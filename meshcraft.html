@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8"/>
 <title>Meshcraft</title>
+<link rel="shortcut icon" href="/favicon.ico" />
+
+	
 <!--                                                     _.._
                                                       .-'_.._''.
  __  __   ___       _....._              .          .' .'     '.\
@@ -34,7 +37,8 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /* if true catch all errors and report to user,    
  * if false let them pass through to e.g. firebug. */
-enableCatcher = false;
+var enableCatcher = false;
+var debugNodes = true;
 
 settings = {
 	/* milliseconds after mouse down, dragging starts */
@@ -51,7 +55,9 @@ settings = {
 	noteTextBorder : 10,
 	noteInnerBorderWidth : 2,
 	noteInnerBorderColor : "#ffbc57",
-
+	noteBackground1 : "rgba(255,255,248,0.935)",
+	noteBackground2 : "rgba(255,255,160,0.935)",
+	
 	/* selection */
 	//selectionColor : "#8080ff",
 	selectionColor : "rgba(243,203,255,0.9)",
@@ -75,32 +81,6 @@ settings = {
 	/* blink speed of the caret */
 	caretBlinkSpeed : 530,	
 };
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ,--.     .      .
- | `-' ,-. |- ,-. |-. ,-. ,-.
- |   . ,-| |  |   | | |-' |
- `--'  `-^ `' `-' ' ' `-' '
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-Catches all errors for a function.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function makeCatcher(that, fun) {
-	return function() {
-		if (enableCatcher) {
-			try {
-				fun.apply(that, arguments);
-			} catch(err) {
-				alert("Internal failure, " + err.name + ": " + err.message + "\n\n" + 
-				      "file: " + err.fileName + "\n" + 
-					  "line: " + err.lineNumber + "\n" + 
-					  "stack: " + err.stack);
-			}
-		} else {
-			fun.apply(that, arguments);
-		}
-	};
-}
-
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .-,--.      .
@@ -510,9 +490,28 @@ Editor.prototype.blur = function() {
   Base-`-'-system for Meshcraft. 
   All system events arrive here.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ 
+/* Catches all errors for a function */
+function System_makeCatcher(that, fun) {
+	return function() {
+		if (enableCatcher) {
+			try {
+				fun.apply(that, arguments);
+			} catch(err) {
+				alert("Internal failure, " + err.name + ": " + err.message + "\n\n" + 
+				      "file: " + err.fileName + "\n" + 
+					  "line: " + err.lineNumber + "\n" + 
+					  "stack: " + err.stack);
+			}
+		} else {
+			fun.apply(that, arguments);
+		}
+	};
+}
+
 var system = { 
 init : function() {
-	makeCatcher(system, system._init)();
+	System_makeCatcher(system, system._init)();
 },
 
 _init : function() {
@@ -647,6 +646,7 @@ _init : function() {
 				if (x != msx || y != msy) {
 					system.space.dragmove(x, y);
 				}
+				this.captureEvents();
 			} else {
 				/* saves position for possible atween timeout */
 				mmx = x;
@@ -718,28 +718,28 @@ _init : function() {
 	}
 	
 	/* double click */
-	function ondblclick(event) {	
+	/*function ondblclick(event) {	
 		event.preventDefault();
 		system.space.dblclick(event);
 		return false;
-	}
+	}*/
 	
-	canvas.onmouseup       = makeCatcher(this, onmouseup);
-	canvas.onmousemove     = makeCatcher(this, onmousemove);
-	canvas.onmousedown     = makeCatcher(this, onmousedown);
-	canvas.ondblclick      = makeCatcher(this, ondblclick);
-	window.onresize        = makeCatcher(this, onresize);
-	hiddenInput.onfocus    = makeCatcher(this, onfocus);
-	hiddenInput.onblur     = makeCatcher(this, onblur);
-	hiddenInput.onkeydown  = makeCatcher(this, onkeydown);
-	hiddenInput.onkeypress = makeCatcher(this, onkeypress);
-	hiddenInput.onkeyup    = makeCatcher(this, onkeyup);
-	this.ontestinput       = makeCatcher(this, testinput);
-	this.onatweentime      = makeCatcher(this, onatweentime);
-	this.onblink           = makeCatcher(this, blink);
+	canvas.onmouseup       = System_makeCatcher(this, onmouseup);
+	canvas.onmousemove     = System_makeCatcher(this, onmousemove);
+	canvas.onmousedown     = System_makeCatcher(this, onmousedown);
+	//canvas.ondblclick      = System_makeCatcher(this, ondblclick);
+	window.onresize        = System_makeCatcher(this, onresize);
+	hiddenInput.onfocus    = System_makeCatcher(this, onfocus);
+	hiddenInput.onblur     = System_makeCatcher(this, onblur);
+	hiddenInput.onkeydown  = System_makeCatcher(this, onkeydown);
+	hiddenInput.onkeypress = System_makeCatcher(this, onkeypress);
+	hiddenInput.onkeyup    = System_makeCatcher(this, onkeyup);
+	this.ontestinput       = System_makeCatcher(this, testinput);
+	this.onatweentime      = System_makeCatcher(this, onatweentime);
+	this.onblink           = System_makeCatcher(this, blink);
 	
-	/* if true use browser supported setCapture()
-	 * call, if false work around */
+	/* if true use browser supported setCapture() call
+	 * if false work around */
 	var useCapture = canvas.setCapture != null;
 	
 	/* sets the mouse cursor */
@@ -889,10 +889,9 @@ function drawHexagon(cx, x, y) {
 ~ ~ ~ | ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
       '
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-var dragTime; /* todo, move this to system */
 function Space() {
 	/* all items in the space */
-	this.items = []; /* todo private? */
+	this._items = []; 
 	
 	this.iaction = { /* todo private? */
 		act : enums.ACT_NONE,
@@ -905,7 +904,7 @@ function Space() {
 
 /* redraws the complete space */
 Space.prototype.redraw = function() {
-	var items = this.items;
+	var items = this._items;
 	var editor = system.editor;
 	var canvas = system.canvas;
 	system.canvasClear();
@@ -960,7 +959,7 @@ Space.prototype.redraw = function() {
 		
 /* adds an item to the space */
 Space.prototype.addItem = function(item, x, y) {
-	this.items.push(item);
+	this._items.push(item);
 	item.x = x;
 	item.y = y;
 }
@@ -1010,8 +1009,8 @@ Space.prototype.focus = function(item) {
 
 /* returns the item offset at position x, y */	
 Space.prototype.itoAtXY = function(x, y) {
-	for(var i = 0, len = this.items.length; i < len; i++) {
-		var it = this.items[i];
+	for(var i = 0, len = this._items.length; i < len; i++) {
+		var it = this._items[i];
 		if (x >= it.x && y >= it.y &&  x <= it.x + it.width && y <= it.y + it.height) {
 			return i;
 		}
@@ -1067,7 +1066,7 @@ function checkItemCompass(it, x, y) { /* todo move to item */
 
 /* mouse hover */
 Space.prototype.mousehover = function(x, y) {
-	x -= this.pox; /* todo make pox and poy underscored */
+	x -= this.pox;
 	y -= this.poy;
 	var com = null;
 	var editor = system.editor;
@@ -1091,10 +1090,11 @@ Space.prototype.mousehover = function(x, y) {
 
 /* starts an operation with the mouse held down */
 Space.prototype.dragstart = function(x, y) {
-	x -= this.pox; /* todo make pox and poy underscored */
+	x -= this.pox;
 	y -= this.poy;
 	var editor  = system.editor;
 	var iaction = this.iaction; /* todo make underscored */
+	var redraw = false;
 
 	var ito = this.itoAtXY(x, y);
 	if (ito < 0) {
@@ -1108,19 +1108,19 @@ Space.prototype.dragstart = function(x, y) {
 	} 
 	
 	/* dragging or scrolling */
-	var it = this.items[ito];
+	var it = this._items[ito];
 	if (ito > 0) {
 		/* moves item to top */
-		this.items.splice(ito, 1);
-		this.items.unshift(it);
+		this._items.splice(ito, 1);
+		this._items.unshift(it);
 		ito = 0;
-		draw = true;
+		redraw = true;
 	}
 	/*  focus the item */
 	if (editor.item != it) {
 		it.focus(editor);
 	}
-			
+
 	var srad = settings.scrollbarRadius;
 	var sbmx = settings.scrollbarMarginX;
 	if (it.scroll >= 0 && Math.abs(x - it.x - it.width + srad + sbmx) <= srad +1)  {
@@ -1133,26 +1133,30 @@ Space.prototype.dragstart = function(x, y) {
 		iaction.item = it;
 		iaction.sx = x - it.x;
 		iaction.sy = y - it.y;
+		system.setCursor("move");
+	}
+	if (redraw) {
+		this.redraw();
 	}
 }
 
 /* a click is a mouse down followed within dragtime by 'mouseup' and
  * not having moved out of 'dragbox'. */
 Space.prototype.click = function(x, y) {
-	x -= this.pox; /* todo make pox and poy underscored */
+	x -= this.pox;
 	y -= this.poy;
 	var editor = system.editor;
 	var iaction = this.iaction;
 	var ito = this.itoAtXY(x, y);
-	var it = this.items[ito];
+	var it = this._items[ito];
 	if (ito < 0) {
 		/* click on background */
 		return;
 	}
 	if (ito > 0) {
 		/* moves item to top */
-		this.items.splice(ito, 1);
-		this.items.unshift(it);
+		this._items.splice(ito, 1);
+		this._items.unshift(it);
 		ito = 0;
 		draw = true;
 	}
@@ -1175,7 +1179,7 @@ Space.prototype.click = function(x, y) {
 
 /* stops an operation with the mouse held down */
 Space.prototype.dragstop = function(x, y) {
-	x -= this.pox; /* todo make pox and poy underscored */
+	x -= this.pox;
 	y -= this.poy;
 	var editor = system.editor;
 	var iaction = this.iaction;
@@ -1210,7 +1214,7 @@ Space.prototype.dragstop = function(x, y) {
 
 /* moving during an operation with the mouse held down */
 Space.prototype.dragmove = function(x, y) {
-	x -= this.pox; /* todo make pox and poy underscored */
+	x -= this.pox;
 	y -= this.poy;
 	var iaction = this.iaction;
 	switch(iaction.act) {
@@ -1350,19 +1354,15 @@ Space.prototype.mousedown = function(x, y) {
 	return enums.MST_ATWEEN;
 }
 
-/* mouse up event */
-Space.prototype.mouseup = function(event) {
-
-}
-	
 /* double click */
-Space.prototype.dblclick = function(event) {
-	var x = event.pageX - system.canvas.offsetLeft - this.pox;
-	var y = event.pageY - system.canvas.offsetTop  - this.poy;
+/*
+Space.prototype.dblclick = function(x, y) {
+	var -x = this.pox;
+	var -y = this.poy;
 	var ito = this.itoAtXY(x, y);
 	var iaction = this.iaction;
 	if (ito < 0) {
-		/* on background */
+		// on background 
 		iaction.act = enums.ACT_MENU;
 		iaction.sx = x;
 		iaction.sy = y;
@@ -1370,7 +1370,82 @@ Space.prototype.dblclick = function(event) {
 		return false;
 	}
 	return false;
+}*/
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ Treenode
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ Part of a tree-structure.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+function Treenode(type, partent) {
+	this.type   = type;
 }
+
+/* appends tnode to list of children */
+Treenode.prototype.append = function(tnode) {
+	if (tnode.parent) {
+		throw new Error("append() on a node already part of a tree");
+	}
+	tnode.parent = this;
+	if (!this.last) {
+		this.first = this.last = tnode;
+		tnode.prev = tnode.next = null;
+	} else {
+		this.last.next = tnode;
+		tnode.prev = this.last;
+		this.last = tnode;
+		tnode.next = null;
+	}
+	this.listen && this.listen();
+}
+
+/* inserts tnode before child bnode */
+Treenode.prototype.insertBefore = function(tnode, bnode) {
+	if (!bnode) {
+		this.append(node);
+		return
+	}
+	
+	if (tnode.parent) {
+		throw new Error("Treenode.append() on a node already part of a tree");
+	}
+	
+	if (bnode == first) {
+		this.first.prev = tnode;
+		tnode.next = this.first;
+		this.first = tnode;
+		tnode.prev = null;
+	}
+	/* debug check if child */
+	if (debugNodes) for(var n=this.first; n != bnode; n = n.next) 
+		if (!n) throw new Error("debugNodes");
+	
+	tnode.next = bnode;
+	tnode.prev = bnode.prev;
+	bnode.prev.next = node;
+	bnode.prev = node;
+	if (this.listen) this.listen();
+}
+
+/* removes child tnode */
+Treenode.prototype.remove = function(tnode) {
+	/* debug check if child */
+	if (debugNodes) for(var n= this.first; n != tnode; n = n.next) 
+		if (!n) throw new Error("debugNodes");
+	
+	if (tnode == this.first) this.first = tnode.next;
+	if (tnode == this.last) this.last = tnode.last;
+	if (tnode.next) tnode.next.prev = tnode.prev;
+	if (tnode.prev) tnode.prev.next = tnode.next;
+	if (this.listen) this.listen();
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ TEXT
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .-,--.                             .
@@ -1380,6 +1455,14 @@ Space.prototype.dblclick = function(event) {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ | ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
                      `'         '
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+Paragraph.prototype = new Treenode;                // Define sub-class
+Paragraph.prototype.constructor = Paragraph;
+function Paragraph()
+{
+    this.y = 2;
+}
+
+
 /* returns the paragraph of a node */
 function getPara(e) {
 	while (e.nodeName != "para") {
@@ -1832,9 +1915,8 @@ Note.prototype._getCanvasImpl = function(selection) {
 	/* draws background */
 	Note_bevel(cx, 0, 0, this.width, this.height, 2.5, 3);
 	var grad = cx.createLinearGradient(0, 0, this.width / 10, this.height);			
-	grad.addColorStop(0, "rgba(255,255,248,0.955)");
-	grad.addColorStop(1, "rgba(255,255,160,0.955)");
-	//grad.addColorStop(1, "#fefee8");
+	grad.addColorStop(0, settings.noteBackground1);
+	grad.addColorStop(1, settings.noteBackground2);
 	cx.fillStyle = grad;
 	cx.fill();
 	cx.fillStyle = "#000000";
