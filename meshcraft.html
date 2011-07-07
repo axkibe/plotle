@@ -34,11 +34,11 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /* if true catch all errors and report to user,    
  * if false let them pass through to e.g. firebug. */
-enableCatcher = true;
+enableCatcher = false;
 
 settings = {
 	/* milliseconds after mouse down, dragging starts */
-	dragtime : 1400,
+	dragtime : 400,
 	
 	/* pixels after mouse down and move, dragging starts */
 	dragbox  : 10,
@@ -146,14 +146,18 @@ function debug() {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 var enums = {
+	/* Mouse state */
+	MST_NONE   : 0, /* button is up */
+	MST_ATWEEN : 1, /* just came down, unsure if click or drag */
+	MST_DRAG   : 2, /* mouse is dragging */
+
 	/* interface action active */
-	NOTHING   : 0,
-	PAN       : 1,
-	DRAGSTART : 2,
-	DRAG      : 3,
-	RESIZE    : 4,
-	SCROLL    : 5,
-	MENU      : 6,
+	ACT_NONE    : 0,
+	ACT_PAN     : 1,
+	ACT_IDRAG   : 2,
+	ACT_IRESIZE : 3,
+	ACT_SCROLL  : 4,
+	ACT_MENU    : 6,
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -512,13 +516,24 @@ init : function() {
 },
 
 _init : function() {
-	var canvas = system.canvas = document.getElementById("canvas");
+	var canvas = this.canvas = document.getElementById("canvas");
 	canvas.width  = window.innerWidth - 1;
 	canvas.height = window.innerHeight - 1;
 	var cx = canvas.getContext("2d");
 	
 	/* the space that currently is displayed */
 	system.space = null;
+	
+	/* mouse state */
+	var mst = enums.MST_NONE;
+	/* position the mouse went down to atween state */
+	var msx = null;
+	var msy = null;
+	/* latest mouse position seen in atween state */
+	var mmx = null;
+	var mmy = null;
+	/* timer for atween state */
+	var atweenTimer = null;
 
 	var editor = system.editor = new Editor();
 	
@@ -605,40 +620,107 @@ _init : function() {
 		
 	/* view window resized */
 	function onresize(event) {
-		//debug("resize");
 		/* todo debouncing */
 		canvas.width  = window.innerWidth - 1;
 		canvas.height = window.innerHeight - 1;	
-		if (system.space) {
-			system.space.redraw();
-		}
+		system.space && system.space.redraw();
 	}
 	
 	/* mouse move event */
 	function onmousemove(event) {
-		system.space.mousemove(event);
-		return true;
+		var x = event.pageX - canvas.offsetLeft;
+		var y = event.pageY - canvas.offsetTop;
+
+		switch(mst) {
+		case enums.MST_NONE :
+			system.space.mousehover(x, y);
+			return true;
+		case enums.MST_ATWEEN :
+		{
+			var dragbox = settings.dragbox;
+			if ((Math.abs(x - msx) > dragbox) || (Math.abs(y - msy) > dragbox)) {
+				/* moved out of dragbox -> start dragging */
+				clearTimeout(atweenTimer);
+				atweenTimer = null;
+				mst = enums.MST_DRAG;
+				system.space.dragstart(msx, msy);
+				if (x != msx || y != msy) {
+					system.space.dragmove(x, y);
+				}
+			} else {
+				/* saves position for possible atween timeout */
+				mmx = x;
+				mmy = y;
+			}
+			return true;
+		}
+		case enums.MST_DRAG :
+			system.space.dragmove(x, y);
+			return true;
+		default :
+			throw new Error("invalid mst");
+		}
 	}
 	
 	/* mouse down event */
 	function onmousedown(event) {
 		event.preventDefault();
 		hiddenInput.focus();
-		system.space.mousedown(event);
+		var x = event.pageX - canvas.offsetLeft;
+		var y = event.pageY - canvas.offsetTop;
+		/* asks the space if it forces this to be a drag or click, or yet unknown */
+		mst = system.space.mousedown(x, y);
+		if (mst == enums.MST_ATWEEN) {
+			msx = mmx = x;
+			msy = mmy = y;
+			atweenTimer = setTimeout("system.onatweentime();", settings.dragtime);
+		}		
 		return false;
 	}
-	
-	/* dobule click */
-	function ondblclick(event) {	
-		event.preventDefault();
-		system.space.dblclick(event);
-		return false;
-	}
-	
+
 	/* mouse up event */
 	function onmouseup(event) {
 		event.preventDefault();
-		system.space.mouseup(event);
+		system.releaseEvents();
+		var x = event.pageX - canvas.offsetLeft;
+		var y = event.pageY - canvas.offsetTop;
+		
+		switch (mst) {
+		case enums.MST_NONE :
+			console.log("mouse up, without down?");
+			return false;
+		case enums.MST_ATWEEN :
+			/* this was a click */
+			clearTimeout(atweenTimer);
+			atweenTimer = null;
+			system.space.click(x, y);
+			mst = enums.MST_NONE;
+			return false;
+		case enums.MST_DRAG :
+			system.space.dragstop(x, y);
+			mst = enums.MST_NONE;
+			return false;
+		}
+	}
+
+	/* timeout after mouse down so dragging starts */
+	function onatweentime() {
+		if (mst != enums.MST_ATWEEN) {
+			console.log("dragTime() in wrong action mode");
+			return;
+		}
+		mst = enums.MST_DRAG;
+		atweenTimer = null;
+		system.space.dragstart(msx, msy);
+		if (mmx != msx || mmy != msy) {
+			system.space.dragmove(mmx, mmy);
+		}
+	}
+	
+	/* double click */
+	function ondblclick(event) {	
+		event.preventDefault();
+		system.space.dblclick(event);
 		return false;
 	}
 	
@@ -652,8 +734,9 @@ _init : function() {
 	hiddenInput.onkeydown  = makeCatcher(this, onkeydown);
 	hiddenInput.onkeypress = makeCatcher(this, onkeypress);
 	hiddenInput.onkeyup    = makeCatcher(this, onkeyup);
-	system.ontestinput     = makeCatcher(this, testinput);
-	system.onblink         = makeCatcher(this, blink);
+	this.ontestinput       = makeCatcher(this, testinput);
+	this.onatweentime      = makeCatcher(this, onatweentime);
+	this.onblink           = makeCatcher(this, blink);
 	
 	/* if true use browser supported setCapture()
 	 * call, if false work around */
@@ -664,7 +747,7 @@ _init : function() {
 		canvas.style.cursor = cursor;
 	}		
 	
-	/*-- Meshcraftsystem calls --*/
+	/*-- Meshcraft System calls --*/
 	
 	/* clears the canvas */
 	system.canvasClear = function() {
@@ -673,6 +756,7 @@ _init : function() {
 	}
 	
 	/* captures all mouseevents event beyond the canvas (for dragging) */ 
+	/* todo make private */
 	system.captureEvents = function() {
 		if (useCapture) {
 			canvas.setCapture(canvas);
@@ -811,7 +895,7 @@ function Space() {
 	this.items = []; /* todo private? */
 	
 	this.iaction = { /* todo private? */
-		act : enums.NOTHING,
+		act : enums.ACT_NONE,
 	};
 			
 	/* panning offset */
@@ -869,7 +953,7 @@ Space.prototype.redraw = function() {
 		
 	editor.updateCaret();
 		
-	if (this.iaction.act == enums.MENU) {
+	if (this.iaction.act == enums.ACT_MENU) {
 		this.drawMenu();
 	}
 }
@@ -943,7 +1027,7 @@ function checkItemCompass(it, x, y) { /* todo move to item */
 	var e = x >= it.x + it.width - d && x <= it.x + it.width + d;
 	var s = y >= it.y + it.height - d && y <= it.y + it.height + d;
 	var w = x >= it.x - d && x <= it.x + d;
-				
+	
 	if (n) {
 		if (w) { 
 			return "nw";
@@ -979,45 +1063,170 @@ function checkItemCompass(it, x, y) { /* todo move to item */
 	}
 	return null;
 }
+
+
+/* mouse hover */
+Space.prototype.mousehover = function(x, y) {
+	x -= this.pox; /* todo make pox and poy underscored */
+	y -= this.poy;
+	var com = null;
+	var editor = system.editor;
+	if (editor.item) {
+		var it = editor.item;
+		com = checkItemCompass(it, x, y);
+		if (com) {
+			system.setCursor(com + "-resize");					
+		}
+	}
+	if (!com) {
+		var ito = this.itoAtXY(x, y); /* todo give a better name */
+		if (ito < 0) {
+			system.setCursor("crosshair");
+		} else {
+			//var ch = it.atXY(x - it.x, y - it.y);
+			system.setCursor("default");					
+		}
+	}
+}
+
+/* starts an operation with the mouse held down */
+Space.prototype.dragstart = function(x, y) {
+	x -= this.pox; /* todo make pox and poy underscored */
+	y -= this.poy;
+	var editor  = system.editor;
+	var iaction = this.iaction; /* todo make underscored */
+
+	var ito = this.itoAtXY(x, y);
+	if (ito < 0) {
+		/* panning */
+		iaction.act = enums.ACT_PAN;
+		iaction.sx = x;
+		iaction.sy = y;
+		system.captureEvents();
+		system.setCursor("pointer");
+		return;
+	} 
 	
-/* mouse move event */
-Space.prototype.mousemove = function(event) {
-	var draw = false;
-	/* todo let space offer better coords already */
-	var x = event.pageX - system.canvas.offsetLeft - this.pox; 
-	var y = event.pageY - system.canvas.offsetTop  - this.poy;
+	/* dragging or scrolling */
+	var it = this.items[ito];
+	if (ito > 0) {
+		/* moves item to top */
+		this.items.splice(ito, 1);
+		this.items.unshift(it);
+		ito = 0;
+		draw = true;
+	}
+	/*  focus the item */
+	if (editor.item != it) {
+		it.focus(editor);
+	}
+			
+	var srad = settings.scrollbarRadius;
+	var sbmx = settings.scrollbarMarginX;
+	if (it.scroll >= 0 && Math.abs(x - it.x - it.width + srad + sbmx) <= srad +1)  {
+		iaction.act = enums.ACT_SCROLL;
+		iaction.item = it;
+		iaction.sx = x - it.x;
+		iaction.sy = y - it.y;
+	} else {
+		iaction.act = enums.ACT_IDRAG;
+		iaction.item = it;
+		iaction.sx = x - it.x;
+		iaction.sy = y - it.y;
+	}
+}
+
+/* a click is a mouse down followed within dragtime by 'mouseup' and
+ * not having moved out of 'dragbox'. */
+Space.prototype.click = function(x, y) {
+	x -= this.pox; /* todo make pox and poy underscored */
+	y -= this.poy;
+	var editor = system.editor;
+	var iaction = this.iaction;
+	var ito = this.itoAtXY(x, y);
+	var it = this.items[ito];
+	if (ito < 0) {
+		/* click on background */
+		return;
+	}
+	if (ito > 0) {
+		/* moves item to top */
+		this.items.splice(ito, 1);
+		this.items.unshift(it);
+		ito = 0;
+		draw = true;
+	}
+	/*  focus the item */
+	if (editor.item != it) {
+		it.focus(editor);
+	}
+	var ox = x - it.x;
+	if (it.atXY) { /* todo, make this less dirty, move the logic into the item or editor*/
+		var ch = it.atXY(ox, y - it.y);
+		if (ch) {
+			var para = getPara(ch.node);
+			editor.caret.element = ch.node;
+			editor.caret.offset = ch.offset + para.getChunkOffset(ch, x - it.x - para.x);
+			editor.caret.show();
+			this.redraw();
+		}
+	}
+}
+
+/* stops an operation with the mouse held down */
+Space.prototype.dragstop = function(x, y) {
+	x -= this.pox; /* todo make pox and poy underscored */
+	y -= this.poy;
+	var editor = system.editor;
 	var iaction = this.iaction;
 	switch (iaction.act) {
-	case enums.PAN : 
+	case enums.ACT_IDRAG :
+		iaction.item.x = x - iaction.sx;
+		iaction.item.y = y - iaction.sy;
+		iaction.item = null;
+		system.setCursor("default");
+		this.redraw();
+		break;
+	case enums.ACT_PAN :
+		break;
+	case enums.ACT_IRESIZE :
+		iaction.com  = null;
+		iaction.item = null;
+		iaction.six  = null;
+		iaction.siy  = null;
+		iaction.swi  = null;
+		iaction.shi  = null;
+		break;
+	case enums.ACT_SCROLL :
+		break;
+	default :
+		throw new Error("Invalid action in 'Space.dragstop'");
+	}
+	iaction.act = enums.ACT_NONE;
+	iaction.sx   = null;
+	iaction.sy   = null;
+	return;
+}
+
+/* moving during an operation with the mouse held down */
+Space.prototype.dragmove = function(x, y) {
+	x -= this.pox; /* todo make pox and poy underscored */
+	y -= this.poy;
+	var iaction = this.iaction;
+	switch(iaction.act) {
+	case enums.ACT_PAN :
 		this.pox += x - iaction.sx;
 		this.poy += y - iaction.sy;
-		draw = true;
-		break;
-	case enums.DRAGSTART :
-	{
-		var dragbox = settings.dragbox;
-		if ((Math.abs(x - iaction.sx) > dragbox) || (Math.abs(y - iaction.sy) > dragbox)) {
-			/* moved out of dragbox -> start dragging */
-			clearTimeout(this.dragTimer);
-			this.dragTimer = null;
-			iaction.act = enums.DRAG;
-			iaction.item.x = x - iaction.sx;
-			iaction.item.y = y - iaction.sy;
-			system.setCursor("move");
-			draw = true;
-		} else {
-			/* save position for possible timeout */
-			iaction.mx = x;
-			iaction.my = y;
-		}
-		break;
-	}
-	case enums.DRAG :
+		this.redraw();
+		return;
+	case enums.ACT_IDRAG :
 		iaction.item.x = x - iaction.sx;
 		iaction.item.y = y - iaction.sy;
 		draw = true;
-		break;
-	case enums.RESIZE :
+		this.redraw();
+		return;
+	case enums.ACT_IRESIZE :
+	{
 		var wi = iaction.swi;
 		var hi = iaction.shi;
 		switch (iaction.com) {
@@ -1060,10 +1269,11 @@ Space.prototype.mousemove = function(event) {
 		}
 		if (wi != iaction.swi || hi != iaction.shi) {
 			iaction.item.resize(wi, hi);
-			draw = true;
+			this.redraw();
 		}
-		break;
-	case enums.SCROLL:
+		return;
+	}
+	case enums.ACT_SCROLL:
 	{
 		var dy = y - iaction.sy;
 		var it = iaction.item;
@@ -1081,11 +1291,16 @@ Space.prototype.mousemove = function(event) {
 		it.scroll = its;
 		iaction.sy = y;
 		it.dropCanvasCache();
-		draw = true;
-		break;
+		this.redraw();
+		return true;
 	}
-	case enums.MENU:
-	{
+	default :
+		throw new Error("unknown action code in Space.dragging");
+	}
+}
+
+	
+/*	case enums.MENU:
 		var cx = system.canvas.getContext("2d");
 		drawHexagon(cx, iaction.sx, iaction.sy);
 		var bh = iaction.mhover;
@@ -1097,68 +1312,29 @@ Space.prototype.mousemove = function(event) {
 		if (bh != iaction.mhover) {
 			draw = true;
 		}
-		/* fall through */
-	}
-	default :
-		/* hovering */			
-		var com = null;
-		var editor = system.editor;
-		if (editor.item) {
-			var it = editor.item;
-			com = checkItemCompass(it, x, y);
-			if (com) {
-				system.setCursor(com + "-resize");					
-			}
-		}
-		if (!com) {
-			var ito = this.itoAtXY(x, y);
-			if (ito < 0) {
-				system.setCursor("crosshair");
-			} else {
-				//var ch = it.atXY(x - it.x, y - it.y);
-				system.setCursor("default");					
-			}
-		}
-	}
-		
-	if (draw) {
-		this.redraw();
-	}
-}
+*/
 	
-/* timeout after mouse down so dragging starts */
-Space.prototype.dragTime = function(event) {
-	var iaction = this.iaction;
-	if (iaction.act != enums.DRAGSTART) {
-		console.log("dragTime() in wrong action mode");
-		return;
-	}
-	iaction.act = enums.DRAG;
-	iaction.item.x = iaction.mx - iaction.sx;
-	iaction.item.y = iaction.my - iaction.sy;
-	system.setCursor("move");
-	this.redraw(); 
-}
 
 /* mouse down event */
-Space.prototype.mousedown = function(event) {
-	var draw = false;
-	var x = event.pageX - system.canvas.offsetLeft - this.pox;
-	var y = event.pageY - system.canvas.offsetTop  - this.poy;
+Space.prototype.mousedown = function(x, y) {
+	x -= this.pox;
+	y -= this.poy;
+	
 	var iaction = this.iaction;
 	var editor = system.editor;
 	/* checks menu */
-	if (iaction.act == enums.MENU) {
-		iaction.act = enums.NOTHING;
+	/*if (iaction.act == enums.MENU) {
+		iaction.act = enums.ACT_NONE;
 		iaction.sx = null;
 		iaction.sy = null;
 		iaction.mhover = null;
 		draw = true;
-	}
+	}*/
 		
+	var com;
 	if (editor.item && (com = checkItemCompass(editor.item, x, y))) {
 		/* resizing */
-		iaction.act  = enums.RESIZE;
+		iaction.act  = enums.ACT_IRESIZE;
 		iaction.com  = com;
 		iaction.item = editor.item;
 		iaction.sx   = x;
@@ -1167,120 +1343,16 @@ Space.prototype.mousedown = function(event) {
 		iaction.shi  = editor.item.height;
 		iaction.six  = editor.item.x;
 		iaction.siy  = editor.item.y;
-		system.captureEvents();
 		system.setCursor(com + "-resize");
-	} else {
-		/* checks dragging or panning */
-		var ito = this.itoAtXY(x, y);
-		if (ito < 0) {
-			/* panning */
-			iaction.act = enums.PAN;
-			iaction.sx = x;
-			iaction.sy = y;
-			system.captureEvents();
-			system.setCursor("pointer");
-		} else {
-			/* dragging, scrolling or text select */
-			var it = this.items[ito];
-			if (ito > 0) {
-				/* moves item to top */
-				this.items.splice(ito, 1);
-				this.items.unshift(it);
-				ito = 0;
-				draw = true;
-			}
-			/*  focus the item */
-			if (editor.item != it) {
-				it.focus(editor);
-			}
-			
-			var srad = settings.scrollbarRadius;
-			var sbmx = settings.scrollbarMarginX;
-			if (it.scroll >= 0 && Math.abs(x - it.x - it.width + srad + sbmx) <= srad +1)  {
-				iaction.act = enums.SCROLL;
-				system.captureEvents();
-				iaction.item = it;
-				iaction.sx = x - it.x;
-				iaction.sy = y - it.y;
-			} else {
-				iaction.act = enums.DRAGSTART;
-				iaction.item = it;
-				iaction.sx = x - it.x;
-				iaction.sy = y - it.y;
-				iaction.mx = x;
-				iaction.my = y;
-				system.captureEvents();
-				dragTime = this.dragTime;
-				this.dragTimer = setTimeout("dragTime();", settings.dragtime);
-			}
-		}
+		return enums.MST_DRAG;
 	}
 	
-	if (draw) {
-		this.redraw();
-	}
+	return enums.MST_ATWEEN;
 }
 
 /* mouse up event */
 Space.prototype.mouseup = function(event) {
-	if (this.dragTimer) {
-		clearTimeout(this.dragTimer);
-		this.dragTimer = null;
-	}
-	var x = event.pageX - system.canvas.offsetLeft - this.pox;
-	var y = event.pageY - system.canvas.offsetTop  - this.poy;
-	var editor = system.editor;
-	var iaction = this.iaction;
-	system.releaseEvents();
-		
-	switch (iaction.act) {
-	case enums.DRAGSTART :
-	{
-		/* this was no drag after all but a click */
-		iaction.mx   = null;
-		iaction.my   = null;
-		var it = iaction.item;
-		var ox = x - it.x;
-		if (it.atXY) { /* todo, make this less dirty, move the logic into the item or editor*/
-			var ch = it.atXY(ox, y - it.y);
-			if (ch) {
-				var para = getPara(ch.node);
-				editor.caret.element = ch.node;
-				editor.caret.offset = ch.offset + para.getChunkOffset(ch, x - it.x - para.x);
-				editor.caret.show();
-				this.redraw();
-			}
-		}
-		iaction.item = null;
-		break;
-	}
-	case enums.DRAG :
-		iaction.item.x = x - iaction.sx;
-		iaction.item.y = y - iaction.sy;
-		iaction.mx = null;
-		iaction.my = null;
-		iaction.item = null;
-		system.setCursor("default");
-		this.redraw();
-		break;
-	case enums.PAN :
-		break;
-	case enums.RESIZE :
-		iaction.com  = null;
-		iaction.item = null;
-		iaction.six  = null;
-		iaction.siy  = null;
-		iaction.swi  = null;
-		iaction.shi  = null;
-		break;
-	case enums.SCROLL :
-		break;
-	}
-	
-	iaction.act = enums.NOTHING;
-	iaction.sx   = null;
-	iaction.sy   = null;
-	return false;
+
 }
 	
 /* double click */
@@ -1291,7 +1363,7 @@ Space.prototype.dblclick = function(event) {
 	var iaction = this.iaction;
 	if (ito < 0) {
 		/* on background */
-		iaction.act = enums.MENU;
+		iaction.act = enums.ACT_MENU;
 		iaction.sx = x;
 		iaction.sy = y;
 		iaction.mhover = 0;
