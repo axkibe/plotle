@@ -1303,7 +1303,6 @@ Space.prototype.dragmove = function(x, y) {
 	}
 }
 
-	
 /*	case enums.MENU:
 		var cx = system.canvas.getContext("2d");
 		drawHexagon(cx, iaction.sx, iaction.sy);
@@ -1317,7 +1316,6 @@ Space.prototype.dragmove = function(x, y) {
 			draw = true;
 		}
 */
-	
 
 /* mouse down event */
 Space.prototype.mousedown = function(x, y) {
@@ -1397,7 +1395,8 @@ Treenode.prototype.append = function(tnode) {
 		this.last = tnode;
 		tnode.next = null;
 	}
-	this.listen && this.listen();
+	tnode.tell = this.tell;
+	if (this.tell) this.tell();
 }
 
 /* inserts tnode before child bnode */
@@ -1425,7 +1424,9 @@ Treenode.prototype.insertBefore = function(tnode, bnode) {
 	tnode.prev = bnode.prev;
 	bnode.prev.next = node;
 	bnode.prev = node;
-	if (this.listen) this.listen();
+	
+	tnode.tell = this.tell;
+	if (this.tell) this.tell();
 }
 
 /* removes child tnode */
@@ -1438,7 +1439,15 @@ Treenode.prototype.remove = function(tnode) {
 	if (tnode == this.last) this.last = tnode.last;
 	if (tnode.next) tnode.next.prev = tnode.prev;
 	if (tnode.prev) tnode.prev.next = tnode.next;
-	if (this.listen) this.listen();
+	if (this.tell) this.tell();
+}
+
+/* returns first anchestor of 'type' */
+Treenode.prototype.anchestor(type) {
+	var n;
+	for(n = this.parent; n.type != type; n = n.next);
+	if (!n) throw new Error("anchestor not there");
+	return n;
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1446,6 +1455,24 @@ Treenode.prototype.remove = function(tnode) {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+Textnode.prototype = new Treenode;
+Textnode.prototype.constructor = Paragraph;
+function Textnode(text)
+{
+	Treenode.call("text");
+	this._text = text ? text : "";
+}
+
+/* sets the text */
+Textnode.prototype.sett(text) {
+	this._text = text;
+	if (this.tell) this.tell();
+}
+
+/* gets the text */
+Textnode.prototype.gett() {
+	return this._text;
+}
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .-,--.                             .
@@ -1457,201 +1484,196 @@ Treenode.prototype.remove = function(tnode) {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 Paragraph.prototype = new Treenode;                // Define sub-class
 Paragraph.prototype.constructor = Paragraph;
-function Paragraph()
+function Paragraph(txt)
 {
-    this.y = 2;
-}
-
-
-/* returns the paragraph of a node */
-function getPara(e) {
-	while (e.nodeName != "para") {
-		e = e.parentNode;
-	}
-	return e;
-}
-
-function newParagraph(doc, txt) {
-	var dimpl = doc.dimpl;
-	var para = dimpl.createElement("para");
-	para.appendChild(dimpl.createTextNode(txt));
-	
-	var pcanvas = document.createElement("canvas");
+	Treenode.call("paragraph");
+	this.appendChild(new Textnode(txt));
+	var pcanvas = this._pvancas = document.createElement("canvas");
 	pcanvas.width = pcanvas.height = 0;
-	pcanvas.actual == false;
-	
-	/* gets the canvas cache of a drawn para */
-	para.getCanvas = function(width, selection) {
-		var cx = pcanvas.getContext("2d");
-		if (pcanvas.actual && pcanvas.width == width) {
-			return pcanvas;
-		}
-		pcanvas.actual = true;
-		pcanvas.width = width;
-		var x = 0;
-		var y = doc.textsize;
-		
-		cx.font = doc.font;
-		var space = cx.measureText(" ").width;
-		
-		/* calculates position information */ 
-		var pinfo = para.pinfo = [];
+	pcanvas.actual == false; // todo move var otherplace
+	this.h = null;
+}
 
-		var pline = 0;
-		{
-			var l = [];
-			l.x = x;
-			l.y = y;
-			pinfo[pline] = l;
-		}
-
-		/* selection start and stop */
-		var sel1line   = null;
-		var sel1chunk  = null;
-		var sel1offset = null;
-		var sel2line   = null;
-		var sel2chunk  = null;
-		var sel2offset = null;
-		
-		/* for every child node */
-		for(var node = para.firstChild; node; node = node.nextSibling) {
-			var t = node.data;
-			/* makes/resets position info */
-			var pchunk = 0;
-			/* every text chunk */
-			var reg;
-			if (!doc.pre) {
-				reg = /(\s*\S+)\s?(\s*)/g;
-			} else {
-				reg = /(.+)()$/g;
-			}
-			var stol = true; /* at start of line */
-			for(var ca = reg.exec(t); ca != null; ca = reg.exec(t)) {
-				/* text is a word plus hard spaces */
-				var text = ca[1] + ca[2];
-				var w = cx.measureText(text).width;
-				if (x + w + space > width) {
-					if (!stol) {
-						/* soft break */
-						x = 0;
-						y += Math.round(doc.textsize * (doc.pre ? 1 : 1.2));
-						pline++;
-						{
-							var l = [];
-							l.x = x;
-							l.y = y;
-							pinfo[pline] = l;
-							pchunk = 0;
-						}
-						stol = true;
-						//if (y - Math.round(doc.textsize * 1.2) > this.height) {
-						//	break;
-						//}
-					} else {
-						/* horizontal overflow */
-						// todo
-					}
-				}				
-				/*if (selection.active && 
-				    selection.element1 == node && 
-				    sel1line == null && 
-				    ca.index + text.length >= selection.offset1
-				) {
-					sel1line   = pline;
-					sel1chunk  = pchunk;
-					sel1offset = selection.offset1 - ca.index;
-				}
-				if (selection.active && 
-				    selection.element2 == node && 
-				    sel2line == null && 
-				    ca.index + text.length >= selection.offset2
-				) {
-					sel2line   = pline;
-					sel2chunk  = pchunk;
-					sel2offset = selection.offset2 - ca.index;
-				}*/
-				pinfo[pline][pchunk++] = {
-					x: x, 
-					w: w,
-					node: node,
-					offset: ca.index, 
-					text: text,
-				};
-
-				x += w + space;
-				stol = false;
-			}
-
-			/* hard break */
-			/*if (y - Math.round(doc.textsize * 1.2) > this.height) {
-				break;
-			}*/
-		}
-		/* returns the logical height (excluding letters bottombox)  */
-		pcanvas.h = y;
-		/* todo: work out exact height for text below baseline */
-		/* set the canvas height */
-		pcanvas.height = y + Math.round(doc.textsize * 0.27);
-		cx.font = doc.font;
-
-		/* draws the selection into the canvas */
-		/*if (sel1line != null) {
-			var pl1 = pinfo[sel1line];
-			var pc1 = pl1[sel1chunk];
-			cx.fillStyle = settings.selectionColor;
-			var ts = pc1.text.substring(0, sel1offset);
-			var cow = cx.measureText(ts).width;
-			var x1 = pc1.x + cow;
-			cx.fillRect(x1, pl1.y - doc.textsize, 
-				width - x1, doc.textsize + Math.round(doc.textsize * 0.27));
-		}*/
-	
-		cx.fillStyle = "black";
-		/* draws text into the canvas */
-		for(var il = 0; il <= pline; il++) {
-			var pl = pinfo[il];
-			var plen = pl.length;
-			for(var ic = 0; ic < plen; ic++) {
-				var pc = pl[ic];
-				cx.fillText(pc.text, pc.x, pl.y);
-			}
-		}
+/* draws the paragraph in its cache and returns it */
+Paragraph.prototype.getCanvas = function(width, selection) {
+	var pcanvas = this._pcanvas;
+	var cx = pcanvas.getContext("2d");
+	if (pcanvas.actual && pcanvas.width == width) { /* todo, double check? */
 		return pcanvas;
 	}
-	
-	/* finds the line/chunk by offset */
-	/* asw ... buffer for answer */
-	para.findByOffset = function(offset, asw) {
-		var pinfo = para.pinfo;
-		var lastl = pinfo[0];
-		var lastc = null;
-		var plen = pinfo.length;
-		for(var pli= 0; pli < plen; pli++) {
-			var pl = pinfo[pli];
-			var pllen = pl.length;
-			for(var pci = 0; pci < pllen; pci++) {
-				var pc = pl[pci];
-				if (pc.offset == offset) {
-					asw.line = pl; asw.chunk = pc;
-					return asw;
-				}
-				if (pc.offset > offset) {
-					asw.line = lastl; asw.chunk = lastc;
-					return asw;
-				}
-				lastl = pl;
-				lastc = pc;
-			}
-		}
-		asw.line = lastl; asw.chunk = lastc;
-		return asw;
-	}	
-	
-	/* drops the canvas cache (cause something has changed */
-	para.dropCache = function() {
-		pcanvas.actual = false;
-		doc.item.dropCanvasCache();
+	pcanvas.actual = true;
+	pcanvas.width = width;
+	var root = this.getAnchestor("root");
+	var textsize = root.textsize;
+	var x = 0;
+	var y = textsize;	
+	cx.font = root.font;
+	var space = cx.measureText(" ").width;
+		
+	/* calculates position information */ 
+	var pinfo = this._pinfo = [];
+
+	var pline = 0;
+	{
+		var l = [];
+		l.x = x;
+		l.y = y;
+		pinfo[pline] = l;
 	}
+
+	/* selection start and stop */
+	/*var sel1line   = null;
+	var sel1chunk  = null;
+	var sel1offset = null;
+	var sel2line   = null;
+	var sel2chunk  = null;
+	var sel2offset = null;*/
+		
+	/* build position informations */
+	for(var node = this.first; node; node = node.next) {
+		var t = node.gett();
+		/* makes position info */
+		var pchunk = 0;
+		/* every text chunk */
+		var reg;
+		if (!root.pre) {
+			reg = /(\s*\S+)\s?(\s*)/g;
+		} else {
+			reg = /(.+)()$/g;
+		}
+		var stol = true; /* at start of line */
+		for(var ca = reg.exec(t); ca != null; ca = reg.exec(t)) {
+			/* text is a word plus hard spaces */
+			var text = ca[1] + ca[2];
+			var w = cx.measureText(text).width;
+			if (x + w + space > width) {
+				if (!stol) {
+					/* soft break */
+					x = 0;
+					y += Math.round(doc.textsize * (doc.pre ? 1 : 1.2));
+					pline++;
+					{
+						var l = [];
+						l.x = x;
+						l.y = y;
+						pinfo[pline] = l;
+						pchunk = 0;
+					}
+					stol = true;
+					//if (y - Math.round(doc.textsize * 1.2) > this.height) {
+					//	break;
+					//}
+				} else {
+					/* horizontal overflow */
+					// todo
+				}
+			}				
+			/*if (selection.active && 
+			    selection.element1 == node && 
+			    sel1line == null && 
+			    ca.index + text.length >= selection.offset1
+			) {
+				sel1line   = pline;
+				sel1chunk  = pchunk;
+				sel1offset = selection.offset1 - ca.index;
+			}
+			if (selection.active && 
+			    selection.element2 == node && 
+			    sel2line == null && 
+			    ca.index + text.length >= selection.offset2
+			) {
+				sel2line   = pline;
+				sel2chunk  = pchunk;
+				sel2offset = selection.offset2 - ca.index;
+			}*/
+			pinfo[pline][pchunk++] = {
+				x: x, 
+				w: w,
+				node: node,
+				offset: ca.index, 
+				text: text,
+			};
+
+			x += w + space;
+			stol = false;
+		}
+
+		/* hard break */
+		/*if (y - Math.round(doc.textsize * 1.2) > this.height) {
+			break;
+		}*/
+	}
+	
+	/* returns the logical height (excluding letters bottombox)  */
+	this.h = y;
+	/* todo: work out exact height for text below baseline */
+	/* set the canvas height */
+	this.height = y + Math.round(doc.textsize * 0.27);
+
+	/* draws the selection into the canvas */
+	/*if (sel1line != null) {
+		var pl1 = pinfo[sel1line];
+		var pc1 = pl1[sel1chunk];
+		cx.fillStyle = settings.selectionColor;
+		var ts = pc1.text.substring(0, sel1offset);
+		var cow = cx.measureText(ts).width;
+		var x1 = pc1.x + cow;
+		cx.fillRect(x1, pl1.y - doc.textsize, 
+			width - x1, doc.textsize + Math.round(doc.textsize * 0.27));
+	}*/
+	
+	cx.fillStyle = "black";
+	/* draws text into the canvas */
+	for(var il = 0; il <= pline; il++) {
+		var pl = pinfo[il];
+		var plen = pl.length;
+		for(var ic = 0; ic < plen; ic++) {
+			var pc = pl[ic];
+			cx.fillText(pc.text, pc.x, pl.y);
+		}
+	}
+	return pcanvas;
+}
+
+
+//  getPara(e)  xxx
+// newParagraph(doc, txt) xxx
+	
+/* finds the line/chunk by offset */
+/* asw ... buffer for answer */
+Paragraph.prototype.findByOffset = function(offset, asw) {
+	var pinfo = para.pinfo;
+	var lastl = pinfo[0];
+	var lastc = null;
+	var plen = pinfo.length;
+	for(var pli= 0; pli < plen; pli++) {
+		var pl = pinfo[pli];
+		var pllen = pl.length;
+		for(var pci = 0; pci < pllen; pci++) {
+			var pc = pl[pci];
+			if (pc.offset == offset) {
+				asw.line = pl; asw.chunk = pc;
+				return asw;
+			}
+			if (pc.offset > offset) {
+				asw.line = lastl; asw.chunk = lastc;
+				return asw;
+			}
+			lastl = pl;
+			lastc = pc;
+		}
+	}
+	asw.line = lastl; asw.chunk = lastc;
+	return asw;
+}	
+
+//	para.dropCache = function()   xxx
+	
+/* drops the canvas cache (cause something has changed */
+Paragraph.prototype.listen = function() {
+	pcanvas.actual = false;xxx
+	doc.item.dropCanvasCache();
+}
 	
 	/* returns chunk at x/y */
 	para.atXY = function(x, y, asw) {
