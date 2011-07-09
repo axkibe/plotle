@@ -143,7 +143,7 @@ var enums = {
 	ACT_PAN     : 1,
 	ACT_IDRAG   : 2,
 	ACT_IRESIZE : 3,
-	ACT_SCROLL  : 4,
+	ACT_SCROLLY : 4,
 	ACT_MENU    : 6,
 };
 
@@ -197,19 +197,6 @@ function Selection() {
 	this.inner = null;
 }	
 
-/* drops the cache of all paras in this selection */
-Selection.prototype.dropCaches = function() {
-	if (this.element1) {
-		getPara(this.element1).dropCache();
-	}
-	if (this.element1) {
-		getPara(this.element2).dropCache();
-	}
-	if (this.inner) {
-		/* todo xx */
-	}
-}
-
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .-,--.   .   .
  `\__  ,-| . |- ,-. ,-.
@@ -244,7 +231,10 @@ Editor.prototype.updateCaret = function() {
 		var pline  = aswbuf.line;
 		var pchunk = aswbuf.chunk;
 		var x = system.space.pox + caret.item.x + cpara.x + (pchunk != null ? pchunk.x : pline.x);
-		var y = system.space.poy + caret.item.y + cpara.y + pline.y - caret.item.scrollpos();
+		var y = system.space.poy + caret.item.y + cpara.y + pline.y;
+		if (caret.item.scrolly > 0) {
+			y -= caret.item.scrolly;
+		}
 		var cow; /* offset width for the caret */
 		if (pchunk == null) {
 			cow = 0;
@@ -317,6 +307,7 @@ Editor.prototype.specialKey = function(keycode, shiftKey) {
 	{
 		caret.offset = 0;
 		refresh = true;
+		break;
 	}
 	case 37 : // left
 	{
@@ -373,16 +364,14 @@ Editor.prototype.specialKey = function(keycode, shiftKey) {
 				selection.item = this.item;
 				selection.element1 = be;
 				selection.offset1 = bo;
-				getPara(selection.element1).dropCache();
 			}
 			selection.element2 = caret.element;
 			selection.offset2 = caret.offset;
-			getPara(selection.element2).dropCache();
 			redraw = true;
 		} else {
 			if (selection.active) {
 				selection.active = false;
-				selection.dropCaches();					
+				//selection.dropCaches();					
 				redraw = true;
 			} 
 		}
@@ -812,7 +801,7 @@ _init : function() {
 
 	// -v-v-v- testing code here -v-v-v-v-
 	var space = system.space = new Space();
-	var note1 = new Note(220, 65);
+	//var note1 = new Note(220, 65);
 	//var note1 = new Note(320, 90);
 	var note2 = new Note(500, 200);
 	var vector1 = null;
@@ -820,8 +809,9 @@ _init : function() {
 	//if (vector1) {
 	//	space.addItem(vector1,  10,  10);
 	//}
-	space.addItem(note1,    10,  10);
-	space.addItem(note2,   250, 240);
+	//space.addItem(note1,    10,  10);
+	//space.addItem(note2,   250, 240);
+	space.addItem(note2,   50, 40);
 	{
 		var a=[];
 		var n=0;
@@ -839,13 +829,14 @@ a[n++]="                   `'-.....-.'.'.-'  / | |     | |    `-._____ / | |    
 a[n++]="                                 \\_.'  | '.    | '.           `  |_|     \\ \\._,\\ '/  | |      |   /";
 a[n++]="                                       '___'   '___'                      `~~'  `\"   |_|      `'~~/";
 		for(var i = 0; i < n; i++) {
-			note1.dtree.append(new Paragraph(a[i]));
+//			note1.dtree.append(new Paragraph(a[i]));
 		}
 	}
 	//note1.doc.textsize = 13;
-	note1.dtree.textsize = 3;
-	note1.dtree.font = note1.dtree.textsize + "px monospace";
-	note1.dtree.pre = true;
+	//note1.dtree.textsize = 3;
+	//note1.dtree.font = note1.dtree.textsize + "px monospace";
+	//note1.dtree.pre = true;
+	
 	//var draw = window.localStorage.getItem("draw");
 	var draw = "";
 	if (draw) {
@@ -854,14 +845,16 @@ a[n++]="                                       '___'   '___'                    
 			note2.append(new Paragraph(ca[1]));
 		}
 		note2.doc.textsize = 10;
-		note2.doc.font = note1.doc.textsize + "px monospace";
+		note2.doc.font = note2.doc.textsize + "px monospace";
 		note2.doc.pre = true;
 	} else {
 		var d = note2.dtree;
-		d.append(new Paragraph("Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sollicitudin tortor vehicula tellus vestibulum quis pharetra augue faucibus. Integer id quam urna. Aliquam accumsan pulvinar luctus."));
-		d.append(new Paragraph("Fusce tincidunt, sapien posuere interdum rutrum, mauris ante consequat ipsum, id tincidunt nisl turpis ut lectus. Sed in elit ut neque placerat malesuada non vel turpis. Integer congue sem commodo justo pretium vestibulum. Pellentesque at libero eget quam blandit molestie. Nunc in lacus massa, quis faucibus justo."));
-		d.append(new Paragraph("Aliquam vitae tellus nulla. Vestibulum at tortor sit amet ligula bibendum iaculis quis vitae sapien. Integer pellentesque ullamcorper arcu, volutpat aliquam mi viverra vel. Integer mollis, augue at pellentesque tristique, ante magna rutrum urna, vel sagittis sem elit in augue."));
-		d.append(new Paragraph("Nam eros nunc, egestas porttitor pharetra sit amet, egestas eleifend eros. Nulla mauris felis, cursus eget tincidunt sed, pretium quis nibh. Proin pulvinar, enim sit amet tincidunt varius, diam risus bibendum augue, sed facilisis lectus massa in sem. Duis ac felis libero."));
+		d.append(new Paragraph("Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sollicitudin tortor vehicula tellus vestibulum quis pharetra augue faucibus. Integer id quam urna. Aliquam accumsan pulvinar luctus. Fusce tincidunt, sapien posuere interdum rutrum, mauris ante consequat ipsum, id tincidunt nisl turpis ut lectus. Sed in elit ut neque placerat malesuada non vel turpis. Integer congue sem commodo justo pretium vestibulum. Pellentesque at libero eget quam blandit molestie. Nunc in lacus massa, quis faucibus justo. Aliquam vitae tellus nulla. Vestibulum at tortor sit amet ligula bibendum iaculis quis vitae sapien. Integer pellentesque ullamcorper arcu, volutpat aliquam mi viverra vel. Integer mollis, augue at pellentesque tristique, ante magna rutrum urna, vel sagittis sem elit in augue."));
+		
+		//d.append(new Paragraph("Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sollicitudin tortor vehicula tellus vestibulum quis pharetra augue faucibus. Integer id quam urna. Aliquam accumsan pulvinar luctus."));
+		//d.append(new Paragraph("Fusce tincidunt, sapien posuere interdum rutrum, mauris ante consequat ipsum, id tincidunt nisl turpis ut lectus. Sed in elit ut neque placerat malesuada non vel turpis. Integer congue sem commodo justo pretium vestibulum. Pellentesque at libero eget quam blandit molestie. Nunc in lacus massa, quis faucibus justo."));
+		//d.append(new Paragraph("Aliquam vitae tellus nulla. Vestibulum at tortor sit amet ligula bibendum iaculis quis vitae sapien. Integer pellentesque ullamcorper arcu, volutpat aliquam mi viverra vel. Integer mollis, augue at pellentesque tristique, ante magna rutrum urna, vel sagittis sem elit in augue."));
+		//d.append(new Paragraph("Nam eros nunc, egestas porttitor pharetra sit amet, egestas eleifend eros. Nulla mauris felis, cursus eget tincidunt sed, pretium quis nibh. Proin pulvinar, enim sit amet tincidunt varius, diam risus bibendum augue, sed facilisis lectus massa in sem. Duis ac felis libero."));
 	}
 	space.redraw();	
 }};
@@ -1134,11 +1127,11 @@ Space.prototype.dragstart = function(x, y) {
 
 	var srad = settings.scrollbarRadius;
 	var sbmx = settings.scrollbarMarginX;
-	if (it.scrollpos() >= 0 && Math.abs(x - it.x - it.width + srad + sbmx) <= srad +1)  {
-		iaction.act = enums.ACT_SCROLL;
+	if (it.scrolly >= 0 && Math.abs(x - it.x - it.width + srad + sbmx) <= srad +1)  {
+		iaction.act = enums.ACT_SCROLLY; 
 		iaction.item = it;
-		iaction.sx = x - it.x;
-		iaction.sy = y - it.y;
+		iaction.sy   = y;
+		iaction.ssy  = it.scrolly;
 	} else {
 		iaction.act = enums.ACT_IDRAG;
 		iaction.item = it;
@@ -1218,7 +1211,8 @@ Space.prototype.dragstop = function(x, y) {
 		iaction.swi  = null;
 		iaction.shi  = null;
 		break;
-	case enums.ACT_SCROLL :
+	case enums.ACT_SCROLLY :
+		iaction.ssy  = null;
 		break;
 	default :
 		throw new Error("Invalid action in 'Space.dragstop'");
@@ -1250,6 +1244,7 @@ Space.prototype.dragmove = function(x, y) {
 	{
 		var wi = iaction.swi;
 		var hi = iaction.shi;
+		var it = iaction.item;
 		switch (iaction.com) {
 		case "e"  : 
 		case "ne" :
@@ -1266,7 +1261,7 @@ Space.prototype.dragmove = function(x, y) {
 			if (wi < settings.noteMinSizeX) {
 				wi = settings.noteMinSizeX;
 			}
-			iaction.item.x = iaction.six + iaction.swi - wi;
+			it.x = iaction.six + iaction.swi - wi;
 			break;
 		}
 		switch (iaction.com) {
@@ -1285,34 +1280,46 @@ Space.prototype.dragmove = function(x, y) {
 			if (hi < settings.noteMinSizeY) {
 				hi = settings.noteMinSizeY;
 			}
-			iaction.item.y = iaction.siy + iaction.shi - hi;
+			it.y = iaction.siy + iaction.shi - hi;
 			break;			
 		}
 		if (wi != iaction.swi || hi != iaction.shi) {
-			iaction.item.resize(wi, hi);
+			it.resize(wi, hi);
 			this.redraw();
 		}
+		var dtreeHeight = it.dtree.getHeight();
+		var smaxy = dtreeHeight - (it.height - 2 * it.textBorder);
+		if (smaxy > 0 && it.scrolly > smaxy) {
+			it.scrolly = smaxy;
+			// todo split redraw into reflow and redraw.
+			this.redraw();
+		}		
 		return;
 	}
-	case enums.ACT_SCROLL:
+	case enums.ACT_SCROLLY:
 	{
 		var dy = y - iaction.sy;
 		var it = iaction.item;
-		var scrollMax  = it.height - settings.scrollbarMarginY * 2;
-		var scrollSize = it.scrollSize;
-		var moveable = scrollMax - scrollSize;
-		var its = it.scrollpos();
-		its += dy * 100 / moveable;
-		if (its < 0) {
-			its = 0;
+		var scrollRange = it.height - settings.scrollbarMarginY * 2;
+		var dtreeHeight = it.dtree.getHeight();
+		var scrollSize  = scrollRange * scrollRange / (dtreeHeight + 2 * it.textBorder);
+		var srad = settings.scrollbarRadius;
+		if (scrollSize < srad * 2) {
+			/* minimum size of scrollbar */
+			scrollSize = srad * 2;
+		}		
+		var sy = iaction.ssy + 
+			dy * (dtreeHeight - (it.height - 2 * it.textBorder)) / (scrollRange - scrollSize);
+		var smaxy = dtreeHeight - (it.height - 2 * it.textBorder);
+		if (sy < 0) {
+			sy = 0;
+		} else if (sy > smaxy) {
+			sy = smaxy;
 		}
-		if (its > 100) {
-			its = 100;
-		}
-		it.setScrollpos(its);
-		iaction.sy = y;
+
+		it.scrolly = sy;
 		this.redraw();
-		return true;
+		return true;		
 	}
 	default :
 		throw new Error("unknown action code in Space.dragging");
@@ -1485,9 +1492,11 @@ Object.defineProperty(Textnode.prototype, "text", {
 		return this._text;
 	},
 	
-	set: function(text) { 
-		this._text = text;
-		if (this.listen) this.listen(); else if (this.tell) this.tell.listen();
+	set: function(text) {
+		if (this._text != text) {
+			this._text = text;
+			if (this.listen) this.listen(); else if (this.tell) this.tell.listen();
+		}
 	}
 });
 
@@ -1508,58 +1517,40 @@ function Paragraph(text)
 	pcanvas.width = pcanvas.height = 0;
 	pcanvas.actual == false; // todo move var otherplace
 	this.append(new Textnode(text));
-	this.h = null;
+	this._width = null;	
 	this.x = null;
 	this.y = null;
 }
 
-/* draws the paragraph in its cache and returns it */
-Paragraph.prototype.getCanvas = function(width, selection) {
-	var pcanvas = this._pcanvas;
-	var cx = pcanvas.getContext("2d");
-	if (pcanvas.actual && pcanvas.width == width) { /* todo, double check? */
-		return pcanvas;
+/* (re)flows the Paragraph  */
+Paragraph.prototype._reflow = function() {
+	if (this._flowActual) {
+		return;
 	}
-	pcanvas.actual = true;
-	pcanvas.width = width;
+
+	/* build position informations */
+	this._flowActual = true;
+	var pinfo = this._pinfo = [];
+	var width = this._width;
 	var dtree = this.anchestor("dtree");
+	/* canvas is needed for font measurement */
+	var cx = this._pcanvas.getContext("2d");
 	var textsize = dtree.textsize;
 	var x = 0;
 	var y = textsize;	
 	cx.font = dtree.font;
 	var space = cx.measureText(" ").width;
-		
-	/* calculates position information */ 
-	var pinfo = this._pinfo = [];
-
 	var pline = 0;
 	{
-		var l = [];
+		var l = pinfo[pline] = [];
 		l.x = x;
 		l.y = y;
-		pinfo[pline] = l;
 	}
 
-	/* selection start and stop */
-	/*var sel1line   = null;
-	var sel1chunk  = null;
-	var sel1offset = null;
-	var sel2line   = null;
-	var sel2chunk  = null;
-	var sel2offset = null;*/
-		
-	/* build position informations */
 	for(var node = this.first; node; node = node.next) {
 		var t = node.text;
-		/* makes position info */
 		var pchunk = 0;
-		/* every text chunk */
-		var reg;
-		if (!dtree.pre) {
-			reg = /(\s*\S+)\s?(\s*)/g;
-		} else {
-			reg = /(.+)()$/g;
-		}
+		var reg = !dtree.pre ? (/(\s*\S+)\s?(\s*)/g) : (/(.+)()$/g);
 		var stol = true; /* at start of line */
 		for(var ca = reg.exec(t); ca != null; ca = reg.exec(t)) {
 			/* text is a word plus hard spaces */
@@ -1572,39 +1563,16 @@ Paragraph.prototype.getCanvas = function(width, selection) {
 					y += Math.round(dtree.textsize * (dtree.pre ? 1 : 1.2));
 					pline++;
 					{
-						var l = [];
+						var l = pinfo[pline] = [];
 						l.x = x;
 						l.y = y;
-						pinfo[pline] = l;
 						pchunk = 0;
 					}
 					stol = true;
-					//if (y - Math.round(dtree.textsize * 1.2) > this.height) {
-					//	break;
-					//}
 				} else {
 					/* horizontal overflow */
-					// todo
 				}
 			}				
-			/*if (selection.active && 
-			    selection.element1 == node && 
-			    sel1line == null && 
-			    ca.index + text.length >= selection.offset1
-			) {
-				sel1line   = pline;
-				sel1chunk  = pchunk;
-				sel1offset = selection.offset1 - ca.index;
-			}
-			if (selection.active && 
-			    selection.element2 == node && 
-			    sel2line == null && 
-			    ca.index + text.length >= selection.offset2
-			) {
-				sel2line   = pline;
-				sel2chunk  = pchunk;
-				sel2offset = selection.offset2 - ca.index;
-			}*/
 			pinfo[pline][pchunk++] = {
 				x: x, 
 				w: w,
@@ -1616,19 +1584,97 @@ Paragraph.prototype.getCanvas = function(width, selection) {
 			x += w + space;
 			stol = false;
 		}
-
-		/* hard break */
-		/*if (y - Math.round(doc.textsize * 1.2) > this.height) {
-			break;
-		}*/
 	}
-	
 	/* returns the logical height (excluding letters bottombox)  */
-	pcanvas.hsoft = y;
+	this._softHeight = y;
+}
+
+/* returns the logical height 
+ * (without addition of box below last line base line ofr gpq etc.) */
+Object.defineProperty(Paragraph.prototype, "softHeight", {
+	get: function() { 
+		this._reflow();
+		return this._softHeight;
+	},
+});
+
+Object.defineProperty(Paragraph.prototype, "height", {
+	get: function() { 
+		var dtree = this.anchestor("dtree");
+		return this._softHeight + Math.round(dtree.textsize * 0.27);
+	},
+	set: function(s) {
+		throw new Error("Cannot set paragrph height.");
+	}
+});
+
+
+Object.defineProperty(Paragraph.prototype, "width", {
+	get: function() { 
+		return this._width;
+	},
+	set: function(width) {
+		if (this._width != width) {
+			this._width = width;
+			this._flowActual = false;
+			this._canvasActual = false;
+		}
+	}
+});
+
+/* draws the paragraph in its cache and returns it */
+Paragraph.prototype.getCanvas = function(selection) {
+	var pcanvas = this._pcanvas;
+	if (this._canvasActual) {
+		return pcanvas;
+	}
+	var cx = pcanvas.getContext("2d");
+	this._reflow();
+	this._canvasActual = true;
+
+	/* selection start and stop */
+	/*var sel1line   = null;
+	var sel1chunk  = null;
+	var sel1offset = null;
+	var sel2line   = null;
+	var sel2chunk  = null;
+	var sel2offset = null;*/
+	/*if (selection.active && 
+	    selection.element1 == node && 
+	    sel1line == null && 
+	    ca.index + text.length >= selection.offset1
+	) {
+		sel1line   = pline;
+		sel1chunk  = pchunk;
+		sel1offset = selection.offset1 - ca.index;
+	}
+	if (selection.active && 
+	    selection.element2 == node && 
+	    sel2line == null && 
+	    ca.index + text.length >= selection.offset2
+	) {
+		sel2line   = pline;
+		sel2chunk  = pchunk;
+		sel2offset = selection.offset2 - ca.index;
+	}*/
+			
 	/* todo: work out exact height for text below baseline */
 	/* set the canvas height */
-	pcanvas.height = y + Math.round(dtree.textsize * 0.27);
-	/* set font anew since changing height reseted canvas */
+	var dtree = this.anchestor("dtree");
+	{
+		var equalHeight = pcanvas.height == this.height;
+		var equalWidth  = pcanvas.width  == this._width;
+		if (equalHeight && equalWidth) {
+			cx.clearRect(0, 0, this._width, this.height);
+		} else {
+			if (!equalHeight) {
+				pcanvas.height = this.height;
+			}
+			if (!equalWidth) {
+				pcanvas.width = this._width;
+			}
+		}
+	}
 	cx.font = dtree.font;
 
 	/* draws the selection into the canvas */
@@ -1645,7 +1691,9 @@ Paragraph.prototype.getCanvas = function(width, selection) {
 	
 	cx.fillStyle = "black";
 	/* draws text into the canvas */
-	for(var il = 0; il <= pline; il++) {
+	var pinfo = this._pinfo;
+	var plines = pinfo.length;
+	for(var il = 0; il < plines; il++) {
 		var pl = pinfo[il];
 		var plen = pl.length;
 		for(var ic = 0; ic < plen; ic++) {
@@ -1655,14 +1703,11 @@ Paragraph.prototype.getCanvas = function(width, selection) {
 	}
 	return pcanvas;
 }
-
-
-//  getPara(e)  xxx
-// newParagraph(doc, txt) xxx
 	
 /* finds the line/chunk by offset */
 /* asw ... buffer for answer */
 Paragraph.prototype.findByOffset = function(offset, asw) {
+	this._reflow();
 	var pinfo = this._pinfo;
 	var lastl = pinfo[0];
 	var lastc = null;
@@ -1687,12 +1732,11 @@ Paragraph.prototype.findByOffset = function(offset, asw) {
 	asw.line = lastl; asw.chunk = lastc;
 	return asw;
 }	
-
-//	para.dropCache = function()   xxx
 	
 /* drops the canvas cache (cause something has changed */
 Paragraph.prototype.listen = function() {
-	this._pcanvas.actual = false;
+	this._flowActual   = false;
+	this._canvasActual = false;
 	if (this.tell) this.tell.listen();
 }
 	
@@ -1794,14 +1838,12 @@ function DTree() {
 	Treenode.call(this, "dtree");
 	this.textsize = 13;
 	this.font = this.textsize + 'px Verdana,Geneva,Kalimati,sans-serif';
-	this.scrollOffset = 0; /* todo this doesnt belong here */
 }
 		
 /* returns the chunk at x,y */
-DTree.prototype.atXY = function(x, y) {
+DTree.prototype.atXY = function(x, y) { //xxx
 	var p = this.first;
-	y += this.scrollOffset;	
-	while (p && y > p.y + p.h) {
+	while (p && y > p.y + p.softHeight) {
 		p = p.next;
 	}
 	if (p == null) {
@@ -1813,7 +1855,7 @@ DTree.prototype.atXY = function(x, y) {
 /* draws the content in a buffer canvas */
 /* acanvas  ... canvas to draw upon */
 /* todo rename */
-DTree.prototype.drawCanvas = function(acanvas, offsetX, offsetY, width, height, scroll, selection) {
+DTree.prototype.drawCanvas = function(acanvas, offsetX, offsetY, width, scrolly, selection) {
 	var cx = acanvas.getContext("2d");
 	var y = offsetY;
 	var pi = 0;
@@ -1827,25 +1869,33 @@ DTree.prototype.drawCanvas = function(acanvas, offsetX, offsetY, width, height, 
 		if (h > 0) {
 			h += parasep;
 		}
-		h += para.getCanvas(width, selection).hsoft;
+		h += para.softHeight;
 	}
-		
-	var scrollOffset = this.scrollOffset = Math.round((h - height) * scroll / 100);
-		
+
 	for(var para = this.first; para; para = para.next) {
-		var pcanvas = para.getCanvas(width, selection);
+		para.width = width; /* todo */
+		var pcanvas = para.getCanvas(selection);
 		para.x = offsetX;
 		para.y = y;
-		para.h = pcanvas.height;
-		cx.drawImage(pcanvas, offsetX, y - scrollOffset);
-		y += pcanvas.hsoft + parasep;
+		cx.drawImage(pcanvas, offsetX, y - scrolly);
+		y += para.softHeight + parasep;
 	}
 }
 
 /* returns the height of the drawn document */
 DTree.prototype.getHeight = function() {
-	var lpara = this.last;
-	return lpara.y + lpara.h;
+	var h = 0;
+	var parasep = this.pre ? 0 : this.textsize;
+	var first = true;
+	for(var para = this.first; para; para = para.next) {
+		if (!first) {
+			h += parasep;
+		} else {
+			first = false;
+		}
+		h += para.softHeight;
+	}
+	return h;
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1877,7 +1927,8 @@ function Note(width, height) {
 	
 	this.width  = width;
 	this.height = height;
-	this._scrollpos = -Number.MIN_VALUE;
+	this._scrollx = -8833;
+	this._scrolly = -8833;
 	this.bcanvas.width  = width; /* need to set it so early? */
 	this.bcanvas.height = height;
 	this.dtree = new DTree();
@@ -1886,6 +1937,9 @@ function Note(width, height) {
 
 /* returns the chunk at x, y */
 Note.prototype.atXY = function(x, y) {
+	if (this._scrolly > 0) {
+		y += this._scrolly;
+	}
 	if (x < this.textBorder || y < this.textBorder) {
 		return null;
 	}
@@ -1908,16 +1962,21 @@ Note.prototype.resize = function(width, height) {
 	bcanvas.actual = false;
 }
 
-/* gets the scroll position from 0 .. 100 */
-Note.prototype.scrollpos = function() {
-	return this._scrollpos;
-}
-
-/* sets the scroll position from 0 .. 100 */
-Note.prototype.setScrollpos = function(scrollpos) {
-	this._scrollpos = scrollpos;
-	this.bcanvas.actual = false;
-}
+Object.defineProperty(Note.prototype, "scrolly", {
+	get: function() { 
+		return this._scrolly;
+	},
+	
+	set: function(sy) {
+		if (sy < 0 && sy != -8833) {
+			throw new Error("Invalid scrolly position");
+		}
+		if (this._scrolly != sy) {
+			this._scrolly = sy;
+			this.bcanvas.actual = false;
+		}
+	}
+});
 
 /* draws a bevel */
 function Note_bevel(cx, x, y, w, h, border, radius) {
@@ -1946,10 +2005,9 @@ Note.prototype._getCanvasImpl = function(selection) {
 		return bcanvas;
 	}
 	// todo create sizing here;
-	cx.clearRect(0, 0, bcanvas.width, bcanvas.height);
-	/* draws a bevel */
-		
-	/* draws background */
+
+	/* draws the note */
+	cx.clearRect(0, 0, bcanvas.width, bcanvas.height);	
 	Note_bevel(cx, 0, 0, this.width, this.height, 2.5, 3);
 	var grad = cx.createLinearGradient(0, 0, this.width / 10, this.height);			
 	grad.addColorStop(0, settings.noteBackground1);
@@ -1959,44 +2017,49 @@ Note.prototype._getCanvasImpl = function(selection) {
 	cx.fillStyle = "#000000";
 
 	/* draws text */
-	var sp = this._scrollpos;
+	var sy = this._scrolly;
 	var innerWidth = this.width  - 2 * this.textBorder - 
-		(sp >= 0 ? settings.scrollbarRadius * 2 : 0);
+		(sy >= 0 ? settings.scrollbarRadius * 2 : 0);
+	var innerHeight = this.height - 2 * this.textBorder;
 	dtree.drawCanvas(bcanvas, 
-		this.textBorder, this.textBorder, 
-		innerWidth, this.height - 2 * this.textBorder, 
-		sp < 0 ? 0 : sp,
+		this.textBorder, this.textBorder, innerWidth, 
+		sy < 0 ? 0 : Math.round(sy),
 		selection
 	);
-		
-	/* draws the scrollbar */
+	
 	var dtreeHeight = dtree.getHeight();
-	var scrollMax = this.height - settings.scrollbarMarginY * 2;
-	var scrollSize = scrollMax * scrollMax / dtreeHeight;
-	if (sp < 0 && scrollSize <= scrollMax) {
-		/* should not use scrollbar */
+	if (sy < 0 && dtreeHeight > innerHeight) {
+		/* should use a scrollbar */
 		return null;
 	}
-		
-	if (sp >= 0) {
-		/* draws the scroll bar */
-		var srad       = settings.scrollbarRadius;
+
+	if (sy >= 0) {
+		if (dtreeHeight <= innerHeight) {
+			/* should not use a scrollbar */
+			return null;
+		}
+
+		/* draws the vertical scroll bar */
 		cx.fillStyle   = settings.scrollbarFillStyle;
 		cx.strokeStyle = settings.scrollbarStrokeStyle;
 		cx.lineWidth   = settings.scrollbarLineWidth;
-		var sx = this.width - settings.scrollbarMarginX - srad;
-		var sy = settings.scrollbarMarginY + sp * (scrollMax - scrollSize) / 100;
+		
+		var scrollRange = this.height - settings.scrollbarMarginY * 2;
+		var srad       = settings.scrollbarRadius;
+		var scrollSize  = scrollRange * scrollRange / (dtreeHeight + 2 * this.textBorder);
+		var spx = this.width - settings.scrollbarMarginX - srad;
 		if (scrollSize < srad * 2) {
+			/* minimum size of scrollbar */
 			scrollSize = srad * 2;
-		} else if (scrollSize > scrollMax) {
-			/* retry without scrollbar */
-			return null;
 		}
-		this.scrollSize = scrollSize;
-			
+						
+		var spy = settings.scrollbarMarginY + 
+			sy / (dtreeHeight - (this.height - 2 * this.textBorder)) * (scrollRange - scrollSize);
+			sy / (dtreeHeight - (this.height - 2 * this.textBorder)) * (scrollRange - scrollSize);
+		
 		cx.beginPath();
-		cx.arc(sx, sy + srad, srad, Math.PI, 0, false);
-		cx.arc(sx, sy + scrollSize - srad, srad, 0, Math.PI, false);
+		cx.arc(spx, spy + srad, srad, Math.PI, 0, false);
+		cx.arc(spx, spy + scrollSize - srad, srad, 0, Math.PI, false);
 		cx.closePath();
 		cx.stroke();
 		cx.fill();
@@ -2030,11 +2093,11 @@ Note.prototype.focus = function(editor) {
 Note.prototype.getCanvas = function(selection) {
 	var asw = this._getCanvasImpl(selection);
 	if (asw == null) {
-		if (this._scrollpos == 0) {
-			console.log("_scrollpos was zero");
-			this._scrollpos = Number.MIN_VALUE;
+		if (this._scrolly >= 0) {
+			this._scrolly = -8833;
+		} else {
+			this._scrolly = 0;		
 		}
-		this._scrollpos = -this._scrollpos;
 		asw = this._getCanvasImpl(selection);
 	}
 	if (asw == null) {
