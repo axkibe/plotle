@@ -235,7 +235,7 @@ Editor.prototype.updateCaret = function() {
 		/* todo cache position */
 		cx.font = caret.item.dtree.font;
 		var ce  = caret.element;
-		var t   = ce.gett();
+		var t   = ce.text;
 		var co  = caret.offset;
 		var pchunk, pline;
 		var cpara = ce.anchestor("paragraph");
@@ -281,8 +281,8 @@ Editor.prototype.specialKey = function(keycode, shiftKey) {
 		var co = caret.offset;
 		var ce = caret.element;
 		if (co > 0) {
-			var t = ce.gett();
-			ce.sett(t.substring(0, co - 1) + t.substring(co, t.length));
+			var t = ce.text;
+			ce.text = t.substring(0, co - 1) + t.substring(co, t.length);
 			caret.offset--;
 			redraw = true;
 		} else {
@@ -295,11 +295,11 @@ Editor.prototype.specialKey = function(keycode, shiftKey) {
 	{
 		var ce    = caret.element;
 		var co    = caret.offset;			
-		var ct    = ce.gett();
+		var ct    = ce.text;
 		/* todo multi node ability */
 		var opara = ce.anchestor("paragraph");
 			
-		ce.sett(ct.substring(0, co));
+		ce.text = ct.substring(0, co);
 		var npara = new Paragraph(ct.substring(co, ct.length));
 		opara.parent.insertBefore(npara, opara.next);
 		caret.element = npara.first;
@@ -309,7 +309,7 @@ Editor.prototype.specialKey = function(keycode, shiftKey) {
 	}
 	case 35 : // end
 	{
-		caret.offset = caret.element.gett().length;
+		caret.offset = caret.element.text.length;
 		refresh = true;
 		break;
 	}
@@ -330,7 +330,7 @@ Editor.prototype.specialKey = function(keycode, shiftKey) {
 				return false;
 			}
 			ce = caret.element = prespara.last;
-			caret.offset = ce.gett().length;
+			caret.offset = ce.text.length;
 		}
 		refresh = true;
 		break;
@@ -343,7 +343,7 @@ Editor.prototype.specialKey = function(keycode, shiftKey) {
 			return false;
 		}
 		ce = caret.element = pprev.first;
-		var ct = ce.gett();
+		var ct = ce.text;
 		if (caret.offset > ct.length) {
 			caret.offset = ct.length;
 		}
@@ -352,7 +352,7 @@ Editor.prototype.specialKey = function(keycode, shiftKey) {
 	case 39 : // right
 	{	
 		var ce = caret.element;
-		var ct = ce.gett();
+		var ct = ce.text;
 		var be = ce;
 		var bo = caret.offset;
 			
@@ -398,7 +398,7 @@ Editor.prototype.specialKey = function(keycode, shiftKey) {
 			return false;
 		}
 		ce = caret.element = pnext.first;
-		var ct = ce.gett();
+		var ct = ce.text;
 		if (caret.offset > ct.length) {
 			caret.offset = ct.length;
 		}
@@ -409,9 +409,9 @@ Editor.prototype.specialKey = function(keycode, shiftKey) {
 	{
 		var co = caret.offset;
 		var ce = caret.element;
-		var ct = ce.gett();
+		var ct = ce.text;
 		if (co < ct.length) {
-			ce.sett(ct.substring(0, co) + ct.substring(co + 1, ct.length));
+			ce.text = ct.substring(0, co) + ct.substring(co + 1, ct.length);
 			redraw = true;
 		} else {
 			var para = ce.anchestor("paragraph");
@@ -450,8 +450,8 @@ Editor.prototype.input = function(text) {
 		var ch = text[ci];
 		var ce = caret.element;
 		var co = caret.offset;
-		var ct = ce.gett();
-		ce.sett(ct.substring(0, co) + ch + ct.substring(co, ct.length));
+		var ct = ce.text;
+		ce.text = ct.substring(0, co) + ch + ct.substring(co, ct.length);
 		this.caret.offset++;
 	}
 	return true;
@@ -677,11 +677,16 @@ _init : function() {
 		var y = event.pageY - canvas.offsetTop;
 		/* asks the space if it forces this to be a drag or click, or yet unknown */
 		mst = system.space.mousedown(x, y);
-		if (mst == enums.MST_ATWEEN) {
+		switch(mst) {
+		case enums.MST_ATWEEN :
 			msx = mmx = x;
 			msy = mmy = y;
 			atweenTimer = setTimeout("system.onatweentime();", settings.dragtime);
-		}		
+			break;
+		case enums.MST_DRAG :
+			this.captureEvents();
+			break;
+		}	
 		return false;
 	}
 
@@ -1475,17 +1480,16 @@ function Textnode(text)
 	this._text = text ? text : "";
 }
 
-/* sets the text */
-Textnode.prototype.sett = function(text) {
-	this._text = text;
-	if (this.listen) this.listen(); else if (this.tell) this.tell.listen();
-	return text;
-}
-
-/* gets the text */
-Textnode.prototype.gett = function() {
-	return this._text;
-}
+Object.defineProperty(Textnode.prototype, "text", {
+	get: function() { 
+		return this._text;
+	},
+	
+	set: function(text) { 
+		this._text = text;
+		if (this.listen) this.listen(); else if (this.tell) this.tell.listen();
+	}
+});
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .-,--.                             .
@@ -1546,7 +1550,7 @@ Paragraph.prototype.getCanvas = function(width, selection) {
 		
 	/* build position informations */
 	for(var node = this.first; node; node = node.next) {
-		var t = node.gett();
+		var t = node.text;
 		/* makes position info */
 		var pchunk = 0;
 		/* every text chunk */
@@ -1751,7 +1755,7 @@ Paragraph.prototype.joinToNext = function(node, caret) {
 		/* end of document */
 		return false;
 	}
-	node.sett(node.gett() + nextPara.first.gett());
+	node.text = node.text + nextPara.first.text; // todo xxx
 	/* todo take over siblings */
 	this.parent.remove(nextPara);
 	return true;
@@ -1768,13 +1772,13 @@ Paragraph.prototype.joinToPrevious = function(node, caret) {
 	if (prevPara == null) {
 		return false;
 	}
-	var nt = node.gett();
+	var nt = node.text;
 	var plc = prevPara.last;
 	if (caret) {
 		caret.element = plc;
-		caret.offset = plc.gett().length;
+		caret.offset = plc.text.length;
 	}
-	plc.sett(plc.gett() + nt);
+	plc.text = plc.text + nt; // todo xxx
 	this.parent.remove(this);
 	return true;
 }
@@ -2063,7 +2067,7 @@ VectorGraph.prototype.getCanvas = function(selection) {
 	cx.clearRect(0, 0, bcanvas.width, bcanvas.height);
 	draw = "";
 	for(var para = doc.getFirstPara(); para; para = para.next) {
-		var cmd = para.first.gett();
+		var cmd = para.first.text;
 		draw += cmd + "\n";
 		var reg = /(\S+)\s*/g;
 		var cc = [];
