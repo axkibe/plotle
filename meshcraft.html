@@ -63,12 +63,13 @@ settings = {
 	selectionColor : "rgba(243,203,255,0.9)",
 	
 	/* scrollbar */
-	scrollbarFillStyle : "#ffbc57",
+	scrollbarRound       : true,
+	scrollbarFillStyle   : "#ffbc57",
 	scrollbarStrokeStyle : "#dd9a34",
-	scrollbarLineWidth : 2,
-	scrollbarRadius  : 4,
-	scrollbarMarginX : 7,
-	scrollbarMarginY : 5,
+	scrollbarLineWidth   : 2,
+	scrollbarRadius      : 4,
+	scrollbarMarginX     : 7,
+	scrollbarMarginY     : 5,
 	
 	/* size of resize handles */
 	handleSize : 10,
@@ -849,12 +850,10 @@ a[n++]="                                       '___'   '___'                    
 		note2.doc.pre = true;
 	} else {
 		var d = note2.dtree;
-		d.append(new Paragraph("Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sollicitudin tortor vehicula tellus vestibulum quis pharetra augue faucibus. Integer id quam urna. Aliquam accumsan pulvinar luctus. Fusce tincidunt, sapien posuere interdum rutrum, mauris ante consequat ipsum, id tincidunt nisl turpis ut lectus. Sed in elit ut neque placerat malesuada non vel turpis. Integer congue sem commodo justo pretium vestibulum. Pellentesque at libero eget quam blandit molestie. Nunc in lacus massa, quis faucibus justo. Aliquam vitae tellus nulla. Vestibulum at tortor sit amet ligula bibendum iaculis quis vitae sapien. Integer pellentesque ullamcorper arcu, volutpat aliquam mi viverra vel. Integer mollis, augue at pellentesque tristique, ante magna rutrum urna, vel sagittis sem elit in augue."));
-		
-		//d.append(new Paragraph("Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sollicitudin tortor vehicula tellus vestibulum quis pharetra augue faucibus. Integer id quam urna. Aliquam accumsan pulvinar luctus."));
-		//d.append(new Paragraph("Fusce tincidunt, sapien posuere interdum rutrum, mauris ante consequat ipsum, id tincidunt nisl turpis ut lectus. Sed in elit ut neque placerat malesuada non vel turpis. Integer congue sem commodo justo pretium vestibulum. Pellentesque at libero eget quam blandit molestie. Nunc in lacus massa, quis faucibus justo."));
-		//d.append(new Paragraph("Aliquam vitae tellus nulla. Vestibulum at tortor sit amet ligula bibendum iaculis quis vitae sapien. Integer pellentesque ullamcorper arcu, volutpat aliquam mi viverra vel. Integer mollis, augue at pellentesque tristique, ante magna rutrum urna, vel sagittis sem elit in augue."));
-		//d.append(new Paragraph("Nam eros nunc, egestas porttitor pharetra sit amet, egestas eleifend eros. Nulla mauris felis, cursus eget tincidunt sed, pretium quis nibh. Proin pulvinar, enim sit amet tincidunt varius, diam risus bibendum augue, sed facilisis lectus massa in sem. Duis ac felis libero."));
+		d.append(new Paragraph("Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sollicitudin tortor vehicula tellus vestibulum quis pharetra augue faucibus. Integer id quam urna. Aliquam accumsan pulvinar luctus."));
+		d.append(new Paragraph("Fusce tincidunt, sapien posuere interdum rutrum, mauris ante consequat ipsum, id tincidunt nisl turpis ut lectus. Sed in elit ut neque placerat malesuada non vel turpis. Integer congue sem commodo justo pretium vestibulum. Pellentesque at libero eget quam blandit molestie. Nunc in lacus massa, quis faucibus justo."));
+		d.append(new Paragraph("Aliquam vitae tellus nulla. Vestibulum at tortor sit amet ligula bibendum iaculis quis vitae sapien. Integer pellentesque ullamcorper arcu, volutpat aliquam mi viverra vel. Integer mollis, augue at pellentesque tristique, ante magna rutrum urna, vel sagittis sem elit in augue."));
+		d.append(new Paragraph("Nam eros nunc, egestas porttitor pharetra sit amet, egestas eleifend eros. Nulla mauris felis, cursus eget tincidunt sed, pretium quis nibh. Proin pulvinar, enim sit amet tincidunt varius, diam risus bibendum augue, sed facilisis lectus massa in sem. Duis ac felis libero."));
 	}
 	space.redraw();	
 }};
@@ -1302,15 +1301,16 @@ Space.prototype.dragmove = function(x, y) {
 		var it = iaction.item;
 		var scrollRange = it.height - settings.scrollbarMarginY * 2;
 		var dtreeHeight = it.dtree.getHeight();
-		var scrollSize  = scrollRange * scrollRange / (dtreeHeight + 2 * it.textBorder);
+		var innerHeight = it.height - 2 * it.textBorder;
+		var scrollSize  = scrollRange * innerHeight / dtreeHeight;
 		var srad = settings.scrollbarRadius;
 		if (scrollSize < srad * 2) {
 			/* minimum size of scrollbar */
 			scrollSize = srad * 2;
 		}		
 		var sy = iaction.ssy + 
-			dy * (dtreeHeight - (it.height - 2 * it.textBorder)) / (scrollRange - scrollSize);
-		var smaxy = dtreeHeight - (it.height - 2 * it.textBorder);
+			dy * (dtreeHeight - innerHeight) / (scrollRange - scrollSize);
+		var smaxy = dtreeHeight - innerHeight;
 		if (sy < 0) {
 			sy = 0;
 		} else if (sy > smaxy) {
@@ -1395,12 +1395,44 @@ Space.prototype.dblclick = function(x, y) {
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- Treenode +++
+ ,--,--'                    .
+ `- | ,-. ,-. ,-. ,-. ,-. ,-| ,-.
+  , | |   |-' |-' | | | | | | |-'
+  `-' '   `-' `-' ' ' `-' `-^ `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  Part of a tree-structure.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+Treenode.id = 1;
 function Treenode(type) {
-	this.type   = type;
+	this.type = type;
+	this.id   = ++Treenode.id;
+}
+
+/* prints the structure */
+/* todo remove after a while */
+Treenode.prototype.dbgstructure = function() {
+	var str = "[" + this.type + "-" + this.id;
+	if (this.next) {
+		str += " n-" + this.next.id;
+	}
+	if (this.prev) {	
+		str += " p-" + this.prev.id;
+	}
+	if (this.first) {
+		str += " f-" + this.first.id + " {";
+		for(var nn = this.first; nn; nn = nn.next) {
+			if (nn != this.first) {
+				str += ", ";
+			}
+			str += nn.dbgstructure();
+		}
+		str += "}"
+	}
+	if (this.last) {
+		str += " l-" + this.last.id;
+	}
+	str += "]";
+	return str;
 }
 
 /* appends tnode to list of children */
@@ -1460,7 +1492,7 @@ Treenode.prototype.remove = function(tnode) {
 		if (!n) throw new Error("debugNodes");
 	
 	if (tnode == this.first) this.first = tnode.next;
-	if (tnode == this.last) this.last = tnode.last;
+	if (tnode == this.last) this.last = tnode.prev;
 	if (tnode.next) tnode.next.prev = tnode.prev;
 	if (tnode.prev) tnode.prev.next = tnode.next;
 	if (this.listen) this.listen(); else if (this.tell) this.tell.listen();
@@ -1475,9 +1507,11 @@ Treenode.prototype.anchestor = function(type) {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- TEXT
+ ,--,--'      .            .
+ `- | ,-. . , |- ,-. ,-. ,-| ,-.
+  , | |-'  X  |  | | | | | | |-'
+  `-' `-' ' ` `' ' ' `-' `-^ `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 Textnode.prototype = new Treenode;
 Textnode.prototype.constructor = Textnode;
@@ -1828,7 +1862,10 @@ Paragraph.prototype.joinToPrevious = function(node, caret) {
 }
 	
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- DTree
+ .-,--.  ,--,--'
+ ' |   \ `- | ,-. ,-. ,-.
+ , |   /  , | |   |-' |-'
+ `-^--'   `-' '   `-' `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  A document with nodes in tree structure.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -2020,6 +2057,7 @@ Note.prototype._getCanvasImpl = function(selection) {
 	var sy = this._scrolly;
 	var innerWidth = this.width  - 2 * this.textBorder - 
 		(sy >= 0 ? settings.scrollbarRadius * 2 : 0);
+		
 	var innerHeight = this.height - 2 * this.textBorder;
 	dtree.drawCanvas(bcanvas, 
 		this.textBorder, this.textBorder, innerWidth, 
@@ -2044,25 +2082,29 @@ Note.prototype._getCanvasImpl = function(selection) {
 		cx.strokeStyle = settings.scrollbarStrokeStyle;
 		cx.lineWidth   = settings.scrollbarLineWidth;
 		
-		var scrollRange = this.height - settings.scrollbarMarginY * 2;
-		var srad       = settings.scrollbarRadius;
-		var scrollSize  = scrollRange * scrollRange / (dtreeHeight + 2 * this.textBorder);
+		var srad        = settings.scrollbarRadius;
 		var spx = this.width - settings.scrollbarMarginX - srad;
+		var scrollRange = this.height - settings.scrollbarMarginY * 2;
+		var scrollSize  = scrollRange * innerHeight / dtreeHeight;
 		if (scrollSize < srad * 2) {
 			/* minimum size of scrollbar */
 			scrollSize = srad * 2;
 		}
 						
 		var spy = settings.scrollbarMarginY + 
-			sy / (dtreeHeight - (this.height - 2 * this.textBorder)) * (scrollRange - scrollSize);
-			sy / (dtreeHeight - (this.height - 2 * this.textBorder)) * (scrollRange - scrollSize);
+			sy / (dtreeHeight - innerHeight) * (scrollRange - scrollSize);
+			sy / (dtreeHeight - innerHeight) * (scrollRange - scrollSize);
 		
-		cx.beginPath();
-		cx.arc(spx, spy + srad, srad, Math.PI, 0, false);
-		cx.arc(spx, spy + scrollSize - srad, srad, 0, Math.PI, false);
-		cx.closePath();
-		cx.stroke();
-		cx.fill();
+		if (settings.scrollbarRound) {
+			cx.beginPath();
+			cx.arc(spx, spy + srad, srad, Math.PI, 0, false);
+			cx.arc(spx, spy + scrollSize - srad, srad, 0, Math.PI, false);
+			cx.closePath();
+			cx.stroke();
+			cx.fill();
+		} else {
+			cx.fillRect(spx, spy, srad + 2, scrollSize);
+		}
 	}
 
 	/* draws the border */
