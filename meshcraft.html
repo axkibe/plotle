@@ -22,10 +22,7 @@
 
 <script type="text/javascript">//<![CDATA[
 
-/* Coding guide to Object Orientation used here: 
-   _prefix denotes a private property, there should never be something else than this._something.
-   Class_function denotes a static function for this class.
-*/
+"use strict";
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .---.     .  .
@@ -40,7 +37,7 @@
 var enableCatcher = false;
 var debugNodes = true;
 
-settings = {
+var settings = {
 	/* milliseconds after mouse down, dragging starts */
 	dragtime : 400,
 	
@@ -172,13 +169,13 @@ function Caret() {
 Caret.prototype.show = function() {
 	this.shown = true;
 	this.blink = false;
-	system.startBlinker();
+	System.startBlinker();
 }
 	
 /* hides the caret */
 Caret.prototype.hide = function() {
 	this.shown = false;
-	system.stopBlinker();
+	System.stopBlinker();
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -212,7 +209,7 @@ function Editor() {
 
 /* draws or erases the caret */
 Editor.prototype.updateCaret = function() {
-	var cx = system.canvas.getContext("2d");
+	var cx = System.canvas.getContext("2d");
 	var caret = this.caret;
 	if (caret.save) {
 		/* erase the old caret */
@@ -231,8 +228,8 @@ Editor.prototype.updateCaret = function() {
 		cpara.findByOffset(co, aswbuf);
 		var pline  = aswbuf.line;
 		var pchunk = aswbuf.chunk;
-		var x = system.space.pox + caret.item.x + cpara.x + (pchunk != null ? pchunk.x : pline.x);
-		var y = system.space.poy + caret.item.y + cpara.y + pline.y;
+		var x = System.space.pox + caret.item.x + cpara.x + (pchunk != null ? pchunk.x : pline.x);
+		var y = System.space.poy + caret.item.y + cpara.y + pline.y;
 		if (caret.item.scrolly > 0) {
 			y -= caret.item.scrolly;
 		}
@@ -294,7 +291,7 @@ Editor.prototype.specialKey = function(keycode, shiftKey) {
 		var npara = new Paragraph(ct.substring(co, ct.length));
 		opara.parent.insertBefore(npara, opara.next);
 		caret.element = npara.first;
-		caret.offset  = 0;			
+		caret.offset  = 0;
 		redraw = true;
 		break;
 	}
@@ -486,10 +483,12 @@ Editor.prototype.blur = function() {
   Base-`-'-system for Meshcraft. 
   All system events arrive here.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
- 
+var System = { 
+
 /* Catches all errors for a function */
-function System_makeCatcher(that, fun) {
+makeCatcher : function(that, fun) {
 	return function() {
+		"use strict";
 		if (enableCatcher) {
 			try {
 				fun.apply(that, arguments);
@@ -503,22 +502,28 @@ function System_makeCatcher(that, fun) {
 			fun.apply(that, arguments);
 		}
 	};
-}
+},
 
-var system = { 
 init : function() {
-	System_makeCatcher(system, system._init)();
+	System.makeCatcher(System, System._init)();
 },
 
 _init : function() {
+	if (this != System) {
+		throw new Error("System has wrong this pointer");
+	}
 	var canvas = this.canvas = document.getElementById("canvas");
 	canvas.width  = window.innerWidth - 1;
 	canvas.height = window.innerHeight - 1;
 	var cx = canvas.getContext("2d");
 	
 	/* the space that currently is displayed */
-	system.space = null;
-	
+	this.space = null;
+
+	/* if true use browser supported setCapture() call
+	 * if false work around */
+	var useCapture = canvas.setCapture != null;
+
 	/* mouse state */
 	var mst = enums.MST_NONE;
 	/* position the mouse went down to atween state */
@@ -530,7 +535,7 @@ _init : function() {
 	/* timer for atween state */
 	var atweenTimer = null;
 
-	var editor = system.editor = new Editor();
+	var editor = this.editor = new Editor();
 	
 	/* hidden input that forwards all events */
 	var hiddenInput = document.getElementById("input");
@@ -551,13 +556,33 @@ _init : function() {
 		case 39 : // right
 		case 40 : // down
 		case 46 : // del
-			system.space.specialKey(keyCode, shiftKey);
+			this.space.specialKey(keyCode, shiftKey);
 			return false;
 		default : 
 			return true;
 		}
 	}
+
+	/* captures all mouseevents event beyond the canvas (for dragging) */ 
+	function captureEvents() {
+		if (useCapture) {
+			canvas.setCapture(canvas);
+		} else {
+			document.onmouseup = onmouseup;
+			document.onmousemove = onmousemove;
+		}
+	}
 	
+	/* stops capturing all mouseevents */
+	function releaseEvents() {
+		if (useCapture) {
+			canvas.releaseCapture(canvas);
+		} else {
+			document.onmouseup = null;
+			document.onmousemove = null;
+		}
+	}
+
 	/*-- Functions the browser calls --*/
 	
 	/* tests if the hidden input field got data */
@@ -567,7 +592,7 @@ _init : function() {
 			return;
 		}
 		hiddenInput.value = "";
-		system.space.input(text);
+		this.space.input(text);
 	}
 	
 	/* do a blink */
@@ -594,7 +619,7 @@ _init : function() {
 		}
 		lastSpecialKey = -1;
 		testinput();
-		setTimeout("system.ontestinput();", 0);
+		setTimeout("System.ontestinput();", 0);
 		return true;
 	}
 
@@ -606,12 +631,12 @@ _init : function() {
 	
 	/* hidden input lost focus */
 	function onblur(event) {
-		system.space.systemBlur();
+		this.space.systemBlur();
 	}
 	
 	/* hidden input got focus */
 	function onfocus(event) {
-		system.space.systemFocus();
+		this.space.systemFocus();
 	}
 		
 	/* view window resized */
@@ -619,7 +644,7 @@ _init : function() {
 		/* todo debouncing */
 		canvas.width  = window.innerWidth - 1;
 		canvas.height = window.innerHeight - 1;	
-		system.space && system.space.redraw();
+		this.space && this.space.redraw();
 	}
 	
 	/* mouse move event */
@@ -629,7 +654,7 @@ _init : function() {
 
 		switch(mst) {
 		case enums.MST_NONE :
-			system.space.mousehover(x, y);
+			this.space.mousehover(x, y);
 			return true;
 		case enums.MST_ATWEEN :
 		{
@@ -639,11 +664,11 @@ _init : function() {
 				clearTimeout(atweenTimer);
 				atweenTimer = null;
 				mst = enums.MST_DRAG;
-				system.space.dragstart(msx, msy);
+				this.space.dragstart(msx, msy);
 				if (x != msx || y != msy) {
-					system.space.dragmove(x, y);
+					this.space.dragmove(x, y);
 				}
-				this.captureEvents();
+				captureEvents();
 			} else {
 				/* saves position for possible atween timeout */
 				mmx = x;
@@ -652,7 +677,7 @@ _init : function() {
 			return true;
 		}
 		case enums.MST_DRAG :
-			system.space.dragmove(x, y);
+			this.space.dragmove(x, y);
 			return true;
 		default :
 			throw new Error("invalid mst");
@@ -666,15 +691,15 @@ _init : function() {
 		var x = event.pageX - canvas.offsetLeft;
 		var y = event.pageY - canvas.offsetTop;
 		/* asks the space if it forces this to be a drag or click, or yet unknown */
-		mst = system.space.mousedown(x, y);
+		mst = this.space.mousedown(x, y);
 		switch(mst) {
 		case enums.MST_ATWEEN :
 			msx = mmx = x;
 			msy = mmy = y;
-			atweenTimer = setTimeout("system.onatweentime();", settings.dragtime);
+			atweenTimer = setTimeout("System.onatweentime();", settings.dragtime);
 			break;
 		case enums.MST_DRAG :
-			this.captureEvents();
+			captureEvents();
 			break;
 		}	
 		return false;
@@ -683,7 +708,7 @@ _init : function() {
 	/* mouse up event */
 	function onmouseup(event) {
 		event.preventDefault();
-		system.releaseEvents();
+		releaseEvents();
 		var x = event.pageX - canvas.offsetLeft;
 		var y = event.pageY - canvas.offsetTop;
 		
@@ -695,11 +720,11 @@ _init : function() {
 			/* this was a click */
 			clearTimeout(atweenTimer);
 			atweenTimer = null;
-			system.space.click(x, y);
+			this.space.click(x, y);
 			mst = enums.MST_NONE;
 			return false;
 		case enums.MST_DRAG :
-			system.space.dragstop(x, y);
+			this.space.dragstop(x, y);
 			mst = enums.MST_NONE;
 			return false;
 		}
@@ -713,95 +738,70 @@ _init : function() {
 		}
 		mst = enums.MST_DRAG;
 		atweenTimer = null;
-		system.space.dragstart(msx, msy);
+		this.space.dragstart(msx, msy);
 		if (mmx != msx || mmy != msy) {
-			system.space.dragmove(mmx, mmy);
+			this.space.dragmove(mmx, mmy);
 		}
 	}
 	
 	/* double click */
 	/*function ondblclick(event) {	
 		event.preventDefault();
-		system.space.dblclick(event);
+		this.space.dblclick(event);
 		return false;
 	}*/
 	
-	canvas.onmouseup       = System_makeCatcher(this, onmouseup);
-	canvas.onmousemove     = System_makeCatcher(this, onmousemove);
-	canvas.onmousedown     = System_makeCatcher(this, onmousedown);
-	//canvas.ondblclick      = System_makeCatcher(this, ondblclick);
-	window.onresize        = System_makeCatcher(this, onresize);
-	hiddenInput.onfocus    = System_makeCatcher(this, onfocus);
-	hiddenInput.onblur     = System_makeCatcher(this, onblur);
-	hiddenInput.onkeydown  = System_makeCatcher(this, onkeydown);
-	hiddenInput.onkeypress = System_makeCatcher(this, onkeypress);
-	hiddenInput.onkeyup    = System_makeCatcher(this, onkeyup);
-	this.ontestinput       = System_makeCatcher(this, testinput);
-	this.onatweentime      = System_makeCatcher(this, onatweentime);
-	this.onblink           = System_makeCatcher(this, blink);
-	
-	/* if true use browser supported setCapture() call
-	 * if false work around */
-	var useCapture = canvas.setCapture != null;
-	
+	canvas.onmouseup       = this.makeCatcher(this, onmouseup);
+	canvas.onmousemove     = this.makeCatcher(this, onmousemove);
+	canvas.onmousedown     = this.makeCatcher(this, onmousedown);
+	//canvas.ondblclick      = this.makeCatcher(this, ondblclick);
+	window.onresize        = this.makeCatcher(this, onresize);
+	hiddenInput.onfocus    = this.makeCatcher(this, onfocus);
+	hiddenInput.onblur     = this.makeCatcher(this, onblur);
+	hiddenInput.onkeydown  = this.makeCatcher(this, onkeydown);
+	hiddenInput.onkeypress = this.makeCatcher(this, onkeypress);
+	hiddenInput.onkeyup    = this.makeCatcher(this, onkeyup);
+	this.ontestinput       = this.makeCatcher(this, testinput);
+	this.onatweentime      = this.makeCatcher(this, onatweentime);
+	this.onblink           = this.makeCatcher(this, blink);
+		
 	/* sets the mouse cursor */
-	system.setCursor = function(cursor) {
+	this.setCursor = function(cursor) {
 		canvas.style.cursor = cursor;
 	}		
 	
 	/*-- Meshcraft System calls --*/
 	
 	/* clears the canvas */
-	system.canvasClear = function() {
+	this.canvasClear = function() {
 		cx.clearRect(0, 0, canvas.width, canvas.height);
 		//canvas.width = canvas.width;
 	}
-	
-	/* captures all mouseevents event beyond the canvas (for dragging) */ 
-	/* todo make private */
-	system.captureEvents = function() {
-		if (useCapture) {
-			canvas.setCapture(canvas);
-		} else {
-			document.onmouseup = onmouseup;
-			document.onmousemove = onmousemove;
-		}
-	}
-	
-	/* stops capturing all mouseevents */
-	system.releaseEvents = function() {
-		if (useCapture) {
-			canvas.releaseCapture(canvas);
-		} else {
-			document.onmouseup = null;
-			document.onmousemove = null;
-		}
-	}
-	
+		
 	/* the blink (and check input) timer */
 	var blinkTimer = null;
 	
 	/* (re)starts the blink timer */
-	system.startBlinker = function() {
+	this.startBlinker = function() {
 		if (blinkTimer) {
 			clearInterval(blinkTimer);
 		} 
 		testinput();
-		blinkTimer = setInterval("system.onblink()", settings.caretBlinkSpeed);		
+		blinkTimer = setInterval("System.onblink()", settings.caretBlinkSpeed);		
 	}
 	
 	/* stops the blink timer */
-	system.stopBlinker = function() {
+	this.stopBlinker = function() {
 		if (blinkTimer) {
 			clearInterval(blinkTimer);
 		} 		
 	}
 		
-	system.startBlinker();
-	delete system.init;
+	this.startBlinker();
+	delete this.init;
 
 	// -v-v-v- testing code here -v-v-v-v-
-	var space = system.space = new Space();
+	var space = this.space = new Space();
 	//var note1 = new Note(220, 65);
 	//var note1 = new Note(320, 90);
 	var note2 = new Note(500, 200);
@@ -908,9 +908,9 @@ function Space() {
 /* redraws the complete space */
 Space.prototype.redraw = function() {
 	var items = this._items;
-	var editor = system.editor;
-	var canvas = system.canvas;
-	system.canvasClear();
+	var editor = System.editor;
+	var canvas = System.canvas;
+	System.canvasClear();
 	editor.caret.save = null;
 	var cx = canvas.getContext("2d");
 	
@@ -970,7 +970,7 @@ Space.prototype.addItem = function(item, x, y) {
 /* draws a menu */
 /* todo make an own object */
 Space.prototype.drawMenu = function() {
-	var cx = system.canvas.getContext("2d");
+	var cx = System.canvas.getContext("2d");
 	var iaction = this.iaction;
 	drawHexagon(cx, iaction.sx, iaction.sy);
 	cx.stroke();
@@ -982,7 +982,7 @@ Space.prototype.drawMenu = function() {
 
 /* user pressed a special key */
 Space.prototype.specialKey = function(keyCode, shiftKey) {
-	var rv = system.editor.specialKey(keyCode, shiftKey);
+	var rv = System.editor.specialKey(keyCode, shiftKey);
 	if (rv) {
 		this.redraw();
 	}
@@ -990,24 +990,24 @@ Space.prototype.specialKey = function(keyCode, shiftKey) {
 
 /* user entered normal text (one character or more) */
 Space.prototype.input = function(text) {
-	if (system.editor.input(text)) {
+	if (System.editor.input(text)) {
 		this.redraw();		
 	}
 }
 
 /* the canvas/space got focus from the system*/
 Space.prototype.systemFocus = function() {
-	system.editor.systemFocus();
+	System.editor.systemFocus();
 }
 
 /* the canvas/space lost system focus */
 Space.prototype.systemBlur = function() {
-	system.editor.systemBlur();
+	System.editor.systemBlur();
 }
 
 /* gives one item the keyboard focus */
 Space.prototype.focus = function(item) {
-	item.focus(system.editor);
+	item.focus(System.editor);
 }
 
 /* returns the item offset at position x, y */	
@@ -1072,21 +1072,21 @@ Space.prototype.mousehover = function(x, y) {
 	x -= this.pox;
 	y -= this.poy;
 	var com = null;
-	var editor = system.editor;
+	var editor = System.editor;
 	if (editor.item) {
 		var it = editor.item;
 		com = checkItemCompass(it, x, y);
 		if (com) {
-			system.setCursor(com + "-resize");					
+			System.setCursor(com + "-resize");					
 		}
 	}
 	if (!com) {
 		var ito = this.itoAtXY(x, y); /* todo give a better name */
 		if (ito < 0) {
-			system.setCursor("crosshair");
+			System.setCursor("crosshair");
 		} else {
 			//var ch = it.atXY(x - it.x, y - it.y);
-			system.setCursor("default");					
+			System.setCursor("default");					
 		}
 	}
 }
@@ -1095,7 +1095,7 @@ Space.prototype.mousehover = function(x, y) {
 Space.prototype.dragstart = function(x, y) {
 	x -= this.pox;
 	y -= this.poy;
-	var editor  = system.editor;
+	var editor  = System.editor;
 	var iaction = this.iaction; /* todo make underscored */
 	var redraw = false;
 
@@ -1105,8 +1105,7 @@ Space.prototype.dragstart = function(x, y) {
 		iaction.act = enums.ACT_PAN;
 		iaction.sx = x;
 		iaction.sy = y;
-		system.captureEvents();
-		system.setCursor("pointer");
+		System.setCursor("pointer");
 		return;
 	} 
 	
@@ -1136,7 +1135,7 @@ Space.prototype.dragstart = function(x, y) {
 		iaction.item = it;
 		iaction.sx = x - it.x;
 		iaction.sy = y - it.y;
-		system.setCursor("move");
+		System.setCursor("move");
 	}
 	if (redraw) {
 		this.redraw();
@@ -1148,7 +1147,7 @@ Space.prototype.dragstart = function(x, y) {
 Space.prototype.click = function(x, y) {
 	x -= this.pox;
 	y -= this.poy;
-	var editor = system.editor;
+	var editor = System.editor;
 	var iaction = this.iaction;
 	var ito = this.itoAtXY(x, y);
 	var it = this._items[ito];
@@ -1190,14 +1189,14 @@ Space.prototype.click = function(x, y) {
 Space.prototype.dragstop = function(x, y) {
 	x -= this.pox;
 	y -= this.poy;
-	var editor = system.editor;
+	var editor = System.editor;
 	var iaction = this.iaction;
 	switch (iaction.act) {
 	case enums.ACT_IDRAG :
 		iaction.item.x = x - iaction.sx;
 		iaction.item.y = y - iaction.sy;
 		iaction.item = null;
-		system.setCursor("default");
+		System.setCursor("default");
 		this.redraw();
 		break;
 	case enums.ACT_PAN :
@@ -1227,6 +1226,7 @@ Space.prototype.dragmove = function(x, y) {
 	x -= this.pox;
 	y -= this.poy;
 	var iaction = this.iaction;
+	
 	switch(iaction.act) {
 	case enums.ACT_PAN :
 		this.pox += x - iaction.sx;
@@ -1236,7 +1236,6 @@ Space.prototype.dragmove = function(x, y) {
 	case enums.ACT_IDRAG :
 		iaction.item.x = x - iaction.sx;
 		iaction.item.y = y - iaction.sy;
-		draw = true;
 		this.redraw();
 		return;
 	case enums.ACT_IRESIZE :
@@ -1286,7 +1285,7 @@ Space.prototype.dragmove = function(x, y) {
 			it.resize(wi, hi);
 			this.redraw();
 		}
-		var dtreeHeight = it.dtree.getHeight();
+		var dtreeHeight = it.dtree.height;
 		var smaxy = dtreeHeight - (it.height - 2 * it.textBorder);
 		if (smaxy > 0 && it.scrolly > smaxy) {
 			it.scrolly = smaxy;
@@ -1300,7 +1299,7 @@ Space.prototype.dragmove = function(x, y) {
 		var dy = y - iaction.sy;
 		var it = iaction.item;
 		var scrollRange = it.height - settings.scrollbarMarginY * 2;
-		var dtreeHeight = it.dtree.getHeight();
+		var dtreeHeight = it.dtree.height;
 		var innerHeight = it.height - 2 * it.textBorder;
 		var scrollSize  = scrollRange * innerHeight / dtreeHeight;
 		var srad = settings.scrollbarRadius;
@@ -1346,7 +1345,7 @@ Space.prototype.mousedown = function(x, y) {
 	y -= this.poy;
 	
 	var iaction = this.iaction;
-	var editor = system.editor;
+	var editor = System.editor;
 	/* checks menu */
 	/*if (iaction.act == enums.MENU) {
 		iaction.act = enums.ACT_NONE;
@@ -1368,7 +1367,7 @@ Space.prototype.mousedown = function(x, y) {
 		iaction.shi  = editor.item.height;
 		iaction.six  = editor.item.x;
 		iaction.siy  = editor.item.y;
-		system.setCursor(com + "-resize");
+		System.setCursor(com + "-resize");
 		return enums.MST_DRAG;
 	}
 	
@@ -1638,7 +1637,7 @@ Object.defineProperty(Paragraph.prototype, "height", {
 		return this._softHeight + Math.round(dtree.textsize * 0.27);
 	},
 	set: function(s) {
-		throw new Error("Cannot set paragrph height.");
+		throw new Error("Cannot set paragarph height.");
 	}
 });
 
@@ -1647,6 +1646,7 @@ Object.defineProperty(Paragraph.prototype, "width", {
 	get: function() { 
 		return this._width;
 	},
+	
 	set: function(width) {
 		if (this._width != width) {
 			this._width = width;
@@ -1892,25 +1892,14 @@ DTree.prototype.atXY = function(x, y) { //xxx
 /* draws the content in a buffer canvas */
 /* acanvas  ... canvas to draw upon */
 /* todo rename */
-DTree.prototype.drawCanvas = function(acanvas, offsetX, offsetY, width, scrolly, selection) {
+DTree.prototype.drawCanvas = function(acanvas, offsetX, offsetY, scrolly, selection) {
 	var cx = acanvas.getContext("2d");
 	var y = offsetY;
 	var pi = 0;
 	var h = 0;
 	var parasep = this.pre ? 0 : this.textsize;
 
-	/* calculate height
-	 * paragraph is going to cache the canvas
-	 * every paragraph */
 	for(var para = this.first; para; para = para.next) {
-		if (h > 0) {
-			h += parasep;
-		}
-		h += para.softHeight;
-	}
-
-	for(var para = this.first; para; para = para.next) {
-		para.width = width; /* todo */
 		var pcanvas = para.getCanvas(selection);
 		para.x = offsetX;
 		para.y = y;
@@ -1919,21 +1908,60 @@ DTree.prototype.drawCanvas = function(acanvas, offsetX, offsetY, width, scrolly,
 	}
 }
 
-/* returns the height of the drawn document */
-DTree.prototype.getHeight = function() {
-	var h = 0;
-	var parasep = this.pre ? 0 : this.textsize;
-	var first = true;
-	for(var para = this.first; para; para = para.next) {
-		if (!first) {
-			h += parasep;
-		} else {
-			first = false;
-		}
-		h += para.softHeight;
+/* Overloads Treenodes append to set the paragraph width */
+DTree.prototype.append = function(tnode) {
+	if (this._width) {
+		tnode.width = this._width;
 	}
-	return h;
+	return Treenode.prototype.append.call(this, tnode);
 }
+
+
+/* Overloads Treenodes insertBefore to set the paragraph width */
+DTree.prototype.insertBefore = function(tnode, bnode) {
+	if (this._width && bnode) { 
+		/* if not bnode append will be called */
+		tnode.width = this._width;
+	}
+	return Treenode.prototype.insertBefore.call(this, tnode, bnode);
+}
+
+Object.defineProperty(DTree.prototype, "width", {
+	get: function() { 
+		return this._width;
+	},
+	set: function(width) {
+		if (this._width != width) {
+			this._width = width;
+			for(var para = this.first; para; para = para.next) {
+				para.width = width;
+			}
+		}
+	}
+});
+
+Object.defineProperty(DTree.prototype, "height", {
+	get: function() { 
+		/* todo caching */
+		var h = 0;
+		var parasep = this.pre ? 0 : this.textsize;
+		var first = true;
+		for(var para = this.first; para; para = para.next) {
+			if (para._width != this._width) {
+				throw new Error("width violation");
+			}
+			if (!first) {
+				h += parasep;
+			} else {
+				first = false;
+			}
+			h += para.softHeight;
+		}
+		return h;
+	},
+	
+	set: function(width) { throw new Error("Cannot set height of DTree"); }
+});
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,-_/ .
@@ -2055,22 +2083,37 @@ Note.prototype._getCanvasImpl = function(selection) {
 
 	/* draws text */
 	var sy = this._scrolly;
-	var innerWidth = this.width  - 2 * this.textBorder - 
-		(sy >= 0 ? settings.scrollbarRadius * 2 : 0);
-		
 	var innerHeight = this.height - 2 * this.textBorder;
+	dtree.width = this.width  - 2 * this.textBorder - (sy >= 0 ? settings.scrollbarRadius * 2 : 0);
+	var dtreeHeight = dtree.height;
+	
+	if (sy < 0) {
+		if (dtreeHeight > innerHeight) {
+			/* should use a scrollbar */
+			sy = this._scrolly = 0;		
+			dtree.width = this.width  - 2 * this.textBorder - (sy >= 0 ? settings.scrollbarRadius * 2 : 0);
+			dtreeHeight = dtree.height;
+			if (dtreeHeight <= innerHeight) {
+				throw new Error("note doesnt fit with and without scrollbar.");			
+			}
+		}
+	} else if (dtreeHeight <= innerHeight) {
+		/* should not use a scrollbar */
+		sy = this._scrolly = -8833;
+		dtree.width = this.width  - 2 * this.textBorder - (sy >= 0 ? settings.scrollbarRadius * 2 : 0);
+		dtreeHeight = dtree.height;
+		if (dtreeHeight > innerHeight) {
+			throw new Error("note doesnt fit with and without scrollbar.");			
+		}
+	}
+	
+	/* todo move before draw */	
 	dtree.drawCanvas(bcanvas, 
-		this.textBorder, this.textBorder, innerWidth, 
+		this.textBorder, this.textBorder, 
 		sy < 0 ? 0 : Math.round(sy),
 		selection
 	);
 	
-	var dtreeHeight = dtree.getHeight();
-	if (sy < 0 && dtreeHeight > innerHeight) {
-		/* should use a scrollbar */
-		return null;
-	}
-
 	if (sy >= 0) {
 		if (dtreeHeight <= innerHeight) {
 			/* should not use a scrollbar */
@@ -2134,17 +2177,6 @@ Note.prototype.focus = function(editor) {
 /* gets the canvas buffer for this item */
 Note.prototype.getCanvas = function(selection) {
 	var asw = this._getCanvasImpl(selection);
-	if (asw == null) {
-		if (this._scrolly >= 0) {
-			this._scrolly = -8833;
-		} else {
-			this._scrolly = 0;		
-		}
-		asw = this._getCanvasImpl(selection);
-	}
-	if (asw == null) {
-		throw new Error("note doesnt fit with and without scrollbar.");
-	}
 	return asw;
 }
 
@@ -2323,7 +2355,7 @@ VectorGraph.prototype.focus = function(editor) {
   `'  `'   ' ' ' `-^ `-' ' '
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 window.onload = function() {
-	system.init();
+	System.init();
 }
 
 //]]></script>
