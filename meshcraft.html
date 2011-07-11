@@ -60,7 +60,7 @@ var settings = {
 	selectionColor : "rgba(243,203,255,0.9)",
 	
 	/* scrollbar */
-	scrollbarRound       : true,
+	scrollbarForm        : "hexagonh",  // 'square', 'round', 'hexagonh' or 'hexagonv'
 	scrollbarFillStyle   : "#ffbc57",
 	scrollbarStrokeStyle : "#dd9a34",
 	scrollbarLineWidth   : 2,
@@ -102,6 +102,7 @@ function debug() {
 		} else {
 			l += "{";
 			var first = true;
+			var p;
 			for (p in a) {
 				if (!first) {
 					l += ", ";
@@ -173,6 +174,7 @@ Marker.prototype.set = function(a1, a2, a3) {
 
 
 /* returns chunk at x/y */
+/* todo private? */
 Marker.prototype._getPinfoAtXY = function(flowbox, x, y) {
 	var pinfo = flowbox.pinfo;
 	var plen = pinfo.length;
@@ -224,8 +226,8 @@ Marker.prototype.setFromXY = function(flowbox, x, y) {
 		}
 	}
 	if (dx - x1 <= x2 - dx) o--;
-	this.set(c.node, c.offset + o);	
-//xxxx	editor.caret.offset = ch.offset + para.getChunkOffset(ch, x - it.x - para.x);
+	this.element = c.node;
+	this.offset = c.offset + o;	
 }
 
 /* sets the this.pline and this.pchunk according to the chunk 
@@ -254,10 +256,70 @@ Marker.prototype.getPinfo = function() {
 			bli = li; bci = ci;
 		}
 	}
-	this.pli = bli; this.pci.bci;
+	this.pli = bli; this.pci = bci;
 	return pinfo;
 }
 
+/* moves the marker a line down */
+/* returns true if moved, false if at bottom */
+Marker.prototype.moveUpDown = function(direction) {
+	var e  = this.element;
+	var o  = this.offset;
+	var cx   = System.canvas.getContext("2d"); // any canvas, todo make measure own object
+	cx.font  = e.anchestor("dtree").font;
+	var p  = e.anchestor("paragraph");
+	var pinfo = this.getPinfo();
+	var li = this.pli;
+	var ci = this.pci;
+	var l = pinfo[li];
+	var c = l[ci];
+	var x = (c ? c.x : l.x) + cx.measureText(c.text.substr(0, o - c.offset)).width;
+	if (direction) {
+		if (li == 0) {
+			p = p.prev;
+			if (p == null) return false;
+			pinfo = p.pinfo;
+			l = pinfo[pinfo.length - 1];
+		} else {
+			l = pinfo[li - 1];
+		}
+	} else {
+		if (li + 1 >= pinfo.length) {
+			p = p.next;
+			if (p == null) return false;
+			pinfo = p.pinfo;
+			l = pinfo[0];
+		} else {
+			l = pinfo[li + 1];
+		}	
+	}
+	var llen = l.length;
+	for(ci = 0; ci < llen && x > l[ci].x + l[ci].w; ci++);
+	if (ci >= llen) {
+		c = l[llen - 1];
+		this.element = c.node;
+		this.offset  = c.offset + c.text.length;
+		return true;
+	}
+	c = l[ci];
+	
+	var t = c.text;
+	var tlen = t.length;
+	var x1 = 0, x2 = 0;
+	var dx = x - c.x;
+	var o;
+	for(o = 0; o < tlen; o++) {
+		x1 = x2;
+		x2 = cx.measureText(t.substr(0, o)).width;
+		if (x2 > dx) {
+			break;
+		}
+	}
+	if (dx - x1 <= x2 - dx) o--;	
+	this.element = c.node;
+	this.offset  = c.offset + o;
+	return true;
+}
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,--.             .  
@@ -339,6 +401,9 @@ Editor.prototype.updateCaret = function() {
 		var t   = ce.text;
 		var cpara = ce.anchestor("paragraph");
 		var pinfo = caret.getPinfo();
+		if (caret.pli == 2 && caret.pci > 6) {
+			pinfo = caret.getPinfo();
+		}
 		var pline  = pinfo[caret.pli];
 		var pchunk = pline[caret.pci];
 		var x = System.space.pox + caret.item.x + cpara.x + (pchunk != null ? pchunk.x : pline.x);
@@ -351,7 +416,7 @@ Editor.prototype.updateCaret = function() {
 			cow = 0;
 		} else {
 			var ts = t.substring(pchunk.offset, co);
-			cow = cx.measureText(ts).width
+			cow = cx.measureText(ts).width;
 		}
 		var ts = caret.item.dtree.textsize;
 		var th = Math.round(ts * 1.2);
@@ -430,24 +495,14 @@ Editor.prototype.specialKey = function(keycode, shiftKey) {
 			if (!prespara) {
 				return false;
 			}
-			caret.set(prespara.last, ce.text.length);
+			ce = prespara.last;
+			caret.set(ce, ce.text.length);
 		}
 		refresh = true;
 		break;
 	}
 	case 38 : // up
-		/* todo, do properly */
-		var ce = caret.element;
-		var pprev = ce.parent.prev;
-		if (!pprev) {
-			return false;
-		}
-		ce = caret.element = pprev.first;
-		var ct = ce.text;
-		if (caret.offset > ct.length) {
-			caret.offset = ct.length;
-		}
-		refresh = true;
+		refresh = caret.moveUpDown(true);
 		break;
 	case 39 : // right
 	{	
@@ -488,32 +543,8 @@ Editor.prototype.specialKey = function(keycode, shiftKey) {
 		break;
 	}
 	case 40 : // down
-	{	
-		/* todo, do properly xxx */
-		var ce  = caret.element;
-		var co  = caret.offset;
-		var cit = caret.item;
-		var p   = ce.anchestor("paragraph");
-		var pinfo = caret.getPinfo();
-		var pli = caret.pli;
-		var pci = caret.pci;
-		var pl;
-		var pc;
-		if (pli + 1 >= pinfo.length) {
-			p = p.next;
-			if (p == null) break;
-			pinfo = p.pinfo;
-			pl = pinfo[0];
-		} else {
-			pl = pinfo[pli + 1];
-		}		
-		pc = pl[0];
-		
-		caret.element = pc.node;
-		caret.offset = pc.offset;
-		refresh = true;
+		refresh = caret.moveUpDown(false);
 		break;
-	}
 	case 46 : // del
 	{
 		var co = caret.offset;
@@ -990,6 +1021,7 @@ var hexsin = [ sin(pi6 + pi3 * 1), sin(pi6 + pi3 * 2), sin(pi6 + pi3 * 3),
                sin(pi6 + pi3 * 4), sin(pi6 + pi3 * 5), sin(pi6 + pi3 * 6) ];
 var hexcos = [ cos(pi6 + pi3 * 1), cos(pi6 + pi3 * 2), cos(pi6 + pi3 * 3),
                cos(pi6 + pi3 * 4), cos(pi6 + pi3 * 5), cos(pi6 + pi3 * 6) ];
+var hexc = cos(pi6);
 	
 function drawHexagon(cx, x, y) {
 	var rad = 20;
@@ -1286,26 +1318,16 @@ Space.prototype.click = function(x, y) {
 		it.focus(editor);
 	}
 	var ox = x - it.x;
-	var oy = y - it.y;
+	var oy = y - it.y + (it.scrolly > 0 ? it.scrolly : 0);
 	if (it.paraAtY) { /* todo, make this less dirty, move the logic into the item or editor*/
 		var p = it.paraAtY(oy);
-		editor.caret.setFromXY(p, ox - p.x, oy - p.y);
-		editor.caret.show();
-		redraw = true;
-	}
-		
-//		return p.atXY(x - p.x, y - p.y);
-/*		var ch = it.atXY(ox, y - it.y);
-		if (ch) {
-			var para = ch.node.anchestor("paragraph");;
-			editor.caret.element = ch.node;xxx
-			editor.caret.offset = ch.offset + para.getChunkOffset(ch, x - it.x - para.x);
+		if (p) {
+			editor.caret.setFromXY(p, ox - p.x, oy - p.y);
 			editor.caret.show();
 			redraw = true;
 		}
 	}
-*/
-	
+			
 	if (redraw) {
 		this.redraw();
 	}
@@ -2058,9 +2080,6 @@ function Note(width, height) {
 
 /* returns the para at y */
 Note.prototype.paraAtY = function(y) {
-	if (this._scrolly > 0) {
-		y += this._scrolly;
-	}
 	if (y < this.textBorder) {
 		return null;
 	}
@@ -2190,15 +2209,46 @@ Note.prototype.getCanvas = function(selection) {
 			sy / (dtreeHeight - innerHeight) * (scrollRange - scrollSize);
 			sy / (dtreeHeight - innerHeight) * (scrollRange - scrollSize);
 		
-		if (settings.scrollbarRound) {
+		switch (settings.scrollbarForm) {
+		case 'round' :
 			cx.beginPath();
 			cx.arc(spx, spy + srad, srad, Math.PI, 0, false);
 			cx.arc(spx, spy + scrollSize - srad, srad, 0, Math.PI, false);
 			cx.closePath();
 			cx.stroke();
 			cx.fill();
-		} else {
+			break;
+		case 'square' :
 			cx.fillRect(spx, spy, srad + 2, scrollSize);
+			break;
+		case 'hexagonh' :
+			cx.beginPath();
+			cx.moveTo(spx -   1 * srad, spy + hexc * srad);
+			cx.lineTo(spx - 0.5 * srad, spy);
+			cx.lineTo(spx + 0.5 * srad, spy);
+			cx.lineTo(spx +   1 * srad, spy + hexc * srad);
+			cx.lineTo(spx +   1 * srad, spy + scrollSize - hexc * srad);
+			cx.lineTo(spx + 0.5 * srad, spy + scrollSize);
+			cx.lineTo(spx - 0.5 * srad, spy + scrollSize);
+			cx.lineTo(spx -   1 * srad, spy + scrollSize - hexc * srad);
+			cx.closePath();
+			cx.stroke();
+			cx.fill();
+			break;
+		case 'hexagonv' :
+			cx.beginPath();
+			cx.moveTo(spx - 1 * srad, spy + hexc * srad);
+			cx.lineTo(spx           , spy);
+			cx.lineTo(spx + 1 * srad, spy + hexc * srad);
+			cx.lineTo(spx + 1 * srad, spy + scrollSize - hexc * srad);
+			cx.lineTo(spx           , spy + scrollSize);
+			cx.lineTo(spx - 1 * srad, spy + scrollSize - hexc * srad);
+			cx.closePath();
+			cx.stroke();
+			cx.fill();
+			break;
+		default :
+			throw new Error("invalid settings.scrollbarForm");
 		}
 	}
 
