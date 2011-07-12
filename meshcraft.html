@@ -147,7 +147,34 @@ var enums = {
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- Marker ++++
+ ,-,-,-.
+ `,| | |   ,-. ,-. ,-. . . ,-. ,-.
+   | ; | . |-' ,-| `-. | | |   |-'
+   '   `-' `-' `-^ `-' `-^ '   `-'
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ Marks a position in an element of an item.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+var Measure = {
+	init : function() {
+		Measure._canvas = document.createElement("canvas");
+		Measure._cx = this._canvas.getContext("2d");
+	},
+	
+	width : function(text) {
+		return Measure._cx.measureText(text).width;
+	}
+}
+
+Object.defineProperty(Measure, "font", {
+	get: function() {  return Measure._cx.font; },
+	set: function(font) { Measure._cx.font = font; }
+});
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ,-,-,-.           .
+ `,| | |   ,-. ,-. | , ,-. ,-.
+   | ; | . ,-| |   |<  |-' |
+   '   `-' `-^ '   ' ` `-' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  Marks a position in an element of an item.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -174,7 +201,6 @@ Marker.prototype.set = function(a1, a2, a3) {
 
 
 /* returns chunk at x/y */
-/* todo private? */
 Marker.prototype._getPinfoAtXY = function(flowbox, x, y) {
 	var pinfo = flowbox.pinfo;
 	var plen = pinfo.length;
@@ -211,8 +237,7 @@ Marker.prototype.setFromXY = function(flowbox, x, y) {
 	var c = l[this.pci]; // x,y is in this chunk
 	
 	var dx   = x - c.x;
-	var cx   = System.canvas.getContext("2d"); // any canvas, todo make measure own object
-	cx.font  = flowbox.anchestor("dtree").font;
+	Measure.font = flowbox.anchestor("dtree").font;
 	var t    = c.text;
 	var tlen = t.length;
 	
@@ -220,7 +245,7 @@ Marker.prototype.setFromXY = function(flowbox, x, y) {
 	var o;
 	for(o = 0; o < tlen; o++) {
 		x1 = x2;
-		x2 = cx.measureText(t.substr(0, o)).width;
+		x2 = Measure.width(t.substr(0, o));
 		if (x2 > dx) {
 			break;
 		}
@@ -265,15 +290,14 @@ Marker.prototype.getPinfo = function() {
 Marker.prototype.moveUpDown = function(direction) {
 	var e  = this.element;
 	var o  = this.offset;
-	var cx   = System.canvas.getContext("2d"); // any canvas, todo make measure own object
-	cx.font  = e.anchestor("dtree").font;
+	Measure.font = e.anchestor("dtree").font;
 	var p  = e.anchestor("paragraph");
 	var pinfo = this.getPinfo();
 	var li = this.pli;
 	var ci = this.pci;
 	var l = pinfo[li];
 	var c = l[ci];
-	var x = (c ? c.x : l.x) + cx.measureText(c.text.substr(0, o - c.offset)).width;
+	var x = (c ? c.x : l.x) + Measure.width(c.text.substr(0, o - c.offset));
 	if (direction) {
 		if (li == 0) {
 			p = p.prev;
@@ -310,7 +334,7 @@ Marker.prototype.moveUpDown = function(direction) {
 	var o;
 	for(o = 0; o < tlen; o++) {
 		x1 = x2;
-		x2 = cx.measureText(t.substr(0, o)).width;
+		x2 = Measure.width(t.substr(0, o));
 		if (x2 > dx) {
 			break;
 		}
@@ -395,7 +419,7 @@ Editor.prototype.updateCaret = function() {
 	
 	if (caret.shown && !caret.blink) {
 		/* todo cache position */
-		cx.font = caret.item.dtree.font;
+		Measure.font = caret.item.dtree.font;
 		var ce  = caret.element;
 		var co  = caret.offset;
 		var t   = ce.text;
@@ -416,7 +440,7 @@ Editor.prototype.updateCaret = function() {
 			cow = 0;
 		} else {
 			var ts = t.substring(pchunk.offset, co);
-			cow = cx.measureText(ts).width;
+			cow = Measure.width(ts);
 		}
 		var ts = caret.item.dtree.textsize;
 		var th = Math.round(ts * 1.2);
@@ -665,6 +689,7 @@ _init : function() {
 	canvas.width  = window.innerWidth - 1;
 	canvas.height = window.innerHeight - 1;
 	var cx = canvas.getContext("2d");
+	Measure.init();
 	
 	/* the space that currently is displayed */
 	this.space = null;
@@ -1715,12 +1740,11 @@ Paragraph.prototype._flow = function() {
 	var width = this._width;
 	var dtree = this.anchestor("dtree");
 	/* canvas is needed for font measurement */
-	var cx = this._pcanvas.getContext("2d");
 	var textsize = dtree.textsize;
 	var x = 0;
 	var y = textsize;	
-	cx.font = dtree.font;
-	var space = cx.measureText(" ").width;
+	Measure.font = dtree.font;
+	var space = Measure.width(" ");
 	var pline = 0;
 	{
 		var l = pinfo[pline] = [];
@@ -1736,7 +1760,7 @@ Paragraph.prototype._flow = function() {
 		for(var ca = reg.exec(t); ca != null; ca = reg.exec(t)) {
 			/* text is a word plus hard spaces */
 			var text = ca[1] + ca[2];
-			var w = cx.measureText(text).width;
+			var w = Measure.width(text);
 			if (x + w + space > width) {
 				if (!stol) {
 					/* soft break */
@@ -1914,7 +1938,7 @@ Paragraph.prototype.joinToNext = function(node, caret) {
 		/* end of document */
 		return false;
 	}
-	node.text = node.text + nextPara.first.text; // todo xxx
+	node.text = node.text + nextPara.first.text;
 	/* todo take over siblings */
 	this.parent.remove(nextPara);
 	return true;
@@ -1937,7 +1961,7 @@ Paragraph.prototype.joinToPrevious = function(node, caret) {
 		caret.element = plc;
 		caret.offset = plc.text.length;
 	}
-	plc.text = plc.text + nt; // todo xxx
+	plc.text = plc.text + nt; 
 	this.parent.remove(this);
 	return true;
 }
