@@ -57,7 +57,8 @@ var settings = {
 	
 	/* selection */
 	//selectionColor : "#8080ff",
-	selectionColor : "rgba(243,203,255,0.9)",
+	selectionColor  : "rgba(243, 203, 255, 0.9)",
+	selectionStroke : "rgb (243, 183, 253)",
 	
 	/* scrollbar */
 	scrollbarForm        : "hexagonh",  // 'square', 'round', 'hexagonh' or 'hexagonv'
@@ -89,6 +90,7 @@ var settings = {
  Prints out messages  `' and objects on the console.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function debug() {
+	if (!console) return;
 	var l = "";
 	for(var i = 0; i < arguments.length; i++) {
 		if (i > 0) { 
@@ -146,6 +148,23 @@ var enums = {
 	ACT_MENU    : 6,
 };
 
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ Legacy+++
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+if (!Object.defineProperty) {
+	Object.defineProperty = function(obj, label, funcs) {
+		if (funcs.get) {
+			obj.__defineGetter__(label, funcs.get);
+		}
+		if (funcs.set) {
+			obj.__defineSetter__(label, funcs.set);
+		}
+	}
+}
+
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,-,-,-.
  `,| | |   ,-. ,-. ,-. . . ,-. ,-.
@@ -166,7 +185,7 @@ var Measure = {
 }
 
 Object.defineProperty(Measure, "font", {
-	get: function() {  return Measure._cx.font; },
+	get: function() { return Measure._cx.font; },
 	set: function(font) { Measure._cx.font = font; }
 });
 
@@ -179,26 +198,55 @@ Object.defineProperty(Measure, "font", {
  Marks a position in an element of an item.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Marker() {
-	this.item = null;
-	this.element = null;
-	this.offset = 0;
+	this._item = null;
+	this._element = null;
+	this._offset = 0;
+	this._pli = null;
+	this._cli = null;
 }
 
-/* shortcut to set all makers 
- * set(item, element, offset)
+Object.defineProperty(Marker.prototype, "item", {
+	/* todo needed? */
+	get: function() { return this._item; },
+	set: function(it) { throw new Error("use set()"); }
+});
+
+Object.defineProperty(Marker.prototype, "element", {
+	get: function() { return this._element; },
+	set: function(e) { throw new Error("use set()"); }
+});
+
+Object.defineProperty(Marker.prototype, "offset", {
+	get: function() { return this._offset; },
+	set: function(o) { this._offset = o; }
+});
+
+/* "overloaded" 3-timed
+ * set(marker)
  * set(element, offset)
+ * set(item, element, offset)
  */
 Marker.prototype.set = function(a1, a2, a3) {
-	if (arguments.length > 2) {
-		this.item    = a1;
-		this.element = a2;
-		this.offset  = a3;
-	} else {	
-		this.element = a1;
-		this.offset  = a2;
+	switch (arguments.length) {
+	case 1 :
+		this._item    = a1._item; 
+		this._element = a1._element;
+		this._offset  = a1._offset;
+		break;
+	case 2 :
+		this._element = a1;
+		this._offset  = a2;
+		break;
+	case 3 :
+		this._item    = a1;
+		this._element = a2;
+		this._offset  = a3;
+		break;
+	default :
+		throw new Error("wrong # of arguments");
+		break;
 	}
 }
-
 
 /* returns chunk at x/y */
 Marker.prototype._getPinfoAtXY = function(flowbox, x, y) {
@@ -213,29 +261,50 @@ Marker.prototype._getPinfoAtXY = function(flowbox, x, y) {
 	if (li >= plen) {
 		li--; /* got to last line if overflow */
 	}
-	this.pli = li;
+	this._pli = li;
 	var l = pinfo[li];
 	var llen = l.length;
 	var c;
 	for (var ci = 0; ci < llen; ci++) {
 		c = l[ci]; 
 		if (x <= c.x + c.w) {
-			this.pci = ci;
+			this._pci = ci;
 			return pinfo;
 		}
 	}
 	/* set to last chunk if overflow */
-	this.pci = llen - 1;
+	this._pci = llen - 1;
 	return pinfo;
+}
+
+/* Sets .x and .y to coordinates of actual position, relative to dtree */
+Marker.prototype.getXY = function() {
+	/* todo cache position */
+	var dtree = this._item.dtree;
+	Measure.font = dtree.font;
+	var e = this._element;
+	var t = e.text;
+	var p = e.anchestor("paragraph");
+	var pinfo = this.getPinfo();
+	var l = pinfo[this._pli];
+	var c = l[this._pci];
+	this.x = p.x + (c ? c.x + Measure.width(t.substring(c.offset, this._offset)) : l.x);
+	this.y = p.y + l.y - dtree.textsize; /* todo baseline? */
 }
 	
 /* sets the marker to position closest to x, y from flowbox(para) */
 Marker.prototype.setFromXY = function(flowbox, x, y) {
 	if (flowbox.type != "paragraph") { throw new Error("invalid flowbox."); }
 	var pinfo = this._getPinfoAtXY(flowbox, x, y);
-	var l = pinfo[this.pli];
-	var c = l[this.pci]; // x,y is in this chunk
+	var l = pinfo[this._pli];
+	var c = l[this._pci]; // x,y is in this chunk
 	
+	if (!c) {
+		/* todo? */
+		this._element = flowbox.first;
+		this._offset = 0;
+		return;
+	}
 	var dx   = x - c.x;
 	Measure.font = flowbox.anchestor("dtree").font;
 	var t    = c.text;
@@ -251,15 +320,15 @@ Marker.prototype.setFromXY = function(flowbox, x, y) {
 		}
 	}
 	if (dx - x1 <= x2 - dx) o--;
-	this.element = c.node;
-	this.offset = c.offset + o;	
+	this._element = c.node;
+	this._offset = c.offset + o;
 }
 
 /* sets the this.pline and this.pchunk according to the chunk 
  * the marker is in */
 Marker.prototype.getPinfo = function() {
-	var te = this.element;
-	var to = this.offset;
+	var te = this._element;
+	var to = this._offset;
 	var para  = te.anchestor("paragraph");
 	var pinfo = para.pinfo;
 	var bli =  0; /* buffer for line count */
@@ -271,37 +340,37 @@ Marker.prototype.getPinfo = function() {
 		for(var ci = 0; ci < llen; ci++) {
 			var c = l[ci];
 			if (c.offset == to) {
-				this.pli = li; this.pci = ci;
+				this._pli = li; this._pci = ci;
 				return pinfo;
 			}
 			if (c.offset > to) {
-				this.pli = bli; this.pci = bci;
+				this._pli = bli; this._pci = bci;
 				return pinfo;
 			}
 			bli = li; bci = ci;
 		}
 	}
-	this.pli = bli; this.pci = bci;
+	this._pli = bli; this._pci = bci;
 	return pinfo;
 }
 
-/* moves the marker a line down */
-/* returns true if moved, false if at bottom */
-Marker.prototype.moveUpDown = function(direction) {
-	var e  = this.element;
-	var o  = this.offset;
+/* moves the marker a line up (dir == true) or down */
+/* returns true if moved */
+Marker.prototype.moveUpDown = function(dir) {
+	var e  = this._element;
+	var o  = this._offset;
 	Measure.font = e.anchestor("dtree").font;
 	var p  = e.anchestor("paragraph");
 	var pinfo = this.getPinfo();
-	var li = this.pli;
-	var ci = this.pci;
+	var li = this._pli;
+	var ci = this._pci;
 	var l = pinfo[li];
 	var c = l[ci];
 	var x = (c ? c.x : l.x) + Measure.width(c.text.substr(0, o - c.offset));
-	if (direction) {
+	if (dir) {
 		if (li == 0) {
 			p = p.prev;
-			if (p == null) return false;
+			if (!p) return false;
 			pinfo = p.pinfo;
 			l = pinfo[pinfo.length - 1];
 		} else {
@@ -310,7 +379,7 @@ Marker.prototype.moveUpDown = function(direction) {
 	} else {
 		if (li + 1 >= pinfo.length) {
 			p = p.next;
-			if (p == null) return false;
+			if (!p) return false;
 			pinfo = p.pinfo;
 			l = pinfo[0];
 		} else {
@@ -321,8 +390,8 @@ Marker.prototype.moveUpDown = function(direction) {
 	for(ci = 0; ci < llen && x > l[ci].x + l[ci].w; ci++);
 	if (ci >= llen) {
 		c = l[llen - 1];
-		this.element = c.node;
-		this.offset  = c.offset + c.text.length;
+		this._element = c.node;
+		this._offset  = c.offset + c.text.length;
 		return true;
 	}
 	c = l[ci];
@@ -340,8 +409,38 @@ Marker.prototype.moveUpDown = function(direction) {
 		}
 	}
 	if (dx - x1 <= x2 - dx) o--;	
-	this.element = c.node;
-	this.offset  = c.offset + o;
+	this._element = c.node;
+	this._offset  = c.offset + o;
+	return true;
+}
+
+/* moves the marker a line left (dir == true) or right */
+/* returns true if moved */
+Marker.prototype.moveLeftRight = function(dir) {
+	if (dir) {
+		if (this._offset > 0) {
+			this._offset--;
+		} else {
+			var pev = this._element.parent.prev;
+			if (!pev) {
+				return false;
+			}
+			var e = this._element = pev.last;
+			this._offset = e.text.length;
+		}
+	} else {
+		var t = this._element.text;
+		if (this._offset < t.length) {
+			this._offset++;
+		} else {
+			var pnext = this._element.parent.next;
+			if (!pnext) {
+				return false;
+			}
+			this._element = pnext.first;
+			this._offset = 0;
+		}
+	}
 	return true;
 }
 
@@ -385,12 +484,8 @@ Caret.prototype.hide = function() {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Selection() {
 	this.active = false;
-	this.item = null;
-	this.element1 = null;
-	this.element2 = null;
-	this.offset1 = 0;
-	this.offset2 = 0;
-	this.inner = null;
+	this.begin = new Marker();
+	this.end   = new Marker();
 }	
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -414,38 +509,15 @@ Editor.prototype.updateCaret = function() {
 		cx.putImageData(caret.save, caret.sx - 1, caret.sy - 1);
 		caret.save = null;
 	} 
-	
-	/* XXX TODO, Make call to get X by Chunk, wordoffset */
-	
+		
 	if (caret.shown && !caret.blink) {
-		/* todo cache position */
-		Measure.font = caret.item.dtree.font;
-		var ce  = caret.element;
-		var co  = caret.offset;
-		var t   = ce.text;
-		var cpara = ce.anchestor("paragraph");
-		var pinfo = caret.getPinfo();
-		if (caret.pli == 2 && caret.pci > 6) {
-			pinfo = caret.getPinfo();
-		}
-		var pline  = pinfo[caret.pli];
-		var pchunk = pline[caret.pci];
-		var x = System.space.pox + caret.item.x + cpara.x + (pchunk != null ? pchunk.x : pline.x);
-		var y = System.space.poy + caret.item.y + cpara.y + pline.y;
-		if (caret.item.scrolly > 0) {
-			y -= caret.item.scrolly;
-		}
-		var cow; /* offset width for the caret */
-		if (pchunk == null) {
-			cow = 0;
-		} else {
-			var ts = t.substring(pchunk.offset, co);
-			cow = Measure.width(ts);
-		}
-		var ts = caret.item.dtree.textsize;
-		var th = Math.round(ts * 1.2);
-		x += cow;
-		y -= ts;
+		caret.getXY();
+		var it = caret.item;
+		var sy = it.scrolly;
+		var x = System.space.pox + it.x + caret.x;
+		var y = System.space.poy + it.y + caret.y - (sy > 0 ? sy : 0);
+		var th = Math.round(it.dtree.textsize * 1.2);
+		
 		caret.save = cx.getImageData(
 			(caret.sx = x) - 1, 
 			(caret.sy = y) - 1, 
@@ -464,6 +536,24 @@ Editor.prototype.specialKey = function(keycode, shiftKey) {
 	var refresh = false;
 	var redraw = false;
 	var caret  = this.caret;
+	var select = this.selection;			
+
+	if (!shiftKey && select.active) {
+		select.active = false;
+		this.item.listen(); /* make not actual */
+		redraw = true;
+	} else if (shiftKey && !select.active) {
+		switch(keycode) {
+		case 35 : // end
+		case 36 : // pos1
+		case 37 : // left
+		case 38 : // up
+		case 39 : // right
+		case 40 : // down	
+			select.begin.set(caret);
+		}
+	}
+
 	
 	switch(keycode) {
 	case  8 : // backspace
@@ -510,19 +600,8 @@ Editor.prototype.specialKey = function(keycode, shiftKey) {
 	}
 	case 37 : // left
 	{
-		if (caret.offset > 0) {
-			caret.offset--;
-		} else {
-			var ce = caret.element;
-			var para = ce.parent;
-			var prespara = para.prev;
-			if (!prespara) {
-				return false;
-			}
-			ce = prespara.last;
-			caret.set(ce, ce.text.length);
-		}
-		refresh = true;
+		var change = caret.moveLeftRight(true);
+		refresh = change;
 		break;
 	}
 	case 38 : // up
@@ -530,40 +609,7 @@ Editor.prototype.specialKey = function(keycode, shiftKey) {
 		break;
 	case 39 : // right
 	{	
-		var ce = caret.element;
-		var ct = ce.text;
-		var be = ce;
-		var bo = caret.offset;
-			
-		if (caret.offset < ct.length) {
-			caret.offset++;
-		} else {
-			var pnext = ce.parent.next;
-			if (!pnext) {
-				break;
-			}
-			caret.element = pnext.first;
-			caret.offset = 0;
-		}
-		var selection = this.selection;
-		if (shiftKey) {
-			if (!selection.active) {
-				selection.active = true;
-				selection.item = this.item;
-				selection.element1 = be;
-				selection.offset1 = bo;
-			}
-			selection.element2 = caret.element;
-			selection.offset2 = caret.offset;
-			redraw = true;
-		} else {
-			if (selection.active) {
-				selection.active = false;
-				//selection.dropCaches();					
-				redraw = true;
-			} 
-		}
-		refresh = true;
+		refresh = caret.moveLeftRight(false);		
 		break;
 	}
 	case 40 : // down
@@ -586,6 +632,24 @@ Editor.prototype.specialKey = function(keycode, shiftKey) {
 	default :
 		break;
 	}
+
+
+	if (shiftKey && refresh) {
+		switch(keycode) {
+		case 35 : // end
+		case 36 : // pos1
+		case 37 : // left
+		case 38 : // up
+		case 39 : // right
+		case 40 : // down	
+			select.active = true;
+			select.end.set(caret);
+			this.item.listen(); /* make not actual */
+			redraw = true;
+		}
+	}
+	
+	
 	if (refresh || redraw) {
 		caret.show();
 	}
@@ -918,17 +982,10 @@ _init : function() {
 		}
 	}
 	
-	/* double click */
-	/*function ondblclick(event) {	
-		event.preventDefault();
-		this.space.dblclick(event);
-		return false;
-	}*/
 	
 	canvas.onmouseup       = this.makeCatcher(this, onmouseup);
 	canvas.onmousemove     = this.makeCatcher(this, onmousemove);
 	canvas.onmousedown     = this.makeCatcher(this, onmousedown);
-	//canvas.ondblclick      = this.makeCatcher(this, ondblclick);
 	window.onresize        = this.makeCatcher(this, onresize);
 	hiddenInput.onfocus    = this.makeCatcher(this, onfocus);
 	hiddenInput.onblur     = this.makeCatcher(this, onblur);
@@ -1048,7 +1105,7 @@ var hexcos = [ cos(pi6 + pi3 * 1), cos(pi6 + pi3 * 2), cos(pi6 + pi3 * 3),
                cos(pi6 + pi3 * 4), cos(pi6 + pi3 * 5), cos(pi6 + pi3 * 6) ];
 var hexc = cos(pi6);
 	
-function drawHexagon(cx, x, y) {
+/*function drawHexagon(cx, x, y) {
 	var rad = 20;
 	cx.beginPath();
 	cx.moveTo(x + hexsin[0] * rad, y + hexcos[0] * rad);
@@ -1057,7 +1114,7 @@ function drawHexagon(cx, x, y) {
 	}
 	cx.lineTo(x + hexsin[0] * rad, y + hexcos[0] * rad);
 	cx.closePath();
-}
+}*/
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .---.                 
@@ -1130,9 +1187,9 @@ Space.prototype.redraw = function() {
 		
 	editor.updateCaret();
 		
-	if (this.iaction.act == enums.ACT_MENU) {
+	/*if (this.iaction.act == enums.ACT_MENU) {
 		this.drawMenu();
-	}
+	}*/
 }
 		
 /* adds an item to the space */
@@ -1140,19 +1197,6 @@ Space.prototype.addItem = function(item, x, y) {
 	this._items.push(item);
 	item.x = x;
 	item.y = y;
-}
-
-/* draws a menu */
-/* todo make an own object */
-Space.prototype.drawMenu = function() {
-	var cx = System.canvas.getContext("2d");
-	var iaction = this.iaction;
-	drawHexagon(cx, iaction.sx, iaction.sy);
-	cx.stroke();
-	cx.fillStyle = "#ffcc88";
-	if (iaction.mhover == 0) {
-		cx.fill();
-	}
 }
 
 /* user pressed a special key */
@@ -1837,7 +1881,7 @@ Object.defineProperty(Paragraph.prototype, "width", {
 });
 
 /* draws the paragraph in its cache and returns it */
-Paragraph.prototype.getCanvas = function(selection) {
+Paragraph.prototype.getCanvas = function() {
 	var pcanvas = this._pcanvas;
 	if (this._canvasActual) {
 		return pcanvas;
@@ -1845,32 +1889,6 @@ Paragraph.prototype.getCanvas = function(selection) {
 	var cx = pcanvas.getContext("2d");
 	this._flow();
 	this._canvasActual = true;
-
-	/* selection start and stop */
-	/*var sel1line   = null;
-	var sel1chunk  = null;
-	var sel1offset = null;
-	var sel2line   = null;
-	var sel2chunk  = null;
-	var sel2offset = null;*/
-	/*if (selection.active && 
-	    selection.element1 == node && 
-	    sel1line == null && 
-	    ca.index + text.length >= selection.offset1
-	) {
-		sel1line   = pline;
-		sel1chunk  = pchunk;
-		sel1offset = selection.offset1 - ca.index;
-	}
-	if (selection.active && 
-	    selection.element2 == node && 
-	    sel2line == null && 
-	    ca.index + text.length >= selection.offset2
-	) {
-		sel2line   = pline;
-		sel2chunk  = pchunk;
-		sel2offset = selection.offset2 - ca.index;
-	}*/
 			
 	/* todo: work out exact height for text below baseline */
 	/* set the canvas height */
@@ -1889,20 +1907,8 @@ Paragraph.prototype.getCanvas = function(selection) {
 			}
 		}
 	}
-	cx.font = dtree.font;
-
-	/* draws the selection into the canvas */
-	/*if (sel1line != null) {
-		var pl1 = pinfo[sel1line];
-		var pc1 = pl1[sel1chunk];
-		cx.fillStyle = settings.selectionColor;
-		var ts = pc1.text.substring(0, sel1offset);
-		var cow = cx.measureText(ts).width;
-		var x1 = pc1.x + cow;
-		cx.fillRect(x1, pl1.y - doc.textsize, 
-			width - x1, doc.textsize + Math.round(doc.textsize * 0.27));
-	}*/
 	
+	cx.font = dtree.font;	
 	cx.fillStyle = "black";
 	/* draws text into the canvas */
 	var pinfo = this._pinfo;
@@ -1958,8 +1964,7 @@ Paragraph.prototype.joinToPrevious = function(node, caret) {
 	var nt = node.text;
 	var plc = prevPara.last;
 	if (caret) {
-		caret.element = plc;
-		caret.offset = plc.text.length;
+		caret.set(plc, plc.text.length);
 	}
 	plc.text = plc.text + nt; 
 	this.parent.remove(this);
@@ -1994,7 +1999,7 @@ DTree.prototype.paraAtY = function(y) {
 /* draws the content in a buffer canvas */
 /* acanvas  ... canvas to draw upon */
 /* todo rename */
-DTree.prototype.drawCanvas = function(acanvas, offsetX, offsetY, scrolly, selection) {
+DTree.prototype.drawCanvas = function(acanvas, offsetX, offsetY, scrolly) {
 	var cx = acanvas.getContext("2d");
 	var y = offsetY;
 	var pi = 0;
@@ -2002,7 +2007,7 @@ DTree.prototype.drawCanvas = function(acanvas, offsetX, offsetY, scrolly, select
 	var parasep = this.pre ? 0 : this.textsize;
 
 	for(var para = this.first; para; para = para.next) {
-		var pcanvas = para.getCanvas(selection);
+		var pcanvas = para.getCanvas();
 		para.x = offsetX;
 		para.y = y;
 		cx.drawImage(pcanvas, offsetX, y - scrolly);
@@ -2157,7 +2162,7 @@ function Note_bevel(cx, x, y, w, h, border, radius) {
 }
 	
 /* gets the canvas buffer for this item */
-Note.prototype.getCanvas = function(selection) {
+Note.prototype.getCanvas = function(select) {
 	var bcanvas = this.bcanvas;
 	var dtree = this.dtree;
 	var cx = bcanvas.getContext("2d");
@@ -2166,7 +2171,7 @@ Note.prototype.getCanvas = function(selection) {
 		return bcanvas;
 	}
 
-	/* draws the note */
+	/* draws the background */
 	cx.clearRect(0, 0, bcanvas.width, bcanvas.height);	
 	Note_bevel(cx, 0, 0, this.width, this.height, 2.5, 3);
 	var grad = cx.createLinearGradient(0, 0, this.width / 10, this.height);			
@@ -2176,12 +2181,11 @@ Note.prototype.getCanvas = function(selection) {
 	cx.fill();
 	cx.fillStyle = "#000000";
 
-	/* draws text */
+	/* calculates if a scrollbar is needed */
 	var sy = this._scrolly;
 	var innerHeight = this.height - 2 * this.textBorder;
 	dtree.width = this.width  - 2 * this.textBorder - (sy >= 0 ? settings.scrollbarRadius * 2 : 0);
 	var dtreeHeight = dtree.height;
-	
 	if (sy < 0) {
 		if (dtreeHeight > innerHeight) {
 			/* should use a scrollbar */
@@ -2202,11 +2206,79 @@ Note.prototype.getCanvas = function(selection) {
 		}
 	}
 	
-	/* todo move before draw */	
+	/* draws the selection */
+	if (select.active && select.begin.item == this) {
+		var b = select.begin;
+		var e = select.end;
+		b.getXY();
+		e.getXY();
+		if (e.y < b.y) {
+			e = select.begin;
+			b = select.end;
+		} else if (e.y == b.y && e.x < b.x) {
+			e = select.begin;
+			b = select.end;		
+		}
+		
+		cx.fillStyle   = settings.selectionColor;
+		cx.strokeStyle = settings.selectionStroke;
+		cx.beginPath();
+		var psy = sy >= 0 ? sy : 0;
+		var lh = Math.round(this.dtree.textsize * 1.2);
+		var bx = Math.round(b.x) + 0.5;
+		var by = Math.round(b.y - psy) + 0.5;
+		var ex = Math.round(e.x) + 0.5;
+		var ey = Math.round(e.y - psy) + 0.5;
+		var rx = Math.round(dtree.width + this.textBorder / 2) + 0.5;
+		var lx = Math.round(this.textBorder / 2) + 0.5;
+		if ((Math.abs(by - ey) < 2)) {
+			// ***
+			cx.moveTo(bx, by);
+			cx.lineTo(bx, by + lh);
+			cx.lineTo(ex, ey + lh);
+			cx.lineTo(ex, ey);
+			cx.lineTo(bx, by);
+			cx.stroke();
+			cx.fill();			
+		} else if (Math.abs(by + lh - ey) < 2 && (bx >= ex))  {
+			//      ***
+			// ***
+			cx.moveTo(rx, by + lh);
+			cx.lineTo(bx, by + lh);
+			cx.lineTo(bx, by);
+			cx.lineTo(rx, by);
+			
+			cx.moveTo(lx, ey);
+			cx.lineTo(ex, ey);
+			cx.lineTo(ex, ey + lh);
+			cx.lineTo(lx, ey + lh);
+			cx.stroke();
+			cx.fill();
+		} else {
+			//    *****
+			// *****
+			for(var i = 0; i < 2; i++) {
+				cx.beginPath();
+				var edge = i ? cx.moveTo : cx.lineTo;
+				cx.moveTo(rx, ey);
+				cx.lineTo(ex, ey);
+				cx.lineTo(ex, ey + lh);
+				cx.lineTo(lx, ey + lh);
+				edge.call(cx, lx, by + lh);
+				cx.lineTo(bx, by + lh);
+				cx.lineTo(bx, by);
+				cx.lineTo(rx, by);
+				edge.call(cx, rx, ey);
+				if (i) cx.stroke(); else cx.fill();
+			}			
+		}
+		cx.beginPath();
+	}
+	
+	/* draws text */	
 	dtree.drawCanvas(bcanvas, 
 		this.textBorder, this.textBorder, 
-		sy < 0 ? 0 : Math.round(sy),
-		selection
+		sy < 0 ? 0 : Math.round(sy)
 	);
 	
 	if (sy >= 0) {
@@ -2318,7 +2390,7 @@ function VectorGraph(width, height, doc)
 
 /* gets the canvas buffer for this item */
 /* if caret != null draws the caret into the canvas */
-VectorGraph.prototype.getCanvas = function(selection) {
+VectorGraph.prototype.getCanvas = function() {
 	var cx = this.bcanvas.getContext("2d");
 	cx.beginPath();
 	cx.clearRect(0, 0, bcanvas.width, bcanvas.height);
