@@ -38,9 +38,11 @@ var enableCatcher = false;
 var debugNodes = true;
 
 var settings = {
+
+	defaultFont : "Verdana,Geneva,Kalimati,sans-serif",
+
 	/* milliseconds after mouse down, dragging starts */
 	dragtime : 400,
-	
 	/* pixels after mouse down and move, dragging starts */
 	dragbox  : 10,
 	
@@ -52,8 +54,19 @@ var settings = {
 	noteTextBorder : 10,
 	noteInnerBorderWidth : 2,
 	noteInnerBorderColor : "#ffbc57",
-	noteBackground1 : "rgba(255,255,248,0.935)",
-	noteBackground2 : "rgba(255,255,160,0.935)",
+	noteOuterBorderWidth : 1,
+	noteOuterBorderColor : "black",
+	noteBackground1 : "rgba(255, 255, 248, 0.935)",
+	noteBackground2 : "rgba(255, 255, 160, 0.935)",
+	
+	/* float menu style */
+	floatMenuInnerBorderWidth : 2,
+	floatMenuInnerBorderColor : "#ffbc57",
+	floatMenuOuterBorderWidth : 1,
+	floatMenuOuterBorderColor : "black",
+	floatMenuBackground1 : "rgba(255, 255, 168, 0.935)",
+	floatMenuBackground2 : "rgba(255, 255, 248, 0.935)",
+	floatMenuFillStyle : "#ffbc57",
 	
 	/* selection */
 	//selectionColor : "#8080ff",
@@ -145,12 +158,16 @@ var enums = {
 	ACT_IDRAG   : 2,
 	ACT_IRESIZE : 3,
 	ACT_SCROLLY : 4,
-	ACT_MENU    : 6,
+	ACT_FMENU   : 5,
 };
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- Legacy+++
+  ,                       
+  )   ,-. ,-. ,-. ,-. . . 
+ /    |-' | | ,-| |   | | 
+ `--' `-' `-| `-^ `-' `-| 
+           ,|          /| 
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -523,6 +540,7 @@ Editor.prototype.updateCaret = function() {
 			(caret.sy = y) - 1, 
 			caret.sh = 3, 
 			caret.sw = th + 1);
+		cx.fillStyle = "black";
 		cx.fillRect(x, y, 1, th);
 	}
 }	
@@ -1093,28 +1111,136 @@ a[n++]="                                       '___'   '___'                    
 Hexagon
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/* shortcut globas, dirty :( */
-var pi  = Math.PI;
-var pi3 = Math.PI / 3;
-var pi6 = Math.PI / 6;
-var sin = Math.sin;
-var cos = Math.cos;
-var hexsin = [ sin(pi6 + pi3 * 1), sin(pi6 + pi3 * 2), sin(pi6 + pi3 * 3),
-               sin(pi6 + pi3 * 4), sin(pi6 + pi3 * 5), sin(pi6 + pi3 * 6) ];
-var hexcos = [ cos(pi6 + pi3 * 1), cos(pi6 + pi3 * 2), cos(pi6 + pi3 * 3),
-               cos(pi6 + pi3 * 4), cos(pi6 + pi3 * 5), cos(pi6 + pi3 * 6) ];
-var hexc = cos(pi6);
+/* shortcut globas */
+var hexc = Math.cos(Math.PI / 6);
+var hext = Math.tan(Math.PI / 6);
 	
-/*function drawHexagon(cx, x, y) {
-	var rad = 20;
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ .-,--' .          .                    
+ \|__  |  ,-. ,-. |- ,-,-. ,-. ,-. . . 
+  |    |  | | ,-| |  | | | |-' | | | | 
+ `'    `' `-' `-^ `' ' ' ' `-' ' ' `-^ 
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+function Floatmenu() {
+	this.x = null;
+	this.y = null;
+	this.radi = 25;
+	this.rado = 60;
+	this.fill = false;
+	this.mouseover = false;
+}
+
+Floatmenu.prototype._pathHex = function(cx, x, y, r) {
+	var r2 = Math.round(0.5 * r);
+	var rc = Math.round(hexc * r);
+
 	cx.beginPath();
-	cx.moveTo(x + hexsin[0] * rad, y + hexcos[0] * rad);
-	for(var i = 1; i < 6; i++) {
-		cx.lineTo(x + hexsin[i] * rad, y + hexcos[i] * rad);
-	}
-	cx.lineTo(x + hexsin[0] * rad, y + hexcos[0] * rad);
+	cx.moveTo(x - r, y);
+	cx.lineTo(x - r2, y - rc);
+	cx.lineTo(x + r2, y - rc);
+	cx.lineTo(x + r, y);
+	cx.lineTo(x + r2, y + rc);
+	cx.lineTo(x - r2, y + rc);
+	cx.lineTo(x - r, y);
 	cx.closePath();
-}*/
+}
+
+Floatmenu.prototype._pathHex6 = function(cx, x, y, seg) {
+	var ri = this.radi;
+	var ro = this.rado;
+	var ri2 = Math.round(0.5 * ri);
+	var ric = Math.round(hexc * ri);	
+	var ro2 = Math.round(0.5 * ro);
+	var roc = Math.round(hexc * ro);
+	
+	cx.beginPath();
+	cx.moveTo(x - ro2, y - roc);
+	cx.lineTo(x + ro2, y - roc);
+	cx.lineTo(x + ri2, y - ric);
+	cx.lineTo(x - ri2, y - ric);
+	cx.closePath();
+}	
+
+Floatmenu.prototype.draw = function() {
+	var canvas = System.canvas;
+	var cx = canvas.getContext("2d");
+	cx.save();
+	var x = this.x + 0.5;
+	var y = this.y + 0.5;
+
+	var grad = cx.createRadialGradient(x, y, 0, x, y, (this.rado + this.radi) / 2);
+	grad.addColorStop(0, settings.floatMenuBackground1);
+	grad.addColorStop(1, settings.floatMenuBackground2);
+	
+	this._pathHex(cx, x, y, this.rado - 1);
+	cx.fillStyle = grad;
+	cx.lineWidth = settings.floatMenuInnerBorderWidth;
+	cx.strokeStyle = settings.floatMenuInnerBorderColor;
+	cx.fill();
+	//cx.stroke(); 
+	
+	this._pathHex(cx, x, y, this.rado);
+	cx.lineWidth = settings.floatMenuOuterBorderWidth;
+	cx.strokeStyle = settings.floatMenuOuterBorderColor;
+	cx.stroke();
+	
+	this._pathHex(cx, x, y, this.radi);
+	cx.stroke();
+
+	this._pathHex6(cx, x, y, 0);
+	if (this.fill) {
+		cx.fillStyle = settings.floatMenuFillStyle;
+		cx.fill();
+	}
+	cx.stroke();
+	
+	cx.fillStyle = "black";
+	cx.font = "10pt " + settings.defaultFont;
+	cx.textAlign = "center";
+	cx.textBaseline = "middle";
+	cx.fillText("new", this.x, this.y);
+	
+	cx.fillText("Note", Math.round(this.x), Math.round(this.y - (this.rado - this.radi) * 1.1));
+	cx.beginPath(); /* todo tidy up */
+	cx.restore();
+}
+
+Floatmenu.prototype.mousehover = function(x, y) {
+	var ofill = this.fill;
+	var tx = this.x;
+	var ty = this.y;
+	var ro = this.rado;
+	var ri = this.radi;
+	var ro2 = this.rado * hexc;
+	var ri2 = this.radi * hexc;
+	var roc = this.rado * hexc;
+	var ric = this.radi * hexc;
+	var yh = (y - ty) * hext;
+
+	if (y < ty - roc || y > ty + roc ||
+	    x - ro + yh >= tx ||
+		x + ro + yh <= tx ||
+		x - ro - yh >= tx ||
+		x + ro - yh <= tx)
+	{
+		/* out of menu */
+		this.mouseover = false;
+		this.fill = false;
+	} else {
+		this.mouseover = true;
+		System.setCursor("default");
+		var lor = x + (y - this.y) * hext <= this.x;
+		var rol = x - (y - this.y) * hext >= this.x;
+		if (y < ty - ric && lor && rol) {
+			this.fill = true;
+		} else {
+			this.fill = false;
+		}
+	}
+	
+	return this.fill != ofill;
+}
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .---.                 
@@ -1122,11 +1248,12 @@ var hexc = cos(pi6);
     \ | | ,-| |   |-' 
 `---' |-' `-^ `-' `-' 
 ~ ~ ~ | ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-      '
+      ' 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Space() {
 	/* all items in the space */
 	this._items = []; 
+	this._floatmenu = new Floatmenu();
 	
 	this.iaction = { /* todo private? */
 		act : enums.ACT_NONE,
@@ -1145,7 +1272,7 @@ Space.prototype.redraw = function() {
 	System.canvasClear();
 	editor.caret.save = null;
 	var cx = canvas.getContext("2d");
-	
+
 	for(var i = items.length - 1; i >= 0; i--) {
 		var it = items[i];
 		cx.drawImage(it.getCanvas(editor.selection), it.x + this.pox, it.y + this.poy);
@@ -1184,12 +1311,11 @@ Space.prototype.redraw = function() {
 		cx.beginPath(); 
 		cx.restore();
 	}
-		
+				
+	if (this.iaction.act == enums.ACT_FMENU) {
+		this._floatmenu.draw();
+	}
 	editor.updateCaret();
-		
-	/*if (this.iaction.act == enums.ACT_MENU) {
-		this.drawMenu();
-	}*/
 }
 		
 /* adds an item to the space */
@@ -1288,25 +1414,36 @@ function checkItemCompass(it, x, y) { /* todo move to item */
 
 /* mouse hover */
 Space.prototype.mousehover = function(x, y) {
-	x -= this.pox;
-	y -= this.poy;
+	var px = x - this.pox;
+	var py = y - this.poy;
 	var com = null;
 	var editor = System.editor;
+	var redraw = false;
+	if (this.iaction.act == enums.ACT_FMENU) {
+		redraw = this._floatmenu.mousehover(x, y);
+		if (this._floatmenu.mouseover) {
+			/* mouse was over float, no need to look further */
+			if (redraw) this.redraw();
+			return;
+		}
+	}
+	
 	if (editor.item) {
 		var it = editor.item;
-		com = checkItemCompass(it, x, y);
+		com = checkItemCompass(it, px, py);
 		if (com) {
 			System.setCursor(com + "-resize");					
 		}
 	}
 	if (!com) {
-		var ito = this.itoAtXY(x, y); /* todo give a better name */
+		var ito = this.itoAtXY(px, py); /* todo give a better name */
 		if (ito < 0) {
 			System.setCursor("crosshair");
 		} else {
-			System.setCursor("default");					
+			System.setCursor("default");				
 		}
 	}
+	if (redraw) this.redraw();
 }
 
 /* starts an operation with the mouse held down */
@@ -1363,37 +1500,41 @@ Space.prototype.dragstart = function(x, y) {
 /* a click is a mouse down followed within dragtime by 'mouseup' and
  * not having moved out of 'dragbox'. */
 Space.prototype.click = function(x, y) {
-	x -= this.pox;
-	y -= this.poy;
+	var px = x - this.pox;
+	var py = y - this.poy;
 	var editor = System.editor;
 	var iaction = this.iaction;
-	var ito = this.itoAtXY(x, y);
+	var ito = this.itoAtXY(px, py);
 	var it = this._items[ito];
 	var redraw = false;
 	
 	if (ito < 0) {
-		/* click on background */
-		return;
-	}
-	if (ito > 0) {
-		/* moves item to top */
-		this._items.splice(ito, 1);
-		this._items.unshift(it);
-		ito = 0;
+		iaction.act = enums.ACT_FMENU;
+		this._floatmenu.x = x;
+		this._floatmenu.y = y;
+		System.setCursor("default");
 		redraw = true;
-	}
-	/*  focus the item */
-	if (editor.item != it) {
-		it.focus(editor);
-	}
-	var ox = x - it.x;
-	var oy = y - it.y + (it.scrolly > 0 ? it.scrolly : 0);
-	if (it.paraAtY) { /* todo, make this less dirty, move the logic into the item or editor*/
-		var p = it.paraAtY(oy);
-		if (p) {
-			editor.caret.setFromXY(p, ox - p.x, oy - p.y);
-			editor.caret.show();
+	} else {
+		if (ito > 0) {
+			/* moves item to top */
+			this._items.splice(ito, 1);
+			this._items.unshift(it);
+			ito = 0;
 			redraw = true;
+		}
+		/*  focus the item */
+		if (editor.item != it) {
+			it.focus(editor);
+		}
+		var ox = px - it.x;
+		var oy = py - it.y + (it.scrolly > 0 ? it.scrolly : 0);
+		if (it.paraAtY) { /* todo, make this less dirty, move the logic into the item or editor*/
+			var p = it.paraAtY(oy);
+			if (p) {
+				editor.caret.setFromXY(p, ox - p.x, oy - p.y);
+				editor.caret.show();
+				redraw = true;
+			}
 		}
 	}
 			
@@ -1542,20 +1683,6 @@ Space.prototype.dragmove = function(x, y) {
 	}
 }
 
-/*	case enums.MENU:
-		var cx = system.canvas.getContext("2d");
-		drawHexagon(cx, iaction.sx, iaction.sy);
-		var bh = iaction.mhover;
-		if (cx.isPointInPath(x, y)) {
-			iaction.mhover = 0;
-		} else {
-			iaction.mhover = -1;
-		}
-		if (bh != iaction.mhover) {
-			draw = true;
-		}
-*/
-
 /* mouse down event */
 Space.prototype.mousedown = function(x, y) {
 	x -= this.pox;
@@ -1590,24 +1717,6 @@ Space.prototype.mousedown = function(x, y) {
 	
 	return enums.MST_ATWEEN;
 }
-
-/* double click */
-/*
-Space.prototype.dblclick = function(x, y) {
-	var -x = this.pox;
-	var -y = this.poy;
-	var ito = this.itoAtXY(x, y);
-	var iaction = this.iaction;
-	if (ito < 0) {
-		// on background 
-		iaction.act = enums.ACT_MENU;
-		iaction.sx = x;
-		iaction.sy = y;
-		iaction.mhover = 0;
-		return false;
-	}
-	return false;
-}*/
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1984,7 +2093,7 @@ DTree.prototype.constructor = DTree;
 function DTree() {
 	Treenode.call(this, "dtree");
 	this.textsize = 13;
-	this.font = this.textsize + 'px Verdana,Geneva,Kalimati,sans-serif';
+	this.font = this.textsize + 'px ' + settings.defaultFont;
 }
 		
 /* returns the chunk at x,y */
@@ -2351,17 +2460,15 @@ Note.prototype.getCanvas = function(select) {
 	/* draws the border */
 	cx.beginPath(); 
 	cx.lineWidth = settings.noteInnerBorderWidth;
-	cx.lineWidth = "2";
 	cx.strokeStyle = settings.noteInnerBorderColor;
-	cx.strokeStyle = "#ffbc57";
 	Note_bevel(cx, 0, 0, this.width, this.height, 1.5, 4);
 	cx.stroke(); cx.beginPath(); cx.closePath();
-	cx.lineWidth = "1";
-	cx.strokeStyle = "#000000";
+	cx.lineWidth = settings.noteOuterBorderWidth;
+	cx.strokeStyle = settings.noteOuterBorderColor;
 	Note_bevel(cx, 0, 0, this.width, this.height, 0.5, 5);
 	cx.stroke(); cx.beginPath(); cx.closePath();
-	cx.restore();		
-	bcanvas.actual = true;			
+	cx.restore();
+	bcanvas.actual = true;			 /* todo move */
 	return bcanvas;	
 }
 	
