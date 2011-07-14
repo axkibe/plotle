@@ -1391,10 +1391,10 @@ Space.prototype.redraw = function() {
 			cx.lineTo(canvas.width, canvas.height);
 			cx.lineTo(0, canvas.height);
 			cx.lineTo(0, 0);
-			var xp1 = it.x + this.pox + 0.5;
-			var yp1 = it.y + this.poy + 0.5;
-			var xp2 = xp1 + it.width;
-			var yp2 = yp1 + it.height;
+			var xp1 = it.x + this.pox - 0.5;
+			var yp1 = it.y + this.poy - 0.5;
+			var xp2 = xp1 + it.width + 1;
+			var yp2 = yp1 + it.height + 1;
 			
 			cx.moveTo(xp1, yp1); 
 			cx.lineTo(xp1, yp2); 
@@ -1556,10 +1556,10 @@ Space.prototype.mousehover = function(x, y) {
 		System.setCursor(com + "-resize");
 		if (redraw) this.redraw();
 		return;
-	} 
+	}
 	
 	if (it && ito != 0 && 
-		Hex.within(px - it.x - 7 * it.width / 8, py - it.y, settings.itemMenuInnerRadius)) 
+		Hex.within(px - it.x - 7 * it.width / 8, py - it.y, settings.itemMenuInnerRadius))
 	{
 		System.setCursor("pointer");
 	} else if (ito < 0) {
