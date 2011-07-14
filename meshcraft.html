@@ -59,6 +59,9 @@ var settings = {
 	noteBackground1 : "rgba(255, 255, 248, 0.935)",
 	noteBackground2 : "rgba(255, 255, 160, 0.935)",
 	
+	newNoteWidth : 200,
+	newNoteHeight : 100,
+	
 	/* float menu style */
 	floatMenuInnerBorderWidth : 2,
 	floatMenuInnerBorderColor : "#ffbc57",
@@ -725,8 +728,9 @@ Editor.prototype.focus = function(item) {
 		
 /* editor disconnects */
 Editor.prototype.blur = function() {
+	this.item = null;
 	this.caret.hide();
-	caret.set(null, null, null);
+	this.caret.set(null, null, null);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -970,7 +974,7 @@ _init : function() {
 		
 		switch (mst) {
 		case enums.MST_NONE :
-			console.log("mouse up, without down?");
+			/* console.log("mouse up, without down?"); */
 			return false;
 		case enums.MST_ATWEEN :
 			/* this was a click */
@@ -1061,7 +1065,7 @@ _init : function() {
 	//}
 	//space.addItem(note1,    10,  10);
 	//space.addItem(note2,   250, 240);
-	space.addItem(note2,   50, 40);
+	space.addItem(note2, false, 50, 40);
 	{
 		var a=[];
 		var n=0;
@@ -1128,7 +1132,7 @@ function Floatmenu() {
 	this.radi = 25;
 	this.rado = 60;
 	this.fill = false;
-	this.mouseover = false;
+	this.mousepos = -1;
 }
 
 Floatmenu.prototype._pathHex = function(cx, x, y, r) {
@@ -1189,7 +1193,7 @@ Floatmenu.prototype.draw = function() {
 	cx.stroke();
 
 	this._pathHex6(cx, x, y, 0);
-	if (this.fill) {
+	if (this.mousepos == 1) {
 		cx.fillStyle = settings.floatMenuFillStyle;
 		cx.fill();
 	}
@@ -1206,8 +1210,7 @@ Floatmenu.prototype.draw = function() {
 	cx.restore();
 }
 
-Floatmenu.prototype.mousehover = function(x, y) {
-	var ofill = this.fill;
+Floatmenu.prototype._getMousepos = function(x, y) {
 	var tx = this.x;
 	var ty = this.y;
 	var ro = this.rado;
@@ -1225,21 +1228,30 @@ Floatmenu.prototype.mousehover = function(x, y) {
 		x + ro - yh <= tx)
 	{
 		/* out of menu */
-		this.mouseover = false;
-		this.fill = false;
+		return this.mousepos = -1;
 	} else {
-		this.mouseover = true;
-		System.setCursor("default");
 		var lor = x + (y - this.y) * hext <= this.x;
 		var rol = x - (y - this.y) * hext >= this.x;
 		if (y < ty - ric && lor && rol) {
-			this.fill = true;
+			return this.mousepos = 1;
 		} else {
-			this.fill = false;
+			return this.mousepos = 0;
 		}
 	}
-	
-	return this.fill != ofill;
+}
+
+
+Floatmenu.prototype.mousehover = function(x, y) {
+	var omp = this.mousepos;
+	var mp = this._getMousepos(x, y);
+	if (mp < 0) {
+		return  mp != omp;
+	}
+	return mp != omp;
+}
+
+Floatmenu.prototype.mousedown = function(x, y) {
+	return this._getMousepos(x, y);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1319,10 +1331,14 @@ Space.prototype.redraw = function() {
 }
 		
 /* adds an item to the space */
-Space.prototype.addItem = function(item, x, y) {
-	this._items.push(item);
+Space.prototype.addItem = function(item, top, x, y) {
 	item.x = x;
 	item.y = y;
+	if (top) {
+		this._items.unshift(item);
+	} else {
+		this._items.push(item);	
+	}
 }
 
 /* user pressed a special key */
@@ -1351,9 +1367,9 @@ Space.prototype.systemBlur = function() {
 }
 
 /* gives one item the keyboard focus */
-Space.prototype.focus = function(item) {
+/*Space.prototype.focus = function(item) {
 	item.focus(System.editor);
-}
+}*/
 
 /* returns the item offset at position x, y */	
 Space.prototype.itoAtXY = function(x, y) {
@@ -1421,8 +1437,9 @@ Space.prototype.mousehover = function(x, y) {
 	var redraw = false;
 	if (this.iaction.act == enums.ACT_FMENU) {
 		redraw = this._floatmenu.mousehover(x, y);
-		if (this._floatmenu.mouseover) {
+		if (this._floatmenu.mousepos >= 0) {
 			/* mouse was over float, no need to look further */
+			System.setCursor("default");
 			if (redraw) this.redraw();
 			return;
 		}
@@ -1476,6 +1493,7 @@ Space.prototype.dragstart = function(x, y) {
 	/*  focus the item */
 	if (editor.item != it) {
 		it.focus(editor);
+		redraw = true;
 	}
 
 	var srad = settings.scrollbarRadius;
@@ -1513,6 +1531,7 @@ Space.prototype.click = function(x, y) {
 		this._floatmenu.x = x;
 		this._floatmenu.y = y;
 		System.setCursor("default");
+		editor.blur();
 		redraw = true;
 	} else {
 		if (ito > 0) {
@@ -1525,6 +1544,7 @@ Space.prototype.click = function(x, y) {
 		/*  focus the item */
 		if (editor.item != it) {
 			it.focus(editor);
+			redraw = true;
 		}
 		var ox = px - it.x;
 		var oy = py - it.y + (it.scrolly > 0 ? it.scrolly : 0);
@@ -1685,36 +1705,50 @@ Space.prototype.dragmove = function(x, y) {
 
 /* mouse down event */
 Space.prototype.mousedown = function(x, y) {
-	x -= this.pox;
-	y -= this.poy;
+	var px = x - this.pox;
+	var py = y - this.poy;
 	
 	var iaction = this.iaction;
 	var editor = System.editor;
-	/* checks menu */
-	/*if (iaction.act == enums.MENU) {
-		iaction.act = enums.ACT_NONE;
-		iaction.sx = null;
-		iaction.sy = null;
-		iaction.mhover = null;
-		draw = true;
-	}*/
+	var redraw = false;
+	
+	if (iaction.act == enums.ACT_FMENU) {
+		var md = this._floatmenu.mousedown(x, y);
+		iaction.act = enums.NONE;
+		redraw = true;
+		if (md >= 0) {
+			if (md == 1) {				
+				var nw = settings.newNoteWidth;
+				var nh = settings.newNoteHeight;
+				var note = new Note(nw, nh);
+				note.dtree.append(new Paragraph(""));
+				this.addItem(note, true, 
+					Math.round(this._floatmenu.x - nw / 2), 
+					Math.round(this._floatmenu.y - nh / 2));
+			}
+			if (redraw) this.redraw();
+			return enums.MST_NONE;
+		}
+	}
 		
 	var com;
-	if (editor.item && (com = checkItemCompass(editor.item, x, y))) {
+	if (editor.item && (com = checkItemCompass(editor.item, px, py))) {
 		/* resizing */
 		iaction.act  = enums.ACT_IRESIZE;
 		iaction.com  = com;
 		iaction.item = editor.item;
-		iaction.sx   = x;
-		iaction.sy   = y;
+		iaction.sx   = px;
+		iaction.sy   = py;
 		iaction.swi  = editor.item.width;
 		iaction.shi  = editor.item.height;
 		iaction.six  = editor.item.x;
 		iaction.siy  = editor.item.y;
 		System.setCursor(com + "-resize");
+		if (redraw) this.redraw();
 		return enums.MST_DRAG;
 	}
 	
+	if (redraw) this.redraw();
 	return enums.MST_ATWEEN;
 }
 
