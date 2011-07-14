@@ -59,8 +59,8 @@ var settings = {
 	noteBackground1 : "rgba(255, 255, 248, 0.935)",
 	noteBackground2 : "rgba(255, 255, 160, 0.935)",
 	
-	newNoteWidth : 200,
-	newNoteHeight : 100,
+	newNoteWidth : 300,
+	newNoteHeight : 150,
 	
 	/* float menu style */
 	floatMenuInnerBorderWidth : 2,
@@ -386,7 +386,7 @@ Marker.prototype.moveUpDown = function(dir) {
 	var ci = this._pci;
 	var l = pinfo[li];
 	var c = l[ci];
-	var x = (c ? c.x : l.x) + Measure.width(c.text.substr(0, o - c.offset));
+	var x = c ? c.x + Measure.width(c.text.substr(0, o - c.offset)) : l.x;
 	if (dir) {
 		if (li == 0) {
 			p = p.prev;
@@ -669,7 +669,6 @@ Editor.prototype.specialKey = function(keycode, shiftKey) {
 			redraw = true;
 		}
 	}
-	
 	
 	if (refresh || redraw) {
 		caret.show();
@@ -1112,12 +1111,79 @@ a[n++]="                                       '___'   '___'                    
 }};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Hexagon
+ ,-_/,.
+ ' |_|/ ,-. . ,
+  /| |  |-'  X
+  `' `' `-' ' `
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ Utilities for hexagons.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+var Hex = {
+	c6 : Math.cos(Math.PI / 6),
+	t6 : Math.tan(Math.PI / 6),
+}
 
-/* shortcut globas */
-var hexc = Math.cos(Math.PI / 6);
-var hext = Math.tan(Math.PI / 6);
+/* make a hexagon path */
+Hex.makePath = function(cx, x, y, r) {
+	var r2 = Math.round(0.5 * r);
+	var rc = Math.round(Hex.c6 * r);
+	cx.beginPath();
+	cx.moveTo(x - r, y);
+	cx.lineTo(x - r2, y - rc);
+	cx.lineTo(x + r2, y - rc);
+	cx.lineTo(x + r, y);
+	cx.lineTo(x + r2, y + rc);
+	cx.lineTo(x - r2, y + rc);
+	cx.lineTo(x - r, y);
+	cx.closePath();
+}
+
+/* returns true if x/y is in hexagon */
+Hex.inHex = function(x, y, r) {
+	var r2 = this.rado * Hex.c6;
+	var rc = this.rado * Hex.c6;
+	var yh = y * Hex.t6;
+
+	return !(
+		y < - rc || y > rc ||
+	    x - r + yh >= 0 ||
+		x + r + yh <= 0 ||
+		x - r - yh >= 0 ||
+		x + r - yh <= 0
+	);
+}
+
+/* makes a hexagon segment path:
+         .-------.
+		/ \  1  / \	 
+	   / 6 .---. 2 \
+	  /___/  .  \___\    -1
+	  \   \     /   /
+	   \ 5 `---´ 3 /
+ 	    \ /  4  \ /
+         `-------´
+             |-> ri
+			 |------> r
+*/
+Hex.makePathSegment = function(cx, x, y, r, ri, seg) {
+	var r2 = Math.round(0.5 * r);
+	var rc = Math.round(Hex.c6 * r);
+	var ri2 = Math.round(0.5 * ri);
+	var ric = Math.round(Hex.c6 * ri);	
+	switch(seg) {
+	case 1:
+		cx.beginPath();
+		cx.moveTo(x - r2,  y - rc);
+		cx.lineTo(x + r2,  y - rc);
+		cx.lineTo(x + ri2, y - ric);
+		cx.lineTo(x - ri2, y - ric);
+		cx.closePath();
+		break;
+	default :
+		throw new Error("invalid segment: " + seg);
+	}
+}	
+
 	
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .-,--' .          .                    
@@ -1135,37 +1201,6 @@ function Floatmenu() {
 	this.mousepos = -1;
 }
 
-Floatmenu.prototype._pathHex = function(cx, x, y, r) {
-	var r2 = Math.round(0.5 * r);
-	var rc = Math.round(hexc * r);
-
-	cx.beginPath();
-	cx.moveTo(x - r, y);
-	cx.lineTo(x - r2, y - rc);
-	cx.lineTo(x + r2, y - rc);
-	cx.lineTo(x + r, y);
-	cx.lineTo(x + r2, y + rc);
-	cx.lineTo(x - r2, y + rc);
-	cx.lineTo(x - r, y);
-	cx.closePath();
-}
-
-Floatmenu.prototype._pathHex6 = function(cx, x, y, seg) {
-	var ri = this.radi;
-	var ro = this.rado;
-	var ri2 = Math.round(0.5 * ri);
-	var ric = Math.round(hexc * ri);	
-	var ro2 = Math.round(0.5 * ro);
-	var roc = Math.round(hexc * ro);
-	
-	cx.beginPath();
-	cx.moveTo(x - ro2, y - roc);
-	cx.lineTo(x + ro2, y - roc);
-	cx.lineTo(x + ri2, y - ric);
-	cx.lineTo(x - ri2, y - ric);
-	cx.closePath();
-}	
-
 Floatmenu.prototype.draw = function() {
 	var canvas = System.canvas;
 	var cx = canvas.getContext("2d");
@@ -1177,22 +1212,22 @@ Floatmenu.prototype.draw = function() {
 	grad.addColorStop(0, settings.floatMenuBackground1);
 	grad.addColorStop(1, settings.floatMenuBackground2);
 	
-	this._pathHex(cx, x, y, this.rado - 1);
+	Hex.makePath(cx, x, y, this.rado - 1);
 	cx.fillStyle = grad;
 	cx.lineWidth = settings.floatMenuInnerBorderWidth;
 	cx.strokeStyle = settings.floatMenuInnerBorderColor;
 	cx.fill();
 	//cx.stroke(); 
 	
-	this._pathHex(cx, x, y, this.rado);
+	Hex.makePath(cx, x, y, this.rado);
 	cx.lineWidth = settings.floatMenuOuterBorderWidth;
 	cx.strokeStyle = settings.floatMenuOuterBorderColor;
 	cx.stroke();
 	
-	this._pathHex(cx, x, y, this.radi);
+	Hex.makePath(cx, x, y, this.radi);
 	cx.stroke();
 
-	this._pathHex6(cx, x, y, 0);
+	Hex.makePathSegment(cx, x, y, this.rado, this.radi, 1);
 	if (this.mousepos == 1) {
 		cx.fillStyle = settings.floatMenuFillStyle;
 		cx.fill();
@@ -1211,27 +1246,15 @@ Floatmenu.prototype.draw = function() {
 }
 
 Floatmenu.prototype._getMousepos = function(x, y) {
-	var tx = this.x;
 	var ty = this.y;
-	var ro = this.rado;
-	var ri = this.radi;
-	var ro2 = this.rado * hexc;
-	var ri2 = this.radi * hexc;
-	var roc = this.rado * hexc;
-	var ric = this.radi * hexc;
-	var yh = (y - ty) * hext;
-
-	if (y < ty - roc || y > ty + roc ||
-	    x - ro + yh >= tx ||
-		x + ro + yh <= tx ||
-		x - ro - yh >= tx ||
-		x + ro - yh <= tx)
-	{
+	var tx = this.x;
+		
+	if (!Hex.inHex(x - this.x, y - this.y, this.rado)) {
 		/* out of menu */
 		return this.mousepos = -1;
 	} else {
-		var lor = x + (y - this.y) * hext <= this.x;
-		var rol = x - (y - this.y) * hext >= this.x;
+		var lor = x + (y - this.y) * Hex.t6 <= this.x;
+		var rol = x - (y - this.y) * Hex.t6 >= this.x;
 		if (y < ty - ric && lor && rol) {
 			return this.mousepos = 1;
 		} else {
@@ -2462,26 +2485,26 @@ Note.prototype.getCanvas = function(select) {
 			break;
 		case 'hexagonh' :
 			cx.beginPath();
-			cx.moveTo(spx -   1 * srad, spy + hexc * srad);
+			cx.moveTo(spx -   1 * srad, spy + Hex.c6 * srad);
 			cx.lineTo(spx - 0.5 * srad, spy);
 			cx.lineTo(spx + 0.5 * srad, spy);
-			cx.lineTo(spx +   1 * srad, spy + hexc * srad);
-			cx.lineTo(spx +   1 * srad, spy + scrollSize - hexc * srad);
+			cx.lineTo(spx +   1 * srad, spy + Hex.c6 * srad);
+			cx.lineTo(spx +   1 * srad, spy + scrollSize - Hex.c6 * srad);
 			cx.lineTo(spx + 0.5 * srad, spy + scrollSize);
 			cx.lineTo(spx - 0.5 * srad, spy + scrollSize);
-			cx.lineTo(spx -   1 * srad, spy + scrollSize - hexc * srad);
+			cx.lineTo(spx -   1 * srad, spy + scrollSize - Hex.c6 * srad);
 			cx.closePath();
 			cx.stroke();
 			cx.fill();
 			break;
 		case 'hexagonv' :
 			cx.beginPath();
-			cx.moveTo(spx - 1 * srad, spy + hexc * srad);
+			cx.moveTo(spx - 1 * srad, spy + Hex.c6 * srad);
 			cx.lineTo(spx           , spy);
-			cx.lineTo(spx + 1 * srad, spy + hexc * srad);
-			cx.lineTo(spx + 1 * srad, spy + scrollSize - hexc * srad);
+			cx.lineTo(spx + 1 * srad, spy + Hex.c6 * srad);
+			cx.lineTo(spx + 1 * srad, spy + scrollSize - Hex.c6 * srad);
 			cx.lineTo(spx           , spy + scrollSize);
-			cx.lineTo(spx - 1 * srad, spy + scrollSize - hexc * srad);
+			cx.lineTo(spx - 1 * srad, spy + scrollSize - Hex.c6 * srad);
 			cx.closePath();
 			cx.stroke();
 			cx.fill();
