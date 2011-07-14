@@ -53,23 +53,38 @@ var settings = {
 	/* note style */
 	noteTextBorder : 10,
 	noteInnerBorderWidth : 2,
-	noteInnerBorderColor : "#ffbc57",
+	noteInnerBorderColor : "rgb(255, 188, 87)",
+	noteInnerRadius      : 5,
 	noteOuterBorderWidth : 1,
 	noteOuterBorderColor : "black",
+	noteOuterRadius      : 6,
 	noteBackground1 : "rgba(255, 255, 248, 0.935)",
 	noteBackground2 : "rgba(255, 255, 160, 0.935)",
 	
-	newNoteWidth : 300,
+	newNoteWidth  : 300,
 	newNoteHeight : 150,
 	
 	/* float menu style */
+	floatMenuInnerRadius : 25,
+	floatMenuOuterRadius : 60,
 	floatMenuInnerBorderWidth : 2,
-	floatMenuInnerBorderColor : "#ffbc57",
-	floatMenuOuterBorderWidth : 1,
-	floatMenuOuterBorderColor : "black",
+	floatMenuInnerBorderColor : "rgb(255, 200, 105)",
+	floatMenuOuterBorderWidth : 0.5,
+	floatMenuOuterBorderColor : "rgb(0, 0, 0)",
 	floatMenuBackground1 : "rgba(255, 255, 168, 0.935)",
 	floatMenuBackground2 : "rgba(255, 255, 248, 0.935)",
-	floatMenuFillStyle : "#ffbc57",
+	floatMenuFillStyle : "rgb(255, 237, 210)",
+
+	/* item menu style */
+	itemMenuInnerRadius : 25,
+	itemMenuOuterRadius : 60,
+	itemMenuInnerBorderWidth : 2,
+	itemMenuInnerBorderColor : "rgb(255, 200, 105)",
+	itemMenuOuterBorderWidth : 0.5,
+	itemMenuOuterBorderColor : "rgb(0, 0, 0)",
+	itemMenuBackground1 : "rgba(255, 255, 188, 0.935)",
+	itemMenuBackground2 : "rgba(255, 255, 248, 0.935)",
+	itemMenuFillStyle : "rgb(255, 237, 210)",
 	
 	/* selection */
 	//selectionColor : "#8080ff",
@@ -78,8 +93,8 @@ var settings = {
 	
 	/* scrollbar */
 	scrollbarForm        : "hexagonh",  // 'square', 'round', 'hexagonh' or 'hexagonv'
-	scrollbarFillStyle   : "#ffbc57",
-	scrollbarStrokeStyle : "#dd9a34",
+	scrollbarFillStyle   : "rgb(255, 188, 87)",
+	scrollbarStrokeStyle : "rgb(221, 154, 52)",
 	scrollbarLineWidth   : 2,
 	scrollbarRadius      : 4,
 	scrollbarMarginX     : 7,
@@ -827,8 +842,8 @@ _init : function() {
 		if (useCapture) {
 			canvas.setCapture(canvas);
 		} else {
-			document.onmouseup = onmouseup;
-			document.onmousemove = onmousemove;
+			document.onmouseup   = canvas.onmouseup;
+			document.onmousemove = canvas.onmousemove;
 		}
 	}
 	
@@ -1124,7 +1139,7 @@ var Hex = {
 }
 
 /* make a hexagon path */
-Hex.makePath = function(cx, x, y, r) {
+Hex.makePath  = function(cx, x, y, r) {
 	var r2 = Math.round(0.5 * r);
 	var rc = Math.round(Hex.c6 * r);
 	cx.beginPath();
@@ -1139,31 +1154,30 @@ Hex.makePath = function(cx, x, y, r) {
 }
 
 /* returns true if x/y is in hexagon */
-Hex.inHex = function(x, y, r) {
-	var r2 = this.rado * Hex.c6;
-	var rc = this.rado * Hex.c6;
+Hex.within = function(x, y, r) {
+	var rc = r * Hex.c6;
 	var yh = y * Hex.t6;
 
 	return !(
 		y < - rc || y > rc ||
-	    x - r + yh >= 0 ||
-		x + r + yh <= 0 ||
-		x - r - yh >= 0 ||
-		x + r - yh <= 0
+	    x - r >= -yh ||
+		x + r <= -yh ||
+		x - r >=  yh ||
+		x + r <=  yh
 	);
 }
 
 /* makes a hexagon segment path:
-         .-------.
-		/ \  1  / \	 
-	   / 6 .---. 2 \
-	  /___/  .  \___\    -1
-	  \   \     /   /
+		   r |------>| 
+          ri |->.    '
+         .------'.   '      -1
+		/ \  1  / \	 '
+	   / 6 .---.'2 \ '
+	  /___/  .  \___\'  
+	  \   \  0  /   /
 	   \ 5 `---´ 3 /
  	    \ /  4  \ /
          `-------´
-             |-> ri
-			 |------> r
 */
 Hex.makePathSegment = function(cx, x, y, r, ri, seg) {
 	var r2 = Math.round(0.5 * r);
@@ -1195,10 +1209,16 @@ Hex.makePathSegment = function(cx, x, y, r, ri, seg) {
 function Floatmenu() {
 	this.x = null;
 	this.y = null;
-	this.radi = 25;
-	this.rado = 60;
+	this.radi = settings.floatMenuInnerRadius;
+	this.rado = settings.floatMenuOuterRadius;
 	this.fill = false;
 	this.mousepos = -1;
+}
+
+Floatmenu.prototype.set = function(x, y) {
+	this.x = x;
+	this.y = y;
+	this.mousepos = 0;
 }
 
 Floatmenu.prototype.draw = function() {
@@ -1212,27 +1232,49 @@ Floatmenu.prototype.draw = function() {
 	grad.addColorStop(0, settings.floatMenuBackground1);
 	grad.addColorStop(1, settings.floatMenuBackground2);
 	
-	Hex.makePath(cx, x, y, this.rado - 1);
-	cx.fillStyle = grad;
-	cx.lineWidth = settings.floatMenuInnerBorderWidth;
-	cx.strokeStyle = settings.floatMenuInnerBorderColor;
-	cx.fill();
-	//cx.stroke(); 
-	
 	Hex.makePath(cx, x, y, this.rado);
-	cx.lineWidth = settings.floatMenuOuterBorderWidth;
-	cx.strokeStyle = settings.floatMenuOuterBorderColor;
-	cx.stroke();
-	
+	cx.fillStyle = grad;
+	cx.fill();
+	if (settings.floatMenuInnerBorderWidth > 0) {
+		cx.lineWidth = settings.floatMenuInnerBorderWidth;
+		cx.strokeStyle = settings.floatMenuInnerBorderColor;
+		cx.stroke(); 
+	}
 	Hex.makePath(cx, x, y, this.radi);
-	cx.stroke();
-
+	if (settings.floatMenuInnerBorderWidth > 0) {
+		cx.lineWidth = settings.floatMenuInnerBorderWidth;
+		cx.strokeStyle = settings.floatMenuInnerBorderColor;
+		cx.stroke(); 
+	}	
 	Hex.makePathSegment(cx, x, y, this.rado, this.radi, 1);
 	if (this.mousepos == 1) {
 		cx.fillStyle = settings.floatMenuFillStyle;
 		cx.fill();
 	}
-	cx.stroke();
+	if (settings.floatMenuInnerBorderWidth > 0) {
+		cx.lineWidth = settings.floatMenuInnerBorderWidth;
+		cx.strokeStyle = settings.floatMenuInnerBorderColor;
+		cx.stroke(); 
+	}	
+	
+	Hex.makePath(cx, x, y, this.rado);
+	if (settings.floatMenuOuterBorderWidth > 0) {
+		cx.lineWidth = settings.floatMenuOuterBorderWidth;	
+		cx.strokeStyle = settings.floatMenuOuterBorderColor;
+		cx.stroke();
+	}
+	Hex.makePath(cx, x, y, this.radi);
+	if (settings.floatMenuOuterBorderWidth > 0) {
+		cx.lineWidth = settings.floatMenuOuterBorderWidth;	
+		cx.strokeStyle = settings.floatMenuOuterBorderColor;
+		cx.stroke();
+	}
+	Hex.makePathSegment(cx, x, y, this.rado, this.radi, 1);
+	if (settings.floatMenuOuterBorderWidth > 0) {
+		cx.lineWidth = settings.floatMenuOuterBorderWidth;	
+		cx.strokeStyle = settings.floatMenuOuterBorderColor;
+		cx.stroke();
+	}
 	
 	cx.fillStyle = "black";
 	cx.font = "10pt " + settings.defaultFont;
@@ -1246,16 +1288,18 @@ Floatmenu.prototype.draw = function() {
 }
 
 Floatmenu.prototype._getMousepos = function(x, y) {
-	var ty = this.y;
-	var tx = this.x;
+	var dx = x - this.x;
+	var dy = y - this.y;
 		
-	if (!Hex.inHex(x - this.x, y - this.y, this.rado)) {
+	if (!Hex.within(dx, dy, this.rado)) {
 		/* out of menu */
 		return this.mousepos = -1;
+	} else if (Hex.within(dx, dy, this.radi)) {
+		return this.mousepos = 0;
 	} else {
-		var lor = x + (y - this.y) * Hex.t6 <= this.x;
-		var rol = x - (y - this.y) * Hex.t6 >= this.x;
-		if (y < ty - ric && lor && rol) {
+		var lor = dx <= -dy * Hex.t6;
+		var rol = dx >= +dy * Hex.t6;
+		if (lor && rol) {
 			return this.mousepos = 1;
 		} else {
 			return this.mousepos = 0;
@@ -1263,14 +1307,9 @@ Floatmenu.prototype._getMousepos = function(x, y) {
 	}
 }
 
-
 Floatmenu.prototype.mousehover = function(x, y) {
 	var omp = this.mousepos;
-	var mp = this._getMousepos(x, y);
-	if (mp < 0) {
-		return  mp != omp;
-	}
-	return mp != omp;
+	return omp != this._getMousepos(x, y);
 }
 
 Floatmenu.prototype.mousedown = function(x, y) {
@@ -1343,7 +1382,50 @@ Space.prototype.redraw = function() {
 		cx.strokeStyle = settings.handleColor2;
 		cx.lineWidth = settings.handleWidth2;
 		cx.stroke(); 
+		
 		cx.beginPath(); 
+		/* draws item menu */
+		{
+			cx.moveTo(0, 0);
+			cx.lineTo(canvas.width, 0);
+			cx.lineTo(canvas.width, canvas.height);
+			cx.lineTo(0, canvas.height);
+			cx.lineTo(0, 0);
+			var xp1 = it.x + this.pox + 0.5;
+			var yp1 = it.y + this.poy + 0.5;
+			var xp2 = xp1 + it.width;
+			var yp2 = yp1 + it.height;
+			
+			cx.moveTo(xp1, yp1); 
+			cx.lineTo(xp1, yp2); 
+			cx.lineTo(xp2, yp2); 
+			cx.lineTo(xp2, yp1);
+			cx.lineTo(xp1, yp1);
+			cx.clip();
+			
+			var xim = xp1 + Math.round(it.width * 7 / 8);
+			var grad = cx.createRadialGradient(xim, yp1, 0, xim, yp1, 
+				(settings.itemMenuInnerRadius + settings.itemMenuOuterRadius) / 2);
+			grad.addColorStop(0, settings.itemMenuBackground1);
+			grad.addColorStop(1, settings.itemMenuBackground2);	
+			
+			Hex.makePath(cx, xim, yp1, settings.itemMenuInnerRadius);
+			cx.fillStyle = grad;
+			cx.fill();	
+			if (settings.itemMenuInnerBorderWidth > 0) {
+				cx.lineWidth = settings.itemMenuInnerBorderWidth;
+				cx.strokeStyle = settings.itemMenuInnerBorderColor;
+				cx.stroke();
+			}
+			
+			if (settings.itemMenuOuterBorderWidth > 0) {
+				cx.lineWidth = settings.itemMenuOuterBorderWidth;
+				cx.strokeStyle = settings.itemMenuOuterBorderColor;
+				cx.stroke();
+			}
+		}
+		
+		cx.beginPath();
 		cx.restore();
 	}
 				
@@ -1461,27 +1543,29 @@ Space.prototype.mousehover = function(x, y) {
 	if (this.iaction.act == enums.ACT_FMENU) {
 		redraw = this._floatmenu.mousehover(x, y);
 		if (this._floatmenu.mousepos >= 0) {
-			/* mouse was over float, no need to look further */
+			/* mouse floated on float menu, no need to look further */
 			System.setCursor("default");
 			if (redraw) this.redraw();
 			return;
 		}
 	}
 	
-	if (editor.item) {
-		var it = editor.item;
-		com = checkItemCompass(it, px, py);
-		if (com) {
-			System.setCursor(com + "-resize");					
-		}
-	}
-	if (!com) {
-		var ito = this.itoAtXY(px, py); /* todo give a better name */
-		if (ito < 0) {
-			System.setCursor("crosshair");
-		} else {
-			System.setCursor("default");				
-		}
+	var ito = this.itoAtXY(px, py); /* todo give a better name */
+	var it = editor.item;
+	if (it && (com = checkItemCompass(it, px, py))) {
+		System.setCursor(com + "-resize");
+		if (redraw) this.redraw();
+		return;
+	} 
+	
+	if (it && ito != 0 && 
+		Hex.within(px - it.x - 7 * it.width / 8, py - it.y, settings.itemMenuInnerRadius)) 
+	{
+		System.setCursor("pointer");
+	} else if (ito < 0) {
+		System.setCursor("crosshair");
+	} else {
+		System.setCursor("default");				
 	}
 	if (redraw) this.redraw();
 }
@@ -1500,7 +1584,7 @@ Space.prototype.dragstart = function(x, y) {
 		iaction.act = enums.ACT_PAN;
 		iaction.sx = x;
 		iaction.sy = y;
-		System.setCursor("pointer");
+		System.setCursor("crosshair");
 		return;
 	} 
 	
@@ -1551,8 +1635,7 @@ Space.prototype.click = function(x, y) {
 	
 	if (ito < 0) {
 		iaction.act = enums.ACT_FMENU;
-		this._floatmenu.x = x;
-		this._floatmenu.y = y;
+		this._floatmenu.set(x, y);
 		System.setCursor("default");
 		editor.blur();
 		redraw = true;
@@ -2518,11 +2601,11 @@ Note.prototype.getCanvas = function(select) {
 	cx.beginPath(); 
 	cx.lineWidth = settings.noteInnerBorderWidth;
 	cx.strokeStyle = settings.noteInnerBorderColor;
-	Note_bevel(cx, 0, 0, this.width, this.height, 1.5, 4);
+	Note_bevel(cx, 0, 0, this.width, this.height, 1.5, settings.noteInnerRadius);
 	cx.stroke(); cx.beginPath(); cx.closePath();
 	cx.lineWidth = settings.noteOuterBorderWidth;
 	cx.strokeStyle = settings.noteOuterBorderColor;
-	Note_bevel(cx, 0, 0, this.width, this.height, 0.5, 5);
+	Note_bevel(cx, 0, 0, this.width, this.height, 0.5, settings.noteOuterRadius);
 	cx.stroke(); cx.beginPath(); cx.closePath();
 	cx.restore();
 	bcanvas.actual = true;			 /* todo move */
