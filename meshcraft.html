@@ -65,25 +65,25 @@ var settings = {
 	newNoteHeight : 150,
 	
 	/* float menu style */
-	floatMenuInnerRadius : 25,
-	floatMenuOuterRadius : 60,
-	floatMenuInnerBorderWidth : 2,
-	floatMenuInnerBorderColor : "rgb(255, 200, 105)",
+	floatMenuOuterRadius : 75,
+	floatMenuInnerRadius : 30,
 	floatMenuOuterBorderWidth : 0.5,
 	floatMenuOuterBorderColor : "rgb(0, 0, 0)",
+	floatMenuInnerBorderWidth : 2,
+	floatMenuInnerBorderColor : "rgb(255, 200, 105)",
 	floatMenuBackground1 : "rgba(255, 255, 168, 0.935)",
 	floatMenuBackground2 : "rgba(255, 255, 248, 0.935)",
 	floatMenuFillStyle : "rgb(255, 237, 210)",
 
 	/* item menu style */
-	itemMenuInnerRadius : 25,
-	itemMenuOuterRadius : 60,
-	itemMenuInnerBorderWidth : 2,
-	itemMenuInnerBorderColor : "rgb(255, 200, 105)",
+	itemMenuOuterRadius : 75,
+	itemMenuInnerRadius : 30,
 	itemMenuOuterBorderWidth : 0.5,
 	itemMenuOuterBorderColor : "rgb(0, 0, 0)",
-	itemMenuBackground1 : "rgba(255, 255, 188, 0.935)",
-	itemMenuBackground2 : "rgba(255, 255, 248, 0.935)",
+	itemMenuInnerBorderWidth : 2,
+	itemMenuInnerBorderColor : "rgb(255, 200, 105)",
+	itemMenuBackground1 : "rgba(255, 255, 205, 0.935)",
+	itemMenuBackground2 : "rgba(255, 255, 255, 0.935)",
 	itemMenuFillStyle : "rgb(255, 237, 210)",
 	
 	/* selection */
@@ -177,6 +177,7 @@ var enums = {
 	ACT_IRESIZE : 3,
 	ACT_SCROLLY : 4,
 	ACT_FMENU   : 5,
+	ACT_IMENU   : 6,	
 };
 
 
@@ -1200,39 +1201,48 @@ Hex.makePathSegment = function(cx, x, y, r, ri, seg) {
 
 	
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- .-,--' .          .                    
- \|__  |  ,-. ,-. |- ,-,-. ,-. ,-. . . 
-  |    |  | | ,-| |  | | | |-' | | | | 
- `'    `' `-' `-^ `' ' ' ' `-' ' ' `-^ 
+  Hexmenu +++
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+		   r |------>| 
+          ri |->.    '
+         .------'.   '      -1
+		/ \  1  / \	 '
+	   / 6 .---.'2 \ '
+	  /___/  .  \___\'  
+	  \   \  0  /   /
+	   \ 5 `---´ 3 /
+ 	    \ /  4  \ /
+         `-------´  
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Floatmenu() {
-	this.x = null;
-	this.y = null;
-	this.radi = settings.floatMenuInnerRadius;
-	this.rado = settings.floatMenuOuterRadius;
-	this.fill = false;
+function Hexmenu(r, ri, labels) {
+	this.x  = null;
+	this.y  = null;
+	this.r  = r;
+	this.ri = ri;
+	this.labels = labels;
 	this.mousepos = -1;
 }
 
-Floatmenu.prototype.set = function(x, y) {
+Hexmenu.prototype.set = function(x, y) {
 	this.x = x;
 	this.y = y;
 	this.mousepos = 0;
 }
 
-Floatmenu.prototype.draw = function() {
+Hexmenu.prototype.draw = function() {
 	var canvas = System.canvas;
 	var cx = canvas.getContext("2d");
 	cx.save();
 	var x = this.x + 0.5;
 	var y = this.y + 0.5;
+	var r = this.r;
+	var ri = this.ri;
 
-	var grad = cx.createRadialGradient(x, y, 0, x, y, (this.rado + this.radi) / 2);
+	var grad = cx.createRadialGradient(x, y, 0, x, y, (r + ri) / 2);
 	grad.addColorStop(0, settings.floatMenuBackground1);
 	grad.addColorStop(1, settings.floatMenuBackground2);
 	
-	Hex.makePath(cx, x, y, this.rado);
+	Hex.makePath(cx, x, y, r);
 	cx.fillStyle = grad;
 	cx.fill();
 	if (settings.floatMenuInnerBorderWidth > 0) {
@@ -1240,13 +1250,13 @@ Floatmenu.prototype.draw = function() {
 		cx.strokeStyle = settings.floatMenuInnerBorderColor;
 		cx.stroke(); 
 	}
-	Hex.makePath(cx, x, y, this.radi);
+	Hex.makePath(cx, x, y, ri);
 	if (settings.floatMenuInnerBorderWidth > 0) {
 		cx.lineWidth = settings.floatMenuInnerBorderWidth;
 		cx.strokeStyle = settings.floatMenuInnerBorderColor;
 		cx.stroke(); 
 	}	
-	Hex.makePathSegment(cx, x, y, this.rado, this.radi, 1);
+	Hex.makePathSegment(cx, x, y, r, ri, 1);
 	if (this.mousepos == 1) {
 		cx.fillStyle = settings.floatMenuFillStyle;
 		cx.fill();
@@ -1257,19 +1267,19 @@ Floatmenu.prototype.draw = function() {
 		cx.stroke(); 
 	}	
 	
-	Hex.makePath(cx, x, y, this.rado);
+	Hex.makePath(cx, x, y, r);
 	if (settings.floatMenuOuterBorderWidth > 0) {
 		cx.lineWidth = settings.floatMenuOuterBorderWidth;	
 		cx.strokeStyle = settings.floatMenuOuterBorderColor;
 		cx.stroke();
 	}
-	Hex.makePath(cx, x, y, this.radi);
+	Hex.makePath(cx, x, y, ri);
 	if (settings.floatMenuOuterBorderWidth > 0) {
 		cx.lineWidth = settings.floatMenuOuterBorderWidth;	
 		cx.strokeStyle = settings.floatMenuOuterBorderColor;
 		cx.stroke();
 	}
-	Hex.makePathSegment(cx, x, y, this.rado, this.radi, 1);
+	Hex.makePathSegment(cx, x, y, r, ri, 1);
 	if (settings.floatMenuOuterBorderWidth > 0) {
 		cx.lineWidth = settings.floatMenuOuterBorderWidth;	
 		cx.strokeStyle = settings.floatMenuOuterBorderColor;
@@ -1277,24 +1287,35 @@ Floatmenu.prototype.draw = function() {
 	}
 	
 	cx.fillStyle = "black";
-	cx.font = "10pt " + settings.defaultFont;
+	cx.font = "12px " + settings.defaultFont;
 	cx.textAlign = "center";
 	cx.textBaseline = "middle";
-	cx.fillText("new", this.x, this.y);
 	
-	cx.fillText("Note", Math.round(this.x), Math.round(this.y - (this.rado - this.radi) * 1.1));
+	var labels = this.labels;
+	var llen = labels.length;
+	switch (llen) {
+	default:
+	case 2:
+		cx.fillText(labels[1], this.x, this.y - r + 20);
+		/* fall */
+	case 1:
+		cx.fillText(labels[0], this.x, this.y);
+		/* fall */
+	case 0:
+		/* nothing */
+	}
 	cx.beginPath(); /* todo tidy up */
 	cx.restore();
 }
 
-Floatmenu.prototype._getMousepos = function(x, y) {
+Hexmenu.prototype._getMousepos = function(x, y) {
 	var dx = x - this.x;
 	var dy = y - this.y;
 		
-	if (!Hex.within(dx, dy, this.rado)) {
+	if (!Hex.within(dx, dy, this.r)) {
 		/* out of menu */
 		return this.mousepos = -1;
-	} else if (Hex.within(dx, dy, this.radi)) {
+	} else if (Hex.within(dx, dy, this.ri)) {
 		return this.mousepos = 0;
 	} else {
 		var lor = dx <= -dy * Hex.t6;
@@ -1307,12 +1328,12 @@ Floatmenu.prototype._getMousepos = function(x, y) {
 	}
 }
 
-Floatmenu.prototype.mousehover = function(x, y) {
+Hexmenu.prototype.mousehover = function(x, y) {
 	var omp = this.mousepos;
 	return omp != this._getMousepos(x, y);
 }
 
-Floatmenu.prototype.mousedown = function(x, y) {
+Hexmenu.prototype.mousedown = function(x, y) {
 	return this._getMousepos(x, y);
 }
 
@@ -1327,9 +1348,12 @@ Floatmenu.prototype.mousedown = function(x, y) {
 function Space() {
 	/* all items in the space */
 	this._items = []; 
-	this._floatmenu = new Floatmenu();
+	this._floatmenu = new Hexmenu(settings.floatMenuOuterRadius, settings.floatMenuInnerRadius,
+		["new", "Note"]);
+	this._itemmenu = new Hexmenu(settings.itemMenuOuterRadius, settings.itemMenuInnerRadius,
+		["", "Remove"])
 	
-	this.iaction = { /* todo private? */
+	this._iaction = { 
 		act : enums.ACT_NONE,
 	};
 			
@@ -1351,87 +1375,19 @@ Space.prototype.redraw = function() {
 		var it = items[i];
 		cx.drawImage(it.getCanvas(editor.selection), it.x + this.pox, it.y + this.poy);
 	}
-		
-	/* draws resize handles */
 	if (editor.item) {
-		cx.save();
-		var it = editor.item;
-		var ds = settings.handleDistance; 			
-		var hs = settings.handleSize;
-		var hs2 = hs / 2;
-			
-		var x1 = it.x + 0.5 - ds + this.pox;
-		var y1 = it.y + 0.5 - ds + this.poy;
-		var x2 = x1 + it.width  + 2*ds - 1;
-		var y2 = y1 + it.height + 2*ds - 1;
-		var xm = Math.round((x1 - 0.5 + x2) / 2) + 0.5;
-		var ym = Math.round((y1 - 0.5 + y2) / 2) + 0.5;
-		
-		cx.moveTo(x1, y1 + hs);  cx.lineTo(x1, y1); cx.lineTo(x1 + hs, y1);
-		cx.moveTo(xm - hs2, y1); cx.lineTo(xm + hs2, y1);
-		cx.moveTo(x2 - hs,  y1); cx.lineTo(x2, y1); cx.lineTo(x2, y1 + hs);
-		cx.moveTo(x2, ym - hs2); cx.lineTo(x2, ym + hs2);
-		cx.moveTo(x2, y2 - hs);  cx.lineTo(x2, y2); cx.lineTo(x2 - hs, y2);
-		cx.moveTo(xm - hs2, y2); cx.lineTo(xm + hs2, y2);
-		cx.moveTo(x1 + hs, y2);  cx.lineTo(x1, y2); cx.lineTo(x1, y2 - hs);
-		cx.moveTo(x1, ym - hs2); cx.lineTo(x1, ym + hs2);
-			
-		cx.strokeStyle = settings.handleColor1;
-		cx.lineWidth = settings.handleWidth1;
-		cx.stroke(); 
-		cx.strokeStyle = settings.handleColor2;
-		cx.lineWidth = settings.handleWidth2;
-		cx.stroke(); 
-		
-		cx.beginPath(); 
-		/* draws item menu */
-		{
-			cx.moveTo(0, 0);
-			cx.lineTo(canvas.width, 0);
-			cx.lineTo(canvas.width, canvas.height);
-			cx.lineTo(0, canvas.height);
-			cx.lineTo(0, 0);
-			var xp1 = it.x + this.pox - 0.5;
-			var yp1 = it.y + this.poy - 0.5;
-			var xp2 = xp1 + it.width + 1;
-			var yp2 = yp1 + it.height + 1;
-			
-			cx.moveTo(xp1, yp1); 
-			cx.lineTo(xp1, yp2); 
-			cx.lineTo(xp2, yp2); 
-			cx.lineTo(xp2, yp1);
-			cx.lineTo(xp1, yp1);
-			cx.clip();
-			
-			var xim = xp1 + Math.round(it.width * 7 / 8);
-			var grad = cx.createRadialGradient(xim, yp1, 0, xim, yp1, 
-				(settings.itemMenuInnerRadius + settings.itemMenuOuterRadius) / 2);
-			grad.addColorStop(0, settings.itemMenuBackground1);
-			grad.addColorStop(1, settings.itemMenuBackground2);	
-			
-			Hex.makePath(cx, xim, yp1, settings.itemMenuInnerRadius);
-			cx.fillStyle = grad;
-			cx.fill();	
-			if (settings.itemMenuInnerBorderWidth > 0) {
-				cx.lineWidth = settings.itemMenuInnerBorderWidth;
-				cx.strokeStyle = settings.itemMenuInnerBorderColor;
-				cx.stroke();
-			}
-			
-			if (settings.itemMenuOuterBorderWidth > 0) {
-				cx.lineWidth = settings.itemMenuOuterBorderWidth;
-				cx.strokeStyle = settings.itemMenuOuterBorderColor;
-				cx.stroke();
-			}
-		}
-		
-		cx.beginPath();
-		cx.restore();
+		editor.item.drawHandles(canvas, this.pox, this.poy);
 	}
-				
-	if (this.iaction.act == enums.ACT_FMENU) {
+	
+	switch(this._iaction.act) {
+	case enums.ACT_FMENU :
 		this._floatmenu.draw();
+		break;
+	case enums.ACT_IMENU :
+		this._itemmenu.draw();
+		break;
 	}
+		
 	editor.updateCaret();
 }
 		
@@ -1487,52 +1443,6 @@ Space.prototype.itoAtXY = function(x, y) {
 	return -1;
 }
 
-/* returns the compass of the resize handles of an item */
-function checkItemCompass(it, x, y) { /* todo move to item */
-	var d = settings.handleSize;
-	/* resize */
-	var n = y >= it.y - d && y <= it.y + d;
-	var e = x >= it.x + it.width - d && x <= it.x + it.width + d;
-	var s = y >= it.y + it.height - d && y <= it.y + it.height + d;
-	var w = x >= it.x - d && x <= it.x + d;
-	
-	if (n) {
-		if (w) { 
-			return "nw";
-		} else if (e) {
-			return "ne";
-		} else {
-			var mx = it.x + it.width / 2;
-			if (x >= mx - d && x <= mx + d) {
-				return "n";
-			}
-		}
-	} else if (s) {
-		if (w) {
-			return "sw";
-		} else if (e) {
-			return "se";
-		} else {
-			var mx = it.x + it.width / 2;
-			if (x >= mx - d && x <= mx + d) {
-				return "s";
-			}
-		}
-	} else if (w) {
-		var my = it.y + it.height / 2;
-		if (y >= my - d && y <= my + d) {
-			return "w";
-		}
-	} else if (e) {
-		var my = it.y + it.height / 2;
-		if (y >= my - d && y <= my + d) {
-			return "e";
-		}
-	}
-	return null;
-}
-
-
 /* mouse hover */
 Space.prototype.mousehover = function(x, y) {
 	var px = x - this.pox;
@@ -1540,7 +1450,8 @@ Space.prototype.mousehover = function(x, y) {
 	var com = null;
 	var editor = System.editor;
 	var redraw = false;
-	if (this.iaction.act == enums.ACT_FMENU) {
+	switch(this._iaction.act) {
+	case enums.ACT_FMENU :
 		redraw = this._floatmenu.mousehover(x, y);
 		if (this._floatmenu.mousepos >= 0) {
 			/* mouse floated on float menu, no need to look further */
@@ -1548,25 +1459,35 @@ Space.prototype.mousehover = function(x, y) {
 			if (redraw) this.redraw();
 			return;
 		}
+		break;
+	case enums.ACT_IMENU :
+		redraw = this._itemmenu.mousehover(x, y);
+		if (this._itemmenu.mousepos >= 0) {
+			/* mouse floated on float menu, no need to look further */
+			System.setCursor("default");
+			if (redraw) this.redraw();
+			return;
+		}
+		break;		
 	}
 	
-	var ito = this.itoAtXY(px, py); /* todo give a better name */
 	var it = editor.item;
-	if (it && (com = checkItemCompass(it, px, py))) {
-		System.setCursor(com + "-resize");
-		if (redraw) this.redraw();
-		return;
+	if (it) {
+		var ito = this.itoAtXY(px, py); /* todo give a better name */
+		if (ito != 0 && it.withinItemMenu(px, py)) {
+			System.setCursor("pointer");
+			if (redraw) this.redraw();
+			return;
+		}
+		
+		if ((com = it.checkItemCompass(px, py))) {
+			System.setCursor(com + "-resize");
+			if (redraw) this.redraw();
+			return;
+		}
 	}
 	
-	if (it && ito != 0 && 
-		Hex.within(px - it.x - 7 * it.width / 8, py - it.y, settings.itemMenuInnerRadius))
-	{
-		System.setCursor("pointer");
-	} else if (ito < 0) {
-		System.setCursor("crosshair");
-	} else {
-		System.setCursor("default");				
-	}
+	System.setCursor(ito < 0 ? "crosshair" : "default");
 	if (redraw) this.redraw();
 }
 
@@ -1575,7 +1496,7 @@ Space.prototype.dragstart = function(x, y) {
 	x -= this.pox;
 	y -= this.poy;
 	var editor  = System.editor;
-	var iaction = this.iaction; /* todo make underscored */
+	var iaction = this._iaction;
 	var redraw = false;
 
 	var ito = this.itoAtXY(x, y);
@@ -1628,45 +1549,50 @@ Space.prototype.click = function(x, y) {
 	var px = x - this.pox;
 	var py = y - this.poy;
 	var editor = System.editor;
-	var iaction = this.iaction;
+	var iaction = this._iaction;
 	var ito = this.itoAtXY(px, py);
 	var it = this._items[ito];
 	var redraw = false;
 	
+	if (ito != 0 && editor.item && editor.item.withinItemMenu(px, py)) {
+		var it = editor.item;
+		it.setItemMenu(this._itemmenu, this.pox, this.poy);
+		iaction.act = enums.ACT_IMENU;
+		this.redraw();
+		return;
+	}
 	if (ito < 0) {
 		iaction.act = enums.ACT_FMENU;
 		this._floatmenu.set(x, y);
 		System.setCursor("default");
 		editor.blur();
-		redraw = true;
-	} else {
-		if (ito > 0) {
-			/* moves item to top */
-			this._items.splice(ito, 1);
-			this._items.unshift(it);
-			ito = 0;
-			redraw = true;
-		}
-		/*  focus the item */
-		if (editor.item != it) {
-			it.focus(editor);
-			redraw = true;
-		}
-		var ox = px - it.x;
-		var oy = py - it.y + (it.scrolly > 0 ? it.scrolly : 0);
-		if (it.paraAtY) { /* todo, make this less dirty, move the logic into the item or editor*/
-			var p = it.paraAtY(oy);
-			if (p) {
-				editor.caret.setFromXY(p, ox - p.x, oy - p.y);
-				editor.caret.show();
-				redraw = true;
-			}
-		}
-	}
-			
-	if (redraw) {
 		this.redraw();
+		return;
 	}
+	if (ito > 0) {
+		/* moves item to top */
+		this._items.splice(ito, 1);
+		this._items.unshift(it);
+		ito = 0;
+		redraw = true;
+	}
+	/*  focus the item */
+	if (editor.item != it) {
+		it.focus(editor);
+		redraw = true;
+	}
+	var ox = px - it.x;
+	var oy = py - it.y + (it.scrolly > 0 ? it.scrolly : 0);
+	if (it.paraAtY) { /* todo, make this less dirty, move the logic into the item or editor*/
+		var p = it.paraAtY(oy);
+		if (p) {
+			editor.caret.setFromXY(p, ox - p.x, oy - p.y);
+			editor.caret.show();
+			redraw = true;
+		}
+	}
+				
+	if (redraw) { this.redraw(); }
 }
 
 /* stops an operation with the mouse held down */
@@ -1674,7 +1600,7 @@ Space.prototype.dragstop = function(x, y) {
 	x -= this.pox;
 	y -= this.poy;
 	var editor = System.editor;
-	var iaction = this.iaction;
+	var iaction = this._iaction;
 	switch (iaction.act) {
 	case enums.ACT_IDRAG :
 		iaction.item.x = x - iaction.sx;
@@ -1709,7 +1635,7 @@ Space.prototype.dragstop = function(x, y) {
 Space.prototype.dragmove = function(x, y) {
 	x -= this.pox;
 	y -= this.poy;
-	var iaction = this.iaction;
+	var iaction = this._iaction;
 	
 	switch(iaction.act) {
 	case enums.ACT_PAN :
@@ -1814,7 +1740,7 @@ Space.prototype.mousedown = function(x, y) {
 	var px = x - this.pox;
 	var py = y - this.poy;
 	
-	var iaction = this.iaction;
+	var iaction = this._iaction;
 	var editor = System.editor;
 	var redraw = false;
 	
@@ -1829,29 +1755,36 @@ Space.prototype.mousedown = function(x, y) {
 				var note = new Note(nw, nh);
 				note.dtree.append(new Paragraph(""));
 				this.addItem(note, true, 
-					Math.round(this._floatmenu.x - nw / 2), 
-					Math.round(this._floatmenu.y - nh / 2));
+					Math.round(this._floatmenu.x - nw / 2) - this.pox, 
+					Math.round(this._floatmenu.y - nh / 2) - this.poy);
 			}
 			if (redraw) this.redraw();
 			return enums.MST_NONE;
 		}
 	}
-		
-	var com;
-	if (editor.item && (com = checkItemCompass(editor.item, px, py))) {
-		/* resizing */
-		iaction.act  = enums.ACT_IRESIZE;
-		iaction.com  = com;
-		iaction.item = editor.item;
-		iaction.sx   = px;
-		iaction.sy   = py;
-		iaction.swi  = editor.item.width;
-		iaction.shi  = editor.item.height;
-		iaction.six  = editor.item.x;
-		iaction.siy  = editor.item.y;
-		System.setCursor(com + "-resize");
-		if (redraw) this.redraw();
-		return enums.MST_DRAG;
+	
+	if (editor.item) {
+		var ito = this.itoAtXY(px, py); /* todo just check for first */
+		if (ito != 0 && editor.item && editor.item.withinItemMenu(px, py)) {
+			if (redraw) this.redraw();
+			return enums.MST_ATWEEN;
+		}
+		var com;
+		if ((com = editor.item.checkItemCompass(px, py))) {
+			/* resizing */
+			iaction.act  = enums.ACT_IRESIZE;
+			iaction.com  = com;
+			iaction.item = editor.item;
+			iaction.sx   = px;
+			iaction.sy   = py;
+			iaction.swi  = editor.item.width;
+			iaction.shi  = editor.item.height;
+			iaction.six  = editor.item.x;
+			iaction.siy  = editor.item.y;
+			System.setCursor(com + "-resize");
+			if (redraw) this.redraw();
+			return enums.MST_DRAG;
+		}
 	}
 	
 	if (redraw) this.redraw();
@@ -2328,10 +2261,149 @@ Object.defineProperty(DTree.prototype, "height", {
  Something on a canvas.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Item(width, height) {
-/* todo, not used! */
    this.width  = width;
    this.height = height;
+   this.x = null;
+   this.y = null;
 }
+
+/* set a hex menu to be this items menu */
+Item.prototype.setItemMenu = function(hexmenu, pox, poy) {
+	hexmenu.set(this.x + 7 * this.width / 8 + pox, this.y + poy);
+}
+
+/* returns if coords are within the item menu */
+Item.prototype.withinItemMenu = function(x, y) {
+	return Hex.within(x - this.x - 7 * this.width / 8, y - this.y, settings.itemMenuInnerRadius);
+}
+
+/* returns the compass of the resize handles of an item */
+Item.prototype.checkItemCompass = function(x, y) { 
+	var d = settings.handleSize;          // inner distance
+	var d2 = settings.handleSize * 3 / 4; // outer distance
+	
+	var n = y >= this.y - d2 && y <= this.y + d;
+	var e = x >= this.x + this.width - d && x <= this.x + this.width + d2;
+	var s = y >= this.y + this.height - d && y <= this.y + this.height + d2;
+	var w = x >= this.x - d2 && x <= this.x + d;
+	
+	if (n) {
+		if (w) { 
+			return "nw";
+		} else if (e) {
+			return "ne";
+		} else {
+			var mx = this.x + this.width / 2;
+			if (x >= mx - d && x <= mx + d) {
+				return "n";
+			}
+		}
+	} else if (s) {
+		if (w) {
+			return "sw";
+		} else if (e) {
+			return "se";
+		} else {
+			var mx = this.x + this.width / 2;
+			if (x >= mx - d && x <= mx + d) {
+				return "s";
+			}
+		}
+	} else if (w) {
+		var my = this.y + this.height / 2;
+		if (y >= my - d && y <= my + d) {
+			return "w";
+		}
+	} else if (e) {
+		var my = this.y + this.height / 2;
+		if (y >= my - d && y <= my + d) {
+			return "e";
+		}
+	}
+	return null;
+}
+
+/* draws the edit handles of an item (resize, itemmenu) */
+Item.prototype.drawHandles = function(canvas, pox, poy) {
+	var cx = canvas.getContext("2d");
+	cx.save();
+	var ds = settings.handleDistance; 			
+	var hs = settings.handleSize;
+	var hs2 = hs / 2;
+			
+	var x1 = this.x + 0.5 - ds + pox;
+	var y1 = this.y + 0.5 - ds + poy;
+	var x2 = x1 + this.width  + 2 * ds - 1;
+	var y2 = y1 + this.height + 2 * ds - 1;
+	var xm = Math.round((x1 - 0.5 + x2) / 2) + 0.5;
+	var ym = Math.round((y1 - 0.5 + y2) / 2) + 0.5;
+	
+	cx.beginPath(); 
+	cx.moveTo(x1, y1 + hs);  cx.lineTo(x1, y1); cx.lineTo(x1 + hs, y1);
+	cx.moveTo(xm - hs2, y1); cx.lineTo(xm + hs2, y1);
+	cx.moveTo(x2 - hs,  y1); cx.lineTo(x2, y1); cx.lineTo(x2, y1 + hs);
+	cx.moveTo(x2, ym - hs2); cx.lineTo(x2, ym + hs2);
+	cx.moveTo(x2, y2 - hs);  cx.lineTo(x2, y2); cx.lineTo(x2 - hs, y2);
+	cx.moveTo(xm - hs2, y2); cx.lineTo(xm + hs2, y2);
+	cx.moveTo(x1 + hs, y2);  cx.lineTo(x1, y2); cx.lineTo(x1, y2 - hs);
+	cx.moveTo(x1, ym - hs2); cx.lineTo(x1, ym + hs2);
+			
+	if (settings.handleWidth1 > 0) {
+		cx.strokeStyle = settings.handleColor1;
+		cx.lineWidth = settings.handleWidth1;
+		cx.stroke(); 
+	}
+	
+	if (settings.handleWidth2 > 0) {
+		cx.strokeStyle = settings.handleColor2;
+		cx.lineWidth = settings.handleWidth2;
+		cx.stroke(); 
+	}
+		
+	cx.beginPath(); 
+	/* draws item menu */
+	cx.moveTo(0, 0);
+	cx.lineTo(canvas.width, 0);
+	cx.lineTo(canvas.width, canvas.height);
+	cx.lineTo(0, canvas.height);
+	cx.lineTo(0, 0);
+	x1 = this.x + pox - 0.5;
+	y1 = this.y + poy - 0.5;
+	x2 = x1 + this.width + 1;
+	y2 = y1 + this.height + 1;
+			
+	cx.moveTo(x1, y1); 
+	cx.lineTo(x1, y2); 
+	cx.lineTo(x2, y2); 
+	cx.lineTo(x2, y1);
+	cx.lineTo(x1, y1);
+	cx.clip();
+			
+	var xim = x1 + Math.round(this.width * 7 / 8);
+	var grad = cx.createRadialGradient(xim, y1, 0, xim, y1, 
+		(settings.itemMenuInnerRadius + settings.itemMenuOuterRadius) / 2);
+	grad.addColorStop(0, settings.itemMenuBackground1);
+	grad.addColorStop(1, settings.itemMenuBackground2);	
+			
+	Hex.makePath(cx, xim, y1, settings.itemMenuInnerRadius);
+	cx.fillStyle = grad;
+	cx.fill();	
+	if (settings.itemMenuInnerBorderWidth > 0) {
+		cx.lineWidth = settings.itemMenuInnerBorderWidth;
+		cx.strokeStyle = settings.itemMenuInnerBorderColor;
+		cx.stroke();
+	}
+			
+	if (settings.itemMenuOuterBorderWidth > 0) {
+		cx.lineWidth = settings.itemMenuOuterBorderWidth;
+		cx.strokeStyle = settings.itemMenuOuterBorderColor;
+		cx.stroke();
+	}
+		
+	cx.beginPath(); /* todo tidy up */
+	cx.restore();
+}
+
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ,-,-.       .      
@@ -2341,13 +2413,14 @@ function Item(width, height) {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  An item with text and a scrollbar.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+Note.prototype = new Item;
+Note.prototype.constructor = Note;
 function Note(width, height) {
+	Item.call(this, width, height);
 	this.bcanvas = document.createElement("canvas");
 	this.textBorder = settings.noteTextBorder;
 	this.bcanvas.actual = false;
 	
-	this.width  = width;
-	this.height = height;
 	this._scrollx = -8833;
 	this._scrolly = -8833;
 	this.bcanvas.width  = width; /* need to set it so early? */
