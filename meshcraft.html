@@ -64,6 +64,15 @@ var settings = {
 	newNoteWidth  : 300,
 	newNoteHeight : 150,
 	
+	/* edge menu style */
+	edgeMenuOuterBorderWidth : 0.5,
+	edgeMenuOuterBorderColor : "rgb(0, 0, 0)",
+	edgeMenuInnerBorderWidth : 2,
+	edgeMenuInnerBorderColor : "rgb(255, 200, 105)",
+	edgeMenuBackground1 : "rgba(255, 255, 248, 0.90)",
+	edgeMenuBackground2 : "rgba(255, 255, 190, 0.90)",	
+	edgeMenuFillStyle : "rgb(255, 237, 210)",
+	
 	/* float menu style */
 	floatMenuOuterRadius : 75,
 	floatMenuInnerRadius : 30,
@@ -76,6 +85,10 @@ var settings = {
 	floatMenuFillStyle : "rgb(255, 237, 210)",
 
 	/* item menu style */
+	itemMenuPositionkX   :  0,
+	itemMenuPositionkY   :  0,
+	itemMenuPositiondX   : 40,
+	itemMenuPositiondY   :  8,
 	itemMenuOuterRadius : 75,
 	itemMenuInnerRadius : 30,
 	itemMenuOuterBorderWidth : 0.5,
@@ -426,8 +439,13 @@ Marker.prototype.moveUpDown = function(dir) {
 	for(ci = 0; ci < llen && x > l[ci].x + l[ci].w; ci++);
 	if (ci >= llen) {
 		c = l[llen - 1];
-		this._element = c.node;
-		this._offset  = c.offset + c.text.length;
+		if (c) {
+			this._element = c.node;
+			this._offset  = c.offset + c.text.length;
+		} else {
+			this._element = p.first;
+			this._offset = 0;
+		}
 		return true;
 	}
 	c = l[ci];
@@ -590,7 +608,6 @@ Editor.prototype.specialKey = function(keycode, shiftKey) {
 			select.begin.set(caret);
 		}
 	}
-
 	
 	switch(keycode) {
 	case  8 : // backspace
@@ -606,6 +623,7 @@ Editor.prototype.specialKey = function(keycode, shiftKey) {
 			var para = ce.anchestor("paragraph");
 			redraw = para.joinToPrevious(ce, caret);
 		}
+		System.repository.updateItem(this.item);
 		break;
 	}
 	case 13 : // return
@@ -621,6 +639,7 @@ Editor.prototype.specialKey = function(keycode, shiftKey) {
 		opara.parent.insertBefore(npara, opara.next);
 		caret.set(npara.first, 0);
 		redraw = true;
+		System.repository.updateItem(this.item);
 		break;
 	}
 	case 35 : // end
@@ -664,6 +683,7 @@ Editor.prototype.specialKey = function(keycode, shiftKey) {
 			var para = ce.anchestor("paragraph");
 			redraw = para.joinToNext(ce, caret);
 		}
+		System.repository.updateItem(this.item);
 		break;
 	}
 	default :
@@ -718,6 +738,7 @@ Editor.prototype.input = function(text) {
 		ce.text = ct.substring(0, co) + ch + ct.substring(co, ct.length);
 		this.caret.offset++;
 	}
+	System.repository.updateItem(this.item);
 	return true;
 }
 				
@@ -1064,22 +1085,23 @@ _init : function() {
 			clearInterval(blinkTimer);
 		} 		
 	}
-		
-	this.startBlinker();
-	delete this.init;
 
-	// -v-v-v- testing code here -v-v-v-v-
+	this.repository = new Repository();
 	var space = this.space = new Space();
-	//var note1 = new Note(220, 65);
-	//var note1 = new Note(320, 90);
-	var note2 = new Note(500, 200);
-	var vector1 = null;
+	this.startBlinker();
+	/* hinders init to be called another time */
+	delete this.init; 
+	delete this._init; 
+	System.repository.loadup();	
+	
+	//var vector1 = null;
 	//vector1 = new VectorGraph(850, 200, note2.doc);
 	//if (vector1) {
 	//	space.addItem(vector1,  10,  10);
 	//}
 	//space.addItem(note1,    10,  10);
-	//space.addItem(note2,   250, 240);
+	/*
+	space.addItem(note2,   250, 240);
 	space.addItem(note2, false, 50, 40);
 	{
 		var a=[];
@@ -1100,30 +1122,7 @@ a[n++]="                                       '___'   '___'                    
 		for(var i = 0; i < n; i++) {
 //			note1.dtree.append(new Paragraph(a[i]));
 		}
-	}
-	//note1.doc.textsize = 13;
-	//note1.dtree.textsize = 3;
-	//note1.dtree.font = note1.dtree.textsize + "px monospace";
-	//note1.dtree.pre = true;
-	
-	//var draw = window.localStorage.getItem("draw");
-	var draw = "";
-	if (draw) {
-		var reg = /([^\n]+)$/gm;
-		for(var ca = reg.exec(draw); ca != null; ca = reg.exec(draw)) {
-			note2.append(new Paragraph(ca[1]));
-		}
-		note2.doc.textsize = 10;
-		note2.doc.font = note2.doc.textsize + "px monospace";
-		note2.doc.pre = true;
-	} else {
-		var d = note2.dtree;
-		d.append(new Paragraph("Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sollicitudin tortor vehicula tellus vestibulum quis pharetra augue faucibus. Integer id quam urna. Aliquam accumsan pulvinar luctus."));
-		d.append(new Paragraph("Fusce tincidunt, sapien posuere interdum rutrum, mauris ante consequat ipsum, id tincidunt nisl turpis ut lectus. Sed in elit ut neque placerat malesuada non vel turpis. Integer congue sem commodo justo pretium vestibulum. Pellentesque at libero eget quam blandit molestie. Nunc in lacus massa, quis faucibus justo."));
-		d.append(new Paragraph("Aliquam vitae tellus nulla. Vestibulum at tortor sit amet ligula bibendum iaculis quis vitae sapien. Integer pellentesque ullamcorper arcu, volutpat aliquam mi viverra vel. Integer mollis, augue at pellentesque tristique, ante magna rutrum urna, vel sagittis sem elit in augue."));
-		d.append(new Paragraph("Nam eros nunc, egestas porttitor pharetra sit amet, egestas eleifend eros. Nulla mauris felis, cursus eget tincidunt sed, pretium quis nibh. Proin pulvinar, enim sit amet tincidunt varius, diam risus bibendum augue, sed facilisis lectus massa in sem. Duis ac felis libero."));
-	}
-	space.redraw();	
+	}*/
 }};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1135,12 +1134,12 @@ a[n++]="                                       '___'   '___'                    
  Utilities for hexagons.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 var Hex = {
-	c6 : Math.cos(Math.PI / 6),
-	t6 : Math.tan(Math.PI / 6),
+	c6  : Math.cos(Math.PI / 6),
+	t6  : Math.tan(Math.PI / 6),
 }
 
 /* make a hexagon path */
-Hex.makePath  = function(cx, x, y, r) {
+Hex.makePath = function(cx, x, y, r) {
 	var r2 = Math.round(0.5 * r);
 	var rc = Math.round(Hex.c6 * r);
 	cx.beginPath();
@@ -1153,6 +1152,21 @@ Hex.makePath  = function(cx, x, y, r) {
 	cx.lineTo(x - r, y);
 	cx.closePath();
 }
+
+/* draws a filltext rotated by phi */
+Hex.fillText = function(cx, text, x, y, phi, rad) {
+	var t1 = Math.cos(phi);
+	var t2 = Math.sin(phi);
+	var det = t1 * t1 + t2 * t2;
+	x += rad * t2;
+	y -= rad * t1;
+	cx.setTransform(t1, t2, -t2, t1, 0, 0);
+	var x1 = (x * t1 + y * t2) / det;
+	var y1 = (y * t1 - x * t2) / det;
+	cx.fillText(text, x1, y1);
+	cx.setTransform(1, 0, 0, 1, 0, 0);
+}
+
 
 /* returns true if x/y is in hexagon */
 Hex.within = function(x, y, r) {
@@ -1201,7 +1215,10 @@ Hex.makePathSegment = function(cx, x, y, r, ri, seg) {
 
 	
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  Hexmenu +++
+  ,-_/,.
+ ' |_|/ ,-. . , ,-,-. ,-. ,-. . .
+  /| |  |-'  X  | | | |-' | | | |
+  `' `' `-' ' ` ' ' ' `-' ' ' `-^
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 		   r |------>| 
           ri |->.    '
@@ -1293,12 +1310,30 @@ Hexmenu.prototype.draw = function() {
 	
 	var labels = this.labels;
 	var llen = labels.length;
+	
+	
+	var dist = r / 3.5;
 	switch (llen) {
 	default:
-	case 2:
-		cx.fillText(labels[1], this.x, this.y - r + 20);
+	case 7: // segment 6
+		Hex.fillText(cx, labels[6], this.x, this.y, Math.PI / 3 * 5, r - dist);
 		/* fall */
-	case 1:
+	case 6: // segment 5
+		Hex.fillText(cx, labels[5], this.x, this.y, Math.PI / 3 * 4, r - dist);
+		/* fall */
+	case 5: // segment 4
+		Hex.fillText(cx, labels[4], this.x, this.y, Math.PI / 3 * 3, r - dist);
+		/* fall */
+	case 4: // segment 3
+		Hex.fillText(cx, labels[3], this.x, this.y, Math.PI / 3 * 2, r - dist);
+		/* fall */
+	case 3: // segment 2
+		Hex.fillText(cx, labels[2], this.x, this.y, Math.PI / 3 * 1, r - dist);
+		/* fall */
+	case 2: // segment 1
+		Hex.fillText(cx, labels[1], this.x, this.y, Math.PI / 3 * 6, r - dist);
+		/* fall */
+	case 1: // segment 0
 		cx.fillText(labels[0], this.x, this.y);
 		/* fall */
 	case 0:
@@ -1326,6 +1361,11 @@ Hexmenu.prototype._getMousepos = function(x, y) {
 			return this.mousepos = 0;
 		}
 	}
+	
+	cx.fillStyle = "black";
+	cx.font = "12px " + settings.defaultFont;
+	cx.textAlign = "center";
+	cx.textBaseline = "middle";
 }
 
 Hexmenu.prototype.mousehover = function(x, y) {
@@ -1338,6 +1378,132 @@ Hexmenu.prototype.mousedown = function(x, y) {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.-,--.   .
+ `\__  ,-| ,-. ,-. ,-,-. ,-. ,-. . .
+  /    | | | | |-' | | | |-' | | | |
+ '`--' `-^ `-| `-' ' ' ' `-' ' ' `-^
+~ ~ ~ ~ ~ ~ ,|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+            `'
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+function Edgemenu() {
+	this.mousepos = -1;
+	this.width  = 160;
+	this.bwidth = 70;
+	this.height = 30;
+}
+
+Edgemenu.prototype._stroke = function(cx) {
+	if (settings.edgeMenuInnerBorderWidth > 0) {
+		cx.lineWidth   = settings.edgeMenuInnerBorderWidth;
+		cx.strokeStyle = settings.edgeMenuInnerBorderColor;
+		cx.stroke();
+	}
+	if (settings.edgeMenuOuterBorderWidth > 0) {
+		cx.lineWidth   = settings.edgeMenuOuterBorderWidth;
+		cx.strokeStyle = settings.edgeMenuOuterBorderColor;
+		cx.stroke();
+	}
+}
+
+Edgemenu.prototype.draw = function(x, y) {
+	var canvas = System.canvas;
+	var cx = canvas.getContext("2d");
+	var x = Math.round(canvas.width / 2) + 0.5;
+	var y = canvas.height + 0.5;
+	var w = this.width;
+	var bw = this.bwidth;
+	var h =  this.height;
+	var ew = Math.round(h * Hex.t6);
+	var xl = x - w - ew;
+	var xr = x + w + ew;
+	cx.moveTo(xl, y);
+	cx.lineTo(x - w, y - h);
+	cx.lineTo(x + w, y - h);
+	cx.lineTo(xr, y);
+	var grad = cx.createLinearGradient(0, y - h, 0, y);
+	grad.addColorStop(0, settings.edgeMenuBackground1);
+	grad.addColorStop(1, settings.edgeMenuBackground2);
+	cx.fillStyle = grad;
+	cx.fill();
+	cx.moveTo(xl + bw, y - h);
+	cx.lineTo(xl + bw + ew, y);
+	cx.moveTo(xr - bw, y - h);
+	cx.lineTo(xr - bw - ew, y);
+	this._stroke(cx);
+		
+	switch(this.mousepos) {
+	case 1 :
+		cx.beginPath();
+		cx.moveTo(xl, y);
+		cx.lineTo(x - w, y - h);
+		cx.lineTo(xl + bw, y - h);
+		cx.lineTo(xl + bw + ew, y);
+		cx.fillStyle = settings.edgeMenuFillStyle;
+		cx.fill();
+		this._stroke(cx);
+		break;
+	case 2 :
+		cx.beginPath();
+		cx.moveTo(xr - bw - ew, y);
+		cx.lineTo(xr - bw, y - h);
+		cx.lineTo(x + w, y - h);
+		cx.lineTo(xr, y);
+		cx.fillStyle = settings.edgeMenuFillStyle;
+		cx.fill();
+		this._stroke(cx);
+		break;
+	}
+	
+	cx.fillStyle = "black";
+	cx.font = "12px " + settings.defaultFont;
+	cx.textAlign = "center";
+	cx.textBaseline = "middle";
+	cx.fillText("Meshcraft Demospace", x, y - Math.round(h / 2));
+	cx.fillText("Export", xl + Math.round((bw + ew) / 2), y - Math.round(h / 2));
+	cx.fillText("Import", xr - Math.round((bw + ew) / 2), y - Math.round(h / 2));
+}
+
+Edgemenu.prototype._getMousepos = function(x, y) {
+	var canvas = System.canvas;
+	var h  = this.height;
+	var ty = canvas.height;
+	if (y < ty - h) {
+		return this.mousepos = -1;
+	}
+	var tx = Math.round(canvas.width / 2) + 0.5;
+	var w  = this.width;
+	var bw = this.bwidth;
+	var ew = Math.round(h * Hex.t6);
+	var xl = tx - w - ew;
+	var xr = tx + w + ew;
+	var tx = Math.round(canvas.width / 2) + 0.5;
+	
+	if ((x - xl <= -(y - ty) * Hex.t6)) {
+		return this.mousepos = -1;
+	}
+	if ((x - xr >= +(y - ty) * Hex.t6)) {
+		return this.mousepos = -1;
+	}
+	if ((x - (xl + bw + ew) <= +(y - ty) * Hex.t6)) {
+		return this.mousepos = 1;
+	}
+	if ((x - (xr - bw - ew) >= -(y - ty) * Hex.t6)) {
+		return this.mousepos = 2;
+	}
+	return this.mousepos = -1;
+}
+
+Edgemenu.prototype.mousehover = function (x, y) {	
+	var omp = this.mousepos;
+	return omp != this._getMousepos(x, y);
+}
+
+Edgemenu.prototype.mousedown = function(x, y) {
+	return this._getMousepos(x, y);
+}
+
+		
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .---.                 
 \___  ,-. ,-. ,-. ,-. 
     \ | | ,-| |   |-' 
@@ -1347,11 +1513,12 @@ Hexmenu.prototype.mousedown = function(x, y) {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Space() {
 	/* all items in the space */
-	this._items = []; 
+	this.items = []; 
 	this._floatmenu = new Hexmenu(settings.floatMenuOuterRadius, settings.floatMenuInnerRadius,
 		["new", "Note"]);
 	this._itemmenu = new Hexmenu(settings.itemMenuOuterRadius, settings.itemMenuInnerRadius,
 		["", "Remove"])
+	this.edgemenu = new Edgemenu();
 	
 	this._iaction = { 
 		act : enums.ACT_NONE,
@@ -1364,7 +1531,7 @@ function Space() {
 
 /* redraws the complete space */
 Space.prototype.redraw = function() {
-	var items = this._items;
+	var items = this.items;
 	var editor = System.editor;
 	var canvas = System.canvas;
 	System.canvasClear();
@@ -1387,7 +1554,7 @@ Space.prototype.redraw = function() {
 		this._itemmenu.draw();
 		break;
 	}
-		
+	this.edgemenu.draw();
 	editor.updateCaret();
 }
 		
@@ -1396,10 +1563,18 @@ Space.prototype.addItem = function(item, top, x, y) {
 	item.x = x;
 	item.y = y;
 	if (top) {
-		this._items.unshift(item);
+		this.items.unshift(item);
 	} else {
-		this._items.push(item);	
+		this.items.push(item);	
 	}
+	System.repository.addItem(item);
+}
+
+/* removes an item from the space */
+Space.prototype.removeItem = function(item) {
+	var items = this.items;
+	items.splice(items.indexOf(item), 1);
+	System.repository.removeItem(item);
 }
 
 /* user pressed a special key */
@@ -1434,8 +1609,8 @@ Space.prototype.systemBlur = function() {
 
 /* returns the item offset at position x, y */	
 Space.prototype.itoAtXY = function(x, y) {
-	for(var i = 0, len = this._items.length; i < len; i++) {
-		var it = this._items[i];
+	for(var i = 0, len = this.items.length; i < len; i++) {
+		var it = this.items[i];
 		if (x >= it.x && y >= it.y &&  x <= it.x + it.width && y <= it.y + it.height) {
 			return i;
 		}
@@ -1449,7 +1624,15 @@ Space.prototype.mousehover = function(x, y) {
 	var py = y - this.poy;
 	var com = null;
 	var editor = System.editor;
-	var redraw = false;
+	var redraw = this.edgemenu.mousehover(x, y);
+	if (this.edgemenu.mousepos >= 0) {
+		/* mouse floated on edge menu, no need to look further */
+		System.setCursor("default");
+		if (redraw) this.redraw();
+		return;
+	}
+	
+
 	switch(this._iaction.act) {
 	case enums.ACT_FMENU :
 		redraw = this._floatmenu.mousehover(x, y);
@@ -1472,8 +1655,8 @@ Space.prototype.mousehover = function(x, y) {
 	}
 	
 	var it = editor.item;
+	var ito = this.itoAtXY(px, py); /* todo give a better name */
 	if (it) {
-		var ito = this.itoAtXY(px, py); /* todo give a better name */
 		if (ito != 0 && it.withinItemMenu(px, py)) {
 			System.setCursor("pointer");
 			if (redraw) this.redraw();
@@ -1510,13 +1693,14 @@ Space.prototype.dragstart = function(x, y) {
 	} 
 	
 	/* dragging or scrolling */
-	var it = this._items[ito];
+	var it = this.items[ito];
 	if (ito > 0) {
 		/* moves item to top */
-		this._items.splice(ito, 1);
-		this._items.unshift(it);
+		this.items.splice(ito, 1);
+		this.items.unshift(it);
 		ito = 0;
 		redraw = true;
+		System.repository.updateItemlist();
 	}
 	/*  focus the item */
 	if (editor.item != it) {
@@ -1551,7 +1735,7 @@ Space.prototype.click = function(x, y) {
 	var editor = System.editor;
 	var iaction = this._iaction;
 	var ito = this.itoAtXY(px, py);
-	var it = this._items[ito];
+	var it = this.items[ito];
 	var redraw = false;
 	
 	if (ito != 0 && editor.item && editor.item.withinItemMenu(px, py)) {
@@ -1571,10 +1755,11 @@ Space.prototype.click = function(x, y) {
 	}
 	if (ito > 0) {
 		/* moves item to top */
-		this._items.splice(ito, 1);
-		this._items.unshift(it);
+		this.items.splice(ito, 1);
+		this.items.unshift(it);
 		ito = 0;
 		redraw = true;
+		System.repository.updateItemlist();
 	}
 	/*  focus the item */
 	if (editor.item != it) {
@@ -1605,6 +1790,7 @@ Space.prototype.dragstop = function(x, y) {
 	case enums.ACT_IDRAG :
 		iaction.item.x = x - iaction.sx;
 		iaction.item.y = y - iaction.sy;
+		System.repository.updateItem(iaction.item);
 		iaction.item = null;
 		System.setCursor("default");
 		this.redraw();
@@ -1646,6 +1832,7 @@ Space.prototype.dragmove = function(x, y) {
 	case enums.ACT_IDRAG :
 		iaction.item.x = x - iaction.sx;
 		iaction.item.y = y - iaction.sy;
+		System.repository.updateItem(iaction.item);
 		this.redraw();
 		return;
 	case enums.ACT_IRESIZE :
@@ -1691,17 +1878,19 @@ Space.prototype.dragmove = function(x, y) {
 			it.y = iaction.siy + iaction.shi - hi;
 			break;			
 		}
+		var redraw = false;
 		if (wi != iaction.swi || hi != iaction.shi) {
 			it.resize(wi, hi);
-			this.redraw();
+			redraw = true;
 		}
 		var dtreeHeight = it.dtree.height;
 		var smaxy = dtreeHeight - (it.height - 2 * it.textBorder);
 		if (smaxy > 0 && it.scrolly > smaxy) {
 			it.scrolly = smaxy;
-			// todo split redraw into reflow and redraw.
-			this.redraw();
+			redraw = true;;
 		}		
+		if (redraw) this.redraw();
+		System.repository.updateItem(iaction.item);
 		return;
 	}
 	case enums.ACT_SCROLLY:
@@ -1743,13 +1932,31 @@ Space.prototype.mousedown = function(x, y) {
 	var iaction = this._iaction;
 	var editor = System.editor;
 	var redraw = false;
+
+	var md = this.edgemenu.mousedown(x, y);
+	if (md >= 0) {
+		iaction.act = enums.ACT_NONE;
+		redraw = true;
+		switch(md) {
+		case 1:
+			debug("Export");
+			break;
+		case 2:
+			debug("Import");
+			break;
+		}
+		if (redraw) this.redraw();
+		return enums.MST_NONE;
+	}
 	
-	if (iaction.act == enums.ACT_FMENU) {
+	switch (iaction.act) {
+	case enums.ACT_FMENU :
 		var md = this._floatmenu.mousedown(x, y);
-		iaction.act = enums.NONE;
+		iaction.act = enums.ACT_NONE;
 		redraw = true;
 		if (md >= 0) {
-			if (md == 1) {				
+			switch(md) {
+			case 1 :
 				var nw = settings.newNoteWidth;
 				var nh = settings.newNoteHeight;
 				var note = new Note(nw, nh);
@@ -1757,10 +1964,28 @@ Space.prototype.mousedown = function(x, y) {
 				this.addItem(note, true, 
 					Math.round(this._floatmenu.x - nw / 2) - this.pox, 
 					Math.round(this._floatmenu.y - nh / 2) - this.poy);
+				break;
 			}
 			if (redraw) this.redraw();
 			return enums.MST_NONE;
 		}
+		break;
+	case enums.ACT_IMENU :
+		var md = this._itemmenu.mousedown(x, y);
+		iaction.act = enums.ACT_NONE;
+		redraw = true;
+		if (md >= 0) {
+			switch(md) {
+			case 1:
+				var ei = editor.item;
+				editor.blur();
+				this.removeItem(ei);
+				break;
+			}
+			if (redraw) this.redraw();
+			return enums.MST_NONE;
+		}
+		break;
 	}
 	
 	if (editor.item) {
@@ -1800,14 +2025,15 @@ Space.prototype.mousedown = function(x, y) {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  Part of a tree-structure.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-Treenode.id = 1;
+//Treenode.id = 1;
 function Treenode(type) {
 	this.type = type;
-	this.id   = ++Treenode.id;
+	//this.id   = ++Treenode.id;
 }
 
 /* prints the structure */
 /* todo remove after a while */
+/*
 Treenode.prototype.dbgstructure = function() {
 	var str = "[" + this.type + "-" + this.id;
 	if (this.next) {
@@ -1831,7 +2057,7 @@ Treenode.prototype.dbgstructure = function() {
 	}
 	str += "]";
 	return str;
-}
+}*/
 
 /* appends tnode to list of children */
 Treenode.prototype.append = function(tnode) {
@@ -2163,10 +2389,31 @@ Paragraph.prototype.joinToPrevious = function(node, caret) {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 DTree.prototype = new Treenode;
 DTree.prototype.constructor = DTree;
-function DTree() {
+function DTree(js) {
 	Treenode.call(this, "dtree");
 	this.textsize = 13;
 	this.font = this.textsize + 'px ' + settings.defaultFont;
+	
+	/* json import */
+	if (js) {
+		var jslen = js.length;
+		for(var i = 0; i < jslen; i++) {
+			this.append(new Paragraph(js[i]));
+		}
+	}
+}
+
+/* turns the note into a string */
+DTree.prototype.stringify = function() {
+	var dat = ["["];
+	
+	for (var n = this.first; n; n = n.next) {
+		if (n != this.first) dat.push(',"'); else dat.push('"');		
+		dat.push(n.first.text);
+		dat.push('"');
+	}	
+	dat.push("]");
+	return dat.join('');
 }
 		
 /* returns the chunk at x,y */
@@ -2252,6 +2499,135 @@ Object.defineProperty(DTree.prototype, "height", {
 	set: function(width) { throw new Error("Cannot set height of DTree"); }
 });
 
+
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ Repository ++
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+function Repository() {
+	this._lock = false;
+}
+
+
+Repository.prototype.loadup = function() {
+	var idfdat = window.localStorage.getItem("idfactory");
+	if (idfdat) {
+		try {
+			this.itemIDFactory = JSON.parse(idfdat);
+		} catch(err) {
+			this.itemIDFactory = null;
+			throw new Error("JSON error reading idfactory", err.name, err.message);
+		}
+	}
+	if (!this.itemIDFactory) {
+		console.log("no idfactory, restarting repository");
+		this.itemIDFactory = {};
+		return;
+	}
+	
+	var itldat = window.localStorage.getItem("itemlist");
+	if (!itldat) {
+		return;
+	}
+	try {
+		var itl = JSON.parse(itldat);
+	} catch(err) {
+		throw new ("JSON error reading itemlist", err.name, err.message);
+	}
+	
+	var itllen = itl.length;
+	for (var i = 0; i < itllen; i++) {
+		this._loadItem(itl[i]);
+	}
+	System.space.redraw();
+}
+
+Repository.prototype._newItemID = function(type) {
+	var idf = this.itemIDFactory;
+	if (typeof(idf.type) == "undefined") {
+		idf.type = 1;
+	}
+	idf.type++;
+	window.localStorage.setItem("idfactory", JSON.stringify(this.itemIDFactory));
+	return idf.type;
+}
+
+Repository.prototype._loadItem = function(tid) {
+	this._lock = true;
+	var tiddat = window.localStorage.getItem(tid);
+	//debug("get", tid, tiddat);
+	var it;
+	try {
+		it = JSON.parse(tiddat);
+	} catch (err) {
+		this._lock = false;
+		throw new Error("JSON error: reading item " + tid, err.name, err.message);
+	} 
+	
+	if (!it || !it.x || !it.y) {
+		this._lock = false;
+		throw new Error("JSON error: attributes missing from " + tid);
+	}
+	
+	var note;
+	try {
+		note = new Note(it);
+	} catch (err) {
+		this._lock = false;
+		throw new Error("JSON error: ", err.name, err.message);
+	}
+	note.tid = tid;
+	note.dtree.append(new Paragraph(""));
+	System.space.addItem(note, false, it.x, it.y);
+	this._lock = false;
+}
+
+Repository.prototype._saveItemlist = function() {
+	if (this._lock) return;
+	var dat = ["["];
+	var il = System.space.items; 
+	var illen = il.length;
+	
+	for(var i = 0; i < illen; i++) {
+		if (i > 0) dat.push(',"'); else dat.push('"');
+		dat.push(il[i].tid);
+		dat.push('"');
+	}
+	dat.push("]");
+	dat = dat.join('');
+	window.localStorage.setItem("itemlist", dat);
+}
+
+Repository.prototype.updateItemlist = function() {
+	this._saveItemlist();
+}
+
+Repository.prototype.removeItem = function(item) {
+	if (this._lock) return;
+	window.localStorage.setItem(item.tid, "");
+	this._saveItemlist();
+}
+
+Repository.prototype._saveItem = function(item) {
+	if (this._lock) return;
+	var dat = item.stringify();
+	window.localStorage.setItem(item.tid, dat);
+}
+
+Repository.prototype.updateItem = function(item) {
+	if (this._lock) return;
+	this._saveItem(item);
+}
+
+Repository.prototype.addItem = function(item) {
+	if (this._lock) return;
+	item.tid  = item.type + "-" + this._newItemID(item.type);
+	this._saveItem(item);
+	this._saveItemlist();
+}
+
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,-_/ .
  '  | |- ,-. ,-,-.
@@ -2260,21 +2636,27 @@ Object.defineProperty(DTree.prototype, "height", {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
  Something on a canvas.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Item(width, height) {
-   this.width  = width;
-   this.height = height;
-   this.x = null;
-   this.y = null;
+function Item(type, width, height) {
+	this.type = type;
+	this.width  = width;
+	this.height = height;
+	this.x = null;
+	this.y = null;
 }
 
 /* set a hex menu to be this items menu */
 Item.prototype.setItemMenu = function(hexmenu, pox, poy) {
-	hexmenu.set(this.x + 7 * this.width / 8 + pox, this.y + poy);
+	hexmenu.set(
+		this.x + this.width  * settings.itemMenuPositionkX + settings.itemMenuPositiondX + pox, 
+		this.y + this.height * settings.itemMenuPositionkY + settings.itemMenuPositiondY + poy);
 }
 
 /* returns if coords are within the item menu */
 Item.prototype.withinItemMenu = function(x, y) {
-	return Hex.within(x - this.x - 7 * this.width / 8, y - this.y, settings.itemMenuInnerRadius);
+	return Hex.within(
+		x - this.x - this.width  * settings.itemMenuPositionkX - settings.itemMenuPositiondX, 
+		y - this.y - this.height * settings.itemMenuPositionkY - settings.itemMenuPositiondY, 
+		settings.itemMenuInnerRadius);
 }
 
 /* returns the compass of the resize handles of an item */
@@ -2379,13 +2761,16 @@ Item.prototype.drawHandles = function(canvas, pox, poy) {
 	cx.lineTo(x1, y1);
 	cx.clip();
 			
-	var xim = x1 + Math.round(this.width * 7 / 8);
-	var grad = cx.createRadialGradient(xim, y1, 0, xim, y1, 
+	var xim = x1 + 
+		Math.round(this.width  * settings.itemMenuPositionkX + settings.itemMenuPositiondX);
+	var yim = y1 + 
+		Math.round(this.height * settings.itemMenuPositionkY + settings.itemMenuPositiondY);
+	var grad = cx.createRadialGradient(xim, yim, 0, xim, yim, 
 		(settings.itemMenuInnerRadius + settings.itemMenuOuterRadius) / 2);
 	grad.addColorStop(0, settings.itemMenuBackground1);
 	grad.addColorStop(1, settings.itemMenuBackground2);	
 			
-	Hex.makePath(cx, xim, y1, settings.itemMenuInnerRadius);
+	Hex.makePath(cx, xim, yim, settings.itemMenuInnerRadius);
 	cx.fillStyle = grad;
 	cx.fill();	
 	if (settings.itemMenuInnerBorderWidth > 0) {
@@ -2415,18 +2800,38 @@ Item.prototype.drawHandles = function(canvas, pox, poy) {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 Note.prototype = new Item;
 Note.prototype.constructor = Note;
-function Note(width, height) {
-	Item.call(this, width, height);
+function Note(a1, a2) {
+	var width, height;
+	if (arguments.length == 1) {
+		var js = a1;
+		width  = js.w;
+		height = js.h;
+		this.dtree = new DTree(js.d);
+		this.dtree.tell = this;
+	} else {
+		width  = a1;
+		height = a2;
+		this.dtree = new DTree();
+		this.dtree.tell = this;
+	}
+	Item.call(this, "note", width, height);
 	this.bcanvas = document.createElement("canvas");
 	this.textBorder = settings.noteTextBorder;
-	this.bcanvas.actual = false;
+	this.bcanvas.actual = false; /* todo */
 	
 	this._scrollx = -8833;
 	this._scrolly = -8833;
 	this.bcanvas.width  = width; /* need to set it so early? */
 	this.bcanvas.height = height;
-	this.dtree = new DTree();
-	this.dtree.tell = this;
+}
+
+/* turns the note into a string */
+Note.prototype.stringify = function() {
+	return [
+	'{"x":',this.x,',"y":',this.y,
+	',"w":',this.width,',"h":',this.height,
+	',"d":',this.dtree.stringify(),
+	'}'].join('');
 }
 
 /* returns the para at y */
@@ -2684,7 +3089,7 @@ Note.prototype.getCanvas = function(select) {
 	bcanvas.actual = true;			 /* todo move */
 	return bcanvas;	
 }
-	
+
 /* item gets focus */
 Note.prototype.focus = function(editor) {
 	editor.focus(this);
@@ -2700,7 +3105,7 @@ Note.prototype.focus = function(editor) {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ,-.|~ ~ ~ ~ ~ | ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  Something that draws     `-+' vectors  '
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function VectorGraph(width, height, doc)
+/*function VectorGraph(width, height, doc)
 {
 	this.bcanvas = document.createElement("canvas");
 	this.width  = bcanvas.width  =  width;
@@ -2708,8 +3113,8 @@ function VectorGraph(width, height, doc)
 	this.doc = doc;
 }
 
-/* gets the canvas buffer for this item */
-/* if caret != null draws the caret into the canvas */
+// gets the canvas buffer for this item 
+// if caret != null draws the caret into the canvas 
 VectorGraph.prototype.getCanvas = function() {
 	var cx = this.bcanvas.getContext("2d");
 	cx.beginPath();
@@ -2718,11 +3123,11 @@ VectorGraph.prototype.getCanvas = function() {
 	for(var para = doc.getFirstPara(); para; para = para.next) {
 		var cmd = para.first.text;
 		draw += cmd + "\n";
-		var reg = /(\S+)\s*/g;
-		var cc = [];
+*///		var reg = /(\S+)\s*/g;
+/*		var cc = [];
 		var ci = 0;
 		for(var ca = reg.exec(cmd); ca != null; ca = reg.exec(cmd)) {
-			/* text is a word plus hard spaces */
+			/* text is a word plus hard spaces *
 			cc[ci++] = ca[1]; 
 		}
 		switch (cc[0]) {
@@ -2855,10 +3260,10 @@ VectorGraph.prototype.getCanvas = function() {
 	return bcanvas;
 }
 	
-/* item gets focus */
+/* item gets focus *
 VectorGraph.prototype.focus = function(editor) {
 	return;
-}
+}*/
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,.   ,   ,.       .
