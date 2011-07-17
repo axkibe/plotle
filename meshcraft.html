@@ -581,6 +581,20 @@ Editor.prototype.updateCaret = function() {
 		cx.fillRect(x, y, 1, th);
 	}
 }	
+
+Editor.prototype.newline = function() {
+	var caret  = this.caret;
+	var ce    = caret.element;
+	var co    = caret.offset;			
+	var ct    = ce.text;
+	/* todo multi node ability */
+	var opara = ce.anchestor("paragraph");
+		
+	ce.text = ct.substring(0, co);
+	var npara = new Paragraph(ct.substring(co, ct.length));
+	opara.parent.insertBefore(npara, opara.next);
+	caret.set(npara.first, 0);
+}
 	
 /* got a special key */
 /* returns redraw code telling if the element needs to be redrawn. */
@@ -628,16 +642,7 @@ Editor.prototype.specialKey = function(keycode, shiftKey) {
 	}
 	case 13 : // return
 	{
-		var ce    = caret.element;
-		var co    = caret.offset;			
-		var ct    = ce.text;
-		/* todo multi node ability */
-		var opara = ce.anchestor("paragraph");
-			
-		ce.text = ct.substring(0, co);
-		var npara = new Paragraph(ct.substring(co, ct.length));
-		opara.parent.insertBefore(npara, opara.next);
-		caret.set(npara.first, 0);
+		this.newline();
 		redraw = true;
 		System.repository.updateItem(this.item);
 		break;
@@ -730,13 +735,17 @@ Editor.prototype.input = function(text) {
 		return false;
 	}
 	var caret = this.caret;
-	for(var ci = 0; ci < text.length; ci++) {
-		var ch = text[ci];
+	var reg = /([^\n]+)(\n?)/g;
+	for(var ca = reg.exec(text); ca != null; ca = reg.exec(text)) {
+		var line = ca[1];
 		var ce = caret.element;
 		var co = caret.offset;
 		var ct = ce.text;
-		ce.text = ct.substring(0, co) + ch + ct.substring(co, ct.length);
-		this.caret.offset++;
+		ce.text = ct.substring(0, co) + line + ct.substring(co, ct.length);
+		this.caret.offset += text.length;
+		if (ca[2]) {
+			this.newline();
+		}
 	}
 	System.repository.updateItem(this.item);
 	return true;
@@ -1093,7 +1102,8 @@ _init : function() {
 	delete this.init; 
 	delete this._init; 
 	System.repository.loadup();	
-	
+	System.space.redraw();
+
 	//var vector1 = null;
 	//vector1 = new VectorGraph(850, 200, note2.doc);
 	//if (vector1) {
@@ -1939,7 +1949,47 @@ Space.prototype.mousedown = function(x, y) {
 		redraw = true;
 		switch(md) {
 		case 1:
-			debug("Export");
+			var div = document.createElement("div");
+			div.style.position = "absolute";
+			div.style.width    = "100%";
+			div.style.height   = "100%";
+			div.style.top      = 0;
+			div.style.left     = 0;
+			div.style.zIndex   = 10;
+			div.style.background = "rgba(248, 237, 105, 0.9)";
+			div.style.overflow   = "auto";
+			document.body.appendChild(div);
+			var label = document.createElement("div");
+			label.style.width = "100%";
+			label.style.textAlign = "center";
+			label.style.marginTop = "20px";
+			label.style.fontWeight = "bold";
+			label.appendChild(document.createTextNode(
+				"Copy/paste this to a text file (e.g.notepad) and save it there. "+
+				"Current browsers do not yet support dynamic file creation from javascript."));
+			div.appendChild(label);
+			var ta = document.createElement("textarea");
+			ta.style.width =  "90%";
+			ta.style.height = (div.offsetHeight - label.offsetHeight - 120) + "px";
+			ta.style.display = "block";
+			ta.style.marginLeft = "auto";
+			ta.style.marginRight = "auto";
+			ta.style.marginTop = "20px";
+			ta.value = System.repository.export("xml");
+			div.appendChild(ta);
+			div.appendChild(document.createElement("br"));
+			var button = document.createElement("button");
+			button.appendChild(document.createTextNode("Dismiss"));
+			button.data = "Dismiss";
+			button.style.width  = "100px";			
+			button.style.height = "30px";
+			button.style.display = "block";
+			button.style.marginLeft = "auto";
+			button.style.marginRight = "auto";
+			button.onclick = function() {
+				document.body.removeChild(div);
+			}
+			div.appendChild(button);
 			break;
 		case 2:
 			debug("Import");
@@ -2074,8 +2124,11 @@ Treenode.prototype.append = function(tnode) {
 		this.last = tnode;
 		tnode.next = null;
 	}
-	tnode.tell = this.listen ? this : this.tell;
-	if (this.listen) this.listen(); else if (this.tell) this.tell.listen();
+}
+
+/* default pass to parent */
+Treenode.prototype.listen = function() {
+	if (this.parent) this.parent.listen();
 }
 
 /* inserts tnode before child bnode */
@@ -2104,22 +2157,18 @@ Treenode.prototype.insertBefore = function(tnode, bnode) {
 	tnode.prev = bnode.prev;
 	bnode.prev.next = tnode;
 	bnode.prev = tnode;
-	
-	tnode.tell = this.listen ? this : this.tell;
-	if (this.listen) this.listen(); else if (this.tell) this.tell.listen();
+	this.listen();
 }
 
 /* removes child tnode */
 Treenode.prototype.remove = function(tnode) {
-	/* debug check if child */
-	if (debugNodes) for(var n= this.first; n != tnode; n = n.next) 
-		if (!n) throw new Error("debugNodes");
-	
+	/* debug check if child */	
 	if (tnode == this.first) this.first = tnode.next;
 	if (tnode == this.last) this.last = tnode.prev;
 	if (tnode.next) tnode.next.prev = tnode.prev;
 	if (tnode.prev) tnode.prev.next = tnode.next;
-	if (this.listen) this.listen(); else if (this.tell) this.tell.listen();
+	tnode.parent = null;
+	this.listen();
 }
 
 /* returns first anchestor of 'type' */
@@ -2153,7 +2202,7 @@ Object.defineProperty(Textnode.prototype, "text", {
 	set: function(text) {
 		if (this._text != text) {
 			this._text = text;
-			if (this.listen) this.listen(); else if (this.tell) this.tell.listen();
+			this.listen();
 		}
 	}
 });
@@ -2173,7 +2222,7 @@ function Paragraph(text)
 	Treenode.call(this, "paragraph");
 	var pcanvas = this._pcanvas = document.createElement("canvas");
 	pcanvas.width = pcanvas.height = 0;
-	pcanvas.actual == false; // todo move var otherplace
+	this._canvasActual = false;
 	this.append(new Textnode(text));
 	this._width = null;	
 	this.x = null;
@@ -2336,9 +2385,9 @@ Paragraph.prototype.getCanvas = function() {
 Paragraph.prototype.listen = function() {
 	this._flowActual   = false;
 	this._canvasActual = false;
-	if (this.tell) this.tell.listen();
+	if (this.parent) this.parent.listen();
 }
-		
+
 /* join a child node to its next sibling, 
  * or joins this paragraph to its next sibling */
  /* todo, this doesnt belong here */
@@ -2403,17 +2452,13 @@ function DTree(js) {
 	}
 }
 
-/* turns the note into a string */
-DTree.prototype.stringify = function() {
-	var dat = ["["];
-	
+/* turns the document tree into an object for JSON stringify */
+DTree.prototype.jsonfy = function() {
+	var js = [];
 	for (var n = this.first; n; n = n.next) {
-		if (n != this.first) dat.push(',"'); else dat.push('"');		
-		dat.push(n.first.text);
-		dat.push('"');
+		js.push(n.first.text);
 	}	
-	dat.push("]");
-	return dat.join('');
+	return js;
 }
 		
 /* returns the chunk at x,y */
@@ -2503,13 +2548,16 @@ Object.defineProperty(DTree.prototype, "height", {
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- Repository ++
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ .-,--.                   .
+  `|__/ ,-. ,-. ,-. ,-. . |- ,-. ,-. . .
+  )| \  |-' | | | | `-. | |  | | |   | |
+  `'  ` `-' |-' `-' `-' ' `' `-' '   `-|
+~ ~ ~ ~ ~ ~ | ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ /|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~                                  
+            '                        `-'
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Repository() {
 	this._lock = false;
 }
-
 
 Repository.prototype.loadup = function() {
 	var idfdat = window.localStorage.getItem("idfactory");
@@ -2541,7 +2589,18 @@ Repository.prototype.loadup = function() {
 	for (var i = 0; i < itllen; i++) {
 		this._loadItem(itl[i]);
 	}
-	System.space.redraw();
+}
+
+Repository.prototype.export = function(type) {
+	var js = {}
+	js.formatversion = 0;
+	var il = System.space.items;
+	var illen = il.length;
+	var jil = js.items = [];
+	for(var i = 0; i < illen; i++) {
+		jil.push(il[i].jsonfy());
+	}
+	return JSON.stringify(js);
 }
 
 Repository.prototype._newItemID = function(type) {
@@ -2557,7 +2616,6 @@ Repository.prototype._newItemID = function(type) {
 Repository.prototype._loadItem = function(tid) {
 	this._lock = true;
 	var tiddat = window.localStorage.getItem(tid);
-	//debug("get", tid, tiddat);
 	var it;
 	try {
 		it = JSON.parse(tiddat);
@@ -2579,7 +2637,9 @@ Repository.prototype._loadItem = function(tid) {
 		throw new Error("JSON error: ", err.name, err.message);
 	}
 	note.tid = tid;
-	note.dtree.append(new Paragraph(""));
+	if (!note.dtree.first) {
+		note.dtree.append(new Paragraph(""));
+	}
 	System.space.addItem(note, false, it.x, it.y);
 	this._lock = false;
 }
@@ -2612,8 +2672,8 @@ Repository.prototype.removeItem = function(item) {
 
 Repository.prototype._saveItem = function(item) {
 	if (this._lock) return;
-	var dat = item.stringify();
-	window.localStorage.setItem(item.tid, dat);
+	var js = item.jsonfy();
+	window.localStorage.setItem(item.tid, JSON.stringify(js));
 }
 
 Repository.prototype.updateItem = function(item) {
@@ -2807,17 +2867,16 @@ function Note(a1, a2) {
 		width  = js.w;
 		height = js.h;
 		this.dtree = new DTree(js.d);
-		this.dtree.tell = this;
 	} else {
 		width  = a1;
 		height = a2;
 		this.dtree = new DTree();
-		this.dtree.tell = this;
 	}
+	this.dtree.parent = this;
 	Item.call(this, "note", width, height);
 	this.bcanvas = document.createElement("canvas");
 	this.textBorder = settings.noteTextBorder;
-	this.bcanvas.actual = false; /* todo */
+	this._canvasActual = false; /* todo */
 	
 	this._scrollx = -8833;
 	this._scrolly = -8833;
@@ -2826,12 +2885,15 @@ function Note(a1, a2) {
 }
 
 /* turns the note into a string */
-Note.prototype.stringify = function() {
-	return [
-	'{"x":',this.x,',"y":',this.y,
-	',"w":',this.width,',"h":',this.height,
-	',"d":',this.dtree.stringify(),
-	'}'].join('');
+Note.prototype.jsonfy = function() {
+	var js = {
+		x: this.x,
+		y: this.y,
+		w: this.width,
+		h: this.height,
+		d: this.dtree.jsonfy(),
+	}
+	return js;
 }
 
 /* returns the para at y */
@@ -2844,7 +2906,8 @@ Note.prototype.paraAtY = function(y) {
 
 /* drops the cached canvas */
 Note.prototype.listen = function() {
-	this.bcanvas.actual = false;
+	this._canvasActual = false;
+	/* end of chain */
 }
 	
 /* resizes the note */
@@ -2855,7 +2918,7 @@ Note.prototype.resize = function(width, height) {
 	var bcanvas = this.bcanvas;
 	this.width  = bcanvas.width  = width; /* todo, not yet do sizing */
 	this.height = bcanvas.height = height;
-	bcanvas.actual = false;
+	this._canvasActual = false;
 }
 
 Object.defineProperty(Note.prototype, "scrolly", {
@@ -2869,7 +2932,7 @@ Object.defineProperty(Note.prototype, "scrolly", {
 		}
 		if (this._scrolly != sy) {
 			this._scrolly = sy;
-			this.bcanvas.actual = false;
+			this._canvasActual = false;
 		}
 	}
 });
@@ -2893,7 +2956,7 @@ Note.prototype.getCanvas = function(select) {
 	var bcanvas = this.bcanvas;
 	var dtree = this.dtree;
 	var cx = bcanvas.getContext("2d");
-	if (bcanvas.actual) {
+	if (this._canvasActual) {
 		/* buffer hit */
 		return bcanvas;
 	}
@@ -3086,14 +3149,14 @@ Note.prototype.getCanvas = function(select) {
 	Note_bevel(cx, 0, 0, this.width, this.height, 0.5, settings.noteOuterRadius);
 	cx.stroke(); cx.beginPath(); cx.closePath();
 	cx.restore();
-	bcanvas.actual = true;			 /* todo move */
+	this._canvasActual = true;
 	return bcanvas;	
 }
 
 /* item gets focus */
 Note.prototype.focus = function(editor) {
 	editor.focus(this);
-	this.bcanvas.actual = false;
+	this._canvasActual = false; /* todo why? */
 	editor.caret.show();
 }
 
