@@ -538,35 +538,51 @@ Caret.prototype.hide = function() {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Selection() {
 	this.active = false;
-	this.begin = new Marker();
-	this.end   = new Marker();
+	this.mark1 = new Marker();
+	this.mark2 = new Marker();
+	this.begin = null;
+	this.end   = null;
+}
+
+/* sets begin/end so begin is before end. */
+Selection.prototype.normalize = function() {
+	var e1 = this.mark1.element;
+	var e2 = this.mark2.element;
+	
+	if (e1 == e2) {
+		if (this.mark1.offset <= this.mark2.offset) {
+			this.begin = this.mark1;
+			this.end   = this.mark2;
+		} else {
+			this.begin = this.mark2;
+			this.end   = this.mark1;		
+		}
+		return;
+	} 
+	
+	var pn;
+	for (pn = e1.parent.next; pn && pn.first != e2; pn = pn.next);
+	
+	if (!pn) {
+		this.end   = this.mark1;
+		this.begin = this.mark2;
+	} else {
+		this.begin = this.mark1;	
+		this.end   = this.mark2;
+	}
 }
 
 Selection.prototype.innerText = function() {
 	if (!this.active) return "";
+	this.normalize();
 	var be = this.begin.element;
 	var bo = this.begin.offset;
 	var ee = this.end.element;
 	var eo = this.end.offset;
 	var bet = be.text;
 	if (be == ee) {
-		return bo < eo ? bet.substring(bo, eo) : bet.substring(eo, bo);
+		return bet.substring(bo, eo);
 	}
-	
-	var pn;
-	for (pn = be.parent.next; pn && pn.first != ee; pn = pn.next);
-	
-	if (!pn) {
-		/* begin and end are reversed */
-		var se = be;
-		var so = bo;
-		be = ee;
-		bo = eo;
-		ee = se;
-		eo = so;
-		bet = be.text;
-	}
-
 	
 	var buf = [bet.substring(bo, bet.length)];
 	for (var n = be.parent.next.first; n != ee; n = n.parent.next.first) {
@@ -585,6 +601,7 @@ Selection.prototype.innerText = function() {
  `\__  ,-| . |- ,-. ,-.
   /    | | | |  | | |
  '`--' `-^ ' `' `-' '
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Editor() {
 	this.caret     = new Caret();
@@ -636,8 +653,9 @@ Editor.prototype.newline = function() {
 	
 /* got a special key */
 /* returns redraw code telling if the element needs to be redrawn. */
-Editor.prototype.specialKey = function(keycode, shiftKey) {
-	if (!this.item) {
+Editor.prototype.specialKey = function(keycode, shiftKey, ctrlKey) {
+	var item = this.item;
+	if (!item) {
 		return false;
 	}
 	var refresh = false;
@@ -645,11 +663,48 @@ Editor.prototype.specialKey = function(keycode, shiftKey) {
 	var caret  = this.caret;
 	var select = this.selection;			
 
+	if (ctrlKey) {
+		switch(keycode) {
+		case 65 : // ctrl+a
+			var pfirst = item.dtree.first;
+			select.mark1.set(item, pfirst.first, 0);
+			var plast = item.dtree.last;
+			select.mark2.set(item, plast.first, plast.first.text.length);
+			select.active = true;
+			for(var n = pfirst; n; n = n.next) {
+				n.listen();
+			}
+			caret.set(select.mark2);
+			System.setInput(select.innerText());
+			caret.show();
+			return true;
+		}
+	}
+	
 	if (!shiftKey && select.active) {
-		select.active = false;
-		System.setInput("");
-		this.item.listen(); /* make not actual */
-		redraw = true;
+		switch(keycode) {
+		case 35 : // end
+		case 36 : // pos1
+		case 37 : // left
+		case 38 : // up
+		case 39 : // right
+		case 40 : // down		
+			select.active = false;
+			System.setInput("");
+			item.listen(); /* make not actual */
+			redraw = true;
+			break;
+		case  8 : // backspace
+		case 46 : // del
+			this.deleteSelection();
+			redraw = true;
+			keycode = 0;
+			break;
+		case 13 : // return
+			this.deleteSelection();
+			redraw = true;
+			break;
+		}
 	} else if (shiftKey && !select.active) {
 		switch(keycode) {
 		case 35 : // end
@@ -658,7 +713,7 @@ Editor.prototype.specialKey = function(keycode, shiftKey) {
 		case 38 : // up
 		case 39 : // right
 		case 40 : // down	
-			select.begin.set(caret);
+			select.mark1.set(caret);
 		}
 	}
 	
@@ -676,14 +731,14 @@ Editor.prototype.specialKey = function(keycode, shiftKey) {
 			var para = ce.anchestor("paragraph");
 			redraw = para.joinToPrevious(ce, caret);
 		}
-		System.repository.updateItem(this.item);
+		System.repository.updateItem(item);
 		break;
 	}
 	case 13 : // return
 	{
 		this.newline();
 		redraw = true;
-		System.repository.updateItem(this.item);
+		System.repository.updateItem(item);
 		break;
 	}
 	case 35 : // end
@@ -727,7 +782,7 @@ Editor.prototype.specialKey = function(keycode, shiftKey) {
 			var para = ce.anchestor("paragraph");
 			redraw = para.joinToNext(ce, caret);
 		}
-		System.repository.updateItem(this.item);
+		System.repository.updateItem(item);
 		break;
 	}
 	default :
@@ -744,9 +799,9 @@ Editor.prototype.specialKey = function(keycode, shiftKey) {
 		case 39 : // right
 		case 40 : // down	
 			select.active = true;
-			select.end.set(caret);
+			select.mark2.set(caret);
 			System.setInput(select.innerText());
-			this.item.listen(); /* make not actual */
+			item.listen(); /* make not actual */
 			redraw = true;
 		}
 	}
@@ -767,7 +822,36 @@ Editor.prototype.blink = function() {
 		this.updateCaret();			
 	}
 }
-	
+
+/* deletes the selection */
+Editor.prototype.deleteSelection = function() {
+	var select = this.selection;
+	select.normalize();
+	var b = select.begin;
+	var e = select.end;
+	var be = b.element;
+	var bo = b.offset;
+	var ee = e.element;
+	var eo = e.offset;
+	if (be == ee) {
+		var bet = be.text;
+		be.text = bet.substring(0, bo) + bet.substring(eo, bet.length);
+	} else {
+		var eet = ee.text;
+		be.text = be.text.substring(0, bo) + eet.substring(eo, eet.length);
+		var pn;
+		for (pn = be.parent.next; pn.first != ee; pn = pn.next) {
+			/* ^ todo make multi child compatible */
+			pn.parent.remove(pn);
+		}
+		pn.parent.remove(pn);
+	}
+	be.listen();
+	this.caret.set(b);
+	select.active = false;
+	/* setInput("") is done by System */
+}
+
 /* got character input from user */
 /* returns redraw needs */
 Editor.prototype.input = function(text) {
@@ -775,6 +859,9 @@ Editor.prototype.input = function(text) {
 		return false;
 	}
 	var caret = this.caret;
+	if (this.selection.active) {
+		this.deleteSelection();
+	}
 	var reg = /([^\n]+)(\n?)/g;
 	for(var ca = reg.exec(text); ca != null; ca = reg.exec(text)) {
 		var line = ca[1];
@@ -890,7 +977,16 @@ _init : function() {
 	var lastSpecialKey = -1;
 	
 	/* a special key is pressed */
-	function specialKey(keyCode, shiftKey) {
+	function specialKey(keyCode, shiftKey, ctrlKey) {
+		if (ctrlKey) {
+			switch(keyCode) {
+			case 65 : // ctrl+a
+				this.space.specialKey(keyCode, shiftKey, ctrlKey);
+				return false;		
+			default : 
+				return true;
+			}
+		}
 		switch(keyCode) {
 		case  8 : // backspace
 		case 13 : // return
@@ -901,7 +997,7 @@ _init : function() {
 		case 39 : // right
 		case 40 : // down
 		case 46 : // del
-			this.space.specialKey(keyCode, shiftKey);
+			this.space.specialKey(keyCode, shiftKey, ctrlKey);
 			return false;
 		default : 
 			return true;
@@ -956,7 +1052,7 @@ _init : function() {
 	
 	/* key down in hidden input field */
 	function onkeydown(event) {
-		var pass = specialKey.call(this, lastSpecialKey = event.keyCode, event.shiftKey);
+		var pass = specialKey.call(this, lastSpecialKey = event.keyCode, event.shiftKey, event.ctrlKey);
 		if (!pass) event.preventDefault();
 	}
 		
@@ -966,7 +1062,7 @@ _init : function() {
 		var ek = event.keyCode;
 		if (((ek > 0 && ek < 32) || ew == 0) && lastSpecialKey != ek) {
 			lastSpecialKey = -1;
-			return specialKey(ek, event.shiftKey);
+			return specialKey(ek, event.shiftKey, event.ctrlKey);
 		}
 		lastSpecialKey = -1;
 		testinput();
@@ -1654,8 +1750,8 @@ Space.prototype.removeItem = function(item) {
 }
 
 /* user pressed a special key */
-Space.prototype.specialKey = function(keyCode, shiftKey) {
-	var rv = System.editor.specialKey(keyCode, shiftKey);
+Space.prototype.specialKey = function(keyCode, shiftKey, ctrlKey) {
+	var rv = System.editor.specialKey(keyCode, shiftKey, ctrlKey);
 	if (rv) {
 		this.redraw();
 	}
@@ -2041,7 +2137,8 @@ Space.prototype.mousedown = function(x, y) {
 			ta.style.marginLeft = "auto";
 			ta.style.marginRight = "auto";
 			ta.style.marginTop = "20px";
-			ta.value = System.repository.export("xml");
+			ta.value = System.repository.doExport("xml");
+			
 			div.appendChild(ta);
 			div.appendChild(document.createElement("br"));
 			var button = document.createElement("button");
@@ -2335,7 +2432,9 @@ Paragraph.prototype._flow = function() {
 	for(var node = this.first; node; node = node.next) {
 		var t = node.text;
 		var pchunk = 0;
-		var reg = !dtree.pre ? (/(\s*\S+)\s?(\s*)/g) : (/(.+)()$/g);
+		//var reg = !dtree.pre ? (/(\s*\S+)\s?(\s*)/g) : (/(.+)()$/g);
+		/* also match only spaces, todo check if more performance if hand coding exception */
+		var reg = !dtree.pre ? (/(\s*\S+|\s+$)\s?(\s*)/g) : (/(.+)()$/g);
 		var stol = true; /* at start of line */
 		for(var ca = reg.exec(t); ca != null; ca = reg.exec(t)) {
 			/* text is a word plus hard spaces */
@@ -2670,7 +2769,7 @@ Repository.prototype.loadup = function() {
 	}
 }
 
-Repository.prototype.export = function(type) {
+Repository.prototype.doExport = function(type) {
 	var js = {}
 	js.formatversion = 0;
 	var il = System.space.items;
@@ -3076,18 +3175,16 @@ Note.prototype.getCanvas = function(select) {
 	}
 	
 	/* draws the selection */
-	if (select.active && select.begin.item == this) {
-		var b = select.begin;
-		var e = select.end;
+	if (select.active && select.mark1.item == this) {
+		/* todo make part of selection to use shortcut with XY */
+		var b = select.mark1;
+		var e = select.mark2;
 		b.getXY();
 		e.getXY();
-		if (e.y < b.y) {
-			e = select.begin;
-			b = select.end;
-		} else if (e.y == b.y && e.x < b.x) {
-			e = select.begin;
-			b = select.end;		
-		}
+		if (e.y < b.y || (e.y == b.y && e.x < b.x)) {
+			b = select.mark2;
+			e = select.mark1;
+		} 
 		
 		cx.fillStyle   = settings.selectionColor;
 		cx.strokeStyle = settings.selectionStroke;
@@ -3420,7 +3517,7 @@ window.onload = function() {
 //]]></script>
 </head>
 <body style="margin: 0; overflow: hidden;">
-<textarea id="input" style="//position: absolute; top:-200px;"></textarea>
+<textarea id="input" style="position: absolute; top:-200px;"></textarea>
 <canvas id="canvas">
   You need a browser that supports HTML5 Canvas elements!
 </canvas>
