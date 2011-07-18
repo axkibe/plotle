@@ -540,7 +540,45 @@ function Selection() {
 	this.active = false;
 	this.begin = new Marker();
 	this.end   = new Marker();
-}	
+}
+
+Selection.prototype.innerText = function() {
+	if (!this.active) return "";
+	var be = this.begin.element;
+	var bo = this.begin.offset;
+	var ee = this.end.element;
+	var eo = this.end.offset;
+	var bet = be.text;
+	if (be == ee) {
+		return bo < eo ? bet.substring(bo, eo) : bet.substring(eo, bo);
+	}
+	
+	var pn;
+	for (pn = be.parent.next; pn && pn.first != ee; pn = pn.next);
+	
+	if (!pn) {
+		/* begin and end are reversed */
+		var se = be;
+		var so = bo;
+		be = ee;
+		bo = eo;
+		ee = se;
+		eo = so;
+		bet = be.text;
+	}
+
+	
+	var buf = [bet.substring(bo, bet.length)];
+	for (var n = be.parent.next.first; n != ee; n = n.parent.next.first) {
+		/* ^ todo make multi child compatible */
+		if (!n) { throw new Error("selection akward");}
+		buf.push('\n');
+		buf.push(n.text);
+	}
+	buf.push('\n');
+	buf.push(ee.text.substring(0, eo));
+	return buf.join('');
+}
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .-,--.   .   .
@@ -609,6 +647,7 @@ Editor.prototype.specialKey = function(keycode, shiftKey) {
 
 	if (!shiftKey && select.active) {
 		select.active = false;
+		System.setInput("");
 		this.item.listen(); /* make not actual */
 		redraw = true;
 	} else if (shiftKey && !select.active) {
@@ -706,6 +745,7 @@ Editor.prototype.specialKey = function(keycode, shiftKey) {
 		case 40 : // down	
 			select.active = true;
 			select.end.set(caret);
+			System.setInput(select.innerText());
 			this.item.listen(); /* make not actual */
 			redraw = true;
 		}
@@ -887,16 +927,22 @@ _init : function() {
 			document.onmousemove = null;
 		}
 	}
-
+	
+	/* the value that is expected to be input.
+	 * either nothing or the text selection
+	 * if it changes the user did something 
+	 */
+	var inputval = "";
+	
 	/*-- Functions the browser calls --*/
 	
 	/* tests if the hidden input field got data */
 	function testinput() {
 		var text = hiddenInput.value;
-		if (text == "") {
+		if (text == inputval) {
 			return;
 		}
-		hiddenInput.value = "";
+		hiddenInput.value = inputval = "";
 		System.space.input(text);
 	}
 	
@@ -1035,6 +1081,14 @@ _init : function() {
 		}
 	}
 
+	/* mouse down event */
+	function onmousewheel(event) {
+		var wheel = event.wheelDelta || event.detail;
+		wheel = wheel > 0 ? 1 : -1;
+		debug("wheel", wheel);
+		this.space.mousewheel(wheel);
+	}
+	
 	/* timeout after mouse down so dragging starts */
 	function onatweentime() {
 		if (mst != enums.MST_ATWEEN) {
@@ -1048,11 +1102,12 @@ _init : function() {
 			this.space.dragmove(mmx, mmy);
 		}
 	}
-	
-	
+		
 	canvas.onmouseup       = this.makeCatcher(this, onmouseup);
 	canvas.onmousemove     = this.makeCatcher(this, onmousemove);
 	canvas.onmousedown     = this.makeCatcher(this, onmousedown);
+	canvas.onmousewheel    = this.makeCatcher(this, onmousewheel);
+	canvas.addEventListener('DOMMouseScroll', canvas.onmousewheel, false); // Firefox.
 	window.onresize        = this.makeCatcher(this, onresize);
 	hiddenInput.onfocus    = this.makeCatcher(this, onfocus);
 	hiddenInput.onblur     = this.makeCatcher(this, onblur);
@@ -1070,6 +1125,15 @@ _init : function() {
 	
 	/*-- Meshcraft System calls --*/
 	
+	/* sets the input (text selection) */
+	this.setInput = function(text) {	
+		hiddenInput.value = inputval = text;
+		if (text != "") {
+			hiddenInput.selectionStart = 0;
+			hiddenInput.selectionEnd = text.length;			
+		}
+	}
+
 	/* clears the canvas */
 	this.canvasClear = function() {
 		cx.clearRect(0, 0, canvas.width, canvas.height);
@@ -1537,6 +1601,7 @@ function Space() {
 	/* panning offset */
 	this.pox = 0;
 	this.poy = 0;
+	this.zoom = 1;
 }
 
 /* redraws the complete space */
@@ -1579,6 +1644,7 @@ Space.prototype.addItem = function(item, top, x, y) {
 	}
 	System.repository.addItem(item);
 }
+
 
 /* removes an item from the space */
 Space.prototype.removeItem = function(item) {
@@ -2064,6 +2130,19 @@ Space.prototype.mousedown = function(x, y) {
 	
 	if (redraw) this.redraw();
 	return enums.MST_ATWEEN;
+}
+
+
+Space.prototype.mousewheel = function(wheel) {
+	if (wheel > 0) {
+		this.zoom *= 1.1;
+	} else {
+		this.zoom /= 1.1;
+	}
+	if (Math.abs(this.zoom - 1) < 0.0001) {
+		this.zoom = 1;
+	}
+	debug(this.zoom);
 }
 
 
@@ -3341,7 +3420,7 @@ window.onload = function() {
 //]]></script>
 </head>
 <body style="margin: 0; overflow: hidden;">
-<textarea id="input" style="position: absolute; top:-200px;"></textarea>
+<textarea id="input" style="//position: absolute; top:-200px;"></textarea>
 <canvas id="canvas">
   You need a browser that supports HTML5 Canvas elements!
 </canvas>
