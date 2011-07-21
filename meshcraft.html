@@ -87,14 +87,16 @@ var settings = {
 	/* item menu style */
 	itemMenuPositionkX   :  0,
 	itemMenuPositionkY   :  0,
-	itemMenuPositiondX   : 40,
+	itemMenuPositiondX   : 26,
 	itemMenuPositiondY   :  8,
 	itemMenuOuterRadius : 75,
 	itemMenuInnerRadius : 30,
 	itemMenuOuterBorderWidth : 0.5,
-	itemMenuOuterBorderColor : "rgb(0, 0, 0)",
+	itemMenuOuterBorderColor1 : "rgb(0, 0, 0)",
+	itemMenuOuterBorderColor2 : "rgb(255, 255, 255)",
 	itemMenuInnerBorderWidth : 2,
-	itemMenuInnerBorderColor : "rgb(255, 200, 105)",
+	itemMenuInnerBorderColor1 : "rgb(255, 200, 105)",
+	itemMenuInnerBorderColor2 : "rgb(255, 255, 255)",
 	itemMenuBackground1 : "rgba(255, 255, 205, 0.935)",
 	itemMenuBackground2 : "rgba(255, 255, 255, 0.935)",
 	itemMenuFillStyle : "rgb(255, 237, 210)",
@@ -338,7 +340,7 @@ Marker.prototype.getXY = function() {
 	var l = pinfo[this._pli];
 	var c = l[this._pci];
 	this.x = p.x + (c ? c.x + Measure.width(t.substring(c.offset, this._offset)) : l.x);
-	this.y = p.y + l.y - dtree.textsize; /* todo baseline? */
+	this.y = p.y + l.y - dtree.fontsize; /* todo baseline? */
 }
 	
 /* sets the marker to position closest to x, y from flowbox(para) */
@@ -625,7 +627,7 @@ Editor.prototype.updateCaret = function() {
 		var sy = it.scrolly;
 		var x = System.space.pox + it.x + caret.x;
 		var y = System.space.poy + it.y + caret.y - (sy > 0 ? sy : 0);
-		var th = Math.round(it.dtree.textsize * 1.2);
+		var th = Math.round(it.dtree.fontsize * 1.2);
 		
 		caret.save = cx.getImageData(
 			(caret.sx = x) - 1, 
@@ -1763,7 +1765,7 @@ function Space() {
 	/* all items in the space */
 	this.items = []; 
 	this._floatmenu = new Hexmenu(settings.floatMenuOuterRadius, settings.floatMenuInnerRadius,
-		["new", "Note", "Label", "Three", "Four", "Five", "Six"]);
+		["new", "Note", "Label"]);
 	this._itemmenu = new Hexmenu(settings.itemMenuOuterRadius, settings.itemMenuInnerRadius,
 		["", "Remove"])
 	this.edgemenu = new Edgemenu();
@@ -2204,13 +2206,16 @@ Space.prototype.mousedown = function(x, y) {
 			label.style.textAlign = "center";
 			label.style.marginTop = "20px";
 			label.style.fontWeight = "bold";
-			label.appendChild(document.createTextNode(
-				"Copy/paste this to a text file (e.g.notepad) and save it there. "+
-				"Current browsers do not yet support dynamic file creation from javascript."));
+			label.appendChild(document.createTextNode("Copy/paste this to a text file (e.g.notepad) and save it there."));
 			div.appendChild(label);
+			var label2 = document.createElement("div");
+			label2.style.width = "100%";
+			label2.style.textAlign = "center";
+			label2.appendChild(document.createTextNode("Sorry for this, current browsers do not yet allow file creation for offline repositories."));
+			div.appendChild(label2);
 			var ta = document.createElement("textarea");
 			ta.style.width =  "90%";
-			ta.style.height = (div.offsetHeight - label.offsetHeight - 120) + "px";
+			ta.style.height = (div.offsetHeight - label.offsetHeight - 150) + "px";
 			ta.style.display = "block";
 			ta.style.marginLeft = "auto";
 			ta.style.marginRight = "auto";
@@ -2247,7 +2252,7 @@ Space.prototype.mousedown = function(x, y) {
 		redraw = true;
 		if (md >= 0) {
 			switch(md) {
-			case 1 :
+			case 1 : // note
 				var nw = settings.newNoteWidth;
 				var nh = settings.newNoteHeight;
 				var note = new Note(nw, nh);
@@ -2255,6 +2260,13 @@ Space.prototype.mousedown = function(x, y) {
 				this.addItem(note, true, 
 					Math.round(this._floatmenu.x - nw / 2) - this.pox, 
 					Math.round(this._floatmenu.y - nh / 2) - this.poy);
+				break;
+			case 2 : // label
+				var label = new Label();
+				label.dtree.append(new Paragraph("Label"));
+				this.addItem(label, true, 
+					this._floatmenu.x - this.pox, 
+					this._floatmenu.y - this.poy);
 				break;
 			}
 			if (redraw) this.redraw();
@@ -2478,7 +2490,7 @@ function Paragraph(text)
 	pcanvas.width = pcanvas.height = 0;
 	this._canvasActual = false;
 	this.append(new Textnode(text));
-	this._width = null;	
+	this._flowWidth = null;	
 	this.x = null;
 	this.y = null;
 }
@@ -2492,12 +2504,13 @@ Paragraph.prototype._flow = function() {
 	/* build position informations */
 	this._flowActual = true;
 	var pinfo = this._pinfo = [];
-	var width = this._width;
+	var flowWidth = this._flowWidth;
+	var width = 0;
 	var dtree = this.anchestor("dtree");
 	/* canvas is needed for font measurement */
-	var textsize = dtree.textsize;
+	var fontsize = dtree.fontsize;
 	var x = 0;
-	var y = textsize;	
+	var y = fontsize;	
 	Measure.font = dtree.font;
 	var space = Measure.width(" ");
 	var pline = 0;
@@ -2518,11 +2531,15 @@ Paragraph.prototype._flow = function() {
 			/* text is a word plus hard spaces */
 			var text = ca[1] + ca[2];
 			var w = Measure.width(text);
-			if (x + w + space > width) {
+			if (flowWidth > 0 && x + w + space > flowWidth) {
 				if (!stol) {
 					/* soft break */
+					if (x > width) {
+						/* stores maximum width used */
+						width = x;
+					}
 					x = 0;
-					y += Math.round(dtree.textsize * (dtree.pre ? 1 : 1.2));
+					y += Math.round(dtree.fontsize * (dtree.pre ? 1 : 1.2));
 					pline++;
 					{
 						var l = pinfo[pline] = [];
@@ -2534,7 +2551,7 @@ Paragraph.prototype._flow = function() {
 				} else {
 					/* horizontal overflow */
 				}
-			}				
+			}
 			pinfo[pline][pchunk++] = {
 				x: x, 
 				w: w,
@@ -2542,13 +2559,18 @@ Paragraph.prototype._flow = function() {
 				offset: ca.index, 
 				text: text,
 			};
-
 			x += w + space;
 			stol = false;
 		}
+		if (x > width) {
+			/* stores maximum width used */
+			width = x;
+		}
 	}
-	/* returns the logical height (excluding letters bottombox)  */
+	/* stores metrics */
+	/* logical height (excluding letters bottombox) */
 	this._softHeight = y;
+	this._width = width;
 }
 
 /* returns the logical height 
@@ -2561,16 +2583,25 @@ Object.defineProperty(Paragraph.prototype, "softHeight", {
 	set: function(s) { throw new Error("Cannot set paragraph softHeight."); }
 });
 
+Object.defineProperty(Paragraph.prototype, "width", {
+	get: function() { 
+		this._flow();
+		return this._width;
+	},
+	set: function(s) { throw new Error("Cannot set paragraph width."); }
+});
+
 /* returns the computes size of the paragraph */
 Object.defineProperty(Paragraph.prototype, "height", {
 	get: function() { 
+		this._flow();
 		var dtree = this.anchestor("dtree");
-		return this._softHeight + Math.round(dtree.textsize * 0.27);
+		return this._softHeight + Math.round(dtree.fontsize * 0.27);
 	},
 	set: function(s) { throw new Error("Cannot set paragraph height."); }
 });
 
-/* return the position information */
+/* return the position information arrays for all chunks */
 Object.defineProperty(Paragraph.prototype, "pinfo", {
 	get: function() { 
 		this._flow();
@@ -2579,14 +2610,13 @@ Object.defineProperty(Paragraph.prototype, "pinfo", {
 	set: function(s) { throw new Error("Cannot set pinfo");	}
 });
 
-Object.defineProperty(Paragraph.prototype, "width", {
+Object.defineProperty(Paragraph.prototype, "flowWidth", {
 	get: function() { 
-		return this._width;
+		return this._flowWidth;
 	},
-	
-	set: function(width) {
-		if (this._width != width) {
-			this._width = width;
+	set: function(fw) {
+		if (this._flowWidth != fw) {
+			this._flowWidth = fw;
 			this._flowActual = false;
 			this._canvasActual = false;
 		}
@@ -2608,20 +2638,21 @@ Paragraph.prototype.getCanvas = function() {
 	var dtree = this.anchestor("dtree");
 	{
 		var equalHeight = pcanvas.height == this.height;
-		var equalWidth  = pcanvas.width  == this._width;
+		var equalWidth  = pcanvas.width  == this.width;
 		if (equalHeight && equalWidth) {
-			cx.clearRect(0, 0, this._width, this.height);
+			cx.clearRect(0, 0, this.width, this.height);
 		} else {
 			if (!equalHeight) {
 				pcanvas.height = this.height;
 			}
 			if (!equalWidth) {
-				pcanvas.width = this._width;
+				pcanvas.width = this.width;
 			}
 		}
 	}
 	
 	cx.font = dtree.font;	
+	debug(dtree.font);
 	cx.fillStyle = "black";
 	/* draws text into the canvas */
 	var pinfo = this._pinfo;
@@ -2631,6 +2662,7 @@ Paragraph.prototype.getCanvas = function() {
 		var plen = pl.length;
 		for(var ic = 0; ic < plen; ic++) {
 			var pc = pl[ic];
+			debug(pc.text, pc.x, pl.y);
 			cx.fillText(pc.text, pc.x, pl.y);
 		}
 	}
@@ -2696,8 +2728,7 @@ DTree.prototype = new Treenode;
 DTree.prototype.constructor = DTree;
 function DTree(js) {
 	Treenode.call(this, "dtree");
-	this.textsize = 13;
-	this.font = this.textsize + 'px ' + settings.defaultFont;
+	this.fontsize = 13;
 	
 	/* json import */
 	if (js) {
@@ -2707,6 +2738,13 @@ function DTree(js) {
 		}
 	}
 }
+
+Object.defineProperty(DTree.prototype, "font", {
+	get: function() { 
+		return this.fontsize + 'px ' + settings.defaultFont;
+	},
+	set: function() { throw new Error("Cannot set font. Set fontsize/fontface"); }
+});
 
 /* turns the document tree into an object for JSON stringify */
 DTree.prototype.jsonfy = function() {
@@ -2734,7 +2772,7 @@ DTree.prototype.drawCanvas = function(acanvas, offsetX, offsetY, scrolly) {
 	var y = offsetY;
 	var pi = 0;
 	var h = 0;
-	var parasep = this.pre ? 0 : this.textsize;
+	var parasep = this.pre ? 0 : this.fontsize;
 
 	for(var para = this.first; para; para = para.next) {
 		var pcanvas = para.getCanvas();
@@ -2747,8 +2785,8 @@ DTree.prototype.drawCanvas = function(acanvas, offsetX, offsetY, scrolly) {
 
 /* Overloads Treenodes append to set the paragraph width */
 DTree.prototype.append = function(tnode) {
-	if (this._width) {
-		tnode.width = this._width;
+	if (this._flowWidth) {
+		tnode.flowWidth = this._flowWidth;
 	}
 	return Treenode.prototype.append.call(this, tnode);
 }
@@ -2756,52 +2794,53 @@ DTree.prototype.append = function(tnode) {
 
 /* Overloads Treenodes insertBefore to set the paragraph width */
 DTree.prototype.insertBefore = function(tnode, bnode) {
-	if (this._width && bnode) { 
+	if (this._flowWidth && bnode) { 
 		/* if not bnode append will be called */
-		tnode.width = this._width;
+		tnode.flowWidth = this._flowWidth;
 	}
 	return Treenode.prototype.insertBefore.call(this, tnode, bnode);
 }
 
-Object.defineProperty(DTree.prototype, "width", {
+Object.defineProperty(DTree.prototype, "flowWidth", {
 	get: function() { 
-		return this._width;
+		return this._flowWidth;
 	},
-	set: function(width) {
-		if (this._width != width) {
-			this._width = width;
+	set: function(fw) {
+		if (this._flowWidth != fw) {
+			this._flowWidth = fw;
 			for(var para = this.first; para; para = para.next) {
-				para.width = width;
+				para.flowWidth = fw;
 			}
 		}
 	}
+});
+
+Object.defineProperty(DTree.prototype, "width", {
+	get: function() { 
+		/* todo caching */
+		var w = 0;
+		for(var para = this.first; para; para = para.next) {
+			if (para.width > w) w = para.width;
+		}		
+		return w;
+	},
+	set: function(width) { throw new Error("Cannot set width of DTree"); }
 });
 
 Object.defineProperty(DTree.prototype, "height", {
 	get: function() { 
 		/* todo caching */
 		var h = 0;
-		var parasep = this.pre ? 0 : this.textsize;
+		var parasep = this.pre ? 0 : this.fontsize;
 		var first = true;
 		for(var para = this.first; para; para = para.next) {
-			if (para._width != this._width) {
-				throw new Error("width violation");
-			}
-			if (!first) {
-				h += parasep;
-			} else {
-				first = false;
-			}
+			if (!first) h += parasep; else first = false;
 			h += para.softHeight;
 		}
 		return h;
 	},
-	
 	set: function(width) { throw new Error("Cannot set height of DTree"); }
 });
-
-
-
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .-,--.                   .
@@ -2816,6 +2855,7 @@ function Repository() {
 }
 
 Repository.prototype.loadup = function() {
+	window.localStorage.clear(); /* XXXX */
 	var idfdat = window.localStorage.getItem("idfactory");
 	if (idfdat) {
 		try {
@@ -2884,7 +2924,6 @@ Repository.prototype._loadItem = function(tid) {
 		this._lock = false;
 		throw new Error("JSON error: attributes missing from " + tid);
 	}
-	
 	var note;
 	try {
 		note = new Note(it);
@@ -2961,8 +3000,8 @@ function Item(type, width, height) {
 }
 
 /* set a hex menu to be this items menu */
-Item.prototype.setItemMenu = function(hexmenu, pox, poy) {
-	hexmenu.set(
+Item.prototype.setItemMenu = function(menu, pox, poy) {
+	menu.set(
 		this.x + this.width  * settings.itemMenuPositionkX + settings.itemMenuPositiondX + pox, 
 		this.y + this.height * settings.itemMenuPositionkY + settings.itemMenuPositiondY + poy);
 }
@@ -3059,45 +3098,58 @@ Item.prototype.drawHandles = function(canvas, pox, poy) {
 	}
 		
 	cx.beginPath(); 
-	/* draws item menu */
+	/* draws item menu handler */
+	x1 = this.x + pox - 0.5;
+	y1 = this.y + poy - 0.5;
+	x2 = x1 + this.width + 1;
+	y2 = y1 + this.height + 1;	
+	/*
 	cx.moveTo(0, 0);
 	cx.lineTo(canvas.width, 0);
 	cx.lineTo(canvas.width, canvas.height);
 	cx.lineTo(0, canvas.height);
 	cx.lineTo(0, 0);
-	x1 = this.x + pox - 0.5;
-	y1 = this.y + poy - 0.5;
-	x2 = x1 + this.width + 1;
-	y2 = y1 + this.height + 1;
-			
 	cx.moveTo(x1, y1); 
 	cx.lineTo(x1, y2); 
 	cx.lineTo(x2, y2); 
 	cx.lineTo(x2, y1);
-	cx.lineTo(x1, y1);
-	cx.clip();
-			
+	cx.lineTo(x1, y1);*/
 	var xim = x1 + 
 		Math.round(this.width  * settings.itemMenuPositionkX + settings.itemMenuPositiondX);
 	var yim = y1 + 
 		Math.round(this.height * settings.itemMenuPositionkY + settings.itemMenuPositiondY);
-	var grad = cx.createRadialGradient(xim, yim, 0, xim, yim, 
-		(settings.itemMenuInnerRadius + settings.itemMenuOuterRadius) / 2);
-	grad.addColorStop(0, settings.itemMenuBackground1);
-	grad.addColorStop(1, settings.itemMenuBackground2);	
-			
+	cx.moveTo(x1, 0);
+	cx.lineTo(x1, y1);
+	cx.lineTo(x1 + this.width, y1);
+	cx.lineTo(x1 + this.width, y1 + this.height);
+	cx.lineTo(canvas.width, y1 + this.height);
+	cx.lineTo(canvas.width, 0);
+	cx.closePath();
+	cx.clip();
+	//var grad = cx.createRadialGradient(xim, yim, 0, xim, yim, 
+	//	(settings.itemMenuInnerRadius + settings.itemMenuOuterRadius) / 2);
 	Hex.makePath(cx, xim, yim, settings.itemMenuInnerRadius);
-	cx.fillStyle = grad;
+	{
+		var grad = cx.createLinearGradient(0, yim - settings.itemMenuInnerRadius,  0, yim + 5);
+		grad.addColorStop(0, settings.itemMenuBackground1);
+		grad.addColorStop(1, settings.itemMenuBackground2);	
+		cx.fillStyle = grad;
+	}
 	cx.fill();	
 	if (settings.itemMenuInnerBorderWidth > 0) {
+		grad.addColorStop(0, settings.itemMenuInnerBorderColor1);
+		grad.addColorStop(1, settings.itemMenuInnerBorderColor2);	
 		cx.lineWidth = settings.itemMenuInnerBorderWidth;
-		cx.strokeStyle = settings.itemMenuInnerBorderColor;
+		cx.strokeStyle = grad;
 		cx.stroke();
 	}
 			
 	if (settings.itemMenuOuterBorderWidth > 0) {
+		grad.addColorStop(0, settings.itemMenuOuterBorderColor1);
+		grad.addColorStop(1, settings.itemMenuOuterBorderColor2);	
+		cx.lineWidth = settings.itemMenuInnerBorderWidth;
+		cx.strokeStyle = grad;
 		cx.lineWidth = settings.itemMenuOuterBorderWidth;
-		cx.strokeStyle = settings.itemMenuOuterBorderColor;
 		cx.stroke();
 	}
 		
@@ -3107,10 +3159,10 @@ Item.prototype.drawHandles = function(canvas, pox, poy) {
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-,-,-.       .      
-` | |   ,-. |- ,-. 
-  | |-. | | |  |-' 
- ,' `-' `-' `' `-' 
+ ,-,-.       .      
+ ` | |   ,-. |- ,-. 
+   | |-. | | |  |-' 
+  ,' `-' `-' `' `-' 
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  An item with text and a scrollbar.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -3132,7 +3184,7 @@ function Note(a1, a2) {
 	Item.call(this, "note", width, height);
 	this.bcanvas = document.createElement("canvas");
 	this.textBorder = settings.noteTextBorder;
-	this._canvasActual = false; /* todo */
+	this._canvasActual = false;
 	
 	this._scrollx = -8833;
 	this._scrolly = -8833;
@@ -3230,13 +3282,13 @@ Note.prototype.getCanvas = function(select) {
 	/* calculates if a scrollbar is needed */
 	var sy = this._scrolly;
 	var innerHeight = this.height - 2 * this.textBorder;
-	dtree.width = this.width  - 2 * this.textBorder - (sy >= 0 ? settings.scrollbarRadius * 2 : 0);
+	dtree.flowWidth = this.width  - 2 * this.textBorder - (sy >= 0 ? settings.scrollbarRadius * 2 : 0);
 	var dtreeHeight = dtree.height;
 	if (sy < 0) {
 		if (dtreeHeight > innerHeight) {
 			/* should use a scrollbar */
 			sy = this._scrolly = 0;		
-			dtree.width = this.width  - 2 * this.textBorder - (sy >= 0 ? settings.scrollbarRadius * 2 : 0);
+			dtree.flowWidth = this.width  - 2 * this.textBorder - (sy >= 0 ? settings.scrollbarRadius * 2 : 0);
 			dtreeHeight = dtree.height;
 			if (dtreeHeight <= innerHeight) {
 				throw new Error("note doesnt fit with and without scrollbar.");			
@@ -3245,7 +3297,7 @@ Note.prototype.getCanvas = function(select) {
 	} else if (dtreeHeight <= innerHeight) {
 		/* should not use a scrollbar */
 		sy = this._scrolly = -8833;
-		dtree.width = this.width  - 2 * this.textBorder - (sy >= 0 ? settings.scrollbarRadius * 2 : 0);
+		dtree.flowWidth = this.width  - 2 * this.textBorder - (sy >= 0 ? settings.scrollbarRadius * 2 : 0);
 		dtreeHeight = dtree.height;
 		if (dtreeHeight > innerHeight) {
 			throw new Error("note doesnt fit with and without scrollbar.");			
@@ -3268,7 +3320,7 @@ Note.prototype.getCanvas = function(select) {
 		cx.strokeStyle = settings.selectionStroke;
 		cx.beginPath();
 		var psy = sy >= 0 ? sy : 0;
-		var lh = Math.round(this.dtree.textsize * 1.2);
+		var lh = Math.round(this.dtree.fontsize * 1.2);
 		var bx = Math.round(b.x) + 0.5;
 		var by = Math.round(b.y - psy) + 0.5;
 		var ex = Math.round(e.x) + 0.5;
@@ -3413,6 +3465,163 @@ Note.prototype.focus = function(editor) {
 	this._canvasActual = false; /* todo why? */
 	editor.caret.show();
 }
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ LABEL +++
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ An sizeable item with sizing text 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+Label.prototype = new Item;
+Label.prototype.constructor = Note;
+function Label(a1, a2) {
+	if (arguments.length == 1) {
+		var js = a1;
+		this.fontsize = js.fs;
+		this.dtree    = new DTree(js.d);
+	} else {
+		this.fontsize = 20;
+		this.dtree    = new DTree();
+	}
+	this.dtree.parent = this;
+	this.dtree.fontsize = this.fontsize;
+	Item.call(this, "label");
+	this.bcanvas = document.createElement("canvas");
+	this._canvasActual = false;
+}
+
+/* turns the label into a string */
+Label.prototype.jsonfy = function() {
+	var js = {
+		x: this.x,
+		y: this.y,
+		fs: this.fontsize,
+		d: this.dtree.jsonfy(),
+	}
+	return js;
+}
+
+/* returns the para at y */
+Label.prototype.paraAtY = function(y) {
+	return this.dtree.paraAtY(y);
+}
+
+/* drops the cached canvas */
+Label.prototype.listen = function() {
+	this._canvasActual = false;
+	/* end of chain */
+}
+	
+/* resizes the note */
+Label.prototype.resize = function(width, height) {
+	debug("todo xxx");
+}
+	
+/* gets the canvas buffer for this item */
+Label.prototype.getCanvas = function(select) {
+	var bcanvas = this.bcanvas;
+	var dtree = this.dtree;
+	var cx = bcanvas.getContext("2d");
+	if (this._canvasActual) {
+		/* buffer hit */
+		return bcanvas;
+	}
+
+	/* clear */
+	cx.clearRect(0, 0, bcanvas.width, bcanvas.height);	
+
+	/* calculates if a scrollbar is needed */
+	dtree.flowWidth = -1;
+	var height = this.height = bcanvas.height = dtree.height;
+	var width  = this.width  = bcanvas.width  = dtree.width;
+	
+	/* draws the selection */
+	//if (select.active && select.mark1.item == this) {
+		/* todo make part of selection to use shortcut with XY */
+/*		var b = select.mark1;
+		var e = select.mark2;
+		b.getXY();
+		e.getXY();
+		if (e.y < b.y || (e.y == b.y && e.x < b.x)) {
+			b = select.mark2;
+			e = select.mark1;
+		} 
+		
+		cx.fillStyle   = settings.selectionColor;
+		cx.strokeStyle = settings.selectionStroke;
+		cx.beginPath();
+		var psy = sy >= 0 ? sy : 0;
+		var lh = Math.round(this.dtree.fontsize * 1.2);
+		var bx = Math.round(b.x) + 0.5;
+		var by = Math.round(b.y - psy) + 0.5;
+		var ex = Math.round(e.x) + 0.5;
+		var ey = Math.round(e.y - psy) + 0.5;
+		var rx = Math.round(dtree.width + this.textBorder / 2) + 0.5;
+		var lx = Math.round(this.textBorder / 2) + 0.5;
+		if ((Math.abs(by - ey) < 2)) {
+			// ***
+			cx.moveTo(bx, by);
+			cx.lineTo(bx, by + lh);
+			cx.lineTo(ex, ey + lh);
+			cx.lineTo(ex, ey);
+			cx.lineTo(bx, by);
+			cx.stroke();
+			cx.fill();			
+		} else if (Math.abs(by + lh - ey) < 2 && (bx >= ex))  {
+			//      ***
+			// ***
+			cx.moveTo(rx, by + lh);
+			cx.lineTo(bx, by + lh);
+			cx.lineTo(bx, by);
+			cx.lineTo(rx, by);
+			
+			cx.moveTo(lx, ey);
+			cx.lineTo(ex, ey);
+			cx.lineTo(ex, ey + lh);
+			cx.lineTo(lx, ey + lh);
+			cx.stroke();
+			cx.fill();
+		} else {
+			//    *****
+			// *****
+			for(var i = 0; i < 2; i++) {
+				cx.beginPath();
+				var edge = i ? cx.moveTo : cx.lineTo;
+				cx.moveTo(rx, ey);
+				cx.lineTo(ex, ey);
+				cx.lineTo(ex, ey + lh);
+				cx.lineTo(lx, ey + lh);
+				edge.call(cx, lx, by + lh);
+				cx.lineTo(bx, by + lh);
+				cx.lineTo(bx, by);
+				cx.lineTo(rx, by);
+				edge.call(cx, rx, ey);
+				if (i) cx.stroke(); else cx.fill();
+			}			
+		}
+		cx.beginPath();
+	}*/
+	
+	/* draws text */	
+	dtree.drawCanvas(bcanvas, 0, 0, 0);
+	
+	/* draws the border */
+	cx.beginPath(); 
+	cx.rect(0, 0, width, height);
+	cx.lineWidth = 1;
+	cx.strokeStyle = "rgba(128,128,128,1)";
+	cx.stroke(); cx.beginPath(); 
+	cx.restore();
+	this._canvasActual = true;
+	return bcanvas;	
+}
+
+/* item gets focus */
+Label.prototype.focus = function(editor) {
+	editor.focus(this);
+	this._canvasActual = false; /* todo why? */
+	editor.caret.show();
+}
+
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ,.   ,.       .          ,---.              .
