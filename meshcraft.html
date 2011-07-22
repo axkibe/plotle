@@ -46,9 +46,14 @@ var settings = {
 	/* pixels after mouse down and move, dragging starts */
 	dragbox  : 10,
 	
-	/* minimum size for notes */
-	noteMinSizeX : 40,
-	noteMinSizeY : 40,
+	/* factor to add to the bottom of font height */
+	bottombox : 0.22,
+	
+	/* minimum sizes */
+	noteMinWidth   : 40,
+	noteMinHeight  : 40,
+	labelMinWidth  : 30,
+	labelMinHeight : 15,
 	
 	/* note style */
 	noteTextBorder : 10,
@@ -58,8 +63,8 @@ var settings = {
 	noteOuterBorderWidth : 1,
 	noteOuterBorderColor : "black",
 	noteOuterRadius      : 6,
-	noteBackground1 : "rgba(255, 255, 248, 0.935)",
-	noteBackground2 : "rgba(255, 255, 160, 0.935)",
+	noteBackground1 : "rgba(255, 255, 248, 0.955)",
+	noteBackground2 : "rgba(255, 255, 160, 0.955)",
 	
 	newNoteWidth  : 300,
 	newNoteHeight : 150,
@@ -80,8 +85,8 @@ var settings = {
 	floatMenuOuterBorderColor : "rgb(0, 0, 0)",
 	floatMenuInnerBorderWidth : 2,
 	floatMenuInnerBorderColor : "rgb(255, 200, 105)",
-	floatMenuBackground1 : "rgba(255, 255, 168, 0.935)",
-	floatMenuBackground2 : "rgba(255, 255, 248, 0.935)",
+	floatMenuBackground2 : "rgba(255, 255, 243, 0.955)",
+	floatMenuBackground1 : "rgba(255, 255, 168, 0.955)",
 	floatMenuFillStyle : "rgb(255, 237, 210)",
 
 	/* item menu style */
@@ -97,8 +102,8 @@ var settings = {
 	itemMenuInnerBorderWidth : 2,
 	itemMenuInnerBorderColor1 : "rgb(255, 200, 105)",
 	itemMenuInnerBorderColor2 : "rgb(255, 255, 255)",
-	itemMenuBackground1 : "rgba(255, 255, 205, 0.935)",
-	itemMenuBackground2 : "rgba(255, 255, 255, 0.935)",
+	itemMenuBackground1 : "rgba(255, 255, 200, 0.955)",
+	itemMenuBackground2 : "rgba(255, 255, 205, 0)",
 	itemMenuFillStyle : "rgb(255, 237, 210)",
 	
 	/* selection */
@@ -627,7 +632,7 @@ Editor.prototype.updateCaret = function() {
 		var sy = it.scrolly;
 		var x = System.space.pox + it.x + caret.x;
 		var y = System.space.poy + it.y + caret.y - (sy > 0 ? sy : 0);
-		var th = Math.round(it.dtree.fontsize * 1.2);
+		var th = Math.round(it.dtree.fontsize * (1 + settings.bottombox));
 		
 		caret.save = cx.getImageData(
 			(caret.sx = x) - 1, 
@@ -2074,6 +2079,7 @@ Space.prototype.dragmove = function(x, y) {
 	x -= this.pox;
 	y -= this.poy;
 	var iaction = this._iaction;
+	var redraw = false;
 	
 	switch(iaction.act) {
 	case enums.ACT_PAN :
@@ -2096,18 +2102,12 @@ Space.prototype.dragmove = function(x, y) {
 		case "e"  : 
 		case "ne" :
 		case "se" :
-			var wi = iaction.swi + x - iaction.sx;
-			if (wi < settings.noteMinSizeX) {
-				wi = settings.noteMinSizeX;
-			}
+			wi = iaction.swi + x - iaction.sx;
 			break;
 		case "w"  :
 		case "nw" :
 		case "sw" :	
-			var wi = iaction.swi - x + iaction.sx;
-			if (wi < settings.noteMinSizeX) {
-				wi = settings.noteMinSizeX;
-			}
+			wi = iaction.swi - x + iaction.sx;
 			it.x = iaction.six + iaction.swi - wi;
 			break;
 		}
@@ -2116,31 +2116,34 @@ Space.prototype.dragmove = function(x, y) {
 		case "sw" :
 		case "se" :
 			var hi = iaction.shi + y - iaction.sy;
-			if (hi < settings.noteMinSizeY) {
-				hi = settings.noteMinSizeY;
-			}
 			break;
 		case "n"  : 
 		case "nw" :
 		case "ne" :
 			var hi = iaction.shi - y + iaction.sy;
-			if (hi < settings.noteMinSizeY) {
-				hi = settings.noteMinSizeY;
-			}
-			it.y = iaction.siy + iaction.shi - hi;
 			break;			
 		}
-		var redraw = false;
-		if (wi != iaction.swi || hi != iaction.shi) {
-			it.resize(wi, hi);
-			redraw = true;
+		redraw = it.resize(wi, hi); 
+		switch (iaction.com) {
+		case "w"  :
+		case "nw" :
+		case "sw" :	
+			it.x = iaction.six + iaction.swi - it.width;
+			break;		
+		}
+		switch (iaction.com) {
+		case "n"  : 
+		case "nw" :
+		case "ne" :
+			it.y = iaction.siy + iaction.shi - it.height;
+			break;
 		}
 		var dtreeHeight = it.dtree.height;
 		var smaxy = dtreeHeight - (it.height - 2 * it.textBorder);
 		if (smaxy > 0 && it.scrolly > smaxy) {
 			it.scrolly = smaxy;
 			redraw = true;;
-		}		
+		}
 		if (redraw) this.redraw();
 		System.repository.updateItem(iaction.item);
 		return;
@@ -2539,7 +2542,7 @@ Paragraph.prototype._flow = function() {
 						width = x;
 					}
 					x = 0;
-					y += Math.round(dtree.fontsize * (dtree.pre ? 1 : 1.2));
+					y += Math.round(dtree.fontsize * (dtree.pre ? 1 : 1 + settings.bottombox));
 					pline++;
 					{
 						var l = pinfo[pline] = [];
@@ -2596,7 +2599,7 @@ Object.defineProperty(Paragraph.prototype, "height", {
 	get: function() { 
 		this._flow();
 		var dtree = this.anchestor("dtree");
-		return this._softHeight + Math.round(dtree.fontsize * 0.27);
+		return this._softHeight + Math.round(dtree.fontsize * settings.bottombox);
 	},
 	set: function(s) { throw new Error("Cannot set paragraph height."); }
 });
@@ -2652,7 +2655,6 @@ Paragraph.prototype.getCanvas = function() {
 	}
 	
 	cx.font = dtree.font;	
-	debug(dtree.font);
 	cx.fillStyle = "black";
 	/* draws text into the canvas */
 	var pinfo = this._pinfo;
@@ -2662,7 +2664,6 @@ Paragraph.prototype.getCanvas = function() {
 		var plen = pl.length;
 		for(var ic = 0; ic < plen; ic++) {
 			var pc = pl[ic];
-			debug(pc.text, pc.x, pl.y);
 			cx.fillText(pc.text, pc.x, pl.y);
 		}
 	}
@@ -2726,9 +2727,8 @@ Paragraph.prototype.joinToPrevious = function(node, caret) {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 DTree.prototype = new Treenode;
 DTree.prototype.constructor = DTree;
-function DTree(js) {
+function DTree(js, fontsize) {
 	Treenode.call(this, "dtree");
-	this.fontsize = 13;
 	
 	/* json import */
 	if (js) {
@@ -2736,12 +2736,15 @@ function DTree(js) {
 		for(var i = 0; i < jslen; i++) {
 			this.append(new Paragraph(js[i]));
 		}
+		this._fontsize = js.fontsize || 13;
+	} else {
+		this._fontsize = fontsize || 13;
 	}
 }
 
 Object.defineProperty(DTree.prototype, "font", {
 	get: function() { 
-		return this.fontsize + 'px ' + settings.defaultFont;
+		return this._fontsize + 'px ' + settings.defaultFont;
 	},
 	set: function() { throw new Error("Cannot set font. Set fontsize/fontface"); }
 });
@@ -2772,13 +2775,15 @@ DTree.prototype.drawCanvas = function(acanvas, offsetX, offsetY, scrolly) {
 	var y = offsetY;
 	var pi = 0;
 	var h = 0;
-	var parasep = this.pre ? 0 : this.fontsize;
+	var parasep = this.pre ? 0 : this._fontsize;
 
 	for(var para = this.first; para; para = para.next) {
 		var pcanvas = para.getCanvas();
 		para.x = offsetX;
 		para.y = y;
-		cx.drawImage(pcanvas, offsetX, y - scrolly);
+		if (pcanvas.width > 0 && pcanvas.height > 0) {
+			cx.drawImage(pcanvas, offsetX, y - scrolly);
+		}
 		y += para.softHeight + parasep;
 	}
 }
@@ -2801,16 +2806,26 @@ DTree.prototype.insertBefore = function(tnode, bnode) {
 	return Treenode.prototype.insertBefore.call(this, tnode, bnode);
 }
 
+Object.defineProperty(DTree.prototype, "fontsize", {
+	get: function() { return this._fontsize; },
+	set: function(fs) {
+		if (this._fonsize == fs) return;
+		this._fontsize = fs; 
+		for(var para = this.first; para; para = para.next) {
+			para.listen();
+		}
+	}
+});
+
 Object.defineProperty(DTree.prototype, "flowWidth", {
 	get: function() { 
 		return this._flowWidth;
 	},
 	set: function(fw) {
-		if (this._flowWidth != fw) {
-			this._flowWidth = fw;
-			for(var para = this.first; para; para = para.next) {
-				para.flowWidth = fw;
-			}
+		if (this._flowWidth == fw) return;
+		this._flowWidth = fw;
+		for(var para = this.first; para; para = para.next) {
+			para.flowWidth = fw;
 		}
 	}
 });
@@ -2821,7 +2836,7 @@ Object.defineProperty(DTree.prototype, "width", {
 		var w = 0;
 		for(var para = this.first; para; para = para.next) {
 			if (para.width > w) w = para.width;
-		}		
+		}
 		return w;
 	},
 	set: function(width) { throw new Error("Cannot set width of DTree"); }
@@ -2831,7 +2846,7 @@ Object.defineProperty(DTree.prototype, "height", {
 	get: function() { 
 		/* todo caching */
 		var h = 0;
-		var parasep = this.pre ? 0 : this.fontsize;
+		var parasep = this.pre ? 0 : this._fontsize;
 		var first = true;
 		for(var para = this.first; para; para = para.next) {
 			if (!first) h += parasep; else first = false;
@@ -2843,147 +2858,6 @@ Object.defineProperty(DTree.prototype, "height", {
 });
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- .-,--.                   .
-  `|__/ ,-. ,-. ,-. ,-. . |- ,-. ,-. . .
-  )| \  |-' | | | | `-. | |  | | |   | |
-  `'  ` `-' |-' `-' `-' ' `' `-' '   `-|
-~ ~ ~ ~ ~ ~ | ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ /|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~                                  
-            '                        `-'
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Repository() {
-	this._lock = false;
-}
-
-Repository.prototype.loadup = function() {
-	window.localStorage.clear(); /* XXXX */
-	var idfdat = window.localStorage.getItem("idfactory");
-	if (idfdat) {
-		try {
-			this.itemIDFactory = JSON.parse(idfdat);
-		} catch(err) {
-			this.itemIDFactory = null;
-			throw new Error("JSON error reading idfactory", err.name, err.message);
-		}
-	}
-	if (!this.itemIDFactory) {
-		console.log("no idfactory, restarting repository");
-		this.itemIDFactory = {};
-		return;
-	}
-	
-	var itldat = window.localStorage.getItem("itemlist");
-	if (!itldat) {
-		return;
-	}
-	try {
-		var itl = JSON.parse(itldat);
-	} catch(err) {
-		throw new ("JSON error reading itemlist", err.name, err.message);
-	}
-	
-	var itllen = itl.length;
-	for (var i = 0; i < itllen; i++) {
-		this._loadItem(itl[i]);
-	}
-}
-
-Repository.prototype.doExport = function(type) {
-	var js = {}
-	js.formatversion = 0;
-	var il = System.space.items;
-	var illen = il.length;
-	var jil = js.items = [];
-	for(var i = 0; i < illen; i++) {
-		jil.push(il[i].jsonfy());
-	}
-	return JSON.stringify(js);
-}
-
-Repository.prototype._newItemID = function(type) {
-	var idf = this.itemIDFactory;
-	if (typeof(idf.type) == "undefined") {
-		idf.type = 1;
-	}
-	idf.type++;
-	window.localStorage.setItem("idfactory", JSON.stringify(this.itemIDFactory));
-	return idf.type;
-}
-
-Repository.prototype._loadItem = function(tid) {
-	this._lock = true;
-	var tiddat = window.localStorage.getItem(tid);
-	var it;
-	try {
-		it = JSON.parse(tiddat);
-	} catch (err) {
-		this._lock = false;
-		throw new Error("JSON error: reading item " + tid, err.name, err.message);
-	} 
-	
-	if (!it || !it.x || !it.y) {
-		this._lock = false;
-		throw new Error("JSON error: attributes missing from " + tid);
-	}
-	var note;
-	try {
-		note = new Note(it);
-	} catch (err) {
-		this._lock = false;
-		throw new Error("JSON error: ", err.name, err.message);
-	}
-	note.tid = tid;
-	if (!note.dtree.first) {
-		note.dtree.append(new Paragraph(""));
-	}
-	System.space.addItem(note, false, it.x, it.y);
-	this._lock = false;
-}
-
-Repository.prototype._saveItemlist = function() {
-	if (this._lock) return;
-	var dat = ["["];
-	var il = System.space.items; 
-	var illen = il.length;
-	
-	for(var i = 0; i < illen; i++) {
-		if (i > 0) dat.push(',"'); else dat.push('"');
-		dat.push(il[i].tid);
-		dat.push('"');
-	}
-	dat.push("]");
-	dat = dat.join('');
-	window.localStorage.setItem("itemlist", dat);
-}
-
-Repository.prototype.updateItemlist = function() {
-	this._saveItemlist();
-}
-
-Repository.prototype.removeItem = function(item) {
-	if (this._lock) return;
-	window.localStorage.setItem(item.tid, "");
-	this._saveItemlist();
-}
-
-Repository.prototype._saveItem = function(item) {
-	if (this._lock) return;
-	var js = item.jsonfy();
-	window.localStorage.setItem(item.tid, JSON.stringify(js));
-}
-
-Repository.prototype.updateItem = function(item) {
-	if (this._lock) return;
-	this._saveItem(item);
-}
-
-Repository.prototype.addItem = function(item) {
-	if (this._lock) return;
-	item.tid  = item.type + "-" + this._newItemID(item.type);
-	this._saveItem(item);
-	this._saveItemlist();
-}
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,-_/ .
  '  | |- ,-. ,-,-.
  .^ | |  |-' | | |
@@ -2991,10 +2865,8 @@ Repository.prototype.addItem = function(item) {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
  Something on a canvas.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Item(type, width, height) {
+function Item(type) {
 	this.type = type;
-	this.width  = width;
-	this.height = height;
 	this.x = null;
 	this.y = null;
 }
@@ -3014,8 +2886,18 @@ Item.prototype.withinItemMenu = function(x, y) {
 		settings.itemMenuInnerRadius);
 }
 
-/* returns the compass of the resize handles of an item */
-Item.prototype.checkItemCompass = function(x, y) { 
+/* returns the compass of the resize handles of an item 
+ * 
+ * rhs .. bitwise resize handle selector:
+ * 
+ *   1  2  4
+ * 128     8
+ *  64 32 16
+ */
+Item.prototype._checkItemCompass = function(x, y, rhs) { 
+	if (rhs == 0) {
+		return;
+	}
 	var d = settings.handleSize;          // inner distance
 	var d2 = settings.handleSize * 3 / 4; // outer distance
 	
@@ -3025,33 +2907,33 @@ Item.prototype.checkItemCompass = function(x, y) {
 	var w = x >= this.x - d2 && x <= this.x + d;
 	
 	if (n) {
-		if (w) { 
+		if (w && rhs & 1) { 
 			return "nw";
-		} else if (e) {
+		} else if (e && rhs & 4) {
 			return "ne";
-		} else {
+		} else if (rhs & 2) {
 			var mx = this.x + this.width / 2;
 			if (x >= mx - d && x <= mx + d) {
 				return "n";
 			}
 		}
 	} else if (s) {
-		if (w) {
+		if (w && rhs & 64) {
 			return "sw";
-		} else if (e) {
+		} else if (e && rhs & 16) {
 			return "se";
-		} else {
+		} else if (rhs & 32) {
 			var mx = this.x + this.width / 2;
 			if (x >= mx - d && x <= mx + d) {
 				return "s";
 			}
 		}
-	} else if (w) {
+	} else if (w && rhs & 128) {
 		var my = this.y + this.height / 2;
 		if (y >= my - d && y <= my + d) {
 			return "w";
 		}
-	} else if (e) {
+	} else if (e && rhs & 8) {
 		var my = this.y + this.height / 2;
 		if (y >= my - d && y <= my + d) {
 			return "e";
@@ -3061,7 +2943,8 @@ Item.prototype.checkItemCompass = function(x, y) {
 }
 
 /* draws the edit handles of an item (resize, itemmenu) */
-Item.prototype.drawHandles = function(canvas, pox, poy) {
+/* rhs ... resize  handles selector */
+Item.prototype._drawHandles = function(canvas, pox, poy, rhs) {
 	var cx = canvas.getContext("2d");
 	cx.save();
 	var ds = settings.handleDistance; 			
@@ -3076,22 +2959,21 @@ Item.prototype.drawHandles = function(canvas, pox, poy) {
 	var ym = Math.round((y1 - 0.5 + y2) / 2) + 0.5;
 	
 	cx.beginPath(); 
-	cx.moveTo(x1, y1 + hs);  cx.lineTo(x1, y1); cx.lineTo(x1 + hs, y1);
-	cx.moveTo(xm - hs2, y1); cx.lineTo(xm + hs2, y1);
-	cx.moveTo(x2 - hs,  y1); cx.lineTo(x2, y1); cx.lineTo(x2, y1 + hs);
-	cx.moveTo(x2, ym - hs2); cx.lineTo(x2, ym + hs2);
-	cx.moveTo(x2, y2 - hs);  cx.lineTo(x2, y2); cx.lineTo(x2 - hs, y2);
-	cx.moveTo(xm - hs2, y2); cx.lineTo(xm + hs2, y2);
-	cx.moveTo(x1 + hs, y2);  cx.lineTo(x1, y2); cx.lineTo(x1, y2 - hs);
-	cx.moveTo(x1, ym - hs2); cx.lineTo(x1, ym + hs2);
+	if (rhs &   1) { cx.moveTo(x1, y1 + hs);  cx.lineTo(x1, y1); cx.lineTo(x1 + hs, y1); }
+	if (rhs &   2) { cx.moveTo(xm - hs2, y1); cx.lineTo(xm + hs2, y1);                   }
+	if (rhs &   4) { cx.moveTo(x2 - hs,  y1); cx.lineTo(x2, y1); cx.lineTo(x2, y1 + hs); }
+	if (rhs &   8) { cx.moveTo(x2, ym - hs2); cx.lineTo(x2, ym + hs2);                   }
+	if (rhs &  16) { cx.moveTo(x2, y2 - hs);  cx.lineTo(x2, y2); cx.lineTo(x2 - hs, y2); }
+	if (rhs &  32) { cx.moveTo(xm - hs2, y2); cx.lineTo(xm + hs2, y2);                   }
+	if (rhs &  64) { cx.moveTo(x1 + hs, y2);  cx.lineTo(x1, y2); cx.lineTo(x1, y2 - hs); }
+	if (rhs & 128) { cx.moveTo(x1, ym - hs2); cx.lineTo(x1, ym + hs2);                   }
 			
-	if (settings.handleWidth1 > 0) {
+	if (rhs > 0 && settings.handleWidth1 > 0) {
 		cx.strokeStyle = settings.handleColor1;
 		cx.lineWidth = settings.handleWidth1;
 		cx.stroke(); 
 	}
-	
-	if (settings.handleWidth2 > 0) {
+	if (rhs > 0 && settings.handleWidth2 > 0) {
 		cx.strokeStyle = settings.handleColor2;
 		cx.lineWidth = settings.handleWidth2;
 		cx.stroke(); 
@@ -3103,21 +2985,11 @@ Item.prototype.drawHandles = function(canvas, pox, poy) {
 	y1 = this.y + poy - 0.5;
 	x2 = x1 + this.width + 1;
 	y2 = y1 + this.height + 1;	
-	/*
-	cx.moveTo(0, 0);
-	cx.lineTo(canvas.width, 0);
-	cx.lineTo(canvas.width, canvas.height);
-	cx.lineTo(0, canvas.height);
-	cx.lineTo(0, 0);
-	cx.moveTo(x1, y1); 
-	cx.lineTo(x1, y2); 
-	cx.lineTo(x2, y2); 
-	cx.lineTo(x2, y1);
-	cx.lineTo(x1, y1);*/
 	var xim = x1 + 
 		Math.round(this.width  * settings.itemMenuPositionkX + settings.itemMenuPositiondX);
 	var yim = y1 + 
 		Math.round(this.height * settings.itemMenuPositionkY + settings.itemMenuPositiondY);
+	/* clip, never draws over the item, and not below or left of it */
 	cx.moveTo(x1, 0);
 	cx.lineTo(x1, y1);
 	cx.lineTo(x1 + this.width, y1);
@@ -3126,15 +2998,11 @@ Item.prototype.drawHandles = function(canvas, pox, poy) {
 	cx.lineTo(canvas.width, 0);
 	cx.closePath();
 	cx.clip();
-	//var grad = cx.createRadialGradient(xim, yim, 0, xim, yim, 
-	//	(settings.itemMenuInnerRadius + settings.itemMenuOuterRadius) / 2);
 	Hex.makePath(cx, xim, yim, settings.itemMenuInnerRadius);
-	{
-		var grad = cx.createLinearGradient(0, yim - settings.itemMenuInnerRadius,  0, yim + 5);
-		grad.addColorStop(0, settings.itemMenuBackground1);
-		grad.addColorStop(1, settings.itemMenuBackground2);	
-		cx.fillStyle = grad;
-	}
+	var grad = cx.createLinearGradient(0, yim - settings.itemMenuInnerRadius,  0, yim + 5);
+	grad.addColorStop(0, settings.itemMenuBackground1);
+	grad.addColorStop(1, settings.itemMenuBackground2);	
+	cx.fillStyle = grad;
 	cx.fill();	
 	if (settings.itemMenuInnerBorderWidth > 0) {
 		grad.addColorStop(0, settings.itemMenuInnerBorderColor1);
@@ -3169,27 +3037,26 @@ Item.prototype.drawHandles = function(canvas, pox, poy) {
 Note.prototype = new Item;
 Note.prototype.constructor = Note;
 function Note(a1, a2) {
-	var width, height;
 	if (arguments.length == 1) {
 		var js = a1;
-		width  = js.w;
-		height = js.h;
+		this.width  = js.w;
+		this.height = js.h;
 		this.dtree = new DTree(js.d);
 	} else {
-		width  = a1;
-		height = a2;
+		this.width  = a1;
+		this.height = a2;
 		this.dtree = new DTree();
 	}
 	this.dtree.parent = this;
-	Item.call(this, "note", width, height);
+	Item.call(this, "note");
 	this.bcanvas = document.createElement("canvas");
 	this.textBorder = settings.noteTextBorder;
 	this._canvasActual = false;
 	
 	this._scrollx = -8833;
 	this._scrolly = -8833;
-	this.bcanvas.width  = width; /* need to set it so early? */
-	this.bcanvas.height = height;
+	this.bcanvas.width  = this.width; /* need to set it so early? */
+	this.bcanvas.height = this.height;
 }
 
 /* turns the note into a string */
@@ -3218,15 +3085,19 @@ Note.prototype.listen = function() {
 	/* end of chain */
 }
 	
-/* resizes the note */
+/* resizes the note 
+ * returns true if something changed */
 Note.prototype.resize = function(width, height) {
+	if (height < settings.noteMinHeight) height = settings.noteMinHeight;
+	if (width  < settings.noteMinWidth)   width = settings.noteMinWidth;
 	if (this.width == width && this.height == height) {
-		return;
+		return false;
 	}
 	var bcanvas = this.bcanvas;
 	this.width  = bcanvas.width  = width; /* todo, not yet do sizing */
 	this.height = bcanvas.height = height;
 	this._canvasActual = false;
+	return true;
 }
 
 Object.defineProperty(Note.prototype, "scrolly", {
@@ -3244,6 +3115,15 @@ Object.defineProperty(Note.prototype, "scrolly", {
 		}
 	}
 });
+
+/* draws the items handles */
+Note.prototype.drawHandles = function(canvas, pox, poy, rhs) {
+	return this._drawHandles(canvas, pox, poy, 255);
+}
+
+Note.prototype.checkItemCompass = function(x, y, rhs) { 
+	return this._checkItemCompass(x, y, 255);
+}
 
 /* draws a bevel */
 function Note_bevel(cx, x, y, w, h, border, radius) {
@@ -3320,7 +3200,7 @@ Note.prototype.getCanvas = function(select) {
 		cx.strokeStyle = settings.selectionStroke;
 		cx.beginPath();
 		var psy = sy >= 0 ? sy : 0;
-		var lh = Math.round(this.dtree.fontsize * 1.2);
+		var lh = Math.round(this.dtree.fontsize * (1 + settings.bottombox));
 		var bx = Math.round(b.x) + 0.5;
 		var by = Math.round(b.y - psy) + 0.5;
 		var ex = Math.round(e.x) + 0.5;
@@ -3476,14 +3356,11 @@ Label.prototype.constructor = Note;
 function Label(a1, a2) {
 	if (arguments.length == 1) {
 		var js = a1;
-		this.fontsize = js.fs;
 		this.dtree    = new DTree(js.d);
 	} else {
-		this.fontsize = 20;
-		this.dtree    = new DTree();
+		this.dtree    = new DTree(null, 20);
 	}
 	this.dtree.parent = this;
-	this.dtree.fontsize = this.fontsize;
 	Item.call(this, "label");
 	this.bcanvas = document.createElement("canvas");
 	this._canvasActual = false;
@@ -3494,11 +3371,23 @@ Label.prototype.jsonfy = function() {
 	var js = {
 		x: this.x,
 		y: this.y,
-		fs: this.fontsize,
 		d: this.dtree.jsonfy(),
 	}
 	return js;
 }
+
+Object.defineProperty(Label.prototype, "width", {
+	get: function() { return Math.max(this.dtree.width, settings.labelMinWidth);           },
+	set: function() { throw new Error("Cannot set width of Label, set fontsize instead."); }
+});
+
+Object.defineProperty(Label.prototype, "height", {
+	get: function() { 
+		var mh = Math.round(this.dtree.height * (1 + settings.bottombox));
+		return Math.max(mh, settings.labelMinHeight);          
+	},
+	set: function() { throw new Error("Cannot set height of Label, set fontsize instead."); }
+});
 
 /* returns the para at y */
 Label.prototype.paraAtY = function(y) {
@@ -3512,10 +3401,26 @@ Label.prototype.listen = function() {
 }
 	
 /* resizes the note */
+/* resizes the note 
+ * returns true if something changed */
 Label.prototype.resize = function(width, height) {
-	debug("todo xxx");
+	var dtree = this.dtree;
+	var fs = Math.max(dtree.fontsize * height / this.height, 8);
+	if (dtree._fontsize == fs) return false;
+	dtree.fontsize = fs;
+	this._canvasActual = false;
+	return true;
 }
-	
+
+/* draws the items handles */
+Label.prototype.drawHandles = function(canvas, pox, poy, rhs) {
+	this._drawHandles(canvas, pox, poy, 85);
+}
+
+Label.prototype.checkItemCompass = function(x, y, rhs) { 
+	return this._checkItemCompass(x, y, 85);
+}
+
 /* gets the canvas buffer for this item */
 Label.prototype.getCanvas = function(select) {
 	var bcanvas = this.bcanvas;
@@ -3531,8 +3436,8 @@ Label.prototype.getCanvas = function(select) {
 
 	/* calculates if a scrollbar is needed */
 	dtree.flowWidth = -1;
-	var height = this.height = bcanvas.height = dtree.height;
-	var width  = this.width  = bcanvas.width  = dtree.width;
+	var height = bcanvas.height = this.height;
+	var width  = bcanvas.width  = this.width;
 	
 	/* draws the selection */
 	//if (select.active && select.mark1.item == this) {
@@ -3790,6 +3695,147 @@ VectorGraph.prototype.getCanvas = function() {
 VectorGraph.prototype.focus = function(editor) {
 	return;
 }*/
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ .-,--.                   .
+  `|__/ ,-. ,-. ,-. ,-. . |- ,-. ,-. . .
+  )| \  |-' | | | | `-. | |  | | |   | |
+  `'  ` `-' |-' `-' `-' ' `' `-' '   `-|
+~ ~ ~ ~ ~ ~ | ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ /|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~                                  
+            '                        `-'
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+function Repository() {
+	this._lock = false;
+}
+
+Repository.prototype.loadup = function() {
+	window.localStorage.clear(); /* XXXX */
+	var idfdat = window.localStorage.getItem("idfactory");
+	if (idfdat) {
+		try {
+			this.itemIDFactory = JSON.parse(idfdat);
+		} catch(err) {
+			this.itemIDFactory = null;
+			throw new Error("JSON error reading idfactory", err.name, err.message);
+		}
+	}
+	if (!this.itemIDFactory) {
+		console.log("no idfactory, restarting repository");
+		this.itemIDFactory = {};
+		return;
+	}
+	
+	var itldat = window.localStorage.getItem("itemlist");
+	if (!itldat) {
+		return;
+	}
+	try {
+		var itl = JSON.parse(itldat);
+	} catch(err) {
+		throw new ("JSON error reading itemlist", err.name, err.message);
+	}
+	
+	var itllen = itl.length;
+	for (var i = 0; i < itllen; i++) {
+		this._loadItem(itl[i]);
+	}
+}
+
+Repository.prototype.doExport = function(type) {
+	var js = {}
+	js.formatversion = 0;
+	var il = System.space.items;
+	var illen = il.length;
+	var jil = js.items = [];
+	for(var i = 0; i < illen; i++) {
+		jil.push(il[i].jsonfy());
+	}
+	return JSON.stringify(js);
+}
+
+Repository.prototype._newItemID = function(type) {
+	var idf = this.itemIDFactory;
+	if (typeof(idf.type) == "undefined") {
+		idf.type = 1;
+	}
+	idf.type++;
+	window.localStorage.setItem("idfactory", JSON.stringify(this.itemIDFactory));
+	return idf.type;
+}
+
+Repository.prototype._loadItem = function(tid) {
+	this._lock = true;
+	var tiddat = window.localStorage.getItem(tid);
+	var it;
+	try {
+		it = JSON.parse(tiddat);
+	} catch (err) {
+		this._lock = false;
+		throw new Error("JSON error: reading item " + tid, err.name, err.message);
+	} 
+	
+	if (!it || !it.x || !it.y) {
+		this._lock = false;
+		throw new Error("JSON error: attributes missing from " + tid);
+	}
+	var note;
+	try {
+		note = new Note(it);
+	} catch (err) {
+		this._lock = false;
+		throw new Error("JSON error: ", err.name, err.message);
+	}
+	note.tid = tid;
+	if (!note.dtree.first) {
+		note.dtree.append(new Paragraph(""));
+	}
+	System.space.addItem(note, false, it.x, it.y);
+	this._lock = false;
+}
+
+Repository.prototype._saveItemlist = function() {
+	if (this._lock) return;
+	var dat = ["["];
+	var il = System.space.items; 
+	var illen = il.length;
+	
+	for(var i = 0; i < illen; i++) {
+		if (i > 0) dat.push(',"'); else dat.push('"');
+		dat.push(il[i].tid);
+		dat.push('"');
+	}
+	dat.push("]");
+	dat = dat.join('');
+	window.localStorage.setItem("itemlist", dat);
+}
+
+Repository.prototype.updateItemlist = function() {
+	this._saveItemlist();
+}
+
+Repository.prototype.removeItem = function(item) {
+	if (this._lock) return;
+	window.localStorage.setItem(item.tid, "");
+	this._saveItemlist();
+}
+
+Repository.prototype._saveItem = function(item) {
+	if (this._lock) return;
+	var js = item.jsonfy();
+	window.localStorage.setItem(item.tid, JSON.stringify(js));
+}
+
+Repository.prototype.updateItem = function(item) {
+	if (this._lock) return;
+	this._saveItem(item);
+}
+
+Repository.prototype.addItem = function(item) {
+	if (this._lock) return;
+	item.tid  = item.type + "-" + this._newItemID(item.type);
+	this._saveItem(item);
+	this._saveItemlist();
+}
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,.   ,   ,.       .
