@@ -2732,11 +2732,12 @@ function DTree(js, fontsize) {
 	
 	/* json import */
 	if (js) {
-		var jslen = js.length;
-		for(var i = 0; i < jslen; i++) {
-			this.append(new Paragraph(js[i]));
+		var d = js.d;
+		var dlen = d.length;
+		for(var i = 0; i < dlen; i++) {
+			this.append(new Paragraph(d[i]));
 		}
-		this._fontsize = js.fontsize || 13;
+		this._fontsize = js.fs || 13;
 	} else {
 		this._fontsize = fontsize || 13;
 	}
@@ -2751,10 +2752,11 @@ Object.defineProperty(DTree.prototype, "font", {
 
 /* turns the document tree into an object for JSON stringify */
 DTree.prototype.jsonfy = function() {
-	var js = [];
+	var js = {fs : this._fontsize, d: []};
+	var d = js.d;
 	for (var n = this.first; n; n = n.next) {
-		js.push(n.first.text);
-	}	
+		d.push(n.first.text);
+	}
 	return js;
 }
 		
@@ -3062,11 +3064,12 @@ function Note(a1, a2) {
 /* turns the note into a string */
 Note.prototype.jsonfy = function() {
 	var js = {
-		x: this.x,
-		y: this.y,
-		w: this.width,
-		h: this.height,
-		d: this.dtree.jsonfy(),
+	     t : "note",
+ 		 x : this.x,
+		 y : this.y,
+		 w : this.width,
+		 h : this.height,
+		 d : this.dtree.jsonfy(),
 	}
 	return js;
 }
@@ -3369,6 +3372,7 @@ function Label(a1, a2) {
 /* turns the label into a string */
 Label.prototype.jsonfy = function() {
 	var js = {
+	    t: "label",
 		x: this.x,
 		y: this.y,
 		d: this.dtree.jsonfy(),
@@ -3709,28 +3713,28 @@ function Repository() {
 }
 
 Repository.prototype.loadup = function() {
-	window.localStorage.clear(); /* XXXX */
-	var idfdat = window.localStorage.getItem("idfactory");
-	if (idfdat) {
+	var idfjs = window.localStorage.getItem("idf");
+	if (idfjs) {
 		try {
-			this.itemIDFactory = JSON.parse(idfdat);
+			this.IDFactory = JSON.parse(idfjs);
 		} catch(err) {
-			this.itemIDFactory = null;
-			throw new Error("JSON error reading idfactory", err.name, err.message);
+			this.IDFactory = null;
+			console.log("JSON error reading idfactory", err.name, err.message);
 		}
 	}
-	if (!this.itemIDFactory) {
-		console.log("no idfactory, restarting repository");
-		this.itemIDFactory = {};
+	if (!this.IDFactory) {
+		console.log("no repository found.");
+		this.IDFactory = {nid: 1};
 		return;
 	}
 	
-	var itldat = window.localStorage.getItem("itemlist");
-	if (!itldat) {
+	var itljs = window.localStorage.getItem("itemlist");
+	debug("itljs", itljs);
+	if (!itljs) {
 		return;
 	}
 	try {
-		var itl = JSON.parse(itldat);
+		var itl = JSON.parse(itljs);
 	} catch(err) {
 		throw new ("JSON error reading itemlist", err.name, err.message);
 	}
@@ -3753,60 +3757,75 @@ Repository.prototype.doExport = function(type) {
 	return JSON.stringify(js);
 }
 
-Repository.prototype._newItemID = function(type) {
-	var idf = this.itemIDFactory;
-	if (typeof(idf.type) == "undefined") {
-		idf.type = 1;
-	}
-	idf.type++;
-	window.localStorage.setItem("idfactory", JSON.stringify(this.itemIDFactory));
-	return idf.type;
+Repository.prototype._newItemID = function() {
+	var idf = this.IDFactory;
+	idf.nid++;
+	window.localStorage.setItem("idf", JSON.stringify(idf));
+	return idf.nid;
 }
 
-Repository.prototype._loadItem = function(tid) {
+Repository.prototype._loadItem = function(id) {
 	this._lock = true;
-	var tiddat = window.localStorage.getItem(tid);
-	var it;
+	var itstr = window.localStorage.getItem(id);
+	var itjs;
 	try {
-		it = JSON.parse(tiddat);
+		itjs = JSON.parse(itstr);
 	} catch (err) {
 		this._lock = false;
-		throw new Error("JSON error: reading item " + tid, err.name, err.message);
+		throw err;
 	} 
 	
-	if (!it || !it.x || !it.y) {
+	if (!itjs || !itjs.x || !itjs.y || !itjs.t) {
 		this._lock = false;
-		throw new Error("JSON error: attributes missing from " + tid);
+		throw new Error("JSON error: attributes missing from " + id);
 	}
-	var note;
-	try {
-		note = new Note(it);
-	} catch (err) {
+
+	switch(itjs.t) {
+	case "note":
+	{
+		var note;
+		try {
+			note = new Note(itjs);
+		} catch (err) {
+			this._lock = false;
+			throw err;
+		}
+		note.id = id;
+		if (!note.dtree.first) {
+			note.dtree.append(new Paragraph(""));
+		}
+		System.space.addItem(note, false, itjs.x, itjs.y);
 		this._lock = false;
-		throw new Error("JSON error: ", err.name, err.message);
+		return;
 	}
-	note.tid = tid;
-	if (!note.dtree.first) {
-		note.dtree.append(new Paragraph(""));
+	case "label":
+		var label;
+		try {
+			label = new Label(itjs);
+		} catch (err) {
+			this._lock = false;
+			throw err;
+		}
+		label.id = id;
+		if (!label.dtree.first) {
+			label.dtree.append(new Paragraph(""));
+		}
+		System.space.addItem(label, false, itjs.x, itjs.y);
+		this._lock = false;
+		return;
 	}
-	System.space.addItem(note, false, it.x, it.y);
-	this._lock = false;
 }
 
 Repository.prototype._saveItemlist = function() {
 	if (this._lock) return;
-	var dat = ["["];
+	var js = [];
 	var il = System.space.items; 
 	var illen = il.length;
 	
-	for(var i = 0; i < illen; i++) {
-		if (i > 0) dat.push(',"'); else dat.push('"');
-		dat.push(il[i].tid);
-		dat.push('"');
+	for(var i = 0; i < illen; i++) {		
+		js.push(il[i].id);
 	}
-	dat.push("]");
-	dat = dat.join('');
-	window.localStorage.setItem("itemlist", dat);
+	window.localStorage.setItem("itemlist", JSON.stringify(js));
 }
 
 Repository.prototype.updateItemlist = function() {
@@ -3815,14 +3834,13 @@ Repository.prototype.updateItemlist = function() {
 
 Repository.prototype.removeItem = function(item) {
 	if (this._lock) return;
-	window.localStorage.setItem(item.tid, "");
+	window.localStorage.setItem(item.id, "");
 	this._saveItemlist();
 }
 
 Repository.prototype._saveItem = function(item) {
 	if (this._lock) return;
-	var js = item.jsonfy();
-	window.localStorage.setItem(item.tid, JSON.stringify(js));
+	window.localStorage.setItem(item.id, JSON.stringify(item.jsonfy()));
 }
 
 Repository.prototype.updateItem = function(item) {
@@ -3832,7 +3850,7 @@ Repository.prototype.updateItem = function(item) {
 
 Repository.prototype.addItem = function(item) {
 	if (this._lock) return;
-	item.tid  = item.type + "-" + this._newItemID(item.type);
+	item.id  = this._newItemID(item.type);
 	this._saveItem(item);
 	this._saveItemlist();
 }
