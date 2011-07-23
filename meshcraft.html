@@ -1745,7 +1745,7 @@ Edgemenu.prototype._getMousepos = function(x, y) {
 	if ((x - (xr - bw - ew) >= -(y - ty) * Hex.t6)) {
 		return this.mousepos = 2;
 	}
-	return this.mousepos = -1;
+	return this.mousepos = 0;
 }
 
 Edgemenu.prototype.mousehover = function (x, y) {	
@@ -1780,8 +1780,8 @@ function Space() {
 	};
 			
 	/* panning offset */
-	this.pox = 0;
-	this.poy = 0;
+	this.pox = parseInt(window.localStorage.getItem("pox")) || 0;
+	this.poy = parseInt(window.localStorage.getItem("poy")) || 0;
 	this.zoom = 1;
 }
 
@@ -2085,6 +2085,8 @@ Space.prototype.dragmove = function(x, y) {
 	case enums.ACT_PAN :
 		this.pox += x - iaction.sx;
 		this.poy += y - iaction.sy;
+		window.localStorage.setItem("pox", this.pox);
+		window.localStorage.setItem("poy", this.poy);		
 		this.redraw();
 		return;
 	case enums.ACT_IDRAG :
@@ -2179,6 +2181,196 @@ Space.prototype.dragmove = function(x, y) {
 	}
 }
 
+/* shows the export dialog */
+Space.prototype._exportDialog = function() {
+	var div = document.createElement("div");
+	div.style.position = "absolute";
+	div.style.width    = "100%";
+	div.style.height   = "100%";
+	div.style.top      = 0;
+	div.style.left     = 0;
+	div.style.zIndex   = 10;
+	div.style.background = "rgba(248, 237, 105, 0.9)";
+	div.style.overflow   = "auto";
+	document.body.appendChild(div);
+	var label = document.createElement("div");
+	label.style.width = "100%";
+	label.style.textAlign = "center";
+	label.style.marginTop = "20px";
+	label.style.fontWeight = "bold";
+	label.appendChild(document.createTextNode("Copy/paste this to a text file (e.g.notepad) and save it there."));
+	div.appendChild(label);
+	var label2 = document.createElement("div");
+	label2.style.width = "100%";
+	label2.style.textAlign = "center";
+	label2.appendChild(document.createTextNode("Sorry for this, current browsers do not yet allow file creation for offline repositories."));
+	div.appendChild(label2);
+	var ta = document.createElement("textarea");
+	ta.style.width =  "90%";
+	ta.style.height = (div.offsetHeight - label.offsetHeight - 150) + "px";
+	ta.style.display = "block";
+	ta.style.marginLeft = "auto";
+	ta.style.marginRight = "auto";
+	ta.style.marginTop = "20px";
+	ta.value = System.repository.doExport("xml");
+	ta.readOnly = true;
+
+	div.appendChild(ta);
+	div.appendChild(document.createElement("br"));
+	var button = document.createElement("button");
+	button.appendChild(document.createTextNode("Dismiss"));
+	button.style.width  = "100px";			
+	button.style.height = "30px";
+	button.style.display = "block";
+	button.style.marginLeft = "auto";
+	button.style.marginRight = "auto";
+	button.onclick = function() {
+		document.body.removeChild(div);
+	}
+	div.appendChild(button);
+}
+
+/* shows the export dialog */
+Space.prototype._importDialog = function() {
+	var div = document.createElement("div");
+	div.style.position = "absolute";
+	div.style.width    = "100%";
+	div.style.height   = "100%";
+	div.style.top      = 0;
+	div.style.left     = 0;
+	div.style.zIndex   = 10;
+	div.style.background = "rgba(248, 237, 105, 0.9)";
+	div.style.overflow   = "auto";
+	document.body.appendChild(div);
+	var label = document.createElement("div");
+	label.style.width = "100%";
+	label.style.textAlign = "center";
+	label.style.marginTop = "20px";
+	label.style.fontWeight = "bold";
+	label.appendChild(document.createTextNode("Warning. Current Repository will be erased!"));
+	var label2 = document.createElement("div");
+	label2.style.width = "100%";
+	label2.style.textAlign = "center";
+	label2.appendChild(document.createTextNode("Paste the repository save in the textbox and press 'Import'."));
+	div.appendChild(label);
+	div.appendChild(label2);
+	var ta = document.createElement("textarea");
+	ta.style.width =  "90%";
+	ta.style.height = (div.offsetHeight - label.offsetHeight - 150) + "px";
+	ta.style.display = "block";
+	ta.style.marginLeft = "auto";
+	ta.style.marginRight = "auto";
+	ta.style.marginTop = "20px";
+	div.appendChild(ta);
+	div.appendChild(document.createElement("br"));
+	
+	var bd = document.createElement("div");
+	bd.style.display = "block";
+	bd.style.width = "100%";
+	div.appendChild(bd);
+	var bdl = document.createElement("div");
+	bdl.style.width = "50%";
+	bdl.style.cssFloat = "left";
+	bd.appendChild(bdl);
+	var bdr = document.createElement("div");
+	bdr.style.width = "50%";
+	bdr.style.cssFloat = "left";
+	bd.appendChild(bdr);
+	
+	var okb = document.createElement("button");
+	okb.appendChild(document.createTextNode("Import"));
+	okb.style.width  = "100px";			
+	okb.style.height = "30px";
+	okb.style.marginRight = "20px";
+	okb.style.cssFloat  = "right";
+	var space = this;
+	okb.onclick = function() {
+		System.repository.doImport(ta.value);
+		document.body.removeChild(div);
+		space.redraw();
+	}
+	bdl.appendChild(okb);
+
+	var okc = document.createElement("button");
+	okc.appendChild(document.createTextNode("Cancel"));
+	okc.style.width  = "100px";			
+	okc.style.height = "30px";
+	okc.style.marginLeft = "20px";
+	okc.style.cssFloat  = "left";
+	okc.onclick = function() {
+		document.body.removeChild(div);
+	}
+	bdr.appendChild(okc);
+}
+
+/* shows the export dialog */
+Space.prototype._revertDialog = function() {
+	var div = document.createElement("div");
+	div.style.position = "absolute";
+	div.style.width    = "100%";
+	div.style.height   = "100%";
+	div.style.top      = 0;
+	div.style.left     = 0;
+	div.style.zIndex   = 10;
+	div.style.background = "rgba(248, 237, 105, 0.9)";
+	div.style.overflow   = "auto";
+	document.body.appendChild(div);
+	var label = document.createElement("div");
+	label.style.width = "100%";
+	label.style.textAlign = "center";
+	label.style.marginTop = "20px";
+	label.style.fontWeight = "bold";
+	label.appendChild(document.createTextNode("Warning. Current Repository will be erased!"));
+	var label2 = document.createElement("div");
+	label2.style.width = "100%";
+	label2.style.textAlign = "center";
+	label2.appendChild(document.createTextNode("Revert to default demo state?"));
+	div.appendChild(label);
+	div.appendChild(label2);
+	div.appendChild(document.createElement("br"));
+	div.appendChild(document.createElement("br"));
+	div.appendChild(document.createElement("br"));
+	div.appendChild(document.createElement("br"));
+	var bd = document.createElement("div");
+	bd.style.display = "block";
+	bd.style.width = "100%";
+	div.appendChild(bd);
+	var bdl = document.createElement("div");
+	bdl.style.width = "50%";
+	bdl.style.cssFloat = "left";
+	bd.appendChild(bdl);
+	var bdr = document.createElement("div");
+	bdr.style.width = "50%";
+	bdr.style.cssFloat = "left";
+	bd.appendChild(bdr);
+	
+	var okb = document.createElement("button");
+	okb.appendChild(document.createTextNode("Revert"));
+	okb.style.width  = "100px";			
+	okb.style.height = "30px";
+	okb.style.marginRight = "20px";
+	okb.style.cssFloat  = "right";
+	var space = this;
+	okb.onclick = function() {
+		System.repository.doImport(demoRepository);
+		document.body.removeChild(div);
+		space.redraw();
+	}
+	bdl.appendChild(okb);
+
+	var okc = document.createElement("button");
+	okc.appendChild(document.createTextNode("Cancel"));
+	okc.style.width  = "100px";			
+	okc.style.height = "30px";
+	okc.style.marginLeft = "20px";
+	okc.style.cssFloat  = "left";
+	okc.onclick = function() {
+		document.body.removeChild(div);
+	}
+	bdr.appendChild(okc);
+}
+
+
 /* mouse down event */
 Space.prototype.mousedown = function(x, y) {
 	var px = x - this.pox;
@@ -2193,55 +2385,14 @@ Space.prototype.mousedown = function(x, y) {
 		iaction.act = enums.ACT_NONE;
 		redraw = true;
 		switch(md) {
+		case 0:
+			this._revertDialog();
+			break;
 		case 1:
-			var div = document.createElement("div");
-			div.style.position = "absolute";
-			div.style.width    = "100%";
-			div.style.height   = "100%";
-			div.style.top      = 0;
-			div.style.left     = 0;
-			div.style.zIndex   = 10;
-			div.style.background = "rgba(248, 237, 105, 0.9)";
-			div.style.overflow   = "auto";
-			document.body.appendChild(div);
-			var label = document.createElement("div");
-			label.style.width = "100%";
-			label.style.textAlign = "center";
-			label.style.marginTop = "20px";
-			label.style.fontWeight = "bold";
-			label.appendChild(document.createTextNode("Copy/paste this to a text file (e.g.notepad) and save it there."));
-			div.appendChild(label);
-			var label2 = document.createElement("div");
-			label2.style.width = "100%";
-			label2.style.textAlign = "center";
-			label2.appendChild(document.createTextNode("Sorry for this, current browsers do not yet allow file creation for offline repositories."));
-			div.appendChild(label2);
-			var ta = document.createElement("textarea");
-			ta.style.width =  "90%";
-			ta.style.height = (div.offsetHeight - label.offsetHeight - 150) + "px";
-			ta.style.display = "block";
-			ta.style.marginLeft = "auto";
-			ta.style.marginRight = "auto";
-			ta.style.marginTop = "20px";
-			ta.value = System.repository.doExport("xml");
-			
-			div.appendChild(ta);
-			div.appendChild(document.createElement("br"));
-			var button = document.createElement("button");
-			button.appendChild(document.createTextNode("Dismiss"));
-			button.data = "Dismiss";
-			button.style.width  = "100px";			
-			button.style.height = "30px";
-			button.style.display = "block";
-			button.style.marginLeft = "auto";
-			button.style.marginRight = "auto";
-			button.onclick = function() {
-				document.body.removeChild(div);
-			}
-			div.appendChild(button);
+			this._exportDialog();
 			break;
 		case 2:
-			debug("Import");
+			this._importDialog();
 			break;
 		}
 		if (redraw) this.redraw();
@@ -2332,7 +2483,7 @@ Space.prototype.mousewheel = function(wheel) {
 	if (Math.abs(this.zoom - 1) < 0.0001) {
 		this.zoom = 1;
 	}
-	debug(this.zoom);
+//	debug(this.zoom);
 }
 
 
@@ -3716,67 +3867,101 @@ Repository.prototype.loadup = function() {
 	var idfjs = window.localStorage.getItem("idf");
 	if (idfjs) {
 		try {
-			this.IDFactory = JSON.parse(idfjs);
+			this._idFactory = JSON.parse(idfjs);
 		} catch(err) {
-			this.IDFactory = null;
+			this._idFactory = null;
 			console.log("JSON error reading idfactory", err.name, err.message);
 		}
 	}
-	if (!this.IDFactory) {
+	if (!this._idFactory) {
 		console.log("no repository found.");
-		this.IDFactory = {nid: 1};
+		this._idFactory = {nid: 1};
 		return;
 	}
 	
 	var itljs = window.localStorage.getItem("itemlist");
-	debug("itljs", itljs);
-	if (!itljs) {
-		return;
-	}
-	try {
-		var itl = JSON.parse(itljs);
-	} catch(err) {
-		throw new ("JSON error reading itemlist", err.name, err.message);
-	}
+	if (!itljs) return;
+	var itl = JSON.parse(itljs);
 	
 	var itllen = itl.length;
+	this._lock = true;
 	for (var i = 0; i < itllen; i++) {
-		this._loadItem(itl[i]);
+		var itstr = window.localStorage.getItem(itl[i]);
+		var itjs;
+		try {
+			itjs = JSON.parse(itstr);
+		} catch (err) {
+			this._lock = false;
+			throw err;
+		} 
+		this._loadItem(itl[i], itjs);
 	}
+	this._lock = false;
 }
 
-Repository.prototype.doExport = function(type) {
+Repository.prototype.doExport = function() {
 	var js = {}
 	js.formatversion = 0;
+	js.idf = this._idFactory;
 	var il = System.space.items;
 	var illen = il.length;
-	var jil = js.items = [];
+	
+	var jitems = js.items = {};
+	var z = js.z = [];
 	for(var i = 0; i < illen; i++) {
-		jil.push(il[i].jsonfy());
+		var it = il[i];
+		z.push(it.id);
+		jitems[it.id] = it.jsonfy();
 	}
-	return JSON.stringify(js);
+	js.pox = System.space.pox;
+	js.poy = System.space.poy;
+	return JSON.stringify(js, null, 1);
 }
 
+Repository.prototype.doImport = function(str) {
+	try {
+		var js = JSON.parse(str);
+	} catch (err) {
+		window.alert("Repository save not valid JSON.");
+		return;
+	}
+	if (js.formatversion != 0 || !js.idf || !js.items || !js.z) {
+		window.alert("Repository not recognized.");	
+		return;
+	}
+	this._lock = true;
+	/* erase current repository */
+	var il = System.space.items;
+	var illen = il.length;
+	for(var i = 0; i < illen; i++) {
+		window.localStorage.setItem(il[i].id, "");
+	}
+	window.localStorage.setItem("itemlist", JSON.stringify(js));
+	System.space.items = [];
+	this._idFactory = js.idf;	
+	var zlen = js.z.length;
+	for (var i = 0; i < zlen; i++) {
+		var id = js.z[i];
+		var item = this._loadItem(id, js.items[id]);
+		this._saveItem(item);
+	}
+	this._saveItemlist();
+	System.editor.blur();
+	System.space.pox = js.pox || 0;
+	System.space.poy = js.poy || 0;
+	this._lock = false;
+}
+
+
 Repository.prototype._newItemID = function() {
-	var idf = this.IDFactory;
+	var idf = this._idFactory;
 	idf.nid++;
 	window.localStorage.setItem("idf", JSON.stringify(idf));
 	return idf.nid;
 }
 
-Repository.prototype._loadItem = function(id) {
-	this._lock = true;
-	var itstr = window.localStorage.getItem(id);
-	var itjs;
-	try {
-		itjs = JSON.parse(itstr);
-	} catch (err) {
-		this._lock = false;
-		throw err;
-	} 
-	
+Repository.prototype._loadItem = function(id, itjs) {
 	if (!itjs || !itjs.x || !itjs.y || !itjs.t) {
-		this._lock = false;
 		throw new Error("JSON error: attributes missing from " + id);
 	}
 
@@ -3784,40 +3969,29 @@ Repository.prototype._loadItem = function(id) {
 	case "note":
 	{
 		var note;
-		try {
-			note = new Note(itjs);
-		} catch (err) {
-			this._lock = false;
-			throw err;
-		}
+		note = new Note(itjs);
 		note.id = id;
 		if (!note.dtree.first) {
 			note.dtree.append(new Paragraph(""));
 		}
 		System.space.addItem(note, false, itjs.x, itjs.y);
-		this._lock = false;
-		return;
+		return note;
 	}
 	case "label":
 		var label;
-		try {
-			label = new Label(itjs);
-		} catch (err) {
-			this._lock = false;
-			throw err;
-		}
+		label = new Label(itjs);
 		label.id = id;
 		if (!label.dtree.first) {
 			label.dtree.append(new Paragraph(""));
 		}
 		System.space.addItem(label, false, itjs.x, itjs.y);
-		this._lock = false;
-		return;
+		return label;
+	default :
+		throw new Error("unknown item type");
 	}
 }
 
 Repository.prototype._saveItemlist = function() {
-	if (this._lock) return;
 	var js = [];
 	var il = System.space.items; 
 	var illen = il.length;
@@ -3829,6 +4003,7 @@ Repository.prototype._saveItemlist = function() {
 }
 
 Repository.prototype.updateItemlist = function() {
+	if (this._lock) return;
 	this._saveItemlist();
 }
 
@@ -3839,7 +4014,6 @@ Repository.prototype.removeItem = function(item) {
 }
 
 Repository.prototype._saveItem = function(item) {
-	if (this._lock) return;
 	window.localStorage.setItem(item.id, JSON.stringify(item.jsonfy()));
 }
 
@@ -3862,10 +4036,156 @@ Repository.prototype.addItem = function(item) {
   `'  `'   ' ' ' `-^ `-' ' '
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 window.onload = function() {
+	//window.localStorage.clear();
 	System.init();
 }
 
-//]]></script>
+//]]>
+var demoRepository = (<r><![CDATA[
+{
+ "formatversion": 0,
+ "idf": {
+  "nid": 19
+ },
+ "items": {
+  "9": {
+   "t": "note",
+   "x": 703,
+   "y": 50,
+   "w": 211,
+   "h": 40,
+   "d": {
+    "fs": 13,
+    "d": [
+     "Drag the background to pan"
+    ]
+   }
+  },
+  "13": {
+   "t": "note",
+   "x": 926,
+   "y": 49,
+   "w": 214,
+   "h": 42,
+   "d": {
+    "fs": 13,
+    "d": [
+     "Drag an item to drag it."
+    ]
+   }
+  },
+  "11": {
+   "t": "note",
+   "x": 702,
+   "y": -12,
+   "w": 213,
+   "h": 49,
+   "d": {
+    "fs": 13,
+    "d": [
+     "Click the background to create a new item"
+    ]
+   }
+  },
+  "12": {
+   "t": "note",
+   "x": 926,
+   "y": -13,
+   "w": 214,
+   "h": 50,
+   "d": {
+    "fs": 13,
+    "d": [
+     "Click an item to edit it."
+    ]
+   }
+  },
+  "3": {
+   "t": "note",
+   "x": 976,
+   "y": 313,
+   "w": 180,
+   "h": 188,
+   "d": {
+    "fs": 13,
+    "d": [
+     "This is a note.",
+     "",
+     "",
+     "",
+     "",
+     "it can scroll",
+     ". . . ",
+     "",
+     "",
+     "",
+     "like this."
+    ]
+   }
+  },
+  "8": {
+   "t": "note",
+   "x": 135,
+   "y": 193,
+   "w": 155,
+   "h": 40,
+   "d": {
+    "fs": 13,
+    "d": [
+     "item network editor"
+    ]
+   }
+  },
+  "2": {
+   "t": "label",
+   "x": -64,
+   "y": -40,
+   "d": {
+    "fs": 91.89061749392019,
+    "d": [
+     "Meshcraft"
+    ]
+   }
+  },
+  "10": {
+   "t": "label",
+   "x": 82,
+   "y": 123,
+   "d": {
+    "fs": 20,
+    "d": [
+     "is an"
+    ]
+   }
+  },
+  "6": {
+   "t": "label",
+   "x": 977,
+   "y": 273,
+   "d": {
+    "fs": 24.808421121785162,
+    "d": [
+     "This is a label"
+    ]
+   }
+  }
+ },
+ "z": [
+  9,
+  13,
+  11,
+  12,
+  "3",
+  8,
+  "2",
+  10,
+  6
+ ],
+ "pox": 86,
+ "poy": 53
+}
+]]></r>).toString();
+</script>
 </head>
 <body style="margin: 0; overflow: hidden;">
 <textarea id="input" style="position: absolute; top:-200px;"></textarea>
