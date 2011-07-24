@@ -186,18 +186,19 @@ function debug() {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 var enums = {
 	/* Mouse state */
-	MST_NONE   : 0, /* button is up */
-	MST_ATWEEN : 1, /* just came down, unsure if click or drag */
-	MST_DRAG   : 2, /* mouse is dragging */
+	MST_NONE   : 0, // button is up 
+	MST_ATWEEN : 1, // mouse just came down, unsure if click or drag 
+	MST_DRAG   : 2, // mouse is dragging 
 
 	/* interface action active */
-	ACT_NONE    : 0,
-	ACT_PAN     : 1,
-	ACT_IDRAG   : 2,
-	ACT_IRESIZE : 3,
-	ACT_SCROLLY : 4,
-	ACT_FMENU   : 5,
-	ACT_IMENU   : 6,	
+	ACT_NONE    : 0,  // idle 
+	ACT_PAN     : 1,  // panning the background
+	ACT_IDRAG   : 2,  // draggine one item
+	ACT_IRESIZE : 3,  // resizing one item
+	ACT_SCROLLY : 4,  // scrolling a note
+	ACT_FMENU   : 5,  // clicked the float menu (background click)
+	ACT_IMENU   : 6,  // clicked one item menu
+	ACT_RBIND   : 7,  // dragging a new relation
 };
 
 
@@ -1671,6 +1672,8 @@ Edgemenu.prototype.draw = function(x, y) {
 	var ew = Math.round(h * Hex.t6);
 	var xl = x - w - ew;
 	var xr = x + w + ew;
+	
+	cx.beginPath();
 	cx.moveTo(xl, y);
 	cx.lineTo(x - w, y - h);
 	cx.lineTo(x + w, y - h);
@@ -1809,6 +1812,56 @@ Space.prototype.redraw = function() {
 	case enums.ACT_IMENU :
 		this._itemmenu.draw();
 		break;
+	case enums.ACT_RBIND :
+	{
+		var ia = this._iaction;
+		cx.beginPath();
+		var it = ia.item;
+		var x = ia.smx + this.pox + 0.5;
+		var y = ia.smy + this.poy + 0.5;
+		var ix = it.x + this.pox + 0.5;
+		var iy = it.y + this.poy + 0.5;
+		/* find quadrant */
+		var iw = it.width;
+		var ih = it.height;
+		var im = 0;
+		var x1, y1;
+		if (x < ix) { x1 = ix; }
+		else if (x < ix + iw) { x1 = x; im++; }
+		else { x1 = ix + iw; }
+		
+		if (y < iy) { y1 = iy; }
+		else if (y < iy + ih) { y1 = y; im++; } 
+		else { y1 = iy + ih; }
+		
+		if (im == 2) {
+			/* in middle */
+			 x1 = ix + iw / 2;
+			 y1 = iy + ih / 2;
+		}
+		 
+		var as = 12;
+		var d = Math.atan2(y - y1, x - x1);
+		var ad = Math.PI/12;
+		var ms = 2 / Math.sqrt(3) * as;
+		cx.moveTo(x1, y1);
+
+		cx.lineTo(x - ms * Math.cos(d), y - ms * Math.sin(d));
+		cx.lineTo(x - as * Math.cos(d - ad), y - as * Math.sin(d - ad));
+		cx.lineTo(x, y);
+		cx.lineTo(x - as * Math.cos(d + ad), y - as * Math.sin(d + ad));
+		cx.lineTo(x - ms * Math.cos(d), y - ms * Math.sin(d));
+		
+		cx.lineWidth = 4;
+		cx.strokeStyle = "rgba(255, 255, 40, 0.5)";
+		cx.stroke();
+		cx.lineWidth = 1;
+		cx.strokeStyle = "rgba(80, 40, 20, 0.8)";
+		cx.stroke();
+		cx.fillStyle = "rgba(255, 255, 40, 0.5)";
+		cx.fill();
+		break;
+	}
 	}
 	this.edgemenu.draw();
 	editor.updateCaret();
@@ -1940,6 +1993,18 @@ Space.prototype.dragstart = function(x, y) {
 	var redraw = false;
 
 	var ito = this.itoAtXY(x, y);
+	if (ito != 0 && editor.item && editor.item.withinItemMenu(x, y)) {
+		var it = editor.item;
+		it.setItemMenu(this._itemmenu, this.pox, this.poy);
+		iaction.act = enums.ACT_RBIND;
+		iaction.item = it;
+		iaction.sx = x;
+		iaction.sy = y;
+		System.setCursor("not-allowed");
+		this.redraw();
+		return;
+	}
+
 	if (ito < 0) {
 		/* panning */
 		iaction.act = enums.ACT_PAN;
@@ -2043,6 +2108,7 @@ Space.prototype.dragstop = function(x, y) {
 	y -= this.poy;
 	var editor = System.editor;
 	var iaction = this._iaction;
+	var redraw = false;
 	switch (iaction.act) {
 	case enums.ACT_IDRAG :
 		iaction.item.x = x - iaction.sx;
@@ -2050,7 +2116,7 @@ Space.prototype.dragstop = function(x, y) {
 		System.repository.updateItem(iaction.item);
 		iaction.item = null;
 		System.setCursor("default");
-		this.redraw();
+		redraw = true;
 		break;
 	case enums.ACT_PAN :
 		break;
@@ -2065,12 +2131,19 @@ Space.prototype.dragstop = function(x, y) {
 	case enums.ACT_SCROLLY :
 		iaction.ssy  = null;
 		break;
+	case enums.ACT_RBIND :
+		redraw = true;
+		iaction.smx = null;
+		iaction.smy = null;
+		redraw = true;
+		break;
 	default :
 		throw new Error("Invalid action in 'Space.dragstop'");
 	}
 	iaction.act = enums.ACT_NONE;
 	iaction.sx   = null;
 	iaction.sy   = null;
+	if (redraw) this.redraw();
 	return;
 }
 
@@ -2176,8 +2249,14 @@ Space.prototype.dragmove = function(x, y) {
 		this.redraw();
 		return true;		
 	}
+	case enums.ACT_RBIND :
+		// todo xxx
+		iaction.smx = x;
+		iaction.smy = y;
+		this.redraw();
+		return true;			
 	default :
-		throw new Error("unknown action code in Space.dragging");
+		throw new Error("unknown action code in Space.dragging: "+iaction.act);
 	}
 }
 
@@ -3285,7 +3364,8 @@ function Note_bevel(cx, x, y, w, h, border, radius) {
 	var y1 = y + border;
 	var x2 = x + w - border;
 	var y2 = y + h - border;
-			
+	
+	cx.beginPath();
 	cx.moveTo(x1 + radius, y1);
 	cx.arc(x2 - radius, y1 + radius, radius, -Math.PI / 2, 0, false);
 	cx.arc(x2 - radius, y2 - radius, radius, 0, Math.PI / 2, false);
@@ -3479,15 +3559,14 @@ Note.prototype.getCanvas = function(select) {
 	}
 
 	/* draws the border */
-	cx.beginPath(); 
 	cx.lineWidth = settings.noteInnerBorderWidth;
 	cx.strokeStyle = settings.noteInnerBorderColor;
 	Note_bevel(cx, 0, 0, this.width, this.height, 1.5, settings.noteInnerRadius);
-	cx.stroke(); cx.beginPath(); cx.closePath();
+	cx.stroke(); cx.beginPath(); cx.closePath(); // todo
 	cx.lineWidth = settings.noteOuterBorderWidth;
 	cx.strokeStyle = settings.noteOuterBorderColor;
 	Note_bevel(cx, 0, 0, this.width, this.height, 0.5, settings.noteOuterRadius);
-	cx.stroke(); cx.beginPath(); cx.closePath();
+	cx.stroke(); cx.beginPath(); cx.closePath(); // todo
 	cx.restore();
 	this._canvasActual = true;
 	return bcanvas;	
