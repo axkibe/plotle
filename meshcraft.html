@@ -38,7 +38,6 @@ var enableCatcher = false;
 var debugNodes = true;
 
 var settings = {
-
 	defaultFont : "Verdana,Geneva,Kalimati,sans-serif",
 
 	/* milliseconds after mouse down, dragging starts */
@@ -54,6 +53,8 @@ var settings = {
 	noteMinHeight  : 40,
 	labelMinWidth  : 30,
 	labelMinHeight : 15,
+	relationMinWidth  : 30,
+	relationMinHeight : 15,
 	
 	/* note style */
 	noteTextBorder : 10,
@@ -972,6 +973,9 @@ _init : function() {
 	/* latest mouse position seen in atween state */
 	var mmx = null;
 	var mmy = null;
+	/* latest shift/ctrl key status in atween state */
+	var mms = null;
+	var mmc = null; 
 	/* timer for atween state */
 	var atweenTimer = null;
 
@@ -1119,7 +1123,7 @@ _init : function() {
 				clearTimeout(atweenTimer);
 				atweenTimer = null;
 				mst = enums.MST_DRAG;
-				this.space.dragstart(msx, msy);
+				this.space.dragstart(msx, msy, event.shiftKey, event.ctrlKey);
 				if (x != msx || y != msy) {
 					this.space.dragmove(x, y);
 				}
@@ -1128,6 +1132,8 @@ _init : function() {
 				/* saves position for possible atween timeout */
 				mmx = x;
 				mmy = y;
+				mms = event.shiftKey;
+				mmc = event.ctrlKey;
 			}
 			return true;
 		}
@@ -1151,6 +1157,8 @@ _init : function() {
 		case enums.MST_ATWEEN :
 			msx = mmx = x;
 			msy = mmy = y;
+			mmc = event.ctrlKey;
+			mms = event.shiftKey;
 			atweenTimer = setTimeout("System.onatweentime();", settings.dragtime);
 			break;
 		case enums.MST_DRAG :
@@ -1201,7 +1209,7 @@ _init : function() {
 		}
 		mst = enums.MST_DRAG;
 		atweenTimer = null;
-		this.space.dragstart(msx, msy);
+		this.space.dragstart(msx, msy, mss, msc);
 		if (mmx != msx || mmy != msy) {
 			this.space.dragmove(mmx, mmy);
 		}
@@ -1799,7 +1807,7 @@ Space.prototype.redraw = function() {
 
 	for(var i = items.length - 1; i >= 0; i--) {
 		var it = items[i];
-		cx.drawImage(it.getCanvas(editor.selection), it.x + this.pox, it.y + this.poy);
+		it.draw(canvas, editor.selection, this.pox, this.poy);
 	}
 	if (editor.item) {
 		editor.item.drawHandles(canvas, this.pox, this.poy);
@@ -1817,52 +1825,98 @@ Space.prototype.redraw = function() {
 		var ia = this._iaction;
 		cx.beginPath();
 		var it = ia.item;
-		var x = ia.smx + this.pox + 0.5;
-		var y = ia.smy + this.poy + 0.5;
-		var ix = it.x + this.pox + 0.5;
-		var iy = it.y + this.poy + 0.5;
-		/* find quadrant */
-		var iw = it.width;
-		var ih = it.height;
-		var im = 0;
-		var x1, y1;
-		if (x < ix) { x1 = ix; }
-		else if (x < ix + iw) { x1 = x; im++; }
-		else { x1 = ix + iw; }
+		var it2 = ia.item2;
+		var x1, y1, x2, y2;
 		
-		if (y < iy) { y1 = iy; }
-		else if (y < iy + ih) { y1 = y; im++; } 
-		else { y1 = iy + ih; }
+		var ix  = it.x + this.pox + 0.5;
+		var iy  = it.y + this.poy + 0.5;
+		var ixw = ix + it.width;
+		var iyh = iy + it.height;
 		
-		if (im == 2) {
-			/* in middle */
-			 x1 = ix + iw / 2;
-			 y1 = iy + ih / 2;
+		if (!it2) {
+			x2 = ia.smx + this.pox + 0.5;
+			y2 = ia.smy + this.poy + 0.5;
+			/* find quadrant */
+			var im = 0;
+			if (x2 < ix) { x1 = ix; }
+			else if (x2 < ixw) { x1 = x2; im++; }
+			else { x1 = ixw; }
+		
+			if (y2 < iy) { y1 = iy; }
+			else if (y2 < iyh) { y1 = y2; im++; } 
+			else { y1 = iyh; }
+		
+			if (im == 2) {
+				/* in middle */
+				x1 = (ix + ixw) / 2;
+				y1 = (iy + iyh) / 2;
+			}
+			System.setCursor("not-allowed");
+		} else {
+			var i2x  = it2.x + this.pox + 0.5;
+			var i2y  = it2.y + this.poy + 0.5;
+			var i2xw = i2x + it2.width;
+			var i2yh = i2y + it2.height;
+			
+			if (i2x > ixw) { 
+				/* 2 is clearly to the right */
+				x1 = ixw;
+				x2 = i2x;
+			} else if (i2xw < ix) {
+				/* 2 is clearly to the left */
+				x1 = ix;
+				x2 = i2xw;
+			} else {
+				/* an intersection */
+				x1 = x2 = ((ix > i2x ? ix : i2x) + (ixw < i2xw ? ixw : i2xw)) / 2;
+			}
+
+			if (i2y > iyh) { 
+				/* 2 is clearly to the right */
+				y1 = iyh;
+				y2 = i2y;
+			} else if (i2yh < iy) {
+				/* 2 is clearly to the left */
+				y1 = iy;
+				y2 = i2yh;
+			} else {
+				/* an intersection */
+				y1 = y2 = ((iy > i2y ? iy : i2y) + (iyh < i2yh ? iyh : i2yh)) / 2;
+			}
+			
+			//y1 = (iy  + iyh)  / 2;
+			//y2 = (i2y + i2yh) / 2;
+			
+			/* highlights the focused item */
+			cx.rect(i2x, i2y, it2.width, it2.height);
+			cx.lineWidth = 3;
+			cx.strokeStyle = "rgba(255, 183, 15, 0.5)";
+			cx.stroke();
+			cx.beginPath();
+			System.setCursor("default");
 		}
-		 
 		var as = 12;
-		var d = Math.atan2(y - y1, x - x1);
+		var d = Math.atan2(y2 - y1, x2 - x1);
 		var ad = Math.PI/12;
 		var ms = 2 / Math.sqrt(3) * as;
 		cx.moveTo(x1, y1);
 
-		cx.lineTo(x - ms * Math.cos(d), y - ms * Math.sin(d));
-		cx.lineTo(x - as * Math.cos(d - ad), y - as * Math.sin(d - ad));
-		cx.lineTo(x, y);
-		cx.lineTo(x - as * Math.cos(d + ad), y - as * Math.sin(d + ad));
-		cx.lineTo(x - ms * Math.cos(d), y - ms * Math.sin(d));
-		
-		cx.lineWidth = 4;
-		cx.strokeStyle = "rgba(255, 255, 40, 0.5)";
+		cx.lineTo(x2 - ms * Math.cos(d),      y2 - ms * Math.sin(d));
+		cx.lineTo(x2 - as * Math.cos(d - ad), y2 - as * Math.sin(d - ad));
+		cx.lineTo(x2,                         y2);
+		cx.lineTo(x2 - as * Math.cos(d + ad), y2 - as * Math.sin(d + ad));
+		cx.lineTo(x2 - ms * Math.cos(d),      y2 - ms * Math.sin(d));
+
+		cx.lineWidth = 3;
+		cx.strokeStyle = "rgba(255, 225, 80, 0.5)";
 		cx.stroke();
 		cx.lineWidth = 1;
 		cx.strokeStyle = "rgba(80, 40, 20, 0.8)";
 		cx.stroke();
-		cx.fillStyle = "rgba(255, 255, 40, 0.5)";
+		cx.fillStyle = "rgba(255, 225, 40, 0.5)";
 		cx.fill();
 		break;
-	}
-	}
+	}}
 	this.edgemenu.draw();
 	editor.updateCaret();
 }
@@ -1985,7 +2039,7 @@ Space.prototype.mousehover = function(x, y) {
 }
 
 /* starts an operation with the mouse held down */
-Space.prototype.dragstart = function(x, y) {
+Space.prototype.dragstart = function(x, y, shiftKey, ctrlKey) {
 	x -= this.pox;
 	y -= this.poy;
 	var editor  = System.editor;
@@ -1993,7 +2047,8 @@ Space.prototype.dragstart = function(x, y) {
 	var redraw = false;
 
 	var ito = this.itoAtXY(x, y);
-	if (ito != 0 && editor.item && editor.item.withinItemMenu(x, y)) {
+	if ((ito != 0 && editor.item && editor.item.withinItemMenu(x, y)) ||
+		(ito >= 0 && ctrlKey)) {
 		var it = editor.item;
 		it.setItemMenu(this._itemmenu, this.pox, this.poy);
 		iaction.act = enums.ACT_RBIND;
@@ -2250,7 +2305,8 @@ Space.prototype.dragmove = function(x, y) {
 		return true;		
 	}
 	case enums.ACT_RBIND :
-		// todo xxx
+		var ito = this.itoAtXY(x, y); 
+		iaction.item2 = ito > 0 ? this.items[ito] : null;
 		iaction.smx = x;
 		iaction.smy = y;
 		this.redraw();
@@ -3373,14 +3429,18 @@ function Note_bevel(cx, x, y, w, h, border, radius) {
 	cx.arc(x1 + radius, y1 + radius, radius, Math.PI, -Math.PI / 2, false);
 }
 	
-/* gets the canvas buffer for this item */
-Note.prototype.getCanvas = function(select) {
+/* draws the item           * 
+ * canvas  : draw on this   *
+ * select  : selection      *
+ * pox/poy : panning offset */
+Note.prototype.draw = function(canvas, select, pox, poy) {
 	var bcanvas = this.bcanvas;
 	var dtree = this.dtree;
 	var cx = bcanvas.getContext("2d");
 	if (this._canvasActual) {
 		/* buffer hit */
-		return bcanvas;
+		canvas.getContext("2d").drawImage(bcanvas, this.x + pox, this.y + poy);
+		return;
 	}
 
 	/* draws the background */
@@ -3569,7 +3629,7 @@ Note.prototype.getCanvas = function(select) {
 	cx.stroke(); cx.beginPath(); cx.closePath(); // todo
 	cx.restore();
 	this._canvasActual = true;
-	return bcanvas;	
+	canvas.getContext("2d").drawImage(bcanvas, this.x + pox, this.y + poy);
 }
 
 /* item gets focus */
@@ -3655,14 +3715,26 @@ Label.prototype.checkItemCompass = function(x, y, rhs) {
 	return this._checkItemCompass(x, y, 85);
 }
 
-/* gets the canvas buffer for this item */
-Label.prototype.getCanvas = function(select) {
+/* draws the item           * 
+ * canvas  : draw on this   *
+ * select  : selection      *
+ * pox/poy : panning offset */
+Label.prototype.draw = function(canvas, select, pox, poy) {
 	var bcanvas = this.bcanvas;
 	var dtree = this.dtree;
 	var cx = bcanvas.getContext("2d");
 	if (this._canvasActual) {
 		/* buffer hit */
-		return bcanvas;
+		canvas.getContext("2d").drawImage(bcanvas, this.x + pox, this.y + poy);
+		return;
+	}
+	var bcanvas = this.bcanvas;
+	var dtree = this.dtree;
+	var cx = bcanvas.getContext("2d");
+	if (this._canvasActual) {
+		/* buffer hit */
+		canvas.getContext("2d").drawImage(bcanvas, this.x + pox, this.y + poy);
+		return;
 	}
 
 	/* clear */
@@ -3751,16 +3823,104 @@ Label.prototype.getCanvas = function(select) {
 	cx.stroke(); cx.beginPath(); 
 	cx.restore();
 	this._canvasActual = true;
-	return bcanvas;	
+	canvas.getContext("2d").drawImage(bcanvas, this.x + pox, this.y + poy);
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ .-,--.     .      .
+  `|__/ ,-. |  ,-. |- . ,-. ,-.
+  )| \  |-' |  ,-| |  | | | | |
+  `'  ` `-' `' `-^ `' ' `-' ' '
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ Relates two items (or other relations)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+Relation.prototype = new Item;
+Relation.prototype.constructor = Note;
+function Relation(a1, a2) {
+	if (arguments.length == 1) {
+		var js = a1;
+		this.dtree    = new DTree(js.d);
+		this.item1    = js.i1;
+		this.item2    = js.i2;
+		if (!this.item1 && !this.item2) throw new Error("Relation relates to nothing");
+	} else {
+		this.dtree    = new DTree(null, 14);
+		this.item1    = a1;
+		this.item2    = a2;		
+	}
+	this.dtree.parent = this; /* todo, move into constructor */
+	Item.call(this, "relation");
+	this.bcanvas = document.createElement("canvas");
+	this._canvasActual = false;
+}
+
+Relation.prototype.jsonfy = function() {
+	var js = {
+	    t: "relation",
+		it1: this.item1,
+		it2: this.item2,
+		d: this.dtree.jsonfy(),
+	}
+	return js;
+}
+
+/* todo remove */
+Object.defineProperty(Relation.prototype, "width", {
+	get: function() { throw new Error("Cannot get width of relation");  },
+	set: function() { throw new Error("Cannot set width of relation, set fontsize instead."); }
+});
+
+Object.defineProperty(Relation.prototype, "height", {
+	get: function() { throw new Error("Cannot get height of relation"); },
+	set: function() { throw new Error("Cannot set height of relation, set fontsize instead."); }
+});
+
+/* drops the cached canvas */
+Relation.prototype.listen = function() {
+	this._canvasActual = false;
+	/* end of chain */
+}
+	
+Relation.prototype.resize = function(width, height) {
+	var dtree = this.dtree;
+	var fs = Math.max(dtree.fontsize * height / this.height, 8);
+	if (dtree._fontsize == fs) return false;
+	dtree.fontsize = fs;
+	this._canvasActual = false;
+	return true;
+}
+
+/* draws the items handles */
+/* todo what is rhs? */
+Relation.prototype.drawHandles = function(canvas, pox, poy, rhs) {
+	this._drawHandles(canvas, pox, poy, 85);
+}
+
+Relation.prototype.checkItemCompass = function(x, y, rhs) { 
+	return this._checkItemCompass(x, y, 85);
+}
+
+
+/* draws the item           * 
+ * canvas  : draw on this   *
+ * select  : selection      *
+ * pox/poy : panning offset */
+Relation.prototype.draw = function(canvas, select, pox, poy) {
+	var cx = canvas.getContext();
+	cx.beginPath();
+	cx.moveTo(this.item1.x, this.item1.y);
+	cx.lineTo(this.item2.y, this.item2.y);
+	cx.strokeStyle = "black";
+	cx.lineWidth = 2;
+	cx.stroke();
 }
 
 /* item gets focus */
-Label.prototype.focus = function(editor) {
+Relation.prototype.focus = function(editor) {
 	editor.focus(this);
 	this._canvasActual = false; /* todo why? */
 	editor.caret.show();
 }
-
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ,.   ,.       .          ,---.              .
@@ -4124,61 +4284,9 @@ var demoRepository = (<r><![CDATA[
 {
  "formatversion": 0,
  "idf": {
-  "nid": 19
+  "nid": 22
  },
  "items": {
-  "9": {
-   "t": "note",
-   "x": 703,
-   "y": 50,
-   "w": 211,
-   "h": 40,
-   "d": {
-    "fs": 13,
-    "d": [
-     "Drag the background to pan"
-    ]
-   }
-  },
-  "13": {
-   "t": "note",
-   "x": 926,
-   "y": 49,
-   "w": 214,
-   "h": 42,
-   "d": {
-    "fs": 13,
-    "d": [
-     "Drag an item to drag it."
-    ]
-   }
-  },
-  "11": {
-   "t": "note",
-   "x": 702,
-   "y": -12,
-   "w": 213,
-   "h": 49,
-   "d": {
-    "fs": 13,
-    "d": [
-     "Click the background to create a new item"
-    ]
-   }
-  },
-  "12": {
-   "t": "note",
-   "x": 926,
-   "y": -13,
-   "w": 214,
-   "h": 50,
-   "d": {
-    "fs": 13,
-    "d": [
-     "Click an item to edit it."
-    ]
-   }
-  },
   "3": {
    "t": "note",
    "x": 976,
@@ -4199,6 +4307,84 @@ var demoRepository = (<r><![CDATA[
      "",
      "",
      "like this."
+    ]
+   }
+  },
+  "9": {
+   "t": "note",
+   "x": 921,
+   "y": -12,
+   "w": 218,
+   "h": 50,
+   "d": {
+    "fs": 13,
+    "d": [
+     "Drag the background to pan."
+    ]
+   }
+  },
+  "11": {
+   "t": "note",
+   "x": 702,
+   "y": -12,
+   "w": 213,
+   "h": 49,
+   "d": {
+    "fs": 13,
+    "d": [
+     "Click the background to create a new item."
+    ]
+   }
+  },
+  "21": {
+   "t": "note",
+   "x": 925,
+   "y": 100,
+   "w": 214,
+   "h": 54,
+   "d": {
+    "fs": 13,
+    "d": [
+     "Drag an items half-hexagon to create a relation."
+    ]
+   }
+  },
+  "13": {
+   "t": "note",
+   "x": 922,
+   "y": 43,
+   "w": 217,
+   "h": 49,
+   "d": {
+    "fs": 13,
+    "d": [
+     "Drag an item to drag it."
+    ]
+   }
+  },
+  "20": {
+   "t": "note",
+   "x": 702,
+   "y": 101,
+   "w": 213,
+   "h": 55,
+   "d": {
+    "fs": 13,
+    "d": [
+     "Click an items half-hexagon on its top/left to change it."
+    ]
+   }
+  },
+  "12": {
+   "t": "note",
+   "x": 702,
+   "y": 44,
+   "w": 214,
+   "h": 50,
+   "d": {
+    "fs": 13,
+    "d": [
+     "Click an item to edit it."
     ]
    }
   },
@@ -4250,18 +4436,20 @@ var demoRepository = (<r><![CDATA[
   }
  },
  "z": [
-  9,
-  13,
-  11,
-  12,
   "3",
+  9,
+  11,
+  21,
+  13,
+  20,
+  12,
   8,
   "2",
   10,
   6
  ],
- "pox": 86,
- "poy": 53
+ "pox": 78,
+ "poy": 67
 }
 ]]></r>).toString();
 </script>
