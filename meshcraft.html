@@ -1210,7 +1210,7 @@ _init : function() {
 		}
 		mst = enums.MST_DRAG;
 		atweenTimer = null;
-		this.space.dragstart(msx, msy, mss, msc);
+		this.space.dragstart(msx, msy, mms, mmc);
 		if (mmx != msx || mmy != msy) {
 			this.space.dragmove(mmx, mmy);
 		}
@@ -1670,6 +1670,16 @@ Edgemenu.prototype.draw = function(x, y) {
 	this._stroke(cx);
 		
 	switch(this.mousepos) {
+	case 0 :
+		cx.beginPath();
+		cx.moveTo(xl + bw + ew, y);
+		cx.lineTo(xl + bw, y - h);
+		cx.lineTo(xr - bw, y - h);
+		cx.lineTo(xr - bw - ew, y);
+		cx.fillStyle = settings.edgeMenuFillStyle;
+		cx.fill();
+		this._stroke(cx);
+		break;
 	case 1 :
 		cx.beginPath();
 		cx.moveTo(xl, y);
@@ -1932,17 +1942,22 @@ Space.prototype.dragstart = function(x, y, shiftKey, ctrlKey) {
 	var redraw = false;
 
 	var ito = this.itoAtXY(x, y);
-	if ((ito != 0 && editor.item && editor.item.withinItemMenu(x, y)) ||
-		(ito >= 0 && ctrlKey)) {
-		var it = this.items[ito];
+	var relit = null; /* item of a new relation */
+	if (ito != 0 && editor.item && editor.item.withinItemMenu(x, y)) {
+		relit = editor.item;
+	} else if (ito >= 0 && ctrlKey) {
+		relit = this.items[ito];
+	}
+	if (relit) {
 		iaction.act = enums.ACT_RBIND;
-		iaction.item = it;
+		iaction.item = relit;
 		iaction.sx = iaction.smx = x;
 		iaction.sy = iaction.smy = y;
 		System.setCursor("not-allowed");
 		this.redraw();
 		return;
 	}
+
 
 	if (ito < 0) {
 		/* panning */
