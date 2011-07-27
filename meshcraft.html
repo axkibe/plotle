@@ -5,7 +5,6 @@
 <title>Meshcraft</title>
 <link rel="shortcut icon" href="/favicon.ico" />
 
-	
 <!--                                                     _.._
                                                       .-'_.._''.
  __  __   ___       _....._              .          .' .'     '.\
@@ -35,7 +34,6 @@
 /* if true catch all errors and report to user,    
  * if false let them pass through to e.g. firebug. */
 var enableCatcher = false;
-var debugNodes = true;
 
 var settings = {
 	defaultFont : "Verdana,Geneva,Kalimati,sans-serif",
@@ -132,6 +130,9 @@ var settings = {
 	/* blink speed of the caret */
 	caretBlinkSpeed : 530,	
 };
+
+/* shortcuts */
+var R = Math.round;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .-,--.      .
@@ -634,7 +635,7 @@ Editor.prototype.updateCaret = function() {
 		var sy = it.scrolly;
 		var x = System.space.pox + it.x + caret.x;
 		var y = System.space.poy + it.y + caret.y - (sy > 0 ? sy : 0);
-		var th = Math.round(it.dtree.fontsize * (1 + settings.bottombox));
+		var th = R(it.dtree.fontsize * (1 + settings.bottombox));
 		
 		caret.save = cx.getImageData(
 			(caret.sx = x) - 1, 
@@ -1064,8 +1065,9 @@ _init : function() {
 	
 	/* key down in hidden input field */
 	function onkeydown(event) {
-		var pass = specialKey.call(this, lastSpecialKey = event.keyCode, event.shiftKey, event.ctrlKey);
-		if (!pass) event.preventDefault();
+		if (!specialKey.call(this, 
+			lastSpecialKey = event.keyCode, event.shiftKey, event.ctrlKey
+		)) event.preventDefault();
 	}
 		
 	/* hidden input key press */
@@ -1074,7 +1076,7 @@ _init : function() {
 		var ek = event.keyCode;
 		if (((ek > 0 && ek < 32) || ew == 0) && lastSpecialKey != ek) {
 			lastSpecialKey = -1;
-			return specialKey(ek, event.shiftKey, event.ctrlKey);
+			return specialKey.call(this, ek, event.shiftKey, event.ctrlKey);
 		}
 		lastSpecialKey = -1;
 		testinput();
@@ -1197,7 +1199,6 @@ _init : function() {
 	function onmousewheel(event) {
 		var wheel = event.wheelDelta || event.detail;
 		wheel = wheel > 0 ? 1 : -1;
-		debug("wheel", wheel);
 		this.space.mousewheel(wheel);
 	}
 	
@@ -1279,36 +1280,7 @@ _init : function() {
 	delete this._init; 
 	System.repository.loadup();	
 	System.space.redraw();
-
-	//var vector1 = null;
 	//vector1 = new VectorGraph(850, 200, note2.doc);
-	//if (vector1) {
-	//	space.addItem(vector1,  10,  10);
-	//}
-	//space.addItem(note1,    10,  10);
-	/*
-	space.addItem(note2,   250, 240);
-	space.addItem(note2, false, 50, 40);
-	{
-		var a=[];
-		var n=0;
-a[n++]="                                                         _.._";
-a[n++]="                                                      .-'_.._''.";
-a[n++]=" __  __   ___       _....._              .          .' .'     '.\\";
-a[n++]="|  |/  `.'   `.   .´       '.          .'|         / .'                                _.._";
-a[n++]="|   .-.  .-.   ' /   .-'\"'.  \\        (  |        . '            .-,.-~.              .' .._|    .|";
-a[n++]="|  |  |  |  |  |/   /______\\  |        | |        | |            |  .-. |    __      | '      .' |_";
-a[n++]="|  |  |  |  |  ||   __________|    _   | | .'''-. | |            | |  | | .:-`.'.  __| |__  .'     |";
-a[n++]="|  |  |  |  |  |\\  (          '  .' |  | |/.'''. \\. '            | |  | |/ |   \\ ||__   __|'-..  .-'";
-a[n++]="|  |  |  |  |  | \\  '-.___..-~. .   | /|  /    | | \\ '.         .| |  '- `\" __ | |   | |      |  |";
-a[n++]="|__|  |__|  |__|  `         .'.'.'| |//| |     | |  '. `.____.-'/| |      .'.''| |   | |      |  |";
-a[n++]="                   `'-.....-.'.'.-'  / | |     | |    `-._____ / | |     / /   | |_  | |      |  '.'";
-a[n++]="                                 \\_.'  | '.    | '.           `  |_|     \\ \\._,\\ '/  | |      |   /";
-a[n++]="                                       '___'   '___'                      `~~'  `\"   |_|      `'~~/";
-		for(var i = 0; i < n; i++) {
-//			note1.dtree.append(new Paragraph(a[i]));
-		}
-	}*/
 }};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1344,8 +1316,8 @@ var Hex = {
 
 /* make a hexagon path */
 Hex.makePath = function(cx, x, y, r) {
-	var r2 = Math.round(0.5 * r);
-	var rc = Math.round(Hex.c6 * r);
+	var r2 = R(r / 2);
+	var rc = R(Hex.c6 * r);
 	cx.beginPath();
 	cx.moveTo(x - r, y);
 	cx.lineTo(x - r2, y - rc);
@@ -1393,10 +1365,10 @@ Hex.within = function(x, y, r) {
 /* makes a double hex with 6 segments and center */
 /* it kinda looks like a flower. */
 Hex.makeFlowerPath = function(cx, x, y, r, ri, segs) {
-	var r2 = Math.round(0.5 * r);
-	var rc = Math.round(Hex.c6 * r);
-	var ri2 = Math.round(0.5 * ri);
-	var ric = Math.round(Hex.c6 * ri);
+	var r2  = R(r / 2);
+	var rc  = R(Hex.c6 * r);
+	var ri2 = R(ri / 2);
+	var ric = R(Hex.c6 * ri);
 	/* inner hex */
 	cx.moveTo(x - r, y);
 	cx.lineTo(x - r2, y - rc);
@@ -1443,10 +1415,10 @@ Hex.makeFlowerPath = function(cx, x, y, r, ri, segs) {
 
 /* makes a hexagon segment path: */
 Hex.makePathSegment = function(cx, x, y, r, ri, seg) {
-	var r2 = Math.round(0.5 * r);
-	var rc = Math.round(Hex.c6 * r);
-	var ri2 = Math.round(0.5 * ri);
-	var ric = Math.round(Hex.c6 * ri);	
+	var r2  = R(r  / 2);
+	var rc  = R(Hex.c6 * r);
+	var ri2 = R(ri / 2);
+	var ric = R(Hex.c6 * ri);
 	switch(seg) {
 	case 1:
 		cx.beginPath();
@@ -1672,12 +1644,12 @@ Edgemenu.prototype._stroke = function(cx) {
 Edgemenu.prototype.draw = function(x, y) {
 	var canvas = System.canvas;
 	var cx = canvas.getContext("2d");
-	var x = Math.round(canvas.width / 2) + 0.5;
+	var x = R(canvas.width / 2) + 0.5;
 	var y = canvas.height + 0.5;
 	var w = this.width;
 	var bw = this.bwidth;
 	var h =  this.height;
-	var ew = Math.round(h * Hex.t6);
+	var ew = R(h * Hex.t6);
 	var xl = x - w - ew;
 	var xr = x + w + ew;
 	
@@ -1724,9 +1696,9 @@ Edgemenu.prototype.draw = function(x, y) {
 	cx.font = "12px " + settings.defaultFont;
 	cx.textAlign = "center";
 	cx.textBaseline = "middle";
-	cx.fillText("Meshcraft Demospace", x, y - Math.round(h / 2));
-	cx.fillText("Export", xl + Math.round((bw + ew) / 2), y - Math.round(h / 2));
-	cx.fillText("Import", xr - Math.round((bw + ew) / 2), y - Math.round(h / 2));
+	cx.fillText("Meshcraft Demospace", x, y - R(h / 2));
+	cx.fillText("Export", xl + R((bw + ew) / 2), y - R(h / 2));
+	cx.fillText("Import", xr - R((bw + ew) / 2), y - R(h / 2));
 }
 
 Edgemenu.prototype._getMousepos = function(x, y) {
@@ -1736,13 +1708,13 @@ Edgemenu.prototype._getMousepos = function(x, y) {
 	if (y < ty - h) {
 		return this.mousepos = -1;
 	}
-	var tx = Math.round(canvas.width / 2) + 0.5;
+	var tx = R(canvas.width / 2) + 0.5;
 	var w  = this.width;
 	var bw = this.bwidth;
-	var ew = Math.round(h * Hex.t6);
+	var ew = R(h * Hex.t6);
 	var xl = tx - w - ew;
 	var xr = tx + w + ew;
-	var tx = Math.round(canvas.width / 2) + 0.5;
+	var tx = R(canvas.width / 2) + 0.5;
 	
 	if ((x - xl <= -(y - ty) * Hex.t6)) {
 		return this.mousepos = -1;
@@ -1804,13 +1776,15 @@ Space.prototype.redraw = function() {
 	System.canvasClear();
 	editor.caret.save = null;
 	var cx = canvas.getContext("2d");
+	this.selection = editor.selection;
+	this.canvas = System.canvas;
 
 	for(var i = items.length - 1; i >= 0; i--) {
 		var it = items[i];
-		it.draw(canvas, editor.selection, this.pox, this.poy);
+		it.draw(this);
 	}
 	if (editor.item) {
-		editor.item.drawHandles(canvas, this.pox, this.poy);
+		editor.item.drawHandles(canvas, this.pox, this.poy); /* todo spacify */
 	}
 	
 	switch(this._iaction.act) {
@@ -1825,106 +1799,18 @@ Space.prototype.redraw = function() {
 		var ia = this._iaction;
 		cx.beginPath();
 		var it = ia.item;
-		var it2 = ia.item2;
-		var x1, y1, x2, y2;
-		
-		var ix  = it.x + this.pox + 0.5;
-		var iy  = it.y + this.poy + 0.5;
-		var ixw = ix + it.width;
-		var iyh = iy + it.height;
-		
-		if (!it2) {
-			x2 = ia.smx + this.pox + 0.5;
-			y2 = ia.smy + this.poy + 0.5;
-			/* find quadrant */
-			var im = 0;
-			if (x2 < ix) { x1 = ix; }
-			else if (x2 < ixw) { x1 = x2; im++; }
-			else { x1 = ixw; }
-		
-			if (y2 < iy) { y1 = iy; }
-			else if (y2 < iyh) { y1 = y2; im++; } 
-			else { y1 = iyh; }
-		
-			if (im == 2) {
-				/* in middle */
-				x1 = (ix + ixw) / 2;
-				y1 = (iy + iyh) / 2;
-			}
-			System.setCursor("not-allowed");
+		if (ia.item2) {
+			Relation_drawArrow(this, ia.item, ia.item2, null);
 		} else {
-			var i2x  = it2.x + this.pox + 0.5;
-			var i2y  = it2.y + this.poy + 0.5;
-			var i2xw = i2x + it2.width;
-			var i2yh = i2y + it2.height;
-			
-			if (i2x > ixw) { 
-				/* 2 is clearly to the right */
-				x1 = ixw;
-				x2 = i2x;
-			} else if (i2xw < ix) {
-				/* 2 is clearly to the left */
-				x1 = ix;
-				x2 = i2xw;
-			} else {
-				/* an intersection */
-				x1 = x2 = ((ix > i2x ? ix : i2x) + (ixw < i2xw ? ixw : i2xw)) / 2;
-			}
-
-			if (i2y > iyh) { 
-				/* 2 is clearly to the right */
-				y1 = iyh;
-				y2 = i2y;
-			} else if (i2yh < iy) {
-				/* 2 is clearly to the left */
-				y1 = iy;
-				y2 = i2yh;
-			} else {
-				/* an intersection */
-				y1 = y2 = ((iy > i2y ? iy : i2y) + (iyh < i2yh ? iyh : i2yh)) / 2;
-			}
-			
-			//y1 = (iy  + iyh)  / 2;
-			//y2 = (i2y + i2yh) / 2;
-			
-			/* highlights the focused item */
-			cx.rect(i2x, i2y, it2.width, it2.height);
-			cx.lineWidth = 3;
-			cx.strokeStyle = "rgba(255, 183, 15, 0.5)";
-			cx.stroke();
-			cx.beginPath();
-			System.setCursor("default");
+			Relation_drawArrow(this, ia.item, ia.smx, ia.smy);
 		}
-		var as = 12;
-		var d = Math.atan2(y2 - y1, x2 - x1);
-		var ad = Math.PI/12;
-		var ms = 2 / Math.sqrt(3) * as;
-		cx.moveTo(x1, y1);
-
-		cx.lineTo(x2 - ms * Math.cos(d),      y2 - ms * Math.sin(d));
-		cx.lineTo(x2 - as * Math.cos(d - ad), y2 - as * Math.sin(d - ad));
-		cx.lineTo(x2,                         y2);
-		cx.lineTo(x2 - as * Math.cos(d + ad), y2 - as * Math.sin(d + ad));
-		cx.lineTo(x2 - ms * Math.cos(d),      y2 - ms * Math.sin(d));
-
-		cx.lineWidth = 3;
-		cx.strokeStyle = "rgba(255, 225, 80, 0.5)";
-		cx.stroke();
-		cx.lineWidth = 1;
-		cx.strokeStyle = "rgba(80, 40, 20, 0.8)";
-		cx.stroke();
-		cx.fillStyle = "rgba(255, 225, 40, 0.5)";
-		cx.fill();
-		break;
 	}}
 	this.edgemenu.draw();
 	editor.updateCaret();
 }
 		
 /* adds an item to the space */
-Space.prototype.addItem = function(item, top, x, y) {
-	item.x = x;
-	item.y = y;
+Space.prototype.addItem = function(item, top) {
 	if (top) {
 		this.items.unshift(item);
 	} else {
@@ -1996,7 +1882,6 @@ Space.prototype.mousehover = function(x, y) {
 		return;
 	}
 	
-
 	switch(this._iaction.act) {
 	case enums.ACT_FMENU :
 		redraw = this._floatmenu.mousehover(x, y);
@@ -2049,12 +1934,11 @@ Space.prototype.dragstart = function(x, y, shiftKey, ctrlKey) {
 	var ito = this.itoAtXY(x, y);
 	if ((ito != 0 && editor.item && editor.item.withinItemMenu(x, y)) ||
 		(ito >= 0 && ctrlKey)) {
-		var it = editor.item;
-		it.setItemMenu(this._itemmenu, this.pox, this.poy);
+		var it = this.items[ito];
 		iaction.act = enums.ACT_RBIND;
 		iaction.item = it;
-		iaction.sx = x;
-		iaction.sy = y;
+		iaction.sx = iaction.smx = x;
+		iaction.sy = iaction.smy = y;
 		System.setCursor("not-allowed");
 		this.redraw();
 		return;
@@ -2187,11 +2071,20 @@ Space.prototype.dragstop = function(x, y) {
 		iaction.ssy  = null;
 		break;
 	case enums.ACT_RBIND :
+	{
 		redraw = true;
 		iaction.smx = null;
 		iaction.smy = null;
-		redraw = true;
+		var ito = this.itoAtXY(x, y); 
+		if (ito < 0) {
+			break;
+		}
+		var it2 = this.items[ito];
+		var rel = new Relation(iaction.item.id, it2.id);
+		rel.dtree.append(new Paragraph("relates to"));
+		this.addItem(rel, true);
 		break;
+	}
 	default :
 		throw new Error("Invalid action in 'Space.dragstop'");
 	}
@@ -2333,12 +2226,16 @@ Space.prototype._exportDialog = function() {
 	label.style.textAlign = "center";
 	label.style.marginTop = "20px";
 	label.style.fontWeight = "bold";
-	label.appendChild(document.createTextNode("Copy/paste this to a text file (e.g.notepad) and save it there."));
+	label.appendChild(document.createTextNode(
+		"Copy/paste this to a text file (e.g.notepad) and save it there."
+	));
 	div.appendChild(label);
 	var label2 = document.createElement("div");
 	label2.style.width = "100%";
 	label2.style.textAlign = "center";
-	label2.appendChild(document.createTextNode("Sorry for this, current browsers do not yet allow file creation for offline repositories."));
+	label2.appendChild(document.createTextNode(
+		"Sorry for this, current browsers do not yet allow file creation for offline repositories.")
+	);
 	div.appendChild(label2);
 	var ta = document.createElement("textarea");
 	ta.style.width =  "90%";
@@ -2386,7 +2283,9 @@ Space.prototype._importDialog = function() {
 	var label2 = document.createElement("div");
 	label2.style.width = "100%";
 	label2.style.textAlign = "center";
-	label2.appendChild(document.createTextNode("Paste the repository save in the textbox and press 'Import'."));
+	label2.appendChild(document.createTextNode(
+		"Paste the repository save in the textbox and press 'Import'."
+	));
 	div.appendChild(label);
 	div.appendChild(label2);
 	var ta = document.createElement("textarea");
@@ -2538,30 +2437,28 @@ Space.prototype.mousedown = function(x, y) {
 	case enums.ACT_FMENU :
 		var md = this._floatmenu.mousedown(x, y);
 		iaction.act = enums.ACT_NONE;
+		var fm = this._floatmenu;
 		redraw = true;
-		if (md >= 0) {
-			switch(md) {
-			case 1 : // note
-				var nw = settings.newNoteWidth;
-				var nh = settings.newNoteHeight;
-				var note = new Note(nw, nh);
-				note.dtree.append(new Paragraph(""));
-				this.addItem(note, true, 
-					Math.round(this._floatmenu.x - nw / 2) - this.pox, 
-					Math.round(this._floatmenu.y - nh / 2) - this.poy);
-				break;
-			case 2 : // label
-				var label = new Label();
-				label.dtree.append(new Paragraph("Label"));
-				this.addItem(label, true, 
-					this._floatmenu.x - this.pox, 
-					this._floatmenu.y - this.poy);
-				break;
-			}
-			if (redraw) this.redraw();
-			return enums.MST_NONE;
+		if (md < 0) {
+			break;
 		}
-		break;
+		switch(md) {
+		case 1 : // note
+			var nw = settings.newNoteWidth;
+			var nh = settings.newNoteHeight;
+			var note = new Note(nw, nh,	R(fm.x - nw / 2 - this.pox), R(fm.y - nh / 2 - this.poy));
+			note.dtree.append(new Paragraph(""));
+			this.addItem(note, true);
+			break;
+		case 2 : // label
+			/* todo center, like notes */
+			var label = new Label(fm.x - this.pox, fm.y - this.poy);
+			label.dtree.append(new Paragraph("Label"));
+			this.addItem(label, true);
+			break;
+		}
+		if (redraw) this.redraw();
+		return enums.MST_NONE;
 	case enums.ACT_IMENU :
 		var md = this._itemmenu.mousedown(x, y);
 		iaction.act = enums.ACT_NONE;
@@ -2608,7 +2505,6 @@ Space.prototype.mousedown = function(x, y) {
 	return enums.MST_ATWEEN;
 }
 
-
 Space.prototype.mousewheel = function(wheel) {
 	if (wheel > 0) {
 		this.zoom *= 1.1;
@@ -2618,7 +2514,19 @@ Space.prototype.mousewheel = function(wheel) {
 	if (Math.abs(this.zoom - 1) < 0.0001) {
 		this.zoom = 1;
 	}
-//	debug(this.zoom);
+}
+
+/* gets an item by id */
+Space.prototype.getItem = function(id) {
+	/* TODO todo, this is a diry workaround */
+	var itl = this.items;
+	var itllen = itl.length;
+	for(var i = 0; i < itllen; i++) {
+		if (itl[i].id == id) {
+			return itl[i];
+		}
+	}
+	return null;
 }
 
 
@@ -2828,7 +2736,7 @@ Paragraph.prototype._flow = function() {
 						width = x;
 					}
 					x = 0;
-					y += Math.round(dtree.fontsize * (dtree.pre ? 1 : 1 + settings.bottombox));
+					y += R(dtree.fontsize * (dtree.pre ? 1 : 1 + settings.bottombox));
 					pline++;
 					{
 						var l = pinfo[pline] = [];
@@ -2885,7 +2793,7 @@ Object.defineProperty(Paragraph.prototype, "height", {
 	get: function() { 
 		this._flow();
 		var dtree = this.anchestor("dtree");
-		return this._softHeight + Math.round(dtree.fontsize * settings.bottombox);
+		return this._softHeight + R(dtree.fontsize * settings.bottombox);
 	},
 	set: function(s) { throw new Error("Cannot set paragraph height."); }
 });
@@ -3013,6 +2921,7 @@ Paragraph.prototype.joinToPrevious = function(node, caret) {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 DTree.prototype = new Treenode;
 DTree.prototype.constructor = DTree;
+/* todo insert parent */
 function DTree(js, fontsize) {
 	Treenode.call(this, "dtree");
 	
@@ -3058,13 +2967,81 @@ DTree.prototype.paraAtY = function(y) {
 /* draws the content in a buffer canvas */
 /* acanvas  ... canvas to draw upon */
 /* todo rename */
-DTree.prototype.drawCanvas = function(acanvas, offsetX, offsetY, scrolly) {
+DTree.prototype.drawCanvas = function(acanvas, select, offsetX, offsetY, scrolly) {
 	var cx = acanvas.getContext("2d");
 	var y = offsetY;
 	var pi = 0;
 	var h = 0;
 	var parasep = this.pre ? 0 : this._fontsize;
 
+	/* draws the selection */
+	if (select.active && select.mark1.item == this.parent) {
+		/* todo make part of selection to use shortcut with XY */
+		var b = select.mark1;
+		var e = select.mark2;
+		b.getXY();
+		e.getXY();
+		if (e.y < b.y || (e.y == b.y && e.x < b.x)) {
+			b = select.mark2;
+			e = select.mark1;
+		}
+		
+		cx.fillStyle   = settings.selectionColor;
+		cx.strokeStyle = settings.selectionStroke;
+		cx.beginPath();
+		var psy = scrolly >= 0 ? scrolly : 0;
+		var lh = R(this.fontsize * (1 + settings.bottombox));
+		var bx = R(b.x) + 0.5;
+		var by = R(b.y - psy) + 0.5;
+		var ex = R(e.x) + 0.5;
+		var ey = R(e.y - psy) + 0.5;
+		var rx = R(this.width + offsetX / 2) + 0.5;
+		var lx = R(offsetX / 2) + 0.5;
+		if ((Math.abs(by - ey) < 2)) {
+			// ***
+			cx.moveTo(bx, by);
+			cx.lineTo(bx, by + lh);
+			cx.lineTo(ex, ey + lh);
+			cx.lineTo(ex, ey);
+			cx.lineTo(bx, by);
+			cx.stroke();
+			cx.fill();			
+		} else if (Math.abs(by + lh - ey) < 2 && (bx >= ex))  {
+			//      ***
+			// ***
+			cx.moveTo(rx, by + lh);
+			cx.lineTo(bx, by + lh);
+			cx.lineTo(bx, by);
+			cx.lineTo(rx, by);
+			
+			cx.moveTo(lx, ey);
+			cx.lineTo(ex, ey);
+			cx.lineTo(ex, ey + lh);
+			cx.lineTo(lx, ey + lh);
+			cx.stroke();
+			cx.fill();
+		} else {
+			//    *****
+			// *****
+			for(var i = 0; i < 2; i++) {
+				cx.beginPath();
+				var edge = i ? cx.moveTo : cx.lineTo;
+				cx.moveTo(rx, ey);
+				cx.lineTo(ex, ey);
+				cx.lineTo(ex, ey + lh);
+				cx.lineTo(lx, ey + lh);
+				edge.call(cx, lx, by + lh);
+				cx.lineTo(bx, by + lh);
+				cx.lineTo(bx, by);
+				cx.lineTo(rx, by);
+				edge.call(cx, rx, ey);
+				if (i) cx.stroke(); else cx.fill();
+			}			
+		}
+		cx.beginPath();
+	}	
+	
+	/* draws tha paragraphs */
 	for(var para = this.first; para; para = para.next) {
 		var pcanvas = para.getCanvas();
 		para.x = offsetX;
@@ -3155,8 +3132,6 @@ Object.defineProperty(DTree.prototype, "height", {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Item(type) {
 	this.type = type;
-	this.x = null;
-	this.y = null;
 }
 
 /* set a hex menu to be this items menu */
@@ -3243,8 +3218,8 @@ Item.prototype._drawHandles = function(canvas, pox, poy, rhs) {
 	var y1 = this.y + 0.5 - ds + poy;
 	var x2 = x1 + this.width  + 2 * ds - 1;
 	var y2 = y1 + this.height + 2 * ds - 1;
-	var xm = Math.round((x1 - 0.5 + x2) / 2) + 0.5;
-	var ym = Math.round((y1 - 0.5 + y2) / 2) + 0.5;
+	var xm = R((x1 - 0.5 + x2) / 2) + 0.5;
+	var ym = R((y1 - 0.5 + y2) / 2) + 0.5;
 	
 	cx.beginPath(); 
 	if (rhs &   1) { cx.moveTo(x1, y1 + hs);  cx.lineTo(x1, y1); cx.lineTo(x1 + hs, y1); }
@@ -3273,10 +3248,8 @@ Item.prototype._drawHandles = function(canvas, pox, poy, rhs) {
 	y1 = this.y + poy - 0.5;
 	x2 = x1 + this.width + 1;
 	y2 = y1 + this.height + 1;	
-	var xim = x1 + 
-		Math.round(this.width  * settings.itemMenuPositionkX + settings.itemMenuPositiondX);
-	var yim = y1 + 
-		Math.round(this.height * settings.itemMenuPositionkY + settings.itemMenuPositiondY);
+	var xim = x1 + R(this.width  * settings.itemMenuPositionkX + settings.itemMenuPositiondX);
+	var yim = y1 + R(this.height * settings.itemMenuPositionkY + settings.itemMenuPositiondY);
 	/* clip, never draws over the item, and not below or left of it */
 	cx.moveTo(x1, 0);
 	cx.lineTo(x1, y1);
@@ -3324,16 +3297,25 @@ Item.prototype._drawHandles = function(canvas, pox, poy, rhs) {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 Note.prototype = new Item;
 Note.prototype.constructor = Note;
-function Note(a1, a2) {
+
+/* constructor
+ * Note(json)  or
+ * Note(width, height, x, y) */
+/* todo move xy to start */
+function Note(a1, a2, a3, a4) {
 	if (arguments.length == 1) {
 		var js = a1;
+		this.x      = js.x;
+		this.y      = js.y;
 		this.width  = js.w;
 		this.height = js.h;
 		this.dtree = new DTree(js.d);
 	} else {
 		this.width  = a1;
 		this.height = a2;
-		this.dtree = new DTree();
+		this.x      = a3;
+		this.y      = a4;
+		this.dtree  = new DTree();
 	}
 	this.dtree.parent = this;
 	Item.call(this, "note");
@@ -3429,17 +3411,15 @@ function Note_bevel(cx, x, y, w, h, border, radius) {
 	cx.arc(x1 + radius, y1 + radius, radius, Math.PI, -Math.PI / 2, false);
 }
 	
-/* draws the item           * 
- * canvas  : draw on this   *
- * select  : selection      *
- * pox/poy : panning offset */
-Note.prototype.draw = function(canvas, select, pox, poy) {
+/* draws the item       * 
+ * space  : todraw upon */
+Note.prototype.draw = function(space) {
 	var bcanvas = this.bcanvas;
 	var dtree = this.dtree;
 	var cx = bcanvas.getContext("2d");
 	if (this._canvasActual) {
 		/* buffer hit */
-		canvas.getContext("2d").drawImage(bcanvas, this.x + pox, this.y + poy);
+		space.canvas.getContext("2d").drawImage(bcanvas, this.x + space.pox, this.y + space.poy);
 		return;
 	}
 
@@ -3478,82 +3458,16 @@ Note.prototype.draw = function(canvas, select, pox, poy) {
 		}
 	}
 	
-	/* draws the selection */
-	if (select.active && select.mark1.item == this) {
-		/* todo make part of selection to use shortcut with XY */
-		var b = select.mark1;
-		var e = select.mark2;
-		b.getXY();
-		e.getXY();
-		if (e.y < b.y || (e.y == b.y && e.x < b.x)) {
-			b = select.mark2;
-			e = select.mark1;
-		} 
-		
-		cx.fillStyle   = settings.selectionColor;
-		cx.strokeStyle = settings.selectionStroke;
-		cx.beginPath();
-		var psy = sy >= 0 ? sy : 0;
-		var lh = Math.round(this.dtree.fontsize * (1 + settings.bottombox));
-		var bx = Math.round(b.x) + 0.5;
-		var by = Math.round(b.y - psy) + 0.5;
-		var ex = Math.round(e.x) + 0.5;
-		var ey = Math.round(e.y - psy) + 0.5;
-		var rx = Math.round(dtree.width + this.textBorder / 2) + 0.5;
-		var lx = Math.round(this.textBorder / 2) + 0.5;
-		if ((Math.abs(by - ey) < 2)) {
-			// ***
-			cx.moveTo(bx, by);
-			cx.lineTo(bx, by + lh);
-			cx.lineTo(ex, ey + lh);
-			cx.lineTo(ex, ey);
-			cx.lineTo(bx, by);
-			cx.stroke();
-			cx.fill();			
-		} else if (Math.abs(by + lh - ey) < 2 && (bx >= ex))  {
-			//      ***
-			// ***
-			cx.moveTo(rx, by + lh);
-			cx.lineTo(bx, by + lh);
-			cx.lineTo(bx, by);
-			cx.lineTo(rx, by);
-			
-			cx.moveTo(lx, ey);
-			cx.lineTo(ex, ey);
-			cx.lineTo(ex, ey + lh);
-			cx.lineTo(lx, ey + lh);
-			cx.stroke();
-			cx.fill();
-		} else {
-			//    *****
-			// *****
-			for(var i = 0; i < 2; i++) {
-				cx.beginPath();
-				var edge = i ? cx.moveTo : cx.lineTo;
-				cx.moveTo(rx, ey);
-				cx.lineTo(ex, ey);
-				cx.lineTo(ex, ey + lh);
-				cx.lineTo(lx, ey + lh);
-				edge.call(cx, lx, by + lh);
-				cx.lineTo(bx, by + lh);
-				cx.lineTo(bx, by);
-				cx.lineTo(rx, by);
-				edge.call(cx, rx, ey);
-				if (i) cx.stroke(); else cx.fill();
-			}			
-		}
-		cx.beginPath();
-	}
-	
-	/* draws text */	
-	dtree.drawCanvas(bcanvas, 
-		this.textBorder, this.textBorder, 
-		sy < 0 ? 0 : Math.round(sy)
+	/* draws selection and text */	
+	dtree.drawCanvas(bcanvas, space.selection,
+		this.textBorder, this.textBorder,
+		sy < 0 ? 0 : R(sy)
 	);
-	
+
 	if (sy >= 0) {
 		if (dtreeHeight <= innerHeight) {
 			/* should not use a scrollbar */
+			/* todo remove */
 			return null;
 		}
 
@@ -3629,7 +3543,7 @@ Note.prototype.draw = function(canvas, select, pox, poy) {
 	cx.stroke(); cx.beginPath(); cx.closePath(); // todo
 	cx.restore();
 	this._canvasActual = true;
-	canvas.getContext("2d").drawImage(bcanvas, this.x + pox, this.y + poy);
+	space.canvas.getContext("2d").drawImage(bcanvas, this.x + space.pox, this.y + space.poy);
 }
 
 /* item gets focus */
@@ -3640,18 +3554,29 @@ Note.prototype.focus = function(editor) {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- LABEL +++
+  ,       .       .  
+  )   ,-. |-. ,-. |  
+ /    ,-| | | |-' |  
+ `--' `-^ ^-' `-' `' 
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  An sizeable item with sizing text 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 Label.prototype = new Item;
 Label.prototype.constructor = Note;
+
+/* constructor
+ * Label(json)  or
+ * Label(x, y) */
 function Label(a1, a2) {
 	if (arguments.length == 1) {
 		var js = a1;
-		this.dtree    = new DTree(js.d);
+		this.x     = js.x;
+		this.y     = js.y;
+		this.dtree = new DTree(js.d);
 	} else {
-		this.dtree    = new DTree(null, 20);
+		this.x     = a1;
+		this.y     = a2;
+		this.dtree = new DTree(null, 20);
 	}
 	this.dtree.parent = this;
 	Item.call(this, "label");
@@ -3677,7 +3602,7 @@ Object.defineProperty(Label.prototype, "width", {
 
 Object.defineProperty(Label.prototype, "height", {
 	get: function() { 
-		var mh = Math.round(this.dtree.height * (1 + settings.bottombox));
+		var mh = R(this.dtree.height * (1 + settings.bottombox));
 		return Math.max(mh, settings.labelMinHeight);          
 	},
 	set: function() { throw new Error("Cannot set height of Label, set fontsize instead."); }
@@ -3715,17 +3640,15 @@ Label.prototype.checkItemCompass = function(x, y, rhs) {
 	return this._checkItemCompass(x, y, 85);
 }
 
-/* draws the item           * 
- * canvas  : draw on this   *
- * select  : selection      *
- * pox/poy : panning offset */
-Label.prototype.draw = function(canvas, select, pox, poy) {
+/* draws the item
+   space  : to draw upon  */
+Label.prototype.draw = function(space) {
 	var bcanvas = this.bcanvas;
 	var dtree = this.dtree;
 	var cx = bcanvas.getContext("2d");
 	if (this._canvasActual) {
 		/* buffer hit */
-		canvas.getContext("2d").drawImage(bcanvas, this.x + pox, this.y + poy);
+		space.canvas.getContext("2d").drawImage(bcanvas, this.x + space.pox, this.y + space.poy);
 		return;
 	}
 	var bcanvas = this.bcanvas;
@@ -3744,76 +3667,9 @@ Label.prototype.draw = function(canvas, select, pox, poy) {
 	dtree.flowWidth = -1;
 	var height = bcanvas.height = this.height;
 	var width  = bcanvas.width  = this.width;
-	
-	/* draws the selection */
-	//if (select.active && select.mark1.item == this) {
-		/* todo make part of selection to use shortcut with XY */
-/*		var b = select.mark1;
-		var e = select.mark2;
-		b.getXY();
-		e.getXY();
-		if (e.y < b.y || (e.y == b.y && e.x < b.x)) {
-			b = select.mark2;
-			e = select.mark1;
-		} 
 		
-		cx.fillStyle   = settings.selectionColor;
-		cx.strokeStyle = settings.selectionStroke;
-		cx.beginPath();
-		var psy = sy >= 0 ? sy : 0;
-		var lh = Math.round(this.dtree.fontsize * 1.2);
-		var bx = Math.round(b.x) + 0.5;
-		var by = Math.round(b.y - psy) + 0.5;
-		var ex = Math.round(e.x) + 0.5;
-		var ey = Math.round(e.y - psy) + 0.5;
-		var rx = Math.round(dtree.width + this.textBorder / 2) + 0.5;
-		var lx = Math.round(this.textBorder / 2) + 0.5;
-		if ((Math.abs(by - ey) < 2)) {
-			// ***
-			cx.moveTo(bx, by);
-			cx.lineTo(bx, by + lh);
-			cx.lineTo(ex, ey + lh);
-			cx.lineTo(ex, ey);
-			cx.lineTo(bx, by);
-			cx.stroke();
-			cx.fill();			
-		} else if (Math.abs(by + lh - ey) < 2 && (bx >= ex))  {
-			//      ***
-			// ***
-			cx.moveTo(rx, by + lh);
-			cx.lineTo(bx, by + lh);
-			cx.lineTo(bx, by);
-			cx.lineTo(rx, by);
-			
-			cx.moveTo(lx, ey);
-			cx.lineTo(ex, ey);
-			cx.lineTo(ex, ey + lh);
-			cx.lineTo(lx, ey + lh);
-			cx.stroke();
-			cx.fill();
-		} else {
-			//    *****
-			// *****
-			for(var i = 0; i < 2; i++) {
-				cx.beginPath();
-				var edge = i ? cx.moveTo : cx.lineTo;
-				cx.moveTo(rx, ey);
-				cx.lineTo(ex, ey);
-				cx.lineTo(ex, ey + lh);
-				cx.lineTo(lx, ey + lh);
-				edge.call(cx, lx, by + lh);
-				cx.lineTo(bx, by + lh);
-				cx.lineTo(bx, by);
-				cx.lineTo(rx, by);
-				edge.call(cx, rx, ey);
-				if (i) cx.stroke(); else cx.fill();
-			}			
-		}
-		cx.beginPath();
-	}*/
-	
 	/* draws text */	
-	dtree.drawCanvas(bcanvas, 0, 0, 0);
+	dtree.drawCanvas(bcanvas, space.selection, 0, 0, 0);
 	
 	/* draws the border */
 	cx.beginPath(); 
@@ -3823,7 +3679,14 @@ Label.prototype.draw = function(canvas, select, pox, poy) {
 	cx.stroke(); cx.beginPath(); 
 	cx.restore();
 	this._canvasActual = true;
-	canvas.getContext("2d").drawImage(bcanvas, this.x + pox, this.y + poy);
+	space.canvas.getContext("2d").drawImage(bcanvas, this.x + space.pox, this.y + space.poy);
+}
+
+/* item gets focus */
+Label.prototype.focus = function(editor) {
+	editor.focus(this);
+	this._canvasActual = false; /* todo why? */
+	editor.caret.show();
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -3839,26 +3702,26 @@ Relation.prototype.constructor = Note;
 function Relation(a1, a2) {
 	if (arguments.length == 1) {
 		var js = a1;
-		this.dtree    = new DTree(js.d);
-		this.item1    = js.i1;
-		this.item2    = js.i2;
+		this.dtree  = new DTree(js.d);
+		this.i1id   = js.i1.id;
+		this.i2id   = js.i2.id;
 		if (!this.item1 && !this.item2) throw new Error("Relation relates to nothing");
 	} else {
-		this.dtree    = new DTree(null, 14);
-		this.item1    = a1;
-		this.item2    = a2;		
+		this.dtree  = new DTree(null, 14);
+		this.i1id   = a1;
+		this.i2id   = a2;		
 	}
 	this.dtree.parent = this; /* todo, move into constructor */
-	Item.call(this, "relation");
+	Item.call(this, "rel");
 	this.bcanvas = document.createElement("canvas");
 	this._canvasActual = false;
 }
 
 Relation.prototype.jsonfy = function() {
 	var js = {
-	    t: "relation",
-		it1: this.item1,
-		it2: this.item2,
+	    t: "rel",
+		i1id: this.i1id,
+		i2id: this.i2id,
 		d: this.dtree.jsonfy(),
 	}
 	return js;
@@ -3900,19 +3763,105 @@ Relation.prototype.checkItemCompass = function(x, y, rhs) {
 	return this._checkItemCompass(x, y, 85);
 }
 
+/* Draws one relationship arrow
+ * (space, item1_id, item2_id, null) - or - 
+ * (space, item1_id, x, y)  */
+function Relation_drawArrow(space, item1, item2_x, null_y) {
+	var cx = space.canvas.getContext("2d");
+	var x1, y1, x2, y2;
+	var ix  = item1.x + space.pox + 0.5;
+	var iy  = item1.y + space.poy + 0.5;
+	var ixw = ix + item1.width;
+	var iyh = iy + item1.height;
 
-/* draws the item           * 
- * canvas  : draw on this   *
- * select  : selection      *
- * pox/poy : panning offset */
-Relation.prototype.draw = function(canvas, select, pox, poy) {
-	var cx = canvas.getContext();
+	if (null_y) {
+		x2 = item2_x + space.pox + 0.5;
+		y2 = null_y  + space.poy + 0.5;
+		/* find quadrant */
+		var im = 0;
+		if (x2 < ix) { x1 = ix; }
+		else if (x2 < ixw) { x1 = x2; im++; }
+		else { x1 = ixw; }
+
+		if (y2 < iy) { y1 = iy; }
+		else if (y2 < iyh) { y1 = y2; im++; } 
+		else { y1 = iyh; }
+
+		if (im == 2) {
+			/* in middle */
+			x1 = (ix + ixw) / 2;
+			y1 = (iy + iyh) / 2;
+		}
+		System.setCursor("not-allowed");
+	} else {
+		var it2 = item2_x;
+		var i2x  = it2.x + space.pox + 0.5;
+		var i2y  = it2.y + space.poy + 0.5;
+		var i2xw = i2x + it2.width;
+		var i2yh = i2y + it2.height;
+			
+		if (i2x > ixw) { 
+			/* 2 is clearly to the right */
+			x1 = ixw;
+			x2 = i2x;
+		} else if (i2xw < ix) {
+			/* 2 is clearly to the left */
+			x1 = ix;
+			x2 = i2xw;
+		} else {
+			/* an intersection */
+			x1 = x2 = ((ix > i2x ? ix : i2x) + (ixw < i2xw ? ixw : i2xw)) / 2;
+		}
+		if (i2y > iyh) { 
+			/* 2 is clearly to the right */
+			y1 = iyh;
+			y2 = i2y;
+		} else if (i2yh < iy) {
+			/* 2 is clearly to the left */
+			y1 = iy;
+			y2 = i2yh;
+		} else {
+			/* an intersection */
+			y1 = y2 = ((iy > i2y ? iy : i2y) + (iyh < i2yh ? iyh : i2yh)) / 2;
+		}
+			
+		//y1 = (iy  + iyh)  / 2;
+		//y2 = (i2y + i2yh) / 2;	
+		/* highlights the focused item */
+		cx.beginPath();
+		cx.rect(i2x, i2y, it2.width, it2.height);
+		cx.lineWidth = 3;
+		cx.strokeStyle = "rgba(255, 183, 15, 0.5)";
+		cx.stroke();
+		cx.beginPath();
+		System.setCursor("default");
+	}
+	var as = 12;  // arrow size
+	var d = Math.atan2(y2 - y1, x2 - x1);
+	var ad = Math.PI/12;
+	var ms = 2 / Math.sqrt(3) * as;
+
 	cx.beginPath();
-	cx.moveTo(this.item1.x, this.item1.y);
-	cx.lineTo(this.item2.y, this.item2.y);
-	cx.strokeStyle = "black";
-	cx.lineWidth = 2;
+	cx.moveTo(x1, y1);
+	cx.lineTo(x2 - ms * Math.cos(d),      y2 - ms * Math.sin(d));
+	cx.lineTo(x2 - as * Math.cos(d - ad), y2 - as * Math.sin(d - ad));
+	cx.lineTo(x2,                         y2);
+	cx.lineTo(x2 - as * Math.cos(d + ad), y2 - as * Math.sin(d + ad));
+	cx.lineTo(x2 - ms * Math.cos(d),      y2 - ms * Math.sin(d));
+	cx.lineWidth = 3;
+	cx.strokeStyle = "rgba(255, 225, 80, 0.5)";
 	cx.stroke();
+	cx.lineWidth = 1;
+	cx.strokeStyle = "rgba(80, 40, 20, 0.8)";
+	cx.stroke();
+	cx.fillStyle = "rgba(255, 225, 40, 0.5)";
+	cx.fill();
+}
+
+/* draws the item       * 
+ * space, to draw upon  */
+Relation.prototype.draw = function(space) {
+	Relation_drawArrow(space, space.getItem(this.i1id), space.getItem(this.i2id));
 }
 
 /* item gets focus */
@@ -4200,7 +4149,7 @@ Repository.prototype._newItemID = function() {
 }
 
 Repository.prototype._loadItem = function(id, itjs) {
-	if (!itjs || !itjs.x || !itjs.y || !itjs.t) {
+	if (!itjs || !itjs.t) {
 		throw new Error("JSON error: attributes missing from " + id);
 	}
 
@@ -4213,7 +4162,7 @@ Repository.prototype._loadItem = function(id, itjs) {
 		if (!note.dtree.first) {
 			note.dtree.append(new Paragraph(""));
 		}
-		System.space.addItem(note, false, itjs.x, itjs.y);
+		System.space.addItem(note, false);
 		return note;
 	}
 	case "label":
@@ -4223,7 +4172,7 @@ Repository.prototype._loadItem = function(id, itjs) {
 		if (!label.dtree.first) {
 			label.dtree.append(new Paragraph(""));
 		}
-		System.space.addItem(label, false, itjs.x, itjs.y);
+		System.space.addItem(label, false);
 		return label;
 	default :
 		throw new Error("unknown item type");
@@ -4275,7 +4224,7 @@ Repository.prototype.addItem = function(item) {
   `'  `'   ' ' ' `-^ `-' ' '
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 window.onload = function() {
-	//window.localStorage.clear();
+	window.localStorage.clear();
 	System.init();
 }
 
