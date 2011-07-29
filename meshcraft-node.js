@@ -33,33 +33,26 @@ var dispatch = function(req, res) {
 		res.end(content, "binary");
 	} 
 
-  
-	if (req.url == "/favicon.png") {
-		fs.readFile('./favicon.png', function(error, content) {
-			if (error) {
-				serverError(500);
-			} else {
-				renderPng(content);
-			}
-		});
-	} else if (req.url == "/favicon.ico") {
+ 	switch(req.url) {
+	case "/favicon.ico" :
 		fs.readFile('./favicon.ico', function(error, content) {
-			if (error) {
-				serverError(500);
-			} else {
-				renderIco(content);
-			}
+			if (error) serverError(500); else renderIco(content);
 		});
-	} else if (req.url == "/" || req.url == "/meshcraft.html" || req.url == "/index.html") {
+		break;
+	case "/" :
+	case "/meshcraft.html" :
+	case "/index.html" :
 		fs.readFile('./meshcraft.html', function(error, content) {
-			if (error) {
-				serverError(500);
-			} else {
-				renderHtml(content);
-			}
+			if (error) serverError(500); else renderHtml(content);	
 		});
-	} else {
+	case "/meshcraft.js" :
+		fs.readFile('./meshcraft.js', function(error, content) {
+			if (error) serverError(500); else renderHtml(content);	
+		});
+		break;
+	default :
 		serverError(404, '404 Bad Request');
+		break;
 	}
 }
  
