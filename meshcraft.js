@@ -11,7 +11,6 @@
                    `'-.....-.'.'.-'  / | |     | |    `-._____ / | |     / /   | |_  | |      |  '.'
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___'   '___'                      `~~'  `"   |_|      `'*/ 
-
 "use strict";
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1093,7 +1092,6 @@ _init : function() {
 		
 	/* view window resized */
 	function onresize(event) {
-		/* todo debouncing */
 		canvas.width  = window.innerWidth - 1;
 		canvas.height = window.innerHeight - 1;	
 		this.space && this.space.redraw();
@@ -1501,7 +1499,6 @@ Hexmenu.prototype.set = function(x, y) {
 Hexmenu.prototype.draw = function() {
 	var canvas = System.canvas;
 	var cx = canvas.getContext("2d");
-	cx.save();
 	var x = this.x + 0.5;
 	var y = this.y + 0.5;
 	var r = this.r;
@@ -1538,8 +1535,7 @@ Hexmenu.prototype.draw = function() {
 	cx.textBaseline = "middle";
 	
 	var labels = this.labels;
-	var llen = labels.length;
-	
+	var llen = labels.length;	
 	
 	var dist = r / 3.5;
 	switch (llen) {
@@ -1568,8 +1564,6 @@ Hexmenu.prototype.draw = function() {
 	case 0:
 		/* nothing */
 	}
-	cx.beginPath(); /* todo tidy up */
-	cx.restore();
 }
 
 Hexmenu.prototype._getMousepos = function(x, y) {
@@ -1786,7 +1780,7 @@ Space.prototype.redraw = function() {
 		it.draw(this);
 	}
 	if (editor.item) {
-		editor.item.drawHandles(canvas, this.pox, this.poy); /* todo spacify */
+		editor.item.drawHandles(this);
 	}
 	
 	var ia = this._iaction;
@@ -3161,15 +3155,15 @@ Item.prototype._checkItemCompass = function(x, y, rhs) {
 
 /* draws the edit handles of an item (resize, itemmenu) */
 /* rhs ... resize  handles selector */
-Item.prototype._drawHandles = function(canvas, pox, poy, rhs) {
-	var cx = canvas.getContext("2d");
+Item.prototype._drawHandles = function(space, rhs) {
+	var cx = space.canvas.getContext("2d");
 	cx.save();
 	var ds = settings.handleDistance; 			
 	var hs = settings.handleSize;
 	var hs2 = hs / 2;
 			
-	var x1 = this.x + 0.5 - ds + pox;
-	var y1 = this.y + 0.5 - ds + poy;
+	var x1 = this.x + 0.5 - ds + space.pox;
+	var y1 = this.y + 0.5 - ds + space.poy;
 	var x2 = x1 + this.width  + 2 * ds - 1;
 	var y2 = y1 + this.height + 2 * ds - 1;
 	var xm = R((x1 - 0.5 + x2) / 2) + 0.5;
@@ -3198,19 +3192,20 @@ Item.prototype._drawHandles = function(canvas, pox, poy, rhs) {
 		
 	cx.beginPath(); 
 	/* draws item menu handler */
-	x1 = this.x + pox - 0.5;
-	y1 = this.y + poy - 0.5;
+	x1 = this.x + space.pox - 0.5;
+	y1 = this.y + space.poy - 0.5;
 	x2 = x1 + this.width + 1;
 	y2 = y1 + this.height + 1;	
 	var xim = x1 + R(this.width  * settings.itemMenuPositionkX + settings.itemMenuPositiondX);
 	var yim = y1 + R(this.height * settings.itemMenuPositionkY + settings.itemMenuPositiondY);
 	/* clip, never draws over the item, and not below or left of it */
+	/* todo remove */
 	cx.moveTo(x1, 0);
 	cx.lineTo(x1, y1);
 	cx.lineTo(x1 + this.width, y1);
 	cx.lineTo(x1 + this.width, y1 + this.height);
-	cx.lineTo(canvas.width, y1 + this.height);
-	cx.lineTo(canvas.width, 0);
+	cx.lineTo(space.canvas.width, y1 + this.height);
+	cx.lineTo(space.canvas.width, 0);
 	cx.closePath();
 	cx.clip();
 	Hex.makePath(cx, xim, yim, settings.itemMenuInnerRadius);
@@ -3342,11 +3337,11 @@ Object.defineProperty(Note.prototype, "scrolly", {
 });
 
 /* draws the items handles */
-Note.prototype.drawHandles = function(canvas, pox, poy, rhs) {
-	return this._drawHandles(canvas, pox, poy, 255);
+Note.prototype.drawHandles = function(space) {
+	return this._drawHandles(space, 255);
 }
 
-Note.prototype.checkItemCompass = function(x, y, rhs) { 
+Note.prototype.checkItemCompass = function(x, y) { 
 	return this._checkItemCompass(x, y, 255);
 }
 
@@ -3587,8 +3582,8 @@ Label.prototype.resize = function(width, height) {
 }
 
 /* draws the items handles */
-Label.prototype.drawHandles = function(canvas, pox, poy, rhs) {
-	this._drawHandles(canvas, pox, poy, 170);
+Label.prototype.drawHandles = function(space) {
+	this._drawHandles(space, 170);
 }
 
 Label.prototype.checkItemCompass = function(x, y, rhs) { 
@@ -3699,8 +3694,8 @@ Relation.prototype.resize = function(width, height) {
 
 /* draws the items handles */
 /* todo what is rhs? */
-Relation.prototype.drawHandles = function(canvas, pox, poy, rhs) {
-	this._drawHandles(canvas, pox, poy, 170);
+Relation.prototype.drawHandles = function(space) {
+	this._drawHandles(space, 170);
 }
 
 Relation.prototype.checkItemCompass = function(x, y, rhs) { 
