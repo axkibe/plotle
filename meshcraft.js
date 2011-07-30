@@ -79,12 +79,9 @@ var settings = {
 	floatMenuFillStyle : "rgb(255, 237, 210)",
 
 	/* item menu style */
-	itemMenuPositionkX   :  0,
-	itemMenuPositionkY   :  0,
-	itemMenuPositiondX   : 26,
-	itemMenuPositiondY   :  8,
 	itemMenuOuterRadius : 75,
 	itemMenuInnerRadius : 30,
+	itemMenuSliceHeight : 17,
 	itemMenuOuterBorderWidth : 0.5,
 	itemMenuOuterBorderColor1 : "rgb(0, 0, 0)",
 	itemMenuOuterBorderColor2 : "rgb(255, 255, 255)",
@@ -92,7 +89,7 @@ var settings = {
 	itemMenuInnerBorderColor1 : "rgb(255, 200, 105)",
 	itemMenuInnerBorderColor2 : "rgb(255, 255, 255)",
 	itemMenuBackground1 : "rgba(255, 255, 200, 0.955)",
-	itemMenuBackground2 : "rgba(255, 255, 205, 0)",
+	itemMenuBackground2 : "rgba(255, 255, 205, 0.5)",
 	itemMenuFillStyle : "rgb(255, 237, 210)",
 	
 	/* selection */
@@ -1295,8 +1292,7 @@ Y- *-----*    +    *-----*
 	 \  5  *-----*   3 /
  	  \   /       \   /
 	   \ /    4    \ /
-        *-----------*
-		
+        *-----------*		
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 var Hex = {
 	c6  : Math.cos(Math.PI / 6),
@@ -1317,6 +1313,35 @@ Hex.makePath = function(cx, x, y, r) {
 	cx.lineTo(x - r, y);
 	cx.closePath();
 }
+ 
+/* draws the top slice
+		------------- 
+	   /.............\
+      /...............\
+	 +.................\
+	/                   \
+   *          .          *
+	\                   /
+	 \                 /
+ 	  \               /
+	   \             /
+        *-----------*		
+*/
+Hex.makeSlicePath = function(cx, x, y, r, h) {
+	var r2 = R(r / 2);
+	var rc = R(Hex.c6 * r);
+	if (h > r) throw new Error("Cannot make slice larger than radius");
+	var ym = y + rc - h;
+	var xm = x + r - (r * Hex.c6 - h) * Hex.t6;	
+	
+	cx.beginPath();
+	cx.moveTo(x, y);
+	cx.lineTo(xm - r2, y - h);
+	cx.lineTo(xm + r2, y - h);
+	cx.lineTo(xm - x + xm, y);
+	return xm;
+}
+
 
 /* draws a filltext rotated by phi */
 Hex.fillText = function(cx, text, x, y, phi, rad) {
@@ -1350,6 +1375,20 @@ Hex.within = function(x, y, r) {
 		x + r <=  yh
 	);
 }
+
+/* returns true if x/y is in hexagon */
+Hex.withinSlice = function(x, y, r, h) {
+	var w  = r - (r * Hex.c6 - h) * Hex.t6;
+	var rc = r * Hex.c6;
+	var yh = y * Hex.t6;
+	return !(
+		y < -h || 
+		y > 0 ||
+	    x < -yh ||
+		x - 2 * w > yh
+	);
+}
+
 
 /* makes a double hex with 6 segments and center */
 /* it kinda looks like a flower. */
@@ -3084,17 +3123,15 @@ function Item(type) {
 
 /* set a hex menu to be this items menu */
 Item.prototype.setItemMenu = function(menu, pox, poy) {
-	menu.set(
-		this.x + this.width  * settings.itemMenuPositionkX + settings.itemMenuPositiondX + pox, 
-		this.y + this.height * settings.itemMenuPositionkY + settings.itemMenuPositiondY + poy);
+	var r = settings.itemMenuInnerRadius;
+	var h = settings.itemMenuSliceHeight;
+	menu.set(R(this.x + pox + r - (r * Hex.c6 - h) * Hex.t6), R(this.y + poy + r * Hex.c6 - h) - 1);
 }
 
 /* returns if coords are within the item menu */
 Item.prototype.withinItemMenu = function(x, y) {
-	return Hex.within(
-		x - this.x - this.width  * settings.itemMenuPositionkX - settings.itemMenuPositiondX, 
-		y - this.y - this.height * settings.itemMenuPositionkY - settings.itemMenuPositiondY, 
-		settings.itemMenuInnerRadius);
+	return Hex.withinSlice(x - this.x, y - this.y - 1, 
+		settings.itemMenuInnerRadius, settings.itemMenuSliceHeight);
 }
 
 /* returns the compass of the resize handles of an item 
@@ -3192,24 +3229,16 @@ Item.prototype._drawHandles = function(space, rhs) {
 		
 	cx.beginPath(); 
 	/* draws item menu handler */
-	x1 = this.x + space.pox - 0.5;
-	y1 = this.y + space.poy - 0.5;
+	x1 = this.x + space.pox + 0.5;
+	y1 = this.y + space.poy + 0.5;
 	x2 = x1 + this.width + 1;
 	y2 = y1 + this.height + 1;	
-	var xim = x1 + R(this.width  * settings.itemMenuPositionkX + settings.itemMenuPositiondX);
-	var yim = y1 + R(this.height * settings.itemMenuPositionkY + settings.itemMenuPositiondY);
-	/* clip, never draws over the item, and not below or left of it */
-	/* todo remove */
-	cx.moveTo(x1, 0);
-	cx.lineTo(x1, y1);
-	cx.lineTo(x1 + this.width, y1);
-	cx.lineTo(x1 + this.width, y1 + this.height);
-	cx.lineTo(space.canvas.width, y1 + this.height);
-	cx.lineTo(space.canvas.width, 0);
-	cx.closePath();
-	cx.clip();
-	Hex.makePath(cx, xim, yim, settings.itemMenuInnerRadius);
-	var grad = cx.createLinearGradient(0, yim - settings.itemMenuInnerRadius,  0, yim + 5);
+	var xim = Hex.makeSlicePath(cx, x1, y1 - 1, 
+		settings.itemMenuInnerRadius, settings.itemMenuSliceHeight);
+	var grad = cx.createLinearGradient(
+		0, y1 - settings.itemMenuSliceHeight - 1, 
+		0, y1 - settings.itemMenuSliceHeight + settings.itemMenuInnerRadius * Hex.c6
+	);
 	grad.addColorStop(0, settings.itemMenuBackground1);
 	grad.addColorStop(1, settings.itemMenuBackground2);	
 	cx.fillStyle = grad;
