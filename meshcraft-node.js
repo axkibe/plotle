@@ -32,6 +32,13 @@ var dispatch = function(req, res) {
 		});
 		res.end(content, "binary");
 	} 
+	
+	var renderScript = function(content) {
+		res.writeHead(200, 
+			{'Content-Type': 'text/javascript'}
+		);
+		res.end(content, 'utf-8');		
+	}
 
  	switch(req.url) {
 	case "/favicon.ico" :
@@ -47,7 +54,7 @@ var dispatch = function(req, res) {
 		});
 	case "/meshcraft.js" :
 		fs.readFile('./meshcraft.js', function(error, content) {
-			if (error) serverError(500); else renderHtml(content);	
+			if (error) serverError(500); else renderScript(content);	
 		});
 		break;
 	default :

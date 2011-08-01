@@ -188,6 +188,15 @@ var enums = {
 	ACT_FMENU   : 5,  // clicked the float menu (background click)
 	ACT_IMENU   : 6,  // clicked one item menu
 	ACT_RBIND   : 7,  // dragging a new relation
+	
+	/* which kind of event transfix() calls for all items which intersect x/y */
+	TRANSFIX_NONE  : 0,
+	TRANSFIX_HOVER : 1,
+	
+	/* bitfield return code of transfix() */
+	TX_NONE   : 0x0,
+	TX_HIT    : 0x1,
+	TX_REDRAW : 0x2,
 };
 
 
@@ -1890,7 +1899,7 @@ Space.prototype.mousehover = function(x, y) {
 	
 	switch(this._iaction.act) {
 	case enums.ACT_FMENU :
-		redraw = this._floatmenu.mousehover(x, y);
+		redraw = redraw || this._floatmenu.mousehover(x, y);
 		if (this._floatmenu.mousepos >= 0) {
 			/* mouse floated on float menu, no need to look further */
 			System.setCursor("default");
@@ -1899,32 +1908,34 @@ Space.prototype.mousehover = function(x, y) {
 		}
 		break;
 	case enums.ACT_IMENU :
-		redraw = this._itemmenu.mousehover(x, y);
+		redraw = redraw || this._itemmenu.mousehover(x, y);
 		if (this._itemmenu.mousepos >= 0) {
-			/* mouse floated on float menu, no need to look further */
+			/* mouse floated on item menu, no need to look further */
 			System.setCursor("default");
 			if (redraw) this.redraw();
 			return;
 		}
-		break;		
+		break;	
 	}
 
-	var atxy = this.repository.topAtXY(px, py);	
 	if (editor.item) {
-		if (atxy.z != 0 && editor.item.withinItemMenu(px, py)) {
+		/* todo move into items */
+		if (editor.item.withinItemMenu(px, py)) {
 			System.setCursor("pointer");
 			if (redraw) this.redraw();
 			return;
 		}
-			
+
 		if ((com = editor.item.checkItemCompass(px, py))) {
 			System.setCursor(com + "-resize");
 			if (redraw) this.redraw();
 			return;
 		}
 	}
-	
-	System.setCursor(atxy.it ? "default" : "crosshair");
+
+	var tx = this.repository.transfix(px, py, enums.TRANSFIX_HOVER);
+	redraw = redraw || (tx & enums.TX_REDRAW);
+	if (!(tx & enums.TX_HIT)) { System.setCursor("crosshair");} 
 	if (redraw) this.redraw();
 }
 
@@ -2450,9 +2461,10 @@ Space.prototype.mousedown = function(x, y) {
 			this.repository.addItem(note, true);
 			break;
 		case 2 : // label
-			/* todo center, like notes */
 			var label = new Label(null, null, fm.x - this.pox, fm.y - this.poy);
 			label.dtree.append(new Paragraph("Label"));
+			label.x -= label.width  / 2;
+			label.y -= label.height / 2;
 			this.repository.addItem(label, true);
 			break;
 		}
@@ -3304,6 +3316,16 @@ Note.prototype.listen = function() {
 	/* end of chain */
 }
 	
+/* mouse hovers at x/y 
+ * returns transfix code
+ */
+Note.prototype.txHover = function(x, y) {
+	if (x >= this.x && y >= this.y &&  x <= this.x + this.width && y <= this.y + this.height) {
+		System.setCursor("default");
+		return enums.FX_HIT;
+	}
+}
+	
 /* resizes the note 
  * returns true if something changed
  */
@@ -3534,6 +3556,17 @@ function Label(js, id, x, y) {
 	this._canvasActual = false;
 }
 
+/* mouse hovers at x/y 
+ * returns transfix code
+ */
+Label.prototype.txHover = function(x, y) {
+	if (x >= this.x && y >= this.y &&  x <= this.x + this.width && y <= this.y + this.height) {
+		System.setCursor("default");
+		return enums.FX_HIT;
+	}
+}
+
+
 /* turns the label into a string */
 Label.prototype.jsonfy = function() {
 	var js = {
@@ -3670,6 +3703,14 @@ Relation.prototype.jsonfy = function() {
 		d: this.dtree.jsonfy(),
 	}
 	return js;
+}
+
+/* mouse hovers at x/y 
+ * returns transfix code
+ */
+Relation.prototype.txHover = function(x, y) {
+	/* todo */
+	return enums.FX_NONE;
 }
 
 /* todo remove */
@@ -4075,7 +4116,27 @@ function Repository() {
 	this._topAtXYBuf = {};
 }
 
+/* shoots throw x/y and asks every item that intersects if it feels reponsible */ 
+Repository.prototype.transfix = function(x, y, fx_code) {
+	var zidx  = this.zidx;
+	var items = this.items;
+	var fx = 0;
+	for(var z = 0, zlen = zidx.length; z < zlen; z++) {
+		var it = items[zidx[z]];
+		switch (fx_code) {
+		case enums.TRANSFIX_HOVER : 
+			fx |= it.txHover(x, y);
+			break; 
+		default :
+			throw new Error("transfix, unknown code");
+		}
+		if (fx & enums.FX_HIT) break;
+	}
+	return fx;	
+}
+
 /* returns  {it: item at xy, z: info } */
+/* todo, can be removed? */
 Repository.prototype.topAtXY = function(x, y) {
 	var a = this._topAtXYBuf;
 	var zidx  = this.zidx;
@@ -4187,7 +4248,7 @@ Repository.prototype.doImport = function(str) {
 	this._idFactory = js.idf;	
 	var zlen = this.zidx.length;
 	for (var i = 0; i < zlen; i++) {
-		var id = zidx[i] = parseInt(zidx[i]);
+		var id = zidx[i] = typeof zidx[i] == "number" ? zidx[i] : parseInt(zidx[i]);
 		var item = this._loadItem(id, js.items[id]);
 		if (item) {
 			items[id] = item;
@@ -4202,7 +4263,6 @@ Repository.prototype.doImport = function(str) {
 	System.space.poy = js.poy || 0;
 	this._lock = false;
 }
-
 
 Repository.prototype._newItemID = function() {
 	var idf = this._idFactory;
