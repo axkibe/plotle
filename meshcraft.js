@@ -648,8 +648,8 @@ Editor.prototype.newline = function() {
 	caret.set(npara.first, 0);
 }
 	
-/* got a special key */
-/* returns redraw code telling if the element needs to be redrawn. */
+/* handles a special key */
+/* returns true if the element needs to be redrawn. */
 Editor.prototype.specialKey = function(keycode, shiftKey, ctrlKey) {
 	var item = this.item;
 	if (!item) {
@@ -1263,10 +1263,15 @@ _init : function() {
 	this.startBlinker();
 	/* hinders init to be called another time */
 	delete this.init; 
-	delete this._init; 
-	System.repository.loadup();	
+	delete this._init;
+	var e = null;
+	try {
+		System.repository.loadup();	
+	} catch (err) {
+		e = err;
+	}
 	System.space.redraw();
-	//vector1 = new VectorGraph(850, 200, note2.doc);
+	if (e) throw e;
 }};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1815,7 +1820,7 @@ Space.prototype.redraw = function() {
 	this.canvas = System.canvas;
 
 	for(var i = zidx.length - 1; i >= 0; i--) {
-		var it = items[zidx[i] ];
+		var it = items[zidx[i]];
 		it.draw(this);
 	}
 	if (editor.item) {
@@ -2075,7 +2080,7 @@ Space.prototype.dragstop = function(x, y) {
 		if (!atxy.it) {
 			break;
 		}
-		var rel = new Relation(iaction.item.id, atxy.it.id); /* todo allow id-less direct */
+		var rel = new Relation(null, null, iaction.item.id, atxy.it.id); /* todo allow id-less direct */
 		rel.dtree.append(new Paragraph("relates to"));
 		this.repository.addItem(rel, true);
 		break;
@@ -2440,13 +2445,13 @@ Space.prototype.mousedown = function(x, y) {
 		case 1 : // note
 			var nw = settings.newNoteWidth;
 			var nh = settings.newNoteHeight;
-			var note = new Note(nw, nh,	R(fm.x - nw / 2 - this.pox), R(fm.y - nh / 2 - this.poy));
+			var note = new Note(null, null, R(fm.x - nw / 2 - this.pox), R(fm.y - nh / 2 - this.poy), nw, nh);
 			note.dtree.append(new Paragraph(""));
 			this.repository.addItem(note, true);
 			break;
 		case 2 : // label
 			/* todo center, like notes */
-			var label = new Label(fm.x - this.pox, fm.y - this.poy);
+			var label = new Label(null, null, fm.x - this.pox, fm.y - this.poy);
 			label.dtree.append(new Paragraph("Label"));
 			this.repository.addItem(label, true);
 			break;
@@ -2525,39 +2530,9 @@ Space.prototype.getItem = function(id) {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  Part of a tree-structure.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-//Treenode.id = 1;
 function Treenode(type) {
 	this.type = type;
-	//this.id   = ++Treenode.id;
 }
-
-/* prints the structure */
-/* todo remove after a while */
-/*
-Treenode.prototype.dbgstructure = function() {
-	var str = "[" + this.type + "-" + this.id;
-	if (this.next) {
-		str += " n-" + this.next.id;
-	}
-	if (this.prev) {	
-		str += " p-" + this.prev.id;
-	}
-	if (this.first) {
-		str += " f-" + this.first.id + " {";
-		for(var nn = this.first; nn; nn = nn.next) {
-			if (nn != this.first) {
-				str += ", ";
-			}
-			str += nn.dbgstructure();
-		}
-		str += "}"
-	}
-	if (this.last) {
-		str += " l-" + this.last.id;
-	}
-	str += "]";
-	return str;
-}*/
 
 /* appends tnode to list of children */
 Treenode.prototype.append = function(tnode) {
@@ -3117,8 +3092,9 @@ Object.defineProperty(DTree.prototype, "height", {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
  Something on a canvas.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Item(type) {
+function Item(type, id) {
 	this.type = type;
+	this.id = id;
 }
 
 /* set a hex menu to be this items menu */
@@ -3194,7 +3170,6 @@ Item.prototype._checkItemCompass = function(x, y, rhs) {
 /* rhs ... resize  handles selector */
 Item.prototype._drawHandles = function(space, rhs) {
 	var cx = space.canvas.getContext("2d");
-	cx.save();
 	var ds = settings.handleDistance; 			
 	var hs = settings.handleSize;
 	var hs2 = hs / 2;
@@ -3259,9 +3234,6 @@ Item.prototype._drawHandles = function(space, rhs) {
 		cx.lineWidth = settings.itemMenuOuterBorderWidth;
 		cx.stroke();
 	}
-		
-	cx.beginPath(); /* todo tidy up */
-	cx.restore();
 }
 
 
@@ -3277,26 +3249,24 @@ Note.prototype = new Item;
 Note.prototype.constructor = Note;
 
 /* constructor
- * Note(json)  or
- * Note(width, height, x, y) */
-/* todo move xy to start */
-function Note(a1, a2, a3, a4) {
-	if (arguments.length == 1) {
-		var js = a1;
+ * Note(json, [id])  or
+ * Note(null, [id], width, height, x, y) */
+function Note(js, id, x, y, width, height) {
+	if (js) {
 		this.x      = js.x;
 		this.y      = js.y;
 		this.width  = js.w;
 		this.height = js.h;
 		this.dtree = new DTree(js.d);
 	} else {
-		this.width  = a1;
-		this.height = a2;
-		this.x      = a3;
-		this.y      = a4;
+		this.width  = width;
+		this.height = height;
+		this.x      = x;
+		this.y      = y;
 		this.dtree  = new DTree();
 	}
 	this.dtree.parent = this;
-	Item.call(this, "note");
+	Item.call(this, "note", id);
 	this.bcanvas = document.createElement("canvas");
 	this.textBorder = settings.noteTextBorder;
 	this._canvasActual = false;
@@ -3335,7 +3305,8 @@ Note.prototype.listen = function() {
 }
 	
 /* resizes the note 
- * returns true if something changed */
+ * returns true if something changed
+ */
 Note.prototype.resize = function(width, height) {
 	if (height < settings.noteMinHeight) height = settings.noteMinHeight;
 	if (width  < settings.noteMinWidth)   width = settings.noteMinWidth;
@@ -3389,8 +3360,9 @@ function Note_bevel(cx, x, y, w, h, border, radius) {
 	cx.arc(x1 + radius, y1 + radius, radius, Math.PI, -Math.PI / 2, false);
 }
 	
-/* draws the item       * 
- * space  : todraw upon */
+/* draws the item       
+ * space  : todraw upon 
+ */
 Note.prototype.draw = function(space) {
 	var bcanvas = this.bcanvas;
 	var dtree = this.dtree;
@@ -3543,21 +3515,21 @@ Label.prototype = new Item;
 Label.prototype.constructor = Note;
 
 /* constructor
- * Label(json)  or
- * Label(x, y) */
-function Label(a1, a2) {
-	if (arguments.length == 1) {
-		var js = a1;
+ * Label(js, [id])  or
+ * Label(null, [id], x, y) 
+ */
+function Label(js, id, x, y) {
+	if (js) {
 		this.x     = js.x;
 		this.y     = js.y;
 		this.dtree = new DTree(js.d);
 	} else {
-		this.x     = a1;
-		this.y     = a2;
+		this.x     = x;
+		this.y     = y;
 		this.dtree = new DTree(null, 20);
 	}
 	this.dtree.parent = this;
-	Item.call(this, "label");
+	Item.call(this, "label", id);
 	this.bcanvas = document.createElement("canvas");
 	this._canvasActual = false;
 }
@@ -3664,9 +3636,14 @@ Label.prototype.focus = function(editor) {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 Relation.prototype = new Item;
 Relation.prototype.constructor = Note;
-function Relation(a1, a2) {
+
+/* constructor
+ * Relation(js, [id])
+ * Relation(js, [id], i1, i2) 
+ */
+function Relation(js, id, i1, i2) {
 	var dtree;
-	if (arguments.length == 1) {
+	if (js) {
 		var js = a1;
 		this.dtree  = dtree = new DTree(js.d);
 		this.i1id   = js.i1.id;
@@ -3674,12 +3651,12 @@ function Relation(a1, a2) {
 		if (!this.item1 && !this.item2) throw new Error("Relation relates to nothing");
 	} else {
 		this.dtree  = dtree = new DTree(null, 14);
-		this.i1id   = a1;
-		this.i2id   = a2;		
+		this.i1id   = i1;
+		this.i2id   = i2;		
 	}
 	dtree.parent = this; /* todo, move into constructor */
 	dtree.flowWidth = -1;
-	Item.call(this, "rel");
+	Item.call(this, "rel", id);
 	this.bcanvas = document.createElement("canvas");
 	this._canvasActual = false;
 	this.middle = {};
@@ -4104,7 +4081,7 @@ Repository.prototype.topAtXY = function(x, y) {
 	var zidx  = this.zidx;
 	var items = this.items;
 	for(var z = 0, zlen = zidx.length; z < zlen; z++) {
-		var it = items[zidx[z] ];
+		var it = items[zidx[z]];
 		/* todo let item decide */
 		if (x >= it.x && y >= it.y &&  x <= it.x + it.width && y <= it.y + it.height) {
 			a.z  = z;
@@ -4128,27 +4105,36 @@ Repository.prototype.loadup = function() {
 		}
 	}
 	if (!this._idFactory) {
-		console.log("no repository found.");
+		console.log("no repository found. (no idf)");
 		this._idFactory = {nid: 1};
 		return;
 	}
 	
-	var itljs = window.localStorage.getItem("itemlist");
-	if (!itljs) return;
-	var itl = JSON.parse(itljs);
+	var zjs = window.localStorage.getItem("zidx");	
+	if (!zjs) {
+		console.log("no repository found. (no zidx)");
+		return;
+	}
+	var zidx = this.zidx = JSON.parse(zjs);
 	
-	var itllen = itl.length;
+	var zlen = zidx.length;
 	this._lock = true;
-	for (var i = 0; i < itllen; i++) {
-		var itstr = window.localStorage.getItem(itl[i]);
+	for (var i = 0; i < zlen; i++) {
+		var id = zidx[i];
+		var itstr = window.localStorage.getItem(id);
 		var itjs;
 		try {
 			itjs = JSON.parse(itstr);
 		} catch (err) {
 			this._lock = false;
 			throw err;
-		} 
-		this._loadItem(itl[i], itjs);
+		} 		
+		var item = this._loadItem(id, itjs);
+		if (item) {
+			this.items[id] = item;
+		} else {
+			zidx.splice(i--, 1); zlen--;
+		}
 	}
 	this._lock = false;
 }
@@ -4174,7 +4160,7 @@ Repository.prototype.moveToTop = function(z) {
 	var id = zidx[z];
 	zidx.splice(z, 1);
 	zidx.unshift(id);
-	this.updateItemlist();
+	this._saveZIDX();
 	this._topAtXYBuf.z = 0;
 	return 0; 
 }
@@ -4196,18 +4182,21 @@ Repository.prototype.doImport = function(str) {
 	for(var id in items) {
 		window.localStorage.setItem(id, "");
 	}
-	window.localStorage.setItem("itemlist", JSON.stringify(js));
-	/* todo move erase into space */
-	this.items = {};
-	this.zidx = [];
+	var items = this.items = {};
+	var zidx  = this.zidx = js.z;
 	this._idFactory = js.idf;	
-	var zlen = js.z.length;
+	var zlen = this.zidx.length;
 	for (var i = 0; i < zlen; i++) {
-		var id = js.z[i];
+		var id = zidx[i] = parseInt(zidx[i]);
 		var item = this._loadItem(id, js.items[id]);
-		this._saveItem(item);
+		if (item) {
+			items[id] = item;
+			this._saveItem(item); // todo workaround
+		} else {
+			zidx.splice(i--, 1); zlen--;
+		}
 	}
-	this._saveItemlist();
+	this._saveZIDX();
 	System.editor.blur();
 	System.space.pox = js.pox || 0;
 	System.space.poy = js.poy || 0;
@@ -4224,49 +4213,42 @@ Repository.prototype._newItemID = function() {
 
 Repository.prototype._loadItem = function(id, itjs) {
 	if (!itjs || !itjs.t) {
-		throw new Error("JSON error: attributes missing from " + id);
+		throw new Error("JSON error: attributes missing from " + id + ":");
 	}
 
 	switch(itjs.t) {
 	case "note":
 	{
 		var note;
-		note = new Note(itjs);
-		note.id = id;
+		note = new Note(itjs, id);
 		if (!note.dtree.first) {
 			note.dtree.append(new Paragraph(""));
 		}
-		this.addItem(note, false);
 		return note;
 	}
 	case "label":
 		var label;
-		label = new Label(itjs);
-		label.id = id;
+		label = new Label(itjs, id);
 		if (!label.dtree.first) {
 			label.dtree.append(new Paragraph(""));
 		}
-		this.addItem(label, false);
 		return label;
+	case "rel":
+		debug("ignored relation");
+		return null;
 	default :
 		throw new Error("unknown item type");
 	}
 }
 
 /* todo rename to zidx */
-Repository.prototype._saveItemlist = function() {
-	window.localStorage.setItem("itemlist", JSON.stringify(System.space.zidx));
-}
-
-/* todo rename */
-Repository.prototype.updateItemlist = function() {
-	if (this._lock) return;
-	this._saveItemlist();
+Repository.prototype._saveZIDX = function() {
+	window.localStorage.setItem("zidx", JSON.stringify(this.zidx));
 }
 
 /* adds an item to the space */
-Repository.prototype.addItem = function(item) {
-	item.id  = this._newItemID(item.type);
+Repository.prototype.addItem = function(item, top) {
+	if (!item.id) item.id  = this._newItemID(item.type);
 	this.items[item.id] = item;
 	if (top) {
 		this.zidx.unshift(item.id);
@@ -4274,10 +4256,9 @@ Repository.prototype.addItem = function(item) {
 		this.zidx.push(item.id);
 	}
 	
-	if (!this._lock) {
-		this._saveItem(item);
-		this._saveItemlist();
-	}
+	if (this._lock) throw new Error("addind while repository locked");
+	this._saveItem(item);
+	this._saveZIDX();
 }
 
 /* removes an item from the repository. */
@@ -4290,7 +4271,7 @@ Repository.prototype.removeItem = function(item) {
 	
 	if (!this._lock) { 
 		window.localStorage.setItem(item.id, "");
-		this._saveItemlist();
+		this._saveZIDX();
 	}
 }
 
@@ -4310,10 +4291,13 @@ Repository.prototype.updateItem = function(item) {
   `'  `'   ' ' ' `-^ `-' ' '
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 window.onload = function() {
-	window.localStorage.clear();
+	//window.localStorage.clear();
 	System.init();
 }
 
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ DemoRepository +++
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 var demoRepository = (<r><![CDATA[
 {
  "formatversion": 0,
