@@ -173,6 +173,7 @@ function debug() {
  '`--' ' ' `-^ ' ' ' `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/* todo split up into e.g. MST.NONE */
 var enums = {
 	/* Mouse state */
 	MST_NONE   : 0, // button is up 
@@ -190,13 +191,13 @@ var enums = {
 	ACT_RBIND   : 7,  // dragging a new relation
 	
 	/* which kind of event transfix() calls for all items which intersect x/y */
-	TRANSFIX_NONE  : 0,
-	TRANSFIX_HOVER : 1,
+	TFX_NONE      : 0,
+	TFX_HOVER     : 1,
+	TFX_DRAGSTART : 2,
 	
 	/* bitfield return code of transfix() */
-	TX_NONE   : 0x0,
-	TX_HIT    : 0x1,
-	TX_REDRAW : 0x2,
+	TFX_HIT    : 0x1,
+	TFX_REDRAW : 0x2,
 };
 
 
@@ -1806,7 +1807,7 @@ function Space() {
 		["", "Remove"])
 	this.edgemenu = new Edgemenu();
 	
-	this._iaction = { 
+	this.iaction = {
 		act : enums.ACT_NONE,
 	};
 	
@@ -1836,8 +1837,8 @@ Space.prototype.redraw = function() {
 		editor.item.drawHandles(this);
 	}
 	
-	var ia = this._iaction;
-	switch(this._iaction.act) {
+	var ia = this.iaction;
+	switch(this.iaction.act) {
 	case enums.ACT_FMENU :
 		this._floatmenu.draw();
 		break;
@@ -1897,7 +1898,7 @@ Space.prototype.mousehover = function(x, y) {
 		return;
 	}
 	
-	switch(this._iaction.act) {
+	switch(this.iaction.act) {
 	case enums.ACT_FMENU :
 		redraw = redraw || this._floatmenu.mousehover(x, y);
 		if (this._floatmenu.mousepos >= 0) {
@@ -1933,10 +1934,40 @@ Space.prototype.mousehover = function(x, y) {
 		}
 	}
 
-	var tx = this.repository.transfix(px, py, enums.TRANSFIX_HOVER);
-	redraw = redraw || (tx & enums.TX_REDRAW);
-	if (!(tx & enums.TX_HIT)) { System.setCursor("crosshair");} 
+	/* todo remove nulls by shiftKey, ctrlKey */
+	var tx = this.repository.transfix(this, px, py, null, null, enums.TFX_HOVER);
+	redraw = redraw || (tx & enums.TFX_REDRAW);
+	if (!(tx & enums.TFX_HIT)) { System.setCursor("crosshair");} 
 	if (redraw) this.redraw();
+}
+
+/* starts creating a new relation */
+Space.prototype.actionSpawnRelation = function(item, x, y) {
+	var ia = this.iaction;
+	ia.act = enums.ACT_RBIND;
+	ia.item = item;
+	ia.sx = ia.smx = x;
+	ia.sy = ia.smy = y;
+	System.setCursor("not-allowed");
+}
+
+/* starts a scrolling action */
+Space.prototype.actionScrollY = function(item, scrollY, startY) {
+	var ia  = this.iaction;
+	ia.act  = enums.ACT_SCROLLY;
+	ia.item = item;
+	ia.sy   = scrollY;
+	ia.ssy  = startY;
+}
+
+/* starts dragging an item */
+Space.prototype.actionIDrag = function(item, sx, sy) {
+	var ia  = this.iaction;
+	ia.act  = enums.ACT_IDRAG;
+	ia.item = item;
+	ia.sx   = sx;
+	ia.sy   = sy;	
+	System.setCursor("move");
 }
 
 /* starts an operation with the mouse held down */
@@ -1944,28 +1975,18 @@ Space.prototype.dragstart = function(x, y, shiftKey, ctrlKey) {
 	x -= this.pox;
 	y -= this.poy;
 	var editor  = System.editor;
-	var iaction = this._iaction;
+	var iaction = this.iaction;
 	var redraw = false;
-
-	var atxy = this.repository.topAtXY(x, y);
-	var it = atxy.it;
-	var relit = null; /* item of a new relation */
-	if (atxy.z != 0 && editor.item && editor.item.withinItemMenu(x, y)) {
-		relit = editor.item;
-	} else if (it && ctrlKey) {
-		relit = it;
-	}
-	if (relit) {
-		iaction.act = enums.ACT_RBIND;
-		iaction.item = relit;
-		iaction.sx = iaction.smx = x;
-		iaction.sy = iaction.smy = y;
-		System.setCursor("not-allowed");
+	
+	if (editor.item && editor.item.withinItemMenu(x, y)) {
+		this.actionSpawnRelation(editor.item, x, y);
 		this.redraw();
 		return;
-	}
+	} 
 
-	if (!atxy.it) {
+	var tfx = this.repository.transfix(this, x, y, shiftKey, ctrlKey, enums.TFX_DRAGSTART);
+		
+	if (!(tfx & enums.TFX_HIT)) {
 		/* panning */
 		iaction.act = enums.ACT_PAN;
 		iaction.sx = x;
@@ -1974,33 +1995,7 @@ Space.prototype.dragstart = function(x, y, shiftKey, ctrlKey) {
 		return;
 	} 
 	
-	if (atxy.z > 0) {
-		this.repository.moveToTop(atxy.z);
-		redraw = true; /* todo full redraw */		
-	}
-	/*  focus the item */
-	if (editor.item != it) {
-		atxy.it.focus(editor);
-		redraw = true;
-	}
-
-	var srad = settings.scrollbarRadius;
-	var sbmx = settings.scrollbarMarginX;
-	if (it.scrolly >= 0 && Math.abs(x - it.x - it.width + srad + sbmx) <= srad +1)  {
-		iaction.act = enums.ACT_SCROLLY; 
-		iaction.item = it;
-		iaction.sy   = y;
-		iaction.ssy  = it.scrolly;
-	} else {
-		iaction.act = enums.ACT_IDRAG;
-		iaction.item = it;
-		iaction.sx = x - it.x;
-		iaction.sy = y - it.y;
-		System.setCursor("move");
-	}
-	if (redraw) {
-		this.redraw();
-	}
+	if (redraw) this.redraw();
 }
 
 /* a click is a mouse down followed within dragtime by 'mouseup' and
@@ -2009,7 +2004,7 @@ Space.prototype.click = function(x, y) {
 	var px = x - this.pox;
 	var py = y - this.poy;
 	var editor = System.editor;
-	var iaction = this._iaction;
+	var iaction = this.iaction;
 	var redraw = false;
 		
 	var atxy = this.repository.topAtXY(px, py);
@@ -2058,7 +2053,7 @@ Space.prototype.dragstop = function(x, y) {
 	x -= this.pox;
 	y -= this.poy;
 	var editor = System.editor;
-	var iaction = this._iaction;
+	var iaction = this.iaction;
 	var redraw = false;
 	switch (iaction.act) {
 	case enums.ACT_IDRAG :
@@ -2110,7 +2105,7 @@ Space.prototype.dragstop = function(x, y) {
 Space.prototype.dragmove = function(x, y) {
 	x -= this.pox;
 	y -= this.poy;
-	var iaction = this._iaction;
+	var iaction = this.iaction;
 	var redraw = false;
 	
 	switch(iaction.act) {
@@ -2420,7 +2415,7 @@ Space.prototype.mousedown = function(x, y) {
 	var px = x - this.pox;
 	var py = y - this.poy;
 	
-	var iaction = this._iaction;
+	var iaction = this.iaction;
 	var editor = System.editor;
 	var redraw = false;
 
@@ -3319,11 +3314,44 @@ Note.prototype.listen = function() {
 /* mouse hovers at x/y 
  * returns transfix code
  */
-Note.prototype.txHover = function(x, y) {
-	if (x >= this.x && y >= this.y &&  x <= this.x + this.width && y <= this.y + this.height) {
-		System.setCursor("default");
-		return enums.FX_HIT;
+Note.prototype.tfxHover = function(space, x, y, z, shiftKey, ctrlKey) {
+	if (x < this.x || y < this.y ||  x > this.x + this.width || y > this.y + this.height) {
+		return 0;
 	}
+	System.setCursor("default");
+	return enums.TFX_HIT;
+}
+
+/* a dragging move started
+ * returns transfix code
+ */
+Note.prototype.tfxDragstart = function(space, x, y, z, shiftKey, ctrlKey) {
+	if (x < this.x || y < this.y ||  x > this.x + this.width || y > this.y + this.height) {
+		return 0;
+	}
+	var tfx = enums.TFX_HIT;
+	if (ctrlKey) {
+		space.actionSpawnRelation(this, x, y);
+		return tfx | enums.TFX_REDRAW;
+	}
+	if (z > 0) {
+		space.repository.moveToTop(z);
+		tfx |= enums.TFX_REDRAW; /* todo full redraw */
+	}
+	if (System.editor.item != this) {
+		this.focus(System.editor);
+		/* todo, why again is focus part of items? */
+		tfx |= enums.TFX_REDRAW;
+	}
+
+	var srad = settings.scrollbarRadius;
+	var sbmx = settings.scrollbarMarginX;
+	if (this.scrolly >= 0 && Math.abs(x - this.x - this.width + srad + sbmx) <= srad +1)  {
+		space.actionScrollY(this, y, this.scrolly);
+	} else {
+		space.actionIDrag(this, x - this.x, y - this.y);
+	}
+	return tfx;
 }
 	
 /* resizes the note 
@@ -3559,13 +3587,34 @@ function Label(js, id, x, y) {
 /* mouse hovers at x/y 
  * returns transfix code
  */
-Label.prototype.txHover = function(x, y) {
-	if (x >= this.x && y >= this.y &&  x <= this.x + this.width && y <= this.y + this.height) {
-		System.setCursor("default");
-		return enums.FX_HIT;
+Label.prototype.tfxHover = function(space, x, y, z, shiftKey, ctrlKey) { // todo rename to shift/ctrl
+	if (x < this.x || y < this.y ||  x > this.x + this.width || y > this.y + this.height) {
+		return 0;
 	}
+	System.setCursor("default");
+	return enums.TFX_HIT;
 }
 
+/* a dragging move started
+ * returns transfix code
+ */
+Label.prototype.tfxDragstart = function(space, x, y, z, shiftKey, ctrlKey) {
+	if (x < this.x || y < this.y ||  x > this.x + this.width || y > this.y + this.height) {
+		return 0;
+	}
+	var tfx = enums.TFX_HIT;
+	if (z > 0) {
+		space.repository.moveToTop(z);
+		tfx |= enums.TFX_REDRAW; /* todo full redraw */
+	}
+	if (System.editor.item != this) {
+		this.focus(System.editor);
+		tfx |= enums.TFX_REDRAW;
+	}
+
+	space.actionIDrag(this, x - this.x, y - this.y);
+	return tfx;
+}
 
 /* turns the label into a string */
 Label.prototype.jsonfy = function() {
@@ -3708,7 +3757,15 @@ Relation.prototype.jsonfy = function() {
 /* mouse hovers at x/y 
  * returns transfix code
  */
-Relation.prototype.txHover = function(x, y) {
+Relation.prototype.tfxHover = function(space, x, y, z, shiftKey, ctrlKey) {
+	/* todo */
+	return enums.FX_NONE;
+}
+
+/* drag operation started at x/y 
+ * returns transfix code
+ */
+Relation.prototype.tfxDragstart = function(space, x, y, z, shiftKey, ctrlKey) {
 	/* todo */
 	return enums.FX_NONE;
 }
@@ -4117,20 +4174,23 @@ function Repository() {
 }
 
 /* shoots throw x/y and asks every item that intersects if it feels reponsible */ 
-Repository.prototype.transfix = function(x, y, fx_code) {
+Repository.prototype.transfix = function(space, x, y, shiftKey, ctrlKey, fx_code) {
 	var zidx  = this.zidx;
 	var items = this.items;
 	var fx = 0;
 	for(var z = 0, zlen = zidx.length; z < zlen; z++) {
 		var it = items[zidx[z]];
 		switch (fx_code) {
-		case enums.TRANSFIX_HOVER : 
-			fx |= it.txHover(x, y);
+		case enums.TFX_HOVER : 
+			fx |= it.tfxHover(space, x, y, z, shiftKey, ctrlKey);
+			break; 
+		case enums.TFX_DRAGSTART : 
+			fx |= it.tfxDragstart(space, x, y, z, shiftKey, ctrlKey);
 			break; 
 		default :
 			throw new Error("transfix, unknown code");
 		}
-		if (fx & enums.FX_HIT) break;
+		if (fx & enums.TFX_HIT) break;
 	}
 	return fx;	
 }
