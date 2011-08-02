@@ -173,8 +173,6 @@ function debug() {
  '`--' ' ' `-^ ' ' ' `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* todo split up into e.g. MST.NONE */
-
 /* Mouse state */
 var MST = {
 	NONE   : 0, // button is up 
@@ -667,11 +665,8 @@ Editor.prototype.newline = function() {
 	
 /* handles a special key */
 /* returns true if the element needs to be redrawn. */
-Editor.prototype.specialKey = function(keycode, shiftKey, ctrlKey) {
-	var item = this.item;
-	if (!item) {
-		return false;
-	}
+Editor.prototype.specialKey = function(item, keycode, shiftKey, ctrlKey) {
+	if (!item) return false;
 	var refresh = false;
 	var redraw = false;
 	var caret  = this.caret;
@@ -868,10 +863,8 @@ Editor.prototype.deleteSelection = function() {
 
 /* got character input from user */
 /* returns redraw needs */
-Editor.prototype.input = function(text) {
-	if (!this.item) {
-		return false;
-	}
+Editor.prototype.input = function(item, text) {
+	if (!item) return false;
 	var caret = this.caret;
 	if (this.selection.active) {
 		this.deleteSelection();
@@ -888,37 +881,10 @@ Editor.prototype.input = function(text) {
 			this.newline();
 		}
 	}
-	System.repository.updateItem(this.item);
+	System.repository.updateItem(item);
 	return true;
 }
-				
-/* editor got systemFocus */
-Editor.prototype.systemFocus = function() {
-	if (this.item) {
-		this.caret.show();
-		this.updateCaret();
-	}
-}
-
-/* editor got systemFocus */
-Editor.prototype.systemBlur = function() {
-	this.caret.hide();
-}
-
-/* editor focuses one item */
-Editor.prototype.focus = function(item) {
-	this.item = item;
-	var caret = this.caret;
-	caret.set(item, item.dtree.first.first, 0);
-}
-		
-/* editor disconnects */
-Editor.prototype.blur = function() {
-	this.item = null;
-	this.caret.hide();
-	this.caret.set(null, null, null);
-}
-
+						
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .---.         .
  \___  . . ,-. |- ,-. ,-,-.
@@ -1098,7 +1064,7 @@ _init : function() {
 	function onblur(event) {
 		this.space.systemBlur();
 	}
-	
+
 	/* hidden input got focus */
 	function onfocus(event) {
 		this.space.systemFocus();
@@ -1840,12 +1806,10 @@ Space.prototype.redraw = function() {
 		var it = items[zidx[i]];
 		it.draw(this);
 	}
-	if (editor.item) {
-		editor.item.drawHandles(this);
-	}
+	if (this.foci) this.foci.drawHandles(this);
 	
 	var ia = this.iaction;
-	switch(this.iaction.act) {
+	switch(ia.act) {
 	case ACT.FMENU :
 		this._floatmenu.draw();
 		break;
@@ -1853,22 +1817,20 @@ Space.prototype.redraw = function() {
 		this._itemmenu.draw();
 		break;
 	case ACT.RBIND :
-	{
 		cx.beginPath();
-		var it = ia.item;
 		if (ia.item2) {
 			Relation_drawArrow(this, ia.item, ia.item2, null, null, true);
 		} else {
 			Relation_drawArrow(this, ia.item, ia.smx, ia.smy, null, false);
 		}
-	}}
+	}
 	this.edgemenu.draw();
 	editor.updateCaret();
 }
 
 /* user pressed a special key */
 Space.prototype.specialKey = function(keyCode, shiftKey, ctrlKey) {
-	var rv = System.editor.specialKey(keyCode, shiftKey, ctrlKey);
+	var rv = System.editor.specialKey(this.foci, keyCode, shiftKey, ctrlKey);
 	if (rv) {
 		this.redraw();
 	}
@@ -1876,19 +1838,36 @@ Space.prototype.specialKey = function(keyCode, shiftKey, ctrlKey) {
 
 /* user entered normal text (one character or more) */
 Space.prototype.input = function(text) {
-	if (System.editor.input(text)) {
+	if (System.editor.input(this.foci, text)) {
 		this.redraw();		
 	}
 }
 
 /* the canvas/space got focus from the system*/
 Space.prototype.systemFocus = function() {
-	System.editor.systemFocus();
+	if (!this.foci) {
+		return
+	}
+	System.editor.caret.show();
+	System.editor.updateCaret();
 }
 
 /* the canvas/space lost system focus */
 Space.prototype.systemBlur = function() {
-	System.editor.systemBlur();
+	System.editor.caret.hide();
+}
+
+/* sets the focussed item or loses it if null*/
+Space.prototype.setFoci = function(item) {
+	this.foci = item;
+	var caret = System.editor.caret;
+	if (item) {
+		caret.set(item, item.dtree.first.first, 0);
+		caret.show();
+	} else {
+		caret.hide();
+		caret.set(null, null, null);
+	}
 }
 
 /* mouse hover */
@@ -1926,15 +1905,15 @@ Space.prototype.mousehover = function(x, y) {
 		break;	
 	}
 
-	if (editor.item) {
+	if (this.foci) {
 		/* todo move into items */
-		if (editor.item.withinItemMenu(px, py)) {
+		if (this.foci.withinItemMenu(px, py)) {
 			System.setCursor("pointer");
 			if (redraw) this.redraw();
 			return;
 		}
 
-		if ((com = editor.item.checkItemCompass(px, py))) {
+		if ((com = this.foci.checkItemCompass(px, py))) {
 			System.setCursor(com + "-resize");
 			if (redraw) this.redraw();
 			return;
@@ -1985,8 +1964,8 @@ Space.prototype.dragstart = function(x, y, shiftKey, ctrlKey) {
 	var iaction = this.iaction;
 	var redraw = false;
 	
-	if (editor.item && editor.item.withinItemMenu(x, y)) {
-		this.actionSpawnRelation(editor.item, x, y);
+	if (this.foci && this.foci.withinItemMenu(x, y)) {
+		this.actionSpawnRelation(this.foci, x, y);
 		this.redraw();
 		return;
 	} 
@@ -2016,7 +1995,7 @@ Space.prototype.click = function(x, y) {
 		
 	var atxy = this.repository.topAtXY(px, py);
 	
-	var eit = editor.item;
+	var eit = this.foci; // todo rename eit
 	if (atxy.z != 0 && eit && eit.withinItemMenu(px, py)) {
 		eit.setItemMenu(this._itemmenu, this.pox, this.poy);
 		iaction.act = ACT.IMENU;
@@ -2028,7 +2007,7 @@ Space.prototype.click = function(x, y) {
 		iaction.act = ACT.FMENU;
 		this._floatmenu.set(x, y);
 		System.setCursor("default");
-		editor.blur();
+		this.setFoci(null);
 		this.redraw();
 		return;
 	}
@@ -2038,7 +2017,7 @@ Space.prototype.click = function(x, y) {
 	}
 	/*  focus the item */
 	if (it != eit) {
-		it.focus(editor);
+		this.setFoci(it);
 		redraw = true;
 	}
 	var ox = px - it.x;
@@ -2479,9 +2458,8 @@ Space.prototype.mousedown = function(x, y) {
 		if (md >= 0) {
 			switch(md) {
 			case 1:
-				var ei = editor.item;
-				editor.blur();
-				this.repository.removeItem(ei);
+				this.setFoci(null);
+				this.repository.removeItem(this.foci);
 				break;
 			}
 			if (redraw) this.redraw();
@@ -2490,24 +2468,24 @@ Space.prototype.mousedown = function(x, y) {
 		break;
 	}
 	
-	if (editor.item) {
+	if (this.foci) {
 		var atxy = this.repository.topAtXY(px, py); /* todo just check for first */
-		if (atxy.z != 0 && editor.item && editor.item.withinItemMenu(px, py)) {
+		if (this.foci && this.foci.withinItemMenu(px, py)) {
 			if (redraw) this.redraw();
 			return MST.ATWEEN;
 		}
 		var com;
-		if ((com = editor.item.checkItemCompass(px, py))) {
+		if ((com = this.foci.checkItemCompass(px, py))) {
 			/* resizing */
 			iaction.act  = ACT.IRESIZE;
 			iaction.com  = com;
-			iaction.item = editor.item;
+			iaction.item = this.foci;
 			iaction.sx   = px;
 			iaction.sy   = py;
-			iaction.swi  = editor.item.width;
-			iaction.shi  = editor.item.height;
-			iaction.six  = editor.item.x;
-			iaction.siy  = editor.item.y;
+			iaction.swi  = this.foci.width;
+			iaction.shi  = this.foci.height;
+			iaction.six  = this.foci.x;
+			iaction.siy  = this.foci.y;
 			System.setCursor(com + "-resize");
 			if (redraw) this.redraw();
 			return MST.DRAG;
@@ -2528,13 +2506,6 @@ Space.prototype.mousewheel = function(wheel) {
 		this.zoom = 1;
 	}
 }
-
-/* gets an item by id */
-Space.prototype.getItem = function(id) {
-	/* TODO xxx remove */
-	return this.repository.items[id];
-}
-
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,--,--'                    .
@@ -2897,8 +2868,11 @@ Paragraph.prototype.joinToPrevious = function(node, caret) {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 DTree.prototype = new Treenode;
 DTree.prototype.constructor = DTree;
-/* todo insert parent */
-function DTree(js, fontsize) {
+/* constructor
+ * DTree(js, parent)
+ * Dtree(null, parent, fontsize)
+ */
+function DTree(js, parent, fontsize) {
 	Treenode.call(this, "dtree");
 	
 	/* json import */
@@ -2912,6 +2886,7 @@ function DTree(js, fontsize) {
 	} else {
 		this._fontsize = fontsize || 13;
 	}
+	this.parent = parent;
 }
 
 Object.defineProperty(DTree.prototype, "font", {
@@ -3271,15 +3246,14 @@ function Note(js, id, x, y, width, height) {
 		this.y      = js.y;
 		this.width  = js.w;
 		this.height = js.h;
-		this.dtree = new DTree(js.d);
+		this.dtree = new DTree(js.d, this);
 	} else {
 		this.width  = width;
 		this.height = height;
 		this.x      = x;
 		this.y      = y;
-		this.dtree  = new DTree();
+		this.dtree  = new DTree(null, this);
 	}
-	this.dtree.parent = this;
 	Item.call(this, "note", id);
 	this.bcanvas = document.createElement("canvas");
 	this.textBorder = settings.noteTextBorder;
@@ -3336,19 +3310,18 @@ Note.prototype.tfxDragstart = function(space, x, y, z, shiftKey, ctrlKey) {
 	if (x < this.x || y < this.y ||  x > this.x + this.width || y > this.y + this.height) {
 		return 0;
 	}
-	var tfx = TXR.HIT; // todo
+	var txr = TXR.HIT; // todo
 	if (ctrlKey) {
 		space.actionSpawnRelation(this, x, y);
-		return tfx | TXR.REDRAW;
+		return txr | TXR.REDRAW;
 	}
 	if (z > 0) {
 		space.repository.moveToTop(z);
-		tfx |= TXR.REDRAW; /* todo full redraw */
+		txr |= TXR.REDRAW; /* todo full redraw */
 	}
-	if (System.editor.item != this) {
-		this.focus(System.editor);
-		/* todo, why again is focus part of items? */
-		tfx |= TXR.REDRAW;
+	if (space.foci != this) {
+		space.setFoci(this);
+		txr |= TXR.REDRAW;
 	}
 
 	var srad = settings.scrollbarRadius;
@@ -3358,7 +3331,7 @@ Note.prototype.tfxDragstart = function(space, x, y, z, shiftKey, ctrlKey) {
 	} else {
 		space.actionIDrag(this, x - this.x, y - this.y);
 	}
-	return tfx;
+	return txr;
 }
 	
 /* resizes the note 
@@ -3553,13 +3526,6 @@ Note.prototype.draw = function(space) {
 	space.canvas.getContext("2d").drawImage(bcanvas, this.x + space.pox, this.y + space.poy);
 }
 
-/* item gets focus */
-Note.prototype.focus = function(editor) {
-	editor.focus(this);
-	this._canvasActual = false; /* todo why? */
-	editor.caret.show();
-}
-
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,       .       .  
   )   ,-. |-. ,-. |  
@@ -3579,13 +3545,12 @@ function Label(js, id, x, y) {
 	if (js) {
 		this.x     = js.x;
 		this.y     = js.y;
-		this.dtree = new DTree(js.d);
+		this.dtree = new DTree(js.d, this);
 	} else {
 		this.x     = x;
 		this.y     = y;
-		this.dtree = new DTree(null, 20);
+		this.dtree = new DTree(null, this, 20);
 	}
-	this.dtree.parent = this;
 	Item.call(this, "label", id);
 	this.bcanvas = document.createElement("canvas");
 	this._canvasActual = false;
@@ -3610,12 +3575,16 @@ Label.prototype.tfxDragstart = function(space, x, y, z, shiftKey, ctrlKey) {
 		return 0;
 	}
 	var tfx = TXR.HIT;
+	if (ctrlKey) {
+		space.actionSpawnRelation(this, x, y);
+		return tfx | TXR.REDRAW;
+	}
 	if (z > 0) {
 		space.repository.moveToTop(z);
 		tfx |= TXR.REDRAW; /* todo full redraw */
 	}
-	if (System.editor.item != this) {
-		this.focus(System.editor);
+	if (space.foci != this) {
+		space.setFoci(this);
 		tfx |= TXR.REDRAW;
 	}
 
@@ -3708,13 +3677,6 @@ Label.prototype.draw = function(space) {
 	space.canvas.getContext("2d").drawImage(bcanvas, this.x + space.pox, this.y + space.poy);
 }
 
-/* item gets focus */
-Label.prototype.focus = function(editor) {
-	editor.focus(this);
-	this._canvasActual = false; /* todo why? */
-	editor.caret.show();
-}
-
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .-,--.     .      .
   `|__/ ,-. |  ,-. |- . ,-. ,-.
@@ -3734,16 +3696,15 @@ function Relation(js, id, i1, i2) {
 	var dtree;
 	if (js) {
 		var js = a1;
-		this.dtree  = dtree = new DTree(js.d);
+		this.dtree  = dtree = new DTree(js.d, this);
 		this.i1id   = js.i1.id;
 		this.i2id   = js.i2.id;
 		if (!this.item1 && !this.item2) throw new Error("Relation relates to nothing");
 	} else {
-		this.dtree  = dtree = new DTree(null, 14);
+		this.dtree  = dtree = new DTree(null, this, 14);
 		this.i1id   = i1;
 		this.i2id   = i2;		
 	}
-	dtree.parent = this; /* todo, move into constructor */
 	dtree.flowWidth = -1;
 	Item.call(this, "rel", id);
 	this.bcanvas = document.createElement("canvas");
@@ -3971,8 +3932,8 @@ function Relation_drawArrow(space, item1, item2_x, null_y, mcanvas, light) {
 Relation.prototype.draw = function(space) {
 	var bcanvas = this.bcanvas;
 	var dtree = this.dtree;
-	var it1 = space.getItem(this.i1id);
-	var it2 = space.getItem(this.i2id);
+	var it1 = space.repository.items[this.i1id];
+	var it2 = space.repository.items[this.i2id];
 	if (this._canvasActual) {
 		/* buffer hit */
 		Relation_drawArrow(space, it1, it2, null, bcanvas, false);
@@ -3985,13 +3946,6 @@ Relation.prototype.draw = function(space) {
 	dtree.drawCanvas(bcanvas, space.selection, 0, 0, 0);
 	this._canvasActual = true;
 	Relation_drawArrow(space, it1, it2, null, bcanvas, false);
-}
-
-/* item gets focus */
-Relation.prototype.focus = function(editor) {
-	editor.focus(this);
-	this._canvasActual = false; /* todo why? */
-	editor.caret.show();
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -4157,11 +4111,6 @@ VectorGraph.prototype.getCanvas = function() {
 	return bcanvas;
 }
 	
-/* item gets focus *
-VectorGraph.prototype.focus = function(editor) {
-	return;
-}*/
-
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .-,--.                   .
   `|__/ ,-. ,-. ,-. ,-. . |- ,-. ,-. . .
@@ -4325,7 +4274,7 @@ Repository.prototype.doImport = function(str) {
 		}
 	}
 	this._saveZIDX();
-	System.editor.blur();
+	System.space.setFoci(null);
 	System.space.pox = js.pox || 0;
 	System.space.poy = js.poy || 0;
 	this._lock = false;
@@ -4416,6 +4365,7 @@ Repository.prototype.updateItem = function(item) {
  `|  /|  / . ,-. ,-| ,-. . , ,
   | / | /  | | | | | | | |/|/
   `'  `'   ' ' ' `-^ `-' ' '
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 window.onload = function() {
 	//window.localStorage.clear();
@@ -4423,7 +4373,12 @@ window.onload = function() {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- DemoRepository +++
+.-,--.               .-,--.                   .
+' |   \ ,-. ,-,-. ,-. `|__/ ,-. ,-. ,-. ,-. . |- ,-. ,-. . .
+, |   / |-' | | | | | )| \  |-' | | | | `-. | |  | | |   | |
+`-^--'  `-' ' ' ' `-' `'  ` `-' |-' `-' `-' ' `' `-' '   `-|
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ | ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ /|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~                                                          
+                                '                        `-'
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 var demoRepository = (<r><![CDATA[
 {
