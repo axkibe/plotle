@@ -194,16 +194,24 @@ var ACT = {
 	
 var TXE = {
 	/* which kind of event transfix() calls for all items which intersect x/y */
-	NONE      : 0,
-	HOVER     : 1,
-	DRAGSTART : 2,
+	NONE       : 0,
+	DRAGSTART  : 1,
+	HOVER      : 2,
+	RBINDHOVER : 3, 
+	RBINDTO    : 4,
 }
 
 var TXR = {	
 	/* bitfield return code of transfix() */
 	HIT    : 0x1,
-	REDRAW : 0x2,
+	REDRAW : 0x2
 };
+
+/* onlook() events */
+var ONLOOK = {
+	NONE   : 0,
+	REMOVE : 1,
+}
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -665,14 +673,14 @@ Editor.prototype.newline = function() {
 	
 /* handles a special key */
 /* returns true if the element needs to be redrawn. */
-Editor.prototype.specialKey = function(item, keycode, shiftKey, ctrlKey) {
+Editor.prototype.specialKey = function(item, keycode, shift, ctrl) {
 	if (!item) return false;
 	var refresh = false;
 	var redraw = false;
 	var caret  = this.caret;
 	var select = this.selection;			
 
-	if (ctrlKey) {
+	if (ctrl) {
 		switch(keycode) {
 		case 65 : // ctrl+a
 			var pfirst = item.dtree.first;
@@ -690,7 +698,7 @@ Editor.prototype.specialKey = function(item, keycode, shiftKey, ctrlKey) {
 		}
 	}
 	
-	if (!shiftKey && select.active) {
+	if (!shift && select.active) {
 		switch(keycode) {
 		case 35 : // end
 		case 36 : // pos1
@@ -714,7 +722,7 @@ Editor.prototype.specialKey = function(item, keycode, shiftKey, ctrlKey) {
 			redraw = true;
 			break;
 		}
-	} else if (shiftKey && !select.active) {
+	} else if (shift && !select.active) {
 		switch(keycode) {
 		case 35 : // end
 		case 36 : // pos1
@@ -799,7 +807,7 @@ Editor.prototype.specialKey = function(item, keycode, shiftKey, ctrlKey) {
 	}
 
 
-	if (shiftKey && refresh) {
+	if (shift && refresh) {
 		switch(keycode) {
 		case 35 : // end
 		case 36 : // pos1
@@ -960,11 +968,11 @@ _init : function() {
 	var lastSpecialKey = -1;
 	
 	/* a special key is pressed */
-	function specialKey(keyCode, shiftKey, ctrlKey) {
-		if (ctrlKey) {
+	function specialKey(keyCode, shift, ctrl) {
+		if (ctrl) {
 			switch(keyCode) {
 			case 65 : // ctrl+a
-				this.space.specialKey(keyCode, shiftKey, ctrlKey);
+				this.space.specialKey(keyCode, shift, ctrl);
 				return false;		
 			default : 
 				return true;
@@ -980,7 +988,7 @@ _init : function() {
 		case 39 : // right
 		case 40 : // down
 		case 46 : // del
-			this.space.specialKey(keyCode, shiftKey, ctrlKey);
+			this.space.specialKey(keyCode, shift, ctrl);
 			return false;
 		default : 
 			return true;
@@ -1096,7 +1104,7 @@ _init : function() {
 				mst = MST.DRAG;
 				this.space.dragstart(msx, msy, event.shiftKey, event.ctrlKey || event.metaKey);
 				if (x != msx || y != msy) {
-					this.space.dragmove(x, y);
+					this.space.dragmove(x, y, event.shiftKey, event.ctrlKey || event.metaKey);
 				}
 				captureEvents();
 			} else {
@@ -1109,7 +1117,7 @@ _init : function() {
 			return true;
 		}
 		case MST.DRAG :
-			this.space.dragmove(x, y);
+			this.space.dragmove(x, y, event.shiftKey, event.ctrlKey || event.metaKey);
 			return true;
 		default :
 			throw new Error("invalid mst");
@@ -1154,11 +1162,11 @@ _init : function() {
 			/* this was a click */
 			clearTimeout(atweenTimer);
 			atweenTimer = null;
-			this.space.click(x, y);
+			this.space.click(x, y, event.shiftKey, event.ctrlKey || event.metaKey);
 			mst = MST.NONE;
 			return false;
 		case MST.DRAG :
-			this.space.dragstop(x, y);
+			this.space.dragstop(x, y, event.shiftKey, event.ctrlKey || event.metaKey);
 			mst = MST.NONE;
 			return false;
 		}
@@ -1181,7 +1189,7 @@ _init : function() {
 		atweenTimer = null;
 		this.space.dragstart(msx, msy, mms, mmc);
 		if (mmx != msx || mmy != msy) {
-			this.space.dragmove(mmx, mmy);
+			this.space.dragmove(mmx, mmy, mms, mmc);
 		}
 	}
 		
@@ -1829,8 +1837,8 @@ Space.prototype.redraw = function() {
 }
 
 /* user pressed a special key */
-Space.prototype.specialKey = function(keyCode, shiftKey, ctrlKey) {
-	var rv = System.editor.specialKey(this.foci, keyCode, shiftKey, ctrlKey);
+Space.prototype.specialKey = function(keyCode, shift, ctrl) {
+	var rv = System.editor.specialKey(this.foci, keyCode, shift, ctrl);
 	if (rv) {
 		this.redraw();
 	}
@@ -1956,13 +1964,23 @@ Space.prototype.actionIDrag = function(item, sx, sy) {
 	System.setCursor("move");
 }
 
+Space.prototype.actionRBindTo = function(toItem) {
+	var rel = new Relation(null, null, this.iaction.item.id, toItem.id);
+	rel.dtree.append(new Paragraph("relates to"));
+	this.repository.addItem(rel, true);
+}
+
+Space.prototype.actionRBindHover = function(item) {
+	this.iaction.item2 = item;
+}
+
+
 /* starts an operation with the mouse held down */
-Space.prototype.dragstart = function(x, y, shiftKey, ctrlKey) {
+Space.prototype.dragstart = function(x, y, shift, ctrl) {
 	x -= this.pox;
 	y -= this.poy;
 	var editor  = System.editor;
 	var iaction = this.iaction;
-	var redraw = false;
 	
 	if (this.foci && this.foci.withinItemMenu(x, y)) {
 		this.actionSpawnRelation(this.foci, x, y);
@@ -1970,7 +1988,7 @@ Space.prototype.dragstart = function(x, y, shiftKey, ctrlKey) {
 		return;
 	} 
 
-	var tfx = this.repository.transfix(this, x, y, shiftKey, ctrlKey, TXE.DRAGSTART);
+	var tfx = this.repository.transfix(this, x, y, shift, ctrl, TXE.DRAGSTART);
 		
 	if (!(tfx & TXR.HIT)) {
 		/* panning */
@@ -1981,61 +1999,38 @@ Space.prototype.dragstart = function(x, y, shiftKey, ctrlKey) {
 		return;
 	} 
 	
-	if (redraw) this.redraw();
+	if (tfx & TXR.REDRAW) this.redraw();
 }
 
 /* a click is a mouse down followed within dragtime by 'mouseup' and
  * not having moved out of 'dragbox'. */
-Space.prototype.click = function(x, y) {
+Space.prototype.click = function(x, y, shift, ctrl) {
 	var px = x - this.pox;
 	var py = y - this.poy;
-	var editor = System.editor;
-	var iaction = this.iaction;
-	var redraw = false;
-		
-	var atxy = this.repository.topAtXY(px, py);
-	
-	var eit = this.foci; // todo rename eit
-	if (atxy.z != 0 && eit && eit.withinItemMenu(px, py)) {
-		eit.setItemMenu(this._itemmenu, this.pox, this.poy);
-		iaction.act = ACT.IMENU;
+			
+	var foci = this.foci;
+	if (foci && foci.withinItemMenu(px, py)) {
+		foci.setItemMenu(this._itemmenu, this.pox, this.poy);
+		this.iaction.act = ACT.IMENU;
 		this.redraw();
 		return;
 	}
-	var it = atxy.it;
-	if (!it) {
-		iaction.act = ACT.FMENU;
+
+	var tfx = this.repository.transfix(this, px, py, shift, ctrl, TXE.CLICK);	
+	if (!(tfx & TXR.HIT)) {
+		this.iaction.act = ACT.FMENU;
 		this._floatmenu.set(x, y);
 		System.setCursor("default");
 		this.setFoci(null);
 		this.redraw();
 		return;
 	}
-	if (atxy.z > 0) {
-		this.repository.moveToTop(atxy.z);
-		redraw = true; /* todo full redraw */
-	}
-	/*  focus the item */
-	if (it != eit) {
-		this.setFoci(it);
-		redraw = true;
-	}
-	var ox = px - it.x;
-	var oy = py - it.y + (it.scrolly > 0 ? it.scrolly : 0);
-	if (it.paraAtY) { /* todo, make this less dirty, move the logic into the item or editor */
-		var p = it.paraAtY(oy);
-		if (p) {
-			editor.caret.setFromXY(p, ox - p.x, oy - p.y);
-			editor.caret.show();
-			redraw = true;
-		}
-	}
-
-	if (redraw) this.redraw();
+	
+	if (tfx & TXR.REDRAW) this.redraw();
 }
 
 /* stops an operation with the mouse held down */
-Space.prototype.dragstop = function(x, y) {
+Space.prototype.dragstop = function(x, y, shift, ctrl) {
 	x -= this.pox;
 	y -= this.poy;
 	var editor = System.editor;
@@ -2064,19 +2059,11 @@ Space.prototype.dragstop = function(x, y) {
 		iaction.ssy  = null;
 		break;
 	case ACT.RBIND :
-	{
-		redraw = true;
 		iaction.smx = null;
 		iaction.smy = null;
-		var atxy = this.repository.topAtXY(x, y); 
-		if (!atxy.it) {
-			break;
-		}
-		var rel = new Relation(null, null, iaction.item.id, atxy.it.id); /* todo allow id-less direct */
-		rel.dtree.append(new Paragraph("relates to"));
-		this.repository.addItem(rel, true);
+		this.repository.transfix(this, x, y, shift, ctrl, TXE.RBINDTO);
+		redraw = true;
 		break;
-	}
 	default :
 		throw new Error("Invalid action in 'Space.dragstop'");
 	}
@@ -2088,7 +2075,7 @@ Space.prototype.dragstop = function(x, y) {
 }
 
 /* moving during an operation with the mouse held down */
-Space.prototype.dragmove = function(x, y) {
+Space.prototype.dragmove = function(x, y, shift, ctrl) {
 	x -= this.pox;
 	y -= this.poy;
 	var iaction = this.iaction;
@@ -2190,7 +2177,8 @@ Space.prototype.dragmove = function(x, y) {
 		return true;		
 	}
 	case ACT.RBIND :
-		iaction.item2 = this.repository.topAtXY(x, y).it;
+		iaction.item2 = null;
+		this.repository.transfix(this, x, y, shift, ctrl, TXE.RBINDHOVER);
 		iaction.smx = x;
 		iaction.smy = y;
 		this.redraw();
@@ -2458,8 +2446,8 @@ Space.prototype.mousedown = function(x, y) {
 		if (md >= 0) {
 			switch(md) {
 			case 1:
-				this.setFoci(null);
 				this.repository.removeItem(this.foci);
+				this.setFoci(null);
 				break;
 			}
 			if (redraw) this.redraw();
@@ -2469,7 +2457,6 @@ Space.prototype.mousedown = function(x, y) {
 	}
 	
 	if (this.foci) {
-		var atxy = this.repository.topAtXY(px, py); /* todo just check for first */
 		if (this.foci && this.foci.withinItemMenu(px, py)) {
 			if (redraw) this.redraw();
 			return MST.ATWEEN;
@@ -3295,7 +3282,7 @@ Note.prototype.listen = function() {
 /* mouse hovers at x/y 
  * returns transfix code
  */
-Note.prototype.tfxHover = function(space, x, y, z, shiftKey, ctrlKey) {
+Note.prototype.tfxHover = function(space, x, y, z, shift, ctrl) {
 	if (x < this.x || y < this.y ||  x > this.x + this.width || y > this.y + this.height) {
 		return 0;
 	}
@@ -3306,12 +3293,12 @@ Note.prototype.tfxHover = function(space, x, y, z, shiftKey, ctrlKey) {
 /* a dragging move started
  * returns transfix code
  */
-Note.prototype.tfxDragstart = function(space, x, y, z, shiftKey, ctrlKey) {
+Note.prototype.tfxDragstart = function(space, x, y, z, shift, ctrl) {
 	if (x < this.x || y < this.y ||  x > this.x + this.width || y > this.y + this.height) {
 		return 0;
 	}
 	var txr = TXR.HIT; // todo
-	if (ctrlKey) {
+	if (ctrl) {
 		space.actionSpawnRelation(this, x, y);
 		return txr | TXR.REDRAW;
 	}
@@ -3334,6 +3321,53 @@ Note.prototype.tfxDragstart = function(space, x, y, z, shiftKey, ctrlKey) {
 	return txr;
 }
 	
+/* a dragging move started
+ * returns transfix code
+ */
+Note.prototype.tfxClick = function(space, x, y, z, shift, ctrl) {
+	if (x < this.x || y < this.y ||  x > this.x + this.width || y > this.y + this.height) {
+		return 0;
+	}
+	var txr = TXR.HIT;
+	if (z > 0) {
+		space.repository.moveToTop(z);
+		txr |= TXR.REDRAW; /* todo full redraw */
+	}
+	if (space.foci != this) {
+		space.setFoci(this);
+		txr |= TXR.REDRAW;
+	}
+
+	var ox = x - this.x;
+	var oy = y - this.y + (this.scrolly > 0 ? this.scrolly : 0);
+	var p = this.paraAtY(oy);
+	if (p) {
+		var editor = System.editor;
+		editor.caret.setFromXY(p, ox - p.x, oy - p.y);
+		editor.caret.show();
+		txr |= TXR.REDRAW;
+	}
+	return txr;
+}
+
+Note.prototype.tfxRBindHover = function(space, x, y, z, shift, ctrl) {
+	if (x < this.x || y < this.y ||  x > this.x + this.width || y > this.y + this.height) {
+		return 0;
+	}
+	space.actionRBindHover(this);
+	return TXR.HIT | TXR.REDRAW;
+}
+
+Note.prototype.tfxRBindTo = function(space, x, y, z, shift, ctrl) {
+	if (x < this.x || y < this.y ||  x > this.x + this.width || y > this.y + this.height) {
+		return 0;
+	}
+	space.actionRBindTo(this);
+	return TXR.HIT | TXR.REDRAW;
+}
+
+
+
 /* resizes the note 
  * returns true if something changed
  */
@@ -3559,7 +3593,7 @@ function Label(js, id, x, y) {
 /* mouse hovers at x/y 
  * returns transfix code
  */
-Label.prototype.tfxHover = function(space, x, y, z, shiftKey, ctrlKey) { // todo rename to shift/ctrl
+Label.prototype.tfxHover = function(space, x, y, z, shift, ctrl) {
 	if (x < this.x || y < this.y ||  x > this.x + this.width || y > this.y + this.height) {
 		return 0;
 	}
@@ -3570,12 +3604,12 @@ Label.prototype.tfxHover = function(space, x, y, z, shiftKey, ctrlKey) { // todo
 /* a dragging move started
  * returns transfix code
  */
-Label.prototype.tfxDragstart = function(space, x, y, z, shiftKey, ctrlKey) {
+Label.prototype.tfxDragstart = function(space, x, y, z, shift, ctrl) {
 	if (x < this.x || y < this.y ||  x > this.x + this.width || y > this.y + this.height) {
 		return 0;
 	}
 	var tfx = TXR.HIT;
-	if (ctrlKey) {
+	if (ctrl) {
 		space.actionSpawnRelation(this, x, y);
 		return tfx | TXR.REDRAW;
 	}
@@ -3590,6 +3624,50 @@ Label.prototype.tfxDragstart = function(space, x, y, z, shiftKey, ctrlKey) {
 
 	space.actionIDrag(this, x - this.x, y - this.y);
 	return tfx;
+}
+
+/* a dragging move started
+ * returns transfix code
+ */
+Label.prototype.tfxClick = function(space, x, y, z, shift, ctrl) {
+	if (x < this.x || y < this.y ||  x > this.x + this.width || y > this.y + this.height) {
+		return 0;
+	}
+	var txr = TXR.HIT;
+	if (z > 0) {
+		space.repository.moveToTop(z);
+		txr |= TXR.REDRAW; /* todo full redraw */
+	}
+	if (space.foci != this) {
+		space.setFoci(this);
+		txr |= TXR.REDRAW;
+	}
+	var ox = x - this.x;
+	var oy = y - this.y + (this.scrolly > 0 ? this.scrolly : 0);
+	var p = this.paraAtY(oy);
+	if (p) {
+		var editor = System.editor;
+		editor.caret.setFromXY(p, ox - p.x, oy - p.y);
+		editor.caret.show();
+		txr |= TXR.REDRAW;
+	}
+	return txr;	
+}
+
+Label.prototype.tfxRBindHover = function(space, x, y, z, shift, ctrl) {
+	if (x < this.x || y < this.y ||  x > this.x + this.width || y > this.y + this.height) {
+		return 0;
+	}
+	space.actionRBindHover(this);
+	return TXR.HIT | TXR.REDRAW;
+}
+
+Label.prototype.tfxRBindTo = function(space, x, y, z, shift, ctrl) {
+	if (x < this.x || y < this.y ||  x > this.x + this.width || y > this.y + this.height) {
+		return 0;
+	}
+	space.actionRBindTo(this);
+	return TXR.HIT | TXR.REDRAW;
 }
 
 /* turns the label into a string */
@@ -3709,7 +3787,6 @@ function Relation(js, id, i1, i2) {
 	Item.call(this, "rel", id);
 	this.bcanvas = document.createElement("canvas");
 	this._canvasActual = false;
-	this.middle = {};
 }
 
 Relation.prototype.jsonfy = function() {
@@ -3725,7 +3802,7 @@ Relation.prototype.jsonfy = function() {
 /* mouse hovers at x/y 
  * returns transfix code
  */
-Relation.prototype.tfxHover = function(space, x, y, z, shiftKey, ctrlKey) {
+Relation.prototype.tfxHover = function(space, x, y, z, shift, ctrl) {
 	/* todo */
 	return 0;
 }
@@ -3733,7 +3810,22 @@ Relation.prototype.tfxHover = function(space, x, y, z, shiftKey, ctrlKey) {
 /* drag operation started at x/y 
  * returns transfix code
  */
-Relation.prototype.tfxDragstart = function(space, x, y, z, shiftKey, ctrlKey) {
+Relation.prototype.tfxDragstart = function(space, x, y, z, shift, ctrl) {
+	/* todo */
+	return 0;
+}
+
+Relation.prototype.tfxClick = function(space, x, y, z, shift, ctrl) {
+	/* todo */
+	return 0;
+}
+
+Relation.prototype.tfxRBindHover = function(space, x, y, z, shift, ctrl) {
+	/* todo */
+	return 0;
+}
+
+Relation.prototype.tfxRBindTo = function(space, x, y, z, shift, ctrl) {
 	/* todo */
 	return 0;
 }
@@ -3948,6 +4040,18 @@ Relation.prototype.draw = function(space) {
 	Relation_drawArrow(space, it1, it2, null, bcanvas, false);
 }
 
+/* something happend an item onlooked */
+Relation.prototype.onlook = function(event, item) {
+	switch(event) {
+	case ONLOOK.REMOVE :
+		System.repository.removeItem(this);
+		/* todo check for cycles */
+		break;
+	default :
+		throw new Error("unknown unlook event");
+	}
+}
+
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ,.   ,.       .          ,---.              .
 `|  / ,-. ,-. |- ,-. ,-. |  -'  ,-. ,-. ,-. |-.
@@ -4125,50 +4229,39 @@ function Repository() {
 	/* z information of the items, 0 is topmost */
 	this.zidx = [];
 	this._lock = false;
-	/* buffer for getTopATXY() */
-	this._topAtXYBuf = {};
+	
+	this.onlooks = {};
 }
 
 /* shoots throw x/y and asks every item that intersects if it feels reponsible */ 
-Repository.prototype.transfix = function(space, x, y, shiftKey, ctrlKey, fx_code) {
+Repository.prototype.transfix = function(space, x, y, shift, ctrl, fx_code) {
 	var zidx  = this.zidx;
 	var items = this.items;
 	var fx = 0;
 	for(var z = 0, zlen = zidx.length; z < zlen; z++) {
 		var it = items[zidx[z]];
 		switch (fx_code) {
-		case TXE.HOVER : 
-			fx |= it.tfxHover(space, x, y, z, shiftKey, ctrlKey);
+		case TXE.CLICK : 
+			fx |= it.tfxClick(space, x, y, z, shift, ctrl);
 			break; 
 		case TXE.DRAGSTART : 
-			fx |= it.tfxDragstart(space, x, y, z, shiftKey, ctrlKey);
+			fx |= it.tfxDragstart(space, x, y, z, shift, ctrl);
 			break; 
+		case TXE.HOVER : 
+			fx |= it.tfxHover(space, x, y, z, shift, ctrl);
+			break; 
+		case TXE.RBINDHOVER : 
+			fx |= it.tfxRBindHover(space, x, y, z, shift, ctrl);
+			break;
+		case TXE.RBINDTO : 
+			fx |= it.tfxRBindTo(space, x, y, z, shift, ctrl);
+			break;
 		default :
 			throw new Error("transfix, unknown code");
 		}
 		if (fx & TXR.HIT) break;
 	}
 	return fx;	
-}
-
-/* returns  {it: item at xy, z: info } */
-/* todo, can be removed? */
-Repository.prototype.topAtXY = function(x, y) {
-	var a = this._topAtXYBuf;
-	var zidx  = this.zidx;
-	var items = this.items;
-	for(var z = 0, zlen = zidx.length; z < zlen; z++) {
-		var it = items[zidx[z]];
-		/* todo let item decide */
-		if (x >= it.x && y >= it.y &&  x <= it.x + it.width && y <= it.y + it.height) {
-			a.z  = z;
-			a.it = it;
-			return a;
-		}
-	}
-	a.z  = -8833;
-	a.it = null;
-	return a;
 }
 
 Repository.prototype.loadup = function() {
@@ -4238,9 +4331,14 @@ Repository.prototype.moveToTop = function(z) {
 	zidx.splice(z, 1);
 	zidx.unshift(id);
 	this._saveZIDX();
-	this._topAtXYBuf.z = 0;
 	return 0; 
 }
+
+Repository.prototype.addOnlook = function(onlooker, carny) {
+	var onl = this.onlooks;
+	// todo
+}
+
 
 Repository.prototype.doImport = function(str) {
 	try {
@@ -4259,8 +4357,9 @@ Repository.prototype.doImport = function(str) {
 	for(var id in items) {
 		window.localStorage.setItem(id, "");
 	}
-	var items = this.items = {};
-	var zidx  = this.zidx = js.z;
+	var items = this.items     = {};
+	var zidx  = this.zidx      = js.z;
+	var onl   = this.onlookers = {};
 	this._idFactory = js.idf;	
 	var zlen = this.zidx.length;
 	for (var i = 0; i < zlen; i++) {
@@ -4344,6 +4443,11 @@ Repository.prototype.removeItem = function(item) {
 	var id = item.id;
 	zidx.splice(zidx.indexOf(id), 1);
 	delete items[id];
+	
+//	var onl = item.onlookers;
+//	for (var i = 0, onllen = item.onlookers.len; i < onllen; i++) {
+//		onl[i].onlook(ONLOOK.REMOVE, item); 
+//	} todo
 	
 	if (!this._lock) { 
 		window.localStorage.setItem(item.id, "");
