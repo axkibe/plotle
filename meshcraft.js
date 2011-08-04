@@ -4224,6 +4224,9 @@ VectorGraph.prototype.getCanvas = function() {
             '                        `-'
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Repository() {
+}
+
+Repository.prototype.reset = function() {
 	/* all items */
 	this.items = {};
 	/* z information of the items, 0 is topmost */
@@ -4231,40 +4234,11 @@ function Repository() {
 	this._lock = false;
 	
 	this.onlooks = {};
-}
-
-/* shoots throw x/y and asks every item that intersects if it feels reponsible */ 
-Repository.prototype.transfix = function(space, x, y, shift, ctrl, fx_code) {
-	var zidx  = this.zidx;
-	var items = this.items;
-	var fx = 0;
-	for(var z = 0, zlen = zidx.length; z < zlen; z++) {
-		var it = items[zidx[z]];
-		switch (fx_code) {
-		case TXE.CLICK : 
-			fx |= it.tfxClick(space, x, y, z, shift, ctrl);
-			break; 
-		case TXE.DRAGSTART : 
-			fx |= it.tfxDragstart(space, x, y, z, shift, ctrl);
-			break; 
-		case TXE.HOVER : 
-			fx |= it.tfxHover(space, x, y, z, shift, ctrl);
-			break; 
-		case TXE.RBINDHOVER : 
-			fx |= it.tfxRBindHover(space, x, y, z, shift, ctrl);
-			break;
-		case TXE.RBINDTO : 
-			fx |= it.tfxRBindTo(space, x, y, z, shift, ctrl);
-			break;
-		default :
-			throw new Error("transfix, unknown code");
-		}
-		if (fx & TXR.HIT) break;
-	}
-	return fx;	
+	this.onlookers = {};
 }
 
 Repository.prototype.loadup = function() {
+	this.reset();
 	var idfjs = window.localStorage.getItem("idf");
 	if (idfjs) {
 		try {
@@ -4309,6 +4283,37 @@ Repository.prototype.loadup = function() {
 	this._lock = false;
 }
 
+/* shoots throw x/y and asks every item that intersects if it feels reponsible */ 
+Repository.prototype.transfix = function(space, x, y, shift, ctrl, fx_code) {
+	var zidx  = this.zidx;
+	var items = this.items;
+	var fx = 0;
+	for(var z = 0, zlen = zidx.length; z < zlen; z++) {
+		var it = items[zidx[z]];
+		switch (fx_code) {
+		case TXE.CLICK : 
+			fx |= it.tfxClick(space, x, y, z, shift, ctrl);
+			break; 
+		case TXE.DRAGSTART : 
+			fx |= it.tfxDragstart(space, x, y, z, shift, ctrl);
+			break; 
+		case TXE.HOVER : 
+			fx |= it.tfxHover(space, x, y, z, shift, ctrl);
+			break; 
+		case TXE.RBINDHOVER : 
+			fx |= it.tfxRBindHover(space, x, y, z, shift, ctrl);
+			break;
+		case TXE.RBINDTO : 
+			fx |= it.tfxRBindTo(space, x, y, z, shift, ctrl);
+			break;
+		default :
+			throw new Error("transfix, unknown code");
+		}
+		if (fx & TXR.HIT) break;
+	}
+	return fx;	
+}
+
 Repository.prototype.doExport = function() {
 	var js = {}
 	js.formatversion = 0;
@@ -4335,10 +4340,11 @@ Repository.prototype.moveToTop = function(z) {
 }
 
 Repository.prototype.addOnlook = function(onlooker, carny) {
-	var onl = this.onlooks;
+	var ol = this.onlooks;
+	var or = this.onlookers;
+	
 	// todo
 }
-
 
 Repository.prototype.doImport = function(str) {
 	try {
@@ -4352,14 +4358,14 @@ Repository.prototype.doImport = function(str) {
 		return;
 	}
 	this._lock = true;
+	this.reset();
 	/* erase current repository */
 	var items = this.items;
 	for(var id in items) {
 		window.localStorage.setItem(id, "");
 	}
-	var items = this.items     = {};
+	var items = this.items;
 	var zidx  = this.zidx      = js.z;
-	var onl   = this.onlookers = {};
 	this._idFactory = js.idf;	
 	var zlen = this.zidx.length;
 	for (var i = 0; i < zlen; i++) {
