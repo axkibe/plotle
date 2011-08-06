@@ -1811,7 +1811,7 @@ Space.prototype.redraw = function() {
 	this.canvas = System.canvas;
 
 	for(var i = zidx.length - 1; i >= 0; i--) {
-		var it = items[zidx[i]];
+		var it = items[zidx[i]]; // todo shorten
 		it.draw(this);
 	}
 	if (this.foci) this.foci.drawHandles(this);
@@ -1967,7 +1967,6 @@ Space.prototype.actionIDrag = function(item, sx, sy) {
 Space.prototype.actionRBindTo = function(toItem) {
 	var rel = new Relation(null, null, this.iaction.item.id, toItem.id);
 	rel.dtree.append(new Paragraph("relates to"));
-	this.repository.addItem(rel, true);
 }
 
 Space.prototype.actionRBindHover = function(item) {
@@ -2417,7 +2416,6 @@ Space.prototype.mousedown = function(x, y) {
 		var md = this._floatmenu.mousedown(x, y);
 		iaction.act = ACT.NONE;
 		var fm = this._floatmenu;
-		redraw = true;
 		if (md < 0) {
 			break;
 		}
@@ -2426,18 +2424,16 @@ Space.prototype.mousedown = function(x, y) {
 			var nw = settings.newNoteWidth;
 			var nh = settings.newNoteHeight;
 			var note = new Note(null, null, R(fm.x - nw / 2 - this.pox), R(fm.y - nh / 2 - this.poy), nw, nh);
-			note.dtree.append(new Paragraph(""));
-			this.repository.addItem(note, true);
+			this.setFoci(note);
 			break;
 		case 2 : // label
 			var label = new Label(null, null, fm.x - this.pox, fm.y - this.poy);
-			label.dtree.append(new Paragraph("Label"));
 			label.x -= label.width  / 2;
 			label.y -= label.height / 2;
-			this.repository.addItem(label, true);
+			this.setFoci(label);
 			break;
 		}
-		if (redraw) this.redraw();
+		this.redraw();
 		return MST.NONE;
 	case ACT.IMENU :
 		var md = this._itemmenu.mousedown(x, y);
@@ -3245,12 +3241,23 @@ function Note(js, id, x, y, width, height) {
 	this.bcanvas = document.createElement("canvas");
 	this.textBorder = settings.noteTextBorder;
 	this._canvasActual = false;
-	
 	this._scrollx = -8833;
 	this._scrolly = -8833;
-	this.bcanvas.width  = this.width; /* need to set it so early? */
+	this.bcanvas.width  = this.width; /* todo, need to set it so early? */
 	this.bcanvas.height = this.height;
+	
+	if (!this.dtree.first) {
+		this.dtree.append(new Paragraph(""));
+	}
+	
+	System.repository.addItem(this, true);
 }
+
+/* called when item is removed */
+Note.prototype.removed = function() {
+	/* nothing */
+}
+
 
 /* turns the note into a string */
 Note.prototype.jsonfy = function() {
@@ -3588,6 +3595,13 @@ function Label(js, id, x, y) {
 	Item.call(this, "label", id);
 	this.bcanvas = document.createElement("canvas");
 	this._canvasActual = false;
+	if (!this.dtree.first) this.dtree.append(new Paragraph(""));
+	System.repository.addItem(this, true);
+}
+
+/* called when item is removed */
+Label.prototype.removed = function() {
+	/* nothing */
 }
 
 /* mouse hovers at x/y 
@@ -3787,6 +3801,16 @@ function Relation(js, id, i1, i2) {
 	Item.call(this, "rel", id);
 	this.bcanvas = document.createElement("canvas");
 	this._canvasActual = false;
+	
+	System.repository.addItem(this, true);
+	System.repository.addOnlook(this.id, this.i1id);
+	System.repository.addOnlook(this.id, this.i2id);
+}
+
+/* called when item is removed */
+Relation.prototype.removed = function() {
+	System.repository.removeOnlook(this.id, this.i1id);
+	System.repository.removeOnlook(this.id, this.i2id);	
 }
 
 Relation.prototype.jsonfy = function() {
@@ -4044,6 +4068,9 @@ Relation.prototype.draw = function(space) {
 Relation.prototype.onlook = function(event, item) {
 	switch(event) {
 	case ONLOOK.REMOVE :
+		if (item.id != this.i1id && item.id != this.i2id) {
+			throw new Error("Got onlook for not my item?");
+		}
 		System.repository.removeItem(this);
 		/* todo check for cycles */
 		break;
@@ -4233,7 +4260,7 @@ Repository.prototype.reset = function() {
 	this.zidx = [];
 	this._lock = false;
 	
-	this.onlooks = {};
+	this.onlookeds = {};
 	this.onlookers = {};
 }
 
@@ -4259,11 +4286,9 @@ Repository.prototype.loadup = function() {
 		console.log("no repository found. (no zidx)");
 		return;
 	}
-	var zidx = this.zidx = JSON.parse(zjs);
-	
-	var zlen = zidx.length;
+	var zidx = JSON.parse(zjs);
 	this._lock = true;
-	for (var i = 0; i < zlen; i++) {
+	for (var i = 0, zlen = zidx.length; i < zlen; i++) {
 		var id = zidx[i];
 		var itstr = window.localStorage.getItem(id);
 		var itjs;
@@ -4273,12 +4298,7 @@ Repository.prototype.loadup = function() {
 			this._lock = false;
 			throw err;
 		} 		
-		var item = this._loadItem(id, itjs);
-		if (item) {
-			this.items[id] = item;
-		} else {
-			zidx.splice(i--, 1); zlen--;
-		}
+		this._loadItem(id, itjs);
 	}
 	this._lock = false;
 }
@@ -4339,11 +4359,29 @@ Repository.prototype.moveToTop = function(z) {
 	return 0; 
 }
 
-Repository.prototype.addOnlook = function(onlooker, carny) {
-	var ol = this.onlooks;
-	var or = this.onlookers;
-	
-	// todo
+/* one item wants to watch another item */
+Repository.prototype.addOnlook = function(onlooker, onlooked) {
+	var its = this.items;
+	if (!its[onlooker] || !its[onlooked]) {
+		throw new Error("adding Onlook to invalid item ids:");
+	}
+	var od = this.onlookeds[onlooked];
+	var or = this.onlookers[onlooker];
+	if (!od) this.onlookeds[onlooked] = od = [];
+	if (!or) this.onlookers[onlooker] = or = [];
+	if (od.indexOf(onlooker) < 0) od.push(onlooker);
+	if (or.indexOf(onlooked) < 0) or.push(onlooked);	
+}
+
+/* one item stops to watch another item */
+Repository.prototype.removeOnlook = function(onlooker, onlooked) {
+	var od = this.onlookeds[onlooked];
+	var or = this.onlookers[onlooker];
+	/* todo is there a removeItem in array? */
+	var odi = od.indexOf(onlooker);
+	var ori = or.indexOf(onlooked);
+	if (odi >= 0) od.splice(odi, 1);
+	if (ori >= 0) or.splice(ori, 1);
 }
 
 Repository.prototype.doImport = function(str) {
@@ -4357,32 +4395,24 @@ Repository.prototype.doImport = function(str) {
 		window.alert("Repository not recognized.");	
 		return;
 	}
-	this._lock = true;
 	this.reset();
-	/* erase current repository */
 	var items = this.items;
+	/* erase current local repository */
 	for(var id in items) {
 		window.localStorage.setItem(id, "");
 	}
 	var items = this.items;
-	var zidx  = this.zidx      = js.z;
+	var zidx  = js.z;
 	this._idFactory = js.idf;	
-	var zlen = this.zidx.length;
-	for (var i = 0; i < zlen; i++) {
-		var id = zidx[i] = typeof zidx[i] == "number" ? zidx[i] : parseInt(zidx[i]);
-		var item = this._loadItem(id, js.items[id]);
-		if (item) {
-			items[id] = item;
-			this._saveItem(item); // todo workaround
-		} else {
-			zidx.splice(i--, 1); zlen--;
-		}
+	for (var i = zidx.length; i >= 0; i--) {
+		var id = zidx[i];
+		if (typeof zidx[i] != "number") id = parseInt(id);
+		this._loadItem(id, js.items[id]);
 	}
 	this._saveZIDX();
 	System.space.setFoci(null);
 	System.space.pox = js.pox || 0;
 	System.space.poy = js.poy || 0;
-	this._lock = false;
 }
 
 Repository.prototype._newItemID = function() {
@@ -4398,22 +4428,8 @@ Repository.prototype._loadItem = function(id, itjs) {
 	}
 
 	switch(itjs.t) {
-	case "note":
-	{
-		var note;
-		note = new Note(itjs, id);
-		if (!note.dtree.first) {
-			note.dtree.append(new Paragraph(""));
-		}
-		return note;
-	}
-	case "label":
-		var label;
-		label = new Label(itjs, id);
-		if (!label.dtree.first) {
-			label.dtree.append(new Paragraph(""));
-		}
-		return label;
+	case "note" : return new Note(itjs, id);
+	case "label": return new Label(itjs, id);
 	case "rel":
 		debug("ignored relation");
 		return null;
@@ -4437,25 +4453,38 @@ Repository.prototype.addItem = function(item, top) {
 		this.zidx.push(item.id);
 	}
 	
-	if (this._lock) throw new Error("addind while repository locked");
-	this._saveItem(item);
-	this._saveZIDX();
+	if (!this._lock) {
+		this._saveItem(item);
+		this._saveZIDX();
+	}
 }
 
 /* removes an item from the repository. */
 Repository.prototype.removeItem = function(item) {
-	var items = this.items;
 	var zidx = this.zidx;
 	var id = item.id;
 	zidx.splice(zidx.indexOf(id), 1);
-	delete items[id];
+	delete this.items[id];
+	item.removed();
 	
-//	var onl = item.onlookers;
-//	for (var i = 0, onllen = item.onlookers.len; i < onllen; i++) {
-//		onl[i].onlook(ONLOOK.REMOVE, item); 
-//	} todo
+	{	
+		this.onlookeds.locked = true;
+		var od = this.onlookeds[id];
+		if (od) {
+			var odc = [];
+			// todo, is there array copy?
+			for (var i = 0; i < od.length; i++) {
+				odc[i] = od[i];
+			}
+			for (var i = 0; i < odc.length; i++) {
+				var it = this.items[odc[i]];
+				if (it) it.onlook(ONLOOK.REMOVE, item);
+			}
+		}
+		this.onlookeds.locked = true;
+	}
 	
-	if (!this._lock) { 
+	if (!this._lock) {
 		window.localStorage.setItem(item.id, "");
 		this._saveZIDX();
 	}
