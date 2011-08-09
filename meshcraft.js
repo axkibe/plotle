@@ -84,10 +84,10 @@ var settings = {
 	itemMenuSliceHeight : 17,
 	itemMenuOuterBorderWidth : 0.5,
 	itemMenuOuterBorderColor1 : "rgb(0, 0, 0)",
-	itemMenuOuterBorderColor2 : "rgb(255, 255, 255)",
+	itemMenuOuterBorderColor2 : null && "rgb(255, 255, 255)",
 	itemMenuInnerBorderWidth : 2,
 	itemMenuInnerBorderColor1 : "rgb(255, 200, 105)",
-	itemMenuInnerBorderColor2 : "rgb(255, 255, 255)",
+	itemMenuInnerBorderColor2 : null & "rgb(255, 255, 255)",
 	itemMenuBackground1 : "rgba(255, 255, 200, 0.955)",
 	itemMenuBackground2 : "rgba(255, 255, 205, 0.5)",
 	itemMenuFillStyle : "rgb(255, 237, 210)",
@@ -1255,14 +1255,8 @@ _init : function() {
 	/* hinders init to be called another time */
 	delete this.init; 
 	delete this._init;
-	var e = null;
-	try {
-		System.repository.loadup();	
-	} catch (err) {
-		e = err;
-	}
+	System.repository.loadLocalStorage();	
 	System.space.redraw();
-	if (e) throw e;
 }};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1825,11 +1819,11 @@ Space.prototype.redraw = function() {
 		this._itemmenu.draw();
 		break;
 	case ACT.RBIND :
-		cx.beginPath();
+		cx.beginPath(); /* todo remove? */
 		if (ia.item2) {
-			Relation_drawArrow(this, ia.item, ia.item2, null, null, true);
+			Relation_drawLabeledArrow(this, ia.item, ia.item2, null, null, true);
 		} else {
-			Relation_drawArrow(this, ia.item, ia.smx, ia.smy, null, false);
+			Relation_drawLabeledArrow(this, ia.item, ia.smx, ia.smy, null, false);
 		}
 	}
 	this.edgemenu.draw();
@@ -1929,7 +1923,7 @@ Space.prototype.mousehover = function(x, y) {
 	}
 
 	/* todo remove nulls by shiftKey, ctrlKey */
-	var tx = this.repository.transfix(this, px, py, null, null, TXE.HOVER);
+	var tx = this.repository.transfix(TXE.HOVER, this, px, py, null, null);
 	redraw = redraw || (tx & TXR.REDRAW);
 	if (!(tx & TXR.HIT)) { System.setCursor("crosshair");} 
 	if (redraw) this.redraw();
@@ -1967,6 +1961,7 @@ Space.prototype.actionIDrag = function(item, sx, sy) {
 Space.prototype.actionRBindTo = function(toItem) {
 	var rel = new Relation(null, null, this.iaction.item.id, toItem.id);
 	rel.dtree.append(new Paragraph("relates to"));
+	System.repository.updateItem(rel);
 }
 
 Space.prototype.actionRBindHover = function(item) {
@@ -1987,7 +1982,7 @@ Space.prototype.dragstart = function(x, y, shift, ctrl) {
 		return;
 	} 
 
-	var tfx = this.repository.transfix(this, x, y, shift, ctrl, TXE.DRAGSTART);
+	var tfx = this.repository.transfix(TXE.DRAGSTART, this, x, y, shift, ctrl);
 		
 	if (!(tfx & TXR.HIT)) {
 		/* panning */
@@ -2015,7 +2010,7 @@ Space.prototype.click = function(x, y, shift, ctrl) {
 		return;
 	}
 
-	var tfx = this.repository.transfix(this, px, py, shift, ctrl, TXE.CLICK);	
+	var tfx = this.repository.transfix(TXE.CLICK, this, px, py, shift, ctrl);
 	if (!(tfx & TXR.HIT)) {
 		this.iaction.act = ACT.FMENU;
 		this._floatmenu.set(x, y);
@@ -2060,7 +2055,7 @@ Space.prototype.dragstop = function(x, y, shift, ctrl) {
 	case ACT.RBIND :
 		iaction.smx = null;
 		iaction.smy = null;
-		this.repository.transfix(this, x, y, shift, ctrl, TXE.RBINDTO);
+		this.repository.transfix(TXE.RBINDTO, this, x, y, shift, ctrl);
 		redraw = true;
 		break;
 	default :
@@ -2177,7 +2172,7 @@ Space.prototype.dragmove = function(x, y, shift, ctrl) {
 	}
 	case ACT.RBIND :
 		iaction.item2 = null;
-		this.repository.transfix(this, x, y, shift, ctrl, TXE.RBINDHOVER);
+		this.repository.transfix(TXE.RBINDHOVER, this, x, y, shift, ctrl);
 		iaction.smx = x;
 		iaction.smy = y;
 		this.redraw();
@@ -2222,7 +2217,7 @@ Space.prototype._exportDialog = function() {
 	ta.style.marginLeft = "auto";
 	ta.style.marginRight = "auto";
 	ta.style.marginTop = "20px";
-	ta.value = System.repository.doExport("xml");
+	ta.value = System.repository.saveToJString();
 	ta.readOnly = true;
 
 	div.appendChild(ta);
@@ -2297,7 +2292,7 @@ Space.prototype._importDialog = function() {
 	okb.style.cssFloat  = "right";
 	var space = this;
 	okb.onclick = function() {
-		System.repository.doImport(ta.value);
+		System.repository.doFromJString(ta.value);
 		document.body.removeChild(div);
 		space.redraw();
 	}
@@ -2364,7 +2359,7 @@ Space.prototype._revertDialog = function() {
 	okb.style.cssFloat  = "right";
 	var space = this;
 	okb.onclick = function() {
-		System.repository.doImport(demoRepository);
+		System.repository.loadFromJString(demoRepository);
 		document.body.removeChild(div);
 		space.redraw();
 	}
@@ -2508,6 +2503,7 @@ Treenode.prototype.append = function(tnode) {
 		throw new Error("append() on a node already part of a tree");
 	}
 	tnode.parent = this;
+	debug("append", tnode, "TO", this);
 	if (!this.last) {
 		this.first = this.last = tnode;
 		tnode.prev = tnode.next = null;
@@ -2517,6 +2513,7 @@ Treenode.prototype.append = function(tnode) {
 		this.last = tnode;
 		tnode.next = null;
 	}
+	this.listen();
 }
 
 /* default pass to parent */
@@ -2542,9 +2539,6 @@ Treenode.prototype.insertBefore = function(tnode, bnode) {
 		this.first = tnode;
 		tnode.prev = null;
 	}
-	/* debug check if child */
-	if (debugNodes) for(var n=this.first; n != bnode; n = n.next) 
-		if (!n) throw new Error("debugNodes");
 	
 	tnode.next = bnode;
 	tnode.prev = bnode.prev;
@@ -2555,7 +2549,6 @@ Treenode.prototype.insertBefore = function(tnode, bnode) {
 
 /* removes child tnode */
 Treenode.prototype.remove = function(tnode) {
-	/* debug check if child */	
 	if (tnode == this.first) this.first = tnode.next;
 	if (tnode == this.last) this.last = tnode.prev;
 	if (tnode.next) tnode.next.prev = tnode.prev;
@@ -2863,9 +2856,11 @@ function DTree(js, parent, fontsize) {
 		var d = js.d;
 		var dlen = d.length;
 		for(var i = 0; i < dlen; i++) {
+			debug(d[i]);
 			this.append(new Paragraph(d[i]));
 		}
 		this._fontsize = js.fs || 13;
+		debug(js.fs, this._fontsize);
 	} else {
 		this._fontsize = fontsize || 13;
 	}
@@ -2883,6 +2878,8 @@ Object.defineProperty(DTree.prototype, "font", {
 DTree.prototype.jsonfy = function() {
 	var js = {fs : this._fontsize, d: []};
 	var d = js.d;
+	debug(this.first);
+	debug(this.last);
 	for (var n = this.first; n; n = n.next) {
 		d.push(n.first.text);
 	}
@@ -3191,18 +3188,26 @@ Item.prototype._drawHandles = function(space, rhs) {
 	cx.fillStyle = grad;
 	cx.fill();	
 	if (settings.itemMenuInnerBorderWidth > 0) {
-		grad.addColorStop(0, settings.itemMenuInnerBorderColor1);
-		grad.addColorStop(1, settings.itemMenuInnerBorderColor2);	
+		if (settings.itemMenuInnerBorderColor2) {
+			grad.addColorStop(0, settings.itemMenuInnerBorderColor1);
+			grad.addColorStop(1, settings.itemMenuInnerBorderColor2);	
+			cx.strokeStyle = grad;
+		} else {
+			cx.strokeStyle = settings.itemMenuInnerBorderColor1;
+		}
 		cx.lineWidth = settings.itemMenuInnerBorderWidth;
-		cx.strokeStyle = grad;
 		cx.stroke();
 	}
 			
 	if (settings.itemMenuOuterBorderWidth > 0) {
-		grad.addColorStop(0, settings.itemMenuOuterBorderColor1);
-		grad.addColorStop(1, settings.itemMenuOuterBorderColor2);	
-		cx.lineWidth = settings.itemMenuInnerBorderWidth;
-		cx.strokeStyle = grad;
+		if (settings.itemMenuOuterBorderColor2) {
+			grad.addColorStop(0, settings.itemMenuOuterBorderColor1);
+			grad.addColorStop(1, settings.itemMenuOuterBorderColor2);	
+			cx.lineWidth = settings.itemMenuInnerBorderWidth;
+			cx.strokeStyle = grad;
+		} else {
+			cx.strokeStyle = settings.itemMenuOuterBorderColor1;
+		}
 		cx.lineWidth = settings.itemMenuOuterBorderWidth;
 		cx.stroke();
 	}
@@ -3286,94 +3291,71 @@ Note.prototype.listen = function() {
 	/* end of chain */
 }
 	
-/* mouse hovers at x/y 
+/* checks if this items reacts on an event 
  * returns transfix code
  */
-Note.prototype.tfxHover = function(space, x, y, z, shift, ctrl) {
+Note.prototype.transfix = function(txe, space, x, y, z, shift, ctrl) {
 	if (x < this.x || y < this.y ||  x > this.x + this.width || y > this.y + this.height) {
 		return 0;
 	}
-	System.setCursor("default");
-	return TXR.HIT;
+	switch (txe) {
+	case TXE.HOVER : 
+		System.setCursor("default");
+		return TXR.HIT;
+	case TXE.DRAGSTART :
+		var txr = TXR.HIT; // todo
+		if (ctrl) {
+			space.actionSpawnRelation(this, x, y);
+			return txr | TXR.REDRAW;
+		}
+		if (z > 0) {
+			space.repository.moveToTop(z);
+			txr |= TXR.REDRAW; /* todo full redraw */
+		}
+		if (space.foci != this) {
+			space.setFoci(this);
+			txr |= TXR.REDRAW;
+		}
+
+		var srad = settings.scrollbarRadius;
+		var sbmx = settings.scrollbarMarginX;
+		if (this.scrolly >= 0 && Math.abs(x - this.x - this.width + srad + sbmx) <= srad +1)  {
+			space.actionScrollY(this, y, this.scrolly);
+		} else {
+			space.actionIDrag(this, x - this.x, y - this.y);
+		}
+		return txr;
+	case TXE.CLICK :
+		var txr = TXR.HIT;
+		if (z > 0) {
+			space.repository.moveToTop(z);
+			txr |= TXR.REDRAW; /* todo full redraw */
+		}
+		if (space.foci != this) {
+			space.setFoci(this);
+			txr |= TXR.REDRAW;
+		}
+
+		var ox = x - this.x;
+		var oy = y - this.y + (this.scrolly > 0 ? this.scrolly : 0);
+		var p = this.paraAtY(oy);
+		if (p) {
+			var editor = System.editor;
+			editor.caret.setFromXY(p, ox - p.x, oy - p.y);
+			editor.caret.show();
+			txr |= TXR.REDRAW;
+		}
+		return txr;
+	case TXE.RBINDHOVER :
+		space.actionRBindHover(this);
+		return TXR.HIT | TXR.REDRAW;
+	case TXE.RBINDTO :
+		space.actionRBindTo(this);
+		return TXR.HIT | TXR.REDRAW;
+	default :
+		throw new Error("Unknown transfix code:" + txe);
+	}
 }
-
-/* a dragging move started
- * returns transfix code
- */
-Note.prototype.tfxDragstart = function(space, x, y, z, shift, ctrl) {
-	if (x < this.x || y < this.y ||  x > this.x + this.width || y > this.y + this.height) {
-		return 0;
-	}
-	var txr = TXR.HIT; // todo
-	if (ctrl) {
-		space.actionSpawnRelation(this, x, y);
-		return txr | TXR.REDRAW;
-	}
-	if (z > 0) {
-		space.repository.moveToTop(z);
-		txr |= TXR.REDRAW; /* todo full redraw */
-	}
-	if (space.foci != this) {
-		space.setFoci(this);
-		txr |= TXR.REDRAW;
-	}
-
-	var srad = settings.scrollbarRadius;
-	var sbmx = settings.scrollbarMarginX;
-	if (this.scrolly >= 0 && Math.abs(x - this.x - this.width + srad + sbmx) <= srad +1)  {
-		space.actionScrollY(this, y, this.scrolly);
-	} else {
-		space.actionIDrag(this, x - this.x, y - this.y);
-	}
-	return txr;
-}
-	
-/* a dragging move started
- * returns transfix code
- */
-Note.prototype.tfxClick = function(space, x, y, z, shift, ctrl) {
-	if (x < this.x || y < this.y ||  x > this.x + this.width || y > this.y + this.height) {
-		return 0;
-	}
-	var txr = TXR.HIT;
-	if (z > 0) {
-		space.repository.moveToTop(z);
-		txr |= TXR.REDRAW; /* todo full redraw */
-	}
-	if (space.foci != this) {
-		space.setFoci(this);
-		txr |= TXR.REDRAW;
-	}
-
-	var ox = x - this.x;
-	var oy = y - this.y + (this.scrolly > 0 ? this.scrolly : 0);
-	var p = this.paraAtY(oy);
-	if (p) {
-		var editor = System.editor;
-		editor.caret.setFromXY(p, ox - p.x, oy - p.y);
-		editor.caret.show();
-		txr |= TXR.REDRAW;
-	}
-	return txr;
-}
-
-Note.prototype.tfxRBindHover = function(space, x, y, z, shift, ctrl) {
-	if (x < this.x || y < this.y ||  x > this.x + this.width || y > this.y + this.height) {
-		return 0;
-	}
-	space.actionRBindHover(this);
-	return TXR.HIT | TXR.REDRAW;
-}
-
-Note.prototype.tfxRBindTo = function(space, x, y, z, shift, ctrl) {
-	if (x < this.x || y < this.y ||  x > this.x + this.width || y > this.y + this.height) {
-		return 0;
-	}
-	space.actionRBindTo(this);
-	return TXR.HIT | TXR.REDRAW;
-}
-
-
 
 /* resizes the note 
  * returns true if something changed
@@ -3391,6 +3373,7 @@ Note.prototype.resize = function(width, height) {
 	return true;
 }
 
+/* returns or set the vertical scroll position */
 Object.defineProperty(Note.prototype, "scrolly", {
 	get: function() { 
 		return this._scrolly;
@@ -3432,7 +3415,7 @@ function Note_bevel(cx, x, y, w, h, border, radius) {
 }
 	
 /* draws the item       
- * space  : todraw upon 
+ * space  : to draw upon 
  */
 Note.prototype.draw = function(space) {
 	var bcanvas = this.bcanvas;
@@ -3607,81 +3590,60 @@ Label.prototype.removed = function() {
 /* mouse hovers at x/y 
  * returns transfix code
  */
-Label.prototype.tfxHover = function(space, x, y, z, shift, ctrl) {
+Label.prototype.transfix = function(txe, space, x, y, z, shift, ctrl) {
 	if (x < this.x || y < this.y ||  x > this.x + this.width || y > this.y + this.height) {
 		return 0;
 	}
-	System.setCursor("default");
-	return TXR.HIT;
-}
+	switch(txe) {
+	case TXE.HOVER :
+		System.setCursor("default");
+		return TXR.HIT;
+	case TXE.DRAGSTART :
+		var txr = TXR.HIT;
+		if (ctrl) {
+			space.actionSpawnRelation(this, x, y);
+			return txr | TXR.REDRAW;
+		}
+		if (z > 0) {
+			space.repository.moveToTop(z);
+			txr |= TXR.REDRAW; /* todo full redraw */
+		}
+		if (space.foci != this) {
+			space.setFoci(this);
+			txr |= TXR.REDRAW;
+		}
 
-/* a dragging move started
- * returns transfix code
- */
-Label.prototype.tfxDragstart = function(space, x, y, z, shift, ctrl) {
-	if (x < this.x || y < this.y ||  x > this.x + this.width || y > this.y + this.height) {
-		return 0;
+		space.actionIDrag(this, x - this.x, y - this.y);
+		return txr;
+	case TXR.CLICK: 
+		var txr = TXR.HIT;
+		if (z > 0) {
+			space.repository.moveToTop(z);
+			txr |= TXR.REDRAW; /* todo full redraw */
+		}
+		if (space.foci != this) {
+			space.setFoci(this);
+			txr |= TXR.REDRAW;
+		}
+		var ox = x - this.x;
+		var oy = y - this.y + (this.scrolly > 0 ? this.scrolly : 0);
+		var p = this.paraAtY(oy);
+		if (p) {
+			var editor = System.editor;
+			editor.caret.setFromXY(p, ox - p.x, oy - p.y);
+			editor.caret.show();
+			txr |= TXR.REDRAW;
+		}
+		return txr;	
+	case TXE.RBINDHOVER :
+		space.actionRBindHover(this);
+		return TXR.HIT | TXR.REDRAW;
+	case TXE.RBINDTO :
+		space.actionRBindTo(this);
+		return TXR.HIT | TXR.REDRAW;
+	default :
+		throw new Error("Unknown transfix code:" + txe);
 	}
-	var tfx = TXR.HIT;
-	if (ctrl) {
-		space.actionSpawnRelation(this, x, y);
-		return tfx | TXR.REDRAW;
-	}
-	if (z > 0) {
-		space.repository.moveToTop(z);
-		tfx |= TXR.REDRAW; /* todo full redraw */
-	}
-	if (space.foci != this) {
-		space.setFoci(this);
-		tfx |= TXR.REDRAW;
-	}
-
-	space.actionIDrag(this, x - this.x, y - this.y);
-	return tfx;
-}
-
-/* a dragging move started
- * returns transfix code
- */
-Label.prototype.tfxClick = function(space, x, y, z, shift, ctrl) {
-	if (x < this.x || y < this.y ||  x > this.x + this.width || y > this.y + this.height) {
-		return 0;
-	}
-	var txr = TXR.HIT;
-	if (z > 0) {
-		space.repository.moveToTop(z);
-		txr |= TXR.REDRAW; /* todo full redraw */
-	}
-	if (space.foci != this) {
-		space.setFoci(this);
-		txr |= TXR.REDRAW;
-	}
-	var ox = x - this.x;
-	var oy = y - this.y + (this.scrolly > 0 ? this.scrolly : 0);
-	var p = this.paraAtY(oy);
-	if (p) {
-		var editor = System.editor;
-		editor.caret.setFromXY(p, ox - p.x, oy - p.y);
-		editor.caret.show();
-		txr |= TXR.REDRAW;
-	}
-	return txr;	
-}
-
-Label.prototype.tfxRBindHover = function(space, x, y, z, shift, ctrl) {
-	if (x < this.x || y < this.y ||  x > this.x + this.width || y > this.y + this.height) {
-		return 0;
-	}
-	space.actionRBindHover(this);
-	return TXR.HIT | TXR.REDRAW;
-}
-
-Label.prototype.tfxRBindTo = function(space, x, y, z, shift, ctrl) {
-	if (x < this.x || y < this.y ||  x > this.x + this.width || y > this.y + this.height) {
-		return 0;
-	}
-	space.actionRBindTo(this);
-	return TXR.HIT | TXR.REDRAW;
 }
 
 /* turns the label into a string */
@@ -3782,20 +3744,19 @@ Relation.prototype.constructor = Note;
 
 /* constructor
  * Relation(js, [id])
- * Relation(js, [id], i1, i2) 
+ * Relation(js, [id], i1id, i2id) 
  */
-function Relation(js, id, i1, i2) {
+function Relation(js, id, i1id, i2id) {
 	var dtree;
 	if (js) {
-		var js = a1;
+		debug(js.d);
 		this.dtree  = dtree = new DTree(js.d, this);
-		this.i1id   = js.i1.id;
-		this.i2id   = js.i2.id;
-		if (!this.item1 && !this.item2) throw new Error("Relation relates to nothing");
+		this.i1id   = js.i1;
+		this.i2id   = js.i2;
 	} else {
 		this.dtree  = dtree = new DTree(null, this, 14);
-		this.i1id   = i1;
-		this.i2id   = i2;		
+		this.i1id   = i1id;
+		this.i2id   = i2id;
 	}
 	dtree.flowWidth = -1;
 	Item.call(this, "rel", id);
@@ -3820,37 +3781,13 @@ Relation.prototype.jsonfy = function() {
 		i2: this.i2id,
 		d: this.dtree.jsonfy(),
 	}
+	debug(js, js.d);
 	return js;
 }
 
-/* mouse hovers at x/y 
- * returns transfix code
+/* returns transfix code
  */
-Relation.prototype.tfxHover = function(space, x, y, z, shift, ctrl) {
-	/* todo */
-	return 0;
-}
-
-/* drag operation started at x/y 
- * returns transfix code
- */
-Relation.prototype.tfxDragstart = function(space, x, y, z, shift, ctrl) {
-	/* todo */
-	return 0;
-}
-
-Relation.prototype.tfxClick = function(space, x, y, z, shift, ctrl) {
-	/* todo */
-	return 0;
-}
-
-Relation.prototype.tfxRBindHover = function(space, x, y, z, shift, ctrl) {
-	/* todo */
-	return 0;
-}
-
-Relation.prototype.tfxRBindTo = function(space, x, y, z, shift, ctrl) {
-	/* todo */
+Relation.prototype.transfix = function(txe, space, x, y, z, shift, ctrl) {
 	return 0;
 }
 
@@ -3897,10 +3834,13 @@ Relation.prototype.checkItemCompass = function(x, y, rhs) {
  * mcanvas:  if not null draw this in the middle of the arrow.
  * light:    if true highlights item2   
  */
-function Relation_drawArrow(space, item1, item2_x, null_y, mcanvas, light) {
+function Relation_drawLabeledArrow(space, item1, item2_x, null_y, mcanvas, light) {
 	var scanvas = space.canvas;
 	var cx = scanvas.getContext("2d");
 	var x1, y1, x2, y2;
+	if (!item1) {
+		throw new Error("todo");
+	}
 	var ix  = item1.x + space.pox + 0.5;
 	var iy  = item1.y + space.poy + 0.5;
 	var ixw = ix + item1.width;
@@ -3927,6 +3867,9 @@ function Relation_drawArrow(space, item1, item2_x, null_y, mcanvas, light) {
 		System.setCursor("not-allowed");
 	} else {
 		var it2 = item2_x;
+		if (!item2_x) {
+			throw new Error("item2 missing");
+		}
 		var i2x  = it2.x + space.pox + 0.5;
 		var i2y  = it2.y + space.poy + 0.5;
 		var i2xw = i2x + it2.width;
@@ -4052,7 +3995,7 @@ Relation.prototype.draw = function(space) {
 	var it2 = space.repository.items[this.i2id];
 	if (this._canvasActual) {
 		/* buffer hit */
-		Relation_drawArrow(space, it1, it2, null, bcanvas, false);
+		Relation_drawLabeledArrow(space, it1, it2, null, bcanvas, false);
 		return;
 	}
 	var cx = bcanvas.getContext("2d");
@@ -4061,7 +4004,7 @@ Relation.prototype.draw = function(space) {
 	bcanvas.width  = dtree.width;
 	dtree.drawCanvas(bcanvas, space.selection, 0, 0, 0);
 	this._canvasActual = true;
-	Relation_drawArrow(space, it1, it2, null, bcanvas, false);
+	Relation_drawLabeledArrow(space, it1, it2, null, bcanvas, false);
 }
 
 /* something happend an item onlooked */
@@ -4264,7 +4207,8 @@ Repository.prototype.reset = function() {
 	this.onlookers = {};
 }
 
-Repository.prototype.loadup = function() {
+/* loads the repository from HTML5 localStorage */
+Repository.prototype.loadLocalStorage = function() {
 	this.reset();
 	var idfjs = window.localStorage.getItem("idf");
 	if (idfjs) {
@@ -4288,7 +4232,7 @@ Repository.prototype.loadup = function() {
 	}
 	var zidx = JSON.parse(zjs);
 	this._lock = true;
-	for (var i = 0, zlen = zidx.length; i < zlen; i++) {
+	for (var i = zidx.length - 1; i >= 0; i--) {
 		var id = zidx[i];
 		var itstr = window.localStorage.getItem(id);
 		var itjs;
@@ -4303,38 +4247,31 @@ Repository.prototype.loadup = function() {
 	this._lock = false;
 }
 
+/* erases the local repository */
+Repository.prototype.eraseLocalStorage = function() {
+	var items = this.items;
+	window.localStorage.setItem("idf", "");
+	window.localStorage.setItem("zidx", "");
+	for(var id in items) {
+		window.localStorage.setItem(id, "");
+	}
+}
+
 /* shoots throw x/y and asks every item that intersects if it feels reponsible */ 
-Repository.prototype.transfix = function(space, x, y, shift, ctrl, fx_code) {
+Repository.prototype.transfix = function(txe, space,  x, y, shift, ctrl) {
 	var zidx  = this.zidx;
 	var items = this.items;
 	var fx = 0;
 	for(var z = 0, zlen = zidx.length; z < zlen; z++) {
 		var it = items[zidx[z]];
-		switch (fx_code) {
-		case TXE.CLICK : 
-			fx |= it.tfxClick(space, x, y, z, shift, ctrl);
-			break; 
-		case TXE.DRAGSTART : 
-			fx |= it.tfxDragstart(space, x, y, z, shift, ctrl);
-			break; 
-		case TXE.HOVER : 
-			fx |= it.tfxHover(space, x, y, z, shift, ctrl);
-			break; 
-		case TXE.RBINDHOVER : 
-			fx |= it.tfxRBindHover(space, x, y, z, shift, ctrl);
-			break;
-		case TXE.RBINDTO : 
-			fx |= it.tfxRBindTo(space, x, y, z, shift, ctrl);
-			break;
-		default :
-			throw new Error("transfix, unknown code");
-		}
+		fx |= it.transfix(txe, space, x, y, z, shift, ctrl);
 		if (fx & TXR.HIT) break;
 	}
 	return fx;	
 }
 
-Repository.prototype.doExport = function() {
+/* saves this repository into a JSON-String that is returned */
+Repository.prototype.saveToJString = function() {
 	var js = {}
 	js.formatversion = 0;
 	js.idf = this._idFactory;
@@ -4362,7 +4299,7 @@ Repository.prototype.moveToTop = function(z) {
 /* one item wants to watch another item */
 Repository.prototype.addOnlook = function(onlooker, onlooked) {
 	var its = this.items;
-	if (!its[onlooker] || !its[onlooked]) {
+	if (!this._lock && (!its[onlooker] || !its[onlooked])) {
 		throw new Error("adding Onlook to invalid item ids:");
 	}
 	var od = this.onlookeds[onlooked];
@@ -4384,7 +4321,8 @@ Repository.prototype.removeOnlook = function(onlooker, onlooked) {
 	if (ori >= 0) or.splice(ori, 1);
 }
 
-Repository.prototype.doImport = function(str) {
+/* loads the repository from a JSON string */
+Repository.prototype.loadFromJString = function(str) {
 	try {
 		var js = JSON.parse(str);
 	} catch (err) {
@@ -4396,15 +4334,14 @@ Repository.prototype.doImport = function(str) {
 		return;
 	}
 	this.reset();
-	var items = this.items;
+	this.eraseLocalStorage();
 	/* erase current local repository */
-	for(var id in items) {
-		window.localStorage.setItem(id, "");
-	}
 	var items = this.items;
 	var zidx  = js.z;
 	this._idFactory = js.idf;	
-	for (var i = zidx.length; i >= 0; i--) {
+	window.localStorage.setItem("idf", JSON.stringify(this._idFactory));
+	
+	for (var i = zidx.length - 1; i >= 0; i--) {
 		var id = zidx[i];
 		if (typeof zidx[i] != "number") id = parseInt(id);
 		this._loadItem(id, js.items[id]);
@@ -4428,11 +4365,9 @@ Repository.prototype._loadItem = function(id, itjs) {
 	}
 
 	switch(itjs.t) {
-	case "note" : return new Note(itjs, id);
-	case "label": return new Label(itjs, id);
-	case "rel":
-		debug("ignored relation");
-		return null;
+	case "note"  : return new Note(itjs, id);
+	case "label" : return new Label(itjs, id);
+	case "rel"   : return new Relation(itjs, id);
 	default :
 		throw new Error("unknown item type");
 	}
@@ -4507,7 +4442,11 @@ Repository.prototype.updateItem = function(item) {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 window.onload = function() {
-	//window.localStorage.clear();
+	var request = document.location.search;
+	if (request.indexOf("reset") >= 0) {
+		console.log("Clearing localStorage");
+		window.localStorage.clear();
+	}
 	System.init();
 }
 
