@@ -643,8 +643,8 @@ Editor.prototype.updateCaret = function() {
 		caret.getXY();
 		var it = caret.item;
 		var sy = it.scrolly;
-		var x = System.space.pox + it.x + caret.x;
-		var y = System.space.poy + it.y + caret.y - (sy > 0 ? sy : 0);
+		var x = System.space.pox + it.x1 + caret.x;
+		var y = System.space.poy + it.y1 + caret.y - (sy > 0 ? sy : 0);
 		var th = R(it.dtree.fontsize * (1 + settings.bottombox));
 		
 		caret.save = cx.getImageData(
@@ -2032,8 +2032,12 @@ Space.prototype.dragstop = function(x, y, shift, ctrl) {
 	var redraw = false;
 	switch (iaction.act) {
 	case ACT.IDRAG :
-		iaction.item.x = x - iaction.sx;
-		iaction.item.y = y - iaction.sy;
+		var w = iaction.item.x2 - iaction.item.x1;
+		var h = iaction.item.y2 - iaction.item.y1;
+		iaction.item.x1 = x - iaction.sx;
+		iaction.item.y1 = y - iaction.sy;
+		iaction.item.x2 = x - iaction.sx + w;
+		iaction.item.y2 = y - iaction.sy + h;
 		System.repository.updateItem(iaction.item);
 		iaction.item = null;
 		System.setCursor("default");
@@ -2046,8 +2050,10 @@ Space.prototype.dragstop = function(x, y, shift, ctrl) {
 		iaction.item = null;
 		iaction.six  = null;
 		iaction.siy  = null;
-		iaction.swi  = null;
-		iaction.shi  = null;
+		iaction.six1 = null;
+		iaction.siy1 = null;
+		iaction.six2 = null;
+		iaction.siy2 = null;
 		break;
 	case ACT.SCROLLY :
 		iaction.ssy  = null;
@@ -2084,58 +2090,52 @@ Space.prototype.dragmove = function(x, y, shift, ctrl) {
 		this.redraw();
 		return;
 	case ACT.IDRAG :
-		iaction.item.x = x - iaction.sx;
-		iaction.item.y = y - iaction.sy;
+		/* todo move into items */
+		var w = iaction.item.x2 - iaction.item.x1;
+		var h = iaction.item.y2 - iaction.item.y1;
+		iaction.item.x1 = x - iaction.sx;
+		iaction.item.y1 = y - iaction.sy;
+		iaction.item.x2 = x - iaction.sx + w;
+		iaction.item.y2 = y - iaction.sy + h;
 		System.repository.updateItem(iaction.item);
 		this.redraw();
 		return;
 	case ACT.IRESIZE :
 	{
-		var wi = iaction.swi;
-		var hi = iaction.shi;
+		var x1 = iaction.six1;
+		var y1 = iaction.siy1;
+		var x2 = iaction.six2;
+		var y2 = iaction.siy2;
 		var it = iaction.item;
 		switch (iaction.com) {
 		case "e"  : 
 		case "ne" :
 		case "se" :
-			wi = iaction.swi + x - iaction.sx;
+			x2 = iaction.six2 + x - iaction.sx;
 			break;
 		case "w"  :
 		case "nw" :
 		case "sw" :	
-			wi = iaction.swi - x + iaction.sx;
-			it.x = iaction.six + iaction.swi - wi;
+			x1 = iaction.six1 + x - iaction.sx;
 			break;
 		}
 		switch (iaction.com) {
 		case "s"  : 
 		case "sw" :
 		case "se" :
-			var hi = iaction.shi + y - iaction.sy;
+			y2 = iaction.siy2 + y - iaction.sy;
 			break;
 		case "n"  : 
 		case "nw" :
 		case "ne" :
-			var hi = iaction.shi - y + iaction.sy;
+			y1 = iaction.siy1 + y - iaction.sy;	
 			break;			
 		}
-		redraw = it.resize(wi, hi); 
-		switch (iaction.com) {
-		case "w"  :
-		case "nw" :
-		case "sw" :	
-			it.x = iaction.six + iaction.swi - it.width;
-			break;		
-		}
-		switch (iaction.com) {
-		case "n"  : 
-		case "nw" :
-		case "ne" :
-			it.y = iaction.siy + iaction.shi - it.height;
-			break;
-		}
+		redraw = it.setZone(x1, y1, x2, y2); 
+		
+		/* adapt scrollbar position, todo x move into item */
 		var dtreeHeight = it.dtree.height;
-		var smaxy = dtreeHeight - (it.height - 2 * it.textBorder);
+		var smaxy = dtreeHeight - ((it.x2 - it.x1) - 2 * it.textBorder);
 		if (smaxy > 0 && it.scrolly > smaxy) {
 			it.scrolly = smaxy;
 			redraw = true;;
@@ -2148,9 +2148,10 @@ Space.prototype.dragmove = function(x, y, shift, ctrl) {
 	{
 		var dy = y - iaction.sy;
 		var it = iaction.item;
-		var scrollRange = it.height - settings.scrollbarMarginY * 2;
+		var h = it.y2 - it.y1;
+		var scrollRange = h - settings.scrollbarMarginY * 2;
 		var dtreeHeight = it.dtree.height;
-		var innerHeight = it.height - 2 * it.textBorder;
+		var innerHeight = h - 2 * it.textBorder;
 		var scrollSize  = scrollRange * innerHeight / dtreeHeight;
 		var srad = settings.scrollbarRadius;
 		if (scrollSize < srad * 2) {
@@ -2418,13 +2419,15 @@ Space.prototype.mousedown = function(x, y) {
 		case 1 : // note
 			var nw = settings.newNoteWidth;
 			var nh = settings.newNoteHeight;
-			var note = new Note(null, null, R(fm.x - nw / 2 - this.pox), R(fm.y - nh / 2 - this.poy), nw, nh);
+			var x1 = R(fm.x - nw / 2 - this.pox);
+			var y1 = R(fm.y - nh / 2 - this.poy);
+			var note = new Note(null, null, x1, y1, x1 + nw, y1 + nh);
 			this.setFoci(note);
 			break;
 		case 2 : // label
 			var label = new Label(null, null, fm.x - this.pox, fm.y - this.poy);
-			label.x -= label.width  / 2;
-			label.y -= label.height / 2;
+			label.setPos(R(label.x1 - (label.x2 - label.x1) / 2),
+			             R(label.y1 - (label.y2 - label.y1) / 2));
 			this.setFoci(label);
 			break;
 		}
@@ -2460,10 +2463,10 @@ Space.prototype.mousedown = function(x, y) {
 			iaction.item = this.foci;
 			iaction.sx   = px;
 			iaction.sy   = py;
-			iaction.swi  = this.foci.width;
-			iaction.shi  = this.foci.height;
-			iaction.six  = this.foci.x;
-			iaction.siy  = this.foci.y;
+			iaction.six1  = this.foci.x1;
+			iaction.siy1  = this.foci.y1;
+			iaction.six2  = this.foci.x2;
+			iaction.siy2  = this.foci.y2;
 			System.setCursor(com + "-resize");
 			if (redraw) this.redraw();
 			return MST.DRAG;
@@ -2503,7 +2506,6 @@ Treenode.prototype.append = function(tnode) {
 		throw new Error("append() on a node already part of a tree");
 	}
 	tnode.parent = this;
-	debug("append", tnode, "TO", this);
 	if (!this.last) {
 		this.first = this.last = tnode;
 		tnode.prev = tnode.next = null;
@@ -2706,7 +2708,7 @@ Object.defineProperty(Paragraph.prototype, "softHeight", {
 Object.defineProperty(Paragraph.prototype, "width", {
 	get: function() { 
 		this._flow();
-		return this._width;
+		return this._width;f
 	},
 	set: function(s) { throw new Error("Cannot set paragraph width."); }
 });
@@ -2856,11 +2858,9 @@ function DTree(js, parent, fontsize) {
 		var d = js.d;
 		var dlen = d.length;
 		for(var i = 0; i < dlen; i++) {
-			debug(d[i]);
 			this.append(new Paragraph(d[i]));
 		}
 		this._fontsize = js.fs || 13;
-		debug(js.fs, this._fontsize);
 	} else {
 		this._fontsize = fontsize || 13;
 	}
@@ -2878,8 +2878,6 @@ Object.defineProperty(DTree.prototype, "font", {
 DTree.prototype.jsonfy = function() {
 	var js = {fs : this._fontsize, d: []};
 	var d = js.d;
-	debug(this.first);
-	debug(this.last);
 	for (var n = this.first; n; n = n.next) {
 		d.push(n.first.text);
 	}
@@ -3014,9 +3012,7 @@ Object.defineProperty(DTree.prototype, "fontsize", {
 });
 
 Object.defineProperty(DTree.prototype, "flowWidth", {
-	get: function() { 
-		return this._flowWidth;
-	},
+	get: function() { return this._flowWidth; },
 	set: function(fw) {
 		if (this._flowWidth == fw) return;
 		this._flowWidth = fw;
@@ -3070,12 +3066,12 @@ function Item(type, id) {
 Item.prototype.setItemMenu = function(menu, pox, poy) {
 	var r = settings.itemMenuInnerRadius;
 	var h = settings.itemMenuSliceHeight;
-	menu.set(R(this.x + pox + r - (r * Hex.c6 - h) * Hex.t6), R(this.y + poy + r * Hex.c6 - h) - 1);
+	menu.set(R(this.x1 + pox + r - (r * Hex.c6 - h) * Hex.t6), R(this.y1 + poy + r * Hex.c6 - h) - 1);
 }
 
 /* returns if coords are within the item menu */
 Item.prototype.withinItemMenu = function(x, y) {
-	return Hex.withinSlice(x - this.x, y - this.y - 1, 
+	return Hex.withinSlice(x - this.x1, y - this.y1 - 1, 
 		settings.itemMenuInnerRadius, settings.itemMenuSliceHeight);
 }
 
@@ -3094,10 +3090,10 @@ Item.prototype._checkItemCompass = function(x, y, rhs) {
 	var d = settings.handleSize;          // inner distance
 	var d2 = settings.handleSize * 3 / 4; // outer distance
 	
-	var n = y >= this.y - d2 && y <= this.y + d;
-	var e = x >= this.x + this.width - d && x <= this.x + this.width + d2;
-	var s = y >= this.y + this.height - d && y <= this.y + this.height + d2;
-	var w = x >= this.x - d2 && x <= this.x + d;
+	var n = y >= this.y1 - d2 && y <= this.y1 + d;
+	var e = x >= this.x2 - d  && x <= this.x2 + d2;
+	var s = y >= this.y2 - d  && y <= this.y2 + d2;
+	var w = x >= this.x1 - d2 && x <= this.x1 + d;
 	
 	if (n) {
 		if (w && rhs & 128) { 
@@ -3105,7 +3101,7 @@ Item.prototype._checkItemCompass = function(x, y, rhs) {
 		} else if (e && rhs & 2) {
 			return "ne";
 		} else if (rhs & 1) {
-			var mx = this.x + this.width / 2;
+			var mx = (this.x1 + this.x2) / 2;
 			if (x >= mx - d && x <= mx + d) {
 				return "n";
 			}
@@ -3116,18 +3112,18 @@ Item.prototype._checkItemCompass = function(x, y, rhs) {
 		} else if (e && rhs & 8) {
 			return "se";
 		} else if (rhs & 16) {
-			var mx = this.x + this.width / 2;
+			var mx = (this.x1 + this.x2) / 2;
 			if (x >= mx - d && x <= mx + d) {
 				return "s";
 			}
 		}
 	} else if (w && rhs & 64) {
-		var my = this.y + this.height / 2;
+		var my = (this.y1 + this.y2) / 2;
 		if (y >= my - d && y <= my + d) {
 			return "w";
 		}
 	} else if (e && rhs & 4) {
-		var my = this.y + this.height / 2;
+		var my = (this.y1 + this.y2) / 2;
 		if (y >= my - d && y <= my + d) {
 			return "e";
 		}
@@ -3143,12 +3139,12 @@ Item.prototype._drawHandles = function(space, rhs) {
 	var hs = settings.handleSize;
 	var hs2 = hs / 2;
 			
-	var x1 = this.x + 0.5 - ds + space.pox;
-	var y1 = this.y + 0.5 - ds + space.poy;
-	var x2 = x1 + this.width  + 2 * ds - 1;
-	var y2 = y1 + this.height + 2 * ds - 1;
-	var xm = R((x1 - 0.5 + x2) / 2) + 0.5;
-	var ym = R((y1 - 0.5 + y2) / 2) + 0.5;
+	var x1 = this.x1 + 0.5 - ds + space.pox;
+	var y1 = this.y1 + 0.5 - ds + space.poy;
+	var x2 = this.x2 - 0.5 + ds + space.pox;
+	var y2 = this.y2 - 0.5 + ds + space.poy;
+	var xm = R((x1 + x2) / 2) + 0.5;
+	var ym = R((y1 + y2) / 2) + 0.5;
 	
 	cx.beginPath(); 
 	if (rhs &   1) { cx.moveTo(xm - hs2, y1); cx.lineTo(xm + hs2, y1);                   }
@@ -3173,10 +3169,8 @@ Item.prototype._drawHandles = function(space, rhs) {
 		
 	cx.beginPath(); 
 	/* draws item menu handler */
-	x1 = this.x + space.pox + 0.5;
-	y1 = this.y + space.poy + 0.5;
-	x2 = x1 + this.width + 1;
-	y2 = y1 + this.height + 1;	
+	x1 = this.x1 + space.pox + 0.5;
+	y1 = this.y1 + space.poy + 0.5;
 	var xim = Hex.makeSlicePath(cx, x1, y1 - 1, 
 		settings.itemMenuInnerRadius, settings.itemMenuSliceHeight);
 	var grad = cx.createLinearGradient(
@@ -3227,19 +3221,19 @@ Note.prototype.constructor = Note;
 
 /* constructor
  * Note(json, [id])  or
- * Note(null, [id], width, height, x, y) */
-function Note(js, id, x, y, width, height) {
+ * Note(null, [id], x1, y1, x2, y2) */
+function Note(js, id, x1, y1, x2, y2) {
 	if (js) {
-		this.x      = js.x;
-		this.y      = js.y;
-		this.width  = js.w;
-		this.height = js.h;
+		this.x1    = js.x1 || js.x; // todo
+		this.y1    = js.y1 || js.y; // todo
+		this.x2    = js.x2 || (js.x + js.w); // todo
+		this.y2    = js.y2 || (js.y + js.h); // todo 
 		this.dtree = new DTree(js.d, this);
 	} else {
-		this.width  = width;
-		this.height = height;
-		this.x      = x;
-		this.y      = y;
+		this.x1   = x1;
+		this.y1   = y1;
+		this.x2   = x2;
+		this.y2   = y2;
 		this.dtree  = new DTree(null, this);
 	}
 	Item.call(this, "note", id);
@@ -3248,8 +3242,8 @@ function Note(js, id, x, y, width, height) {
 	this._canvasActual = false;
 	this._scrollx = -8833;
 	this._scrolly = -8833;
-	this.bcanvas.width  = this.width; /* todo, need to set it so early? */
-	this.bcanvas.height = this.height;
+	this.bcanvas.width  = this.x2 - this.x1; /* todo, need to set it so early? */
+	this.bcanvas.height = this.y2 - this.y1;
 	
 	if (!this.dtree.first) {
 		this.dtree.append(new Paragraph(""));
@@ -3263,16 +3257,15 @@ Note.prototype.removed = function() {
 	/* nothing */
 }
 
-
 /* turns the note into a string */
 Note.prototype.jsonfy = function() {
 	var js = {
 	     t : "note",
- 		 x : this.x,
-		 y : this.y,
-		 w : this.width,
-		 h : this.height,
-		 d : this.dtree.jsonfy(),
+ 		 x1 : this.x1,
+		 y1 : this.y1,
+		 x2 : this.x2,
+		 y2 : this.y2,
+		 d  : this.dtree.jsonfy(),
 	}
 	return js;
 }
@@ -3295,9 +3288,7 @@ Note.prototype.listen = function() {
  * returns transfix code
  */
 Note.prototype.transfix = function(txe, space, x, y, z, shift, ctrl) {
-	if (x < this.x || y < this.y ||  x > this.x + this.width || y > this.y + this.height) {
-		return 0;
-	}
+	if (x < this.x1 || y < this.y1 || x > this.x2 || y > this.y2) return 0;
 	switch (txe) {
 	case TXE.HOVER : 
 		System.setCursor("default");
@@ -3319,10 +3310,10 @@ Note.prototype.transfix = function(txe, space, x, y, z, shift, ctrl) {
 
 		var srad = settings.scrollbarRadius;
 		var sbmx = settings.scrollbarMarginX;
-		if (this.scrolly >= 0 && Math.abs(x - this.x - this.width + srad + sbmx) <= srad +1)  {
+		if (this.scrolly >= 0 && Math.abs(x - this.x2 + srad + sbmx) <= srad +1)  {
 			space.actionScrollY(this, y, this.scrolly);
 		} else {
-			space.actionIDrag(this, x - this.x, y - this.y);
+			space.actionIDrag(this, x - this.x1, y - this.y1);
 		}
 		return txr;
 	case TXE.CLICK :
@@ -3336,8 +3327,8 @@ Note.prototype.transfix = function(txe, space, x, y, z, shift, ctrl) {
 			txr |= TXR.REDRAW;
 		}
 
-		var ox = x - this.x;
-		var oy = y - this.y + (this.scrolly > 0 ? this.scrolly : 0);
+		var ox = x - this.x1;
+		var oy = y - this.y1 + (this.scrolly > 0 ? this.scrolly : 0);
 		var p = this.paraAtY(oy);
 		if (p) {
 			var editor = System.editor;
@@ -3357,19 +3348,37 @@ Note.prototype.transfix = function(txe, space, x, y, z, shift, ctrl) {
 	}
 }
 
-/* resizes the note 
+/* sets the notes position and size
  * returns true if something changed
  */
-Note.prototype.resize = function(width, height) {
-	if (height < settings.noteMinHeight) height = settings.noteMinHeight;
-	if (width  < settings.noteMinWidth)   width = settings.noteMinWidth;
-	if (this.width == width && this.height == height) {
+Note.prototype.setZone = function(x1, y1, x2, y2) {
+	var w = x2 - x1;
+	var h = y2 - y1;
+	if (w < settings.noteMinWidth)  x2 = x1 + (w = settings.noteMinWidth);
+	if (h < settings.noteMinHeight) y2 = y1 + (h = settings.noteMinHeight);
+	if (this.x1 === x1 && this.y1 === y1 && this.x2 === x2 && this.y2 === y2) {
 		return false;
 	}
-	var bcanvas = this.bcanvas;
-	this.width  = bcanvas.width  = width; /* todo, not yet do sizing */
-	this.height = bcanvas.height = height;
-	this._canvasActual = false;
+	if (w != this.x2 - this.x1 || h != this.y2 - this.y1) {
+		var bcanvas = this.bcanvas;
+		bcanvas.width  = w; /* todo, not yet do sizing */
+		bcanvas.height = h;
+		this._canvasActual = false;
+	}
+	this.x1 = x1;
+	this.y1 = y1;
+	this.x2 = x2;
+	this.y2 = y2;
+	return true;
+}
+
+/* sets new position retaining height */
+Note.prototype.setPos = function(x1, y1) {
+	if (this.x1 == x1 && this.y1 == y1) return false;
+	this.x2 = x1 + (this.x2 - this.x1);
+	this.y2 = y1 + (this.y2 - this.y1);
+	this.x1 = x1;
+	this.y1 = y1;
 	return true;
 }
 
@@ -3390,6 +3399,46 @@ Object.defineProperty(Note.prototype, "scrolly", {
 	}
 });
 
+/* todo */
+Object.defineProperty(Note.prototype, "x", {
+	get: function() { 
+		throw new Error("x:(");
+	},
+	set: function(sy) {
+		throw new Error("x:((");
+	}
+});
+
+/* todo */
+Object.defineProperty(Note.prototype, "y", {
+	get: function() { 
+		throw new Error("y:(");
+	},
+	set: function(sy) {
+		throw new Error("y:((");
+	}
+});
+
+/* todo */
+Object.defineProperty(Note.prototype, "width", {
+	get: function() { 
+		throw new Error("w:(");
+	},
+	set: function(sy) {
+		throw new Error("w:((");
+	}
+});
+
+/* todo */
+Object.defineProperty(Note.prototype, "height", {
+	get: function() { 
+		throw new Error("h:(");
+	},
+	set: function(sy) {
+		throw new Error("h:((");
+	}
+});
+
 /* draws the items handles */
 Note.prototype.drawHandles = function(space) {
 	return this._drawHandles(space, 255);
@@ -3400,18 +3449,18 @@ Note.prototype.checkItemCompass = function(x, y) {
 }
 
 /* draws a bevel */
-function Note_bevel(cx, x, y, w, h, border, radius) {
-	var x1 = x + border;
-	var y1 = y + border;
-	var x2 = x + w - border;
-	var y2 = y + h - border;
+function Note_bevel(cx, x1, y1, x2, y2, border, radius) {
+	var xb1 = x1 + border;
+	var yb1 = y1 + border;
+	var xb2 = x2 - border;
+	var yb2 = y2 - border;
 	
 	cx.beginPath();
-	cx.moveTo(x1 + radius, y1);
-	cx.arc(x2 - radius, y1 + radius, radius, -Math.PI / 2, 0, false);
-	cx.arc(x2 - radius, y2 - radius, radius, 0, Math.PI / 2, false);
-	cx.arc(x1 + radius, y2 - radius, radius, Math.PI / 2, Math.PI, false);
-	cx.arc(x1 + radius, y1 + radius, radius, Math.PI, -Math.PI / 2, false);
+	cx.moveTo(xb1 + radius, yb1);
+	cx.arc(xb2 - radius, yb1 + radius, radius, -Math.PI / 2, 0, false);
+	cx.arc(xb2 - radius, yb2 - radius, radius, 0, Math.PI / 2, false);
+	cx.arc(xb1 + radius, yb2 - radius, radius, Math.PI / 2, Math.PI, false);
+	cx.arc(xb1 + radius, yb1 + radius, radius, Math.PI, -Math.PI / 2, false);
 }
 	
 /* draws the item       
@@ -3423,14 +3472,17 @@ Note.prototype.draw = function(space) {
 	var cx = bcanvas.getContext("2d");
 	if (this._canvasActual) {
 		/* buffer hit */
-		space.canvas.getContext("2d").drawImage(bcanvas, this.x + space.pox, this.y + space.poy);
+		space.canvas.getContext("2d").drawImage(bcanvas, this.x1 + space.pox, this.y1 + space.poy);
 		return;
 	}
 
 	/* draws the background */
+	var w = this.x2 - this.x1; // width
+	var h = this.y2 - this.y1; // height
+	/* todo - resize here */
 	cx.clearRect(0, 0, bcanvas.width, bcanvas.height);	
-	Note_bevel(cx, 0, 0, this.width, this.height, 2.5, 3);
-	var grad = cx.createLinearGradient(0, 0, this.width / 10, this.height);			
+	Note_bevel(cx, 0, 0, w, h, 2.5, 3);
+	var grad = cx.createLinearGradient(0, 0, w / 10, h);
 	grad.addColorStop(0, settings.noteBackground1);
 	grad.addColorStop(1, settings.noteBackground2);
 	cx.fillStyle = grad;
@@ -3439,23 +3491,23 @@ Note.prototype.draw = function(space) {
 
 	/* calculates if a scrollbar is needed */
 	var sy = this._scrolly;
-	var innerHeight = this.height - 2 * this.textBorder;
-	dtree.flowWidth = this.width  - 2 * this.textBorder - (sy >= 0 ? settings.scrollbarRadius * 2 : 0);
+	var innerHeight = h - 2 * this.textBorder;
+	dtree.flowWidth = w - 2 * this.textBorder - (sy >= 0 ? settings.scrollbarRadius * 2 : 0);
 	var dtreeHeight = dtree.height;
 	if (sy < 0) {
 		if (dtreeHeight > innerHeight) {
-			/* should use a scrollbar */
+			/* does not use a scrollbar but should */
 			sy = this._scrolly = 0;		
-			dtree.flowWidth = this.width  - 2 * this.textBorder - (sy >= 0 ? settings.scrollbarRadius * 2 : 0);
+			dtree.flowWidth = w - 2 * this.textBorder - (sy >= 0 ? settings.scrollbarRadius * 2 : 0);
 			dtreeHeight = dtree.height;
 			if (dtreeHeight <= innerHeight) {
 				throw new Error("note doesnt fit with and without scrollbar.");			
 			}
 		}
 	} else if (dtreeHeight <= innerHeight) {
-		/* should not use a scrollbar */
+		/* uses a scrollbar but should */
 		sy = this._scrolly = -8833;
-		dtree.flowWidth = this.width  - 2 * this.textBorder - (sy >= 0 ? settings.scrollbarRadius * 2 : 0);
+		dtree.flowWidth = w - 2 * this.textBorder - (sy >= 0 ? settings.scrollbarRadius * 2 : 0);
 		dtreeHeight = dtree.height;
 		if (dtreeHeight > innerHeight) {
 			throw new Error("note doesnt fit with and without scrollbar.");			
@@ -3480,9 +3532,9 @@ Note.prototype.draw = function(space) {
 		cx.strokeStyle = settings.scrollbarStrokeStyle;
 		cx.lineWidth   = settings.scrollbarLineWidth;
 		
-		var srad        = settings.scrollbarRadius;
-		var spx = this.width - settings.scrollbarMarginX - srad;
-		var scrollRange = this.height - settings.scrollbarMarginY * 2;
+		var srad = settings.scrollbarRadius;
+		var spx  = w - settings.scrollbarMarginX - srad;
+		var scrollRange = h - settings.scrollbarMarginY * 2;
 		var scrollSize  = scrollRange * innerHeight / dtreeHeight;
 		if (scrollSize < srad * 2) {
 			/* minimum size of scrollbar */
@@ -3539,15 +3591,15 @@ Note.prototype.draw = function(space) {
 	/* draws the border */
 	cx.lineWidth = settings.noteInnerBorderWidth;
 	cx.strokeStyle = settings.noteInnerBorderColor;
-	Note_bevel(cx, 0, 0, this.width, this.height, 1.5, settings.noteInnerRadius);
+	Note_bevel(cx, 0, 0, w, h, 1.5, settings.noteInnerRadius);
 	cx.stroke(); cx.beginPath(); cx.closePath(); // todo
 	cx.lineWidth = settings.noteOuterBorderWidth;
 	cx.strokeStyle = settings.noteOuterBorderColor;
-	Note_bevel(cx, 0, 0, this.width, this.height, 0.5, settings.noteOuterRadius);
+	Note_bevel(cx, 0, 0, w, h, 0.5, settings.noteOuterRadius);
 	cx.stroke(); cx.beginPath(); cx.closePath(); // todo
 	cx.restore();
 	this._canvasActual = true;
-	space.canvas.getContext("2d").drawImage(bcanvas, this.x + space.pox, this.y + space.poy);
+	space.canvas.getContext("2d").drawImage(bcanvas, this.x1 + space.pox, this.y1 + space.poy);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -3563,22 +3615,21 @@ Label.prototype.constructor = Note;
 
 /* constructor
  * Label(js, [id])  or
- * Label(null, [id], x, y) 
+ * Label(null, [id], x1, y1) 
  */
-function Label(js, id, x, y) {
+function Label(js, id, x1, y1) {
 	if (js) {
-		this.x     = js.x;
-		this.y     = js.y;
 		this.dtree = new DTree(js.d, this);
+		if (!this.dtree.first) this.dtree.append(new Paragraph("Label"));
+		this.setZone(js.x1 || js.x, js.y1 || js.x, js.x2 || js.x + 100, js.y2 || js.y + 100);
 	} else {
-		this.x     = x;
-		this.y     = y;
 		this.dtree = new DTree(null, this, 20);
+		if (!this.dtree.first) this.dtree.append(new Paragraph("Label"));
+		this.setZone(x1, y1, x1 + 100, y1 + 50);
 	}
 	Item.call(this, "label", id);
 	this.bcanvas = document.createElement("canvas");
 	this._canvasActual = false;
-	if (!this.dtree.first) this.dtree.append(new Paragraph(""));
 	System.repository.addItem(this, true);
 }
 
@@ -3591,7 +3642,7 @@ Label.prototype.removed = function() {
  * returns transfix code
  */
 Label.prototype.transfix = function(txe, space, x, y, z, shift, ctrl) {
-	if (x < this.x || y < this.y ||  x > this.x + this.width || y > this.y + this.height) {
+	if (x < this.x1 || y < this.y1 ||  x > this.x2 || y > this.y2) {
 		return 0;
 	}
 	switch(txe) {
@@ -3613,7 +3664,7 @@ Label.prototype.transfix = function(txe, space, x, y, z, shift, ctrl) {
 			txr |= TXR.REDRAW;
 		}
 
-		space.actionIDrag(this, x - this.x, y - this.y);
+		space.actionIDrag(this, x - this.x1, y - this.y1);
 		return txr;
 	case TXR.CLICK: 
 		var txr = TXR.HIT;
@@ -3625,8 +3676,8 @@ Label.prototype.transfix = function(txe, space, x, y, z, shift, ctrl) {
 			space.setFoci(this);
 			txr |= TXR.REDRAW;
 		}
-		var ox = x - this.x;
-		var oy = y - this.y + (this.scrolly > 0 ? this.scrolly : 0);
+		var ox = x - this.x1;
+		var oy = y - this.y1 + (this.scrolly > 0 ? this.scrolly : 0);
 		var p = this.paraAtY(oy);
 		if (p) {
 			var editor = System.editor;
@@ -3650,14 +3701,56 @@ Label.prototype.transfix = function(txe, space, x, y, z, shift, ctrl) {
 Label.prototype.jsonfy = function() {
 	var js = {
 	    t: "label",
-		x: this.x,
-		y: this.y,
-		d: this.dtree.jsonfy(),
+		x1: this.x1,
+		y1: this.y1,
+		y2: this.y2,
+		 d: this.dtree.jsonfy(),
 	}
 	return js;
 }
 
+/* todo */
+Object.defineProperty(Label.prototype, "x", {
+	get: function() { 
+		throw new Error("x:(");
+	},
+	set: function(sy) {
+		throw new Error("x:((");
+	}
+});
+
+/* todo */
+Object.defineProperty(Label.prototype, "y", {
+	get: function() { 
+		throw new Error("y:(");
+	},
+	set: function(sy) {
+		throw new Error("y:((");
+	}
+});
+
+/* todo */
+Object.defineProperty(Label.prototype, "height", {
+	get: function() { 
+		throw new Error("h:(");
+	},
+	set: function(sy) {
+		throw new Error("h:((");
+	}
+});
+
+/* todo */
 Object.defineProperty(Label.prototype, "width", {
+	get: function() { 
+		throw new Error("w:(");
+	},
+	set: function(sy) {
+		throw new Error("w:((");
+	}
+});
+
+
+/*Object.defineProperty(Label.prototype, "width", {
 	get: function() { return Math.max(this.dtree.width, settings.labelMinWidth);           },
 	set: function() { throw new Error("Cannot set width of Label, set fontsize instead."); }
 });
@@ -3668,7 +3761,46 @@ Object.defineProperty(Label.prototype, "height", {
 		return Math.max(mh, settings.labelMinHeight);          
 	},
 	set: function() { throw new Error("Cannot set height of Label, set fontsize instead."); }
-});
+});*/
+
+
+/* sets the zone the label is 
+ * also determines fontsize indirectly 
+ * returns true if something changed */
+Label.prototype.setZone = function(x1, y1, x2, y2) {
+	if (this.x1 === x1 && this.y1 === y1 && this.x2 === x2 && this.y2 === y2) return false;
+	var dtree = this.dtree;
+	var zh = y2 - y1;
+	var th = R(this.dtree.height * (1 + settings.bottombox));
+	var dfs = dtree.fontsize;
+	var fs = Math.max(dfs * zh / th, 8);
+	var keepx2 = this.x2 == x2 ? x2 : Number.NAN;
+	this.x1 = x1;
+	this.y1 = y1;
+	dtree.fontsize = fs;
+	dtree.flowWidth = -1;
+	if (keepx2 !== Number.NAN) {
+		this.x1 = keepx2 - (this.x2 - this.x1);
+		this.x2 = keepx2;
+	}
+	this._canvasActual = false;
+//	this.x2 = x1 + dtree.width;	
+//	this.y2 = y1 + R(this.dtree.height * (1 + settings.bottombox));
+	return dfs !== fs;
+}
+
+/* sets new position retaining height */
+Label.prototype.setPos = function(x1, y1) {
+	if (this.x1 === x1 && this.y1 === y1) {
+		return false;
+	}
+	this.x2 = x1 + (this.x2 - this.x1);
+	this.y2 = y1 + (this.y2 - this.y1);
+	this.x1 = x1;
+	this.y1 = y1;
+	return true;
+}
+
 
 /* returns the para at y */
 Label.prototype.paraAtY = function(y) {
@@ -3678,20 +3810,9 @@ Label.prototype.paraAtY = function(y) {
 /* drops the cached canvas */
 Label.prototype.listen = function() {
 	this._canvasActual = false;
+	this.x2 = this.x1 + this.dtree.width;
+	this.y2 = this.y1 + R(this.dtree.height * (1 + settings.bottombox));
 	/* end of chain */
-}
-	
-/* resizes the note */
-/* resizes the note 
- * returns true if something changed */
-Label.prototype.resize = function(width, height) {
-	var dtree = this.dtree;
-	var fs = Math.max(dtree.fontsize * height / this.height, 8);
-	if (dtree._fontsize == fs) return false;
-	dtree.fontsize = fs;
-	dtree.flowWidth = -1;
-	this._canvasActual = false;
-	return true;
 }
 
 /* draws the items handles */
@@ -3710,25 +3831,26 @@ Label.prototype.draw = function(space) {
 	var dtree = this.dtree;
 	if (this._canvasActual) {
 		/* buffer hit */
-		space.canvas.getContext("2d").drawImage(bcanvas, this.x + space.pox, this.y + space.poy);
+		space.canvas.getContext("2d").drawImage(bcanvas, this.x1 + space.pox, this.y1 + space.poy);
 		return;
 	}
-	var cx = bcanvas.getContext("2d");
-	cx.save();
-	cx.clearRect(0, 0, bcanvas.width, bcanvas.height);	
-	var height = bcanvas.height = this.height;
-	var width  = bcanvas.width  = this.width;
+	var w = this.x2 - this.x1;
+	var h = this.y2 - this.y1;
+	//cx.clearRect(0, 0, bcanvas.width, bcanvas.height); todo
+	bcanvas.height = h;
+	bcanvas.width  = w;
 	/* draws text */	
+	var cx = bcanvas.getContext("2d");
 	dtree.drawCanvas(bcanvas, space.selection, 0, 0, 0);
 	/* draws the border */
 	cx.beginPath(); 
-	cx.rect(0, 0, width, height);
+	cx.rect(0, 0, w, h);
 	cx.lineWidth = 1;
 	cx.strokeStyle = "rgba(128,128,128,1)";
-	cx.stroke(); cx.beginPath(); 
-	cx.restore();
+	cx.stroke(); 
+	cx.beginPath(); 
 	this._canvasActual = true;
-	space.canvas.getContext("2d").drawImage(bcanvas, this.x + space.pox, this.y + space.poy);
+	space.canvas.getContext("2d").drawImage(bcanvas, this.x1 + space.pox, this.y1 + space.poy);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -3749,7 +3871,6 @@ Relation.prototype.constructor = Note;
 function Relation(js, id, i1id, i2id) {
 	var dtree;
 	if (js) {
-		debug(js.d);
 		this.dtree  = dtree = new DTree(js.d, this);
 		this.i1id   = js.i1;
 		this.i2id   = js.i2;
@@ -3779,9 +3900,8 @@ Relation.prototype.jsonfy = function() {
 	    t: "rel",
 		i1: this.i1id,
 		i2: this.i2id,
-		d: this.dtree.jsonfy(),
+		d: this.dtree.jsonfy(true),
 	}
-	debug(js, js.d);
 	return js;
 }
 
@@ -3841,28 +3961,28 @@ function Relation_drawLabeledArrow(space, item1, item2_x, null_y, mcanvas, light
 	if (!item1) {
 		throw new Error("todo");
 	}
-	var ix  = item1.x + space.pox + 0.5;
-	var iy  = item1.y + space.poy + 0.5;
-	var ixw = ix + item1.width;
-	var iyh = iy + item1.height;
+	var i1x1 = item1.x1 + space.pox + 0.5;
+	var i1y1 = item1.y1 + space.poy + 0.5;
+	var i1x2 = item1.x2 + space.pox + 0.5;
+	var i1y2 = item1.y2 + space.poy + 0.5;;
 
 	if (null_y) {
 		x2 = item2_x + space.pox + 0.5;
 		y2 = null_y  + space.poy + 0.5;
 		/* find quadrant */
 		var im = 0;
-		if (x2 < ix) { x1 = ix; }
-		else if (x2 < ixw) { x1 = x2; im++; }
-		else { x1 = ixw; }
+		if (x2 < i1x1) { x1 = i1x1; }
+		else if (x2 < i1x2) { x1 = x2; im++; }
+		else { x1 = i1x2; }
 
-		if (y2 < iy) { y1 = iy; }
-		else if (y2 < iyh) { y1 = y2; im++; } 
-		else { y1 = iyh; }
+		if (y2 < i1y1) { y1 = i1y1; }
+		else if (y2 < i1y2) { y1 = y2; im++; } 
+		else { y1 = i1y2; }
 
 		if (im == 2) {
 			/* in middle */
-			x1 = (ix + ixw) / 2;
-			y1 = (iy + iyh) / 2;
+			x1 = (i1x1 + i1x2) / 2;
+			y1 = (i1y1 + i1y2) / 2;
 		}
 		System.setCursor("not-allowed");
 	} else {
@@ -3870,42 +3990,47 @@ function Relation_drawLabeledArrow(space, item1, item2_x, null_y, mcanvas, light
 		if (!item2_x) {
 			throw new Error("item2 missing");
 		}
-		var i2x  = it2.x + space.pox + 0.5;
-		var i2y  = it2.y + space.poy + 0.5;
-		var i2xw = i2x + it2.width;
-		var i2yh = i2y + it2.height;
-			
-		if (i2x > ixw) { 
+		var i2x1 = it2.x1 + space.pox + 0.5;
+		var i2y1 = it2.y1 + space.poy + 0.5;
+		var i2x2 = it2.x2 + space.pox + 0.5;
+		var i2y2 = it2.y2 + space.poy + 0.5;
+
+		if (i2x1 > i1x2) { 
 			/* 2 is clearly to the right */
-			x1 = ixw;
-			x2 = i2x;
-		} else if (i2xw < ix) {
+			x1 = i1x2;
+			x2 = i2x1;
+		} else if (i2x2 < i1x1) {
 			/* 2 is clearly to the left */
-			x1 = ix;
-			x2 = i2xw;
+			x1 = i1x1;
+			x2 = i2x2;
 		} else {
 			/* an intersection */
-			x1 = x2 = ((ix > i2x ? ix : i2x) + (ixw < i2xw ? ixw : i2xw)) / 2;
+			x1 = x2 = ((i1x1 > i2x1 ? i1x1 : i2x1) + (i1x2 < i2x2 ? i1x2 : i2x2)) / 2;
 		}
-		if (i2y > iyh) { 
+		if (i2y1 > i1y2) { 
 			/* 2 is clearly to the right */
-			y1 = iyh;
-			y2 = i2y;
-		} else if (i2yh < iy) {
+			y1 = i1y2;
+			y2 = i2y1;
+		} else if (i2y2 < i1y1) {
 			/* 2 is clearly to the left */
-			y1 = iy;
-			y2 = i2yh;
+			y1 = i1y1;
+			y2 = i2y2;
 		} else {
 			/* an intersection */
-			y1 = y2 = ((iy > i2y ? iy : i2y) + (iyh < i2yh ? iyh : i2yh)) / 2;
+			y1 = y2 = ((i1y1 > i2y1 ? i1y1 : i2y1) + (i1y2 < i2y2 ? i1y2 : i2y2)) / 2;
 		}
-			
+
 		//y1 = (iy  + iyh)  / 2;
 		//y2 = (i2y + i2yh) / 2;	
-		
+
 		if (light) {
+			/* todo let the item highlight itself */
 			cx.beginPath();
-			cx.rect(i2x, i2y, it2.width, it2.height);
+			cx.moveTo(i2x1, i2y1);
+			cx.lineTo(i2x2, i2y1);
+			cx.lineTo(i2x2, i2y2);
+			cx.lineTo(i2x1, i2y2);
+			cx.closePath();
 			cx.lineWidth = 3;
 			cx.strokeStyle = "rgba(255, 183, 15, 0.5)";
 			cx.stroke();
