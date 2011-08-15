@@ -2293,7 +2293,7 @@ Space.prototype._importDialog = function() {
 	okb.style.cssFloat  = "right";
 	var space = this;
 	okb.onclick = function() {
-		System.repository.doFromJString(ta.value);
+		System.repository.loadFromJString(ta.value);
 		document.body.removeChild(div);
 		space.redraw();
 	}
@@ -4590,12 +4590,139 @@ var demoRepository = (<r><![CDATA[
   "nid": 22
  },
  "items": {
+  "6": {
+   "t": "label",
+   "x1": 977,
+   "y1": 977,
+   "y2": 987,
+   "d": {
+    "fs": 8,
+    "d": [
+     "This is a label"
+    ]
+   }
+  },
+  "10": {
+   "t": "label",
+   "x1": 82,
+   "y1": 82,
+   "y2": 225,
+   "d": {
+    "fs": 117.5,
+    "d": [
+     "is an"
+    ]
+   }
+  },
+  "2": {
+   "t": "label",
+   "x1": -64,
+   "y1": -64,
+   "y2": 60,
+   "d": {
+    "fs": 101.73604079684021,
+    "d": [
+     "Meshcraft"
+    ]
+   }
+  },
+  "8": {
+   "t": "note",
+   "x1": 173,
+   "y1": 228,
+   "x2": 328,
+   "y2": 268,
+   "d": {
+    "fs": 13,
+    "d": [
+     "item network editor"
+    ]
+   }
+  },
+  "12": {
+   "t": "note",
+   "x1": 702,
+   "y1": 44,
+   "x2": 916,
+   "y2": 94,
+   "d": {
+    "fs": 13,
+    "d": [
+     "Click an item to edit it."
+    ]
+   }
+  },
+  "20": {
+   "t": "note",
+   "x1": 702,
+   "y1": 101,
+   "x2": 915,
+   "y2": 156,
+   "d": {
+    "fs": 13,
+    "d": [
+     "Click an items half-hexagon on its top/left to change it."
+    ]
+   }
+  },
+  "13": {
+   "t": "note",
+   "x1": 922,
+   "y1": 43,
+   "x2": 1139,
+   "y2": 92,
+   "d": {
+    "fs": 13,
+    "d": [
+     "Drag an item to drag it."
+    ]
+   }
+  },
+  "21": {
+   "t": "note",
+   "x1": 925,
+   "y1": 100,
+   "x2": 1139,
+   "y2": 154,
+   "d": {
+    "fs": 13,
+    "d": [
+     "Drag an items half-hexagon to create a relation."
+    ]
+   }
+  },
+  "11": {
+   "t": "note",
+   "x1": 702,
+   "y1": -12,
+   "x2": 915,
+   "y2": 37,
+   "d": {
+    "fs": 13,
+    "d": [
+     "Click the background to create a new item."
+    ]
+   }
+  },
+  "9": {
+   "t": "note",
+   "x1": 921,
+   "y1": -12,
+   "x2": 1139,
+   "y2": 38,
+   "d": {
+    "fs": 13,
+    "d": [
+     "Drag the background to pan."
+    ]
+   }
+  },
   "3": {
    "t": "note",
-   "x": 976,
-   "y": 313,
-   "w": 180,
-   "h": 188,
+   "x1": 976,
+   "y1": 313,
+   "x2": 1156,
+   "y2": 501,
    "d": {
     "fs": 13,
     "d": [
@@ -4612,142 +4739,18 @@ var demoRepository = (<r><![CDATA[
      "like this."
     ]
    }
-  },
-  "9": {
-   "t": "note",
-   "x": 921,
-   "y": -12,
-   "w": 218,
-   "h": 50,
-   "d": {
-    "fs": 13,
-    "d": [
-     "Drag the background to pan."
-    ]
-   }
-  },
-  "11": {
-   "t": "note",
-   "x": 702,
-   "y": -12,
-   "w": 213,
-   "h": 49,
-   "d": {
-    "fs": 13,
-    "d": [
-     "Click the background to create a new item."
-    ]
-   }
-  },
-  "21": {
-   "t": "note",
-   "x": 925,
-   "y": 100,
-   "w": 214,
-   "h": 54,
-   "d": {
-    "fs": 13,
-    "d": [
-     "Drag an items half-hexagon to create a relation."
-    ]
-   }
-  },
-  "13": {
-   "t": "note",
-   "x": 922,
-   "y": 43,
-   "w": 217,
-   "h": 49,
-   "d": {
-    "fs": 13,
-    "d": [
-     "Drag an item to drag it."
-    ]
-   }
-  },
-  "20": {
-   "t": "note",
-   "x": 702,
-   "y": 101,
-   "w": 213,
-   "h": 55,
-   "d": {
-    "fs": 13,
-    "d": [
-     "Click an items half-hexagon on its top/left to change it."
-    ]
-   }
-  },
-  "12": {
-   "t": "note",
-   "x": 702,
-   "y": 44,
-   "w": 214,
-   "h": 50,
-   "d": {
-    "fs": 13,
-    "d": [
-     "Click an item to edit it."
-    ]
-   }
-  },
-  "8": {
-   "t": "note",
-   "x": 135,
-   "y": 193,
-   "w": 155,
-   "h": 40,
-   "d": {
-    "fs": 13,
-    "d": [
-     "item network editor"
-    ]
-   }
-  },
-  "2": {
-   "t": "label",
-   "x": -64,
-   "y": -40,
-   "d": {
-    "fs": 91.89061749392019,
-    "d": [
-     "Meshcraft"
-    ]
-   }
-  },
-  "10": {
-   "t": "label",
-   "x": 82,
-   "y": 123,
-   "d": {
-    "fs": 20,
-    "d": [
-     "is an"
-    ]
-   }
-  },
-  "6": {
-   "t": "label",
-   "x": 977,
-   "y": 273,
-   "d": {
-    "fs": 24.808421121785162,
-    "d": [
-     "This is a label"
-    ]
-   }
   }
  },
  "z": [
-  "3",
+  8,
+  3,
   9,
   11,
   21,
   13,
   20,
   12,
-  8,
-  "2",
+  2,
   10,
   6
  ],
