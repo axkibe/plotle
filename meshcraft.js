@@ -1787,8 +1787,7 @@ function Space() {
 	};
 	
 	/* panning offset */
-	this.pox = parseInt(window.localStorage.getItem("pox")) || 0;
-	this.poy = parseInt(window.localStorage.getItem("poy")) || 0;
+	this.repository.getPoxy(this);
 	this.zoom = 1;
 }
 
@@ -2085,8 +2084,7 @@ Space.prototype.dragmove = function(x, y, shift, ctrl) {
 	case ACT.PAN :
 		this.pox += x - iaction.sx;
 		this.poy += y - iaction.sy;
-		window.localStorage.setItem("pox", this.pox);
-		window.localStorage.setItem("poy", this.poy);		
+		System.repository.savePoxy(this.pox, this.poy);
 		this.redraw();
 		return;
 	case ACT.IDRAG :
@@ -2218,7 +2216,7 @@ Space.prototype._exportDialog = function() {
 	ta.style.marginLeft = "auto";
 	ta.style.marginRight = "auto";
 	ta.style.marginTop = "20px";
-	ta.value = System.repository.saveToJString();
+	ta.value = System.repository.exportToJString();
 	ta.readOnly = true;
 
 	div.appendChild(ta);
@@ -2293,7 +2291,7 @@ Space.prototype._importDialog = function() {
 	okb.style.cssFloat  = "right";
 	var space = this;
 	okb.onclick = function() {
-		System.repository.loadFromJString(ta.value);
+		System.repository.importFromJString(ta.value);
 		document.body.removeChild(div);
 		space.redraw();
 	}
@@ -2360,7 +2358,7 @@ Space.prototype._revertDialog = function() {
 	okb.style.cssFloat  = "right";
 	var space = this;
 	okb.onclick = function() {
-		System.repository.loadFromJString(demoRepository);
+		System.repository.importFromJString(demoRepository);
 		document.body.removeChild(div);
 		space.redraw();
 	}
@@ -3224,10 +3222,10 @@ Note.prototype.constructor = Note;
  * Note(null, [id], x1, y1, x2, y2) */
 function Note(js, id, x1, y1, x2, y2) {
 	if (js) {
-		this.x1    = js.x1 || js.x; // todo
-		this.y1    = js.y1 || js.y; // todo
-		this.x2    = js.x2 || (js.x + js.w); // todo
-		this.y2    = js.y2 || (js.y + js.h); // todo 
+		this.x1    = js.x1;
+		this.y1    = js.y1; 
+		this.x2    = js.x2; 
+		this.y2    = js.y2;
 		this.dtree = new DTree(js.d, this);
 	} else {
 		this.x1   = x1;
@@ -3294,7 +3292,7 @@ Note.prototype.transfix = function(txe, space, x, y, z, shift, ctrl) {
 		System.setCursor("default");
 		return TXR.HIT;
 	case TXE.DRAGSTART :
-		var txr = TXR.HIT; // todo
+		var txr = TXR.HIT;
 		if (ctrl) {
 			space.actionSpawnRelation(this, x, y);
 			return txr | TXR.REDRAW;
@@ -3592,12 +3590,11 @@ Note.prototype.draw = function(space) {
 	cx.lineWidth = settings.noteInnerBorderWidth;
 	cx.strokeStyle = settings.noteInnerBorderColor;
 	Note_bevel(cx, 0, 0, w, h, 1.5, settings.noteInnerRadius);
-	cx.stroke(); cx.beginPath(); cx.closePath(); // todo
+	cx.stroke(); 
 	cx.lineWidth = settings.noteOuterBorderWidth;
 	cx.strokeStyle = settings.noteOuterBorderColor;
 	Note_bevel(cx, 0, 0, w, h, 0.5, settings.noteOuterRadius);
-	cx.stroke(); cx.beginPath(); cx.closePath(); // todo
-	cx.restore();
+	cx.stroke(); 
 	this._canvasActual = true;
 	space.canvas.getContext("2d").drawImage(bcanvas, this.x1 + space.pox, this.y1 + space.poy);
 }
@@ -3621,7 +3618,7 @@ function Label(js, id, x1, y1) {
 	if (js) {
 		this.dtree = new DTree(js.d, this);
 		if (!this.dtree.first) this.dtree.append(new Paragraph("Label"));
-		this.setZone(js.x1 || js.x, js.y1 || js.x, js.x2 || js.x + 100, js.y2 || js.y + 100);
+		this.setZone(js.x1, js.y1, js.x2, js.y2);
 	} else {
 		this.dtree = new DTree(null, this, 20);
 		if (!this.dtree.first) this.dtree.append(new Paragraph("Label"));
@@ -3938,7 +3935,6 @@ Relation.prototype.resize = function(width, height) {
 }
 
 /* draws the items handles */
-/* todo what is rhs? */
 Relation.prototype.drawHandles = function(space) {
 	this._drawHandles(space, 170);
 }
@@ -4042,9 +4038,7 @@ function Relation_drawLabeledArrow(space, item1, item2_x, null_y, mcanvas, light
 	var ad = Math.PI/12;
 	var ms = 2 / Math.sqrt(3) * as;
 	cx.beginPath();
-	cx.save();
 	if (mcanvas) {
-
 		var mx = (x1 + x2) / 2;
 		var my = (y1 + y2) / 2;
 		var tx = R(mx - mcanvas.width / 2)  - 2;
@@ -4319,6 +4313,7 @@ VectorGraph.prototype.getCanvas = function() {
             '                        `-'
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Repository() {
+	this.reset();
 }
 
 Repository.prototype.reset = function() {
@@ -4326,7 +4321,11 @@ Repository.prototype.reset = function() {
 	this.items = {};
 	/* z information of the items, 0 is topmost */
 	this.zidx = [];
-	this._lock = false;
+	
+	/* do not save changes, used during loadup */
+	this._nosave    = false;
+	/* do not notify onlookers, used during import */
+	this._noonlooks = false;
 	
 	this.onlookeds = {};
 	this.onlookers = {};
@@ -4356,7 +4355,8 @@ Repository.prototype.loadLocalStorage = function() {
 		return;
 	}
 	var zidx = JSON.parse(zjs);
-	this._lock = true;
+	this._nosave = true;
+	this._noonlooks = true;
 	for (var i = zidx.length - 1; i >= 0; i--) {
 		var id = zidx[i];
 		var itstr = window.localStorage.getItem(id);
@@ -4364,12 +4364,14 @@ Repository.prototype.loadLocalStorage = function() {
 		try {
 			itjs = JSON.parse(itstr);
 		} catch (err) {
-			this._lock = false;
+			this._nosave = false;
+			this._noonlooks = false;
 			throw err;
 		} 		
 		this._loadItem(id, itjs);
 	}
-	this._lock = false;
+	this._nosave = false;
+	this._noonlooks = false;
 }
 
 /* erases the local repository */
@@ -4396,7 +4398,7 @@ Repository.prototype.transfix = function(txe, space,  x, y, shift, ctrl) {
 }
 
 /* saves this repository into a JSON-String that is returned */
-Repository.prototype.saveToJString = function() {
+Repository.prototype.exportToJString = function() {
 	var js = {}
 	js.formatversion = 0;
 	js.idf = this._idFactory;
@@ -4424,7 +4426,7 @@ Repository.prototype.moveToTop = function(z) {
 /* one item wants to watch another item */
 Repository.prototype.addOnlook = function(onlooker, onlooked) {
 	var its = this.items;
-	if (!this._lock && (!its[onlooker] || !its[onlooked])) {
+	if (!this._noonlooks && (!its[onlooker] || !its[onlooked])) {
 		throw new Error("adding Onlook to invalid item ids:");
 	}
 	var od = this.onlookeds[onlooked];
@@ -4438,16 +4440,16 @@ Repository.prototype.addOnlook = function(onlooker, onlooked) {
 /* one item stops to watch another item */
 Repository.prototype.removeOnlook = function(onlooker, onlooked) {
 	var od = this.onlookeds[onlooked];
-	var or = this.onlookers[onlooker];
-	/* todo is there a removeItem in array? */
 	var odi = od.indexOf(onlooker);
-	var ori = or.indexOf(onlooked);
 	if (odi >= 0) od.splice(odi, 1);
+
+	var or = this.onlookers[onlooker];
+	var ori = or.indexOf(onlooked);
 	if (ori >= 0) or.splice(ori, 1);
 }
 
 /* loads the repository from a JSON string */
-Repository.prototype.loadFromJString = function(str) {
+Repository.prototype.importFromJString = function(str) {
 	try {
 		var js = JSON.parse(str);
 	} catch (err) {
@@ -4465,16 +4467,17 @@ Repository.prototype.loadFromJString = function(str) {
 	var zidx  = js.z;
 	this._idFactory = js.idf;	
 	window.localStorage.setItem("idf", JSON.stringify(this._idFactory));
-	
+	this._noonlooks = true;
 	for (var i = zidx.length - 1; i >= 0; i--) {
 		var id = zidx[i];
 		if (typeof zidx[i] != "number") id = parseInt(id);
 		this._loadItem(id, js.items[id]);
 	}
 	this._saveZIDX();
+	this._noonlocks = false;
+
 	System.space.setFoci(null);
-	System.space.pox = js.pox || 0;
-	System.space.poy = js.poy || 0;
+	this.savePoxy(System.space.pox = js.pox || 0, System.space.poy = js.poy || 0);
 }
 
 Repository.prototype._newItemID = function() {
@@ -4485,20 +4488,15 @@ Repository.prototype._newItemID = function() {
 }
 
 Repository.prototype._loadItem = function(id, itjs) {
-	if (!itjs || !itjs.t) {
-		throw new Error("JSON error: attributes missing from " + id + ":");
-	}
-
+	if (!itjs || !itjs.t) throw new Error("JSON error: attributes missing from " + id + ":");
 	switch(itjs.t) {
 	case "note"  : return new Note(itjs, id);
 	case "label" : return new Label(itjs, id);
 	case "rel"   : return new Relation(itjs, id);
-	default :
-		throw new Error("unknown item type");
+	default      : throw new Error("unknown item type");
 	}
 }
 
-/* todo rename to zidx */
 Repository.prototype._saveZIDX = function() {
 	window.localStorage.setItem("zidx", JSON.stringify(this.zidx));
 }
@@ -4513,7 +4511,7 @@ Repository.prototype.addItem = function(item, top) {
 		this.zidx.push(item.id);
 	}
 	
-	if (!this._lock) {
+	if (!this._nosave) {
 		this._saveItem(item);
 		this._saveZIDX();
 	}
@@ -4527,24 +4525,19 @@ Repository.prototype.removeItem = function(item) {
 	delete this.items[id];
 	item.removed();
 	
-	{	
-		this.onlookeds.locked = true;
+	if (!this._noonlooks) {	
 		var od = this.onlookeds[id];
 		if (od) {
-			var odc = [];
-			// todo, is there array copy?
-			for (var i = 0; i < od.length; i++) {
-				odc[i] = od[i];
-			}
+			/* copies array so it can be changed during traversal */
+			var odc = od.slice();
 			for (var i = 0; i < odc.length; i++) {
 				var it = this.items[odc[i]];
 				if (it) it.onlook(ONLOOK.REMOVE, item);
 			}
 		}
-		this.onlookeds.locked = true;
 	}
 	
-	if (!this._lock) {
+	if (!this._nosave) {
 		window.localStorage.setItem(item.id, "");
 		this._saveZIDX();
 	}
@@ -4555,8 +4548,21 @@ Repository.prototype._saveItem = function(item) {
 }
 
 Repository.prototype.updateItem = function(item) {
-	if (this._lock) return;
-	this._saveItem(item);
+	if (!this._nosave) this._saveItem(item);
+}
+
+
+/* loads panning offsets and puts them into o.pox and o.poy */
+Repository.prototype.getPoxy = function(o) {
+	o.pox = parseInt(window.localStorage.getItem("pox")) || 0;
+	o.poy = parseInt(window.localStorage.getItem("poy")) || 0;
+}
+
+Repository.prototype.savePoxy = function(pox, poy) {
+	if (!this._nosave) {
+		window.localStorage.setItem("pox", pox);
+		window.localStorage.setItem("poy", poy);		
+	}
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -4587,7 +4593,7 @@ var demoRepository = (<r><![CDATA[
 {
  "formatversion": 0,
  "idf": {
-  "nid": 22
+  "nid": 23
  },
  "items": {
   "6": {
@@ -4602,18 +4608,6 @@ var demoRepository = (<r><![CDATA[
     ]
    }
   },
-  "10": {
-   "t": "label",
-   "x1": 82,
-   "y1": 82,
-   "y2": 225,
-   "d": {
-    "fs": 117.5,
-    "d": [
-     "is an"
-    ]
-   }
-  },
   "2": {
    "t": "label",
    "x1": -64,
@@ -4623,19 +4617,6 @@ var demoRepository = (<r><![CDATA[
     "fs": 101.73604079684021,
     "d": [
      "Meshcraft"
-    ]
-   }
-  },
-  "8": {
-   "t": "note",
-   "x1": 173,
-   "y1": 228,
-   "x2": 328,
-   "y2": 268,
-   "d": {
-    "fs": 13,
-    "d": [
-     "item network editor"
     ]
    }
   },
@@ -4739,10 +4720,36 @@ var demoRepository = (<r><![CDATA[
      "like this."
     ]
    }
+  },
+  "8": {
+   "t": "note",
+   "x1": 186,
+   "y1": 172,
+   "x2": 341,
+   "y2": 212,
+   "d": {
+    "fs": 13,
+    "d": [
+     "item network editor"
+    ]
+   }
+  },
+  "23": {
+   "t": "rel",
+   "i1": 2,
+   "i2": 8,
+   "d": {
+    "fs": 14,
+    "d": [
+     "relates to"
+    ]
+   }
   }
  },
  "z": [
   8,
+  23,
+  2,
   3,
   9,
   11,
@@ -4750,8 +4757,6 @@ var demoRepository = (<r><![CDATA[
   13,
   20,
   12,
-  2,
-  10,
   6
  ],
  "pox": 78,
