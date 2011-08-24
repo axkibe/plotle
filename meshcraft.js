@@ -259,6 +259,153 @@ Object.defineProperty(Measure, "font", {
 });
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.-,--.           .
+ '|__/ ,-. . ,-. |-
+ ,|    | | | | | |
+ `'    `-' ' ' ' `'
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ A Point in a 2D plane.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+/* Constructor.
+ * Point(x, y) or
+ * Point(js)
+ * Point(point)
+ */
+function Point(js_p_x, y) {
+	if (typeof(y) === "undefined") {
+		/* it doesn't matter if js_p is json or point */
+		if (!js_p_x) {
+			throw new Error("what?");
+		}
+		this.x = js_p_x.x;
+		this.y = js_p_x.y;
+	} else {
+		this.x = js_p_x;
+		this.y = y;
+	}
+	this.type = "point";
+}
+
+/* returns a json object for this point */
+Point.prototype.jsonfy = function() {
+	return { x: this.x, y: this.y };
+}
+
+/* Sets this point 
+ * point(p)    another point
+ * point(x, y) to this coords
+ */
+Point.prototype.set = function(p_x, y) {
+	if (typeof(y) === "undefined") {
+		this.x = p_x.x;
+		this.y = p_x.y;
+	} else {
+		this.x = p_x;
+		this.y = y;
+	}
+	return this;
+}
+
+Point.prototype.eq = function(p) {
+	return this.x == p.x && this.y == p.y; 
+}
+
+/* move this point by point or x/y, returns this */
+Point.prototype.moveby = function(p_x, y) {
+	if (typeof(y) === "undefined") {
+		this.x += p_x.x;
+		this.y += p_x.y;
+	} else {	
+		this.x += p_x;
+		this.y += y;
+	}
+	return this;
+}
+
+/* move this point by point or x/y, returns this */
+Point.prototype.pullby = function(p_x, y) {
+	if (typeof(y) === "undefined") {
+		this.x -= p_x.x;
+		this.y -= p_x.y;
+	} else {	
+		this.x -= p_x;
+		this.y -= y;
+	}
+	return this;
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.-,--.         .
+ `|__/ ,-. ,-. |-
+ )| \  |-' |   |
+ `'  ` `-' `-' `'
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ A rectangle in a 2D plane.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+/* Constructor.
+ * Rect(js) or
+ * Rect(rect)
+ * Rect(null, p1, p2) or  (p1, p2 kept by reference so new'em on call)
+ */
+function Rect(js_r, p1, p2) {
+	if (js_r) {
+		/* it doesn't matter if js_r is json or a rect */
+		this.p1 = new Point(js_r.p1);
+		this.p2 = new Point(js_r.p2);
+	} else {
+		this.p1 = p1;
+		this.p2 = p2;
+	}
+	this.type = "rect";
+}
+
+/* returns a json object for this rect */
+Rect.prototype.jsonfy = function() {
+	return { p1: this.p1.jsonfy(), p2: this.p2.jsonfy() };
+}
+
+/* move this rect by x/y, returns this */
+Rect.prototype.moveby = function(x, y) {
+	this.p1.moveby(x, y);
+	this.p2.moveby(x, y);
+	return this;
+}
+
+Rect.prototype.moveto = function(p) {
+	this.p2.pullby(this.p1).moveby(p);
+	this.p1.set(p);
+}
+
+/* returns true if x/y is within this rect */
+/* todo, pointify */
+Rect.prototype.within = function(x, y) {
+	return x >= this.p1.x && y >= this.p1.y && x <= this.p2.x && y <= this.p2.y;
+}
+
+/* Sets this rectangle to be as z */
+Rect.prototype.set = function(z) {
+	this.p1.set(z.p1);
+	this.p2.set(z.p2);
+}
+
+/* Returns true if this rectangle is like z */
+Rect.prototype.eq = function(z) {
+	return this.p1.eq(z.p1) && this.p2.eq(z.p2);
+}
+
+Object.defineProperty(Rect.prototype, "w", {
+	get: function()  { return this.p2.x - this.p1.x;    },
+	set: function(w) { return this.p2.x = this.p1.x + w },
+});
+
+Object.defineProperty(Rect.prototype, "h", {
+	get: function()  { return this.p2.y - this.p1.y; },
+	set: function(h) { return this.p2.y = this.p1.x  },
+});
+	
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,-,-,-.           .
  `,| | |   ,-. ,-. | , ,-. ,-.
    | ; | . ,-| |   |<  |-' |
@@ -362,6 +509,7 @@ Marker.prototype.getXY = function() {
 }
 	
 /* sets the marker to position closest to x, y from flowbox(para) */
+/* todo pointify */
 Marker.prototype.setFromXY = function(flowbox, x, y) {
 	if (flowbox.type != "paragraph") { throw new Error("invalid flowbox."); }
 	var pinfo = this._getPinfoAtXY(flowbox, x, y);
@@ -643,8 +791,9 @@ Editor.prototype.updateCaret = function() {
 		caret.getXY();
 		var it = caret.item;
 		var sy = it.scrolly;
-		var x = System.space.pox + it.x1 + caret.x;
-		var y = System.space.poy + it.y1 + caret.y - (sy > 0 ? sy : 0);
+		var x,y
+		x = System.space.pox + it.zone.p1.x + caret.x;
+		y = System.space.poy + it.zone.p1.y + caret.y - (sy > 0 ? sy : 0);		
 		var th = R(it.dtree.fontsize * (1 + settings.bottombox));
 		
 		caret.save = cx.getImageData(
@@ -1334,12 +1483,12 @@ Hex.makeSlicePath = function(cx, x, y, r, h) {
 
 
 /* draws a filltext rotated by phi */
-Hex.fillText = function(cx, text, x, y, phi, rad) {
+Hex.fillText = function(cx, text, p, phi, rad) {
 	var t1 = Math.cos(phi);
 	var t2 = Math.sin(phi);
 	var det = t1 * t1 + t2 * t2;
-	x += rad * t2;
-	y -= rad * t1;
+	var x = p.x + rad * t2;
+	var y = p.y - rad * t1;
 	if (t1 < 0) {
 		/* turn lower segments so text isn't upside down */
 		t1 = -t1;
@@ -1511,25 +1660,23 @@ Hex.makePathSegment = function(cx, x, y, r, ri, seg) {
          `-------´  
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Hexmenu(r, ri, labels) {
-	this.x  = null;
-	this.y  = null;
+	this.p  = new Point(0, 0);
 	this.r  = r;
 	this.ri = ri;
 	this.labels = labels;
 	this.mousepos = -1;
 }
 
-Hexmenu.prototype.set = function(x, y) {
-	this.x = x;
-	this.y = y;
+Hexmenu.prototype.set = function(p) {
+	this.p.set(p);
 	this.mousepos = 0;
 }
 
 Hexmenu.prototype.draw = function() {
 	var canvas = System.canvas;
 	var cx = canvas.getContext("2d");
-	var x = this.x + 0.5;
-	var y = this.y + 0.5;
+	var x = this.p.x + 0.5;
+	var y = this.p.y + 0.5;
 	var r = this.r;
 	var ri = this.ri;
 
@@ -1570,25 +1717,25 @@ Hexmenu.prototype.draw = function() {
 	switch (llen) {
 	default:
 	case 7: // segment 6
-		Hex.fillText(cx, labels[6], this.x, this.y, Math.PI / 3 * 5, r - dist);
+		Hex.fillText(cx, labels[6], this.p, Math.PI / 3 * 5, r - dist);
 		/* fall */
 	case 6: // segment 5
-		Hex.fillText(cx, labels[5], this.x, this.y, Math.PI / 3 * 4, r - dist);
+		Hex.fillText(cx, labels[5], this.p, Math.PI / 3 * 4, r - dist);
 		/* fall */
 	case 5: // segment 4
-		Hex.fillText(cx, labels[4], this.x, this.y, Math.PI / 3 * 3, r - dist);
+		Hex.fillText(cx, labels[4], this.p, Math.PI / 3 * 3, r - dist);
 		/* fall */
 	case 4: // segment 3
-		Hex.fillText(cx, labels[3], this.x, this.y, Math.PI / 3 * 2, r - dist);
+		Hex.fillText(cx, labels[3], this.p, Math.PI / 3 * 2, r - dist);
 		/* fall */
 	case 3: // segment 2
-		Hex.fillText(cx, labels[2], this.x, this.y, Math.PI / 3 * 1, r - dist);
+		Hex.fillText(cx, labels[2], this.p, Math.PI / 3 * 1, r - dist);
 		/* fall */
 	case 2: // segment 1
-		Hex.fillText(cx, labels[1], this.x, this.y, Math.PI / 3 * 6, r - dist);
+		Hex.fillText(cx, labels[1], this.p, Math.PI / 3 * 6, r - dist);
 		/* fall */
 	case 1: // segment 0
-		cx.fillText(labels[0], this.x, this.y);
+		cx.fillText(labels[0], this.p.x, this.p.y);
 		/* fall */
 	case 0:
 		/* nothing */
@@ -1596,8 +1743,8 @@ Hexmenu.prototype.draw = function() {
 }
 
 Hexmenu.prototype._getMousepos = function(x, y) {
-	var dx = x - this.x;
-	var dy = y - this.y;
+	var dx = x - this.p.x;
+	var dy = y - this.p.y;
 		
 	if (!Hex.within(dx, dy, this.r)) {
 		/* out of menu */
@@ -1633,7 +1780,7 @@ Hexmenu.prototype.mousedown = function(x, y) {
   /    | | | | |-' | | | |-' | | | |
  '`--' `-^ `-| `-' ' ' ' `-' ' ' `-^
 ~ ~ ~ ~ ~ ~ ,|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-            `'
+  The menu  `' at the screen edge.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Edgemenu() {
 	this.mousepos = -1;
@@ -2012,7 +2159,7 @@ Space.prototype.click = function(x, y, shift, ctrl) {
 	var tfx = this.repository.transfix(TXE.CLICK, this, px, py, shift, ctrl);
 	if (!(tfx & TXR.HIT)) {
 		this.iaction.act = ACT.FMENU;
-		this._floatmenu.set(x, y);
+		this._floatmenu.set(new Point(x, y));  // todo should be point right away
 		System.setCursor("default");
 		this.setFoci(null);
 		this.redraw();
@@ -2031,12 +2178,9 @@ Space.prototype.dragstop = function(x, y, shift, ctrl) {
 	var redraw = false;
 	switch (iaction.act) {
 	case ACT.IDRAG :
-		var w = iaction.item.x2 - iaction.item.x1;
-		var h = iaction.item.y2 - iaction.item.y1;
-		iaction.item.x1 = x - iaction.sx;
-		iaction.item.y1 = y - iaction.sy;
-		iaction.item.x2 = x - iaction.sx + w;
-		iaction.item.y2 = y - iaction.sy + h;
+		var w = iaction.item.zone.w;
+		var h = iaction.item.zone.h;
+		iaction.item.moveto(new Point(x - iaction.sx, y - iaction.sy));
 		System.repository.updateItem(iaction.item);
 		iaction.item = null;
 		System.setCursor("default");
@@ -2089,12 +2233,7 @@ Space.prototype.dragmove = function(x, y, shift, ctrl) {
 		return;
 	case ACT.IDRAG :
 		/* todo move into items */
-		var w = iaction.item.x2 - iaction.item.x1;
-		var h = iaction.item.y2 - iaction.item.y1;
-		iaction.item.x1 = x - iaction.sx;
-		iaction.item.y1 = y - iaction.sy;
-		iaction.item.x2 = x - iaction.sx + w;
-		iaction.item.y2 = y - iaction.sy + h;
+		iaction.item.moveto(new Point(x - iaction.sx, y - iaction.sy));
 		System.repository.updateItem(iaction.item);
 		this.redraw();
 		return;
@@ -2129,7 +2268,7 @@ Space.prototype.dragmove = function(x, y, shift, ctrl) {
 			y1 = iaction.siy1 + y - iaction.sy;	
 			break;			
 		}
-		redraw = it.setZone(x1, y1, x2, y2); 
+		redraw = it.setZone(new Rect(null, new Point(x1, y1), new Point(x2, y2)));  // todo
 		
 		/* adapt scrollbar position, todo x move into item */
 		var dtreeHeight = it.dtree.height;
@@ -2417,15 +2556,18 @@ Space.prototype.mousedown = function(x, y) {
 		case 1 : // note
 			var nw = settings.newNoteWidth;
 			var nh = settings.newNoteHeight;
-			var x1 = R(fm.x - nw / 2 - this.pox);
-			var y1 = R(fm.y - nh / 2 - this.poy);
-			var note = new Note(null, null, x1, y1, x1 + nw, y1 + nh);
+			// todo, beautify point logic.
+			var p1 = new Point(fm.p).pullby(R(nw / 2), R(nh / 2)).pullby(this.pox, this.poy);	
+			var p2 = new Point(p1).moveby(nw, nh);
+			var note = new Note(null, null, new Rect(null, p1, p2));
 			this.setFoci(note);
 			break;
 		case 2 : // label
-			var label = new Label(null, null, fm.x - this.pox, fm.y - this.poy);
-			label.setPos(R(label.x1 - (label.x2 - label.x1) / 2),
-			             R(label.y1 - (label.y2 - label.y1) / 2));
+			var label = new Label(null, null, new Point(fm.p).pullby(this.pox, this.poy));
+			/* todo center label
+			label.moveto(new Point(R(label.x1 - (label.x2 - label.x1) / 2),
+			                       R(label.y1 - (label.y2 - label.y1) / 2)));
+								   */
 			this.setFoci(label);
 			break;
 		}
@@ -3061,15 +3203,18 @@ function Item(type, id) {
 }
 
 /* set a hex menu to be this items menu */
+/* todo, beautify */
 Item.prototype.setItemMenu = function(menu, pox, poy) {
 	var r = settings.itemMenuInnerRadius;
 	var h = settings.itemMenuSliceHeight;
-	menu.set(R(this.x1 + pox + r - (r * Hex.c6 - h) * Hex.t6), R(this.y1 + poy + r * Hex.c6 - h) - 1);
+	menu.set(
+	 new Point(R(this.x1 + pox + r - (r * Hex.c6 - h) * Hex.t6), 
+	 R(this.y1 + poy + r * Hex.c6 - h) - 1));
 }
 
 /* returns if coords are within the item menu */
 Item.prototype.withinItemMenu = function(x, y) {
-	return Hex.withinSlice(x - this.x1, y - this.y1 - 1, 
+	return Hex.withinSlice(x - this.zone.p1.x, y - this.zone.p1.y - 1, 
 		settings.itemMenuInnerRadius, settings.itemMenuSliceHeight);
 }
 
@@ -3137,10 +3282,11 @@ Item.prototype._drawHandles = function(space, rhs) {
 	var hs = settings.handleSize;
 	var hs2 = hs / 2;
 			
-	var x1 = this.x1 + 0.5 - ds + space.pox;
-	var y1 = this.y1 + 0.5 - ds + space.poy;
-	var x2 = this.x2 - 0.5 + ds + space.pox;
-	var y2 = this.y2 - 0.5 + ds + space.poy;
+	/* todo 2dize */
+	var x1 = this.zone.p1.x + 0.5 - ds + space.pox;
+	var y1 = this.zone.p1.y + 0.5 - ds + space.poy;
+	var x2 = this.zone.p2.x - 0.5 + ds + space.pox;
+	var y2 = this.zone.p2.y - 0.5 + ds + space.poy;
 	var xm = R((x1 + x2) / 2) + 0.5;
 	var ym = R((y1 + y2) / 2) + 0.5;
 	
@@ -3167,8 +3313,8 @@ Item.prototype._drawHandles = function(space, rhs) {
 		
 	cx.beginPath(); 
 	/* draws item menu handler */
-	x1 = this.x1 + space.pox + 0.5;
-	y1 = this.y1 + space.poy + 0.5;
+	x1 = this.zone.p1.x + space.pox + 0.5;
+	y1 = this.zone.p1.y + space.poy + 0.5;
 	var xim = Hex.makeSlicePath(cx, x1, y1 - 1, 
 		settings.itemMenuInnerRadius, settings.itemMenuSliceHeight);
 	var grad = cx.createLinearGradient(
@@ -3219,19 +3365,20 @@ Note.prototype.constructor = Note;
 
 /* constructor
  * Note(json, [id])  or
- * Note(null, [id], x1, y1, x2, y2) */
-function Note(js, id, x1, y1, x2, y2) {
+ * Note(null, [id], zone) 
+ *
+ * zone ... of type Rect, reference kept, so new() on call.
+ */
+function Note(js, id, zone) {
 	if (js) {
-		this.x1    = js.x1;
-		this.y1    = js.y1; 
-		this.x2    = js.x2; 
-		this.y2    = js.y2;
+		if (js.x1) { /* todold */
+			this.zone = new Rect(null, new Point(js.x1, js.y1), new Point(js.x2, js.y2));
+		} else {
+			this.zone = new Rect(js.z);
+		}
 		this.dtree = new DTree(js.d, this);
 	} else {
-		this.x1   = x1;
-		this.y1   = y1;
-		this.x2   = x2;
-		this.y2   = y2;
+		this.zone = zone;
 		this.dtree  = new DTree(null, this);
 	}
 	Item.call(this, "note", id);
@@ -3240,13 +3387,13 @@ function Note(js, id, x1, y1, x2, y2) {
 	this._canvasActual = false;
 	this._scrollx = -8833;
 	this._scrolly = -8833;
-	this.bcanvas.width  = this.x2 - this.x1; /* todo, need to set it so early? */
-	this.bcanvas.height = this.y2 - this.y1;
+	this.bcanvas.width  = this.zone.w; /* todo, need to set it so early? */
+	this.bcanvas.height = this.zone.h;
 	
 	if (!this.dtree.first) {
 		this.dtree.append(new Paragraph(""));
 	}
-	
+	/* todo, don't add here */
 	System.repository.addItem(this, true);
 }
 
@@ -3259,10 +3406,7 @@ Note.prototype.removed = function() {
 Note.prototype.jsonfy = function() {
 	var js = {
 	     t : "note",
- 		 x1 : this.x1,
-		 y1 : this.y1,
-		 x2 : this.x2,
-		 y2 : this.y2,
+		 z : this.zone.jsonfy(),
 		 d  : this.dtree.jsonfy(),
 	}
 	return js;
@@ -3286,7 +3430,7 @@ Note.prototype.listen = function() {
  * returns transfix code
  */
 Note.prototype.transfix = function(txe, space, x, y, z, shift, ctrl) {
-	if (x < this.x1 || y < this.y1 || x > this.x2 || y > this.y2) return 0;
+	if (!this.zone.within(x, y)) return 0;
 	switch (txe) {
 	case TXE.HOVER : 
 		System.setCursor("default");
@@ -3311,7 +3455,8 @@ Note.prototype.transfix = function(txe, space, x, y, z, shift, ctrl) {
 		if (this.scrolly >= 0 && Math.abs(x - this.x2 + srad + sbmx) <= srad +1)  {
 			space.actionScrollY(this, y, this.scrolly);
 		} else {
-			space.actionIDrag(this, x - this.x1, y - this.y1);
+			/* todo pointify */
+			space.actionIDrag(this, x - this.zone.p1.x, y - this.zone.p1.y);
 		}
 		return txr;
 	case TXE.CLICK :
@@ -3325,8 +3470,8 @@ Note.prototype.transfix = function(txe, space, x, y, z, shift, ctrl) {
 			txr |= TXR.REDRAW;
 		}
 
-		var ox = x - this.x1;
-		var oy = y - this.y1 + (this.scrolly > 0 ? this.scrolly : 0);
+		var ox = x - this.zone.p1.x;
+		var oy = y - this.zone.p1.y + (this.scrolly > 0 ? this.scrolly : 0);
 		var p = this.paraAtY(oy);
 		if (p) {
 			var editor = System.editor;
@@ -3347,37 +3492,32 @@ Note.prototype.transfix = function(txe, space, x, y, z, shift, ctrl) {
 }
 
 /* sets the notes position and size
+ * the note does not have to accept the full zone.
+ * e.g. it will refuse to go below minimum size.
  * returns true if something changed
  */
-Note.prototype.setZone = function(x1, y1, x2, y2) {
-	var w = x2 - x1;
-	var h = y2 - y1;
-	if (w < settings.noteMinWidth)  x2 = x1 + (w = settings.noteMinWidth);
-	if (h < settings.noteMinHeight) y2 = y1 + (h = settings.noteMinHeight);
-	if (this.x1 === x1 && this.y1 === y1 && this.x2 === x2 && this.y2 === y2) {
-		return false;
-	}
-	if (w != this.x2 - this.x1 || h != this.y2 - this.y1) {
-		var bcanvas = this.bcanvas;
-		bcanvas.width  = w; /* todo, not yet do sizing */
-		bcanvas.height = h;
-		this._canvasActual = false;
-	}
-	this.x1 = x1;
-	this.y1 = y1;
-	this.x2 = x2;
-	this.y2 = y2;
+Note.prototype.setZone = function(zone) {
+	debug("setZone");
+	var w = zone.w;
+	var h = zone.h;
+	if (w < settings.noteMinWidth)  w = zone.w = settings.noteMinWidth;
+	if (h < settings.noteMinHeight) h = zone.h = settings.noteMinHeight;
+	if (this.zone.eq(zone)) return false;
+	this.zone.set(zone);
+
+	var bcanvas = this.bcanvas;
+	bcanvas.width  = w; /* todo, not yet do sizing */
+	bcanvas.height = h;
+	this._canvasActual = false;
 	return true;
 }
 
 /* sets new position retaining height */
-Note.prototype.setPos = function(x1, y1) {
-	if (this.x1 == x1 && this.y1 == y1) return false;
-	this.x2 = x1 + (this.x2 - this.x1);
-	this.y2 = y1 + (this.y2 - this.y1);
-	this.x1 = x1;
-	this.y1 = y1;
-	return true;
+/* rename to moveto */
+Note.prototype.moveto = function(p) {
+	if (this.zone.p1.eq(p)) return false;
+	this.zone.moveto(p);
+	return this;
 }
 
 /* returns or set the vertical scroll position */
@@ -3446,40 +3586,45 @@ Note.prototype.checkItemCompass = function(x, y) {
 	return this._checkItemCompass(x, y, 255);
 }
 
-/* draws a bevel */
-function Note_bevel(cx, x1, y1, x2, y2, border, radius) {
-	var xb1 = x1 + border;
-	var yb1 = y1 + border;
-	var xb2 = x2 - border;
-	var yb2 = y2 - border;
-	
+/* draws a bevel 
+ *
+ * cx .. canvas context
+ */
+function Note_bevel(cx, w, h, border, radius) {
+	var x1 = border;
+	var y1 = border;
+	var x2 = w - border;
+	var y2 = h - border;
 	cx.beginPath();
-	cx.moveTo(xb1 + radius, yb1);
-	cx.arc(xb2 - radius, yb1 + radius, radius, -Math.PI / 2, 0, false);
-	cx.arc(xb2 - radius, yb2 - radius, radius, 0, Math.PI / 2, false);
-	cx.arc(xb1 + radius, yb2 - radius, radius, Math.PI / 2, Math.PI, false);
-	cx.arc(xb1 + radius, yb1 + radius, radius, Math.PI, -Math.PI / 2, false);
+	cx.moveTo(x1 + radius, y1);
+	cx.arc(x2 - radius, y1 + radius, radius, -Math.PI / 2, 0, false);
+	cx.arc(x2 - radius, y2 - radius, radius, 0, Math.PI / 2, false);
+	cx.arc(x1 + radius, y2 - radius, radius, Math.PI / 2, Math.PI, false);
+	cx.arc(x1 + radius, y1 + radius, radius, Math.PI, -Math.PI / 2, false);
 }
 	
-/* draws the item       
- * space  : to draw upon 
+/* draws the item.
+ *
+ * space   to draw 
  */
 Note.prototype.draw = function(space) {
 	var bcanvas = this.bcanvas;
-	var dtree = this.dtree;
+	var dtree   = this.dtree;
 	var cx = bcanvas.getContext("2d");
 	if (this._canvasActual) {
 		/* buffer hit */
-		space.canvas.getContext("2d").drawImage(bcanvas, this.x1 + space.pox, this.y1 + space.poy);
+		space.canvas.getContext("2d").drawImage(
+			bcanvas, this.zone.p1.x + space.pox, this.zone.p1.y + space.poy
+		);
 		return;
 	}
 
 	/* draws the background */
-	var w = this.x2 - this.x1; // width
-	var h = this.y2 - this.y1; // height
+	var w = this.zone.w; 
+	var h = this.zone.h;
 	/* todo - resize here */
-	cx.clearRect(0, 0, bcanvas.width, bcanvas.height);	
-	Note_bevel(cx, 0, 0, w, h, 2.5, 3);
+	cx.clearRect(0, 0, bcanvas.width, bcanvas.height);	 // todo w,h?
+	Note_bevel(cx, w, h, 2.5, 3);
 	var grad = cx.createLinearGradient(0, 0, w / 10, h);
 	grad.addColorStop(0, settings.noteBackground1);
 	grad.addColorStop(1, settings.noteBackground2);
@@ -3589,14 +3734,14 @@ Note.prototype.draw = function(space) {
 	/* draws the border */
 	cx.lineWidth = settings.noteInnerBorderWidth;
 	cx.strokeStyle = settings.noteInnerBorderColor;
-	Note_bevel(cx, 0, 0, w, h, 1.5, settings.noteInnerRadius);
+	Note_bevel(cx, w, h, 1.5, settings.noteInnerRadius);
 	cx.stroke(); 
 	cx.lineWidth = settings.noteOuterBorderWidth;
 	cx.strokeStyle = settings.noteOuterBorderColor;
-	Note_bevel(cx, 0, 0, w, h, 0.5, settings.noteOuterRadius);
+	Note_bevel(cx, w, h, 0.5, settings.noteOuterRadius);
 	cx.stroke(); 
 	this._canvasActual = true;
-	space.canvas.getContext("2d").drawImage(bcanvas, this.x1 + space.pox, this.y1 + space.poy);
+	space.canvas.getContext("2d").drawImage(bcanvas, this.zone.p1.x + space.pox, this.zone.p1.y + space.poy);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -3612,21 +3757,29 @@ Label.prototype.constructor = Note;
 
 /* constructor
  * Label(js, [id])  or
- * Label(null, [id], x1, y1) 
+ * Label(null, [id], p1) 
+ *
+ * todo make creation as Rect.
  */
-function Label(js, id, x1, y1) {
+function Label(js, id, p1) {
 	if (js) {
+		if (js.x1) { /* todold */
+			this.zone = new Rect(null, new Point(js.x1, js.y1), new Point(js.x2, js.y2));
+		} else {
+			this.zone = new Rect(js.z);
+		}
 		this.dtree = new DTree(js.d, this);
-		if (!this.dtree.first) this.dtree.append(new Paragraph("Label"));
-		this.setZone(js.x1, js.y1, js.x2, js.y2);
 	} else {
+		this.zone = new Rect(null, p1, new Point(p1).moveby(100, 50));
 		this.dtree = new DTree(null, this, 20);
-		if (!this.dtree.first) this.dtree.append(new Paragraph("Label"));
-		this.setZone(x1, y1, x1 + 100, y1 + 50);
 	}
 	Item.call(this, "label", id);
+	if (!this.dtree.first) this.dtree.append(new Paragraph("Label"));
 	this.bcanvas = document.createElement("canvas");
 	this._canvasActual = false;
+	if (typeof(this.zone.p2.x) === "undefined")  {
+		this.zone.p2.x = this.zone.p1.x + this.dtree.width;
+	}
 	System.repository.addItem(this, true);
 }
 
@@ -3639,9 +3792,7 @@ Label.prototype.removed = function() {
  * returns transfix code
  */
 Label.prototype.transfix = function(txe, space, x, y, z, shift, ctrl) {
-	if (x < this.x1 || y < this.y1 ||  x > this.x2 || y > this.y2) {
-		return 0;
-	}
+	if (!this.zone.within(x, y)) return 0;
 	switch(txe) {
 	case TXE.HOVER :
 		System.setCursor("default");
@@ -3661,7 +3812,7 @@ Label.prototype.transfix = function(txe, space, x, y, z, shift, ctrl) {
 			txr |= TXR.REDRAW;
 		}
 
-		space.actionIDrag(this, x - this.x1, y - this.y1);
+		space.actionIDrag(this, x - this.zone.p1.x, y - this.zone.p1.y);
 		return txr;
 	case TXR.CLICK: 
 		var txr = TXR.HIT;
@@ -3673,8 +3824,9 @@ Label.prototype.transfix = function(txe, space, x, y, z, shift, ctrl) {
 			space.setFoci(this);
 			txr |= TXR.REDRAW;
 		}
-		var ox = x - this.x1;
-		var oy = y - this.y1 + (this.scrolly > 0 ? this.scrolly : 0);
+		var ox = x - this.zone.p1.x;
+		/* todo, lavel has scrolly?? */
+		var oy = y - this.zone.p1.y + (this.scrolly > 0 ? this.scrolly : 0);
 		var p = this.paraAtY(oy);
 		if (p) {
 			var editor = System.editor;
@@ -3698,106 +3850,45 @@ Label.prototype.transfix = function(txe, space, x, y, z, shift, ctrl) {
 Label.prototype.jsonfy = function() {
 	var js = {
 	    t: "label",
-		x1: this.x1,
-		y1: this.y1,
-		y2: this.y2,
-		 d: this.dtree.jsonfy(),
+		z: this.zone.jsonfy(),
+		d: this.dtree.jsonfy(),
 	}
 	return js;
 }
 
-/* todo */
-Object.defineProperty(Label.prototype, "x", {
-	get: function() { 
-		throw new Error("x:(");
-	},
-	set: function(sy) {
-		throw new Error("x:((");
-	}
-});
-
-/* todo */
-Object.defineProperty(Label.prototype, "y", {
-	get: function() { 
-		throw new Error("y:(");
-	},
-	set: function(sy) {
-		throw new Error("y:((");
-	}
-});
-
-/* todo */
-Object.defineProperty(Label.prototype, "height", {
-	get: function() { 
-		throw new Error("h:(");
-	},
-	set: function(sy) {
-		throw new Error("h:((");
-	}
-});
-
-/* todo */
-Object.defineProperty(Label.prototype, "width", {
-	get: function() { 
-		throw new Error("w:(");
-	},
-	set: function(sy) {
-		throw new Error("w:((");
-	}
-});
-
-
-/*Object.defineProperty(Label.prototype, "width", {
-	get: function() { return Math.max(this.dtree.width, settings.labelMinWidth);           },
-	set: function() { throw new Error("Cannot set width of Label, set fontsize instead."); }
-});
-
-Object.defineProperty(Label.prototype, "height", {
-	get: function() { 
-		var mh = R(this.dtree.height * (1 + settings.bottombox));
-		return Math.max(mh, settings.labelMinHeight);          
-	},
-	set: function() { throw new Error("Cannot set height of Label, set fontsize instead."); }
-});*/
-
-
 /* sets the zone the label is 
  * also determines fontsize indirectly 
  * returns true if something changed */
-Label.prototype.setZone = function(x1, y1, x2, y2) {
-	if (this.x1 === x1 && this.y1 === y1 && this.x2 === x2 && this.y2 === y2) return false;
+ 
+// todo, add allign paramter
+Label.prototype.setZone = function(zone) {
+	if (this.zone.eq(zone)) return false;
 	var dtree = this.dtree;
-	var zh = y2 - y1;
+	var zh = zone.h;
 	var th = R(this.dtree.height * (1 + settings.bottombox));
 	var dfs = dtree.fontsize;
 	var fs = Math.max(dfs * zh / th, 8);
-	var keepx2 = this.x2 == x2 ? x2 : Number.NAN;
-	this.x1 = x1;
-	this.y1 = y1;
+	var keepx2 = this.zone.p2.x == x2 ? x2 : Number.NAN;
+	this.zone.p1.set(zone.p1);
 	dtree.fontsize = fs;
 	dtree.flowWidth = -1;
 	if (keepx2 !== Number.NAN) {
-		this.x1 = keepx2 - (this.x2 - this.x1);
-		this.x2 = keepx2;
+		this.zone.p1.x = keepx2 - (this.zone.w);
+		this.zone.p2.x = keepx2;
 	}
 	this._canvasActual = false;
+	// todo other points??? , y2?
 //	this.x2 = x1 + dtree.width;	
 //	this.y2 = y1 + R(this.dtree.height * (1 + settings.bottombox));
 	return dfs !== fs;
 }
 
 /* sets new position retaining height */
-Label.prototype.setPos = function(x1, y1) {
-	if (this.x1 === x1 && this.y1 === y1) {
-		return false;
-	}
-	this.x2 = x1 + (this.x2 - this.x1);
-	this.y2 = y1 + (this.y2 - this.y1);
-	this.x1 = x1;
-	this.y1 = y1;
-	return true;
+Label.prototype.moveto = function(P) {
+	if (this.zone.p1.eq(p)) return false;
+	this.zone.moveto(p);
+	return this;
 }
-
 
 /* returns the para at y */
 Label.prototype.paraAtY = function(y) {
@@ -3807,9 +3898,9 @@ Label.prototype.paraAtY = function(y) {
 /* drops the cached canvas */
 Label.prototype.listen = function() {
 	this._canvasActual = false;
-	this.x2 = this.x1 + this.dtree.width;
-	this.y2 = this.y1 + R(this.dtree.height * (1 + settings.bottombox));
-	/* end of chain */
+	this.zone.w = this.dtree.width; /* todo, call width in dtree w as well */
+	this.zone.h = R(this.dtree.height * (1 + settings.bottombox));
+	/* end of listen-chain */
 }
 
 /* draws the items handles */
@@ -3828,11 +3919,12 @@ Label.prototype.draw = function(space) {
 	var dtree = this.dtree;
 	if (this._canvasActual) {
 		/* buffer hit */
-		space.canvas.getContext("2d").drawImage(bcanvas, this.x1 + space.pox, this.y1 + space.poy);
+		space.canvas.getContext("2d").drawImage(
+			bcanvas, this.zone.p1.x + space.pox, this.zone.p1.y + space.poy);
 		return;
 	}
-	var w = this.x2 - this.x1;
-	var h = this.y2 - this.y1;
+	var w = this.zone.w;
+	var h = this.zone.h;
 	//cx.clearRect(0, 0, bcanvas.width, bcanvas.height); todo
 	bcanvas.height = h;
 	bcanvas.width  = w;
@@ -3847,7 +3939,8 @@ Label.prototype.draw = function(space) {
 	cx.stroke(); 
 	cx.beginPath(); 
 	this._canvasActual = true;
-	space.canvas.getContext("2d").drawImage(bcanvas, this.x1 + space.pox, this.y1 + space.poy);
+	space.canvas.getContext("2d").drawImage(
+		bcanvas, this.zone.p1.x + space.pox, this.zone.p1.y + space.poy);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -3943,6 +4036,19 @@ Relation.prototype.checkItemCompass = function(x, y, rhs) {
 	return this._checkItemCompass(x, y, 170);
 }
 
+/* Calculates the zone of a relation for 
+ * item1 to item2
+ *  - or - 
+ * item1 to x, y
+ * Results are written into o.x1, o.y1, o.x2, o.y2
+ * o.x1 <= o.x2
+ * o.y1 <= o.y2
+ * o.ab .. arrow base, 1 if arrow goes from
+ */
+function Relation_calcZone(o, item1, item2_x, null_y) {
+//xxxx
+}
+
 /* Draws one relationship arrow
  * (space, item1_id, item2_id, null, middle) - or - 
  * (space, item1_id,        x,    y, middle)  
@@ -3950,6 +4056,8 @@ Relation.prototype.checkItemCompass = function(x, y, rhs) {
  * mcanvas:  if not null draw this in the middle of the arrow.
  * light:    if true highlights item2   
  */
+
+ /* todo 2dize*/
 function Relation_drawLabeledArrow(space, item1, item2_x, null_y, mcanvas, light) {
 	var scanvas = space.canvas;
 	var cx = scanvas.getContext("2d");
@@ -3957,10 +4065,12 @@ function Relation_drawLabeledArrow(space, item1, item2_x, null_y, mcanvas, light
 	if (!item1) {
 		throw new Error("todo");
 	}
-	var i1x1 = item1.x1 + space.pox + 0.5;
-	var i1y1 = item1.y1 + space.poy + 0.5;
-	var i1x2 = item1.x2 + space.pox + 0.5;
-	var i1y2 = item1.y2 + space.poy + 0.5;;
+	/* todo, beautify 2d */
+	var i1x1, i1y1, i1x2, i1y2;
+	i1x1 = item1.zone.p1.x + space.pox + 0.5;
+	i1y1 = item1.zone.p1.y + space.poy + 0.5;
+	i1x2 = item1.zone.p2.x + space.pox + 0.5;
+	i1y2 = item1.zone.p2.y + space.poy + 0.5;
 
 	if (null_y) {
 		x2 = item2_x + space.pox + 0.5;
@@ -3986,10 +4096,12 @@ function Relation_drawLabeledArrow(space, item1, item2_x, null_y, mcanvas, light
 		if (!item2_x) {
 			throw new Error("item2 missing");
 		}
-		var i2x1 = it2.x1 + space.pox + 0.5;
-		var i2y1 = it2.y1 + space.poy + 0.5;
-		var i2x2 = it2.x2 + space.pox + 0.5;
-		var i2y2 = it2.y2 + space.poy + 0.5;
+		var i2x1, i2y1, i2x2, i2y2;
+		
+		i2x1 = it2.zone.p1.x + space.pox + 0.5;
+		i2y1 = it2.zone.p1.y + space.poy + 0.5;
+		i2x2 = it2.zone.p2.x + space.pox + 0.5;
+		i2y2 = it2.zone.p2.y + space.poy + 0.5;			
 
 		if (i2x1 > i1x2) { 
 			/* 2 is clearly to the right */
