@@ -120,6 +120,8 @@ var settings = {
 
 /* shortcuts */
 var R = Math.round;
+var max = Math.max;
+var min = Math.min;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .-,--.      .
@@ -265,26 +267,26 @@ Object.defineProperty(Measure, "font", {
  `'    `-' ' ' ' `'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  A Point in a 2D plane.
+ Points are immutable objects.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
 /* Constructor.
  * Point(x, y) or
- * Point(js)
  * Point(point)
  */
-function Point(js_p_x, y) {
-	if (typeof(y) === "undefined") {
-		/* it doesn't matter if js_p is json or point */
-		if (!js_p_x) {
-			throw new Error("what?");
-		}
-		this.x = js_p_x.x;
-		this.y = js_p_x.y;
-	} else {
-		this.x = js_p_x;
-		this.y = y;
+function Point(p, y) {
+	if (arguments.length === 1) {
+		this.x = p.x;
+		this.y = p.y;
 	}
-	this.type = "point";
+	this.x = p;
+	this.y = y;
+	this.type = "point"; // todo needed?
+	Object.freeze(this);
+}
+
+/* Creates a point from json */
+Point.jnew = function(js) {
+	return new Point(js.x, js.y);
 }
 
 /* returns a json object for this point */
@@ -292,47 +294,26 @@ Point.prototype.jsonfy = function() {
 	return { x: this.x, y: this.y };
 }
 
-/* Sets this point 
- * point(p)    another point
- * point(x, y) to this coords
- */
-Point.prototype.set = function(p_x, y) {
-	if (typeof(y) === "undefined") {
-		this.x = p_x.x;
-		this.y = p_x.y;
-	} else {
-		this.x = p_x;
-		this.y = y;
-	}
-	return this;
+Point.prototype.eq = function(px, y) {
+	return arguments.length === 1 ? 
+		this.x === px.x && this.y === px.y :
+		this.x === px   && this.y ===    y;
 }
 
-Point.prototype.eq = function(p) {
-	return this.x == p.x && this.y == p.y; 
+/* add two points or x/y values, returns new point */
+Point.prototype.add = function(px, y) {
+	return arguments.length === 1 ?
+		new Point(this.x + px.x, this.y + px.y) :
+		new Point(this.x + px, this.y + y);
 }
 
-/* move this point by point or x/y, returns this */
-Point.prototype.moveby = function(p_x, y) {
-	if (typeof(y) === "undefined") {
-		this.x += p_x.x;
-		this.y += p_x.y;
+/* subtracts a points (or x/y from this), returns new point */
+Point.prototype.sub = function(px, y) {
+	if (arguments.length === 1) {
+		return new Point(this.x - px.x, this.y - px.y);
 	} else {	
-		this.x += p_x;
-		this.y += y;
+		return new Point(this.x - px, this.y - y);
 	}
-	return this;
-}
-
-/* move this point by point or x/y, returns this */
-Point.prototype.pullby = function(p_x, y) {
-	if (typeof(y) === "undefined") {
-		this.x -= p_x.x;
-		this.y -= p_x.y;
-	} else {	
-		this.x -= p_x;
-		this.y -= y;
-	}
-	return this;
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -342,23 +323,29 @@ Point.prototype.pullby = function(p_x, y) {
  `'  ` `-' `-' `'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  A rectangle in a 2D plane.
+ Rectangles are immutable objects.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /* Constructor.
- * Rect(js) or
  * Rect(rect)
- * Rect(null, p1, p2) or  (p1, p2 kept by reference so new'em on call)
+ * Rect(p1, p2) 
  */
-function Rect(js_r, p1, p2) {
-	if (js_r) {
-		/* it doesn't matter if js_r is json or a rect */
-		this.p1 = new Point(js_r.p1);
-		this.p2 = new Point(js_r.p2);
+function Rect(r1, p2) {
+	if (arguments.length === 1) {
+		this.p1 = r1.p1;
+		this.p2 = r1.p2;
 	} else {
-		this.p1 = p1;
+		this.p1 = r1;
 		this.p2 = p2;
 	}
-	this.type = "rect";
+	if (this.p1.x > this.p2.x || this.p1.y > this.p2.y) throw new Error("not a rectangle.");
+	this.type = "rect"; // todo needed?
+	Object.freeze(this);
+}
+
+/* Creates a point from json */
+Rect.jnew = function(js) {
+	return new Rect(js.p1, js.p2);
 }
 
 /* returns a json object for this rect */
@@ -366,28 +353,38 @@ Rect.prototype.jsonfy = function() {
 	return { p1: this.p1.jsonfy(), p2: this.p2.jsonfy() };
 }
 
-/* move this rect by x/y, returns this */
-Rect.prototype.moveby = function(x, y) {
-	this.p1.moveby(x, y);
-	this.p2.moveby(x, y);
-	return this;
+/* returns a rect moved by a point or x/y */
+Rect.prototype.add = function(px, y) {
+	return arguments.length === 1 ?
+		new Rect(this.p1.add(px), this.p2.add(px)) :  // todosimple?
+		new Rect(this.p1.add(px, y), this.p2.add(px, y));
 }
 
-Rect.prototype.moveto = function(p) {
-	this.p2.pullby(this.p1).moveby(p);
-	this.p1.set(p);
+Rect.prototype.sub = function(p) {
+	return arguments.length === 1 ?
+		new Rect(this.p1.sub(px), this.p2.sub(px)) : // todosimple?
+		new Rect(this.p1.sub(px, y), this.p2.sub(px, y));
 }
 
 /* returns true if x/y is within this rect */
 /* todo, pointify */
-Rect.prototype.within = function(x, y) {
-	return x >= this.p1.x && y >= this.p1.y && x <= this.p2.x && y <= this.p2.y;
+Rect.prototype.within = function(px, y) {
+	return arguments.length === 1 ?
+		(px.x >= this.p1.x && px.y >= this.p1.y && px.x <= this.p2.x && px.y <= this.p2.y) :
+		(px   >= this.p1.x &&    y >= this.p1.y && px   <= this.p2.x &&    y <= this.p2.y);
 }
 
-/* Sets this rectangle to be as z */
-Rect.prototype.set = function(z) {
-	this.p1.set(z.p1);
-	this.p2.set(z.p2);
+/* returns a rectangle with same p1 but size w/h or point */
+Rect.prototype.resize = function(pw, h) {
+	return arguments.length === 1 ?
+		new Rect(this.p1, this.p1.add(pw)) :   // todo, check if simplify
+		new Rect(this.p1, this.p1.add(pw, h));
+}
+
+/* returns a rectangle with same size at position at p|x/y) */
+Rect.prototype.atpos = function(px, y) {
+	if (arguments.length !== 1) px = new Point(px, y);
+	return new Rect(px, px.add(this.w, this.h));
 }
 
 /* Returns true if this rectangle is like z */
@@ -397,13 +394,24 @@ Rect.prototype.eq = function(z) {
 
 Object.defineProperty(Rect.prototype, "w", {
 	get: function()  { return this.p2.x - this.p1.x;    },
-	set: function(w) { return this.p2.x = this.p1.x + w },
+	set: function(w) { throw new Error("Rect cannot set w"); },
 });
 
 Object.defineProperty(Rect.prototype, "h", {
 	get: function()  { return this.p2.y - this.p1.y; },
-	set: function(h) { return this.p2.y = this.p1.x  },
+	set: function(h) { throw new Error("Rect cannot set w"); },
 });
+
+Object.defineProperty(Rect.prototype, "mx", {
+	get: function() { return R((this.p2.x + this.p1.x) / 2); },
+	set: function() { throw new Error("Rect cannot set mx")},
+});
+
+Object.defineProperty(Rect.prototype, "my", {
+	get: function() { return R((this.p2.y + this.p1.y) / 2); },
+	set: function() { throw new Error("Rect cannot set my")},
+});
+
 	
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,-,-,-.           .
@@ -1660,7 +1668,7 @@ Hex.makePathSegment = function(cx, x, y, r, ri, seg) {
          `-------´  
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Hexmenu(r, ri, labels) {
-	this.p  = new Point(0, 0);
+	this.p  = null;
 	this.r  = r;
 	this.ri = ri;
 	this.labels = labels;
@@ -1668,7 +1676,7 @@ function Hexmenu(r, ri, labels) {
 }
 
 Hexmenu.prototype.set = function(p) {
-	this.p.set(p);
+	this.p = p;
 	this.mousepos = 0;
 }
 
@@ -2180,7 +2188,7 @@ Space.prototype.dragstop = function(x, y, shift, ctrl) {
 	case ACT.IDRAG :
 		var w = iaction.item.zone.w;
 		var h = iaction.item.zone.h;
-		iaction.item.moveto(new Point(x - iaction.sx, y - iaction.sy));
+		iaction.item.moveto(new Point(x - iaction.sx, y - iaction.sy)); // todo
 		System.repository.updateItem(iaction.item);
 		iaction.item = null;
 		System.setCursor("default");
@@ -2233,7 +2241,7 @@ Space.prototype.dragmove = function(x, y, shift, ctrl) {
 		return;
 	case ACT.IDRAG :
 		/* todo move into items */
-		iaction.item.moveto(new Point(x - iaction.sx, y - iaction.sy));
+		iaction.item.moveto(new Point(x - iaction.sx, y - iaction.sy)); // todo
 		System.repository.updateItem(iaction.item);
 		this.redraw();
 		return;
@@ -2268,7 +2276,7 @@ Space.prototype.dragmove = function(x, y, shift, ctrl) {
 			y1 = iaction.siy1 + y - iaction.sy;	
 			break;			
 		}
-		redraw = it.setZone(new Rect(null, new Point(x1, y1), new Point(x2, y2)));  // todo
+		redraw = it.setZone(new Rect(new Point(x1, y1), new Point(x2, y2)));  // todo
 		
 		/* adapt scrollbar position, todo x move into item */
 		var dtreeHeight = it.dtree.height;
@@ -2557,13 +2565,13 @@ Space.prototype.mousedown = function(x, y) {
 			var nw = settings.newNoteWidth;
 			var nh = settings.newNoteHeight;
 			// todo, beautify point logic.
-			var p1 = new Point(fm.p).pullby(R(nw / 2), R(nh / 2)).pullby(this.pox, this.poy);	
-			var p2 = new Point(p1).moveby(nw, nh);
-			var note = new Note(null, null, new Rect(null, p1, p2));
+			var p1 = fm.p.sub(R(nw / 2) + this.pox, R(nh / 2) + this.poy);
+			var p2 = p1.add(nw, nh);
+			var note = new Note(null, null, new Rect( p1, p2));
 			this.setFoci(note);
 			break;
 		case 2 : // label
-			var label = new Label(null, null, new Point(fm.p).pullby(this.pox, this.poy));
+			var label = new Label(null, null, fm.p.sub(this.pox, this.poy));
 			/* todo center label
 			label.moveto(new Point(R(label.x1 - (label.x2 - label.x1) / 2),
 			                       R(label.y1 - (label.y2 - label.y1) / 2)));
@@ -3233,10 +3241,11 @@ Item.prototype._checkItemCompass = function(x, y, rhs) {
 	var d = settings.handleSize;          // inner distance
 	var d2 = settings.handleSize * 3 / 4; // outer distance
 	
-	var n = y >= this.y1 - d2 && y <= this.y1 + d;
-	var e = x >= this.x2 - d  && x <= this.x2 + d2;
-	var s = y >= this.y2 - d  && y <= this.y2 + d2;
-	var w = x >= this.x1 - d2 && x <= this.x1 + d;
+	/* todo, simplize? */
+	var n = y >= this.zone.p1.y - d2 && y <= this.zone.p1.y + d;
+	var e = x >= this.zone.p2.x - d  && x <= this.zone.p2.x + d2;
+	var s = y >= this.zone.p2.y - d  && y <= this.zone.p2.y + d2;
+	var w = x >= this.zone.p1.x - d2 && x <= this.zone.p1.x + d;
 	
 	if (n) {
 		if (w && rhs & 128) { 
@@ -3244,7 +3253,7 @@ Item.prototype._checkItemCompass = function(x, y, rhs) {
 		} else if (e && rhs & 2) {
 			return "ne";
 		} else if (rhs & 1) {
-			var mx = (this.x1 + this.x2) / 2;
+			var mx = this.zone.mx;
 			if (x >= mx - d && x <= mx + d) {
 				return "n";
 			}
@@ -3255,18 +3264,18 @@ Item.prototype._checkItemCompass = function(x, y, rhs) {
 		} else if (e && rhs & 8) {
 			return "se";
 		} else if (rhs & 16) {
-			var mx = (this.x1 + this.x2) / 2;
+			var mx = this.zone.mx;
 			if (x >= mx - d && x <= mx + d) {
 				return "s";
 			}
 		}
 	} else if (w && rhs & 64) {
-		var my = (this.y1 + this.y2) / 2;
+		var my = this.zone.my;
 		if (y >= my - d && y <= my + d) {
 			return "w";
 		}
 	} else if (e && rhs & 4) {
-		var my = (this.y1 + this.y2) / 2;
+		var my = this.zone.my;
 		if (y >= my - d && y <= my + d) {
 			return "e";
 		}
@@ -3372,9 +3381,9 @@ Note.prototype.constructor = Note;
 function Note(js, id, zone) {
 	if (js) {
 		if (js.x1) { /* todold */
-			this.zone = new Rect(null, new Point(js.x1, js.y1), new Point(js.x2, js.y2));
+			this.zone = new Rect(new Point(js.x1, js.y1), new Point(js.x2, js.y2));
 		} else {
-			this.zone = new Rect(js.z);
+			this.zone = Rect.jnew(js.z);
 		}
 		this.dtree = new DTree(js.d, this);
 	} else {
@@ -3498,16 +3507,18 @@ Note.prototype.transfix = function(txe, space, x, y, z, shift, ctrl) {
  */
 Note.prototype.setZone = function(zone) {
 	debug("setZone");
-	var w = zone.w;
-	var h = zone.h;
-	if (w < settings.noteMinWidth)  w = zone.w = settings.noteMinWidth;
-	if (h < settings.noteMinHeight) h = zone.h = settings.noteMinHeight;
+	if (zone.w < settings.noteMinWidth || zone.h < settings.noteMinHeight) {
+		zone = zone.resize(
+			max(zone.w, settings.noteMinWidth),
+			max(zone.h, settings.noteMinHeight));
+		
+	}
 	if (this.zone.eq(zone)) return false;
-	this.zone.set(zone);
+	this.zone = zone;
 
 	var bcanvas = this.bcanvas;
-	bcanvas.width  = w; /* todo, not yet do sizing */
-	bcanvas.height = h;
+	bcanvas.width  = zone.w; /* todo, not yet do sizing */
+	bcanvas.height = zone.h;
 	this._canvasActual = false;
 	return true;
 }
@@ -3516,7 +3527,7 @@ Note.prototype.setZone = function(zone) {
 /* rename to moveto */
 Note.prototype.moveto = function(p) {
 	if (this.zone.p1.eq(p)) return false;
-	this.zone.moveto(p);
+	this.zone = this.zone.atpos(p);
 	return this;
 }
 
@@ -3764,13 +3775,13 @@ Label.prototype.constructor = Note;
 function Label(js, id, p1) {
 	if (js) {
 		if (js.x1) { /* todold */
-			this.zone = new Rect(null, new Point(js.x1, js.y1), new Point(js.x2, js.y2));
+			this.zone = new Rect(new Point(js.x1, js.y1), new Point(js.x2, js.y2));
 		} else {
-			this.zone = new Rect(js.z);
+			this.zone = Rect.jnew(js.z);
 		}
 		this.dtree = new DTree(js.d, this);
 	} else {
-		this.zone = new Rect(null, p1, new Point(p1).moveby(100, 50));
+		this.zone = new Rect(p1, p1.add(100, 50));
 		this.dtree = new DTree(null, this, 20);
 	}
 	Item.call(this, "label", id);
@@ -3778,7 +3789,7 @@ function Label(js, id, p1) {
 	this.bcanvas = document.createElement("canvas");
 	this._canvasActual = false;
 	if (typeof(this.zone.p2.x) === "undefined")  {
-		this.zone.p2.x = this.zone.p1.x + this.dtree.width;
+		throw new Error("todo");
 	}
 	System.repository.addItem(this, true);
 }
@@ -3867,7 +3878,7 @@ Label.prototype.setZone = function(zone) {
 	var zh = zone.h;
 	var th = R(this.dtree.height * (1 + settings.bottombox));
 	var dfs = dtree.fontsize;
-	var fs = Math.max(dfs * zh / th, 8);
+	var fs = max(dfs * zh / th, 8);
 	var keepx2 = this.zone.p2.x == x2 ? x2 : Number.NAN;
 	this.zone.p1.set(zone.p1);
 	dtree.fontsize = fs;
@@ -3884,9 +3895,9 @@ Label.prototype.setZone = function(zone) {
 }
 
 /* sets new position retaining height */
-Label.prototype.moveto = function(P) {
+Label.prototype.moveto = function(p) {
 	if (this.zone.p1.eq(p)) return false;
-	this.zone.moveto(p);
+	this.zone = this.zone.atpos(p);
 	return this;
 }
 
@@ -4020,7 +4031,7 @@ Relation.prototype.listen = function() {
 	
 Relation.prototype.resize = function(width, height) {
 	var dtree = this.dtree;
-	var fs = Math.max(dtree.fontsize * height / this.height, 8);
+	var fs = max(dtree.fontsize * height / this.height, 8);
 	if (dtree._fontsize == fs) return false;
 	dtree.fontsize = fs;
 	this._canvasActual = false;
