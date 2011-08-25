@@ -181,6 +181,7 @@ var MST = {
 	ATWEEN : 1, // mouse just came down, unsure if click or drag 
 	DRAG   : 2  // mouse is dragging 
 };
+Object.freeze(MST);
 
 /* interface action active */
 var ACT = {
@@ -193,6 +194,7 @@ var ACT = {
 	IMENU   : 6, // clicked one item menu
 	RBIND   : 7  // dragging a new relation
 };
+Object.freeze(ACT);
 	
 var TXE = {
 	/* which kind of event transfix() calls for all items which intersect x/y */
@@ -202,18 +204,22 @@ var TXE = {
 	RBINDHOVER : 3, 
 	RBINDTO    : 4,
 }
+Object.freeze(TXE);
 
 var TXR = {	
 	/* bitfield return code of transfix() */
 	HIT    : 0x1,
 	REDRAW : 0x2
 };
+Object.freeze(TXR);
+
 
 /* onlook() events */
 var ONLOOK = {
 	NONE   : 0,
 	REMOVE : 1,
 }
+Object.freeze(ONLOOK);
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -224,7 +230,6 @@ var ONLOOK = {
            ,|          /| 
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
 if (!Object.defineProperty) {
 	Object.defineProperty = function(obj, label, funcs) {
 		if (funcs.get) {
@@ -338,7 +343,7 @@ function Rect(r1, p2) {
 		this.p1 = r1;
 		this.p2 = p2;
 	}
-	if (this.p1.x > this.p2.x || this.p1.y > this.p2.y) throw new Error("not a rectangle.");
+	if (this.p1.x > this.p2.x || this.p1.y > this.p2.y) { throw new Error("not a rectangle."); }
 	this.type = "rect"; // todo needed?
 	Object.freeze(this);
 }
@@ -2201,10 +2206,7 @@ Space.prototype.dragstop = function(x, y, shift, ctrl) {
 		iaction.item = null;
 		iaction.six  = null;
 		iaction.siy  = null;
-		iaction.six1 = null;
-		iaction.siy1 = null;
-		iaction.six2 = null;
-		iaction.siy2 = null;
+		iaction.siz  = null;
 		break;
 	case ACT.SCROLLY :
 		iaction.ssy  = null;
@@ -2247,40 +2249,41 @@ Space.prototype.dragmove = function(x, y, shift, ctrl) {
 		return;
 	case ACT.IRESIZE :
 	{
-		var x1 = iaction.six1;
-		var y1 = iaction.siy1;
-		var x2 = iaction.six2;
-		var y2 = iaction.siy2;
+		// todo no splitup
+		var x1 = iaction.siz.p1.x;
+		var y1 = iaction.siz.p1.y;
+		var x2 = iaction.siz.p2.x;
+		var y2 = iaction.siz.p2.y;
 		var it = iaction.item;
 		switch (iaction.com) {
 		case "e"  : 
 		case "ne" :
 		case "se" :
-			x2 = iaction.six2 + x - iaction.sx;
+			x2 = max(iaction.siz.p2.x + x - iaction.sx, x1);
 			break;
 		case "w"  :
 		case "nw" :
 		case "sw" :	
-			x1 = iaction.six1 + x - iaction.sx;
+			x1 = min(iaction.siz.p2.x + x - iaction.sx, x2);
 			break;
 		}
 		switch (iaction.com) {
 		case "s"  : 
 		case "sw" :
 		case "se" :
-			y2 = iaction.siy2 + y - iaction.sy;
+			y2 = max(iaction.siz.p2.y + y - iaction.sy, y1);
 			break;
 		case "n"  : 
 		case "nw" :
 		case "ne" :
-			y1 = iaction.siy1 + y - iaction.sy;	
-			break;			
+			y1 = min(iaction.size.py.y + y - iaction.sy, y2);	
+			break;
 		}
 		redraw = it.setZone(new Rect(new Point(x1, y1), new Point(x2, y2)));  // todo
 		
 		/* adapt scrollbar position, todo x move into item */
 		var dtreeHeight = it.dtree.height;
-		var smaxy = dtreeHeight - ((it.x2 - it.x1) - 2 * it.textBorder);
+		var smaxy = dtreeHeight - ((it.zone.w) - 2 * it.textBorder);
 		if (smaxy > 0 && it.scrolly > smaxy) {
 			it.scrolly = smaxy;
 			redraw = true;;
@@ -2293,7 +2296,7 @@ Space.prototype.dragmove = function(x, y, shift, ctrl) {
 	{
 		var dy = y - iaction.sy;
 		var it = iaction.item;
-		var h = it.y2 - it.y1;
+		var h = it.zone.h;
 		var scrollRange = h - settings.scrollbarMarginY * 2;
 		var dtreeHeight = it.dtree.height;
 		var innerHeight = h - 2 * it.textBorder;
@@ -2611,10 +2614,7 @@ Space.prototype.mousedown = function(x, y) {
 			iaction.item = this.foci;
 			iaction.sx   = px;
 			iaction.sy   = py;
-			iaction.six1  = this.foci.x1;
-			iaction.siy1  = this.foci.y1;
-			iaction.six2  = this.foci.x2;
-			iaction.siy2  = this.foci.y2;
+			iaction.siz  = this.foci.zone;
 			System.setCursor(com + "-resize");
 			if (redraw) this.redraw();
 			return MST.DRAG;
@@ -3216,8 +3216,9 @@ Item.prototype.setItemMenu = function(menu, pox, poy) {
 	var r = settings.itemMenuInnerRadius;
 	var h = settings.itemMenuSliceHeight;
 	menu.set(
-	 new Point(R(this.x1 + pox + r - (r * Hex.c6 - h) * Hex.t6), 
-	 R(this.y1 + poy + r * Hex.c6 - h) - 1));
+	 new Point(
+		R(this.zone.p1.x + pox + r - (r * Hex.c6 - h) * Hex.t6), 
+		R(this.zone.p1.y + poy + r * Hex.c6 - h) - 1));
 }
 
 /* returns if coords are within the item menu */
@@ -3461,7 +3462,7 @@ Note.prototype.transfix = function(txe, space, x, y, z, shift, ctrl) {
 
 		var srad = settings.scrollbarRadius;
 		var sbmx = settings.scrollbarMarginX;
-		if (this.scrolly >= 0 && Math.abs(x - this.x2 + srad + sbmx) <= srad +1)  {
+		if (this.scrolly >= 0 && Math.abs(x - this.zone.p2.x + srad + sbmx) <= srad + 1)  {
 			space.actionScrollY(this, y, this.scrolly);
 		} else {
 			/* todo pointify */
@@ -3506,16 +3507,13 @@ Note.prototype.transfix = function(txe, space, x, y, z, shift, ctrl) {
  * returns true if something changed
  */
 Note.prototype.setZone = function(zone) {
-	debug("setZone");
 	if (zone.w < settings.noteMinWidth || zone.h < settings.noteMinHeight) {
 		zone = zone.resize(
 			max(zone.w, settings.noteMinWidth),
 			max(zone.h, settings.noteMinHeight));
-		
 	}
 	if (this.zone.eq(zone)) return false;
 	this.zone = zone;
-
 	var bcanvas = this.bcanvas;
 	bcanvas.width  = zone.w; /* todo, not yet do sizing */
 	bcanvas.height = zone.h;
