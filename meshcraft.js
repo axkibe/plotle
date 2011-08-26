@@ -120,6 +120,7 @@ var settings = {
 
 /* shortcuts */
 var R = Math.round;
+var abs = Math.abs;
 var max = Math.max;
 var min = Math.min;
 
@@ -350,7 +351,7 @@ function Rect(r1, p2) {
 
 /* Creates a point from json */
 Rect.jnew = function(js) {
-	return new Rect(js.p1, js.p2);
+	return new Rect(Point.jnew(js.p1), Point.jnew(js.p2));
 }
 
 /* returns a json object for this rect */
@@ -804,9 +805,9 @@ Editor.prototype.updateCaret = function() {
 		caret.getXY();
 		var it = caret.item;
 		var sy = it.scrolly;
-		var x,y
-		x = System.space.pox + it.zone.p1.x + caret.x;
-		y = System.space.poy + it.zone.p1.y + caret.y - (sy > 0 ? sy : 0);		
+		var x,y; // todo
+		x = System.space.pan.x + it.zone.p1.x + caret.x;
+		y = System.space.pan.y + it.zone.p1.y + caret.y - (sy > 0 ? sy : 0);		
 		var th = R(it.dtree.fontsize * (1 + settings.bottombox));
 		
 		caret.save = cx.getImageData(
@@ -921,31 +922,22 @@ Editor.prototype.specialKey = function(item, keycode, shift, ctrl) {
 		break;
 	}
 	case 35 : // end
-	{
 		caret.offset = caret.element.text.length;
 		refresh = true;
 		break;
-	}
 	case 36 : // pos1
-	{
 		caret.offset = 0;
 		refresh = true;
 		break;
-	}
 	case 37 : // left
-	{
-		var change = caret.moveLeftRight(true);
-		refresh = change;
+		refresh = caret.moveLeftRight(true);
 		break;
-	}
 	case 38 : // up
 		refresh = caret.moveUpDown(true);
 		break;
 	case 39 : // right
-	{	
 		refresh = caret.moveLeftRight(false);		
 		break;
-	}
 	case 40 : // down
 		refresh = caret.moveUpDown(false);
 		break;
@@ -1109,11 +1101,9 @@ _init : function() {
 	/* mouse state */
 	var mst = MST.NONE;
 	/* position the mouse went down to atween state */
-	var msx = null;
-	var msy = null;
+	var msp = null;
 	/* latest mouse position seen in atween state */
-	var mmx = null;
-	var mmy = null;
+	var mmp = null;
 	/* latest shift/ctrl key status in atween state */
 	var mms = null;
 	var mmc = null; 
@@ -1249,37 +1239,34 @@ _init : function() {
 	
 	/* mouse move event */
 	function onmousemove(event) {
-		var x = event.pageX - canvas.offsetLeft;
-		var y = event.pageY - canvas.offsetTop;
-
+		var p = new Point(event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop);
 		switch(mst) {
 		case MST.NONE :
-			this.space.mousehover(x, y);
+			this.space.mousehover(p);
 			return true;
 		case MST.ATWEEN :
 		{
 			var dragbox = settings.dragbox;
-			if ((Math.abs(x - msx) > dragbox) || (Math.abs(y - msy) > dragbox)) {
+			if ((abs(p.x - msp.x) > dragbox) || (abs(p.y - msp.y) > dragbox)) {
 				/* moved out of dragbox -> start dragging */
 				clearTimeout(atweenTimer);
 				atweenTimer = null;
 				mst = MST.DRAG;
-				this.space.dragstart(msx, msy, event.shiftKey, event.ctrlKey || event.metaKey);
-				if (x != msx || y != msy) {
-					this.space.dragmove(x, y, event.shiftKey, event.ctrlKey || event.metaKey);
+				this.space.dragstart(msp, event.shiftKey, event.ctrlKey || event.metaKey);
+				if (!p.eq(msp)) {
+					this.space.dragmove(p, event.shiftKey, event.ctrlKey || event.metaKey);
 				}
 				captureEvents();
 			} else {
 				/* saves position for possible atween timeout */
-				mmx = x;
-				mmy = y;
+				mmp = p;
 				mms = event.shiftKey;
 				mmc = event.ctrlKey || event.metaKey;
 			}
 			return true;
 		}
 		case MST.DRAG :
-			this.space.dragmove(x, y, event.shiftKey, event.ctrlKey || event.metaKey);
+			this.space.dragmove(p, event.shiftKey, event.ctrlKey || event.metaKey);
 			return true;
 		default :
 			throw new Error("invalid mst");
@@ -1290,14 +1277,12 @@ _init : function() {
 	function onmousedown(event) {
 		event.preventDefault();
 		hiddenInput.focus();
-		var x = event.pageX - canvas.offsetLeft;
-		var y = event.pageY - canvas.offsetTop;
+		var p = new Point (event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop);
 		/* asks the space if it forces this to be a drag or click, or yet unknown */
-		mst = this.space.mousedown(x, y);
+		mst = this.space.mousedown(p);
 		switch(mst) {
 		case MST.ATWEEN :
-			msx = mmx = x;
-			msy = mmy = y;
+			msp = mmp = p;
 			mms = event.shiftKey;
 			mmc = event.ctrlKey || event.metaKey;
 			atweenTimer = setTimeout("System.onatweentime();", settings.dragtime);
@@ -1313,8 +1298,7 @@ _init : function() {
 	function onmouseup(event) {
 		event.preventDefault();
 		releaseEvents();
-		var x = event.pageX - canvas.offsetLeft;
-		var y = event.pageY - canvas.offsetTop;
+		var p = new Point(event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop);
 		
 		switch (mst) {
 		case MST.NONE :
@@ -1324,11 +1308,11 @@ _init : function() {
 			/* this was a click */
 			clearTimeout(atweenTimer);
 			atweenTimer = null;
-			this.space.click(x, y, event.shiftKey, event.ctrlKey || event.metaKey);
+			this.space.click(p, event.shiftKey, event.ctrlKey || event.metaKey);
 			mst = MST.NONE;
 			return false;
 		case MST.DRAG :
-			this.space.dragstop(x, y, event.shiftKey, event.ctrlKey || event.metaKey);
+			this.space.dragstop(p, event.shiftKey, event.ctrlKey || event.metaKey);
 			mst = MST.NONE;
 			return false;
 		}
@@ -1349,9 +1333,9 @@ _init : function() {
 		}
 		mst = MST.DRAG;
 		atweenTimer = null;
-		this.space.dragstart(msx, msy, mms, mmc);
-		if (mmx != msx || mmy != msy) {
-			this.space.dragmove(mmx, mmy, mms, mmc);
+		this.space.dragstart(msp, mms, mmc);
+		if (!mmp.eq(msp)) {
+			this.space.dragmove(mmp, mms, mmc);
 		}
 	}
 		
@@ -1755,9 +1739,10 @@ Hexmenu.prototype.draw = function() {
 	}
 }
 
-Hexmenu.prototype._getMousepos = function(x, y) {
-	var dx = x - this.p.x;
-	var dy = y - this.p.y;
+Hexmenu.prototype._getMousepos = function(p) {
+	var dp = p.sub(this.p);
+	var dx = dp.x; // todo
+	var dy = dp.y;
 		
 	if (!Hex.within(dx, dy, this.r)) {
 		/* out of menu */
@@ -1778,13 +1763,14 @@ Hexmenu.prototype._getMousepos = function(x, y) {
 	}
 }
 
-Hexmenu.prototype.mousehover = function(x, y) {
+/* returns true if this.mousepos has changed */
+Hexmenu.prototype.mousehover = function(p) {
 	var omp = this.mousepos;
-	return omp != this._getMousepos(x, y);
+	return omp != this._getMousepos(p);
 }
 
-Hexmenu.prototype.mousedown = function(x, y) {
-	return this._getMousepos(x, y);
+Hexmenu.prototype.mousedown = function(p) {
+	return this._getMousepos(p);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1885,7 +1871,10 @@ Edgemenu.prototype.draw = function(x, y) {
 	cx.fillText("Import", xr - R((bw + ew) / 2), y - R(h / 2));
 }
 
-Edgemenu.prototype._getMousepos = function(x, y) {
+Edgemenu.prototype._getMousepos = function(p) {
+	var x = p.x; // todo
+	var y = p.y;
+
 	var canvas = System.canvas;
 	var h  = this.height;
 	var ty = canvas.height;
@@ -1915,9 +1904,10 @@ Edgemenu.prototype._getMousepos = function(x, y) {
 	return this.mousepos = 0;
 }
 
-Edgemenu.prototype.mousehover = function (x, y) {	
+/* returns true if this.mousepos has changed*/
+Edgemenu.prototype.mousehover = function(p) {	
 	var omp = this.mousepos;
-	return omp != this._getMousepos(x, y);
+	return omp != this._getMousepos(p);
 }
 
 Edgemenu.prototype.mousedown = function(x, y) {
@@ -1947,7 +1937,7 @@ function Space() {
 	};
 	
 	/* panning offset */
-	this.repository.getPoxy(this);
+	this.pan = this.repository.getPan();
 	this.zoom = 1;
 }
 
@@ -1980,9 +1970,9 @@ Space.prototype.redraw = function() {
 	case ACT.RBIND :
 		cx.beginPath(); /* todo remove? */
 		if (ia.item2) {
-			Relation_drawLabeledArrow(this, ia.item, ia.item2, null, null, true);
+			Relation_drawLabeledArrow(this, ia.item, ia.item2, null, true);
 		} else {
-			Relation_drawLabeledArrow(this, ia.item, ia.smx, ia.smy, null, false);
+			Relation_drawLabeledArrow(this, ia.item, ia.smp, null, false);
 		}
 	}
 	this.edgemenu.draw();
@@ -2032,12 +2022,11 @@ Space.prototype.setFoci = function(item) {
 }
 
 /* mouse hover */
-Space.prototype.mousehover = function(x, y) {
-	var px = x - this.pox;
-	var py = y - this.poy;
+Space.prototype.mousehover = function(p) {
+	var pp = p.sub(this.pan);
 	var com = null;
 	var editor = System.editor;
-	var redraw = this.edgemenu.mousehover(x, y);
+	var redraw = this.edgemenu.mousehover(p);
 	if (this.edgemenu.mousepos >= 0) {
 		/* mouse floated on edge menu, no need to look further */
 		System.setCursor("default");
@@ -2047,7 +2036,7 @@ Space.prototype.mousehover = function(x, y) {
 	
 	switch(this.iaction.act) {
 	case ACT.FMENU :
-		redraw = redraw || this._floatmenu.mousehover(x, y);
+		redraw = redraw || this._floatmenu.mousehover(p);
 		if (this._floatmenu.mousepos >= 0) {
 			/* mouse floated on float menu, no need to look further */
 			System.setCursor("default");
@@ -2056,7 +2045,7 @@ Space.prototype.mousehover = function(x, y) {
 		}
 		break;
 	case ACT.IMENU :
-		redraw = redraw || this._itemmenu.mousehover(x, y);
+		redraw = redraw || this._itemmenu.mousehover(pp);
 		if (this._itemmenu.mousepos >= 0) {
 			/* mouse floated on item menu, no need to look further */
 			System.setCursor("default");
@@ -2068,13 +2057,13 @@ Space.prototype.mousehover = function(x, y) {
 
 	if (this.foci) {
 		/* todo move into items */
-		if (this.foci.withinItemMenu(px, py)) {
+		if (this.foci.withinItemMenu(pp)) {
 			System.setCursor("pointer");
 			if (redraw) this.redraw();
 			return;
 		}
 
-		if ((com = this.foci.checkItemCompass(px, py))) {
+		if ((com = this.foci.checkItemCompass(pp))) {
 			System.setCursor(com + "-resize");
 			if (redraw) this.redraw();
 			return;
@@ -2082,19 +2071,18 @@ Space.prototype.mousehover = function(x, y) {
 	}
 
 	/* todo remove nulls by shiftKey, ctrlKey */
-	var tx = this.repository.transfix(TXE.HOVER, this, px, py, null, null);
+	var tx = this.repository.transfix(TXE.HOVER, this, pp, null, null);
 	redraw = redraw || (tx & TXR.REDRAW);
 	if (!(tx & TXR.HIT)) { System.setCursor("crosshair");} 
 	if (redraw) this.redraw();
 }
 
 /* starts creating a new relation */
-Space.prototype.actionSpawnRelation = function(item, x, y) {
+Space.prototype.actionSpawnRelation = function(item, p) {
 	var ia = this.iaction;
 	ia.act = ACT.RBIND;
 	ia.item = item;
-	ia.sx = ia.smx = x;
-	ia.sy = ia.smy = y;
+	ia.sp = ia.smp = p;
 	System.setCursor("not-allowed");
 }
 
@@ -2108,12 +2096,11 @@ Space.prototype.actionScrollY = function(item, scrollY, startY) {
 }
 
 /* starts dragging an item */
-Space.prototype.actionIDrag = function(item, sx, sy) {
+Space.prototype.actionIDrag = function(item, sp) {
 	var ia  = this.iaction;
 	ia.act  = ACT.IDRAG;
 	ia.item = item;
-	ia.sx   = sx;
-	ia.sy   = sy;	
+	ia.sp   = sp;
 	System.setCursor("move");
 }
 
@@ -2129,50 +2116,49 @@ Space.prototype.actionRBindHover = function(item) {
 
 
 /* starts an operation with the mouse held down */
-Space.prototype.dragstart = function(x, y, shift, ctrl) {
-	x -= this.pox;
-	y -= this.poy;
+Space.prototype.dragstart = function(p, shift, ctrl) {
+	var pp = p.sub(this.pan);
+	debug("dragstart", pp.x, pp.y);
 	var editor  = System.editor;
 	var iaction = this.iaction;
 	
-	if (this.foci && this.foci.withinItemMenu(x, y)) {
-		this.actionSpawnRelation(this.foci, x, y);
+	if (this.foci && this.foci.withinItemMenu(pp)) {
+		this.actionSpawnRelation(this.foci, pp);
 		this.redraw();
 		return;
 	} 
 
-	var tfx = this.repository.transfix(TXE.DRAGSTART, this, x, y, shift, ctrl);
-		
+	var tfx = this.repository.transfix(TXE.DRAGSTART, this, pp, shift, ctrl);
+
 	if (!(tfx & TXR.HIT)) {
 		/* panning */
+		debug("panning");
 		iaction.act = ACT.PAN;
-		iaction.sx = x;
-		iaction.sy = y;
+		iaction.sp = pp;
 		System.setCursor("crosshair");
 		return;
 	} 
-	
+
 	if (tfx & TXR.REDRAW) this.redraw();
 }
 
 /* a click is a mouse down followed within dragtime by 'mouseup' and
  * not having moved out of 'dragbox'. */
-Space.prototype.click = function(x, y, shift, ctrl) {
-	var px = x - this.pox;
-	var py = y - this.poy;
-			
+Space.prototype.click = function(p, shift, ctrl) {
+	var pp = p.sub(this.pan);
+
 	var foci = this.foci;
-	if (foci && foci.withinItemMenu(px, py)) {
-		foci.setItemMenu(this._itemmenu, this.pox, this.poy);
+	if (foci && foci.withinItemMenu(pp)) {
+		foci.setItemMenu(this._itemmenu, this.pan);
 		this.iaction.act = ACT.IMENU;
 		this.redraw();
 		return;
 	}
 
-	var tfx = this.repository.transfix(TXE.CLICK, this, px, py, shift, ctrl);
+	var tfx = this.repository.transfix(TXE.CLICK, this, pp, shift, ctrl);
 	if (!(tfx & TXR.HIT)) {
 		this.iaction.act = ACT.FMENU;
-		this._floatmenu.set(new Point(x, y));  // todo should be point right away
+		this._floatmenu.set(p);
 		System.setCursor("default");
 		this.setFoci(null);
 		this.redraw();
@@ -2183,9 +2169,8 @@ Space.prototype.click = function(x, y, shift, ctrl) {
 }
 
 /* stops an operation with the mouse held down */
-Space.prototype.dragstop = function(x, y, shift, ctrl) {
-	x -= this.pox;
-	y -= this.poy;
+Space.prototype.dragstop = function(p, shift, ctrl) {
+	var pp = p.sub(this.pan);
 	var editor = System.editor;
 	var iaction = this.iaction;
 	var redraw = false;
@@ -2193,7 +2178,7 @@ Space.prototype.dragstop = function(x, y, shift, ctrl) {
 	case ACT.IDRAG :
 		var w = iaction.item.zone.w;
 		var h = iaction.item.zone.h;
-		iaction.item.moveto(new Point(x - iaction.sx, y - iaction.sy)); // todo
+		iaction.item.moveto(pp.sub(iaction.sp));
 		System.repository.updateItem(iaction.item);
 		iaction.item = null;
 		System.setCursor("default");
@@ -2203,47 +2188,42 @@ Space.prototype.dragstop = function(x, y, shift, ctrl) {
 		break;
 	case ACT.IRESIZE :
 		iaction.com  = null;
-		iaction.item = null;
-		iaction.six  = null;
-		iaction.siy  = null;
+		iaction.item = null;		
+		iaction.sip  = null;
 		iaction.siz  = null;
 		break;
 	case ACT.SCROLLY :
 		iaction.ssy  = null;
 		break;
 	case ACT.RBIND :
-		iaction.smx = null;
-		iaction.smy = null;
-		this.repository.transfix(TXE.RBINDTO, this, x, y, shift, ctrl);
+		iaction.smp = null;
+		this.repository.transfix(TXE.RBINDTO, this, pp, shift, ctrl);
 		redraw = true;
 		break;
 	default :
 		throw new Error("Invalid action in 'Space.dragstop'");
 	}
 	iaction.act = ACT.NONE;
-	iaction.sx  = null;
-	iaction.sy  = null;
+	iaction.sp  = null;
 	if (redraw) this.redraw();
 	return;
 }
 
 /* moving during an operation with the mouse held down */
-Space.prototype.dragmove = function(x, y, shift, ctrl) {
-	x -= this.pox;
-	y -= this.poy;
+Space.prototype.dragmove = function(p, shift, ctrl) {
+	var pp = p.sub(this.pan);
 	var iaction = this.iaction;
 	var redraw = false;
 	
 	switch(iaction.act) {
 	case ACT.PAN :
-		this.pox += x - iaction.sx;
-		this.poy += y - iaction.sy;
-		System.repository.savePoxy(this.pox, this.poy);
+		this.pan = p.sub(iaction.sp);
+		System.repository.savePan(this.pan);
 		this.redraw();
 		return;
 	case ACT.IDRAG :
 		/* todo move into items */
-		iaction.item.moveto(new Point(x - iaction.sx, y - iaction.sy)); // todo
+		iaction.item.moveto(pp.sub(iaction.sp));
 		System.repository.updateItem(iaction.item);
 		this.redraw();
 		return;
@@ -2259,27 +2239,27 @@ Space.prototype.dragmove = function(x, y, shift, ctrl) {
 		case "e"  : 
 		case "ne" :
 		case "se" :
-			x2 = max(iaction.siz.p2.x + x - iaction.sx, x1);
+			x2 = max(iaction.siz.p2.x + x - iaction.sp.x, x1);
 			break;
 		case "w"  :
 		case "nw" :
 		case "sw" :	
-			x1 = min(iaction.siz.p2.x + x - iaction.sx, x2);
+			x1 = min(iaction.siz.p2.x + x - iaction.sp.x, x2);
 			break;
 		}
 		switch (iaction.com) {
 		case "s"  : 
 		case "sw" :
 		case "se" :
-			y2 = max(iaction.siz.p2.y + y - iaction.sy, y1);
+			y2 = max(iaction.siz.p2.y + y - iaction.sp.y, y1);
 			break;
 		case "n"  : 
 		case "nw" :
 		case "ne" :
-			y1 = min(iaction.size.py.y + y - iaction.sy, y2);	
+			y1 = min(iaction.siz.p2.y + y - iaction.sp.y, y2);	
 			break;
 		}
-		redraw = it.setZone(new Rect(new Point(x1, y1), new Point(x2, y2)));  // todo
+		redraw = it.setZone(new Rect(new Point(x1, y1), new Point(x2, y2)), iaction.com);  // todo
 		
 		/* adapt scrollbar position, todo x move into item */
 		var dtreeHeight = it.dtree.height;
@@ -2321,9 +2301,8 @@ Space.prototype.dragmove = function(x, y, shift, ctrl) {
 	}
 	case ACT.RBIND :
 		iaction.item2 = null;
-		this.repository.transfix(TXE.RBINDHOVER, this, x, y, shift, ctrl);
-		iaction.smx = x;
-		iaction.smy = y;
+		this.repository.transfix(TXE.RBINDHOVER, this, p, shift, ctrl);
+		iaction.smp = p;
 		this.redraw();
 		return true;
 	default :
@@ -2528,15 +2507,13 @@ Space.prototype._revertDialog = function() {
 
 
 /* mouse down event */
-Space.prototype.mousedown = function(x, y) {
-	var px = x - this.pox;
-	var py = y - this.poy;
-	
+Space.prototype.mousedown = function(p) {
+	var pp = p.sub(this.pan);
 	var iaction = this.iaction;
 	var editor = System.editor;
 	var redraw = false;
 
-	var md = this.edgemenu.mousedown(x, y);
+	var md = this.edgemenu.mousedown(p);
 	if (md >= 0) {
 		iaction.act = ACT.NONE;
 		redraw = true;
@@ -2557,7 +2534,7 @@ Space.prototype.mousedown = function(x, y) {
 	
 	switch (iaction.act) {
 	case ACT.FMENU :
-		var md = this._floatmenu.mousedown(x, y);
+		var md = this._floatmenu.mousedown(p);
 		iaction.act = ACT.NONE;
 		var fm = this._floatmenu;
 		if (md < 0) {
@@ -2568,13 +2545,13 @@ Space.prototype.mousedown = function(x, y) {
 			var nw = settings.newNoteWidth;
 			var nh = settings.newNoteHeight;
 			// todo, beautify point logic.
-			var p1 = fm.p.sub(R(nw / 2) + this.pox, R(nh / 2) + this.poy);
+			var p1 = fm.p.sub(R(nw / 2) + this.pan.x, R(nh / 2) + this.pan.y);
 			var p2 = p1.add(nw, nh);
 			var note = new Note(null, null, new Rect( p1, p2));
 			this.setFoci(note);
 			break;
 		case 2 : // label
-			var label = new Label(null, null, fm.p.sub(this.pox, this.poy));
+			var label = new Label(null, null, fm.p.sub(this.pan));
 			/* todo center label
 			label.moveto(new Point(R(label.x1 - (label.x2 - label.x1) / 2),
 			                       R(label.y1 - (label.y2 - label.y1) / 2)));
@@ -2585,7 +2562,7 @@ Space.prototype.mousedown = function(x, y) {
 		this.redraw();
 		return MST.NONE;
 	case ACT.IMENU :
-		var md = this._itemmenu.mousedown(x, y);
+		var md = this._itemmenu.mousedown(p);
 		iaction.act = ACT.NONE;
 		redraw = true;
 		if (md >= 0) {
@@ -2602,18 +2579,17 @@ Space.prototype.mousedown = function(x, y) {
 	}
 	
 	if (this.foci) {
-		if (this.foci && this.foci.withinItemMenu(px, py)) {
+		if (this.foci && this.foci.withinItemMenu(p)) {
 			if (redraw) this.redraw();
 			return MST.ATWEEN;
 		}
 		var com;
-		if ((com = this.foci.checkItemCompass(px, py))) {
+		if ((com = this.foci.checkItemCompass(p))) {
 			/* resizing */
 			iaction.act  = ACT.IRESIZE;
 			iaction.com  = com;
 			iaction.item = this.foci;
-			iaction.sx   = px;
-			iaction.sy   = py;
+			iaction.sp   = p;
 			iaction.siz  = this.foci.zone;
 			System.setCursor(com + "-resize");
 			if (redraw) this.redraw();
@@ -2631,7 +2607,7 @@ Space.prototype.mousewheel = function(wheel) {
 	} else {
 		this.zoom /= 1.1;
 	}
-	if (Math.abs(this.zoom - 1) < 0.0001) {
+	if (abs(this.zoom - 1) < 0.0001) {
 		this.zoom = 1;
 	}
 }
@@ -3074,7 +3050,7 @@ DTree.prototype.drawCanvas = function(acanvas, select, offsetX, offsetY, scrolly
 		var ey = R(e.y - psy) + 0.5;
 		var rx = R(this.width + offsetX / 2) + 0.5;
 		var lx = R(offsetX / 2) + 0.5;
-		if ((Math.abs(by - ey) < 2)) {
+		if ((abs(by - ey) < 2)) {
 			// ***
 			cx.moveTo(bx, by);
 			cx.lineTo(bx, by + lh);
@@ -3083,7 +3059,7 @@ DTree.prototype.drawCanvas = function(acanvas, select, offsetX, offsetY, scrolly
 			cx.lineTo(bx, by);
 			cx.stroke();
 			cx.fill();			
-		} else if (Math.abs(by + lh - ey) < 2 && (bx >= ex))  {
+		} else if (abs(by + lh - ey) < 2 && (bx >= ex))  {
 			//      ***
 			// ***
 			cx.moveTo(rx, by + lh);
@@ -3212,18 +3188,19 @@ function Item(type, id) {
 
 /* set a hex menu to be this items menu */
 /* todo, beautify */
-Item.prototype.setItemMenu = function(menu, pox, poy) {
+Item.prototype.setItemMenu = function(menu, pan) {
 	var r = settings.itemMenuInnerRadius;
 	var h = settings.itemMenuSliceHeight;
 	menu.set(
 	 new Point(
-		R(this.zone.p1.x + pox + r - (r * Hex.c6 - h) * Hex.t6), 
-		R(this.zone.p1.y + poy + r * Hex.c6 - h) - 1));
+		R(this.zone.p1.x + pan.x + r - (r * Hex.c6 - h) * Hex.t6), 
+		R(this.zone.p1.y + pan.y + r * Hex.c6 - h) - 1));
 }
 
 /* returns if coords are within the item menu */
-Item.prototype.withinItemMenu = function(x, y) {
-	return Hex.withinSlice(x - this.zone.p1.x, y - this.zone.p1.y - 1, 
+Item.prototype.withinItemMenu = function(p) {
+	// todo
+	return Hex.withinSlice(p.x - this.zone.p1.x, p.y - this.zone.p1.y - 1, 
 		settings.itemMenuInnerRadius, settings.itemMenuSliceHeight);
 }
 
@@ -3235,18 +3212,18 @@ Item.prototype.withinItemMenu = function(x, y) {
  *  64     4
  *  32 16  8
  */
-Item.prototype._checkItemCompass = function(x, y, rhs) { 
+Item.prototype._checkItemCompass = function(p, rhs) { 
 	if (rhs == 0) {
 		return;
 	}
-	var d = settings.handleSize;          // inner distance
+	var d  = settings.handleSize;         // inner distance
 	var d2 = settings.handleSize * 3 / 4; // outer distance
 	
 	/* todo, simplize? */
-	var n = y >= this.zone.p1.y - d2 && y <= this.zone.p1.y + d;
-	var e = x >= this.zone.p2.x - d  && x <= this.zone.p2.x + d2;
-	var s = y >= this.zone.p2.y - d  && y <= this.zone.p2.y + d2;
-	var w = x >= this.zone.p1.x - d2 && x <= this.zone.p1.x + d;
+	var n = p.y >= this.zone.p1.y - d2 && p.y <= this.zone.p1.y + d;
+	var e = p.x >= this.zone.p2.x - d  && p.x <= this.zone.p2.x + d2;
+	var s = p.y >= this.zone.p2.y - d  && p.y <= this.zone.p2.y + d2;
+	var w = p.x >= this.zone.p1.x - d2 && p.x <= this.zone.p1.x + d;
 	
 	if (n) {
 		if (w && rhs & 128) { 
@@ -3255,7 +3232,7 @@ Item.prototype._checkItemCompass = function(x, y, rhs) {
 			return "ne";
 		} else if (rhs & 1) {
 			var mx = this.zone.mx;
-			if (x >= mx - d && x <= mx + d) {
+			if (p.x >= mx - d && p.x <= mx + d) {
 				return "n";
 			}
 		}
@@ -3266,18 +3243,18 @@ Item.prototype._checkItemCompass = function(x, y, rhs) {
 			return "se";
 		} else if (rhs & 16) {
 			var mx = this.zone.mx;
-			if (x >= mx - d && x <= mx + d) {
+			if (p.x >= mx - d && p.x <= mx + d) {
 				return "s";
 			}
 		}
 	} else if (w && rhs & 64) {
 		var my = this.zone.my;
-		if (y >= my - d && y <= my + d) {
+		if (p.y >= my - d && p.y <= my + d) {
 			return "w";
 		}
 	} else if (e && rhs & 4) {
 		var my = this.zone.my;
-		if (y >= my - d && y <= my + d) {
+		if (p.y >= my - d && p.y <= my + d) {
 			return "e";
 		}
 	}
@@ -3293,10 +3270,10 @@ Item.prototype._drawHandles = function(space, rhs) {
 	var hs2 = hs / 2;
 			
 	/* todo 2dize */
-	var x1 = this.zone.p1.x + 0.5 - ds + space.pox;
-	var y1 = this.zone.p1.y + 0.5 - ds + space.poy;
-	var x2 = this.zone.p2.x - 0.5 + ds + space.pox;
-	var y2 = this.zone.p2.y - 0.5 + ds + space.poy;
+	var x1 = this.zone.p1.x + 0.5 - ds + space.pan.x;
+	var y1 = this.zone.p1.y + 0.5 - ds + space.pan.y;
+	var x2 = this.zone.p2.x - 0.5 + ds + space.pan.x;
+	var y2 = this.zone.p2.y - 0.5 + ds + space.pan.y;
 	var xm = R((x1 + x2) / 2) + 0.5;
 	var ym = R((y1 + y2) / 2) + 0.5;
 	
@@ -3323,8 +3300,9 @@ Item.prototype._drawHandles = function(space, rhs) {
 		
 	cx.beginPath(); 
 	/* draws item menu handler */
-	x1 = this.zone.p1.x + space.pox + 0.5;
-	y1 = this.zone.p1.y + space.poy + 0.5;
+	// todo
+	x1 = this.zone.p1.x + space.pan.x + 0.5;
+	y1 = this.zone.p1.y + space.pan.y + 0.5;
 	var xim = Hex.makeSlicePath(cx, x1, y1 - 1, 
 		settings.itemMenuInnerRadius, settings.itemMenuSliceHeight);
 	var grad = cx.createLinearGradient(
@@ -3439,8 +3417,8 @@ Note.prototype.listen = function() {
 /* checks if this items reacts on an event 
  * returns transfix code
  */
-Note.prototype.transfix = function(txe, space, x, y, z, shift, ctrl) {
-	if (!this.zone.within(x, y)) return 0;
+Note.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
+	if (!this.zone.within(p)) return 0;
 	switch (txe) {
 	case TXE.HOVER : 
 		System.setCursor("default");
@@ -3448,7 +3426,7 @@ Note.prototype.transfix = function(txe, space, x, y, z, shift, ctrl) {
 	case TXE.DRAGSTART :
 		var txr = TXR.HIT;
 		if (ctrl) {
-			space.actionSpawnRelation(this, x, y);
+			space.actionSpawnRelation(this, p);
 			return txr | TXR.REDRAW;
 		}
 		if (z > 0) {
@@ -3462,11 +3440,11 @@ Note.prototype.transfix = function(txe, space, x, y, z, shift, ctrl) {
 
 		var srad = settings.scrollbarRadius;
 		var sbmx = settings.scrollbarMarginX;
-		if (this.scrolly >= 0 && Math.abs(x - this.zone.p2.x + srad + sbmx) <= srad + 1)  {
+		if (this.scrolly >= 0 && abs(p.x - this.zone.p2.x + srad + sbmx) <= srad + 1)  {
 			space.actionScrollY(this, y, this.scrolly);
 		} else {
 			/* todo pointify */
-			space.actionIDrag(this, x - this.zone.p1.x, y - this.zone.p1.y);
+			space.actionIDrag(this, p.sub(this.zone.p1));
 		}
 		return txr;
 	case TXE.CLICK :
@@ -3480,12 +3458,12 @@ Note.prototype.transfix = function(txe, space, x, y, z, shift, ctrl) {
 			txr |= TXR.REDRAW;
 		}
 
-		var ox = x - this.zone.p1.x;
-		var oy = y - this.zone.p1.y + (this.scrolly > 0 ? this.scrolly : 0);
-		var p = this.paraAtY(oy);
-		if (p) {
+		var ox = p.x - this.zone.p1.x;
+		var oy = p.y - this.zone.p1.y + (this.scrolly > 0 ? this.scrolly : 0);
+		var para = this.paraAtY(oy);
+		if (para) {
 			var editor = System.editor;
-			editor.caret.setFromXY(p, ox - p.x, oy - p.y);
+			editor.caret.setFromXY(para, ox - para.x, oy - para.y);
 			editor.caret.show();
 			txr |= TXR.REDRAW;
 		}
@@ -3623,7 +3601,7 @@ Note.prototype.draw = function(space) {
 	if (this._canvasActual) {
 		/* buffer hit */
 		space.canvas.getContext("2d").drawImage(
-			bcanvas, this.zone.p1.x + space.pox, this.zone.p1.y + space.poy
+			bcanvas, this.zone.p1.x + space.pan.x, this.zone.p1.y + space.pan.y
 		);
 		return;
 	}
@@ -3750,7 +3728,8 @@ Note.prototype.draw = function(space) {
 	Note_bevel(cx, w, h, 0.5, settings.noteOuterRadius);
 	cx.stroke(); 
 	this._canvasActual = true;
-	space.canvas.getContext("2d").drawImage(bcanvas, this.zone.p1.x + space.pox, this.zone.p1.y + space.poy);
+	space.canvas.getContext("2d").drawImage(
+		bcanvas, this.zone.p1.x + space.pan.x, this.zone.p1.y + space.pan.y);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -3787,7 +3766,8 @@ function Label(js, id, p1) {
 	this.bcanvas = document.createElement("canvas");
 	this._canvasActual = false;
 	if (typeof(this.zone.p2.x) === "undefined")  {
-		throw new Error("todo");
+		debug("fixing Label zone");
+		this.zone = new Rect(this.zone.p1, this.zone.p1.add(this.dtree.width, this.dtree.height));
 	}
 	System.repository.addItem(this, true);
 }
@@ -3797,10 +3777,10 @@ Label.prototype.removed = function() {
 	/* nothing */
 }
 
-/* mouse hovers at x/y 
+/* An event happened at p.
  * returns transfix code
  */
-Label.prototype.transfix = function(txe, space, x, y, z, shift, ctrl) {
+Label.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 	if (!this.zone.within(x, y)) return 0;
 	switch(txe) {
 	case TXE.HOVER :
@@ -3809,7 +3789,7 @@ Label.prototype.transfix = function(txe, space, x, y, z, shift, ctrl) {
 	case TXE.DRAGSTART :
 		var txr = TXR.HIT;
 		if (ctrl) {
-			space.actionSpawnRelation(this, x, y);
+			space.actionSpawnRelation(this, p);
 			return txr | TXR.REDRAW;
 		}
 		if (z > 0) {
@@ -3821,7 +3801,7 @@ Label.prototype.transfix = function(txe, space, x, y, z, shift, ctrl) {
 			txr |= TXR.REDRAW;
 		}
 
-		space.actionIDrag(this, x - this.zone.p1.x, y - this.zone.p1.y);
+		space.actionIDrag(this, p.sub(this.zone.p1));
 		return txr;
 	case TXR.CLICK: 
 		var txr = TXR.HIT;
@@ -3833,13 +3813,14 @@ Label.prototype.transfix = function(txe, space, x, y, z, shift, ctrl) {
 			space.setFoci(this);
 			txr |= TXR.REDRAW;
 		}
-		var ox = x - this.zone.p1.x;
-		/* todo, lavel has scrolly?? */
-		var oy = y - this.zone.p1.y + (this.scrolly > 0 ? this.scrolly : 0);
-		var p = this.paraAtY(oy);
-		if (p) {
+		// todo op 
+		var ox = p.x - this.zone.p1.x;
+		/* todo, label has scrolly?? */
+		var oy = p.y - this.zone.p1.y + (this.scrolly > 0 ? this.scrolly : 0);
+		var para = this.paraAtY(oy);
+		if (para) {
 			var editor = System.editor;
-			editor.caret.setFromXY(p, ox - p.x, oy - p.y);
+			editor.caret.setFromXY(para, ox - para.x, oy - para.y);
 			editor.caret.show();
 			txr |= TXR.REDRAW;
 		}
@@ -3867,28 +3848,28 @@ Label.prototype.jsonfy = function() {
 
 /* sets the zone the label is 
  * also determines fontsize indirectly 
- * returns true if something changed */
- 
-// todo, add allign paramter
-Label.prototype.setZone = function(zone) {
+ * returns true if something changed 
+ *
+ * zone  ... a rectangle
+ * align ... compass point
+ */
+Label.prototype.setZone = function(zone, align) {
 	if (this.zone.eq(zone)) return false;
 	var dtree = this.dtree;
 	var zh = zone.h;
 	var th = R(this.dtree.height * (1 + settings.bottombox));
 	var dfs = dtree.fontsize;
 	var fs = max(dfs * zh / th, 8);
-	var keepx2 = this.zone.p2.x == x2 ? x2 : Number.NAN;
-	this.zone.p1.set(zone.p1);
 	dtree.fontsize = fs;
 	dtree.flowWidth = -1;
-	if (keepx2 !== Number.NAN) {
-		this.zone.p1.x = keepx2 - (this.zone.w);
-		this.zone.p2.x = keepx2;
+	if (align === "ne" || align === "e" || align === "se") {
+		/* align right */
+		this.zone = new Rect(zone.p2.add(-this.dtree.width, -this.dtree.height), zone.p2);
+	} else {
+		/* align left */
+		this.zone = new Rect(zone.p1, zone.p1.add(this.dtree.width, -this.dtree.height));
 	}
 	this._canvasActual = false;
-	// todo other points??? , y2?
-//	this.x2 = x1 + dtree.width;	
-//	this.y2 = y1 + R(this.dtree.height * (1 + settings.bottombox));
 	return dfs !== fs;
 }
 
@@ -3907,8 +3888,9 @@ Label.prototype.paraAtY = function(y) {
 /* drops the cached canvas */
 Label.prototype.listen = function() {
 	this._canvasActual = false;
-	this.zone.w = this.dtree.width; /* todo, call width in dtree w as well */
-	this.zone.h = R(this.dtree.height * (1 + settings.bottombox));
+	this.zone = this.zone.resize(
+		this.dtree.width, 
+		R(this.dtree.height * (1 + settings.bottombox)));
 	/* end of listen-chain */
 }
 
@@ -3917,8 +3899,8 @@ Label.prototype.drawHandles = function(space) {
 	this._drawHandles(space, 170);
 }
 
-Label.prototype.checkItemCompass = function(x, y, rhs) { 
-	return this._checkItemCompass(x, y, 170);
+Label.prototype.checkItemCompass = function(p, rhs) { 
+	return this._checkItemCompass(p, 170);
 }
 
 /* draws the item
@@ -3929,7 +3911,7 @@ Label.prototype.draw = function(space) {
 	if (this._canvasActual) {
 		/* buffer hit */
 		space.canvas.getContext("2d").drawImage(
-			bcanvas, this.zone.p1.x + space.pox, this.zone.p1.y + space.poy);
+			bcanvas, this.zone.p1.x + space.pan.x, this.zone.p1.y + space.pan.y);
 		return;
 	}
 	var w = this.zone.w;
@@ -3949,7 +3931,7 @@ Label.prototype.draw = function(space) {
 	cx.beginPath(); 
 	this._canvasActual = true;
 	space.canvas.getContext("2d").drawImage(
-		bcanvas, this.zone.p1.x + space.pox, this.zone.p1.y + space.poy);
+		bcanvas, this.zone.p1.x + space.pan.x, this.zone.p1.y + space.pan.y);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -4004,9 +3986,9 @@ Relation.prototype.jsonfy = function() {
 	return js;
 }
 
-/* returns transfix code
- */
-Relation.prototype.transfix = function(txe, space, x, y, z, shift, ctrl) {
+/* returns transfix code */
+Relation.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
+	// todo
 	return 0;
 }
 
@@ -4041,8 +4023,8 @@ Relation.prototype.drawHandles = function(space) {
 	this._drawHandles(space, 170);
 }
 
-Relation.prototype.checkItemCompass = function(x, y, rhs) { 
-	return this._checkItemCompass(x, y, 170);
+Relation.prototype.checkItemCompass = function(p, rhs) { 
+	return this._checkItemCompass(p, 170);
 }
 
 /* Calculates the zone of a relation for 
@@ -4067,7 +4049,7 @@ function Relation_calcZone(o, item1, item2_x, null_y) {
  */
 
  /* todo 2dize*/
-function Relation_drawLabeledArrow(space, item1, item2_x, null_y, mcanvas, light) {
+function Relation_drawLabeledArrow(space, item1, item2_p, mcanvas, light) {
 	var scanvas = space.canvas;
 	var cx = scanvas.getContext("2d");
 	var x1, y1, x2, y2;
@@ -4076,14 +4058,15 @@ function Relation_drawLabeledArrow(space, item1, item2_x, null_y, mcanvas, light
 	}
 	/* todo, beautify 2d */
 	var i1x1, i1y1, i1x2, i1y2;
-	i1x1 = item1.zone.p1.x + space.pox + 0.5;
-	i1y1 = item1.zone.p1.y + space.poy + 0.5;
-	i1x2 = item1.zone.p2.x + space.pox + 0.5;
-	i1y2 = item1.zone.p2.y + space.poy + 0.5;
+	i1x1 = item1.zone.p1.x + space.pan.x + 0.5;
+	i1y1 = item1.zone.p1.y + space.pan.y + 0.5;
+	i1x2 = item1.zone.p2.x + space.pan.x + 0.5;
+	i1y2 = item1.zone.p2.y + space.pan.y + 0.5;
 
-	if (null_y) {
-		x2 = item2_x + space.pox + 0.5;
-		y2 = null_y  + space.poy + 0.5;
+	if (item2_p.type === "point") {
+		// todo
+		x2 = item2_p.x + space.pan.x + 0.5;
+		y2 = item2_p.y + space.pan.y + 0.5;
 		/* find quadrant */
 		var im = 0;
 		if (x2 < i1x1) { x1 = i1x1; }
@@ -4107,10 +4090,10 @@ function Relation_drawLabeledArrow(space, item1, item2_x, null_y, mcanvas, light
 		}
 		var i2x1, i2y1, i2x2, i2y2;
 		
-		i2x1 = it2.zone.p1.x + space.pox + 0.5;
-		i2y1 = it2.zone.p1.y + space.poy + 0.5;
-		i2x2 = it2.zone.p2.x + space.pox + 0.5;
-		i2y2 = it2.zone.p2.y + space.poy + 0.5;			
+		i2x1 = it2.zone.p1.x + space.pan.x + 0.5;
+		i2y1 = it2.zone.p1.y + space.pan.y + 0.5;
+		i2x2 = it2.zone.p2.x + space.pan.x + 0.5;
+		i2y2 = it2.zone.p2.y + space.pan.y + 0.5;			
 
 		if (i2x1 > i1x2) { 
 			/* 2 is clearly to the right */
@@ -4506,13 +4489,13 @@ Repository.prototype.eraseLocalStorage = function() {
 }
 
 /* shoots throw x/y and asks every item that intersects if it feels reponsible */ 
-Repository.prototype.transfix = function(txe, space,  x, y, shift, ctrl) {
+Repository.prototype.transfix = function(txe, space, p, shift, ctrl) {
 	var zidx  = this.zidx;
 	var items = this.items;
 	var fx = 0;
 	for(var z = 0, zlen = zidx.length; z < zlen; z++) {
 		var it = items[zidx[z]];
-		fx |= it.transfix(txe, space, x, y, z, shift, ctrl);
+		fx |= it.transfix(txe, space, p, z, shift, ctrl);
 		if (fx & TXR.HIT) break;
 	}
 	return fx;	
@@ -4529,8 +4512,7 @@ Repository.prototype.exportToJString = function() {
 		jitems[id] = items[id].jsonfy();
 	}
 	js.z = this.zidx;
-	js.pox = System.space.pox;
-	js.poy = System.space.poy;
+	js.pan = System.space.pan.jsonfy();
 	return JSON.stringify(js, null, 1);
 }
 
@@ -4598,7 +4580,8 @@ Repository.prototype.importFromJString = function(str) {
 	this._noonlocks = false;
 
 	System.space.setFoci(null);
-	this.savePoxy(System.space.pox = js.pox || 0, System.space.poy = js.poy || 0);
+	System.space.pan = js.pan ? Point.jnew(js.pan) : new Point(0, 0);
+	this.savePan(System.space.pan);
 }
 
 Repository.prototype._newItemID = function() {
@@ -4673,16 +4656,15 @@ Repository.prototype.updateItem = function(item) {
 }
 
 
-/* loads panning offsets and puts them into o.pox and o.poy */
-Repository.prototype.getPoxy = function(o) {
-	o.pox = parseInt(window.localStorage.getItem("pox")) || 0;
-	o.poy = parseInt(window.localStorage.getItem("poy")) || 0;
+/* loads panning offsets  */
+Repository.prototype.getPan = function() {
+	var js = window.localStorage.getItem("pan");
+	return js ? Point.jnew(js) : new Point(0, 0);
 }
 
-Repository.prototype.savePoxy = function(pox, poy) {
+Repository.prototype.savePan = function(pan) {
 	if (!this._nosave) {
-		window.localStorage.setItem("pox", pox);
-		window.localStorage.setItem("poy", poy);		
+		window.localStorage.setItem("pan", pan.jsonfy());
 	}
 }
 
