@@ -286,7 +286,7 @@ function Point(p, y) {
 	}
 	this.x = p;
 	this.y = y;
-	this.type = "point"; // todo needed?
+	this.type = "point";
 	Object.freeze(this);
 }
 
@@ -348,7 +348,7 @@ function Rect(r1, p2) {
 		this.p2 = p2;
 	}
 	if (this.p1.x > this.p2.x || this.p1.y > this.p2.y) { throw new Error("not a rectangle."); }
-	this.type = "rect"; // todo needed?
+	this.type = "rect";
 	Object.freeze(this);
 }
 
@@ -365,22 +365,20 @@ Rect.prototype.jsonfy = function() {
 /* returns a rect moved by a point or x/y */
 Rect.prototype.add = function(px, y) {
 	return arguments.length === 1 ?
-		new Rect(this.p1.add(px), this.p2.add(px)) :  // todosimple?
+		new Rect(this.p1.add(px),    this.p2.add(px)) : 
 		new Rect(this.p1.add(px, y), this.p2.add(px, y));
 }
 
 Rect.prototype.sub = function(p) {
 	return arguments.length === 1 ?
-		new Rect(this.p1.sub(px), this.p2.sub(px)) : // todosimple?
+		new Rect(this.p1.sub(px),    this.p2.sub(px)) : 
 		new Rect(this.p1.sub(px, y), this.p2.sub(px, y));
 }
 
-/* returns true if x/y is within this rect */
-/* todo, pointify */
-Rect.prototype.within = function(px, y) {
-	return arguments.length === 1 ?
-		(px.x >= this.p1.x && px.y >= this.p1.y && px.x <= this.p2.x && px.y <= this.p2.y) :
-		(px   >= this.p1.x &&    y >= this.p1.y && px   <= this.p2.x &&    y <= this.p2.y);
+/* returns true if point is within this rect */
+Rect.prototype.within = function(p) {
+	return p.x >= this.p1.x && p.y >= this.p1.y && 
+	       p.x <= this.p2.x && p.y <= this.p2.y;
 }
 
 /* returns a rectangle with same p1 but size w/h or point */
@@ -540,9 +538,9 @@ Marker.prototype.getXY = function() {
 	
 /* sets the marker to position closest to x, y from flowbox(para) */
 /* todo pointify */
-Marker.prototype.setFromXY = function(flowbox, x, y) {
+Marker.prototype.setFromPoint = function(flowbox, p) {
 	if (flowbox.type != "paragraph") { throw new Error("invalid flowbox."); }
-	var pinfo = this._getPinfoAtXY(flowbox, x, y);
+	var pinfo = this._getPinfoAtXY(flowbox, p.x, p.y);
 	var l = pinfo[this._pli];
 	var c = l[this._pci]; // x,y is in this chunk
 	
@@ -552,7 +550,7 @@ Marker.prototype.setFromXY = function(flowbox, x, y) {
 		this._offset = 0;
 		return;
 	}
-	var dx   = x - c.x;
+	var dx   = p.x - c.x;
 	Measure.font = flowbox.anchestor("dtree").font;
 	var t    = c.text;
 	var tlen = t.length;
@@ -813,7 +811,7 @@ Editor.prototype.updateCaret = function() {
 	var caret = this.caret;
 	if (caret.save) {
 		/* erase the old caret */
-		cx.putImageData(caret.save, caret.sx - 1, caret.sy - 1);
+		cx.putImageData(caret.save, caret.sp.x - 1, caret.sp.y - 1);
 		caret.save = null;
 	} 
 		
@@ -821,18 +819,14 @@ Editor.prototype.updateCaret = function() {
 		caret.getXY();
 		var it = caret.item;
 		var sy = it.scrolly;
-		var x,y; // todo
-		x = System.space.pan.x + it.zone.p1.x + caret.x;
-		y = System.space.pan.y + it.zone.p1.y + caret.y - (sy > 0 ? sy : 0);		
+		var sp = caret.sp = System.space.pan.add(
+			it.zone.p1.x + caret.x,
+			it.zone.p1.y + caret.y - (sy > 0 ? sy : 0));
 		var th = R(it.dtree.fontsize * (1 + settings.bottombox));
 		
-		caret.save = cx.getImageData(
-			(caret.sx = x) - 1, 
-			(caret.sy = y) - 1, 
-			caret.sh = 3, 
-			caret.sw = th + 1);
+		caret.save = cx.getImageData(sp.x - 1, sp.y - 1, 3, th + 1);
 		cx.fillStyle = "black";
-		cx.fillRect(x, y, 1, th);
+		cx.fillRect(sp.x, sp.y, 1, th);
 	}
 }	
 
@@ -1514,35 +1508,34 @@ Hex.fillText = function(cx, text, p, phi, rad) {
 	cx.setTransform(1, 0, 0, 1, 0, 0);
 }
 
-/* returns true if x/y is in hexagon */
-Hex.within = function(x, y, r) {
+/* returns true if point is in hexagon wit radius r */
+Hex.within = function(p, r) {
 	var rc = r * Hex.c6;
-	var yh = y * Hex.t6;
-
+	var yh = p.y * Hex.t6;
+	// todo invert
 	return !(
-		y < - rc || y > rc ||
-	    x - r >= -yh ||
-		x + r <= -yh ||
-		x - r >=  yh ||
-		x + r <=  yh
+		p.y < - rc || p.y > rc ||
+	    p.x - r >= -yh ||
+		p.x + r <= -yh ||
+		p.x - r >=  yh ||
+		p.x + r <=  yh
 	);
 }
 
-/* returns true if x/y is in hexagon */
-Hex.withinSlice = function(x, y, r, h) {
+/* returns true if point is in hexagon slice */
+Hex.withinSlice = function(p, r, h) {
 	var w  = r - (r * Hex.c6 - h) * Hex.t6;
 	var rc = r * Hex.c6;
-	var yh = y * Hex.t6;
+	var yh = p.y * Hex.t6;
 	return !(
-		y < -h || 
-		y > 0 ||
-	    x < -yh ||
-		x - 2 * w > yh
+		p.y < -h || 
+		p.y > 0 ||
+	    p.x < -yh ||
+		p.x - 2 * w > yh
 	);
 }
 
-
-/* makes a double hex with 6 segments and center */
+/* makes a double hexagon with 6 segments and center */
 /* it kinda looks like a flower. */
 Hex.makeFlowerPath = function(cx, x, y, r, ri, segs) {
 	var r2  = R(r / 2);
@@ -1757,18 +1750,15 @@ Hexmenu.prototype.draw = function() {
 
 Hexmenu.prototype._getMousepos = function(p) {
 	var dp = p.sub(this.p);
-	var dx = dp.x; // todo
-	var dy = dp.y;
-		
-	if (!Hex.within(dx, dy, this.r)) {
+	if (!Hex.within(dp, this.r)) {
 		/* out of menu */
 		return this.mousepos = -1;
-	} else if (Hex.within(dx, dy, this.ri)) {
+	} else if (Hex.within(dp, this.ri)) {
 		return this.mousepos = 0;
 	} else {
-		var lor = dx <= -dy * Hex.t6;
-		var rol = dx >= +dy * Hex.t6;
-		var aom = dy <= 0;
+		var lor = dp.x <= -dp.y * Hex.t6; // left of right diagonal
+		var rol = dp.x >=  dp.y * Hex.t6; // right of left diagonal
+		var aom = dp.y <= 0;              // above of middle line
 		if (lor && rol)        return this.mousepos = 1;
 		else if (!lor && aom)  return this.mousepos = 2;
 		else if (rol && !aom)  return this.mousepos = 3;
@@ -3212,9 +3202,10 @@ Item.prototype.setItemMenu = function(menu, pan) {
 
 /* returns if coords are within the item menu */
 Item.prototype.withinItemMenu = function(p) {
-	// todo
-	return Hex.withinSlice(p.x - this.zone.p1.x, p.y - this.zone.p1.y - 1, 
-		settings.itemMenuInnerRadius, settings.itemMenuSliceHeight);
+	return Hex.withinSlice(
+		p.sub(this.zone.p1),
+		settings.itemMenuInnerRadius, 
+		settings.itemMenuSliceHeight);
 }
 
 /* returns the compass of the resize handles of an item 
@@ -3465,12 +3456,13 @@ Note.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 			txr |= TXR.REDRAW;
 		}
 
-		var ox = p.x - this.zone.p1.x;
-		var oy = p.y - this.zone.p1.y + (this.scrolly > 0 ? this.scrolly : 0);
-		var para = this.paraAtY(oy);
+		var op = new Point(
+			p.x - this.zone.p1.x, 
+			p.y - this.zone.p1.y + (this.scrolly > 0 ? this.scrolly : 0));
+		var para = this.paraAtY(op.y);
 		if (para) {
 			var editor = System.editor;
-			editor.caret.setFromXY(para, ox - para.x, oy - para.y);
+			editor.caret.setFromPoint(para, op.sub(para.x, para.y));
 			editor.caret.show();
 			txr |= TXR.REDRAW;
 		}
@@ -3816,14 +3808,11 @@ Label.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 			space.setFoci(this);
 			txr |= TXR.REDRAW;
 		}
-		// todo op 
-		var ox = p.x - this.zone.p1.x;
-		/* todo, label has scrolly?? */
-		var oy = p.y - this.zone.p1.y + (this.scrolly > 0 ? this.scrolly : 0);
-		var para = this.paraAtY(oy);
+		var op = p.sub(this.zone.p1);
+		var para = this.paraAtY(op.y);
 		if (para) {
 			var editor = System.editor;
-			editor.caret.setFromXY(para, ox - para.x, oy - para.y);
+			editor.caret.setFromXY(para, op.sub(para.x, para.y));
 			editor.caret.show();
 			txr |= TXR.REDRAW;
 		}
