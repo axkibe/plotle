@@ -1984,7 +1984,6 @@ Space.prototype.redraw = function() {
 		this._itemmenu.draw();
 		break;
 	case ACT.RBIND :
-		cx.beginPath(); /* todo remove? */
 		if (ia.item2) {
 			Relation_drawLabeledArrow(this, ia.item, ia.item2, null, true);
 		} else {
@@ -2288,7 +2287,7 @@ Space.prototype.dragmove = function(p, shift, ctrl) {
 	}
 	case ACT.SCROLLY:
 	{
-		var dy = y - iaction.sy;
+		var dy = pp.y - iaction.sy;
 		var it = iaction.item;
 		var h = it.zone.h;
 		var scrollRange = h - settings.scrollbarMarginY * 2;
@@ -2315,8 +2314,8 @@ Space.prototype.dragmove = function(p, shift, ctrl) {
 	}
 	case ACT.RBIND :
 		iaction.item2 = null;
-		this.repository.transfix(TXE.RBINDHOVER, this, p, shift, ctrl);
-		iaction.smp = p;
+		this.repository.transfix(TXE.RBINDHOVER, this, pp, shift, ctrl);
+		iaction.smp = pp;
 		this.redraw();
 		return true;
 	default :
@@ -3371,11 +3370,7 @@ Note.prototype.constructor = Note;
  */
 function Note(js, id, zone) {
 	if (js) {
-		if (js.x1) { /* todold */
-			this.zone = new Rect(new Point(js.x1, js.y1), new Point(js.x2, js.y2));
-		} else {
-			this.zone = Rect.jnew(js.z);
-		}
+		this.zone = Rect.jnew(js.z);
 		this.dtree = new DTree(js.d, this);
 	} else {
 		this.zone = zone;
@@ -3453,7 +3448,7 @@ Note.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 		var srad = settings.scrollbarRadius;
 		var sbmx = settings.scrollbarMarginX;
 		if (this.scrolly >= 0 && abs(p.x - this.zone.p2.x + srad + sbmx) <= srad + 1)  {
-			space.actionScrollY(this, y, this.scrolly);
+			space.actionScrollY(this, p.y, this.scrolly);
 		} else {
 			/* todo pointify */
 			space.actionIDrag(this, p.sub(this.zone.p1));
@@ -3763,11 +3758,7 @@ Label.prototype.constructor = Note;
  */
 function Label(js, id, p1) {
 	if (js) {
-		if (js.x1) { /* todold */
-			this.zone = new Rect(new Point(js.x1, js.y1), new Point(js.x2, js.y2));
-		} else {
-			this.zone = Rect.jnew(js.z);
-		}
+		this.zone = Rect.jnew(js.z);
 		this.dtree = new DTree(js.d, this);
 	} else {
 		this.zone = new Rect(p1, p1.add(100, 50));
@@ -3778,8 +3769,8 @@ function Label(js, id, p1) {
 	this.bcanvas = document.createElement("canvas");
 	this._canvasActual = false;
 	if (typeof(this.zone.p2.x) === "undefined")  {
-		debug("fixing Label zone");
-		this.zone = new Rect(this.zone.p1, this.zone.p1.add(this.dtree.width, this.dtree.height));
+		throw new Error("Invalid label");
+		//this.zone = new Rect(this.zone.p1, this.zone.p1.add(this.dtree.width, this.dtree.height));
 	}
 	System.repository.addItem(this, true);
 }
@@ -4229,7 +4220,7 @@ Relation.prototype.draw = function(space) {
 	var it2 = space.repository.items[this.i2id];
 	if (this._canvasActual) {
 		/* buffer hit */
-		Relation_drawLabeledArrow(space, it1, it2, null, bcanvas, false);
+		Relation_drawLabeledArrow(space, it1, it2, bcanvas, false);
 		return;
 	}
 	var cx = bcanvas.getContext("2d");
@@ -4238,7 +4229,7 @@ Relation.prototype.draw = function(space) {
 	bcanvas.width  = dtree.width;
 	dtree.drawCanvas(bcanvas, space.selection, 0, 0, 0);
 	this._canvasActual = true;
-	Relation_drawLabeledArrow(space, it1, it2, null, bcanvas, false);
+	Relation_drawLabeledArrow(space, it1, it2, bcanvas, false);
 }
 
 /* something happend an item onlooked */
@@ -4712,9 +4703,16 @@ var demoRepository = (<r><![CDATA[
  "items": {
   "6": {
    "t": "label",
-   "x1": 977,
-   "y1": 977,
-   "y2": 987,
+   "z": {
+    "p1": {
+     "x": 977,
+     "y": 977
+    },
+    "p2": {
+     "x": 1035,
+     "y": 985
+    }
+   },
    "d": {
     "fs": 8,
     "d": [
@@ -4722,24 +4720,18 @@ var demoRepository = (<r><![CDATA[
     ]
    }
   },
-  "2": {
-   "t": "label",
-   "x1": -64,
-   "y1": -64,
-   "y2": 60,
-   "d": {
-    "fs": 101.73604079684021,
-    "d": [
-     "Meshcraft"
-    ]
-   }
-  },
   "12": {
    "t": "note",
-   "x1": 702,
-   "y1": 44,
-   "x2": 916,
-   "y2": 94,
+   "z": {
+    "p1": {
+     "x": 702,
+     "y": 44
+    },
+    "p2": {
+     "x": 916,
+     "y": 94
+    }
+   },
    "d": {
     "fs": 13,
     "d": [
@@ -4749,10 +4741,16 @@ var demoRepository = (<r><![CDATA[
   },
   "20": {
    "t": "note",
-   "x1": 702,
-   "y1": 101,
-   "x2": 915,
-   "y2": 156,
+   "z": {
+    "p1": {
+     "x": 702,
+     "y": 101
+    },
+    "p2": {
+     "x": 915,
+     "y": 156
+    }
+   },
    "d": {
     "fs": 13,
     "d": [
@@ -4762,10 +4760,16 @@ var demoRepository = (<r><![CDATA[
   },
   "13": {
    "t": "note",
-   "x1": 922,
-   "y1": 43,
-   "x2": 1139,
-   "y2": 92,
+   "z": {
+    "p1": {
+     "x": 922,
+     "y": 43
+    },
+    "p2": {
+     "x": 1139,
+     "y": 92
+    }
+   },
    "d": {
     "fs": 13,
     "d": [
@@ -4775,10 +4779,16 @@ var demoRepository = (<r><![CDATA[
   },
   "21": {
    "t": "note",
-   "x1": 925,
-   "y1": 100,
-   "x2": 1139,
-   "y2": 154,
+   "z": {
+    "p1": {
+     "x": 925,
+     "y": 100
+    },
+    "p2": {
+     "x": 1139,
+     "y": 154
+    }
+   },
    "d": {
     "fs": 13,
     "d": [
@@ -4788,10 +4798,16 @@ var demoRepository = (<r><![CDATA[
   },
   "11": {
    "t": "note",
-   "x1": 702,
-   "y1": -12,
-   "x2": 915,
-   "y2": 37,
+   "z": {
+    "p1": {
+     "x": 702,
+     "y": -12
+    },
+    "p2": {
+     "x": 915,
+     "y": 37
+    }
+   },
    "d": {
     "fs": 13,
     "d": [
@@ -4801,10 +4817,16 @@ var demoRepository = (<r><![CDATA[
   },
   "9": {
    "t": "note",
-   "x1": 921,
-   "y1": -12,
-   "x2": 1139,
-   "y2": 38,
+   "z": {
+    "p1": {
+     "x": 921,
+     "y": -12
+    },
+    "p2": {
+     "x": 1139,
+     "y": 38
+    }
+   },
    "d": {
     "fs": 13,
     "d": [
@@ -4814,10 +4836,16 @@ var demoRepository = (<r><![CDATA[
   },
   "3": {
    "t": "note",
-   "x1": 976,
-   "y1": 313,
-   "x2": 1156,
-   "y2": 501,
+   "z": {
+    "p1": {
+     "x": 976,
+     "y": 313
+    },
+    "p2": {
+     "x": 1156,
+     "y": 501
+    }
+   },
    "d": {
     "fs": 13,
     "d": [
@@ -4835,16 +4863,22 @@ var demoRepository = (<r><![CDATA[
     ]
    }
   },
-  "8": {
-   "t": "note",
-   "x1": 186,
-   "y1": 172,
-   "x2": 341,
-   "y2": 212,
+  "2": {
+   "t": "label",
+   "z": {
+    "p1": {
+     "x": -64,
+     "y": -64
+    },
+    "p2": {
+     "x": 467,
+     "y": 60
+    }
+   },
    "d": {
-    "fs": 13,
+    "fs": 101.36746822985607,
     "d": [
-     "item network editor"
+     "Meshcraft"
     ]
    }
   },
@@ -4858,12 +4892,31 @@ var demoRepository = (<r><![CDATA[
      "relates to"
     ]
    }
+  },
+  "8": {
+   "t": "note",
+   "z": {
+    "p1": {
+     "x": 201,
+     "y": 152
+    },
+    "p2": {
+     "x": 356,
+     "y": 192
+    }
+   },
+   "d": {
+    "fs": 13,
+    "d": [
+     "item network editor"
+    ]
+   }
   }
  },
  "z": [
   8,
-  23,
   2,
+  23,
   3,
   9,
   11,
@@ -4873,7 +4926,9 @@ var demoRepository = (<r><![CDATA[
   12,
   6
  ],
- "pox": 78,
- "poy": 67
+ "pan": {
+  "x": 96,
+  "y": 98
+ }
 }
 ]]></r>).toString();
