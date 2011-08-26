@@ -537,7 +537,6 @@ Marker.prototype.getXY = function() {
 }
 	
 /* sets the marker to position closest to x, y from flowbox(para) */
-/* todo pointify */
 Marker.prototype.setFromPoint = function(flowbox, p) {
 	if (flowbox.type != "paragraph") { throw new Error("invalid flowbox."); }
 	var pinfo = this._getPinfoAtXY(flowbox, p.x, p.y);
@@ -1512,14 +1511,9 @@ Hex.fillText = function(cx, text, p, phi, rad) {
 Hex.within = function(p, r) {
 	var rc = r * Hex.c6;
 	var yh = p.y * Hex.t6;
-	// todo invert
-	return !(
-		p.y < - rc || p.y > rc ||
-	    p.x - r >= -yh ||
-		p.x + r <= -yh ||
-		p.x - r >=  yh ||
-		p.x + r <=  yh
-	);
+	return	p.y >= -rc && p.y <= rc &&
+	        p.x - r < -abs(yh) &&
+			p.x + r >  abs(yh);
 }
 
 /* returns true if point is in hexagon slice */
@@ -1527,12 +1521,8 @@ Hex.withinSlice = function(p, r, h) {
 	var w  = r - (r * Hex.c6 - h) * Hex.t6;
 	var rc = r * Hex.c6;
 	var yh = p.y * Hex.t6;
-	return !(
-		p.y < -h || 
-		p.y > 0 ||
-	    p.x < -yh ||
-		p.x - 2 * w > yh
-	);
+	return p.y >=  -h &&         p.y <= 0 &&
+	       p.x >= -yh && p.x - 2 * w <= yh;
 }
 
 /* makes a double hexagon with 6 segments and center */
@@ -1878,35 +1868,20 @@ Edgemenu.prototype.draw = function(x, y) {
 }
 
 Edgemenu.prototype._getMousepos = function(p) {
-	var x = p.x; // todo
-	var y = p.y;
-
 	var canvas = System.canvas;
 	var h  = this.height;
 	var ty = canvas.height;
-	if (y < ty - h) {
-		return this.mousepos = -1;
-	}
+	if (p.y < ty - h) return this.mousepos = -1;
 	var tx = R(canvas.width / 2) + 0.5;
 	var w  = this.width;
 	var bw = this.bwidth;
 	var ew = R(h * Hex.t6);
 	var xl = tx - w - ew;
 	var xr = tx + w + ew;
-	var tx = R(canvas.width / 2) + 0.5;
-	
-	if ((x - xl <= -(y - ty) * Hex.t6)) {
-		return this.mousepos = -1;
-	}
-	if ((x - xr >= +(y - ty) * Hex.t6)) {
-		return this.mousepos = -1;
-	}
-	if ((x - (xl + bw + ew) <= +(y - ty) * Hex.t6)) {
-		return this.mousepos = 1;
-	}
-	if ((x - (xr - bw - ew) >= -(y - ty) * Hex.t6)) {
-		return this.mousepos = 2;
-	}
+	if ((p.x - xl <= -(p.y - ty) * Hex.t6)) return this.mousepos = -1;
+	if ((p.x - xr >=  (p.y - ty) * Hex.t6)) return this.mousepos = -1;
+	if ((p.x - (xl + bw + ew) <=  (p.y - ty) * Hex.t6)) return this.mousepos = 1;
+	if ((p.x - (xr - bw - ew) >= -(p.y - ty) * Hex.t6)) return this.mousepos = 2;
 	return this.mousepos = 0;
 }
 
@@ -1963,7 +1938,7 @@ Space.prototype.redraw = function() {
 		var it = items[zidx[i]]; // todo shorten
 		it.draw(this);
 	}
-	if (this.foci) this.foci.drawHandles(this);
+	if (this.focus) this.focus.drawHandles(this);
 	
 	var ia = this.iaction;
 	switch(ia.act) {
@@ -1986,7 +1961,7 @@ Space.prototype.redraw = function() {
 
 /* user pressed a special key */
 Space.prototype.specialKey = function(keyCode, shift, ctrl) {
-	var rv = System.editor.specialKey(this.foci, keyCode, shift, ctrl);
+	var rv = System.editor.specialKey(this.focus, keyCode, shift, ctrl);
 	if (rv) {
 		this.redraw();
 	}
@@ -1994,14 +1969,14 @@ Space.prototype.specialKey = function(keyCode, shift, ctrl) {
 
 /* user entered normal text (one character or more) */
 Space.prototype.input = function(text) {
-	if (System.editor.input(this.foci, text)) {
+	if (System.editor.input(this.focus, text)) {
 		this.redraw();		
 	}
 }
 
 /* the canvas/space got focus from the system*/
 Space.prototype.systemFocus = function() {
-	if (!this.foci) {
+	if (!this.focus) {
 		return
 	}
 	System.editor.caret.show();
@@ -2015,7 +1990,7 @@ Space.prototype.systemBlur = function() {
 
 /* sets the focussed item or loses it if null*/
 Space.prototype.setFoci = function(item) {
-	this.foci = item;
+	this.focus = item;
 	var caret = System.editor.caret;
 	if (item) {
 		caret.set(item, item.dtree.first.first, 0);
@@ -2060,15 +2035,15 @@ Space.prototype.mousehover = function(p) {
 		break;	
 	}
 
-	if (this.foci) {
+	if (this.focus) {
 		/* todo move into items */
-		if (this.foci.withinItemMenu(pp)) {
+		if (this.focus.withinItemMenu(pp)) {
 			System.setCursor("pointer");
 			if (redraw) this.redraw();
 			return;
 		}
 
-		if ((com = this.foci.checkItemCompass(pp))) {
+		if ((com = this.focus.checkItemCompass(pp))) {
 			System.setCursor(com + "-resize");
 			if (redraw) this.redraw();
 			return;
@@ -2126,8 +2101,8 @@ Space.prototype.dragstart = function(p, shift, ctrl) {
 	var editor  = System.editor;
 	var iaction = this.iaction;
 	
-	if (this.foci && this.foci.withinItemMenu(pp)) {
-		this.actionSpawnRelation(this.foci, pp);
+	if (this.focus && this.focus.withinItemMenu(pp)) {
+		this.actionSpawnRelation(this.focus, pp);
 		this.redraw();
 		return;
 	} 
@@ -2150,9 +2125,9 @@ Space.prototype.dragstart = function(p, shift, ctrl) {
 Space.prototype.click = function(p, shift, ctrl) {
 	var pp = p.sub(this.pan);
 
-	var foci = this.foci;
-	if (foci && foci.withinItemMenu(pp)) {
-		foci.setItemMenu(this._itemmenu, this.pan);
+	var focus = this.focus;
+	if (focus && focus.withinItemMenu(pp)) {
+		focus.setItemMenu(this._itemmenu, this.pan);
 		this.iaction.act = ACT.IMENU;
 		this.redraw();
 		return;
@@ -2571,7 +2546,7 @@ Space.prototype.mousedown = function(p) {
 		if (md >= 0) {
 			switch(md) {
 			case 1:
-				this.repository.removeItem(this.foci);
+				this.repository.removeItem(this.focus);
 				this.setFoci(null);
 				break;
 			}
@@ -2581,19 +2556,19 @@ Space.prototype.mousedown = function(p) {
 		break;
 	}
 	
-	if (this.foci) {
-		if (this.foci && this.foci.withinItemMenu(p)) {
+	if (this.focus) {
+		if (this.focus && this.focus.withinItemMenu(p)) {
 			if (redraw) this.redraw();
 			return MST.ATWEEN;
 		}
 		var com;
-		if ((com = this.foci.checkItemCompass(pp))) {
+		if ((com = this.focus.checkItemCompass(pp))) {
 			/* resizing */
 			iaction.act  = ACT.IRESIZE;
 			iaction.com  = com;
-			iaction.item = this.foci;
+			iaction.item = this.focus;
 			iaction.sp   = p;
-			iaction.siz  = this.foci.zone;
+			iaction.siz  = this.focus.zone;
 			System.setCursor(com + "-resize");
 			if (redraw) this.redraw();
 			return MST.DRAG;
@@ -3431,7 +3406,7 @@ Note.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 			space.repository.moveToTop(z);
 			txr |= TXR.REDRAW; /* todo full redraw */
 		}
-		if (space.foci != this) {
+		if (space.focus != this) {
 			space.setFoci(this);
 			txr |= TXR.REDRAW;
 		}
@@ -3451,7 +3426,7 @@ Note.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 			space.repository.moveToTop(z);
 			txr |= TXR.REDRAW; /* todo full redraw */
 		}
-		if (space.foci != this) {
+		if (space.focus != this) {
 			space.setFoci(this);
 			txr |= TXR.REDRAW;
 		}
@@ -3791,7 +3766,7 @@ Label.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 			space.repository.moveToTop(z);
 			txr |= TXR.REDRAW; /* todo full redraw */
 		}
-		if (space.foci != this) {
+		if (space.focus != this) {
 			space.setFoci(this);
 			txr |= TXR.REDRAW;
 		}
@@ -3804,7 +3779,7 @@ Label.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 			space.repository.moveToTop(z);
 			txr |= TXR.REDRAW; /* todo full redraw */
 		}
-		if (space.foci != this) {
+		if (space.focus != this) {
 			space.setFoci(this);
 			txr |= TXR.REDRAW;
 		}
@@ -3812,7 +3787,7 @@ Label.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 		var para = this.paraAtY(op.y);
 		if (para) {
 			var editor = System.editor;
-			editor.caret.setFromXY(para, op.sub(para.x, para.y));
+			editor.caret.setFromPoint(para, op.sub(para.x, para.y));
 			editor.caret.show();
 			txr |= TXR.REDRAW;
 		}
