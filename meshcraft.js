@@ -292,6 +292,9 @@ function Point(p, y) {
 
 /* Creates a point from json */
 Point.jnew = function(js) {
+	if (typeof(js.x) !== "number" || typeof(js.y) !== "number") {
+		throw new Error("Expected a number in JSON, but isn't");
+	}
 	return new Point(js.x, js.y);
 }
 
@@ -381,10 +384,23 @@ Rect.prototype.within = function(px, y) {
 }
 
 /* returns a rectangle with same p1 but size w/h or point */
-Rect.prototype.resize = function(pw, h) {
-	return arguments.length === 1 ?
-		new Rect(this.p1, this.p1.add(pw)) :   // todo, check if simplify
-		new Rect(this.p1, this.p1.add(pw, h));
+Rect.prototype.resize = function(w, h, align) {
+	var p1 = this.p1;
+	var p2 = this.p2;
+	
+	if (align === "w" || align === "sw" || align === "nw") {
+		p1 = new Point(p2.x - w, p1.y);
+	} else {
+		p2 = new Point(p1.x + w, p2.y);
+	}
+
+	if (align === "n" || align === "nw" || align === "ne") {
+		p1 = new Point(p1.y, p2.y - h);
+	} else {
+		p2 = new Point(p2.x, p1.y + h);
+	}
+	
+	return new Rect(p1, p2);
 }
 
 /* returns a rectangle with same size at position at p|x/y) */
@@ -1937,7 +1953,7 @@ function Space() {
 	};
 	
 	/* panning offset */
-	this.pan = this.repository.getPan();
+	this.pan = new Point(0, 0);
 	this.zoom = 1;
 }
 
@@ -2045,7 +2061,7 @@ Space.prototype.mousehover = function(p) {
 		}
 		break;
 	case ACT.IMENU :
-		redraw = redraw || this._itemmenu.mousehover(pp);
+		redraw = redraw || this._itemmenu.mousehover(p);
 		if (this._itemmenu.mousepos >= 0) {
 			/* mouse floated on item menu, no need to look further */
 			System.setCursor("default");
@@ -2118,7 +2134,6 @@ Space.prototype.actionRBindHover = function(item) {
 /* starts an operation with the mouse held down */
 Space.prototype.dragstart = function(p, shift, ctrl) {
 	var pp = p.sub(this.pan);
-	debug("dragstart", pp.x, pp.y);
 	var editor  = System.editor;
 	var iaction = this.iaction;
 	
@@ -2132,7 +2147,6 @@ Space.prototype.dragstart = function(p, shift, ctrl) {
 
 	if (!(tfx & TXR.HIT)) {
 		/* panning */
-		debug("panning");
 		iaction.act = ACT.PAN;
 		iaction.sp = pp;
 		System.setCursor("crosshair");
@@ -2239,24 +2253,24 @@ Space.prototype.dragmove = function(p, shift, ctrl) {
 		case "e"  : 
 		case "ne" :
 		case "se" :
-			x2 = max(iaction.siz.p2.x + x - iaction.sp.x, x1);
+			x2 = max(iaction.siz.p2.x + p.x - iaction.sp.x, x1);
 			break;
 		case "w"  :
 		case "nw" :
 		case "sw" :	
-			x1 = min(iaction.siz.p2.x + x - iaction.sp.x, x2);
+			x1 = min(iaction.siz.p1.x + p.x - iaction.sp.x, x2);
 			break;
 		}
 		switch (iaction.com) {
 		case "s"  : 
 		case "sw" :
 		case "se" :
-			y2 = max(iaction.siz.p2.y + y - iaction.sp.y, y1);
+			y2 = max(iaction.siz.p2.y + p.y - iaction.sp.y, y1);
 			break;
 		case "n"  : 
 		case "nw" :
 		case "ne" :
-			y1 = min(iaction.siz.p2.y + y - iaction.sp.y, y2);	
+			y1 = min(iaction.siz.p1.y + p.y - iaction.sp.y, y2);	
 			break;
 		}
 		redraw = it.setZone(new Rect(new Point(x1, y1), new Point(x2, y2)), iaction.com);  // todo
@@ -2584,7 +2598,7 @@ Space.prototype.mousedown = function(p) {
 			return MST.ATWEEN;
 		}
 		var com;
-		if ((com = this.foci.checkItemCompass(p))) {
+		if ((com = this.foci.checkItemCompass(pp))) {
 			/* resizing */
 			iaction.act  = ACT.IRESIZE;
 			iaction.com  = com;
@@ -3213,9 +3227,7 @@ Item.prototype.withinItemMenu = function(p) {
  *  32 16  8
  */
 Item.prototype._checkItemCompass = function(p, rhs) { 
-	if (rhs == 0) {
-		return;
-	}
+	if (rhs == 0) return;
 	var d  = settings.handleSize;         // inner distance
 	var d2 = settings.handleSize * 3 / 4; // outer distance
 	
@@ -3223,8 +3235,8 @@ Item.prototype._checkItemCompass = function(p, rhs) {
 	var n = p.y >= this.zone.p1.y - d2 && p.y <= this.zone.p1.y + d;
 	var e = p.x >= this.zone.p2.x - d  && p.x <= this.zone.p2.x + d2;
 	var s = p.y >= this.zone.p2.y - d  && p.y <= this.zone.p2.y + d2;
-	var w = p.x >= this.zone.p1.x - d2 && p.x <= this.zone.p1.x + d;
-	
+	var w = p.x >= this.zone.p1.x - d2 && p.x <= this.zone.p1.x + d;	
+
 	if (n) {
 		if (w && rhs & 128) { 
 			return "nw";
@@ -3484,11 +3496,11 @@ Note.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
  * e.g. it will refuse to go below minimum size.
  * returns true if something changed
  */
-Note.prototype.setZone = function(zone) {
+Note.prototype.setZone = function(zone, align) {
 	if (zone.w < settings.noteMinWidth || zone.h < settings.noteMinHeight) {
 		zone = zone.resize(
 			max(zone.w, settings.noteMinWidth),
-			max(zone.h, settings.noteMinHeight));
+			max(zone.h, settings.noteMinHeight), align);
 	}
 	if (this.zone.eq(zone)) return false;
 	this.zone = zone;
@@ -3569,8 +3581,8 @@ Note.prototype.drawHandles = function(space) {
 	return this._drawHandles(space, 255);
 }
 
-Note.prototype.checkItemCompass = function(x, y) { 
-	return this._checkItemCompass(x, y, 255);
+Note.prototype.checkItemCompass = function(p) { 
+	return this._checkItemCompass(p, 255);
 }
 
 /* draws a bevel 
@@ -3781,7 +3793,7 @@ Label.prototype.removed = function() {
  * returns transfix code
  */
 Label.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
-	if (!this.zone.within(x, y)) return 0;
+	if (!this.zone.within(p)) return 0;
 	switch(txe) {
 	case TXE.HOVER :
 		System.setCursor("default");
@@ -3860,17 +3872,19 @@ Label.prototype.setZone = function(zone, align) {
 	var th = R(this.dtree.height * (1 + settings.bottombox));
 	var dfs = dtree.fontsize;
 	var fs = max(dfs * zh / th, 8);
+	if (dfs === fs) return false;
 	dtree.fontsize = fs;
 	dtree.flowWidth = -1;
-	if (align === "ne" || align === "e" || align === "se") {
+	th = R(this.dtree.height * (1 + settings.bottombox));
+	if (align === "sw" || align === "w" || align === "nw") {
 		/* align right */
-		this.zone = new Rect(zone.p2.add(-this.dtree.width, -this.dtree.height), zone.p2);
+		this.zone = new Rect(zone.p2.add(-this.dtree.width, -th), zone.p2);
 	} else {
 		/* align left */
-		this.zone = new Rect(zone.p1, zone.p1.add(this.dtree.width, -this.dtree.height));
+		this.zone = new Rect(zone.p1, zone.p1.add(this.dtree.width, th));
 	}
 	this._canvasActual = false;
-	return dfs !== fs;
+	return true;
 }
 
 /* sets new position retaining height */
@@ -4063,7 +4077,7 @@ function Relation_drawLabeledArrow(space, item1, item2_p, mcanvas, light) {
 	i1x2 = item1.zone.p2.x + space.pan.x + 0.5;
 	i1y2 = item1.zone.p2.y + space.pan.y + 0.5;
 
-	if (item2_p.type === "point") {
+	if (item2_p && item2_p.type === "point") {
 		// todo
 		x2 = item2_p.x + space.pan.x + 0.5;
 		y2 = item2_p.y + space.pan.y + 0.5;
@@ -4084,10 +4098,7 @@ function Relation_drawLabeledArrow(space, item1, item2_p, mcanvas, light) {
 		}
 		System.setCursor("not-allowed");
 	} else {
-		var it2 = item2_x;
-		if (!item2_x) {
-			throw new Error("item2 missing");
-		}
+		var it2 = item2_p;
 		var i2x1, i2y1, i2x2, i2y2;
 		
 		i2x1 = it2.zone.p1.x + space.pan.x + 0.5;
@@ -4453,6 +4464,7 @@ Repository.prototype.loadLocalStorage = function() {
 		return;
 	}
 	
+	System.space.pan = this._getPan();
 	var zjs = window.localStorage.getItem("zidx");	
 	if (!zjs) {
 		console.log("no repository found. (no zidx)");
@@ -4657,15 +4669,14 @@ Repository.prototype.updateItem = function(item) {
 
 
 /* loads panning offsets  */
-Repository.prototype.getPan = function() {
-	var js = window.localStorage.getItem("pan");
+Repository.prototype._getPan = function() {
+	var jstr = window.localStorage.getItem("pan");
+	var js   = JSON.parse(jstr);
 	return js ? Point.jnew(js) : new Point(0, 0);
 }
 
 Repository.prototype.savePan = function(pan) {
-	if (!this._nosave) {
-		window.localStorage.setItem("pan", pan.jsonfy());
-	}
+	if (!this._nosave) window.localStorage.setItem("pan", JSON.stringify(pan.jsonfy()));
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
