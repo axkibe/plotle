@@ -2200,7 +2200,6 @@ Space.prototype.dragmove = function(p, shift, ctrl) {
 		this.redraw();
 		return;
 	case ACT.IDRAG :
-		/* todo move into items */
 		iaction.item.moveto(pp.sub(iaction.sp));
 		System.repository.updateItem(iaction.item);
 		this.redraw();
@@ -2208,36 +2207,34 @@ Space.prototype.dragmove = function(p, shift, ctrl) {
 	case ACT.IRESIZE :
 	{
 		// todo no splitup
-		var x1 = iaction.siz.p1.x;
-		var y1 = iaction.siz.p1.y;
-		var x2 = iaction.siz.p2.x;
-		var y2 = iaction.siz.p2.y;
+		var p1 = iaction.siz.p1;
+		var p2 = iaction.siz.p2;
 		var it = iaction.item;
 		switch (iaction.com) {
 		case "e"  : 
 		case "ne" :
 		case "se" :
-			x2 = max(iaction.siz.p2.x + p.x - iaction.sp.x, x1);
+			p2 = new Point(max(p2.x + p.x - iaction.sp.x, p1.x), p2.y);
 			break;
 		case "w"  :
 		case "nw" :
 		case "sw" :	
-			x1 = min(iaction.siz.p1.x + p.x - iaction.sp.x, x2);
+			p1 = new Point(min(p1.x + p.x - iaction.sp.x, p1.x), p1.y);
 			break;
 		}
 		switch (iaction.com) {
 		case "s"  : 
 		case "sw" :
 		case "se" :
-			y2 = max(iaction.siz.p2.y + p.y - iaction.sp.y, y1);
+			p2 = new Point(p2.x, max(p2.y + p.y - iaction.sp.y, p1.y));
 			break;
 		case "n"  : 
 		case "nw" :
 		case "ne" :
-			y1 = min(iaction.siz.p1.y + p.y - iaction.sp.y, y2);	
+			p1 = new Point(p1.x, min(p1.y + p.y - iaction.sp.y, p2.y));	
 			break;
 		}
-		redraw = it.setZone(new Rect(new Point(x1, y1), new Point(x2, y2)), iaction.com);  // todo
+		redraw = it.setZone(new Rect(p1, p2), iaction.com); 
 		
 		/* adapt scrollbar position, todo x move into item */
 		var dtreeHeight = it.dtree.height;
@@ -2530,10 +2527,7 @@ Space.prototype.mousedown = function(p) {
 			break;
 		case 2 : // label
 			var label = new Label(null, null, fm.p.sub(this.pan));
-			/* todo center label
-			label.moveto(new Point(R(label.x1 - (label.x2 - label.x1) / 2),
-			                       R(label.y1 - (label.y2 - label.y1) / 2)));
-								   */
+			label.moveto(label.zone.p1.sub(R(label.zone.w / 2), R(label.zone.h / 2)));
 			this.setFoci(label);
 			break;
 		}
@@ -3165,12 +3159,10 @@ function Item(type, id) {
 }
 
 /* set a hex menu to be this items menu */
-/* todo, beautify */
 Item.prototype.setItemMenu = function(menu, pan) {
 	var r = settings.itemMenuInnerRadius;
 	var h = settings.itemMenuSliceHeight;
-	menu.set(
-	 new Point(
+	menu.set(new Point(
 		R(this.zone.p1.x + pan.x + r - (r * Hex.c6 - h) * Hex.t6), 
 		R(this.zone.p1.y + pan.y + r * Hex.c6 - h) - 1));
 }
@@ -3348,9 +3340,6 @@ function Note(js, id, zone) {
 	this._canvasActual = false;
 	this._scrollx = -8833;
 	this._scrolly = -8833;
-	this.bcanvas.width  = this.zone.w; /* todo, need to set it so early? */
-	this.bcanvas.height = this.zone.h;
-	
 	if (!this.dtree.first) {
 		this.dtree.append(new Paragraph(""));
 	}
@@ -3466,9 +3455,6 @@ Note.prototype.setZone = function(zone, align) {
 	}
 	if (this.zone.eq(zone)) return false;
 	this.zone = zone;
-	var bcanvas = this.bcanvas;
-	bcanvas.width  = zone.w; /* todo, not yet do sizing */
-	bcanvas.height = zone.h;
 	this._canvasActual = false;
 	return true;
 }
@@ -3584,7 +3570,12 @@ Note.prototype.draw = function(space) {
 	var w = this.zone.w; 
 	var h = this.zone.h;
 	/* todo - resize here */
-	cx.clearRect(0, 0, bcanvas.width, bcanvas.height);	 // todo w,h?
+	if (bcanvas.width != w || bcanvas.height != h) {
+		if (bcanvas.width  != w) bcanvas.width  = w;
+		if (bcanvas.height != h) bcanvas.height = h;
+	} else {
+		cx.clearRect(0, 0, w, h);
+	}
 	Note_bevel(cx, w, h, 2.5, 3);
 	var grad = cx.createLinearGradient(0, 0, w / 10, h);
 	grad.addColorStop(0, settings.noteBackground1);
@@ -3625,12 +3616,6 @@ Note.prototype.draw = function(space) {
 	);
 
 	if (sy >= 0) {
-		if (dtreeHeight <= innerHeight) {
-			/* should not use a scrollbar */
-			/* todo remove */
-			return null;
-		}
-
 		/* draws the vertical scroll bar */
 		cx.fillStyle   = settings.scrollbarFillStyle;
 		cx.strokeStyle = settings.scrollbarStrokeStyle;
@@ -4658,241 +4643,4 @@ window.onload = function() {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ | ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ /|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~                                                          
                                 '                        `-'
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-var demoRepository = (<r><![CDATA[
-{
- "formatversion": 0,
- "idf": {
-  "nid": 23
- },
- "items": {
-  "6": {
-   "t": "label",
-   "z": {
-    "p1": {
-     "x": 977,
-     "y": 977
-    },
-    "p2": {
-     "x": 1035,
-     "y": 985
-    }
-   },
-   "d": {
-    "fs": 8,
-    "d": [
-     "This is a label"
-    ]
-   }
-  },
-  "12": {
-   "t": "note",
-   "z": {
-    "p1": {
-     "x": 702,
-     "y": 44
-    },
-    "p2": {
-     "x": 916,
-     "y": 94
-    }
-   },
-   "d": {
-    "fs": 13,
-    "d": [
-     "Click an item to edit it."
-    ]
-   }
-  },
-  "20": {
-   "t": "note",
-   "z": {
-    "p1": {
-     "x": 702,
-     "y": 101
-    },
-    "p2": {
-     "x": 915,
-     "y": 156
-    }
-   },
-   "d": {
-    "fs": 13,
-    "d": [
-     "Click an items half-hexagon on its top/left to change it."
-    ]
-   }
-  },
-  "13": {
-   "t": "note",
-   "z": {
-    "p1": {
-     "x": 922,
-     "y": 43
-    },
-    "p2": {
-     "x": 1139,
-     "y": 92
-    }
-   },
-   "d": {
-    "fs": 13,
-    "d": [
-     "Drag an item to drag it."
-    ]
-   }
-  },
-  "21": {
-   "t": "note",
-   "z": {
-    "p1": {
-     "x": 925,
-     "y": 100
-    },
-    "p2": {
-     "x": 1139,
-     "y": 154
-    }
-   },
-   "d": {
-    "fs": 13,
-    "d": [
-     "Drag an items half-hexagon to create a relation."
-    ]
-   }
-  },
-  "11": {
-   "t": "note",
-   "z": {
-    "p1": {
-     "x": 702,
-     "y": -12
-    },
-    "p2": {
-     "x": 915,
-     "y": 37
-    }
-   },
-   "d": {
-    "fs": 13,
-    "d": [
-     "Click the background to create a new item."
-    ]
-   }
-  },
-  "9": {
-   "t": "note",
-   "z": {
-    "p1": {
-     "x": 921,
-     "y": -12
-    },
-    "p2": {
-     "x": 1139,
-     "y": 38
-    }
-   },
-   "d": {
-    "fs": 13,
-    "d": [
-     "Drag the background to pan."
-    ]
-   }
-  },
-  "3": {
-   "t": "note",
-   "z": {
-    "p1": {
-     "x": 976,
-     "y": 313
-    },
-    "p2": {
-     "x": 1156,
-     "y": 501
-    }
-   },
-   "d": {
-    "fs": 13,
-    "d": [
-     "This is a note.",
-     "",
-     "",
-     "",
-     "",
-     "it can scroll",
-     ". . . ",
-     "",
-     "",
-     "",
-     "like this."
-    ]
-   }
-  },
-  "2": {
-   "t": "label",
-   "z": {
-    "p1": {
-     "x": -64,
-     "y": -64
-    },
-    "p2": {
-     "x": 467,
-     "y": 60
-    }
-   },
-   "d": {
-    "fs": 101.36746822985607,
-    "d": [
-     "Meshcraft"
-    ]
-   }
-  },
-  "23": {
-   "t": "rel",
-   "i1": 2,
-   "i2": 8,
-   "d": {
-    "fs": 14,
-    "d": [
-     "relates to"
-    ]
-   }
-  },
-  "8": {
-   "t": "note",
-   "z": {
-    "p1": {
-     "x": 201,
-     "y": 152
-    },
-    "p2": {
-     "x": 356,
-     "y": 192
-    }
-   },
-   "d": {
-    "fs": 13,
-    "d": [
-     "item network editor"
-    ]
-   }
-  }
- },
- "z": [
-  8,
-  2,
-  23,
-  3,
-  9,
-  11,
-  21,
-  13,
-  20,
-  12,
-  6
- ],
- "pan": {
-  "x": 96,
-  "y": 98
- }
-}
-]]></r>).toString();
+var demoRepository = "";
