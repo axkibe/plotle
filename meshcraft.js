@@ -12,6 +12,28 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___'   '___'                      `~~'  `"   |_|      `'*/ 
 "use strict";
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ,                       
+  )   ,-. ,-. ,-. ,-. . . 
+ /    |-' | | ,-| |   | | 
+ `--' `-' `-| `-^ `-' `-| 
+           ,|          /| 
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+if (!Object.defineProperty) {
+	Object.defineProperty = function(obj, label, funcs) {
+		if (funcs.get) {
+			obj.__defineGetter__(label, funcs.get);
+		}
+		if (funcs.set) {
+			obj.__defineSetter__(label, funcs.set);
+		}
+	}
+}
+
+if (!Object.freeze) {
+	Object.freeze = function(obj) {};
+}
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .---.     .  .
@@ -221,26 +243,6 @@ var ONLOOK = {
 	REMOVE : 1,
 }
 Object.freeze(ONLOOK);
-
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ,                       
-  )   ,-. ,-. ,-. ,-. . . 
- /    |-' | | ,-| |   | | 
- `--' `-' `-| `-^ `-' `-| 
-           ,|          /| 
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-if (!Object.defineProperty) {
-	Object.defineProperty = function(obj, label, funcs) {
-		if (funcs.get) {
-			obj.__defineGetter__(label, funcs.get);
-		}
-		if (funcs.set) {
-			obj.__defineSetter__(label, funcs.set);
-		}
-	}
-}
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,-,-,-.
@@ -4616,21 +4618,22 @@ Repository.prototype.savePan = function(pan) {
   `'  `'   ' ' ' `-^ `-' ' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+var demoRepository = null;
 window.onload = function() {
 	var request = document.location.search;
 	if (request.indexOf("reset") >= 0) {
 		console.log("Clearing localStorage");
 		window.localStorage.clear();
 	}
+	// loads the demoRepository JSON String
+	var demotag = "DEMOREPOSITORY";
+	for(var node = document.body.lastChild; node; node = node.previousSibling) {
+		if (node.nodeName != "#comment") continue;
+		var data = node.data;
+		if (data.substring(0, demotag.length) != demotag) continue;
+		demoRepository = data.substring(demotag.length);
+		break;
+	}
 	System.init();
 }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-.-,--.               .-,--.                   .
-' |   \ ,-. ,-,-. ,-. `|__/ ,-. ,-. ,-. ,-. . |- ,-. ,-. . .
-, |   / |-' | | | | | )| \  |-' | | | | `-. | |  | | |   | |
-`-^--'  `-' ' ' ' `-' `'  ` `-' |-' `-' `-' ' `' `-' '   `-|
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ | ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ /|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~                                                          
-                                '                        `-'
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-var demoRepository = "";
