@@ -3870,11 +3870,14 @@ Label.prototype.draw = function(space) {
 	}
 	var w = this.zone.w;
 	var h = this.zone.h;
-	//cx.clearRect(0, 0, bcanvas.width, bcanvas.height); todo
-	bcanvas.height = h;
-	bcanvas.width  = w;
-	/* draws text */	
 	var cx = bcanvas.getContext("2d");
+	if (bcanvas.width != w || bcanvas.height != h) {
+		if (bcanvas.width  != w) bcanvas.width = w;
+		if (bcanvas.height != h) bcanvas.height = h;
+	} else {
+		cx.clearRect(0, 0, w, h); 
+	}
+	/* draws text */	
 	dtree.drawCanvas(bcanvas, space.selection, 0, 0, 0);
 	/* draws the border */
 	cx.beginPath(); 
@@ -3946,17 +3949,6 @@ Relation.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 	return 0;
 }
 
-/* todo remove */
-Object.defineProperty(Relation.prototype, "width", {
-	get: function() { throw new Error("Cannot get width of relation");  },
-	set: function() { throw new Error("Cannot set width of relation, set fontsize instead."); }
-});
-
-Object.defineProperty(Relation.prototype, "height", {
-	get: function() { throw new Error("Cannot get height of relation"); },
-	set: function() { throw new Error("Cannot set height of relation, set fontsize instead."); }
-});
-
 /* drops the cached canvas */
 Relation.prototype.listen = function() {
 	this._canvasActual = false;
@@ -4007,9 +3999,7 @@ function Relation_drawLabeledArrow(space, item1, item2_p, mcanvas, light) {
 	var scanvas = space.canvas;
 	var cx = scanvas.getContext("2d");
 	var x1, y1, x2, y2;
-	if (!item1) {
-		throw new Error("todo");
-	}
+
 	/* todo, beautify 2d */
 	var i1x1, i1y1, i1x2, i1y2;
 	i1x1 = item1.zone.p1.x + space.pan.x + 0.5;
