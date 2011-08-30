@@ -343,6 +343,7 @@ Point.prototype.sub = function(px, y) {
  */
 function Rect(r1, p2) {
 	if (arguments.length === 1) {
+		throw new Error("todo. Why do yo do this?)");
 		this.p1 = r1.p1;
 		this.p2 = r1.p2;
 	} else {
@@ -433,6 +434,183 @@ Object.defineProperty(Rect.prototype, "my", {
 	get: function() { return R((this.p2.y + this.p1.y) / 2); },
 	set: function() { throw new Error("Rect cannot set my")},
 });
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ++Arrow. 
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ A directional line
+ Arrows are pseuod-immutable objects.
+ Differently to a rectangle p1 is not necessarily left and top of p2.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/* Constructor.
+ * Rect(rect)
+ * Rect(p1, p2) 
+ */
+function Arrow(p1, p2) {
+	this.p1 = p1;
+	this.p2 = p2;
+	this.type = "arrow";
+}
+
+/* Returns the arrow for two objects.
+ * item1 to item2  -or-
+ * item1 to point
+ *
+ * returns a.zone = the zone
+ *         a.arrowcom = compass direction the arrow comes from (e.g. "nw")
+ */
+Arrow.create = function(item1, item2) {
+	if (item2.type === "point" && item1.zone && item1.zone.type === "rect") {
+		var p2 = item2;
+		var z1 = item1.zone;
+		var p1;
+		if (z1.within(p2)) {
+			p1 = new Point(z1.mx, z1.my);
+		} else {
+			p1 = new Point(
+				p2.x < z1.p1.x ? z1.p1.x :
+			   (p2.x < z1.p2.x ? z1.p2.x : p2.x),
+				p2.y < z1.p1.y ? z1.p1.y :
+			   (p2.y > z1.p2.y ? z1.p2.y : p2.y));
+		}
+		return new Arrow(p1, p2);
+	} 
+	if (item1.zone && item1.zone.type === "rect" && item2.zone && item2.zone.type === "rect") {
+		var z1 = item1.zone;
+		var z2 = item2.zone;
+		var x1, y1, x2, y2;
+		if (z2.p1.x > z1.p2.x) { 
+			/* zone2 is clearly on the right */
+			x1 = z1.p2.x;
+			x2 = z2.p1.x;
+		} else if (z2.p2.x < z1.p1.x) {
+			/* zone2 is clearly on the left */
+			x1 = z1.p1.x;
+			x2 = z2.p2.x;
+		} else {
+			/* an intersection */
+			x1 = x2 = R((max(z1.p1.x, z2.p1.x) +
+			             min(z1.p2.x, z2.p2.x)) / 2);
+		}
+		if (z2.p1.y > z1.p2.y) { 
+			/* zone2 is clearly on the bottom */
+			y1 = z1.p2.y;
+			y2 = z2.p1.y;
+		} else if (z2.p2.x < z1.p1.x) {
+			/* zone2 is clearly on the top */
+			y1 = z1.p1.y;
+			y2 = z2.p2.y;
+		} else {
+			/* an intersection */
+			y1 = y2 = R((max(z1.p1.y, z2.p1.y) +
+			             min(z1.p2.y, z2.p2.y)) / 2);
+		}
+	}
+	return new Arrow(new Point(x1, y1), new Point(x2, y2));
+}
+
+/* Returns the zone of the arrow.
+ * Result is cached.
+ */
+Object.defineProperty(Arrow.prototype, "zone", {
+	get: function() { 
+		if (this._zone) return this._zone;
+		if (p1.x <= p2.x && p1.y <= p2.y) // \v
+			return new Rect(this.p1, this.p2); 
+		if (p1.x >  p2.x && p1.y >  p2.y) // ^\
+			return new Rect(this.p2, this.p1); 
+		return new Rect(
+			new Point(min(this.p1.x, this.p2.x)),
+			new Point(min(this.p1.y, this.p2.y)));	
+	},
+	set: function() { throw new Error("Cannot set zone"); }
+});
+
+/* Draws one relationship arrow
+ * (space, item1_id, item2_id, null, middle) - or - 
+ * (space, item1_id,        x,    y, middle)  
+ *
+ * mcanvas:  if not null draw this in the middle of the arrow.
+ */
+ /* todo 2dize*/
+Arrow.prototype.draw = function(space, mcanvas) {
+	var scanvas = space.canvas;
+	var cx = scanvas.getContext("2d");	
+	/* todo, beautify 2d */
+	//System.setCursor("default");
+	var as = 12;  // arrow size
+	var p1 = this.p1;
+	var p2 = this.p2;
+	var d = Math.atan2(p2.y - p1.y, p2.x - p1.x);
+	var ad = Math.PI/12;
+	var ms = 2 / Math.sqrt(3) * as;
+	cx.beginPath();
+	if (mcanvas) {
+		var mx = (p1.x + p2.x) / 2;
+		var my = (p1.y + p2.y) / 2;
+		var tx = R(mx - mcanvas.width  / 2) - 2;
+		var ty = R(my - mcanvas.height / 2) - 2;
+		var bx = R(mx + mcanvas.width  / 2) + 2;
+		var by = R(my + mcanvas.height / 2) + 2;
+		cx.beginPath();
+		cx.drawImage(mcanvas, tx, ty);
+		cx.rect(tx - 0.5, ty - 0.5, mcanvas.width + 4, mcanvas.height + 4);
+		cx.lineWidth = 1;
+		cx.strokeStyle = "rgba(255, 127, 0, 0.4)"; // todo settings
+		cx.stroke();
+
+		// calculate intersections
+		var is1x, is1y; 
+		var is2x, is2y;
+	
+		var kx = R((p2.x - p1.x) / (p2.y - p1.y) * mcanvas.height / 2);
+		if (p1.y > p2.y) {
+			is1x = mx + kx;
+			is2x = mx - kx; 
+			is1y = by;
+			is2y = ty;
+		} else {
+			is1x = mx - kx;
+			is2x = mx + kx; 
+			is1y = ty;
+			is2y = by;
+		}
+		if (is1x < tx || is1x > bx) {
+			var ky = R((p2.y - p1.y) / (p2.x - p1.x) * mcanvas.width  / 2);
+			if (p1.x > p2.x) {
+				is1x = bx;
+				is2x = tx; 
+				is1y = my + ky;
+				is2y = my - ky;
+			} else {
+				is1x = tx;
+				is2x = bx; 
+				is1y = my - ky;
+				is2y = my + ky;
+			}
+		}
+
+		cx.moveTo(p1.x, p1.y);
+		cx.lineTo(is1x, is1y);
+		cx.moveTo(is2x, is2y);
+	} else {
+		cx.moveTo(p1.x, p1.y);
+	}
+	// draws the arrow head
+	cx.lineTo(p2.x - ms * Math.cos(d),      p2.y - ms * Math.sin(d));
+	cx.lineTo(p2.x - as * Math.cos(d - ad), p2.y - as * Math.sin(d - ad));
+	cx.lineTo(p2.x,                         p2.y);
+	cx.lineTo(p2.x - as * Math.cos(d + ad), p2.y - as * Math.sin(d + ad));
+	cx.lineTo(p2.x - ms * Math.cos(d),      p2.y - ms * Math.sin(d));
+	cx.lineWidth = 3;
+	cx.strokeStyle = "rgba(255, 225, 80, 0.5)";  // todo settings
+	cx.stroke();
+	cx.lineWidth = 1;
+	cx.strokeStyle = "rgba(200, 100, 0, 0.8)";  // todo settings
+	cx.stroke();
+	cx.fillStyle = "rgba(255, 225, 40, 0.5)";  // todo settings
+	cx.fill();
+}
 
 	
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1952,9 +2130,10 @@ Space.prototype.redraw = function() {
 		break;
 	case ACT.RBIND :
 		if (ia.item2) {
-			Relation_drawLabeledArrow(this, ia.item, ia.item2, null, true);
+			Arrow.create(ia.item, ia.item2).draw(this, null);
+			ia.item2.highlight(cx);
 		} else {
-			Relation_drawLabeledArrow(this, ia.item, ia.smp, null, false);
+			Arrow.create(ia.item, ia.smp).draw(this, null);
 		}
 	}
 	this.edgemenu.draw();
@@ -3354,6 +3533,19 @@ Note.prototype.removed = function() {
 	/* nothing */
 }
 
+/* highlets the note. */		
+Note.prototype.highlight = function(cx) {
+	cx.beginPath();
+	cx.moveTo(this.zone.p1.x, this.zone.p1.y);
+	cx.lineTo(this.zone.p2.x, this.zone.p1.y);
+	cx.lineTo(this.zone.p2.x, this.zone.p2.y);
+	cx.lineTo(this.zone.p1.x, this.zone.p2.y);
+	cx.closePath();
+	cx.lineWidth = 3;
+	cx.strokeStyle = "rgba(255, 183, 15, 0.5)"; // todo settings
+	cx.stroke();
+}
+
 /* turns the note into a string */
 Note.prototype.jsonfy = function() {
 	var js = {
@@ -3790,6 +3982,20 @@ Label.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 	}
 }
 
+/* highlets the label. */		
+Label.prototype.highlight = function(cx) {
+	cx.beginPath();
+	cx.moveTo(this.zone.p1.x, this.zone.p1.y);
+	cx.lineTo(this.zone.p2.x, this.zone.p1.y);
+	cx.lineTo(this.zone.p2.x, this.zone.p2.y);
+	cx.lineTo(this.zone.p1.x, this.zone.p2.y);
+	cx.closePath();
+	cx.lineWidth = 3;
+	cx.strokeStyle = "rgba(255, 183, 15, 0.5)"; // todo settings
+	cx.stroke();
+}
+
+
 /* turns the label into a string */
 Label.prototype.jsonfy = function() {
 	var js = {
@@ -3945,6 +4151,15 @@ Relation.prototype.jsonfy = function() {
 	return js;
 }
 
+Object.defineProperty(Relation.prototype, "arrow", {
+	get: function() { 
+		return this._arrow || (
+			this._arrow = Arrow.create(
+			System.repository.items[this.i1id],  // todo make funcall
+			System.repository.items[this.i2id]));
+	},
+});
+
 /* returns transfix code */
 Relation.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 	// todo
@@ -3954,9 +4169,9 @@ Relation.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 /* drops the cached canvas */
 Relation.prototype.listen = function() {
 	this._canvasActual = false;
-	/* end of chain */
+	/* end of listen chain */
 }
-	
+
 Relation.prototype.resize = function(width, height) {
 	var dtree = this.dtree;
 	var fs = max(dtree.fontsize * height / this.height, 8);
@@ -3975,183 +4190,6 @@ Relation.prototype.checkItemCompass = function(p, rhs) {
 	return this._checkItemCompass(p, 170);
 }
 
-/* Calculates the zone of a relation for 
- * item1 to item2
- *  - or - 
- * item1 to x, y
- * Results are written into o.x1, o.y1, o.x2, o.y2
- * o.x1 <= o.x2
- * o.y1 <= o.y2
- * o.ab .. arrow base, 1 if arrow goes from
- */
-function Relation_calcZone(o, item1, item2_x, null_y) {
-//xxxx
-}
-
-/* Draws one relationship arrow
- * (space, item1_id, item2_id, null, middle) - or - 
- * (space, item1_id,        x,    y, middle)  
- *
- * mcanvas:  if not null draw this in the middle of the arrow.
- * light:    if true highlights item2   
- */
-
- /* todo 2dize*/
-function Relation_drawLabeledArrow(space, item1, item2_p, mcanvas, light) {
-	var scanvas = space.canvas;
-	var cx = scanvas.getContext("2d");
-	var x1, y1, x2, y2;
-
-	/* todo, beautify 2d */
-	var i1x1, i1y1, i1x2, i1y2;
-	i1x1 = item1.zone.p1.x + space.pan.x + 0.5;
-	i1y1 = item1.zone.p1.y + space.pan.y + 0.5;
-	i1x2 = item1.zone.p2.x + space.pan.x + 0.5;
-	i1y2 = item1.zone.p2.y + space.pan.y + 0.5;
-
-	if (item2_p && item2_p.type === "point") {
-		// todo
-		x2 = item2_p.x + space.pan.x + 0.5;
-		y2 = item2_p.y + space.pan.y + 0.5;
-		/* find quadrant */
-		var im = 0;
-		if (x2 < i1x1) { x1 = i1x1; }
-		else if (x2 < i1x2) { x1 = x2; im++; }
-		else { x1 = i1x2; }
-
-		if (y2 < i1y1) { y1 = i1y1; }
-		else if (y2 < i1y2) { y1 = y2; im++; } 
-		else { y1 = i1y2; }
-
-		if (im == 2) {
-			/* in middle */
-			x1 = (i1x1 + i1x2) / 2;
-			y1 = (i1y1 + i1y2) / 2;
-		}
-		System.setCursor("not-allowed");
-	} else {
-		var it2 = item2_p;
-		var i2x1, i2y1, i2x2, i2y2;
-		
-		i2x1 = it2.zone.p1.x + space.pan.x + 0.5;
-		i2y1 = it2.zone.p1.y + space.pan.y + 0.5;
-		i2x2 = it2.zone.p2.x + space.pan.x + 0.5;
-		i2y2 = it2.zone.p2.y + space.pan.y + 0.5;			
-
-		if (i2x1 > i1x2) { 
-			/* 2 is clearly to the right */
-			x1 = i1x2;
-			x2 = i2x1;
-		} else if (i2x2 < i1x1) {
-			/* 2 is clearly to the left */
-			x1 = i1x1;
-			x2 = i2x2;
-		} else {
-			/* an intersection */
-			x1 = x2 = ((i1x1 > i2x1 ? i1x1 : i2x1) + (i1x2 < i2x2 ? i1x2 : i2x2)) / 2;
-		}
-		if (i2y1 > i1y2) { 
-			/* 2 is clearly to the right */
-			y1 = i1y2;
-			y2 = i2y1;
-		} else if (i2y2 < i1y1) {
-			/* 2 is clearly to the left */
-			y1 = i1y1;
-			y2 = i2y2;
-		} else {
-			/* an intersection */
-			y1 = y2 = ((i1y1 > i2y1 ? i1y1 : i2y1) + (i1y2 < i2y2 ? i1y2 : i2y2)) / 2;
-		}
-
-		//y1 = (iy  + iyh)  / 2;
-		//y2 = (i2y + i2yh) / 2;	
-
-		if (light) {
-			/* todo let the item highlight itself */
-			cx.beginPath();
-			cx.moveTo(i2x1, i2y1);
-			cx.lineTo(i2x2, i2y1);
-			cx.lineTo(i2x2, i2y2);
-			cx.lineTo(i2x1, i2y2);
-			cx.closePath();
-			cx.lineWidth = 3;
-			cx.strokeStyle = "rgba(255, 183, 15, 0.5)";
-			cx.stroke();
-		}
-		System.setCursor("default");
-	}
-	var as = 12;  // arrow size
-	var d = Math.atan2(y2 - y1, x2 - x1);
-	var ad = Math.PI/12;
-	var ms = 2 / Math.sqrt(3) * as;
-	cx.beginPath();
-	if (mcanvas) {
-		var mx = (x1 + x2) / 2;
-		var my = (y1 + y2) / 2;
-		var tx = R(mx - mcanvas.width / 2)  - 2;
-		var ty = R(my - mcanvas.height / 2) - 2;
-		var bx = R(mx + mcanvas.width / 2)  + 2;
-		var by = R(my + mcanvas.height / 2) + 2;
-		cx.drawImage(mcanvas, tx, ty);
-		
-		cx.rect(tx - 0.5, ty - 0.5, mcanvas.width + 4, mcanvas.height + 4);
-		cx.lineWidth = 1;
-		cx.strokeStyle = "rgba(255, 127, 0, 0.4)";
-		cx.stroke();
-		cx.beginPath();
-		
-		var is1x, is1y; 
-		var is2x, is2y;
-	
-		var kx = R((x2 - x1) / (y2 - y1) * mcanvas.height / 2);
-		if (y1 > y2) {
-			is1x = mx + kx;
-			is2x = mx - kx; 
-			is1y = by;
-			is2y = ty;
-		} else {
-			is1x = mx - kx;
-			is2x = mx + kx; 
-			is1y = ty;
-			is2y = by;
-		}
-		if (is1x < tx || is1x > bx) {
-			var ky = R((y2 - y1) / (x2 - x1) * mcanvas.width  / 2);
-			if (x1 > x2) {
-				is1x = bx;
-				is2x = tx; 
-				is1y = my + ky;
-				is2y = my - ky;
-			} else {
-				is1x = tx;
-				is2x = bx; 
-				is1y = my - ky;
-				is2y = my + ky;
-			}
-		}
-
-		cx.moveTo(x1, y1);
-		cx.lineTo(is1x, is1y);
-		cx.moveTo(is2x, is2y);
-	} else {
-		cx.moveTo(x1, y1);
-	}
-	cx.lineTo(x2 - ms * Math.cos(d),      y2 - ms * Math.sin(d));
-	cx.lineTo(x2 - as * Math.cos(d - ad), y2 - as * Math.sin(d - ad));
-	cx.lineTo(x2,                         y2);
-	cx.lineTo(x2 - as * Math.cos(d + ad), y2 - as * Math.sin(d + ad));
-	cx.lineTo(x2 - ms * Math.cos(d),      y2 - ms * Math.sin(d));
-	cx.lineWidth = 3;
-	cx.strokeStyle = "rgba(255, 225, 80, 0.5)";
-	cx.stroke();
-	cx.lineWidth = 1;
-	cx.strokeStyle = "rgba(200, 100, 0, 0.8)";
-	cx.stroke();
-	cx.fillStyle = "rgba(255, 225, 40, 0.5)";
-	cx.fill();
-	cx.restore();
-}
-
 /* draws the item       * 
  * space, to draw upon  */
 Relation.prototype.draw = function(space) {
@@ -4161,7 +4199,7 @@ Relation.prototype.draw = function(space) {
 	var it2 = space.repository.items[this.i2id];
 	if (this._canvasActual) {
 		/* buffer hit */
-		Relation_drawLabeledArrow(space, it1, it2, bcanvas, false);
+		this.arrow.draw(space, bcanvas);
 		return;
 	}
 	var cx = bcanvas.getContext("2d");
@@ -4170,7 +4208,7 @@ Relation.prototype.draw = function(space) {
 	bcanvas.width  = dtree.width;
 	dtree.drawCanvas(bcanvas, space.selection, 0, 0, 0);
 	this._canvasActual = true;
-	Relation_drawLabeledArrow(space, it1, it2, bcanvas, false);
+	this.arrow.draw(space, bcanvas);
 }
 
 /* something happend an item onlooked */
