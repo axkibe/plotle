@@ -3497,7 +3497,7 @@ DTree.prototype.draw = function(c2d, select, offsetX, offsetY, scrolly) {
 		/* todo make part of selection to use shortcut with XY */
 		var b = select.mark1;
 		var e = select.mark2;
-		b.getXY();
+		b.getXY(); // TODO rename!
 		e.getXY();
 		if (e.y < b.y || (e.y == b.y && e.x < b.x)) {
 			b = select.mark2;
@@ -3507,52 +3507,52 @@ DTree.prototype.draw = function(c2d, select, offsetX, offsetY, scrolly) {
 		c2d.begin();
 		var psy = scrolly >= 0 ? scrolly : 0;
 		var lh = R(this.fontsize * (1 + settings.bottombox));
-		var bx = R(b.x) + 0.5;
-		var by = R(b.y - psy) + 0.5;
-		var ex = R(e.x) + 0.5;
-		var ey = R(e.y - psy) + 0.5;
-		var rx = R(this.width + offsetX / 2) + 0.5;
-		var lx = R(offsetX / 2) + 0.5;
+		var bx = R(b.x);
+		var by = R(b.y - psy);
+		var ex = R(e.x);
+		var ey = R(e.y - psy);
+		var rx = R(this.width + offsetX / 2);
+		var lx = R(offsetX / 2);
 		if ((abs(by - ey) < 2)) {
 			// ***
-			cx.moveTo(bx, by);
-			cx.lineTo(bx, by + lh);
-			cx.lineTo(ex, ey + lh);
-			cx.lineTo(ex, ey);
-			cx.lineTo(bx, by);
-			cx.stroke(1, settings.selectionStroke);
-			cx.fill(settings.selectionColor);
+			c2d.moveTo(bx, by);
+			c2d.lineTo(bx, by + lh);
+			c2d.lineTo(ex, ey + lh);
+			c2d.lineTo(ex, ey);
+			c2d.lineTo(bx, by);
+			c2d.stroke(1, settings.selectionStroke);
+			c2d.fill(settings.selectionColor);
 		} else if (abs(by + lh - ey) < 2 && (bx >= ex))  {
 			//      ***
 			// ***
-			cx.moveTo(rx, by + lh);
-			cx.lineTo(bx, by + lh);
-			cx.lineTo(bx, by);
-			cx.lineTo(rx, by);
+			c2d.moveTo(rx, by + lh);
+			c2d.lineTo(bx, by + lh);
+			c2d.lineTo(bx, by);
+			c2d.lineTo(rx, by);
 			
-			cx.moveTo(lx, ey);
-			cx.lineTo(ex, ey);
-			cx.lineTo(ex, ey + lh);
-			cx.lineTo(lx, ey + lh);
-			cx.stroke(1, settings.selectionStroke);
-			cx.fill(settings.selectionColor);
+			c2d.moveTo(lx, ey);
+			c2d.lineTo(ex, ey);
+			c2d.lineTo(ex, ey + lh);
+			c2d.lineTo(lx, ey + lh);
+			c2d.stroke(1, settings.selectionStroke);
+			c2d.fill(settings.selectionColor);
 		} else {
 			//    *****
 			// *****
 			for(var i = 0; i < 2; i++) {
-				cx.beginPath();
-				var edge = i ? cx.moveTo : cx.lineTo;
-				cx.moveTo(rx, ey);
-				cx.lineTo(ex, ey);
-				cx.lineTo(ex, ey + lh);
-				cx.lineTo(lx, ey + lh);
-				edge.call(cx, lx, by + lh);
-				cx.lineTo(bx, by + lh);
-				cx.lineTo(bx, by);
-				cx.lineTo(rx, by);
-				edge.call(cx, rx, ey);
+				c2d.begin();
+				var edge = i ? c2d.moveTo : c2d.lineTo;
+				c2d.moveTo(rx, ey);
+				c2d.lineTo(ex, ey);
+				c2d.lineTo(ex, ey + lh);
+				c2d.lineTo(lx, ey + lh);
+				edge.call(c2d, lx, by + lh);
+				c2d.lineTo(bx, by + lh);
+				c2d.lineTo(bx, by);
+				c2d.lineTo(rx, by);
+				edge.call(c2d, rx, ey);
 				if (i) {
-					cx.stroke(1, settings.selectionStroke); 
+					c2d.stroke(1, settings.selectionStroke); 
 				} else {
 					c2d.fill(settings.selectionColor);
 				}
@@ -4792,7 +4792,7 @@ Repository.prototype.importFromJString = function(str) {
 		this._loadItem(id, js.items[id]);
 	}
 	this._saveZIDX();
-	this._noonlocks = false;
+	this._noonlooks = false;
 
 	System.space.setFoci(null);
 	System.space.pan = System.space.can2d.pan = js.pan ? Point.jnew(js.pan) : new Point(0, 0); // todo
