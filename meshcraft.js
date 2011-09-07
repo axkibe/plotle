@@ -256,6 +256,7 @@ function debug() {
    '   `-' `-' `-^ `-' `-^ '   `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  Marks a position in an element of an item.
+ todo integrate to Can2D
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 var Measure = {
 	init : function() {
@@ -540,9 +541,7 @@ Object.defineProperty(Arrow.prototype, "zone", {
  */
  /* todo 2dize*/
 Arrow.prototype.draw = function(space, mcanvas) {
-	var scanvas = space.canvas;
-	var cx = scanvas.getContext("2d");	
-	/* todo, beautify 2d */
+	var c2d = space.can2d;
 	//System.setCursor("default");
 	var as = 12;  // arrow size
 	var p1 = this.p1;
@@ -550,7 +549,7 @@ Arrow.prototype.draw = function(space, mcanvas) {
 	var d = Math.atan2(p2.y - p1.y, p2.x - p1.x);
 	var ad = Math.PI/12;
 	var ms = 2 / Math.sqrt(3) * as;
-	cx.beginPath();
+	c2d.begin();
 	if (mcanvas) {
 		var mx = (p1.x + p2.x) / 2;
 		var my = (p1.y + p2.y) / 2;
@@ -558,13 +557,10 @@ Arrow.prototype.draw = function(space, mcanvas) {
 		var ty = R(my - mcanvas.height / 2) - 2;
 		var bx = R(mx + mcanvas.width  / 2) + 2;
 		var by = R(my + mcanvas.height / 2) + 2;
-		cx.beginPath();
-		cx.drawImage(mcanvas, tx, ty);
-		cx.rect(tx - 0.5, ty - 0.5, mcanvas.width + 4, mcanvas.height + 4);
-		cx.lineWidth = 1;
-		cx.strokeStyle = "rgba(255, 127, 0, 0.4)"; // todo settings
-		cx.stroke();
-		cx.beginPath();
+		c2d.drawImage(mcanvas, tx, ty);
+		c2d.rect(tx, ty, mcanvas.width + 4, mcanvas.height + 4);
+		c2d.stroke(1, "rgba(255, 127, 0, 0.4)"); // todo settings
+		c2d.begin();
 
 		// calculate intersections
 		var is1x, is1y; 
@@ -597,26 +593,21 @@ Arrow.prototype.draw = function(space, mcanvas) {
 			}
 		}
 
-		cx.moveTo(p1.x, p1.y);
-		cx.lineTo(is1x, is1y);
-		cx.moveTo(is2x, is2y);
+		c2d.moveTo(p1.x, p1.y);
+		c2d.lineTo(is1x, is1y);
+		c2d.moveTo(is2x, is2y);
 	} else {
-		cx.moveTo(p1.x, p1.y);
+		c2d.moveTo(p1.x, p1.y);
 	}
 	// draws the arrow head
-	cx.lineTo(p2.x - ms * Math.cos(d),      p2.y - ms * Math.sin(d));
-	cx.lineTo(p2.x - as * Math.cos(d - ad), p2.y - as * Math.sin(d - ad));
-	cx.lineTo(p2.x,                         p2.y);
-	cx.lineTo(p2.x - as * Math.cos(d + ad), p2.y - as * Math.sin(d + ad));
-	cx.lineTo(p2.x - ms * Math.cos(d),      p2.y - ms * Math.sin(d));
-	cx.lineWidth = 3;
-	cx.strokeStyle = "rgba(255, 225, 80, 0.5)";  // todo settings
-	cx.stroke();
-	cx.lineWidth = 1;
-	cx.strokeStyle = "rgba(200, 100, 0, 0.8)";  // todo settings
-	cx.stroke();
-	cx.fillStyle = "rgba(255, 225, 40, 0.5)";  // todo settings
-	cx.fill();
+	c2d.lineTo(p2.x - ms * Math.cos(d),      p2.y - ms * Math.sin(d));
+	c2d.lineTo(p2.x - as * Math.cos(d - ad), p2.y - as * Math.sin(d - ad));
+	c2d.lineTo(p2.x,                         p2.y);
+	c2d.lineTo(p2.x - as * Math.cos(d + ad), p2.y - as * Math.sin(d + ad));
+	c2d.lineTo(p2.x - ms * Math.cos(d),      p2.y - ms * Math.sin(d));
+	c2d.stroke(3, "rgba(255, 225, 80, 0.5)"); // todo settings
+	c2d.stroke(1, "rgba(200, 100, 0, 0.8)");  // todo settings
+	c2d.fill("rgba(255, 225, 40, 0.5)");
 }
 
 
@@ -636,7 +627,18 @@ function Can2D(canvas) {
 	this.pan = new Point(0, 0);
 }
 
+Object.defineProperty(Can2D.prototype, "width", {
+	get: function() { return this._canvas.width; },
+	set: function() { throw new Error("use Can2D.resetSize()");},
+});
+
+Object.defineProperty(Can2D.prototype, "height", {
+	get: function() { return this._canvas.height; },
+	set: function() { throw new Error("use Can2D.resetSize()");},
+});
+
 /* clears the canvas */
+/* todo rename to resetSize() */
 Can2D.prototype.clear = function() {
 	var c = this._canvas;
 	this._cx.clearRect(0, 0, c.width, c.height);
@@ -681,6 +683,33 @@ Can2D.prototype.fill = function(style) {
 	cx.fill();
 }
 
+/* rect(style, rect)   -or-
+ * rect(style, p1, p2) -or-
+ * rect(style, x1, y1, w, h)
+ */
+Can2D.prototype.rect = function(r) {
+	var pan = this.pan;
+	var cx = this._cx;
+	if (typeof(r) === "object") {
+		if (r.type === "rect") {
+			return this._cx.rect(
+				r.p1.x + pan.x + 0.5, r.p1.y + pan.y + 0.5, 
+				r.w, r.h);
+		}
+		if (r.type === "point") {
+			var p1 = r;
+			var p2 = arguments[1];
+			return this._cx.rect(
+				p1.x + pan.x + 0.5, p1.y + pan.y + 0.5, 
+				p2.x - p1.x,        p2.y - p1.y);
+		}
+		throw new Error("fillRect not a rectangle");
+	}
+	return this._cx.rect(
+		arguments[0] + pan.x + 0.5,  arguments[1] + pan.y + 0.5, 
+		arguments[2], arguments[3]);
+}
+
 /* fillRect(style, rect)   -or-
  * fillRect(style, p1, p2) -or-
  * fillRect(style, x1, y1, x2, y2)
@@ -711,6 +740,19 @@ Can2D.prototype.begin = function() {
 Can2D.prototype.close = function() {
 	this._cx.closePath();
 }
+
+/* drawImage(image, p) -or-
+ * drawImage(image, x, y)
+ */
+Can2D.prototype.drawImage = function(image, p) {
+	var pan = this.pan;
+	if (typeof(p) === "object") {
+		this._cx.drawImage(image, p.x + pan.x, p.y + pan.y);
+		return;
+	}
+	this._cx.drawImage(image, p + pan.x, arguments[2] + pan.y);
+}
+
 
 /* putImageData(image, p) -or-
  * putImageData(image, x, y)
@@ -770,7 +812,7 @@ Can2D.prototype.fillText = function(text, p) {
 	if (typeof(p) === "object") {
 		return this._cx.fillText(text, p.x, p.y);
 	}
-	return this._cx.fillText(text, p, arguments[2]);
+	return this._cx.fillText(text, arguments[1], arguments[2]);
 }
 
 /* draws a filltext rotated by phi 
@@ -805,8 +847,8 @@ Can2D.prototype.fontStyle = function(font, fill, align, baseline) {
 	var cx = this._cx;
 	cx.font         = font;
 	cx.fillStyle    = fill;
-	cx.textAlign    = "center";
-	cx.textBaseline = "middle";
+	cx.textAlign    = align;
+	cx.textBaseline = baseline;
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1262,6 +1304,7 @@ Editor.prototype.specialKey = function(item, keycode, shift, ctrl) {
 			this.deleteSelection();
 			redraw = true;
 			keycode = 0;
+			System.repository.updateItem(item);
 			break;
 		case 13 : // return
 			this.deleteSelection();
@@ -1471,7 +1514,6 @@ _init : function() {
 	var canvas = this.canvas = document.getElementById("canvas");
 	canvas.width  = window.innerWidth - 1;
 	canvas.height = window.innerHeight - 1;
-	var cx = canvas.getContext("2d"); // todox
 	this.can2d = new Can2D(canvas);
 	Measure.init();
 	
@@ -2137,24 +2179,19 @@ function Edgemenu() {
 	this.height = 30;
 }
 
-Edgemenu.prototype._stroke = function(cx) {
+Edgemenu.prototype._stroke = function(c2d) {
 	if (settings.edgeMenuInnerBorderWidth > 0) {
-		cx.lineWidth   = settings.edgeMenuInnerBorderWidth;
-		cx.strokeStyle = settings.edgeMenuInnerBorderColor;
-		cx.stroke();
+		c2d.stroke(settings.edgeMenuInnerBorderWidth, settings.edgeMenuInnerBorderColor);
 	}
 	if (settings.edgeMenuOuterBorderWidth > 0) {
-		cx.lineWidth   = settings.edgeMenuOuterBorderWidth;
-		cx.strokeStyle = settings.edgeMenuOuterBorderColor;
-		cx.stroke();
+		c2d.stroke(settings.edgeMenuOuterBorderWidth, settings.edgeMenuOuterBorderColor);
 	}
 }
 
 Edgemenu.prototype.draw = function(x, y) {
-	var canvas = System.canvas;
-	var cx = canvas.getContext("2d");
-	var x = R(canvas.width / 2) + 0.5;
-	var y = canvas.height + 0.5;
+	var c2d = System.can2d;
+	var x = R(c2d.width / 2);
+	var y = c2d.height;
 	var w = this.width;
 	var bw = this.bwidth;
 	var h =  this.height;
@@ -2162,62 +2199,55 @@ Edgemenu.prototype.draw = function(x, y) {
 	var xl = x - w - ew;
 	var xr = x + w + ew;
 	
-	cx.beginPath();
-	cx.moveTo(xl, y);
-	cx.lineTo(x - w, y - h);
-	cx.lineTo(x + w, y - h);
-	cx.lineTo(xr, y);
-	var grad = cx.createLinearGradient(0, y - h, 0, y);
+	c2d.begin();
+	c2d.moveTo(xl, y);
+	c2d.lineTo(x - w, y - h);
+	c2d.lineTo(x + w, y - h);
+	c2d.lineTo(xr, y);
+	var grad = c2d.createLinearGradient(0, y - h, 0, y);
 	grad.addColorStop(0, settings.edgeMenuBackground1);
 	grad.addColorStop(1, settings.edgeMenuBackground2);
-	cx.fillStyle = grad;
-	cx.fill();
-	cx.moveTo(xl + bw, y - h);
-	cx.lineTo(xl + bw + ew, y);
-	cx.moveTo(xr - bw, y - h);
-	cx.lineTo(xr - bw - ew, y);
-	this._stroke(cx);
+	c2d.fill(grad);
+	c2d.moveTo(xl + bw, y - h);
+	c2d.lineTo(xl + bw + ew, y);
+	c2d.moveTo(xr - bw, y - h);
+	c2d.lineTo(xr - bw - ew, y);
+	this._stroke(c2d);
 		
 	switch(this.mousepos) {
 	case 0 :
-		cx.beginPath();
-		cx.moveTo(xl + bw + ew, y);
-		cx.lineTo(xl + bw, y - h);
-		cx.lineTo(xr - bw, y - h);
-		cx.lineTo(xr - bw - ew, y);
-		cx.fillStyle = settings.edgeMenuFillStyle;
-		cx.fill();
-		this._stroke(cx);
+		c2d.begin();
+		c2d.moveTo(xl + bw + ew, y);
+		c2d.lineTo(xl + bw, y - h);
+		c2d.lineTo(xr - bw, y - h);
+		c2d.lineTo(xr - bw - ew, y);
+		c2d.fill(settings.edgeMenuFillStyle);
+		this._stroke(c2d);
 		break;
 	case 1 :
-		cx.beginPath();
-		cx.moveTo(xl, y);
-		cx.lineTo(x - w, y - h);
-		cx.lineTo(xl + bw, y - h);
-		cx.lineTo(xl + bw + ew, y);
-		cx.fillStyle = settings.edgeMenuFillStyle;
-		cx.fill();
-		this._stroke(cx);
+		c2d.begin();
+		c2d.moveTo(xl, y);
+		c2d.lineTo(x - w, y - h);
+		c2d.lineTo(xl + bw, y - h);
+		c2d.lineTo(xl + bw + ew, y);
+		c2d.fill(settings.edgeMenuFillStyle);
+		this._stroke(c2d);
 		break;
 	case 2 :
-		cx.beginPath();
-		cx.moveTo(xr - bw - ew, y);
-		cx.lineTo(xr - bw, y - h);
-		cx.lineTo(x + w, y - h);
-		cx.lineTo(xr, y);
-		cx.fillStyle = settings.edgeMenuFillStyle;
-		cx.fill();
-		this._stroke(cx);
+		c2d.begin();
+		c2d.moveTo(xr - bw - ew, y);
+		c2d.lineTo(xr - bw, y - h);
+		c2d.lineTo(x + w, y - h);
+		c2d.lineTo(xr, y);
+		c2d.fill(settings.edgeMenuFillStyle);
+		this._stroke(c2d);
 		break;
 	}
-	
-	cx.fillStyle = "black";
-	cx.font = "12px " + settings.defaultFont;
-	cx.textAlign = "center";
-	cx.textBaseline = "middle";
-	cx.fillText("Meshcraft Demospace", x, y - R(h / 2));
-	cx.fillText("Export", xl + R((bw + ew) / 2), y - R(h / 2));
-	cx.fillText("Import", xr - R((bw + ew) / 2), y - R(h / 2));
+
+	c2d.fontStyle("12px " + settings.defaultFont, "black", "center", "middle");
+	c2d.fillText("Meshcraft Demospace", x, y - R(h / 2));
+	c2d.fillText("Export", xl + R((bw + ew) / 2), y - R(h / 2));
+	c2d.fillText("Import", xr - R((bw + ew) / 2), y - R(h / 2));
 }
 
 Edgemenu.prototype._getMousepos = function(p) {
@@ -2294,7 +2324,8 @@ Space.prototype.redraw = function() {
 	var canvas = System.canvas;
 	var c2d = this.can2d;
 	editor.caret.save = null;
-	var cx = canvas.getContext("2d");
+	var cx = canvas.getContext("2d"); // todo
+	var c2d = this.can2d;
 	this.selection = editor.selection;
 	this.canvas = System.canvas;
 	c2d.clear();
@@ -2316,7 +2347,7 @@ Space.prototype.redraw = function() {
 	case ACT.RBIND :
 		if (ia.item2) {
 			Arrow.create(ia.item, ia.item2).draw(this, null);
-			ia.item2.highlight(cx);
+			ia.item2.highlight(c2d);
 		} else {
 			Arrow.create(ia.item, ia.smp).draw(this, null);
 		}
@@ -3712,16 +3743,10 @@ Note.prototype.removed = function() {
 }
 
 /* highlets the note. */		
-Note.prototype.highlight = function(cx) {
-	cx.beginPath();
-	cx.moveTo(this.zone.p1.x, this.zone.p1.y);
-	cx.lineTo(this.zone.p2.x, this.zone.p1.y);
-	cx.lineTo(this.zone.p2.x, this.zone.p2.y);
-	cx.lineTo(this.zone.p1.x, this.zone.p2.y);
-	cx.closePath();
-	cx.lineWidth = 3;
-	cx.strokeStyle = "rgba(255, 183, 15, 0.5)"; // todo settings
-	cx.stroke();
+Note.prototype.highlight = function(c2d) {
+	c2d.begin();
+	c2d.rect(this.zone);
+	c2d.stroke(3, "rgba(255, 183, 15, 0.5)"); // todo settings
 }
 
 /* turns the note into a string */
@@ -4161,16 +4186,10 @@ Label.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 }
 
 /* highlets the label. */		
-Label.prototype.highlight = function(cx) {
-	cx.beginPath();
-	cx.moveTo(this.zone.p1.x, this.zone.p1.y);
-	cx.lineTo(this.zone.p2.x, this.zone.p1.y);
-	cx.lineTo(this.zone.p2.x, this.zone.p2.y);
-	cx.lineTo(this.zone.p1.x, this.zone.p2.y);
-	cx.closePath();
-	cx.lineWidth = 3;
-	cx.strokeStyle = "rgba(255, 183, 15, 0.5)"; // todo settings
-	cx.stroke();
+Label.prototype.highlight = function(c2d) {
+	c2d.begin();
+	c2d.rect(this.zone);
+	c2d.stroke(3, "rgba(255, 183, 15, 0.5)"); // todo settings
 }
 
 
@@ -4621,7 +4640,7 @@ Repository.prototype.loadLocalStorage = function() {
 		return;
 	}
 	
-	System.space.pan = System.can2d.pan = this._getPan(); // todo space setFunction
+	System.space.pan = System.space.can2d.pan = this._getPan(); // todo space setFunction
 	var zjs = window.localStorage.getItem("zidx");
 	if (!zjs) {
 		console.log("no repository found. (no zidx)");
@@ -4749,7 +4768,7 @@ Repository.prototype.importFromJString = function(str) {
 	this._noonlocks = false;
 
 	System.space.setFoci(null);
-	System.space.pan = System.can2d.pan = js.pan ? Point.jnew(js.pan) : new Point(0, 0); // todo
+	System.space.pan = System.space.can2d.pan = js.pan ? Point.jnew(js.pan) : new Point(0, 0); // todo
 	this.savePan(System.space.pan);
 }
 
