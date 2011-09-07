@@ -103,7 +103,7 @@ var settings = {
 	scrollbarForm        : "hexagonh",  // 'square', 'round', 'hexagonh' or 'hexagonv'
 	scrollbarFillStyle   : "rgb(255, 188, 87)",
 	scrollbarStrokeStyle : "rgb(221, 154, 52)",
-	scrollbarLineWidth   : 2,
+	scrollbarLineWidth   : 1,
 	scrollbarRadius      : 4,
 	scrollbarMarginX     : 7,
 	scrollbarMarginY     : 5,
@@ -426,9 +426,19 @@ Object.defineProperty(Rect.prototype, "w", {
 	set: function(w) { throw new Error("Rect cannot set w"); },
 });
 
+Object.defineProperty(Rect.prototype, "width", {
+	get: function()  { return this.p2.x - this.p1.x;    },
+	set: function(w) { throw new Error("Rect cannot set width"); },
+});
+
 Object.defineProperty(Rect.prototype, "h", {
 	get: function()  { return this.p2.y - this.p1.y; },
-	set: function(h) { throw new Error("Rect cannot set w"); },
+	set: function(h) { throw new Error("Rect cannot set h"); },
+});
+
+Object.defineProperty(Rect.prototype, "height", {
+	get: function()  { return this.p2.y - this.p1.y; },
+	set: function(h) { throw new Error("Rect cannot set height"); },
 });
 
 Object.defineProperty(Rect.prototype, "mx", {
@@ -551,8 +561,8 @@ Arrow.prototype.draw = function(space, mcanvas) {
 	var ms = 2 / Math.sqrt(3) * as;
 	c2d.begin();
 	if (mcanvas) {
-		var mx = (p1.x + p2.x) / 2;
-		var my = (p1.y + p2.y) / 2;
+		var mx = R((p1.x + p2.x) / 2);
+		var my = R((p1.y + p2.y) / 2);
 		var tx = R(mx - mcanvas.width  / 2) - 2;
 		var ty = R(my - mcanvas.height / 2) - 2;
 		var bx = R(mx + mcanvas.width  / 2) + 2;
@@ -566,17 +576,30 @@ Arrow.prototype.draw = function(space, mcanvas) {
 		var is1x, is1y; 
 		var is2x, is2y;
 	
-		var kx = R((p2.x - p1.x) / (p2.y - p1.y) * mcanvas.height / 2);
-		if (p1.y > p2.y) {
-			is1x = mx + kx;
-			is2x = mx - kx; 
-			is1y = by;
-			is2y = ty;
+		if (p1.y == p2.y) {
+			var kx = R(mcanvas.width / 2);
+			if (p1.x > p2.x) {
+				is1x = mx + kx;
+				is2x = mx - kx; 
+				is1y = is2y = p1.y;
+			} else {
+				is1x = mx - kx;
+				is2x = mx + kx; 
+				is1y = is2y = p1.y;
+			}
 		} else {
-			is1x = mx - kx;
-			is2x = mx + kx; 
-			is1y = ty;
-			is2y = by;
+			var kx = R((p2.x - p1.x) / (p2.y - p1.y) * mcanvas.height / 2);
+			if (p1.y > p2.y) {
+				is1x = mx + kx;
+				is2x = mx - kx; 
+				is1y = by;
+				is2y = ty;
+			} else {
+				is1x = mx - kx;
+				is2x = mx + kx; 
+				is1y = ty;
+				is2y = by;
+			}
 		}
 		if (is1x < tx || is1x > bx) {
 			var ky = R((p2.y - p1.y) / (p2.x - p1.x) * mcanvas.width  / 2);
@@ -600,11 +623,11 @@ Arrow.prototype.draw = function(space, mcanvas) {
 		c2d.moveTo(p1.x, p1.y);
 	}
 	// draws the arrow head
-	c2d.lineTo(p2.x - ms * Math.cos(d),      p2.y - ms * Math.sin(d));
-	c2d.lineTo(p2.x - as * Math.cos(d - ad), p2.y - as * Math.sin(d - ad));
-	c2d.lineTo(p2.x,                         p2.y);
-	c2d.lineTo(p2.x - as * Math.cos(d + ad), p2.y - as * Math.sin(d + ad));
-	c2d.lineTo(p2.x - ms * Math.cos(d),      p2.y - ms * Math.sin(d));
+	c2d.lineTo(p2.x - R(ms * Math.cos(d)),      p2.y - R(ms * Math.sin(d)));
+	c2d.lineTo(p2.x - R(as * Math.cos(d - ad)), p2.y - R(as * Math.sin(d - ad)));
+	c2d.lineTo(p2.x,                            p2.y);
+	c2d.lineTo(p2.x - R(as * Math.cos(d + ad)), p2.y - R(as * Math.sin(d + ad)));
+	c2d.lineTo(p2.x - R(ms * Math.cos(d)),      p2.y - R(ms * Math.sin(d)));
 	c2d.stroke(3, "rgba(255, 225, 80, 0.5)"); // todo settings
 	c2d.stroke(1, "rgba(200, 100, 0, 0.8)");  // todo settings
 	c2d.fill("rgba(255, 225, 40, 0.5)");
@@ -621,10 +644,33 @@ Arrow.prototype.draw = function(space, mcanvas) {
  objects as arguments.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Can2D(canvas) {
-	this._canvas = canvas;
-	this._cx = canvas.getContext("2d");
+/* Can2D()        -or-    creates new canvas
+ * Can2D(canvas)  -or-    encloses an existing canvas
+ * Can2D(width, height)   creates a new canvas and sets its size;
+ */
+function Can2D(a1, a2) {
+	this.type = "can2d";
+	var ta1 = typeof(a1);
+	if (ta1 === "undefined") {
+		this._canvas = document.createElement("canvas");	
+	} else if (ta1 === "object") {
+		this._canvas = a1;
+	} else {
+		this._canvas = document.createElement("canvas");	
+		this._canvas.width  = a1;
+		this._canvas.height = a2;
+	}
+	this._cx = this._canvas.getContext("2d");
 	this.pan = new Point(0, 0);
+}
+
+Can2D.ensureInteger = function() {
+	for(var a in arguments) {
+		var arg = arguments[a];
+		if (Math.floor(arg) - arg !== 0) {
+			throw new Error(arg + " not an integer");
+		}
+	}
 }
 
 Object.defineProperty(Can2D.prototype, "width", {
@@ -637,35 +683,85 @@ Object.defineProperty(Can2D.prototype, "height", {
 	set: function() { throw new Error("use Can2D.resetSize()");},
 });
 
-/* clears the canvas */
-/* todo rename to resetSize() */
-Can2D.prototype.clear = function() {
+/* attune() -or-
+ * attune(rect) -or-
+ * attune(width, height)
+ *
+ * the canvas is cleared and its size ensured to be width/height (of rect)
+ */
+Can2D.prototype.attune = function(a1, a2) {
+	var ta1 = typeof(a1);
 	var c = this._canvas;
-	this._cx.clearRect(0, 0, c.width, c.height);
+	if (ta1 === "undefined") {
+		this._cx.clearRect(0, 0, c.width, c.height);	
+		return;
+	}
+	var w, h;
+	if (ta1 === "object") {
+		w = a1.width;
+		h = a1.height;
+	} else {
+		w = a1;
+		h = a2;
+	}
+	if (c.width === w && c.height === h) {
+		// no size change, clearRect() is faster
+		this._cx.clearRect(0, 0, c.width, c.height);	
+		return;		
+	}
+	/* setting with or height clears the contents */
+	if (c.width  !== w) c.width  = w;
+	if (c.height !== h) c.height = h;
 }
 
 /* moveTo(point) -or-
  * moveTo(x, y)
  */
-Can2D.prototype.moveTo = function(p) {
+Can2D.prototype.moveTo = function(a1, a2) {
 	var pan = this.pan;
-	if (typeof(p) === "object") {
-		this._cx.moveTo(p.x + pan.x + 0.5, p.y + pan.y + 0.5);
-		return;
-	} 
-	this._cx.moveTo(p + pan.x + 0.5, arguments[1] + pan.y + 0.5);
+	var x, y;
+	if (typeof(a1) === "object") {
+		x = a1.x;
+		y = a1.y;
+	} else {
+		x = a1;
+		y = a2;
+	}
+	Can2D.ensureInteger(x, y);
+	Can2D.ensureInteger(pan.x, pan.y);
+	this._cx.moveTo(x + pan.x + 0.5, y + pan.y + 0.5);
 }
 
 /* lineto(point) -or-
  * lineto(x, y)
  */
-Can2D.prototype.lineTo = function(p) {
+Can2D.prototype.lineTo = function(a1, a2) {
 	var pan = this.pan;
-	if (typeof(p) === "object") {
-		this._cx.lineTo(px.x + pan.x + 0.5, px.y + pan.y + 0.5);
-		return;
+	var x, y;
+	if (typeof(a1) === "object") {
+		x = a1.x;
+		y = a1.y;
+	} else {
+		x = a1;
+		y = a2;
 	}
-	this._cx.lineTo(p + pan.x + 0.5, arguments[1] + pan.y + 0.5);
+	Can2D.ensureInteger(x, y);
+	Can2D.ensureInteger(pan.x, pan.y);
+	this._cx.lineTo(x + pan.x + 0.5, y + pan.y + 0.5);
+}
+
+/* Draws an arc.
+ *
+ * arc(p,    radius, startAngle, endAngle, anticlockwise)   -or-
+ * arc(x, y, radius, startAngle, endAngle, anticlockwise)   -or-
+ */
+Can2D.prototype.arc = function(a1, a2, a3, a4, a5, a6) {
+	var pan = this.pan;
+	if (typeof(a1) === "object") {
+		this._cx.arc(a1.x + pan.x + 0.5, a1.y + pan.y + 0.5, a2, a3, a4, a5);
+		return;
+	} 
+	this._cx.arc(a1 + pan.x + 0.5, a2 + pan.y + 0.5, a3, a4, a5, a6);
 }
 
 /* makes a stroke */
@@ -746,6 +842,7 @@ Can2D.prototype.close = function() {
  */
 Can2D.prototype.drawImage = function(image, p) {
 	var pan = this.pan;
+	if (image.type === "can2d") image = image._canvas;
 	if (typeof(p) === "object") {
 		this._cx.drawImage(image, p.x + pan.x, p.y + pan.y);
 		return;
@@ -792,14 +889,14 @@ Can2D.prototype.createRadialGradient = function(p, r, p2, r2) {
 	return this._cx.createRadialGradient(p.x, p.y, r, p2.x, p2.y, r2);
 }
 
-/* createLinearGradient(p1, p2) -or-
+/* createLinearGradient(p1, p2)          -or-
  * createLinearGradient(x1, y1, x2, y2) 
  */
-Can2D.prototype.createLinearGradient = function(p1, p2) {
-	if (typeof(p1) === "object") {
-		return this._cx.createLinearGradient(p1.x, p1.y, p2.x, p2.y);
+Can2D.prototype.createLinearGradient = function(a1, a2, a3, a4) {
+	if (typeof(a1) === "object") {
+		return this._cx.createLinearGradient(a1.x, a1.y, a2.x, a2.y);
 	}
-	return this._cx.createLinearGradient(p1, p2, arguments[2], arguments[3]);
+	return this._cx.createLinearGradient(a1, a2, a3, a4);
 }	
 
 /*	 todo?
@@ -808,11 +905,11 @@ Can2D.prototype.setTransform = function(a, b, c, d, e, f) {
 }*/
 
 /* fillText */
-Can2D.prototype.fillText = function(text, p) {
-	if (typeof(p) === "object") {
-		return this._cx.fillText(text, p.x, p.y);
+Can2D.prototype.fillText = function(text, a1, a2) {
+	if (typeof(a1) === "object") {
+		return this._cx.fillText(text, a1.x, a1.y);
 	}
-	return this._cx.fillText(text, arguments[1], arguments[2]);
+	return this._cx.fillText(text, a1, a2);
 }
 
 /* draws a filltext rotated by phi 
@@ -842,7 +939,11 @@ Can2D.prototype.fillRotateText = function(text, p, phi, rad) {
 }
 
 	
-/* sets the fontStyle, fillStyle, textAlign, textBaseline  */
+/* fontStyle(font, fill)                      -or-
+ * fontStyle(font, fill, align, baseline)
+ *
+ * sets the fontStyle, fillStyle, textAlign, textBaseline  
+ */
 Can2D.prototype.fontStyle = function(font, fill, align, baseline) {
 	var cx = this._cx;
 	cx.font         = font;
@@ -1885,20 +1986,36 @@ Hex.makePath = function(c2d, p, r) {
  *      \            /
  *       *----------*		
  *              
+ * makeSlicePath(c2d, p, r, h)       -or-
+ * makeSlicePath(c2d, x, y, r, h)    
+ * 
  * returns pm;
  */
-Hex.makeSlicePath = function(c2d, p, r, h) {
+Hex.makeSlicePath = function(c2d, a1, a2, a3, a4) {
+	var x, y, r, h;
+	if (typeof(a1) === "object") {
+		x = a1.x;
+		y = a1.y;
+		r = a2;
+		h = a3;
+	} else {
+		x = a1;
+		y = a2;
+		r = a3;
+		h = a4;	
+	}
+	
 	var r2 = R(r / 2);
 	var rc = R(Hex.c6 * r);
 	if (h > r) throw new Error("Cannot make slice larger than radius");
-	var pm = new Point(p.x + r - R((r * Hex.c6 - h) * Hex.t6), p.y + rc - h);
+	var pm = new Point(x + r - R((r * Hex.c6 - h) * Hex.t6), y + rc - h);
 	
 	c2d.begin();
-	c2d.moveTo(p);
-	c2d.lineTo(pm.x - r2, p.y - h);
-	c2d.lineTo(pm.x + r2, p.y - h);
-	c2d.lineTo(2 * pm.x - p.x, p.y);
-	c2d.close();
+	c2d.moveTo(x, y);
+	c2d.lineTo(pm.x - r2, y - h);
+	c2d.lineTo(pm.x + r2, y - h);
+	c2d.lineTo(2 * pm.x - x, y);
+	//c2d.close();
 	return pm;
 }
 
@@ -2324,11 +2441,10 @@ Space.prototype.redraw = function() {
 	var canvas = System.canvas;
 	var c2d = this.can2d;
 	editor.caret.save = null;
-	var cx = canvas.getContext("2d"); // todo
 	var c2d = this.can2d;
 	this.selection = editor.selection;
 	this.canvas = System.canvas;
-	c2d.clear();
+	c2d.attune();
 
 	for(var i = zidx.length - 1; i >= 0; i--) {
 		var it = items[zidx[i]]; // todo shorten
@@ -3098,12 +3214,11 @@ Paragraph.prototype.constructor = Paragraph;
 function Paragraph(text)
 {
 	Treenode.call(this, "paragraph");
-	var pcanvas = this._pcanvas = document.createElement("canvas");
-	pcanvas.width = pcanvas.height = 0;
-	this._canvasActual = false;
+	this._pcan2d = new Can2D(0 ,0);
+	this._canvasActual = false; // todo rename
 	this.append(new Textnode(text));
 	this._flowWidth = null;	
-	this.x = null;
+	this.x = null; // todo ->p
 	this.y = null;
 }
 
@@ -3236,35 +3351,20 @@ Object.defineProperty(Paragraph.prototype, "flowWidth", {
 });
 
 /* draws the paragraph in its cache and returns it */
-Paragraph.prototype.getCanvas = function() {
-	var pcanvas = this._pcanvas;
+Paragraph.prototype.getCan2D = function() {
+	var c2d = this._pcan2d;
 	if (this._canvasActual) {
-		return pcanvas;
+		return c2d;
 	}
-	var cx = pcanvas.getContext("2d");
 	this._flow();
 	this._canvasActual = true;
 			
 	/* todo: work out exact height for text below baseline */
 	/* set the canvas height */
 	var dtree = this.anchestor("dtree");
-	{
-		var equalHeight = pcanvas.height == this.height;
-		var equalWidth  = pcanvas.width  == this.width;
-		if (equalHeight && equalWidth) {
-			cx.clearRect(0, 0, this.width, this.height);
-		} else {
-			if (!equalHeight) {
-				pcanvas.height = this.height;
-			}
-			if (!equalWidth) {
-				pcanvas.width = this.width;
-			}
-		}
-	}
+	c2d.attune(this);
+	c2d.fontStyle(dtree.font, "black", "start", "alphabetic");
 	
-	cx.font = dtree.font;	
-	cx.fillStyle = "black";
 	/* draws text into the canvas */
 	var pinfo = this._pinfo;
 	var plines = pinfo.length;
@@ -3273,10 +3373,10 @@ Paragraph.prototype.getCanvas = function() {
 		var plen = pl.length;
 		for(var ic = 0; ic < plen; ic++) {
 			var pc = pl[ic];
-			cx.fillText(pc.text, pc.x, pl.y);
+			c2d.fillText(pc.text, pc.x, pl.y);
 		}
 	}
-	return pcanvas;
+	return c2d;
 }
 		
 /* drops the canvas cache (cause something has changed */
@@ -3386,8 +3486,7 @@ DTree.prototype.paraAtY = function(y) {
 /* draws the content in a buffer canvas */
 /* acanvas  ... canvas to draw upon */
 /* todo rename */
-DTree.prototype.drawCanvas = function(acanvas, select, offsetX, offsetY, scrolly) {
-	var cx = acanvas.getContext("2d");
+DTree.prototype.draw = function(c2d, select, offsetX, offsetY, scrolly) { 
 	var y = offsetY;
 	var pi = 0;
 	var h = 0;
@@ -3404,10 +3503,8 @@ DTree.prototype.drawCanvas = function(acanvas, select, offsetX, offsetY, scrolly
 			b = select.mark2;
 			e = select.mark1;
 		}
-		
-		cx.fillStyle   = settings.selectionColor;
-		cx.strokeStyle = settings.selectionStroke;
-		cx.beginPath();
+			
+		c2d.begin();
 		var psy = scrolly >= 0 ? scrolly : 0;
 		var lh = R(this.fontsize * (1 + settings.bottombox));
 		var bx = R(b.x) + 0.5;
@@ -3423,8 +3520,8 @@ DTree.prototype.drawCanvas = function(acanvas, select, offsetX, offsetY, scrolly
 			cx.lineTo(ex, ey + lh);
 			cx.lineTo(ex, ey);
 			cx.lineTo(bx, by);
-			cx.stroke();
-			cx.fill();			
+			cx.stroke(1, settings.selectionStroke);
+			cx.fill(settings.selectionColor);
 		} else if (abs(by + lh - ey) < 2 && (bx >= ex))  {
 			//      ***
 			// ***
@@ -3437,8 +3534,8 @@ DTree.prototype.drawCanvas = function(acanvas, select, offsetX, offsetY, scrolly
 			cx.lineTo(ex, ey);
 			cx.lineTo(ex, ey + lh);
 			cx.lineTo(lx, ey + lh);
-			cx.stroke();
-			cx.fill();
+			cx.stroke(1, settings.selectionStroke);
+			cx.fill(settings.selectionColor);
 		} else {
 			//    *****
 			// *****
@@ -3454,19 +3551,22 @@ DTree.prototype.drawCanvas = function(acanvas, select, offsetX, offsetY, scrolly
 				cx.lineTo(bx, by);
 				cx.lineTo(rx, by);
 				edge.call(cx, rx, ey);
-				if (i) cx.stroke(); else cx.fill();
-			}			
+				if (i) {
+					cx.stroke(1, settings.selectionStroke); 
+				} else {
+					c2d.fill(settings.selectionColor);
+				}
+			}
 		}
-		cx.beginPath();
-	}	
+	}
 	
 	/* draws tha paragraphs */
 	for(var para = this.first; para; para = para.next) {
-		var pcanvas = para.getCanvas();
+		var pc2d = para.getCan2D();
 		para.x = offsetX;
 		para.y = y;
-		if (pcanvas.width > 0 && pcanvas.height > 0) {
-			cx.drawImage(pcanvas, offsetX, y - scrolly);
+		if (pc2d.width > 0 && pc2d.height > 0) {
+			c2d.drawImage(pc2d, offsetX, y - scrolly);
 		}
 		y += para.softHeight + parasep;
 	}
@@ -3660,7 +3760,7 @@ Item.prototype._drawHandles = function(space, rhs) {
 	/* draws item menu handler */
 	// todo
 	var p1 = this.zone.p1;
-	var pm = Hex.makeSlicePath(c2d, p1, 
+	var pm = Hex.makeSlicePath(c2d, p1,
 		settings.itemMenuInnerRadius, settings.itemMenuSliceHeight);
 	var grad = c2d.createLinearGradient(
 		0, p1.y - settings.itemMenuSliceHeight - 1, 
@@ -3684,7 +3784,7 @@ Item.prototype._drawHandles = function(space, rhs) {
 	}
 			
 	if (settings.itemMenuOuterBorderWidth > 0) {
-		Hex.makeSlicePath(c2d, p1.sub(1, 0), 
+		Hex.makeSlicePath(c2d, p1.x - 1, p1.y, 
 			settings.itemMenuInnerRadius + 1, settings.itemMenuSliceHeight + 1);
 		var style;
 		if (settings.itemMenuOuterBorderColor2) {
@@ -3725,7 +3825,7 @@ function Note(js, id, zone) {
 		this.dtree  = new DTree(null, this);
 	}
 	Item.call(this, "note", id);
-	this.bcanvas = document.createElement("canvas");
+	this._bcan2d = new Can2D();
 	this.textBorder = settings.noteTextBorder;
 	this._canvasActual = false;
 	this._scrollx = -8833;
@@ -3881,70 +3981,33 @@ Object.defineProperty(Note.prototype, "scrolly", {
 	}
 });
 
-/* todo */
-Object.defineProperty(Note.prototype, "x", {
-	get: function() { 
-		throw new Error("x:(");
-	},
-	set: function(sy) {
-		throw new Error("x:((");
-	}
-});
-
-/* todo */
-Object.defineProperty(Note.prototype, "y", {
-	get: function() { 
-		throw new Error("y:(");
-	},
-	set: function(sy) {
-		throw new Error("y:((");
-	}
-});
-
-/* todo */
-Object.defineProperty(Note.prototype, "width", {
-	get: function() { 
-		throw new Error("w:(");
-	},
-	set: function(sy) {
-		throw new Error("w:((");
-	}
-});
-
-/* todo */
-Object.defineProperty(Note.prototype, "height", {
-	get: function() { 
-		throw new Error("h:(");
-	},
-	set: function(sy) {
-		throw new Error("h:((");
-	}
-});
-
 /* draws the items handles */
 Note.prototype.drawHandles = function(space) {
 	return this._drawHandles(space, 255);
 }
 
+/* returns which handle the point might be floating over */
+/* todo rename */
 Note.prototype.checkItemCompass = function(p) { 
 	return this._checkItemCompass(p, 255);
 }
 
-/* draws a bevel 
+/* draws a bevel.
  *
- * cx .. canvas context
+ * c2d  ... canvas 2d
+ * zone ... zone to zake the size from.
  */
-function Note_bevel(cx, w, h, border, radius) {
+function Note_bevel(c2d, zone, border, radius) {
 	var x1 = border;
 	var y1 = border;
-	var x2 = w - border;
-	var y2 = h - border;
-	cx.beginPath();
-	cx.moveTo(x1 + radius, y1);
-	cx.arc(x2 - radius, y1 + radius, radius, -Math.PI / 2, 0, false);
-	cx.arc(x2 - radius, y2 - radius, radius, 0, Math.PI / 2, false);
-	cx.arc(x1 + radius, y2 - radius, radius, Math.PI / 2, Math.PI, false);
-	cx.arc(x1 + radius, y1 + radius, radius, Math.PI, -Math.PI / 2, false);
+	var x2 = zone.w - border;
+	var y2 = zone.h - border;
+	c2d.begin();
+	c2d.moveTo(x1 + radius, y1);
+	c2d.arc(x2 - radius, y1 + radius, radius, -Math.PI / 2, 0, false);
+	c2d.arc(x2 - radius, y2 - radius, radius, 0, Math.PI / 2, false);
+	c2d.arc(x1 + radius, y2 - radius, radius, Math.PI / 2, Math.PI, false);
+	c2d.arc(x1 + radius, y1 + radius, radius, Math.PI, -Math.PI / 2, false);
 }
 	
 /* draws the item.
@@ -3952,45 +4015,33 @@ function Note_bevel(cx, w, h, border, radius) {
  * space   to draw 
  */
 Note.prototype.draw = function(space) {
-	var bcanvas = this.bcanvas;
+	var bc2d = this._bcan2d;
 	var dtree   = this.dtree;
-	var cx = bcanvas.getContext("2d");
 	if (this._canvasActual) {
 		/* buffer hit */
-		space.canvas.getContext("2d").drawImage(
-			bcanvas, this.zone.p1.x + space.pan.x, this.zone.p1.y + space.pan.y
-		);
+		space.can2d.drawImage(bc2d, this.zone.p1);
 		return;
 	}
 
-	/* draws the background */
-	var w = this.zone.w; 
-	var h = this.zone.h;
-	/* todo - resize here */
-	if (bcanvas.width != w || bcanvas.height != h) {
-		if (bcanvas.width  != w) bcanvas.width  = w;
-		if (bcanvas.height != h) bcanvas.height = h;
-	} else {
-		cx.clearRect(0, 0, w, h);
-	}
-	Note_bevel(cx, w, h, 2.5, 3);
-	var grad = cx.createLinearGradient(0, 0, w / 10, h);
+	bc2d.attune(this.zone.w, this.zone.h); // todow
+	Note_bevel(bc2d, this.zone, 2, 3); // todo
+	var grad = bc2d.createLinearGradient(0, 0, this.zone.w / 10, this.zone.h);
 	grad.addColorStop(0, settings.noteBackground1);
 	grad.addColorStop(1, settings.noteBackground2);
-	cx.fillStyle = grad;
-	cx.fill();
-	cx.fillStyle = "#000000";
-
+	bc2d.fill(grad);
+	
 	/* calculates if a scrollbar is needed */
 	var sy = this._scrolly;
-	var innerHeight = h - 2 * this.textBorder;
-	dtree.flowWidth = w - 2 * this.textBorder - (sy >= 0 ? settings.scrollbarRadius * 2 : 0);
+	var innerHeight = this.zone.h - 2 * this.textBorder;
+	dtree.flowWidth = 
+		this.zone.w - 2 * this.textBorder - (sy >= 0 ? settings.scrollbarRadius * 2 : 0);
 	var dtreeHeight = dtree.height;
 	if (sy < 0) {
 		if (dtreeHeight > innerHeight) {
 			/* does not use a scrollbar but should */
 			sy = this._scrolly = 0;		
-			dtree.flowWidth = w - 2 * this.textBorder - (sy >= 0 ? settings.scrollbarRadius * 2 : 0);
+			dtree.flowWidth = 
+				this.zone.w - 2 * this.textBorder - (sy >= 0 ? settings.scrollbarRadius * 2 : 0);
 			dtreeHeight = dtree.height;
 			if (dtreeHeight <= innerHeight) {
 				throw new Error("note doesnt fit with and without scrollbar.");			
@@ -3999,7 +4050,7 @@ Note.prototype.draw = function(space) {
 	} else if (dtreeHeight <= innerHeight) {
 		/* uses a scrollbar but should */
 		sy = this._scrolly = -8833;
-		dtree.flowWidth = w - 2 * this.textBorder - (sy >= 0 ? settings.scrollbarRadius * 2 : 0);
+		dtree.flowWidth = this.zone.w - 2 * this.textBorder - (sy >= 0 ? settings.scrollbarRadius * 2 : 0);
 		dtreeHeight = dtree.height;
 		if (dtreeHeight > innerHeight) {
 			throw new Error("note doesnt fit with and without scrollbar.");			
@@ -4007,67 +4058,61 @@ Note.prototype.draw = function(space) {
 	}
 	
 	/* draws selection and text */	
-	dtree.drawCanvas(bcanvas, space.selection,
-		this.textBorder, this.textBorder,
-		sy < 0 ? 0 : R(sy)
-	);
-
+	dtree.draw(bc2d, space.selection, this.textBorder, this.textBorder, sy < 0 ? 0 : R(sy));
+	
 	if (sy >= 0) {
 		/* draws the vertical scroll bar */
-		cx.fillStyle   = settings.scrollbarFillStyle;
-		cx.strokeStyle = settings.scrollbarStrokeStyle;
-		cx.lineWidth   = settings.scrollbarLineWidth;
-		
-		var srad = settings.scrollbarRadius;
-		var spx  = w - settings.scrollbarMarginX - srad;
-		var scrollRange = h - settings.scrollbarMarginY * 2;
+	
+		var srad   = settings.scrollbarRadius;
+		var srad05 = R(settings.scrollbarRadius * 0.5);
+		var spx  = this.zone.w - settings.scrollbarMarginX - srad;
+		var scrollRange = this.zone.h - settings.scrollbarMarginY * 2;
 		var scrollSize  = scrollRange * innerHeight / dtreeHeight;
 		if (scrollSize < srad * 2) {
 			/* minimum size of scrollbar */
 			scrollSize = srad * 2;
 		}
 						
-		var spy = settings.scrollbarMarginY + 
-			sy / (dtreeHeight - innerHeight) * (scrollRange - scrollSize);
-			sy / (dtreeHeight - innerHeight) * (scrollRange - scrollSize);
+		var spy = R(settings.scrollbarMarginY + 
+			sy / (dtreeHeight - innerHeight) * (scrollRange - scrollSize));
 		
 		switch (settings.scrollbarForm) {
 		case 'round' :
-			cx.beginPath();
-			cx.arc(spx, spy + srad, srad, Math.PI, 0, false);
-			cx.arc(spx, spy + scrollSize - srad, srad, 0, Math.PI, false);
-			cx.closePath();
-			cx.stroke();
-			cx.fill();
+			bc2d.begin();
+			bc2d.arc(spx, spy + srad, srad, Math.PI, 0, false);
+			bc2d.arc(spx, spy + scrollSize - srad, srad, 0, Math.PI, false);
+			bc2d.close();
+			bc2d.fill(settings.scrollbarFillStyle);
+			bc2d.stroke(settings.scrollbarLineWidth, settings.scrollbarStrokeStyle);
 			break;
 		case 'square' :
-			cx.fillRect(spx, spy, srad + 2, scrollSize);
+			bc2d.fillRect(settings.scrollbarFillStyle, spx, spy, srad + 2, scrollSize);
 			break;
 		case 'hexagonh' :
-			cx.beginPath();
-			cx.moveTo(spx -   1 * srad, spy + Hex.c6 * srad);
-			cx.lineTo(spx - 0.5 * srad, spy);
-			cx.lineTo(spx + 0.5 * srad, spy);
-			cx.lineTo(spx +   1 * srad, spy + Hex.c6 * srad);
-			cx.lineTo(spx +   1 * srad, spy + scrollSize - Hex.c6 * srad);
-			cx.lineTo(spx + 0.5 * srad, spy + scrollSize);
-			cx.lineTo(spx - 0.5 * srad, spy + scrollSize);
-			cx.lineTo(spx -   1 * srad, spy + scrollSize - Hex.c6 * srad);
-			cx.closePath();
-			cx.stroke();
-			cx.fill();
+			bc2d.begin();
+			bc2d.moveTo(spx - srad,   R(spy + Hex.c6 * srad));
+			bc2d.lineTo(spx - srad05, spy);
+			bc2d.lineTo(spx + srad05, spy);
+			bc2d.lineTo(spx + srad,   R(spy + Hex.c6 * srad));
+			bc2d.lineTo(spx + srad,   R(spy + scrollSize - Hex.c6 * srad));
+			bc2d.lineTo(spx + srad05, R(spy + scrollSize));
+			bc2d.lineTo(spx - srad05, R(spy + scrollSize));
+			bc2d.lineTo(spx - srad,   R(spy + scrollSize - Hex.c6 * srad));
+			bc2d.close();
+			bc2d.fill(settings.scrollbarFillStyle);
+			bc2d.stroke(settings.scrollbarLineWidth, settings.scrollbarStrokeStyle);
 			break;
 		case 'hexagonv' :
-			cx.beginPath();
-			cx.moveTo(spx - 1 * srad, spy + Hex.c6 * srad);
-			cx.lineTo(spx           , spy);
-			cx.lineTo(spx + 1 * srad, spy + Hex.c6 * srad);
-			cx.lineTo(spx + 1 * srad, spy + scrollSize - Hex.c6 * srad);
-			cx.lineTo(spx           , spy + scrollSize);
-			cx.lineTo(spx - 1 * srad, spy + scrollSize - Hex.c6 * srad);
-			cx.closePath();
-			cx.stroke();
-			cx.fill();
+			bc2d.begin();
+			bc2d.moveTo(spx - srad, R(spy + Hex.c6 * srad));
+			bc2d.lineTo(spx           , spy);
+			bc2d.lineTo(spx + srad, spy + Hex.c6 * srad);
+			bc2d.lineTo(spx + srad, R(spy + scrollSize - Hex.c6 * srad));
+			bc2d.lineTo(spx           , R(spy + scrollSize));
+			bc2d.lineTo(spx - srad, R(spy + scrollSize - Hex.c6 * srad));
+			bc2d.close();
+			bc2d.fill(settings.scrollbarFillStyle);
+			bc2d.stroke(settings.scrollbarLineWidth, settings.scrollbarStrokeStyle);
 			break;
 		default :
 			throw new Error("invalid settings.scrollbarForm");
@@ -4075,17 +4120,13 @@ Note.prototype.draw = function(space) {
 	}
 
 	/* draws the border */
-	cx.lineWidth = settings.noteInnerBorderWidth;
-	cx.strokeStyle = settings.noteInnerBorderColor;
-	Note_bevel(cx, w, h, 1.5, settings.noteInnerRadius);
-	cx.stroke(); 
-	cx.lineWidth = settings.noteOuterBorderWidth;
-	cx.strokeStyle = settings.noteOuterBorderColor;
-	Note_bevel(cx, w, h, 0.5, settings.noteOuterRadius);
-	cx.stroke(); 
+	Note_bevel(bc2d, this.zone, 2, settings.noteInnerRadius); // todo moveto can2d
+	bc2d.stroke(settings.noteInnerBorderWidth, settings.noteInnerBorderColor);	
+	Note_bevel(bc2d, this.zone, 1, settings.noteOuterRadius);
+	bc2d.stroke(settings.noteOuterBorderWidth, settings.noteOuterBorderColor); 
+	bc2d.begin();
 	this._canvasActual = true;
-	space.canvas.getContext("2d").drawImage(
-		bcanvas, this.zone.p1.x + space.pan.x, this.zone.p1.y + space.pan.y);
+	space.can2d.drawImage(bc2d, this.zone.p1);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -4115,8 +4156,9 @@ function Label(js, id, p1) {
 	}
 	Item.call(this, "label", id);
 	if (!this.dtree.first) this.dtree.append(new Paragraph("Label"));
-	this.bcanvas = document.createElement("canvas");
-	this._canvasActual = false;
+	/* buffer canvas 2D */
+	this._bc2d = new Can2D();  
+	this._canvasActual = false;  // todo rename
 	if (typeof(this.zone.p2.x) === "undefined")  {
 		throw new Error("Invalid label");
 		//this.zone = new Rect(this.zone.p1, this.zone.p1.add(this.dtree.width, this.dtree.height));
@@ -4130,7 +4172,7 @@ Label.prototype.removed = function() {
 }
 
 /* An event happened at p.
- * returns transfix code
+ * returns transfix code.
  */
 Label.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 	if (!this.zone.within(p)) return 0;
@@ -4191,7 +4233,6 @@ Label.prototype.highlight = function(c2d) {
 	c2d.rect(this.zone);
 	c2d.stroke(3, "rgba(255, 183, 15, 0.5)"); // todo settings
 }
-
 
 /* turns the label into a string */
 Label.prototype.jsonfy = function() {
@@ -4264,36 +4305,23 @@ Label.prototype.checkItemCompass = function(p, rhs) {
 
 /* draws the item
    space  : to draw upon  */
-Label.prototype.draw = function(space) {
-	var bcanvas = this.bcanvas;
+Label.prototype.draw = function(space) { // todo replace space by space.can2d
+	var bc2d = this._bc2d;
 	var dtree = this.dtree;
 	if (this._canvasActual) {
 		/* buffer hit */
-		space.canvas.getContext("2d").drawImage(
-			bcanvas, this.zone.p1.x + space.pan.x, this.zone.p1.y + space.pan.y);
+		space.can2d.drawImage(bc2d, this.zone.p1);
 		return;
 	}
-	var w = this.zone.w;
-	var h = this.zone.h;
-	var cx = bcanvas.getContext("2d");
-	if (bcanvas.width != w || bcanvas.height != h) {
-		if (bcanvas.width  != w) bcanvas.width = w;
-		if (bcanvas.height != h) bcanvas.height = h;
-	} else {
-		cx.clearRect(0, 0, w, h); 
-	}
+	bc2d.attune(this.zone.w, this.zone.h); // todo this.zone
 	/* draws text */	
-	dtree.drawCanvas(bcanvas, space.selection, 0, 0, 0);
+	dtree.draw(bc2d, space.selection, 0, 0, 0);
 	/* draws the border */
-	cx.beginPath(); 
-	cx.rect(0, 0, w, h);
-	cx.lineWidth = 1;
-	cx.strokeStyle = "rgba(128,128,128,1)";
-	cx.stroke(); 
-	cx.beginPath(); 
+	bc2d.begin(); 
+	bc2d.rect(0, 0, bc2d.width - 1, bc2d.height - 1);  
+	bc2d.stroke(1, "rgba(128,128,128,1)"); // todo settings
 	this._canvasActual = true;
-	space.canvas.getContext("2d").drawImage(
-		bcanvas, this.zone.p1.x + space.pan.x, this.zone.p1.y + space.pan.y);
+	space.can2d.drawImage(bc2d, this.zone.p1);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -4324,7 +4352,7 @@ function Relation(js, id, i1id, i2id) {
 	}
 	dtree.flowWidth = -1;
 	Item.call(this, "rel", id);
-	this.bcanvas = document.createElement("canvas");
+	this._bc2d = new Can2D();
 	this._canvasActual = false;
 	
 	System.repository.addItem(this, true);
@@ -4348,6 +4376,7 @@ Relation.prototype.jsonfy = function() {
 	return js;
 }
 
+/* returns the arrow object of this relation */
 Object.defineProperty(Relation.prototype, "arrow", {
 	get: function() { 
 		if (this._arrow) return this._arrow;
@@ -4393,22 +4422,20 @@ Relation.prototype.checkItemCompass = function(p, rhs) {
 /* draws the item       * 
  * space, to draw upon  */
 Relation.prototype.draw = function(space) {
-	var bcanvas = this.bcanvas;
+	var bc2d = this._bc2d;
 	var dtree = this.dtree;
 	var it1 = System.repository.items[this.i1id]; // todo funcall
 	var it2 = System.repository.items[this.i2id];
 	if (this._canvasActual) {
 		/* buffer hit */
-		this.arrow.draw(space, bcanvas);
+		this.arrow.draw(space, bc2d);
 		return;
 	}
-	var cx = bcanvas.getContext("2d");
-	/* draws text */	
-	bcanvas.height = dtree.height;
-	bcanvas.width  = dtree.width;
-	dtree.drawCanvas(bcanvas, space.selection, 0, 0, 0);
+	/* draws text */
+	bc2d.attune(dtree); 
+	dtree.draw(bc2d, space.selection, 0, 0, 0);
 	this._canvasActual = true;
-	this.arrow.draw(space, bcanvas);
+	this.arrow.draw(space, bc2d);
 }
 
 /* something happend an item onlooked */
