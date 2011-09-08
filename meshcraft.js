@@ -558,7 +558,7 @@ Arrow.prototype.draw = function(space, mcanvas) {
 	var d = Math.atan2(p2.y - p1.y, p2.x - p1.x);
 	var ad = Math.PI/12;
 	var ms = 2 / Math.sqrt(3) * as;
-	c2d.begin();
+	c2d.beginPath();
 	if (mcanvas) {
 		var mx = R((p1.x + p2.x) / 2);
 		var my = R((p1.y + p2.y) / 2);
@@ -569,7 +569,7 @@ Arrow.prototype.draw = function(space, mcanvas) {
 		c2d.drawImage(mcanvas, tx, ty);
 		c2d.rect(tx, ty, mcanvas.width + 4, mcanvas.height + 4);
 		c2d.stroke(1, "rgba(255, 127, 0, 0.4)"); // todo settings
-		c2d.begin();
+		c2d.beginPath();
 
 		// calculate intersections
 		var is1x, is1y; 
@@ -631,8 +631,6 @@ Arrow.prototype.draw = function(space, mcanvas) {
 	c2d.stroke(1, "rgba(200, 100, 0, 0.8)");  // todo settings
 	c2d.fill("rgba(255, 225, 40, 0.5)");
 }
-
-
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,--.          _  .-,--.
@@ -830,14 +828,10 @@ Can2D.prototype.fillRect = function(style, rect) {
 }
 
 /* begins a path */
-Can2D.prototype.begin = function() {
-	this._cx.beginPath();
-}
+Can2D.prototype.beginPath = function() { this._cx.beginPath();  }
 
 /* closes a path */
-Can2D.prototype.close = function() {
-	this._cx.closePath();
-}
+Can2D.prototype.closePath = function() { this._cx.closePath();  } 
 
 /* drawImage(image, p) -or-
  * drawImage(image, x, y)
@@ -957,26 +951,216 @@ Can2D.prototype.fontStyle = function(font, fill, align, baseline) {
 
 /***
  * Utilities for hexagons.
- * The Flower Hexagon:
- * 
- *               X
- *               |--------->| r
- *               |--->      ' ri
- *         *-----'----'*    '     -1
- *        / \    1    ' \   '
- *       /   \   '   /'  \  '
- *      /  6  *-----* ' 2 \ '
- *     /   '   \'    \'
- * Y- *-----*    +    *-----*
- *     \     \       /     /
- *      \  5  *-----*   3 /
- *       \   /       \   /
- *        \ /    4    \ /
- *         *-----------*		
  */
 /* shortcuts for often needed trigonometric values */
 Can2D.cos6 = Math.cos(Math.PI / 6);
 Can2D.tan6 = Math.tan(Math.PI / 6);
+
+/* makes a hexagon path */
+Can2D.prototype.makeHexagon = function(p, r) {
+	var x = p.x;
+	var y = p.y;
+	var r2 = R(r / 2);
+	var rc = R(Can2D.cos6 * r);
+	this.beginPath();
+	this.moveTo(x - r, y);
+	this.lineTo(x - r2, y - rc);
+	this.lineTo(x + r2, y - rc);
+	this.lineTo(x + r, y);
+	this.lineTo(x + r2, y + rc);
+	this.lineTo(x - r2, y + rc);
+	this.lineTo(x - r, y);
+	this.closePath();
+}
+
+/* makes a double hexagon with 6 segments and center 
+ * it kinda looks like a flower. 
+ *
+ * The Flower Hexagon:
+ * 
+ *                p.x
+ *                 |--------->| r
+ *                 |--->| ri  ' 
+ *                 '    '     '
+ *           *-----'----'*    '     -1
+ *          / \    1    ' \   '
+ *         /   \   '   /'  \  '
+ *        /  6  *-----* ' 2 \ '
+ *       /   '   \'    \'    \
+ * p.y  *-----*    +    *-----*
+ *       \     \    p  /     /
+ *        \  5  *-----*   3 /
+ *         \   /       \   /
+ *          \ /    4    \ /
+ *           *-----------*
+ *
+ * p     ... center
+ * r     ... outer radius
+ * ri    ... inner radius
+ * segs  ... lists 0..6 which segments to include
+ */
+Can2D.prototype.makeHexagonFlower = function(p, r, ri, segs) {
+	var r2  = R(r / 2);
+	var rc  = R(Can2D.cos6 * r);
+	var ri2 = R(ri / 2);
+	var ric = R(Can2D.cos6 * ri);
+	var px = p.x;
+	var py = p.y;
+	this.beginPath();
+	/* inner hex */
+	this.moveTo(px - r,  py);
+	this.lineTo(px - r2, py - rc);
+	this.lineTo(px + r2, py - rc);
+	this.lineTo(px + r,  py);
+	this.lineTo(px + r2, py + rc);
+	this.lineTo(px - r2, py + rc);
+	this.lineTo(px - r,  py);
+	/* outer hex */
+	this.moveTo(px - ri,  py);
+	this.lineTo(px - ri2, py - ric);
+	this.lineTo(px + ri2, py - ric);
+	this.lineTo(px + ri,  py);
+	this.lineTo(px + ri2, py + ric);
+	this.lineTo(px - ri2, py + ric);
+	this.lineTo(px - ri,  py);	
+	
+	if (segs[1] || segs[6]) {
+		this.moveTo(px - ri2,  py - ric);
+		this.lineTo(px - r2,   py - rc);
+	}
+	if (segs[1] || segs[2]) {
+		this.moveTo(px + ri2, py - ric);
+		this.lineTo(px + r2,  py - rc);
+	}
+	if (segs[2] || segs[3]) {
+		this.moveTo(px + ri,  py);
+		this.lineTo(px + r,   py);
+	}
+	if (segs[3] || segs[4]) {
+		this.moveTo(px + ri2,  py + ric);
+		this.lineTo(px + r2,   py + rc);
+	}
+	if (segs[4] || segs[5]) {
+		this.moveTo(px - ri2, py + ric);
+		this.lineTo(px - r2,  py + rc);
+	}
+	if (segs[5] || segs[6]) {
+		this.moveTo(px - ri,  py);
+		this.lineTo(px - r,   py);
+	}
+}
+
+
+/* makes the top slice of a hexagon.
+ *       ------------        ^
+ *      /............\       |  h
+ *     /..............\      |
+ *   p*................\     v
+ *   /                  \
+ *  *<-------->*         *
+ *   \     r    pm      /
+ *    \                /
+ *     \              /
+ *      \            /
+ *       *----------*		
+ *              
+ * makeHexagonSlice(c2d, p, r, h)       -or-
+ * makeHexagonSlice(c2d, x, y, r, h)    
+ * 
+ * returns pm;
+ */
+Can2D.prototype.makeHexagonSlice = function(a1, a2, a3, a4) {
+	var x, y, r, h;
+	
+	if (typeof(a1) === "object") {
+		x = a1.x;
+		y = a1.y;
+		r = a2;
+		h = a3;
+	} else {
+		x = a1;
+		y = a2;
+		r = a3;
+		h = a4;	
+	}
+	
+	var r2 = R(r / 2);
+	var rc = R(Can2D.cos6 * r);
+	if (h > r) throw new Error("Cannot make slice larger than radius");
+	var pm = new Point(x + r - R((r * Can2D.cos6 - h) * Can2D.tan6), y + rc - h);
+	
+	this.beginPath();
+	this.moveTo(x, y);
+	this.lineTo(pm.x - r2, y - h);
+	this.lineTo(pm.x + r2, y - h);
+	this.lineTo(2 * pm.x - x, y);
+	return pm;
+}
+
+
+/* makes a hexagon segment path: 
+ *         r |------>| 
+ *        ri |->.    '
+ *       .------'.   '      -1
+ *      / \  1  / \	 '
+ *     / 6 .---.'2 \ '
+ *    /___/  .  \___\'  
+ *    \   \  0  /   /
+ *     \ 5 `---´ 3 /
+ *      \ /  4  \ /
+ *       `-------´  
+ */
+Can2D.prototype.makeHexagonSegment = function(p, r, ri, seg) {
+	var r2  = R(r  / 2);
+	var rc  = R(Can2D.cos6 * r);
+	var ri2 = R(ri / 2);
+	var ric = R(Can2D.cos6 * ri);
+	var px = p.x;
+	var py = p.y;
+	this.beginPath();
+	switch(seg) {
+	case 1:
+		this.moveTo(px - r2,  py - rc);
+		this.lineTo(px + r2,  py - rc);
+		this.lineTo(px + ri2, py - ric);
+		this.lineTo(px - ri2, py - ric);
+		break;
+	case 2:
+		this.moveTo(px + r2,  py - rc);
+		this.lineTo(px + r,   py);
+		this.lineTo(px + ri,  py);
+		this.lineTo(px + ri2, py - ric);
+		break;
+	case 3:
+		this.moveTo(px + r,   py);
+		this.lineTo(px + r2,  py + rc);
+		this.lineTo(px + ri2, py + ric);
+		this.lineTo(px + ri,  py);
+		break;
+	case 4:
+		this.lineTo(px + r2,  py + rc);
+		this.lineTo(px - r2,  py + rc);
+		this.lineTo(px - ri2, py + ric);
+		this.lineTo(px + ri2, py + ric);
+		break;
+	case 5:
+		this.moveTo(px - r2,  py + rc);
+		this.lineTo(px - r,   py);
+		this.lineTo(px - ri,  py);
+		this.lineTo(px - ri2, py + ric);
+		break;
+	case 6:
+		this.moveTo(px - r,   py);
+		this.lineTo(px - r2,  py - rc);
+		this.lineTo(px - ri2, py- ric);
+		this.lineTo(px - ri,  py);
+		break;
+	default :
+		throw new Error("invalid segment: " + seg);
+	}
+	this.closePath();
+}	
+
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,-,-,-.           .
@@ -1952,96 +2136,11 @@ _init : function() {
 	System.space.redraw();
 }};
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ,-_/,.
- ' |_|/ ,-. . ,
-  /| |  |-'  X
-  `' `' `-' ' `
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- Utilities for hexagons.
 
-The Flower Hexagon:
 
-              X
-		      |--------->| r
-              |--->      ' ri
-        *-----'----'*    '     -1
-	   / \    1    ' \   '
-      /   \   '   /'  \  '
-	 /  6  *-----* ' 2 \ '
-	/     /   '   \'    \'
-Y- *-----*    +    *-----*
-	\     \       /     /
-	 \  5  *-----*   3 /
- 	  \   /       \   /
-	   \ /    4    \ /
-        *-----------*		
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+//+++++++++++++++++++++++++++++
 var Hex = { };
-
-/* make a hexagon path */
-Hex.makePath = function(c2d, p, r) {
-	var x = p.x;
-	var y = p.y;
-	var r2 = R(r / 2);
-	var rc = R(Can2D.cos6 * r);
-	c2d.begin();
-	c2d.moveTo(x - r, y);
-	c2d.lineTo(x - r2, y - rc);
-	c2d.lineTo(x + r2, y - rc);
-	c2d.lineTo(x + r, y);
-	c2d.lineTo(x + r2, y + rc);
-	c2d.lineTo(x - r2, y + rc);
-	c2d.lineTo(x - r, y);
-	c2d.close();
-}
  
-/* draws the top slice
- *       ------------        ^
- *      /............\       |  h
- *     /..............\      |
- *   p*................\     v
- *   /                  \
- *  *<-------->*         *
- *   \     r    pm      /
- *    \                /
- *     \              /
- *      \            /
- *       *----------*		
- *              
- * makeSlicePath(c2d, p, r, h)       -or-
- * makeSlicePath(c2d, x, y, r, h)    
- * 
- * returns pm;
- */
-Hex.makeSlicePath = function(c2d, a1, a2, a3, a4) {
-	var x, y, r, h;
-	if (typeof(a1) === "object") {
-		x = a1.x;
-		y = a1.y;
-		r = a2;
-		h = a3;
-	} else {
-		x = a1;
-		y = a2;
-		r = a3;
-		h = a4;	
-	}
-	
-	var r2 = R(r / 2);
-	var rc = R(Can2D.cos6 * r);
-	if (h > r) throw new Error("Cannot make slice larger than radius");
-	var pm = new Point(x + r - R((r * Can2D.cos6 - h) * Can2D.tan6), y + rc - h);
-	
-	c2d.begin();
-	c2d.moveTo(x, y);
-	c2d.lineTo(pm.x - r2, y - h);
-	c2d.lineTo(pm.x + r2, y - h);
-	c2d.lineTo(2 * pm.x - x, y);
-	//c2d.close();
-	return pm;
-}
-
 /* returns true if point is in hexagon wit radius r */
 Hex.within = function(p, r) {
 	var rc = r * Can2D.cos6;
@@ -2059,131 +2158,6 @@ Hex.withinSlice = function(p, r, h) {
 	return p.y >=  -h &&         p.y <= 0 &&
 	       p.x >= -yh && p.x - 2 * w <= yh;
 }
-
-/* makes a double hexagon with 6 segments and center 
- * it kinda looks like a flower. 
- *
- * p     ... center 
- * r     ... outer radius
- * ri    ... inner radius
- * segs  ... lists 0..6 which segments to include
- */
-Hex.makeFlowerPath = function(c2d, p, r, ri, segs) {
-	var r2  = R(r / 2);
-	var rc  = R(Can2D.cos6 * r);
-	var ri2 = R(ri / 2);
-	var ric = R(Can2D.cos6 * ri);
-	var px = p.x;
-	var py = p.y;
-	c2d.begin();
-	/* inner hex */
-	// todo call make hex
-	c2d.moveTo(px - r,  py);
-	c2d.lineTo(px - r2, py - rc);
-	c2d.lineTo(px + r2, py - rc);
-	c2d.lineTo(px + r,  py);
-	c2d.lineTo(px + r2, py + rc);
-	c2d.lineTo(px - r2, py + rc);
-	c2d.lineTo(px - r,  py);
-	/* outer hex */
-	// todo call make hex
-	c2d.moveTo(px - ri,  py);
-	c2d.lineTo(px - ri2, py - ric);
-	c2d.lineTo(px + ri2, py - ric);
-	c2d.lineTo(px + ri,  py);
-	c2d.lineTo(px + ri2, py + ric);
-	c2d.lineTo(px - ri2, py + ric);
-	c2d.lineTo(px - ri,  py);	
-	
-	if (segs[1] || segs[6]) {
-		c2d.moveTo(px - ri2,  py - ric);
-		c2d.lineTo(px - r2,   py - rc);
-	}
-	if (segs[1] || segs[2]) {
-		c2d.moveTo(px + ri2, py - ric);
-		c2d.lineTo(px + r2,  py - rc);
-	}
-	if (segs[2] || segs[3]) {
-		c2d.moveTo(px + ri,  py);
-		c2d.lineTo(px + r,   py);
-	}
-	if (segs[3] || segs[4]) {
-		c2d.moveTo(px + ri2,  py + ric);
-		c2d.lineTo(px + r2,   py + rc);
-	}
-	if (segs[4] || segs[5]) {
-		c2d.moveTo(px - ri2, py + ric);
-		c2d.lineTo(px - r2,  py + rc);
-	}
-	if (segs[5] || segs[6]) {
-		c2d.moveTo(px - ri,  py);
-		c2d.lineTo(px - r,   py);
-	}
-}
-
-/* makes a hexagon segment path: 
-		   r |------>| 
-          ri |->.    '
-         .------'.   '      -1
-		/ \  1  / \	 '
-	   / 6 .---.'2 \ '
-	  /___/  .  \___\'  
-	  \   \  0  /   /
-	   \ 5 `---´ 3 /
- 	    \ /  4  \ /
-         `-------´  
-*/
-Hex.makePathSegment = function(c2d, p, r, ri, seg) {
-	var r2  = R(r  / 2);
-	var rc  = R(Can2D.cos6 * r);
-	var ri2 = R(ri / 2);
-	var ric = R(Can2D.cos6 * ri);
-	var px = p.x;
-	var py = p.y;
-	c2d.begin();
-	switch(seg) {
-	case 1:
-		c2d.moveTo(px - r2,  py - rc);
-		c2d.lineTo(px + r2,  py - rc);
-		c2d.lineTo(px + ri2, py - ric);
-		c2d.lineTo(px - ri2, py - ric);
-		break;
-	case 2:
-		c2d.moveTo(px + r2,  py - rc);
-		c2d.lineTo(px + r,   py);
-		c2d.lineTo(px + ri,  py);
-		c2d.lineTo(px + ri2, py - ric);
-		break;
-	case 3:
-		c2d.moveTo(px + r,   py);
-		c2d.lineTo(px + r2,  py + rc);
-		c2d.lineTo(px + ri2, py + ric);
-		c2d.lineTo(px + ri,  py);
-		break;
-	case 4:
-		c2d.lineTo(px + r2,  py + rc);
-		c2d.lineTo(px - r2,  py + rc);
-		c2d.lineTo(px - ri2, py + ric);
-		c2d.lineTo(px + ri2, py + ric);
-		break;
-	case 5:
-		c2d.moveTo(px - r2,  py + rc);
-		c2d.lineTo(px - r,   py);
-		c2d.lineTo(px - ri,  py);
-		c2d.lineTo(px - ri2, py + ric);
-		break;
-	case 6:
-		c2d.moveTo(px - r,   py);
-		c2d.lineTo(px - r2,  py - rc);
-		c2d.lineTo(px - ri2, py- ric);
-		c2d.lineTo(px - ri,  py);
-		break;
-	default :
-		throw new Error("invalid segment: " + seg);
-	}
-	c2d.close();
-}	
-
 
 	
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2225,15 +2199,15 @@ Hexmenu.prototype.draw = function() {
 	var grad = c2d.createRadialGradient(p, 0, p, (r + ri) / 2);
 	grad.addColorStop(0, settings.floatMenuBackground1);
 	grad.addColorStop(1, settings.floatMenuBackground2);
-	Hex.makePath(c2d, p, r);
+	c2d.makeHexagon(p, r);
 	c2d.fill(grad);
 
 	if (this.mousepos > 0) {
-		Hex.makePathSegment(c2d, p, r, ri, this.mousepos);
+		c2d.makeHexagonSegment(p, r, ri, this.mousepos);
 		c2d.fill(settings.floatMenuFillStyle);
 	}
 	
-	Hex.makeFlowerPath(c2d, p, r, ri, this.labels, false);	
+	c2d.makeHexagonFlower(p, r, ri, this.labels, false);	
 	if (settings.floatMenuInnerBorderWidth > 0) {
 		c2d.stroke(settings.floatMenuInnerBorderWidth, settings.floatMenuInnerBorderColor);
 	}
@@ -2339,7 +2313,7 @@ Edgemenu.prototype.draw = function(x, y) {
 	var xl = x - w - ew;
 	var xr = x + w + ew;
 	
-	c2d.begin();
+	c2d.beginPath();
 	c2d.moveTo(xl, y);
 	c2d.lineTo(x - w, y - h);
 	c2d.lineTo(x + w, y - h);
@@ -2356,7 +2330,7 @@ Edgemenu.prototype.draw = function(x, y) {
 		
 	switch(this.mousepos) {
 	case 0 :
-		c2d.begin();
+		c2d.beginPath();
 		c2d.moveTo(xl + bw + ew, y);
 		c2d.lineTo(xl + bw, y - h);
 		c2d.lineTo(xr - bw, y - h);
@@ -2365,7 +2339,7 @@ Edgemenu.prototype.draw = function(x, y) {
 		this._stroke(c2d);
 		break;
 	case 1 :
-		c2d.begin();
+		c2d.beginPath();
 		c2d.moveTo(xl, y);
 		c2d.lineTo(x - w, y - h);
 		c2d.lineTo(xl + bw, y - h);
@@ -2374,7 +2348,7 @@ Edgemenu.prototype.draw = function(x, y) {
 		this._stroke(c2d);
 		break;
 	case 2 :
-		c2d.begin();
+		c2d.beginPath();
 		c2d.moveTo(xr - bw - ew, y);
 		c2d.lineTo(xr - bw, y - h);
 		c2d.lineTo(x + w, y - h);
@@ -3532,7 +3506,7 @@ DTree.prototype.draw = function(c2d, select, offsetX, offsetY, scrolly) {
 			e = select.mark1;
 		}
 			
-		c2d.begin();
+		c2d.beginPath();
 		var psy = scrolly >= 0 ? scrolly : 0;
 		var lh = R(this.fontsize * (1 + settings.bottombox));
 		var bx = R(b.x);
@@ -3568,7 +3542,7 @@ DTree.prototype.draw = function(c2d, select, offsetX, offsetY, scrolly) {
 			//    *****
 			// *****
 			for(var i = 0; i < 2; i++) {
-				c2d.begin();
+				c2d.beginPath();
 				var edge = i ? c2d.moveTo : c2d.lineTo;
 				c2d.moveTo(rx, ey);
 				c2d.lineTo(ex, ey);
@@ -3685,7 +3659,7 @@ Item.prototype.setItemMenu = function(menu, pan) {
 	var r = settings.itemMenuInnerRadius;
 	var h = settings.itemMenuSliceHeight;
 	menu.set(new Point(
-		R(this.zone.p1.x + pan.x + r - (r * Can2D.cos6 - h) * Can2D.t6), 
+		R(this.zone.p1.x + pan.x + r - (r * Can2D.cos6 - h) * Can2D.tan6), 
 		R(this.zone.p1.y + pan.y + r * Can2D.cos6 - h) - 1));
 }
 
@@ -3768,7 +3742,7 @@ Item.prototype._drawHandles = function(space, rhs) {
 	var xm = R((x1 + x2) / 2);
 	var ym = R((y1 + y2) / 2);
 	
-	c2d.begin(); 
+	c2d.beginPath(); 
 	if (rhs &   1) { c2d.moveTo(xm - hs2, y1); c2d.lineTo(xm + hs2, y1);                    }
 	if (rhs &   2) { c2d.moveTo(x2 - hs,  y1); c2d.lineTo(x2, y1); c2d.lineTo(x2, y1 + hs); }
 	if (rhs &   4) { c2d.moveTo(x2, ym - hs2); c2d.lineTo(x2, ym + hs2);                    }
@@ -3788,8 +3762,8 @@ Item.prototype._drawHandles = function(space, rhs) {
 	/* draws item menu handler */
 	// todo
 	var p1 = this.zone.p1;
-	var pm = Hex.makeSlicePath(c2d, p1,
-		settings.itemMenuInnerRadius, settings.itemMenuSliceHeight);
+	var pm = c2d.makeHexagonSlice(p1,settings.itemMenuInnerRadius, settings.itemMenuSliceHeight);
+	debug("pm", pm.x, pm.y);
 	var grad = c2d.createLinearGradient(
 		0, p1.y - settings.itemMenuSliceHeight - 1, 
 		0, p1.y - settings.itemMenuSliceHeight + settings.itemMenuInnerRadius * Can2D.cos6
@@ -3812,7 +3786,7 @@ Item.prototype._drawHandles = function(space, rhs) {
 	}
 			
 	if (settings.itemMenuOuterBorderWidth > 0) {
-		Hex.makeSlicePath(c2d, p1.x - 1, p1.y, 
+		c2d.makeHexagonSlice(p1.x - 1, p1.y, 
 			settings.itemMenuInnerRadius + 1, settings.itemMenuSliceHeight + 1);
 		var style;
 		if (settings.itemMenuOuterBorderColor2) {
@@ -3872,7 +3846,7 @@ Note.prototype.removed = function() {
 
 /* highlets the note. */		
 Note.prototype.highlight = function(c2d) {
-	c2d.begin();
+	c2d.beginPath();
 	c2d.rect(this.zone);
 	c2d.stroke(3, "rgba(255, 183, 15, 0.5)"); // todo settings
 }
@@ -4030,7 +4004,7 @@ function Note_bevel(c2d, zone, border, radius) {
 	var y1 = border;
 	var x2 = zone.w - border;
 	var y2 = zone.h - border;
-	c2d.begin();
+	c2d.beginPath();
 	c2d.moveTo(x1 + radius, y1);
 	c2d.arc(x2 - radius, y1 + radius, radius, -Math.PI / 2, 0, false);
 	c2d.arc(x2 - radius, y2 - radius, radius, 0, Math.PI / 2, false);
@@ -4106,10 +4080,10 @@ Note.prototype.draw = function(space) {
 		
 		switch (settings.scrollbarForm) {
 		case 'round' :
-			bc2d.begin();
+			bc2d.beginPath();
 			bc2d.arc(spx, spy + srad, srad, Math.PI, 0, false);
 			bc2d.arc(spx, spy + scrollSize - srad, srad, 0, Math.PI, false);
-			bc2d.close();
+			bc2d.closePath();
 			bc2d.fill(settings.scrollbarFillStyle);
 			bc2d.stroke(settings.scrollbarLineWidth, settings.scrollbarStrokeStyle);
 			break;
@@ -4117,7 +4091,7 @@ Note.prototype.draw = function(space) {
 			bc2d.fillRect(settings.scrollbarFillStyle, spx, spy, srad + 2, scrollSize);
 			break;
 		case 'hexagonh' :
-			bc2d.begin();
+			bc2d.beginPath();
 			bc2d.moveTo(spx - srad,   R(spy + Can2D.cos6 * srad));
 			bc2d.lineTo(spx - srad05, spy);
 			bc2d.lineTo(spx + srad05, spy);
@@ -4126,19 +4100,19 @@ Note.prototype.draw = function(space) {
 			bc2d.lineTo(spx + srad05, R(spy + scrollSize));
 			bc2d.lineTo(spx - srad05, R(spy + scrollSize));
 			bc2d.lineTo(spx - srad,   R(spy + scrollSize - Can2D.cos6 * srad));
-			bc2d.close();
+			bc2d.closePath();
 			bc2d.fill(settings.scrollbarFillStyle);
 			bc2d.stroke(settings.scrollbarLineWidth, settings.scrollbarStrokeStyle);
 			break;
 		case 'hexagonv' :
-			bc2d.begin();
+			bc2d.beginPath();
 			bc2d.moveTo(spx - srad, R(spy + Can2D.cos6 * srad));
 			bc2d.lineTo(spx           , spy);
 			bc2d.lineTo(spx + srad, spy + Can2D.cos6 * srad);
 			bc2d.lineTo(spx + srad, R(spy + scrollSize - Can2D.cos6 * srad));
 			bc2d.lineTo(spx           , R(spy + scrollSize));
+			bc2d.closePath();
 			bc2d.lineTo(spx - srad, R(spy + scrollSize - Can2D.cos6 * srad));
-			bc2d.close();
 			bc2d.fill(settings.scrollbarFillStyle);
 			bc2d.stroke(settings.scrollbarLineWidth, settings.scrollbarStrokeStyle);
 			break;
@@ -4152,7 +4126,7 @@ Note.prototype.draw = function(space) {
 	bc2d.stroke(settings.noteInnerBorderWidth, settings.noteInnerBorderColor);	
 	Note_bevel(bc2d, this.zone, 1, settings.noteOuterRadius);
 	bc2d.stroke(settings.noteOuterBorderWidth, settings.noteOuterBorderColor); 
-	bc2d.begin();
+	bc2d.beginPath();
 	this._canvasActual = true;
 	space.can2d.drawImage(bc2d, this.zone.p1);
 }
@@ -4257,7 +4231,7 @@ Label.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 
 /* highlets the label. */		
 Label.prototype.highlight = function(c2d) {
-	c2d.begin();
+	c2d.beginPath();
 	c2d.rect(this.zone);
 	c2d.stroke(3, "rgba(255, 183, 15, 0.5)"); // todo settings
 }
@@ -4345,7 +4319,7 @@ Label.prototype.draw = function(space) { // todo replace space by space.can2d
 	/* draws text */	
 	dtree.draw(bc2d, space.selection, 0, 0, 0);
 	/* draws the border */
-	bc2d.begin(); 
+	bc2d.beginPath(); 
 	bc2d.rect(0, 0, bc2d.width - 1, bc2d.height - 1);  
 	bc2d.stroke(1, "rgba(128,128,128,1)"); // todo settings
 	this._canvasActual = true;
