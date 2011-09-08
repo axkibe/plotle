@@ -149,7 +149,6 @@ var abs = Math.abs;
 var max = Math.max;
 var min = Math.min;
 
-
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .-,--.
  `\__  ,-. . . ,-,-. ,-.
@@ -636,7 +635,10 @@ Arrow.prototype.draw = function(space, mcanvas) {
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- +++ Can2D +++
+  ,--.          _  .-,--.
+ | `-' ,-. ,-. ´ ) ' |   \
+ |   . ,-| | |  /  , |   /
+ `--'  `-^ ' ' '~` `-^--'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  Meshcrafts Canvas wrapper.
  
@@ -952,6 +954,30 @@ Can2D.prototype.fontStyle = function(font, fill, align, baseline) {
 	cx.textBaseline = baseline;
 }
 
+
+/***
+ * Utilities for hexagons.
+ * The Flower Hexagon:
+ * 
+ *               X
+ *               |--------->| r
+ *               |--->      ' ri
+ *         *-----'----'*    '     -1
+ *        / \    1    ' \   '
+ *       /   \   '   /'  \  '
+ *      /  6  *-----* ' 2 \ '
+ *     /   '   \'    \'
+ * Y- *-----*    +    *-----*
+ *     \     \       /     /
+ *      \  5  *-----*   3 /
+ *       \   /       \   /
+ *        \ /    4    \ /
+ *         *-----------*		
+ */
+/* shortcuts for often needed trigonometric values */
+Can2D.cos6 = Math.cos(Math.PI / 6);
+Can2D.tan6 = Math.tan(Math.PI / 6);
+
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,-,-,-.           .
  `,| | |   ,-. ,-. | , ,-. ,-.
@@ -968,8 +994,8 @@ function Marker() {
 	this._cli = null;
 }
 
+/* todo needed? */
 Object.defineProperty(Marker.prototype, "item", {
-	/* todo needed? */
 	get: function() { return this._item; },
 	set: function(it) { throw new Error("use set()"); }
 });
@@ -1951,17 +1977,14 @@ Y- *-----*    +    *-----*
 	   \ /    4    \ /
         *-----------*		
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-var Hex = {
-	c6  : Math.cos(Math.PI / 6),
-	t6  : Math.tan(Math.PI / 6),
-}
+var Hex = { };
 
 /* make a hexagon path */
 Hex.makePath = function(c2d, p, r) {
 	var x = p.x;
 	var y = p.y;
 	var r2 = R(r / 2);
-	var rc = R(Hex.c6 * r);
+	var rc = R(Can2D.cos6 * r);
 	c2d.begin();
 	c2d.moveTo(x - r, y);
 	c2d.lineTo(x - r2, y - rc);
@@ -2006,9 +2029,9 @@ Hex.makeSlicePath = function(c2d, a1, a2, a3, a4) {
 	}
 	
 	var r2 = R(r / 2);
-	var rc = R(Hex.c6 * r);
+	var rc = R(Can2D.cos6 * r);
 	if (h > r) throw new Error("Cannot make slice larger than radius");
-	var pm = new Point(x + r - R((r * Hex.c6 - h) * Hex.t6), y + rc - h);
+	var pm = new Point(x + r - R((r * Can2D.cos6 - h) * Can2D.tan6), y + rc - h);
 	
 	c2d.begin();
 	c2d.moveTo(x, y);
@@ -2021,8 +2044,8 @@ Hex.makeSlicePath = function(c2d, a1, a2, a3, a4) {
 
 /* returns true if point is in hexagon wit radius r */
 Hex.within = function(p, r) {
-	var rc = r * Hex.c6;
-	var yh = p.y * Hex.t6;
+	var rc = r * Can2D.cos6;
+	var yh = p.y * Can2D.cos6;
 	return	p.y >= -rc && p.y <= rc &&
 	        p.x - r < -abs(yh) &&
 			p.x + r >  abs(yh);
@@ -2030,9 +2053,9 @@ Hex.within = function(p, r) {
 
 /* returns true if point is in hexagon slice */
 Hex.withinSlice = function(p, r, h) {
-	var w  = r - (r * Hex.c6 - h) * Hex.t6;
-	var rc = r * Hex.c6;
-	var yh = p.y * Hex.t6;
+	var w  = r - (r * Can2D.cos6 - h) * Can2D.tan6;
+	var rc = r * Can2D.cos6;
+	var yh = p.y * Can2D.tan6;
 	return p.y >=  -h &&         p.y <= 0 &&
 	       p.x >= -yh && p.x - 2 * w <= yh;
 }
@@ -2047,9 +2070,9 @@ Hex.withinSlice = function(p, r, h) {
  */
 Hex.makeFlowerPath = function(c2d, p, r, ri, segs) {
 	var r2  = R(r / 2);
-	var rc  = R(Hex.c6 * r);
+	var rc  = R(Can2D.cos6 * r);
 	var ri2 = R(ri / 2);
-	var ric = R(Hex.c6 * ri);
+	var ric = R(Can2D.cos6 * ri);
 	var px = p.x;
 	var py = p.y;
 	c2d.begin();
@@ -2112,9 +2135,9 @@ Hex.makeFlowerPath = function(c2d, p, r, ri, segs) {
 */
 Hex.makePathSegment = function(c2d, p, r, ri, seg) {
 	var r2  = R(r  / 2);
-	var rc  = R(Hex.c6 * r);
+	var rc  = R(Can2D.cos6 * r);
 	var ri2 = R(ri / 2);
-	var ric = R(Hex.c6 * ri);
+	var ric = R(Can2D.cos6 * ri);
 	var px = p.x;
 	var py = p.y;
 	c2d.begin();
@@ -2258,9 +2281,9 @@ Hexmenu.prototype._getMousepos = function(p) {
 	} else if (Hex.within(dp, this.ri)) {
 		return this.mousepos = 0;
 	} else {
-		var lor = dp.x <= -dp.y * Hex.t6; // left of right diagonal
-		var rol = dp.x >=  dp.y * Hex.t6; // right of left diagonal
-		var aom = dp.y <= 0;              // above of middle line
+		var lor = dp.x <= -dp.y * Can2D.tan6; // left of right diagonal
+		var rol = dp.x >=  dp.y * Can2D.tan6; // right of left diagonal
+		var aom = dp.y <= 0;                  // above of middle line
 		if (lor && rol)        return this.mousepos = 1;
 		else if (!lor && aom)  return this.mousepos = 2;
 		else if (rol && !aom)  return this.mousepos = 3;
@@ -2312,7 +2335,7 @@ Edgemenu.prototype.draw = function(x, y) {
 	var w = this.width;
 	var bw = this.bwidth;
 	var h =  this.height;
-	var ew = R(h * Hex.t6);
+	var ew = R(h * Can2D.tan6);
 	var xl = x - w - ew;
 	var xr = x + w + ew;
 	
@@ -2375,13 +2398,13 @@ Edgemenu.prototype._getMousepos = function(p) {
 	var tx = R(canvas.width / 2) + 0.5;
 	var w  = this.width;
 	var bw = this.bwidth;
-	var ew = R(h * Hex.t6);
+	var ew = R(h * Can2D.tan6);
 	var xl = tx - w - ew;
 	var xr = tx + w + ew;
-	if ((p.x - xl <= -(p.y - ty) * Hex.t6)) return this.mousepos = -1;
-	if ((p.x - xr >=  (p.y - ty) * Hex.t6)) return this.mousepos = -1;
-	if ((p.x - (xl + bw + ew) <=  (p.y - ty) * Hex.t6)) return this.mousepos = 1;
-	if ((p.x - (xr - bw - ew) >= -(p.y - ty) * Hex.t6)) return this.mousepos = 2;
+	if ((p.x - xl <= -(p.y - ty) * Can2D.tan6)) return this.mousepos = -1;
+	if ((p.x - xr >=  (p.y - ty) * Can2D.tan6)) return this.mousepos = -1;
+	if ((p.x - (xl + bw + ew) <=  (p.y - ty) * Can2D.t6)) return this.mousepos = 1;
+	if ((p.x - (xr - bw - ew) >= -(p.y - ty) * Can2D.t6)) return this.mousepos = 2;
 	return this.mousepos = 0;
 }
 
@@ -2396,7 +2419,12 @@ Edgemenu.prototype.mousedown = function(x, y) {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- Cockpit+++
+  ,--.         .         .
+ | `-' ,-. ,-. | , ,-. . |-
+ |   . | | |   |<  | | | |
+ `--'  `-' `-' ' ` |-' ' `'
+                   |
+                   '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  The unmoving interface.      
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -3657,8 +3685,8 @@ Item.prototype.setItemMenu = function(menu, pan) {
 	var r = settings.itemMenuInnerRadius;
 	var h = settings.itemMenuSliceHeight;
 	menu.set(new Point(
-		R(this.zone.p1.x + pan.x + r - (r * Hex.c6 - h) * Hex.t6), 
-		R(this.zone.p1.y + pan.y + r * Hex.c6 - h) - 1));
+		R(this.zone.p1.x + pan.x + r - (r * Can2D.cos6 - h) * Can2D.t6), 
+		R(this.zone.p1.y + pan.y + r * Can2D.cos6 - h) - 1));
 }
 
 /* returns if coords are within the item menu */
@@ -3764,7 +3792,7 @@ Item.prototype._drawHandles = function(space, rhs) {
 		settings.itemMenuInnerRadius, settings.itemMenuSliceHeight);
 	var grad = c2d.createLinearGradient(
 		0, p1.y - settings.itemMenuSliceHeight - 1, 
-		0, p1.y - settings.itemMenuSliceHeight + settings.itemMenuInnerRadius * Hex.c6
+		0, p1.y - settings.itemMenuSliceHeight + settings.itemMenuInnerRadius * Can2D.cos6
 	);
 	grad.addColorStop(0, settings.itemMenuBackground1);
 	grad.addColorStop(1, settings.itemMenuBackground2);	
@@ -4090,26 +4118,26 @@ Note.prototype.draw = function(space) {
 			break;
 		case 'hexagonh' :
 			bc2d.begin();
-			bc2d.moveTo(spx - srad,   R(spy + Hex.c6 * srad));
+			bc2d.moveTo(spx - srad,   R(spy + Can2D.cos6 * srad));
 			bc2d.lineTo(spx - srad05, spy);
 			bc2d.lineTo(spx + srad05, spy);
-			bc2d.lineTo(spx + srad,   R(spy + Hex.c6 * srad));
-			bc2d.lineTo(spx + srad,   R(spy + scrollSize - Hex.c6 * srad));
+			bc2d.lineTo(spx + srad,   R(spy + Can2D.cos6 * srad));
+			bc2d.lineTo(spx + srad,   R(spy + scrollSize - Can2D.cos6 * srad));
 			bc2d.lineTo(spx + srad05, R(spy + scrollSize));
 			bc2d.lineTo(spx - srad05, R(spy + scrollSize));
-			bc2d.lineTo(spx - srad,   R(spy + scrollSize - Hex.c6 * srad));
+			bc2d.lineTo(spx - srad,   R(spy + scrollSize - Can2D.cos6 * srad));
 			bc2d.close();
 			bc2d.fill(settings.scrollbarFillStyle);
 			bc2d.stroke(settings.scrollbarLineWidth, settings.scrollbarStrokeStyle);
 			break;
 		case 'hexagonv' :
 			bc2d.begin();
-			bc2d.moveTo(spx - srad, R(spy + Hex.c6 * srad));
+			bc2d.moveTo(spx - srad, R(spy + Can2D.cos6 * srad));
 			bc2d.lineTo(spx           , spy);
-			bc2d.lineTo(spx + srad, spy + Hex.c6 * srad);
-			bc2d.lineTo(spx + srad, R(spy + scrollSize - Hex.c6 * srad));
+			bc2d.lineTo(spx + srad, spy + Can2D.cos6 * srad);
+			bc2d.lineTo(spx + srad, R(spy + scrollSize - Can2D.cos6 * srad));
 			bc2d.lineTo(spx           , R(spy + scrollSize));
-			bc2d.lineTo(spx - srad, R(spy + scrollSize - Hex.c6 * srad));
+			bc2d.lineTo(spx - srad, R(spy + scrollSize - Can2D.cos6 * srad));
 			bc2d.close();
 			bc2d.fill(settings.scrollbarFillStyle);
 			bc2d.stroke(settings.scrollbarLineWidth, settings.scrollbarStrokeStyle);
