@@ -12,9 +12,8 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___'   '___'                      `~~'  `"   |_|      `'*/ 
 
-									   
-"use strict";
 
+"use strict";
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .---.     .  .
 \___  ,-. |- |- . ,-. ,-. ,-.
@@ -1161,6 +1160,24 @@ Can2D.prototype.makeHexagonSegment = function(p, r, ri, seg) {
 	this.closePath();
 }	
 
+/* returns true if point is in hexagon with radius r */
+Can2D.withinHexagon = function(p, r) {
+	var rc = r * Can2D.cos6;
+	var yh = p.y * Can2D.cos6;
+	return	p.y >= -rc && p.y <= rc &&
+	        p.x - r < -abs(yh) &&
+			p.x + r >  abs(yh);
+}
+
+/* returns true if point is in hexagon slice */
+Can2D.withinHexagonSlice = function(p, r, h) {
+	var w  = r - (r * Can2D.cos6 - h) * Can2D.tan6;
+	var rc = r * Can2D.cos6;
+	var yh = p.y * Can2D.tan6;
+	return p.y >=  -h &&         p.y <= 0 &&
+	       p.x >= -yh && p.x - 2 * w <= yh;
+}
+
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,-,-,-.           .
@@ -1250,8 +1267,8 @@ Marker.prototype._getPinfoAtXY = function(flowbox, x, y) {
 	return pinfo;
 }
 
-/* Sets .x and .y to coordinates of actual position, relative to dtree */
-Marker.prototype.getXY = function() {
+/* Gets the point of actual position, relative to dtree */
+Marker.prototype.getPoint = function() {
 	/* todo cache position */
 	var dtree = this._item.dtree;
 	Measure.font = dtree.font;
@@ -1261,8 +1278,9 @@ Marker.prototype.getXY = function() {
 	var pinfo = this.getPinfo();
 	var l = pinfo[this._pli];
 	var c = l[this._pci];
-	this.x = p.x + (c ? c.x + Measure.width(t.substring(c.offset, this._offset)) : l.x);
-	this.y = p.y + l.y - dtree.fontsize; /* todo baseline? */
+	return new Point( // todo improve if p.x / p.y is a Point
+		p.x + (c ? c.x + Measure.width(t.substring(c.offset, this._offset)) : l.x),
+		p.y + l.y - dtree.fontsize);
 }
 	
 /* sets the marker to position closest to x, y from flowbox(para) */
@@ -1544,12 +1562,12 @@ Editor.prototype.updateCaret = function() {
 	} 
 
 	if (caret.shown && !caret.blink) {
-		caret.getXY();
+		var cp = caret.getPoint();
 		var it = caret.item;
 		var sy = it.scrolly;
 		var sp = caret.sp = System.space.pan.add(
-			it.zone.p1.x + caret.x,
-			it.zone.p1.y + caret.y - (sy > 0 ? sy : 0));
+			it.zone.p1.x + cp.x,
+			it.zone.p1.y + cp.y - (sy > 0 ? sy : 0));
 		var th = R(it.dtree.fontsize * (1 + settings.bottombox));		
 		caret.save = c2d.getImageData(sp.x - 1, sp.y - 1, 3, th + 1);
 		c2d.fillRect("black", sp.x, sp.y, 1, th);
@@ -1577,7 +1595,7 @@ Editor.prototype.specialKey = function(item, keycode, shift, ctrl) {
 	var refresh = false;
 	var redraw = false;
 	var caret  = this.caret;
-	var select = this.selection;			
+	var select = this.selection;
 
 	if (ctrl) {
 		switch(keycode) {
@@ -1605,9 +1623,7 @@ Editor.prototype.specialKey = function(item, keycode, shift, ctrl) {
 		case 38 : // up
 		case 39 : // right
 		case 40 : // down		
-			select.active = false;
-			System.setInput("");
-			item.listen(); /* make not actual */
+			this.deselect();
 			redraw = true;
 			break;
 		case  8 : // backspace
@@ -1709,7 +1725,8 @@ Editor.prototype.specialKey = function(item, keycode, shift, ctrl) {
 			select.active = true;
 			select.mark2.set(caret);
 			System.setInput(select.innerText());
-			item.listen(); /* make not actual */
+			/* clear item cache */
+			item.listen(); 
 			redraw = true;
 		}
 	}
@@ -1759,6 +1776,16 @@ Editor.prototype.deleteSelection = function() {
 	select.active = false;
 	/* setInput("") is done by System */
 }
+
+/* clears the selection */
+Editor.prototype.deselect = function() {
+	if (!this.selection.active) return;
+	this.selection.active = false;
+	System.setInput("");
+	/* clear item cache */
+	this.selection.item.listen(); 
+}
+
 
 /* got character input from user */
 /* returns redraw needs */
@@ -2135,30 +2162,6 @@ _init : function() {
 	System.repository.loadLocalStorage();	
 	System.space.redraw();
 }};
-
-
-
-//+++++++++++++++++++++++++++++
-var Hex = { };
- 
-/* returns true if point is in hexagon wit radius r */
-Hex.within = function(p, r) {
-	var rc = r * Can2D.cos6;
-	var yh = p.y * Can2D.cos6;
-	return	p.y >= -rc && p.y <= rc &&
-	        p.x - r < -abs(yh) &&
-			p.x + r >  abs(yh);
-}
-
-/* returns true if point is in hexagon slice */
-Hex.withinSlice = function(p, r, h) {
-	var w  = r - (r * Can2D.cos6 - h) * Can2D.tan6;
-	var rc = r * Can2D.cos6;
-	var yh = p.y * Can2D.tan6;
-	return p.y >=  -h &&         p.y <= 0 &&
-	       p.x >= -yh && p.x - 2 * w <= yh;
-}
-
 	
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,-_/,.
@@ -2249,10 +2252,10 @@ Hexmenu.prototype.draw = function() {
 
 Hexmenu.prototype._getMousepos = function(p) {
 	var dp = p.sub(this.p);
-	if (!Hex.within(dp, this.r)) {
+	if (!Can2D.withinHexagon(dp, this.r)) {
 		/* out of menu */
 		return this.mousepos = -1;
-	} else if (Hex.within(dp, this.ri)) {
+	} else if (Can2D.withinHexagon(dp, this.ri)) {
 		return this.mousepos = 0;
 	} else {
 		var lor = dp.x <= -dp.y * Can2D.tan6; // left of right diagonal
@@ -2375,10 +2378,10 @@ Edgemenu.prototype._getMousepos = function(p) {
 	var ew = R(h * Can2D.tan6);
 	var xl = tx - w - ew;
 	var xr = tx + w + ew;
-	if ((p.x - xl <= -(p.y - ty) * Can2D.tan6)) return this.mousepos = -1;
-	if ((p.x - xr >=  (p.y - ty) * Can2D.tan6)) return this.mousepos = -1;
-	if ((p.x - (xl + bw + ew) <=  (p.y - ty) * Can2D.t6)) return this.mousepos = 1;
-	if ((p.x - (xr - bw - ew) >= -(p.y - ty) * Can2D.t6)) return this.mousepos = 2;
+	if ((p.x - xl <= -(p.y - ty) * Can2D.tan6))             return this.mousepos = -1;
+	if ((p.x - xr >=  (p.y - ty) * Can2D.tan6))             return this.mousepos = -1;
+	if ((p.x - (xl + bw + ew) <=  (p.y - ty) * Can2D.tan6)) return this.mousepos =  1;
+	if ((p.x - (xr - bw - ew) >= -(p.y - ty) * Can2D.tan6)) return this.mousepos =  2;
 	return this.mousepos = 0;
 }
 
@@ -3499,20 +3502,21 @@ DTree.prototype.draw = function(c2d, select, offsetX, offsetY, scrolly) {
 		/* todo make part of selection to use shortcut with XY */
 		var b = select.mark1;
 		var e = select.mark2;
-		b.getXY(); // TODO rename!
-		e.getXY();
-		if (e.y < b.y || (e.y == b.y && e.x < b.x)) {
+		var bp = b.getPoint();
+		var ep = e.getPoint();
+		if (ep.y < bp.y || (ep.y == bp.y && ep.x < bp.x)) {
 			b = select.mark2;
 			e = select.mark1;
+			{ var _ = bp; bp = ep; ep = _; }
 		}
 			
 		c2d.beginPath();
 		var psy = scrolly >= 0 ? scrolly : 0;
 		var lh = R(this.fontsize * (1 + settings.bottombox));
-		var bx = R(b.x);
-		var by = R(b.y - psy);
-		var ex = R(e.x);
-		var ey = R(e.y - psy);
+		var bx = R(bp.x);
+		var by = R(bp.y - psy);
+		var ex = R(ep.x);
+		var ey = R(ep.y - psy);
 		var rx = R(this.width + offsetX / 2);
 		var lx = R(offsetX / 2);
 		if ((abs(by - ey) < 2)) {
@@ -3665,8 +3669,7 @@ Item.prototype.setItemMenu = function(menu, pan) {
 
 /* returns if coords are within the item menu */
 Item.prototype.withinItemMenu = function(p) {
-	return Hex.withinSlice(
-		p.sub(this.zone.p1),
+	return Can2D.withinHexagonSlice(p.sub(this.zone.p1), 
 		settings.itemMenuInnerRadius, 
 		settings.itemMenuSliceHeight);
 }
@@ -3763,7 +3766,6 @@ Item.prototype._drawHandles = function(space, rhs) {
 	// todo
 	var p1 = this.zone.p1;
 	var pm = c2d.makeHexagonSlice(p1,settings.itemMenuInnerRadius, settings.itemMenuSliceHeight);
-	debug("pm", pm.x, pm.y);
 	var grad = c2d.createLinearGradient(
 		0, p1.y - settings.itemMenuSliceHeight - 1, 
 		0, p1.y - settings.itemMenuSliceHeight + settings.itemMenuInnerRadius * Can2D.cos6
@@ -3927,6 +3929,7 @@ Note.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 			var editor = System.editor;
 			editor.caret.setFromPoint(para, op.sub(para.x, para.y));
 			editor.caret.show();
+			editor.deselect();
 			txr |= TXR.REDRAW;
 		}
 		return txr;
@@ -4215,6 +4218,7 @@ Label.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 			var editor = System.editor;
 			editor.caret.setFromPoint(para, op.sub(para.x, para.y));
 			editor.caret.show();
+			editor.deselect();
 			txr |= TXR.REDRAW;
 		}
 		return txr;	
