@@ -292,7 +292,7 @@ function Point(p, y) {
 	}
 	this.x = p;
 	this.y = y;
-	this.type = "point";
+	this.otype = "point";
 	Object.freeze(this);
 }
 
@@ -316,19 +316,17 @@ Point.prototype.eq = function(px, y) {
 }
 
 /* add two points or x/y values, returns new point */
-Point.prototype.add = function(px, y) {
-	return arguments.length === 1 ?
-		new Point(this.x + px.x, this.y + px.y) :
-		new Point(this.x + px, this.y + y);
+Point.prototype.add = function(a1, a2) {
+	return (typeof(a1) === "object" ?
+		new Point(this.x + a1.x, this.y + a1.y) :
+		new Point(this.x + a1,   this.y + a2));
 }
 
 /* subtracts a points (or x/y from this), returns new point */
-Point.prototype.sub = function(px, y) {
-	if (arguments.length === 1) {
-		return new Point(this.x - px.x, this.y - px.y);
-	} else {	
-		return new Point(this.x - px, this.y - y);
-	}
+Point.prototype.sub = function(a1, a2) {
+	return (typeof(a1) === "object" ?
+		new Point(this.x - a1.x, this.y - a1.y) :
+		new Point(this.x - a1,   this.y - a2));
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -355,7 +353,7 @@ function Rect(r1, p2) {
 		this.p2 = p2;
 	}
 	if (this.p1.x > this.p2.x || this.p1.y > this.p2.y) { throw new Error("not a rectangle."); }
-	this.type = "rect";
+	this.otype = "rect";
 	Object.freeze(this);
 }
 
@@ -463,7 +461,7 @@ Object.defineProperty(Rect.prototype, "my", {
 function Arrow(p1, p2) {
 	this.p1 = p1;
 	this.p2 = p2;
-	this.type = "arrow";
+	this.otype = "arrow";
 }
 
 /* Returns the arrow for two objects.
@@ -474,7 +472,7 @@ function Arrow(p1, p2) {
  *         a.arrowcom = compass direction the arrow comes from (e.g. "nw")
  */
 Arrow.create = function(item1, item2) {
-	if (item2.type === "point" && item1.zone && item1.zone.type === "rect") {
+	if (item2.otype === "point" && item1.zone && item1.zone.otype === "rect") {
 		var p2 = item2;
 		var z1 = item1.zone;
 		var p1;
@@ -489,7 +487,7 @@ Arrow.create = function(item1, item2) {
 		}
 		return new Arrow(p1, p2);
 	} 
-	if (item1.zone && item1.zone.type === "rect" && item2.zone && item2.zone.type === "rect") {
+	if (item1.zone && item1.zone.otype === "rect" && item2.zone && item2.zone.otype === "rect") {
 		var z1 = item1.zone;
 		var z2 = item2.zone;
 		var x1, y1, x2, y2;
@@ -530,13 +528,13 @@ Arrow.create = function(item1, item2) {
 Object.defineProperty(Arrow.prototype, "zone", {
 	get: function() { 
 		if (this._zone) return this._zone;
-		if (p1.x <= p2.x && p1.y <= p2.y) // \v
+		if (this.p1.x <= this.p2.x && this.p1.y <= this.p2.y) // \v
 			return new Rect(this.p1, this.p2); 
-		if (p1.x >  p2.x && p1.y >  p2.y) // ^\
+		if (this.p1.x >  this.p2.x && this.p1.y >  this.p2.y) // ^\
 			return new Rect(this.p2, this.p1); 
 		return new Rect(
-			new Point(min(this.p1.x, this.p2.x)),
-			new Point(min(this.p1.y, this.p2.y)));	
+			new Point(min(this.p1.x, this.p2.x), min(this.p1.y, this.p2.y)),
+			new Point(max(this.p1.x, this.p2.x), max(this.p1.y, this.p2.y)));
 	},
 	set: function() { throw new Error("Cannot set zone"); }
 });
@@ -550,8 +548,9 @@ Object.defineProperty(Arrow.prototype, "zone", {
  /* todo 2dize*/
 Arrow.prototype.draw = function(space, mcanvas) {
 	var c2d = space.can2d;
-	//System.setCursor("default");
-	var as = 12;  // arrow size
+	
+	/* arrow size*/
+	var as = 12;  
 	var p1 = this.p1;
 	var p2 = this.p2;
 	var d = Math.atan2(p2.y - p1.y, p2.x - p1.x);
@@ -559,8 +558,8 @@ Arrow.prototype.draw = function(space, mcanvas) {
 	var ms = 2 / Math.sqrt(3) * as;
 	c2d.beginPath();
 	if (mcanvas) {
-		var mx = R((p1.x + p2.x) / 2);
-		var my = R((p1.y + p2.y) / 2);
+		var mx = ((p1.x + p2.x) / 2);
+		var my = ((p1.y + p2.y) / 2);
 		var tx = R(mx - mcanvas.width  / 2) - 2;
 		var ty = R(my - mcanvas.height / 2) - 2;
 		var bx = R(mx + mcanvas.width  / 2) + 2;
@@ -575,42 +574,42 @@ Arrow.prototype.draw = function(space, mcanvas) {
 		var is2x, is2y;
 	
 		if (p1.y == p2.y) {
-			var kx = R(mcanvas.width / 2);
+			var kx = mcanvas.width / 2;
 			if (p1.x > p2.x) {
-				is1x = mx + kx;
-				is2x = mx - kx; 
+				is1x = R(mx + kx);
+				is2x = R(mx - kx); 
 				is1y = is2y = p1.y;
 			} else {
-				is1x = mx - kx;
-				is2x = mx + kx; 
+				is1x = R(mx - kx);
+				is2x = R(mx + kx); 
 				is1y = is2y = p1.y;
 			}
 		} else {
-			var kx = R((p2.x - p1.x) / (p2.y - p1.y) * mcanvas.height / 2);
+			var kx = ((p2.x - p1.x) / (p2.y - p1.y) * mcanvas.height / 2);
 			if (p1.y > p2.y) {
-				is1x = mx + kx;
-				is2x = mx - kx; 
+				is1x = R(mx + kx);
+				is2x = R(mx - kx); 
 				is1y = by;
 				is2y = ty;
 			} else {
-				is1x = mx - kx;
-				is2x = mx + kx; 
+				is1x = R(mx - kx);
+				is2x = R(mx + kx); 
 				is1y = ty;
 				is2y = by;
 			}
 		}
 		if (is1x < tx || is1x > bx) {
-			var ky = R((p2.y - p1.y) / (p2.x - p1.x) * mcanvas.width  / 2);
+			var ky = ((p2.y - p1.y) / (p2.x - p1.x) * mcanvas.width  / 2);
 			if (p1.x > p2.x) {
 				is1x = bx;
 				is2x = tx; 
-				is1y = my + ky;
-				is2y = my - ky;
+				is1y = R(my + ky);
+				is2y = R(my - ky);
 			} else {
 				is1x = tx;
 				is2x = bx; 
-				is1y = my - ky;
-				is2y = my + ky;
+				is1y = R(my - ky);
+				is2y = R(my + ky);
 			}
 		}
 
@@ -648,7 +647,7 @@ Arrow.prototype.draw = function(space, mcanvas) {
  * Can2D(width, height)   creates a new canvas and sets its size;
  */
 function Can2D(a1, a2) {
-	this.type = "can2d";
+	this.otype = "can2d";
 	var ta1 = typeof(a1);
 	if (ta1 === "undefined") {
 		this._canvas = document.createElement("canvas");	
@@ -786,12 +785,12 @@ Can2D.prototype.rect = function(r) {
 	var pan = this.pan;
 	var cx = this._cx;
 	if (typeof(r) === "object") {
-		if (r.type === "rect") {
+		if (r.otype === "rect") {
 			return this._cx.rect(
 				r.p1.x + pan.x + 0.5, r.p1.y + pan.y + 0.5, 
 				r.w, r.h);
 		}
-		if (r.type === "point") {
+		if (r.otype === "point") {
 			var p1 = r;
 			var p2 = arguments[1];
 			return this._cx.rect(
@@ -814,10 +813,10 @@ Can2D.prototype.fillRect = function(style, rect) {
 	var cx = this._cx;
 	cx.fillStyle = style;
 	if (typeof(p) === "object") {
-		if (rect.type === "rect") {
+		if (rect.otype === "rect") {
 			return this._cx.fillRect(rect.p1.x, rect.p1.y, rect.p2.x, rect.p2.y);
 		}
-		if (rect.type === "point") {
+		if (rect.otype === "point") {
 			var p2 = arguments[2];
 			return this._cx.fillRect(rect.x, rect.y, p2.x, p2.y);
 		}
@@ -837,7 +836,7 @@ Can2D.prototype.closePath = function() { this._cx.closePath();  }
  */
 Can2D.prototype.drawImage = function(image, p) {
 	var pan = this.pan;
-	if (image.type === "can2d") image = image._canvas;
+	if (image.otype === "can2d") image = image._canvas;
 	if (typeof(p) === "object") {
 		this._cx.drawImage(image, p.x + pan.x, p.y + pan.y);
 		return;
@@ -865,10 +864,10 @@ Can2D.prototype.putImageData = function(image, p) {
 Can2D.prototype.getImageData = function(rect) {
 	var pan = this.pan;
 	if (typeof(p) === "object") {
-		if (rect.type === "rect") {
+		if (rect.otype === "rect") {
 			return this._cx.getImageData(rect.p1.x, rect.p1.y, rect.p2.x, rect.p2.y);
 		}
-		if (rect.type === "point") {
+		if (rect.otype === "point") {
 			var p2 = arguments[1];
 			return this._cx.getImageData(rect.x, rect.y, p2.x, p2.y);
 		}
@@ -1195,7 +1194,6 @@ function Marker() {
 	this._cli = null;
 }
 
-/* todo needed? */
 Object.defineProperty(Marker.prototype, "item", {
 	get: function() { return this._item; },
 	set: function(it) { throw new Error("use set()"); }
@@ -1279,13 +1277,13 @@ Marker.prototype.getPoint = function() {
 	var l = pinfo[this._pli];
 	var c = l[this._pci];
 	return new Point( // todo improve if p.x / p.y is a Point
-		p.x + (c ? c.x + Measure.width(t.substring(c.offset, this._offset)) : l.x),
-		p.y + l.y - dtree.fontsize);
+		p.p.x + (c ? c.x + Measure.width(t.substring(c.offset, this._offset)) : l.x),
+		p.p.y + l.y - dtree.fontsize);
 }
 	
 /* sets the marker to position closest to x, y from flowbox(para) */
 Marker.prototype.setFromPoint = function(flowbox, p) {
-	if (flowbox.type != "paragraph") { throw new Error("invalid flowbox."); }
+	if (flowbox.otype != "paragraph") { throw new Error("invalid flowbox:"+flowbox.otype); }
 	var pinfo = this._getPinfoAtXY(flowbox, p.x, p.y);
 	var l = pinfo[this._pli];
 	var c = l[this._pci]; // x,y is in this chunk
@@ -1780,12 +1778,12 @@ Editor.prototype.deleteSelection = function() {
 /* clears the selection */
 Editor.prototype.deselect = function() {
 	if (!this.selection.active) return;
+	var item = this.selection.mark1.item;
 	this.selection.active = false;
 	System.setInput("");
 	/* clear item cache */
-	this.selection.item.listen(); 
+	item.listen(); 
 }
-
 
 /* got character input from user */
 /* returns redraw needs */
@@ -2004,12 +2002,12 @@ _init : function() {
 	/* mouse move event */
 	function onmousemove(event) {
 		var p = new Point(event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop);
+
 		switch(mst) {
 		case MST.NONE :
 			this.space.mousehover(p);
 			return true;
 		case MST.ATWEEN :
-		{
 			var dragbox = settings.dragbox;
 			if ((abs(p.x - msp.x) > dragbox) || (abs(p.y - msp.y) > dragbox)) {
 				/* moved out of dragbox -> start dragging */
@@ -2028,7 +2026,6 @@ _init : function() {
 				mmc = event.ctrlKey || event.metaKey;
 			}
 			return true;
-		}
 		case MST.DRAG :
 			this.space.dragmove(p, event.shiftKey, event.ctrlKey || event.metaKey);
 			return true;
@@ -2603,13 +2600,23 @@ Space.prototype.actionIDrag = function(item, sp) {
 }
 
 Space.prototype.actionRBindTo = function(toItem) {
+	if (toItem.id === this.iaction.item.id) {
+		console.log("not binding to itself");
+		System.setCursor("default");
+		return;
+	}
 	var rel = new Relation(null, null, this.iaction.item.id, toItem.id);
 	rel.dtree.append(new Paragraph("relates to"));
 	System.repository.updateItem(rel);
 }
 
-Space.prototype.actionRBindHover = function(item) {
-	this.iaction.item2 = item;
+Space.prototype.actionRBindHover = function(toItem) {
+	if (toItem.id === this.iaction.item.id) {
+		System.setCursor("not-allowed");
+		return;
+	}
+	System.setCursor("default");
+	this.iaction.item2 = toItem;
 }
 
 
@@ -3107,8 +3114,8 @@ Space.prototype.mousewheel = function(wheel) {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  Part of a tree-structure.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Treenode(type) {
-	this.type = type;
+function Treenode(otype) {
+	this.otype = otype;
 }
 
 /* appends tnode to list of children */
@@ -3171,9 +3178,9 @@ Treenode.prototype.remove = function(tnode) {
 }
 
 /* returns first anchestor of 'type' */
-Treenode.prototype.anchestor = function(type) {
+Treenode.prototype.anchestor = function(otype) {
 	var n;
-	for(n = this; n && n.type != type; n = n.parent);
+	for(n = this; n && n.otype != otype; n = n.parent);
 	if (!n) throw new Error("anchestor not there");
 	return n;
 }
@@ -3223,8 +3230,7 @@ function Paragraph(text)
 	this._canvasActual = false; // todo rename
 	this.append(new Textnode(text));
 	this._flowWidth = null;	
-	this.x = null; // todo ->p
-	this.y = null;
+	this.p = null;
 }
 
 /* (re)flows the Paragraph, positioning all chunks  */
@@ -3304,6 +3310,24 @@ Paragraph.prototype._flow = function() {
 	this._softHeight = y;
 	this._width = width;
 }
+
+Object.defineProperty(Paragraph.prototype, "x", {
+	get: function() { 
+		throw new Error(":("); 
+	},
+	set: function() { 
+		throw new Error(":("); 
+	},
+});
+
+Object.defineProperty(Paragraph.prototype, "y", {
+	get: function() { 
+		throw new Error(":("); 
+	},
+	set: function() { 
+		throw new Error(":("); 
+	},
+});
 
 /* returns the logical height 
  * (without addition of box below last line base line ofr gpq etc.) */
@@ -3479,13 +3503,13 @@ DTree.prototype.jsonfy = function() {
 	return js;
 }
 		
-/* returns the chunk at x,y */
-DTree.prototype.paraAtY = function(y) {
-	var p = this.first;
-	while (p && y > p.y + p.softHeight) {
-		p = p.next;
+/* returns the chunk at x,y xxx*/
+DTree.prototype.paraAtP = function(p) {
+	var para = this.first;
+	while (para && p.y > para.p.y + para.softHeight) {
+		para = para.next;
 	}
-	return p;
+	return para;
 }
 
 /* draws the content in a buffer canvas */
@@ -3569,8 +3593,7 @@ DTree.prototype.draw = function(c2d, select, offsetX, offsetY, scrolly) {
 	/* draws tha paragraphs */
 	for(var para = this.first; para; para = para.next) {
 		var pc2d = para.getCan2D();
-		para.x = offsetX;
-		para.y = y;
+		para.p = new Point(offsetX, y);
 		if (pc2d.width > 0 && pc2d.height > 0) {
 			c2d.drawImage(pc2d, offsetX, y - scrolly);
 		}
@@ -3653,8 +3676,8 @@ Object.defineProperty(DTree.prototype, "height", {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
  Something on a canvas.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Item(type, id) {
-	this.type = type;
+function Item(otype, id) {
+	this.otype = otype;
 	this.id = id;
 }
 
@@ -3687,7 +3710,6 @@ Item.prototype._checkItemCompass = function(p, rhs) {
 	var d  = settings.handleSize;         // inner distance
 	var d2 = settings.handleSize * 3 / 4; // outer distance
 	
-	/* todo, simplize? */
 	var n = p.y >= this.zone.p1.y - d2 && p.y <= this.zone.p1.y + d;
 	var e = p.x >= this.zone.p2.x - d  && p.x <= this.zone.p2.x + d2;
 	var s = p.y >= this.zone.p2.y - d  && p.y <= this.zone.p2.y + d2;
@@ -3737,7 +3759,6 @@ Item.prototype._drawHandles = function(space, rhs) {
 	var hs = settings.handleSize;
 	var hs2 = hs / 2;
 			
-	/* todo 2dize */
 	var x1 = this.zone.p1.x - ds;
 	var y1 = this.zone.p1.y - ds;
 	var x2 = this.zone.p2.x + ds;
@@ -3864,11 +3885,11 @@ Note.prototype.jsonfy = function() {
 }
 
 /* returns the para at y */
-Note.prototype.paraAtY = function(y) {
-	if (y < this.textBorder) {
+Note.prototype.paraAtP = function(p) {
+	if (p.y < this.textBorder) {
 		return null;
 	}
-	return this.dtree.paraAtY(y);
+	return this.dtree.paraAtP(p);
 }
 
 /* drops the cached canvas */
@@ -3924,10 +3945,10 @@ Note.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 		var op = new Point(
 			p.x - this.zone.p1.x, 
 			p.y - this.zone.p1.y + (this.scrolly > 0 ? this.scrolly : 0));
-		var para = this.paraAtY(op.y);
+		var para = this.paraAtP(op);
 		if (para) {
 			var editor = System.editor;
-			editor.caret.setFromPoint(para, op.sub(para.x, para.y));
+			editor.caret.setFromPoint(para, op.sub(para.p));
 			editor.caret.show();
 			editor.deselect();
 			txr |= TXR.REDRAW;
@@ -4028,7 +4049,7 @@ Note.prototype.draw = function(space) {
 		return;
 	}
 
-	bc2d.attune(this.zone.w, this.zone.h); // todow
+	bc2d.attune(this.zone);
 	Note_bevel(bc2d, this.zone, 2, 3); // todo
 	var grad = bc2d.createLinearGradient(0, 0, this.zone.w / 10, this.zone.h);
 	grad.addColorStop(0, settings.noteBackground1);
@@ -4213,10 +4234,10 @@ Label.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 			txr |= TXR.REDRAW;
 		}
 		var op = p.sub(this.zone.p1);
-		var para = this.paraAtY(op.y);
+		var para = this.paraAtP(op);
 		if (para) {
 			var editor = System.editor;
-			editor.caret.setFromPoint(para, op.sub(para.x, para.y));
+			editor.caret.setFromPoint(para, op.sub(para.p));
 			editor.caret.show();
 			editor.deselect();
 			txr |= TXR.REDRAW;
@@ -4287,8 +4308,8 @@ Label.prototype.moveto = function(p) {
 }
 
 /* returns the para at y */
-Label.prototype.paraAtY = function(y) {
-	return this.dtree.paraAtY(y);
+Label.prototype.paraAtP = function(p) {
+	return this.dtree.paraAtP(p);
 }
 
 /* drops the cached canvas */
@@ -4319,7 +4340,7 @@ Label.prototype.draw = function(space) { // todo replace space by space.can2d
 		space.can2d.drawImage(bc2d, this.zone.p1);
 		return;
 	}
-	bc2d.attune(this.zone.w, this.zone.h); // todo this.zone
+	bc2d.attune(this.zone);
 	/* draws text */	
 	dtree.draw(bc2d, space.selection, 0, 0, 0);
 	/* draws the border */
@@ -4397,8 +4418,90 @@ Object.defineProperty(Relation.prototype, "arrow", {
 
 /* returns transfix code */
 Relation.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
-	// todo
-	return 0;
+	var arrow = this.arrow;
+	var zone  = arrow.zone;
+	if (p.x < zone.p1.x - 80 || p.x > zone.p2.x + 80 ||
+	    p.y < zone.p1.y - 80 || p.y > zone.p2.y + 80) {
+		return 0;
+	}
+	switch (txe) {
+	case TXE.HOVER : 
+		/* difference of point to arrow */
+		var dx = (p.x - arrow.p1.x);
+		var dy = (p.y - arrow.p1.y);
+		var onLine = false;
+		if (abs(dx) < 8 && abs(dy) < 8) {
+			onLine = true;
+		} else if (abs(dx) < 8) {
+			onLine = abs(dx - (arrow.p2.x - arrow.p1.x) / (arrow.p2.y - arrow.p1.y) * dy) < 8;
+		} else {
+			onLine = abs(dy - (arrow.p2.y - arrow.p1.y) / (arrow.p2.x - arrow.p1.x) * dx) < 8;
+		}
+		if (onLine) {
+			System.setCursor("move");
+			return TXR.HIT;
+		} else {
+			return 0;
+		}
+	case TXE.DRAGSTART :
+/*		var txr = TXR.HIT;
+		if (ctrl) {
+			space.actionSpawnRelation(this, p);
+			return txr | TXR.REDRAW;
+		}
+		if (z > 0) {
+			System.repository.moveToTop(z);
+			txr |= TXR.REDRAW; 
+		}
+		if (space.focus != this) {
+			space.setFoci(this);
+			txr |= TXR.REDRAW;
+		}
+
+		var srad = settings.scrollbarRadius;
+		var sbmx = settings.scrollbarMarginX;
+		if (this.scrolly >= 0 && abs(p.x - this.zone.p2.x + srad + sbmx) <= srad + 1)  {
+			space.actionScrollY(this, p.y, this.scrolly);
+		} else {
+			space.actionIDrag(this, p.sub(this.zone.p1));
+		}
+		return txr;*/
+		return 0;
+	case TXE.CLICK :
+	/*
+		var txr = TXR.HIT;
+		if (z > 0) {
+			System.repository.moveToTop(z);
+			txr |= TXR.REDRAW; 
+		}
+		if (space.focus != this) {
+			space.setFoci(this);
+			txr |= TXR.REDRAW;
+		}
+
+		var op = new Point(
+			p.x - this.zone.p1.x, 
+			p.y - this.zone.p1.y + (this.scrolly > 0 ? this.scrolly : 0));
+		var para = this.paraAtP(op);
+		if (para) {
+			var editor = System.editor;
+			editor.caret.setFromPoint(para, op.sub(para.p));
+			editor.caret.show();
+			editor.deselect();
+			txr |= TXR.REDRAW;
+		}
+		return txr;*/
+	case TXE.RBINDHOVER :
+		/* space.actionRBindHover(this);
+		return TXR.HIT | TXR.REDRAW; */
+		return 0;
+	case TXE.RBINDTO :
+		/* space.actionRBindTo(this);
+		return TXR.HIT | TXR.REDRAW; */
+		return 0;
+	default :
+		throw new Error("Unknown transfix code:" + txe);
+	}
 }
 
 /* drops the cached canvas */
@@ -4828,7 +4931,7 @@ Repository.prototype._saveZIDX = function() {
 
 /* adds an item to the space */
 Repository.prototype.addItem = function(item, top) {
-	if (!item.id) item.id  = this._newItemID(item.type);
+	if (!item.id) item.id  = this._newItemID(item.otype);
 	this.items[item.id] = item;
 	if (top) {
 		this.zidx.unshift(item.id);
