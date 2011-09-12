@@ -546,9 +546,7 @@ Object.defineProperty(Arrow.prototype, "zone", {
  * mcanvas:  if not null draw this in the middle of the arrow.
  */
  /* todo 2dize*/
-Arrow.prototype.draw = function(space, mcanvas) {
-	var c2d = space.can2d;
-	
+Arrow.prototype.draw = function(can2d, mcanvas) {	
 	/* arrow size*/
 	var as = 12;  
 	var p1 = this.p1;
@@ -556,7 +554,7 @@ Arrow.prototype.draw = function(space, mcanvas) {
 	var d = Math.atan2(p2.y - p1.y, p2.x - p1.x);
 	var ad = Math.PI/12;
 	var ms = 2 / Math.sqrt(3) * as;
-	c2d.beginPath();
+	can2d.beginPath();
 	if (mcanvas) {
 		var mx = ((p1.x + p2.x) / 2);
 		var my = ((p1.y + p2.y) / 2);
@@ -564,10 +562,10 @@ Arrow.prototype.draw = function(space, mcanvas) {
 		var ty = R(my - mcanvas.height / 2) - 2;
 		var bx = R(mx + mcanvas.width  / 2) + 2;
 		var by = R(my + mcanvas.height / 2) + 2;
-		c2d.drawImage(mcanvas, tx, ty);
-		c2d.rect(tx, ty, mcanvas.width + 4, mcanvas.height + 4);
-		c2d.stroke(1, "rgba(255, 127, 0, 0.4)"); // todo settings
-		c2d.beginPath();
+		can2d.drawImage(mcanvas, tx, ty);
+		can2d.rect(tx, ty, mcanvas.width + 4, mcanvas.height + 4);
+		can2d.stroke(1, "rgba(255, 127, 0, 0.4)"); // todo settings
+		can2d.beginPath();
 
 		// calculate intersections
 		var is1x, is1y; 
@@ -613,21 +611,21 @@ Arrow.prototype.draw = function(space, mcanvas) {
 			}
 		}
 
-		c2d.moveTo(p1.x, p1.y);
-		c2d.lineTo(is1x, is1y);
-		c2d.moveTo(is2x, is2y);
+		can2d.moveTo(p1.x, p1.y);
+		can2d.lineTo(is1x, is1y);
+		can2d.moveTo(is2x, is2y);
 	} else {
-		c2d.moveTo(p1.x, p1.y);
+		can2d.moveTo(p1.x, p1.y);
 	}
 	// draws the arrow head
-	c2d.lineTo(p2.x - R(ms * Math.cos(d)),      p2.y - R(ms * Math.sin(d)));
-	c2d.lineTo(p2.x - R(as * Math.cos(d - ad)), p2.y - R(as * Math.sin(d - ad)));
-	c2d.lineTo(p2.x,                            p2.y);
-	c2d.lineTo(p2.x - R(as * Math.cos(d + ad)), p2.y - R(as * Math.sin(d + ad)));
-	c2d.lineTo(p2.x - R(ms * Math.cos(d)),      p2.y - R(ms * Math.sin(d)));
-	c2d.stroke(3, "rgba(255, 225, 80, 0.5)"); // todo settings
-	c2d.stroke(1, "rgba(200, 100, 0, 0.8)");  // todo settings
-	c2d.fill("rgba(255, 225, 40, 0.5)");
+	can2d.lineTo(p2.x - R(ms * Math.cos(d)),      p2.y - R(ms * Math.sin(d)));
+	can2d.lineTo(p2.x - R(as * Math.cos(d - ad)), p2.y - R(as * Math.sin(d - ad)));
+	can2d.lineTo(p2.x,                            p2.y);
+	can2d.lineTo(p2.x - R(as * Math.cos(d + ad)), p2.y - R(as * Math.sin(d + ad)));
+	can2d.lineTo(p2.x - R(ms * Math.cos(d)),      p2.y - R(ms * Math.sin(d)));
+	can2d.stroke(3, "rgba(255, 225, 80, 0.5)"); // todo settings
+	can2d.stroke(1, "rgba(200, 100, 0, 0.8)");  // todo settings
+	can2d.fill("rgba(255, 225, 40, 0.5)");
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1175,6 +1173,20 @@ Can2D.withinHexagonSlice = function(p, r, h) {
 	var yh = p.y * Can2D.tan6;
 	return p.y >=  -h &&         p.y <= 0 &&
 	       p.x >= -yh && p.x - 2 * w <= yh;
+}
+
+/* returns true if p is near the line spawned by p1 and p2 */
+Can2D.isNearLine = function(p, dis, p1, p2) {
+	var dx = (p.x - p1.x);
+	var dy = (p.y - p1.y);
+	if (abs(dx) < 8 && abs(dy) < 8) {
+		return true;
+	}
+	if (abs(dx) < dis) {
+		return abs(dx - (p2.x - p1.x) / (p2.y - p1.y) * dy) < dis;
+	} else {
+		return abs(dy - (p2.y - p1.y) / (p2.x - p1.x) * dx) < dis;
+	}
 }
 
 
@@ -2441,16 +2453,15 @@ Space.prototype.redraw = function() {
 	var zidx  = System.repository.zidx;
 	var editor = System.editor;
 	var canvas = System.canvas;
-	var c2d = this.can2d;
+	var can2d = this.can2d;
 	editor.caret.save = null;
-	var c2d = this.can2d;
 	this.selection = editor.selection;
 	this.canvas = System.canvas;
-	c2d.attune();
+	can2d.attune();
 
 	for(var i = zidx.length - 1; i >= 0; i--) {
 		var it = items[zidx[i]]; // todo shorten
-		it.draw(this);
+		it.draw(can2d, this.selection);
 	}
 	if (this.focus) this.focus.drawHandles(this);
 	
@@ -2464,10 +2475,10 @@ Space.prototype.redraw = function() {
 		break;
 	case ACT.RBIND :
 		if (ia.item2) {
-			Arrow.create(ia.item, ia.item2).draw(this, null);
-			ia.item2.highlight(c2d);
+			Arrow.create(ia.item, ia.item2).draw(can2d, null);
+			ia.item2.highlight(can2d);
 		} else {
-			Arrow.create(ia.item, ia.smp).draw(this, null);
+			Arrow.create(ia.item, ia.smp).draw(can2d, null);
 		}
 	}
 	this.edgemenu.draw();
@@ -2598,6 +2609,7 @@ Space.prototype.actionIDrag = function(item, sp) {
 	ia.sp   = sp;
 	System.setCursor("move");
 }
+
 
 Space.prototype.actionRBindTo = function(toItem) {
 	if (toItem.id === this.iaction.item.id) {
@@ -4040,12 +4052,12 @@ function Note_bevel(c2d, zone, border, radius) {
  *
  * space   to draw 
  */
-Note.prototype.draw = function(space) {
-	var bc2d = this._bcan2d;
-	var dtree   = this.dtree;
+Note.prototype.draw = function(can2d, selection) {
+	var bc2d  = this._bcan2d;
+	var dtree = this.dtree;
 	if (this._canvasActual) {
 		/* buffer hit */
-		space.can2d.drawImage(bc2d, this.zone.p1);
+		can2d.drawImage(bc2d, this.zone.p1);
 		return;
 	}
 
@@ -4084,11 +4096,10 @@ Note.prototype.draw = function(space) {
 	}
 	
 	/* draws selection and text */	
-	dtree.draw(bc2d, space.selection, this.textBorder, this.textBorder, sy < 0 ? 0 : R(sy));
+	dtree.draw(bc2d, selection, this.textBorder, this.textBorder, sy < 0 ? 0 : R(sy));
 	
 	if (sy >= 0) {
 		/* draws the vertical scroll bar */
-	
 		var srad   = settings.scrollbarRadius;
 		var srad05 = R(settings.scrollbarRadius * 0.5);
 		var spx  = this.zone.w - settings.scrollbarMarginX - srad;
@@ -4152,7 +4163,7 @@ Note.prototype.draw = function(space) {
 	bc2d.stroke(settings.noteOuterBorderWidth, settings.noteOuterBorderColor); 
 	bc2d.beginPath();
 	this._canvasActual = true;
-	space.can2d.drawImage(bc2d, this.zone.p1);
+	can2d.drawImage(bc2d, this.zone.p1);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -4332,23 +4343,23 @@ Label.prototype.checkItemCompass = function(p, rhs) {
 
 /* draws the item
    space  : to draw upon  */
-Label.prototype.draw = function(space) { // todo replace space by space.can2d
+Label.prototype.draw = function(can2d, selection) {
 	var bc2d = this._bc2d;
 	var dtree = this.dtree;
 	if (this._canvasActual) {
 		/* buffer hit */
-		space.can2d.drawImage(bc2d, this.zone.p1);
+		can2d.drawImage(bc2d, this.zone.p1);
 		return;
 	}
 	bc2d.attune(this.zone);
 	/* draws text */	
-	dtree.draw(bc2d, space.selection, 0, 0, 0);
+	dtree.draw(bc2d, selection, 0, 0, 0);
 	/* draws the border */
 	bc2d.beginPath(); 
 	bc2d.rect(0, 0, bc2d.width - 1, bc2d.height - 1);  
 	bc2d.stroke(1, "rgba(128,128,128,1)"); // todo settings
 	this._canvasActual = true;
-	space.can2d.drawImage(bc2d, this.zone.p1);
+	can2d.drawImage(bc2d, this.zone.p1);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -4420,24 +4431,15 @@ Object.defineProperty(Relation.prototype, "arrow", {
 Relation.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 	var arrow = this.arrow;
 	var zone  = arrow.zone;
-	if (p.x < zone.p1.x - 80 || p.x > zone.p2.x + 80 ||
-	    p.y < zone.p1.y - 80 || p.y > zone.p2.y + 80) {
+	/* distance to line recognized as hit */
+	var dis   = 8;
+	if (p.x < zone.p1.x - dis || p.x > zone.p2.x + dis ||
+	    p.y < zone.p1.y - dis || p.y > zone.p2.y + dis) {
 		return 0;
 	}
 	switch (txe) {
 	case TXE.HOVER : 
-		/* difference of point to arrow */
-		var dx = (p.x - arrow.p1.x);
-		var dy = (p.y - arrow.p1.y);
-		var onLine = false;
-		if (abs(dx) < 8 && abs(dy) < 8) {
-			onLine = true;
-		} else if (abs(dx) < 8) {
-			onLine = abs(dx - (arrow.p2.x - arrow.p1.x) / (arrow.p2.y - arrow.p1.y) * dy) < 8;
-		} else {
-			onLine = abs(dy - (arrow.p2.y - arrow.p1.y) / (arrow.p2.x - arrow.p1.x) * dx) < 8;
-		}
-		if (onLine) {
+		if (Can2D.isNearLine(p, dis, arrow.p1, arrow.p1)) {
 			System.setCursor("move");
 			return TXR.HIT;
 		} else {
@@ -4530,21 +4532,21 @@ Relation.prototype.checkItemCompass = function(p, rhs) {
 
 /* draws the item       * 
  * space, to draw upon  */
-Relation.prototype.draw = function(space) {
+Relation.prototype.draw = function(can2d, selection) {
 	var bc2d = this._bc2d;
 	var dtree = this.dtree;
 	var it1 = System.repository.items[this.i1id]; // todo funcall
 	var it2 = System.repository.items[this.i2id];
 	if (this._canvasActual) {
 		/* buffer hit */
-		this.arrow.draw(space, bc2d);
+		this.arrow.draw(can2d, bc2d);
 		return;
 	}
 	/* draws text */
 	bc2d.attune(dtree); 
-	dtree.draw(bc2d, space.selection, 0, 0, 0);
+	dtree.draw(bc2d, selection, 0, 0, 0);
 	this._canvasActual = true;
-	this.arrow.draw(space, bc2d);
+	this.arrow.draw(can2d, bc2d);
 }
 
 /* something happend an item onlooked */
@@ -5026,4 +5028,3 @@ window.onload = function() {
 	}
 	System.init();
 }
-
