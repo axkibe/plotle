@@ -38,26 +38,30 @@ var settings = {
 	bottombox : 0.22,
 	
 	/* minimum sizes */
-	noteMinWidth   : 40,
-	noteMinHeight  : 40,
-	labelMinWidth  : 30,
-	labelMinHeight : 15,
-	relationMinWidth  : 30,
-	relationMinHeight : 15,
+	note : {
+		minWidth  : 40,
+		minHeight : 40,
+		newWidth  : 300,
+		newHeight : 150,
+		
+		textBorder : 10,
+		innerBorderWidth : 2,
+		innerBorderColor : "rgb(255, 188, 87)",
+		innerRadius      : 5,
+		outerBorderWidth : 1,
+		outerBorderColor : "black",
+		outerRadius      : 6,
+		background1 : "rgba(255, 255, 248, 0.955)",
+		background2 : "rgba(255, 255, 160, 0.955)",
+	},
 	
-	/* note style */
-	noteTextBorder : 10,
-	noteInnerBorderWidth : 2,
-	noteInnerBorderColor : "rgb(255, 188, 87)",
-	noteInnerRadius      : 5,
-	noteOuterBorderWidth : 1,
-	noteOuterBorderColor : "black",
-	noteOuterRadius      : 6,
-	noteBackground1 : "rgba(255, 255, 248, 0.955)",
-	noteBackground2 : "rgba(255, 255, 160, 0.955)",
+//	label : {   todo unused?
+//		minWidth  : 30,
+//		minHeight : 30,
+//	},
+//	relationMinWidth  : 30, todo unused ?
+//	relationMinHeight : 15,
 	
-	newNoteWidth  : 300,
-	newNoteHeight : 150,
 	
 	/* edge menu style */
 	edgeMenuOuterBorderWidth : 0.5,
@@ -108,12 +112,14 @@ var settings = {
 	scrollbarMarginY     : 5,
 	
 	/* size of resize handles */
-	handleSize : 10,
-	handleDistance : 0,
-	handleColor1 : "rgb(125,120,32)",
-	handleWidth1 : 3,
-	handleColor2 : "rgb(255,180,90)",
-	handleWidth2 : 1,
+	handle : {
+		size      : 10,
+		distance  : 0,
+		color1    : "rgb(125,120,32)",
+		width1    : 3,
+		color2    : "rgb(255,180,90)",
+		width2    : 1,
+	}
 	
 	/* blink speed of the caret */
 	caretBlinkSpeed : 530,	
@@ -546,15 +552,13 @@ Object.defineProperty(Arrow.prototype, "zone", {
  * mcanvas:  if not null draw this in the middle of the arrow.
  */
  /* todo 2dize*/
-Arrow.prototype.draw = function(can2d, mcanvas) {	
+Arrow.prototype.draw = function(can2d, mcanvas) {
 	/* arrow size*/
-	var as = 12;  
 	var p1 = this.p1;
 	var p2 = this.p2;
-	var d = Math.atan2(p2.y - p1.y, p2.x - p1.x);
-	var ad = Math.PI/12;
-	var ms = 2 / Math.sqrt(3) * as;
-	can2d.beginPath();
+	/* origin of arrow */
+	var po = p1;
+	can2d.beginPath();	
 	if (mcanvas) {
 		var mx = ((p1.x + p2.x) / 2);
 		var my = ((p1.y + p2.y) / 2);
@@ -567,65 +571,48 @@ Arrow.prototype.draw = function(can2d, mcanvas) {
 		can2d.stroke(1, "rgba(255, 127, 0, 0.4)"); // todo settings
 		can2d.beginPath();
 
-		// calculate intersections
-		var is1x, is1y; 
-		var is2x, is2y;
-	
+		// calculates intersections
+		var isp1, isp2;	
 		if (p1.y == p2.y) {
 			var kx = mcanvas.width / 2;
 			if (p1.x > p2.x) {
-				is1x = R(mx + kx);
-				is2x = R(mx - kx); 
-				is1y = is2y = p1.y;
+				isp1 = new Point(R(mx + kx), p1.y);
+				isp2 = new Point(R(mx - kx), p1.y);
 			} else {
-				is1x = R(mx - kx);
-				is2x = R(mx + kx); 
-				is1y = is2y = p1.y;
+				isp1 = new Point(R(mx - kx), p1.y);
+				isp2 = new Point(R(mx + kx), p1.y);
 			}
 		} else {
 			var kx = ((p2.x - p1.x) / (p2.y - p1.y) * mcanvas.height / 2);
 			if (p1.y > p2.y) {
-				is1x = R(mx + kx);
-				is2x = R(mx - kx); 
-				is1y = by;
-				is2y = ty;
+				isp1 = new Point(R(mx + kx), by);
+				isp2 = new Point(R(mx - kx), ty);
 			} else {
-				is1x = R(mx - kx);
-				is2x = R(mx + kx); 
-				is1y = ty;
-				is2y = by;
+				isp1 = new Point(R(mx - kx), ty);
+				isp2 = new Point(R(mx + kx), by);
 			}
 		}
-		if (is1x < tx || is1x > bx) {
+		if (isp1.x < tx || isp1.x > bx) {
 			var ky = ((p2.y - p1.y) / (p2.x - p1.x) * mcanvas.width  / 2);
 			if (p1.x > p2.x) {
-				is1x = bx;
-				is2x = tx; 
-				is1y = R(my + ky);
-				is2y = R(my - ky);
+				isp1 = new Point(bx, R(my + ky));
+				isp2 = new Point(tx, R(my - ky));
 			} else {
-				is1x = tx;
-				is2x = bx; 
-				is1y = R(my - ky);
-				is2y = R(my + ky);
+				isp1 = new Point(tx, R(my - ky));
+				isp2 = new Point(by, R(my + ky));
 			}
 		}
 
-		can2d.moveTo(p1.x, p1.y);
-		can2d.lineTo(is1x, is1y);
-		can2d.moveTo(is2x, is2y);
+		can2d.moveTo(p1);
+		can2d.lineTo(isp1);
+		can2d.stroke(3, "rgba(255, 225, 80, 0.5)"); // todo settings
+		can2d.stroke(1, "rgba(200, 100, 0, 0.8)");  // todo settings
+		
+		po = isp2;
 	} else {
-		can2d.moveTo(p1.x, p1.y);
+		po = p1;
 	}
-	// draws the arrow head
-	can2d.lineTo(p2.x - R(ms * Math.cos(d)),      p2.y - R(ms * Math.sin(d)));
-	can2d.lineTo(p2.x - R(as * Math.cos(d - ad)), p2.y - R(as * Math.sin(d - ad)));
-	can2d.lineTo(p2.x,                            p2.y);
-	can2d.lineTo(p2.x - R(as * Math.cos(d + ad)), p2.y - R(as * Math.sin(d + ad)));
-	can2d.lineTo(p2.x - R(ms * Math.cos(d)),      p2.y - R(ms * Math.sin(d)));
-	can2d.stroke(3, "rgba(255, 225, 80, 0.5)"); // todo settings
-	can2d.stroke(1, "rgba(200, 100, 0, 0.8)");  // todo settings
-	can2d.fill("rgba(255, 225, 40, 0.5)");
+	can2d.drawArrow(po, p2);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -659,7 +646,37 @@ function Can2D(a1, a2) {
 	this._cx = this._canvas.getContext("2d");
 	this.pan = new Point(0, 0);
 }
+/* returns true if point is in hexagon with radius r */
+Can2D.withinHexagon = function(p, r) {
+	var rc = r * Can2D.cos6;
+	var yh = p.y * Can2D.cos6;
+	return	p.y >= -rc && p.y <= rc &&
+	        p.x - r < -abs(yh) &&
+			p.x + r >  abs(yh);
+}
 
+/* returns true if point is in hexagon slice */
+Can2D.withinHexagonSlice = function(p, r, h) {
+	var w  = r - (r * Can2D.cos6 - h) * Can2D.tan6;
+	var rc = r * Can2D.cos6;
+	var yh = p.y * Can2D.tan6;
+	return p.y >=  -h &&         p.y <= 0 &&
+	       p.x >= -yh && p.x - 2 * w <= yh;
+}
+
+/* returns true if p is near the line spawned by p1 and p2 */
+Can2D.isNearLine = function(p, dis, p1, p2) {
+	var dx = (p.x - p1.x);
+	var dy = (p.y - p1.y);
+	if (abs(dx) < 8 && abs(dy) < 8) {
+		return true;
+	}
+	if (abs(dx) < dis) {
+		return abs(dx - (p2.x - p1.x) / (p2.y - p1.y) * dy) < dis;
+	} else {
+		return abs(dy - (p2.y - p1.y) / (p2.x - p1.x) * dx) < dis;
+	}
+}
 Can2D.ensureInteger = function() {
 	for(var a in arguments) {
 		var arg = arguments[a];
@@ -944,7 +961,6 @@ Can2D.prototype.fontStyle = function(font, fill, align, baseline) {
 	cx.textBaseline = baseline;
 }
 
-
 /***
  * Utilities for hexagons.
  */
@@ -1157,36 +1173,30 @@ Can2D.prototype.makeHexagonSegment = function(p, r, ri, seg) {
 	this.closePath();
 }	
 
-/* returns true if point is in hexagon with radius r */
-Can2D.withinHexagon = function(p, r) {
-	var rc = r * Can2D.cos6;
-	var yh = p.y * Can2D.cos6;
-	return	p.y >= -rc && p.y <= rc &&
-	        p.x - r < -abs(yh) &&
-			p.x + r >  abs(yh);
-}
 
-/* returns true if point is in hexagon slice */
-Can2D.withinHexagonSlice = function(p, r, h) {
-	var w  = r - (r * Can2D.cos6 - h) * Can2D.tan6;
-	var rc = r * Can2D.cos6;
-	var yh = p.y * Can2D.tan6;
-	return p.y >=  -h &&         p.y <= 0 &&
-	       p.x >= -yh && p.x - 2 * w <= yh;
-}
-
-/* returns true if p is near the line spawned by p1 and p2 */
-Can2D.isNearLine = function(p, dis, p1, p2) {
-	var dx = (p.x - p1.x);
-	var dy = (p.y - p1.y);
-	if (abs(dx) < 8 && abs(dy) < 8) {
-		return true;
-	}
-	if (abs(dx) < dis) {
-		return abs(dx - (p2.x - p1.x) / (p2.y - p1.y) * dy) < dis;
-	} else {
-		return abs(dy - (p2.y - p1.y) / (p2.x - p1.x) * dx) < dis;
-	}
+/* draws an arrow pointing from p1 to p2 
+ * p1    ... origin 
+ * p2    ... target
+ */
+Can2D.prototype.drawArrow = function(p1, p2) {
+	/* arrow size */
+	var as = 12; 
+	/* degree of arrow tail */
+	var d = Math.atan2(p2.y - p1.y, p2.x - p1.x);
+	/* degree of arrow head */
+	var ad = Math.PI/12;
+	/* arrow span, the arrow is formed as hexagon piece */
+	var ms = 2 / Math.sqrt(3) * as;
+	this.beginPath();
+	this.moveTo(p1);
+	this.lineTo(p2.x - R(ms * Math.cos(d)),      p2.y - R(ms * Math.sin(d)));
+	this.lineTo(p2.x - R(as * Math.cos(d - ad)), p2.y - R(as * Math.sin(d - ad)));
+	this.lineTo(p2);
+	this.lineTo(p2.x - R(as * Math.cos(d + ad)), p2.y - R(as * Math.sin(d + ad)));
+	this.lineTo(p2.x - R(ms * Math.cos(d)),      p2.y - R(ms * Math.sin(d)));
+	this.stroke(3, "rgba(255, 225, 80, 0.5)"); // todo settings
+	this.stroke(1, "rgba(200, 100, 0, 0.8)");  // todo settings
+	this.fill("rgba(255, 225, 40, 0.5)");      // todo settings
 }
 
 
@@ -3051,8 +3061,8 @@ Space.prototype.mousedown = function(p) {
 		}
 		switch(md) {
 		case 1 : // note
-			var nw = settings.newNoteWidth;
-			var nh = settings.newNoteHeight;
+			var nw = settings.note.newWidth;
+			var nh = settings.note.neweight;
 			// todo, beautify point logic.
 			var p1 = fm.p.sub(R(nw / 2) + this.pan.x, R(nh / 2) + this.pan.y);
 			var p2 = p1.add(nw, nh);
@@ -3719,8 +3729,8 @@ Item.prototype.withinItemMenu = function(p) {
  */
 Item.prototype._checkItemCompass = function(p, rhs) { 
 	if (rhs == 0) return;
-	var d  = settings.handleSize;         // inner distance
-	var d2 = settings.handleSize * 3 / 4; // outer distance
+	var d  = settings.handle.size;         // inner distance
+	var d2 = settings.handle.size * 3 / 4; // outer distance
 	
 	var n = p.y >= this.zone.p1.y - d2 && p.y <= this.zone.p1.y + d;
 	var e = p.x >= this.zone.p2.x - d  && p.x <= this.zone.p2.x + d2;
@@ -3767,8 +3777,8 @@ Item.prototype._checkItemCompass = function(p, rhs) {
 /* rhs ... resize  handles selector */
 Item.prototype._drawHandles = function(space, rhs) {
 	var c2d = space.can2d;
-	var ds = settings.handleDistance; 			
-	var hs = settings.handleSize;
+	var ds = settings.handle.distance; 			
+	var hs = settings.handle.size;
 	var hs2 = hs / 2;
 			
 	var x1 = this.zone.p1.x - ds;
@@ -3788,11 +3798,11 @@ Item.prototype._drawHandles = function(space, rhs) {
 	if (rhs &  64) { c2d.moveTo(x1, ym - hs2); c2d.lineTo(x1, ym + hs2);                    }
 	if (rhs & 128) { c2d.moveTo(x1, y1 + hs);  c2d.lineTo(x1, y1); c2d.lineTo(x1 + hs, y1); }
 			
-	if (rhs > 0 && settings.handleWidth1 > 0) {
-		c2d.stroke(settings.handleWidth1, settings.handleColor1);
+	if (rhs > 0 && settings.handle.width1 > 0) {
+		c2d.stroke(settings.handle.width1, settings.handle.color1);
 	}
-	if (rhs > 0 && settings.handleWidth2 > 0) {
-		c2d.stroke(settings.handleWidth2, settings.handleColor2);
+	if (rhs > 0 && settings.handle.width2 > 0) {
+		c2d.stroke(settings.handle.width2, settings.handle.color2);
 	}
 	
 	/* draws item menu handler */
@@ -3863,7 +3873,7 @@ function Note(js, id, zone) {
 	}
 	Item.call(this, "note", id);
 	this._bcan2d = new Can2D();
-	this.textBorder = settings.noteTextBorder;
+	this.textBorder = settings.note.textBorder;
 	this._canvasActual = false;
 	this._scrollx = -8833;
 	this._scrolly = -8833;
@@ -3983,10 +3993,10 @@ Note.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
  * returns true if something changed
  */
 Note.prototype.setZone = function(zone, align) {
-	if (zone.w < settings.noteMinWidth || zone.h < settings.noteMinHeight) {
+	if (zone.w < settings.note.minWidth || zone.h < settings.note.minHeight) {
 		zone = zone.resize(
-			max(zone.w, settings.noteMinWidth),
-			max(zone.h, settings.noteMinHeight), align);
+			max(zone.w, settings.note.minWidth),
+			max(zone.h, settings.note.minHeight), align);
 	}
 	if (this.zone.eq(zone)) return false;
 	this.zone = zone;
@@ -4064,8 +4074,8 @@ Note.prototype.draw = function(can2d, selection) {
 	bc2d.attune(this.zone);
 	Note_bevel(bc2d, this.zone, 2, 3); // todo
 	var grad = bc2d.createLinearGradient(0, 0, this.zone.w / 10, this.zone.h);
-	grad.addColorStop(0, settings.noteBackground1);
-	grad.addColorStop(1, settings.noteBackground2);
+	grad.addColorStop(0, settings.note.background1);
+	grad.addColorStop(1, settings.note.background2);
 	bc2d.fill(grad);
 	
 	/* calculates if a scrollbar is needed */
@@ -4157,10 +4167,10 @@ Note.prototype.draw = function(can2d, selection) {
 	}
 
 	/* draws the border */
-	Note_bevel(bc2d, this.zone, 2, settings.noteInnerRadius); // todo moveto can2d
-	bc2d.stroke(settings.noteInnerBorderWidth, settings.noteInnerBorderColor);	
-	Note_bevel(bc2d, this.zone, 1, settings.noteOuterRadius);
-	bc2d.stroke(settings.noteOuterBorderWidth, settings.noteOuterBorderColor); 
+	Note_bevel(bc2d, this.zone, 2, settings.note.innerRadius); // todo moveto can2d
+	bc2d.stroke(settings.note.innerBorderWidth, settings.note.innerBorderColor);	
+	Note_bevel(bc2d, this.zone, 1, settings.note.outerRadius);
+	bc2d.stroke(settings.note.outerBorderWidth, settings.note.outerBorderColor); 
 	bc2d.beginPath();
 	this._canvasActual = true;
 	can2d.drawImage(bc2d, this.zone.p1);
