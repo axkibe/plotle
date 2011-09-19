@@ -1,4 +1,4 @@
-/*                                                       _.._
+/**                                                      _.._
                                                       .-'_.._''.
  __  __   ___       _....._              .          .' .'     '.\
 |  |/  `.'   `.   .´       '.          .'|         / .'                                _.._
@@ -14,6 +14,20 @@
 
 
 "use strict";
+
+/**
+| Subclassing helper.
+| 
+| sub: prototype to become a subclass.
+| base: prototype to become the baseclass.
+*/
+function subclass(sub, base) {
+   function inherit() {}
+   inherit.prototype = base.prototype;
+   sub.prototype = new inherit();
+   sub.prototype.constructor = sub;
+}
+
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .---.     .  .
 \___  ,-. |- |- . ,-. ,-. ,-.
@@ -22,13 +36,15 @@
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
                        `'
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* if true catches all errors and report to user,    
- * if false lets them pass through to e.g. firebug. */
+/** if true catches all errors and report to user,    
+| if false lets them pass through to e.g. firebug. 
+*/
 var enableCatcher = false;
 
 var settings = {
+	/* standard font */
 	defaultFont : "Verdana,Geneva,Kalimati,sans-serif",
-
+	
 	/* milliseconds after mouse down, dragging starts */
 	dragtime : 400,
 	/* pixels after mouse down and move, dragging starts */
@@ -39,18 +55,33 @@ var settings = {
 	
 	/* minimum sizes */
 	note : {
-		minWidth  : 40,
-		minHeight : 40,
-		newWidth  : 300,
-		newHeight : 150,
-		
-		textBorder : 10,
+		minWidth     : 40,
+		minHeight    : 40,
+		newWidth     : 300,
+		newHeight    : 150,
+		             
+		textBorder   : 10,
+
+		style : {
+			fill : {
+				gradient : 'askew',
+				steps    : [
+					[0, "rgba(255, 255, 248, 0.955)"],
+				    [1, "rgba(255, 255, 160, 0.955)"] ],
+			},
+			edge : [
+				{ width : 2,
+				  color : "rgb(255, 188, 87)" },
+				{ width : 1,
+				  color : "black" } ]
+		},
+
+		// xx old
 		innerBorderWidth : 2,
 		innerBorderColor : "rgb(255, 188, 87)",
-		innerRadius      : 5,
+		cornerRadius     : 6,
 		outerBorderWidth : 1,
 		outerBorderColor : "black",
-		outerRadius      : 6,
 		background1 : "rgba(255, 255, 248, 0.955)",
 		background2 : "rgba(255, 255, 160, 0.955)",
 	},
@@ -98,18 +129,21 @@ var settings = {
 	itemMenuFillStyle : "rgb(255, 237, 210)",
 	
 	/* selection */
-	//selectionColor : "#8080ff",
-	selectionColor  : "rgba(243, 203, 255, 0.9)",
-	selectionStroke : "rgb (243, 183, 253)",
+	selection : {
+		color  : "rgba(243, 203, 255, 0.9)",
+		stroke : "rgb (243, 183, 253)",
+	},
 	
 	/* scrollbar */
-	scrollbarForm        : "hexagonh",  // 'square', 'round', 'hexagonh' or 'hexagonv'
-	scrollbarFillStyle   : "rgb(255, 188, 87)",
-	scrollbarStrokeStyle : "rgb(221, 154, 52)",
-	scrollbarLineWidth   : 1,
-	scrollbarRadius      : 4,
-	scrollbarMarginX     : 7,
-	scrollbarMarginY     : 5,
+	scrollbar : {
+		form        : "hexagonh",  // 'square', 'round', 'hexagonh' or 'hexagonv'
+		fillStyle   : "rgb(255, 188, 87)",
+		strokeStyle : "rgb(221, 154, 52)",
+		lineWidth   : 1,
+		radius      : 4,
+		marginX     : 7,
+		marginY     : 5,
+	},
 	
 	/* size of resize handles */
 	handle : {
@@ -119,7 +153,7 @@ var settings = {
 		width1    : 3,
 		color2    : "rgb(255,180,90)",
 		width2    : 1,
-	}
+	},
 	
 	/* blink speed of the caret */
 	caretBlinkSpeed : 530,	
@@ -336,44 +370,44 @@ Point.prototype.sub = function(a1, a2) {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-.-,--.         .
- `|__/ ,-. ,-. |-
- )| \  |-' |   |
- `'  ` `-' `-' `'
+ .-,--.         .
+  `|__/ ,-. ,-. |-
+  )| \  |-' |   |
+  `'  ` `-' `-' `'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  A rectangle in a 2D plane.
  Rectangles are immutable objects.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-/* Constructor.
- * Rect(rect)
- * Rect(p1, p2) 
- */
-function Rect(r1, p2) {
-	if (arguments.length === 1) {
-		throw new Error("todo. Why do yo do this?)");
-		this.p1 = r1.p1;
-		this.p2 = r1.p2;
-	} else {
-		this.p1 = r1;
-		this.p2 = p2;
-	}
-	if (this.p1.x > this.p2.x || this.p1.y > this.p2.y) { throw new Error("not a rectangle."); }
+/**
+| Constructor.
+| Rect(p1, p2) 
+*/
+function Rect(p1, p2) {
+	this.p1 = p1;
+	this.p2 = p2;
+	if (p1.x > p2.x || p1.y > p2.y) { throw new Error("not a rectangle."); }
 	this.otype = "rect";
-	Object.freeze(this);
+	// freeze if not a father object
+	if (this.constructor == Rect) Object.freeze(this);
 }
 
-/* Creates a point from json */
+/** 
+| Creates a point from json 
+*/
 Rect.jnew = function(js) {
 	return new Rect(Point.jnew(js.p1), Point.jnew(js.p2));
 }
 
-/* returns a json object for this rect */
+/** 
+| Returns a json object for this rect 
+*/
 Rect.prototype.jsonfy = function() {
 	return { p1: this.p1.jsonfy(), p2: this.p2.jsonfy() };
 }
 
-/* returns a rect moved by a point or x/y */
+/** 
+| Returns a rect moved by a point or x/y 
+*/
 Rect.prototype.add = function(px, y) {
 	return arguments.length === 1 ?
 		new Rect(this.p1.add(px),    this.p2.add(px)) : 
@@ -386,13 +420,17 @@ Rect.prototype.sub = function(p) {
 		new Rect(this.p1.sub(px, y), this.p2.sub(px, y));
 }
 
-/* returns true if point is within this rect */
+/** 
+| returns true if point is within this rect 
+*/
 Rect.prototype.within = function(p) {
 	return p.x >= this.p1.x && p.y >= this.p1.y && 
 	       p.x <= this.p2.x && p.y <= this.p2.y;
 }
 
-/* returns a rectangle with same p1 but size w/h or point */
+/** 
+| returns a rectangle with same p1 but size w/h or point 
+*/
 Rect.prototype.resize = function(w, h, align) {
 	var p1 = this.p1;
 	var p2 = this.p2;
@@ -412,46 +450,151 @@ Rect.prototype.resize = function(w, h, align) {
 	return new Rect(p1, p2);
 }
 
-/* returns a rectangle with same size at position at p|x/y) */
+/** 
+| returns a rectangle with same size at position at p|x/y) 
+*/
 Rect.prototype.atpos = function(px, y) {
 	if (arguments.length !== 1) px = new Point(px, y);
 	return new Rect(px, px.add(this.w, this.h));
 }
 
-/* Returns true if this rectangle is like z */
-Rect.prototype.eq = function(z) {
-	return this.p1.eq(z.p1) && this.p2.eq(z.p2);
+/** 
+| Returns true if this rectangle is like another 
+*/
+Rect.prototype.eq = function(r) {
+	return this.p1.eq(r.p1) && this.p2.eq(r.p2);
 }
 
-Object.defineProperty(Rect.prototype, "w", {
-	get: function()  { return this.p2.x - this.p1.x;    },
-	set: function(w) { throw new Error("Rect cannot set w"); },
+Object.defineProperty(Rect.prototype, "w", { 
+	get: function()  { return this.p2.x - this.p1.x; }
 });
 
 Object.defineProperty(Rect.prototype, "width", {
-	get: function()  { return this.p2.x - this.p1.x;    },
-	set: function(w) { throw new Error("Rect cannot set width"); },
+	get: function()  { return this.p2.x - this.p1.x; }
 });
 
 Object.defineProperty(Rect.prototype, "h", {
-	get: function()  { return this.p2.y - this.p1.y; },
-	set: function(h) { throw new Error("Rect cannot set h"); },
+	get: function()  { return this.p2.y - this.p1.y; }
 });
 
 Object.defineProperty(Rect.prototype, "height", {
-	get: function()  { return this.p2.y - this.p1.y; },
-	set: function(h) { throw new Error("Rect cannot set height"); },
+	get: function()  { return this.p2.y - this.p1.y; }
 });
 
 Object.defineProperty(Rect.prototype, "mx", {
-	get: function() { return R((this.p2.x + this.p1.x) / 2); },
-	set: function() { throw new Error("Rect cannot set mx")},
+	get: function() { return R((this.p2.x + this.p1.x) / 2); }
 });
 
 Object.defineProperty(Rect.prototype, "my", {
-	get: function() { return R((this.p2.y + this.p1.y) / 2); },
-	set: function() { throw new Error("Rect cannot set my")},
+	get: function() { return R((this.p2.y + this.p1.y) / 2); }
 });
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ RountRect ++
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ A rectangle in a 2D plane with rounded corners
+ Rectangles are immutable objects.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+subclass(RoundRect, Rect);
+
+/**
+| Constructor.
+| Rect(rect, crad)      -or-
+| Rect(p1, p2, crad) 
+*/
+function RoundRect(a1, a2, a3) {
+	if (a1.otype === "point") {
+		Rect.call(this, a1, a2);
+		this.crad = a3;
+	} else {
+		Rect.call(this, a1.p1, a1.p2);
+		this.crad = a2;
+	}
+	this.otype = "roundrect";
+	Object.freeze(this);
+}
+
+/* draws a bevel.
+ *
+ * c2d  ... canvas 2d
+ * zone ... zone to zake the size from.
+ */
+RoundRect.prototype.path = function(c2d, border) {
+	var x1 = border;
+	var y1 = border;
+	var x2 = this.w - border;
+	var y2 = this.h - border;
+	var cr = this.crad + border;
+	var pi = Math.PI;
+	var ph = Math.PI / 2;
+	c2d.beginPath();
+	c2d.moveTo(x1 + cr, y1);
+	c2d.arc(x2 - cr, y1 + cr, cr, -ph,   0, false);
+	c2d.arc(x2 - cr, y2 - cr, cr,   0,  ph, false);
+	c2d.arc(x1 + cr, y2 - cr, cr,  ph,  pi, false);
+	c2d.arc(x1 + cr, y1 + cr, cr,  pi, -ph, false);
+}
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ Hexagon ++
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ A hexagon in a 2D plane.
+ Hexagons are immutable objects.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+/**
+| Constructor.
+| Hexagon(p: center, r: radius) 
+*/
+function Hexagon(p, r) {
+	this.otype = "hexagon";
+	if (typeof(p) !== "object" || p.otype !== "point") throw new Error("invalid p");
+	this.p = p;
+	this.r = r;
+	Object.freeze(this);
+}
+
+/**
+| shortcuts for often needed trigonometric values 
+*/
+Hexagon.cos6 = Math.cos(Math.PI / 6);
+Hexagon.tan6 = Math.tan(Math.PI / 6);
+
+/** 
+| Creates a hexgon from json.
+*/
+Hexagon.jnew = function(js) {
+	return new Hexagon(js.p, js.r);
+}
+
+/**
+| Returns a json object for this rect.
+*/
+Hexagon.prototype.jsonfy = function() {
+	return { p: this.p, j: this.j };
+}
+
+/**
+| Returns a hexagon moved by a point or x/y.
+*/
+Hexagon.prototype.add = function(a1, a2) {
+	return new Hexagon(this.p.add(a1, a2), this.r);
+}
+
+/**
+| Returns true if point is within this hexagon.
+*/
+Hexagon.prototype.within = function(p) {
+/* returns true if point is in hexagon with radius r */
+	var rc = this.r * Hexagon.cos6;
+	var y = this.p.y - p.y;
+	var x = this.p.x - p.x;
+	var yh = abs(y * Hexagon.cos6);
+	return y >= -rc && y <= rc &&
+           x - this.r < -yh &&
+           x + this.r >  yh;
+}
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++Arrow. 
@@ -460,23 +603,25 @@ Object.defineProperty(Rect.prototype, "my", {
  Arrows are pseuod-immutable objects.
  Differently to a rectangle p1 is not necessarily left and top of p2.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Constructor.
- * Rect(rect)
- * Rect(p1, p2) 
- */
+
+/** 
+| Constructor.
+| Arrow(p1, p2) 
+*/
 function Arrow(p1, p2) {
 	this.p1 = p1;
 	this.p2 = p2;
 	this.otype = "arrow";
 }
 
-/* Returns the arrow for two objects.
- * item1 to item2  -or-
- * item1 to point
- *
- * returns a.zone = the zone
- *         a.arrowcom = compass direction the arrow comes from (e.g. "nw")
- */
+/** 
+| Returns the arrow pointing from item1 to item2
+| item1 to item2  -or-
+| item1 to point
+|
+| returns a.zone = the zone
+|         a.arrowcom = compass direction the arrow comes from (e.g. "nw")
+*/
 Arrow.create = function(item1, item2) {
 	if (item2.otype === "point" && item1.zone && item1.zone.otype === "rect") {
 		var p2 = item2;
@@ -528,9 +673,10 @@ Arrow.create = function(item1, item2) {
 	throw new Error("do not know how to create arrow.");
 }
 
-/* Returns the zone of the arrow.
- * Result is cached.
- */
+/** 
+| Returns the zone of the arrow.
+| Result is cached.
+*/
 Object.defineProperty(Arrow.prototype, "zone", {
 	get: function() { 
 		if (this._zone) return this._zone;
@@ -545,14 +691,15 @@ Object.defineProperty(Arrow.prototype, "zone", {
 	set: function() { throw new Error("Cannot set zone"); }
 });
 
-/* Draws one relationship arrow
- * (space, item1_id, item2_id, null, middle) - or - 
- * (space, item1_id,        x,    y, middle)  
- *
- * mcanvas:  if not null draw this in the middle of the arrow.
- */
- /* todo 2dize*/
+/** 
+| Draws one an arrow. todo
+| (space, item1_id, item2_id, null, middle) - or - 
+| (space, item1_id,        x,    y, middle)  
+|
+| mcanvas:  if not null draw this in the middle of the arrow.
+*/
 Arrow.prototype.draw = function(can2d, mcanvas) {
+/* todo 2dize*/
 	/* arrow size*/
 	var p1 = this.p1;
 	var p2 = this.p2;
@@ -625,7 +772,6 @@ Arrow.prototype.draw = function(can2d, mcanvas) {
  
  It enhances the HTML5 Canvas Context by accpeting previously defined immutable graphic
  objects as arguments.
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /* Can2D()        -or-    creates new canvas
  * Can2D(canvas)  -or-    encloses an existing canvas
@@ -646,25 +792,21 @@ function Can2D(a1, a2) {
 	this._cx = this._canvas.getContext("2d");
 	this.pan = new Point(0, 0);
 }
-/* returns true if point is in hexagon with radius r */
-Can2D.withinHexagon = function(p, r) {
-	var rc = r * Can2D.cos6;
-	var yh = p.y * Can2D.cos6;
-	return	p.y >= -rc && p.y <= rc &&
-	        p.x - r < -abs(yh) &&
-			p.x + r >  abs(yh);
-}
 
-/* returns true if point is in hexagon slice */
+/*
+| returns true if point is in hexagon slice
+*/
 Can2D.withinHexagonSlice = function(p, r, h) {
-	var w  = r - (r * Can2D.cos6 - h) * Can2D.tan6;
-	var rc = r * Can2D.cos6;
-	var yh = p.y * Can2D.tan6;
+	var w  = r - (r * Hexagon.cos6 - h) * Hexagon.tan6;
+	var rc = r * Hexagon.cos6;
+	var yh = p.y * Hexagon.tan6;
 	return p.y >=  -h &&         p.y <= 0 &&
 	       p.x >= -yh && p.x - 2 * w <= yh;
 }
 
-/* returns true if p is near the line spawned by p1 and p2 */
+/*
+| returns true if p is near the line spawned by p1 and p2
+*/
 Can2D.isNearLine = function(p, dis, p1, p2) {
 	var dx = (p.x - p1.x);
 	var dy = (p.y - p1.y);
@@ -696,12 +838,13 @@ Object.defineProperty(Can2D.prototype, "height", {
 	set: function() { throw new Error("use Can2D.resetSize()");},
 });
 
-/* attune() -or-
- * attune(rect) -or-
- * attune(width, height)
- *
- * the canvas is cleared and its size ensured to be width/height (of rect)
- */
+/*
+| attune() -or-
+| attune(rect) -or-
+| attune(width, height)
+| 
+| the canvas is cleared and its size ensured to be width/height (of rect)
+*/
 Can2D.prototype.attune = function(a1, a2) {
 	var ta1 = typeof(a1);
 	var c = this._canvas;
@@ -727,7 +870,9 @@ Can2D.prototype.attune = function(a1, a2) {
 	if (c.height !== h) c.height = h;
 }
 
-/* moveTo(point) -or-
+
+/**
+ * moveTo(point) -or-
  * moveTo(x, y)
  */
 Can2D.prototype.moveTo = function(a1, a2) {
@@ -891,6 +1036,72 @@ Can2D.prototype.getImageData = function(rect) {
 	return this._cx.getImageData(rect, arguments[1], arguments[2], arguments[3]);
 }
 
+/**
+| Returns a HTML5 color style for a meshcraft style notation.
+*/
+Can2D.prototype._colorStyle = function(style, shape) {
+	if (style.substring) {
+		return style;
+	} else if (!style.gradient) {
+		throw new Error('unknown style');
+	}
+
+	switch (style.gradient) {
+	case 'askew' :
+		var grad = this._cx.createLinearGradient(
+			0, 0, shape.width / 10, shape.height);
+		var steps = style.steps;
+		for(var i = 0; i < steps.length; i++) {
+			grad.addColorStop(steps[i][0], steps[i][1]);
+		}
+		return grad;
+	default :
+		throw new Error('unknown gradient');
+	}
+}
+
+/**
+| Draws a filled area.
+| 
+| style: the style formated in meshcraft style notation.
+| shape: an object which has path() defined 
+*/
+Can2D.prototype.fills = function(style, shape) {
+	var cx = this._cx;
+	shape.path(this, 0);
+	cx.fillStyle = this._colorStyle(style, shape);
+	cx.fill();
+}
+
+/**
+| Draws a single edge.
+|
+| style: the style formated in meshcraft style notation.
+| shape: an object which has path() defined
+*/
+Can2D.prototype._edge = function(style, shape) {
+	var cx = this._cx;
+	shape.path(this, style.width);
+	cx.strokeStyle = this._colorStyle(style.color, shape);
+	cx.stroke();
+}
+
+/**
+| Draws an edge.
+|
+| style: the style formated in meshcraft style notation.
+| shape: an object which has path() defined
+*/
+Can2D.prototype.edges = function(style, shape) {
+	var cx = this._cx;
+	if (style instanceof Array) {
+		for(var i = 0; i < style.length; i++) {
+			this._edge(style[i], shape);
+		}
+	} else {
+		this._edge(style[i], shape);
+	}
+}
 
 /* createRadialGradient(center, radius, center2, radius2) 
  */
@@ -964,16 +1175,13 @@ Can2D.prototype.fontStyle = function(font, fill, align, baseline) {
 /***
  * Utilities for hexagons.
  */
-/* shortcuts for often needed trigonometric values */
-Can2D.cos6 = Math.cos(Math.PI / 6);
-Can2D.tan6 = Math.tan(Math.PI / 6);
 
 /* makes a hexagon path */
 Can2D.prototype.makeHexagon = function(p, r) {
 	var x = p.x;
 	var y = p.y;
 	var r2 = R(r / 2);
-	var rc = R(Can2D.cos6 * r);
+	var rc = R(Hexagon.cos6 * r);
 	this.beginPath();
 	this.moveTo(x - r, y);
 	this.lineTo(x - r2, y - rc);
@@ -1013,9 +1221,9 @@ Can2D.prototype.makeHexagon = function(p, r) {
  */
 Can2D.prototype.makeHexagonFlower = function(p, r, ri, segs) {
 	var r2  = R(r / 2);
-	var rc  = R(Can2D.cos6 * r);
+	var rc  = R(Hexagon.cos6 * r);
 	var ri2 = R(ri / 2);
-	var ric = R(Can2D.cos6 * ri);
+	var ric = R(Hexagon.cos6 * ri);
 	var px = p.x;
 	var py = p.y;
 	this.beginPath();
@@ -1097,9 +1305,9 @@ Can2D.prototype.makeHexagonSlice = function(a1, a2, a3, a4) {
 	}
 	
 	var r2 = R(r / 2);
-	var rc = R(Can2D.cos6 * r);
+	var rc = R(Hexagon.cos6 * r);
 	if (h > r) throw new Error("Cannot make slice larger than radius");
-	var pm = new Point(x + r - R((r * Can2D.cos6 - h) * Can2D.tan6), y + rc - h);
+	var pm = new Point(x + r - R((r * Hexagon.cos6 - h) * Hexagon.tan6), y + rc - h);
 	
 	this.beginPath();
 	this.moveTo(x, y);
@@ -1124,9 +1332,9 @@ Can2D.prototype.makeHexagonSlice = function(a1, a2, a3, a4) {
  */
 Can2D.prototype.makeHexagonSegment = function(p, r, ri, seg) {
 	var r2  = R(r  / 2);
-	var rc  = R(Can2D.cos6 * r);
+	var rc  = R(Hexagon.cos6 * r);
 	var ri2 = R(ri / 2);
-	var ric = R(Can2D.cos6 * ri);
+	var ric = R(Hexagon.cos6 * ri);
 	var px = p.x;
 	var py = p.y;
 	this.beginPath();
@@ -2188,7 +2396,7 @@ _init : function() {
   /| |  |-'  X  | | | |-' | | | |
   `' `' `-' ' ` ' ' ' `-' ' ' `-^
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-		   r |------>| 
+		  ro |------>| 
           ri |->.    '
          .------'.   '      -1
 		/ \  1  / \	 '
@@ -2199,37 +2407,28 @@ _init : function() {
  	    \ /  4  \ /
          `-------´  
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Hexmenu(r, ri, labels) {
-	this.p  = null;
-	this.r  = r;
-	this.ri = ri;
+function Hexmenu(p, ri, ro, labels) {
+	this.p = p;
+	this.hi = new Hexagon(p, ri);
+	this.ho = new Hexagon(p, ro);
 	this.labels = labels;
 	this.mousepos = -1;
 }
 
-Hexmenu.prototype.set = function(p) {
-	this.p = p;
-	this.mousepos = 0;
-}
-
 Hexmenu.prototype.draw = function() {
-	var c2d = System.can2d;
-	var p  = this.p;
-	var r  = this.r;
-	var ri = this.ri;
-	
-	var grad = c2d.createRadialGradient(p, 0, p, (r + ri) / 2);
+	var c2d = System.can2d;	
+	var grad = c2d.createRadialGradient(this.p, 0, this.p, (this.hi.r + this.ho.r) / 2);
 	grad.addColorStop(0, settings.floatMenuBackground1);
 	grad.addColorStop(1, settings.floatMenuBackground2);
-	c2d.makeHexagon(p, r);
+	c2d.makeHexagon(this.p, this.ho.r);
 	c2d.fill(grad);
 
 	if (this.mousepos > 0) {
-		c2d.makeHexagonSegment(p, r, ri, this.mousepos);
+		c2d.makeHexagonSegment(this.p, this.ho.r, this.hi.r, this.mousepos); // todo swap
 		c2d.fill(settings.floatMenuFillStyle);
 	}
 	
-	c2d.makeHexagonFlower(p, r, ri, this.labels, false);	
+	c2d.makeHexagonFlower(this.p, this.ho.r, this.hi.r, this.labels, false); // todo swap
 	if (settings.floatMenuInnerBorderWidth > 0) {
 		c2d.stroke(settings.floatMenuInnerBorderWidth, settings.floatMenuInnerBorderColor);
 	}
@@ -2241,26 +2440,26 @@ Hexmenu.prototype.draw = function() {
 	var labels = this.labels;
 	var llen = labels.length;
 	
-	var dist = r / 3.5;
+	var rd = this.ho.r * (1 - 1 / 3.5);
 	switch (llen) {
 	default:
 	case 7: // segment 6
-		c2d.fillRotateText(labels[6], this.p, Math.PI / 3 * 5, r - dist);
+		c2d.fillRotateText(labels[6], this.p, Math.PI / 3 * 5, rd);
 		/* fall */
 	case 6: // segment 5
-		c2d.fillRotateText(labels[5], this.p, Math.PI / 3 * 4, r - dist);
+		c2d.fillRotateText(labels[5], this.p, Math.PI / 3 * 4, rd);
 		/* fall */
 	case 5: // segment 4
-		c2d.fillRotateText(labels[4], this.p, Math.PI / 3 * 3, r - dist);
+		c2d.fillRotateText(labels[4], this.p, Math.PI / 3 * 3, rd);
 		/* fall */
 	case 4: // segment 3
-		c2d.fillRotateText(labels[3], this.p, Math.PI / 3 * 2, r - dist);
+		c2d.fillRotateText(labels[3], this.p, Math.PI / 3 * 2, rd);
 		/* fall */
 	case 3: // segment 2
-		c2d.fillRotateText(labels[2], this.p, Math.PI / 3 * 1, r - dist);
+		c2d.fillRotateText(labels[2], this.p, Math.PI / 3 * 1, rd);
 		/* fall */
 	case 2: // segment 1
-		c2d.fillRotateText(labels[1], this.p, Math.PI / 3 * 6, r - dist);
+		c2d.fillRotateText(labels[1], this.p, Math.PI / 3 * 6, rd);
 		/* fall */
 	case 1: // segment 0
 		c2d.fillText(labels[0], this.p);
@@ -2270,16 +2469,16 @@ Hexmenu.prototype.draw = function() {
 }
 
 Hexmenu.prototype._getMousepos = function(p) {
-	var dp = p.sub(this.p);
-	if (!Can2D.withinHexagon(dp, this.r)) {
+	var dp = p.sub(this.p); // todo
+	if (!this.ho.within(p)) {
 		/* out of menu */
 		return this.mousepos = -1;
-	} else if (Can2D.withinHexagon(dp, this.ri)) {
+	} else if (this.hi.within(p))  {
 		return this.mousepos = 0;
 	} else {
-		var lor = dp.x <= -dp.y * Can2D.tan6; // left of right diagonal
-		var rol = dp.x >=  dp.y * Can2D.tan6; // right of left diagonal
-		var aom = dp.y <= 0;                  // above of middle line
+		var lor = dp.x <= -dp.y * Hexagon.tan6; // left of right diagonal
+		var rol = dp.x >=  dp.y * Hexagon.tan6; // right of left diagonal
+		var aom = dp.y <= 0;                    // above of middle line
 		if (lor && rol)        return this.mousepos = 1;
 		else if (!lor && aom)  return this.mousepos = 2;
 		else if (rol && !aom)  return this.mousepos = 3;
@@ -2331,7 +2530,7 @@ Edgemenu.prototype.draw = function(x, y) {
 	var w = this.width;
 	var bw = this.bwidth;
 	var h =  this.height;
-	var ew = R(h * Can2D.tan6);
+	var ew = R(h * Hexagon.tan6);
 	var xl = x - w - ew;
 	var xr = x + w + ew;
 	
@@ -2394,13 +2593,13 @@ Edgemenu.prototype._getMousepos = function(p) {
 	var tx = R(canvas.width / 2) + 0.5;
 	var w  = this.width;
 	var bw = this.bwidth;
-	var ew = R(h * Can2D.tan6);
+	var ew = R(h * Hexagon.tan6);
 	var xl = tx - w - ew;
 	var xr = tx + w + ew;
-	if ((p.x - xl <= -(p.y - ty) * Can2D.tan6))             return this.mousepos = -1;
-	if ((p.x - xr >=  (p.y - ty) * Can2D.tan6))             return this.mousepos = -1;
-	if ((p.x - (xl + bw + ew) <=  (p.y - ty) * Can2D.tan6)) return this.mousepos =  1;
-	if ((p.x - (xr - bw - ew) >= -(p.y - ty) * Can2D.tan6)) return this.mousepos =  2;
+	if ((p.x - xl <= -(p.y - ty) * Hexagon.tan6))             return this.mousepos = -1;
+	if ((p.x - xr >=  (p.y - ty) * Hexagon.tan6))             return this.mousepos = -1;
+	if ((p.x - (xl + bw + ew) <=  (p.y - ty) * Hexagon.tan6)) return this.mousepos =  1;
+	if ((p.x - (xr - bw - ew) >= -(p.y - ty) * Hexagon.tan6)) return this.mousepos =  2;
 	return this.mousepos = 0;
 }
 
@@ -2410,7 +2609,7 @@ Edgemenu.prototype.mousehover = function(p) {
 	return omp != this._getMousepos(p);
 }
 
-Edgemenu.prototype.mousedown = function(x, y) {
+Edgemenu.prototype.mousedown = function(x, y) { // todo why x,y
 	return this._getMousepos(x, y);
 }
 
@@ -2436,13 +2635,10 @@ function Cockpit() {
     \ | | ,-| |   |-' 
 `---' |-' `-^ `-' `-' 
 ~ ~ ~ | ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- The  '  place     
+ The  '  are where all the items are in.     
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Space() {
-	this._floatmenu = new Hexmenu(settings.floatMenuOuterRadius, settings.floatMenuInnerRadius,
-		["new", "Note", "Label"]);
-	this._itemmenu = new Hexmenu(settings.itemMenuOuterRadius, settings.itemMenuInnerRadius,
-		["", "Remove"])
+	this._floatMenuLabels = ["new", "Note", "Label"];
 	this.edgemenu = new Edgemenu();
 	
 	this.iaction = {
@@ -2672,7 +2868,7 @@ Space.prototype.click = function(p, shift, ctrl) {
 
 	var focus = this.focus;
 	if (focus && focus.withinItemMenu(pp)) {
-		focus.setItemMenu(this._itemmenu, this.pan);
+		this._itemmenu = focus.newItemMenu(this.pan);
 		this.iaction.act = ACT.IMENU;
 		this.redraw();
 		return;
@@ -2681,7 +2877,11 @@ Space.prototype.click = function(p, shift, ctrl) {
 	var tfx = System.repository.transfix(TXE.CLICK, this, pp, shift, ctrl);
 	if (!(tfx & TXR.HIT)) {
 		this.iaction.act = ACT.FMENU;
-		this._floatmenu.set(p);
+		this._floatmenu = new Hexmenu(p, 
+			settings.floatMenuInnerRadius,
+			settings.floatMenuOuterRadius,
+			this._floatMenuLabels);
+
 		System.setCursor("default");
 		this.setFoci(null);
 		this.redraw();
@@ -2796,11 +2996,11 @@ Space.prototype.dragmove = function(p, shift, ctrl) {
 		var dy = pp.y - iaction.sy;
 		var it = iaction.item;
 		var h = it.zone.h;
-		var scrollRange = h - settings.scrollbarMarginY * 2;
+		var scrollRange = h - settings.scrollbar.marginY * 2;
 		var dtreeHeight = it.dtree.height;
 		var innerHeight = h - 2 * it.textBorder;
 		var scrollSize  = scrollRange * innerHeight / dtreeHeight;
-		var srad = settings.scrollbarRadius;
+		var srad = settings.scrollbar.radius;
 		if (scrollSize < srad * 2) {
 			/* minimum size of scrollbar */
 			scrollSize = srad * 2;
@@ -3062,11 +3262,11 @@ Space.prototype.mousedown = function(p) {
 		switch(md) {
 		case 1 : // note
 			var nw = settings.note.newWidth;
-			var nh = settings.note.neweight;
+			var nh = settings.note.newHeight;
 			// todo, beautify point logic.
 			var p1 = fm.p.sub(R(nw / 2) + this.pan.x, R(nh / 2) + this.pan.y);
 			var p2 = p1.add(nw, nh);
-			var note = new Note(null, null, new Rect( p1, p2));
+			var note = new Note(null, null, new Rect(p1, p2));
 			this.setFoci(note);
 			break;
 		case 2 : // label
@@ -3525,7 +3725,7 @@ DTree.prototype.jsonfy = function() {
 	return js;
 }
 		
-/* returns the chunk at x,y xxx*/
+/* returns the chunk at x,y */
 DTree.prototype.paraAtP = function(p) {
 	var para = this.first;
 	while (para && p.y > para.p.y + para.softHeight) {
@@ -3572,8 +3772,8 @@ DTree.prototype.draw = function(c2d, select, offsetX, offsetY, scrolly) {
 			c2d.lineTo(ex, ey + lh);
 			c2d.lineTo(ex, ey);
 			c2d.lineTo(bx, by);
-			c2d.stroke(1, settings.selectionStroke);
-			c2d.fill(settings.selectionColor);
+			c2d.stroke(1, settings.selection.stroke);
+			c2d.fill(settings.selection.color);
 		} else if (abs(by + lh - ey) < 2 && (bx >= ex))  {
 			//      ***
 			// ***
@@ -3586,8 +3786,8 @@ DTree.prototype.draw = function(c2d, select, offsetX, offsetY, scrolly) {
 			c2d.lineTo(ex, ey);
 			c2d.lineTo(ex, ey + lh);
 			c2d.lineTo(lx, ey + lh);
-			c2d.stroke(1, settings.selectionStroke);
-			c2d.fill(settings.selectionColor);
+			c2d.stroke(1, settings.selection.stroke);
+			c2d.fill(settings.selection.color);
 		} else {
 			//    *****
 			// *****
@@ -3606,7 +3806,7 @@ DTree.prototype.draw = function(c2d, select, offsetX, offsetY, scrolly) {
 				if (i) {
 					c2d.stroke(1, settings.selectionStroke); 
 				} else {
-					c2d.fill(settings.selectionColor);
+					c2d.fill(settings.selection.color);
 				}
 			}
 		}
@@ -3704,12 +3904,15 @@ function Item(otype, id) {
 }
 
 /* set a hex menu to be this items menu */
-Item.prototype.setItemMenu = function(menu, pan) {
+Item.prototype.newItemMenu = function(pan) {
 	var r = settings.itemMenuInnerRadius;
 	var h = settings.itemMenuSliceHeight;
-	menu.set(new Point(
-		R(this.zone.p1.x + pan.x + r - (r * Can2D.cos6 - h) * Can2D.tan6), 
-		R(this.zone.p1.y + pan.y + r * Can2D.cos6 - h) - 1));
+	var labels = this._itemMenuLabels = ["", "Remove"];
+	// todo why pan?
+	var p = new Point(
+		R(this.zone.p1.x + pan.x + r - (r * Hexagon.cos6 - h) * Hexagon.tan6), 
+		R(this.zone.p1.y + pan.y + r * Hexagon.cos6 - h) - 1);
+	return new Hexmenu(p, settings.itemMenuInnerRadius, settings.itemMenuOuterRadius, labels);
 }
 
 /* returns if coords are within the item menu */
@@ -3811,7 +4014,7 @@ Item.prototype._drawHandles = function(space, rhs) {
 	var pm = c2d.makeHexagonSlice(p1,settings.itemMenuInnerRadius, settings.itemMenuSliceHeight);
 	var grad = c2d.createLinearGradient(
 		0, p1.y - settings.itemMenuSliceHeight - 1, 
-		0, p1.y - settings.itemMenuSliceHeight + settings.itemMenuInnerRadius * Can2D.cos6
+		0, p1.y - settings.itemMenuSliceHeight + settings.itemMenuInnerRadius * Hexagon.cos6
 	);
 	grad.addColorStop(0, settings.itemMenuBackground1);
 	grad.addColorStop(1, settings.itemMenuBackground2);	
@@ -3865,12 +4068,14 @@ Note.prototype.constructor = Note;
  */
 function Note(js, id, zone) {
 	if (js) {
+		var rect  = Rect.jnew(js.z);
 		this.zone = Rect.jnew(js.z);
 		this.dtree = new DTree(js.d, this);
 	} else {
 		this.zone = zone;
 		this.dtree  = new DTree(null, this);
 	}
+	this.silhoutte = new RoundRect(this.zone, settings.note.cornerRadius); 
 	Item.call(this, "note", id);
 	this._bcan2d = new Can2D();
 	this.textBorder = settings.note.textBorder;
@@ -3944,8 +4149,8 @@ Note.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 			txr |= TXR.REDRAW;
 		}
 
-		var srad = settings.scrollbarRadius;
-		var sbmx = settings.scrollbarMarginX;
+		var srad = settings.scrollbar.radius;
+		var sbmx = settings.scrollbar.marginX;
 		if (this.scrolly >= 0 && abs(p.x - this.zone.p2.x + srad + sbmx) <= srad + 1)  {
 			space.actionScrollY(this, p.y, this.scrolly);
 		} else {
@@ -3999,7 +4204,8 @@ Note.prototype.setZone = function(zone, align) {
 			max(zone.h, settings.note.minHeight), align);
 	}
 	if (this.zone.eq(zone)) return false;
-	this.zone = zone;
+	this.zone      = zone;
+	this.silhoutte = new RoundRect(zone, this.silhoutte.crad);
 	this._canvasActual = false;
 	return true;
 }
@@ -4039,29 +4245,13 @@ Note.prototype.drawHandles = function(space) {
 Note.prototype.checkItemCompass = function(p) { 
 	return this._checkItemCompass(p, 255);
 }
-
-/* draws a bevel.
- *
- * c2d  ... canvas 2d
- * zone ... zone to zake the size from.
- */
-function Note_bevel(c2d, zone, border, radius) {
-	var x1 = border;
-	var y1 = border;
-	var x2 = zone.w - border;
-	var y2 = zone.h - border;
-	c2d.beginPath();
-	c2d.moveTo(x1 + radius, y1);
-	c2d.arc(x2 - radius, y1 + radius, radius, -Math.PI / 2, 0, false);
-	c2d.arc(x2 - radius, y2 - radius, radius, 0, Math.PI / 2, false);
-	c2d.arc(x1 + radius, y2 - radius, radius, Math.PI / 2, Math.PI, false);
-	c2d.arc(x1 + radius, y1 + radius, radius, Math.PI, -Math.PI / 2, false);
-}
 	
-/* draws the item.
- *
- * space   to draw 
- */
+/**
+| Draws the note.
+|
+| can2d: canvas-2d to draw upon.
+| selection: current selection to highlight.
+*/
 Note.prototype.draw = function(can2d, selection) {
 	var bc2d  = this._bcan2d;
 	var dtree = this.dtree;
@@ -4072,24 +4262,20 @@ Note.prototype.draw = function(can2d, selection) {
 	}
 
 	bc2d.attune(this.zone);
-	Note_bevel(bc2d, this.zone, 2, 3); // todo
-	var grad = bc2d.createLinearGradient(0, 0, this.zone.w / 10, this.zone.h);
-	grad.addColorStop(0, settings.note.background1);
-	grad.addColorStop(1, settings.note.background2);
-	bc2d.fill(grad);
-	
+	bc2d.fills(settings.note.style.fill, this.silhoutte);
+
 	/* calculates if a scrollbar is needed */
 	var sy = this._scrolly;
 	var innerHeight = this.zone.h - 2 * this.textBorder;
 	dtree.flowWidth = 
-		this.zone.w - 2 * this.textBorder - (sy >= 0 ? settings.scrollbarRadius * 2 : 0);
+		this.zone.w - 2 * this.textBorder - (sy >= 0 ? settings.scrollbar.radius * 2 : 0);
 	var dtreeHeight = dtree.height;
 	if (sy < 0) {
 		if (dtreeHeight > innerHeight) {
 			/* does not use a scrollbar but should */
 			sy = this._scrolly = 0;		
 			dtree.flowWidth = 
-				this.zone.w - 2 * this.textBorder - (sy >= 0 ? settings.scrollbarRadius * 2 : 0);
+				this.zone.w - 2 * this.textBorder - (sy >= 0 ? settings.scrollbar.radius * 2 : 0);
 			dtreeHeight = dtree.height;
 			if (dtreeHeight <= innerHeight) {
 				throw new Error("note doesnt fit with and without scrollbar.");			
@@ -4098,7 +4284,9 @@ Note.prototype.draw = function(can2d, selection) {
 	} else if (dtreeHeight <= innerHeight) {
 		/* uses a scrollbar but should */
 		sy = this._scrolly = -8833;
-		dtree.flowWidth = this.zone.w - 2 * this.textBorder - (sy >= 0 ? settings.scrollbarRadius * 2 : 0);
+		dtree.flowWidth = this.zone.w - 
+			2 * this.textBorder - 
+			(sy >= 0 ? settings.scrollbar.radius * 2 : 0);
 		dtreeHeight = dtree.height;
 		if (dtreeHeight > innerHeight) {
 			throw new Error("note doesnt fit with and without scrollbar.");			
@@ -4110,68 +4298,72 @@ Note.prototype.draw = function(can2d, selection) {
 	
 	if (sy >= 0) {
 		/* draws the vertical scroll bar */
-		var srad   = settings.scrollbarRadius;
-		var srad05 = R(settings.scrollbarRadius * 0.5);
-		var spx  = this.zone.w - settings.scrollbarMarginX - srad;
-		var scrollRange = this.zone.h - settings.scrollbarMarginY * 2;
+		var srad   = settings.scrollbar.radius;
+		var srad05 = R(settings.scrollbar.radius * 0.5);
+		var spx  = this.zone.w - settings.scrollbar.marginX - srad;
+		var scrollRange = this.zone.h - settings.scrollbar.marginY * 2;
 		var scrollSize  = scrollRange * innerHeight / dtreeHeight;
 		if (scrollSize < srad * 2) {
 			/* minimum size of scrollbar */
 			scrollSize = srad * 2;
 		}
 						
-		var spy = R(settings.scrollbarMarginY + 
+		var spy = R(settings.scrollbar.marginY + 
 			sy / (dtreeHeight - innerHeight) * (scrollRange - scrollSize));
 		
-		switch (settings.scrollbarForm) {
+		switch (settings.scrollbar.form) {
 		case 'round' :
 			bc2d.beginPath();
 			bc2d.arc(spx, spy + srad, srad, Math.PI, 0, false);
 			bc2d.arc(spx, spy + scrollSize - srad, srad, 0, Math.PI, false);
 			bc2d.closePath();
-			bc2d.fill(settings.scrollbarFillStyle);
-			bc2d.stroke(settings.scrollbarLineWidth, settings.scrollbarStrokeStyle);
+			bc2d.fill(settings.scrollbar.fillStyle);
+			bc2d.stroke(settings.scrollbar.lineWidth, settings.scrollbar.strokeStyle);
 			break;
 		case 'square' :
-			bc2d.fillRect(settings.scrollbarFillStyle, spx, spy, srad + 2, scrollSize);
+			bc2d.fillRect(settings.scrollbar.fillStyle, spx, spy, srad + 2, scrollSize);
 			break;
 		case 'hexagonh' :
 			bc2d.beginPath();
-			bc2d.moveTo(spx - srad,   R(spy + Can2D.cos6 * srad));
+			bc2d.moveTo(spx - srad,   R(spy + Hexagon.cos6 * srad));
 			bc2d.lineTo(spx - srad05, spy);
 			bc2d.lineTo(spx + srad05, spy);
-			bc2d.lineTo(spx + srad,   R(spy + Can2D.cos6 * srad));
-			bc2d.lineTo(spx + srad,   R(spy + scrollSize - Can2D.cos6 * srad));
+			bc2d.lineTo(spx + srad,   R(spy + Hexagon.cos6 * srad));
+			bc2d.lineTo(spx + srad,   R(spy + scrollSize - Hexagon.cos6 * srad));
 			bc2d.lineTo(spx + srad05, R(spy + scrollSize));
 			bc2d.lineTo(spx - srad05, R(spy + scrollSize));
-			bc2d.lineTo(spx - srad,   R(spy + scrollSize - Can2D.cos6 * srad));
+			bc2d.lineTo(spx - srad,   R(spy + scrollSize - Hexagon.cos6 * srad));
 			bc2d.closePath();
-			bc2d.fill(settings.scrollbarFillStyle);
-			bc2d.stroke(settings.scrollbarLineWidth, settings.scrollbarStrokeStyle);
+			bc2d.fill(settings.scrollbar.fillStyle);
+			bc2d.stroke(settings.scrollbar.lineWidth, settings.scrollbar.strokeStyle);
 			break;
 		case 'hexagonv' :
 			bc2d.beginPath();
-			bc2d.moveTo(spx - srad, R(spy + Can2D.cos6 * srad));
-			bc2d.lineTo(spx           , spy);
-			bc2d.lineTo(spx + srad, spy + Can2D.cos6 * srad);
-			bc2d.lineTo(spx + srad, R(spy + scrollSize - Can2D.cos6 * srad));
-			bc2d.lineTo(spx           , R(spy + scrollSize));
+			bc2d.moveTo(spx - srad, R(spy + Hexagon.cos6 * srad));
+			bc2d.lineTo(spx, spy);
+			bc2d.lineTo(spx + srad, spy + Hexagon.cos6 * srad);
+			bc2d.lineTo(spx + srad, R(spy + scrollSize - Hexagon.cos6 * srad));
+			bc2d.lineTo(spx, R(spy + scrollSize));
 			bc2d.closePath();
-			bc2d.lineTo(spx - srad, R(spy + scrollSize - Can2D.cos6 * srad));
-			bc2d.fill(settings.scrollbarFillStyle);
-			bc2d.stroke(settings.scrollbarLineWidth, settings.scrollbarStrokeStyle);
+			bc2d.lineTo(spx - srad, R(spy + scrollSize - Hexagon.cos6 * srad));
+			bc2d.fill(settings.scrollbar.fillStyle);
+			bc2d.stroke(settings.scrollbar.lineWidth, settings.scrollbar.strokeStyle);
 			break;
 		default :
-			throw new Error("invalid settings.scrollbarForm");
+			throw new Error("invalid settings.scrollbar.form");
 		}
 	}
 
 	/* draws the border */
-	Note_bevel(bc2d, this.zone, 2, settings.note.innerRadius); // todo moveto can2d
+	bc2d.edges(settings.note.style.edge, this.silhoutte);
+	
+	/*xx
+	this.silhoutte.path(bc2d,  2);
 	bc2d.stroke(settings.note.innerBorderWidth, settings.note.innerBorderColor);	
-	Note_bevel(bc2d, this.zone, 1, settings.note.outerRadius);
+	this.silhoutte.path(bc2d,  1);
 	bc2d.stroke(settings.note.outerBorderWidth, settings.note.outerBorderColor); 
 	bc2d.beginPath();
+	*/
 	this._canvasActual = true;
 	can2d.drawImage(bc2d, this.zone.p1);
 }
@@ -4470,8 +4662,8 @@ Relation.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 			txr |= TXR.REDRAW;
 		}
 
-		var srad = settings.scrollbarRadius;
-		var sbmx = settings.scrollbarMarginX;
+		var srad = settings.scrollbar.radius;
+		var sbmx = settings.scrollbar.marginX;
 		if (this.scrolly >= 0 && abs(p.x - this.zone.p2.x + srad + sbmx) <= srad + 1)  {
 			space.actionScrollY(this, p.y, this.scrolly);
 		} else {
