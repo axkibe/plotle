@@ -2549,6 +2549,9 @@ function Edgemenu() {
 	/* widths of buttons (meassured on bottom) */
 	this.buttonWidths = [100, 150, 100];
 
+	/* label texts */
+	this.labels = ["Export", "Meshcraft Demospace", "Import"];
+
 	/* total width */
 	this.width = 0;
 	for(var b in this.buttonWidths) {
@@ -2646,27 +2649,35 @@ Edgemenu.prototype.draw = function() {
 	c2d.edges(settings.edgemenu.style.edge, this, -2); 
 
 	c2d.fontStyle("12px " + settings.defaultFont, "black", "center", "middle");
-	//c2d.fillText("Meshcraft Demospace", x, y - R(h / 2));
-	//c2d.fillText("Export", xl + R((bw + ew) / 2), y - R(h / 2));
-	//c2d.fillText("Import", xr - R((bw + ew) / 2), y - R(h / 2));
+	var bx = this.p1.x;
+	var my = R((this.p2.y - this.p1.y) / 2);
+	for(var i = 0; i < this.labels.length; i++) {
+		c2d.fillText("Meshcraft Demospace", x, y - R(h / 2));
+	}
 }
 
 Edgemenu.prototype._getMousepos = function(p) {
-	var canvas = System.canvas;
-	var h  = this.height;
-	var ty = canvas.height;
-	if (p.y < ty - h) return this.mousepos = -1;
-	var tx = R(canvas.width / 2) + 0.5;
-	var w  = this.width;
-	var bw = this.bwidth;
-	var ew = R(h * Hexagon.tan6);
-	var xl = tx - w - ew;
-	var xr = tx + w + ew;
-	if ((p.x - xl <= -(p.y - ty) * Hexagon.tan6))             return this.mousepos = -1;
-	if ((p.x - xr >=  (p.y - ty) * Hexagon.tan6))             return this.mousepos = -1;
-	if ((p.x - (xl + bw + ew) <=  (p.y - ty) * Hexagon.tan6)) return this.mousepos =  1;
-	if ((p.x - (xr - bw - ew) >= -(p.y - ty) * Hexagon.tan6)) return this.mousepos =  2;
-	return this.mousepos = 0;
+	var c2d = System.can2d;
+	if (!this.p1 || !this.p2) return this.mousepos = -1;
+	if (p.y < this.p1.y) return this.mousepos = -1;
+	var mx = R(canvas.width / 2);
+	var ew = R((this.p2.y - this.p1.y) * Hexagon.tan6);
+	/* shortcut name = letters for formula */
+	var pymcht6 = (p.y - c2d.height) * Hexagon.tan6;
+
+	if (p.x - this.p1.x < -pymcht6) return this.mousepos = -1;
+	if (p.x - this.p2.x >  pymcht6) return this.mousepos = -1;
+	var bx = this.p1.x;
+	for(var mp = 0; mp < this.buttonWidths.length; mp++) {
+		bx += this.buttonWidths[mp];
+		if (mp % 2 === 0) {
+			if (p.x - bx < pymcht6) return this.mousepos = mp;
+		} else {
+			if (p.x - bx < -pymcht6) return this.mousepos = mp;
+		}
+	}
+	throw new Error("this code should not be reached");
+	return this.mousepos = -1;
 }
 
 /* returns true if this.mousepos has changed*/
