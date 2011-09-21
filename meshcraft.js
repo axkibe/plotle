@@ -53,7 +53,7 @@ var settings = {
 	/* factor to add to the bottom of font height */
 	bottombox : 0.22,
 	
-	/* minimum sizes */
+	/* standard note in space */
 	note : {
 		minWidth     : 40,
 		minHeight    : 40,
@@ -65,44 +65,39 @@ var settings = {
 		style : {
 			fill : {
 				gradient : 'askew',
-				steps    : [
+				steps : [
 					[0, "rgba(255, 255, 248, 0.955)"],
-				    [1, "rgba(255, 255, 160, 0.955)"] ],
+				    [1, "rgba(255, 255, 160, 0.955)"],
+				],
 			},
 			edge : [
-				{ width : 2,
-				  color : "rgb(255, 188, 87)" },
-				{ width : 1,
-				  color : "black" } ]
+				{ border: 2, width : 1, color : "rgb(255, 188, 87)" },
+				{ border: 1, width : 1, color : "black" },
+			],
 		},
 
-		// xx old
-		innerBorderWidth : 2,
-		innerBorderColor : "rgb(255, 188, 87)",
 		cornerRadius     : 6,
-		outerBorderWidth : 1,
-		outerBorderColor : "black",
-		background1 : "rgba(255, 255, 248, 0.955)",
-		background2 : "rgba(255, 255, 160, 0.955)",
 	},
 	
-//	label : {   todo unused?
-//		minWidth  : 30,
-//		minHeight : 30,
-//	},
-//	relationMinWidth  : 30, todo unused ?
-//	relationMinHeight : 15,
-	
-	
-	/* edge menu style */
-	edgeMenuOuterBorderWidth : 0.5,
-	edgeMenuOuterBorderColor : "rgb(0, 0, 0)",
-	edgeMenuInnerBorderWidth : 2,
-	edgeMenuInnerBorderColor : "rgb(255, 200, 105)",
-	edgeMenuBackground1 : "rgba(255, 255, 248, 0.90)",
-	edgeMenuBackground2 : "rgba(255, 255, 190, 0.90)",	
-	edgeMenuFillStyle : "rgb(255, 237, 210)",
-	
+	/* menu at the bottom of cockpit */
+	edgemenu : {
+		style : {
+			fill : {
+				gradient : 'horizontal',
+				steps : [
+					//[ 0, "rgba(255, 255, 248, 0.90)" ],
+					[ 0, "rgba(255, 255, 200, 0.90)" ],
+					[ 1, "rgba(255, 255, 160, 0.90)" ] 
+				],
+			},
+			edge : [
+				{ border: 1, width :   2, color : "rgb(255, 200, 105)" },
+				{ border: 0, width : 0.5, color : "black" },
+			],
+			select : "rgb(255, 237, 210)",
+		},
+	},
+
 	/* float menu style */
 	floatMenuOuterRadius : 75,
 	floatMenuInnerRadius : 30,
@@ -321,10 +316,12 @@ Object.defineProperty(Measure, "font", {
  A Point in a 2D plane.
  Points are immutable objects.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Constructor.
- * Point(x, y) or
- * Point(point)
- */
+/** 
+| Constructor.
+|
+| Point(x, y) or
+| Point(point)
+*/
 function Point(p, y) {
 	if (arguments.length === 1) {
 		this.x = p.x;
@@ -336,6 +333,11 @@ function Point(p, y) {
 	Object.freeze(this);
 }
 
+/**
+| Shortcut for often used point at 0/0.
+*/
+Point.zero = new Point(0, 0);
+
 /* Creates a point from json */
 Point.jnew = function(js) {
 	if (typeof(js.x) !== "number" || typeof(js.y) !== "number") {
@@ -344,25 +346,34 @@ Point.jnew = function(js) {
 	return new Point(js.x, js.y);
 }
 
-/* returns a json object for this point */
+/** 
+| Returns a json object for this point.
+*/
 Point.prototype.jsonfy = function() {
 	return { x: this.x, y: this.y };
 }
 
+/**
+| Returns true if this point is equal to another.
+*/
 Point.prototype.eq = function(px, y) {
 	return arguments.length === 1 ? 
 		this.x === px.x && this.y === px.y :
 		this.x === px   && this.y ===    y;
 }
 
-/* add two points or x/y values, returns new point */
+/** 
+| Adds two points or x/y values, returns a new point.
+*/
 Point.prototype.add = function(a1, a2) {
 	return (typeof(a1) === "object" ?
 		new Point(this.x + a1.x, this.y + a1.y) :
 		new Point(this.x + a1,   this.y + a2));
 }
 
-/* subtracts a points (or x/y from this), returns new point */
+/** 
+| Subtracts a points (or x/y from this), returns new point 
+*/
 Point.prototype.sub = function(a1, a2) {
 	return (typeof(a1) === "object" ?
 		new Point(this.x - a1.x, this.y - a1.y) :
@@ -414,6 +425,9 @@ Rect.prototype.add = function(px, y) {
 		new Rect(this.p1.add(px, y), this.p2.add(px, y));
 }
 
+/**
+| Returns a rect moved by a -point or -x/-y.
+*/
 Rect.prototype.sub = function(p) {
 	return arguments.length === 1 ?
 		new Rect(this.p1.sub(px),    this.p2.sub(px)) : 
@@ -421,7 +435,7 @@ Rect.prototype.sub = function(p) {
 }
 
 /** 
-| returns true if point is within this rect 
+| Returns true if point is within this rect.
 */
 Rect.prototype.within = function(p) {
 	return p.x >= this.p1.x && p.y >= this.p1.y && 
@@ -429,7 +443,7 @@ Rect.prototype.within = function(p) {
 }
 
 /** 
-| returns a rectangle with same p1 but size w/h or point 
+| Returns a rectangle with same p1 but size w/h or point.
 */
 Rect.prototype.resize = function(w, h, align) {
 	var p1 = this.p1;
@@ -451,7 +465,7 @@ Rect.prototype.resize = function(w, h, align) {
 }
 
 /** 
-| returns a rectangle with same size at position at p|x/y) 
+| Returns a rectangle with same size at position at p|x/y).
 */
 Rect.prototype.atpos = function(px, y) {
 	if (arguments.length !== 1) px = new Point(px, y);
@@ -465,6 +479,7 @@ Rect.prototype.eq = function(r) {
 	return this.p1.eq(r.p1) && this.p2.eq(r.p2);
 }
 
+/* todo remove */
 Object.defineProperty(Rect.prototype, "w", { 
 	get: function()  { return this.p2.x - this.p1.x; }
 });
@@ -473,6 +488,7 @@ Object.defineProperty(Rect.prototype, "width", {
 	get: function()  { return this.p2.x - this.p1.x; }
 });
 
+/* todo remove */
 Object.defineProperty(Rect.prototype, "h", {
 	get: function()  { return this.p2.y - this.p1.y; }
 });
@@ -819,6 +835,10 @@ Can2D.isNearLine = function(p, dis, p1, p2) {
 		return abs(dy - (p2.y - p1.y) / (p2.x - p1.x) * dx) < dis;
 	}
 }
+
+/**
+| Throws an error if any argument is not an integer.
+*/
 Can2D.ensureInteger = function() {
 	for(var a in arguments) {
 		var arg = arguments[a];
@@ -830,20 +850,18 @@ Can2D.ensureInteger = function() {
 
 Object.defineProperty(Can2D.prototype, "width", {
 	get: function() { return this._canvas.width; },
-	set: function() { throw new Error("use Can2D.resetSize()");},
 });
 
 Object.defineProperty(Can2D.prototype, "height", {
 	get: function() { return this._canvas.height; },
-	set: function() { throw new Error("use Can2D.resetSize()");},
 });
 
 /*
-| attune() -or-
-| attune(rect) -or-
+| attune()                   -or-
+| attune(rect)               -or-
 | attune(width, height)
 | 
-| the canvas is cleared and its size ensured to be width/height (of rect)
+| The canvas is cleared and its size ensured to be width/height (of rect).
 */
 Can2D.prototype.attune = function(a1, a2) {
 	var ta1 = typeof(a1);
@@ -872,9 +890,9 @@ Can2D.prototype.attune = function(a1, a2) {
 
 
 /**
- * moveTo(point) -or-
- * moveTo(x, y)
- */
+| moveTo(point) -or-
+| moveTo(x, y)
+*/
 Can2D.prototype.moveTo = function(a1, a2) {
 	var pan = this.pan;
 	var x, y;
@@ -890,9 +908,10 @@ Can2D.prototype.moveTo = function(a1, a2) {
 	this._cx.moveTo(x + pan.x + 0.5, y + pan.y + 0.5);
 }
 
-/* lineto(point) -or-
- * lineto(x, y)
- */
+/** 
+| lineto(point) -or-
+| lineto(x, y)
+*/
 Can2D.prototype.lineTo = function(a1, a2) {
 	var pan = this.pan;
 	var x, y;
@@ -908,11 +927,11 @@ Can2D.prototype.lineTo = function(a1, a2) {
 	this._cx.lineTo(x + pan.x + 0.5, y + pan.y + 0.5);
 }
 
-/* Draws an arc.
- *
- * arc(p,    radius, startAngle, endAngle, anticlockwise)   -or-
- * arc(x, y, radius, startAngle, endAngle, anticlockwise)   -or-
- */
+/**
+| Draws an arc.
+| arc(p,    radius, startAngle, endAngle, anticlockwise)   -or-
+| arc(x, y, radius, startAngle, endAngle, anticlockwise)   -or-
+*/
 Can2D.prototype.arc = function(a1, a2, a3, a4, a5, a6) {
 	var pan = this.pan;
 	if (typeof(a1) === "object") {
@@ -922,7 +941,9 @@ Can2D.prototype.arc = function(a1, a2, a3, a4, a5, a6) {
 	this._cx.arc(a1 + pan.x + 0.5, a2 + pan.y + 0.5, a3, a4, a5, a6);
 }
 
-/* makes a stroke */
+/** 
+| Makes a stroke. 
+*/
 Can2D.prototype.stroke = function(lineWidth, style) {
 	var cx = this._cx;
 	cx.lineWidth = lineWidth;
@@ -985,15 +1006,22 @@ Can2D.prototype.fillRect = function(style, rect) {
 	return this._cx.fillRect(rect, arguments[2], arguments[3], arguments[4]);
 }
 
-/* begins a path */
+/**
+| Begins a path 
+*/
 Can2D.prototype.beginPath = function() { this._cx.beginPath();  }
 
-/* closes a path */
+/** 
+| Closes a path 
+*/
 Can2D.prototype.closePath = function() { this._cx.closePath();  } 
 
-/* drawImage(image, p) -or-
- * drawImage(image, x, y)
- */
+/** 
+| Draws an image.
+|
+| drawImage(image, p)      -or-
+| drawImage(image, x, y)
+*/
 Can2D.prototype.drawImage = function(image, p) {
 	var pan = this.pan;
 	if (image.otype === "can2d") image = image._canvas;
@@ -1005,9 +1033,10 @@ Can2D.prototype.drawImage = function(image, p) {
 }
 
 
-/* putImageData(image, p) -or-
- * putImageData(image, x, y)
- */
+/** 
+| putImageData(image, p) -or-
+| putImageData(image, x, y)
+*/
 Can2D.prototype.putImageData = function(image, p) {
 	var pan = this.pan;
 	if (typeof(p) === "object") {
@@ -1017,10 +1046,11 @@ Can2D.prototype.putImageData = function(image, p) {
 	this._cx.putImageData(image, p + pan.x, arguments[2] + pan.y);
 }
 
-/* getImageData(rect)   -or-
- * getImageData(p1, p2) -or-
- * getImageData(x1, y1, x2, y2)
- */
+/**
+| getImageData(rect)   -or-
+| getImageData(p1, p2) -or-
+| getImageData(x1, y1, x2, y2)
+*/
 Can2D.prototype.getImageData = function(rect) {
 	var pan = this.pan;
 	if (typeof(p) === "object") {
@@ -1046,18 +1076,22 @@ Can2D.prototype._colorStyle = function(style, shape) {
 		throw new Error('unknown style');
 	}
 
+	var grad;
 	switch (style.gradient) {
 	case 'askew' :
-		var grad = this._cx.createLinearGradient(
-			0, 0, shape.width / 10, shape.height);
-		var steps = style.steps;
-		for(var i = 0; i < steps.length; i++) {
-			grad.addColorStop(steps[i][0], steps[i][1]);
-		}
-		return grad;
-	default :
-		throw new Error('unknown gradient');
+		grad = this._cx.createLinearGradient(
+			shape.p1.x, shape.p1.y, shape.p1.x + (shape.p2.x - shape.p1.x) / 10, shape.p2.y);
+		break;
+	case 'horizontal' :
+		grad = this._cx.createLinearGradient( 0, shape.p1.y, 0, shape.p2.y);
+		break;
+	default : throw new Error('unknown gradient');
 	}
+	var steps = style.steps;
+	for(var i = 0; i < steps.length; i++) {
+		grad.addColorStop(steps[i][0], steps[i][1]);
+	}
+	return grad;
 }
 
 /**
@@ -1066,9 +1100,9 @@ Can2D.prototype._colorStyle = function(style, shape) {
 | style: the style formated in meshcraft style notation.
 | shape: an object which has path() defined 
 */
-Can2D.prototype.fills = function(style, shape) {
+Can2D.prototype.fills = function(style, shape, a1, a2, a3) {
 	var cx = this._cx;
-	shape.path(this, 0);
+	shape.path(this, 0, a1, a2, a3);
 	cx.fillStyle = this._colorStyle(style, shape);
 	cx.fill();
 }
@@ -1079,10 +1113,11 @@ Can2D.prototype.fills = function(style, shape) {
 | style: the style formated in meshcraft style notation.
 | shape: an object which has path() defined
 */
-Can2D.prototype._edge = function(style, shape) {
+Can2D.prototype._edge = function(style, shape, a1, a2, a3) {
 	var cx = this._cx;
-	shape.path(this, style.width);
+	shape.path(this, style.border, a1, a2, a3);
 	cx.strokeStyle = this._colorStyle(style.color, shape);
+	cx.lineWidth = style.width;
 	cx.stroke();
 }
 
@@ -1092,14 +1127,14 @@ Can2D.prototype._edge = function(style, shape) {
 | style: the style formated in meshcraft style notation.
 | shape: an object which has path() defined
 */
-Can2D.prototype.edges = function(style, shape) {
+Can2D.prototype.edges = function(style, shape, a1, a2, a3) {
 	var cx = this._cx;
 	if (style instanceof Array) {
 		for(var i = 0; i < style.length; i++) {
-			this._edge(style[i], shape);
+			this._edge(style[i], shape, a1, a2, a3);
 		}
 	} else {
-		this._edge(style[i], shape);
+		this._edge(style[i], shape, a1, a2, a3);
 	}
 }
 
@@ -2508,81 +2543,112 @@ Hexmenu.prototype.mousedown = function(p) {
   The menu  `' at the screen edge.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Edgemenu() {
+	/* section mouse hovers over/clicks */
 	this.mousepos = -1;
-	this.width  = 160;
-	this.bwidth = 70;
+
+	/* widths of buttons (meassured on bottom) */
+	this.buttonWidths = [100, 150, 100];
+
+	/* total width */
+	this.width = 0;
+	for(var b in this.buttonWidths) {
+		this.width += this.buttonWidths[b];
+	}
+	
+	/* total height */
 	this.height = 30;
 }
 
-Edgemenu.prototype._stroke = function(c2d) {
-	if (settings.edgeMenuInnerBorderWidth > 0) {
-		c2d.stroke(settings.edgeMenuInnerBorderWidth, settings.edgeMenuInnerBorderColor);
-	}
-	if (settings.edgeMenuOuterBorderWidth > 0) {
-		c2d.stroke(settings.edgeMenuOuterBorderWidth, settings.edgeMenuOuterBorderColor);
+/**
+| Makes the edgemenus path.
+|
+| c2d : canvas2d area
+| border: additional inward distance
+| section: 
+|   -2 structure frame
+|   -1 outer frame
+|   >0 buttons
+*/
+Edgemenu.prototype.path = function(c2d, border, section) {
+	var b =  border;
+	/* width half */
+	var w2 = R(this.width / 2);
+	/* x in the middle */
+	var xm = R((this.p1.x + this.p2.x) / 2);
+	/* edge width (diagonal extra) */
+	var ew  = R((this.p2.y - this.p1.y) * Hexagon.tan6);
+
+	c2d.beginPath();
+	if (section === -2) {
+		/* structure frame */
+		c2d.moveTo(this.p1.x + b,      this.p2.y);
+		c2d.lineTo(this.p1.x + ew + b, this.p1.y + b);
+		c2d.lineTo(this.p2.x - ew - b, this.p1.y + b);
+		c2d.lineTo(this.p2.x - b,      this.p2.y);
+	
+		/* x-position of button */
+		var bx = this.p1.x;
+		for(var b = 0; b < this.buttonWidths.length - 1; b++) {
+			bx += this.buttonWidths[b];
+			c2d.moveTo(bx, this.p2.y);
+			if (b % 2 === 0) { 
+				c2d.lineTo(bx - ew, this.p1.y);
+			} else {
+				c2d.lineTo(bx + ew, this.p1.y);
+			}
+		}
+	} else if (section === -1) {
+		/* outer frame */
+		c2d.moveTo(this.p1.x + b,      this.p2.y);
+		c2d.lineTo(this.p1.x + ew + b, this.p1.y + b);
+		c2d.lineTo(this.p2.x - ew - b, this.p1.y + b);
+		c2d.lineTo(this.p2.x - b,      this.p2.y);
+	} else {
+		if (section < 0) throw new Error("invalid section");
+		debug(section);
+		var bx = this.p1.x;
+		for(var b = 0; b < section; b++) {
+			bx += this.buttonWidths[b];
+		}
+		c2d.moveTo(bx, this.p2.y);
+		if (section % 2 === 0) {
+			c2d.lineTo(bx + ew, this.p1.y);
+			bx += this.buttonWidths[section];
+			c2d.lineTo(bx - ew, this.p1.y);
+			c2d.lineTo(bx,      this.p2.y);
+		} else {
+			c2d.lineTo(bx - ew, this.p1.y);
+			bx += this.buttonWidths[section];
+			c2d.lineTo(bx + ew, this.p1.y);
+			c2d.lineTo(bx,      this.p2.y);
+		}
 	}
 }
 
-Edgemenu.prototype.draw = function(x, y) {
+Edgemenu.prototype.draw = function() {
 	var c2d = System.can2d;
-	var x = R(c2d.width / 2);
-	var y = c2d.height;
-	var w = this.width;
-	var bw = this.bwidth;
-	var h =  this.height;
-	var ew = R(h * Hexagon.tan6);
-	var xl = x - w - ew;
-	var xr = x + w + ew;
-	
-	c2d.beginPath();
-	c2d.moveTo(xl, y);
-	c2d.lineTo(x - w, y - h);
-	c2d.lineTo(x + w, y - h);
-	c2d.lineTo(xr, y);
-	var grad = c2d.createLinearGradient(0, y - h, 0, y);
-	grad.addColorStop(0, settings.edgeMenuBackground1);
-	grad.addColorStop(1, settings.edgeMenuBackground2);
-	c2d.fill(grad);
-	c2d.moveTo(xl + bw, y - h);
-	c2d.lineTo(xl + bw + ew, y);
-	c2d.moveTo(xr - bw, y - h);
-	c2d.lineTo(xr - bw - ew, y);
-	this._stroke(c2d);
-		
-	switch(this.mousepos) {
-	case 0 :
-		c2d.beginPath();
-		c2d.moveTo(xl + bw + ew, y);
-		c2d.lineTo(xl + bw, y - h);
-		c2d.lineTo(xr - bw, y - h);
-		c2d.lineTo(xr - bw - ew, y);
-		c2d.fill(settings.edgeMenuFillStyle);
-		this._stroke(c2d);
-		break;
-	case 1 :
-		c2d.beginPath();
-		c2d.moveTo(xl, y);
-		c2d.lineTo(x - w, y - h);
-		c2d.lineTo(xl + bw, y - h);
-		c2d.lineTo(xl + bw + ew, y);
-		c2d.fill(settings.edgeMenuFillStyle);
-		this._stroke(c2d);
-		break;
-	case 2 :
-		c2d.beginPath();
-		c2d.moveTo(xr - bw - ew, y);
-		c2d.lineTo(xr - bw, y - h);
-		c2d.lineTo(x + w, y - h);
-		c2d.lineTo(xr, y);
-		c2d.fill(settings.edgeMenuFillStyle);
-		this._stroke(c2d);
-		break;
+	var xm  = R(c2d.width / 2);
+	var w2  = R(this.width / 2);
+
+	{
+		var px1 = xm - w2, py1 = c2d.height - this.height;
+		var px2 = xm + w2, py2 = c2d.height;
+		if (!this.p1 || this.p1.x !== px1 || this.p1.y !== py1) 
+			this.p1 = new Point(px1, py1);
+		if (!this.p2 || this.p2.x !== px2 || this.p2.y !== py2) 
+			this.p2 = new Point(px2, py2);
 	}
 
+	c2d.fills(settings.edgemenu.style.fill, this, -1);
+	if (this.mousepos >= 0) {
+		c2d.fills(settings.edgemenu.style.select, this, this.mousepos);
+	}
+	c2d.edges(settings.edgemenu.style.edge, this, -2); 
+
 	c2d.fontStyle("12px " + settings.defaultFont, "black", "center", "middle");
-	c2d.fillText("Meshcraft Demospace", x, y - R(h / 2));
-	c2d.fillText("Export", xl + R((bw + ew) / 2), y - R(h / 2));
-	c2d.fillText("Import", xr - R((bw + ew) / 2), y - R(h / 2));
+	//c2d.fillText("Meshcraft Demospace", x, y - R(h / 2));
+	//c2d.fillText("Export", xl + R((bw + ew) / 2), y - R(h / 2));
+	//c2d.fillText("Import", xr - R((bw + ew) / 2), y - R(h / 2));
 }
 
 Edgemenu.prototype._getMousepos = function(p) {
@@ -4069,13 +4135,14 @@ Note.prototype.constructor = Note;
 function Note(js, id, zone) {
 	if (js) {
 		var rect  = Rect.jnew(js.z);
-		this.zone = Rect.jnew(js.z);
+		this.zone = zone = Rect.jnew(js.z);
 		this.dtree = new DTree(js.d, this);
 	} else {
 		this.zone = zone;
 		this.dtree  = new DTree(null, this);
 	}
-	this.silhoutte = new RoundRect(this.zone, settings.note.cornerRadius); 
+	this.silhoutte = new RoundRect(
+		Point.zero, new Point(zone.width, zone.height), settings.note.cornerRadius); 
 	Item.call(this, "note", id);
 	this._bcan2d = new Can2D();
 	this.textBorder = settings.note.textBorder;
@@ -4205,7 +4272,8 @@ Note.prototype.setZone = function(zone, align) {
 	}
 	if (this.zone.eq(zone)) return false;
 	this.zone      = zone;
-	this.silhoutte = new RoundRect(zone, this.silhoutte.crad);
+	this.silhoutte = new RoundRect(
+		Point.zero, new Point(zone.width, zone.height), this.silhoutte.crad);
 	this._canvasActual = false;
 	return true;
 }
@@ -4357,13 +4425,6 @@ Note.prototype.draw = function(can2d, selection) {
 	/* draws the border */
 	bc2d.edges(settings.note.style.edge, this.silhoutte);
 	
-	/*xx
-	this.silhoutte.path(bc2d,  2);
-	bc2d.stroke(settings.note.innerBorderWidth, settings.note.innerBorderColor);	
-	this.silhoutte.path(bc2d,  1);
-	bc2d.stroke(settings.note.outerBorderWidth, settings.note.outerBorderColor); 
-	bc2d.beginPath();
-	*/
 	this._canvasActual = true;
 	can2d.drawImage(bc2d, this.zone.p1);
 }
