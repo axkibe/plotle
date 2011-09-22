@@ -2608,7 +2608,6 @@ Edgemenu.prototype.path = function(c2d, border, section) {
 		c2d.lineTo(this.p2.x - b,      this.p2.y);
 	} else {
 		if (section < 0) throw new Error("invalid section");
-		debug(section);
 		var bx = this.p1.x;
 		for(var b = 0; b < section; b++) {
 			bx += this.buttonWidths[b];
@@ -2650,9 +2649,10 @@ Edgemenu.prototype.draw = function() {
 
 	c2d.fontStyle("12px " + settings.defaultFont, "black", "center", "middle");
 	var bx = this.p1.x;
-	var my = R((this.p2.y - this.p1.y) / 2);
+	var my = R((this.p1.y + this.p2.y) / 2);
 	for(var i = 0; i < this.labels.length; i++) {
-		c2d.fillText("Meshcraft Demospace", x, y - R(h / 2));
+		c2d.fillText(this.labels[i], bx + R(this.buttonWidths[i] / 2), my);
+		bx += this.buttonWidths[i];
 	}
 }
 
@@ -3315,10 +3315,10 @@ Space.prototype.mousedown = function(p) {
 		redraw = true;
 		switch(md) {
 		case 0:
-			this._revertDialog();
+			this._exportDialog();
 			break;
 		case 1:
-			this._exportDialog();
+			this._revertDialog();
 			break;
 		case 2:
 			this._importDialog();
