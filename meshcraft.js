@@ -36,7 +36,8 @@ function subclass(sub, base) {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
                        `'
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/** if true catches all errors and report to user,    
+/** 
+| if true catches all errors and report to user.
 | if false lets them pass through to e.g. firebug. 
 */
 var enableCatcher = false;
@@ -85,9 +86,8 @@ var settings = {
 			fill : {
 				gradient : 'horizontal',
 				steps : [
-					//[ 0, "rgba(255, 255, 248, 0.90)" ],
 					[ 0, "rgba(255, 255, 200, 0.90)" ],
-					[ 1, "rgba(255, 255, 160, 0.90)" ] 
+					[ 1, "rgba(255, 255, 160, 0.90)" ], 
 				],
 			},
 			edge : [
@@ -110,19 +110,27 @@ var settings = {
 	floatMenuFillStyle : "rgb(255, 237, 210)",
 
 	/* item menu style */
-	itemMenuOuterRadius : 75,
-	itemMenuInnerRadius : 30,
-	itemMenuSliceHeight : 17,
-	itemMenuOuterBorderWidth : 0.5,
-	itemMenuOuterBorderColor1 : "rgb(0, 0, 0)",
-	itemMenuOuterBorderColor2 : null && "rgb(255, 255, 255)",
-	itemMenuInnerBorderWidth : 2,
-	itemMenuInnerBorderColor1 : "rgb(255, 200, 105)",
-	itemMenuInnerBorderColor2 : null & "rgb(255, 255, 255)",
-	itemMenuBackground1 : "rgba(255, 255, 200, 0.955)",
-	itemMenuBackground2 : "rgba(255, 255, 205, 0.5)",
-	itemMenuFillStyle : "rgb(255, 237, 210)",
-	
+	itemmenu : {
+		outerRadius : 75,
+		innerRadius : 30,
+		slice : {
+			height : 17,
+			style : {
+				fill : {
+					gradient : 'horizontal',
+					steps : [
+						[ 0, "rgba(255, 255, 200, 0.9)" ],
+						[ 1, "rgba(255, 255, 205, 0.9)" ],
+					],
+				},
+				edge : [
+					{ border: 1, width :   1, color : "rgb(255, 200, 105)" },
+					{ border: 0, width : 0.7, color : "black" },
+				],
+			},
+		},
+	},
+
 	/* selection */
 	selection : {
 		color  : "rgba(243, 203, 255, 0.9)",
@@ -613,6 +621,53 @@ Hexagon.prototype.within = function(p) {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ++HexagonSlice
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ The top slice of a hexagon.
+       ------------        ^
+      /............\       |  h
+     /..............\      |
+ psw*................\     v
+   /                  \
+  *<-------->*         *
+   \     r    pm      /
+    \                /
+     \              /
+      \            /
+       *----------*		
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*
+| Constructor.
+|
+| psw: Point to south west.
+| rad: radius.
+| height: slice height.
+*/
+function hexagonSlice(psw, rad, height) {
+	this.psw    = psw;
+	this.rad    = rad;
+	this.height = height;
+	
+	if (height > rad) throw new Error("Cannot make slice larger than radius");
+	this.pm = new Point(
+		psw.x + rad - R((rad * Hexagon.cos6 - height) * Hexagon.tan6), 
+		psw.y + R(rad * Hexagon.cos6) - height);
+	/* for gradients only */
+	/* todo rename to gradientP1, so less confuse */
+	this.p1 = new Point(psw.x, psw.y - height);
+	this.p2 = new Point(this.pm.x + rad, psw.y);
+}
+
+hexagonSlice.prototype.path = function(can2d, border) {
+	var r2 = R(this.rad / 2);
+	can2d.beginPath();
+	can2d.moveTo(this.psw.x                 + border, this.psw.y               - border);
+	can2d.lineTo(this.pm.x - r2             + border, this.psw.y - this.height + border);
+	can2d.lineTo(this.pm.x + r2             - border, this.psw.y - this.height + border);
+	can2d.lineTo(2 * this.pm.x - this.psw.x - border, this.psw.y               - border);
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++Arrow. 
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  A directional line
@@ -1080,12 +1135,16 @@ Can2D.prototype._colorStyle = function(style, shape) {
 	switch (style.gradient) {
 	case 'askew' :
 		grad = this._cx.createLinearGradient(
-			shape.p1.x, shape.p1.y, shape.p1.x + (shape.p2.x - shape.p1.x) / 10, shape.p2.y);
+			shape.p1.x + this.pan.x, shape.p1.y + this.pan.y, 
+			shape.p1.x + (shape.p2.x - shape.p1.x) / 10 + this.pan.x, shape.p2.y + this.pan.y);
 		break;
 	case 'horizontal' :
-		grad = this._cx.createLinearGradient( 0, shape.p1.y, 0, shape.p2.y);
+		grad = this._cx.createLinearGradient(
+			0, this.pan.y + shape.p1.y, 
+			0, this.pan.y + shape.p2.y);
 		break;
-	default : throw new Error('unknown gradient');
+	default : 
+		throw new Error('unknown gradient');
 	}
 	var steps = style.steps;
 	for(var i = 0; i < steps.length; i++) {
@@ -1305,52 +1364,6 @@ Can2D.prototype.makeHexagonFlower = function(p, r, ri, segs) {
 	}
 }
 
-
-/* makes the top slice of a hexagon.
- *       ------------        ^
- *      /............\       |  h
- *     /..............\      |
- *   p*................\     v
- *   /                  \
- *  *<-------->*         *
- *   \     r    pm      /
- *    \                /
- *     \              /
- *      \            /
- *       *----------*		
- *              
- * makeHexagonSlice(c2d, p, r, h)       -or-
- * makeHexagonSlice(c2d, x, y, r, h)    
- * 
- * returns pm;
- */
-Can2D.prototype.makeHexagonSlice = function(a1, a2, a3, a4) {
-	var x, y, r, h;
-	
-	if (typeof(a1) === "object") {
-		x = a1.x;
-		y = a1.y;
-		r = a2;
-		h = a3;
-	} else {
-		x = a1;
-		y = a2;
-		r = a3;
-		h = a4;	
-	}
-	
-	var r2 = R(r / 2);
-	var rc = R(Hexagon.cos6 * r);
-	if (h > r) throw new Error("Cannot make slice larger than radius");
-	var pm = new Point(x + r - R((r * Hexagon.cos6 - h) * Hexagon.tan6), y + rc - h);
-	
-	this.beginPath();
-	this.moveTo(x, y);
-	this.lineTo(pm.x - r2, y - h);
-	this.lineTo(pm.x + r2, y - h);
-	this.lineTo(2 * pm.x - x, y);
-	return pm;
-}
 
 
 /* makes a hexagon segment path: 
@@ -3978,25 +3991,38 @@ Object.defineProperty(DTree.prototype, "height", {
 function Item(otype, id) {
 	this.otype = otype;
 	this.id = id;
+	this._h6slice = null;
 }
+
+/**
+| Return the hexgon slice that is the handle
+*/
+Object.defineProperty(Item.prototype, "h6slice", {
+	get: function() { 
+		if (this._h6slice && this._h6slice.psw.eq(this.zone.p1)) return this._h6slice;
+		return this._h6slice = new hexagonSlice(
+			this.zone.p1, settings.itemmenu.innerRadius, settings.itemmenu.slice.height);
+	},
+});
 
 /* set a hex menu to be this items menu */
 Item.prototype.newItemMenu = function(pan) {
-	var r = settings.itemMenuInnerRadius;
-	var h = settings.itemMenuSliceHeight;
+	var r = settings.itemmenu.innerRadius;
+	var h = settings.itemmenu.slice.height;
 	var labels = this._itemMenuLabels = ["", "Remove"];
 	// todo why pan?
 	var p = new Point(
 		R(this.zone.p1.x + pan.x + r - (r * Hexagon.cos6 - h) * Hexagon.tan6), 
 		R(this.zone.p1.y + pan.y + r * Hexagon.cos6 - h) - 1);
-	return new Hexmenu(p, settings.itemMenuInnerRadius, settings.itemMenuOuterRadius, labels);
+	return new Hexmenu(p, settings.itemmenu.innerRadius, settings.itemmenu.outerRadius, labels);
 }
 
 /* returns if coords are within the item menu */
+/* todo xxx */
 Item.prototype.withinItemMenu = function(p) {
 	return Can2D.withinHexagonSlice(p.sub(this.zone.p1), 
-		settings.itemMenuInnerRadius, 
-		settings.itemMenuSliceHeight);
+		settings.itemmenu.innerRadius, 
+		settings.itemmenu.slice.height);
 }
 
 /* returns the compass of the resize handles of an item 
@@ -4086,43 +4112,9 @@ Item.prototype._drawHandles = function(space, rhs) {
 	}
 	
 	/* draws item menu handler */
-	// todo
-	var p1 = this.zone.p1;
-	var pm = c2d.makeHexagonSlice(p1,settings.itemMenuInnerRadius, settings.itemMenuSliceHeight);
-	var grad = c2d.createLinearGradient(
-		0, p1.y - settings.itemMenuSliceHeight - 1, 
-		0, p1.y - settings.itemMenuSliceHeight + settings.itemMenuInnerRadius * Hexagon.cos6
-	);
-	grad.addColorStop(0, settings.itemMenuBackground1);
-	grad.addColorStop(1, settings.itemMenuBackground2);	
-	c2d.fill(grad);
-	
-	// todo make this more elegent?
-	if (settings.itemMenuInnerBorderWidth > 0) {
-		var style;
-		if (settings.itemMenuInnerBorderColor2) {
-			grad.addColorStop(0, settings.itemMenuInnerBorderColor1);
-			grad.addColorStop(1, settings.itemMenuInnerBorderColor2);	
-			style = grad;
-		} else {
-			style = settings.itemMenuInnerBorderColor1;
-		}
-		c2d.stroke(settings.itemMenuInnerBorderWidth, style);
-	}
-			
-	if (settings.itemMenuOuterBorderWidth > 0) {
-		c2d.makeHexagonSlice(p1.x - 1, p1.y, 
-			settings.itemMenuInnerRadius + 1, settings.itemMenuSliceHeight + 1);
-		var style;
-		if (settings.itemMenuOuterBorderColor2) {
-			grad.addColorStop(0, settings.itemMenuOuterBorderColor1);
-			grad.addColorStop(1, settings.itemMenuOuterBorderColor2);	
-			style = grad;
-		} else {
-			style = settings.itemMenuOuterBorderColor1;
-		}
-		c2d.stroke(settings.itemMenuOuterBorderWidth, style);
-	}
+	var h6slice = this.h6slice;
+	c2d.fills(settings.itemmenu.slice.style.fill, h6slice);
+	c2d.edges(settings.itemmenu.slice.style.edge, h6slice);
 }
 
 
