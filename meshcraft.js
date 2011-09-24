@@ -48,6 +48,7 @@ var settings = {
 	
 	/* milliseconds after mouse down, dragging starts */
 	dragtime : 400,
+
 	/* pixels after mouse down and move, dragging starts */
 	dragbox  : 10,
 	
@@ -94,11 +95,18 @@ var settings = {
 				{ border: 1, width :   2, color : "rgb(255, 200, 105)" },
 				{ border: 0, width : 0.5, color : "black" },
 			],
-			select : "rgb(255, 237, 210)",
+			select : {
+				gradient : 'horizontal',
+				steps : [
+					[0, "rgb(255, 237, 210)" ],
+					[1, "rgb(255, 185, 81)"  ],
+				],
+			},
 		},
 	},
 
 
+	/* float menu */
 	floatmenu : {
 		outerRadius : 75,
 		innerRadius : 30,
@@ -114,12 +122,17 @@ var settings = {
 					[ 1, "rgba(255, 255, 243, 0.955)" ],
 				],
 			},
-			select : "rgb(255, 237, 210)",
+			select : {
+				gradient : 'radial',
+				steps : [
+					[0, "rgb(255, 185, 81)"  ],
+					[1, "rgb(255, 237, 210)" ],
+				],
+			},
 		},
 	},
-	/* float menu style */
 
-	/* item menu style */
+	/* item menu  */
 	itemmenu : {
 		outerRadius : 75,
 		innerRadius : 30,
@@ -620,14 +633,13 @@ Hexagon.prototype.add = function(a1, a2) {
 | Returns true if point is within this hexagon.
 */
 Hexagon.prototype.within = function(p) {
-/* returns true if point is in hexagon with radius r */
 	var rc = this.r * Hexagon.cos6;
-	var y = this.p.y - p.y;
-	var x = this.p.x - p.x;
-	var yh = abs(y * Hexagon.cos6);
-	return y >= -rc && y <= rc &&
-           x - this.r < -yh &&
-           x + this.r >  yh;
+	var dy = this.p.y - p.y;
+	var dx = this.p.x - p.x;
+	var yhc6 = abs(dy * Hexagon.cos6);
+	return dy >= -rc && dy <= rc &&
+           dx - this.r < -yhc6 &&
+           dx + this.r >  yhc6;
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -832,6 +844,38 @@ HexagonFlower.prototype.path = function(can2d, border, segment) {
 	}
 }
 
+
+/* 
+| returns the segment a point is within 
+*/
+HexagonFlower.prototype.within = function(p) {
+	var roc6 = this.ro * Hexagon.cos6;
+	var dy = p.y - this.pc.y;
+	var dx = p.x - this.pc.x;
+	var dyc6 = abs(dy * Hexagon.tan6);
+	
+	if (dy <  -roc6 || dy >  roc6 || dx - this.ro >= -dyc6 || dx + this.ro <= dyc6) {
+		debug(-1);
+		return -1;
+	}
+	
+	var ric6 = this.ri * Hexagon.cos6;
+	if (dy >= -ric6 && dy <= ric6 && dx - this.ri <  -dyc6 && dx + this.ri >  dyc6) {
+		debug(0);
+		return 0;
+	}
+
+	var lor = dx <= -dy * Hexagon.tan6; // left of right diagonal
+	var rol = dx >=  dy * Hexagon.tan6; // right of left diagonal
+	var aom = dy <= 0;                  // above of middle line
+	if (lor && rol)        return 1;
+	else if (!lor && aom)  return 2;
+	else if (rol && !aom)  return 3;
+	else if (!rol && !lor) return 4;
+	else if (lor && !aom)  return 5;
+	else if (!rol && aom)  return 6;
+	else return 0;
+}
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++Arrow. 
@@ -2465,8 +2509,8 @@ _init : function() {
   /| |  |-'  X  | | | |-' | | | |
   `' `' `-' ' ` ' ' ' `-' ' ' `-^
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-		  ro |------>| 
-          ri |->.    '
+		rado |------>| 
+        radi |->.    '
          .------'.   '      -1
 		/ \  1  / \	 '
 	   / 6 .---.'2 \ '
@@ -2476,11 +2520,14 @@ _init : function() {
  	    \ /  4  \ /
          `-------´  
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Hexmenu(p, ri, ro, labels) {
+function Hexmenu(p, radi, rado, labels) {
 	this.p = p;
-	this.hflower = new HexagonFlower(p, ri, ro, labels);
-	this.hi = new Hexagon(p, ri);
-	this.ho = new Hexagon(p, ro);
+	this.radi = radi;
+	this.rado = rado;
+	this.hflower = new HexagonFlower(p, radi, rado, labels);
+
+	this.hi = new Hexagon(p, radi);
+	this.ho = new Hexagon(p, rado);
 	this.labels = labels;
 	this.mousepos = -1;
 }
@@ -2499,52 +2546,27 @@ Hexmenu.prototype.draw = function() {
 	var llen = labels.length;
 	
 	var rd = this.ho.r * (1 - 1 / 3.5);
-	switch (llen) {
+	switch (llen - 1) {
 	default:
-	case 7: // segment 6
-		c2d.fillRotateText(labels[6], this.p, Math.PI / 3 * 5, rd);
-		/* fall */
-	case 6: // segment 5
-		c2d.fillRotateText(labels[5], this.p, Math.PI / 3 * 4, rd);
-		/* fall */
-	case 5: // segment 4
-		c2d.fillRotateText(labels[4], this.p, Math.PI / 3 * 3, rd);
-		/* fall */
-	case 4: // segment 3
-		c2d.fillRotateText(labels[3], this.p, Math.PI / 3 * 2, rd);
-		/* fall */
-	case 3: // segment 2
-		c2d.fillRotateText(labels[2], this.p, Math.PI / 3 * 1, rd);
-		/* fall */
-	case 2: // segment 1
-		c2d.fillRotateText(labels[1], this.p, Math.PI / 3 * 6, rd);
-		/* fall */
-	case 1: // segment 0
-		c2d.fillText(labels[0], this.p);
-		/* fall */
-	case 0: // nothing 
+	case 6: c2d.fillRotateText(labels[6], this.p, Math.PI / 3 * 5, rd); 
+	/* fall */
+	case 5: c2d.fillRotateText(labels[5], this.p, Math.PI / 3 * 4, rd);
+	/* fall */
+	case 4: c2d.fillRotateText(labels[4], this.p, Math.PI / 3 * 3, rd);
+	/* fall */
+	case 3: c2d.fillRotateText(labels[3], this.p, Math.PI / 3 * 2, rd);
+	/* fall */
+	case 2: c2d.fillRotateText(labels[2], this.p, Math.PI / 3 * 1, rd);
+	/* fall */
+	case 1: c2d.fillRotateText(labels[1], this.p, Math.PI / 3 * 6, rd);
+	/* fall */
+	case 0: c2d.fillText(labels[0], this.p);
 	}
 }
 
+// todo remove.
 Hexmenu.prototype._getMousepos = function(p) {
-	var dp = p.sub(this.p); // todo
-	if (!this.ho.within(p)) {
-		/* out of menu */
-		return this.mousepos = -1;
-	} else if (this.hi.within(p))  {
-		return this.mousepos = 0;
-	} else {
-		var lor = dp.x <= -dp.y * Hexagon.tan6; // left of right diagonal
-		var rol = dp.x >=  dp.y * Hexagon.tan6; // right of left diagonal
-		var aom = dp.y <= 0;                    // above of middle line
-		if (lor && rol)        return this.mousepos = 1;
-		else if (!lor && aom)  return this.mousepos = 2;
-		else if (rol && !aom)  return this.mousepos = 3;
-		else if (!rol && !lor) return this.mousepos = 4;
-		else if (lor && !aom)  return this.mousepos = 5;
-		else if (!rol && aom)  return this.mousepos = 6;
-		else return this.mousepos = 0;
-	}
+	return this.mousepos = this.hflower.within(p);
 }
 
 /* returns true if this.mousepos has changed */
