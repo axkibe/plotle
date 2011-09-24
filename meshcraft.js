@@ -98,16 +98,26 @@ var settings = {
 		},
 	},
 
+
+	floatmenu : {
+		outerRadius : 75,
+		innerRadius : 30,
+		style : {
+			edge : [
+				{ border: 1, width :   2, color : "rgb(255, 200, 105)" },
+				{ border: 0, width : 0.5, color : "black" },
+			],
+			fill : {
+				gradient : "radial",
+				steps : [
+					[ 0, "rgba(255, 255, 168, 0.955)" ], 
+					[ 1, "rgba(255, 255, 243, 0.955)" ],
+				],
+			},
+			select : "rgb(255, 237, 210)",
+		},
+	},
 	/* float menu style */
-	floatMenuOuterRadius : 75,
-	floatMenuInnerRadius : 30,
-	floatMenuOuterBorderWidth : 0.5,
-	floatMenuOuterBorderColor : "rgb(0, 0, 0)",
-	floatMenuInnerBorderWidth : 2,
-	floatMenuInnerBorderColor : "rgb(255, 200, 105)",
-	floatMenuBackground2 : "rgba(255, 255, 243, 0.955)",
-	floatMenuBackground1 : "rgba(255, 255, 168, 0.955)",
-	floatMenuFillStyle : "rgb(255, 237, 210)",
 
 	/* item menu style */
 	itemmenu : {
@@ -643,7 +653,7 @@ Hexagon.prototype.within = function(p) {
 | rad: radius.
 | height: slice height.
 */
-function hexagonSlice(psw, rad, height) {
+function HexagonSlice(psw, rad, height) {
 	this.psw    = psw;
 	this.rad    = rad;
 	this.height = height;
@@ -658,7 +668,7 @@ function hexagonSlice(psw, rad, height) {
 	this.p2 = new Point(this.pm.x + rad, psw.y);
 }
 
-hexagonSlice.prototype.path = function(can2d, border) {
+HexagonSlice.prototype.path = function(can2d, border) {
 	var r2 = R(this.rad / 2);
 	can2d.beginPath();
 	can2d.moveTo(this.psw.x                 + border, this.psw.y               - border);
@@ -666,6 +676,162 @@ hexagonSlice.prototype.path = function(can2d, border) {
 	can2d.lineTo(this.pm.x + r2             - border, this.psw.y - this.height + border);
 	can2d.lineTo(2 * this.pm.x - this.psw.x - border, this.psw.y               - border);
 }
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ++HexagonFlower
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ Makes a double hexagon with 6 segments.
+ It kinda looks like a flower. 
+
+                 pc.x
+                  |--------->| ro
+                  |--->| ri  ' 
+                  '    '     '
+            *-----'----'*    '     -1
+           / \    1    ' \   '
+          /   \   '   /'  \  '
+         /  6  *-----* ' 2 \ '
+        /   '   \'    \'    \
+ pc.y  *-----*    +    *-----*
+        \     \    p  /     /
+         \  5  *-----*   3 /
+          \   /       \   /
+           \ /    4    \ /
+            *-----------*
+
+ pc:   center
+ r:    outer radius
+ ri:   inner radius
+ segs: lists 0..6 which segments to include
+
+ additional "segments":
+ 	 0: inner hex
+	-1: outer hex
+	-2: structure
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+function HexagonFlower(pc, ri, ro, segs) {
+	this.pc = pc;
+	if (ri > ro) throw new Error("inner radius > outer radius");
+	this.ri = ri;
+	this.ro = ro;
+	this.gradientPC = pc;
+	this.gradientR1 = ro;
+	this.segs = segs;
+	Object.freeze(this);
+}
+
+/**
+| Makes the flower-hex-6 path.
+*/
+HexagonFlower.prototype.path = function(can2d, border, segment) {
+	var ri  = this.ri;
+	var ri2 = R(this.ri / 2);
+	var ric = R(this.ri * Hexagon.cos6);
+	var ro  = this.ro;
+	var ro2 = R(this.ro / 2);
+	var roc = R(this.ro * Hexagon.cos6);
+	var pc  = this.pc;
+	var pcx = pc.x, pcy = pc.y;
+	var b   = border;
+	var b2  = R(border / 2);
+	var bc6 = R(border * Hexagon.cos6);
+	var segs = this.segs;
+	can2d.beginPath();
+	/* inner hex */
+	if (segment === 0 || segment === -2) {
+		can2d.moveTo(pcx - ri  - b,  pcy             );
+		can2d.lineTo(pcx - ri2 - b2, pcy - ric - bc6 );
+		can2d.lineTo(pcx + ri2 + b2, pcy - ric - bc6 );
+		can2d.lineTo(pcx + ri  + b,  pcy             );
+		can2d.lineTo(pcx + ri2 + b2, pcy + ric + bc6 );
+		can2d.lineTo(pcx - ri2 - b2, pcy + ric + bc6 );
+		can2d.lineTo(pcx - ri  - b,  pcy             );	
+	}
+
+	/* outer hex */
+	if (segment === -1 || segment === -2) {
+		can2d.moveTo(pcx - ro  + b,  pcy             );
+		can2d.lineTo(pcx - ro2 + b2, pcy - roc + bc6 );
+		can2d.lineTo(pcx + ro2 - b2, pcy - roc + bc6 );
+		can2d.lineTo(pcx + ro  - b,  pcy             );
+		can2d.lineTo(pcx + ro2 - b2, pcy + roc - bc6 );
+		can2d.lineTo(pcx - ro2 + b2, pcy + roc - bc6 );
+		can2d.lineTo(pcx - ro  + b,  pcy             );
+	}
+
+	switch (segment) {
+	case -2 :
+		if (segs[1] || segs[6]) {
+			can2d.moveTo(pcx - ri2,  pcy - ric);
+			can2d.lineTo(pcx - ro2,  pcy - roc);
+		}
+		if (segs[1] || segs[2]) {
+			can2d.moveTo(pcx + ri2, pcy - ric);
+			can2d.lineTo(pcx + ro2, pcy - roc);
+		}
+		if (segs[2] || segs[3]) {
+			can2d.moveTo(pcx + ri,  pcy);
+			can2d.lineTo(pcx + ro,  pcy);
+		}
+		if (segs[3] || segs[4]) {
+			can2d.moveTo(pcx + ri2, pcy + ric + bc6);
+			can2d.lineTo(pcx + ro2, pcy + roc - bc6);
+		}
+		if (segs[4] || segs[5]) {
+			can2d.moveTo(pcx - ri2, pcy + ric + bc6);
+			can2d.lineTo(pcx - ro2, pcy + roc - bc6);
+		}
+		if (segs[5] || segs[6]) {
+			can2d.moveTo(pcx - ri, pcy);
+			can2d.lineTo(pcx - ro, pcy);
+		}
+		break;
+	case 1:
+		can2d.moveTo(pcx - ro2 + b2, pcy - roc + bc6);
+		can2d.lineTo(pcx + ro2 - b2, pcy - roc + bc6);
+		can2d.lineTo(pcx + ri2 + b2, pcy - ric - bc6);
+		can2d.lineTo(pcx - ri2 - b2, pcy - ric - bc6);
+		can2d.lineTo(pcx - ro2 + b2, pcy - roc + bc6);
+		break;
+	case 2:
+		can2d.moveTo(pcx + ro2 - b2, pcy - roc + bc6);
+		can2d.lineTo(pcx + ro  - b,  pcy);
+		can2d.lineTo(pcx + ri  + b,  pcy);
+		can2d.lineTo(pcx + ri2 + b2, pcy - ric - bc6);
+		can2d.lineTo(pcx + ro2 - b2, pcy - roc + bc6);
+		break;
+	case 3:
+		can2d.moveTo(pcx + ro  - b,  pcy);
+		can2d.lineTo(pcx + ro2 - b2, pcy + roc - bc6);
+		can2d.lineTo(pcx + ri2 + b2, pcy + ric + bc6);
+		can2d.lineTo(pcx + ri  + b,  pcy);
+		can2d.lineTo(pcx + ro  - b,  pcy);
+		break;
+	case 4:
+		can2d.moveTo(pcx + ro2 - b2, pcy + roc - bc6);
+		can2d.lineTo(pcx - ro2 + b2, pcy + roc - bc6);
+		can2d.lineTo(pcx - ri2 - b2, pcy + ric + bc6);
+		can2d.lineTo(pcx + ri2 + b2, pcy + ric + bc6);
+		can2d.lineTo(pcx + ro2 - b2, pcy + roc - bc6);
+		break;
+	case 5:
+		can2d.moveTo(pcx - ro2 + b2, pcy + roc - bc6);
+		can2d.lineTo(pcx - ro  + b,  pcy);
+		can2d.lineTo(pcx - ri  - b,  pcy);
+		can2d.lineTo(pcx - ri2 - b2, pcy + ric + bc6);
+		can2d.lineTo(pcx - ro2 + b2, pcy + roc - bc6);
+		break;
+	case 6:
+		can2d.moveTo(pcx - ro  + b,  pcy);
+		can2d.lineTo(pcx - ro2 + b2, pcy - roc + bc6);
+		can2d.lineTo(pcx - ri2 - b2, pcy - ric - bc6);
+		can2d.lineTo(pcx - ri  - b,  pcy);
+		can2d.lineTo(pcx - ro  + b,  pcy);
+		break;
+	}
+}
+
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++Arrow. 
@@ -1134,14 +1300,26 @@ Can2D.prototype._colorStyle = function(style, shape) {
 	var grad;
 	switch (style.gradient) {
 	case 'askew' :
+		// todo use gradientP1
+		if (!shape.p1 || !shape.p2) throw new Error(style.gradient+' gradiend misses p1/p2');
 		grad = this._cx.createLinearGradient(
 			shape.p1.x + this.pan.x, shape.p1.y + this.pan.y, 
 			shape.p1.x + (shape.p2.x - shape.p1.x) / 10 + this.pan.x, shape.p2.y + this.pan.y);
 		break;
 	case 'horizontal' :
+		// todo use gradientP1
+		if (!shape.p1 || !shape.p2) throw new Error(style.gradient+' gradient misses p1/p2');
 		grad = this._cx.createLinearGradient(
 			0, this.pan.y + shape.p1.y, 
 			0, this.pan.y + shape.p2.y);
+		break;
+	case 'radial' :
+		if (!shape.gradientPC || !shape.gradientR1) 
+			throw new Error(style.gradient+' gradient misses gradient[PC|R0|R1]');
+		var ro = shape.gradientR0 || 0;
+		grad = this._cx.createRadialGradient(
+			shape.gradientPC.x + this.pan.x, shape.gradientPC.y + this.pan.y, ro, 
+			shape.gradientPC.x + this.pan.x, shape.gradientPC.y + this.pan.y, shape.gradientR1);
 		break;
 	default : 
 		throw new Error('unknown gradient');
@@ -1202,21 +1380,6 @@ Can2D.prototype.edges = function(style, shape, a1, a2, a3) {
 Can2D.prototype.createRadialGradient = function(p, r, p2, r2) {
 	return this._cx.createRadialGradient(p.x, p.y, r, p2.x, p2.y, r2);
 }
-
-/* createLinearGradient(p1, p2)          -or-
- * createLinearGradient(x1, y1, x2, y2) 
- */
-Can2D.prototype.createLinearGradient = function(a1, a2, a3, a4) {
-	if (typeof(a1) === "object") {
-		return this._cx.createLinearGradient(a1.x, a1.y, a2.x, a2.y);
-	}
-	return this._cx.createLinearGradient(a1, a2, a3, a4);
-}	
-
-/*	 todo?
-Can2D.prototype.setTransform = function(a, b, c, d, e, f) {
-	this._cx.setTransform(a, b, c, d, e, f);
-}*/
 
 /* fillText */
 Can2D.prototype.fillText = function(text, a1, a2) {
@@ -1286,148 +1449,6 @@ Can2D.prototype.makeHexagon = function(p, r) {
 	this.lineTo(x - r, y);
 	this.closePath();
 }
-
-/* makes a double hexagon with 6 segments and center 
- * it kinda looks like a flower. 
- *
- * The Flower Hexagon:
- * 
- *                p.x
- *                 |--------->| r
- *                 |--->| ri  ' 
- *                 '    '     '
- *           *-----'----'*    '     -1
- *          / \    1    ' \   '
- *         /   \   '   /'  \  '
- *        /  6  *-----* ' 2 \ '
- *       /   '   \'    \'    \
- * p.y  *-----*    +    *-----*
- *       \     \    p  /     /
- *        \  5  *-----*   3 /
- *         \   /       \   /
- *          \ /    4    \ /
- *           *-----------*
- *
- * p     ... center
- * r     ... outer radius
- * ri    ... inner radius
- * segs  ... lists 0..6 which segments to include
- */
-Can2D.prototype.makeHexagonFlower = function(p, r, ri, segs) {
-	var r2  = R(r / 2);
-	var rc  = R(Hexagon.cos6 * r);
-	var ri2 = R(ri / 2);
-	var ric = R(Hexagon.cos6 * ri);
-	var px = p.x;
-	var py = p.y;
-	this.beginPath();
-	/* inner hex */
-	this.moveTo(px - r,  py);
-	this.lineTo(px - r2, py - rc);
-	this.lineTo(px + r2, py - rc);
-	this.lineTo(px + r,  py);
-	this.lineTo(px + r2, py + rc);
-	this.lineTo(px - r2, py + rc);
-	this.lineTo(px - r,  py);
-	/* outer hex */
-	this.moveTo(px - ri,  py);
-	this.lineTo(px - ri2, py - ric);
-	this.lineTo(px + ri2, py - ric);
-	this.lineTo(px + ri,  py);
-	this.lineTo(px + ri2, py + ric);
-	this.lineTo(px - ri2, py + ric);
-	this.lineTo(px - ri,  py);	
-	
-	if (segs[1] || segs[6]) {
-		this.moveTo(px - ri2,  py - ric);
-		this.lineTo(px - r2,   py - rc);
-	}
-	if (segs[1] || segs[2]) {
-		this.moveTo(px + ri2, py - ric);
-		this.lineTo(px + r2,  py - rc);
-	}
-	if (segs[2] || segs[3]) {
-		this.moveTo(px + ri,  py);
-		this.lineTo(px + r,   py);
-	}
-	if (segs[3] || segs[4]) {
-		this.moveTo(px + ri2,  py + ric);
-		this.lineTo(px + r2,   py + rc);
-	}
-	if (segs[4] || segs[5]) {
-		this.moveTo(px - ri2, py + ric);
-		this.lineTo(px - r2,  py + rc);
-	}
-	if (segs[5] || segs[6]) {
-		this.moveTo(px - ri,  py);
-		this.lineTo(px - r,   py);
-	}
-}
-
-
-
-/* makes a hexagon segment path: 
- *         r |------>| 
- *        ri |->.    '
- *       .------'.   '      -1
- *      / \  1  / \	 '
- *     / 6 .---.'2 \ '
- *    /___/  .  \___\'  
- *    \   \  0  /   /
- *     \ 5 `---´ 3 /
- *      \ /  4  \ /
- *       `-------´  
- */
-Can2D.prototype.makeHexagonSegment = function(p, r, ri, seg) {
-	var r2  = R(r  / 2);
-	var rc  = R(Hexagon.cos6 * r);
-	var ri2 = R(ri / 2);
-	var ric = R(Hexagon.cos6 * ri);
-	var px = p.x;
-	var py = p.y;
-	this.beginPath();
-	switch(seg) {
-	case 1:
-		this.moveTo(px - r2,  py - rc);
-		this.lineTo(px + r2,  py - rc);
-		this.lineTo(px + ri2, py - ric);
-		this.lineTo(px - ri2, py - ric);
-		break;
-	case 2:
-		this.moveTo(px + r2,  py - rc);
-		this.lineTo(px + r,   py);
-		this.lineTo(px + ri,  py);
-		this.lineTo(px + ri2, py - ric);
-		break;
-	case 3:
-		this.moveTo(px + r,   py);
-		this.lineTo(px + r2,  py + rc);
-		this.lineTo(px + ri2, py + ric);
-		this.lineTo(px + ri,  py);
-		break;
-	case 4:
-		this.lineTo(px + r2,  py + rc);
-		this.lineTo(px - r2,  py + rc);
-		this.lineTo(px - ri2, py + ric);
-		this.lineTo(px + ri2, py + ric);
-		break;
-	case 5:
-		this.moveTo(px - r2,  py + rc);
-		this.lineTo(px - r,   py);
-		this.lineTo(px - ri,  py);
-		this.lineTo(px - ri2, py + ric);
-		break;
-	case 6:
-		this.moveTo(px - r,   py);
-		this.lineTo(px - r2,  py - rc);
-		this.lineTo(px - ri2, py- ric);
-		this.lineTo(px - ri,  py);
-		break;
-	default :
-		throw new Error("invalid segment: " + seg);
-	}
-	this.closePath();
-}	
 
 
 /* draws an arrow pointing from p1 to p2 
@@ -2457,6 +2478,7 @@ _init : function() {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Hexmenu(p, ri, ro, labels) {
 	this.p = p;
+	this.hflower = new HexagonFlower(p, ri, ro, labels);
 	this.hi = new Hexagon(p, ri);
 	this.ho = new Hexagon(p, ro);
 	this.labels = labels;
@@ -2464,25 +2486,13 @@ function Hexmenu(p, ri, ro, labels) {
 }
 
 Hexmenu.prototype.draw = function() {
-	var c2d = System.can2d;	
-	var grad = c2d.createRadialGradient(this.p, 0, this.p, (this.hi.r + this.ho.r) / 2);
-	grad.addColorStop(0, settings.floatMenuBackground1);
-	grad.addColorStop(1, settings.floatMenuBackground2);
-	c2d.makeHexagon(this.p, this.ho.r);
-	c2d.fill(grad);
+	var c2d = System.can2d; // todo?
 
+	c2d.fills(settings.floatmenu.style.fill, this.hflower, -1);
 	if (this.mousepos > 0) {
-		c2d.makeHexagonSegment(this.p, this.ho.r, this.hi.r, this.mousepos); // todo swap
-		c2d.fill(settings.floatMenuFillStyle);
+		c2d.fills(settings.floatmenu.style.select, this.hflower, this.mousepos);
 	}
-	
-	c2d.makeHexagonFlower(this.p, this.ho.r, this.hi.r, this.labels, false); // todo swap
-	if (settings.floatMenuInnerBorderWidth > 0) {
-		c2d.stroke(settings.floatMenuInnerBorderWidth, settings.floatMenuInnerBorderColor);
-	}
-	if (settings.floatMenuOuterBorderWidth > 0) {
-		c2d.stroke(settings.floatMenuOuterBorderWidth, settings.floatMenuOuterBorderColor);
-	}	
+	c2d.edges(settings.floatmenu.style.edge, this.hflower, -2); 
 
 	c2d.fontStyle("12px " + settings.defaultFont, "black", "center", "middle");
 	var labels = this.labels;
@@ -2968,8 +2978,8 @@ Space.prototype.click = function(p, shift, ctrl) {
 	if (!(tfx & TXR.HIT)) {
 		this.iaction.act = ACT.FMENU;
 		this._floatmenu = new Hexmenu(p, 
-			settings.floatMenuInnerRadius,
-			settings.floatMenuOuterRadius,
+			settings.floatmenu.innerRadius,
+			settings.floatmenu.outerRadius,
 			this._floatMenuLabels);
 
 		System.setCursor("default");
@@ -4000,7 +4010,7 @@ function Item(otype, id) {
 Object.defineProperty(Item.prototype, "h6slice", {
 	get: function() { 
 		if (this._h6slice && this._h6slice.psw.eq(this.zone.p1)) return this._h6slice;
-		return this._h6slice = new hexagonSlice(
+		return this._h6slice = new HexagonSlice(
 			this.zone.p1, settings.itemmenu.innerRadius, settings.itemmenu.slice.height);
 	},
 });
