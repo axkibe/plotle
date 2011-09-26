@@ -2,7 +2,7 @@
                                                       .-'_.._''.
  __  __   ___       _....._              .          .' .'     '.\
 |  |/  `.'   `.   .´       '.          .'|         / .'                                _.._
-|   .-.  .-.   ' /   .-'"'.  \        (  |        . '            .-,.-~.              .' .._|    .|
+|   .-.  .-.   ' /   .-'"'.  \        (  |        . '            .-,.-~.             .' .._|    .|
 |  |  |  |  |  |/   /______\  |        | |        | |            |  .-. |    __      | '      .' |_
 |  |  |  |  |  ||   __________|    _   | | .'''-. | |            | |  | | .:-`.'.  __| |__  .'     |
 |  |  |  |  |  |\  (          '  .' |  | |/.'''. \. '            | |  | |/ |   \ ||__   __|'-..  .-'
@@ -142,13 +142,13 @@ var settings = {
 				fill : {
 					gradient : 'horizontal',
 					steps : [
-						[ 0, "rgba(255, 255, 200, 0.9)" ],
-						[ 1, "rgba(255, 255, 205, 0.9)" ],
+						[ 0, 'rgba(255, 255, 200, 0.9)' ],
+						[ 1, 'rgba(255, 255, 205, 0.9)' ],
 					],
 				},
 				edge : [
-					{ border: 1, width :   1, color : "rgb(255, 200, 105)" },
-					{ border: 0, width : 0.7, color : "black" },
+					{ border: 1, width :   1, color : 'rgb(255, 200, 105)' },
+					{ border: 0, width : 0.7, color : 'black' },
 				],
 			},
 		},
@@ -156,15 +156,15 @@ var settings = {
 
 	/* selection */
 	selection : {
-		color  : "rgba(243, 203, 255, 0.9)",
-		stroke : "rgb (243, 183, 253)",
+		color  : 'rgba(243, 203, 255, 0.9)', // todo
+		stroke : 'rgb (243, 183, 253)',
 	},
 	
 	/* scrollbar */
 	scrollbar : {
-		form        : "hexagonh",  // 'square', 'round', 'hexagonh' or 'hexagonv'
-		fillStyle   : "rgb(255, 188, 87)",
-		strokeStyle : "rgb(221, 154, 52)",
+		form        : 'hexagonh',  // 'square', 'round', 'hexagonh' or 'hexagonv'
+		fillStyle   : 'rgb(255, 188, 87)',
+		strokeStyle : 'rgb(221, 154, 52)',
 		lineWidth   : 1,
 		radius      : 4,
 		marginX     : 7,
@@ -175,10 +175,20 @@ var settings = {
 	handle : {
 		size      : 10,
 		distance  : 0,
-		color1    : "rgb(125,120,32)",
+		color1    : 'rgb(125,120,32)',
 		width1    : 3,
-		color2    : "rgb(255,180,90)",
+		color2    : 'rgb(255,180,90)',
 		width2    : 1,
+	},
+	
+	relation : {
+		style : {
+			fill : 'rgba(255, 225, 40, 0.5)',
+			edge : [
+				{ border: 0, width : 3, color : 'rgba(255, 225, 80, 0.5)' },
+				{ border: 0, width : 1, color : 'rgba(200, 100, 0, 0.8)' },
+			],
+		},
 	},
 	
 	/* blink speed of the caret */
@@ -537,7 +547,10 @@ Object.defineProperty(Rect.prototype, "my", {
 });
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- RountRect ++
+ .-,--.               . .-,--.         .  
+  `|__/ ,-. . . ,-. ,-|  `|__/ ,-. ,-. |- 
+  )| \  | | | | | | | |  )| \  |-' |   |  
+  `'  ` `-' `-^ ' ' `-^  `'  ` `-' `-' `' 
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  A rectangle in a 2D plane with rounded corners
  Rectangles are immutable objects.
@@ -584,9 +597,12 @@ RoundRect.prototype.path = function(c2d, border) {
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- Hexagon ++
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- A hexagon in a 2D plane.
+ ,-_/,.                         
+ ' |_|/ ,-. . , ,-. ,-. ,-. ,-. 
+  /| |  |-'  X  ,-| | | | | | | 
+  `' `' `-' ' ` `-^ `-| `-' ' ' 
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ A hexagon in a 2D   `' plane.
  Hexagons are immutable objects.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -643,9 +659,13 @@ Hexagon.prototype.within = function(p) {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ++HexagonSlice
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- The top slice of a hexagon.
+ ,-_/,.                         .---. .            
+ ' |_|/ ,-. . , ,-. ,-. ,-. ,-. \___  |  . ,-. ,-. 
+  /| |  |-'  X  ,-| | | | | | |     \ |  | |   |-' 
+  `' `' `-' ' ` `-^ `-| `-' ' ' `---' `' ' `-' `-' 
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ The top slice of a  `' hexagon.
+
        ------------        ^
       /............\       |  h
      /..............\      |
@@ -690,8 +710,12 @@ HexagonSlice.prototype.path = function(can2d, border) {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ++HexagonFlower
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ ,-_/,.                        .-,--' .                    
+ ' |_|/ ,-. . , ,-. ,-. ,-. ,-. \|__  |  ,-. . , , ,-. ,-. 
+  /| |  |-'  X  ,-| | | | | | |  |    |  | | |/|/  |-' |   
+  `' `' `-' ' ` `-^ `-| `-' ' ' `'    `' `-' ' '   `-' '   
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                     `'     
  Makes a double hexagon with 6 segments.
  It kinda looks like a flower. 
 
@@ -855,13 +879,11 @@ HexagonFlower.prototype.within = function(p) {
 	var dyc6 = abs(dy * Hexagon.tan6);
 	
 	if (dy <  -roc6 || dy >  roc6 || dx - this.ro >= -dyc6 || dx + this.ro <= dyc6) {
-		debug(-1);
 		return -1;
 	}
 	
 	var ric6 = this.ri * Hexagon.cos6;
 	if (dy >= -ric6 && dy <= ric6 && dx - this.ri <  -dyc6 && dx + this.ri >  dyc6) {
-		debug(0);
 		return 0;
 	}
 
@@ -878,169 +900,158 @@ HexagonFlower.prototype.within = function(p) {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ++Arrow. 
+  ,             
+  )   . ,-. ,-. 
+ /    | | | |-' 
+ `--' ' ' ' `-' 
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- A directional line
- Arrows are pseuod-immutable objects.
- Differently to a rectangle p1 is not necessarily left and top of p2.
+ A line. Possibly with arrow-heads as ends.
+ Lines are pseudo-immutable objects.
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /** 
 | Constructor.
-| Arrow(p1, p2) 
+| 
+| p1: point 1
+| p1end: 'normal' or 'arrow'
+| p2: point 1
+| p2end: 'normal' or 'arrow'
 */
-function Arrow(p1, p2) {
+function Line(p1, p1end, p2, p2end) {
 	this.p1 = p1;
+	this.p1end = p1end;
 	this.p2 = p2;
-	this.otype = "arrow";
+	this.p2end = p2end;
+	this.otype = "line";
 }
 
 /** 
-| Returns the arrow pointing from item1 to item2
-| item1 to item2  -or-
-| item1 to point
-|
-| returns a.zone = the zone
-|         a.arrowcom = compass direction the arrow comes from (e.g. "nw")
+| Returns the line connecting entity1 to entity2
+| shape1: a Rect or Point
+| end1: 'normal' or 'arrow'
+| shape2: a Rect or Point
+| end2: 'normal' or 'arrow'
 */
-Arrow.create = function(item1, item2) {
-	if (item2.otype === "point" && item1.zone && item1.zone.otype === "rect") {
-		var p2 = item2;
-		var z1 = item1.zone;
+Line.connect = function(shape1, end1, shape2, end2) {
+	if (!shape1 || !shape2) {
+		debug(shape1, '|-|', shape2);
+		throw new Error('error');
+	}
+	if (shape1.otype === 'rect' && shape2.otype === 'point') {
+		var p2 = shape2;
+		var z1 = shape1;
 		var p1;
 		if (z1.within(p2)) {
-			p1 = new Point(z1.mx, z1.my);
+			p1 = new Point(z1.mx, z1.my); // todo rename mx/my
 		} else {
+			// todo min max
 			p1 = new Point(
-				p2.x < z1.p1.x ? z1.p1.x :
-			   (p2.x > z1.p2.x ? z1.p2.x : p2.x),
-				p2.y < z1.p1.y ? z1.p1.y :
-			   (p2.y > z1.p2.y ? z1.p2.y : p2.y));
+				p2.x < z1.p1.x ? z1.p1.x : (p2.x > z1.p2.x ? z1.p2.x : p2.x),
+				p2.y < z1.p1.y ? z1.p1.y : (p2.y > z1.p2.y ? z1.p2.y : p2.y));
 		}
-		return new Arrow(p1, p2);
+		return new Line(p1, end1, p2, end2);
 	} 
-	if (item1.zone && item1.zone.otype === "rect" && item2.zone && item2.zone.otype === "rect") {
-		var z1 = item1.zone;
-		var z2 = item2.zone;
+	if (shape1.otype === 'rect' && shape2.otype === 'rect') {
+		var z1 = shape1;
+		var z2 = shape2;
 		var x1, y1, x2, y2;
 		if (z2.p1.x > z1.p2.x) { 
-			/* zone2 is clearly on the right */
+			// zone2 is clearly on the right 
 			x1 = z1.p2.x;
 			x2 = z2.p1.x;
 		} else if (z2.p2.x < z1.p1.x) {
-			/* zone2 is clearly on the left */
+			// zone2 is clearly on the left 
 			x1 = z1.p1.x;
 			x2 = z2.p2.x;
 		} else {
-			/* an intersection */
+			// an intersection 
 			x1 = x2 = R((max(z1.p1.x, z2.p1.x) +
 			             min(z1.p2.x, z2.p2.x)) / 2);
 		}
 		if (z2.p1.y > z1.p2.y) { 
-			/* zone2 is clearly on the bottom */
+			// zone2 is clearly on the bottom 
 			y1 = z1.p2.y;
 			y2 = z2.p1.y;
 		} else if (z2.p2.y < z1.p1.y) {
-			/* zone2 is clearly on the top */
+			// zone2 is clearly on the top 
 			y1 = z1.p1.y;
 			y2 = z2.p2.y;
 		} else {
-			/* an intersection */
+			// an intersection 
 			y1 = y2 = R((max(z1.p1.y, z2.p1.y) +
 			             min(z1.p2.y, z2.p2.y)) / 2);
 		}
-		return new Arrow(new Point(x1, y1), new Point(x2, y2));
+		return new Line(new Point(x1, y1), end1, new Point(x2, y2), end2);
 	}
-	throw new Error("do not know how to create arrow.");
+	throw new Error("do not know how to create connection.");
 }
 
 /** 
 | Returns the zone of the arrow.
 | Result is cached.
 */
-Object.defineProperty(Arrow.prototype, "zone", {
+Object.defineProperty(Line.prototype, "zone", {
 	get: function() { 
 		if (this._zone) return this._zone;
-		if (this.p1.x <= this.p2.x && this.p1.y <= this.p2.y) // \v
+		if (this.p1.x <= this.p2.x && this.p1.y <= this.p2.y) 
 			return new Rect(this.p1, this.p2); 
-		if (this.p1.x >  this.p2.x && this.p1.y >  this.p2.y) // ^\
+		if (this.p1.x >  this.p2.x && this.p1.y >  this.p2.y) 
 			return new Rect(this.p2, this.p1); 
 		return new Rect(
 			new Point(min(this.p1.x, this.p2.x), min(this.p1.y, this.p2.y)),
 			new Point(max(this.p1.x, this.p2.x), max(this.p1.y, this.p2.y)));
 	},
-	set: function() { throw new Error("Cannot set zone"); }
 });
 
-/** 
-| Draws one an arrow. todo
-| (space, item1_id, item2_id, null, middle) - or - 
-| (space, item1_id,        x,    y, middle)  
-|
-| mcanvas:  if not null draw this in the middle of the arrow.
+/**
+| todo
 */
-Arrow.prototype.draw = function(can2d, mcanvas) {
-/* todo 2dize*/
-	/* arrow size*/
+Line.prototype.path = function(can2d) {
 	var p1 = this.p1;
 	var p2 = this.p2;
-	/* origin of arrow */
-	var po = p1;
-	can2d.beginPath();	
-	if (mcanvas) {
-		var mx = ((p1.x + p2.x) / 2);
-		var my = ((p1.y + p2.y) / 2);
-		var tx = R(mx - mcanvas.width  / 2) - 2;
-		var ty = R(my - mcanvas.height / 2) - 2;
-		var bx = R(mx + mcanvas.width  / 2) + 2;
-		var by = R(my + mcanvas.height / 2) + 2;
-		can2d.drawImage(mcanvas, tx, ty);
-		can2d.rect(tx, ty, mcanvas.width + 4, mcanvas.height + 4);
-		can2d.stroke(1, "rgba(255, 127, 0, 0.4)"); // todo settings
-		can2d.beginPath();
 
-		// calculates intersections
-		var isp1, isp2;	
-		if (p1.y == p2.y) {
-			var kx = mcanvas.width / 2;
-			if (p1.x > p2.x) {
-				isp1 = new Point(R(mx + kx), p1.y);
-				isp2 = new Point(R(mx - kx), p1.y);
-			} else {
-				isp1 = new Point(R(mx - kx), p1.y);
-				isp2 = new Point(R(mx + kx), p1.y);
-			}
-		} else {
-			var kx = ((p2.x - p1.x) / (p2.y - p1.y) * mcanvas.height / 2);
-			if (p1.y > p2.y) {
-				isp1 = new Point(R(mx + kx), by);
-				isp2 = new Point(R(mx - kx), ty);
-			} else {
-				isp1 = new Point(R(mx - kx), ty);
-				isp2 = new Point(R(mx + kx), by);
-			}
-		}
-		if (isp1.x < tx || isp1.x > bx) {
-			var ky = ((p2.y - p1.y) / (p2.x - p1.x) * mcanvas.width  / 2);
-			if (p1.x > p2.x) {
-				isp1 = new Point(bx, R(my + ky));
-				isp2 = new Point(tx, R(my - ky));
-			} else {
-				isp1 = new Point(tx, R(my - ky));
-				isp2 = new Point(by, R(my + ky));
-			}
-		}
-
+	can2d.beginPath();
+	// todo, multiple lineend types
+	switch(this.p1end) {
+	case 'normal':
 		can2d.moveTo(p1);
-		can2d.lineTo(isp1);
-		can2d.stroke(3, "rgba(255, 225, 80, 0.5)"); // todo settings
-		can2d.stroke(1, "rgba(200, 100, 0, 0.8)");  // todo settings
-		
-		po = isp2;
-	} else {
-		po = p1;
+		break;
+	default : 
+		throw new Error('unknown line end');
 	}
-	can2d.drawArrow(po, p2);
+	
+	switch(this.p2end) {
+	case 'normal' :
+		can2d.lineTo(p2);
+		break;
+	case 'arrow' :
+		// arrow size
+		var as = 12; 
+		// degree of arrow tail
+		var d = Math.atan2(p2.y - p1.y, p2.x - p1.x);
+		// degree of arrow head 
+		var ad = Math.PI/12;
+		// arrow span, the arrow is formed as hexagon piece
+		var ms = 2 / Math.sqrt(3) * as;
+		can2d.lineTo(p2.x - R(ms * Math.cos(d)),      p2.y - R(ms * Math.sin(d)));
+		can2d.lineTo(p2.x - R(as * Math.cos(d - ad)), p2.y - R(as * Math.sin(d - ad)));
+		can2d.lineTo(p2);
+		can2d.lineTo(p2.x - R(as * Math.cos(d + ad)), p2.y - R(as * Math.sin(d + ad)));
+		can2d.lineTo(p2.x - R(ms * Math.cos(d)),      p2.y - R(ms * Math.sin(d)));
+		break;
+	default : 
+		throw new Error('unknown line end');
+	}
+
+}
+
+/** 
+| Draws the line.
+*/
+Line.prototype.draw = function(can2d) {
+	can2d.fills(settings.relation.style.fill, this);
+	can2d.edges(settings.relation.style.edge, this);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1205,6 +1216,17 @@ Can2D.prototype.arc = function(a1, a2, a3, a4, a5, a6) {
 	} 
 	this._cx.arc(a1 + pan.x + 0.5, a2 + pan.y + 0.5, a3, a4, a5, a6);
 }
+		
+/**
+| Draws a frame around the canvas.
+| Called 'path', because it is the general purpose name for object to draw themselves
+| and a can2d has it defined as shortcut to frame itself.
+*/
+Can2D.prototype.path = function(border) {
+	var cx = this._cx;
+	cx.beginPath(); 
+	cx.rect(0.5, 0.5, this._canvas.width - 1, this._canvas.height - 1);
+}
 
 /** 
 | Makes a stroke. 
@@ -1217,7 +1239,7 @@ Can2D.prototype.stroke = function(lineWidth, style) {
 }
 
 /* makes a fill */
-Can2D.prototype.fill = function(style) {
+Can2D.prototype.fill = function(style) { 
 	var cx = this._cx;
 	cx.fillStyle = style;
 	cx.fill();
@@ -1492,32 +1514,6 @@ Can2D.prototype.makeHexagon = function(p, r) {
 	this.lineTo(x - r2, y + rc);
 	this.lineTo(x - r, y);
 	this.closePath();
-}
-
-
-/* draws an arrow pointing from p1 to p2 
- * p1    ... origin 
- * p2    ... target
- */
-Can2D.prototype.drawArrow = function(p1, p2) {
-	/* arrow size */
-	var as = 12; 
-	/* degree of arrow tail */
-	var d = Math.atan2(p2.y - p1.y, p2.x - p1.x);
-	/* degree of arrow head */
-	var ad = Math.PI/12;
-	/* arrow span, the arrow is formed as hexagon piece */
-	var ms = 2 / Math.sqrt(3) * as;
-	this.beginPath();
-	this.moveTo(p1);
-	this.lineTo(p2.x - R(ms * Math.cos(d)),      p2.y - R(ms * Math.sin(d)));
-	this.lineTo(p2.x - R(as * Math.cos(d - ad)), p2.y - R(as * Math.sin(d - ad)));
-	this.lineTo(p2);
-	this.lineTo(p2.x - R(as * Math.cos(d + ad)), p2.y - R(as * Math.sin(d + ad)));
-	this.lineTo(p2.x - R(ms * Math.cos(d)),      p2.y - R(ms * Math.sin(d)));
-	this.stroke(3, "rgba(255, 225, 80, 0.5)"); // todo settings
-	this.stroke(1, "rgba(200, 100, 0, 0.8)");  // todo settings
-	this.fill("rgba(255, 225, 40, 0.5)");      // todo settings
 }
 
 
@@ -2802,12 +2798,11 @@ Space.prototype.redraw = function() {
 		this._itemmenu.draw();
 		break;
 	case ACT.RBIND :
-		if (ia.item2) {
-			Arrow.create(ia.item, ia.item2).draw(can2d, null);
-			ia.item2.highlight(can2d);
-		} else {
-			Arrow.create(ia.item, ia.smp).draw(can2d, null);
-		}
+		var arrow = Line.connect(
+			ia.item.zone, 'normal', 
+			(ia.item2 && ia.item2.zone) || ia.smp , 'arrow');
+		if (ia.item2) ia.item2.highlight(can2d);
+		arrow.draw(can2d);
 	}
 	this.edgemenu.draw();
 	editor.updateCaret();
@@ -2945,8 +2940,7 @@ Space.prototype.actionRBindTo = function(toItem) {
 		System.setCursor("default");
 		return;
 	}
-	var rel = new Relation(null, null, this.iaction.item.id, toItem.id);
-	rel.dtree.append(new Paragraph("relates to"));
+	var rel = Relation.create(this.iaction.item, toItem);
 	System.repository.updateItem(rel);
 }
 
@@ -3809,25 +3803,24 @@ Paragraph.prototype.joinToPrevious = function(node, caret) {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 DTree.prototype = new Treenode;
 DTree.prototype.constructor = DTree;
-/* constructor
- * DTree(js, parent)
- * Dtree(null, parent, fontsize)
- */
-function DTree(js, parent, fontsize) {
+/**
+| Constructor.
+*/
+function DTree(fontsize) {
 	Treenode.call(this, "dtree");
-	
-	/* json import */
-	if (js) {
-		var d = js.d;
-		var dlen = d.length;
-		for(var i = 0; i < dlen; i++) {
-			this.append(new Paragraph(d[i]));
-		}
-		this._fontsize = js.fs || 13;
-	} else {
-		this._fontsize = fontsize || 13;
+	this._fontsize = fontsize || 13;
+}
+
+/**
+| Creates a Dtree from json representation.
+*/
+DTree.jnew = function(js) {
+	var o = new DTree(js.fs);
+	var d = js.d;
+	for(var i = 0, dlen = d.length; i < dlen; i++) {
+		o.append(new Paragraph(d[i]));
 	}
-	this.parent = parent;
+	return o;
 }
 
 Object.defineProperty(DTree.prototype, "font", {
@@ -4167,15 +4160,17 @@ Note.prototype.constructor = Note;
  *
  * zone ... of type Rect, reference kept, so new() on call.
  */
+// todo split jnew
 function Note(js, id, zone) {
 	if (js) {
 		var rect  = Rect.jnew(js.z);
 		this.zone = zone = Rect.jnew(js.z);
-		this.dtree = new DTree(js.d, this);
+		this.dtree = DTree.jnew(js.d);
 	} else {
-		this.zone = zone;
-		this.dtree  = new DTree(null, this);
+		this.zone  = zone;
+		this.dtree = new DTree();
 	}
+	this.dtree.parent = this;
 	this.silhoutte = new RoundRect(
 		Point.zero, new Point(zone.width, zone.height), settings.note.cornerRadius); 
 	Item.call(this, "note", id);
@@ -4481,14 +4476,16 @@ Label.prototype.constructor = Note;
  *
  * todo make creation as Rect.
  */
+// todo split jnew
 function Label(js, id, p1) {
 	if (js) {
 		this.zone = Rect.jnew(js.z);
-		this.dtree = new DTree(js.d, this);
+		this.dtree = DTree.jnew(js.d);
 	} else {
 		this.zone = new Rect(p1, p1.add(100, 50));
-		this.dtree = new DTree(null, this, 20);
+		this.dtree = new DTree(20);
 	}
+	this.dtree.parent = this;
 	Item.call(this, "label", id);
 	if (!this.dtree.first) this.dtree.append(new Paragraph("Label"));
 	/* buffer canvas 2D */
@@ -4671,23 +4668,19 @@ Label.prototype.draw = function(can2d, selection) {
 Relation.prototype = new Item;
 Relation.prototype.constructor = Note;
 
-/* constructor
- * Relation(js, [id])
- * Relation(js, [id], i1id, i2id) 
- */
-function Relation(js, id, i1id, i2id) {
-	var dtree;
-	if (js) {
-		this.dtree  = dtree = new DTree(js.d, this);
-		this.i1id   = js.i1;
-		this.i2id   = js.i2;
-	} else {
-		this.dtree  = dtree = new DTree(null, this, 14);
-		this.i1id   = i1id;
-		this.i2id   = i2id;
-	}
-	dtree.flowWidth = -1;
-	Item.call(this, "rel", id);
+/**
+| Constructor.
+| Do not call directly, but Relation.jnew() or Relation.create()
+| Relation(id, i1id, i2id, textZone, [dtree]) 
+*/
+function Relation(id, i1id, i2id, textZone, dtree) {
+	this.i1id     = i1id;
+	this.i2id     = i2id;
+	this.textZone = textZone;
+	this.dtree    = dtree;
+	this.dtree.parent = this;	
+	this.dtree.flowWidth = -1;
+	Item.call(this, 'rel', id);
 	this._bc2d = new Can2D();
 	this._canvasActual = false;
 	
@@ -4696,12 +4689,109 @@ function Relation(js, id, i1id, i2id) {
 	System.repository.addOnlook(this.id, this.i2id);
 }
 
-/* called when item is removed */
+/**
+| Creates a relation from json representation.
+*/
+Relation.jnew = function(js) {
+	var tz;
+	if (js.tz) {
+		tz = Rect.jnew(js.tz);
+	} else {
+		// todo remove
+		tz = new Rect(new Point(0, 0), new Point(100, 100));
+	}
+	var dtree = DTree.jnew(js.d);
+	var o = new Relation(js.id, js.i1, js.i2, tz, dtree);
+}
+
+/**
+| Creates a new Relation.
+*/
+Relation.create = function(item1, item2) {
+	var dtree = new DTree();
+	dtree.append(new Paragraph("relates to"));
+	dtree.flowWidth = -1;
+	var cline = Line.connect(item1.zone, null, item2.zone, null);
+	var mx = (cline.p1.x + cline.p2.x) / 2;
+	var my = (cline.p1.y + cline.p2.y) / 2;
+	var textZone = new Rect(
+		new Point(R(mx - dtree.width / 2), R(my - dtree.height / 2)),
+		new Point(R(mx + dtree.width / 2), R(my + dtree.height / 2)));
+	return new Relation(null, item1.id, item2.id, textZone, dtree);
+
+/*
+	xxx
+	if (mcanvas) {
+	var it1 = System.repository.items[this.i1id]; // todo funcall
+	var it2 = System.repository.items[this.i2id];
+		var mx = ((p1.x + p2.x) / 2);
+		var my = ((p1.y + p2.y) / 2);
+		var tx = R(mx - mcanvas.width  / 2) - 2;
+		var ty = R(my - mcanvas.height / 2) - 2;
+		var bx = R(mx + mcanvas.width  / 2) + 2;
+		var by = R(my + mcanvas.height / 2) + 2;
+		can2d.drawImage(mcanvas, tx, ty);
+		can2d.rect(tx, ty, mcanvas.width + 4, mcanvas.height + 4);
+		can2d.stroke(1, "rgba(255, 127, 0, 0.4)"); // todo settings
+		can2d.beginPath();
+
+		// calculates intersections
+		var isp1, isp2;	
+		if (p1.y == p2.y) {
+			var kx = mcanvas.width / 2;
+			if (p1.x > p2.x) {
+				isp1 = new Point(R(mx + kx), p1.y);
+				isp2 = new Point(R(mx - kx), p1.y);
+			} else {
+				isp1 = new Point(R(mx - kx), p1.y);
+				isp2 = new Point(R(mx + kx), p1.y);
+			}
+		} else {
+			var kx = ((p2.x - p1.x) / (p2.y - p1.y) * mcanvas.height / 2);
+			if (p1.y > p2.y) {
+				isp1 = new Point(R(mx + kx), by);
+				isp2 = new Point(R(mx - kx), ty);
+			} else {
+				isp1 = new Point(R(mx - kx), ty);
+				isp2 = new Point(R(mx + kx), by);
+			}
+		}
+		if (isp1.x < tx || isp1.x > bx) {
+			var ky = ((p2.y - p1.y) / (p2.x - p1.x) * mcanvas.width  / 2);
+			if (p1.x > p2.x) {
+				isp1 = new Point(bx, R(my + ky));
+				isp2 = new Point(tx, R(my - ky));
+			} else {
+				isp1 = new Point(tx, R(my - ky));
+				isp2 = new Point(by, R(my + ky));
+			}
+		}
+
+		can2d.moveTo(p1);
+		can2d.lineTo(isp1);
+		can2d.stroke(3, "rgba(255, 225, 80, 0.5)"); // todo settings
+		can2d.stroke(1, "rgba(200, 100, 0, 0.8)");  // todo settings
+		
+		po = isp2;
+	} else {
+		po = p1;
+	}*/
+}
+
+
+
+/** 
+| Called when ab item is removed.
+*/
 Relation.prototype.removed = function() {
 	System.repository.removeOnlook(this.id, this.i1id);
 	System.repository.removeOnlook(this.id, this.i2id);	
 }
 
+
+/**
+| Returns json representation.
+*/
 Relation.prototype.jsonfy = function() {
 	var js = {
 	    t: "rel",
@@ -4712,24 +4802,32 @@ Relation.prototype.jsonfy = function() {
 	return js;
 }
 
-/* returns the arrow object of this relation */
+/** 
+| Returns the arrow object of this relation 
+*/
+/*
 Object.defineProperty(Relation.prototype, "arrow", {
 	get: function() { 
 		if (this._arrow) return this._arrow;
 		var i1 = System.repository.items[this.i1id];  // todo make funcall
 		var i2 = System.repository.items[this.i2id];
-		/* caches the zones, so the relation knows when one its anchors moved */
+		// caches the zones, so the relation knows when one its anchors moved 
 		this.i1zone = i1.zone;
 		this.i2zone = i2.zone;
 		return this._arrow = Arrow.create(i1, i2);
 	}
-});
+});*/
 
-/* returns transfix code */
+/** 
+| An action happend.
+| Returns transfix code.
+*/
 Relation.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
+	return 0;
+	/*
 	var arrow = this.arrow;
 	var zone  = arrow.zone;
-	/* distance to line recognized as hit */
+	// distance to line recognized as hit 
 	var dis   = 8;
 	if (p.x < zone.p1.x - dis || p.x > zone.p2.x + dis ||
 	    p.y < zone.p1.y - dis || p.y > zone.p2.y + dis) {
@@ -4744,7 +4842,7 @@ Relation.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 			return 0;
 		}
 	case TXE.DRAGSTART :
-/*		var txr = TXR.HIT;
+		var txr = TXR.HIT;
 		if (ctrl) {
 			space.actionSpawnRelation(this, p);
 			return txr | TXR.REDRAW;
@@ -4765,10 +4863,9 @@ Relation.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 		} else {
 			space.actionIDrag(this, p.sub(this.zone.p1));
 		}
-		return txr;*/
+		return txr;
 		return 0;
 	case TXE.CLICK :
-	/*
 		var txr = TXR.HIT;
 		if (z > 0) {
 			System.repository.moveToTop(z);
@@ -4790,33 +4887,36 @@ Relation.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 			editor.deselect();
 			txr |= TXR.REDRAW;
 		}
-		return txr;*/
+		return txr;
 	case TXE.RBINDHOVER :
-		/* space.actionRBindHover(this);
-		return TXR.HIT | TXR.REDRAW; */
+		// space.actionRBindHover(this);
+		return TXR.HIT | TXR.REDRAW; 
 		return 0;
 	case TXE.RBINDTO :
-		/* space.actionRBindTo(this);
-		return TXR.HIT | TXR.REDRAW; */
+		// space.actionRBindTo(this);
+		return TXR.HIT | TXR.REDRAW; 
 		return 0;
 	default :
 		throw new Error("Unknown transfix code:" + txe);
-	}
+	}*/
 }
 
-/* drops the cached canvas */
+/** 
+| Drops the cached canvas.
+*/
 Relation.prototype.listen = function() {
 	this._canvasActual = false;
-	/* end of listen chain */
+	// end of listen chain 
 }
 
 Relation.prototype.resize = function(width, height) {
-	var dtree = this.dtree;
+	/*var dtree = this.dtree;
 	var fs = max(dtree.fontsize * height / this.height, 8);
 	if (dtree._fontsize == fs) return false;
 	dtree.fontsize = fs;
 	this._canvasActual = false;
-	return true;
+	return true;*/
+	throw new Error('unimplemented');
 }
 
 /* draws the items handles */
@@ -4828,26 +4928,35 @@ Relation.prototype.checkItemCompass = function(p, rhs) {
 	return this._checkItemCompass(p, 170);
 }
 
-/* draws the item       * 
- * space, to draw upon  */
+/**
+| Draws the item.
+*/
 Relation.prototype.draw = function(can2d, selection) {
 	var bc2d = this._bc2d;
 	var dtree = this.dtree;
 	var it1 = System.repository.items[this.i1id]; // todo funcall
 	var it2 = System.repository.items[this.i2id];
-	if (this._canvasActual) {
-		/* buffer hit */
-		this.arrow.draw(can2d, bc2d);
-		return;
+	if (!this._canvasActual) {
+		bc2d.attune(dtree); 
+		bc2d.edges(settings.relation.style.edge, bc2d);
+		dtree.draw(bc2d, selection, 0, 0, 0);
+		this._canvasActual = true;
 	}
-	/* draws text */
-	bc2d.attune(dtree); 
-	dtree.draw(bc2d, selection, 0, 0, 0);
-	this._canvasActual = true;
-	this.arrow.draw(can2d, bc2d);
+	var l1 = Line.connect(it1.zone,     'normal', this.textZone, 'normal');
+	var l2 = Line.connect(this.textZone,'normal', it2.zone,      'arrow');
+	//can2d.draw(bc2d, xx
+	can2d.drawImage(bc2d, this.textZone.p1);
+	// todo combine into one call;
+	can2d.fills(settings.relation.style.fill, l1);
+	can2d.edges(settings.relation.style.edge, l1);
+	can2d.fills(settings.relation.style.fill, l2); 
+	can2d.edges(settings.relation.style.edge, l2);
+	// draws text 
 }
 
-/* something happend an item onlooked */
+/**
+| Something happend on an item onlooked. 
+*/
 Relation.prototype.onlook = function(event, item) {
 	switch(event) {
 	case ONLOOK.REMOVE :
@@ -4858,10 +4967,10 @@ Relation.prototype.onlook = function(event, item) {
 		/* todo check for cycles */
 		break;
 	case ONLOOK.UPDATE : 
-		if ((item.id === this.i1id && !item.zone.eq(this.i1zone)) ||
+		/*if ((item.id === this.i1id && !item.zone.eq(this.i1zone)) ||
 		    (item.id === this.i2id && !item.zone.eq(this.i2zone))) {
 			this._arrow = null;		
-		}
+		}*/
 		break;
 	default :
 		throw new Error("unknown unlook event");
@@ -5220,7 +5329,7 @@ Repository.prototype._loadItem = function(id, itjs) {
 	switch(itjs.t) {
 	case "note"  : return new Note(itjs, id);
 	case "label" : return new Label(itjs, id);
-	case "rel"   : return new Relation(itjs, id);
+	case "rel"   : return Relation.jnew(itjs, id);
 	default      : throw new Error("unknown item type");
 	}
 }
