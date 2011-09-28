@@ -156,7 +156,7 @@ var settings = {
 
 	// selection
 	selection : {
-		color  : 'rgba(243, 203, 255, 0.9)', // todo
+		color  : 'rgba(243, 203, 255, 0.9)', 
 		stroke : 'rgb (243, 183, 253)',
 	},
 	
@@ -226,6 +226,7 @@ var R = Math.round;
 var abs = Math.abs;
 var max = Math.max;
 var min = Math.min;
+var half = function(v) { return Math.round(v / 2); }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .-,--.
@@ -396,6 +397,22 @@ Point.jnew = function(js) {
 	return new Point(js.x, js.y);
 }
 
+/**
+| Creates a new point.
+| However it will look through a list of points to see if 
+| this point has already this x/y to save creation of yet
+| another object
+|
+| Point.renew(x, y, p1, p2, p3, ...)
+*/
+Point.renew = function(x, y) {
+	for(var a = 2; a < arguments.length; a++) {
+		var p = arguments[a];
+		if (p.x === x && p.y === y) return p;
+	}
+	return new Point(x, y);
+}
+
 /** 
 | Returns a json object for this point.
 */
@@ -500,31 +517,101 @@ Rect.prototype.within = function(p) {
 /** 
 | Returns a resized rectangle.
 |
-| width:   new width
-| height:  new height
-| align:   compass direction which point should be identical to this rectangle.
+| width:  new width
+| height: new height
+| align:  compass direction which point will be identical to this rectangle.
 */
 Rect.prototype.resize = function(width, height, align) {
-	var pnw = this.pnw;
-	var pse = this.pse;
+	if (this.width === width && this.height === height) return this;
+	var pnw, pse;
 	switch(align) {
-	case  'w' :
-	case 'sw' :
-	case 'nw' :
-		pnw = new Point(pse.x - width, pnw.y); break;
-	default:
-		pse = new Point(pnw.x + width, pse.y); break;
-	}
-	// todo combine
-	switch(align) {
-	case  'n' :
-	case 'nw' :
+	case 'n' :
+		pnw = Point.renew(
+			this.pnw.x - half(width - this.width), 
+			this.pnw.y, 
+			this.pnw, this.pse);
+		pse = Point.renew(
+			pnw.x + width, 
+			this.pnw.y + height, 
+			this.pnw, this.pse);
+		break;
 	case 'ne' :
-		pnw = new Point(pnw.y, pse.y - height); break;
-	default :
-		pse = new Point(pse.x, pnw.y + height); break;
+		pnw = Point.renew(
+			this.pse.x - width, 
+			this.pnw.y, 
+			this.pnw, this.pse);
+		pse = Point.renew(
+			this.pse.x, 
+			this.pnw.y + height,
+			this.pnw, this.pse);
+		break;
+	case 'e' :
+		pnw = Point.renew(
+			this.pse.x - width,
+			this.pnw.y - half(height - this.height), 
+			this.pnw, this.pse);
+		pse = Point.renew(
+			this.pse.x,
+			pnw.y + height,
+			this.pnw, this.pse);
+		break;
+	case 'se' :
+		pnw = Point.renew(
+			this.pse.x - width,
+			this.pse.y - height,
+			this.pnw, this.pse);
+		pse = this.pse;
+		break;
+	case 's' :
+		pnw = Point.renew(
+			this.pnw.x - half(width - this.width), 
+			this.pnw.y - height, 
+			this.pnw, this.pse);
+		pse = Point.renew(
+			pnw.x + width, 
+			this.pnw.y, 
+			this.pnw, this.pse);
+		break;
+	case 'sw' :
+		pnw = Point.renew(
+			this.pnw.x, 
+			this.pse.y - height, 
+			this.pnw, this.pse);
+		pse = Point.renew(
+			this.pnw.x + width, 
+			this.pse.y,
+			this.pnw, this.pse);
+		break;
+	case 'w' :
+		pnw = Point.renew(
+			this.pnw.x,
+			this.pnw.y - half(height - this.height), 
+			this.pnw, this.pse);
+		pse = Point.renew(
+			this.pnw.x + width,
+			pnw.y + height,
+			this.pnw, this.pse);
+		break;
+	case 'nw' :
+		pnw = this.nw;
+		pse = Point.renew(
+			this.pnw.x + width,
+			this.pnw.y + height,
+			this.pnw, this.pse);
+		break;
+	case 'c' :
+		pnw = Point.renew(
+			this.pnw.x - half(width - this.width),
+			this.pnw.y - half(height - this.height), 
+			this.pnw, this.pse);
+		pse = Point.renew(
+			pnw.x + width,
+			pnw.y + height,
+			this.pnw, this.pse);
+		break;
+	default : 
+		throw new Error('invalid align: '+align);
 	}
-	
 	return new Rect(pnw, pse);
 }
 
@@ -4657,6 +4744,7 @@ Label.prototype.setZone = function(zone, align) {
 	var dfs = dtree.fontsize;
 	var fs = max(dfs * zh / th, 8);
 	if (this.zone && dfs === fs) return false;
+	this.lock = true;
 	dtree.fontsize = fs;
 	dtree.flowWidth = -1;
 	th = R(this.dtree.height * (1 + settings.bottombox));
@@ -4672,6 +4760,7 @@ Label.prototype.setZone = function(zone, align) {
 		this.zone = new Rect(zone.pnw, zone.pnw.add(this.dtree.width, th));
 		break;
 	}
+	this.lock = false;
 	this._canvasActual = false;
 	return true;
 }
@@ -4692,10 +4781,11 @@ Label.prototype.paraAtP = function(p) {
 
 /* drops the cached canvas */
 Label.prototype.listen = function() {
+	if (this.lock) return;
 	this._canvasActual = false;
 	if (this.zone) {
 		this.zone = this.zone.resize(
-			this.dtree.width,  R(this.dtree.height * (1 + settings.bottombox)));
+			this.dtree.width,  R(this.dtree.height * (1 + settings.bottombox)), 'c');
 	}
 	/* end of listen-chain */
 }

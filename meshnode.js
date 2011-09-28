@@ -1,5 +1,5 @@
 //include our modules
-var sys   = require('sys');
+var util  = require('util');
 var http  = require('http');
 var url   = require('url');
  
@@ -53,7 +53,7 @@ http.createServer(function (req, res) {
     ); 
     dispatch(req, reqp, res);
   } catch (err) {
-    sys.puts(err);
+    util.puts(err);
     res.writeHead(500);
     res.end('Internal Server Error');
   } 
