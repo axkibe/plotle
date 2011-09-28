@@ -36,7 +36,7 @@ function subclass(sub, base) {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
                        `'
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/** 
+/**
 | if true catches all errors and report to user.
 | if false lets them pass through to e.g. firebug. 
 */
@@ -194,7 +194,7 @@ var settings = {
 		demagnify : 1.2,
 	},
 	
-	/* blink speed of the caret */
+	// Blink speed of the caret.
 	caretBlinkSpeed : 530,	
 };
 
@@ -234,7 +234,9 @@ var min = Math.min;
  '`--' ' ' `-^ ' ' ' `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Mouse state */
+/**
+| Mouse state 
+*/
 var MST = {
 	NONE   : 0, // button is up 
 	ATWEEN : 1, // mouse just came down, unsure if click or drag 
@@ -242,7 +244,9 @@ var MST = {
 };
 Object.freeze(MST);
 
-/* interface action active */
+/**
+| Interface action active.
+*/
 var ACT = {
 	NONE    : 0, // idle 
 	PAN     : 1, // panning the background
@@ -265,15 +269,19 @@ var TXE = {
 }
 Object.freeze(TXE);
 
+/**
+| Bitfield return code of transfix() 
+*/
 var TXR = {	
-	/* bitfield return code of transfix() */
 	HIT    : 0x1,
 	REDRAW : 0x2
 };
 Object.freeze(TXR);
 
 
-/* onlook() events */
+/**
+| onlook() events 
+*/
 var ONLOOK = {
 	NONE   : 0,
 	UPDATE : 1,
@@ -332,8 +340,6 @@ function debug() {
    | ; | . |-' ,-| `-. | | |   |-'
    '   `-' `-' `-^ `-' `-^ '   `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- Marks a position in an element of an item.
- todo integrate to Can2D
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 var Measure = {
 	init : function() {
@@ -435,12 +441,14 @@ Point.prototype.sub = function(a1, a2) {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /**
 | Constructor.
-| Rect(p1, p2) 
+|
+| pnw: point to north west.
+| pse: point to south east.
 */
-function Rect(p1, p2) {
-	this.p1 = p1;
-	this.p2 = p2;
-	if (p1.x > p2.x || p1.y > p2.y) { throw new Error("not a rectangle."); }
+function Rect(pnw, pse) {
+	this.pnw = pnw;
+	this.pse = pse;
+	if (pnw.x > pse.x || pnw.y > pse.y) { throw new Error("not a rectangle."); }
 	this.otype = "rect";
 	// freeze if not a father object
 	if (this.constructor == Rect) Object.freeze(this);
@@ -450,103 +458,120 @@ function Rect(p1, p2) {
 | Creates a point from json 
 */
 Rect.jnew = function(js) {
-	return new Rect(Point.jnew(js.p1), Point.jnew(js.p2));
+	// todo remove p1p2
+	return new Rect(Point.jnew(js.pnw || js.p1), Point.jnew(js.pse || js.p2));
 }
 
 /** 
 | Returns a json object for this rect 
 */
 Rect.prototype.jsonfy = function() {
-	return { p1: this.p1.jsonfy(), p2: this.p2.jsonfy() };
+	return { pnw: this.pnw.jsonfy(), pse: this.pse.jsonfy() };
 }
 
 /** 
 | Returns a rect moved by a point or x/y 
+| 
+| add(point)   -or-
+| add(x, y)  
 */
-Rect.prototype.add = function(px, y) {
-	return arguments.length === 1 ?
-		new Rect(this.p1.add(px),    this.p2.add(px)) : 
-		new Rect(this.p1.add(px, y), this.p2.add(px, y));
+Rect.prototype.add = function(a1, a2) {
+	return new Rect(this.pnw.add(a1, a2), this.pse.add(a1, a2));
 }
 
 /**
 | Returns a rect moved by a -point or -x/-y.
+|
+| sub(point)   -or-
+| sub(x, y)  
 */
-Rect.prototype.sub = function(p) {
-	return arguments.length === 1 ?
-		new Rect(this.p1.sub(px),    this.p2.sub(px)) : 
-		new Rect(this.p1.sub(px, y), this.p2.sub(px, y));
+Rect.prototype.sub = function(a1, a2) {
+	return new Rect(this.pnw.sub(a1, a2), this.pse.sub(a1, a2)); 
 }
 
 /** 
 | Returns true if point is within this rect.
 */
 Rect.prototype.within = function(p) {
-	return p.x >= this.p1.x && p.y >= this.p1.y && 
-	       p.x <= this.p2.x && p.y <= this.p2.y;
+	return p.x >= this.pnw.x && p.y >= this.pnw.y && 
+	       p.x <= this.pse.x && p.y <= this.pse.y;
 }
 
 /** 
-| Returns a rectangle with same p1 but size w/h or point.
+| Returns a resized rectangle.
+|
+| width:   new width
+| height:  new height
+| align:   compass direction which point should be identical to this rectangle.
 */
-Rect.prototype.resize = function(w, h, align) {
-	var p1 = this.p1;
-	var p2 = this.p2;
-	
-	if (align === "w" || align === "sw" || align === "nw") {
-		p1 = new Point(p2.x - w, p1.y);
-	} else {
-		p2 = new Point(p1.x + w, p2.y);
+Rect.prototype.resize = function(width, height, align) {
+	var pnw = this.pnw;
+	var pse = this.pse;
+	switch(align) {
+	case  'w' :
+	case 'sw' :
+	case 'nw' :
+		pnw = new Point(pse.x - width, pnw.y); break;
+	default:
+		pse = new Point(pnw.x + width, pse.y); break;
 	}
-
-	if (align === "n" || align === "nw" || align === "ne") {
-		p1 = new Point(p1.y, p2.y - h);
-	} else {
-		p2 = new Point(p2.x, p1.y + h);
+	// todo combine
+	switch(align) {
+	case  'n' :
+	case 'nw' :
+	case 'ne' :
+		pnw = new Point(pnw.y, pse.y - height); break;
+	default :
+		pse = new Point(pse.x, pnw.y + height); break;
 	}
 	
-	return new Rect(p1, p2);
+	return new Rect(pnw, pse);
 }
 
 /** 
 | Returns a rectangle with same size at position at p|x/y).
 */
-Rect.prototype.atpos = function(px, y) {
-	if (arguments.length !== 1) px = new Point(px, y);
-	return new Rect(px, px.add(this.w, this.h));
+Rect.prototype.atpos = function(a1, a2) {
+	if (typeof(a1) !== 'object') a1 = new Point(a1, a2);
+	return new Rect(a1, a1.add(this.width, this.height));
 }
 
 /** 
 | Returns true if this rectangle is like another 
 */
 Rect.prototype.eq = function(r) {
-	return this.p1.eq(r.p1) && this.p2.eq(r.p2);
+	return this.pnw.eq(r.pnw) && this.pse.eq(r.pse);
 }
 
 /* todo remove */
-Object.defineProperty(Rect.prototype, "w", { 
-	get: function()  { return this.p2.x - this.p1.x; }
+Object.defineProperty(Rect.prototype, "w", {
+	get: function()  { 
+		throw new Error("w used"); 
+	}
 });
 
 Object.defineProperty(Rect.prototype, "width", {
-	get: function()  { return this.p2.x - this.p1.x; }
+	get: function()  { return this.pse.x - this.pnw.x; }
 });
 
 /* todo remove */
 Object.defineProperty(Rect.prototype, "h", {
-	get: function()  { return this.p2.y - this.p1.y; }
+	get: function()  {
+		throw new Error("h used"); 
+	}
 });
 
 Object.defineProperty(Rect.prototype, "height", {
-	get: function()  { return this.p2.y - this.p1.y; }
+	get: function()  { return this.pse.y - this.pnw.y; }
 });
 
+// todo replace by "pc", point center
 Object.defineProperty(Rect.prototype, "mx", {
-	get: function() { return R((this.p2.x + this.p1.x) / 2); }
+	get: function() { return R((this.pnw.x + this.pse.x) / 2); }
 });
 
 Object.defineProperty(Rect.prototype, "my", {
-	get: function() { return R((this.p2.y + this.p1.y) / 2); }
+	get: function() { return R((this.pnw.y + this.pse.y) / 2); }
 });
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -563,14 +588,14 @@ subclass(RoundRect, Rect);
 /**
 | Constructor.
 | Rect(rect, crad)      -or-
-| Rect(p1, p2, crad) 
+| Rect(pnw, pse, crad) 
 */
 function RoundRect(a1, a2, a3) {
 	if (a1.otype === "point") {
 		Rect.call(this, a1, a2);
 		this.crad = a3;
 	} else {
-		Rect.call(this, a1.p1, a1.p2);
+		Rect.call(this, a1.pnw, a1.pse);
 		this.crad = a2;
 	}
 	this.otype = "roundrect";
@@ -582,11 +607,12 @@ function RoundRect(a1, a2, a3) {
  * c2d  ... canvas 2d
  * zone ... zone to zake the size from.
  */
+// todo doesnt use pnw!
 RoundRect.prototype.path = function(c2d, border) {
 	var x1 = border;
 	var y1 = border;
-	var x2 = this.w - border;
-	var y2 = this.h - border;
+	var x2 = this.width - border;
+	var y2 = this.height - border;
 	var cr = this.crad + border;
 	var pi = Math.PI;
 	var ph = Math.PI / 2;
@@ -699,8 +725,8 @@ function HexagonSlice(psw, rad, height) {
 		psw.y + R(rad * Hexagon.cos6) - height);
 	/* for gradients only */
 	/* todo rename to gradientP1, so less confuse */
-	this.p1 = new Point(psw.x, psw.y - height);
-	this.p2 = new Point(this.pm.x + rad, psw.y);
+	this.pnw = new Point(psw.x, psw.y - height);
+	this.pse = new Point(this.pm.x + rad, psw.y);
 }
 
 HexagonSlice.prototype.path = function(can2d, border) {
@@ -949,8 +975,8 @@ Line.connect = function(shape1, end1, shape2, end2) {
 		} else {
 			// todo min max
 			p1 = new Point(
-				p2.x < z1.p1.x ? z1.p1.x : (p2.x > z1.p2.x ? z1.p2.x : p2.x),
-				p2.y < z1.p1.y ? z1.p1.y : (p2.y > z1.p2.y ? z1.p2.y : p2.y));
+				p2.x < z1.pnw.x ? z1.pnw.x : (p2.x > z1.pse.x ? z1.pse.x : p2.x),
+				p2.y < z1.pnw.y ? z1.pnw.y : (p2.y > z1.pse.y ? z1.pse.y : p2.y));
 		}
 		return new Line(p1, end1, p2, end2);
 	} 
@@ -958,31 +984,31 @@ Line.connect = function(shape1, end1, shape2, end2) {
 		var z1 = shape1;
 		var z2 = shape2;
 		var x1, y1, x2, y2;
-		if (z2.p1.x > z1.p2.x) { 
+		if (z2.pnw.x > z1.pse.x) { 
 			// zone2 is clearly on the right 
-			x1 = z1.p2.x;
-			x2 = z2.p1.x;
-		} else if (z2.p2.x < z1.p1.x) {
+			x1 = z1.pse.x;
+			x2 = z2.pnw.x;
+		} else if (z2.pse.x < z1.pnw.x) {
 			// zone2 is clearly on the left 
-			x1 = z1.p1.x;
-			x2 = z2.p2.x;
+			x1 = z1.pnw.x;
+			x2 = z2.pse.x;
 		} else {
 			// an intersection 
-			x1 = x2 = R((max(z1.p1.x, z2.p1.x) +
-			             min(z1.p2.x, z2.p2.x)) / 2);
+			x1 = x2 = R((max(z1.pnw.x, z2.pnw.x) +
+			             min(z1.pse.x, z2.pse.x)) / 2);
 		}
-		if (z2.p1.y > z1.p2.y) { 
+		if (z2.pnw.y > z1.pse.y) { 
 			// zone2 is clearly on the bottom 
-			y1 = z1.p2.y;
-			y2 = z2.p1.y;
-		} else if (z2.p2.y < z1.p1.y) {
+			y1 = z1.pse.y;
+			y2 = z2.pnw.y;
+		} else if (z2.pse.y < z1.pnw.y) {
 			// zone2 is clearly on the top 
-			y1 = z1.p1.y;
-			y2 = z2.p2.y;
+			y1 = z1.pnw.y;
+			y2 = z2.pse.y;
 		} else {
 			// an intersection 
-			y1 = y2 = R((max(z1.p1.y, z2.p1.y) +
-			             min(z1.p2.y, z2.p2.y)) / 2);
+			y1 = y2 = R((max(z1.pnw.y, z2.pnw.y) +
+			             min(z1.pse.y, z2.pse.y)) / 2);
 		}
 		return new Line(new Point(x1, y1), end1, new Point(x2, y2), end2);
 	}
@@ -1007,7 +1033,9 @@ Object.defineProperty(Line.prototype, "zone", {
 });
 
 /**
-| todo
+| Draws the path of the line.
+|
+| can2d: Canvas2D to draw upon.
 */
 Line.prototype.path = function(can2d) {
 	var p1 = this.p1;
@@ -1067,10 +1095,11 @@ Line.prototype.draw = function(can2d) {
  It enhances the HTML5 Canvas Context by accpeting previously defined immutable graphic
  objects as arguments.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Can2D()        -or-    creates new canvas
- * Can2D(canvas)  -or-    encloses an existing canvas
- * Can2D(width, height)   creates a new canvas and sets its size;
- */
+/**
+| Can2D()        -or-    creates new Canvas2D
+| Can2D(canvas)  -or-    encloses an existing HTML5 canvas
+| Can2D(width, height)   creates a new Canvas2D and sets its size;
+*/
 function Can2D(a1, a2) {
 	this.otype = "can2d";
 	var ta1 = typeof(a1);
@@ -1087,8 +1116,8 @@ function Can2D(a1, a2) {
 	this.pan = new Point(0, 0);
 }
 
-/*
-| returns true if point is in hexagon slice
+/**
+| Returns true if point is in hexagon slice.
 */
 Can2D.withinHexagonSlice = function(p, r, h) {
 	var w  = r - (r * Hexagon.cos6 - h) * Hexagon.tan6;
@@ -1098,10 +1127,12 @@ Can2D.withinHexagonSlice = function(p, r, h) {
 	       p.x >= -yh && p.x - 2 * w <= yh;
 }
 
-/*
-| returns true if p is near the line spawned by p1 and p2
+/**
+| Returns true if p is near the line spawned by p1 and p2.
 */
 Can2D.isNearLine = function(p, dis, p1, p2) {
+	throw new Error('unimplemented');
+	// todo
 	var dx = (p.x - p1.x);
 	var dy = (p.y - p1.y);
 	if (abs(dx) < 8 && abs(dy) < 8) {
@@ -1134,16 +1165,16 @@ Object.defineProperty(Can2D.prototype, "height", {
 	get: function() { return this._canvas.height; },
 });
 
-/*
+/**
+| The canvas is cleared and its size ensured to be width/height (of rect).
+| border is an additional increase/decrease added.
+|
 | attune()                                    -or-
 | attune(rect, [resizeW], [resizeH])          -or-
 | attune(width, height, [resizeW], [resizeH])
-| 
-| The canvas is cleared and its size ensured to be width/height (of rect).
-| border is an additional increase/decrease added.
 */
+// todo remove resizeW resizeH again if not used.
 Can2D.prototype.attune = function(a1, a2, a3, a4) {
-	debug('attune', a1, a2, a3, a4);
 	var ta1 = typeof(a1);
 	var c = this._canvas;
 	if (ta1 === "undefined") {
@@ -1242,7 +1273,7 @@ Can2D.prototype.path = function(self, border) {
 }
 
 /** 
-| Makes a stroke. 
+| Makes a stroke. todo remove
 */
 Can2D.prototype.stroke = function(lineWidth, style) {
 	var cx = this._cx;
@@ -1251,59 +1282,60 @@ Can2D.prototype.stroke = function(lineWidth, style) {
 	cx.stroke();
 }
 
-/* makes a fill */
+/** 
+| Makes a fill. todo remove
+*/
 Can2D.prototype.fill = function(style) { 
 	var cx = this._cx;
 	cx.fillStyle = style;
 	cx.fill();
 }
 
-/* rect(style, rect)   -or-
- * rect(style, p1, p2) -or-
- * rect(style, x1, y1, w, h)
- */
-Can2D.prototype.rect = function(r) {
+/** 
+| rect(rect)     -or-
+| rect(pnw, pse) -or-
+| rect(nwx, nwy, w, h)
+| todo remove by rect.path
+*/
+Can2D.prototype.rect = function(a1, a2, a3, a4) {
 	var pan = this.pan;
 	var cx = this._cx;
 	if (typeof(r) === "object") {
-		if (r.otype === "rect") {
+		switch(r.otype) {
+		case "rect":
 			return this._cx.rect(
-				r.p1.x + pan.x + 0.5, r.p1.y + pan.y + 0.5, 
-				r.w, r.h);
-		}
-		if (r.otype === "point") {
-			var p1 = r;
-			var p2 = arguments[1];
+				a1.pnw.x + pan.x + 0.5, a1.pnw.y + pan.y + 0.5, 
+				a1.width, a1.height);
+		case "point":
 			return this._cx.rect(
-				p1.x + pan.x + 0.5, p1.y + pan.y + 0.5, 
-				p2.x - p1.x,        p2.y - p1.y);
+				a1.x + pan.x + 0.5, a1.y + pan.y + 0.5, 
+				a2.x - a1.x,        a2.y - a1.y);
+		default:
+			throw new Error("fillRect not a rectangle");
 		}
-		throw new Error("fillRect not a rectangle");
 	}
-	return this._cx.rect(
-		arguments[0] + pan.x + 0.5,  arguments[1] + pan.y + 0.5, 
-		arguments[2], arguments[3]);
+	return this._cx.rect(a1 + pan.x + 0.5,  a2 + pan.y + 0.5, a3, a4);
 }
 
-/* fillRect(style, rect)   -or-
- * fillRect(style, p1, p2) -or-
- * fillRect(style, x1, y1, x2, y2)
- */
-Can2D.prototype.fillRect = function(style, rect) {
+/** 
+| fillRect(style, rect)     -or-
+| fillRect(style, pnw, pse) -or-
+| fillRect(style, nwx, nwy, width, height)
+*/
+Can2D.prototype.fillRect = function(style, a1, a2, a3, a4) {
 	var pan = this.pan;
 	var cx = this._cx;
 	cx.fillStyle = style;
 	if (typeof(p) === "object") {
-		if (rect.otype === "rect") {
-			return this._cx.fillRect(rect.p1.x, rect.p1.y, rect.p2.x, rect.p2.y);
-		}
-		if (rect.otype === "point") {
-			var p2 = arguments[2];
-			return this._cx.fillRect(rect.x, rect.y, p2.x, p2.y);
+		switch(rect.otype) {
+		case 'rect':
+			return this._cx.fillRect(a1.pnw.x, a1.pnw.y, a1.pse.x, a1.pse.y);
+		case 'point':
+			return this._cx.fillRect(a1.x, a1.y, a2.x, a2.y);
 		}
 		throw new Error("fillRect not a rectangle");
 	}
-	return this._cx.fillRect(rect, arguments[2], arguments[3], arguments[4]);
+	return this._cx.fillRect(a1, a2, a3, a4);
 }
 
 /**
@@ -1322,48 +1354,48 @@ Can2D.prototype.closePath = function() { this._cx.closePath();  }
 | drawImage(image, p)      -or-
 | drawImage(image, x, y)
 */
-Can2D.prototype.drawImage = function(image, p) {
+Can2D.prototype.drawImage = function(image, a1, a2) {
 	var pan = this.pan;
 	if (image.otype === "can2d") image = image._canvas;
-	if (typeof(p) === "object") {
-		this._cx.drawImage(image, p.x + pan.x, p.y + pan.y);
+	if (typeof(a1) === "object") {
+		this._cx.drawImage(image, a1.x + pan.x, a1.y + pan.y);
 		return;
 	}
-	this._cx.drawImage(image, p + pan.x, arguments[2] + pan.y);
+	this._cx.drawImage(image, a1 + pan.x, a2 + pan.y);
 }
 
 
 /** 
-| putImageData(image, p) -or-
-| putImageData(image, x, y)
+| putImageData(imagedata, p) -or-
+| putImageData(imagedata, x, y)
 */
-Can2D.prototype.putImageData = function(image, p) {
+Can2D.prototype.putImageData = function(imagedata, a1, a2) {
 	var pan = this.pan;
 	if (typeof(p) === "object") {
-		this._cx.putImageData(image, p.x + pan.x, p.y + pan.y);
+		this._cx.putImageData(imagedata, a1.x + pan.x, a2.y + pan.y);
 		return;
 	}
-	this._cx.putImageData(image, p + pan.x, arguments[2] + pan.y);
+	this._cx.putImageData(imagedata, a1 + pan.x, a2 + pan.y);
 }
 
 /**
-| getImageData(rect)   -or-
-| getImageData(p1, p2) -or-
+| getImageData(rect)     -or-
+| getImageData(pnw, pse) -or-
 | getImageData(x1, y1, x2, y2)
 */
-Can2D.prototype.getImageData = function(rect) {
+Can2D.prototype.getImageData = function(a1, a2, a3, a4) {
 	var pan = this.pan;
 	if (typeof(p) === "object") {
-		if (rect.otype === "rect") {
-			return this._cx.getImageData(rect.p1.x, rect.p1.y, rect.p2.x, rect.p2.y);
-		}
-		if (rect.otype === "point") {
-			var p2 = arguments[1];
-			return this._cx.getImageData(rect.x, rect.y, p2.x, p2.y);
+		switch (a1.otype) {
+		case "rect":
+			return this._cx.getImageData(a1.pnw.x, a1.pnw.y, a1.pse.x, a1.pse.y);
+		case "point":
+			return this._cx.getImageData(a1.x, a1.y, a2.x, a2.y);
+
 		}
 		throw new Error("getImageData not a rectangle");
 	}
-	return this._cx.getImageData(rect, arguments[1], arguments[2], arguments[3]);
+	return this._cx.getImageData(a1, a2, a3, a4);
 }
 
 /**
@@ -1379,18 +1411,20 @@ Can2D.prototype._colorStyle = function(style, shape) {
 	var grad;
 	switch (style.gradient) {
 	case 'askew' :
-		// todo use gradientP1
-		if (!shape.p1 || !shape.p2) throw new Error(style.gradient+' gradiend misses p1/p2');
+		// todo use gradientPNW
+		if (!shape.pnw || !shape.pse) 
+			throw new Error(style.gradient+' gradiend misses pnw/pse');
 		grad = this._cx.createLinearGradient(
-			shape.p1.x + this.pan.x, shape.p1.y + this.pan.y, 
-			shape.p1.x + (shape.p2.x - shape.p1.x) / 10 + this.pan.x, shape.p2.y + this.pan.y);
+			shape.pnw.x + this.pan.x, shape.pnw.y + this.pan.y, 
+			shape.pnw.x + shape.width / 10 + this.pan.x, shape.pse.y + this.pan.y);
 		break;
 	case 'horizontal' :
-		// todo use gradientP1
-		if (!shape.p1 || !shape.p2) throw new Error(style.gradient+' gradient misses p1/p2');
+		// todo use gradientPNW
+		if (!shape.pnw || !shape.pse) 
+			throw new Error(style.gradient+' gradient misses pnw/pse');
 		grad = this._cx.createLinearGradient(
-			0, this.pan.y + shape.p1.y, 
-			0, this.pan.y + shape.p2.y);
+			0, this.pan.y + shape.pnw.y, 
+			0, this.pan.y + shape.pse.y);
 		break;
 	case 'radial' :
 		if (!shape.gradientPC || !shape.gradientR1) 
@@ -1452,12 +1486,6 @@ Can2D.prototype.edges = function(style, shape, a1, a2, a3) {
 	} else {
 		this._edge(style[i], shape, a1, a2, a3);
 	}
-}
-
-/* createRadialGradient(center, radius, center2, radius2) 
- */
-Can2D.prototype.createRadialGradient = function(p, r, p2, r2) {
-	return this._cx.createRadialGradient(p.x, p.y, r, p2.x, p2.y, r2);
 }
 
 /* fillText */
@@ -1901,7 +1929,9 @@ function Editor() {
 	this.item      = null;
 }
 
-/* draws or erases the caret */
+/** 
+| Draws or erases the caret.
+*/
 Editor.prototype.updateCaret = function() {
 	var c2d = System.can2d;
 	var caret = this.caret;
@@ -1916,8 +1946,8 @@ Editor.prototype.updateCaret = function() {
 		var it = caret.item;
 		var sy = it.scrolly;
 		var sp = caret.sp = System.space.pan.add(
-			it.zone.p1.x + cp.x,
-			it.zone.p1.y + cp.y - (sy > 0 ? sy : 0));
+			it.zone.pnw.x + cp.x,
+			it.zone.pnw.y + cp.y - (sy > 0 ? sy : 0));
 		var th = R(it.dtree.fontsize * (1 + settings.bottombox));		
 		caret.save = c2d.getImageData(sp.x - 1, sp.y - 1, 3, th + 1);
 		c2d.fillRect("black", sp.x, sp.y, 1, th);
@@ -2631,68 +2661,72 @@ Edgemenu.prototype.path = function(c2d, border, section) {
 	/* width half */
 	var w2 = R(this.width / 2);
 	/* x in the middle */
-	var xm = R((this.p1.x + this.p2.x) / 2);
+	var xm = R((this.pnw.x + this.pse.x) / 2);
 	/* edge width (diagonal extra) */
-	var ew  = R((this.p2.y - this.p1.y) * Hexagon.tan6);
+	var ew  = R((this.pse.y - this.pnw.y) * Hexagon.tan6);
 
 	c2d.beginPath();
 	if (section === -2) {
 		/* structure frame */
-		c2d.moveTo(this.p1.x + b,      this.p2.y);
-		c2d.lineTo(this.p1.x + ew + b, this.p1.y + b);
-		c2d.lineTo(this.p2.x - ew - b, this.p1.y + b);
-		c2d.lineTo(this.p2.x - b,      this.p2.y);
+		c2d.moveTo(this.pnw.x + b,      this.pse.y);
+		c2d.lineTo(this.pnw.x + ew + b, this.pnw.y + b);
+		c2d.lineTo(this.pse.x - ew - b, this.pnw.y + b);
+		c2d.lineTo(this.pse.x - b,      this.pse.y);
 	
 		/* x-position of button */
-		var bx = this.p1.x;
+		var bx = this.pnw.x;
 		for(var b = 0; b < this.buttonWidths.length - 1; b++) {
 			bx += this.buttonWidths[b];
-			c2d.moveTo(bx, this.p2.y);
+			c2d.moveTo(bx, this.pse.y);
 			if (b % 2 === 0) { 
-				c2d.lineTo(bx - ew, this.p1.y);
+				c2d.lineTo(bx - ew, this.pnw.y);
 			} else {
-				c2d.lineTo(bx + ew, this.p1.y);
+				c2d.lineTo(bx + ew, this.pnw.y);
 			}
 		}
 	} else if (section === -1) {
 		/* outer frame */
-		c2d.moveTo(this.p1.x + b,      this.p2.y);
-		c2d.lineTo(this.p1.x + ew + b, this.p1.y + b);
-		c2d.lineTo(this.p2.x - ew - b, this.p1.y + b);
-		c2d.lineTo(this.p2.x - b,      this.p2.y);
+		c2d.moveTo(this.pnw.x + b,      this.pse.y);
+		c2d.lineTo(this.pnw.x + ew + b, this.pnw.y + b);
+		c2d.lineTo(this.pse.x - ew - b, this.pnw.y + b);
+		c2d.lineTo(this.pse.x - b,      this.pse.y);
 	} else {
 		if (section < 0) throw new Error("invalid section");
-		var bx = this.p1.x;
+		var bx = this.pnw.x;
 		for(var b = 0; b < section; b++) {
 			bx += this.buttonWidths[b];
 		}
-		c2d.moveTo(bx, this.p2.y);
+		c2d.moveTo(bx, this.pse.y);
 		if (section % 2 === 0) {
-			c2d.lineTo(bx + ew, this.p1.y);
+			c2d.lineTo(bx + ew, this.pnw.y);
 			bx += this.buttonWidths[section];
-			c2d.lineTo(bx - ew, this.p1.y);
-			c2d.lineTo(bx,      this.p2.y);
+			c2d.lineTo(bx - ew, this.pnw.y);
+			c2d.lineTo(bx,      this.pse.y);
 		} else {
-			c2d.lineTo(bx - ew, this.p1.y);
+			c2d.lineTo(bx - ew, this.pnw.y);
 			bx += this.buttonWidths[section];
-			c2d.lineTo(bx + ew, this.p1.y);
-			c2d.lineTo(bx,      this.p2.y);
+			c2d.lineTo(bx + ew, this.pnw.y);
+			c2d.lineTo(bx,      this.pse.y);
 		}
 	}
 }
 
+/**
+| Draws the edgemenu.
+*/
 Edgemenu.prototype.draw = function() {
 	var c2d = System.can2d;
 	var xm  = R(c2d.width / 2);
 	var w2  = R(this.width / 2);
 
 	{
-		var px1 = xm - w2, py1 = c2d.height - this.height;
-		var px2 = xm + w2, py2 = c2d.height;
-		if (!this.p1 || this.p1.x !== px1 || this.p1.y !== py1) 
-			this.p1 = new Point(px1, py1);
-		if (!this.p2 || this.p2.x !== px2 || this.p2.y !== py2) 
-			this.p2 = new Point(px2, py2);
+		// todo replace with Point.renew()
+		var nwx = xm - w2, nwy = c2d.height - this.height;
+		var sex = xm + w2, sey = c2d.height;
+		if (!this.pnw || this.pnw.x !== nwx || this.pnw.y !== nwy) 
+			this.pnw = new Point(nwx, nwy);
+		if (!this.pse || this.pse.x !== sex || this.pse.y !== sey) 
+			this.pse = new Point(sex, sey);
 	}
 
 	c2d.fills(settings.edgemenu.style.fill, this, -1);
@@ -2702,26 +2736,30 @@ Edgemenu.prototype.draw = function() {
 	c2d.edges(settings.edgemenu.style.edge, this, -2); 
 
 	c2d.fontStyle("12px " + settings.defaultFont, "black", "center", "middle");
-	var bx = this.p1.x;
-	var my = R((this.p1.y + this.p2.y) / 2);
+	var bx = this.pnw.x;
+	var my = R((this.pnw.y + this.pse.y) / 2);
 	for(var i = 0; i < this.labels.length; i++) {
 		c2d.fillText(this.labels[i], bx + R(this.buttonWidths[i] / 2), my);
 		bx += this.buttonWidths[i];
 	}
 }
 
+/**
+| Returns which section the position is at.
+| todo rename
+*/
 Edgemenu.prototype._getMousepos = function(p) {
 	var c2d = System.can2d;
-	if (!this.p1 || !this.p2) return this.mousepos = -1;
-	if (p.y < this.p1.y) return this.mousepos = -1;
-	var mx = R(canvas.width / 2);
-	var ew = R((this.p2.y - this.p1.y) * Hexagon.tan6);
+	if (!this.pnw || !this.pse) return this.mousepos = -1;
+	if (p.y < this.pnw.y) return this.mousepos = -1;
+	var mx = R(c2d.width / 2);
+	var ew = R((this.pse.y - this.pnw.y) * Hexagon.tan6); // todo simplify
 	/* shortcut name = letters for formula */
 	var pymcht6 = (p.y - c2d.height) * Hexagon.tan6;
 
-	if (p.x - this.p1.x < -pymcht6) return this.mousepos = -1;
-	if (p.x - this.p2.x >  pymcht6) return this.mousepos = -1;
-	var bx = this.p1.x;
+	if (p.x - this.pnw.x < -pymcht6) return this.mousepos = -1;
+	if (p.x - this.pse.x >  pymcht6) return this.mousepos = -1;
+	var bx = this.pnw.x;
 	for(var mp = 0; mp < this.buttonWidths.length; mp++) {
 		bx += this.buttonWidths[mp];
 		if (mp % 2 === 0) {
@@ -2734,13 +2772,17 @@ Edgemenu.prototype._getMousepos = function(p) {
 	return this.mousepos = -1;
 }
 
-/* returns true if this.mousepos has changed*/
+/**
+| Returns true if this.mousepos has changed
+*/
+// todo rename
 Edgemenu.prototype.mousehover = function(p) {	
 	var omp = this.mousepos;
 	return omp != this._getMousepos(p);
 }
 
-Edgemenu.prototype.mousedown = function(x, y) { // todo why x,y
+// todo why x,y
+Edgemenu.prototype.mousedown = function(x, y) { 
 	return this._getMousepos(x, y);
 }
 
@@ -2755,7 +2797,7 @@ Edgemenu.prototype.mousedown = function(x, y) { // todo why x,y
  The unmoving interface.      
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Cockpit() {
-
+// todo, use this!
 
 }		
 		
@@ -3027,8 +3069,6 @@ Space.prototype.dragstop = function(p, shift, ctrl) {
 	var redraw = false;
 	switch (iaction.act) {
 	case ACT.IDRAG :
-		var w = iaction.item.zone.w;
-		var h = iaction.item.zone.h;
 		iaction.item.moveto(pp.sub(iaction.sp));
 		System.repository.updateItem(iaction.item);
 		iaction.item = null;
@@ -3080,38 +3120,39 @@ Space.prototype.dragmove = function(p, shift, ctrl) {
 	case ACT.IRESIZE :
 	{
 		// todo no splitup
-		var p1 = iaction.siz.p1;
-		var p2 = iaction.siz.p2;
+		var pnw = iaction.siz.pnw;
+		var pse = iaction.siz.pse;
 		var it = iaction.item;
 		switch (iaction.com) {
 		case "e"  : 
 		case "ne" :
 		case "se" :
-			p2 = new Point(max(p2.x + p.x - iaction.sp.x, p1.x), p2.y);
+			pse = new Point(max(pse.x + p.x - iaction.sp.x, pnw.x), pse.y);
 			break;
 		case "w"  :
 		case "nw" :
 		case "sw" :	
-			p1 = new Point(min(p1.x + p.x - iaction.sp.x, p1.x), p1.y);
+			pnw = new Point(min(pnw.x + p.x - iaction.sp.x, pnw.x), pnw.y);
 			break;
 		}
+		// todo combine, todo, why not use resize?
 		switch (iaction.com) {
 		case "s"  : 
 		case "sw" :
 		case "se" :
-			p2 = new Point(p2.x, max(p2.y + p.y - iaction.sp.y, p1.y));
+			pse = new Point(pse.x, max(pse.y + p.y - iaction.sp.y, pnw.y));
 			break;
 		case "n"  : 
 		case "nw" :
 		case "ne" :
-			p1 = new Point(p1.x, min(p1.y + p.y - iaction.sp.y, p2.y));	
+			pnw = new Point(pnw.x, min(pnw.y + p.y - iaction.sp.y, pse.y));	
 			break;
 		}
-		redraw = it.setZone(new Rect(p1, p2), iaction.com); 
+		redraw = it.setZone(new Rect(pnw, pse), iaction.com); 
 		
 		/* adapt scrollbar position, todo x move into item */
 		var dtreeHeight = it.dtree.height;
-		var smaxy = dtreeHeight - ((it.zone.w) - 2 * it.textBorder);
+		var smaxy = dtreeHeight - ((it.zone.width) - 2 * it.textBorder);
 		if (smaxy > 0 && it.scrolly > smaxy) {
 			it.scrolly = smaxy;
 			redraw = true;;
@@ -3393,19 +3434,19 @@ Space.prototype.mousedown = function(p) {
 			var nw = settings.note.newWidth;
 			var nh = settings.note.newHeight;
 			// todo, beautify point logic.
-			var p1 = fm.p.sub(R(nw / 2) + this.pan.x, R(nh / 2) + this.pan.y);
-			var p2 = p1.add(nw, nh);
-			var note = new Note(null, new Rect(p1, p2), new DTree());
+			var pnw = fm.p.sub(R(nw / 2) + this.pan.x, R(nh / 2) + this.pan.y);
+			var pse = pnw.add(nw, nh);
+			var note = new Note(null, new Rect(pnw, pse), new DTree());
 			this.setFoci(note);
 			break;
 		case 2 : // label
-			var p1 = fm.p.sub(this.pan);
-			var p2 = p1.add(100, 50);
+			var pnw = fm.p.sub(this.pan);
+			var pse = pnw.add(100, 50);
 			var dtree = new DTree(20);
 			dtree.append(new Paragraph("Label"));
-			var label = new Label(null, new Rect(p1, p2), dtree);
-			label.moveto(p1.sub(
-				R(label.zone.width / 2), 
+			var label = new Label(null, new Rect(pnw, pse), dtree);
+			label.moveto(pnw.sub(
+				R(label.zone.width / 2),  // todo make half()
 				R(label.zone.height / 2)));
 			this.setFoci(label);
 			break;
@@ -4043,9 +4084,9 @@ function Item(otype, id) {
 */
 Object.defineProperty(Item.prototype, "h6slice", {
 	get: function() { 
-		if (this._h6slice && this._h6slice.psw.eq(this.zone.p1)) return this._h6slice;
+		if (this._h6slice && this._h6slice.psw.eq(this.zone.pnw)) return this._h6slice;
 		return this._h6slice = new HexagonSlice(
-			this.zone.p1, settings.itemmenu.innerRadius, settings.itemmenu.slice.height);
+			this.zone.pnw, settings.itemmenu.innerRadius, settings.itemmenu.slice.height);
 	},
 });
 
@@ -4056,15 +4097,15 @@ Item.prototype.newItemMenu = function(pan) {
 	var labels = this._itemMenuLabels = ["", "Remove"];
 	// todo why pan?
 	var p = new Point(
-		R(this.zone.p1.x + pan.x + r - (r * Hexagon.cos6 - h) * Hexagon.tan6), 
-		R(this.zone.p1.y + pan.y + r * Hexagon.cos6 - h) - 1);
+		R(this.zone.pnw.x + pan.x + r - (r * Hexagon.cos6 - h) * Hexagon.tan6), 
+		R(this.zone.pnw.y + pan.y + r * Hexagon.cos6 - h) - 1);
 	return new Hexmenu(p, settings.itemmenu.innerRadius, settings.itemmenu.outerRadius, labels);
 }
 
 /* returns if coords are within the item menu */
 /* todo xxx */
 Item.prototype.withinItemMenu = function(p) {
-	return Can2D.withinHexagonSlice(p.sub(this.zone.p1), 
+	return Can2D.withinHexagonSlice(p.sub(this.zone.pnw), 
 		settings.itemmenu.innerRadius, 
 		settings.itemmenu.slice.height);
 }
@@ -4082,10 +4123,10 @@ Item.prototype._checkItemCompass = function(p, rhs) {
 	var d  = settings.handle.size;         // inner distance
 	var d2 = settings.handle.size * 3 / 4; // outer distance
 	
-	var n = p.y >= this.zone.p1.y - d2 && p.y <= this.zone.p1.y + d;
-	var e = p.x >= this.zone.p2.x - d  && p.x <= this.zone.p2.x + d2;
-	var s = p.y >= this.zone.p2.y - d  && p.y <= this.zone.p2.y + d2;
-	var w = p.x >= this.zone.p1.x - d2 && p.x <= this.zone.p1.x + d;	
+	var n = p.y >= this.zone.pnw.y - d2 && p.y <= this.zone.pnw.y + d;
+	var e = p.x >= this.zone.pse.x - d  && p.x <= this.zone.pse.x + d2;
+	var s = p.y >= this.zone.pse.y - d  && p.y <= this.zone.pse.y + d2;
+	var w = p.x >= this.zone.pnw.x - d2 && p.x <= this.zone.pnw.x + d;	
 
 	if (n) {
 		if (w && rhs & 128) { 
@@ -4131,10 +4172,10 @@ Item.prototype._drawHandles = function(space, rhs) {
 	var hs = settings.handle.size;
 	var hs2 = hs / 2;
 			
-	var x1 = this.zone.p1.x - ds;
-	var y1 = this.zone.p1.y - ds;
-	var x2 = this.zone.p2.x + ds;
-	var y2 = this.zone.p2.y + ds;
+	var x1 = this.zone.pnw.x - ds;
+	var y1 = this.zone.pnw.y - ds;
+	var x2 = this.zone.pse.x + ds;
+	var y2 = this.zone.pse.y + ds;
 	var xm = R((x1 + x2) / 2);
 	var ym = R((y1 + y2) / 2);
 	
@@ -4272,11 +4313,11 @@ Note.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 
 		var srad = settings.scrollbar.radius;
 		var sbmx = settings.scrollbar.marginX;
-		if (this.scrolly >= 0 && abs(p.x - this.zone.p2.x + srad + sbmx) <= srad + 1)  {
+		if (this.scrolly >= 0 && abs(p.x - this.zone.pse.x + srad + sbmx) <= srad + 1)  {
 			space.actionScrollY(this, p.y, this.scrolly);
 		} else {
 			/* todo pointify */
-			space.actionIDrag(this, p.sub(this.zone.p1));
+			space.actionIDrag(this, p.sub(this.zone.pnw));
 		}
 		return txr;
 	case TXE.CLICK :
@@ -4291,8 +4332,8 @@ Note.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 		}
 
 		var op = new Point(
-			p.x - this.zone.p1.x, 
-			p.y - this.zone.p1.y + (this.scrolly > 0 ? this.scrolly : 0));
+			p.x - this.zone.pnw.x, 
+			p.y - this.zone.pnw.y + (this.scrolly > 0 ? this.scrolly : 0));
 		var para = this.paraAtP(op);
 		if (para) {
 			var editor = System.editor;
@@ -4320,10 +4361,10 @@ Note.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 | Returns true if something changed.
 */
 Note.prototype.setZone = function(zone, align) {
-	if (zone.w < settings.note.minWidth || zone.h < settings.note.minHeight) {
+	if (zone.width < settings.note.minWidth || zone.height < settings.note.minHeight) {
 		zone = zone.resize(
-			max(zone.w, settings.note.minWidth),
-			max(zone.h, settings.note.minHeight), align);
+			max(zone.width, settings.note.minWidth),
+			max(zone.height, settings.note.minHeight), align);
 	}
 	if (this.zone.eq(zone)) return false;
 	this.zone      = zone;
@@ -4336,7 +4377,7 @@ Note.prototype.setZone = function(zone, align) {
 /* sets new position retaining height */
 /* rename to moveto */
 Note.prototype.moveto = function(p) {
-	if (this.zone.p1.eq(p)) return false;
+	if (this.zone.pnw.eq(p)) return false;
 	this.zone = this.zone.atpos(p);
 	return this;
 }
@@ -4380,7 +4421,7 @@ Note.prototype.draw = function(can2d, selection) {
 	var dtree = this.dtree;
 	if (this._canvasActual) {
 		/* buffer hit */
-		can2d.drawImage(bc2d, this.zone.p1);
+		can2d.drawImage(bc2d, this.zone.pnw);
 		return;
 	}
 
@@ -4389,16 +4430,18 @@ Note.prototype.draw = function(can2d, selection) {
 
 	/* calculates if a scrollbar is needed */
 	var sy = this._scrolly;
-	var innerHeight = this.zone.h - 2 * this.textBorder;
+	var innerHeight = this.zone.height - 2 * this.textBorder;
 	dtree.flowWidth = 
-		this.zone.w - 2 * this.textBorder - (sy >= 0 ? settings.scrollbar.radius * 2 : 0);
+		this.zone.width - 2 * this.textBorder - 
+		(sy >= 0 ? settings.scrollbar.radius * 2 : 0); // to make a var
 	var dtreeHeight = dtree.height;
 	if (sy < 0) {
 		if (dtreeHeight > innerHeight) {
 			/* does not use a scrollbar but should */
 			sy = this._scrolly = 0;		
 			dtree.flowWidth = 
-				this.zone.w - 2 * this.textBorder - (sy >= 0 ? settings.scrollbar.radius * 2 : 0);
+				this.zone.width - 2 * this.textBorder - 
+				(sy >= 0 ? settings.scrollbar.radius * 2 : 0);
 			dtreeHeight = dtree.height;
 			if (dtreeHeight <= innerHeight) {
 				throw new Error("note doesnt fit with and without scrollbar.");			
@@ -4407,7 +4450,7 @@ Note.prototype.draw = function(can2d, selection) {
 	} else if (dtreeHeight <= innerHeight) {
 		/* uses a scrollbar but should */
 		sy = this._scrolly = -8833;
-		dtree.flowWidth = this.zone.w - 
+		dtree.flowWidth = this.zone.width - 
 			2 * this.textBorder - 
 			(sy >= 0 ? settings.scrollbar.radius * 2 : 0);
 		dtreeHeight = dtree.height;
@@ -4423,8 +4466,8 @@ Note.prototype.draw = function(can2d, selection) {
 		/* draws the vertical scroll bar */
 		var srad   = settings.scrollbar.radius;
 		var srad05 = R(settings.scrollbar.radius * 0.5);
-		var spx  = this.zone.w - settings.scrollbar.marginX - srad;
-		var scrollRange = this.zone.h - settings.scrollbar.marginY * 2;
+		var spx  = this.zone.width - settings.scrollbar.marginX - srad;
+		var scrollRange = this.zone.height - settings.scrollbar.marginY * 2;
 		var scrollSize  = scrollRange * innerHeight / dtreeHeight;
 		if (scrollSize < srad * 2) {
 			/* minimum size of scrollbar */
@@ -4481,7 +4524,7 @@ Note.prototype.draw = function(can2d, selection) {
 	bc2d.edges(settings.note.style.edge, this.silhoutte);
 	
 	this._canvasActual = true;
-	can2d.drawImage(bc2d, this.zone.p1);
+	can2d.drawImage(bc2d, this.zone.pnw);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -4506,7 +4549,7 @@ function Label(id, zone, dtree) {
 	/* buffer canvas 2D */
 	this._bc2d = new Can2D();  
 	this._canvasActual = false;  // todo rename
-	if (typeof(this.zone.p2.x) === "undefined") throw new Error("Invalid label"); // todo remove 
+	if (typeof(this.zone.pse.x) === "undefined") throw new Error("Invalid label"); // todo remove 
 	System.repository.addItem(this, true);
 }
 
@@ -4547,7 +4590,7 @@ Label.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 			txr |= TXR.REDRAW;
 		}
 
-		space.actionIDrag(this, p.sub(this.zone.p1));
+		space.actionIDrag(this, p.sub(this.zone.pnw));
 		return txr;
 	case TXR.CLICK: 
 		var txr = TXR.HIT;
@@ -4559,7 +4602,7 @@ Label.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 			space.setFoci(this);
 			txr |= TXR.REDRAW;
 		}
-		var op = p.sub(this.zone.p1);
+		var op = p.sub(this.zone.pnw);
 		var para = this.paraAtP(op);
 		if (para) {
 			var editor = System.editor;
@@ -4620,22 +4663,25 @@ Label.prototype.setZone = function(zone, align) {
 	switch(align) {
 	case "sw" :
 	case "w"  :
-	case "nw" : // align right 
-		this.zone = new Rect(zone.p2.add(-this.dtree.width, -th), zone.p2);
+	case "nw" : // align right
+	 // todo sub
+		this.zone = new Rect(zone.pse.add(-this.dtree.width, -th), zone.pse);
 		break;
 	case 'c': // center
 	default : // align left
-		this.zone = new Rect(zone.p1, zone.p1.add(this.dtree.width, th));
+		this.zone = new Rect(zone.pnw, zone.pnw.add(this.dtree.width, th));
 		break;
 	}
 	this._canvasActual = false;
 	return true;
 }
 
-/* sets new position retaining height */
-Label.prototype.moveto = function(p) {
-	if (this.zone.p1.eq(p)) return false;
-	this.zone = this.zone.atpos(p);
+/**
+| Sets a new position. 
+*/
+Label.prototype.moveto = function(pnw) {
+	if (this.zone.pnw.eq(pnw)) return false;
+	this.zone = this.zone.atpos(pnw);
 	return this;
 }
 
@@ -4670,7 +4716,7 @@ Label.prototype.draw = function(can2d, selection) {
 	var dtree = this.dtree;
 	if (this._canvasActual) {
 		/* buffer hit */
-		can2d.drawImage(bc2d, this.zone.p1);
+		can2d.drawImage(bc2d, this.zone.pnw);
 		return;
 	}
 	bc2d.attune(this.zone);
@@ -4681,7 +4727,7 @@ Label.prototype.draw = function(can2d, selection) {
 	bc2d.rect(0, 0, bc2d.width - 1, bc2d.height - 1);  
 	bc2d.stroke(1, "rgba(128,128,128,1)"); // todo settings
 	this._canvasActual = true;
-	can2d.drawImage(bc2d, this.zone.p1);
+	can2d.drawImage(bc2d, this.zone.pnw);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -4844,15 +4890,16 @@ Relation.prototype.setTextZone = function(zone, align) {
 	dtree.fontsize = fs;
 	dtree.flowWidth = -1;
 	th = R(this.dtree.height * (1 + settings.bottombox));
+	// todo use rect resize?
 	switch(align) {
 	case "sw" :
 	case "w"  :
 	case "nw" : // align right 
-		this.textZone = new Rect(zone.p2.add(-this.dtree.width, -zh), zone.p2);
+		this.textZone = new Rect(zone.pse.add(-this.dtree.width, -zh), zone.pse); 
 		break;
 	case 'c': // center
 	default : // align left
-		this.textZone = new Rect(zone.p1, zone.p1.add(this.dtree.width, zh));
+		this.textZone = new Rect(zone.pnw, zone.pnw.add(this.dtree.width, zh));
 		break;
 	}
 	this._canvasActual = false;
@@ -4991,7 +5038,7 @@ Relation.prototype.draw = function(can2d, selection) {
 	can2d.fills(settings.relation.style.fill, l2); 
 	can2d.edges(settings.relation.style.edge, l2);
 	// draws text 
-	can2d.drawImage(bc2d, this.textZone.p1);
+	can2d.drawImage(bc2d, this.textZone.pnw);
 }
 
 /**
