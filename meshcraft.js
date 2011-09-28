@@ -43,19 +43,19 @@ function subclass(sub, base) {
 var enableCatcher = false;
 
 var settings = {
-	/* standard font */
+	// standard font
 	defaultFont : "Verdana,Geneva,Kalimati,sans-serif",
 	
-	/* milliseconds after mouse down, dragging starts */
+	// milliseconds after mouse down, dragging starts
 	dragtime : 400,
 
-	/* pixels after mouse down and move, dragging starts */
+	// pixels after mouse down and move, dragging starts 
 	dragbox  : 10,
 	
-	/* factor to add to the bottom of font height */
+	// factor to add to the bottom of font height
 	bottombox : 0.22,
 	
-	/* standard note in space */
+	// standard note in space
 	note : {
 		minWidth     : 40,
 		minHeight    : 40,
@@ -81,7 +81,7 @@ var settings = {
 		cornerRadius     : 6,
 	},
 	
-	/* menu at the bottom of cockpit */
+	// menu at the bottom of cockpit
 	edgemenu : {
 		style : {
 			fill : {
@@ -106,7 +106,7 @@ var settings = {
 	},
 
 
-	/* float menu */
+	// float menu
 	floatmenu : {
 		outerRadius : 75,
 		innerRadius : 30,
@@ -132,7 +132,7 @@ var settings = {
 		},
 	},
 
-	/* item menu  */
+	// item menu
 	itemmenu : {
 		outerRadius : 75,
 		innerRadius : 30,
@@ -154,13 +154,13 @@ var settings = {
 		},
 	},
 
-	/* selection */
+	// selection
 	selection : {
 		color  : 'rgba(243, 203, 255, 0.9)', // todo
 		stroke : 'rgb (243, 183, 253)',
 	},
 	
-	/* scrollbar */
+	// scrollbar
 	scrollbar : {
 		form        : 'hexagonh',  // 'square', 'round', 'hexagonh' or 'hexagonv'
 		fillStyle   : 'rgb(255, 188, 87)',
@@ -171,7 +171,7 @@ var settings = {
 		marginY     : 5,
 	},
 	
-	/* size of resize handles */
+	// size of resize handles 
 	handle : {
 		size      : 10,
 		distance  : 0,
@@ -189,6 +189,9 @@ var settings = {
 				{ border: 0, width : 1, color : 'rgba(200, 100, 0, 0.8)' },
 			],
 		},
+
+		// scale down relation text
+		demagnify : 1.2,
 	},
 	
 	/* blink speed of the caret */
@@ -935,7 +938,6 @@ function Line(p1, p1end, p2, p2end) {
 */
 Line.connect = function(shape1, end1, shape2, end2) {
 	if (!shape1 || !shape2) {
-		debug(shape1, '|-|', shape2);
 		throw new Error('error');
 	}
 	if (shape1.otype === 'rect' && shape2.otype === 'point') {
@@ -1133,35 +1135,41 @@ Object.defineProperty(Can2D.prototype, "height", {
 });
 
 /*
-| attune()                   -or-
-| attune(rect)               -or-
-| attune(width, height)
+| attune()                                    -or-
+| attune(rect, [resizeW], [resizeH])          -or-
+| attune(width, height, [resizeW], [resizeH])
 | 
 | The canvas is cleared and its size ensured to be width/height (of rect).
+| border is an additional increase/decrease added.
 */
-Can2D.prototype.attune = function(a1, a2) {
+Can2D.prototype.attune = function(a1, a2, a3, a4) {
+	debug('attune', a1, a2, a3, a4);
 	var ta1 = typeof(a1);
 	var c = this._canvas;
 	if (ta1 === "undefined") {
 		this._cx.clearRect(0, 0, c.width, c.height);	
 		return;
 	}
-	var w, h;
+	var w, h, rw, rh;
 	if (ta1 === "object") {
-		w = a1.width;
-		h = a1.height;
+		w  = a1.width;
+		h  = a1.height;
+		rw = a2 || 0;
+		rh = a3 || 0;
 	} else {
-		w = a1;
-		h = a2;
+		w  = a1;
+		h  = a2;
+		rw = a3 || 0;
+		rh = a4 || 0;
 	}
-	if (c.width === w && c.height === h) {
+	if (c.width === w + rw && c.height === h + rh) {
 		// no size change, clearRect() is faster
-		this._cx.clearRect(0, 0, c.width, c.height);	
-		return;		
+		this._cx.clearRect(0, 0, c.width, c.height);
+		return;	
 	}
-	/* setting with or height clears the contents */
-	if (c.width  !== w) c.width  = w;
-	if (c.height !== h) c.height = h;
+	/* setting width or height clears the contents */
+	if (c.width  !== w + rw) c.width  = w + rw;
+	if (c.height !== h + rh) c.height = h + rh;
 }
 
 
@@ -1221,11 +1229,16 @@ Can2D.prototype.arc = function(a1, a2, a3, a4, a5, a6) {
 | Draws a frame around the canvas.
 | Called 'path', because it is the general purpose name for object to draw themselves
 | and a can2d has it defined as shortcut to frame itself.
+|
+| border: increase/decrease total size
 */
-Can2D.prototype.path = function(border) {
+Can2D.prototype.path = function(self, border) {
+	if (this !== self) throw new Error("Can2D.path: self != this");
 	var cx = this._cx;
 	cx.beginPath(); 
-	cx.rect(0.5, 0.5, this._canvas.width - 1, this._canvas.height - 1);
+	cx.rect(
+		0.5 + border, 0.5 + border, 
+		this._canvas.width - 1 - border, this._canvas.height - 1 - border);
 }
 
 /** 
@@ -1784,8 +1797,8 @@ Marker.prototype.moveLeftRight = function(dir) {
  `--'  `-^ '   `-' `' 
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-Caret.prototype = new Marker;
-Caret.prototype.constructor = Caret;
+subclass(Caret, Marker);
+
 function Caret() {
 	Marker.call(this);
 	
@@ -3382,12 +3395,18 @@ Space.prototype.mousedown = function(p) {
 			// todo, beautify point logic.
 			var p1 = fm.p.sub(R(nw / 2) + this.pan.x, R(nh / 2) + this.pan.y);
 			var p2 = p1.add(nw, nh);
-			var note = new Note(null, null, new Rect(p1, p2));
+			var note = new Note(null, new Rect(p1, p2), new DTree());
 			this.setFoci(note);
 			break;
 		case 2 : // label
-			var label = new Label(null, null, fm.p.sub(this.pan));
-			label.moveto(label.zone.p1.sub(R(label.zone.w / 2), R(label.zone.h / 2)));
+			var p1 = fm.p.sub(this.pan);
+			var p2 = p1.add(100, 50);
+			var dtree = new DTree(20);
+			dtree.append(new Paragraph("Label"));
+			var label = new Label(null, new Rect(p1, p2), dtree);
+			label.moveto(p1.sub(
+				R(label.zone.width / 2), 
+				R(label.zone.height / 2)));
 			this.setFoci(label);
 			break;
 		}
@@ -3530,8 +3549,8 @@ Treenode.prototype.anchestor = function(otype) {
   `-' `-' ' ` `' ' ' `-' `-^ `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-Textnode.prototype = new Treenode;
-Textnode.prototype.constructor = Textnode;
+subclass(Textnode, Treenode);
+
 function Textnode(text)
 {
 	Treenode.call(this, "text");
@@ -3559,8 +3578,8 @@ Object.defineProperty(Textnode.prototype, "text", {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ | ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
                      `'         '
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-Paragraph.prototype = new Treenode;
-Paragraph.prototype.constructor = Paragraph;
+subclass(Paragraph, Treenode);
+
 function Paragraph(text)
 {
 	Treenode.call(this, "paragraph");
@@ -3801,8 +3820,8 @@ Paragraph.prototype.joinToPrevious = function(node, caret) {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  A document with nodes in tree structure.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-DTree.prototype = new Treenode;
-DTree.prototype.constructor = DTree;
+subclass(DTree, Treenode);
+
 /**
 | Constructor.
 */
@@ -4151,29 +4170,22 @@ Item.prototype._drawHandles = function(space, rhs) {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  An item with text and a scrollbar.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-Note.prototype = new Item;
-Note.prototype.constructor = Note;
+subclass(Note, Item);
 
-/* constructor
- * Note(json, [id])  or
- * Note(null, [id], zone) 
- *
- * zone ... of type Rect, reference kept, so new() on call.
- */
-// todo split jnew
-function Note(js, id, zone) {
-	if (js) {
-		var rect  = Rect.jnew(js.z);
-		this.zone = zone = Rect.jnew(js.z);
-		this.dtree = DTree.jnew(js.d);
-	} else {
-		this.zone  = zone;
-		this.dtree = new DTree();
-	}
-	this.dtree.parent = this;
+/**
+| Note Constructor.
+| 
+| id:    item id
+| zone:  position and size of note.
+| dtree: document tree.
+*/
+function Note(id, zone, dtree) {
+	Item.call(this, "note", id);
+	this.zone  = zone;
+	this.dtree = dtree;
+	dtree.parent = this;
 	this.silhoutte = new RoundRect(
 		Point.zero, new Point(zone.width, zone.height), settings.note.cornerRadius); 
-	Item.call(this, "note", id);
 	this._bcan2d = new Can2D();
 	this.textBorder = settings.note.textBorder;
 	this._canvasActual = false;
@@ -4186,12 +4198,24 @@ function Note(js, id, zone) {
 	System.repository.addItem(this, true);
 }
 
-/* called when item is removed */
+/**
+| Creates a new note from json representation.
+*/
+Note.jnew = function(js, id) {
+	return new Note(id, Rect.jnew(js.z), DTree.jnew(js.d));
+}
+
+/**
+| Called when item is removed 
+*/
 Note.prototype.removed = function() {
 	/* nothing */
 }
 
-/* highlets the note. */		
+/** 
+| Highlets the note. 
+*/
+// todo round rects
 Note.prototype.highlight = function(c2d) {
 	c2d.beginPath();
 	c2d.rect(this.zone);
@@ -4289,11 +4313,12 @@ Note.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 	}
 }
 
-/* sets the notes position and size
- * the note does not have to accept the full zone.
- * e.g. it will refuse to go below minimum size.
- * returns true if something changed
- */
+/**
+| Sets the notes position and size.
+| The note does not have to accept the full zone.
+| For example it will refuse to go below minimum size.
+| Returns true if something changed.
+*/
 Note.prototype.setZone = function(zone, align) {
 	if (zone.w < settings.note.minWidth || zone.h < settings.note.minHeight) {
 		zone = zone.resize(
@@ -4467,36 +4492,31 @@ Note.prototype.draw = function(can2d, selection) {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  An sizeable item with sizing text 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-Label.prototype = new Item;
-Label.prototype.constructor = Note;
+subclass(Label, Item);
 
-/* constructor
- * Label(js, [id])  or
- * Label(null, [id], p1) 
- *
- * todo make creation as Rect.
- */
-// todo split jnew
-function Label(js, id, p1) {
-	if (js) {
-		this.zone = Rect.jnew(js.z);
-		this.dtree = DTree.jnew(js.d);
-	} else {
-		this.zone = new Rect(p1, p1.add(100, 50));
-		this.dtree = new DTree(20);
-	}
-	this.dtree.parent = this;
+/**
+| Constructor
+| Label([id], rect)  or
+*/
+function Label(id, zone, dtree) {
+	this.dtree = dtree;
+	dtree.parent = this;
 	Item.call(this, "label", id);
-	if (!this.dtree.first) this.dtree.append(new Paragraph("Label"));
+	this.setZone(zone, 'c'); 
 	/* buffer canvas 2D */
 	this._bc2d = new Can2D();  
 	this._canvasActual = false;  // todo rename
-	if (typeof(this.zone.p2.x) === "undefined")  {
-		throw new Error("Invalid label");
-		//this.zone = new Rect(this.zone.p1, this.zone.p1.add(this.dtree.width, this.dtree.height));
-	}
+	if (typeof(this.zone.p2.x) === "undefined") throw new Error("Invalid label"); // todo remove 
 	System.repository.addItem(this, true);
 }
+
+/**
+| Creates a new Label from json representation 
+*/
+Label.jnew = function(js, id) {
+	return new Label(id, Rect.jnew(js.z), DTree.jnew(js.d));
+}
+
 
 /* called when item is removed */
 Label.prototype.removed = function() {
@@ -4567,40 +4587,46 @@ Label.prototype.highlight = function(c2d) {
 	c2d.stroke(3, "rgba(255, 183, 15, 0.5)"); // todo settings
 }
 
-/* turns the label into a string */
+/**
+| Turns the label into its json represntation. 
+*/
 Label.prototype.jsonfy = function() {
-	var js = {
+	return {
 	    t: "label",
 		z: this.zone.jsonfy(),
 		d: this.dtree.jsonfy(),
 	}
-	return js;
 }
 
-/* sets the zone the label is 
- * also determines fontsize indirectly 
- * returns true if something changed 
- *
- * zone  ... a rectangle
- * align ... compass point
- */
+/** 
+| Sets the zone of the label.
+| Also determines its fontsize.
+| Returns true if something changed.
+|
+| zone: a rectangle
+| align: compass direction 
+*/
 Label.prototype.setZone = function(zone, align) {
-	if (this.zone.eq(zone)) return false;
+	if (this.zone && this.zone.eq(zone)) return false;
 	var dtree = this.dtree;
-	var zh = zone.h;
+	var zh = zone.height;
 	var th = R(this.dtree.height * (1 + settings.bottombox));
 	var dfs = dtree.fontsize;
 	var fs = max(dfs * zh / th, 8);
-	if (dfs === fs) return false;
+	if (this.zone && dfs === fs) return false;
 	dtree.fontsize = fs;
 	dtree.flowWidth = -1;
 	th = R(this.dtree.height * (1 + settings.bottombox));
-	if (align === "sw" || align === "w" || align === "nw") {
-		/* align right */
+	switch(align) {
+	case "sw" :
+	case "w"  :
+	case "nw" : // align right 
 		this.zone = new Rect(zone.p2.add(-this.dtree.width, -th), zone.p2);
-	} else {
-		/* align left */
+		break;
+	case 'c': // center
+	default : // align left
 		this.zone = new Rect(zone.p1, zone.p1.add(this.dtree.width, th));
+		break;
 	}
 	this._canvasActual = false;
 	return true;
@@ -4621,9 +4647,10 @@ Label.prototype.paraAtP = function(p) {
 /* drops the cached canvas */
 Label.prototype.listen = function() {
 	this._canvasActual = false;
-	this.zone = this.zone.resize(
-		this.dtree.width, 
-		R(this.dtree.height * (1 + settings.bottombox)));
+	if (this.zone) {
+		this.zone = this.zone.resize(
+			this.dtree.width,  R(this.dtree.height * (1 + settings.bottombox)));
+	}
 	/* end of listen-chain */
 }
 
@@ -4665,8 +4692,7 @@ Label.prototype.draw = function(can2d, selection) {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  Relates two items (or other relations)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-Relation.prototype = new Item;
-Relation.prototype.constructor = Note;
+subclass(Relation, Item);
 
 /**
 | Constructor.
@@ -4674,13 +4700,13 @@ Relation.prototype.constructor = Note;
 | Relation(id, i1id, i2id, textZone, [dtree]) 
 */
 function Relation(id, i1id, i2id, textZone, dtree) {
+	Item.call(this, 'rel', id);
 	this.i1id     = i1id;
 	this.i2id     = i2id;
-	this.textZone = textZone;
 	this.dtree    = dtree;
 	this.dtree.parent = this;	
 	this.dtree.flowWidth = -1;
-	Item.call(this, 'rel', id);
+	this.setTextZone(textZone);
 	this._bc2d = new Can2D();
 	this._canvasActual = false;
 	
@@ -4692,7 +4718,7 @@ function Relation(id, i1id, i2id, textZone, dtree) {
 /**
 | Creates a relation from json representation.
 */
-Relation.jnew = function(js) {
+Relation.jnew = function(js, id) {
 	var tz;
 	if (js.tz) {
 		tz = Rect.jnew(js.tz);
@@ -4701,14 +4727,14 @@ Relation.jnew = function(js) {
 		tz = new Rect(new Point(0, 0), new Point(100, 100));
 	}
 	var dtree = DTree.jnew(js.d);
-	var o = new Relation(js.id, js.i1, js.i2, tz, dtree);
+	var o = new Relation(id, js.i1, js.i2, tz, dtree);
 }
 
 /**
 | Creates a new Relation.
 */
 Relation.create = function(item1, item2) {
-	var dtree = new DTree();
+	var dtree = new DTree(20);
 	dtree.append(new Paragraph("relates to"));
 	dtree.flowWidth = -1;
 	var cline = Line.connect(item1.zone, null, item2.zone, null);
@@ -4778,8 +4804,6 @@ Relation.create = function(item1, item2) {
 	}*/
 }
 
-
-
 /** 
 | Called when ab item is removed.
 */
@@ -4788,35 +4812,52 @@ Relation.prototype.removed = function() {
 	System.repository.removeOnlook(this.id, this.i2id);	
 }
 
-
 /**
 | Returns json representation.
 */
 Relation.prototype.jsonfy = function() {
-	var js = {
-	    t: "rel",
-		i1: this.i1id,
-		i2: this.i2id,
-		d: this.dtree.jsonfy(true),
+	return {
+	    t  : "rel",
+		i1 : this.i1id,
+		i2 : this.i2id,
+		d  : this.dtree.jsonfy(),
+		tz : this.textZone.jsonfy(), 
 	}
-	return js;
 }
 
 /** 
-| Returns the arrow object of this relation 
+| Sets the text zone of the relation.
+| Also determines its fontsize.
+| Returns true if something changed.
+|
+| zone: a rectangle
+| align: compass direction 
 */
-/*
-Object.defineProperty(Relation.prototype, "arrow", {
-	get: function() { 
-		if (this._arrow) return this._arrow;
-		var i1 = System.repository.items[this.i1id];  // todo make funcall
-		var i2 = System.repository.items[this.i2id];
-		// caches the zones, so the relation knows when one its anchors moved 
-		this.i1zone = i1.zone;
-		this.i2zone = i2.zone;
-		return this._arrow = Arrow.create(i1, i2);
+Relation.prototype.setTextZone = function(zone, align) {
+	if (this.textZone && this.textZone.eq(textZone)) return false;
+	var dtree = this.dtree;
+	var zh = zone.height;
+	var th = R(this.dtree.height * (1 + settings.bottombox)) * settings.relation.demagnify;
+	var dfs = dtree.fontsize;
+	var fs = max(dfs * zh / th, 8);
+	if (this.zone && dfs === fs) return false;
+	dtree.fontsize = fs;
+	dtree.flowWidth = -1;
+	th = R(this.dtree.height * (1 + settings.bottombox));
+	switch(align) {
+	case "sw" :
+	case "w"  :
+	case "nw" : // align right 
+		this.textZone = new Rect(zone.p2.add(-this.dtree.width, -zh), zone.p2);
+		break;
+	case 'c': // center
+	default : // align left
+		this.textZone = new Rect(zone.p1, zone.p1.add(this.dtree.width, zh));
+		break;
 	}
-});*/
+	this._canvasActual = false;
+	return true;
+}
 
 /** 
 | An action happend.
@@ -4937,21 +4978,20 @@ Relation.prototype.draw = function(can2d, selection) {
 	var it1 = System.repository.items[this.i1id]; // todo funcall
 	var it2 = System.repository.items[this.i2id];
 	if (!this._canvasActual) {
-		bc2d.attune(dtree); 
+		bc2d.attune(this.textZone); 
 		bc2d.edges(settings.relation.style.edge, bc2d);
-		dtree.draw(bc2d, selection, 0, 0, 0);
+		dtree.draw(bc2d, selection, 2, 2, 0);
 		this._canvasActual = true;
 	}
 	var l1 = Line.connect(it1.zone,     'normal', this.textZone, 'normal');
 	var l2 = Line.connect(this.textZone,'normal', it2.zone,      'arrow');
-	//can2d.draw(bc2d, xx
-	can2d.drawImage(bc2d, this.textZone.p1);
 	// todo combine into one call;
 	can2d.fills(settings.relation.style.fill, l1);
 	can2d.edges(settings.relation.style.edge, l1);
 	can2d.fills(settings.relation.style.fill, l2); 
 	can2d.edges(settings.relation.style.edge, l2);
 	// draws text 
+	can2d.drawImage(bc2d, this.textZone.p1);
 }
 
 /**
@@ -5324,12 +5364,12 @@ Repository.prototype._newItemID = function() {
 	return idf.nid;
 }
 
-Repository.prototype._loadItem = function(id, itjs) {
-	if (!itjs || !itjs.t) throw new Error("JSON error: attributes missing from " + id + ":");
-	switch(itjs.t) {
-	case "note"  : return new Note(itjs, id);
-	case "label" : return new Label(itjs, id);
-	case "rel"   : return Relation.jnew(itjs, id);
+Repository.prototype._loadItem = function(id, js) {
+	if (!js || !js.t) throw new Error("JSON error: attributes missing from ("+id+"):" + js);
+	switch(js.t) {
+	case "note"  : return Note.jnew(js, id);
+	case "label" : return Label.jnew(js, id);
+	case "rel"   : return Relation.jnew(js, id);
 	default      : throw new Error("unknown item type");
 	}
 }
