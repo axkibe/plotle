@@ -78,9 +78,17 @@ var settings = {
 			],
 		},
 
-		cornerRadius     : 6,
+		cornerRadius : 6,
 	},
-	
+
+	label : {
+		style : {
+			edge : [
+				{ border: 0, width : 0.2, color : 'rgba(200, 100, 0, 0.5)' },
+			],
+		},
+	},
+
 	// menu at the bottom of cockpit
 	edgemenu : {
 		style : {
@@ -187,6 +195,9 @@ var settings = {
 			edge : [
 				{ border: 0, width : 3, color : 'rgba(255, 225, 80, 0.5)' },
 				{ border: 0, width : 1, color : 'rgba(200, 100, 0, 0.8)' },
+			],
+			labeledge : [
+				{ border: 0, width : 0.2, color : 'rgba(200, 100, 0, 0.5)' },
 			],
 		},
 
@@ -465,7 +476,9 @@ Point.prototype.sub = function(a1, a2) {
 function Rect(pnw, pse) {
 	this.pnw = pnw;
 	this.pse = pse;
-	if (pnw.x > pse.x || pnw.y > pse.y) { throw new Error("not a rectangle."); }
+	if (!pnw || !pse || pnw.x > pse.x || pnw.y > pse.y) { 
+		throw new Error("not a rectangle."); 
+	}
 	this.otype = "rect";
 	// freeze if not a father object
 	if (this.constructor == Rect) Object.freeze(this);
@@ -593,7 +606,7 @@ Rect.prototype.resize = function(width, height, align) {
 			this.pnw, this.pse);
 		break;
 	case 'nw' :
-		pnw = this.nw;
+		pnw = this.pnw;
 		pse = Point.renew(
 			this.pnw.x + width,
 			this.pnw.y + height,
@@ -1172,6 +1185,33 @@ Line.prototype.draw = function(can2d) {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ Compass+++
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+function Compass() {
+	throw new Error("instancing a static object");
+}
+
+/**
+| Returns the compass direction opposite of a direction.
+*/
+Compass.opposite = function(dir) {
+	switch (dir) {
+	case 'n'  : return 's';
+	case 'ne' : return 'sw';
+	case 'e'  : return 'w';
+	case 'se' : return 'nw';
+	case 's'  : return 'n';
+	case 'sw' : return 'ne';
+	case 'w'  : return 'e';
+	case 'nw' : return 'se';
+	case 'c'  : return 'c';
+	default   : throw new Error('unknown compass direction');
+	}
+}
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,--.          _  .-,--.
  | `-' ,-. ,-. ´ ) ' |   \
  |   . ,-| | |  /  , |   /
@@ -1438,7 +1478,7 @@ Can2D.prototype.closePath = function() { this._cx.closePath();  }
 /** 
 | Draws an image.
 |
-| drawImage(image, p)      -or-
+| drawImage(image, pnw)   -or-
 | drawImage(image, x, y)
 */
 Can2D.prototype.drawImage = function(image, a1, a2) {
@@ -3205,37 +3245,52 @@ Space.prototype.dragmove = function(p, shift, ctrl) {
 		this.redraw();
 		return;
 	case ACT.IRESIZE :
-	{
 		// todo no splitup
-		var pnw = iaction.siz.pnw;
-		var pse = iaction.siz.pse;
+		var ipnw = iaction.siz.pnw;
+		var ipse = iaction.siz.pse;
 		var it = iaction.item;
+		var dx = p.x - iaction.sp.x;
+		var dy = p.y - iaction.sp.y;
+		var pnw, pse;
 		switch (iaction.com) {
-		case "e"  : 
-		case "ne" :
-		case "se" :
-			pse = new Point(max(pse.x + p.x - iaction.sp.x, pnw.x), pse.y);
+		case 'n'  :
+			pnw = Point.renew(ipnw.x, min(ipnw.y + dy, ipse.y), ipnw, ipse);
+			pse = ipse;
 			break;
-		case "w"  :
-		case "nw" :
-		case "sw" :	
-			pnw = new Point(min(pnw.x + p.x - iaction.sp.x, pnw.x), pnw.y);
+		case 'ne' :
+			pnw = Point.renew(ipnw.x, min(ipnw.y + dy, ipse.y), ipnw, ipse);
+			pse = Point.renew(max(ipse.x + dx, ipnw.x), ipse.y, ipnw, ipse);
 			break;
+		case 'e'  :
+			pnw = ipnw;
+			pse = Point.renew(max(ipse.x + dx, ipnw.x), ipse.y, ipnw, ipse);
+			break;
+		case 'se' :
+			pnw = ipnw;
+			pse = Point.renew(max(ipse.x + dx, ipnw.x), max(ipse.y + dy, ipnw.y), ipnw, ipse);
+			break;
+		case 's' :
+			pnw = ipnw;
+			pse = Point.renew(ipse.x, max(ipse.y + dy, ipnw.y), ipnw, ipse);
+			break; 
+		case 'sw'  :
+			pnw = Point.renew(min(ipnw.x + dx, ipse.x), ipnw.y, ipnw, ipse), 
+			pse = Point.renew(ipse.x, max(ipse.y + dy, ipnw.y), ipnw, ipse);
+			break;
+		case 'w'   :
+			pnw = Point.renew(min(ipnw.x + dx, ipse.x), ipnw.y, ipnw, ipse), 
+			pse = ipse;
+			break;
+		case 'nw' :
+			pnw = Point.renew(min(ipnw.x + dx, ipse.x), min(ipnw.y + dy, ipse.y), ipnw, ipse);
+			pse = ipse;
+			break;
+		case 'c' : 
+		default  : 
+			throw new Error('unknown align');
 		}
-		// todo combine, todo, why not use resize?
-		switch (iaction.com) {
-		case "s"  : 
-		case "sw" :
-		case "se" :
-			pse = new Point(pse.x, max(pse.y + p.y - iaction.sp.y, pnw.y));
-			break;
-		case "n"  : 
-		case "nw" :
-		case "ne" :
-			pnw = new Point(pnw.x, min(pnw.y + p.y - iaction.sp.y, pse.y));	
-			break;
-		}
-		redraw = it.setZone(new Rect(pnw, pse), iaction.com); 
+		
+		redraw = it.setZone(new Rect(pnw, pse), Compass.opposite(iaction.com)); 
 		
 		/* adapt scrollbar position, todo x move into item */
 		var dtreeHeight = it.dtree.height;
@@ -3247,9 +3302,7 @@ Space.prototype.dragmove = function(p, shift, ctrl) {
 		if (redraw) this.redraw();
 		System.repository.updateItem(iaction.item);
 		return;
-	}
 	case ACT.SCROLLY:
-	{
 		var dy = pp.y - iaction.sy;
 		var it = iaction.item;
 		var h = it.zone.h;
@@ -3274,7 +3327,6 @@ Space.prototype.dragmove = function(p, shift, ctrl) {
 		it.scrolly = sy;
 		this.redraw();
 		return true;		
-	}
 	case ACT.RBIND :
 		iaction.item2 = null;
 		System.repository.transfix(TXE.RBINDHOVER, this, pp, shift, ctrl);
@@ -4197,18 +4249,14 @@ Item.prototype.withinItemMenu = function(p) {
 		settings.itemmenu.slice.height);
 }
 
-/* returns the compass of the resize handles of an item 
- * 
- * rhs .. bitwise resize handle selector:
- * 
- * 128  1  2
- *  64     4
- *  32 16  8
- */
-Item.prototype._checkItemCompass = function(p, rhs) { 
-	if (rhs == 0) return;
-	var d  = settings.handle.size;         // inner distance
-	var d2 = settings.handle.size * 3 / 4; // outer distance
+/**
+| Returns the compass direction of the handle if p is on a resizer handle.
+*/
+Item.prototype.checkItemCompass = function(p) { 
+	var ha = this.handles;
+	if (!ha) return null;
+	var d  = settings.handle.size;        // inner distance
+	var d2 = 0.75 * settings.handle.size; // outer distance
 	
 	var n = p.y >= this.zone.pnw.y - d2 && p.y <= this.zone.pnw.y + d;
 	var e = p.x >= this.zone.pse.x - d  && p.x <= this.zone.pse.x + d2;
@@ -4216,44 +4264,34 @@ Item.prototype._checkItemCompass = function(p, rhs) {
 	var w = p.x >= this.zone.pnw.x - d2 && p.x <= this.zone.pnw.x + d;	
 
 	if (n) {
-		if (w && rhs & 128) { 
-			return "nw";
-		} else if (e && rhs & 2) {
-			return "ne";
-		} else if (rhs & 1) {
+		if (w && ha.nw)     return 'nw';
+		else if (e && ha.e) return 'ne';
+		else if (ha.n) {
 			var mx = this.zone.mx;
-			if (p.x >= mx - d && p.x <= mx + d) {
-				return "n";
-			}
+			// todo abs.
+			if (p.x >= mx - d && p.x <= mx + d) return 'n'; 
 		}
 	} else if (s) {
-		if (w && rhs & 32) {
-			return "sw";
-		} else if (e && rhs & 8) {
-			return "se";
-		} else if (rhs & 16) {
+		if (w && ha.sw)      return 'sw';
+		else if (e && ha.se) return 'se';
+		else if (ha.s) {
 			var mx = this.zone.mx;
-			if (p.x >= mx - d && p.x <= mx + d) {
-				return "s";
-			}
+			if (p.x >= mx - d && p.x <= mx + d) return 's'; 
 		}
-	} else if (w && rhs & 64) {
+	} else if (w && ha.w) {
 		var my = this.zone.my;
-		if (p.y >= my - d && p.y <= my + d) {
-			return "w";
-		}
-	} else if (e && rhs & 4) {
+		if (p.y >= my - d && p.y <= my + d) return 'w'; 
+	} else if (e && ha.e) {
 		var my = this.zone.my;
-		if (p.y >= my - d && p.y <= my + d) {
-			return "e";
-		}
+		if (p.y >= my - d && p.y <= my + d) return 'e';
 	}
 	return null;
 }
 
-/* draws the edit handles of an item (resize, itemmenu) */
-/* rhs ... resize  handles selector */
-Item.prototype._drawHandles = function(space, rhs) {
+/**
+| Draws the handles of an item (resize, itemmenu) 
+*/
+Item.prototype.drawHandles = function(space) {
 	var c2d = space.can2d;
 	var ds = settings.handle.distance; 			
 	var hs = settings.handle.size;
@@ -4265,26 +4303,29 @@ Item.prototype._drawHandles = function(space, rhs) {
 	var y2 = this.zone.pse.y + ds;
 	var xm = R((x1 + x2) / 2);
 	var ym = R((y1 + y2) / 2);
+	var ha = this.handles;
 	
 	c2d.beginPath(); 
-	if (rhs &   1) { c2d.moveTo(xm - hs2, y1); c2d.lineTo(xm + hs2, y1);                    }
-	if (rhs &   2) { c2d.moveTo(x2 - hs,  y1); c2d.lineTo(x2, y1); c2d.lineTo(x2, y1 + hs); }
-	if (rhs &   4) { c2d.moveTo(x2, ym - hs2); c2d.lineTo(x2, ym + hs2);                    }
-	if (rhs &   8) { c2d.moveTo(x2, y2 - hs);  c2d.lineTo(x2, y2); c2d.lineTo(x2 - hs, y2); }
-	if (rhs &  16) { c2d.moveTo(xm - hs2, y2); c2d.lineTo(xm + hs2, y2);                    }
-	if (rhs &  32) { c2d.moveTo(x1 + hs, y2);  c2d.lineTo(x1, y2); c2d.lineTo(x1, y2 - hs); }
-	if (rhs &  64) { c2d.moveTo(x1, ym - hs2); c2d.lineTo(x1, ym + hs2);                    }
-	if (rhs & 128) { c2d.moveTo(x1, y1 + hs);  c2d.lineTo(x1, y1); c2d.lineTo(x1 + hs, y1); }
-			
-	if (rhs > 0 && settings.handle.width1 > 0) {
+	if (ha.n ) { c2d.moveTo(xm - hs2, y1); c2d.lineTo(xm + hs2, y1);                    }
+	if (ha.ne) { c2d.moveTo(x2 - hs,  y1); c2d.lineTo(x2, y1); c2d.lineTo(x2, y1 + hs); }
+	if (ha.e ) { c2d.moveTo(x2, ym - hs2); c2d.lineTo(x2, ym + hs2);                    }
+	if (ha.se) { c2d.moveTo(x2, y2 - hs);  c2d.lineTo(x2, y2); c2d.lineTo(x2 - hs, y2); }
+	if (ha.s ) { c2d.moveTo(xm - hs2, y2); c2d.lineTo(xm + hs2, y2);                    }
+	if (ha.sw) { c2d.moveTo(x1 + hs, y2);  c2d.lineTo(x1, y2); c2d.lineTo(x1, y2 - hs); }
+	if (ha.w ) { c2d.moveTo(x1, ym - hs2); c2d.lineTo(x1, ym + hs2);                    }
+	if (ha.nw) { c2d.moveTo(x1, y1 + hs);  c2d.lineTo(x1, y1); c2d.lineTo(x1 + hs, y1); }
+		
+	// todo replace with edges()
+	if (settings.handle.width1 > 0) {
 		c2d.stroke(settings.handle.width1, settings.handle.color1);
 	}
-	if (rhs > 0 && settings.handle.width2 > 0) {
+	if (settings.handle.width2 > 0) {
 		c2d.stroke(settings.handle.width2, settings.handle.color2);
 	}
 	
-	/* draws item menu handler */
+	// draws item menu handler 
 	var h6slice = this.h6slice;
+	// todo replace with paint()
 	c2d.fills(settings.itemmenu.slice.style.fill, h6slice);
 	c2d.edges(settings.itemmenu.slice.style.edge, h6slice);
 }
@@ -4311,6 +4352,7 @@ function Note(id, zone, dtree) {
 	Item.call(this, "note", id);
 	this.zone  = zone;
 	this.dtree = dtree;
+	this.handles = Note.handles;
 	dtree.parent = this;
 	this.silhoutte = new RoundRect(
 		Point.zero, new Point(zone.width, zone.height), settings.note.cornerRadius); 
@@ -4325,6 +4367,18 @@ function Note(id, zone, dtree) {
 	/* todo, don't add here */
 	System.repository.addItem(this, true);
 }
+
+Note.handles = {
+	n  : true,
+	ne : true,
+	e  : true,
+	se : true,
+	s  : true,
+	sw : true,
+	w  : true,
+	nw : true,
+}
+Object.freeze(Note.handles);
 
 /**
 | Creates a new note from json representation.
@@ -4486,17 +4540,6 @@ Object.defineProperty(Note.prototype, "scrolly", {
 	}
 });
 
-/* draws the items handles */
-Note.prototype.drawHandles = function(space) {
-	return this._drawHandles(space, 255);
-}
-
-/* returns which handle the point might be floating over */
-/* todo rename */
-Note.prototype.checkItemCompass = function(p) { 
-	return this._checkItemCompass(p, 255);
-}
-	
 /**
 | Draws the note.
 |
@@ -4629,9 +4672,10 @@ subclass(Label, Item);
 | Label([id], rect)  or
 */
 function Label(id, zone, dtree) {
+	Item.call(this, "label", id);
 	this.dtree = dtree;
 	dtree.parent = this;
-	Item.call(this, "label", id);
+	this.handles = Label.handles;
 	this.setZone(zone, 'c'); 
 	/* buffer canvas 2D */
 	this._bc2d = new Can2D();  
@@ -4639,6 +4683,17 @@ function Label(id, zone, dtree) {
 	if (typeof(this.zone.pse.x) === "undefined") throw new Error("Invalid label"); // todo remove 
 	System.repository.addItem(this, true);
 }
+
+/**
+| The handles the item presents
+*/
+Label.handles = {
+	ne : true,
+	se : true,
+	sw : true,
+	nw : true,
+}
+Object.freeze(Label.handles);
 
 /**
 | Creates a new Label from json representation 
@@ -4744,25 +4799,40 @@ Label.prototype.setZone = function(zone, align) {
 	var dfs = dtree.fontsize;
 	var fs = max(dfs * zh / th, 8);
 	if (this.zone && dfs === fs) return false;
-	this.lock = true;
+	this._lock = true;
 	dtree.fontsize = fs;
 	dtree.flowWidth = -1;
-	th = R(this.dtree.height * (1 + settings.bottombox));
+	this.zone = this.zone ? this.zone.resize(this._dWidth(), this._dHeight(), align) : zone;
+/*
 	switch(align) {
 	case "sw" :
 	case "w"  :
 	case "nw" : // align right
 	 // todo sub
-		this.zone = new Rect(zone.pse.add(-this.dtree.width, -th), zone.pse);
+		this.zone = new Rect(zone.pse.add(-this.dtree.width, -dh), zone.pse);
 		break;
 	case 'c': // center
 	default : // align left
-		this.zone = new Rect(zone.pnw, zone.pnw.add(this.dtree.width, th));
+		this.zone = new Rect(zone.pnw, zone.pnw.add(this.dtree.width, dh));
 		break;
-	}
-	this.lock = false;
+	}*/
+	this._lock = false;
 	this._canvasActual = false;
 	return true;
+}
+
+/**
+| todo
+*/
+Label.prototype._dHeight = function() {
+	return R(this.dtree.height * (1 + settings.bottombox));
+}
+
+/**
+| todo
+*/
+Label.prototype._dWidth = function() {
+	return max(this.dtree.width, R(0.4 * this._dHeight()));
 }
 
 /**
@@ -4781,22 +4851,12 @@ Label.prototype.paraAtP = function(p) {
 
 /* drops the cached canvas */
 Label.prototype.listen = function() {
-	if (this.lock) return;
+	if (this._lock) return;
 	this._canvasActual = false;
 	if (this.zone) {
-		this.zone = this.zone.resize(
-			this.dtree.width,  R(this.dtree.height * (1 + settings.bottombox)), 'c');
+		this.zone = this.zone.resize(this._dWidth(), this._dHeight(), 'c');
 	}
 	/* end of listen-chain */
-}
-
-/* draws the items handles */
-Label.prototype.drawHandles = function(space) {
-	this._drawHandles(space, 170);
-}
-
-Label.prototype.checkItemCompass = function(p, rhs) { 
-	return this._checkItemCompass(p, 170);
 }
 
 /* draws the item
@@ -4810,12 +4870,10 @@ Label.prototype.draw = function(can2d, selection) {
 		return;
 	}
 	bc2d.attune(this.zone);
-	/* draws text */	
+	// draws text
 	dtree.draw(bc2d, selection, 0, 0, 0);
-	/* draws the border */
-	bc2d.beginPath(); 
-	bc2d.rect(0, 0, bc2d.width - 1, bc2d.height - 1);  
-	bc2d.stroke(1, "rgba(128,128,128,1)"); // todo settings
+	// draws the border
+	bc2d.edges(settings.label.style.edge, bc2d);
 	this._canvasActual = true;
 	can2d.drawImage(bc2d, this.zone.pnw);
 }
@@ -5097,15 +5155,6 @@ Relation.prototype.resize = function(width, height) {
 	throw new Error('unimplemented');
 }
 
-/* draws the items handles */
-Relation.prototype.drawHandles = function(space) {
-	this._drawHandles(space, 170);
-}
-
-Relation.prototype.checkItemCompass = function(p, rhs) { 
-	return this._checkItemCompass(p, 170);
-}
-
 /**
 | Draws the item.
 */
@@ -5116,7 +5165,7 @@ Relation.prototype.draw = function(can2d, selection) {
 	var it2 = System.repository.items[this.i2id];
 	if (!this._canvasActual) {
 		bc2d.attune(this.textZone); 
-		bc2d.edges(settings.relation.style.edge, bc2d);
+		bc2d.edges(settings.relation.style.labeledge, bc2d);
 		dtree.draw(bc2d, selection, 2, 2, 0);
 		this._canvasActual = true;
 	}
