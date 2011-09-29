@@ -2067,7 +2067,6 @@ Editor.prototype.updateCaret = function() {
 		c2d.putImageData(caret.save, caret.sp.x - 1, caret.sp.y - 1);
 		caret.save = null;
 	} 
-
 	if (caret.shown && !caret.blink) {
 		var cp = caret.getPoint();
 		var it = caret.item;
@@ -2075,7 +2074,7 @@ Editor.prototype.updateCaret = function() {
 		var sp = caret.sp = System.space.pan.add(
 			it.zone.pnw.x + cp.x,
 			it.zone.pnw.y + cp.y - (sy > 0 ? sy : 0));
-		var th = R(it.dtree.fontsize * (1 + settings.bottombox));		
+		var th = R(it.dtree.fontsize * (1 + settings.bottombox));
 		caret.save = c2d.getImageData(sp.x - 1, sp.y - 1, 3, th + 1);
 		c2d.fillRect("black", sp.x, sp.y, 1, th);
 	}
@@ -3017,6 +3016,7 @@ Space.prototype.systemFocus = function() {
 /* the canvas/space lost system focus */
 Space.prototype.systemBlur = function() {
 	System.editor.caret.hide();
+	System.editor.updateCaret();
 }
 
 /* sets the focussed item or loses it if null*/
@@ -3770,19 +3770,18 @@ function Paragraph(text)
 	this.p = null;
 }
 
-/* (re)flows the Paragraph, positioning all chunks  */
+/**
+|(re)flows the Paragraph, positioning all chunks  
+*/
 Paragraph.prototype._flow = function() {
-	if (this._flowActual) {
-		return;
-	}
+	if (this._flowActual) return; 
 
-	/* build position informations */
+	// builds position informations.
 	this._flowActual = true;
 	var pinfo = this._pinfo = [];
-	var flowWidth = this._flowWidth;
+	var fw = this._flowWidth;
 	var width = 0;
 	var dtree = this.anchestor("dtree");
-	/* canvas is needed for font measurement */
 	var fontsize = dtree.fontsize;
 	var x = 0;
 	var y = fontsize;	
@@ -3799,14 +3798,14 @@ Paragraph.prototype._flow = function() {
 		var t = node.text;
 		var pchunk = 0;
 		//var reg = !dtree.pre ? (/(\s*\S+)\s?(\s*)/g) : (/(.+)()$/g);
-		/* also match only spaces, todo check if more performance if hand coding exception */
+		/* also match only spaces, todo check if more performance if hand coding */
 		var reg = !dtree.pre ? (/(\s*\S+|\s+$)\s?(\s*)/g) : (/(.+)()$/g);
 		var stol = true; /* at start of line */
 		for(var ca = reg.exec(t); ca != null; ca = reg.exec(t)) {
 			/* text is a word plus hard spaces */
 			var text = ca[1] + ca[2];
 			var w = Measure.width(text);
-			if (flowWidth > 0 && x + w + space > flowWidth) {
+			if (fw > 0 && x + w + space > fw) {
 				if (!stol) {
 					/* soft break */
 					if (x > width) {
@@ -3848,24 +3847,6 @@ Paragraph.prototype._flow = function() {
 	this._width = width;
 }
 
-Object.defineProperty(Paragraph.prototype, "x", {
-	get: function() { 
-		throw new Error(":("); 
-	},
-	set: function() { 
-		throw new Error(":("); 
-	},
-});
-
-Object.defineProperty(Paragraph.prototype, "y", {
-	get: function() { 
-		throw new Error(":("); 
-	},
-	set: function() { 
-		throw new Error(":("); 
-	},
-});
-
 /* returns the logical height 
  * (without addition of box below last line base line ofr gpq etc.) */
 Object.defineProperty(Paragraph.prototype, "softHeight", {
@@ -3873,7 +3854,6 @@ Object.defineProperty(Paragraph.prototype, "softHeight", {
 		this._flow();
 		return this._softHeight;
 	},
-	set: function(s) { throw new Error("Cannot set paragraph softHeight."); }
 });
 
 Object.defineProperty(Paragraph.prototype, "width", {
@@ -3881,7 +3861,6 @@ Object.defineProperty(Paragraph.prototype, "width", {
 		this._flow();
 		return this._width;f
 	},
-	set: function(s) { throw new Error("Cannot set paragraph width."); }
 });
 
 /* returns the computes size of the paragraph */
@@ -3891,7 +3870,6 @@ Object.defineProperty(Paragraph.prototype, "height", {
 		var dtree = this.anchestor("dtree");
 		return this._softHeight + R(dtree.fontsize * settings.bottombox);
 	},
-	set: function(s) { throw new Error("Cannot set paragraph height."); }
 });
 
 /* return the position information arrays for all chunks */
@@ -3900,7 +3878,6 @@ Object.defineProperty(Paragraph.prototype, "pinfo", {
 		this._flow();
 		return this._pinfo;
 	},
-	set: function(s) { throw new Error("Cannot set pinfo");	}
 });
 
 Object.defineProperty(Paragraph.prototype, "flowWidth", {
@@ -4023,13 +4000,15 @@ DTree.jnew = function(js) {
 }
 
 Object.defineProperty(DTree.prototype, "font", {
+	// todo, look if this can be removed.
 	get: function() { 
 		return this._fontsize + 'px ' + settings.defaultFont;
 	},
-	set: function() { throw new Error("Cannot set font. Set fontsize/fontface"); }
 });
 
-/* turns the document tree into an object for JSON stringify */
+/**
+| Turns the document tree into a json representation.
+*/
 DTree.prototype.jsonfy = function() {
 	var js = {fs : this._fontsize, d: []};
 	var d = js.d;
@@ -4039,7 +4018,9 @@ DTree.prototype.jsonfy = function() {
 	return js;
 }
 		
-/* returns the chunk at x,y */
+/**
+| Returns the paragraph at point
+*/
 DTree.prototype.paraAtP = function(p) {
 	var para = this.first;
 	while (para && p.y > para.p.y + para.softHeight) {
@@ -4048,9 +4029,13 @@ DTree.prototype.paraAtP = function(p) {
 	return para;
 }
 
-/* draws the content in a buffer canvas */
-/* acanvas  ... canvas to draw upon */
-/* todo rename */
+/**
+| draws the content in a Canvas2D 
+| c2d: Canvas2D to draw within.
+| select: selection object (for highlighting the selection)
+| offsetX/offsetY: offset in canvas (todo make a point)
+| scrolly: scroll position (todo make a point)
+*/
 DTree.prototype.draw = function(c2d, select, offsetX, offsetY, scrolly) { 
 	var y = offsetY;
 	var pi = 0;
@@ -4126,7 +4111,7 @@ DTree.prototype.draw = function(c2d, select, offsetX, offsetY, scrolly) {
 		}
 	}
 	
-	/* draws tha paragraphs */
+	// draws tha paragraphs 
 	for(var para = this.first; para; para = para.next) {
 		var pc2d = para.getCan2D();
 		para.p = new Point(offsetX, y);
@@ -4137,7 +4122,10 @@ DTree.prototype.draw = function(c2d, select, offsetX, offsetY, scrolly) {
 	}
 }
 
-/* Overloads Treenodes append to set the paragraph width */
+/**
+| Overloads Treenodes.append() to set the new paragraphs width.
+| todo, change this to ask for the parents width on the flow?
+*/
 DTree.prototype.append = function(tnode) {
 	if (this._flowWidth) {
 		tnode.flowWidth = this._flowWidth;
@@ -4146,7 +4134,9 @@ DTree.prototype.append = function(tnode) {
 }
 
 
-/* Overloads Treenodes insertBefore to set the paragraph width */
+/**
+| Overloads Treenodes insertBefore to set the paragraphs width.
+*/
 DTree.prototype.insertBefore = function(tnode, bnode) {
 	if (this._flowWidth && bnode) { 
 		/* if not bnode append will be called */
@@ -4155,6 +4145,9 @@ DTree.prototype.insertBefore = function(tnode, bnode) {
 	return Treenode.prototype.insertBefore.call(this, tnode, bnode);
 }
 
+/** 
+* Gets/Sets the font size.
+*/
 Object.defineProperty(DTree.prototype, "fontsize", {
 	get: function() { return this._fontsize; },
 	set: function(fs) {
@@ -4166,6 +4159,9 @@ Object.defineProperty(DTree.prototype, "fontsize", {
 	}
 });
 
+/**
+* Gets/Sets the flowWidth.
+*/
 Object.defineProperty(DTree.prototype, "flowWidth", {
 	get: function() { return this._flowWidth; },
 	set: function(fw) {
@@ -4177,6 +4173,9 @@ Object.defineProperty(DTree.prototype, "flowWidth", {
 	}
 });
 
+/**
+| Returns the width of the document tree.
+*/
 Object.defineProperty(DTree.prototype, "width", {
 	get: function() { 
 		/* todo caching */
@@ -4186,9 +4185,12 @@ Object.defineProperty(DTree.prototype, "width", {
 		}
 		return w;
 	},
-	set: function(width) { throw new Error("Cannot set width of DTree"); }
 });
 
+/**
+| Returns the height of the document tree.
+*/
+// xxx
 Object.defineProperty(DTree.prototype, "height", {
 	get: function() { 
 		/* todo caching */
@@ -4201,7 +4203,6 @@ Object.defineProperty(DTree.prototype, "height", {
 		}
 		return h;
 	},
-	set: function(width) { throw new Error("Cannot set height of DTree"); }
 });
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -4264,8 +4265,8 @@ Item.prototype.checkItemCompass = function(p) {
 	var w = p.x >= this.zone.pnw.x - d2 && p.x <= this.zone.pnw.x + d;	
 
 	if (n) {
-		if (w && ha.nw)     return 'nw';
-		else if (e && ha.e) return 'ne';
+		if (w && ha.nw)      return 'nw';
+		else if (e && ha.ne) return 'ne';
 		else if (ha.n) {
 			var mx = this.zone.mx;
 			// todo abs.
@@ -4293,17 +4294,19 @@ Item.prototype.checkItemCompass = function(p) {
 */
 Item.prototype.drawHandles = function(space) {
 	var c2d = space.can2d;
-	var ds = settings.handle.distance; 			
+	var ds = settings.handle.distance; 
 	var hs = settings.handle.size;
 	var hs2 = hs / 2;
+	
+	var ha = this.handles;
+	var zone = this.handlezone;
 			
-	var x1 = this.zone.pnw.x - ds;
-	var y1 = this.zone.pnw.y - ds;
-	var x2 = this.zone.pse.x + ds;
-	var y2 = this.zone.pse.y + ds;
+	var x1 = zone.pnw.x - ds;
+	var y1 = zone.pnw.y - ds;
+	var x2 = zone.pse.x + ds;
+	var y2 = zone.pse.y + ds;
 	var xm = R((x1 + x2) / 2);
 	var ym = R((y1 + y2) / 2);
-	var ha = this.handles;
 	
 	c2d.beginPath(); 
 	if (ha.n ) { c2d.moveTo(xm - hs2, y1); c2d.lineTo(xm + hs2, y1);                    }
@@ -4515,15 +4518,25 @@ Note.prototype.setZone = function(zone, align) {
 	return true;
 }
 
-/* sets new position retaining height */
-/* rename to moveto */
+/**
+| The zone the handles appear on.
+*/
+Object.defineProperty(Note.prototype, "handlezone", {
+	get : function() { return this.zone; }
+});
+
+/**
+| Sets new position retaining size 
+*/
 Note.prototype.moveto = function(p) {
 	if (this.zone.pnw.eq(p)) return false;
 	this.zone = this.zone.atpos(p);
 	return this;
 }
 
-/* returns or set the vertical scroll position */
+/** 
+| Gets or Sets the vertical scroll position 
+*/
 Object.defineProperty(Note.prototype, "scrolly", {
 	get: function() { 
 		return this._scrolly;
@@ -4668,13 +4681,13 @@ Note.prototype.draw = function(can2d, selection) {
 subclass(Label, Item);
 
 /**
-| Constructor
-| Label([id], rect)  or
+| Constructor.
 */
 function Label(id, zone, dtree) {
 	Item.call(this, "label", id);
 	this.dtree = dtree;
 	dtree.parent = this;
+	dtree.pre = true;
 	this.handles = Label.handles;
 	this.setZone(zone, 'c'); 
 	/* buffer canvas 2D */
@@ -4696,21 +4709,24 @@ Label.handles = {
 Object.freeze(Label.handles);
 
 /**
-| Creates a new Label from json representation 
+| Creates a new Label from json representation.
 */
 Label.jnew = function(js, id) {
 	return new Label(id, Rect.jnew(js.z), DTree.jnew(js.d));
 }
 
 
-/* called when item is removed */
+/** 
+| Called when item is removed 
+*/
 Label.prototype.removed = function() {
 	/* nothing */
 }
 
-/* An event happened at p.
- * returns transfix code.
- */
+/**
+| An event happened at p.
+| returns transfix code.
+*/
 Label.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 	if (!this.zone.within(p)) return 0;
 	switch(txe) {
@@ -4802,20 +4818,8 @@ Label.prototype.setZone = function(zone, align) {
 	this._lock = true;
 	dtree.fontsize = fs;
 	dtree.flowWidth = -1;
-	this.zone = this.zone ? this.zone.resize(this._dWidth(), this._dHeight(), align) : zone;
-/*
-	switch(align) {
-	case "sw" :
-	case "w"  :
-	case "nw" : // align right
-	 // todo sub
-		this.zone = new Rect(zone.pse.add(-this.dtree.width, -dh), zone.pse);
-		break;
-	case 'c': // center
-	default : // align left
-		this.zone = new Rect(zone.pnw, zone.pnw.add(this.dtree.width, dh));
-		break;
-	}*/
+	if (!this.zone) this.zone = zone;
+	this.zone = this.zone.resize(this._dWidth(), this._dHeight(), align);
 	this._lock = false;
 	this._canvasActual = false;
 	return true;
@@ -4832,8 +4836,15 @@ Label.prototype._dHeight = function() {
 | todo
 */
 Label.prototype._dWidth = function() {
-	return max(this.dtree.width, R(0.4 * this._dHeight()));
+	return max(this.dtree.width, R(0.4 * this.dtree.fontsize));
 }
+
+/**
+| The zone the handles appear on.
+*/
+Object.defineProperty(Label.prototype, "handlezone", {
+	get : function() { return this.zone; }
+});
 
 /**
 | Sets a new position. 
@@ -4859,8 +4870,12 @@ Label.prototype.listen = function() {
 	/* end of listen-chain */
 }
 
-/* draws the item
-   space  : to draw upon  */
+/**
+| Draws the Label.
+|
+| can2d:  Canvas2D to draw upon.
+| selection: Selection to highlight.
+*/
 Label.prototype.draw = function(can2d, selection) {
 	var bc2d = this._bc2d;
 	var dtree = this.dtree;
@@ -4998,6 +5013,13 @@ Relation.create = function(item1, item2) {
 	}*/
 }
 
+/**
+| The zone the handles appear on.
+*/
+Object.defineProperty(Relation.prototype, "handlezone", {
+	get : function() { return this.textZone; }
+});
+
 /** 
 | Called when ab item is removed.
 */
@@ -5059,6 +5081,57 @@ Relation.prototype.setTextZone = function(zone, align) {
 | Returns transfix code.
 */
 Relation.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
+	if (!this.textZone.within(p)) return 0;
+	switch(txe) {
+	case TXE.HOVER :
+		System.setCursor("default");
+		return TXR.HIT;
+	case TXE.DRAGSTART :
+		var txr = TXR.HIT;
+		if (ctrl) {
+			space.actionSpawnRelation(this, p);
+			return txr | TXR.REDRAW;
+		}
+		if (z > 0) {
+			System.repository.moveToTop(z);
+			txr |= TXR.REDRAW; 
+		}
+		if (space.focus != this) {
+			space.setFoci(this);
+			txr |= TXR.REDRAW;
+		}
+
+		space.actionIDrag(this, p.sub(this.zone.pnw));
+		return txr;
+	case TXR.CLICK: 
+		var txr = TXR.HIT;
+		if (z > 0) {
+			System.repository.moveToTop(z);
+			txr |= TXR.REDRAW;
+		}
+		if (space.focus != this) {
+			space.setFoci(this);
+			txr |= TXR.REDRAW;
+		}
+		var op = p.sub(this.textZone.pnw);
+		var para = this.paraAtP(op);
+		if (para) {
+			var editor = System.editor;
+			editor.caret.setFromPoint(para, op.sub(para.p));
+			editor.caret.show();
+			editor.deselect();
+			txr |= TXR.REDRAW;
+		}
+		return txr;	
+	case TXE.RBINDHOVER :
+		space.actionRBindHover(this);
+		return TXR.HIT | TXR.REDRAW;
+	case TXE.RBINDTO :
+		space.actionRBindTo(this);
+		return TXR.HIT | TXR.REDRAW;
+	default :
+		throw new Error("Unknown transfix code:" + txe);
+	}
 	return 0;
 	/*
 	var arrow = this.arrow;
@@ -5136,6 +5209,12 @@ Relation.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 		throw new Error("Unknown transfix code:" + txe);
 	}*/
 }
+
+/* returns the para at y */
+Relation.prototype.paraAtP = function(p) {
+	return this.dtree.paraAtP(p);
+}
+
 
 /** 
 | Drops the cached canvas.
