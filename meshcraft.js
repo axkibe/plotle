@@ -726,9 +726,10 @@ Editor.prototype.updateCaret = function() {
 		var cp = caret.getPoint();
 		var it = caret.item;
 		var sy = it.scrolly;
+		var tzone = it.handlezone; // todo, do not reuse handlezone
 		var sp = caret.sp = System.space.pan.add(
-			it.zone.pnw.x + cp.x,
-			it.zone.pnw.y + cp.y - (sy > 0 ? sy : 0));
+			tzone.pnw.x + cp.x,
+			tzone.pnw.y + cp.y - (sy > 0 ? sy : 0));
 		var th = R(it.dtree.fontsize * (1 + settings.bottombox));
 		caret.save = c2d.getImageData(sp.x - 1, sp.y - 1, 3, th + 1);
 		c2d.fillRect("black", sp.x, sp.y, 1, th);
@@ -1949,7 +1950,7 @@ Space.prototype.dragmove = function(p, shift, ctrl) {
 		
 		/* adapt scrollbar position, todo x move into item */
 		var dtreeHeight = it.dtree.height;
-		var smaxy = dtreeHeight - ((it.zone.width) - 2 * it.textBorder);
+		var smaxy = dtreeHeight - ((it.handlezone.width) - 2 * it.textBorder);
 		if (smaxy > 0 && it.scrolly > smaxy) {
 			it.scrolly = smaxy;
 			redraw = true;;
@@ -2276,7 +2277,7 @@ Space.prototype.mousedown = function(p) {
 			iaction.com  = com;
 			iaction.item = this.focus;
 			iaction.sp   = p;
-			iaction.siz  = this.focus.zone;
+			iaction.siz  = this.focus.handlezone; 
 			System.setCursor(com + "-resize");
 			if (redraw) this.redraw();
 			return MST.DRAG;
@@ -2879,28 +2880,31 @@ function Item(otype, id) {
 */
 Object.defineProperty(Item.prototype, "h6slice", {
 	get: function() { 
-		if (this._h6slice && this._h6slice.psw.eq(this.zone.pnw)) return this._h6slice;
+		var hzone = this.handlezone;
+		if (this._h6slice && this._h6slice.psw.eq(hzone.pnw)) return this._h6slice;
 		return this._h6slice = new HexagonSlice(
-			this.zone.pnw, settings.itemmenu.innerRadius, settings.itemmenu.slice.height);
+			hzone.pnw, settings.itemmenu.innerRadius, settings.itemmenu.slice.height);
 	},
 });
 
 /* set a hex menu to be this items menu */
 Item.prototype.newItemMenu = function(pan) {
+	var hzone = this.handlezone;
 	var r = settings.itemmenu.innerRadius;
 	var h = settings.itemmenu.slice.height;
 	var labels = this._itemMenuLabels = ["", "Remove"];
 	// todo why pan?
 	var p = new Point(
-		R(this.zone.pnw.x + pan.x + r - (r * Hexagon.cos6 - h) * Hexagon.tan6), 
-		R(this.zone.pnw.y + pan.y + r * Hexagon.cos6 - h) - 1);
+		R(hzone.pnw.x + pan.x + r - (r * Hexagon.cos6 - h) * Hexagon.tan6), 
+		R(hzone.pnw.y + pan.y + r * Hexagon.cos6 - h) - 1);
 	return new Hexmenu(p, settings.itemmenu.innerRadius, settings.itemmenu.outerRadius, labels);
 }
 
 /* returns if coords are within the item menu */
 /* todo xxx */
 Item.prototype.withinItemMenu = function(p) {
-	return Can2D.withinHexagonSlice(p.sub(this.zone.pnw), 
+	var hzone = this.handlezone; 
+	return Can2D.withinHexagonSlice(p.sub(hzone.pnw), 
 		settings.itemmenu.innerRadius, 
 		settings.itemmenu.slice.height);
 }
@@ -2910,20 +2914,21 @@ Item.prototype.withinItemMenu = function(p) {
 */
 Item.prototype.checkItemCompass = function(p) { 
 	var ha = this.handles;
+	var hzone = this.handlezone;
 	if (!ha) return null;
 	var d  = settings.handle.size;        // inner distance
 	var d2 = 0.75 * settings.handle.size; // outer distance
 	
-	var n = p.y >= this.zone.pnw.y - d2 && p.y <= this.zone.pnw.y + d;
-	var e = p.x >= this.zone.pse.x - d  && p.x <= this.zone.pse.x + d2;
-	var s = p.y >= this.zone.pse.y - d  && p.y <= this.zone.pse.y + d2;
-	var w = p.x >= this.zone.pnw.x - d2 && p.x <= this.zone.pnw.x + d;	
+	var n = p.y >= hzone.pnw.y - d2 && p.y <= hzone.pnw.y + d;
+	var e = p.x >= hzone.pse.x - d  && p.x <= hzone.pse.x + d2;
+	var s = p.y >= hzone.pse.y - d  && p.y <= hzone.pse.y + d2;
+	var w = p.x >= hzone.pnw.x - d2 && p.x <= hzone.pnw.x + d;	
 
 	if (n) {
 		if (w && ha.nw)      return 'nw';
 		else if (e && ha.ne) return 'ne';
 		else if (ha.n) {
-			var mx = this.zone.mx;
+			var mx = hzone.mx;
 			// todo abs.
 			if (p.x >= mx - d && p.x <= mx + d) return 'n'; 
 		}
@@ -2931,14 +2936,14 @@ Item.prototype.checkItemCompass = function(p) {
 		if (w && ha.sw)      return 'sw';
 		else if (e && ha.se) return 'se';
 		else if (ha.s) {
-			var mx = this.zone.mx;
+			var mx = hzone.mx;
 			if (p.x >= mx - d && p.x <= mx + d) return 's'; 
 		}
 	} else if (w && ha.w) {
-		var my = this.zone.my;
+		var my = hzone.my;
 		if (p.y >= my - d && p.y <= my + d) return 'w'; 
 	} else if (e && ha.e) {
-		var my = this.zone.my;
+		var my = hzone.my;
 		if (p.y >= my - d && p.y <= my + d) return 'e';
 	}
 	return null;
@@ -3185,7 +3190,7 @@ Object.defineProperty(Note.prototype, "handlezone", {
 */
 Note.prototype.moveto = function(p) {
 	if (this.zone.pnw.eq(p)) return false;
-	this.zone = this.zone.atpos(p);
+	this.zone = this.zone.moveto(p);
 	return this;
 }
 
@@ -3506,7 +3511,7 @@ Object.defineProperty(Label.prototype, "handlezone", {
 */
 Label.prototype.moveto = function(pnw) {
 	if (this.zone.pnw.eq(pnw)) return false;
-	this.zone = this.zone.atpos(pnw);
+	this.zone = this.zone.moveto(pnw);
 	return this;
 }
 
@@ -3565,11 +3570,13 @@ subclass(Relation, Item);
 */
 function Relation(id, i1id, i2id, textZone, dtree) {
 	Item.call(this, 'rel', id);
-	this.i1id     = i1id;
-	this.i2id     = i2id;
-	this.dtree    = dtree;
-	this.dtree.parent = this;	
-	this.dtree.flowWidth = -1;
+	this.handles    = Relation.handles;
+	this.i1id       = i1id;
+	this.i2id       = i2id;
+	this.dtree      = dtree;
+	dtree.parent    = this;
+	dtree.flowWidth = -1;
+	dtree.pre       = true;
 	this.setTextZone(textZone);
 	this._bc2d = new Can2D();
 	this._canvasActual = false;
@@ -3578,6 +3585,17 @@ function Relation(id, i1id, i2id, textZone, dtree) {
 	System.repository.addOnlook(this.id, this.i1id);
 	System.repository.addOnlook(this.id, this.i2id);
 }
+
+/**
+| The handles the item presents.
+*/
+Relation.handles = {
+	ne : true,
+	se : true,
+	sw : true,
+	nw : true,
+}
+Object.freeze(Label.handles);
 
 /**
 | Creates a relation from json representation.
@@ -3732,6 +3750,47 @@ Relation.prototype.setTextZone = function(zone, align) {
 }
 
 /** 
+| Sets the textZone of the relation.
+| Also determines its fontsize.
+| Returns true if something changed.
+|
+| zone: a rectangle
+| align: compass direction 
+*/
+Relation.prototype.setZone = function(zone, align) {
+	if (this.textZone && this.textZone.eq(zone)) return false;
+	var dtree = this.dtree;
+	var zh = zone.height;
+	var th = R(this.dtree.height * (1 + settings.bottombox));
+	var dfs = dtree.fontsize;
+	var fs = max(dfs * zh / th, 8);
+	if (this.textZone && dfs === fs) return false;
+	this._lock = true;
+	dtree.fontsize = fs;
+	dtree.flowWidth = -1;
+	if (!this.textZone) this.textZone = zone;
+	this.textZone = this.textZone.resize(this._dWidth(), this._dHeight(), align);
+	this._lock = false;
+	this._canvasActual = false;
+	return true;
+}
+
+/**
+| todo
+*/
+Relation.prototype._dHeight = function() {
+	return R(this.dtree.height * (1 + settings.bottombox));
+}
+
+/**
+| todo
+*/
+Relation.prototype._dWidth = function() {
+	return max(this.dtree.width, R(0.4 * this.dtree.fontsize));
+}
+
+
+/** 
 | An action happend.
 | Returns transfix code.
 */
@@ -3756,7 +3815,7 @@ Relation.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 			txr |= TXR.REDRAW;
 		}
 
-		space.actionIDrag(this, p.sub(this.zone.pnw));
+		space.actionIDrag(this, p.sub(this.handlezone.pnw));
 		return txr;
 	case TXR.CLICK: 
 		var txr = TXR.HIT;
@@ -3865,6 +3924,15 @@ Relation.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 	}*/
 }
 
+/**
+| Sets a new position of the textlabel.
+*/
+Relation.prototype.moveto = function(pnw) {
+	if (this.textZone.pnw.eq(pnw)) return false;
+	this.textZone = this.textZone.moveto(pnw);
+	return this;
+}
+
 /* returns the para at y */
 Relation.prototype.paraAtP = function(p) {
 	return this.dtree.paraAtP(p);
@@ -3875,7 +3943,11 @@ Relation.prototype.paraAtP = function(p) {
 | Drops the cached canvas.
 */
 Relation.prototype.listen = function() {
+	if (this._lock) return;
 	this._canvasActual = false;
+	if (this.textZone) {
+		this.textZone = this.textZone.resize(this._dWidth(), this._dHeight(), 'c');
+	}
 	// end of listen chain 
 }
 

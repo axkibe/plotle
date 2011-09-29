@@ -383,7 +383,7 @@ Rect.prototype.resize = function(width, height, align) {
 /** 
 | Returns a rectangle with same size at position at p|x/y).
 */
-Rect.prototype.atpos = function(a1, a2) {
+Rect.prototype.moveto = function(a1, a2) {
 	if (typeof(a1) !== 'object') a1 = new Point(a1, a2);
 	return new Rect(a1, a1.add(this.width, this.height));
 }
