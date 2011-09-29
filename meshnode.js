@@ -25,6 +25,12 @@ var dispatch = function(req, reqp, res) {
 			if (error) { serverError(500); return; }
 			writeHeadEnd(res, 'text/html', content, 'utf-8');	
 		});
+	case "/canvas2d.js" :
+		fs.readFile('./canvas2d.js', function(error, content) {
+			if (error) { serverError(500); return; }
+			writeHeadEnd(res, 'text/javascript', content, 'utf-8');	
+		});
+		break;
 	case "/meshcraft.js" :
 		fs.readFile('./meshcraft.js', function(error, content) {
 			if (error) { serverError(500); return; }
