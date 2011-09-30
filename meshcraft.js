@@ -725,14 +725,22 @@ Editor.prototype.updateCaret = function() {
 	if (caret.shown && !caret.blink) {
 		var cp = caret.getPoint();
 		var it = caret.item;
-		var sy = it.scrolly;
+		var sy = max(it.scrolly, 0) || 0;
 		var tzone = it.handlezone; // todo, do not reuse handlezone
+		var th = R(it.dtree.fontsize * (1 + settings.bottombox));
+		var cyn = cp.y - sy;
+		var cys = cyn + th;
+		cyn = min(max(cyn, 0), tzone.height);
+		cys = min(max(cys, 0), tzone.height);
+		if (cyn === cys) {
+			caret.save = null;
+			return;
+		}
 		var sp = caret.sp = System.space.pan.add(
 			tzone.pnw.x + cp.x,
-			tzone.pnw.y + cp.y - (sy > 0 ? sy : 0));
-		var th = R(it.dtree.fontsize * (1 + settings.bottombox));
-		caret.save = c2d.getImageData(sp.x - 1, sp.y - 1, 3, th + 1);
-		c2d.fillRect("black", sp.x, sp.y, 1, th);
+			tzone.pnw.y + cyn);
+		caret.save = c2d.getImageData(sp.x - 1, sp.y - 1, 3, cys - cyn + 1);
+		c2d.fillRect("black", sp.x, sp.y, 1, cys - cyn);
 	}
 }
 
@@ -1961,7 +1969,7 @@ Space.prototype.dragmove = function(p, shift, ctrl) {
 	case ACT.SCROLLY:
 		var dy = pp.y - iaction.sy;
 		var it = iaction.item;
-		var h = it.zone.h;
+		var h = it.zone.height;
 		var scrollRange = h - settings.scrollbar.marginY * 2;
 		var dtreeHeight = it.dtree.height;
 		var innerHeight = h - 2 * it.textBorder;
@@ -1970,16 +1978,11 @@ Space.prototype.dragmove = function(p, shift, ctrl) {
 		if (scrollSize < srad * 2) {
 			/* minimum size of scrollbar */
 			scrollSize = srad * 2;
-		}		
+		}
 		var sy = iaction.ssy + 
 			dy * (dtreeHeight - innerHeight) / (scrollRange - scrollSize);
 		var smaxy = dtreeHeight - innerHeight;
-		if (sy < 0) {
-			sy = 0;
-		} else if (sy > smaxy) {
-			sy = smaxy;
-		}
-
+		sy = min(max(sy, 0), smaxy);
 		it.scrolly = sy;
 		this.redraw();
 		return true;		
@@ -3198,10 +3201,7 @@ Note.prototype.moveto = function(p) {
 | Gets or Sets the vertical scroll position 
 */
 Object.defineProperty(Note.prototype, "scrolly", {
-	get: function() { 
-		return this._scrolly;
-	},
-	
+	get: function() { return this._scrolly; },
 	set: function(sy) {
 		if (sy < 0 && sy != -8833) {
 			throw new Error("Invalid scrolly position");

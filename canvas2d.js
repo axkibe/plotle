@@ -334,7 +334,7 @@ Rect.prototype.resize = function(width, height, align) {
 			this.pnw, this.pse);
 		pse = Point.renew(
 			pnw.x + width, 
-			this.pnw.y, 
+			this.pse.y, 
 			this.pnw, this.pse);
 		break;
 	case 'sw' :
