@@ -1340,7 +1340,9 @@ _init : function() {
 	/* hinders init to be called another time */
 	delete this.init; 
 	delete this._init;
-	System.repository.loadLocalStorage();	
+	if (!System.repository.loadLocalStorage()) {
+		System.repository.importFromJString(demoRepository);
+	}
 	System.space.redraw();
 }};
 	
@@ -4218,7 +4220,9 @@ Repository.prototype.reset = function() {
 	this.onlookers = {};
 }
 
-/* loads the repository from HTML5 localStorage */
+/** 
+| Loads the repository from HTML5 localStorage.
+*/
 Repository.prototype.loadLocalStorage = function() {
 	this.reset();
 	var idfjs = window.localStorage.getItem("idf");
@@ -4233,14 +4237,14 @@ Repository.prototype.loadLocalStorage = function() {
 	if (!this._idFactory) {
 		console.log("no repository found. (no idf)");
 		this._idFactory = {nid: 1};
-		return;
+		return false;
 	}
 	
 	System.space.pan = System.space.c2d.pan = this._getPan(); // todo space setFunction
 	var zjs = window.localStorage.getItem("zidx");
 	if (!zjs) {
 		console.log("no repository found. (no zidx)");
-		return;
+		return false;
 	}
 	var zidx = JSON.parse(zjs);
 	this._nosave = true;
@@ -4260,6 +4264,7 @@ Repository.prototype.loadLocalStorage = function() {
 	}
 	this._nosave = false;
 	this._noonlooks = false;
+	return true;
 }
 
 /* erases the local repository */
