@@ -18,7 +18,8 @@
 | but enhanced on the fly for what I need.
 |
 | Defines:
-|  Can2D  // todo rename to C2D
+|  C2D
+|
 |  Compass
 |  Point
 |  Line
@@ -36,9 +37,39 @@
 
 "use strict";
 
-function C2D() {
-	throw new Error('do not call directly');
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ,--.  _  .-,--.
+ | `-' ´ ) ' |   \
+ |   .  /  , |   /
+ `--'  '~` `-^--'
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ Meshcrafts Canvas wrapper.
+ 
+ It enhances the HTML5 Canvas Context by accpeting previously defined immutable graphic
+ objects as arguments.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/**
+| C2D()        -or-    creates new Canvas2D
+| C2D(canvas)  -or-    encloses an existing HTML5 canvas
+| C2D(width, height)   creates a new Canvas2D and sets its size;
+*/
+function C2D(a1, a2) {
+	this.otype = "c2d"; // todo remove otypes
+	var ta1 = typeof(a1);
+	// todo switch
+	if (ta1 === "undefined") {
+		this._canvas = document.createElement("canvas");	
+	} else if (ta1 === "object") {
+		this._canvas = a1;
+	} else {
+		this._canvas = document.createElement("canvas");	
+		this._canvas.width  = a1;
+		this._canvas.height = a2;
+	}
+	this._cx = this._canvas.getContext("2d");
+	this.pan = new Point(0, 0);
 }
+
 
 /**
 | Subclassing helper.
@@ -105,7 +136,7 @@ C2D.debug = function() {
    '   `-' `-' `-^ `-' `-^ '   `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-var Measure = {
+C2D.Measure = {
 	init : function() {
 		Measure._canvas = document.createElement("canvas");
 		Measure._cx = this._canvas.getContext("2d");
@@ -116,7 +147,7 @@ var Measure = {
 	}
 }
 
-Object.defineProperty(Measure, "font", {
+Object.defineProperty(C2D.Measure, "font", {
 	get: function() { return Measure._cx.font; },
 	set: function(font) { Measure._cx.font = font; }
 });
@@ -277,6 +308,18 @@ Rect.prototype.sub = function(a1, a2) {
 Rect.prototype.within = function(p) {
 	return p.x >= this.pnw.x && p.y >= this.pnw.y && 
 	       p.x <= this.pse.x && p.y <= this.pse.y;
+}
+
+/**
+| Draws the rect.
+*/
+Rect.prototype.path = function(c2d, border) {
+	c2d.beginPath();
+	c2d.moveTo(this.pnw.x + border, this.pnw.y + border);
+	c2d.lineTo(this.pse.x - border, this.pnw.y + border);
+	c2d.lineTo(this.pse.x - border, this.pse.y - border);
+	c2d.lineTo(this.pnw.x + border, this.pse.y - border);
+	c2d.closePath();
 }
 
 /** 
@@ -571,13 +614,13 @@ function HexagonSlice(psw, rad, height) {
 /**
 | Draws the hexagon.
 */
-HexagonSlice.prototype.path = function(can2d, border) {
+HexagonSlice.prototype.path = function(c2d, border) {
 	var r2 = C2D.half(this.rad);
-	can2d.beginPath();
-	can2d.moveTo(this.psw.x                 + border, this.psw.y               - border);
-	can2d.lineTo(this.pm.x - r2             + border, this.psw.y - this.height + border);
-	can2d.lineTo(this.pm.x + r2             - border, this.psw.y - this.height + border);
-	can2d.lineTo(2 * this.pm.x - this.psw.x - border, this.psw.y               - border);
+	c2d.beginPath();
+	c2d.moveTo(this.psw.x                 + border, this.psw.y               - border);
+	c2d.lineTo(this.pm.x - r2             + border, this.psw.y - this.height + border);
+	c2d.lineTo(this.pm.x + r2             - border, this.psw.y - this.height + border);
+	c2d.lineTo(2 * this.pm.x - this.psw.x - border, this.psw.y               - border);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -632,7 +675,7 @@ function HexagonFlower(pc, ri, ro, segs) {
 /**
 | Makes the flower-hex-6 path.
 */
-HexagonFlower.prototype.path = function(can2d, border, segment) {
+HexagonFlower.prototype.path = function(c2d, border, segment) {
 	var ri  = this.ri;
 	var ri2 = C2D.half(this.ri);
 	var ric = Math.round(this.ri * Hexagon.cos6);
@@ -645,97 +688,97 @@ HexagonFlower.prototype.path = function(can2d, border, segment) {
 	var b2  = C2D.half(border);
 	var bc6 = Math.round(border * Hexagon.cos6);
 	var segs = this.segs;
-	can2d.beginPath();
+	c2d.beginPath();
 	/* inner hex */
 	if (segment === 0 || segment === -2) {
-		can2d.moveTo(pcx - ri  - b,  pcy             );
-		can2d.lineTo(pcx - ri2 - b2, pcy - ric - bc6 );
-		can2d.lineTo(pcx + ri2 + b2, pcy - ric - bc6 );
-		can2d.lineTo(pcx + ri  + b,  pcy             );
-		can2d.lineTo(pcx + ri2 + b2, pcy + ric + bc6 );
-		can2d.lineTo(pcx - ri2 - b2, pcy + ric + bc6 );
-		can2d.lineTo(pcx - ri  - b,  pcy             );	
+		c2d.moveTo(pcx - ri  - b,  pcy             );
+		c2d.lineTo(pcx - ri2 - b2, pcy - ric - bc6 );
+		c2d.lineTo(pcx + ri2 + b2, pcy - ric - bc6 );
+		c2d.lineTo(pcx + ri  + b,  pcy             );
+		c2d.lineTo(pcx + ri2 + b2, pcy + ric + bc6 );
+		c2d.lineTo(pcx - ri2 - b2, pcy + ric + bc6 );
+		c2d.lineTo(pcx - ri  - b,  pcy             );	
 	}
 
 	/* outer hex */
 	if (segment === -1 || segment === -2) {
-		can2d.moveTo(pcx - ro  + b,  pcy             );
-		can2d.lineTo(pcx - ro2 + b2, pcy - roc + bc6 );
-		can2d.lineTo(pcx + ro2 - b2, pcy - roc + bc6 );
-		can2d.lineTo(pcx + ro  - b,  pcy             );
-		can2d.lineTo(pcx + ro2 - b2, pcy + roc - bc6 );
-		can2d.lineTo(pcx - ro2 + b2, pcy + roc - bc6 );
-		can2d.lineTo(pcx - ro  + b,  pcy             );
+		c2d.moveTo(pcx - ro  + b,  pcy             );
+		c2d.lineTo(pcx - ro2 + b2, pcy - roc + bc6 );
+		c2d.lineTo(pcx + ro2 - b2, pcy - roc + bc6 );
+		c2d.lineTo(pcx + ro  - b,  pcy             );
+		c2d.lineTo(pcx + ro2 - b2, pcy + roc - bc6 );
+		c2d.lineTo(pcx - ro2 + b2, pcy + roc - bc6 );
+		c2d.lineTo(pcx - ro  + b,  pcy             );
 	}
 
 	switch (segment) {
 	case -2 :
 		if (segs[1] || segs[6]) {
-			can2d.moveTo(pcx - ri2,  pcy - ric);
-			can2d.lineTo(pcx - ro2,  pcy - roc);
+			c2d.moveTo(pcx - ri2,  pcy - ric);
+			c2d.lineTo(pcx - ro2,  pcy - roc);
 		}
 		if (segs[1] || segs[2]) {
-			can2d.moveTo(pcx + ri2, pcy - ric);
-			can2d.lineTo(pcx + ro2, pcy - roc);
+			c2d.moveTo(pcx + ri2, pcy - ric);
+			c2d.lineTo(pcx + ro2, pcy - roc);
 		}
 		if (segs[2] || segs[3]) {
-			can2d.moveTo(pcx + ri,  pcy);
-			can2d.lineTo(pcx + ro,  pcy);
+			c2d.moveTo(pcx + ri,  pcy);
+			c2d.lineTo(pcx + ro,  pcy);
 		}
 		if (segs[3] || segs[4]) {
-			can2d.moveTo(pcx + ri2, pcy + ric + bc6);
-			can2d.lineTo(pcx + ro2, pcy + roc - bc6);
+			c2d.moveTo(pcx + ri2, pcy + ric + bc6);
+			c2d.lineTo(pcx + ro2, pcy + roc - bc6);
 		}
 		if (segs[4] || segs[5]) {
-			can2d.moveTo(pcx - ri2, pcy + ric + bc6);
-			can2d.lineTo(pcx - ro2, pcy + roc - bc6);
+			c2d.moveTo(pcx - ri2, pcy + ric + bc6);
+			c2d.lineTo(pcx - ro2, pcy + roc - bc6);
 		}
 		if (segs[5] || segs[6]) {
-			can2d.moveTo(pcx - ri, pcy);
-			can2d.lineTo(pcx - ro, pcy);
+			c2d.moveTo(pcx - ri, pcy);
+			c2d.lineTo(pcx - ro, pcy);
 		}
 		break;
 	case 1:
-		can2d.moveTo(pcx - ro2 + b2, pcy - roc + bc6);
-		can2d.lineTo(pcx + ro2 - b2, pcy - roc + bc6);
-		can2d.lineTo(pcx + ri2 + b2, pcy - ric - bc6);
-		can2d.lineTo(pcx - ri2 - b2, pcy - ric - bc6);
-		can2d.lineTo(pcx - ro2 + b2, pcy - roc + bc6);
+		c2d.moveTo(pcx - ro2 + b2, pcy - roc + bc6);
+		c2d.lineTo(pcx + ro2 - b2, pcy - roc + bc6);
+		c2d.lineTo(pcx + ri2 + b2, pcy - ric - bc6);
+		c2d.lineTo(pcx - ri2 - b2, pcy - ric - bc6);
+		c2d.lineTo(pcx - ro2 + b2, pcy - roc + bc6);
 		break;
 	case 2:
-		can2d.moveTo(pcx + ro2 - b2, pcy - roc + bc6);
-		can2d.lineTo(pcx + ro  - b,  pcy);
-		can2d.lineTo(pcx + ri  + b,  pcy);
-		can2d.lineTo(pcx + ri2 + b2, pcy - ric - bc6);
-		can2d.lineTo(pcx + ro2 - b2, pcy - roc + bc6);
+		c2d.moveTo(pcx + ro2 - b2, pcy - roc + bc6);
+		c2d.lineTo(pcx + ro  - b,  pcy);
+		c2d.lineTo(pcx + ri  + b,  pcy);
+		c2d.lineTo(pcx + ri2 + b2, pcy - ric - bc6);
+		c2d.lineTo(pcx + ro2 - b2, pcy - roc + bc6);
 		break;
 	case 3:
-		can2d.moveTo(pcx + ro  - b,  pcy);
-		can2d.lineTo(pcx + ro2 - b2, pcy + roc - bc6);
-		can2d.lineTo(pcx + ri2 + b2, pcy + ric + bc6);
-		can2d.lineTo(pcx + ri  + b,  pcy);
-		can2d.lineTo(pcx + ro  - b,  pcy);
+		c2d.moveTo(pcx + ro  - b,  pcy);
+		c2d.lineTo(pcx + ro2 - b2, pcy + roc - bc6);
+		c2d.lineTo(pcx + ri2 + b2, pcy + ric + bc6);
+		c2d.lineTo(pcx + ri  + b,  pcy);
+		c2d.lineTo(pcx + ro  - b,  pcy);
 		break;
 	case 4:
-		can2d.moveTo(pcx + ro2 - b2, pcy + roc - bc6);
-		can2d.lineTo(pcx - ro2 + b2, pcy + roc - bc6);
-		can2d.lineTo(pcx - ri2 - b2, pcy + ric + bc6);
-		can2d.lineTo(pcx + ri2 + b2, pcy + ric + bc6);
-		can2d.lineTo(pcx + ro2 - b2, pcy + roc - bc6);
+		c2d.moveTo(pcx + ro2 - b2, pcy + roc - bc6);
+		c2d.lineTo(pcx - ro2 + b2, pcy + roc - bc6);
+		c2d.lineTo(pcx - ri2 - b2, pcy + ric + bc6);
+		c2d.lineTo(pcx + ri2 + b2, pcy + ric + bc6);
+		c2d.lineTo(pcx + ro2 - b2, pcy + roc - bc6);
 		break;
 	case 5:
-		can2d.moveTo(pcx - ro2 + b2, pcy + roc - bc6);
-		can2d.lineTo(pcx - ro  + b,  pcy);
-		can2d.lineTo(pcx - ri  - b,  pcy);
-		can2d.lineTo(pcx - ri2 - b2, pcy + ric + bc6);
-		can2d.lineTo(pcx - ro2 + b2, pcy + roc - bc6);
+		c2d.moveTo(pcx - ro2 + b2, pcy + roc - bc6);
+		c2d.lineTo(pcx - ro  + b,  pcy);
+		c2d.lineTo(pcx - ri  - b,  pcy);
+		c2d.lineTo(pcx - ri2 - b2, pcy + ric + bc6);
+		c2d.lineTo(pcx - ro2 + b2, pcy + roc - bc6);
 		break;
 	case 6:
-		can2d.moveTo(pcx - ro  + b,  pcy);
-		can2d.lineTo(pcx - ro2 + b2, pcy - roc + bc6);
-		can2d.lineTo(pcx - ri2 - b2, pcy - ric - bc6);
-		can2d.lineTo(pcx - ri  - b,  pcy);
-		can2d.lineTo(pcx - ro  + b,  pcy);
+		c2d.moveTo(pcx - ro  + b,  pcy);
+		c2d.lineTo(pcx - ro2 + b2, pcy - roc + bc6);
+		c2d.lineTo(pcx - ri2 - b2, pcy - ric - bc6);
+		c2d.lineTo(pcx - ri  - b,  pcy);
+		c2d.lineTo(pcx - ro  + b,  pcy);
 		break;
 	}
 }
@@ -874,17 +917,17 @@ Object.defineProperty(Line.prototype, "zone", {
 /**
 | Draws the path of the line.
 |
-| can2d: Canvas2D to draw upon.
+| c2d: Canvas2D to draw upon.
 */
-Line.prototype.path = function(can2d) {
+Line.prototype.path = function(c2d) {
 	var p1 = this.p1;
 	var p2 = this.p2;
 
-	can2d.beginPath();
+	c2d.beginPath();
 	// todo, multiple lineend types
 	switch(this.p1end) {
 	case 'normal':
-		can2d.moveTo(p1);
+		c2d.moveTo(p1);
 		break;
 	default : 
 		throw new Error('unknown line end');
@@ -892,7 +935,7 @@ Line.prototype.path = function(can2d) {
 	
 	switch(this.p2end) {
 	case 'normal' :
-		can2d.lineTo(p2);
+		c2d.lineTo(p2);
 		break;
 	case 'arrow' :
 		// arrow size
@@ -903,17 +946,17 @@ Line.prototype.path = function(can2d) {
 		var ad = Math.PI/12;
 		// arrow span, the arrow is formed as hexagon piece
 		var ms = 2 / Math.sqrt(3) * as;
-		can2d.lineTo(
+		c2d.lineTo(
 			p2.x - Math.round(ms * Math.cos(d)),
 			p2.y - Math.round(ms * Math.sin(d)));
-		can2d.lineTo(
+		c2d.lineTo(
 			p2.x - Math.round(as * Math.cos(d - ad)), 
 			p2.y - Math.round(as * Math.sin(d - ad)));
-		can2d.lineTo(p2);
-		can2d.lineTo(
+		c2d.lineTo(p2);
+		c2d.lineTo(
 			p2.x - Math.round(as * Math.cos(d + ad)), 
 			p2.y - Math.round(as * Math.sin(d + ad)));
-		can2d.lineTo(
+		c2d.lineTo(
 			p2.x - Math.round(ms * Math.cos(d)),
 			p2.y - Math.round(ms * Math.sin(d)));
 		break;
@@ -926,9 +969,9 @@ Line.prototype.path = function(can2d) {
 /** 
 | Draws the line.
 */
-Line.prototype.draw = function(can2d) {
-	can2d.fills(settings.relation.style.fill, this);
-	can2d.edges(settings.relation.style.edge, this);
+Line.prototype.draw = function(c2d) {
+	c2d.fills(settings.relation.style.fill, this);
+	c2d.edges(settings.relation.style.edge, this);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -959,41 +1002,19 @@ Compass.opposite = function(dir) {
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ,--.          _  .-,--.
- | `-' ,-. ,-. ´ ) ' |   \
- |   . ,-| | |  /  , |   /
- `--'  `-^ ' ' '~` `-^--'
+  ,--.  _  .-,--.
+ | `-' ´ ) ' |   \
+ |   .  /  , |   /
+ `--'  '~` `-^--'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- Meshcrafts Canvas wrapper.
- 
- It enhances the HTML5 Canvas Context by accpeting previously defined immutable graphic
- objects as arguments.
+ Prototype.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/**
-| Can2D()        -or-    creates new Canvas2D
-| Can2D(canvas)  -or-    encloses an existing HTML5 canvas
-| Can2D(width, height)   creates a new Canvas2D and sets its size;
-*/
-function Can2D(a1, a2) {
-	this.otype = "can2d";
-	var ta1 = typeof(a1);
-	if (ta1 === "undefined") {
-		this._canvas = document.createElement("canvas");	
-	} else if (ta1 === "object") {
-		this._canvas = a1;
-	} else {
-		this._canvas = document.createElement("canvas");	
-		this._canvas.width  = a1;
-		this._canvas.height = a2;
-	}
-	this._cx = this._canvas.getContext("2d");
-	this.pan = new Point(0, 0);
-}
 
 /**
 | Returns true if point is in hexagon slice.
+| todo remove
 */
-Can2D.withinHexagonSlice = function(p, r, h) {
+C2D.withinHexagonSlice = function(p, r, h) {
 	var w  = r - (r * Hexagon.cos6 - h) * Hexagon.tan6;
 	var rc = r * Hexagon.cos6;
 	var yh = p.y * Hexagon.tan6;
@@ -1004,7 +1025,7 @@ Can2D.withinHexagonSlice = function(p, r, h) {
 /**
 | Returns true if p is near the line spawned by p1 and p2.
 */
-Can2D.isNearLine = function(p, dis, p1, p2) {
+C2D.isNearLine = function(p, dis, p1, p2) {
 	throw new Error('unimplemented');
 	// todo
 	var dx = (p.x - p1.x);
@@ -1022,7 +1043,7 @@ Can2D.isNearLine = function(p, dis, p1, p2) {
 /**
 | Throws an error if any argument is not an integer.
 */
-Can2D.ensureInteger = function() {
+C2D.ensureInteger = function() {
 	for(var a in arguments) {
 		var arg = arguments[a];
 		if (Math.floor(arg) - arg !== 0) {
@@ -1031,11 +1052,11 @@ Can2D.ensureInteger = function() {
 	}
 }
 
-Object.defineProperty(Can2D.prototype, "width", {
+Object.defineProperty(C2D.prototype, "width", {
 	get: function() { return this._canvas.width; },
 });
 
-Object.defineProperty(Can2D.prototype, "height", {
+Object.defineProperty(C2D.prototype, "height", {
 	get: function() { return this._canvas.height; },
 });
 
@@ -1048,7 +1069,7 @@ Object.defineProperty(Can2D.prototype, "height", {
 | attune(width, height, [resizeW], [resizeH])
 */
 // todo remove resizeW resizeH again if not used.
-Can2D.prototype.attune = function(a1, a2, a3, a4) {
+C2D.prototype.attune = function(a1, a2, a3, a4) {
 	var ta1 = typeof(a1);
 	var c = this._canvas;
 	if (ta1 === "undefined") {
@@ -1082,7 +1103,7 @@ Can2D.prototype.attune = function(a1, a2, a3, a4) {
 | moveTo(point) -or-
 | moveTo(x, y)
 */
-Can2D.prototype.moveTo = function(a1, a2) {
+C2D.prototype.moveTo = function(a1, a2) {
 	var pan = this.pan;
 	var x, y;
 	if (typeof(a1) === "object") {
@@ -1092,8 +1113,8 @@ Can2D.prototype.moveTo = function(a1, a2) {
 		x = a1;
 		y = a2;
 	}
-	Can2D.ensureInteger(x, y);
-	Can2D.ensureInteger(pan.x, pan.y);
+	C2D.ensureInteger(x, y);
+	C2D.ensureInteger(pan.x, pan.y);
 	this._cx.moveTo(x + pan.x + 0.5, y + pan.y + 0.5);
 }
 
@@ -1101,7 +1122,7 @@ Can2D.prototype.moveTo = function(a1, a2) {
 | lineto(point) -or-
 | lineto(x, y)
 */
-Can2D.prototype.lineTo = function(a1, a2) {
+C2D.prototype.lineTo = function(a1, a2) {
 	var pan = this.pan;
 	var x, y;
 	if (typeof(a1) === "object") {
@@ -1111,8 +1132,8 @@ Can2D.prototype.lineTo = function(a1, a2) {
 		x = a1;
 		y = a2;
 	}
-	Can2D.ensureInteger(x, y);
-	Can2D.ensureInteger(pan.x, pan.y);
+	C2D.ensureInteger(x, y);
+	C2D.ensureInteger(pan.x, pan.y);
 	this._cx.lineTo(x + pan.x + 0.5, y + pan.y + 0.5);
 }
 
@@ -1121,7 +1142,7 @@ Can2D.prototype.lineTo = function(a1, a2) {
 | arc(p,    radius, startAngle, endAngle, anticlockwise)   -or-
 | arc(x, y, radius, startAngle, endAngle, anticlockwise)   -or-
 */
-Can2D.prototype.arc = function(a1, a2, a3, a4, a5, a6) {
+C2D.prototype.arc = function(a1, a2, a3, a4, a5, a6) {
 	var pan = this.pan;
 	if (typeof(a1) === "object") {
 		this._cx.arc(a1.x + pan.x + 0.5, a1.y + pan.y + 0.5, a2, a3, a4, a5);
@@ -1133,12 +1154,12 @@ Can2D.prototype.arc = function(a1, a2, a3, a4, a5, a6) {
 /**
 | Draws a frame around the canvas.
 | Called 'path', because it is the general purpose name for object to draw themselves
-| and a can2d has it defined as shortcut to frame itself.
+| and a c2d has it defined as shortcut to frame itself.
 |
 | border: increase/decrease total size
 */
-Can2D.prototype.path = function(self, border) {
-	if (this !== self) throw new Error("Can2D.path: self != this");
+C2D.prototype.path = function(self, border) {
+	if (this !== self) throw new Error("C2D.path: self != this");
 	var cx = this._cx;
 	cx.beginPath(); 
 	cx.rect(
@@ -1149,7 +1170,7 @@ Can2D.prototype.path = function(self, border) {
 /** 
 | Makes a stroke. todo remove
 */
-Can2D.prototype.stroke = function(lineWidth, style) {
+C2D.prototype.stroke = function(lineWidth, style) {
 	var cx = this._cx;
 	cx.lineWidth = lineWidth;
 	cx.strokeStyle = style;
@@ -1159,7 +1180,7 @@ Can2D.prototype.stroke = function(lineWidth, style) {
 /** 
 | Makes a fill. todo remove
 */
-Can2D.prototype.fill = function(style) { 
+C2D.prototype.fill = function(style) { 
 	var cx = this._cx;
 	cx.fillStyle = style;
 	cx.fill();
@@ -1171,7 +1192,7 @@ Can2D.prototype.fill = function(style) {
 | rect(nwx, nwy, w, h)
 | todo remove by rect.path
 */
-Can2D.prototype.rect = function(a1, a2, a3, a4) {
+C2D.prototype.rect = function(a1, a2, a3, a4) {
 	var pan = this.pan;
 	var cx = this._cx;
 	if (typeof(r) === "object") {
@@ -1196,7 +1217,7 @@ Can2D.prototype.rect = function(a1, a2, a3, a4) {
 | fillRect(style, pnw, pse) -or-
 | fillRect(style, nwx, nwy, width, height)
 */
-Can2D.prototype.fillRect = function(style, a1, a2, a3, a4) {
+C2D.prototype.fillRect = function(style, a1, a2, a3, a4) {
 	var pan = this.pan;
 	var cx = this._cx;
 	cx.fillStyle = style;
@@ -1215,12 +1236,12 @@ Can2D.prototype.fillRect = function(style, a1, a2, a3, a4) {
 /**
 | Begins a path 
 */
-Can2D.prototype.beginPath = function() { this._cx.beginPath();  }
+C2D.prototype.beginPath = function() { this._cx.beginPath();  }
 
 /** 
 | Closes a path 
 */
-Can2D.prototype.closePath = function() { this._cx.closePath();  } 
+C2D.prototype.closePath = function() { this._cx.closePath();  } 
 
 /** 
 | Draws an image.
@@ -1228,9 +1249,9 @@ Can2D.prototype.closePath = function() { this._cx.closePath();  }
 | drawImage(image, pnw)   -or-
 | drawImage(image, x, y)
 */
-Can2D.prototype.drawImage = function(image, a1, a2) {
+C2D.prototype.drawImage = function(image, a1, a2) {
 	var pan = this.pan;
-	if (image.otype === "can2d") image = image._canvas;
+	if (image.otype === "c2d") image = image._canvas;
 	if (typeof(a1) === "object") {
 		this._cx.drawImage(image, a1.x + pan.x, a1.y + pan.y);
 		return;
@@ -1243,7 +1264,7 @@ Can2D.prototype.drawImage = function(image, a1, a2) {
 | putImageData(imagedata, p) -or-
 | putImageData(imagedata, x, y)
 */
-Can2D.prototype.putImageData = function(imagedata, a1, a2) {
+C2D.prototype.putImageData = function(imagedata, a1, a2) {
 	var pan = this.pan;
 	if (typeof(p) === "object") {
 		this._cx.putImageData(imagedata, a1.x + pan.x, a2.y + pan.y);
@@ -1257,7 +1278,7 @@ Can2D.prototype.putImageData = function(imagedata, a1, a2) {
 | getImageData(pnw, pse) -or-
 | getImageData(x1, y1, x2, y2)
 */
-Can2D.prototype.getImageData = function(a1, a2, a3, a4) {
+C2D.prototype.getImageData = function(a1, a2, a3, a4) {
 	var pan = this.pan;
 	if (typeof(p) === "object") {
 		switch (a1.otype) {
@@ -1275,7 +1296,7 @@ Can2D.prototype.getImageData = function(a1, a2, a3, a4) {
 /**
 | Returns a HTML5 color style for a meshcraft style notation.
 */
-Can2D.prototype._colorStyle = function(style, shape) {
+C2D.prototype._colorStyle = function(style, shape) {
 	if (style.substring) {
 		return style;
 	} else if (!style.gradient) {
@@ -1324,7 +1345,7 @@ Can2D.prototype._colorStyle = function(style, shape) {
 | style: the style formated in meshcraft style notation.
 | shape: an object which has path() defined 
 */
-Can2D.prototype.fills = function(style, shape, a1, a2, a3) {
+C2D.prototype.fills = function(style, shape, a1, a2, a3) {
 	var cx = this._cx;
 	shape.path(this, 0, a1, a2, a3);
 	cx.fillStyle = this._colorStyle(style, shape);
@@ -1337,7 +1358,7 @@ Can2D.prototype.fills = function(style, shape, a1, a2, a3) {
 | style: the style formated in meshcraft style notation.
 | shape: an object which has path() defined
 */
-Can2D.prototype._edge = function(style, shape, a1, a2, a3) {
+C2D.prototype._edge = function(style, shape, a1, a2, a3) {
 	var cx = this._cx;
 	shape.path(this, style.border, a1, a2, a3);
 	cx.strokeStyle = this._colorStyle(style.color, shape);
@@ -1351,7 +1372,7 @@ Can2D.prototype._edge = function(style, shape, a1, a2, a3) {
 | style: the style formated in meshcraft style notation.
 | shape: an object which has path() defined
 */
-Can2D.prototype.edges = function(style, shape, a1, a2, a3) {
+C2D.prototype.edges = function(style, shape, a1, a2, a3) {
 	var cx = this._cx;
 	if (style instanceof Array) {
 		for(var i = 0; i < style.length; i++) {
@@ -1362,22 +1383,24 @@ Can2D.prototype.edges = function(style, shape, a1, a2, a3) {
 	}
 }
 
-/* fillText */
-Can2D.prototype.fillText = function(text, a1, a2) {
+/**
+| Draws some text.
+*/
+C2D.prototype.fillText = function(text, a1, a2) {
 	if (typeof(a1) === "object") {
 		return this._cx.fillText(text, a1.x, a1.y);
 	}
 	return this._cx.fillText(text, a1, a2);
 }
 
-/* draws a filltext rotated by phi 
- *
- * test ...  text to draw
- * p    ...  center point of rotation
- * phi  ...  rotation
- * rad  ...  distance from center
- */
-Can2D.prototype.fillRotateText = function(text, p, phi, rad) {
+/**
+| Draws some text rotated by phi 
+| text: text to draw
+| p: center point of rotation // todo pc
+| phi: rotation angle
+| rad:  distance from center // todo rename
+*/
+C2D.prototype.fillRotateText = function(text, p, phi, rad) {
 	var cx = this._cx;
 	var t1 = Math.cos(phi);
 	var t2 = Math.sin(phi);
@@ -1397,12 +1420,13 @@ Can2D.prototype.fillRotateText = function(text, p, phi, rad) {
 }
 
 	
-/* fontStyle(font, fill)                      -or-
- * fontStyle(font, fill, align, baseline)
- *
- * sets the fontStyle, fillStyle, textAlign, textBaseline  
- */
-Can2D.prototype.fontStyle = function(font, fill, align, baseline) {
+/**
+| Sets the fontStyle, fillStyle, textAlign, textBaseline.
+|
+| fontStyle(font, fill)                      -or-
+| fontStyle(font, fill, align, baseline)
+*/
+C2D.prototype.fontStyle = function(font, fill, align, baseline) {
 	var cx = this._cx;
 	cx.font         = font;
 	cx.fillStyle    = fill;
@@ -1415,7 +1439,7 @@ Can2D.prototype.fontStyle = function(font, fill, align, baseline) {
  */
 // todo remove!
 /* makes a hexagon path */
-Can2D.prototype.makeHexagon = function(p, r) {
+/*C2D.prototype.makeHexagon = function(p, r) {
 	var x = p.x;
 	var y = p.y;
 	var r2 = C2D.half(r);
@@ -1430,4 +1454,4 @@ Can2D.prototype.makeHexagon = function(p, r) {
 	this.lineTo(x - r, y);
 	this.closePath();
 }
-
+*/

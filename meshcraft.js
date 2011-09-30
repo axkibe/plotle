@@ -20,7 +20,16 @@
 
 "use strict";
 
+/**
+| +++ Shortcuts  +++ 
+*/
+var R = Math.round;
+var abs = Math.abs;
+var max = Math.max;
+var min = Math.min;
+var half     = C2D.half;
 var subclass = C2D.subclass;
+var Measure  = C2D.Measure;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .---.     .  .
@@ -70,6 +79,9 @@ var settings = {
 				{ border: 2, width : 1, color : "rgb(255, 188, 87)" },
 				{ border: 1, width : 1, color : "black" },
 			],
+			highlight : [
+				{ border: 0, width: 3, color: 'rgba(255, 183, 15, 0.5)' },
+			],
 		},
 
 		cornerRadius : 6,
@@ -78,7 +90,10 @@ var settings = {
 	label : {
 		style : {
 			edge : [
-				{ border: 0, width : 0.2, color : 'rgba(200, 100, 0, 0.5)' },
+				{ border: 0, width: 0.2, color: 'rgba(200, 100, 0, 0.5)' },
+			],
+			highlight : [
+				{ border: 0, width: 3, color: 'rgba(255, 183, 15, 0.5)' },
 			],
 		},
 	},
@@ -193,6 +208,9 @@ var settings = {
 			labeledge : [
 				{ border: 0, width : 0.2, color : 'rgba(200, 100, 0, 0.5)' },
 			],
+			highlight : [
+				{ border: 0, width: 3, color: 'rgba(255, 183, 15, 0.5)' },
+			],
 		},
 
 		// scale down relation text
@@ -226,12 +244,6 @@ if (!Object.freeze) {
 	Object.freeze = function(obj) {};
 }
 
-/* +++ Shortcuts  +++ */
-var R = Math.round;
-var abs = Math.abs;
-var max = Math.max;
-var min = Math.min;
-var half = function(v) { return Math.round(v / 2); }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .-,--.
@@ -715,7 +727,7 @@ function Editor() {
 | Draws or erases the caret.
 */
 Editor.prototype.updateCaret = function() {
-	var c2d = System.can2d;
+	var c2d = System.c2d;
 	var caret = this.caret;
 	if (caret.save) {
 		/* erase the old caret */
@@ -1022,7 +1034,7 @@ _init : function() {
 	var canvas = this.canvas = document.getElementById("canvas");
 	canvas.width  = window.innerWidth - 1;
 	canvas.height = window.innerHeight - 1;
-	this.can2d = new Can2D(canvas);
+	this.c2d = new C2D(canvas);
 	Measure.init();
 	
 	/* the space that currently is displayed */
@@ -1362,7 +1374,7 @@ function Hexmenu(p, radi, rado, labels) {
 }
 
 Hexmenu.prototype.draw = function() {
-	var c2d = System.can2d; // todo?
+	var c2d = System.c2d; // todo?
 
 	c2d.fills(settings.floatmenu.style.fill, this.hflower, -1);
 	if (this.mousepos > 0) {
@@ -1505,7 +1517,7 @@ Edgemenu.prototype.path = function(c2d, border, section) {
 | Draws the edgemenu.
 */
 Edgemenu.prototype.draw = function() {
-	var c2d = System.can2d;
+	var c2d = System.c2d;
 	var xm  = R(c2d.width / 2);
 	var w2  = R(this.width / 2);
 
@@ -1539,7 +1551,7 @@ Edgemenu.prototype.draw = function() {
 | todo rename
 */
 Edgemenu.prototype._getMousepos = function(p) {
-	var c2d = System.can2d;
+	var c2d = System.c2d;
 	if (!this.pnw || !this.pse) return this.mousepos = -1;
 	if (p.y < this.pnw.y) return this.mousepos = -1;
 	var mx = R(c2d.width / 2);
@@ -1609,9 +1621,9 @@ function Space() {
 	};
 	
 	/* panning offset */
-	this.can2d = new Can2D(System.canvas);
+	this.c2d = new C2D(System.canvas);
 	this.pan = new Point(0, 0);
-	this.can2d.pan = this.pan;
+	this.c2d.pan = this.pan;
 	
 	this.zoom = 1;
 }
@@ -1622,15 +1634,15 @@ Space.prototype.redraw = function() {
 	var zidx  = System.repository.zidx;
 	var editor = System.editor;
 	var canvas = System.canvas;
-	var can2d = this.can2d;
+	var c2d = this.c2d;
 	editor.caret.save = null;
 	this.selection = editor.selection;
 	this.canvas = System.canvas;
-	can2d.attune();
+	c2d.attune();
 
 	for(var i = zidx.length - 1; i >= 0; i--) {
 		var it = items[zidx[i]]; // todo shorten
-		it.draw(can2d, this.selection);
+		it.draw(c2d, this.selection);
 	}
 	if (this.focus) this.focus.drawHandles(this);
 	
@@ -1646,8 +1658,8 @@ Space.prototype.redraw = function() {
 		var arrow = Line.connect(
 			ia.item.zone, 'normal', 
 			(ia.item2 && ia.item2.zone) || ia.smp , 'arrow');
-		if (ia.item2) ia.item2.highlight(can2d);
-		arrow.draw(can2d);
+		if (ia.item2) ia.item2.highlight(c2d);
+		arrow.draw(c2d);
 	}
 	this.edgemenu.draw();
 	editor.updateCaret();
@@ -1899,7 +1911,7 @@ Space.prototype.dragmove = function(p, shift, ctrl) {
 	
 	switch(iaction.act) {
 	case ACT.PAN :
-		this.pan = this.can2d.pan = p.sub(iaction.sp);
+		this.pan = this.c2d.pan = p.sub(iaction.sp);
 		System.repository.savePan(this.pan);
 		this.redraw();
 		return;
@@ -2422,7 +2434,7 @@ subclass(Paragraph, Treenode);
 function Paragraph(text)
 {
 	Treenode.call(this, "paragraph");
-	this._pcan2d = new Can2D(0 ,0);
+	this._pc2d = new C2D(0 ,0);
 	this._canvasActual = false; // todo rename
 	this.append(new Textnode(text));
 	this._flowWidth = null;	
@@ -2552,9 +2564,11 @@ Object.defineProperty(Paragraph.prototype, "flowWidth", {
 	}
 });
 
-/* draws the paragraph in its cache and returns it */
-Paragraph.prototype.getCan2D = function() {
-	var c2d = this._pcan2d;
+/**
+| Draws the paragraph in its cache and returns it.
+*/
+Paragraph.prototype.getC2D = function() {
+	var c2d = this._pc2d;
 	if (this._canvasActual) {
 		return c2d;
 	}
@@ -2772,7 +2786,7 @@ DTree.prototype.draw = function(c2d, select, offsetX, offsetY, scrolly) {
 	
 	// draws tha paragraphs 
 	for(var para = this.first; para; para = para.next) {
-		var pc2d = para.getCan2D();
+		var pc2d = para.getC2D();
 		para.p = new Point(offsetX, y);
 		if (pc2d.width > 0 && pc2d.height > 0) {
 			c2d.drawImage(pc2d, offsetX, y - scrolly);
@@ -2907,7 +2921,7 @@ Item.prototype.newItemMenu = function(pan) {
 /* todo xxx */
 Item.prototype.withinItemMenu = function(p) {
 	var hzone = this.handlezone; 
-	return Can2D.withinHexagonSlice(p.sub(hzone.pnw), 
+	return C2D.withinHexagonSlice(p.sub(hzone.pnw), 
 		settings.itemmenu.innerRadius, 
 		settings.itemmenu.slice.height);
 }
@@ -2956,7 +2970,7 @@ Item.prototype.checkItemCompass = function(p) {
 | Draws the handles of an item (resize, itemmenu) 
 */
 Item.prototype.drawHandles = function(space) {
-	var c2d = space.can2d;
+	var c2d = space.c2d;
 	var ds = settings.handle.distance; 
 	var hs = settings.handle.size;
 	var hs2 = hs / 2;
@@ -3022,7 +3036,7 @@ function Note(id, zone, dtree) {
 	dtree.parent = this;
 	this.silhoutte = new RoundRect(
 		Point.zero, new Point(zone.width, zone.height), settings.note.cornerRadius); 
-	this._bcan2d = new Can2D();
+	this._bc2d = new C2D();
 	this.textBorder = settings.note.textBorder;
 	this._canvasActual = false;
 	this._scrollx = -8833;
@@ -3060,14 +3074,12 @@ Note.prototype.removed = function() {
 	/* nothing */
 }
 
-/** 
-| Highlets the note. 
-*/
+/**
+| Highlights the  note
+*/		
 // todo round rects
 Note.prototype.highlight = function(c2d) {
-	c2d.beginPath();
-	c2d.rect(this.zone);
-	c2d.stroke(3, "rgba(255, 183, 15, 0.5)"); // todo settings
+	c2d.edges(settings.note.style.highlight, this.zone);
 }
 
 /* turns the note into a string */
@@ -3216,15 +3228,15 @@ Object.defineProperty(Note.prototype, "scrolly", {
 /**
 | Draws the note.
 |
-| can2d: canvas-2d to draw upon.
+| c2d: canvas-2d to draw upon.
 | selection: current selection to highlight.
 */
-Note.prototype.draw = function(can2d, selection) {
-	var bc2d  = this._bcan2d;
+Note.prototype.draw = function(c2d, selection) {
+	var bc2d  = this._bc2d;
 	var dtree = this.dtree;
 	if (this._canvasActual) {
 		/* buffer hit */
-		can2d.drawImage(bc2d, this.zone.pnw);
+		c2d.drawImage(bc2d, this.zone.pnw);
 		return;
 	}
 
@@ -3327,7 +3339,7 @@ Note.prototype.draw = function(can2d, selection) {
 	bc2d.edges(settings.note.style.edge, this.silhoutte);
 	
 	this._canvasActual = true;
-	can2d.drawImage(bc2d, this.zone.pnw);
+	c2d.drawImage(bc2d, this.zone.pnw);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -3351,7 +3363,7 @@ function Label(id, zone, dtree) {
 	this.handles = Label.handles;
 	this.setZone(zone, 'c'); 
 	/* buffer canvas 2D */
-	this._bc2d = new Can2D();  
+	this._bc2d = new C2D();  
 	this._canvasActual = false;  // todo rename
 	if (typeof(this.zone.pse.x) === "undefined") throw new Error("Invalid label"); // todo remove 
 	System.repository.addItem(this, true);
@@ -3441,11 +3453,11 @@ Label.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 	}
 }
 
-/* highlets the label. */		
+/**
+| Highlights the label.
+*/		
 Label.prototype.highlight = function(c2d) {
-	c2d.beginPath();
-	c2d.rect(this.zone);
-	c2d.stroke(3, "rgba(255, 183, 15, 0.5)"); // todo settings
+	c2d.edges(settings.label.style.highlight, this.zone);
 }
 
 /**
@@ -3533,15 +3545,15 @@ Label.prototype.listen = function() {
 /**
 | Draws the Label.
 |
-| can2d:  Canvas2D to draw upon.
+| c2d:  Canvas2D to draw upon.
 | selection: Selection to highlight.
 */
-Label.prototype.draw = function(can2d, selection) {
+Label.prototype.draw = function(c2d, selection) {
 	var bc2d = this._bc2d;
 	var dtree = this.dtree;
 	if (this._canvasActual) {
 		/* buffer hit */
-		can2d.drawImage(bc2d, this.zone.pnw);
+		c2d.drawImage(bc2d, this.zone.pnw);
 		return;
 	}
 	bc2d.attune(this.zone);
@@ -3550,7 +3562,7 @@ Label.prototype.draw = function(can2d, selection) {
 	// draws the border
 	bc2d.edges(settings.label.style.edge, bc2d);
 	this._canvasActual = true;
-	can2d.drawImage(bc2d, this.zone.pnw);
+	c2d.drawImage(bc2d, this.zone.pnw);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -3578,7 +3590,7 @@ function Relation(id, i1id, i2id, textZone, dtree) {
 	dtree.flowWidth = -1;
 	dtree.pre       = true;
 	this.setTextZone(textZone);
-	this._bc2d = new Can2D();
+	this._bc2d = new C2D();
 	this._canvasActual = false;
 	
 	System.repository.addItem(this, true);
@@ -3638,10 +3650,10 @@ Relation.create = function(item1, item2) {
 		var ty = R(my - mcanvas.height / 2) - 2;
 		var bx = R(mx + mcanvas.width  / 2) + 2;
 		var by = R(my + mcanvas.height / 2) + 2;
-		can2d.drawImage(mcanvas, tx, ty);
-		can2d.rect(tx, ty, mcanvas.width + 4, mcanvas.height + 4);
-		can2d.stroke(1, "rgba(255, 127, 0, 0.4)"); // todo settings
-		can2d.beginPath();
+		c2d.drawImage(mcanvas, tx, ty);
+		c2d.rect(tx, ty, mcanvas.width + 4, mcanvas.height + 4);
+		c2d.stroke(1, "rgba(255, 127, 0, 0.4)"); // todo settings
+		c2d.beginPath();
 
 		// calculates intersections
 		var isp1, isp2;	
@@ -3675,10 +3687,10 @@ Relation.create = function(item1, item2) {
 			}
 		}
 
-		can2d.moveTo(p1);
-		can2d.lineTo(isp1);
-		can2d.stroke(3, "rgba(255, 225, 80, 0.5)"); // todo settings
-		can2d.stroke(1, "rgba(200, 100, 0, 0.8)");  // todo settings
+		c2d.moveTo(p1);
+		c2d.lineTo(isp1);
+		c2d.stroke(3, "rgba(255, 225, 80, 0.5)"); // todo settings
+		c2d.stroke(1, "rgba(200, 100, 0, 0.8)");  // todo settings
 		
 		po = isp2;
 	} else {
@@ -3699,6 +3711,13 @@ Object.defineProperty(Relation.prototype, "handlezone", {
 Relation.prototype.removed = function() {
 	System.repository.removeOnlook(this.id, this.i1id);
 	System.repository.removeOnlook(this.id, this.i2id);	
+}
+
+/**
+| Highlights the label.
+*/		
+Relation.prototype.highlight = function(c2d) {
+	c2d.edges(settings.relation.style.highlight, this.textZone);
 }
 
 /**
@@ -3858,7 +3877,7 @@ Relation.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 	}
 	switch (txe) {
 	case TXE.HOVER : 
-		if (Can2D.isNearLine(p, dis, arrow.p1, arrow.p1)) {
+		if (C2D.isNearLine(p, dis, arrow.p1, arrow.p1)) {
 			System.setCursor("move");
 			return TXR.HIT;
 		} else {
@@ -3964,7 +3983,7 @@ Relation.prototype.resize = function(width, height) {
 /**
 | Draws the item.
 */
-Relation.prototype.draw = function(can2d, selection) {
+Relation.prototype.draw = function(c2d, selection) {
 	var bc2d = this._bc2d;
 	var dtree = this.dtree;
 	var it1 = System.repository.items[this.i1id]; // todo funcall
@@ -3978,12 +3997,12 @@ Relation.prototype.draw = function(can2d, selection) {
 	var l1 = Line.connect(it1.zone,     'normal', this.textZone, 'normal');
 	var l2 = Line.connect(this.textZone,'normal', it2.zone,      'arrow');
 	// todo combine into one call;
-	can2d.fills(settings.relation.style.fill, l1);
-	can2d.edges(settings.relation.style.edge, l1);
-	can2d.fills(settings.relation.style.fill, l2); 
-	can2d.edges(settings.relation.style.edge, l2);
+	c2d.fills(settings.relation.style.fill, l1);
+	c2d.edges(settings.relation.style.edge, l1);
+	c2d.fills(settings.relation.style.fill, l2); 
+	c2d.edges(settings.relation.style.edge, l2);
 	// draws text 
-	can2d.drawImage(bc2d, this.textZone.pnw);
+	c2d.drawImage(bc2d, this.textZone.pnw);
 }
 
 /**
@@ -4217,7 +4236,7 @@ Repository.prototype.loadLocalStorage = function() {
 		return;
 	}
 	
-	System.space.pan = System.space.can2d.pan = this._getPan(); // todo space setFunction
+	System.space.pan = System.space.c2d.pan = this._getPan(); // todo space setFunction
 	var zjs = window.localStorage.getItem("zidx");
 	if (!zjs) {
 		console.log("no repository found. (no zidx)");
@@ -4345,7 +4364,7 @@ Repository.prototype.importFromJString = function(str) {
 	this._noonlooks = false;
 
 	System.space.setFoci(null);
-	System.space.pan = System.space.can2d.pan = js.pan ? Point.jnew(js.pan) : new Point(0, 0); // todo
+	System.space.pan = System.space.c2d.pan = js.pan ? Point.jnew(js.pan) : new Point(0, 0); // todo
 	this.savePan(System.space.pan);
 }
 
