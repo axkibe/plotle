@@ -21,10 +21,8 @@
 |  C2D
 |
 |  Compass
-|  Point
 |  Line
 |  Measure
-|  Rect
 |  RoundRect
 |  Hexagon
 |  HexagonSlice
@@ -55,12 +53,14 @@
 */
 function C2D(a1, a2) {
 	var ta1 = typeof(a1);
-	// todo switch
-	if (ta1 === "undefined") {
-		this._canvas = document.createElement("canvas");	
-	} else if (ta1 === "object") {
+	switch (ta1) {
+	case 'undefined' :
+		this._canvas = document.createElement("canvas");
+		break;
+	case 'object' :
 		this._canvas = a1;
-	} else {
+		break;
+	default :
 		this._canvas = document.createElement("canvas");	
 		this._canvas.width  = a1;
 		this._canvas.height = a2;
@@ -254,28 +254,28 @@ C2D.Point.prototype.sub = function(a1, a2) {
 | pnw: point to north west.
 | pse: point to south east.
 */
-function Rect(pnw, pse) {
+C2D.Rect = function(pnw, pse) {
 	this.pnw = pnw;
 	this.pse = pse;
 	if (!pnw || !pse || pnw.x > pse.x || pnw.y > pse.y) { 
 		throw new Error("not a rectangle."); 
 	}
 	// freeze if not a father object
-	if (this.constructor == Rect) Object.freeze(this);
+	if (this.constructor == C2D.Rect) Object.freeze(this);
 }
 
 /** 
 | Creates a point from json 
 */
-Rect.jnew = function(js) {
+C2D.Rect.jnew = function(js) {
 	// todo remove p1p2
-	return new Rect(C2D.Point.jnew(js.pnw || js.p1), C2D.Point.jnew(js.pse || js.p2));
+	return new C2D.Rect(C2D.Point.jnew(js.pnw || js.p1), C2D.Point.jnew(js.pse || js.p2));
 }
 
 /** 
 | Returns a json object for this rect 
 */
-Rect.prototype.jsonfy = function() {
+C2D.Rect.prototype.jsonfy = function() {
 	return { pnw: this.pnw.jsonfy(), pse: this.pse.jsonfy() };
 }
 
@@ -285,8 +285,8 @@ Rect.prototype.jsonfy = function() {
 | add(point)   -or-
 | add(x, y)  
 */
-Rect.prototype.add = function(a1, a2) {
-	return new Rect(this.pnw.add(a1, a2), this.pse.add(a1, a2));
+C2D.Rect.prototype.add = function(a1, a2) {
+	return new C2D.Rect(this.pnw.add(a1, a2), this.pse.add(a1, a2));
 }
 
 /**
@@ -295,14 +295,14 @@ Rect.prototype.add = function(a1, a2) {
 | sub(point)   -or-
 | sub(x, y)  
 */
-Rect.prototype.sub = function(a1, a2) {
-	return new Rect(this.pnw.sub(a1, a2), this.pse.sub(a1, a2)); 
+C2D.Rect.prototype.sub = function(a1, a2) {
+	return new C2D.Rect(this.pnw.sub(a1, a2), this.pse.sub(a1, a2)); 
 }
 
 /** 
 | Returns true if point is within this rect.
 */
-Rect.prototype.within = function(p) {
+C2D.Rect.prototype.within = function(p) {
 	return p.x >= this.pnw.x && p.y >= this.pnw.y && 
 	       p.x <= this.pse.x && p.y <= this.pse.y;
 }
@@ -310,7 +310,7 @@ Rect.prototype.within = function(p) {
 /**
 | Draws the rect.
 */
-Rect.prototype.path = function(c2d, border) {
+C2D.Rect.prototype.path = function(c2d, border) {
 	c2d.beginPath();
 	c2d.moveTo(this.pnw.x + border, this.pnw.y + border);
 	c2d.lineTo(this.pse.x - border, this.pnw.y + border);
@@ -326,7 +326,7 @@ Rect.prototype.path = function(c2d, border) {
 | height: new height
 | align:  compass direction which point will be identical to this rectangle.
 */
-Rect.prototype.resize = function(width, height, align) {
+C2D.Rect.prototype.resize = function(width, height, align) {
 	if (this.width === width && this.height === height) return this;
 	var pnw, pse;
 	switch(align) {
@@ -417,38 +417,38 @@ Rect.prototype.resize = function(width, height, align) {
 	default : 
 		throw new Error('invalid align: '+align);
 	}
-	return new Rect(pnw, pse);
+	return new C2D.Rect(pnw, pse);
 }
 
 /** 
 | Returns a rectangle with same size at position at p|x/y).
 */
-Rect.prototype.moveto = function(a1, a2) {
+C2D.Rect.prototype.moveto = function(a1, a2) {
 	if (typeof(a1) !== 'object') a1 = new C2D.Point(a1, a2);
-	return new Rect(a1, a1.add(this.width, this.height));
+	return new C2D.Rect(a1, a1.add(this.width, this.height));
 }
 
 /** 
 | Returns true if this rectangle is like another 
 */
-Rect.prototype.eq = function(r) {
+C2D.Rect.prototype.eq = function(r) {
 	return this.pnw.eq(r.pnw) && this.pse.eq(r.pse);
 }
 
-Object.defineProperty(Rect.prototype, "width", {
+Object.defineProperty(C2D.Rect.prototype, "width", {
 	get: function()  { return this.pse.x - this.pnw.x; }
 });
 
-Object.defineProperty(Rect.prototype, "height", {
+Object.defineProperty(C2D.Rect.prototype, "height", {
 	get: function()  { return this.pse.y - this.pnw.y; }
 });
 
 // todo replace by "pc", point center
-Object.defineProperty(Rect.prototype, "mx", {
+Object.defineProperty(C2D.Rect.prototype, "mx", {
 	get: function() { return C2D.half(this.pnw.x + this.pse.x); }
 });
 
-Object.defineProperty(Rect.prototype, "my", {
+Object.defineProperty(C2D.Rect.prototype, "my", {
 	get: function() { return C2D.half(this.pnw.y + this.pse.y); }
 });
 
@@ -461,7 +461,7 @@ Object.defineProperty(Rect.prototype, "my", {
  A rectangle in a 2D plane with rounded corners
  Rectangles are immutable objects.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-C2D.subclass(RoundRect, Rect);
+C2D.subclass(RoundRect, C2D.Rect);
 
 /**
 | Constructor.
@@ -470,10 +470,10 @@ C2D.subclass(RoundRect, Rect);
 */
 function RoundRect(a1, a2, a3) {
 	if (a1.constructor === C2D.Point) {
-		Rect.call(this, a1, a2);
+		C2D.Rect.call(this, a1, a2);
 		this.crad = a3;
 	} else {
-		Rect.call(this, a1.pnw, a1.pse);
+		C2D.Rect.call(this, a1.pnw, a1.pse);
 		this.crad = a2;
 	}
 	Object.freeze(this);
@@ -844,7 +844,7 @@ Line.connect = function(shape1, end1, shape2, end2) {
 	if (!shape1 || !shape2) {
 		throw new Error('error');
 	}
-	if (shape1.constructor === Rect && shape2.constructor === C2D.Point) {
+	if (shape1.constructor === C2D.Rect && shape2.constructor === C2D.Point) {
 		var p2 = shape2;
 		var z1 = shape1;
 		var p1;
@@ -858,7 +858,7 @@ Line.connect = function(shape1, end1, shape2, end2) {
 		}
 		return new Line(p1, end1, p2, end2);
 	} 
-	if (shape1.constructor === Rect && shape2.constructor === Rect) {
+	if (shape1.constructor === C2D.Rect && shape2.constructor === C2D.Rect) {
 		var z1 = shape1;
 		var z2 = shape2;
 		var x1, y1, x2, y2;
@@ -899,10 +899,10 @@ Object.defineProperty(Line.prototype, "zone", {
 	get: function() { 
 		if (this._zone) return this._zone;
 		if (this.p1.x <= this.p2.x && this.p1.y <= this.p2.y) 
-			return new Rect(this.p1, this.p2); 
+			return new C2D.Rect(this.p1, this.p2); 
 		if (this.p1.x >  this.p2.x && this.p1.y >  this.p2.y) 
-			return new Rect(this.p2, this.p1); 
-		return new Rect(
+			return new C2D.Rect(this.p2, this.p1); 
+		return new C2D.Rect(
 			new Point(Math.min(this.p1.x, this.p2.x), Math.min(this.p1.y, this.p2.y)),
 			new Point(Math.max(this.p1.x, this.p2.x), Math.max(this.p1.y, this.p2.y)));
 	},
@@ -1190,7 +1190,7 @@ C2D.prototype.rect = function(a1, a2, a3, a4) {
 	var pan = this.pan;
 	var cx = this._cx;
 	if (typeof(r) === "object") {
-		if (r.constructor === Rect)
+		if (r.constructor === C2D.Rect)
 			return this._cx.rect(
 				a1.pnw.x + pan.x + 0.5, a1.pnw.y + pan.y + 0.5, 
 				a1.width, a1.height);
@@ -1213,7 +1213,7 @@ C2D.prototype.fillRect = function(style, a1, a2, a3, a4) {
 	var cx = this._cx;
 	cx.fillStyle = style;
 	if (typeof(p) === "object") {
-		if (a1.constructor === Rect) 
+		if (a1.constructor === C2D.Rect) 
 			return this._cx.fillRect(a1.pnw.x, a1.pnw.y, a1.pse.x, a1.pse.y);
 		if (a1.constructor === C2D.Point) 
 			return this._cx.fillRect(a1.x, a1.y, a2.x, a2.y);
@@ -1270,7 +1270,7 @@ C2D.prototype.putImageData = function(imagedata, a1, a2) {
 C2D.prototype.getImageData = function(a1, a2, a3, a4) {
 	var pan = this.pan;
 	if (typeof(p) === 'object') {
-		if (a1.constructor === Rect) 
+		if (a1.constructor === C2D.Rect) 
 			return this._cx.getImageData(a1.pnw.x, a1.pnw.y, a1.pse.x, a1.pse.y);
 		if (a1.constructor === C2D.Point) 
 			return this._cx.getImageData(a1.x, a1.y, a2.x, a2.y);

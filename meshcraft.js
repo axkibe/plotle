@@ -23,14 +23,16 @@
 /**
 | +++ Shortcuts  +++ 
 */
-var R = Math.round;
+var R   = Math.round;
 var abs = Math.abs;
 var max = Math.max;
 var min = Math.min;
+
 var half     = C2D.half;
 var subclass = C2D.subclass;
 var Measure  = C2D.Measure;
 var Point    = C2D.Point;
+var Rect     = C2D.Rect;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .---.     .  .
