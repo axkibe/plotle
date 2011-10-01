@@ -54,7 +54,6 @@
 | C2D(width, height)   creates a new Canvas2D and sets its size;
 */
 function C2D(a1, a2) {
-	this.otype = "c2d"; // todo remove otypes
 	var ta1 = typeof(a1);
 	// todo switch
 	if (ta1 === "undefined") {
@@ -167,28 +166,27 @@ Object.defineProperty(C2D.Measure, "font", {
 | Point(x, y) or
 | Point(point)
 */
-function Point(p, y) {
+C2D.Point = function(p, y) {
 	if (arguments.length === 1) {
 		this.x = p.x;
 		this.y = p.y;
 	}
 	this.x = p;
 	this.y = y;
-	this.otype = "point";
 	Object.freeze(this);
 }
 
 /**
 | Shortcut for often used point at 0/0.
 */
-Point.zero = new Point(0, 0);
+C2D.Point.zero = new C2D.Point(0, 0);
 
 /* Creates a point from json */
-Point.jnew = function(js) {
+C2D.Point.jnew = function(js) {
 	if (typeof(js.x) !== "number" || typeof(js.y) !== "number") {
 		throw new Error("Expected a number in JSON, but isn't");
 	}
-	return new Point(js.x, js.y);
+	return new C2D.Point(js.x, js.y);
 }
 
 /**
@@ -199,25 +197,25 @@ Point.jnew = function(js) {
 |
 | Point.renew(x, y, p1, p2, p3, ...)
 */
-Point.renew = function(x, y) {
+C2D.Point.renew = function(x, y) {
 	for(var a = 2; a < arguments.length; a++) {
 		var p = arguments[a];
 		if (p.x === x && p.y === y) return p;
 	}
-	return new Point(x, y);
+	return new C2D.Point(x, y);
 }
 
 /** 
 | Returns a json object for this point.
 */
-Point.prototype.jsonfy = function() {
+C2D.Point.prototype.jsonfy = function() {
 	return { x: this.x, y: this.y };
 }
 
 /**
 | Returns true if this point is equal to another.
 */
-Point.prototype.eq = function(px, y) {
+C2D.Point.prototype.eq = function(px, y) {
 	return arguments.length === 1 ? 
 		this.x === px.x && this.y === px.y :
 		this.x === px   && this.y ===    y;
@@ -226,19 +224,19 @@ Point.prototype.eq = function(px, y) {
 /** 
 | Adds two points or x/y values, returns a new point.
 */
-Point.prototype.add = function(a1, a2) {
+C2D.Point.prototype.add = function(a1, a2) {
 	return (typeof(a1) === "object" ?
-		new Point(this.x + a1.x, this.y + a1.y) :
-		new Point(this.x + a1,   this.y + a2));
+		new C2D.Point(this.x + a1.x, this.y + a1.y) :
+		new C2D.Point(this.x + a1,   this.y + a2));
 }
 
 /** 
 | Subtracts a points (or x/y from this), returns new point 
 */
-Point.prototype.sub = function(a1, a2) {
+C2D.Point.prototype.sub = function(a1, a2) {
 	return (typeof(a1) === "object" ?
-		new Point(this.x - a1.x, this.y - a1.y) :
-		new Point(this.x - a1,   this.y - a2));
+		new C2D.Point(this.x - a1.x, this.y - a1.y) :
+		new C2D.Point(this.x - a1,   this.y - a2));
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -262,7 +260,6 @@ function Rect(pnw, pse) {
 	if (!pnw || !pse || pnw.x > pse.x || pnw.y > pse.y) { 
 		throw new Error("not a rectangle."); 
 	}
-	this.otype = "rect";
 	// freeze if not a father object
 	if (this.constructor == Rect) Object.freeze(this);
 }
@@ -272,7 +269,7 @@ function Rect(pnw, pse) {
 */
 Rect.jnew = function(js) {
 	// todo remove p1p2
-	return new Rect(Point.jnew(js.pnw || js.p1), Point.jnew(js.pse || js.p2));
+	return new Rect(C2D.Point.jnew(js.pnw || js.p1), C2D.Point.jnew(js.pse || js.p2));
 }
 
 /** 
@@ -334,85 +331,85 @@ Rect.prototype.resize = function(width, height, align) {
 	var pnw, pse;
 	switch(align) {
 	case 'n' :
-		pnw = Point.renew(
+		pnw = C2D.Point.renew(
 			this.pnw.x - half(width - this.width), 
 			this.pnw.y, 
 			this.pnw, this.pse);
-		pse = Point.renew(
+		pse = C2D.Point.renew(
 			pnw.x + width, 
 			this.pnw.y + height, 
 			this.pnw, this.pse);
 		break;
 	case 'ne' :
-		pnw = Point.renew(
+		pnw = C2D.Point.renew(
 			this.pse.x - width, 
 			this.pnw.y, 
 			this.pnw, this.pse);
-		pse = Point.renew(
+		pse = C2D.Point.renew(
 			this.pse.x, 
 			this.pnw.y + height,
 			this.pnw, this.pse);
 		break;
 	case 'e' :
-		pnw = Point.renew(
+		pnw = C2D.Point.renew(
 			this.pse.x - width,
 			this.pnw.y - half(height - this.height), 
 			this.pnw, this.pse);
-		pse = Point.renew(
+		pse = C2D.Point.renew(
 			this.pse.x,
 			pnw.y + height,
 			this.pnw, this.pse);
 		break;
 	case 'se' :
-		pnw = Point.renew(
+		pnw = C2D.Point.renew(
 			this.pse.x - width,
 			this.pse.y - height,
 			this.pnw, this.pse);
 		pse = this.pse;
 		break;
 	case 's' :
-		pnw = Point.renew(
+		pnw = C2D.Point.renew(
 			this.pnw.x - half(width - this.width), 
 			this.pnw.y - height, 
 			this.pnw, this.pse);
-		pse = Point.renew(
+		pse = C2D.Point.renew(
 			pnw.x + width, 
 			this.pse.y, 
 			this.pnw, this.pse);
 		break;
 	case 'sw' :
-		pnw = Point.renew(
+		pnw = C2D.Point.renew(
 			this.pnw.x, 
 			this.pse.y - height, 
 			this.pnw, this.pse);
-		pse = Point.renew(
+		pse = C2D.Point.renew(
 			this.pnw.x + width, 
 			this.pse.y,
 			this.pnw, this.pse);
 		break;
 	case 'w' :
-		pnw = Point.renew(
+		pnw = C2D.Point.renew(
 			this.pnw.x,
 			this.pnw.y - half(height - this.height), 
 			this.pnw, this.pse);
-		pse = Point.renew(
+		pse = C2D.Point.renew(
 			this.pnw.x + width,
 			pnw.y + height,
 			this.pnw, this.pse);
 		break;
 	case 'nw' :
 		pnw = this.pnw;
-		pse = Point.renew(
+		pse = C2D.Point.renew(
 			this.pnw.x + width,
 			this.pnw.y + height,
 			this.pnw, this.pse);
 		break;
 	case 'c' :
-		pnw = Point.renew(
+		pnw = C2D.Point.renew(
 			this.pnw.x - half(width - this.width),
 			this.pnw.y - half(height - this.height), 
 			this.pnw, this.pse);
-		pse = Point.renew(
+		pse = C2D.Point.renew(
 			pnw.x + width,
 			pnw.y + height,
 			this.pnw, this.pse);
@@ -427,7 +424,7 @@ Rect.prototype.resize = function(width, height, align) {
 | Returns a rectangle with same size at position at p|x/y).
 */
 Rect.prototype.moveto = function(a1, a2) {
-	if (typeof(a1) !== 'object') a1 = new Point(a1, a2);
+	if (typeof(a1) !== 'object') a1 = new C2D.Point(a1, a2);
 	return new Rect(a1, a1.add(this.width, this.height));
 }
 
@@ -472,14 +469,13 @@ C2D.subclass(RoundRect, Rect);
 | Rect(pnw, pse, crad) 
 */
 function RoundRect(a1, a2, a3) {
-	if (a1.otype === "point") {
+	if (a1.constructor === C2D.Point) {
 		Rect.call(this, a1, a2);
 		this.crad = a3;
 	} else {
 		Rect.call(this, a1.pnw, a1.pse);
 		this.crad = a2;
 	}
-	this.otype = "roundrect";
 	Object.freeze(this);
 }
 
@@ -522,8 +518,7 @@ RoundRect.prototype.path = function(c2d, border) {
 | Hexagon(p: center, r: radius) 
 */
 function Hexagon(p, r) {
-	this.otype = "hexagon";
-	if (typeof(p) !== "object" || p.otype !== "point") throw new Error("invalid p");
+	if (typeof(p) !== "object" || p.constructor !== C2D.Point) throw new Error("invalid p");
 	this.p = p;
 	this.r = r;
 	Object.freeze(this);
@@ -836,7 +831,6 @@ function Line(p1, p1end, p2, p2end) {
 	this.p1end = p1end;
 	this.p2 = p2;
 	this.p2end = p2end;
-	this.otype = "line";
 }
 
 /** 
@@ -850,7 +844,7 @@ Line.connect = function(shape1, end1, shape2, end2) {
 	if (!shape1 || !shape2) {
 		throw new Error('error');
 	}
-	if (shape1.otype === 'rect' && shape2.otype === 'point') {
+	if (shape1.constructor === Rect && shape2.constructor === C2D.Point) {
 		var p2 = shape2;
 		var z1 = shape1;
 		var p1;
@@ -864,7 +858,7 @@ Line.connect = function(shape1, end1, shape2, end2) {
 		}
 		return new Line(p1, end1, p2, end2);
 	} 
-	if (shape1.otype === 'rect' && shape2.otype === 'rect') {
+	if (shape1.constructor === Rect && shape2.constructor === Rect) {
 		var z1 = shape1;
 		var z2 = shape2;
 		var x1, y1, x2, y2;
@@ -1196,18 +1190,15 @@ C2D.prototype.rect = function(a1, a2, a3, a4) {
 	var pan = this.pan;
 	var cx = this._cx;
 	if (typeof(r) === "object") {
-		switch(r.otype) {
-		case "rect":
+		if (r.constructor === Rect)
 			return this._cx.rect(
 				a1.pnw.x + pan.x + 0.5, a1.pnw.y + pan.y + 0.5, 
 				a1.width, a1.height);
-		case "point":
+		if (r.constructor === C2D.Point)
 			return this._cx.rect(
 				a1.x + pan.x + 0.5, a1.y + pan.y + 0.5, 
 				a2.x - a1.x,        a2.y - a1.y);
-		default:
-			throw new Error("fillRect not a rectangle");
-		}
+		throw new Error("fillRect not a rectangle");
 	}
 	return this._cx.rect(a1 + pan.x + 0.5,  a2 + pan.y + 0.5, a3, a4);
 }
@@ -1222,12 +1213,10 @@ C2D.prototype.fillRect = function(style, a1, a2, a3, a4) {
 	var cx = this._cx;
 	cx.fillStyle = style;
 	if (typeof(p) === "object") {
-		switch(rect.otype) {
-		case 'rect':
+		if (a1.constructor === Rect) 
 			return this._cx.fillRect(a1.pnw.x, a1.pnw.y, a1.pse.x, a1.pse.y);
-		case 'point':
+		if (a1.constructor === C2D.Point) 
 			return this._cx.fillRect(a1.x, a1.y, a2.x, a2.y);
-		}
 		throw new Error("fillRect not a rectangle");
 	}
 	return this._cx.fillRect(a1, a2, a3, a4);
@@ -1251,7 +1240,7 @@ C2D.prototype.closePath = function() { this._cx.closePath();  }
 */
 C2D.prototype.drawImage = function(image, a1, a2) {
 	var pan = this.pan;
-	if (image.otype === "c2d") image = image._canvas;
+	if (image.constructor === C2D) image = image._canvas;
 	if (typeof(a1) === "object") {
 		this._cx.drawImage(image, a1.x + pan.x, a1.y + pan.y);
 		return;
@@ -1280,15 +1269,12 @@ C2D.prototype.putImageData = function(imagedata, a1, a2) {
 */
 C2D.prototype.getImageData = function(a1, a2, a3, a4) {
 	var pan = this.pan;
-	if (typeof(p) === "object") {
-		switch (a1.otype) {
-		case "rect":
+	if (typeof(p) === 'object') {
+		if (a1.constructor === Rect) 
 			return this._cx.getImageData(a1.pnw.x, a1.pnw.y, a1.pse.x, a1.pse.y);
-		case "point":
+		if (a1.constructor === C2D.Point) 
 			return this._cx.getImageData(a1.x, a1.y, a2.x, a2.y);
-
-		}
-		throw new Error("getImageData not a rectangle");
+		throw new Error('getImageData not a rectangle');
 	}
 	return this._cx.getImageData(a1, a2, a3, a4);
 }

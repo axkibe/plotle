@@ -30,6 +30,7 @@ var min = Math.min;
 var half     = C2D.half;
 var subclass = C2D.subclass;
 var Measure  = C2D.Measure;
+var Point    = C2D.Point;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .---.     .  .
@@ -446,7 +447,7 @@ Marker.prototype.getPoint = function() {
 	Measure.font = dtree.font;
 	var e = this._element;
 	var t = e.text;
-	var p = e.anchestor("paragraph");
+	var p = e.anchestor(Paragraph);
 	var pinfo = this.getPinfo();
 	var l = pinfo[this._pli];
 	var c = l[this._pci];
@@ -457,7 +458,7 @@ Marker.prototype.getPoint = function() {
 	
 /* sets the marker to position closest to x, y from flowbox(para) */
 Marker.prototype.setFromPoint = function(flowbox, p) {
-	if (flowbox.otype != "paragraph") { throw new Error("invalid flowbox:"+flowbox.otype); }
+	if (flowbox.constructor !== Paragraph) { throw new Error('invalid flowbox.'); }
 	var pinfo = this._getPinfoAtXY(flowbox, p.x, p.y);
 	var l = pinfo[this._pli];
 	var c = l[this._pci]; // x,y is in this chunk
@@ -469,7 +470,7 @@ Marker.prototype.setFromPoint = function(flowbox, p) {
 		return;
 	}
 	var dx   = p.x - c.x;
-	Measure.font = flowbox.anchestor("dtree").font;
+	Measure.font = flowbox.anchestor(DTree).font;
 	var t    = c.text;
 	var tlen = t.length;
 	
@@ -492,7 +493,7 @@ Marker.prototype.setFromPoint = function(flowbox, p) {
 Marker.prototype.getPinfo = function() {
 	var te = this._element;
 	var to = this._offset;
-	var para  = te.anchestor("paragraph");
+	var para  = te.anchestor(Paragraph);
 	var pinfo = para.pinfo;
 	var bli =  0; /* buffer for line count */
 	var bci = -1; /* buffer for chunk count */
@@ -522,8 +523,8 @@ Marker.prototype.getPinfo = function() {
 Marker.prototype.moveUpDown = function(dir) {
 	var e  = this._element;
 	var o  = this._offset;
-	Measure.font = e.anchestor("dtree").font;
-	var p  = e.anchestor("paragraph");
+	Measure.font = e.anchestor(DTree).font;
+	var p  = e.anchestor(Paragraph);
 	var pinfo = this.getPinfo();
 	var li = this._pli;
 	var ci = this._pci;
@@ -762,7 +763,7 @@ Editor.prototype.newline = function() {
 	var co    = caret.offset;			
 	var ct    = ce.text;
 	/* todo multi node ability */
-	var opara = ce.anchestor("paragraph");
+	var opara = ce.anchestor(Paragraph);
 		
 	ce.text = ct.substring(0, co);
 	var npara = new Paragraph(ct.substring(co, ct.length));
@@ -843,7 +844,7 @@ Editor.prototype.specialKey = function(item, keycode, shift, ctrl) {
 			caret.offset--;
 			redraw = true;
 		} else {
-			var para = ce.anchestor("paragraph");
+			var para = ce.anchestor(Paragraph);
 			redraw = para.joinToPrevious(ce, caret);
 		}
 		System.repository.updateItem(item);
@@ -885,7 +886,7 @@ Editor.prototype.specialKey = function(item, keycode, shift, ctrl) {
 			ce.text = ct.substring(0, co) + ct.substring(co + 1, ct.length);
 			redraw = true;
 		} else {
-			var para = ce.anchestor("paragraph");
+			var para = ce.anchestor(Paragraph);
 			redraw = para.joinToNext(ce, caret);
 		}
 		System.repository.updateItem(item);
@@ -2325,8 +2326,8 @@ Space.prototype.mousewheel = function(wheel) {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  Part of a tree-structure.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Treenode(otype) {
-	this.otype = otype;
+function Treenode() {
+	// nada
 }
 
 /* appends tnode to list of children */
@@ -2389,10 +2390,10 @@ Treenode.prototype.remove = function(tnode) {
 }
 
 /* returns first anchestor of 'type' */
-Treenode.prototype.anchestor = function(otype) {
+Treenode.prototype.anchestor = function(construct) {
 	var n;
-	for(n = this; n && n.otype != otype; n = n.parent);
-	if (!n) throw new Error("anchestor not there");
+	for(n = this; n && n.constructor !== construct; n = n.parent);
+	if (!n) throw new Error('anchestor not there');
 	return n;
 }
 
@@ -2407,7 +2408,7 @@ subclass(Textnode, Treenode);
 
 function Textnode(text)
 {
-	Treenode.call(this, "text");
+	Treenode.call(this);
 	this._text = text ? text : "";
 }
 
@@ -2436,7 +2437,7 @@ subclass(Paragraph, Treenode);
 
 function Paragraph(text)
 {
-	Treenode.call(this, "paragraph");
+	Treenode.call(this);
 	this._pc2d = new C2D(0 ,0);
 	this._canvasActual = false; // todo rename
 	this.append(new Textnode(text));
@@ -2455,7 +2456,7 @@ Paragraph.prototype._flow = function() {
 	var pinfo = this._pinfo = [];
 	var fw = this._flowWidth;
 	var width = 0;
-	var dtree = this.anchestor("dtree");
+	var dtree = this.anchestor(DTree);
 	var fontsize = dtree.fontsize;
 	var x = 0;
 	var y = fontsize;	
@@ -2541,7 +2542,7 @@ Object.defineProperty(Paragraph.prototype, "width", {
 Object.defineProperty(Paragraph.prototype, "height", {
 	get: function() { 
 		this._flow();
-		var dtree = this.anchestor("dtree");
+		var dtree = this.anchestor(DTree);
 		return this._softHeight + R(dtree.fontsize * settings.bottombox);
 	},
 });
@@ -2580,7 +2581,7 @@ Paragraph.prototype.getC2D = function() {
 			
 	/* todo: work out exact height for text below baseline */
 	/* set the canvas height */
-	var dtree = this.anchestor("dtree");
+	var dtree = this.anchestor(DTree);
 	c2d.attune(this);
 	c2d.fontStyle(dtree.font, "black", "start", "alphabetic");
 	
@@ -2659,7 +2660,7 @@ subclass(DTree, Treenode);
 | Constructor.
 */
 function DTree(fontsize) {
-	Treenode.call(this, "dtree");
+	Treenode.call(this);
 	this._fontsize = fontsize || 13;
 }
 
@@ -2889,8 +2890,7 @@ Object.defineProperty(DTree.prototype, "height", {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
  Something on a canvas.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Item(otype, id) {
-	this.otype = otype;
+function Item(id) {
 	this.id = id;
 	this._h6slice = null;
 }
@@ -3032,7 +3032,7 @@ subclass(Note, Item);
 | dtree: document tree.
 */
 function Note(id, zone, dtree) {
-	Item.call(this, "note", id);
+	Item.call(this, id);
 	this.zone  = zone;
 	this.dtree = dtree;
 	this.handles = Note.handles;
@@ -3359,7 +3359,7 @@ subclass(Label, Item);
 | Constructor.
 */
 function Label(id, zone, dtree) {
-	Item.call(this, "label", id);
+	Item.call(this, id);
 	this.dtree = dtree;
 	dtree.parent = this;
 	dtree.pre = true;
@@ -3584,7 +3584,7 @@ subclass(Relation, Item);
 | Relation(id, i1id, i2id, textZone, [dtree]) 
 */
 function Relation(id, i1id, i2id, textZone, dtree) {
-	Item.call(this, 'rel', id);
+	Item.call(this, id);
 	this.handles    = Relation.handles;
 	this.i1id       = i1id;
 	this.i2id       = i2id;
@@ -4397,7 +4397,7 @@ Repository.prototype._saveZIDX = function() {
 
 /* adds an item to the space */
 Repository.prototype.addItem = function(item, top) {
-	if (!item.id) item.id  = this._newItemID(item.otype);
+	if (!item.id) item.id  = this._newItemID();
 	this.items[item.id] = item;
 	if (top) {
 		this.zidx.unshift(item.id);
