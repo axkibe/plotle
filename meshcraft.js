@@ -28,11 +28,16 @@ var abs = Math.abs;
 var max = Math.max;
 var min = Math.min;
 
-var half     = C2D.half;
-var subclass = C2D.subclass;
-var Measure  = C2D.Measure;
-var Point    = C2D.Point;
-var Rect     = C2D.Rect;
+var half          = C2D.half;
+var subclass      = C2D.subclass;
+var Hexagon       = C2D.Hexagon;
+var HexagonFlower = C2D.HexagonFlower;
+var HexagonSlice  = C2D.HexagonSlice;
+var Line          = C2D.Line;
+var Measure       = C2D.Measure;
+var Point         = C2D.Point;
+var Rect          = C2D.Rect;
+var RoundRect     = C2D.RoundRect;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .---.     .  .
@@ -1470,7 +1475,7 @@ Edgemenu.prototype.path = function(c2d, border, section) {
 	/* x in the middle */
 	var xm = R((this.pnw.x + this.pse.x) / 2);
 	/* edge width (diagonal extra) */
-	var ew  = R((this.pse.y - this.pnw.y) * Hexagon.tan6);
+	var ew  = R((this.pse.y - this.pnw.y) * C2D.tan6);
 
 	c2d.beginPath();
 	if (section === -2) {
@@ -1560,9 +1565,9 @@ Edgemenu.prototype._getMousepos = function(p) {
 	if (!this.pnw || !this.pse) return this.mousepos = -1;
 	if (p.y < this.pnw.y) return this.mousepos = -1;
 	var mx = R(c2d.width / 2);
-	var ew = R((this.pse.y - this.pnw.y) * Hexagon.tan6); // todo simplify
+	var ew = R((this.pse.y - this.pnw.y) * C2D.tan6); // todo simplify
 	/* shortcut name = letters for formula */
-	var pymcht6 = (p.y - c2d.height) * Hexagon.tan6;
+	var pymcht6 = (p.y - c2d.height) * C2D.tan6;
 
 	if (p.x - this.pnw.x < -pymcht6) return this.mousepos = -1;
 	if (p.x - this.pse.x >  pymcht6) return this.mousepos = -1;
@@ -1972,7 +1977,7 @@ Space.prototype.dragmove = function(p, shift, ctrl) {
 			throw new Error('unknown align');
 		}
 		
-		redraw = it.setZone(new Rect(pnw, pse), Compass.opposite(iaction.com)); 
+		redraw = it.setZone(new Rect(pnw, pse), C2D.opposite(iaction.com)); 
 		
 		/* adapt scrollbar position, todo x move into item */
 		var dtreeHeight = it.dtree.height;
@@ -2917,8 +2922,8 @@ Item.prototype.newItemMenu = function(pan) {
 	var labels = this._itemMenuLabels = ["", "Remove"];
 	// todo why pan?
 	var p = new Point(
-		R(hzone.pnw.x + pan.x + r - (r * Hexagon.cos6 - h) * Hexagon.tan6), 
-		R(hzone.pnw.y + pan.y + r * Hexagon.cos6 - h) - 1);
+		R(hzone.pnw.x + pan.x + r - (r * C2D.cos6 - h) * C2D.tan6), 
+		R(hzone.pnw.y + pan.y + r * C2D.cos6 - h) - 1);
 	return new Hexmenu(p, settings.itemmenu.innerRadius, settings.itemmenu.outerRadius, labels);
 }
 
@@ -3311,27 +3316,27 @@ Note.prototype.draw = function(c2d, selection) {
 			break;
 		case 'hexagonh' :
 			bc2d.beginPath();
-			bc2d.moveTo(spx - srad,   R(spy + Hexagon.cos6 * srad));
+			bc2d.moveTo(spx - srad,   R(spy + C2D.cos6 * srad));
 			bc2d.lineTo(spx - srad05, spy);
 			bc2d.lineTo(spx + srad05, spy);
-			bc2d.lineTo(spx + srad,   R(spy + Hexagon.cos6 * srad));
-			bc2d.lineTo(spx + srad,   R(spy + scrollSize - Hexagon.cos6 * srad));
+			bc2d.lineTo(spx + srad,   R(spy + C2D.cos6 * srad));
+			bc2d.lineTo(spx + srad,   R(spy + scrollSize - C2D.cos6 * srad));
 			bc2d.lineTo(spx + srad05, R(spy + scrollSize));
 			bc2d.lineTo(spx - srad05, R(spy + scrollSize));
-			bc2d.lineTo(spx - srad,   R(spy + scrollSize - Hexagon.cos6 * srad));
+			bc2d.lineTo(spx - srad,   R(spy + scrollSize - C2D.cos6 * srad));
 			bc2d.closePath();
 			bc2d.fill(settings.scrollbar.fillStyle);
 			bc2d.stroke(settings.scrollbar.lineWidth, settings.scrollbar.strokeStyle);
 			break;
 		case 'hexagonv' :
 			bc2d.beginPath();
-			bc2d.moveTo(spx - srad, R(spy + Hexagon.cos6 * srad));
+			bc2d.moveTo(spx - srad, R(spy + C2D.cos6 * srad));
 			bc2d.lineTo(spx, spy);
-			bc2d.lineTo(spx + srad, spy + Hexagon.cos6 * srad);
-			bc2d.lineTo(spx + srad, R(spy + scrollSize - Hexagon.cos6 * srad));
+			bc2d.lineTo(spx + srad, spy + C2D.cos6 * srad);
+			bc2d.lineTo(spx + srad, R(spy + scrollSize - C2D.cos6 * srad));
 			bc2d.lineTo(spx, R(spy + scrollSize));
 			bc2d.closePath();
-			bc2d.lineTo(spx - srad, R(spy + scrollSize - Hexagon.cos6 * srad));
+			bc2d.lineTo(spx - srad, R(spy + scrollSize - C2D.cos6 * srad));
 			bc2d.fill(settings.scrollbar.fillStyle);
 			bc2d.stroke(settings.scrollbar.lineWidth, settings.scrollbar.strokeStyle);
 			break;

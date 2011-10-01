@@ -17,21 +17,11 @@
 | This is not a full blown feature complete everything library, 
 | but enhanced on the fly for what I need.
 |
-| Defines:
-|  C2D
-|
-|  Compass
-|  Line
-|  Measure
-|  RoundRect
-|  Hexagon
-|  HexagonSlice
-|  HexagonFlower 
+| Defines: C2D
 |
 | Authors: Axel Kittenberger
-| License: Gnu Affero GPLv3
+| License: GNU Affero GPLv3
 */
-// Todo move all into the C2D namespace.
 
 "use strict";
 
@@ -87,6 +77,8 @@ C2D.subclass = function(sub, base) {
 | Shortcuts
 */
 C2D.half = function(v) { return Math.round(v / 2); }
+C2D.cos6 = Math.cos(Math.PI / 6); // todo cos30
+C2D.tan6 = Math.tan(Math.PI / 6); // todo tan30
 
 /**
 | Just a convenience debugging tool
@@ -461,14 +453,14 @@ Object.defineProperty(C2D.Rect.prototype, "my", {
  A rectangle in a 2D plane with rounded corners
  Rectangles are immutable objects.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-C2D.subclass(RoundRect, C2D.Rect);
 
 /**
 | Constructor.
+|
 | Rect(rect, crad)      -or-
 | Rect(pnw, pse, crad) 
 */
-function RoundRect(a1, a2, a3) {
+C2D.RoundRect = function(a1, a2, a3) {
 	if (a1.constructor === C2D.Point) {
 		C2D.Rect.call(this, a1, a2);
 		this.crad = a3;
@@ -478,6 +470,7 @@ function RoundRect(a1, a2, a3) {
 	}
 	Object.freeze(this);
 }
+C2D.subclass(C2D.RoundRect, C2D.Rect);
 
 /**
 | Draws a bevel.
@@ -486,7 +479,7 @@ function RoundRect(a1, a2, a3) {
 | border: additional distance.
 */
 // todo doesnt use pnw!
-RoundRect.prototype.path = function(c2d, border) {
+C2D.RoundRect.prototype.path = function(c2d, border) {
 	var x1 = border;
 	var y1 = border;
 	var x2 = this.width - border;
@@ -517,48 +510,43 @@ RoundRect.prototype.path = function(c2d, border) {
 | Constructor.
 | Hexagon(p: center, r: radius) 
 */
-function Hexagon(p, r) {
-	if (typeof(p) !== "object" || p.constructor !== C2D.Point) throw new Error("invalid p");
+C2D.Hexagon = function(p, r) {
+	if (typeof(p) !== 'object' || p.constructor !== C2D.Point) throw new Error("invalid p");
 	this.p = p;
 	this.r = r;
 	Object.freeze(this);
 }
 
-/**
-| shortcuts for often needed trigonometric values 
-*/
-Hexagon.cos6 = Math.cos(Math.PI / 6);
-Hexagon.tan6 = Math.tan(Math.PI / 6);
 
 /** 
 | Creates a hexgon from json.
 */
-Hexagon.jnew = function(js) {
-	return new Hexagon(js.p, js.r);
+C2D.Hexagon.jnew = function(js) {
+	return new C2D.Hexagon(js.p, js.r);
 }
 
 /**
 | Returns a json object for this rect.
 */
-Hexagon.prototype.jsonfy = function() {
+C2D.Hexagon.prototype.jsonfy = function() {
 	return { p: this.p, j: this.j };
 }
 
 /**
 | Returns a hexagon moved by a point or x/y.
 */
-Hexagon.prototype.add = function(a1, a2) {
-	return new Hexagon(this.p.add(a1, a2), this.r);
+C2D.Hexagon.prototype.add = function(a1, a2) {
+	return new C2D.Hexagon(this.p.add(a1, a2), this.r);
 }
 
 /**
 | Returns true if point is within this hexagon.
 */
-Hexagon.prototype.within = function(p) {
-	var rc = this.r * Hexagon.cos6;
+C2D.Hexagon.prototype.within = function(p) {
+	var rc = this.r * C2D.cos6;
 	var dy = this.p.y - p.y;
 	var dx = this.p.x - p.x;
-	var yhc6 = Math.abs(dy * Hexagon.cos6);
+	var yhc6 = Math.abs(dy * C2D.cos6);
 	return dy >= -rc && dy <= rc &&
            dx - this.r < -yhc6 &&
            dx + this.r >  yhc6;
@@ -591,15 +579,15 @@ Hexagon.prototype.within = function(p) {
 | rad: radius.
 | height: slice height.
 */
-function HexagonSlice(psw, rad, height) {
+C2D.HexagonSlice = function(psw, rad, height) {
 	this.psw    = psw;
 	this.rad    = rad;
 	this.height = height;
 	
 	if (height > rad) throw new Error("Cannot make slice larger than radius");
 	this.pm = new Point(
-		psw.x + rad - Math.round((rad * Hexagon.cos6 - height) * Hexagon.tan6), 
-		psw.y + Math.round(rad * Hexagon.cos6) - height);
+		psw.x + rad - Math.round((rad * C2D.cos6 - height) * C2D.tan6), 
+		psw.y + Math.round(rad * C2D.cos6) - height);
 	/* for gradients only */
 	/* todo rename to gradientP1, so less confuse */
 	this.pnw = new Point(psw.x, psw.y - height);
@@ -609,7 +597,7 @@ function HexagonSlice(psw, rad, height) {
 /**
 | Draws the hexagon.
 */
-HexagonSlice.prototype.path = function(c2d, border) {
+C2D.HexagonSlice.prototype.path = function(c2d, border) {
 	var r2 = C2D.half(this.rad);
 	c2d.beginPath();
 	c2d.moveTo(this.psw.x                 + border, this.psw.y               - border);
@@ -656,9 +644,9 @@ HexagonSlice.prototype.path = function(c2d, border) {
 
 // todo replace numbers with compass names.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function HexagonFlower(pc, ri, ro, segs) {
+C2D.HexagonFlower = function(pc, ri, ro, segs) {
 	this.pc = pc;
-	if (ri > ro) throw new Error("inner radius > outer radius");
+	if (ri > ro) throw new Error('inner radius > outer radius');
 	this.ri = ri;
 	this.ro = ro;
 	this.gradientPC = pc;
@@ -670,18 +658,18 @@ function HexagonFlower(pc, ri, ro, segs) {
 /**
 | Makes the flower-hex-6 path.
 */
-HexagonFlower.prototype.path = function(c2d, border, segment) {
+C2D.HexagonFlower.prototype.path = function(c2d, border, segment) {
 	var ri  = this.ri;
 	var ri2 = C2D.half(this.ri);
-	var ric = Math.round(this.ri * Hexagon.cos6);
+	var ric = Math.round(this.ri * C2D.cos6);
 	var ro  = this.ro;
 	var ro2 = C2D.half(this.ro);
-	var roc = Math.round(this.ro * Hexagon.cos6);
+	var roc = Math.round(this.ro * C2D.cos6);
 	var pc  = this.pc;
 	var pcx = pc.x, pcy = pc.y;
 	var b   = border;
 	var b2  = C2D.half(border);
-	var bc6 = Math.round(border * Hexagon.cos6);
+	var bc6 = Math.round(border * C2D.cos6);
 	var segs = this.segs;
 	c2d.beginPath();
 	/* inner hex */
@@ -781,24 +769,24 @@ HexagonFlower.prototype.path = function(c2d, border, segment) {
 /** 
 | Returns the segment the point is within. 
 */
-HexagonFlower.prototype.within = function(p) {
-	var roc6 = this.ro * Hexagon.cos6;
+C2D.HexagonFlower.prototype.within = function(p) {
+	var roc6 = this.ro * C2D.cos6;
 	var dy = p.y - this.pc.y;
 	var dx = p.x - this.pc.x;
-	var dyc6 = Math.abs(dy * Hexagon.tan6);
+	var dyc6 = Math.abs(dy * C2D.tan6);
 	
 	if (dy <  -roc6 || dy >  roc6 || dx - this.ro >= -dyc6 || dx + this.ro <= dyc6) {
 		return -1;
 	}
 	
-	var ric6 = this.ri * Hexagon.cos6;
+	var ric6 = this.ri * C2D.cos6;
 	if (dy >= -ric6 && dy <= ric6 && dx - this.ri <  -dyc6 && dx + this.ri >  dyc6) {
 		return 0;
 	}
 
-	var lor = dx <= -dy * Hexagon.tan6; // left of right diagonal
-	var rol = dx >=  dy * Hexagon.tan6; // right of left diagonal
-	var aom = dy <= 0;                  // above of middle line
+	var lor = dx <= -dy * C2D.tan6; // left of right diagonal
+	var rol = dx >=  dy * C2D.tan6; // right of left diagonal
+	var aom = dy <= 0;              // above of middle line
 	if (lor && rol)        return 1;
 	else if (!lor && aom)  return 2;
 	else if (rol && !aom)  return 3;
@@ -826,7 +814,7 @@ HexagonFlower.prototype.within = function(p) {
 | p2: point 1
 | p2end: 'normal' or 'arrow'
 */
-function Line(p1, p1end, p2, p2end) {
+C2D.Line = function(p1, p1end, p2, p2end) {
 	this.p1 = p1;
 	this.p1end = p1end;
 	this.p2 = p2;
@@ -840,7 +828,7 @@ function Line(p1, p1end, p2, p2end) {
 | shape2: a Rect or Point
 | end2: 'normal' or 'arrow'
 */
-Line.connect = function(shape1, end1, shape2, end2) {
+C2D.Line.connect = function(shape1, end1, shape2, end2) {
 	if (!shape1 || !shape2) {
 		throw new Error('error');
 	}
@@ -856,7 +844,7 @@ Line.connect = function(shape1, end1, shape2, end2) {
 				p2.x < z1.pnw.x ? z1.pnw.x : (p2.x > z1.pse.x ? z1.pse.x : p2.x),
 				p2.y < z1.pnw.y ? z1.pnw.y : (p2.y > z1.pse.y ? z1.pse.y : p2.y));
 		}
-		return new Line(p1, end1, p2, end2);
+		return new C2D.Line(p1, end1, p2, end2);
 	} 
 	if (shape1.constructor === C2D.Rect && shape2.constructor === C2D.Rect) {
 		var z1 = shape1;
@@ -886,7 +874,7 @@ Line.connect = function(shape1, end1, shape2, end2) {
 			// an intersection 
 			y1 = y2 = C2D.half(Math.max(z1.pnw.y, z2.pnw.y) + Math.min(z1.pse.y, z2.pse.y));
 		}
-		return new Line(new Point(x1, y1), end1, new Point(x2, y2), end2);
+		return new C2D.Line(new Point(x1, y1), end1, new Point(x2, y2), end2);
 	}
 	throw new Error("do not know how to create connection.");
 }
@@ -895,7 +883,7 @@ Line.connect = function(shape1, end1, shape2, end2) {
 | Returns the zone of the arrow.
 | Result is cached.
 */
-Object.defineProperty(Line.prototype, "zone", {
+Object.defineProperty(C2D.Line.prototype, "zone", {
 	get: function() { 
 		if (this._zone) return this._zone;
 		if (this.p1.x <= this.p2.x && this.p1.y <= this.p2.y) 
@@ -913,7 +901,7 @@ Object.defineProperty(Line.prototype, "zone", {
 |
 | c2d: Canvas2D to draw upon.
 */
-Line.prototype.path = function(c2d) {
+C2D.Line.prototype.path = function(c2d) {
 	var p1 = this.p1;
 	var p2 = this.p2;
 
@@ -963,23 +951,25 @@ Line.prototype.path = function(c2d) {
 /** 
 | Draws the line.
 */
-Line.prototype.draw = function(c2d) {
+C2D.Line.prototype.draw = function(c2d) {
 	c2d.fills(settings.relation.style.fill, this);
 	c2d.edges(settings.relation.style.edge, this);
 }
 
+
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- Compass+++
+  ,--.  _  .-,--.
+ | `-' ´ ) ' |   \
+ |   .  /  , |   /
+ `--'  '~` `-^--'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ Statics and Prototype.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Compass() {
-	throw new Error("instancing a static object");
-}
 
 /**
 | Returns the compass direction opposite of a direction.
 */
-Compass.opposite = function(dir) {
+C2D.opposite = function(dir) {
 	switch (dir) {
 	case 'n'  : return 's';
 	case 'ne' : return 'sw';
@@ -994,24 +984,14 @@ Compass.opposite = function(dir) {
 	}
 }
 
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ,--.  _  .-,--.
- | `-' ´ ) ' |   \
- |   .  /  , |   /
- `--'  '~` `-^--'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- Prototype.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
 /**
 | Returns true if point is in hexagon slice.
 | todo remove
 */
 C2D.withinHexagonSlice = function(p, r, h) {
-	var w  = r - (r * Hexagon.cos6 - h) * Hexagon.tan6;
-	var rc = r * Hexagon.cos6;
-	var yh = p.y * Hexagon.tan6;
+	var w  = r - (r * C2D.cos6 - h) * C2D.tan6;
+	var rc = r * C2D.cos6;
+	var yh = p.y * C2D.tan6;
 	return p.y >=  -h &&         p.y <= 0 &&
 	       p.x >= -yh && p.x - 2 * w <= yh;
 }
@@ -1429,7 +1409,7 @@ C2D.prototype.fontStyle = function(font, fill, align, baseline) {
 	var x = p.x;
 	var y = p.y;
 	var r2 = C2D.half(r);
-	var rc = Math.round(Hexagon.cos6 * r);
+	var rc = Math.round(C2D.cos6 * r);
 	this.beginPath();
 	this.moveTo(x - r, y);
 	this.lineTo(x - r2, y - rc);
