@@ -1658,8 +1658,9 @@ Space.prototype.redraw = function() {
 		break;
 	case ACT.RBIND :
 		var arrow = Line.connect(
-			ia.item.zone, 'normal', 
-			(ia.item2 && ia.item2.zone) || ia.smp , 'arrow');
+			ia.item.handlezone, 'normal', 
+			(ia.item2 && ia.item2.handlezone) || ia.smp , 'arrow');
+		// todo use something like bindzone
 		if (ia.item2) ia.item2.highlight(c2d);
 		arrow.draw(c2d);
 	}
@@ -3633,7 +3634,7 @@ Relation.create = function(item1, item2) {
 	var dtree = new DTree(20);
 	dtree.append(new Paragraph("relates to"));
 	dtree.flowWidth = -1;
-	var cline = Line.connect(item1.zone, null, item2.zone, null);
+	var cline = Line.connect(item1.handlezone, null, item2.handlezone, null); // todo bindzone
 	var mx = (cline.p1.x + cline.p2.x) / 2;
 	var my = (cline.p1.y + cline.p2.y) / 2;
 	var textZone = new Rect(
@@ -3996,8 +3997,8 @@ Relation.prototype.draw = function(c2d, selection) {
 		dtree.draw(bc2d, selection, 2, 2, 0);
 		this._canvasActual = true;
 	}
-	var l1 = Line.connect(it1.zone,     'normal', this.textZone, 'normal');
-	var l2 = Line.connect(this.textZone,'normal', it2.zone,      'arrow');
+	var l1 = Line.connect(it1.handlezone, 'normal', this.textZone, 'normal'); // todo bindzone
+	var l2 = Line.connect(this.textZone,  'normal', it2.handlezone, 'arrow'); // todo bindzone
 	// todo combine into one call;
 	c2d.fills(settings.relation.style.fill, l1);
 	c2d.edges(settings.relation.style.edge, l1);
