@@ -77,8 +77,8 @@ C2D.subclass = function(sub, base) {
 | Shortcuts
 */
 C2D.half = function(v) { return Math.round(v / 2); }
-C2D.cos6 = Math.cos(Math.PI / 6); // todo cos30
-C2D.tan6 = Math.tan(Math.PI / 6); // todo tan30
+C2D.cos30 = Math.cos(Math.PI / 6);
+C2D.tan30 = Math.tan(Math.PI / 6);
 
 /**
 | Just a convenience debugging tool
@@ -543,10 +543,10 @@ C2D.Hexagon.prototype.add = function(a1, a2) {
 | Returns true if point is within this hexagon.
 */
 C2D.Hexagon.prototype.within = function(p) {
-	var rc = this.r * C2D.cos6;
+	var rc = this.r * C2D.cos30;
 	var dy = this.p.y - p.y;
 	var dx = this.p.x - p.x;
-	var yhc6 = Math.abs(dy * C2D.cos6);
+	var yhc6 = Math.abs(dy * C2D.cos30);
 	return dy >= -rc && dy <= rc &&
            dx - this.r < -yhc6 &&
            dx + this.r >  yhc6;
@@ -586,8 +586,8 @@ C2D.HexagonSlice = function(psw, rad, height) {
 	
 	if (height > rad) throw new Error("Cannot make slice larger than radius");
 	this.pm = new Point(
-		psw.x + rad - Math.round((rad * C2D.cos6 - height) * C2D.tan6), 
-		psw.y + Math.round(rad * C2D.cos6) - height);
+		psw.x + rad - Math.round((rad * C2D.cos30 - height) * C2D.tan30), 
+		psw.y + Math.round(rad * C2D.cos30) - height);
 	/* for gradients only */
 	/* todo rename to gradientP1, so less confuse */
 	this.pnw = new Point(psw.x, psw.y - height);
@@ -661,15 +661,15 @@ C2D.HexagonFlower = function(pc, ri, ro, segs) {
 C2D.HexagonFlower.prototype.path = function(c2d, border, segment) {
 	var ri  = this.ri;
 	var ri2 = C2D.half(this.ri);
-	var ric = Math.round(this.ri * C2D.cos6);
+	var ric = Math.round(this.ri * C2D.cos30);
 	var ro  = this.ro;
 	var ro2 = C2D.half(this.ro);
-	var roc = Math.round(this.ro * C2D.cos6);
+	var roc = Math.round(this.ro * C2D.cos30);
 	var pc  = this.pc;
 	var pcx = pc.x, pcy = pc.y;
 	var b   = border;
 	var b2  = C2D.half(border);
-	var bc6 = Math.round(border * C2D.cos6);
+	var bc6 = Math.round(border * C2D.cos30);
 	var segs = this.segs;
 	c2d.beginPath();
 	/* inner hex */
@@ -770,22 +770,22 @@ C2D.HexagonFlower.prototype.path = function(c2d, border, segment) {
 | Returns the segment the point is within. 
 */
 C2D.HexagonFlower.prototype.within = function(p) {
-	var roc6 = this.ro * C2D.cos6;
+	var roc6 = this.ro * C2D.cos30;
 	var dy = p.y - this.pc.y;
 	var dx = p.x - this.pc.x;
-	var dyc6 = Math.abs(dy * C2D.tan6);
+	var dyc6 = Math.abs(dy * C2D.tan30);
 	
 	if (dy <  -roc6 || dy >  roc6 || dx - this.ro >= -dyc6 || dx + this.ro <= dyc6) {
 		return -1;
 	}
 	
-	var ric6 = this.ri * C2D.cos6;
+	var ric6 = this.ri * C2D.cos30;
 	if (dy >= -ric6 && dy <= ric6 && dx - this.ri <  -dyc6 && dx + this.ri >  dyc6) {
 		return 0;
 	}
 
-	var lor = dx <= -dy * C2D.tan6; // left of right diagonal
-	var rol = dx >=  dy * C2D.tan6; // right of left diagonal
+	var lor = dx <= -dy * C2D.tan30; // left of right diagonal
+	var rol = dx >=  dy * C2D.tan30; // right of left diagonal
 	var aom = dy <= 0;              // above of middle line
 	if (lor && rol)        return 1;
 	else if (!lor && aom)  return 2;
@@ -989,9 +989,9 @@ C2D.opposite = function(dir) {
 | todo remove
 */
 C2D.withinHexagonSlice = function(p, r, h) {
-	var w  = r - (r * C2D.cos6 - h) * C2D.tan6;
-	var rc = r * C2D.cos6;
-	var yh = p.y * C2D.tan6;
+	var w  = r - (r * C2D.cos30 - h) * C2D.tan30;
+	var rc = r * C2D.cos30;
+	var yh = p.y * C2D.tan30;
 	return p.y >=  -h &&         p.y <= 0 &&
 	       p.x >= -yh && p.x - 2 * w <= yh;
 }
@@ -1400,24 +1400,3 @@ C2D.prototype.fontStyle = function(font, fill, align, baseline) {
 	cx.textBaseline = baseline;
 }
 
-/***
- * Utilities for hexagons.
- */
-// todo remove!
-/* makes a hexagon path */
-/*C2D.prototype.makeHexagon = function(p, r) {
-	var x = p.x;
-	var y = p.y;
-	var r2 = C2D.half(r);
-	var rc = Math.round(C2D.cos6 * r);
-	this.beginPath();
-	this.moveTo(x - r, y);
-	this.lineTo(x - r2, y - rc);
-	this.lineTo(x + r2, y - rc);
-	this.lineTo(x + r, y);
-	this.lineTo(x + r2, y + rc);
-	this.lineTo(x - r2, y + rc);
-	this.lineTo(x - r, y);
-	this.closePath();
-}
-*/
