@@ -260,8 +260,7 @@ C2D.Rect = function(pnw, pse) {
 | Creates a point from json 
 */
 C2D.Rect.jnew = function(js) {
-	// todo remove p1p2
-	return new C2D.Rect(C2D.Point.jnew(js.pnw || js.p1), C2D.Point.jnew(js.pse || js.p2));
+	return new C2D.Rect(C2D.Point.jnew(js.pnw), C2D.Point.jnew(js.pse));
 }
 
 /** 
