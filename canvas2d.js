@@ -42,8 +42,7 @@
 | C2D(width, height)   creates a new Canvas2D and sets its size;
 */
 function C2D(a1, a2) {
-	var ta1 = typeof(a1);
-	switch (ta1) {
+	switch (typeof(a1)) {
 	case 'undefined' :
 		this._canvas = document.createElement("canvas");
 		break;
@@ -56,7 +55,7 @@ function C2D(a1, a2) {
 		this._canvas.height = a2;
 	}
 	this._cx = this._canvas.getContext("2d");
-	this.pan = new Point(0, 0);
+	this.pan = C2D.Point.zero;
 }
 
 
@@ -76,9 +75,16 @@ C2D.subclass = function(sub, base) {
 /**
 | Shortcuts
 */
-C2D.half = function(v) { return Math.round(v / 2); }
-C2D.cos30 = Math.cos(Math.PI / 6);
-C2D.tan30 = Math.tan(Math.PI / 6);
+
+// sets a readonly value.
+C2D.fixate = function(obj, key, value) { Object.defineProperty(obj, key, {enumerable: true, value: value}); }
+C2D.fixate(C2D, 'fixate', C2D.fixate);
+// divides by 2 and round up
+C2D.fixate(C2D, 'half',  function(v) { return Math.round(v / 2); });
+// cos(30°)
+C2D.fixate(C2D, 'cos30', Math.cos(Math.PI / 6));
+// tan(30°)
+C2D.fixate(C2D, 'tan30', Math.tan(Math.PI / 6));
 
 /**
 | Just a convenience debugging tool
@@ -156,16 +162,15 @@ Object.defineProperty(C2D.Measure, "font", {
 | Constructor.
 |
 | Point(x, y) or
-| Point(point)
+| Point(p)
 */
-C2D.Point = function(p, y) {
-	if (arguments.length === 1) {
-		this.x = p.x;
-		this.y = p.y;
+C2D.Point = function(a1, a2) {
+	if (typeof(a1) === 'object') {
+		C2D.fixate(this, 'x', a1.x);
+		C2D.fixate(this, 'y', a1.y);
 	}
-	this.x = p;
-	this.y = y;
-	Object.freeze(this);
+	C2D.fixate(this, 'x', a1);
+	C2D.fixate(this, 'y', a2);
 }
 
 /**
@@ -247,13 +252,13 @@ C2D.Point.prototype.sub = function(a1, a2) {
 | pse: point to south east.
 */
 C2D.Rect = function(pnw, pse) {
-	this.pnw = pnw;
-	this.pse = pse;
 	if (!pnw || !pse || pnw.x > pse.x || pnw.y > pse.y) { 
 		throw new Error("not a rectangle."); 
 	}
-	// freeze if not a father object
-	if (this.constructor == C2D.Rect) Object.freeze(this);
+	Object.defineProperty(this, 'pnw',    {enumerable: true, value: pnw});
+	Object.defineProperty(this, 'pse',    {enumerable: true, value: pse});
+	Object.defineProperty(this, 'width',  {enumerable: true, value: pse.x - pnw.x});
+	Object.defineProperty(this, 'height', {enumerable: true, value: pse.y - pnw.y});
 }
 
 /** 
@@ -267,7 +272,7 @@ C2D.Rect.jnew = function(js) {
 | Returns a json object for this rect 
 */
 C2D.Rect.prototype.jsonfy = function() {
-	return { pnw: this.pnw.jsonfy(), pse: this.pse.jsonfy() };
+	return this._json || (this._json = { pnw: this.pnw.jsonfy(), pse: this.pse.jsonfy() });
 }
 
 /** 
@@ -426,21 +431,16 @@ C2D.Rect.prototype.eq = function(r) {
 	return this.pnw.eq(r.pnw) && this.pse.eq(r.pse);
 }
 
-Object.defineProperty(C2D.Rect.prototype, "width", {
-	get: function()  { return this.pse.x - this.pnw.x; }
-});
-
-Object.defineProperty(C2D.Rect.prototype, "height", {
-	get: function()  { return this.pse.y - this.pnw.y; }
-});
-
-// todo replace by "pc", point center
-Object.defineProperty(C2D.Rect.prototype, "mx", {
-	get: function() { return C2D.half(this.pnw.x + this.pse.x); }
-});
-
-Object.defineProperty(C2D.Rect.prototype, "my", {
-	get: function() { return C2D.half(this.pnw.y + this.pse.y); }
+/**
+| Point in the center.
+*/
+Object.defineProperty(C2D.Rect.prototype, 'pc', {
+	get: function() {
+		var pc = new Point(half(this.pse.x + this.pnw.x), half(this.pse.y, this.pnw.y));
+		// caches the result, so this function wont be called for this Rect again.
+		Object.defineProperty(this, 'pc', {enumerable: true, value: pc});
+		return pc;
+	}
 });
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -467,7 +467,6 @@ C2D.RoundRect = function(a1, a2, a3) {
 		C2D.Rect.call(this, a1.pnw, a1.pse);
 		this.crad = a2;
 	}
-	Object.freeze(this);
 }
 C2D.subclass(C2D.RoundRect, C2D.Rect);
 
@@ -477,21 +476,20 @@ C2D.subclass(C2D.RoundRect, C2D.Rect);
 | c2d: Canvas2D area to draw upon.
 | border: additional distance.
 */
-// todo doesnt use pnw!
 C2D.RoundRect.prototype.path = function(c2d, border) {
-	var x1 = border;
-	var y1 = border;
-	var x2 = this.width - border;
-	var y2 = this.height - border;
-	var cr = this.crad + border;
+	var nwx = this.pnw.x + border;
+	var nwy = this.pnw.y + border;
+	var sex = this.pse.x - border;
+	var sey = this.pse.y - border;
+	var cr  = this.crad  + border;
 	var pi = Math.PI;
 	var ph = Math.PI / 2;
 	c2d.beginPath();
-	c2d.moveTo(x1 + cr, y1);
-	c2d.arc(x2 - cr, y1 + cr, cr, -ph,   0, false);
-	c2d.arc(x2 - cr, y2 - cr, cr,   0,  ph, false);
-	c2d.arc(x1 + cr, y2 - cr, cr,  ph,  pi, false);
-	c2d.arc(x1 + cr, y1 + cr, cr,  pi, -ph, false);
+	c2d.moveTo(nwx + cr, nwy);
+	c2d.arc(sex - cr, nwy + cr, cr, -ph,   0, false);
+	c2d.arc(sex - cr, sey - cr, cr,   0,  ph, false);
+	c2d.arc(nwx + cr, sey - cr, cr,  ph,  pi, false);
+	c2d.arc(nwx + cr, nwy + cr, cr,  pi, -ph, false);
 }
 
 
@@ -836,7 +834,7 @@ C2D.Line.connect = function(shape1, end1, shape2, end2) {
 		var z1 = shape1;
 		var p1;
 		if (z1.within(p2)) {
-			p1 = new Point(z1.mx, z1.my); // todo rename mx/my
+			p1 = z1.pc; 
 		} else {
 			// todo min max
 			p1 = new Point(
@@ -1037,38 +1035,36 @@ Object.defineProperty(C2D.prototype, "height", {
 | The canvas is cleared and its size ensured to be width/height (of rect).
 | border is an additional increase/decrease added.
 |
-| attune()                                    -or-
-| attune(rect, [resizeW], [resizeH])          -or-
-| attune(width, height, [resizeW], [resizeH])
+| attune()               -or-
+| attune(rect)           -or-
+| attune(width, height)
 */
 // todo remove resizeW resizeH again if not used.
-C2D.prototype.attune = function(a1, a2, a3, a4) {
+C2D.prototype.attune = function(a1, a2) {
 	var ta1 = typeof(a1);
 	var c = this._canvas;
-	if (ta1 === "undefined") {
+	var w, h;
+	switch(typeof(a1)) {
+	case 'undefined' :
 		this._cx.clearRect(0, 0, c.width, c.height);	
 		return;
-	}
-	var w, h, rw, rh;
-	if (ta1 === "object") {
+	case 'object' :
 		w  = a1.width;
 		h  = a1.height;
-		rw = a2 || 0;
-		rh = a3 || 0;
-	} else {
+		break;
+	default :
 		w  = a1;
 		h  = a2;
-		rw = a3 || 0;
-		rh = a4 || 0;
+		break;
 	}
-	if (c.width === w + rw && c.height === h + rh) {
+	if (c.width === w && c.height === h) {
 		// no size change, clearRect() is faster
 		this._cx.clearRect(0, 0, c.width, c.height);
 		return;	
 	}
 	/* setting width or height clears the contents */
-	if (c.width  !== w + rw) c.width  = w + rw;
-	if (c.height !== h + rh) c.height = h + rh;
+	if (c.width  !== w) c.width  = w;
+	if (c.height !== h) c.height = h;
 }
 
 
@@ -1144,6 +1140,7 @@ C2D.prototype.path = function(self, border) {
 | Makes a stroke. todo remove
 */
 C2D.prototype.stroke = function(lineWidth, style) {
+//	throw new Error("stroke");
 	var cx = this._cx;
 	cx.lineWidth = lineWidth;
 	cx.strokeStyle = style;
@@ -1310,9 +1307,9 @@ C2D.prototype._colorStyle = function(style, shape) {
 | style: the style formated in meshcraft style notation.
 | shape: an object which has path() defined 
 */
-C2D.prototype.fills = function(style, shape, a1, a2, a3) {
+C2D.prototype.fills = function(style, shape, path, a1, a2, a3) {
 	var cx = this._cx;
-	shape.path(this, 0, a1, a2, a3);
+	shape[path](this, 0, a1, a2, a3);
 	cx.fillStyle = this._colorStyle(style, shape);
 	cx.fill();
 }
@@ -1323,9 +1320,9 @@ C2D.prototype.fills = function(style, shape, a1, a2, a3) {
 | style: the style formated in meshcraft style notation.
 | shape: an object which has path() defined
 */
-C2D.prototype._edge = function(style, shape, a1, a2, a3) {
+C2D.prototype._edge = function(style, shape, path, a1, a2, a3) {
 	var cx = this._cx;
-	shape.path(this, style.border, a1, a2, a3);
+	shape[path](this, style.border, a1, a2, a3);
 	cx.strokeStyle = this._colorStyle(style.color, shape);
 	cx.lineWidth = style.width;
 	cx.stroke();
@@ -1337,15 +1334,22 @@ C2D.prototype._edge = function(style, shape, a1, a2, a3) {
 | style: the style formated in meshcraft style notation.
 | shape: an object which has path() defined
 */
-C2D.prototype.edges = function(style, shape, a1, a2, a3) {
+C2D.prototype.edges = function(style, shape, path, a1, a2, a3) {
 	var cx = this._cx;
 	if (style instanceof Array) {
 		for(var i = 0; i < style.length; i++) {
-			this._edge(style[i], shape, a1, a2, a3);
+			this._edge(style[i], shape, path, a1, a2, a3);
 		}
 	} else {
-		this._edge(style[i], shape, a1, a2, a3);
+		this._edge(style[i], shape, path, a1, a2, a3);
 	}
+}
+
+/**
+| Fills an aera and draws its borders 
+*/
+C2D.prototype.draw = function(style, spahe, path, a1, a2, a3) {
+	throw new Error('todo');
 }
 
 /**

@@ -1388,13 +1388,13 @@ function Hexmenu(p, radi, rado, labels) {
 Hexmenu.prototype.draw = function() {
 	var c2d = System.c2d; // todo?
 
-	c2d.fills(settings.floatmenu.style.fill, this.hflower, -1);
+	c2d.fills(settings.floatmenu.style.fill, this.hflower, 'path' -1); // todo combine path-1
 	if (this.mousepos > 0) {
 		c2d.fills(settings.floatmenu.style.select, this.hflower, this.mousepos);
 	}
-	c2d.edges(settings.floatmenu.style.edge, this.hflower, -2); 
+	c2d.edges(settings.floatmenu.style.edge, this.hflower, 'path', -2); 
 
-	c2d.fontStyle("12px " + settings.defaultFont, "black", "center", "middle");
+	c2d.fontStyle('12px ' + settings.defaultFont, 'black', 'center', 'middle');
 	var labels = this.labels;
 	var llen = labels.length;
 	
@@ -1543,11 +1543,11 @@ Edgemenu.prototype.draw = function() {
 			this.pse = new Point(sex, sey);
 	}
 
-	c2d.fills(settings.edgemenu.style.fill, this, -1);
+	c2d.fills(settings.edgemenu.style.fill, this, 'path', -1); // todo combine path-1
 	if (this.mousepos >= 0) {
-		c2d.fills(settings.edgemenu.style.select, this, this.mousepos);
+		c2d.fills(settings.edgemenu.style.select, this, 'path', this.mousepos);
 	}
-	c2d.edges(settings.edgemenu.style.edge, this, -2); 
+	c2d.edges(settings.edgemenu.style.edge, this, 'path', -2); 
 
 	c2d.fontStyle("12px " + settings.defaultFont, "black", "center", "middle");
 	var bx = this.pnw.x;
@@ -1566,7 +1566,7 @@ Edgemenu.prototype._getMousepos = function(p) {
 	var c2d = System.c2d;
 	if (!this.pnw || !this.pse) return this.mousepos = -1;
 	if (p.y < this.pnw.y) return this.mousepos = -1;
-	var mx = R(c2d.width / 2);
+	var mx = R(c2d.width / 2);  // todo give it pc
 	var ew = R((this.pse.y - this.pnw.y) * C2D.tan30); // todo simplify
 	/* shortcut name = letters for formula */
 	var pymcht6 = (p.y - c2d.height) * C2D.tan30;
@@ -2729,7 +2729,7 @@ DTree.prototype.draw = function(c2d, select, offsetX, offsetY, scrolly) {
 	var parasep = this.pre ? 0 : this._fontsize;
 
 	/* draws the selection */
-	if (select.active && select.mark1.item == this.parent) {
+	if (select.active && select.mark1.item === this.parent) {
 		/* todo make part of selection to use shortcut with XY */
 		var b = select.mark1;
 		var e = select.mark2;
@@ -2957,7 +2957,7 @@ Item.prototype.checkItemCompass = function(p) {
 		if (w && ha.nw)      return 'nw';
 		else if (e && ha.ne) return 'ne';
 		else if (ha.n) {
-			var mx = hzone.mx;
+			var mx = hzone.pc.x;
 			// todo abs.
 			if (p.x >= mx - d && p.x <= mx + d) return 'n'; 
 		}
@@ -2965,14 +2965,14 @@ Item.prototype.checkItemCompass = function(p) {
 		if (w && ha.sw)      return 'sw';
 		else if (e && ha.se) return 'se';
 		else if (ha.s) {
-			var mx = hzone.mx;
+			var mx = hzone.pc.x;
 			if (p.x >= mx - d && p.x <= mx + d) return 's'; 
 		}
 	} else if (w && ha.w) {
-		var my = hzone.my;
+		var my = hzone.pc.y;
 		if (p.y >= my - d && p.y <= my + d) return 'w'; 
 	} else if (e && ha.e) {
-		var my = hzone.my;
+		var my = hzone.pc.y;
 		if (p.y >= my - d && p.y <= my + d) return 'e';
 	}
 	return null;
@@ -3018,8 +3018,8 @@ Item.prototype.drawHandles = function(space) {
 	// draws item menu handler 
 	var h6slice = this.h6slice;
 	// todo replace with paint()
-	c2d.fills(settings.itemmenu.slice.style.fill, h6slice);
-	c2d.edges(settings.itemmenu.slice.style.edge, h6slice);
+	c2d.fills(settings.itemmenu.slice.style.fill, h6slice, 'path');
+	c2d.edges(settings.itemmenu.slice.style.edge, h6slice, 'path');
 }
 
 
@@ -3091,7 +3091,7 @@ Note.prototype.removed = function() {
 */		
 // todo round rects
 Note.prototype.highlight = function(c2d) {
-	c2d.edges(settings.note.style.highlight, this.zone);
+	c2d.edges(settings.note.style.highlight, this.zone, 'path');
 }
 
 /* turns the note into a string */
@@ -3253,7 +3253,7 @@ Note.prototype.draw = function(c2d, selection) {
 	}
 
 	bc2d.attune(this.zone);
-	bc2d.fills(settings.note.style.fill, this.silhoutte);
+	bc2d.fills(settings.note.style.fill, this.silhoutte, 'path');
 
 	/* calculates if a scrollbar is needed */
 	var sy = this._scrolly;
@@ -3348,7 +3348,7 @@ Note.prototype.draw = function(c2d, selection) {
 	}
 
 	/* draws the border */
-	bc2d.edges(settings.note.style.edge, this.silhoutte);
+	bc2d.edges(settings.note.style.edge, this.silhoutte, 'path');
 	
 	this._canvasActual = true;
 	c2d.drawImage(bc2d, this.zone.pnw);
@@ -3469,7 +3469,7 @@ Label.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 | Highlights the label.
 */		
 Label.prototype.highlight = function(c2d) {
-	c2d.edges(settings.label.style.highlight, this.zone);
+	c2d.edges(settings.label.style.highlight, this.zone, 'path');
 }
 
 /**
@@ -3572,7 +3572,7 @@ Label.prototype.draw = function(c2d, selection) {
 	// draws text
 	dtree.draw(bc2d, selection, 0, 0, 0);
 	// draws the border
-	bc2d.edges(settings.label.style.edge, bc2d);
+	bc2d.edges(settings.label.style.edge, bc2d, 'path');
 	this._canvasActual = true;
 	c2d.drawImage(bc2d, this.zone.pnw);
 }
@@ -3644,7 +3644,7 @@ Relation.create = function(item1, item2) {
 	dtree.append(new Paragraph("relates to"));
 	dtree.flowWidth = -1;
 	var cline = Line.connect(item1.handlezone, null, item2.handlezone, null); // todo bindzone
-	var mx = (cline.p1.x + cline.p2.x) / 2;
+	var mx = (cline.p1.x + cline.p2.x) / 2; // todo teach line pc
 	var my = (cline.p1.y + cline.p2.y) / 2;
 	var textZone = new Rect(
 		new Point(R(mx - dtree.width / 2), R(my - dtree.height / 2)),
@@ -3652,7 +3652,6 @@ Relation.create = function(item1, item2) {
 	return new Relation(null, item1.id, item2.id, textZone, dtree);
 
 /*
-	xxx
 	if (mcanvas) {
 	var it1 = System.repository.items[this.i1id]; // todo funcall
 	var it2 = System.repository.items[this.i2id];
@@ -3729,7 +3728,7 @@ Relation.prototype.removed = function() {
 | Highlights the label.
 */		
 Relation.prototype.highlight = function(c2d) {
-	c2d.edges(settings.relation.style.highlight, this.textZone);
+	c2d.edges(settings.relation.style.highlight, this.textZone, 'path');
 }
 
 /**
@@ -4002,17 +4001,17 @@ Relation.prototype.draw = function(c2d, selection) {
 	var it2 = System.repository.items[this.i2id];
 	if (!this._canvasActual) {
 		bc2d.attune(this.textZone); 
-		bc2d.edges(settings.relation.style.labeledge, bc2d);
+		bc2d.edges(settings.relation.style.labeledge, bc2d, 'path');
 		dtree.draw(bc2d, selection, 2, 2, 0);
 		this._canvasActual = true;
 	}
 	var l1 = Line.connect(it1.handlezone, 'normal', this.textZone, 'normal'); // todo bindzone
 	var l2 = Line.connect(this.textZone,  'normal', it2.handlezone, 'arrow'); // todo bindzone
 	// todo combine into one call;
-	c2d.fills(settings.relation.style.fill, l1);
-	c2d.edges(settings.relation.style.edge, l1);
-	c2d.fills(settings.relation.style.fill, l2); 
-	c2d.edges(settings.relation.style.edge, l2);
+	c2d.fills(settings.relation.style.fill, l1, 'path');
+	c2d.edges(settings.relation.style.edge, l1, 'path');
+	c2d.fills(settings.relation.style.fill, l2, 'path'); 
+	c2d.edges(settings.relation.style.edge, l2, 'path');
 	// draws text 
 	c2d.drawImage(bc2d, this.textZone.pnw);
 }
