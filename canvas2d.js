@@ -672,13 +672,6 @@ C2D.HexagonSlice.prototype.path = function(c2d, border) {
  ri:   inner radius
  ro:   outer radius
  segs: which segments to include
-
- additional "segments":  todo
- 	 0: inner hex
-	-1: outer hex
-	-2: structure
-
-// todo replace numbers with compass names.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 C2D.HexagonFlower = function(pc, ri, ro, segs) {
 	if (ri > ro) throw new Error('inner radius > outer radius');
@@ -987,8 +980,8 @@ C2D.Line.prototype.path = function(c2d) {
 | Draws the line.
 */
 C2D.Line.prototype.draw = function(c2d) {
-	c2d.fills(settings.relation.style.fill, this);
-	c2d.edges(settings.relation.style.edge, this);
+	c2d.fills(settings.relation.style.fill, this, 'path');
+	c2d.edges(settings.relation.style.edge, this, 'path');
 }
 
 
