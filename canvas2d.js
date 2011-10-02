@@ -657,23 +657,23 @@ C2D.HexagonSlice.prototype.path = function(c2d, border) {
                   |--->| ri  ' 
                   '    '     '
             *-----'----'*    '     -1
-           / \    1    ' \   '
+           / \    n    ' \   '
           /   \   '   /'  \  '
-         /  6  *-----* ' 2 \ '
-        /   '   \'    \'    \
+         / nw  *-----* 'ne \ '
+        /   ' /   '   \'    \
  pc.y  *-----*    +    *-----*
         \     \    p  /     /
-         \  5  *-----*   3 /
+         \ sw  *-----*  se /
           \   /       \   /
-           \ /    4    \ /
+           \ /    s    \ /
             *-----------*
 
  pc:   center
- r:    outer radius
  ri:   inner radius
- segs: lists 0..6 which segments to include
+ ro:   outer radius
+ segs: which segments to include
 
- additional "segments":
+ additional "segments":  todo
  	 0: inner hex
 	-1: outer hex
 	-2: structure
@@ -681,14 +681,13 @@ C2D.HexagonSlice.prototype.path = function(c2d, border) {
 // todo replace numbers with compass names.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 C2D.HexagonFlower = function(pc, ri, ro, segs) {
-	this.pc = pc;
 	if (ri > ro) throw new Error('inner radius > outer radius');
-	this.ri = ri;
-	this.ro = ro;
-	this.gradientPC = pc;
-	this.gradientR1 = ro;
-	this.segs = segs;
-	Object.freeze(this);
+	C2D.fixate(this, 'pc', pc);
+	C2D.fixate(this, 'ri', ri);
+	C2D.fixate(this, 'ro', ro);
+	C2D.fixate(this, 'gradientPC', pc);
+	C2D.fixate(this, 'gradientR1', ro);
+	C2D.fixate(this, 'segs', segs);
 }
 
 /**
@@ -709,7 +708,7 @@ C2D.HexagonFlower.prototype.path = function(c2d, border, segment) {
 	var segs = this.segs;
 	c2d.beginPath();
 	/* inner hex */
-	if (segment === 0 || segment === -2) {
+	if (segment === 'innerHex' || segment === 'structure') {
 		c2d.moveTo(pcx - ri  - b,  pcy             );
 		c2d.lineTo(pcx - ri2 - b2, pcy - ric - bc6 );
 		c2d.lineTo(pcx + ri2 + b2, pcy - ric - bc6 );
@@ -720,7 +719,7 @@ C2D.HexagonFlower.prototype.path = function(c2d, border, segment) {
 	}
 
 	/* outer hex */
-	if (segment === -1 || segment === -2) {
+	if (segment === 'outerHex' || segment === 'structure') {
 		c2d.moveTo(pcx - ro  + b,  pcy             );
 		c2d.lineTo(pcx - ro2 + b2, pcy - roc + bc6 );
 		c2d.lineTo(pcx + ro2 - b2, pcy - roc + bc6 );
@@ -731,68 +730,68 @@ C2D.HexagonFlower.prototype.path = function(c2d, border, segment) {
 	}
 
 	switch (segment) {
-	case -2 :
-		if (segs[1] || segs[6]) {
+	case 'structure' :
+		if (segs.n || segs.nw) {
 			c2d.moveTo(pcx - ri2,  pcy - ric);
 			c2d.lineTo(pcx - ro2,  pcy - roc);
 		}
-		if (segs[1] || segs[2]) {
+		if (segs.n  || segs.ne) {
 			c2d.moveTo(pcx + ri2, pcy - ric);
 			c2d.lineTo(pcx + ro2, pcy - roc);
 		}
-		if (segs[2] || segs[3]) {
+		if (segs.ne || segs.se) {
 			c2d.moveTo(pcx + ri,  pcy);
 			c2d.lineTo(pcx + ro,  pcy);
 		}
-		if (segs[3] || segs[4]) {
+		if (segs.se || segs.s) {
 			c2d.moveTo(pcx + ri2, pcy + ric + bc6);
 			c2d.lineTo(pcx + ro2, pcy + roc - bc6);
 		}
-		if (segs[4] || segs[5]) {
+		if (segs.s || segs.sw) {
 			c2d.moveTo(pcx - ri2, pcy + ric + bc6);
 			c2d.lineTo(pcx - ro2, pcy + roc - bc6);
 		}
-		if (segs[5] || segs[6]) {
+		if (segs.sw || segs.nw) {
 			c2d.moveTo(pcx - ri, pcy);
 			c2d.lineTo(pcx - ro, pcy);
 		}
 		break;
-	case 1:
+	case 'n':
 		c2d.moveTo(pcx - ro2 + b2, pcy - roc + bc6);
 		c2d.lineTo(pcx + ro2 - b2, pcy - roc + bc6);
 		c2d.lineTo(pcx + ri2 + b2, pcy - ric - bc6);
 		c2d.lineTo(pcx - ri2 - b2, pcy - ric - bc6);
 		c2d.lineTo(pcx - ro2 + b2, pcy - roc + bc6);
 		break;
-	case 2:
+	case 'ne':
 		c2d.moveTo(pcx + ro2 - b2, pcy - roc + bc6);
 		c2d.lineTo(pcx + ro  - b,  pcy);
 		c2d.lineTo(pcx + ri  + b,  pcy);
 		c2d.lineTo(pcx + ri2 + b2, pcy - ric - bc6);
 		c2d.lineTo(pcx + ro2 - b2, pcy - roc + bc6);
 		break;
-	case 3:
+	case 'se':
 		c2d.moveTo(pcx + ro  - b,  pcy);
 		c2d.lineTo(pcx + ro2 - b2, pcy + roc - bc6);
 		c2d.lineTo(pcx + ri2 + b2, pcy + ric + bc6);
 		c2d.lineTo(pcx + ri  + b,  pcy);
 		c2d.lineTo(pcx + ro  - b,  pcy);
 		break;
-	case 4:
+	case 's':
 		c2d.moveTo(pcx + ro2 - b2, pcy + roc - bc6);
 		c2d.lineTo(pcx - ro2 + b2, pcy + roc - bc6);
 		c2d.lineTo(pcx - ri2 - b2, pcy + ric + bc6);
 		c2d.lineTo(pcx + ri2 + b2, pcy + ric + bc6);
 		c2d.lineTo(pcx + ro2 - b2, pcy + roc - bc6);
 		break;
-	case 5:
+	case 'sw':
 		c2d.moveTo(pcx - ro2 + b2, pcy + roc - bc6);
 		c2d.lineTo(pcx - ro  + b,  pcy);
 		c2d.lineTo(pcx - ri  - b,  pcy);
 		c2d.lineTo(pcx - ri2 - b2, pcy + ric + bc6);
 		c2d.lineTo(pcx - ro2 + b2, pcy + roc - bc6);
 		break;
-	case 6:
+	case 'nw':
 		c2d.moveTo(pcx - ro  + b,  pcy);
 		c2d.lineTo(pcx - ro2 + b2, pcy - roc + bc6);
 		c2d.lineTo(pcx - ri2 - b2, pcy - ric - bc6);
@@ -812,24 +811,24 @@ C2D.HexagonFlower.prototype.within = function(p) {
 	var dyc6 = Math.abs(dy * C2D.tan30);
 	
 	if (dy <  -roc6 || dy >  roc6 || dx - this.ro >= -dyc6 || dx + this.ro <= dyc6) {
-		return -1;
+		return null;
 	}
 	
 	var ric6 = this.ri * C2D.cos30;
 	if (dy >= -ric6 && dy <= ric6 && dx - this.ri <  -dyc6 && dx + this.ri >  dyc6) {
-		return 0;
+		return 'center';
 	}
 
 	var lor = dx <= -dy * C2D.tan30; // left of right diagonal
 	var rol = dx >=  dy * C2D.tan30; // right of left diagonal
-	var aom = dy <= 0;              // above of middle line
-	if (lor && rol)        return 1;
-	else if (!lor && aom)  return 2;
-	else if (rol && !aom)  return 3;
-	else if (!rol && !lor) return 4;
-	else if (lor && !aom)  return 5;
-	else if (!rol && aom)  return 6;
-	else return 0;
+	var aom = dy <= 0;               // above of middle line
+	if (lor && rol)        return 'n';
+	else if (!lor && aom)  return 'ne';
+	else if (rol && !aom)  return 'se';
+	else if (!rol && !lor) return 's';
+	else if (lor && !aom)  return 'sw';
+	else if (!rol && aom)  return 'nw';
+	else return 'center';
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

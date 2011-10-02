@@ -1382,39 +1382,30 @@ function Hexmenu(p, radi, rado, labels) {
 	this.hi = new Hexagon(p, radi);
 	this.ho = new Hexagon(p, rado);
 	this.labels = labels;
-	this.mousepos = -1;
+	this.mousepos = null;
 }
 
 Hexmenu.prototype.draw = function() {
 	var c2d = System.c2d; // todo?
 
-	c2d.fills(settings.floatmenu.style.fill, this.hflower, 'path', -1); // todo combine path-1
-	if (this.mousepos > 0) {
+	c2d.fills(settings.floatmenu.style.fill, this.hflower, 'path', 'outerHex'); // todo combine path-1
+	if (this.mousepos && this.mousepos !== 'center') {
 		c2d.fills(settings.floatmenu.style.select, this.hflower, 'path', this.mousepos);
 	}
-	c2d.edges(settings.floatmenu.style.edge, this.hflower, 'path', -2); 
+	c2d.edges(settings.floatmenu.style.edge, this.hflower, 'path', 'structure'); 
 
 	c2d.fontStyle('12px ' + settings.defaultFont, 'black', 'center', 'middle');
 	var labels = this.labels;
-	var llen = labels.length;
 	
 	var rd = this.ho.r * (1 - 1 / 3.5);
-	switch (llen - 1) {
-	default:
-	case 6: c2d.fillRotateText(labels[6], this.p, Math.PI / 3 * 5, rd); 
-	/* fall */
-	case 5: c2d.fillRotateText(labels[5], this.p, Math.PI / 3 * 4, rd);
-	/* fall */
-	case 4: c2d.fillRotateText(labels[4], this.p, Math.PI / 3 * 3, rd);
-	/* fall */
-	case 3: c2d.fillRotateText(labels[3], this.p, Math.PI / 3 * 2, rd);
-	/* fall */
-	case 2: c2d.fillRotateText(labels[2], this.p, Math.PI / 3 * 1, rd);
-	/* fall */
-	case 1: c2d.fillRotateText(labels[1], this.p, Math.PI / 3 * 6, rd);
-	/* fall */
-	case 0: c2d.fillText(labels[0], this.p);
-	}
+
+	if (labels.n)  c2d.fillRotateText(labels.n,  this.p, Math.PI / 3 * 6, rd);
+	if (labels.ne) c2d.fillRotateText(labels.ne, this.p, Math.PI / 3 * 1, rd);
+	if (labels.se) c2d.fillRotateText(labels.se, this.p, Math.PI / 3 * 2, rd);
+	if (labels.s)  c2d.fillRotateText(labels.s,  this.p, Math.PI / 3 * 3, rd);
+	if (labels.sw) c2d.fillRotateText(labels.sw, this.p, Math.PI / 3 * 4, rd);
+	if (labels.nw) c2d.fillRotateText(labels.nw, this.p, Math.PI / 3 * 5, rd); 
+	if (labels.c)  c2d.fillText(labels.c, this.p);
 }
 
 // todo remove.
@@ -1625,7 +1616,7 @@ function Cockpit() {
  The  '  are where all the items are in.     
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Space() {
-	this._floatMenuLabels = ["new", "Note", "Label"];
+	this._floatMenuLabels = {c: 'new', n: 'Note', ne: 'Label'};
 	this.edgemenu = new Edgemenu();
 	
 	this.iaction = {
@@ -2252,8 +2243,9 @@ Space.prototype.mousedown = function(p) {
 		if (md < 0) {
 			break;
 		}
+		debug(md);
 		switch(md) {
-		case 1 : // note
+		case 'n' : // note
 			var nw = settings.note.newWidth;
 			var nh = settings.note.newHeight;
 			// todo, beautify point logic.
@@ -2262,7 +2254,7 @@ Space.prototype.mousedown = function(p) {
 			var note = new Note(null, new Rect(pnw, pse), new DTree());
 			this.setFoci(note);
 			break;
-		case 2 : // label
+		case 'ne' : // label
 			var pnw = fm.p.sub(this.pan);
 			var pse = pnw.add(100, 50);
 			var dtree = new DTree(20);
@@ -2280,9 +2272,9 @@ Space.prototype.mousedown = function(p) {
 		var md = this._itemmenu.mousedown(p);
 		iaction.act = ACT.NONE;
 		redraw = true;
-		if (md >= 0) {
+		if (md) {
 			switch(md) {
-			case 1:
+			case 'n':
 				System.repository.removeItem(this.focus);
 				this.setFoci(null);
 				break;
@@ -2921,7 +2913,7 @@ Item.prototype.newItemMenu = function(pan) {
 	var hzone = this.handlezone;
 	var r = settings.itemmenu.innerRadius;
 	var h = settings.itemmenu.slice.height;
-	var labels = this._itemMenuLabels = ["", "Remove"];
+	var labels = this._itemMenuLabels = {n : 'Remove'};
 	// todo why pan?
 	var p = new Point(
 		R(hzone.pnw.x + pan.x + r - (r * C2D.cos30 - h) * C2D.tan30), 
