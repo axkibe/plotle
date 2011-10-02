@@ -1388,9 +1388,9 @@ function Hexmenu(p, radi, rado, labels) {
 Hexmenu.prototype.draw = function() {
 	var c2d = System.c2d; // todo?
 
-	c2d.fills(settings.floatmenu.style.fill, this.hflower, 'path' -1); // todo combine path-1
+	c2d.fills(settings.floatmenu.style.fill, this.hflower, 'path', -1); // todo combine path-1
 	if (this.mousepos > 0) {
-		c2d.fills(settings.floatmenu.style.select, this.hflower, this.mousepos);
+		c2d.fills(settings.floatmenu.style.select, this.hflower, 'path', this.mousepos);
 	}
 	c2d.edges(settings.floatmenu.style.edge, this.hflower, 'path', -2); 
 

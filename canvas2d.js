@@ -72,18 +72,23 @@ C2D.subclass = function(sub, base) {
    sub.prototype.constructor = sub;
 }
 
-/**
-| Shortcuts
+/** 
+| sets a readonly value 
 */
-
-// sets a readonly value.
-C2D.fixate = function(obj, key, value) { Object.defineProperty(obj, key, {enumerable: true, value: value}); }
+C2D.fixate = function(obj, key, value) { 
+	Object.defineProperty(obj, key, {enumerable: true, value: value}); 
+	return value;
+}
 C2D.fixate(C2D, 'fixate', C2D.fixate);
-// divides by 2 and round up
+
+/* divides by 2 and rounds up */
 C2D.fixate(C2D, 'half',  function(v) { return Math.round(v / 2); });
-// cos(30°)
+
+/* cos(30°) */
+
 C2D.fixate(C2D, 'cos30', Math.cos(Math.PI / 6));
-// tan(30°)
+
+/* tan(30°) */
 C2D.fixate(C2D, 'tan30', Math.tan(Math.PI / 6));
 
 /**
@@ -168,22 +173,25 @@ C2D.Point = function(a1, a2) {
 	if (typeof(a1) === 'object') {
 		C2D.fixate(this, 'x', a1.x);
 		C2D.fixate(this, 'y', a1.y);
+	} else {
+		C2D.fixate(this, 'x', a1);
+		C2D.fixate(this, 'y', a2);
 	}
-	C2D.fixate(this, 'x', a1);
-	C2D.fixate(this, 'y', a2);
 }
 
 /**
-| Shortcut for often used point at 0/0.
+| Shortcut for point at 0/0.
 */
 C2D.Point.zero = new C2D.Point(0, 0);
 
-/* Creates a point from json */
+/** 
+| Creates a point from json 
+*/
 C2D.Point.jnew = function(js) {
-	if (typeof(js.x) !== "number" || typeof(js.y) !== "number") {
-		throw new Error("Expected a number in JSON, but isn't");
+	if (typeof(js.x) !== 'number' || typeof(js.y) !== 'number') {
+		throw new Error('JSON malformed point.');
 	}
-	return new C2D.Point(js.x, js.y);
+	return new C2D.Point(js);
 }
 
 /**
@@ -206,34 +214,34 @@ C2D.Point.renew = function(x, y) {
 | Returns a json object for this point.
 */
 C2D.Point.prototype.jsonfy = function() {
-	return { x: this.x, y: this.y };
+	return this._json || (this._json = { x: this.x, y: this.y });
 }
 
 /**
 | Returns true if this point is equal to another.
 */
-C2D.Point.prototype.eq = function(px, y) {
-	return arguments.length === 1 ? 
-		this.x === px.x && this.y === px.y :
-		this.x === px   && this.y ===    y;
+C2D.Point.prototype.eq = function(a1, a2) {
+	return typeof(a1) === 'object' ? 
+		this.x === a1.x && this.y === a1.y :
+		this.x === a1   && this.y === a2;
 }
 
 /** 
 | Adds two points or x/y values, returns a new point.
 */
 C2D.Point.prototype.add = function(a1, a2) {
-	return (typeof(a1) === "object" ?
+	return typeof(a1) === "object" ?
 		new C2D.Point(this.x + a1.x, this.y + a1.y) :
-		new C2D.Point(this.x + a1,   this.y + a2));
+		new C2D.Point(this.x + a1,   this.y + a2);
 }
 
 /** 
 | Subtracts a points (or x/y from this), returns new point 
 */
 C2D.Point.prototype.sub = function(a1, a2) {
-	return (typeof(a1) === "object" ?
+	return typeof(a1) === "object" ?
 		new C2D.Point(this.x - a1.x, this.y - a1.y) :
-		new C2D.Point(this.x - a1,   this.y - a2));
+		new C2D.Point(this.x - a1,   this.y - a2);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -255,10 +263,10 @@ C2D.Rect = function(pnw, pse) {
 	if (!pnw || !pse || pnw.x > pse.x || pnw.y > pse.y) { 
 		throw new Error("not a rectangle."); 
 	}
-	Object.defineProperty(this, 'pnw',    {enumerable: true, value: pnw});
-	Object.defineProperty(this, 'pse',    {enumerable: true, value: pse});
-	Object.defineProperty(this, 'width',  {enumerable: true, value: pse.x - pnw.x});
-	Object.defineProperty(this, 'height', {enumerable: true, value: pse.y - pnw.y});
+	C2D.fixate(this, 'pnw',    pnw);
+	C2D.fixate(this, 'pse',    pse);
+	C2D.fixate(this, 'width',  pse.x - pnw.x);
+	C2D.fixate(this, 'height', pse.y - pnw.y);
 }
 
 /** 
@@ -304,7 +312,7 @@ C2D.Rect.prototype.within = function(p) {
 }
 
 /**
-| Draws the rect.
+| Draws the rectangle.
 */
 C2D.Rect.prototype.path = function(c2d, border) {
 	c2d.beginPath();
@@ -417,7 +425,10 @@ C2D.Rect.prototype.resize = function(width, height, align) {
 }
 
 /** 
-| Returns a rectangle with same size at position at p|x/y).
+| Returns a rectangle with same size at position.
+| 
+| moveto(p)   -or-
+| moveto(x, y)
 */
 C2D.Rect.prototype.moveto = function(a1, a2) {
 	if (typeof(a1) !== 'object') a1 = new C2D.Point(a1, a2);
@@ -425,7 +436,7 @@ C2D.Rect.prototype.moveto = function(a1, a2) {
 }
 
 /** 
-| Returns true if this rectangle is like another 
+| Returns true if this rectangle is the same as another 
 */
 C2D.Rect.prototype.eq = function(r) {
 	return this.pnw.eq(r.pnw) && this.pse.eq(r.pse);
@@ -436,10 +447,9 @@ C2D.Rect.prototype.eq = function(r) {
 */
 Object.defineProperty(C2D.Rect.prototype, 'pc', {
 	get: function() {
-		var pc = new Point(half(this.pse.x + this.pnw.x), half(this.pse.y, this.pnw.y));
-		// caches the result, so this function wont be called for this Rect again.
-		Object.defineProperty(this, 'pc', {enumerable: true, value: pc});
-		return pc;
+		// caches the result, so this function wont be called again for this Rect.
+		return C2D.fixate(this, 'pc', new Point(
+			half(this.pse.x + this.pnw.x), half(this.pse.y, this.pnw.y)));
 	}
 });
 
@@ -462,16 +472,16 @@ Object.defineProperty(C2D.Rect.prototype, 'pc', {
 C2D.RoundRect = function(a1, a2, a3) {
 	if (a1.constructor === C2D.Point) {
 		C2D.Rect.call(this, a1, a2);
-		this.crad = a3;
+		C2D.fixate(this, 'crad', a3);
 	} else {
 		C2D.Rect.call(this, a1.pnw, a1.pse);
-		this.crad = a2;
+		C2D.fixate(this, 'crad', a2);
 	}
 }
 C2D.subclass(C2D.RoundRect, C2D.Rect);
 
 /**
-| Draws a bevel.
+| Draws the roundrect.
 |
 | c2d: Canvas2D area to draw upon.
 | border: additional distance.
@@ -483,7 +493,7 @@ C2D.RoundRect.prototype.path = function(c2d, border) {
 	var sey = this.pse.y - border;
 	var cr  = this.crad  + border;
 	var pi = Math.PI;
-	var ph = Math.PI / 2;
+	var ph = pi / 2;
 	c2d.beginPath();
 	c2d.moveTo(nwx + cr, nwy);
 	c2d.arc(sex - cr, nwy + cr, cr, -ph,   0, false);
@@ -505,12 +515,15 @@ C2D.RoundRect.prototype.path = function(c2d, border) {
 
 /**
 | Constructor.
-| Hexagon(p: center, r: radius) 
+|
+| Hexagon(p, r) 
+| pc: center
+| r: radius
 */
-C2D.Hexagon = function(p, r) {
-	if (typeof(p) !== 'object' || p.constructor !== C2D.Point) throw new Error("invalid p");
-	this.p = p;
-	this.r = r;
+C2D.Hexagon = function(pc, r) {
+	if (typeof(pc) !== 'object' || pc.constructor !== C2D.Point) throw new Error('invalid pc');
+	C2D.fixate(this, 'pc', pc);
+	C2D.fixate(this, 'r', r);
 	Object.freeze(this);
 }
 
@@ -519,21 +532,21 @@ C2D.Hexagon = function(p, r) {
 | Creates a hexgon from json.
 */
 C2D.Hexagon.jnew = function(js) {
-	return new C2D.Hexagon(js.p, js.r);
+	return new C2D.Hexagon(js.pc, js.r);
 }
 
 /**
 | Returns a json object for this rect.
 */
 C2D.Hexagon.prototype.jsonfy = function() {
-	return { p: this.p, j: this.j };
+	return this._json || (this._json = { pc: this.pc, r: this.r });
 }
 
 /**
 | Returns a hexagon moved by a point or x/y.
 */
 C2D.Hexagon.prototype.add = function(a1, a2) {
-	return new C2D.Hexagon(this.p.add(a1, a2), this.r);
+	return new C2D.Hexagon(this.pc.add(a1, a2), this.r);
 }
 
 /**
@@ -558,16 +571,18 @@ C2D.Hexagon.prototype.within = function(p) {
  The top slice of a  `' hexagon.
 
        ------------        ^
-      /............\       |  h
+      /............\       |  height
      /..............\      |
  psw*................\     v
    /                  \
   *<-------->*         *
-   \     r    pm      /
+   \   rad   pm       /
     \                /
      \              /
       \            /
-       *----------*		
+       *----------*	
+
+ height must be <= rad
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /**
 | Constructor.
@@ -577,19 +592,43 @@ C2D.Hexagon.prototype.within = function(p) {
 | height: slice height.
 */
 C2D.HexagonSlice = function(psw, rad, height) {
-	this.psw    = psw;
-	this.rad    = rad;
-	this.height = height;
+	C2D.fixate(this, 'psw', psw);
+	C2D.fixate(this, 'rad', rad);
+	C2D.fixate(this, 'height', height);
 	
-	if (height > rad) throw new Error("Cannot make slice larger than radius");
-	this.pm = new Point(
-		psw.x + rad - Math.round((rad * C2D.cos30 - height) * C2D.tan30), 
-		psw.y + Math.round(rad * C2D.cos30) - height);
-	/* for gradients only */
-	/* todo rename to gradientP1, so less confuse */
-	this.pnw = new Point(psw.x, psw.y - height);
-	this.pse = new Point(this.pm.x + rad, psw.y);
+	if (height > rad) throw new Error('Cannot make slice larger than radius');
 }
+
+/**
+| Middle(center) point of Hexagon.
+*/
+Object.defineProperty(C2D.HexagonSlice.prototype, 'pm', {
+	get: function() {
+		return C2D.fixate(this, 'pm', new Point(
+			this.psw.x + this.rad - Math.round((this.rad * C2D.cos30 - this.height) * C2D.tan30), 
+			this.psw.y + Math.round(this.rad * C2D.cos30) - this.height));
+	}
+});
+
+/**
+| pnw (used by gradients)
+*/
+Object.defineProperty(C2D.HexagonSlice.prototype, 'pnw', {
+	get: function() { 
+		return C2D.fixate(this, 'pnw', new Point(this.psw.x, this.psw.y - this.height)); 
+	}
+});
+
+
+/**
+| pse (used by gradients)
+*/
+Object.defineProperty(C2D.HexagonSlice.prototype, 'pse', {
+	get: function() { 
+		return C2D.fixate(this, 'pse', new Point(this.pm.x + this.rad, this.psw.y)); 
+	}
+});
+	
 
 /**
 | Draws the hexagon.
