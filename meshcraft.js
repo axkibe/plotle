@@ -14,8 +14,6 @@
 /**
 | Authors: Axel Kittenberger (axkibe@gmail.com)
 | License: GNU Affero GPLv3 
-|
-| If you see this in your Broswer, please reload!
 */
 
 "use strict";
@@ -203,10 +201,13 @@ var settings = {
 	handle : {
 		size      : 10,
 		distance  : 0,
-		color1    : 'rgb(125,120,32)',
-		width1    : 3,
-		color2    : 'rgb(255,180,90)',
-		width2    : 1,
+
+		style : {
+			edge : [
+				{ border: 0, width: 3, color: 'rgb(125,120,32)' },
+				{ border: 0, width: 1, color: 'rgb(255,180,90)' },
+			],
+		},
 	},
 	
 	relation : {
@@ -1351,10 +1352,10 @@ Hexmenu.prototype.draw = function() {
 	
 	var rd = this.style.outerRadius * (1 - 1 / 3.5);
 
-	if (labels.n)  c2d.fillRotateText(labels.n,  this.p, Math.PI / 3 * 6, rd);
+	if (labels.n)  c2d.fillText(labels.n, this.p.x, this.p.y - rd);
 	if (labels.ne) c2d.fillRotateText(labels.ne, this.p, Math.PI / 3 * 1, rd);
 	if (labels.se) c2d.fillRotateText(labels.se, this.p, Math.PI / 3 * 2, rd);
-	if (labels.s)  c2d.fillRotateText(labels.s,  this.p, Math.PI / 3 * 3, rd);
+	if (labels.s)  c2d.fillText(labels.n, this.p.x, this.p.y + rd);
 	if (labels.sw) c2d.fillRotateText(labels.sw, this.p, Math.PI / 3 * 4, rd);
 	if (labels.nw) c2d.fillRotateText(labels.nw, this.p, Math.PI / 3 * 5, rd); 
 	if (labels.c)  c2d.fillText(labels.c, this.p);
@@ -1599,7 +1600,7 @@ Space.prototype.redraw = function() {
 		var it = items[zidx[i]]; // todo shorten
 		it.draw(c2d, this.selection);
 	}
-	if (this.focus) this.focus.drawHandles(this);
+	if (this.focus) this.focus.drawHandles(c2d);
 	
 	var ia = this.iaction;
 	switch(ia.act) {
@@ -2908,24 +2909,23 @@ Item.prototype.checkItemCompass = function(p) {
 }
 
 /**
-| Draws the handles of an item (resize, itemmenu) 
+| Paths the resize handles.
 */
-Item.prototype.drawHandles = function(space) {
-	var c2d = space.c2d;
+Item.prototype.pathResizeHandles = function(c2d, border) {
+	if (border !== 0) throw new Error('borders unsupported for handles');
+	var ha = this.handles;
+	var zone = this.handlezone;
 	var ds = settings.handle.distance; 
 	var hs = settings.handle.size;
 	var hs2 = hs / 2;
 	
-	var ha = this.handles;
-	var zone = this.handlezone;
-			
 	var x1 = zone.pnw.x - ds;
 	var y1 = zone.pnw.y - ds;
 	var x2 = zone.pse.x + ds;
 	var y2 = zone.pse.y + ds;
 	var xm = R((x1 + x2) / 2);
 	var ym = R((y1 + y2) / 2);
-	
+
 	c2d.beginPath(); 
 	if (ha.n ) { c2d.moveTo(xm - hs2, y1); c2d.lineTo(xm + hs2, y1);                    }
 	if (ha.ne) { c2d.moveTo(x2 - hs,  y1); c2d.lineTo(x2, y1); c2d.lineTo(x2, y1 + hs); }
@@ -2935,20 +2935,17 @@ Item.prototype.drawHandles = function(space) {
 	if (ha.sw) { c2d.moveTo(x1 + hs, y2);  c2d.lineTo(x1, y2); c2d.lineTo(x1, y2 - hs); }
 	if (ha.w ) { c2d.moveTo(x1, ym - hs2); c2d.lineTo(x1, ym + hs2);                    }
 	if (ha.nw) { c2d.moveTo(x1, y1 + hs);  c2d.lineTo(x1, y1); c2d.lineTo(x1 + hs, y1); }
-		
-	// todo replace with edges()
-	if (settings.handle.width1 > 0) {
-		c2d.stroke(settings.handle.width1, settings.handle.color1);
-	}
-	if (settings.handle.width2 > 0) {
-		c2d.stroke(settings.handle.width2, settings.handle.color2);
-	}
-	
+}
+
+/**
+| Draws the handles of an item (resize, itemmenu) 
+*/
+Item.prototype.drawHandles = function(c2d) {
+	// draws the resize handles
+	c2d.edges(settings.handle.style.edge, this, 'pathResizeHandles');
 	// draws item menu handler 
-	var h6slice = this.h6slice;
-	// todo replace with paint()
-	c2d.fills(settings.itemmenu.slice.style.fill, h6slice, 'path');
-	c2d.edges(settings.itemmenu.slice.style.edge, h6slice, 'path');
+	var sstyle = settings.itemmenu.slice.style;
+	c2d.paint(sstyle.fill, sstyle.edge, this.h6slice, 'path');
 }
 
 

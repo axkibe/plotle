@@ -1,10 +1,18 @@
-//include our modules
-var util  = require('util');
-var http  = require('http');
-var url   = require('url');
- 
-var fs = require('fs');
-var port = 8833;
+var config;
+try {
+	config = require('./config');
+} catch (e) {
+	console.log('no config found, default to running local on port 8833');
+	config = {
+		ip   : '127.0.0.1',
+		port : 8833,
+	};
+}
+
+var util = require('util');
+var http = require('http');
+var url  = require('url');
+var fs   = require('fs');
 
 var writeHeadEnd = function(res, type, content, format) {
 	res.writeHead(200, {'Content-Type': type});
@@ -25,6 +33,7 @@ var dispatch = function(req, reqp, res) {
 			if (error) { serverError(500); return; }
 			writeHeadEnd(res, 'text/html', content, 'utf-8');	
 		});
+		break;
 	case "/canvas2d.js" :
 		fs.readFile('./canvas2d.js', function(error, content) {
 			if (error) { serverError(500); return; }
@@ -49,7 +58,7 @@ var dispatch = function(req, reqp, res) {
 	}
 }
  
-console.log('Starting server @ http://127.0.0.1:/' + port); 
+console.log('Starting server @ http://'+(config.ip || '*')+'/:'+config.port); 
 http.createServer(function (req, res) {
   try {
 	var reqp = url.parse(req.url);
@@ -63,6 +72,6 @@ http.createServer(function (req, res) {
     res.writeHead(500);
     res.end('Internal Server Error');
   } 
-}).listen(port, "127.0.0.1", function() {
-  console.log('Server running at http://127.0.0.1:/' + port);
+}).listen(config.port, config.ip, function() {
+  console.log('Server running at http://'+(config.ip || '*')+'/:'+config.port);
 });

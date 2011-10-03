@@ -471,14 +471,18 @@ C2D.prototype.fills = function(style, shape, path, a1, a2, a3) {
 | Draws a single edge.
 |
 | style: the style formated in meshcraft style notation.
+| skip:  skips shaping if border == skip
 | shape: an object which has path() defined
 */
-C2D.prototype._edge = function(style, shape, path, a1, a2, a3) {
+C2D.prototype._edge = function(style, skip, shape, path, a1, a2, a3) {
 	var cx = this._cx;
-	shape[path](this, style.border, a1, a2, a3);
+	if (skip !== style.border) {
+		shape[path](this, style.border, a1, a2, a3);
+	}
 	cx.strokeStyle = this._colorStyle(style.color, shape);
 	cx.lineWidth = style.width;
 	cx.stroke();
+	return style.border;
 }
 
 /**
@@ -489,20 +493,33 @@ C2D.prototype._edge = function(style, shape, path, a1, a2, a3) {
 */
 C2D.prototype.edges = function(style, shape, path, a1, a2, a3) {
 	var cx = this._cx;
+	var skip = null;
 	if (style instanceof Array) {
 		for(var i = 0; i < style.length; i++) {
-			this._edge(style[i], shape, path, a1, a2, a3);
+			skip = this._edge(style[i], skip, shape, path, a1, a2, a3);
 		}
 	} else {
-		this._edge(style[i], shape, path, a1, a2, a3);
+		skip = this._edge(style[i], skip, shape, path, a1, a2, a3);
 	}
 }
 
 /**
 | Fills an aera and draws its borders 
 */
-C2D.prototype.draw = function(style, spahe, path, a1, a2, a3) {
-	throw new Error('todo');
+C2D.prototype.paint = function(fillStyle, edgeStyle, shape, path, a1, a2, a3) {
+	var cx = this._cx;
+	var skip = 0;
+	shape[path](this, 0, a1, a2, a3);
+	cx.fillStyle = this._colorStyle(fillStyle, shape);
+	cx.fill();
+	var cx = this._cx;
+	if (edgeStyle instanceof Array) {
+		for(var i = 0; i < edgeStyle.length; i++) {
+			skip = this._edge(edgeStyle[i], skip, shape, path, a1, a2, a3);
+		}
+	} else {
+		skip = this._edge(edgeStyle[i], skip, shape, path, a1, a2, a3);
+	}
 }
 
 /**
@@ -518,17 +535,17 @@ C2D.prototype.fillText = function(text, a1, a2) {
 /**
 | Draws some text rotated by phi 
 | text: text to draw
-| p: center point of rotation // todo pc
+| p: center point of rotation 
 | phi: rotation angle
-| rad:  distance from center // todo rename
+| d: distance from center // todo rename
 */
-C2D.prototype.fillRotateText = function(text, p, phi, rad) {
+C2D.prototype.fillRotateText = function(text, pc, phi, d) {
 	var cx = this._cx;
 	var t1 = Math.cos(phi);
 	var t2 = Math.sin(phi);
 	var det = t1 * t1 + t2 * t2;
-	var x = p.x + rad * t2;
-	var y = p.y - rad * t1;
+	var x = pc.x + d * t2;
+	var y = pc.y - d * t1;
 	if (t1 < 0) {
 		/* turn lower segments so text isn't upside down */
 		t1 = -t1;
@@ -1402,9 +1419,9 @@ C2D.Line.prototype.path = function(c2d) {
 /** 
 | Draws the line.
 */
-C2D.Line.prototype.draw = function(c2d) {
-	c2d.fills(settings.relation.style.fill, this, 'path');
-	c2d.edges(settings.relation.style.edge, this, 'path');
+C2D.Line.prototype.paint = function(c2d) {
+	var style = settings.relation.style;
+	c2d.paint(style.fill, style.edge, this, 'path');
 }
 
 /**
