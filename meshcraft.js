@@ -29,6 +29,7 @@ var max = Math.max;
 var min = Math.min;
 
 var cos30         = C2D.cos30;
+var debug         = C2D.debug;
 var half          = C2D.half;
 var tan30         = C2D.tan30;
 var subclass      = C2D.subclass;
@@ -316,51 +317,6 @@ var ONLOOK = {
 	REMOVE : 2,
 }
 Object.freeze(ONLOOK);
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- .-,--.      .
- ' |   \ ,-. |-. . . ,-.
- , |   / |-' | | | | | |
- `-^--'  `-' ^-' `-^ `-|
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ,|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- Prints out messages  `' and objects on the console.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function debug() {
-	if (!console) return;
-	var l = "";
-	for(var i = 0; i < arguments.length; i++) {
-		if (i > 0) { 
-			l += " ";
-		}
-		var a = arguments[i];
-		if (a == null) {
-			l += "|null|";
-		} else if (a.substring || typeof(a) != "object") {
-			l += a;
-		} else {
-			l += "{";
-			var first = true;
-			var p;
-			for (p in a) {
-				if (!first) {
-					l += ", ";
-				} else {
-					first = false;
-				}
-				switch (typeof(a[p])) {
-				case "function" : 
-					l += p + " : function";
-					break;
-				default:
-					l += p  + " : " + a[p];
-					break;
-				}
-			}
-			l += "}";
-		}
-	}
-	console.log(l);
-}
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,-,-,-.           .
@@ -1373,14 +1329,10 @@ _init : function() {
  	    \ /  4  \ /
          `-------´  
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Hexmenu(p, radi, rado, labels) {
+function Hexmenu(p, style, labels) {
 	this.p = p;
-	this.radi = radi;
-	this.rado = rado;
-	this.hflower = new HexagonFlower(p, radi, rado, labels);
-
-	this.hi = new Hexagon(p, radi);
-	this.ho = new Hexagon(p, rado);
+	this.style = style;
+	this.hflower = new HexagonFlower(p, style.innerRadius, style.outerRadius, labels);
 	this.labels = labels;
 	this.mousepos = null;
 }
@@ -1397,7 +1349,7 @@ Hexmenu.prototype.draw = function() {
 	c2d.fontStyle('12px ' + settings.defaultFont, 'black', 'center', 'middle');
 	var labels = this.labels;
 	
-	var rd = this.ho.r * (1 - 1 / 3.5);
+	var rd = this.style.outerRadius * (1 - 1 / 3.5);
 
 	if (labels.n)  c2d.fillRotateText(labels.n,  this.p, Math.PI / 3 * 6, rd);
 	if (labels.ne) c2d.fillRotateText(labels.ne, this.p, Math.PI / 3 * 1, rd);
@@ -1855,10 +1807,7 @@ Space.prototype.click = function(p, shift, ctrl) {
 	var tfx = System.repository.transfix(TXE.CLICK, this, pp, shift, ctrl);
 	if (!(tfx & TXR.HIT)) {
 		this.iaction.act = ACT.FMENU;
-		this._floatmenu = new Hexmenu(p, 
-			settings.floatmenu.innerRadius,
-			settings.floatmenu.outerRadius,
-			this._floatMenuLabels);
+		this._floatmenu = new Hexmenu(p, settings.floatmenu, this._floatMenuLabels);
 
 		System.setCursor("default");
 		this.setFoci(null);
@@ -2243,7 +2192,6 @@ Space.prototype.mousedown = function(p) {
 		if (md < 0) {
 			break;
 		}
-		debug(md);
 		switch(md) {
 		case 'n' : // note
 			var nw = settings.note.newWidth;
@@ -2910,24 +2858,13 @@ Object.defineProperty(Item.prototype, "h6slice", {
 
 /* set a hex menu to be this items menu */
 Item.prototype.newItemMenu = function(pan) {
-	var hzone = this.handlezone;
-	var r = settings.itemmenu.innerRadius;
-	var h = settings.itemmenu.slice.height;
 	var labels = this._itemMenuLabels = {n : 'Remove'};
-	// todo why pan?
-	var p = new Point(
-		R(hzone.pnw.x + pan.x + r - (r * C2D.cos30 - h) * C2D.tan30), 
-		R(hzone.pnw.y + pan.y + r * C2D.cos30 - h) - 1);
-	return new Hexmenu(p, settings.itemmenu.innerRadius, settings.itemmenu.outerRadius, labels);
+	return new Hexmenu(this.h6slice.pm.add(pan), settings.itemmenu,  labels);
 }
 
 /* returns if coords are within the item menu */
-/* todo xxx */
 Item.prototype.withinItemMenu = function(p) {
-	var hzone = this.handlezone; 
-	return C2D.withinHexagonSlice(p.sub(hzone.pnw), 
-		settings.itemmenu.innerRadius, 
-		settings.itemmenu.slice.height);
+	return this.h6slice.within(p);
 }
 
 /**
