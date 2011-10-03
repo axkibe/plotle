@@ -1359,8 +1359,12 @@ C2D.Line.connect = function(shape1, end1, shape2, end2) {
 Object.defineProperty(C2D.Line.prototype, 'zone', {
 	get: function() { 
 		return C2D.fixate(this, 'zone', new C2D.Rect(
-			C2D.Point(Math.min(this.p1.x, this.p2.x), Math.min(this.p1.y, this.p2.y), this.p1, this.p2),
-			C2D.Point(Math.max(this.p1.x, this.p2.x), Math.max(this.p1.y, this.p2.y), this.p1, this.p2)));
+			C2D.Point.renew(
+				Math.min(this.p1.x, this.p2.x), Math.min(this.p1.y, this.p2.y), 
+				this.p1, this.p2),
+			C2D.Point.renew(
+				Math.max(this.p1.x, this.p2.x), Math.max(this.p1.y, this.p2.y), 
+				this.p1, this.p2)));
 	}
 });
 
@@ -1419,7 +1423,7 @@ C2D.Line.prototype.path = function(c2d) {
 /** 
 | Draws the line.
 */
-C2D.Line.prototype.paint = function(c2d) {
+C2D.Line.prototype.draw = function(c2d) {
 	var style = settings.relation.style;
 	c2d.paint(style.fill, style.edge, this, 'path');
 }
