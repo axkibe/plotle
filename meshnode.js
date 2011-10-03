@@ -14,6 +14,12 @@ var http = require('http');
 var url  = require('url');
 var fs   = require('fs');
 
+/* logs a console message */
+function log(text) {
+    text = (new Date()) + ": " + text;
+    console.log(text);
+}
+
 var writeHeadEnd = function(res, type, content, format) {
 	res.writeHead(200, {'Content-Type': type});
 	res.end(content, 'utf-8');
@@ -58,20 +64,20 @@ var dispatch = function(req, reqp, res) {
 	}
 }
  
-console.log('Starting server @ http://'+(config.ip || '*')+'/:'+config.port); 
+log('Starting server @ http://'+(config.ip || '*')+'/:'+config.port); 
 http.createServer(function (req, res) {
-  try {
-	var reqp = url.parse(req.url);
-    console.log('Incoming Request from: ' +
-                 req.connection.remoteAddress +
-                ' for href: ' + reqp.href
-    ); 
-    dispatch(req, reqp, res);
-  } catch (err) {
-    util.puts(err);
-    res.writeHead(500);
-    res.end('Internal Server Error');
-  } 
+	try {
+		var reqp = url.parse(req.url);
+		log('Incoming Request from: ' +
+			req.connection.remoteAddress +
+			' for href: ' + reqp.href
+		); 
+		dispatch(req, reqp, res);
+	} catch (err) {
+		log(err);
+		res.writeHead(500);
+		res.end('Internal Server Error');
+	} 
 }).listen(config.port, config.ip, function() {
-  console.log('Server running at http://'+(config.ip || '*')+'/:'+config.port);
+	log('Server running at http://'+(config.ip || '*')+'/:'+config.port);
 });
