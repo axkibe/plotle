@@ -35,6 +35,7 @@ var Hexagon       = C2D.Hexagon;
 var HexagonFlower = C2D.HexagonFlower;
 var HexagonSlice  = C2D.HexagonSlice;
 var Line          = C2D.Line;
+var Margin        = C2D.Margin;
 var Measure       = C2D.Measure;
 var Point         = C2D.Point;
 var Rect          = C2D.Rect;
@@ -69,12 +70,13 @@ var settings = {
 	
 	// standard note in space
 	note : {
-		minWidth     : 40,
-		minHeight    : 40,
-		newWidth     : 300,
-		newHeight    : 150,
-		             
-		textBorder   : 10,
+		minWidth  :  40,
+		minHeight :  40,
+		newWidth  : 300,
+		newHeight : 150,
+		
+		// inner margin to text 
+		imargin  : { n: 10, e: 10, s: 10, w: 10 },
 
 		style : {
 			fill : {
@@ -105,6 +107,9 @@ var settings = {
 				{ border: 0, width: 3, color: 'rgba(255, 183, 15, 0.5)' },
 			],
 		},
+		
+		// inner margin to text 
+		imargin  : { n: 1, e: 1, s: 1, w: 1 },
 	},
 
 	// menu at the bottom of cockpit
@@ -224,6 +229,9 @@ var settings = {
 				{ border: 0, width: 3, color: 'rgba(255, 183, 15, 0.5)' },
 			],
 		},
+		
+		// inner margin to text 
+		imargin  : { n: 1, e: 1, s: 1, w: 1 },
 
 		// scale down relation text
 		demagnify : 1.2,
@@ -1924,7 +1932,7 @@ Space.prototype.dragmove = function(p, shift, ctrl) {
 		
 		/* adapt scrollbar position, todo x move into item */
 		var dtreeHeight = it.dtree.height;
-		var smaxy = dtreeHeight - ((it.handlezone.width) - 2 * it.textBorder);
+		var smaxy = dtreeHeight - ((it.handlezone.width) - it.imargin.y);
 		if (smaxy > 0 && it.scrolly > smaxy) {
 			it.scrolly = smaxy;
 			redraw = true;;
@@ -1938,7 +1946,7 @@ Space.prototype.dragmove = function(p, shift, ctrl) {
 		var h = it.zone.height;
 		var scrollRange = h - settings.scrollbar.marginY * 2;
 		var dtreeHeight = it.dtree.height;
-		var innerHeight = h - 2 * it.textBorder;
+		var innerHeight = h - it.imargin.y;
 		var scrollSize  = scrollRange * innerHeight / dtreeHeight;
 		var srad = settings.scrollbar.radius;
 		if (scrollSize < srad * 2) {
@@ -2660,11 +2668,11 @@ DTree.prototype.paraAtP = function(p) {
 | draws the content in a Canvas2D 
 | c2d: Canvas2D to draw within.
 | select: selection object (for highlighting the selection)
-| offsetX/offsetY: offset in canvas (todo make a point)
+| imargin: distance of text to edge
 | scrolly: scroll position (todo make a point)
 */
-DTree.prototype.draw = function(c2d, select, offsetX, offsetY, scrolly) { 
-	var y = offsetY;
+DTree.prototype.draw = function(c2d, select, imargin, scrolly) { 
+	var y = imargin.n;
 	var pi = 0;
 	var h = 0;
 	var parasep = this.pre ? 0 : this._fontsize;
@@ -2689,8 +2697,8 @@ DTree.prototype.draw = function(c2d, select, offsetX, offsetY, scrolly) {
 		var by = R(bp.y - psy);
 		var ex = R(ep.x);
 		var ey = R(ep.y - psy);
-		var rx = R(this.width + offsetX / 2);
-		var lx = R(offsetX / 2);
+		var rx = half(this.width + imargin.e);
+		var lx = half(imargin.w);
 		if ((abs(by - ey) < 2)) {
 			// ***
 			c2d.moveTo(bx, by);
@@ -2741,9 +2749,9 @@ DTree.prototype.draw = function(c2d, select, offsetX, offsetY, scrolly) {
 	// draws tha paragraphs 
 	for(var para = this.first; para; para = para.next) {
 		var pc2d = para.getC2D();
-		para.p = new Point(offsetX, y);
+		para.p = new Point(imargin.w, y);
 		if (pc2d.width > 0 && pc2d.height > 0) {
-			c2d.drawImage(pc2d, offsetX, y - scrolly);
+			c2d.drawImage(pc2d, imargin.w, y - scrolly);
 		}
 		y += para.softHeight + parasep;
 	}
@@ -2975,7 +2983,7 @@ function Note(id, zone, dtree) {
 	this.silhoutte = new RoundRect(
 		Point.zero, new Point(zone.width, zone.height), settings.note.cornerRadius); 
 	this._bc2d = new C2D();
-	this.textBorder = settings.note.textBorder;
+	this.imargin = Note.imargin;
 	this._canvasActual = false;
 	this._scrollx = -8833;
 	this._scrolly = -8833;
@@ -2986,6 +2994,14 @@ function Note(id, zone, dtree) {
 	System.repository.addItem(this, true);
 }
 
+/**
+| Default margin for all notes.
+*/
+Note.imargin = Margin.jnew(settings.note.imargin);
+
+/**
+| Resize handles to show on notes.
+*/
 Note.handles = {
 	n  : true,
 	ne : true,
@@ -3032,9 +3048,7 @@ Note.prototype.jsonfy = function() {
 
 /* returns the para at y */
 Note.prototype.paraAtP = function(p) {
-	if (p.y < this.textBorder) {
-		return null;
-	}
+	if (p.y < this.imargin.n) return null; 
 	return this.dtree.paraAtP(p);
 }
 
@@ -3183,21 +3197,21 @@ Note.prototype.draw = function(c2d, selection) {
 
 	/* calculates if a scrollbar is needed */
 	var sy = this._scrolly;
-	var innerHeight = this.zone.height - 2 * this.textBorder;
+	var innerHeight = this.zone.height - this.imargin.y; // todo rename iheight
 	dtree.flowWidth = 
-		this.zone.width - 2 * this.textBorder - 
-		(sy >= 0 ? settings.scrollbar.radius * 2 : 0); // to make a var
+		this.zone.width - this.imargin.x - 
+		(sy >= 0 ? settings.scrollbar.radius * 2 : 0); // todo make a var
 	var dtreeHeight = dtree.height;
 	if (sy < 0) {
 		if (dtreeHeight > innerHeight) {
-			/* does not use a scrollbar but should */
+			// does not use a scrollbar but should
 			sy = this._scrolly = 0;		
 			dtree.flowWidth = 
-				this.zone.width - 2 * this.textBorder - 
+				this.zone.width - this.imargin.x - 
 				(sy >= 0 ? settings.scrollbar.radius * 2 : 0);
 			dtreeHeight = dtree.height;
 			if (dtreeHeight <= innerHeight) {
-				throw new Error("note doesnt fit with and without scrollbar.");			
+				throw new Error('note doesnt fit with and without scrollbar.');
 			}
 		}
 	} else if (dtreeHeight <= innerHeight) {
@@ -3208,12 +3222,12 @@ Note.prototype.draw = function(c2d, selection) {
 			(sy >= 0 ? settings.scrollbar.radius * 2 : 0);
 		dtreeHeight = dtree.height;
 		if (dtreeHeight > innerHeight) {
-			throw new Error("note doesnt fit with and without scrollbar.");			
+			throw new Error('note doesnt fit with and without scrollbar.');
 		}
 	}
 	
 	/* draws selection and text */	
-	dtree.draw(bc2d, selection, this.textBorder, this.textBorder, sy < 0 ? 0 : R(sy));
+	dtree.draw(bc2d, selection, this.imargin, sy < 0 ? 0 : R(sy));
 	
 	if (sy >= 0) {
 		/* draws the vertical scroll bar */
@@ -3299,6 +3313,7 @@ function Label(id, zone, dtree) {
 	dtree.parent = this;
 	dtree.pre = true;
 	this.handles = Label.handles;
+	this.imargin = Label.imargin;
 	this.setZone(zone, 'c'); 
 	/* buffer canvas 2D */
 	this._bc2d = new C2D();  
@@ -3306,6 +3321,11 @@ function Label(id, zone, dtree) {
 	if (typeof(this.zone.pse.x) === "undefined") throw new Error("Invalid label"); // todo remove 
 	System.repository.addItem(this, true);
 }
+
+/**
+| Default margin for all labels.
+*/
+Label.imargin = Margin.jnew(settings.label.imargin);
 
 /**
 | The handles the item presents
@@ -3496,7 +3516,7 @@ Label.prototype.draw = function(c2d, selection) {
 	}
 	bc2d.attune(this.zone);
 	// draws text
-	dtree.draw(bc2d, selection, 0, 0, 0);
+	dtree.draw(bc2d, selection, this.imargin, 0);
 	// draws the border
 	bc2d.edges(settings.label.style.edge, bc2d, 'path');
 	this._canvasActual = true;
@@ -3527,6 +3547,7 @@ function Relation(id, i1id, i2id, textZone, dtree) {
 	dtree.parent    = this;
 	dtree.flowWidth = -1;
 	dtree.pre       = true;
+	this.imargin    = Relation.imargin;
 	this.setTextZone(textZone);
 	this._bc2d = new C2D();
 	this._canvasActual = false;
@@ -3537,7 +3558,12 @@ function Relation(id, i1id, i2id, textZone, dtree) {
 }
 
 /**
-| The handles the item presents.
+| Default margin for all relations.
+*/
+Relation.imargin = Margin.jnew(settings.relation.imargin);
+
+/**
+| The resize handles a relation presents.
 */
 Relation.handles = {
 	ne : true,
@@ -3928,7 +3954,7 @@ Relation.prototype.draw = function(c2d, selection) {
 	if (!this._canvasActual) {
 		bc2d.attune(this.textZone); 
 		bc2d.edges(settings.relation.style.labeledge, bc2d, 'path');
-		dtree.draw(bc2d, selection, 2, 2, 0);
+		dtree.draw(bc2d, selection, this.imargin, 0);
 		this._canvasActual = true;
 	}
 	var l1 = Line.connect(it1.handlezone, 'normal', this.textZone, 'normal'); // todo bindzone

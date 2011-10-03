@@ -888,8 +888,65 @@ C2D.Rect.prototype.eq = function(r) {
 | Point in the center.
 */
 C2D.lazyFixate(C2D.Rect.prototype, 'pc', function() { 
-	return new Point(half(this.pse.x + this.pnw.x), half(this.pse.y, this.pnw.y));
+	return new Point(half(this.pse.x + this.pnw.x), half(this.pse.y + this.pnw.y));
 });
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+,-,-,-.                     
+`,| | |   ,-. ,-. ,-. . ,-. 
+  | ; | . ,-| |   | | | | | 
+  '   `-' `-^ '   `-| ' ' ' 
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                   `'     
+ Holds information of inner or outer distances.
+ Margins are immutable objects.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/**
+| Constructor.
+|
+| Margin(n, e, s, w)
+|
+| n: north margin
+| e: east margin
+| s: south margin
+| w: west margin
+*/
+C2D.Margin = function(n, e, s, w) {
+	C2D.fixate(this, 'n', n);
+	C2D.fixate(this, 'e', e);
+	C2D.fixate(this, 's', s);
+	C2D.fixate(this, 'w', w);
+}
+
+/**
+| A margin with all distances 0.
+*/
+C2D.Margin.zero = new C2D.Margin(0, 0, 0, 0);
+
+/** 
+| Creates a margin from json.
+*/
+C2D.Margin.jnew = function(js) {
+	return new C2D.Margin(js.n, js.e, js.s, js.w);
+}
+
+/** 
+| Returns a json object for this margin
+*/
+C2D.Margin.prototype.jsonfy = function() {
+	return this._json || (this._json = { n: this.n, e: this.e, s: this.s, w: this.w });
+}
+
+/**
+| East + west margin = x
+*/
+C2D.lazyFixate(C2D.Margin.prototype, 'x', function() { return this.e + this.w; });
+
+/**
+| North + south margin = y
+*/
+C2D.lazyFixate(C2D.Margin.prototype, 'y', function() { return this.n + this.s; });
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .-,--.               . .-,--.         .  
@@ -897,8 +954,10 @@ C2D.lazyFixate(C2D.Rect.prototype, 'pc', function() {
   )| \  | | | | | | | |  )| \  |-' |   |  
   `'  ` `-' `-^ ' ' `-^  `'  ` `-' `-' `' 
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
  A rectangle in a 2D plane with rounded corners
  Rectangles are immutable objects.
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
@@ -947,8 +1006,10 @@ C2D.RoundRect.prototype.path = function(c2d, border) {
   /| |  |-'  X  ,-| | | | | | | 
   `' `' `-' ' ` `-^ `-| `-' ' ' 
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- A hexagon in a 2D   `' plane.
+                     `' 
+ A hexagon in a 2D plane.
  Hexagons are immutable objects.
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
@@ -1006,7 +1067,8 @@ C2D.Hexagon.prototype.within = function(p) {
   /| |  |-'  X  ,-| | | | | | |     \ |  | |   |-' 
   `' `' `-' ' ` `-^ `-| `-' ' ' `---' `' ' `-' `-' 
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- The top slice of a  `' hexagon.
+                     `' 
+ The top slice of a hexagon.
 
        ------------        ^
       /............\       |  height
@@ -1021,6 +1083,7 @@ C2D.Hexagon.prototype.within = function(p) {
        *----------*	
 
  height must be <= rad
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /**
 | Constructor.
@@ -1120,6 +1183,7 @@ C2D.HexagonSlice.prototype.within = function(p) {
  ri:   inner radius
  ro:   outer radius
  segs: which segments to include
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 C2D.HexagonFlower = function(pc, ri, ro, segs) {
 	if (ri > ro) throw new Error('inner radius > outer radius');
@@ -1278,8 +1342,10 @@ C2D.HexagonFlower.prototype.within = function(p) {
  /    | | | |-' 
  `--' ' ' ' `-' 
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
  A line. Possibly with arrow-heads as ends.
  Lines are pseudo-immutable objects.
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /** 
@@ -1445,15 +1511,5 @@ C2D.Line.prototype.isNear = function(p, dis) {
 		return Math.abs(dy - (p2.y - p1.y) / (p2.x - p1.x) * dx) < dis;
 	}
 }
-
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ,--.  _  .-,--.
- | `-' ´ ) ' |   \
- |   .  /  , |   /
- `--'  '~` `-^--'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- Statics and Prototype.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 
