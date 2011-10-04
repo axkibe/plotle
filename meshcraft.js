@@ -16,7 +16,7 @@
 | License: GNU Affero GPLv3 
 */
 
-"use strict";
+'use strict';
 
 /**
 | +++ Shortcuts  +++ 
@@ -57,7 +57,7 @@ var enableCatcher = false;
 
 var settings = {
 	// standard font
-	defaultFont : "Verdana,Geneva,Kalimati,sans-serif",
+	defaultFont : 'Verdana,Geneva,Kalimati,sans-serif',
 	
 	// milliseconds after mouse down, dragging starts
 	dragtime : 400,
@@ -82,13 +82,13 @@ var settings = {
 			fill : {
 				gradient : 'askew',
 				steps : [
-					[0, "rgba(255, 255, 248, 0.955)"],
-				    [1, "rgba(255, 255, 160, 0.955)"],
+					[0, 'rgba(255, 255, 248, 0.955)'],
+				    [1, 'rgba(255, 255, 160, 0.955)'],
 				],
 			},
 			edge : [
-				{ border: 2, width : 1, color : "rgb(255, 188, 87)" },
-				{ border: 1, width : 1, color : "black" },
+				{ border: 2, width : 1, color : 'rgb(255, 188, 87)' },
+				{ border: 1, width : 1, color : 'black' },
 			],
 			highlight : [
 				{ border: 0, width: 3, color: 'rgba(255, 183, 15, 0.5)' },
@@ -118,19 +118,19 @@ var settings = {
 			fill : {
 				gradient : 'horizontal',
 				steps : [
-					[ 0, "rgba(255, 255, 200, 0.90)" ],
-					[ 1, "rgba(255, 255, 160, 0.90)" ], 
+					[ 0, 'rgba(255, 255, 200, 0.90)' ],
+					[ 1, 'rgba(255, 255, 160, 0.90)' ], 
 				],
 			},
 			edge : [
-				{ border: 1, width :   2, color : "rgb(255, 200, 105)" },
-				{ border: 0, width : 0.5, color : "black" },
+				{ border: 1, width :   2, color : 'rgb(255, 200, 105)' },
+				{ border: 0, width : 0.5, color : 'black' },
 			],
 			select : {
 				gradient : 'horizontal',
 				steps : [
-					[0, "rgb(255, 237, 210)" ],
-					[1, "rgb(255, 185, 81)"  ],
+					[0, 'rgb(255, 237, 210)' ],
+					[1, 'rgb(255, 185, 81)'  ],
 				],
 			},
 		},
@@ -143,21 +143,21 @@ var settings = {
 		innerRadius : 30,
 		style : {
 			edge : [
-				{ border: 1, width :   2, color : "rgb(255, 200, 105)" },
-				{ border: 0, width : 0.5, color : "black" },
+				{ border: 1, width :   2, color : 'rgb(255, 200, 105)' },
+				{ border: 0, width : 0.5, color : 'black' },
 			],
 			fill : {
-				gradient : "radial",
+				gradient : 'radial',
 				steps : [
-					[ 0, "rgba(255, 255, 168, 0.955)" ], 
-					[ 1, "rgba(255, 255, 243, 0.955)" ],
+					[ 0, 'rgba(255, 255, 168, 0.955)' ], 
+					[ 1, 'rgba(255, 255, 243, 0.955)' ],
 				],
 			},
 			select : {
 				gradient : 'radial',
 				steps : [
-					[0, "rgb(255, 185, 81)"  ],
-					[1, "rgb(255, 237, 210)" ],
+					[0, 'rgb(255, 185, 81)'  ],
+					[1, 'rgb(255, 237, 210)' ],
 				],
 			},
 		},
@@ -187,16 +187,23 @@ var settings = {
 
 	// selection
 	selection : {
-		color  : 'rgba(243, 203, 255, 0.9)', 
-		stroke : 'rgb (243, 183, 253)',
+		style : {
+			fill   : 'rgba(243, 203, 255, 0.9)',
+			edge : [
+				//{ border : 0, width : 1, color: 'rgb(254,183,253)' },
+				{ border : 0, width : 1, color: 'black' },
+			],
+		}
 	},
 	
 	// scrollbar
 	scrollbar : {
-		form        : 'hexagonh',  // 'square', 'round', 'hexagonh' or 'hexagonv'
-		fillStyle   : 'rgb(255, 188, 87)',
-		strokeStyle : 'rgb(221, 154, 52)',
-		lineWidth   : 1,
+		style : {
+			fill : 'rgb(255, 188, 87)',
+			edge : [
+				{ border : 0, width : 1, color: 'rgb(221, 154, 52)' },
+			],
+		},
 		radius      : 4,
 		marginX     : 7,
 		marginY     : 5,
@@ -343,27 +350,28 @@ function Marker() {
 	this._cli = null;
 }
 
-Object.defineProperty(Marker.prototype, "item", {
+Object.defineProperty(Marker.prototype, 'item', {
 	get: function() { return this._item; },
-	set: function(it) { throw new Error("use set()"); }
+	set: function(it) { throw new Error('use set()'); }
 });
 
-Object.defineProperty(Marker.prototype, "element", {
+Object.defineProperty(Marker.prototype, 'element', {
 	get: function() { return this._element; },
-	set: function(e) { throw new Error("use set()"); }
+	set: function(e) { throw new Error('use set()'); }
 });
 
-Object.defineProperty(Marker.prototype, "offset", {
+Object.defineProperty(Marker.prototype, 'offset', {
 	get: function() { return this._offset; },
 	set: function(o) { this._offset = o; }
 });
 
-/* "overloaded" 3-timed
- * set(marker)
- * set(element, offset)
- * set(item, element, offset)
+/** 
+| set(marker)                -or-
+| set(element, offset)       -or-
+< set(item, element, offset) -or-
  */
 Marker.prototype.set = function(a1, a2, a3) {
+	// todo, use typeof
 	switch (arguments.length) {
 	case 1 :
 		this._item    = a1._item; 
@@ -380,7 +388,7 @@ Marker.prototype.set = function(a1, a2, a3) {
 		this._offset  = a3;
 		break;
 	default :
-		throw new Error("wrong # of arguments");
+		throw new Error('wrong # of arguments');
 		break;
 	}
 }
@@ -425,12 +433,14 @@ Marker.prototype.getPoint = function() {
 	var pinfo = this.getPinfo();
 	var l = pinfo[this._pli];
 	var c = l[this._pci];
-	return new Point( // todo improve if p.x / p.y is a Point
-		p.p.x + (c ? c.x + Measure.width(t.substring(c.offset, this._offset)) : l.x),
-		p.p.y + l.y - dtree.fontsize);
+	return p.p.add( 
+		(c ? c.x + Measure.width(t.substring(c.offset, this._offset)) : l.x),
+		l.y - dtree.fontsize);
 }
 	
-/* sets the marker to position closest to x, y from flowbox(para) */
+/**
+| Sets the marker to position closest to x, y from flowbox(para).
+*/
 Marker.prototype.setFromPoint = function(flowbox, p) {
 	if (flowbox.constructor !== Paragraph) { throw new Error('invalid flowbox.'); }
 	var pinfo = this._getPinfoAtXY(flowbox, p.x, p.y);
@@ -462,8 +472,10 @@ Marker.prototype.setFromPoint = function(flowbox, p) {
 	this._offset = c.offset + o;
 }
 
-/* sets the this.pline and this.pchunk according to the chunk 
- * the marker is in */
+/**
+| sets the this.pline and this.pchunk according to the chunk 
+| the marker is in 
+*/
 Marker.prototype.getPinfo = function() {
 	var te = this._element;
 	var to = this._offset;
@@ -492,8 +504,10 @@ Marker.prototype.getPinfo = function() {
 	return pinfo;
 }
 
-/* moves the marker a line up (dir == true) or down */
-/* returns true if moved */
+/**
+| Moves the marker a line up (dir == true) or down 
+| returns true if moved 
+*/
 Marker.prototype.moveUpDown = function(dir) {
 	var e  = this._element;
 	var o  = this._offset;
@@ -557,8 +571,10 @@ Marker.prototype.moveUpDown = function(dir) {
 	return true;
 }
 
-/* moves the marker a line left (dir == true) or right */
-/* returns true if moved */
+/**
+| Moves the marker a character left (dir == true) or right
+| returns true if moved.
+*/
 Marker.prototype.moveLeftRight = function(dir) {
 	if (dir) {
 		if (this._offset > 0) {
@@ -594,8 +610,6 @@ Marker.prototype.moveLeftRight = function(dir) {
  `--'  `-^ '   `-' `' 
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-subclass(Caret, Marker);
-
 function Caret() {
 	Marker.call(this);
 	
@@ -604,6 +618,7 @@ function Caret() {
 	/* true when just blinked away */
 	this.blink = false;	
 }
+subclass(Caret, Marker);
 	
 /* shows the caret or resets the blink timer if already shown */
 Caret.prototype.show = function() {
@@ -661,8 +676,11 @@ Selection.prototype.normalize = function() {
 	}
 }
 
+/**
+| todo
+*/
 Selection.prototype.innerText = function() {
-	if (!this.active) return "";
+	if (!this.active) return '';
 	this.normalize();
 	var be = this.begin.element;
 	var bo = this.begin.offset;
@@ -676,7 +694,7 @@ Selection.prototype.innerText = function() {
 	var buf = [bet.substring(bo, bet.length)];
 	for (var n = be.parent.next.first; n != ee; n = n.parent.next.first) {
 		/* ^ todo make multi child compatible */
-		if (!n) { throw new Error("selection akward");}
+		if (!n) { throw new Error('selection akward');}
 		buf.push('\n');
 		buf.push(n.text);
 	}
@@ -727,7 +745,7 @@ Editor.prototype.updateCaret = function() {
 			tzone.pnw.x + cp.x,
 			tzone.pnw.y + cyn);
 		caret.save = c2d.getImageData(sp.x - 1, sp.y - 1, 3, cys - cyn + 1);
-		c2d.fillRect("black", sp.x, sp.y, 1, cys - cyn);
+		c2d.fillRect('black', sp.x, sp.y, 1, cys - cyn);
 	}
 }
 
@@ -931,7 +949,7 @@ Editor.prototype.deleteSelection = function() {
 	be.listen();
 	this.caret.set(b);
 	select.active = false;
-	/* setInput("") is done by System */
+	/* setInput('') is done by System */
 }
 
 /* clears the selection */
@@ -939,7 +957,7 @@ Editor.prototype.deselect = function() {
 	if (!this.selection.active) return;
 	var item = this.selection.mark1.item;
 	this.selection.active = false;
-	System.setInput("");
+	System.setInput('');
 	/* clear item cache */
 	item.listen(); 
 }
@@ -982,15 +1000,15 @@ var System = {
 /* Catches all errors for a function */
 makeCatcher : function(that, fun) {
 	return function() {
-		"use strict";
+		'use strict';
 		if (enableCatcher) {
 			try {
 				fun.apply(that, arguments);
 			} catch(err) {
-				alert("Internal failure, " + err.name + ": " + err.message + "\n\n" + 
-				      "file: " + err.fileName + "\n" + 
-					  "line: " + err.lineNumber + "\n" + 
-					  "stack: " + err.stack);
+				alert('Internal failure, '+err.name+': '+err.message+'\n\n' + 
+				      'file: '+err.fileName+'\n'+
+					  'line: '+err.lineNumber+'\n'+
+					  'stack: '+err.stack);
 			}
 		} else {
 			fun.apply(that, arguments);
@@ -1004,9 +1022,9 @@ init : function() {
 
 _init : function() {
 	if (this != System) {
-		throw new Error("System has wrong this pointer");
+		throw new Error('System has wrong this pointer');
 	}
-	var canvas = this.canvas = document.getElementById("canvas");
+	var canvas = this.canvas = document.getElementById('canvas');
 	canvas.width  = window.innerWidth - 1;
 	canvas.height = window.innerHeight - 1;
 	this.c2d = new C2D(canvas);
@@ -1034,7 +1052,7 @@ _init : function() {
 	var editor = this.editor = new Editor();
 	
 	/* hidden input that forwards all events */
-	var hiddenInput = document.getElementById("input");
+	var hiddenInput = document.getElementById('input');
 	
 	/* remembers last SpecialKey pressed, to hinder double events.
 	 * Opera is behaving stupid here. */
@@ -1088,15 +1106,15 @@ _init : function() {
 		}
 	}
 	
-	/* the value that is expected to be input.
-	 * either nothing or the text selection
-	 * if it changes the user did something 
-	 */
-	var inputval = "";
+	// the value that is expected to be in input.
+	// either nothing or the text selection
+	// if it changes the user did something 
+
+	var inputval = '';
 	
-	/*-- Functions the browser calls --*/
+	//-- Functions the browser calls --
 	
-	/* tests if the hidden input field got data */
+	// tests if the hidden input field got data
 	function testinput() {
 		var text = hiddenInput.value;
 		if (text == inputval) {
@@ -1106,22 +1124,22 @@ _init : function() {
 		System.space.input(text);
 	}
 	
-	/* do a blink */
+	// do a blink 
 	function blink() {
-		/* hackish, also look into the hidden input field, 
-		 * maybe the user pasted something using the browser menu. */
+		// hackish, also look into the hidden input field, 
+		// maybe the user pasted something using the browser menu. 
 		testinput();
 		editor.blink();
 	}
 	
-	/* key down in hidden input field */
+	// key down in hidden input field
 	function onkeydown(event) {
 		if (!specialKey.call(this, 
 			lastSpecialKey = event.keyCode, event.shiftKey, event.ctrlKey || event.metaKey
 		)) event.preventDefault();
 	}
 		
-	/* hidden input key press */
+	// hidden input key press
 	function onkeypress(event) {
 		var ew = event.which;
 		var ek = event.keyCode;
@@ -1131,11 +1149,11 @@ _init : function() {
 		}
 		lastSpecialKey = -1;
 		testinput();
-		setTimeout("System.ontestinput();", 0);
+		setTimeout('System.ontestinput();', 0);
 		return true;
 	}
 
-	/* hidden input key up */
+	// hidden input key up
 	function onkeyup(event) {
 		testinput();
 		return true;
@@ -1189,7 +1207,7 @@ _init : function() {
 			this.space.dragmove(p, event.shiftKey, event.ctrlKey || event.metaKey);
 			return true;
 		default :
-			throw new Error("invalid mst");
+			throw new Error('invalid mst');
 		}
 	}
 	
@@ -1205,7 +1223,7 @@ _init : function() {
 			msp = mmp = p;
 			mms = event.shiftKey;
 			mmc = event.ctrlKey || event.metaKey;
-			atweenTimer = setTimeout("System.onatweentime();", settings.dragtime);
+			atweenTimer = setTimeout('System.onatweentime();', settings.dragtime);
 			break;
 		case MST.DRAG :
 			captureEvents();
@@ -1222,7 +1240,6 @@ _init : function() {
 		
 		switch (mst) {
 		case MST.NONE :
-			/* console.log("mouse up, without down?"); */
 			return false;
 		case MST.ATWEEN :
 			/* this was a click */
@@ -1248,7 +1265,7 @@ _init : function() {
 	/* timeout after mouse down so dragging starts */
 	function onatweentime() {
 		if (mst != MST.ATWEEN) {
-			console.log("dragTime() in wrong action mode");
+			console.log('dragTime() in wrong action mode');
 			return;
 		}
 		mst = MST.DRAG;
@@ -1284,7 +1301,7 @@ _init : function() {
 	/* sets the input (text selection) */
 	this.setInput = function(text) {	
 		hiddenInput.value = inputval = text;
-		if (text != "") {
+		if (text != '') {
 			hiddenInput.selectionStart = 0;
 			hiddenInput.selectionEnd = text.length;			
 		}
@@ -1299,7 +1316,7 @@ _init : function() {
 			clearInterval(blinkTimer);
 		} 
 		testinput();
-		blinkTimer = setInterval("System.onblink()", settings.caretBlinkSpeed);		
+		blinkTimer = setInterval('System.onblink()', settings.caretBlinkSpeed);		
 	}
 	
 	/* stops the blink timer */
@@ -1349,11 +1366,11 @@ function Hexmenu(p, style, labels) {
 Hexmenu.prototype.draw = function() {
 	var c2d = System.c2d; // todo?
 
-	c2d.fills(settings.floatmenu.style.fill, this.hflower, 'path', 'outerHex'); // todo combine path-1
+	c2d.fill(settings.floatmenu.style.fill, this.hflower, 'path', 'outerHex'); // todo combine path-1
 	if (this.mousepos && this.mousepos !== 'center') {
-		c2d.fills(settings.floatmenu.style.select, this.hflower, 'path', this.mousepos);
+		c2d.fill(settings.floatmenu.style.select, this.hflower, 'path', this.mousepos);
 	}
-	c2d.edges(settings.floatmenu.style.edge, this.hflower, 'path', 'structure'); 
+	c2d.edge(settings.floatmenu.style.edge, this.hflower, 'path', 'structure'); 
 
 	c2d.fontStyle('12px ' + settings.defaultFont, 'black', 'center', 'middle');
 	var labels = this.labels;
@@ -1400,7 +1417,7 @@ function Edgemenu() {
 	this.buttonWidths = [100, 150, 100];
 
 	/* label texts */
-	this.labels = ["Export", "Meshcraft Demospace", "Import"];
+	this.labels = ['Export', 'Meshcraft Demospace', 'Import'];
 
 	/* total width */
 	this.width = 0;
@@ -1457,7 +1474,7 @@ Edgemenu.prototype.path = function(c2d, border, section) {
 		c2d.lineTo(this.pse.x - ew - b, this.pnw.y + b);
 		c2d.lineTo(this.pse.x - b,      this.pse.y);
 	} else {
-		if (section < 0) throw new Error("invalid section");
+		if (section < 0) throw new Error('invalid section');
 		var bx = this.pnw.x;
 		for(var b = 0; b < section; b++) {
 			bx += this.buttonWidths[b];
@@ -1495,13 +1512,13 @@ Edgemenu.prototype.draw = function() {
 			this.pse = new Point(sex, sey);
 	}
 
-	c2d.fills(settings.edgemenu.style.fill, this, 'path', -1); // todo combine path-1
+	c2d.fill(settings.edgemenu.style.fill, this, 'path', -1); // todo combine path-1
 	if (this.mousepos >= 0) {
-		c2d.fills(settings.edgemenu.style.select, this, 'path', this.mousepos);
+		c2d.fill(settings.edgemenu.style.select, this, 'path', this.mousepos);
 	}
-	c2d.edges(settings.edgemenu.style.edge, this, 'path', -2); 
+	c2d.edge(settings.edgemenu.style.edge, this, 'path', -2); 
 
-	c2d.fontStyle("12px " + settings.defaultFont, "black", "center", "middle");
+	c2d.fontStyle('12px ' + settings.defaultFont, 'black', 'center', 'middle');
 	var bx = this.pnw.x;
 	var my = R((this.pnw.y + this.pse.y) / 2);
 	for(var i = 0; i < this.labels.length; i++) {
@@ -1534,7 +1551,7 @@ Edgemenu.prototype._getMousepos = function(p) {
 			if (p.x - bx < -pymcht6) return this.mousepos = mp;
 		}
 	}
-	throw new Error("this code should not be reached");
+	throw new Error('this code should not be reached');
 	return this.mousepos = -1;
 }
 
@@ -1681,7 +1698,7 @@ Space.prototype.mousehover = function(p) {
 	var redraw = this.edgemenu.mousehover(p);
 	if (this.edgemenu.mousepos >= 0) {
 		/* mouse floated on edge menu, no need to look further */
-		System.setCursor("default");
+		System.setCursor('default');
 		if (redraw) this.redraw();
 		return;
 	}
@@ -1691,7 +1708,7 @@ Space.prototype.mousehover = function(p) {
 		redraw = redraw || this._floatmenu.mousehover(p);
 		if (this._floatmenu.mousepos >= 0) {
 			/* mouse floated on float menu, no need to look further */
-			System.setCursor("default");
+			System.setCursor('default');
 			if (redraw) this.redraw();
 			return;
 		}
@@ -1700,7 +1717,7 @@ Space.prototype.mousehover = function(p) {
 		redraw = redraw || this._itemmenu.mousehover(p);
 		if (this._itemmenu.mousepos >= 0) {
 			/* mouse floated on item menu, no need to look further */
-			System.setCursor("default");
+			System.setCursor('default');
 			if (redraw) this.redraw();
 			return;
 		}
@@ -1710,13 +1727,13 @@ Space.prototype.mousehover = function(p) {
 	if (this.focus) {
 		/* todo move into items */
 		if (this.focus.withinItemMenu(pp)) {
-			System.setCursor("pointer");
+			System.setCursor('pointer');
 			if (redraw) this.redraw();
 			return;
 		}
 
 		if ((com = this.focus.checkItemCompass(pp))) {
-			System.setCursor(com + "-resize");
+			System.setCursor(com+'-resize');
 			if (redraw) this.redraw();
 			return;
 		}
@@ -1725,7 +1742,7 @@ Space.prototype.mousehover = function(p) {
 	/* todo remove nulls by shiftKey, ctrlKey */
 	var tx = System.repository.transfix(TXE.HOVER, this, pp, null, null);
 	redraw = redraw || (tx & TXR.REDRAW);
-	if (!(tx & TXR.HIT)) { System.setCursor("crosshair");} 
+	if (!(tx & TXR.HIT)) { System.setCursor('crosshair');} 
 	if (redraw) this.redraw();
 }
 
@@ -1735,7 +1752,7 @@ Space.prototype.actionSpawnRelation = function(item, p) {
 	ia.act = ACT.RBIND;
 	ia.item = item;
 	ia.sp = ia.smp = p;
-	System.setCursor("not-allowed");
+	System.setCursor('not-allowed');
 }
 
 /* starts a scrolling action */
@@ -1753,14 +1770,14 @@ Space.prototype.actionIDrag = function(item, sp) {
 	ia.act  = ACT.IDRAG;
 	ia.item = item;
 	ia.sp   = sp;
-	System.setCursor("move");
+	System.setCursor('move');
 }
 
 
 Space.prototype.actionRBindTo = function(toItem) {
 	if (toItem.id === this.iaction.item.id) {
-		console.log("not binding to itself");
-		System.setCursor("default");
+		console.log('not binding to itself');
+		System.setCursor('default');
 		return;
 	}
 	var rel = Relation.create(this.iaction.item, toItem);
@@ -1769,10 +1786,10 @@ Space.prototype.actionRBindTo = function(toItem) {
 
 Space.prototype.actionRBindHover = function(toItem) {
 	if (toItem.id === this.iaction.item.id) {
-		System.setCursor("not-allowed");
+		System.setCursor('not-allowed');
 		return;
 	}
-	System.setCursor("default");
+	System.setCursor('default');
 	this.iaction.item2 = toItem;
 }
 
@@ -1794,7 +1811,7 @@ Space.prototype.dragstart = function(p, shift, ctrl) {
 		/* panning */
 		iaction.act = ACT.PAN;
 		iaction.sp = pp;
-		System.setCursor("crosshair");
+		System.setCursor('crosshair');
 		return;
 	} 
 	if (tfx & TXR.REDRAW) this.redraw();
@@ -1818,7 +1835,7 @@ Space.prototype.click = function(p, shift, ctrl) {
 		this.iaction.act = ACT.FMENU;
 		this._floatmenu = new Hexmenu(p, settings.floatmenu, this._floatMenuLabels);
 
-		System.setCursor("default");
+		System.setCursor('default');
 		this.setFoci(null);
 		this.redraw();
 		return;
@@ -1837,7 +1854,7 @@ Space.prototype.dragstop = function(p, shift, ctrl) {
 		iaction.item.moveto(pp.sub(iaction.sp));
 		System.repository.updateItem(iaction.item);
 		iaction.item = null;
-		System.setCursor("default");
+		System.setCursor('default');
 		redraw = true;
 		break;
 	case ACT.PAN :
@@ -1857,7 +1874,7 @@ Space.prototype.dragstop = function(p, shift, ctrl) {
 		redraw = true;
 		break;
 	default :
-		throw new Error("Invalid action in 'Space.dragstop'");
+		throw new Error('Invalid action in "Space.dragstop"');
 	}
 	iaction.act = ACT.NONE;
 	iaction.sp  = null;
@@ -1967,45 +1984,45 @@ Space.prototype.dragmove = function(p, shift, ctrl) {
 		this.redraw();
 		return true;
 	default :
-		throw new Error("unknown action code in Space.dragging: "+iaction.act);
+		throw new Error('unknown action code in Space.dragging: '+iaction.act);
 	}
 }
 
 /* shows the export dialog */
 Space.prototype._exportDialog = function() {
-	var div = document.createElement("div");
-	div.style.position = "absolute";
-	div.style.width    = "100%";
-	div.style.height   = "100%";
+	var div = document.createElement('div');
+	div.style.position = 'absolute';
+	div.style.width    = '100%';
+	div.style.height   = '100%';
 	div.style.top      = 0;
 	div.style.left     = 0;
 	div.style.zIndex   = 10;
-	div.style.background = "rgba(248, 237, 105, 0.9)";
-	div.style.overflow   = "auto";
+	div.style.background = 'rgba(248, 237, 105, 0.9)';
+	div.style.overflow   = 'auto';
 	document.body.appendChild(div);
-	var label = document.createElement("div");
-	label.style.width = "100%";
-	label.style.textAlign = "center";
-	label.style.marginTop = "20px";
-	label.style.fontWeight = "bold";
+	var label = document.createElement('div');
+	label.style.width = '100%';
+	label.style.textAlign = 'center';
+	label.style.marginTop = '20px';
+	label.style.fontWeight = 'bold';
 	label.appendChild(document.createTextNode(
-		"Copy/paste this to a text file (e.g.notepad) and save it there."
+		'Copy/paste this to a text file (e.g.notepad) and save it there.'
 	));
 	div.appendChild(label);
-	var label2 = document.createElement("div");
-	label2.style.width = "100%";
-	label2.style.textAlign = "center";
+	var label2 = document.createElement('div');
+	label2.style.width = '100%';
+	label2.style.textAlign = 'center';
 	label2.appendChild(document.createTextNode(
-		"Sorry for this, current browsers do not yet allow file creation for offline repositories.")
+		'Sorry for this, current browsers do not yet allow file creation for offline repositories.')
 	);
 	div.appendChild(label2);
-	var ta = document.createElement("textarea");
-	ta.style.width =  "90%";
-	ta.style.height = (div.offsetHeight - label.offsetHeight - 150) + "px";
-	ta.style.display = "block";
-	ta.style.marginLeft = "auto";
-	ta.style.marginRight = "auto";
-	ta.style.marginTop = "20px";
+	var ta = document.createElement('textarea');
+	ta.style.width       = '90%';
+	ta.style.height      = (div.offsetHeight - label.offsetHeight - 150) + 'px';
+	ta.style.display     = 'block';
+	ta.style.marginLeft  = "auto";
+	ta.style.marginRight = 'auto';
+	ta.style.marginTop   = '20px';
 	ta.value = System.repository.exportToJString();
 	ta.readOnly = true;
 
@@ -2665,6 +2682,71 @@ DTree.prototype.paraAtP = function(p) {
 }
 
 /**
+| Draws the selection
+|
+| c2d     : Canvas2D to draw upon
+| isEdge  : true if this is an edge
+| border  : extra border for edge, must be 0
+| imargin : inner margin of item
+| scrolly : scroll position of item
+*/
+DTree.prototype.pathSelection = function(c2d, border, isEdge, select, imargin, scrolly) {
+	/* todo make part of selection to use shortcut with XY */
+	var b = select.mark1;
+	var e = select.mark2;
+	var bp = b.getPoint();
+	var ep = e.getPoint();
+	if (ep.y < bp.y || (ep.y == bp.y && ep.x < bp.x)) {
+		b = select.mark2;
+		e = select.mark1;
+		{ var _ = bp; bp = ep; ep = _; }
+	}
+			
+	c2d.beginPath();
+	var psy = scrolly >= 0 ? scrolly : 0;
+	var lh = R(this.fontsize * (1 + settings.bottombox));
+	var bx = R(bp.x);
+	var by = R(bp.y - psy);
+	var ex = ep.x;
+	var ey = ep.y - psy;
+	var rx = this.width + half(imargin.e);
+	var lx = half(imargin.w);
+	if ((abs(by - ey) < 2)) {
+		// ***
+		c2d.moveTo(bx, by);
+		c2d.lineTo(bx, by + lh);
+		c2d.lineTo(ex, ey + lh);
+		c2d.lineTo(ex, ey);
+		c2d.lineTo(bx, by);
+	} else if (abs(by + lh - ey) < 2 && (bx >= ex))  {
+		//      ***
+		// ***
+		c2d.moveTo(rx, by + lh);
+		c2d.lineTo(bx, by + lh);
+		c2d.lineTo(bx, by);
+		c2d.lineTo(rx, by);
+			
+		c2d.moveTo(lx, ey);
+		c2d.lineTo(ex, ey);
+		c2d.lineTo(ex, ey + lh);
+		c2d.lineTo(lx, ey + lh);
+	} else {
+		//    *****
+		// *****
+		c2d.moveTo(rx, ey);
+		c2d.lineTo(ex, ey);
+		c2d.lineTo(ex, ey + lh);
+		c2d.lineTo(lx, ey + lh);
+
+		if (isEdge) c2d.moveTo(lx, by + lh); else c2d.lineTo(lx, by + lh);
+		c2d.lineTo(bx, by + lh);
+		c2d.lineTo(bx, by);
+		c2d.lineTo(rx, by);
+		if (isEdge) c2d.lineTo(rx, ey);
+	}
+}
+
+/**
 | draws the content in a Canvas2D 
 | c2d: Canvas2D to draw within.
 | select: selection object (for highlighting the selection)
@@ -2679,71 +2761,12 @@ DTree.prototype.draw = function(c2d, select, imargin, scrolly) {
 
 	/* draws the selection */
 	if (select.active && select.mark1.item === this.parent) {
-		/* todo make part of selection to use shortcut with XY */
-		var b = select.mark1;
-		var e = select.mark2;
-		var bp = b.getPoint();
-		var ep = e.getPoint();
-		if (ep.y < bp.y || (ep.y == bp.y && ep.x < bp.x)) {
-			b = select.mark2;
-			e = select.mark1;
-			{ var _ = bp; bp = ep; ep = _; }
-		}
-			
-		c2d.beginPath();
-		var psy = scrolly >= 0 ? scrolly : 0;
-		var lh = R(this.fontsize * (1 + settings.bottombox));
-		var bx = R(bp.x);
-		var by = R(bp.y - psy);
-		var ex = R(ep.x);
-		var ey = R(ep.y - psy);
-		var rx = half(this.width + imargin.e);
-		var lx = half(imargin.w);
-		if ((abs(by - ey) < 2)) {
-			// ***
-			c2d.moveTo(bx, by);
-			c2d.lineTo(bx, by + lh);
-			c2d.lineTo(ex, ey + lh);
-			c2d.lineTo(ex, ey);
-			c2d.lineTo(bx, by);
-			c2d.stroke(1, settings.selection.stroke);
-			c2d.fill(settings.selection.color);
-		} else if (abs(by + lh - ey) < 2 && (bx >= ex))  {
-			//      ***
-			// ***
-			c2d.moveTo(rx, by + lh);
-			c2d.lineTo(bx, by + lh);
-			c2d.lineTo(bx, by);
-			c2d.lineTo(rx, by);
-			
-			c2d.moveTo(lx, ey);
-			c2d.lineTo(ex, ey);
-			c2d.lineTo(ex, ey + lh);
-			c2d.lineTo(lx, ey + lh);
-			c2d.stroke(1, settings.selection.stroke);
-			c2d.fill(settings.selection.color);
-		} else {
-			//    *****
-			// *****
-			for(var i = 0; i < 2; i++) {
-				c2d.beginPath();
-				var edge = i ? c2d.moveTo : c2d.lineTo;
-				c2d.moveTo(rx, ey);
-				c2d.lineTo(ex, ey);
-				c2d.lineTo(ex, ey + lh);
-				c2d.lineTo(lx, ey + lh);
-				edge.call(c2d, lx, by + lh);
-				c2d.lineTo(bx, by + lh);
-				c2d.lineTo(bx, by);
-				c2d.lineTo(rx, by);
-				edge.call(c2d, rx, ey);
-				if (i) {
-					c2d.stroke(1, settings.selectionStroke); 
-				} else {
-					c2d.fill(settings.selection.color);
-				}
-			}
-		}
+		c2d.fill(
+			settings.selection.style.fill, this, 'pathSelection', 
+			false, select, imargin, scrolly);
+		c2d.edge(
+			settings.selection.style.edge, this, 'pathSelection', 
+			true,  select, imargin, scrolly);
 	}
 	
 	// draws tha paragraphs 
@@ -2950,7 +2973,7 @@ Item.prototype.pathResizeHandles = function(c2d, border) {
 */
 Item.prototype.drawHandles = function(c2d) {
 	// draws the resize handles
-	c2d.edges(settings.handle.style.edge, this, 'pathResizeHandles');
+	c2d.edge(settings.handle.style.edge, this, 'pathResizeHandles');
 	// draws item menu handler 
 	var sstyle = settings.itemmenu.slice.style;
 	c2d.paint(sstyle.fill, sstyle.edge, this.h6slice, 'path');
@@ -3033,7 +3056,7 @@ Note.prototype.removed = function() {
 */		
 // todo round rects
 Note.prototype.highlight = function(c2d) {
-	c2d.edges(settings.note.style.highlight, this.zone, 'path');
+	c2d.edge(settings.note.style.highlight, this.zone, 'path');
 }
 
 /* turns the note into a string */
@@ -3178,6 +3201,37 @@ Object.defineProperty(Note.prototype, "scrolly", {
 });
 
 /**
+| Draws the scrollbar.
+*/
+Note.prototype.pathScrollbar = function(c2d, border, sy, dtreeHeight, innerHeight) {
+	if (border !== 0) throw new Error('pathScrollbar does not support borders');
+	/* draws the vertical scroll bar */
+	var srad   = settings.scrollbar.radius;
+	var srad05 = half(settings.scrollbar.radius);
+	var spx  = this.zone.width - settings.scrollbar.marginX - srad;
+	var scrollRange = this.zone.height - settings.scrollbar.marginY * 2;
+	var scrollSize  = scrollRange * innerHeight / dtreeHeight;
+	if (scrollSize < srad * 2) {
+		/* minimum size of scrollbar */
+		scrollSize = srad * 2;
+	}
+						
+	var spy = R(settings.scrollbar.marginY + 
+		sy / (dtreeHeight - innerHeight) * (scrollRange - scrollSize));
+		
+	c2d.beginPath();
+	c2d.moveTo(spx - srad,   R(spy + C2D.cos30 * srad));
+	c2d.lineTo(spx - srad05, spy);
+	c2d.lineTo(spx + srad05, spy);
+	c2d.lineTo(spx + srad,   R(spy + C2D.cos30 * srad));
+	c2d.lineTo(spx + srad,   R(spy + scrollSize - C2D.cos30 * srad));
+	c2d.lineTo(spx + srad05, R(spy + scrollSize));
+	c2d.lineTo(spx - srad05, R(spy + scrollSize));
+	c2d.lineTo(spx - srad,   R(spy + scrollSize - C2D.cos30 * srad));
+	c2d.closePath();
+}
+
+/**
 | Draws the note.
 |
 | c2d: canvas-2d to draw upon.
@@ -3193,11 +3247,11 @@ Note.prototype.draw = function(c2d, selection) {
 	}
 
 	bc2d.attune(this.zone);
-	bc2d.fills(settings.note.style.fill, this.silhoutte, 'path');
+	bc2d.fill(settings.note.style.fill, this.silhoutte, 'path');
 
 	/* calculates if a scrollbar is needed */
 	var sy = this._scrolly;
-	var innerHeight = this.zone.height - this.imargin.y; // todo rename iheight
+	var innerHeight = this.zone.height - this.imargin.y; // todo rename iheight // todo make a getter
 	dtree.flowWidth = 
 		this.zone.width - this.imargin.x - 
 		(sy >= 0 ? settings.scrollbar.radius * 2 : 0); // todo make a var
@@ -3230,65 +3284,12 @@ Note.prototype.draw = function(c2d, selection) {
 	dtree.draw(bc2d, selection, this.imargin, sy < 0 ? 0 : R(sy));
 	
 	if (sy >= 0) {
-		/* draws the vertical scroll bar */
-		var srad   = settings.scrollbar.radius;
-		var srad05 = R(settings.scrollbar.radius * 0.5);
-		var spx  = this.zone.width - settings.scrollbar.marginX - srad;
-		var scrollRange = this.zone.height - settings.scrollbar.marginY * 2;
-		var scrollSize  = scrollRange * innerHeight / dtreeHeight;
-		if (scrollSize < srad * 2) {
-			/* minimum size of scrollbar */
-			scrollSize = srad * 2;
-		}
-						
-		var spy = R(settings.scrollbar.marginY + 
-			sy / (dtreeHeight - innerHeight) * (scrollRange - scrollSize));
-		
-		switch (settings.scrollbar.form) {
-		case 'round' :
-			bc2d.beginPath();
-			bc2d.arc(spx, spy + srad, srad, Math.PI, 0, false);
-			bc2d.arc(spx, spy + scrollSize - srad, srad, 0, Math.PI, false);
-			bc2d.closePath();
-			bc2d.fill(settings.scrollbar.fillStyle);
-			bc2d.stroke(settings.scrollbar.lineWidth, settings.scrollbar.strokeStyle);
-			break;
-		case 'square' :
-			bc2d.fillRect(settings.scrollbar.fillStyle, spx, spy, srad + 2, scrollSize);
-			break;
-		case 'hexagonh' :
-			bc2d.beginPath();
-			bc2d.moveTo(spx - srad,   R(spy + C2D.cos30 * srad));
-			bc2d.lineTo(spx - srad05, spy);
-			bc2d.lineTo(spx + srad05, spy);
-			bc2d.lineTo(spx + srad,   R(spy + C2D.cos30 * srad));
-			bc2d.lineTo(spx + srad,   R(spy + scrollSize - C2D.cos30 * srad));
-			bc2d.lineTo(spx + srad05, R(spy + scrollSize));
-			bc2d.lineTo(spx - srad05, R(spy + scrollSize));
-			bc2d.lineTo(spx - srad,   R(spy + scrollSize - C2D.cos30 * srad));
-			bc2d.closePath();
-			bc2d.fill(settings.scrollbar.fillStyle);
-			bc2d.stroke(settings.scrollbar.lineWidth, settings.scrollbar.strokeStyle);
-			break;
-		case 'hexagonv' :
-			bc2d.beginPath();
-			bc2d.moveTo(spx - srad, R(spy + C2D.cos30 * srad));
-			bc2d.lineTo(spx, spy);
-			bc2d.lineTo(spx + srad, spy + C2D.cos30 * srad);
-			bc2d.lineTo(spx + srad, R(spy + scrollSize - C2D.cos30 * srad));
-			bc2d.lineTo(spx, R(spy + scrollSize));
-			bc2d.closePath();
-			bc2d.lineTo(spx - srad, R(spy + scrollSize - C2D.cos30 * srad));
-			bc2d.fill(settings.scrollbar.fillStyle);
-			bc2d.stroke(settings.scrollbar.lineWidth, settings.scrollbar.strokeStyle);
-			break;
-		default :
-			throw new Error("invalid settings.scrollbar.form");
-		}
+		bc2d.paint(settings.scrollbar.style.fill, settings.scrollbar.style.edge, this, 'pathScrollbar',
+			sy, dtreeHeight, innerHeight);
 	}
 
 	/* draws the border */
-	bc2d.edges(settings.note.style.edge, this.silhoutte, 'path');
+	bc2d.edge(settings.note.style.edge, this.silhoutte, 'path');
 	
 	this._canvasActual = true;
 	c2d.drawImage(bc2d, this.zone.pnw);
@@ -3415,7 +3416,7 @@ Label.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 | Highlights the label.
 */		
 Label.prototype.highlight = function(c2d) {
-	c2d.edges(settings.label.style.highlight, this.zone, 'path');
+	c2d.edge(settings.label.style.highlight, this.zone, 'path');
 }
 
 /**
@@ -3518,7 +3519,7 @@ Label.prototype.draw = function(c2d, selection) {
 	// draws text
 	dtree.draw(bc2d, selection, this.imargin, 0);
 	// draws the border
-	bc2d.edges(settings.label.style.edge, bc2d, 'path');
+	bc2d.edge(settings.label.style.edge, bc2d, 'path');
 	this._canvasActual = true;
 	c2d.drawImage(bc2d, this.zone.pnw);
 }
@@ -3680,7 +3681,7 @@ Relation.prototype.removed = function() {
 | Highlights the label.
 */		
 Relation.prototype.highlight = function(c2d) {
-	c2d.edges(settings.relation.style.highlight, this.textZone, 'path');
+	c2d.edge(settings.relation.style.highlight, this.textZone, 'path');
 }
 
 /**
@@ -3953,17 +3954,15 @@ Relation.prototype.draw = function(c2d, selection) {
 	var it2 = System.repository.items[this.i2id];
 	if (!this._canvasActual) {
 		bc2d.attune(this.textZone); 
-		bc2d.edges(settings.relation.style.labeledge, bc2d, 'path');
+		bc2d.edge(settings.relation.style.labeledge, bc2d, 'path');
 		dtree.draw(bc2d, selection, this.imargin, 0);
 		this._canvasActual = true;
 	}
 	var l1 = Line.connect(it1.handlezone, 'normal', this.textZone, 'normal'); // todo bindzone
 	var l2 = Line.connect(this.textZone,  'normal', it2.handlezone, 'arrow'); // todo bindzone
 	// todo combine into one call;
-	c2d.fills(settings.relation.style.fill, l1, 'path');
-	c2d.edges(settings.relation.style.edge, l1, 'path');
-	c2d.fills(settings.relation.style.fill, l2, 'path'); 
-	c2d.edges(settings.relation.style.edge, l2, 'path');
+	c2d.paint(settings.relation.style.fill, settings.relation.style.edge, l1, 'path');
+	c2d.paint(settings.relation.style.fill, settings.relation.style.edge, l2, 'path');
 	// draws text 
 	c2d.drawImage(bc2d, this.textZone.pnw);
 }

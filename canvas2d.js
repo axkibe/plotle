@@ -23,7 +23,7 @@
 | License: GNU Affero GPLv3
 */
 
-"use strict";
+'use strict';
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,--.  _  .-,--.
@@ -44,17 +44,17 @@
 function C2D(a1, a2) {
 	switch (typeof(a1)) {
 	case 'undefined' :
-		this._canvas = document.createElement("canvas");
+		this._canvas = document.createElement('canvas');
 		break;
 	case 'object' :
 		this._canvas = a1;
 		break;
 	default :
-		this._canvas = document.createElement("canvas");	
+		this._canvas = document.createElement('canvas');	
 		this._canvas.width  = a1;
 		this._canvas.height = a2;
 	}
-	this._cx = this._canvas.getContext("2d");
+	this._cx = this._canvas.getContext('2d');
 	this.pan = C2D.Point.zero;
 }
 
@@ -125,7 +125,7 @@ C2D.fixate(C2D, 'ensureInteger', function() {
 	for(var a in arguments) {
 		var arg = arguments[a];
 		if (Math.floor(arg) - arg !== 0) {
-			throw new Error(arg + " not an integer");
+			throw new Error(arg + ' not an integer');
 		}
 	}
 });
@@ -135,36 +135,36 @@ C2D.fixate(C2D, 'ensureInteger', function() {
 */
 C2D.debug = function() {
 	if (!console) return;
-	var l = "";
+	var l = '';
 	for(var i = 0; i < arguments.length; i++) {
 		if (i > 0) { 
-			l += " ";
+			l += ' ';
 		}
 		var a = arguments[i];
 		if (a == null) {
-			l += "|null|";
-		} else if (a.substring || typeof(a) != "object") {
+			l += '|null|';
+		} else if (a.substring || typeof(a) != 'object') {
 			l += a;
 		} else {
-			l += "{";
+			l += '{';
 			var first = true;
 			var p;
 			for (p in a) {
 				if (!first) {
-					l += ", ";
+					l += ', ';
 				} else {
 					first = false;
 				}
 				switch (typeof(a[p])) {
-				case "function" : 
-					l += p + " : function";
+				case 'function' : 
+					l += p + ' : function';
 					break;
 				default:
-					l += p  + " : " + a[p];
+					l += p  + ' : ' + a[p];
 					break;
 				}
 			}
-			l += "}";
+			l += '}';
 		}
 	}
 	console.log(l);
@@ -174,7 +174,7 @@ C2D.debug = function() {
 /**
 | Canvas width.
 */
-Object.defineProperty(C2D.prototype, "width", { get: function() { return this._canvas.width; }, });
+Object.defineProperty(C2D.prototype, 'width',  { get: function() { return this._canvas.width; }, });
 
 /**
 | Canvas height.
@@ -225,7 +225,7 @@ C2D.prototype.attune = function(a1, a2) {
 C2D.prototype.moveTo = function(a1, a2) {
 	var pan = this.pan;
 	var x, y;
-	if (typeof(a1) === "object") {
+	if (typeof(a1) === 'object') {
 		x = a1.x;
 		y = a1.y;
 	} else {
@@ -246,7 +246,7 @@ C2D.prototype.moveTo = function(a1, a2) {
 C2D.prototype.lineTo = function(a1, a2) {
 	var pan = this.pan;
 	var x, y;
-	if (typeof(a1) === "object") {
+	if (typeof(a1) === 'object') {
 		x = a1.x;
 		y = a1.y;
 	} else {
@@ -266,7 +266,7 @@ C2D.prototype.lineTo = function(a1, a2) {
 */
 C2D.prototype.arc = function(a1, a2, a3, a4, a5, a6) {
 	var pan = this.pan;
-	if (typeof(a1) === "object") {
+	if (typeof(a1) === 'object') {
 		this._cx.arc(a1.x + pan.x + 0.5, a1.y + pan.y + 0.5, a2, a3, a4, a5);
 		return;
 	} 
@@ -281,32 +281,12 @@ C2D.prototype.arc = function(a1, a2, a3, a4, a5, a6) {
 | border: increase/decrease total size
 */
 C2D.prototype.path = function(self, border) {
-	if (this !== self) throw new Error("C2D.path: self != this");
+	if (this !== self) throw new Error('C2D.path: self != this');
 	var cx = this._cx;
 	cx.beginPath(); 
 	cx.rect(
 		0.5 + border, 0.5 + border, 
 		this._canvas.width - 1 - border, this._canvas.height - 1 - border);
-}
-
-/** 
-| Makes a stroke. todo remove
-*/
-C2D.prototype.stroke = function(lineWidth, style) {
-//	throw new Error("stroke");
-	var cx = this._cx;
-	cx.lineWidth = lineWidth;
-	cx.strokeStyle = style;
-	cx.stroke();
-}
-
-/** 
-| Makes a fill. todo remove
-*/
-C2D.prototype.fill = function(style) { 
-	var cx = this._cx;
-	cx.fillStyle = style;
-	cx.fill();
 }
 
 /** 
@@ -318,7 +298,7 @@ C2D.prototype.fill = function(style) {
 C2D.prototype.rect = function(a1, a2, a3, a4) {
 	var pan = this.pan;
 	var cx = this._cx;
-	if (typeof(r) === "object") {
+	if (typeof(r) === 'object') {
 		if (r.constructor === C2D.Rect)
 			return this._cx.rect(
 				a1.pnw.x + pan.x + 0.5, a1.pnw.y + pan.y + 0.5, 
@@ -327,7 +307,7 @@ C2D.prototype.rect = function(a1, a2, a3, a4) {
 			return this._cx.rect(
 				a1.x + pan.x + 0.5, a1.y + pan.y + 0.5, 
 				a2.x - a1.x,        a2.y - a1.y);
-		throw new Error("fillRect not a rectangle");
+		throw new Error('fillRect not a rectangle');
 	}
 	return this._cx.rect(a1 + pan.x + 0.5,  a2 + pan.y + 0.5, a3, a4);
 }
@@ -341,12 +321,12 @@ C2D.prototype.fillRect = function(style, a1, a2, a3, a4) {
 	var pan = this.pan;
 	var cx = this._cx;
 	cx.fillStyle = style;
-	if (typeof(p) === "object") {
+	if (typeof(p) === 'object') {
 		if (a1.constructor === C2D.Rect) 
 			return this._cx.fillRect(a1.pnw.x, a1.pnw.y, a1.pse.x, a1.pse.y);
 		if (a1.constructor === C2D.Point) 
 			return this._cx.fillRect(a1.x, a1.y, a2.x, a2.y);
-		throw new Error("fillRect not a rectangle");
+		throw new Error('fillRect not a rectangle');
 	}
 	return this._cx.fillRect(a1, a2, a3, a4);
 }
@@ -370,7 +350,7 @@ C2D.prototype.closePath = function() { this._cx.closePath();  }
 C2D.prototype.drawImage = function(image, a1, a2) {
 	var pan = this.pan;
 	if (image.constructor === C2D) image = image._canvas;
-	if (typeof(a1) === "object") {
+	if (typeof(a1) === 'object') {
 		this._cx.drawImage(image, a1.x + pan.x, a1.y + pan.y);
 		return;
 	}
@@ -384,7 +364,7 @@ C2D.prototype.drawImage = function(image, a1, a2) {
 */
 C2D.prototype.putImageData = function(imagedata, a1, a2) {
 	var pan = this.pan;
-	if (typeof(p) === "object") {
+	if (typeof(p) === 'object') {
 		this._cx.putImageData(imagedata, a1.x + pan.x, a2.y + pan.y);
 		return;
 	}
@@ -460,9 +440,9 @@ C2D.prototype._colorStyle = function(style, shape) {
 | style: the style formated in meshcraft style notation.
 | shape: an object which has path() defined 
 */
-C2D.prototype.fills = function(style, shape, path, a1, a2, a3) {
+C2D.prototype.fill = function(style, shape, path, a1, a2, a3, a4) {
 	var cx = this._cx;
-	shape[path](this, 0, a1, a2, a3);
+	shape[path](this, 0, a1, a2, a3, a4);
 	cx.fillStyle = this._colorStyle(style, shape);
 	cx.fill();
 }
@@ -474,10 +454,10 @@ C2D.prototype.fills = function(style, shape, path, a1, a2, a3) {
 | skip:  skips shaping if border == skip
 | shape: an object which has path() defined
 */
-C2D.prototype._edge = function(style, skip, shape, path, a1, a2, a3) {
+C2D.prototype._edge = function(style, skip, shape, path, a1, a2, a3, a4) {
 	var cx = this._cx;
 	if (skip !== style.border) {
-		shape[path](this, style.border, a1, a2, a3);
+		shape[path](this, style.border, a1, a2, a3, a4);
 	}
 	cx.strokeStyle = this._colorStyle(style.color, shape);
 	cx.lineWidth = style.width;
@@ -491,34 +471,34 @@ C2D.prototype._edge = function(style, skip, shape, path, a1, a2, a3) {
 | style: the style formated in meshcraft style notation.
 | shape: an object which has path() defined
 */
-C2D.prototype.edges = function(style, shape, path, a1, a2, a3) {
+C2D.prototype.edge = function(style, shape, path, a1, a2, a3, a4) {
 	var cx = this._cx;
 	var skip = null;
 	if (style instanceof Array) {
 		for(var i = 0; i < style.length; i++) {
-			skip = this._edge(style[i], skip, shape, path, a1, a2, a3);
+			skip = this._edge(style[i], skip, shape, path, a1, a2, a3, a4);
 		}
 	} else {
-		skip = this._edge(style[i], skip, shape, path, a1, a2, a3);
+		skip = this._edge(style[i], skip, shape, path, a1, a2, a3, a4);
 	}
 }
 
 /**
 | Fills an aera and draws its borders 
 */
-C2D.prototype.paint = function(fillStyle, edgeStyle, shape, path, a1, a2, a3) {
+C2D.prototype.paint = function(fillStyle, edgeStyle, shape, path, a1, a2, a3, a4) {
 	var cx = this._cx;
 	var skip = 0;
-	shape[path](this, 0, a1, a2, a3);
+	shape[path](this, 0, a1, a2, a3, a4);
 	cx.fillStyle = this._colorStyle(fillStyle, shape);
 	cx.fill();
 	var cx = this._cx;
 	if (edgeStyle instanceof Array) {
 		for(var i = 0; i < edgeStyle.length; i++) {
-			skip = this._edge(edgeStyle[i], skip, shape, path, a1, a2, a3);
+			skip = this._edge(edgeStyle[i], skip, shape, path, a1, a2, a3, a4);
 		}
 	} else {
-		skip = this._edge(edgeStyle[i], skip, shape, path, a1, a2, a3);
+		skip = this._edge(edgeStyle[i], skip, shape, path, a1, a2, a3, a4);
 	}
 }
 
@@ -526,7 +506,7 @@ C2D.prototype.paint = function(fillStyle, edgeStyle, shape, path, a1, a2, a3) {
 | Draws some text.
 */
 C2D.prototype.fillText = function(text, a1, a2) {
-	if (typeof(a1) === "object") {
+	if (typeof(a1) === 'object') {
 		return this._cx.fillText(text, a1.x, a1.y);
 	}
 	return this._cx.fillText(text, a1, a2);
@@ -582,8 +562,8 @@ C2D.prototype.fontStyle = function(font, fill, align, baseline) {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 C2D.Measure = {
 	init : function() {
-		Measure._canvas = document.createElement("canvas");
-		Measure._cx = this._canvas.getContext("2d");
+		Measure._canvas = document.createElement('canvas');
+		Measure._cx = this._canvas.getContext('2d');
 	},
 	
 	width : function(text) {
@@ -591,7 +571,7 @@ C2D.Measure = {
 	}
 }
 
-Object.defineProperty(C2D.Measure, "font", {
+Object.defineProperty(C2D.Measure, 'font', {
 	get: function() { return Measure._cx.font; },
 	set: function(font) { Measure._cx.font = font; }
 });
@@ -672,7 +652,7 @@ C2D.Point.prototype.eq = function(a1, a2) {
 | Adds two points or x/y values, returns a new point.
 */
 C2D.Point.prototype.add = function(a1, a2) {
-	return typeof(a1) === "object" ?
+	return typeof(a1) === 'object' ?
 		new C2D.Point(this.x + a1.x, this.y + a1.y) :
 		new C2D.Point(this.x + a1,   this.y + a2);
 }
@@ -681,7 +661,7 @@ C2D.Point.prototype.add = function(a1, a2) {
 | Subtracts a points (or x/y from this), returns new point 
 */
 C2D.Point.prototype.sub = function(a1, a2) {
-	return typeof(a1) === "object" ?
+	return typeof(a1) === 'object' ?
 		new C2D.Point(this.x - a1.x, this.y - a1.y) :
 		new C2D.Point(this.x - a1,   this.y - a2);
 }
@@ -703,7 +683,7 @@ C2D.Point.prototype.sub = function(a1, a2) {
 */
 C2D.Rect = function(pnw, pse) {
 	if (!pnw || !pse || pnw.x > pse.x || pnw.y > pse.y) { 
-		throw new Error("not a rectangle."); 
+		throw new Error('not a rectangle.'); 
 	}
 	C2D.fixate(this, 'pnw',    pnw);
 	C2D.fixate(this, 'pse',    pse);
@@ -816,7 +796,7 @@ C2D.Rect.prototype.resize = function(width, height, align) {
 	case 's' :
 		pnw = C2D.Point.renew(
 			this.pnw.x - half(width - this.width), 
-			this.pnw.y - height, 
+			this.pse.y - height, 
 			this.pnw, this.pse);
 		pse = C2D.Point.renew(
 			pnw.x + width, 
@@ -1415,7 +1395,7 @@ C2D.Line.connect = function(shape1, end1, shape2, end2) {
 		}
 		return new C2D.Line(new Point(x1, y1), end1, new Point(x2, y2), end2);
 	}
-	throw new Error("do not know how to create connection.");
+	throw new Error('do not know how to create connection.');
 }
 
 /** 
