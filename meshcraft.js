@@ -677,7 +677,7 @@ Selection.prototype.normalize = function() {
 }
 
 /**
-| todo
+| The text the selection selects.
 */
 Selection.prototype.innerText = function() {
 	if (!this.active) return '';
@@ -693,7 +693,7 @@ Selection.prototype.innerText = function() {
 	
 	var buf = [bet.substring(bo, bet.length)];
 	for (var n = be.parent.next.first; n != ee; n = n.parent.next.first) {
-		/* ^ todo make multi child compatible */
+		// ^ todo make multi child compatible
 		if (!n) { throw new Error('selection akward');}
 		buf.push('\n');
 		buf.push(n.text);
@@ -754,7 +754,7 @@ Editor.prototype.newline = function() {
 	var ce    = caret.element;
 	var co    = caret.offset;			
 	var ct    = ce.text;
-	/* todo multi node ability */
+	// todo multi node ability
 	var opara = ce.anchestor(Paragraph);
 		
 	ce.text = ct.substring(0, co);
@@ -923,7 +923,9 @@ Editor.prototype.blink = function() {
 	}
 }
 
-/* deletes the selection */
+/**
+| Deletes the selection 
+*/
 Editor.prototype.deleteSelection = function() {
 	var select = this.selection;
 	select.normalize();
@@ -941,7 +943,7 @@ Editor.prototype.deleteSelection = function() {
 		be.text = be.text.substring(0, bo) + eet.substring(eo, eet.length);
 		var pn;
 		for (pn = be.parent.next; pn.first != ee; pn = pn.next) {
-			/* ^ todo make multi child compatible */
+			// ^ todo make multi child compatible
 			pn.parent.remove(pn);
 		}
 		pn.parent.remove(pn);
@@ -949,10 +951,12 @@ Editor.prototype.deleteSelection = function() {
 	be.listen();
 	this.caret.set(b);
 	select.active = false;
-	/* setInput('') is done by System */
+	// setInput('') is done by System
 }
 
-/* clears the selection */
+/** 
+| Removes the selection.
+*/
 Editor.prototype.deselect = function() {
 	if (!this.selection.active) return;
 	var item = this.selection.mark1.item;
@@ -1120,7 +1124,7 @@ _init : function() {
 		if (text == inputval) {
 			return;
 		}
-		hiddenInput.value = inputval = "";
+		hiddenInput.value = inputval = '';
 		System.space.input(text);
 	}
 	
@@ -1366,7 +1370,7 @@ function Hexmenu(p, style, labels) {
 Hexmenu.prototype.draw = function() {
 	var c2d = System.c2d; // todo?
 
-	c2d.fill(settings.floatmenu.style.fill, this.hflower, 'path', 'outerHex'); // todo combine path-1
+	c2d.fill(settings.floatmenu.style.fill, this.hflower, 'path', 'outerHex'); 
 	if (this.mousepos && this.mousepos !== 'center') {
 		c2d.fill(settings.floatmenu.style.select, this.hflower, 'path', this.mousepos);
 	}
@@ -1386,19 +1390,11 @@ Hexmenu.prototype.draw = function() {
 	if (labels.c)  c2d.fillText(labels.c, this.p);
 }
 
-// todo remove.
-Hexmenu.prototype._getMousepos = function(p) {
+/**
+| Sets this.mousepos and returns it according to p.
+*/
+Hexmenu.prototype.getMousepos = function(p) {
 	return this.mousepos = this.hflower.within(p);
-}
-
-/* returns true if this.mousepos has changed */
-Hexmenu.prototype.mousehover = function(p) {
-	var omp = this.mousepos;
-	return omp != this._getMousepos(p);
-}
-
-Hexmenu.prototype.mousedown = function(p) {
-	return this._getMousepos(p);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1537,7 +1533,7 @@ Edgemenu.prototype._getMousepos = function(p) {
 	if (p.y < this.pnw.y) return this.mousepos = -1;
 	var mx = R(c2d.width / 2);  // todo give it pc
 	var ew = R((this.pse.y - this.pnw.y) * C2D.tan30); // todo simplify
-	/* shortcut name = letters for formula */
+	// shortcut name = letters for formula
 	var pymcht6 = (p.y - c2d.height) * C2D.tan30;
 
 	if (p.x - this.pnw.x < -pymcht6) return this.mousepos = -1;
@@ -1601,7 +1597,7 @@ function Space() {
 		act : ACT.NONE,
 	};
 	
-	/* panning offset */
+	// panning offset
 	this.c2d = new C2D(System.canvas);
 	this.pan = new Point(0, 0);
 	this.c2d.pan = this.pan;
@@ -1609,7 +1605,9 @@ function Space() {
 	this.zoom = 1;
 }
 
-/* redraws the complete space */
+/**
+| Redraws the complete space.
+*/
 Space.prototype.redraw = function() {
 	var items = System.repository.items;
 	var zidx  = System.repository.zidx;
@@ -1705,7 +1703,7 @@ Space.prototype.mousehover = function(p) {
 	
 	switch(this.iaction.act) {
 	case ACT.FMENU :
-		redraw = redraw || this._floatmenu.mousehover(p);
+		redraw = (this._floatmenu.mousepos !== this._floatmenu.getMousepos(p)) || redraw;
 		if (this._floatmenu.mousepos >= 0) {
 			/* mouse floated on float menu, no need to look further */
 			System.setCursor('default');
@@ -1714,7 +1712,7 @@ Space.prototype.mousehover = function(p) {
 		}
 		break;
 	case ACT.IMENU :
-		redraw = redraw || this._itemmenu.mousehover(p);
+		redraw = (this._itemmenu.mousepos !== this._itemmenu.getMousepos(p)) || redraw;
 		if (this._itemmenu.mousepos >= 0) {
 			/* mouse floated on item menu, no need to look further */
 			System.setCursor('default');
@@ -1725,7 +1723,7 @@ Space.prototype.mousehover = function(p) {
 	}
 
 	if (this.focus) {
-		/* todo move into items */
+		// todo move into items
 		if (this.focus.withinItemMenu(pp)) {
 			System.setCursor('pointer');
 			if (redraw) this.redraw();
@@ -1739,7 +1737,7 @@ Space.prototype.mousehover = function(p) {
 		}
 	}
 
-	/* todo remove nulls by shiftKey, ctrlKey */
+	// todo remove nulls by shiftKey, ctrlKey
 	var tx = System.repository.transfix(TXE.HOVER, this, pp, null, null);
 	redraw = redraw || (tx & TXR.REDRAW);
 	if (!(tx & TXR.HIT)) { System.setCursor('crosshair');} 
@@ -1900,7 +1898,6 @@ Space.prototype.dragmove = function(p, shift, ctrl) {
 		this.redraw();
 		return;
 	case ACT.IRESIZE :
-		// todo no splitup
 		var ipnw = iaction.siz.pnw;
 		var ipse = iaction.siz.pse;
 		var it = iaction.item;
@@ -1947,7 +1944,7 @@ Space.prototype.dragmove = function(p, shift, ctrl) {
 		
 		redraw = it.setZone(new Rect(pnw, pse), C2D.opposite(iaction.com)); 
 		
-		/* adapt scrollbar position, todo x move into item */
+		// adapt scrollbar position, todo move into item
 		var dtreeHeight = it.dtree.height;
 		var smaxy = dtreeHeight - ((it.handlezone.width) - it.imargin.y);
 		if (smaxy > 0 && it.scrolly > smaxy) {
@@ -2020,21 +2017,21 @@ Space.prototype._exportDialog = function() {
 	ta.style.width       = '90%';
 	ta.style.height      = (div.offsetHeight - label.offsetHeight - 150) + 'px';
 	ta.style.display     = 'block';
-	ta.style.marginLeft  = "auto";
+	ta.style.marginLeft  = 'auto';
 	ta.style.marginRight = 'auto';
 	ta.style.marginTop   = '20px';
 	ta.value = System.repository.exportToJString();
 	ta.readOnly = true;
 
 	div.appendChild(ta);
-	div.appendChild(document.createElement("br"));
-	var button = document.createElement("button");
-	button.appendChild(document.createTextNode("Dismiss"));
-	button.style.width  = "100px";			
-	button.style.height = "30px";
-	button.style.display = "block";
-	button.style.marginLeft = "auto";
-	button.style.marginRight = "auto";
+	div.appendChild(document.createElement('br'));
+	var button = document.createElement('button');
+	button.appendChild(document.createTextNode('Dismiss'));
+	button.style.width       = '100px';			
+	button.style.height      = '30px';
+	button.style.display     = 'block';
+	button.style.marginLeft  = 'auto';
+	button.style.marginRight = 'auto';
 	button.onclick = function() {
 		document.body.removeChild(div);
 	}
@@ -2043,59 +2040,59 @@ Space.prototype._exportDialog = function() {
 
 /* shows the export dialog */
 Space.prototype._importDialog = function() {
-	var div = document.createElement("div");
-	div.style.position = "absolute";
-	div.style.width    = "100%";
-	div.style.height   = "100%";
+	var div = document.createElement('div');
+	div.style.position = 'absolute';
+	div.style.width    = '100%';
+	div.style.height   = '100%';
 	div.style.top      = 0;
 	div.style.left     = 0;
 	div.style.zIndex   = 10;
-	div.style.background = "rgba(248, 237, 105, 0.9)";
-	div.style.overflow   = "auto";
+	div.style.background = 'rgba(248, 237, 105, 0.9)';
+	div.style.overflow   = 'auto';
 	document.body.appendChild(div);
-	var label = document.createElement("div");
-	label.style.width = "100%";
-	label.style.textAlign = "center";
-	label.style.marginTop = "20px";
-	label.style.fontWeight = "bold";
-	label.appendChild(document.createTextNode("Warning. Current Repository will be erased!"));
-	var label2 = document.createElement("div");
-	label2.style.width = "100%";
-	label2.style.textAlign = "center";
+	var label = document.createElement('div');
+	label.style.width      = '100%';
+	label.style.textAlign  = 'center';
+	label.style.marginTop  = '20px';
+	label.style.fontWeight = 'bold';
+	label.appendChild(document.createTextNode('Warning. Current Repository will be erased!'));
+	var label2 = document.createElement('div');
+	label2.style.width     = '100%';
+	label2.style.textAlign = 'center';
 	label2.appendChild(document.createTextNode(
-		"Paste the repository save in the textbox and press 'Import'."
+		'Paste the repository save in the textbox and press "Import".'
 	));
 	div.appendChild(label);
 	div.appendChild(label2);
-	var ta = document.createElement("textarea");
-	ta.style.width =  "90%";
-	ta.style.height = (div.offsetHeight - label.offsetHeight - 150) + "px";
-	ta.style.display = "block";
-	ta.style.marginLeft = "auto";
-	ta.style.marginRight = "auto";
-	ta.style.marginTop = "20px";
+	var ta = document.createElement('textarea');
+	ta.style.width       =  '90%';
+	ta.style.height      = (div.offsetHeight - label.offsetHeight - 150)+'px';
+	ta.style.display     = 'block';
+	ta.style.marginLeft  = 'auto';
+	ta.style.marginRight = 'auto';
+	ta.style.marginTop   = '20px';
 	div.appendChild(ta);
-	div.appendChild(document.createElement("br"));
+	div.appendChild(document.createElement('br'));
 	
-	var bd = document.createElement("div");
-	bd.style.display = "block";
-	bd.style.width = "100%";
+	var bd = document.createElement('div');
+	bd.style.display = 'block';
+	bd.style.width   = '100%';
 	div.appendChild(bd);
-	var bdl = document.createElement("div");
-	bdl.style.width = "50%";
-	bdl.style.cssFloat = "left";
+	var bdl = document.createElement('div');
+	bdl.style.width    = '50%';
+	bdl.style.cssFloat = 'left';
 	bd.appendChild(bdl);
-	var bdr = document.createElement("div");
-	bdr.style.width = "50%";
-	bdr.style.cssFloat = "left";
+	var bdr = document.createElement('div');
+	bdr.style.width    = '50%';
+	bdr.style.cssFloat = 'left';
 	bd.appendChild(bdr);
 	
-	var okb = document.createElement("button");
-	okb.appendChild(document.createTextNode("Import"));
-	okb.style.width  = "100px";			
-	okb.style.height = "30px";
-	okb.style.marginRight = "20px";
-	okb.style.cssFloat  = "right";
+	var okb = document.createElement('button');
+	okb.appendChild(document.createTextNode('Import'));
+	okb.style.width       = '100px';			
+	okb.style.height      = '30px';
+	okb.style.marginRight = '20px';
+	okb.style.cssFloat    = 'right';
 	var space = this;
 	okb.onclick = function() {
 		System.repository.importFromJString(ta.value);
@@ -2104,12 +2101,12 @@ Space.prototype._importDialog = function() {
 	}
 	bdl.appendChild(okb);
 
-	var okc = document.createElement("button");
-	okc.appendChild(document.createTextNode("Cancel"));
-	okc.style.width  = "100px";			
-	okc.style.height = "30px";
-	okc.style.marginLeft = "20px";
-	okc.style.cssFloat  = "left";
+	var okc = document.createElement('button');
+	okc.appendChild(document.createTextNode('Cancel'));
+	okc.style.width      = '100px';
+	okc.style.height     = '30px';
+	okc.style.marginLeft = '20px';
+	okc.style.cssFloat   = 'left';
 	okc.onclick = function() {
 		document.body.removeChild(div);
 	}
@@ -2118,51 +2115,51 @@ Space.prototype._importDialog = function() {
 
 /* shows the export dialog */
 Space.prototype._revertDialog = function() {
-	var div = document.createElement("div");
-	div.style.position = "absolute";
-	div.style.width    = "100%";
-	div.style.height   = "100%";
-	div.style.top      = 0;
-	div.style.left     = 0;
-	div.style.zIndex   = 10;
-	div.style.background = "rgba(248, 237, 105, 0.9)";
-	div.style.overflow   = "auto";
+	var div = document.createElement('div');
+	div.style.position   = 'absolute';
+	div.style.width      = '100%';
+	div.style.height     = '100%';
+	div.style.top        = 0;
+	div.style.left       = 0;
+	div.style.zIndex     = 10;
+	div.style.background = 'rgba(248, 237, 105, 0.9)';
+	div.style.overflow   = 'auto';
 	document.body.appendChild(div);
-	var label = document.createElement("div");
-	label.style.width = "100%";
-	label.style.textAlign = "center";
-	label.style.marginTop = "20px";
-	label.style.fontWeight = "bold";
-	label.appendChild(document.createTextNode("Warning. Current Repository will be erased!"));
-	var label2 = document.createElement("div");
-	label2.style.width = "100%";
-	label2.style.textAlign = "center";
-	label2.appendChild(document.createTextNode("Revert to default demo state?"));
+	var label = document.createElement('div');
+	label.style.width      = '100%';
+	label.style.textAlign  = 'center';
+	label.style.marginTop  = '20px';
+	label.style.fontWeight = 'bold';
+	label.appendChild(document.createTextNode('Warning. Current Repository will be erased!'));
+	var label2 = document.createElement('div');
+	label2.style.width     = '100%';
+	label2.style.textAlign = 'center';
+	label2.appendChild(document.createTextNode('Revert to default demo state?'));
 	div.appendChild(label);
 	div.appendChild(label2);
-	div.appendChild(document.createElement("br"));
-	div.appendChild(document.createElement("br"));
-	div.appendChild(document.createElement("br"));
-	div.appendChild(document.createElement("br"));
-	var bd = document.createElement("div");
-	bd.style.display = "block";
-	bd.style.width = "100%";
+	div.appendChild(document.createElement('br'));
+	div.appendChild(document.createElement('br'));
+	div.appendChild(document.createElement('br'));
+	div.appendChild(document.createElement('br'));
+	var bd = document.createElement('div');
+	bd.style.display = 'block';
+	bd.style.width   = '100%';
 	div.appendChild(bd);
-	var bdl = document.createElement("div");
-	bdl.style.width = "50%";
-	bdl.style.cssFloat = "left";
+	var bdl = document.createElement('div');
+	bdl.style.width    = '50%';
+	bdl.style.cssFloat = 'left';
 	bd.appendChild(bdl);
-	var bdr = document.createElement("div");
-	bdr.style.width = "50%";
-	bdr.style.cssFloat = "left";
+	var bdr = document.createElement('div');
+	bdr.style.width    = '50%';
+	bdr.style.cssFloat = 'left';
 	bd.appendChild(bdr);
 	
-	var okb = document.createElement("button");
-	okb.appendChild(document.createTextNode("Revert"));
-	okb.style.width  = "100px";			
-	okb.style.height = "30px";
-	okb.style.marginRight = "20px";
-	okb.style.cssFloat  = "right";
+	var okb = document.createElement('button');
+	okb.appendChild(document.createTextNode('Revert'));
+	okb.style.width       = '100px';
+	okb.style.height      = '30px';
+	okb.style.marginRight = '20px';
+	okb.style.cssFloat    = 'right';
 	var space = this;
 	okb.onclick = function() {
 		System.repository.importFromJString(demoRepository);
@@ -2171,12 +2168,12 @@ Space.prototype._revertDialog = function() {
 	}
 	bdl.appendChild(okb);
 
-	var okc = document.createElement("button");
-	okc.appendChild(document.createTextNode("Cancel"));
-	okc.style.width  = "100px";			
-	okc.style.height = "30px";
-	okc.style.marginLeft = "20px";
-	okc.style.cssFloat  = "left";
+	var okc = document.createElement('button');
+	okc.appendChild(document.createTextNode('Cancel'));
+	okc.style.width      = '100px';
+	okc.style.height     = '30px';
+	okc.style.marginLeft = '20px';
+	okc.style.cssFloat   = 'left';
 	okc.onclick = function() {
 		document.body.removeChild(div);
 	}
@@ -2212,7 +2209,7 @@ Space.prototype.mousedown = function(p) {
 	
 	switch (iaction.act) {
 	case ACT.FMENU :
-		var md = this._floatmenu.mousedown(p);
+		var md = this._floatmenu.getMousepos(p);
 		iaction.act = ACT.NONE;
 		var fm = this._floatmenu;
 		if (md < 0) {
@@ -2232,7 +2229,7 @@ Space.prototype.mousedown = function(p) {
 			var pnw = fm.p.sub(this.pan);
 			var pse = pnw.add(100, 50);
 			var dtree = new DTree(20);
-			dtree.append(new Paragraph("Label"));
+			dtree.append(new Paragraph('Label'));
 			var label = new Label(null, new Rect(pnw, pse), dtree);
 			label.moveto(pnw.sub(
 				R(label.zone.width / 2),  // todo make half()
@@ -2243,7 +2240,7 @@ Space.prototype.mousedown = function(p) {
 		this.redraw();
 		return MST.NONE;
 	case ACT.IMENU :
-		var md = this._itemmenu.mousedown(p);
+		var md = this._itemmenu.getMousepos(p);
 		iaction.act = ACT.NONE;
 		redraw = true;
 		if (md) {
@@ -2272,7 +2269,7 @@ Space.prototype.mousedown = function(p) {
 			iaction.item = this.focus;
 			iaction.sp   = p;
 			iaction.siz  = this.focus.handlezone; 
-			System.setCursor(com + "-resize");
+			System.setCursor(com+'-resize');
 			if (redraw) this.redraw();
 			return MST.DRAG;
 		}
@@ -2308,7 +2305,7 @@ function Treenode() {
 /* appends tnode to list of children */
 Treenode.prototype.append = function(tnode) {
 	if (tnode.parent) {
-		throw new Error("append() on a node already part of a tree");
+		throw new Error('append() on a node already part of a tree');
 	}
 	tnode.parent = this;
 	if (!this.last) {
@@ -2336,7 +2333,7 @@ Treenode.prototype.insertBefore = function(tnode, bnode) {
 	}
 	
 	if (tnode.parent) {
-		throw new Error("Treenode.append() on a node already part of a tree");
+		throw new Error('Treenode.append() on a node already part of a tree');
 	}
 	tnode.parent = this;
 	
@@ -2379,15 +2376,14 @@ Treenode.prototype.anchestor = function(construct) {
   `-' `-' ' ` `' ' ' `-' `-^ `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-subclass(Textnode, Treenode);
-
 function Textnode(text)
 {
 	Treenode.call(this);
-	this._text = text ? text : "";
+	this._text = text ? text : '';
 }
+subclass(Textnode, Treenode);
 
-Object.defineProperty(Textnode.prototype, "text", {
+Object.defineProperty(Textnode.prototype, 'text', {
 	get: function() { 
 		return this._text;
 	},
@@ -2407,8 +2403,9 @@ Object.defineProperty(Textnode.prototype, "text", {
   `'    `-^ '   `-^ `-| '   `-^ |-' ' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ | ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
                      `'         '
+ A paragraph.
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-subclass(Paragraph, Treenode);
 
 function Paragraph(text)
 {
@@ -2419,6 +2416,7 @@ function Paragraph(text)
 	this._flowWidth = null;	
 	this.p = null;
 }
+subclass(Paragraph, Treenode);
 
 /**
 |(re)flows the Paragraph, positioning all chunks  
@@ -2436,7 +2434,7 @@ Paragraph.prototype._flow = function() {
 	var x = 0;
 	var y = fontsize;	
 	Measure.font = dtree.font;
-	var space = Measure.width(" ");
+	var space = Measure.width(' ');
 	var pline = 0;
 	{
 		var l = pinfo[pline] = [];
@@ -2448,18 +2446,18 @@ Paragraph.prototype._flow = function() {
 		var t = node.text;
 		var pchunk = 0;
 		//var reg = !dtree.pre ? (/(\s*\S+)\s?(\s*)/g) : (/(.+)()$/g);
-		/* also match only spaces, todo check if more performance if hand coding */
+		// also match only spaces, todo check if more performance if hand coding
 		var reg = !dtree.pre ? (/(\s*\S+|\s+$)\s?(\s*)/g) : (/(.+)()$/g);
-		var stol = true; /* at start of line */
+		var stol = true; // at start of line 
 		for(var ca = reg.exec(t); ca != null; ca = reg.exec(t)) {
-			/* text is a word plus hard spaces */
+			// text is a word plus hard spaces
 			var text = ca[1] + ca[2];
 			var w = Measure.width(text);
 			if (fw > 0 && x + w + space > fw) {
 				if (!stol) {
-					/* soft break */
+					// soft break 
 					if (x > width) {
-						/* stores maximum width used */
+						// stores maximum width used 
 						width = x;
 					}
 					x = 0;
@@ -2473,7 +2471,7 @@ Paragraph.prototype._flow = function() {
 					}
 					stol = true;
 				} else {
-					/* horizontal overflow */
+					// horizontal overflow 
 				}
 			}
 			pinfo[pline][pchunk++] = {
@@ -2487,34 +2485,39 @@ Paragraph.prototype._flow = function() {
 			stol = false;
 		}
 		if (x > width) {
-			/* stores maximum width used */
+			// stores maximum width used 
 			width = x;
 		}
 	}
-	/* stores metrics */
-	/* logical height (excluding letters bottombox) */
+	// stores metrics
+	// logical height (excluding letters bottombox)
 	this._softHeight = y;
 	this._width = width;
 }
 
-/* returns the logical height 
- * (without addition of box below last line base line ofr gpq etc.) */
-Object.defineProperty(Paragraph.prototype, "softHeight", {
+/**
+| Returns the logical height.
+| (without addition of box below last line base line for 'gpq' etc.)
+| todo huh?
+*/
+Object.defineProperty(Paragraph.prototype, 'softHeight', {
 	get: function() { 
 		this._flow();
 		return this._softHeight;
 	},
 });
 
-Object.defineProperty(Paragraph.prototype, "width", {
+Object.defineProperty(Paragraph.prototype, 'width', {
 	get: function() { 
 		this._flow();
-		return this._width;f
+		return this._width;
 	},
 });
 
-/* returns the computes size of the paragraph */
-Object.defineProperty(Paragraph.prototype, "height", {
+/**
+| Returns the computed height of the paragraph. 
+*/
+Object.defineProperty(Paragraph.prototype, 'height', {
 	get: function() { 
 		this._flow();
 		var dtree = this.anchestor(DTree);
@@ -2522,15 +2525,20 @@ Object.defineProperty(Paragraph.prototype, "height", {
 	},
 });
 
-/* return the position information arrays for all chunks */
-Object.defineProperty(Paragraph.prototype, "pinfo", {
+/**
+| Returns the position information arrays for all chunks.
+*/
+Object.defineProperty(Paragraph.prototype, 'pinfo', {
 	get: function() { 
 		this._flow();
 		return this._pinfo;
 	},
 });
 
-Object.defineProperty(Paragraph.prototype, "flowWidth", {
+/**
+| todo huh?
+*/
+Object.defineProperty(Paragraph.prototype, 'flowWidth', {
 	get: function() { 
 		return this._flowWidth;
 	},
@@ -2554,13 +2562,13 @@ Paragraph.prototype.getC2D = function() {
 	this._flow();
 	this._canvasActual = true;
 			
-	/* todo: work out exact height for text below baseline */
-	/* set the canvas height */
+	// todo: work out exact height for text below baseline 
+	// set the canvas height 
 	var dtree = this.anchestor(DTree);
 	c2d.attune(this);
-	c2d.fontStyle(dtree.font, "black", "start", "alphabetic");
+	c2d.fontStyle(dtree.font, 'black', 'start', 'alphabetic');
 	
-	/* draws text into the canvas */
+	// draws text into the canvas
 	var pinfo = this._pinfo;
 	var plines = pinfo.length;
 	for(var il = 0; il < plines; il++) {
@@ -2574,20 +2582,23 @@ Paragraph.prototype.getC2D = function() {
 	return c2d;
 }
 		
-/* drops the canvas cache (cause something has changed */
+// drops the canvas cache (cause something has changed 
 Paragraph.prototype.listen = function() {
 	this._flowActual   = false;
 	this._canvasActual = false;
 	if (this.parent) this.parent.listen();
 }
 
-/* join a child node to its next sibling, 
- * or joins this paragraph to its next sibling */
- /* todo, this doesnt belong here */
+/** 
+| Joins a child node to its next sibling, 
+| or joins this paragraph to its next sibling 
+|
+| todo, this doesnt belong here .
+*/
 Paragraph.prototype.joinToNext = function(node, caret) {
 	var next = node.next;
 	if (next) {
-		alert("joinToNext, not yet implemented");
+		alert('joinToNext, not yet implemented');
 	}
 	var nextPara = this.next;
 	if (nextPara == null) {
@@ -2600,12 +2611,16 @@ Paragraph.prototype.joinToNext = function(node, caret) {
 	return true;
 }
 	
-/* join a child node to its previous sibling, 
- * or joins this paragraph to its previos sibling */
+/**
+| Joins a child node to its previous sibling, 
+| or joins this paragraph to its previos sibling.
+|
+| todo, doesnt belong here.
+*/
 Paragraph.prototype.joinToPrevious = function(node, caret) {
 	var prev = node.prev;
 	if (prev) {
-		alert("joinToPrevious, not yet implemented");
+		alert('joinToPrevious, not yet implemented');
 	}
 	var prevPara = this.prev;
 	if (prevPara == null) {
@@ -2627,9 +2642,10 @@ Paragraph.prototype.joinToPrevious = function(node, caret) {
  , |   /  , | |   |-' |-'
  `-^--'   `-' '   `-' `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
  A document with nodes in tree structure.
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-subclass(DTree, Treenode);
 
 /**
 | Constructor.
@@ -2638,6 +2654,7 @@ function DTree(fontsize) {
 	Treenode.call(this);
 	this._fontsize = fontsize || 13;
 }
+subclass(DTree, Treenode);
 
 /**
 | Creates a Dtree from json representation.
@@ -2651,7 +2668,7 @@ DTree.jnew = function(js) {
 	return o;
 }
 
-Object.defineProperty(DTree.prototype, "font", {
+Object.defineProperty(DTree.prototype, 'font', {
 	// todo, look if this can be removed.
 	get: function() { 
 		return this._fontsize + 'px ' + settings.defaultFont;
@@ -2806,7 +2823,7 @@ DTree.prototype.insertBefore = function(tnode, bnode) {
 /** 
 * Gets/Sets the font size.
 */
-Object.defineProperty(DTree.prototype, "fontsize", {
+Object.defineProperty(DTree.prototype, 'fontsize', {
 	get: function() { return this._fontsize; },
 	set: function(fs) {
 		if (this._fonsize == fs) return;
@@ -2820,7 +2837,7 @@ Object.defineProperty(DTree.prototype, "fontsize", {
 /**
 * Gets/Sets the flowWidth.
 */
-Object.defineProperty(DTree.prototype, "flowWidth", {
+Object.defineProperty(DTree.prototype, 'flowWidth', {
 	get: function() { return this._flowWidth; },
 	set: function(fw) {
 		if (this._flowWidth == fw) return;
@@ -2834,7 +2851,7 @@ Object.defineProperty(DTree.prototype, "flowWidth", {
 /**
 | Returns the width of the document tree.
 */
-Object.defineProperty(DTree.prototype, "width", {
+Object.defineProperty(DTree.prototype, 'width', {
 	get: function() { 
 		/* todo caching */
 		var w = 0;
@@ -2849,7 +2866,7 @@ Object.defineProperty(DTree.prototype, "width", {
 | Returns the height of the document tree.
 */
 // xxx
-Object.defineProperty(DTree.prototype, "height", {
+Object.defineProperty(DTree.prototype, 'height', {
 	get: function() { 
 		/* todo caching */
 		var h = 0;
@@ -2869,7 +2886,9 @@ Object.defineProperty(DTree.prototype, "height", {
  .^ | |  |-' | | |
  `--' `' `-' ' ' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+
  Something on a canvas.
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Item(id) {
 	this.id = id;
@@ -2879,7 +2898,7 @@ function Item(id) {
 /**
 | Return the hexgon slice that is the handle
 */
-Object.defineProperty(Item.prototype, "h6slice", {
+Object.defineProperty(Item.prototype, 'h6slice', {
 	get: function() { 
 		var hzone = this.handlezone;
 		if (this._h6slice && this._h6slice.psw.eq(hzone.pnw)) return this._h6slice;
@@ -2986,12 +3005,13 @@ Item.prototype.drawHandles = function(c2d) {
    | |-. | | |  |-' 
   ,' `-' `-' `' `-' 
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
  An item with text and a scrollbar.
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-subclass(Note, Item);
 
 /**
-| Note Constructor.
+| Constructor.
 | 
 | id:    item id
 | zone:  position and size of note.
@@ -3011,11 +3031,12 @@ function Note(id, zone, dtree) {
 	this._scrollx = -8833;
 	this._scrolly = -8833;
 	if (!this.dtree.first) {
-		this.dtree.append(new Paragraph(""));
+		this.dtree.append(new Paragraph(''));
 	}
 	/* todo, don't add here */
 	System.repository.addItem(this, true);
 }
+subclass(Note, Item);
 
 /**
 | Default margin for all notes.
@@ -3062,9 +3083,9 @@ Note.prototype.highlight = function(c2d) {
 /* turns the note into a string */
 Note.prototype.jsonfy = function() {
 	var js = {
-	     t : "note",
+	     t : 'note',
 		 z : this.zone.jsonfy(),
-		 d  : this.dtree.jsonfy(),
+		 d : this.dtree.jsonfy(),
 	}
 	return js;
 }
@@ -3088,7 +3109,7 @@ Note.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 	if (!this.zone.within(p)) return 0;
 	switch (txe) {
 	case TXE.HOVER : 
-		System.setCursor("default");
+		System.setCursor('default');
 		return TXR.HIT;
 	case TXE.DRAGSTART :
 		var txr = TXR.HIT;
@@ -3144,7 +3165,7 @@ Note.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 		space.actionRBindTo(this);
 		return TXR.HIT | TXR.REDRAW;
 	default :
-		throw new Error("Unknown transfix code:" + txe);
+		throw new Error('Unknown transfix code:'+txe);
 	}
 }
 
@@ -3171,7 +3192,7 @@ Note.prototype.setZone = function(zone, align) {
 /**
 | The zone the handles appear on.
 */
-Object.defineProperty(Note.prototype, "handlezone", {
+Object.defineProperty(Note.prototype, 'handlezone', {
 	get : function() { return this.zone; }
 });
 
@@ -3187,11 +3208,11 @@ Note.prototype.moveto = function(p) {
 /** 
 | Gets or Sets the vertical scroll position 
 */
-Object.defineProperty(Note.prototype, "scrolly", {
+Object.defineProperty(Note.prototype, 'scrolly', {
 	get: function() { return this._scrolly; },
 	set: function(sy) {
 		if (sy < 0 && sy != -8833) {
-			throw new Error("Invalid scrolly position");
+			throw new Error('Invalid scrolly position');
 		}
 		if (this._scrolly != sy) {
 			this._scrolly = sy;
@@ -3301,9 +3322,10 @@ Note.prototype.draw = function(c2d, selection) {
  /    ,-| | | |-' |  
  `--' `-^ ^-' `-' `' 
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
  An sizeable item with sizing text 
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-subclass(Label, Item);
 
 /**
 | Constructor.
@@ -3319,9 +3341,10 @@ function Label(id, zone, dtree) {
 	/* buffer canvas 2D */
 	this._bc2d = new C2D();  
 	this._canvasActual = false;  // todo rename
-	if (typeof(this.zone.pse.x) === "undefined") throw new Error("Invalid label"); // todo remove 
+	if (typeof(this.zone.pse.x) === 'undefined') throw new Error('Invalid label'); // todo remove 
 	System.repository.addItem(this, true);
 }
+subclass(Label, Item);
 
 /**
 | Default margin for all labels.
@@ -3362,7 +3385,7 @@ Label.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 	if (!this.zone.within(p)) return 0;
 	switch(txe) {
 	case TXE.HOVER :
-		System.setCursor("default");
+		System.setCursor('default');
 		return TXR.HIT;
 	case TXE.DRAGSTART :
 		var txr = TXR.HIT;
@@ -3408,7 +3431,7 @@ Label.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 		space.actionRBindTo(this);
 		return TXR.HIT | TXR.REDRAW;
 	default :
-		throw new Error("Unknown transfix code:" + txe);
+		throw new Error('Unknown transfix code:'+txe);
 	}
 }
 
@@ -3424,7 +3447,7 @@ Label.prototype.highlight = function(c2d) {
 */
 Label.prototype.jsonfy = function() {
 	return {
-	    t: "label",
+	    t: 'label',
 		z: this.zone.jsonfy(),
 		d: this.dtree.jsonfy(),
 	}
@@ -3473,7 +3496,7 @@ Label.prototype._dWidth = function() {
 /**
 | The zone the handles appear on.
 */
-Object.defineProperty(Label.prototype, "handlezone", {
+Object.defineProperty(Label.prototype, 'handlezone', {
 	get : function() { return this.zone; }
 });
 
@@ -3530,9 +3553,10 @@ Label.prototype.draw = function(c2d, selection) {
   )| \  |-' |  ,-| |  | | | | |
   `'  ` `-' `' `-^ `' ' `-' ' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
  Relates two items (or other relations)
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-subclass(Relation, Item);
 
 /**
 | Constructor.
@@ -3557,6 +3581,7 @@ function Relation(id, i1id, i2id, textZone, dtree) {
 	System.repository.addOnlook(this.id, this.i1id);
 	System.repository.addOnlook(this.id, this.i2id);
 }
+subclass(Relation, Item);
 
 /**
 | Default margin for all relations.
@@ -3594,7 +3619,7 @@ Relation.jnew = function(js, id) {
 */
 Relation.create = function(item1, item2) {
 	var dtree = new DTree(20);
-	dtree.append(new Paragraph("relates to"));
+	dtree.append(new Paragraph('relates to'));
 	dtree.flowWidth = -1;
 	var cline = Line.connect(item1.handlezone, null, item2.handlezone, null); // todo bindzone
 	var mx = (cline.p1.x + cline.p2.x) / 2; // todo teach line pc
@@ -3603,69 +3628,12 @@ Relation.create = function(item1, item2) {
 		new Point(R(mx - dtree.width / 2), R(my - dtree.height / 2)),
 		new Point(R(mx + dtree.width / 2), R(my + dtree.height / 2)));
 	return new Relation(null, item1.id, item2.id, textZone, dtree);
-
-/*
-	if (mcanvas) {
-	var it1 = System.repository.items[this.i1id]; // todo funcall
-	var it2 = System.repository.items[this.i2id];
-		var mx = ((p1.x + p2.x) / 2);
-		var my = ((p1.y + p2.y) / 2);
-		var tx = R(mx - mcanvas.width  / 2) - 2;
-		var ty = R(my - mcanvas.height / 2) - 2;
-		var bx = R(mx + mcanvas.width  / 2) + 2;
-		var by = R(my + mcanvas.height / 2) + 2;
-		c2d.drawImage(mcanvas, tx, ty);
-		c2d.rect(tx, ty, mcanvas.width + 4, mcanvas.height + 4);
-		c2d.stroke(1, "rgba(255, 127, 0, 0.4)"); // todo settings
-		c2d.beginPath();
-
-		// calculates intersections
-		var isp1, isp2;	
-		if (p1.y == p2.y) {
-			var kx = mcanvas.width / 2;
-			if (p1.x > p2.x) {
-				isp1 = new Point(R(mx + kx), p1.y);
-				isp2 = new Point(R(mx - kx), p1.y);
-			} else {
-				isp1 = new Point(R(mx - kx), p1.y);
-				isp2 = new Point(R(mx + kx), p1.y);
-			}
-		} else {
-			var kx = ((p2.x - p1.x) / (p2.y - p1.y) * mcanvas.height / 2);
-			if (p1.y > p2.y) {
-				isp1 = new Point(R(mx + kx), by);
-				isp2 = new Point(R(mx - kx), ty);
-			} else {
-				isp1 = new Point(R(mx - kx), ty);
-				isp2 = new Point(R(mx + kx), by);
-			}
-		}
-		if (isp1.x < tx || isp1.x > bx) {
-			var ky = ((p2.y - p1.y) / (p2.x - p1.x) * mcanvas.width  / 2);
-			if (p1.x > p2.x) {
-				isp1 = new Point(bx, R(my + ky));
-				isp2 = new Point(tx, R(my - ky));
-			} else {
-				isp1 = new Point(tx, R(my - ky));
-				isp2 = new Point(by, R(my + ky));
-			}
-		}
-
-		c2d.moveTo(p1);
-		c2d.lineTo(isp1);
-		c2d.stroke(3, "rgba(255, 225, 80, 0.5)"); // todo settings
-		c2d.stroke(1, "rgba(200, 100, 0, 0.8)");  // todo settings
-		
-		po = isp2;
-	} else {
-		po = p1;
-	}*/
 }
 
 /**
 | The zone the handles appear on.
 */
-Object.defineProperty(Relation.prototype, "handlezone", {
+Object.defineProperty(Relation.prototype, 'handlezone', {
 	get : function() { return this.textZone; }
 });
 
@@ -3689,7 +3657,7 @@ Relation.prototype.highlight = function(c2d) {
 */
 Relation.prototype.jsonfy = function() {
 	return {
-	    t  : "rel",
+	    t  : 'rel',
 		i1 : this.i1id,
 		i2 : this.i2id,
 		d  : this.dtree.jsonfy(),
@@ -3718,9 +3686,9 @@ Relation.prototype.setTextZone = function(zone, align) {
 	th = R(this.dtree.height * (1 + settings.bottombox));
 	// todo use rect resize?
 	switch(align) {
-	case "sw" :
-	case "w"  :
-	case "nw" : // align right 
+	case 'sw' :
+	case 'w'  :
+	case 'nw' : // align right 
 		this.textZone = new Rect(zone.pse.add(-this.dtree.width, -zh), zone.pse); 
 		break;
 	case 'c': // center
@@ -3781,7 +3749,7 @@ Relation.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 	if (!this.textZone.within(p)) return 0;
 	switch(txe) {
 	case TXE.HOVER :
-		System.setCursor("default");
+		System.setCursor('default');
 		return TXR.HIT;
 	case TXE.DRAGSTART :
 		var txr = TXR.HIT;
@@ -3827,7 +3795,7 @@ Relation.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 		space.actionRBindTo(this);
 		return TXR.HIT | TXR.REDRAW;
 	default :
-		throw new Error("Unknown transfix code:" + txe);
+		throw new Error('Unknown transfix code:'+txe);
 	}
 	return 0;
 	/*
@@ -3842,7 +3810,7 @@ Relation.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 	switch (txe) {
 	case TXE.HOVER : 
 		if (C2D.isNearLine(p, dis, arrow.p1, arrow.p1)) {
-			System.setCursor("move");
+			System.setCursor('move');
 			return TXR.HIT;
 		} else {
 			return 0;
@@ -3903,7 +3871,7 @@ Relation.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 		return TXR.HIT | TXR.REDRAW; 
 		return 0;
 	default :
-		throw new Error("Unknown transfix code:" + txe);
+		throw new Error('Unknown transfix code:'+txe);
 	}*/
 }
 
@@ -3974,7 +3942,7 @@ Relation.prototype.onlook = function(event, item) {
 	switch(event) {
 	case ONLOOK.REMOVE :
 		if (item.id != this.i1id && item.id != this.i2id) {
-			throw new Error("Got onlook for not my item?");
+			throw new Error('Got onlook for not my item?');
 		}
 		System.repository.removeItem(this);
 		/* todo check for cycles */
@@ -3986,7 +3954,7 @@ Relation.prototype.onlook = function(event, item) {
 		}*/
 		break;
 	default :
-		throw new Error("unknown unlook event");
+		throw new Error('unknown unlook event');
 	}
 }
 
@@ -3996,11 +3964,13 @@ Relation.prototype.onlook = function(event, item) {
  | /  |-' |   |  | | |   |  ,-' |   ,-| | | | |
  `'   `-' `-' `' `-' '   `---|  '   `-^ |-' ' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ,-.|~ ~ ~ ~ ~ | ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- Something that draws     `-+' vectors  '
+                          `-+'          '
+ Something that draws vectors.
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /*function VectorGraph(width, height, doc)
 {
-	this.bcanvas = document.createElement("canvas");
+	this.bcanvas = document.createElement('canvas');
 	this.width  = bcanvas.width  =  width;
 	this.height = bcanvas.height = height;
 	this.doc = doc;
@@ -4009,13 +3979,13 @@ Relation.prototype.onlook = function(event, item) {
 // gets the canvas buffer for this item 
 // if caret != null draws the caret into the canvas 
 VectorGraph.prototype.getCanvas = function() {
-	var cx = this.bcanvas.getContext("2d");
+	var cx = this.bcanvas.getContext('2d');
 	cx.beginPath();
 	cx.clearRect(0, 0, bcanvas.width, bcanvas.height);
-	draw = "";
+	draw = '';
 	for(var para = doc.getFirstPara(); para; para = para.next) {
 		var cmd = para.first.text;
-		draw += cmd + "\n";
+		draw += cmd + '\n';
 *///		var reg = /(\S+)\s*/g;
 /*		var cc = [];
 		var ci = 0;
@@ -4031,14 +4001,14 @@ VectorGraph.prototype.getCanvas = function() {
 			var a4 = parseFloat(cc[4]);
 			var a5 = parseFloat(cc[5]);
 			var a6 = parseFloat(cc[6]);
-			if (typeof(a1) != "number" || 
-			    typeof(a2) != "number" ||
-			    typeof(a3) != "number" ||
-			    typeof(a4) != "number" ||
-			    typeof(a5) != "number" ||
-			    typeof(a6) != "number"
+			if (typeof(a1) != 'number' || 
+			    typeof(a2) != 'number' ||
+			    typeof(a3) != 'number' ||
+			    typeof(a4) != 'number' ||
+			    typeof(a5) != 'number' ||
+			    typeof(a6) != 'number'
 			) {
-				//msg("Arguments not numbers: " + cmd);
+				//msg('Arguments not numbers: '+cmd);
 				break;
 			}
 			cx.arc(a1, a2, a3, a4 * Math.PI / 4, a5 * Math.PI / 4, a6 > 0 ? true : false);
@@ -4057,14 +4027,14 @@ VectorGraph.prototype.getCanvas = function() {
 			var a4 = parseFloat(cc[4]);
 			var a5 = parseFloat(cc[5]);
 			var a6 = parseFloat(cc[6]);
-			if (typeof(a1) != "number" || 
-			    typeof(a2) != "number" ||
-			    typeof(a3) != "number" ||
-			    typeof(a4) != "number" ||
-			    typeof(a5) != "number" ||
-			    typeof(a6) != "number"
+			if (typeof(a1) != 'number' || 
+			    typeof(a2) != 'number' ||
+			    typeof(a3) != 'number' ||
+			    typeof(a4) != 'number' ||
+			    typeof(a5) != 'number' ||
+			    typeof(a6) != 'number'
 			) {
-				//msg("Arguments not numbers: " + cmd);
+				//msg('Arguments not numbers: '+cmd);
 				break;
 			}
 			cx.bezierCurveTo(a1, a2, a3, a4, a5, a6);
@@ -4074,12 +4044,12 @@ VectorGraph.prototype.getCanvas = function() {
 			var a2 = parseFloat(cc[2]);
 			var a3 = parseFloat(cc[3]);
 			var a4 = parseFloat(cc[4]);
-			if (typeof(a1) != "number" || 
-			    typeof(a2) != "number" ||
-			    typeof(a3) != "number" ||
-			    typeof(a4) != "number" 
+			if (typeof(a1) != 'number' || 
+			    typeof(a2) != 'number' ||
+			    typeof(a3) != 'number' ||
+			    typeof(a4) != 'number' 
 			) {
-				//msg("Arguments not numbers: " + cmd);
+				//msg('Arguments not numbers: '+cmd);
 				break;
 			}
 			cx.quadraticCurveTo(a1, a2, a3, a4, a5, a6);
@@ -4087,10 +4057,10 @@ VectorGraph.prototype.getCanvas = function() {
 		case 'M' :
 			var a1 = parseFloat(cc[1]);
 			var a2 = parseFloat(cc[2]);
-			if (typeof(a1) != "number" || 
-			    typeof(a2) != "number"
+			if (typeof(a1) != 'number' || 
+			    typeof(a2) != 'number'
 			) {
-				//msg("Arguments not numbers: " + cmd);
+				//msg('Arguments not numbers: '+cmd);
 				break;
 			}
 			cx.moveTo(a1, a2);
@@ -4098,10 +4068,10 @@ VectorGraph.prototype.getCanvas = function() {
 		case 'L' :
 			var a1 = parseFloat(cc[1]);
 			var a2 = parseFloat(cc[2]);
-			if (typeof(a1) != "number" || 
-			    typeof(a2) != "number"
+			if (typeof(a1) != 'number' || 
+			    typeof(a2) != 'number'
 			) {
-				//msg("Arguments not numbers: " + cmd);
+				//msg('Arguments not numbers: '+cmd);
 				break;
 			}
 			cx.lineTo(a1, a2);
@@ -4114,39 +4084,39 @@ VectorGraph.prototype.getCanvas = function() {
 			var a1 = parseFloat(cc[1]);
 			var a2 = parseFloat(cc[2]);
 			var a3 = parseFloat(cc[3]);
-			if (typeof(a1) != "number" || 
-			    typeof(a2) != "number" ||
-			    typeof(a3) != "number"
+			if (typeof(a1) != 'number' || 
+			    typeof(a2) != 'number' ||
+			    typeof(a3) != 'number'
 			) {
-				//msg("Arguments not numbers: " + cmd);
+				//msg('Arguments not numbers: '+cmd);
 				break;
 			}
-			cx.strokeStyle = "rgb(" + a1 + "," + a2 + "," + a3 +")";
+			cx.strokeStyle = 'rgb('+a1+','+a2+','+a3+')';
 			break;
 		case 'C' :
 			var a1 = parseFloat(cc[1]);
 			var a2 = parseFloat(cc[2]);
 			var a3 = parseFloat(cc[3]);
-			if (typeof(a1) != "number" || 
-			    typeof(a2) != "number" ||
-			    typeof(a3) != "number"
+			if (typeof(a1) != 'number' || 
+			    typeof(a2) != 'number' ||
+			    typeof(a3) != 'number'
 			) {
-				//msg("Arguments not numbers: " + cmd);
+				//msg('Arguments not numbers: '+cmd);
 				break;
 			}
-			cx.fillStyle = "rgb(" + a1 + "," + a2 + "," + a3 +")";
+			cx.fillStyle = 'rgb('+a1+','+a2+','+a3+')';
 			break;
 		case 'W' :
 			var a1 = parseFloat(cc[1]);
-			if (typeof(a1) != "number") {
-				//msg("Arguments not numbers: " + cmd);
+			if (typeof(a1) != 'number') {
+				//msg('Arguments not numbers: '+cmd);
 				break;
 			}				
 			cx.lineWidth = a1;
 		case '' :
 			break;
 		default :
-			//msg("Unknown command: " + cmd);
+			//msg('Unknown command: '+cmd);
 			break;
 		}
 	}			
@@ -4185,25 +4155,25 @@ Repository.prototype.reset = function() {
 */
 Repository.prototype.loadLocalStorage = function() {
 	this.reset();
-	var idfjs = window.localStorage.getItem("idf");
+	var idfjs = window.localStorage.getItem('idf');
 	if (idfjs) {
 		try {
 			this._idFactory = JSON.parse(idfjs);
 		} catch(err) {
 			this._idFactory = null;
-			console.log("JSON error reading idfactory", err.name, err.message);
+			console.log('JSON error reading idfactory', err.name, err.message);
 		}
 	}
 	if (!this._idFactory) {
-		console.log("no repository found. (no idf)");
+		console.log('no repository found. (no idf)');
 		this._idFactory = {nid: 1};
 		return false;
 	}
 	
 	System.space.pan = System.space.c2d.pan = this._getPan(); // todo space setFunction
-	var zjs = window.localStorage.getItem("zidx");
+	var zjs = window.localStorage.getItem('zidx');
 	if (!zjs) {
-		console.log("no repository found. (no zidx)");
+		console.log('no repository found. (no zidx)');
 		return false;
 	}
 	var zidx = JSON.parse(zjs);
@@ -4230,10 +4200,10 @@ Repository.prototype.loadLocalStorage = function() {
 /* erases the local repository */
 Repository.prototype.eraseLocalStorage = function() {
 	var items = this.items;
-	window.localStorage.setItem("idf", "");
-	window.localStorage.setItem("zidx", "");
+	window.localStorage.setItem('idf', '');
+	window.localStorage.setItem('zidx', '');
 	for(var id in items) {
-		window.localStorage.setItem(id, "");
+		window.localStorage.setItem(id, '');
 	}
 }
 
@@ -4279,7 +4249,7 @@ Repository.prototype.moveToTop = function(z) {
 Repository.prototype.addOnlook = function(onlooker, onlooked) {
 	var its = this.items;
 	if (!this._noonlooks && (!its[onlooker] || !its[onlooked])) {
-		throw new Error("adding Onlook to invalid item ids:");
+		throw new Error('adding Onlook to invalid item ids:');
 	}
 	var od = this.onlookeds[onlooked];
 	var or = this.onlookers[onlooker];
@@ -4305,11 +4275,11 @@ Repository.prototype.importFromJString = function(str) {
 	try {
 		var js = JSON.parse(str);
 	} catch (err) {
-		window.alert("Repository save not valid JSON.");
+		window.alert('Repository save not valid JSON.');
 		return;
 	}
 	if (js.formatversion != 0 || !js.idf || !js.items || !js.z) {
-		window.alert("Repository not recognized.");	
+		window.alert('Repository not recognized.');	
 		return;
 	}
 	this.reset();
@@ -4318,11 +4288,11 @@ Repository.prototype.importFromJString = function(str) {
 	var items = this.items;
 	var zidx  = js.z;
 	this._idFactory = js.idf;	
-	window.localStorage.setItem("idf", JSON.stringify(this._idFactory));
+	window.localStorage.setItem('idf', JSON.stringify(this._idFactory));
 	this._noonlooks = true;
 	for (var i = zidx.length - 1; i >= 0; i--) {
 		var id = zidx[i];
-		if (typeof zidx[i] != "number") id = parseInt(id);
+		if (typeof zidx[i] !== 'number') id = parseInt(id);
 		this._loadItem(id, js.items[id]);
 	}
 	this._saveZIDX();
@@ -4336,22 +4306,22 @@ Repository.prototype.importFromJString = function(str) {
 Repository.prototype._newItemID = function() {
 	var idf = this._idFactory;
 	idf.nid++;
-	window.localStorage.setItem("idf", JSON.stringify(idf));
+	window.localStorage.setItem('idf', JSON.stringify(idf));
 	return idf.nid;
 }
 
 Repository.prototype._loadItem = function(id, js) {
-	if (!js || !js.t) throw new Error("JSON error: attributes missing from ("+id+"):" + js);
+	if (!js || !js.t) throw new Error('JSON error: attributes missing from ('+id+'): '+js);
 	switch(js.t) {
-	case "note"  : return Note.jnew(js, id);
-	case "label" : return Label.jnew(js, id);
-	case "rel"   : return Relation.jnew(js, id);
-	default      : throw new Error("unknown item type");
+	case 'note'  : return Note.jnew(js, id);
+	case 'label' : return Label.jnew(js, id);
+	case 'rel'   : return Relation.jnew(js, id);
+	default      : throw new Error('unknown item type');
 	}
 }
 
 Repository.prototype._saveZIDX = function() {
-	window.localStorage.setItem("zidx", JSON.stringify(this.zidx));
+	window.localStorage.setItem('zidx', JSON.stringify(this.zidx));
 }
 
 /* adds an item to the space */
@@ -4392,7 +4362,7 @@ Repository.prototype.removeItem = function(item) {
 	}
 	
 	if (!this._nosave) {
-		window.localStorage.setItem(item.id, "");
+		window.localStorage.setItem(item.id, '');
 		this._saveZIDX();
 	}
 }
@@ -4417,13 +4387,13 @@ Repository.prototype.updateItem = function(item) {
 
 /* loads panning offsets  */
 Repository.prototype._getPan = function() {
-	var jstr = window.localStorage.getItem("pan");
+	var jstr = window.localStorage.getItem('pan');
 	var js   = JSON.parse(jstr);
 	return js ? Point.jnew(js) : new Point(0, 0);
 }
 
 Repository.prototype.savePan = function(pan) {
-	if (!this._nosave) window.localStorage.setItem("pan", JSON.stringify(pan.jsonfy()));
+	if (!this._nosave) window.localStorage.setItem('pan', JSON.stringify(pan.jsonfy()));
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -4436,14 +4406,14 @@ Repository.prototype.savePan = function(pan) {
 var demoRepository = null;
 window.onload = function() {
 	var request = document.location.search;
-	if (request.indexOf("reset") >= 0) {
-		console.log("Clearing localStorage");
+	if (request.indexOf('reset') >= 0) {
+		console.log('Clearing localStorage');
 		window.localStorage.clear();
 	}
 	// loads the demoRepository JSON String
-	var demotag = "DEMOREPOSITORY";
+	var demotag = 'DEMOREPOSITORY';
 	for(var node = document.body.lastChild; node; node = node.previousSibling) {
-		if (node.nodeName != "#comment") continue;
+		if (node.nodeName != '#comment') continue;
 		var data = node.data;
 		if (data.substring(0, demotag.length) != demotag) continue;
 		demoRepository = data.substring(demotag.length);
