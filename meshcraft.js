@@ -1527,7 +1527,7 @@ Edgemenu.prototype.draw = function() {
 | Returns which section the position is at.
 | todo rename
 */
-Edgemenu.prototype._getMousepos = function(p) {
+Edgemenu.prototype.getMousepos = function(p) {
 	var c2d = System.c2d;
 	if (!this.pnw || !this.pse) return this.mousepos = -1;
 	if (p.y < this.pnw.y) return this.mousepos = -1;
@@ -1551,19 +1551,6 @@ Edgemenu.prototype._getMousepos = function(p) {
 	return this.mousepos = -1;
 }
 
-/**
-| Returns true if this.mousepos has changed
-*/
-// todo rename
-Edgemenu.prototype.mousehover = function(p) {	
-	var omp = this.mousepos;
-	return omp != this._getMousepos(p);
-}
-
-// todo why x,y
-Edgemenu.prototype.mousedown = function(x, y) { 
-	return this._getMousepos(x, y);
-}
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,--.         .         .
@@ -1693,7 +1680,7 @@ Space.prototype.mousehover = function(p) {
 	var pp = p.sub(this.pan);
 	var com = null;
 	var editor = System.editor;
-	var redraw = this.edgemenu.mousehover(p);
+	var redraw = this.edgemenu.mousepos !== this.edgemenu.getMousepos(p);
 	if (this.edgemenu.mousepos >= 0) {
 		/* mouse floated on edge menu, no need to look further */
 		System.setCursor('default');
@@ -2188,7 +2175,7 @@ Space.prototype.mousedown = function(p) {
 	var editor = System.editor;
 	var redraw = false;
 
-	var md = this.edgemenu.mousedown(p);
+	var md = this.edgemenu.getMousepos(p);
 	if (md >= 0) {
 		iaction.act = ACT.NONE;
 		redraw = true;
