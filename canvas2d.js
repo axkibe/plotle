@@ -299,11 +299,11 @@ C2D.prototype.rect = function(a1, a2, a3, a4) {
 	var pan = this.pan;
 	var cx = this._cx;
 	if (typeof(r) === 'object') {
-		if (r.constructor === C2D.Rect)
+		if (r instanceof C2D.Rect)
 			return this._cx.rect(
 				a1.pnw.x + pan.x + 0.5, a1.pnw.y + pan.y + 0.5, 
 				a1.width, a1.height);
-		if (r.constructor === C2D.Point)
+		if (r instanceof C2D.Point)
 			return this._cx.rect(
 				a1.x + pan.x + 0.5, a1.y + pan.y + 0.5, 
 				a2.x - a1.x,        a2.y - a1.y);
@@ -322,9 +322,9 @@ C2D.prototype.fillRect = function(style, a1, a2, a3, a4) {
 	var cx = this._cx;
 	cx.fillStyle = style;
 	if (typeof(p) === 'object') {
-		if (a1.constructor === C2D.Rect) 
+		if (a1 instanceof C2D.Rect) 
 			return this._cx.fillRect(a1.pnw.x, a1.pnw.y, a1.pse.x, a1.pse.y);
-		if (a1.constructor === C2D.Point) 
+		if (a1 instanceof C2D.Point) 
 			return this._cx.fillRect(a1.x, a1.y, a2.x, a2.y);
 		throw new Error('fillRect not a rectangle');
 	}
@@ -349,7 +349,7 @@ C2D.prototype.closePath = function() { this._cx.closePath();  }
 */
 C2D.prototype.drawImage = function(image, a1, a2) {
 	var pan = this.pan;
-	if (image.constructor === C2D) image = image._canvas;
+	if (image instanceof C2D) image = image._canvas;
 	if (typeof(a1) === 'object') {
 		this._cx.drawImage(image, a1.x + pan.x, a1.y + pan.y);
 		return;
@@ -379,9 +379,9 @@ C2D.prototype.putImageData = function(imagedata, a1, a2) {
 C2D.prototype.getImageData = function(a1, a2, a3, a4) {
 	var pan = this.pan;
 	if (typeof(p) === 'object') {
-		if (a1.constructor === C2D.Rect) 
+		if (a1 instanceof C2D.Rect) 
 			return this._cx.getImageData(a1.pnw.x, a1.pnw.y, a1.pse.x, a1.pse.y);
-		if (a1.constructor === C2D.Point) 
+		if (a1 instanceof C2D.Point) 
 			return this._cx.getImageData(a1.x, a1.y, a2.x, a2.y);
 		throw new Error('getImageData not a rectangle');
 	}
@@ -627,7 +627,7 @@ C2D.Point.jnew = function(js) {
 C2D.Point.renew = function(x, y) {
 	for(var a = 2; a < arguments.length; a++) {
 		var p = arguments[a];
-		if (p.x === x && p.y === y) return p;
+		if (p instanceof Point && p.x === x && p.y === y) return p;
 	}
 	return new C2D.Point(x, y);
 }
@@ -947,7 +947,7 @@ C2D.lazyFixate(C2D.Margin.prototype, 'y', function() { return this.n + this.s; }
 | Rect(pnw, pse, crad) 
 */
 C2D.RoundRect = function(a1, a2, a3) {
-	if (a1.constructor === C2D.Point) {
+	if (a1 instanceof C2D.Point) {
 		C2D.Rect.call(this, a1, a2);
 		C2D.fixate(this, 'crad', a3);
 	} else {
@@ -1000,7 +1000,7 @@ C2D.RoundRect.prototype.path = function(c2d, border) {
 | r: radius
 */
 C2D.Hexagon = function(pc, r) {
-	if (typeof(pc) !== 'object' || pc.constructor !== C2D.Point) throw new Error('invalid pc');
+	if (typeof(pc) !== 'object' || !(pc instanceof C2D.Point)) throw new Error('invalid pc');
 	C2D.fixate(this, 'pc', pc);
 	C2D.fixate(this, 'r', r);
 	Object.freeze(this);
@@ -1352,7 +1352,7 @@ C2D.Line = function(p1, p1end, p2, p2end) {
 */
 C2D.Line.connect = function(shape1, end1, shape2, end2) {
 	if (!shape1 || !shape2) throw new Error('error'); 
-	if (shape1.constructor === C2D.Rect && shape2.constructor === C2D.Point) {
+	if (shape1 instanceof C2D.Rect && shape2 instanceof C2D.Point) {
 		var p2 = shape2;
 		var z1 = shape1;
 		var p1;
@@ -1365,7 +1365,7 @@ C2D.Line.connect = function(shape1, end1, shape2, end2) {
 		}
 		return new C2D.Line(p1, end1, p2, end2);
 	} 
-	if (shape1.constructor === C2D.Rect && shape2.constructor === C2D.Rect) {
+	if (shape1 instanceof C2D.Rect && shape2 instanceof C2D.Rect) {
 		var z1 = shape1;
 		var z2 = shape2;
 		var x1, y1, x2, y2;

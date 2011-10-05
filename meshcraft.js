@@ -442,7 +442,7 @@ Marker.prototype.getPoint = function() {
 | Sets the marker to position closest to x, y from flowbox(para).
 */
 Marker.prototype.setFromPoint = function(flowbox, p) {
-	if (flowbox.constructor !== Paragraph) { throw new Error('invalid flowbox.'); }
+	if (!flowbox instanceof Paragraph) { throw new Error('invalid flowbox.'); }
 	var pinfo = this._getPinfoAtXY(flowbox, p.x, p.y);
 	var l = pinfo[this._pli];
 	var c = l[this._pci]; // x,y is in this chunk
@@ -1438,9 +1438,9 @@ function Edgemenu() {
 Edgemenu.prototype.path = function(c2d, border, section) {
 	var b =  border;
 	/* width half */
-	var w2 = R(this.width / 2);
+	var w2 = half(this.width);
 	/* x in the middle */
-	var xm = R((this.pnw.x + this.pse.x) / 2);
+	var xm = half(this.pnw.x + this.pse.x);
 	/* edge width (diagonal extra) */
 	var ew  = R((this.pse.y - this.pnw.y) * C2D.tan30);
 
@@ -1495,18 +1495,11 @@ Edgemenu.prototype.path = function(c2d, border, section) {
 */
 Edgemenu.prototype.draw = function() {
 	var c2d = System.c2d;
-	var xm  = R(c2d.width / 2);
-	var w2  = R(this.width / 2);
+	var xm  = half(c2d.width);
+	var w2  = half(this.width);
 
-	{
-		// todo replace with Point.renew()
-		var nwx = xm - w2, nwy = c2d.height - this.height;
-		var sex = xm + w2, sey = c2d.height;
-		if (!this.pnw || this.pnw.x !== nwx || this.pnw.y !== nwy) 
-			this.pnw = new Point(nwx, nwy);
-		if (!this.pse || this.pse.x !== sex || this.pse.y !== sey) 
-			this.pse = new Point(sex, sey);
-	}
+	this.pnw = Point.renew(xm - w2, c2d.height - this.height, this.pnw, this.pse);
+	this.pse = Point.renew(xm + w2, c2d.height, this.pnw, this.pse);
 
 	c2d.fill(settings.edgemenu.style.fill, this, 'path', -1); // todo combine path-1
 	if (this.mousepos >= 0) {
@@ -1516,9 +1509,9 @@ Edgemenu.prototype.draw = function() {
 
 	c2d.fontStyle('12px ' + settings.defaultFont, 'black', 'center', 'middle');
 	var bx = this.pnw.x;
-	var my = R((this.pnw.y + this.pse.y) / 2);
+	var my = half(this.pnw.y + this.pse.y);
 	for(var i = 0; i < this.labels.length; i++) {
-		c2d.fillText(this.labels[i], bx + R(this.buttonWidths[i] / 2), my);
+		c2d.fillText(this.labels[i], bx + half(this.buttonWidths[i]), my);
 		bx += this.buttonWidths[i];
 	}
 }
@@ -1531,7 +1524,7 @@ Edgemenu.prototype.getMousepos = function(p) {
 	var c2d = System.c2d;
 	if (!this.pnw || !this.pse) return this.mousepos = -1;
 	if (p.y < this.pnw.y) return this.mousepos = -1;
-	var mx = R(c2d.width / 2);  // todo give it pc
+	var mx = half(c2d.width);  // todo give it pc
 	var ew = R((this.pse.y - this.pnw.y) * C2D.tan30); // todo simplify
 	// shortcut name = letters for formula
 	var pymcht6 = (p.y - c2d.height) * C2D.tan30;
@@ -1663,7 +1656,7 @@ Space.prototype.systemBlur = function() {
 }
 
 /* sets the focussed item or loses it if null*/
-Space.prototype.setFoci = function(item) {
+Space.prototype.setFocus = function(item) {
 	this.focus = item;
 	var caret = System.editor.caret;
 	if (item) {
@@ -1821,7 +1814,7 @@ Space.prototype.click = function(p, shift, ctrl) {
 		this._floatmenu = new Hexmenu(p, settings.floatmenu, this._floatMenuLabels);
 
 		System.setCursor('default');
-		this.setFoci(null);
+		this.setFocus(null);
 		this.redraw();
 		return;
 	}
@@ -2207,10 +2200,10 @@ Space.prototype.mousedown = function(p) {
 			var nw = settings.note.newWidth;
 			var nh = settings.note.newHeight;
 			// todo, beautify point logic.
-			var pnw = fm.p.sub(R(nw / 2) + this.pan.x, R(nh / 2) + this.pan.y);
+			var pnw = fm.p.sub(half(nw) + this.pan.x, half(nh) + this.pan.y);
 			var pse = pnw.add(nw, nh);
 			var note = new Note(null, new Rect(pnw, pse), new DTree());
-			this.setFoci(note);
+			this.setFocus(note);
 			break;
 		case 'ne' : // label
 			var pnw = fm.p.sub(this.pan);
@@ -2218,10 +2211,8 @@ Space.prototype.mousedown = function(p) {
 			var dtree = new DTree(20);
 			dtree.append(new Paragraph('Label'));
 			var label = new Label(null, new Rect(pnw, pse), dtree);
-			label.moveto(pnw.sub(
-				R(label.zone.width / 2),  // todo make half()
-				R(label.zone.height / 2)));
-			this.setFoci(label);
+			label.moveto(pnw.sub(half(label.zone.width), half(label.zone.height)));
+			this.setFocus(label);
 			break;
 		}
 		this.redraw();
@@ -2234,7 +2225,7 @@ Space.prototype.mousedown = function(p) {
 			switch(md) {
 			case 'n':
 				System.repository.removeItem(this.focus);
-				this.setFoci(null);
+				this.setFocus(null);
 				break;
 			}
 			if (redraw) this.redraw();
@@ -2352,7 +2343,7 @@ Treenode.prototype.remove = function(tnode) {
 Treenode.prototype.anchestor = function(construct) {
 	var n;
 	for(n = this; n && n.constructor !== construct; n = n.parent);
-	if (!n) throw new Error('anchestor not there');
+	if (!n) throw new Error('anchestor not there:'+construct);
 	return n;
 }
 
@@ -2954,14 +2945,14 @@ Item.prototype.pathResizeHandles = function(c2d, border) {
 	var zone = this.handlezone;
 	var ds = settings.handle.distance; 
 	var hs = settings.handle.size;
-	var hs2 = hs / 2;
+	var hs2 = half(hs);
 	
 	var x1 = zone.pnw.x - ds;
 	var y1 = zone.pnw.y - ds;
 	var x2 = zone.pse.x + ds;
 	var y2 = zone.pse.y + ds;
-	var xm = R((x1 + x2) / 2);
-	var ym = R((y1 + y2) / 2);
+	var xm = half(x1 + x2);
+	var ym = half(y1 + y2);
 
 	c2d.beginPath(); 
 	if (ha.n ) { c2d.moveTo(xm - hs2, y1); c2d.lineTo(xm + hs2, y1);                    }
@@ -3109,7 +3100,7 @@ Note.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 			txr |= TXR.REDRAW; /* todo full redraw */
 		}
 		if (space.focus != this) {
-			space.setFoci(this);
+			space.setFocus(this);
 			txr |= TXR.REDRAW;
 		}
 
@@ -3129,7 +3120,7 @@ Note.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 			txr |= TXR.REDRAW; /* todo full redraw */
 		}
 		if (space.focus != this) {
-			space.setFoci(this);
+			space.setFocus(this);
 			txr |= TXR.REDRAW;
 		}
 
@@ -3385,7 +3376,7 @@ Label.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 			txr |= TXR.REDRAW; /* todo full redraw */
 		}
 		if (space.focus != this) {
-			space.setFoci(this);
+			space.setFocus(this);
 			txr |= TXR.REDRAW;
 		}
 
@@ -3398,7 +3389,7 @@ Label.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 			txr |= TXR.REDRAW; /* todo full redraw */
 		}
 		if (space.focus != this) {
-			space.setFoci(this);
+			space.setFocus(this);
 			txr |= TXR.REDRAW;
 		}
 		var op = p.sub(this.zone.pnw);
@@ -3749,7 +3740,7 @@ Relation.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 			txr |= TXR.REDRAW; 
 		}
 		if (space.focus != this) {
-			space.setFoci(this);
+			space.setFocus(this);
 			txr |= TXR.REDRAW;
 		}
 
@@ -3762,7 +3753,7 @@ Relation.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 			txr |= TXR.REDRAW;
 		}
 		if (space.focus != this) {
-			space.setFoci(this);
+			space.setFocus(this);
 			txr |= TXR.REDRAW;
 		}
 		var op = p.sub(this.textZone.pnw);
@@ -3813,7 +3804,7 @@ Relation.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 			txr |= TXR.REDRAW; 
 		}
 		if (space.focus != this) {
-			space.setFoci(this);
+			space.setFocus(this);
 			txr |= TXR.REDRAW;
 		}
 
@@ -3833,7 +3824,7 @@ Relation.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 			txr |= TXR.REDRAW; 
 		}
 		if (space.focus != this) {
-			space.setFoci(this);
+			space.setFocus(this);
 			txr |= TXR.REDRAW;
 		}
 
@@ -4285,7 +4276,7 @@ Repository.prototype.importFromJString = function(str) {
 	this._saveZIDX();
 	this._noonlooks = false;
 
-	System.space.setFoci(null);
+	System.space.setFocus(null);
 	System.space.pan = System.space.c2d.pan = js.pan ? Point.jnew(js.pan) : new Point(0, 0); // todo
 	this.savePan(System.space.pan);
 }
