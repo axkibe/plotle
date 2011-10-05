@@ -368,8 +368,8 @@ Object.defineProperty(Marker.prototype, 'offset', {
 /** 
 | set(marker)                -or-
 | set(element, offset)       -or-
-< set(item, element, offset) -or-
- */
+| set(item, element, offset) -or-
+*/
 Marker.prototype.set = function(a1, a2, a3) {
 	// todo, use typeof
 	switch (arguments.length) {
@@ -393,7 +393,9 @@ Marker.prototype.set = function(a1, a2, a3) {
 	}
 }
 
-/* returns chunk at x/y */
+/** 
+| Returns chunk at x/y 
+*/
 Marker.prototype._getPinfoAtXY = function(flowbox, x, y) {
 	var pinfo = flowbox.pinfo;
 	var plen = pinfo.length;
@@ -422,7 +424,9 @@ Marker.prototype._getPinfoAtXY = function(flowbox, x, y) {
 	return pinfo;
 }
 
-/* Gets the point of actual position, relative to dtree */
+/** 
+| Gets the markers position, relative to dtree 
+*/
 Marker.prototype.getPoint = function() {
 	/* todo cache position */
 	var dtree = this._item.dtree;
@@ -609,7 +613,13 @@ Marker.prototype.moveLeftRight = function(dir) {
  |   . ,-| |   |-' |  
  `--'  `-^ '   `-' `' 
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+ The Caret.
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/**
+| Constructor.
+*/
 function Caret() {
 	Marker.call(this);
 	
@@ -619,15 +629,20 @@ function Caret() {
 	this.blink = false;	
 }
 subclass(Caret, Marker);
-	
-/* shows the caret or resets the blink timer if already shown */
+
+
+/** 
+| Shows the caret or resets the blink timer if already shown 
+*/
 Caret.prototype.show = function() {
 	this.shown = true;
 	this.blink = false;
 	System.startBlinker();
 }
 	
-/* hides the caret */
+/** 
+| Hides the caret 
+*/
 Caret.prototype.hide = function() {
 	this.shown = false;
 	System.stopBlinker();
@@ -639,7 +654,13 @@ Caret.prototype.hide = function() {
      \ |-' |  |-' |   |  | | | | |
  `---' `-' `' `-' `-' `' ' `-' ' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+ Text Selection.
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/**
+| Constructor.
+*/
 function Selection() {
 	this.active = false;
 	this.mark1 = new Marker();
@@ -648,7 +669,9 @@ function Selection() {
 	this.end   = null;
 }
 
-/* sets begin/end so begin is before end. */
+/** 
+| Sets begin/end so begin is before end. 
+*/
 Selection.prototype.normalize = function() {
 	var e1 = this.mark1.element;
 	var e2 = this.mark2.element;
@@ -709,7 +732,13 @@ Selection.prototype.innerText = function() {
   /    | | | |  | | |
  '`--' `-^ ' `' `-' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+ todo, what exactly belongs to this?
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/**
+| Constructor.
+*/
 function Editor() {
 	this.caret     = new Caret();
 	this.selection = new Selection();
@@ -749,6 +778,9 @@ Editor.prototype.updateCaret = function() {
 	}
 }
 
+/**
+| Inserts a new line
+*/
 Editor.prototype.newline = function() {
 	var caret  = this.caret;
 	var ce    = caret.element;
@@ -763,8 +795,10 @@ Editor.prototype.newline = function() {
 	caret.set(npara.first, 0);
 }
 	
-/* handles a special key */
-/* returns true if the element needs to be redrawn. */
+/** 
+| Handles a special(control) key 
+| returns true if the element needs to be redrawn. 
+*/
 Editor.prototype.specialKey = function(item, keycode, shift, ctrl) {
 	if (!item) return false;
 	var refresh = false;
@@ -900,8 +934,8 @@ Editor.prototype.specialKey = function(item, keycode, shift, ctrl) {
 			select.active = true;
 			select.mark2.set(caret);
 			System.setInput(select.innerText());
-			/* clear item cache */
-			item.listen(); 
+			// clears item cache 
+			item.listen();  // todo rename.
 			redraw = true;
 		}
 	}
@@ -915,7 +949,9 @@ Editor.prototype.specialKey = function(item, keycode, shift, ctrl) {
 	return redraw;
 }
 
-/* blinks the caret away or into visiblity */
+/** 
+| Switches caret visibility state.
+*/
 Editor.prototype.blink = function() {
 	if (this.caret.shown) {
 		this.caret.blink = !this.caret.blink;
@@ -924,7 +960,7 @@ Editor.prototype.blink = function() {
 }
 
 /**
-| Deletes the selection 
+| Deletes the selection including its contents.
 */
 Editor.prototype.deleteSelection = function() {
 	var select = this.selection;
@@ -966,8 +1002,10 @@ Editor.prototype.deselect = function() {
 	item.listen(); 
 }
 
-/* got character input from user */
-/* returns redraw needs */
+/** 
+| Received a input from user
+| returns true if redraw is needed 
+*/
 Editor.prototype.input = function(item, text) {
 	if (!item) return false;
 	var caret = this.caret;
@@ -996,12 +1034,15 @@ Editor.prototype.input = function(item, text) {
      \ | | `-. |  |-' | | |
  `---' `-| `-' `' `-' ' ' '
 ~ ~ ~ ~ /|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-  Base-`-'-system for Meshcraft. 
-  All system events arrive here.
+       `-'                     . 
+  Base system for Meshcraft. 
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 var System = { 
 
-/* Catches all errors for a function */
+/** 
+| Catches all errors a function throws if enabledCatcher is set. 
+*/
 makeCatcher : function(that, fun) {
 	return function() {
 		'use strict';
@@ -1020,49 +1061,55 @@ makeCatcher : function(that, fun) {
 	};
 },
 
+/**
+| Startup.
+*/
 init : function() {
 	System.makeCatcher(System, System._init)();
 },
 
+/**
+| Startup with possibly enabled error catching.
+*/
 _init : function() {
-	if (this != System) {
-		throw new Error('System has wrong this pointer');
-	}
+	if (this != System) throw new Error('System has wrong this pointer'); 
 	var canvas = this.canvas = document.getElementById('canvas');
 	canvas.width  = window.innerWidth - 1;
 	canvas.height = window.innerHeight - 1;
 	this.c2d = new C2D(canvas);
 	Measure.init();
 	
-	/* the space that currently is displayed */
+	// the space that currently is displayed
 	this.space = null;
 
-	/* if true use browser supported setCapture() call
-	 * if false work around */
+	// if true browser supports the setCapture() call
+	// if false needs work around 
 	var useCapture = canvas.setCapture != null;
 
-	/* mouse state */
+	// mouse state
 	var mst = MST.NONE;
-	/* position the mouse went down to atween state */
+	// position the mouse went down to atween state
 	var msp = null;
-	/* latest mouse position seen in atween state */
+	// latest mouse position seen in atween state 
 	var mmp = null;
-	/* latest shift/ctrl key status in atween state */
+	// latest shift/ctrl key status in atween state
 	var mms = null;
 	var mmc = null; 
-	/* timer for atween state */
+	// timer for atween state 
 	var atweenTimer = null;
 
 	var editor = this.editor = new Editor();
 	
-	/* hidden input that forwards all events */
+	// hidden input that forwards all events
 	var hiddenInput = document.getElementById('input');
 	
-	/* remembers last SpecialKey pressed, to hinder double events.
-	 * Opera is behaving stupid here. */
+	// remembers last SpecialKey pressed, to hinder double events.
+	// Opera is behaving stupid here.
 	var lastSpecialKey = -1;
 	
-	/* a special key is pressed */
+	/**
+	| A special key was pressed.
+	*/
 	function specialKey(keyCode, shift, ctrl) {
 		if (ctrl) {
 			switch(keyCode) {
@@ -1090,7 +1137,9 @@ _init : function() {
 		}
 	}
 
-	/* captures all mouseevents event beyond the canvas (for dragging) */ 
+	/** 
+	| Captures all mouseevents event beyond the canvas (for dragging).
+	*/ 
 	function captureEvents() {
 		if (useCapture) {
 			canvas.setCapture(canvas);
@@ -1100,7 +1149,9 @@ _init : function() {
 		}
 	}
 	
-	/* stops capturing all mouseevents */
+	/**
+	| Stops capturing all mouseevents 
+	*/
 	function releaseEvents() {
 		if (useCapture) {
 			canvas.releaseCapture(canvas);
@@ -1111,8 +1162,8 @@ _init : function() {
 	}
 	
 	// the value that is expected to be in input.
-	// either nothing or the text selection
-	// if it changes the user did something 
+	// either nothing or the text selection.
+	// if it changes the user did something.
 
 	var inputval = '';
 	
@@ -1136,14 +1187,18 @@ _init : function() {
 		editor.blink();
 	}
 	
-	// key down in hidden input field
+	/**
+	| Key down in hidden input field.
+	*/
 	function onkeydown(event) {
 		if (!specialKey.call(this, 
 			lastSpecialKey = event.keyCode, event.shiftKey, event.ctrlKey || event.metaKey
 		)) event.preventDefault();
 	}
 		
-	// hidden input key press
+	/**
+	| Hidden input key press.
+	*/
 	function onkeypress(event) {
 		var ew = event.which;
 		var ek = event.keyCode;
@@ -1157,30 +1212,40 @@ _init : function() {
 		return true;
 	}
 
-	// hidden input key up
+	/**
+	| Hidden input key up.
+	*/
 	function onkeyup(event) {
 		testinput();
 		return true;
 	}
 	
-	/* hidden input lost focus */
+	/**
+	| Hidden input lost focus.
+	*/
 	function onblur(event) {
 		this.space.systemBlur();
 	}
 
-	/* hidden input got focus */
+	/** 
+	| Hidden input got focus.
+	*/
 	function onfocus(event) {
 		this.space.systemFocus();
 	}
 		
-	/* view window resized */
+	/** 
+	| View window resized.
+	*/
 	function onresize(event) {
 		canvas.width  = window.innerWidth - 1;
 		canvas.height = window.innerHeight - 1;	
 		this.space && this.space.redraw();
 	}
 	
-	/* mouse move event */
+	/** 
+	| Mouse move event 
+	*/
 	function onmousemove(event) {
 		var p = new Point(event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop);
 
@@ -1191,7 +1256,7 @@ _init : function() {
 		case MST.ATWEEN :
 			var dragbox = settings.dragbox;
 			if ((abs(p.x - msp.x) > dragbox) || (abs(p.y - msp.y) > dragbox)) {
-				/* moved out of dragbox -> start dragging */
+				// moved out of dragbox -> start dragging
 				clearTimeout(atweenTimer);
 				atweenTimer = null;
 				mst = MST.DRAG;
@@ -1201,7 +1266,7 @@ _init : function() {
 				}
 				captureEvents();
 			} else {
-				/* saves position for possible atween timeout */
+				// saves position for possible atween timeout 
 				mmp = p;
 				mms = event.shiftKey;
 				mmc = event.ctrlKey || event.metaKey;
@@ -1215,7 +1280,9 @@ _init : function() {
 		}
 	}
 	
-	/* mouse down event */
+	/** 
+	| Mouse down event.
+	*/
 	function onmousedown(event) {
 		event.preventDefault();
 		hiddenInput.focus();
@@ -1236,7 +1303,9 @@ _init : function() {
 		return false;
 	}
 
-	/* mouse up event */
+	/** 
+	| Mouse up event.
+	*/
 	function onmouseup(event) {
 		event.preventDefault();
 		releaseEvents();
@@ -1259,14 +1328,18 @@ _init : function() {
 		}
 	}
 
-	/* mouse down event */
+	/**
+	| Mouse down event.
+	*/
 	function onmousewheel(event) {
 		var wheel = event.wheelDelta || event.detail;
 		wheel = wheel > 0 ? 1 : -1;
 		this.space.mousewheel(wheel);
 	}
 	
-	/* timeout after mouse down so dragging starts */
+	/** 
+	| Timeout after mouse down so dragging starts.
+	*/
 	function onatweentime() {
 		if (mst != MST.ATWEEN) {
 			console.log('dragTime() in wrong action mode');
@@ -1295,14 +1368,18 @@ _init : function() {
 	this.onatweentime      = this.makeCatcher(this, onatweentime);
 	this.onblink           = this.makeCatcher(this, blink);
 		
-	/* sets the mouse cursor */
+	/**
+	| Sets the mouse cursor
+	*/
 	this.setCursor = function(cursor) {
 		canvas.style.cursor = cursor;
 	}		
 	
-	/*-- Meshcraft System calls --*/
+	//-- Exported System calls --
 	
-	/* sets the input (text selection) */
+	/** 
+	| Sets the input (text selection).
+	*/
 	this.setInput = function(text) {	
 		hiddenInput.value = inputval = text;
 		if (text != '') {
@@ -1311,10 +1388,12 @@ _init : function() {
 		}
 	}
 		
-	/* the blink (and check input) timer */
+	// the blink (and check input) timer 
 	var blinkTimer = null;
 	
-	/* (re)starts the blink timer */
+	/**
+	| (re)starts the blink timer 
+	*/
 	this.startBlinker = function() {
 		if (blinkTimer) {
 			clearInterval(blinkTimer);
@@ -1323,7 +1402,9 @@ _init : function() {
 		blinkTimer = setInterval('System.onblink()', settings.caretBlinkSpeed);		
 	}
 	
-	/* stops the blink timer */
+	/**
+	| Stops the blink timer.
+	*/
 	this.stopBlinker = function() {
 		if (blinkTimer) {
 			clearInterval(blinkTimer);
@@ -1331,15 +1412,16 @@ _init : function() {
 	}
 
 	this.repository = new Repository();
-	var space = this.space = new Space();
+	this.space = new Space();
 	this.startBlinker();
-	/* hinders init to be called another time */
+	// hinders init to be called another time 
 	delete this.init; 
 	delete this._init;
-	if (!System.repository.loadLocalStorage()) {
-		System.repository.importFromJString(demoRepository);
+
+	if (!this.repository.loadLocalStorage()) {
+		this.repository.importFromJString(demoRepository);
 	}
-	System.space.redraw();
+	this.space.redraw();
 }};
 	
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1348,7 +1430,8 @@ _init : function() {
   /| |  |-'  X  | | | |-' | | | |
   `' `' `-' ' ` ' ' ' `-' ' ' `-^
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-		rado |------>| 
+
+        rado |------>| 
         radi |->.    '
          .------'.   '      -1
 		/ \  1  / \	 '
@@ -1358,7 +1441,11 @@ _init : function() {
 	   \ 5 `---´ 3 /
  	    \ /  4  \ /
          `-------´  
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/**
+| Constructor.
+*/
 function Hexmenu(p, style, labels) {
 	this.p = p;
 	this.style = style;
@@ -1367,6 +1454,9 @@ function Hexmenu(p, style, labels) {
 	this.mousepos = null;
 }
 
+/**
+| Draws the hexmenu.
+*/
 Hexmenu.prototype.draw = function() {
 	var c2d = System.c2d; // todo?
 
@@ -1403,25 +1493,31 @@ Hexmenu.prototype.getMousepos = function(p) {
   /    | | | | |-' | | | |-' | | | |
  '`--' `-^ `-| `-' ' ' ' `-' ' ' `-^
 ~ ~ ~ ~ ~ ~ ,|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-  The menu  `' at the screen edge.
+            `'
+  The menu at the screen edge.
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/**
+| Constructor.
+*/
 function Edgemenu() {
-	/* section mouse hovers over/clicks */
+	// section mouse hovers over/clicks
 	this.mousepos = -1;
 
-	/* widths of buttons (meassured on bottom) */
+	// widths of buttons (meassured on bottom)
 	this.buttonWidths = [100, 150, 100];
 
-	/* label texts */
+	// label texts
 	this.labels = ['Export', 'Meshcraft Demospace', 'Import'];
 
-	/* total width */
-	this.width = 0;
+	// total width 
+	var width = 0;
 	for(var b in this.buttonWidths) {
-		this.width += this.buttonWidths[b];
+		width += this.buttonWidths[b];
 	}
+	this.width = width;
 	
-	/* total height */
+	// total height
 	this.height = 30;
 }
 
@@ -1437,22 +1533,22 @@ function Edgemenu() {
 */
 Edgemenu.prototype.path = function(c2d, border, section) {
 	var b =  border;
-	/* width half */
+	// width half
 	var w2 = half(this.width);
-	/* x in the middle */
+	// x in the middle 
 	var xm = half(this.pnw.x + this.pse.x);
-	/* edge width (diagonal extra) */
+	// edge width (diagonal extra)
 	var ew  = R((this.pse.y - this.pnw.y) * C2D.tan30);
 
 	c2d.beginPath();
 	if (section === -2) {
-		/* structure frame */
+		// structure frame 
 		c2d.moveTo(this.pnw.x + b,      this.pse.y);
 		c2d.lineTo(this.pnw.x + ew + b, this.pnw.y + b);
 		c2d.lineTo(this.pse.x - ew - b, this.pnw.y + b);
 		c2d.lineTo(this.pse.x - b,      this.pse.y);
 	
-		/* x-position of button */
+		// x-position of button 
 		var bx = this.pnw.x;
 		for(var b = 0; b < this.buttonWidths.length - 1; b++) {
 			bx += this.buttonWidths[b];
@@ -1464,7 +1560,7 @@ Edgemenu.prototype.path = function(c2d, border, section) {
 			}
 		}
 	} else if (section === -1) {
-		/* outer frame */
+		// outer frame
 		c2d.moveTo(this.pnw.x + b,      this.pse.y);
 		c2d.lineTo(this.pnw.x + ew + b, this.pnw.y + b);
 		c2d.lineTo(this.pse.x - ew - b, this.pnw.y + b);
@@ -1553,7 +1649,9 @@ Edgemenu.prototype.getMousepos = function(p) {
                    |
                    '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
  The unmoving interface.      
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Cockpit() {
 // todo, use this!
@@ -1562,13 +1660,19 @@ function Cockpit() {
 		
 		
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-.---.                 
-\___  ,-. ,-. ,-. ,-. 
-    \ | | ,-| |   |-' 
-`---' |-' `-^ `-' `-' 
-~ ~ ~ | ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- The  '  are where all the items are in.     
+ .---.                 
+ \___  ,-. ,-. ,-. ,-. 
+     \ | | ,-| |   |-' 
+ `---' |-' `-^ `-' `-' 
+~ ~ ~ ~|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+       '
+ The place where all the items are.
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+/**
+| Constructor
+*/
 function Space() {
 	this._floatMenuLabels = {c: 'new', n: 'Note', ne: 'Label'};
 	this.edgemenu = new Edgemenu();
