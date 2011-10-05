@@ -10,16 +10,16 @@
 |__|  |__|  |__|  `         .'.'.'| |//| |     | |  '. `.____.-'/| |      .'.''| |   | |      |  |
                    `'-.....-.'.'.-'  / | |     | |    `-._____ / | |     / /   | |_  | |      |  '.'
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
-                                       '___)   '___)                      `~~'  `"   |_|      `'*/ 
+                                       '___)   '___)                      `~~'  `"   |_|      `'*/
 /**
 | Authors: Axel Kittenberger (axkibe@gmail.com)
-| License: GNU Affero GPLv3 
+| License: GNU Affero GPLv3
 */
 
 'use strict';
 
 /**
-| +++ Shortcuts  +++ 
+| +++ Shortcuts  +++
 */
 var R   = Math.round;
 var abs = Math.abs;
@@ -51,18 +51,18 @@ var RoundRect     = C2D.RoundRect;
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /**
 | if true catches all errors and report to user.
-| if false lets them pass through to e.g. firebug. 
+| if false lets them pass through to e.g. firebug.
 */
 var enableCatcher = false;
 
 var settings = {
 	// standard font
 	defaultFont : 'Verdana,Geneva,Kalimati,sans-serif',
-	
+
 	// milliseconds after mouse down, dragging starts
 	dragtime : 400,
 
-	// pixels after mouse down and move, dragging starts 
+	// pixels after mouse down and move, dragging starts
 	dragbox  : 10,
 	
 	// factor to add to the bottom of font height
@@ -107,8 +107,8 @@ var settings = {
 				{ border: 0, width: 3, color: 'rgba(255, 183, 15, 0.5)' },
 			],
 		},
-		
-		// inner margin to text 
+
+		// inner margin to text
 		imargin  : { n: 1, e: 1, s: 1, w: 1 },
 	},
 
@@ -119,7 +119,7 @@ var settings = {
 				gradient : 'horizontal',
 				steps : [
 					[ 0, 'rgba(255, 255, 200, 0.90)' ],
-					[ 1, 'rgba(255, 255, 160, 0.90)' ], 
+					[ 1, 'rgba(255, 255, 160, 0.90)' ],
 				],
 			},
 			edge : [
@@ -149,7 +149,7 @@ var settings = {
 			fill : {
 				gradient : 'radial',
 				steps : [
-					[ 0, 'rgba(255, 255, 168, 0.955)' ], 
+					[ 0, 'rgba(255, 255, 168, 0.955)' ],
 					[ 1, 'rgba(255, 255, 243, 0.955)' ],
 				],
 			},
@@ -195,7 +195,7 @@ var settings = {
 			],
 		}
 	},
-	
+
 	// scrollbar
 	scrollbar : {
 		style : {
@@ -208,8 +208,8 @@ var settings = {
 		marginX     : 7,
 		marginY     : 5,
 	},
-	
-	// size of resize handles 
+
+	// size of resize handles
 	handle : {
 		size      : 10,
 		distance  : 0,
@@ -221,7 +221,7 @@ var settings = {
 			],
 		},
 	},
-	
+
 	relation : {
 		style : {
 			fill : 'rgba(255, 225, 40, 0.5)',
@@ -236,21 +236,21 @@ var settings = {
 				{ border: 0, width: 3, color: 'rgba(255, 183, 15, 0.5)' },
 			],
 		},
-		
-		// inner margin to text 
+
+		// inner margin to text
 		imargin  : { n: 1, e: 1, s: 1, w: 1 },
 
 		// scale down relation text
 		demagnify : 1.2,
 	},
-	
+
 	// Blink speed of the caret.
-	caretBlinkSpeed : 530,	
+	caretBlinkSpeed : 530,
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ,                       
-  )   ,-. ,-. ,-. ,-. . . 
+  ,
+  )   ,-. ,-. ,-. ,-. . .
  /    |-' | | ,-| |   | | 
  `--' `-' `-| `-^ `-' `-| 
            ,|          /| 
@@ -280,12 +280,12 @@ if (!Object.freeze) {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /**
-| Mouse state 
+| Mouse state
 */
 var MST = {
-	NONE   : 0, // button is up 
-	ATWEEN : 1, // mouse just came down, unsure if click or drag 
-	DRAG   : 2  // mouse is dragging 
+	NONE   : 0, // button is up
+	ATWEEN : 1, // mouse just came down, unsure if click or drag
+	DRAG   : 2  // mouse is dragging
 };
 Object.freeze(MST);
 
@@ -293,7 +293,7 @@ Object.freeze(MST);
 | Interface action active.
 */
 var ACT = {
-	NONE    : 0, // idle 
+	NONE    : 0, // idle
 	PAN     : 1, // panning the background
 	IDRAG   : 2, // draggine one item
 	IRESIZE : 3, // resizing one item
@@ -303,21 +303,21 @@ var ACT = {
 	RBIND   : 7  // dragging a new relation
 };
 Object.freeze(ACT);
-	
+
 var TXE = {
 	/* which kind of event transfix() calls for all items which intersect x/y */
 	NONE       : 0,
 	DRAGSTART  : 1,
 	HOVER      : 2,
-	RBINDHOVER : 3, 
+	RBINDHOVER : 3,
 	RBINDTO    : 4,
 }
 Object.freeze(TXE);
 
 /**
-| Bitfield return code of transfix() 
+| Bitfield return code of transfix()
 */
-var TXR = {	
+var TXR = {
 	HIT    : 0x1,
 	REDRAW : 0x2
 };
@@ -325,7 +325,7 @@ Object.freeze(TXR);
 
 
 /**
-| onlook() events 
+| onlook() events
 */
 var ONLOOK = {
 	NONE   : 0,
@@ -365,7 +365,7 @@ Object.defineProperty(Marker.prototype, 'offset', {
 	set: function(o) { this._offset = o; }
 });
 
-/** 
+/**
 | set(marker)                -or-
 | set(element, offset)       -or-
 | set(item, element, offset) -or-
@@ -374,7 +374,7 @@ Marker.prototype.set = function(a1, a2, a3) {
 	// todo, use typeof
 	switch (arguments.length) {
 	case 1 :
-		this._item    = a1._item; 
+		this._item    = a1._item;
 		this._element = a1._element;
 		this._offset  = a1._offset;
 		break;
@@ -393,15 +393,15 @@ Marker.prototype.set = function(a1, a2, a3) {
 	}
 }
 
-/** 
-| Returns chunk at x/y 
+/**
+| Returns chunk at x/y
 */
-Marker.prototype._getPinfoAtXY = function(flowbox, x, y) {
+Marker.prototype._getPinfoAtP = function(flowbox, p) {
 	var pinfo = flowbox.pinfo;
 	var plen = pinfo.length;
 	var li;
 	for (li = 0; li < plen; li++) {
-		if (y <= pinfo[li].y) {
+		if (p.y <= pinfo[li].y) {
 			break;
 		}
 	}
@@ -413,8 +413,8 @@ Marker.prototype._getPinfoAtXY = function(flowbox, x, y) {
 	var llen = l.length;
 	var c;
 	for (var ci = 0; ci < llen; ci++) {
-		c = l[ci]; 
-		if (x <= c.x + c.w) {
+		c = l[ci];
+		if (p.x <= c.x + c.w) {
 			this._pci = ci;
 			return pinfo;
 		}
@@ -424,8 +424,8 @@ Marker.prototype._getPinfoAtXY = function(flowbox, x, y) {
 	return pinfo;
 }
 
-/** 
-| Gets the markers position, relative to dtree 
+/**
+| Gets the markers position, relative to dtree
 */
 Marker.prototype.getPoint = function() {
 	/* todo cache position */
@@ -437,7 +437,7 @@ Marker.prototype.getPoint = function() {
 	var pinfo = this.getPinfo();
 	var l = pinfo[this._pli];
 	var c = l[this._pci];
-	return p.p.add( 
+	return p.p.add(
 		(c ? c.x + Measure.width(t.substring(c.offset, this._offset)) : l.x),
 		l.y - dtree.fontsize);
 }
@@ -447,12 +447,12 @@ Marker.prototype.getPoint = function() {
 */
 Marker.prototype.setFromPoint = function(flowbox, p) {
 	if (!flowbox instanceof Paragraph) { throw new Error('invalid flowbox.'); }
-	var pinfo = this._getPinfoAtXY(flowbox, p.x, p.y);
+	var pinfo = this._getPinfoAtP(flowbox, p);
 	var l = pinfo[this._pli];
 	var c = l[this._pci]; // x,y is in this chunk
-	
+
 	if (!c) {
-		/* todo? */
+		// todo?
 		this._element = flowbox.first;
 		this._offset = 0;
 		return;
@@ -461,7 +461,7 @@ Marker.prototype.setFromPoint = function(flowbox, p) {
 	Measure.font = flowbox.anchestor(DTree).font;
 	var t    = c.text;
 	var tlen = t.length;
-	
+
 	var x1 = 0, x2 = 0;
 	var o;
 	for(o = 0; o < tlen; o++) {
@@ -477,8 +477,8 @@ Marker.prototype.setFromPoint = function(flowbox, p) {
 }
 
 /**
-| sets the this.pline and this.pchunk according to the chunk 
-| the marker is in 
+| Sets this.pline and this.pchunk according to the chunk
+| the marker is in
 */
 Marker.prototype.getPinfo = function() {
 	var te = this._element;
@@ -509,8 +509,8 @@ Marker.prototype.getPinfo = function() {
 }
 
 /**
-| Moves the marker a line up (dir == true) or down 
-| returns true if moved 
+| Moves the marker a line up (dir == true) or down
+| returns true if moved
 */
 Marker.prototype.moveUpDown = function(dir) {
 	var e  = this._element;
@@ -540,7 +540,7 @@ Marker.prototype.moveUpDown = function(dir) {
 			l = pinfo[0];
 		} else {
 			l = pinfo[li + 1];
-		}	
+		}
 	}
 	var llen = l.length;
 	for(ci = 0; ci < llen && x > l[ci].x + l[ci].w; ci++);
@@ -556,7 +556,7 @@ Marker.prototype.moveUpDown = function(dir) {
 		return true;
 	}
 	c = l[ci];
-	
+
 	var t = c.text;
 	var tlen = t.length;
 	var x1 = 0, x2 = 0;
@@ -569,7 +569,7 @@ Marker.prototype.moveUpDown = function(dir) {
 			break;
 		}
 	}
-	if (dx - x1 <= x2 - dx) o--;	
+	if (dx - x1 <= x2 - dx) o--;
 	this._element = c.node;
 	this._offset  = c.offset + o;
 	return true;
@@ -608,10 +608,10 @@ Marker.prototype.moveLeftRight = function(dir) {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ,--.             .  
- | `-' ,-. ,-. ,-. |- 
- |   . ,-| |   |-' |  
- `--'  `-^ '   `-' `' 
+  ,--.             .
+ | `-' ,-. ,-. ,-. |-
+ |   . ,-| |   |-' |
+ `--'  `-^ '   `-' `'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  The Caret.
@@ -622,26 +622,25 @@ Marker.prototype.moveLeftRight = function(dir) {
 */
 function Caret() {
 	Marker.call(this);
-	
-	/* true if visible */
+	// true if visible
 	this.shown = false;
-	/* true when just blinked away */
-	this.blink = false;	
+	// true when just blinked away
+	this.blink = false;
 }
 subclass(Caret, Marker);
 
 
-/** 
-| Shows the caret or resets the blink timer if already shown 
+/**
+| Shows the caret or resets the blink timer if already shown
 */
 Caret.prototype.show = function() {
 	this.shown = true;
 	this.blink = false;
 	System.startBlinker();
 }
-	
-/** 
-| Hides the caret 
+
+/**
+| Hides the caret.
 */
 Caret.prototype.hide = function() {
 	this.shown = false;
@@ -669,27 +668,27 @@ function Selection() {
 	this.end   = null;
 }
 
-/** 
-| Sets begin/end so begin is before end. 
+/**
+| Sets begin/end so begin is before end.
 */
 Selection.prototype.normalize = function() {
 	var e1 = this.mark1.element;
 	var e2 = this.mark2.element;
-	
-	if (e1 == e2) {
+
+	if (e1 === e2) {
 		if (this.mark1.offset <= this.mark2.offset) {
 			this.begin = this.mark1;
 			this.end   = this.mark2;
 		} else {
 			this.begin = this.mark2;
-			this.end   = this.mark1;		
+			this.end   = this.mark1;	
 		}
 		return;
-	} 
-	
+	}
+
 	var pn;
 	for (pn = e1.parent.next; pn && pn.first != e2; pn = pn.next);
-	
+
 	if (!pn) {
 		this.end   = this.mark1;
 		this.begin = this.mark2;
@@ -713,7 +712,7 @@ Selection.prototype.innerText = function() {
 	if (be == ee) {
 		return bet.substring(bo, eo);
 	}
-	
+
 	var buf = [bet.substring(bo, bet.length)];
 	for (var n = be.parent.next.first; n != ee; n = n.parent.next.first) {
 		// ^ todo make multi child compatible
@@ -745,7 +744,7 @@ function Editor() {
 	this.item      = null;
 }
 
-/** 
+/**
 | Draws or erases the caret.
 */
 Editor.prototype.updateCaret = function() {
@@ -784,20 +783,20 @@ Editor.prototype.updateCaret = function() {
 Editor.prototype.newline = function() {
 	var caret  = this.caret;
 	var ce    = caret.element;
-	var co    = caret.offset;			
+	var co    = caret.offset;
 	var ct    = ce.text;
 	// todo multi node ability
 	var opara = ce.anchestor(Paragraph);
-		
+
 	ce.text = ct.substring(0, co);
 	var npara = new Paragraph(ct.substring(co, ct.length));
 	opara.parent.insertBefore(npara, opara.next);
 	caret.set(npara.first, 0);
 }
-	
-/** 
-| Handles a special(control) key 
-| returns true if the element needs to be redrawn. 
+
+/**
+| Handles a special(control) key
+| returns true if the element needs to be redrawn.
 */
 Editor.prototype.specialKey = function(item, keycode, shift, ctrl) {
 	if (!item) return false;
@@ -823,7 +822,7 @@ Editor.prototype.specialKey = function(item, keycode, shift, ctrl) {
 			return true;
 		}
 	}
-	
+
 	if (!shift && select.active) {
 		switch(keycode) {
 		case 35 : // end
@@ -831,7 +830,7 @@ Editor.prototype.specialKey = function(item, keycode, shift, ctrl) {
 		case 37 : // left
 		case 38 : // up
 		case 39 : // right
-		case 40 : // down		
+		case 40 : // down
 			this.deselect();
 			redraw = true;
 			break;
@@ -854,11 +853,11 @@ Editor.prototype.specialKey = function(item, keycode, shift, ctrl) {
 		case 37 : // left
 		case 38 : // up
 		case 39 : // right
-		case 40 : // down	
+		case 40 : // down
 			select.mark1.set(caret);
 		}
 	}
-	
+
 	switch(keycode) {
 	case  8 : // backspace
 	{
@@ -898,7 +897,7 @@ Editor.prototype.specialKey = function(item, keycode, shift, ctrl) {
 		refresh = caret.moveUpDown(true);
 		break;
 	case 39 : // right
-		refresh = caret.moveLeftRight(false);		
+		refresh = caret.moveLeftRight(false);
 		break;
 	case 40 : // down
 		refresh = caret.moveUpDown(false);
@@ -930,16 +929,16 @@ Editor.prototype.specialKey = function(item, keycode, shift, ctrl) {
 		case 37 : // left
 		case 38 : // up
 		case 39 : // right
-		case 40 : // down	
+		case 40 : // down
 			select.active = true;
 			select.mark2.set(caret);
 			System.setInput(select.innerText());
-			// clears item cache 
+			// clears item cache
 			item.listen();  // todo rename.
 			redraw = true;
 		}
 	}
-	
+
 	if (refresh || redraw) {
 		caret.show();
 	}
@@ -949,13 +948,13 @@ Editor.prototype.specialKey = function(item, keycode, shift, ctrl) {
 	return redraw;
 }
 
-/** 
+/**
 | Switches caret visibility state.
 */
 Editor.prototype.blink = function() {
 	if (this.caret.shown) {
 		this.caret.blink = !this.caret.blink;
-		this.updateCaret();			
+		this.updateCaret();
 	}
 }
 
@@ -990,7 +989,7 @@ Editor.prototype.deleteSelection = function() {
 	// setInput('') is done by System
 }
 
-/** 
+/**
 | Removes the selection.
 */
 Editor.prototype.deselect = function() {
@@ -999,12 +998,12 @@ Editor.prototype.deselect = function() {
 	this.selection.active = false;
 	System.setInput('');
 	/* clear item cache */
-	item.listen(); 
+	item.listen();
 }
 
-/** 
+/**
 | Received a input from user
-| returns true if redraw is needed 
+| returns true if redraw is needed
 */
 Editor.prototype.input = function(item, text) {
 	if (!item) return false;
@@ -1027,21 +1026,21 @@ Editor.prototype.input = function(item, text) {
 	System.repository.updateItem(item);
 	return true;
 }
-						
+
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .---.         .
  \___  . . ,-. |- ,-. ,-,-.
      \ | | `-. |  |-' | | |
  `---' `-| `-' `' `-' ' ' '
 ~ ~ ~ ~ /|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-       `-'                     . 
-  Base system for Meshcraft. 
+       `-'
+  Base system for Meshcraft.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-var System = { 
+var System = {
 
-/** 
-| Catches all errors a function throws if enabledCatcher is set. 
+/**
+| Catches all errors a function throws if enabledCatcher is set.
 */
 makeCatcher : function(that, fun) {
 	return function() {
@@ -1050,7 +1049,7 @@ makeCatcher : function(that, fun) {
 			try {
 				fun.apply(that, arguments);
 			} catch(err) {
-				alert('Internal failure, '+err.name+': '+err.message+'\n\n' + 
+				alert('Internal failure, '+err.name+': '+err.message+'\n\n' +
 				      'file: '+err.fileName+'\n'+
 					  'line: '+err.lineNumber+'\n'+
 					  'stack: '+err.stack);
@@ -1072,7 +1071,7 @@ init : function() {
 | Startup with possibly enabled error catching.
 */
 _init : function() {
-	if (this != System) throw new Error('System has wrong this pointer'); 
+	if (this != System) throw new Error('System has wrong this pointer');
 	var canvas = this.canvas = document.getElementById('canvas');
 	canvas.width  = window.innerWidth - 1;
 	canvas.height = window.innerHeight - 1;
@@ -1102,11 +1101,11 @@ _init : function() {
 	
 	// hidden input that forwards all events
 	var hiddenInput = document.getElementById('input');
-	
+
 	// remembers last SpecialKey pressed, to hinder double events.
 	// Opera is behaving stupid here.
 	var lastSpecialKey = -1;
-	
+
 	/**
 	| A special key was pressed.
 	*/
@@ -1115,8 +1114,8 @@ _init : function() {
 			switch(keyCode) {
 			case 65 : // ctrl+a
 				this.space.specialKey(keyCode, shift, ctrl);
-				return false;		
-			default : 
+				return false;
+			default :
 				return true;
 			}
 		}
@@ -1132,14 +1131,14 @@ _init : function() {
 		case 46 : // del
 			this.space.specialKey(keyCode, shift, ctrl);
 			return false;
-		default : 
+		default :
 			return true;
 		}
 	}
 
-	/** 
+	/**
 	| Captures all mouseevents event beyond the canvas (for dragging).
-	*/ 
+	*/
 	function captureEvents() {
 		if (useCapture) {
 			canvas.setCapture(canvas);
@@ -1148,9 +1147,9 @@ _init : function() {
 			document.onmousemove = canvas.onmousemove;
 		}
 	}
-	
+
 	/**
-	| Stops capturing all mouseevents 
+	| Stops capturing all mouseevents
 	*/
 	function releaseEvents() {
 		if (useCapture) {
@@ -1160,15 +1159,17 @@ _init : function() {
 			document.onmousemove = null;
 		}
 	}
-	
+
 	// the value that is expected to be in input.
 	// either nothing or the text selection.
 	// if it changes the user did something.
 
 	var inputval = '';
-	
+
+	//---------------------------------
 	//-- Functions the browser calls --
-	
+	//---------------------------------
+
 	// tests if the hidden input field got data
 	function testinput() {
 		var text = hiddenInput.value;
@@ -1178,24 +1179,26 @@ _init : function() {
 		hiddenInput.value = inputval = '';
 		System.space.input(text);
 	}
-	
-	// do a blink 
+
+	/**
+	| does a blink.
+	*/
 	function blink() {
 		// hackish, also look into the hidden input field, 
 		// maybe the user pasted something using the browser menu. 
 		testinput();
 		editor.blink();
 	}
-	
+
 	/**
 	| Key down in hidden input field.
 	*/
 	function onkeydown(event) {
-		if (!specialKey.call(this, 
+		if (!specialKey.call(this,
 			lastSpecialKey = event.keyCode, event.shiftKey, event.ctrlKey || event.metaKey
 		)) event.preventDefault();
 	}
-		
+
 	/**
 	| Hidden input key press.
 	*/
@@ -1219,7 +1222,7 @@ _init : function() {
 		testinput();
 		return true;
 	}
-	
+
 	/**
 	| Hidden input lost focus.
 	*/
@@ -1227,24 +1230,24 @@ _init : function() {
 		this.space.systemBlur();
 	}
 
-	/** 
+	/**
 	| Hidden input got focus.
 	*/
 	function onfocus(event) {
 		this.space.systemFocus();
 	}
-		
-	/** 
+
+	/**
 	| View window resized.
 	*/
 	function onresize(event) {
 		canvas.width  = window.innerWidth - 1;
-		canvas.height = window.innerHeight - 1;	
+		canvas.height = window.innerHeight - 1;
 		this.space && this.space.redraw();
 	}
-	
-	/** 
-	| Mouse move event 
+
+	/**
+	| Mouse move event.
 	*/
 	function onmousemove(event) {
 		var p = new Point(event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop);
@@ -1266,7 +1269,7 @@ _init : function() {
 				}
 				captureEvents();
 			} else {
-				// saves position for possible atween timeout 
+				// saves position for possible atween timeout
 				mmp = p;
 				mms = event.shiftKey;
 				mmc = event.ctrlKey || event.metaKey;
@@ -1279,8 +1282,8 @@ _init : function() {
 			throw new Error('invalid mst');
 		}
 	}
-	
-	/** 
+
+	/**
 	| Mouse down event.
 	*/
 	function onmousedown(event) {
@@ -1299,18 +1302,18 @@ _init : function() {
 		case MST.DRAG :
 			captureEvents();
 			break;
-		}	
+		}
 		return false;
 	}
 
-	/** 
+	/**
 	| Mouse up event.
 	*/
 	function onmouseup(event) {
 		event.preventDefault();
 		releaseEvents();
 		var p = new Point(event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop);
-		
+
 		switch (mst) {
 		case MST.NONE :
 			return false;
@@ -1336,8 +1339,8 @@ _init : function() {
 		wheel = wheel > 0 ? 1 : -1;
 		this.space.mousewheel(wheel);
 	}
-	
-	/** 
+
+	/**
 	| Timeout after mouse down so dragging starts.
 	*/
 	function onatweentime() {
@@ -1352,7 +1355,7 @@ _init : function() {
 			this.space.dragmove(mmp, mms, mmc);
 		}
 	}
-		
+
 	canvas.onmouseup       = this.makeCatcher(this, onmouseup);
 	canvas.onmousemove     = this.makeCatcher(this, onmousemove);
 	canvas.onmousedown     = this.makeCatcher(this, onmousedown);
@@ -1367,48 +1370,50 @@ _init : function() {
 	this.ontestinput       = this.makeCatcher(this, testinput);
 	this.onatweentime      = this.makeCatcher(this, onatweentime);
 	this.onblink           = this.makeCatcher(this, blink);
-		
+
 	/**
 	| Sets the mouse cursor
 	*/
 	this.setCursor = function(cursor) {
 		canvas.style.cursor = cursor;
-	}		
-	
-	//-- Exported System calls --
-	
-	/** 
+	}
+
+	//-------------------------------------
+	//-- Interface for the System object --
+	//-------------------------------------
+
+	/**
 	| Sets the input (text selection).
 	*/
-	this.setInput = function(text) {	
+	this.setInput = function(text) {
 		hiddenInput.value = inputval = text;
 		if (text != '') {
 			hiddenInput.selectionStart = 0;
-			hiddenInput.selectionEnd = text.length;			
+			hiddenInput.selectionEnd = text.length;	
 		}
 	}
-		
-	// the blink (and check input) timer 
+
+	// the blink (and check input) timer
 	var blinkTimer = null;
-	
+
 	/**
-	| (re)starts the blink timer 
+	| (re)starts the blink timer
 	*/
 	this.startBlinker = function() {
 		if (blinkTimer) {
 			clearInterval(blinkTimer);
-		} 
+		}
 		testinput();
-		blinkTimer = setInterval('System.onblink()', settings.caretBlinkSpeed);		
+		blinkTimer = setInterval('System.onblink()', settings.caretBlinkSpeed);
 	}
-	
+
 	/**
 	| Stops the blink timer.
 	*/
 	this.stopBlinker = function() {
 		if (blinkTimer) {
 			clearInterval(blinkTimer);
-		} 		
+		}
 	}
 
 	this.repository = new Repository();
@@ -1436,11 +1441,11 @@ _init : function() {
          .------'.   '      -1
 		/ \  1  / \	 '
 	   / 6 .---.'2 \ '
-	  /___/  .  \___\'  
+	  /___/  .  \___\'
 	  \   \  0  /   /
 	   \ 5 `---´ 3 /
  	    \ /  4  \ /
-         `-------´  
+         `-------´
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /**
@@ -1460,15 +1465,15 @@ function Hexmenu(p, style, labels) {
 Hexmenu.prototype.draw = function() {
 	var c2d = System.c2d; // todo?
 
-	c2d.fill(settings.floatmenu.style.fill, this.hflower, 'path', 'outerHex'); 
+	c2d.fill(settings.floatmenu.style.fill, this.hflower, 'path', 'outerHex');
 	if (this.mousepos && this.mousepos !== 'center') {
 		c2d.fill(settings.floatmenu.style.select, this.hflower, 'path', this.mousepos);
 	}
-	c2d.edge(settings.floatmenu.style.edge, this.hflower, 'path', 'structure'); 
+	c2d.edge(settings.floatmenu.style.edge, this.hflower, 'path', 'structure');
 
 	c2d.fontStyle('12px ' + settings.defaultFont, 'black', 'center', 'middle');
 	var labels = this.labels;
-	
+
 	var rd = this.style.outerRadius * (1 - 1 / 3.5);
 
 	if (labels.n)  c2d.fillText(labels.n, this.p.x, this.p.y - rd);
@@ -1476,7 +1481,7 @@ Hexmenu.prototype.draw = function() {
 	if (labels.se) c2d.fillRotateText(labels.se, this.p, Math.PI / 3 * 2, rd);
 	if (labels.s)  c2d.fillText(labels.n, this.p.x, this.p.y + rd);
 	if (labels.sw) c2d.fillRotateText(labels.sw, this.p, Math.PI / 3 * 4, rd);
-	if (labels.nw) c2d.fillRotateText(labels.nw, this.p, Math.PI / 3 * 5, rd); 
+	if (labels.nw) c2d.fillRotateText(labels.nw, this.p, Math.PI / 3 * 5, rd);
 	if (labels.c)  c2d.fillText(labels.c, this.p);
 }
 
@@ -1510,13 +1515,13 @@ function Edgemenu() {
 	// label texts
 	this.labels = ['Export', 'Meshcraft Demospace', 'Import'];
 
-	// total width 
+	// total width
 	var width = 0;
 	for(var b in this.buttonWidths) {
 		width += this.buttonWidths[b];
 	}
 	this.width = width;
-	
+
 	// total height
 	this.height = 30;
 }
@@ -1526,7 +1531,7 @@ function Edgemenu() {
 |
 | c2d : canvas2d area
 | border: additional inward distance
-| section: 
+| section:
 |   -2 structure frame
 |   -1 outer frame
 |   >0 buttons
@@ -1535,25 +1540,25 @@ Edgemenu.prototype.path = function(c2d, border, section) {
 	var b =  border;
 	// width half
 	var w2 = half(this.width);
-	// x in the middle 
+	// x in the middle
 	var xm = half(this.pnw.x + this.pse.x);
 	// edge width (diagonal extra)
 	var ew  = R((this.pse.y - this.pnw.y) * C2D.tan30);
 
 	c2d.beginPath();
 	if (section === -2) {
-		// structure frame 
+		// structure frame
 		c2d.moveTo(this.pnw.x + b,      this.pse.y);
 		c2d.lineTo(this.pnw.x + ew + b, this.pnw.y + b);
 		c2d.lineTo(this.pse.x - ew - b, this.pnw.y + b);
 		c2d.lineTo(this.pse.x - b,      this.pse.y);
-	
-		// x-position of button 
+
+		// x-position of button
 		var bx = this.pnw.x;
 		for(var b = 0; b < this.buttonWidths.length - 1; b++) {
 			bx += this.buttonWidths[b];
 			c2d.moveTo(bx, this.pse.y);
-			if (b % 2 === 0) { 
+			if (b % 2 === 0) {
 				c2d.lineTo(bx - ew, this.pnw.y);
 			} else {
 				c2d.lineTo(bx + ew, this.pnw.y);
@@ -1601,7 +1606,7 @@ Edgemenu.prototype.draw = function() {
 	if (this.mousepos >= 0) {
 		c2d.fill(settings.edgemenu.style.select, this, 'path', this.mousepos);
 	}
-	c2d.edge(settings.edgemenu.style.edge, this, 'path', -2); 
+	c2d.edge(settings.edgemenu.style.edge, this, 'path', -2);
 
 	c2d.fontStyle('12px ' + settings.defaultFont, 'black', 'center', 'middle');
 	var bx = this.pnw.x;
@@ -1646,23 +1651,20 @@ Edgemenu.prototype.getMousepos = function(p) {
  | `-' ,-. ,-. | , ,-. . |-
  |   . | | |   |<  | | | |
  `--'  `-' `-' ' ` |-' ' `'
-                   |
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
                    '
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
- The unmoving interface.      
+ The unmoving interface.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Cockpit() {
 // todo, use this!
 
-}		
-		
-		
+}
+
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- .---.                 
- \___  ,-. ,-. ,-. ,-. 
-     \ | | ,-| |   |-' 
+ .---.
+ \___  ,-. ,-. ,-. ,-.
+     \ | | ,-| |   |-'
  `---' |-' `-^ `-' `-' 
 ~ ~ ~ ~|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
        '
@@ -1708,7 +1710,7 @@ Space.prototype.redraw = function() {
 		it.draw(c2d, this.selection);
 	}
 	if (this.focus) this.focus.drawHandles(c2d);
-	
+
 	var ia = this.iaction;
 	switch(ia.act) {
 	case ACT.FMENU :
@@ -1719,7 +1721,7 @@ Space.prototype.redraw = function() {
 		break;
 	case ACT.RBIND :
 		var arrow = Line.connect(
-			ia.item.handlezone, 'normal', 
+			ia.item.handlezone, 'normal',
 			(ia.item2 && ia.item2.handlezone) || ia.smp , 'arrow');
 		// todo use something like bindzone
 		if (ia.item2) ia.item2.highlight(c2d);
@@ -1740,7 +1742,7 @@ Space.prototype.specialKey = function(keyCode, shift, ctrl) {
 /* user entered normal text (one character or more) */
 Space.prototype.input = function(text) {
 	if (System.editor.input(this.focus, text)) {
-		this.redraw();		
+		this.redraw();
 	}
 }
 
@@ -1784,7 +1786,7 @@ Space.prototype.mousehover = function(p) {
 		if (redraw) this.redraw();
 		return;
 	}
-	
+
 	switch(this.iaction.act) {
 	case ACT.FMENU :
 		redraw = (this._floatmenu.mousepos !== this._floatmenu.getMousepos(p)) || redraw;
@@ -1803,7 +1805,7 @@ Space.prototype.mousehover = function(p) {
 			if (redraw) this.redraw();
 			return;
 		}
-		break;	
+		break;
 	}
 
 	if (this.focus) {
@@ -1824,7 +1826,7 @@ Space.prototype.mousehover = function(p) {
 	// todo remove nulls by shiftKey, ctrlKey
 	var tx = System.repository.transfix(TXE.HOVER, this, pp, null, null);
 	redraw = redraw || (tx & TXR.REDRAW);
-	if (!(tx & TXR.HIT)) { System.setCursor('crosshair');} 
+	if (!(tx & TXR.HIT)) { System.setCursor('crosshair');}
 	if (redraw) this.redraw();
 }
 
@@ -1881,12 +1883,12 @@ Space.prototype.dragstart = function(p, shift, ctrl) {
 	var pp = p.sub(this.pan);
 	var editor  = System.editor;
 	var iaction = this.iaction;
-	
+
 	if (this.focus && this.focus.withinItemMenu(pp)) {
 		this.actionSpawnRelation(this.focus, pp);
 		this.redraw();
 		return;
-	} 
+	}
 
 	var tfx = System.repository.transfix(TXE.DRAGSTART, this, pp, shift, ctrl);
 	if (!(tfx & TXR.HIT)) {
@@ -1895,7 +1897,7 @@ Space.prototype.dragstart = function(p, shift, ctrl) {
 		iaction.sp = pp;
 		System.setCursor('crosshair');
 		return;
-	} 
+	}
 	if (tfx & TXR.REDRAW) this.redraw();
 }
 
@@ -1942,8 +1944,9 @@ Space.prototype.dragstop = function(p, shift, ctrl) {
 	case ACT.PAN :
 		break;
 	case ACT.IRESIZE :
+		// todo rename everything, make iaction a prototype.
 		iaction.com  = null;
-		iaction.item = null;		
+		iaction.item = null;
 		iaction.sip  = null;
 		iaction.siz  = null;
 		break;
@@ -1964,12 +1967,14 @@ Space.prototype.dragstop = function(p, shift, ctrl) {
 	return;
 }
 
-/* moving during an operation with the mouse held down */
+/**
+| Moving during an operation with the mouse held down.
+*/
 Space.prototype.dragmove = function(p, shift, ctrl) {
 	var pp = p.sub(this.pan);
 	var iaction = this.iaction;
 	var redraw = false;
-	
+
 	switch(iaction.act) {
 	case ACT.PAN :
 		this.pan = this.c2d.pan = p.sub(iaction.sp);
@@ -2021,20 +2026,13 @@ Space.prototype.dragmove = function(p, shift, ctrl) {
 			pnw = Point.renew(min(ipnw.x + dx, ipse.x), min(ipnw.y + dy, ipse.y), ipnw, ipse);
 			pse = ipse;
 			break;
-		case 'c' : 
-		default  : 
+		case 'c' :
+		default  :
 			throw new Error('unknown align');
 		}
-		
-		redraw = it.setZone(new Rect(pnw, pse), C2D.opposite(iaction.com)); 
-		
-		// adapt scrollbar position, todo move into item
-		var dtreeHeight = it.dtree.height;
-		var smaxy = dtreeHeight - ((it.handlezone.width) - it.imargin.y);
-		if (smaxy > 0 && it.scrolly > smaxy) {
-			it.scrolly = smaxy;
-			redraw = true;;
-		}
+
+		redraw = it.setZone(new Rect(pnw, pse), C2D.opposite(iaction.com));
+
 		if (redraw) this.redraw();
 		System.repository.updateItem(iaction.item);
 		return;
@@ -2051,13 +2049,13 @@ Space.prototype.dragmove = function(p, shift, ctrl) {
 			/* minimum size of scrollbar */
 			scrollSize = srad * 2;
 		}
-		var sy = iaction.ssy + 
+		var sy = iaction.ssy +
 			dy * (dtreeHeight - innerHeight) / (scrollRange - scrollSize);
 		var smaxy = dtreeHeight - innerHeight;
 		sy = min(max(sy, 0), smaxy);
 		it.scrolly = sy;
 		this.redraw();
-		return true;		
+		return true;
 	case ACT.RBIND :
 		iaction.item2 = null;
 		System.repository.transfix(TXE.RBINDHOVER, this, pp, shift, ctrl);
@@ -2902,6 +2900,7 @@ DTree.prototype.insertBefore = function(tnode, bnode) {
 	return Treenode.prototype.insertBefore.call(this, tnode, bnode);
 }
 
+
 /** 
 * Gets/Sets the font size.
 */
@@ -2931,26 +2930,34 @@ Object.defineProperty(DTree.prototype, 'flowWidth', {
 });
 
 /**
+| Something changed.
+*/
+DTree.prototype.listen = function() {
+	this._cacheWidth  = null;
+	this._cacheHeight = null;
+	if (this.parent) this.parent.listen();
+}
+
+/**
 | Returns the width of the document tree.
 */
 Object.defineProperty(DTree.prototype, 'width', {
 	get: function() { 
-		/* todo caching */
+		if (this._cacheWidth) return this._cacheWidth;
 		var w = 0;
 		for(var para = this.first; para; para = para.next) {
 			if (para.width > w) w = para.width;
 		}
-		return w;
+		return this._cacheWidth = w;
 	},
 });
 
 /**
 | Returns the height of the document tree.
 */
-// xxx
 Object.defineProperty(DTree.prototype, 'height', {
 	get: function() { 
-		/* todo caching */
+		if (this._cacheHeight) return this._cacheHeight;
 		var h = 0;
 		var parasep = this.pre ? 0 : this._fontsize;
 		var first = true;
@@ -2958,7 +2965,7 @@ Object.defineProperty(DTree.prototype, 'height', {
 			if (!first) h += parasep; else first = false;
 			h += para.softHeight;
 		}
-		return h;
+		return this._cacheHeight = h;
 	},
 });
 
@@ -2989,13 +2996,17 @@ Object.defineProperty(Item.prototype, 'h6slice', {
 	},
 });
 
-/* set a hex menu to be this items menu */
+/**
+| Creates a new Hexmenu for this item. 
+*/
 Item.prototype.newItemMenu = function(pan) {
 	var labels = this._itemMenuLabels = {n : 'Remove'};
 	return new Hexmenu(this.h6slice.pm.add(pan), settings.itemmenu,  labels);
 }
 
-/* returns if coords are within the item menu */
+/**
+| Returns if point is within the item menu 
+*/
 Item.prototype.withinItemMenu = function(p) {
 	return this.h6slice.within(p);
 }
@@ -3016,27 +3027,19 @@ Item.prototype.checkItemCompass = function(p) {
 	var w = p.x >= hzone.pnw.x - d2 && p.x <= hzone.pnw.x + d;	
 
 	if (n) {
-		if (w && ha.nw)      return 'nw';
-		else if (e && ha.ne) return 'ne';
-		else if (ha.n) {
-			var mx = hzone.pc.x;
-			// todo abs.
-			if (p.x >= mx - d && p.x <= mx + d) return 'n'; 
-		}
-	} else if (s) {
-		if (w && ha.sw)      return 'sw';
-		else if (e && ha.se) return 'se';
-		else if (ha.s) {
-			var mx = hzone.pc.x;
-			if (p.x >= mx - d && p.x <= mx + d) return 's'; 
-		}
-	} else if (w && ha.w) {
-		var my = hzone.pc.y;
-		if (p.y >= my - d && p.y <= my + d) return 'w'; 
-	} else if (e && ha.e) {
-		var my = hzone.pc.y;
-		if (p.y >= my - d && p.y <= my + d) return 'e';
-	}
+		if (w && ha.nw) return 'nw'; 
+		if (e && ha.ne) return 'ne'; 
+		if (ha.n && abs(p.x - hzone.pc.x) <= d) return 'n';
+		return null;
+	} 
+	if (s) {
+		if (w && ha.sw) return 'sw'; 
+		if (e && ha.se) return 'se'; 
+		if (ha.s && abs(p.x - hzone.pc.x) <= d) return 's';
+		return null;
+	} 
+	if (w && ha.w && abs(p.y - hzone.pc.y) <= d) return 'w'; 
+	if (e && ha.e && abs(p.y - hzone.pc.y) <= d) return 'e';  
 	return null;
 }
 
@@ -3157,12 +3160,14 @@ Note.prototype.removed = function() {
 /**
 | Highlights the  note
 */		
-// todo round rects
 Note.prototype.highlight = function(c2d) {
+	// todo round rects
 	c2d.edge(settings.note.style.highlight, this.zone, 'path');
 }
 
-/* turns the note into a string */
+/**
+| Turns the note into a string 
+*/
 Note.prototype.jsonfy = function() {
 	var js = {
 	     t : 'note',
@@ -3172,21 +3177,26 @@ Note.prototype.jsonfy = function() {
 	return js;
 }
 
-/* returns the para at y */
+/** 
+| Returns the para at y 
+*/
 Note.prototype.paraAtP = function(p) {
 	if (p.y < this.imargin.n) return null; 
 	return this.dtree.paraAtP(p);
 }
 
-/* drops the cached canvas */
+/** 
+| Drops the cached canvas 
+*/
 Note.prototype.listen = function() {
 	this._canvasActual = false;
 	/* end of chain */
 }
 	
-/* checks if this items reacts on an event 
- * returns transfix code
- */
+/**
+| Checks if this items reacts on an event.
+| Returns transfix code.
+*/
 Note.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 	if (!this.zone.within(p)) return 0;
 	switch (txe) {
@@ -3201,9 +3211,9 @@ Note.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 		}
 		if (z > 0) {
 			System.repository.moveToTop(z);
-			txr |= TXR.REDRAW; /* todo full redraw */
+			txr |= TXR.REDRAW; // todo full redraw
 		}
-		if (space.focus != this) {
+		if (space.focus != this) {  
 			space.setFocus(this);
 			txr |= TXR.REDRAW;
 		}
@@ -3213,7 +3223,6 @@ Note.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 		if (this.scrolly >= 0 && abs(p.x - this.zone.pse.x + srad + sbmx) <= srad + 1)  {
 			space.actionScrollY(this, p.y, this.scrolly);
 		} else {
-			/* todo pointify */
 			space.actionIDrag(this, p.sub(this.zone.pnw));
 		}
 		return txr;
@@ -3221,7 +3230,7 @@ Note.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 		var txr = TXR.HIT;
 		if (z > 0) {
 			System.repository.moveToTop(z);
-			txr |= TXR.REDRAW; /* todo full redraw */
+			txr |= TXR.REDRAW; // todo full redraw 
 		}
 		if (space.focus != this) {
 			space.setFocus(this);
@@ -3258,6 +3267,7 @@ Note.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 | Returns true if something changed.
 */
 Note.prototype.setZone = function(zone, align) {
+	// ensures minimum size
 	if (zone.width < settings.note.minWidth || zone.height < settings.note.minHeight) {
 		zone = zone.resize(
 			max(zone.width, settings.note.minWidth),
@@ -3268,6 +3278,9 @@ Note.prototype.setZone = function(zone, align) {
 	this.silhoutte = new RoundRect(
 		Point.zero, new Point(zone.width, zone.height), this.silhoutte.crad);
 	this._canvasActual = false;
+	// adapts scrollbar position
+	var smaxy = this.dtree.height - (this.zone.height - this.imargin.y);
+	if (smaxy > 0 && this.scrolly > smaxy) { this.scrolly = smaxy; }
 	return true;
 }
 
@@ -4442,7 +4455,7 @@ Repository.prototype.removeItem = function(item) {
 			}
 		}
 	}
-	
+
 	if (!this._nosave) {
 		window.localStorage.setItem(item.id, '');
 		this._saveZIDX();
@@ -4455,7 +4468,7 @@ Repository.prototype._saveItem = function(item) {
 
 Repository.prototype.updateItem = function(item) {
 	if (!this._nosave) this._saveItem(item);
-	
+
 	/* notifies onlookers */
 	if (this._noonlooks) return;
 	var od = this.onlookeds[item.id];

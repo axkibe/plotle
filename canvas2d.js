@@ -1,20 +1,20 @@
-/**    _..._                                                                                     
-    .-'_..._''.                                                           .-''-.   _______       
-  .' .'      '.\             _..._ .----.     .----.                    .' .-.  )  \  ___ `'.    
- / .'                      .'     '.\    \   /    /                    / .'  / /    ' |--.\  \   
-. '                       .   .-.   .'   '. /'   /                    (_/   / /     | |    \  '  
-| |                 __    |  '   '  ||    |'    /    __                    / /      | |     |  ' 
-| |              .:--.'.  |  |   |  ||    ||    | .:--.'.         _       / /       | |     |  | 
-. '             / |   \ | |  |   |  |'.   `'   .'/ |   \ |      .' |     . '        | |     ' .' 
- \ '.          .`" __ | | |  |   |  | \        / `" __ | |     .   | /  / /    _.-')| |___.' /'  
-  '. `._____.-'/ .'.''| | |  |   |  |  \      /   .'.''| |   .'.'| |//.' '  _.'.-''/_______.'/   
-    `-.______ / / /   | |_|  |   |  |   '----'   / /   | |_.'.'.-'  //  /.-'_.'    \_______|/    
-             `  \ \._,\ '/|  |   |  |            \ \._,\ '/.'   \_.'/    _.'                     
+/**    _..._
+    .-'_..._''.                                                           .-''-.   _______
+  .' .'      '.\             _..._ .----.     .----.                    .' .-.  )  \  ___ `'.
+ / .'                      .'     '.\    \   /    /                    / .'  / /    ' |--.\  \
+. '                       .   .-.   .'   '. /'   /                    (_/   / /     | |    \  '
+| |                 __    |  '   '  ||    |'    /    __                    / /      | |     |  '
+| |              .:--.'.  |  |   |  ||    ||    | .:--.'.         _       / /       | |     |  |
+. '             / |   \ | |  |   |  |'.   `'   .'/ |   \ |      .' |     . '        | |     ' .'
+ \ '.          .`" __ | | |  |   |  | \        / `" __ | |     .   | /  / /    _.-')| |___.' /'
+  '. `._____.-'/ .'.''| | |  |   |  |  \      /   .'.''| |   .'.'| |//.' '  _.'.-''/_______.'/
+    `-.______ / / /   | |_|  |   |  |   '----'   / /   | |_.'.'.-'  //  /.-'_.'    \_______|/
+             `  \ \._,\ '/|  |   |  |            \ \._,\ '/.'   \_.'/    _.'
                  `--'  `" '--'   '--'             `--'  `"         ( _.*/
 /**
 | A graphic 2D-Object library for HTML Canvas 5
 |
-| This is not a full blown feature complete everything library, 
+| This is not a full blown feature complete everything library,
 | but enhanced on the fly for what I need.
 |
 | Defines: C2D
@@ -32,7 +32,7 @@
  `--'  '~` `-^--'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  Meshcrafts Canvas wrapper.
- 
+
  It enhances the HTML5 Canvas Context by accpeting previously defined immutable graphic
  objects as arguments.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -50,7 +50,7 @@ function C2D(a1, a2) {
 		this._canvas = a1;
 		break;
 	default :
-		this._canvas = document.createElement('canvas');	
+		this._canvas = document.createElement('canvas');
 		this._canvas.width  = a1;
 		this._canvas.height = a2;
 	}
@@ -61,7 +61,7 @@ function C2D(a1, a2) {
 
 /**
 | Subclassing helper.
-| 
+|
 | sub: prototype to become a subclass.
 | base: prototype to become the baseclass.
 */
@@ -72,11 +72,11 @@ C2D.subclass = function(sub, base) {
    sub.prototype.constructor = sub;
 }
 
-/** 
-| sets a readonly value 
+/**
+| sets a readonly value
 */
-C2D.fixate = function(obj, key, value) { 
-	Object.defineProperty(obj, key, {enumerable: true, value: value}); 
+C2D.fixate = function(obj, key, value) {
+	Object.defineProperty(obj, key, {enumerable: true, value: value});
 	return value;
 }
 C2D.fixate(C2D, 'fixate', C2D.fixate);
@@ -137,7 +137,7 @@ C2D.debug = function() {
 	if (!console) return;
 	var l = '';
 	for(var i = 0; i < arguments.length; i++) {
-		if (i > 0) { 
+		if (i > 0) {
 			l += ' ';
 		}
 		var a = arguments[i];
@@ -156,7 +156,7 @@ C2D.debug = function() {
 					first = false;
 				}
 				switch (typeof(a[p])) {
-				case 'function' : 
+				case 'function' :
 					l += p + ' : function';
 					break;
 				default:
@@ -194,7 +194,7 @@ C2D.prototype.attune = function(a1, a2) {
 	var w, h;
 	switch(typeof(a1)) {
 	case 'undefined' :
-		this._cx.clearRect(0, 0, c.width, c.height);	
+		this._cx.clearRect(0, 0, c.width, c.height);
 		return;
 	case 'object' :
 		w  = a1.width;
@@ -208,7 +208,7 @@ C2D.prototype.attune = function(a1, a2) {
 	if (c.width === w && c.height === h) {
 		// no size change, clearRect() is faster
 		this._cx.clearRect(0, 0, c.width, c.height);
-		return;	
+		return;
 	}
 	/* setting width or height clears the contents */
 	if (c.width  !== w) c.width  = w;
@@ -237,7 +237,7 @@ C2D.prototype.moveTo = function(a1, a2) {
 	this._cx.moveTo(x + pan.x + 0.5, y + pan.y + 0.5);
 }
 
-/** 
+/**
 | Draws a line.
 |
 | lineto(point) -or-
@@ -269,10 +269,10 @@ C2D.prototype.arc = function(a1, a2, a3, a4, a5, a6) {
 	if (typeof(a1) === 'object') {
 		this._cx.arc(a1.x + pan.x + 0.5, a1.y + pan.y + 0.5, a2, a3, a4, a5);
 		return;
-	} 
+	}
 	this._cx.arc(a1 + pan.x + 0.5, a2 + pan.y + 0.5, a3, a4, a5, a6);
 }
-		
+
 /**
 | Draws a frame around the canvas.
 | Called 'path', because it is the general purpose name for object to draw themselves
@@ -283,9 +283,9 @@ C2D.prototype.arc = function(a1, a2, a3, a4, a5, a6) {
 C2D.prototype.path = function(self, border) {
 	if (this !== self) throw new Error('C2D.path: self != this');
 	var cx = this._cx;
-	cx.beginPath(); 
+	cx.beginPath();
 	cx.rect(
-		0.5 + border, 0.5 + border, 
+		0.5 + border, 0.5 + border,
 		this._canvas.width - 1 - border, this._canvas.height - 1 - border);
 }
 
@@ -312,7 +312,7 @@ C2D.prototype.rect = function(a1, a2, a3, a4) {
 	return this._cx.rect(a1 + pan.x + 0.5,  a2 + pan.y + 0.5, a3, a4);
 }
 
-/** 
+/**
 | fillRect(style, rect)     -or-
 | fillRect(style, pnw, pse) -or-
 | fillRect(style, nwx, nwy, width, height)
@@ -322,9 +322,9 @@ C2D.prototype.fillRect = function(style, a1, a2, a3, a4) {
 	var cx = this._cx;
 	cx.fillStyle = style;
 	if (typeof(p) === 'object') {
-		if (a1 instanceof C2D.Rect) 
+		if (a1 instanceof C2D.Rect)
 			return this._cx.fillRect(a1.pnw.x, a1.pnw.y, a1.pse.x, a1.pse.y);
-		if (a1 instanceof C2D.Point) 
+		if (a1 instanceof C2D.Point)
 			return this._cx.fillRect(a1.x, a1.y, a2.x, a2.y);
 		throw new Error('fillRect not a rectangle');
 	}
@@ -334,14 +334,14 @@ C2D.prototype.fillRect = function(style, a1, a2, a3, a4) {
 /**
 | Begins a path.
 */
-C2D.prototype.beginPath = function() { this._cx.beginPath();  }
+C2D.prototype.beginPath = function() { this._cx.beginPath(); }
 
-/** 
+/**
 | Closes a path.
 */
-C2D.prototype.closePath = function() { this._cx.closePath();  } 
+C2D.prototype.closePath = function() { this._cx.closePath(); }
 
-/** 
+/**
 | Draws an image.
 |
 | drawImage(image, pnw)   -or-
@@ -358,7 +358,7 @@ C2D.prototype.drawImage = function(image, a1, a2) {
 }
 
 
-/** 
+/**
 | putImageData(imagedata, p) -or-
 | putImageData(imagedata, x, y)
 */
@@ -379,9 +379,9 @@ C2D.prototype.putImageData = function(imagedata, a1, a2) {
 C2D.prototype.getImageData = function(a1, a2, a3, a4) {
 	var pan = this.pan;
 	if (typeof(p) === 'object') {
-		if (a1 instanceof C2D.Rect) 
+		if (a1 instanceof C2D.Rect)
 			return this._cx.getImageData(a1.pnw.x, a1.pnw.y, a1.pse.x, a1.pse.y);
-		if (a1 instanceof C2D.Point) 
+		if (a1 instanceof C2D.Point)
 			return this._cx.getImageData(a1.x, a1.y, a2.x, a2.y);
 		throw new Error('getImageData not a rectangle');
 	}
@@ -402,29 +402,29 @@ C2D.prototype._colorStyle = function(style, shape) {
 	switch (style.gradient) {
 	case 'askew' :
 		// todo use gradientPNW
-		if (!shape.pnw || !shape.pse) 
+		if (!shape.pnw || !shape.pse)
 			throw new Error(style.gradient+' gradiend misses pnw/pse');
 		grad = this._cx.createLinearGradient(
-			shape.pnw.x + this.pan.x, shape.pnw.y + this.pan.y, 
+			shape.pnw.x + this.pan.x, shape.pnw.y + this.pan.y,
 			shape.pnw.x + shape.width / 10 + this.pan.x, shape.pse.y + this.pan.y);
 		break;
 	case 'horizontal' :
 		// todo use gradientPNW
-		if (!shape.pnw || !shape.pse) 
+		if (!shape.pnw || !shape.pse)
 			throw new Error(style.gradient+' gradient misses pnw/pse');
 		grad = this._cx.createLinearGradient(
-			0, this.pan.y + shape.pnw.y, 
+			0, this.pan.y + shape.pnw.y,
 			0, this.pan.y + shape.pse.y);
 		break;
 	case 'radial' :
-		if (!shape.gradientPC || !shape.gradientR1) 
+		if (!shape.gradientPC || !shape.gradientR1)
 			throw new Error(style.gradient+' gradient misses gradient[PC|R0|R1]');
 		var ro = shape.gradientR0 || 0;
 		grad = this._cx.createRadialGradient(
-			shape.gradientPC.x + this.pan.x, shape.gradientPC.y + this.pan.y, ro, 
+			shape.gradientPC.x + this.pan.x, shape.gradientPC.y + this.pan.y, ro,
 			shape.gradientPC.x + this.pan.x, shape.gradientPC.y + this.pan.y, shape.gradientR1);
 		break;
-	default : 
+	default :
 		throw new Error('unknown gradient');
 	}
 	var steps = style.steps;
@@ -436,9 +436,9 @@ C2D.prototype._colorStyle = function(style, shape) {
 
 /**
 | Draws a filled area.
-| 
+|
 | style: the style formated in meshcraft style notation.
-| shape: an object which has path() defined 
+| shape: an object which has path() defined
 */
 C2D.prototype.fill = function(style, shape, path, a1, a2, a3, a4) {
 	var cx = this._cx;
@@ -484,7 +484,7 @@ C2D.prototype.edge = function(style, shape, path, a1, a2, a3, a4) {
 }
 
 /**
-| Fills an aera and draws its borders 
+| Fills an aera and draws its borders
 */
 C2D.prototype.paint = function(fillStyle, edgeStyle, shape, path, a1, a2, a3, a4) {
 	var cx = this._cx;
@@ -513,9 +513,9 @@ C2D.prototype.fillText = function(text, a1, a2) {
 }
 
 /**
-| Draws some text rotated by phi 
+| Draws some text rotated by phi
 | text: text to draw
-| p: center point of rotation 
+| p: center point of rotation
 | phi: rotation angle
 | d: distance from center // todo rename
 */
@@ -538,7 +538,7 @@ C2D.prototype.fillRotateText = function(text, pc, phi, d) {
 	cx.setTransform(1, 0, 0, 1, 0, 0);
 }
 
-	
+
 /**
 | Sets the fontStyle, fillStyle, textAlign, textBaseline.
 |
@@ -565,7 +565,7 @@ C2D.Measure = {
 		Measure._canvas = document.createElement('canvas');
 		Measure._cx = this._canvas.getContext('2d');
 	},
-	
+
 	width : function(text) {
 		return Measure._cx.measureText(text).width;
 	}
@@ -585,7 +585,7 @@ Object.defineProperty(C2D.Measure, 'font', {
  A Point in a 2D plane.
  Points are immutable objects.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/** 
+/**
 | Constructor.
 |
 | Point(x, y) or
@@ -606,8 +606,8 @@ C2D.Point = function(a1, a2) {
 */
 C2D.Point.zero = new C2D.Point(0, 0);
 
-/** 
-| Creates a point from json 
+/**
+| Creates a point from json.
 */
 C2D.Point.jnew = function(js) {
 	if (typeof(js.x) !== 'number' || typeof(js.y) !== 'number') {
@@ -872,12 +872,12 @@ C2D.lazyFixate(C2D.Rect.prototype, 'pc', function() {
 });
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-,-,-,-.                     
-`,| | |   ,-. ,-. ,-. . ,-. 
-  | ; | . ,-| |   | | | | | 
-  '   `-' `-^ '   `-| ' ' ' 
+,-,-,-.
+`,| | |   ,-. ,-. ,-. . ,-.
+  | ; | . ,-| |   | | | | |
+  '   `-' `-^ '   `-| ' ' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-                   `'     
+                   `'
  Holds information of inner or outer distances.
  Margins are immutable objects.
 
@@ -904,14 +904,14 @@ C2D.Margin = function(n, e, s, w) {
 */
 C2D.Margin.zero = new C2D.Margin(0, 0, 0, 0);
 
-/** 
+/**
 | Creates a margin from json.
 */
 C2D.Margin.jnew = function(js) {
 	return new C2D.Margin(js.n, js.e, js.s, js.w);
 }
 
-/** 
+/**
 | Returns a json object for this margin
 */
 C2D.Margin.prototype.jsonfy = function() {
@@ -929,10 +929,10 @@ C2D.lazyFixate(C2D.Margin.prototype, 'x', function() { return this.e + this.w; }
 C2D.lazyFixate(C2D.Margin.prototype, 'y', function() { return this.n + this.s; });
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- .-,--.               . .-,--.         .  
-  `|__/ ,-. . . ,-. ,-|  `|__/ ,-. ,-. |- 
-  )| \  | | | | | | | |  )| \  |-' |   |  
-  `'  ` `-' `-^ ' ' `-^  `'  ` `-' `-' `' 
+ .-,--.               . .-,--.         .
+  `|__/ ,-. . . ,-. ,-|  `|__/ ,-. ,-. |-
+  )| \  | | | | | | | |  )| \  |-' |   |
+  `'  ` `-' `-^ ' ' `-^  `'  ` `-' `-' `'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  A rectangle in a 2D plane with rounded corners
@@ -981,12 +981,12 @@ C2D.RoundRect.prototype.path = function(c2d, border) {
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ,-_/,.                         
- ' |_|/ ,-. . , ,-. ,-. ,-. ,-. 
-  /| |  |-'  X  ,-| | | | | | | 
-  `' `' `-' ' ` `-^ `-| `-' ' ' 
+ ,-_/,.
+ ' |_|/ ,-. . , ,-. ,-. ,-. ,-.
+  /| |  |-'  X  ,-| | | | | | |
+  `' `' `-' ' ` `-^ `-| `-' ' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-                     `' 
+                     `'
  A hexagon in a 2D plane.
  Hexagons are immutable objects.
 
@@ -1042,9 +1042,9 @@ C2D.Hexagon.prototype.within = function(p) {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ,-_/,.                         .---. .            
- ' |_|/ ,-. . , ,-. ,-. ,-. ,-. \___  |  . ,-. ,-. 
-  /| |  |-'  X  ,-| | | | | | |     \ |  | |   |-' 
+ ,-_/,.                         .---. .
+ ' |_|/ ,-. . , ,-. ,-. ,-. ,-. \___  |  . ,-. ,-.
+  /| |  |-'  X  ,-| | | | | | |     \ |  | |   |-'
   `' `' `-' ' ` `-^ `-| `-' ' ' `---' `' ' `-' `-' 
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
                      `' 
@@ -1076,14 +1076,14 @@ C2D.HexagonSlice = function(psw, rad, height) {
 	C2D.fixate(this, 'psw', psw);
 	C2D.fixate(this, 'rad', rad);
 	C2D.fixate(this, 'height', height);
-	
+
 	if (height > rad) throw new Error('Cannot make slice larger than radius');
 }
 
 /**
 | Middle(center) point of Hexagon.
 */
-C2D.lazyFixate(C2D.HexagonSlice.prototype, 'pm', function() { 
+C2D.lazyFixate(C2D.HexagonSlice.prototype, 'pm', function() {
 	return new Point(
 		this.psw.x + this.rad - Math.round((this.rad * C2D.cos30 - this.height) * C2D.tan30), 
 		this.psw.y + Math.round(this.rad * C2D.cos30) - this.height);
@@ -1092,8 +1092,8 @@ C2D.lazyFixate(C2D.HexagonSlice.prototype, 'pm', function() {
 /**
 | pnw (used by gradients)
 */
-C2D.lazyFixate(C2D.HexagonSlice.prototype, 'pnw', function() { 
-	return new Point(this.psw.x, this.psw.y - this.height); 
+C2D.lazyFixate(C2D.HexagonSlice.prototype, 'pnw', function() {
+	return new Point(this.psw.x, this.psw.y - this.height);
 });
 
 /**
@@ -1134,12 +1134,12 @@ C2D.HexagonSlice.prototype.within = function(p) {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ,-_/,.                        .-,--' .                    
+ ,-_/,.                        .-,--' .
  ' |_|/ ,-. . , ,-. ,-. ,-. ,-. \|__  |  ,-. . , , ,-. ,-. 
   /| |  |-'  X  ,-| | | | | | |  |    |  | | |/|/  |-' |   
   `' `' `-' ' ` `-^ `-| `-' ' ' `'    `' `-' ' '   `-' '   
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-                     `'     
+                     `'
  Makes a double hexagon with 6 segments.
  It kinda looks like a flower. 
 
@@ -1200,7 +1200,7 @@ C2D.HexagonFlower.prototype.path = function(c2d, border, segment) {
 		c2d.lineTo(pcx + ri  + b,  pcy             );
 		c2d.lineTo(pcx + ri2 + b2, pcy + ric + bc6 );
 		c2d.lineTo(pcx - ri2 - b2, pcy + ric + bc6 );
-		c2d.lineTo(pcx - ri  - b,  pcy             );	
+		c2d.lineTo(pcx - ri  - b,  pcy             );
 	}
 
 	/* outer hex */
@@ -1294,11 +1294,11 @@ C2D.HexagonFlower.prototype.within = function(p) {
 	var dy = p.y - this.pc.y;
 	var dx = p.x - this.pc.x;
 	var dyc6 = Math.abs(dy * C2D.tan30);
-	
+
 	if (dy <  -roc6 || dy >  roc6 || dx - this.ro >= -dyc6 || dx + this.ro <= dyc6) {
 		return null;
 	}
-	
+
 	var ric6 = this.ri * C2D.cos30;
 	if (dy >= -ric6 && dy <= ric6 && dx - this.ri <  -dyc6 && dx + this.ri >  dyc6) {
 		return 'center';
