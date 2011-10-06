@@ -1455,7 +1455,7 @@ _init : function() {
 | Constructor.
 */
 function Hexmenu(pc, style, labels) {
-	this.p = p;
+	this.p = pc;
 	this.style = style;
 	this.hflower = new HexagonFlower(pc, style.innerRadius, style.outerRadius, labels);
 	this.labels = labels;
