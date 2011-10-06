@@ -64,18 +64,18 @@ var settings = {
 
 	// pixels after mouse down and move, dragging starts
 	dragbox  : 10,
-	
+
 	// factor to add to the bottom of font height
 	bottombox : 0.22,
-	
+
 	// standard note in space
 	note : {
 		minWidth  :  40,
 		minHeight :  40,
 		newWidth  : 300,
 		newHeight : 150,
-		
-		// inner margin to text 
+
+		// inner margin to text
 		imargin  : { n: 10, e: 10, s: 10, w: 10 },
 
 		style : {
@@ -251,10 +251,11 @@ var settings = {
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,
   )   ,-. ,-. ,-. ,-. . .
- /    |-' | | ,-| |   | | 
- `--' `-' `-| `-^ `-' `-| 
-           ,|          /| 
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ /    |-' | | ,-| |   | |
+ `--' `-' `-| `-^ `-' `-|
+~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ ~/|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+           `'         `-'
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 if (!Object.defineProperty) {
 	Object.defineProperty = function(obj, label, funcs) {
@@ -340,7 +341,9 @@ Object.freeze(ONLOOK);
    | ; | . ,-| |   |<  |-' |
    '   `-' `-^ '   ' ` `-' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
  Marks a position in an element of an item.
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Marker() {
 	this._item = null;
@@ -441,7 +444,7 @@ Marker.prototype.getPoint = function() {
 		(c ? c.x + Measure.width(t.substring(c.offset, this._offset)) : l.x),
 		l.y - dtree.fontsize);
 }
-	
+
 /**
 | Sets the marker to position closest to x, y from flowbox(para).
 */
@@ -681,7 +684,7 @@ Selection.prototype.normalize = function() {
 			this.end   = this.mark2;
 		} else {
 			this.begin = this.mark2;
-			this.end   = this.mark1;	
+			this.end   = this.mark1;
 		}
 		return;
 	}
@@ -693,7 +696,7 @@ Selection.prototype.normalize = function() {
 		this.end   = this.mark1;
 		this.begin = this.mark2;
 	} else {
-		this.begin = this.mark1;	
+		this.begin = this.mark1;
 		this.end   = this.mark2;
 	}
 }
@@ -754,7 +757,7 @@ Editor.prototype.updateCaret = function() {
 		/* erase the old caret */
 		c2d.putImageData(caret.save, caret.sp.x - 1, caret.sp.y - 1);
 		caret.save = null;
-	} 
+	}
 	if (caret.shown && !caret.blink) {
 		var cp = caret.getPoint();
 		var it = caret.item;
@@ -1077,28 +1080,28 @@ _init : function() {
 	canvas.height = window.innerHeight - 1;
 	this.c2d = new C2D(canvas);
 	Measure.init();
-	
+
 	// the space that currently is displayed
 	this.space = null;
 
 	// if true browser supports the setCapture() call
-	// if false needs work around 
+	// if false needs work around
 	var useCapture = canvas.setCapture != null;
 
-	// mouse state
+	// mouse state  todox
 	var mst = MST.NONE;
 	// position the mouse went down to atween state
 	var msp = null;
-	// latest mouse position seen in atween state 
+	// latest mouse position seen in atween state
 	var mmp = null;
 	// latest shift/ctrl key status in atween state
 	var mms = null;
-	var mmc = null; 
-	// timer for atween state 
+	var mmc = null;
+	// timer for atween state
 	var atweenTimer = null;
 
 	var editor = this.editor = new Editor();
-	
+
 	// hidden input that forwards all events
 	var hiddenInput = document.getElementById('input');
 
@@ -1184,8 +1187,8 @@ _init : function() {
 	| does a blink.
 	*/
 	function blink() {
-		// hackish, also look into the hidden input field, 
-		// maybe the user pasted something using the browser menu. 
+		// hackish, also look into the hidden input field,
+		// maybe the user pasted something using the browser menu.
 		testinput();
 		editor.blink();
 	}
@@ -1389,7 +1392,7 @@ _init : function() {
 		hiddenInput.value = inputval = text;
 		if (text != '') {
 			hiddenInput.selectionStart = 0;
-			hiddenInput.selectionEnd = text.length;	
+			hiddenInput.selectionEnd = text.length;
 		}
 	}
 
@@ -1419,8 +1422,8 @@ _init : function() {
 	this.repository = new Repository();
 	this.space = new Space();
 	this.startBlinker();
-	// hinders init to be called another time 
-	delete this.init; 
+	// hinders init to be called another time
+	delete this.init;
 	delete this._init;
 
 	if (!this.repository.loadLocalStorage()) {
@@ -1428,7 +1431,7 @@ _init : function() {
 	}
 	this.space.redraw();
 }};
-	
+
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,-_/,.
  ' |_|/ ,-. . , ,-,-. ,-. ,-. . .
@@ -1436,25 +1439,25 @@ _init : function() {
   `' `' `-' ' ` ' ' ' `-' ' ' `-^
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-        rado |------>| 
-        radi |->.    '
+ outerRadius |------>|
+ innerRadius |->|    '
          .------'.   '      -1
-		/ \  1  / \	 '
-	   / 6 .---.'2 \ '
+		/ \  n  / \	 '
+	   /nw .---.'ne\ '
 	  /___/  .  \___\'
-	  \   \  0  /   /
-	   \ 5 `---´ 3 /
- 	    \ /  4  \ /
+	  \   \ pc  /   /
+	   \sw `---´ se/
+ 	    \ /  s  \ /
          `-------´
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /**
 | Constructor.
 */
-function Hexmenu(p, style, labels) {
+function Hexmenu(pc, style, labels) {
 	this.p = p;
 	this.style = style;
-	this.hflower = new HexagonFlower(p, style.innerRadius, style.outerRadius, labels);
+	this.hflower = new HexagonFlower(pc, style.innerRadius, style.outerRadius, labels);
 	this.labels = labels;
 	this.mousepos = null;
 }
@@ -1502,6 +1505,7 @@ Hexmenu.prototype.getMousepos = function(p) {
   The menu at the screen edge.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 /**
 | Constructor.
 */
@@ -1665,7 +1669,7 @@ function Cockpit() {
  .---.
  \___  ,-. ,-. ,-. ,-.
      \ | | ,-| |   |-'
- `---' |-' `-^ `-' `-' 
+ `---' |-' `-^ `-' `-'
 ~ ~ ~ ~|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
        '
  The place where all the items are.
@@ -1678,16 +1682,17 @@ function Cockpit() {
 function Space() {
 	this._floatMenuLabels = {c: 'new', n: 'Note', ne: 'Label'};
 	this.edgemenu = new Edgemenu();
-	
+
+	//todo evil
 	this.iaction = {
 		act : ACT.NONE,
 	};
-	
+
 	// panning offset
 	this.c2d = new C2D(System.canvas);
 	this.pan = new Point(0, 0);
 	this.c2d.pan = this.pan;
-	
+
 	this.zoom = 1;
 }
 
@@ -2013,13 +2018,13 @@ Space.prototype.dragmove = function(p, shift, ctrl) {
 		case 's' :
 			pnw = ipnw;
 			pse = Point.renew(ipse.x, max(ipse.y + dy, ipnw.y), ipnw, ipse);
-			break; 
+			break;
 		case 'sw'  :
-			pnw = Point.renew(min(ipnw.x + dx, ipse.x), ipnw.y, ipnw, ipse), 
+			pnw = Point.renew(min(ipnw.x + dx, ipse.x), ipnw.y, ipnw, ipse),
 			pse = Point.renew(ipse.x, max(ipse.y + dy, ipnw.y), ipnw, ipse);
 			break;
 		case 'w'   :
-			pnw = Point.renew(min(ipnw.x + dx, ipse.x), ipnw.y, ipnw, ipse), 
+			pnw = Point.renew(min(ipnw.x + dx, ipse.x), ipnw.y, ipnw, ipse),
 			pse = ipse;
 			break;
 		case 'nw' :
@@ -2109,7 +2114,7 @@ Space.prototype._exportDialog = function() {
 	div.appendChild(document.createElement('br'));
 	var button = document.createElement('button');
 	button.appendChild(document.createTextNode('Dismiss'));
-	button.style.width       = '100px';			
+	button.style.width       = '100px';
 	button.style.height      = '30px';
 	button.style.display     = 'block';
 	button.style.marginLeft  = 'auto';
@@ -2155,7 +2160,7 @@ Space.prototype._importDialog = function() {
 	ta.style.marginTop   = '20px';
 	div.appendChild(ta);
 	div.appendChild(document.createElement('br'));
-	
+
 	var bd = document.createElement('div');
 	bd.style.display = 'block';
 	bd.style.width   = '100%';
@@ -2168,10 +2173,10 @@ Space.prototype._importDialog = function() {
 	bdr.style.width    = '50%';
 	bdr.style.cssFloat = 'left';
 	bd.appendChild(bdr);
-	
+
 	var okb = document.createElement('button');
 	okb.appendChild(document.createTextNode('Import'));
-	okb.style.width       = '100px';			
+	okb.style.width       = '100px';
 	okb.style.height      = '30px';
 	okb.style.marginRight = '20px';
 	okb.style.cssFloat    = 'right';
@@ -2235,7 +2240,7 @@ Space.prototype._revertDialog = function() {
 	bdr.style.width    = '50%';
 	bdr.style.cssFloat = 'left';
 	bd.appendChild(bdr);
-	
+
 	var okb = document.createElement('button');
 	okb.appendChild(document.createTextNode('Revert'));
 	okb.style.width       = '100px';
@@ -2288,7 +2293,7 @@ Space.prototype.mousedown = function(p) {
 		if (redraw) this.redraw();
 		return MST.NONE;
 	}
-	
+
 	switch (iaction.act) {
 	case ACT.FMENU :
 		var md = this._floatmenu.getMousepos(p);
@@ -2335,7 +2340,7 @@ Space.prototype.mousedown = function(p) {
 		}
 		break;
 	}
-	
+
 	if (this.focus) {
 		if (this.focus && this.focus.withinItemMenu(p)) {
 			if (redraw) this.redraw();
@@ -2348,13 +2353,13 @@ Space.prototype.mousedown = function(p) {
 			iaction.com  = com;
 			iaction.item = this.focus;
 			iaction.sp   = p;
-			iaction.siz  = this.focus.handlezone; 
+			iaction.siz  = this.focus.handlezone;
 			System.setCursor(com+'-resize');
 			if (redraw) this.redraw();
 			return MST.DRAG;
 		}
 	}
-	
+
 	if (redraw) this.redraw();
 	return MST.ATWEEN;
 }
@@ -2411,19 +2416,19 @@ Treenode.prototype.insertBefore = function(tnode, bnode) {
 		this.append(tnode);
 		return
 	}
-	
+
 	if (tnode.parent) {
 		throw new Error('Treenode.append() on a node already part of a tree');
 	}
 	tnode.parent = this;
-	
+
 	if (bnode == this.first) {
 		this.first.prev = tnode;
 		tnode.next = this.first;
 		this.first = tnode;
 		tnode.prev = null;
 	}
-	
+
 	tnode.next = bnode;
 	tnode.prev = bnode.prev;
 	bnode.prev.next = tnode;
@@ -2464,10 +2469,10 @@ function Textnode(text)
 subclass(Textnode, Treenode);
 
 Object.defineProperty(Textnode.prototype, 'text', {
-	get: function() { 
+	get: function() {
 		return this._text;
 	},
-	
+
 	set: function(text) {
 		if (this._text != text) {
 			this._text = text;
@@ -2493,16 +2498,16 @@ function Paragraph(text)
 	this._pc2d = new C2D(0 ,0);
 	this._canvasActual = false; // todo rename
 	this.append(new Textnode(text));
-	this._flowWidth = null;	
+	this._flowWidth = null;
 	this.p = null;
 }
 subclass(Paragraph, Treenode);
 
 /**
-|(re)flows the Paragraph, positioning all chunks  
+| (re)flows the Paragraph, positioning all chunks.
 */
 Paragraph.prototype._flow = function() {
-	if (this._flowActual) return; 
+	if (this._flowActual) return;
 
 	// builds position informations.
 	this._flowActual = true;
@@ -2512,7 +2517,7 @@ Paragraph.prototype._flow = function() {
 	var dtree = this.anchestor(DTree);
 	var fontsize = dtree.fontsize;
 	var x = 0;
-	var y = fontsize;	
+	var y = fontsize;
 	Measure.font = dtree.font;
 	var space = Measure.width(' ');
 	var pline = 0;
@@ -2528,16 +2533,16 @@ Paragraph.prototype._flow = function() {
 		//var reg = !dtree.pre ? (/(\s*\S+)\s?(\s*)/g) : (/(.+)()$/g);
 		// also match only spaces, todo check if more performance if hand coding
 		var reg = !dtree.pre ? (/(\s*\S+|\s+$)\s?(\s*)/g) : (/(.+)()$/g);
-		var stol = true; // at start of line 
+		var stol = true; // at start of line
 		for(var ca = reg.exec(t); ca != null; ca = reg.exec(t)) {
 			// text is a word plus hard spaces
 			var text = ca[1] + ca[2];
 			var w = Measure.width(text);
 			if (fw > 0 && x + w + space > fw) {
 				if (!stol) {
-					// soft break 
+					// soft break
 					if (x > width) {
-						// stores maximum width used 
+						// stores maximum width used
 						width = x;
 					}
 					x = 0;
@@ -2551,21 +2556,21 @@ Paragraph.prototype._flow = function() {
 					}
 					stol = true;
 				} else {
-					// horizontal overflow 
+					// horizontal overflow
 				}
 			}
 			pinfo[pline][pchunk++] = {
-				x: x, 
+				x: x,
 				w: w,
 				node: node,
-				offset: ca.index, 
+				offset: ca.index,
 				text: text,
 			};
 			x += w + space;
 			stol = false;
 		}
 		if (x > width) {
-			// stores maximum width used 
+			// stores maximum width used.
 			width = x;
 		}
 	}
@@ -2581,24 +2586,24 @@ Paragraph.prototype._flow = function() {
 | todo huh?
 */
 Object.defineProperty(Paragraph.prototype, 'softHeight', {
-	get: function() { 
+	get: function() {
 		this._flow();
 		return this._softHeight;
 	},
 });
 
 Object.defineProperty(Paragraph.prototype, 'width', {
-	get: function() { 
+	get: function() {
 		this._flow();
 		return this._width;
 	},
 });
 
 /**
-| Returns the computed height of the paragraph. 
+| Returns the computed height of the paragraph.
 */
 Object.defineProperty(Paragraph.prototype, 'height', {
-	get: function() { 
+	get: function() {
 		this._flow();
 		var dtree = this.anchestor(DTree);
 		return this._softHeight + R(dtree.fontsize * settings.bottombox);
@@ -2609,7 +2614,7 @@ Object.defineProperty(Paragraph.prototype, 'height', {
 | Returns the position information arrays for all chunks.
 */
 Object.defineProperty(Paragraph.prototype, 'pinfo', {
-	get: function() { 
+	get: function() {
 		this._flow();
 		return this._pinfo;
 	},
@@ -2619,7 +2624,7 @@ Object.defineProperty(Paragraph.prototype, 'pinfo', {
 | todo huh?
 */
 Object.defineProperty(Paragraph.prototype, 'flowWidth', {
-	get: function() { 
+	get: function() {
 		return this._flowWidth;
 	},
 	set: function(fw) {
@@ -2641,13 +2646,13 @@ Paragraph.prototype.getC2D = function() {
 	}
 	this._flow();
 	this._canvasActual = true;
-			
-	// todo: work out exact height for text below baseline 
-	// set the canvas height 
+
+	// todo: work out exact height for text below baseline
+	// set the canvas height
 	var dtree = this.anchestor(DTree);
 	c2d.attune(this);
 	c2d.fontStyle(dtree.font, 'black', 'start', 'alphabetic');
-	
+
 	// draws text into the canvas
 	var pinfo = this._pinfo;
 	var plines = pinfo.length;
@@ -2661,17 +2666,17 @@ Paragraph.prototype.getC2D = function() {
 	}
 	return c2d;
 }
-		
-// drops the canvas cache (cause something has changed 
+
+// drops the canvas cache (cause something has changed
 Paragraph.prototype.listen = function() {
 	this._flowActual   = false;
 	this._canvasActual = false;
 	if (this.parent) this.parent.listen();
 }
 
-/** 
-| Joins a child node to its next sibling, 
-| or joins this paragraph to its next sibling 
+/**
+| Joins a child node to its next sibling,
+| or joins this paragraph to its next sibling
 |
 | todo, this doesnt belong here .
 */
@@ -2690,9 +2695,9 @@ Paragraph.prototype.joinToNext = function(node, caret) {
 	this.parent.remove(nextPara);
 	return true;
 }
-	
+
 /**
-| Joins a child node to its previous sibling, 
+| Joins a child node to its previous sibling,
 | or joins this paragraph to its previos sibling.
 |
 | todo, doesnt belong here.
@@ -2711,11 +2716,11 @@ Paragraph.prototype.joinToPrevious = function(node, caret) {
 	if (caret) {
 		caret.set(plc, plc.text.length);
 	}
-	plc.text = plc.text + nt; 
+	plc.text = plc.text + nt;
 	this.parent.remove(this);
 	return true;
 }
-	
+
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .-,--.  ,--,--'
  ' |   \ `- | ,-. ,-. ,-.
@@ -2748,11 +2753,11 @@ DTree.jnew = function(js) {
 	return o;
 }
 
+/**
+| Returns the default font of the dtree.
+*/
 Object.defineProperty(DTree.prototype, 'font', {
-	// todo, look if this can be removed.
-	get: function() { 
-		return this._fontsize + 'px ' + settings.defaultFont;
-	},
+	get: function() { return this._fontsize + 'px ' + settings.defaultFont; },
 });
 
 /**
@@ -2766,7 +2771,7 @@ DTree.prototype.jsonfy = function() {
 	}
 	return js;
 }
-		
+
 /**
 | Returns the paragraph at point
 */
@@ -2798,7 +2803,7 @@ DTree.prototype.pathSelection = function(c2d, border, isEdge, select, imargin, s
 		e = select.mark1;
 		{ var _ = bp; bp = ep; ep = _; }
 	}
-			
+
 	c2d.beginPath();
 	var psy = scrolly >= 0 ? scrolly : 0;
 	var lh = R(this.fontsize * (1 + settings.bottombox));
@@ -2822,7 +2827,7 @@ DTree.prototype.pathSelection = function(c2d, border, isEdge, select, imargin, s
 		c2d.lineTo(bx, by + lh);
 		c2d.lineTo(bx, by);
 		c2d.lineTo(rx, by);
-			
+
 		c2d.moveTo(lx, ey);
 		c2d.lineTo(ex, ey);
 		c2d.lineTo(ex, ey + lh);
@@ -2844,13 +2849,13 @@ DTree.prototype.pathSelection = function(c2d, border, isEdge, select, imargin, s
 }
 
 /**
-| draws the content in a Canvas2D 
+| draws the content in a Canvas2D
 | c2d: Canvas2D to draw within.
 | select: selection object (for highlighting the selection)
 | imargin: distance of text to edge
 | scrolly: scroll position (todo make a point)
 */
-DTree.prototype.draw = function(c2d, select, imargin, scrolly) { 
+DTree.prototype.draw = function(c2d, select, imargin, scrolly) {
 	var y = imargin.n;
 	var pi = 0;
 	var h = 0;
@@ -2859,14 +2864,14 @@ DTree.prototype.draw = function(c2d, select, imargin, scrolly) {
 	/* draws the selection */
 	if (select.active && select.mark1.item === this.parent) {
 		c2d.fill(
-			settings.selection.style.fill, this, 'pathSelection', 
+			settings.selection.style.fill, this, 'pathSelection',
 			false, select, imargin, scrolly);
 		c2d.edge(
-			settings.selection.style.edge, this, 'pathSelection', 
+			settings.selection.style.edge, this, 'pathSelection',
 			true,  select, imargin, scrolly);
 	}
-	
-	// draws tha paragraphs 
+
+	// draws tha paragraphs
 	for(var para = this.first; para; para = para.next) {
 		var pc2d = para.getC2D();
 		para.p = new Point(imargin.w, y);
@@ -2893,7 +2898,7 @@ DTree.prototype.append = function(tnode) {
 | Overloads Treenodes insertBefore to set the paragraphs width.
 */
 DTree.prototype.insertBefore = function(tnode, bnode) {
-	if (this._flowWidth && bnode) { 
+	if (this._flowWidth && bnode) {
 		/* if not bnode append will be called */
 		tnode.flowWidth = this._flowWidth;
 	}
@@ -2901,14 +2906,14 @@ DTree.prototype.insertBefore = function(tnode, bnode) {
 }
 
 
-/** 
+/**
 * Gets/Sets the font size.
 */
 Object.defineProperty(DTree.prototype, 'fontsize', {
 	get: function() { return this._fontsize; },
 	set: function(fs) {
 		if (this._fonsize == fs) return;
-		this._fontsize = fs; 
+		this._fontsize = fs;
 		for(var para = this.first; para; para = para.next) {
 			para.listen();
 		}
@@ -2942,7 +2947,7 @@ DTree.prototype.listen = function() {
 | Returns the width of the document tree.
 */
 Object.defineProperty(DTree.prototype, 'width', {
-	get: function() { 
+	get: function() {
 		if (this._cacheWidth) return this._cacheWidth;
 		var w = 0;
 		for(var para = this.first; para; para = para.next) {
@@ -2956,7 +2961,7 @@ Object.defineProperty(DTree.prototype, 'width', {
 | Returns the height of the document tree.
 */
 Object.defineProperty(DTree.prototype, 'height', {
-	get: function() { 
+	get: function() {
 		if (this._cacheHeight) return this._cacheHeight;
 		var h = 0;
 		var parasep = this.pre ? 0 : this._fontsize;
@@ -2974,7 +2979,7 @@ Object.defineProperty(DTree.prototype, 'height', {
  '  | |- ,-. ,-,-.
  .^ | |  |-' | | |
  `--' `' `-' ' ' '
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ 
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  Something on a canvas.
 
@@ -2988,7 +2993,7 @@ function Item(id) {
 | Return the hexgon slice that is the handle
 */
 Object.defineProperty(Item.prototype, 'h6slice', {
-	get: function() { 
+	get: function() {
 		var hzone = this.handlezone;
 		if (this._h6slice && this._h6slice.psw.eq(hzone.pnw)) return this._h6slice;
 		return this._h6slice = new HexagonSlice(
@@ -2997,7 +3002,7 @@ Object.defineProperty(Item.prototype, 'h6slice', {
 });
 
 /**
-| Creates a new Hexmenu for this item. 
+| Creates a new Hexmenu for this item.
 */
 Item.prototype.newItemMenu = function(pan) {
 	var labels = this._itemMenuLabels = {n : 'Remove'};
@@ -3005,7 +3010,7 @@ Item.prototype.newItemMenu = function(pan) {
 }
 
 /**
-| Returns if point is within the item menu 
+| Returns if point is within the item menu
 */
 Item.prototype.withinItemMenu = function(p) {
 	return this.h6slice.within(p);
@@ -3013,33 +3018,34 @@ Item.prototype.withinItemMenu = function(p) {
 
 /**
 | Returns the compass direction of the handle if p is on a resizer handle.
+| todo rename
 */
-Item.prototype.checkItemCompass = function(p) { 
+Item.prototype.checkItemCompass = function(p) {
 	var ha = this.handles;
 	var hzone = this.handlezone;
 	if (!ha) return null;
 	var d  = settings.handle.size;        // inner distance
 	var d2 = 0.75 * settings.handle.size; // outer distance
-	
+
 	var n = p.y >= hzone.pnw.y - d2 && p.y <= hzone.pnw.y + d;
 	var e = p.x >= hzone.pse.x - d  && p.x <= hzone.pse.x + d2;
 	var s = p.y >= hzone.pse.y - d  && p.y <= hzone.pse.y + d2;
-	var w = p.x >= hzone.pnw.x - d2 && p.x <= hzone.pnw.x + d;	
+	var w = p.x >= hzone.pnw.x - d2 && p.x <= hzone.pnw.x + d;
 
 	if (n) {
-		if (w && ha.nw) return 'nw'; 
-		if (e && ha.ne) return 'ne'; 
+		if (w && ha.nw) return 'nw';
+		if (e && ha.ne) return 'ne';
 		if (ha.n && abs(p.x - hzone.pc.x) <= d) return 'n';
 		return null;
-	} 
+	}
 	if (s) {
-		if (w && ha.sw) return 'sw'; 
-		if (e && ha.se) return 'se'; 
+		if (w && ha.sw) return 'sw';
+		if (e && ha.se) return 'se';
 		if (ha.s && abs(p.x - hzone.pc.x) <= d) return 's';
 		return null;
-	} 
-	if (w && ha.w && abs(p.y - hzone.pc.y) <= d) return 'w'; 
-	if (e && ha.e && abs(p.y - hzone.pc.y) <= d) return 'e';  
+	}
+	if (w && ha.w && abs(p.y - hzone.pc.y) <= d) return 'w';
+	if (e && ha.e && abs(p.y - hzone.pc.y) <= d) return 'e';
 	return null;
 }
 
@@ -3050,10 +3056,10 @@ Item.prototype.pathResizeHandles = function(c2d, border) {
 	if (border !== 0) throw new Error('borders unsupported for handles');
 	var ha = this.handles;
 	var zone = this.handlezone;
-	var ds = settings.handle.distance; 
+	var ds = settings.handle.distance;
 	var hs = settings.handle.size;
 	var hs2 = half(hs);
-	
+
 	var x1 = zone.pnw.x - ds;
 	var y1 = zone.pnw.y - ds;
 	var x2 = zone.pse.x + ds;
@@ -3061,7 +3067,7 @@ Item.prototype.pathResizeHandles = function(c2d, border) {
 	var xm = half(x1 + x2);
 	var ym = half(y1 + y2);
 
-	c2d.beginPath(); 
+	c2d.beginPath();
 	if (ha.n ) { c2d.moveTo(xm - hs2, y1); c2d.lineTo(xm + hs2, y1);                    }
 	if (ha.ne) { c2d.moveTo(x2 - hs,  y1); c2d.lineTo(x2, y1); c2d.lineTo(x2, y1 + hs); }
 	if (ha.e ) { c2d.moveTo(x2, ym - hs2); c2d.lineTo(x2, ym + hs2);                    }
@@ -3073,22 +3079,29 @@ Item.prototype.pathResizeHandles = function(c2d, border) {
 }
 
 /**
-| Draws the handles of an item (resize, itemmenu) 
+| Draws the handles of an item (resize, itemmenu)
 */
 Item.prototype.drawHandles = function(c2d) {
 	// draws the resize handles
 	c2d.edge(settings.handle.style.edge, this, 'pathResizeHandles');
-	// draws item menu handler 
+	// draws item menu handler
 	var sstyle = settings.itemmenu.slice.style;
 	c2d.paint(sstyle.fill, sstyle.edge, this.h6slice, 'path');
 }
 
+/**
+| Called when item is removed
+*/
+Item.prototype.removed = function() {
+	// nothing
+}
+
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ,-,-.       .      
- ` | |   ,-. |- ,-. 
-   | |-. | | |  |-' 
-  ,' `-' `-' `' `-' 
+ ,-,-.       .
+ ` | |   ,-. |- ,-.
+   | |-. | | |  |-'
+  ,' `-' `-' `' `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  An item with text and a scrollbar.
@@ -3097,7 +3110,7 @@ Item.prototype.drawHandles = function(c2d) {
 
 /**
 | Constructor.
-| 
+|
 | id:    item id
 | zone:  position and size of note.
 | dtree: document tree.
@@ -3109,7 +3122,7 @@ function Note(id, zone, dtree) {
 	this.handles = Note.handles;
 	dtree.parent = this;
 	this.silhoutte = new RoundRect(
-		Point.zero, new Point(zone.width, zone.height), settings.note.cornerRadius); 
+		Point.zero, new Point(zone.width, zone.height), settings.note.cornerRadius);
 	this._bc2d = new C2D();
 	this.imargin = Note.imargin;
 	this._canvasActual = false;
@@ -3151,7 +3164,7 @@ Note.jnew = function(js, id) {
 }
 
 /**
-| Called when item is removed 
+| Called when item is removed
 */
 Note.prototype.removed = function() {
 	/* nothing */
@@ -3159,14 +3172,14 @@ Note.prototype.removed = function() {
 
 /**
 | Highlights the  note
-*/		
+*/
 Note.prototype.highlight = function(c2d) {
 	// todo round rects
 	c2d.edge(settings.note.style.highlight, this.zone, 'path');
 }
 
 /**
-| Turns the note into a string 
+| Turns the note into a string
 */
 Note.prototype.jsonfy = function() {
 	var js = {
@@ -3177,22 +3190,22 @@ Note.prototype.jsonfy = function() {
 	return js;
 }
 
-/** 
-| Returns the para at y 
+/**
+| Returns the para at y
 */
 Note.prototype.paraAtP = function(p) {
-	if (p.y < this.imargin.n) return null; 
+	if (p.y < this.imargin.n) return null;
 	return this.dtree.paraAtP(p);
 }
 
-/** 
-| Drops the cached canvas 
+/**
+| Drops the cached canvas
 */
 Note.prototype.listen = function() {
 	this._canvasActual = false;
 	/* end of chain */
 }
-	
+
 /**
 | Checks if this items reacts on an event.
 | Returns transfix code.
@@ -3200,7 +3213,7 @@ Note.prototype.listen = function() {
 Note.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 	if (!this.zone.within(p)) return 0;
 	switch (txe) {
-	case TXE.HOVER : 
+	case TXE.HOVER :
 		System.setCursor('default');
 		return TXR.HIT;
 	case TXE.DRAGSTART :
@@ -3213,7 +3226,7 @@ Note.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 			System.repository.moveToTop(z);
 			txr |= TXR.REDRAW; // todo full redraw
 		}
-		if (space.focus != this) {  
+		if (space.focus != this) {
 			space.setFocus(this);
 			txr |= TXR.REDRAW;
 		}
@@ -3230,7 +3243,7 @@ Note.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 		var txr = TXR.HIT;
 		if (z > 0) {
 			System.repository.moveToTop(z);
-			txr |= TXR.REDRAW; // todo full redraw 
+			txr |= TXR.REDRAW; // todo full redraw
 		}
 		if (space.focus != this) {
 			space.setFocus(this);
@@ -3238,7 +3251,7 @@ Note.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 		}
 
 		var op = new Point(
-			p.x - this.zone.pnw.x, 
+			p.x - this.zone.pnw.x,
 			p.y - this.zone.pnw.y + (this.scrolly > 0 ? this.scrolly : 0));
 		var para = this.paraAtP(op);
 		if (para) {
@@ -3292,7 +3305,7 @@ Object.defineProperty(Note.prototype, 'handlezone', {
 });
 
 /**
-| Sets new position retaining size 
+| Sets new position retaining size
 */
 Note.prototype.moveto = function(p) {
 	if (this.zone.pnw.eq(p)) return false;
@@ -3300,8 +3313,8 @@ Note.prototype.moveto = function(p) {
 	return this;
 }
 
-/** 
-| Gets or Sets the vertical scroll position 
+/**
+| Gets or Sets the vertical scroll position
 */
 Object.defineProperty(Note.prototype, 'scrolly', {
 	get: function() { return this._scrolly; },
@@ -3331,10 +3344,10 @@ Note.prototype.pathScrollbar = function(c2d, border, sy, dtreeHeight, innerHeigh
 		/* minimum size of scrollbar */
 		scrollSize = srad * 2;
 	}
-						
-	var spy = R(settings.scrollbar.marginY + 
+
+	var spy = R(settings.scrollbar.marginY +
 		sy / (dtreeHeight - innerHeight) * (scrollRange - scrollSize));
-		
+
 	c2d.beginPath();
 	c2d.moveTo(spx - srad,   R(spy + C2D.cos30 * srad));
 	c2d.lineTo(spx - srad05, spy);
@@ -3365,19 +3378,19 @@ Note.prototype.draw = function(c2d, selection) {
 	bc2d.attune(this.zone);
 	bc2d.fill(settings.note.style.fill, this.silhoutte, 'path');
 
-	/* calculates if a scrollbar is needed */
+	// calculates if a scrollbar is needed
 	var sy = this._scrolly;
 	var innerHeight = this.zone.height - this.imargin.y; // todo rename iheight // todo make a getter
-	dtree.flowWidth = 
-		this.zone.width - this.imargin.x - 
+	dtree.flowWidth =
+		this.zone.width - this.imargin.x -
 		(sy >= 0 ? settings.scrollbar.radius * 2 : 0); // todo make a var
 	var dtreeHeight = dtree.height;
 	if (sy < 0) {
 		if (dtreeHeight > innerHeight) {
 			// does not use a scrollbar but should
-			sy = this._scrolly = 0;		
-			dtree.flowWidth = 
-				this.zone.width - this.imargin.x - 
+			sy = this._scrolly = 0;
+			dtree.flowWidth =
+				this.zone.width - this.imargin.x -
 				(sy >= 0 ? settings.scrollbar.radius * 2 : 0);
 			dtreeHeight = dtree.height;
 			if (dtreeHeight <= innerHeight) {
@@ -3387,18 +3400,18 @@ Note.prototype.draw = function(c2d, selection) {
 	} else if (dtreeHeight <= innerHeight) {
 		/* uses a scrollbar but should */
 		sy = this._scrolly = -8833;
-		dtree.flowWidth = this.zone.width - 
-			2 * this.textBorder - 
+		dtree.flowWidth = this.zone.width -
+			2 * this.textBorder -
 			(sy >= 0 ? settings.scrollbar.radius * 2 : 0);
 		dtreeHeight = dtree.height;
 		if (dtreeHeight > innerHeight) {
 			throw new Error('note doesnt fit with and without scrollbar.');
 		}
 	}
-	
-	/* draws selection and text */	
+
+	/* draws selection and text */
 	dtree.draw(bc2d, selection, this.imargin, sy < 0 ? 0 : R(sy));
-	
+
 	if (sy >= 0) {
 		bc2d.paint(settings.scrollbar.style.fill, settings.scrollbar.style.edge, this, 'pathScrollbar',
 			sy, dtreeHeight, innerHeight);
@@ -3406,19 +3419,19 @@ Note.prototype.draw = function(c2d, selection) {
 
 	/* draws the border */
 	bc2d.edge(settings.note.style.edge, this.silhoutte, 'path');
-	
+
 	this._canvasActual = true;
 	c2d.drawImage(bc2d, this.zone.pnw);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ,       .       .  
-  )   ,-. |-. ,-. |  
- /    ,-| | | |-' |  
- `--' `-^ ^-' `-' `' 
+  ,       .       .
+  )   ,-. |-. ,-. |
+ /    ,-| | | |-' |
+ `--' `-^ ^-' `-' `'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- An sizeable item with sizing text 
+ An sizeable item with sizing text.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -3432,11 +3445,11 @@ function Label(id, zone, dtree) {
 	dtree.pre = true;
 	this.handles = Label.handles;
 	this.imargin = Label.imargin;
-	this.setZone(zone, 'c'); 
+	this.setZone(zone, 'c');
 	/* buffer canvas 2D */
-	this._bc2d = new C2D();  
+	this._bc2d = new C2D();
 	this._canvasActual = false;  // todo rename
-	if (typeof(this.zone.pse.x) === 'undefined') throw new Error('Invalid label'); // todo remove 
+	if (typeof(this.zone.pse.x) === 'undefined') throw new Error('Invalid label'); // todo remove
 	System.repository.addItem(this, true);
 }
 subclass(Label, Item);
@@ -3447,7 +3460,7 @@ subclass(Label, Item);
 Label.imargin = Margin.jnew(settings.label.imargin);
 
 /**
-| The handles the item presents
+| The resize handles the item presents.
 */
 Label.handles = {
 	ne : true,
@@ -3462,14 +3475,6 @@ Object.freeze(Label.handles);
 */
 Label.jnew = function(js, id) {
 	return new Label(id, Rect.jnew(js.z), DTree.jnew(js.d));
-}
-
-
-/** 
-| Called when item is removed 
-*/
-Label.prototype.removed = function() {
-	/* nothing */
 }
 
 /**
@@ -3499,7 +3504,7 @@ Label.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 
 		space.actionIDrag(this, p.sub(this.zone.pnw));
 		return txr;
-	case TXR.CLICK: 
+	case TXR.CLICK:
 		var txr = TXR.HIT;
 		if (z > 0) {
 			System.repository.moveToTop(z);
@@ -3518,7 +3523,7 @@ Label.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 			editor.deselect();
 			txr |= TXR.REDRAW;
 		}
-		return txr;	
+		return txr;
 	case TXE.RBINDHOVER :
 		space.actionRBindHover(this);
 		return TXR.HIT | TXR.REDRAW;
@@ -3532,13 +3537,13 @@ Label.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 
 /**
 | Highlights the label.
-*/		
+*/
 Label.prototype.highlight = function(c2d) {
 	c2d.edge(settings.label.style.highlight, this.zone, 'path');
 }
 
 /**
-| Turns the label into its json represntation. 
+| Turns the label into its json represntation.
 */
 Label.prototype.jsonfy = function() {
 	return {
@@ -3548,13 +3553,13 @@ Label.prototype.jsonfy = function() {
 	}
 }
 
-/** 
+/**
 | Sets the zone of the label.
 | Also determines its fontsize.
 | Returns true if something changed.
 |
 | zone: a rectangle
-| align: compass direction 
+| align: compass direction
 */
 Label.prototype.setZone = function(zone, align) {
 	if (this.zone && this.zone.eq(zone)) return false;
@@ -3596,7 +3601,7 @@ Object.defineProperty(Label.prototype, 'handlezone', {
 });
 
 /**
-| Sets a new position. 
+| Sets a new position.
 */
 Label.prototype.moveto = function(pnw) {
 	if (this.zone.pnw.eq(pnw)) return false;
@@ -3655,8 +3660,9 @@ Label.prototype.draw = function(c2d, selection) {
 
 /**
 | Constructor.
+|
 | Do not call directly, but Relation.jnew() or Relation.create()
-| Relation(id, i1id, i2id, textZone, [dtree]) 
+| Relation(id, i1id, i2id, textZone, [dtree])
 */
 function Relation(id, i1id, i2id, textZone, dtree) {
 	Item.call(this, id);
@@ -3671,7 +3677,7 @@ function Relation(id, i1id, i2id, textZone, dtree) {
 	this.setTextZone(textZone);
 	this._bc2d = new C2D();
 	this._canvasActual = false;
-	
+
 	System.repository.addItem(this, true);
 	System.repository.addOnlook(this.id, this.i1id);
 	System.repository.addOnlook(this.id, this.i2id);
@@ -3732,17 +3738,17 @@ Object.defineProperty(Relation.prototype, 'handlezone', {
 	get : function() { return this.textZone; }
 });
 
-/** 
-| Called when ab item is removed.
+/**
+| Called when an item is removed.
 */
 Relation.prototype.removed = function() {
 	System.repository.removeOnlook(this.id, this.i1id);
-	System.repository.removeOnlook(this.id, this.i2id);	
+	System.repository.removeOnlook(this.id, this.i2id);
 }
 
 /**
 | Highlights the label.
-*/		
+*/
 Relation.prototype.highlight = function(c2d) {
 	c2d.edge(settings.relation.style.highlight, this.textZone, 'path');
 }
@@ -3756,17 +3762,17 @@ Relation.prototype.jsonfy = function() {
 		i1 : this.i1id,
 		i2 : this.i2id,
 		d  : this.dtree.jsonfy(),
-		tz : this.textZone.jsonfy(), 
+		tz : this.textZone.jsonfy(),
 	}
 }
 
-/** 
+/**
 | Sets the text zone of the relation.
 | Also determines its fontsize.
 | Returns true if something changed.
 |
 | zone: a rectangle
-| align: compass direction 
+| align: compass direction
 */
 Relation.prototype.setTextZone = function(zone, align) {
 	if (this.textZone && this.textZone.eq(textZone)) return false;
@@ -3783,8 +3789,8 @@ Relation.prototype.setTextZone = function(zone, align) {
 	switch(align) {
 	case 'sw' :
 	case 'w'  :
-	case 'nw' : // align right 
-		this.textZone = new Rect(zone.pse.add(-this.dtree.width, -zh), zone.pse); 
+	case 'nw' : // align right
+		this.textZone = new Rect(zone.pse.add(-this.dtree.width, -zh), zone.pse);
 		break;
 	case 'c': // center
 	default : // align left
@@ -3795,13 +3801,13 @@ Relation.prototype.setTextZone = function(zone, align) {
 	return true;
 }
 
-/** 
+/**
 | Sets the textZone of the relation.
 | Also determines its fontsize.
 | Returns true if something changed.
 |
 | zone: a rectangle
-| align: compass direction 
+| align: compass direction
 */
 Relation.prototype.setZone = function(zone, align) {
 	if (this.textZone && this.textZone.eq(zone)) return false;
@@ -3836,7 +3842,7 @@ Relation.prototype._dWidth = function() {
 }
 
 
-/** 
+/**
 | An action happend.
 | Returns transfix code.
 */
@@ -3854,7 +3860,7 @@ Relation.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 		}
 		if (z > 0) {
 			System.repository.moveToTop(z);
-			txr |= TXR.REDRAW; 
+			txr |= TXR.REDRAW;
 		}
 		if (space.focus != this) {
 			space.setFocus(this);
@@ -3863,7 +3869,7 @@ Relation.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 
 		space.actionIDrag(this, p.sub(this.handlezone.pnw));
 		return txr;
-	case TXR.CLICK: 
+	case TXR.CLICK:
 		var txr = TXR.HIT;
 		if (z > 0) {
 			System.repository.moveToTop(z);
@@ -3882,7 +3888,7 @@ Relation.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 			editor.deselect();
 			txr |= TXR.REDRAW;
 		}
-		return txr;	
+		return txr;
 	case TXE.RBINDHOVER :
 		space.actionRBindHover(this);
 		return TXR.HIT | TXR.REDRAW;
@@ -3896,14 +3902,14 @@ Relation.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 	/*
 	var arrow = this.arrow;
 	var zone  = arrow.zone;
-	// distance to line recognized as hit 
+	// distance to line recognized as hit
 	var dis   = 8;
 	if (p.x < zone.p1.x - dis || p.x > zone.p2.x + dis ||
 	    p.y < zone.p1.y - dis || p.y > zone.p2.y + dis) {
 		return 0;
 	}
 	switch (txe) {
-	case TXE.HOVER : 
+	case TXE.HOVER :
 		if (C2D.isNearLine(p, dis, arrow.p1, arrow.p1)) {
 			System.setCursor('move');
 			return TXR.HIT;
@@ -3918,7 +3924,7 @@ Relation.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 		}
 		if (z > 0) {
 			System.repository.moveToTop(z);
-			txr |= TXR.REDRAW; 
+			txr |= TXR.REDRAW;
 		}
 		if (space.focus != this) {
 			space.setFocus(this);
@@ -3938,7 +3944,7 @@ Relation.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 		var txr = TXR.HIT;
 		if (z > 0) {
 			System.repository.moveToTop(z);
-			txr |= TXR.REDRAW; 
+			txr |= TXR.REDRAW;
 		}
 		if (space.focus != this) {
 			space.setFocus(this);
@@ -3946,7 +3952,7 @@ Relation.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 		}
 
 		var op = new Point(
-			p.x - this.zone.p1.x, 
+			p.x - this.zone.p1.x,
 			p.y - this.zone.p1.y + (this.scrolly > 0 ? this.scrolly : 0));
 		var para = this.paraAtP(op);
 		if (para) {
@@ -3959,11 +3965,11 @@ Relation.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 		return txr;
 	case TXE.RBINDHOVER :
 		// space.actionRBindHover(this);
-		return TXR.HIT | TXR.REDRAW; 
+		return TXR.HIT | TXR.REDRAW;
 		return 0;
 	case TXE.RBINDTO :
 		// space.actionRBindTo(this);
-		return TXR.HIT | TXR.REDRAW; 
+		return TXR.HIT | TXR.REDRAW;
 		return 0;
 	default :
 		throw new Error('Unknown transfix code:'+txe);
@@ -3985,8 +3991,8 @@ Relation.prototype.paraAtP = function(p) {
 }
 
 
-/** 
-| Drops the cached canvas.
+/**
+| Something has changed.
 */
 Relation.prototype.listen = function() {
 	if (this._lock) return;
@@ -3994,7 +4000,7 @@ Relation.prototype.listen = function() {
 	if (this.textZone) {
 		this.textZone = this.textZone.resize(this._dWidth(), this._dHeight(), 'c');
 	}
-	// end of listen chain 
+	// end of listen chain
 }
 
 Relation.prototype.resize = function(width, height) {
@@ -4016,7 +4022,7 @@ Relation.prototype.draw = function(c2d, selection) {
 	var it1 = System.repository.items[this.i1id]; // todo funcall
 	var it2 = System.repository.items[this.i2id];
 	if (!this._canvasActual) {
-		bc2d.attune(this.textZone); 
+		bc2d.attune(this.textZone);
 		bc2d.edge(settings.relation.style.labeledge, bc2d, 'path');
 		dtree.draw(bc2d, selection, this.imargin, 0);
 		this._canvasActual = true;
@@ -4026,12 +4032,12 @@ Relation.prototype.draw = function(c2d, selection) {
 	// todo combine into one call;
 	c2d.paint(settings.relation.style.fill, settings.relation.style.edge, l1, 'path');
 	c2d.paint(settings.relation.style.fill, settings.relation.style.edge, l2, 'path');
-	// draws text 
+	// draws text
 	c2d.drawImage(bc2d, this.textZone.pnw);
 }
 
 /**
-| Something happend on an item onlooked. 
+| Something happend on an item onlooked.
 */
 Relation.prototype.onlook = function(event, item) {
 	switch(event) {
@@ -4042,10 +4048,10 @@ Relation.prototype.onlook = function(event, item) {
 		System.repository.removeItem(this);
 		/* todo check for cycles */
 		break;
-	case ONLOOK.UPDATE : 
+	case ONLOOK.UPDATE :
 		/*if ((item.id === this.i1id && !item.zone.eq(this.i1zone)) ||
 		    (item.id === this.i2id && !item.zone.eq(this.i2zone))) {
-			this._arrow = null;		
+			this._arrow = null;
 		}*/
 		break;
 	default :
@@ -4071,8 +4077,8 @@ Relation.prototype.onlook = function(event, item) {
 	this.doc = doc;
 }
 
-// gets the canvas buffer for this item 
-// if caret != null draws the caret into the canvas 
+// gets the canvas buffer for this item
+// if caret != null draws the caret into the canvas
 VectorGraph.prototype.getCanvas = function() {
 	var cx = this.bcanvas.getContext('2d');
 	cx.beginPath();
@@ -4108,10 +4114,10 @@ VectorGraph.prototype.getCanvas = function() {
 			}
 			cx.arc(a1, a2, a3, a4 * Math.PI / 4, a5 * Math.PI / 4, a6 > 0 ? true : false);
 			break;
-		case '.' :			
+		case '.' :
 			cx.closePath();
 			break;
-			case 'F' :			
+			case 'F' :
 			cx.fill();
 			cx.beginPath();
 			break;
@@ -4122,7 +4128,7 @@ VectorGraph.prototype.getCanvas = function() {
 			var a4 = parseFloat(cc[4]);
 			var a5 = parseFloat(cc[5]);
 			var a6 = parseFloat(cc[6]);
-			if (typeof(a1) != 'number' || 
+			if (typeof(a1) != 'number' ||
 			    typeof(a2) != 'number' ||
 			    typeof(a3) != 'number' ||
 			    typeof(a4) != 'number' ||
@@ -4139,10 +4145,10 @@ VectorGraph.prototype.getCanvas = function() {
 			var a2 = parseFloat(cc[2]);
 			var a3 = parseFloat(cc[3]);
 			var a4 = parseFloat(cc[4]);
-			if (typeof(a1) != 'number' || 
+			if (typeof(a1) != 'number' ||
 			    typeof(a2) != 'number' ||
 			    typeof(a3) != 'number' ||
-			    typeof(a4) != 'number' 
+			    typeof(a4) != 'number'
 			) {
 				//msg('Arguments not numbers: '+cmd);
 				break;
@@ -4152,7 +4158,7 @@ VectorGraph.prototype.getCanvas = function() {
 		case 'M' :
 			var a1 = parseFloat(cc[1]);
 			var a2 = parseFloat(cc[2]);
-			if (typeof(a1) != 'number' || 
+			if (typeof(a1) != 'number' ||
 			    typeof(a2) != 'number'
 			) {
 				//msg('Arguments not numbers: '+cmd);
@@ -4163,7 +4169,7 @@ VectorGraph.prototype.getCanvas = function() {
 		case 'L' :
 			var a1 = parseFloat(cc[1]);
 			var a2 = parseFloat(cc[2]);
-			if (typeof(a1) != 'number' || 
+			if (typeof(a1) != 'number' ||
 			    typeof(a2) != 'number'
 			) {
 				//msg('Arguments not numbers: '+cmd);
@@ -4179,7 +4185,7 @@ VectorGraph.prototype.getCanvas = function() {
 			var a1 = parseFloat(cc[1]);
 			var a2 = parseFloat(cc[2]);
 			var a3 = parseFloat(cc[3]);
-			if (typeof(a1) != 'number' || 
+			if (typeof(a1) != 'number' ||
 			    typeof(a2) != 'number' ||
 			    typeof(a3) != 'number'
 			) {
@@ -4192,7 +4198,7 @@ VectorGraph.prototype.getCanvas = function() {
 			var a1 = parseFloat(cc[1]);
 			var a2 = parseFloat(cc[2]);
 			var a3 = parseFloat(cc[3]);
-			if (typeof(a1) != 'number' || 
+			if (typeof(a1) != 'number' ||
 			    typeof(a2) != 'number' ||
 			    typeof(a3) != 'number'
 			) {
@@ -4206,7 +4212,7 @@ VectorGraph.prototype.getCanvas = function() {
 			if (typeof(a1) != 'number') {
 				//msg('Arguments not numbers: '+cmd);
 				break;
-			}				
+			}
 			cx.lineWidth = a1;
 		case '' :
 			break;
@@ -4214,16 +4220,16 @@ VectorGraph.prototype.getCanvas = function() {
 			//msg('Unknown command: '+cmd);
 			break;
 		}
-	}			
+	}
 	return bcanvas;
 }
-	
+
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .-,--.                   .
   `|__/ ,-. ,-. ,-. ,-. . |- ,-. ,-. . .
   )| \  |-' | | | | `-. | |  | | |   | |
   `'  ` `-' |-' `-' `-' ' `' `-' '   `-|
-~ ~ ~ ~ ~ ~ | ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ /|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~                                  
+~ ~ ~ ~ ~ ~ | ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ /|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
             '                        `-'
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Repository() {
@@ -4235,17 +4241,17 @@ Repository.prototype.reset = function() {
 	this.items = {};
 	/* z information of the items, 0 is topmost */
 	this.zidx = [];
-	
+
 	/* do not save changes, used during loadup */
 	this._nosave    = false;
 	/* do not notify onlookers, used during import */
 	this._noonlooks = false;
-	
+
 	this.onlookeds = {};
 	this.onlookers = {};
 }
 
-/** 
+/**
 | Loads the repository from HTML5 localStorage.
 */
 Repository.prototype.loadLocalStorage = function() {
@@ -4264,7 +4270,7 @@ Repository.prototype.loadLocalStorage = function() {
 		this._idFactory = {nid: 1};
 		return false;
 	}
-	
+
 	System.space.pan = System.space.c2d.pan = this._getPan(); // todo space setFunction
 	var zjs = window.localStorage.getItem('zidx');
 	if (!zjs) {
@@ -4284,7 +4290,7 @@ Repository.prototype.loadLocalStorage = function() {
 			this._nosave = false;
 			this._noonlooks = false;
 			throw err;
-		} 		
+		}
 		this._loadItem(id, itjs);
 	}
 	this._nosave = false;
@@ -4292,7 +4298,9 @@ Repository.prototype.loadLocalStorage = function() {
 	return true;
 }
 
-/* erases the local repository */
+/**
+| Erases the local repository.
+*/
 Repository.prototype.eraseLocalStorage = function() {
 	var items = this.items;
 	window.localStorage.setItem('idf', '');
@@ -4302,7 +4310,9 @@ Repository.prototype.eraseLocalStorage = function() {
 	}
 }
 
-/* shoots throw x/y and asks every item that intersects if it feels reponsible */ 
+/**
+| Asks every item that intersects with a point if it feels reponsible for an event.
+*/
 Repository.prototype.transfix = function(txe, space, p, shift, ctrl) {
 	var zidx  = this.zidx;
 	var items = this.items;
@@ -4312,10 +4322,12 @@ Repository.prototype.transfix = function(txe, space, p, shift, ctrl) {
 		fx |= it.transfix(txe, space, p, z, shift, ctrl);
 		if (fx & TXR.HIT) break;
 	}
-	return fx;	
+	return fx;
 }
 
-/* saves this repository into a JSON-String that is returned */
+/**
+| Saves this repository into a JSON-String that is returned
+*/
 Repository.prototype.exportToJString = function() {
 	var js = {}
 	js.formatversion = 0;
@@ -4330,17 +4342,21 @@ Repository.prototype.exportToJString = function() {
 	return JSON.stringify(js, null, 1);
 }
 
-/* moves an item top */
+/**
+| Moves an item top
+*/
 Repository.prototype.moveToTop = function(z) {
 	var zidx = this.zidx;
 	var id = zidx[z];
 	zidx.splice(z, 1);
 	zidx.unshift(id);
 	this._saveZIDX();
-	return 0; 
+	return 0;
 }
 
-/* one item wants to watch another item */
+/**
+| One item wants to watch another item.
+*/
 Repository.prototype.addOnlook = function(onlooker, onlooked) {
 	var its = this.items;
 	if (!this._noonlooks && (!its[onlooker] || !its[onlooked])) {
@@ -4351,10 +4367,12 @@ Repository.prototype.addOnlook = function(onlooker, onlooked) {
 	if (!od) this.onlookeds[onlooked] = od = [];
 	if (!or) this.onlookers[onlooker] = or = [];
 	if (od.indexOf(onlooker) < 0) od.push(onlooker);
-	if (or.indexOf(onlooked) < 0) or.push(onlooked);	
+	if (or.indexOf(onlooked) < 0) or.push(onlooked);
 }
 
-/* one item stops to watch another item */
+/**
+| One item stops to watch another item.
+*/
 Repository.prototype.removeOnlook = function(onlooker, onlooked) {
 	var od = this.onlookeds[onlooked];
 	var odi = od.indexOf(onlooker);
@@ -4374,7 +4392,7 @@ Repository.prototype.importFromJString = function(str) {
 		return;
 	}
 	if (js.formatversion != 0 || !js.idf || !js.items || !js.z) {
-		window.alert('Repository not recognized.');	
+		window.alert('Repository not recognized.');
 		return;
 	}
 	this.reset();
@@ -4382,7 +4400,7 @@ Repository.prototype.importFromJString = function(str) {
 	/* erase current local repository */
 	var items = this.items;
 	var zidx  = js.z;
-	this._idFactory = js.idf;	
+	this._idFactory = js.idf;
 	window.localStorage.setItem('idf', JSON.stringify(this._idFactory));
 	this._noonlooks = true;
 	for (var i = zidx.length - 1; i >= 0; i--) {
@@ -4398,6 +4416,9 @@ Repository.prototype.importFromJString = function(str) {
 	this.savePan(System.space.pan);
 }
 
+/**
+| Creates a new ID.
+*/
 Repository.prototype._newItemID = function() {
 	var idf = this._idFactory;
 	idf.nid++;
@@ -4405,6 +4426,9 @@ Repository.prototype._newItemID = function() {
 	return idf.nid;
 }
 
+/**
+| Loads an Item from JSON.
+*/
 Repository.prototype._loadItem = function(id, js) {
 	if (!js || !js.t) throw new Error('JSON error: attributes missing from ('+id+'): '+js);
 	switch(js.t) {
@@ -4428,26 +4452,28 @@ Repository.prototype.addItem = function(item, top) {
 	} else {
 		this.zidx.push(item.id);
 	}
-	
+
 	if (!this._nosave) {
 		this._saveItem(item);
 		this._saveZIDX();
 	}
 }
 
-/* removes an item from the repository. */
+/**
+| Removes an item from the repository.
+*/
 Repository.prototype.removeItem = function(item) {
 	var zidx = this.zidx;
 	var id = item.id;
 	zidx.splice(zidx.indexOf(id), 1);
 	delete this.items[id];
 	item.removed();
-	
-	/* notifies onlookers */
-	if (!this._noonlooks) {	
+
+	// notifies onlookers
+	if (!this._noonlooks) {
 		var od = this.onlookeds[id];
 		if (od) {
-			/* copies the array so it can be changed during traversal */
+			// copies the array so it can be changed during traversal
 			var odc = od.slice();
 			for (var i = 0; i < odc.length; i++) {
 				var it = this.items[odc[i]];
@@ -4462,14 +4488,20 @@ Repository.prototype.removeItem = function(item) {
 	}
 }
 
+/**
+| Stores an item into local storage.
+*/
 Repository.prototype._saveItem = function(item) {
 	window.localStorage.setItem(item.id, JSON.stringify(item.jsonfy()));
 }
 
+/**
+| Changes an item in local storage.
+*/
 Repository.prototype.updateItem = function(item) {
 	if (!this._nosave) this._saveItem(item);
 
-	/* notifies onlookers */
+	// notifies onlookers
 	if (this._noonlooks) return;
 	var od = this.onlookeds[item.id];
 	if (!od) return;
@@ -4480,13 +4512,18 @@ Repository.prototype.updateItem = function(item) {
 }
 
 
-/* loads panning offsets  */
+/**
+| Loads panning offset.
+*/
 Repository.prototype._getPan = function() {
 	var jstr = window.localStorage.getItem('pan');
 	var js   = JSON.parse(jstr);
 	return js ? Point.jnew(js) : new Point(0, 0);
 }
 
+/**
+| Saves the panning offset.
+*/
 Repository.prototype.savePan = function(pan) {
 	if (!this._nosave) window.localStorage.setItem('pan', JSON.stringify(pan.jsonfy()));
 }

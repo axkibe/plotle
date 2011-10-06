@@ -289,7 +289,7 @@ C2D.prototype.path = function(self, border) {
 		this._canvas.width - 1 - border, this._canvas.height - 1 - border);
 }
 
-/** 
+/**
 | rect(rect)     -or-
 | rect(pnw, pse) -or-
 | rect(nwx, nwy, w, h)
@@ -301,11 +301,11 @@ C2D.prototype.rect = function(a1, a2, a3, a4) {
 	if (typeof(r) === 'object') {
 		if (r instanceof C2D.Rect)
 			return this._cx.rect(
-				a1.pnw.x + pan.x + 0.5, a1.pnw.y + pan.y + 0.5, 
+				a1.pnw.x + pan.x + 0.5, a1.pnw.y + pan.y + 0.5,
 				a1.width, a1.height);
 		if (r instanceof C2D.Point)
 			return this._cx.rect(
-				a1.x + pan.x + 0.5, a1.y + pan.y + 0.5, 
+				a1.x + pan.x + 0.5, a1.y + pan.y + 0.5,
 				a2.x - a1.x,        a2.y - a1.y);
 		throw new Error('fillRect not a rectangle');
 	}
@@ -618,7 +618,7 @@ C2D.Point.jnew = function(js) {
 
 /**
 | Creates a new point.
-| However it will look through a list of points to see if 
+| However it will look through a list of points to see if
 | this point has already this x/y to save creation of yet
 | another object
 |
@@ -632,7 +632,7 @@ C2D.Point.renew = function(x, y) {
 	return new C2D.Point(x, y);
 }
 
-/** 
+/**
 | Returns a json object for this point.
 */
 C2D.Point.prototype.jsonfy = function() {
@@ -643,12 +643,12 @@ C2D.Point.prototype.jsonfy = function() {
 | Returns true if this point is equal to another.
 */
 C2D.Point.prototype.eq = function(a1, a2) {
-	return typeof(a1) === 'object' ? 
+	return typeof(a1) === 'object' ?
 		this.x === a1.x && this.y === a1.y :
 		this.x === a1   && this.y === a2;
 }
 
-/** 
+/**
 | Adds two points or x/y values, returns a new point.
 */
 C2D.Point.prototype.add = function(a1, a2) {
@@ -657,8 +657,8 @@ C2D.Point.prototype.add = function(a1, a2) {
 		new C2D.Point(this.x + a1,   this.y + a2);
 }
 
-/** 
-| Subtracts a points (or x/y from this), returns new point 
+/**
+| Subtracts a points (or x/y from this), returns new point
 */
 C2D.Point.prototype.sub = function(a1, a2) {
 	return typeof(a1) === 'object' ?
@@ -682,8 +682,8 @@ C2D.Point.prototype.sub = function(a1, a2) {
 | pse: point to south east.
 */
 C2D.Rect = function(pnw, pse) {
-	if (!pnw || !pse || pnw.x > pse.x || pnw.y > pse.y) { 
-		throw new Error('not a rectangle.'); 
+	if (!pnw || !pse || pnw.x > pse.x || pnw.y > pse.y) {
+		throw new Error('not a rectangle.');
 	}
 	C2D.fixate(this, 'pnw',    pnw);
 	C2D.fixate(this, 'pse',    pse);
@@ -691,25 +691,25 @@ C2D.Rect = function(pnw, pse) {
 	C2D.fixate(this, 'height', pse.y - pnw.y);
 }
 
-/** 
-| Creates a point from json 
+/**
+| Creates a point from json
 */
 C2D.Rect.jnew = function(js) {
 	return new C2D.Rect(C2D.Point.jnew(js.pnw), C2D.Point.jnew(js.pse));
 }
 
-/** 
-| Returns a json object for this rect 
+/**
+| Returns a json object for this rect
 */
 C2D.Rect.prototype.jsonfy = function() {
 	return this._json || (this._json = { pnw: this.pnw.jsonfy(), pse: this.pse.jsonfy() });
 }
 
-/** 
-| Returns a rect moved by a point or x/y 
-| 
+/**
+| Returns a rect moved by a point or x/y
+|
 | add(point)   -or-
-| add(x, y)  
+| add(x, y)
 */
 C2D.Rect.prototype.add = function(a1, a2) {
 	return new C2D.Rect(this.pnw.add(a1, a2), this.pse.add(a1, a2));
@@ -719,17 +719,17 @@ C2D.Rect.prototype.add = function(a1, a2) {
 | Returns a rect moved by a -point or -x/-y.
 |
 | sub(point)   -or-
-| sub(x, y)  
+| sub(x, y)
 */
 C2D.Rect.prototype.sub = function(a1, a2) {
-	return new C2D.Rect(this.pnw.sub(a1, a2), this.pse.sub(a1, a2)); 
+	return new C2D.Rect(this.pnw.sub(a1, a2), this.pse.sub(a1, a2));
 }
 
-/** 
+/**
 | Returns true if point is within this rect.
 */
 C2D.Rect.prototype.within = function(p) {
-	return p.x >= this.pnw.x && p.y >= this.pnw.y && 
+	return p.x >= this.pnw.x && p.y >= this.pnw.y &&
 	       p.x <= this.pse.x && p.y <= this.pse.y;
 }
 
@@ -745,7 +745,7 @@ C2D.Rect.prototype.path = function(c2d, border) {
 	c2d.closePath();
 }
 
-/** 
+/**
 | Returns a resized rectangle.
 |
 | width:  new width
@@ -758,28 +758,28 @@ C2D.Rect.prototype.resize = function(width, height, align) {
 	switch(align) {
 	case 'n' :
 		pnw = C2D.Point.renew(
-			this.pnw.x - half(width - this.width), 
-			this.pnw.y, 
+			this.pnw.x - half(width - this.width),
+			this.pnw.y,
 			this.pnw, this.pse);
 		pse = C2D.Point.renew(
-			pnw.x + width, 
-			this.pnw.y + height, 
+			pnw.x + width,
+			this.pnw.y + height,
 			this.pnw, this.pse);
 		break;
 	case 'ne' :
 		pnw = C2D.Point.renew(
-			this.pse.x - width, 
-			this.pnw.y, 
+			this.pse.x - width,
+			this.pnw.y,
 			this.pnw, this.pse);
 		pse = C2D.Point.renew(
-			this.pse.x, 
+			this.pse.x,
 			this.pnw.y + height,
 			this.pnw, this.pse);
 		break;
 	case 'e' :
 		pnw = C2D.Point.renew(
 			this.pse.x - width,
-			this.pnw.y - half(height - this.height), 
+			this.pnw.y - half(height - this.height),
 			this.pnw, this.pse);
 		pse = C2D.Point.renew(
 			this.pse.x,
@@ -795,28 +795,28 @@ C2D.Rect.prototype.resize = function(width, height, align) {
 		break;
 	case 's' :
 		pnw = C2D.Point.renew(
-			this.pnw.x - half(width - this.width), 
-			this.pse.y - height, 
+			this.pnw.x - half(width - this.width),
+			this.pse.y - height,
 			this.pnw, this.pse);
 		pse = C2D.Point.renew(
-			pnw.x + width, 
-			this.pse.y, 
+			pnw.x + width,
+			this.pse.y,
 			this.pnw, this.pse);
 		break;
 	case 'sw' :
 		pnw = C2D.Point.renew(
-			this.pnw.x, 
-			this.pse.y - height, 
+			this.pnw.x,
+			this.pse.y - height,
 			this.pnw, this.pse);
 		pse = C2D.Point.renew(
-			this.pnw.x + width, 
+			this.pnw.x + width,
 			this.pse.y,
 			this.pnw, this.pse);
 		break;
 	case 'w' :
 		pnw = C2D.Point.renew(
 			this.pnw.x,
-			this.pnw.y - half(height - this.height), 
+			this.pnw.y - half(height - this.height),
 			this.pnw, this.pse);
 		pse = C2D.Point.renew(
 			this.pnw.x + width,
@@ -833,22 +833,22 @@ C2D.Rect.prototype.resize = function(width, height, align) {
 	case 'c' :
 		pnw = C2D.Point.renew(
 			this.pnw.x - half(width - this.width),
-			this.pnw.y - half(height - this.height), 
+			this.pnw.y - half(height - this.height),
 			this.pnw, this.pse);
 		pse = C2D.Point.renew(
 			pnw.x + width,
 			pnw.y + height,
 			this.pnw, this.pse);
 		break;
-	default : 
+	default :
 		throw new Error('invalid align: '+align);
 	}
 	return new C2D.Rect(pnw, pse);
 }
 
-/** 
+/**
 | Returns a rectangle with same size at position.
-| 
+|
 | moveto(p)   -or-
 | moveto(x, y)
 */
@@ -857,8 +857,8 @@ C2D.Rect.prototype.moveto = function(a1, a2) {
 	return new C2D.Rect(a1, a1.add(this.width, this.height));
 }
 
-/** 
-| Returns true if this rectangle is the same as another 
+/**
+| Returns true if this rectangle is the same as another
 */
 C2D.Rect.prototype.eq = function(r) {
 	return this.pnw.eq(r.pnw) && this.pse.eq(r.pse);
@@ -867,7 +867,7 @@ C2D.Rect.prototype.eq = function(r) {
 /**
 | Point in the center.
 */
-C2D.lazyFixate(C2D.Rect.prototype, 'pc', function() { 
+C2D.lazyFixate(C2D.Rect.prototype, 'pc', function() {
 	return new Point(half(this.pse.x + this.pnw.x), half(this.pse.y + this.pnw.y));
 });
 
@@ -944,7 +944,7 @@ C2D.lazyFixate(C2D.Margin.prototype, 'y', function() { return this.n + this.s; }
 | Constructor.
 |
 | Rect(rect, crad)      -or-
-| Rect(pnw, pse, crad) 
+| Rect(pnw, pse, crad)
 */
 C2D.RoundRect = function(a1, a2, a3) {
 	if (a1 instanceof C2D.Point) {
@@ -995,7 +995,7 @@ C2D.RoundRect.prototype.path = function(c2d, border) {
 /**
 | Constructor.
 |
-| Hexagon(p, r) 
+| Hexagon(p, r)
 | pc: center
 | r: radius
 */
@@ -1007,7 +1007,7 @@ C2D.Hexagon = function(pc, r) {
 }
 
 
-/** 
+/**
 | Creates a hexgon from json.
 */
 C2D.Hexagon.jnew = function(js) {
@@ -1045,9 +1045,9 @@ C2D.Hexagon.prototype.within = function(p) {
  ,-_/,.                         .---. .
  ' |_|/ ,-. . , ,-. ,-. ,-. ,-. \___  |  . ,-. ,-.
   /| |  |-'  X  ,-| | | | | | |     \ |  | |   |-'
-  `' `' `-' ' ` `-^ `-| `-' ' ' `---' `' ' `-' `-' 
+  `' `' `-' ' ` `-^ `-| `-' ' ' `---' `' ' `-' `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-                     `' 
+                     `'
  The top slice of a hexagon.
 
        ------------        ^
@@ -1060,7 +1060,7 @@ C2D.Hexagon.prototype.within = function(p) {
     \                /
      \              /
       \            /
-       *----------*	
+       *----------*
 
  height must be <= rad
 
@@ -1085,7 +1085,7 @@ C2D.HexagonSlice = function(psw, rad, height) {
 */
 C2D.lazyFixate(C2D.HexagonSlice.prototype, 'pm', function() {
 	return new Point(
-		this.psw.x + this.rad - Math.round((this.rad * C2D.cos30 - this.height) * C2D.tan30), 
+		this.psw.x + this.rad - Math.round((this.rad * C2D.cos30 - this.height) * C2D.tan30),
 		this.psw.y + Math.round(this.rad * C2D.cos30) - this.height);
 });
 
@@ -1099,7 +1099,7 @@ C2D.lazyFixate(C2D.HexagonSlice.prototype, 'pnw', function() {
 /**
 | pnw (used by gradients)
 */
-C2D.lazyFixate(C2D.HexagonSlice.prototype, 'width', function() { 
+C2D.lazyFixate(C2D.HexagonSlice.prototype, 'width', function() {
 	return 2 * Math.round(this.rad - (this.rad * C2D.cos30 - this.height) * C2D.tan30);
 });
 
@@ -1135,17 +1135,17 @@ C2D.HexagonSlice.prototype.within = function(p) {
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,-_/,.                        .-,--' .
- ' |_|/ ,-. . , ,-. ,-. ,-. ,-. \|__  |  ,-. . , , ,-. ,-. 
-  /| |  |-'  X  ,-| | | | | | |  |    |  | | |/|/  |-' |   
-  `' `' `-' ' ` `-^ `-| `-' ' ' `'    `' `-' ' '   `-' '   
+ ' |_|/ ,-. . , ,-. ,-. ,-. ,-. \|__  |  ,-. . , , ,-. ,-.
+  /| |  |-'  X  ,-| | | | | | |  |    |  | | |/|/  |-' |
+  `' `' `-' ' ` `-^ `-| `-' ' ' `'    `' `-' ' '   `-' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
                      `'
  Makes a double hexagon with 6 segments.
- It kinda looks like a flower. 
+ It kinda looks like a flower.
 
                  pc.x
                   |--------->| ro
-                  |--->| ri  ' 
+                  |--->| ri  '
                   '    '     '
             *-----'----'*    '     -1
            / \    n    ' \   '
@@ -1286,8 +1286,8 @@ C2D.HexagonFlower.prototype.path = function(c2d, border, segment) {
 	}
 }
 
-/** 
-| Returns the segment the point is within. 
+/**
+| Returns the segment the point is within.
 */
 C2D.HexagonFlower.prototype.within = function(p) {
 	var roc6 = this.ro * C2D.cos30;
@@ -1317,10 +1317,10 @@ C2D.HexagonFlower.prototype.within = function(p) {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ,             
-  )   . ,-. ,-. 
- /    | | | |-' 
- `--' ' ' ' `-' 
+  ,
+  )   . ,-. ,-.
+ /    | | | |-'
+ `--' ' ' ' `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  A line. Possibly with arrow-heads as ends.
@@ -1328,9 +1328,9 @@ C2D.HexagonFlower.prototype.within = function(p) {
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/** 
+/**
 | Constructor.
-| 
+|
 | p1: point 1
 | p1end: 'normal' or 'arrow'
 | p2: point 1
@@ -1343,54 +1343,55 @@ C2D.Line = function(p1, p1end, p2, p2end) {
 	C2D.fixate(this, 'p2end', p2end);
 }
 
-/** 
+/**
 | Returns the line connecting entity1 to entity2
+|
 | shape1: a Rect or Point
 | end1: 'normal' or 'arrow'
 | shape2: a Rect or Point
 | end2: 'normal' or 'arrow'
 */
 C2D.Line.connect = function(shape1, end1, shape2, end2) {
-	if (!shape1 || !shape2) throw new Error('error'); 
+	if (!shape1 || !shape2) throw new Error('error');
 	if (shape1 instanceof C2D.Rect && shape2 instanceof C2D.Point) {
 		var p2 = shape2;
 		var z1 = shape1;
 		var p1;
 		if (z1.within(p2)) {
-			p1 = z1.pc; 
+			p1 = z1.pc;
 		} else {
 			p1 = new Point(
 				Math.max(z1.pnw.x, Math.min(p2.x, z1.pse.x)),
 				Math.max(z1.pnw.y, Math.min(p2.y, z1.pse.y)));
 		}
 		return new C2D.Line(p1, end1, p2, end2);
-	} 
+	}
 	if (shape1 instanceof C2D.Rect && shape2 instanceof C2D.Rect) {
 		var z1 = shape1;
 		var z2 = shape2;
 		var x1, y1, x2, y2;
-		if (z2.pnw.x > z1.pse.x) { 
-			// zone2 is clearly on the right 
+		if (z2.pnw.x > z1.pse.x) {
+			// zone2 is clearly on the right
 			x1 = z1.pse.x;
 			x2 = z2.pnw.x;
 		} else if (z2.pse.x < z1.pnw.x) {
-			// zone2 is clearly on the left 
+			// zone2 is clearly on the left
 			x1 = z1.pnw.x;
 			x2 = z2.pse.x;
 		} else {
-			// an intersection 
+			// an intersection
 			x1 = x2 = C2D.half(Math.max(z1.pnw.x, z2.pnw.x) + Math.min(z1.pse.x, z2.pse.x));
 		}
-		if (z2.pnw.y > z1.pse.y) { 
-			// zone2 is clearly on the bottom 
+		if (z2.pnw.y > z1.pse.y) {
+			// zone2 is clearly on the bottom
 			y1 = z1.pse.y;
 			y2 = z2.pnw.y;
 		} else if (z2.pse.y < z1.pnw.y) {
-			// zone2 is clearly on the top 
+			// zone2 is clearly on the top
 			y1 = z1.pnw.y;
 			y2 = z2.pse.y;
 		} else {
-			// an intersection 
+			// an intersection
 			y1 = y2 = C2D.half(Math.max(z1.pnw.y, z2.pnw.y) + Math.min(z1.pse.y, z2.pse.y));
 		}
 		return new C2D.Line(new Point(x1, y1), end1, new Point(x2, y2), end2);
@@ -1398,18 +1399,18 @@ C2D.Line.connect = function(shape1, end1, shape2, end2) {
 	throw new Error('do not know how to create connection.');
 }
 
-/** 
+/**
 | Returns the zone of the arrow.
 | Result is cached.
 */
 Object.defineProperty(C2D.Line.prototype, 'zone', {
-	get: function() { 
+	get: function() {
 		return C2D.fixate(this, 'zone', new C2D.Rect(
 			C2D.Point.renew(
-				Math.min(this.p1.x, this.p2.x), Math.min(this.p1.y, this.p2.y), 
+				Math.min(this.p1.x, this.p2.x), Math.min(this.p1.y, this.p2.y),
 				this.p1, this.p2),
 			C2D.Point.renew(
-				Math.max(this.p1.x, this.p2.x), Math.max(this.p1.y, this.p2.y), 
+				Math.max(this.p1.x, this.p2.x), Math.max(this.p1.y, this.p2.y),
 				this.p1, this.p2)));
 	}
 });
@@ -1429,20 +1430,20 @@ C2D.Line.prototype.path = function(c2d) {
 	case 'normal':
 		c2d.moveTo(p1);
 		break;
-	default : 
+	default :
 		throw new Error('unknown line end');
 	}
-	
+
 	switch(this.p2end) {
 	case 'normal' :
 		c2d.lineTo(p2);
 		break;
 	case 'arrow' :
 		// arrow size
-		var as = 12; 
+		var as = 12;
 		// degree of arrow tail
 		var d = Math.atan2(p2.y - p1.y, p2.x - p1.x);
-		// degree of arrow head 
+		// degree of arrow head
 		var ad = Math.PI/12;
 		// arrow span, the arrow is formed as hexagon piece
 		var ms = 2 / Math.sqrt(3) * as;
@@ -1450,23 +1451,23 @@ C2D.Line.prototype.path = function(c2d) {
 			p2.x - Math.round(ms * Math.cos(d)),
 			p2.y - Math.round(ms * Math.sin(d)));
 		c2d.lineTo(
-			p2.x - Math.round(as * Math.cos(d - ad)), 
+			p2.x - Math.round(as * Math.cos(d - ad)),
 			p2.y - Math.round(as * Math.sin(d - ad)));
 		c2d.lineTo(p2);
 		c2d.lineTo(
-			p2.x - Math.round(as * Math.cos(d + ad)), 
+			p2.x - Math.round(as * Math.cos(d + ad)),
 			p2.y - Math.round(as * Math.sin(d + ad)));
 		c2d.lineTo(
 			p2.x - Math.round(ms * Math.cos(d)),
 			p2.y - Math.round(ms * Math.sin(d)));
 		break;
-	default : 
+	default :
 		throw new Error('unknown line end');
 	}
 
 }
 
-/** 
+/**
 | Draws the line.
 */
 C2D.Line.prototype.draw = function(c2d) {
