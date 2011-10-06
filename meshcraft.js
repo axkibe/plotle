@@ -198,6 +198,8 @@ var settings = {
 
 	// scrollbar
 	scrollbar : {
+		// todo minimum size?
+
 		style : {
 			fill : 'rgb(255, 188, 87)',
 			edge : [
@@ -205,7 +207,7 @@ var settings = {
 			],
 		},
 		radius      : 4,
-		marginX     : 7,
+		marginX     : 7, // to use margin object
 		marginY     : 5,
 	},
 
@@ -374,26 +376,20 @@ Object.defineProperty(Marker.prototype, 'offset', {
 | set(item, element, offset) -or-
 */
 Marker.prototype.set = function(a1, a2, a3) {
-	// todo, use typeof
-	switch (arguments.length) {
-	case 1 :
+	if (a1 instanceof Marker) {
 		this._item    = a1._item;
 		this._element = a1._element;
 		this._offset  = a1._offset;
-		break;
-	case 2 :
-		this._element = a1;
-		this._offset  = a2;
-		break;
-	case 3 :
+		return;
+	}
+	if (a1 instanceof Item) {
 		this._item    = a1;
 		this._element = a2;
 		this._offset  = a3;
-		break;
-	default :
-		throw new Error('wrong # of arguments');
-		break;
+		return
 	}
+	this._element = a1;
+	this._offset  = a2;
 }
 
 /**
@@ -1026,6 +1022,7 @@ Editor.prototype.input = function(item, text) {
 			this.newline();
 		}
 	}
+	ce.listen();
 	System.repository.updateItem(item);
 	return true;
 }
@@ -2042,12 +2039,13 @@ Space.prototype.dragmove = function(p, shift, ctrl) {
 		System.repository.updateItem(iaction.item);
 		return;
 	case ACT.SCROLLY:
+		// todo let the item scroll itself
 		var dy = pp.y - iaction.sy;
 		var it = iaction.item;
 		var h = it.zone.height;
 		var scrollRange = h - settings.scrollbar.marginY * 2;
 		var dtreeHeight = it.dtree.height;
-		var innerHeight = h - it.imargin.y;
+		var innerHeight = h - it.imargin.y;  // todo use it.iheight?
 		var scrollSize  = scrollRange * innerHeight / dtreeHeight;
 		var srad = settings.scrollbar.radius;
 		if (scrollSize < srad * 2) {
@@ -2492,8 +2490,7 @@ Object.defineProperty(Textnode.prototype, 'text', {
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-function Paragraph(text)
-{
+function Paragraph(text) {
 	Treenode.call(this);
 	this._pc2d = new C2D(0 ,0);
 	this._canvasActual = false; // todo rename
@@ -2621,14 +2618,17 @@ Object.defineProperty(Paragraph.prototype, 'pinfo', {
 });
 
 /**
-| todo huh?
+| The width a paragraph should max have.
 */
 Object.defineProperty(Paragraph.prototype, 'flowWidth', {
 	get: function() {
 		return this._flowWidth;
 	},
 	set: function(fw) {
-		if (this._flowWidth != fw) {
+		if (fw !== fw) {
+			throw new Error("todo!");
+		}
+		if (this._flowWidth !== fw) {
 			this._flowWidth = fw;
 			this._flowActual = false;
 			this._canvasActual = false;
@@ -3108,6 +3108,8 @@ Item.prototype.removed = function() {
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+// todo make scrollbars an own object?
+
 /**
 | Constructor.
 |
@@ -3339,14 +3341,14 @@ Note.prototype.pathScrollbar = function(c2d, border, sy, dtreeHeight, innerHeigh
 	var srad05 = half(settings.scrollbar.radius);
 	var spx  = this.zone.width - settings.scrollbar.marginX - srad;
 	var scrollRange = this.zone.height - settings.scrollbar.marginY * 2;
-	var scrollSize  = scrollRange * innerHeight / dtreeHeight;
+	var scrollSize  = scrollRange * this.iheight / dtreeHeight;
 	if (scrollSize < srad * 2) {
 		/* minimum size of scrollbar */
 		scrollSize = srad * 2;
 	}
 
 	var spy = R(settings.scrollbar.marginY +
-		sy / (dtreeHeight - innerHeight) * (scrollRange - scrollSize));
+		sy / (dtreeHeight - this.iheight) * (scrollRange - scrollSize));
 
 	c2d.beginPath();
 	c2d.moveTo(spx - srad,   R(spy + C2D.cos30 * srad));
@@ -3359,6 +3361,21 @@ Note.prototype.pathScrollbar = function(c2d, border, sy, dtreeHeight, innerHeigh
 	c2d.lineTo(spx - srad,   R(spy + scrollSize - C2D.cos30 * srad));
 	c2d.closePath();
 }
+
+/**
+| The inner width for contents excluding scrollbars.
+*/
+Object.defineProperty(Note.prototype, 'iwidth', {
+	get: function() { return this.zone.width - this.imargin.x - (this.scrolly >= 0 ? settings.scrollbar.radius * 2 : 0); },
+});
+
+/**
+| The inner height for contents excluding scrollbars.
+*/
+Object.defineProperty(Note.prototype, 'iheight', {
+	get: function() { return this.zone.height - this.imargin.y; },
+});
+
 
 /**
 | Draws the note.
@@ -3380,33 +3397,25 @@ Note.prototype.draw = function(c2d, selection) {
 
 	// calculates if a scrollbar is needed
 	var sy = this._scrolly;
-	var innerHeight = this.zone.height - this.imargin.y; // todo rename iheight // todo make a getter
 	dtree.flowWidth =
 		this.zone.width - this.imargin.x -
 		(sy >= 0 ? settings.scrollbar.radius * 2 : 0); // todo make a var
 	var dtreeHeight = dtree.height;
 	if (sy < 0) {
-		if (dtreeHeight > innerHeight) {
+		if (dtreeHeight > this.iheight) {
 			// does not use a scrollbar but should
-			sy = this._scrolly = 0;
-			dtree.flowWidth =
-				this.zone.width - this.imargin.x -
-				(sy >= 0 ? settings.scrollbar.radius * 2 : 0);
+			this._scrolly = sy = 0;
+			// todo move formula into a property
+			dtree.flowWidth = this.iwidth;
 			dtreeHeight = dtree.height;
-			if (dtreeHeight <= innerHeight) {
-				throw new Error('note doesnt fit with and without scrollbar.');
-			}
+			if (dtreeHeight <= this.iheight) throw new Error('note doesnt fit with and without scrollbar.');
 		}
-	} else if (dtreeHeight <= innerHeight) {
-		/* uses a scrollbar but should */
-		sy = this._scrolly = -8833;
-		dtree.flowWidth = this.zone.width -
-			2 * this.textBorder -
-			(sy >= 0 ? settings.scrollbar.radius * 2 : 0);
+	} else if (dtreeHeight <= this.iheight) {
+		// uses a scrollbar but shouldn't
+		this._scrolly = sy = -8833;
+		dtree.flowWidth = this.iwidth;
 		dtreeHeight = dtree.height;
-		if (dtreeHeight > innerHeight) {
-			throw new Error('note doesnt fit with and without scrollbar.');
-		}
+		if (dtreeHeight > this.iheight) throw new Error('note doesnt fit with and without scrollbar.');
 	}
 
 	/* draws selection and text */
@@ -3414,7 +3423,7 @@ Note.prototype.draw = function(c2d, selection) {
 
 	if (sy >= 0) {
 		bc2d.paint(settings.scrollbar.style.fill, settings.scrollbar.style.edge, this, 'pathScrollbar',
-			sy, dtreeHeight, innerHeight);
+			sy, dtreeHeight, this.iheight);
 	}
 
 	/* draws the border */
