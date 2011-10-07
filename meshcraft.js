@@ -53,7 +53,7 @@ var RoundRect     = C2D.RoundRect;
 | if true catches all errors and report to user.
 | if false lets them pass through to e.g. firebug.
 */
-var enableCatcher = false;
+var enableCatcher = true;
 
 var settings = {
 	// standard font

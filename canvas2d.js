@@ -86,7 +86,9 @@ C2D.fixate(C2D, 'fixate', C2D.fixate);
 */
 C2D.fixate(C2D, 'lazyFixate', function(proto, key, getter) {
 	Object.defineProperty(proto, key, {
-		get : function() { return C2D.fixate(this, key, getter.call(this)); }
+		// this clever overriding does not work in IE9 :-( or Android 2.2 Browser
+		// get : function() { return C2D.fixate(this, key, getter.call(this)); },
+		get : function() { return this['_cache_'+key] || (this['_cache_'+key] = getter.call(this)); },
 	});
 });
 
