@@ -26,6 +26,34 @@
 'use strict';
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ,
+  )   ,-. ,-. ,-. ,-. . .
+ /    |-' | | ,-| |   | |
+ `--' `-' `-| `-^ `-' `-|
+~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ ~/|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+           `'         `-'
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+if (!Object.defineProperty) {
+	Object.defineProperty = function(obj, label, funcs) {
+		if (funcs.value) {
+			obj[label] = funcs.value;
+			return;
+		}
+		if (funcs.get) {
+			obj.__defineGetter__(label, funcs.get);
+		}
+		if (funcs.set) {
+			obj.__defineSetter__(label, funcs.set);
+		}
+	}
+}
+
+if (!Object.freeze) {
+	Object.freeze = function(obj) {};
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,--.  _  .-,--.
  | `-' ´ ) ' |   \
  |   .  /  , |   /
@@ -84,13 +112,13 @@ C2D.fixate(C2D, 'fixate', C2D.fixate);
 /**
 * A value is computed and fixated only when needed.
 */
-C2D.fixate(C2D, 'lazyFixate', function(proto, key, getter) {
+C2D.lazyFixate = function(proto, key, getter) {
 	Object.defineProperty(proto, key, {
 		// this clever overriding does not work in IE9 :-( or Android 2.2 Browser
 		// get : function() { return C2D.fixate(this, key, getter.call(this)); },
 		get : function() { return this['_cache_'+key] || (this['_cache_'+key] = getter.call(this)); },
 	});
-});
+};
 
 /* divides by 2 and rounds up */
 C2D.fixate(C2D, 'half',  function(v) { return Math.round(v / 2); });
