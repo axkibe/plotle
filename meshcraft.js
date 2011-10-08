@@ -226,8 +226,8 @@ var settings = {
 		style : {
 			fill : 'rgba(255, 225, 40, 0.5)',
 			edge : [
-				{ border: 0, width : 3, color : 'rgba(255, 225, 80, 0.5)' },
-				{ border: 0, width : 1, color : 'rgba(200, 100, 0, 0.8)' },
+				{ border: 0, width : 3, color : 'rgba(255, 225, 80, 0.4)' },
+				{ border: 0, width : 1, color : 'rgba(200, 100, 0,  0.8)' },
 			],
 			labeledge : [
 				{ border: 0, width : 0.2, color : 'rgba(200, 100, 0, 0.5)' },

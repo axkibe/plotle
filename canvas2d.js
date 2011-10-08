@@ -511,7 +511,7 @@ C2D.prototype.edge = function(style, shape, path, a1, a2, a3, a4) {
 */
 C2D.prototype.paint = function(fillStyle, edgeStyle, shape, path, a1, a2, a3, a4) {
 	var cx = this._cx;
-	shape[path](this, 0, a1, a2, a3, a4);
+	shape[path](this, 0, false, a1, a2, a3, a4);
 	cx.fillStyle = this._colorStyle(fillStyle, shape);
 	cx.fill();
 	var cx = this._cx;
@@ -1442,7 +1442,7 @@ Object.defineProperty(C2D.Line.prototype, 'zone', {
 |
 | c2d: Canvas2D to draw upon.
 */
-C2D.Line.prototype.path = function(c2d, edge) {
+C2D.Line.prototype.path = function(c2d, border, edge) {
 	var p1 = this.p1;
 	var p2 = this.p2;
 
@@ -1450,7 +1450,7 @@ C2D.Line.prototype.path = function(c2d, edge) {
 	// todo, multiple lineend types
 	switch(this.p1end) {
 	case 'normal':
-		c2d.moveTo(p1, edge);
+		if (edge) c2d.moveTo(p1, edge);
 		break;
 	default :
 		throw new Error('unknown line end');
@@ -1458,7 +1458,7 @@ C2D.Line.prototype.path = function(c2d, edge) {
 
 	switch(this.p2end) {
 	case 'normal' :
-		c2d.lineTo(p2, edge);
+		if (edge) c2d.lineTo(p2, edge);
 		break;
 	case 'arrow' :
 		// arrow size
@@ -1469,13 +1469,19 @@ C2D.Line.prototype.path = function(c2d, edge) {
 		var ad = Math.PI/12;
 		// arrow span, the arrow is formed as hexagon piece
 		var ms = 2 / Math.sqrt(3) * as;
-		c2d.lineTo(
-			p2.x - Math.round(ms * Math.cos(d)),
-			p2.y - Math.round(ms * Math.sin(d)), edge);
+		if (edge) {
+			c2d.lineTo(
+				p2.x - Math.round(ms * Math.cos(d)),
+				p2.y - Math.round(ms * Math.sin(d)), edge);
+		} else {
+			c2d.moveTo(
+				p2.x - Math.round(ms * Math.cos(d)),
+				p2.y - Math.round(ms * Math.sin(d)), edge);
+		}
 		c2d.lineTo(
 			p2.x - Math.round(as * Math.cos(d - ad)),
 			p2.y - Math.round(as * Math.sin(d - ad)), edge);
-		c2d.lineTo(p2);
+		c2d.lineTo(p2, edge);
 		c2d.lineTo(
 			p2.x - Math.round(as * Math.cos(d + ad)),
 			p2.y - Math.round(as * Math.sin(d + ad)), edge);
