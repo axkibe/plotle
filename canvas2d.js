@@ -996,9 +996,9 @@ C2D.subclass(C2D.RoundRect, C2D.Rect);
 C2D.RoundRect.prototype.path = function(c2d, border) {
 	var nwx = this.pnw.x + border;
 	var nwy = this.pnw.y + border;
-	var sex = this.pse.x - border;
-	var sey = this.pse.y - border;
-	var cr  = this.crad  + border;
+	var sex = this.pse.x - border - 1;
+	var sey = this.pse.y - border - 1;
+	var cr  = this.crad  - border;
 	var pi = Math.PI;
 	var ph = pi / 2;
 	c2d.beginPath();
@@ -1144,11 +1144,11 @@ C2D.lazyFixate(C2D.HexagonSlice.prototype, 'pse', function() {
 | Draws the hexagon.
 */
 C2D.HexagonSlice.prototype.path = function(c2d, border) {
-	var r2 = C2D.half(this.rad);
+	var r05 = C2D.half(this.rad);
 	c2d.beginPath();
 	c2d.moveTo(this.psw.x                 + border, this.psw.y               - border);
-	c2d.lineTo(this.pm.x - r2             + border, this.psw.y - this.height + border);
-	c2d.lineTo(this.pm.x + r2             - border, this.psw.y - this.height + border);
+	c2d.lineTo(this.pm.x - r05            + border, this.psw.y - this.height + border);
+	c2d.lineTo(this.pm.x + r05            - border, this.psw.y - this.height + border);
 	c2d.lineTo(2 * this.pm.x - this.psw.x - border, this.psw.y               - border);
 }
 

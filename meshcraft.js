@@ -53,7 +53,7 @@ var RoundRect     = C2D.RoundRect;
 | if true catches all errors and report to user.
 | if false lets them pass through to e.g. firebug.
 */
-var enableCatcher = true;
+var enableCatcher = false;
 
 var settings = {
 	// standard font
@@ -76,7 +76,7 @@ var settings = {
 		newHeight : 150,
 
 		// inner margin to text
-		imargin  : { n: 10, e: 10, s: 10, w: 10 },
+		imargin  : { n: 7, e: 7, s: 7, w: 7 },
 
 		style : {
 			fill : {
@@ -87,8 +87,8 @@ var settings = {
 				],
 			},
 			edge : [
-				{ border: 2, width : 1, color : 'rgb(255, 188, 87)' },
-				{ border: 1, width : 1, color : 'black' },
+				{ border: 1, width : 1, color : 'rgb(255, 188, 87)' },
+				{ border: 0, width : 1, color : 'black' },
 			],
 			highlight : [
 				{ border: 0, width: 3, color: 'rgba(255, 183, 15, 0.5)' },
@@ -198,17 +198,15 @@ var settings = {
 
 	// scrollbar
 	scrollbar : {
-		// todo minimum size?
-
 		style : {
 			fill : 'rgb(255, 188, 87)',
 			edge : [
 				{ border : 0, width : 1, color: 'rgb(221, 154, 52)' },
 			],
 		},
-		radius      : 4,
-		marginX     : 7, // to use margin object
-		marginY     : 5,
+		strength :  8,
+		minSize  : 12,
+		imarginw :  2,
 	},
 
 	// size of resize handles
@@ -249,31 +247,6 @@ var settings = {
 	// Blink speed of the caret.
 	caretBlinkSpeed : 530,
 };
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ,
-  )   ,-. ,-. ,-. ,-. . .
- /    |-' | | ,-| |   | |
- `--' `-' `-| `-^ `-' `-|
-~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ ~/|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-           `'         `-'
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-if (!Object.defineProperty) {
-	Object.defineProperty = function(obj, label, funcs) {
-		if (funcs.get) {
-			obj.__defineGetter__(label, funcs.get);
-		}
-		if (funcs.set) {
-			obj.__defineSetter__(label, funcs.set);
-		}
-	}
-}
-
-if (!Object.freeze) {
-	Object.freeze = function(obj) {};
-}
-
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .-,--.
@@ -757,7 +730,7 @@ Editor.prototype.updateCaret = function() {
 	if (caret.shown && !caret.blink) {
 		var cp = caret.getPoint();
 		var it = caret.item;
-		var sy = max(it.scrolly, 0) || 0;
+		var sy = (it.scrollbarY && it.scrollbarY.visible && it.scrollbarY.pos) || 0;
 		var tzone = it.handlezone; // todo, do not reuse handlezone
 		var th = R(it.dtree.fontsize * (1 + settings.bottombox));
 		var cyn = cp.y - sy;
@@ -1842,12 +1815,12 @@ Space.prototype.actionSpawnRelation = function(item, p) {
 }
 
 /* starts a scrolling action */
-Space.prototype.actionScrollY = function(item, scrollY, startY) {
+Space.prototype.actionScrollY = function(item, startY, scrollbar) {
 	var ia  = this.iaction;
 	ia.act  = ACT.SCROLLY;
 	ia.item = item;
-	ia.sy   = scrollY;
-	ia.ssy  = startY;
+	ia.sy   = startY;
+	ia.ssy  = scrollbar.pos;
 }
 
 /* starts dragging an item */
@@ -1917,6 +1890,7 @@ Space.prototype.click = function(p, shift, ctrl) {
 	}
 
 	var tfx = System.repository.transfix(TXE.CLICK, this, pp, shift, ctrl);
+
 	if (!(tfx & TXR.HIT)) {
 		this.iaction.act = ACT.FMENU;
 		this._floatmenu = new Hexmenu(p, settings.floatmenu, this._floatMenuLabels);
@@ -1926,6 +1900,7 @@ Space.prototype.click = function(p, shift, ctrl) {
 		this.redraw();
 		return;
 	}
+
 	if (tfx & TXR.REDRAW) this.redraw();
 }
 
@@ -1953,7 +1928,7 @@ Space.prototype.dragstop = function(p, shift, ctrl) {
 		iaction.siz  = null;
 		break;
 	case ACT.SCROLLY :
-		iaction.ssy  = null;
+		iaction.sy   = null;
 		break;
 	case ACT.RBIND :
 		iaction.smp = null;
@@ -2042,21 +2017,10 @@ Space.prototype.dragmove = function(p, shift, ctrl) {
 		// todo let the item scroll itself
 		var dy = pp.y - iaction.sy;
 		var it = iaction.item;
-		var h = it.zone.height;
-		var scrollRange = h - settings.scrollbar.marginY * 2;
-		var dtreeHeight = it.dtree.height;
-		var innerHeight = h - it.imargin.y;  // todo use it.iheight?
-		var scrollSize  = scrollRange * innerHeight / dtreeHeight;
-		var srad = settings.scrollbar.radius;
-		if (scrollSize < srad * 2) {
-			/* minimum size of scrollbar */
-			scrollSize = srad * 2;
-		}
-		var sy = iaction.ssy +
-			dy * (dtreeHeight - innerHeight) / (scrollRange - scrollSize);
-		var smaxy = dtreeHeight - innerHeight;
-		sy = min(max(sy, 0), smaxy);
-		it.scrolly = sy;
+		var sbary = it.scrollbarY;
+		var sy = iaction.ssy + sbary.max / sbary.zone.height * dy;
+		sy = max(0, min(sy, sbary.max));
+		it.scrollbarY.pos = sy;
 		this.redraw();
 		return true;
 	case ACT.RBIND :
@@ -2805,12 +2769,11 @@ DTree.prototype.pathSelection = function(c2d, border, isEdge, select, imargin, s
 	}
 
 	c2d.beginPath();
-	var psy = scrolly >= 0 ? scrolly : 0;
 	var lh = R(this.fontsize * (1 + settings.bottombox));
 	var bx = R(bp.x);
-	var by = R(bp.y - psy);
-	var ex = ep.x;
-	var ey = ep.y - psy;
+	var by = R(bp.y - scrolly);
+	var ex = R(ep.x);
+	var ey = R(ep.y - scrolly);
 	var rx = this.width + half(imargin.e);
 	var lx = half(imargin.w);
 	if ((abs(by - ey) < 2)) {
@@ -2861,7 +2824,7 @@ DTree.prototype.draw = function(c2d, select, imargin, scrolly) {
 	var h = 0;
 	var parasep = this.pre ? 0 : this._fontsize;
 
-	/* draws the selection */
+	// paints the selection
 	if (select.active && select.mark1.item === this.parent) {
 		c2d.fill(
 			settings.selection.style.fill, this, 'pathSelection',
@@ -2874,7 +2837,7 @@ DTree.prototype.draw = function(c2d, select, imargin, scrolly) {
 	// draws tha paragraphs
 	for(var para = this.first; para; para = para.next) {
 		var pc2d = para.getC2D();
-		para.p = new Point(imargin.w, y);
+		para.p = new Point(imargin.w, R(y));
 		if (pc2d.width > 0 && pc2d.height > 0) {
 			c2d.drawImage(pc2d, imargin.w, y - scrolly);
 		}
@@ -3096,6 +3059,96 @@ Item.prototype.removed = function() {
 	// nothing
 }
 
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ .---.             .  .  .
+ \___  ,-. ,-. ,-. |  |  |-. ,-. ,-.
+     \ |   |   | | |  |  | | ,-| |
+ `---' `-' '   `-' `' `' ^-' `-^ '
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+ A scrollbar.
+ todo when finished moved above item.
+
+ currently only vertical scrollbars.
+
+ -8833 is a special position for 'not set'.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/**
+| Constructor.
+|
+| parent: parent holding the scrollbar
+*/
+function Scrollbar(parent) {
+	this.parent = parent;
+	this.max      = null;
+	this.visible  = false;
+	this._pos     = 0;
+	this.aperture = null;
+	this.zone     = null;
+}
+
+/**
+| The zone the handles appear on.
+*/
+Object.defineProperty(Scrollbar.prototype, 'pos', {
+	get : function() { return this._pos; },
+	set : function(pos) {
+		if (pos < 0) throw new Error('invalid scrollbar pos');
+		this._pos = pos;
+		if (this.parent) this.parent.listen();
+		return pos;
+	}
+});
+
+/**
+| Makes the path for c2d.edge/fill/paint.
+| todo change descr on all path()s
+*/
+Scrollbar.prototype.path = function(c2d, border) {
+	//var spx  = this.zone.width - settings.scrollbar.marginX - srad;
+	//var scrollRange = this.zone.height - settings.scrollbar.marginY * 2;
+	//var scrollSize  = scrollRange * this.iheight / dtreeHeight;
+	// minimum size of scrollbar
+	//var spy = R(settings.scrollbar.marginY +
+	//	sy / (dtreeHeight - this.iheight) * (scrollRange - scrollSize));
+
+	if (border !== 0) throw new Error('Scrollbar.path does not support borders');
+	var z = this.zone;
+	var w = z.width;
+	var size = max(R(this.aperture * z.height / this.max), settings.scrollbar.minSize);
+	var sy = z.pnw.y + R(this._pos * z.height / this.max);
+
+	// todo make hex again
+	c2d.beginPath();
+	c2d.moveTo(z.pnw.x, R(sy + C2D.cos30 * w / 2));
+	c2d.lineTo(z.pnw.x + R(w / 4),     sy);
+	c2d.lineTo(z.pnw.x + R(w * 3 / 4), sy);
+	c2d.lineTo(z.pse.x, R(sy + C2D.cos30 * w / 2));
+
+	c2d.lineTo(z.pse.x, R(sy + size - C2D.cos30 * w / 2));
+	c2d.lineTo(z.pnw.x + R(w * 3 / 4),     sy + size);
+	c2d.lineTo(z.pnw.x + R(w / 4), sy + size);
+	c2d.lineTo(z.pnw.x, R(sy + size - C2D.cos30 * w / 2));
+
+	c2d.lineTo(z.pnw.x, R(sy + C2D.cos30 * w / 2));
+
+	//c2d.lineTo(spx - srad05, spy);
+	//c2d.lineTo(spx + srad05, spy);
+	//c2d.lineTo(spx + srad,   R(spy + C2D.cos30 * srad));
+	//c2d.lineTo(spx + srad,   R(spy + scrollSize - C2D.cos30 * srad));
+	//c2d.lineTo(spx + srad05, R(spy + scrollSize));
+	//c2d.lineTo(spx - srad05, R(spy + scrollSize));
+	//c2d.lineTo(spx - srad,   R(spy + scrollSize - C2D.cos30 * srad));
+	//c2d.closePath();
+}
+
+/**
+| Paints the scrollbar.
+*/
+Scrollbar.prototype.paint = function(c2d) {
+	c2d.paint(settings.scrollbar.style.fill, settings.scrollbar.style.edge, this, 'path');
+}
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,-,-.       .
@@ -3123,17 +3176,15 @@ function Note(id, zone, dtree) {
 	this.dtree = dtree;
 	this.handles = Note.handles;
 	dtree.parent = this;
+	// todo, merge silhoutte and zone.
 	this.silhoutte = new RoundRect(
 		Point.zero, new Point(zone.width, zone.height), settings.note.cornerRadius);
 	this._bc2d = new C2D();
-	this.imargin = Note.imargin;
+	this.imargin = Note.imargin;  // todo needed?
 	this._canvasActual = false;
-	this._scrollx = -8833;
-	this._scrolly = -8833;
-	if (!this.dtree.first) {
-		this.dtree.append(new Paragraph(''));
-	}
-	/* todo, don't add here */
+	this.scrollbarY = new Scrollbar(this, null);
+	if (!this.dtree.first) { this.dtree.append(new Paragraph('')); }
+	// todo, don't add here
 	System.repository.addItem(this, true);
 }
 subclass(Note, Item);
@@ -3166,13 +3217,6 @@ Note.jnew = function(js, id) {
 }
 
 /**
-| Called when item is removed
-*/
-Note.prototype.removed = function() {
-	/* nothing */
-}
-
-/**
 | Highlights the  note
 */
 Note.prototype.highlight = function(c2d) {
@@ -3193,7 +3237,7 @@ Note.prototype.jsonfy = function() {
 }
 
 /**
-| Returns the para at y
+| Returns the para at point. todo, honor scroll here.
 */
 Note.prototype.paraAtP = function(p) {
 	if (p.y < this.imargin.n) return null;
@@ -3205,7 +3249,7 @@ Note.prototype.paraAtP = function(p) {
 */
 Note.prototype.listen = function() {
 	this._canvasActual = false;
-	/* end of chain */
+	// end of chain
 }
 
 /**
@@ -3233,12 +3277,12 @@ Note.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 			txr |= TXR.REDRAW;
 		}
 
-		var srad = settings.scrollbar.radius;
-		var sbmx = settings.scrollbar.marginX;
-		if (this.scrolly >= 0 && abs(p.x - this.zone.pse.x + srad + sbmx) <= srad + 1)  {
-			space.actionScrollY(this, p.y, this.scrolly);
+		var sbary = this.scrollbarY;
+		var pr = p.sub(this.zone.pnw);
+		if (sbary.visible && sbary.zone.within(pr)) {
+			space.actionScrollY(this, p.y, this.scrollbarY);
 		} else {
-			space.actionIDrag(this, p.sub(this.zone.pnw));
+			space.actionIDrag(this, pr);
 		}
 		return txr;
 	case TXE.CLICK :
@@ -3254,7 +3298,7 @@ Note.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 
 		var op = new Point(
 			p.x - this.zone.pnw.x,
-			p.y - this.zone.pnw.y + (this.scrolly > 0 ? this.scrolly : 0));
+			p.y - this.zone.pnw.y + max(0, this.scrollbarY.pos));
 		var para = this.paraAtP(op);
 		if (para) {
 			var editor = System.editor;
@@ -3294,8 +3338,7 @@ Note.prototype.setZone = function(zone, align) {
 		Point.zero, new Point(zone.width, zone.height), this.silhoutte.crad);
 	this._canvasActual = false;
 	// adapts scrollbar position
-	var smaxy = this.dtree.height - (this.zone.height - this.imargin.y);
-	if (smaxy > 0 && this.scrolly > smaxy) { this.scrolly = smaxy; }
+	this._setScrollbar();
 	return true;
 }
 
@@ -3316,57 +3359,12 @@ Note.prototype.moveto = function(p) {
 }
 
 /**
-| Gets or Sets the vertical scroll position
-*/
-Object.defineProperty(Note.prototype, 'scrolly', {
-	get: function() { return this._scrolly; },
-	set: function(sy) {
-		if (sy < 0 && sy != -8833) {
-			throw new Error('Invalid scrolly position');
-		}
-		if (this._scrolly != sy) {
-			this._scrolly = sy;
-			this._canvasActual = false;
-		}
-	}
-});
-
-/**
-| Draws the scrollbar.
-*/
-Note.prototype.pathScrollbar = function(c2d, border, sy, dtreeHeight, innerHeight) {
-	if (border !== 0) throw new Error('pathScrollbar does not support borders');
-	/* draws the vertical scroll bar */
-	var srad   = settings.scrollbar.radius;
-	var srad05 = half(settings.scrollbar.radius);
-	var spx  = this.zone.width - settings.scrollbar.marginX - srad;
-	var scrollRange = this.zone.height - settings.scrollbar.marginY * 2;
-	var scrollSize  = scrollRange * this.iheight / dtreeHeight;
-	if (scrollSize < srad * 2) {
-		/* minimum size of scrollbar */
-		scrollSize = srad * 2;
-	}
-
-	var spy = R(settings.scrollbar.marginY +
-		sy / (dtreeHeight - this.iheight) * (scrollRange - scrollSize));
-
-	c2d.beginPath();
-	c2d.moveTo(spx - srad,   R(spy + C2D.cos30 * srad));
-	c2d.lineTo(spx - srad05, spy);
-	c2d.lineTo(spx + srad05, spy);
-	c2d.lineTo(spx + srad,   R(spy + C2D.cos30 * srad));
-	c2d.lineTo(spx + srad,   R(spy + scrollSize - C2D.cos30 * srad));
-	c2d.lineTo(spx + srad05, R(spy + scrollSize));
-	c2d.lineTo(spx - srad05, R(spy + scrollSize));
-	c2d.lineTo(spx - srad,   R(spy + scrollSize - C2D.cos30 * srad));
-	c2d.closePath();
-}
-
-/**
 | The inner width for contents excluding scrollbars.
 */
 Object.defineProperty(Note.prototype, 'iwidth', {
-	get: function() { return this.zone.width - this.imargin.x - (this.scrolly >= 0 ? settings.scrollbar.radius * 2 : 0); },
+	get: function() {
+		return this.zone.width - this.imargin.x - (this.scrollbarY.pos >= 0 ? settings.scrollbar.strength : 0);
+	},
 });
 
 /**
@@ -3378,55 +3376,68 @@ Object.defineProperty(Note.prototype, 'iheight', {
 
 
 /**
+| Actualizes the scrollbar.
+*/
+Note.prototype._setScrollbar = function() {
+	var sbary = this.scrollbarY;
+	if (!sbary.visible) return;
+	sbary.max = this.dtree.height;
+	// todo make a Rect.renew!
+	sbary.zone = new Rect(
+		Point.renew(
+			this.zone.width - this.imargin.e - settings.scrollbar.strength,
+			this.imargin.n,
+			sbary.zone && sbary.zone.pnw),
+		Point.renew(
+			this.zone.width - this.imargin.e,
+			this.zone.height - this.imargin.y,
+			sbary.zone && sbary.zone.pse));
+	sbary.aperture = this.iheight;
+	var smaxy = max(0, this.dtree.height - this.iheight);
+	if (sbary.pos > smaxy) sbary.pos = smaxy;
+}
+
+
+/**
 | Draws the note.
 |
 | c2d: canvas-2d to draw upon.
 | selection: current selection to highlight.
 */
 Note.prototype.draw = function(c2d, selection) {
+	// the canvas buffer
 	var bc2d  = this._bc2d;
+	// buffer hit?
+	if (this._canvasActual) { c2d.drawImage(bc2d, this.zone.pnw); return; }
+	// if not builds the canvas buffer
 	var dtree = this.dtree;
-	if (this._canvasActual) {
-		/* buffer hit */
-		c2d.drawImage(bc2d, this.zone.pnw);
-		return;
-	}
-
+	// resize the canvas
 	bc2d.attune(this.zone);
 	bc2d.fill(settings.note.style.fill, this.silhoutte, 'path');
 
 	// calculates if a scrollbar is needed
-	var sy = this._scrolly;
-	dtree.flowWidth =
-		this.zone.width - this.imargin.x -
-		(sy >= 0 ? settings.scrollbar.radius * 2 : 0); // todo make a var
-	var dtreeHeight = dtree.height;
-	if (sy < 0) {
-		if (dtreeHeight > this.iheight) {
-			// does not use a scrollbar but should
-			this._scrolly = sy = 0;
-			// todo move formula into a property
-			dtree.flowWidth = this.iwidth;
-			dtreeHeight = dtree.height;
-			if (dtreeHeight <= this.iheight) throw new Error('note doesnt fit with and without scrollbar.');
-		}
-	} else if (dtreeHeight <= this.iheight) {
-		// uses a scrollbar but shouldn't
-		this._scrolly = sy = -8833;
+	var sbary = this.scrollbarY;
+	dtree.flowWidth = this.iwidth;
+
+	if (!sbary.visible && dtree.height > this.iheight) {
+		// doesn't use a scrollbar but should
+		sbary.visible = true;
 		dtree.flowWidth = this.iwidth;
-		dtreeHeight = dtree.height;
-		if (dtreeHeight > this.iheight) throw new Error('note doesnt fit with and without scrollbar.');
+	} else if (sbary.visible && dtree.height <= this.iheight) {
+		// uses a scrollbar but shouldn't
+		sbary.visible = false;
+		dtree.flowWidth = this.iwidth;
 	}
 
-	/* draws selection and text */
-	dtree.draw(bc2d, selection, this.imargin, sy < 0 ? 0 : R(sy));
-
-	if (sy >= 0) {
-		bc2d.paint(settings.scrollbar.style.fill, settings.scrollbar.style.edge, this, 'pathScrollbar',
-			sy, dtreeHeight, this.iheight);
+	if (sbary.visible) {
+		this._setScrollbar();
+		sbary.paint(bc2d);
 	}
 
-	/* draws the border */
+	// draws selection and text
+	dtree.draw(bc2d, selection, this.imargin, sbary.visible ? sbary.pos : 0);
+
+	// draws the border
 	bc2d.edge(settings.note.style.edge, this.silhoutte, 'path');
 
 	this._canvasActual = true;
@@ -3630,7 +3641,7 @@ Label.prototype.listen = function() {
 	if (this.zone) {
 		this.zone = this.zone.resize(this._dWidth(), this._dHeight(), 'c');
 	}
-	/* end of listen-chain */
+	// end of listen-chain
 }
 
 /**
@@ -3908,81 +3919,6 @@ Relation.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 		throw new Error('Unknown transfix code:'+txe);
 	}
 	return 0;
-	/*
-	var arrow = this.arrow;
-	var zone  = arrow.zone;
-	// distance to line recognized as hit
-	var dis   = 8;
-	if (p.x < zone.p1.x - dis || p.x > zone.p2.x + dis ||
-	    p.y < zone.p1.y - dis || p.y > zone.p2.y + dis) {
-		return 0;
-	}
-	switch (txe) {
-	case TXE.HOVER :
-		if (C2D.isNearLine(p, dis, arrow.p1, arrow.p1)) {
-			System.setCursor('move');
-			return TXR.HIT;
-		} else {
-			return 0;
-		}
-	case TXE.DRAGSTART :
-		var txr = TXR.HIT;
-		if (ctrl) {
-			space.actionSpawnRelation(this, p);
-			return txr | TXR.REDRAW;
-		}
-		if (z > 0) {
-			System.repository.moveToTop(z);
-			txr |= TXR.REDRAW;
-		}
-		if (space.focus != this) {
-			space.setFocus(this);
-			txr |= TXR.REDRAW;
-		}
-
-		var srad = settings.scrollbar.radius;
-		var sbmx = settings.scrollbar.marginX;
-		if (this.scrolly >= 0 && abs(p.x - this.zone.p2.x + srad + sbmx) <= srad + 1)  {
-			space.actionScrollY(this, p.y, this.scrolly);
-		} else {
-			space.actionIDrag(this, p.sub(this.zone.p1));
-		}
-		return txr;
-		return 0;
-	case TXE.CLICK :
-		var txr = TXR.HIT;
-		if (z > 0) {
-			System.repository.moveToTop(z);
-			txr |= TXR.REDRAW;
-		}
-		if (space.focus != this) {
-			space.setFocus(this);
-			txr |= TXR.REDRAW;
-		}
-
-		var op = new Point(
-			p.x - this.zone.p1.x,
-			p.y - this.zone.p1.y + (this.scrolly > 0 ? this.scrolly : 0));
-		var para = this.paraAtP(op);
-		if (para) {
-			var editor = System.editor;
-			editor.caret.setFromPoint(para, op.sub(para.p));
-			editor.caret.show();
-			editor.deselect();
-			txr |= TXR.REDRAW;
-		}
-		return txr;
-	case TXE.RBINDHOVER :
-		// space.actionRBindHover(this);
-		return TXR.HIT | TXR.REDRAW;
-		return 0;
-	case TXE.RBINDTO :
-		// space.actionRBindTo(this);
-		return TXR.HIT | TXR.REDRAW;
-		return 0;
-	default :
-		throw new Error('Unknown transfix code:'+txe);
-	}*/
 }
 
 /**
