@@ -36,7 +36,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 if (!Object.defineProperty) {
 	Object.defineProperty = function(obj, label, funcs) {
-		if (funcs.value) {
+		if (typeof(funcs.value) !== 'undefined') {
 			obj[label] = funcs.value;
 			return;
 		}
@@ -107,7 +107,7 @@ C2D.fixate = function(obj, key, value) {
 	Object.defineProperty(obj, key, {enumerable: true, value: value});
 	return value;
 }
-C2D.fixate(C2D, 'fixate', C2D.fixate);
+//C2D.fixate(C2D, 'fixate', C2D.fixate);
 
 /**
 * A value is computed and fixated only when needed.
