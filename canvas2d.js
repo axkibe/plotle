@@ -249,58 +249,54 @@ C2D.prototype.attune = function(a1, a2) {
 /**
 | Moves the path maker.
 |
-| moveTo(point) -or-
-| moveTo(x, y)
+| moveTo(point, edge) -or-
+| moveTo(x, y,  edge)
 */
-C2D.prototype.moveTo = function(a1, a2) {
+C2D.prototype.moveTo = function(a1, a2, a3) {
 	var pan = this.pan;
-	var x, y;
+	var x, y, e;
 	if (typeof(a1) === 'object') {
-		x = a1.x;
-		y = a1.y;
+		x = a1.x; y = a1.y; e = a2;
 	} else {
-		x = a1;
-		y = a2;
+		x = a1;   y = a2;   e = a3;
 	}
 	C2D.ensureInteger(x, y);
-	C2D.ensureInteger(pan.x, pan.y);
-	this._cx.moveTo(x + pan.x + 0.5, y + pan.y + 0.5);
+	this._cx.moveTo(x + pan.x + (e ? 0.5 : 0), y + pan.y + (e ? 0.5 : 0));
 }
 
 /**
 | Draws a line.
 |
-| lineto(point) -or-
-| lineto(x, y)
+| lineto(point, edge) -or-
+| lineto(x, y, edge)
 */
-C2D.prototype.lineTo = function(a1, a2) {
+C2D.prototype.lineTo = function(a1, a2, a3) {
 	var pan = this.pan;
-	var x, y;
+	var x, y, e;
 	if (typeof(a1) === 'object') {
-		x = a1.x;
-		y = a1.y;
+		x = a1.x; y = a1.y; e = a2;
 	} else {
-		x = a1;
-		y = a2;
+		x = a1;   y = a2;   e = a3;
 	}
 	C2D.ensureInteger(x, y);
-	C2D.ensureInteger(pan.x, pan.y);
-	this._cx.lineTo(x + pan.x + 0.5, y + pan.y + 0.5);
+	this._cx.lineTo(x + pan.x + (e ? 0.5 : 0), y + pan.y + (e ? 0.5 : 0));
 }
 
 /**
 | Draws an arc.
 |
-| arc(p,    radius, startAngle, endAngle, anticlockwise)   -or-
-| arc(x, y, radius, startAngle, endAngle, anticlockwise)   -or-
+| arc(p,    radius, startAngle, endAngle, anticlockwise, edge)   -or-
+| arc(x, y, radius, startAngle, endAngle, anticlockwise, edge)   -or-
 */
-C2D.prototype.arc = function(a1, a2, a3, a4, a5, a6) {
+C2D.prototype.arc = function(a1, a2, a3, a4, a5, a6, a7) {
 	var pan = this.pan;
+	var x, y, r, sa, ea, ac, e;
 	if (typeof(a1) === 'object') {
-		this._cx.arc(a1.x + pan.x + 0.5, a1.y + pan.y + 0.5, a2, a3, a4, a5);
-		return;
+		x = a1.x; y = a1.y; r = a2; sa = a3; ea = a4; ac = a5; e = a6;
+	} else {
+		x = a1;   y = a2;   r = a3; sa = a4; ea = a5; ac = a6; e = a7;
 	}
-	this._cx.arc(a1 + pan.x + 0.5, a2 + pan.y + 0.5, a3, a4, a5, a6);
+	this._cx.arc(x + pan.x + (e ? 0.5 : 0), y + pan.y + (e ? 0.5 : 0), r, sa, ea, ac);
 }
 
 /**
@@ -310,10 +306,11 @@ C2D.prototype.arc = function(a1, a2, a3, a4, a5, a6) {
 |
 | border: increase/decrease total size
 */
-C2D.prototype.path = function(self, border) {
+C2D.prototype.path = function(self, border, edge) {
 	if (this !== self) throw new Error('C2D.path: self != this');
 	var cx = this._cx;
 	cx.beginPath();
+	// todo -> moveTo lineTo
 	cx.rect(
 		0.5 + border, 0.5 + border,
 		this._canvas.width - 1 - border, this._canvas.height - 1 - border);
@@ -326,6 +323,7 @@ C2D.prototype.path = function(self, border) {
 | todo remove by rect.path
 */
 C2D.prototype.rect = function(a1, a2, a3, a4) {
+//	throw new Error('todo');
 	var pan = this.pan;
 	var cx = this._cx;
 	if (typeof(r) === 'object') {
@@ -472,7 +470,7 @@ C2D.prototype._colorStyle = function(style, shape) {
 */
 C2D.prototype.fill = function(style, shape, path, a1, a2, a3, a4) {
 	var cx = this._cx;
-	shape[path](this, 0, a1, a2, a3, a4);
+	shape[path](this, 0, false, a1, a2, a3, a4);
 	cx.fillStyle = this._colorStyle(style, shape);
 	cx.fill();
 }
@@ -481,18 +479,14 @@ C2D.prototype.fill = function(style, shape, path, a1, a2, a3, a4) {
 | Draws a single edge.
 |
 | style: the style formated in meshcraft style notation.
-| skip:  skips shaping if border == skip
 | shape: an object which has path() defined
 */
-C2D.prototype._edge = function(style, skip, shape, path, a1, a2, a3, a4) {
+C2D.prototype._edge = function(style, shape, path, a1, a2, a3, a4) {
 	var cx = this._cx;
-	if (skip !== style.border) {
-		shape[path](this, style.border, a1, a2, a3, a4);
-	}
+	shape[path](this, style.border, true, a1, a2, a3, a4);
 	cx.strokeStyle = this._colorStyle(style.color, shape);
 	cx.lineWidth = style.width;
 	cx.stroke();
-	return style.border;
 }
 
 /**
@@ -503,13 +497,12 @@ C2D.prototype._edge = function(style, skip, shape, path, a1, a2, a3, a4) {
 */
 C2D.prototype.edge = function(style, shape, path, a1, a2, a3, a4) {
 	var cx = this._cx;
-	var skip = null;
 	if (style instanceof Array) {
 		for(var i = 0; i < style.length; i++) {
-			skip = this._edge(style[i], skip, shape, path, a1, a2, a3, a4);
+			this._edge(style[i], shape, path, a1, a2, a3, a4);
 		}
 	} else {
-		skip = this._edge(style[i], skip, shape, path, a1, a2, a3, a4);
+		this._edge(style[i], shape, path, a1, a2, a3, a4);
 	}
 }
 
@@ -518,17 +511,16 @@ C2D.prototype.edge = function(style, shape, path, a1, a2, a3, a4) {
 */
 C2D.prototype.paint = function(fillStyle, edgeStyle, shape, path, a1, a2, a3, a4) {
 	var cx = this._cx;
-	var skip = 0;
 	shape[path](this, 0, a1, a2, a3, a4);
 	cx.fillStyle = this._colorStyle(fillStyle, shape);
 	cx.fill();
 	var cx = this._cx;
 	if (edgeStyle instanceof Array) {
 		for(var i = 0; i < edgeStyle.length; i++) {
-			skip = this._edge(edgeStyle[i], skip, shape, path, a1, a2, a3, a4);
+			this._edge(edgeStyle[i], shape, path, a1, a2, a3, a4);
 		}
 	} else {
-		skip = this._edge(edgeStyle[i], skip, shape, path, a1, a2, a3, a4);
+		this._edge(edgeStyle[i], shape, path, a1, a2, a3, a4);
 	}
 }
 
@@ -766,12 +758,12 @@ C2D.Rect.prototype.within = function(p) {
 /**
 | Draws the rectangle.
 */
-C2D.Rect.prototype.path = function(c2d, border) {
+C2D.Rect.prototype.path = function(c2d, border, edge) {
 	c2d.beginPath();
-	c2d.moveTo(this.pnw.x + border, this.pnw.y + border);
-	c2d.lineTo(this.pse.x - border, this.pnw.y + border);
-	c2d.lineTo(this.pse.x - border, this.pse.y - border);
-	c2d.lineTo(this.pnw.x + border, this.pse.y - border);
+	c2d.moveTo(this.pnw.x + border, this.pnw.y + border, edge);
+	c2d.lineTo(this.pse.x - border, this.pnw.y + border, edge);
+	c2d.lineTo(this.pse.x - border, this.pse.y - border, edge);
+	c2d.lineTo(this.pnw.x + border, this.pse.y - border, edge);
 	c2d.closePath();
 }
 
@@ -993,7 +985,7 @@ C2D.subclass(C2D.RoundRect, C2D.Rect);
 | c2d: Canvas2D area to draw upon.
 | border: additional distance.
 */
-C2D.RoundRect.prototype.path = function(c2d, border) {
+C2D.RoundRect.prototype.path = function(c2d, border, edge) {
 	var nwx = this.pnw.x + border;
 	var nwy = this.pnw.y + border;
 	var sex = this.pse.x - border - 1;
@@ -1003,10 +995,10 @@ C2D.RoundRect.prototype.path = function(c2d, border) {
 	var ph = pi / 2;
 	c2d.beginPath();
 	c2d.moveTo(nwx + cr, nwy);
-	c2d.arc(sex - cr, nwy + cr, cr, -ph,   0, false);
-	c2d.arc(sex - cr, sey - cr, cr,   0,  ph, false);
-	c2d.arc(nwx + cr, sey - cr, cr,  ph,  pi, false);
-	c2d.arc(nwx + cr, nwy + cr, cr,  pi, -ph, false);
+	c2d.arc(sex - cr, nwy + cr, cr, -ph,   0, false, edge);
+	c2d.arc(sex - cr, sey - cr, cr,   0,  ph, false, edge);
+	c2d.arc(nwx + cr, sey - cr, cr,  ph,  pi, false, edge);
+	c2d.arc(nwx + cr, nwy + cr, cr,  pi, -ph, false, edge);
 }
 
 
@@ -1143,13 +1135,13 @@ C2D.lazyFixate(C2D.HexagonSlice.prototype, 'pse', function() {
 /**
 | Draws the hexagon.
 */
-C2D.HexagonSlice.prototype.path = function(c2d, border) {
+C2D.HexagonSlice.prototype.path = function(c2d, border, edge) {
 	var r05 = C2D.half(this.rad);
 	c2d.beginPath();
-	c2d.moveTo(this.psw.x                 + border, this.psw.y               - border);
-	c2d.lineTo(this.pm.x - r05            + border, this.psw.y - this.height + border);
-	c2d.lineTo(this.pm.x + r05            - border, this.psw.y - this.height + border);
-	c2d.lineTo(2 * this.pm.x - this.psw.x - border, this.psw.y               - border);
+	c2d.moveTo(this.psw.x                 + border, this.psw.y               - border, edge);
+	c2d.lineTo(this.pm.x - r05            + border, this.psw.y - this.height + border, edge);
+	c2d.lineTo(this.pm.x + r05            - border, this.psw.y - this.height + border, edge);
+	c2d.lineTo(2 * this.pm.x - this.psw.x - border, this.psw.y               - border, edge);
 }
 
 /**
@@ -1208,7 +1200,7 @@ C2D.HexagonFlower = function(pc, ri, ro, segs) {
 /**
 | Makes the flower-hex-6 path.
 */
-C2D.HexagonFlower.prototype.path = function(c2d, border, segment) {
+C2D.HexagonFlower.prototype.path = function(c2d, border, edge, segment) {
 	var ri  = this.ri;
 	var ri2 = C2D.half(this.ri);
 	var ric = Math.round(this.ri * C2D.cos30);
@@ -1224,94 +1216,94 @@ C2D.HexagonFlower.prototype.path = function(c2d, border, segment) {
 	c2d.beginPath();
 	/* inner hex */
 	if (segment === 'innerHex' || segment === 'structure') {
-		c2d.moveTo(pcx - ri  - b,  pcy             );
-		c2d.lineTo(pcx - ri2 - b2, pcy - ric - bc6 );
-		c2d.lineTo(pcx + ri2 + b2, pcy - ric - bc6 );
-		c2d.lineTo(pcx + ri  + b,  pcy             );
-		c2d.lineTo(pcx + ri2 + b2, pcy + ric + bc6 );
-		c2d.lineTo(pcx - ri2 - b2, pcy + ric + bc6 );
-		c2d.lineTo(pcx - ri  - b,  pcy             );
+		c2d.moveTo(pcx - ri  - b,  pcy,             edge);
+		c2d.lineTo(pcx - ri2 - b2, pcy - ric - bc6, edge);
+		c2d.lineTo(pcx + ri2 + b2, pcy - ric - bc6, edge);
+		c2d.lineTo(pcx + ri  + b,  pcy,             edge);
+		c2d.lineTo(pcx + ri2 + b2, pcy + ric + bc6, edge);
+		c2d.lineTo(pcx - ri2 - b2, pcy + ric + bc6, edge);
+		c2d.lineTo(pcx - ri  - b,  pcy,             edge);
 	}
 
 	/* outer hex */
 	if (segment === 'outerHex' || segment === 'structure') {
-		c2d.moveTo(pcx - ro  + b,  pcy             );
-		c2d.lineTo(pcx - ro2 + b2, pcy - roc + bc6 );
-		c2d.lineTo(pcx + ro2 - b2, pcy - roc + bc6 );
-		c2d.lineTo(pcx + ro  - b,  pcy             );
-		c2d.lineTo(pcx + ro2 - b2, pcy + roc - bc6 );
-		c2d.lineTo(pcx - ro2 + b2, pcy + roc - bc6 );
-		c2d.lineTo(pcx - ro  + b,  pcy             );
+		c2d.moveTo(pcx - ro  + b,  pcy,             edge);
+		c2d.lineTo(pcx - ro2 + b2, pcy - roc + bc6, edge);
+		c2d.lineTo(pcx + ro2 - b2, pcy - roc + bc6, edge);
+		c2d.lineTo(pcx + ro  - b,  pcy,             edge);
+		c2d.lineTo(pcx + ro2 - b2, pcy + roc - bc6, edge);
+		c2d.lineTo(pcx - ro2 + b2, pcy + roc - bc6, edge);
+		c2d.lineTo(pcx - ro  + b,  pcy,             edge);
 	}
 
 	switch (segment) {
 	case 'structure' :
 		if (segs.n || segs.nw) {
-			c2d.moveTo(pcx - ri2,  pcy - ric);
-			c2d.lineTo(pcx - ro2,  pcy - roc);
+			c2d.moveTo(pcx - ri2,  pcy - ric, edge);
+			c2d.lineTo(pcx - ro2,  pcy - roc, edge);
 		}
 		if (segs.n  || segs.ne) {
-			c2d.moveTo(pcx + ri2, pcy - ric);
-			c2d.lineTo(pcx + ro2, pcy - roc);
+			c2d.moveTo(pcx + ri2, pcy - ric, edge);
+			c2d.lineTo(pcx + ro2, pcy - roc, edge);
 		}
 		if (segs.ne || segs.se) {
-			c2d.moveTo(pcx + ri,  pcy);
-			c2d.lineTo(pcx + ro,  pcy);
+			c2d.moveTo(pcx + ri,  pcy, edge);
+			c2d.lineTo(pcx + ro,  pcy, edge);
 		}
 		if (segs.se || segs.s) {
-			c2d.moveTo(pcx + ri2, pcy + ric + bc6);
-			c2d.lineTo(pcx + ro2, pcy + roc - bc6);
+			c2d.moveTo(pcx + ri2, pcy + ric + bc6, edge);
+			c2d.lineTo(pcx + ro2, pcy + roc - bc6, edge);
 		}
 		if (segs.s || segs.sw) {
-			c2d.moveTo(pcx - ri2, pcy + ric + bc6);
-			c2d.lineTo(pcx - ro2, pcy + roc - bc6);
+			c2d.moveTo(pcx - ri2, pcy + ric + bc6, edge);
+			c2d.lineTo(pcx - ro2, pcy + roc - bc6, edge);
 		}
 		if (segs.sw || segs.nw) {
-			c2d.moveTo(pcx - ri, pcy);
-			c2d.lineTo(pcx - ro, pcy);
+			c2d.moveTo(pcx - ri, pcy, edge);
+			c2d.lineTo(pcx - ro, pcy, edge);
 		}
 		break;
 	case 'n':
-		c2d.moveTo(pcx - ro2 + b2, pcy - roc + bc6);
-		c2d.lineTo(pcx + ro2 - b2, pcy - roc + bc6);
-		c2d.lineTo(pcx + ri2 + b2, pcy - ric - bc6);
-		c2d.lineTo(pcx - ri2 - b2, pcy - ric - bc6);
-		c2d.lineTo(pcx - ro2 + b2, pcy - roc + bc6);
+		c2d.moveTo(pcx - ro2 + b2, pcy - roc + bc6, edge);
+		c2d.lineTo(pcx + ro2 - b2, pcy - roc + bc6, edge);
+		c2d.lineTo(pcx + ri2 + b2, pcy - ric - bc6, edge);
+		c2d.lineTo(pcx - ri2 - b2, pcy - ric - bc6, edge);
+		c2d.lineTo(pcx - ro2 + b2, pcy - roc + bc6, edge);
 		break;
 	case 'ne':
-		c2d.moveTo(pcx + ro2 - b2, pcy - roc + bc6);
-		c2d.lineTo(pcx + ro  - b,  pcy);
-		c2d.lineTo(pcx + ri  + b,  pcy);
-		c2d.lineTo(pcx + ri2 + b2, pcy - ric - bc6);
-		c2d.lineTo(pcx + ro2 - b2, pcy - roc + bc6);
+		c2d.moveTo(pcx + ro2 - b2, pcy - roc + bc6, edge);
+		c2d.lineTo(pcx + ro  - b,  pcy, edge);
+		c2d.lineTo(pcx + ri  + b,  pcy, edge);
+		c2d.lineTo(pcx + ri2 + b2, pcy - ric - bc6, edge);
+		c2d.lineTo(pcx + ro2 - b2, pcy - roc + bc6, edge);
 		break;
 	case 'se':
-		c2d.moveTo(pcx + ro  - b,  pcy);
-		c2d.lineTo(pcx + ro2 - b2, pcy + roc - bc6);
-		c2d.lineTo(pcx + ri2 + b2, pcy + ric + bc6);
-		c2d.lineTo(pcx + ri  + b,  pcy);
-		c2d.lineTo(pcx + ro  - b,  pcy);
+		c2d.moveTo(pcx + ro  - b,  pcy, edge);
+		c2d.lineTo(pcx + ro2 - b2, pcy + roc - bc6, edge);
+		c2d.lineTo(pcx + ri2 + b2, pcy + ric + bc6, edge);
+		c2d.lineTo(pcx + ri  + b,  pcy, edge);
+		c2d.lineTo(pcx + ro  - b,  pcy, edge);
 		break;
 	case 's':
-		c2d.moveTo(pcx + ro2 - b2, pcy + roc - bc6);
-		c2d.lineTo(pcx - ro2 + b2, pcy + roc - bc6);
-		c2d.lineTo(pcx - ri2 - b2, pcy + ric + bc6);
-		c2d.lineTo(pcx + ri2 + b2, pcy + ric + bc6);
-		c2d.lineTo(pcx + ro2 - b2, pcy + roc - bc6);
+		c2d.moveTo(pcx + ro2 - b2, pcy + roc - bc6, edge);
+		c2d.lineTo(pcx - ro2 + b2, pcy + roc - bc6, edge);
+		c2d.lineTo(pcx - ri2 - b2, pcy + ric + bc6, edge);
+		c2d.lineTo(pcx + ri2 + b2, pcy + ric + bc6, edge);
+		c2d.lineTo(pcx + ro2 - b2, pcy + roc - bc6, edge);
 		break;
 	case 'sw':
-		c2d.moveTo(pcx - ro2 + b2, pcy + roc - bc6);
-		c2d.lineTo(pcx - ro  + b,  pcy);
-		c2d.lineTo(pcx - ri  - b,  pcy);
-		c2d.lineTo(pcx - ri2 - b2, pcy + ric + bc6);
-		c2d.lineTo(pcx - ro2 + b2, pcy + roc - bc6);
+		c2d.moveTo(pcx - ro2 + b2, pcy + roc - bc6, edge);
+		c2d.lineTo(pcx - ro  + b,  pcy, edge);
+		c2d.lineTo(pcx - ri  - b,  pcy, edge);
+		c2d.lineTo(pcx - ri2 - b2, pcy + ric + bc6, edge);
+		c2d.lineTo(pcx - ro2 + b2, pcy + roc - bc6, edge);
 		break;
 	case 'nw':
-		c2d.moveTo(pcx - ro  + b,  pcy);
-		c2d.lineTo(pcx - ro2 + b2, pcy - roc + bc6);
-		c2d.lineTo(pcx - ri2 - b2, pcy - ric - bc6);
-		c2d.lineTo(pcx - ri  - b,  pcy);
-		c2d.lineTo(pcx - ro  + b,  pcy);
+		c2d.moveTo(pcx - ro  + b,  pcy, edge);
+		c2d.lineTo(pcx - ro2 + b2, pcy - roc + bc6, edge);
+		c2d.lineTo(pcx - ri2 - b2, pcy - ric - bc6, edge);
+		c2d.lineTo(pcx - ri  - b,  pcy, edge);
+		c2d.lineTo(pcx - ro  + b,  pcy, edge);
 		break;
 	}
 }
@@ -1450,7 +1442,7 @@ Object.defineProperty(C2D.Line.prototype, 'zone', {
 |
 | c2d: Canvas2D to draw upon.
 */
-C2D.Line.prototype.path = function(c2d) {
+C2D.Line.prototype.path = function(c2d, edge) {
 	var p1 = this.p1;
 	var p2 = this.p2;
 
@@ -1458,7 +1450,7 @@ C2D.Line.prototype.path = function(c2d) {
 	// todo, multiple lineend types
 	switch(this.p1end) {
 	case 'normal':
-		c2d.moveTo(p1);
+		c2d.moveTo(p1, edge);
 		break;
 	default :
 		throw new Error('unknown line end');
@@ -1466,7 +1458,7 @@ C2D.Line.prototype.path = function(c2d) {
 
 	switch(this.p2end) {
 	case 'normal' :
-		c2d.lineTo(p2);
+		c2d.lineTo(p2, edge);
 		break;
 	case 'arrow' :
 		// arrow size
@@ -1479,17 +1471,17 @@ C2D.Line.prototype.path = function(c2d) {
 		var ms = 2 / Math.sqrt(3) * as;
 		c2d.lineTo(
 			p2.x - Math.round(ms * Math.cos(d)),
-			p2.y - Math.round(ms * Math.sin(d)));
+			p2.y - Math.round(ms * Math.sin(d)), edge);
 		c2d.lineTo(
 			p2.x - Math.round(as * Math.cos(d - ad)),
-			p2.y - Math.round(as * Math.sin(d - ad)));
+			p2.y - Math.round(as * Math.sin(d - ad)), edge);
 		c2d.lineTo(p2);
 		c2d.lineTo(
 			p2.x - Math.round(as * Math.cos(d + ad)),
-			p2.y - Math.round(as * Math.sin(d + ad)));
+			p2.y - Math.round(as * Math.sin(d + ad)), edge);
 		c2d.lineTo(
 			p2.x - Math.round(ms * Math.cos(d)),
-			p2.y - Math.round(ms * Math.sin(d)));
+			p2.y - Math.round(ms * Math.sin(d)), edge);
 		break;
 	default :
 		throw new Error('unknown line end');

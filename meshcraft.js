@@ -76,7 +76,7 @@ var settings = {
 		newHeight : 150,
 
 		// inner margin to text
-		imargin  : { n: 7, e: 7, s: 7, w: 7 },
+		imargin  : { n: 5, e: 5, s: 5, w: 5 },
 
 		style : {
 			fill : {
@@ -1510,7 +1510,7 @@ function Edgemenu() {
 |   -1 outer frame
 |   >0 buttons
 */
-Edgemenu.prototype.path = function(c2d, border, section) {
+Edgemenu.prototype.path = function(c2d, border, edge, section) {
 	var b =  border;
 	// width half
 	var w2 = half(this.width);
@@ -1522,10 +1522,10 @@ Edgemenu.prototype.path = function(c2d, border, section) {
 	c2d.beginPath();
 	if (section === -2) {
 		// structure frame
-		c2d.moveTo(this.pnw.x + b,      this.pse.y);
-		c2d.lineTo(this.pnw.x + ew + b, this.pnw.y + b);
-		c2d.lineTo(this.pse.x - ew - b, this.pnw.y + b);
-		c2d.lineTo(this.pse.x - b,      this.pse.y);
+		c2d.moveTo(this.pnw.x + b,      this.pse.y,     edge);
+		c2d.lineTo(this.pnw.x + ew + b, this.pnw.y + b, edge);
+		c2d.lineTo(this.pse.x - ew - b, this.pnw.y + b, edge);
+		c2d.lineTo(this.pse.x - b,      this.pse.y,     edge);
 
 		// x-position of button
 		var bx = this.pnw.x;
@@ -1533,17 +1533,17 @@ Edgemenu.prototype.path = function(c2d, border, section) {
 			bx += this.buttonWidths[b];
 			c2d.moveTo(bx, this.pse.y);
 			if (b % 2 === 0) {
-				c2d.lineTo(bx - ew, this.pnw.y);
+				c2d.lineTo(bx - ew, this.pnw.y, edge);
 			} else {
-				c2d.lineTo(bx + ew, this.pnw.y);
+				c2d.lineTo(bx + ew, this.pnw.y, edge);
 			}
 		}
 	} else if (section === -1) {
 		// outer frame
-		c2d.moveTo(this.pnw.x + b,      this.pse.y);
-		c2d.lineTo(this.pnw.x + ew + b, this.pnw.y + b);
-		c2d.lineTo(this.pse.x - ew - b, this.pnw.y + b);
-		c2d.lineTo(this.pse.x - b,      this.pse.y);
+		c2d.moveTo(this.pnw.x + b,      this.pse.y,     edge);
+		c2d.lineTo(this.pnw.x + ew + b, this.pnw.y + b, edge);
+		c2d.lineTo(this.pse.x - ew - b, this.pnw.y + b, edge);
+		c2d.lineTo(this.pse.x - b,      this.pse.y,     edge);
 	} else {
 		if (section < 0) throw new Error('invalid section');
 		var bx = this.pnw.x;
@@ -1552,15 +1552,15 @@ Edgemenu.prototype.path = function(c2d, border, section) {
 		}
 		c2d.moveTo(bx, this.pse.y);
 		if (section % 2 === 0) {
-			c2d.lineTo(bx + ew, this.pnw.y);
+			c2d.lineTo(bx + ew, this.pnw.y, edge);
 			bx += this.buttonWidths[section];
-			c2d.lineTo(bx - ew, this.pnw.y);
-			c2d.lineTo(bx,      this.pse.y);
+			c2d.lineTo(bx - ew, this.pnw.y, edge);
+			c2d.lineTo(bx,      this.pse.y, edge);
 		} else {
-			c2d.lineTo(bx - ew, this.pnw.y);
+			c2d.lineTo(bx - ew, this.pnw.y, edge);
 			bx += this.buttonWidths[section];
-			c2d.lineTo(bx + ew, this.pnw.y);
-			c2d.lineTo(bx,      this.pse.y);
+			c2d.lineTo(bx + ew, this.pnw.y, edge);
+			c2d.lineTo(bx,      this.pse.y, edge);
 		}
 	}
 }
@@ -2018,9 +2018,8 @@ Space.prototype.dragmove = function(p, shift, ctrl) {
 		var dy = pp.y - iaction.sy;
 		var it = iaction.item;
 		var sbary = it.scrollbarY;
-		var sy = iaction.ssy + sbary.max / sbary.zone.height * dy;
-		sy = max(0, min(sy, sbary.max));
-		it.scrollbarY.pos = sy;
+		var spos = iaction.ssy + sbary.max / sbary.zone.height * dy;
+		it.setScrollbar(spos);
 		this.redraw();
 		return true;
 	case ACT.RBIND :
@@ -2589,9 +2588,6 @@ Object.defineProperty(Paragraph.prototype, 'flowWidth', {
 		return this._flowWidth;
 	},
 	set: function(fw) {
-		if (fw !== fw) {
-			throw new Error("todo!");
-		}
 		if (this._flowWidth !== fw) {
 			this._flowWidth = fw;
 			this._flowActual = false;
@@ -2756,7 +2752,7 @@ DTree.prototype.paraAtP = function(p) {
 | imargin : inner margin of item
 | scrolly : scroll position of item
 */
-DTree.prototype.pathSelection = function(c2d, border, isEdge, select, imargin, scrolly) {
+DTree.prototype.pathSelection = function(c2d, border, edge, select, imargin, scrolly) {
 	/* todo make part of selection to use shortcut with XY */
 	var b = select.mark1;
 	var e = select.mark2;
@@ -2778,36 +2774,36 @@ DTree.prototype.pathSelection = function(c2d, border, isEdge, select, imargin, s
 	var lx = half(imargin.w);
 	if ((abs(by - ey) < 2)) {
 		// ***
-		c2d.moveTo(bx, by);
-		c2d.lineTo(bx, by + lh);
-		c2d.lineTo(ex, ey + lh);
-		c2d.lineTo(ex, ey);
-		c2d.lineTo(bx, by);
+		c2d.moveTo(bx, by, edge);
+		c2d.lineTo(bx, by + lh, edge);
+		c2d.lineTo(ex, ey + lh, edge);
+		c2d.lineTo(ex, ey, edge);
+		c2d.lineTo(bx, by, edge);
 	} else if (abs(by + lh - ey) < 2 && (bx >= ex))  {
 		//      ***
 		// ***
-		c2d.moveTo(rx, by + lh);
-		c2d.lineTo(bx, by + lh);
-		c2d.lineTo(bx, by);
-		c2d.lineTo(rx, by);
+		c2d.moveTo(rx, by + lh, edge);
+		c2d.lineTo(bx, by + lh, edge);
+		c2d.lineTo(bx, by, edge);
+		c2d.lineTo(rx, by, edge);
 
-		c2d.moveTo(lx, ey);
-		c2d.lineTo(ex, ey);
-		c2d.lineTo(ex, ey + lh);
-		c2d.lineTo(lx, ey + lh);
+		c2d.moveTo(lx, ey, edge);
+		c2d.lineTo(ex, ey, edge);
+		c2d.lineTo(ex, ey + lh, edge);
+		c2d.lineTo(lx, ey + lh, edge);
 	} else {
 		//    *****
 		// *****
-		c2d.moveTo(rx, ey);
-		c2d.lineTo(ex, ey);
-		c2d.lineTo(ex, ey + lh);
-		c2d.lineTo(lx, ey + lh);
+		c2d.moveTo(rx, ey, edge);
+		c2d.lineTo(ex, ey, edge);
+		c2d.lineTo(ex, ey + lh, edge);
+		c2d.lineTo(lx, ey + lh, edge);
 
-		if (isEdge) c2d.moveTo(lx, by + lh); else c2d.lineTo(lx, by + lh);
-		c2d.lineTo(bx, by + lh);
-		c2d.lineTo(bx, by);
-		c2d.lineTo(rx, by);
-		if (isEdge) c2d.lineTo(rx, ey);
+		if (edge) c2d.moveTo(lx, by + lh, edge); else c2d.lineTo(lx, by + lh, edge);
+		c2d.lineTo(bx, by + lh, edge);
+		c2d.lineTo(bx, by, edge);
+		c2d.lineTo(rx, by, edge);
+		if (!edge) c2d.lineTo(rx, ey, edge);
 	}
 }
 
@@ -2826,12 +2822,13 @@ DTree.prototype.draw = function(c2d, select, imargin, scrolly) {
 
 	// paints the selection
 	if (select.active && select.mark1.item === this.parent) {
+		// todo make paint()
 		c2d.fill(
 			settings.selection.style.fill, this, 'pathSelection',
-			false, select, imargin, scrolly);
+			select, imargin, scrolly);
 		c2d.edge(
 			settings.selection.style.edge, this, 'pathSelection',
-			true,  select, imargin, scrolly);
+			select, imargin, scrolly);
 	}
 
 	// draws tha paragraphs
@@ -2894,6 +2891,8 @@ Object.defineProperty(DTree.prototype, 'flowWidth', {
 		for(var para = this.first; para; para = para.next) {
 			para.flowWidth = fw;
 		}
+		this._cacheWidth  = null;
+		this._cacheHeight = null;
 	}
 });
 
@@ -2987,13 +2986,14 @@ Item.prototype.checkItemCompass = function(p) {
 	var ha = this.handles;
 	var hzone = this.handlezone;
 	if (!ha) return null;
-	var d  = settings.handle.size;        // inner distance
-	var d2 = 0.75 * settings.handle.size; // outer distance
+	var d   =       settings.handle.size; // distance
+	var din = 0.5 * settings.handle.size; // inner distance
+	var dou =       settings.handle.size; // outer distance
 
-	var n = p.y >= hzone.pnw.y - d2 && p.y <= hzone.pnw.y + d;
-	var e = p.x >= hzone.pse.x - d  && p.x <= hzone.pse.x + d2;
-	var s = p.y >= hzone.pse.y - d  && p.y <= hzone.pse.y + d2;
-	var w = p.x >= hzone.pnw.x - d2 && p.x <= hzone.pnw.x + d;
+	var n = p.y >= hzone.pnw.y - dou && p.y <= hzone.pnw.y + din;
+	var e = p.x >= hzone.pse.x - din && p.x <= hzone.pse.x + dou;
+	var s = p.y >= hzone.pse.y - din && p.y <= hzone.pse.y + dou;
+	var w = p.x >= hzone.pnw.x - dou && p.x <= hzone.pnw.x + din;
 
 	if (n) {
 		if (w && ha.nw) return 'nw';
@@ -3015,7 +3015,7 @@ Item.prototype.checkItemCompass = function(p) {
 /**
 | Paths the resize handles.
 */
-Item.prototype.pathResizeHandles = function(c2d, border) {
+Item.prototype.pathResizeHandles = function(c2d, border, edge) {
 	if (border !== 0) throw new Error('borders unsupported for handles');
 	var ha = this.handles;
 	var zone = this.handlezone;
@@ -3031,14 +3031,30 @@ Item.prototype.pathResizeHandles = function(c2d, border) {
 	var ym = half(y1 + y2);
 
 	c2d.beginPath();
-	if (ha.n ) { c2d.moveTo(xm - hs2, y1); c2d.lineTo(xm + hs2, y1);                    }
-	if (ha.ne) { c2d.moveTo(x2 - hs,  y1); c2d.lineTo(x2, y1); c2d.lineTo(x2, y1 + hs); }
-	if (ha.e ) { c2d.moveTo(x2, ym - hs2); c2d.lineTo(x2, ym + hs2);                    }
-	if (ha.se) { c2d.moveTo(x2, y2 - hs);  c2d.lineTo(x2, y2); c2d.lineTo(x2 - hs, y2); }
-	if (ha.s ) { c2d.moveTo(xm - hs2, y2); c2d.lineTo(xm + hs2, y2);                    }
-	if (ha.sw) { c2d.moveTo(x1 + hs, y2);  c2d.lineTo(x1, y2); c2d.lineTo(x1, y2 - hs); }
-	if (ha.w ) { c2d.moveTo(x1, ym - hs2); c2d.lineTo(x1, ym + hs2);                    }
-	if (ha.nw) { c2d.moveTo(x1, y1 + hs);  c2d.lineTo(x1, y1); c2d.lineTo(x1 + hs, y1); }
+	if (ha.n ) {
+		c2d.moveTo(xm - hs2, y1, edge); c2d.lineTo(xm + hs2, y1, edge);
+	}
+	if (ha.ne) {
+		c2d.moveTo(x2 - hs,  y1, edge); c2d.lineTo(x2, y1, edge); c2d.lineTo(x2, y1 + hs, edge);
+	}
+	if (ha.e ) {
+		c2d.moveTo(x2, ym - hs2, edge); c2d.lineTo(x2, ym + hs2, edge);
+	}
+	if (ha.se) {
+		c2d.moveTo(x2, y2 - hs,  edge); c2d.lineTo(x2, y2, edge); c2d.lineTo(x2 - hs, y2, edge);
+	}
+	if (ha.s ) {
+		c2d.moveTo(xm - hs2, y2, edge); c2d.lineTo(xm + hs2, y2, edge);
+	}
+	if (ha.sw) {
+		c2d.moveTo(x1 + hs, y2,  edge); c2d.lineTo(x1, y2, edge); c2d.lineTo(x1, y2 - hs, edge);
+	}
+	if (ha.w ) {
+		c2d.moveTo(x1, ym - hs2, edge); c2d.lineTo(x1, ym + hs2, edge);
+	}
+	if (ha.nw) {
+		c2d.moveTo(x1, y1 + hs,  edge); c2d.lineTo(x1, y1, edge); c2d.lineTo(x1 + hs, y1, edge);
+	}
 }
 
 /**
@@ -3083,64 +3099,34 @@ function Scrollbar(parent) {
 	this.parent = parent;
 	this.max      = null;
 	this.visible  = false;
-	this._pos     = 0;
+	this.pos      = 0;
 	this.aperture = null;
 	this.zone     = null;
 }
 
 /**
-| The zone the handles appear on.
-*/
-Object.defineProperty(Scrollbar.prototype, 'pos', {
-	get : function() { return this._pos; },
-	set : function(pos) {
-		if (pos < 0) throw new Error('invalid scrollbar pos');
-		this._pos = pos;
-		if (this.parent) this.parent.listen();
-		return pos;
-	}
-});
-
-/**
 | Makes the path for c2d.edge/fill/paint.
 | todo change descr on all path()s
 */
-Scrollbar.prototype.path = function(c2d, border) {
-	//var spx  = this.zone.width - settings.scrollbar.marginX - srad;
-	//var scrollRange = this.zone.height - settings.scrollbar.marginY * 2;
-	//var scrollSize  = scrollRange * this.iheight / dtreeHeight;
-	// minimum size of scrollbar
-	//var spy = R(settings.scrollbar.marginY +
-	//	sy / (dtreeHeight - this.iheight) * (scrollRange - scrollSize));
-
+Scrollbar.prototype.path = function(c2d, border, edge) {
 	if (border !== 0) throw new Error('Scrollbar.path does not support borders');
 	var z = this.zone;
 	var w = z.width;
-	var size = max(R(this.aperture * z.height / this.max), settings.scrollbar.minSize);
-	var sy = z.pnw.y + R(this._pos * z.height / this.max);
+	var size  = R(this.aperture * z.height / this.max);
+	var msize = max(size, settings.scrollbar.minSize);
+	var sy = z.pnw.y + R(this.pos * ((z.height - msize + size) / this.max));
 
-	// todo make hex again
 	c2d.beginPath();
-	c2d.moveTo(z.pnw.x, R(sy + C2D.cos30 * w / 2));
-	c2d.lineTo(z.pnw.x + R(w / 4),     sy);
-	c2d.lineTo(z.pnw.x + R(w * 3 / 4), sy);
-	c2d.lineTo(z.pse.x, R(sy + C2D.cos30 * w / 2));
+	c2d.moveTo(z.pnw.x, R(sy + C2D.cos30 * w / 2), edge);
+	c2d.lineTo(z.pnw.x + R(w / 4),     sy,         edge);
+	c2d.lineTo(z.pnw.x + R(w * 3 / 4), sy,         edge);
+	c2d.lineTo(z.pse.x, R(sy + C2D.cos30 * w / 2), edge);
 
-	c2d.lineTo(z.pse.x, R(sy + size - C2D.cos30 * w / 2));
-	c2d.lineTo(z.pnw.x + R(w * 3 / 4),     sy + size);
-	c2d.lineTo(z.pnw.x + R(w / 4), sy + size);
-	c2d.lineTo(z.pnw.x, R(sy + size - C2D.cos30 * w / 2));
-
-	c2d.lineTo(z.pnw.x, R(sy + C2D.cos30 * w / 2));
-
-	//c2d.lineTo(spx - srad05, spy);
-	//c2d.lineTo(spx + srad05, spy);
-	//c2d.lineTo(spx + srad,   R(spy + C2D.cos30 * srad));
-	//c2d.lineTo(spx + srad,   R(spy + scrollSize - C2D.cos30 * srad));
-	//c2d.lineTo(spx + srad05, R(spy + scrollSize));
-	//c2d.lineTo(spx - srad05, R(spy + scrollSize));
-	//c2d.lineTo(spx - srad,   R(spy + scrollSize - C2D.cos30 * srad));
-	//c2d.closePath();
+	c2d.lineTo(z.pse.x, R(sy + msize - C2D.cos30 * w / 2), edge);
+	c2d.lineTo(z.pnw.x + R(w * 3 / 4), sy + msize,         edge);
+	c2d.lineTo(z.pnw.x + R(w / 4),     sy + msize,         edge);
+	c2d.lineTo(z.pnw.x, R(sy + msize - C2D.cos30 * w / 2), edge);
+	c2d.closePath();
 }
 
 /**
@@ -3336,9 +3322,9 @@ Note.prototype.setZone = function(zone, align) {
 	this.zone      = zone;
 	this.silhoutte = new RoundRect(
 		Point.zero, new Point(zone.width, zone.height), this.silhoutte.crad);
-	this._canvasActual = false;
 	// adapts scrollbar position
-	this._setScrollbar();
+	this._canvasActual = false;
+	this.setScrollbar();
 	return true;
 }
 
@@ -3378,7 +3364,7 @@ Object.defineProperty(Note.prototype, 'iheight', {
 /**
 | Actualizes the scrollbar.
 */
-Note.prototype._setScrollbar = function() {
+Note.prototype.setScrollbar = function(pos) {
 	var sbary = this.scrollbarY;
 	if (!sbary.visible) return;
 	sbary.max = this.dtree.height;
@@ -3390,11 +3376,15 @@ Note.prototype._setScrollbar = function() {
 			sbary.zone && sbary.zone.pnw),
 		Point.renew(
 			this.zone.width - this.imargin.e,
-			this.zone.height - this.imargin.y,
+			this.zone.height - this.imargin.s - 1,
 			sbary.zone && sbary.zone.pse));
 	sbary.aperture = this.iheight;
 	var smaxy = max(0, this.dtree.height - this.iheight);
+
+	if (typeof(pos) !== 'undefined') sbary.pos = pos;
 	if (sbary.pos > smaxy) sbary.pos = smaxy;
+	if (sbary.pos < 0) sbary.pos = 0;
+	if (typeof(pos) !== 'undefined') this.listen();
 }
 
 
@@ -3429,15 +3419,16 @@ Note.prototype.draw = function(c2d, selection) {
 		dtree.flowWidth = this.iwidth;
 	}
 
+	// paints selection and text
+	dtree.draw(bc2d, selection, this.imargin, sbary.visible ? sbary.pos : 0);
+
+	// paints the scrollbar
 	if (sbary.visible) {
-		this._setScrollbar();
+		this.setScrollbar();
 		sbary.paint(bc2d);
 	}
 
-	// draws selection and text
-	dtree.draw(bc2d, selection, this.imargin, sbary.visible ? sbary.pos : 0);
-
-	// draws the border
+	// paints the border
 	bc2d.edge(settings.note.style.edge, this.silhoutte, 'path');
 
 	this._canvasActual = true;
