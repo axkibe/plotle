@@ -12,8 +12,12 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `'*/
 /**
-| Authors: Axel Kittenberger (axkibe@gmail.com)
-| License: GNU Affero GPLv3
+| A network item editor.
+|
+| This is the client-side script for the user interface.
+|
+| Authors: Axel Kittenberger
+| License: GNU Affero AGPLv3
 */
 
 'use strict';
