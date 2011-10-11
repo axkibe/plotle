@@ -94,9 +94,11 @@ function parsePrompt(out, context, line) {
 	if (typeof(para[0]) === 'undefined') return true;
 	switch (para[0]) {
 	case 'command' :
+		showCommand(command);
 		return true;
 	case 'create' :
 		var js;
+		out.write(para[1]);
 		try {
 			js = JSON.parse(para[1]);
 		} catch(err) {
@@ -130,4 +132,8 @@ prompt.on('line', function (line) {
 		process.stdin.destroy();
 	}
 	prompt.prompt();
+});
+prompt.on('close', function() {
+	process.stdout.write('\n');
+	process.stdin.destroy();
 });
