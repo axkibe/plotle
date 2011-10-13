@@ -102,44 +102,45 @@ MeshMashine.types = {
 MeshMashine.prototype.check = function(obj, type) {
 	if (typeof(type) === 'undefined') {
 		// this is a root object.
-		if (!obj.id) return   'id missing';
 		if (!obj.type) return 'type missing';
 		type = obj.type;
 	}
 	var typedesc = MeshMashine.types[type];
 	switch(typeof(typedesc)) {
 	case 'undefined' :
-		return 'unknown type "'+type+'"';
+		return ' unknown type "'+type+'"';
 	case 'boolean' :
 		// a primitve
 		switch(type) {
 		case 'int' :
-			return typeof(obj) !== 'number' ? ': not a number' :
-				(Math.floor(obj) !== obj ? ': number not integer' : true);
+			return typeof(obj) !== 'number' ? ' not a number' :
+				(Math.floor(obj) !== obj ? ' number not integer' : true);
 		case 'trail' :
-			return typeof(obj) !== 'array' ? ': not a trail' : true;
+			return typeof(obj) !== 'array' ? ' not a trail' : true;
 		case 'field' :
-			return typeof(obj) !== 'object' || !obj.substr ? ': not a field' : true;
+			return typeof(obj) !== 'object' || !obj.substr ? ' not a field' : true;
 		default :
-			ifail(': unknown primitve '+type);
+			ifail('unknown primitve '+type);
 		}
 	case 'object' :
 		// a collective
 		var checklist = {};
-		for(var key in type) {
-			if (type[key].required) checklist[key] = true;
+		for(var key in typedesc) {
+			if (typedesc[key].required) checklist[key] = true;
 		}
 		for(var key in obj) {
-			if (!type[key]) return ': key "'+key+'" not in type';
+			if (key === 'id' || key === 'type') continue;
+			if (!typedesc[key]) return '.'+key+' not in type';
 			delete checklist[key];
-			var asw = this.check(obj[key], type[key]);
+			var asw = this.check(obj[key], typedesc[key].type);
 			if (asw !== true) {
 				return '.' + key + asw;
 			}
 		}
 		for(var key in checklist) {
-			return '.' + key + ': required but missing';
+			return '.' + key + ' required but missing';
 		}
+		return true;
 	}
 }
 
@@ -152,14 +153,14 @@ MeshMashine.prototype.create = function(histpos, node) {
 	if (!node.type) {
 		return {code: false, message: 'node has no type'};
 	}
-	if (!types[node.type]) {
+	if (!MeshMashine.types[node.type]) {
 		return {code: false, message: 'unknown node type'};
 	}
 	if (node.id) {
 		return {code: false, message: 'node already has an id'};
 	}
 
-	var check = this.check(node, type[node.type]);
+	var check = this.check(node);
 	if (check !== true) {
 		return {code: false, message: check};
 	}
