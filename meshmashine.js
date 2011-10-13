@@ -29,111 +29,337 @@
 | License: GNU Affero AGPLv3
 */
 
-function MeshMashine() {
-	this.repo = {};
 
-	/*this.types = {
-		z : {
-			trail: 'trail',
-		},
-		note  : {
-			pnw : 'point',
-			psw : 'point',
-			dtree : 'link',
-		},
-		dtree : {
-			trail: 'trail',
-		},
-		para : {
-			trail: 'trail',
-		},
-		text : {
-			text: 'assembly',
-		}
-	};*/
+/**
+| Deep copies an object.
+*/
+function clone(original) {
+	if(typeof(original) !== 'object' || original === null) {
+		return original;
+	}
+	var copy = {}
+	for(var i in original) {
+		copy[i] = clone(original[i]);
+	}
+	return copy;
+}
 
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ,-,-,-.           .   ,-,-,-.           .
+ `,| | |   ,-. ,-. |-. `,| | |   ,-. ,-. |-. . ,-. ,-.
+   | ; | . |-' `-. | |   | ; | . ,-| `-. | | | | | |-'
+   '   `-' `-' `-' ' '   '   `-' `-^ `-' ' ' ' ' ' `-'
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+/**
+| Constructor.
+|
+| ifail: function(message), called on internal fail of meshmashine.
+*/
+function MeshMashine(ifail) {
+	this.repository = { z: [] };
+	this.history = [];
 	this.idfactory = 1;
-
-	this.z = { trail: [] };
+	this.ifail = ifail;
 }
 
-MeshMashine.prototype.command = function(version, command) {
-	//xxx
-}
+/**
+| Each meshmashine node must be of one of these types.
+*/
+MeshMashine.types = {
+	// --- build in primes ---
+	// whole-number
+	int        : true,
 
-MeshMashine.prototype._create = function(njs) {
-	if (!njs.type) return 'error: create node has no type';
-	var node = { type: njs.d, id: idfactory++ };
-	this.repo[node.id] = node;
-	this.repo.z.trail.push(node.id);
-	return nid;
-}
+	// an array of node ids
+	trail      : true,
 
-//-----------------------------------------------------------
-// Testing
-//-----------------------------------------------------------
+	// an area where partial changes may done
+	// this is the place where causal consistency /
+	// operation tranformation must take place
+	field      : true,
 
-var mm = new MeshMashine();
+	// --- collectives ---
 
-var readline = require('readline');
-function showCommand(out, command) {
-	out.write('command:\n');
-	for(var i = 0; i < command.length; i++) {
-		out.write(i, '?\n');
+	point : {
+		x : { required : true, type : 'int'},
+		y : { required : true, type : 'int'},
+	},
+
+
+	note : {
+		pnw   : { required: true,  type: 'point' },
+		pse   : { required: true,  type: 'point' },
+		dtree : { required: false, type: 'trail'},
+	}
+};
+
+/**
+| Checks if an meshmashine object matches in a meshmashine type.
+*/
+MeshMashine.prototype.check = function(obj, type) {
+	if (typeof(type) === 'undefined') {
+		// this is a root object.
+		if (!obj.id) return   'id missing';
+		if (!obj.type) return 'type missing';
+		type = obj.type;
+	}
+	var typedesc = MeshMashine.types[type];
+	switch(typeof(typedesc)) {
+	case 'undefined' :
+		return 'unknown type "'+type+'"';
+	case 'boolean' :
+		// a primitve
+		switch(type) {
+		case 'int' :
+			return typeof(obj) !== 'number' ? ': not a number' :
+				(Math.floor(obj) !== obj ? ': number not integer' : true);
+		case 'trail' :
+			return typeof(obj) !== 'array' ? ': not a trail' : true;
+		case 'field' :
+			return typeof(obj) !== 'object' || !obj.substr ? ': not a field' : true;
+		default :
+			ifail(': unknown primitve '+type);
+		}
+	case 'object' :
+		// a collective
+		var checklist = {};
+		for(var key in type) {
+			if (type[key].required) checklist[key] = true;
+		}
+		for(var key in obj) {
+			if (!type[key]) return ': key "'+key+'" not in type';
+			delete checklist[key];
+			var asw = this.check(obj[key], type[key]);
+			if (asw !== true) {
+				return '.' + key + asw;
+			}
+		}
+		for(var key in checklist) {
+			return '.' + key + ': required but missing';
+		}
 	}
 }
 
-// todo remove
-function parsePrompt(out, context, line) {
-	var command = context.command;
-	var reg = /\s*(\S+)\s*/g;
-	var para = [];
-	for(var ca = reg.exec(line); ca != null; ca = reg.exec(line)) {
-		para.push(ca[1]);
+
+/**
+| Creates a node to be added in repository.
+| An id will be added.
+*/
+MeshMashine.prototype.create = function(histpos, node) {
+	if (!node.type) {
+		return {code: false, message: 'node has no type'};
 	}
-	if (typeof(para[0]) === 'undefined') return true;
-	switch (para[0]) {
-	case 'command' :
-		showCommand(command);
-		return true;
-	case 'create' :
+	if (!types[node.type]) {
+		return {code: false, message: 'unknown node type'};
+	}
+	if (node.id) {
+		return {code: false, message: 'node already has an id'};
+	}
+
+	var check = this.check(node, type[node.type]);
+	if (check !== true) {
+		return {code: false, message: check};
+	}
+
+	node = clone(node);
+	node.id = this.idfactory++;
+	this.repository[node.id] = node;
+	this.history.push({cmd: 'create', node: node});
+	return {code: true, id: node.id};
+}
+
+/**
+| Returns a copy of the repository at histpos
+*/
+MeshMashine.prototype.reflect = function(histpos) {
+	if (histpos > this.history.length || histpos < 0) {
+		return {code: false, message: 'invalid histpos'};
+	}
+	var reflect = clone(this.repository);
+
+	for(var hi = this.history.length - 1; hi >= histpos; hi--) {
+		var h = this.history[hi];
+		switch(h.cmd) {
+		case 'create':
+			if (!reflect[h.node.id]) {
+				this.ifail('history mismatch, created node not there.');
+			}
+			delete reflect[h.node.id];
+			break;
+		default:
+			this.ifail('history mismatch, created node not there.');
+		}
+	}
+
+	return {code: true, reflect : reflect};
+
+}
+
+MeshMashine.prototype.update = function(histpos) {
+	if (histpos > this.history.length || histpos < 0) {
+		return {code: false, message: 'invalid histpos'};
+	}
+	var update = [];
+	for(var hi = histpos; hi < this.history.length; hi++) {
+		update.push(clone(this.history[hi]));
+	}
+	return {code: true, update: update, histpos: this.history.length};
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ,--,--'      .
+ `- | ,-. ,-. |- . ,-. ,-.
+  , | |-' `-. |  | | | | |
+  `-' `-' `-' `' ' ' ' `-|
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                        `'
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+function mmfail(message) {
+	console.log('internal fail:' + message);
+	process.exit(-1);
+}
+var mm = new MeshMashine(mmfail);
+
+var fs         = require('fs');
+var net        = require('net');
+var readline   = require('readline');
+var util       = require('util');
+
+// loads command history
+var fhist = fs.readFileSync('./cmdhistory.txt').toString().split('\n');
+var chist = [];
+for (var fi = fhist.length - 2; fi >= 0; fi--) {
+	chist.push(fhist[fi]);
+}
+
+var cmdhistory = fs.createWriteStream('./cmdhistory.txt', {'flags': 'a'});
+
+var shell = {
+	'create' : function(out, context, line, args) {
+		var json = /\s*\S+\s*(.*)/g.exec(line)[1];
 		var js;
-		out.write(para[1]);
 		try {
-			js = JSON.parse(para[1]);
+			js = JSON.parse(json);
 		} catch(err) {
-			out.write('not a valid json.\n');
+			out.write('Argument not a valid json: '+err.message+'\n');
 			return true;
 		}
-		command.push({cmd: 'create', js: js});
+		var asw = mm.create(context.histpos, js);
+		if (asw.code) {
+			out.write('OK. id: '+ asw.id +'\n');
+		} else {
+			out.write('Err: '+asw.message+'\n');
+		}
 		return true;
-	case 'q':
-	case 'quit':
+	},
+
+	'histpos' : function(out, context, line, args) {
+		if (typeof(args[1]) === 'undefined') {
+			out.write('histpos: '+context.histpos+'\n');
+		} else {
+			var histpos = parseInt(args[1]);
+			if (histpos !== histpos) {
+				out.write('"'+args[1]+'" not a number'+'\n');
+			} else {
+				context.histpos = args[1];
+				out.write('histpos:> '+context.histpos+'\n');
+			}
+		}
+		return true;
+	},
+
+	'reflect' : function(out, context, line, args) {
+		var asw = mm.reflect(context.histpos);
+		if (!asw.code) {
+			out.write('Err: '+asw.message+'\n');
+			return true;
+		}
+		var reflect = asw.reflect;
+		out.write(JSON.stringify(reflect, null, 2));
+		out.write('\n');
+		return true;
+	},
+
+	'show' : function(out, context, line, args) {
+		return true;
+	},
+
+	'update' : function(out, context, line, args) {
+		var asw = mm.update(context.histpos);
+		if (!asw.code) {
+			out.write('Err: '+asw.message+'\n');
+			return true;
+		}
+		out.write(context.histpos+' -> '+asw.histpos+'\n');
+		out.write(JSON.stringify(asw.update, null, 2));
+		out.write('\n');
+		context.histpos = asw.histpos;
+		return true;
+	},
+
+
+	'quit' : function(out, context, line, args) {
 		return false;
-	case 'submit' :
-		//mm.command(['create': {}])
-		out.write('submit\n');
-		return true;
-	case 'show' :
-		out.write('show.\n');
-		return true;
-	default :
-		out.write('unknown command\n');
-		return true;
+	},
+};
+
+function completer(sub) {
+	var sublist = [];
+	for (var s in shell) {
+		if (s.substr(0, sub.length) === sub) {
+			sublist.push(s+' ');
+		}
 	}
+	return [sublist, sub];
 }
 
-var prompt = readline.createInterface(process.stdin, process.stdout, null);
-prompt.prompt();
-context = { command: [] };
-prompt.on('line', function (line) {
-	if (!parsePrompt(process.stdout, context, line)) {
-		prompt.close();
-		process.stdin.destroy();
+function parsePrompt(out, context, line) {
+	var commandlist = context.commandlist;
+	var reg = /\s*(\S+)\s*/g;
+	var args = [];
+	for(var ca = reg.exec(line); ca != null; ca = reg.exec(line)) {
+		args.push(ca[1]);
 	}
-	prompt.prompt();
-});
-prompt.on('close', function() {
+	if (typeof(args[0]) === 'undefined') return true;
+	cmdhistory.write(line+'\n');
+	if (shell[args[0]]) return shell[args[0]](out, context, line, args);
+	out.write('unknown command "'+args[0]+'"\n"');
+	return true;
+}
+
+function createShell(input, output, closer) {
+	var shell = readline.createInterface(input, output, completer);
+
+	shell.history = chist;
+
+	shell.prompt();
+	context = { histpos : 0 };
+	shell.on('line', function (line) {
+		if (!parsePrompt(output, context, line)) {
+			shell.close();
+			input.destroy();
+			return;
+		}
+		shell.prompt();
+	});
+	if (closer) shell.on('close', closer);
+	return shell;
+}
+
+
+//var server = net.createServer(function(c) {
+//	c.setNoDelay(true);
+//	createShell(c, c);
+//});
+//server.listen(8823, '127.0.0.1');
+
+createShell(process.stdin, process.stdout, function() {
 	process.stdout.write('\n');
 	process.stdin.destroy();
+//	process.exit();
 });
+
