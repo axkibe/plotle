@@ -59,35 +59,56 @@ function clone(original) {
 | ifail: function(message), called on internal fail of meshmashine.
 */
 function MeshMashine(ifail) {
-	this.repository = { z: [] };
-	this.history = [];
-	this.idfactory = 1;
-	this.ifail = ifail;
+	this.repository = {};
+	this.history    = [];
+	this.ridfactory = 1;
+	this.ifail      = ifail;
+	this.types      = MeshMashine.types;
 }
 
 /**
 | Each meshmashine node must be of one of these types.
 */
 MeshMashine.types = {
-	// --- build in primes ---
-	// whole-number
+	/********************
+	| Build in primes.
+	********************/
+
+	/**
+	| an integer number.
+	|
+	| valid functions:
+	|    set
+	*/
 	int        : true,
 
-	// an array of node ids
+	/**
+	| An array of node ids
+	|
+	| valid functions: 
+	|   enqueue 
+	|   dequeue
+	*/
 	trail      : true,
 
-	// an area where partial changes may done
-	// this is the place where causal consistency /
-	// operation tranformation must take place
+	/** 
+	| An area where partial changes may done.
+	|
+	| This is the place where most of the causal consistency,
+	| operation tranformation takes place.
+	| valid functions:
+	|    transform
+	*/
 	field      : true,
 
-	// --- collectives ---
+	/********************
+	| Collectives.
+	********************/
 
 	point : {
 		x : { required : true, type : 'int'},
 		y : { required : true, type : 'int'},
 	},
-
 
 	note : {
 		pnw   : { required: true,  type: 'point' },
@@ -98,20 +119,18 @@ MeshMashine.types = {
 
 /**
 | Checks if an meshmashine object matches in a meshmashine type.
+|
+| obj:      the object to check
+| type:     the typename of the object
 */
-MeshMashine.prototype.check = function(obj, type) {
-	if (typeof(type) === 'undefined') {
-		// this is a root object.
-		if (!obj.type) return 'type missing';
-		type = obj.type;
-	}
-	var typedesc = MeshMashine.types[type];
-	switch(typeof(typedesc)) {
+MeshMashine.prototype._typecheck = function(obj, typename) {
+	var type = this.types[typename];
+	switch(typeof(type)) {
 	case 'undefined' :
-		return ' unknown type "'+type+'"';
+		return ' unknown type "'+typename+'"';
 	case 'boolean' :
 		// a primitve
-		switch(type) {
+		switch(typename) {
 		case 'int' :
 			return typeof(obj) !== 'number' ? ' not a number' :
 				(Math.floor(obj) !== obj ? ' number not integer' : true);
@@ -120,20 +139,20 @@ MeshMashine.prototype.check = function(obj, type) {
 		case 'field' :
 			return typeof(obj) !== 'object' || !obj.substr ? ' not a field' : true;
 		default :
-			ifail('unknown primitve '+type);
+			this.ifail('unknown primitve '+type);
 		}
 	case 'object' :
 		// a collective
 		for(var key in obj) {
 			if (key === 'id' || key === 'type') continue;
-			if (!typedesc[key]) return '.'+key+' not in type';
-			var asw = this.check(obj[key], typedesc[key].type);
+			if (!type[key]) return '.'+key+' not in type';
+			var asw = this._typecheck(obj[key], type[key].type);
 			if (asw !== true) {
 				return '.' + key + asw;
 			}
 		}
-		for(var key in typedesc) {
-			if (typedesc[key].required && typeof(obj[key]) === 'undefined') {
+		for(var key in type) {
+			if (type[key].required && typeof(obj[key]) === 'undefined') {
 				return '.' + key + ' required but missing';
 			}
 		}
@@ -141,111 +160,140 @@ MeshMashine.prototype.check = function(obj, type) {
 	}
 }
 
+/**
+| Returns true if the root node with 'rid' exists at histpos.
+*/
+MeshMashine.prototype._isNodeThere = function(histpos, rid) {
+	var there = !!this.repository[rid].node;
+	for(var hi = this.history.length - 1; hi >= histpos; hi--) {
+		var h = this.history[hi];
+		switch(h.cmd) {
+		case 'create' :
+			if (h.rid === rid) there = false;
+			break;
+		case 'remove' :
+			if (h.rid === rid) there = true;
+			break;
+		}
+	}
+	return there;
+}
+
+/**
+| Returns true if histpos is valid.
+*/
+MeshMashine.prototype._isValidHistpos = function(histpos) {
+	return typeof(histpos) === 'number' && histpos <= this.history.length && histpos >= 0;
+}
 
 /**
 | Creates a node to be added in repository.
-| An id will be added.
+| Returns the rood id.
 */
-MeshMashine.prototype.create = function(histpos, node) {
-	if (!node.type) {
-		return {code: false, message: 'node has no type'};
-	}
-	if (!MeshMashine.types[node.type]) {
-		return {code: false, message: 'unknown node type'};
-	}
-	if (node.id) {
-		return {code: false, message: 'node already has an id'};
-	}
-
-	var check = this.check(node);
-	if (check !== true) {
-		return {code: false, message: check};
-	}
+MeshMashine.prototype.create = function(histpos, typename, node) {
+	var type = this.types[typename];
+	if (!type)   return {code: false, message: 'unknown node type'};
+	if (!node)   return {code: false, message: 'invalid node'};
+	if (node.id) return {code: false, message: 'node already has an id'}; // todo needed?
+	var typecheck = this._typecheck(node, typename);
+	if (typecheck !== true) return {code: false, message: typecheck};
 
 	node = clone(node);
-	var id = node.id = this.idfactory++;
-	this.repository[id] = node;
-	this.history.push({cmd: 'create', id: id, node: node});
-	return {code: true, histpos: histpos, id: id};
+	var rid = this.ridfactory++;
+	this.repository[rid] = {typename: typename, node : node};
+	this.history.push({cmd: 'create', rid: rid, node: node});
+	return {code: true, histpos: histpos, rid: rid};
 }
 
 /**
 | Removes a node from the repository.
 */
-MeshMashine.prototype.remove = function(histpos, id) {
-	if (typeof(histpos) !== 'number' || histpos > this.history.length || histpos < 0) {
-		return {code: false, message: 'invalid histpos'};
-	}
-	if (typeof(id) !== 'number') {
-		return {code: false, message: 'invalid id type'};
-	}
+MeshMashine.prototype.remove = function(histpos, rid) {
+	if (!this._isValidHistpos(histpos))   return {code: false, message: 'invalid histpos'};
+	if (typeof(rid) !== 'number')         return {code: false, message: 'invalid root id type'}; 
+	if (!this._isNodeThere(histpos, rid)) return {code: false, message: 'node not there'}; 
+	if (!this.repository[rid].node)       return {code: true,  message: 'already removed'};
 
-	// checks if the node is there at histpos
-	// this is a double-check can be cut out.
-	var there = !!this.repository[id];
-	for(var hi = this.history.length - 1; hi >= histpos; hi--) {
-		var h = this.history[hi];
-		switch(h.cmd) {
-		case 'create' :
-			if (h.id === id) there = false;
-			break;
-		case 'remove' :
-			if (h.id === id) there = true;
-			break;
-		}
-	}
-	if (!there) {
-		return {code: false, message: 'node not there'};
-	}
-
-	// if anyway not in current repository this is a null action.
-	if (!this.repository[id]) {
-		// not in the current respository.
-		return {code: true };
-	}
-
-	this.history.push({cmd: 'remove', id: id, save: this.repository[id]});
-	delete this.repository[id]; // or set null?
+	this.history.push({cmd: 'remove', rid: rid, save: this.repository[rid].node});
+	this.repository[id].node = null; 
 	return {code: true, histpos: histpos};
 }
 
 /**
-| Returns a copy of the repository at histpos
+| Returns a complete copy of the repository at histpos
 */
 MeshMashine.prototype.reflect = function(histpos) {
-	if (typeof(histpos) !== 'number' || histpos > this.history.length || histpos < 0) {
-		return {code: false, message: 'invalid histpos'};
-	}
+	if (!this._isValidHistpos(histpos))   return {code: false, message: 'invalid histpos'};
+	
 	var reflect = clone(this.repository);
-
 	for(var hi = this.history.length - 1; hi >= histpos; hi--) {
 		var h = this.history[hi];
 		switch(h.cmd) {
 		case 'create':
-			if (!reflect[h.node.id]) {
+			if (!reflect[h.rid].node) {
 				this.ifail('history mismatch, created node not there.');
 			}
-			delete reflect[h.node.id];
+			reflect[h.rid].node = null;
 			break;
 		case 'remove':
-			if (reflect[h.id]) {
+			if (reflect[h.rid].node) {
 				this.ifail('history mismatch, removed node there.');
 			}
-			reflect[h.id] = clone(h.save);
+			reflect[h.rid].node = clone(h.save);
 			break;
 		default:
 			this.ifail('history mismatch, unknown command.');
 		}
 	}
-
+	
 	return {code: true, histpos: histpos, reflect : reflect};
-
 }
 
-MeshMashine.prototype.update = function(histpos) {
+/**
+| Sets a settable entry.
+*/
+MeshMashine.prototype.set = function(histpos, ida, value) {
+	/*
 	if (typeof(histpos) !== 'number' || histpos > this.history.length || histpos < 0) {
 		return {code: false, message: 'invalid histpos'};
 	}
+	var rid;
+	switch(typeof(ida)) {
+	case 'number' : 
+		rid = ida;
+		break;
+	case 'array' : 
+		rid = ida[0];
+		if (typeof(rid) !== 'number') {
+			return {code: false, message: 'id faulty'};
+		}
+		break;
+	default :
+		return {code: false, message: 'id faulty'};
+	}
+
+	if (!this._isNodeThere(histpos, rid)) {
+		return {code: false, message: 'node not there'};
+	}
+	var node = this.repository[rid];
+	if (!node) {
+		return {code: true, message: 'node was removed'};
+	}
+	
+	var check = this.checkValue(node.type, ida, 
+
+	
+	if (this._checkValueType(ida, value)) {
+		
+	}
+*/
+}
+
+/**
+| Returns all changes from histpos to now.
+*/
+MeshMashine.prototype.update = function(histpos) {
+	if (!this._isValidHistpos(histpos))   return {code: false, message: 'invalid histpos'};
 	var update = [];
 	for(var hi = histpos; hi < this.history.length; hi++) {
 		update.push(clone(this.history[hi]));
@@ -284,15 +332,21 @@ var cmdhistory = fs.createWriteStream('./cmdhistory.txt', {'flags': 'a'});
 
 var shell = {
 	'create' : function(out, context, line, args) {
-		var json = /\s*\S+\s*(.*)/g.exec(line)[1];
+		var reg = /\s*\S+\s+(\S+)\s+(.*)/g.exec(line);
+		if (!reg) {
+			out.write('syntax: create TYPE JSON.\n');
+			return true;
+		}
+		var type = reg[1];
+		var json = reg[2];
 		var js;
 		try {
 			js = JSON.parse(json);
 		} catch(err) {
-			out.write('Argument not a valid json: '+err.message+'\n');
+			out.write('not a valid json: '+err.message+'\n');
 			return true;
 		}
-		var asw = mm.create(context.histpos, js);
+		var asw = mm.create(context.histpos, type, js);
 		out.write(util.inspect(asw, false, null)+'\n');
 		return true;
 	},
@@ -321,6 +375,8 @@ var shell = {
 	'remove' : function(out, context, line, args) {
 		if (typeof(args[1]) === 'undefined') {
 			out.write('id missing\n');
+			out.write('syntax: remove ID.\n');
+			return true;
 		}
 		var id = parseInt(args[1]);
 		if (id !== id) {
@@ -332,7 +388,27 @@ var shell = {
 		return true;
 	},
 
+	'set' : function(out, context, line, args) {
+		if (typeof(args[1]) === 'undefined') {
+			out.write('id missing\n');
+			out.write('syntax: set ID JSON.\n');
+			return true;
+		}
+		var json = /\s*\S+\s+\S+\s+(.*)/g.exec(line)[1];
+		var js;
+		try {
+			js = JSON.parse(json);
+		} catch(err) {
+			out.write('Argument not a valid json: '+err.message+'\n');
+			return true;
+		}
+		var asw = mm.set(context.histpos, id, js);
+		out.write(util.inspect(asw, false, null)+'\n');
+		return true;
+	},
+
 	'show' : function(out, context, line, args) {
+		out.write('unimplemented');
 		return true;
 	},
 
