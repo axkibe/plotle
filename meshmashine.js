@@ -23,8 +23,6 @@
 /*
 | The causal consistency / operation transformation engine for meshcraft.
 |
-| This is the client-side script for the user interface.
-|
 | Authors: Axel Kittenberger
 | License: GNU Affero AGPLv3
 */
@@ -44,6 +42,12 @@ function clone(original) {
 	return copy;
 }
 
+/**
+| Returns true is s is a string.
+*/
+function isString(s) {
+	return typeof(s) === 'string' || s instanceof String;
+}
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,-,-,-.           .   ,-,-,-.           .
@@ -85,13 +89,13 @@ MeshMashine.types = {
 	/**
 	| An array of node ids
 	|
-	| valid functions: 
-	|   enqueue 
+	| valid functions:
+	|   enqueue
 	|   dequeue
 	*/
 	trail      : true,
 
-	/** 
+	/**
 	| An area where partial changes may done.
 	|
 	| This is the place where most of the causal consistency,
@@ -106,14 +110,14 @@ MeshMashine.types = {
 	********************/
 
 	point : {
-		x : { required : true, type : 'int'},
-		y : { required : true, type : 'int'},
+		x : { required : true, typename : 'int'},
+		y : { required : true, typename : 'int'},
 	},
 
 	note : {
-		pnw   : { required: true,  type: 'point' },
-		pse   : { required: true,  type: 'point' },
-		dtree : { required: false, type: 'trail'},
+		pnw   : { required: true,  typename: 'point' },
+		pse   : { required: true,  typename: 'point' },
+		dtree : { required: false, typename: 'trail' },
 	}
 };
 
@@ -135,9 +139,9 @@ MeshMashine.prototype._typecheck = function(obj, typename) {
 			return typeof(obj) !== 'number' ? ' not a number' :
 				(Math.floor(obj) !== obj ? ' number not integer' : true);
 		case 'trail' :
-			return typeof(obj) !== 'array' ? ' not a trail' : true;
+			return typeof(obj) !== 'object' ? ' not a trail' : true;
 		case 'field' :
-			return typeof(obj) !== 'object' || !obj.substr ? ' not a field' : true;
+			return typeof(obj) !== 'object' || !obj instanceof String ? ' not a field' : true;
 		default :
 			this.ifail('unknown primitve '+type);
 		}
@@ -146,7 +150,7 @@ MeshMashine.prototype._typecheck = function(obj, typename) {
 		for(var key in obj) {
 			if (key === 'id' || key === 'type') continue;
 			if (!type[key]) return '.'+key+' not in type';
-			var asw = this._typecheck(obj[key], type[key].type);
+			var asw = this._typecheck(obj[key], type[key].typename);
 			if (asw !== true) {
 				return '.' + key + asw;
 			}
@@ -187,6 +191,36 @@ MeshMashine.prototype._isValidHistpos = function(histpos) {
 }
 
 /**
+| Returns the root id of an id(array)
+*/
+MeshMashine.prototype._getRID = function(ida) {
+	if (typeof(ida) === 'number') return ida;
+	if (typeof(ida) !== 'object') return null;
+	var rid = ida[0];
+	if (typeof(rid) !== 'number') return null;
+	return rid;
+}
+
+/**
+| Returns the type an id(array) points to
+*/
+MeshMashine.prototype._getType = function(ida) {
+	var rid = typeof(ida) === 'number' ? ida : ida[0];
+	if (!this.repository[rid]) return null;
+	var typename = this.repository[rid].typename;
+	var type = this.types[typename];
+	if (!type) this.ifail('invalid type in repository: '+typename);
+	if (typeof(ida) === 'number') return type;
+	for(var i = 1; i < ida.length; i++) {
+		if (!type[ida[i]]) return null;
+		var typename = type[ida[i]].typename;
+		var type = this.types[typename];
+		if (!type) this.ifail('invalid type in repository: '+typename);
+	}
+	return type;
+}
+
+/**
 | Creates a node to be added in repository.
 | Returns the rood id.
 */
@@ -194,7 +228,6 @@ MeshMashine.prototype.create = function(histpos, typename, node) {
 	var type = this.types[typename];
 	if (!type)   return {code: false, message: 'unknown node type'};
 	if (!node)   return {code: false, message: 'invalid node'};
-	if (node.id) return {code: false, message: 'node already has an id'}; // todo needed?
 	var typecheck = this._typecheck(node, typename);
 	if (typecheck !== true) return {code: false, message: typecheck};
 
@@ -210,12 +243,12 @@ MeshMashine.prototype.create = function(histpos, typename, node) {
 */
 MeshMashine.prototype.remove = function(histpos, rid) {
 	if (!this._isValidHistpos(histpos))   return {code: false, message: 'invalid histpos'};
-	if (typeof(rid) !== 'number')         return {code: false, message: 'invalid root id type'}; 
-	if (!this._isNodeThere(histpos, rid)) return {code: false, message: 'node not there'}; 
+	if (typeof(rid) !== 'number')         return {code: false, message: 'invalid root id type'};
+	if (!this._isNodeThere(histpos, rid)) return {code: false, message: 'node not there'};
 	if (!this.repository[rid].node)       return {code: true,  message: 'already removed'};
 
 	this.history.push({cmd: 'remove', rid: rid, save: this.repository[rid].node});
-	this.repository[id].node = null; 
+	this.repository[id].node = null;
 	return {code: true, histpos: histpos};
 }
 
@@ -224,7 +257,7 @@ MeshMashine.prototype.remove = function(histpos, rid) {
 */
 MeshMashine.prototype.reflect = function(histpos) {
 	if (!this._isValidHistpos(histpos))   return {code: false, message: 'invalid histpos'};
-	
+
 	var reflect = clone(this.repository);
 	for(var hi = this.history.length - 1; hi >= histpos; hi--) {
 		var h = this.history[hi];
@@ -245,8 +278,34 @@ MeshMashine.prototype.reflect = function(histpos) {
 			this.ifail('history mismatch, unknown command.');
 		}
 	}
-	
+
+	// remove empty entries
+	for(var i in reflect) if (reflect[i].node === null) delete reflect[i];
+
 	return {code: true, histpos: histpos, reflect : reflect};
+}
+
+/**
+| Gets a node or entry.
+*/
+MeshMashine.prototype.get = function(histpos, ida) {
+	if (!this._isValidHistpos(histpos)) return {code: false, message: 'invalid histpos'};
+	var rid = this._getRID(ida);
+	if (rid === null) return {code: false, message: 'invalid id'};
+	var type = this._getType(ida);
+	if (!type) return {code: false, message: 'invalid ida'};
+
+	var typename = this.repository[rid].typename;
+	var node = this.repository[rid].node;
+
+	// todo history.
+
+	if (typeof(ida) === 'number') return {code: true, histpos: histpos, entry: node};
+	for(var i = 1; i < ida.length; i++) {
+		node = node[ida[i]];
+		if (typeof(node) !== 'object') return {code: true, histpos: histpos, entry: node};
+	}
+	return {code: true, histpos: histpos, entry: node};
 }
 
 /**
@@ -259,10 +318,10 @@ MeshMashine.prototype.set = function(histpos, ida, value) {
 	}
 	var rid;
 	switch(typeof(ida)) {
-	case 'number' : 
+	case 'number' :
 		rid = ida;
 		break;
-	case 'array' : 
+	case 'array' :
 		rid = ida[0];
 		if (typeof(rid) !== 'number') {
 			return {code: false, message: 'id faulty'};
@@ -279,12 +338,12 @@ MeshMashine.prototype.set = function(histpos, ida, value) {
 	if (!node) {
 		return {code: true, message: 'node was removed'};
 	}
-	
-	var check = this.checkValue(node.type, ida, 
 
-	
+	var check = this.checkValue(node.type, ida,
+
+
 	if (this._checkValueType(ida, value)) {
-		
+
 	}
 */
 }
@@ -311,7 +370,7 @@ MeshMashine.prototype.update = function(histpos) {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 function mmfail(message) {
-	console.log('internal fail:' + message);
+	console.log('internal fail: '+message);
 	process.exit(-1);
 }
 var mm = new MeshMashine(mmfail);
@@ -407,8 +466,22 @@ var shell = {
 		return true;
 	},
 
-	'show' : function(out, context, line, args) {
-		out.write('unimplemented');
+	'get' : function(out, context, line, args) {
+		var reg = /\s*\S+\s+(.*)/g.exec(line);
+		if (!reg) {
+			out.write('syntax: get ID(json).\n');
+			return true;
+		}
+		var idstr = reg[1];
+		var jsid;
+		try {
+			jsid = JSON.parse(idstr);
+		} catch(err) {
+			out.write('not a valid json: '+err.message+'\n');
+			return true;
+		}
+		var asw = mm.get(context.histpos, jsid);
+		out.write(util.inspect(asw, false, null)+'\n');
 		return true;
 	},
 
