@@ -124,21 +124,18 @@ MeshMashine.prototype.check = function(obj, type) {
 		}
 	case 'object' :
 		// a collective
-		var checklist = {};
-		for(var key in typedesc) {
-			if (typedesc[key].required) checklist[key] = true;
-		}
 		for(var key in obj) {
 			if (key === 'id' || key === 'type') continue;
 			if (!typedesc[key]) return '.'+key+' not in type';
-			delete checklist[key];
 			var asw = this.check(obj[key], typedesc[key].type);
 			if (asw !== true) {
 				return '.' + key + asw;
 			}
 		}
-		for(var key in checklist) {
-			return '.' + key + ' required but missing';
+		for(var key in typedesc) {
+			if (typedesc[key].required && typeof(obj[key]) === 'undefined') {
+				return '.' + key + ' required but missing';
+			}
 		}
 		return true;
 	}
@@ -166,17 +163,57 @@ MeshMashine.prototype.create = function(histpos, node) {
 	}
 
 	node = clone(node);
-	node.id = this.idfactory++;
-	this.repository[node.id] = node;
-	this.history.push({cmd: 'create', node: node});
-	return {code: true, id: node.id};
+	var id = node.id = this.idfactory++;
+	this.repository[id] = node;
+	this.history.push({cmd: 'create', id: id, node: node});
+	return {code: true, histpos: histpos, id: id};
+}
+
+/**
+| Removes a node from the repository.
+*/
+MeshMashine.prototype.remove = function(histpos, id) {
+	if (typeof(histpos) !== 'number' || histpos > this.history.length || histpos < 0) {
+		return {code: false, message: 'invalid histpos'};
+	}
+	if (typeof(id) !== 'number') {
+		return {code: false, message: 'invalid id type'};
+	}
+
+	// checks if the node is there at histpos
+	// this is a double-check can be cut out.
+	var there = !!this.repository[id];
+	for(var hi = this.history.length - 1; hi >= histpos; hi--) {
+		var h = this.history[hi];
+		switch(h.cmd) {
+		case 'create' :
+			if (h.id === id) there = false;
+			break;
+		case 'remove' :
+			if (h.id === id) there = true;
+			break;
+		}
+	}
+	if (!there) {
+		return {code: false, message: 'node not there'};
+	}
+
+	// if anyway not in current repository this is a null action.
+	if (!this.repository[id]) {
+		// not in the current respository.
+		return {code: true };
+	}
+
+	this.history.push({cmd: 'remove', id: id, save: this.repository[id]});
+	delete this.repository[id]; // or set null?
+	return {code: true, histpos: histpos};
 }
 
 /**
 | Returns a copy of the repository at histpos
 */
 MeshMashine.prototype.reflect = function(histpos) {
-	if (histpos > this.history.length || histpos < 0) {
+	if (typeof(histpos) !== 'number' || histpos > this.history.length || histpos < 0) {
 		return {code: false, message: 'invalid histpos'};
 	}
 	var reflect = clone(this.repository);
@@ -190,24 +227,30 @@ MeshMashine.prototype.reflect = function(histpos) {
 			}
 			delete reflect[h.node.id];
 			break;
+		case 'remove':
+			if (reflect[h.id]) {
+				this.ifail('history mismatch, removed node there.');
+			}
+			reflect[h.id] = clone(h.save);
+			break;
 		default:
-			this.ifail('history mismatch, created node not there.');
+			this.ifail('history mismatch, unknown command.');
 		}
 	}
 
-	return {code: true, reflect : reflect};
+	return {code: true, histpos: histpos, reflect : reflect};
 
 }
 
 MeshMashine.prototype.update = function(histpos) {
-	if (histpos > this.history.length || histpos < 0) {
+	if (typeof(histpos) !== 'number' || histpos > this.history.length || histpos < 0) {
 		return {code: false, message: 'invalid histpos'};
 	}
 	var update = [];
 	for(var hi = histpos; hi < this.history.length; hi++) {
 		update.push(clone(this.history[hi]));
 	}
-	return {code: true, update: update, histpos: this.history.length};
+	return {code: true, histpos: this.history.length, update: update };
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -250,38 +293,42 @@ var shell = {
 			return true;
 		}
 		var asw = mm.create(context.histpos, js);
-		if (asw.code) {
-			out.write('OK. id: '+ asw.id +'\n');
-		} else {
-			out.write('Err: '+asw.message+'\n');
-		}
+		out.write(util.inspect(asw, false, null)+'\n');
 		return true;
 	},
 
 	'histpos' : function(out, context, line, args) {
 		if (typeof(args[1]) === 'undefined') {
 			out.write('histpos: '+context.histpos+'\n');
-		} else {
-			var histpos = parseInt(args[1]);
-			if (histpos !== histpos) {
-				out.write('"'+args[1]+'" not a number'+'\n');
-			} else {
-				context.histpos = args[1];
-				out.write('histpos:> '+context.histpos+'\n');
-			}
+			return true;
 		}
+		var histpos = parseInt(args[1]);
+		if (histpos !== histpos) {
+			out.write('"'+args[1]+'" not a number'+'\n');
+			return true;
+		}
+		context.histpos = histpos;
+		out.write('histpos:='+context.histpos+'\n');
 		return true;
 	},
 
 	'reflect' : function(out, context, line, args) {
 		var asw = mm.reflect(context.histpos);
-		if (!asw.code) {
-			out.write('Err: '+asw.message+'\n');
+		out.write(util.inspect(asw, false, null)+'\n');
+		return true;
+	},
+
+	'remove' : function(out, context, line, args) {
+		if (typeof(args[1]) === 'undefined') {
+			out.write('id missing\n');
+		}
+		var id = parseInt(args[1]);
+		if (id !== id) {
+			out.write('"'+args[1]+'" not a number'+'\n');
 			return true;
 		}
-		var reflect = asw.reflect;
-		out.write(JSON.stringify(reflect, null, 2));
-		out.write('\n');
+		var asw = mm.remove(context.histpos, id);
+		out.write(util.inspect(asw, false, null)+'\n');
 		return true;
 	},
 
@@ -291,14 +338,8 @@ var shell = {
 
 	'update' : function(out, context, line, args) {
 		var asw = mm.update(context.histpos);
-		if (!asw.code) {
-			out.write('Err: '+asw.message+'\n');
-			return true;
-		}
-		out.write(context.histpos+' -> '+asw.histpos+'\n');
-		out.write(JSON.stringify(asw.update, null, 2));
-		out.write('\n');
-		context.histpos = asw.histpos;
+		out.write(util.inspect(asw, false, null)+'\n');
+		if (asw.code) context.histpos = asw.histpos;
 		return true;
 	},
 
