@@ -35,6 +35,10 @@ function clone(original) {
 	if(typeof(original) !== 'object' || original === null) {
 		return original;
 	}
+	if (original instanceof Array) {
+		return original.slice();
+	}
+
 	var copy = {}
 	for(var i in original) {
 		copy[i] = clone(original[i]);
@@ -47,6 +51,18 @@ function clone(original) {
 */
 function isString(s) {
 	return typeof(s) === 'string' || s instanceof String;
+}
+
+/**
+| Turns a JSON String to object.
+*/
+function j2o(json) {
+	try {
+		return JSON.parse(json);
+	} catch(err) {
+		j2o.message = err.message;
+		return null;
+	}
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -120,6 +136,14 @@ MeshMashine.types = {
 		dtree : { required: false, typename: 'trail' },
 	}
 };
+
+
+/**
+| Returns true if ida is a root id.
+*/
+MeshMashine.isRootID = function(ida) {
+	return typeof(ida) === 'number' || ida.length === 1;
+}
 
 /**
 | Checks if an meshmashine object matches in a meshmashine type.
@@ -205,20 +229,36 @@ MeshMashine.prototype._getRID = function(ida) {
 /**
 | Returns the type an id(array) points to
 */
-MeshMashine.prototype._getType = function(ida) {
+MeshMashine.prototype._getTypename = function(ida) {
 	var rid = typeof(ida) === 'number' ? ida : ida[0];
 	if (!this.repository[rid]) return null;
 	var typename = this.repository[rid].typename;
 	var type = this.types[typename];
 	if (!type) this.ifail('invalid type in repository: '+typename);
-	if (typeof(ida) === 'number') return type;
+	if (typeof(ida) === 'number') return typename;
+
 	for(var i = 1; i < ida.length; i++) {
 		if (!type[ida[i]]) return null;
 		var typename = type[ida[i]].typename;
 		var type = this.types[typename];
 		if (!type) this.ifail('invalid type in repository: '+typename);
 	}
-	return type;
+	return typename;
+}
+
+/**
+| Sets the value of ida.
+| This functions makes no checks anymore, ida must not be a rootID
+| Returns the old value.
+*/
+MeshMashine.prototype._setIDAValue = function(entry, ida, value) {
+	for(var i = 1; i < ida.length - 1; i++) {
+		entry = entry[ida[i]];
+	}
+	var lastID = ida[ida.length -1];
+	var save = entry[lastID];
+	entry[lastID] = value;
+	return save;
 }
 
 /**
@@ -249,7 +289,7 @@ MeshMashine.prototype.remove = function(histpos, rid) {
 	if (!this.repository[rid].node)       return {code: true,  message: 'already removed'};
 
 	this.history.push({cmd: 'remove', rid: rid, save: this.repository[rid].node});
-	this.repository[id].node = null;
+	this.repository[rid].node = null;
 	return {code: true, histpos: histpos};
 }
 
@@ -277,6 +317,14 @@ MeshMashine.prototype.reflect = function(histpos) {
 			}
 			reflect[h.rid].node = clone(h.save);
 			break;
+		case 'set' :
+			if (MeshMashine.isRootID(h.ida)) {
+				reflect[h.rid] = h.save;
+			} else {
+				console.log(util.inspect(h));
+				this._setIDAValue(reflect[h.rid].node, h.ida, h.save);
+			}
+			break;
 		default:
 			this.ifail('history mismatch, unknown command.');
 		}
@@ -292,13 +340,11 @@ MeshMashine.prototype.reflect = function(histpos) {
 | Gets a node or entry.
 */
 MeshMashine.prototype.get = function(histpos, ida) {
-	if (!this._isValidHistpos(histpos)) return {code: false, message: 'invalid histpos'};
-	var rid = this._getRID(ida);
-	if (rid === null) return {code: false, message: 'invalid id'};
-	var type = this._getType(ida);
-	if (!type) return {code: false, message: 'invalid ida'};
+	var rid, typename;
+	if (!this._isValidHistpos(histpos))       return {code: false, message: 'invalid histpos'};
+	if ((rid = this._getRID(ida)) === null)   return {code: false, message: 'invalid id'};
+	if (!(typename = this._getTypename(ida))) return {code: false, message: 'invalid ida'};
 
-	var typename = this.repository[rid].typename;
 	var node = this.repository[rid].node;
 
 	// playback
@@ -312,7 +358,13 @@ MeshMashine.prototype.get = function(histpos, ida) {
 			if (h.rid === rid) node = h.save;
 			break;
 		case 'set' :
-			this.ifail('todo');
+			if (h.rid === rid) {
+				if (MeshMashine.isRootID(h.ida)) {
+					node = h.save;
+				} else {
+					this._setIDAValue(node, h.ida, h.save);
+				}
+			}
 			break;
 		}
 	}
@@ -329,40 +381,22 @@ MeshMashine.prototype.get = function(histpos, ida) {
 | Sets a settable entry.
 */
 MeshMashine.prototype.set = function(histpos, ida, value) {
-	/*
-	if (typeof(histpos) !== 'number' || histpos > this.history.length || histpos < 0) {
-		return {code: false, message: 'invalid histpos'};
-	}
-	var rid;
-	switch(typeof(ida)) {
-	case 'number' :
-		rid = ida;
-		break;
-	case 'array' :
-		rid = ida[0];
-		if (typeof(rid) !== 'number') {
-			return {code: false, message: 'id faulty'};
-		}
-		break;
-	default :
-		return {code: false, message: 'id faulty'};
-	}
+	var rid, typename;
+	if (!this._isValidHistpos(histpos))       return {code: false, message: 'invalid histpos'};
+	if ((rid = this._getRID(ida)) === null)   return {code: false, message: 'invalid id'};
+	if (!(typename = this._getTypename(ida))) return {code: false, message: 'invalid ida'};
+	if (typename !== 'int')                   return {code: false, message: 'unsettable type: '+typename};
+	if (!this._isNodeThere(histpos, rid))     return {code: false, message: 'node removed'};
 
-	if (!this._isNodeThere(histpos, rid)) {
-		return {code: false, message: 'node not there'};
+	var save;
+	if (MeshMashine.isRootID(ida)) {
+		save = this.repository[ida];
+		this.repository[ida] = value;
+	} else {
+		save = this._setIDAValue(this.repository[ida[0]].node, ida, value);
 	}
-	var node = this.repository[rid];
-	if (!node) {
-		return {code: true, message: 'node was removed'};
-	}
-
-	var check = this.checkValue(node.type, ida,
-
-
-	if (this._checkValueType(ida, value)) {
-
-	}
-*/
+	this.history.push({cmd: 'set', rid: rid, ida: clone(ida), save: save, value : value});
+	return {code: true, histpos: histpos, save: save};
 }
 
 /**
@@ -413,13 +447,9 @@ var shell = {
 			out.write('syntax: create TYPE JSON.\n');
 			return true;
 		}
-		var type = reg[1];
-		var json = reg[2];
-		var js;
-		try {
-			js = JSON.parse(json);
-		} catch(err) {
-			out.write('not a valid json: '+err.message+'\n');
+		var type = reg[1], js;
+		if ((js = j2o(reg[2])) === null) {
+			out.write('not a valid json: '+j2o.message+'\n');
 			return true;
 		}
 		var asw = mm.create(context.histpos, type, js);
@@ -465,36 +495,25 @@ var shell = {
 	},
 
 	'set' : function(out, context, line, args) {
-		if (typeof(args[1]) === 'undefined') {
-			out.write('id missing\n');
-			out.write('syntax: set ID JSON.\n');
+		var reg = /\s*\S+\s+(\[[^\]]*\]|\S+)\s+(.*)/g.exec(line);
+		var ida, value;
+		if (!reg ||
+			(ida   = j2o(reg[1])) === null ||
+			(value = j2o(reg[2])) === null)
+		{
+			out.write('syntax: create IDA VALUE.\n');
 			return true;
 		}
-		var json = /\s*\S+\s+\S+\s+(.*)/g.exec(line)[1];
-		var js;
-		try {
-			js = JSON.parse(json);
-		} catch(err) {
-			out.write('Argument not a valid json: '+err.message+'\n');
-			return true;
-		}
-		var asw = mm.set(context.histpos, id, js);
+		var asw = mm.set(context.histpos, ida, value);
 		out.write(util.inspect(asw, false, null)+'\n');
 		return true;
 	},
 
 	'get' : function(out, context, line, args) {
 		var reg = /\s*\S+\s+(.*)/g.exec(line);
-		if (!reg) {
-			out.write('syntax: get ID(json).\n');
-			return true;
-		}
-		var idstr = reg[1];
-		var jsid;
-		try {
-			jsid = JSON.parse(idstr);
-		} catch(err) {
-			out.write('not a valid json: '+err.message+'\n');
+		var ida;
+		if (!reg || (ida   = j2o(reg[1])) === null) {
+			out.write('syntax: create IDA.\n');
 			return true;
 		}
 		var asw = mm.get(context.histpos, jsid);
