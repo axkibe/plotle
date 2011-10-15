@@ -169,6 +169,7 @@ MeshMashine.prototype._typecheck = function(obj, typename) {
 */
 MeshMashine.prototype._isNodeThere = function(histpos, rid) {
 	var there = !!this.repository[rid].node;
+	// playback
 	for(var hi = this.history.length - 1; hi >= histpos; hi--) {
 		var h = this.history[hi];
 		switch(h.cmd) {
@@ -259,6 +260,8 @@ MeshMashine.prototype.reflect = function(histpos) {
 	if (!this._isValidHistpos(histpos))   return {code: false, message: 'invalid histpos'};
 
 	var reflect = clone(this.repository);
+
+	// playback
 	for(var hi = this.history.length - 1; hi >= histpos; hi--) {
 		var h = this.history[hi];
 		switch(h.cmd) {
@@ -298,9 +301,23 @@ MeshMashine.prototype.get = function(histpos, ida) {
 	var typename = this.repository[rid].typename;
 	var node = this.repository[rid].node;
 
-	// todo history.
+	// playback
+	for(var hi = this.history.length - 1; hi >= histpos; hi--) {
+		var h = this.history[hi];
+		switch(h.cmd) {
+		case 'create' :
+			if (h.rid === rid) node = null;
+			break;
+		case 'remove' :
+			if (h.rid === rid) node = h.save;
+			break;
+		case 'set' :
+			this.ifail('todo');
+			break;
+		}
+	}
 
-	if (typeof(ida) === 'number') return {code: true, histpos: histpos, entry: node};
+	if (typeof(ida) === 'number' || node === null) return {code: true, histpos: histpos, entry: node};
 	for(var i = 1; i < ida.length; i++) {
 		node = node[ida[i]];
 		if (typeof(node) !== 'object') return {code: true, histpos: histpos, entry: node};
