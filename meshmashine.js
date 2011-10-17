@@ -109,7 +109,7 @@ MeshMashine.types = {
 	|   enqueue
 	|   dequeue
 	*/
-	trail      : true,
+	queue      : true,
 
 	/**
 	| An area where partial changes may done.
@@ -117,7 +117,9 @@ MeshMashine.types = {
 	| This is the place where most of the causal consistency,
 	| operation tranformation takes place.
 	| valid functions:
-	|    transform
+	|   erase
+	|   insert
+	|   move
 	*/
 	field      : true,
 
@@ -133,7 +135,7 @@ MeshMashine.types = {
 	note : {
 		pnw   : { required: true,  typename: 'point' },
 		pse   : { required: true,  typename: 'point' },
-		dtree : { required: false, typename: 'trail' },
+		dtree : { required: false, typename: 'queue' },
 	}
 };
 
@@ -162,8 +164,8 @@ MeshMashine.prototype._typecheck = function(obj, typename) {
 		case 'int' :
 			return typeof(obj) !== 'number' ? ' not a number' :
 				(Math.floor(obj) !== obj ? ' number not integer' : true);
-		case 'trail' :
-			return typeof(obj) !== 'object' ? ' not a trail' : true;
+		case 'queue' :
+			return typeof(obj) !== 'object' ? ' not a queue' : true;
 		case 'field' :
 			return typeof(obj) !== 'object' || !obj instanceof String ? ' not a field' : true;
 		default :

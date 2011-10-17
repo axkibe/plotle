@@ -414,7 +414,7 @@ Marker.prototype.getPoint = function() {
 	var l = pinfo[this._pli];
 	var c = l[this._pci];
 	return p.p.add(
-		(c ? c.x + Measure.width(t.substring(c.offset, this._offset)) : l.x),
+		R(c ? c.x + Measure.width(t.substring(c.offset, this._offset)) : l.x),
 		l.y - dtree.fontsize);
 }
 
@@ -2919,7 +2919,7 @@ Object.defineProperty(DTree.prototype, 'width', {
 		for(var para = this.first; para; para = para.next) {
 			if (para.width > w) w = para.width;
 		}
-		return this._cacheWidth = w;
+		return this._cacheWidth = R(w);
 	},
 });
 

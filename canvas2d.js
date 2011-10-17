@@ -618,6 +618,7 @@ C2D.Point = function(a1, a2) {
 		C2D.fixate(this, 'x', a1.x);
 		C2D.fixate(this, 'y', a1.y);
 	} else {
+		C2D.ensureInteger(a1, a2);
 		C2D.fixate(this, 'x', a1);
 		C2D.fixate(this, 'y', a2);
 	}
