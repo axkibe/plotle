@@ -25,6 +25,7 @@ var util = require('util');
 var http = require('http');
 var url  = require('url');
 var fs   = require('fs');
+var MeshMashine = require('./meshmashine');
 
 /**
 | Loads the configuration file
@@ -47,6 +48,11 @@ try {
 		port : 8833,
 	};
 }
+
+var mm = new MeshMashine(function(err) {
+	util.log(util.inspect(err));
+	throw err;
+});
 
 /**
 | Files served.
@@ -82,41 +88,81 @@ var content = {
 };
 
 /**
+| Logs and returns a web error
+*/
+function webError(res, code, message) {
+	res.writeHead(code, {'Content-Type': 'text/plain'});
+	messge = code+' '+message;
+	util.log(message);
+	res.end(message);
+}
+
+/**
+| Handles an Ajax request to the MeshMashine.
+*/
+var mmAjax = function(req, red, res) {
+	var data = [];
+	if (req.method !== 'POST') {
+		webError(res, 400, 'Must use POST');
+		return;
+	}
+	req.on('data',
+	function(chunk) {
+		data.push(chunk);
+	});
+	req.on('end',
+	function() {
+		var query = data.join('');
+		util.log('mm-query: '+query);
+		var cmd;
+		try {
+			cmd = JSON.parse(query);
+		} catch (err) {
+			webError(res, 400, 'Not valid JSON');
+			return;
+		}
+		var asw;
+		switch (cmd.cmd) {
+		case 'get' :
+			asw = mm.get(cmd.time, cmd.path);
+			break;
+		case 'reflect' :
+			asw = mm.reflect(cmd.time);
+			break;
+		case 'set' :
+			asw = mm.set(cmd.time, cmd.path, cmd.value);
+			break;
+		case 'update' :
+			asw = mm.update(cmd.time);
+			break;
+		default:
+			webError(res, 400, '.cmd missing');
+			return;
+		}
+		res.writeHead(200, {'Content-Type': 'application/json'});
+		res.end(JSON.stringify(asw));
+	});
+}
+
+/**
 | Dispatches web request
 */
 var dispatch = function(req, red, res) {
 	if (red.pathname === '/mm') {
-		var data = [];
-		if (req.method !== 'POST') {
-			res.writeHead(400, {'Content-Type': 'text/plain'});
-			res.end('400 Must use POST');
-			return;
-		}
-		req.on('data',
-		function(chunk) {
-			data.push(chunk);
-		});
-		req.on('end',
-		function() {
-			var query = data.join('');
-			util.log('mm-query: '+query);
-			res.writeHead(200, {'Content-Type': 'application/json'});
-			res.end(JSON.stringify({foo:'bar'}));
-		});
+		mmAjax(req, red, res);
 		return;
 	}
 
 	var co = content[red.pathname];
 	if (!co) {
 		res.writeHead(404, {'Content-Type': 'text/plain'});
-		res.end('404 Bad Reqeust');
+		webErro(res, '404 Bad Reqeust');
 	}
 
 	fs.readFile(co.file,
 	function(err, data) {
 		if (err) {
-			res.writeHead(500, {'Content-Type': 'text/plain'});
-			res.end('500 Internal Server Error');
+			webError(res, 500, 'Internal Server Error');
 		}
 		res.writeHead(200, co.mime);
 		res.end(data, co.code);

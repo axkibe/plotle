@@ -1,3 +1,4 @@
+#!/usr/local/bin/node
 /**
 | A command line shell to interact with a meshcraft repository.
 |
@@ -82,7 +83,15 @@ function mmRequest(cmd, callback) {
 		});
 		res.on('end', function() {
 			var asw = data.join('');
-			callback(null, data);
+			var ao;
+			try {
+				ao = JSON.parse(asw);
+			} catch (err) {
+				console.log('received invalid JSON: '+asw+' | '+err.message);
+				callback(err);
+				return;
+			}
+			callback(null, ao);
 		});
 	});
 	req.on('error', function(e) {
@@ -127,11 +136,10 @@ var shell = {
 			(value = j2o(reg[2])) === null)
 		{
 			out.write('syntax: set PATH VALUE.\n');
+			callback();
 			return;
 		}
-		if (!path instanceof Array) {
-			path = [path];
-		}
+		if (!path instanceof Array) path = [path];
 		mmRequest({cmd: 'set', time: context.time, path: path, value: value}, callback);
 		return;
 	},
@@ -141,14 +149,16 @@ var shell = {
 		var path;
 		if (!reg || (path = j2o(reg[1])) === null) {
 			out.write('syntax: get PATH.\n');
+			callback();
 			return;
 		}
+		if (!path instanceof Array) path = [path];
 		mmRequest({cmd: 'get', time: context.time, path: path}, callback);
 		return;
 	},
 
 	'update' : function(out, context, line, args, callback) {
-		mmRequest({cmd: 'update', time: context.time, path: path},
+		mmRequest({cmd: 'update', time: context.time},
 		function(err, asw) {
 			if (!err && asw.code) context.time = asw.time;
 			callback(err, asw);
@@ -197,7 +207,7 @@ function parsePrompt(out, context, line, callback) {
 				callback(quit);
 				return;
 			}
-			if (!quit) out.write(util.inspect(asw, false, null)+'\n');
+			if (asw) out.write(util.inspect(asw, false, null)+'\n');
 			callback(quit);
 		});
 		return;
@@ -224,8 +234,7 @@ function createShell(input, output, closer) {
 				input.destroy();
 				return;
 			}
-			// evil use of internal structore so the cursor
-			// stays where it was
+			// evil use of internal structore so the cursor stays where it was
 			shell._refreshLine();
 		});
 	});
