@@ -119,40 +119,42 @@ var shell = {
 		mmRequest({cmd: 'reflect', time: context.time}, callback);
 	},
 
-	'set' : function(out, context, line, args) {
-		//var reg = /\s*\S+\s+(\[[^\]]*\]|\S+)\s+(.*)/g.exec(line);
-		var reg = /\s*\S+\s+(\[[^\]]*\])\s+(.*)/g.exec(line);
+	'set' : function(out, context, line, args, callback) {
+		var reg = /\s*\S+\s+(\[[^\]]*\]|\S+)\s+(.*)/g.exec(line);
 		var path, value;
 		if (!reg ||
 			(path  = j2o(reg[1])) === null ||
 			(value = j2o(reg[2])) === null)
 		{
 			out.write('syntax: set PATH VALUE.\n');
-			return true;
+			return;
+		}
+		if (!path instanceof Array) {
+			path = [path];
 		}
 		mmRequest({cmd: 'set', time: context.time, path: path, value: value}, callback);
-		return true;
+		return;
 	},
 
-	'get' : function(out, context, line, args) {
+	'get' : function(out, context, line, args, callback) {
 		var reg = /\s*\S+\s+(.*)/g.exec(line);
 		var path;
 		if (!reg || (path = j2o(reg[1])) === null) {
 			out.write('syntax: get PATH.\n');
-			return true;
+			return;
 		}
-		var asw = mm.get(context.time, path);
-		out.write(util.inspect(asw, false, null)+'\n');
-		return true;
+		mmRequest({cmd: 'get', time: context.time, path: path}, callback);
+		return;
 	},
 
-	'update' : function(out, context, line, args) {
-		var asw = mm.update(context.time);
-		out.write(util.inspect(asw, false, null)+'\n');
-		if (asw.code) context.time = asw.time;
-		return true;
+	'update' : function(out, context, line, args, callback) {
+		mmRequest({cmd: 'update', time: context.time, path: path},
+		function(err, asw) {
+			if (!err && asw.code) context.time = asw.time;
+			callback(err, asw);
+		});
+		return;
 	},
-
 
 	'quit' : function(out, context, line, args, callback) {
 		callback(null, null, true);
