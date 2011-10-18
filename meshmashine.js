@@ -20,7 +20,7 @@
                  / /   | |_.'.'.-'  / | |     | |    |  |   |  |    `''-...... -'
                  \ \._,\ '/.'   \_.'  | '.    | '.   |  |   |  |
                   `--'  `"            '---'   '---'  '--'   ''*/
-/*
+/**
 | The causal consistency / operation transformation engine for meshcraft.
 |
 | Authors: Axel Kittenberger
@@ -46,12 +46,218 @@ function clone(original) {
 	return copy;
 }
 
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ,-,-,-.           .   ,-,-,-.           .
+ `,| | |   ,-. ,-. |-. `,| | |   ,-. ,-. |-. . ,-. ,-.
+   | ; | . |-' `-. | |   | ; | . ,-| `-. | | | | | |-'
+   '   `-' `-' `-' ' '   '   `-' `-^ `-' ' ' ' ' ' `-'
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 /**
-| Returns true is s is a string.
+| Sets the value of an entry.
+| This functions makes no checks anymore.
+| Returns node (possibly changed)
+|
+| node:  the repo or part of
+| path:  path to the value (relative to node)
+| value: the new value to set
+| save:  if not null sets here the old value as .save
 */
-function isString(s) {
-	return typeof(s) === 'string' || s instanceof String;
+function mmSet(node, path, value, save) {
+	if (path.length === 0) {
+		if (save) save.save = node;
+		return value;
+	}
+
+	var subnode = node;
+	for(var i = 0; i < path.length - 1; i++) {
+		subnode = subnode[path[i]];
+	}
+
+	var last = path[path.length -1];
+	var save = subnode[last];
+	subnode[last] = value;
+	return node;
 }
+
+function mmGet(node, path) {
+	var subnode = node;
+	for (var i = 0; i < path.length; i++) {
+		subnode = subnode[path[i]];
+	}
+	return subnode;
+}
+
+/**
+| Constructor.
+|
+| ifail: function(message), called on internal fail of meshmashine.
+*/
+function MeshMashine(ifail) {
+	this.repository = { _grow : 1 };
+	this.history    = [];
+	this.idfactory  = 1;
+	this.ifail      = ifail;
+}
+
+/**
+| Returns true if the root node of path exists at time.
+*/
+MeshMashine.prototype._isRootThere = function(time, path) {
+	var there = !!this.repository[ida[0]];
+	for(var hi = this.history.length - 1; hi >= time; hi--) {
+		var h = this.history[hi];
+		switch(h.cmd) {
+		case 'create' :
+			if (h.path[0] === path[0]) there = false;
+			break;
+		case 'remove' :
+			if (h.path[0] === path[0]) there = true;
+			break;
+		}
+	}
+	return there;
+}
+
+/**
+| Returns true if time is valid.
+*/
+MeshMashine.prototype._isValidTime = function(time) {
+	return typeof(time) === 'number' && time >= 0 && time <= this.history.length;
+}
+
+/**
+| Returns true if path is valid.
+*/
+MeshMashine.prototype._isValidPath = function(path) {
+	if (!path instanceof Array || path.length === 0) return false;
+	for (var pi = 0; pi < path.length; pi++) {
+		var p = path[pi];
+		if (!p) return false;
+		if (p[0] === '_') return false;
+	}
+	return true;
+}
+
+/**
+| Reflects the state of the repository at time.
+| If ida is not null it cares only to rebuild what is necessary to see the ida.
+*/
+// todo partial reflects
+MeshMashine.prototype._reflect = function(time, path) {
+	var reflect = clone(this.repository);
+
+	// playback
+	for(var hi = this.history.length - 1; hi >= time; hi--) {
+		var h = this.history[hi];
+		switch(h.cmd) {
+		case 'create':
+			if (!reflect[h.path[0]]) this.ifail('history mismatch, created node not there.');
+			reflect[h.path[0]].node = null;
+			break;
+		case 'remove':
+			if (reflect[h.path[0]]) this.ifail('history mismatch, removed node there.');
+			reflect[h.path[0]] = clone(h.save);
+			break;
+		case 'set' :
+			mmSet(reflect, h.path, h.save);
+			break;
+		default:
+			this.ifail('history mismatch, unknown command.');
+		}
+	}
+	return reflect;
+}
+
+
+/**
+| Creates a root node to be added in repository.
+| Returns the rood id.
+*/
+MeshMashine.prototype.create = function(time, node) {
+	if (node === null) return {code: false, message: 'null node'};
+	var path = [this.ridfactory++];
+	this.repository[path[0]] = node;
+	this.history.push({cmd: 'create', path: path, node: node});
+	return {code: true, time: time, path: path};
+}
+
+/**
+| Gets a node or entry.
+*/
+MeshMashine.prototype.get = function(time, path) {
+	if (!this._isValidTime(time)) return {code: false, message: 'invalid time'};
+
+	var reflect = this._reflect(time, path);
+
+	return {code: true, time: time, entry: mmGet(reflect, path) };
+}
+
+/**
+| Returns a complete copy of the repository at time
+*/
+MeshMashine.prototype.reflect = function(time) {
+	if (!this._isValidTime(time))   return {code: false, message: 'invalid time'};
+
+	var reflect = this._reflect(time);
+
+	for(var key in reflect) {
+		if (reflect[key] === null) delete reflect[key];
+	}
+
+	return {code: true, time: time, reflect : reflect};
+}
+
+/**
+| Sets a setable entry.
+*/
+MeshMashine.prototype.set = function(time, path, value) {
+	if (!this._isValidTime(time)) return {code: false, message: 'invalid time'};
+	if (!this._isValidPath(time)) return {code: false, message: 'invalid path'};
+
+
+	var node = this.repository;
+	var pi;
+	for (pi = 0; pi < path.length - 1; pi++) {
+		node = node[path[pi]];
+		if (typeof(node) === 'undefined') return {code: false, message: 'path points nowhere'};
+	}
+
+	if (path[pi] === -1) {
+		// append to end.
+		if (!node._grow) return {code: false, message: 'node not growable'};
+		path[pi] = node._grow++;
+	}
+
+	var save = node[path[pi]] || null;
+	node[path[pi]] = value;
+
+	this.history.push({cmd: 'set', path: path, save: save, value : value});
+	return {code: true, time: time, path: path, save: save};
+}
+
+/**
+| Returns all changes from time to now.
+*/
+MeshMashine.prototype.update = function(time) {
+	if (!this._isValidTime(time))   return {code: false, message: 'invalid time'};
+	var update = [];
+	for(var ti = time; ti < this.history.length; ti++) {
+		update.push((this.history[ti]));
+	}
+	return {code: true, time: this.history.length, update: update };
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ,--,--'      .
+ `- | ,-. ,-. |- . ,-. ,-.
+  , | |-' `-. |  | | | | |
+  `-' `-' `-' `' ' ' ' `-|
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                        `'
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
 | Turns a JSON String to object.
@@ -64,363 +270,6 @@ function j2o(json) {
 		return null;
 	}
 }
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ,-,-,-.           .   ,-,-,-.           .
- `,| | |   ,-. ,-. |-. `,| | |   ,-. ,-. |-. . ,-. ,-.
-   | ; | . |-' `-. | |   | ; | . ,-| `-. | | | | | |-'
-   '   `-' `-' `-' ' '   '   `-' `-^ `-' ' ' ' ' ' `-'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-/**
-| Constructor.
-|
-| ifail: function(message), called on internal fail of meshmashine.
-*/
-function MeshMashine(ifail) {
-	this.repository = {};
-	this.history    = [];
-	this.ridfactory = 1;
-	this.ifail      = ifail;
-	this.types      = MeshMashine.types;
-}
-
-/**
-| Each meshmashine node must be of one of these types.
-*/
-MeshMashine.types = {
-	/********************
-	| Build in primes.
-	********************/
-
-	/**
-	| an integer number.
-	|
-	| valid functions:
-	|    set
-	*/
-	int        : true,
-
-	/**
-	| An array of node ids
-	|
-	| valid functions:
-	|   enqueue
-	|   dequeue
-	*/
-	queue      : true,
-
-	/**
-	| An area where partial changes may done.
-	|
-	| This is the place where most of the causal consistency,
-	| operation tranformation takes place.
-	| valid functions:
-	|   erase
-	|   insert
-	|   move
-	*/
-	field      : true,
-
-	/********************
-	| Collectives.
-	********************/
-
-	point : {
-		x : { required : true, typename : 'int'},
-		y : { required : true, typename : 'int'},
-	},
-
-	note : {
-		pnw   : { required: true,  typename: 'point' },
-		pse   : { required: true,  typename: 'point' },
-		dtree : { required: false, typename: 'queue' },
-	}
-};
-
-
-/**
-| Returns true if ida is a root id.
-*/
-MeshMashine.isRootID = function(ida) {
-	return typeof(ida) === 'number' || ida.length === 1;
-}
-
-/**
-| Checks if an meshmashine object matches in a meshmashine type.
-|
-| obj:      the object to check
-| type:     the typename of the object
-*/
-MeshMashine.prototype._typecheck = function(obj, typename) {
-	var type = this.types[typename];
-	switch(typeof(type)) {
-	case 'undefined' :
-		return ' unknown type "'+typename+'"';
-	case 'boolean' :
-		// a primitve
-		switch(typename) {
-		case 'int' :
-			return typeof(obj) !== 'number' ? ' not a number' :
-				(Math.floor(obj) !== obj ? ' number not integer' : true);
-		case 'queue' :
-			return typeof(obj) !== 'object' ? ' not a queue' : true;
-		case 'field' :
-			return typeof(obj) !== 'object' || !obj instanceof String ? ' not a field' : true;
-		default :
-			this.ifail('unknown primitve '+type);
-		}
-	case 'object' :
-		// a collective
-		for(var key in obj) {
-			if (key === 'id' || key === 'type') continue;
-			if (!type[key]) return '.'+key+' not in type';
-			var asw = this._typecheck(obj[key], type[key].typename);
-			if (asw !== true) {
-				return '.' + key + asw;
-			}
-		}
-		for(var key in type) {
-			if (type[key].required && typeof(obj[key]) === 'undefined') {
-				return '.' + key + ' required but missing';
-			}
-		}
-		return true;
-	}
-}
-
-/**
-| Returns true if the root node with 'rid' exists at histpos.
-*/
-MeshMashine.prototype._isNodeThere = function(histpos, rid) {
-	var there = !!this.repository[rid].node;
-	// playback
-	for(var hi = this.history.length - 1; hi >= histpos; hi--) {
-		var h = this.history[hi];
-		switch(h.cmd) {
-		case 'create' :
-			if (h.rid === rid) there = false;
-			break;
-		case 'remove' :
-			if (h.rid === rid) there = true;
-			break;
-		}
-	}
-	return there;
-}
-
-/**
-| Returns true if histpos is valid.
-*/
-MeshMashine.prototype._isValidHistpos = function(histpos) {
-	return typeof(histpos) === 'number' && histpos <= this.history.length && histpos >= 0;
-}
-
-/**
-| Returns the root id of an id(array)
-*/
-MeshMashine.prototype._getRID = function(ida) {
-	if (typeof(ida) === 'number') return ida;
-	if (typeof(ida) !== 'object') return null;
-	var rid = ida[0];
-	if (typeof(rid) !== 'number') return null;
-	return rid;
-}
-
-/**
-| Returns the type an id(array) points to
-*/
-MeshMashine.prototype._getTypename = function(ida) {
-	var rid = typeof(ida) === 'number' ? ida : ida[0];
-	if (!this.repository[rid]) return null;
-	var typename = this.repository[rid].typename;
-	var type = this.types[typename];
-	if (!type) this.ifail('invalid type in repository: '+typename);
-	if (typeof(ida) === 'number') return typename;
-
-	for(var i = 1; i < ida.length; i++) {
-		if (!type[ida[i]]) return null;
-		var typename = type[ida[i]].typename;
-		var type = this.types[typename];
-		if (!type) this.ifail('invalid type in repository: '+typename);
-	}
-	return typename;
-}
-
-/**
-| Sets the value of ida.
-| This functions makes no checks anymore, ida must not be a rootID
-| Returns the old value.
-*/
-MeshMashine.prototype._setIDAValue = function(entry, ida, value) {
-	for(var i = 1; i < ida.length - 1; i++) {
-		entry = entry[ida[i]];
-	}
-	var lastID = ida[ida.length -1];
-	var save = entry[lastID];
-	entry[lastID] = value;
-	return save;
-}
-
-/**
-| Creates a node to be added in repository.
-| Returns the rood id.
-*/
-MeshMashine.prototype.create = function(histpos, typename, node) {
-	var type = this.types[typename];
-	if (!type)   return {code: false, message: 'unknown node type'};
-	if (!node)   return {code: false, message: 'invalid node'};
-	var typecheck = this._typecheck(node, typename);
-	if (typecheck !== true) return {code: false, message: typecheck};
-
-	node = clone(node);
-	var rid = this.ridfactory++;
-	this.repository[rid] = {typename: typename, node : node};
-	this.history.push({cmd: 'create', rid: rid, node: node});
-	return {code: true, histpos: histpos, rid: rid};
-}
-
-/**
-| Removes a node from the repository.
-*/
-MeshMashine.prototype.remove = function(histpos, rid) {
-	if (!this._isValidHistpos(histpos))   return {code: false, message: 'invalid histpos'};
-	if (typeof(rid) !== 'number')         return {code: false, message: 'invalid root id type'};
-	if (!this._isNodeThere(histpos, rid)) return {code: false, message: 'node not there'};
-	if (!this.repository[rid].node)       return {code: true,  message: 'already removed'};
-
-	this.history.push({cmd: 'remove', rid: rid, save: this.repository[rid].node});
-	this.repository[rid].node = null;
-	return {code: true, histpos: histpos};
-}
-
-/**
-| Returns a complete copy of the repository at histpos
-*/
-MeshMashine.prototype.reflect = function(histpos) {
-	if (!this._isValidHistpos(histpos))   return {code: false, message: 'invalid histpos'};
-
-	var reflect = clone(this.repository);
-
-	// playback
-	for(var hi = this.history.length - 1; hi >= histpos; hi--) {
-		var h = this.history[hi];
-		switch(h.cmd) {
-		case 'create':
-			if (!reflect[h.rid].node) {
-				this.ifail('history mismatch, created node not there.');
-			}
-			reflect[h.rid].node = null;
-			break;
-		case 'remove':
-			if (reflect[h.rid].node) {
-				this.ifail('history mismatch, removed node there.');
-			}
-			reflect[h.rid].node = clone(h.save);
-			break;
-		case 'set' :
-			if (MeshMashine.isRootID(h.ida)) {
-				reflect[h.rid] = h.save;
-			} else {
-				console.log(util.inspect(h));
-				this._setIDAValue(reflect[h.rid].node, h.ida, h.save);
-			}
-			break;
-		default:
-			this.ifail('history mismatch, unknown command.');
-		}
-	}
-
-	// remove empty entries
-	for(var i in reflect) if (reflect[i].node === null) delete reflect[i];
-
-	return {code: true, histpos: histpos, reflect : reflect};
-}
-
-/**
-| Gets a node or entry.
-*/
-MeshMashine.prototype.get = function(histpos, ida) {
-	var rid, typename;
-	if (!this._isValidHistpos(histpos))       return {code: false, message: 'invalid histpos'};
-	if ((rid = this._getRID(ida)) === null)   return {code: false, message: 'invalid id'};
-	if (!(typename = this._getTypename(ida))) return {code: false, message: 'invalid ida'};
-
-	var node = this.repository[rid].node;
-
-	// playback
-	for(var hi = this.history.length - 1; hi >= histpos; hi--) {
-		var h = this.history[hi];
-		switch(h.cmd) {
-		case 'create' :
-			if (h.rid === rid) node = null;
-			break;
-		case 'remove' :
-			if (h.rid === rid) node = h.save;
-			break;
-		case 'set' :
-			if (h.rid === rid) {
-				if (MeshMashine.isRootID(h.ida)) {
-					node = h.save;
-				} else {
-					this._setIDAValue(node, h.ida, h.save);
-				}
-			}
-			break;
-		}
-	}
-
-	if (typeof(ida) === 'number' || node === null) return {code: true, histpos: histpos, entry: node};
-	for(var i = 1; i < ida.length; i++) {
-		node = node[ida[i]];
-		if (typeof(node) !== 'object') return {code: true, histpos: histpos, entry: node};
-	}
-	return {code: true, histpos: histpos, entry: node};
-}
-
-/**
-| Sets a settable entry.
-*/
-MeshMashine.prototype.set = function(histpos, ida, value) {
-	var rid, typename;
-	if (!this._isValidHistpos(histpos))       return {code: false, message: 'invalid histpos'};
-	if ((rid = this._getRID(ida)) === null)   return {code: false, message: 'invalid id'};
-	if (!(typename = this._getTypename(ida))) return {code: false, message: 'invalid ida'};
-	if (typename !== 'int')                   return {code: false, message: 'unsettable type: '+typename};
-	if (!this._isNodeThere(histpos, rid))     return {code: false, message: 'node removed'};
-
-	var save;
-	if (MeshMashine.isRootID(ida)) {
-		save = this.repository[ida];
-		this.repository[ida] = value;
-	} else {
-		save = this._setIDAValue(this.repository[ida[0]].node, ida, value);
-	}
-	this.history.push({cmd: 'set', rid: rid, ida: clone(ida), save: save, value : value});
-	return {code: true, histpos: histpos, save: save};
-}
-
-/**
-| Returns all changes from histpos to now.
-*/
-MeshMashine.prototype.update = function(histpos) {
-	if (!this._isValidHistpos(histpos))   return {code: false, message: 'invalid histpos'};
-	var update = [];
-	for(var hi = histpos; hi < this.history.length; hi++) {
-		update.push(clone(this.history[hi]));
-	}
-	return {code: true, histpos: this.history.length, update: update };
-}
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ,--,--'      .
- `- | ,-. ,-. |- . ,-. ,-.
-  , | |-' `-. |  | | | | |
-  `-' `-' `-' `' ' ' ' `-|
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-                        `'
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 function mmfail(message) {
 	console.log('internal fail: '+message);
@@ -443,90 +292,59 @@ for (var fi = fhist.length - 2; fi >= 0; fi--) {
 var cmdhistory = fs.createWriteStream('./cmdhistory.txt', {'flags': 'a'});
 
 var shell = {
-	'create' : function(out, context, line, args) {
-		var reg = /\s*\S+\s+(\S+)\s+(.*)/g.exec(line);
-		if (!reg) {
-			out.write('syntax: create TYPE JSON.\n');
-			return true;
-		}
-		var type = reg[1], js;
-		if ((js = j2o(reg[2])) === null) {
-			out.write('not a valid json: '+j2o.message+'\n');
-			return true;
-		}
-		var asw = mm.create(context.histpos, type, js);
-		out.write(util.inspect(asw, false, null)+'\n');
-		return true;
-	},
-
-	'histpos' : function(out, context, line, args) {
+	'time' : function(out, context, line, args) {
 		if (typeof(args[1]) === 'undefined') {
-			out.write('histpos: '+context.histpos+'\n');
+			out.write('time: '+context.time+'\n');
 			return true;
 		}
-		var histpos = parseInt(args[1]);
-		if (histpos !== histpos) {
+		var time = parseInt(args[1]);
+		if (time !== time) {
 			out.write('"'+args[1]+'" not a number'+'\n');
 			return true;
 		}
-		context.histpos = histpos;
-		out.write('histpos:='+context.histpos+'\n');
+		context.time = time;
+		out.write('time:='+context.time+'\n');
 		return true;
 	},
 
 	'reflect' : function(out, context, line, args) {
-		var asw = mm.reflect(context.histpos);
-		out.write(util.inspect(asw, false, null)+'\n');
-		return true;
-	},
-
-	'remove' : function(out, context, line, args) {
-		if (typeof(args[1]) === 'undefined') {
-			out.write('id missing\n');
-			out.write('syntax: remove ID.\n');
-			return true;
-		}
-		var id = parseInt(args[1]);
-		if (id !== id) {
-			out.write('"'+args[1]+'" not a number'+'\n');
-			return true;
-		}
-		var asw = mm.remove(context.histpos, id);
+		var asw = mm.reflect(context.time);
 		out.write(util.inspect(asw, false, null)+'\n');
 		return true;
 	},
 
 	'set' : function(out, context, line, args) {
-		var reg = /\s*\S+\s+(\[[^\]]*\]|\S+)\s+(.*)/g.exec(line);
-		var ida, value;
+		//var reg = /\s*\S+\s+(\[[^\]]*\]|\S+)\s+(.*)/g.exec(line);
+		var reg = /\s*\S+\s+(\[[^\]]*\])\s+(.*)/g.exec(line);
+		var path, value;
 		if (!reg ||
-			(ida   = j2o(reg[1])) === null ||
+			(path  = j2o(reg[1])) === null ||
 			(value = j2o(reg[2])) === null)
 		{
-			out.write('syntax: create IDA VALUE.\n');
+			out.write('syntax: set PATH VALUE.\n');
 			return true;
 		}
-		var asw = mm.set(context.histpos, ida, value);
+		var asw = mm.set(context.time, path, value);
 		out.write(util.inspect(asw, false, null)+'\n');
 		return true;
 	},
 
 	'get' : function(out, context, line, args) {
 		var reg = /\s*\S+\s+(.*)/g.exec(line);
-		var ida;
-		if (!reg || (ida   = j2o(reg[1])) === null) {
-			out.write('syntax: create IDA.\n');
+		var path;
+		if (!reg || (path = j2o(reg[1])) === null) {
+			out.write('syntax: get PATH.\n');
 			return true;
 		}
-		var asw = mm.get(context.histpos, jsid);
+		var asw = mm.get(context.time, path);
 		out.write(util.inspect(asw, false, null)+'\n');
 		return true;
 	},
 
 	'update' : function(out, context, line, args) {
-		var asw = mm.update(context.histpos);
+		var asw = mm.update(context.time);
 		out.write(util.inspect(asw, false, null)+'\n');
-		if (asw.code) context.histpos = asw.histpos;
+		if (asw.code) context.time = asw.time;
 		return true;
 	},
 
@@ -566,7 +384,7 @@ function createShell(input, output, closer) {
 	shell.history = chist;
 
 	shell.prompt();
-	context = { histpos : 0 };
+	context = { time : 0 };
 	shell.on('line', function (line) {
 		if (!parsePrompt(output, context, line)) {
 			shell.close();
@@ -580,15 +398,8 @@ function createShell(input, output, closer) {
 }
 
 
-//var server = net.createServer(function(c) {
-//	c.setNoDelay(true);
-//	createShell(c, c);
-//});
-//server.listen(8823, '127.0.0.1');
-
 createShell(process.stdin, process.stdout, function() {
 	process.stdout.write('\n');
 	process.stdin.destroy();
-//	process.exit();
 });
 
