@@ -25,6 +25,8 @@ var util = require('util');
 var http = require('http');
 var url  = require('url');
 var fs   = require('fs');
+
+var log  = require('./mclog');
 var MeshMashine = require('./meshmashine');
 
 /**
@@ -46,8 +48,12 @@ try {
 	config = {
 		ip   : '127.0.0.1',
 		port : 8833,
+		log  : {mm: true}
 	};
 }
+
+log.enable = config.log;
+log('mm', 'test');
 
 var mm = new MeshMashine(function(err) {
 	util.log(util.inspect(err));
