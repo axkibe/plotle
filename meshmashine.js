@@ -57,7 +57,7 @@ function clone(original) {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
-| Sets the value of an entry.
+| Sets the value of a node.
 | This functions makes no checks anymore.
 | Returns node (possibly changed)
 |
@@ -83,13 +83,21 @@ function mmSet(node, path, value, save) {
 	return node;
 }
 
-function mmGet(node, path) {
-	var subnode = node;
-	for (var i = 0; i < path.length; i++) {
-		subnode = subnode[path[i]];
-	}
-	return subnode;
+/**
+| Type check shortcuts
+*/
+function isString(o) {
+	return typeof(o) === 'string' || o instanceof String;
 }
+
+function isArray(o)  {
+	return o instanceof Array;
+}
+
+function isTable(o)  {
+	return typeof(o) === 'object' && !(o instanceof Array) && !(o instanceof String);
+}
+
 
 /**
 | Constructor.
@@ -97,9 +105,8 @@ function mmGet(node, path) {
 | ifail: function(message), called on internal fail of meshmashine.
 */
 function MeshMashine(ifail) {
-	this.repository = { _grow : 1 };
+	this.repository = {};
 	this.history    = [];
-	this.idfactory  = 1;
 	this.ifail      = ifail;
 }
 
@@ -133,7 +140,7 @@ MeshMashine.prototype._isValidTime = function(time) {
 | Returns true if path is valid.
 */
 MeshMashine.prototype._isValidPath = function(path) {
-	if (!(path instanceof Array) || path.length === 0) return false;
+	if (!isArray(path) || path.length === 0) return false;
 	for (var pi = 0; pi < path.length; pi++) {
 		var p = path[pi];
 		if (!p) return false;
@@ -173,33 +180,65 @@ MeshMashine.prototype._reflect = function(time, path) {
 }
 
 /**
-| Gets a node or entry.
+| Alters a string.
+*/
+MeshMashine.prototype.alter = function(time, from, to) {
+	if (!this._isValidTime(time)) return {code: false, message: 'invalid time'};
+	if (!isString(from)) return {code: false, message: 'unimplemented: from must be string'};
+
+	/*
+	if (!this._isValidPath(path)) return {code: false, message: 'invalid path'};
+
+	var node = this.repository;
+	var pi;
+	for (pi = 0; pi < path.length - 1; pi++) {
+		node = node[path[pi]];
+		if (typeof(node) === 'undefined') return {code: false, message: 'path points nowhere'};
+	}
+
+	if (path[pi] === -1) {
+		// append to end.
+		if (typeof(node) !== 'object' || node instanceof Array) {
+			return {code: false, message: 'node not growable'};
+		}
+		if (!node._grow) node._grow = 1;
+		path[pi] = node._grow++;
+	}
+
+	var save = node[path[pi]] || null;
+	node[path[pi]] = value;
+
+	this.history.push({cmd: 'set', path: path, save: save, value : value});
+	return {code: true, time: time, path: path, save: save};*/
+	return {code: false, message: 'unimplemented'};
+}
+
+/**
+| Gets a node (which also can be the complete repository).
 */
 MeshMashine.prototype.get = function(time, path) {
 	if (!this._isValidTime(time)) return {code: false, message: 'invalid time'};
 
 	var reflect = this._reflect(time, path);
 
-	return {code: true, time: time, entry: mmGet(reflect, path) };
-}
-
-/**
-| Returns a complete copy of the repository at time
-*/
-MeshMashine.prototype.reflect = function(time) {
-	if (!this._isValidTime(time))   return {code: false, message: 'invalid time'};
-
-	var reflect = this._reflect(time);
-
+	// remove nulls
 	for(var key in reflect) {
 		if (reflect[key] === null) delete reflect[key];
 	}
 
-	return {code: true, time: time, reflect : reflect};
+	var node = reflect;
+	for (var i = 0; i < path.length; i++) {
+		if (node === null) {
+			return {code: true, message: 'path points nowhere.' };
+		}
+		node = node[path[i]];
+	}
+
+	return {code: true, time: time, node: node };
 }
 
 /**
-| Sets a setable entry.
+| Sets a node.
 */
 MeshMashine.prototype.set = function(time, path, value) {
 	if (!this._isValidTime(time)) return {code: false, message: 'invalid time'};
@@ -214,7 +253,10 @@ MeshMashine.prototype.set = function(time, path, value) {
 
 	if (path[pi] === -1) {
 		// append to end.
-		if (!node._grow) return {code: false, message: 'node not growable'};
+		if (typeof(node) !== 'object' || node instanceof Array) {
+			return {code: false, message: 'node not growable'};
+		}
+		if (!node._grow) node._grow = 1;
 		path[pi] = node._grow++;
 	}
 

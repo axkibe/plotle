@@ -121,8 +121,10 @@ var shell = {
 		return;
 	},
 	'get' : function(out, context, line, args, callback) {
-		var reg = /\s*\S+\s+(.*)/g.exec(line);
+		var reg = /\s*\S+\s*(.*)/g.exec(line);
 		var path;
+		// no argument defaults to get all.
+		if (reg && reg[1] === '') reg[1] = '[]';
 		if (!reg || (path = j2o(reg[1])) === null) {
 			out.write('syntax: get PATH.\n');
 			callback();
