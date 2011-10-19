@@ -108,16 +108,16 @@ function mmRequest(cmd, callback) {
 var shell = {
 	'alter' : function(out, context, line, args, callback) {
 		var reg = /\s*\S+\s+(\[[^\]]*\]|\S+)\s+(.*)/g.exec(line);
-		var from, to;
+		var origin, target;
 		if (!reg ||
-			(from = j2o(reg[1])) === null ||
-			(to   = j2o(reg[2])) === null)
+			(origin = j2o(reg[1])) === null ||
+			(target = j2o(reg[2])) === null)
 		{
-			out.write('syntax: alter FROM TO.\n');
+			out.write('syntax: alter ORIGIN TARGET.\n');
 			callback();
 			return;
 		}
-		mmRequest({cmd: 'alter', time: context.time, from: from, to: to}, callback);
+		mmRequest({cmd: 'alter', time: context.time, origin: origin, target: target}, callback);
 		return;
 	},
 	'get' : function(out, context, line, args, callback) {

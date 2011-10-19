@@ -47,6 +47,9 @@ function isTable(o)  {
 	return typeof(o) === 'object' && !(o instanceof Array) && !(o instanceof String);
 }
 
+function isInteger(o) {
+	return typeof(o) === 'number' && Math.floor(o) === o;
+}
 
 /**
 | Returns a rejection error
@@ -59,7 +62,7 @@ function reject(message) {
 /**
 | return the subnode path points at
 */
-function gpath(node, path) {
+function get(node, path) {
 	for (var i = 0; i < path.length; i++) {
 		if (node === null) {
 			return reject('path points nowhere.');
@@ -76,14 +79,44 @@ function gpath(node, path) {
 | path:  path to the value (relative to node)
 | value: the new value to set
 */
-function spath(node, path, value) {
-	if (path.length === 0) return reject('cannot set empty path');
+function set(node, path, value) {
+	if (path.length === 0) throw reject('cannot set empty path');
 	var pi;
 	for(pi = 0; pi < path.length - 1; pi++) {
-		if (!node) return reject('path points nowhere');
+		if (!node) throw reject('path points nowhere');
 		node = node[path[i]];
 	}
 	node[path[pi]] = value;
+}
+
+/**
+| Alters a string
+*/
+function alter(node, origin, target) {
+	// todo moves
+	if (isString(origin)) {
+		// insert
+		var s = get(node, target.path);
+		var tf = target.from;
+		if (tf > s.length) throw reject('.target.from outside string');
+		if (tf === -1) tf = s.length;
+		if (tf < 0) throw reject('.target.from outside string');
+		var to = tf + origin.length;
+		if (typeof(target.to) !== 'undefined') {
+			if (target.to !== to) throw reject('.target.to set but wrong');
+		} else {
+			target.to = to
+		}
+		set(node, target.path, s.substring(0, tf) + origin + s.substring(tf));
+	} else if (to === null || isString(to)) {
+		// remove
+		var s = get(node, origin.path);
+		var of = origin.from;
+		var ot = origin.to;
+		if (!isInteger(of)) throw reject('.target.origin.from no integer: '+of);
+		if (!isInteger(ot)) throw reject('.target.origin.to no integer: '+ot);
+		set(node, origin.path, s.substring(0, of) + s.substring(ot));
+	}
 }
 
 /**
@@ -129,16 +162,10 @@ MeshMashine.prototype._reflect = function(time, path) {
 	for(var hi = this.history.length - 1; hi >= time; hi--) {
 		var h = this.history[hi];
 		switch(h.cmd) {
-		case 'create':
-			if (!reflect[h.path[0]]) this.ifail('history mismatch, created node not there.');
-			reflect[h.path[0]].node = null;
-			break;
-		case 'remove':
-			if (reflect[h.path[0]]) this.ifail('history mismatch, removed node there.');
-			reflect[h.path[0]] = clone(h.save);
-			break;
+		case 'alter':
+			unalter(reflect, h);
 		case 'set' :
-			spath(reflect, h.path, h.save);
+			set(reflect, h.path, clone(h.save));
 			break;
 		default:
 			this.ifail('history mismatch, unknown command.');
@@ -146,41 +173,40 @@ MeshMashine.prototype._reflect = function(time, path) {
 	}
 
 	try {
-		return gpath(reflect, path);
+		return get(reflect, path);
 	} catch (err) {
 		// returns mm rejections but rethrows on coding errors.
-		if (err.code !== false) throw err; else return err; 
+		if (err.code !== false) throw err; else return err;
 	}
 }
 
 /**
 | Alters a string.
 */
-MeshMashine.prototype.alter = function(time, from, to) {
-	log('mm', 'alter', from, to);
+MeshMashine.prototype.alter = function(time, origin, target) {
+	log('mm', 'alter', origin, target);
 	if (!this._isValidTime(time)) return reject('invalid time');
-	if (!isString(from))          return reject('unimplemented: from must be string');
-	if (typeof(to.path) === 'undefined' || typeof(to.offset) === 'undefined') { 
-		return reject('.to is no string pointer');
+	if (!isString(origin))        return reject('unimplemented: origin must be string');
+	if (typeof(target.path) === 'undefined' || typeof(target.from) === 'undefined') {
+		return reject('.target is no string pointer');
 	}
-	if (!this._isValidPath(to.path)) return reject('.to.path invalid');
+	if (!this._isValidPath(target.path)) return reject('.target.path invalid');
 
-	var tn = this._reflect(time, to.path);
-	log(true, tn);
-	if (!isString(tn)) return reject('.to does not point to a string');
+	var tn = this._reflect(time, target.path);
+	if (!isString(tn)) return reject('.target.path does not point to a string');
 
 	// todo transformation
 	//for(var hi = time; hi < this.history.length; hi++) {
-	//	
+	//
 	//}
 
-	var s = gpath(this.repository, to.path);
-	var too = to.offset;
-	if (too > s.length) return reject('.to.offset too large');
-	if (too === -1) too = s.length;
-	spath(this.repository, to.path, s.substring(0, too) + from + s.substring(too));
-	this.history.push({cmd: 'alter', from: from, to: to});
-	return {code: true, time: time};
+	try {
+		alter(this.repository, origin, target);
+	} catch(err) {
+		if (err.code !== false) throw err; else return err;
+	}
+	this.history.push({cmd: 'alter', origin: origin, target: target});
+	return {ok: true, time: time};
 }
 
 /**
@@ -213,13 +239,13 @@ MeshMashine.prototype.set = function(time, path, value) {
 	var pi;
 	for (pi = 0; pi < path.length - 1; pi++) {
 		node = node[path[pi]];
-		if (typeof(node) === 'undefined') return {code: false, message: 'path points nowhere'};
+		if (typeof(node) === 'undefined') return reject('path points nowhere');
 	}
 
 	if (path[pi] === -1) {
 		// append to end.
 		if (typeof(node) !== 'object' || node instanceof Array) {
-			return {code: false, message: 'node not growable'};
+			return reject('node not growable');
 		}
 		if (!node._grow) node._grow = 1;
 		path[pi] = node._grow++;
