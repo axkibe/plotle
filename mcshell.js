@@ -106,6 +106,57 @@ function mmRequest(cmd, callback) {
 | All commands to the shell
 */
 var shell = {
+	'alter' : function(out, context, line, args, callback) {
+		var reg = /\s*\S+\s+(\[[^\]]*\]|\S+)\s+(.*)/g.exec(line);
+		var from, to;
+		if (!reg ||
+			(from = j2o(reg[1])) === null ||
+			(to   = j2o(reg[2])) === null)
+		{
+			out.write('syntax: alter FROM TO.\n');
+			callback();
+			return;
+		}
+		mmRequest({cmd: 'alter', time: context.time, from: from, to: to}, callback);
+		return;
+	},
+	'get' : function(out, context, line, args, callback) {
+		var reg = /\s*\S+\s+(.*)/g.exec(line);
+		var path;
+		if (!reg || (path = j2o(reg[1])) === null) {
+			out.write('syntax: get PATH.\n');
+			callback();
+			return;
+		}
+		if (!(path instanceof Array)) path = [path];
+		mmRequest({cmd: 'get', time: context.time, path: path}, callback);
+		return;
+	},
+
+	'quit' : function(out, context, line, args, callback) {
+		callback(null, null, true);
+	},
+
+	'reflect' : function(out, context, line, args, callback) {
+		mmRequest({cmd: 'reflect', time: context.time}, callback);
+	},
+
+	'set' : function(out, context, line, args, callback) {
+		var reg = /\s*\S+\s+(\[[^\]]*\]|\S+)\s+(.*)/g.exec(line);
+		var path, value;
+		if (!reg ||
+			(path  = j2o(reg[1])) === null ||
+			(value = j2o(reg[2])) === null)
+		{
+			out.write('syntax: set PATH VALUE.\n');
+			callback();
+			return;
+		}
+		if (!(path instanceof Array)) path = [path];
+		mmRequest({cmd: 'set', time: context.time, path: path, value: value}, callback);
+		return;
+	},
+
 	'time' : function(out, context, line, args, callback) {
 		if (typeof(args[1]) === 'undefined') {
 			out.write('time: '+context.time+'\n');
@@ -124,39 +175,6 @@ var shell = {
 		return;
 	},
 
-	'reflect' : function(out, context, line, args, callback) {
-		mmRequest({cmd: 'reflect', time: context.time}, callback);
-	},
-
-	'set' : function(out, context, line, args, callback) {
-		var reg = /\s*\S+\s+(\[[^\]]*\]|\S+)\s+(.*)/g.exec(line);
-		var path, value;
-		if (!reg ||
-			(path  = j2o(reg[1])) === null ||
-			(value = j2o(reg[2])) === null)
-		{
-			out.write('syntax: set PATH VALUE.\n');
-			callback();
-			return;
-		}
-		if (!path instanceof Array) path = [path];
-		mmRequest({cmd: 'set', time: context.time, path: path, value: value}, callback);
-		return;
-	},
-
-	'get' : function(out, context, line, args, callback) {
-		var reg = /\s*\S+\s+(.*)/g.exec(line);
-		var path;
-		if (!reg || (path = j2o(reg[1])) === null) {
-			out.write('syntax: get PATH.\n');
-			callback();
-			return;
-		}
-		if (!path instanceof Array) path = [path];
-		mmRequest({cmd: 'get', time: context.time, path: path}, callback);
-		return;
-	},
-
 	'update' : function(out, context, line, args, callback) {
 		mmRequest({cmd: 'update', time: context.time},
 		function(err, asw) {
@@ -166,13 +184,10 @@ var shell = {
 		return;
 	},
 
-	'quit' : function(out, context, line, args, callback) {
-		callback(null, null, true);
-	},
 };
 
 /**
-| A simple completer for shell commands
+| A simple completer for shell commands.
 */
 function completer(sub) {
 	var sublist = [];
@@ -185,7 +200,7 @@ function completer(sub) {
 }
 
 /**
-| Parses the prompt input
+| Parses the prompt input.
 */
 function parsePrompt(out, context, line, callback) {
 	var commandlist = context.commandlist;

@@ -136,7 +136,7 @@ var mmAjax = function(req, red, res) {
 			asw = mm.update(cmd.time);
 			break;
 		default:
-			webError(res, 400, '.cmd missing');
+			webError(res, 400, 'unknown command "'+cmd.cmd+'"');
 			return;
 		}
 		res.writeHead(200, {'Content-Type': 'application/json'});

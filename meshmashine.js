@@ -27,6 +27,7 @@
 | License: GNU Affero AGPLv3
 */
 
+var util = require('util'); // todo remove
 
 /**
 | Deep copies an object.
@@ -132,7 +133,7 @@ MeshMashine.prototype._isValidTime = function(time) {
 | Returns true if path is valid.
 */
 MeshMashine.prototype._isValidPath = function(path) {
-	if (!path instanceof Array || path.length === 0) return false;
+	if (!(path instanceof Array) || path.length === 0) return false;
 	for (var pi = 0; pi < path.length; pi++) {
 		var p = path[pi];
 		if (!p) return false;
@@ -171,19 +172,6 @@ MeshMashine.prototype._reflect = function(time, path) {
 	return reflect;
 }
 
-
-/**
-| Creates a root node to be added in repository.
-| Returns the rood id.
-*/
-MeshMashine.prototype.create = function(time, node) {
-	if (node === null) return {code: false, message: 'null node'};
-	var path = [this.ridfactory++];
-	this.repository[path[0]] = node;
-	this.history.push({cmd: 'create', path: path, node: node});
-	return {code: true, time: time, path: path};
-}
-
 /**
 | Gets a node or entry.
 */
@@ -215,8 +203,7 @@ MeshMashine.prototype.reflect = function(time) {
 */
 MeshMashine.prototype.set = function(time, path, value) {
 	if (!this._isValidTime(time)) return {code: false, message: 'invalid time'};
-	if (!this._isValidPath(time)) return {code: false, message: 'invalid path'};
-
+	if (!this._isValidPath(path)) return {code: false, message: 'invalid path'};
 
 	var node = this.repository;
 	var pi;
