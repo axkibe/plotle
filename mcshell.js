@@ -180,7 +180,7 @@ var shell = {
 	'update' : function(out, context, line, args, callback) {
 		mmRequest({cmd: 'update', time: context.time},
 		function(err, asw) {
-			if (!err && asw.code) context.time = asw.time;
+			if (!err && asw.ok) context.time = asw.time;
 			callback(err, asw);
 		});
 		return;

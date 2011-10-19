@@ -5,7 +5,11 @@
 | License: GNU Affero AGPLv3
 */
 
+/**
+| Wrapper for _log to hide internals in brower context
+*/
 var log = function() {
+
 	// todo make browser equivalent.
 	var inspect = require('util').inspect;
 
@@ -36,20 +40,32 @@ var log = function() {
 	| Logs if category is configured to be logged.
 	*/
 	function _log(category) {
-		if (!log || !log.enable[category]) return;
+		if (category !== true && !log.enable.all && (!log || !log.enable[category])) return;
 		var a = timestamp();
-		a.push('(');
-		a.push(category);
-		a.push(') ');
+		if (category !== true) {
+			a.push('(');
+			a.push(category);
+			a.push(') ');	
+		}
 		for(var i = 1; i < arguments.length; i++) {
 			if (i > 1) a.push(' ');
-			a.push(inspect(arguments[i]));
+			var arg = arguments[i];
+			if (typeof(arg) === 'string' || arg instanceof String) {
+				a.push(arg);
+			} else {
+				a.push(inspect(arg), null, null);
+			}
 		}
 		console.log(a.join(''));
 	}
 
 	return _log;
 }();
+
+/**
+| Default enabled categories
+*/
+log.enable = {fail: true};
 
 module.exports = log;
 

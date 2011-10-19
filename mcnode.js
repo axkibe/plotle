@@ -44,19 +44,26 @@ var MeshMashine = require('./meshmashine');
 try {
 	config = require('./config');
 } catch (e) {
-	util.log('no config found, defaulting to localhost:8833');
+	log(true, 'no config found, defaulting to localhost:8833');
 	config = {
 		ip   : '127.0.0.1',
 		port : 8833,
-		log  : {mm: true}
+		log  : {},
 	};
 }
 
-log.enable = config.log;
-log('mm', 'test');
+/**
+| Sets enabled logging categories from config
+*/
+(function() {
+	if (!config.log) return;
+	for (var c in config.log) {
+		log.enable[c] = config.log[c];
+	}
+}());
 
 var mm = new MeshMashine(function(err) {
-	util.log(util.inspect(err));
+	log('fail', err);
 	throw err;
 });
 
@@ -98,8 +105,8 @@ var content = {
 */
 function webError(res, code, message) {
 	res.writeHead(code, {'Content-Type': 'text/plain'});
-	messge = code+' '+message;
-	util.log(message);
+	message = code+' '+message;
+	log('web', 'err', message);
 	res.end(message);
 }
 
@@ -119,7 +126,7 @@ var mmAjax = function(req, red, res) {
 	req.on('end',
 	function() {
 		var query = data.join('');
-		util.log('mm-query: '+query);
+		log('ajax', 'in ', query);
 		var cmd;
 		try {
 			cmd = JSON.parse(query);
@@ -135,6 +142,7 @@ var mmAjax = function(req, red, res) {
 		case 'update' : asw = mm.update(cmd.time);                    break;
 		default: webError(res, 400, 'unknown command "'+cmd.cmd+'"'); return;
 		}
+		log('ajax', 'out', asw);
 		res.writeHead(200, {'Content-Type': 'application/json'});
 		res.end(JSON.stringify(asw));
 	});
@@ -168,13 +176,13 @@ var dispatch = function(req, red, res) {
 /**
 | Startup.
 */
-util.log('Starting server @ http://'+(config.ip || '*')+'/:'+config.port);
+log('start', 'Starting server @ http://'+(config.ip || '*')+'/:'+config.port);
 http.createServer(
 function (req, res) {
 	var red = url.parse(req.url);
-	util.log(req.connection.remoteAddress+': '+red.href);
+	log('web', req.connection.remoteAddress, red.href);
 	dispatch(req, red, res);
 }).listen(config.port, config.ip, function() {
-	util.log('Server running');
+	log('start', 'Server running');
 });
 
