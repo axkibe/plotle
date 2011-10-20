@@ -62,10 +62,7 @@ try {
 	}
 }());
 
-var mm = new MeshMashine(function(err) {
-	log('fail', err);
-	throw err;
-});
+var mm = new MeshMashine();
 
 /**
 | Files served.

@@ -51,6 +51,14 @@ function isInteger(o) {
 	return typeof(o) === 'number' && Math.floor(o) === o;
 }
 
+function isStrPtr(o) {
+	return typeof(o) === 'object' && isInteger(o.from);
+}
+
+function isStrSpan(o) {
+	return isStrPtr(o) && isInteger(o.to);
+}
+
 /**
 | Returns a rejection error
 */
@@ -96,6 +104,7 @@ function alter(node, origin, target) {
 	// todo moves
 	if (isString(origin)) {
 		// insert
+		log(true, 'insert');
 		var s = get(node, target.path);
 		var tf = target.from;
 		if (tf > s.length) throw reject('.target.from outside string');
@@ -108,26 +117,26 @@ function alter(node, origin, target) {
 			target.to = to
 		}
 		set(node, target.path, s.substring(0, tf) + origin + s.substring(tf));
-	} else if (to === null || isString(to)) {
+	} else if (target === null || isString(target)) {
 		// remove
+		log(true, 'remove');
 		var s = get(node, origin.path);
 		var of = origin.from;
 		var ot = origin.to;
-		if (!isInteger(of)) throw reject('.target.origin.from no integer: '+of);
-		if (!isInteger(ot)) throw reject('.target.origin.to no integer: '+ot);
+		if (!isInteger(of)) throw reject('.origin.from no integer: '+of);
+		if (!isInteger(ot)) throw reject('.origin.to no integer: '+ot);
 		set(node, origin.path, s.substring(0, of) + s.substring(ot));
+	} else {
+		throw reject('invalid alter');
 	}
 }
 
 /**
 | Constructor.
-|
-| ifail: function(message), called on internal fail of meshmashine.
 */
-function MeshMashine(ifail) {
+function MeshMashine() {
 	this.repository = {};
 	this.history    = [];
-	this.ifail      = ifail;
 }
 
 /**
@@ -163,12 +172,18 @@ MeshMashine.prototype._reflect = function(time, path) {
 		var h = this.history[hi];
 		switch(h.cmd) {
 		case 'alter':
-			unalter(reflect, h);
+			try {
+				alter(reflect, h.target, h.origin);
+			} catch (err) {
+				if (err.ok !== false) throw err;
+				throw new Error('history mismatch, alter: '+err.message);
+			}
+			break;
 		case 'set' :
 			set(reflect, h.path, clone(h.save));
 			break;
 		default:
-			this.ifail('history mismatch, unknown command.');
+			throw new Error('history mismatch, unknown command.');
 		}
 	}
 
@@ -176,7 +191,7 @@ MeshMashine.prototype._reflect = function(time, path) {
 		return get(reflect, path);
 	} catch (err) {
 		// returns mm rejections but rethrows on coding errors.
-		if (err.code !== false) throw err; else return err;
+		if (err.ok !== false) throw err; else return err;
 	}
 }
 
@@ -186,27 +201,26 @@ MeshMashine.prototype._reflect = function(time, path) {
 MeshMashine.prototype.alter = function(time, origin, target) {
 	log('mm', 'alter', origin, target);
 	if (!this._isValidTime(time)) return reject('invalid time');
-	if (!isString(origin))        return reject('unimplemented: origin must be string');
-	if (typeof(target.path) === 'undefined' || typeof(target.from) === 'undefined') {
-		return reject('.target is no string pointer');
+
+	if (isString(origin)) {
+		if (!isStrPtr(target.path)) reject('.target is no string pointer');
+		if (!this._isValidPath(target.path)) return reject('.target.path invalid');
+
+		var tn = this._reflect(time, target.path);
+		if (!isString(tn)) return reject('.target.path does not point to a string');
+
+		//var tp = this._transform(time, target);
+
+		try {
+			alter(this.repository, origin, target);
+		} catch(err) {
+			if (err.ok !== false) throw err; else return err;
+		}
+		this.history.push({cmd: 'alter', origin: origin, target: target});
+		return {ok: true, time: time};
+	} else {
+		return reject('unimplemented');
 	}
-	if (!this._isValidPath(target.path)) return reject('.target.path invalid');
-
-	var tn = this._reflect(time, target.path);
-	if (!isString(tn)) return reject('.target.path does not point to a string');
-
-	// todo transformation
-	//for(var hi = time; hi < this.history.length; hi++) {
-	//
-	//}
-
-	try {
-		alter(this.repository, origin, target);
-	} catch(err) {
-		if (err.code !== false) throw err; else return err;
-	}
-	this.history.push({cmd: 'alter', origin: origin, target: target});
-	return {ok: true, time: time};
 }
 
 /**
