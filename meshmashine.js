@@ -85,7 +85,7 @@ function isSamepath(p1, p2) {
 function isSubpath(p1, p2) {
 	if (p1.length > p2.length) return false;
 	for(var p = 0, pl = p1.length; p < pl; p++) {
-		if (p1[p] !== p2[o]) return false;
+		if (p1[p] !== p2[p]) return false;
 	}
 	return true;
 }

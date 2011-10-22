@@ -35,7 +35,7 @@
 */
 
 
-var switchscreen = false;
+var switchscreen = true;
 var fs       = require('fs');
 var http     = require('http');
 var util     = require('util');
@@ -74,7 +74,7 @@ function() {
 tsize = tout.getWindowSize();
 
 var messages = [];
-var text = 'foobar';
+var text = '';
 var change = {cmd: null, from: null, value: null};
 var time = 0;
 var cursor = 0;
@@ -192,6 +192,25 @@ function set(path, value, callback) {
 	});
 }
 
+function send() {
+	switch (change.cmd) {
+	case 'insert' :
+		request({
+			cmd: 'alter',
+			origin: change.value,
+			target: {path: root, from: change.from},
+		}, function(err, asw) {
+			change.cmd = null;
+			change.from = null;
+			change.value = null;
+			refresh();
+		});
+		break;
+	default :
+		message('nothing to send');
+	}
+}
+
 function get(path, callback) {
 	request({cmd: 'get', path: path}, function(err, asw) {
 		callback(err || (!asw.ok && asw.message), asw && asw.node);
@@ -199,16 +218,12 @@ function get(path, callback) {
 }
 
 function init() {
-	sequence().then(function(next) {
-		tin.resume();
-		tty.setRawMode(true);
-		if (switchscreen) tout.write('\033[?1049h');
-		drawScreen();
-		tin.pause();
-		set(root, text, next);
-	}).then(function(next) {
-		refresh();
-	});
+	tin.resume();
+	tty.setRawMode(true);
+	if (switchscreen) tout.write('\033[?1049h');
+	tin.pause();
+	refresh();
+	drawScreen();
 }
 init();
 
@@ -239,6 +254,7 @@ function(ch, key) {
 			switch (key.name) {
 			case 'c' : exit(0); break;
 			case 'u' : refresh(); break;
+			case 's' : send(); break;
 			}
 		} else {
 			switch (key.name) {
@@ -246,7 +262,9 @@ function(ch, key) {
 				if (cursor > 0) cursor--;
 				break;
 			case 'right' :
-				if (cursor < text.length + (change.cmd === 'insert' ? change.value.length : 0)) {
+				if (cursor < text.length +
+					(change.cmd === 'insert' ? change.value.length : 0)
+				) {
 					cursor++;
 				}
 				break;
@@ -258,7 +276,7 @@ function(ch, key) {
 		case 'insert':
 			var rc = cursor - change.from;
 			if (rc >= 0 && rc <= change.value.length) {
-				change.value = change.value.substr(0, rc) + ch + change.value.substr(rc);
+				change.value = change.value.substr(0, rc)+ch+change.value.substr(rc);
 				cursor++;
 			} else {
 				message('-- change!');
