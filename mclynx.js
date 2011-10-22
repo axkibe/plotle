@@ -34,6 +34,8 @@
 | License: GNU Affero AGPLv3
 */
 
+
+var switchscreen = false;
 var fs       = require('fs');
 var http     = require('http');
 var util     = require('util');
@@ -73,6 +75,7 @@ tsize = tout.getWindowSize();
 
 var messages = [];
 var text = 'foobar';
+var change = {cmd: null, from: null, value: null};
 var time = 0;
 var cursor = 0;
 
@@ -84,22 +87,31 @@ function drawScreen() {
 	for(var i = 0; i < tsize[0]; i++) {
 		tout.write('-');
 	}
-	var im = messages.length - bh;
-	if (im < 0) im = 0;
-	for(var ic = th + 1; im < messages.length; ic++, im++) {
+	for(var ic = th + 1, im = messages.length - 1; ic < tsize[1] && im >= 0; ic++, im--) {
 		tout.cursorTo(0, ic);
 		tout.write(messages[im]);
 	}
 	tout.cursorTo(0, 0);
-	tout.write(text);
+	switch (change.cmd) {
+	case 'insert':
+		tout.write(text.substr(0, change.from));
+		tout.write('\033[37;42;1m');
+		tout.write(change.value);
+		tout.write('\033[0m');
+		tout.write(text.substr(change.from));
+		break;
+	default :
+		tout.write(text);
+		break;
+	}
 	tout.cursorTo(cursor, 0);
 }
 
 function message(s) {
 	if (s instanceof Array) s = s.join('');
 	var slines = s.split('\n');
-	for (sline in slines) {
-		messages.push(slines[sline]);
+	for (var si = slines.length - 1; si >= 0; si--) {
+		messages.push(slines[si]);
 	}
 	drawScreen();
 }
@@ -151,6 +163,7 @@ function ajax(cmd, callback) {
 
 function request(cmd, callback) {
 	cmd.time = time;
+	message('');
 	message('-> '+util.inspect(cmd));
 	tin.pause();
 	ajax(cmd, function(err, asw) {
@@ -189,8 +202,7 @@ function init() {
 	sequence().then(function(next) {
 		tin.resume();
 		tty.setRawMode(true);
-		// screen buffer
-		tout.write('\033[?1049h');
+		if (switchscreen) tout.write('\033[?1049h');
 		drawScreen();
 		tin.pause();
 		set(root, text, next);
@@ -214,22 +226,52 @@ function refresh() {
 }
 
 function exit(code) {
-	// original screen
-	tout.write('\033[?1049l');
+	if (switchscreen) tout.write('\033[?1049l');
 	tty.setRawMode(false);
 	process.exit(1);
 }
 
 
 tin.on('keypress',
-function(s, key) {
-	if (key && key.ctrl) {
-		if (key.name === 'c') {
-			exit(0);
-		}
-		if (key.name === 'u') {
-			refresh();
+function(ch, key) {
+	if (key) {
+		if (key.ctrl) {
+			switch (key.name) {
+			case 'c' : exit(0); break;
+			case 'u' : refresh(); break;
+			}
+		} else {
+			switch (key.name) {
+			case 'left' :
+				if (cursor > 0) cursor--;
+				break;
+			case 'right' :
+				if (cursor < text.length + (change.cmd === 'insert' ? change.value.length : 0)) {
+					cursor++;
+				}
+				break;
+			}
 		}
 	}
+	if (!key || key.name === ch) {
+		switch (change.cmd) {
+		case 'insert':
+			var rc = cursor - change.from;
+			if (rc >= 0 && rc <= change.value.length) {
+				change.value = change.value.substr(0, rc) + ch + change.value.substr(rc);
+				cursor++;
+			} else {
+				message('-- change!');
+			}
+			break;
+		default :
+			change.cmd  = 'insert';
+			change.from = cursor;
+			change.value = ch;
+			cursor++;
+			break;
+		}
+	}
+	drawScreen();
 });
 
