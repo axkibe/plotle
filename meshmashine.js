@@ -1,16 +1,31 @@
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ,-,-,-.           .   ,-,-,-.           .
- `,| | |   ,-. ,-. |-. `,| | |   ,-. ,-. |-. . ,-. ,-.
-   | ; | . |-' `-. | |   | ; | . ,-| `-. | | | | | |-'
-   '   `-' `-' `-' ' '   '   `-' `-^ `-' ' ' ' ' ' `-'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+/**                                                      _.._
+                                                      .-'_.._''.
+ __  __   ___       _....._              .          .' .'     '.\
+|  |/  `.'   `.   .´       '.          .'|         / .'                                _.._
+|   .-.  .-.   ' /   .-'"'.  \        (  |        . '            .-,.-~.             .' .._|    .|
+|  |  |  |  |  |/   /______\  |        | |        | |            |  .-. |    __      | '      .' |_
+|  |  |  |  |  ||   __________|    _   | | .'''-. | |            | |  | | .:-`.'.  __| |__  .'     |
+|  |  |  |  |  |\  (          '  .' |  | |/.'''. \. '            | |  | |/ |   \ ||__   __|'-..  .-'
+|  |  |  |  |  | \  '-.___..-~. .   | /|  /    | | \ '.         .| |  '- `" __ | |   | |      |  |
+|__|  |__|  |__|  `         .'.'.'| |//| |     | |  '. `.____.-'/| |      .'.''| |   | |      |  |
+                   `'-.....-.'.'.-'  / | |     | |    `-._____ / | |     / /   | |_  | |      |  '.'
+                                 \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
+                                       '___)   '___)                      `~~'  `"   |_|      `--´
+
+
+                       ,-,-,-.           .   ,-,-,-.           .
+                       `,| | |   ,-. ,-. |-. `,| | |   ,-. ,-. |-. . ,-. ,-.
+                         | ; | . |-' `-. | |   | ; | . ,-| `-. | | | | | |-'
+                         '   `-' `-' `-' ' '   '   `-' `-^ `-' ' ' ' ' ' `-'
+
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+ The causal consistency / operation transformation engine for meshcraft.
+
+ Authors: Axel Kittenberger
+ License: GNU Affero AGPLv3
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/**
-| The causal consistency / operation transformation engine for meshcraft.
-|
-| Authors: Axel Kittenberger
-| License: GNU Affero AGPLv3
-*/
 
 /**
 | Deep copies an object.
@@ -51,12 +66,28 @@ function isInteger(o) {
 	return typeof(o) === 'number' && Math.floor(o) === o;
 }
 
-function isStrPtr(o) {
+function isIndex(o) {
 	return typeof(o) === 'object' && isInteger(o.from);
 }
 
-function isStrSpan(o) {
-	return isStrPtr(o) && isInteger(o.to);
+function isSpan(o) {
+	return isIndex(o) && isInteger(o.to);
+}
+
+function isSamepath(p1, p2) {
+	if (p1.length !== p2.length) return false;
+	for(var p = 0, pl = p1.length; p < pl; p++) {
+		if (p1[p] !== p2[p]) return false;
+	}
+	return true;
+}
+
+function isSubpath(p1, p2) {
+	if (p1.length > p2.length) return false;
+	for(var p = 0, pl = p1.length; p < pl; p++) {
+		if (p1[p] !== p2[o]) return false;
+	}
+	return true;
 }
 
 /**
@@ -111,6 +142,7 @@ function alter(node, origin, target) {
 		if (tf === -1) tf = s.length;
 		if (tf < 0) throw reject('.target.from outside string');
 		var to = tf + origin.length;
+		// make target a span.
 		if (typeof(target.to) !== 'undefined') {
 			if (target.to !== to) throw reject('.target.to set but wrong');
 		} else {
@@ -120,11 +152,10 @@ function alter(node, origin, target) {
 	} else if (target === null || isString(target)) {
 		// remove
 		log(true, 'remove');
+		if (!isSpan(origin)) throw reject('origin no span when removing text');
 		var s = get(node, origin.path);
 		var of = origin.from;
 		var ot = origin.to;
-		if (!isInteger(of)) throw reject('.origin.from no integer: '+of);
-		if (!isInteger(ot)) throw reject('.origin.to no integer: '+ot);
 		set(node, origin.path, s.substring(0, of) + s.substring(ot));
 	} else {
 		throw reject('invalid alter');
@@ -158,6 +189,48 @@ MeshMashine.prototype._isValidPath = function(path) {
 	}
 	return true;
 }
+
+/**
+|
+*/
+MeshMashine.prototype._transformIndex = function(time, idx) {
+	var tidx = null;
+	for(var t = time; t < this.history.length; t++) {
+		var h = this.history[t];
+		switch(h.cmd) {
+		case 'set':
+			if (isSubpath(h.path, (tidx || idx).from)) {
+				// this change is being overwritten
+				log('ote', 'setted away');
+				return null;
+			}
+			break;
+		case 'alter' :
+			log(true, (tidx || idx).from);
+			if (isSamepath(h.path, (tidx || idx).from)) {
+				log('ote', 'altered');
+			}
+			if (tidx === null) tidx = idx;
+			if (isString(h.origin)) {
+				// was an insert
+				if (!isSpan(h.target)) throw new Error('history mangled');
+				if (tidx.from > h.target.from) { // or >= for insert after?
+					tidx.from += h.target.to - h.target.from;
+				}
+			} else if (h.target === null || isString(h.target)) {
+				// was a remove
+				if (!isSpan(h.origin)) throw new Error('history mangled');
+				if (tidx.from > h.origin.from) {
+					tidx.from -= h.origin.to - h.origin.from;
+				}
+				throw new Error('history mangled');
+			}
+			break;
+		}
+	}
+	return tidx || idx;
+}
+
 
 /**
 | Reflects the state of the repository at time.
@@ -203,20 +276,20 @@ MeshMashine.prototype.alter = function(time, origin, target) {
 	if (!this._isValidTime(time)) return reject('invalid time');
 
 	if (isString(origin)) {
-		if (!isStrPtr(target.path)) reject('.target is no string pointer');
+		if (!isIndex(target.path)) reject('.target is no index');
 		if (!this._isValidPath(target.path)) return reject('.target.path invalid');
 
 		var tn = this._reflect(time, target.path);
 		if (!isString(tn)) return reject('.target.path does not point to a string');
 
-		//var tp = this._transform(time, target);
+		var tidx = this._transformIndex(time, target);
 
 		try {
-			alter(this.repository, origin, target);
+			alter(this.repository, origin, tidx);
 		} catch(err) {
 			if (err.ok !== false) throw err; else return err;
 		}
-		this.history.push({cmd: 'alter', origin: origin, target: target});
+		this.history.push({cmd: 'alter', origin: origin, target: tidx});
 		return {ok: true, time: time};
 	} else {
 		return reject('unimplemented');
@@ -229,6 +302,7 @@ MeshMashine.prototype.alter = function(time, origin, target) {
 MeshMashine.prototype.get = function(time, path) {
 	log('mm', 'get', time, path);
 	if (!this._isValidTime(time)) return reject('invalid time');
+	if (!this._isValidPath(path)) return reject('invalid path');
 
 	var reflect = this._reflect(time, path);
 
