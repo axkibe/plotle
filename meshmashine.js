@@ -45,7 +45,7 @@ function clone(original) {
 	return copy;
 }
 
-var log = require('./mclog');
+var log = require('./meshcraft-log');
 
 /**
 | Type check shortcuts

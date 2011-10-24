@@ -10,7 +10,7 @@ var fs         = require('fs');
 var http       = require('http');
 var readline   = require('readline');
 var util       = require('util');
-var libemsi    = require('./libemsi');
+var libemsi    = require('./lib-meshcraft-client');
 
 var j2o    = libemsi.j2o;
 var config = libemsi.config();

@@ -23,7 +23,7 @@ var log = function() {
 	}
 
 	/**
-	| Creates a timestamp which will be returned as joinable array. 
+	| Creates a timestamp which will be returned as joinable array.
 	*/
 	function timestamp() {
 		var now = new Date();
@@ -45,7 +45,7 @@ var log = function() {
 		if (category !== true) {
 			a.push('(');
 			a.push(category);
-			a.push(') ');	
+			a.push(') ');
 		}
 		for(var i = 1; i < arguments.length; i++) {
 			if (i > 1) a.push(' ');

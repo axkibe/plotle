@@ -179,24 +179,23 @@ init();
 
 function refresh() {
 	tin.pause();
-	update(
-	function(err, asw) {
+	update(function(err, asw) {
 		if (err) {
 			tin.resume();
 			drawScreen();
 			return;
 		}
-		get(root,
-	function(err, asw) {
-		if (err) {
+		get(root, function(err, asw) {
+			if (err) {
+				tin.resume();
+				drawScreen();
+				return;
+			}
+			text = asw.node;
 			tin.resume();
 			drawScreen();
-			return;
-		}
-		text = asw.node;
-		tin.resume();
-		drawScreen();
-	})});
+		})
+	});
 }
 
 function exit(message) {
@@ -223,6 +222,8 @@ tin.on('keypress', function(ch, key) {
 				if (cursor > 0) cursor--;
 				break;
 			case 'right' :
+				var max = text.length;
+				if (change.cmd === 'insert') max += change.value.length;
 				if (cursor < text.length +
 					(change.cmd === 'insert' ? change.value.length : 0)
 				) {
@@ -232,7 +233,7 @@ tin.on('keypress', function(ch, key) {
 			}
 		}
 	}
-	if (!key || key.name === ch) {
+	if (key.name === ch) {
 		switch (change.cmd) {
 		case 'insert':
 			var rc = cursor - change.from;
