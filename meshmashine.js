@@ -181,7 +181,7 @@ MeshMashine.prototype._isValidTime = function(time) {
 | Returns true if path is valid.
 */
 MeshMashine.prototype._isValidPath = function(path) {
-	if (!isArray(path) || path.length === 0) return false;
+	if (!isArray(path)) return false;
 	for (var pi = 0; pi < path.length; pi++) {
 		var p = path[pi];
 		if (!p) return false;
