@@ -58,6 +58,11 @@ function isArray(o)  {
 	return o instanceof Array;
 }
 
+function isEmpty(o)  {
+	for(var _ in o) return false;
+	return true;
+}
+
 function isTable(o)  {
 	return typeof(o) === 'object' && !(o instanceof Array) && !(o instanceof String);
 }
@@ -133,9 +138,10 @@ function set(node, path, value) {
 */
 function alter(node, origin, target) {
 	// todo moves
-	if (isString(origin)) {
+	log('alter', origin, target);
+	if (isString(origin.text)) {
 		// insert
-		log(true, 'insert');
+		log('alter', 'insert');
 		var s = get(node, target.path);
 		var tf = target.from;
 		if (tf > s.length) throw reject('.target.from outside string');
@@ -146,16 +152,17 @@ function alter(node, origin, target) {
 		if (typeof(target.to) !== 'undefined') {
 			if (target.to !== to) throw reject('.target.to set but wrong');
 		} else {
-			target.to = to
+			target.to = to;
 		}
-		set(node, target.path, s.substring(0, tf) + origin + s.substring(tf));
-	} else if (target === null || isString(target)) {
+		set(node, target.path, s.substring(0, tf) + origin.text + s.substring(tf));
+	} else if (isEmpty(target)) {
 		// remove
-		log(true, 'remove');
-		if (!isSpan(origin)) throw reject('origin no span when removing text');
+		log('alter', 'remove');
+		if (!isSpan(origin)) throw reject('origin no span');
 		var s = get(node, origin.path);
 		var of = origin.from;
 		var ot = origin.to;
+		target.text = s.substring(of, ot);
 		set(node, origin.path, s.substring(0, of) + s.substring(ot));
 	} else {
 		throw reject('invalid alter');
@@ -191,44 +198,43 @@ MeshMashine.prototype._isValidPath = function(path) {
 }
 
 /**
-|
+| Transforms an index or span.
 */
-MeshMashine.prototype._transformIndex = function(time, idx) {
-	var tidx = null;
+MeshMashine.prototype._transformIS = function(time, ios) {
 	for(var t = time; t < this.history.length; t++) {
 		var h = this.history[t];
 		switch(h.cmd) {
 		case 'set':
-			if (isSubpath(h.path, (tidx || idx).from)) {
+			if (isSubpath(h.path, ios.path)) {
 				// this change is being overwritten
 				log('ote', 'setted away');
 				return null;
 			}
 			break;
 		case 'alter' :
-			log(true, (tidx || idx).from);
-			if (isSamepath(h.path, (tidx || idx).from)) {
-				log('ote', 'altered');
-			}
-			if (tidx === null) tidx = idx;
+			if (!isSamepath(h.path, ios.path)) break;
+			log('ote', 'altered');
 			if (isString(h.origin)) {
 				// was an insert
 				if (!isSpan(h.target)) throw new Error('history mangled');
-				if (tidx.from > h.target.from) { // or >= for insert after?
-					tidx.from += h.target.to - h.target.from;
+				if (iod.from > h.target.from) { // or >= for insert after?
+					iod.from += h.target.to - h.target.from;
+				}
+				if (iod.to > h.target.from) { // or >= for insert after?
+					iod.to += h.target.to - h.target.from;
 				}
 			} else if (h.target === null || isString(h.target)) {
 				// was a remove
 				if (!isSpan(h.origin)) throw new Error('history mangled');
-				if (tidx.from > h.origin.from) {
-					tidx.from -= h.origin.to - h.origin.from;
-				}
+				if (ios.from > h.origin.from) ios.from -= h.origin.to - h.origin.from;
+				if (ios.to > h.origin.from) ios.to -= h.origin.to - h.origin.from;
+			} else {
 				throw new Error('history mangled');
 			}
 			break;
 		}
 	}
-	return tidx || idx;
+	return ios;
 }
 
 
@@ -275,14 +281,14 @@ MeshMashine.prototype.alter = function(time, origin, target) {
 	log('mm', 'alter', origin, target);
 	if (!this._isValidTime(time)) return reject('invalid time');
 
-	if (isString(origin)) {
-		if (!isIndex(target.path)) reject('.target is no index');
+	if (isString(origin.text)) {
+		if (!isIndex(target)) reject('.target is no index');
 		if (!this._isValidPath(target.path)) return reject('.target.path invalid');
 
 		var tn = this._reflect(time, target.path);
 		if (!isString(tn)) return reject('.target.path does not point to a string');
 
-		var tidx = this._transformIndex(time, target);
+		var tidx = this._transformIS(time, target);
 
 		try {
 			alter(this.repository, origin, tidx);
@@ -291,7 +297,25 @@ MeshMashine.prototype.alter = function(time, origin, target) {
 		}
 		this.history.push({cmd: 'alter', origin: origin, target: tidx});
 		return {ok: true, time: time};
+	} else if (target === null) {
+		if (!isSpan(origin)) reject('.origin is no span');
+		if (!this._isValidPath(origin.path)) return reject('.origin.path invalid');
+
+		var tn = this._reflect(time, origin.path);
+		if (!isString(tn)) return reject('.origin.path does not point to a string');
+
+		var aorg = this._transformIS(time, origin);
+		var atrg = {};
+
+		try {
+			alter(this.repository, aorg, atrg);
+		} catch(err) {
+			if (err.ok !== false) throw err; else return err;
+		}
+		this.history.push({cmd: 'alter', origin: aorg, target: atrg});
+		return {ok: true, time: time};
 	} else {
+		log(true, target);
 		return reject('unimplemented');
 	}
 }
