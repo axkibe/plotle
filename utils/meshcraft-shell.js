@@ -69,6 +69,7 @@ var shell = {
 		request({cmd: 'alter', time: context.time, origin: origin, target: target}, callback);
 		return;
 	},
+
 	'get' : function(out, context, line, args, callback) {
 		var reg = /\s*\S+\s*(.*)/g.exec(line);
 		var path;
@@ -82,6 +83,10 @@ var shell = {
 		if (!(path instanceof Array)) path = [path];
 		request({cmd: 'get', time: context.time, path: path}, callback);
 		return;
+	},
+
+	'now' : function(out, context, line, args, callback) {
+		request({cmd: 'now'}, callback);
 	},
 
 	'quit' : function(out, context, line, args, callback) {

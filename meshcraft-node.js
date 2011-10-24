@@ -13,10 +13,10 @@
                                        '___)   '___)                      `~~'  `"   |_|      `--´
 
 
-                               ,-,-,-.       ,-,-.         .
-                               `,| | |   ,-. ` | |   ,-. ,-| ,-.
-                                 | ; | . |     | |-. | | | | |-'
-                                 '   `-' `-'  ,' `-' `-' `-^ `-'
+                                       ,-,-.         .
+                                       ` | |   ,-. ,-| ,-.
+                                         | |-. | | | | |-'
+                                        ,' `-' `-' `-^ `-'
 
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
@@ -142,6 +142,7 @@ var mmAjax = function(req, red, res) {
 		switch (cmd.cmd) {
 		case 'alter':  asw = mm.alter(cmd.time, cmd.origin, cmd.target); break;
 		case 'get':    asw = mm.get(cmd.time, cmd.path);                 break;
+		case 'now':    asw = mm.now();                                   break;
 		case 'set':    asw = mm.set(cmd.time, cmd.path, cmd.value);      break;
 		case 'update': asw = mm.update(cmd.time);                        break;
 		default: webError(res, 400, 'unknown command "'+cmd.cmd+'"'); return;

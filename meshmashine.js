@@ -316,6 +316,15 @@ MeshMashine.prototype.get = function(time, path) {
 }
 
 /**
+| Returns the current time position
+*/
+MeshMashine.prototype.now = function() {
+	log('mm', 'now');
+	log('mm', 'ok', this.history.length);
+	return {ok: true, time: this.history.length };
+}
+
+/**
 | Sets a node.
 */
 MeshMashine.prototype.set = function(time, path, value) {
@@ -343,7 +352,7 @@ MeshMashine.prototype.set = function(time, path, value) {
 	node[path[pi]] = value;
 
 	this.history.push({cmd: 'set', path: path, save: save, value : value});
-	
+
 	log('mm', 'ok', time, path, save);
 	return {ok: true, time: time, path: path, save: save};
 }

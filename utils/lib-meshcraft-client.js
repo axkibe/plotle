@@ -34,7 +34,6 @@ var _config;
 var config = module.exports.config = function() {
 	if (_config) return _config;
 	try {
-		console.log(process.arguments[1]);
 		return _config = require('./config');
 	} catch(err) {
 		return _config = {
