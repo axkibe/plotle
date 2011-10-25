@@ -13,26 +13,18 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--´
 
-                               ,-,-,-.        ,
-                               `,| | |   ,-.  )   . . ,-. . ,
-                                 | ; | . |   /    | | | |  X
-                                 '   `-' `-' `--' `-| ' ' ' `
-                                                   /|
-                                                  `-'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
+                                        ,
+                                        )   . . ,-. . ,
+                                       /    | | | |  X
+                                       `--' `-| ' ' ' `
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~/| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                                            `-'
  A terminal based interface.
 
  Authors: Axel Kittenberger
  License: GNU Affero AGPLv3
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/**
-| A command line shell to interact with a meshcraft repository.
-|
-| Authors: Axel Kittenberger
-| License: GNU Affero AGPLv3
-*/
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 function isString(o) {
 	return typeof(o) === 'string' || o instanceof String;
@@ -64,12 +56,13 @@ var tsize;
 process.on('SIGWINCH',
 function() {
 	tsize = tout.getWindowSize();
+	drawScreen();
 });
 tsize = tout.getWindowSize();
 
 var messages = [];
 var text = '';
-var change = {cmd: null, from: null, value: null};
+var change = {cmd: null, at1: null, at2: null, value: null};
 var time = 0;
 var cursor = 0;
 
@@ -88,18 +81,18 @@ function drawScreen() {
 	tout.cursorTo(0, 0);
 	switch (change.cmd) {
 	case 'remove':
-		tout.write(text.substring(0, change.from));
+		tout.write(text.substring(0, change.at1));
 		tout.write('\033[37;41;1m');
-		tout.write(text.substring(change.from, change.to));
+		tout.write(text.substring(change.at1, change.at2));
 		tout.write('\033[0m');
-		tout.write(text.substring(change.to));
+		tout.write(text.substring(change.at2));
 		break;
 	case 'insert':
-		tout.write(text.substring(0, change.from));
+		tout.write(text.substring(0, change.at1));
 		tout.write('\033[37;42;1m');
 		tout.write(change.value);
 		tout.write('\033[0m');
-		tout.write(text.substring(change.from));
+		tout.write(text.substring(change.at1));
 		break;
 	default :
 		tout.write(text);
@@ -163,24 +156,22 @@ function send() {
 	case 'insert' :
 		request({
 			cmd: 'alter',
-			origin: {text: change.value},
-			target: {path: root, from: change.from},
+			val: change.value,
+			src: null,
+			trg: {path: root, at1: change.at1},
 		}, function(err, asw) {
-			change.cmd = null;
-			change.from = null;
-			change.value = null;
+			for(k in change) change[k] = null;
 			refresh();
 		});
 		break;
 	case 'remove' :
 		request({
 			cmd: 'alter',
-			origin: {path: root, from: change.from, to: change.to},
-			target: null,
+			val: null,
+			src: {path: root, at1: change.at1, at2: change.at2},
+			trg: null,
 		}, function(err, asw) {
-			change.cmd = null;
-			change.from = null;
-			change.value = null;
+			for(k in change) change[k] = null;
 			refresh();
 		});
 		break;
@@ -188,7 +179,6 @@ function send() {
 		message('nothing to send');
 	}
 }
-
 
 function init() {
 	tin.resume();
@@ -225,6 +215,7 @@ function exit(message) {
 
 
 tin.on('keypress', function(ch, key) {
+	//message(ch+' | '+util.inspect(key));
 	if (key && key.ctrl) {
 		switch (key.name) {
 		case 'c' : exit();    break;
@@ -251,13 +242,13 @@ tin.on('keypress', function(ch, key) {
 		switch (change.cmd) {
 		case 'remove' :
 			if (cursor === text.length) break;
-			if (change.to === cursor) {
-				change.to++;
+			if (change.at2 === cursor) {
+				change.at2++;
 				cursor++;
 				break;
 			}
-			if (change.from === cursor + 1) {
-				change.from--;
+			if (change.at1 === cursor + 1) {
+				change.at1--;
 				break;
 			}
 			message('-- another change in buffer!');
@@ -267,9 +258,9 @@ tin.on('keypress', function(ch, key) {
 			break;
 		case null:
 			if (cursor >= text.length) break;
-			change.cmd  = 'remove';
-			change.from = cursor;
-			change.to   = cursor + 1;
+			change.cmd = 'remove';
+			change.at1 = cursor;
+			change.at2 = cursor + 1;
 			cursor++;
 			break;
 		default :
@@ -281,13 +272,13 @@ tin.on('keypress', function(ch, key) {
 		switch (change.cmd) {
 		case 'remove' :
 			if (cursor === 0) break;
-			if (change.from === cursor) {
-				change.from--;
+			if (change.at1 === cursor) {
+				change.at1--;
 				cursor--;
 				break;
 			}
-			if (change.to + 1 === cursor) {
-				change.to++;
+			if (change.at2 + 1 === cursor) {
+				change.at2++;
 				cursor--;
 				break;
 			}
@@ -299,8 +290,8 @@ tin.on('keypress', function(ch, key) {
 		case null:
 			if (cursor === 0) break;
 			change.cmd = 'remove';
-			change.from = cursor - 1;
-			change.to   = cursor;
+			change.at1 = cursor - 1;
+			change.at2 = cursor;
 			cursor--;
 			break;
 		default :
@@ -310,12 +301,13 @@ tin.on('keypress', function(ch, key) {
 		break;
 	case undefined :
 	case (ch) :
+	case (ch && ch.toLowerCase()) :
 		switch (change.cmd) {
 		case 'remove':
 			message('-- another change in buffer!');
 			break;
 		case 'insert':
-			var rc = cursor - change.from;
+			var rc = cursor - change.at1;
 			if (rc >= 0 && rc <= change.value.length) {
 				change.value = change.value.substring(0, rc)+ch+change.value.substring(rc);
 				cursor++;
@@ -324,8 +316,8 @@ tin.on('keypress', function(ch, key) {
 			}
 			break;
 		case null:
-			change.cmd  = 'insert';
-			change.from = cursor;
+			change.cmd   = 'insert';
+			change.at1   = cursor;
 			change.value = ch;
 			cursor++;
 			break;

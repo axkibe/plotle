@@ -50,6 +50,10 @@ var log = require('./meshcraft-log');
 /**
 | Type check shortcuts
 */
+function is(o) {
+	return typeof(o) !== 'undefined' && (o !== null);
+}
+
 function isString(o) {
 	return typeof(o) === 'string' || o instanceof String;
 }
@@ -72,11 +76,11 @@ function isInteger(o) {
 }
 
 function isIndex(o) {
-	return typeof(o) === 'object' && isInteger(o.from);
+	return typeof(o) === 'object' && isInteger(o.at1);
 }
 
 function isSpan(o) {
-	return isIndex(o) && isInteger(o.to);
+	return isIndex(o) && isInteger(o.at2);
 }
 
 function isSamepath(p1, p2) {
@@ -136,34 +140,43 @@ function set(node, path, value) {
 /**
 | Alters a string
 */
-function alter(node, origin, target) {
+function alter(node, val, src, trg) {
 	// todo moves
-	log('alter', origin, target);
-	if (isString(origin.text)) {
+	log('alter', 'val:', val, 'src:', src, 'trg:', trg);
+	if (!src) {
 		// insert
-		log('alter', 'insert');
-		var s = get(node, target.path);
-		var tf = target.from;
-		if (tf > s.length) throw reject('.target.from outside string');
-		if (tf === -1) tf = s.length;
-		if (tf < 0) throw reject('.target.from outside string');
-		var to = tf + origin.length;
+		log('alter', 'is insert');
+		if (!isIndex(trg)) throw reject('alter(insert).trg not an index');
+		if (!isString(val)) throw reject('alter(insert).val not a string');
+		var s = get(node, trg.path);
+		var tat1 = trg.at1
+		if (tat1 === -1) tat1 = s.length;
+		if (tat1 < 0 || tat1 > s.length) throw reject('alter(insert).trg.at1 outside string');
+
 		// make target a span.
-		if (typeof(target.to) !== 'undefined') {
-			if (target.to !== to) throw reject('.target.to set but wrong');
+		var tat2 = tat1 + val.length;
+		if (is(trg.at2)) {
+			if (trg.at2 !== tat2) throw reject('alter(inster).trg.at2 already set wrongly');
 		} else {
-			target.to = to;
+			trg.at2 = tat2;
 		}
-		set(node, target.path, s.substring(0, tf) + origin.text + s.substring(tf));
-	} else if (isEmpty(target)) {
+		set(node, trg.path, s.substring(0, tat1) + val + s.substring(tat1));
+		return val;
+	} else if (!trg) {
 		// remove
-		log('alter', 'remove');
-		if (!isSpan(origin)) throw reject('origin no span');
-		var s = get(node, origin.path);
-		var of = origin.from;
-		var ot = origin.to;
-		target.text = s.substring(of, ot);
-		set(node, origin.path, s.substring(0, of) + s.substring(ot));
+		log('alter', 'is remove');
+		if (!isSpan(src)) throw reject('alter(remove).src not a span');
+		var s = get(node, src.path);
+		var sat1 = src.at1, sat2 = src.at2;
+		if (sat1 === -1) sat1 = s.length;
+		if (sat2 === -1) sat2 = s.length;
+		if (sat1 === sat2) { log('alter', 'removed nothing'); return; }
+		if (sat2 < sat1)     throw reject('alter(remove) src.at2 < src.at1');
+		if (sat1 > s.length) throw reject('alter(remove) src.at1 outside string');
+		if (sat2 > s.length) throw reject('alter(remove) src.at2 outside string');
+		val = s.substring(sat1, sat2);
+		set(node, src.path, s.substring(0, sat1) + s.substring(sat2));
+		return val;
 	} else {
 		throw reject('invalid alter');
 	}
@@ -212,22 +225,33 @@ MeshMashine.prototype._transformIS = function(time, ios) {
 			}
 			break;
 		case 'alter' :
-			if (!isSamepath(h.path, ios.path)) break;
-			log('ote', 'altered');
-			if (isString(h.origin)) {
-				// was an insert
-				if (!isSpan(h.target)) throw new Error('history mangled');
-				if (iod.from > h.target.from) { // or >= for insert after?
-					iod.from += h.target.to - h.target.from;
+			if (!h.src && h.trg) {
+				log('ote', 'alter-instert');
+				if (!isSamepath(h.trg.path, ios.path)) break;
+				if (!isSpan(h.trg)) throw new Error('history mangled');
+				// or >= for insert after?
+				if (ios.at1 > h.trg.at1) {
+					ios.at1 += h.val.length;
+					if (is(ios.at2)) ios.at2 += h.val.length;
 				}
-				if (iod.to > h.target.from) { // or >= for insert after?
-					iod.to += h.target.to - h.target.from;
+			} else if (h.src || !h.trg) {
+				log('ote', 'alter-remove');
+				if (!isSamepath(h.src.path, ios.path)) break;
+				if (!isSpan(h.src)) throw new Error('history mangled');
+				//       123456789
+				//         ^^^    <- removed
+				//case1:       '''
+				//case2:    '''
+				if (ios.at1 > h.src.at1) {
+					if (ios.at1 > h.src.at2) {
+						ios.at1 -= h.val.length;
+						if (is(ios.at2)) ios.at2 -= h.val.length;
+					} else {
+						if (is(ios.at2)) ios.at2 = ios.at2 - ios.at1 + h.src.at1;
+						ios.at1 = h.src.at1;
+					}
 				}
-			} else if (h.target === null || isString(h.target)) {
-				// was a remove
-				if (!isSpan(h.origin)) throw new Error('history mangled');
-				if (ios.from > h.origin.from) ios.from -= h.origin.to - h.origin.from;
-				if (ios.to > h.origin.from) ios.to -= h.origin.to - h.origin.from;
+				if (typeof(ios.at2) !== 'undefined') ios.at2 -= h.val.length;
 			} else {
 				throw new Error('history mangled');
 			}
@@ -252,7 +276,7 @@ MeshMashine.prototype._reflect = function(time, path) {
 		switch(h.cmd) {
 		case 'alter':
 			try {
-				alter(reflect, h.target, h.origin);
+				alter(reflect, h.val, h.trg, h.src);
 			} catch (err) {
 				if (err.ok !== false) throw err;
 				throw new Error('history mismatch, alter: '+err.message);
@@ -269,7 +293,7 @@ MeshMashine.prototype._reflect = function(time, path) {
 	try {
 		return get(reflect, path);
 	} catch (err) {
-		// returns mm rejections but rethrows on coding errors.
+		// returns mm rejections but rethrows coding errors.
 		if (err.ok !== false) throw err; else return err;
 	}
 }
@@ -277,42 +301,34 @@ MeshMashine.prototype._reflect = function(time, path) {
 /**
 | Alters a string.
 */
-MeshMashine.prototype.alter = function(time, origin, target) {
-	log('mm', 'alter', origin, target);
+MeshMashine.prototype.alter = function(time, val, src, trg) {
+	log('mm', 'alter time:', time, 'src:', src, 'trg:', trg);
 	if (!this._isValidTime(time)) return reject('invalid time');
-
-	if (isString(origin.text)) {
-		if (!isIndex(target)) reject('.target is no index');
-		if (!this._isValidPath(target.path)) return reject('.target.path invalid');
-
-		var tn = this._reflect(time, target.path);
-		if (!isString(tn)) return reject('.target.path does not point to a string');
-
-		var tidx = this._transformIS(time, target);
-
+	if (!src) {
+		if (!isIndex(trg))                return reject('alter(insert).trg is no index');
+		if (!this._isValidPath(trg.path)) return reject('alter(insert).trg.path invalid');
+		var ttrg = this._transformIS(time, trg);
 		try {
-			alter(this.repository, origin, tidx);
+			alter(this.repository, val, null, ttrg);
 		} catch(err) {
 			if (err.ok !== false) throw err; else return err;
 		}
-		this.history.push({cmd: 'alter', origin: origin, target: tidx});
+		// todo, check if more keys are set in trg than allowed.
+		this.history.push({cmd: 'alter', val: val, src: null, trg: trg});
 		return {ok: true, time: time};
-	} else if (target === null) {
-		if (!isSpan(origin)) reject('.origin is no span');
-		if (!this._isValidPath(origin.path)) return reject('.origin.path invalid');
+	} else if (!trg) {
+		if (!isIndex(src))                return reject('alter(remove).src is no span');
+		if (!this._isValidPath(src.path)) return reject('alter(remove).src.path invalid');
 
-		var tn = this._reflect(time, origin.path);
-		if (!isString(tn)) return reject('.origin.path does not point to a string');
+		var tsrc = this._transformIS(time, src);
 
-		var aorg = this._transformIS(time, origin);
-		var atrg = {};
-
+		var val;
 		try {
-			alter(this.repository, aorg, atrg);
+			val = alter(this.repository, null, tsrc, null);
 		} catch(err) {
 			if (err.ok !== false) throw err; else return err;
 		}
-		this.history.push({cmd: 'alter', origin: aorg, target: atrg});
+		this.history.push({cmd: 'alter', val: val, src: tsrc, trg: null});
 		return {ok: true, time: time};
 	} else {
 		log(true, target);
@@ -324,7 +340,7 @@ MeshMashine.prototype.alter = function(time, origin, target) {
 | Gets a node (which also can be the complete repository).
 */
 MeshMashine.prototype.get = function(time, path) {
-	log('mm', 'get', time, path);
+	log('mm', 'get time:', time, ' path:', path);
 	if (!this._isValidTime(time)) return reject('invalid time');
 	if (!this._isValidPath(path)) return reject('invalid path');
 
@@ -352,7 +368,7 @@ MeshMashine.prototype.now = function() {
 | Sets a node.
 */
 MeshMashine.prototype.set = function(time, path, value) {
-	log('mm', 'set', time, path, value);
+	log('mm', 'set time:', time, 'path:', path, 'value:', value);
 	if (!this._isValidTime(time)) return reject('invalid time');
 	if (!this._isValidPath(path)) return reject('invalid path');
 
@@ -385,7 +401,7 @@ MeshMashine.prototype.set = function(time, path, value) {
 | Returns all changes from time to now.
 */
 MeshMashine.prototype.update = function(time) {
-	log('mm', 'update', time);
+	log('mm', 'update time:', time);
 	if (!this._isValidTime(time)) return reject('invalid time');
 	var update = [];
 	for(var ti = time; ti < this.history.length; ti++) {
