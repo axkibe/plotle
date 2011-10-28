@@ -30,7 +30,6 @@ function isString(o) {
 	return typeof(o) === 'string' || o instanceof String;
 }
 
-var switchscreen = true;
 var fs       = require('fs');
 var http     = require('http');
 var util     = require('util');
@@ -53,18 +52,17 @@ if (!(root instanceof Array)) root = [root];
 var tin  = process.stdin;
 var tout = process.stdout;
 var tsize;
-process.on('SIGWINCH',
-function() {
+process.on('SIGWINCH', function() {
 	tsize = tout.getWindowSize();
 	drawScreen();
 });
 tsize = tout.getWindowSize();
 
 var messages = [];
-var text = '';
-var change = {cmd: null, at1: null, at2: null, value: null};
+var tree  = null;
+var change = {cmd: null, at1: null, at2: null, val: null};
 var time = 0;
-var cursor = 0;
+var cx = 0, cy = 0;
 
 function drawScreen() {
 	tout.write('\033[2J');
@@ -79,26 +77,52 @@ function drawScreen() {
 		tout.write(messages[im]);
 	}
 	tout.cursorTo(0, 0);
-	switch (change.cmd) {
-	case 'remove':
-		tout.write(text.substring(0, change.at1));
-		tout.write('\033[37;41;1m');
-		tout.write(text.substring(change.at1, change.at2));
+	if (!(tree instanceof Array)) {
+		tout.write('\033[31;47;1m');
+		tout.write('Invalid tree:\n');
+		tout.write(util.inspect(tree));
 		tout.write('\033[0m');
-		tout.write(text.substring(change.at2));
-		break;
-	case 'insert':
-		tout.write(text.substring(0, change.at1));
-		tout.write('\033[37;42;1m');
-		tout.write(change.value);
-		tout.write('\033[0m');
-		tout.write(text.substring(change.at1));
-		break;
-	default :
-		tout.write(text);
-		break;
+		return;
 	}
-	tout.cursorTo(cursor, 0);
+	for(var i = 0; i < tree.length; i++) {
+		if (change.line !== i) {
+			if (tree[1].text) {
+				tout.write(tree[i].text);
+			} else {
+				tout.write('\033[31;47;1mPara has no text!\033[0m');
+			}
+		} else {
+			var line = tree[i].text;
+			switch (change.cmd) {
+			case 'newline':
+				tout.write(line.substring(0, change.at1));
+				tout.write('\033[37;44;1m');
+				tout.write('⤶');
+				tout.write('\033[0m');
+				tout.write(line.substring(change.at1));
+				break;
+			case 'remove':
+				tout.write(line.substring(0, change.at1));
+				tout.write('\033[37;41;1m');
+				tout.write(line.substring(change.at1, change.at2));
+				tout.write('\033[0m');
+				tout.write(line.substring(change.at2));
+				break;
+			case 'insert':
+				tout.write(line.substring(0, change.at1));
+				tout.write('\033[37;42;1m');
+				tout.write(change.val);
+				tout.write('\033[0m');
+				tout.write(line.substring(change.at1));
+				break;
+			default :
+				tout.write(line);
+				break;
+			}
+		}
+		tout.write('\n');
+	}
+	tout.cursorTo(cx, cy);
 }
 
 function message(s) {
@@ -143,32 +167,38 @@ function get(path, callback) {
 		path: path}, callback);
 }
 
-function set(path, value, callback) {
+function set(path, val, callback) {
 	request({
 		cmd: 'set',
 		time: time,
 		path: path,
-		value: value}, callback);
+		val:  val}, callback);
 }
 
 function send() {
 	switch (change.cmd) {
 	case 'insert' :
+		var path = root.slice();
+		path.push(change.line);
+		path.push('text');
 		request({
 			cmd: 'alter',
-			val: change.value,
+			val: change.val,
 			src: null,
-			trg: {path: root, at1: change.at1},
+			trg: {path: path, at1: change.at1},
 		}, function(err, asw) {
 			for(k in change) change[k] = null;
 			refresh();
 		});
 		break;
 	case 'remove' :
+		var path = root.slice();
+		path.push(change.line);
+		path.push('text');
 		request({
 			cmd: 'alter',
 			val: null,
-			src: {path: root, at1: change.at1, at2: change.at2},
+			src: {path: path, at1: change.at1, at2: change.at2},
 			trg: null,
 		}, function(err, asw) {
 			for(k in change) change[k] = null;
@@ -183,7 +213,7 @@ function send() {
 function init() {
 	tin.resume();
 	tty.setRawMode(true);
-	if (switchscreen) tout.write('\033[?1049h');
+	tout.write('\033[2J');
 	tin.pause();
 	refresh();
 	drawScreen();
@@ -196,8 +226,7 @@ function refresh() {
 		if (err) exit(err.message);
 		get(root, function(err, asw) {
 			if (err) exit(err.message);
-			text = asw.node;
-			if (!isString(text)) exit('Root does not point to string.');
+			tree = asw.node;
 			tin.resume();
 			drawScreen();
 		})
@@ -205,7 +234,8 @@ function refresh() {
 }
 
 function exit(message) {
-	if (switchscreen) tout.write('\033[?1049l');
+	tout.cursorTo(0, 0);
+	tout.write('\033[2J');
 	tty.setRawMode(false);
 	if (message) {
 		console.log(message);
@@ -215,7 +245,7 @@ function exit(message) {
 
 
 tin.on('keypress', function(ch, key) {
-	//message(ch+' | '+util.inspect(key));
+	// message(ch+' | '+util.inspect(key));
 	if (key && key.ctrl) {
 		switch (key.name) {
 		case 'c' : exit();    break;
@@ -227,41 +257,59 @@ tin.on('keypress', function(ch, key) {
 
 	switch (key && key.name) {
 	case 'left' :
-		if (cursor > 0) cursor--;
+		if (cx > 0) cx--;
 		break;
 	case 'right' :
-		var max = text.length;
-		if (change.cmd === 'insert') max += change.value.length;
-		if (cursor < text.length +
-			(change.cmd === 'insert' ? change.value.length : 0)
-		) {
-			cursor++;
+		var max = tree[cy].text.length;
+		if (change.line === cy && change.cmd === 'insert') max += change.val.length;
+		if (cx < max) cx++;
+		break;
+	case 'up' :
+		if (cy <= 0) break;
+		cy--;
+		break;
+	case 'down' :
+		if (cy >= tree.length - 1) break;
+		cy++;
+		break;
+	case 'enter' :
+		if (change.cmd !== null) {
+			message('-- another change in buffer!');
+			break;
 		}
+		change.cmd = 'newline';
+		change.line = cy;
+		change.at1  = cx++;
 		break;
 	case 'delete' :
 		switch (change.cmd) {
 		case 'remove' :
-			if (cursor === text.length) break;
-			if (change.at2 === cursor) {
-				change.at2++;
-				cursor++;
+			if (cy !== change.line) {
+				message('-- another change in buffer!');
 				break;
 			}
-			if (change.at1 === cursor + 1) {
+			if (cx >= tree[cy].text.length) break;
+			if (change.at2 === cx) {
+				change.at2++;
+				cx++;
+				break;
+			}
+			if (change.at1 === cx + 1) {
 				change.at1--;
 				break;
 			}
 			message('-- another change in buffer!');
 			break;
 		case 'insert' :
+		case 'newline' :
 			message('-- another change in buffer!');
 			break;
 		case null:
-			if (cursor >= text.length) break;
-			change.cmd = 'remove';
-			change.at1 = cursor;
-			change.at2 = cursor + 1;
-			cursor++;
+			if (cx >= tree[cy].text.length) break;
+			change.cmd  = 'remove';
+			change.line = cy;
+			change.at1  = cx;
+			change.at2  = ++cx;
 			break;
 		default :
 			exit('unknown command state');
@@ -271,7 +319,11 @@ tin.on('keypress', function(ch, key) {
 	case 'backspace' :
 		switch (change.cmd) {
 		case 'remove' :
-			if (cursor === 0) break;
+			if (cx === 0) break;
+			if (cy !== change.line) {
+				message('-- another change in buffer!');
+				break;
+			}
 			if (change.at1 === cursor) {
 				change.at1--;
 				cursor--;
@@ -284,15 +336,16 @@ tin.on('keypress', function(ch, key) {
 			}
 			message('-- another change in buffer!');
 			break;
+		case 'newline' :
 		case 'insert' :
 			message('-- another change in buffer!');
 			break;
 		case null:
-			if (cursor === 0) break;
-			change.cmd = 'remove';
-			change.at1 = cursor - 1;
-			change.at2 = cursor;
-			cursor--;
+			if (cx === 0) break;
+			change.cmd  = 'remove';
+			change.line = cy;
+			change.at2  = cx;
+			change.at1  = --cx;
 			break;
 		default :
 			exit('unknown command state');
@@ -300,26 +353,28 @@ tin.on('keypress', function(ch, key) {
 		}
 		break;
 	case undefined :
+	case 'space':
 	case (ch) :
 	case (ch && ch.toLowerCase()) :
 		switch (change.cmd) {
 		case 'remove':
+		case 'newline':
 			message('-- another change in buffer!');
 			break;
 		case 'insert':
-			var rc = cursor - change.at1;
-			if (rc >= 0 && rc <= change.value.length) {
-				change.value = change.value.substring(0, rc)+ch+change.value.substring(rc);
-				cursor++;
+			var rc = cx - change.at1;
+			if (cy === change.line && rc >= 0 && rc <= change.val.length) {
+				change.val = change.val.substring(0, rc)+ch+change.val.substring(rc);
+				cx++;
 			} else {
 				message('-- another change in buffer!');
 			}
 			break;
 		case null:
-			change.cmd   = 'insert';
-			change.at1   = cursor;
-			change.value = ch;
-			cursor++;
+			change.cmd  = 'insert';
+			change.line = cy;
+			change.at1  = cx++;
+			change.val  = ch;
 			break;
 		default :
 			exit('unknown command state');

@@ -99,17 +99,17 @@ var shell = {
 
 	'set' : function(out, context, line, args, callback) {
 		var reg = /\s*\S+\s+(\[[^\]]*\]|\S+)\s+(.*)/g.exec(line);
-		var path, value;
+		var path, val;
 		if (!reg ||
-			(path  = j2o(reg[1])) === null ||
-			(value = j2o(reg[2])) === null)
+			(path = j2o(reg[1])) === null ||
+			(val  = j2o(reg[2])) === null)
 		{
 			out.write('syntax: set PATH VALUE.\n');
 			callback();
 			return;
 		}
 		if (!(path instanceof Array)) path = [path];
-		request({cmd: 'set', time: context.time, path: path, value: value}, callback);
+		request({cmd: 'set', time: context.time, path: path, val: val}, callback);
 	},
 
 	'time' : function(out, context, line, args, callback) {

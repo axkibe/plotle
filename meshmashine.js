@@ -127,14 +127,14 @@ function get(node, path) {
 | path:  path to the value (relative to node)
 | value: the new value to set
 */
-function set(node, path, value) {
+function set(node, path, val) {
 	if (path.length === 0) throw reject('cannot set empty path');
 	var pi;
 	for(pi = 0; pi < path.length - 1; pi++) {
 		if (!node) throw reject('path points nowhere');
-		node = node[path[i]];
+		node = node[path[pi]];
 	}
-	node[path[pi]] = value;
+	node[path[pi]] = val;
 }
 
 /**
@@ -204,8 +204,8 @@ MeshMashine.prototype._isValidPath = function(path) {
 	if (!isArray(path)) return false;
 	for (var pi = 0; pi < path.length; pi++) {
 		var p = path[pi];
-		if (!p) return false;
-		if (p[0] === '_') return false;
+		if (typeof(p) === 'undefined') return false;
+		//if (p[0] === '_') return false;
 	}
 	return true;
 }
@@ -367,8 +367,8 @@ MeshMashine.prototype.now = function() {
 /**
 | Sets a node.
 */
-MeshMashine.prototype.set = function(time, path, value) {
-	log('mm', 'set time:', time, 'path:', path, 'value:', value);
+MeshMashine.prototype.set = function(time, path, val) {
+	log('mm', 'set time:', time, 'path:', path, 'val:', val);
 	if (!this._isValidTime(time)) return reject('invalid time');
 	if (!this._isValidPath(path)) return reject('invalid path');
 
@@ -389,9 +389,9 @@ MeshMashine.prototype.set = function(time, path, value) {
 	}
 
 	var save = node[path[pi]] || null;
-	node[path[pi]] = value;
+	node[path[pi]] = val;
 
-	this.history.push({cmd: 'set', path: path, save: save, value : value});
+	this.history.push({cmd: 'set', path: path, save: save, val : val});
 
 	log('mm', 'ok', time, path, save);
 	return {ok: true, time: time, path: path, save: save};
