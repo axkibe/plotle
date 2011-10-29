@@ -173,7 +173,7 @@ function get(node, path, pathlen) {
 function set(node, path, pathlen, val) {
 	if (pathlen <= 0) throw reject('cannot set empty path');
 	var pi;
-	for(pi = 0; pi < pathlen; pi++) {
+	for(pi = 0; pi < pathlen - 1; pi++) {
 		if (!node) throw reject('path points nowhere');
 		node = node[path[pi]];
 	}
@@ -214,14 +214,13 @@ function alter(node, src, trg, readonly) {
 
 		// where trg span should end
 		var tat2 = tlast.at1 + src.val.length;
-		if (is(trg.at2)) {
-			check(trg.at2 === tat2, bm, 'trg at2 preset incorrectly');
+		if (is(tlast.at2)) {
+			check(tlast.at2 === tat2, bm, 'trg at2 preset incorrectly');
 		} else {
 			check(!readonly, bm, 'not changing readonly signatory');
-			trg.at2 = tat2;
+			tlast.at2 = tat2;
 		}
-		log('debug', node, trg, s.substring(0, trg.at1) + src.val + s.substring(trg.at1));
-		set(node, trg, trg.length - 1, s.substring(0, trg.at1) + src.val + s.substring(trg.at1));
+		set(node, trg, trg.length - 1, s.substring(0, tlast.at1) + src.val + s.substring(tlast.at1));
 	} else if (trgST === 'empty' || trgST === 'value') {
 		log('alter', 'is remove');
 		var bm = 'alter(remove) ';
