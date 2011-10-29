@@ -170,10 +170,10 @@ function get(node, path, pathlen) {
 | path:  path to the value (relative to node)
 | value: the new value to set
 */
-function set(node, path, val) {
-	if (path.length === 0) throw reject('cannot set empty path');
+function set(node, path, pathlen, val) {
+	if (pathlen <= 0) throw reject('cannot set empty path');
 	var pi;
-	for(pi = 0; pi < path.length - 1; pi++) {
+	for(pi = 0; pi < pathlen; pi++) {
 		if (!node) throw reject('path points nowhere');
 		node = node[path[pi]];
 	}
@@ -206,7 +206,7 @@ function alter(node, src, trg, readonly) {
 		check(isString(s), bm, 'trg signates no string');
 
 		var tlast = trg[trg.length - 1];
-		if (tlast.at1 === -1) {
+		if (tlast.at1 === '_end') {
 			check(!readonly, bm, 'not changing readonly signatory');
 			tlast.at1 = s.length;
 		}
@@ -220,18 +220,19 @@ function alter(node, src, trg, readonly) {
 			check(!readonly, bm, 'not changing readonly signatory');
 			trg.at2 = tat2;
 		}
-		set(node, trg, s.substring(0, trg.at1) + src.val + s.substring(trg.at1));
+		log('debug', node, trg, s.substring(0, trg.at1) + src.val + s.substring(trg.at1));
+		set(node, trg, trg.length - 1, s.substring(0, trg.at1) + src.val + s.substring(trg.at1));
 	} else if (trgST === 'empty' || trgST === 'value') {
 		log('alter', 'is remove');
 		var bm = 'alter(remove) ';
 		check(srcST === 'span', bm, 'src not a span');
 		var s = get(node, src, src.length - 1);
 		var slast = src[src.length - 1];
-		if (slast.at1 === -1) {
+		if (slast.at1 === '_end') {
 			check(!readonly, bm, 'not changing readonly signatory');
 			slast.at1 = s.length;
 		}
-		if (slast.at2 === -1) {
+		if (slast.at2 === '_end') {
 			check(!readonly, bm, 'not changing readonly signatory');
 			slast.at2 = s.length;
 		}
@@ -247,8 +248,7 @@ function alter(node, src, trg, readonly) {
 			check(!readonly, bm, 'not changing readonly signatory');
 			trgST.val = val;
 		}
-
-		set(node, src, s.substring(0, src.at1) + s.substring(src.at2));
+		set(node, src, src.length - 1, s.substring(0, src.at1) + s.substring(src.at2));
 	} else {
 		throw reject('invalid alter');
 	}
@@ -285,13 +285,13 @@ MeshMashine.prototype._isValidPath = function(path) {
 /**
 | Transforms an index or span.
 */
-MeshMashine.prototype.transform = function(time, sign) {
-	log('debug', sign);
+MeshMashine.prototype.transform = function(time, sign, msg) {
 	var signST = signatoryType(sign);
-	log('debug', signST);
+	log('te', msg, 'in', time, sign, signST);
 	switch (signST) {
 	case 'nil' :
 	case 'value' :
+		log('te', msg, 'out', sign);
 		return sign;
 	case 'path' :
 	case 'index' :
@@ -368,6 +368,7 @@ MeshMashine.prototype.transform = function(time, sign) {
 			break;
 		}
 	}
+	log('te', msg, 'out', sign);
 	return sign;
 }
 
@@ -393,7 +394,7 @@ MeshMashine.prototype._reflect = function(time, path) {
 			}
 			break;
 		case 'set' :
-			set(reflect, h.path, clone(h.save));
+			set(reflect, h.path, h.path.len, clone(h.save));
 			break;
 		default:
 			throw new Error('history mismatch, unknown command.');
@@ -416,10 +417,8 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 	if (!this._isValidTime(time)) return reject('invalid time');
 
 	try {
-		log('te', 'src');
-		var tsrc = this.transform(time, src);
-		log('te', 'trg');
-		var ttrg = this.transform(time, trg);
+		var tsrc = this.transform(time, src, 'src');
+		var ttrg = this.transform(time, trg, 'trg');
 		alter(this.repository, tsrc, ttrg, false);
 	} catch(err) {
 		if (err.ok !== false) throw err; else return err;
@@ -471,7 +470,7 @@ MeshMashine.prototype.set = function(time, path, val) {
 		if (typeof(node) === 'undefined') return reject('path points nowhere');
 	}
 
-	if (path[pi] === -1) {
+	if (path[pi] === '_end') {
 		// append to end.
 		if (typeof(node) !== 'object' || node instanceof Array) {
 			return reject('node not growable');

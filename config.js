@@ -4,6 +4,7 @@ module.exports= {
 	port : 8833,
 	log  : {
 //		all:   true,
+		alter: true,
 		ajax:  false,
 		debug: true,
 		mm:    true,
