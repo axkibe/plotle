@@ -53,7 +53,7 @@ var log = function() {
 			if (typeof(arg) === 'string' || arg instanceof String) {
 				a.push(arg);
 			} else {
-				a.push(inspect(arg), null, null);
+				a.push(inspect(arg, false, null));
 			}
 		}
 		console.log(a.join(''));

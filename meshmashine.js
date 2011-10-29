@@ -151,10 +151,10 @@ function checkOneOf(value) {
 }
 
 /**
-| return the subnode path points at
+| Returns the subnode path points at.
 */
-function get(node, path) {
-	for (var i = 0; i < path.length; i++) {
+function get(node, path, pathlen) {
+	for (var i = 0; i < pathlen; i++) {
 		if (node === null) {
 			return reject('path points nowhere.');
 		}
@@ -202,7 +202,7 @@ function alter(node, src, trg, readonly) {
 		var bm = 'alter(remove) ';
 		checkOneOf(trgST, 'index', 'span', bm, 'trg not an index');
 
-		var s = get(node, trg.path);
+		var s = get(node, trg, trg.length - 1);
 		check(isString(s), bm, 'trg signates no string');
 
 		var tlast = trg[trg.length - 1];
@@ -220,12 +220,12 @@ function alter(node, src, trg, readonly) {
 			check(!readonly, bm, 'not changing readonly signatory');
 			trg.at2 = tat2;
 		}
-		set(node, trg.path, s.substring(0, tat1) + src.val + s.substring(tat1));
+		set(node, trg, s.substring(0, trg.at1) + src.val + s.substring(trg.at1));
 	} else if (trgST === 'empty' || trgST === 'value') {
 		log('alter', 'is remove');
 		var bm = 'alter(remove) ';
 		check(srcST === 'span', bm, 'src not a span');
-		var s = get(node, src.path);
+		var s = get(node, src, src.length - 1);
 		var slast = src[src.length - 1];
 		if (slast.at1 === -1) {
 			check(!readonly, bm, 'not changing readonly signatory');
@@ -248,7 +248,7 @@ function alter(node, src, trg, readonly) {
 			trgST.val = val;
 		}
 
-		set(node, src.path, s.substring(0, sat1) + s.substring(sat2));
+		set(node, src, s.substring(0, src.at1) + s.substring(src.at2));
 	} else {
 		throw reject('invalid alter');
 	}
@@ -401,7 +401,7 @@ MeshMashine.prototype._reflect = function(time, path) {
 	}
 
 	try {
-		return get(reflect, path);
+		return get(reflect, path, path.length);
 	} catch (err) {
 		// returns mm rejections but rethrows coding errors.
 		if (err.ok !== false) throw err; else return err;
