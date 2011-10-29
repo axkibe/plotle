@@ -56,17 +56,17 @@ function request(cmd, callback) {
 */
 var shell = {
 	'alter' : function(out, context, line, args, callback) {
-		var reg = /\s*\S+\s+(\[[^\]]*\]|\S+)\s+(.*)/g.exec(line);
-		var origin, target;
+		var reg = /\s*(\S)\s(.*)\s*->\s*(.*)/g.exec(line);
+		var src, trg;
 		if (!reg ||
-			(origin = j2o(reg[1])) === null ||
-			(target = j2o(reg[2])) === null)
+			(src = j2o(reg[1])) === null ||
+			(trg = j2o(reg[2])) === null)
 		{
-			out.write('syntax: alter ORIGIN TARGET.\n');
+			out.write('syntax: alter SRC -> TRG.\n');
 			callback();
 			return;
 		}
-		request({cmd: 'alter', time: context.time, origin: origin, target: target}, callback);
+		request({cmd: 'alter', time: context.time, src: src, trg: trg}, callback);
 		return;
 	},
 
@@ -91,10 +91,6 @@ var shell = {
 
 	'quit' : function(out, context, line, args, callback) {
 		callback(null, null, true);
-	},
-
-	'reflect' : function(out, context, line, args, callback) {
-		request({cmd: 'reflect', time: context.time}, callback);
 	},
 
 	'set' : function(out, context, line, args, callback) {

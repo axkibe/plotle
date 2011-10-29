@@ -75,13 +75,31 @@ function isInteger(o) {
 	return typeof(o) === 'number' && Math.floor(o) === o;
 }
 
-function isIndex(o) {
-	return typeof(o) === 'object' && isInteger(o.at1);
+function signatoryType(o) {
+	if (o === null) return 'nil';
+	if (isArray(o)) {
+		if (o.length === 0) return 'root';
+		var last = o[o.length - 1];
+		if (isTable(last)) {
+			if (is(last.at1) && is(last.at2)) return 'span';
+			if (is(last.at1)) return 'index';
+			return null;
+		}
+		return 'path';
+	}
+	if (!isTable(o)) return null;
+	if (is(o.val)) return 'value';
+	if (isEmpty(o)) return 'empty';
+	return null;
 }
 
-function isSpan(o) {
-	return isIndex(o) && isInteger(o.at2);
-}
+//function isIndex(o) { xxxxx
+//	return typeof(o) === 'object' && isInteger(o.at1);
+//}
+//
+//function isSpan(o) { xxxxx
+//	return isIndex(o) && isInteger(o.at2);
+//}
 
 function isSamepath(p1, p2) {
 	if (p1.length !== p2.length) return false;
@@ -99,12 +117,37 @@ function isSubpath(p1, p2) {
 	return true;
 }
 
+
 /**
 | Returns a rejection error
 */
 function reject(message) {
 	log('mm', 'reject', message);
 	return {ok: false, message: message};
+}
+
+/**
+| a kind of assert.
+*/
+function check(condition, msg1, msg2) {
+	if (!condition) throw reject((msg1||'')+(msg2||''));
+}
+
+/**
+| a kind of assert.
+*/
+function checkBoundaries(value, lowest, highest, msg1, msg2) {
+	if (value < lowest || value > highest) throw reject((msg1||'')+(msg2||''));
+}
+
+/**
+| a kind of assert.
+*/
+function checkOneOf(value) {
+	for (var i = 1; i < arguments.length - 2; i++) {
+		if (value === arguments[i]) return;
+	}
+	throw reject(arguments[arguments.length - 2]||'')+(arguments[arguments.length - 1]||'');
 }
 
 /**
@@ -139,44 +182,73 @@ function set(node, path, val) {
 
 /**
 | Alters a string
+|
+| node: the tree to alter
+| src: the source signatory
+| trg: the target signatory
+| readonly: if true alter will not change any signatory but fail if it would.
+|           but it will change node!
 */
-function alter(node, val, src, trg) {
+function alter(node, src, trg, readonly) {
 	// todo moves
-	log('alter', 'val:', val, 'src:', src, 'trg:', trg);
-	if (!src) {
-		// insert
-		log('alter', 'is insert');
-		if (!isIndex(trg)) throw reject('alter(insert).trg not an index');
-		if (!isString(val)) throw reject('alter(insert).val not a string');
-		var s = get(node, trg.path);
-		var tat1 = trg.at1
-		if (tat1 === -1) tat1 = s.length;
-		if (tat1 < 0 || tat1 > s.length) throw reject('alter(insert).trg.at1 outside string');
+	log('alter', 'src:', src);
+	var srcST = signatoryType(src);
 
-		// make target a span.
-		var tat2 = tat1 + val.length;
+	log('alter', 'trg:', trg);
+	var trgST = signatoryType(trg);
+
+	if (srcST === 'value') {
+		log('alter', 'is insert');
+		var bm = 'alter(remove) ';
+		checkOneOf(trgST, 'index', 'span', bm, 'trg not an index');
+
+		var s = get(node, trg.path);
+		check(isString(s), bm, 'trg signates no string');
+
+		var tlast = trg[trg.length - 1];
+		if (tlast.at1 === -1) {
+			check(!readonly, bm, 'not changing readonly signatory');
+			tlast.at1 = s.length;
+		}
+		checkBoundaries(tlast.at1, 0, s.length, bm, 'trg at1 outside string');
+
+		// where trg span should end
+		var tat2 = tlast.at1 + src.val.length;
 		if (is(trg.at2)) {
-			if (trg.at2 !== tat2) throw reject('alter(inster).trg.at2 already set wrongly');
+			check(trg.at2 === tat2, bm, 'trg at2 preset incorrectly');
 		} else {
+			check(!readonly, bm, 'not changing readonly signatory');
 			trg.at2 = tat2;
 		}
-		set(node, trg.path, s.substring(0, tat1) + val + s.substring(tat1));
-		return val;
-	} else if (!trg) {
-		// remove
+		set(node, trg.path, s.substring(0, tat1) + src.val + s.substring(tat1));
+	} else if (trgST === 'empty' || trgST === 'value') {
 		log('alter', 'is remove');
-		if (!isSpan(src)) throw reject('alter(remove).src not a span');
+		var bm = 'alter(remove) ';
+		check(srcST === 'span', bm, 'src not a span');
 		var s = get(node, src.path);
-		var sat1 = src.at1, sat2 = src.at2;
-		if (sat1 === -1) sat1 = s.length;
-		if (sat2 === -1) sat2 = s.length;
-		if (sat1 === sat2) { log('alter', 'removed nothing'); return; }
-		if (sat2 < sat1)     throw reject('alter(remove) src.at2 < src.at1');
-		if (sat1 > s.length) throw reject('alter(remove) src.at1 outside string');
-		if (sat2 > s.length) throw reject('alter(remove) src.at2 outside string');
-		val = s.substring(sat1, sat2);
+		var slast = src[src.length - 1];
+		if (slast.at1 === -1) {
+			check(!readonly, bm, 'not changing readonly signatory');
+			slast.at1 = s.length;
+		}
+		if (slast.at2 === -1) {
+			check(!readonly, bm, 'not changing readonly signatory');
+			slast.at2 = s.length;
+		}
+		if (slast.at1 === slast.at2) { log('alter', 'removed nothing'); return; }
+		check(slast.at2 > slast.at1, bm, 'src at2 < at1');
+		checkBoundaries(slast.at1, 0, s.length, bm, 'src at1 outside string');
+		checkBoundaries(slast.at2, 0, s.length, bm, 'src at2 outside string');
+
+		val = s.substring(slast.at1, slast.at2);
+		if (trgST === 'value') {
+			check(val == trg.val, bm, 'trg val preset incorrectly');
+		} else {
+			check(!readonly, bm, 'not changing readonly signatory');
+			trgST.val = val;
+		}
+
 		set(node, src.path, s.substring(0, sat1) + s.substring(sat2));
-		return val;
 	} else {
 		throw reject('invalid alter');
 	}
@@ -213,52 +285,90 @@ MeshMashine.prototype._isValidPath = function(path) {
 /**
 | Transforms an index or span.
 */
-MeshMashine.prototype._transformIS = function(time, ios) {
+MeshMashine.prototype.transform = function(time, sign) {
+	log('debug', sign);
+	var signST = signatoryType(sign);
+	log('debug', signST);
+	switch (signST) {
+	case 'nil' :
+	case 'value' :
+		return sign;
+	case 'path' :
+	case 'index' :
+	case 'span' :
+		break;
+	default :
+		throw reject('transform unknown signatory type: '+signST);
+		break;
+	}
+
+	var signL = sign[sign.length - 1];
+
 	for(var t = time; t < this.history.length; t++) {
 		var h = this.history[t];
 		switch(h.cmd) {
 		case 'set':
-			if (isSubpath(h.path, ios.path)) {
+			if (isSubpath(h.path, sign)) {
 				// this change is being overwritten
-				log('ote', 'setted away');
+				log('te', 'setted away');
 				return null;
 			}
 			break;
 		case 'alter' :
-			if (!h.src && h.trg) {
-				log('ote', 'alter-instert');
-				if (!isSamepath(h.trg.path, ios.path)) break;
-				if (!isSpan(h.trg)) throw new Error('history mangled');
-				// or >= for insert after?
-				if (ios.at1 > h.trg.at1) {
-					ios.at1 += h.val.length;
-					if (is(ios.at2)) ios.at2 += h.val.length;
-				}
-			} else if (h.src || !h.trg) {
-				log('ote', 'alter-remove');
-				if (!isSamepath(h.src.path, ios.path)) break;
-				if (!isSpan(h.src)) throw new Error('history mangled');
-				//       123456789
-				//         ^^^    <- removed
-				//case1:       '''
-				//case2:    '''
-				if (ios.at1 > h.src.at1) {
-					if (ios.at1 > h.src.at2) {
-						ios.at1 -= h.val.length;
-						if (is(ios.at2)) ios.at2 -= h.val.length;
-					} else {
-						if (is(ios.at2)) ios.at2 = ios.at2 - ios.at1 + h.src.at1;
-						ios.at1 = h.src.at1;
+			var src = h.src;
+			var trg = h.trg;
+			var srcST = signatoryType(h.src);
+			var trgST = signatoryType(h.trg);
+			if (srcST === 'value') {
+				if (!isSamepath(trg, sign)) break;
+				log('te', 'alter-insert');
+
+				var trgL = trg[trg.length - 1];
+				check(trgST === 'span', 'history mangled');
+				if (signL.at1 > trgl.at1) { // or >= ?
+					log('te', 'at1 += ',trg.val.length);
+					signL.at1 += trg.val.length;
+					if (is(signL.at2)) {
+						log('te', 'at2 +=', trg.val.length);
+						signL.at2 += trg.val.length;
 					}
 				}
-				if (typeof(ios.at2) !== 'undefined') ios.at2 -= h.val.length;
+			} else if (trgST === 'value') {
+				if (!isSamepath(src, sign)) break;
+				log('te', 'alter-remove');
+
+				var srcL = src[src.length - 1];
+				check(srcST === 'span', 'history mangled');
+				//       123456789
+				//         ^^^    <- removed
+				//case1:       <->
+				//case2:    <->
+				if (signL.at1 > srcL.at1) {
+					if (signL.at1 > srcL.at2) {
+						log('te', 'at1 -=', trg.val.length);
+						// case1
+						signL.at1 -= trg.val.length;
+						if (is(signL.at2)) {
+							log('te', 'at2 -=', trg.val.length);
+							signL.at2 -= trg.val.length;
+						}
+					} else {
+						// case2
+						if (is(signL.at2)) {
+							log('te', 'at2 =', signL.at2 - signL.at1 + srcL.at1);
+							singL.at2 = signL.at2 - signL.at1 + srcL.at1;
+						}
+						log('te', 'at1 =', srcL.at);
+						signL.at1 = srcL.at1;
+					}
+				}
 			} else {
 				throw new Error('history mangled');
 			}
 			break;
 		}
 	}
-	return ios;
+	return sign;
 }
 
 
@@ -301,39 +411,21 @@ MeshMashine.prototype._reflect = function(time, path) {
 /**
 | Alters a string.
 */
-MeshMashine.prototype.alter = function(time, val, src, trg) {
+MeshMashine.prototype.alter = function(time, src, trg) {
 	log('mm', 'alter time:', time, 'src:', src, 'trg:', trg);
 	if (!this._isValidTime(time)) return reject('invalid time');
-	if (!src) {
-		if (!isIndex(trg))                return reject('alter(insert).trg is no index');
-		if (!this._isValidPath(trg.path)) return reject('alter(insert).trg.path invalid');
-		var ttrg = this._transformIS(time, trg);
-		try {
-			alter(this.repository, val, null, ttrg);
-		} catch(err) {
-			if (err.ok !== false) throw err; else return err;
-		}
-		// todo, check if more keys are set in trg than allowed.
-		this.history.push({cmd: 'alter', val: val, src: null, trg: trg});
-		return {ok: true, time: time};
-	} else if (!trg) {
-		if (!isIndex(src))                return reject('alter(remove).src is no span');
-		if (!this._isValidPath(src.path)) return reject('alter(remove).src.path invalid');
 
-		var tsrc = this._transformIS(time, src);
-
-		var val;
-		try {
-			val = alter(this.repository, null, tsrc, null);
-		} catch(err) {
-			if (err.ok !== false) throw err; else return err;
-		}
-		this.history.push({cmd: 'alter', val: val, src: tsrc, trg: null});
-		return {ok: true, time: time};
-	} else {
-		log(true, target);
-		return reject('unimplemented');
+	try {
+		log('te', 'src');
+		var tsrc = this.transform(time, src);
+		log('te', 'trg');
+		var ttrg = this.transform(time, trg);
+		alter(this.repository, tsrc, ttrg, false);
+	} catch(err) {
+		if (err.ok !== false) throw err; else return err;
 	}
+
+	this.history.push({cmd: 'alter', src: tsrc, trg: ttrg});
 }
 
 /**

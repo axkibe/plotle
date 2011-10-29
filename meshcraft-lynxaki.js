@@ -177,15 +177,19 @@ function set(path, val, callback) {
 
 function send() {
 	switch (change.cmd) {
+	case 'newline' :
+		for(k in change) change[k] = null;
+		refresh();
+		break;
 	case 'insert' :
 		var path = root.slice();
 		path.push(change.line);
 		path.push('text');
+		path.push({t: 'idx', at1: change.at1});
 		request({
 			cmd: 'alter',
-			val: change.val,
-			src: null,
-			trg: {path: path, at1: change.at1},
+			src: {val: change.val},
+			trg: path,
 		}, function(err, asw) {
 			for(k in change) change[k] = null;
 			refresh();
@@ -195,10 +199,10 @@ function send() {
 		var path = root.slice();
 		path.push(change.line);
 		path.push('text');
+		path.push({t: 'span', at1: change.at1, at2: change.at2});
 		request({
 			cmd: 'alter',
-			val: null,
-			src: {path: path, at1: change.at1, at2: change.at2},
+			src: path,
 			trg: null,
 		}, function(err, asw) {
 			for(k in change) change[k] = null;
