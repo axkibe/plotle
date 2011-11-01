@@ -168,7 +168,7 @@ function checkOneOf(value) {
 function get(node, path, pathlen) {
 	for (var i = 0; i < pathlen; i++) {
 		if (node === null) {
-			return reject('path points nowhere.');
+			throw reject('path points nowhere.');
 		}
 		node = node[path[i]];
 	}
@@ -209,7 +209,32 @@ function alter(node, src, trg, readonly) {
 	var trgST = signatoryType(trg);
 	log('alter', 'trg:', trgST, ':', trg);
 
-	if (srcST === 'value') {
+	if ((srcST === 'value') && (trgST === 'path')) {
+		log('alter', 'is set');
+		var bm = 'alter(set) ';
+		try {
+			var node = get(node, trg, trg.length - 1);
+		} catch (err) {
+			if (err.ok !== false) throw err; else return err;
+		}
+		var tlast = trg[trg.length - 1];
+		if (node[tlast] === '_new') {
+			// append to end.
+			log('alter', 'new index');
+			check(!readonly, bm, 'not changing readonly signatory');
+			check(isTable(node), bm, 'node cannot grow new subnodes');
+			if (!node._grow) node._grow = 1;
+			trg[trg.length - 1] = node._grow++;
+		}
+		var save = node[tlast] || null;
+		if (src.val) {
+			log('alter', already set, src.val, '===', save,'?');
+			check(deepEqual(src.val, save), bm, 'src.val set incorrectly);
+		} else {
+			src.val = save;
+		}
+		node[tlast] = val;
+	} else if (srcST === 'value' && (trgST === 'index' || trgST === 'span')) {
 		log('alter', 'is insert');
 		var bm = 'alter(remove) ';
 		checkOneOf(trgST, 'index', 'span', bm, 'trg not an index');
@@ -232,12 +257,16 @@ function alter(node, src, trg, readonly) {
 			check(!readonly, bm, 'not changing readonly signatory');
 			tlast.at2 = tat2;
 		}
-		set(node, trg, trg.length - 1, s.substring(0, tlast.at1) + src.val + s.substring(tlast.at1));
-	} else if (trgST === 'empty' || trgST === 'value') {
+		var sinserted = s.substring(0, tlast.at1) + src.val + s.substring(tlast.at1);
+		set(node, trg, trg.length - 1, sinserted);
+	} else if ((srcST === 'index' || srcST === 'span') &&
+	           (trgST === 'empty' || trgST === 'value')
+	) {
 		log('alter', 'is remove');
 		var bm = 'alter(remove) ';
 		check(srcST === 'span', bm, 'src not a span');
 		var s = get(node, src, src.length - 1);
+		// todo check s
 		var slast = src[src.length - 1];
 		if (slast.at1 === '_end') {
 			check(!readonly, bm, 'not changing readonly signatory');
@@ -259,7 +288,8 @@ function alter(node, src, trg, readonly) {
 			check(!readonly, bm, 'not changing readonly signatory');
 			trg.val = val;
 		}
-		set(node, src, src.length - 1, s.substring(0, slast.at1) + s.substring(slast.at2));
+		var sremoved = s.substring(0, slast.at1) + s.substring(slast.at2);
+		set(node, src, src.length - 1, sremoved);
 	} else {
 		throw reject('invalid alter');
 	}

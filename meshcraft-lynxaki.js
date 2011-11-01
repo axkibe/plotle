@@ -93,10 +93,17 @@ function drawScreen() {
 			}
 		} else {
 			var line = tree[i].text;
+
 			switch (change.cmd) {
+			case 'join':
+				tout.write('\033[37;46;1m');
+				tout.write('↰');
+				tout.write('\033[0m');
+				tout.write(line);
+				break;
 			case 'newline':
 				tout.write(line.substring(0, change.at1));
-				tout.write('\033[37;44;1m');
+				tout.write('\033[37;46;1m');
 				tout.write('⤶');
 				tout.write('\033[0m');
 				tout.write(line.substring(change.at1));
@@ -177,15 +184,37 @@ function set(path, val, callback) {
 
 function send() {
 	switch (change.cmd) {
+	case 'join' :
+		var sign = root.slice();
+		sign.push(change.line);
+		request({
+			cmd: 'alter',
+			src: 'splice',
+			trg: sign,
+		}, function(err, asw) {
+			for(k in change) change[k] = null;
+			refresh();
+		});
+		break;
 	case 'newline' :
-		for(k in change) change[k] = null;
-		refresh();
+		var sign = root.slice();
+		sign.push(change.line);
+		sign.push('text');
+		sign.push({at1: change.at1});
+		request({
+			cmd: 'alter',
+			src: sign,
+			trg: 'splice',
+		}, function(err, asw) {
+			for(k in change) change[k] = null;
+			refresh();
+		});
 		break;
 	case 'insert' :
 		var path = root.slice();
 		path.push(change.line);
 		path.push('text');
-		path.push({t: 'idx', at1: change.at1});
+		path.push({at1: change.at1});
 		request({
 			cmd: 'alter',
 			src: {val: change.val},
@@ -199,7 +228,7 @@ function send() {
 		var path = root.slice();
 		path.push(change.line);
 		path.push('text');
-		path.push({t: 'span', at1: change.at1, at2: change.at2});
+		path.push({at1: change.at1, at2: change.at2});
 		request({
 			cmd: 'alter',
 			src: path,
@@ -305,6 +334,7 @@ tin.on('keypress', function(ch, key) {
 			message('-- another change in buffer!');
 			break;
 		case 'insert' :
+		case 'join' :
 		case 'newline' :
 			message('-- another change in buffer!');
 			break;
@@ -342,10 +372,15 @@ tin.on('keypress', function(ch, key) {
 			break;
 		case 'newline' :
 		case 'insert' :
+		case 'join' :
 			message('-- another change in buffer!');
 			break;
 		case null:
-			if (cx === 0) break;
+			if (cx === 0) {
+				change.cmd = 'join';
+				change.line = cy;
+				break;
+			}
 			change.cmd  = 'remove';
 			change.line = cy;
 			change.at2  = cx;
@@ -361,6 +396,7 @@ tin.on('keypress', function(ch, key) {
 	case (ch) :
 	case (ch && ch.toLowerCase()) :
 		switch (change.cmd) {
+		case 'join' :
 		case 'remove':
 		case 'newline':
 			message('-- another change in buffer!');
