@@ -101,10 +101,22 @@ function signatoryType(o) {
 //	return isIndex(o) && isInteger(o.at2);
 //}
 
-function isSamepath(p1, p2) {
-	if (p1.length !== p2.length) return false;
-	for(var p = 0, pl = p1.length; p < pl; p++) {
-		if (p1[p] !== p2[p]) return false;
+function basepathLen(p) {
+	var pl = p.length;
+	if (pl === 0) return 0;
+	if (isTable(p[pl - 1])) return pl - 1;
+	return pl;
+}
+
+/**
+| Compares if two paths are the same, excluding possible
+| signatories.
+*/
+function haveSameBase(p1, p2) {
+	var bpl1 = basepathLen(p1);
+	if (bpl1 !== basepathLen(p2)) return false;
+	for(var pi = 0; pi < bpl1; pi++) {
+		if (p1[pi] !== p2[pi]) return false;
 	}
 	return true;
 }
@@ -191,11 +203,11 @@ function set(node, path, pathlen, val) {
 */
 function alter(node, src, trg, readonly) {
 	// todo moves
-	log('alter', 'src:', src);
 	var srcST = signatoryType(src);
+	log('alter', 'src:', srcST, ':', src);
 
-	log('alter', 'trg:', trg);
 	var trgST = signatoryType(trg);
+	log('alter', 'trg:', trgST, ':', trg);
 
 	if (srcST === 'value') {
 		log('alter', 'is insert');
@@ -245,9 +257,9 @@ function alter(node, src, trg, readonly) {
 			check(val == trg.val, bm, 'trg val preset incorrectly');
 		} else {
 			check(!readonly, bm, 'not changing readonly signatory');
-			trgST.val = val;
+			trg.val = val;
 		}
-		set(node, src, src.length - 1, s.substring(0, src.at1) + s.substring(src.at2));
+		set(node, src, src.length - 1, s.substring(0, slast.at1) + s.substring(slast.at2));
 	} else {
 		throw reject('invalid alter');
 	}
@@ -289,7 +301,10 @@ MeshMashine.prototype.transform = function(time, sign, msg) {
 	log('te', msg, 'in', time, sign, signST);
 	switch (signST) {
 	case 'nil' :
+		sign = {};
+		/* fall */
 	case 'value' :
+	case 'empty' :
 		log('te', msg, 'out', sign);
 		return sign;
 	case 'path' :
@@ -319,21 +334,23 @@ MeshMashine.prototype.transform = function(time, sign, msg) {
 			var srcST = signatoryType(h.src);
 			var trgST = signatoryType(h.trg);
 			if (srcST === 'value') {
-				if (!isSamepath(trg, sign)) break;
+				log('debug', 'insert?', trg, sign);
+				if (!haveSameBase(trg, sign)) break;
 				log('te', 'alter-insert');
 
 				var trgL = trg[trg.length - 1];
 				check(trgST === 'span', 'history mangled');
-				if (signL.at1 > trgl.at1) { // or >= ?
-					log('te', 'at1 += ',trg.val.length);
-					signL.at1 += trg.val.length;
+				if (signL.at1 > trgL.at1) { // or >= ?
+					log('te', 'at1 += ',src.val.length);
+					signL.at1 += src.val.length;
 					if (is(signL.at2)) {
-						log('te', 'at2 +=', trg.val.length);
-						signL.at2 += trg.val.length;
+						log('te', 'at2 +=', src.val.length);
+						signL.at2 += src.val.length;
 					}
 				}
 			} else if (trgST === 'value') {
-				if (!isSamepath(src, sign)) break;
+				log('debug', 'remove?', trg, sign);
+				if (!haveSameBase(src, sign)) break;
 				log('te', 'alter-remove');
 
 				var srcL = src[src.length - 1];
@@ -362,7 +379,7 @@ MeshMashine.prototype.transform = function(time, sign, msg) {
 					}
 				}
 			} else {
-				throw new Error('history mangled');
+				throw new Error('history mangled, srcST: '+srcST+' trgST:'+trgST);
 			}
 			break;
 		}

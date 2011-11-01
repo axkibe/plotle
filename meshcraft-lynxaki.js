@@ -328,14 +328,14 @@ tin.on('keypress', function(ch, key) {
 				message('-- another change in buffer!');
 				break;
 			}
-			if (change.at1 === cursor) {
+			if (change.at1 === cx) {
 				change.at1--;
-				cursor--;
+				cx--;
 				break;
 			}
-			if (change.at2 + 1 === cursor) {
+			if (change.at2 + 1 === cx) {
 				change.at2++;
-				cursor--;
+				cx--;
 				break;
 			}
 			message('-- another change in buffer!');

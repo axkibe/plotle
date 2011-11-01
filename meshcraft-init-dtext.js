@@ -16,7 +16,7 @@ if (config.initmessage) {
 }
 
 if (process.argv.length < 3) {
-	console.log(process.argv[0]+' PATH');
+	console.log('meshcraft-init-dtext PATH');
 	process.exit(1);
 }
 
