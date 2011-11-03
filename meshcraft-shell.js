@@ -56,12 +56,23 @@ function request(cmd, callback) {
 */
 var shell = {
 	'alter' : function(out, context, line, args, callback) {
-		var reg = /\s*(\S)\s(.*)\s*->\s*(.*)/g.exec(line);
+		var reg = /\s*\S+\s(.*)\s*->\s*(.*)/g.exec(line);
 		var src, trg;
-		if (!reg ||
-			(src = j2o(reg[1])) === null ||
-			(trg = j2o(reg[2])) === null)
-		{
+
+		if (!reg) {
+			out.write('error: -> missing\n');
+			out.write('syntax: alter SRC -> TRG.\n');
+			callback();
+			return;
+		}
+		if ((src = j2o(reg[1])) === null) {
+			out.write('error: SRC <'+reg[1]+'> no JSON\n');
+			out.write('syntax: alter SRC -> TRG.\n');
+			callback();
+			return;
+		}
+		if ((trg = j2o(reg[2])) === null) {
+			out.write('error: TRG <'+reg[2]+'> no JSON\n');
 			out.write('syntax: alter SRC -> TRG.\n');
 			callback();
 			return;
@@ -91,21 +102,6 @@ var shell = {
 
 	'quit' : function(out, context, line, args, callback) {
 		callback(null, null, true);
-	},
-
-	'set' : function(out, context, line, args, callback) {
-		var reg = /\s*\S+\s+(\[[^\]]*\]|\S+)\s+(.*)/g.exec(line);
-		var path, val;
-		if (!reg ||
-			(path = j2o(reg[1])) === null ||
-			(val  = j2o(reg[2])) === null)
-		{
-			out.write('syntax: set PATH VALUE.\n');
-			callback();
-			return;
-		}
-		if (!(path instanceof Array)) path = [path];
-		request({cmd: 'set', time: context.time, path: path, val: val}, callback);
 	},
 
 	'time' : function(out, context, line, args, callback) {

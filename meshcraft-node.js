@@ -143,7 +143,6 @@ var mmAjax = function(req, red, res) {
 		case 'alter':  asw = mm.alter(cmd.time, cmd.src, cmd.trg);    break;
 		case 'get':    asw = mm.get(cmd.time, cmd.path);              break;
 		case 'now':    asw = mm.now();                                break;
-		case 'set':    asw = mm.set(cmd.time, cmd.path, cmd.val);     break;
 		case 'update': asw = mm.update(cmd.time);                     break;
 		default: webError(res, 400, 'unknown command "'+cmd.cmd+'"'); return;
 		}

@@ -217,8 +217,12 @@ function send() {
 		path.push({at1: change.at1});
 		request({
 			cmd: 'alter',
-			src: {val: change.val},
-			trg: path,
+			src: {
+				val: change.val,
+			},
+			trg: {
+				sign: path,
+			},
 		}, function(err, asw) {
 			for(k in change) change[k] = null;
 			refresh();
@@ -231,8 +235,12 @@ function send() {
 		path.push({at1: change.at1, at2: change.at2});
 		request({
 			cmd: 'alter',
-			src: path,
-			trg: null,
+			src: {
+				sign: path,
+			},
+			trg: {
+				val: null,
+			}
 		}, function(err, asw) {
 			for(k in change) change[k] = null;
 			refresh();
