@@ -86,13 +86,13 @@ function drawScreen() {
 	}
 	for(var i = 0; i < tree.length; i++) {
 		if (change.line !== i) {
-			if (tree[1].text) {
-				tout.write(tree[i].text);
+			if (tree[i]['text%']) {
+				tout.write(tree[i]['text%']);
 			} else {
 				tout.write('\033[31;47;1mPara has no text!\033[0m');
 			}
 		} else {
-			var line = tree[i].text;
+			var line = tree[i]['text%'];
 
 			switch (change.cmd) {
 			case 'join':
@@ -168,43 +168,53 @@ function update(callback) {
 }
 
 function get(path, callback) {
-	request({
-		cmd: 'get',
-		time: time,
-		path: path}, callback);
+	request(
+		{
+			cmd: 'get',
+			time: time,
+			path: path
+		}, 
+		callback);
 }
 
 function set(path, val, callback) {
-	request({
-		cmd: 'set',
-		time: time,
-		path: path,
-		val:  val}, callback);
+	request(
+		{
+			cmd: 'set',
+			time: time,
+			path: path,
+			val:  val
+		},
+		callback);
 }
 
 function send() {
 	switch (change.cmd) {
 	case 'join' :
-		var sign = root.slice();
+		var pivot = root.slice();
+		var sign = pivot.slice();;
 		sign.push(change.line);
+		sign.push('text%');
+		sign.push({at1: change.at1});
 		request({
 			cmd: 'alter',
-			src: 'splice',
-			trg: sign,
+			src: { proc: 'splice', },
+			trg: { sign: sign, pivot: pivot, },
 		}, function(err, asw) {
 			for(k in change) change[k] = null;
 			refresh();
 		});
 		break;
 	case 'newline' :
-		var sign = root.slice();
+		var pivot = root.slice();
+		var sign = pivot.slice();;
 		sign.push(change.line);
-		sign.push('text');
+		sign.push('text%');
 		sign.push({at1: change.at1});
 		request({
 			cmd: 'alter',
-			src: sign,
-			trg: 'splice',
+			src: { sign: sign, pivot: pivot },
+			trg: { proc: 'splice'}, 
 		}, function(err, asw) {
 			for(k in change) change[k] = null;
 			refresh();
@@ -213,7 +223,7 @@ function send() {
 	case 'insert' :
 		var path = root.slice();
 		path.push(change.line);
-		path.push('text');
+		path.push('text%');
 		path.push({at1: change.at1});
 		request({
 			cmd: 'alter',
@@ -231,7 +241,7 @@ function send() {
 	case 'remove' :
 		var path = root.slice();
 		path.push(change.line);
-		path.push('text');
+		path.push('text%');
 		path.push({at1: change.at1, at2: change.at2});
 		request({
 			cmd: 'alter',
@@ -301,7 +311,7 @@ tin.on('keypress', function(ch, key) {
 		if (cx > 0) cx--;
 		break;
 	case 'right' :
-		var max = tree[cy].text.length;
+		var max = tree[cy]['text%'].length;
 		if (change.line === cy && change.cmd === 'insert') max += change.val.length;
 		if (cx < max) cx++;
 		break;
@@ -329,7 +339,7 @@ tin.on('keypress', function(ch, key) {
 				message('-- another change in buffer!');
 				break;
 			}
-			if (cx >= tree[cy].text.length) break;
+			if (cx >= tree[cy]['text%'].length) break;
 			if (change.at2 === cx) {
 				change.at2++;
 				cx++;
@@ -347,7 +357,7 @@ tin.on('keypress', function(ch, key) {
 			message('-- another change in buffer!');
 			break;
 		case null:
-			if (cx >= tree[cy].text.length) break;
+			if (cx >= tree[cy]['text%'].length) break;
 			change.cmd  = 'remove';
 			change.line = cy;
 			change.at1  = cx;

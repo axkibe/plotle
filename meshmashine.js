@@ -79,40 +79,43 @@ function isInteger(o) {
 	return typeof(o) === 'number' && Math.floor(o) === o;
 }
 
-function alterType(src, trg) {
-	if (is(src.val) && isPathSign(trg.sign))            return 'set';
-	if (is(src.val) && isIndexSign(trg.sign))           return 'insert';
-	if (isSpanSign(src.sign) && !isIndexSign(trg.sign)) return 'remove';
-	return null;
-}
-
-function isIndexSign(o) {
+function isIndex(o) {
 	if (!isArray(o)) return false;
 	if (o.length === 0) return false;
 	var last = o[o.length - 1];
 	if (is(last.at1)) return true;
 }
 
-function isSpanSign(o) {
+function isSpan(o) {
 	if (!isArray(o)) return false;
 	if (o.length === 0) return false;
 	var last = o[o.length - 1];
 	if (is(last.at1) && is(last.at2)) return true;
 }
 
-function isPathSign(o) {
+function isPath(o) {
 	if (!isArray(o)) return false;
 	if (o.length === 0) return false;
 	var last = o[o.length - 1];
 	return isInteger(last) || isString(last);
 }
 
-function isRootSign(o) {
+function isRoot(o) {
 	if (!isArray(o)) return false;
 	return o.length === 0;
 }
 
-function basepathLen(p) {
+function alterType(src, trg) {
+	if (trg.proc === 'splice')                          return 'split';
+	if (src.proc === 'splice')                          return 'join';
+	if (is(src.val) && isPath(trg.sign))            return 'set';
+	if (is(src.val) && isIndex(trg.sign))           return 'insert';
+	if (isSpan(src.sign) && !isIndex(trg.sign)) return 'remove';
+	return null;
+}
+
+
+function basePathLength(p) {
 	var pl = p.length;
 	if (pl === 0) return 0;
 	if (isTable(p[pl - 1])) return pl - 1;
@@ -120,19 +123,20 @@ function basepathLen(p) {
 }
 
 /**
-| Compares if two paths are the same, excluding possible
-| signatories.
+| Compares if two signatories are the same,
+| excluding possible index/spans at their end.
 */
 function haveSameBase(p1, p2) {
-	var bpl1 = basepathLen(p1);
-	if (bpl1 !== basepathLen(p2)) return false;
+	var bpl1 = basePathLength(p1);
+	if (bpl1 !== basePathLength(p2)) return false;
+
 	for(var pi = 0; pi < bpl1; pi++) {
 		if (p1[pi] !== p2[pi]) return false;
 	}
 	return true;
 }
 
-function isSubpath(p1, p2) {
+function isSubPath(p1, p2) {
 	if (p1.length > p2.length) return false;
 	for(var p = 0, pl = p1.length; p < pl; p++) {
 		if (p1[p] !== p2[p]) return false;
@@ -159,28 +163,71 @@ function reject(message) {
 	return {ok: false, message: message};
 }
 
-/**
-| a kind of assert.
-*/
-function check(condition, msg1, msg2) {
-	if (!condition) throw reject((msg1||'')+(msg2||''));
-}
-
-/**
-| a kind of assert.
-*/
-function checkBoundaries(value, lowest, highest, msg1, msg2) {
-	if (value < lowest || value > highest) throw reject((msg1||'')+(msg2||''));
-}
-
-/**
-| a kind of assert.
-*/
-function checkOneOf(value) {
-	for (var i = 1; i < arguments.length - 2; i++) {
-		if (value === arguments[i]) return;
+function fail(args, aoffset) {
+	var a = args.slice(aoffset, args.length);
+	for(var i = 2; i < arguments.length; i++) {
+		a.push(arguments[i]);
 	}
-	throw reject(arguments[arguments.length - 2]||'')+(arguments[arguments.length - 1]||'');
+	throw reject(a.join(' '));
+}
+
+function check(condition) {
+	if (!condition) fail(arguments, 1);
+}
+
+function checkWithin(val, low, high) {
+	if (val < low || val > high) fail(arguments, 3);
+}
+
+function checkReadWrite(readonlys) {
+	if (!readonly) fail(arguments, 1, 'readonly flag forbids change');
+}
+
+function checkIsPath(val) {
+	if (!isPath(val)) fail(arguments, 1, 'not a path');
+}
+
+function checkIsIndex(val) {
+	if (!isIndex(value)) fail(arguments, 1, 'not an index');
+}
+
+function checkIsSpan(val) {
+	if (!isSpan(value)) fail(arguments, 1, 'not a span');
+}
+
+function checkIsArray(val) {
+	if (!isArray(value)) fail(arguments, 1, 'not an array');
+}
+
+function checkIsString(val) {
+	if (!isString(value)) fail(arguments, 1, 'not a string');
+}
+
+function checkIsTable(val) {
+	if (!isTable(value)) fail(arguments, 1, 'not a table');
+}
+
+function checkIsSubPath(v1, v2, vs1, vs2) {
+	if (!isSubPath(v1, v2)) fail(arguments, 4, vs1, 'not a subpath of', vs2);
+}
+
+function getPostfix(sign) {
+	if (!(sign > 0)) throw new Error();
+	return sign[sig.length - 1];
+}
+
+function convertPostfix(sp, str, readonly, cm1, cm2) {
+	check(is(sp.at1), cm1, cm2, 'not a postfix');
+	if (sp.at1 === '_end') {
+		checkReadWrite(readonly, cm1, cm2);
+		sigl.at1 = str.length;
+	}
+	if (sp.at2 === '_end') {
+		checkReadWrite(readonly, cm1, cm2);
+		sigl.at2 = str.length;
+	}
+	checkWithin(sp.at1, 0, str.length, cm, 'postfix.at1 outside string');
+	if (is(sp.at2)) checkWithin(sp.at2, 0, str.length, cm, 'postfix.at2 outside string');
 }
 
 /**
@@ -188,6 +235,9 @@ function checkOneOf(value) {
 | TODO check for leading '_'
 */
 function get(node, path, pathlen) {
+	if (!is(pathlen)) pathlen = path.length;
+	if (pathlen < 0) pathlen = path.length + pathlen;
+	if (pathlen < 0) throw reject('invalid path');
 	for (var i = 0; i < pathlen; i++) {
 		if (node === null) {
 			throw reject('path points nowhere.');
@@ -205,6 +255,8 @@ function get(node, path, pathlen) {
 | value: the new value to set
 */
 function set(node, path, pathlen, val) {
+	if (!is(pathlen)) pathlen = path.len;
+	if (pathlen < 0) pathlen = path.len - pathlen;
 	if (pathlen <= 0) throw reject('cannot set empty path');
 	var pi;
 	for(pi = 0; pi < pathlen - 1; pi++) {
@@ -224,90 +276,124 @@ function set(node, path, pathlen, val) {
 |           but it will change node!
 */
 function alter(node, src, trg, readonly) {
-	// todo moves
 	var atype = alterType(src, trg);
-	var bm = 'alter('+atype+')';
+	var cm = 'alter('+atype+')';
 
 	log('alter', 'src:', src);
 	log('alter', 'trg:', trg);
 	log('alter', 'atype:', atype);
 	switch (atype) {
+	case 'split' :
+		checkIsPath(src.pivot, cm, 'src.pivot');
+		checkIsIndex(src.sign, cm, 'src.sign');
+		checkIsSubPath(src.pivot, src.sign, cm, 'src.pivot', 'src.sign');
+		var pivotNode = get(node, src.pivot);
+		checkIsArray(pivotNode, cm, 'src.pivot');
+
+		var str = get(node, src.sign, -1);
+		checkIsString(str, cm, 'content of src.sign');
+
+		var sig_p = getPostfix(src.sign);
+		convertPostfix(sig_p, str, readonly, cm, 'src.sign');
+		check(src.sign.length - 3 === src.pivot.length, cm, 'currently cannot splice trees');
+
+		var piv_p = getPostfix(src.pivot);
+		var ppre = pivotNode[src.sign[src.pivot.length]];
+		log('debug', 'pre', ppre);
+		for(k in ppre) {
+			var pk = ppre[k];
+			check(!isArray(pk) && !isTable(pk), cm, 'cannot splice arrays or tables');
+		}
+		// no rejects after here
+		var pnew = {};
+		var ksplit = src.sign[src.sign.length - 2];
+		for(k in ppre) {
+			if (k === ksplit) {
+				pnew[k] = ppre[k].substring(sigl.at1);
+				ppre[k] = ppre[k].substring(0, sigl.at1);
+			} else {
+				pnew[k] = ppre[k];
+			}
+		}
+		log('debug', 'splice', src.sign[src.pivot.length], pnew);
+		pivotNode.splice(src.sign[src.pivot.length], pnew);
+		break;
 	case 'set':
-		var sub = get(node, trg.sign, trg.sign.length - 1);
-		var tslast = trg.sign[trg.sign.length - 1];
-		if (node[tslast] === '_new') {
+		var sub = get(node, trg.sign, -1);
+		var trgs = getSignSuffif(trg);
+		if (node[trgs] === '_new') {
 			// append to end.
 			log('alter', 'grow new');
-			check(!readonly, bm, 'not changing readonly signatory');
-			check(isTable(sub), bm, 'node cannot grow new subnodes');
+			checkReadWrite(readonly, cm);
+			checkIsTable(sub, bm);
 			if (!node._grow) node._grow = 1;
-			tslast = trg.sign[trg.sign.length - 1] = node._grow++;
+			trgs = trg.sign[trg.sign.length - 1] = node._grow++;
 		}
 		var save = sub[tslast] || null;
 		if (is(trg.val)) {
-			check(deepEqual(trg.val, save), bm, 'trg.val set incorrectly');
+			check(deepEqual(trg.val, save), cm, 'trg.val set incorrectly');
 		} else {
-			check(!readonly, bm, 'not changing readonly signatory');
+			checkReadWrite(readonly, cm);
 			trg.val = save;
 		}
 
 		if (is(src.sign)) {
 			check(deepEqual(trg.sign, src.sign), bm, 'src.sign set incorrectly');
 		} else {
-			check(!readonly, bm, 'not changing readonly signatory');
+			checkReadWrite(readonly, cm);
 			src.sign = trg.sign;
 		}
 		node[tslast] = src.val;
 		break;
 	case 'insert':
-		var s = get(node, trg.sign, trg.sign.length - 1);
+		var str = get(node, trg.sign, trg.sign.length - 1);
 		check(isString(s), bm, 'trg.sign signates no string');
 
-		var tlast = trg.sign[trg.sign.length - 1];  // TODO rename trgl
-		if (tlast.at1 === '_end') {
-			check(!readonly, bm, 'not changing readonly signatory');
-			tlast.at1 = s.length;
+		var trg_p = getPostfix(trg.sign);
+		if (trg_p.at1 === '_end') {
+			checkReadWrite(readonly, cm);
+			trg_p.at1 = s.length;
 		}
-		checkBoundaries(tlast.at1, 0, s.length, bm, 'trg.sign...at1 outside string');
+		checkBoundaries(trg_p.at1, 0, str.length, cm, 'trg.sign...at1 outside string');
 
 		// where trg span should end
 		var tat2 = tlast.at1 + src.val.length;
 		if (is(tlast.at2)) {
-			check(tlast.at2 === tat2, bm, 'trg.sign...at2 preset incorrectly');
+			check(tlast.at2 === tat2, cm, 'trg.sign...at2 preset incorrectly');
 		} else {
-			check(!readonly, bm, 'not changing readonly signatory');
+			checkReadWrite(readonly, cm);
 			tlast.at2 = tat2;
 		}
-		var sn = s.substring(0, tlast.at1) + src.val + s.substring(tlast.at1);
-		set(node, trg.sign, trg.sign.length - 1, sn);
+		var str_n = str.substring(0, tlast.at1) + src.val + str.substring(tlast.at1);
+		set(node, trg.sign, trg.sign.length - 1, str_n);
 		break;
 	case 'remove':
-		var s = get(node, src.sign, src.sign.length - 1);
-		check(isString(s), bm, 'src.sign signates no string');
+		var str = get(node, src.sign, src.sign.length - 1);
+		checkIsString(str, cm, 'content of src.sign');
 
-		// todo check s
 		var slast = src.sign[src.sign.length - 1];
+
 		if (slast.at1 === '_end') {
-			check(!readonly, bm, 'not changing readonly signatory');
+			checkReadWrite(readonly, cm);
 			slast.at1 = s.length;
 		}
 		if (slast.at2 === '_end') {
-			check(!readonly, bm, 'not changing readonly signatory');
+			checkReadWrite(readonly, cm);
 			slast.at2 = s.length;
 		}
 		if (slast.at1 === slast.at2) { log('alter', 'removed nothing'); return; }
 		check(slast.at2 > slast.at1, bm, 'src at2 < at1');
-		checkBoundaries(slast.at1, 0, s.length, bm, 'src.sign...at1 outside string');
-		checkBoundaries(slast.at2, 0, s.length, bm, 'src.sign...at2 outside string');
+		checkBoundaries(slast.at1, 0, s.length, cm, 'src.sign...at1 outside string');
+		checkBoundaries(slast.at2, 0, s.length, cm, 'src.sign...at2 outside string');
 
 		val = s.substring(slast.at1, slast.at2);
 		if (isnon(trg.val)) {
-			check(val == trg.val, bm, 'trg.val preset incorrectly');
+			check(val == trg.val, cm, 'trg.val preset incorrectly');
 		} else {
-			check(!readonly, bm, 'not changing readonly signatory');
+			checkReadWrite(readonly, cm);
 			trg.val = val;
 		}
-		var sn = s.substring(0, slast.at1) + s.substring(slast.at2);
+		var sn = str.substring(0, slast.at1) + s.substring(slast.at2);
 		set(node, src.sign, src.sign.length - 1, sn);
 		break;
 	default:
@@ -349,7 +435,7 @@ MeshMashine.prototype._isValidPath = function(path) {
 MeshMashine.prototype.transform = function(time, sign, msg) {
 	log('te', msg, 'in', time, sign);
 	if (!is(sign)) return sign;
-	if (isRootSign(sign)) return sign;
+	if (isRoot(sign)) return sign;
 
 	var sigl = sign[sign.length - 1];
 
@@ -367,7 +453,7 @@ MeshMashine.prototype.transform = function(time, sign, msg) {
 		case 'insert':
 			if (!haveSameBase(trg.sign, sign)) continue;
 			log('te', 'alter-insert');
-			check(isSpanSign(trg.sign), 'history mangled');
+			check(isSpan(trg.sign), 'history mangled');
 
 			var trgl = trg.sign[trg.sign.length - 1];
 			if (sigl.at1 > trgl.at1) { // or >= ?
@@ -494,43 +580,6 @@ MeshMashine.prototype.now = function() {
 	log('mm', 'ok', this.history.length);
 	return {ok: true, time: this.history.length };
 }
-
-/**
-| Sets a node.
-*/
-/*
-
-TODO delete
-
-MeshMashine.prototype.set = function(time, path, val) {
-	log('mm', 'set time:', time, 'path:', path, 'val:', val);
-	if (!this._isValidTime(time)) return reject('invalid time');
-	if (!this._isValidPath(path)) return reject('invalid path');
-
-	var node = this.repository;
-	var pi;
-	for (pi = 0; pi < path.length - 1; pi++) {
-		node = node[path[pi]];
-		if (typeof(node) === 'undefined') return reject('path points nowhere');
-	}
-
-	if (path[pi] === '_end') {
-		// append to end.
-		if (typeof(node) !== 'object' || node instanceof Array) {
-			return reject('node not growable');
-		}
-		if (!node._grow) node._grow = 1;
-		path[pi] = node._grow++;
-	}
-
-	var save = node[path[pi]] || null;
-	node[path[pi]] = val;
-
-	this.history.push({cmd: 'set', path: path, save: save, val : val});
-
-	log('mm', 'ok', time, path, save);
-	return {ok: true, time: time, path: path, save: save};
-}*/
 
 /**
 | Returns all changes from time to now.

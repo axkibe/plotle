@@ -40,20 +40,20 @@ libemsi.request({cmd: "now"}, function (err, now) {
 			src: {
 				val: [
 					{
-						type: 'para',
-						text: 'If you can dream---and not make dreams your master;',
+						"type":  'para',
+						"text%": 'If you can dream---and not make dreams your master;',
 					},
 					{
-						type: 'para',
-						text: 'If you can think---and not make thoughts your aim,',
+						"type": 'para',
+						"text%": 'If you can think---and not make thoughts your aim,',
 					},
 					{
-						type: 'para',
-						text: 'If you can meet with Triumph and Disaster',
+						"type":  'para',
+						"text%": 'If you can meet with Triumph and Disaster',
 					},
 					{
-						type: 'para',
-						text: 'And treat those two impostors just the same',
+						"type": 'para',
+						"text%": 'And treat those two impostors just the same',
 					},
 				],
 			},
