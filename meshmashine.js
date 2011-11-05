@@ -106,10 +106,10 @@ function isRoot(o) {
 }
 
 function alterType(src, trg) {
-	if (trg.proc === 'splice')                          return 'split';
-	if (src.proc === 'splice')                          return 'join';
-	if (is(src.val) && isPath(trg.sign))            return 'set';
-	if (is(src.val) && isIndex(trg.sign))           return 'insert';
+	if (trg.proc === 'splice')                  return 'split';
+	if (src.proc === 'splice')                  return 'join';
+	if (is(src.val) && isPath(trg.sign))        return 'set';
+	if (is(src.val) && isIndex(trg.sign))       return 'insert';
 	if (isSpan(src.sign) && !isIndex(trg.sign)) return 'remove';
 	return null;
 }
@@ -316,7 +316,7 @@ function alter(node, src, trg, readonly) {
 			}
 		}
 		log('debug', 'splice', src.sign[src.pivot.length], pnew);
-		pivotNode.splice(src.sign[src.pivot.length], pnew);
+		pivotNode.splice(src.sign[src.pivot.length] + 1, 0, pnew);
 		break;
 	case 'set':
 		var subnode = get(node, trg.sign, -1);
