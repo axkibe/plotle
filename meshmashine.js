@@ -164,7 +164,7 @@ function reject(message) {
 }
 
 function fail(args, aoffset) {
-	var a = args.slice(aoffset, args.length);
+	var a = Array.prototype.slice.call(args, aoffset, args.length);
 	for(var i = 2; i < arguments.length; i++) {
 		a.push(arguments[i]);
 	}
@@ -179,8 +179,8 @@ function checkWithin(val, low, high) {
 	if (val < low || val > high) fail(arguments, 3);
 }
 
-function checkReadWrite(readonlys) {
-	if (!readonly) fail(arguments, 1, 'readonly flag forbids change');
+function checkReadWrite(readonly) {
+	if (readonly) fail(arguments, 1, 'readonly flag forbids change');
 }
 
 function checkIsPath(val) {
@@ -188,19 +188,19 @@ function checkIsPath(val) {
 }
 
 function checkIsIndex(val) {
-	if (!isIndex(value)) fail(arguments, 1, 'not an index');
+	if (!isIndex(val)) fail(arguments, 1, 'not an index');
 }
 
 function checkIsSpan(val) {
-	if (!isSpan(value)) fail(arguments, 1, 'not a span');
+	if (!isSpan(val)) fail(arguments, 1, 'not a span');
 }
 
 function checkIsArray(val) {
-	if (!isArray(value)) fail(arguments, 1, 'not an array');
+	if (!isArray(val)) fail(arguments, 1, 'not an array');
 }
 
 function checkIsString(val) {
-	if (!isString(value)) fail(arguments, 1, 'not a string');
+	if (!isString(val)) fail(arguments, 1, 'not a string');
 }
 
 function checkIsTable(val) {
@@ -212,8 +212,8 @@ function checkIsSubPath(v1, v2, vs1, vs2) {
 }
 
 function getPostfix(sign) {
-	if (!(sign > 0)) throw new Error();
-	return sign[sig.length - 1];
+	if (!(sign.length > 0)) throw new Error();
+	return sign[sign.length - 1];
 }
 
 function convertPostfix(sp, str, readonly, cm1, cm2) {
@@ -226,8 +226,8 @@ function convertPostfix(sp, str, readonly, cm1, cm2) {
 		checkReadWrite(readonly, cm1, cm2);
 		sigl.at2 = str.length;
 	}
-	checkWithin(sp.at1, 0, str.length, cm, 'postfix.at1 outside string');
-	if (is(sp.at2)) checkWithin(sp.at2, 0, str.length, cm, 'postfix.at2 outside string');
+	checkWithin(sp.at1, 0, str.length, cm1, cm2, 'postfix.at1 invalid');
+	if (is(sp.at2)) checkWithin(sp.at2, 0, str.length, cm1, cm2, 'postfix.at2 invalid');
 }
 
 /**
@@ -309,8 +309,8 @@ function alter(node, src, trg, readonly) {
 		var ksplit = src.sign[src.sign.length - 2];
 		for(k in ppre) {
 			if (k === ksplit) {
-				pnew[k] = ppre[k].substring(sigl.at1);
-				ppre[k] = ppre[k].substring(0, sigl.at1);
+				pnew[k] = ppre[k].substring(sig_p.at1);
+				ppre[k] = ppre[k].substring(0, sig_p.at1);
 			} else {
 				pnew[k] = ppre[k];
 			}
@@ -319,17 +319,17 @@ function alter(node, src, trg, readonly) {
 		pivotNode.splice(src.sign[src.pivot.length], pnew);
 		break;
 	case 'set':
-		var sub = get(node, trg.sign, -1);
-		var trgs = getSignSuffif(trg);
-		if (node[trgs] === '_new') {
+		var subnode = get(node, trg.sign, -1);
+		var trg_p = getPostfix(trg.sign);
+		if (subnode[trg_p] === '_new') {
 			// append to end.
 			log('alter', 'grow new');
 			checkReadWrite(readonly, cm);
 			checkIsTable(sub, bm);
-			if (!node._grow) node._grow = 1;
-			trgs = trg.sign[trg.sign.length - 1] = node._grow++;
+			if (!subnode._grow) subnode._grow = 1;
+			trg_p = trg.sign[trg.sign.length - 1] = subnode._grow++;
 		}
-		var save = sub[tslast] || null;
+		var save = subnode[trg_p] || null;
 		if (is(trg.val)) {
 			check(deepEqual(trg.val, save), cm, 'trg.val set incorrectly');
 		} else {
@@ -343,7 +343,7 @@ function alter(node, src, trg, readonly) {
 			checkReadWrite(readonly, cm);
 			src.sign = trg.sign;
 		}
-		node[tslast] = src.val;
+		subnode[trg_p] = src.val;
 		break;
 	case 'insert':
 		var str = get(node, trg.sign, trg.sign.length - 1);
