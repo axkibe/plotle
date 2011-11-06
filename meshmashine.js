@@ -370,7 +370,7 @@ function alter(node, src, trg, readonly) {
 			// append to end.
 			log('alter', 'grow new');
 			checkReadWrite(readonly, cm);
-			checkIsTable(sub, bm);
+			checkIsTable(sub, cm);
 			if (!subnode._grow) subnode._grow = 1;
 			trg_p = trg.sign[trg.sign.length - 1] = subnode._grow++;
 		}
@@ -383,7 +383,7 @@ function alter(node, src, trg, readonly) {
 		}
 
 		if (is(src.sign)) {
-			check(deepEqual(trg.sign, src.sign), bm, 'src.sign set incorrectly');
+			check(deepEqual(trg.sign, src.sign), cm, 'src.sign set incorrectly');
 		} else {
 			checkReadWrite(readonly, cm);
 			src.sign = trg.sign;
@@ -392,12 +392,12 @@ function alter(node, src, trg, readonly) {
 		break;
 	case 'insert':
 		var str = get(node, trg.sign, trg.sign.length - 1);
-		check(isString(s), bm, 'trg.sign signates no string');
+		check(isString(str), cm, 'trg.sign signates no string');
 
 		var trg_p = getPostfix(trg.sign);
 		if (trg_p.at1 === '_end') {
 			checkReadWrite(readonly, cm);
-			trg_p.at1 = s.length;
+			trg_p.at1 = str.length;
 		}
 		checkBoundaries(trg_p.at1, 0, str.length, cm, 'trg.sign...at1 outside string');
 
@@ -420,25 +420,25 @@ function alter(node, src, trg, readonly) {
 
 		if (slast.at1 === '_end') {
 			checkReadWrite(readonly, cm);
-			slast.at1 = s.length;
+			slast.at1 = str.length;
 		}
 		if (slast.at2 === '_end') {
 			checkReadWrite(readonly, cm);
-			slast.at2 = s.length;
+			slast.at2 = str.length;
 		}
 		if (slast.at1 === slast.at2) { log('alter', 'removed nothing'); return; }
-		check(slast.at2 > slast.at1, bm, 'src at2 < at1');
-		checkBoundaries(slast.at1, 0, s.length, cm, 'src.sign...at1 outside string');
-		checkBoundaries(slast.at2, 0, s.length, cm, 'src.sign...at2 outside string');
+		check(slast.at2 > slast.at1, cm, 'src at2 < at1');
+		checkBoundaries(slast.at1, 0, str.length, cm, 'src.sign...at1 outside string');
+		checkBoundaries(slast.at2, 0, str.length, cm, 'src.sign...at2 outside string');
 
-		val = s.substring(slast.at1, slast.at2);
+		val = str.substring(slast.at1, slast.at2);
 		if (isnon(trg.val)) {
 			check(val == trg.val, cm, 'trg.val preset incorrectly');
 		} else {
 			checkReadWrite(readonly, cm);
 			trg.val = val;
 		}
-		var sn = str.substring(0, slast.at1) + s.substring(slast.at2);
+		var sn = str.substring(0, slast.at1) + str.substring(slast.at2);
 		set(node, src.sign, src.sign.length - 1, sn);
 		break;
 	default:
