@@ -193,9 +193,9 @@ function send() {
 	case 'join' :
 		var pivot = root.slice();
 		var sign = pivot.slice();;
-		sign.push(change.line);
+		sign.push(change.line - 1);
 		sign.push('text%');
-		sign.push({at1: change.at1});
+		sign.push({at1: '_end'});
 		request({
 			cmd: 'alter',
 			src: { proc: 'splice', },
@@ -210,11 +210,11 @@ function send() {
 		var sign = pivot.slice();;
 		sign.push(change.line);
 		sign.push('text%');
-		sign.push({at1: change.at1});
+		sign.push({at1: change.at1}); // todo at1 not cared about
 		request({
 			cmd: 'alter',
 			src: { sign: sign, pivot: pivot },
-			trg: { proc: 'splice'}, 
+			trg: { proc: 'splice'},
 		}, function(err, asw) {
 			for(k in change) change[k] = null;
 			refresh();
@@ -395,6 +395,7 @@ tin.on('keypress', function(ch, key) {
 			break;
 		case null:
 			if (cx === 0) {
+				if (cy === 0) break;
 				change.cmd = 'join';
 				change.line = cy;
 				break;

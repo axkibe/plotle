@@ -144,9 +144,17 @@ function isSubPath(p1, p2) {
 	return true;
 }
 
+function keysLength(o) {
+	var n = 0;
+	for(k in o) {
+		n++;
+	}
+	return n;
+}
+
 function deepEqual(o1, o2) {
 	if (o1 === o2) return true;
-	if (o1.keys.length !== o2.keys.length) return false;
+	if (keysLength(o1) !== keysLength(o2)) return false;
 
 	for(k in o1) {
 		return deepEqual(o1[k], o2[k]);
@@ -220,11 +228,11 @@ function convertPostfix(sp, str, readonly, cm1, cm2) {
 	check(is(sp.at1), cm1, cm2, 'not a postfix');
 	if (sp.at1 === '_end') {
 		checkReadWrite(readonly, cm1, cm2);
-		sigl.at1 = str.length;
+		sp.at1 = str.length;
 	}
 	if (sp.at2 === '_end') {
 		checkReadWrite(readonly, cm1, cm2);
-		sigl.at2 = str.length;
+		sp.at2 = str.length;
 	}
 	checkWithin(sp.at1, 0, str.length, cm1, cm2, 'postfix.at1 invalid');
 	if (is(sp.at2)) checkWithin(sp.at2, 0, str.length, cm1, cm2, 'postfix.at2 invalid');
@@ -297,9 +305,8 @@ function alter(node, src, trg, readonly) {
 		convertPostfix(sig_p, str, readonly, cm, 'src.sign');
 		check(src.sign.length - 3 === src.pivot.length, cm, 'currently cannot splice trees');
 
-		var piv_p = getPostfix(src.pivot);
-		var ppre = pivotNode[src.sign[src.pivot.length]];
-		log('debug', 'pre', ppre);
+		var sig_splice = src.sign[src.pivot.length];
+		var ppre = pivotNode[sig_splice];
 		for(k in ppre) {
 			var pk = ppre[k];
 			check(!isArray(pk) && !isTable(pk), cm, 'cannot splice arrays or tables');
@@ -315,8 +322,47 @@ function alter(node, src, trg, readonly) {
 				pnew[k] = ppre[k];
 			}
 		}
-		log('debug', 'splice', src.sign[src.pivot.length], pnew);
-		pivotNode.splice(src.sign[src.pivot.length] + 1, 0, pnew);
+		pivotNode.splice(sig_splice + 1, 0, pnew);
+		break;
+	case 'join' :
+		checkIsPath(trg.pivot, cm, 'trg.pivot');
+		checkIsIndex(trg.sign, cm, 'trg.sign'); // todo allow paths
+		checkIsSubPath(trg.pivot, trg.sign, cm, 'trg.pivot', 'trg.sign');
+		var pivotNode = get(node, trg.pivot);
+		checkIsArray(pivotNode, cm, 'trg.pivot');
+
+		var str = get(node, trg.sign, -1);
+		checkIsString(str, cm, 'content of trg.sign');
+
+		var sig_p = getPostfix(trg.sign);
+		convertPostfix(sig_p, str, readonly, cm, 'trg.sign');
+		check(trg.sign.length - 3 === trg.pivot.length, cm, 'corrently cannot splice trees');
+
+		var sig_splice = trg.sign[trg.pivot.length];
+		check(pivotNode.length > sig_splice, cm, 'splice out of range');
+
+		var ppre = pivotNode[sig_splice];
+		var pnex = pivotNode[sig_splice + 1];
+		log('debug', 'ppre', ppre);
+		log('debug', 'pnex', pnex);
+		check(keysLength(ppre) === keysLength(pnex), cm, 'stubs.keys not equal');
+		for(k in ppre) {
+			check(is(pnex[k]), cm, 'stubs['+k+'] not equal');
+			if (k !== trg.sign[trg.pivot.length]) {
+				check(deepEqual(ppre[k], pnex[k], cm, 'stubs['+k+'] not deep equal'));
+			} else {
+				check(k.indexOf('%') > 0, cm, 'stubs['+k+'] does not contain %');
+				checkIsString(ppre[k], cm, 'stubs['+k+']');
+			}
+		}
+		// no rejects after here
+		for(k in ppre) {
+			if (k === trg.sign[trg.pivot.length]) {
+				ppre[k] += pnex[k];
+			}
+		}
+
+		pivotNode.splice(sig_splice + 1, 1);
 		break;
 	case 'set':
 		var subnode = get(node, trg.sign, -1);
