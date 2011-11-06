@@ -26,6 +26,7 @@
  License: GNU Affero AGPLv3
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+"use strict";
 
 /**
 | Deep copies an object.
@@ -146,7 +147,7 @@ function isSubPath(p1, p2) {
 
 function keysLength(o) {
 	var n = 0;
-	for(k in o) {
+	for(var k in o) {
 		n++;
 	}
 	return n;
@@ -156,7 +157,7 @@ function deepEqual(o1, o2) {
 	if (o1 === o2) return true;
 	if (keysLength(o1) !== keysLength(o2)) return false;
 
-	for(k in o1) {
+	for(var k in o1) {
 		return deepEqual(o1[k], o2[k]);
 	}
 	return true;
@@ -307,14 +308,14 @@ function alter(node, src, trg, readonly) {
 
 		var sig_splice = src.sign[src.pivot.length];
 		var ppre = pivotNode[sig_splice];
-		for(k in ppre) {
+		for(var k in ppre) {
 			var pk = ppre[k];
 			check(!isArray(pk) && !isTable(pk), cm, 'cannot splice arrays or tables');
 		}
 		// no rejects after here
 		var pnew = {};
 		var ksplit = src.sign[src.sign.length - 2];
-		for(k in ppre) {
+		for(var k in ppre) {
 			if (k === ksplit) {
 				pnew[k] = ppre[k].substring(sig_p.at1);
 				ppre[k] = ppre[k].substring(0, sig_p.at1);
@@ -343,13 +344,11 @@ function alter(node, src, trg, readonly) {
 
 		var ppre = pivotNode[sig_splice];
 		var pnex = pivotNode[sig_splice + 1];
-		log('debug', 'ppre', ppre);
-		log('debug', 'pnex', pnex);
 		check(keysLength(ppre) === keysLength(pnex), cm, 'stubs.keys not equal');
-		for(k in ppre) {
+		for(var k in ppre) {
 			check(is(pnex[k]), cm, 'stubs['+k+'] not equal');
-			if (k !== trg.sign[trg.pivot.length]) {
-				check(deepEqual(ppre[k], pnex[k], cm, 'stubs['+k+'] not deep equal'));
+			if (k !== trg.sign[trg.pivot.length + 1]) {
+				check(deepEqual(ppre[k], pnex[k]), cm, 'stubs['+k+'] not deep equal');
 			} else {
 				check(k.indexOf('%') > 0, cm, 'stubs['+k+'] does not contain %');
 				checkIsString(ppre[k], cm, 'stubs['+k+']');
@@ -357,7 +356,7 @@ function alter(node, src, trg, readonly) {
 		}
 		// no rejects after here
 		for(k in ppre) {
-			if (k === trg.sign[trg.pivot.length]) {
+			if (k === trg.sign[trg.pivot.length + 1]) {
 				ppre[k] += pnex[k];
 			}
 		}
