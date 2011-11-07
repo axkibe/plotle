@@ -49,8 +49,11 @@ if (root === null) {
 }
 if (!(root instanceof Array)) root = [root];
 
+// shortcuts for process.stin/out
 var tin  = process.stdin;
 var tout = process.stdout;
+
+// window size
 var tsize;
 process.on('SIGWINCH', function() {
 	tsize = tout.getWindowSize();
@@ -61,7 +64,7 @@ tsize = tout.getWindowSize();
 var messages = [];
 var tree  = null;
 var change = {cmd: null, at1: null, at2: null, val: null};
-var time = 0;
+var curTime, time = 0;
 var cx = 0, cy = 0;
 
 function drawScreen() {
@@ -143,28 +146,27 @@ function message(s) {
 
 function request(cmd, callback) {
 	cmd.time = time;
-	message('');
-	message('-> '+util.inspect(cmd));
 	tin.pause();
-	libemsi.request(cmd, function(err, asw) {
-		tin.resume();
-		if (err) {
-			message('<x '+err.message);
-		} else {
-			message('<- '+util.inspect(asw));
-		}
-		callback(err, asw);
-	});
+	libemsi.request(cmd,
+		function(err, asw) {
+			tin.resume();
+			if (err) {
+				message('<x '+err.message);
+			} else {
+				message('<- '+util.inspect(asw));
+			}
+			callback(err, asw);
+		});
 }
 
 function update(callback) {
-	libemsi.request({
-		cmd: 'update',
-		time: time},
-	function(err, asw) {
-		if (!err && asw.time) time = asw.time;
-		callback(err, asw);
-	});
+	request(
+		{
+			cmd: 'update',
+			time: time},
+		function(err, asw) {
+			callback(err, asw);
+		});
 }
 
 function get(path, callback) {
@@ -173,7 +175,7 @@ function get(path, callback) {
 			cmd: 'get',
 			time: time,
 			path: path
-		}, 
+		},
 		callback);
 }
 
@@ -202,7 +204,7 @@ function send() {
 			trg: { sign: sign, pivot: pivot, },
 		}, function(err, asw) {
 			for(k in change) change[k] = null;
-			refresh();
+			tocurrent();
 		});
 		break;
 	case 'newline' :
@@ -217,7 +219,7 @@ function send() {
 			trg: { proc: 'splice'},
 		}, function(err, asw) {
 			for(k in change) change[k] = null;
-			refresh();
+			tocurrent();
 		});
 		break;
 	case 'insert' :
@@ -235,7 +237,7 @@ function send() {
 			},
 		}, function(err, asw) {
 			for(k in change) change[k] = null;
-			refresh();
+			tocurrent();
 		});
 		break;
 	case 'remove' :
@@ -253,7 +255,7 @@ function send() {
 			}
 		}, function(err, asw) {
 			for(k in change) change[k] = null;
-			refresh();
+			tocurrent();
 		});
 		break;
 	default :
@@ -266,21 +268,25 @@ function init() {
 	tty.setRawMode(true);
 	tout.write('\033[2J');
 	tin.pause();
-	refresh();
+	tocurrent();
 	drawScreen();
 }
 init();
 
-function refresh() {
-	tin.pause();
-	update(function(err, asw) {
+function getRoot(callback) {
+	get(root, function(err, asw) {
 		if (err) exit(err.message);
-		get(root, function(err, asw) {
-			if (err) exit(err.message);
-			tree = asw.node;
-			tin.resume();
-			drawScreen();
-		})
+		tree = asw.node;
+		drawScreen();
+		if (callback) callback();
+	})
+}
+
+
+function tocurrent(callback) {
+	update(function(err, asw) {
+		if (asw.time) curTime = time = asw.time;
+		getRoot(callback);
 	});
 }
 
@@ -299,9 +305,27 @@ tin.on('keypress', function(ch, key) {
 	// message(ch+' | '+util.inspect(key));
 	if (key && key.ctrl) {
 		switch (key.name) {
-		case 'c' : exit();    break;
-		case 'u' : refresh(); break;
-		case 's' : send();    break;
+		case 'left' :
+			if (time === 0) break;
+			time--;
+			message('time: '+time);
+			getRoot();
+			break;
+		case 'right' :
+			if (time === curTime) break;
+			time++;
+			message('time: '+time);
+			getRoot();
+			break;
+		case 'c' :
+			exit();
+			break;
+		case 'up':
+			tocurrent();
+			break;
+		case 's':
+			send();
+			break;
 		}
 		return;
 	}
@@ -324,6 +348,7 @@ tin.on('keypress', function(ch, key) {
 		cy++;
 		break;
 	case 'enter' :
+		if (time !== curTime) { message('not at now'); break; }
 		if (change.cmd !== null) {
 			message('-- another change in buffer!');
 			break;
@@ -333,6 +358,7 @@ tin.on('keypress', function(ch, key) {
 		change.at1  = cx++;
 		break;
 	case 'delete' :
+		if (time !== curTime) { message('not at now'); break; }
 		switch (change.cmd) {
 		case 'remove' :
 			if (cy !== change.line) {
@@ -369,6 +395,7 @@ tin.on('keypress', function(ch, key) {
 		}
 		break;
 	case 'backspace' :
+		if (time !== curTime) { message('not at now'); break; }
 		switch (change.cmd) {
 		case 'remove' :
 			if (cx === 0) break;
@@ -414,6 +441,7 @@ tin.on('keypress', function(ch, key) {
 	case 'space':
 	case (ch) :
 	case (ch && ch.toLowerCase()) :
+		if (time !== curTime) { message('not at now'); break; }
 		switch (change.cmd) {
 		case 'join' :
 		case 'remove':

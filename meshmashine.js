@@ -236,7 +236,10 @@ function convertPostfix(sp, str, readonly, cm1, cm2) {
 		sp.at2 = str.length;
 	}
 	checkWithin(sp.at1, 0, str.length, cm1, cm2, 'postfix.at1 invalid');
-	if (is(sp.at2)) checkWithin(sp.at2, 0, str.length, cm1, cm2, 'postfix.at2 invalid');
+	if (is(sp.at2)) {
+		checkWithin(sp.at2, 0, str.length, cm1, cm2, 'postfix.at2 invalid');
+		check(sp.at2 >= sp.at1, cm1, cm2, 'postfix: at2 < at1');
+	}
 }
 
 /**
@@ -395,50 +398,35 @@ function alter(node, src, trg, readonly) {
 		check(isString(str), cm, 'trg.sign signates no string');
 
 		var trg_p = getPostfix(trg.sign);
-		if (trg_p.at1 === '_end') {
-			checkReadWrite(readonly, cm);
-			trg_p.at1 = str.length;
-		}
-		checkBoundaries(trg_p.at1, 0, str.length, cm, 'trg.sign...at1 outside string');
+		convertPostfix(trg_p, str, readonly, cm, 'trg.sign');
 
 		// where trg span should end
-		var tat2 = tlast.at1 + src.val.length;
-		if (is(tlast.at2)) {
-			check(tlast.at2 === tat2, cm, 'trg.sign...at2 preset incorrectly');
+		var tat2 = trg_p.at1 + src.val.length;
+		if (is(trg_p.at2)) {
+			check(trg_p.at2 === tat2, cm, 'trg.sign...at2 preset incorrectly');
 		} else {
 			checkReadWrite(readonly, cm);
-			tlast.at2 = tat2;
+			trg_p.at2 = tat2;
 		}
-		var str_n = str.substring(0, tlast.at1) + src.val + str.substring(tlast.at1);
+		var str_n = str.substring(0, trg_p.at1) + src.val + str.substring(trg_p.at1);
 		set(node, trg.sign, trg.sign.length - 1, str_n);
 		break;
 	case 'remove':
 		var str = get(node, src.sign, src.sign.length - 1);
 		checkIsString(str, cm, 'content of src.sign');
 
-		var slast = src.sign[src.sign.length - 1];
+		var src_p = getPostfix(src.sign);
+		convertPostfix(src_p, str, readonly, cm, 'src.sign');
+		if (src_p.at1 === src_p.at2) { log('alter', 'removed nothing'); return; }
 
-		if (slast.at1 === '_end') {
-			checkReadWrite(readonly, cm);
-			slast.at1 = str.length;
-		}
-		if (slast.at2 === '_end') {
-			checkReadWrite(readonly, cm);
-			slast.at2 = str.length;
-		}
-		if (slast.at1 === slast.at2) { log('alter', 'removed nothing'); return; }
-		check(slast.at2 > slast.at1, cm, 'src at2 < at1');
-		checkBoundaries(slast.at1, 0, str.length, cm, 'src.sign...at1 outside string');
-		checkBoundaries(slast.at2, 0, str.length, cm, 'src.sign...at2 outside string');
-
-		val = str.substring(slast.at1, slast.at2);
+		var val = str.substring(src_p.at1, src_p.at2);
 		if (isnon(trg.val)) {
-			check(val == trg.val, cm, 'trg.val preset incorrectly');
+			check(val == trg.val, cm, 'trg.val preset incorrectly:', val, '!==', trg.val);
 		} else {
 			checkReadWrite(readonly, cm);
 			trg.val = val;
 		}
-		var sn = str.substring(0, slast.at1) + str.substring(slast.at2);
+		var sn = str.substring(0, src_p.at1) + str.substring(src_p.at2);
 		set(node, src.sign, src.sign.length - 1, sn);
 		break;
 	default:
