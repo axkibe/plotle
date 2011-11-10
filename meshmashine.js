@@ -219,7 +219,8 @@ Signature.prototype.isPath = function() {
 | Returns the signature at index i.
 */
 Signature.prototype.arc = function(i) {
-	if (i < 0) i = this._sign.length - i;
+	if (i < 0) i = this._sign.length + i;
+	if (i < 0) return null;
 	return this._sign[i];
 }
 
@@ -321,9 +322,9 @@ Alternation.prototype.type = function(backward) {
 	var trg = !backward ? this.trg : this.src;
 	if (trg.proc === 'splice') return 'split';
 	if (src.proc === 'splice') return 'join';
-	if (is(src.val) && trg.sign.isPath()) return 'set';
-	if (is(src.val) && trg.sign.isIndex()) return 'insert';
-	if (src.sign.isSpan() && !trg.sign.isIndex()) return 'remove';
+	if (is(src.val) && trg.sign && trg.sign.isPath()) return 'set';
+	if (is(src.val) && trg.sign && trg.sign.isIndex()) return 'insert';
+	if (src.sign.isSpan() && !(trg.sign && trg.sign.isIndex())) return 'remove';
 	return null;
 }
 
@@ -402,7 +403,7 @@ NTree.prototype.alter = function(alternation, backward) {
 		var pivotNode = this.get(src.sign, src.pivot);
 		check(isArray(pivotNode), cm, 'src.pivot signates no array');
 
-		var str = this.get(node, src.sign);
+		var str = this.get(src.sign);
 		check(isString(str), cm, 'src.sign signates no string');
 
 		check(src.pivot === src.sign.length - 3,  cm, 'currently cannot splice trees');
@@ -419,11 +420,15 @@ NTree.prototype.alter = function(alternation, backward) {
 		// no rejects after here
 		var pnew = {};
 		var ksplit = src.sign.arc(-2);
+		log('debug', 'src.sign', src.sign);
+		log('debug', 'ksplit', ksplit);
 		for(var k in ppre) {
 			if (k === ksplit) {
+				log('debug', 'in');
 				pnew[k] = ppre[k].substring(sig_pfx.at1);
 				ppre[k] = ppre[k].substring(0, sig_pfx.at1);
 			} else {
+				log('debug', 'out');
 				pnew[k] = ppre[k];
 			}
 		}
@@ -509,7 +514,7 @@ NTree.prototype.alter = function(alternation, backward) {
 		check(isString(str), cm, 'src.sign signates no string');
 
 		var src_pfx = src.sign.attunePostfix(str);
-		if (src_p.at1 === src_p.at2) { log('alter', 'removed nothing'); return; }
+		if (src_pfx.at1 === src_pfx.at2) { log('alter', 'removed nothing'); return; }
 
 		var val = str.substring(src_pfx.at1, src_pfx.at2);
 		if (isnon(trg.val)) {
@@ -790,7 +795,6 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 MeshMashine.prototype.get = function(time, sign) {
 	try {
 		log('mm', 'get time:', time, ' sign:', sign);
-		log('debug', this.repository);
 		if (!this._isValidTime(time)) return reject('invalid time');
 		sign = new Signature(sign, 'sign');
 
