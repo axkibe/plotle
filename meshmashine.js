@@ -378,7 +378,7 @@ NTree.prototype.set = function(sign, val, slen) {
 		check(node !== null, sign.name, 'points nowhere');
 		node = node[sign.arc(i)];
 	}
-	node[path[i]] = val;
+	node[sign.arc(i)] = val;
 }
 
 /**
@@ -465,16 +465,15 @@ NTree.prototype.alter = function(alternation, backward) {
 		break;
 	case 'set':
 		check(trg.sign.postfix === null, cm, 'trg.sign must not have postfix');
-		log('debug', 'trg.sign', trg.sign);
-		var nParent = this.get(trg.sign, -1);
 		if (trg.sign.arc(-1) === '_new') {
 			// append to end.
 			log('alter', 'grow new');
+			var nParent = this.get(trg.sign, -1);
 			check(isTable(nParent), cm, 'can only grow tables');
 			if (!nParent._grow) nParent._grow = 1;
-			trg_pfx = trg.sign.setarc(-1, nParent._grow++);
+			trg.sign.setarc(-1, nParent._grow++);
 		}
-		var save = nParent[trg_pfx] || null;
+		var save = this.get(trg.sign);
 		if (is(trg.val)) {
 			check(deepEqual(trg.val, save), cm, 'trg.val set incorrectly');
 		} else {
@@ -486,7 +485,7 @@ NTree.prototype.alter = function(alternation, backward) {
 		} else {
 			src.sign = trg.sign;
 		}
-		nParent[trg_pfx] = src.val;
+		this.set(trg.sign, src.val);
 		break;
 	case 'insert':
 		var str = this.get(node, trg.sign);
@@ -505,7 +504,7 @@ NTree.prototype.alter = function(alternation, backward) {
 		this.set(trg.sign, nstr);
 		break;
 	case 'remove':
-		var str = this.get(node, src.sign);
+		var str = this.get(src.sign);
 		check(isString(str), cm, 'src.sign signates no string');
 
 		var src_pfx = src.sign.attunePostfix(str);
@@ -716,7 +715,6 @@ MeshMashine.prototype._reflect = function(time, sign) {
 		for(var hi = this.history.length - 1; hi >= time; hi--) {
 			alter(reflect, this.history[hi], true);
 		}
-		
 		return reflect.get(sign);
 	} catch (err) {
 		// returns rejections but rethrows coding errors.
@@ -764,7 +762,7 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 				alts[i] = new Alternation(sc, trg, true);
 			}
 		}
-			
+
 		if (!isArray(alts)) {
 			this.repository.alter(alts, false);
 			this.history.push(alts);
@@ -789,17 +787,16 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 MeshMashine.prototype.get = function(time, sign) {
 	try {
 		log('mm', 'get time:', time, ' sign:', sign);
+		log('debug', this.repository);
 		if (!this._isValidTime(time)) return reject('invalid time');
 		sign = new Signature(sign, 'sign');
-    
+
 		var reflect = this._reflect(time, sign);
-    
 		// remove nulls
 		// todo, hierachical.
 		for(var key in reflect) {
 			if (reflect[key] === null) delete reflect[key];
 		}
-    
 		log('mm', 'ok', time, reflect);
 		return {ok: true, time: time, node: reflect };
 	} catch(err) {
