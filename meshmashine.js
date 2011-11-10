@@ -153,15 +153,16 @@ function fixate(obj, key, value) {
 | Signates an entry, string index or string span.
 | TODO check for leading '_'
 */
-function Signature(sign, name, frozen) {
+function Signature(sign, name) {
 	check(isArray(sign), name, 'not an array');
 	for (var i = 0; i < sign.length; i++) {
-		check(isString(sign[i]) || isInteger(sign[i]), name, 'arcs must be String or Integer');
+		check(isString(sign[i]) || isInteger(sign[i]) ||
+			(i === sign.length - 1 && isTable(sign[i])),
+			name, 'arcs must be string or integer or a postfix table');
 		check(sign[i][0] !== '_', name, 'arcs must not start with _');
 	}
 	this._sign = clone(sign);
 	this.name = name;
-	if (frozen) this.freeze();
 }
 
 /**
@@ -270,6 +271,7 @@ Signature.prototype.toString = function() {
 | Freezes this signature
 */
 Signature.prototype.freeze = function() {
+	if (this.readonly) return;
 	this.readonly = true;
 	Object.freeze(this);
 	Object.freeze(this._sign);
@@ -293,10 +295,10 @@ Signature.prototype.attunePostfix = function(str) {
 		check(!this.readonly, this.name, 'cannot change readonly');
 		pfx.at2 = str.length;
 	}
-	checkWithin(sp.at1, 0, str.length, this.name, 'postfix.at1 invalid');
-	if (is(sp.at2)) {
-		checkWithin(sp.at2, 0, str.length, this.name, 'postfix.at2 invalid');
-		check(sp.at2 >= sp.at1, this.name, 'postfix: at2 < at1');
+	checkWithin(pfx.at1, 0, str.length, this.name, 'postfix.at1 invalid');
+	if (is(pfx.at2)) {
+		checkWithin(pfx.at2, 0, str.length, this.name, 'postfix.at2 invalid');
+		check(pfx.at2 >= pfx.at1, this.name, 'postfix: at2 < at1');
 	}
 	return pfx;
 }
@@ -309,10 +311,9 @@ Signature.prototype.attunePostfix = function(str) {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  A single alternation (point in history)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Alternation(src, trg, frozen) {
+function Alternation(src, trg) {
 	this.src = src;
 	this.trg = trg;
-	if (frozen) this.freeze();
 }
 
 Alternation.prototype.type = function(backward) {
@@ -322,7 +323,7 @@ Alternation.prototype.type = function(backward) {
 	if (src.proc === 'splice') return 'join';
 	if (is(src.val) && trg.sign.isPath()) return 'set';
 	if (is(src.val) && trg.sign.isIndex()) return 'insert';
-	if (rc.sign.isSpan() && !trg.sign.isIndex()) return 'remove';
+	if (src.sign.isSpan() && !trg.sign.isIndex()) return 'remove';
 	return null;
 }
 
@@ -488,14 +489,14 @@ NTree.prototype.alter = function(alternation, backward) {
 		this.set(trg.sign, src.val);
 		break;
 	case 'insert':
-		var str = this.get(node, trg.sign);
+		var str = this.get(trg.sign);
 		check(isString(str), cm, 'trg.sign signates no string');
 
 		var trg_pfx = trg.sign.attunePostfix(str);
 
 		// where trg span should end
-		var tat2 = trg_p.at1 + src.val.length;
-		if (is(trg_p.at2)) {
+		var tat2 = trg_pfx.at1 + src.val.length;
+		if (is(trg_pfx.at2)) {
 			check(trg_pfx.at2 === tat2, cm, 'trg.sign...at2 preset incorrectly');
 		} else {
 			trg_pfx.at2 = tat2;
@@ -744,14 +745,14 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 		if (!isArray(tsrc) && !isArray(ttrg)) {
 			src.sign = tsrc;
 			trg.sign = ttrg;
-			alts = new Alternation(src, trg, true);
+			alts = new Alternation(src, trg);
 		} else if (!isArray(tsrc) && isArray(ttrg))  {
 			src.sign = tsrc;
 			alts = [];
 			for(var i = 0; i < ttrg.length; i++) {
 				var tc = clone(trg);
 				tc.sign = ttrg[i];
-				alts[i] = new Alternation(src, tc, true);
+				alts[i] = new Alternation(src, tc);
 			}
 		} else if (isArray(tsrc) && !isArray(ttrg)) {
 			trg.sign = ttrg;
@@ -759,16 +760,18 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 			for(var i = 0; i < tsrc.length; i++) {
 				var sc = clone(src);
 				src.sign = tsrc[i];
-				alts[i] = new Alternation(sc, trg, true);
+				alts[i] = new Alternation(sc, trg);
 			}
 		}
 
 		if (!isArray(alts)) {
 			this.repository.alter(alts, false);
+			alts.freeze();
 			this.history.push(alts);
 		} else {
 			for(var i = 0; i < alts.length; i++) {
 				alter(this.repository, alts[i], false);
+				alts[i].freeze();
 				this.history.push(alts[i]);
 			}
 		}

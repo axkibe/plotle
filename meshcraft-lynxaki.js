@@ -207,7 +207,7 @@ function send() {
 		});
 		break;
 	case 'newline' :
-		var sign = pivot.slice();;
+		var sign = root.slice();;
 		sign.push(change.line);
 		sign.push('text%');
 		sign.push({at1: change.at1}); // todo at1 not cared about
