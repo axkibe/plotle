@@ -28,64 +28,33 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 "use strict";
 
+var log = require('./meshcraft-log');
+
 /**
 | Deep copies an object.
 */
 function clone(original) {
+	//return JSON.parse(JSON.stringify(original));
 	if(typeof(original) !== 'object' || original === null) {
 		return original;
 	}
-	if (original instanceof Array) {
-		return original.slice();
-	}
-
-	var copy = {}
+	var copy = original.constructor();
 	for(var i in original) {
 		copy[i] = clone(original[i]);
 	}
 	return copy;
 }
 
-var log = require('./meshcraft-log');
-
 /**
 | Type check shortcuts
 */
-function is(o) {
-	return typeof(o) !== 'undefined';
-}
-
-function isnon(o) {
-	return typeof(o) !== 'undefined' && o !== null;
-}
-
-function isString(o) {
-	return typeof(o) === 'string' || o instanceof String;
-}
-
-function isArray(o)  {
-	return o instanceof Array;
-}
-
-function isEmpty(o)  {
-	for(var _ in o) return false;
-	return true;
-}
-
-function isTable(o)  {
-	return typeof(o) === 'object' && !(o instanceof Array) && !(o instanceof String);
-}
-
-function isInteger(o) {
-	return typeof(o) === 'number' && Math.floor(o) === o;
-}
-
-function isIndex(o) {
-	if (!isArray(o)) return false;
-	if (o.length === 0) return false;
-	var last = o[o.length - 1];
-	if (is(last.at1)) return true;
-}
+function is(o)        { return typeof(o) !== 'undefined'; }
+function isnon(o)     { return typeof(o) !== 'undefined' && o !== null; }
+function isString(o)  { return typeof(o) === 'string' || o instanceof String; }
+function isArray(o)   { return o instanceof Array; }
+function isSign(o)    { return o instanceof Signature; }
+function isTable(o)   { return o.constructor === Object; }
+function isInteger(o) { return typeof(o) === 'number' && Math.floor(o) === o; }
 
 function isSpan(o) {
 	if (!isArray(o)) return false;
@@ -94,26 +63,11 @@ function isSpan(o) {
 	if (is(last.at1) && is(last.at2)) return true;
 }
 
-function isPath(o) {
-	if (!isArray(o)) return false;
-	if (o.length === 0) return false;
-	var last = o[o.length - 1];
-	return isInteger(last) || isString(last);
-}
-
 function isRoot(o) {
 	if (!isArray(o)) return false;
 	return o.length === 0;
 }
 
-function alterType(src, trg) {
-	if (trg.proc === 'splice')                  return 'split';
-	if (src.proc === 'splice')                  return 'join';
-	if (is(src.val) && isPath(trg.sign))        return 'set';
-	if (is(src.val) && isIndex(trg.sign))       return 'insert';
-	if (isSpan(src.sign) && !isIndex(trg.sign)) return 'remove';
-	return null;
-}
 
 
 function basePathLength(p) {
@@ -138,11 +92,6 @@ function haveSameBase(p1, p2) {
 }
 
 function isSubPath(p1, p2) {
-	if (p1.length > p2.length) return false;
-	for(var p = 0, pl = p1.length; p < pl; p++) {
-		if (p1[p] !== p2[p]) return false;
-	}
-	return true;
 }
 
 function keysLength(o) {
@@ -188,73 +137,218 @@ function checkWithin(val, low, high) {
 	if (val < low || val > high) fail(arguments, 3);
 }
 
-function checkReadWrite(readonly) {
-	if (readonly) fail(arguments, 1, 'readonly flag forbids change');
+function fixate(obj, key, value) {
+    Object.defineProperty(obj, key, {enumerable: true, value: value});
+    return value;
 }
 
-function checkIsPath(val) {
-	if (!isPath(val)) fail(arguments, 1, 'not a path');
-}
 
-function checkIsIndex(val) {
-	if (!isIndex(val)) fail(arguments, 1, 'not an index');
-}
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ .---.               .
+ \___  . ,-. ,-. ,-. |- . . ,-. ,-.
+     \ | | | | | ,-| |  | | |   |-'
+ `---' ' `-| ' ' `-^ `' `-^ '   `-'
+~ ~ ~ ~ ~ ,|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+          `'
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-function checkIsSpan(val) {
-	if (!isSpan(val)) fail(arguments, 1, 'not a span');
-}
-
-function checkIsArray(val) {
-	if (!isArray(val)) fail(arguments, 1, 'not an array');
-}
-
-function checkIsString(val) {
-	if (!isString(val)) fail(arguments, 1, 'not a string');
-}
-
-function checkIsTable(val) {
-	if (!isTable(value)) fail(arguments, 1, 'not a table');
-}
-
-function checkIsSubPath(v1, v2, vs1, vs2) {
-	if (!isSubPath(v1, v2)) fail(arguments, 4, vs1, 'not a subpath of', vs2);
-}
-
-function getPostfix(sign) {
-	if (!(sign.length > 0)) throw new Error();
-	return sign[sign.length - 1];
-}
-
-function convertPostfix(sp, str, readonly, cm1, cm2) {
-	check(is(sp.at1), cm1, cm2, 'not a postfix');
-	if (sp.at1 === '_end') {
-		checkReadWrite(readonly, cm1, cm2);
-		sp.at1 = str.length;
+/**
+| Signates an entry, string index or string span.
+| TODO check for leading '_'
+*/
+function Signature(sign, name, frozen) {
+	check(isArray(sign), name, 'not an array');
+	for (var i = 0; i < sign.length; si++) {
+		check(isString(sign[i]) || isInteger(sign[i]), name, 'arcs must be String or Integer');
+		check(sign[i][0] !== '_', name, 'arcs must not start with _');
 	}
-	if (sp.at2 === '_end') {
-		checkReadWrite(readonly, cm1, cm2);
-		sp.at2 = str.length;
+	this._sign = clone(sign);
+	this.name = name;
+	if (frozen) this.freeze();
+}
+
+/**
+| Length of the signature.
+*/
+Object.defineProperty(Signature.prototype, 'length', {
+	get: function() { return this._sign.length; },
+});
+
+/**
+| If the signature is an index or span it will return that.
+*/
+Object.defineProperty(Signature.prototype, 'postfix', {
+	get: function() {
+		if (this.sign.length === 0) return null;
+		var pfx = this.sign[this.sign.length - 1];
+		return isTable(pfx) ? pfx : null;
+	},
+});
+
+/**
+| Length of the path / signature without postfix.
+*/
+Object.defineProperty(Signature.prototype, 'pathlen', {
+	get: function() {
+		return this._sign.length - (this.postfix ? 1 : 0);
+	},
+});
+
+/**
+| True if the signature ends as string index.
+*/
+Signature.prototype.isIndex = function() {
+	var pfx = this.postfix;
+	return (pfx !== null) && is(pfx.at1);
+}
+
+/**
+| True if the signature ends as string span.
+*/
+Signature.prototype.isSpan = function() {
+	var pfx = this.postfix;
+	return (pfx !== null) && is(pfx.at1) && is(pfx.at2);
+}
+
+/**
+| True if the signature is only a path (without postfix)
+*/
+Signature.prototype.isPath = function() {
+	return (this.postfix === null);
+}
+
+/**
+| Returns the signature at index i.
+*/
+Signature.prototype.arc = function(i) {
+	if (i < 0) i = this._sign.length - i;
+	return this._sign[i];
+}
+
+/**
+| True if this signature is the same as another.
+*/
+Signature.prototype.equals = function(o) {
+	return this._sign.deepEqual(o._sign);
+}
+
+/**
+| True if this signature is start of another.
+*/
+Signature.prototype.isSubOf = function(o) {
+	if (this.postfix) return false;
+	if (this.length > o.pathlen) return false;
+	for(var i = 0, len = this.pathlen; i < len; i++) {
+		if (this._sign[i] !== o._sign[i]) return false;
 	}
-	checkWithin(sp.at1, 0, str.length, cm1, cm2, 'postfix.at1 invalid');
-	if (is(sp.at2)) {
-		checkWithin(sp.at2, 0, str.length, cm1, cm2, 'postfix.at2 invalid');
-		check(sp.at2 >= sp.at1, cm1, cm2, 'postfix: at2 < at1');
+	return true;
+}
+
+/**
+| Returns the signature at index i.
+*/
+Signature.prototype.setarc = function(i, v) {
+	check(!this.frozen, 'changing readonly signature');
+	return this._sign[i] = v;
+}
+
+/**
+| stringify
+*/
+Signature.prototype.toString = function() {
+	return this._sign.toString();
+}
+	
+
+/**
+| Freezes this signature
+*/
+Signature.prototype.freeze = function() {
+	this.readonly = true;
+	Object.freeze(this);
+	Object.freeze(this._sign);
+	var pfx = this.postfix;
+	if (pfx) {
+		Object.freeze(pfx);
 	}
 }
 
 /**
-| Returns the subnode path points at.
-| TODO check for leading '_'
+| Attunes the '_end' things of the postfix to match the string it points to.
 */
-function get(node, path, pathlen) {
-	if (!is(pathlen)) pathlen = path.length;
-	if (pathlen < 0) pathlen = path.length + pathlen;
-	if (pathlen < 0) throw reject('invalid path');
-	for (var i = 0; i < pathlen; i++) {
-		if (node === null) {
-			throw reject('path points nowhere.');
-		}
-		node = node[path[i]];
+Signature.prototype.attunePostfix = function(str) {
+	var pfx = this.postfix;
+	check(pfx !== null, this.name, 'not a postfix');
+	if (pfx.at1 === '_end') {
+		check(!this.readonly, this.name, 'cannot change readonly');
+		pfx.at1 = str.length;
+	}
+	if (pfx.at2 === '_end') {
+		check(!this.readonly, this.name, 'cannot change readonly');
+		pfx.at2 = str.length;
+	}
+	checkWithin(sp.at1, 0, str.length, this.name, 'postfix.at1 invalid');
+	if (is(sp.at2)) {
+		checkWithin(sp.at2, 0, str.length, this.name, 'postfix.at2 invalid');
+		check(sp.at2 >= sp.at1, this.name, 'postfix: at2 < at1');
+	}
+	return pfx;
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     ,.   .  .                  .
+    / |   |  |- ,-. ,-. ,-. ,-. |- . ,-. ,-.
+   /~~|-. |  |  |-' |   | | ,-| |  | | | | |
+ ,'   `-' `' `' `-' '   ' ' `-^ `' ' `-' ' '
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ A single alternation (point in history)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+function Alternation(src, trg, frozen) {
+	this.src = src;
+	this.trg = trg;
+	if (frozen) this.freeze();
+}
+
+Alternation.prototype.type = function(backward) {
+	var src = !backward ? this.src : this.trg;
+	var trg = !backward = this.trg : this.src;
+	if (trg.proc === 'splice') return 'split';
+	if (src.proc === 'splice') return 'join';
+	if (is(src.val) && trg.sign.isPath() return 'set';
+	if (is(src.val) && trg.sign.isIndex() return 'insert';
+	if (rc.sign.isSpan() && !trg.sign.isIndex()) return 'remove';
+	return null;
+}
+
+Alternation.prototype.freeze = function() {
+	if (this.src.sign) this.src.sign.freeze();
+	if (this.trg.sign) this.trg.sign.freeze();
+	Object.freeze(this);
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ,-,-.  ,--,--'
+ ` | |  `- | ,-. ,-. ,-.
+   | |-. , | |   |-' |-'
+  ,' `-' `-' '   `-' `-'
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ a node tree (repository)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+function NTree(master) {
+	this.tree = master ? clone(master) : {};
+}
+
+/**
+| Returns the subnode path points at.
+*/
+NTree.prototype.get = function(sign, slen) {
+	if (!is(slen)) slen = sign.pathlen;
+	else if (slen < 0) slen = sign.pathlen - slen;
+
+	var node = this.tree;
+	for (var i = 0; i < slen; i++) {
+		check(node !== null, sign.name, 'points nowhere');
+		node = node[sign.arc(i)];
 	}
 	return node;
 }
@@ -266,62 +360,60 @@ function get(node, path, pathlen) {
 | path:  path to the value (relative to node)
 | value: the new value to set
 */
-function set(node, path, pathlen, val) {
-	if (!is(pathlen)) pathlen = path.len;
-	if (pathlen < 0) pathlen = path.len - pathlen;
-	if (pathlen <= 0) throw reject('cannot set empty path');
-	var pi;
-	for(pi = 0; pi < pathlen - 1; pi++) {
-		if (!node) throw reject('path points nowhere');
-		node = node[path[pi]];
+NTree.prototype.set = function(sign, val, slen) {
+	if (!is(slen)) slen = sign.pathlen;
+	else if (slen < 0) slen = sign.pathlen - slen;
+
+	var i;
+	var node = this.tree;
+	for(i = 0; i < slen - 1; i++) {
+		check(node !== null, sign.name, 'points nowhere');
+		node = node[sign.arc(i)];
 	}
-	node[path[pi]] = val;
+	node[path[i]] = val;
 }
 
 /**
 | Alters a string
-|
-| node: the tree to alter
-| src: the source signatory
-| trg: the target signatory
-| readonly: if true alter will not change any signatory but fail if it would.
-|           but it will change node!
 */
-function alter(node, src, trg, readonly) {
-	var atype = alterType(src, trg);
+NTree.prototype.alter(alternation, backward) {
+	var atype = alternation(backward);
 	var cm = 'alter('+atype+')';
+	var src = !backward ? alternation.src : alternation.trg;
+	var trg = !backward ? alternation.trg : alternation.src;
 
 	log('alter', 'src:', src);
 	log('alter', 'trg:', trg);
 	log('alter', 'atype:', atype);
 	switch (atype) {
 	case 'split' :
-		checkIsPath(src.pivot, cm, 'src.pivot');
-		checkIsIndex(src.sign, cm, 'src.sign');
-		checkIsSubPath(src.pivot, src.sign, cm, 'src.pivot', 'src.sign');
-		var pivotNode = get(node, src.pivot);
-		checkIsArray(pivotNode, cm, 'src.pivot');
+		check(isInteger(src.pivot), cm, 'src.pivot not an integer');
+		check(src.sign.isIndex(), cm, 'src.sign not an index');
 
-		var str = get(node, src.sign, -1);
-		checkIsString(str, cm, 'content of src.sign');
+		var pivotNode = this.get(src.sign, src.pivot);
+		check(isArray(pivotNode, cm, 'src.pivot signates no array');
 
-		var sig_p = getPostfix(src.sign);
-		convertPostfix(sig_p, str, readonly, cm, 'src.sign');
-		check(src.sign.length - 3 === src.pivot.length, cm, 'currently cannot splice trees');
+		var str = this.get(node, src.sign);
+		check(isString(str), cm, 'src.sign signates no string');
 
-		var sig_splice = src.sign[src.pivot.length];
+		check(src.pivot === src.sign.length - 3,  cm, 'currently cannot splice trees');
+		var sig_pfx = src.sign.attunePostfix(str);
+		var sig_splice = src.sign.arc(src.pivot);
+		checkWithin(sig_splice, 0, pivotNode.length, cm, 'splice out of range');
+
 		var ppre = pivotNode[sig_splice];
 		for(var k in ppre) {
 			var pk = ppre[k];
 			check(!isArray(pk) && !isTable(pk), cm, 'cannot splice arrays or tables');
 		}
+
 		// no rejects after here
 		var pnew = {};
-		var ksplit = src.sign[src.sign.length - 2];
+		var ksplit = src.sign.arc(-2);
 		for(var k in ppre) {
 			if (k === ksplit) {
-				pnew[k] = ppre[k].substring(sig_p.at1);
-				ppre[k] = ppre[k].substring(0, sig_p.at1);
+				pnew[k] = ppre[k].substring(sig_pfx.at1);
+				ppre[k] = ppre[k].substring(0, sig_pfx.at1);
 			} else {
 				pnew[k] = ppre[k];
 			}
@@ -329,116 +421,116 @@ function alter(node, src, trg, readonly) {
 		pivotNode.splice(sig_splice + 1, 0, pnew);
 		break;
 	case 'join' :
-		checkIsPath(trg.pivot, cm, 'trg.pivot');
-		checkIsIndex(trg.sign, cm, 'trg.sign'); // todo allow paths
-		checkIsSubPath(trg.pivot, trg.sign, cm, 'trg.pivot', 'trg.sign');
-		var pivotNode = get(node, trg.pivot);
-		checkIsArray(pivotNode, cm, 'trg.pivot');
+		check(isInteger(trg.pivot), cm, 'trg.pivot not an integer');
+		check(trg.sign.isIndex(), cm, 'trg.sign not an index');
 
-		var str = get(node, trg.sign, -1);
-		checkIsString(str, cm, 'content of trg.sign');
+		var pivotNode = this.get(node, src.sign, src.pivot);
+		check(isArray(pivotNode), cm, 'src.pivot signates no array');
 
-		var sig_p = getPostfix(trg.sign);
-		convertPostfix(sig_p, str, readonly, cm, 'trg.sign');
-		check(trg.sign.length - 3 === trg.pivot.length, cm, 'corrently cannot splice trees');
+		var str = this.get(node, trg.sign);
+		check(isString(str, cm, 'trg.sign signates no string'));
 
-		var sig_splice = trg.sign[trg.pivot.length];
-		check(pivotNode.length > sig_splice, cm, 'splice out of range');
+		check(trg.pivot === trg.sign.length - 3, cm, 'corrently cannot splice trees');
+		var sig_pfx = trg.sign.attunePostfix(str);
+		var sig_splice = trg.sign.arc(trg.pivot);
+		checkWithin(sig_splice, 0, pivotNode.length -1, cm, 'splice out of range');
 
 		var ppre = pivotNode[sig_splice];
 		var pnex = pivotNode[sig_splice + 1];
 		check(keysLength(ppre) === keysLength(pnex), cm, 'stubs.keys not equal');
 		for(var k in ppre) {
-			check(is(pnex[k]), cm, 'stubs['+k+'] not equal');
-			if (k !== trg.sign[trg.pivot.length + 1]) {
-				check(deepEqual(ppre[k], pnex[k]), cm, 'stubs['+k+'] not deep equal');
+			check(is(pnex[k]), cm, 'stub['+k+'] not equal');
+			if (k !== trg.sign.arg(trg.pivot + 1)) {
+				check(deepEqual(ppre[k], pnex[k]), cm, 'stub['+k+'] not deep equal');
 			} else {
-				check(k.indexOf('%') > 0, cm, 'stubs['+k+'] does not contain %');
-				checkIsString(ppre[k], cm, 'stubs['+k+']');
+				check(k.indexOf('%') > 0, cm, 'stub['+k+'] does not contain %');
+				check(isString(ppre[k]), cm, 'stub['+k+'] not a string');
 			}
 		}
 		// no rejects after here
 		for(k in ppre) {
-			if (k === trg.sign[trg.pivot.length + 1]) {
+			if (k === trg.sign.arc(trg.pivot + 1)) {
 				ppre[k] += pnex[k];
 			}
 		}
-
 		pivotNode.splice(sig_splice + 1, 1);
 		break;
 	case 'set':
-		var subnode = get(node, trg.sign, -1);
-		var trg_p = getPostfix(trg.sign);
-		if (subnode[trg_p] === '_new') {
+		var nParent = this.get(node, trg.sign, -1);
+		var trg_pfx = trg.sign.postfix;
+		if (trg_pfx === '_new') {
 			// append to end.
 			log('alter', 'grow new');
-			checkReadWrite(readonly, cm);
-			checkIsTable(sub, cm);
-			if (!subnode._grow) subnode._grow = 1;
-			trg_p = trg.sign[trg.sign.length - 1] = subnode._grow++;
+			check(isTable(nParent, cm, 'can only grow tables');
+			if (!nParent._grow) nParent._grow = 1;
+			trg_pfx = trg.sign.setarc(-1, nParent._grow++);
 		}
-		var save = subnode[trg_p] || null;
+		var save = nParent[trg_pfx] || null;
 		if (is(trg.val)) {
 			check(deepEqual(trg.val, save), cm, 'trg.val set incorrectly');
 		} else {
-			checkReadWrite(readonly, cm);
 			trg.val = save;
 		}
 
 		if (is(src.sign)) {
-			check(deepEqual(trg.sign, src.sign), cm, 'src.sign set incorrectly');
+			check(trg.sign.equals(src.sign)), cm, 'src.sign set incorrectly');
 		} else {
-			checkReadWrite(readonly, cm);
 			src.sign = trg.sign;
 		}
-		subnode[trg_p] = src.val;
+		nParent[trg_pfx] = src.val;
 		break;
 	case 'insert':
-		var str = get(node, trg.sign, trg.sign.length - 1);
+		var str = this.get(node, trg.sign);
 		check(isString(str), cm, 'trg.sign signates no string');
 
-		var trg_p = getPostfix(trg.sign);
-		convertPostfix(trg_p, str, readonly, cm, 'trg.sign');
+		var trg_pfx = trg.sign.attunePostfix(str);
 
 		// where trg span should end
 		var tat2 = trg_p.at1 + src.val.length;
 		if (is(trg_p.at2)) {
-			check(trg_p.at2 === tat2, cm, 'trg.sign...at2 preset incorrectly');
+			check(trg_pfx.at2 === tat2, cm, 'trg.sign...at2 preset incorrectly');
 		} else {
-			checkReadWrite(readonly, cm);
-			trg_p.at2 = tat2;
+			trg_pfx.at2 = tat2;
 		}
-		var str_n = str.substring(0, trg_p.at1) + src.val + str.substring(trg_p.at1);
-		set(node, trg.sign, trg.sign.length - 1, str_n);
+		var nstr = str.substring(0, trg_pfx.at1) + src.val + str.substring(trg_pfx.at1);
+		this.set(trg.sign, nstr);
 		break;
 	case 'remove':
-		var str = get(node, src.sign, src.sign.length - 1);
-		checkIsString(str, cm, 'content of src.sign');
+		var str = this.get(node, src.sign);
+		check(isString(str), cm, 'src.sign signates no string');
 
-		var src_p = getPostfix(src.sign);
-		convertPostfix(src_p, str, readonly, cm, 'src.sign');
+		var src_pfx = src.sign.attunePostfix(str);
 		if (src_p.at1 === src_p.at2) { log('alter', 'removed nothing'); return; }
 
-		var val = str.substring(src_p.at1, src_p.at2);
+		var val = str.substring(src_pfx.at1, src_pfx.at2);
 		if (isnon(trg.val)) {
 			check(val == trg.val, cm, 'trg.val preset incorrectly:', val, '!==', trg.val);
 		} else {
-			checkReadWrite(readonly, cm);
 			trg.val = val;
 		}
-		var sn = str.substring(0, src_p.at1) + str.substring(src_p.at2);
-		set(node, src.sign, src.sign.length - 1, sn);
+		var nstr = str.substring(0, src_pfx.at1) + str.substring(src_pfx.at2);
+		this.set(src.sign, nstr);
 		break;
 	default:
 		throw reject('invalid alter');
 	}
 }
 
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ,-,-,-.           .   ,-,-,-.           .
+ `,| | |   ,-. ,-. |-. `,| | |   ,-. ,-. |-. . ,-. ,-.
+   | ; | . |-' `-. | |   | ; | . ,-| `-. | | | | | |-'
+   '   `-' `-' `-' ' '   '   `-' `-^ `-' ' ' ' ' ' `-'
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ Thats the thing.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 /**
 | Constructor.
 */
 function MeshMashine() {
-	this.repository = {};
+	this.repository = new NTree();
 	this.history    = [];
 }
 
@@ -446,94 +538,157 @@ function MeshMashine() {
 | Returns true if time is valid.
 */
 MeshMashine.prototype._isValidTime = function(time) {
-	return typeof(time) === 'number' && time >= 0 && time <= this.history.length;
+	return isInteger(time) && time >= 0 && time <= this.history.length;
 }
 
 /**
-| Returns true if path is valid.
+| Transforms a single signature for one historic moment
+|
+| It must not alter src or trg.
 */
-MeshMashine.prototype._isValidPath = function(path) {
-	if (!isArray(path)) return false;
-	for (var pi = 0; pi < path.length; pi++) {
-		var p = path[pi];
-		if (typeof(p) === 'undefined') return false;
-		//if (p[0] === '_') return false;
+MeshMashine.prototype.transformMoment = function(sign, src, trg) {
+	var sig_pfx = sign.postfix;
+	var atype = alterType(src, trg);
+	switch(atype) {
+	case 'split':
+		if (!isSubPath(src.pivot, sign)) continue;
+		log('te', 'alter-split');
+		var src_i = src.sign[src.pivot.length];
+		var sig_i = sign[src.pivot.length];
+		if (sig_i < src_i) {
+			log('te', 'split downside');
+			continue;
+		}
+		if (sig_i > src_i) {
+			// split was before -> index shifted
+			log('te', 'split upside');
+			sign[src.piviot.length]++;
+			continue;
+		}
+		log('te', 'split here');
+		// split is in same line;
+		src_pfx = src.sign.postfix;
+		if (isIndex(sign) {
+			log('te', 'split index');
+			if (sig_p.at1 > src_p.at1) {
+				log('te', 'split rigtside');
+				continue;
+			}
+			log('te', 'split leftside');
+			sign[src.pivot.length]++;
+			sig_p.at1 -= src_p.at1;
+			continue;
+		}
+		if (isSpan(sign) {
+			log('te', 'split span');
+			//Span        mmmmm      <-- sig_p.at1--sig_at2
+			//Splits:  1    2    3   <-- src_p.at1
+			//case 3:
+			if (sig_p.at2 < src_p.at1) {
+				log('te', 'split rightside');
+				continue;
+			}
+			// case 1:
+			if (sig_p.at1 > src_p.at1) {
+				log('te', 'split leftside');
+				sign[src.pivot.length]++;
+				sig_p.at1 -= src_p.at1;
+				sig_p.at2 -= src_p.at1;
+				continue;
+			}
+			// case 2 -> have to split!
+			var sat2 = sig_p.at2;
+			sig_p.at2 = src_p.at1;
+			var sig2 = sign.splice();
+			sig2.at1 = src_p.at1;
+			sig2.at2 = sat2;
+			return [sign, sat2];
+		}
+		break;
+	case 'set':
+		log('te', 'nothing to do');
+		break;
+	case 'insert':
+		if (!haveSameBase(trg.sign, sign)) continue;
+		log('te', 'alter-insert');
+		check(isSpan(trg.sign), 'history mangled');
+		var trg_pfx = trg.sign.postfix;
+		if (sig_o.at1 > trg_p.at1) { // or >= ?
+			log('te', 'at1 += ',src.val.length);
+			sig_p.at1 += src.val.length;
+			if (is(sig_p.at2)) {
+				log('te', 'at2 +=', src.val.length);
+				sig_p.at2 += src.val.length;
+			}
+		}
+		break;
+	case 'remove':
+		if (!haveSameBase(src, sign)) continue;
+		log('te', 'alter-remove');
+		check(isSpan(src.sign), 'history mangled');
+		var src_pfx = src.sign.postfix;
+		//       123456789
+		//         ^^^    <- removed
+		//case1:       <->
+		//case2:    <->
+		if (signl.at1 > srcl.at1) {
+			if (signl.at1 > srcl.at2) {
+				log('te', 'at1 -=', trg.val.length);
+				// case1
+				signl.at1 -= trg.val.length;
+				if (is(signl.at2)) {
+					log('te', 'at2 -=', trg.val.length);
+					signl.at2 -= trg.val.length;
+				}
+			} else {
+				// case2
+				if (is(signl.at2)) {
+					log('te', 'at2 =', signl.at2 - signl.at1 + srcl.at1);
+					singl.at2 = signl.at2 - signl.at1 + srcl.at1;
+				}
+				log('te', 'at1 =', srcl.at);
+				signl.at1 = srcl.at1;
+			}
+		}
+		break;
+	default :
+		throw new Error('history mangled, srcST: '+srcST+' trgST:'+trgST);
 	}
-	return true;
 }
 
 /**
-| Transforms a signature
+| Transforms a signature, possibly splitting up.
 */
-MeshMashine.prototype.transform = function(time, sign, msg) {
-	log('te', msg, 'in', time, sign);
+MeshMashine.prototype.transform = function(time, sign) {
+	log('te', 'in', time, sign);
 	if (!is(sign)) return sign;
 	if (isRoot(sign)) return sign;
 
-	var sigl = sign[sign.length - 1];
-
+	var sigs = null;
 	for(var t = time; t < this.history.length; t++) {
-		var h = this.history[t];
-		var src = h.src;
-		var trg = h.trg;
-		var atype = alterType(src, trg);
-		log('debug', 'atype:', atype);
+		var moment = this.history[t];
 
-		switch(atype) {
-		case 'set':
-			log('tw', msg, 'unimplemented');
-			break;
-		case 'insert':
-			if (!haveSameBase(trg.sign, sign)) continue;
-			log('te', 'alter-insert');
-			check(isSpan(trg.sign), 'history mangled');
-
-			var trgl = trg.sign[trg.sign.length - 1];
-			if (sigl.at1 > trgl.at1) { // or >= ?
-				log('te', 'at1 += ',src.val.length);
-				sigl.at1 += src.val.length;
-				if (is(sigl.at2)) {
-					log('te', 'at2 +=', src.val.length);
-					sigl.at2 += src.val.length;
-				}
+		if (sigs === null) {
+			asw = transformMoment(sign, moment.src, moment.trg);
+			if (asw instanceof Array) {
+				sigs = asw;
+			} else {
+				if (asw !== sign) throw new Error('iFail, asw !== sign');
 			}
-			break;
-		case 'remove':
-			log('debug', 'remove?', trg, sign);
-			if (!haveSameBase(src, sign)) continue;
-			log('te', 'alter-remove');
-			check(isSpan(src.sign), 'history mangled');
-
-			var srcl = src[src.length - 1];
-			//       123456789
-			//         ^^^    <- removed
-			//case1:       <->
-			//case2:    <->
-			if (signl.at1 > srcl.at1) {
-				if (signl.at1 > srcl.at2) {
-					log('te', 'at1 -=', trg.val.length);
-					// case1
-					signl.at1 -= trg.val.length;
-					if (is(signl.at2)) {
-						log('te', 'at2 -=', trg.val.length);
-						signl.at2 -= trg.val.length;
+		} else {
+			for(var si = 0; si < sigs.length; si++) {
+				var asw = transformMoment(sigs[si], moment.src, moment.trg);
+				if (asw instanceof Array) {
+					for(var ai = 0; ai < asw.length; ai++) {
+						sigs.splice(si++, asw[ai]);
 					}
 				} else {
-					// case2
-					if (is(signl.at2)) {
-						log('te', 'at2 =', signl.at2 - signl.at1 + srcl.at1);
-						singl.at2 = signl.at2 - signl.at1 + srcl.at1;
-					}
-					log('te', 'at1 =', srcl.at);
-					signl.at1 = srcl.at1;
+					if (asw !== sign) throw new Error('iFail, asw !== sign');
 				}
 			}
-			break;
-		default :
-			throw new Error('history mangled, srcST: '+srcST+' trgST:'+trgST);
 		}
 	}
-	log('te', msg, 'out', sign);
+	log('te', 'out', sign);
 	return sign;
 }
 
@@ -543,24 +698,18 @@ MeshMashine.prototype.transform = function(time, sign, msg) {
 | If path is not null it cares only to rebuild what is necessary to see the ida.
 */
 // todo partial reflects
-MeshMashine.prototype._reflect = function(time, path) {
-	var reflect = clone(this.repository);
-
-	// playback
-	for(var hi = this.history.length - 1; hi >= time; hi--) {
-		var h = this.history[hi];
-		try {
-			alter(reflect, h.trg, h.src);
-		} catch (err) {
-			if (err.ok !== false) throw err;
-			throw new Error('history mismatch, alter: '+err.message);
-		}
-	}
-
+MeshMashine.prototype._reflect = function(time, sign) {
 	try {
-		return get(reflect, path, path.length);
+		var reflect = new NTree(this.repository);
+
+		// playback
+		for(var hi = this.history.length - 1; hi >= time; hi--) {
+			alter(reflect, this.history[hi], true);
+		}
+		
+		return get(reflect, sign);
 	} catch (err) {
-		// returns mm rejections but rethrows coding errors.
+		// returns rejections but rethrows coding errors.
 		if (err.ok !== false) throw err; else return err;
 	}
 }
@@ -569,39 +718,79 @@ MeshMashine.prototype._reflect = function(time, path) {
 | Alters the repository.
 */
 MeshMashine.prototype.alter = function(time, src, trg) {
-	log('mm', 'alter time:', time, 'src:', src, 'trg:', trg);
-	if (!this._isValidTime(time)) return reject('invalid time');
-
 	try {
-		src.sign = this.transform(time, src.sign, 'src');
-		trg.sign = this.transform(time, trg.sign, 'trg');
-		alter(this.repository, src, trg, false);
+		log('mm', 'alter time:', time, 'src:', src, 'trg:', trg);
+		if (!this._isValidTime(time)) return reject('invalid time');
+
+		src.sign = new Signature(src.sign);
+		trg.sign = new Signature(trg.sign);
+		var tsrc = this.transform(time, src.sign);
+		var ttrg = this.transform(time, trg.sign);
+		var alts;
+
+		if (isSign(tsrc) && isSign(ttrg)) {
+			src.sign = tsrc;
+			trg.sign = ttrg;
+			alts = new Alternation(src, trg, true);
+		} else if (isSign(tsrc) && isArray(ttrg))  {
+			src.sign = tsrc;
+			alts = [];
+			for(var i = 0; i < ttrg.length; i++) {
+				var tc = clone(trg);
+				tc.sign = ttrg[i];
+				alts[i] = new Alternation(src, tc, true);
+			}
+		} else if (isArray(tsrc) && isSign(ttrg)) {
+			trg.sign = ttrg;
+			alts = [];
+			for(var i = 0; i < tsrc.length; i++) {
+				var sc = clone(src);
+				src.sign = tsrc[i];
+				alts[i] = new Alternation(sc, trg, true);
+			}
+		}
+			
+		if (!isArray(alts)) {
+			alter(this.repository, alts, false);
+			this.history.push(alts);
+		} else {
+			for(var i = 0; i < alts.length; i++) {
+				alter(this.repository, alts[i], false);
+				this.history.push(alts[i]);
+			}
+		}
+
+		return {ok: true, time: this.history.length, alts: alts };
 	} catch(err) {
+		// returns rejections but rethrows coding errors.
 		if (err.ok !== false) throw err; else return err;
 	}
-
-	this.history.push({src: src, trg: trg});
-	return {ok: true, time: this.history.length, src: src, trg: trg };
 }
 
 /**
 | Gets a node (which can go up to the complete repository).
 | TODO add timespans
 */
-MeshMashine.prototype.get = function(time, path) {
-	log('mm', 'get time:', time, ' path:', path);
-	if (!this._isValidTime(time)) return reject('invalid time');
-	if (!this._isValidPath(path)) return reject('invalid path');
-
-	var reflect = this._reflect(time, path);
-
-	// remove nulls
-	for(var key in reflect) {
-		if (reflect[key] === null) delete reflect[key];
+MeshMashine.prototype.get = function(time, sign) {
+	try {
+		log('mm', 'get time:', time, ' sign:', sign);
+		if (!this._isValidTime(time)) return reject('invalid time');
+		sign = new Signature(sign, 'sign');
+    
+		var reflect = this._reflect(time, sign);
+    
+		// remove nulls
+		// todo, hierachical.
+		for(var key in reflect) {
+			if (reflect[key] === null) delete reflect[key];
+		}
+    
+		log('mm', 'ok', time, reflect);
+		return {ok: true, time: time, node: reflect };
+	} catch(err) {
+		// returns rejections but rethrows coding errors.
+		if (err.ok !== false) throw err; else return err;
 	}
-
-	log('mm', 'ok', time, reflect);
-	return {ok: true, time: time, node: reflect };
 }
 
 /**
