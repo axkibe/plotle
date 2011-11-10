@@ -91,9 +91,6 @@ function haveSameBase(p1, p2) {
 	return true;
 }
 
-function isSubPath(p1, p2) {
-}
-
 function keysLength(o) {
 	var n = 0;
 	for(var k in o) {
@@ -158,7 +155,7 @@ function fixate(obj, key, value) {
 */
 function Signature(sign, name, frozen) {
 	check(isArray(sign), name, 'not an array');
-	for (var i = 0; i < sign.length; si++) {
+	for (var i = 0; i < sign.length; i++) {
 		check(isString(sign[i]) || isInteger(sign[i]), name, 'arcs must be String or Integer');
 		check(sign[i][0] !== '_', name, 'arcs must not start with _');
 	}
@@ -179,8 +176,8 @@ Object.defineProperty(Signature.prototype, 'length', {
 */
 Object.defineProperty(Signature.prototype, 'postfix', {
 	get: function() {
-		if (this.sign.length === 0) return null;
-		var pfx = this.sign[this.sign.length - 1];
+		if (this._sign.length === 0) return null;
+		var pfx = this._sign[this._sign.length - 1];
 		return isTable(pfx) ? pfx : null;
 	},
 });
@@ -226,6 +223,15 @@ Signature.prototype.arc = function(i) {
 }
 
 /**
+| Returns the signature at index i.
+*/
+Signature.prototype.setarc = function(i, v) {
+	check(!this.frozen, 'changing readonly signature');
+	if (i < 0) i = this._sign.length - i;
+	return this._sign[i] = v;
+}
+
+/**
 | True if this signature is the same as another.
 */
 Signature.prototype.equals = function(o) {
@@ -234,23 +240,23 @@ Signature.prototype.equals = function(o) {
 
 /**
 | True if this signature is start of another.
+|
+| o: the other signature
+| [slan]: the length of this signature to consider.
 */
-Signature.prototype.isSubOf = function(o) {
-	if (this.postfix) return false;
-	if (this.length > o.pathlen) return false;
-	for(var i = 0, len = this.pathlen; i < len; i++) {
+Signature.prototype.isSubOf = function(o, slen) {
+	if (!is(slen)) slen = this.pathlen;
+	if (slen < 0) slen = this.pathlen + slen;
+	if (slen < 0) slen = 0;
+
+	if (slen === this.length && this.postfix) return false;
+	if (slen > o.pathlen) return false;
+	for(var i = 0; i < slen; i++) {
 		if (this._sign[i] !== o._sign[i]) return false;
 	}
 	return true;
 }
 
-/**
-| Returns the signature at index i.
-*/
-Signature.prototype.setarc = function(i, v) {
-	check(!this.frozen, 'changing readonly signature');
-	return this._sign[i] = v;
-}
 
 /**
 | stringify
@@ -311,11 +317,11 @@ function Alternation(src, trg, frozen) {
 
 Alternation.prototype.type = function(backward) {
 	var src = !backward ? this.src : this.trg;
-	var trg = !backward = this.trg : this.src;
+	var trg = !backward ? this.trg : this.src;
 	if (trg.proc === 'splice') return 'split';
 	if (src.proc === 'splice') return 'join';
-	if (is(src.val) && trg.sign.isPath() return 'set';
-	if (is(src.val) && trg.sign.isIndex() return 'insert';
+	if (is(src.val) && trg.sign.isPath()) return 'set';
+	if (is(src.val) && trg.sign.isIndex()) return 'insert';
 	if (rc.sign.isSpan() && !trg.sign.isIndex()) return 'remove';
 	return null;
 }
@@ -335,7 +341,7 @@ Alternation.prototype.freeze = function() {
  a node tree (repository)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function NTree(master) {
-	this.tree = master ? clone(master) : {};
+	this.tree = master ? clone(master.tree) : {};
 }
 
 /**
@@ -343,7 +349,8 @@ function NTree(master) {
 */
 NTree.prototype.get = function(sign, slen) {
 	if (!is(slen)) slen = sign.pathlen;
-	else if (slen < 0) slen = sign.pathlen - slen;
+	if (slen < 0) slen = sign.pathlen + slen;
+	if (slen < 0) slen = 0;
 
 	var node = this.tree;
 	for (var i = 0; i < slen; i++) {
@@ -362,7 +369,8 @@ NTree.prototype.get = function(sign, slen) {
 */
 NTree.prototype.set = function(sign, val, slen) {
 	if (!is(slen)) slen = sign.pathlen;
-	else if (slen < 0) slen = sign.pathlen - slen;
+	if (slen < 0) slen = sign.pathlen + slen;
+	if (slen < 0) slen = 0;
 
 	var i;
 	var node = this.tree;
@@ -376,8 +384,8 @@ NTree.prototype.set = function(sign, val, slen) {
 /**
 | Alters a string
 */
-NTree.prototype.alter(alternation, backward) {
-	var atype = alternation(backward);
+NTree.prototype.alter = function(alternation, backward) {
+	var atype = alternation.type(backward);
 	var cm = 'alter('+atype+')';
 	var src = !backward ? alternation.src : alternation.trg;
 	var trg = !backward ? alternation.trg : alternation.src;
@@ -391,7 +399,7 @@ NTree.prototype.alter(alternation, backward) {
 		check(src.sign.isIndex(), cm, 'src.sign not an index');
 
 		var pivotNode = this.get(src.sign, src.pivot);
-		check(isArray(pivotNode, cm, 'src.pivot signates no array');
+		check(isArray(pivotNode), cm, 'src.pivot signates no array');
 
 		var str = this.get(node, src.sign);
 		check(isString(str), cm, 'src.sign signates no string');
@@ -456,12 +464,13 @@ NTree.prototype.alter(alternation, backward) {
 		pivotNode.splice(sig_splice + 1, 1);
 		break;
 	case 'set':
-		var nParent = this.get(node, trg.sign, -1);
-		var trg_pfx = trg.sign.postfix;
-		if (trg_pfx === '_new') {
+		check(trg.sign.postfix === null, cm, 'trg.sign must not have postfix');
+		log('debug', 'trg.sign', trg.sign);
+		var nParent = this.get(trg.sign, -1);
+		if (trg.sign.arc(-1) === '_new') {
 			// append to end.
 			log('alter', 'grow new');
-			check(isTable(nParent, cm, 'can only grow tables');
+			check(isTable(nParent), cm, 'can only grow tables');
 			if (!nParent._grow) nParent._grow = 1;
 			trg_pfx = trg.sign.setarc(-1, nParent._grow++);
 		}
@@ -473,7 +482,7 @@ NTree.prototype.alter(alternation, backward) {
 		}
 
 		if (is(src.sign)) {
-			check(trg.sign.equals(src.sign)), cm, 'src.sign set incorrectly');
+			check(trg.sign.equals(src.sign), cm, 'src.sign set incorrectly');
 		} else {
 			src.sign = trg.sign;
 		}
@@ -543,50 +552,50 @@ MeshMashine.prototype._isValidTime = function(time) {
 
 /**
 | Transforms a single signature for one historic moment
-|
-| It must not alter src or trg.
 */
-MeshMashine.prototype.transformMoment = function(sign, src, trg) {
+MeshMashine.prototype.transformMoment = function(sign, alter) {
 	var sig_pfx = sign.postfix;
-	var atype = alterType(src, trg);
+	var src = alter.src;
+	var trg = alter.trg;
+	var atype = alter.type();
 	switch(atype) {
 	case 'split':
-		if (!isSubPath(src.pivot, sign)) continue;
+		if (!src.sign.isSubOf(sign, src.pivot)) return sign;
 		log('te', 'alter-split');
 		var src_i = src.sign[src.pivot.length];
 		var sig_i = sign[src.pivot.length];
 		if (sig_i < src_i) {
 			log('te', 'split downside');
-			continue;
+			return sign;
 		}
 		if (sig_i > src_i) {
 			// split was before -> index shifted
 			log('te', 'split upside');
 			sign[src.piviot.length]++;
-			continue;
+			return sign;
 		}
 		log('te', 'split here');
 		// split is in same line;
 		src_pfx = src.sign.postfix;
-		if (isIndex(sign) {
+		if (isIndex(sign)) {
 			log('te', 'split index');
 			if (sig_p.at1 > src_p.at1) {
 				log('te', 'split rigtside');
-				continue;
+				return;
 			}
 			log('te', 'split leftside');
 			sign[src.pivot.length]++;
 			sig_p.at1 -= src_p.at1;
-			continue;
+			return;
 		}
-		if (isSpan(sign) {
+		if (isSpan(sign)) {
 			log('te', 'split span');
 			//Span        mmmmm      <-- sig_p.at1--sig_at2
 			//Splits:  1    2    3   <-- src_p.at1
 			//case 3:
 			if (sig_p.at2 < src_p.at1) {
 				log('te', 'split rightside');
-				continue;
+				return;
 			}
 			// case 1:
 			if (sig_p.at1 > src_p.at1) {
@@ -594,7 +603,7 @@ MeshMashine.prototype.transformMoment = function(sign, src, trg) {
 				sign[src.pivot.length]++;
 				sig_p.at1 -= src_p.at1;
 				sig_p.at2 -= src_p.at1;
-				continue;
+				return;
 			}
 			// case 2 -> have to split!
 			var sat2 = sig_p.at2;
@@ -604,12 +613,13 @@ MeshMashine.prototype.transformMoment = function(sign, src, trg) {
 			sig2.at2 = sat2;
 			return [sign, sat2];
 		}
+		throw reject('invalid split');
 		break;
 	case 'set':
 		log('te', 'nothing to do');
 		break;
 	case 'insert':
-		if (!haveSameBase(trg.sign, sign)) continue;
+		if (!haveSameBase(trg.sign, sign)) return;
 		log('te', 'alter-insert');
 		check(isSpan(trg.sign), 'history mangled');
 		var trg_pfx = trg.sign.postfix;
@@ -623,7 +633,7 @@ MeshMashine.prototype.transformMoment = function(sign, src, trg) {
 		}
 		break;
 	case 'remove':
-		if (!haveSameBase(src, sign)) continue;
+		if (!haveSameBase(src, sign)) return;
 		log('te', 'alter-remove');
 		check(isSpan(src.sign), 'history mangled');
 		var src_pfx = src.sign.postfix;
@@ -670,7 +680,7 @@ MeshMashine.prototype.transform = function(time, sign) {
 
 		if (sigs === null) {
 			asw = transformMoment(sign, moment.src, moment.trg);
-			if (asw instanceof Array) {
+			if (isArray(asw)) {
 				sigs = asw;
 			} else {
 				if (asw !== sign) throw new Error('iFail, asw !== sign');
@@ -678,7 +688,7 @@ MeshMashine.prototype.transform = function(time, sign) {
 		} else {
 			for(var si = 0; si < sigs.length; si++) {
 				var asw = transformMoment(sigs[si], moment.src, moment.trg);
-				if (asw instanceof Array) {
+				if (isArray(asw)) {
 					for(var ai = 0; ai < asw.length; ai++) {
 						sigs.splice(si++, asw[ai]);
 					}
@@ -707,7 +717,7 @@ MeshMashine.prototype._reflect = function(time, sign) {
 			alter(reflect, this.history[hi], true);
 		}
 		
-		return get(reflect, sign);
+		return reflect.get(sign);
 	} catch (err) {
 		// returns rejections but rethrows coding errors.
 		if (err.ok !== false) throw err; else return err;
@@ -722,17 +732,22 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 		log('mm', 'alter time:', time, 'src:', src, 'trg:', trg);
 		if (!this._isValidTime(time)) return reject('invalid time');
 
-		src.sign = new Signature(src.sign);
-		trg.sign = new Signature(trg.sign);
-		var tsrc = this.transform(time, src.sign);
-		var ttrg = this.transform(time, trg.sign);
+		var tsrc, ttrg;
+		if (is(src.sign)) {
+			src.sign = new Signature(src.sign, 'src.sign');
+			tsrc = this.transform(time, src.sign);
+		}
+		if (is(trg.sign)) {
+			trg.sign = new Signature(trg.sign, 'trg.sign');
+			ttrg = this.transform(time, trg.sign);
+		}
 		var alts;
 
-		if (isSign(tsrc) && isSign(ttrg)) {
+		if (!isArray(tsrc) && !isArray(ttrg)) {
 			src.sign = tsrc;
 			trg.sign = ttrg;
 			alts = new Alternation(src, trg, true);
-		} else if (isSign(tsrc) && isArray(ttrg))  {
+		} else if (!isArray(tsrc) && isArray(ttrg))  {
 			src.sign = tsrc;
 			alts = [];
 			for(var i = 0; i < ttrg.length; i++) {
@@ -740,7 +755,7 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 				tc.sign = ttrg[i];
 				alts[i] = new Alternation(src, tc, true);
 			}
-		} else if (isArray(tsrc) && isSign(ttrg)) {
+		} else if (isArray(tsrc) && !isArray(ttrg)) {
 			trg.sign = ttrg;
 			alts = [];
 			for(var i = 0; i < tsrc.length; i++) {
@@ -751,7 +766,7 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 		}
 			
 		if (!isArray(alts)) {
-			alter(this.repository, alts, false);
+			this.repository.alter(alts, false);
 			this.history.push(alts);
 		} else {
 			for(var i = 0; i < alts.length; i++) {

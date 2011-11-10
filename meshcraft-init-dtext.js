@@ -16,18 +16,18 @@ if (config.initmessage) {
 }
 
 if (process.argv.length < 3) {
-	console.log('meshcraft-init-dtext PATH');
+	console.log('meshcraft-init-dtext SIGN');
 	process.exit(1);
 }
 
-var path;
+var sign;
 try {
-	path = JSON.parse(process.argv[2]);
+	sign = JSON.parse(process.argv[2]);
 } catch(err) {
-	console.log('path not valid JSON');
+	console.log('signature not valid JSON');
 	process.exit(1);
 }
-if (!(path instanceof Array)) path = [path];
+if (!(sign instanceof Array)) sign = [sign];
 
 libemsi.request({cmd: "now"}, function (err, now) {
 	if (err) {
@@ -58,7 +58,7 @@ libemsi.request({cmd: "now"}, function (err, now) {
 				],
 			},
 			trg: {
-				sign: path,
+				sign: sign,
 			}
 		},
 		function(err, asw) {
