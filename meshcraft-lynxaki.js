@@ -300,38 +300,11 @@ function exit(message) {
 
 
 tin.on('keypress', function(ch, key) {
-	// message(ch+' | '+util.inspect(key));
+	//message(ch+' | '+util.inspect(key));
 	if (key && key.ctrl) {
 		switch (key.name) {
-		case 'left' :
-			if (time === 0) break;
-			if (change.cmd) {
-				message('discarding change');
-				for(k in change) change[k] = null;
-			}
-			time--;
-			message('time: '+time);
-			getRoot();
-			break;
-		case 'right' :
-			if (time === curTime) break;
-			if (change.cmd) {
-				message('discarding change');
-				for(k in change) change[k] = null;
-			}
-			time++;
-			message('time: '+time);
-			getRoot();
-			break;
 		case 'c' :
 			exit();
-			break;
-		case 'up':
-			if (change.cmd) {
-				message('discarding change');
-				for(k in change) change[k] = null;
-			}
-			tocurrent();
 			break;
 		case 's':
 			send();
@@ -341,6 +314,36 @@ tin.on('keypress', function(ch, key) {
 	}
 
 	switch (key && key.name) {
+	case 'tab':
+		send();
+		break;
+	case 'pageup' :
+		if (time === 0) break;
+		if (change.cmd) {
+			message('discarding change');
+			for(k in change) change[k] = null;
+		}
+		time--;
+		message('time: '+time);
+		getRoot();
+		break;
+	case 'pagedown' :
+		if (time === curTime) break;
+		if (change.cmd) {
+			message('discarding change');
+			for(k in change) change[k] = null;
+		}
+		time++;
+		message('time: '+time);
+		getRoot();
+		break;
+	case 'home':
+		if (change.cmd) {
+			message('discarding change');
+			for(k in change) change[k] = null;
+		}
+		tocurrent();
+		break;
 	case 'left' :
 		if (cx > 0) cx--;
 		break;

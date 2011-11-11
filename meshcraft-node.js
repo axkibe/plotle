@@ -181,6 +181,9 @@ var dispatch = function(req, red, res) {
 /**
 | Startup.
 */
+for(var i = 0; i < 40; i++) {
+	console.log('');
+}
 log('start', 'Starting server @ http://'+(config.ip || '*')+'/:'+config.port);
 http.createServer(
 function (req, res) {

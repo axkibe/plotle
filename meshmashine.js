@@ -198,6 +198,16 @@ Signature.prototype.setarc = function(i, v) {
 }
 
 /**
+| Returns the signature at index i.
+*/
+Signature.prototype.addarc = function(i, v) {
+	check(!this.frozen, 'changing readonly signature');
+	if (i < 0) i = this._sign.length - i;
+	check(isInteger(this._sign[i], 'cannot add to non integer arc'));
+	return this._sign[i] += v;
+}
+
+/**
 | True if this signature is the same as another.
 */
 Signature.prototype.equals = function(o) {
@@ -554,7 +564,7 @@ MeshMashine.prototype.transformOnMoment = function(sign, alter) {
 		if (sig_i > src_i) {
 			// split was before -> index shifted
 			log('te', 'split upside');
-			sign[src.piviot.length]++;
+			sign.addarc(src.piviot.length, 1);
 			return sign;
 		}
 		log('te', 'split here');
@@ -562,12 +572,12 @@ MeshMashine.prototype.transformOnMoment = function(sign, alter) {
 		src_pfx = src.sign.postfix;
 		if (sign.isIndex()) {
 			log('te', 'split index');
-			if (sig_pfx.at1 > src_pfx.at1) {
+			if (src_pfx.at1 > sig_pfx.at1) {
 				log('te', 'split rigtside');
 				return sign;
 			}
 			log('te', 'split leftside');
-			sign[src.pivot.length]++;
+			sign.addarc(src.pivot.length, 1);
 			sig_pfx.at1 -= src_pfx.at1;
 			return sign;
 		}
