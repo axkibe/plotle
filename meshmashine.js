@@ -56,41 +56,6 @@ function isSign(o)    { return o instanceof Signature; }
 function isTable(o)   { return o.constructor === Object; }
 function isInteger(o) { return typeof(o) === 'number' && Math.floor(o) === o; }
 
-function isSpan(o) {
-	if (!isArray(o)) return false;
-	if (o.length === 0) return false;
-	var last = o[o.length - 1];
-	if (is(last.at1) && is(last.at2)) return true;
-}
-
-function isRoot(o) {
-	if (!isArray(o)) return false;
-	return o.length === 0;
-}
-
-
-
-function basePathLength(p) {
-	var pl = p.length;
-	if (pl === 0) return 0;
-	if (isTable(p[pl - 1])) return pl - 1;
-	return pl;
-}
-
-/**
-| Compares if two signatories are the same,
-| excluding possible index/spans at their end.
-*/
-function haveSameBase(p1, p2) {
-	var bpl1 = basePathLength(p1);
-	if (bpl1 !== basePathLength(p2)) return false;
-
-	for(var pi = 0; pi < bpl1; pi++) {
-		if (p1[pi] !== p2[pi]) return false;
-	}
-	return true;
-}
-
 function keysLength(o) {
 	var n = 0;
 	for(var k in o) {
@@ -162,7 +127,6 @@ function Signature(sign, name) {
 		check(sign[i][0] !== '_', name, 'arcs must not start with _');
 	}
 	this._sign = clone(sign);
-	this.name = name;
 }
 
 /**
@@ -237,7 +201,20 @@ Signature.prototype.setarc = function(i, v) {
 | True if this signature is the same as another.
 */
 Signature.prototype.equals = function(o) {
-	return this._sign.deepEqual(o._sign);
+	return deepEqual(this._sign, o._sign);
+}
+
+/**
+| True if this signature has the same path (that is without postfix)
+| than another
+*/
+Signature.prototype.equalPaths = function(o) {
+	var pl = this.pathlen;
+	if (pl !== o.pathlen) return false;
+	for(var i = 0; i < pl; i++) {
+		if (this._sign[i] !== o._sign[i]) return false;
+	}
+	return true;
 }
 
 /**
@@ -285,21 +262,21 @@ Signature.prototype.freeze = function() {
 /**
 | Attunes the '_end' things of the postfix to match the string it points to.
 */
-Signature.prototype.attunePostfix = function(str) {
+Signature.prototype.attunePostfix = function(str, name) {
 	var pfx = this.postfix;
-	check(pfx !== null, this.name, 'not a postfix');
+	check(pfx !== null, name, 'not a postfix');
 	if (pfx.at1 === '_end') {
-		check(!this.readonly, this.name, 'cannot change readonly');
+		check(!this.readonly, name, 'cannot change readonly');
 		pfx.at1 = str.length;
 	}
 	if (pfx.at2 === '_end') {
-		check(!this.readonly, this.name, 'cannot change readonly');
+		check(!this.readonly, name, 'cannot change readonly');
 		pfx.at2 = str.length;
 	}
-	checkWithin(pfx.at1, 0, str.length, this.name, 'postfix.at1 invalid');
+	checkWithin(pfx.at1, 0, str.length, name, 'postfix.at1 invalid');
 	if (is(pfx.at2)) {
-		checkWithin(pfx.at2, 0, str.length, this.name, 'postfix.at2 invalid');
-		check(pfx.at2 >= pfx.at1, this.name, 'postfix: at2 < at1');
+		checkWithin(pfx.at2, 0, str.length, name, 'postfix.at2 invalid');
+		check(pfx.at2 >= pfx.at1, name, 'postfix: at2 < at1');
 	}
 	return pfx;
 }
@@ -318,8 +295,9 @@ function Alternation(src, trg) {
 }
 
 Alternation.prototype.type = function(backward) {
-	var src = !backward ? this.src : this.trg;
-	var trg = !backward ? this.trg : this.src;
+	log('debug', 'type', this);
+	var src = backward ? this.trg : this.src;
+	var trg = backward ? this.src : this.trg;
 	if (trg.proc === 'splice') return 'split';
 	if (src.proc === 'splice') return 'join';
 	if (is(src.val) && trg.sign && trg.sign.isPath()) return 'set';
@@ -359,7 +337,7 @@ NTree.prototype.get = function(sign, slen) {
 		check(node !== null, sign.name, 'points nowhere');
 		node = node[sign.arc(i)];
 	}
-	return node;
+	return is(node) ? node : null;
 }
 
 /**
@@ -407,7 +385,7 @@ NTree.prototype.alter = function(alternation, backward) {
 		check(isString(str), cm, 'src.sign signates no string');
 
 		check(src.pivot === src.sign.length - 3,  cm, 'currently cannot splice trees');
-		var sig_pfx = src.sign.attunePostfix(str);
+		var sig_pfx = src.sign.attunePostfix(str, 'src.sign');
 		var sig_splice = src.sign.arc(src.pivot);
 		checkWithin(sig_splice, 0, pivotNode.length, cm, 'splice out of range');
 
@@ -438,14 +416,14 @@ NTree.prototype.alter = function(alternation, backward) {
 		check(isInteger(trg.pivot), cm, 'trg.pivot not an integer');
 		check(trg.sign.isIndex(), cm, 'trg.sign not an index');
 
-		var pivotNode = this.get(node, src.sign, src.pivot);
-		check(isArray(pivotNode), cm, 'src.pivot signates no array');
+		var pivotNode = this.get(trg.sign, trg.pivot);
+		check(isArray(pivotNode), cm, 'trg.sign(pivot) signates no array');
 
-		var str = this.get(node, trg.sign);
+		var str = this.get(trg.sign);
 		check(isString(str, cm, 'trg.sign signates no string'));
 
 		check(trg.pivot === trg.sign.length - 3, cm, 'corrently cannot splice trees');
-		var sig_pfx = trg.sign.attunePostfix(str);
+		var sig_pfx = trg.sign.attunePostfix(str, 'trg.sign');
 		var sig_splice = trg.sign.arc(trg.pivot);
 		checkWithin(sig_splice, 0, pivotNode.length -1, cm, 'splice out of range');
 
@@ -454,7 +432,7 @@ NTree.prototype.alter = function(alternation, backward) {
 		check(keysLength(ppre) === keysLength(pnex), cm, 'stubs.keys not equal');
 		for(var k in ppre) {
 			check(is(pnex[k]), cm, 'stub['+k+'] not equal');
-			if (k !== trg.sign.arg(trg.pivot + 1)) {
+			if (k !== trg.sign.arc(trg.pivot + 1)) {
 				check(deepEqual(ppre[k], pnex[k]), cm, 'stub['+k+'] not deep equal');
 			} else {
 				check(k.indexOf('%') > 0, cm, 'stub['+k+'] does not contain %');
@@ -481,7 +459,7 @@ NTree.prototype.alter = function(alternation, backward) {
 		}
 		var save = this.get(trg.sign);
 		if (is(trg.val)) {
-			check(deepEqual(trg.val, save), cm, 'trg.val set incorrectly');
+			check(deepEqual(trg.val, save), cm, 'trg.val set incorrectly', trg.val, '!=', save);
 		} else {
 			trg.val = save;
 		}
@@ -497,7 +475,7 @@ NTree.prototype.alter = function(alternation, backward) {
 		var str = this.get(trg.sign);
 		check(isString(str), cm, 'trg.sign signates no string');
 
-		var trg_pfx = trg.sign.attunePostfix(str);
+		var trg_pfx = trg.sign.attunePostfix(str, 'trg.sign');
 
 		// where trg span should end
 		var tat2 = trg_pfx.at1 + src.val.length;
@@ -513,7 +491,7 @@ NTree.prototype.alter = function(alternation, backward) {
 		var str = this.get(src.sign);
 		check(isString(str), cm, 'src.sign signates no string');
 
-		var src_pfx = src.sign.attunePostfix(str);
+		var src_pfx = src.sign.attunePostfix(str, 'src.sign');
 		if (src_pfx.at1 === src_pfx.at2) { log('alter', 'removed nothing'); return; }
 
 		var val = str.substring(src_pfx.at1, src_pfx.at2);
@@ -526,7 +504,7 @@ NTree.prototype.alter = function(alternation, backward) {
 		this.set(src.sign, nstr);
 		break;
 	default:
-		throw reject('invalid alter');
+		throw reject('invalid atype:' + atype);
 	}
 }
 
@@ -558,7 +536,7 @@ MeshMashine.prototype._isValidTime = function(time) {
 /**
 | Transforms a single signature for one historic moment
 */
-MeshMashine.prototype.transformMoment = function(sign, alter) {
+MeshMashine.prototype.transformOnMoment = function(sign, alter) {
 	var sig_pfx = sign.postfix;
 	var src = alter.src;
 	var trg = alter.trg;
@@ -582,25 +560,25 @@ MeshMashine.prototype.transformMoment = function(sign, alter) {
 		log('te', 'split here');
 		// split is in same line;
 		src_pfx = src.sign.postfix;
-		if (isIndex(sign)) {
+		if (sign.isIndex()) {
 			log('te', 'split index');
-			if (sig_p.at1 > src_p.at1) {
+			if (sig_pfx.at1 > src_pfx.at1) {
 				log('te', 'split rigtside');
-				return;
+				return sign;
 			}
 			log('te', 'split leftside');
 			sign[src.pivot.length]++;
-			sig_p.at1 -= src_p.at1;
-			return;
+			sig_pfx.at1 -= src_pfx.at1;
+			return sign;
 		}
-		if (isSpan(sign)) {
+		if (sign.isSpan()) {
 			log('te', 'split span');
 			//Span        mmmmm      <-- sig_p.at1--sig_at2
 			//Splits:  1    2    3   <-- src_p.at1
 			//case 3:
 			if (sig_p.at2 < src_p.at1) {
 				log('te', 'split rightside');
-				return;
+				return sign;
 			}
 			// case 1:
 			if (sig_p.at1 > src_p.at1) {
@@ -608,7 +586,7 @@ MeshMashine.prototype.transformMoment = function(sign, alter) {
 				sign[src.pivot.length]++;
 				sig_p.at1 -= src_p.at1;
 				sig_p.at2 -= src_p.at1;
-				return;
+				return sign;
 			}
 			// case 2 -> have to split!
 			var sat2 = sig_p.at2;
@@ -619,55 +597,54 @@ MeshMashine.prototype.transformMoment = function(sign, alter) {
 			return [sign, sat2];
 		}
 		throw reject('invalid split');
-		break;
 	case 'set':
 		log('te', 'nothing to do');
-		break;
+		return sign;
 	case 'insert':
-		if (!haveSameBase(trg.sign, sign)) return;
+		if (!trg.sign || !trg.sign.equalPaths(sign)) return sign;
 		log('te', 'alter-insert');
-		check(isSpan(trg.sign), 'history mangled');
+		check(trg.sign.isSpan(), 'history mangled');
 		var trg_pfx = trg.sign.postfix;
-		if (sig_o.at1 > trg_p.at1) { // or >= ?
+		if (sig_pfx.at1 > trg_pfx.at1) { // or >= ?
 			log('te', 'at1 += ',src.val.length);
-			sig_p.at1 += src.val.length;
-			if (is(sig_p.at2)) {
+			sig_pfx.at1 += src.val.length;
+			if (is(sig_pfx.at2)) {
 				log('te', 'at2 +=', src.val.length);
-				sig_p.at2 += src.val.length;
+				sig_pfx.at2 += src.val.length;
 			}
 		}
-		break;
+		return sign;
 	case 'remove':
-		if (!haveSameBase(src, sign)) return;
+		if (!src.sign.equalPaths(sign)) return sign;
 		log('te', 'alter-remove');
-		check(isSpan(src.sign), 'history mangled');
+		check(src.sign && src.sign.isSpan(), 'history mangled');
 		var src_pfx = src.sign.postfix;
 		//       123456789
 		//         ^^^    <- removed
 		//case1:       <->
 		//case2:    <->
-		if (signl.at1 > srcl.at1) {
-			if (signl.at1 > srcl.at2) {
+		if (sig_pfx.at1 > src_pfx.at1) {
+			if (sig_pfx.at1 > src_pfx.at2) {
 				log('te', 'at1 -=', trg.val.length);
 				// case1
-				signl.at1 -= trg.val.length;
-				if (is(signl.at2)) {
+				sig_pfx.at1 -= trg.val.length;
+				if (is(sig_pfx.at2)) {
 					log('te', 'at2 -=', trg.val.length);
-					signl.at2 -= trg.val.length;
+					sig_pfx.at2 -= trg.val.length;
 				}
 			} else {
 				// case2
-				if (is(signl.at2)) {
-					log('te', 'at2 =', signl.at2 - signl.at1 + srcl.at1);
-					singl.at2 = signl.at2 - signl.at1 + srcl.at1;
+				if (is(sig_pfx.at2)) {
+					log('te', 'at2 =', sig_pfx.at2 - sig_pfx.at1 + src_pfx.at1);
+					sig_pfx.at2 = sig_pfx.at2 - sig_pfx.at1 + src_pfx.at1;
 				}
-				log('te', 'at1 =', srcl.at);
-				signl.at1 = srcl.at1;
+				log('te', 'at1 =', src_pfx.at);
+				sig_pfx.at1 = src_pfx.at1;
 			}
 		}
-		break;
+		return sign;
 	default :
-		throw new Error('history mangled, srcST: '+srcST+' trgST:'+trgST);
+		throw new Error('unknown atype: '+atype);
 	}
 }
 
@@ -677,28 +654,28 @@ MeshMashine.prototype.transformMoment = function(sign, alter) {
 MeshMashine.prototype.transform = function(time, sign) {
 	log('te', 'in', time, sign);
 	if (!is(sign)) return sign;
-	if (isRoot(sign)) return sign;
+	if (sign.length === 0) return sign;
 
 	var sigs = null;
 	for(var t = time; t < this.history.length; t++) {
 		var moment = this.history[t];
 
 		if (sigs === null) {
-			asw = transformMoment(sign, moment.src, moment.trg);
+			asw = this.transformOnMoment(sign, moment);
 			if (isArray(asw)) {
 				sigs = asw;
 			} else {
-				if (asw !== sign) throw new Error('iFail, asw !== sign');
+				if (asw !== sign) throw new Error('iFail, asw !== sign '+asw+' != '+sign);
 			}
 		} else {
 			for(var si = 0; si < sigs.length; si++) {
-				var asw = transformMoment(sigs[si], moment.src, moment.trg);
+				var asw = transformOnMoment(sigs[si], moment.src, moment.trg);
 				if (isArray(asw)) {
 					for(var ai = 0; ai < asw.length; ai++) {
 						sigs.splice(si++, asw[ai]);
 					}
 				} else {
-					if (asw !== sign) throw new Error('iFail, asw !== sign');
+					if (asw !== sign) throw new Error('iFail, asw !== sign '+asw+' != '+sign);
 				}
 			}
 		}
@@ -719,12 +696,12 @@ MeshMashine.prototype._reflect = function(time, sign) {
 
 		// playback
 		for(var hi = this.history.length - 1; hi >= time; hi--) {
-			alter(reflect, this.history[hi], true);
+			reflect.alter(this.history[hi], true);
 		}
 		return reflect.get(sign);
 	} catch (err) {
-		// returns rejections but rethrows coding errors.
-		if (err.ok !== false) throw err; else return err;
+		// nothing should ever fail, does rethrow as lethal error
+		err.ok = null; throw err;
 	}
 }
 

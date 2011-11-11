@@ -305,12 +305,20 @@ tin.on('keypress', function(ch, key) {
 		switch (key.name) {
 		case 'left' :
 			if (time === 0) break;
+			if (change.cmd) {
+				message('discarding change');
+				for(k in change) change[k] = null;
+			}
 			time--;
 			message('time: '+time);
 			getRoot();
 			break;
 		case 'right' :
 			if (time === curTime) break;
+			if (change.cmd) {
+				message('discarding change');
+				for(k in change) change[k] = null;
+			}
 			time++;
 			message('time: '+time);
 			getRoot();
@@ -319,6 +327,10 @@ tin.on('keypress', function(ch, key) {
 			exit();
 			break;
 		case 'up':
+			if (change.cmd) {
+				message('discarding change');
+				for(k in change) change[k] = null;
+			}
 			tocurrent();
 			break;
 		case 's':
@@ -346,7 +358,6 @@ tin.on('keypress', function(ch, key) {
 		cy++;
 		break;
 	case 'enter' :
-		if (time !== curTime) { message('not at now'); break; }
 		if (change.cmd !== null) {
 			message('-- another change in buffer!');
 			break;
@@ -356,7 +367,6 @@ tin.on('keypress', function(ch, key) {
 		change.at1  = cx++;
 		break;
 	case 'delete' :
-		if (time !== curTime) { message('not at now'); break; }
 		switch (change.cmd) {
 		case 'remove' :
 			if (cy !== change.line) {
@@ -393,7 +403,6 @@ tin.on('keypress', function(ch, key) {
 		}
 		break;
 	case 'backspace' :
-		if (time !== curTime) { message('not at now'); break; }
 		switch (change.cmd) {
 		case 'remove' :
 			if (cx === 0) break;
@@ -439,7 +448,6 @@ tin.on('keypress', function(ch, key) {
 	case 'space':
 	case (ch) :
 	case (ch && ch.toLowerCase()) :
-		if (time !== curTime) { message('not at now'); break; }
 		switch (change.cmd) {
 		case 'join' :
 		case 'remove':
