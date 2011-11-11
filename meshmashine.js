@@ -28,6 +28,8 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 "use strict";
 
+var debug = true;
+
 var log = require('./meshcraft-log');
 
 /**
@@ -43,6 +45,15 @@ function clone(original) {
 		copy[i] = clone(original[i]);
 	}
 	return copy;
+}
+
+/**
+| copies a table one level only
+*/
+function duplicate(original) {
+	var dup = {};
+	for(var k in original) dup[k] = original[k];
+	return dup;
 }
 
 /**
@@ -79,6 +90,7 @@ function deepEqual(o1, o2) {
 | Returns a rejection error
 */
 function reject(message) {
+	if (debug) throw new Error(message); // in debug mode any failure is fatal.
 	log('mm', 'reject', message);
 	return {ok: false, message: message};
 }
@@ -95,8 +107,8 @@ function check(condition) {
 	if (!condition) fail(arguments, 1);
 }
 
-function checkWithin(val, low, high) {
-	if (val < low || val > high) fail(arguments, 3);
+function checkWithin(v, low, high) {
+	if (v < low || v > high) fail(arguments, 3, low, '<=', v, '<=', high);
 }
 
 function fixate(obj, key, value) {
@@ -119,6 +131,7 @@ function fixate(obj, key, value) {
 | TODO check for leading '_'
 */
 function Signature(sign, name) {
+	if (isSign(sign)) sign = sign._sign;
 	check(isArray(sign), name, 'not an array');
 	for (var i = 0; i < sign.length; i++) {
 		check(isString(sign[i]) || isInteger(sign[i]) ||
@@ -202,8 +215,8 @@ Signature.prototype.setarc = function(i, v) {
 */
 Signature.prototype.addarc = function(i, v) {
 	check(!this.frozen, 'changing readonly signature');
-	if (i < 0) i = this._sign.length - i;
-	check(isInteger(this._sign[i], 'cannot add to non integer arc'));
+	if (i < 0) i = this._sign.length + i;
+	check(isInteger(this._sign[i]), 'cannot add to non integer arc: ', this._sign[i]);
 	return this._sign[i] += v;
 }
 
@@ -305,14 +318,17 @@ function Alternation(src, trg) {
 }
 
 Alternation.prototype.type = function(backward) {
-	log('debug', 'type', this);
 	var src = backward ? this.trg : this.src;
 	var trg = backward ? this.src : this.trg;
 	if (trg.proc === 'splice') return 'split';
 	if (src.proc === 'splice') return 'join';
 	if (is(src.val) && trg.sign && trg.sign.isPath()) return 'set';
 	if (is(src.val) && trg.sign && trg.sign.isIndex()) return 'insert';
-	if (src.sign.isSpan() && !(trg.sign && trg.sign.isIndex())) return 'remove';
+	if (src.sign && src.sign.isSpan() && !(trg.sign && trg.sign.isIndex())) return 'remove';
+	if (debug) {
+		log('debug', this);
+		throw new Error('invalid type');
+	}
 	return null;
 }
 
@@ -408,15 +424,11 @@ NTree.prototype.alter = function(alternation, backward) {
 		// no rejects after here
 		var pnew = {};
 		var ksplit = src.sign.arc(-2);
-		log('debug', 'src.sign', src.sign);
-		log('debug', 'ksplit', ksplit);
 		for(var k in ppre) {
 			if (k === ksplit) {
-				log('debug', 'in');
 				pnew[k] = ppre[k].substring(sig_pfx.at1);
 				ppre[k] = ppre[k].substring(0, sig_pfx.at1);
 			} else {
-				log('debug', 'out');
 				pnew[k] = ppre[k];
 			}
 		}
@@ -471,7 +483,7 @@ NTree.prototype.alter = function(alternation, backward) {
 		if (is(trg.val)) {
 			check(deepEqual(trg.val, save), cm, 'trg.val set incorrectly', trg.val, '!=', save);
 		} else {
-			trg.val = save;
+			trg.val = clone(save);
 		}
 
 		if (is(src.sign)) {
@@ -514,7 +526,7 @@ NTree.prototype.alter = function(alternation, backward) {
 		this.set(src.sign, nstr);
 		break;
 	default:
-		throw reject('invalid atype:' + atype);
+		throw reject('invalid atype:', atype);
 	}
 }
 
@@ -555,8 +567,8 @@ MeshMashine.prototype.transformOnMoment = function(sign, alter) {
 	case 'split':
 		if (!src.sign.isSubOf(sign, src.pivot)) return sign;
 		log('te', 'alter-split');
-		var src_i = src.sign[src.pivot.length];
-		var sig_i = sign[src.pivot.length];
+		var src_i = src.sign[src.pivot];
+		var sig_i = sign[src.pivot];
 		if (sig_i < src_i) {
 			log('te', 'split downside');
 			return sign;
@@ -564,12 +576,41 @@ MeshMashine.prototype.transformOnMoment = function(sign, alter) {
 		if (sig_i > src_i) {
 			// split was before -> index shifted
 			log('te', 'split upside');
-			sign.addarc(src.piviot.length, 1);
+			sign.addarc(src.pivot, 1);
 			return sign;
 		}
 		log('te', 'split here');
 		// split is in same line;
 		src_pfx = src.sign.postfix;
+		if (sign.isSpan()) {
+			log('te', 'split span');
+			//Span        mmmmm      <-- sig_p.at1--sig_at2
+			//Splits:  1    2    3   <-- src_p.at1
+			//case 3:
+			if (sig_pfx.at2 < src_pfx.at1) {
+				log('te', 'split rightside');
+				return sign;
+			}
+			// case 1:
+			if (sig_pfx.at1 > src_pfx.at1) {
+				log('te', 'split leftside');
+				sign[src.pivot]++;
+				sig_pfx.at1 -= src_pfx.at1;
+				sig_pfx.at2 -= src_pfx.at1;
+				return sign;
+			}
+			// case 2 -> have to split!
+			log('te', 'split split');
+			var sat2 = sig_pfx.at2 - src_pfx.at1;
+			sig_pfx.at2 = src_pfx.at1;
+
+			var sign2 = new Signature(sign, 'split');
+			sign2.addarc(src.pivot, 1);
+			var sig2_pfx = sign2.postfix;
+			sig2_pfx.at1 = 0;
+			sig2_pfx.at2 = sat2;
+			return [sign, sign2];
+		}
 		if (sign.isIndex()) {
 			log('te', 'split index');
 			if (src_pfx.at1 > sig_pfx.at1) {
@@ -577,36 +618,35 @@ MeshMashine.prototype.transformOnMoment = function(sign, alter) {
 				return sign;
 			}
 			log('te', 'split leftside');
-			sign.addarc(src.pivot.length, 1);
+			sign.addarc(src.pivot, 1);
 			sig_pfx.at1 -= src_pfx.at1;
 			return sign;
 		}
-		if (sign.isSpan()) {
-			log('te', 'split span');
-			//Span        mmmmm      <-- sig_p.at1--sig_at2
-			//Splits:  1    2    3   <-- src_p.at1
-			//case 3:
-			if (sig_p.at2 < src_p.at1) {
-				log('te', 'split rightside');
-				return sign;
-			}
-			// case 1:
-			if (sig_p.at1 > src_p.at1) {
-				log('te', 'split leftside');
-				sign[src.pivot.length]++;
-				sig_p.at1 -= src_p.at1;
-				sig_p.at2 -= src_p.at1;
-				return sign;
-			}
-			// case 2 -> have to split!
-			var sat2 = sig_p.at2;
-			sig_p.at2 = src_p.at1;
-			var sig2 = sign.splice();
-			sig2.at1 = src_p.at1;
-			sig2.at2 = sat2;
-			return [sign, sat2];
-		}
 		throw reject('invalid split');
+	case 'join':
+		if (!trg.sign.isSubOf(sign, trg.pivot)) return sign;
+		log('te', 'alter-join');
+		var trg_i = trg.sign[trg.pivot];
+		var sig_i = sign[trg.pivot];
+		if (sig_i < trg_i) {
+			log('te', 'join downside');
+			return sign;
+		}
+		if (sig_i > trg_i) {
+			// split was before -> index shifted
+			log('te', 'join upside');
+			sign.addarc(src.pivot, -1);
+			return sign;
+		}
+		log('te', 'join here');
+		// join is in same line;
+		trg_pfx = trg.sign.postfix;
+		sign.addarc(trg.pivot, -1);
+		sig_pfx.at1 += trg_pfx.at1;
+		if (is(sig_pfx.at2)) {
+			sig_pfx.at1 += trg_pfx.at1;
+		}
+		return sign;
 	case 'set':
 		log('te', 'nothing to do');
 		return sign;
@@ -666,32 +706,27 @@ MeshMashine.prototype.transform = function(time, sign) {
 	if (!is(sign)) return sign;
 	if (sign.length === 0) return sign;
 
-	var sigs = null;
+	var signa = sign; // sign or array
 	for(var t = time; t < this.history.length; t++) {
 		var moment = this.history[t];
 
-		if (sigs === null) {
-			asw = this.transformOnMoment(sign, moment);
-			if (isArray(asw)) {
-				sigs = asw;
-			} else {
-				if (asw !== sign) throw new Error('iFail, asw !== sign '+asw+' != '+sign);
-			}
+		if (!isArray(signa)) {
+			signa = this.transformOnMoment(signa, moment);
 		} else {
-			for(var si = 0; si < sigs.length; si++) {
-				var asw = transformOnMoment(sigs[si], moment.src, moment.trg);
+			for(var si = 0; si < signa.length; si++) {
+				var asw = transformOnMoment(signa[si], moment);
 				if (isArray(asw)) {
 					for(var ai = 0; ai < asw.length; ai++) {
-						sigs.splice(si++, asw[ai]);
+						signa.splice(si++, asw[ai]);
 					}
 				} else {
-					if (asw !== sign) throw new Error('iFail, asw !== sign '+asw+' != '+sign);
+					check(asw === signa[si], 'aswk !== signa[si]');
 				}
 			}
 		}
 	}
-	log('te', 'out', sign);
-	return sign;
+	log('te', 'out', signa);
+	return signa;
 }
 
 
@@ -742,7 +777,7 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 			src.sign = tsrc;
 			alts = [];
 			for(var i = 0; i < ttrg.length; i++) {
-				var tc = clone(trg);
+				var tc = duplicate(trg);
 				tc.sign = ttrg[i];
 				alts[i] = new Alternation(src, tc);
 			}
@@ -750,8 +785,8 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 			trg.sign = ttrg;
 			alts = [];
 			for(var i = 0; i < tsrc.length; i++) {
-				var sc = clone(src);
-				src.sign = tsrc[i];
+				var sc = duplicate(src);
+				sc.sign = tsrc[i];
 				alts[i] = new Alternation(sc, trg);
 			}
 		}
@@ -762,7 +797,7 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 			this.history.push(alts);
 		} else {
 			for(var i = 0; i < alts.length; i++) {
-				alter(this.repository, alts[i], false);
+				this.repository.alter(alts[i], false);
 				alts[i].freeze();
 				this.history.push(alts[i]);
 			}
