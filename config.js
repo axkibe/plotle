@@ -4,13 +4,13 @@ module.exports= {
 	port : 8833,
 	log  : {
 		//all:   true,
-		alter:  false,
+		alter:  true,
 		ajax:   false,
 		debug:  true,
 		fail:   true,
-		mm:     false,
+		mm:     true,
 		start:  true,
-		te:     false,
+		te:     true,
 		web:    false,
 	}
 }

@@ -14,11 +14,9 @@
                                        '___)   '___)                      `~~'  `"   |_|      `--´
 
 
-	LibEmSi (MC)
-
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- Commutil utilities for mc-clients
+ Common utilities for meshcraft clients
 
  Authors: Axel Kittenberger
  License: GNU Affero AGPLv3

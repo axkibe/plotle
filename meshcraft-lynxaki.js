@@ -30,14 +30,14 @@ function isString(o) {
 	return typeof(o) === 'string' || o instanceof String;
 }
 
-var fs       = require('fs');
-var http     = require('http');
-var util     = require('util');
-var tty      = require('tty');
-var libemsi  = require('./meshcraft-libclient');
+var fs        = require('fs');
+var http      = require('http');
+var util      = require('util');
+var tty       = require('tty');
+var libclient = require('./meshcraft-libclient');
 
-var j2o = libemsi.j2o;
-var config = libemsi.config();
+var j2o = libclient.j2o;
+var config = libclient.config();
 if (config.initmessage) {
 	console.log(config.initmessage);
 }
@@ -152,7 +152,7 @@ function message(s) {
 function request(cmd, callback) {
 	cmd.time = time;
 	tin.pause();
-	libemsi.request(cmd,
+	libclient.request(cmd,
 		function(err, asw) {
 			tin.resume();
 			if (err) {

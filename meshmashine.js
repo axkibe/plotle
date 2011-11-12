@@ -558,8 +558,9 @@ MeshMashine.prototype.transformOnMoment = function(way, alter) {
 	case 'split':
 		if (!src.sign.isSubOf(sign, src.pivot)) return way;
 		log('te', 'alter-split');
-		var src_i = src.sign[src.pivot];
-		var sig_i = sign[src.pivot];
+		var src_i = src.sign.arc(src.pivot);
+		var sig_i = sign.arc(src.pivot);
+		log('te', 'sig_i', sig_i, 'src_i', src_i);
 		if (sig_i < src_i) {
 			log('te', 'split downside');
 			return way;
@@ -585,7 +586,7 @@ MeshMashine.prototype.transformOnMoment = function(way, alter) {
 			// case 1:
 			if (sig_pfx.at1 > src_pfx.at1) {
 				log('te', 'split leftside');
-				sign[src.pivot]++;
+				sign.addarc(src.pivot)++;
 				sig_pfx.at1 -= src_pfx.at1;
 				sig_pfx.at2 -= src_pfx.at1;
 				return way;
@@ -617,8 +618,8 @@ MeshMashine.prototype.transformOnMoment = function(way, alter) {
 	case 'join':
 		if (!trg.sign.isSubOf(sign, trg.pivot)) return way;
 		log('te', 'alter-join');
-		var trg_i = trg.sign[trg.pivot];
-		var sig_i = sign[trg.pivot];
+		var trg_i = trg.sign.arc(trg.pivot);
+		var sig_i = sign.arc(trg.pivot);
 		if (sig_i < trg_i) {
 			log('te', 'join downside');
 			return way;
@@ -705,7 +706,7 @@ MeshMashine.prototype.transform = function(time, way) {
 			waya = this.transformOnMoment(waya, moment);
 		} else {
 			for(var i = 0; i < waya.length; i++) {
-				var tom = transformOnMoment(waya[si], moment);
+				var tom = this.transformOnMoment(waya[i], moment);
 				if (isArray(tom)) {
 					for(var tomi = 0; tomi < tom.length; tomi++) {
 						waya.splice(i++, tom[tomi]);
