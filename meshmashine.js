@@ -40,20 +40,26 @@ function clone(original) {
 	if(typeof(original) !== 'object' || original === null) {
 		return original;
 	}
+	if (original instanceof Signature) {
+		return new Signature(original, 'clone');
+	}
+
 	var copy = original.constructor();
-	for(var i in original) {
-		copy[i] = clone(original[i]);
+	for(var k in original) {
+		copy[k] = clone(original[k]);
 	}
 	return copy;
 }
 
 /**
-| copies a table one level only
+| Deep freezes an object.
 */
-function duplicate(original) {
-	var dup = {};
-	for(var k in original) dup[k] = original[k];
-	return dup;
+function deepFreeze(obj) {
+	if (typeof(obj) !== 'object' || obj === null) return;
+	Object.freeze(obj);
+	for (var k in obj) {
+		deepFreeze(obj[k]);
+	}
 }
 
 /**
@@ -100,6 +106,9 @@ function fail(args, aoffset) {
 	for(var i = 2; i < arguments.length; i++) {
 		a.push(arguments[i]);
 	}
+	var b = a.slice();
+	b.unshift('fail');
+	log.apply(this, b);
 	throw reject(a.join(' '));
 }
 
@@ -266,21 +275,6 @@ Signature.prototype.isSubOf = function(o, slen) {
 Signature.prototype.toString = function() {
 	return this._sign.toString();
 }
-	
-
-/**
-| Freezes this signature
-*/
-Signature.prototype.freeze = function() {
-	if (this.readonly) return;
-	this.readonly = true;
-	Object.freeze(this);
-	Object.freeze(this._sign);
-	var pfx = this.postfix;
-	if (pfx) {
-		Object.freeze(pfx);
-	}
-}
 
 /**
 | Attunes the '_end' things of the postfix to match the string it points to.
@@ -296,11 +290,12 @@ Signature.prototype.attunePostfix = function(str, name) {
 		check(!this.readonly, name, 'cannot change readonly');
 		pfx.at2 = str.length;
 	}
+	/* todo proper checking
 	checkWithin(pfx.at1, 0, str.length, name, 'postfix.at1 invalid');
 	if (is(pfx.at2)) {
 		checkWithin(pfx.at2, 0, str.length, name, 'postfix.at2 invalid');
 		check(pfx.at2 >= pfx.at1, name, 'postfix: at2 < at1');
-	}
+	}*/
 	return pfx;
 }
 
@@ -330,12 +325,6 @@ Alternation.prototype.type = function(backward) {
 		throw new Error('invalid type');
 	}
 	return null;
-}
-
-Alternation.prototype.freeze = function() {
-	if (this.src.sign) this.src.sign.freeze();
-	if (this.trg.sign) this.trg.sign.freeze();
-	Object.freeze(this);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -384,7 +373,7 @@ NTree.prototype.set = function(sign, val, slen) {
 		check(node !== null, sign.name, 'points nowhere');
 		node = node[sign.arc(i)];
 	}
-	node[sign.arc(i)] = val;
+	node[sign.arc(i)] = clone(val);
 }
 
 /**
@@ -605,15 +594,12 @@ MeshMashine.prototype.transformOnMoment = function(way, alter) {
 			log('te', 'split split');
 			var sat2 = sig_pfx.at2 - src_pfx.at1;
 			sig_pfx.at2 = src_pfx.at1;
-			if (is(way.val)) way.val = way.val.substring(0, sat2);
 
-			var way2 = duplicate(way);
-			way2.sign = new Signature(way2.sign, 'split');
+			var way2 = clone(way);
 			way2.sign.addarc(src.pivot, 1);
 			var sig2_pfx = way2.sign.postfix;
 			sig2_pfx.at1 = 0;
 			sig2_pfx.at2 = sat2;
-			if (is(way2.val)) way2.val = way2.val.substring(sat2);
 			return [way, way2];
 		}
 		if (sign.isIndex()) {
@@ -722,7 +708,7 @@ MeshMashine.prototype.transform = function(time, way) {
 				var tom = transformOnMoment(waya[si], moment);
 				if (isArray(tom)) {
 					for(var tomi = 0; tomi < tom.length; tomi++) {
-						waya.splice(i++, asw[tomi]);
+						waya.splice(i++, tom[tomi]);
 					}
 				} else {
 					check(tom === waya[i], 'tom !== waya[i]');
@@ -775,23 +761,23 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 		} else if (!isArray(tsrca) && isArray(ttrga))  {
 			alta = [];
 			for(var i = 0; i < ttrga.length; i++) {
-				alta[i] = new Alternation(tsrca, ttrga[i]);
+				alta[i] = new Alternation(clone(tsrca), ttrga[i]);
 			}
 		} else if (isArray(tsrca) && !isArray(ttrga)) {
 			alta = [];
 			for(var i = 0; i < tsrca.length; i++) {
-				alta[i] = new Alternation(tsrca[i], ttrga);
+				alta[i] = new Alternation(tsrca[i], clone(ttrga));
 			}
 		}
 
 		if (!isArray(alta)) {
 			this.repository.alter(alta, false);
-			alta.freeze();
+			deepFreeze(alta);
 			this.history.push(alta);
 		} else {
 			for(var i = 0; i < alta.length; i++) {
 				this.repository.alter(alta[i], false);
-				alta[i].freeze();
+				deepFreeze(alta[i]);
 				this.history.push(alta[i]);
 			}
 		}
