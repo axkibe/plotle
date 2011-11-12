@@ -28,7 +28,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 "use strict";
 
-var debug = true;
+var debug = false;
 
 var log = require('./meshcraft-log');
 
@@ -349,7 +349,7 @@ NTree.prototype.get = function(sign, slen) {
 
 	var node = this.tree;
 	for (var i = 0; i < slen; i++) {
-		check(node !== null, sign.name, 'points nowhere');
+		check(isnon(node), sign.name, 'points nowhere');
 		node = node[sign.arc(i)];
 	}
 	return is(node) ? node : null;
@@ -370,7 +370,7 @@ NTree.prototype.set = function(sign, val, slen) {
 	var i;
 	var node = this.tree;
 	for(i = 0; i < slen - 1; i++) {
-		check(node !== null, sign.name, 'points nowhere');
+		check(isnon(node), sign.name, 'points nowhere');
 		node = node[sign.arc(i)];
 	}
 	node[sign.arc(i)] = clone(val);
@@ -734,11 +734,11 @@ MeshMashine.prototype._reflect = function(time, sign) {
 		for(var hi = this.history.length - 1; hi >= time; hi--) {
 			reflect.alter(this.history[hi], true);
 		}
-		return reflect.get(sign);
 	} catch (err) {
-		// nothing should ever fail, does rethrow as lethal error
+		// this should not ever fail, does rethrow a lethal error
 		err.ok = null; throw err;
 	}
+	return reflect.get(sign);
 }
 
 /**

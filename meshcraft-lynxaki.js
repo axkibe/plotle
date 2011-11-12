@@ -42,12 +42,17 @@ if (config.initmessage) {
 	console.log(config.initmessage);
 }
 
-var root = j2o(process.argv[2]);
-if (root === null) {
-	console.log('"'+process.argv[2]+'" not a valid root');
-	process.exit(1);
+var root;
+if (process.argv.length < 3) {
+	root = ['welcome', 'items', 0, 'doc'];
+} else {
+	root = j2o(process.argv[2]);
+	if (root === null) {
+		console.log('"'+process.argv[2]+'" not a valid root');
+		process.exit(1);
+	}
+	if (!(root instanceof Array)) root = [root];
 }
-if (!(root instanceof Array)) root = [root];
 
 // shortcuts for process.stin/out
 var tin  = process.stdin;
@@ -273,8 +278,11 @@ init();
 
 function getRoot(callback) {
 	get(root, function(err, asw) {
-		if (err) exit(err.message);
-		tree = asw.node;
+		if (err) {
+			tree = null;
+		} else {
+			tree = asw.node;
+		}
 		drawScreen();
 		if (callback) callback();
 	})
@@ -348,6 +356,7 @@ tin.on('keypress', function(ch, key) {
 		if (cx > 0) cx--;
 		break;
 	case 'right' :
+		if (!tree || !tree[cy] || !tree[cy]['text%']) break;
 		var max = tree[cy]['text%'].length;
 		if (change.line === cy && change.cmd === 'insert') max += change.val.length;
 		if (cx < max) cx++;
@@ -357,6 +366,7 @@ tin.on('keypress', function(ch, key) {
 		cy--;
 		break;
 	case 'down' :
+		if (!tree) break;
 		if (cy >= tree.length - 1) break;
 		cy++;
 		break;
