@@ -38,24 +38,28 @@ libemsi.request({cmd: "now"}, function (err, now) {
 			cmd: 'alter',
 			time: now.time,
 			src: {
-				val: [
-					{
-						"type":  'para',
-						"text%": 'If you can dream---and not make dreams your master;',
+				val: {
+					'type': 'note',
+					'zone': {
+						'pnw' : { 'x': 100, 'y': 100 },
+						'pse' : { 'x': 300, 'y': 200 },
 					},
-					{
-						"type": 'para',
-						"text%": 'If you can think---and not make thoughts your aim,',
-					},
-					{
-						"type":  'para',
-						"text%": 'If you can meet with Triumph and Disaster',
-					},
-					{
-						"type": 'para',
-						"text%": 'And treat those two impostors just the same',
-					},
-				],
+					'doc': [
+						{
+							'type':  'para',
+							'text%': 'If you can dream---and not make dreams your master;',
+						}, {
+							'type': 'para',
+							'text%': 'If you can think---and not make thoughts your aim,',
+						}, {
+							'type':  'para',
+							'text%': 'If you can meet with Triumph and Disaster',
+						}, {
+							'type': 'para',
+							'text%': 'And treat those two impostors just the same',
+						},
+					],
+				},
 			},
 			trg: {
 				sign: sign,
