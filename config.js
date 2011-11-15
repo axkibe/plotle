@@ -1,5 +1,5 @@
 // editable configuration
-module.exports= {
+module.exports = {
 	ip   : '127.0.0.1',
 	port : 8833,
 	log  : {
@@ -11,7 +11,6 @@ module.exports= {
 		mm:     true,
 		start:  true,
 		te:     true,
-		web:    false,
+		web:    true,
 	}
 }
-

@@ -26,11 +26,15 @@
  License: GNU Affero AGPLv3
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+var log;
+var MeshMashine = function() {
+
 "use strict";
 
 var debug = false;
 
-var log = require('./meshcraft-log');
+try { if (!log) log = require('./meshcraft-log'); } catch(e) { /* browser */ }
 
 /**
 | Deep copies an object.
@@ -491,7 +495,8 @@ NTree.prototype.alter = function(alternation, backward) {
 		// where trg span should end
 		var tat2 = trg_pfx.at1 + src.val.length;
 		if (is(trg_pfx.at2)) {
-			check(trg_pfx.at2 === tat2, cm, 'trg.sign...at2 preset incorrectly');
+			check(trg_pfx.at2 === tat2, cm, 'trg.sign...at2 preset incorrectly',
+				trg_pfx.at2, '!==', tat2);
 		} else {
 			trg_pfx.at2 = tat2;
 		}
@@ -746,6 +751,7 @@ MeshMashine.prototype._reflect = function(time, sign) {
 | Alters the repository.
 */
 MeshMashine.prototype.alter = function(time, src, trg) {
+	log(true, 'test');
 	try {
 		log('mm', 'alter time:', time, 'src:', src, 'trg:', trg);
 		if (!this._isValidTime(time)) return reject('invalid time');
@@ -786,6 +792,7 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 		return {ok: true, time: this.history.length, alts: alta };
 	} catch(err) {
 		// returns rejections but rethrows coding errors.
+		log(true, 'error');
 		if (err.ok !== false) throw err; else return err;
 	}
 }
@@ -839,4 +846,8 @@ MeshMashine.prototype.update = function(time) {
 	return {ok: true, time: this.history.length, update: update };
 }
 
-module.exports = MeshMashine;
+return MeshMashine;
+
+}();
+
+try {  module.exports = MeshMashine; } catch (e) { /* broswer */ }

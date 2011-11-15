@@ -6,12 +6,85 @@
 */
 
 /**
-| Wrapper for _log to hide internals in brower context
+| In Browser this should already be defined.
+*/
+var config;
+try { config = require('./config'); } catch(e) { }
+
+/**
+| Logs a number of inspected arguments.
+| First argument is category, logging will only be done if configured so in config.js
 */
 var log = function() {
-
-	// todo make browser equivalent.
-	var inspect = require('util').inspect;
+	// self written instead of nodeJS' one, so its identical in server and browser.
+	// pushes the string onto a
+	function inspect(o, a, indent) {
+		if (!indent) indent = 0;
+		var to = typeof(o);
+		if (to === 'function')	{
+			a.push('function ');
+			if (o.name) a.push(o.name);
+			return;
+		}
+		if (to === 'string' || o instanceof String) {
+			a.push('"');
+			a.push(o);
+			a.push('"');
+			return;
+		}
+		if (to === 'number') {
+			a.push(o);
+			return;
+		}
+		if (o === null) {
+			a.push('null');
+			return;
+		}
+		if (o instanceof Array) {
+			a.push('[\n');
+			for(var k = 0; k < o.length; k++) {
+				if(k > 0) {
+					a.push(',\n');
+				}
+				for (var i = 0; i < indent; i++) { a.push('  '); }
+				inspect(o[k], a, indent + 1);
+			}
+			var first = true;
+			for(var k in o) {
+				if (typeof(k) === 'number' || parseInt(k) == k || !o.hasOwnProperty(k)) continue;
+				if (first) {
+					a.push('\n');
+					for (var i = 0; i < indent; i++) { a.push('  '); }
+					a.push('|\n');
+					first = false;
+				} else {
+					a.push(',\n');
+					for (var i = 0; i < indent; i++) { a.push('  '); }
+				}
+				a.push(k);
+				a.push(': ');
+				inspect(o[k], a, indent + 1);
+				a.push('\n');
+			}
+			a.push('\n');
+			for (var i = 0; i < indent - 1; i++) { a.push('  '); }
+			a.push(']');
+			return;
+		}
+		a.push('{\n');
+		var first = true;
+		for(var k in o) {
+			if (!o.hasOwnProperty(k)) continue;
+			if (first) { first = false; } else { a.push(',\n')};
+			for (var i = 0; i < indent; i++) { a.push('  '); }
+			a.push(k);
+			a.push(': ');
+			inspect(o[k], a, indent + 1);
+		}
+		a.push('\n');
+		for (var i = 0; i < indent - 1; i++) { a.push('  '); }
+		a.push('}');
+	}
 
 	/**
 	| Pushes a 2-decimal number on an array.
@@ -39,8 +112,8 @@ var log = function() {
 	/**
 	| Logs if category is configured to be logged.
 	*/
-	function _log(category) {
-		if (category !== true && !log.enable.all && (!log || !log.enable[category])) return;
+	return function(category) {
+		if (category !== true && !config.log.all && (!log || !config.log[category])) return;
 		var a = timestamp();
 		if (category !== true) {
 			a.push('(');
@@ -49,23 +122,14 @@ var log = function() {
 		}
 		for(var i = 1; i < arguments.length; i++) {
 			if (i > 1) a.push(' ');
-			var arg = arguments[i];
-			if (typeof(arg) === 'string' || arg instanceof String) {
-				a.push(arg);
-			} else {
-				a.push(inspect(arg, true, null));
-			}
+			inspect(arguments[i], a);
 		}
 		console.log(a.join(''));
-	}
-
-	return _log;
+	};
 }();
 
-/**
-| Default enabled categories
-*/
-log.enable = {fail: true};
+try { module.exports = log; } catch(e) {};
 
-module.exports = log;
+
+
 

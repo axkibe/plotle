@@ -7,22 +7,22 @@
 */
 
 var util       = require('util');
-var libemsi    = require('./meshcraft-libclient');
+var libclient    = require('./meshcraft-libclient');
 
-var j2o    = libemsi.j2o;
-var config = libemsi.config();
+var j2o    = libclient.j2o;
+var config = libclient.config();
 if (config.initmessage) {
 	console.log(config.initmessage);
 }
 
 var sign = ["welcome"];
 
-libemsi.request({cmd: "now"}, function (err, now) {
+libclient.request({cmd: "now"}, function (err, now) {
 	if (err) {
 		console.log('Error: '+err.message);
 		process.exit(1);
 	}
-	libemsi.request({
+	libclient.request({
 			cmd: 'alter',
 			time: now.time,
 			src: {

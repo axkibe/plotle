@@ -52,23 +52,13 @@ var MeshMashine = require('./meshmashine');
 try {
 	config = require('./config');
 } catch (e) {
-	log(true, 'no config found, defaulting to localhost:8833');
+	console.log(true, 'no config found, defaulting to localhost:8833');
 	config = {
 		ip   : '127.0.0.1',
 		port : 8833,
 		log  : {},
 	};
 }
-
-/**
-| Sets enabled logging categories from config
-*/
-(function() {
-	if (!config.log) return;
-	for (var c in config.log) {
-		log.enable[c] = config.log[c];
-	}
-}());
 
 var mm = new MeshMashine();
 
@@ -88,21 +78,16 @@ var content = {
 		meshcraft_html,
 	'/meshcraft.html':
 		meshcraft_html,
-	'/canvas2d.js': {
-		file: './canvas2d.js',
-		mime: 'text/javascript',
-		code: 'utf-8',
-	},
-	'/meshcraft.js': {
-		file: './meshcraft.js',
-		mime: 'text/javascript',
-		code: 'utf-8',
-	},
-	'/favicon.ico': {
-		file: './favicon.ico',
-		mime: 'image/x-icon',
-		code: 'binary',
-	},
+	'/meshcraft-canvas.js':
+		{ file: './meshcraft-canvas.js', mime: 'text/javascript', code: 'utf-8',  },
+	'/meshcraft-log.js':
+		{ file: './meshcraft-log.js',    mime: 'text/javascript', code: 'utf-8',  },
+	'/meshcraft-shell.js':
+		{ file: './meshcraft-shell.js',  mime: 'text/javascript', code: 'utf-8',  },
+	'/meshmashine.js':
+		{ file: './meshmashine.js',      mime: 'text/javascript', code: 'utf-8',  },
+	'/favicon.ico':
+		{ file: './favicon.ico',         mime: 'image/x-icon',    code: 'binary', },
 };
 
 /**
@@ -154,11 +139,29 @@ var mmAjax = function(req, red, res) {
 }
 
 /**
+| Transmits the config relevant to the client
+*/
+function webConfig(req, red, res) {
+	res.writeHead(200, {'Content-Type': 'application/json'});
+	res.write('var config = {\n');
+	res.write('\tlog : {\n');
+	for(k in config.log) {
+		res.write('\t\t'+k+' : true,\n');
+	}
+	res.write('\t}\n');
+	res.end('};\n')
+}
+
+/**
 | Dispatches web request
 */
 var dispatch = function(req, red, res) {
 	if (red.pathname === '/mm') {
 		mmAjax(req, red, res);
+		return;
+	}
+	if (red.pathname === '/config.js') {
+		webConfig(req, red, res);
 		return;
 	}
 
@@ -170,10 +173,8 @@ var dispatch = function(req, red, res) {
 
 	fs.readFile(co.file,
 	function(err, data) {
-		if (err) {
-			webError(res, 500, 'Internal Server Error');
-		}
-		res.writeHead(200, co.mime);
+		if (err) { webError(res, 500, 'Internal Server Error'); }
+		res.writeHead(200, {'Content-Type': co.mime});
 		res.end(data, co.code);
 	});
 }
