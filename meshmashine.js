@@ -28,18 +28,33 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 var log;
-var MeshMashine = function() {
+
+var clone;
+var config;
+var debug;
+var deepFreeze;
+var MeshMashine;
+var Signature;
+try {
+	// if not fails running nodejs
+	config = require('./config');
+	log    = require('./meshcraft-log');
+	debug  = config.debug === true || (config.debug % 4 - config.debug % 2) === 2;
+} catch(e) {
+	// require failed running in browser
+	debug  = config.debug === true || (config.debug % 2) === 1;
+}
+
+(function() {
 
 "use strict";
 
 var debug = false;
 
-try { if (!log) log = require('./meshcraft-log'); } catch(e) { /* browser */ }
-
 /**
 | Deep copies an object.
 */
-function clone(original) {
+clone = function(original) {
 	//return JSON.parse(JSON.stringify(original));
 	if(typeof(original) !== 'object' || original === null) {
 		return original;
@@ -58,7 +73,7 @@ function clone(original) {
 /**
 | Deep freezes an object.
 */
-function deepFreeze(obj) {
+deepFreeze = function(obj) {
 	if (typeof(obj) !== 'object' || obj === null) return;
 	Object.freeze(obj);
 	for (var k in obj) {
@@ -141,9 +156,8 @@ function fixate(obj, key, value) {
 
 /**
 | Signates an entry, string index or string span.
-| TODO check for leading '_'
 */
-function Signature(sign, name) {
+Signature = function(sign, name) {
 	if (isSign(sign)) sign = sign._sign;
 	check(isArray(sign), name, 'not an array');
 	for (var i = 0; i < sign.length; i++) {
@@ -537,7 +551,7 @@ NTree.prototype.alter = function(alternation, backward) {
 /**
 | Constructor.
 */
-function MeshMashine() {
+MeshMashine = function() {
 	this.repository = new NTree();
 	this.history    = [];
 }
@@ -804,14 +818,18 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 MeshMashine.prototype.get = function(time, sign) {
 	try {
 		log('mm', 'get time:', time, ' sign:', sign);
-		if (!this._isValidTime(time)) return reject('invalid time');
-		sign = new Signature(sign, 'sign');
+		if (time > 0) {
+			if (!this._isValidTime(time)) return reject('invalid time');
 
-		var reflect = this._reflect(time, sign);
-		// remove nulls
-		// todo, hierachical.
-		for(var key in reflect) {
-			if (reflect[key] === null) delete reflect[key];
+			var reflect = this._reflect(time, sign);
+			// remove nulls
+			// todo, hierachical.
+			for(var key in reflect) {
+				if (reflect[key] === null) delete reflect[key];
+			}
+		} else {
+			reflect = this.repository.get(sign);
+			time = this.history.length;
 		}
 		log('mm', 'ok', time, reflect);
 		return {ok: true, time: time, node: reflect };
@@ -846,8 +864,16 @@ MeshMashine.prototype.update = function(time) {
 	return {ok: true, time: this.history.length, update: update };
 }
 
-return MeshMashine;
 
-}();
+try {
+	module.exports = {
+		deepFreeze  : deepFreeze,
+		clone       : clone,
+		MeshMashine : MeshMashine,
+		Signature   : Signature
+	};
+} catch(err){
+	// browser
+}
 
-try {  module.exports = MeshMashine; } catch (e) { /* broswer */ }
+}());

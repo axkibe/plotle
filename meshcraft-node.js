@@ -35,7 +35,13 @@ var url  = require('url');
 var fs   = require('fs');
 
 var log  = require('./meshcraft-log');
-var MeshMashine = require('./meshmashine');
+var Meshmashine, Signature;
+
+(function() {
+	var mm_module = require('./meshmashine');
+	MeshMashine = mm_module.MeshMashine;
+	Signature = mm_module.Signature;
+}());
 
 /**
 | Loads the configuration file
@@ -54,11 +60,13 @@ try {
 } catch (e) {
 	console.log(true, 'no config found, defaulting to localhost:8833');
 	config = {
-		ip   : '127.0.0.1',
-		port : 8833,
-		log  : {},
+		debug : false,
+		ip    : '127.0.0.1',
+		port  : 8833,
+		log   : {},
 	};
 }
+var debug = config.debug === true || (config.debug % 4 - config.debug % 2) === 2;
 
 var mm = new MeshMashine();
 
@@ -124,12 +132,25 @@ var mmAjax = function(req, red, res) {
 			webError(res, 400, 'Not valid JSON');
 			return;
 		}
-		var asw;
+		var asw, sign;
 		switch (cmd.cmd) {
-		case 'alter':  asw = mm.alter(cmd.time, cmd.src, cmd.trg);    break;
-		case 'get':    asw = mm.get(cmd.time, cmd.sign);              break;
-		case 'now':    asw = mm.now();                                break;
-		case 'update': asw = mm.update(cmd.time);                     break;
+		case 'alter':
+			asw = mm.alter(cmd.time, cmd.src, cmd.trg);
+			break;
+		case 'get':
+			try {
+				sign = new Signature(cmd.sign);
+			} catch (e) {
+				if (e.ok !== false) throw e; else asw = e;
+			}
+			asw = mm.get(cmd.time, sign);
+			break;
+		case 'now':
+			asw = mm.now();
+			break;
+		case 'update':
+			asw = mm.update(cmd.time);
+			break;
 		default: webError(res, 400, 'unknown command "'+cmd.cmd+'"'); return;
 		}
 		log('ajax', 'out', asw);
@@ -144,6 +165,7 @@ var mmAjax = function(req, red, res) {
 function webConfig(req, red, res) {
 	res.writeHead(200, {'Content-Type': 'application/json'});
 	res.write('var config = {\n');
+	res.write('\tdebug : '+(config.debug === true || config.debug % 2 === 1 ? 'true' : 'false') + ',\n');
 	res.write('\tlog : {\n');
 	for(k in config.log) {
 		res.write('\t\t'+k+' : true,\n');

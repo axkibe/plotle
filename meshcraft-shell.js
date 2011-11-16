@@ -31,7 +31,6 @@ var max = Math.max;
 var min = Math.min;
 
 var cos30         = MCCanvas.cos30;
-var debug         = MCCanvas.debug;
 var half          = MCCanvas.half;
 var tan30         = MCCanvas.tan30;
 var subclass      = MCCanvas.subclass;
@@ -1394,16 +1393,13 @@ _init : function() {
 		}
 	}
 
-	this.repository = new Repository();
+	this.mio = new MeshIO();
 	this.space = new Space();
 	this.startBlinker();
 	// hinders init to be called another time
 	delete this.init;
 	delete this._init;
 
-	if (!this.repository.loadLocalStorage()) {
-		this.repository.importFromJString(demoRepository);
-	}
 	this.space.redraw();
 }};
 
@@ -1675,19 +1671,20 @@ function Space() {
 | Redraws the complete space.
 */
 Space.prototype.redraw = function() {
-	var items = System.repository.items;
-	var zidx  = System.repository.zidx;
+	var current = System.mio.getCurrentSpace();
+	var items   = current.items;
+	var z       = current.z;
+	log('debug', 'z', z);
 	var editor = System.editor;
 	var canvas = System.canvas;
-	var c2d = this.c2d;
+	var c2d = this.c2d; // todo rename
 	editor.caret.save = null;
 	this.selection = editor.selection;
 	this.canvas = System.canvas;
 	c2d.attune();
 
-	for(var i = zidx.length - 1; i >= 0; i--) {
-		var it = items[zidx[i]]; // todo shorten
-		it.draw(c2d, this.selection);
+	for(var zi = z.length - 1; zi >= 0; zi--) {
+		Item.draw(c2d, items[z[zi]], this.selection);
 	}
 	if (this.focus) this.focus.drawHandles(c2d);
 
@@ -2947,17 +2944,14 @@ Object.defineProperty(DTree.prototype, 'height', {
  .^ | |  |-' | | |
  `--' `' `-' ' ' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
  Something on a canvas.
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Item(id) {
 	this.id = id;
 	this._h6slice = null;
 }
-
 /**
-| Return the hexgon slice that is the handle
+| Return the hexagon slice that is the handle
 */
 Object.defineProperty(Item.prototype, 'h6slice', {
 	get: function() {
@@ -4164,18 +4158,19 @@ VectorGraph.prototype.getCanvas = function() {
 	}
 	return bcanvas;
 }
+*/
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- .-,--.                   .
-  `|__/ ,-. ,-. ,-. ,-. . |- ,-. ,-. . .
-  )| \  |-' | | | | `-. | |  | | |   | |
-  `'  ` `-' |-' `-' `-' ' `' `-' '   `-|
-~ ~ ~ ~ ~ ~ | ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ /|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-            '                        `-'
+ ,-,-,-.           .   ,-_/ ,,--.
+ `,| | |   ,-. ,-. |-. '  | |`, |
+   | ; | . |-' `-. | | .^ | |   |
+   '   `-' `-' `-' ' ' `--' `---'
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ Communicates with the server, holds caches.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Repository() {
-	log(true, "this is a test");
+function MeshIO() {
 	this.mm = new MeshMashine();
+	this.spacesign = new Signature(["welcome"]);
 
 	// for now hand init
 	this.mm.alter(0,
@@ -4216,6 +4211,20 @@ function Repository() {
 		});
 }
 
+MeshIO.prototype.getCurrentSpace = function() {
+	var space = this.mm.get(-1, this.spacesign);
+	return space.node;
+}
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ .-,--.                   .
+  `|__/ ,-. ,-. ,-. ,-. . |- ,-. ,-. . .
+  )| \  |-' | | | | `-. | |  | | |   | |
+  `'  ` `-' |-' `-' `-' ' `' `-' '   `-|
+~ ~ ~ ~ ~ ~ | ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ /|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+            '                        `-'
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /*
 Repository.prototype.reset = function() {
 	// all items
