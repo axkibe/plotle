@@ -28,20 +28,16 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-var config;
 var util = require('util');
 var http = require('http');
 var url  = require('url');
 var fs   = require('fs');
 
-var log  = require('./meshcraft-log');
-var Meshmashine, Signature;
+var config = require('./config');
+var jools = require('./meshcraft-jools');
+var log = jools.log;
 
-(function() {
-	var mm_module = require('./meshmashine');
-	MeshMashine = mm_module.MeshMashine;
-	Signature = mm_module.Signature;
-}());
+var meshmashine = require('./meshmashine');
 
 /**
 | Loads the configuration file
@@ -68,7 +64,7 @@ try {
 }
 var debug = config.debug === true || (config.debug % 4 - config.debug % 2) === 2;
 
-var mm = new MeshMashine();
+var mm = new meshmashine.MeshMashine(meshmashine.MeshTreeGeneric);
 
 /**
 | Files served.
@@ -80,16 +76,13 @@ var meshcraft_html = {
 };
 
 var content = {
-	'/':
-		meshcraft_html,
-	'/index.html':
-		meshcraft_html,
-	'/meshcraft.html':
-		meshcraft_html,
+	'/':               meshcraft_html,
+	'/index.html':     meshcraft_html,
+	'/meshcraft.html': meshcraft_html,
 	'/meshcraft-canvas.js':
 		{ file: './meshcraft-canvas.js', mime: 'text/javascript', code: 'utf-8',  },
-	'/meshcraft-log.js':
-		{ file: './meshcraft-log.js',    mime: 'text/javascript', code: 'utf-8',  },
+	'/meshcraft-jools.js':
+		{ file: './meshcraft-jools.js',  mime: 'text/javascript', code: 'utf-8',  },
 	'/meshcraft-shell.js':
 		{ file: './meshcraft-shell.js',  mime: 'text/javascript', code: 'utf-8',  },
 	'/meshmashine.js':
@@ -139,7 +132,7 @@ var mmAjax = function(req, red, res) {
 			break;
 		case 'get':
 			try {
-				sign = new Signature(cmd.sign);
+				sign = new meshmashine.Signature(cmd.sign);
 			} catch (e) {
 				if (e.ok !== false) throw e; else asw = e;
 			}
@@ -190,7 +183,7 @@ var dispatch = function(req, red, res) {
 	var co = content[red.pathname];
 	if (!co) {
 		res.writeHead(404, {'Content-Type': 'text/plain'});
-		webErro(res, '404 Bad Reqeust');
+		webError(res, '404 Bad Reqeust');
 	}
 
 	fs.readFile(co.file,
@@ -204,9 +197,9 @@ var dispatch = function(req, red, res) {
 /**
 | Startup.
 */
-for(var i = 0; i < 40; i++) {
-	console.log('');
-}
+//for(var i = 0; i < 40; i++) {
+//	console.log('');
+//}
 log('start', 'Starting server @ http://'+(config.ip || '*')+'/:'+config.port);
 http.createServer(
 function (req, res) {

@@ -23,7 +23,11 @@
 | License: GNU Affero GPLv3
 */
 
+// TODO encapsulate
+
 'use strict';
+
+var subclass = jools.subclass;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,
@@ -82,19 +86,6 @@ function MCCanvas(a1, a2) {
 	this.pan = MCCanvas.Point.zero;
 }
 
-
-/**
-| Subclassing helper.
-|
-| sub: prototype to become a subclass.
-| base: prototype to become the baseclass.
-*/
-MCCanvas.subclass = function(sub, base) {
-   function inherit() {}
-   inherit.prototype = base.prototype;
-   sub.prototype = new inherit();
-   sub.prototype.constructor = sub;
-}
 
 /**
 | sets a readonly value
@@ -974,7 +965,7 @@ MCCanvas.RoundRect = function(a1, a2, a3) {
 		MCCanvas.fixate(this, 'crad', a2);
 	}
 }
-MCCanvas.subclass(MCCanvas.RoundRect, MCCanvas.Rect);
+subclass(MCCanvas.RoundRect, MCCanvas.Rect);
 
 /**
 | Draws the roundrect.

@@ -30,10 +30,11 @@ var abs = Math.abs;
 var max = Math.max;
 var min = Math.min;
 
+var subclass      = jools.subclass;
+
 var cos30         = MCCanvas.cos30;
 var half          = MCCanvas.half;
 var tan30         = MCCanvas.tan30;
-var subclass      = MCCanvas.subclass;
 var Hexagon       = MCCanvas.Hexagon;
 var HexagonFlower = MCCanvas.HexagonFlower;
 var HexagonSlice  = MCCanvas.HexagonSlice;
@@ -4169,8 +4170,8 @@ VectorGraph.prototype.getCanvas = function() {
  Communicates with the server, holds caches.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function MeshIO() {
-	this.mm = new MeshMashine();
-	this.spacesign = new Signature(["welcome"]);
+	this.mm = new meshmashine.MeshMashine();
+	this.spacesign = new meshmashine.Signature(["welcome"]);
 
 	// for now hand init
 	this.mm.alter(0,

@@ -27,34 +27,36 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-var log;
+/**
+| Imports
+*/
+var jools;
 
-var clone;
-var config;
-var debug;
-var deepFreeze;
-var MeshMashine;
-var Signature;
-try {
-	// if not fails running nodejs
-	config = require('./config');
-	log    = require('./meshcraft-log');
-	debug  = config.debug === true || (config.debug % 4 - config.debug % 2) === 2;
-} catch(e) {
-	// require failed running in browser
-	debug  = config.debug === true || (config.debug % 2) === 1;
-}
+/**
+| Exports
+*/
+var meshmashine;
 
+/**
+| Capsule
+*/
 (function() {
 
 "use strict";
 
-var debug = false;
+try {
+	// if not fails running nodejs
+	jools =  require('./meshcraft-jools');
+} catch(e) {
+	// require failed, running in browser
+}
+
+var log = jools.log;
 
 /**
 | Deep copies an object.
 */
-clone = function(original) {
+function clone(original) {
 	//return JSON.parse(JSON.stringify(original));
 	if(typeof(original) !== 'object' || original === null) {
 		return original;
@@ -73,7 +75,7 @@ clone = function(original) {
 /**
 | Deep freezes an object.
 */
-deepFreeze = function(obj) {
+function deepFreeze(obj) {
 	if (typeof(obj) !== 'object' || obj === null) return;
 	Object.freeze(obj);
 	for (var k in obj) {
@@ -115,7 +117,7 @@ function deepEqual(o1, o2) {
 | Returns a rejection error
 */
 function reject(message) {
-	if (debug) throw new Error(message); // in debug mode any failure is fatal.
+	if (jools.debug) throw new Error(message); // in debug mode any failure is fatal.
 	log('mm', 'reject', message);
 	return {ok: false, message: message};
 }
@@ -157,7 +159,7 @@ function fixate(obj, key, value) {
 /**
 | Signates an entry, string index or string span.
 */
-Signature = function(sign, name) {
+function Signature(sign, name) {
 	if (isSign(sign)) sign = sign._sign;
 	check(isArray(sign), name, 'not an array');
 	for (var i = 0; i < sign.length; i++) {
@@ -175,6 +177,7 @@ Signature = function(sign, name) {
 Object.defineProperty(Signature.prototype, 'length', {
 	get: function() { return this._sign.length; },
 });
+
 
 /**
 | If the signature is an index or span it will return that.
@@ -226,6 +229,15 @@ Signature.prototype.arc = function(i) {
 	if (i < 0) i = this._sign.length + i;
 	if (i < 0) return null;
 	return this._sign[i];
+}
+
+/**
+| Fits the arc numberation to be in this signature.
+*/
+Signature.prototype.fitarc(sa, def) {
+	if (!is(sa)) sa = def;
+	if (sa < 0) sa = this.pathlen + sa;
+	if (sa < 0) sa = 0;
 }
 
 /**
@@ -338,7 +350,7 @@ Alternation.prototype.type = function(backward) {
 	if (is(src.val) && trg.sign && trg.sign.isPath()) return 'set';
 	if (is(src.val) && trg.sign && trg.sign.isIndex()) return 'insert';
 	if (src.sign && src.sign.isSpan() && !(trg.sign && trg.sign.isIndex())) return 'remove';
-	if (debug) {
+	if (jools.debug) {
 		log('debug', this);
 		throw new Error('invalid type');
 	}
@@ -353,22 +365,21 @@ Alternation.prototype.type = function(backward) {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  a node tree (repository)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function NTree(master) {
+function MeshTreeGeneric(master) {
 	this.tree = master ? clone(master.tree) : {};
 }
 
 /**
 | Returns the subnode path points at.
 */
-NTree.prototype.get = function(sign, slen) {
-	if (!is(slen)) slen = sign.pathlen;
-	if (slen < 0) slen = sign.pathlen + slen;
-	if (slen < 0) slen = 0;
+MeshTreeGeneric.prototype.get = function(sign, s0, sl) {
+	s0 = sign.fitarc(s0, 0);
+	sl = sign.fitarc(sl, sign.length);
 
 	var node = this.tree;
-	for (var i = 0; i < slen; i++) {
-		check(isnon(node), sign.name, 'points nowhere');
-		node = node[sign.arc(i)];
+	for (var si = s0; i < sl; si++) {
+		check(isnon(node), 'signature points nowhere');
+		node = node[sign.arc(si)];
 	}
 	return is(node) ? node : null;
 }
@@ -380,24 +391,27 @@ NTree.prototype.get = function(sign, slen) {
 | path:  path to the value (relative to node)
 | value: the new value to set
 */
-NTree.prototype.set = function(sign, val, slen) {
-	if (!is(slen)) slen = sign.pathlen;
-	if (slen < 0) slen = sign.pathlen + slen;
-	if (slen < 0) slen = 0;
+MeshTreeGeneric.prototype.set = function(sign, s0, sl) {
+	s0 = sign.fitarc(s0, 0);
+	sl = sign.fitarc(sl, sign.length);
 
 	var i;
 	var node = this.tree;
-	for(i = 0; i < slen - 1; i++) {
-		check(isnon(node), sign.name, 'points nowhere');
-		node = node[sign.arc(i)];
+	for(si = s0; i < sl - 1; si++) {
+		check(isnon(node), 'signature points nowhere');
+		node = node[sign.arc(si)];
 	}
-	node[sign.arc(i)] = clone(val);
+	node[sign.arc(si)] = clone(val);
 }
+
+/**
+| ++Causal consistency++
+*/
 
 /**
 | Alters a string
 */
-NTree.prototype.alter = function(alternation, backward) {
+function alter(meshtree, alternation, backward) {
 	var atype = alternation.type(backward);
 	var cm = 'alter('+atype+')';
 	var src = !backward ? alternation.src : alternation.trg;
@@ -411,10 +425,10 @@ NTree.prototype.alter = function(alternation, backward) {
 		check(isInteger(src.pivot), cm, 'src.pivot not an integer');
 		check(src.sign.isIndex(), cm, 'src.sign not an index');
 
-		var pivotNode = this.get(src.sign, src.pivot);
+		var pivotNode = meshtree.get(src.sign, src.pivot);
 		check(isArray(pivotNode), cm, 'src.pivot signates no array');
 
-		var str = this.get(src.sign);
+		var str = meshtree.get(src.sign);
 		check(isString(str), cm, 'src.sign signates no string');
 
 		check(src.pivot === src.sign.length - 3,  cm, 'currently cannot splice trees');
@@ -445,10 +459,10 @@ NTree.prototype.alter = function(alternation, backward) {
 		check(isInteger(trg.pivot), cm, 'trg.pivot not an integer');
 		check(trg.sign.isIndex(), cm, 'trg.sign not an index');
 
-		var pivotNode = this.get(trg.sign, trg.pivot);
+		var pivotNode = meshtree.get(trg.sign, trg.pivot);
 		check(isArray(pivotNode), cm, 'trg.sign(pivot) signates no array');
 
-		var str = this.get(trg.sign);
+		var str = meshtree.get(trg.sign);
 		check(isString(str, cm, 'trg.sign signates no string'));
 
 		check(trg.pivot === trg.sign.length - 3, cm, 'corrently cannot splice trees');
@@ -481,12 +495,12 @@ NTree.prototype.alter = function(alternation, backward) {
 		if (trg.sign.arc(-1) === '_new') {
 			// append to end.
 			log('alter', 'grow new');
-			var nParent = this.get(trg.sign, -1);
+			var nParent = meshtree.get(trg.sign, -1);
 			check(isTable(nParent), cm, 'can only grow tables');
 			if (!nParent._grow) nParent._grow = 1;
 			trg.sign.setarc(-1, nParent._grow++);
 		}
-		var save = this.get(trg.sign);
+		var save = meshtree.get(trg.sign);
 		if (is(trg.val)) {
 			check(deepEqual(trg.val, save), cm, 'trg.val set incorrectly', trg.val, '!=', save);
 		} else {
@@ -498,10 +512,10 @@ NTree.prototype.alter = function(alternation, backward) {
 		} else {
 			src.sign = trg.sign;
 		}
-		this.set(trg.sign, src.val);
+		meshtree.set(trg.sign, src.val);
 		break;
 	case 'insert':
-		var str = this.get(trg.sign);
+		var str = meshtree.get(trg.sign);
 		check(isString(str), cm, 'trg.sign signates no string');
 
 		var trg_pfx = trg.sign.attunePostfix(str, 'trg.sign');
@@ -515,10 +529,10 @@ NTree.prototype.alter = function(alternation, backward) {
 			trg_pfx.at2 = tat2;
 		}
 		var nstr = str.substring(0, trg_pfx.at1) + src.val + str.substring(trg_pfx.at1);
-		this.set(trg.sign, nstr);
+		meshtree.set(trg.sign, nstr);
 		break;
 	case 'remove':
-		var str = this.get(src.sign);
+		var str = meshtree.get(src.sign);
 		check(isString(str), cm, 'src.sign signates no string');
 
 		var src_pfx = src.sign.attunePostfix(str, 'src.sign');
@@ -531,7 +545,7 @@ NTree.prototype.alter = function(alternation, backward) {
 			trg.val = val;
 		}
 		var nstr = str.substring(0, src_pfx.at1) + str.substring(src_pfx.at2);
-		this.set(src.sign, nstr);
+		meshtree.set(src.sign, nstr);
 		break;
 	default:
 		throw reject('invalid atype:', atype);
@@ -551,8 +565,8 @@ NTree.prototype.alter = function(alternation, backward) {
 /**
 | Constructor.
 */
-MeshMashine = function() {
-	this.repository = new NTree();
+function MeshMashine(RootType) {
+	this.repository = new RootType();
 	this.history    = [];
 }
 
@@ -864,14 +878,20 @@ MeshMashine.prototype.update = function(time) {
 	return {ok: true, time: this.history.length, update: update };
 }
 
+/**
+| export
+*/
+meshmashine = {
+	clone           : clone,
+	deepFreeze      : deepFreeze,
+	MeshMashine     : MeshMashine,
+	MeshTreeGeneric : MeshTreeGeneric,
+	Signature       : Signature
+}
+
 
 try {
-	module.exports = {
-		deepFreeze  : deepFreeze,
-		clone       : clone,
-		MeshMashine : MeshMashine,
-		Signature   : Signature
-	};
+	module.exports = meshmashine;
 } catch(err){
 	// browser
 }
