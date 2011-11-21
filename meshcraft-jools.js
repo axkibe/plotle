@@ -13,7 +13,7 @@ var config;
 /**
 | Exports
 */
-var jools = {};
+var jools;
 
 /**
 | Capsule
@@ -22,16 +22,18 @@ var jools = {};
 
 "use strict";
 
+var debug;
+
 /**
 | In Browser this should already be defined.
 */
 try {
 	config = require('./config');
 	// executed in Node.JS
-	jools.debug  = config.debug === true || (config.debug % 4 - config.debug % 2) === 2;
+	debug  = config.debug === true || (config.debug % 4 - config.debug % 2) === 2;
 } catch(e) {
 	// require failed running in browser
-	jools.debug  = config.debug === true || (config.debug % 2) === 1;
+	debug  = config.debug === true || (config.debug % 2) === 1;
 }
 
 /**
@@ -40,7 +42,7 @@ try {
 | sub: prototype to become a subclass.
 | base: prototype to become the baseclass.
 */
-jools.subclass = function(sub, base) {
+function subclass(sub, base) {
    function inherit() {}
    inherit.prototype = base.prototype;
    sub.prototype = new inherit();
@@ -57,6 +59,10 @@ jools.subclass = function(sub, base) {
 function inspect(o, a, indent) {
 	if (!indent) indent = 0;
 	var to = typeof(o);
+	if (to === 'undefined') {
+		a.push('undefined');
+		return;
+	}
 	if (to === 'function')	{
 		a.push('function ');
 		if (o.name) a.push(o.name);
@@ -90,12 +96,12 @@ function inspect(o, a, indent) {
 			if (typeof(k) === 'number' || parseInt(k) == k || !o.hasOwnProperty(k)) continue;
 			if (first) {
 				a.push('\n');
-				for (var i = 0; i < indent; i++) a.push('  ');
+				for (var i = 0; i < indent + 1; i++) a.push('  ');
 				a.push('|\n');
 				first = false;
 			} else {
 				a.push(',\n');
-				for (var i = 0; i < indent; i++) a.push('  ');
+				for (var i = 0; i < indent + 1; i++) a.push('  ');
 			}
 			a.push(k);
 			a.push(': ');
@@ -103,7 +109,7 @@ function inspect(o, a, indent) {
 			a.push('\n');
 		}
 		a.push('\n');
-		for (var i = 0; i < indent - 1; i++) a.push('  ');
+		for (var i = 0; i < indent; i++) a.push('  ');
 		a.push(']');
 		return;
 	}
@@ -112,13 +118,13 @@ function inspect(o, a, indent) {
 	for(var k in o) {
 		if (!o.hasOwnProperty(k)) continue;
 		if (first) { first = false; } else { a.push(',\n')};
-		for (var i = 0; i < indent; i++) a.push('  ');
+		for (var i = 0; i < indent + 1; i++) a.push('  ');
 		a.push(k);
 		a.push(': ');
 		inspect(o[k], a, indent + 1);
 	}
 	a.push('\n');
-	for (var i = 0; i < indent - 1; i++) a.push('  ');
+	for (var i = 0; i < indent; i++) a.push('  ');
 	a.push('}');
 }
 
@@ -150,7 +156,7 @@ function timestamp() {
 /**
 | Logs a number of inspected argument if category is configured to be logged.
 */
-jools.log = function(category) {
+function log(category) {
 	if (category !== true && !config.log.all && !config.log[category]) return;
 	var a = timestamp();
 	if (category !== true) {
@@ -166,8 +172,45 @@ jools.log = function(category) {
 };
 
 /**
-| Export for Node.js
+| Deep copies an object.
 */
+function clone(original) {
+	//return JSON.parse(JSON.stringify(original));
+	if(typeof(original) !== 'object' || original === null) {
+		return original;
+	}
+
+	if (original.clone) return new original.clone();
+
+	var copy = original.constructor();
+	for(var k in original) {
+		copy[k] = clone(original[k]);
+	}
+	return copy;
+}
+
+/**
+| Deep freezes an object.
+*/
+function deepFreeze(obj) {
+	if (typeof(obj) !== 'object' || obj === null) return;
+	Object.freeze(obj);
+	for (var k in obj) {
+		deepFreeze(obj[k]);
+	}
+}
+
+/**
+| Exports
+*/
+jools = {
+	clone      : clone,
+	debug      : debug,
+	deepFreeze : deepFreeze,
+	log        : log,
+	subclass   : subclass,
+};
+
 try {
 	module.exports = jools;
 } catch(e) {

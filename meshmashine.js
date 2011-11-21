@@ -51,37 +51,9 @@ try {
 	// require failed, running in browser
 }
 
-var log = jools.log;
-
-/**
-| Deep copies an object.
-*/
-function clone(original) {
-	//return JSON.parse(JSON.stringify(original));
-	if(typeof(original) !== 'object' || original === null) {
-		return original;
-	}
-	if (original instanceof Signature) {
-		return new Signature(original, 'clone');
-	}
-
-	var copy = original.constructor();
-	for(var k in original) {
-		copy[k] = clone(original[k]);
-	}
-	return copy;
-}
-
-/**
-| Deep freezes an object.
-*/
-function deepFreeze(obj) {
-	if (typeof(obj) !== 'object' || obj === null) return;
-	Object.freeze(obj);
-	for (var k in obj) {
-		deepFreeze(obj[k]);
-	}
-}
+var log        = jools.log;
+var clone      = jools.clone;
+var deepFreeze = jools.deepFreeze;
 
 /**
 | Type check shortcuts
@@ -172,6 +144,14 @@ function Signature(sign, name) {
 }
 
 /**
+| Clones the signature
+*/
+Signature.prototype.clone = function() {
+	return new Signature(this, 'clone');
+}
+
+
+/**
 | Length of the signature.
 */
 Object.defineProperty(Signature.prototype, 'length', {
@@ -198,6 +178,7 @@ Object.defineProperty(Signature.prototype, 'pathlen', {
 		return this._sign.length - (this.postfix ? 1 : 0);
 	},
 });
+
 
 /**
 | True if the signature ends as string index.
@@ -234,10 +215,11 @@ Signature.prototype.arc = function(i) {
 /**
 | Fits the arc numberation to be in this signature.
 */
-Signature.prototype.fitarc(sa, def) {
-	if (!is(sa)) sa = def;
+Signature.prototype.fitarc = function(sa, defaultedge) {
+	if (!is(sa)) sa = defaultedge ? this.pathlen : 0;
 	if (sa < 0) sa = this.pathlen + sa;
 	if (sa < 0) sa = 0;
+	return sa;
 }
 
 /**
@@ -357,52 +339,6 @@ Alternation.prototype.type = function(backward) {
 	return null;
 }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ,-,-.  ,--,--'
- ` | |  `- | ,-. ,-. ,-.
-   | |-. , | |   |-' |-'
-  ,' `-' `-' '   `-' `-'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- a node tree (repository)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function MeshTreeGeneric(master) {
-	this.tree = master ? clone(master.tree) : {};
-}
-
-/**
-| Returns the subnode path points at.
-*/
-MeshTreeGeneric.prototype.get = function(sign, s0, sl) {
-	s0 = sign.fitarc(s0, 0);
-	sl = sign.fitarc(sl, sign.length);
-
-	var node = this.tree;
-	for (var si = s0; i < sl; si++) {
-		check(isnon(node), 'signature points nowhere');
-		node = node[sign.arc(si)];
-	}
-	return is(node) ? node : null;
-}
-
-/**
-| Sets the value of a node.
-|
-| node:  the repo or part of
-| path:  path to the value (relative to node)
-| value: the new value to set
-*/
-MeshTreeGeneric.prototype.set = function(sign, s0, sl) {
-	s0 = sign.fitarc(s0, 0);
-	sl = sign.fitarc(sl, sign.length);
-
-	var i;
-	var node = this.tree;
-	for(si = s0; i < sl - 1; si++) {
-		check(isnon(node), 'signature points nowhere');
-		node = node[sign.arc(si)];
-	}
-	node[sign.arc(si)] = clone(val);
-}
 
 /**
 | ++Causal consistency++
@@ -762,11 +698,11 @@ MeshMashine.prototype.transform = function(time, way) {
 // todo partial reflects
 MeshMashine.prototype._reflect = function(time, sign) {
 	try {
-		var reflect = new NTree(this.repository);
+		var reflect = this.repository.clone();
 
 		// playback
 		for(var hi = this.history.length - 1; hi >= time; hi--) {
-			reflect.alter(this.history[hi], true);
+			alter(reflect, this.history[hi], true);
 		}
 	} catch (err) {
 		// this should not ever fail, does rethrow a lethal error
@@ -806,12 +742,12 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 		}
 
 		if (!isArray(alta)) {
-			this.repository.alter(alta, false);
+			alter(this.repository, alta, false);
 			deepFreeze(alta);
 			this.history.push(alta);
 		} else {
 			for(var i = 0; i < alta.length; i++) {
-				this.repository.alter(alta[i], false);
+				alter(this.repository, alta[i], false);
 				deepFreeze(alta[i]);
 				this.history.push(alta[i]);
 			}
@@ -837,10 +773,9 @@ MeshMashine.prototype.get = function(time, sign) {
 
 			var reflect = this._reflect(time, sign);
 			// remove nulls
-			// todo, hierachical.
-			for(var key in reflect) {
-				if (reflect[key] === null) delete reflect[key];
-			}
+			//for(var key in reflect) {
+			//	if (reflect[key] === null) delete reflect[key];
+			//}
 		} else {
 			reflect = this.repository.get(sign);
 			time = this.history.length;
@@ -882,10 +817,7 @@ MeshMashine.prototype.update = function(time) {
 | export
 */
 meshmashine = {
-	clone           : clone,
-	deepFreeze      : deepFreeze,
 	MeshMashine     : MeshMashine,
-	MeshTreeGeneric : MeshTreeGeneric,
 	Signature       : Signature
 }
 
