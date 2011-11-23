@@ -51,6 +51,14 @@ function subclass(sub, base) {
 
 
 /**
+| Fixates a value to an object (not changeable)
+*/
+function fixate(obj, key, value) {
+    Object.defineProperty(obj, key, {enumerable: true, value: value});
+    return value;
+}
+
+/**
 | Inspects an object and creates a descriptes string for it.
 |
 | This is self written instead of using the nodeJS' one, so its identical in server and browser.
@@ -88,7 +96,7 @@ function inspect(o, a, indent) {
 			if(k > 0) {
 				a.push(',\n');
 			}
-			for (var i = 0; i < indent; i++) a.push('  ');
+			for (var i = 0; i < indent + 1; i++) a.push('  ');
 			inspect(o[k], a, indent + 1);
 		}
 		var first = true;
@@ -207,6 +215,7 @@ jools = {
 	clone      : clone,
 	debug      : debug,
 	deepFreeze : deepFreeze,
+	fixate     : fixate,
 	log        : log,
 	subclass   : subclass,
 };

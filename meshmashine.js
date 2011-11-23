@@ -54,6 +54,36 @@ try {
 var log        = jools.log;
 var clone      = jools.clone;
 var deepFreeze = jools.deepFreeze;
+var fixate     = jools.fixate;
+
+/**
+| Returns a rejection error
+*/
+function reject(message) {
+	if (jools.debug) throw new Error(message); // in debug mode any failure is fatal.
+	log('mm', 'reject', message);
+	return {ok: false, message: message};
+}
+
+function fail(args, aoffset) {
+	var a = Array.prototype.slice.call(args, aoffset, args.length);
+	for(var i = 2; i < arguments.length; i++) {
+		a.push(arguments[i]);
+	}
+	var b = a.slice();
+	b.unshift('fail');
+	log.apply(this, b);
+	throw reject(a.join(' '));
+}
+
+function check(condition) {
+	if (!condition) fail(arguments, 1);
+}
+
+function checkWithin(v, low, high) {
+	if (v < low || v > high) fail(arguments, 3, low, '<=', v, '<=', high);
+}
+
 
 /**
 | Type check shortcuts
@@ -85,38 +115,6 @@ function deepEqual(o1, o2) {
 }
 
 
-/**
-| Returns a rejection error
-*/
-function reject(message) {
-	if (jools.debug) throw new Error(message); // in debug mode any failure is fatal.
-	log('mm', 'reject', message);
-	return {ok: false, message: message};
-}
-
-function fail(args, aoffset) {
-	var a = Array.prototype.slice.call(args, aoffset, args.length);
-	for(var i = 2; i < arguments.length; i++) {
-		a.push(arguments[i]);
-	}
-	var b = a.slice();
-	b.unshift('fail');
-	log.apply(this, b);
-	throw reject(a.join(' '));
-}
-
-function check(condition) {
-	if (!condition) fail(arguments, 1);
-}
-
-function checkWithin(v, low, high) {
-	if (v < low || v > high) fail(arguments, 3, low, '<=', v, '<=', high);
-}
-
-function fixate(obj, key, value) {
-    Object.defineProperty(obj, key, {enumerable: true, value: value});
-    return value;
-}
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -353,9 +351,7 @@ function alter(meshtree, alternation, backward) {
 	var src = !backward ? alternation.src : alternation.trg;
 	var trg = !backward ? alternation.trg : alternation.src;
 
-	log('alter', 'src:', src);
-	log('alter', 'trg:', trg);
-	log('alter', 'atype:', atype);
+	log('alter', 'src:', src, 'trg:', trg, 'atype:', atype);
 	switch (atype) {
 	case 'split' :
 		check(isInteger(src.pivot), cm, 'src.pivot not an integer');
@@ -718,6 +714,7 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 	log(true, 'test');
 	try {
 		log('mm', 'alter time:', time, 'src:', src, 'trg:', trg);
+		log('debug', 'before', this.repository);
 		if (!this._isValidTime(time)) return reject('invalid time');
 
 		if (is(src.sign)) src.sign = new Signature(src.sign, 'src.sign');
@@ -753,6 +750,7 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 			}
 		}
 
+		log('debug', 'after', this.repository);
 		return {ok: true, time: this.history.length, alts: alta };
 	} catch(err) {
 		// returns rejections but rethrows coding errors.
