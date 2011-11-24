@@ -66,7 +66,7 @@ try {
 }
 var debug = config.debug === true || (config.debug % 4 - config.debug % 2) === 2;
 
-var mm = new meshmashine.MeshMashine(woods.TreeGeneric);
+var mm = new meshmashine.MeshMashine(woods.Generic);
 //var mm = new meshmashine.MeshMashine(woods.Nexus);
 
 /**

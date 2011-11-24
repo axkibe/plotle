@@ -148,6 +148,19 @@ Signature.prototype.clone = function() {
 	return new Signature(this, 'clone');
 }
 
+///**
+//| Signates an entry, string index or string span.
+//*/
+//function Signature(sign) {
+//	check(isArray(sign), 'Signature not created with array');
+//	for (var i = 0; i < sign.length; i++) {
+//		var a = sign[i];
+//		check(isString(a) || isInteger(a) || (i === sign.length - 1 && isTable(a)),
+//			'Arcs must be string, integer or a postfix table');
+//		check(sign[i][0] !== '_', 'Arcs must not start with _.');
+//	}
+//	deepFreeze(sign);
+//}
 
 /**
 | Length of the signature.
@@ -203,12 +216,14 @@ Signature.prototype.isPath = function() {
 
 /**
 | Returns the signature at index i.
+| TODO rename to get?
 */
 Signature.prototype.arc = function(i) {
 	if (i < 0) i = this._sign.length + i;
 	if (i < 0) return null;
 	return this._sign[i];
 }
+
 
 /**
 | Fits the arc numberation to be in this signature.
@@ -357,7 +372,7 @@ function alter(meshtree, alternation, backward) {
 		check(isInteger(src.pivot), cm, 'src.pivot not an integer');
 		check(src.sign.isIndex(), cm, 'src.sign not an index');
 
-		var pivotNode = meshtree.get(src.sign, src.pivot);
+		var pivotNode = meshtree.get(src.sign, 0, src.pivot);
 		check(isArray(pivotNode), cm, 'src.pivot signates no array');
 
 		var str = meshtree.get(src.sign);
@@ -391,7 +406,7 @@ function alter(meshtree, alternation, backward) {
 		check(isInteger(trg.pivot), cm, 'trg.pivot not an integer');
 		check(trg.sign.isIndex(), cm, 'trg.sign not an index');
 
-		var pivotNode = meshtree.get(trg.sign, trg.pivot);
+		var pivotNode = meshtree.get(trg.sign, 0, trg.pivot);
 		check(isArray(pivotNode), cm, 'trg.sign(pivot) signates no array');
 
 		var str = meshtree.get(trg.sign);
@@ -427,7 +442,7 @@ function alter(meshtree, alternation, backward) {
 		if (trg.sign.arc(-1) === '_new') {
 			// append to end.
 			log('alter', 'grow new');
-			var nParent = meshtree.get(trg.sign, -1);
+			var nParent = meshtree.get(trg.sign, 0, -1);
 			check(isTable(nParent), cm, 'can only grow tables');
 			if (!nParent._grow) nParent._grow = 1;
 			trg.sign.setarc(-1, nParent._grow++);
@@ -754,7 +769,7 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 		return {ok: true, time: this.history.length, alts: alta };
 	} catch(err) {
 		// returns rejections but rethrows coding errors.
-		log(true, 'error');
+		log(true, 'error', err);
 		if (err.ok !== false) throw err; else return err;
 	}
 }

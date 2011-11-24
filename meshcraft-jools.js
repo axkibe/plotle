@@ -59,84 +59,6 @@ function fixate(obj, key, value) {
 }
 
 /**
-| Inspects an object and creates a descriptes string for it.
-|
-| This is self written instead of using the nodeJS' one, so its identical in server and browser.
-| It pushes the string in serveral pars onto a.
-*/
-function inspect(o, a, indent) {
-	if (!indent) indent = 0;
-	var to = typeof(o);
-	if (to === 'undefined') {
-		a.push('undefined');
-		return;
-	}
-	if (to === 'function')	{
-		a.push('function ');
-		if (o.name) a.push(o.name);
-		return;
-	}
-	if (to === 'string' || o instanceof String) {
-		a.push('"');
-		a.push(o);
-		a.push('"');
-		return;
-	}
-	if (to === 'number') {
-		a.push(o);
-		return;
-	}
-	if (o === null) {
-		a.push('null');
-		return;
-	}
-	if (o instanceof Array) {
-		a.push('[\n');
-		for(var k = 0; k < o.length; k++) {
-			if(k > 0) {
-				a.push(',\n');
-			}
-			for (var i = 0; i < indent + 1; i++) a.push('  ');
-			inspect(o[k], a, indent + 1);
-		}
-		var first = true;
-		for(var k in o) {
-			if (typeof(k) === 'number' || parseInt(k) == k || !o.hasOwnProperty(k)) continue;
-			if (first) {
-				a.push('\n');
-				for (var i = 0; i < indent + 1; i++) a.push('  ');
-				a.push('|\n');
-				first = false;
-			} else {
-				a.push(',\n');
-				for (var i = 0; i < indent + 1; i++) a.push('  ');
-			}
-			a.push(k);
-			a.push(': ');
-			inspect(o[k], a, indent + 1);
-			a.push('\n');
-		}
-		a.push('\n');
-		for (var i = 0; i < indent; i++) a.push('  ');
-		a.push(']');
-		return;
-	}
-	a.push('{\n');
-	var first = true;
-	for(var k in o) {
-		if (!o.hasOwnProperty(k)) continue;
-		if (first) { first = false; } else { a.push(',\n')};
-		for (var i = 0; i < indent + 1; i++) a.push('  ');
-		a.push(k);
-		a.push(': ');
-		inspect(o[k], a, indent + 1);
-	}
-	a.push('\n');
-	for (var i = 0; i < indent; i++) a.push('  ');
-	a.push('}');
-}
-
-/**
 | Pushes a 2-decimal number on an array.
 */
 function pushpad(a, n, s) {
@@ -174,7 +96,7 @@ function log(category) {
 	}
 	for(var i = 1; i < arguments.length; i++) {
 		if (i > 1) a.push(' ');
-		inspect(arguments[i], a);
+		a.push(JSON.stringify(arguments[i], null, ". "));
 	}
 	console.log(a.join(''));
 };
