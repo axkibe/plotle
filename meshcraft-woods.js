@@ -5,6 +5,11 @@
 | License: GNU Affero AGPLv3
 */
 
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ Module
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 /**
 | Imports
 */
@@ -35,7 +40,7 @@ function isnon(o)     { return typeof(o) !== 'undefined' && o !== null; }
 function Stem(twigs, master) {
 	this._twigs = twigs;
 	for (k in master) {
-		twigs[k] = this.sprout(master[k]);
+		twigs[k] = this._sprout(master[k]);
 	}
 }
 
@@ -49,7 +54,7 @@ Stem.prototype.get = function(sign, s0, sl) {
 	if (s0 + 1 === sl) {
 		return twig;
 	}
-	if (!twig.get) throw new Error('signature points nowhere');
+	if (!twig || !twig.get) throw new Error('signature points nowhere');
 	return twig.get(sign, s0 + 1, sl);
 }
 
@@ -60,18 +65,19 @@ Stem.prototype.set = function(sign, val, s0, sl) {
 	s0 = sign.fitarc(s0, false);
 	sl = sign.fitarc(sl, true);
 	if (s0 + 1 === sl) {
-		this._twigs[sign.arc(s0)] = this.sprout(val);
+		this._twigs[sign.arc(s0)] = this._sprout(val);
 	} else {
 		var twig = this._twigs[sign.arc(s0)];
-		if (!twig.set) throw new Error('signature points nowhere');
+		if (!twig || !twig.set) throw new Error('signature points nowhere');
 		twig.set(sign, val, s0 + 1, sl);
 	}
 }
 
 /**
-| Sprouts new twigs
+| Sprouts a new twig.
 */
-Stem.prototype.sprout = function(master) {
+Stem.prototype._sprout = function(master) {
+	log('debug', 'SPROUT', master);
 	if (typeof(master) === undefined) return undefined;
 	var creator = this.cSeeds[master.constructor.name];
 	if (creator === true) return master;
@@ -130,19 +136,16 @@ GenericAlley.prototype.tSeeds = GenericCopse.prototype.tSeeds;
 function Nexus(master) {
 	if (master instanceof Nexus) master = master._twigs;
 	Stem.call(this, {}, master);
+	this.type  = 'nexus';
+}
+subclass(Nexus, Stem);
+
+Nexus.prototype.cSeeds = {
+	'Space' : Space,
 }
 
-/**
-| Sets the value of a node.
-*/
-Nexus.prototype.set = function(sign, val, s0, sl) {
-	s0 = sign.fitarc(s0, false);
-	sl = sign.fitarc(sl, true);
-	if (s0 + 1 === sl) {
-		var creator = seeds[val.constructor.name] || seeds[val.type];
-		if (creator !== 'Space') throw new Error('Twigs of Nexus must be Space');
-	}
-	Stem.set.call(this, sign, val, s0, sl);
+Nexus.prototype.tSeeds = {
+	'space' : Space,
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -151,57 +154,24 @@ Nexus.prototype.set = function(sign, val, s0, sl) {
  a space
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Space(master) {
-	if (master instanceof Space) master = master._twigs;
-	//this.items = new Alley(
-	Stem.call(this, this, null);
-	
-	if (master.type !== 'space') throw new Error('Space does not have correct type: '+master.type);
-	for (var k in master) {
-		if (!master.hasOwnProperty(k)) continue;
-		switch (k) {
-		case 'items':
-		case 'type' :
-		case 'z':
-			break;
-		default :
-			throw new Error('Space has unknown key:'+k);
-		}
+	if (master instanceof Space) {
+		master = master._twigs;
+	} else if (master && master.type !== 'space') {
+		throw new Error('Space master typed wrongly: '+master.type);
 	}
-	this.type  = 'space';
-	this.items = {};
-	if (master) {
-		this.z = clone(master.z);
-		for (var k in master.items) {
-			this.items[k] = new Note(master.items[k]);
-		}
-	} else {
-		this.z = [];
-	}
-}
+	// todo check if master has other keys.
 
-/**
-| Returns the subnode path points at.
-*/
-Space.prototype.get = function(sign, s0, sl) {
-	s0 = sign.fitarc(s0, false);
-	sl = sign.fitarc(sl, true);
-	var s0a = sign.arc(s0);
-	switch (s0a) {
-	case 'items':
-		if (s0 + 1 === sl) return this.items;
-		var node = this.items[sign.arc(s0 + 1)];
-		if (s0 + 2 === sl) return node;
-		if (!node) throw new Error('Signature points nowhere');
-		return node.get(sign, s0 + 2, sl);
-	case 'z' :
-		if (s0 + 1 === sl) return this.z;
-		if (s0 + 2 !== sl) throw new Error('space.z[] has no further children');
-		return this.z[sign.arc(s0 + 1)];
-		if (!node) throw new Error('Signature points nowhere');
-	default:
-		throw new Error('Unknown arc to space: '+s0a);
-	}
+	Stem.call(this, {
+			items : new ItemCopse(master && master.items),
+			z     : new ArcAlley (master && master.z),
+		}, null);
+	this.type  = 'space';
+	this.items = this._twigs.items;
+	this.z     = this._twigs.z;
+	log('debug', 'NEWSPACE MASTER', master);
+	log('debug', 'NEWSPACE THIS', this);
 }
+subclass(Space, Stem);
 
 /**
 | Sets the value of a node.
@@ -209,79 +179,57 @@ Space.prototype.get = function(sign, s0, sl) {
 Space.prototype.set = function(sign, val, s0, sl) {
 	s0 = sign.fitarc(s0, false);
 	sl = sign.fitarc(sl, true);
-	var s0a = sign.arc(s0);
-	if (s0 + 1 === sl) throw new Error('Cannot set space['+sign.arg(s0)+'] directly');
-	if (s0 + 2 === sl) {
-		switch (s0a) {
-		case 'items' :
-			this.items[sign.arc(s0 + 1)] = new Note(val);
-			break;
-		case 'z' :
-			if (typeof(val) !== 'string' && typeof(val) !== 'number')
-				throw new Error('space.z[] must be item or string');
-			this.z[sign.arc(s0 + 1)] = val;
-			break;
-		default :
-			throw new Error('space.'+s0a+' invalid arc');
-		}
-	} else {
-		switch (s0a) {
-		case 'items' :
-			this.items[sign.arc(s0 + 1)].set(sign, val, s0 + 2, sl);
-			break;
-		case 'z' :
-			throw new Error('space.z[] has no further children');
-			break;
-		default :
-			throw new Error('space.'+s0a+' invalid arc');
-		}
-	}
+	if (s0 + 1 === sl) throw new Error('Cannot set Space twigs themselves');
+	Stem.set.call(this, sign, val, s0, sl);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ++ Note ++
+ ++ ItemCopse ++
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- a note
+ A copse of items (in a space).
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-/*
-function Note(master) {
-	if (master instanceof Note) {
-		Generic.call(this, master.nodes);
-	} else {
-		Generic.call(this, master);
-	}
+function ItemCopse(master) {
+	if (master instanceof ItemCopse) master = master._twigs;
+	Stem.call(this, {}, master);
+	log('debug', 'ITEMCOPSE MASTER', master);
+	log('debug', 'ITEMCOPSE THIS', this);
 }
-subclass(Note, GenericCopsei);
-*/
+subclass(ItemCopse, Stem);
 
-/*function Note(master) {
-	if (master.type !== 'note') throw new Error('Note does not have correct type: '+master.type);
-	for (var k in master) {
-		if (!master.hasOwnProperty(k)) continue;
-		switch (k) {
-		case 'zone':
-		case 'doc':
-			break;
-		default :
-			throw new Error('Space has unknown key:'+k);
-		}
-	}
-	this.type = 'note';
-	if (master) {
-	this.zone = new Zone(master ? master.zone : null);
-	this.doc  = new Doc(master ? master.doc : null);}
-}*/
+ItemCopse.prototype.cSeeds = {
+	'GenericCopse' : GenericCopse,
+	'Object'       : GenericCopse,
+};
 
+//ItemCopse.prototype.tSeeds = {
+//};
 
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ++ ArcAlley ++
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ xx
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+function ArcAlley(master) {
+	log('debug', 'ARCALLEY MASTER', master);
+	if (master instanceof ArcAlley) master = master._twigs;
+	Stem.call(this, [], master);
+}
+subclass(ArcAlley, Stem);
 
-/**
-| Export.
-*/
+ArcAlley.prototype.cSeeds = {
+	'Number' : true,
+	'String' : true,
+};
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ Module Export
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 woods = {
-	//Nexus   : Nexus,
-	//Space   : Space,
-	//Note    : Note,
+	Nexus        : Nexus,
+	Space        : Space,
+	ItemCopse    : ItemCopse,
+	ArcAlley     : ArcAlley,
 	GenericCopse : GenericCopse,
 }
 
