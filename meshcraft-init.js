@@ -40,13 +40,13 @@ libclient.request({cmd: "now"}, function (err, now) {
 									'type':  'para',
 									'text%': 'If you can dream---and not make dreams your master;',
 								}, {
-									'type': 'para',
+									'type':  'para',
 									'text%': 'If you can think---and not make thoughts your aim,',
 								}, {
 									'type':  'para',
 									'text%': 'If you can meet with Triumph and Disaster',
 								}, {
-									'type': 'para',
+									'type':  'para',
 									'text%': 'And treat those two impostors just the same',
 								},
 							],

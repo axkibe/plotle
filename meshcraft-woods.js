@@ -27,42 +27,15 @@ var subclass = jools.subclass;
 function is(o)        { return typeof(o) !== 'undefined'; }
 function isnon(o)     { return typeof(o) !== 'undefined' && o !== null; }
 
-var seeds = {
-	'Alley'    : Alley,
-	'Array'    : Alley,
-	'Generic'  : Generic,
-};
-
-function sprout(master, generic) {
-	switch(typeof(master)) {
-	case 'string' : return master;
-	case 'number' : return master;
-	case 'object' :
-		if (master instanceof String) return master;
-		break;
-	default: throw new Error('Cannot sprout unknown type: '+typeof(master));
-	}
-
-	// master is an object
-	var creator = seeds[master.constructor.name];
-	if (creator) return new creator(master);
-	if (master.constructor !== Object)
-		throw new Error('Cannot sprout unknown constructor: '+master.constructor.name);
-	if (generic) return new Generic(master);
-	creator = seeds[master.type];
-	if (!creator) throw new Error('Cannot sprout unknown master-type: '+master.type);
-	return new creator(master);
-}
-
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++ Stem ++
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  The base of all meshcraft-nodes.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Stem(twigs, master, generic) {
+function Stem(twigs, master) {
 	this._twigs = twigs;
 	for (k in master) {
-		twigs[k] = sprout(master[k], generic);
+		twigs[k] = this.sprout(master[k]);
 	}
 }
 
@@ -83,12 +56,11 @@ Stem.prototype.get = function(sign, s0, sl) {
 /**
 | Sets the value of a twig.
 */
-/* todo change order */
 Stem.prototype.set = function(sign, val, s0, sl) {
 	s0 = sign.fitarc(s0, false);
 	sl = sign.fitarc(sl, true);
 	if (s0 + 1 === sl) {
-		this._twigs[sign.arc(s0)] = sprout(val, !!this.generic);
+		this._twigs[sign.arc(s0)] = this.sprout(val);
 	} else {
 		var twig = this._twigs[sign.arc(s0)];
 		if (!twig.set) throw new Error('signature points nowhere');
@@ -97,10 +69,17 @@ Stem.prototype.set = function(sign, val, s0, sl) {
 }
 
 /**
-| Clones the tree
+| Sprouts new twigs
 */
-Stem.prototype.clone = function() {
-	return new this.constructor(this._twigs);
+Stem.prototype.sprout = function(master) {
+	if (typeof(master) === undefined) return undefined;
+	var creator = this.cSeeds[master.constructor.name];
+	if (creator === true) return master;
+	if (creator) return new creator(master);
+	if (!this.tSeeds) throw new Error('Cannot sprout (cname): '+master.constructor.name);
+	creator = this.tSeeds[master.type];
+	if (!creator) throw new Error('Cannot sprout (type): '+master.type);
+	return new creator(master);
 }
 
 Stem.prototype.toJSON = function() {
@@ -110,31 +89,38 @@ Stem.prototype.toJSON = function() {
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++ Generic ++
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- a generic twig allowing any subtwigs.
+ a generic twig allowing any kind of subtwigs.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Generic(master) {
-	if (master instanceof Generic) master = master._twigs;
-	Stem.call(this, {}, master, true);
+function GenericCopse(master) {
+	if (master instanceof GenericCopse) master = master._twigs;
+	Stem.call(this, {}, master);
 }
-subclass(Generic, Stem);
+subclass(GenericCopse, Stem);
 
-/**
-| Twigs are also generic
-*/
-Generic.prototype.generic = true;
+GenericCopse.prototype.cSeeds = {
+	'Array'        : GenericAlley,
+	'GenericAlley' : GenericAlley,
+	'GenericCopse' : GenericCopse,
+	'Number'       : true,
+	'Object'       : GenericCopse,
+	'String'       : true,
+};
+
+GenericCopse.prototype.tSeeds = null;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++ Alley ++
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- an array.
+ a generic array allowing any kind of subtwigs.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Alley(master) {
-	if (master instanceof Alley) master = master._twigs;
-	Stem.call(this, [], master, true);
+function GenericAlley(master) {
+	if (master instanceof GenericAlley) master = master._twigs;
+	Stem.call(this, [], master);
 }
-subclass(Alley, Stem);
+subclass(GenericAlley, Stem);
 
-Alley.prototype.generic = true;
+GenericAlley.prototype.cSeeds = GenericCopse.prototype.cSeeds;
+GenericAlley.prototype.tSeeds = GenericCopse.prototype.tSeeds;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++ Nexus ++
@@ -143,7 +129,7 @@ Alley.prototype.generic = true;
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Nexus(master) {
 	if (master instanceof Nexus) master = master._twigs;
-	Stem.call(this, {}, master, true);
+	Stem.call(this, {}, master);
 }
 
 /**
@@ -152,25 +138,11 @@ function Nexus(master) {
 Nexus.prototype.set = function(sign, val, s0, sl) {
 	s0 = sign.fitarc(s0, false);
 	sl = sign.fitarc(sl, true);
-
 	if (s0 + 1 === sl) {
-		this.nodes[sign.arc(s0)] = new Space(val);
-	} else {
-		var node = this.nodes[sign.arc(s0)];
-		if (!node) throw new Error('signature points nowhere');
-		node.set(sign, val, s0 + 1, sl);
+		var creator = seeds[val.constructor.name] || seeds[val.type];
+		if (creator !== 'Space') throw new Error('Twigs of Nexus must be Space');
 	}
-}
-
-Nexus.prototype.toJSON = function() {
-	return this.spaces;
-}
-
-/**
-| Clones the Nexus
-*/
-Nexus.prototype.clone = function() {
-	return new Nexus(this);
+	Stem.set.call(this, sign, val, s0, sl);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -179,6 +151,10 @@ Nexus.prototype.clone = function() {
  a space
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Space(master) {
+	if (master instanceof Space) master = master._twigs;
+	//this.items = new Alley(
+	Stem.call(this, this, null);
+	
 	if (master.type !== 'space') throw new Error('Space does not have correct type: '+master.type);
 	for (var k in master) {
 		if (!master.hasOwnProperty(k)) continue;
@@ -262,19 +238,13 @@ Space.prototype.set = function(sign, val, s0, sl) {
 	}
 }
 
-/**
-| Clones the tree
-*/
-Space.prototype.clone = function() {
-	return new Space(this);
-}
-
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++ Note ++
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  a note
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+/*
 function Note(master) {
 	if (master instanceof Note) {
 		Generic.call(this, master.nodes);
@@ -282,7 +252,8 @@ function Note(master) {
 		Generic.call(this, master);
 	}
 }
-subclass(Note, Generic);
+subclass(Note, GenericCopsei);
+*/
 
 /*function Note(master) {
 	if (master.type !== 'note') throw new Error('Note does not have correct type: '+master.type);
@@ -299,7 +270,7 @@ subclass(Note, Generic);
 	this.type = 'note';
 	if (master) {
 	this.zone = new Zone(master ? master.zone : null);
-	this.doc  = new Doc(master ? master.doc : null);
+	this.doc  = new Doc(master ? master.doc : null);}
 }*/
 
 
@@ -308,10 +279,10 @@ subclass(Note, Generic);
 | Export.
 */
 woods = {
-	Nexus   : Nexus,
-	Space   : Space,
-	Note    : Note,
-	Generic : Generic,
+	//Nexus   : Nexus,
+	//Space   : Space,
+	//Note    : Note,
+	GenericCopse : GenericCopse,
 }
 
 try {
