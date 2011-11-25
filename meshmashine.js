@@ -451,7 +451,8 @@ function alter(meshtree, alternation, backward) {
 		if (is(trg.val)) {
 			check(deepEqual(trg.val, save), cm, 'trg.val set incorrectly', trg.val, '!=', save);
 		} else {
-			trg.val = clone(save);
+			trg.val = save && save.constructor ? new save.constructor(save) : save;
+			//trg.val = clone(save);
 		}
 
 		if (is(src.sign)) {
@@ -709,7 +710,7 @@ MeshMashine.prototype.transform = function(time, way) {
 // todo partial reflects
 MeshMashine.prototype._reflect = function(time, sign) {
 	try {
-		var reflect = this.repository.clone();
+		var reflect = new this.repository.constructor(this.repository);
 
 		// playback
 		for(var hi = this.history.length - 1; hi >= time; hi--) {

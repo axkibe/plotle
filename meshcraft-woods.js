@@ -139,26 +139,11 @@ Alley.prototype.generic = true;
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++ Nexus ++
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- the root of spaces
+ The root of spaces
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Nexus(master) {
-	this.nodes = {};
-	if (master) {
-		for (k in master.nodes) this.nodes[k] = new Space(master.nodes[k]);
-	}
-}
-
-/**
-| Returns the subnode path points at.
-*/
-Nexus.prototype.get = function(sign, s0, sl) {
-	s0 = sign.fitarc(s0, false);
-	sl = sign.fitarc(sl, true);
-
-	var node = this.nodes[sign.arc(s0)];
-	if (s0 + 1 === sl) return node;
-	if (!node) throw new Error('Signature points nowhere');
-	return node.get(sign, s0 + 1, sl);
+	if (master instanceof Nexus) master = master._twigs;
+	Stem.call(this, {}, master, true);
 }
 
 /**
