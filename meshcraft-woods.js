@@ -38,6 +38,7 @@ function isnon(o)     { return typeof(o) !== 'undefined' && o !== null; }
  The base of all meshcraft-nodes.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Stem(twigs, master) {
+	if (master && master._twigs) master = master._twigs;
 	this._twigs = twigs;
 	for (k in master) {
 		twigs[k] = this._sprout(master[k]);
@@ -77,7 +78,6 @@ Stem.prototype.set = function(sign, val, s0, sl) {
 | Sprouts a new twig.
 */
 Stem.prototype._sprout = function(master) {
-	log('debug', 'SPROUT', master);
 	if (typeof(master) === undefined) return undefined;
 	var creator = this.cSeeds[master.constructor.name];
 	if (creator === true) return master;
@@ -98,7 +98,6 @@ Stem.prototype.toJSON = function() {
  a generic twig allowing any kind of subtwigs.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function GenericCopse(master) {
-	if (master instanceof GenericCopse) master = master._twigs;
 	Stem.call(this, {}, master);
 }
 subclass(GenericCopse, Stem);
@@ -120,7 +119,6 @@ GenericCopse.prototype.tSeeds = null;
  a generic array allowing any kind of subtwigs.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function GenericAlley(master) {
-	if (master instanceof GenericAlley) master = master._twigs;
 	Stem.call(this, [], master);
 }
 subclass(GenericAlley, Stem);
@@ -134,7 +132,6 @@ GenericAlley.prototype.tSeeds = GenericCopse.prototype.tSeeds;
  The root of spaces
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Nexus(master) {
-	if (master instanceof Nexus) master = master._twigs;
 	Stem.call(this, {}, master);
 	this.type  = 'nexus';
 }
@@ -155,7 +152,7 @@ Nexus.prototype.tSeeds = {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Space(master) {
 	if (master instanceof Space) {
-		master = master._twigs;
+		// TODO
 	} else if (master && master.type !== 'space') {
 		throw new Error('Space master typed wrongly: '+master.type);
 	}
@@ -168,8 +165,6 @@ function Space(master) {
 	this.type  = 'space';
 	this.items = this._twigs.items;
 	this.z     = this._twigs.z;
-	log('debug', 'NEWSPACE MASTER', master);
-	log('debug', 'NEWSPACE THIS', this);
 }
 subclass(Space, Stem);
 
@@ -180,7 +175,7 @@ Space.prototype.set = function(sign, val, s0, sl) {
 	s0 = sign.fitarc(s0, false);
 	sl = sign.fitarc(sl, true);
 	if (s0 + 1 === sl) throw new Error('Cannot set Space twigs themselves');
-	Stem.set.call(this, sign, val, s0, sl);
+	this.super.set.call(this, sign, val, s0, sl);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -189,10 +184,7 @@ Space.prototype.set = function(sign, val, s0, sl) {
  A copse of items (in a space).
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function ItemCopse(master) {
-	if (master instanceof ItemCopse) master = master._twigs;
 	Stem.call(this, {}, master);
-	log('debug', 'ITEMCOPSE MASTER', master);
-	log('debug', 'ITEMCOPSE THIS', this);
 }
 subclass(ItemCopse, Stem);
 
@@ -210,8 +202,6 @@ ItemCopse.prototype.cSeeds = {
  xx
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function ArcAlley(master) {
-	log('debug', 'ARCALLEY MASTER', master);
-	if (master instanceof ArcAlley) master = master._twigs;
 	Stem.call(this, [], master);
 }
 subclass(ArcAlley, Stem);

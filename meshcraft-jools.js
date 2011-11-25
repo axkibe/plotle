@@ -46,6 +46,7 @@ function subclass(sub, base) {
    function inherit() {}
    inherit.prototype = base.prototype;
    sub.prototype = new inherit();
+   sub.prototype.super = base.prototype;
    sub.prototype.constructor = sub;
 }
 
