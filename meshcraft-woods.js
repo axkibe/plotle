@@ -28,9 +28,9 @@ function is(o)        { return typeof(o) !== 'undefined'; }
 function isnon(o)     { return typeof(o) !== 'undefined' && o !== null; }
 
 var seeds = {
+	'Alley'    : Alley,
+	'Array'    : Alley,
 	'Generic'  : Generic,
-	'Array'    : Sequence,
-	'Sequence' : Sequence,
 };
 
 function sprout(master, generic) {
@@ -59,172 +59,82 @@ function sprout(master, generic) {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  The base of all meshcraft-nodes.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-//function Stem(master, twigs, generic) {
-//	this._twigs = twigs;
-//	for (k in master) {
-//		twigs[k] = sprout(master[k], generic);
-//	}
-//}
-//
-///**
-//| Returns the subnode the signature points at.
-//*/
-//Stem.prototype.get = function(sign, s0, sl) {
-//	s0 = sign.fitarc(s0, false);
-//	sl = sign.fitarc(sl, true);
-//	var node = this._twigs[sign.arc(s0)];
-//	if (s0 + 1 === sl) {
-//		return node;
-//	}
-//	if (!node.get) throw new Error('signature points nowhere');
-//	return node.get(sign, s0 + 1, sl);
-//}
-//
-///**
-//| Sets the value of a node.
-//*/
-///* todo change order */
-//Generic.prototype.set = function(sign, val, s0, sl) {
-//	s0 = sign.fitarc(s0, false);
-//	sl = sign.fitarc(sl, true);
-//	if (s0 + 1 === sl) {
-//		this._nodes[sign.arc(s0)] = sprout(val, true);
-//	} else {
-//		var node = this._nodes[sign.arc(s0)];
-//		if (!isnon(node)) throw new Error('signature points nowhere');
-//		node.set(sign, val, s0 + 1, sl);
-//	}
-//}
-//
-///**
-//| Clones the tree
-//*/
-//Generic.prototype.clone = function() {
-//	return new Generic(this._nodes);
-//}
-//
-//Generic.prototype.toJSON = function() {
-//	return this._nodes;
-//}
+function Stem(twigs, master, generic) {
+	this._twigs = twigs;
+	for (k in master) {
+		twigs[k] = sprout(master[k], generic);
+	}
+}
+
+/**
+| Returns the twig the signature points at.
+*/
+Stem.prototype.get = function(sign, s0, sl) {
+	s0 = sign.fitarc(s0, false);
+	sl = sign.fitarc(sl, true);
+	var twig = this._twigs[sign.arc(s0)];
+	if (s0 + 1 === sl) {
+		return twig;
+	}
+	if (!twig.get) throw new Error('signature points nowhere');
+	return twig.get(sign, s0 + 1, sl);
+}
+
+/**
+| Sets the value of a twig.
+*/
+/* todo change order */
+Stem.prototype.set = function(sign, val, s0, sl) {
+	s0 = sign.fitarc(s0, false);
+	sl = sign.fitarc(sl, true);
+	if (s0 + 1 === sl) {
+		this._twigs[sign.arc(s0)] = sprout(val, !!this.generic);
+	} else {
+		var twig = this._twigs[sign.arc(s0)];
+		if (!twig.set) throw new Error('signature points nowhere');
+		twig.set(sign, val, s0 + 1, sl);
+	}
+}
+
+/**
+| Clones the tree
+*/
+Stem.prototype.clone = function() {
+	return new this.constructor(this._twigs);
+}
+
+Stem.prototype.toJSON = function() {
+	return this._twigs;
+}
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++ Generic ++
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- a node tree (repository)
+ a generic twig allowing any subtwigs.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Generic(master) {
-	this._nodes = {};
-	if (master instanceof Generic) {
-		master = master._nodes;
-	}
-	for (k in master) {
-		this._nodes[k] = sprout(master[k], true);
-	}
+	if (master instanceof Generic) master = master._twigs;
+	Stem.call(this, {}, master, true);
 }
+subclass(Generic, Stem);
 
 /**
-| Returns the subnode path points at.
+| Twigs are also generic
 */
-Generic.prototype.get = function(sign, s0, sl) {
-	s0 = sign.fitarc(s0, false);
-	sl = sign.fitarc(sl, true);
-	var node = this._nodes[sign.arc(s0)];
-	if (s0 + 1 === sl) {
-		return node;
-	}
-	if (!isnon(node)) throw new Error('signature points nowhere');
-	return node.get(sign, s0 + 1, sl);
-}
-
-/**
-| Sets the value of a node.
-*/
-/* todo change order */
-Generic.prototype.set = function(sign, val, s0, sl) {
-	s0 = sign.fitarc(s0, false);
-	sl = sign.fitarc(sl, true);
-	if (s0 + 1 === sl) {
-		this._nodes[sign.arc(s0)] = sprout(val, true);
-	} else {
-		var node = this._nodes[sign.arc(s0)];
-		if (!isnon(node)) throw new Error('signature points nowhere');
-		node.set(sign, val, s0 + 1, sl);
-	}
-}
-
-/**
-| Clones the tree
-*/
-Generic.prototype.clone = function() {
-	return new Generic(this._nodes);
-}
-
-Generic.prototype.toJSON = function() {
-	return this._nodes;
-}
+Generic.prototype.generic = true;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ++ Sequence ++
+ ++ Alley ++
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  an array.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Sequence(master) {
-	this._seq = [];
-	if (master instanceof Sequence) {
-		master = master._seq;
-	}
-	for (k in master) {
-		this._seq[k] = sprout(master[k], true);
-	}
+function Alley(master) {
+	if (master instanceof Alley) master = master._twigs;
+	Stem.call(this, [], master, true);
 }
+subclass(Alley, Stem);
 
-/**
-| Returns the subnode path points at.
-*/
-Sequence.prototype.get = function(sign, s0, sl) {
-	s0 = sign.fitarc(s0, false);
-	sl = sign.fitarc(sl, true);
-	var node = this._seq[sign.arc(s0)];
-	if (s0 + 1 === sl) {
-		return node;
-	}
-	if (!isnon(node)) throw new Error('signature points nowhere');
-	return node.get(sign, s0 + 1, sl);
-}
-
-/**
-| Sets the value of a node.
-*/
-/* todo change order */
-Sequence.prototype.set = function(sign, val, s0, sl) {
-	s0 = sign.fitarc(s0, false);
-	sl = sign.fitarc(sl, true);
-	if (s0 + 1 === sl) {
-		this._seq[sign.arc(s0)] = sprout(val, true);
-	} else {
-		var node = this._seq[sign.arc(s0)];
-		if (!isnon(node)) throw new Error('signature points nowhere');
-		node.set(sign, val, s0 + 1, sl);
-	}
-}
-
-/**
-| Clones the tree
-*/
-Sequence.prototype.clone = function() {
-	return new Sequence(this._seq);
-}
-
-Sequence.prototype.toJSON = function() {
-	return this._seq;
-}
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ++ Set ++
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- ???
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
+Alley.prototype.generic = true;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++ Nexus ++
