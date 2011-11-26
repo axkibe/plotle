@@ -41,6 +41,7 @@ function Stem(twigs, master) {
 	if (master && master._twigs) master = master._twigs;
 	this._twigs = twigs;
 	for (k in master) {
+		if (k === 'type' ) continue;
 		twigs[k] = this._sprout(master[k]);
 	}
 }
@@ -132,8 +133,7 @@ GenericAlley.prototype.tSeeds = GenericCopse.prototype.tSeeds;
  The root of spaces
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Nexus(master) {
-	Stem.call(this, {}, master);
-	this.type  = 'nexus';
+	Stem.call(this, {type: 'nexus'}, master);
 }
 subclass(Nexus, Stem);
 
@@ -151,18 +151,16 @@ Nexus.prototype.tSeeds = {
  a space
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Space(master) {
-	if (master instanceof Space) {
-		// TODO
-	} else if (master && master.type !== 'space') {
+	if (master && !(master instanceof Space) && master.type !== 'space') {
 		throw new Error('Space master typed wrongly: '+master.type);
 	}
 	// todo check if master has other keys.
 
 	Stem.call(this, {
+			type  : 'space',
 			items : new ItemCopse(master && master.items),
 			z     : new ArcAlley (master && master.z),
 		}, null);
-	this.type  = 'space';
 	this.items = this._twigs.items;
 	this.z     = this._twigs.z;
 }
@@ -189,17 +187,48 @@ function ItemCopse(master) {
 subclass(ItemCopse, Stem);
 
 ItemCopse.prototype.cSeeds = {
-	'GenericCopse' : GenericCopse,
-	'Object'       : GenericCopse,
+	'Note' : Note,
 };
 
-//ItemCopse.prototype.tSeeds = {
-//};
+ItemCopse.prototype.tSeeds = {
+	'note' : Note,
+};
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ++ Note ++
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ a note
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+function Note(master) {
+	if (master && !(master instanceof Note) && master.type !== 'note') {
+		throw new Error('Note master typed wrongly: '+master.type);
+	}
+	// todo check if master has other keys.
+
+	Stem.call(this, {
+			type : 'note',
+			zone : new GenericCopse(master && master.zone),
+			doc  : new DocAlley(master && master.doc),
+		}, null);
+	this.zone = this._twigs.zone;
+	this.doc  = this._twigs.doc;
+}
+subclass(Note, Stem);
+
+/**
+| Sets the value of a node.
+*/
+Note.prototype.set = function(sign, val, s0, sl) {
+	s0 = sign.fitarc(s0, false);
+	sl = sign.fitarc(sl, true);
+	if (s0 + 1 === sl) throw new Error('Cannot set Note twigs themselves');
+	this.super.set.call(this, sign, val, s0, sl);
+}
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++ ArcAlley ++
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- xx
+ An array of Numbers and Strings (Arcs to Signatures)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function ArcAlley(master) {
 	Stem.call(this, [], master);
@@ -212,6 +241,21 @@ ArcAlley.prototype.cSeeds = {
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ++ DocAlley ++
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ An array of Paragraphs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+function DocAlley(master) {
+	Stem.call(this, [], master);
+}
+subclass(DocAlley, Stem);
+
+DocAlley.prototype.cSeeds = {
+	'Object'       : GenericCopse, // xx
+	'GenericCopse' : GenericCopse, // xx
+};
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  Module Export
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -220,6 +264,7 @@ woods = {
 	Space        : Space,
 	ItemCopse    : ItemCopse,
 	ArcAlley     : ArcAlley,
+	DocAlley     : DocAlley,
 	GenericCopse : GenericCopse,
 }
 
