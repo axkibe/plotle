@@ -133,7 +133,7 @@ var mmAjax = function(req, red, res) {
 			break;
 		case 'get':
 			try {
-				sign = new meshmashine.Signature(cmd.sign);
+				sign = new woods.Signature(cmd.sign);
 			} catch (e) {
 				if (e.ok !== false) throw e; else asw = e;
 			}

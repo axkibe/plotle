@@ -31,6 +31,7 @@
 | Imports
 */
 var jools;
+var woods;
 
 /**
 | Exports
@@ -46,7 +47,8 @@ var meshmashine;
 
 try {
 	// if not fails running nodejs
-	jools =  require('./meshcraft-jools');
+	jools = require('./meshcraft-jools');
+	woods = require('./meshcraft-woods');
 } catch(e) {
 	// require failed, running in browser
 }
@@ -55,6 +57,7 @@ var log        = jools.log;
 var clone      = jools.clone;
 var deepFreeze = jools.deepFreeze;
 var fixate     = jools.fixate;
+var Signature  = woods.Signature;
 
 /**
 | Returns a rejection error
@@ -91,8 +94,6 @@ function checkWithin(v, low, high) {
 function is(o)        { return typeof(o) !== 'undefined'; }
 function isnon(o)     { return typeof(o) !== 'undefined' && o !== null; }
 function isString(o)  { return typeof(o) === 'string' || o instanceof String; }
-function isArray(o)   { return o instanceof Array; }
-function isSign(o)    { return o instanceof Signature; }
 function isTable(o)   { return o.constructor === Object; }
 function isInteger(o) { return typeof(o) === 'number' && Math.floor(o) === o; }
 
@@ -116,213 +117,6 @@ function deepEqual(o1, o2) {
 
 
 
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- .---.               .
- \___  . ,-. ,-. ,-. |- . . ,-. ,-.
-     \ | | | | | ,-| |  | | |   |-'
- `---' ' `-| ' ' `-^ `' `-^ '   `-'
-~ ~ ~ ~ ~ ,|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-          `'
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-/**
-| Signates an entry, string index or string span.
-*/
-function Signature(sign, name) {
-	if (isSign(sign)) sign = sign._sign;
-	check(isArray(sign), name, 'not an array');
-	for (var i = 0; i < sign.length; i++) {
-		check(isString(sign[i]) || isInteger(sign[i]) ||
-			(i === sign.length - 1 && isTable(sign[i])),
-			name, 'arcs must be string or integer or a postfix table');
-		check(sign[i][0] !== '_', name, 'arcs must not start with _');
-	}
-	this._sign = clone(sign);
-}
-
-/**
-| Clones the signature
-*/
-Signature.prototype.clone = function() {
-	return new Signature(this, 'clone');
-}
-
-///**
-//| Signates an entry, string index or string span.
-//*/
-//function Signature(sign) {
-//	check(isArray(sign), 'Signature not created with array');
-//	for (var i = 0; i < sign.length; i++) {
-//		var a = sign[i];
-//		check(isString(a) || isInteger(a) || (i === sign.length - 1 && isTable(a)),
-//			'Arcs must be string, integer or a postfix table');
-//		check(sign[i][0] !== '_', 'Arcs must not start with _.');
-//	}
-//	deepFreeze(sign);
-//}
-
-/**
-| Length of the signature.
-*/
-Object.defineProperty(Signature.prototype, 'length', {
-	get: function() { return this._sign.length; },
-});
-
-
-/**
-| If the signature is an index or span it will return that.
-*/
-Object.defineProperty(Signature.prototype, 'postfix', {
-	get: function() {
-		if (this._sign.length === 0) return null;
-		var pfx = this._sign[this._sign.length - 1];
-		return isTable(pfx) ? pfx : null;
-	},
-});
-
-/**
-| Length of the path / signature without postfix.
-*/
-Object.defineProperty(Signature.prototype, 'pathlen', {
-	get: function() {
-		return this._sign.length - (this.postfix ? 1 : 0);
-	},
-});
-
-
-/**
-| True if the signature ends as string index.
-*/
-Signature.prototype.isIndex = function() {
-	var pfx = this.postfix;
-	return (pfx !== null) && is(pfx.at1);
-}
-
-/**
-| True if the signature ends as string span.
-*/
-Signature.prototype.isSpan = function() {
-	var pfx = this.postfix;
-	return (pfx !== null) && is(pfx.at1) && is(pfx.at2);
-}
-
-/**
-| True if the signature is only a path (without postfix)
-*/
-Signature.prototype.isPath = function() {
-	return (this.postfix === null);
-}
-
-/**
-| Returns the signature at index i.
-| TODO rename to get?
-*/
-Signature.prototype.arc = function(i) {
-	if (i < 0) i = this._sign.length + i;
-	if (i < 0) return null;
-	return this._sign[i];
-}
-
-
-/**
-| Fits the arc numberation to be in this signature.
-*/
-Signature.prototype.fitarc = function(sa, defaultedge) {
-	if (!is(sa)) sa = defaultedge ? this.pathlen : 0;
-	if (sa < 0) sa = this.pathlen + sa;
-	if (sa < 0) sa = 0;
-	return sa;
-}
-
-/**
-| Returns the signature at index i.
-*/
-Signature.prototype.setarc = function(i, v) {
-	check(!this.frozen, 'changing readonly signature');
-	if (i < 0) i = this._sign.length - i;
-	return this._sign[i] = v;
-}
-
-/**
-| Returns the signature at index i.
-*/
-Signature.prototype.addarc = function(i, v) {
-	check(!this.frozen, 'changing readonly signature');
-	if (i < 0) i = this._sign.length + i;
-	check(isInteger(this._sign[i]), 'cannot add to non integer arc: ', this._sign[i]);
-	return this._sign[i] += v;
-}
-
-/**
-| True if this signature is the same as another.
-*/
-Signature.prototype.equals = function(o) {
-	return deepEqual(this._sign, o._sign);
-}
-
-/**
-| True if this signature has the same path (that is without postfix)
-| than another
-*/
-Signature.prototype.equalPaths = function(o) {
-	var pl = this.pathlen;
-	if (pl !== o.pathlen) return false;
-	for(var i = 0; i < pl; i++) {
-		if (this._sign[i] !== o._sign[i]) return false;
-	}
-	return true;
-}
-
-/**
-| True if this signature is start of another.
-|
-| o: the other signature
-| [slan]: the length of this signature to consider.
-*/
-Signature.prototype.isSubOf = function(o, slen) {
-	if (!is(slen)) slen = this.pathlen;
-	if (slen < 0) slen = this.pathlen + slen;
-	if (slen < 0) slen = 0;
-
-	if (slen === this.length && this.postfix) return false;
-	if (slen > o.pathlen) return false;
-	for(var i = 0; i < slen; i++) {
-		if (this._sign[i] !== o._sign[i]) return false;
-	}
-	return true;
-}
-
-
-/**
-| stringify
-*/
-Signature.prototype.toString = function() {
-	return this._sign.toString();
-}
-
-/**
-| Attunes the '_end' things of the postfix to match the string it points to.
-*/
-Signature.prototype.attunePostfix = function(str, name) {
-	var pfx = this.postfix;
-	check(pfx !== null, name, 'not a postfix');
-	if (pfx.at1 === '_end') {
-		check(!this.readonly, name, 'cannot change readonly');
-		pfx.at1 = str.length;
-	}
-	if (pfx.at2 === '_end') {
-		check(!this.readonly, name, 'cannot change readonly');
-		pfx.at2 = str.length;
-	}
-	/* todo proper checking
-	checkWithin(pfx.at1, 0, str.length, name, 'postfix.at1 invalid');
-	if (is(pfx.at2)) {
-		checkWithin(pfx.at2, 0, str.length, name, 'postfix.at2 invalid');
-		check(pfx.at2 >= pfx.at1, name, 'postfix: at2 < at1');
-	}*/
-	return pfx;
-}
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      ,.   .  .                  .
@@ -373,7 +167,7 @@ function alter(meshtree, alternation, backward) {
 		check(src.sign.isIndex(), cm, 'src.sign not an index');
 
 		var pivotNode = meshtree.get(src.sign, 0, src.pivot);
-		check(isArray(pivotNode), cm, 'src.pivot signates no array');
+		check(pivotNode.isAlley, cm, 'src.pivot signates no Alley');
 
 		var str = meshtree.get(src.sign);
 		check(isString(str), cm, 'src.sign signates no string');
@@ -383,23 +177,26 @@ function alter(meshtree, alternation, backward) {
 		var sig_splice = src.sign.arc(src.pivot);
 		checkWithin(sig_splice, 0, pivotNode.length, cm, 'splice out of range');
 
-		var ppre = pivotNode[sig_splice];
+		var ppre = pivotNode.get(sig_splice);
+		/*
 		for(var k in ppre) {
-			var pk = ppre[k];
-			check(!isArray(pk) && !isTable(pk), cm, 'cannot splice arrays or tables');
+			var pk = ppre.get(k);
+			//check(!pk.isAlley && !isTable(pk), cm, 'cannot splice arrays or tables');
 		}
+		*/
 
 		// no rejects after here
-		var pnew = {};
+		var pnew = new ppre.constructor();
 		var ksplit = src.sign.arc(-2);
-		for(var k in ppre) {
+		ppre.forEach(function(v, k) {
+			log('debug', 'VK', v, k);
 			if (k === ksplit) {
-				pnew[k] = ppre[k].substring(sig_pfx.at1);
-				ppre[k] = ppre[k].substring(0, sig_pfx.at1);
+				pnew.set(k, v.substring(sig_pfx.at1));
+				ppre.set(k, v.substring(0, sig_pfx.at1));
 			} else {
-				pnew[k] = ppre[k];
+				pnew.set(k, v);
 			}
-		}
+		});
 		pivotNode.splice(sig_splice + 1, 0, pnew);
 		break;
 	case 'join' :
@@ -407,7 +204,7 @@ function alter(meshtree, alternation, backward) {
 		check(trg.sign.isIndex(), cm, 'trg.sign not an index');
 
 		var pivotNode = meshtree.get(trg.sign, 0, trg.pivot);
-		check(isArray(pivotNode), cm, 'trg.sign(pivot) signates no array');
+		check(pivotNode.isAlley, cm, 'trg.sign(pivot) signates no Alley');
 
 		var str = meshtree.get(trg.sign);
 		check(isString(str, cm, 'trg.sign signates no string'));
@@ -683,12 +480,12 @@ MeshMashine.prototype.transform = function(time, way) {
 	for(var t = time; t < this.history.length; t++) {
 		var moment = this.history[t];
 
-		if (!isArray(waya)) {
+		if (!(waya instanceof Array)) {
 			waya = this.transformOnMoment(waya, moment);
 		} else {
 			for(var i = 0; i < waya.length; i++) {
 				var tom = this.transformOnMoment(waya[i], moment);
-				if (isArray(tom)) {
+				if (tom instanceof Array) {
 					for(var tomi = 0; tomi < tom.length; tomi++) {
 						waya.splice(i++, tom[tomi]);
 					}
@@ -740,21 +537,21 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 		var ttrga = this.transform(time, trg);
 
 		var alta;
-		if (!isArray(tsrca) && !isArray(ttrga)) {
+		if (!(tsrca instanceof Array) && !(ttrga instanceof Array)) {
 			alta = new Alternation(tsrca, ttrga);
-		} else if (!isArray(tsrca) && isArray(ttrga))  {
+		} else if (!(tsrca instanceof Array) && (ttrga instanceof Array))  {
 			alta = [];
 			for(var i = 0; i < ttrga.length; i++) {
 				alta[i] = new Alternation(clone(tsrca), ttrga[i]);
 			}
-		} else if (isArray(tsrca) && !isArray(ttrga)) {
+		} else if ((tsrca instanceof Array) && !(ttrga instanceof Array)) {
 			alta = [];
 			for(var i = 0; i < tsrca.length; i++) {
 				alta[i] = new Alternation(tsrca[i], clone(ttrga));
 			}
 		}
 
-		if (!isArray(alta)) {
+		if (!(alta instanceof Array)) {
 			alter(this.repository, alta, false);
 			deepFreeze(alta);
 			this.history.push(alta);
@@ -832,7 +629,6 @@ MeshMashine.prototype.update = function(time) {
 */
 meshmashine = {
 	MeshMashine     : MeshMashine,
-	Signature       : Signature
 }
 
 

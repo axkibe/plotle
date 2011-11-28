@@ -17,7 +17,7 @@
 | This is not a full blown feature complete everything library,
 | but enhanced on the fly for what meshcraft needs.
 |
-| Defines: MCCanvas
+| Defines: fabric
 |
 | Authors: Axel Kittenberger
 | License: GNU Affero GPLv3
@@ -65,11 +65,11 @@ if (!Object.freeze) {
  objects as arguments.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /**
-| MCCanvas()        -or-    creates new Canvas2D
-| MCCanvas(canvas)  -or-    encloses an existing HTML5 canvas
-| MCCanvas(width, height)   creates a new Canvas2D and sets its size;
+| fabric()        -or-    creates new Canvas2D
+| fabric(canvas)  -or-    encloses an existing HTML5 canvas
+| fabric(width, height)   creates a new Canvas2D and sets its size;
 */
-function MCCanvas(a1, a2) {
+function fabric(a1, a2) {
 	switch (typeof(a1)) {
 	case 'undefined' :
 		this._canvas = document.createElement('canvas');
@@ -83,44 +83,44 @@ function MCCanvas(a1, a2) {
 		this._canvas.height = a2;
 	}
 	this._cx = this._canvas.getContext('2d');
-	this.pan = MCCanvas.Point.zero;
+	this.pan = fabric.Point.zero;
 }
 
 
 /**
 | sets a readonly value
 */
-MCCanvas.fixate = function(obj, key, value) {
+fabric.fixate = function(obj, key, value) {
 	Object.defineProperty(obj, key, {enumerable: true, value: value});
 	return value;
 }
-//MCCanvas.fixate(MCCanvas, 'fixate', MCCanvas.fixate);
+//fabric.fixate(fabric, 'fixate', fabric.fixate);
 
 /**
 * A value is computed and fixated only when needed.
 */
-MCCanvas.lazyFixate = function(proto, key, getter) {
+fabric.lazyFixate = function(proto, key, getter) {
 	Object.defineProperty(proto, key, {
 		// this clever overriding does not work in IE9 :-( or Android 2.2 Browser
-		// get : function() { return MCCanvas.fixate(this, key, getter.call(this)); },
+		// get : function() { return fabric.fixate(this, key, getter.call(this)); },
 		get : function() { return this['_cache_'+key] || (this['_cache_'+key] = getter.call(this)); },
 	});
 };
 
 /* divides by 2 and rounds up */
-MCCanvas.fixate(MCCanvas, 'half',  function(v) { return Math.round(v / 2); });
+fabric.fixate(fabric, 'half',  function(v) { return Math.round(v / 2); });
 
 /* cos(30°) */
 
-MCCanvas.fixate(MCCanvas, 'cos30', Math.cos(Math.PI / 6));
+fabric.fixate(fabric, 'cos30', Math.cos(Math.PI / 6));
 
 /* tan(30°) */
-MCCanvas.fixate(MCCanvas, 'tan30', Math.tan(Math.PI / 6));
+fabric.fixate(fabric, 'tan30', Math.tan(Math.PI / 6));
 
 /**
 | Returns the compass direction opposite of a direction.
 */
-MCCanvas.fixate(MCCanvas, 'opposite', function(dir) {
+fabric.fixate(fabric, 'opposite', function(dir) {
 	switch (dir) {
 	case 'n'  : return 's';
 	case 'ne' : return 'sw';
@@ -138,7 +138,7 @@ MCCanvas.fixate(MCCanvas, 'opposite', function(dir) {
 /**
 | Throws an error if any argument is not an integer.
 */
-MCCanvas.fixate(MCCanvas, 'ensureInteger', function() {
+fabric.fixate(fabric, 'ensureInteger', function() {
 	for(var a in arguments) {
 		var arg = arguments[a];
 		if (Math.floor(arg) - arg !== 0) {
@@ -150,7 +150,7 @@ MCCanvas.fixate(MCCanvas, 'ensureInteger', function() {
 /**
 | Just a convenience debugging tool
 */
-MCCanvas.debug = function() {
+fabric.debug = function() {
 	if (!console) return;
 	var l = '';
 	for(var i = 0; i < arguments.length; i++) {
@@ -191,12 +191,12 @@ MCCanvas.debug = function() {
 /**
 | Canvas width.
 */
-Object.defineProperty(MCCanvas.prototype, 'width',  { get: function() { return this._canvas.width; }, });
+Object.defineProperty(fabric.prototype, 'width',  { get: function() { return this._canvas.width; }, });
 
 /**
 | Canvas height.
 */
-Object.defineProperty(MCCanvas.prototype, "height", { get: function() { return this._canvas.height; }, });
+Object.defineProperty(fabric.prototype, "height", { get: function() { return this._canvas.height; }, });
 
 /**
 | The canvas is cleared and resized to width/height (of rect).
@@ -205,7 +205,7 @@ Object.defineProperty(MCCanvas.prototype, "height", { get: function() { return t
 | attune(rect)           -or-
 | attune(width, height)
 */
-MCCanvas.prototype.attune = function(a1, a2) {
+fabric.prototype.attune = function(a1, a2) {
 	var ta1 = typeof(a1);
 	var c = this._canvas;
 	var w, h;
@@ -239,7 +239,7 @@ MCCanvas.prototype.attune = function(a1, a2) {
 | moveTo(point, edge) -or-
 | moveTo(x, y,  edge)
 */
-MCCanvas.prototype.moveTo = function(a1, a2, a3) {
+fabric.prototype.moveTo = function(a1, a2, a3) {
 	var pan = this.pan;
 	var x, y, e;
 	if (typeof(a1) === 'object') {
@@ -247,7 +247,7 @@ MCCanvas.prototype.moveTo = function(a1, a2, a3) {
 	} else {
 		x = a1;   y = a2;   e = a3;
 	}
-	MCCanvas.ensureInteger(x, y);
+	fabric.ensureInteger(x, y);
 	this._cx.moveTo(x + pan.x + (e ? 0.5 : 0), y + pan.y + (e ? 0.5 : 0));
 }
 
@@ -257,7 +257,7 @@ MCCanvas.prototype.moveTo = function(a1, a2, a3) {
 | lineto(point, edge) -or-
 | lineto(x, y, edge)
 */
-MCCanvas.prototype.lineTo = function(a1, a2, a3) {
+fabric.prototype.lineTo = function(a1, a2, a3) {
 	var pan = this.pan;
 	var x, y, e;
 	if (typeof(a1) === 'object') {
@@ -265,7 +265,7 @@ MCCanvas.prototype.lineTo = function(a1, a2, a3) {
 	} else {
 		x = a1;   y = a2;   e = a3;
 	}
-	MCCanvas.ensureInteger(x, y);
+	fabric.ensureInteger(x, y);
 	this._cx.lineTo(x + pan.x + (e ? 0.5 : 0), y + pan.y + (e ? 0.5 : 0));
 }
 
@@ -275,7 +275,7 @@ MCCanvas.prototype.lineTo = function(a1, a2, a3) {
 | arc(p,    radius, startAngle, endAngle, anticlockwise, edge)   -or-
 | arc(x, y, radius, startAngle, endAngle, anticlockwise, edge)   -or-
 */
-MCCanvas.prototype.arc = function(a1, a2, a3, a4, a5, a6, a7) {
+fabric.prototype.arc = function(a1, a2, a3, a4, a5, a6, a7) {
 	var pan = this.pan;
 	var x, y, r, sa, ea, ac, e;
 	if (typeof(a1) === 'object') {
@@ -293,8 +293,8 @@ MCCanvas.prototype.arc = function(a1, a2, a3, a4, a5, a6, a7) {
 |
 | border: increase/decrease total size
 */
-MCCanvas.prototype.path = function(self, border, edge) {
-	if (this !== self) throw new Error('MCCanvas.path: self != this');
+fabric.prototype.path = function(self, border, edge) {
+	if (this !== self) throw new Error('fabric.path: self != this');
 	var cx = this._cx;
 	cx.beginPath();
 	// todo -> moveTo lineTo
@@ -309,16 +309,16 @@ MCCanvas.prototype.path = function(self, border, edge) {
 | rect(nwx, nwy, w, h)
 | todo remove by rect.path
 */
-MCCanvas.prototype.rect = function(a1, a2, a3, a4) {
+fabric.prototype.rect = function(a1, a2, a3, a4) {
 //	throw new Error('todo');
 	var pan = this.pan;
 	var cx = this._cx;
 	if (typeof(r) === 'object') {
-		if (r instanceof MCCanvas.Rect)
+		if (r instanceof fabric.Rect)
 			return this._cx.rect(
 				a1.pnw.x + pan.x + 0.5, a1.pnw.y + pan.y + 0.5,
 				a1.width, a1.height);
-		if (r instanceof MCCanvas.Point)
+		if (r instanceof fabric.Point)
 			return this._cx.rect(
 				a1.x + pan.x + 0.5, a1.y + pan.y + 0.5,
 				a2.x - a1.x,        a2.y - a1.y);
@@ -332,14 +332,14 @@ MCCanvas.prototype.rect = function(a1, a2, a3, a4) {
 | fillRect(style, pnw, pse) -or-
 | fillRect(style, nwx, nwy, width, height)
 */
-MCCanvas.prototype.fillRect = function(style, a1, a2, a3, a4) {
+fabric.prototype.fillRect = function(style, a1, a2, a3, a4) {
 	var pan = this.pan;
 	var cx = this._cx;
 	cx.fillStyle = style;
 	if (typeof(p) === 'object') {
-		if (a1 instanceof MCCanvas.Rect)
+		if (a1 instanceof fabric.Rect)
 			return this._cx.fillRect(a1.pnw.x, a1.pnw.y, a1.pse.x, a1.pse.y);
-		if (a1 instanceof MCCanvas.Point)
+		if (a1 instanceof fabric.Point)
 			return this._cx.fillRect(a1.x, a1.y, a2.x, a2.y);
 		throw new Error('fillRect not a rectangle');
 	}
@@ -349,12 +349,12 @@ MCCanvas.prototype.fillRect = function(style, a1, a2, a3, a4) {
 /**
 | Begins a path.
 */
-MCCanvas.prototype.beginPath = function() { this._cx.beginPath(); }
+fabric.prototype.beginPath = function() { this._cx.beginPath(); }
 
 /**
 | Closes a path.
 */
-MCCanvas.prototype.closePath = function() { this._cx.closePath(); }
+fabric.prototype.closePath = function() { this._cx.closePath(); }
 
 /**
 | Draws an image.
@@ -362,9 +362,9 @@ MCCanvas.prototype.closePath = function() { this._cx.closePath(); }
 | drawImage(image, pnw)   -or-
 | drawImage(image, x, y)
 */
-MCCanvas.prototype.drawImage = function(image, a1, a2) {
+fabric.prototype.drawImage = function(image, a1, a2) {
 	var pan = this.pan;
-	if (image instanceof MCCanvas) image = image._canvas;
+	if (image instanceof fabric) image = image._canvas;
 	if (typeof(a1) === 'object') {
 		this._cx.drawImage(image, a1.x + pan.x, a1.y + pan.y);
 		return;
@@ -377,7 +377,7 @@ MCCanvas.prototype.drawImage = function(image, a1, a2) {
 | putImageData(imagedata, p) -or-
 | putImageData(imagedata, x, y)
 */
-MCCanvas.prototype.putImageData = function(imagedata, a1, a2) {
+fabric.prototype.putImageData = function(imagedata, a1, a2) {
 	var pan = this.pan;
 	if (typeof(p) === 'object') {
 		this._cx.putImageData(imagedata, a1.x + pan.x, a2.y + pan.y);
@@ -391,12 +391,12 @@ MCCanvas.prototype.putImageData = function(imagedata, a1, a2) {
 | getImageData(pnw, pse) -or-
 | getImageData(x1, y1, x2, y2)
 */
-MCCanvas.prototype.getImageData = function(a1, a2, a3, a4) {
+fabric.prototype.getImageData = function(a1, a2, a3, a4) {
 	var pan = this.pan;
 	if (typeof(p) === 'object') {
-		if (a1 instanceof MCCanvas.Rect)
+		if (a1 instanceof fabric.Rect)
 			return this._cx.getImageData(a1.pnw.x, a1.pnw.y, a1.pse.x, a1.pse.y);
-		if (a1 instanceof MCCanvas.Point)
+		if (a1 instanceof fabric.Point)
 			return this._cx.getImageData(a1.x, a1.y, a2.x, a2.y);
 		throw new Error('getImageData not a rectangle');
 	}
@@ -406,7 +406,7 @@ MCCanvas.prototype.getImageData = function(a1, a2, a3, a4) {
 /**
 | Returns a HTML5 color style for a meshcraft style notation.
 */
-MCCanvas.prototype._colorStyle = function(style, shape) {
+fabric.prototype._colorStyle = function(style, shape) {
 	if (style.substring) {
 		return style;
 	} else if (!style.gradient) {
@@ -455,7 +455,7 @@ MCCanvas.prototype._colorStyle = function(style, shape) {
 | style: the style formated in meshcraft style notation.
 | shape: an object which has path() defined
 */
-MCCanvas.prototype.fill = function(style, shape, path, a1, a2, a3, a4) {
+fabric.prototype.fill = function(style, shape, path, a1, a2, a3, a4) {
 	var cx = this._cx;
 	shape[path](this, 0, false, a1, a2, a3, a4);
 	cx.fillStyle = this._colorStyle(style, shape);
@@ -468,7 +468,7 @@ MCCanvas.prototype.fill = function(style, shape, path, a1, a2, a3, a4) {
 | style: the style formated in meshcraft style notation.
 | shape: an object which has path() defined
 */
-MCCanvas.prototype._edge = function(style, shape, path, a1, a2, a3, a4) {
+fabric.prototype._edge = function(style, shape, path, a1, a2, a3, a4) {
 	var cx = this._cx;
 	shape[path](this, style.border, true, a1, a2, a3, a4);
 	cx.strokeStyle = this._colorStyle(style.color, shape);
@@ -482,7 +482,7 @@ MCCanvas.prototype._edge = function(style, shape, path, a1, a2, a3, a4) {
 | style: the style formated in meshcraft style notation.
 | shape: an object which has path() defined
 */
-MCCanvas.prototype.edge = function(style, shape, path, a1, a2, a3, a4) {
+fabric.prototype.edge = function(style, shape, path, a1, a2, a3, a4) {
 	var cx = this._cx;
 	if (style instanceof Array) {
 		for(var i = 0; i < style.length; i++) {
@@ -496,7 +496,7 @@ MCCanvas.prototype.edge = function(style, shape, path, a1, a2, a3, a4) {
 /**
 | Fills an aera and draws its borders
 */
-MCCanvas.prototype.paint = function(fillStyle, edgeStyle, shape, path, a1, a2, a3, a4) {
+fabric.prototype.paint = function(fillStyle, edgeStyle, shape, path, a1, a2, a3, a4) {
 	var cx = this._cx;
 	shape[path](this, 0, false, a1, a2, a3, a4);
 	cx.fillStyle = this._colorStyle(fillStyle, shape);
@@ -514,7 +514,7 @@ MCCanvas.prototype.paint = function(fillStyle, edgeStyle, shape, path, a1, a2, a
 /**
 | Draws some text.
 */
-MCCanvas.prototype.fillText = function(text, a1, a2) {
+fabric.prototype.fillText = function(text, a1, a2) {
 	if (typeof(a1) === 'object') {
 		return this._cx.fillText(text, a1.x, a1.y);
 	}
@@ -528,7 +528,7 @@ MCCanvas.prototype.fillText = function(text, a1, a2) {
 | phi: rotation angle
 | d: distance from center // todo rename
 */
-MCCanvas.prototype.fillRotateText = function(text, pc, phi, d) {
+fabric.prototype.fillRotateText = function(text, pc, phi, d) {
 	var cx = this._cx;
 	var t1 = Math.cos(phi);
 	var t2 = Math.sin(phi);
@@ -554,7 +554,7 @@ MCCanvas.prototype.fillRotateText = function(text, pc, phi, d) {
 | fontStyle(font, fill)                      -or-
 | fontStyle(font, fill, align, baseline)
 */
-MCCanvas.prototype.fontStyle = function(font, fill, align, baseline) {
+fabric.prototype.fontStyle = function(font, fill, align, baseline) {
 	var cx = this._cx;
 	cx.font         = font;
 	cx.fillStyle    = fill;
@@ -569,7 +569,7 @@ MCCanvas.prototype.fontStyle = function(font, fill, align, baseline) {
    '   `-' `-' `-^ `-' `-^ '   `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-MCCanvas.Measure = {
+fabric.Measure = {
 	init : function() {
 		Measure._canvas = document.createElement('canvas');
 		Measure._cx = this._canvas.getContext('2d');
@@ -580,7 +580,7 @@ MCCanvas.Measure = {
 	}
 }
 
-Object.defineProperty(MCCanvas.Measure, 'font', {
+Object.defineProperty(fabric.Measure, 'font', {
 	get: function() { return Measure._cx.font; },
 	set: function(font) { Measure._cx.font = font; }
 });
@@ -600,30 +600,30 @@ Object.defineProperty(MCCanvas.Measure, 'font', {
 | Point(x, y) or
 | Point(p)
 */
-MCCanvas.Point = function(a1, a2) {
+fabric.Point = function(a1, a2) {
 	if (typeof(a1) === 'object') {
-		MCCanvas.fixate(this, 'x', a1.x);
-		MCCanvas.fixate(this, 'y', a1.y);
+		fabric.fixate(this, 'x', a1.x);
+		fabric.fixate(this, 'y', a1.y);
 	} else {
-		MCCanvas.ensureInteger(a1, a2);
-		MCCanvas.fixate(this, 'x', a1);
-		MCCanvas.fixate(this, 'y', a2);
+		fabric.ensureInteger(a1, a2);
+		fabric.fixate(this, 'x', a1);
+		fabric.fixate(this, 'y', a2);
 	}
 }
 
 /**
 | Shortcut for point at 0/0.
 */
-MCCanvas.Point.zero = new MCCanvas.Point(0, 0);
+fabric.Point.zero = new fabric.Point(0, 0);
 
 /**
 | Creates a point from json.
 */
-MCCanvas.Point.jnew = function(js) {
+fabric.Point.jnew = function(js) {
 	if (typeof(js.x) !== 'number' || typeof(js.y) !== 'number') {
 		throw new Error('JSON malformed point.');
 	}
-	return new MCCanvas.Point(js);
+	return new fabric.Point(js);
 }
 
 /**
@@ -634,25 +634,25 @@ MCCanvas.Point.jnew = function(js) {
 |
 | Point.renew(x, y, p1, p2, p3, ...)
 */
-MCCanvas.Point.renew = function(x, y) {
+fabric.Point.renew = function(x, y) {
 	for(var a = 2; a < arguments.length; a++) {
 		var p = arguments[a];
 		if (p instanceof Point && p.x === x && p.y === y) return p;
 	}
-	return new MCCanvas.Point(x, y);
+	return new fabric.Point(x, y);
 }
 
 /**
 | Returns a json object for this point.
 */
-MCCanvas.Point.prototype.jsonfy = function() {
+fabric.Point.prototype.jsonfy = function() {
 	return this._json || (this._json = { x: this.x, y: this.y });
 }
 
 /**
 | Returns true if this point is equal to another.
 */
-MCCanvas.Point.prototype.eq = function(a1, a2) {
+fabric.Point.prototype.eq = function(a1, a2) {
 	return typeof(a1) === 'object' ?
 		this.x === a1.x && this.y === a1.y :
 		this.x === a1   && this.y === a2;
@@ -661,19 +661,19 @@ MCCanvas.Point.prototype.eq = function(a1, a2) {
 /**
 | Adds two points or x/y values, returns a new point.
 */
-MCCanvas.Point.prototype.add = function(a1, a2) {
+fabric.Point.prototype.add = function(a1, a2) {
 	return typeof(a1) === 'object' ?
-		new MCCanvas.Point(this.x + a1.x, this.y + a1.y) :
-		new MCCanvas.Point(this.x + a1,   this.y + a2);
+		new fabric.Point(this.x + a1.x, this.y + a1.y) :
+		new fabric.Point(this.x + a1,   this.y + a2);
 }
 
 /**
 | Subtracts a points (or x/y from this), returns new point
 */
-MCCanvas.Point.prototype.sub = function(a1, a2) {
+fabric.Point.prototype.sub = function(a1, a2) {
 	return typeof(a1) === 'object' ?
-		new MCCanvas.Point(this.x - a1.x, this.y - a1.y) :
-		new MCCanvas.Point(this.x - a1,   this.y - a2);
+		new fabric.Point(this.x - a1.x, this.y - a1.y) :
+		new fabric.Point(this.x - a1,   this.y - a2);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -691,27 +691,27 @@ MCCanvas.Point.prototype.sub = function(a1, a2) {
 | pnw: point to north west.
 | pse: point to south east.
 */
-MCCanvas.Rect = function(pnw, pse) {
+fabric.Rect = function(pnw, pse) {
 	if (!pnw || !pse || pnw.x > pse.x || pnw.y > pse.y) {
 		throw new Error('not a rectangle.');
 	}
-	MCCanvas.fixate(this, 'pnw',    pnw);
-	MCCanvas.fixate(this, 'pse',    pse);
-	MCCanvas.fixate(this, 'width',  pse.x - pnw.x);
-	MCCanvas.fixate(this, 'height', pse.y - pnw.y);
+	fabric.fixate(this, 'pnw',    pnw);
+	fabric.fixate(this, 'pse',    pse);
+	fabric.fixate(this, 'width',  pse.x - pnw.x);
+	fabric.fixate(this, 'height', pse.y - pnw.y);
 }
 
 /**
 | Creates a point from json
 */
-MCCanvas.Rect.jnew = function(js) {
-	return new MCCanvas.Rect(MCCanvas.Point.jnew(js.pnw), MCCanvas.Point.jnew(js.pse));
+fabric.Rect.jnew = function(js) {
+	return new fabric.Rect(fabric.Point.jnew(js.pnw), fabric.Point.jnew(js.pse));
 }
 
 /**
 | Returns a json object for this rect
 */
-MCCanvas.Rect.prototype.jsonfy = function() {
+fabric.Rect.prototype.jsonfy = function() {
 	return this._json || (this._json = { pnw: this.pnw.jsonfy(), pse: this.pse.jsonfy() });
 }
 
@@ -721,8 +721,8 @@ MCCanvas.Rect.prototype.jsonfy = function() {
 | add(point)   -or-
 | add(x, y)
 */
-MCCanvas.Rect.prototype.add = function(a1, a2) {
-	return new MCCanvas.Rect(this.pnw.add(a1, a2), this.pse.add(a1, a2));
+fabric.Rect.prototype.add = function(a1, a2) {
+	return new fabric.Rect(this.pnw.add(a1, a2), this.pse.add(a1, a2));
 }
 
 /**
@@ -731,14 +731,14 @@ MCCanvas.Rect.prototype.add = function(a1, a2) {
 | sub(point)   -or-
 | sub(x, y)
 */
-MCCanvas.Rect.prototype.sub = function(a1, a2) {
-	return new MCCanvas.Rect(this.pnw.sub(a1, a2), this.pse.sub(a1, a2));
+fabric.Rect.prototype.sub = function(a1, a2) {
+	return new fabric.Rect(this.pnw.sub(a1, a2), this.pse.sub(a1, a2));
 }
 
 /**
 | Returns true if point is within this rect.
 */
-MCCanvas.Rect.prototype.within = function(p) {
+fabric.Rect.prototype.within = function(p) {
 	return p.x >= this.pnw.x && p.y >= this.pnw.y &&
 	       p.x <= this.pse.x && p.y <= this.pse.y;
 }
@@ -746,7 +746,7 @@ MCCanvas.Rect.prototype.within = function(p) {
 /**
 | Draws the rectangle.
 */
-MCCanvas.Rect.prototype.path = function(c2d, border, edge) {
+fabric.Rect.prototype.path = function(c2d, border, edge) {
 	c2d.beginPath();
 	c2d.moveTo(this.pnw.x + border, this.pnw.y + border, edge);
 	c2d.lineTo(this.pse.x - border, this.pnw.y + border, edge);
@@ -762,90 +762,90 @@ MCCanvas.Rect.prototype.path = function(c2d, border, edge) {
 | height: new height
 | align:  compass direction which point will be identical to this rectangle.
 */
-MCCanvas.Rect.prototype.resize = function(width, height, align) {
+fabric.Rect.prototype.resize = function(width, height, align) {
 	if (this.width === width && this.height === height) return this;
 	var pnw, pse;
 	switch(align) {
 	case 'n' :
-		pnw = MCCanvas.Point.renew(
+		pnw = fabric.Point.renew(
 			this.pnw.x - half(width - this.width),
 			this.pnw.y,
 			this.pnw, this.pse);
-		pse = MCCanvas.Point.renew(
+		pse = fabric.Point.renew(
 			pnw.x + width,
 			this.pnw.y + height,
 			this.pnw, this.pse);
 		break;
 	case 'ne' :
-		pnw = MCCanvas.Point.renew(
+		pnw = fabric.Point.renew(
 			this.pse.x - width,
 			this.pnw.y,
 			this.pnw, this.pse);
-		pse = MCCanvas.Point.renew(
+		pse = fabric.Point.renew(
 			this.pse.x,
 			this.pnw.y + height,
 			this.pnw, this.pse);
 		break;
 	case 'e' :
-		pnw = MCCanvas.Point.renew(
+		pnw = fabric.Point.renew(
 			this.pse.x - width,
 			this.pnw.y - half(height - this.height),
 			this.pnw, this.pse);
-		pse = MCCanvas.Point.renew(
+		pse = fabric.Point.renew(
 			this.pse.x,
 			pnw.y + height,
 			this.pnw, this.pse);
 		break;
 	case 'se' :
-		pnw = MCCanvas.Point.renew(
+		pnw = fabric.Point.renew(
 			this.pse.x - width,
 			this.pse.y - height,
 			this.pnw, this.pse);
 		pse = this.pse;
 		break;
 	case 's' :
-		pnw = MCCanvas.Point.renew(
+		pnw = fabric.Point.renew(
 			this.pnw.x - half(width - this.width),
 			this.pse.y - height,
 			this.pnw, this.pse);
-		pse = MCCanvas.Point.renew(
+		pse = fabric.Point.renew(
 			pnw.x + width,
 			this.pse.y,
 			this.pnw, this.pse);
 		break;
 	case 'sw' :
-		pnw = MCCanvas.Point.renew(
+		pnw = fabric.Point.renew(
 			this.pnw.x,
 			this.pse.y - height,
 			this.pnw, this.pse);
-		pse = MCCanvas.Point.renew(
+		pse = fabric.Point.renew(
 			this.pnw.x + width,
 			this.pse.y,
 			this.pnw, this.pse);
 		break;
 	case 'w' :
-		pnw = MCCanvas.Point.renew(
+		pnw = fabric.Point.renew(
 			this.pnw.x,
 			this.pnw.y - half(height - this.height),
 			this.pnw, this.pse);
-		pse = MCCanvas.Point.renew(
+		pse = fabric.Point.renew(
 			this.pnw.x + width,
 			pnw.y + height,
 			this.pnw, this.pse);
 		break;
 	case 'nw' :
 		pnw = this.pnw;
-		pse = MCCanvas.Point.renew(
+		pse = fabric.Point.renew(
 			this.pnw.x + width,
 			this.pnw.y + height,
 			this.pnw, this.pse);
 		break;
 	case 'c' :
-		pnw = MCCanvas.Point.renew(
+		pnw = fabric.Point.renew(
 			this.pnw.x - half(width - this.width),
 			this.pnw.y - half(height - this.height),
 			this.pnw, this.pse);
-		pse = MCCanvas.Point.renew(
+		pse = fabric.Point.renew(
 			pnw.x + width,
 			pnw.y + height,
 			this.pnw, this.pse);
@@ -853,7 +853,7 @@ MCCanvas.Rect.prototype.resize = function(width, height, align) {
 	default :
 		throw new Error('invalid align: '+align);
 	}
-	return new MCCanvas.Rect(pnw, pse);
+	return new fabric.Rect(pnw, pse);
 }
 
 /**
@@ -862,22 +862,22 @@ MCCanvas.Rect.prototype.resize = function(width, height, align) {
 | moveto(p)   -or-
 | moveto(x, y)
 */
-MCCanvas.Rect.prototype.moveto = function(a1, a2) {
-	if (typeof(a1) !== 'object') a1 = new MCCanvas.Point(a1, a2);
-	return new MCCanvas.Rect(a1, a1.add(this.width, this.height));
+fabric.Rect.prototype.moveto = function(a1, a2) {
+	if (typeof(a1) !== 'object') a1 = new fabric.Point(a1, a2);
+	return new fabric.Rect(a1, a1.add(this.width, this.height));
 }
 
 /**
 | Returns true if this rectangle is the same as another
 */
-MCCanvas.Rect.prototype.eq = function(r) {
+fabric.Rect.prototype.eq = function(r) {
 	return this.pnw.eq(r.pnw) && this.pse.eq(r.pse);
 }
 
 /**
 | Point in the center.
 */
-MCCanvas.lazyFixate(MCCanvas.Rect.prototype, 'pc', function() {
+fabric.lazyFixate(fabric.Rect.prototype, 'pc', function() {
 	return new Point(half(this.pse.x + this.pnw.x), half(this.pse.y + this.pnw.y));
 });
 
@@ -902,41 +902,41 @@ MCCanvas.lazyFixate(MCCanvas.Rect.prototype, 'pc', function() {
 | s: south margin
 | w: west margin
 */
-MCCanvas.Margin = function(n, e, s, w) {
-	MCCanvas.fixate(this, 'n', n);
-	MCCanvas.fixate(this, 'e', e);
-	MCCanvas.fixate(this, 's', s);
-	MCCanvas.fixate(this, 'w', w);
+fabric.Margin = function(n, e, s, w) {
+	fabric.fixate(this, 'n', n);
+	fabric.fixate(this, 'e', e);
+	fabric.fixate(this, 's', s);
+	fabric.fixate(this, 'w', w);
 }
 
 /**
 | A margin with all distances 0.
 */
-MCCanvas.Margin.zero = new MCCanvas.Margin(0, 0, 0, 0);
+fabric.Margin.zero = new fabric.Margin(0, 0, 0, 0);
 
 /**
 | Creates a margin from json.
 */
-MCCanvas.Margin.jnew = function(js) {
-	return new MCCanvas.Margin(js.n, js.e, js.s, js.w);
+fabric.Margin.jnew = function(js) {
+	return new fabric.Margin(js.n, js.e, js.s, js.w);
 }
 
 /**
 | Returns a json object for this margin
 */
-MCCanvas.Margin.prototype.jsonfy = function() {
+fabric.Margin.prototype.jsonfy = function() {
 	return this._json || (this._json = { n: this.n, e: this.e, s: this.s, w: this.w });
 }
 
 /**
 | East + west margin = x
 */
-MCCanvas.lazyFixate(MCCanvas.Margin.prototype, 'x', function() { return this.e + this.w; });
+fabric.lazyFixate(fabric.Margin.prototype, 'x', function() { return this.e + this.w; });
 
 /**
 | North + south margin = y
 */
-MCCanvas.lazyFixate(MCCanvas.Margin.prototype, 'y', function() { return this.n + this.s; });
+fabric.lazyFixate(fabric.Margin.prototype, 'y', function() { return this.n + this.s; });
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .-,--.               . .-,--.         .
@@ -956,16 +956,16 @@ MCCanvas.lazyFixate(MCCanvas.Margin.prototype, 'y', function() { return this.n +
 | Rect(rect, crad)      -or-
 | Rect(pnw, pse, crad)
 */
-MCCanvas.RoundRect = function(a1, a2, a3) {
-	if (a1 instanceof MCCanvas.Point) {
-		MCCanvas.Rect.call(this, a1, a2);
-		MCCanvas.fixate(this, 'crad', a3);
+fabric.RoundRect = function(a1, a2, a3) {
+	if (a1 instanceof fabric.Point) {
+		fabric.Rect.call(this, a1, a2);
+		fabric.fixate(this, 'crad', a3);
 	} else {
-		MCCanvas.Rect.call(this, a1.pnw, a1.pse);
-		MCCanvas.fixate(this, 'crad', a2);
+		fabric.Rect.call(this, a1.pnw, a1.pse);
+		fabric.fixate(this, 'crad', a2);
 	}
 }
-subclass(MCCanvas.RoundRect, MCCanvas.Rect);
+subclass(fabric.RoundRect, fabric.Rect);
 
 /**
 | Draws the roundrect.
@@ -973,7 +973,7 @@ subclass(MCCanvas.RoundRect, MCCanvas.Rect);
 | c2d: Canvas2D area to draw upon.
 | border: additional distance.
 */
-MCCanvas.RoundRect.prototype.path = function(c2d, border, edge) {
+fabric.RoundRect.prototype.path = function(c2d, border, edge) {
 	var nwx = this.pnw.x + border;
 	var nwy = this.pnw.y + border;
 	var sex = this.pse.x - border - 1;
@@ -1009,10 +1009,10 @@ MCCanvas.RoundRect.prototype.path = function(c2d, border, edge) {
 | pc: center
 | r: radius
 */
-MCCanvas.Hexagon = function(pc, r) {
-	if (typeof(pc) !== 'object' || !(pc instanceof MCCanvas.Point)) throw new Error('invalid pc');
-	MCCanvas.fixate(this, 'pc', pc);
-	MCCanvas.fixate(this, 'r', r);
+fabric.Hexagon = function(pc, r) {
+	if (typeof(pc) !== 'object' || !(pc instanceof fabric.Point)) throw new Error('invalid pc');
+	fabric.fixate(this, 'pc', pc);
+	fabric.fixate(this, 'r', r);
 	Object.freeze(this);
 }
 
@@ -1020,32 +1020,32 @@ MCCanvas.Hexagon = function(pc, r) {
 /**
 | Creates a hexgon from json.
 */
-MCCanvas.Hexagon.jnew = function(js) {
-	return new MCCanvas.Hexagon(js.pc, js.r);
+fabric.Hexagon.jnew = function(js) {
+	return new fabric.Hexagon(js.pc, js.r);
 }
 
 /**
 | Returns a json object for this rect.
 */
-MCCanvas.Hexagon.prototype.jsonfy = function() {
+fabric.Hexagon.prototype.jsonfy = function() {
 	return this._json || (this._json = { pc: this.pc, r: this.r });
 }
 
 /**
 | Returns a hexagon moved by a point or x/y.
 */
-MCCanvas.Hexagon.prototype.add = function(a1, a2) {
-	return new MCCanvas.Hexagon(this.pc.add(a1, a2), this.r);
+fabric.Hexagon.prototype.add = function(a1, a2) {
+	return new fabric.Hexagon(this.pc.add(a1, a2), this.r);
 }
 
 /**
 | Returns true if point is within this hexagon.
 */
-MCCanvas.Hexagon.prototype.within = function(p) {
-	var rc = this.r * MCCanvas.cos30;
+fabric.Hexagon.prototype.within = function(p) {
+	var rc = this.r * fabric.cos30;
 	var dy = this.p.y - p.y;
 	var dx = this.p.x - p.x;
-	var yhc6 = Math.abs(dy * MCCanvas.cos30);
+	var yhc6 = Math.abs(dy * fabric.cos30);
 	return dy >= -rc && dy <= rc &&
            dx - this.r < -yhc6 &&
            dx + this.r >  yhc6;
@@ -1082,10 +1082,10 @@ MCCanvas.Hexagon.prototype.within = function(p) {
 | rad: radius.
 | height: slice height.
 */
-MCCanvas.HexagonSlice = function(psw, rad, height) {
-	MCCanvas.fixate(this, 'psw', psw);
-	MCCanvas.fixate(this, 'rad', rad);
-	MCCanvas.fixate(this, 'height', height);
+fabric.HexagonSlice = function(psw, rad, height) {
+	fabric.fixate(this, 'psw', psw);
+	fabric.fixate(this, 'rad', rad);
+	fabric.fixate(this, 'height', height);
 
 	if (height > rad) throw new Error('Cannot make slice larger than radius');
 }
@@ -1093,38 +1093,38 @@ MCCanvas.HexagonSlice = function(psw, rad, height) {
 /**
 | Middle(center) point of Hexagon.
 */
-MCCanvas.lazyFixate(MCCanvas.HexagonSlice.prototype, 'pm', function() {
+fabric.lazyFixate(fabric.HexagonSlice.prototype, 'pm', function() {
 	return new Point(
-		this.psw.x + this.rad - Math.round((this.rad * MCCanvas.cos30 - this.height) * MCCanvas.tan30),
-		this.psw.y + Math.round(this.rad * MCCanvas.cos30) - this.height);
+		this.psw.x + this.rad - Math.round((this.rad * fabric.cos30 - this.height) * fabric.tan30),
+		this.psw.y + Math.round(this.rad * fabric.cos30) - this.height);
 });
 
 /**
 | pnw (used by gradients)
 */
-MCCanvas.lazyFixate(MCCanvas.HexagonSlice.prototype, 'pnw', function() {
+fabric.lazyFixate(fabric.HexagonSlice.prototype, 'pnw', function() {
 	return new Point(this.psw.x, this.psw.y - this.height);
 });
 
 /**
 | pnw (used by gradients)
 */
-MCCanvas.lazyFixate(MCCanvas.HexagonSlice.prototype, 'width', function() {
-	return 2 * Math.round(this.rad - (this.rad * MCCanvas.cos30 - this.height) * MCCanvas.tan30);
+fabric.lazyFixate(fabric.HexagonSlice.prototype, 'width', function() {
+	return 2 * Math.round(this.rad - (this.rad * fabric.cos30 - this.height) * fabric.tan30);
 });
 
 /**
 | pse (used by gradients)
 */
-MCCanvas.lazyFixate(MCCanvas.HexagonSlice.prototype, 'pse', function() {
+fabric.lazyFixate(fabric.HexagonSlice.prototype, 'pse', function() {
 	return new Point(this.psw.x + this.width, this.psw.y);
 });
 
 /**
 | Draws the hexagon.
 */
-MCCanvas.HexagonSlice.prototype.path = function(c2d, border, edge) {
-	var r05 = MCCanvas.half(this.rad);
+fabric.HexagonSlice.prototype.path = function(c2d, border, edge) {
+	var r05 = fabric.half(this.rad);
 	c2d.beginPath();
 	c2d.moveTo(this.psw.x                 + border, this.psw.y               - border, edge);
 	c2d.lineTo(this.pm.x - r05            + border, this.psw.y - this.height + border, edge);
@@ -1135,10 +1135,10 @@ MCCanvas.HexagonSlice.prototype.path = function(c2d, border, edge) {
 /**
 | Returns true if point is within the slice.
 */
-MCCanvas.HexagonSlice.prototype.within = function(p) {
+fabric.HexagonSlice.prototype.within = function(p) {
 	var dy = p.y - this.psw.y;
 	var dx = p.x - this.psw.x;
-	var hy = dy * MCCanvas.tan30;
+	var hy = dy * fabric.tan30;
 	return dy >= -this.height && dy <= 0 &&
 	       dx >= -hy && dx - this.width <= hy;
 }
@@ -1175,31 +1175,31 @@ MCCanvas.HexagonSlice.prototype.within = function(p) {
  segs: which segments to include
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-MCCanvas.HexagonFlower = function(pc, ri, ro, segs) {
+fabric.HexagonFlower = function(pc, ri, ro, segs) {
 	if (ri > ro) throw new Error('inner radius > outer radius');
-	MCCanvas.fixate(this, 'pc', pc);
-	MCCanvas.fixate(this, 'ri', ri);
-	MCCanvas.fixate(this, 'ro', ro);
-	MCCanvas.fixate(this, 'gradientPC', pc);
-	MCCanvas.fixate(this, 'gradientR1', ro);
-	MCCanvas.fixate(this, 'segs', segs);
+	fabric.fixate(this, 'pc', pc);
+	fabric.fixate(this, 'ri', ri);
+	fabric.fixate(this, 'ro', ro);
+	fabric.fixate(this, 'gradientPC', pc);
+	fabric.fixate(this, 'gradientR1', ro);
+	fabric.fixate(this, 'segs', segs);
 }
 
 /**
 | Makes the flower-hex-6 path.
 */
-MCCanvas.HexagonFlower.prototype.path = function(c2d, border, edge, segment) {
+fabric.HexagonFlower.prototype.path = function(c2d, border, edge, segment) {
 	var ri  = this.ri;
-	var ri2 = MCCanvas.half(this.ri);
-	var ric = Math.round(this.ri * MCCanvas.cos30);
+	var ri2 = fabric.half(this.ri);
+	var ric = Math.round(this.ri * fabric.cos30);
 	var ro  = this.ro;
-	var ro2 = MCCanvas.half(this.ro);
-	var roc = Math.round(this.ro * MCCanvas.cos30);
+	var ro2 = fabric.half(this.ro);
+	var roc = Math.round(this.ro * fabric.cos30);
 	var pc  = this.pc;
 	var pcx = pc.x, pcy = pc.y;
 	var b   = border;
-	var b2  = MCCanvas.half(border);
-	var bc6 = Math.round(border * MCCanvas.cos30);
+	var b2  = fabric.half(border);
+	var bc6 = Math.round(border * fabric.cos30);
 	var segs = this.segs;
 	c2d.beginPath();
 	/* inner hex */
@@ -1299,23 +1299,23 @@ MCCanvas.HexagonFlower.prototype.path = function(c2d, border, edge, segment) {
 /**
 | Returns the segment the point is within.
 */
-MCCanvas.HexagonFlower.prototype.within = function(p) {
-	var roc6 = this.ro * MCCanvas.cos30;
+fabric.HexagonFlower.prototype.within = function(p) {
+	var roc6 = this.ro * fabric.cos30;
 	var dy = p.y - this.pc.y;
 	var dx = p.x - this.pc.x;
-	var dyc6 = Math.abs(dy * MCCanvas.tan30);
+	var dyc6 = Math.abs(dy * fabric.tan30);
 
 	if (dy <  -roc6 || dy >  roc6 || dx - this.ro >= -dyc6 || dx + this.ro <= dyc6) {
 		return null;
 	}
 
-	var ric6 = this.ri * MCCanvas.cos30;
+	var ric6 = this.ri * fabric.cos30;
 	if (dy >= -ric6 && dy <= ric6 && dx - this.ri <  -dyc6 && dx + this.ri >  dyc6) {
 		return 'center';
 	}
 
-	var lor = dx <= -dy * MCCanvas.tan30; // left of right diagonal
-	var rol = dx >=  dy * MCCanvas.tan30; // right of left diagonal
+	var lor = dx <= -dy * fabric.tan30; // left of right diagonal
+	var rol = dx >=  dy * fabric.tan30; // right of left diagonal
 	var aom = dy <= 0;               // above of middle line
 	if (lor && rol)        return 'n';
 	else if (!lor && aom)  return 'ne';
@@ -1346,11 +1346,11 @@ MCCanvas.HexagonFlower.prototype.within = function(p) {
 | p2: point 1
 | p2end: 'normal' or 'arrow'
 */
-MCCanvas.Line = function(p1, p1end, p2, p2end) {
-	MCCanvas.fixate(this, 'p1', p1);
-	MCCanvas.fixate(this, 'p1end', p1end);
-	MCCanvas.fixate(this, 'p2', p2);
-	MCCanvas.fixate(this, 'p2end', p2end);
+fabric.Line = function(p1, p1end, p2, p2end) {
+	fabric.fixate(this, 'p1', p1);
+	fabric.fixate(this, 'p1end', p1end);
+	fabric.fixate(this, 'p2', p2);
+	fabric.fixate(this, 'p2end', p2end);
 }
 
 /**
@@ -1361,9 +1361,9 @@ MCCanvas.Line = function(p1, p1end, p2, p2end) {
 | shape2: a Rect or Point
 | end2: 'normal' or 'arrow'
 */
-MCCanvas.Line.connect = function(shape1, end1, shape2, end2) {
+fabric.Line.connect = function(shape1, end1, shape2, end2) {
 	if (!shape1 || !shape2) throw new Error('error');
-	if (shape1 instanceof MCCanvas.Rect && shape2 instanceof MCCanvas.Point) {
+	if (shape1 instanceof fabric.Rect && shape2 instanceof fabric.Point) {
 		var p2 = shape2;
 		var z1 = shape1;
 		var p1;
@@ -1374,9 +1374,9 @@ MCCanvas.Line.connect = function(shape1, end1, shape2, end2) {
 				Math.max(z1.pnw.x, Math.min(p2.x, z1.pse.x)),
 				Math.max(z1.pnw.y, Math.min(p2.y, z1.pse.y)));
 		}
-		return new MCCanvas.Line(p1, end1, p2, end2);
+		return new fabric.Line(p1, end1, p2, end2);
 	}
-	if (shape1 instanceof MCCanvas.Rect && shape2 instanceof MCCanvas.Rect) {
+	if (shape1 instanceof fabric.Rect && shape2 instanceof fabric.Rect) {
 		var z1 = shape1;
 		var z2 = shape2;
 		var x1, y1, x2, y2;
@@ -1390,7 +1390,7 @@ MCCanvas.Line.connect = function(shape1, end1, shape2, end2) {
 			x2 = z2.pse.x;
 		} else {
 			// an intersection
-			x1 = x2 = MCCanvas.half(Math.max(z1.pnw.x, z2.pnw.x) + Math.min(z1.pse.x, z2.pse.x));
+			x1 = x2 = fabric.half(Math.max(z1.pnw.x, z2.pnw.x) + Math.min(z1.pse.x, z2.pse.x));
 		}
 		if (z2.pnw.y > z1.pse.y) {
 			// zone2 is clearly on the bottom
@@ -1402,9 +1402,9 @@ MCCanvas.Line.connect = function(shape1, end1, shape2, end2) {
 			y2 = z2.pse.y;
 		} else {
 			// an intersection
-			y1 = y2 = MCCanvas.half(Math.max(z1.pnw.y, z2.pnw.y) + Math.min(z1.pse.y, z2.pse.y));
+			y1 = y2 = fabric.half(Math.max(z1.pnw.y, z2.pnw.y) + Math.min(z1.pse.y, z2.pse.y));
 		}
-		return new MCCanvas.Line(new Point(x1, y1), end1, new Point(x2, y2), end2);
+		return new fabric.Line(new Point(x1, y1), end1, new Point(x2, y2), end2);
 	}
 	throw new Error('do not know how to create connection.');
 }
@@ -1413,13 +1413,13 @@ MCCanvas.Line.connect = function(shape1, end1, shape2, end2) {
 | Returns the zone of the arrow.
 | Result is cached.
 */
-Object.defineProperty(MCCanvas.Line.prototype, 'zone', {
+Object.defineProperty(fabric.Line.prototype, 'zone', {
 	get: function() {
-		return MCCanvas.fixate(this, 'zone', new MCCanvas.Rect(
-			MCCanvas.Point.renew(
+		return fabric.fixate(this, 'zone', new fabric.Rect(
+			fabric.Point.renew(
 				Math.min(this.p1.x, this.p2.x), Math.min(this.p1.y, this.p2.y),
 				this.p1, this.p2),
-			MCCanvas.Point.renew(
+			fabric.Point.renew(
 				Math.max(this.p1.x, this.p2.x), Math.max(this.p1.y, this.p2.y),
 				this.p1, this.p2)));
 	}
@@ -1430,7 +1430,7 @@ Object.defineProperty(MCCanvas.Line.prototype, 'zone', {
 |
 | c2d: Canvas2D to draw upon.
 */
-MCCanvas.Line.prototype.path = function(c2d, border, edge) {
+fabric.Line.prototype.path = function(c2d, border, edge) {
 	var p1 = this.p1;
 	var p2 = this.p2;
 
@@ -1486,7 +1486,7 @@ MCCanvas.Line.prototype.path = function(c2d, border, edge) {
 /**
 | Draws the line.
 */
-MCCanvas.Line.prototype.draw = function(c2d) {
+fabric.Line.prototype.draw = function(c2d) {
 	var style = settings.relation.style;
 	c2d.paint(style.fill, style.edge, this, 'path');
 }
@@ -1494,7 +1494,7 @@ MCCanvas.Line.prototype.draw = function(c2d) {
 /**
 | Returns true if p is near the line spawned by p1 and p2.
 */
-MCCanvas.Line.prototype.isNear = function(p, dis) {
+fabric.Line.prototype.isNear = function(p, dis) {
 	throw new Error('unimplemented');
 	// todo
 	var dx = p.x - p1.x;

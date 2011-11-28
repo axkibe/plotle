@@ -32,18 +32,18 @@ var min = Math.min;
 
 var subclass      = jools.subclass;
 
-var cos30         = MCCanvas.cos30;
-var half          = MCCanvas.half;
-var tan30         = MCCanvas.tan30;
-var Hexagon       = MCCanvas.Hexagon;
-var HexagonFlower = MCCanvas.HexagonFlower;
-var HexagonSlice  = MCCanvas.HexagonSlice;
-var Line          = MCCanvas.Line;
-var Margin        = MCCanvas.Margin;
-var Measure       = MCCanvas.Measure;
-var Point         = MCCanvas.Point;
-var Rect          = MCCanvas.Rect;
-var RoundRect     = MCCanvas.RoundRect;
+var cos30         = fabric.cos30;
+var half          = fabric.half;
+var tan30         = fabric.tan30;
+var Hexagon       = fabric.Hexagon;
+var HexagonFlower = fabric.HexagonFlower;
+var HexagonSlice  = fabric.HexagonSlice;
+var Line          = fabric.Line;
+var Margin        = fabric.Margin;
+var Measure       = fabric.Measure;
+var Point         = fabric.Point;
+var Rect          = fabric.Rect;
+var RoundRect     = fabric.RoundRect;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .---.     .  .
@@ -1053,7 +1053,7 @@ _init : function() {
 	var canvas = this.canvas = document.getElementById('canvas');
 	canvas.width  = window.innerWidth - 1;
 	canvas.height = window.innerHeight - 1;
-	this.c2d = new MCCanvas(canvas);
+	this.c2d = new fabric(canvas);
 	Measure.init();
 
 	// the space that currently is displayed
@@ -1519,7 +1519,7 @@ Edgemenu.prototype.path = function(c2d, border, edge, section) {
 	// x in the middle
 	var xm = half(this.pnw.x + this.pse.x);
 	// edge width (diagonal extra)
-	var ew  = R((this.pse.y - this.pnw.y) * MCCanvas.tan30);
+	var ew  = R((this.pse.y - this.pnw.y) * fabric.tan30);
 
 	c2d.beginPath();
 	if (section === -2) {
@@ -1602,9 +1602,9 @@ Edgemenu.prototype.getMousepos = function(p) {
 	if (!this.pnw || !this.pse) return this.mousepos = -1;
 	if (p.y < this.pnw.y) return this.mousepos = -1;
 	var mx = half(c2d.width);  // todo give it pc
-	var ew = R((this.pse.y - this.pnw.y) * MCCanvas.tan30); // todo simplify
+	var ew = R((this.pse.y - this.pnw.y) * fabric.tan30); // todo simplify
 	// shortcut name = letters for formula
-	var pymcht6 = (p.y - c2d.height) * MCCanvas.tan30;
+	var pymcht6 = (p.y - c2d.height) * fabric.tan30;
 
 	if (p.x - this.pnw.x < -pymcht6) return this.mousepos = -1;
 	if (p.x - this.pse.x >  pymcht6) return this.mousepos = -1;
@@ -1661,7 +1661,7 @@ function Space() {
 	};
 
 	// panning offset
-	this.c2d = new MCCanvas(System.canvas);
+	this.c2d = new fabric(System.canvas);
 	this.pan = new Point(0, 0);
 	this.c2d.pan = this.pan;
 
@@ -2011,7 +2011,7 @@ Space.prototype.dragmove = function(p, shift, ctrl) {
 			throw new Error('unknown align');
 		}
 
-		redraw = it.setZone(new Rect(pnw, pse), MCCanvas.opposite(iaction.com));
+		redraw = it.setZone(new Rect(pnw, pse), fabric.opposite(iaction.com));
 
 		if (redraw) this.redraw();
 		System.repository.updateItem(iaction.item);
@@ -2458,7 +2458,7 @@ Object.defineProperty(Textnode.prototype, 'text', {
 
 function Paragraph(text) {
 	Treenode.call(this);
-	this._pc2d = new MCCanvas(0 ,0);
+	this._pc2d = new fabric(0 ,0);
 	this._canvasActual = false; // todo rename
 	this.append(new Textnode(text));
 	this._flowWidth = null;
@@ -2602,7 +2602,7 @@ Object.defineProperty(Paragraph.prototype, 'flowWidth', {
 /**
 | Draws the paragraph in its cache and returns it.
 */
-Paragraph.prototype.getMCCanvas = function() {
+Paragraph.prototype.getfabric = function() {
 	var c2d = this._pc2d;
 	if (this._canvasActual) {
 		return c2d;
@@ -2836,7 +2836,7 @@ DTree.prototype.draw = function(c2d, select, imargin, scrolly) {
 
 	// draws tha paragraphs
 	for(var para = this.first; para; para = para.next) {
-		var pc2d = para.getMCCanvas();
+		var pc2d = para.getfabric();
 		para.p = new Point(imargin.w, R(y));
 		if (pc2d.width > 0 && pc2d.height > 0) {
 			c2d.drawImage(pc2d, imargin.w, y - scrolly);
@@ -3117,15 +3117,15 @@ Scrollbar.prototype.path = function(c2d, border, edge) {
 	var sy = z.pnw.y + R(this.pos * ((z.height - msize + size) / this.max));
 
 	c2d.beginPath();
-	c2d.moveTo(z.pnw.x, R(sy + MCCanvas.cos30 * w / 2), edge);
+	c2d.moveTo(z.pnw.x, R(sy + fabric.cos30 * w / 2), edge);
 	c2d.lineTo(z.pnw.x + R(w / 4),     sy,         edge);
 	c2d.lineTo(z.pnw.x + R(w * 3 / 4), sy,         edge);
-	c2d.lineTo(z.pse.x, R(sy + MCCanvas.cos30 * w / 2), edge);
+	c2d.lineTo(z.pse.x, R(sy + fabric.cos30 * w / 2), edge);
 
-	c2d.lineTo(z.pse.x, R(sy + msize - MCCanvas.cos30 * w / 2), edge);
+	c2d.lineTo(z.pse.x, R(sy + msize - fabric.cos30 * w / 2), edge);
 	c2d.lineTo(z.pnw.x + R(w * 3 / 4), sy + msize,         edge);
 	c2d.lineTo(z.pnw.x + R(w / 4),     sy + msize,         edge);
-	c2d.lineTo(z.pnw.x, R(sy + msize - MCCanvas.cos30 * w / 2), edge);
+	c2d.lineTo(z.pnw.x, R(sy + msize - fabric.cos30 * w / 2), edge);
 	c2d.closePath();
 }
 
@@ -3165,7 +3165,7 @@ function Note(id, zone, dtree) {
 	// todo, merge silhoutte and zone.
 	this.silhoutte = new RoundRect(
 		Point.zero, new Point(zone.width, zone.height), settings.note.cornerRadius);
-	this._bc2d = new MCCanvas();
+	this._bc2d = new fabric();
 	this.imargin = Note.imargin;  // todo needed?
 	this._canvasActual = false;
 	this.scrollbarY = new Scrollbar(this, null);
@@ -3458,7 +3458,7 @@ function Label(id, zone, dtree) {
 	this.imargin = Label.imargin;
 	this.setZone(zone, 'c');
 	/* buffer canvas 2D */
-	this._bc2d = new MCCanvas();
+	this._bc2d = new fabric();
 	this._canvasActual = false;  // todo rename
 	if (typeof(this.zone.pse.x) === 'undefined') throw new Error('Invalid label'); // todo remove
 	System.repository.addItem(this, true);
@@ -3686,7 +3686,7 @@ function Relation(id, i1id, i2id, textZone, dtree) {
 	dtree.pre       = true;
 	this.imargin    = Relation.imargin;
 	this.setTextZone(textZone);
-	this._bc2d = new MCCanvas();
+	this._bc2d      = new fabric();
 	this._canvasActual = false;
 
 	System.repository.addItem(this, true);
