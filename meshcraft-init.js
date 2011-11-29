@@ -15,7 +15,7 @@ if (config.initmessage) {
 	console.log(config.initmessage);
 }
 
-var sign = ["welcome"];
+var path = ["welcome"];
 
 libclient.request({cmd: "now"}, function (err, now) {
 	if (err) {
@@ -58,7 +58,7 @@ libclient.request({cmd: "now"}, function (err, now) {
 				},
 			},
 			trg: {
-				sign: sign,
+				path: path,
 			}
 		},
 		function(err, asw) {

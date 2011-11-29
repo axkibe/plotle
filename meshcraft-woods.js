@@ -28,7 +28,7 @@ var woods;
 "use strict";
 
 try {
-	// if not fails running nodejs
+	// if not fails running node
 	jools        = require('./meshcraft-jools');
 } catch(e) {
 	// require failed, running in browser
@@ -39,172 +39,156 @@ var subclass = jools.subclass;
 
 function is(o)        { return typeof(o) !== 'undefined'; }
 function isnon(o)     { return typeof(o) !== 'undefined' && o !== null; }
+function isString(o)  { return typeof(o) === 'string' || o instanceof String; }
 function isInteger(o) { return typeof(o) === 'number' && Math.floor(o) === o; }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- .---.               .
- \___  . ,-. ,-. ,-. |- . . ,-. ,-.
-     \ | | | | | ,-| |  | | |   |-'
- `---' ' `-| ' ' `-^ `' `-^ '   `-'
-~ ~ ~ ~ ~ ,|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-          `'
+ ++Signature++
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ Signates an entry, string index or string span.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-/**
-| Signates an entry, string index or string span.
-*/
-function Signature(sign) {
-	if (sign instanceof Signature) sign = sign._sign;
-	if (!(sign instanceof Array)) throw new Error('invalid signature master');
-
-	/*
-	TODO fix.
-	for (var i = 0; i < sign.length; i++) {
-		check(isString(sign[i]) || isInteger(sign[i]) ||
-			(i === sign.length - 1 && isTable(sign[i])),
-			name, 'arcs must be string or integer or a postfix table');
-		check(sign[i][0] !== '_', name, 'arcs must not start with _');
-	}*/
-	this._sign = jools.clone(sign);
+function Signature(master) {
+	if (master.path)  this.path  = new Path(master.path);
+	if (master.at1)   this.at1   = master.at1;
+	if (master.at2)   this.at2   = master.at2;
+	if (master.pivot) this.pivot = master.pivot;
+	if (master.proc)  this.proc  = master.proc;
+	if (master.val)   this.val   = master.val;
 }
 
 /**
-| Clones the signature
-| TODO, remove?
+| True if neither inder nor span.
 */
-Signature.prototype.clone = function() {
-	return new Signature(this);
+Signature.prototype.isPlain = function() {
+	return !is(this.at1) && !is(this.at2);
+}
+
+/**
+| True if signature is an index.
+*/
+Signature.prototype.isIndex = function() {
+	return is(this.at1) && !is(this.at2);
+}
+
+/**
+| True if signature is a span.
+*/
+Signature.prototype.isSpan = function() {
+	return is(this.at1) && is(this.at2);
+}
+
+/**
+| Attunes '_end' ats to match a string.
+*/
+Signature.prototype.attune = function(str, name) {
+	if (this.at1 === '_end') this.at1 = str.length;
+	if (this.at2 === '_end') this.at2 = str.length;
+	/* TODO proper checking
+	checkWithin(pfx.at1, 0, str.length, name, 'postfix.at1 invalid');
+	if (is(pfx.at2)) {
+		checkWithin(pfx.at2, 0, str.length, name, 'postfix.at2 invalid');
+		check(pfx.at2 >= pfx.at1, name, 'postfix: at2 < at1');
+	}*/
+	return this;
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ++Path++
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ Path to a node.
+ TODO, make immuteable?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+function Path(master) {
+	if (master instanceof Path) master = master._path;
+	if (!(master instanceof Array)) {
+		log('fail', 'master:', master);
+		throw new Error('invalid path master');
+	}
+
+	for (var i = 0; i < master.length; i++) {
+		var v = master[i];
+		if (isInteger(v)) continue;
+		if (isString(master[i])) {
+			if (v[0] === '_') throw new Error('Path arcs must not start with _');
+			continue;
+		}
+		throw new Error('Path arcs must be String or Integer');
+	}
+	this._path = master.slice();
 }
 
 /**
 | Length of the signature.
 */
-Object.defineProperty(Signature.prototype, 'length', {
-	get: function() { return this._sign.length; },
+Object.defineProperty(Path.prototype, 'length', {
+	get: function() { return this._path.length; },
 });
-
-
-/**
-| If the signature is an index or span it will return that.
-| TODO remove
-*/
-Object.defineProperty(Signature.prototype, 'postfix', {
-	get: function() {
-		if (this._sign.length === 0) return null;
-		var pfx = this._sign[this._sign.length - 1];
-		return (pfx.constructor === Object) ? pfx : null;
-	},
-});
-
-/**
-| Length of the path / signature without postfix.
-*/
-Object.defineProperty(Signature.prototype, 'pathlen', {
-	get: function() {
-		return this._sign.length - (this.postfix ? 1 : 0);
-	},
-});
-
-
-/**
-| True if the signature ends as string index.
-*/
-Signature.prototype.isIndex = function() {
-	var pfx = this.postfix;
-	return (pfx !== null) && is(pfx.at1);
-}
-
-/**
-| True if the signature ends as string span.
-*/
-Signature.prototype.isSpan = function() {
-	var pfx = this.postfix;
-	return (pfx !== null) && is(pfx.at1) && is(pfx.at2);
-}
-
-/**
-| True if the signature is only a path (without postfix)
-*/
-Signature.prototype.isPath = function() {
-	return (this.postfix === null);
-}
-
-/**
-| Returns the signature at index i.
-| TODO rename to get?
-*/
-Signature.prototype.arc = function(i) {
-	if (i < 0) i = this._sign.length + i;
-	if (i < 0) return null;
-	return this._sign[i];
-}
-
-
-/**
-| Fits the arc numberation to be in this signature.
-*/
-Signature.prototype.fitarc = function(sa, defaultedge) {
-	if (!is(sa)) sa = defaultedge ? this.pathlen : 0;
-	if (sa < 0) sa = this.pathlen + sa;
-	if (sa < 0) sa = 0;
-	return sa;
-}
 
 /**
 | Returns the signature at index i.
 */
-Signature.prototype.setarc = function(i, v) {
-	if (this.frozen) throw new Error('changing readonly signature');
-	if (i < 0) i = this._sign.length - i;
-	return this._sign[i] = v;
+Path.prototype.get = function(i) {
+	if (i < 0) i += this._path.length;
+	if (i < 0) return undefined;
+	return this._path[i];
+}
+
+
+/**
+| Fits the arc numeration to be in this signature.
+*/
+Path.prototype.fit = function(a, edge) {
+	if (!is(a)) a = edge ? this.length : 0;
+	if (a < 0) a += this.pathlen;
+	if (a < 0) a = 0;
+	return a;
 }
 
 /**
-| Returns the signature at index i.
+| Sets arc i
 */
-Signature.prototype.addarc = function(i, v) {
-	if (this.frozen) throw new Error('changing readonly signature');
-	if (i < 0) i = this._sign.length + i;
-	if (!isInteger(this._sign[i]))
-		throw new Error('cannot change non-integer arc: '+this._sign[i]);
-	return this._sign[i] += v;
+Path.prototype.set = function(i, v) {
+	if (i < 0) i += this._path.length;
+	return this._path[i] = v;
 }
 
 /**
-| True if this signature is the same as another.
+| Adds to integer arc i
 */
-Signature.prototype.equals = function(o) {
-	return deepEqual(this._sign, o._sign);
+Path.prototype.add = function(i, v) {
+	if (i < 0) i = this._path.length + i;
+	if (!isInteger(this._path[i]))
+		throw new Error('cannot change non-integer arc: '+this._path[i]);
+	return this._path[i] += v;
 }
 
 /**
-| True if this signature has the same path (that is without postfix)
-| than another
+| True if this path is the same as another.
 */
-Signature.prototype.equalPaths = function(o) {
-	var pl = this.pathlen;
-	if (pl !== o.pathlen) return false;
-	for(var i = 0; i < pl; i++) {
-		if (this._sign[i] !== o._sign[i]) return false;
+Path.prototype.equals = function(o, len) {
+	if (this._path.length !== o._path.length) return false;
+	for(var k in this._path) {
+		if (this._path[k] !== o.path[k]) return false;
 	}
 	return true;
 }
 
 /**
-| True if this signature is start of another.
+| True if this path is a subpath of another.
 |
-| o: the other signature
-| [slan]: the length of this signature to consider.
+| o: the other path
+| [slen]: the length of this path to consider.
+|
+| TODO rename to isSubpath
 */
-Signature.prototype.isSubOf = function(o, slen) {
-	if (!is(slen)) slen = this.pathlen;
-	if (slen < 0) slen = this.pathlen + slen;
-	if (slen < 0) slen = 0;
+Path.prototype.isSubOf = function(o, slen) {
+	if (!is(slen)) slen  = this.length;
+	if (slen < 0)  slen += this.length;
+	if (slen < 0)  slen  = 0;
 
-	if (slen === this.length && this.postfix) return false;
 	if (slen > o.pathlen) return false;
 	for(var i = 0; i < slen; i++) {
-		if (this._sign[i] !== o._sign[i]) return false;
+		if (this._path[i] !== o._path[i]) return false;
 	}
 	return true;
 }
@@ -213,32 +197,18 @@ Signature.prototype.isSubOf = function(o, slen) {
 /**
 | stringify
 */
-Signature.prototype.toString = function() {
-	return this._sign.toString();
+Path.prototype.toString = function() {
+	throw new Error("is this used?");
+	return this._path.toString();
 }
 
 /**
-| Attunes the '_end' things of the postfix to match the string it points to.
+| jsonfy
 */
-Signature.prototype.attunePostfix = function(str, name) {
-	var pfx = this.postfix;
-	if (pfx === null) throw new Error(name+' not a postfix');
-	if (pfx.at1 === '_end') {
-		if (this.readonly) throw new Error(name+'cannot change readonly');
-		pfx.at1 = str.length;
-	}
-	if (pfx.at2 === '_end') {
-		if (this.readonly) throw new Error(name+'cannot change readonly');
-		pfx.at2 = str.length;
-	}
-	/* todo proper checking
-	checkWithin(pfx.at1, 0, str.length, name, 'postfix.at1 invalid');
-	if (is(pfx.at2)) {
-		checkWithin(pfx.at2, 0, str.length, name, 'postfix.at2 invalid');
-		check(pfx.at2 >= pfx.at1, name, 'postfix: at2 < at1');
-	}*/
-	return pfx;
+Path.prototype.toJSON = function() {
+	return this._path;
 }
+
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++ Stem ++
@@ -255,40 +225,36 @@ function Stem(twigs, master) {
 }
 
 /**
-| Returns the twig the signature points at.
+| Returns the twig the path points at.
 */
-Stem.prototype.get = function(sign, s0, sl) {
-	if (!(sign instanceof Signature)) {
-		// direct access?
-		return this._twigs[sign];
+Stem.prototype.get = function(path, a0, al) {
+	if (!(path instanceof Path)) { // direct?
+		return this._twigs[path];
 	}
-	s0 = sign.fitarc(s0, false);
-	sl = sign.fitarc(sl, true);
-	var twig = this._twigs[sign.arc(s0)];
-	if (s0 + 1 === sl) {
-		return twig;
-	}
-	if (!twig || !twig.get) throw new Error('signature points nowhere');
-	return twig.get(sign, s0 + 1, sl);
+	a0 = path.fit(a0, false);
+	al = path.fit(al, true);
+	var twig = this._twigs[path.get(a0)];
+	if (a0 + 1 === al) return twig;
+	if (!twig || !twig.get) throw new Error('path goes nowhere');
+	return twig.get(path, a0 + 1, al);
 }
 
 /**
 | Sets the value of a twig.
 */
-Stem.prototype.set = function(sign, val, s0, sl) {
-	if (!(sign instanceof Signature)) {
-		// direct access?
-		this._twigs[sign] = this._sprout(val);
+Stem.prototype.set = function(path, val, a0, al) {
+	if (!(path instanceof Path)) { // direct?
+		this._twigs[path] = this._sprout(val);
 		return;
 	}
-	s0 = sign.fitarc(s0, false);
-	sl = sign.fitarc(sl, true);
-	if (s0 + 1 === sl) {
-		this._twigs[sign.arc(s0)] = this._sprout(val);
+	a0 = path.fit(a0, false);
+	al = path.fit(al, true);
+	if (a0 + 1 === al) {
+		this._twigs[path.get(a0)] = this._sprout(val);
 	} else {
-		var twig = this._twigs[sign.arc(s0)];
-		if (!twig || !twig.set) throw new Error('signature points nowhere');
-		twig.set(sign, val, s0 + 1, sl);
+		var twig = this._twigs[path.get(a0)];
+		if (!twig || !twig.set) throw new Error('path goes nowhere');
+		twig.set(path, val, a0 + 1, al);
 	}
 }
 
@@ -296,7 +262,6 @@ Stem.prototype.set = function(sign, val, s0, sl) {
 | Sprouts a new twig.
 */
 Stem.prototype._sprout = function(master) {
-	log('debug', 'SPROUT', master, '||', typeof(master));
 	if (typeof(master) === 'undefined') return undefined;
 	var creator = this.cSeeds[master.constructor.name];
 	if (creator === true) return master;
@@ -314,6 +279,9 @@ Stem.prototype.toJSON = function() {
 	return this._twigs;
 }
 
+/**
+| Iterates over all subnodes
+*/
 Stem.prototype.forEach = function(callback) {
 	if (this.isAlley) {
 		this._twigs.forEach(callback);
@@ -328,6 +296,15 @@ Stem.prototype.forEach = function(callback) {
 Stem.prototype.splice = function() {
 	if (!this.isAlley) throw new Error(this.constructor.name + ' does not support splice()');
 	return this._twigs.splice.apply(this._twigs, arguments);
+}
+
+/**
+| Grows a new subnode
+*/
+Stem.prototype.growNew = function(path) {
+	if (!this.isGrowable) throw new ('Node not growable');
+	if (!this._grow) this._grow = 1;
+	path.set(-1, this._grow++);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -407,12 +384,13 @@ subclass(Space, Stem);
 /**
 | Sets the value of a node.
 */
-Space.prototype.set = function(sign, val, s0, sl) {
-	s0 = sign.fitarc(s0, false);
-	sl = sign.fitarc(sl, true);
-	if (s0 + 1 === sl) throw new Error('Cannot set Space twigs themselves');
-	this.super.set.call(this, sign, val, s0, sl);
+Space.prototype.set = function(path, val, a0, al) {
+	a0 = path.fit(a0, false);
+	al = path.fit(al, true);
+	if (a0 + 1 === al) throw new Error('Cannot set Space twigs themselves');
+	this.super.set.call(this, path, val, a0, al);
 }
+Space.prototype.isGrowable = true;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++ ItemCopse ++
@@ -456,17 +434,17 @@ subclass(Note, Stem);
 /**
 | Sets the value of a node.
 */
-Note.prototype.set = function(sign, val, s0, sl) {
-	s0 = sign.fitarc(s0, false);
-	sl = sign.fitarc(sl, true);
-	if (s0 + 1 === sl) throw new Error('Cannot set Note twigs themselves');
-	this.super.set.call(this, sign, val, s0, sl);
+Note.prototype.set = function(path, val, a0, al) {
+	a0 = path.fit(a0, false);
+	al = path.fit(al, true);
+	if (a0 + 1 === al) throw new Error('Cannot set Note twigs themselves');
+	this.super.set.call(this, path, val, a0, al);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++ ArcAlley ++
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- An array of Numbers and Strings (Arcs to Signatures)
+ An array of Numbers and Strings (Arcs)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function ArcAlley(master) {
 	Stem.call(this, [], master);
@@ -500,13 +478,14 @@ DocAlley.prototype.isAlley = true;
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 woods = {
-	Nexus        : Nexus,
-	Space        : Space,
-	ItemCopse    : ItemCopse,
 	ArcAlley     : ArcAlley,
 	DocAlley     : DocAlley,
 	GenericCopse : GenericCopse,
+	ItemCopse    : ItemCopse,
+	Nexus        : Nexus,
+	Path         : Path,
 	Signature    : Signature,
+	Space        : Space,
 }
 
 try {

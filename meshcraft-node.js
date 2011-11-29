@@ -111,12 +111,10 @@ var mmAjax = function(req, red, res) {
 		webError(res, 400, 'Must use POST');
 		return;
 	}
-	req.on('data',
-	function(chunk) {
+	req.on('data', function(chunk) {
 		data.push(chunk);
 	});
-	req.on('end',
-	function() {
+	req.on('end', function() {
 		var query = data.join('');
 		log('ajax', 'in ', query);
 		var cmd;
@@ -126,26 +124,33 @@ var mmAjax = function(req, red, res) {
 			webError(res, 400, 'Not valid JSON');
 			return;
 		}
-		var asw, sign;
-		switch (cmd.cmd) {
-		case 'alter':
-			asw = mm.alter(cmd.time, cmd.src, cmd.trg);
-			break;
-		case 'get':
-			try {
-				sign = new woods.Signature(cmd.sign);
-			} catch (e) {
-				if (e.ok !== false) throw e; else asw = e;
+		var asw;
+		try {
+			switch (cmd.cmd) {
+			case 'alter':
+				var src = new woods.Signature(cmd.src);
+				var trg = new woods.Signature(cmd.trg);
+				log('debug', 'cmd', cmd);
+				log('debug', 'src', src);
+				log('debug', 'trg', trg);
+				asw = mm.alter(cmd.time, src, trg);
+				break;
+			case 'get':
+				var path = new woods.Path(cmd.path);
+				asw = mm.get(cmd.time, path);
+				break;
+			case 'now':
+				asw = mm.now();
+				break;
+			case 'update':
+				asw = mm.update(cmd.time);
+				break;
+			default:
+				webError(res, 400, 'unknown command "'+cmd.cmd+'"');
+				return;
 			}
-			asw = mm.get(cmd.time, sign);
-			break;
-		case 'now':
-			asw = mm.now();
-			break;
-		case 'update':
-			asw = mm.update(cmd.time);
-			break;
-		default: webError(res, 400, 'unknown command "'+cmd.cmd+'"'); return;
+		} catch (e) {
+			if (e.ok !== false) throw e; else asw = e;
 		}
 		log('ajax', 'out', asw);
 		res.writeHead(200, {'Content-Type': 'application/json'});
@@ -159,6 +164,7 @@ var mmAjax = function(req, red, res) {
 function webConfig(req, red, res) {
 	res.writeHead(200, {'Content-Type': 'application/json'});
 	res.write('var config = {\n');
+	// TODO this is jools job:
 	res.write('\tdebug : '+(config.debug === true || config.debug % 2 === 1 ? 'true' : 'false') + ',\n');
 	res.write('\tlog : {\n');
 	for(k in config.log) {

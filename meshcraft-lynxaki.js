@@ -68,7 +68,12 @@ tsize = tout.getWindowSize();
 
 var messages = [];
 var tree  = null;
-var change = {cmd: null, at1: null, at2: null, val: null};
+var change = {
+	cmd: null,
+	at1: null,
+	at2: null,
+	val: null,
+};
 var curTime, time = 0;
 var cx = 0, cy = 0;
 
@@ -174,22 +179,22 @@ function update(callback) {
 		});
 }
 
-function get(sign, callback) {
+function get(path, callback) {
 	request(
 		{
 			cmd: 'get',
 			time: time,
-			sign: sign,
+			path: path,
 		},
 		callback);
 }
 
-function set(sign, val, callback) {
+function set(path, val, callback) {
 	request(
 		{
 			cmd: 'set',
 			time: time,
-			sign: sign,
+			path: path,
 			val:  val
 		},
 		callback);
@@ -198,45 +203,55 @@ function set(sign, val, callback) {
 function send() {
 	switch (change.cmd) {
 	case 'join' :
-		var sign = root.slice();;
-		sign.push(change.line - 1);
-		sign.push('text%');
-		sign.push({at1: '_end'});
+		var path = root.slice();;
+		path.push(change.line - 1);
+		path.push('text%');
 		request({
 			cmd: 'alter',
-			src: { proc: 'splice', },
-			trg: { sign: sign, pivot: sign.length - 3, },
+			src: {
+				proc: 'splice',
+			},
+			trg: {
+				at1: '_end',
+				pivot: path.length - 2,
+				path: path,
+			},
 		}, function(err, asw) {
 			for(k in change) change[k] = null;
 			tocurrent();
 		});
 		break;
 	case 'newline' :
-		var sign = root.slice();;
-		sign.push(change.line);
-		sign.push('text%');
-		sign.push({at1: change.at1}); // todo at1 not cared about
+		var path = root.slice();;
+		path.push(change.line);
+		path.push('text%');
 		request({
 			cmd: 'alter',
-			src: { sign: sign, pivot: sign.length - 3 },
-			trg: { proc: 'splice'},
+			src: {
+				at1:   change.at1,
+				pivot: path.length - 2,
+				path:  path,
+			},
+			trg: {
+				proc: 'splice',
+			},
 		}, function(err, asw) {
 			for(k in change) change[k] = null;
 			tocurrent();
 		});
 		break;
 	case 'insert' :
-		var sign = root.slice();
-		sign.push(change.line);
-		sign.push('text%');
-		sign.push({at1: change.at1});
+		var path = root.slice();
+		path.push(change.line);
+		path.push('text%');
 		request({
 			cmd: 'alter',
 			src: {
 				val: change.val,
 			},
 			trg: {
-				sign: sign,
+				at1: change.at1,
+				path: path,
 			},
 		}, function(err, asw) {
 			for(k in change) change[k] = null;
@@ -244,14 +259,15 @@ function send() {
 		});
 		break;
 	case 'remove' :
-		var sign = root.slice();
-		sign.push(change.line);
-		sign.push('text%');
-		sign.push({at1: change.at1, at2: change.at2});
+		var path = root.slice();
+		path.push(change.line);
+		path.push('text%');
 		request({
 			cmd: 'alter',
 			src: {
-				sign: sign,
+				at1:  change.at1,
+				at2:  change.at2,
+				path: path,
 			},
 			trg: {
 				val: null,
