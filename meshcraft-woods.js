@@ -5,11 +5,6 @@
 | License: GNU Affero AGPLv3
 */
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- Module
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
 /**
 | Imports
 */
@@ -29,7 +24,7 @@ var woods;
 
 try {
 	// if not fails running node
-	jools        = require('./meshcraft-jools');
+	jools = require('./meshcraft-jools');
 } catch(e) {
 	// require failed, running in browser
 }
@@ -46,7 +41,7 @@ function isInteger(o) { return typeof(o) === 'number' && Math.floor(o) === o; }
 | Returns a rejection error
 */
 function reject(message) {
-	if (jools.debug) throw new Error(message); // in debug mode any failure is fatal.
+	if (jools.devel) throw new Error(message); // in devel mode any failure is fatal.
 	log('mm', 'reject', message);
 	return {ok: false, message: message};
 }
@@ -72,12 +67,10 @@ function Signature(master) {
 Signature.prototype.attune = function(str, name) {
 	if (this.at1 === '_end') this.at1 = str.length;
 	if (this.at2 === '_end') this.at2 = str.length;
-	/* TODO proper checking
-	checkWithin(pfx.at1, 0, str.length, name, 'postfix.at1 invalid');
-	if (is(pfx.at2)) {
-		checkWithin(pfx.at2, 0, str.length, name, 'postfix.at2 invalid');
-		check(pfx.at2 >= pfx.at1, name, 'postfix: at2 < at1');
-	}*/
+	if(is(this.at1) && (this.at1 < 0 || this.at1 > str.length))
+		throw reject(name+' at1 not within string');
+	if(is(this.at2) && (this.at2 < 0 || this.at2 > str.length))
+		throw reject(name+' at2 not within string');
 	return this;
 }
 
@@ -523,10 +516,11 @@ woods = {
 	Signature    : Signature,
 	Space        : Space,
 	reject       : reject,
-}
+};
 
 try {
 	module.exports = woods;
+	// node
 } catch(e) {
 	// browser;
 };

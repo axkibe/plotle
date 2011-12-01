@@ -53,6 +53,8 @@ try {
 	// require failed, running in browser
 }
 
+
+var debug      = jools.debug;
 var log        = jools.log;
 var clone      = jools.clone;
 var deepFreeze = jools.deepFreeze;
@@ -132,7 +134,7 @@ Alternation.prototype.type = function(backward) {
 	if (is(src.val) && !is(trg.at1)) return 'set';
 	if (is(src.val) &&  is(trg.at1)) return 'insert';
 	if (is(src.at1) &&  is(src.at2) && !is(trg.at1)) return 'remove';
-	if (jools.debug) {
+	if (jools.prissy) {
 		log('fail', this);
 		throw new Error('invalid type');
 	}
@@ -257,9 +259,10 @@ function alter(meshtree, alternation, backward) {
 		src.attune(str, 'src.path');
 		if (src.at1 === src.at2) { log('alter', 'removed nothing'); return; }
 
+		debug('STR', str, 'SRC', src);
 		var val = str.substring(src.at1, src.at2);
 		if (isnon(trg.val)) {
-			check(val == trg.val, cm, 'trg.val preset incorrectly:', val, '!==', trg.val);
+			check(val === trg.val, cm, 'trg.val preset incorrectly:', val, '!==', trg.val);
 		} else {
 			trg.val = val;
 		}
@@ -530,7 +533,7 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 		return {ok: true, time: this.history.length, alts: alta };
 	} catch(err) {
 		// returns rejections but rethrows coding errors.
-		log(true, 'error', err);
+		log('fail', 'error', err);
 		if (err.ok !== false) throw err; else return err;
 	}
 }

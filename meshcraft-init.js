@@ -36,6 +36,10 @@ libclient.request({cmd: "now"}, function (err, now) {
 								'pse' : { 'x': 300, 'y': 200 },
 							},
 							'doc': [
+								/*{
+									'type':  'para',
+									'text%': '',
+								},*/
 								{
 									'type':  'para',
 									'text%': 'If you can dream---and not make dreams your master;',

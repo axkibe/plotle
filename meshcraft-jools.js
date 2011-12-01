@@ -22,7 +22,7 @@ var jools;
 
 "use strict";
 
-var debug;
+var devel;
 
 /**
 | In Browser this should already be defined.
@@ -30,11 +30,37 @@ var debug;
 try {
 	config = require('./config');
 	// executed in Node.JS
-	debug  = config.debug === true || (config.debug % 4 - config.debug % 2) === 2;
+	devel = config.devel === true || config.devel === 'both' || config.devel === 'server';
 } catch(e) {
 	// require failed running in browser
-	debug  = config.debug === true || (config.debug % 2) === 1;
+	devel = config.devel === true || config.devel === 'both' || config.devel === 'client';
 }
+
+/**
+| Legacy
+| (Opera Browser)
+*/
+if (!Object.defineProperty) {
+	console.log('Using legacy Object.defineProperty');
+	Object.defineProperty = function(obj, label, funcs) {
+		if (typeof(funcs.value) !== 'undefined') {
+			obj[label] = funcs.value;
+			return;
+		}
+		if (funcs.get) {
+			obj.__defineGetter__(label, funcs.get);
+		}
+		if (funcs.set) {
+			obj.__defineSetter__(label, funcs.set);
+		}
+	}
+}
+
+if (!Object.freeze) {
+	console.log('Using legacy Object.freeze');
+	Object.freeze = function(obj) {};
+}
+
 
 /**
 | Subclassing helper.
@@ -49,7 +75,6 @@ function subclass(sub, base) {
    sub.prototype.super = base.prototype;
    sub.prototype.constructor = sub;
 }
-
 
 /**
 | Fixates a value to an object (not changeable)
@@ -103,6 +128,21 @@ function log(category) {
 };
 
 /**
+| Shortcut for log('debug', ...);
+*/
+function debug() {
+	if (!config.log.debug) return;
+	var a = timestamp();
+	a.push('(debug) ');
+	for(var i = 0; i < arguments.length; i++) {
+		if (i > 0) a.push(' ');
+		a.push(JSON.stringify(arguments[i], null, ". "));
+	}
+	console.log(a.join(''));
+}
+
+
+/**
 | Deep copies an object.
 */
 function clone(original) {
@@ -138,6 +178,7 @@ jools = {
 	clone      : clone,
 	debug      : debug,
 	deepFreeze : deepFreeze,
+	devel      : devel,
 	fixate     : fixate,
 	log        : log,
 	subclass   : subclass,
