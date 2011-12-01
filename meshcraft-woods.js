@@ -42,39 +42,28 @@ function isnon(o)     { return typeof(o) !== 'undefined' && o !== null; }
 function isString(o)  { return typeof(o) === 'string' || o instanceof String; }
 function isInteger(o) { return typeof(o) === 'number' && Math.floor(o) === o; }
 
+/**
+| Returns a rejection error
+*/
+function reject(message) {
+	if (jools.debug) throw new Error(message); // in debug mode any failure is fatal.
+	log('mm', 'reject', message);
+	return {ok: false, message: message};
+}
+
+
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++Signature++
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  Signates an entry, string index or string span.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Signature(master) {
-	if (master.path)  this.path  = new Path(master.path);
-	if (master.at1)   this.at1   = master.at1;
-	if (master.at2)   this.at2   = master.at2;
-	if (master.pivot) this.pivot = master.pivot;
-	if (master.proc)  this.proc  = master.proc;
-	if (master.val)   this.val   = master.val;
-}
-
-/**
-| True if neither inder nor span.
-*/
-Signature.prototype.isPlain = function() {
-	return !is(this.at1) && !is(this.at2);
-}
-
-/**
-| True if signature is an index.
-*/
-Signature.prototype.isIndex = function() {
-	return is(this.at1) && !is(this.at2);
-}
-
-/**
-| True if signature is a span.
-*/
-Signature.prototype.isSpan = function() {
-	return is(this.at1) && is(this.at2);
+	if (is(master.path))  this.path  = new Path(master.path);
+	if (is(master.at1))   this.at1   = master.at1;
+	if (is(master.at2))   this.at2   = master.at2;
+	if (is(master.pivot)) this.pivot = master.pivot;
+	if (is(master.proc))  this.proc  = master.proc;
+	if (is(master.val))   this.val   = master.val;
 }
 
 /**
@@ -109,10 +98,10 @@ function Path(master) {
 		var v = master[i];
 		if (isInteger(v)) continue;
 		if (isString(master[i])) {
-			if (v[0] === '_') throw new Error('Path arcs must not start with _');
+			if (v[0] === '_') throw reject('Path arcs must not start with _');
 			continue;
 		}
-		throw new Error('Path arcs must be String or Integer');
+		throw reject('Path arcs must be String or Integer');
 	}
 	this._path = master.slice();
 }
@@ -157,8 +146,9 @@ Path.prototype.set = function(i, v) {
 */
 Path.prototype.add = function(i, v) {
 	if (i < 0) i = this._path.length + i;
-	if (!isInteger(this._path[i]))
+	if (!isInteger(this._path[i])) {
 		throw new Error('cannot change non-integer arc: '+this._path[i]);
+	}
 	return this._path[i] += v;
 }
 
@@ -168,7 +158,7 @@ Path.prototype.add = function(i, v) {
 Path.prototype.equals = function(o, len) {
 	if (this._path.length !== o._path.length) return false;
 	for(var k in this._path) {
-		if (this._path[k] !== o.path[k]) return false;
+		if (this._path[k] !== o._path[k]) return false;
 	}
 	return true;
 }
@@ -178,15 +168,13 @@ Path.prototype.equals = function(o, len) {
 |
 | o: the other path
 | [slen]: the length of this path to consider.
-|
-| TODO rename to isSubpath
 */
-Path.prototype.isSubOf = function(o, slen) {
+Path.prototype.like = function(o, slen) {
 	if (!is(slen)) slen  = this.length;
 	if (slen < 0)  slen += this.length;
 	if (slen < 0)  slen  = 0;
 
-	if (slen > o.pathlen) return false;
+	if (slen > o.length) return false;
 	for(var i = 0; i < slen; i++) {
 		if (this._path[i] !== o._path[i]) return false;
 	}
@@ -235,7 +223,7 @@ Stem.prototype.get = function(path, a0, al) {
 	al = path.fit(al, true);
 	var twig = this._twigs[path.get(a0)];
 	if (a0 + 1 === al) return twig;
-	if (!twig || !twig.get) throw new Error('path goes nowhere');
+	if (!twig || !twig.get) throw reject('path goes nowhere');
 	return twig.get(path, a0 + 1, al);
 }
 
@@ -253,7 +241,7 @@ Stem.prototype.set = function(path, val, a0, al) {
 		this._twigs[path.get(a0)] = this._sprout(val);
 	} else {
 		var twig = this._twigs[path.get(a0)];
-		if (!twig || !twig.set) throw new Error('path goes nowhere');
+		if (!twig || !twig.set) throw reject('path goes nowhere');
 		twig.set(path, val, a0 + 1, al);
 	}
 }
@@ -263,6 +251,8 @@ Stem.prototype.set = function(path, val, a0, al) {
 */
 Stem.prototype._sprout = function(master) {
 	if (typeof(master) === 'undefined') return undefined;
+	if (master === null) return null;
+
 	var creator = this.cSeeds[master.constructor.name];
 	if (creator === true) return master;
 	if (creator) return new creator(master);
@@ -305,6 +295,36 @@ Stem.prototype.growNew = function(path) {
 	if (!this.isGrowable) throw new ('Node not growable');
 	if (!this._grow) this._grow = 1;
 	path.set(-1, this._grow++);
+}
+
+/**
+| Returns true if this node matches a master or a node of equal class
+*/
+Stem.prototype.matches = function(master) {
+	if (!isnon(master) || !master.constructor) { log('debug', 'NON'); return false; }
+	if (this.constructor === master.constructor) {
+		// allow matching of nodes equal class
+		master = master._twigs;
+		log('debug', 'TWIGS');
+	}
+
+	var klen = 0;
+	for(var k in this._twigs) {
+		if (k === 'type') continue;
+		var v = this._twigs[k];
+		if (v.matches) {
+			if (!v.matches(master[k])) { log('debug', 'NEQ'); return false; }
+		} else {
+			if (this._twigs[k] !== master[k]) { log('debug', 'DEQ'); return false; }
+		}
+		klen++;
+	}
+	// tests if there aren't additional keys in o.
+	for (var k in master) {
+		if (k !== 'type') klen--;
+	}
+	log('debug', 'KLEN', klen, this, '--<o>--', master);
+	return klen === 0;
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -486,6 +506,7 @@ woods = {
 	Path         : Path,
 	Signature    : Signature,
 	Space        : Space,
+	reject       : reject,
 }
 
 try {
