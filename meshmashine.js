@@ -220,8 +220,6 @@ function alter(meshtree, alternation, backward) {
 			nParent.grow(trg.path);
 		}
 		var save = meshtree.get(trg.path);
-		log('debug', 'SAVE', save);
-		log('debug', 'TVAL', trg.val);
 		if (is(trg.val)) {
 			check(trg.val === save || save.matches(trg.val), cm, 'trg.val set incorrectly');
 		} else {
@@ -311,7 +309,7 @@ MeshMashine.prototype.transformOnMoment = function(sign, alter) {
 		if (!src.path.like(sign.path, src.pivot)) return sign;
 		log('te', 'alter-split');
 		var src_i = src.path.get(src.pivot);
-		var sig_i = path.get(src.pivot);
+		var sig_i = sign.path.get(src.pivot);
 		log('te', 'sig_i', sig_i, 'src_i', src_i);
 		if (sig_i < src_i) {
 			log('te', 'split downside');

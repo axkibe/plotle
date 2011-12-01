@@ -301,11 +301,10 @@ Stem.prototype.growNew = function(path) {
 | Returns true if this node matches a master or a node of equal class
 */
 Stem.prototype.matches = function(master) {
-	if (!isnon(master) || !master.constructor) { log('debug', 'NON'); return false; }
+	if (!isnon(master) || !master.constructor) return false;
 	if (this.constructor === master.constructor) {
 		// allow matching of nodes equal class
 		master = master._twigs;
-		log('debug', 'TWIGS');
 	}
 
 	var klen = 0;
@@ -313,9 +312,9 @@ Stem.prototype.matches = function(master) {
 		if (k === 'type') continue;
 		var v = this._twigs[k];
 		if (v.matches) {
-			if (!v.matches(master[k])) { log('debug', 'NEQ'); return false; }
+			if (!v.matches(master[k])) return false;
 		} else {
-			if (this._twigs[k] !== master[k]) { log('debug', 'DEQ'); return false; }
+			if (this._twigs[k] !== master[k]) return false;
 		}
 		klen++;
 	}
@@ -323,7 +322,6 @@ Stem.prototype.matches = function(master) {
 	for (var k in master) {
 		if (k !== 'type') klen--;
 	}
-	log('debug', 'KLEN', klen, this, '--<o>--', master);
 	return klen === 0;
 }
 
@@ -488,10 +486,27 @@ function DocAlley(master) {
 subclass(DocAlley, Stem);
 
 DocAlley.prototype.cSeeds = {
-	'Object'       : GenericCopse, // xx
-	'GenericCopse' : GenericCopse, // xx
+	'Para'    : Para,
 };
+DocAlley.prototype.tSeeds = {
+	'para'    : Para,
+}
 DocAlley.prototype.isAlley = true;
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ++ Para ++
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ A paragraph
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+function Para(master) {
+	Stem.call(this, {}, master);
+}
+subclass(Para, Stem);
+
+Para.prototype.cSeeds = {
+	'String' : true,
+};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  Module Export
@@ -504,6 +519,7 @@ woods = {
 	ItemCopse    : ItemCopse,
 	Nexus        : Nexus,
 	Path         : Path,
+	Para         : Para,
 	Signature    : Signature,
 	Space        : Space,
 	reject       : reject,
