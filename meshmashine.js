@@ -31,7 +31,6 @@
 | Imports
 */
 var jools;
-var woods;
 
 /**
 | Exports
@@ -48,21 +47,24 @@ var meshmashine;
 try {
 	// if not fails running nodejs
 	jools = require('./meshcraft-jools');
-	woods = require('./meshcraft-woods');
 } catch(e) {
 	// require failed, running in browser
 }
 
+var Path       = jools.Path;
+var Signature  = jools.Signature;
 
 var debug      = jools.debug;
 var log        = jools.log;
 var clone      = jools.clone;
 var deepFreeze = jools.deepFreeze;
+var is         = jools.is;
+var isnon      = jools.isnon;
+var isString   = jools.isString;
+var isInteger  = jools.isInteger;
 var fixate     = jools.fixate;
+var reject     = jools.reject;
 
-var Path       = woods.Path;
-var Signature  = woods.Signature;
-var reject     = woods.reject;
 
 function fail(args, aoffset) {
 	var a = Array.prototype.slice.call(args, aoffset, args.length);
@@ -84,13 +86,6 @@ function checkWithin(v, low, high) {
 }
 
 
-/**
-| Type check shortcuts
-*/
-function is(o)        { return typeof(o) !== 'undefined'; }
-function isnon(o)     { return typeof(o) !== 'undefined' && o !== null; }
-function isString(o)  { return typeof(o) === 'string' || o instanceof String; }
-function isInteger(o) { return typeof(o) === 'number' && Math.floor(o) === o; }
 
 function keysLength(o) {
 	var n = 0;

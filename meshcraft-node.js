@@ -128,15 +128,15 @@ var mmAjax = function(req, red, res) {
 		try {
 			switch (cmd.cmd) {
 			case 'alter':
-				var src = new woods.Signature(cmd.src);
-				var trg = new woods.Signature(cmd.trg);
+				var src = new jools.Signature(cmd.src);
+				var trg = new jools.Signature(cmd.trg);
 				log('debug', 'cmd', cmd);
 				log('debug', 'src', src);
 				log('debug', 'trg', trg);
 				asw = mm.alter(cmd.time, src, trg);
 				break;
 			case 'get':
-				var path = new woods.Path(cmd.path);
+				var path = new jools.Path(cmd.path);
 				asw = mm.get(cmd.time, path);
 				break;
 			case 'now':

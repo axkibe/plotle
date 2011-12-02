@@ -37,6 +37,23 @@ try {
 }
 
 /**
+| Testers
+*/
+function is(o)        { return typeof(o) !== 'undefined'; }
+function isnon(o)     { return typeof(o) !== 'undefined' && o !== null; }
+function isString(o)  { return typeof(o) === 'string' || o instanceof String; }
+function isInteger(o) { return typeof(o) === 'number' && Math.floor(o) === o; }
+
+/**
+| Returns a rejection error
+*/
+function reject(message) {
+	if (jools.devel) throw new Error(message); // in devel mode any failure is fatal.
+	log('reject', 'reject', message);
+	return {ok: false, message: message};
+}
+
+/**
 | Legacy
 | (Opera Browser)
 */
@@ -171,15 +188,167 @@ function deepFreeze(obj) {
 	}
 }
 
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ++Signature++
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ Signates an entry, string index or string span.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+function Signature(master) {
+	if (is(master.path))  this.path  = new Path(master.path);
+	if (is(master.at1))   this.at1   = master.at1;
+	if (is(master.at2))   this.at2   = master.at2;
+	if (is(master.pivot)) this.pivot = master.pivot;
+	if (is(master.proc))  this.proc  = master.proc;
+	if (is(master.val))   this.val   = master.val;
+}
+
+/**
+| Attunes '_end' ats to match a string.
+*/
+Signature.prototype.attune = function(str, name) {
+	if (this.at1 === '_end') this.at1 = str.length;
+	if (this.at2 === '_end') this.at2 = str.length;
+	if(is(this.at1) && (this.at1 < 0 || this.at1 > str.length))
+		throw reject(name+' at1 not within string');
+	if(is(this.at2) && (this.at2 < 0 || this.at2 > str.length))
+		throw reject(name+' at2 not within string');
+	return this;
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ++Path++
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ Path to a node.
+ TODO, make immuteable?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+function Path(master) {
+	if (master instanceof Path) master = master._path;
+	if (!(master instanceof Array)) {
+		log('fail', 'master:', master);
+		throw new Error('invalid path master');
+	}
+
+	for (var i = 0; i < master.length; i++) {
+		var v = master[i];
+		if (isInteger(v)) continue;
+		if (isString(master[i])) {
+			if (v[0] === '_') throw reject('Path arcs must not start with _');
+			continue;
+		}
+		throw reject('Path arcs must be String or Integer');
+	}
+	this._path = master.slice();
+}
+
+/**
+| Length of the signature.
+*/
+Object.defineProperty(Path.prototype, 'length', {
+	get: function() { return this._path.length; },
+});
+
+/**
+| Returns the signature at index i.
+*/
+Path.prototype.get = function(i) {
+	if (i < 0) i += this._path.length;
+	if (i < 0) return undefined;
+	return this._path[i];
+}
+
+
+/**
+| Fits the arc numeration to be in this signature.
+*/
+Path.prototype.fit = function(a, edge) {
+	if (!is(a)) a = edge ? this.length : 0;
+	if (a < 0) a += this.pathlen;
+	if (a < 0) a = 0;
+	return a;
+}
+
+/**
+| Sets arc i
+*/
+Path.prototype.set = function(i, v) {
+	if (i < 0) i += this._path.length;
+	return this._path[i] = v;
+}
+
+/**
+| Adds to integer arc i
+*/
+Path.prototype.add = function(i, v) {
+	if (i < 0) i = this._path.length + i;
+	if (!isInteger(this._path[i])) {
+		throw new Error('cannot change non-integer arc: '+this._path[i]);
+	}
+	return this._path[i] += v;
+}
+
+/**
+| True if this path is the same as another.
+*/
+Path.prototype.equals = function(o, len) {
+	if (this._path.length !== o._path.length) return false;
+	for(var k in this._path) {
+		if (this._path[k] !== o._path[k]) return false;
+	}
+	return true;
+}
+
+/**
+| True if this path is a subpath of another.
+|
+| o: the other path
+| [slen]: the length of this path to consider.
+*/
+Path.prototype.like = function(o, slen) {
+	if (!is(slen)) slen  = this.length;
+	if (slen < 0)  slen += this.length;
+	if (slen < 0)  slen  = 0;
+
+	if (slen > o.length) return false;
+	for(var i = 0; i < slen; i++) {
+		if (this._path[i] !== o._path[i]) return false;
+	}
+	return true;
+}
+
+
+/**
+| stringify
+*/
+Path.prototype.toString = function() {
+	throw new Error("is this used?");
+	return this._path.toString();
+}
+
+/**
+| jsonfy
+*/
+Path.prototype.toJSON = function() {
+	return this._path;
+}
+
+
 /**
 | Exports
 */
 jools = {
+	Path       : Path,
+	Signature  : Signature,
+
 	clone      : clone,
 	debug      : debug,
 	deepFreeze : deepFreeze,
 	devel      : devel,
 	fixate     : fixate,
+	is         : is,
+	isnon      : isnon,
+	isString   : isString,
+	isInteger  : isInteger,
 	log        : log,
 	subclass   : subclass,
 };

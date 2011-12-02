@@ -51,7 +51,9 @@ try {
     // require failed, running in browser
 }
 
+var log      = jools.log;
 var fixate   = jools.fixate;
+var reject   = jools.reject;
 var subclass = jools.subclass;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -90,15 +92,15 @@ function lazyFixate(proto, key, getter) {
 	Object.defineProperty(proto, key, {
 		// this clever overriding does not work in IE9 :-( or Android 2.2 Browser
 		// get : function() { return fixate(this, key, getter.call(this)); },
-		get : function() { 
-			return this['_cache_'+key] || (this['_cache_'+key] = getter.call(this)); 
+		get : function() {
+			return this['_cache_'+key] || (this['_cache_'+key] = getter.call(this));
 		},
 	});
 };
 
 /* divides by 2 and rounds up */
-function half(v) { 
-	return Math.round(v / 2); 
+function half(v) {
+	return Math.round(v / 2);
 });
 
 /* cos(30°) */
@@ -142,14 +144,14 @@ function ensureInteger() {
 | Canvas width.
 */
 Object.defineProperty(Fabric.prototype, 'width',  {
-	get: function() { return this._canvas.width; }, 
+	get: function() { return this._canvas.width; },
 });
 
 /**
 | Canvas height.
 */
 Object.defineProperty(Fabric.prototype, "height", {
-	get: function() { return this._canvas.height; }, 
+	get: function() { return this._canvas.height; },
 });
 
 /**
@@ -604,7 +606,7 @@ Point.renew = function(x, y) {
 /**
 | Returns a json object for this point.
 */
-Point.prototype.jsonfy = function() {
+Point.prototype.toJSON = function() {
 	return this._json || (this._json = { x: this.x, y: this.y });
 }
 
@@ -668,10 +670,10 @@ Rect.jnew = function(js) {
 }
 
 /**
-| Returns a json object for this rect
+| Returns a json object for this rect.
 */
-Rect.prototype.jsonfy = function() {
-	return this._json || (this._json = { pnw: this.pnw.jsonfy(), pse: this.pse.jsonfy() });
+Rect.prototype.toJSON = function() {
+	return this._json || (this._json = { pnw: this.pnw, pse: this.pse });
 }
 
 /**
@@ -883,7 +885,7 @@ Margin.jnew = function(js) {
 /**
 | Returns a json object for this margin
 */
-Margin.prototype.jsonfy = function() {
+Margin.prototype.toJSON = function() {
 	return this._json || (this._json = { n: this.n, e: this.e, s: this.s, w: this.w });
 }
 
@@ -984,9 +986,9 @@ Hexagon.jnew = function(js) {
 }
 
 /**
-| Returns a json object for this rect.
+| Returns a json object for this hexagon.
 */
-Hexagon.prototype.jsonfy = function() {
+Hexagon.prototype.toJSON = function() {
 	return this._json || (this._json = { pc: this.pc, r: this.r });
 }
 
@@ -1474,20 +1476,21 @@ Line.prototype.isNear = function(p, dis) {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 fabric = {
-	cos30         : cos30,
-	ensureInteger : ensureInteger,
 	Fabric        : Fabric,
-	half          : half,
 	Hexagon       : Hexagon,
 	HexagonFlower : HexagonFlower,
 	HexagonSlice  : HexagonSlice,
 	Line          : Line,
 	Margin        : Margin,
 	Meassure      : Meassure,
-	opposite      : opposite,
 	Point         : Point,
 	Rect          : Rect,
 	RoundRect     : RoundRect,
+
+	cos30         : cos30,
+	ensureInteger : ensureInteger,
+	half          : half,
+	opposite      : opposite,
 	tan30         : tan30,
 };
 
