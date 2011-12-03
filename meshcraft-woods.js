@@ -43,6 +43,7 @@ var isnon     = jools.isnon;
 var isString  = jools.isString;
 var isInteger = jools.isInteger;
 var log       = jools.log;
+var reject    = jools.reject;
 var subclass  = jools.subclass;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -290,10 +291,10 @@ function Note(master) {
 
 	Stem.call(this, {
 			type : 'note',
-			//zone : new GenericCopse(master && master.zone),
+			zone : new Rect(master.zone),
 			doc  : new DocAlley(master && master.doc),
 		}, null);
-	this.zone = new Rect(master.zone);
+	this.zone = this._twigs.zone;
 	this.doc  = this._twigs.doc;
 }
 subclass(Note, Stem);
@@ -374,7 +375,6 @@ Para.prototype.cSeeds = {
  A rectangle inherits fabric.Rect and is immutable
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Rect(master) {
-	debug('NEW RECT:', master);
 	this.super.constructor.call(this,
 		new Point(master.pnw),
 		new Point(master.pse)
@@ -420,6 +420,18 @@ Rect.prototype.get = function(path, a0, al) {
 	return twig.get(path, a0 + 1, al);
 }
 
+/**
+| Returns true if the rect matches a master or another rect.
+*/
+Rect.prototype.matches = function(master) {
+	if (!isnon(master) || !master.constructor ||
+	    !isnon(master.pnw) || !isnon(master.pse)) return false;
+	for(var k in master) {
+		if (k !== 'pnw' && k !== 'pse') return false;
+	}
+	return this.pnw.matches(master.pnw) && this.pse.matches(master.pse);
+}
+
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++ Point ++
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
@@ -460,6 +472,18 @@ Point.prototype.get = function(path, a0, al) {
 	return this[path.get(a0)];
 }
 
+/**
+| Returns true if the point matches a master or another point.
+*/
+Point.prototype.matches = function(master) {
+	if (!isnon(master)      || !master.constructor ||
+	    !isnon(master.x)    || !isnon(master.y)    ||
+	    this.x !== master.x || this.y !== master.y) return false;
+	for(var k in master) {
+		if (k !== 'x' && k !== 'y') return false;
+	}
+	return true;
+}
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  Module Export
