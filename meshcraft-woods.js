@@ -9,6 +9,7 @@
 | Imports
 */
 var jools;
+var fabric;
 
 /**
 | Exports
@@ -22,15 +23,21 @@ var woods;
 
 "use strict";
 
-try {
-	// if not fails running node
-	jools = require('./meshcraft-jools');
-} catch(e) {
-	// require failed, running in browser
+/**
+| Running in node or browser?
+*/
+var inNode = true; try { module } catch (e) { inNode = false; }
+
+if (inNode) {
+	// node
+	jools  = require('./meshcraft-jools');
+	fabric = require('./meshcraft-fabric');
 }
 
 var Path      = jools.Path;
 var Signature = jools.Signature;
+
+var debug     = jools.debug;
 var is        = jools.is;
 var isnon     = jools.isnon;
 var isString  = jools.isString;
@@ -70,7 +77,8 @@ Stem.prototype.get = function(path, a0, al) {
 /**
 | Sets the value of a twig.
 */
-Stem.prototype.set = function(path, val, a0, al) {
+Stem.prototype.set = function(path, val, a0, al, oplace) {
+	if (oplace) throw new Error('out of place not yet supported');
 	if (!(path instanceof Path)) { // direct?
 		this._twigs[path] = this._sprout(val);
 		return;
@@ -242,7 +250,8 @@ subclass(Space, Stem);
 /**
 | Sets the value of a node.
 */
-Space.prototype.set = function(path, val, a0, al) {
+Space.prototype.set = function(path, val, a0, al, oplace) {
+	if (oplace) throw new Error('out of place not yet supported');
 	a0 = path.fit(a0, false);
 	al = path.fit(al, true);
 	if (a0 + 1 === al) throw new Error('Cannot set Space twigs themselves');
@@ -277,17 +286,14 @@ function Note(master) {
 	if (master && !(master instanceof Note) && master.type !== 'note') {
 		throw new Error('Note master typed wrongly: '+master.type);
 	}
-	// todo check if master has other keys.
-
-	//var zone = new Zone(master.zone);
+	// TODO check if master has other keys.
 
 	Stem.call(this, {
 			type : 'note',
-			//zone : zone,
-			zone : new GenericCopse(master && master.zone),
+			//zone : new GenericCopse(master && master.zone),
 			doc  : new DocAlley(master && master.doc),
 		}, null);
-	this.zone = this._twigs.zone;
+	this.zone = new Rect(master.zone);
 	this.doc  = this._twigs.doc;
 }
 subclass(Note, Stem);
@@ -295,17 +301,20 @@ subclass(Note, Stem);
 /**
 | Sets the value of a node.
 */
-Note.prototype.set = function(path, val, a0, al) {
+Note.prototype.set = function(path, val, a0, al, oplace) {
+	if (oplace) throw new Error('out of place not yet supported');
 	a0 = path.fit(a0, false);
 	al = path.fit(al, true);
-	/* XX
+
 	if (path.get(a0) === 'zone') {
-			if (a0 + 1 === al) this.zone = new Zone(val);
-		} catch (e) {
-			throw reject(e);
+		if (a0 + 1 === al) {
+			this.zone = new Rect(val);
+			return;
 		}
-	}*/
-	if (a0 + 1 === al) throw new Error('Cannot set Note twigs themselves');
+		this.zone = this.zone.set(path, val, a0 + 1, al, true);
+		return;
+	}
+	if (a0 + 1 === al) throw new Error('Cannot set Note.'+path.get(a0)+' itself');
 	this.super.set.call(this, path, val, a0, al);
 }
 
@@ -358,6 +367,100 @@ Para.prototype.cSeeds = {
 	'String' : true,
 };
 
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ++ Rect ++
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ A rectangle inherits fabric.Rect and is immutable
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+function Rect(master) {
+	debug('NEW RECT:', master);
+	this.super.constructor.call(this,
+		new Point(master.pnw),
+		new Point(master.pse)
+	);
+}
+subclass(Rect, fabric.Rect);
+
+Rect.prototype.set = function(path, val, a0, al, oplace) {
+	if (!oplace) throw new Error('Rect can only be set out of place');
+	a0 = path.fit(a0, false);
+	al = path.fit(al, true);
+
+	switch(path.get(a0)) {
+	case 'pnw': break;
+	case 'pse': break;
+	default : throw reject('path goes nowhere');
+	}
+
+	var npoint;
+	if (a0 + 1 === al) {
+		npoint = new Point(val);
+	} else {
+		npoint = this[path.get(a0)].set(path, val, a0 + 1, al, true);
+	}
+
+	return new Rect(
+		path.get(a0) === 'pnw' ? npoint : this.pnw,
+		path.get(a0) === 'pse' ? npoint : this.pse);
+}
+
+/**
+| Returns the value the path points at.
+*/
+Rect.prototype.get = function(path, a0, al) {
+	if (!(path instanceof Path)) { // direct?
+		return this[path];
+	}
+	a0 = path.fit(a0, false);
+	al = path.fit(al, true);
+	var twig = this[path.get(a0)];
+	if (a0 + 1 === al) return twig;
+	if (!twig || !twig.get) throw reject('path goes nowhere');
+	return twig.get(path, a0 + 1, al);
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ++ Point ++
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ A Points inherits fabric.Point and is immutable
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+function Point(master) {
+	this.super.constructor.call(this, master.x, master.y);
+}
+subclass(Point, fabric.Point);
+
+Point.prototype.set = function(path, val, a0, al, oplace) {
+	if (!oplace) throw new Error('Point can only be set out of place');
+	a0 = path.fit(a0, false);
+	al = path.fit(al, true);
+
+	switch(path.get(a0)) {
+	case 'x': break;
+	case 'y': break;
+	default : throw reject('path goes nowhere');
+	}
+
+	return new Point(
+		path.get(a0) === 'x' ? val : this.x,
+		path.get(a0) === 'y' ? val : this.y);
+}
+
+/**
+| Returns the value the path points at.
+*/
+Point.prototype.get = function(path, a0, al) {
+	if (!(path instanceof Path)) { // direct?
+		return this[path];
+	}
+	a0 = path.fit(a0, false);
+	al = path.fit(al, true);
+	var twig = this[path.get(a0)];
+	if (a0 + 1 !== al) throw reject('path goes nowhere');
+	return this[path.get(a0)];
+}
+
+
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  Module Export
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
@@ -370,14 +473,13 @@ woods = {
 	Nexus        : Nexus,
 	Para         : Para,
 	Space        : Space,
+	Rect         : Rect,
+	Point        : Point,
 };
 
-try {
+if (inNode) {
 	module.exports = woods;
-	// node
-} catch(e) {
-	// browser;
-};
+}
 
 })();
 

@@ -44,11 +44,13 @@ var fabric;
 
 'use strict';
 
-try {
-    // if not fails running node
+/**
+| Running in node or browser?
+*/
+var inNode = true; try { module } catch (e) { inNode = false; }
+
+if (inNode) {
     jools = require('./meshcraft-jools');
-} catch(e) {
-    // require failed, running in browser
 }
 
 var log      = jools.log;
@@ -101,14 +103,14 @@ function lazyFixate(proto, key, getter) {
 /* divides by 2 and rounds up */
 function half(v) {
 	return Math.round(v / 2);
-});
+};
 
 /* cos(30°) */
 
-var cos30 = Math.cos(Math.PI / 6));
+var cos30 = Math.cos(Math.PI / 6);
 
 /* tan(30°) */
-var tan30 = Math.tan(Math.PI / 6));
+var tan30 = Math.tan(Math.PI / 6);
 
 /**
 | Returns the compass direction opposite of a direction.
@@ -126,7 +128,7 @@ function opposite(dir) {
 	case 'c'  : return 'c';
 	default   : throw new Error('unknown compass direction');
 	}
-});
+}
 
 /**
 | Throws an error if any argument is not an integer.
@@ -138,7 +140,7 @@ function ensureInteger() {
 			throw new Error(arg + ' not an integer');
 		}
 	}
-});
+}
 
 /**
 | Canvas width.
@@ -530,7 +532,7 @@ Fabric.prototype.fontStyle = function(font, fill, align, baseline) {
    '   `-' `-' `-^ `-' `-^ '   `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-Measure = {
+var Measure = {
 	init : function() {
 		Measure._canvas = document.createElement('canvas');
 		Measure._cx = this._canvas.getContext('2d');
@@ -561,8 +563,8 @@ Object.defineProperty(Measure, 'font', {
 | Point(x, y) or
 | Point(p)
 */
-Point = function(a1, a2) {
-	if (typeof(a1) === 'object') {
+function Point(a1, a2) {
+	if (typeof(a1) === 'object') { // TODO typeof Point
 		fixate(this, 'x', a1.x);
 		fixate(this, 'y', a1.y);
 	} else {
@@ -652,9 +654,9 @@ Point.prototype.sub = function(a1, a2) {
 | pnw: point to north west.
 | pse: point to south east.
 */
-Rect = function(pnw, pse) {
+function Rect(pnw, pse) {
 	if (!pnw || !pse || pnw.x > pse.x || pnw.y > pse.y) {
-		throw new Error('not a rectangle.');
+		throw reject('not a rectangle.');
 	}
 	fixate(this, 'pnw',    pnw);
 	fixate(this, 'pse',    pse);
@@ -863,7 +865,7 @@ lazyFixate(Rect.prototype, 'pc', function() {
 | s: south margin
 | w: west margin
 */
-Margin = function(n, e, s, w) {
+function Margin(n, e, s, w) {
 	fixate(this, 'n', n);
 	fixate(this, 'e', e);
 	fixate(this, 's', s);
@@ -917,7 +919,7 @@ lazyFixate(Margin.prototype, 'y', function() { return this.n + this.s; });
 | Rect(rect, crad)      -or-
 | Rect(pnw, pse, crad)
 */
-RoundRect = function(a1, a2, a3) {
+function RoundRect(a1, a2, a3) {
 	if (a1 instanceof Point) {
 		Rect.call(this, a1, a2);
 		fixate(this, 'crad', a3);
@@ -970,7 +972,7 @@ RoundRect.prototype.path = function(c2d, border, edge) {
 | pc: center
 | r: radius
 */
-Hexagon = function(pc, r) {
+function Hexagon(pc, r) {
 	if (typeof(pc) !== 'object' || !(pc instanceof Point)) throw new Error('invalid pc');
 	fixate(this, 'pc', pc);
 	fixate(this, 'r', r);
@@ -1043,7 +1045,7 @@ Hexagon.prototype.within = function(p) {
 | rad: radius.
 | height: slice height.
 */
-HexagonSlice = function(psw, rad, height) {
+function HexagonSlice(psw, rad, height) {
 	fixate(this, 'psw', psw);
 	fixate(this, 'rad', rad);
 	fixate(this, 'height', height);
@@ -1308,10 +1310,10 @@ HexagonFlower.prototype.within = function(p) {
 | p2end: 'normal' or 'arrow'
 */
 function Line(p1, p1end, p2, p2end) {
-	fabric(this, 'p1', p1);
-	fabric(this, 'p1end', p1end);
-	fabric(this, 'p2', p2);
-	fabric(this, 'p2end', p2end);
+	fixate(this, 'p1', p1);
+	fixate(this, 'p1end', p1end);
+	fixate(this, 'p2', p2);
+	fixate(this, 'p2end', p2end);
 }
 
 /**
@@ -1482,7 +1484,7 @@ fabric = {
 	HexagonSlice  : HexagonSlice,
 	Line          : Line,
 	Margin        : Margin,
-	Meassure      : Meassure,
+	Measure       : Measure,
 	Point         : Point,
 	Rect          : Rect,
 	RoundRect     : RoundRect,

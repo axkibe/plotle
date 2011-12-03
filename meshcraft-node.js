@@ -150,6 +150,7 @@ var mmAjax = function(req, red, res) {
 				return;
 			}
 		} catch (e) {
+			console.log(util.inspect(e));
 			if (e.ok !== false) throw e; else asw = e;
 		}
 		log('ajax', 'out', asw);

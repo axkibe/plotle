@@ -94,6 +94,25 @@ function subclass(sub, base) {
 }
 
 /**
+| Multisubclassing helper.
+*/
+function multisubclass(sub) {
+	function inherit() {}
+	for(var a = 1; a < arguments.length; a++) {
+		for(var k in arguments[a]) {
+			if(inherit.prototype[k]) {
+				throw new Error('Multiple inheritance clash for '+sub.constructor.name+' :'+k);
+			}
+			inherit.prototype[k] = arguments[a][k];
+		}
+	}
+	sub.prototype = new inherit();
+	sub.prototype.super = Array.prototype.slice.call(arguments);
+	sub.prototype.super.unshift();
+	sub.prototype.constructor = sub;
+}
+
+/**
 | Fixates a value to an object (not changeable)
 */
 function fixate(obj, key, value) {
@@ -350,6 +369,7 @@ jools = {
 	isString   : isString,
 	isInteger  : isInteger,
 	log        : log,
+	reject     : reject,
 	subclass   : subclass,
 };
 
