@@ -96,19 +96,19 @@ function subclass(sub, base) {
 /**
 | Multisubclassing helper.
 */
-function multisubclass(sub) {
+function multisubclass(sub, bases) {
 	function inherit() {}
-	for(var a = 1; a < arguments.length; a++) {
-		for(var k in arguments[a]) {
+	inherit.prototype.super = {};
+	for(var name in bases) {
+		inherit.prototype.super[name] = bases[name];
+		for(var k in bases[name].prototype) {
 			if(inherit.prototype[k]) {
 				throw new Error('Multiple inheritance clash for '+sub.constructor.name+' :'+k);
 			}
-			inherit.prototype[k] = arguments[a][k];
+			inherit.prototype[k] = bases[name].prototype[k];
 		}
 	}
 	sub.prototype = new inherit();
-	sub.prototype.super = Array.prototype.slice.call(arguments);
-	sub.prototype.super.unshift();
 	sub.prototype.constructor = sub;
 }
 
@@ -356,21 +356,22 @@ Path.prototype.toJSON = function() {
 | Exports
 */
 jools = {
-	Path       : Path,
-	Signature  : Signature,
-
-	clone      : clone,
-	debug      : debug,
-	deepFreeze : deepFreeze,
-	devel      : devel,
-	fixate     : fixate,
-	is         : is,
-	isnon      : isnon,
-	isString   : isString,
-	isInteger  : isInteger,
-	log        : log,
-	reject     : reject,
-	subclass   : subclass,
+	Path          : Path,
+	Signature     : Signature,
+                  
+	clone         : clone,
+	debug         : debug,
+	deepFreeze    : deepFreeze,
+	devel         : devel,
+	fixate        : fixate,
+	is            : is,
+	isnon         : isnon,
+	isString      : isString,
+	isInteger     : isInteger,
+	log           : log,
+	multisubclass : multisubclass,
+	reject        : reject,
+	subclass      : subclass,
 };
 
 try {

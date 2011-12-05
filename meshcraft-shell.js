@@ -10,15 +10,22 @@
 |__|  |__|  |__|  `         .'.'.'| |//| |     | |  '. `.____.-'/| |      .'.''| |   | |      |  |
                    `'-.....-.'.'.-'  / | |     | |    `-._____ / | |     / /   | |_  | |      |  '.'
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
-                                       '___)   '___)                      `~~'  `"   |_|      `'*/
-/**
-| A network item editor.
-|
-| This is the client-side script for the user interface.
-|
-| Authors: Axel Kittenberger
-| License: GNU Affero AGPLv3
-*/
+                                       '___)   '___)                      `~~'  `"   |_|      `--´
+
+                                                .---. .       .  .  
+                                                \___  |-. ,-. |  |  
+                                                    \ | | |-' |  |  
+                                                `---' ' ' `-' `' `' 
+
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ A network item editor.
+
+ This is the client-side script for the user interface.
+
+ Authors: Axel Kittenberger
+ License: GNU Affero AGPLv3
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 'use strict';
 
@@ -1638,6 +1645,30 @@ function Cockpit() {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ++ Nexus ++
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ The root of spaces.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+function Nexus(master) {
+	this.super.constructor.call(this, master);
+}
+subclass(Nexus, woods.Nexus);
+
+/**
+| Class Seeds. Things that can grow on this twig.
+*/
+Nexus.prototype.cSeeds = {
+	'Space' : Space,
+}
+
+/**
+| Type Seeds. Things that can be a master for new grows on this twig.
+*/
+Nexus.prototype.tSeeds = {
+	'space' : Space,
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .---.
  \___  ,-. ,-. ,-. ,-.
      \ | | ,-| |   |-'
@@ -1652,6 +1683,7 @@ function Cockpit() {
 | Constructor
 */
 function Space() {
+	this.super.constructor.call(this, master);
 	this._floatMenuLabels = {c: 'new', n: 'Note', ne: 'Label'};
 	this.edgemenu = new Edgemenu();
 
@@ -1666,6 +1698,15 @@ function Space() {
 	this.c2d.pan = this.pan;
 
 	this.zoom = 1;
+}
+subclass(Space, woods.Space);
+
+/**
+| Class Seeds. Things that can grow on this twig.
+*/
+Space.cSeeds = {
+    'ItemCopse' : ItemCopse,
+    'ArcAlley'  : woods.ArcAlley,
 }
 
 /**
@@ -2340,12 +2381,40 @@ Space.prototype.mousewheel = function(wheel) {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ++ ItemCopse ++
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ A copse of items (in a space).
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+function ItemCopse(master) {
+	this.super.constructor.call(this, master);
+}
+subclass(ItemCopse, woods.ItemCopse);
+
+/**
+| Class Seeds. Things that can grow on this twig.
+*/
+ItemCopse.prototype.cSeeds = {
+    'Note' : Note,
+};
+
+/**
+| Type Seeds. Things that can be a master for new grows on this twig.
+*/
+ItemCopse.prototype.tSeeds = {
+    'note' : Note,
+};
+
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,--,--'                    .
  `- | ,-. ,-. ,-. ,-. ,-. ,-| ,-.
   , | |   |-' |-' | | | | | | |-'
   `-' '   `-' `-' ' ' `-' `-^ `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  Part of a tree-structure.
+
+TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO remove???
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Treenode() {
 	// nada
@@ -2451,9 +2520,7 @@ Object.defineProperty(Textnode.prototype, 'text', {
   ,|    ,-| |   ,-| | | |   ,-| | | | |
   `'    `-^ '   `-^ `-| '   `-^ |-' ' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ | ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-                     `'         '
- A paragraph.
-
+ A paragraph.        `'         '
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 function Paragraph(text) {
@@ -3173,7 +3240,7 @@ function Note(id, zone, dtree) {
 	// todo, don't add here
 	System.repository.addItem(this, true);
 }
-subclass(Note, Item);
+multisubclass(Note, woods.Note, Item);
 
 /**
 | Default margin for all notes.

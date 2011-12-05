@@ -184,6 +184,9 @@ function GenericCopse(master) {
 }
 subclass(GenericCopse, Stem);
 
+/**
+| Class Seeds. Things that can grow on this twig.
+*/
 GenericCopse.prototype.cSeeds = {
 	'Array'        : GenericAlley,
 	'GenericAlley' : GenericAlley,
@@ -193,6 +196,9 @@ GenericCopse.prototype.cSeeds = {
 	'String'       : true,
 };
 
+/**
+| Type Seeds. Things that can be a master for new grows on this twig.
+*/
 GenericCopse.prototype.tSeeds = null;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -205,24 +211,37 @@ function GenericAlley(master) {
 }
 subclass(GenericAlley, Stem);
 
+/**
+| Class Seeds. Things that can grow on this twig.
+*/
 GenericAlley.prototype.cSeeds  = GenericCopse.prototype.cSeeds;
+
+/**
+| Type Seeds. Things that can be a master for new grows on this twig.
+*/
 GenericAlley.prototype.tSeeds  = GenericCopse.prototype.tSeeds;
 GenericAlley.prototype.isAlley = true;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++ Nexus ++
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- The root of spaces
+ The root of spaces.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Nexus(master) {
 	Stem.call(this, {type: 'nexus'}, master);
 }
 subclass(Nexus, Stem);
 
+/**
+| Class Seeds. Things that can grow on this twig.
+*/
 Nexus.prototype.cSeeds = {
 	'Space' : Space,
 }
 
+/**
+| Type Seeds. Things that can be a master for new grows on this twig.
+*/
 Nexus.prototype.tSeeds = {
 	'space' : Space,
 }
@@ -240,13 +259,22 @@ function Space(master) {
 
 	Stem.call(this, {
 			type  : 'space',
-			items : new ItemCopse(master && master.items),
-			z     : new ArcAlley (master && master.z),
+			items : new this.cSeeds.ItemCopse(master && master.items),
+			z     : new this.cSeeds.ArcAlley (master && master.z),
 		}, null);
 	this.items = this._twigs.items;
 	this.z     = this._twigs.z;
 }
 subclass(Space, Stem);
+
+/**
+| Class Seeds. Things that can grow on this twig.
+*/
+Space.prototype.cSeeds = {
+	'ItemCopse' : ItemCopse,
+	'ArcAlley'  : ArcAlley,
+}
+
 
 /**
 | Sets the value of a node.
@@ -270,10 +298,16 @@ function ItemCopse(master) {
 }
 subclass(ItemCopse, Stem);
 
+/**
+| Class Seeds. Things that can grow on this twig.
+*/
 ItemCopse.prototype.cSeeds = {
 	'Note' : Note,
 };
 
+/**
+| Type Seeds. Things that can be a master for new grows on this twig.
+*/
 ItemCopse.prototype.tSeeds = {
 	'note' : Note,
 };
@@ -329,6 +363,9 @@ function ArcAlley(master) {
 }
 subclass(ArcAlley, Stem);
 
+/**
+| Class Seeds. Things that can grow on this twig.
+*/
 ArcAlley.prototype.cSeeds = {
 	'Number' : true,
 	'String' : true,
@@ -345,9 +382,16 @@ function DocAlley(master) {
 }
 subclass(DocAlley, Stem);
 
+/**
+| Class Seeds. Things that can grow on this twig.
+*/
 DocAlley.prototype.cSeeds = {
 	'Para'    : Para,
 };
+
+/**
+| Type Seeds. Things that can be a master for new grows on this twig.
+*/
 DocAlley.prototype.tSeeds = {
 	'para'    : Para,
 }
@@ -364,6 +408,9 @@ function Para(master) {
 }
 subclass(Para, Stem);
 
+/**
+| Class Seeds. Things that can grow on this twig.
+*/
 Para.prototype.cSeeds = {
 	'String' : true,
 };
