@@ -37,7 +37,9 @@ var abs = Math.abs;
 var max = Math.max;
 var min = Math.min;
 
-var subclass      = jools.subclass;
+var subclass = jools.subclass;
+var log      = jools.log;
+var debug    = jools.debug;
 
 var cos30         = fabric.cos30;
 var half          = fabric.half;
@@ -417,7 +419,7 @@ Marker.prototype.getPoint = function() {
 	Measure.font = dtree.font;
 	var e = this._element;
 	var t = e.text;
-	var p = e.anchestor(Paragraph);
+	var p = e.anchestor(Para);
 	var pinfo = this.getPinfo();
 	var l = pinfo[this._pli];
 	var c = l[this._pci];
@@ -430,7 +432,7 @@ Marker.prototype.getPoint = function() {
 | Sets the marker to position closest to x, y from flowbox(para).
 */
 Marker.prototype.setFromPoint = function(flowbox, p) {
-	if (!flowbox instanceof Paragraph) { throw new Error('invalid flowbox.'); }
+	if (!flowbox instanceof Para) { throw new Error('invalid flowbox.'); }
 	var pinfo = this._getPinfoAtP(flowbox, p);
 	var l = pinfo[this._pli];
 	var c = l[this._pci]; // x,y is in this chunk
@@ -467,7 +469,7 @@ Marker.prototype.setFromPoint = function(flowbox, p) {
 Marker.prototype.getPinfo = function() {
 	var te = this._element;
 	var to = this._offset;
-	var para  = te.anchestor(Paragraph);
+	var para  = te.anchestor(Para);
 	var pinfo = para.pinfo;
 	var bli =  0; /* buffer for line count */
 	var bci = -1; /* buffer for chunk count */
@@ -500,7 +502,7 @@ Marker.prototype.moveUpDown = function(dir) {
 	var e  = this._element;
 	var o  = this._offset;
 	Measure.font = e.anchestor(DTree).font;
-	var p  = e.anchestor(Paragraph);
+	var p  = e.anchestor(Para);
 	var pinfo = this.getPinfo();
 	var li = this._pli;
 	var ci = this._pci;
@@ -732,11 +734,11 @@ function Editor() {
 | Draws or erases the caret.
 */
 Editor.prototype.updateCaret = function() {
-	var c2d = System.c2d;
+	var f = System.fabric;
 	var caret = this.caret;
 	if (caret.save) {
 		/* erase the old caret */
-		c2d.putImageData(caret.save, caret.sp.x - 1, caret.sp.y - 1);
+		f.putImageData(caret.save, caret.sp.x - 1, caret.sp.y - 1);
 		caret.save = null;
 	}
 	if (caret.shown && !caret.blink) {
@@ -756,8 +758,8 @@ Editor.prototype.updateCaret = function() {
 		var sp = caret.sp = System.space.pan.add(
 			tzone.pnw.x + cp.x,
 			tzone.pnw.y + cyn);
-		caret.save = c2d.getImageData(sp.x - 1, sp.y - 1, 3, cys - cyn + 1);
-		c2d.fillRect('black', sp.x, sp.y, 1, cys - cyn);
+		caret.save = f.getImageData(sp.x - 1, sp.y - 1, 3, cys - cyn + 1);
+		f.fillRect('black', sp.x, sp.y, 1, cys - cyn);
 	}
 }
 
@@ -770,10 +772,10 @@ Editor.prototype.newline = function() {
 	var co    = caret.offset;
 	var ct    = ce.text;
 	// todo multi node ability
-	var opara = ce.anchestor(Paragraph);
+	var opara = ce.anchestor(Para);
 
 	ce.text = ct.substring(0, co);
-	var npara = new Paragraph(ct.substring(co, ct.length));
+	var npara = new Para(ct.substring(co, ct.length));
 	opara.parent.insertBefore(npara, opara.next);
 	caret.set(npara.first, 0);
 }
@@ -853,7 +855,7 @@ Editor.prototype.specialKey = function(item, keycode, shift, ctrl) {
 			caret.offset--;
 			redraw = true;
 		} else {
-			var para = ce.anchestor(Paragraph);
+			var para = ce.anchestor(Para);
 			redraw = para.joinToPrevious(ce, caret);
 		}
 		System.repository.updateItem(item);
@@ -895,7 +897,7 @@ Editor.prototype.specialKey = function(item, keycode, shift, ctrl) {
 			ce.text = ct.substring(0, co) + ct.substring(co + 1, ct.length);
 			redraw = true;
 		} else {
-			var para = ce.anchestor(Paragraph);
+			var para = ce.anchestor(Para);
 			redraw = para.joinToNext(ce, caret);
 		}
 		System.repository.updateItem(item);
@@ -1020,7 +1022,6 @@ Editor.prototype.input = function(item, text) {
 ~ ~ ~ ~ /|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
        `-'
   Base system for Meshcraft.
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 var System = {
 
@@ -1057,10 +1058,10 @@ init : function() {
 */
 _init : function() {
 	if (this != System) throw new Error('System has wrong this pointer');
-	var canvas = this.canvas = document.getElementById('canvas');
+	var canvas = document.getElementById('canvas');
 	canvas.width  = window.innerWidth - 1;
 	canvas.height = window.innerHeight - 1;
-	this.c2d = new fabric(canvas);
+	this.fabric = new fabric.Fabric(canvas);
 	Measure.init();
 
 	// the space that currently is displayed
@@ -1402,13 +1403,12 @@ _init : function() {
 	}
 
 	this.mio = new MeshIO();
-	this.space = new Space();
+
 	this.startBlinker();
 	// hinders init to be called another time
-	delete this.init;
-	delete this._init;
+	this.init = this._init = null;
 
-	this.space.redraw();
+	this.curSpace.redraw();
 }};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1445,26 +1445,26 @@ function Hexmenu(pc, style, labels) {
 | Draws the hexmenu.
 */
 Hexmenu.prototype.draw = function() {
-	var c2d = System.c2d; // todo?
+	var f = System.fabric; // todo?
 
-	c2d.fill(settings.floatmenu.style.fill, this.hflower, 'path', 'outerHex');
+	f.fill(settings.floatmenu.style.fill, this.hflower, 'path', 'outerHex');
 	if (this.mousepos && this.mousepos !== 'center') {
-		c2d.fill(settings.floatmenu.style.select, this.hflower, 'path', this.mousepos);
+		f.fill(settings.floatmenu.style.select, this.hflower, 'path', this.mousepos);
 	}
-	c2d.edge(settings.floatmenu.style.edge, this.hflower, 'path', 'structure');
+	f.edge(settings.floatmenu.style.edge, this.hflower, 'path', 'structure');
 
-	c2d.fontStyle('12px ' + settings.defaultFont, 'black', 'center', 'middle');
+	f.fontStyle('12px ' + settings.defaultFont, 'black', 'center', 'middle');
 	var labels = this.labels;
 
 	var rd = this.style.outerRadius * (1 - 1 / 3.5);
 
-	if (labels.n)  c2d.fillText(labels.n, this.p.x, this.p.y - rd);
-	if (labels.ne) c2d.fillRotateText(labels.ne, this.p, Math.PI / 3 * 1, rd);
-	if (labels.se) c2d.fillRotateText(labels.se, this.p, Math.PI / 3 * 2, rd);
-	if (labels.s)  c2d.fillText(labels.n, this.p.x, this.p.y + rd);
-	if (labels.sw) c2d.fillRotateText(labels.sw, this.p, Math.PI / 3 * 4, rd);
-	if (labels.nw) c2d.fillRotateText(labels.nw, this.p, Math.PI / 3 * 5, rd);
-	if (labels.c)  c2d.fillText(labels.c, this.p);
+	if (labels.n)  f.fillText(labels.n, this.p.x, this.p.y - rd);
+	if (labels.ne) f.fillRotateText(labels.ne, this.p, Math.PI / 3 * 1, rd);
+	if (labels.se) f.fillRotateText(labels.se, this.p, Math.PI / 3 * 2, rd);
+	if (labels.s)  f.fillText(labels.n, this.p.x, this.p.y + rd);
+	if (labels.sw) f.fillRotateText(labels.sw, this.p, Math.PI / 3 * 4, rd);
+	if (labels.nw) f.fillRotateText(labels.nw, this.p, Math.PI / 3 * 5, rd);
+	if (labels.c)  f.fillText(labels.c, this.p);
 }
 
 /**
@@ -1512,14 +1512,14 @@ function Edgemenu() {
 /**
 | Makes the edgemenus path.
 |
-| c2d : canvas2d area
-| border: additional inward distance
+| fabric : the fabric to work on
+| border : additional inward distance
 | section:
 |   -2 structure frame
 |   -1 outer frame
 |   >0 buttons
 */
-Edgemenu.prototype.path = function(c2d, border, edge, section) {
+Edgemenu.prototype.path = function(fabric, border, edge, section) {
 	var b =  border;
 	// width half
 	var w2 = half(this.width);
@@ -1528,48 +1528,48 @@ Edgemenu.prototype.path = function(c2d, border, edge, section) {
 	// edge width (diagonal extra)
 	var ew  = R((this.pse.y - this.pnw.y) * fabric.tan30);
 
-	c2d.beginPath();
+	fabric.beginPath();
 	if (section === -2) {
 		// structure frame
-		c2d.moveTo(this.pnw.x + b,      this.pse.y,     edge);
-		c2d.lineTo(this.pnw.x + ew + b, this.pnw.y + b, edge);
-		c2d.lineTo(this.pse.x - ew - b, this.pnw.y + b, edge);
-		c2d.lineTo(this.pse.x - b,      this.pse.y,     edge);
+		fabric.moveTo(this.pnw.x + b,      this.pse.y,     edge);
+		fabric.lineTo(this.pnw.x + ew + b, this.pnw.y + b, edge);
+		fabric.lineTo(this.pse.x - ew - b, this.pnw.y + b, edge);
+		fabric.lineTo(this.pse.x - b,      this.pse.y,     edge);
 
 		// x-position of button
 		var bx = this.pnw.x;
 		for(var b = 0; b < this.buttonWidths.length - 1; b++) {
 			bx += this.buttonWidths[b];
-			c2d.moveTo(bx, this.pse.y);
+			fabric.moveTo(bx, this.pse.y);
 			if (b % 2 === 0) {
-				c2d.lineTo(bx - ew, this.pnw.y, edge);
+				fabric.lineTo(bx - ew, this.pnw.y, edge);
 			} else {
-				c2d.lineTo(bx + ew, this.pnw.y, edge);
+				fabric.lineTo(bx + ew, this.pnw.y, edge);
 			}
 		}
 	} else if (section === -1) {
 		// outer frame
-		c2d.moveTo(this.pnw.x + b,      this.pse.y,     edge);
-		c2d.lineTo(this.pnw.x + ew + b, this.pnw.y + b, edge);
-		c2d.lineTo(this.pse.x - ew - b, this.pnw.y + b, edge);
-		c2d.lineTo(this.pse.x - b,      this.pse.y,     edge);
+		fabric.moveTo(this.pnw.x + b,      this.pse.y,     edge);
+		fabric.lineTo(this.pnw.x + ew + b, this.pnw.y + b, edge);
+		fabric.lineTo(this.pse.x - ew - b, this.pnw.y + b, edge);
+		fabric.lineTo(this.pse.x - b,      this.pse.y,     edge);
 	} else {
 		if (section < 0) throw new Error('invalid section');
 		var bx = this.pnw.x;
 		for(var b = 0; b < section; b++) {
 			bx += this.buttonWidths[b];
 		}
-		c2d.moveTo(bx, this.pse.y);
+		fabric.moveTo(bx, this.pse.y);
 		if (section % 2 === 0) {
-			c2d.lineTo(bx + ew, this.pnw.y, edge);
+			fabric.lineTo(bx + ew, this.pnw.y, edge);
 			bx += this.buttonWidths[section];
-			c2d.lineTo(bx - ew, this.pnw.y, edge);
-			c2d.lineTo(bx,      this.pse.y, edge);
+			fabric.lineTo(bx - ew, this.pnw.y, edge);
+			fabric.lineTo(bx,      this.pse.y, edge);
 		} else {
-			c2d.lineTo(bx - ew, this.pnw.y, edge);
+			fabric.lineTo(bx - ew, this.pnw.y, edge);
 			bx += this.buttonWidths[section];
-			c2d.lineTo(bx + ew, this.pnw.y, edge);
-			c2d.lineTo(bx,      this.pse.y, edge);
+			fabric.lineTo(bx + ew, this.pnw.y, edge);
+			fabric.lineTo(bx,      this.pse.y, edge);
 		}
 	}
 }
@@ -1578,24 +1578,24 @@ Edgemenu.prototype.path = function(c2d, border, edge, section) {
 | Draws the edgemenu.
 */
 Edgemenu.prototype.draw = function() {
-	var c2d = System.c2d;
-	var xm  = half(c2d.width);
+	var f = System.fabric;
+	var xm  = half(f.width);
 	var w2  = half(this.width);
 
-	this.pnw = Point.renew(xm - w2, c2d.height - this.height, this.pnw, this.pse);
-	this.pse = Point.renew(xm + w2, c2d.height, this.pnw, this.pse);
+	this.pnw = Point.renew(xm - w2, f.height - this.height, this.pnw, this.pse);
+	this.pse = Point.renew(xm + w2, f.height, this.pnw, this.pse);
 
-	c2d.fill(settings.edgemenu.style.fill, this, 'path', -1); // todo combine path-1
+	f.fill(settings.edgemenu.style.fill, this, 'path', -1); // todo combine path-1
 	if (this.mousepos >= 0) {
-		c2d.fill(settings.edgemenu.style.select, this, 'path', this.mousepos);
+		f.fill(settings.edgemenu.style.select, this, 'path', this.mousepos);
 	}
-	c2d.edge(settings.edgemenu.style.edge, this, 'path', -2);
+	f.edge(settings.edgemenu.style.edge, this, 'path', -2);
 
-	c2d.fontStyle('12px ' + settings.defaultFont, 'black', 'center', 'middle');
+	f.fontStyle('12px ' + settings.defaultFont, 'black', 'center', 'middle');
 	var bx = this.pnw.x;
 	var my = half(this.pnw.y + this.pse.y);
 	for(var i = 0; i < this.labels.length; i++) {
-		c2d.fillText(this.labels[i], bx + half(this.buttonWidths[i]), my);
+		f.fillText(this.labels[i], bx + half(this.buttonWidths[i]), my);
 		bx += this.buttonWidths[i];
 	}
 }
@@ -1605,13 +1605,13 @@ Edgemenu.prototype.draw = function() {
 | todo rename
 */
 Edgemenu.prototype.getMousepos = function(p) {
-	var c2d = System.c2d;
+	var f = System.fabric;
 	if (!this.pnw || !this.pse) return this.mousepos = -1;
 	if (p.y < this.pnw.y) return this.mousepos = -1;
-	var mx = half(c2d.width);  // todo give it pc
+	var mx = half(f.width);  // todo give it pc
 	var ew = R((this.pse.y - this.pnw.y) * fabric.tan30); // todo simplify
 	// shortcut name = letters for formula
-	var pymcht6 = (p.y - c2d.height) * fabric.tan30;
+	var pymcht6 = (p.y - f.height) * fabric.tan30;
 
 	if (p.x - this.pnw.x < -pymcht6) return this.mousepos = -1;
 	if (p.x - this.pse.x >  pymcht6) return this.mousepos = -1;
@@ -1682,7 +1682,9 @@ Nexus.prototype.tSeeds = {
 /**
 | Constructor
 */
-function Space() {
+function Space(master) {
+	debug('New iSpace', System.fabric);
+	System.curSpace = this;
 	this.super.constructor.call(this, master);
 	this._floatMenuLabels = {c: 'new', n: 'Note', ne: 'Label'};
 	this.edgemenu = new Edgemenu();
@@ -1693,9 +1695,8 @@ function Space() {
 	};
 
 	// panning offset
-	this.c2d = new fabric(System.canvas);
-	this.pan = new Point(0, 0);
-	this.c2d.pan = this.pan;
+	this.fabric = new fabric.Fabric(System.fabric);
+	this.fabric.pan = this.pan = fabric.Point.zero;
 
 	this.zoom = 1;
 }
@@ -1718,17 +1719,15 @@ Space.prototype.redraw = function() {
 	var z       = current.z;
 	log('debug', 'z', z);
 	var editor = System.editor;
-	var canvas = System.canvas;
-	var c2d = this.c2d; // todo rename
+	var f = this.fabric;
 	editor.caret.save = null;
 	this.selection = editor.selection;
-	this.canvas = System.canvas;
-	c2d.attune();
+	f.attune();
 
 	for(var zi = z.length - 1; zi >= 0; zi--) {
-		Item.draw(c2d, items[z[zi]], this.selection);
+		Item.draw(f, items[z[zi]], this.selection);
 	}
-	if (this.focus) this.focus.drawHandles(c2d);
+	if (this.focus) this.focus.drawHandles(f);
 
 	var ia = this.iaction;
 	switch(ia.act) {
@@ -1743,8 +1742,8 @@ Space.prototype.redraw = function() {
 			ia.item.handlezone, 'normal',
 			(ia.item2 && ia.item2.handlezone) || ia.smp , 'arrow');
 		// todo use something like bindzone
-		if (ia.item2) ia.item2.highlight(c2d);
-		arrow.draw(c2d);
+		if (ia.item2) ia.item2.highlight(f);
+		arrow.draw(f);
 	}
 	this.edgemenu.draw();
 	editor.updateCaret();
@@ -1998,7 +1997,7 @@ Space.prototype.dragmove = function(p, shift, ctrl) {
 
 	switch(iaction.act) {
 	case ACT.PAN :
-		this.pan = this.c2d.pan = p.sub(iaction.sp);
+		this.pan = this.fabric.pan = p.sub(iaction.sp); // TODO double pan?
 		System.repository.savePan(this.pan);
 		this.redraw();
 		return;
@@ -2321,7 +2320,7 @@ Space.prototype.mousedown = function(p) {
 			var pnw = fm.p.sub(this.pan);
 			var pse = pnw.add(100, 50);
 			var dtree = new DTree(20);
-			dtree.append(new Paragraph('Label'));
+			dtree.append(new Para('Label'));
 			var label = new Label(null, new Rect(pnw, pse), dtree);
 			label.moveto(pnw.sub(half(label.zone.width), half(label.zone.height)));
 			this.setFocus(label);
@@ -2413,14 +2412,14 @@ ItemCopse.prototype.tSeeds = {
   `-' '   `-' `-' ' ' `-' `-^ `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  Part of a tree-structure.
-
-TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO remove???
+ TODO remove???
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Treenode() {
 	// nada
 }
 
-/* appends tnode to list of children */
+// appends tnode to list of children 
+/*
 Treenode.prototype.append = function(tnode) {
 	if (tnode.parent) {
 		throw new Error('append() on a node already part of a tree');
@@ -2438,12 +2437,12 @@ Treenode.prototype.append = function(tnode) {
 	this.listen();
 }
 
-/* default pass to parent */
+// default pass to parent
 Treenode.prototype.listen = function() {
 	if (this.parent) this.parent.listen();
 }
 
-/* inserts tnode before child bnode */
+// inserts tnode before child bnode 
 Treenode.prototype.insertBefore = function(tnode, bnode) {
 	if (!bnode) {
 		this.append(tnode);
@@ -2469,7 +2468,7 @@ Treenode.prototype.insertBefore = function(tnode, bnode) {
 	this.listen();
 }
 
-/* removes child tnode */
+// removes child tnode 
 Treenode.prototype.remove = function(tnode) {
 	if (tnode == this.first) this.first = tnode.next;
 	if (tnode == this.last) this.last = tnode.prev;
@@ -2479,13 +2478,14 @@ Treenode.prototype.remove = function(tnode) {
 	this.listen();
 }
 
-/* returns first anchestor of 'type' */
+// returns first anchestor of 'type' 
 Treenode.prototype.anchestor = function(construct) {
 	var n;
 	for(n = this; n && n.constructor !== construct; n = n.parent);
 	if (!n) throw new Error('anchestor not there:'+construct);
 	return n;
 }
+*/
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,--,--'      .            .
@@ -2493,8 +2493,9 @@ Treenode.prototype.anchestor = function(construct) {
   , | |-'  X  |  | | | | | | |-'
   `-' `-' ' ` `' ' ' `-' `-^ `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+TODO remove
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Textnode(text)
+/*function Textnode(text)
 {
 	Treenode.call(this);
 	this._text = text ? text : '';
@@ -2513,6 +2514,7 @@ Object.defineProperty(Textnode.prototype, 'text', {
 		}
 	}
 });
+*/
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .-,--.                             .
@@ -2525,20 +2527,19 @@ Object.defineProperty(Textnode.prototype, 'text', {
 
 function Para(text) {
 	this.super.constructor.call(this);
-	Treenode.call(this);  // TODO;
 
-	this._pc2d = new fabric(0 ,0);
-	this._canvasActual = false; // todo rename
+	this._f = new fabric(0 ,0);
+	this._fup2d8 = false; // fabric up-to-date
 	this.append(new Textnode(text));
 	this._flowWidth = null;
-	this.p = null;
+	this.p = null; // todo huh?
 }
-subclass(Paragraph, woods.paragraph);
+subclass(Para, woods.Para);
 
 /**
-| (re)flows the Paragraph, positioning all chunks.
+| (re)flows the paragraph, positioning all chunks.
 */
-Paragraph.prototype._flow = function() {
+Para.prototype._flow = function() {
 	if (this._flowActual) return;
 
 	// builds position informations.
@@ -2617,14 +2618,14 @@ Paragraph.prototype._flow = function() {
 | (without addition of box below last line base line for 'gpq' etc.)
 | todo huh?
 */
-Object.defineProperty(Paragraph.prototype, 'softHeight', {
+Object.defineProperty(Para.prototype, 'softHeight', {
 	get: function() {
 		this._flow();
 		return this._softHeight;
 	},
 });
 
-Object.defineProperty(Paragraph.prototype, 'width', {
+Object.defineProperty(Para.prototype, 'width', {
 	get: function() {
 		this._flow();
 		return this._width;
@@ -2634,7 +2635,7 @@ Object.defineProperty(Paragraph.prototype, 'width', {
 /**
 | Returns the computed height of the paragraph.
 */
-Object.defineProperty(Paragraph.prototype, 'height', {
+Object.defineProperty(Para.prototype, 'height', {
 	get: function() {
 		this._flow();
 		var dtree = this.anchestor(DTree);
@@ -2645,7 +2646,7 @@ Object.defineProperty(Paragraph.prototype, 'height', {
 /**
 | Returns the position information arrays for all chunks.
 */
-Object.defineProperty(Paragraph.prototype, 'pinfo', {
+Object.defineProperty(Para.prototype, 'pinfo', {
 	get: function() {
 		this._flow();
 		return this._pinfo;
@@ -2655,37 +2656,35 @@ Object.defineProperty(Paragraph.prototype, 'pinfo', {
 /**
 | The width a paragraph should max have.
 */
-Object.defineProperty(Paragraph.prototype, 'flowWidth', {
+Object.defineProperty(Para.prototype, 'flowWidth', {
 	get: function() {
 		return this._flowWidth;
 	},
 	set: function(fw) {
 		if (this._flowWidth !== fw) {
 			this._flowWidth = fw;
-			this._flowActual = false;
-			this._canvasActual = false;
+			this.  _flowUp2D8 = false;
+			this._farbicUp2D8 = false;
 		}
 	}
 });
 
 /**
 | Draws the paragraph in its cache and returns it.
+| TODO renamoe to getFabric
 */
-Paragraph.prototype.getfabric = function() {
-	var c2d = this._pc2d;
-	if (this._canvasActual) {
-		return c2d;
-	}
+Para.prototype.getfabric = function() {
+	if (this._fabricUp2D8) return this._fabric;
+
+	var f = this._fabric;
 	this._flow();
-	this._canvasActual = true;
 
 	// todo: work out exact height for text below baseline
-	// set the canvas height
 	var dtree = this.anchestor(DTree);
-	c2d.attune(this);
-	c2d.fontStyle(dtree.font, 'black', 'start', 'alphabetic');
+	f.attune(this);
+	f.fontStyle(dtree.font, 'black', 'start', 'alphabetic');
 
-	// draws text into the canvas
+	// draws text into the fabric
 	var pinfo = this._pinfo;
 	var plines = pinfo.length;
 	for(var il = 0; il < plines; il++) {
@@ -2693,16 +2692,18 @@ Paragraph.prototype.getfabric = function() {
 		var plen = pl.length;
 		for(var ic = 0; ic < plen; ic++) {
 			var pc = pl[ic];
-			c2d.fillText(pc.text, pc.x, pl.y);
+			f.fillText(pc.text, pc.x, pl.y);
 		}
 	}
-	return c2d;
+
+	this._fabricUp2D8 = true;
+	return f;
 }
 
-// drops the canvas cache (cause something has changed
-Paragraph.prototype.listen = function() {
-	this._flowActual   = false;
-	this._canvasActual = false;
+// drops the cache (cause something has changed
+Para.prototype.listen = function() {
+	this._flowUp2D8 = false;
+	this._fabricUp2D8    = false;
 	if (this.parent) this.parent.listen();
 }
 
@@ -2712,7 +2713,7 @@ Paragraph.prototype.listen = function() {
 |
 | todo, this doesnt belong here .
 */
-Paragraph.prototype.joinToNext = function(node, caret) {
+Para.prototype.joinToNext = function(node, caret) {
 	var next = node.next;
 	if (next) {
 		alert('joinToNext, not yet implemented');
@@ -2734,7 +2735,7 @@ Paragraph.prototype.joinToNext = function(node, caret) {
 |
 | todo, doesnt belong here.
 */
-Paragraph.prototype.joinToPrevious = function(node, caret) {
+Para.prototype.joinToPrevious = function(node, caret) {
 	var prev = node.prev;
 	if (prev) {
 		alert('joinToPrevious, not yet implemented');
@@ -2780,7 +2781,7 @@ DTree.jnew = function(js) {
 	var o = new DTree(js.fs);
 	var d = js.d;
 	for(var i = 0, dlen = d.length; i < dlen; i++) {
-		o.append(new Paragraph(d[i]));
+		o.append(new Para(d[i]));
 	}
 	return o;
 }
@@ -2818,13 +2819,13 @@ DTree.prototype.paraAtP = function(p) {
 /**
 | Draws the selection
 |
-| c2d     : Canvas2D to draw upon
+| fabric  : Fabric to draw upon
 | isEdge  : true if this is an edge
 | border  : extra border for edge, must be 0
 | imargin : inner margin of item
 | scrolly : scroll position of item
 */
-DTree.prototype.pathSelection = function(c2d, border, edge, select, imargin, scrolly) {
+DTree.prototype.pathSelection = function(fabric, border, edge, select, imargin, scrolly) {
 	/* todo make part of selection to use shortcut with XY */
 	var b = select.mark1;
 	var e = select.mark2;
@@ -2836,7 +2837,7 @@ DTree.prototype.pathSelection = function(c2d, border, edge, select, imargin, scr
 		{ var _ = bp; bp = ep; ep = _; }
 	}
 
-	c2d.beginPath();
+	fabric.beginPath();
 	var lh = R(this.fontsize * (1 + settings.bottombox));
 	var bx = R(bp.x);
 	var by = R(bp.y - scrolly);
@@ -2846,47 +2847,47 @@ DTree.prototype.pathSelection = function(c2d, border, edge, select, imargin, scr
 	var lx = half(imargin.w);
 	if ((abs(by - ey) < 2)) {
 		// ***
-		c2d.moveTo(bx, by, edge);
-		c2d.lineTo(bx, by + lh, edge);
-		c2d.lineTo(ex, ey + lh, edge);
-		c2d.lineTo(ex, ey, edge);
-		c2d.lineTo(bx, by, edge);
+		fabric.moveTo(bx, by, edge);
+		fabric.lineTo(bx, by + lh, edge);
+		fabric.lineTo(ex, ey + lh, edge);
+		fabric.lineTo(ex, ey, edge);
+		fabric.lineTo(bx, by, edge);
 	} else if (abs(by + lh - ey) < 2 && (bx >= ex))  {
 		//      ***
 		// ***
-		c2d.moveTo(rx, by + lh, edge);
-		c2d.lineTo(bx, by + lh, edge);
-		c2d.lineTo(bx, by, edge);
-		c2d.lineTo(rx, by, edge);
+		fabric.moveTo(rx, by + lh, edge);
+		fabric.lineTo(bx, by + lh, edge);
+		fabric.lineTo(bx, by, edge);
+		fabric.lineTo(rx, by, edge);
 
-		c2d.moveTo(lx, ey, edge);
-		c2d.lineTo(ex, ey, edge);
-		c2d.lineTo(ex, ey + lh, edge);
-		c2d.lineTo(lx, ey + lh, edge);
+		fabric.moveTo(lx, ey, edge);
+		fabric.lineTo(ex, ey, edge);
+		fabric.lineTo(ex, ey + lh, edge);
+		fabric.lineTo(lx, ey + lh, edge);
 	} else {
 		//    *****
 		// *****
-		c2d.moveTo(rx, ey, edge);
-		c2d.lineTo(ex, ey, edge);
-		c2d.lineTo(ex, ey + lh, edge);
-		c2d.lineTo(lx, ey + lh, edge);
+		fabric.moveTo(rx, ey, edge);
+		fabric.lineTo(ex, ey, edge);
+		fabric.lineTo(ex, ey + lh, edge);
+		fabric.lineTo(lx, ey + lh, edge);
 
-		if (edge) c2d.moveTo(lx, by + lh, edge); else c2d.lineTo(lx, by + lh, edge);
-		c2d.lineTo(bx, by + lh, edge);
-		c2d.lineTo(bx, by, edge);
-		c2d.lineTo(rx, by, edge);
-		if (!edge) c2d.lineTo(rx, ey, edge);
+		if (edge) fabric.moveTo(lx, by + lh, edge); else fabric.lineTo(lx, by + lh, edge);
+		fabric.lineTo(bx, by + lh, edge);
+		fabric.lineTo(bx, by, edge);
+		fabric.lineTo(rx, by, edge);
+		if (!edge) fabric.lineTo(rx, ey, edge);
 	}
 }
 
 /**
 | draws the content in a Canvas2D
-| c2d: Canvas2D to draw within.
+| fabric: Fabric to draw within.
 | select: selection object (for highlighting the selection)
 | imargin: distance of text to edge
 | scrolly: scroll position (todo make a point)
 */
-DTree.prototype.draw = function(c2d, select, imargin, scrolly) {
+DTree.prototype.draw = function(fabric, select, imargin, scrolly) {
 	var y = imargin.n;
 	var pi = 0;
 	var h = 0;
@@ -2895,20 +2896,20 @@ DTree.prototype.draw = function(c2d, select, imargin, scrolly) {
 	// paints the selection
 	if (select.active && select.mark1.item === this.parent) {
 		// todo make paint()
-		c2d.fill(
+		fabric.fill(
 			settings.selection.style.fill, this, 'pathSelection',
 			select, imargin, scrolly);
-		c2d.edge(
+		fabric.edge(
 			settings.selection.style.edge, this, 'pathSelection',
 			select, imargin, scrolly);
 	}
 
 	// draws tha paragraphs
 	for(var para = this.first; para; para = para.next) {
-		var pc2d = para.getfabric();
+		var pf = para.getfabric(); // TODO rename getFabric
 		para.p = new Point(imargin.w, R(y));
-		if (pc2d.width > 0 && pc2d.height > 0) {
-			c2d.drawImage(pc2d, imargin.w, y - scrolly);
+		if (pf.width > 0 && pf.height > 0) {
+			f.drawImage(pf, imargin.w, y - scrolly);
 		}
 		y += para.softHeight + parasep;
 	}
@@ -3014,7 +3015,7 @@ Object.defineProperty(DTree.prototype, 'height', {
  .^ | |  |-' | | |
  `--' `' `-' ' ' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- Something on a canvas.
+ Something in a Space.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Item(id) {
 	this.id = id;
@@ -3084,7 +3085,7 @@ Item.prototype.checkItemCompass = function(p) {
 /**
 | Paths the resize handles.
 */
-Item.prototype.pathResizeHandles = function(c2d, border, edge) {
+Item.prototype.pathResizeHandles = function(fabric, border, edge) {
 	if (border !== 0) throw new Error('borders unsupported for handles');
 	var ha = this.handles;
 	var zone = this.handlezone;
@@ -3099,42 +3100,54 @@ Item.prototype.pathResizeHandles = function(c2d, border, edge) {
 	var xm = half(x1 + x2);
 	var ym = half(y1 + y2);
 
-	c2d.beginPath();
+	fabric.beginPath();
 	if (ha.n ) {
-		c2d.moveTo(xm - hs2, y1, edge); c2d.lineTo(xm + hs2, y1, edge);
+		fabric.moveTo(xm - hs2, y1, edge);
+		fabric.lineTo(xm + hs2, y1, edge);
 	}
 	if (ha.ne) {
-		c2d.moveTo(x2 - hs,  y1, edge); c2d.lineTo(x2, y1, edge); c2d.lineTo(x2, y1 + hs, edge);
+		fabric.moveTo(x2 - hs,  y1, edge);
+		fabric.lineTo(x2, y1, edge);
+		fabric.lineTo(x2, y1 + hs, edge);
 	}
 	if (ha.e ) {
-		c2d.moveTo(x2, ym - hs2, edge); c2d.lineTo(x2, ym + hs2, edge);
+		fabric.moveTo(x2, ym - hs2, edge);
+		fabric.lineTo(x2, ym + hs2, edge);
 	}
 	if (ha.se) {
-		c2d.moveTo(x2, y2 - hs,  edge); c2d.lineTo(x2, y2, edge); c2d.lineTo(x2 - hs, y2, edge);
+		fabric.moveTo(x2, y2 - hs,  edge);
+		fabric.lineTo(x2, y2, edge);
+		fabric.lineTo(x2 - hs, y2, edge);
 	}
 	if (ha.s ) {
-		c2d.moveTo(xm - hs2, y2, edge); c2d.lineTo(xm + hs2, y2, edge);
+		fabric.moveTo(xm - hs2, y2, edge);
+		fabric.lineTo(xm + hs2, y2, edge);
 	}
 	if (ha.sw) {
-		c2d.moveTo(x1 + hs, y2,  edge); c2d.lineTo(x1, y2, edge); c2d.lineTo(x1, y2 - hs, edge);
+		fabric.moveTo(x1 + hs, y2,  edge);
+		fabric.lineTo(x1, y2, edge);
+		fabric.lineTo(x1, y2 - hs, edge);
 	}
 	if (ha.w ) {
-		c2d.moveTo(x1, ym - hs2, edge); c2d.lineTo(x1, ym + hs2, edge);
+		fabric.moveTo(x1, ym - hs2, edge);
+		fabric.lineTo(x1, ym + hs2, edge);
 	}
 	if (ha.nw) {
-		c2d.moveTo(x1, y1 + hs,  edge); c2d.lineTo(x1, y1, edge); c2d.lineTo(x1 + hs, y1, edge);
+		fabric.moveTo(x1, y1 + hs,  edge);
+		fabric.lineTo(x1, y1, edge);
+		fabric.lineTo(x1 + hs, y1, edge);
 	}
 }
 
 /**
 | Draws the handles of an item (resize, itemmenu)
 */
-Item.prototype.drawHandles = function(c2d) {
+Item.prototype.drawHandles = function(fabric) {
 	// draws the resize handles
-	c2d.edge(settings.handle.style.edge, this, 'pathResizeHandles');
+	fabric.edge(settings.handle.style.edge, this, 'pathResizeHandles');
 	// draws item menu handler
 	var sstyle = settings.itemmenu.slice.style;
-	c2d.paint(sstyle.fill, sstyle.edge, this.h6slice, 'path');
+	fabric.paint(sstyle.fill, sstyle.edge, this.h6slice, 'path');
 }
 
 /**
@@ -3174,10 +3187,10 @@ function Scrollbar(parent) {
 }
 
 /**
-| Makes the path for c2d.edge/fill/paint.
+| Makes the path for fabric.edge/fill/paint.
 | todo change descr on all path()s
 */
-Scrollbar.prototype.path = function(c2d, border, edge) {
+Scrollbar.prototype.path = function(fabric, border, edge) {
 	if (border !== 0) throw new Error('Scrollbar.path does not support borders');
 	var z = this.zone;
 	var w = z.width;
@@ -3185,30 +3198,30 @@ Scrollbar.prototype.path = function(c2d, border, edge) {
 	var msize = max(size, settings.scrollbar.minSize);
 	var sy = z.pnw.y + R(this.pos * ((z.height - msize + size) / this.max));
 
-	c2d.beginPath();
-	c2d.moveTo(z.pnw.x, R(sy + fabric.cos30 * w / 2), edge);
-	c2d.lineTo(z.pnw.x + R(w / 4),     sy,         edge);
-	c2d.lineTo(z.pnw.x + R(w * 3 / 4), sy,         edge);
-	c2d.lineTo(z.pse.x, R(sy + fabric.cos30 * w / 2), edge);
+	fabric.beginPath();
+	fabric.moveTo(z.pnw.x, R(sy + fabric.cos30 * w / 2), edge);
+	fabric.lineTo(z.pnw.x + R(w / 4),     sy,         edge);
+	fabric.lineTo(z.pnw.x + R(w * 3 / 4), sy,         edge);
+	fabric.lineTo(z.pse.x, R(sy + fabric.cos30 * w / 2), edge);
 
-	c2d.lineTo(z.pse.x, R(sy + msize - fabric.cos30 * w / 2), edge);
-	c2d.lineTo(z.pnw.x + R(w * 3 / 4), sy + msize,         edge);
-	c2d.lineTo(z.pnw.x + R(w / 4),     sy + msize,         edge);
-	c2d.lineTo(z.pnw.x, R(sy + msize - fabric.cos30 * w / 2), edge);
-	c2d.closePath();
+	fabric.lineTo(z.pse.x, R(sy + msize - fabric.cos30 * w / 2), edge);
+	fabric.lineTo(z.pnw.x + R(w * 3 / 4), sy + msize,         edge);
+	fabric.lineTo(z.pnw.x + R(w / 4),     sy + msize,         edge);
+	fabric.lineTo(z.pnw.x, R(sy + msize - fabric.cos30 * w / 2), edge);
+	fabric.closePath();
 }
 
 /**
 | Paints the scrollbar.
 */
-Scrollbar.prototype.paint = function(c2d) {
-	c2d.paint(settings.scrollbar.style.fill, settings.scrollbar.style.edge, this, 'path');
+Scrollbar.prototype.paint = function(fabric) {
+	fabric.paint(settings.scrollbar.style.fill, settings.scrollbar.style.edge, this, 'path');
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++ DocAlley ++
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- An array of Paragraphs
+ An array of paragraphs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function DocAlley(master) {
     this.super.constructor.call(this, master);
@@ -3261,15 +3274,15 @@ function Note(id, zone, dtree) {
 	// todo, merge silhoutte and zone.
 	this.silhoutte = new RoundRect(
 		Point.zero, new Point(zone.width, zone.height), settings.note.cornerRadius);
-	this._bc2d = new fabric();
+	this._fabric = new fabric.Fabric();
 	this.imargin = Note.imargin;  // todo needed?
-	this._canvasActual = false;
+	this._fabricUp2D8 = false;
 	this.scrollbarY = new Scrollbar(this, null);
-	if (!this.dtree.first) { this.dtree.append(new Paragraph('')); }
+	if (!this.dtree.first) { this.dtree.append(new Para('')); }
 	// todo, don't add here
 	System.repository.addItem(this, true);
 }
-multisubclass(Note, {Note: woods.Note, Item: Item});
+subclass(Note, {Note: woods.Note, Item: Item});
 
 /**
 | Class Seeds. Things that can grow on this twig.
@@ -3308,9 +3321,9 @@ Note.jnew = function(js, id) {
 /**
 | Highlights the  note
 */
-Note.prototype.highlight = function(c2d) {
+Note.prototype.highlight = function(fabric) {
 	// todo round rects
-	c2d.edge(settings.note.style.highlight, this.zone, 'path');
+	fabric.edge(settings.note.style.highlight, this.zone, 'path');
 }
 
 /**
@@ -3334,10 +3347,10 @@ Note.prototype.paraAtP = function(p) {
 }
 
 /**
-| Drops the cached canvas
+| Drops the cache.
 */
 Note.prototype.listen = function() {
-	this._canvasActual = false;
+	this._fabricUp2D8 = false;
 	// end of chain
 }
 
@@ -3426,7 +3439,7 @@ Note.prototype.setZone = function(zone, align) {
 	this.silhoutte = new RoundRect(
 		Point.zero, new Point(zone.width, zone.height), this.silhoutte.crad);
 	// adapts scrollbar position
-	this._canvasActual = false;
+	this._fabricUp2D8 = false;
 	this.setScrollbar();
 	return true;
 }
@@ -3494,19 +3507,20 @@ Note.prototype.setScrollbar = function(pos) {
 /**
 | Draws the note.
 |
-| c2d: canvas-2d to draw upon.
+| fabric: fabric to draw upon.
 | selection: current selection to highlight.
 */
-Note.prototype.draw = function(c2d, selection) {
-	// the canvas buffer
-	var bc2d  = this._bc2d;
+Note.prototype.draw = function(fabric, selection) {
+	var f  = this._fabric;
+
 	// buffer hit?
-	if (this._canvasActual) { c2d.drawImage(bc2d, this.zone.pnw); return; }
-	// if not builds the canvas buffer
+	if (this._fabricUp2D8) { fabric.drawImage(f, this.zone.pnw); return; }
+
+	// if not fill the buffer
 	var dtree = this.dtree;
 	// resize the canvas
-	bc2d.attune(this.zone);
-	bc2d.fill(settings.note.style.fill, this.silhoutte, 'path');
+	f.attune(this.zone);
+	f.fill(settings.note.style.fill, this.silhoutte, 'path');
 
 	// calculates if a scrollbar is needed
 	var sbary = this.scrollbarY;
@@ -3523,19 +3537,19 @@ Note.prototype.draw = function(c2d, selection) {
 	}
 
 	// paints selection and text
-	dtree.draw(bc2d, selection, this.imargin, sbary.visible ? sbary.pos : 0);
+	dtree.draw(f, selection, this.imargin, sbary.visible ? sbary.pos : 0);
 
 	// paints the scrollbar
 	if (sbary.visible) {
 		this.setScrollbar();
-		sbary.paint(bc2d);
+		sbary.paint(f);
 	}
 
 	// paints the border
-	bc2d.edge(settings.note.style.edge, this.silhoutte, 'path');
+	f.edge(settings.note.style.edge, this.silhoutte, 'path');
 
-	this._canvasActual = true;
-	c2d.drawImage(bc2d, this.zone.pnw);
+	this._fabricUp2D8 = true;
+	fabric.drawImage(f, this.zone.pnw);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -3560,9 +3574,9 @@ function Label(id, zone, dtree) {
 	this.handles = Label.handles;
 	this.imargin = Label.imargin;
 	this.setZone(zone, 'c');
-	/* buffer canvas 2D */
-	this._bc2d = new fabric();
-	this._canvasActual = false;  // todo rename
+	// buffer 
+	this._fabric = new fabric.Fabric();
+	this._fabricUp2D8 = false;
 	if (typeof(this.zone.pse.x) === 'undefined') throw new Error('Invalid label'); // todo remove
 	System.repository.addItem(this, true);
 }
@@ -3652,8 +3666,8 @@ Label.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 /**
 | Highlights the label.
 */
-Label.prototype.highlight = function(c2d) {
-	c2d.edge(settings.label.style.highlight, this.zone, 'path');
+Label.prototype.highlight = function(fabric) {
+	fabric.edge(settings.label.style.highlight, this.zone, 'path');
 }
 
 /**
@@ -3689,7 +3703,7 @@ Label.prototype.setZone = function(zone, align) {
 	if (!this.zone) this.zone = zone;
 	this.zone = this.zone.resize(this._dWidth(), this._dHeight(), align);
 	this._lock = false;
-	this._canvasActual = false;
+	this._fabricUp2D8 = false;
 	return true;
 }
 
@@ -3728,10 +3742,10 @@ Label.prototype.paraAtP = function(p) {
 	return this.dtree.paraAtP(p);
 }
 
-/* drops the cached canvas */
+/* drops the cache */
 Label.prototype.listen = function() {
 	if (this._lock) return;
-	this._canvasActual = false;
+	this._fabricUp2D8 = false;
 	if (this.zone) {
 		this.zone = this.zone.resize(this._dWidth(), this._dHeight(), 'c');
 	}
@@ -3741,24 +3755,23 @@ Label.prototype.listen = function() {
 /**
 | Draws the Label.
 |
-| c2d:  Canvas2D to draw upon.
+| fabric:    Fabric to draw upon.
 | selection: Selection to highlight.
 */
-Label.prototype.draw = function(c2d, selection) {
-	var bc2d = this._bc2d;
+Label.prototype.draw = function(fabric, selection) {
+	var f = this._fabric;
 	var dtree = this.dtree;
-	if (this._canvasActual) {
-		/* buffer hit */
-		c2d.drawImage(bc2d, this.zone.pnw);
-		return;
-	}
-	bc2d.attune(this.zone);
+
+	// buffer hit?
+	if (this._fabricUp2D8) { fabric.drawImage(f, this.zone.pnw); return; }
+
+	f.attune(this.zone);
 	// draws text
-	dtree.draw(bc2d, selection, this.imargin, 0);
+	dtree.draw(f, selection, this.imargin, 0);
 	// draws the border
-	bc2d.edge(settings.label.style.edge, bc2d, 'path');
+	f.edge(settings.label.style.edge, f, 'path');
 	this._canvasActual = true;
-	c2d.drawImage(bc2d, this.zone.pnw);
+	fabric.drawImage(f, this.zone.pnw);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -3780,17 +3793,17 @@ Label.prototype.draw = function(c2d, selection) {
 */
 function Relation(id, i1id, i2id, textZone, dtree) {
 	Item.call(this, id);
-	this.handles    = Relation.handles;
-	this.i1id       = i1id;
-	this.i2id       = i2id;
-	this.dtree      = dtree;
-	dtree.parent    = this;
-	dtree.flowWidth = -1;
-	dtree.pre       = true;
-	this.imargin    = Relation.imargin;
+	this.handles      = Relation.handles;
+	this.i1id         = i1id;
+	this.i2id         = i2id;
+	this.dtree        = dtree;
+	dtree.parent      = this;
+	dtree.flowWidth   = -1;
+	dtree.pre         = true;
+	this.imargin      = Relation.imargin;
 	this.setTextZone(textZone);
-	this._bc2d      = new fabric();
-	this._canvasActual = false;
+	this._fabric      = new fabric.Fabric();
+	this._fabricUp2D8 = false;
 
 	System.repository.addItem(this, true);
 	System.repository.addOnlook(this.id, this.i1id);
@@ -3834,7 +3847,7 @@ Relation.jnew = function(js, id) {
 */
 Relation.create = function(item1, item2) {
 	var dtree = new DTree(20);
-	dtree.append(new Paragraph('relates to'));
+	dtree.append(new Para('relates to'));
 	dtree.flowWidth = -1;
 	var cline = Line.connect(item1.handlezone, null, item2.handlezone, null); // todo bindzone
 	var mx = (cline.p1.x + cline.p2.x) / 2; // todo teach line pc
@@ -3863,8 +3876,8 @@ Relation.prototype.removed = function() {
 /**
 | Highlights the label.
 */
-Relation.prototype.highlight = function(c2d) {
-	c2d.edge(settings.relation.style.highlight, this.textZone, 'path');
+Relation.prototype.highlight = function(fabric) {
+	fabric.edge(settings.relation.style.highlight, this.textZone, 'path');
 }
 
 /**
@@ -3911,7 +3924,7 @@ Relation.prototype.setTextZone = function(zone, align) {
 		this.textZone = new Rect(zone.pnw, zone.pnw.add(this.dtree.width, zh));
 		break;
 	}
-	this._canvasActual = false;
+	this._fabricUp2D8 = false;
 	return true;
 }
 
@@ -3937,7 +3950,7 @@ Relation.prototype.setZone = function(zone, align) {
 	if (!this.textZone) this.textZone = zone;
 	this.textZone = this.textZone.resize(this._dWidth(), this._dHeight(), align);
 	this._lock = false;
-	this._canvasActual = false;
+	this._fabricUp2D8 = false;
 	return true;
 }
 
@@ -4035,7 +4048,7 @@ Relation.prototype.paraAtP = function(p) {
 */
 Relation.prototype.listen = function() {
 	if (this._lock) return;
-	this._canvasActual = false;
+	this._fabricUp2D8 = false;
 	if (this.textZone) {
 		this.textZone = this.textZone.resize(this._dWidth(), this._dHeight(), 'c');
 	}
@@ -4047,7 +4060,7 @@ Relation.prototype.resize = function(width, height) {
 	var fs = max(dtree.fontsize * height / this.height, 8);
 	if (dtree._fontsize == fs) return false;
 	dtree.fontsize = fs;
-	this._canvasActual = false;
+	this._fabricUp2D8 = false;
 	return true;*/
 	throw new Error('unimplemented');
 }
@@ -4055,24 +4068,24 @@ Relation.prototype.resize = function(width, height) {
 /**
 | Draws the item.
 */
-Relation.prototype.draw = function(c2d, selection) {
-	var bc2d = this._bc2d;
+Relation.prototype.draw = function(fabric, selection) {
+	var f = this._fabric;
 	var dtree = this.dtree;
 	var it1 = System.repository.items[this.i1id]; // todo funcall
 	var it2 = System.repository.items[this.i2id];
-	if (!this._canvasActual) {
-		bc2d.attune(this.textZone);
-		bc2d.edge(settings.relation.style.labeledge, bc2d, 'path');
-		dtree.draw(bc2d, selection, this.imargin, 0);
-		this._canvasActual = true;
+	if (!this._fabricUp2D8) {
+		f.attune(this.textZone);
+		f.edge(settings.relation.style.labeledge, f, 'path');
+		dtree.draw(f, selection, this.imargin, 0);
+		this._fabricUp2D8 = true;
 	}
 	var l1 = Line.connect(it1.handlezone, 'normal', this.textZone, 'normal'); // todo bindzone
 	var l2 = Line.connect(this.textZone,  'normal', it2.handlezone, 'arrow'); // todo bindzone
 	// todo combine into one call;
-	c2d.paint(settings.relation.style.fill, settings.relation.style.edge, l1, 'path');
-	c2d.paint(settings.relation.style.fill, settings.relation.style.edge, l2, 'path');
+	fabric.paint(settings.relation.style.fill, settings.relation.style.edge, l1, 'path');
+	fabric.paint(settings.relation.style.fill, settings.relation.style.edge, l2, 'path');
 	// draws text
-	c2d.drawImage(bc2d, this.textZone.pnw);
+	fabric.drawImage(f, this.textZone.pnw);
 }
 
 /**
@@ -4099,172 +4112,6 @@ Relation.prototype.onlook = function(event, item) {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-,.   ,.       .          ,---.              .
-`|  / ,-. ,-. |- ,-. ,-. |  -'  ,-. ,-. ,-. |-.
- | /  |-' |   |  | | |   |  ,-' |   ,-| | | | |
- `'   `-' `-' `' `-' '   `---|  '   `-^ |-' ' '
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ,-.|~ ~ ~ ~ ~ | ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-                          `-+'          '
- Something that draws vectors.
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/*function VectorGraph(width, height, doc)
-{
-	this.bcanvas = document.createElement('canvas');
-	this.width  = bcanvas.width  =  width;
-	this.height = bcanvas.height = height;
-	this.doc = doc;
-}
-
-// gets the canvas buffer for this item
-// if caret != null draws the caret into the canvas
-VectorGraph.prototype.getCanvas = function() {
-	var cx = this.bcanvas.getContext('2d');
-	cx.beginPath();
-	cx.clearRect(0, 0, bcanvas.width, bcanvas.height);
-	draw = '';
-	for(var para = doc.getFirstPara(); para; para = para.next) {
-		var cmd = para.first.text;
-		draw += cmd + '\n';
-*///		var reg = /(\S+)\s*/g;
-/*		var cc = [];
-		var ci = 0;
-		for(var ca = reg.exec(cmd); ca != null; ca = reg.exec(cmd)) {
-			/* text is a word plus hard spaces *
-			cc[ci++] = ca[1]; 
-		}
-		switch (cc[0]) {
-		case 'A' :
-			var a1 = parseFloat(cc[1]);
-			var a2 = parseFloat(cc[2]);
-			var a3 = parseFloat(cc[3]);
-			var a4 = parseFloat(cc[4]);
-			var a5 = parseFloat(cc[5]);
-			var a6 = parseFloat(cc[6]);
-			if (typeof(a1) != 'number' || 
-			    typeof(a2) != 'number' ||
-			    typeof(a3) != 'number' ||
-			    typeof(a4) != 'number' ||
-			    typeof(a5) != 'number' ||
-			    typeof(a6) != 'number'
-			) {
-				//msg('Arguments not numbers: '+cmd);
-				break;
-			}
-			cx.arc(a1, a2, a3, a4 * Math.PI / 4, a5 * Math.PI / 4, a6 > 0 ? true : false);
-			break;
-		case '.' :
-			cx.closePath();
-			break;
-			case 'F' :
-			cx.fill();
-			cx.beginPath();
-			break;
-		case 'B' :
-			var a1 = parseFloat(cc[1]);
-			var a2 = parseFloat(cc[2]);
-			var a3 = parseFloat(cc[3]);
-			var a4 = parseFloat(cc[4]);
-			var a5 = parseFloat(cc[5]);
-			var a6 = parseFloat(cc[6]);
-			if (typeof(a1) != 'number' ||
-			    typeof(a2) != 'number' ||
-			    typeof(a3) != 'number' ||
-			    typeof(a4) != 'number' ||
-			    typeof(a5) != 'number' ||
-			    typeof(a6) != 'number'
-			) {
-				//msg('Arguments not numbers: '+cmd);
-				break;
-			}
-			cx.bezierCurveTo(a1, a2, a3, a4, a5, a6);
-			break;
-		case 'Q' :
-			var a1 = parseFloat(cc[1]);
-			var a2 = parseFloat(cc[2]);
-			var a3 = parseFloat(cc[3]);
-			var a4 = parseFloat(cc[4]);
-			if (typeof(a1) != 'number' ||
-			    typeof(a2) != 'number' ||
-			    typeof(a3) != 'number' ||
-			    typeof(a4) != 'number'
-			) {
-				//msg('Arguments not numbers: '+cmd);
-				break;
-			}
-			cx.quadraticCurveTo(a1, a2, a3, a4, a5, a6);
-			break;
-		case 'M' :
-			var a1 = parseFloat(cc[1]);
-			var a2 = parseFloat(cc[2]);
-			if (typeof(a1) != 'number' ||
-			    typeof(a2) != 'number'
-			) {
-				//msg('Arguments not numbers: '+cmd);
-				break;
-			}
-			cx.moveTo(a1, a2);
-			break;
-		case 'L' :
-			var a1 = parseFloat(cc[1]);
-			var a2 = parseFloat(cc[2]);
-			if (typeof(a1) != 'number' ||
-			    typeof(a2) != 'number'
-			) {
-				//msg('Arguments not numbers: '+cmd);
-				break;
-			}
-			cx.lineTo(a1, a2);
-			break;
-		case 'S' :
-			cx.stroke();
-			cx.beginPath();
-			break;
-		case 'c' :
-			var a1 = parseFloat(cc[1]);
-			var a2 = parseFloat(cc[2]);
-			var a3 = parseFloat(cc[3]);
-			if (typeof(a1) != 'number' ||
-			    typeof(a2) != 'number' ||
-			    typeof(a3) != 'number'
-			) {
-				//msg('Arguments not numbers: '+cmd);
-				break;
-			}
-			cx.strokeStyle = 'rgb('+a1+','+a2+','+a3+')';
-			break;
-		case 'C' :
-			var a1 = parseFloat(cc[1]);
-			var a2 = parseFloat(cc[2]);
-			var a3 = parseFloat(cc[3]);
-			if (typeof(a1) != 'number' ||
-			    typeof(a2) != 'number' ||
-			    typeof(a3) != 'number'
-			) {
-				//msg('Arguments not numbers: '+cmd);
-				break;
-			}
-			cx.fillStyle = 'rgb('+a1+','+a2+','+a3+')';
-			break;
-		case 'W' :
-			var a1 = parseFloat(cc[1]);
-			if (typeof(a1) != 'number') {
-				//msg('Arguments not numbers: '+cmd);
-				break;
-			}
-			cx.lineWidth = a1;
-		case '' :
-			break;
-		default :
-			//msg('Unknown command: '+cmd);
-			break;
-		}
-	}
-	return bcanvas;
-}
-*/
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,-,-,-.           .   ,-_/ ,,--.
  `,| | |   ,-. ,-. |-. '  | |`, |
    | ; | . |-' `-. | | .^ | |   |
@@ -4273,11 +4120,11 @@ VectorGraph.prototype.getCanvas = function() {
  Communicates with the server, holds caches.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function MeshIO() {
-	this.mm = new meshmashine.MeshMashine();
-	this.spacesign = new meshmashine.Signature(["welcome"]);
-
+	this.mm = new meshmashine.MeshMashine(Nexus);
+	this.spacepath = new jools.Path(["welcome"]);
+	
 	// for now hand init
-	this.mm.alter(0,
+	this.mm.alter(0, new jools.Signature(
 		{
 			val: {
 				'type': 'space',
@@ -4300,7 +4147,7 @@ function MeshIO() {
 								'text%': 'If you can meet with Triumph and Disaster',
 							}, {
 								'type': 'para',
-								'text%': 'And treat those two impostors just the same',
+									'text%': 'And treat those two impostors just the same',
 							},
 						],
 					},
@@ -4308,15 +4155,15 @@ function MeshIO() {
 				'z' : [
 					0,
 				],
-			},
-		},
-		{
-			sign: ['welcome'],
-		});
+			}
+		}), new jools.Signature({
+			path: this.spacepath
+		})
+	);
 }
 
 MeshIO.prototype.getCurrentSpace = function() {
-	var space = this.mm.get(-1, this.spacesign);
+	var space = this.mm.get(-1, this.spacepath);
 	return space.node;
 }
 
@@ -4630,21 +4477,12 @@ Repository.prototype.reset = function() {
   `'  `'   ' ' ' `-^ `-' ' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-var demoRepository = null;
 window.onload = function() {
 	var request = document.location.search;
 	if (request.indexOf('reset') >= 0) {
 		console.log('Clearing localStorage');
 		window.localStorage.clear();
 	}
-	// loads the demoRepository JSON String
-	var demotag = 'DEMOREPOSITORY';
-	for(var node = document.body.lastChild; node; node = node.previousSibling) {
-		if (node.nodeName != '#comment') continue;
-		var data = node.data;
-		if (data.substring(0, demotag.length) != demotag) continue;
-		demoRepository = data.substring(demotag.length);
-		break;
-	}
+
 	System.init();
 }

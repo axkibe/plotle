@@ -83,32 +83,33 @@ if (!Object.freeze) {
 | Subclassing helper.
 |
 | sub: prototype to become a subclass.
-| base: prototype to become the baseclass.
+| base: either a prototype to become the base.
+|       or a table of prototype to become the base for multiple
+|       inheritance.
 */
 function subclass(sub, base) {
-   function inherit() {}
-   inherit.prototype = base.prototype;
-   sub.prototype = new inherit();
-   sub.prototype.super = base.prototype;
-   sub.prototype.constructor = sub;
-}
-
-/**
-| Multisubclassing helper.
-*/
-function multisubclass(sub, bases) {
 	function inherit() {}
-	inherit.prototype.super = {};
-	for(var name in bases) {
-		inherit.prototype.super[name] = bases[name];
-		for(var k in bases[name].prototype) {
-			if(inherit.prototype[k]) {
-				throw new Error('Multiple inheritance clash for '+sub.constructor.name+' :'+k);
+	if (base.constructor === Object) {
+		// multiple inheritance
+		inherit.prototype.super = {};
+		for(var name in base) {
+			inherit.prototype.super[name] = base[name];
+			for(var k in base[name].prototype) {
+				if (k === 'super') continue;
+				if (k === 'constructor') continue;
+				if(inherit.prototype[k]) {
+					throw new Error('Multiple inheritance clash for '+sub+' :'+k);
+				}
+				inherit.prototype[k] = base[name].prototype[k];
 			}
-			inherit.prototype[k] = bases[name].prototype[k];
 		}
+		sub.prototype = new inherit();
+	} else {
+		// single inheritance
+		inherit.prototype = base.prototype;
+		sub.prototype = new inherit();
+		sub.prototype.super = base.prototype;
 	}
-	sub.prototype = new inherit();
 	sub.prototype.constructor = sub;
 }
 
@@ -158,7 +159,7 @@ function log(category) {
 	}
 	for(var i = 1; i < arguments.length; i++) {
 		if (i > 1) a.push(' ');
-		a.push(JSON.stringify(arguments[i], null, ". "));
+		a.push(JSON.stringify(arguments[i], null, config.jspacon ? config.jspacon : null));
 	}
 	console.log(a.join(''));
 };
@@ -172,7 +173,7 @@ function debug() {
 	a.push('(debug) ');
 	for(var i = 0; i < arguments.length; i++) {
 		if (i > 0) a.push(' ');
-		a.push(JSON.stringify(arguments[i], null, ". "));
+		a.push(JSON.stringify(arguments[i], null, config.jspacon ? config.jspacon : null));
 	}
 	console.log(a.join(''));
 }
@@ -358,7 +359,7 @@ Path.prototype.toJSON = function() {
 jools = {
 	Path          : Path,
 	Signature     : Signature,
-                  
+
 	clone         : clone,
 	debug         : debug,
 	deepFreeze    : deepFreeze,
@@ -369,7 +370,6 @@ jools = {
 	isString      : isString,
 	isInteger     : isInteger,
 	log           : log,
-	multisubclass : multisubclass,
 	reject        : reject,
 	subclass      : subclass,
 };

@@ -550,6 +550,7 @@ woods = {
 	GenericCopse : GenericCopse,
 	ItemCopse    : ItemCopse,
 	Nexus        : Nexus,
+	Note         : Note,
 	Para         : Para,
 	Space        : Space,
 	Rect         : Rect,

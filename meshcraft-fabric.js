@@ -77,7 +77,12 @@ function Fabric(a1, a2) {
 		this._canvas = document.createElement('canvas');
 		break;
 	case 'object' :
-		this._canvas = a1;
+		if (a1.constructor === Fabric) {
+			this._canvas = a1._canvas;
+		} else {
+			if (!a1.getContext) throw new Error('Invalid parameter to new Farbic: ' + a1);
+			this._canvas = a1;
+		}
 		break;
 	default :
 		this._canvas = document.createElement('canvas');

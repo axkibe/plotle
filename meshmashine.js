@@ -333,7 +333,7 @@ MeshMashine.prototype.transformOnMoment = function(sign, alter) {
 			// case 1:
 			if (sign.at1 > src.at1) {
 				log('te', 'split leftside');
-				sign.path.add(src.pivot)++;
+				sign.path.add(src.pivot, 1);
 				sign.at1 -= src.at1;
 				sign.at2 -= src.at1;
 				return sign;

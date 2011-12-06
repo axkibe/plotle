@@ -85,11 +85,12 @@ var content = {
 	'/':               meshcraft_html,
 	'/index.html':     meshcraft_html,
 	'/meshcraft.html': meshcraft_html,
-	'/meshcraft-canvas.js': { file: './meshcraft-canvas.js', mime: mime_js, code: 'utf-8',  },
+	'/meshcraft-fabric.js': { file: './meshcraft-fabric.js', mime: mime_js, code: 'utf-8',  },
 	'/meshcraft-jools.js':  { file: './meshcraft-jools.js',  mime: mime_js, code: 'utf-8',  },
+	'/meshcraft-woods.js':  { file: './meshcraft-woods.js',  mime: mime_js, code: 'utf-8',  },
 	'/meshcraft-shell.js':  { file: './meshcraft-shell.js',  mime: mime_js, code: 'utf-8',  },
 	'/meshmashine.js':      { file: './meshmashine.js',      mime: mime_js, code: 'utf-8',  },
-	'/favicon.ico':         { file: './favicon.ico',         mime: mime_xi, code: 'binary', },
+	'/favicon.ico':         { file: './icons/hexicon.ico',   mime: mime_xi, code: 'binary', },
 };
 
 /**
@@ -183,6 +184,7 @@ var dispatch = function(req, red, res) {
 		mmAjax(req, red, res);
 		return;
 	}
+
 	if (red.pathname === '/config.js') {
 		webConfig(req, red, res);
 		return;
@@ -192,10 +194,10 @@ var dispatch = function(req, red, res) {
 	if (!co) {
 		res.writeHead(404, {'Content-Type': 'text/plain'});
 		webError(res, '404 Bad Reqeust');
+		return;
 	}
 
-	fs.readFile(co.file,
-	function(err, data) {
+	fs.readFile(co.file, function(err, data) {
 		if (err) { webError(res, 500, 'Internal Server Error'); }
 		res.writeHead(200, {'Content-Type': co.mime});
 		res.end(data, co.code);
