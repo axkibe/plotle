@@ -1519,7 +1519,7 @@ function Edgemenu() {
 |   -1 outer frame
 |   >0 buttons
 */
-Edgemenu.prototype.path = function(fabric, border, edge, section) {
+Edgemenu.prototype.path = function(fab, border, edge, section) {
 	var b =  border;
 	// width half
 	var w2 = half(this.width);
@@ -1528,48 +1528,48 @@ Edgemenu.prototype.path = function(fabric, border, edge, section) {
 	// edge width (diagonal extra)
 	var ew  = R((this.pse.y - this.pnw.y) * fabric.tan30);
 
-	fabric.beginPath();
+	fab.beginPath();
 	if (section === -2) {
 		// structure frame
-		fabric.moveTo(this.pnw.x + b,      this.pse.y,     edge);
-		fabric.lineTo(this.pnw.x + ew + b, this.pnw.y + b, edge);
-		fabric.lineTo(this.pse.x - ew - b, this.pnw.y + b, edge);
-		fabric.lineTo(this.pse.x - b,      this.pse.y,     edge);
+		fab.moveTo(this.pnw.x + b,      this.pse.y,     edge);
+		fab.lineTo(this.pnw.x + ew + b, this.pnw.y + b, edge);
+		fab.lineTo(this.pse.x - ew - b, this.pnw.y + b, edge);
+		fab.lineTo(this.pse.x - b,      this.pse.y,     edge);
 
 		// x-position of button
 		var bx = this.pnw.x;
 		for(var b = 0; b < this.buttonWidths.length - 1; b++) {
 			bx += this.buttonWidths[b];
-			fabric.moveTo(bx, this.pse.y);
+			fab.moveTo(bx, this.pse.y);
 			if (b % 2 === 0) {
-				fabric.lineTo(bx - ew, this.pnw.y, edge);
+				fab.lineTo(bx - ew, this.pnw.y, edge);
 			} else {
-				fabric.lineTo(bx + ew, this.pnw.y, edge);
+				fab.lineTo(bx + ew, this.pnw.y, edge);
 			}
 		}
 	} else if (section === -1) {
 		// outer frame
-		fabric.moveTo(this.pnw.x + b,      this.pse.y,     edge);
-		fabric.lineTo(this.pnw.x + ew + b, this.pnw.y + b, edge);
-		fabric.lineTo(this.pse.x - ew - b, this.pnw.y + b, edge);
-		fabric.lineTo(this.pse.x - b,      this.pse.y,     edge);
+		fab.moveTo(this.pnw.x + b,      this.pse.y,     edge);
+		fab.lineTo(this.pnw.x + ew + b, this.pnw.y + b, edge);
+		fab.lineTo(this.pse.x - ew - b, this.pnw.y + b, edge);
+		fab.lineTo(this.pse.x - b,      this.pse.y,     edge);
 	} else {
 		if (section < 0) throw new Error('invalid section');
 		var bx = this.pnw.x;
 		for(var b = 0; b < section; b++) {
 			bx += this.buttonWidths[b];
 		}
-		fabric.moveTo(bx, this.pse.y);
+		fab.moveTo(bx, this.pse.y);
 		if (section % 2 === 0) {
-			fabric.lineTo(bx + ew, this.pnw.y, edge);
+			fab.lineTo(bx + ew, this.pnw.y, edge);
 			bx += this.buttonWidths[section];
-			fabric.lineTo(bx - ew, this.pnw.y, edge);
-			fabric.lineTo(bx,      this.pse.y, edge);
+			fab.lineTo(bx - ew, this.pnw.y, edge);
+			fab.lineTo(bx,      this.pse.y, edge);
 		} else {
-			fabric.lineTo(bx - ew, this.pnw.y, edge);
+			fab.lineTo(bx - ew, this.pnw.y, edge);
 			bx += this.buttonWidths[section];
-			fabric.lineTo(bx + ew, this.pnw.y, edge);
-			fabric.lineTo(bx,      this.pse.y, edge);
+			fab.lineTo(bx + ew, this.pnw.y, edge);
+			fab.lineTo(bx,      this.pse.y, edge);
 		}
 	}
 }
@@ -2528,7 +2528,7 @@ Object.defineProperty(Textnode.prototype, 'text', {
 function Para(text) {
 	this.super.constructor.call(this);
 
-	this._f = new fabric(0 ,0);
+	this._f = new fabric.Fabric(0 ,0);
 	this._fup2d8 = false; // fabric up-to-date
 	this.append(new Textnode(text));
 	this._flowWidth = null;
@@ -2819,13 +2819,13 @@ DTree.prototype.paraAtP = function(p) {
 /**
 | Draws the selection
 |
-| fabric  : Fabric to draw upon
+| fab     : Fabric to draw upon
 | isEdge  : true if this is an edge
 | border  : extra border for edge, must be 0
 | imargin : inner margin of item
 | scrolly : scroll position of item
 */
-DTree.prototype.pathSelection = function(fabric, border, edge, select, imargin, scrolly) {
+DTree.prototype.pathSelection = function(fab, border, edge, select, imargin, scrolly) {
 	/* todo make part of selection to use shortcut with XY */
 	var b = select.mark1;
 	var e = select.mark2;
@@ -2837,7 +2837,7 @@ DTree.prototype.pathSelection = function(fabric, border, edge, select, imargin, 
 		{ var _ = bp; bp = ep; ep = _; }
 	}
 
-	fabric.beginPath();
+	fab.beginPath();
 	var lh = R(this.fontsize * (1 + settings.bottombox));
 	var bx = R(bp.x);
 	var by = R(bp.y - scrolly);
@@ -2847,47 +2847,50 @@ DTree.prototype.pathSelection = function(fabric, border, edge, select, imargin, 
 	var lx = half(imargin.w);
 	if ((abs(by - ey) < 2)) {
 		// ***
-		fabric.moveTo(bx, by, edge);
-		fabric.lineTo(bx, by + lh, edge);
-		fabric.lineTo(ex, ey + lh, edge);
-		fabric.lineTo(ex, ey, edge);
-		fabric.lineTo(bx, by, edge);
+		fab.moveTo(bx, by, edge);
+		fab.lineTo(bx, by + lh, edge);
+		fab.lineTo(ex, ey + lh, edge);
+		fab.lineTo(ex, ey, edge);
+		fab.lineTo(bx, by, edge);
 	} else if (abs(by + lh - ey) < 2 && (bx >= ex))  {
 		//      ***
 		// ***
-		fabric.moveTo(rx, by + lh, edge);
-		fabric.lineTo(bx, by + lh, edge);
-		fabric.lineTo(bx, by, edge);
-		fabric.lineTo(rx, by, edge);
+		fab.moveTo(rx, by + lh, edge);
+		fab.lineTo(bx, by + lh, edge);
+		fab.lineTo(bx, by, edge);
+		fab.lineTo(rx, by, edge);
 
-		fabric.moveTo(lx, ey, edge);
-		fabric.lineTo(ex, ey, edge);
-		fabric.lineTo(ex, ey + lh, edge);
-		fabric.lineTo(lx, ey + lh, edge);
+		fab.moveTo(lx, ey, edge);
+		fab.lineTo(ex, ey, edge);
+		fab.lineTo(ex, ey + lh, edge);
+		fab.lineTo(lx, ey + lh, edge);
 	} else {
 		//    *****
 		// *****
-		fabric.moveTo(rx, ey, edge);
-		fabric.lineTo(ex, ey, edge);
-		fabric.lineTo(ex, ey + lh, edge);
-		fabric.lineTo(lx, ey + lh, edge);
+		fab.moveTo(rx, ey, edge);
+		fab.lineTo(ex, ey, edge);
+		fab.lineTo(ex, ey + lh, edge);
+		fab.lineTo(lx, ey + lh, edge);
 
-		if (edge) fabric.moveTo(lx, by + lh, edge); else fabric.lineTo(lx, by + lh, edge);
-		fabric.lineTo(bx, by + lh, edge);
-		fabric.lineTo(bx, by, edge);
-		fabric.lineTo(rx, by, edge);
-		if (!edge) fabric.lineTo(rx, ey, edge);
+		if (edge)
+			fab.moveTo(lx, by + lh, edge);
+		else
+			fab.lineTo(lx, by + lh, edge);
+		fab.lineTo(bx, by + lh, edge);
+		fab.lineTo(bx, by, edge);
+		fab.lineTo(rx, by, edge);
+		if (!edge) fab.lineTo(rx, ey, edge);
 	}
 }
 
 /**
 | draws the content in a Canvas2D
-| fabric: Fabric to draw within.
-| select: selection object (for highlighting the selection)
+| fab:     Fabric to draw within.
+| select:  selection object (for highlighting the selection)
 | imargin: distance of text to edge
 | scrolly: scroll position (todo make a point)
 */
-DTree.prototype.draw = function(fabric, select, imargin, scrolly) {
+DTree.prototype.draw = function(fab, select, imargin, scrolly) {
 	var y = imargin.n;
 	var pi = 0;
 	var h = 0;
@@ -2896,10 +2899,10 @@ DTree.prototype.draw = function(fabric, select, imargin, scrolly) {
 	// paints the selection
 	if (select.active && select.mark1.item === this.parent) {
 		// todo make paint()
-		fabric.fill(
+		fab.fill(
 			settings.selection.style.fill, this, 'pathSelection',
 			select, imargin, scrolly);
-		fabric.edge(
+		fab.edge(
 			settings.selection.style.edge, this, 'pathSelection',
 			select, imargin, scrolly);
 	}
@@ -3085,7 +3088,7 @@ Item.prototype.checkItemCompass = function(p) {
 /**
 | Paths the resize handles.
 */
-Item.prototype.pathResizeHandles = function(fabric, border, edge) {
+Item.prototype.pathResizeHandles = function(fab, border, edge) {
 	if (border !== 0) throw new Error('borders unsupported for handles');
 	var ha = this.handles;
 	var zone = this.handlezone;
@@ -3100,54 +3103,54 @@ Item.prototype.pathResizeHandles = function(fabric, border, edge) {
 	var xm = half(x1 + x2);
 	var ym = half(y1 + y2);
 
-	fabric.beginPath();
+	fab.beginPath();
 	if (ha.n ) {
-		fabric.moveTo(xm - hs2, y1, edge);
-		fabric.lineTo(xm + hs2, y1, edge);
+		fab.moveTo(xm - hs2, y1, edge);
+		fab.lineTo(xm + hs2, y1, edge);
 	}
 	if (ha.ne) {
-		fabric.moveTo(x2 - hs,  y1, edge);
-		fabric.lineTo(x2, y1, edge);
-		fabric.lineTo(x2, y1 + hs, edge);
+		fab.moveTo(x2 - hs,  y1, edge);
+		fab.lineTo(x2, y1, edge);
+		fab.lineTo(x2, y1 + hs, edge);
 	}
 	if (ha.e ) {
-		fabric.moveTo(x2, ym - hs2, edge);
-		fabric.lineTo(x2, ym + hs2, edge);
+		fab.moveTo(x2, ym - hs2, edge);
+		fab.lineTo(x2, ym + hs2, edge);
 	}
 	if (ha.se) {
-		fabric.moveTo(x2, y2 - hs,  edge);
-		fabric.lineTo(x2, y2, edge);
-		fabric.lineTo(x2 - hs, y2, edge);
+		fab.moveTo(x2, y2 - hs,  edge);
+		fab.lineTo(x2, y2, edge);
+		fab.lineTo(x2 - hs, y2, edge);
 	}
 	if (ha.s ) {
-		fabric.moveTo(xm - hs2, y2, edge);
-		fabric.lineTo(xm + hs2, y2, edge);
+		fab.moveTo(xm - hs2, y2, edge);
+		fab.lineTo(xm + hs2, y2, edge);
 	}
 	if (ha.sw) {
-		fabric.moveTo(x1 + hs, y2,  edge);
-		fabric.lineTo(x1, y2, edge);
-		fabric.lineTo(x1, y2 - hs, edge);
+		fab.moveTo(x1 + hs, y2,  edge);
+		fab.lineTo(x1, y2, edge);
+		fab.lineTo(x1, y2 - hs, edge);
 	}
 	if (ha.w ) {
-		fabric.moveTo(x1, ym - hs2, edge);
-		fabric.lineTo(x1, ym + hs2, edge);
+		fab.moveTo(x1, ym - hs2, edge);
+		fab.lineTo(x1, ym + hs2, edge);
 	}
 	if (ha.nw) {
-		fabric.moveTo(x1, y1 + hs,  edge);
-		fabric.lineTo(x1, y1, edge);
-		fabric.lineTo(x1 + hs, y1, edge);
+		fab.moveTo(x1, y1 + hs,  edge);
+		fab.lineTo(x1, y1, edge);
+		fab.lineTo(x1 + hs, y1, edge);
 	}
 }
 
 /**
 | Draws the handles of an item (resize, itemmenu)
 */
-Item.prototype.drawHandles = function(fabric) {
+Item.prototype.drawHandles = function(fab) {
 	// draws the resize handles
-	fabric.edge(settings.handle.style.edge, this, 'pathResizeHandles');
+	fab.edge(settings.handle.style.edge, this, 'pathResizeHandles');
 	// draws item menu handler
 	var sstyle = settings.itemmenu.slice.style;
-	fabric.paint(sstyle.fill, sstyle.edge, this.h6slice, 'path');
+	fab.paint(sstyle.fill, sstyle.edge, this.h6slice, 'path');
 }
 
 /**
@@ -3187,10 +3190,10 @@ function Scrollbar(parent) {
 }
 
 /**
-| Makes the path for fabric.edge/fill/paint.
+| Makes the path for fab.edge/fill/paint.
 | todo change descr on all path()s
 */
-Scrollbar.prototype.path = function(fabric, border, edge) {
+Scrollbar.prototype.path = function(fab, border, edge) {
 	if (border !== 0) throw new Error('Scrollbar.path does not support borders');
 	var z = this.zone;
 	var w = z.width;
@@ -3198,24 +3201,24 @@ Scrollbar.prototype.path = function(fabric, border, edge) {
 	var msize = max(size, settings.scrollbar.minSize);
 	var sy = z.pnw.y + R(this.pos * ((z.height - msize + size) / this.max));
 
-	fabric.beginPath();
-	fabric.moveTo(z.pnw.x, R(sy + fabric.cos30 * w / 2), edge);
-	fabric.lineTo(z.pnw.x + R(w / 4),     sy,         edge);
-	fabric.lineTo(z.pnw.x + R(w * 3 / 4), sy,         edge);
-	fabric.lineTo(z.pse.x, R(sy + fabric.cos30 * w / 2), edge);
+	fab.beginPath();
+	fab.moveTo(z.pnw.x, R(sy + fabric.cos30 * w / 2), edge);
+	fab.lineTo(z.pnw.x + R(w / 4),     sy,         edge);
+	fab.lineTo(z.pnw.x + R(w * 3 / 4), sy,         edge);
+	fab.lineTo(z.pse.x, R(sy + fabric.cos30 * w / 2), edge);
 
-	fabric.lineTo(z.pse.x, R(sy + msize - fabric.cos30 * w / 2), edge);
-	fabric.lineTo(z.pnw.x + R(w * 3 / 4), sy + msize,         edge);
-	fabric.lineTo(z.pnw.x + R(w / 4),     sy + msize,         edge);
-	fabric.lineTo(z.pnw.x, R(sy + msize - fabric.cos30 * w / 2), edge);
-	fabric.closePath();
+	fab.lineTo(z.pse.x, R(sy + msize - fabric.cos30 * w / 2), edge);
+	fab.lineTo(z.pnw.x + R(w * 3 / 4), sy + msize,         edge);
+	fab.lineTo(z.pnw.x + R(w / 4),     sy + msize,         edge);
+	fab.lineTo(z.pnw.x, R(sy + msize - fabric.cos30 * w / 2), edge);
+	fab.closePath();
 }
 
 /**
 | Paints the scrollbar.
 */
-Scrollbar.prototype.paint = function(fabric) {
-	fabric.paint(settings.scrollbar.style.fill, settings.scrollbar.style.edge, this, 'path');
+Scrollbar.prototype.paint = function(fab) {
+	fab.paint(settings.scrollbar.style.fill, settings.scrollbar.style.edge, this, 'path');
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -3321,9 +3324,9 @@ Note.jnew = function(js, id) {
 /**
 | Highlights the  note
 */
-Note.prototype.highlight = function(fabric) {
+Note.prototype.highlight = function(fab) {
 	// todo round rects
-	fabric.edge(settings.note.style.highlight, this.zone, 'path');
+	fab.edge(settings.note.style.highlight, this.zone, 'path');
 }
 
 /**
@@ -3507,14 +3510,14 @@ Note.prototype.setScrollbar = function(pos) {
 /**
 | Draws the note.
 |
-| fabric: fabric to draw upon.
+| fab:fabric to draw upon.
 | selection: current selection to highlight.
 */
-Note.prototype.draw = function(fabric, selection) {
+Note.prototype.draw = function(fab, selection) {
 	var f  = this._fabric;
 
 	// buffer hit?
-	if (this._fabricUp2D8) { fabric.drawImage(f, this.zone.pnw); return; }
+	if (this._fabricUp2D8) { fab.drawImage(f, this.zone.pnw); return; }
 
 	// if not fill the buffer
 	var dtree = this.dtree;
@@ -3549,7 +3552,7 @@ Note.prototype.draw = function(fabric, selection) {
 	f.edge(settings.note.style.edge, this.silhoutte, 'path');
 
 	this._fabricUp2D8 = true;
-	fabric.drawImage(f, this.zone.pnw);
+	fab.drawImage(f, this.zone.pnw);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -3574,7 +3577,7 @@ function Label(id, zone, dtree) {
 	this.handles = Label.handles;
 	this.imargin = Label.imargin;
 	this.setZone(zone, 'c');
-	// buffer 
+	// buffer
 	this._fabric = new fabric.Fabric();
 	this._fabricUp2D8 = false;
 	if (typeof(this.zone.pse.x) === 'undefined') throw new Error('Invalid label'); // todo remove
@@ -3666,8 +3669,8 @@ Label.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 /**
 | Highlights the label.
 */
-Label.prototype.highlight = function(fabric) {
-	fabric.edge(settings.label.style.highlight, this.zone, 'path');
+Label.prototype.highlight = function(fab) {
+	fab.edge(settings.label.style.highlight, this.zone, 'path');
 }
 
 /**
@@ -3755,15 +3758,18 @@ Label.prototype.listen = function() {
 /**
 | Draws the Label.
 |
-| fabric:    Fabric to draw upon.
+| fab: Fabric to draw upon.
 | selection: Selection to highlight.
 */
-Label.prototype.draw = function(fabric, selection) {
+Label.prototype.draw = function(fab, selection) {
 	var f = this._fabric;
 	var dtree = this.dtree;
 
 	// buffer hit?
-	if (this._fabricUp2D8) { fabric.drawImage(f, this.zone.pnw); return; }
+	if (this._fabricUp2D8) {
+		fab.drawImage(f, this.zone.pnw);
+		return;
+	}
 
 	f.attune(this.zone);
 	// draws text
@@ -3771,7 +3777,7 @@ Label.prototype.draw = function(fabric, selection) {
 	// draws the border
 	f.edge(settings.label.style.edge, f, 'path');
 	this._canvasActual = true;
-	fabric.drawImage(f, this.zone.pnw);
+	fab.drawImage(f, this.zone.pnw);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -3876,8 +3882,8 @@ Relation.prototype.removed = function() {
 /**
 | Highlights the label.
 */
-Relation.prototype.highlight = function(fabric) {
-	fabric.edge(settings.relation.style.highlight, this.textZone, 'path');
+Relation.prototype.highlight = function(fab) {
+	fab.edge(settings.relation.style.highlight, this.textZone, 'path');
 }
 
 /**
@@ -4068,7 +4074,7 @@ Relation.prototype.resize = function(width, height) {
 /**
 | Draws the item.
 */
-Relation.prototype.draw = function(fabric, selection) {
+Relation.prototype.draw = function(fab, selection) {
 	var f = this._fabric;
 	var dtree = this.dtree;
 	var it1 = System.repository.items[this.i1id]; // todo funcall
@@ -4082,10 +4088,10 @@ Relation.prototype.draw = function(fabric, selection) {
 	var l1 = Line.connect(it1.handlezone, 'normal', this.textZone, 'normal'); // todo bindzone
 	var l2 = Line.connect(this.textZone,  'normal', it2.handlezone, 'arrow'); // todo bindzone
 	// todo combine into one call;
-	fabric.paint(settings.relation.style.fill, settings.relation.style.edge, l1, 'path');
-	fabric.paint(settings.relation.style.fill, settings.relation.style.edge, l2, 'path');
+	fab.paint(settings.relation.style.fill, settings.relation.style.edge, l1, 'path');
+	fab.paint(settings.relation.style.fill, settings.relation.style.edge, l2, 'path');
 	// draws text
-	fabric.drawImage(f, this.textZone.pnw);
+	fab.drawImage(f, this.textZone.pnw);
 }
 
 /**
