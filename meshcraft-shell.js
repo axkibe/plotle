@@ -12,10 +12,10 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--´
 
-                                                .---. .       .  .  
-                                                \___  |-. ,-. |  |  
-                                                    \ | | |-' |  |  
-                                                `---' ' ' `-' `' `' 
+                                        .---. .       .  .
+                                        \___  |-. ,-. |  |
+                                            \ | | |-' |  |
+                                        `---' ' ' `-' `' `'
 
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  A network item editor.
@@ -2523,15 +2523,17 @@ Object.defineProperty(Textnode.prototype, 'text', {
  A paragraph.        `'         '
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-function Paragraph(text) {
-	Treenode.call(this);
+function Para(text) {
+	this.super.constructor.call(this);
+	Treenode.call(this);  // TODO;
+
 	this._pc2d = new fabric(0 ,0);
 	this._canvasActual = false; // todo rename
 	this.append(new Textnode(text));
 	this._flowWidth = null;
 	this.p = null;
 }
-subclass(Paragraph, Treenode);
+subclass(Paragraph, woods.paragraph);
 
 /**
 | (re)flows the Paragraph, positioning all chunks.
@@ -3204,6 +3206,31 @@ Scrollbar.prototype.paint = function(c2d) {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ++ DocAlley ++
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ An array of Paragraphs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+function DocAlley(master) {
+    this.super.constructor.call(this, master);
+}
+subclass(DocAlley, woods.DocAlley);
+
+/**
+| Class Seeds. Things that can grow on this twig.
+*/
+DocAlley.prototype.cSeeds = {
+    'Para'    : Para,
+};
+
+/**
+| Type Seeds. Things that can be a master for new grows on this twig.
+*/
+DocAlley.prototype.tSeeds = {
+    'para'    : Para,
+}
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,-,-.       .
  ` | |   ,-. |- ,-.
    | |-. | | |  |-'
@@ -3224,7 +3251,9 @@ Scrollbar.prototype.paint = function(c2d) {
 | dtree: document tree.
 */
 function Note(id, zone, dtree) {
-	Item.call(this, id);
+	this.super.Item.constructor.call(this, id);
+	this.super.Note.constructor.call();
+
 	this.zone  = zone;
 	this.dtree = dtree;
 	this.handles = Note.handles;
@@ -3240,7 +3269,14 @@ function Note(id, zone, dtree) {
 	// todo, don't add here
 	System.repository.addItem(this, true);
 }
-multisubclass(Note, woods.Note, Item);
+multisubclass(Note, {Note: woods.Note, Item: Item});
+
+/**
+| Class Seeds. Things that can grow on this twig.
+*/
+Note.prototype.cSeeds = {
+	'DocAlley'  : DocAlley,
+}
 
 /**
 | Default margin for all notes.

@@ -334,6 +334,14 @@ function Note(master) {
 subclass(Note, Stem);
 
 /**
+| Class Seeds. Things that can grow on this twig.
+*/
+Note.prototype.cSeeds = {
+	'DocAlley'  : DocAlley,
+}
+
+
+/**
 | Sets the value of a node.
 */
 Note.prototype.set = function(path, val, a0, al, oplace) {
