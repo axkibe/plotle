@@ -44,11 +44,13 @@ var meshmashine;
 
 "use strict";
 
-try {
-	// if not fails running nodejs
+/**
+| Running in node or browser?
+*/
+var inNode = true; try { module } catch (e) { inNode = false; }
+
+if (inNode) {
 	jools = require('./meshcraft-jools');
-} catch(e) {
-	// require failed, running in browser
 }
 
 var Path       = jools.Path;
@@ -488,7 +490,7 @@ MeshMashine.prototype._reflect = function(time, path) {
 */
 MeshMashine.prototype.alter = function(time, src, trg) {
 	log(true, 'test');
-	try {
+//	try { XXX
 		log('mm', 'alter time:', time, 'src:', src, 'trg:', trg);
 		if (!this._isValidTime(time)) return reject('invalid time');
 
@@ -526,11 +528,11 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 		}
 
 		return {ok: true, time: this.history.length, alts: alta };
-	} catch(err) {
-		// returns rejections but rethrows coding errors.
-		log('fail', 'error', err);
-		if (err.ok !== false) throw err; else return err;
-	}
+///	} catch(err) {  XXX
+//		// returns rejections but rethrows coding errors.
+//		log('fail', 'error', err);
+//		if (err.ok !== false) throw err; else return err;
+//	}
 }
 
 /**
@@ -592,11 +594,8 @@ meshmashine = {
 	MeshMashine     : MeshMashine,
 }
 
-
-try {
+if (inNode) {
 	module.exports = meshmashine;
-} catch(err){
-	// browser
 }
 
 }());

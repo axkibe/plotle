@@ -25,14 +25,14 @@ var jools;
 var devel;
 
 /**
-| In Browser this should already be defined.
+| Running in node or browser?
 */
-try {
+var inNode = true; try { module } catch (e) { inNode = false; }
+
+if (inNode) {
 	config = require('./config');
-	// executed in Node.JS
 	devel = config.devel === true || config.devel === 'both' || config.devel === 'server';
-} catch(e) {
-	// require failed running in browser
+} else { // inBrowser
 	devel = config.devel === true || config.devel === 'both' || config.devel === 'client';
 }
 
@@ -91,11 +91,9 @@ function subclass(sub, base) {
 	function inherit() {}
 	if (base.constructor === Object) {
 		// multiple inheritance
-		inherit.prototype.super = {};
 		for(var name in base) {
-			inherit.prototype.super[name] = base[name];
 			for(var k in base[name].prototype) {
-				if (k === 'super') continue;
+				if (k === 'base') continue;
 				if (k === 'constructor') continue;
 				if(inherit.prototype[k]) {
 					throw new Error('Multiple inheritance clash for '+sub+' :'+k);
@@ -103,13 +101,12 @@ function subclass(sub, base) {
 				inherit.prototype[k] = base[name].prototype[k];
 			}
 		}
-		sub.prototype = new inherit();
 	} else {
 		// single inheritance
 		inherit.prototype = base.prototype;
-		sub.prototype = new inherit();
-		sub.prototype.super = base.prototype;
 	}
+	sub.prototype = new inherit();
+	sub.prototype.base = base;
 	sub.prototype.constructor = sub;
 }
 
@@ -150,6 +147,9 @@ function timestamp() {
 | Logs a number of inspected argument if category is configured to be logged.
 */
 function log(category) {
+	if (category === 'fail') {
+		console.log('FAIL'); // TODO BREAKPOINT
+	}
 	if (category !== true && !config.log.all && !config.log[category]) return;
 	var a = timestamp();
 	if (category !== true) {
@@ -374,11 +374,9 @@ jools = {
 	subclass      : subclass,
 };
 
-try {
+if (inNode) {
 	module.exports = jools;
-} catch(e) {
-	// browser;
-};
+}
 
 })();
 

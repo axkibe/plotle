@@ -1099,7 +1099,7 @@ _init : function() {
 		if (ctrl) {
 			switch(keyCode) {
 			case 65 : // ctrl+a
-				this.space.specialKey(keyCode, shift, ctrl);
+				this.cSpace.specialKey(keyCode, shift, ctrl);
 				return false;
 			default :
 				return true;
@@ -1115,7 +1115,7 @@ _init : function() {
 		case 39 : // right
 		case 40 : // down
 		case 46 : // del
-			this.space.specialKey(keyCode, shift, ctrl);
+			this.cSpace.specialKey(keyCode, shift, ctrl);
 			return false;
 		default :
 			return true;
@@ -1213,14 +1213,14 @@ _init : function() {
 	| Hidden input lost focus.
 	*/
 	function onblur(event) {
-		this.space.systemBlur();
+		this.cSpace.systemBlur();
 	}
 
 	/**
 	| Hidden input got focus.
 	*/
 	function onfocus(event) {
-		this.space.systemFocus();
+		this.cSpace.systemFocus();
 	}
 
 	/**
@@ -1229,7 +1229,7 @@ _init : function() {
 	function onresize(event) {
 		canvas.width  = window.innerWidth - 1;
 		canvas.height = window.innerHeight - 1;
-		this.space && this.space.redraw();
+		if (this.cSpace) this.cSpace.redraw();
 	}
 
 	/**
@@ -1240,7 +1240,7 @@ _init : function() {
 
 		switch(mst) {
 		case MST.NONE :
-			this.space.mousehover(p);
+			this.cSpace.mousehover(p);
 			return true;
 		case MST.ATWEEN :
 			var dragbox = settings.dragbox;
@@ -1249,9 +1249,9 @@ _init : function() {
 				clearTimeout(atweenTimer);
 				atweenTimer = null;
 				mst = MST.DRAG;
-				this.space.dragstart(msp, event.shiftKey, event.ctrlKey || event.metaKey);
+				this.cSpace.dragstart(msp, event.shiftKey, event.ctrlKey || event.metaKey);
 				if (!p.eq(msp)) {
-					this.space.dragmove(p, event.shiftKey, event.ctrlKey || event.metaKey);
+					this.cSpace.dragmove(p, event.shiftKey, event.ctrlKey || event.metaKey);
 				}
 				captureEvents();
 			} else {
@@ -1262,7 +1262,7 @@ _init : function() {
 			}
 			return true;
 		case MST.DRAG :
-			this.space.dragmove(p, event.shiftKey, event.ctrlKey || event.metaKey);
+			this.cSpace.dragmove(p, event.shiftKey, event.ctrlKey || event.metaKey);
 			return true;
 		default :
 			throw new Error('invalid mst');
@@ -1277,7 +1277,7 @@ _init : function() {
 		hiddenInput.focus();
 		var p = new Point (event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop);
 		/* asks the space if it forces this to be a drag or click, or yet unknown */
-		mst = this.space.mousedown(p);
+		mst = this.cSpace.mousedown(p);
 		switch(mst) {
 		case MST.ATWEEN :
 			msp = mmp = p;
@@ -1307,11 +1307,11 @@ _init : function() {
 			/* this was a click */
 			clearTimeout(atweenTimer);
 			atweenTimer = null;
-			this.space.click(p, event.shiftKey, event.ctrlKey || event.metaKey);
+			this.cSpace.click(p, event.shiftKey, event.ctrlKey || event.metaKey);
 			mst = MST.NONE;
 			return false;
 		case MST.DRAG :
-			this.space.dragstop(p, event.shiftKey, event.ctrlKey || event.metaKey);
+			this.cSpace.dragstop(p, event.shiftKey, event.ctrlKey || event.metaKey);
 			mst = MST.NONE;
 			return false;
 		}
@@ -1323,7 +1323,7 @@ _init : function() {
 	function onmousewheel(event) {
 		var wheel = event.wheelDelta || event.detail;
 		wheel = wheel > 0 ? 1 : -1;
-		this.space.mousewheel(wheel);
+		this.cSpace.mousewheel(wheel);
 	}
 
 	/**
@@ -1336,9 +1336,9 @@ _init : function() {
 		}
 		mst = MST.DRAG;
 		atweenTimer = null;
-		this.space.dragstart(msp, mms, mmc);
+		this.cSpace.dragstart(msp, mms, mmc);
 		if (!mmp.eq(msp)) {
-			this.space.dragmove(mmp, mms, mmc);
+			this.cSpace.dragmove(mmp, mms, mmc);
 		}
 	}
 
@@ -1408,7 +1408,7 @@ _init : function() {
 	// hinders init to be called another time
 	this.init = this._init = null;
 
-	this.curSpace.redraw();
+	this.cSpace.redraw();
 }};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1650,7 +1650,7 @@ function Cockpit() {
  The root of spaces.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Nexus(master) {
-	this.super.constructor.call(this, master);
+	this.base.constructor.call(this, master);
 }
 subclass(Nexus, woods.Nexus);
 
@@ -1683,9 +1683,9 @@ Nexus.prototype.tSeeds = {
 | Constructor
 */
 function Space(master) {
-	debug('New iSpace', System.fabric);
-	System.curSpace = this;
-	this.super.constructor.call(this, master);
+	debug('NEW iSPACE');
+	System.cSpace = this;  // TODO dirty hack, set by set
+	this.base.constructor.call(this, master);
 	this._floatMenuLabels = {c: 'new', n: 'Note', ne: 'Label'};
 	this.edgemenu = new Edgemenu();
 
@@ -1705,7 +1705,7 @@ subclass(Space, woods.Space);
 /**
 | Class Seeds. Things that can grow on this twig.
 */
-Space.cSeeds = {
+Space.prototype.cSeeds = {
     'ItemCopse' : ItemCopse,
     'ArcAlley'  : woods.ArcAlley,
 }
@@ -1714,20 +1714,16 @@ Space.cSeeds = {
 | Redraws the complete space.
 */
 Space.prototype.redraw = function() {
-	var current = System.mio.getCurrentSpace();
-	var items   = current.items;
-	var z       = current.z;
-	log('debug', 'z', z);
 	var editor = System.editor;
-	var f = this.fabric;
 	editor.caret.save = null;
-	this.selection = editor.selection;
-	f.attune();
+	this.selection = editor.selection; // <- TODO double info = bad
+	this.fabric.attune();
 
-	for(var zi = z.length - 1; zi >= 0; zi--) {
-		Item.draw(f, items[z[zi]], this.selection);
+	for(var zi = this.z.length - 1; zi >= 0; zi--) {
+		debug('drawing', zi);
+		this.items.get(this.z.get(zi)).draw(this.fabric, this.selection);
 	}
-	if (this.focus) this.focus.drawHandles(f);
+	if (this.focus) this.focus.drawHandles(this.fabric);
 
 	var ia = this.iaction;
 	switch(ia.act) {
@@ -1742,8 +1738,8 @@ Space.prototype.redraw = function() {
 			ia.item.handlezone, 'normal',
 			(ia.item2 && ia.item2.handlezone) || ia.smp , 'arrow');
 		// todo use something like bindzone
-		if (ia.item2) ia.item2.highlight(f);
-		arrow.draw(f);
+		if (ia.item2) ia.item2.highlight(this.fabric);
+		arrow.draw(this.fabric);
 	}
 	this.edgemenu.draw();
 	editor.updateCaret();
@@ -1842,11 +1838,25 @@ Space.prototype.mousehover = function(p) {
 	}
 
 	// todo remove nulls by shiftKey, ctrlKey
-	var tx = System.repository.transfix(TXE.HOVER, this, pp, null, null);
+	var tx = this._transfix(TXE.HOVER, pp, null, null);
 	redraw = redraw || (tx & TXR.REDRAW);
 	if (!(tx & TXR.HIT)) { System.setCursor('crosshair');}
 	if (redraw) this.redraw();
 }
+
+/**
+| Asks every item that intersects with a point if it feels reponsible for an event.
+*/
+Space.prototype._transfix = function(txe, p, shift, ctrl) {
+	var fx = 0;
+	for(var zi = 0, zlen = this.z.length; zi < zlen; zi++) {
+		var it = this.items.get(this.z.get(zi));
+		fx |= it.transfix(txe, space, p, z, shift, ctrl);
+		if (fx & TXR.HIT) break;
+	}
+	return fx;
+}
+
 
 /* starts creating a new relation */
 Space.prototype.actionSpawnRelation = function(item, p) {
@@ -1908,7 +1918,7 @@ Space.prototype.dragstart = function(p, shift, ctrl) {
 		return;
 	}
 
-	var tfx = System.repository.transfix(TXE.DRAGSTART, this, pp, shift, ctrl);
+	var tfx = this._transfix(TXE.DRAGSTART, pp, shift, ctrl);
 	if (!(tfx & TXR.HIT)) {
 		/* panning */
 		iaction.act = ACT.PAN;
@@ -1932,7 +1942,7 @@ Space.prototype.click = function(p, shift, ctrl) {
 		return;
 	}
 
-	var tfx = System.repository.transfix(TXE.CLICK, this, pp, shift, ctrl);
+	var tfx = this._transfix(TXE.CLICK, pp, shift, ctrl);
 
 	if (!(tfx & TXR.HIT)) {
 		this.iaction.act = ACT.FMENU;
@@ -1975,7 +1985,7 @@ Space.prototype.dragstop = function(p, shift, ctrl) {
 		break;
 	case ACT.RBIND :
 		iaction.smp = null;
-		System.repository.transfix(TXE.RBINDTO, this, pp, shift, ctrl);
+		this._transfix(TXE.RBINDTO, pp, shift, ctrl);
 		redraw = true;
 		break;
 	default :
@@ -2067,7 +2077,7 @@ Space.prototype.dragmove = function(p, shift, ctrl) {
 		return true;
 	case ACT.RBIND :
 		iaction.item2 = null;
-		System.repository.transfix(TXE.RBINDHOVER, this, pp, shift, ctrl);
+		this._transfix(TXE.RBINDHOVER, pp, shift, ctrl);
 		iaction.smp = pp;
 		this.redraw();
 		return true;
@@ -2385,7 +2395,8 @@ Space.prototype.mousewheel = function(wheel) {
  A copse of items (in a space).
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function ItemCopse(master) {
-	this.super.constructor.call(this, master);
+	debug('NEW iITEMCOPSE');
+	this.base.constructor.call(this, master);
 }
 subclass(ItemCopse, woods.ItemCopse);
 
@@ -2526,7 +2537,7 @@ Object.defineProperty(Textnode.prototype, 'text', {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 function Para(text) {
-	this.super.constructor.call(this);
+	this.base.constructor.call(this);
 
 	this._f = new fabric.Fabric(0 ,0);
 	this._fup2d8 = false; // fabric up-to-date
@@ -3020,8 +3031,7 @@ Object.defineProperty(DTree.prototype, 'height', {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  Something in a Space.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Item(id) {
-	this.id = id;
+function Item() {
 	this._h6slice = null;
 }
 /**
@@ -3227,7 +3237,7 @@ Scrollbar.prototype.paint = function(fab) {
  An array of paragraphs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function DocAlley(master) {
-    this.super.constructor.call(this, master);
+    this.base.constructor.call(this, master);
 }
 subclass(DocAlley, woods.DocAlley);
 
@@ -3266,24 +3276,33 @@ DocAlley.prototype.tSeeds = {
 | zone:  position and size of note.
 | dtree: document tree.
 */
-function Note(id, zone, dtree) {
-	this.super.Item.constructor.call(this, id);
-	this.super.Note.constructor.call();
+function Note(master) {
+	debug(master);
+	console.log('DEBUG 1:' + master);
+	console.log('DEBUG 2:' + this.base);
+	console.log('DEBUG 3:' + this.base.Item);
+	console.log('DEBUG 3:' + this.base.Item.constructor);
+	this.base.Item.constructor.call(this);
+	console.log('DEBUG A1:' + this);
+	console.log('DEBUG A2:' + this.base);
+	console.log('DEBUG A3:' + this.base.Note);
+	console.log('DEBUG A4:' + this.base.Note);
+	console.log('DEBUG A%:' + this.base.Note.constructor);
+	this.base.Note.constructor.call(this);
+	console.log('DEBUG B4:' + master);
 
-	this.zone  = zone;
-	this.dtree = dtree;
+	//this.zone  = zone;
+	//this.dtree = dtree;
 	this.handles = Note.handles;
-	dtree.parent = this;
+	//dtree.parent = this;
+
 	// todo, merge silhoutte and zone.
 	this.silhoutte = new RoundRect(
 		Point.zero, new Point(zone.width, zone.height), settings.note.cornerRadius);
 	this._fabric = new fabric.Fabric();
-	this.imargin = Note.imargin;  // todo needed?
 	this._fabricUp2D8 = false;
+	this.imargin = Note.imargin;  // todo needed?
 	this.scrollbarY = new Scrollbar(this, null);
-	if (!this.dtree.first) { this.dtree.append(new Para('')); }
-	// todo, don't add here
-	System.repository.addItem(this, true);
 }
 subclass(Note, {Note: woods.Note, Item: Item});
 
@@ -3514,6 +3533,7 @@ Note.prototype.setScrollbar = function(pos) {
 | selection: current selection to highlight.
 */
 Note.prototype.draw = function(fab, selection) {
+	debug('DRAWING NOTE');
 	var f  = this._fabric;
 
 	// buffer hit?
@@ -4128,7 +4148,7 @@ Relation.prototype.onlook = function(event, item) {
 function MeshIO() {
 	this.mm = new meshmashine.MeshMashine(Nexus);
 	this.spacepath = new jools.Path(["welcome"]);
-	
+
 	// for now hand init
 	this.mm.alter(0, new jools.Signature(
 		{
@@ -4168,10 +4188,11 @@ function MeshIO() {
 	);
 }
 
+/*
 MeshIO.prototype.getCurrentSpace = function() {
 	var space = this.mm.get(-1, this.spacepath);
 	return space.node;
-}
+}*/
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -4256,21 +4277,6 @@ Repository.prototype.reset = function() {
 	for(var id in items) {
 		window.localStorage.setItem(id, '');
 	}
-}*/
-
-/**
-| Asks every item that intersects with a point if it feels reponsible for an event.
-*/
-/*Repository.prototype.transfix = function(txe, space, p, shift, ctrl) {
-	var zidx  = this.zidx;
-	var items = this.items;
-	var fx = 0;
-	for(var z = 0, zlen = zidx.length; z < zlen; z++) {
-		var it = items[zidx[z]];
-		fx |= it.transfix(txe, space, p, z, shift, ctrl);
-		if (fx & TXR.HIT) break;
-	}
-	return fx;
 }*/
 
 /**

@@ -29,7 +29,6 @@ var woods;
 var inNode = true; try { module } catch (e) { inNode = false; }
 
 if (inNode) {
-	// node
 	jools  = require('./meshcraft-jools');
 	fabric = require('./meshcraft-fabric');
 }
@@ -284,7 +283,7 @@ Space.prototype.set = function(path, val, a0, al, oplace) {
 	a0 = path.fit(a0, false);
 	al = path.fit(al, true);
 	if (a0 + 1 === al) throw new Error('Cannot set Space twigs themselves');
-	this.super.set.call(this, path, val, a0, al);
+	this.base.prototype.set.call(this, path, val, a0, al);
 }
 Space.prototype.isGrowable = true;
 
@@ -318,6 +317,7 @@ ItemCopse.prototype.tSeeds = {
  a note
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Note(master) {
+	console.log('NEW wNOTE') // debug
 	if (master && !(master instanceof Note) && master.type !== 'note') {
 		throw new Error('Note master typed wrongly: '+master.type);
 	}
@@ -358,7 +358,7 @@ Note.prototype.set = function(path, val, a0, al, oplace) {
 		return;
 	}
 	if (a0 + 1 === al) throw new Error('Cannot set Note.'+path.get(a0)+' itself');
-	this.super.set.call(this, path, val, a0, al);
+	this.base.prototype.set.call(this, path, val, a0, al);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -379,6 +379,15 @@ ArcAlley.prototype.cSeeds = {
 	'String' : true,
 };
 ArcAlley.prototype.isAlley = true;
+
+/**
+| Alley length.
+|
+| TODO common prototype for all Alleys.
+*/
+Object.defineProperty(ArcAlley.prototype, 'length',  {
+	get: function() { return this._twigs.length; },
+});
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++ DocAlley ++
@@ -405,6 +414,13 @@ DocAlley.prototype.tSeeds = {
 }
 DocAlley.prototype.isAlley = true;
 
+/**
+| Alley length.
+*/
+Object.defineProperty(DocAlley.prototype, 'length',  {
+	get: function() { return this._twigs.length; },
+});
+
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++ Para ++
@@ -430,7 +446,7 @@ Para.prototype.cSeeds = {
  A rectangle inherits fabric.Rect and is immutable
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Rect(master) {
-	this.super.constructor.call(this,
+	this.base.call(this,
 		new Point(master.pnw),
 		new Point(master.pse)
 	);
@@ -493,7 +509,7 @@ Rect.prototype.matches = function(master) {
  A Points inherits fabric.Point and is immutable
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Point(master) {
-	this.super.constructor.call(this, master.x, master.y);
+	this.base.call(this, master.x, master.y);
 }
 subclass(Point, fabric.Point);
 
