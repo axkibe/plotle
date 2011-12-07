@@ -1650,7 +1650,7 @@ function Cockpit() {
  The root of spaces.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Nexus(master) {
-	this.base.constructor.call(this, master);
+	this.base.call(this, master);
 }
 subclass(Nexus, woods.Nexus);
 
@@ -1685,7 +1685,7 @@ Nexus.prototype.tSeeds = {
 function Space(master) {
 	debug('NEW iSPACE');
 	System.cSpace = this;  // TODO dirty hack, set by set
-	this.base.constructor.call(this, master);
+	this.base.call(this, master);
 	this._floatMenuLabels = {c: 'new', n: 'Note', ne: 'Label'};
 	this.edgemenu = new Edgemenu();
 
@@ -2396,7 +2396,7 @@ Space.prototype.mousewheel = function(wheel) {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function ItemCopse(master) {
 	debug('NEW iITEMCOPSE');
-	this.base.constructor.call(this, master);
+	this.base.call(this, master);
 }
 subclass(ItemCopse, woods.ItemCopse);
 
@@ -2537,7 +2537,7 @@ Object.defineProperty(Textnode.prototype, 'text', {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 function Para(text) {
-	this.base.constructor.call(this);
+	this.base.call(this);
 
 	this._f = new fabric.Fabric(0 ,0);
 	this._fup2d8 = false; // fabric up-to-date
@@ -3237,7 +3237,7 @@ Scrollbar.prototype.paint = function(fab) {
  An array of paragraphs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function DocAlley(master) {
-    this.base.constructor.call(this, master);
+    this.base.call(this, master);
 }
 subclass(DocAlley, woods.DocAlley);
 
@@ -3277,19 +3277,8 @@ DocAlley.prototype.tSeeds = {
 | dtree: document tree.
 */
 function Note(master) {
-	debug(master);
-	console.log('DEBUG 1:' + master);
-	console.log('DEBUG 2:' + this.base);
-	console.log('DEBUG 3:' + this.base.Item);
-	console.log('DEBUG 3:' + this.base.Item.constructor);
-	this.base.Item.constructor.call(this);
-	console.log('DEBUG A1:' + this);
-	console.log('DEBUG A2:' + this.base);
-	console.log('DEBUG A3:' + this.base.Note);
-	console.log('DEBUG A4:' + this.base.Note);
-	console.log('DEBUG A%:' + this.base.Note.constructor);
-	this.base.Note.constructor.call(this);
-	console.log('DEBUG B4:' + master);
+	this.base.Item.call(this);
+	this.base.Note.call(master);
 
 	//this.zone  = zone;
 	//this.dtree = dtree;
