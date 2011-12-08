@@ -1851,7 +1851,7 @@ Space.prototype._transfix = function(txe, p, shift, ctrl) {
 	var fx = 0;
 	for(var zi = 0, zlen = this.z.length; zi < zlen; zi++) {
 		var it = this.items.get(this.z.get(zi));
-		fx |= it.transfix(txe, space, p, z, shift, ctrl);
+		fx |= it.transfix(txe, this, p, zi, shift, ctrl);
 		if (fx & TXR.HIT) break;
 	}
 	return fx;
@@ -3278,7 +3278,7 @@ DocAlley.prototype.tSeeds = {
 */
 function Note(master) {
 	this.base.Item.call(this);
-	this.base.Note.call(master);
+	this.base.Note.call(this, master);
 
 	//this.zone  = zone;
 	//this.dtree = dtree;
@@ -3287,7 +3287,7 @@ function Note(master) {
 
 	// todo, merge silhoutte and zone.
 	this.silhoutte = new RoundRect(
-		Point.zero, new Point(zone.width, zone.height), settings.note.cornerRadius);
+		Point.zero, new Point(this.zone.width, this.zone.height), settings.note.cornerRadius);
 	this._fabric = new fabric.Fabric();
 	this._fabricUp2D8 = false;
 	this.imargin = Note.imargin;  // todo needed?
@@ -3535,6 +3535,7 @@ Note.prototype.draw = function(fab, selection) {
 	f.fill(settings.note.style.fill, this.silhoutte, 'path');
 
 	// calculates if a scrollbar is needed
+	/* TODO XX
 	var sbary = this.scrollbarY;
 	dtree.flowWidth = this.iwidth;
 
@@ -3556,6 +3557,7 @@ Note.prototype.draw = function(fab, selection) {
 		this.setScrollbar();
 		sbary.paint(f);
 	}
+	*/
 
 	// paints the border
 	f.edge(settings.note.style.edge, this.silhoutte, 'path');

@@ -317,7 +317,7 @@ ItemCopse.prototype.tSeeds = {
  a note
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Note(master) {
-	console.log('NEW wNOTE') // debug
+	debug('NEW wNOTE_', master); // debug
 	if (master && !(master instanceof Note) && master.type !== 'note') {
 		throw new Error('Note master typed wrongly: '+master.type);
 	}
