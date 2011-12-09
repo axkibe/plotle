@@ -48,7 +48,9 @@ function isInteger(o) { return typeof(o) === 'number' && Math.floor(o) === o; }
 | Returns a rejection error
 */
 function reject(message) {
-	if (jools.devel) throw new Error(message); // in devel mode any failure is fatal.
+	if (jools.devel) {
+		throw new Error(message); // in devel mode any failure is fatal.
+	}
 	log('reject', 'reject', message);
 	return {ok: false, message: message};
 }
@@ -93,7 +95,6 @@ function subclass(sub, base) {
 		// multiple inheritance
 		for(var name in base) {
 			for(var k in base[name].prototype) {
-				if (k === 'base') continue;
 				if (k === 'constructor') continue;
 				if(inherit.prototype[k]) {
 					throw new Error('Multiple inheritance clash for '+sub+' :'+k);
@@ -106,7 +107,6 @@ function subclass(sub, base) {
 		inherit.prototype = base.prototype;
 	}
 	sub.prototype = new inherit();
-	sub.prototype.base = base;
 	sub.prototype.constructor = sub;
 }
 
@@ -115,6 +115,14 @@ function subclass(sub, base) {
 */
 function fixate(obj, key, value) {
     Object.defineProperty(obj, key, {enumerable: true, value: value});
+    return value;
+}
+
+/**
+| Fixates a value to an object (not changeable) and makes it non enumerable.
+*/
+function fixateNoEnum(obj, key, value) {
+    Object.defineProperty(obj, key, {value: value});
     return value;
 }
 
@@ -249,10 +257,10 @@ function Path(master) {
 		throw new Error('invalid path master');
 	}
 
-	for (var i = 0; i < master.length; i++) {
+	for (var i = 0, mlen = master.length; i < mlen; i++) {
 		var v = master[i];
 		if (isInteger(v)) continue;
-		if (isString(master[i])) {
+		if (isString(v)) {
 			if (v[0] === '_') throw reject('Path arcs must not start with _');
 			continue;
 		}
@@ -277,13 +285,12 @@ Path.prototype.get = function(i) {
 	return this._path[i];
 }
 
-
 /**
 | Fits the arc numeration to be in this signature.
 */
 Path.prototype.fit = function(a, edge) {
-	if (!is(a)) a = edge ? this.length : 0;
-	if (a < 0) a += this.pathlen;
+	if (!is(a)) a = edge ? this._path.length : 0;
+	if (a < 0) a += this._path.length;
 	if (a < 0) a = 0;
 	return a;
 }
@@ -365,6 +372,7 @@ jools = {
 	deepFreeze    : deepFreeze,
 	devel         : devel,
 	fixate        : fixate,
+	fixateNoEnum  : fixateNoEnum,
 	is            : is,
 	isnon         : isnon,
 	isString      : isString,

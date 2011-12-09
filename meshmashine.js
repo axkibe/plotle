@@ -213,10 +213,17 @@ function alter(meshtree, alternation, backward) {
 		break;
 	case 'set':
 		check(!is(trg.at1), cm, 'trg.at1 must not exist.');
-		if (trg.path.get(-1) === '_new') {
+		switch(trg.path.get(-1)) {
+		case '$new':
 			log('alter', 'grow new');
 			var nParent = meshtree.get(trg.path, 0, -1);
-			nParent.grow(trg.path);
+			nParent.growNew(trg.path);
+			break;
+		case '$end' :
+			var nParent = meshtree.get(trg.path, 0, -1);
+			check(nParent.isAlley, cm, '$end only applicatable on Alleys');
+			trg.path.set(-1, nParent.length);
+			break;
 		}
 		var save = meshtree.get(trg.path);
 		if (is(trg.val)) {
@@ -256,7 +263,6 @@ function alter(meshtree, alternation, backward) {
 		src.attune(str, 'src.path');
 		if (src.at1 === src.at2) { log('alter', 'removed nothing'); return; }
 
-		debug('STR', str, 'SRC', src);
 		var val = str.substring(src.at1, src.at2);
 		if (isnon(trg.val)) {
 			check(val === trg.val, cm, 'trg.val preset incorrectly:', val, '!==', trg.val);
@@ -490,49 +496,53 @@ MeshMashine.prototype._reflect = function(time, path) {
 */
 MeshMashine.prototype.alter = function(time, src, trg) {
 	log(true, 'test');
-//	try { XXX
+	try {
 		log('mm', 'alter time:', time, 'src:', src, 'trg:', trg);
+		if (time < 0) time = this.history.length;
 		if (!this._isValidTime(time)) return reject('invalid time');
-
 		if (!(src instanceof Signature)) throw new Error('alter src not a Signature');
 		if (!(trg instanceof Signature)) throw new Error('alter trg not a Signature');
 
 		var tsrca = this.transform(time, src);
 		var ttrga = this.transform(time, trg);
 
-		var alta;
+		var alts;
 		if (!(tsrca instanceof Array) && !(ttrga instanceof Array)) {
-			alta = new Alternation(tsrca, ttrga);
+			alts = new Alternation(tsrca, ttrga);
 		} else if (!(tsrca instanceof Array) && (ttrga instanceof Array))  {
-			alta = [];
+			alts = [];
 			for(var i = 0; i < ttrga.length; i++) {
-				alta[i] = new Alternation(clone(tsrca), ttrga[i]);
+				alts[i] = new Alternation(clone(tsrca), ttrga[i]);
 			}
 		} else if ((tsrca instanceof Array) && !(ttrga instanceof Array)) {
-			alta = [];
+			alts = [];
 			for(var i = 0; i < tsrca.length; i++) {
-				alta[i] = new Alternation(tsrca[i], clone(ttrga));
+				alts[i] = new Alternation(tsrca[i], clone(ttrga));
 			}
 		}
 
-		if (!(alta instanceof Array)) {
-			alter(this.repository, alta, false);
-			deepFreeze(alta);
-			this.history.push(alta);
+		if (!(alts instanceof Array)) {
+			alter(this.repository, alts, false);
+			deepFreeze(alts);
+			this.history.push(alts);
 		} else {
-			for(var i = 0; i < alta.length; i++) {
-				alter(this.repository, alta[i], false);
-				deepFreeze(alta[i]);
-				this.history.push(alta[i]);
+			for(var i = 0; i < alts.length; i++) {
+				alter(this.repository, alts[i], false);
+				deepFreeze(alts[i]);
+				this.history.push(alts[i]);
 			}
 		}
 
-		return {ok: true, time: this.history.length, alts: alta };
-///	} catch(err) {  XXX
-//		// returns rejections but rethrows coding errors.
-//		log('fail', 'error', err);
-//		if (err.ok !== false) throw err; else return err;
-//	}
+		return {
+			ok: true,
+			time: this.history.length,
+			alts: alts,
+		};
+	} catch(err) {
+		// returns rejections but rethrows coding errors.
+		log('fail', 'error', err);
+		if (err.ok !== false) throw err; else return err;
+	}
 }
 
 /**

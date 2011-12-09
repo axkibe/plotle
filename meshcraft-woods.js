@@ -140,7 +140,7 @@ Stem.prototype.splice = function() {
 | Grows a new subnode
 */
 Stem.prototype.growNew = function(path) {
-	if (!this.isGrowable) throw new ('Node not growable');
+	if (!this.isGrowable) throw reject('Node not growable');
 	if (!this._grow) this._grow = 1;
 	path.set(-1, this._grow++);
 }
@@ -221,6 +221,14 @@ GenericAlley.prototype.cSeeds  = GenericCopse.prototype.cSeeds;
 GenericAlley.prototype.tSeeds  = GenericCopse.prototype.tSeeds;
 GenericAlley.prototype.isAlley = true;
 
+/**
+| Alley length.
+| TODO common prototype for all Alleys.
+*/
+Object.defineProperty(GenericAlley.prototype, 'length', {
+	get: function() { return this._twigs.length; },
+});
+
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++ Nexus ++
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
@@ -283,9 +291,8 @@ Space.prototype.set = function(path, val, a0, al, oplace) {
 	a0 = path.fit(a0, false);
 	al = path.fit(al, true);
 	if (a0 + 1 === al) throw new Error('Cannot set Space twigs themselves');
-	this.base.prototype.set.call(this, path, val, a0, al);
+	Stem.prototype.set.call(this, path, val, a0, al, oplace);
 }
-Space.prototype.isGrowable = true;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++ ItemCopse ++
@@ -311,13 +318,17 @@ ItemCopse.prototype.tSeeds = {
 	'note' : Note,
 };
 
+/**
+| ItemCopse can automatically assign new IDs to new items.
+*/
+ItemCopse.prototype.isGrowable = true;
+
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++ Note ++
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  a note
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Note(master) {
-	debug('NEW wNOTE_', master); // debug
 	if (master && !(master instanceof Note) && master.type !== 'note') {
 		throw new Error('Note master typed wrongly: '+master.type);
 	}
@@ -358,7 +369,7 @@ Note.prototype.set = function(path, val, a0, al, oplace) {
 		return;
 	}
 	if (a0 + 1 === al) throw new Error('Cannot set Note.'+path.get(a0)+' itself');
-	this.base.prototype.set.call(this, path, val, a0, al);
+	Stem.prototype.set.call(this, path, val, a0, al);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -446,7 +457,7 @@ Para.prototype.cSeeds = {
  A rectangle inherits fabric.Rect and is immutable
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Rect(master) {
-	this.base.call(this,
+	fabric.Rect.call(this,
 		new Point(master.pnw),
 		new Point(master.pse)
 	);
@@ -509,7 +520,7 @@ Rect.prototype.matches = function(master) {
  A Points inherits fabric.Point and is immutable
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Point(master) {
-	this.base.call(this, master.x, master.y);
+	fabric.Point.call(this, master.x, master.y);
 }
 subclass(Point, fabric.Point);
 

@@ -54,10 +54,11 @@ if (inNode) {
     jools = require('./meshcraft-jools');
 }
 
-var log      = jools.log;
-var fixate   = jools.fixate;
-var reject   = jools.reject;
-var subclass = jools.subclass;
+var log          = jools.log;
+var fixate       = jools.fixate;
+var fixateNoEnum = jools.fixate;
+var reject       = jools.reject;
+var subclass     = jools.subclass;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
@@ -614,9 +615,9 @@ Point.renew = function(x, y) {
 /**
 | Returns a json object for this point.
 */
-Point.prototype.toJSON = function() {
+/*Point.prototype.toJSON = function() {
 	return this._json || (this._json = { x: this.x, y: this.y });
-}
+}*/
 
 /**
 | Returns true if this point is equal to another.
@@ -666,8 +667,8 @@ function Rect(pnw, pse) {
 	}
 	fixate(this, 'pnw',    pnw);
 	fixate(this, 'pse',    pse);
-	fixate(this, 'width',  pse.x - pnw.x);
-	fixate(this, 'height', pse.y - pnw.y);
+	fixateNoEnum(this, 'width',  pse.x - pnw.x);
+	fixateNoEnum(this, 'height', pse.y - pnw.y);
 }
 
 /**
@@ -680,9 +681,11 @@ Rect.jnew = function(js) {
 /**
 | Returns a json object for this rect.
 */
+/* TODO Remove
 Rect.prototype.toJSON = function() {
 	return this._json || (this._json = { pnw: this.pnw, pse: this.pse });
 }
+*/
 
 /**
 | Returns a rect moved by a point or x/y

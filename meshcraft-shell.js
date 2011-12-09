@@ -432,6 +432,8 @@ Marker.prototype.getPoint = function() {
 | Sets the marker to position closest to x, y from flowbox(para).
 */
 Marker.prototype.setFromPoint = function(flowbox, p) {
+	throw new Error('TODO');
+
 	if (!flowbox instanceof Para) { throw new Error('invalid flowbox.'); }
 	var pinfo = this._getPinfoAtP(flowbox, p);
 	var l = pinfo[this._pli];
@@ -499,6 +501,8 @@ Marker.prototype.getPinfo = function() {
 | returns true if moved
 */
 Marker.prototype.moveUpDown = function(dir) {
+	throw new Error('TODO');
+
 	var e  = this._element;
 	var o  = this._offset;
 	Measure.font = e.anchestor(DTree).font;
@@ -1650,7 +1654,7 @@ function Cockpit() {
  The root of spaces.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Nexus(master) {
-	this.base.call(this, master);
+	woods.Nexus.call(this, master);
 }
 subclass(Nexus, woods.Nexus);
 
@@ -1683,9 +1687,7 @@ Nexus.prototype.tSeeds = {
 | Constructor
 */
 function Space(master) {
-	debug('NEW iSPACE');
-	System.cSpace = this;  // TODO dirty hack, set by set
-	this.base.call(this, master);
+	woods.Space.call(this, master);
 	this._floatMenuLabels = {c: 'new', n: 'Note', ne: 'Label'};
 	this.edgemenu = new Edgemenu();
 
@@ -1720,7 +1722,6 @@ Space.prototype.redraw = function() {
 	this.fabric.attune();
 
 	for(var zi = this.z.length - 1; zi >= 0; zi--) {
-		debug('drawing', zi);
 		this.items.get(this.z.get(zi)).draw(this.fabric, this.selection);
 	}
 	if (this.focus) this.focus.drawHandles(this.fabric);
@@ -2323,14 +2324,16 @@ Space.prototype.mousedown = function(p) {
 			// todo, beautify point logic.
 			var pnw = fm.p.sub(half(nw) + this.pan.x, half(nh) + this.pan.y);
 			var pse = pnw.add(nw, nh);
-			var note = new Note(null, new Rect(pnw, pse), new DTree());
-			this.setFocus(note);
+			var notePath = System.mio.newNote(new Rect(pnw, pse));
+			this.setFocus(notePath);
 			break;
 		case 'ne' : // label
+			throw new Error('TODO');
 			var pnw = fm.p.sub(this.pan);
 			var pse = pnw.add(100, 50);
-			var dtree = new DTree(20);
-			dtree.append(new Para('Label'));
+
+			//var dtree = new DTree(20);  TODO
+			//dtree.append(new Para('Label'));
 			var label = new Label(null, new Rect(pnw, pse), dtree);
 			label.moveto(pnw.sub(half(label.zone.width), half(label.zone.height)));
 			this.setFocus(label);
@@ -2395,8 +2398,7 @@ Space.prototype.mousewheel = function(wheel) {
  A copse of items (in a space).
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function ItemCopse(master) {
-	debug('NEW iITEMCOPSE');
-	this.base.call(this, master);
+	woods.ItemCopse.call(this, master);
 }
 subclass(ItemCopse, woods.ItemCopse);
 
@@ -2537,7 +2539,7 @@ Object.defineProperty(Textnode.prototype, 'text', {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 function Para(text) {
-	this.base.call(this);
+	woods.Para.call(this);
 
 	this._f = new fabric.Fabric(0 ,0);
 	this._fup2d8 = false; // fabric up-to-date
@@ -3237,7 +3239,7 @@ Scrollbar.prototype.paint = function(fab) {
  An array of paragraphs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function DocAlley(master) {
-    this.base.call(this, master);
+    woods.DocAlley.call(this, master);
 }
 subclass(DocAlley, woods.DocAlley);
 
@@ -3277,15 +3279,10 @@ DocAlley.prototype.tSeeds = {
 | dtree: document tree.
 */
 function Note(master) {
-	this.base.Item.call(this);
-	this.base.Note.call(this, master);
+	Item.call(this);
+	woods.Note.call(this, master);
 
-	//this.zone  = zone;
-	//this.dtree = dtree;
-	this.handles = Note.handles;
-	//dtree.parent = this;
-
-	// todo, merge silhoutte and zone.
+	// TODO, merge silhoutte and zone.
 	this.silhoutte = new RoundRect(
 		Point.zero, new Point(this.zone.width, this.zone.height), settings.note.cornerRadius);
 	this._fabric = new fabric.Fabric();
@@ -3310,7 +3307,7 @@ Note.imargin = Margin.jnew(settings.note.imargin);
 /**
 | Resize handles to show on notes.
 */
-Note.handles = {
+Note.prototype.handles = {
 	n  : true,
 	ne : true,
 	e  : true,
@@ -3320,7 +3317,7 @@ Note.handles = {
 	w  : true,
 	nw : true,
 }
-Object.freeze(Note.handles);
+Object.freeze(Note.prototype.handles);
 
 /**
 | Creates a new note from json representation.
@@ -3439,6 +3436,7 @@ Note.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 | Returns true if something changed.
 */
 Note.prototype.setZone = function(zone, align) {
+	throw new Error('TODO');
 	// ensures minimum size
 	if (zone.width < settings.note.minWidth || zone.height < settings.note.minHeight) {
 		zone = zone.resize(
@@ -3466,6 +3464,7 @@ Object.defineProperty(Note.prototype, 'handlezone', {
 | Sets new position retaining size
 */
 Note.prototype.moveto = function(p) {
+	throw new Error('TODO');
 	if (this.zone.pnw.eq(p)) return false;
 	this.zone = this.zone.moveto(p);
 	return this;
@@ -3476,7 +3475,8 @@ Note.prototype.moveto = function(p) {
 */
 Object.defineProperty(Note.prototype, 'iwidth', {
 	get: function() {
-		return this.zone.width - this.imargin.x - (this.scrollbarY.pos >= 0 ? settings.scrollbar.strength : 0);
+		return this.zone.width - this.imargin.x -
+			(this.scrollbarY.pos >= 0 ? settings.scrollbar.strength : 0);
 	},
 });
 
@@ -3484,7 +3484,9 @@ Object.defineProperty(Note.prototype, 'iwidth', {
 | The inner height for contents excluding scrollbars.
 */
 Object.defineProperty(Note.prototype, 'iheight', {
-	get: function() { return this.zone.height - this.imargin.y; },
+	get: function() {
+		return this.zone.height - this.imargin.y;
+	},
 });
 
 
@@ -3836,18 +3838,20 @@ Relation.imargin = Margin.jnew(settings.relation.imargin);
 /**
 | The resize handles a relation presents.
 */
+// TODO into prototype
 Relation.handles = {
 	ne : true,
 	se : true,
 	sw : true,
 	nw : true,
 }
-Object.freeze(Label.handles);
+Object.freeze(Relation.handles);
 
 /**
 | Creates a relation from json representation.
 */
 Relation.jnew = function(js, id) {
+	throw new Error('TODO');
 	var tz;
 	if (js.tz) {
 		tz = Rect.jnew(js.tz);
@@ -3863,6 +3867,7 @@ Relation.jnew = function(js, id) {
 | Creates a new Relation.
 */
 Relation.create = function(item1, item2) {
+	throw new Error('TODO');
 	var dtree = new DTree(20);
 	dtree.append(new Para('relates to'));
 	dtree.flowWidth = -1;
@@ -4138,11 +4143,13 @@ Relation.prototype.onlook = function(event, item) {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function MeshIO() {
 	this.mm = new meshmashine.MeshMashine(Nexus);
-	this.spacepath = new jools.Path(["welcome"]);
+	System.cSpaceKey = 'welcome';
+
+	var spacepath = new jools.Path([System.cSpaceKey]);
 
 	// for now hand init
-	this.mm.alter(0, new jools.Signature(
-		{
+	var asw = this.mm.alter(0,
+		new jools.Signature({
 			val: {
 				'type': 'space',
 				'items': {
@@ -4174,9 +4181,41 @@ function MeshIO() {
 				],
 			}
 		}), new jools.Signature({
-			path: this.spacepath
+			path: spacepath
 		})
 	);
+	if (asw.ok !== true) throw new Error('Cannot init Repository');
+
+	asw = this.mm.get(-1, spacepath);
+	if (asw.ok !== true) throw new Error('Cannot reget own Space');
+	System.cSpace = asw.node;
+}
+			
+MeshIO.prototype.newNote = function(zone) {
+	var asw = this.mm.alter(-1,
+		new jools.Signature({
+			val: {
+				'type': 'note',
+				'zone': zone,
+				'doc': [ ],
+			},
+		}), new jools.Signature({
+			path: new jools.Path([System.cSpaceKey, 'items', '$new']),
+		})
+	);
+
+	debug('NEWNOTE', asw);
+	var apath = asw.alts.trg.path;
+	if (!(apath instanceof jools.Path)) throw new Error('Cannot reget new Note');
+	
+	asw = this.mm.alter(-1, 
+		new jools.Signature({
+			val: apath.get(-1),
+		}), new jools.Signature({
+			path: new jools.Path([System.cSpaceKey, 'z', '$end']),
+		})
+	);
+	debug('NEWNOTE2', asw);
 }
 
 /*

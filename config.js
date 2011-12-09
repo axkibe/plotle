@@ -1,24 +1,23 @@
 // editable configuration
 module.exports = {
-	// devel: client, server or both. 
-	devel   : 'client',
-	
 	ip      : '127.0.0.1',
-	
 	port    : 8833,
-	
+
+	// devel: client, server or both.
+	devel   : 'client',
+
 	//seperator for JSON messages (to be more easily readable)
 	jspacon : false,
 
 	log     : {
 		//all:   true,
-		alter:  true,
+		alter:  false,
 		ajax:   false,
 		debug:  true,
 		fail:   true,
-		mm:     true,
+		mm:     false,
 		start:  true,
-		te:     true,
+		te:     false,
 		web:    true,
 	}
 }

@@ -161,16 +161,25 @@ var mmAjax = function(req, red, res) {
 }
 
 /**
+| returns true if param is true for the client
+*/
+function configSwitchClient(param) {
+	return param === true || param === 'client' || param === 'both';
+}
+
+/**
 | Transmits the config relevant to the client
 */
 function webConfig(req, red, res) {
 	res.writeHead(200, {'Content-Type': 'application/json'});
 	res.write('var config = {\n');
 	// TODO this is jools job:
-	res.write('\tdebug : '+(config.debug === true || config.debug % 2 === 1 ? 'true' : 'false') + ',\n');
+	res.write('\tdevel : '+ configSwitchClient(config.devel) + ',\n');
 	res.write('\tlog : {\n');
 	for(k in config.log) {
-		res.write('\t\t'+k+' : true,\n');
+		if (configSwitchClient(config.log[k])) {
+			res.write('\t\t'+k+' : true,\n');
+		}
 	}
 	res.write('\t}\n');
 	res.end('};\n')
