@@ -4150,36 +4150,42 @@ function MeshIO() {
 	// for now hand init
 	var asw = this.mm.alter(0,
 		new jools.Signature({
-			val: {
-				'type': 'space',
-				'items': {
-					0 : {
-						'type': 'note',
-						'zone': {
-							'pnw' : { 'x': 100, 'y': 100 },
-							'pse' : { 'x': 300, 'y': 200 },
-						},
-						'doc': [
-							"fontsize" : 13,
-							{
-								'type':  'para',
-								'text%': 'If you can dream---and not make dreams your master;',
-							}, {
-								'type': 'para',
-								'text%': 'If you can think---and not make thoughts your aim,',
-							}, {
-								'type':  'para',
-								'text%': 'If you can meet with Triumph and Disaster',
-							}, {
-								'type': 'para',
-									'text%': 'And treat those two impostors just the same',
-							},
-						],
-					},
-				},
-				'z' : [
-					0,
-				],
+	 	  val: {
+		    type: 'space',
+		    items: {
+		      '0' : {
+		        type: 'note',
+		        zone: {
+		          pnw : { 'x': 100, 'y': 100 },
+		          pse : { 'x': 300, 'y': 200 },
+		        },
+		        doc: {
+		          fontsize : 13,
+		          alley : [
+		            {
+		              type:  'para',
+		              text: 'If you can dream---and not make dreams your master;',
+		            }, {
+	                  type: 'para',
+	                  text: 'If you can think---and not make thoughts your aim,',
+	                }, {
+		              type:  'para',
+		              text: 'If you can meet with Triumph and Disaster',
+	                }, {
+		              type: 'para',
+		              text: 'And treat those two impostors just the same',
+		            },
+		          ],
+		        },
+		      },
+		    },
+			z : {
+			  alley : [
+			    0,
+			  ],
+			}
+		  },
+		},
 			}
 		}), new jools.Signature({
 			path: spacepath

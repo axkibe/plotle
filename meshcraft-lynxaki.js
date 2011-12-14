@@ -99,13 +99,13 @@ function drawScreen() {
 	}
 	for(var i = 0; i < tree.length; i++) {
 		if (change.line !== i) {
-			if (tree[i]['text%']) {
-				tout.write(tree[i]['text%']);
+			if (tree[i]['text']) {
+				tout.write(tree[i]['text']);
 			} else {
 				tout.write('\033[31;47;1mPara has no text!\033[0m');
 			}
 		} else {
-			var line = tree[i]['text%'];
+			var line = tree[i]['text'];
 
 			switch (change.cmd) {
 			case 'join':
@@ -205,7 +205,7 @@ function send() {
 	case 'join' :
 		var path = root.slice();;
 		path.push(change.line - 1);
-		path.push('text%');
+		path.push('text');
 		request({
 			cmd: 'alter',
 			src: {
@@ -224,7 +224,7 @@ function send() {
 	case 'newline' :
 		var path = root.slice();;
 		path.push(change.line);
-		path.push('text%');
+		path.push('text');
 		request({
 			cmd: 'alter',
 			src: {
@@ -243,7 +243,7 @@ function send() {
 	case 'insert' :
 		var path = root.slice();
 		path.push(change.line);
-		path.push('text%');
+		path.push('text');
 		request({
 			cmd: 'alter',
 			src: {
@@ -261,7 +261,7 @@ function send() {
 	case 'remove' :
 		var path = root.slice();
 		path.push(change.line);
-		path.push('text%');
+		path.push('text');
 		request({
 			cmd: 'alter',
 			src: {
@@ -372,8 +372,8 @@ tin.on('keypress', function(ch, key) {
 		if (cx > 0) cx--;
 		break;
 	case 'right' :
-		if (!tree || !tree[cy] || !tree[cy]['text%']) break;
-		var max = tree[cy]['text%'].length;
+		if (!tree || !tree[cy] || !tree[cy]['text']) break;
+		var max = tree[cy]['text'].length;
 		if (change.line === cy && change.cmd === 'insert') max += change.val.length;
 		if (cx < max) cx++;
 		break;
@@ -402,7 +402,7 @@ tin.on('keypress', function(ch, key) {
 				message('-- another change in buffer!');
 				break;
 			}
-			if (cx >= tree[cy]['text%'].length) break;
+			if (cx >= tree[cy]['text'].length) break;
 			if (change.at2 === cx) {
 				change.at2++;
 				cx++;
@@ -420,7 +420,7 @@ tin.on('keypress', function(ch, key) {
 			message('-- another change in buffer!');
 			break;
 		case null:
-			if (cx >= tree[cy]['text%'].length) break;
+			if (cx >= tree[cy]['text'].length) break;
 			change.cmd  = 'remove';
 			change.line = cy;
 			change.at1  = cx;
