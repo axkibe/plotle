@@ -1653,8 +1653,8 @@ function Cockpit() {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  The root of spaces.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Nexus(master) {
-	woods.Nexus.call(this, master);
+function Nexus(master, parent) {
+	woods.Nexus.call(this, master, parent);
 }
 subclass(Nexus, woods.Nexus);
 
@@ -1686,8 +1686,8 @@ Nexus.prototype.tSeeds = {
 /**
 | Constructor
 */
-function Space(master) {
-	woods.Space.call(this, master);
+function Space(master, parent) {
+	woods.Space.call(this, master, parent);
 	this._floatMenuLabels = {c: 'new', n: 'Note', ne: 'Label'};
 	this.edgemenu = new Edgemenu();
 
@@ -2397,8 +2397,8 @@ Space.prototype.mousewheel = function(wheel) {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  A copse of items (in a space).
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function ItemCopse(master) {
-	woods.ItemCopse.call(this, master);
+function ItemCopse(master, parent) {
+	woods.ItemCopse.call(this, master, parent);
 }
 subclass(ItemCopse, woods.ItemCopse);
 
@@ -3238,8 +3238,8 @@ Scrollbar.prototype.paint = function(fab) {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  An array of paragraphs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function DocAlley(master) {
-    woods.DocAlley.call(this, master);
+function DocAlley(master, parent) {
+    woods.DocAlley.call(this, master, parent);
 }
 subclass(DocAlley, woods.DocAlley);
 
@@ -3278,9 +3278,9 @@ DocAlley.prototype.tSeeds = {
 | zone:  position and size of note.
 | dtree: document tree.
 */
-function Note(master) {
+function Note(master, parent) {
 	Item.call(this);
-	woods.Note.call(this, master);
+	woods.Note.call(this, master, parent);
 
 	// TODO, merge silhoutte and zone.
 	this.silhoutte = new RoundRect(
@@ -4142,7 +4142,7 @@ Relation.prototype.onlook = function(event, item) {
  Communicates with the server, holds caches.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function MeshIO() {
-	this.mm = new meshmashine.MeshMashine(Nexus);
+	this.mm = new meshmashine.MeshMashine(Nexus, null);
 	System.cSpaceKey = 'welcome';
 
 	var spacepath = new jools.Path([System.cSpaceKey]);
@@ -4160,6 +4160,7 @@ function MeshIO() {
 							'pse' : { 'x': 300, 'y': 200 },
 						},
 						'doc': [
+							"fontsize" : 13,
 							{
 								'type':  'para',
 								'text%': 'If you can dream---and not make dreams your master;',

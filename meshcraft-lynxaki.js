@@ -212,7 +212,7 @@ function send() {
 				proc: 'splice',
 			},
 			trg: {
-				at1: '_end',
+				at1: '$end',
 				pivot: path.length - 2,
 				path: path,
 			},
@@ -297,7 +297,7 @@ function getRoot(callback) {
 		if (err) {
 			tree = null;
 		} else {
-			tree = asw.node;
+			tree = asw.node.alley;
 		}
 		drawScreen();
 		if (callback) callback();

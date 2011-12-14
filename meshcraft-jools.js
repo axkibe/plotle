@@ -232,11 +232,11 @@ function Signature(master) {
 }
 
 /**
-| Attunes '_end' ats to match a string.
+| Attunes '$end' ats to match a string.
 */
 Signature.prototype.attune = function(str, name) {
-	if (this.at1 === '_end') this.at1 = str.length;
-	if (this.at2 === '_end') this.at2 = str.length;
+	if (this.at1 === '$end') this.at1 = str.length;
+	if (this.at2 === '$end') this.at2 = str.length;
 	if(is(this.at1) && (this.at1 < 0 || this.at1 > str.length))
 		throw reject(name+' at1 not within string');
 	if(is(this.at2) && (this.at2 < 0 || this.at2 > str.length))
