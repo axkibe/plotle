@@ -741,7 +741,7 @@ Editor.prototype.updateCaret = function() {
 	var f = System.fabric;
 	var caret = this.caret;
 	if (caret.save) {
-		/* erase the old caret */
+		// erases the old caret
 		f.putImageData(caret.save, caret.sp.x - 1, caret.sp.y - 1);
 		caret.save = null;
 	}
@@ -2491,13 +2491,6 @@ Treenode.prototype.remove = function(tnode) {
 	this.listen();
 }
 
-// returns first anchestor of 'type' 
-Treenode.prototype.anchestor = function(construct) {
-	var n;
-	for(n = this; n && n.constructor !== construct; n = n.parent);
-	if (!n) throw new Error('anchestor not there:'+construct);
-	return n;
-}
 */
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2538,14 +2531,15 @@ Object.defineProperty(Textnode.prototype, 'text', {
  A paragraph.        `'         '
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-function Para(text) {
-	woods.Para.call(this);
+function Para(master, parent) {
+	debug('NEW iPARA', master, parent.constructor.name);
+	woods.Para.call(this, master);
+	this.parent = parent;
 
-	this._f = new fabric.Fabric(0 ,0);
-	this._fup2d8 = false; // fabric up-to-date
-	this.append(new Textnode(text));
+	this._fabric = new fabric.Fabric(0 ,0);
+	this._fabricUp2d8 = false; // fabric up-to-date
 	this._flowWidth = null;
-	this.p = null; // todo huh?
+	this.pos = null; // position of para in doc.
 }
 subclass(Para, woods.Para);
 
@@ -2554,157 +2548,136 @@ subclass(Para, woods.Para);
 */
 Para.prototype._flow = function() {
 	if (this._flowActual) return;
+	debug('PARA-FLOW');
 
 	// builds position informations.
-	this._flowActual = true;
 	var pinfo = this._pinfo = [];
 	var fw = this._flowWidth;
+	// the width really used
 	var width = 0;
-	var dtree = this.anchestor(DTree);
-	var fontsize = dtree.fontsize;
+	var doca = this.anchestor(DocAlley);
+	var fontsize = doca.fontsize;
+
 	var x = 0;
 	var y = fontsize;
-	Measure.font = dtree.font;
+	Measure.font = doca.getFont();
 	var space = Measure.width(' ');
 	var pline = 0;
-	{
-		var l = pinfo[pline] = [];
-		l.x = x;
-		l.y = y;
+	var l = pinfo[pline] = {a: [], x: x, y: y};
+
+	//for(var node = this.first; node; node = node.next) { TODO
+	var t = this.get('text');
+	var pchunk = 0;
+
+	//var reg = !dtree.pre ? (/(\s*\S+)\s?(\s*)/g) : (/(.+)()$/g);
+	//var reg = !dtree.pre ? (/(\s*\S+|\s+$)\s?(\s*)/g) : (/(.+)()$/g); TODO
+	var reg = (/(\s*\S+|\s+$)\s?(\s*)/g);
+
+	var start = true; // at start of line
+	for(var ca = reg.exec(t); ca != null; ca = reg.exec(t)) {
+		// text is a word plus hard spaces
+		var text = ca[1] + ca[2];
+		var w = Measure.width(text);
+		if (fw > 0 && x + w + space > fw) {
+			if (!start) {
+				// soft break
+				if (x > width) width = x;
+				x = 0;
+				//y += R(doca.fontsize * (dtree.pre ? 1 : 1 + settings.bottombox));
+				y += R(doca.fontsize * (1 + settings.bottombox));
+				pline++;
+				pinfo[pline] = {a: [], x: x, y: y};
+				start = true;
+			} else {
+				// horizontal overflow
+				debug('HORIZONTAL OVERFLOW');
+			}
+		}
+		pinfo[pline][pchunk++] = {
+			x: x,
+			w: w,
+			offset: ca.index,
+			text: text,
+		};
+		x += w + space;
+		start = false;
+	}
+	if (x > width) {
+		// stores maximum width used.
+		width = x;
 	}
 
-	for(var node = this.first; node; node = node.next) {
-		var t = node.text;
-		var pchunk = 0;
-		//var reg = !dtree.pre ? (/(\s*\S+)\s?(\s*)/g) : (/(.+)()$/g);
-		// also match only spaces, todo check if more performance if hand coding
-		var reg = !dtree.pre ? (/(\s*\S+|\s+$)\s?(\s*)/g) : (/(.+)()$/g);
-		var stol = true; // at start of line
-		for(var ca = reg.exec(t); ca != null; ca = reg.exec(t)) {
-			// text is a word plus hard spaces
-			var text = ca[1] + ca[2];
-			var w = Measure.width(text);
-			if (fw > 0 && x + w + space > fw) {
-				if (!stol) {
-					// soft break
-					if (x > width) {
-						// stores maximum width used
-						width = x;
-					}
-					x = 0;
-					y += R(dtree.fontsize * (dtree.pre ? 1 : 1 + settings.bottombox));
-					pline++;
-					{
-						var l = pinfo[pline] = [];
-						l.x = x;
-						l.y = y;
-						pchunk = 0;
-					}
-					stol = true;
-				} else {
-					// horizontal overflow
-				}
-			}
-			pinfo[pline][pchunk++] = {
-				x: x,
-				w: w,
-				node: node,
-				offset: ca.index,
-				text: text,
-			};
-			x += w + space;
-			stol = false;
-		}
-		if (x > width) {
-			// stores maximum width used.
-			width = x;
-		}
-	}
 	// stores metrics
-	// logical height (excluding letters bottombox)
 	this._softHeight = y;
 	this._width = width;
+	this._flowActual = true;
 }
 
 /**
-| Returns the logical height.
+| Returns the soft height.
+|
 | (without addition of box below last line base line for 'gpq' etc.)
-| todo huh?
 */
-Object.defineProperty(Para.prototype, 'softHeight', {
-	get: function() {
-		this._flow();
-		return this._softHeight;
-	},
-});
+Para.prototype.getSoftHeight = function() {
+	this._flow();
+	return this._softHeight;
+}
 
-Object.defineProperty(Para.prototype, 'width', {
-	get: function() {
-		this._flow();
-		return this._width;
-	},
-});
+/**
+| Returns the width the para really uses.
+*/
+Para.prototype.getWidth = function() {
+	this._flow();
+	return this._width;
+}
 
 /**
 | Returns the computed height of the paragraph.
 */
-Object.defineProperty(Para.prototype, 'height', {
-	get: function() {
-		this._flow();
-		var dtree = this.anchestor(DTree);
-		return this._softHeight + R(dtree.fontsize * settings.bottombox);
-	},
-});
+Para.prototype.getHeight = function() {
+	this._flow();
+	var doca = this.anchestor(DocAlley);
+	return this._softHeight + R(dtree.fontsize * settings.bottombox);
+}
 
 /**
-| Returns the position information arrays for all chunks.
+| The width a para should have.
 */
-Object.defineProperty(Para.prototype, 'pinfo', {
-	get: function() {
-		this._flow();
-		return this._pinfo;
-	},
-});
+Para.prototype.getFlowWidth = function() {
+	return this._flowWidth;
+}
 
 /**
-| The width a paragraph should max have.
+| Sets the width a para should have.
 */
-Object.defineProperty(Para.prototype, 'flowWidth', {
-	get: function() {
-		return this._flowWidth;
-	},
-	set: function(fw) {
-		if (this._flowWidth !== fw) {
-			this._flowWidth = fw;
-			this.  _flowUp2D8 = false;
-			this._farbicUp2D8 = false;
-		}
-	}
-});
+Para.prototype.setFlowWidth = function(fw) {
+	if (this._flowWidth === fw) return;
+	this._flowWidth = fw;
+	this._flowUp2D8 = false;
+	this._farbicUp2D8 = false;
+}
 
 /**
 | Draws the paragraph in its cache and returns it.
-| TODO renamoe to getFabric
 */
-Para.prototype.getfabric = function() {
+Para.prototype.getFabric = function() {
 	if (this._fabricUp2D8) return this._fabric;
+	debug('PARA GETFAB');
 
 	var f = this._fabric;
 	this._flow();
 
-	// todo: work out exact height for text below baseline
-	var dtree = this.anchestor(DTree);
+	// TODO: work out exact height for text below baseline
+	var doca = this.anchestor(DocAlley);
 	f.attune(this);
-	f.fontStyle(dtree.font, 'black', 'start', 'alphabetic');
+	f.fontStyle(doca.getFont(), 'black', 'start', 'alphabetic');
 
 	// draws text into the fabric
 	var pinfo = this._pinfo;
-	var plines = pinfo.length;
-	for(var il = 0; il < plines; il++) {
+	for(var il = 0, pinfolen = pinfo.length; il < pinfolen; il++) {
 		var pl = pinfo[il];
-		var plen = pl.length;
-		for(var ic = 0; ic < plen; ic++) {
-			var pc = pl[ic];
+		for(var ic = 0, plen = pl.a.length; ic < plen; ic++) {
+			var pc = pl.a[ic];
 			f.fillText(pc.text, pc.x, pl.y);
 		}
 	}
@@ -2714,18 +2687,20 @@ Para.prototype.getfabric = function() {
 }
 
 // drops the cache (cause something has changed
+/* TODO?
 Para.prototype.listen = function() {
 	this._flowUp2D8 = false;
 	this._fabricUp2D8    = false;
 	if (this.parent) this.parent.listen();
-}
+}*/
 
 /**
 | Joins a child node to its next sibling,
 | or joins this paragraph to its next sibling
 |
-| todo, this doesnt belong here .
+| TODO, this doesnt belong here .
 */
+/* TODO?
 Para.prototype.joinToNext = function(node, caret) {
 	var next = node.next;
 	if (next) {
@@ -2733,14 +2708,15 @@ Para.prototype.joinToNext = function(node, caret) {
 	}
 	var nextPara = this.next;
 	if (nextPara == null) {
-		/* end of document */
+		// end of document
 		return false;
 	}
 	node.text = node.text + nextPara.first.text;
-	/* todo take over siblings */
+	// todo take over siblings
 	this.parent.remove(nextPara);
 	return true;
 }
+*/
 
 /**
 | Joins a child node to its previous sibling,
@@ -2748,6 +2724,7 @@ Para.prototype.joinToNext = function(node, caret) {
 |
 | todo, doesnt belong here.
 */
+/* TODO?
 Para.prototype.joinToPrevious = function(node, caret) {
 	var prev = node.prev;
 	if (prev) {
@@ -2766,6 +2743,7 @@ Para.prototype.joinToPrevious = function(node, caret) {
 	this.parent.remove(this);
 	return true;
 }
+*/
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .-,--.  ,--,--'
@@ -2776,20 +2754,25 @@ Para.prototype.joinToPrevious = function(node, caret) {
 
  A document with nodes in tree structure.
 
+ TODO remove
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
 | Constructor.
 */
+/*
 function DTree(fontsize) {
 	Treenode.call(this);
 	this._fontsize = fontsize || 13;
 }
 subclass(DTree, Treenode);
+*/
 
 /**
 | Creates a Dtree from json representation.
 */
+/*
 DTree.jnew = function(js) {
 	var o = new DTree(js.fs);
 	var d = js.d;
@@ -2797,19 +2780,13 @@ DTree.jnew = function(js) {
 		o.append(new Para(d[i]));
 	}
 	return o;
-}
+}*/
 
-/**
-| Returns the default font of the dtree.
-*/
-Object.defineProperty(DTree.prototype, 'font', {
-	get: function() { return this._fontsize + 'px ' + settings.defaultFont; },
-});
 
 /**
 | Turns the document tree into a json representation.
 */
-DTree.prototype.jsonfy = function() {
+/*DTree.prototype.jsonfy = function() {
 	var js = {fs : this._fontsize, d: []};
 	var d = js.d;
 	for (var n = this.first; n; n = n.next) {
@@ -2817,18 +2794,19 @@ DTree.prototype.jsonfy = function() {
 	}
 	return js;
 }
+*/
 
 /**
 | Returns the paragraph at point
 */
-DTree.prototype.paraAtP = function(p) {
+/*DTree.prototype.paraAtP = function(p) {
 	var para = this.first;
 	while (para && p.y > para.p.y + para.softHeight) {
 		para = para.next;
 	}
 	return para;
 }
-
+*/
 /**
 | Draws the selection
 |
@@ -2838,8 +2816,9 @@ DTree.prototype.paraAtP = function(p) {
 | imargin : inner margin of item
 | scrolly : scroll position of item
 */
+/*
 DTree.prototype.pathSelection = function(fab, border, edge, select, imargin, scrolly) {
-	/* todo make part of selection to use shortcut with XY */
+	// todo make part of selection to use shortcut with XY 
 	var b = select.mark1;
 	var e = select.mark2;
 	var bp = b.getPoint();
@@ -2895,69 +2874,40 @@ DTree.prototype.pathSelection = function(fab, border, edge, select, imargin, scr
 		if (!edge) fab.lineTo(rx, ey, edge);
 	}
 }
-
-/**
-| draws the content in a Canvas2D
-| fab:     Fabric to draw within.
-| select:  selection object (for highlighting the selection)
-| imargin: distance of text to edge
-| scrolly: scroll position (todo make a point)
 */
-DTree.prototype.draw = function(fab, select, imargin, scrolly) {
-	var y = imargin.n;
-	var pi = 0;
-	var h = 0;
-	var parasep = this.pre ? 0 : this._fontsize;
-
-	// paints the selection
-	if (select.active && select.mark1.item === this.parent) {
-		// todo make paint()
-		fab.fill(
-			settings.selection.style.fill, this, 'pathSelection',
-			select, imargin, scrolly);
-		fab.edge(
-			settings.selection.style.edge, this, 'pathSelection',
-			select, imargin, scrolly);
-	}
-
-	// draws tha paragraphs
-	for(var para = this.first; para; para = para.next) {
-		var pf = para.getfabric(); // TODO rename getFabric
-		para.p = new Point(imargin.w, R(y));
-		if (pf.width > 0 && pf.height > 0) {
-			f.drawImage(pf, imargin.w, y - scrolly);
-		}
-		y += para.softHeight + parasep;
-	}
-}
 
 /**
 | Overloads Treenodes.append() to set the new paragraphs width.
 | todo, change this to ask for the parents width on the flow?
 */
+/*
 DTree.prototype.append = function(tnode) {
 	if (this._flowWidth) {
 		tnode.flowWidth = this._flowWidth;
 	}
 	return Treenode.prototype.append.call(this, tnode);
 }
-
+*/
 
 /**
 | Overloads Treenodes insertBefore to set the paragraphs width.
 */
+/*
 DTree.prototype.insertBefore = function(tnode, bnode) {
 	if (this._flowWidth && bnode) {
-		/* if not bnode append will be called */
+		// if not bnode append will be called
 		tnode.flowWidth = this._flowWidth;
 	}
 	return Treenode.prototype.insertBefore.call(this, tnode, bnode);
 }
+*/
 
 
 /**
 * Gets/Sets the font size.
 */
+
+/*
 Object.defineProperty(DTree.prototype, 'fontsize', {
 	get: function() { return this._fontsize; },
 	set: function(fs) {
@@ -2968,10 +2918,12 @@ Object.defineProperty(DTree.prototype, 'fontsize', {
 		}
 	}
 });
+*/
 
 /**
 * Gets/Sets the flowWidth.
 */
+/*
 Object.defineProperty(DTree.prototype, 'flowWidth', {
 	get: function() { return this._flowWidth; },
 	set: function(fw) {
@@ -2983,20 +2935,22 @@ Object.defineProperty(DTree.prototype, 'flowWidth', {
 		this._cacheWidth  = null;
 		this._cacheHeight = null;
 	}
-});
+});*/
 
 /**
 | Something changed.
 */
+/*
 DTree.prototype.listen = function() {
 	this._cacheWidth  = null;
 	this._cacheHeight = null;
 	if (this.parent) this.parent.listen();
-}
+}*/
 
 /**
 | Returns the width of the document tree.
 */
+/*
 Object.defineProperty(DTree.prototype, 'width', {
 	get: function() {
 		if (this._cacheWidth) return this._cacheWidth;
@@ -3007,23 +2961,26 @@ Object.defineProperty(DTree.prototype, 'width', {
 		return this._cacheWidth = R(w);
 	},
 });
+*/
 
 /**
 | Returns the height of the document tree.
 */
+/*
 Object.defineProperty(DTree.prototype, 'height', {
 	get: function() {
 		if (this._cacheHeight) return this._cacheHeight;
 		var h = 0;
-		var parasep = this.pre ? 0 : this._fontsize;
+		var paraSep = this.pre ? 0 : this._fontsize;
 		var first = true;
 		for(var para = this.first; para; para = para.next) {
-			if (!first) h += parasep; else first = false;
+			if (!first) h += paraSep; else first = false;
 			h += para.softHeight;
 		}
 		return this._cacheHeight = h;
 	},
 });
+*/
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,-_/ .
@@ -3172,6 +3129,18 @@ Item.prototype.removed = function() {
 	// nothing
 }
 
+/**
+| Returns first anchestor with constructor constructor
+*/
+/*
+getAnchestor = function(constructor) {
+	var n;
+	for(n = this; n && n.constructor !== construct; n = n.parent);
+	if (!n) throw new Error('anchestor not there:'+construct);
+	return n;
+}
+*/
+
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .---.             .  .  .
  \___  ,-. ,-. ,-. |  |  |-. ,-. ,-.
@@ -3257,6 +3226,52 @@ DocAlley.prototype.tSeeds = {
     'para'    : Para,
 }
 
+/**
+| Draws the document alley on a fabric.
+| fab:     fabric to draw upon.
+| select:  selection object (for highlighting the selection)
+| imargin: distance of text to edge
+| scrollp: scroll position
+*/
+DocAlley.prototype.draw = function(fab, select, imargin, scrollp) {
+	var paraSep = /* TODO this.pre ? 0 :*/ this.fontsize;
+
+	// paints the selection
+	/* TODO
+	if (select.active && select.mark1.item === this.parent) {
+		// todo make paint()
+		fab.fill(
+			settings.selection.style.fill, this, 'pathSelection',
+			select, imargin, scrolly);
+		fab.edge(
+			settings.selection.style.edge, this, 'pathSelection',
+			select, imargin, scrolly);
+	}
+	*/
+
+	var y = imargin.n;
+
+	// draws tha paragraphs
+	debug('TWIG', this._twigs.alley[0]);
+
+	this.forEachNumber(function(para, k) {
+		debug('FENP', para.constructor.name, k.constructor.name);
+		var pf = para.getFabric();
+		para.pos = new Point(imargin.w, R(y));
+
+		if (pf.width > 0 && pf.height > 0) {
+			fab.drawImage(pf, imargin.w, y - scrollp.y);
+		}
+		y += para.softHeight + paraSep;
+	});
+}
+
+/**
+| Returns the default font of the dtree.
+*/
+DocAlley.prototype.getFont = function() {
+	return this.fontsize + 'px ' + settings.defaultFont;
+}
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,-,-.       .
@@ -3524,17 +3539,20 @@ Note.prototype.setScrollbar = function(pos) {
 | selection: current selection to highlight.
 */
 Note.prototype.draw = function(fab, selection) {
-	debug('DRAWING NOTE');
+	debug('NOTE::DRAW');
 	var f  = this._fabric;
 
 	// buffer hit?
 	if (this._fabricUp2D8) { fab.drawImage(f, this.zone.pnw); return; }
+	debug('NOTE::DRAW NEW FAB');
 
 	// if not fill the buffer
-	var dtree = this.dtree;
 	// resize the canvas
 	f.attune(this.zone);
 	f.fill(settings.note.style.fill, this.silhoutte, 'path');
+
+	var doca = this.doc;
+	debug('NOTE::DOCA', doca.constructor.name, doca);
 
 	// calculates if a scrollbar is needed
 	/* TODO XX
@@ -3550,10 +3568,13 @@ Note.prototype.draw = function(fab, selection) {
 		sbary.visible = false;
 		dtree.flowWidth = this.iwidth;
 	}
+	*/
 
 	// paints selection and text
-	dtree.draw(f, selection, this.imargin, sbary.visible ? sbary.pos : 0);
+	//dtree.draw(f, selection, this.imargin, sbary.visible ? sbary.pos : 0);
+	doca.draw(f, selection, this.imargin, fabric.Point.zero); // TODO scrollp
 
+	/*
 	// paints the scrollbar
 	if (sbary.visible) {
 		this.setScrollbar();
@@ -4160,7 +4181,7 @@ function MeshIO() {
 		          pse : { 'x': 300, 'y': 200 },
 		        },
 		        doc: {
-		          fontsize : 13,
+		          //fontsize : 13, TODO
 		          alley : [
 		            {
 		              type:  'para',
@@ -4185,10 +4206,8 @@ function MeshIO() {
 			  ],
 			}
 		  },
-		},
-			}
 		}), new jools.Signature({
-			path: spacepath
+		  path: spacepath
 		})
 	);
 	if (asw.ok !== true) throw new Error('Cannot init Repository');
@@ -4197,14 +4216,14 @@ function MeshIO() {
 	if (asw.ok !== true) throw new Error('Cannot reget own Space');
 	System.cSpace = asw.node;
 }
-			
+
 MeshIO.prototype.newNote = function(zone) {
 	var asw = this.mm.alter(-1,
 		new jools.Signature({
 			val: {
 				'type': 'note',
 				'zone': zone,
-				'doc': [ ],
+				'doc': { alley: [ ] },
 			},
 		}), new jools.Signature({
 			path: new jools.Path([System.cSpaceKey, 'items', '$new']),
@@ -4214,8 +4233,8 @@ MeshIO.prototype.newNote = function(zone) {
 	debug('NEWNOTE', asw);
 	var apath = asw.alts.trg.path;
 	if (!(apath instanceof jools.Path)) throw new Error('Cannot reget new Note');
-	
-	asw = this.mm.alter(-1, 
+
+	asw = this.mm.alter(-1,
 		new jools.Signature({
 			val: apath.get(-1),
 		}), new jools.Signature({

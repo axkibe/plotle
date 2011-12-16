@@ -523,6 +523,8 @@ Fabric.prototype.fillRotateText = function(text, pc, phi, d) {
 |
 | fontStyle(font, fill)                      -or-
 | fontStyle(font, fill, align, baseline)
+|
+| TODO rename setFontStyle
 */
 Fabric.prototype.fontStyle = function(font, fill, align, baseline) {
 	var cx = this._cx;

@@ -26,9 +26,7 @@ var woods;
 /**
 | Running in node or browser?
 */
-var inNode = true; try { module } catch (e) { inNode = false; }
-
-if (inNode) {
+if (typeof(window) === 'undefined') {
 	jools  = require('./meshcraft-jools');
 	fabric = require('./meshcraft-fabric');
 }
@@ -105,11 +103,11 @@ Stem.prototype._sprout = function(master, parent) {
 
 	var creator = this.cSeeds[master.constructor.name];
 	if (creator === true) return master;
-	if (creator) return new creator(master);
+	if (creator) return new creator(master, this);
 	if (!this.tSeeds) throw new Error('Cannot sprout (cname): '+master.constructor.name);
 	creator = this.tSeeds[master.type];
 	if (!creator) throw new Error('Cannot sprout (type): '+master.type);
-	return new creator(master);
+	return new creator(master, this);
 }
 
 /**
@@ -242,6 +240,13 @@ StemAlley.prototype.forEach = function(callback) {
 }
 
 /**
+| Iterates over all subnodes
+*/
+StemAlley.prototype.forEachNumber = function(callback) {
+	this._twigs.alley.forEach(callback);
+}
+
+/**
 | Array splice
 */
 StemAlley.prototype.splice = function() {
@@ -314,6 +319,11 @@ function Nexus(master, parent) {
 subclass(Nexus, Stem);
 
 /**
+| Type
+*/
+Nexus.prototype.type = 'Nexus';
+
+/**
 | Class Seeds. Things that can grow on this twig.
 */
 Nexus.prototype.cSeeds = {
@@ -324,8 +334,9 @@ Nexus.prototype.cSeeds = {
 | Type Seeds. Things that can be a master for new grows on this twig.
 */
 Nexus.prototype.tSeeds = {
-	'space' : Space,
+	'Space' : Space,
 }
+
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++ Space ++
@@ -333,13 +344,13 @@ Nexus.prototype.tSeeds = {
  a space
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Space(master, parent) {
-	if (master && !(master instanceof Space) && master.type !== 'space') {
+	if (master && !(master instanceof Space) && master.type !== 'Space') {
 		throw new Error('Space master typed wrongly: '+master.type);
 	}
 	// todo check if master has other keys.
 
 	Stem.call(this, {
-			type  : 'space',
+//			type  : 'Space', TODO
 			items : new this.cSeeds.ItemCopse(master && master.items),
 			z     : new this.cSeeds.ArcAlley (master && master.z),
 		}, null, parent);
@@ -349,13 +360,17 @@ function Space(master, parent) {
 subclass(Space, Stem);
 
 /**
+| Type
+*/
+Space.prototype.type = 'Space';
+
+/**
 | Class Seeds. Things that can grow on this twig.
 */
 Space.prototype.cSeeds = {
 	'ItemCopse' : ItemCopse,
 	'ArcAlley'  : ArcAlley,
 }
-
 
 /**
 | Sets the value of a node.
@@ -379,6 +394,11 @@ function ItemCopse(master, parent) {
 subclass(ItemCopse, Stem);
 
 /**
+| Type
+*/
+ItemCopse.prototype.type = 'ItemCopse';
+
+/**
 | Class Seeds. Things that can grow on this twig.
 */
 ItemCopse.prototype.cSeeds = {
@@ -389,7 +409,7 @@ ItemCopse.prototype.cSeeds = {
 | Type Seeds. Things that can be a master for new grows on this twig.
 */
 ItemCopse.prototype.tSeeds = {
-	'note' : Note,
+	'Note' : Note,
 };
 
 /**
@@ -403,24 +423,25 @@ ItemCopse.prototype.isGrowable = true;
  a note
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Note(master, parent) {
-	if (master && !(master instanceof Note) && master.type !== 'note') {
+	if (master && !(master instanceof Note) && master.type !== 'Note') {
 		throw new Error('Note master typed wrongly: '+master.type);
 	}
 	// TODO check if master has other keys.
 
 	Stem.call(this, {
 			type     : 'note',
-			doc      : new DocAlley(master && master.doc),
+			doc      : new this.cSeeds.DocAlley(master && master.doc),
 			zone     : new Rect(master.zone),
-			//fontsize : master.fontsize,
 		}, null, parent);
 	this.doc  = this._twigs.doc;
 	this.zone = this._twigs.zone;
-	//Object.defineProperty(this, 'fontsize', {
-	//	get: function()  { return this._twigs.fontsize; },
-	//});
 }
 subclass(Note, Stem);
+
+/**
+| Type
+*/
+Note.prototype.type = 'Note';
 
 /**
 | Class Seeds. Things that can grow on this twig.
@@ -461,6 +482,11 @@ function ArcAlley(master, parent) {
 subclass(ArcAlley, StemAlley);
 
 /**
+| ArcAlley
+*/
+ArcAlley.prototype.type = 'ArcAlley';
+
+/**
 | Class Seeds. Things that can grow on this twig.
 */
 ArcAlley.prototype.cSeeds = {
@@ -475,6 +501,10 @@ ArcAlley.prototype.cSeeds = {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function DocAlley(master, parent) {
 	StemAlley.call(this, master, parent);
+
+	Object.defineProperty(this, 'fontsize', {
+		get: function()  { return this._twigs.fontsize; },
+	});
 }
 subclass(DocAlley, StemAlley);
 
@@ -483,13 +513,15 @@ subclass(DocAlley, StemAlley);
 */
 DocAlley.prototype.cSeeds = {
 	'Para'    : Para,
+	'Number'  : true,  // for fontsize TODO allow more detailed spec which
+	                   // keys can do what.
 };
 
 /**
 | Type Seeds. Things that can be a master for new grows on this twig.
 */
 DocAlley.prototype.tSeeds = {
-	'para'    : Para,
+	'Para'    : Para,
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -501,6 +533,11 @@ function Para(master, parent) {
 	Stem.call(this, {}, master, parent);
 }
 subclass(Para, Stem);
+
+/**
+| Type
+*/
+Para.prototype.type = 'Para';
 
 /**
 | Class Seeds. Things that can grow on this twig.
@@ -643,7 +680,7 @@ woods = {
 	Point        : Point,
 };
 
-if (inNode) {
+if (typeof(window) === 'undefined') {
 	module.exports = woods;
 }
 

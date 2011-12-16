@@ -27,9 +27,7 @@ var devel;
 /**
 | Running in node or browser?
 */
-var inNode = true; try { module } catch (e) { inNode = false; }
-
-if (inNode) {
+if (typeof(window) === 'undefined') {
 	config = require('./config');
 	devel = config.devel === true || config.devel === 'both' || config.devel === 'server';
 } else { // inBrowser
@@ -382,7 +380,7 @@ jools = {
 	subclass      : subclass,
 };
 
-if (inNode) {
+if (typeof(window) === 'undefined') {
 	module.exports = jools;
 }
 

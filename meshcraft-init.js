@@ -27,10 +27,10 @@ libclient.request({cmd: "now"}, function (err, now) {
 	  time: now.time,
 	  src: {
 	    val: {
-	      type: 'space',
+	      type: 'Space',
 	      items: {
 	        '0' : {
-	          type: 'note',
+	          type: 'Note',
 	          zone: {
 	 	        pnw : { x: 100, y: 100 },
 		        pse : { x: 300, y: 200 },
@@ -38,16 +38,16 @@ libclient.request({cmd: "now"}, function (err, now) {
 		      doc: {
 		         alley : [
 		          {
-	                type: 'para',
+	                type: 'Para',
 	                text: 'If you can dream---and not make dreams your master;',
 	              }, {
-	                type: 'para',
+	                type: 'Para',
 	                text: 'If you can think---and not make thoughts your aim,',
 	              }, {
-	                type: 'para',
+	                type: 'Para',
 	                text: 'If you can meet with Triumph and Disaster',
 	              }, {
-	                type: 'para',
+	                type: 'Para',
 	                text: 'And treat those two impostors just the same',
 	              },
 	            ],

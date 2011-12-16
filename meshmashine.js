@@ -45,11 +45,9 @@ var meshmashine;
 "use strict";
 
 /**
-| Running in node or browser?
+| Node includes.
 */
-var inNode = true; try { module } catch (e) { inNode = false; }
-
-if (inNode) {
+if (typeof(window) === 'undefined') {
 	jools = require('./meshcraft-jools');
 }
 
@@ -604,7 +602,7 @@ meshmashine = {
 	MeshMashine     : MeshMashine,
 }
 
-if (inNode) {
+if (typeof(window) === 'undefined') {
 	module.exports = meshmashine;
 }
 
