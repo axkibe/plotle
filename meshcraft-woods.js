@@ -50,6 +50,7 @@ var subclass  = jools.subclass;
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Stem(twigs, master, parent) {
 	if (master && master._twigs) master = master._twigs;
+	if (woods.setParents) this.parent = parent;
 	this._twigs = twigs;
 	for (var k in master) {
 		if (k === 'type' || k === 'alley') continue;
@@ -101,11 +102,11 @@ Stem.prototype._sprout = function(master, parent) {
 	if (typeof(master) === 'undefined') return undefined;
 	if (master === null) return null;
 
-	var creator = this.cSeeds[master.constructor.name];
+	var creator = this.seeds[master.constructor.name];
 	if (creator === true) return master;
 	if (creator) return new creator(master, this);
-	if (!this.tSeeds) throw new Error('Cannot sprout (cname): '+master.constructor.name);
-	creator = this.tSeeds[master.type];
+	if (!this.seeds) throw new Error('Cannot sprout (cname): '+master.constructor.name);
+	creator = this.seeds[master.type];
 	if (!creator) throw new Error('Cannot sprout (type): '+master.type);
 	return new creator(master, this);
 }
@@ -160,6 +161,18 @@ Stem.prototype.matches = function(master) {
 		if (k !== 'type') klen--;
 	}
 	return klen === 0;
+}
+
+/**
+| Gets the first anchestor of 'type', as long the
+| parent variables have been set
+*/
+Stem.prototype.getAnchestor = function(type) {
+	if (!woods.setParents) throw new Error('getAnchestor not avaible without setParents');
+	var n = this;
+	while (n && n.type !== type) n = n.parent;
+	if (!n) throw new Error('anchestor not there: '+type);
+	return n;
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -272,9 +285,9 @@ function GenericCopse(master, parent) {
 subclass(GenericCopse, Stem);
 
 /**
-| Class Seeds. Things that can grow on this twig.
+| Seeds. Things that can grow on this twig.
 */
-GenericCopse.prototype.cSeeds = {
+GenericCopse.prototype.seeds = {
 	'Array'        : GenericAlley,
 	'GenericAlley' : GenericAlley,
 	'GenericCopse' : GenericCopse,
@@ -282,11 +295,6 @@ GenericCopse.prototype.cSeeds = {
 	'Object'       : GenericCopse,
 	'String'       : true,
 };
-
-/**
-| Type Seeds. Things that can be a master for new grows on this twig.
-*/
-GenericCopse.prototype.tSeeds = null;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++ Alley ++
@@ -299,14 +307,9 @@ function GenericAlley(master, parent) {
 subclass(GenericAlley, StemAlley);
 
 /**
-| Class Seeds. Things that can grow on this twig.
+| Seeds. Things that can grow on this twig.
 */
-GenericAlley.prototype.cSeeds  = GenericCopse.prototype.cSeeds;
-
-/**
-| Type Seeds. Things that can be a master for new grows on this twig.
-*/
-GenericAlley.prototype.tSeeds  = GenericCopse.prototype.tSeeds;
+GenericAlley.prototype.seeds  = GenericCopse.prototype.seeds;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++ Nexus ++
@@ -324,19 +327,11 @@ subclass(Nexus, Stem);
 Nexus.prototype.type = 'Nexus';
 
 /**
-| Class Seeds. Things that can grow on this twig.
+| Seeds. Things that can grow on this twig.
 */
-Nexus.prototype.cSeeds = {
+Nexus.prototype.seeds = {
 	'Space' : Space,
 }
-
-/**
-| Type Seeds. Things that can be a master for new grows on this twig.
-*/
-Nexus.prototype.tSeeds = {
-	'Space' : Space,
-}
-
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++ Space ++
@@ -351,8 +346,8 @@ function Space(master, parent) {
 
 	Stem.call(this, {
 //			type  : 'Space', TODO
-			items : new this.cSeeds.ItemCopse(master && master.items),
-			z     : new this.cSeeds.ArcAlley (master && master.z),
+			items : new this.seeds.ItemCopse(master && master.items),
+			z     : new this.seeds.ArcAlley (master && master.z),
 		}, null, parent);
 	this.items = this._twigs.items;
 	this.z     = this._twigs.z;
@@ -365,9 +360,9 @@ subclass(Space, Stem);
 Space.prototype.type = 'Space';
 
 /**
-| Class Seeds. Things that can grow on this twig.
+| Seeds. Things that can grow on this twig.
 */
-Space.prototype.cSeeds = {
+Space.prototype.seeds = {
 	'ItemCopse' : ItemCopse,
 	'ArcAlley'  : ArcAlley,
 }
@@ -399,16 +394,9 @@ subclass(ItemCopse, Stem);
 ItemCopse.prototype.type = 'ItemCopse';
 
 /**
-| Class Seeds. Things that can grow on this twig.
+| Seeds. Things that can grow on this twig.
 */
-ItemCopse.prototype.cSeeds = {
-	'Note' : Note,
-};
-
-/**
-| Type Seeds. Things that can be a master for new grows on this twig.
-*/
-ItemCopse.prototype.tSeeds = {
+ItemCopse.prototype.seeds = {
 	'Note' : Note,
 };
 
@@ -430,7 +418,7 @@ function Note(master, parent) {
 
 	Stem.call(this, {
 			type     : 'note',
-			doc      : new this.cSeeds.DocAlley(master && master.doc),
+			doc      : new this.seeds.DocAlley(master && master.doc),
 			zone     : new Rect(master.zone),
 		}, null, parent);
 	this.doc  = this._twigs.doc;
@@ -444,9 +432,9 @@ subclass(Note, Stem);
 Note.prototype.type = 'Note';
 
 /**
-| Class Seeds. Things that can grow on this twig.
+| Seeds. Things that can grow on this twig.
 */
-Note.prototype.cSeeds = {
+Note.prototype.seeds = {
 	'DocAlley'  : DocAlley,
 }
 
@@ -487,9 +475,9 @@ subclass(ArcAlley, StemAlley);
 ArcAlley.prototype.type = 'ArcAlley';
 
 /**
-| Class Seeds. Things that can grow on this twig.
+| Seeds. Things that can grow on this twig.
 */
-ArcAlley.prototype.cSeeds = {
+ArcAlley.prototype.seeds = {
 	'Number' : true,
 	'String' : true,
 };
@@ -508,21 +496,20 @@ function DocAlley(master, parent) {
 }
 subclass(DocAlley, StemAlley);
 
+
 /**
-| Class Seeds. Things that can grow on this twig.
+| Type
 */
-DocAlley.prototype.cSeeds = {
+DocAlley.prototype.type = 'DocAlley';
+
+/**
+| Seeds. Things that can grow on this twig.
+*/
+DocAlley.prototype.seeds = {
 	'Para'    : Para,
 	'Number'  : true,  // for fontsize TODO allow more detailed spec which
 	                   // keys can do what.
 };
-
-/**
-| Type Seeds. Things that can be a master for new grows on this twig.
-*/
-DocAlley.prototype.tSeeds = {
-	'Para'    : Para,
-}
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++ Para ++
@@ -540,9 +527,9 @@ subclass(Para, Stem);
 Para.prototype.type = 'Para';
 
 /**
-| Class Seeds. Things that can grow on this twig.
+| Seeds. Things that can grow on this twig.
 */
-Para.prototype.cSeeds = {
+Para.prototype.seeds = {
 	'String' : true,
 };
 
@@ -678,6 +665,8 @@ woods = {
 	Space        : Space,
 	Rect         : Rect,
 	Point        : Point,
+
+	setParents   : false,
 };
 
 if (typeof(window) === 'undefined') {

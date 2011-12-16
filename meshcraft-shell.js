@@ -54,6 +54,12 @@ var Point         = fabric.Point;
 var Rect          = fabric.Rect;
 var RoundRect     = fabric.RoundRect;
 
+
+/**
+| Configures meshcraft-woods.
+*/
+woods.setParents = true;
+
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .---.     .  .
  \___  ,-. |- |- . ,-. ,-. ,-.
@@ -1659,17 +1665,10 @@ function Nexus(master, parent) {
 subclass(Nexus, woods.Nexus);
 
 /**
-| Class Seeds. Things that can grow on this twig.
+| Seeds. Things that can grow on this twig.
 */
-Nexus.prototype.cSeeds = {
+Nexus.prototype.seeds = {
 	'Space' : Space,
-}
-
-/**
-| Type Seeds. Things that can be a master for new grows on this twig.
-*/
-Nexus.prototype.tSeeds = {
-	'space' : Space,
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1705,9 +1704,9 @@ function Space(master, parent) {
 subclass(Space, woods.Space);
 
 /**
-| Class Seeds. Things that can grow on this twig.
+| Seeds. Things that can grow on this twig.
 */
-Space.prototype.cSeeds = {
+Space.prototype.seeds = {
     'ItemCopse' : ItemCopse,
     'ArcAlley'  : woods.ArcAlley,
 }
@@ -2403,20 +2402,11 @@ function ItemCopse(master, parent) {
 subclass(ItemCopse, woods.ItemCopse);
 
 /**
-| Class Seeds. Things that can grow on this twig.
+| Seeds. Things that can grow on this twig.
 */
-ItemCopse.prototype.cSeeds = {
+ItemCopse.prototype.seeds = {
     'Note' : Note,
 };
-
-/**
-| Type Seeds. Things that can be a master for new grows on this twig.
-*/
-ItemCopse.prototype.tSeeds = {
-    'note' : Note,
-};
-
-
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,--,--'                    .
@@ -2534,7 +2524,6 @@ Object.defineProperty(Textnode.prototype, 'text', {
 function Para(master, parent) {
 	debug('NEW iPARA', master, parent.constructor.name);
 	woods.Para.call(this, master);
-	this.parent = parent;
 
 	this._fabric = new fabric.Fabric(0 ,0);
 	this._fabricUp2d8 = false; // fabric up-to-date
@@ -2555,7 +2544,7 @@ Para.prototype._flow = function() {
 	var fw = this._flowWidth;
 	// the width really used
 	var width = 0;
-	var doca = this.anchestor(DocAlley);
+	var doca = this.getAnchestor('DocAlley');
 	var fontsize = doca.fontsize;
 
 	var x = 0;
@@ -2636,8 +2625,8 @@ Para.prototype.getWidth = function() {
 */
 Para.prototype.getHeight = function() {
 	this._flow();
-	var doca = this.anchestor(DocAlley);
-	return this._softHeight + R(dtree.fontsize * settings.bottombox);
+	var doca = this.getAnchestor('DocAlley');
+	return this._softHeight + R(doca.fontsize * settings.bottombox);
 }
 
 /**
@@ -2668,7 +2657,7 @@ Para.prototype.getFabric = function() {
 	this._flow();
 
 	// TODO: work out exact height for text below baseline
-	var doca = this.anchestor(DocAlley);
+	var doca = this.getAnchestor('DocAlley');
 	f.attune(this);
 	f.fontStyle(doca.getFont(), 'black', 'start', 'alphabetic');
 
@@ -3213,18 +3202,11 @@ function DocAlley(master, parent) {
 subclass(DocAlley, woods.DocAlley);
 
 /**
-| Class Seeds. Things that can grow on this twig.
+| Seeds. Things that can grow on this twig.
 */
-DocAlley.prototype.cSeeds = {
+DocAlley.prototype.seeds = {
     'Para'    : Para,
 };
-
-/**
-| Type Seeds. Things that can be a master for new grows on this twig.
-*/
-DocAlley.prototype.tSeeds = {
-    'para'    : Para,
-}
 
 /**
 | Draws the document alley on a fabric.
@@ -3308,9 +3290,9 @@ function Note(master, parent) {
 subclass(Note, {Note: woods.Note, Item: Item});
 
 /**
-| Class Seeds. Things that can grow on this twig.
+| Seeds. Things that can grow on this twig.
 */
-Note.prototype.cSeeds = {
+Note.prototype.seeds = {
 	'DocAlley'  : DocAlley,
 }
 
@@ -4172,10 +4154,10 @@ function MeshIO() {
 	var asw = this.mm.alter(0,
 		new jools.Signature({
 	 	  val: {
-		    type: 'space',
+		    type: 'Space',
 		    items: {
 		      '0' : {
-		        type: 'note',
+		        type: 'Note',
 		        zone: {
 		          pnw : { 'x': 100, 'y': 100 },
 		          pse : { 'x': 300, 'y': 200 },
@@ -4184,16 +4166,16 @@ function MeshIO() {
 		          //fontsize : 13, TODO
 		          alley : [
 		            {
-		              type:  'para',
+		              type: 'Para',
 		              text: 'If you can dream---and not make dreams your master;',
 		            }, {
-	                  type: 'para',
+	                  type: 'Para',
 	                  text: 'If you can think---and not make thoughts your aim,',
 	                }, {
-		              type:  'para',
+		              type: 'Para',
 		              text: 'If you can meet with Triumph and Disaster',
 	                }, {
-		              type: 'para',
+		              type: 'Para',
 		              text: 'And treat those two impostors just the same',
 		            },
 		          ],
