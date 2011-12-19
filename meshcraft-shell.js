@@ -722,14 +722,29 @@ Selection.prototype.innerText = function() {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ++ Action ++
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ An action in the making.
+
+ This overlays repository data, so for example a move is not transmitted
+ with every pixel changed but when the the object is released.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/**
+| Constructor.
+*/
+function Action(item) {
+	this.item = item;
+}
+
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .-,--.   .   .
  `\__  ,-| . |- ,-. ,-.
   /    | | | |  | | |
  '`--' `-^ ' `' `-' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
  todo, what exactly belongs to this?
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /**
 | Constructor.
@@ -2556,7 +2571,6 @@ Para.prototype._flow = function() {
 
 	//for(var node = this.first; node; node = node.next) { TODO
 	var t = this.get('text');
-	var pchunk = 0;
 
 	//var reg = !dtree.pre ? (/(\s*\S+)\s?(\s*)/g) : (/(.+)()$/g);
 	//var reg = !dtree.pre ? (/(\s*\S+|\s+$)\s?(\s*)/g) : (/(.+)()$/g); TODO
@@ -2582,12 +2596,12 @@ Para.prototype._flow = function() {
 				debug('HORIZONTAL OVERFLOW');
 			}
 		}
-		pinfo[pline].a[pchunk++] = {
+		pinfo[pline].a.push({
 			x: x,
 			w: w,
 			offset: ca.index,
 			text: text,
-		};
+		});;
 		x += w + space;
 		start = false;
 	}
@@ -2670,6 +2684,7 @@ Para.prototype.getFabric = function() {
 		var pl = pinfo[il];
 		for(var ic = 0, plen = pl.a.length; ic < plen; ic++) {
 			var pc = pl.a[ic];
+			debug('PC', pc);
 			f.fillText(pc.text, pc.x, pl.y);
 		}
 	}
@@ -3252,7 +3267,7 @@ Object.defineProperty(DocAlley.prototype, 'flowWidth', {
 	set: function(fw) {
 		if (this._flowWidth == fw) return;
 		this._flowWidth = fw;
-		this.forEachNumber(this, function(para, k) {
+		this.forEachNumber(function(para, k) {
 			para.flowWidth = fw;
 		}),
 		this._cacheWidth  = null; // TODO used? // TODO use a rect.
