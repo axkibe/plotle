@@ -170,7 +170,7 @@ Stem.prototype.matches = function(master) {
 Stem.prototype.getAnchestor = function(type) {
 	if (!woods.setParents) throw new Error('getAnchestor not avaible without setParents');
 	var n = this;
-	while (n && n.type !== type) n = n.parent;
+	while (n && n.type !== type) { n = n.parent; }
 	if (!n) throw new Error('anchestor not there: '+type);
 	return n;
 }
@@ -346,8 +346,8 @@ function Space(master, parent) {
 
 	Stem.call(this, {
 //			type  : 'Space', TODO
-			items : new this.seeds.ItemCopse(master && master.items),
-			z     : new this.seeds.ArcAlley (master && master.z),
+			items : new this.seeds.ItemCopse(master && master.items, this),
+			z     : new this.seeds.ArcAlley (master && master.z,     this),
 		}, null, parent);
 	this.items = this._twigs.items;
 	this.z     = this._twigs.z;
@@ -418,7 +418,7 @@ function Note(master, parent) {
 
 	Stem.call(this, {
 			type     : 'note',
-			doc      : new this.seeds.DocAlley(master && master.doc),
+			doc      : new this.seeds.DocAlley(master && master.doc, this),
 			zone     : new Rect(master.zone),
 		}, null, parent);
 	this.doc  = this._twigs.doc;

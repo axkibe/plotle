@@ -2522,8 +2522,7 @@ Object.defineProperty(Textnode.prototype, 'text', {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 function Para(master, parent) {
-	debug('NEW iPARA', master, parent.constructor.name);
-	woods.Para.call(this, master);
+	woods.Para.call(this, master, parent);
 
 	this._fabric = new fabric.Fabric(0 ,0);
 	this._fabricUp2d8 = false; // fabric up-to-date
@@ -2542,6 +2541,7 @@ Para.prototype._flow = function() {
 	// builds position informations.
 	var pinfo = this._pinfo = [];
 	var fw = this._flowWidth;
+	debug('FLOW-WITH', fw);
 	// the width really used
 	var width = 0;
 	var doca = this.getAnchestor('DocAlley');
@@ -2582,7 +2582,7 @@ Para.prototype._flow = function() {
 				debug('HORIZONTAL OVERFLOW');
 			}
 		}
-		pinfo[pline][pchunk++] = {
+		pinfo[pline].a[pchunk++] = {
 			x: x,
 			w: w,
 			offset: ca.index,
@@ -2615,36 +2615,39 @@ Para.prototype.getSoftHeight = function() {
 /**
 | Returns the width the para really uses.
 */
-Para.prototype.getWidth = function() {
-	this._flow();
-	return this._width;
-}
+Object.defineProperty(Para.prototype, 'width', {
+	get: function() {
+		this._flow();
+		return this._width;
+	},
+});
 
 /**
 | Returns the computed height of the paragraph.
 */
-Para.prototype.getHeight = function() {
-	this._flow();
-	var doca = this.getAnchestor('DocAlley');
-	return this._softHeight + R(doca.fontsize * settings.bottombox);
-}
+Object.defineProperty(Para.prototype, 'height', {
+	get: function() {
+		this._flow();
+		var doca = this.getAnchestor('DocAlley');
+		return this._softHeight + R(doca.fontsize * settings.bottombox);
+	},
+});
+
 
 /**
 | The width a para should have.
 */
-Para.prototype.getFlowWidth = function() {
-	return this._flowWidth;
-}
-
-/**
-| Sets the width a para should have.
-*/
-Para.prototype.setFlowWidth = function(fw) {
-	if (this._flowWidth === fw) return;
-	this._flowWidth = fw;
-	this._flowUp2D8 = false;
-	this._farbicUp2D8 = false;
-}
+Object.defineProperty(Para.prototype, 'flowWidth', {
+	get : function() {
+		return this._flowWidth;
+	},
+	set : function(fw) {
+		if (this._flowWidth === fw) return;
+		this._flowWidth = fw;
+		this._flowUp2D8 = false;
+		this._farbicUp2D8 = false;
+	}
+});
 
 /**
 | Draws the paragraph in its cache and returns it.
@@ -2909,22 +2912,6 @@ Object.defineProperty(DTree.prototype, 'fontsize', {
 });
 */
 
-/**
-* Gets/Sets the flowWidth.
-*/
-/*
-Object.defineProperty(DTree.prototype, 'flowWidth', {
-	get: function() { return this._flowWidth; },
-	set: function(fw) {
-		if (this._flowWidth == fw) return;
-		this._flowWidth = fw;
-		for(var para = this.first; para; para = para.next) {
-			para.flowWidth = fw;
-		}
-		this._cacheWidth  = null;
-		this._cacheHeight = null;
-	}
-});*/
 
 /**
 | Something changed.
@@ -3206,6 +3193,7 @@ subclass(DocAlley, woods.DocAlley);
 */
 DocAlley.prototype.seeds = {
     'Para'    : Para,
+	'Number'  : true,
 };
 
 /**
@@ -3234,7 +3222,6 @@ DocAlley.prototype.draw = function(fab, select, imargin, scrollp) {
 	var y = imargin.n;
 
 	// draws tha paragraphs
-	debug('TWIG', this._twigs.alley[0]);
 
 	this.forEachNumber(function(para, k) {
 		debug('FENP', para.constructor.name, k.constructor.name);
@@ -3244,7 +3231,7 @@ DocAlley.prototype.draw = function(fab, select, imargin, scrollp) {
 		if (pf.width > 0 && pf.height > 0) {
 			fab.drawImage(pf, imargin.w, y - scrollp.y);
 		}
-		y += para.softHeight + paraSep;
+		y += para.getSoftHeight() + paraSep;
 	});
 }
 
@@ -3254,6 +3241,24 @@ DocAlley.prototype.draw = function(fab, select, imargin, scrollp) {
 DocAlley.prototype.getFont = function() {
 	return this.fontsize + 'px ' + settings.defaultFont;
 }
+
+/**
+* Gets/Sets the flowWidth.
+*/
+Object.defineProperty(DocAlley.prototype, 'flowWidth', {
+	get: function() {
+		return this._flowWidth;
+	},
+	set: function(fw) {
+		if (this._flowWidth == fw) return;
+		this._flowWidth = fw;
+		this.forEachNumber(this, function(para, k) {
+			para.flowWidth = fw;
+		}),
+		this._cacheWidth  = null; // TODO used? // TODO use a rect.
+		this._cacheHeight = null; // TODO used?
+	}
+});
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,-,-.       .
@@ -3521,12 +3526,10 @@ Note.prototype.setScrollbar = function(pos) {
 | selection: current selection to highlight.
 */
 Note.prototype.draw = function(fab, selection) {
-	debug('NOTE::DRAW');
 	var f  = this._fabric;
 
 	// buffer hit?
 	if (this._fabricUp2D8) { fab.drawImage(f, this.zone.pnw); return; }
-	debug('NOTE::DRAW NEW FAB');
 
 	// if not fill the buffer
 	// resize the canvas
@@ -3534,12 +3537,11 @@ Note.prototype.draw = function(fab, selection) {
 	f.fill(settings.note.style.fill, this.silhoutte, 'path');
 
 	var doca = this.doc;
-	debug('NOTE::DOCA', doca.constructor.name, doca);
+	doca.flowWidth = this.iwidth;
 
 	// calculates if a scrollbar is needed
 	/* TODO XX
 	var sbary = this.scrollbarY;
-	dtree.flowWidth = this.iwidth;
 
 	if (!sbary.visible && dtree.height > this.iheight) {
 		// doesn't use a scrollbar but should
@@ -4163,7 +4165,8 @@ function MeshIO() {
 		          pse : { 'x': 300, 'y': 200 },
 		        },
 		        doc: {
-		          //fontsize : 13, TODO
+		          fontsize : 13,
+
 		          alley : [
 		            {
 		              type: 'Para',
@@ -4212,7 +4215,6 @@ MeshIO.prototype.newNote = function(zone) {
 		})
 	);
 
-	debug('NEWNOTE', asw);
 	var apath = asw.alts.trg.path;
 	if (!(apath instanceof jools.Path)) throw new Error('Cannot reget new Note');
 
@@ -4223,7 +4225,6 @@ MeshIO.prototype.newNote = function(zone) {
 			path: new jools.Path([System.cSpaceKey, 'z', '$end']),
 		})
 	);
-	debug('NEWNOTE2', asw);
 }
 
 /*
