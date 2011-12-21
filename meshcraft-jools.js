@@ -13,7 +13,7 @@ var config;
 /**
 | Exports
 */
-var jools;
+var Jools;
 
 /**
 | Capsule
@@ -46,7 +46,7 @@ function isInteger(o) { return typeof(o) === 'number' && Math.floor(o) === o; }
 | Returns a rejection error
 */
 function reject(message) {
-	if (jools.devel) {
+	if (Jools.devel) {
 		throw new Error(message); // in devel mode any failure is fatal.
 	}
 	log('reject', 'reject', message);
@@ -361,7 +361,7 @@ Path.prototype.toJSON = function() {
 /**
 | Exports
 */
-jools = {
+Jools = {
 	Path          : Path,
 	Signature     : Signature,
 
@@ -381,7 +381,7 @@ jools = {
 };
 
 if (typeof(window) === 'undefined') {
-	module.exports = jools;
+	module.exports = Jools;
 }
 
 })();

@@ -30,12 +30,12 @@
 /**
 | Imports
 */
-var jools;
+var Jools;
 
 /**
 | Exports
 */
-var meshmashine;
+var MeshMashine;
 
 /**
 | Capsule
@@ -48,22 +48,22 @@ var meshmashine;
 | Node includes.
 */
 if (typeof(window) === 'undefined') {
-	jools = require('./meshcraft-jools');
+	Jools = require('./meshcraft-jools');
 }
 
-var Path       = jools.Path;
-var Signature  = jools.Signature;
+var Path       = Jools.Path;
+var Signature  = Jools.Signature;
 
-var debug      = jools.debug;
-var log        = jools.log;
-var clone      = jools.clone;
-var deepFreeze = jools.deepFreeze;
-var is         = jools.is;
-var isnon      = jools.isnon;
-var isString   = jools.isString;
-var isInteger  = jools.isInteger;
-var fixate     = jools.fixate;
-var reject     = jools.reject;
+var debug      = Jools.debug;
+var log        = Jools.log;
+var clone      = Jools.clone;
+var deepFreeze = Jools.deepFreeze;
+var is         = Jools.is;
+var isnon      = Jools.isnon;
+var isString   = Jools.isString;
+var isInteger  = Jools.isInteger;
+var fixate     = Jools.fixate;
+var reject     = Jools.reject;
 
 
 function fail(args, aoffset) {
@@ -129,7 +129,7 @@ Alternation.prototype.type = function(backward) {
 	if (is(src.val) && !is(trg.at1)) return 'set';
 	if (is(src.val) &&  is(trg.at1)) return 'insert';
 	if (is(src.at1) &&  is(src.at2) && !is(trg.at1)) return 'remove';
-	if (jools.prissy) {
+	if (Jools.prissy) {
 		log('fail', this);
 		throw new Error('invalid type');
 	}
@@ -288,7 +288,7 @@ function alter(meshtree, alternation, backward) {
 /**
 | Constructor.
 */
-function MeshMashine(RootType) {
+MeshMashine = function(RootType) {
 	this.repository = new RootType();
 	this.history    = [];
 }
@@ -595,15 +595,8 @@ MeshMashine.prototype.update = function(time) {
 	return {ok: true, time: this.history.length, update: update };
 }
 
-/**
-| export
-*/
-meshmashine = {
-	MeshMashine     : MeshMashine,
-}
-
 if (typeof(window) === 'undefined') {
-	module.exports = meshmashine;
+	module.exports = MeshMashine;
 }
 
 }());

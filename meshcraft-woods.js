@@ -8,13 +8,13 @@
 /**
 | Imports
 */
-var jools;
-var fabric;
+var Jools;
+var Fabric;
 
 /**
 | Exports
 */
-var woods;
+var Woods;
 
 /**
 | Capsule
@@ -27,21 +27,21 @@ var woods;
 | Running in node or browser?
 */
 if (typeof(window) === 'undefined') {
-	jools  = require('./meshcraft-jools');
-	fabric = require('./meshcraft-fabric');
+	Jools  = require('./meshcraft-jools');
+	Fabric = require('./meshcraft-fabric');
 }
 
-var Path      = jools.Path;
-var Signature = jools.Signature;
+var Path      = Jools.Path;
+var Signature = Jools.Signature;
 
-var debug     = jools.debug;
-var is        = jools.is;
-var isnon     = jools.isnon;
-var isString  = jools.isString;
-var isInteger = jools.isInteger;
-var log       = jools.log;
-var reject    = jools.reject;
-var subclass  = jools.subclass;
+var debug     = Jools.debug;
+var is        = Jools.is;
+var isnon     = Jools.isnon;
+var isString  = Jools.isString;
+var isInteger = Jools.isInteger;
+var log       = Jools.log;
+var reject    = Jools.reject;
+var subclass  = Jools.subclass;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++ Stem ++
@@ -50,7 +50,7 @@ var subclass  = jools.subclass;
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Stem(twigs, master, parent) {
 	if (master && master._twigs) master = master._twigs;
-	if (woods.setParents) this.parent = parent;
+	if (Woods.setParents) this.parent = parent;
 	this._twigs = twigs;
 	for (var k in master) {
 		if (k === 'type' || k === 'alley') continue;
@@ -168,7 +168,7 @@ Stem.prototype.matches = function(master) {
 | parent variables have been set
 */
 Stem.prototype.getAnchestor = function(type) {
-	if (!woods.setParents) throw new Error('getAnchestor not avaible without setParents');
+	if (!Woods.setParents) throw new Error('getAnchestor not avaible without setParents');
 	var n = this;
 	while (n && n.type !== type) { n = n.parent; }
 	if (!n) throw new Error('anchestor not there: '+type);
@@ -540,12 +540,12 @@ Para.prototype.seeds = {
  A rectangle inherits fabric.Rect and is immutable
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Rect(master) {
-	fabric.Rect.call(this,
+	Fabric.Rect.call(this,
 		new Point(master.pnw),
 		new Point(master.pse)
 	);
 }
-subclass(Rect, fabric.Rect);
+subclass(Rect, Fabric.Rect);
 
 Rect.prototype.set = function(path, val, a0, al, oplace) {
 	if (!oplace) throw new Error('Rect can only be set out of place');
@@ -600,12 +600,12 @@ Rect.prototype.matches = function(master) {
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++ Point ++
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- A Points inherits fabric.Point and is immutable
+ A Points inherits Fabric.Point and is immutable
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Point(master) {
-	fabric.Point.call(this, master.x, master.y);
+	Fabric.Point.call(this, master.x, master.y);
 }
-subclass(Point, fabric.Point);
+subclass(Point, Fabric.Point);
 
 Point.prototype.set = function(path, val, a0, al, oplace) {
 	if (!oplace) throw new Error('Point can only be set out of place');
@@ -654,7 +654,7 @@ Point.prototype.matches = function(master) {
  Module Export
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-woods = {
+Woods = {
 	ArcAlley     : ArcAlley,
 	DocAlley     : DocAlley,
 	GenericCopse : GenericCopse,
@@ -670,7 +670,7 @@ woods = {
 };
 
 if (typeof(window) === 'undefined') {
-	module.exports = woods;
+	module.exports = Woods;
 }
 
 })();

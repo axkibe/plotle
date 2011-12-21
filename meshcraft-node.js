@@ -14,10 +14,10 @@
                                        '___)   '___)                      `~~'  `"   |_|      `--´
 
 
-                                       ,-,-.         .
-                                       ` | |   ,-. ,-| ,-.
-                                         | |-. | | | | |-'
-                                        ,' `-' `-' `-^ `-'
+                                      ,-,-.         .
+                                      ` | |   ,-. ,-| ,-.
+                                        | |-. | | | | |-'
+                                       ,' `-' `-' `-^ `-'
 
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
@@ -34,12 +34,11 @@ var url  = require('url');
 var fs   = require('fs');
 
 var config = require('./config');
-var jools  = require('./meshcraft-jools');
-var woods  = require('./meshcraft-woods');
-var log    = jools.log;
+var Jools  = require('./meshcraft-jools');
+var Woods  = require('./meshcraft-woods');
+var MeshMashine = require('./meshmashine');
 
-var woods = require('./meshcraft-woods');
-var meshmashine = require('./meshmashine');
+var log    = Jools.log;
 
 /**
 | Loads the configuration file
@@ -67,7 +66,7 @@ try {
 var debug = config.debug === true || (config.debug % 4 - config.debug % 2) === 2;
 
 //var mm = new meshmashine.MeshMashine(woods.GenericCopse, null);
-var mm = new meshmashine.MeshMashine(woods.Nexus, null);
+var mm = new MeshMashine(Woods.Nexus, null);
 
 /**
 | Files served.
@@ -129,15 +128,15 @@ var mmAjax = function(req, red, res) {
 		try {
 			switch (cmd.cmd) {
 			case 'alter':
-				var src = new jools.Signature(cmd.src);
-				var trg = new jools.Signature(cmd.trg);
+				var src = new Jools.Signature(cmd.src);
+				var trg = new Jools.Signature(cmd.trg);
 				log('debug', 'cmd', cmd);
 				log('debug', 'src', src);
 				log('debug', 'trg', trg);
 				asw = mm.alter(cmd.time, src, trg);
 				break;
 			case 'get':
-				var path = new jools.Path(cmd.path);
+				var path = new Jools.Path(cmd.path);
 				asw = mm.get(cmd.time, path);
 				break;
 			case 'now':

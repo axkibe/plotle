@@ -30,12 +30,12 @@
 /**
 | Imports
 */
-var jools;
+var Jools;
 
 /**
 | Exports
 */
-var fabric;
+var Fabric;
 
 /**
 | Capsule
@@ -45,20 +45,16 @@ var fabric;
 
 'use strict';
 
-/**
-| Running in node or browser?
-*/
-var inNode = true; try { module } catch (e) { inNode = false; }
-
-if (inNode) {
-    jools = require('./meshcraft-jools');
+if (typeof(window) === 'undefined') {
+    Jools = require('./meshcraft-jools');
 }
 
-var log          = jools.log;
-var fixate       = jools.fixate;
-var fixateNoEnum = jools.fixate;
-var reject       = jools.reject;
-var subclass     = jools.subclass;
+var debug        = Jools.debug;
+var log          = Jools.log;
+var fixate       = Jools.fixate;
+var fixateNoEnum = Jools.fixate;
+var reject       = Jools.reject;
+var subclass     = Jools.subclass;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
@@ -72,7 +68,7 @@ var subclass     = jools.subclass;
 | Fabric(canvas)  -or-    encloses an existing HTML5 canvas
 | Fabric(width, height)   creates a new Canvas2D and sets its size;
 */
-function Fabric(a1, a2) {
+Fabric = function(a1, a2) {
 	switch (typeof(a1)) {
 	case 'undefined' :
 		this._canvas = document.createElement('canvas');
@@ -468,6 +464,9 @@ Fabric.prototype.edge = function(style, shape, path, a1, a2, a3, a4) {
 */
 Fabric.prototype.paint = function(fillStyle, edgeStyle, shape, path, a1, a2, a3, a4) {
 	var cx = this._cx;
+	if (!shape) {
+		debug('NOT SHAPE');
+	}
 	shape[path](this, 0, false, a1, a2, a3, a4);
 	cx.fillStyle = this._colorStyle(fillStyle, shape);
 	cx.fill();
@@ -1488,30 +1487,24 @@ Line.prototype.isNear = function(p, dis) {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-fabric = {
-	Fabric        : Fabric,
-	Hexagon       : Hexagon,
-	HexagonFlower : HexagonFlower,
-	HexagonSlice  : HexagonSlice,
-	Line          : Line,
-	Margin        : Margin,
-	Measure       : Measure,
-	Point         : Point,
-	Rect          : Rect,
-	RoundRect     : RoundRect,
+Fabric.Hexagon       = Hexagon;
+Fabric.HexagonFlower = HexagonFlower;
+Fabric.HexagonSlice  = HexagonSlice;
+Fabric.Line          = Line;
+Fabric.Margin        = Margin;
+Fabric.Measure       = Measure;
+Fabric.Point         = Point;
+Fabric.Rect          = Rect;
+Fabric.RoundRect     = RoundRect;
 
-	cos30         : cos30,
-	ensureInteger : ensureInteger,
-	half          : half,
-	opposite      : opposite,
-	tan30         : tan30,
-};
+Fabric.cos30         = cos30;
+Fabric.ensureInteger = ensureInteger;
+Fabric.half          = half;
+Fabric.opposite      = opposite;
+Fabric.tan30         = tan30;
 
-try {
-	module.exports = fabric;
-	// node
-} catch(e) {
-	// browser
+if (typeof(window) === 'undefined') {
+	module.exports = Fabric;
 }
 
 })();
