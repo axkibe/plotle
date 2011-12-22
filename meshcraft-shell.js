@@ -740,8 +740,8 @@ function Action(type, item, start) {
 /**
 | Action enums
 */
-Action.PAN  = 1; // panning the background
-Action.DRAG = 2; // draggine one item
+Action.PAN      = 1; // panning the background
+Action.ITEMDRAG = 2; // draggine one item
 
 /**
 |
@@ -1749,7 +1749,7 @@ Space.prototype.redraw = function() {
 		var it = this.items.get(this.z.get(zi));
 		it.draw(this.fabric, this.action, this.selection);
 	}
-	if (this.focus) this.focus.drawHandles(this.fabric);
+	if (this.focus) this.focus.drawHandles(this.fabric, this.action);
 
 	var ia = this.iaction;
 	switch(ia.act) {
@@ -1905,10 +1905,10 @@ Space.prototype.actionScrollY = function(item, startY, scrollbar) {
 	ia.ssy  = scrollbar.pos;
 }
 
-/* starts dragging an item */
+// starts dragging an item  TODO rename
 Space.prototype.actionDrag = function(item, start) {
 	if (this.action) throw new Error('action not null on action');
-	this.action = new Action(Action.DRAG, item, start);
+	this.action = new Action(Action.ITEMDRAG, item, start);
 	System.setCursor('move');
 }
 
@@ -1948,7 +1948,7 @@ Space.prototype.dragstart = function(p, shift, ctrl) {
 	var tfx = this._transfix(TXE.DRAGSTART, pp, shift, ctrl);
 	if (!(tfx & TXR.HIT)) {
 		// panning
-		this.action = new Action(Action.PAN, null, pp);
+		this.action = new Action(Action.PAN, null, p);
 		System.setCursor('crosshair');
 		return;
 	}
@@ -1989,11 +1989,11 @@ Space.prototype.dragstop = function(p, shift, ctrl) {
 	var editor = System.editor;
 	var redraw = false;
 	if (!this.action) throw new Error('Dragstop without action?');
-	switch (this.action.act) {
-	case ACT.IDRAG :
-		iaction.item.moveto(pp.sub(iaction.sp));
-		System.repository.updateItem(iaction.item);
-		iaction.item = null;
+	switch (this.action.type) {
+	case Action.ITEMDRAG :
+		//action.item.moveto(pp.sub(iaction.sp)); TODO XXX
+		//System.repository.updateItem(iaction.item);
+		
 		System.setCursor('default');
 		redraw = true;
 		break;
@@ -2036,8 +2036,8 @@ Space.prototype.dragmove = function(p, shift, ctrl) {
 		// System.repository.savePan(this.pan); TODO!
 		this.redraw();
 		return;
-	case Action.DRAG :
-		action.move = pp;
+	case Action.ITEMDRAG :
+		action.move = p;
 		this.redraw();
 		return;
 	case ACT.IRESIZE :
@@ -2600,7 +2600,7 @@ Para.prototype._flow = function() {
 				start = true;
 			} else {
 				// horizontal overflow
-				debug('HORIZONTAL OVERFLOW');
+				console.log('HORIZONTAL OVERFLOW'); // TODO
 			}
 		}
 		pinfo[pline].a.push({
@@ -2992,11 +2992,18 @@ function Item() {
 /**
 | Return the hexagon slice that is the handle
 */
-Item.prototype.getH6Slice = function() {
+Item.prototype.getH6Slice = function(action) {
 	var hzone = this.handlezone;
-	if (this._h6slice && this._h6slice.psw.eq(hzone.pnw)) return this._h6slice;
+
+	// TODO move to some common place?
+	var pnw = hzone.pnw;
+	if (action && action.item === this && action.type === Action.ITEMDRAG && action.move) {
+		pnw = pnw.add(action.move.x - action.start.x, action.move.y - action.start.y);
+	}
+
+	if (this._h6slice && this._h6slice.psw.eq(pnw)) return this._h6slice;
 	return this._h6slice = new HexagonSlice(
-		hzone.pnw, settings.itemmenu.innerRadius, settings.itemmenu.slice.height);
+		pnw, settings.itemmenu.innerRadius, settings.itemmenu.slice.height);
 };
 
 /**
@@ -3051,18 +3058,28 @@ Item.prototype.checkItemCompass = function(p) {
 /**
 | Paths the resize handles.
 */
-Item.prototype.pathResizeHandles = function(fabric, border, edge) {
+Item.prototype.pathResizeHandles = function(fabric, border, edge, action) {
 	if (border !== 0) throw new Error('borders unsupported for handles');
 	var ha = this.handles;
 	var zone = this.handlezone;
 	var ds = settings.handle.distance;
 	var hs = settings.handle.size;
 	var hs2 = half(hs);
+	
+	var pnw = zone.pnw;
+	if (action && action.item === this && action.type === Action.ITEMDRAG && action.move) {
+		pnw = pnw.add(action.move.x - action.start.x, action.move.y - action.start.y);
+	}
+	
+	var pse = zone.pse;
+	if (action && action.item === this && action.type === Action.ITEMDRAG && action.move) {
+		pse = pse.add(action.move.x - action.start.x, action.move.y - action.start.y);
+	}
 
-	var x1 = zone.pnw.x - ds;
-	var y1 = zone.pnw.y - ds;
-	var x2 = zone.pse.x + ds;
-	var y2 = zone.pse.y + ds;
+	var x1 = pnw.x - ds;
+	var y1 = pnw.y - ds;
+	var x2 = pse.x + ds;
+	var y2 = pse.y + ds;
 	var xm = half(x1 + x2);
 	var ym = half(y1 + y2);
 
@@ -3108,12 +3125,13 @@ Item.prototype.pathResizeHandles = function(fabric, border, edge) {
 /**
 | Draws the handles of an item (resize, itemmenu)
 */
-Item.prototype.drawHandles = function(fabric) {
+Item.prototype.drawHandles = function(fabric, action) {
 	// draws the resize handles
-	fabric.edge(settings.handle.style.edge, this, 'pathResizeHandles');
+	fabric.edge(settings.handle.style.edge, this, 'pathResizeHandles', action);
+
 	// draws item menu handler
 	var sstyle = settings.itemmenu.slice.style;
-	fabric.paint(sstyle.fill, sstyle.edge, this.getH6Slice(), 'path');
+	fabric.paint(sstyle.fill, sstyle.edge, this.getH6Slice(action), 'path');
 }
 
 /**
@@ -3268,7 +3286,6 @@ Object.defineProperty(DocAlley.prototype, 'flowWidth', {
 	},
 
 	set: function(fw) {
-		debug('SET FLOWWIDTH');
 		if (this._flowWidth == fw) return;
 		this._flowWidth = fw;
 		this.forEachNumber(function(para, k) {
@@ -3400,7 +3417,7 @@ Note.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 			return txr | TXR.REDRAW;
 		}
 		if (z > 0) {
-			System.repository.moveToTop(z);
+			// System.repository.moveToTop(z); TODO XXX
 			txr |= TXR.REDRAW; // todo full redraw
 		}
 		if (space.focus != this) {
@@ -3413,7 +3430,7 @@ Note.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 		if (sbary.visible && sbary.zone.within(pr)) {
 			space.actionScrollY(this, p.y, this.scrollbarY);
 		} else {
-			space.actionDrag(this, pr);
+			space.actionDrag(this, p);
 		}
 		return txr;
 	case TXE.CLICK :
@@ -3549,51 +3566,52 @@ Note.prototype.draw = function(fabric, action, selection) {
 	var f  = this._fabric;
 
 	// buffer hit?
-	if (this._fabricUp2D8) { fabric.drawImage(f, this.zone.pnw); return; }
+	if (!this._fabricUp2D8) {
 
-	// if not fill the buffer
-	// resize the canvas
-	f.attune(this.zone);
-	f.fill(settings.note.style.fill, this.silhoutte, 'path');
+		// if not fill the buffer
+		// resize the canvas
+		f.attune(this.zone);
+		f.fill(settings.note.style.fill, this.silhoutte, 'path');
 
-	var doca = this.doc;
-	doca.flowWidth = this.iwidth;
+		var doca = this.doc;
+		doca.flowWidth = this.iwidth;
 
-	// calculates if a scrollbar is needed
-	/* TODO XX
-	var sbary = this.scrollbarY;
+		// calculates if a scrollbar is needed
+		/* TODO XX
+		var sbary = this.scrollbarY;
 
-	if (!sbary.visible && dtree.height > this.iheight) {
-		// doesn't use a scrollbar but should
-		sbary.visible = true;
-		dtree.flowWidth = this.iwidth;
-	} else if (sbary.visible && dtree.height <= this.iheight) {
-		// uses a scrollbar but shouldn't
-		sbary.visible = false;
-		dtree.flowWidth = this.iwidth;
+		if (!sbary.visible && dtree.height > this.iheight) {
+			// doesn't use a scrollbar but should
+			sbary.visible = true;
+			dtree.flowWidth = this.iwidth;
+		} else if (sbary.visible && dtree.height <= this.iheight) {
+			// uses a scrollbar but shouldn't
+			sbary.visible = false;
+			dtree.flowWidth = this.iwidth;
+		}
+		*/
+
+		// paints selection and text
+		//dtree.draw(f, selection, this.imargin, sbary.visible ? sbary.pos : 0);
+		doca.draw(f, action, selection, this.imargin, Point.zero); // TODO scrollp
+
+		/*
+		// paints the scrollbar
+		if (sbary.visible) {
+			this.setScrollbar();
+			sbary.paint(f);
+		}
+		*/
+
+		// paints the border
+		f.edge(settings.note.style.edge, this.silhoutte, 'path');
+
+		this._fabricUp2D8 = true;
 	}
-	*/
 
-	// paints selection and text
-	//dtree.draw(f, selection, this.imargin, sbary.visible ? sbary.pos : 0);
-	doca.draw(f, action, selection, this.imargin, Point.zero); // TODO scrollp
-
-	/*
-	// paints the scrollbar
-	if (sbary.visible) {
-		this.setScrollbar();
-		sbary.paint(f);
-	}
-	*/
-
-	// paints the border
-	f.edge(settings.note.style.edge, this.silhoutte, 'path');
-
-	this._fabricUp2D8 = true;
 	var pnw = this.zone.pnw;
-
-	if (action && action.item === this && action.type === Action.DRAG) {
-		pnw = pnw.add(action.start.x - move.x, action.start.y - move.y);
+	if (action && action.item === this && action.type === Action.ITEMDRAG && action.move) {
+		pnw = pnw.add(action.move.x - action.start.x, action.move.y - action.start.y);
 	}
 
 	fabric.drawImage(f, pnw);
@@ -4210,10 +4228,27 @@ function MeshIO() {
 		          ],
 		        },
 		      },
+		      '1' : {
+		        type: 'Note',
+		        zone: {
+		          pnw : { 'x': 450, 'y': 120 },
+		          pse : { 'x': 650, 'y': 250 },
+		        },
+		        doc: {
+		          fontsize : 13,
+
+		          alley : [
+		            {
+		              type: 'Para',
+		              text: 'Muhkuh',
+		            },
+		          ],
+		        },
+			  },
 		    },
 			z : {
 			  alley : [
-			    0,
+			    0, 1,
 			  ],
 			}
 		  },
