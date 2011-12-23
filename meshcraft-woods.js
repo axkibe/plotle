@@ -53,15 +53,22 @@ function Stem(twigs, master) {
 	this._twigs = twigs;
 	if (Woods.cogging) {
 		this.parent = null;
-		this.key = null;
+		this.key$ = null;
+	}
+	if (Woods.cogging) {
+		for (var k in twigs) {
+			if (k === 'type' || k === 'alley') continue;
+			switch (twigs.constructor) {
+			case String : continue;
+			case Number : continue;
+			}
+			twigs[k].parent = this;
+			twigs[k].key$ = k;
+		}
 	}
 	for (var k in master) {
 		if (k === 'type' || k === 'alley') continue;
-		twigs[k] = this._sprout(master[k], this);
-		if (Woods.cogging) {
-			twigs[k].parent = this;
-			twigs[k].key = k;
-		}
+		twigs[k] = this._sprout(master[k], this, k);
 	}
 }
 
@@ -87,18 +94,14 @@ Stem.prototype.get = function(path, a0, al) {
 Stem.prototype.set = function(path, val, a0, al, oplace) {
 	if (oplace) throw new Error('out of place not yet supported');
 	if (!(path instanceof Path)) { // direct?
-		this._twigs[path] = this._sprout(val, this);
+		this._twigs[path] = this._sprout(val, this, path);
 		return;
 	}
 	a0 = path.fit(a0, false);
 	al = path.fit(al, true);
 	var pa0 = path.get(a0);
 	if (a0 + 1 === al) {
-		var scion = this._twigs[pa0] = this._sprout(val, this);
-		if (Woods.cogging) {
-			scion.parent = this;
-			scion.key = pa0;
-		}
+		this._twigs[pa0] = this._sprout(val, this, pa0);
 	} else {
 		var twig = this._twigs[pa0];
 		if (!twig || !twig.set) throw reject('path goes nowhere');
@@ -109,17 +112,26 @@ Stem.prototype.set = function(path, val, a0, al, oplace) {
 /**
 | Sprouts a new twig.
 */
-Stem.prototype._sprout = function(master) {
+Stem.prototype._sprout = function(master, parent, key$) {
 	if (typeof(master) === 'undefined') return undefined;
 	if (master === null) return null;
 
 	var creator = this.seeds[master.constructor.name];
 	if (creator === true) return master;
-	if (creator) return new creator(master);
-	if (!this.seeds) throw new Error('Cannot sprout (cname): '+master.constructor.name);
-	creator = this.seeds[master.type];
-	if (!creator) throw new Error('Cannot sprout (type): '+master.type);
-	return new creator(master);
+
+	var scion;
+	if (!creator) {
+		if (!this.seeds) throw new Error('Cannot sprout (cname): '+master.constructor.name);
+		creator = this.seeds[master.type];
+		if (!creator) throw new Error('Cannot sprout (type): '+master.type);
+	}
+
+	scion = new creator(master);
+	if (Woods.cogging) {
+		scion.parent = parent;
+		scion.key$   = key$;
+	}
+	return scion;
 }
 
 /**
@@ -199,11 +211,7 @@ function StemAlley(master) {
 		throw new Error('StemAlley master.alley not an Array');
 	}
 	for (var k = 0; k < master.alley.length; k++) {
-		var scion = this._twigs.alley[k] = this._sprout(master.alley[k], this);
-		if (Woods.cogging) {
-			scion.parent = this;
-			scion.key = k;
-		}
+		this._twigs.alley[k] = this._sprout(master.alley[k], this, k);
 	}
 }
 subclass(StemAlley, Stem);
@@ -236,11 +244,11 @@ StemAlley.prototype.get = function(path, a0, al) {
 StemAlley.prototype.set = function(path, val, a0, al, oplace) {
 	if (oplace) throw new Error('out of place not yet supported');
 	if (path.constructor === Number) { // direct alley? TODO switch
-		this._twigs.alley[path] = this._sprout(val, this);
+		this._twigs.alley[path] = this._sprout(val, this, path);
 		return;
 	}
 	if (!(path instanceof Path)) { // direct copse? TODO only strings
-		this._twigs[path] = this._sprout(val, this);
+		this._twigs[path] = this._sprout(val, this, path);
 		return;
 	}
 	a0 = path.fit(a0, false);
@@ -248,11 +256,7 @@ StemAlley.prototype.set = function(path, val, a0, al, oplace) {
 	var pa0 = path.get(a0);
 	if (a0 + 1 === al) {
 		var base = pa0.constructor === Number ? this._twigs.alley : this._twigs;
-		var scion = base[pa0] = this._sprout(val, this);
-		if (Woods.cogging) {
-			scion.parent = this;
-			scion.key = pa0;
-		}
+		base[pa0] = this._sprout(val, this, pa0);
 	} else {
 		var base = pa0.constructor === Number ? this._twigs.alley : this._twigs;
 		var twig = base[pa0];
@@ -364,9 +368,9 @@ function Space(master) {
 	// todo check if master has other keys.
 
 	Stem.call(this, {
-//			type  : 'Space', TODO
-			items : new this.seeds.ItemCopse(master && master.items, this),
-			z     : new this.seeds.ArcAlley (master && master.z,     this),
+			type  : 'Space',
+			items : new this.seeds.ItemCopse(master && master.items),
+			z     : new this.seeds.ArcAlley (master && master.z),
 		}, null);
 	this.items = this._twigs.items;
 	this.z     = this._twigs.z;
@@ -437,7 +441,7 @@ function Note(master) {
 
 	Stem.call(this, {
 			type     : 'note',
-			doc      : new this.seeds.DocAlley(master && master.doc, this),
+			doc      : new this.seeds.DocAlley(master && master.doc),
 			zone     : new Rect(master.zone),
 		}, null);
 	this.doc  = this._twigs.doc;

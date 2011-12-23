@@ -37,9 +37,11 @@ var abs = Math.abs;
 var max = Math.max;
 var min = Math.min;
 
-var subclass = Jools.subclass;
-var log      = Jools.log;
-var debug    = Jools.debug;
+var subclass  = Jools.subclass;
+var log       = Jools.log;
+var debug     = Jools.debug;
+var Path      = Jools.Path;
+var Signature = Jools.Signature;
 
 var cos30         = Fabric.cos30;
 var half          = Fabric.half;
@@ -1987,13 +1989,14 @@ Space.prototype.click = function(p, shift, ctrl) {
 Space.prototype.dragstop = function(p, shift, ctrl) {
 	var pp = p.sub(this.pan);
 	var editor = System.editor;
+	var action = this.action;
 	var redraw = false;
-	if (!this.action) throw new Error('Dragstop without action?');
-	switch (this.action.type) {
+	if (!action) throw new Error('Dragstop without action?');
+	switch (action.type) {
 	case Action.ITEMDRAG :
 		//action.item.moveto(pp.sub(iaction.sp)); TODO XXX
 		//System.repository.updateItem(iaction.item);
-		
+		var path = new Path(action.item);
 		System.setCursor('default');
 		redraw = true;
 		break;
@@ -4194,11 +4197,11 @@ function MeshIO() {
 	this.mm = new MeshMashine(Nexus, null);
 	System.cSpaceKey = 'welcome';
 
-	var spacepath = new Jools.Path([System.cSpaceKey]);
+	var spacepath = new Path([System.cSpaceKey]);
 
 	// for now hand init
 	var asw = this.mm.alter(0,
-		new Jools.Signature({
+		new Signature({
 	 	  val: {
 		    type: 'Space',
 		    items: {
@@ -4252,7 +4255,7 @@ function MeshIO() {
 			  ],
 			}
 		  },
-		}), new Jools.Signature({
+		}), new Signature({
 		  path: spacepath
 		})
 	);
@@ -4265,25 +4268,25 @@ function MeshIO() {
 
 MeshIO.prototype.newNote = function(zone) {
 	var asw = this.mm.alter(-1,
-		new Jools.Signature({
+		new Signature({
 			val: {
 				'type': 'note',
 				'zone': zone,
 				'doc': { alley: [ ] },
 			},
-		}), new Jools.Signature({
-			path: new Jools.Path([System.cSpaceKey, 'items', '$new']),
+		}), new Signature({
+			path: new Path([System.cSpaceKey, 'items', '$new']),
 		})
 	);
 
 	var apath = asw.alts.trg.path;
-	if (!(apath instanceof Jools.Path)) throw new Error('Cannot reget new Note');
+	if (!(apath instanceof Path)) throw new Error('Cannot reget new Note');
 
 	asw = this.mm.alter(-1,
-		new Jools.Signature({
+		new Signature({
 			val: apath.get(-1),
-		}), new Jools.Signature({
-			path: new Jools.Path([System.cSpaceKey, 'z', '$end']),
+		}), new Signature({
+			path: new Path([System.cSpaceKey, 'z', '$end']),
 		})
 	);
 }

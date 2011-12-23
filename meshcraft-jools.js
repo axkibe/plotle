@@ -164,7 +164,11 @@ function log(category) {
 	}
 	for(var i = 1; i < arguments.length; i++) {
 		if (i > 1) a.push(' ');
-		a.push(JSON.stringify(arguments[i], null, config.jspacon ? config.jspacon : null));
+		try {
+			a.push(JSON.stringify(arguments[i], null, config.jspacon ? config.jspacon : null));
+		} catch(e) {
+			console.log('OWWW'); // XXX
+		}
 	}
 	console.log(a.join(''));
 };
@@ -253,7 +257,6 @@ function Path(master) {
 	if (master instanceof Path) {
 		master = master._path;
 	}
-	debug('A');
 
 	if (master instanceof Array) {
 		for (var i = 0, mlen = master.length; i < mlen; i++) {
@@ -266,8 +269,27 @@ function Path(master) {
 			throw reject('Path arcs must be String or Integer');
 		}
 		this._path = master.slice();
+	} else if (master.key$ && master.parent) {
+		var path = [];
+		var len = 0;
+		// count size
+		for(var n = master; n; n = n.parent) {
+			if (n.parent) {
+				path.push(null);
+				len++;
+			}
+		}
+		// reverse fill the path;
+		n = master;
+		for(var i = len; i > 0; i--) {
+			if (n.parent && n.parent.get(n.key$) !== n) {
+				throw new Error('cogging defect');
+			}
+			path[--len] = n.key$;
+			n = n.parent;
+		}
+		this._path = path;
 	} else {
-		// XXX
 		log('fail', 'master:', master);
 		throw new Error('invalid path master');
 	}
