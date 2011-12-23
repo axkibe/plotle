@@ -131,15 +131,14 @@ function pushpad(a, n, s) {
 	if (n < 10) a.push('0');
 	a.push(n);
 	a.push(s);
+	return a;
 }
 
 /**
 | Creates a timestamp which will be returned as joinable array.
-| TODO do not create the array here.
 */
-function timestamp() {
+function timestamp(a) {
 	var now = new Date();
-	var a = [];
 	pushpad(a, now.getMonth() + 1, '-');
 	pushpad(a, now.getDate(),      ' ');
 	pushpad(a, now.getHours(),     ':');
@@ -157,7 +156,7 @@ function log(category) {
 		console.log('FAIL'); // TODO BREAKPOINT
 	}
 	if (category !== true && !config.log.all && !config.log[category]) return;
-	var a = timestamp();
+	var a = timestamp([]);
 	if (category !== true) {
 		a.push('(');
 		a.push(category);
@@ -175,7 +174,7 @@ function log(category) {
 */
 function debug() {
 	if (!config.log.debug) return;
-	var a = timestamp();
+	var a = timestamp([]);
 	a.push('(debug) ');
 	for(var i = 0; i < arguments.length; i++) {
 		if (i > 0) a.push(' ');
@@ -208,8 +207,10 @@ function clone(original) {
 */
 function deepFreeze(obj) {
 	if (typeof(obj) !== 'object' || obj === null) return;
+
 	Object.freeze(obj);
 	for (var k in obj) {
+		//if (k === 'parent') continue;
 		deepFreeze(obj[k]);
 	}
 }
@@ -249,29 +250,39 @@ Signature.prototype.attune = function(str, name) {
  TODO, make immuteable?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Path(master) {
-	if (master instanceof Path) master = master._path;
-	if (!(master instanceof Array)) {
+	if (master instanceof Path) {
+		master = master._path;
+	}
+	debug('A');
+
+	if (master instanceof Array) {
+		for (var i = 0, mlen = master.length; i < mlen; i++) {
+			var v = master[i];
+			if (isInteger(v)) continue;
+			if (isString(v)) {
+				if (v[0] === '_') throw reject('Path arcs must not start with _');
+				continue;
+			}
+			throw reject('Path arcs must be String or Integer');
+		}
+		this._path = master.slice();
+	} else {
+		// XXX
 		log('fail', 'master:', master);
 		throw new Error('invalid path master');
 	}
-
-	for (var i = 0, mlen = master.length; i < mlen; i++) {
-		var v = master[i];
-		if (isInteger(v)) continue;
-		if (isString(v)) {
-			if (v[0] === '_') throw reject('Path arcs must not start with _');
-			continue;
-		}
-		throw reject('Path arcs must be String or Integer');
-	}
-	this._path = master.slice();
 }
 
 /**
 | Length of the signature.
 */
 Object.defineProperty(Path.prototype, 'length', {
-	get: function() { return this._path.length; },
+	get: function() {
+		if (!this._path) {
+			debug('NO PATH');
+		}
+		return this._path.length;
+	},
 });
 
 /**

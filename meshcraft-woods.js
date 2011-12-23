@@ -48,13 +48,20 @@ var subclass  = Jools.subclass;
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  The base of all meshcraft-nodes.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Stem(twigs, master, parent) {
+function Stem(twigs, master) {
 	if (master && master._twigs) master = master._twigs;
-	if (Woods.setParents) this.parent = parent;
 	this._twigs = twigs;
+	if (Woods.cogging) {
+		this.parent = null;
+		this.key = null;
+	}
 	for (var k in master) {
 		if (k === 'type' || k === 'alley') continue;
 		twigs[k] = this._sprout(master[k], this);
+		if (Woods.cogging) {
+			twigs[k].parent = this;
+			twigs[k].key = k;
+		}
 	}
 }
 
@@ -87,7 +94,11 @@ Stem.prototype.set = function(path, val, a0, al, oplace) {
 	al = path.fit(al, true);
 	var pa0 = path.get(a0);
 	if (a0 + 1 === al) {
-		this._twigs[pa0] = this._sprout(val, this);
+		var scion = this._twigs[pa0] = this._sprout(val, this);
+		if (Woods.cogging) {
+			scion.parent = this;
+			scion.key = pa0;
+		}
 	} else {
 		var twig = this._twigs[pa0];
 		if (!twig || !twig.set) throw reject('path goes nowhere');
@@ -98,17 +109,17 @@ Stem.prototype.set = function(path, val, a0, al, oplace) {
 /**
 | Sprouts a new twig.
 */
-Stem.prototype._sprout = function(master, parent) {
+Stem.prototype._sprout = function(master) {
 	if (typeof(master) === 'undefined') return undefined;
 	if (master === null) return null;
 
 	var creator = this.seeds[master.constructor.name];
 	if (creator === true) return master;
-	if (creator) return new creator(master, this);
+	if (creator) return new creator(master);
 	if (!this.seeds) throw new Error('Cannot sprout (cname): '+master.constructor.name);
 	creator = this.seeds[master.type];
 	if (!creator) throw new Error('Cannot sprout (type): '+master.type);
-	return new creator(master, this);
+	return new creator(master);
 }
 
 /**
@@ -168,7 +179,7 @@ Stem.prototype.matches = function(master) {
 | parent variables have been set
 */
 Stem.prototype.getAnchestor = function(type) {
-	if (!Woods.setParents) throw new Error('getAnchestor not avaible without setParents');
+	if (!Woods.cogging) throw new Error('getAnchestor not avaible without cogging');
 	var n = this;
 	while (n && n.type !== type) { n = n.parent; }
 	if (!n) throw new Error('anchestor not there: '+type);
@@ -180,15 +191,19 @@ Stem.prototype.getAnchestor = function(type) {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  An array of any kind
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function StemAlley(master, parent) {
-	Stem.call(this, { alley: [] }, master, parent);
+function StemAlley(master) {
+	Stem.call(this, { alley: [] }, master);
 
 	if (master && master._twigs) master = master._twigs;
 	if (!isnon(master) || !isnon(master.alley) || (master.alley.constructor !== Array)) {
 		throw new Error('StemAlley master.alley not an Array');
 	}
 	for (var k = 0; k < master.alley.length; k++) {
-		this._twigs.alley[k] = this._sprout(master.alley[k], this);
+		var scion = this._twigs.alley[k] = this._sprout(master.alley[k], this);
+		if (Woods.cogging) {
+			scion.parent = this;
+			scion.key = k;
+		}
 	}
 }
 subclass(StemAlley, Stem);
@@ -233,7 +248,11 @@ StemAlley.prototype.set = function(path, val, a0, al, oplace) {
 	var pa0 = path.get(a0);
 	if (a0 + 1 === al) {
 		var base = pa0.constructor === Number ? this._twigs.alley : this._twigs;
-		base[pa0] = this._sprout(val, this);
+		var scion = base[pa0] = this._sprout(val, this);
+		if (Woods.cogging) {
+			scion.parent = this;
+			scion.key = pa0;
+		}
 	} else {
 		var base = pa0.constructor === Number ? this._twigs.alley : this._twigs;
 		var twig = base[pa0];
@@ -279,8 +298,8 @@ Object.defineProperty(StemAlley.prototype, 'length',  {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  a generic twig allowing any kind of subtwigs.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function GenericCopse(master, parent) {
-	Stem.call(this, {}, master, parent);
+function GenericCopse(master) {
+	Stem.call(this, {}, master);
 }
 subclass(GenericCopse, Stem);
 
@@ -301,8 +320,8 @@ GenericCopse.prototype.seeds = {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  a generic array allowing any kind of subtwigs.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function GenericAlley(master, parent) {
-	StemAlley.call(this, master, parent);
+function GenericAlley(master) {
+	StemAlley.call(this, master);
 }
 subclass(GenericAlley, StemAlley);
 
@@ -316,8 +335,8 @@ GenericAlley.prototype.seeds  = GenericCopse.prototype.seeds;
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  The root of spaces.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Nexus(master, parent) {
-	Stem.call(this, {type: 'nexus'}, master, parent);
+function Nexus(master) {
+	Stem.call(this, {type: 'nexus'}, master);
 }
 subclass(Nexus, Stem);
 
@@ -338,7 +357,7 @@ Nexus.prototype.seeds = {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  a space
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Space(master, parent) {
+function Space(master) {
 	if (master && !(master instanceof Space) && master.type !== 'Space') {
 		throw new Error('Space master typed wrongly: '+master.type);
 	}
@@ -348,7 +367,7 @@ function Space(master, parent) {
 //			type  : 'Space', TODO
 			items : new this.seeds.ItemCopse(master && master.items, this),
 			z     : new this.seeds.ArcAlley (master && master.z,     this),
-		}, null, parent);
+		}, null);
 	this.items = this._twigs.items;
 	this.z     = this._twigs.z;
 }
@@ -383,8 +402,8 @@ Space.prototype.set = function(path, val, a0, al, oplace) {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  A copse of items (in a space).
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function ItemCopse(master, parent) {
-	Stem.call(this, {}, master, parent);
+function ItemCopse(master) {
+	Stem.call(this, {}, master);
 }
 subclass(ItemCopse, Stem);
 
@@ -410,7 +429,7 @@ ItemCopse.prototype.isGrowable = true;
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  a note
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Note(master, parent) {
+function Note(master) {
 	if (master && !(master instanceof Note) && master.type !== 'Note') {
 		throw new Error('Note master typed wrongly: '+master.type);
 	}
@@ -420,7 +439,7 @@ function Note(master, parent) {
 			type     : 'note',
 			doc      : new this.seeds.DocAlley(master && master.doc, this),
 			zone     : new Rect(master.zone),
-		}, null, parent);
+		}, null);
 	this.doc  = this._twigs.doc;
 	this.zone = this._twigs.zone;
 }
@@ -464,8 +483,8 @@ Note.prototype.set = function(path, val, a0, al, oplace) {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  An array of Numbers and Strings (Arcs)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function ArcAlley(master, parent) {
-	StemAlley.call(this, master, parent);
+function ArcAlley(master) {
+	StemAlley.call(this, master);
 }
 subclass(ArcAlley, StemAlley);
 
@@ -487,8 +506,8 @@ ArcAlley.prototype.seeds = {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  An array of Paragraphs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function DocAlley(master, parent) {
-	StemAlley.call(this, master, parent);
+function DocAlley(master) {
+	StemAlley.call(this, master);
 
 	Object.defineProperty(this, 'fontsize', {
 		get: function()  { return this._twigs.fontsize; },
@@ -516,8 +535,8 @@ DocAlley.prototype.seeds = {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  A paragraph
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Para(master, parent) {
-	Stem.call(this, {}, master, parent);
+function Para(master) {
+	Stem.call(this, {}, master);
 }
 subclass(Para, Stem);
 
@@ -666,7 +685,7 @@ Woods = {
 	Rect         : Rect,
 	Point        : Point,
 
-	setParents   : false,
+	cogging      : false,
 };
 
 if (typeof(window) === 'undefined') {

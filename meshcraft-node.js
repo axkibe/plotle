@@ -65,8 +65,8 @@ try {
 }
 var debug = config.debug === true || (config.debug % 4 - config.debug % 2) === 2;
 
-//var mm = new meshmashine.MeshMashine(woods.GenericCopse, null);
-var mm = new MeshMashine(Woods.Nexus, null);
+//var mm = new meshmashine.MeshMashine(woods.GenericCopse);
+var mm = new MeshMashine(Woods.Nexus);
 
 /**
 | Files served.

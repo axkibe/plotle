@@ -58,7 +58,7 @@ var oppsoite      = Fabric.opposite;
 /**
 | Configures meshcraft-woods.
 */
-Woods.setParents = true;
+Woods.cogging = true;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .---.     .  .
@@ -1684,8 +1684,8 @@ function Cockpit() {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  The root of spaces.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Nexus(master, parent) {
-	Woods.Nexus.call(this, master, parent);
+function Nexus(master) {
+	Woods.Nexus.call(this, master);
 }
 subclass(Nexus, Woods.Nexus);
 
@@ -1710,8 +1710,8 @@ Nexus.prototype.seeds = {
 /**
 | Constructor
 */
-function Space(master, parent) {
-	Woods.Space.call(this, master, parent);
+function Space(master) {
+	Woods.Space.call(this, master);
 	this._floatMenuLabels = {c: 'new', n: 'Note', ne: 'Label'};
 	this.edgemenu = new Edgemenu();
 
@@ -2420,8 +2420,8 @@ Space.prototype.mousewheel = function(wheel) {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  A copse of items (in a space).
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function ItemCopse(master, parent) {
-	Woods.ItemCopse.call(this, master, parent);
+function ItemCopse(master) {
+	Woods.ItemCopse.call(this, master);
 }
 subclass(ItemCopse, Woods.ItemCopse);
 
@@ -2445,7 +2445,7 @@ function Treenode() {
 	// nada
 }
 
-// appends tnode to list of children 
+// appends tnode to list of children
 /*
 Treenode.prototype.append = function(tnode) {
 	if (tnode.parent) {
@@ -2545,8 +2545,8 @@ Object.defineProperty(Textnode.prototype, 'text', {
  A paragraph.        `'         '
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-function Para(master, parent) {
-	Woods.Para.call(this, master, parent);
+function Para(master) {
+	Woods.Para.call(this, master);
 
 	this._fabric = new Fabric(0 ,0);
 	this._fabricUp2d8 = false; // fabric up-to-date
@@ -3219,8 +3219,8 @@ Scrollbar.prototype.paint = function(fabric) {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  An array of paragraphs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function DocAlley(master, parent) {
-    Woods.DocAlley.call(this, master, parent);
+function DocAlley(master) {
+    Woods.DocAlley.call(this, master);
 }
 subclass(DocAlley, Woods.DocAlley);
 
@@ -3316,9 +3316,9 @@ Object.defineProperty(DocAlley.prototype, 'flowWidth', {
 | zone:  position and size of note.
 | dtree: document tree.
 */
-function Note(master, parent) {
+function Note(master) {
 	Item.call(this);
-	Woods.Note.call(this, master, parent);
+	Woods.Note.call(this, master);
 
 	// TODO, merge silhoutte and zone.
 	this.silhoutte = new RoundRect(
