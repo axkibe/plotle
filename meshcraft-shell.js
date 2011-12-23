@@ -1948,7 +1948,7 @@ Space.prototype.dragstart = function(p, shift, ctrl) {
 	var tfx = this._transfix(TXE.DRAGSTART, pp, shift, ctrl);
 	if (!(tfx & TXR.HIT)) {
 		// panning
-		this.action = new Action(Action.PAN, null, p);
+		this.action = new Action(Action.PAN, null, pp);
 		System.setCursor('crosshair');
 		return;
 	}
@@ -2037,7 +2037,7 @@ Space.prototype.dragmove = function(p, shift, ctrl) {
 		this.redraw();
 		return;
 	case Action.ITEMDRAG :
-		action.move = p;
+		action.move = pp;
 		this.redraw();
 		return;
 	case ACT.IRESIZE :
