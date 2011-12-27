@@ -1987,6 +1987,7 @@ Space.prototype.click = function(p, shift, ctrl) {
 
 /* stops an operation with the mouse held down */
 Space.prototype.dragstop = function(p, shift, ctrl) {
+	debug('DRAGSTOP', p.x, p.y);
 	var pp = p.sub(this.pan);
 	var editor = System.editor;
 	var action = this.action;
@@ -1994,9 +1995,13 @@ Space.prototype.dragstop = function(p, shift, ctrl) {
 	if (!action) throw new Error('Dragstop without action?');
 	switch (action.type) {
 	case Action.ITEMDRAG :
-		//action.item.moveto(pp.sub(iaction.sp)); TODO XXX
-		//System.repository.updateItem(iaction.item);
-		var path = new Path(action.item);
+		debug('dragmoveto',
+			action.item.zone.pnw.x + pp.x - action.start.x,
+			action.item.zone.pnw.y + pp.y - action.start.y);
+
+		action.item.moveto(action.item.zone.pnw.add(
+			pp.x - action.start.x,
+			pp.y - action.start.y));
 		System.setCursor('default');
 		redraw = true;
 		break;
@@ -2029,6 +2034,7 @@ Space.prototype.dragstop = function(p, shift, ctrl) {
 | Moving during an operation with the mouse held down.
 */
 Space.prototype.dragmove = function(p, shift, ctrl) {
+	debug('DRAGMOVE', p.x, p.y);
 	var pp = p.sub(this.pan);
 	var redraw = false;
 	var action = this.action;
@@ -3323,9 +3329,6 @@ function Note(master) {
 	Item.call(this);
 	Woods.Note.call(this, master);
 
-	// TODO, merge silhoutte and zone.
-	this.silhoutte = new RoundRect(
-		Point.zero, new Point(this.zone.width, this.zone.height), settings.note.cornerRadius);
 	this._fabric = new Fabric();
 	this._fabricUp2D8 = false;
 	this.imargin = Note.imargin;  // todo needed?
@@ -3477,21 +3480,36 @@ Note.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 | Returns true if something changed.
 */
 Note.prototype.setZone = function(zone, align) {
-	throw new Error('TODO');
 	// ensures minimum size
 	if (zone.width < settings.note.minWidth || zone.height < settings.note.minHeight) {
 		zone = zone.resize(
-			max(zone.width, settings.note.minWidth),
-			max(zone.height, settings.note.minHeight), align);
+			max(zone.width,  settings.note.minWidth),
+			max(zone.height, settings.note.minHeight),
+			align);
 	}
 	if (this.zone.eq(zone)) return false;
-	this.zone      = zone;
-	this.silhoutte = new RoundRect(
-		Point.zero, new Point(zone.width, zone.height), this.silhoutte.crad);
+	System.mio.setZone(this, zone);
+
+
 	// adapts scrollbar position
 	this._fabricUp2D8 = false;
 	this.setScrollbar();
 	return true;
+}
+
+/**
+| Returns the notes silhoutte.
+*/
+Note.prototype.getSilhoutte = function() {
+	if (this._silhoutte && this._silhoutte.eq(this.zone)) {
+		debug('Silhoutte buffer hit!');
+		return this._silhoutte;
+	}
+	debug('Silhoutte NEW!');
+
+	return this._silhoutte = new RoundRect(
+		Point.zero, new Point(this.zone.width, this.zone.height),
+		settings.note.cornerRadius);
 }
 
 /**
@@ -3505,10 +3523,9 @@ Object.defineProperty(Note.prototype, 'handlezone', {
 | Sets new position retaining size
 */
 Note.prototype.moveto = function(p) {
-	throw new Error('TODO');
 	if (this.zone.pnw.eq(p)) return false;
-	this.zone = this.zone.moveto(p);
-	return this;
+	System.mio.setZone(this, this.zone.moveto(p));
+	return true;
 }
 
 /**
@@ -3570,11 +3587,10 @@ Note.prototype.draw = function(fabric, action, selection) {
 
 	// buffer hit?
 	if (!this._fabricUp2D8) {
-
 		// if not fill the buffer
 		// resize the canvas
 		f.attune(this.zone);
-		f.fill(settings.note.style.fill, this.silhoutte, 'path');
+		f.fill(settings.note.style.fill, this.getSilhoutte(), 'path');
 
 		var doca = this.doc;
 		doca.flowWidth = this.iwidth;
@@ -3607,15 +3623,18 @@ Note.prototype.draw = function(fabric, action, selection) {
 		*/
 
 		// paints the border
-		f.edge(settings.note.style.edge, this.silhoutte, 'path');
+		f.edge(settings.note.style.edge, this.getSilhoutte(), 'path');
 
 		this._fabricUp2D8 = true;
 	}
 
 	var pnw = this.zone.pnw;
 	if (action && action.item === this && action.type === Action.ITEMDRAG && action.move) {
+		debug('pnw1', pnw.x, pnw.y);
 		pnw = pnw.add(action.move.x - action.start.x, action.move.y - action.start.y);
+		debug('pnw2', pnw.x, pnw.y);
 	}
+
 
 	fabric.drawImage(f, pnw);
 }
@@ -4276,19 +4295,32 @@ MeshIO.prototype.newNote = function(zone) {
 			},
 		}), new Signature({
 			path: new Path([System.cSpaceKey, 'items', '$new']),
-		})
-	);
+		}));
 
 	var apath = asw.alts.trg.path;
 	if (!(apath instanceof Path)) throw new Error('Cannot reget new Note');
 
-	asw = this.mm.alter(-1,
+	this.mm.alter(-1,
 		new Signature({
 			val: apath.get(-1),
 		}), new Signature({
 			path: new Path([System.cSpaceKey, 'z', '$end']),
-		})
-	);
+		}));
+}
+
+/**
+| Sets the zone for item.
+*/
+MeshIO.prototype.setZone = function(item, zone) {
+	var path = new Path(item);
+	path.set(path.length, 'zone');
+
+	this.mm.alter(-1,
+		new Signature({
+			val: zone,
+		}), new Signature({
+			path: path,
+		}));
 }
 
 /*

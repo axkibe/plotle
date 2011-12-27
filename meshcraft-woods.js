@@ -116,7 +116,7 @@ Stem.prototype._sprout = function(master, parent, key$) {
 	if (typeof(master) === 'undefined') return undefined;
 	if (master === null) return null;
 
-	var creator = this.seeds[master.constructor.name];
+	var creator = this.seeds[master.constructor.name]; // TODO not JS complicant
 	if (creator === true) return master;
 
 	var scion;
@@ -470,12 +470,12 @@ Note.prototype.set = function(path, val, a0, al, oplace) {
 	a0 = path.fit(a0, false);
 	al = path.fit(al, true);
 
-	if (path.get(a0) === 'zone') {
+	if (path === 'zone' || path.get(a0) === 'zone') {
 		if (a0 + 1 === al) {
 			this.zone = new Rect(val);
-			return;
+		} else {
+			this.zone = this.zone.set(path, val, a0 + 1, al, true);
 		}
-		this.zone = this.zone.set(path, val, a0 + 1, al, true);
 		return;
 	}
 	if (a0 + 1 === al) throw new Error('Cannot set Note.'+path.get(a0)+' itself');

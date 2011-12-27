@@ -680,15 +680,6 @@ Rect.jnew = function(js) {
 }
 
 /**
-| Returns a json object for this rect.
-*/
-/* TODO Remove
-Rect.prototype.toJSON = function() {
-	return this._json || (this._json = { pnw: this.pnw, pse: this.pse });
-}
-*/
-
-/**
 | Returns a rect moved by a point or x/y
 |
 | add(point)   -or-
