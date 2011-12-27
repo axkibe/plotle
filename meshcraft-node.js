@@ -159,12 +159,6 @@ var mmAjax = function(req, red, res) {
 	});
 }
 
-/**
-| returns true if param is true for the client
-*/
-function configSwitchClient(param) {
-	return param === true || param === 'client' || param === 'both';
-}
 
 /**
 | Transmits the config relevant to the client
@@ -173,12 +167,11 @@ function webConfig(req, red, res) {
 	res.writeHead(200, {'Content-Type': 'application/json'});
 	res.write('var config = {\n');
 	// TODO this is jools job:
-	res.write('\tdevel : '+ configSwitchClient(config.devel) + ',\n');
+	res.write('\tdevel : '+ Jools.configSwitchClient(config.devel) + ',\n');
+	res.write('\tpuffed : ' + Jools.configSwitchClient(config.puffed) + ',\n');
 	res.write('\tlog : {\n');
 	for(k in config.log) {
-		if (configSwitchClient(config.log[k])) {
-			res.write('\t\t'+k+' : true,\n');
-		}
+		res.write('\t\t'+k+' : '+Jools.configSwitchClient(config.log[k])+',\n');
 	}
 	res.write('\t}\n');
 	res.end('};\n')

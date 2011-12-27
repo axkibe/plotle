@@ -6,8 +6,9 @@ module.exports = {
 	// devel: client, server or both.
 	devel   : 'client',
 
-	//seperator for JSON messages (to be more easily readable)
-	jspacon : false,
+	//messages and JSON with whitespace/newlines for debugging.
+	puffed  : false,
+
 
 	log     : {
 		//all:   true,

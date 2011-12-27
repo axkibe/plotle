@@ -22,16 +22,36 @@ var Jools;
 
 "use strict";
 
+/**
+| Config variables
+*/
 var devel;
+var puffed;
+
+/**
+| returns true if param is true for the client
+*/
+function configSwitchClient(param) {
+	return param === true || param === 'client' || param === 'both';
+}
+
+/**
+| returns true if param is true for the server
+*/
+function configSwitchServer(param) {
+	return param === true || param === 'server' || param === 'both';
+}
 
 /**
 | Running in node or browser?
 */
 if (typeof(window) === 'undefined') {
 	config = require('./config');
-	devel = config.devel === true || config.devel === 'both' || config.devel === 'server';
+	devel  = configSwitchServer(config.devel);
+	puffed = configSwitchServer(config.puffed);
 } else { // inBrowser
-	devel = config.devel === true || config.devel === 'both' || config.devel === 'client';
+	devel  = configSwitchClient(config.devel);
+	puffed = configSwitchClient(config.puffed);
 }
 
 /**
@@ -147,6 +167,105 @@ function timestamp(a) {
 	return a;
 }
 
+/**
+| Pushes spaces into array for indentation.
+*/
+function pushindent(indent, a) {
+	for (var i = 0; i < indent; i++) a.push('  ');
+}
+
+/**
+| Inspects an object and creates a descriptive string for it.
+|
+| Self-written instead of nodeJS` since not available in browser. Not using toJSON since
+| that fails on circles.
+*/
+function inspect(o, a, indent) {
+	if (!indent) indent = 0;
+	if (o.toJSON) o = o.toJSON();
+	var to = typeof(o);
+	if (to === 'undefined') {
+		a.push('undefined');
+		return;
+	}
+	if (to === 'function')	{
+		a.push('function ');
+		if (o.name) a.push(o.name);
+		return;
+	}
+	if (to === 'string' || o instanceof String) {
+		a.push('"');
+		a.push(o);
+		a.push('"');
+		return;
+	}
+	if (to === 'number') {
+		a.push(o);
+		return;
+	}
+	if (o === null) {
+		a.push('null');
+		return;
+	}
+	if (o instanceof Array) {
+		a.push('[');
+		if (puffed) a.push('\n');
+		for(var k = 0; k < o.length; k++) {
+			if(k > 0) {
+				a.push(',');
+				a.push(puffed ? '\n' : ' ');
+			}
+			if (puffed) pushindent(indent + 1, a);
+			inspect(o[k], a, indent + 1);
+		}
+		var first = true;
+		for(var k in o) {
+			if (typeof(k) === 'number' || parseInt(k) == k || !o.hasOwnProperty(k)) continue;
+			if (first) {
+				a.push(puffed ? '\n' : ' ');
+				if (puffed) pushindent(indent + 1, a);
+				a.push('|');
+				a.push(puffed ? '\n' : ' ');
+				first = false;
+			} else {
+				a.push(',');
+				a.push(puffed ? '\n' : ' ');
+				if (puffed) pushindent(indent + 1, a);
+			}
+			a.push(k);
+			a.push(': ');
+			inspect(o[k], a, indent + 1);
+			a.push(puffed ? '\n' : ' ');
+		}
+		a.push(puffed ? '\n' : ' ');
+		if (puffed) pushindent(indent, a);
+		a.push(']');
+		return;
+	}
+	a.push('{');
+	a.push(puffed ? '\n' : ' ');
+	var first = true;
+	for(var k in o) {
+		if (!o.hasOwnProperty(k)) continue;
+		if (first) {
+			first = false;
+		} else {
+			a.push(',');
+			a.push(puffed ? '\n' : ' ');
+		};
+		if (puffed) pushindent(indent + 1, a);
+		a.push(k);
+		a.push(': ');
+		if (k === 'parent') {
+			a.push('###');
+			continue;
+		}
+		inspect(o[k], a, indent + 1);
+	}
+	a.push(puffed ? '\n' : ' ');
+	if (puffed) pushindent(indent, a);
+	a.push('}');
+}
 
 /**
 | Logs a number of inspected argument if category is configured to be logged.
@@ -164,11 +283,7 @@ function log(category) {
 	}
 	for(var i = 1; i < arguments.length; i++) {
 		if (i > 1) a.push(' ');
-		try {
-			a.push(JSON.stringify(arguments[i], null, config.jspacon ? config.jspacon : null));
-		} catch(e) {
-			console.log('OWWW'); // XXX
-		}
+		inspect(arguments[i], a, 0);
 	}
 	console.log(a.join(''));
 };
@@ -182,7 +297,7 @@ function debug() {
 	a.push('(debug) ');
 	for(var i = 0; i < arguments.length; i++) {
 		if (i > 0) a.push(' ');
-		a.push(JSON.stringify(arguments[i], null, config.jspacon ? config.jspacon : null));
+		a.push(JSON.stringify(arguments[i], null, puffed ? '  ' : null));
 	}
 	console.log(a.join(''));
 }
@@ -395,22 +510,24 @@ Path.prototype.toJSON = function() {
 | Exports
 */
 Jools = {
-	Path          : Path,
-	Signature     : Signature,
+	Path               : Path,
+	Signature          : Signature,
 
-	clone         : clone,
-	debug         : debug,
-	deepFreeze    : deepFreeze,
-	devel         : devel,
-	fixate        : fixate,
-	fixateNoEnum  : fixateNoEnum,
-	is            : is,
-	isnon         : isnon,
-	isString      : isString,
-	isInteger     : isInteger,
-	log           : log,
-	reject        : reject,
-	subclass      : subclass,
+	clone              : clone,
+	configSwitchClient : configSwitchClient,
+	configSwitchServer : configSwitchServer,
+	debug              : debug,
+	deepFreeze         : deepFreeze,
+	devel              : devel,
+	fixate             : fixate,
+	fixateNoEnum       : fixateNoEnum,
+	is                 : is,
+	isnon              : isnon,
+	isString           : isString,
+	isInteger          : isInteger,
+	log                : log,
+	reject             : reject,
+	subclass           : subclass,
 };
 
 if (typeof(window) === 'undefined') {
