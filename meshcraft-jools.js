@@ -182,7 +182,7 @@ function pushindent(indent, a) {
 */
 function inspect(o, a, indent) {
 	if (!indent) indent = 0;
-	if (o.toJSON) o = o.toJSON();
+	if (o && o.toJSON) o = o.toJSON();
 	var to = typeof(o);
 	if (to === 'undefined') {
 		a.push('undefined');

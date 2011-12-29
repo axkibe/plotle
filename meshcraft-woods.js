@@ -116,17 +116,20 @@ Stem.prototype._sprout = function(master, parent, key$) {
 	if (typeof(master) === 'undefined') return undefined;
 	if (master === null) return null;
 
-	var creator = this.seeds[master.constructor.name]; // TODO not JS complicant
-	if (creator === true) return master;
-
-	var scion;
-	if (!creator) {
-		if (!this.seeds) throw new Error('Cannot sprout (cname): '+master.constructor.name);
-		creator = this.seeds[master.type];
-		if (!creator) throw new Error('Cannot sprout (type): '+master.type);
+	var type = master.type;
+	if (typeof(type) === 'undefined') {
+		switch (master.constructor) {
+		case String : type = 'String'; break;
+		case Number : type = 'Number'; break;
+		}
 	}
 
-	scion = new creator(master);
+	var creator = this.seeds[type];
+	if (creator === true) return master;
+
+	if (!creator) throw new Error('Cannot sprout: '+master.type);
+
+	var scion = new creator(master);
 	if (Woods.cogging) {
 		scion.parent = parent;
 		scion.key$   = key$;
