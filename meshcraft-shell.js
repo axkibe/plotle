@@ -16,7 +16,6 @@
                                         \___  |-. ,-. |  |
                                             \ | | |-' |  |
                                         `---' ' ' `-' `' `'
-
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  A network item editor.
 
@@ -24,7 +23,6 @@
 
  Authors: Axel Kittenberger
  License: GNU Affero AGPLv3
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 'use strict';
@@ -55,7 +53,7 @@ var Measure       = Fabric.Measure;
 var Point         = Fabric.Point;
 var Rect          = Fabric.Rect;
 var RoundRect     = Fabric.RoundRect;
-var oppsoite      = Fabric.opposite;
+var opposite      = Fabric.opposite;
 
 /**
 | Configures meshcraft-woods.
@@ -293,7 +291,6 @@ Object.freeze(MST);
 // TODO remove
 var ACT = {
 	NONE    : 0, // idle
-	IRESIZE : 3, // resizing one item
 	SCROLLY : 4, // scrolling a note
 	FMENU   : 5, // clicked the float menu (background click)
 	IMENU   : 6, // clicked one item menu
@@ -742,8 +739,9 @@ function Action(type, item, start) {
 /**
 | Action enums
 */
-Action.PAN      = 1; // panning the background
-Action.ITEMDRAG = 2; // draggine one item
+Action.PAN        = 1; // panning the background
+Action.ITEMDRAG   = 2; // draggine one item
+Action.ITEMRESIZE = 3; // resizing one item
 
 /**
 |
@@ -1861,7 +1859,7 @@ Space.prototype.mousehover = function(p) {
 			return;
 		}
 
-		if ((com = this.focus.checkItemCompass(pp))) {
+		if ((com = this.focus.checkItemCompass(pp, this.action))) {
 			System.setCursor(com+'-resize');
 			if (redraw) this.redraw();
 			return;
@@ -1898,7 +1896,9 @@ Space.prototype.actionSpawnRelation = function(item, p) {
 	System.setCursor('not-allowed');
 }
 
-/* starts a scrolling action */
+/**
+| Starts a scrolling action
+*/
 Space.prototype.actionScrollY = function(item, startY, scrollbar) {
 	var ia  = this.iaction;
 	ia.act  = ACT.SCROLLY;
@@ -1907,7 +1907,9 @@ Space.prototype.actionScrollY = function(item, startY, scrollbar) {
 	ia.ssy  = scrollbar.pos;
 }
 
-// starts dragging an item  TODO rename
+/**
+| Starts dragging an item. TODO rename
+*/
 Space.prototype.actionDrag = function(item, start) {
 	if (this.action) throw new Error('action not null on action');
 	this.action = new Action(Action.ITEMDRAG, item, start);
@@ -1915,6 +1917,9 @@ Space.prototype.actionDrag = function(item, start) {
 }
 
 
+/**
+| Binds a relations
+*/
 Space.prototype.actionRBindTo = function(toItem) {
 	if (toItem.id === this.iaction.item.id) {
 		console.log('not binding to itself');
@@ -1925,6 +1930,9 @@ Space.prototype.actionRBindTo = function(toItem) {
 	System.repository.updateItem(rel);
 }
 
+/**
+| Hovering during relation binding.
+*/
 Space.prototype.actionRBindHover = function(toItem) {
 	if (toItem.id === this.iaction.item.id) {
 		System.setCursor('not-allowed');
@@ -1935,7 +1943,9 @@ Space.prototype.actionRBindHover = function(toItem) {
 }
 
 
-/* starts an operation with the mouse held down */
+/**
+| Starts an operation with the mouse held down
+*/
 Space.prototype.dragstart = function(p, shift, ctrl) {
 	var pp = p.sub(this.pan);
 	var editor  = System.editor;
@@ -1957,8 +1967,10 @@ Space.prototype.dragstart = function(p, shift, ctrl) {
 	if (tfx & TXR.REDRAW) this.redraw();
 }
 
-/* a click is a mouse down followed within dragtime by 'mouseup' and
- * not having moved out of 'dragbox'. */
+/**
+| a click is a mouse down followed within dragtime by 'mouseup' and
+| not having moved out of 'dragbox'.
+*/
 Space.prototype.click = function(p, shift, ctrl) {
 	var pp = p.sub(this.pan);
 
@@ -1985,9 +1997,10 @@ Space.prototype.click = function(p, shift, ctrl) {
 	if (tfx & TXR.REDRAW) this.redraw();
 }
 
-/* stops an operation with the mouse held down */
+/**
+| Stops an operation with the mouse held down
+*/
 Space.prototype.dragstop = function(p, shift, ctrl) {
-	debug('DRAGSTOP', p.x, p.y);
 	var pp = p.sub(this.pan);
 	var editor = System.editor;
 	var action = this.action;
@@ -1995,24 +2008,12 @@ Space.prototype.dragstop = function(p, shift, ctrl) {
 	if (!action) throw new Error('Dragstop without action?');
 	switch (action.type) {
 	case Action.ITEMDRAG :
-		debug('dragmoveto',
-			action.item.zone.pnw.x + pp.x - action.start.x,
-			action.item.zone.pnw.y + pp.y - action.start.y);
-
-		action.item.moveto(action.item.zone.pnw.add(
-			pp.x - action.start.x,
-			pp.y - action.start.y));
+	case Action.ITEMRESIZE :
+		action.item.setZone(action.item.getZone(action));
 		System.setCursor('default');
 		redraw = true;
 		break;
 	case Action.PAN :
-		break;
-	case ACT.IRESIZE :
-		// todo rename everything, make iaction a prototype.
-		iaction.com  = null;
-		iaction.item = null;
-		iaction.sip  = null;
-		iaction.siz  = null;
 		break;
 	case ACT.SCROLLY :
 		iaction.sy   = null;
@@ -2034,7 +2035,6 @@ Space.prototype.dragstop = function(p, shift, ctrl) {
 | Moving during an operation with the mouse held down.
 */
 Space.prototype.dragmove = function(p, shift, ctrl) {
-	debug('DRAGMOVE', p.x, p.y);
 	var pp = p.sub(this.pan);
 	var redraw = false;
 	var action = this.action;
@@ -2045,59 +2045,11 @@ Space.prototype.dragmove = function(p, shift, ctrl) {
 		// System.repository.savePan(this.pan); TODO!
 		this.redraw();
 		return;
+
+	case Action.ITEMRESIZE :
 	case Action.ITEMDRAG :
 		action.move = pp;
 		this.redraw();
-		return;
-	case ACT.IRESIZE :
-		var ipnw = iaction.siz.pnw;
-		var ipse = iaction.siz.pse;
-		var it = iaction.item;
-		var dx = p.x - iaction.sp.x;
-		var dy = p.y - iaction.sp.y;
-		var pnw, pse;
-		switch (iaction.com) {
-		case 'n'  :
-			pnw = Point.renew(ipnw.x, min(ipnw.y + dy, ipse.y), ipnw, ipse);
-			pse = ipse;
-			break;
-		case 'ne' :
-			pnw = Point.renew(ipnw.x, min(ipnw.y + dy, ipse.y), ipnw, ipse);
-			pse = Point.renew(max(ipse.x + dx, ipnw.x), ipse.y, ipnw, ipse);
-			break;
-		case 'e'  :
-			pnw = ipnw;
-			pse = Point.renew(max(ipse.x + dx, ipnw.x), ipse.y, ipnw, ipse);
-			break;
-		case 'se' :
-			pnw = ipnw;
-			pse = Point.renew(max(ipse.x + dx, ipnw.x), max(ipse.y + dy, ipnw.y), ipnw, ipse);
-			break;
-		case 's' :
-			pnw = ipnw;
-			pse = Point.renew(ipse.x, max(ipse.y + dy, ipnw.y), ipnw, ipse);
-			break;
-		case 'sw'  :
-			pnw = Point.renew(min(ipnw.x + dx, ipse.x), ipnw.y, ipnw, ipse),
-			pse = Point.renew(ipse.x, max(ipse.y + dy, ipnw.y), ipnw, ipse);
-			break;
-		case 'w'   :
-			pnw = Point.renew(min(ipnw.x + dx, ipse.x), ipnw.y, ipnw, ipse),
-			pse = ipse;
-			break;
-		case 'nw' :
-			pnw = Point.renew(min(ipnw.x + dx, ipse.x), min(ipnw.y + dy, ipse.y), ipnw, ipse);
-			pse = ipse;
-			break;
-		case 'c' :
-		default  :
-			throw new Error('unknown align');
-		}
-
-		redraw = it.setZone(new Rect(pnw, pse), opposite(iaction.com));
-
-		if (redraw) this.redraw();
-		System.repository.updateItem(iaction.item);
 		return;
 	case ACT.SCROLLY:
 		// todo let the item scroll itself
@@ -2327,15 +2279,9 @@ Space.prototype.mousedown = function(p) {
 		iaction.act = ACT.NONE;
 		redraw = true;
 		switch(md) {
-		case 0:
-			this._exportDialog();
-			break;
-		case 1:
-			this._revertDialog();
-			break;
-		case 2:
-			this._importDialog();
-			break;
+		case 0: this._exportDialog(); break;
+		case 1: this._revertDialog(); break;
+		case 2: this._importDialog(); break;
 		}
 		if (redraw) this.redraw();
 		return MST.NONE;
@@ -2396,14 +2342,15 @@ Space.prototype.mousedown = function(p) {
 			return MST.ATWEEN;
 		}
 		var com;
-		if ((com = this.focus.checkItemCompass(pp))) {
-			/* resizing */
-			iaction.act  = ACT.IRESIZE;
-			iaction.com  = com;
-			iaction.item = this.focus;
-			iaction.sp   = p;
-			iaction.siz  = this.focus.handlezone;
+		if ((com = this.focus.checkItemCompass(pp, this.action))) {
+			// resizing
+			if (this.action) throw new Error('action not null on action');
+			this.action = new Action(Action.ITEMRESIZE, this.focus, pp);
+			this.action.align = com;
+			this.action.startZone = this.focus.getZone();
 			System.setCursor(com+'-resize');
+
+			// iaction.siz  = this.focus.handlezone;  ???
 			if (redraw) this.redraw();
 			return MST.DRAG;
 		}
@@ -2674,8 +2621,8 @@ Object.defineProperty(Para.prototype, 'flowWidth', {
 	set : function(fw) {
 		if (this._flowWidth === fw) return;
 		this._flowWidth = fw;
-		this._flowUp2D8 = false;
-		this._farbicUp2D8 = false;
+		this._flow_up2d8F  = false;
+		this._farbic_up2d8F = false;
 	}
 });
 
@@ -2683,7 +2630,7 @@ Object.defineProperty(Para.prototype, 'flowWidth', {
 | Draws the paragraph in its cache and returns it.
 */
 Para.prototype.getFabric = function() {
-	if (this._fabricUp2D8) return this._fabric;
+	if (this._fabricUp2d8) return this._fabric;
 
 	var f = this._fabric;
 	this._flow();
@@ -2703,15 +2650,15 @@ Para.prototype.getFabric = function() {
 		}
 	}
 
-	this._fabricUp2D8 = true;
+	this._fabric_up2d8F = true;
 	return f;
 }
 
 // drops the cache (cause something has changed
 /* TODO?
 Para.prototype.listen = function() {
-	this._flowUp2D8 = false;
-	this._fabricUp2D8    = false;
+	this._flow_up2d8F = false;
+	this._fabric_up2d8F    = false;
 	if (this.parent) this.parent.listen();
 }*/
 
@@ -3002,17 +2949,12 @@ function Item() {
 | Return the hexagon slice that is the handle
 */
 Item.prototype.getH6Slice = function(action) {
-	var hzone = this.handlezone;
+	var zone = this.getZone(action);
 
-	// TODO move to some common place?
-	var pnw = hzone.pnw;
-	if (action && action.item === this && action.type === Action.ITEMDRAG && action.move) {
-		pnw = pnw.add(action.move.x - action.start.x, action.move.y - action.start.y);
-	}
+	if (this._h6slice && this._h6slice.psw.eq(zone.pnw)) return this._h6slice;
 
-	if (this._h6slice && this._h6slice.psw.eq(pnw)) return this._h6slice;
 	return this._h6slice = new HexagonSlice(
-		pnw, settings.itemmenu.innerRadius, settings.itemmenu.slice.height);
+		zone.pnw, settings.itemmenu.innerRadius, settings.itemmenu.slice.height);
 };
 
 /**
@@ -3034,33 +2976,34 @@ Item.prototype.withinItemMenu = function(p) {
 | Returns the compass direction of the handle if p is on a resizer handle.
 | todo rename
 */
-Item.prototype.checkItemCompass = function(p) {
+Item.prototype.checkItemCompass = function(p, action) {
 	var ha = this.handles;
-	var hzone = this.handlezone;
+	var zone = this.getZone(action);
+
 	if (!ha) return null;
 	var d   =       settings.handle.size; // distance
 	var din = 0.5 * settings.handle.size; // inner distance
 	var dou =       settings.handle.size; // outer distance
 
-	var n = p.y >= hzone.pnw.y - dou && p.y <= hzone.pnw.y + din;
-	var e = p.x >= hzone.pse.x - din && p.x <= hzone.pse.x + dou;
-	var s = p.y >= hzone.pse.y - din && p.y <= hzone.pse.y + dou;
-	var w = p.x >= hzone.pnw.x - dou && p.x <= hzone.pnw.x + din;
+	var n = p.y >= zone.pnw.y - dou && p.y <= zone.pnw.y + din;
+	var e = p.x >= zone.pse.x - din && p.x <= zone.pse.x + dou;
+	var s = p.y >= zone.pse.y - din && p.y <= zone.pse.y + dou;
+	var w = p.x >= zone.pnw.x - dou && p.x <= zone.pnw.x + din;
 
 	if (n) {
 		if (w && ha.nw) return 'nw';
 		if (e && ha.ne) return 'ne';
-		if (ha.n && abs(p.x - hzone.pc.x) <= d) return 'n';
+		if (ha.n && abs(p.x - zone.pc.x) <= d) return 'n';
 		return null;
 	}
 	if (s) {
 		if (w && ha.sw) return 'sw';
 		if (e && ha.se) return 'se';
-		if (ha.s && abs(p.x - hzone.pc.x) <= d) return 's';
+		if (ha.s && abs(p.x - zone.pc.x) <= d) return 's';
 		return null;
 	}
-	if (w && ha.w && abs(p.y - hzone.pc.y) <= d) return 'w';
-	if (e && ha.e && abs(p.y - hzone.pc.y) <= d) return 'e';
+	if (w && ha.w && abs(p.y - zone.pc.y) <= d) return 'w';
+	if (e && ha.e && abs(p.y - zone.pc.y) <= d) return 'e';
 	return null;
 }
 
@@ -3070,20 +3013,13 @@ Item.prototype.checkItemCompass = function(p) {
 Item.prototype.pathResizeHandles = function(fabric, border, edge, action) {
 	if (border !== 0) throw new Error('borders unsupported for handles');
 	var ha = this.handles;
-	var zone = this.handlezone;
+	var zone = this.getZone(action);
+	var pnw = zone.pnw;
+	var pse = zone.pse;
+
 	var ds = settings.handle.distance;
 	var hs = settings.handle.size;
 	var hs2 = half(hs);
-	
-	var pnw = zone.pnw;
-	if (action && action.item === this && action.type === Action.ITEMDRAG && action.move) {
-		pnw = pnw.add(action.move.x - action.start.x, action.move.y - action.start.y);
-	}
-	
-	var pse = zone.pse;
-	if (action && action.item === this && action.type === Action.ITEMDRAG && action.move) {
-		pse = pse.add(action.move.x - action.start.x, action.move.y - action.start.y);
-	}
 
 	var x1 = pnw.x - ds;
 	var y1 = pnw.y - ds;
@@ -3330,7 +3266,7 @@ function Note(master) {
 	Woods.Note.call(this, master);
 
 	this._fabric = new Fabric();
-	this._fabricUp2D8 = false;
+	this._fabric_up2d8F = false; // up-to-date-flag
 	this.imargin = Note.imargin;  // todo needed?
 	this.scrollbarY = new Scrollbar(this, null);
 }
@@ -3399,11 +3335,12 @@ Note.prototype.paraAtP = function(p) {
 }
 
 /**
-| Drops the cache.
+| Returns true if the fabric is up-to-date.
 */
-Note.prototype.listen = function() {
-	this._fabricUp2D8 = false;
-	// end of chain
+Note.prototype.fabric_up2d8 = function(zone) {
+	return this._fabric_up2d8F && this._fabric_up2d8S && 
+		zone.width  === this._fabric_up2d8S.width && 
+		zone.height === this._fabric_up2d8S.height;
 }
 
 /**
@@ -3473,60 +3410,129 @@ Note.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 	}
 }
 
+
+/**
+| Returns the zone of the item.
+| An ongoing action can modify this to the meshmashine data.
+*/
+Note.prototype.getZone = function(action) {
+	if (!action || action.item !== this) return this.zone;
+
+	switch (action.type) {
+	case Action.ITEMDRAG:
+		if (!action.move) return this.zone;
+		return this.zone.add(action.move.x - action.start.x, action.move.y - action.start.y);
+
+	case Action.ITEMRESIZE:
+		if (!action.move) return this.zone;
+		var ipnw = action.startZone.pnw;
+		var ipse = action.startZone.pse;
+		var dx = action.move.x - action.start.x;
+		var dy = action.move.y - action.start.y;
+		var minw = settings.note.minWidth;
+		var minh = settings.note.minHeight;
+		var pnw, pse;
+
+		switch (action.align) {
+		case 'n'  :
+			pnw = Point.renew(ipnw.x, min(ipnw.y + dy, ipse.y - minh), ipnw, ipse);
+			pse = ipse;
+			break;
+		case 'ne' :
+			pnw = Point.renew(
+				ipnw.x, min(ipnw.y + dy, ipse.y - minh), ipnw, ipse);
+			pse = Point.renew(
+				max(ipse.x + dx, ipnw.x + minw), ipse.y, ipnw, ipse);
+			break;
+		case 'e'  :
+			pnw = ipnw;
+			pse = Point.renew(max(ipse.x + dx, ipnw.x + minw), ipse.y, ipnw, ipse);
+			break;
+		case 'se' :
+			pnw = ipnw;
+			pse = Point.renew(
+				max(ipse.x + dx, ipnw.x + minw),
+				max(ipse.y + dy, ipnw.y + minh), ipnw, ipse);
+			break;
+		case 's' :
+			pnw = ipnw;
+			pse = Point.renew(ipse.x, max(ipse.y + dy, ipnw.y + minh), ipnw, ipse);
+			break;
+		case 'sw'  :
+			pnw = Point.renew(min(ipnw.x + dx, ipse.x - minw), ipnw.y, ipnw, ipse),
+			pse = Point.renew(ipse.x, max(ipse.y + dy, ipnw.y + minh), ipnw, ipse);
+			break;
+		case 'w'   :
+			pnw = Point.renew(min(ipnw.x + dx, ipse.x - minw), ipnw.y, ipnw, ipse),
+			pse = ipse;
+			break;
+		case 'nw' :
+			pnw = Point.renew(min(ipnw.x + dx, ipse.x - minw), min(ipnw.y + dy, ipse.y - minh), ipnw, ipse);
+			pse = ipse;
+			break;
+		case 'c' :
+		default  :
+			throw new Error('unknown align');
+		}
+		return new Rect(pnw, pse);
+	default :
+		return this.zone;
+	}
+}
+
+
 /**
 | Sets the notes position and size.
-| The note does not have to accept the full zone.
-| For example it will refuse to go below minimum size.
-| Returns true if something changed.
+|
+| TODO this might as well be removed.
 */
-Note.prototype.setZone = function(zone, align) {
+Note.prototype.setZone = function(zone) {
 	// ensures minimum size
 	if (zone.width < settings.note.minWidth || zone.height < settings.note.minHeight) {
-		zone = zone.resize(
-			max(zone.width,  settings.note.minWidth),
-			max(zone.height, settings.note.minHeight),
-			align);
+		log('fail', 'Note under minimum size!');
 	}
-	if (this.zone.eq(zone)) return false;
+	if (this.zone.eq(zone)) return;
 	System.mio.setZone(this, zone);
 
-
+	// TODO this should happen by MeshIO settings...
+	this._fabric_up2d8F = false;
 	// adapts scrollbar position
-	this._fabricUp2D8 = false;
 	this.setScrollbar();
-	return true;
 }
 
 /**
 | Returns the notes silhoutte.
 */
-Note.prototype.getSilhoutte = function() {
-	if (this._silhoutte && this._silhoutte.eq(this.zone)) {
-		debug('Silhoutte buffer hit!');
-		return this._silhoutte;
+Note.prototype.getSilhoutte = function(zone) {
+	if (!this._silhoutte ||
+		this._silhoutte.width  !== zone.width ||
+		this._silhoutte.height !== zone.height)
+	{
+		return this._silhoutte = new RoundRect(
+			Point.zero, new Point(zone.width, zone.height),
+			settings.note.cornerRadius);
 	}
-	debug('Silhoutte NEW!');
 
-	return this._silhoutte = new RoundRect(
-		Point.zero, new Point(this.zone.width, this.zone.height),
-		settings.note.cornerRadius);
+	return this._silhoutte;
 }
 
 /**
 | The zone the handles appear on.
 */
 Object.defineProperty(Note.prototype, 'handlezone', {
-	get : function() { return this.zone; }
+	get : function() { debug('TODO handlezone?'); return this.zone; }
 });
 
 /**
 | Sets new position retaining size
 */
+/* TODO remove
 Note.prototype.moveto = function(p) {
 	if (this.zone.pnw.eq(p)) return false;
 	System.mio.setZone(this, this.zone.moveto(p));
 	return true;
 }
+*/
 
 /**
 | The inner width for contents excluding scrollbars.
@@ -3585,18 +3591,23 @@ Note.prototype.setScrollbar = function(pos) {
 Note.prototype.draw = function(fabric, action, selection) {
 	var f  = this._fabric;
 
-	// buffer hit?
-	if (!this._fabricUp2D8) {
-		// if not fill the buffer
+	var zone = this.getZone(action);
+
+	// no buffer hit?
+	if (true || !this.fabric_up2d8(zone)) {
+		var silhoutte = this.getSilhoutte(zone);
+
 		// resize the canvas
-		f.attune(this.zone);
-		f.fill(settings.note.style.fill, this.getSilhoutte(), 'path');
+		f.attune(zone);
+
+
+		f.fill(settings.note.style.fill, silhoutte, 'path');
 
 		var doca = this.doc;
 		doca.flowWidth = this.iwidth;
 
 		// calculates if a scrollbar is needed
-		/* TODO XX
+		/* TODO 
 		var sbary = this.scrollbarY;
 
 		if (!sbary.visible && dtree.height > this.iheight) {
@@ -3623,20 +3634,15 @@ Note.prototype.draw = function(fabric, action, selection) {
 		*/
 
 		// paints the border
-		f.edge(settings.note.style.edge, this.getSilhoutte(), 'path');
+		f.edge(settings.note.style.edge, silhoutte, 'path');
 
-		this._fabricUp2D8 = true;
-	}
-
-	var pnw = this.zone.pnw;
-	if (action && action.item === this && action.type === Action.ITEMDRAG && action.move) {
-		debug('pnw1', pnw.x, pnw.y);
-		pnw = pnw.add(action.move.x - action.start.x, action.move.y - action.start.y);
-		debug('pnw2', pnw.x, pnw.y);
+		this._fabric_up2d8F = true;
+		this._fabric_up2d8S = zone;
 	}
 
 
-	fabric.drawImage(f, pnw);
+
+	fabric.drawImage(f, zone.pnw);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -3663,7 +3669,7 @@ function Label(id, zone, dtree) {
 	this.setZone(zone, 'c');
 	// buffer
 	this._fabric = new Fabric();
-	this._fabricUp2D8 = false;
+	this._fabric_up2d8F = false;
 	if (typeof(this.zone.pse.x) === 'undefined') throw new Error('Invalid label'); // todo remove
 	System.repository.addItem(this, true);
 }
@@ -3790,7 +3796,7 @@ Label.prototype.setZone = function(zone, align) {
 	if (!this.zone) this.zone = zone;
 	this.zone = this.zone.resize(this._dWidth(), this._dHeight(), align);
 	this._lock = false;
-	this._fabricUp2D8 = false;
+	this._fabric_up2d8F = false;
 	return true;
 }
 
@@ -3830,9 +3836,10 @@ Label.prototype.paraAtP = function(p) {
 }
 
 /* drops the cache */
+// TODO remove all listen()
 Label.prototype.listen = function() {
 	if (this._lock) return;
-	this._fabricUp2D8 = false;
+	this._fabric_up2d8F = false;
 	if (this.zone) {
 		this.zone = this.zone.resize(this._dWidth(), this._dHeight(), 'c');
 	}
@@ -3850,7 +3857,7 @@ Label.prototype.draw = function(fabric, action, selection) {
 	var dtree = this.dtree;
 
 	// buffer hit?
-	if (this._fabricUp2D8) {
+	if (this._fabric_up2d8F) {
 		fabric.drawImage(f, this.zone.pnw);
 		return;
 	}
@@ -3893,7 +3900,7 @@ function Relation(id, i1id, i2id, textZone, dtree) {
 	this.imargin      = Relation.imargin;
 	this.setTextZone(textZone);
 	this._fabric      = new Fabric();
-	this._fabricUp2D8 = false;
+	this._fabric_up2d8F = false;
 
 	System.repository.addItem(this, true);
 	System.repository.addOnlook(this.id, this.i1id);
@@ -4017,7 +4024,7 @@ Relation.prototype.setTextZone = function(zone, align) {
 		this.textZone = new Rect(zone.pnw, zone.pnw.add(this.dtree.width, zh));
 		break;
 	}
-	this._fabricUp2D8 = false;
+	this._fabric_up2d8F = false;
 	return true;
 }
 
@@ -4043,7 +4050,7 @@ Relation.prototype.setZone = function(zone, align) {
 	if (!this.textZone) this.textZone = zone;
 	this.textZone = this.textZone.resize(this._dWidth(), this._dHeight(), align);
 	this._lock = false;
-	this._fabricUp2D8 = false;
+	this._fabric_up2d8F = false;
 	return true;
 }
 
@@ -4141,7 +4148,7 @@ Relation.prototype.paraAtP = function(p) {
 */
 Relation.prototype.listen = function() {
 	if (this._lock) return;
-	this._fabricUp2D8 = false;
+	this._fabric_up2d8F = false;
 	if (this.textZone) {
 		this.textZone = this.textZone.resize(this._dWidth(), this._dHeight(), 'c');
 	}
@@ -4153,7 +4160,7 @@ Relation.prototype.resize = function(width, height) {
 	var fs = max(dtree.fontsize * height / this.height, 8);
 	if (dtree._fontsize == fs) return false;
 	dtree.fontsize = fs;
-	this._fabricUp2D8 = false;
+	this._fabric_up2d8F = false;
 	return true;*/
 	throw new Error('unimplemented');
 }
@@ -4166,11 +4173,11 @@ Relation.prototype.draw = function(fabric, action, selection) {
 	var dtree = this.dtree;
 	var it1 = System.repository.items[this.i1id]; // todo funcall
 	var it2 = System.repository.items[this.i2id];
-	if (!this._fabricUp2D8) {
+	if (!this._fabric_up2d8F) {
 		f.attune(this.textZone);
 		f.edge(settings.relation.style.labeledge, f, 'path');
 		dtree.draw(f, action, selection, this.imargin, 0);
-		this._fabricUp2D8 = true;
+		this._fabric_up2d8F = true;
 	}
 	var l1 = Line.connect(it1.handlezone, 'normal', this.textZone, 'normal'); // todo bindzone
 	var l2 = Line.connect(this.textZone,  'normal', it2.handlezone, 'arrow'); // todo bindzone

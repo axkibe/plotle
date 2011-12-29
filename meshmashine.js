@@ -493,7 +493,6 @@ MeshMashine.prototype._reflect = function(time, path) {
 | Alters the repository.
 */
 MeshMashine.prototype.alter = function(time, src, trg) {
-	log(true, 'test');
 	try {
 		log('mm', 'alter time:', time, 'src:', src, 'trg:', trg);
 		if (time < 0) time = this.history.length;

@@ -731,87 +731,60 @@ Rect.prototype.resize = function(width, height, align) {
 	var pnw, pse;
 	switch(align) {
 	case 'n' :
-		pnw = Point.renew(
-			this.pnw.x - half(width - this.width),
-			this.pnw.y,
+		pnw = Point.renew(this.pnw.x - half(width - this.width), this.pnw.y,
 			this.pnw, this.pse);
-		pse = Point.renew(
-			pnw.x + width,
-			this.pnw.y + height,
+		pse = Point.renew(pnw.x + width, this.pnw.y + height,
 			this.pnw, this.pse);
 		break;
 	case 'ne' :
-		pnw = Point.renew(
-			this.pse.x - width,
-			this.pnw.y,
+		pnw = Point.renew(this.pse.x - width, this.pnw.y,
 			this.pnw, this.pse);
-		pse = Point.renew(
-			this.pse.x,
-			this.pnw.y + height,
+		pse = Point.renew(this.pse.x, this.pnw.y + height,
 			this.pnw, this.pse);
 		break;
 	case 'e' :
-		pnw = Point.renew(
-			this.pse.x - width,
-			this.pnw.y - half(height - this.height),
+		pnw = Point.renew(this.pse.x - width, this.pnw.y - half(height - this.height),
 			this.pnw, this.pse);
-		pse = Point.renew(
-			this.pse.x,
-			pnw.y + height,
+		pse = Point.renew( this.pse.x, pnw.y + height,
 			this.pnw, this.pse);
 		break;
 	case 'se' :
-		pnw = Point.renew(
-			this.pse.x - width,
-			this.pse.y - height,
+		pnw = Point.renew(this.pse.x - width, this.pse.y - height,
 			this.pnw, this.pse);
 		pse = this.pse;
 		break;
 	case 's' :
-		pnw = Point.renew(
-			this.pnw.x - half(width - this.width),
-			this.pse.y - height,
+		pnw = Point.renew(this.pnw.x - half(width - this.width), this.pse.y - height,
 			this.pnw, this.pse);
 		pse = Point.renew(
-			pnw.x + width,
-			this.pse.y,
+			pnw.x + width, this.pse.y,
 			this.pnw, this.pse);
 		break;
 	case 'sw' :
-		pnw = Point.renew(
-			this.pnw.x,
-			this.pse.y - height,
+		pnw = Point.renew(this.pnw.x, this.pse.y - height,
 			this.pnw, this.pse);
 		pse = Point.renew(
-			this.pnw.x + width,
-			this.pse.y,
+			this.pnw.x + width, this.pse.y,
 			this.pnw, this.pse);
 		break;
 	case 'w' :
-		pnw = Point.renew(
-			this.pnw.x,
-			this.pnw.y - half(height - this.height),
+		pnw = Point.renew(this.pnw.x, this.pnw.y - half(height - this.height),
 			this.pnw, this.pse);
 		pse = Point.renew(
-			this.pnw.x + width,
-			pnw.y + height,
+			this.pnw.x + width, pnw.y + height,
 			this.pnw, this.pse);
 		break;
 	case 'nw' :
 		pnw = this.pnw;
-		pse = Point.renew(
-			this.pnw.x + width,
-			this.pnw.y + height,
+		pse = Point.renew(this.pnw.x + width, this.pnw.y + height,
 			this.pnw, this.pse);
 		break;
 	case 'c' :
 		pnw = Point.renew(
-			this.pnw.x - half(width - this.width),
-			this.pnw.y - half(height - this.height),
+			this.pnw.x - half(width - this.width), this.pnw.y - half(height - this.height),
 			this.pnw, this.pse);
 		pse = Point.renew(
-			pnw.x + width,
-			pnw.y + height,
+			pnw.x + width, pnw.y + height,
 			this.pnw, this.pse);
 		break;
 	default :
