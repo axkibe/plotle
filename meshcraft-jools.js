@@ -145,6 +145,15 @@ function fixateNoEnum(obj, key, value) {
 }
 
 /**
+| Turns an object to it JSON representation (as objects yet, not string)
+*/
+function jsonfy(obj) {
+	if (typeof(obj) === 'undefined' || obj === null) return obj;
+	if (obj.toJSON) return obj.toJSON();
+	return obj;
+}
+
+/**
 | Pushes a 2-decimal number on an array.
 */
 function pushpad(a, n, s) {
@@ -182,7 +191,7 @@ function pushindent(indent, a) {
 */
 function inspect(o, a, indent) {
 	if (!indent) indent = 0;
-	if (o && o.toJSON) o = o.toJSON();
+//	if (o && o.toJSON) o = o.toJSON();
 	var to = typeof(o);
 	if (to === 'undefined') {
 		a.push('undefined');
@@ -296,8 +305,8 @@ function debug() {
 	var a = timestamp([]);
 	a.push('(debug) ');
 	for(var i = 0; i < arguments.length; i++) {
-		if (i > 0) a.push(' ');
-		a.push(JSON.stringify(arguments[i], null, puffed ? '  ' : null));
+		if (i > 1) a.push(' ');
+		inspect(arguments[i], a, 0);
 	}
 	console.log(a.join(''));
 }
@@ -329,7 +338,7 @@ function deepFreeze(obj) {
 
 	Object.freeze(obj);
 	for (var k in obj) {
-		//if (k === 'parent') continue;
+		if (k === 'parent') throw new Error('deepFreezing a parent?');
 		deepFreeze(obj[k]);
 	}
 }
@@ -525,6 +534,7 @@ Jools = {
 	isnon              : isnon,
 	isString           : isString,
 	isInteger          : isInteger,
+	jsonfy             : jsonfy,
 	log                : log,
 	reject             : reject,
 	subclass           : subclass,

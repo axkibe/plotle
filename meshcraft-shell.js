@@ -4296,13 +4296,17 @@ MeshIO.prototype.newNote = function(zone) {
 	var asw = this.mm.alter(-1,
 		new Signature({
 			val: {
-				'type': 'note',
+				'type': 'Note',
 				'zone': zone,
-				'doc': { alley: [ ] },
+				'doc': {
+					fontsize : 13,
+					alley: [ ]
+				},
 			},
 		}), new Signature({
 			path: new Path([System.cSpaceKey, 'items', '$new']),
-		}));
+		})
+	);
 
 	var apath = asw.alts.trg.path;
 	if (!(apath instanceof Path)) throw new Error('Cannot reget new Note');
@@ -4312,7 +4316,8 @@ MeshIO.prototype.newNote = function(zone) {
 			val: apath.get(-1),
 		}), new Signature({
 			path: new Path([System.cSpaceKey, 'z', '$end']),
-		}));
+		})
+	);
 }
 
 /**

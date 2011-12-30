@@ -40,6 +40,7 @@ var isnon     = Jools.isnon;
 var isString  = Jools.isString;
 var isInteger = Jools.isInteger;
 var log       = Jools.log;
+var jsonfy    = Jools.jsonfy;
 var reject    = Jools.reject;
 var subclass  = Jools.subclass;
 

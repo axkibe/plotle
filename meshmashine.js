@@ -62,6 +62,7 @@ var is         = Jools.is;
 var isnon      = Jools.isnon;
 var isString   = Jools.isString;
 var isInteger  = Jools.isInteger;
+var jsonfy     = Jools.jsonfy;
 var fixate     = Jools.fixate;
 var reject     = Jools.reject;
 
@@ -228,7 +229,8 @@ function alter(meshtree, alternation, backward) {
 			check(trg.val === save || save.matches(trg.val), cm, 'trg.val set incorrectly');
 		} else {
 			if (!is(save)) save = null;
-			trg.val = (save && save.constructor) ? new save.constructor(save) : save;
+			//trg.val = (save && save.constructor) ? new save.constructor(save) : save; TODO
+			trg.val = jsonfy(save);
 		}
 
 		if (is(src.path)) {
@@ -518,16 +520,18 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 			}
 		}
 
-		if (!(alts instanceof Array)) {
-			alter(this.repository, alts, false);
-			deepFreeze(alts);
-			this.history.push(alts);
-		} else {
+		if (alts instanceof Array) {
 			for(var i = 0; i < alts.length; i++) {
 				alter(this.repository, alts[i], false);
+				debug('DF', alts[i]);
 				deepFreeze(alts[i]);
 				this.history.push(alts[i]);
 			}
+		} else {
+			alter(this.repository, alts, false);
+			debug('DF', alts);
+			deepFreeze(alts);
+			this.history.push(alts);
 		}
 
 		return {
