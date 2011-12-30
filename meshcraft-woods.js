@@ -63,6 +63,7 @@ function Stem(twigs, master) {
 			case String : continue;
 			case Number : continue;
 			}
+			if (twigs[k].noCogs) continue;
 			twigs[k].parent = this;
 			twigs[k].key$ = k;
 		}
@@ -131,7 +132,7 @@ Stem.prototype._sprout = function(master, parent, key$) {
 	if (!creator) throw new Error('Cannot sprout: '+master.type);
 
 	var scion = new creator(master);
-	if (Woods.cogging) {
+	if (Woods.cogging && !scion.noCogs) {
 		scion.parent = parent;
 		scion.key$   = key$;
 	}
@@ -574,6 +575,15 @@ function Rect(master) {
 }
 subclass(Rect, Fabric.Rect);
 
+/**
+| Since rects are immutable, they have no cogs.
+*/
+Rect.prototype.noCogs = true;
+
+/**
+| Returns a new rectangle with changed value.
+| Thus supports only out-of-place operations.
+*/
 Rect.prototype.set = function(path, val, a0, al, oplace) {
 	if (!oplace) throw new Error('Rect can only be set out of place');
 	a0 = path.fit(a0, false);

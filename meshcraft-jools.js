@@ -149,7 +149,7 @@ function fixateNoEnum(obj, key, value) {
 */
 function jsonfy(obj) {
 	if (typeof(obj) === 'undefined' || obj === null) return obj;
-	if (obj.toJSON) return obj.toJSON();
+	if (obj.toJSON) obj = obj.toJSON();
 	return obj;
 }
 
@@ -355,7 +355,7 @@ function Signature(master) {
 	if (is(master.at2))   this.at2   = master.at2;
 	if (is(master.pivot)) this.pivot = master.pivot;
 	if (is(master.proc))  this.proc  = master.proc;
-	if (is(master.val))   this.val   = master.val;
+	if (is(master.val))   this.val   = JSON.parse(JSON.stringify(master.val));
 }
 
 /**

@@ -230,7 +230,8 @@ function alter(meshtree, alternation, backward) {
 		} else {
 			if (!is(save)) save = null;
 			//trg.val = (save && save.constructor) ? new save.constructor(save) : save; TODO
-			trg.val = jsonfy(save);
+			debug('Clone', jsonfy(save));
+			trg.val = JSON.parse(JSON.stringify(save));
 		}
 
 		if (is(src.path)) {
@@ -520,18 +521,17 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 			}
 		}
 
+		var apply = function (alt) {
+			alter(this.repository, alt, false);
+			debug('DeepFreezing', alt);
+			deepFreeze(alt);
+			this.history.push(alt);
+		}
+
 		if (alts instanceof Array) {
-			for(var i = 0; i < alts.length; i++) {
-				alter(this.repository, alts[i], false);
-				debug('DF', alts[i]);
-				deepFreeze(alts[i]);
-				this.history.push(alts[i]);
-			}
+			for(var i = 0; i < alts.length; i++) apply.call(this, alts[i]);
 		} else {
-			alter(this.repository, alts, false);
-			debug('DF', alts);
-			deepFreeze(alts);
-			this.history.push(alts);
+			apply.call(this, alts);
 		}
 
 		return {
