@@ -418,7 +418,7 @@ Marker.prototype._getPinfoAtP = function(flowbox, p) {
 | Gets the markers position, relative to dtree
 */
 Marker.prototype.getPoint = function() {
-	/* todo cache position */
+	// todo cache position
 	var dtree = this._item.dtree;
 	Measure.font = dtree.font;
 	var e = this._element;
@@ -2507,7 +2507,7 @@ function Para(master) {
 	this._fabric = new Fabric(0 ,0);
 	this._fabricUp2d8 = false; // fabric up-to-date
 	this._flowWidth = null;
-	this.pos = null; // position of para in doc.
+	this.pnw = null; // position of para in doc.
 }
 subclass(Para, Woods.Para);
 
@@ -2650,7 +2650,7 @@ Para.prototype.getFabric = function() {
 		}
 	}
 
-	this._fabric_up2d8F = true;
+	this._fabric$flag = true;
 	return f;
 }
 
@@ -2658,7 +2658,7 @@ Para.prototype.getFabric = function() {
 /* TODO?
 Para.prototype.listen = function() {
 	this._flow_up2d8F = false;
-	this._fabric_up2d8F    = false;
+	this._fabric$flag    = false;
 	if (this.parent) this.parent.listen();
 }*/
 
@@ -2767,7 +2767,7 @@ DTree.jnew = function(js) {
 /**
 | Returns the paragraph at point
 */
-/*DTree.prototype.paraAtP = function(p) {
+/*DTree.prototype.paraAtPoint = function(p) {
 	var para = this.first;
 	while (para && p.y > para.p.y + para.softHeight) {
 		para = para.next;
@@ -3206,7 +3206,7 @@ DocAlley.prototype.draw = function(fabric, action, selection, imargin, scrollp) 
 
 	this.forEachNumber(function(para, k) {
 		var pf = para.getFabric();
-		para.pos = new Point(imargin.w, R(y));
+		para.pnw = new Point(imargin.w, R(y));
 
 		if (pf.width > 0 && pf.height > 0) {
 			fabric.drawImage(pf, imargin.w, y - scrollp.y);
@@ -3241,6 +3241,12 @@ Object.defineProperty(DocAlley.prototype, 'flowWidth', {
 	}
 });
 
+DocAlley.prototype.paraAtPoint = function(p) {
+	this.forEachNumber(function(para, k) {
+		if (p.y < para.pnw.y + para.getSoftHeight()) return para;
+	});
+}
+
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,-,-.       .
  ` | |   ,-. |- ,-.
@@ -3266,7 +3272,7 @@ function Note(master) {
 	Woods.Note.call(this, master);
 
 	this._fabric = new Fabric();
-	this._fabric_up2d8F = false; // up-to-date-flag
+	this._fabric$flag = false; // up-to-date-flag
 	this.imargin = Note.imargin;  // todo needed?
 	this.scrollbarY = new Scrollbar(this, null);
 }
@@ -3329,18 +3335,18 @@ Note.prototype.jsonfy = function() {
 /**
 | Returns the para at point. todo, honor scroll here.
 */
-Note.prototype.paraAtP = function(p) {
+Note.prototype.paraAtPoint = function(p) {
 	if (p.y < this.imargin.n) return null;
-	return this.dtree.paraAtP(p);
+	return this.doc.paraAtPoint(p);
 }
 
 /**
 | Returns true if the fabric is up-to-date.
 */
-Note.prototype.fabric_up2d8 = function(zone) {
-	return this._fabric_up2d8F && this._fabric_up2d8S && 
-		zone.width  === this._fabric_up2d8S.width && 
-		zone.height === this._fabric_up2d8S.height;
+Note.prototype.fabricUp2d8 = function(zone) {
+	return this._fabric$flag && this._fabric$size &&
+		zone.width  === this._fabric$size.width &&
+		zone.height === this._fabric$size.height;
 }
 
 /**
@@ -3390,7 +3396,7 @@ Note.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 		var op = new Point(
 			p.x - this.zone.pnw.x,
 			p.y - this.zone.pnw.y + max(0, this.scrollbarY.pos));
-		var para = this.paraAtP(op);
+		var para = this.paraAtPoint(op);
 		if (para) {
 			var editor = System.editor;
 			editor.caret.setFromPoint(para, op.sub(para.p));
@@ -3495,7 +3501,7 @@ Note.prototype.setZone = function(zone) {
 	System.mio.setZone(this, zone);
 
 	// TODO this should happen by MeshIO settings...
-	this._fabric_up2d8F = false;
+	this._fabric$flag = false;
 	// adapts scrollbar position
 	this.setScrollbar();
 }
@@ -3594,7 +3600,7 @@ Note.prototype.draw = function(fabric, action, selection) {
 	var zone = this.getZone(action);
 
 	// no buffer hit?
-	if (true || !this.fabric_up2d8(zone)) {
+	if (true || !this.fabricUp2d8(zone)) {
 		var silhoutte = this.getSilhoutte(zone);
 
 		// resize the canvas
@@ -3636,8 +3642,8 @@ Note.prototype.draw = function(fabric, action, selection) {
 		// paints the border
 		f.edge(settings.note.style.edge, silhoutte, 'path');
 
-		this._fabric_up2d8F = true;
-		this._fabric_up2d8S = zone;
+		this._fabric$flag = true;
+		this._fabric$size = zone;
 	}
 
 
@@ -3669,7 +3675,7 @@ function Label(id, zone, dtree) {
 	this.setZone(zone, 'c');
 	// buffer
 	this._fabric = new Fabric();
-	this._fabric_up2d8F = false;
+	this._fabric$flag = false;
 	if (typeof(this.zone.pse.x) === 'undefined') throw new Error('Invalid label'); // todo remove
 	System.repository.addItem(this, true);
 }
@@ -3736,7 +3742,7 @@ Label.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 			txr |= TXR.REDRAW;
 		}
 		var op = p.sub(this.zone.pnw);
-		var para = this.paraAtP(op);
+		var para = this.paraAtPoint(op);
 		if (para) {
 			var editor = System.editor;
 			editor.caret.setFromPoint(para, op.sub(para.p));
@@ -3796,7 +3802,7 @@ Label.prototype.setZone = function(zone, align) {
 	if (!this.zone) this.zone = zone;
 	this.zone = this.zone.resize(this._dWidth(), this._dHeight(), align);
 	this._lock = false;
-	this._fabric_up2d8F = false;
+	this._fabric$flag = false;
 	return true;
 }
 
@@ -3831,15 +3837,15 @@ Label.prototype.moveto = function(pnw) {
 }
 
 /* returns the para at y */
-Label.prototype.paraAtP = function(p) {
-	return this.dtree.paraAtP(p);
+Label.prototype.paraAtPoint = function(p) {
+	return this.dtree.paraAtPoint(p);
 }
 
 /* drops the cache */
 // TODO remove all listen()
 Label.prototype.listen = function() {
 	if (this._lock) return;
-	this._fabric_up2d8F = false;
+	this._fabric$flag = false;
 	if (this.zone) {
 		this.zone = this.zone.resize(this._dWidth(), this._dHeight(), 'c');
 	}
@@ -3857,7 +3863,7 @@ Label.prototype.draw = function(fabric, action, selection) {
 	var dtree = this.dtree;
 
 	// buffer hit?
-	if (this._fabric_up2d8F) {
+	if (this._fabric$flag) {
 		fabric.drawImage(f, this.zone.pnw);
 		return;
 	}
@@ -3900,7 +3906,7 @@ function Relation(id, i1id, i2id, textZone, dtree) {
 	this.imargin      = Relation.imargin;
 	this.setTextZone(textZone);
 	this._fabric      = new Fabric();
-	this._fabric_up2d8F = false;
+	this._fabric$flag = false;
 
 	System.repository.addItem(this, true);
 	System.repository.addOnlook(this.id, this.i1id);
@@ -4024,7 +4030,7 @@ Relation.prototype.setTextZone = function(zone, align) {
 		this.textZone = new Rect(zone.pnw, zone.pnw.add(this.dtree.width, zh));
 		break;
 	}
-	this._fabric_up2d8F = false;
+	this._fabric$flag = false;
 	return true;
 }
 
@@ -4050,7 +4056,7 @@ Relation.prototype.setZone = function(zone, align) {
 	if (!this.textZone) this.textZone = zone;
 	this.textZone = this.textZone.resize(this._dWidth(), this._dHeight(), align);
 	this._lock = false;
-	this._fabric_up2d8F = false;
+	this._fabric$flag = false;
 	return true;
 }
 
@@ -4107,7 +4113,7 @@ Relation.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 			txr |= TXR.REDRAW;
 		}
 		var op = p.sub(this.textZone.pnw);
-		var para = this.paraAtP(op);
+		var para = this.paraAtPoint(op);
 		if (para) {
 			var editor = System.editor;
 			editor.caret.setFromPoint(para, op.sub(para.p));
@@ -4138,8 +4144,8 @@ Relation.prototype.moveto = function(pnw) {
 }
 
 /* returns the para at y */
-Relation.prototype.paraAtP = function(p) {
-	return this.dtree.paraAtP(p);
+Relation.prototype.paraAtPoint = function(p) {
+	return this.dtree.paraAtPoint(p);
 }
 
 
@@ -4148,7 +4154,7 @@ Relation.prototype.paraAtP = function(p) {
 */
 Relation.prototype.listen = function() {
 	if (this._lock) return;
-	this._fabric_up2d8F = false;
+	this._fabric$flag = false;
 	if (this.textZone) {
 		this.textZone = this.textZone.resize(this._dWidth(), this._dHeight(), 'c');
 	}
@@ -4160,7 +4166,7 @@ Relation.prototype.resize = function(width, height) {
 	var fs = max(dtree.fontsize * height / this.height, 8);
 	if (dtree._fontsize == fs) return false;
 	dtree.fontsize = fs;
-	this._fabric_up2d8F = false;
+	this._fabric$flag = false;
 	return true;*/
 	throw new Error('unimplemented');
 }
@@ -4173,11 +4179,11 @@ Relation.prototype.draw = function(fabric, action, selection) {
 	var dtree = this.dtree;
 	var it1 = System.repository.items[this.i1id]; // todo funcall
 	var it2 = System.repository.items[this.i2id];
-	if (!this._fabric_up2d8F) {
+	if (!this._fabric$flag) {
 		f.attune(this.textZone);
 		f.edge(settings.relation.style.labeledge, f, 'path');
 		dtree.draw(f, action, selection, this.imargin, 0);
-		this._fabric_up2d8F = true;
+		this._fabric$flag = true;
 	}
 	var l1 = Line.connect(it1.handlezone, 'normal', this.textZone, 'normal'); // todo bindzone
 	var l2 = Line.connect(this.textZone,  'normal', it2.handlezone, 'arrow'); // todo bindzone
