@@ -230,7 +230,6 @@ function alter(meshtree, alternation, backward) {
 		} else {
 			if (!is(save)) save = null;
 			//trg.val = (save && save.constructor) ? new save.constructor(save) : save; TODO
-			debug('Clone', jsonfy(save));
 			trg.val = JSON.parse(JSON.stringify(save));
 		}
 
@@ -523,7 +522,6 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 
 		var apply = function (alt) {
 			alter(this.repository, alt, false);
-			debug('DeepFreezing', alt);
 			deepFreeze(alt);
 			this.history.push(alt);
 		}

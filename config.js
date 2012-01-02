@@ -16,7 +16,7 @@ module.exports = {
 		ajax:   false,
 		debug:  true,
 		fail:   true,
-		mm:     true,
+		mm:     false,
 		start:  true,
 		te:     false,
 		web:    true,

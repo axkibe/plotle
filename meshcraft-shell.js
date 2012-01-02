@@ -133,6 +133,7 @@ var settings = {
 	},
 
 	// menu at the bottom of cockpit
+	/*
 	edgemenu : {
 		style : {
 			fill : {
@@ -154,7 +155,7 @@ var settings = {
 				],
 			},
 		},
-	},
+	},*/
 
 
 	// float menu
@@ -292,7 +293,6 @@ Object.freeze(MST);
 var ACT = {
 	NONE    : 0, // idle
 	SCROLLY : 4, // scrolling a note
-	FMENU   : 5, // clicked the float menu (background click)
 	IMENU   : 6, // clicked one item menu
 	RBIND   : 7  // dragging a new relation
 };
@@ -334,39 +334,24 @@ Object.freeze(ONLOOK);
    | ; | . ,-| |   |<  |-' |
    '   `-' `-^ '   ' ` `-' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
  Marks a position in an element of an item.
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Marker() {
-	this._item = null;
-	this._element = null;
-	this._offset = 0;
-	this._pli = null;
-	this._cli = null;
+	this.path = null;
+	this.offset = 0;
+//	this._item = null;
+//	this._element = null;
+//	this._offset = 0;
+//	this._pli = null;
+//	this._cli = null;
 }
-
-Object.defineProperty(Marker.prototype, 'item', {
-	get: function() { return this._item; },
-	set: function(it) { throw new Error('use set()'); }
-});
-
-Object.defineProperty(Marker.prototype, 'element', {
-	get: function() { return this._element; },
-	set: function(e) { throw new Error('use set()'); }
-});
-
-Object.defineProperty(Marker.prototype, 'offset', {
-	get: function() { return this._offset; },
-	set: function(o) { this._offset = o; }
-});
 
 /**
 | set(marker)                -or-
 | set(element, offset)       -or-
 | set(item, element, offset) -or-
 */
-Marker.prototype.set = function(a1, a2, a3) {
+/*Marker.prototype.set = function(a1, a2, a3) {
 	if (a1 instanceof Marker) {
 		this._item    = a1._item;
 		this._element = a1._element;
@@ -381,12 +366,12 @@ Marker.prototype.set = function(a1, a2, a3) {
 	}
 	this._element = a1;
 	this._offset  = a2;
-}
+}*/
 
 /**
 | Returns chunk at x/y
 */
-Marker.prototype._getPinfoAtP = function(flowbox, p) {
+/*Marker.prototype._getPinfoAtP = function(flowbox, p) {
 	var pinfo = flowbox.pinfo;
 	var plen = pinfo.length;
 	var li;
@@ -396,7 +381,7 @@ Marker.prototype._getPinfoAtP = function(flowbox, p) {
 		}
 	}
 	if (li >= plen) {
-		li--; /* got to last line if overflow */
+		li--; // got to last line if overflow
 	}
 	this._pli = li;
 	var l = pinfo[li];
@@ -409,15 +394,15 @@ Marker.prototype._getPinfoAtP = function(flowbox, p) {
 			return pinfo;
 		}
 	}
-	/* set to last chunk if overflow */
+	// set to last chunk if overflow
 	this._pci = llen - 1;
 	return pinfo;
-}
+}*/
 
 /**
 | Gets the markers position, relative to dtree
 */
-Marker.prototype.getPoint = function() {
+/*Marker.prototype.getPoint = function() {
 	// todo cache position
 	var dtree = this._item.dtree;
 	Measure.font = dtree.font;
@@ -430,12 +415,12 @@ Marker.prototype.getPoint = function() {
 	return p.p.add(
 		R(c ? c.x + Measure.width(t.substring(c.offset, this._offset)) : l.x),
 		l.y - dtree.fontsize);
-}
+}*/
 
 /**
 | Sets the marker to position closest to x, y from flowbox(para).
 */
-Marker.prototype.setFromPoint = function(flowbox, p) {
+/*Marker.prototype.setFromPoint = function(flowbox, p) {
 	throw new Error('TODO');
 
 	if (!flowbox instanceof Para) { throw new Error('invalid flowbox.'); }
@@ -466,19 +451,19 @@ Marker.prototype.setFromPoint = function(flowbox, p) {
 	if (dx - x1 <= x2 - dx) o--;
 	this._element = c.node;
 	this._offset = c.offset + o;
-}
+}*/
 
 /**
 | Sets this.pline and this.pchunk according to the chunk
 | the marker is in
 */
-Marker.prototype.getPinfo = function() {
+/*Marker.prototype.getPinfo = function() {
 	var te = this._element;
 	var to = this._offset;
 	var para  = te.anchestor(Para);
 	var pinfo = para.pinfo;
-	var bli =  0; /* buffer for line count */
-	var bci = -1; /* buffer for chunk count */
+	var bli =  0; // buffer for line count
+	var bci = -1; // buffer for chunk count
 	var plen  = pinfo.length;
 	for(var li= 0; li < plen; li++) {
 		var l = pinfo[li];
@@ -498,13 +483,13 @@ Marker.prototype.getPinfo = function() {
 	}
 	this._pli = bli; this._pci = bci;
 	return pinfo;
-}
+}*/
 
 /**
 | Moves the marker a line up (dir == true) or down
 | returns true if moved
 */
-Marker.prototype.moveUpDown = function(dir) {
+/*Marker.prototype.moveUpDown = function(dir) {
 	throw new Error('TODO');
 
 	var e  = this._element;
@@ -568,11 +553,13 @@ Marker.prototype.moveUpDown = function(dir) {
 	this._offset  = c.offset + o;
 	return true;
 }
+*/
 
 /**
 | Moves the marker a character left (dir == true) or right
 | returns true if moved.
 */
+/*
 Marker.prototype.moveLeftRight = function(dir) {
 	if (dir) {
 		if (this._offset > 0) {
@@ -600,6 +587,7 @@ Marker.prototype.moveLeftRight = function(dir) {
 	}
 	return true;
 }
+*/
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,--.             .
@@ -618,18 +606,18 @@ function Caret() {
 	Marker.call(this);
 	// true if visible
 	this.shown = false;
+
 	// true when just blinked away
-	this.blink = false;
+	this.blinked = false;
 }
 subclass(Caret, Marker);
-
 
 /**
 | Shows the caret or resets the blink timer if already shown
 */
 Caret.prototype.show = function() {
 	this.shown = true;
-	this.blink = false;
+	this.blinked = false;
 	System.startBlinker();
 }
 
@@ -641,158 +629,39 @@ Caret.prototype.hide = function() {
 	System.stopBlinker();
 }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- .---.     .          .
- \___  ,-. |  ,-. ,-. |- . ,-. ,-.
-     \ |-' |  |-' |   |  | | | | |
- `---' `-' `' `-' `-' `' ' `-' ' '
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
- Text Selection.
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/**
-| Constructor.
-*/
-function Selection() {
-	this.active = false;
-	this.mark1 = new Marker();
-	this.mark2 = new Marker();
-	this.begin = null;
-	this.end   = null;
-}
-
-/**
-| Sets begin/end so begin is before end.
-*/
-Selection.prototype.normalize = function() {
-	var e1 = this.mark1.element;
-	var e2 = this.mark2.element;
-
-	if (e1 === e2) {
-		if (this.mark1.offset <= this.mark2.offset) {
-			this.begin = this.mark1;
-			this.end   = this.mark2;
-		} else {
-			this.begin = this.mark2;
-			this.end   = this.mark1;
-		}
-		return;
-	}
-
-	var pn;
-	for (pn = e1.parent.next; pn && pn.first != e2; pn = pn.next);
-
-	if (!pn) {
-		this.end   = this.mark1;
-		this.begin = this.mark2;
-	} else {
-		this.begin = this.mark1;
-		this.end   = this.mark2;
-	}
-}
-
-/**
-| The text the selection selects.
-*/
-Selection.prototype.innerText = function() {
-	if (!this.active) return '';
-	this.normalize();
-	var be = this.begin.element;
-	var bo = this.begin.offset;
-	var ee = this.end.element;
-	var eo = this.end.offset;
-	var bet = be.text;
-	if (be == ee) {
-		return bet.substring(bo, eo);
-	}
-
-	var buf = [bet.substring(bo, bet.length)];
-	for (var n = be.parent.next.first; n != ee; n = n.parent.next.first) {
-		// ^ todo make multi child compatible
-		if (!n) { throw new Error('selection akward');}
-		buf.push('\n');
-		buf.push(n.text);
-	}
-	buf.push('\n');
-	buf.push(ee.text.substring(0, eo));
-	return buf.join('');
-}
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ++ Action ++
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- An action in the making.
-
- This overlays repository data, so for example a move is not transmitted
- with every pixel changed but when the the object is released.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/**
-| Constructor.
-*/
-function Action(type, item, start) {
-	this.type  = type;
-	this.item  = item;
-	this.start = start;
-}
-
-/**
-| Action enums
-*/
-Action.PAN        = 1; // panning the background
-Action.ITEMDRAG   = 2; // draggine one item
-Action.ITEMRESIZE = 3; // resizing one item
-
-/**
-|
-*/
-//Action.prototype.
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-.-,--.   .   .
- `\__  ,-| . |- ,-. ,-.
-  /    | | | |  | | |
- '`--' `-^ ' `' `-' '
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- todo, what exactly belongs to this?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/**
-| Constructor.
-*/
-function Editor() {
-	this.caret     = new Caret();
-	this.selection = new Selection();
-	this.item      = null;
-}
-
 /**
 | Draws or erases the caret.
 */
-Editor.prototype.updateCaret = function() {
+Caret.prototype.update = function(action) {
 	var f = System.fabric;
-	var caret = this.caret;
-	if (caret.save) {
-		// erases the old caret
-		f.putImageData(caret.save, caret.sp.x - 1, caret.sp.y - 1);
-		caret.save = null;
+
+	// erases the old caret
+	if (this.save) {
+		f.putImageData(this.save, this.savep.x - 1, this.savep.y - 1);
+		this.save = null;
 	}
-	if (caret.shown && !caret.blink) {
-		var cp = caret.getPoint();
-		var it = caret.item;
-		var sy = (it.scrollbarY && it.scrollbarY.visible && it.scrollbarY.pos) || 0;
-		var tzone = it.handlezone; // todo, do not reuse handlezone
-		var th = R(it.dtree.fontsize * (1 + settings.bottombox));
-		var cyn = cp.y - sy;
+
+	// draws new
+	if (this.shown && !this.blinked) {
+		var cp   = this.getPoint();
+		var item = this.getItem();
+		var zone = item.getZone(action);
+
+		//var sy = (it.scrollbarY && it.scrollbarY.visible && it.scrollbarY.pos) || 0; TODO
+		var th = R(item.doc.fontsize * (1 + settings.bottombox));
+
+		var cyn = cp.y /* - sy*/;
 		var cys = cyn + th;
-		cyn = min(max(cyn, 0), tzone.height);
-		cys = min(max(cys, 0), tzone.height);
+		cyn = min(max(cyn, 0), zone.height);
+		cys = min(max(cys, 0), zone.height);
+
 		if (cyn === cys) {
 			caret.save = null;
 			return;
 		}
-		var sp = caret.sp = System.space.pan.add(
-			tzone.pnw.x + cp.x,
-			tzone.pnw.y + cyn);
+		var sp = this.savep = System.space.pan.add(  // TODO getPan()
+			zone.pnw.x + cp.x,
+			zone.pnw.y + cyn);
 		caret.save = f.getImageData(sp.x - 1, sp.y - 1, 3, cys - cyn + 1);
 		f.fillRect('black', sp.x, sp.y, 1, cys - cyn);
 	}
@@ -801,7 +670,7 @@ Editor.prototype.updateCaret = function() {
 /**
 | Inserts a new line
 */
-Editor.prototype.newline = function() {
+Caret.prototype.newline = function() {
 	var caret  = this.caret;
 	var ce    = caret.element;
 	var co    = caret.offset;
@@ -819,7 +688,7 @@ Editor.prototype.newline = function() {
 | Handles a special(control) key
 | returns true if the element needs to be redrawn.
 */
-Editor.prototype.specialKey = function(item, keycode, shift, ctrl) {
+Caret.prototype.specialKey = function(item, keycode, shift, ctrl) {
 	if (!item) return false;
 	var refresh = false;
 	var redraw = false;
@@ -972,17 +841,124 @@ Editor.prototype.specialKey = function(item, keycode, shift, ctrl) {
 /**
 | Switches caret visibility state.
 */
-Editor.prototype.blink = function() {
-	if (this.caret.shown) {
-		this.caret.blink = !this.caret.blink;
-		this.updateCaret();
+Caret.prototype.blink = function() {
+	if (this.shown) {
+		this.blinked = !this.blinked;
+		this.update();
+	}
+}
+
+
+/**
+| Received a input from user
+| returns true if redraw is needed
+*/
+Caret.prototype.input = function(item, text) {
+	if (!item) return false;
+	var caret = this.caret;
+	if (this.selection.active) {
+		this.deleteSelection();
+	}
+	var reg = /([^\n]+)(\n?)/g;
+	for(var ca = reg.exec(text); ca != null; ca = reg.exec(text)) {
+		var line = ca[1];
+		var ce = caret.element;
+		var co = caret.offset;
+		var ct = ce.text;
+		ce.text = ct.substring(0, co) + line + ct.substring(co, ct.length);
+		this.caret.offset += text.length;
+		if (ca[2]) {
+			this.newline();
+		}
+	}
+	ce.listen();
+	System.repository.updateItem(item);
+	return true;
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ .---.     .          .
+ \___  ,-. |  ,-. ,-. |- . ,-. ,-.
+     \ |-' |  |-' |   |  | | | | |
+ `---' `-' `' `-' `-' `' ' `-' ' '
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+ Text Selection.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/**
+| Constructor.
+*/
+function Selection() {
+	this.active = false;
+	this.mark1 = new Marker();
+	this.mark2 = new Marker();
+	this.begin = null;
+	this.end   = null;
+}
+
+/**
+| Sets begin/end so begin is before end.
+*/
+Selection.prototype.normalize = function() {
+	var e1 = this.mark1.element;
+	var e2 = this.mark2.element;
+
+	if (e1 === e2) {
+		if (this.mark1.offset <= this.mark2.offset) {
+			this.begin = this.mark1;
+			this.end   = this.mark2;
+		} else {
+			this.begin = this.mark2;
+			this.end   = this.mark1;
+		}
+		return;
+	}
+
+	var pn;
+	for (pn = e1.parent.next; pn && pn.first != e2; pn = pn.next);
+
+	if (!pn) {
+		this.end   = this.mark1;
+		this.begin = this.mark2;
+	} else {
+		this.begin = this.mark1;
+		this.end   = this.mark2;
 	}
 }
 
 /**
-| Deletes the selection including its contents.
+| The text the selection selects.
 */
-Editor.prototype.deleteSelection = function() {
+Selection.prototype.innerText = function() {
+	if (!this.active) return '';
+	this.normalize();
+	var be = this.begin.element;
+	var bo = this.begin.offset;
+	var ee = this.end.element;
+	var eo = this.end.offset;
+	var bet = be.text;
+	if (be == ee) {
+		return bet.substring(bo, eo);
+	}
+
+	var buf = [bet.substring(bo, bet.length)];
+	for (var n = be.parent.next.first; n != ee; n = n.parent.next.first) {
+		// ^ todo make multi child compatible
+		if (!n) { throw new Error('selection akward');}
+		buf.push('\n');
+		buf.push(n.text);
+	}
+	buf.push('\n');
+	buf.push(ee.text.substring(0, eo));
+	return buf.join('');
+}
+
+/**
+| Removes the selection including its contents.
+| TODO was deleteSelection.
+*/
+Selection.prototype.remove = function() {
 	var select = this.selection;
 	select.normalize();
 	var b = select.begin;
@@ -1011,43 +987,39 @@ Editor.prototype.deleteSelection = function() {
 }
 
 /**
-| Removes the selection.
+| Deselects the selection.
 */
-Editor.prototype.deselect = function() {
+Caret.prototype.deselect = function() {
 	if (!this.selection.active) return;
 	var item = this.selection.mark1.item;
 	this.selection.active = false;
 	System.setInput('');
-	/* clear item cache */
-	item.listen();
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ++ Action ++
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ An action in the making.
+
+ This overlays repository data, so for example a move is not transmitted
+ with every pixel changed but when the the object is released.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/**
+| Constructor.
+*/
+function Action(type, item, start) {
+	this.type  = type;
+	this.item  = item;
+	this.start = start;
 }
 
 /**
-| Received a input from user
-| returns true if redraw is needed
+| Action enums. TODO fixate
 */
-Editor.prototype.input = function(item, text) {
-	if (!item) return false;
-	var caret = this.caret;
-	if (this.selection.active) {
-		this.deleteSelection();
-	}
-	var reg = /([^\n]+)(\n?)/g;
-	for(var ca = reg.exec(text); ca != null; ca = reg.exec(text)) {
-		var line = ca[1];
-		var ce = caret.element;
-		var co = caret.offset;
-		var ct = ce.text;
-		ce.text = ct.substring(0, co) + line + ct.substring(co, ct.length);
-		this.caret.offset += text.length;
-		if (ca[2]) {
-			this.newline();
-		}
-	}
-	ce.listen();
-	System.repository.updateItem(item);
-	return true;
-}
+Action.PAN        = 1; // panning the background
+Action.ITEMDRAG   = 2; // draggine one item
+Action.ITEMRESIZE = 3; // resizing one item
+Action.FLOATMENU  = 4; // clicked the float menu (background click)
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .---.         .
@@ -1096,11 +1068,10 @@ _init : function() {
 	var canvas = document.getElementById('canvas');
 	canvas.width  = window.innerWidth - 1;
 	canvas.height = window.innerHeight - 1;
-	this.fabric = new Fabric(canvas);
+	var fabric = this.fabric = new Fabric(canvas); // TODO dont remember fabric.
 	Measure.init();
 
-	// the space that currently is displayed
-	this.space = null;
+	this.face = new FrontFace(fabric);
 
 	// if true browser supports the setCapture() call
 	// if false needs work around
@@ -1118,8 +1089,6 @@ _init : function() {
 	// timer for atween state
 	var atweenTimer = null;
 
-	var editor = this.editor = new Editor();
-
 	// hidden input that forwards all events
 	var hiddenInput = document.getElementById('input');
 
@@ -1134,7 +1103,7 @@ _init : function() {
 		if (ctrl) {
 			switch(keyCode) {
 			case 65 : // ctrl+a
-				this.cSpace.specialKey(keyCode, shift, ctrl);
+				this.face.specialKey(keyCode, shift, ctrl);
 				return false;
 			default :
 				return true;
@@ -1150,7 +1119,7 @@ _init : function() {
 		case 39 : // right
 		case 40 : // down
 		case 46 : // del
-			this.cSpace.specialKey(keyCode, shift, ctrl);
+			this.face.specialKey(keyCode, shift, ctrl);
 			return false;
 		default :
 			return true;
@@ -1208,7 +1177,7 @@ _init : function() {
 		// hackish, also look into the hidden input field,
 		// maybe the user pasted something using the browser menu.
 		testinput();
-		editor.blink();
+		this.face.caret.blink();
 	}
 
 	/**
@@ -1248,14 +1217,14 @@ _init : function() {
 	| Hidden input lost focus.
 	*/
 	function onblur(event) {
-		this.cSpace.systemBlur();
+		this.face.systemBlur();
 	}
 
 	/**
 	| Hidden input got focus.
 	*/
 	function onfocus(event) {
-		this.cSpace.systemFocus();
+		this.face.systemFocus();
 	}
 
 	/**
@@ -1264,7 +1233,7 @@ _init : function() {
 	function onresize(event) {
 		canvas.width  = window.innerWidth - 1;
 		canvas.height = window.innerHeight - 1;
-		if (this.cSpace) this.cSpace.redraw();
+		this.face.redraw(); 
 	}
 
 	/**
@@ -1275,7 +1244,7 @@ _init : function() {
 
 		switch(mst) {
 		case MST.NONE :
-			this.cSpace.mousehover(p);
+			this.face.mousehover(p);
 			return true;
 		case MST.ATWEEN :
 			var dragbox = settings.dragbox;
@@ -1284,9 +1253,9 @@ _init : function() {
 				clearTimeout(atweenTimer);
 				atweenTimer = null;
 				mst = MST.DRAG;
-				this.cSpace.dragstart(msp, event.shiftKey, event.ctrlKey || event.metaKey);
+				this.face.dragstart(msp, event.shiftKey, event.ctrlKey || event.metaKey);
 				if (!p.eq(msp)) {
-					this.cSpace.dragmove(p, event.shiftKey, event.ctrlKey || event.metaKey);
+					this.face.dragmove(p, event.shiftKey, event.ctrlKey || event.metaKey);
 				}
 				captureEvents();
 			} else {
@@ -1297,7 +1266,7 @@ _init : function() {
 			}
 			return true;
 		case MST.DRAG :
-			this.cSpace.dragmove(p, event.shiftKey, event.ctrlKey || event.metaKey);
+			this.face.dragmove(p, event.shiftKey, event.ctrlKey || event.metaKey);
 			return true;
 		default :
 			throw new Error('invalid mst');
@@ -1311,8 +1280,8 @@ _init : function() {
 		event.preventDefault();
 		hiddenInput.focus();
 		var p = new Point (event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop);
-		/* asks the space if it forces this to be a drag or click, or yet unknown */
-		mst = this.cSpace.mousedown(p);
+		// asks the face if it forces this to be a drag or click, or yet unknown.
+		mst = this.face.mousedown(p);
 		switch(mst) {
 		case MST.ATWEEN :
 			msp = mmp = p;
@@ -1339,14 +1308,15 @@ _init : function() {
 		case MST.NONE :
 			return false;
 		case MST.ATWEEN :
-			/* this was a click */
+			// A click is a mouse down followed within dragtime by 'mouseup' and
+			// not having moved out of 'dragbox'.
 			clearTimeout(atweenTimer);
 			atweenTimer = null;
-			this.cSpace.click(p, event.shiftKey, event.ctrlKey || event.metaKey);
+			this.face.click(p, event.shiftKey, event.ctrlKey || event.metaKey);
 			mst = MST.NONE;
 			return false;
 		case MST.DRAG :
-			this.cSpace.dragstop(p, event.shiftKey, event.ctrlKey || event.metaKey);
+			this.face.dragstop(p, event.shiftKey, event.ctrlKey || event.metaKey);
 			mst = MST.NONE;
 			return false;
 		}
@@ -1358,7 +1328,7 @@ _init : function() {
 	function onmousewheel(event) {
 		var wheel = event.wheelDelta || event.detail;
 		wheel = wheel > 0 ? 1 : -1;
-		this.cSpace.mousewheel(wheel);
+		this.face.mousewheel(wheel);
 	}
 
 	/**
@@ -1371,9 +1341,9 @@ _init : function() {
 		}
 		mst = MST.DRAG;
 		atweenTimer = null;
-		this.cSpace.dragstart(msp, mms, mmc);
+		this.face.dragstart(msp, mms, mmc);
 		if (!mmp.eq(msp)) {
-			this.cSpace.dragmove(mmp, mms, mmc);
+			this.face.dragmove(mmp, mms, mmc);
 		}
 	}
 
@@ -1438,13 +1408,193 @@ _init : function() {
 	}
 
 	this.mio = new MeshIO();
-
 	this.startBlinker();
+
 	// hinders init to be called another time
 	this.init = this._init = null;
 
-	this.cSpace.redraw();
+	this.face.redraw();
 }};
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ,--.         .         .
+ | `-' ,-. ,-. | , ,-. . |-
+ |   . | | |   |<  | | | |
+ `--'  `-' `-' ' ` |-' ' `'
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                   '
+ The unmoving interface.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+function Cockpit() {
+// todo, use this!
+}
+
+/**
+| Redraws the cockpit.
+*/
+Cockpit.prototype.redraw = function(fabric, action, selection) {
+	// TODO
+}
+
+/**
+| Mouse hover.
+*/
+Cockpit.prototype.mousehover = function(p) {
+	/* TODO
+	var redraw = this.edgemenu.mousepos !== this.edgemenu.getMousepos(p);
+	if (this.edgemenu.mousepos >= 0) {
+		// mouse floated on edge menu, no need to look further 
+		System.setCursor('default');
+		if (redraw) this.redraw();
+		return;
+	}
+	*/
+}
+
+/** 
+| Mouse button down event 
+*/
+Cockpit.prototype.mousedown = function(p) {
+	/*
+	var md = this.edgemenu.getMousepos(p);
+	if (md >= 0) {
+		iaction.act = ACT.NONE;
+		redraw = true;
+		switch(md) {
+		case 0: this._exportDialog(); break;
+		case 1: this._revertDialog(); break;
+		case 2: this._importDialog(); break;
+		}
+		if (redraw) this.redraw();
+		return MST.NONE;
+	}
+	*/
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ++FrontFace++
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ The users front face.
+
+ Consists of the Cockpit and the Space s/he is viewing.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+function FrontFace(fabric) {
+	this.fabric    = fabric;
+	this.space     = null;
+	this.cockpit   = new Cockpit();
+	this.caret     = new Caret();
+
+	this._action    = null;
+	this._selection = new Selection();
+}
+
+/**
+| Meshcraft got the systems focus.
+*/
+FrontFace.prototype.systemFocus = function() {
+	// if (!this.focus) return // TODO
+	this.caret.show();
+	this.caret.update();
+}
+
+/**
+| Meschraft lost the systems focus.
+*/
+FrontFace.prototype.systemBlur = function() {
+	this.caret.hide();
+	this.caret.update();
+}
+
+/**
+| Creates an action
+*/
+FrontFace.prototype.beginAction = function(type, item, start) {
+	if (this._action) throw new Error('double action');
+	return this._action = new Action(type, item, start);
+}
+
+FrontFace.prototype.endAction = function() {
+	if (!this._action) throw new Error('ending no action');
+	this._action = null;
+}
+
+/**
+| Redraws the cockpit and the space.
+*/
+FrontFace.prototype.redraw = function() {
+	this.fabric.attune();  // <- bad name for clear();
+	this.caret.save = null;
+	this.space.redraw(this.fabric, this._action, this._selection);
+	this.cockpit.redraw(this.fabric, this._action, this._selection);
+	this.caret.update();
+}
+
+/**
+| A mouse click.
+*/
+FrontFace.prototype.click = function(p, shift, ctrl) {
+	this.space.click(p, shift, ctrl, this._action);
+}
+
+/**
+| Mouse hover.
+|
+| TODO shift+ctrl.
+*/
+FrontFace.prototype.mousehover = function(p) {
+	// TODO cockpit
+	var redraw = false;
+	if (this.space) redraw = this.space.mousehover(p, this._action) || redraw;
+	if (redraw) this.redraw();
+}
+
+/** 
+| Mouse button down event. 
+*/
+FrontFace.prototype.mousedown = function(p) {
+	// TODO cockpit
+	return this.space.mousedown(p);
+}
+
+/**
+| User pressed a special key.
+*/
+FrontFace.prototype.specialKey = function(keyCode, shift, ctrl) {
+	var redraw = caret.specialKey(this.focus, keyCode, shift, ctrl);
+	if (redraw) this.redraw();
+}
+
+/**
+| User entered normal text (one character or more).
+*/
+FrontFace.prototype.input = function(text) {
+	var redraw = System.editor.input(this.focus, text);
+	if (redraw) this.redraw(); 
+}
+
+/**
+| Starts an operation with the mouse button held down.
+*/
+FrontFace.prototype.dragstart = function(p, shift, ctrl) {
+	// TODO cockpit
+	this.space.dragstart(p, shift, ctrl, _action);
+}
+
+/**
+| Moving during an operation with the mouse button held down.
+*/
+FrontFace.prototype.dragmove = function(p, shift, ctrl) {
+	// TODO cockpit
+	this.space.dragmove(p, shift, ctrl, this._action);
+}
+
+/**
+| Stops an operation with the mouse button held down.
+*/
+FrontFace.prototype.dragstop = function(p, shift, ctrl) {
+	this.space.dragstop(p, shift, ctrl, this._action);
+}
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,-_/,.
@@ -1523,6 +1673,7 @@ Hexmenu.prototype.getMousepos = function(p) {
 /**
 | Constructor.
 */
+/*
 function Edgemenu() {
 	// section mouse hovers over/clicks
 	this.mousepos = -1;
@@ -1543,9 +1694,10 @@ function Edgemenu() {
 	// total height
 	this.height = 30;
 }
+*/
 
 /**
-| Makes the edgemenus path.
+| Makes the edgemenu's path.
 |
 | fabric : to path upon
 | border : additional inward distance
@@ -1554,6 +1706,7 @@ function Edgemenu() {
 |   -1 outer frame
 |   >0 buttons
 */
+/*
 Edgemenu.prototype.path = function(fabric, border, edge, section) {
 	var b =  border;
 	// width half
@@ -1608,10 +1761,12 @@ Edgemenu.prototype.path = function(fabric, border, edge, section) {
 		}
 	}
 }
+*/
 
 /**
 | Draws the edgemenu.
 */
+/*
 Edgemenu.prototype.draw = function() {
 	var f = System.fabric;
 	var xm  = half(f.width);
@@ -1634,11 +1789,13 @@ Edgemenu.prototype.draw = function() {
 		bx += this.buttonWidths[i];
 	}
 }
+*/
 
 /**
 | Returns which section the position is at.
 | todo rename
 */
+/*
 Edgemenu.prototype.getMousepos = function(p) {
 	var f = System.fabric;
 	if (!this.pnw || !this.pse) return this.mousepos = -1;
@@ -1662,27 +1819,15 @@ Edgemenu.prototype.getMousepos = function(p) {
 	throw new Error('this code should not be reached');
 	return this.mousepos = -1;
 }
+*/
 
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ,--.         .         .
- | `-' ,-. ,-. | , ,-. . |-
- |   . | | |   |<  | | | |
- `--'  `-' `-' ' ` |-' ' `'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-                   '
- The unmoving interface.
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Cockpit() {
-// todo, use this!
-
-}
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++ Nexus ++
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
  The root of spaces.
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Nexus(master) {
 	Woods.Nexus.call(this, master);
@@ -1713,18 +1858,12 @@ Nexus.prototype.seeds = {
 function Space(master) {
 	Woods.Space.call(this, master);
 	this._floatMenuLabels = {c: 'new', n: 'Note', ne: 'Label'};
-	this.edgemenu = new Edgemenu();
-
-	//todo evil
-	this.iaction = {
-		act : ACT.NONE,
-	};
 
 	// panning offset
 	this.fabric = new Fabric(System.fabric);
 	this.fabric.pan = this.pan = Point.zero; // TODO no double pan
 
-	this.zoom = 1;
+	this.zoom = 1; // TODO
 }
 subclass(Space, Woods.Space);
 
@@ -1739,23 +1878,19 @@ Space.prototype.seeds = {
 /**
 | Redraws the complete space.
 */
-Space.prototype.redraw = function() {
-	var editor = System.editor;
-	editor.caret.save = null;
-	this.selection = editor.selection; // <- TODO double info = bad
-	this.fabric.attune();
-
+Space.prototype.redraw = function(fabric, action, selection) {
 	for(var zi = this.z.length - 1; zi >= 0; zi--) {
 		var it = this.items.get(this.z.get(zi));
-		it.draw(this.fabric, this.action, this.selection);
+		it.draw(this.fabric, action, selection);
 	}
-	if (this.focus) this.focus.drawHandles(this.fabric, this.action);
 
-	var ia = this.iaction;
-	switch(ia.act) {
-	case ACT.FMENU :
+	if (this.focus) this.focus.drawHandles(this.fabric, action);
+
+	switch(action) {
+	case Action.FLOATMENU :
 		this._floatmenu.draw();
 		break;
+	/* TODO
 	case ACT.IMENU :
 		this._itemmenu.draw();
 		break;
@@ -1766,40 +1901,10 @@ Space.prototype.redraw = function() {
 		// todo use something like bindzone
 		if (ia.item2) ia.item2.highlight(this.fabric);
 		arrow.draw(this.fabric);
-	}
-	this.edgemenu.draw();
-	editor.updateCaret();
-}
-
-/* user pressed a special key */
-Space.prototype.specialKey = function(keyCode, shift, ctrl) {
-	var rv = System.editor.specialKey(this.focus, keyCode, shift, ctrl);
-	if (rv) {
-		this.redraw();
+	*/
 	}
 }
 
-/* user entered normal text (one character or more) */
-Space.prototype.input = function(text) {
-	if (System.editor.input(this.focus, text)) {
-		this.redraw();
-	}
-}
-
-/* the canvas/space got focus from the system*/
-Space.prototype.systemFocus = function() {
-	if (!this.focus) {
-		return
-	}
-	System.editor.caret.show();
-	System.editor.updateCaret();
-}
-
-/* the canvas/space lost system focus */
-Space.prototype.systemBlur = function() {
-	System.editor.caret.hide();
-	System.editor.updateCaret();
-}
 
 /* sets the focussed item or loses it if null*/
 Space.prototype.setFocus = function(item) {
@@ -1817,60 +1922,57 @@ Space.prototype.setFocus = function(item) {
 	*/
 }
 
-/* mouse hover */
-Space.prototype.mousehover = function(p) {
+/**
+| Mouse hover.
+|
+| Returns true for redrawing.
+*/
+Space.prototype.mousehover = function(p, action) {
 	var pp = p.sub(this.pan);
 	var com = null;
 	var editor = System.editor;
-	var redraw = this.edgemenu.mousepos !== this.edgemenu.getMousepos(p);
-	if (this.edgemenu.mousepos >= 0) {
-		/* mouse floated on edge menu, no need to look further */
-		System.setCursor('default');
-		if (redraw) this.redraw();
-		return;
-	}
+	var redraw = false;
 
-	switch(this.iaction.act) {
-	case ACT.FMENU :
+	switch(action) {
+	case Action.FLOATMENU :
 		redraw = (this._floatmenu.mousepos !== this._floatmenu.getMousepos(p)) || redraw;
 		if (this._floatmenu.mousepos >= 0) {
 			/* mouse floated on float menu, no need to look further */
 			System.setCursor('default');
-			if (redraw) this.redraw();
-			return;
+			return redraw;
 		}
 		break;
+	/* TODO
 	case ACT.IMENU :
 		redraw = (this._itemmenu.mousepos !== this._itemmenu.getMousepos(p)) || redraw;
 		if (this._itemmenu.mousepos >= 0) {
-			/* mouse floated on item menu, no need to look further */
+			// mouse floated on item menu, no need to look further
 			System.setCursor('default');
 			if (redraw) this.redraw();
 			return;
 		}
 		break;
+	*/
 	}
 
 	if (this.focus) {
 		// todo move into items
 		if (this.focus.withinItemMenu(pp)) {
 			System.setCursor('pointer');
-			if (redraw) this.redraw();
-			return;
+			return redraw;
 		}
 
-		if ((com = this.focus.checkItemCompass(pp, this.action))) {
+		if ((com = this.focus.checkItemCompass(pp, action))) {
 			System.setCursor(com+'-resize');
-			if (redraw) this.redraw();
-			return;
+			return redraw;
 		}
 	}
 
 	// todo remove nulls by shiftKey, ctrlKey
 	var tx = this._transfix(TXE.HOVER, pp, null, null);
-	redraw = redraw || (tx & TXR.REDRAW);
 	if (!(tx & TXR.HIT)) { System.setCursor('crosshair');}
-	if (redraw) this.redraw();
+
+	return redraw || (tx & TXR.REDRAW);;
 }
 
 /**
@@ -1887,40 +1989,41 @@ Space.prototype._transfix = function(txe, p, shift, ctrl) {
 }
 
 
-/* starts creating a new relation */
+/**
+| Starts creating a new relation.
+*/
 Space.prototype.actionSpawnRelation = function(item, p) {
-	var ia = this.iaction;
+	throw new Error('TODO');
+
+	/*var ia = this.iaction;
 	ia.act = ACT.RBIND;
 	ia.item = item;
 	ia.sp = ia.smp = p;
 	System.setCursor('not-allowed');
+	*/
 }
 
 /**
 | Starts a scrolling action
 */
 Space.prototype.actionScrollY = function(item, startY, scrollbar) {
-	var ia  = this.iaction;
+	throw new Error('TODO');
+	
+	/*var ia  = this.iaction;
 	ia.act  = ACT.SCROLLY;
 	ia.item = item;
 	ia.sy   = startY;
 	ia.ssy  = scrollbar.pos;
+	*/
 }
 
 /**
-| Starts dragging an item. TODO rename
-*/
-Space.prototype.actionDrag = function(item, start) {
-	if (this.action) throw new Error('action not null on action');
-	this.action = new Action(Action.ITEMDRAG, item, start);
-	System.setCursor('move');
-}
-
-
-/**
-| Binds a relations
+| Binds a relation.
 */
 Space.prototype.actionRBindTo = function(toItem) {
+	throw new Error('TODO');
+
+	/*
 	if (toItem.id === this.iaction.item.id) {
 		console.log('not binding to itself');
 		System.setCursor('default');
@@ -1928,28 +2031,31 @@ Space.prototype.actionRBindTo = function(toItem) {
 	}
 	var rel = Relation.create(this.iaction.item, toItem);
 	System.repository.updateItem(rel);
+	*/
 }
 
 /**
 | Hovering during relation binding.
 */
 Space.prototype.actionRBindHover = function(toItem) {
+	throw new Error('TODO');
+
+	/*
 	if (toItem.id === this.iaction.item.id) {
 		System.setCursor('not-allowed');
 		return;
 	}
 	System.setCursor('default');
 	this.iaction.item2 = toItem;
+	*/
 }
 
-
 /**
-| Starts an operation with the mouse held down
+| Starts an operation with the mouse button held down.
 */
-Space.prototype.dragstart = function(p, shift, ctrl) {
+Space.prototype.dragstart = function(p, shift, ctrl, action) {
 	var pp = p.sub(this.pan);
 	var editor  = System.editor;
-	var iaction = this.iaction;
 
 	/* if (this.focus && this.focus.withinItemMenu(pp)) {
 		this.actionSpawnRelation(this.focus, pp);
@@ -1960,7 +2066,7 @@ Space.prototype.dragstart = function(p, shift, ctrl) {
 	var tfx = this._transfix(TXE.DRAGSTART, pp, shift, ctrl);
 	if (!(tfx & TXR.HIT)) {
 		// panning
-		this.action = new Action(Action.PAN, null, pp);
+		System.face.beginAction(Action.PAN, null, pp);
 		System.setCursor('crosshair');
 		return;
 	}
@@ -1968,12 +2074,12 @@ Space.prototype.dragstart = function(p, shift, ctrl) {
 }
 
 /**
-| a click is a mouse down followed within dragtime by 'mouseup' and
-| not having moved out of 'dragbox'.
+| A mouse click.
 */
-Space.prototype.click = function(p, shift, ctrl) {
+Space.prototype.click = function(p, shift, ctrl, action) {
 	var pp = p.sub(this.pan);
 
+	/* TODO
 	var focus = this.focus;
 	if (focus && focus.withinItemMenu(pp)) {
 		this._itemmenu = focus.newItemMenu(this.pan);
@@ -1981,29 +2087,30 @@ Space.prototype.click = function(p, shift, ctrl) {
 		this.redraw();
 		return;
 	}
+	*/
 
 	var tfx = this._transfix(TXE.CLICK, pp, shift, ctrl);
 
-	if (!(tfx & TXR.HIT)) {
-		this.iaction.act = ACT.FMENU;
-		this._floatmenu = new Hexmenu(p, settings.floatmenu, this._floatMenuLabels);
+	if ( !(tfx & TXR.HIT) ) {
+		var action = new Action(Action.FLOATMENU, null, p);
+		action._floatmenu = new Hexmenu(p, settings.floatmenu, this._floatMenuLabels);
 
 		System.setCursor('default');
 		this.setFocus(null);
 		this.redraw();
-		return;
+		return action;
 	}
 
 	if (tfx & TXR.REDRAW) this.redraw();
+	return null;
 }
 
 /**
-| Stops an operation with the mouse held down
+| Stops an operation with the mouse button held down.
 */
-Space.prototype.dragstop = function(p, shift, ctrl) {
+Space.prototype.dragstop = function(p, shift, ctrl, action) {
 	var pp = p.sub(this.pan);
 	var editor = System.editor;
-	var action = this.action;
 	var redraw = false;
 	if (!action) throw new Error('Dragstop without action?');
 	switch (action.type) {
@@ -2015,6 +2122,8 @@ Space.prototype.dragstop = function(p, shift, ctrl) {
 		break;
 	case Action.PAN :
 		break;
+
+	/* TODO
 	case ACT.SCROLLY :
 		iaction.sy   = null;
 		break;
@@ -2023,6 +2132,7 @@ Space.prototype.dragstop = function(p, shift, ctrl) {
 		this._transfix(TXE.RBINDTO, pp, shift, ctrl);
 		redraw = true;
 		break;
+	*/
 	default :
 		throw new Error('Invalid action in "Space.dragstop"');
 	}
@@ -2032,12 +2142,11 @@ Space.prototype.dragstop = function(p, shift, ctrl) {
 }
 
 /**
-| Moving during an operation with the mouse held down.
+| Moving during an operation with the mouse button held down.
 */
-Space.prototype.dragmove = function(p, shift, ctrl) {
+Space.prototype.dragmove = function(p, shift, ctrl, action) {
 	var pp = p.sub(this.pan);
 	var redraw = false;
-	var action = this.action;
 
 	switch(action.type) {
 	case Action.PAN :
@@ -2051,6 +2160,7 @@ Space.prototype.dragmove = function(p, shift, ctrl) {
 		action.move = pp;
 		this.redraw();
 		return;
+	/* TODO
 	case ACT.SCROLLY:
 		// todo let the item scroll itself
 		var dy = pp.y - iaction.sy;
@@ -2066,6 +2176,7 @@ Space.prototype.dragmove = function(p, shift, ctrl) {
 		iaction.smp = pp;
 		this.redraw();
 		return true;
+	*/
 	default :
 		throw new Error('unknown action code in Space.dragging: '+ action.type);
 	}
@@ -2267,28 +2378,15 @@ Space.prototype._revertDialog = function() {
 }
 
 
-/* mouse down event */
-Space.prototype.mousedown = function(p) {
+/** 
+| Mouse button down event 
+*/
+Space.prototype.mousedown = function(p, action) {
 	var pp = p.sub(this.pan);
-	var iaction = this.iaction;
-	var editor = System.editor;
 	var redraw = false;
 
-	var md = this.edgemenu.getMousepos(p);
-	if (md >= 0) {
-		iaction.act = ACT.NONE;
-		redraw = true;
-		switch(md) {
-		case 0: this._exportDialog(); break;
-		case 1: this._revertDialog(); break;
-		case 2: this._importDialog(); break;
-		}
-		if (redraw) this.redraw();
-		return MST.NONE;
-	}
-
 	switch (iaction.act) {
-	case ACT.FMENU :
+	case Action.FLOATMENU :
 		var md = this._floatmenu.getMousepos(p);
 		iaction.act = ACT.NONE;
 		var fm = this._floatmenu;
@@ -2302,7 +2400,7 @@ Space.prototype.mousedown = function(p) {
 			// todo, beautify point logic.
 			var pnw = fm.p.sub(half(nw) + this.pan.x, half(nh) + this.pan.y);
 			var pse = pnw.add(nw, nh);
-			var notePath = System.mio.newNote(new Rect(pnw, pse));
+			var notePath = System.mio.newNote(this, new Rect(pnw, pse));
 			this.setFocus(notePath);
 			break;
 		case 'ne' : // label
@@ -2319,6 +2417,7 @@ Space.prototype.mousedown = function(p) {
 		}
 		this.redraw();
 		return MST.NONE;
+	/* TODO
 	case ACT.IMENU :
 		var md = this._itemmenu.getMousepos(p);
 		iaction.act = ACT.NONE;
@@ -2334,6 +2433,7 @@ Space.prototype.mousedown = function(p) {
 			return MST.NONE;
 		}
 		break;
+	*/
 	}
 
 	if (this.focus) {
@@ -2344,13 +2444,11 @@ Space.prototype.mousedown = function(p) {
 		var com;
 		if ((com = this.focus.checkItemCompass(pp, this.action))) {
 			// resizing
-			if (this.action) throw new Error('action not null on action');
-			this.action = new Action(Action.ITEMRESIZE, this.focus, pp);
-			this.action.align = com;
-			this.action.startZone = this.focus.getZone();
+			var action = System.face.beginAction(Aciton.ITEMRESIZE, this.focus, pp);
+			action.align = com;
+			action.startZone = this.focus.getZone();
 			System.setCursor(com+'-resize');
 
-			// iaction.siz  = this.focus.handlezone;  ???
 			if (redraw) this.redraw();
 			return MST.DRAG;
 		}
@@ -2532,7 +2630,7 @@ Para.prototype._flow = function() {
 	var pline = 0;
 	var l = pinfo[pline] = {a: [], x: x, y: y};
 
-	//for(var node = this.first; node; node = node.next) { TODO
+	//for(var node = this.first; node; node = node.next) TODO
 	var t = this.get('text');
 
 	//var reg = !dtree.pre ? (/(\s*\S+)\s?(\s*)/g) : (/(.+)()$/g);
@@ -3379,7 +3477,8 @@ Note.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 		if (sbary.visible && sbary.zone.within(pr)) {
 			space.actionScrollY(this, p.y, this.scrollbarY);
 		} else {
-			space.actionDrag(this, p);
+			System.face.beginAction(Action.ITEMDRAG, this, p);
+			System.setCursor('move');
 		}
 		return txr;
 	case TXE.CLICK :
@@ -3393,11 +3492,10 @@ Note.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 			txr |= TXR.REDRAW;
 		}
 
-		var op = new Point(
-			p.x - this.zone.pnw.x,
-			p.y - this.zone.pnw.y + max(0, this.scrollbarY.pos));
+		var op = p.sub(this.zone.pnw.w, this.zone.pnw.y - max(0, this.scrollbarY.pos));
 		var para = this.paraAtPoint(op);
 		if (para) {
+			debug('Click Para', para);
 			var editor = System.editor;
 			editor.caret.setFromPoint(para, op.sub(para.p));
 			editor.caret.show();
@@ -3729,7 +3827,8 @@ Label.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 			txr |= TXR.REDRAW;
 		}
 
-		space.actionDrag(this, p.sub(this.zone.pnw));
+		System.face.beginAction(Action.ITEMDRAG, this, p.sub(this.zone.pnw));
+		System.setCursor('move');
 		return txr;
 	case TXR.CLICK:
 		var txr = TXR.HIT;
@@ -4100,7 +4199,8 @@ Relation.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 			txr |= TXR.REDRAW;
 		}
 
-		space.actionDrag(this, p.sub(this.handlezone.pnw));
+		System.face.beginAction(Action.ITEMDRAG, this, p.sub(this.handlezone.pnw));
+		System.setCursor('move');
 		return txr;
 	case TXR.CLICK:
 		var txr = TXR.HIT;
@@ -4227,9 +4327,8 @@ Relation.prototype.onlook = function(event, item) {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function MeshIO() {
 	this.mm = new MeshMashine(Nexus, null);
-	System.cSpaceKey = 'welcome';
 
-	var spacepath = new Path([System.cSpaceKey]);
+	var spacepath = new Path(['welcome']);
 
 	// for now hand init
 	var asw = this.mm.alter(0,
@@ -4295,10 +4394,13 @@ function MeshIO() {
 
 	asw = this.mm.get(-1, spacepath);
 	if (asw.ok !== true) throw new Error('Cannot reget own Space');
-	System.cSpace = asw.node;
+	System.face.space = asw.node;
 }
 
-MeshIO.prototype.newNote = function(zone) {
+/**
+| Creates a new note.
+*/
+MeshIO.prototype.newNote = function(space, zone) {
 	var asw = this.mm.alter(-1,
 		new Signature({
 			val: {
@@ -4310,7 +4412,7 @@ MeshIO.prototype.newNote = function(zone) {
 				},
 			},
 		}), new Signature({
-			path: new Path([System.cSpaceKey, 'items', '$new']),
+			path: new Path([space.key$, 'items', '$new']),
 		})
 	);
 
@@ -4320,8 +4422,9 @@ MeshIO.prototype.newNote = function(zone) {
 	this.mm.alter(-1,
 		new Signature({
 			val: apath.get(-1),
-		}), new Signature({
-			path: new Path([System.cSpaceKey, 'z', '$end']),
+		}),
+		new Signature({
+			path: new Path([space.key$, 'z', '$end']),
 		})
 	);
 }
@@ -4336,16 +4439,12 @@ MeshIO.prototype.setZone = function(item, zone) {
 	this.mm.alter(-1,
 		new Signature({
 			val: zone,
-		}), new Signature({
+		}),
+		new Signature({
 			path: path,
-		}));
+		})
+	);
 }
-
-/*
-MeshIO.prototype.getCurrentSpace = function() {
-	var space = this.mm.get(-1, this.spacepath);
-	return space.node;
-}*/
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -4536,7 +4635,8 @@ Repository.prototype.reset = function() {
 /**
 | Loads an Item from JSON.
 */
-/*Repository.prototype._loadItem = function(id, js) {
+/*
+Repository.prototype._loadItem = function(id, js) {
 	if (!js || !js.t) throw new Error('JSON error: attributes missing from ('+id+'): '+js);
 	switch(js.t) {
 	case 'note'  : return Note.jnew(js, id);
@@ -4544,14 +4644,18 @@ Repository.prototype.reset = function() {
 	case 'rel'   : return Relation.jnew(js, id);
 	default      : throw new Error('unknown item type');
 	}
-}*/
+}
+*/
 
 /*Repository.prototype._saveZIDX = function() {
 	window.localStorage.setItem('zidx', JSON.stringify(this.zidx));
 }*/
 
-/* adds an item to the space */
-/*Repository.prototype.addItem = function(item, top) {
+/**
+| Adds an item to the space
+*/
+/*
+Repository.prototype.addItem = function(item, top) {
 	if (!item.id) item.id  = this._newItemID();
 	this.items[item.id] = item;
 	if (top) {
