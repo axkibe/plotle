@@ -35,9 +35,10 @@ var abs = Math.abs;
 var max = Math.max;
 var min = Math.min;
 
-var subclass  = Jools.subclass;
-var log       = Jools.log;
 var debug     = Jools.debug;
+var fixate    = Jools.fixate;
+var log       = Jools.log;
+var subclass  = Jools.subclass;
 var Path      = Jools.Path;
 var Signature = Jools.Signature;
 
@@ -308,15 +309,6 @@ var TXE = {
 }
 Object.freeze(TXE);
 
-/**
-| Bitfield return code of transfix()
-*/
-var TXR = {
-	HIT    : 0x1,
-	REDRAW : 0x2
-};
-Object.freeze(TXR);
-
 
 /**
 | onlook() events
@@ -327,6 +319,25 @@ var ONLOOK = {
 	REMOVE : 2,
 }
 Object.freeze(ONLOOK);
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ++ Bubble +++
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ Used for event bubbling
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+function Bubble() {
+	this.init();
+}
+
+/**
+| Resets this bubble event.
+*/
+Bubble.prototype.init = function() {
+	this.hit    = false;
+	this.redraw = false;
+	return this;
+}
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,-,-,-.           .
@@ -1235,7 +1246,7 @@ _init : function() {
 	function onresize(event) {
 		canvas.width  = window.innerWidth - 1;
 		canvas.height = window.innerHeight - 1;
-		this.face.redraw(); 
+		this.face.redraw();
 	}
 
 	/**
@@ -1442,7 +1453,7 @@ Cockpit.prototype.redraw = function(fabric, action, selection) {
 /**
 | Mouse hover.
 */
-Cockpit.prototype.mousehover = function(p) {
+Cockpit.prototype.mousehover = function(bubble, p, action) {
 	/* TODO
 	var redraw = this.edgemenu.mousepos !== this.edgemenu.getMousepos(p);
 	if (this.edgemenu.mousepos >= 0) {
@@ -1486,6 +1497,7 @@ function FrontFace(fabric) {
 	this.space     = null;
 	this.cockpit   = new Cockpit();
 	this.caret     = new Caret();
+	this.bubble    = new Bubble();
 
 	this._action    = null;
 	this._selection = new Selection();
@@ -1536,7 +1548,10 @@ FrontFace.prototype.redraw = function() {
 | A mouse click.
 */
 FrontFace.prototype.click = function(p, shift, ctrl) {
-	this.space.click(p, shift, ctrl, this._action);
+	// TODO cockpit
+	var bubble = this.bubble.init();
+	this.space.mousehover(bubble, p, this._action);
+	if (bubble.redraw) this.redraw();
 }
 
 /**
@@ -1546,9 +1561,9 @@ FrontFace.prototype.click = function(p, shift, ctrl) {
 */
 FrontFace.prototype.mousehover = function(p) {
 	// TODO cockpit
-	var redraw = false;
-	if (this.space) redraw = this.space.mousehover(p, this._action) || redraw;
-	if (redraw) this.redraw();
+	var bubble = this.bubble.init();
+	this.space.mousehover(bubble, p, this._action);
+	if (bubble.redraw) this.redraw();
 }
 
 /**
@@ -1556,23 +1571,28 @@ FrontFace.prototype.mousehover = function(p) {
 */
 FrontFace.prototype.mousedown = function(p) {
 	// TODO cockpit
-	return this.space.mousedown(p);
+	var bubble = this.bubble.init();
+	var mst = this.space.mousedown(bubble, p); // TODO rename mst -> mouseState
+	if (bubble.redraw) this.redraw();
+	return mst;
 }
 
 /**
 | User pressed a special key.
 */
 FrontFace.prototype.specialKey = function(keyCode, shift, ctrl) {
-	var redraw = caret.specialKey(this.focus, keyCode, shift, ctrl);
-	if (redraw) this.redraw();
+	throw new Error('TODO');
+	//var redraw = caret.specialKey(this.focus, keyCode, shift, ctrl);
+	//if (redraw) this.redraw();
 }
 
 /**
 | User entered normal text (one character or more).
 */
 FrontFace.prototype.input = function(text) {
-	var redraw = System.editor.input(this.focus, text);
-	if (redraw) this.redraw();
+	throw new Error('TODO');
+	//System.editor.input(this.focus, text);
+	//if (redraw) this.redraw();
 }
 
 /**
@@ -1580,8 +1600,9 @@ FrontFace.prototype.input = function(text) {
 */
 FrontFace.prototype.dragstart = function(p, shift, ctrl) {
 	// TODO cockpit
-	var redraw = this.space.dragstart(p, shift, ctrl, this._action);
-	if (redraw) this.redraw();
+	var bubble = this.bubble.init();
+	this.space.dragstart(bubble, p, shift, ctrl, this._action);
+	if (bubble.redraw) this.redraw();
 }
 
 /**
@@ -1589,16 +1610,19 @@ FrontFace.prototype.dragstart = function(p, shift, ctrl) {
 */
 FrontFace.prototype.dragmove = function(p, shift, ctrl) {
 	// TODO cockpit
-	var redraw = this.space.dragmove(p, shift, ctrl, this._action);
-	if (redraw) this.redraw();
+	var bubble = this.bubble.init();
+	this.space.dragmove(bubble, p, shift, ctrl, this._action);
+	if (bubble.redraw) this.redraw();
 }
 
 /**
 | Stops an operation with the mouse button held down.
 */
 FrontFace.prototype.dragstop = function(p, shift, ctrl) {
-	var redraw = this.space.dragstop(p, shift, ctrl, this._action);
-	if (redraw) this.redraw();
+	// TODO cockpit
+	var bubble = this.bubble.init();
+	this.space.dragstop(bubble, p, shift, ctrl, this._action);
+	if (bubble.redraw) this.redraw();
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1891,22 +1915,25 @@ Space.prototype.redraw = function(fabric, action, selection) {
 
 	if (this.focus) this.focus.drawHandles(this.fabric, action);
 
-	switch(action) {
-	case Action.FLOATMENU :
-		action.floatmenu.draw();
-		break;
-	/* TODO
-	case ACT.IMENU :
-		this._itemmenu.draw();
-		break;
-	case ACT.RBIND :
-		var arrow = Line.connect(
-			ia.item.handlezone, 'normal',
-			(ia.item2 && ia.item2.handlezone) || ia.smp , 'arrow');
-		// todo use something like bindzone
-		if (ia.item2) ia.item2.highlight(this.fabric);
-		arrow.draw(this.fabric);
-	*/
+	debug(action);
+	if (action) {
+		switch (action.type) {
+		case Action.FLOATMENU :
+			action.floatmenu.draw();
+			break;
+		/* TODO
+		case ACT.IMENU :
+			this._itemmenu.draw();
+			break;
+		case ACT.RBIND :
+			var arrow = Line.connect(
+					ia.item.handlezone, 'normal',
+				(ia.item2 && ia.item2.handlezone) || ia.smp , 'arrow');
+				// todo use something like bindzone
+				if (ia.item2) ia.item2.highlight(this.fabric);
+			arrow.draw(this.fabric);
+			*/
+		}
 	}
 }
 
@@ -1932,19 +1959,22 @@ Space.prototype.setFocus = function(item) {
 |
 | Returns true for redrawing.
 */
-Space.prototype.mousehover = function(p, action) {
+Space.prototype.mousehover = function(bubble, p, action) {
 	var pp = p.sub(this.pan);
-	var com = null;
 	var editor = System.editor;
-	var redraw = false;
 
 	switch(action) {
 	case Action.FLOATMENU :
 		redraw = (action.floatmenu.mousepos !== action.floatmenu.getMousepos(p)) || redraw;
+		if (action.floatmenu.mousepos !== action.floatmenu.getMousepos(p)) {
+			// float menu changed
+			bubble.redraw = true;
+		}
 		if (action.floatmenu.mousepos >= 0) {
-			/* mouse floated on float menu, no need to look further */
+			// mouse floated on float menu
+			bubble.hit = true;
 			System.setCursor('default');
-			return redraw;
+			return;
 		}
 		break;
 	/* TODO
@@ -1964,33 +1994,35 @@ Space.prototype.mousehover = function(p, action) {
 		// todo move into items
 		if (this.focus.withinItemMenu(pp)) {
 			System.setCursor('pointer');
-			return redraw;
+			bubble.hit = true;
+			return;
 		}
 
-		if ((com = this.focus.checkItemCompass(pp, action))) {
+		var com = this.focus.checkItemCompass(pp, action);
+		if (com) {
 			System.setCursor(com+'-resize');
-			return redraw;
+			bubble.hit = true;
+			return;
 		}
 	}
 
 	// todo remove nulls by shiftKey, ctrlKey
-	var tx = this._transfix(TXE.HOVER, pp, null, null);
-	if (!(tx & TXR.HIT)) { System.setCursor('crosshair');}
-
-	return redraw || (tx & TXR.REDRAW);
+	// XXX
+	this._transfix(TXE.HOVER, bubble, pp, null, null);
+	if (!bubble.hit) System.setCursor('crosshair');
 }
 
 /**
 | Asks every item that intersects with a point if it feels reponsible for an event.
 */
-Space.prototype._transfix = function(txe, p, shift, ctrl) {
-	var fx = 0;
+Space.prototype._transfix = function(txe, bubble, p, shift, ctrl) {
+	if (bubble.hit) throw new Error('Bubble already hit in _transfix');
+
 	for(var zi = 0, zlen = this.z.length; zi < zlen; zi++) {
 		var it = this.items.get(this.z.get(zi));
-		fx |= it.transfix(txe, this, p, zi, shift, ctrl);
-		if (fx & TXR.HIT) break;
+		it.transfix(txe, bubble, this, p, zi, shift, ctrl);
+		if (bubble.hit) return;
 	}
-	return fx;
 }
 
 
@@ -2058,7 +2090,7 @@ Space.prototype.actionRBindHover = function(toItem) {
 /**
 | Starts an operation with the mouse button held down.
 */
-Space.prototype.dragstart = function(p, shift, ctrl, action) {
+Space.prototype.dragstart = function(bubble, p, shift, ctrl, action) {
 	var pp = p.sub(this.pan);
 	var editor  = System.editor;
 
@@ -2068,21 +2100,19 @@ Space.prototype.dragstart = function(p, shift, ctrl, action) {
 		return;
 	} */
 
-	var tfx = this._transfix(TXE.DRAGSTART, pp, shift, ctrl);
-	if (!(tfx & TXR.HIT)) {
+	this._transfix(TXE.DRAGSTART, bubble, pp, shift, ctrl);
+
+	if (!bubble.hit) {
 		// panning
 		System.face.beginAction(Action.PAN, null, pp);
 		System.setCursor('crosshair');
-		return false;
 	}
-
-	return tfx & TXR.REDRAW;
 }
 
 /**
 | A mouse click.
 */
-Space.prototype.click = function(p, shift, ctrl, action) {
+Space.prototype.click = function(bubble, p, shift, ctrl, action) {
 	var pp = p.sub(this.pan);
 
 	/* TODO
@@ -2095,35 +2125,30 @@ Space.prototype.click = function(p, shift, ctrl, action) {
 	}
 	*/
 
-	var tfx = this._transfix(TXE.CLICK, pp, shift, ctrl);
+	this._transfix(TXE.CLICK, bubble, pp, shift, ctrl);
 
-	if ( !(tfx & TXR.HIT) ) {
+	if (!bubble.hit) {
+		debug('begin floatmenu');
 		var action = System.face.beginAction(Action.FLOATMENU, null, p);
 		action.floatmenu = new Hexmenu(p, settings.floatmenu, this._floatMenuLabels);
-
 		System.setCursor('default');
 		this.setFocus(null);
-		return true;
 	}
-
-	if (tfx & TXR.REDRAW) this.redraw();
-	return null;
 }
 
 /**
 | Stops an operation with the mouse button held down.
 */
-Space.prototype.dragstop = function(p, shift, ctrl, action) {
+Space.prototype.dragstop = function(bubble, p, shift, ctrl, action) {
 	var pp = p.sub(this.pan);
 	var editor = System.editor;
-	var redraw = false;
 	if (!action) throw new Error('Dragstop without action?');
 	switch (action.type) {
 	case Action.ITEMDRAG :
 	case Action.ITEMRESIZE :
 		action.item.setZone(action.item.getZone(action));
 		System.setCursor('default');
-		redraw = true;
+		bubble.redraw = true;
 		break;
 	case Action.PAN :
 		break;
@@ -2142,27 +2167,25 @@ Space.prototype.dragstop = function(p, shift, ctrl, action) {
 		throw new Error('Invalid action in "Space.dragstop"');
 	}
 	System.face.endAction();
-
-	return redraw;
 }
 
 /**
 | Moving during an operation with the mouse button held down.
 */
-Space.prototype.dragmove = function(p, shift, ctrl, action) {
+Space.prototype.dragmove = function(bubble, p, shift, ctrl, action) {
 	var pp = p.sub(this.pan);
-	var redraw = false;
 
 	switch(action.type) {
 	case Action.PAN :
 		this.pan = this.fabric.pan = p.sub(action.start); // TODO double pan?
 		// System.repository.savePan(this.pan); TODO!
-		return true;
-
+		bubble.redraw = true;
+		return;
 	case Action.ITEMRESIZE :
 	case Action.ITEMDRAG :
 		action.move = pp;
-		return true;
+		bubble.redraw = true;
+		return;
 	/* TODO
 	case ACT.SCROLLY:
 		// todo let the item scroll itself
@@ -2384,18 +2407,15 @@ Space.prototype._revertDialog = function() {
 /**
 | Mouse button down event.
 */
-Space.prototype.mousedown = function(p, action) {
+Space.prototype.mousedown = function(bubble, p, action) {
 	var pp = p.sub(this.pan);
-	var redraw = false;
 
 	switch (action) {
 	case Action.FLOATMENU :
 		var md = action.floatmenu.getMousepos(p);
 		iaction.act = ACT.NONE;
 		var fm = action.floatmenu;
-		if (md < 0) {
-			break;
-		}
+		if (md < 0) break;
 		switch(md) {
 		case 'n' : // note
 			var nw = settings.note.newWidth;
@@ -2418,13 +2438,13 @@ Space.prototype.mousedown = function(p, action) {
 			this.setFocus(label);
 			break;
 		}
-		this.redraw();
+		bubble.redraw = true;
 		return MST.NONE;
 	/* TODO
 	case ACT.IMENU :
 		var md = this._itemmenu.getMousepos(p);
 		iaction.act = ACT.NONE;
-		redraw = true;
+		bubble.redraw = true;
 		if (md) {
 			switch(md) {
 			case 'n':
@@ -2432,7 +2452,6 @@ Space.prototype.mousedown = function(p, action) {
 				this.setFocus(null);
 				break;
 			}
-			if (redraw) this.redraw();
 			return MST.NONE;
 		}
 		break;
@@ -2441,7 +2460,6 @@ Space.prototype.mousedown = function(p, action) {
 
 	if (this.focus) {
 		if (this.focus.withinItemMenu(p)) {
-			if (redraw) this.redraw();
 			return MST.ATWEEN;
 		}
 		var com = this.focus.checkItemCompass(pp, action) ;
@@ -2452,12 +2470,10 @@ Space.prototype.mousedown = function(p, action) {
 			action.startZone = this.focus.getZone();
 			System.setCursor(com+'-resize');
 
-			if (redraw) this.redraw();
 			return MST.DRAG;
 		}
 	}
 
-	if (redraw) this.redraw();
 	return MST.ATWEEN;
 }
 
@@ -3454,26 +3470,27 @@ Note.prototype.fabricUp2d8 = function(zone) {
 | Checks if this items reacts on an event.
 | Returns transfix code.
 */
-Note.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
-	if (!this.zone.within(p)) return 0;
+Note.prototype.transfix = function(txe, bubble, space, p, z, shift, ctrl) {
+	if (!this.zone.within(p)) return;
+	bubble.hit = true;
 	switch (txe) {
 	case TXE.HOVER :
 		System.setCursor('default');
-		return TXR.HIT;
+		return;
 	case TXE.DRAGSTART :
-		var txr = TXR.HIT;
 		if (ctrl) {
 			//space.actionSpawnRelation(this, p);
 			throw new Error('TODO');
-			return txr | TXR.REDRAW;
+			bubble.redraw = true;
+			return;
 		}
 		if (z > 0) {
 			// System.repository.moveToTop(z); TODO XXX
-			txr |= TXR.REDRAW; // todo full redraw
+			bubble.redraw = true; // TODO <-- needed?
 		}
 		if (space.focus != this) {
 			space.setFocus(this);
-			txr |= TXR.REDRAW;
+			bubble.redraw = true;
 		}
 
 		var sbary = this.scrollbarY;
@@ -3485,37 +3502,40 @@ Note.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 			System.face.beginAction(Action.ITEMDRAG, this, p);
 			System.setCursor('move');
 		}
-		return txr;
+		return;
 	case TXE.CLICK :
-		var txr = TXR.HIT;
 		if (z > 0) {
 			System.repository.moveToTop(z);
-			txr |= TXR.REDRAW; // todo full redraw
+			bubble.redraw = true;
 		}
 		if (space.focus != this) {
 			space.setFocus(this);
-			txr |= TXR.REDRAW;
+			bubble.redraw = true;
 		}
 
 		var op = p.sub(this.zone.pnw.w, this.zone.pnw.y - max(0, this.scrollbarY.pos));
 		var para = this.paraAtPoint(op);
 		if (para) {
 			debug('Click Para', para);
-			var editor = System.editor;
+			debug('TODO');
+
+			/*var editor = System.editor;
 			editor.caret.setFromPoint(para, op.sub(para.p));
 			editor.caret.show();
-			editor.deselect();
-			txr |= TXR.REDRAW;
+			editor.deselect();*/
+			bubble.redraw = true;
 		}
 		return txr;
 	case TXE.RBINDHOVER :
 		//space.actionRBindHover(this);
 		throw new Error('TODO');
-		return TXR.HIT | TXR.REDRAW;
+		bubble.redraw = true;
+		return;
 	case TXE.RBINDTO :
 		//space.actionRBindTo(this);
 		throw new Error('TODO');
-		return TXR.HIT | TXR.REDRAW;
+		bubble.redraw = true;
+		return;
 	default :
 		throw new Error('Unknown transfix code:'+txe);
 	}
@@ -3813,59 +3833,63 @@ Label.jnew = function(js, id) {
 | An event happened at p.
 | returns transfix code.
 */
-Label.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
+Label.prototype.transfix = function(txe, bubble, space, p, z, shift, ctrl) {
 	if (!this.zone.within(p)) return 0;
+	bubble.hit = true;
+
 	switch(txe) {
 	case TXE.HOVER :
 		System.setCursor('default');
-		return TXR.HIT;
+		return;
 	case TXE.DRAGSTART :
-		var txr = TXR.HIT;
 		if (ctrl) {
 			//space.actionSpawnRelation(this, p);
 			throw new Error('TODO');
-			return txr | TXR.REDRAW;
+			bubble.redraw = true;
+			return txr;
 		}
 		if (z > 0) {
 			System.repository.moveToTop(z);
-			txr |= TXR.REDRAW; /* todo full redraw */
+			bubble.redraw = true;
 		}
 		if (space.focus != this) {
 			space.setFocus(this);
-			txr |= TXR.REDRAW;
+			bubble.redraw = true;
 		}
 
 		System.face.beginAction(Action.ITEMDRAG, this, p.sub(this.zone.pnw));
 		System.setCursor('move');
 		return txr;
-	case TXR.CLICK:
-		var txr = TXR.HIT;
+	case TXE.CLICK:
 		if (z > 0) {
 			System.repository.moveToTop(z);
-			txr |= TXR.REDRAW; /* todo full redraw */
+			bubble.redraw = true;
 		}
 		if (space.focus != this) {
 			space.setFocus(this);
-			txr |= TXR.REDRAW;
+			bubble.redraw = true;
 		}
 		var op = p.sub(this.zone.pnw);
 		var para = this.paraAtPoint(op);
 		if (para) {
+			debug('TODO');
 			var editor = System.editor;
 			editor.caret.setFromPoint(para, op.sub(para.p));
 			editor.caret.show();
 			editor.deselect();
-			txr |= TXR.REDRAW;
+			bubble.redraw = true;
 		}
 		return txr;
 	case TXE.RBINDHOVER :
 		//space.actionRBindHover(this);
 		throw new Error('TODO');
-		return TXR.HIT | TXR.REDRAW;
+		bubble.redraw = true;
+		return;
 	case TXE.RBINDTO :
 		throw new Error('TODO');
 		//space.actionRBindTo(this);
-		return TXR.HIT | TXR.REDRAW;
+		bubble.redraw = true;
+		return;
 	default :
 		throw new Error('Unknown transfix code:'+txe);
 	}
@@ -4188,40 +4212,41 @@ Relation.prototype._dWidth = function() {
 | An action happend.
 | Returns transfix code.
 */
-Relation.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
+Relation.prototype.transfix = function(txe, bubble, space, p, z, shift, ctrl) {
 	if (!this.textZone.within(p)) return 0;
+	bubble.hit = true;
+
 	switch(txe) {
 	case TXE.HOVER :
 		System.setCursor('default');
-		return TXR.HIT;
+		return;
 	case TXE.DRAGSTART :
-		var txr = TXR.HIT;
 		if (ctrl) {
 			//space.actionSpawnRelation(this, p);
 			throw new Error('TODO');
-			return txr | TXR.REDRAW;
+			bubble.redraw = true;
+			return;
 		}
 		if (z > 0) {
 			System.repository.moveToTop(z);
-			txr |= TXR.REDRAW;
+			bubble.redraw = true;
 		}
 		if (space.focus != this) {
 			space.setFocus(this);
-			txr |= TXR.REDRAW;
+			bubble.redraw = true;
 		}
 
 		System.face.beginAction(Action.ITEMDRAG, this, p.sub(this.handlezone.pnw));
 		System.setCursor('move');
 		return txr;
-	case TXR.CLICK:
-		var txr = TXR.HIT;
+	case TXE.CLICK:
 		if (z > 0) {
 			System.repository.moveToTop(z);
-			txr |= TXR.REDRAW;
+			bubble.redraw = true;
 		}
 		if (space.focus != this) {
 			space.setFocus(this);
-			txr |= TXR.REDRAW;
+			bubble.redraw = true;
 		}
 		var op = p.sub(this.textZone.pnw);
 		var para = this.paraAtPoint(op);
@@ -4230,17 +4255,19 @@ Relation.prototype.transfix = function(txe, space, p, z, shift, ctrl) {
 			editor.caret.setFromPoint(para, op.sub(para.p));
 			editor.caret.show();
 			editor.deselect();
-			txr |= TXR.REDRAW;
+			bubble.redraw = true;
 		}
 		return txr;
 	case TXE.RBINDHOVER :
 		//space.actionRBindHover(this);
 		throw new Error('TODO');
-		return TXR.HIT | TXR.REDRAW;
+		bubble.redraw = true;
+		return;
 	case TXE.RBINDTO :
 		//space.actionRBindTo(this);
 		throw new Error('TODO');
-		return TXR.HIT | TXR.REDRAW;
+		bubble.redraw = true;
+		return;
 	default :
 		throw new Error('Unknown transfix code:'+txe);
 	}
