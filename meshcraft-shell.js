@@ -17,19 +17,25 @@
                                             \ | | |-' |  |
                                         `---' ' ' `-' `' `'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- A network item editor.
+
+ A networked node item editor.
 
  This is the client-side script for the user interface.
 
  Authors: Axel Kittenberger
  License: GNU Affero AGPLv3
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 'use strict';
 
-/**
-| +++ Shortcuts  +++
-*/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ .---. .           .          .      
+ \___  |-. ,-. ,-. |- ,-. . . |- ,-. 
+     \ | | | | |   |  |   | | |  `-. 
+ `---' ' ' `-' '   `' `-' `-^ `' `-' 
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 var R   = Math.round;
 var abs = Math.abs;
 var max = Math.max;
@@ -56,9 +62,7 @@ var Rect          = Fabric.Rect;
 var RoundRect     = Fabric.RoundRect;
 var opposite      = Fabric.opposite;
 
-/**
-| Configures meshcraft-woods.
-*/
+// configures meshcraft-woods.
 Woods.cogging = true;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1257,7 +1261,7 @@ _init : function() {
 
 		switch(mst) {
 		case MST.NONE :
-			this.face.mousehover(p);
+			this.face.mousehover(p, event.shiftKey, event.ctrlKey || event.metaKey);
 			return true;
 		case MST.ATWEEN :
 			var dragbox = settings.dragbox;
@@ -1294,7 +1298,7 @@ _init : function() {
 		hiddenInput.focus();
 		var p = new Point (event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop);
 		// asks the face if it forces this to be a drag or click, or yet unknown.
-		mst = this.face.mousedown(p);
+		mst = this.face.mousedown(p, event.shiftKey, event.ctrlKey || event.metaKey);
 		switch(mst) {
 		case MST.ATWEEN :
 			msp = mmp = p;
@@ -1453,7 +1457,7 @@ Cockpit.prototype.redraw = function(fabric, action, selection) {
 /**
 | Mouse hover.
 */
-Cockpit.prototype.mousehover = function(bubble, p, action) {
+Cockpit.prototype.mousehover = function(bubble, p, shift, ctrl, action) {
 	/* TODO
 	var redraw = this.edgemenu.mousepos !== this.edgemenu.getMousepos(p);
 	if (this.edgemenu.mousepos >= 0) {
@@ -1468,7 +1472,7 @@ Cockpit.prototype.mousehover = function(bubble, p, action) {
 /**
 | Mouse button down event
 */
-Cockpit.prototype.mousedown = function(p) {
+Cockpit.prototype.mousedown = function(bubble, p, shift, ctrl, action) {
 	/*
 	var md = this.edgemenu.getMousepos(p);
 	if (md >= 0) {
@@ -1550,7 +1554,7 @@ FrontFace.prototype.redraw = function() {
 FrontFace.prototype.click = function(p, shift, ctrl) {
 	// TODO cockpit
 	var bubble = this.bubble.init();
-	this.space.mousehover(bubble, p, this._action);
+	this.space.click(bubble, p, shift, ctrl, this._action);
 	if (bubble.redraw) this.redraw();
 }
 
@@ -1559,20 +1563,21 @@ FrontFace.prototype.click = function(p, shift, ctrl) {
 |
 | TODO shift+ctrl.
 */
-FrontFace.prototype.mousehover = function(p) {
+FrontFace.prototype.mousehover = function(p, shift, ctrl) {
 	// TODO cockpit
 	var bubble = this.bubble.init();
-	this.space.mousehover(bubble, p, this._action);
+	this.space.mousehover(bubble, p, shift, ctrl, this._action);
 	if (bubble.redraw) this.redraw();
 }
 
 /**
 | Mouse button down event.
 */
-FrontFace.prototype.mousedown = function(p) {
+FrontFace.prototype.mousedown = function(p, shift, ctrl) {
 	// TODO cockpit
 	var bubble = this.bubble.init();
-	var mst = this.space.mousedown(bubble, p); // TODO rename mst -> mouseState
+	// TODO rename mst -> mouseState
+	var mst = this.space.mousedown(bubble, p, shift, ctrl, this._action); 
 	if (bubble.redraw) this.redraw();
 	return mst;
 }
@@ -1915,25 +1920,24 @@ Space.prototype.redraw = function(fabric, action, selection) {
 
 	if (this.focus) this.focus.drawHandles(this.fabric, action);
 
-	debug(action);
-	if (action) {
-		switch (action.type) {
-		case Action.FLOATMENU :
-			action.floatmenu.draw();
-			break;
-		/* TODO
-		case ACT.IMENU :
-			this._itemmenu.draw();
-			break;
-		case ACT.RBIND :
-			var arrow = Line.connect(
-					ia.item.handlezone, 'normal',
-				(ia.item2 && ia.item2.handlezone) || ia.smp , 'arrow');
-				// todo use something like bindzone
-				if (ia.item2) ia.item2.highlight(this.fabric);
-			arrow.draw(this.fabric);
-			*/
-		}
+	switch (action && action.type) {
+	case null: 
+		break;
+	case Action.FLOATMENU :
+		action.floatmenu.draw();
+		break;
+	/* TODO
+	case ACT.IMENU :
+		this._itemmenu.draw();
+		break;
+	case ACT.RBIND :
+		var arrow = Line.connect(
+				ia.item.handlezone, 'normal',
+			(ia.item2 && ia.item2.handlezone) || ia.smp , 'arrow');
+			// todo use something like bindzone
+			if (ia.item2) ia.item2.highlight(this.fabric);
+		arrow.draw(this.fabric);
+		*/
 	}
 }
 
@@ -1959,13 +1963,12 @@ Space.prototype.setFocus = function(item) {
 |
 | Returns true for redrawing.
 */
-Space.prototype.mousehover = function(bubble, p, action) {
+Space.prototype.mousehover = function(bubble, p, shift, ctrl, action) {
 	var pp = p.sub(this.pan);
-	var editor = System.editor;
 
-	switch(action) {
+	switch(action && action.type) {
+	case null : break;
 	case Action.FLOATMENU :
-		redraw = (action.floatmenu.mousepos !== action.floatmenu.getMousepos(p)) || redraw;
 		if (action.floatmenu.mousepos !== action.floatmenu.getMousepos(p)) {
 			// float menu changed
 			bubble.redraw = true;
@@ -2128,11 +2131,11 @@ Space.prototype.click = function(bubble, p, shift, ctrl, action) {
 	this._transfix(TXE.CLICK, bubble, pp, shift, ctrl);
 
 	if (!bubble.hit) {
-		debug('begin floatmenu');
 		var action = System.face.beginAction(Action.FLOATMENU, null, p);
 		action.floatmenu = new Hexmenu(p, settings.floatmenu, this._floatMenuLabels);
 		System.setCursor('default');
 		this.setFocus(null);
+		bubble.redraw = true;
 	}
 }
 
@@ -2407,14 +2410,16 @@ Space.prototype._revertDialog = function() {
 /**
 | Mouse button down event.
 */
-Space.prototype.mousedown = function(bubble, p, action) {
+Space.prototype.mousedown = function(bubble, p, shift, ctrl, action) {
 	var pp = p.sub(this.pan);
 
-	switch (action) {
+	switch (action && action.type) {
+	case null : 
+		break;
 	case Action.FLOATMENU :
-		var md = action.floatmenu.getMousepos(p);
-		iaction.act = ACT.NONE;
 		var fm = action.floatmenu;
+		var md = fm.getMousepos(p);
+		System.face.endAction();
 		if (md < 0) break;
 		switch(md) {
 		case 'n' : // note
