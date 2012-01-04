@@ -168,6 +168,7 @@ Stem.prototype.growNew = function(path) {
 */
 Stem.prototype.matches = function(master) {
 	if (!isnon(master) || !master.constructor) return false;
+
 	if (this.constructor === master.constructor) {
 		// allow matching of nodes equal class
 		master = master._twigs;
@@ -176,18 +177,31 @@ Stem.prototype.matches = function(master) {
 	var klen = 0;
 	for(var k in this._twigs) {
 		if (k === 'type') continue;
-		var v = this._twigs[k];
-		if (v.matches) {
-			if (!v.matches(master[k])) return false;
+		var v1 = this._twigs[k];
+		var v2 = master[k];
+	
+		if (k === 'alley') {
+			if (typeof(v1.length) !== 'number' || typeof(v2.length) !== 'number') {
+				return false;
+			}
+			if (v1.length !== v2.length) return false;
+			for (var i = 0, len = v1.length; i < len; i++) {
+				if (!v1[i].matches(v2)) return false;
+			}
+		}
+		if (v1.matches) {
+			if (!v1.matches(v2)) return false;
 		} else {
-			if (this._twigs[k] !== master[k]) return false;
+			if (v1 !== v2) return false;
 		}
 		klen++;
 	}
+
 	// tests if there aren't additional keys in o.
 	for (var k in master) {
 		if (k !== 'type') klen--;
 	}
+	debug(true, 'TODO klen', klen);
 	return klen === 0;
 }
 
@@ -345,7 +359,7 @@ GenericAlley.prototype.seeds  = GenericCopse.prototype.seeds;
  The root of spaces.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Nexus(master) {
-	Stem.call(this, {type: 'nexus'}, master);
+	Stem.call(this, {type: 'Nexus'}, master);
 }
 subclass(Nexus, Stem);
 
@@ -463,9 +477,9 @@ function Note(master) {
 	// TODO check if master has other keys.
 
 	Stem.call(this, {
-			type     : 'note',
-			doc      : new this.seeds.DocAlley(master && master.doc),
-			zone     : new Rect(master.zone),
+			type  : 'Note',
+			doc   : new this.seeds.DocAlley(master && master.doc),
+			zone  : new Rect(master.zone),
 		}, null);
 	this.doc  = this._twigs.doc;
 	this.zone = this._twigs.zone;
@@ -563,7 +577,7 @@ DocAlley.prototype.seeds = {
  A paragraph
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Para(master) {
-	Stem.call(this, {}, master);
+	Stem.call(this, {type : 'Para'}, master);
 }
 subclass(Para, Stem);
 

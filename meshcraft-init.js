@@ -22,6 +22,7 @@ libclient.request({cmd: "now"}, function (err, now) {
 		console.log('Error: '+err.message);
 		process.exit(1);
 	}
+
 	libclient.request({
 	  cmd: 'alter',
 	  time: now.time,

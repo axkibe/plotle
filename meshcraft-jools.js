@@ -193,30 +193,39 @@ function inspect(o, a, indent) {
 	if (!indent) indent = 0;
 	if (o && o.toJSON) o = o.toJSON();
 	var to = typeof(o);
-	if (to === 'undefined') {
+
+	if (to === 'undefined') {}
+	else if (o === null) to = 'null';
+	else {
+		switch(o.constructor) {
+		case String : to = 'string'; break;
+		case Array  : to = 'array';  break;
+		}
+	}
+	
+	switch (to) {
+	case 'undefined':
 		a.push('undefined');
 		return;
-	}
-	if (to === 'function')	{
+	case 'boolean':
+		a.push(o ? 'true' : 'false');
+		return;
+	case 'function' :
 		a.push('function ');
 		if (o.name) a.push(o.name);
 		return;
-	}
-	if (to === 'string' || o instanceof String) {
+	case 'string' :
 		a.push('"');
 		a.push(o);
 		a.push('"');
 		return;
-	}
-	if (to === 'number') {
+	case 'number':
 		a.push(o);
 		return;
-	}
-	if (o === null) {
+	case 'null':
 		a.push('null');
 		return;
-	}
-	if (o instanceof Array) {
+	case 'array' :
 		a.push('[');
 		if (puffed) a.push('\n');
 		for(var k = 0; k < o.length; k++) {
@@ -250,30 +259,36 @@ function inspect(o, a, indent) {
 		if (puffed) pushindent(indent, a);
 		a.push(']');
 		return;
-	}
-	a.push('{');
-	a.push(puffed ? '\n' : ' ');
-	var first = true;
-	for(var k in o) {
-		if (!o.hasOwnProperty(k)) continue;
-		if (first) {
-			first = false;
-		} else {
-			a.push(',');
-			a.push(puffed ? '\n' : ' ');
-		};
-		if (puffed) pushindent(indent + 1, a);
-		a.push(k);
-		a.push(': ');
-		if (k === 'parent') {
-			a.push('###');
-			continue;
+	case 'object' :
+		a.push('{');
+		a.push(puffed ? '\n' : ' ');
+	 	var first = true;
+		for(var k in o) {
+			if (!o.hasOwnProperty(k)) continue;
+			if (first) {
+				first = false;
+			} else {
+				a.push(',');
+				a.push(puffed ? '\n' : ' ');
+			};
+			if (puffed) pushindent(indent + 1, a);
+			a.push(k);
+			a.push(': ');
+			if (k === 'parent') {
+				a.push('###');
+				continue;
+			}
+			inspect(o[k], a, indent + 1);
 		}
-		inspect(o[k], a, indent + 1);
+		a.push(puffed ? '\n' : ' ');
+			if (puffed) pushindent(indent, a);
+		a.push('}');
+		return;
+	default :
+		a.push('!!Unknown Type: ');
+		a.push(to);
+		a.push('!!');
 	}
-	a.push(puffed ? '\n' : ' ');
-	if (puffed) pushindent(indent, a);
-	a.push('}');
 }
 
 /**

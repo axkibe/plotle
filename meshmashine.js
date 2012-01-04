@@ -226,6 +226,9 @@ function alter(meshtree, alternation, backward) {
 		}
 		var save = meshtree.get(trg.path);
 		if (is(trg.val)) {
+			if (trg.val !== save && !save.matches(trg.val)) {
+				log(true, 'TODO', trg.val, '!==', save); 
+			}
 			check(trg.val === save || save.matches(trg.val), cm, 'trg.val set incorrectly');
 		} else {
 			if (!is(save)) save = null;

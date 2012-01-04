@@ -7,18 +7,17 @@ module.exports = {
 	devel   : 'client',
 
 	//messages and JSON with whitespace/newlines for debugging.
-	puffed  : false,
-
+	puffed  : true,
 
 	log     : {
 		//all:   true,
-		alter:  false,
+		alter:  true,
 		ajax:   false,
 		debug:  true,
 		fail:   true,
-		mm:     false,
+		mm:     true,
 		start:  true,
-		te:     false,
+		te:     true,
 		web:    true,
 	}
 }
