@@ -3,7 +3,7 @@ module.exports = {
 	ip      : '127.0.0.1',
 	port    : 8833,
 
-	// devel: client, server or both.
+	// development mode: client, server or both.
 	devel   : 'client',
 
 	//messages and JSON with whitespace/newlines for debugging.

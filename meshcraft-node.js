@@ -78,15 +78,26 @@ var mime_js = 'text/javascript';
 var mime_xi = 'image/x-icon';
 
 var content = {
-	'/':               meshcraft_html,
-	'/index.html':     meshcraft_html,
-	'/meshcraft.html': meshcraft_html,
-	'/meshcraft-fabric.js': { file: './meshcraft-fabric.js', mime: mime_js, code: 'utf-8',  },
-	'/meshcraft-jools.js':  { file: './meshcraft-jools.js',  mime: mime_js, code: 'utf-8',  },
-	'/meshcraft-woods.js':  { file: './meshcraft-woods.js',  mime: mime_js, code: 'utf-8',  },
-	'/meshcraft-shell.js':  { file: './meshcraft-shell.js',  mime: mime_js, code: 'utf-8',  },
-	'/meshmashine.js':      { file: './meshmashine.js',      mime: mime_js, code: 'utf-8',  },
-	'/favicon.ico':         { file: './icons/hexicon.ico',   mime: mime_xi, code: 'binary', },
+	'/':
+		meshcraft_html,
+	'/index.html':
+		meshcraft_html,
+	'/meshcraft.html':
+		meshcraft_html,
+	'/meshcraft-browser-system.js':
+		{ file: './meshcraft-browser-system.js', mime: mime_js, code: 'utf-8',  },
+	'/meshcraft-fabric.js':
+		{ file: './meshcraft-fabric.js',         mime: mime_js, code: 'utf-8',  },
+	'/meshcraft-jools.js':
+		{ file: './meshcraft-jools.js',          mime: mime_js, code: 'utf-8',  },
+	'/meshcraft-woods.js':
+		{ file: './meshcraft-woods.js',          mime: mime_js, code: 'utf-8',  },
+	'/meshcraft-shell.js':
+		{ file: './meshcraft-shell.js',          mime: mime_js, code: 'utf-8',  },
+	'/meshmashine.js':
+		{ file: './meshmashine.js',              mime: mime_js, code: 'utf-8',  },
+	'/favicon.ico':
+		{ file: './icons/hexicon.ico',           mime: mime_xi, code: 'binary', },
 };
 
 /**
