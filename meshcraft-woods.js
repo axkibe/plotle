@@ -179,17 +179,18 @@ Stem.prototype.matches = function(master) {
 		if (k === 'type') continue;
 		var v1 = this._twigs[k];
 		var v2 = master[k];
-	
+
 		if (k === 'alley') {
-			if (typeof(v1.length) !== 'number' || typeof(v2.length) !== 'number') {
-				return false;
-			}
+			debug('matching alley', v1, '??', v2);
 			if (v1.length !== v2.length) return false;
 			for (var i = 0, len = v1.length; i < len; i++) {
-				if (!v1[i].matches(v2)) return false;
+				if (v1[i].matches) {
+					if (!v1[i].matches(v2[i])) return false;
+				} else {
+					if (v1[i] !== v2[i]) return false;
+				}
 			}
-		}
-		if (v1.matches) {
+		} else if (v1.matches) {
 			if (!v1.matches(v2)) return false;
 		} else {
 			if (v1 !== v2) return false;
