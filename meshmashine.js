@@ -96,16 +96,13 @@ function keysLength(o) {
 	return n;
 }
 
-function deepEqual(o1, o2) {
-	if (o1 === o2) return true;
-	if (keysLength(o1) !== keysLength(o2)) return false;
-
-	for(var k in o1) {
-		return deepEqual(o1[k], o2[k]);
-	}
-	return true;
+function matches(v, w) {
+	if (v === w) return true;
+	if (v.matches) return v.matches(w);
+	if (w.matches) return w.matches(v);
+	log('warn', 'matches failed cause neither has matches()');
+	return false;
 }
-
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      ,.   .  .                  .
@@ -127,13 +124,16 @@ Alternation.prototype.type = function(backward) {
 	var trg = backward ? this.src : this.trg;
 	if (trg.proc === 'splice') return 'split';
 	if (src.proc === 'splice') return 'join';
+
+	if (src.proc === 'arrange') return 'alley-place';
+	if (trg.proc === 'arrange') return 'alley-take';
+
 	if (is(src.val) && !is(trg.at1)) return 'set';
 	if (is(src.val) &&  is(trg.at1)) return 'insert';
 	if (is(src.at1) &&  is(src.at2) && !is(trg.at1)) return 'remove';
-	if (Jools.prissy) {
-		log('fail', this);
-		throw new Error('invalid type');
-	}
+
+	if (Jools.prissy) { log('fail', this); throw new Error('invalid type'); }
+
 	return null;
 }
 
@@ -154,11 +154,13 @@ function alter(meshtree, alternation, backward) {
 	log('alter', 'src:', src, 'trg:', trg, 'atype:', atype);
 	switch (atype) {
 	case 'split' :
+		// a string item is splitted into two.
+
 		check(is(src.at1), cm, 'src.at1 missing');
 		check(isInteger(src.pivot), cm, 'src.pivot not an integer');
 
 		var pivotNode = meshtree.get(src.path, 0, src.pivot);
-		check(pivotNode.isAlley, cm, 'src.path[src.pivot] not an Alley');
+		check(pivotNode.isAlley, cm, 'src.path[src.pivot] not an alley');
 
 		var str = meshtree.get(src.path);
 		check(isString(str), cm, 'src.path signates no string');
@@ -184,6 +186,8 @@ function alter(meshtree, alternation, backward) {
 		pivotNode.splice(sig_splice + 1, 0, pnew);
 		break;
 	case 'join' :
+		// two string items are joined into one.
+
 		check(is(trg.at1), cm, 'trg.at1 missing');
 		check(isInteger(trg.pivot), cm, 'trg.pivot not an integer');
 
@@ -211,25 +215,19 @@ function alter(meshtree, alternation, backward) {
 		pivotNode.splice(sig_splice + 1, 1);
 		break;
 	case 'set':
+		// a new item is inserted or replaces and existing
+
 		check(!is(trg.at1), cm, 'trg.at1 must not exist.');
-		switch(trg.path.get(-1)) {
-		case '$new':
+
+		if (trg.path.get(-1) === '$new') {
 			log('alter', 'grow new');
 			var nParent = meshtree.get(trg.path, 0, -1);
 			nParent.growNew(trg.path);
 			break;
-		case '$end' :
-			var nParent = meshtree.get(trg.path, 0, -1);
-			check(nParent.isAlley, cm, '$end only applicatable on Alleys');
-			trg.path.set(-1, nParent.length);
-			break;
 		}
 		var save = meshtree.get(trg.path);
 		if (is(trg.val)) {
-			if (trg.val !== save && !save.matches(trg.val)) {
-				log(true, 'TODO', trg.val, '!==', save); 
-			}
-			check(trg.val === save || save.matches(trg.val), cm, 'trg.val set incorrectly');
+			check(matches(save, trg.val), cm, 'trg.val preset incorrectly');
 		} else {
 			if (!is(save)) save = null;
 			//trg.val = (save && save.constructor) ? new save.constructor(save) : save; TODO
@@ -237,13 +235,15 @@ function alter(meshtree, alternation, backward) {
 		}
 
 		if (is(src.path)) {
-			check(trg.path.equals(src.path), cm, 'src.path set incorrectly');
+			check(trg.path.equals(src.path), cm, 'src.path preset incorrectly');
 		} else {
 			src.path = trg.path;
 		}
 		meshtree.set(trg.path, src.val);
 		break;
 	case 'insert':
+		// a string is inserted into a string item.
+
 		var str = meshtree.get(trg.path);
 		check(isString(str), cm, 'trg.path signates no string');
 
@@ -260,6 +260,8 @@ function alter(meshtree, alternation, backward) {
 		meshtree.set(trg.path, nstr);
 		break;
 	case 'remove':
+		// a part of a string item is removed.
+
 		var str = meshtree.get(src.path);
 		check(isString(str), cm, 'src.path signates no string');
 
@@ -268,13 +270,49 @@ function alter(meshtree, alternation, backward) {
 
 		var val = str.substring(src.at1, src.at2);
 		if (isnon(trg.val)) {
-			check(val === trg.val, cm, 'trg.val preset incorrectly:', val, '!==', trg.val);
+			check(matches(val, trg.val), cm, 'trg.val preset incorrectly:',
+				val, '!==', trg.val);
 		} else {
 			trg.val = val;
 		}
 		var nstr = str.substring(0, src.at1) + str.substring(src.at2);
 		meshtree.set(src.path, nstr);
 		break;
+
+	case 'alley-place' :
+		// a new item is placed (inserted) into an alley.
+
+		check(is(src.val),  cm, 'src.val not present');
+		check(is(trg.path), cm, 'trg.path not present');
+		check(is(trg.at1),  cm, 'trg.at1 not present');
+		var alley = meshtree.get(trg.path);
+		check(alley && alley.isAlley, cm, 'trg.path not an alley');
+
+		if (trg.at1 === '$top') trg.at1 = 0;
+		if (trg.at1 === '$end') trg.at1 = alley.length;
+		check(trg.at1 >= 0 && trg.at1 <= alley.length, cm, 'trg.at1 not inside alley');
+
+		alley.splice(trg.at1, 0, src.val);
+		break;
+
+	case 'alley-take' :
+		// an item is taken (removed) from an alley.
+
+		check(is(src.path), cm, 'src.path not present');
+		check(is(src.at1),  cm, 'src.at1 not present');
+		var alley = meshtree.get(src.path);
+		check(alley && alley.isAlley, cm, 'src.path not an alley');
+		check(src.at1 >= 0 && src.at1 <= alley.length, cm, 'src.at1 not inside alley');
+
+		var val = alley.get(src.at1);
+		if (is(trg.val)) {
+			check(matches(val, trg.val), cm, 'trg.val preset incorrectly');
+		} else {
+			trg.val = val;
+		}
+		alley.splice(src.at1, 1);
+		break;
+
 	default:
 		throw reject('invalid atype:', atype);
 	}
@@ -373,7 +411,7 @@ MeshMashine.prototype.transformOnMoment = function(sign, alter) {
 		}
 		throw reject('invalid split');
 	case 'join':
-		if (!trg.path.like(sign, trg.pivot)) return sign;
+		if (!trg.path.like(sign, trg.pivot)) return sign; // TODO this looks wrong
 		log('te', 'alter-join');
 		var trg_i =  trg.path.get(trg.pivot);
 		var sig_i = sign.path.get(trg.pivot);
@@ -435,6 +473,34 @@ MeshMashine.prototype.transformOnMoment = function(sign, alter) {
 				log('te', 'at1 =', src.at1);
 				sign.at1 = src.at1;
 			}
+		}
+		return sign;
+	case 'alley-place' :
+		if (!trg.path.like(sign.path)) return sign;
+		XXX
+		log('te', 'alter-alley-place');
+		var trg_i =  trg.alley.get(-1);
+		var sig_i = sign.path.get(trg.alley.length);
+
+		log('te', 'sig_i', sig_i, 'trg_i', trg_i);
+
+		if (sig_i >= trg_i) {
+			// insert was before -> index shifted
+			log('te', 'place shifted');
+			sign.path.add(trg.alley.length, 1);
+		}
+		return sign;
+	case 'alley-take' :
+		if (!src.alley.like(sign.path)) return sign;
+		log('te', 'alter-alley-take');
+		var src_i =  src.path.get(-1);
+		var sig_i = sign.path.get(src.alley.length);
+		log('te', 'sig_i', sig_i, 'src_i', src_i);
+
+		if (sig_i >= src_i) {
+			// take was before -> index shifted
+			log('te', 'place shifted');
+			sign.path.add(src.alley.length, -1);
 		}
 		return sign;
 	default :

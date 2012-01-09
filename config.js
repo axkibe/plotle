@@ -19,5 +19,6 @@ module.exports = {
 		start:  true,
 		te:     true,
 		web:    true,
+		warn:   true,
 	}
 }

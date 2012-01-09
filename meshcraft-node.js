@@ -138,12 +138,13 @@ var mmAjax = function(req, red, res) {
 			case 'alter':
 				var src = new Jools.Signature(cmd.src);
 				var trg = new Jools.Signature(cmd.trg);
-				log('debug', 'cmd', cmd);
-				log('debug', 'src', src);
-				log('debug', 'trg', trg);
 				asw = mm.alter(cmd.time, src, trg);
 				break;
 			case 'get':
+				if (!cmd.path) {
+					webError(res, 400, 'cmd get requires .path');
+					break;
+				}
 				var path = new Jools.Path(cmd.path);
 				asw = mm.get(cmd.time, path);
 				break;
