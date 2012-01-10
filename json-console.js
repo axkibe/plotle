@@ -13,24 +13,24 @@ var readline   = require('readline');
 var util       = require('util');
 var config     = require('./config');
 
+
 /**
 | Loads command history.
 */
-var fhist;
-try {
-	fhist = fs.readFileSync('./cmdhistory.txt').toString().split('\n');
-} catch(error) {
-	fhist = [];
-}
-var chist = [];
-for (var fi = fhist.length - 2; fi >= 0; fi--) {
-	chist.push(fhist[fi]);
-}
-
-/**
-| Stream-writes the command history.
-*/
-var cmdhistory = fs.createWriteStream('./cmdhistory.txt', {'flags': 'a'});
+function loadHistory() {
+	var lines;
+	var history = [];
+	try {
+		lines = fs.readFileSync('./cmdhistory.txt').toString().split('\n');
+	} catch(error) {
+		lines = [];
+	}
+	// turn the history around
+	for (var i = lines.length - 2; i >= 0; i--) {
+		history.push(lines[i]);
+	}
+	return history;
+};
 
 /**
 | Options to connect.
@@ -69,50 +69,88 @@ function request(cmd, callback) {
     req.end();
 }
 
+
 /**
-| Main program.
+| Parses and runs one json request, parses and pretty-prints the json answer.
 */
-console.log('Talking to '+ops.host+':'+ops.port+ops.path);
-
-var shell = readline.createInterface(process.stdin, process.stdout, null);
-shell.history = chist;
-shell.prompt();
-
-shell.on('line', function (line) {
-	cmdhistory.write(line+'\n');
+function jsonRequest(cmd, callback) {
 	var o;
 	try {
 		// o = JSON.parse(line); <- strict JSON
 		// instead eval relaxed JSON, insecure but this is for testing anyway.N
 		var o;
-		eval('o='+line);
+		eval('o='+cmd);
 	} catch (err) {
 		console.log('# invalid input: '+err.message);
 		shell.prompt();
+		callback();
 		return;
 	}
 	var s = JSON.stringify(o);
 	console.log('» '+s);
 	console.log();
-	
+
 	request(s, function(err, code, asw) {
+		if (err) {
+			console.log('# '+util.inspect(err, false, null));
+			callback();
+			return;
+		}
 		try {
 			if (asw) {
 				asw = util.inspect(JSON.parse(asw), false, null);
 			}
 		} catch (err) {
 			console.log('# ('+code+') answer not JSON: '+asw);
-			shell.prompt();
+			callback();
 			return;
 		}
 		console.log('* '+code);
 		console.log(': '+asw);
-		shell.prompt();
+		callback();
 	});
-});
+}
 
-shell.on('close', function() {
-	process.stdout.write('\n');
-	process.stdin.destroy();
-});
+/**
+| Main program.
+*/
+console.log('Talking to '+ops.host+':'+ops.port+ops.path);
 
+if (process.argv.length <= 2) { 
+	var shell = readline.createInterface(process.stdin, process.stdout, null);
+	shell.history = loadHistory();
+	
+	// Stream-writes the command history.
+	var cmdhistory = fs.createWriteStream('./cmdhistory.txt', {'flags': 'a'});
+
+	shell.prompt();
+
+	shell.on('line', function (line) {
+		cmdhistory.write(line+'\n');
+		jsonRequest(line, function() {
+			shell.prompt();
+		});
+	});
+
+	shell.on('close', function() {
+		console.log();
+		process.stdin.destroy();
+	});
+} else {
+	function loop(a) {
+		if (a >= process.argv.length) {
+			return;
+		}
+		var cmd;
+		try {
+			cmd = fs.readFileSync(process.argv[a]);
+		} catch(error) {
+			console.log('# cannot read "'+process.argv[a]+'"');
+			loop(a + 1);
+			return;
+		}
+		jsonRequest(cmd, function() {loop(a + 1)});
+	}
+
+	loop(2);
+}
