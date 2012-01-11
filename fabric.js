@@ -46,7 +46,7 @@ var Fabric;
 'use strict';
 
 if (typeof(window) === 'undefined') {
-    Jools = require('./meshcraft-jools');
+    Jools = require('./jools');
 }
 
 var debug        = Jools.debug;

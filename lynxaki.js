@@ -30,16 +30,70 @@ function isString(o) {
 	return typeof(o) === 'string' || o instanceof String;
 }
 
-var fs        = require('fs');
-var http      = require('http');
-var util      = require('util');
-var tty       = require('tty');
-var libclient = require('./meshcraft-libclient');
+var fs     = require('fs');
+var http   = require('http');
+var util   = require('util');
+var tty    = require('tty');
 
-var j2o = libclient.j2o;
-var config = libclient.config();
-if (config.initmessage) {
-	console.log(config.initmessage);
+var config = require('./config');
+
+
+/**
+| Converts a JSON string to object
+*/
+function j2o() {
+	try {
+		return JSON.parse(s);
+	} catch(err) {
+		return null;
+	}
+}
+
+/**
+| Options to connect to meshmashine
+*/
+var mmops = {
+	host: config().ip,
+	port: config().port,
+	path: '/mm',
+	method: 'POST'
+};
+
+/**
+| Issues an ajax request.
+*/
+function request(cmd, callback) {
+	var req = http.request(mmops, function(res) {
+		if (res.statusCode !== 200) {
+			callback(new Error('Status code: '+res.statusCode));
+			return;
+		}
+		res.setEncoding('utf8');
+		var data = [];
+		res.on('data', function(chunk) {
+			data.push(chunk);
+		});
+		res.on('end', function() {
+			var asw = data.join('');
+			var ao;
+			try {
+				ao = JSON.parse(asw);
+			} catch (err) {
+				callback(err);
+				return;
+			}
+			if (ao.ok) {
+				callback(null, ao);
+			} else {
+				callback(new Error(ao.message));
+			}
+		});
+	});
+	req.on('error', function(err) {
+		callback(err);
+	});
+	req.write(JSON.stringify(cmd));
+	req.end();
 }
 
 var root;

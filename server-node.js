@@ -31,8 +31,8 @@ var url  = require('url');
 var fs   = require('fs');
 
 var config = require('./config');
-var Jools  = require('./meshcraft-jools');
-var Woods  = require('./meshcraft-woods');
+var Jools  = require('./jools');
+var Woods  = require('./woods');
 var MeshMashine = require('./meshmashine');
 
 var log    = Jools.log;
@@ -84,20 +84,20 @@ var content = {
 		meshcraft_html,
 	'/meshcraft.html':
 		meshcraft_html,
-	'/meshcraft-browser-system.js':
-		{ file: './meshcraft-browser-system.js', mime: mime_js, code: 'utf-8',  },
-	'/meshcraft-fabric.js':
-		{ file: './meshcraft-fabric.js',         mime: mime_js, code: 'utf-8',  },
-	'/meshcraft-jools.js':
-		{ file: './meshcraft-jools.js',          mime: mime_js, code: 'utf-8',  },
-	'/meshcraft-woods.js':
-		{ file: './meshcraft-woods.js',          mime: mime_js, code: 'utf-8',  },
-	'/meshcraft-shell.js':
-		{ file: './meshcraft-shell.js',          mime: mime_js, code: 'utf-8',  },
+	'/browser-system.js':
+		{ file: './browser-system.js', mime: mime_js, code: 'utf-8',  },
+	'/fabric.js':
+		{ file: './fabric.js',         mime: mime_js, code: 'utf-8',  },
+	'/jools.js':
+		{ file: './jools.js',          mime: mime_js, code: 'utf-8',  },
+	'/woods.js':
+		{ file: './woods.js',          mime: mime_js, code: 'utf-8',  },
+	'/shell.js':
+		{ file: './shell.js',          mime: mime_js, code: 'utf-8',  },
 	'/meshmashine.js':
-		{ file: './meshmashine.js',              mime: mime_js, code: 'utf-8',  },
+		{ file: './meshmashine.js',    mime: mime_js, code: 'utf-8',  },
 	'/favicon.ico':
-		{ file: './icons/hexicon.ico',           mime: mime_xi, code: 'binary', },
+		{ file: './icons/hexicon.ico', mime: mime_xi, code: 'binary', },
 };
 
 /**

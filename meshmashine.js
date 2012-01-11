@@ -48,7 +48,7 @@ var MeshMashine;
 | Node includes.
 */
 if (typeof(window) === 'undefined') {
-	Jools = require('./meshcraft-jools');
+	Jools = require('./jools');
 }
 
 var Path       = Jools.Path;

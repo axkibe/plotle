@@ -156,7 +156,7 @@ function jsonfy(obj) {
 /**
 | Pushes a 2-decimal number on an array.
 */
-function pushpad(a, n, s) {
+function _pushpad(a, n, s) {
 	if (n < 10) a.push('0');
 	a.push(n);
 	a.push(s);
@@ -166,20 +166,20 @@ function pushpad(a, n, s) {
 /**
 | Creates a timestamp which will be returned as joinable array.
 */
-function timestamp(a) {
+function _timestamp(a) {
 	var now = new Date();
-	pushpad(a, now.getMonth() + 1, '-');
-	pushpad(a, now.getDate(),      ' ');
-	pushpad(a, now.getHours(),     ':');
-	pushpad(a, now.getMinutes(),   ':');
-	pushpad(a, now.getSeconds(),   ' ');
+	_pushpad(a, now.getMonth() + 1, '-');
+	_pushpad(a, now.getDate(),      ' ');
+	_pushpad(a, now.getHours(),     ':');
+	_pushpad(a, now.getMinutes(),   ':');
+	_pushpad(a, now.getSeconds(),   ' ');
 	return a;
 }
 
 /**
 | Pushes spaces into array for indentation.
 */
-function pushindent(indent, a) {
+function _pushindent(indent, a) {
 	for (var i = 0; i < indent; i++) a.push('  ');
 }
 
@@ -187,9 +187,10 @@ function pushindent(indent, a) {
 | Inspects an object and creates a descriptive string for it.
 |
 | Self-written instead of nodeJS` since not available in browser. Not using toJSON since
-| that fails on circles.
+| that fails on circles. This is the jools-internal version that pushes directly on the
+| stack.
 */
-function inspect(o, a, indent) {
+function _inspect(o, a, indent) {
 	if (!indent) indent = 0;
 	if (o && o.toJSON) o = o.toJSON();
 	var to = typeof(o);
@@ -202,7 +203,7 @@ function inspect(o, a, indent) {
 		case Array  : to = 'array';  break;
 		}
 	}
-	
+
 	switch (to) {
 	case 'undefined':
 		a.push('undefined');
@@ -233,30 +234,30 @@ function inspect(o, a, indent) {
 				a.push(',');
 				a.push(puffed ? '\n' : ' ');
 			}
-			if (puffed) pushindent(indent + 1, a);
-			inspect(o[k], a, indent + 1);
+			if (puffed) _pushindent(indent + 1, a);
+			_inspect(o[k], a, indent + 1);
 		}
 		var first = true;
 		for(var k in o) {
 			if (typeof(k) === 'number' || parseInt(k) == k || !o.hasOwnProperty(k)) continue;
 			if (first) {
 				a.push(puffed ? '\n' : ' ');
-				if (puffed) pushindent(indent + 1, a);
+				if (puffed) _pushindent(indent + 1, a);
 				a.push('|');
 				a.push(puffed ? '\n' : ' ');
 				first = false;
 			} else {
 				a.push(',');
 				a.push(puffed ? '\n' : ' ');
-				if (puffed) pushindent(indent + 1, a);
+				if (puffed) _pushindent(indent + 1, a);
 			}
 			a.push(k);
 			a.push(': ');
-			inspect(o[k], a, indent + 1);
+			_inspect(o[k], a, indent + 1);
 			a.push(puffed ? '\n' : ' ');
 		}
 		a.push(puffed ? '\n' : ' ');
-		if (puffed) pushindent(indent, a);
+		if (puffed) _pushindent(indent, a);
 		a.push(']');
 		return;
 	case 'object' :
@@ -271,17 +272,17 @@ function inspect(o, a, indent) {
 				a.push(',');
 				a.push(puffed ? '\n' : ' ');
 			};
-			if (puffed) pushindent(indent + 1, a);
+			if (puffed) _pushindent(indent + 1, a);
 			a.push(k);
 			a.push(': ');
 			if (k === 'parent') {
 				a.push('###');
 				continue;
 			}
-			inspect(o[k], a, indent + 1);
+			_inspect(o[k], a, indent + 1);
 		}
 		a.push(puffed ? '\n' : ' ');
-			if (puffed) pushindent(indent, a);
+			if (puffed) _pushindent(indent, a);
 		a.push('}');
 		return;
 	default :
@@ -299,7 +300,7 @@ function log(category) {
 		console.log('FAIL'); // TODO BREAKPOINT
 	}
 	if (category !== true && !config.log.all && !config.log[category]) return;
-	var a = timestamp([]);
+	var a = _timestamp([]);
 	if (category !== true) {
 		a.push('(');
 		a.push(category);
@@ -307,7 +308,7 @@ function log(category) {
 	}
 	for(var i = 1; i < arguments.length; i++) {
 		if (i > 1) a.push(' ');
-		inspect(arguments[i], a, 0);
+		_inspect(arguments[i], a, 0);
 	}
 	console.log(a.join(''));
 };
@@ -317,15 +318,23 @@ function log(category) {
 */
 function debug() {
 	if (!config.log.debug) return;
-	var a = timestamp([]);
+	var a = _timestamp([]);
 	a.push('(debug) ');
 	for(var i = 0; i < arguments.length; i++) {
 		if (i > 1) a.push(' ');
-		inspect(arguments[i], a, 0);
+		_inspect(arguments[i], a, 0);
 	}
 	console.log(a.join(''));
 }
 
+/**
+| Returns a descriptive string for an object.
+*/
+function inspect(o) {
+	var a = [];
+	_inspect(o, a, 0);
+	return a.join('');
+}
 
 /**
 | Deep copies an object.
@@ -545,6 +554,7 @@ Jools = {
 	devel              : devel,
 	fixate             : fixate,
 	fixateNoEnum       : fixateNoEnum,
+	inspect            : inspect,
 	is                 : is,
 	isnon              : isnon,
 	isString           : isString,

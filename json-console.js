@@ -7,11 +7,13 @@
 | License: GNU Affero AGPLv3
 */
 
-var fs         = require('fs');
-var http       = require('http');
-var readline   = require('readline');
-var util       = require('util');
-var config     = require('./config');
+var fs       = require('fs');
+var http     = require('http');
+var readline = require('readline');
+var util     = require('util');
+
+var Jools    = require('./jools');
+var config   = require('./config');
 
 
 /**
@@ -92,13 +94,13 @@ function jsonRequest(cmd, callback) {
 
 	request(s, function(err, code, asw) {
 		if (err) {
-			console.log('# '+util.inspect(err, false, null));
+			console.log('# '+Jools.inspect(err));
 			callback();
 			return;
 		}
 		try {
 			if (asw) {
-				asw = util.inspect(JSON.parse(asw), false, null);
+				asw = Jools.inspect(JSON.parse(asw));
 			}
 		} catch (err) {
 			console.log('# ('+code+') answer not JSON: '+asw);
@@ -116,10 +118,10 @@ function jsonRequest(cmd, callback) {
 */
 console.log('Talking to '+ops.host+':'+ops.port+ops.path);
 
-if (process.argv.length <= 2) { 
+if (process.argv.length <= 2) {
 	var shell = readline.createInterface(process.stdin, process.stdout, null);
 	shell.history = loadHistory();
-	
+
 	// Stream-writes the command history.
 	var cmdhistory = fs.createWriteStream('./cmdhistory.txt', {'flags': 'a'});
 

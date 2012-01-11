@@ -27,8 +27,8 @@ var Woods;
 | Running in node or browser?
 */
 if (typeof(window) === 'undefined') {
-	Jools  = require('./meshcraft-jools');
-	Fabric = require('./meshcraft-fabric');
+	Jools  = require('./jools');
+	Fabric = require('./fabric');
 }
 
 var Path      = Jools.Path;

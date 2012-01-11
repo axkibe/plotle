@@ -2898,8 +2898,6 @@ Note.prototype.transfix = function(txe, bubble, p, shift, ctrl) {
 		system.setCursor('default');
 		return;
 	case TXE.DRAGSTART :
-		debug('hugh');
-
 		if (ctrl) {
 			//space.actionSpawnRelation(this, p);
 			throw new Error('TODO');
@@ -3839,10 +3837,12 @@ MeshIO.prototype.newNote = function(space, zone) {
 
 	this.mm.alter(-1,
 		new Signature({
+			proc: 'arrange',
 			val: apath.get(-1),
 		}),
 		new Signature({
-			path: new Path([space.key$, 'z', '$end']),
+			at1 : 0,
+			path: new Path([space.key$, 'z']),
 		})
 	);
 }
