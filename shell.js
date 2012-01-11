@@ -1555,7 +1555,9 @@ Space.prototype.redraw = function(fabric, action, selection) {
 Space.prototype.setFocus = function(item) {
 	if (this.focus === item) return;
 	this.focus = item;
-	// TODO movetotop.
+	if (item === null) return;
+
+	meshio.moveToTop(this, item);
 
 	/* TODO XXX
 	var caret = system.editor.caret;
@@ -1843,8 +1845,9 @@ Space.prototype.mousedown = function(bubble, p, shift, ctrl, action) {
 			// todo, beautify point logic.
 			var pnw = fm.p.sub(half(nw) + this.pan.x, half(nh) + this.pan.y);
 			var pse = pnw.add(nw, nh);
-			var notePath = meshio.newNote(this, new Rect(pnw, pse));
-			this.setFocus(notePath);
+			var note = meshio.newNote(this, new Rect(pnw, pse));
+			debug('MADE NOTE', note);
+			this.setFocus(note);
 			break;
 		case 'ne' : // label
 			throw new Error('TODO');
@@ -2905,6 +2908,8 @@ Note.prototype.transfix = function(txe, bubble, p, shift, ctrl) {
 			return;
 		}
 		frontface.space.setFocus(this);
+		bubble.redraw = true;
+
 		var sbary = this.scrollbarY;
 		var pr = p.sub(this.zone.pnw);
 		if (sbary.visible && sbary.zone.within(pr)) {
@@ -3795,9 +3800,9 @@ function MeshIO() {
 		        },
 			  },
 		    },
-			z : {
+			'z' : {
 			  alley : [
-			    0, 1,
+			    '0', '1',
 			  ],
 			}
 		  },
@@ -3816,6 +3821,8 @@ function MeshIO() {
 | Creates a new note.
 */
 MeshIO.prototype.newNote = function(space, zone) {
+	// TODO new Path is itchy here.
+	
 	var asw = this.mm.alter(-1,
 		new Signature({
 			val: {
@@ -3844,6 +3851,9 @@ MeshIO.prototype.newNote = function(space, zone) {
 			path: new Path([space.key$, 'z']),
 		})
 	);
+
+	var k = apath.get(-1);
+	return space.items.get(k);
 }
 
 /**
@@ -3859,6 +3869,38 @@ MeshIO.prototype.setZone = function(item, zone) {
 		}),
 		new Signature({
 			path: path,
+		})
+	);
+}
+
+/**
+| Moves an item up to the z-index
+*/
+MeshIO.prototype.moveToTop = function(space, item) {
+	var path = new Path(space);
+	path.set(path.length, 'z');
+	var at1 = space.z.indexOf(item.key$);
+
+	if (at1 === 0) return;
+	
+	this.mm.alter(-1, 
+		new Signature({
+			path: path, 
+			at1: at1,
+		}),
+		new Signature({
+			proc: 'arrange',
+		})
+	);
+
+	this.mm.alter(-1,
+		new Signature({
+			proc: 'arrange',
+			val: item.key$,
+		}),
+		new Signature({
+			path: path, 
+			at1 : 0,
 		})
 	);
 }

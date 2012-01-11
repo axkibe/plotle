@@ -160,7 +160,9 @@ Stem.prototype.forEach = function(callback) {
 Stem.prototype.grow = function(path) {
 	if (!this.isGrowable) throw reject('Node not growable');
 	if (!this._grow) throw new Error('_grow not set');
-	path.set(-1, this._grow++);
+	
+	while (is(this.get('' + this._grow))) this._grow++;
+	path.set(-1, '' + this._grow);
 }
 
 /**
@@ -315,6 +317,10 @@ Object.defineProperty(StemAlley.prototype, 'length',  {
 });
 
 
+StemAlley.prototype.indexOf = function(searchElement) {
+	return this._twigs.alley.indexOf(searchElement);
+};
+
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++ Generic ++
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
@@ -426,11 +432,7 @@ Space.prototype.set = function(path, val, a0, al, oplace) {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function ItemCopse(master) {
 	Stem.call(this, {}, master);
-
 	this._grow = 1;
-	for (var k in master) {
-		if (k >= this._grow) this._grow = k + 1;
-	}
 }
 subclass(ItemCopse, Stem);
 
@@ -450,19 +452,6 @@ ItemCopse.prototype.seeds = {
 | ItemCopse can automatically assign new IDs to new items.
 */
 ItemCopse.prototype.isGrowable = true;
-
-/**
-| Sets the value of a node.
-*/
-ItemCopse.prototype.set = function(path, val, a0, al, oplace) {
-	a0 = path.fit(a0, false);
-	al = path.fit(al, true);
-	if (a0 + 1 === al) {
-		var k = parseInt(path.get(a0));
-		if (k >= this._grow) this._grow = k + 1;
-	}
-	Stem.prototype.set.call(this, path, val, a0, al, oplace);
-}
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++ Note ++

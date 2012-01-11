@@ -321,7 +321,7 @@ function debug() {
 	var a = _timestamp([]);
 	a.push('(debug) ');
 	for(var i = 0; i < arguments.length; i++) {
-		if (i > 1) a.push(' ');
+		if (i > 0) a.push(' ');
 		_inspect(arguments[i], a, 0);
 	}
 	console.log(a.join(''));
