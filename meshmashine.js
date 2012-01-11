@@ -222,9 +222,9 @@ function alter(meshtree, alternation, backward) {
 		if (trg.path.get(-1) === '$new') {
 			log('alter', 'grow new');
 			var nParent = meshtree.get(trg.path, 0, -1);
-			nParent.growNew(trg.path);
-			break;
+			nParent.grow(trg.path);
 		}
+
 		var save = meshtree.get(trg.path);
 		if (is(trg.val)) {
 			check(matches(save, trg.val), cm, 'trg.val preset incorrectly');
@@ -239,6 +239,7 @@ function alter(meshtree, alternation, backward) {
 		} else {
 			src.path = trg.path;
 		}
+
 		meshtree.set(trg.path, src.val);
 		break;
 	case 'insert':

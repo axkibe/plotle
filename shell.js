@@ -2919,7 +2919,6 @@ Note.prototype.transfix = function(txe, bubble, p, shift, ctrl) {
 		frontface.space.setFocus(this);
 
 		var op = p.sub(this.zone.pnw.w, this.zone.pnw.y - max(0, this.scrollbarY.pos));
-		debug(op);
 
 		var para = this.paraAtPoint(op);
 		if (para) {

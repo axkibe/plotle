@@ -157,7 +157,7 @@ Stem.prototype.forEach = function(callback) {
 /**
 | Grows a new subnode
 */
-Stem.prototype.growNew = function(path) {
+Stem.prototype.grow = function(path) {
 	if (!this.isGrowable) throw reject('Node not growable');
 	if (!this._grow) throw new Error('_grow not set');
 	path.set(-1, this._grow++);
@@ -181,7 +181,6 @@ Stem.prototype.matches = function(master) {
 		var v2 = master[k];
 
 		if (k === 'alley') {
-			debug('matching alley', v1, '??', v2);
 			if (v1.length !== v2.length) return false;
 			for (var i = 0, len = v1.length; i < len; i++) {
 				if (v1[i].matches) {
@@ -202,7 +201,6 @@ Stem.prototype.matches = function(master) {
 	for (var k in master) {
 		if (k !== 'type') klen--;
 	}
-	debug(true, 'TODO klen', klen);
 	return klen === 0;
 }
 
@@ -456,11 +454,11 @@ ItemCopse.prototype.isGrowable = true;
 /**
 | Sets the value of a node.
 */
-Space.prototype.set = function(path, val, a0, al, oplace) {
+ItemCopse.prototype.set = function(path, val, a0, al, oplace) {
 	a0 = path.fit(a0, false);
 	al = path.fit(al, true);
 	if (a0 + 1 === al) {
-		var k = path.get(a0);
+		var k = parseInt(path.get(a0));
 		if (k >= this._grow) this._grow = k + 1;
 	}
 	Stem.prototype.set.call(this, path, val, a0, al, oplace);
