@@ -2044,9 +2044,18 @@ Object.defineProperty(Textnode.prototype, 'text', {
 function Para(master) {
 	Woods.Para.call(this, master);
 
-	this._fabric = new Fabric(0 ,0);
-	this._fabricUp2d8 = false; // fabric up-to-date
-	this._flowWidth = null;
+	// fabric caching
+	this._fabric$      = new Fabric(0 ,0);
+	this._fabric$flag  = false; // fabric up-to-date flag
+	this._fabric$width = 0;
+
+	// flow caching
+	this._flow$       = [];
+	this._flow$flag   = false;
+	this._flow$width  = null;
+	this._flow$spread = null;
+	this._flow$height = null;
+
 	this.pnw = null; // position of para in doc.
 }
 subclass(Para, Woods.Para);
@@ -2054,204 +2063,136 @@ subclass(Para, Woods.Para);
 /**
 | (re)flows the paragraph, positioning all chunks.
 */
-Para.prototype._flow = function() {
-	if (this._flowActual) return;
+Para.prototype._flow = function(width) {
+	//if (this._flow$flag && this._flow$width === with) return this._flow$; TODOX
 
 	// builds position informations.
-	var pinfo = this._pinfo = [];
-	var fw = this._flowWidth;
-	// the width really used
-	var width = 0;
+	var flow  = this._flow$ = [];
+	var spread = 0;  // width really used.
+
 	var doca = this.getAnchestor('DocAlley');
 	var fontsize = doca.fontsize;
 
-	var x = 0;
+	// current x positon, and current x including last tokens width
+	var x = 0, xw = 0; 
+
 	var y = fontsize;
 	Measure.font = doca.getFont();
 	var space = Measure.width(' ');
-	var pline = 0;
-	var l = pinfo[pline] = {a: [], x: x, y: y};
+	var line = 0;
+	flow[line] = {a: [], y: y};
 
-	//for(var node = this.first; node; node = node.next) TODO
-	var t = this.get('text');
+	// TODO go into subnodes instead
+	var text = this.get('text');
 
 	//var reg = !dtree.pre ? (/(\s*\S+)\s?(\s*)/g) : (/(.+)()$/g);
 	//var reg = !dtree.pre ? (/(\s*\S+|\s+$)\s?(\s*)/g) : (/(.+)()$/g); TODO
 	var reg = (/(\s*\S+|\s+$)\s?(\s*)/g);
 
-	var start = true; // at start of line
-	for(var ca = reg.exec(t); ca != null; ca = reg.exec(t)) {
-		// text is a word plus hard spaces
-		var text = ca[1] + ca[2];
-		var w = Measure.width(text);
-		if (fw > 0 && x + w + space > fw) {
-			if (!start) {
+	for(var ca = reg.exec(text); ca != null; ca = reg.exec(text)) {
+		// a token is a word plus following hard spaces
+		var token = ca[1] + ca[2];
+		var w = Measure.width(token);
+		xw = x + w + space;
+
+		if (width > 0 && xw > width) {
+			if (x > 0) {
 				// soft break
-				if (x > width) width = x;
-				x = 0;
+				if (spread < xw) spread = xw;
+				x = 0; xw = x + w + space;
 				//y += R(doca.fontsize * (dtree.pre ? 1 : 1 + settings.bottombox));
 				y += R(doca.fontsize * (1 + settings.bottombox));
-				pline++;
-				pinfo[pline] = {a: [], x: x, y: y};
-				start = true;
+				line++;
+				flow[line] = {a: [], y: y};
 			} else {
 				// horizontal overflow
 				console.log('HORIZONTAL OVERFLOW'); // TODO
 			}
 		}
-		pinfo[pline].a.push({
+		flow[line].a.push({
 			x: x,
 			w: w,
-			offset: ca.index,
-			text: text,
-		});;
-		x += w + space;
-		start = false;
-	}
-	if (x > width) {
-		// stores maximum width used.
-		width = x;
-	}
+			o: ca.index,
+			t: token,
+		});
 
-	// stores metrics
-	this._softHeight = y;
-	this._width = width;
-	this._flowActual = true;
+		x = xw;
+	}
+	if (spread < xw) spread = xw; 
+
+	this._flow$height = y;
+	this._flow$width  = width;
+	this._flow$spread = spread;
+	this._flow$flag   = true;
+	return flow;
 }
 
 /**
-| Returns the soft height.
+| Returns the flow width.
+|
+*/
+Para.prototype.getFlowWidth = function(action) {
+	var item = this.getAnchestor('DocAlley').parent;
+	var zone = item.getZone(action);
+	return zone.width - item.imargin.x;
+}
+
+/**
+| Return the flow height.
 |
 | (without addition of box below last line base line for 'gpq' etc.)
 */
-Para.prototype.getSoftHeight = function() {
-	this._flow();
-	return this._softHeight;
+Para.prototype.getFlowHeight = function(width) {
+	this._flow(width);
+	return this._flow$height;
 }
 
-/**
-| Returns the width the para really uses.
-*/
-Object.defineProperty(Para.prototype, 'width', {
-	get: function() {
-		this._flow();
-		return this._width;
-	},
-});
-
-/**
-| Returns the computed height of the paragraph.
-*/
-Object.defineProperty(Para.prototype, 'height', {
-	get: function() {
-		this._flow();
-		var doca = this.getAnchestor('DocAlley');
-		return this._softHeight + R(doca.fontsize * settings.bottombox);
-	},
-});
-
-
-/**
-| The width a para should have.
-*/
-Object.defineProperty(Para.prototype, 'flowWidth', {
-	get : function() {
-		return this._flowWidth;
-	},
-	set : function(fw) {
-		if (this._flowWidth === fw) return;
-		this._flowWidth = fw;
-		this._flow_up2d8F  = false;
-		this._farbic_up2d8F = false;
-	}
-});
+Para.prototype.getHeight = function(width) {
+	this._flow(width);
+	var doca = this.getAnchestor('DocAlley');
+	return this.getFlowHeight(width) + R(doca.fontsize * settings.bottombox) + 10;
+}
 
 /**
 | Draws the paragraph in its cache and returns it.
 */
-Para.prototype.getFabric = function() {
-	if (this._fabricUp2d8) return this._fabric;
+Para.prototype.getFabric = function(width) {
+	var flow   = this._flow(width);
+	var height = this.getHeight(width);
 
-	var f = this._fabric;
-	this._flow();
+	// cache hit?
+	if (this._fabric$flag && this._fabric$width === width && this._fabric$height === height) {
+		return this._fabric$;
+	}
+
+	var fabric = this._fabric$;
 
 	// TODO: work out exact height for text below baseline
 	var doca = this.getAnchestor('DocAlley');
-	f.attune(this);
-	f.fontStyle(doca.getFont(), 'black', 'start', 'alphabetic');
+	fabric.attune(width, height);
+	fabric.fontStyle(doca.getFont(), 'black', 'start', 'alphabetic');
 
 	// draws text into the fabric
-	var pinfo = this._pinfo;
-	for(var il = 0, pinfolen = pinfo.length; il < pinfolen; il++) {
-		var pl = pinfo[il];
-		for(var ic = 0, plen = pl.a.length; ic < plen; ic++) {
-			var pc = pl.a[ic];
-			f.fillText(pc.text, pc.x, pl.y);
+	for(var a = 0, flowLen = flow.length; a < flowLen; a++) {
+		var line = flow[a];
+		for(var b = 0, lineLen = line.a.length; b < lineLen; b++) {
+			var chunk = line.a[b];
+			fabric.fillText(chunk.t, chunk.x, line.y);
 		}
 	}
 
-	this._fabric$flag = true;
-	return f;
+	this._fabric$flag   = true;
+	this._fabric$width  = width;
+	this._fabric$height = height;
+	return fabric;
 }
 
-// drops the cache (cause something has changed
-/* TODO?
-Para.prototype.listen = function() {
-	this._flow_up2d8F = false;
-	this._fabric$flag    = false;
-	if (this.parent) this.parent.listen();
-}*/
-
-/**
-| Joins a child node to its next sibling,
-| or joins this paragraph to its next sibling
-|
-| TODO, this doesnt belong here .
-*/
-/* TODO?
-Para.prototype.joinToNext = function(node, caret) {
-	var next = node.next;
-	if (next) {
-		alert('joinToNext, not yet implemented');
-	}
-	var nextPara = this.next;
-	if (nextPara == null) {
-		// end of document
-		return false;
-	}
-	node.text = node.text + nextPara.first.text;
-	// todo take over siblings
-	this.parent.remove(nextPara);
-	return true;
+// drops the cache (cause something has changed)
+Para.prototype.set = function(path, val, a0, al, oplace) {
+	this._flow$flag = false;
+	this._fabric$flag = false;
+	Woods.Para.prototype.set.apply(this, arguments);
 }
-*/
-
-/**
-| Joins a child node to its previous sibling,
-| or joins this paragraph to its previos sibling.
-|
-| todo, doesnt belong here.
-*/
-/* TODO?
-Para.prototype.joinToPrevious = function(node, caret) {
-	var prev = node.prev;
-	if (prev) {
-		alert('joinToPrevious, not yet implemented');
-	}
-	var prevPara = this.prev;
-	if (prevPara == null) {
-		return false;
-	}
-	var nt = node.text;
-	var plc = prevPara.last;
-	if (caret) {
-		caret.set(plc, plc.text.length);
-	}
-	plc.text = plc.text + nt;
-	this.parent.remove(this);
-	return true;
-}
-*/
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .-,--.  ,--,--'
@@ -2745,13 +2686,15 @@ DocAlley.prototype.draw = function(fabric, action, selection, imargin, scrollp) 
 	// draws tha paragraphs
 
 	this.forEachNumber(function(para, k) {
-		var pf = para.getFabric();
+		var pw = para.getFlowWidth(action);
+		var pf = para.getFabric(pw);
 		para.pnw = new Point(imargin.w, R(y));
 
 		if (pf.width > 0 && pf.height > 0) {
 			fabric.drawImage(pf, imargin.w, y - scrollp.y);
 		}
-		y += para.getSoftHeight() + paraSep;
+
+		y += para.getFlowHeight(pw) + paraSep;
 	});
 }
 
@@ -2765,6 +2708,7 @@ DocAlley.prototype.getFont = function() {
 /**
 * Gets/Sets the flowWidth.
 */
+/*
 Object.defineProperty(DocAlley.prototype, 'flowWidth', {
 	get: function() {
 		return this._flowWidth;
@@ -2780,10 +2724,12 @@ Object.defineProperty(DocAlley.prototype, 'flowWidth', {
 		this._cacheHeight = null; // TODO used?
 	}
 });
+*/
 
+// TODOX
 DocAlley.prototype.paraAtPoint = function(p) {
 	this.forEachNumber(function(para, k) {
-		if (p.y < para.pnw.y + para.getSoftHeight()) return para;
+		if (p.y < para.pnw.y + para.getFlowHeight()) return para;
 	});
 }
 
@@ -2876,6 +2822,7 @@ Note.prototype.jsonfy = function() {
 | Returns the para at point. todo, honor scroll here.
 */
 Note.prototype.paraAtPoint = function(p) {
+	// TODO rename imargin to innerMargin
 	if (p.y < this.imargin.n) return null;
 	return this.doc.paraAtPoint(p);
 }
@@ -2955,10 +2902,11 @@ Note.prototype.transfix = function(txe, bubble, p, shift, ctrl) {
 
 /**
 | Returns the zone of the item.
-| An ongoing action can modify this to the meshmashine data.
+| An ongoing action can modify this to be different than meshmashine data.
 */
 Note.prototype.getZone = function(action) {
 	if (!action || action.item !== this) return this.zone;
+	// TODO cache the last zone
 
 	switch (action.type) {
 	case Action.ITEMDRAG:
@@ -3059,15 +3007,16 @@ Note.prototype.getSilhoutte = function(zone) {
 }
 
 /**
-| The zone the handles appear on.
+| Returns the inner zone
 */
-Object.defineProperty(Note.prototype, 'handlezone', {
-	get : function() { debug('TODO handlezone?'); return this.zone; }
-});
+Note.prototype.getInnerZone = function(action) {
+	return this.getZone(action).reduce(this.imargin);
+}
 
 /**
 | The inner width for contents excluding scrollbars.
 */
+/*
 Object.defineProperty(Note.prototype, 'iwidth', {
 	get: function() {
 		return this.zone.width - this.imargin.x;
@@ -3075,15 +3024,17 @@ Object.defineProperty(Note.prototype, 'iwidth', {
 //			(this.scrollbarY.pos >= 0 ? settings.scrollbar.strength : 0);
 	},
 });
+*/
 
 /**
 | The inner height for contents excluding scrollbars.
 */
+/*
 Object.defineProperty(Note.prototype, 'iheight', {
 	get: function() {
 		return this.zone.height - this.imargin.y;
 	},
-});
+});*/
 
 
 /**
@@ -3135,7 +3086,7 @@ Note.prototype.draw = function(fabric, action, selection) {
 		f.fill(settings.note.style.fill, silhoutte, 'path');
 
 		var doca = this.doc;
-		doca.flowWidth = this.iwidth;
+//		doca.flowWidth = this.iwidth; TODOX
 
 		// calculates if a scrollbar is needed
 		/* TODO 
@@ -3318,7 +3269,6 @@ Label.prototype.setZone = function(zone, align) {
 	if (this.zone && dfs === fs) return false;
 	this._lock = true;
 	dtree.fontsize = fs;
-	dtree.flowWidth = -1;
 	if (!this.zone) this.zone = zone;
 	this.zone = this.zone.resize(this._dWidth(), this._dHeight(), align);
 	this._lock = false;
@@ -3421,7 +3371,6 @@ function Relation(id, i1id, i2id, textZone, dtree) {
 	this.i2id         = i2id;
 	this.dtree        = dtree;
 	dtree.parent      = this;
-	dtree.flowWidth   = -1;
 	dtree.pre         = true;
 	this.imargin      = Relation.imargin;
 	this.setTextZone(textZone);
@@ -3474,7 +3423,6 @@ Relation.create = function(item1, item2) {
 	throw new Error('TODO');
 	var dtree = new DTree(20);
 	dtree.append(new Para('relates to'));
-	dtree.flowWidth = -1;
 	var cline = Line.connect(item1.handlezone, null, item2.handlezone, null); // todo bindzone
 	var mx = (cline.p1.x + cline.p2.x) / 2; // todo teach line pc
 	var my = (cline.p1.y + cline.p2.y) / 2;
@@ -3537,7 +3485,6 @@ Relation.prototype.setTextZone = function(zone, align) {
 	var fs = max(dfs * zh / th, 8);
 	if (this.zone && dfs === fs) return false;
 	dtree.fontsize = fs;
-	dtree.flowWidth = -1;
 	th = R(this.dtree.height * (1 + settings.bottombox));
 	// todo use rect resize?
 	switch(align) {
@@ -3573,7 +3520,6 @@ Relation.prototype.setZone = function(zone, align) {
 	if (this.textZone && dfs === fs) return false;
 	this._lock = true;
 	dtree.fontsize = fs;
-	dtree.flowWidth = -1;
 	if (!this.textZone) this.textZone = zone;
 	this.textZone = this.textZone.resize(this._dWidth(), this._dHeight(), align);
 	this._lock = false;

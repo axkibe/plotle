@@ -812,6 +812,18 @@ Rect.prototype.eq = function(r) {
 }
 
 /**
+| Returns a rectangle thats reduced on every side by a margin object
+*/
+Rect.prototype.reduce = function(margin) {
+	if (margin.constructor !== Margin) throw new Error('margin of wrong type');
+
+	// allow margins to reduce the rect to zero size without erroring.
+	return new Rect(
+		Point.renew(this.pnw.x + margin.e, this.pnw.y + margin.n, this.pnw, this.pse),
+		Point.renew(this.pse.x - margin.w, this.pse.y - margin.s, this.pnw, this.pse));
+}
+
+/**
 | Point in the center.
 */
 lazyFixate(Rect.prototype, 'pc', function() {

@@ -212,6 +212,7 @@ Stem.prototype.matches = function(master) {
 */
 Stem.prototype.getAnchestor = function(type) {
 	if (!Woods.cogging) throw new Error('getAnchestor not avaible without cogging');
+
 	var n = this;
 	while (n && n.type !== type) { n = n.parent; }
 	if (!n) throw new Error('anchestor not there: '+type);
