@@ -147,20 +147,12 @@ Stem.prototype.toJSON = function() {
 }
 
 /**
-| Iterates over all subnodes
-*/
-Stem.prototype.forEach = function(callback) {
-	for(var k in this._twigs) callback(this._twigs[k], k);
-}
-
-
-/**
 | Grows a new subnode
 */
 Stem.prototype.grow = function(path) {
 	if (!this.isGrowable) throw reject('Node not growable');
 	if (!this._grow) throw new Error('_grow not set');
-	
+
 	while (is(this.get('' + this._grow))) this._grow++;
 	path.set(-1, '' + this._grow);
 }
@@ -284,23 +276,6 @@ StemAlley.prototype.set = function(path, val, a0, al, oplace) {
 		if (!twig || !twig.set) throw reject('path goes nowhere (sa)');
 		twig.set(path, val, a0 + 1, al);
 	}
-}
-/**
-| Iterates over all subnodes
-*/
-StemAlley.prototype.forEach = function(callback) {
-	this._twigs.alley.forEach(callback);
-	for(var k in this._twigs) {
-		if (k === 'alley') continue;
-		callback(this._twigs[k], k);
-	}
-}
-
-/**
-| Iterates over all subnodes
-*/
-StemAlley.prototype.forEachNumber = function(callback) {
-	this._twigs.alley.forEach(callback);
 }
 
 /**

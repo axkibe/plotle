@@ -169,20 +169,17 @@ function alter(meshtree, alternation, backward) {
 		src.attune(str, 'src.path');
 		var sig_splice = src.path.get(src.pivot);
 		checkWithin(sig_splice, 0, pivotNode.length, cm, 'splice out of range');
+		check(src.path.get(-1) === 'text', cm, 'split must be on .text');
 
 		var ppre = pivotNode.get(sig_splice);
 
 		// no rejects after here
-		var pnew = new ppre.constructor();
-		var ksplit = src.path.get(-1);
-		ppre.forEach(function(v, k) {
-			if (k === ksplit) {
-				pnew.set(k, v.substring(src.at1));
-				ppre.set(k, v.substring(0, src.at1));
-			} else {
-				pnew.set(k, v);
-			}
-		});
+		var pnew = new ppre.constructor(ppre);
+
+		var text = ppre.get('text');
+		pnew.set('text', text.substring(src.at1));
+		ppre.set('text', text.substring(0, src.at1));
+
 		pivotNode.splice(sig_splice + 1, 0, pnew);
 		break;
 	case 'join' :
@@ -201,17 +198,13 @@ function alter(meshtree, alternation, backward) {
 		trg.attune(str, 'trg.path');
 		var sig_splice = trg.path.get(trg.pivot);
 		checkWithin(sig_splice, 0, pivotNode.length -1, cm, 'splice out of range');
+		check(trg.path.get(trg.pivot + 1) === 'text', cm, 'join must be on .text');
 
 		var ppre = pivotNode.get(sig_splice);
 		var pnex = pivotNode.get(sig_splice + 1);
 		check(ppre.constructor === pnex.constructor, 'cannot join different types')
 
-		// no rejects after here
-		ppre.forEach(function(v, k) {
-			if (k === trg.path.get(trg.pivot + 1)) {
-				ppre.set(k, v + pnex.get(k));
-			}
-		});
+		ppre.set('text', ppre.get('text') + pnex.get('text'));
 		pivotNode.splice(sig_splice + 1, 1);
 		break;
 	case 'set':

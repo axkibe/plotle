@@ -1624,19 +1624,19 @@ Space.prototype.mousehover = function(bubble, p, shift, ctrl, action) {
 
 	// todo remove nulls by shiftKey, ctrlKey
 	// XXX
-	this._transfix(TXE.HOVER, bubble, pp, null, null);
+	this._transfix(TXE.HOVER, bubble, pp, null, null, action);
 	if (!bubble.hit) system.setCursor('crosshair');
 }
 
 /**
 | Asks every item that intersects with a point if it feels reponsible for an event.
 */
-Space.prototype._transfix = function(txe, bubble, p, shift, ctrl) {
+Space.prototype._transfix = function(txe, bubble, p, shift, ctrl, action) {
 	if (bubble.hit) throw new Error('Bubble already hit in _transfix');
 
 	for(var zi = 0, zlen = this.z.length; zi < zlen; zi++) {
 		var it = this.items.get(this.z.get(zi));
-		it.transfix(txe, bubble, p, shift, ctrl);
+		it.transfix(txe, bubble, p, shift, ctrl, action);
 		if (bubble.hit) return;
 	}
 }
@@ -1715,7 +1715,7 @@ Space.prototype.dragstart = function(bubble, p, shift, ctrl, action) {
 		return;
 	} */
 
-	this._transfix(TXE.DRAGSTART, bubble, pp, shift, ctrl);
+	this._transfix(TXE.DRAGSTART, bubble, pp, shift, ctrl, action);
 
 	if (!bubble.hit) {
 		// panning
@@ -1740,7 +1740,7 @@ Space.prototype.click = function(bubble, p, shift, ctrl, action) {
 	}
 	*/
 
-	this._transfix(TXE.CLICK, bubble, pp, shift, ctrl);
+	this._transfix(TXE.CLICK, bubble, pp, shift, ctrl, action);
 
 	if (!bubble.hit) {
 		var action = frontface.beginAction(Action.FLOATMENU, null, p);
@@ -2064,7 +2064,7 @@ subclass(Para, Woods.Para);
 | (re)flows the paragraph, positioning all chunks.
 */
 Para.prototype._flow = function(width) {
-	//if (this._flow$flag && this._flow$width === with) return this._flow$; TODOX
+	if (this._flow$flag && this._flow$width === width) return this._flow$;
 
 	// builds position informations.
 	var flow  = this._flow$ = [];
@@ -2074,7 +2074,7 @@ Para.prototype._flow = function(width) {
 	var fontsize = doca.fontsize;
 
 	// current x positon, and current x including last tokens width
-	var x = 0, xw = 0; 
+	var x = 0, xw = 0;
 
 	var y = fontsize;
 	Measure.font = doca.getFont();
@@ -2684,8 +2684,8 @@ DocAlley.prototype.draw = function(fabric, action, selection, imargin, scrollp) 
 	var y = imargin.n;
 
 	// draws tha paragraphs
-
-	this.forEachNumber(function(para, k) {
+	for (var a = 0; a < this.length; a++) {
+		var para = this.get(a);
 		var pw = para.getFlowWidth(action);
 		var pf = para.getFabric(pw);
 		para.pnw = new Point(imargin.w, R(y));
@@ -2695,7 +2695,7 @@ DocAlley.prototype.draw = function(fabric, action, selection, imargin, scrollp) 
 		}
 
 		y += para.getFlowHeight(pw) + paraSep;
-	});
+	}
 }
 
 /**
@@ -2706,31 +2706,16 @@ DocAlley.prototype.getFont = function() {
 }
 
 /**
-* Gets/Sets the flowWidth.
+| Returns the paragraph at point
 */
-/*
-Object.defineProperty(DocAlley.prototype, 'flowWidth', {
-	get: function() {
-		return this._flowWidth;
-	},
-
-	set: function(fw) {
-		if (this._flowWidth == fw) return;
-		this._flowWidth = fw;
-		this.forEachNumber(function(para, k) {
-			para.flowWidth = fw;
-		}),
-		this._cacheWidth  = null; // TODO used? // TODO use a rect.
-		this._cacheHeight = null; // TODO used?
+DocAlley.prototype.paraAtPoint = function(p, action) {
+	for(var a = 0; a < this.length; a++) {
+		var para = this.get(a);
+		var w = para.getFlowWidth(action);
+		var h = para.getFlowHeight(w);
+		if (p.y < para.pnw.y + h) return para;
 	}
-});
-*/
-
-// TODOX
-DocAlley.prototype.paraAtPoint = function(p) {
-	this.forEachNumber(function(para, k) {
-		if (p.y < para.pnw.y + para.getFlowHeight()) return para;
-	});
+	return null;
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2821,10 +2806,10 @@ Note.prototype.jsonfy = function() {
 /**
 | Returns the para at point. todo, honor scroll here.
 */
-Note.prototype.paraAtPoint = function(p) {
+Note.prototype.paraAtPoint = function(p, action) {
 	// TODO rename imargin to innerMargin
 	if (p.y < this.imargin.n) return null;
-	return this.doc.paraAtPoint(p);
+	return this.doc.paraAtPoint(p, action);
 }
 
 /**
@@ -2840,7 +2825,7 @@ Note.prototype.fabricUp2d8 = function(zone) {
 | Checks if this items reacts on an event.
 | Returns transfix code.
 */
-Note.prototype.transfix = function(txe, bubble, p, shift, ctrl) {
+Note.prototype.transfix = function(txe, bubble, p, shift, ctrl, action) {
 	if (!this.zone.within(p)) return;
 	bubble.hit = true;
 	switch (txe) {
@@ -2869,10 +2854,13 @@ Note.prototype.transfix = function(txe, bubble, p, shift, ctrl) {
 		return;
 	case TXE.CLICK :
 		frontface.space.setFocus(this);
+		bubble.redraw = true;
 
-		var op = p.sub(this.zone.pnw.w, this.zone.pnw.y - max(0, this.scrollbarY.pos));
+		// var op = p.sub(this.zone.pnw.w, this.zone.pnw.y - max(0, this.scrollbarY.pos)); TODO
+		var pi = p.sub(this.zone.pnw.x, this.zone.pnw.y);
+		debug('PI', pi);
 
-		var para = this.paraAtPoint(op);
+		var para = this.paraAtPoint(pi, action);
 		if (para) {
 			debug('Click Para', para);
 			debug('TODO');
@@ -2881,9 +2869,8 @@ Note.prototype.transfix = function(txe, bubble, p, shift, ctrl) {
 			editor.caret.setFromPoint(para, op.sub(para.p));
 			editor.caret.show();
 			editor.deselect();*/
-			bubble.redraw = true;
 		}
-		return txr;
+		return;
 	case TXE.RBINDHOVER :
 		//space.actionRBindHover(this);
 		throw new Error('TODO');
@@ -3183,7 +3170,7 @@ Label.jnew = function(js, id) {
 | An event happened at p.
 | returns transfix code.
 */
-Label.prototype.transfix = function(txe, bubble, p, shift, ctrl) {
+Label.prototype.transfix = function(txe, bubble, p, shift, ctrl, action) {
 	if (!this.zone.within(p)) return 0;
 	bubble.hit = true;
 
@@ -3205,8 +3192,8 @@ Label.prototype.transfix = function(txe, bubble, p, shift, ctrl) {
 		return txr;
 	case TXE.CLICK:
 		frontface.space.setFocus(this);
-		var op = p.sub(this.zone.pnw);
-		var para = this.paraAtPoint(op);
+		var pi = p.sub(this.zone.pnw);
+		var para = this.paraAtPoint(pi, action);
 		if (para) {
 			debug('TODO');
 			/*
@@ -3217,7 +3204,7 @@ Label.prototype.transfix = function(txe, bubble, p, shift, ctrl) {
 			*/
 			bubble.redraw = true;
 		}
-		return txr;
+		return;
 	case TXE.RBINDHOVER :
 		//space.actionRBindHover(this);
 		throw new Error('TODO');
@@ -3306,9 +3293,11 @@ Label.prototype.moveto = function(pnw) {
 	return this;
 }
 
-/* returns the para at y */
-Label.prototype.paraAtPoint = function(p) {
-	return this.dtree.paraAtPoint(p);
+/**
+| returns the para at point.
+*/
+Label.prototype.paraAtPoint = function(p, action) {
+	return this.dtree.paraAtPoint(p, action);
 }
 
 /* drops the cache */
@@ -3546,7 +3535,7 @@ Relation.prototype._dWidth = function() {
 | An action happend.
 | Returns transfix code.
 */
-Relation.prototype.transfix = function(txe, bubble, p, shift, ctrl) {
+Relation.prototype.transfix = function(txe, bubble, p, shift, ctrl, action) {
 	if (!this.textZone.within(p)) return 0;
 	bubble.hit = true;
 
@@ -3569,8 +3558,8 @@ Relation.prototype.transfix = function(txe, bubble, p, shift, ctrl) {
 	case TXE.CLICK:
 		frontface.space.setFocus(this);
 
-		var op = p.sub(this.textZone.pnw);
-		var para = this.paraAtPoint(op);
+		var pi = p.sub(this.textZone.pnw);
+		var para = this.paraAtPoint(pi, action);
 		if (para) {
 			/* TODO
 			var editor = System.editor;
@@ -3580,7 +3569,7 @@ Relation.prototype.transfix = function(txe, bubble, p, shift, ctrl) {
 			*/
 			bubble.redraw = true;
 		}
-		return txr;
+		return;
 	case TXE.RBINDHOVER :
 		//space.actionRBindHover(this);
 		throw new Error('TODO');
@@ -3606,9 +3595,11 @@ Relation.prototype.moveto = function(pnw) {
 	return this;
 }
 
-/* returns the para at y */
-Relation.prototype.paraAtPoint = function(p) {
-	return this.dtree.paraAtPoint(p);
+/**
+| Returns the para at point.
+*/
+Relation.prototype.paraAtPoint = function(p, action) {
+	return this.dtree.paraAtPoint(p, action);
 }
 
 
