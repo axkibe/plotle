@@ -28,7 +28,6 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 'use strict';
-var frontface;
 var meshio;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -430,12 +429,15 @@ function Marker() {
 }*/
 
 /**
-| Sets the marker to position closest to x, y from flowbox(para).
+| Sets the marker to position closest to x, y.
 */
-/*Marker.prototype.setFromPoint = function(flowbox, p) {
-	throw new Error('TODO');
+Marker.prototype.setFromPoint = function(item, p) {
+	if (item.constructor !== Para) throw new Error('invalid item.');
+	this.path   = new Path(item);
+	this.offset = 0;
 
-	if (!flowbox instanceof Para) { throw new Error('invalid flowbox.'); }
+	/* TODO
+	var flow =
 	var pinfo = this._getPinfoAtP(flowbox, p);
 	var l = pinfo[this._pli];
 	var c = l[this._pci]; // x,y is in this chunk
@@ -463,7 +465,8 @@ function Marker() {
 	if (dx - x1 <= x2 - dx) o--;
 	this._element = c.node;
 	this._offset = c.offset + o;
-}*/
+	*/
+}
 
 /**
 | Sets this.pline and this.pchunk according to the chunk
@@ -630,7 +633,7 @@ subclass(Caret, Marker);
 Caret.prototype.show = function() {
 	this.shown = true;
 	this.blinked = false;
-	system.startBlinker();
+	system.startBlinker(); // TODO make constant input checking in system instead.
 }
 
 /**
@@ -644,42 +647,24 @@ Caret.prototype.hide = function() {
 /**
 | Draws or erases the caret.
 */
-Caret.prototype.update = function(action) {
-	var f = system.fabric; // <-- TODO don't
-	//debug('TODO caret.update');
+Caret.prototype.update = function(face) {
+	var fabric = face.fabric;
+//	debug('TODO caret.update');
 	return;
+	/*
 
 	// erases the old caret
-	if (this.save) {
-		f.putImageData(this.save, this.savep.x - 1, this.savep.y - 1);
-		this.save = null;
+	if (this.save$image) {
+		fabric.putImageData(this.save$image, this.save$point);
+		this.save$image = this.save$point = null;
 	}
 
 	// draws new
 	if (this.shown && !this.blinked) {
-		var cp   = this.getPoint();
-		var item = this.getItem();
-		var zone = item.getZone(action);
-
-		//var sy = (it.scrollbarY && it.scrollbarY.visible && it.scrollbarY.pos) || 0; TODO
-		var th = R(item.doc.fontsize * (1 + settings.bottombox));
-
-		var cyn = cp.y /* - sy*/;
-		var cys = cyn + th;
-		cyn = min(max(cyn, 0), zone.height);
-		cys = min(max(cys, 0), zone.height);
-
-		if (cyn === cys) {
-			caret.save = null;
-			return;
-		}
-		throw new Error('TODO no frontface');
-		var sp = this.savep = frontface.space.pan.add(  // TODO getPan()
-			zone.pnw.x + cp.x,
-			zone.pnw.y + cyn);
-		caret.save = f.getImageData(sp.x - 1, sp.y - 1, 3, cys - cyn + 1);
-		f.fillRect('black', sp.x, sp.y, 1, cys - cyn);
+		var entity = meshio.get(this.path);
+		entity.drawCaret(face);
 	}
+	*/
 }
 
 /**
@@ -860,11 +845,16 @@ Caret.prototype.specialKey = function(item, keycode, shift, ctrl) {
 /**
 | Switches caret visibility state.
 */
-Caret.prototype.blink = function() {
+Caret.prototype.blink = function(face) {
+//debug('TODO BLINK', face);
+	return;
+
+/*
 	if (this.shown) {
 		this.blinked = !this.blinked;
-		this.update();
+		this.update(face);
 	}
+	*/
 }
 
 
@@ -1058,14 +1048,14 @@ function Cockpit() {
 /**
 | Redraws the cockpit.
 */
-Cockpit.prototype.redraw = function(fabric, action, selection) {
+Cockpit.prototype.redraw = function(face) {
 	// TODO
 }
 
 /**
 | Mouse hover.
 */
-Cockpit.prototype.mousehover = function(bubble, p, shift, ctrl, action) {
+Cockpit.prototype.mousehover = function(face, bubble, p, shift, ctrl) {
 	/* TODO
 	var redraw = this.edgemenu.mousepos !== this.edgemenu.getMousepos(p);
 	if (this.edgemenu.mousepos >= 0) {
@@ -1080,7 +1070,7 @@ Cockpit.prototype.mousehover = function(bubble, p, shift, ctrl, action) {
 /**
 | Mouse button down event
 */
-Cockpit.prototype.mousedown = function(bubble, p, shift, ctrl, action) {
+Cockpit.prototype.mousedown = function(face, bubble, p, shift, ctrl) {
 	/*
 	var md = this.edgemenu.getMousepos(p);
 	if (md >= 0) {
@@ -1108,12 +1098,13 @@ function FrontFace(fabric) {
 	Measure.init();
 	this.fabric    = fabric;
 	this.space     = null;
+
 	this.cockpit   = new Cockpit();
 	this.caret     = new Caret();
 	this.bubble    = new Bubble();
 
-	this._action    = null;
-	this._selection = new Selection();
+	this.action    = null;
+	this.selection = new Selection();
 }
 
 /**
@@ -1122,7 +1113,7 @@ function FrontFace(fabric) {
 FrontFace.prototype.systemFocus = function() {
 	// if (!this.focus) return // TODO
 	this.caret.show();
-	this.caret.update();
+	this.caret.update(this);
 }
 
 /**
@@ -1130,20 +1121,21 @@ FrontFace.prototype.systemFocus = function() {
 */
 FrontFace.prototype.systemBlur = function() {
 	this.caret.hide();
-	this.caret.update();
+	this.caret.update(this);
 }
 
 /**
 | Creates an action
 */
+// TODO rather name it start/stop Action
 FrontFace.prototype.beginAction = function(type, item, start) {
-	if (this._action) throw new Error('double action');
-	return this._action = new Action(type, item, start);
+	if (this.action) throw new Error('double action');
+	return this.action = new Action(type, item, start);
 }
 
 FrontFace.prototype.endAction = function() {
-	if (!this._action) throw new Error('ending no action');
-	this._action = null;
+	if (!this.action) throw new Error('ending no action');
+	this.action = null;
 }
 
 /**
@@ -1152,9 +1144,9 @@ FrontFace.prototype.endAction = function() {
 FrontFace.prototype.redraw = function() {
 	this.fabric.attune();  // <- bad name for clear();
 	this.caret.save = null;
-	this.space.redraw(this.fabric, this._action, this._selection);
-	this.cockpit.redraw(this.fabric, this._action, this._selection);
-	this.caret.update();
+	this.space.redraw(this);
+	this.cockpit.redraw(this);
+	this.caret.update(this);
 }
 
 /**
@@ -1163,7 +1155,7 @@ FrontFace.prototype.redraw = function() {
 FrontFace.prototype.click = function(p, shift, ctrl) {
 	// TODO cockpit
 	var bubble = this.bubble.init();
-	this.space.click(bubble, p, shift, ctrl, this._action);
+	this.space.click(this, bubble, p, shift, ctrl);
 	if (bubble.redraw) this.redraw();
 }
 
@@ -1175,7 +1167,7 @@ FrontFace.prototype.click = function(p, shift, ctrl) {
 FrontFace.prototype.mousehover = function(p, shift, ctrl) {
 	// TODO cockpit
 	var bubble = this.bubble.init();
-	this.space.mousehover(bubble, p, shift, ctrl, this._action);
+	this.space.mousehover(this, bubble, p, shift, ctrl);
 	if (bubble.redraw) this.redraw();
 }
 
@@ -1186,7 +1178,7 @@ FrontFace.prototype.mousedown = function(p, shift, ctrl) {
 	// TODO cockpit
 	var bubble = this.bubble.init();
 	// TODO rename mst -> mouseState
-	var mst = this.space.mousedown(bubble, p, shift, ctrl, this._action); 
+	var mst = this.space.mousedown(this, bubble, p, shift, ctrl);
 	if (bubble.redraw) this.redraw();
 	return mst;
 }
@@ -1215,7 +1207,7 @@ FrontFace.prototype.input = function(text) {
 FrontFace.prototype.dragstart = function(p, shift, ctrl) {
 	// TODO cockpit
 	var bubble = this.bubble.init();
-	this.space.dragstart(bubble, p, shift, ctrl, this._action);
+	this.space.dragstart(this, bubble, p, shift, ctrl);
 	if (bubble.redraw) this.redraw();
 }
 
@@ -1225,7 +1217,7 @@ FrontFace.prototype.dragstart = function(p, shift, ctrl) {
 FrontFace.prototype.dragmove = function(p, shift, ctrl) {
 	// TODO cockpit
 	var bubble = this.bubble.init();
-	this.space.dragmove(bubble, p, shift, ctrl, this._action);
+	this.space.dragmove(this, bubble, p, shift, ctrl);
 	if (bubble.redraw) this.redraw();
 }
 
@@ -1235,7 +1227,7 @@ FrontFace.prototype.dragmove = function(p, shift, ctrl) {
 FrontFace.prototype.dragstop = function(p, shift, ctrl) {
 	// TODO cockpit
 	var bubble = this.bubble.init();
-	this.space.dragstop(bubble, p, shift, ctrl, this._action);
+	this.space.dragstop(this, bubble, p, shift, ctrl);
 	if (bubble.redraw) this.redraw();
 }
 
@@ -1500,13 +1492,12 @@ Nexus.prototype.seeds = {
 */
 function Space(master) {
 	Woods.Space.call(this, master);
-	this._floatMenuLabels = {c: 'new', n: 'Note', ne: 'Label'};
 
-	// panning offset
-	this.fabric = new Fabric(system.fabric); // TODO dont
-	this.fabric.pan = this.pan = Point.zero; // TODO no double pan
-
+	// TODO make a 'spaceface' or something like that
+	this.fabric = new Fabric(system.fabric); 
 	this.zoom = 1; // TODO
+
+	this._floatMenuLabels = {c: 'new', n: 'Note', ne: 'Label'};
 }
 subclass(Space, Woods.Space);
 
@@ -1521,19 +1512,20 @@ Space.prototype.seeds = {
 /**
 | Redraws the complete space.
 */
-Space.prototype.redraw = function(fabric, action, selection) {
+Space.prototype.redraw = function(face) {
 	for(var zi = this.z.length - 1; zi >= 0; zi--) {
 		var it = this.items.get(this.z.get(zi));
-		it.draw(this.fabric, action, selection);
+		it.draw(face, this.fabric);
 	}
 
-	if (this.focus) this.focus.drawHandles(this.fabric, action);
+	if (this.focus) this.focus.drawHandles(face);
 
+	var action = face.action;
 	switch (action && action.type) {
-	case null: 
+	case null:
 		break;
 	case Action.FLOATMENU :
-		action.floatmenu.draw();
+		action.floatmenu.draw(face);
 		break;
 	/* TODO
 	case ACT.IMENU :
@@ -1551,7 +1543,9 @@ Space.prototype.redraw = function(fabric, action, selection) {
 }
 
 
-/* sets the focussed item or loses it if null*/
+/**
+| Sets the focussed item or loses it if null
+*/
 Space.prototype.setFocus = function(item) {
 	if (this.focus === item) return;
 	this.focus = item;
@@ -1576,9 +1570,10 @@ Space.prototype.setFocus = function(item) {
 |
 | Returns true for redrawing.
 */
-Space.prototype.mousehover = function(bubble, p, shift, ctrl, action) {
-	var pp = p.sub(this.pan);
+Space.prototype.mousehover = function(face, bubble, p, shift, ctrl) {
+	var pp = p.sub(this.fabric.pan);
 
+	var action = face.action;
 	switch(action && action.type) {
 	case null : break;
 	case Action.FLOATMENU :
@@ -1608,13 +1603,13 @@ Space.prototype.mousehover = function(bubble, p, shift, ctrl, action) {
 
 	if (this.focus) {
 		// todo move into items
-		if (this.focus.withinItemMenu(pp)) {
+		if (this.focus.withinItemMenu(face, pp)) {
 			system.setCursor('pointer');
 			bubble.hit = true;
 			return;
 		}
 
-		var com = this.focus.checkItemCompass(pp, action);
+		var com = this.focus.checkItemCompass(face, pp);
 		if (com) {
 			system.setCursor(com+'-resize');
 			bubble.hit = true;
@@ -1624,19 +1619,19 @@ Space.prototype.mousehover = function(bubble, p, shift, ctrl, action) {
 
 	// todo remove nulls by shiftKey, ctrlKey
 	// XXX
-	this._transfix(TXE.HOVER, bubble, pp, null, null, action);
+	this._transfix(TXE.HOVER, face, bubble, pp, null, null);
 	if (!bubble.hit) system.setCursor('crosshair');
 }
 
 /**
 | Asks every item that intersects with a point if it feels reponsible for an event.
 */
-Space.prototype._transfix = function(txe, bubble, p, shift, ctrl, action) {
+Space.prototype._transfix = function(txe, face, bubble, p, shift, ctrl) {
 	if (bubble.hit) throw new Error('Bubble already hit in _transfix');
 
 	for(var zi = 0, zlen = this.z.length; zi < zlen; zi++) {
 		var it = this.items.get(this.z.get(zi));
-		it.transfix(txe, bubble, p, shift, ctrl, action);
+		it.transfix(txe, face, bubble, p, shift, ctrl);
 		if (bubble.hit) return;
 	}
 }
@@ -1706,20 +1701,20 @@ Space.prototype.actionRBindHover = function(toItem) {
 /**
 | Starts an operation with the mouse button held down.
 */
-Space.prototype.dragstart = function(bubble, p, shift, ctrl, action) {
-	var pp = p.sub(this.pan);
+Space.prototype.dragstart = function(face, bubble, p, shift, ctrl) {
+	var pp = p.sub(this.fabric.pan);
 
-	/* if (this.focus && this.focus.withinItemMenu(pp)) {
+	/* if (this.focus && this.focus.withinItemMenu(face, pp)) {
 		this.actionSpawnRelation(this.focus, pp);
 		this.redraw();
 		return;
 	} */
 
-	this._transfix(TXE.DRAGSTART, bubble, pp, shift, ctrl, action);
+	this._transfix(TXE.DRAGSTART, face, bubble, pp, shift, ctrl);
 
 	if (!bubble.hit) {
 		// panning
-		frontface.beginAction(Action.PAN, null, pp);
+		face.beginAction(Action.PAN, null, pp);
 		system.setCursor('crosshair');
 	}
 }
@@ -1727,12 +1722,12 @@ Space.prototype.dragstart = function(bubble, p, shift, ctrl, action) {
 /**
 | A mouse click.
 */
-Space.prototype.click = function(bubble, p, shift, ctrl, action) {
-	var pp = p.sub(this.pan);
+Space.prototype.click = function(face, bubble, p, shift, ctrl) {
+	var pp = p.sub(this.fabric.pan);
 
 	/* TODO
 	var focus = this.focus;
-	if (focus && focus.withinItemMenu(pp)) {
+	if (focus && focus.withinItemMenu(face, pp)) {
 		this._itemmenu = focus.newItemMenu(this.pan);
 		this.iaction.act = ACT.IMENU;
 		this.redraw();
@@ -1740,10 +1735,10 @@ Space.prototype.click = function(bubble, p, shift, ctrl, action) {
 	}
 	*/
 
-	this._transfix(TXE.CLICK, bubble, pp, shift, ctrl, action);
+	this._transfix(TXE.CLICK, face, bubble, pp, shift, ctrl);
 
 	if (!bubble.hit) {
-		var action = frontface.beginAction(Action.FLOATMENU, null, p);
+		var action = face.beginAction(Action.FLOATMENU, null, p);
 		action.floatmenu = new Hexmenu(p, settings.floatmenu, this._floatMenuLabels);
 		system.setCursor('default');
 		this.setFocus(null);
@@ -1754,13 +1749,14 @@ Space.prototype.click = function(bubble, p, shift, ctrl, action) {
 /**
 | Stops an operation with the mouse button held down.
 */
-Space.prototype.dragstop = function(bubble, p, shift, ctrl, action) {
-	var pp = p.sub(this.pan);
+Space.prototype.dragstop = function(face, bubble, p, shift, ctrl) {
+	var action = face.action;
+	var pp = p.sub(this.fabric.pan);
 	if (!action) throw new Error('Dragstop without action?');
 	switch (action.type) {
 	case Action.ITEMDRAG :
 	case Action.ITEMRESIZE :
-		action.item.setZone(action.item.getZone(action));
+		action.item.setZone(action.item.getZone(face));
 		system.setCursor('default');
 		bubble.redraw = true;
 		break;
@@ -1780,14 +1776,15 @@ Space.prototype.dragstop = function(bubble, p, shift, ctrl, action) {
 	default :
 		throw new Error('Invalid action in "Space.dragstop"');
 	}
-	frontface.endAction();
+	face.endAction();
 }
 
 /**
 | Moving during an operation with the mouse button held down.
 */
-Space.prototype.dragmove = function(bubble, p, shift, ctrl, action) {
-	var pp = p.sub(this.pan);
+Space.prototype.dragmove = function(face, bubble, p, shift, ctrl) {
+	var pp = p.sub(this.fabric.pan);
+	var action = face.action;
 
 	switch(action.type) {
 	case Action.PAN :
@@ -1827,8 +1824,9 @@ Space.prototype.dragmove = function(bubble, p, shift, ctrl, action) {
 /**
 | Mouse button down event.
 */
-Space.prototype.mousedown = function(bubble, p, shift, ctrl, action) {
-	var pp = p.sub(this.pan);
+Space.prototype.mousedown = function(face, bubble, p, shift, ctrl) {
+	var pp = p.sub(this.fabric.pan);
+	var action = face.action;
 
 	switch (action && action.type) {
 	case null :
@@ -1836,22 +1834,20 @@ Space.prototype.mousedown = function(bubble, p, shift, ctrl, action) {
 	case Action.FLOATMENU :
 		var fm = action.floatmenu;
 		var md = fm.getMousepos(p);
-		frontface.endAction();
+		face.endAction();
 		if (md < 0) break;
 		switch(md) {
 		case 'n' : // note
 			var nw = settings.note.newWidth;
 			var nh = settings.note.newHeight;
-			// todo, beautify point logic.
-			var pnw = fm.p.sub(half(nw) + this.pan.x, half(nh) + this.pan.y);
+			var pnw = fm.p.sub(this.fabric.pan.x + half(nw) , this.fabric.pan.y + half(nh));
 			var pse = pnw.add(nw, nh);
 			var note = meshio.newNote(this, new Rect(pnw, pse));
-			debug('MADE NOTE', note);
 			this.setFocus(note);
 			break;
 		case 'ne' : // label
 			throw new Error('TODO');
-			var pnw = fm.p.sub(this.pan);
+			var pnw = fm.p.sub(this.fabric.pan);
 			var pse = pnw.add(100, 50);
 
 			//var dtree = new DTree(20);  TODO
@@ -1882,15 +1878,13 @@ Space.prototype.mousedown = function(bubble, p, shift, ctrl, action) {
 	}
 
 	if (this.focus) {
-		if (this.focus.withinItemMenu(p)) {
-			return MST.ATWEEN;
-		}
-		var com = this.focus.checkItemCompass(pp, action) ;
+		if (this.focus.withinItemMenu(face, p)) return MST.ATWEEN;
+		var com = this.focus.checkItemCompass(face, pp);
 		if (com) {
 			// resizing
-			var action = frontface.beginAction(Action.ITEMRESIZE, this.focus, pp);
+			var action = face.beginAction(Action.ITEMRESIZE, this.focus, pp);
 			action.align = com;
-			action.startZone = this.focus.getZone();
+			action.startZone = this.focus.getZone(face);
 			system.setCursor(com+'-resize');
 
 			return MST.DRAG;
@@ -2131,9 +2125,9 @@ Para.prototype._flow = function(width) {
 | Returns the flow width.
 |
 */
-Para.prototype.getFlowWidth = function(action) {
+Para.prototype.getFlowWidth = function(face) {
 	var item = this.getAnchestor('DocAlley').parent;
-	var zone = item.getZone(action);
+	var zone = item.getZone(face);
 	return zone.width - item.imargin.x;
 }
 
@@ -2187,11 +2181,39 @@ Para.prototype.getFabric = function(width) {
 	return fabric;
 }
 
-// drops the cache (cause something has changed)
+/**
+| Drops the cache (cause something has changed)
+*/
 Para.prototype.set = function(path, val, a0, al, oplace) {
 	this._flow$flag = false;
 	this._fabric$flag = false;
 	Woods.Para.prototype.set.apply(this, arguments);
+}
+
+/**
+| Draws the caret if its in this paragraph.
+*/
+Para.prototype.drawCaret = function(face) {
+	debug('TODO DRAWCARET');
+	return;
+
+	var zone = item.getZone(face);
+
+	//var sy = (it.scrollbarY && it.scrollbarY.visible && it.scrollbarY.pos) || 0; TODO
+	var th = R(item.doc.fontsize * (1 + settings.bottombox));
+
+	var cyn = cp.y /* - sy*/;
+	var cys = cyn + th;
+	cyn = min(max(cyn, 0), zone.height);
+	cys = min(max(cys, 0), zone.height);
+
+	if (cyn === cys) return;
+
+	var sp = this.save$point = face.space.pan.add(  // TODO getPan()
+		zone.pnw.x + cp.x,
+		zone.pnw.y + cyn);
+	caret.save = f.getImageData(sp.x - 1, sp.y - 1, 3, cys - cyn + 1);
+	f.fillRect('black', sp.x, sp.y, 1, cys - cyn);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2429,8 +2451,8 @@ function Item() {
 /**
 | Return the hexagon slice that is the handle
 */
-Item.prototype.getH6Slice = function(action) {
-	var zone = this.getZone(action);
+Item.prototype.getH6Slice = function(face) {
+	var zone = this.getZone(face);
 
 	if (this._h6slice && this._h6slice.psw.eq(zone.pnw)) return this._h6slice;
 
@@ -2441,25 +2463,26 @@ Item.prototype.getH6Slice = function(action) {
 /**
 | Creates a new Hexmenu for this item.
 */
-Item.prototype.newItemMenu = function(pan) {
+Item.prototype.newItemMenu = function(face, pan) {
+	throw new Error('TODO');
 	var labels = this._itemMenuLabels = {n : 'Remove'};
-	return new Hexmenu(this.getH6Slice().pm.add(pan), settings.itemmenu,  labels);
+	return new Hexmenu(this.getH6Slice(face).pm.add(pan), settings.itemmenu,  labels);
 }
 
 /**
 | Returns if point is within the item menu
 */
-Item.prototype.withinItemMenu = function(p) {
-	return this.getH6Slice().within(p);
+Item.prototype.withinItemMenu = function(face, p) {
+	return this.getH6Slice(face).within(p);
 }
 
 /**
 | Returns the compass direction of the handle if p is on a resizer handle.
 | todo rename
 */
-Item.prototype.checkItemCompass = function(p, action) {
+Item.prototype.checkItemCompass = function(face, p) {
 	var ha = this.handles;
-	var zone = this.getZone(action);
+	var zone = this.getZone(face);
 
 	if (!ha) return null;
 	var d   =       settings.handle.size; // distance
@@ -2491,10 +2514,10 @@ Item.prototype.checkItemCompass = function(p, action) {
 /**
 | Paths the resize handles.
 */
-Item.prototype.pathResizeHandles = function(fabric, border, edge, action) {
+Item.prototype.pathResizeHandles = function(fabric, border, edge, face) {
 	if (border !== 0) throw new Error('borders unsupported for handles');
 	var ha = this.handles;
-	var zone = this.getZone(action);
+	var zone = this.getZone(face);
 	var pnw = zone.pnw;
 	var pse = zone.pse;
 
@@ -2551,13 +2574,13 @@ Item.prototype.pathResizeHandles = function(fabric, border, edge, action) {
 /**
 | Draws the handles of an item (resize, itemmenu)
 */
-Item.prototype.drawHandles = function(fabric, action) {
+Item.prototype.drawHandles = function(face) {
 	// draws the resize handles
-	fabric.edge(settings.handle.style.edge, this, 'pathResizeHandles', action);
+	face.fabric.edge(settings.handle.style.edge, this, 'pathResizeHandles', face);
 
 	// draws item menu handler
 	var sstyle = settings.itemmenu.slice.style;
-	fabric.paint(sstyle.fill, sstyle.edge, this.getH6Slice(action), 'path');
+	face.fabric.paint(sstyle.fill, sstyle.edge, this.getH6Slice(face), 'path');
 }
 
 /**
@@ -2665,7 +2688,7 @@ DocAlley.prototype.seeds = {
 | imargin: distance of text to edge
 | scrollp: scroll position
 */
-DocAlley.prototype.draw = function(fabric, action, selection, imargin, scrollp) {
+DocAlley.prototype.draw = function(face, fabric, imargin, scrollp) {
 	var paraSep = /* TODO this.pre ? 0 :*/ this.fontsize;
 
 	// paints the selection
@@ -2686,7 +2709,7 @@ DocAlley.prototype.draw = function(fabric, action, selection, imargin, scrollp) 
 	// draws tha paragraphs
 	for (var a = 0; a < this.length; a++) {
 		var para = this.get(a);
-		var pw = para.getFlowWidth(action);
+		var pw = para.getFlowWidth(face);
 		var pf = para.getFabric(pw);
 		para.pnw = new Point(imargin.w, R(y));
 
@@ -2708,10 +2731,10 @@ DocAlley.prototype.getFont = function() {
 /**
 | Returns the paragraph at point
 */
-DocAlley.prototype.paraAtPoint = function(p, action) {
+DocAlley.prototype.paraAtPoint = function(p, face) {
 	for(var a = 0; a < this.length; a++) {
 		var para = this.get(a);
-		var w = para.getFlowWidth(action);
+		var w = para.getFlowWidth(face);
 		var h = para.getFlowHeight(w);
 		if (p.y < para.pnw.y + h) return para;
 	}
@@ -2825,7 +2848,7 @@ Note.prototype.fabricUp2d8 = function(zone) {
 | Checks if this items reacts on an event.
 | Returns transfix code.
 */
-Note.prototype.transfix = function(txe, bubble, p, shift, ctrl, action) {
+Note.prototype.transfix = function(txe, face, bubble, p, shift, ctrl) {
 	if (!this.zone.within(p)) return;
 	bubble.hit = true;
 	switch (txe) {
@@ -2839,7 +2862,7 @@ Note.prototype.transfix = function(txe, bubble, p, shift, ctrl, action) {
 			bubble.redraw = true;
 			return;
 		}
-		frontface.space.setFocus(this);
+		face.space.setFocus(this);
 		bubble.redraw = true;
 
 		var sbary = this.scrollbarY;
@@ -2848,27 +2871,23 @@ Note.prototype.transfix = function(txe, bubble, p, shift, ctrl, action) {
 			//space.actionScrollY(this, p.y, this.scrollbarY);
 			throw new Error('TODO');
 		} else {
-			frontface.beginAction(Action.ITEMDRAG, this, p);
+			face.beginAction(Action.ITEMDRAG, this, p);
 			system.setCursor('move');
 		}
 		return;
 	case TXE.CLICK :
-		frontface.space.setFocus(this);
+		face.space.setFocus(this);
 		bubble.redraw = true;
 
 		// var op = p.sub(this.zone.pnw.w, this.zone.pnw.y - max(0, this.scrollbarY.pos)); TODO
 		var pi = p.sub(this.zone.pnw.x, this.zone.pnw.y);
 		debug('PI', pi);
 
-		var para = this.paraAtPoint(pi, action);
+		var para = this.paraAtPoint(pi, face);
 		if (para) {
-			debug('Click Para', para);
-			debug('TODO');
-
-			/*var editor = System.editor;
-			editor.caret.setFromPoint(para, op.sub(para.p));
-			editor.caret.show();
-			editor.deselect();*/
+			face.caret.setFromPoint(para, pi.sub(para.pnw));
+			face.caret.show();
+			// face.selection.deselect(); TODO
 		}
 		return;
 	case TXE.RBINDHOVER :
@@ -2891,7 +2910,11 @@ Note.prototype.transfix = function(txe, bubble, p, shift, ctrl, action) {
 | Returns the zone of the item.
 | An ongoing action can modify this to be different than meshmashine data.
 */
-Note.prototype.getZone = function(action) {
+Note.prototype.getZone = function(face) {
+	if (typeof(face) === 'undefined') {
+		throw new Error('BAD');
+	}
+	var action = face.action;
 	if (!action || action.item !== this) return this.zone;
 	// TODO cache the last zone
 
@@ -2996,9 +3019,11 @@ Note.prototype.getSilhoutte = function(zone) {
 /**
 | Returns the inner zone
 */
-Note.prototype.getInnerZone = function(action) {
-	return this.getZone(action).reduce(this.imargin);
+/* TODO unused?
+Note.prototype.getInnerZone = function(face) {
+	return this.getZone(face).reduce(this.imargin);
 }
+*/
 
 /**
 | The inner width for contents excluding scrollbars.
@@ -3057,13 +3082,13 @@ Note.prototype.setScrollbar = function(pos) {
 | fabric: to draw upon.
 | selection: current selection to highlight.
 */
-Note.prototype.draw = function(fabric, action, selection) {
+Note.prototype.draw = function(face, fabric) {
 	var f  = this._fabric;
 
-	var zone = this.getZone(action);
+	var zone = this.getZone(face);
 
 	// no buffer hit?
-	if (true || !this.fabricUp2d8(zone)) {
+	if (true || !this.fabricUp2d8(zone)) { // TODO!
 		var silhoutte = this.getSilhoutte(zone);
 
 		// resize the canvas
@@ -3092,7 +3117,7 @@ Note.prototype.draw = function(fabric, action, selection) {
 
 		// paints selection and text
 		//dtree.draw(f, selection, this.imargin, sbary.visible ? sbary.pos : 0);
-		doca.draw(f, action, selection, this.imargin, Point.zero); // TODO scrollp
+		doca.draw(face, f, this.imargin, Point.zero); // TODO scrollp
 
 		/*
 		// paints the scrollbar
@@ -3108,8 +3133,6 @@ Note.prototype.draw = function(fabric, action, selection) {
 		this._fabric$flag = true;
 		this._fabric$size = zone;
 	}
-
-
 
 	fabric.drawImage(f, zone.pnw);
 }
@@ -3170,7 +3193,7 @@ Label.jnew = function(js, id) {
 | An event happened at p.
 | returns transfix code.
 */
-Label.prototype.transfix = function(txe, bubble, p, shift, ctrl, action) {
+Label.prototype.transfix = function(txe, face, bubble, p, shift, ctrl) {
 	if (!this.zone.within(p)) return 0;
 	bubble.hit = true;
 
@@ -3185,15 +3208,15 @@ Label.prototype.transfix = function(txe, bubble, p, shift, ctrl, action) {
 			bubble.redraw = true;
 			return txr;
 		}
-		frontface.space.setFocus(this);
+		face.space.setFocus(this);
 
-		frontface.beginAction(Action.ITEMDRAG, this, p.sub(this.zone.pnw));
+		face.beginAction(Action.ITEMDRAG, this, p.sub(this.zone.pnw));
 		System.setCursor('move');
 		return txr;
 	case TXE.CLICK:
-		frontface.space.setFocus(this);
+		face.space.setFocus(this);
 		var pi = p.sub(this.zone.pnw);
-		var para = this.paraAtPoint(pi, action);
+		var para = this.paraAtPoint(pi, face);
 		if (para) {
 			debug('TODO');
 			/*
@@ -3296,8 +3319,8 @@ Label.prototype.moveto = function(pnw) {
 /**
 | returns the para at point.
 */
-Label.prototype.paraAtPoint = function(p, action) {
-	return this.dtree.paraAtPoint(p, action);
+Label.prototype.paraAtPoint = function(p, face) {
+	return this.dtree.paraAtPoint(p, face);
 }
 
 /* drops the cache */
@@ -3317,7 +3340,9 @@ Label.prototype.listen = function() {
 | fabric: to draw upon.
 | selection: Selection to highlight.
 */
-Label.prototype.draw = function(fabric, action, selection) {
+Label.prototype.draw = function(face) {
+	throw new Error('TODO');
+
 	var f = this._fabric;
 	var dtree = this.dtree;
 
@@ -3535,7 +3560,9 @@ Relation.prototype._dWidth = function() {
 | An action happend.
 | Returns transfix code.
 */
-Relation.prototype.transfix = function(txe, bubble, p, shift, ctrl, action) {
+Relation.prototype.transfix = function(txe, face, bubble, p, shift, ctrl) {
+	throw new Error('TODO');
+
 	if (!this.textZone.within(p)) return 0;
 	bubble.hit = true;
 
@@ -3550,16 +3577,16 @@ Relation.prototype.transfix = function(txe, bubble, p, shift, ctrl, action) {
 			bubble.redraw = true;
 			return;
 		}
-		frontface.space.setFocus(this);
+		face.space.setFocus(this);
 
-		frontface.beginAction(Action.ITEMDRAG, this, p.sub(this.handlezone.pnw));
+		face.beginAction(Action.ITEMDRAG, this, p.sub(this.handlezone.pnw));
 		system.setCursor('move');
 		return txr;
 	case TXE.CLICK:
-		frontface.space.setFocus(this);
+		face.space.setFocus(this);
 
 		var pi = p.sub(this.textZone.pnw);
-		var para = this.paraAtPoint(pi, action);
+		var para = this.paraAtPoint(pi, face);
 		if (para) {
 			/* TODO
 			var editor = System.editor;
@@ -3598,8 +3625,8 @@ Relation.prototype.moveto = function(pnw) {
 /**
 | Returns the para at point.
 */
-Relation.prototype.paraAtPoint = function(p, action) {
-	return this.dtree.paraAtPoint(p, action);
+Relation.prototype.paraAtPoint = function(p, face) {
+	return this.dtree.paraAtPoint(p, face);
 }
 
 
@@ -3751,7 +3778,7 @@ function MeshIO() {
 
 	asw = this.mm.get(-1, spacepath);
 	if (asw.ok !== true) throw new Error('Cannot reget own Space');
-	frontface.space = asw.node;  // TODO X
+	system.frontface.space = asw.node;  // TODO HACK
 }
 
 /**
