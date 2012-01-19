@@ -636,165 +636,6 @@ Caret.prototype.newline = function() {
 	caret.set(npara.first, 0);
 }
 
-/**
-| Handles a special(control) key
-| returns true if the element needs to be redrawn.
-*/
-Caret.prototype.specialKey = function(item, keycode, shift, ctrl) {
-	throw new Error('TODO');
-
-	if (!item) return false;
-	var refresh = false;
-	var redraw = false;
-	var caret  = this.caret;
-	var select = this.selection;
-
-	if (ctrl) {
-		switch(keycode) {
-		case 65 : // ctrl+a
-			var pfirst = item.dtree.first;
-			select.mark1.set(item, pfirst.first, 0);
-			var plast = item.dtree.last;
-			select.mark2.set(item, plast.first, plast.first.text.length);
-			select.active = true;
-			for(var n = pfirst; n; n = n.next) {
-				n.listen();
-			}
-			caret.set(select.mark2);
-			system.setInput(select.innerText());
-			caret.show();
-			return true;
-		}
-	}
-
-	if (!shift && select.active) {
-		switch(keycode) {
-		case 35 : // end
-		case 36 : // pos1
-		case 37 : // left
-		case 38 : // up
-		case 39 : // right
-		case 40 : // down
-			this.deselect();
-			redraw = true;
-			break;
-		case  8 : // backspace
-		case 46 : // del
-			this.deleteSelection();
-			redraw = true;
-			keycode = 0;
-			throw new Error('TODO');
-			//System.repository.updateItem(item);
-			break;
-		case 13 : // return
-			this.deleteSelection();
-			redraw = true;
-			break;
-		}
-	} else if (shift && !select.active) {
-		switch(keycode) {
-		case 35 : // end
-		case 36 : // pos1
-		case 37 : // left
-		case 38 : // up
-		case 39 : // right
-		case 40 : // down
-			select.mark1.set(caret);
-		}
-	}
-
-	switch(keycode) {
-	case  8 : // backspace
-	{
-		var co = caret.offset;
-		var ce = caret.element;
-		if (co > 0) {
-			var t = ce.text;
-			ce.text = t.substring(0, co - 1) + t.substring(co, t.length);
-			caret.offset--;
-			redraw = true;
-		} else {
-			var para = ce.anchestor(Para);
-			redraw = para.joinToPrevious(ce, caret);
-		}
-		throw new Error('TODO');
-		//System.repository.updateItem(item);
-		break;
-	}
-	case 13 : // return
-	{
-		this.newline();
-		redraw = true;
-		throw new Error('TODO');
-		//System.repository.updateItem(item);
-		break;
-	}
-	case 35 : // end
-		caret.offset = caret.element.text.length;
-		refresh = true;
-		break;
-	case 36 : // pos1
-		caret.offset = 0;
-		refresh = true;
-		break;
-	case 37 : // left
-		refresh = caret.moveLeftRight(true);
-		break;
-	case 38 : // up
-		refresh = caret.moveUpDown(true);
-		break;
-	case 39 : // right
-		refresh = caret.moveLeftRight(false);
-		break;
-	case 40 : // down
-		refresh = caret.moveUpDown(false);
-		break;
-	case 46 : // del
-	{
-		var co = caret.offset;
-		var ce = caret.element;
-		var ct = ce.text;
-		if (co < ct.length) {
-			ce.text = ct.substring(0, co) + ct.substring(co + 1, ct.length);
-			redraw = true;
-		} else {
-			var para = ce.anchestor(Para);
-			redraw = para.joinToNext(ce, caret);
-		}
-		throw new Error('TODO');
-		//System.repository.updateItem(item);
-		break;
-	}
-	default :
-		break;
-	}
-
-
-	if (shift && refresh) {
-		switch(keycode) {
-		case 35 : // end
-		case 36 : // pos1
-		case 37 : // left
-		case 38 : // up
-		case 39 : // right
-		case 40 : // down
-			select.active = true;
-			select.mark2.set(caret);
-			system.setInput(select.innerText());
-			// clears item cache
-			item.listen();  // todo rename.
-			redraw = true;
-		}
-	}
-
-	if (refresh || redraw) {
-		this.show();
-	}
-	if (refresh && !redraw) {
-		this.update(face);
-	}
-	return redraw;
-}
 
 /**
 | Switches caret visibility state.
@@ -1106,6 +947,8 @@ FrontFace.prototype.redraw = function() {
 	this.caret.update(this);
 }
 
+// TODO move shift/ctrl state to frontface
+
 /**
 | A mouse click.
 */
@@ -1130,6 +973,8 @@ FrontFace.prototype.mousehover = function(p, shift, ctrl) {
 
 /**
 | Mouse button down event.
+|
+| Returns the mouse state code, wheter this is a click/drag or undecided.
 */
 FrontFace.prototype.mousedown = function(p, shift, ctrl) {
 	// TODO cockpit
@@ -1144,9 +989,13 @@ FrontFace.prototype.mousedown = function(p, shift, ctrl) {
 | User pressed a special key.
 */
 FrontFace.prototype.specialKey = function(keyCode, shift, ctrl) {
-	throw new Error('TODO');
-	//var redraw = caret.specialKey(this.focus, keyCode, shift, ctrl);
-	//if (redraw) this.redraw();
+	var bubble = this.bubble.init();
+
+	if (this.caret.entity !== null) {
+		this.caret.entity.specialKey(this, bubble, keyCode, shift, ctrl);
+	}
+
+	if (bubble.redraw) this.redraw();
 }
 
 /**
@@ -2079,6 +1928,175 @@ Para.prototype._flow = function(width) {
 }
 
 /**
+| Handles a special(control) key
+| returns true if the element needs to be redrawn.
+*/
+Para.prototype.specialKey = function(face, bubble, keycode, shift, ctrl) {
+	var refresh = false; // TODO needed?
+	var redraw = false;
+	var caret  = face.caret;
+	var select = face.selection;
+
+	if (ctrl) {
+		switch(keycode) {
+		case 65 : // ctrl+a
+			throw new Error('TODO');
+			/*
+			var pfirst = item.dtree.first;
+			select.mark1.set(item, pfirst.first, 0);
+			var plast = item.dtree.last;
+			select.mark2.set(item, plast.first, plast.first.text.length);
+			select.active = true;
+			for(var n = pfirst; n; n = n.next) {
+				n.listen();
+			}
+			caret.set(select.mark2);
+			system.setInput(select.innerText());
+			caret.show();
+			return true;*/
+		}
+	}
+
+	/*
+	if (!shift && select.active) {
+		switch(keycode) {
+		case 35 : // end
+		case 36 : // pos1
+		case 37 : // left
+		case 38 : // up
+		case 39 : // right
+		case 40 : // down
+			this.deselect();
+			redraw = true;
+			break;
+		case  8 : // backspace
+		case 46 : // del
+			this.deleteSelection();
+			redraw = true;
+			keycode = 0;
+			throw new Error('TODO');
+			//System.repository.updateItem(item);
+			break;
+		case 13 : // return
+			this.deleteSelection();
+			redraw = true;
+			break;
+		}
+	} else if (shift && !select.active) {
+		switch(keycode) {
+		case 35 : // end
+		case 36 : // pos1
+		case 37 : // left
+		case 38 : // up
+		case 39 : // right
+		case 40 : // down
+			select.mark1.set(caret);
+		}
+	}*/
+
+	switch(keycode) {
+	case  8 : // backspace
+		throw new Error('TODO');
+		/*
+		var co = caret.offset;
+		var ce = caret.element;
+		if (co > 0) {
+			var t = ce.text;
+			ce.text = t.substring(0, co - 1) + t.substring(co, t.length);
+			caret.offset--;
+			redraw = true;
+		} else {
+			var para = ce.anchestor(Para);
+			redraw = para.joinToPrevious(ce, caret);
+		}
+		throw new Error('TODO');
+		//System.repository.updateItem(item);
+		break;*/
+	case 13 : // return
+		/*
+		this.newline();
+		redraw = true;
+		*/
+		throw new Error('TODO');
+		//System.repository.updateItem(item);
+	case 35 : // end
+		throw new Error('TODO');
+		/*caret.offset = caret.element.text.length;
+		refresh = true;
+		break;*/
+	case 36 : // pos1
+		throw new Error('TODO');
+		/*
+		caret.offset = 0;
+		refresh = true;
+		break;*/
+	case 37 : // left
+		if (caret.offset > 0) caret.offset--;
+		//refresh = caret.moveLeftRight(true);
+		break;
+	case 38 : // up
+		throw new Error('TODO');
+		//refresh = caret.moveUpDown(true);
+		//break;
+	case 39 : // right
+		if (caret.offset < this.get('text').length) caret.offset++;
+		//refresh = caret.moveLeftRight(false);
+		break;
+	case 40 : // down
+		throw new Error('TODO');
+		//refresh = caret.moveUpDown(false);
+		break;
+	case 46 : // del
+		throw new Error('TODO');
+		/*
+		var co = caret.offset;
+		var ce = caret.element;
+		var ct = ce.text;
+		if (co < ct.length) {
+			ce.text = ct.substring(0, co) + ct.substring(co + 1, ct.length);
+			redraw = true;
+		} else {
+			var para = ce.anchestor(Para);
+			redraw = para.joinToNext(ce, caret);
+		}
+		//System.repository.updateItem(item);
+		*/
+		break;
+	default :
+		break;
+	}
+
+
+	/*
+	if (shift && refresh) {
+		switch(keycode) {
+		case 35 : // end
+		case 36 : // pos1
+		case 37 : // left
+		case 38 : // up
+		case 39 : // right
+		case 40 : // down
+			select.active = true;
+			select.mark2.set(caret);
+			system.setInput(select.innerText());
+			// clears item cache
+			item.listen();  // todo rename.
+			redraw = true;
+		}
+	}*/
+
+	/*if (refresh || redraw) {
+		this.show();
+	}
+	if (refresh && !redraw) {
+		this.update(face);
+	}*/
+
+	caret.show();
+	bubble.redraw = true;
+}
+
+/**
 | Returns the flow width.
 |
 */
@@ -2199,7 +2217,7 @@ Para.prototype.drawCaret = function(face) {
 	var cys = cyn + th;
 	cyn = min(max(cyn, 0), zone.height);
 	cys = min(max(cys, 0), zone.height);
-	
+
 	debug('CY', cyn, cys);
 	if (cyn === cys) return;*/
 
@@ -3087,7 +3105,8 @@ Note.prototype.draw = function(face, fabric) {
 	var zone = this.getZone(face);
 
 	// no buffer hit?
-	if (true || !this.fabricUp2d8(zone)) { // TODO!
+	if (!this.fabricUp2d8(zone)) {
+		debug('draw');
 		var silhoutte = this.getSilhoutte(zone);
 
 		// resize the canvas
@@ -3100,7 +3119,7 @@ Note.prototype.draw = function(face, fabric) {
 //		doc.flowWidth = this.iwidth; TODOX
 
 		// calculates if a scrollbar is needed
-		/* TODO 
+		/* TODO
 		var sbary = this.scrollbarY;
 
 		if (!sbary.visible && dtree.height > this.iheight) {
