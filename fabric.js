@@ -345,8 +345,8 @@ Fabric.prototype.drawImage = function(image, a1, a2) {
 */
 Fabric.prototype.putImageData = function(imagedata, a1, a2) {
 	var pan = this.pan;
-	if (typeof(p) === 'object') {
-		this._cx.putImageData(imagedata, a1.x + pan.x, a2.y + pan.y);
+	if (typeof(a1) === 'object') {
+		this._cx.putImageData(imagedata, a1.x + pan.x, a1.y + pan.y);
 		return;
 	}
 	this._cx.putImageData(imagedata, a1 + pan.x, a2 + pan.y);

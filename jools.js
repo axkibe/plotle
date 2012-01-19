@@ -496,7 +496,7 @@ Path.prototype.add = function(i, v) {
 /**
 | True if this path is the same as another.
 */
-Path.prototype.equals = function(o, len) {
+Path.prototype.equals = function(o) {
 	if (this._path.length !== o._path.length) return false;
 	for(var k in this._path) {
 		if (this._path[k] !== o._path[k]) return false;

@@ -202,7 +202,7 @@ function System(FrontFace) {
 		// hackish, also look into the hidden input field,
 		// maybe the user pasted something using the browser menu.
 		testinput();
-		this.frontface.caret.blink();
+		this.frontface.blink();
 	}
 
 	/**
@@ -368,7 +368,7 @@ function System(FrontFace) {
 		atweenTimer = null;
 		this.frontface.dragstart(msp, mms, mmc);
 		if (!mmp.eq(msp)) {
-			fontface.dragmove(mmp, mms, mmc);
+			frontface.dragmove(mmp, mms, mmc);
 		}
 	}
 
@@ -415,20 +415,13 @@ function System(FrontFace) {
 	/**
 	| (re)starts the blink timer
 	*/
-	this.startBlinker = function() {
+	this.restartBlinker = function() {
 		if (blinkTimer) clearInterval(blinkTimer);
 		testinput();
 		blinkTimer = setInterval('system.onblink()', settings.caretBlinkSpeed);
 	}
 
-	/**
-	| Stops the blink timer.
-	*/
-	this.stopBlinker = function() {
-		if (blinkTimer) clearInterval(blinkTimer);
-	}
-
-	this.startBlinker();
+	this.restartBlinker();
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

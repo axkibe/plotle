@@ -348,36 +348,9 @@ Bubble.prototype.init = function() {
  Marks a position in an element of an item.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Marker() {
-	this.path = null;
+	this.entity = null;
 	this.offset = 0;
-//	this._item = null;
-//	this._element = null;
-//	this._offset = 0;
-//	this._pli = null;
-//	this._cli = null;
 }
-
-/**
-| set(marker)                -or-
-| set(element, offset)       -or-
-| set(item, element, offset) -or-
-*/
-/*Marker.prototype.set = function(a1, a2, a3) {
-	if (a1 instanceof Marker) {
-		this._item    = a1._item;
-		this._element = a1._element;
-		this._offset  = a1._offset;
-		return;
-	}
-	if (a1 instanceof Item) {
-		this._item    = a1;
-		this._element = a2;
-		this._offset  = a3;
-		return
-	}
-	this._element = a1;
-	this._offset  = a2;
-}*/
 
 /**
 | Returns chunk at x/y
@@ -411,30 +384,14 @@ function Marker() {
 }*/
 
 /**
-| Gets the markers position, relative to dtree
-*/
-/*Marker.prototype.getPoint = function() {
-	// todo cache position
-	var dtree = this._item.dtree;
-	Measure.font = dtree.font;
-	var e = this._element;
-	var t = e.text;
-	var p = e.anchestor(Para);
-	var pinfo = this.getPinfo();
-	var l = pinfo[this._pli];
-	var c = l[this._pci];
-	return p.p.add(
-		R(c ? c.x + Measure.width(t.substring(c.offset, this._offset)) : l.x),
-		l.y - dtree.fontsize);
-}*/
-
-/**
 | Sets the marker to position closest to x, y.
 */
 Marker.prototype.setFromPoint = function(item, p) {
-	if (item.constructor !== Para) throw new Error('invalid item.');
-	this.path   = new Path(item);
-	this.offset = 0;
+	// TODO remove
+
+/*	if (item.constructor !== Para) throw new Error('invalid item.');
+	this.entity = entity;
+	this.offset = 0;*/
 
 	/* TODO
 	var flow =
@@ -619,6 +576,7 @@ Marker.prototype.moveLeftRight = function(dir) {
 */
 function Caret() {
 	Marker.call(this);
+
 	// true if visible
 	this.shown = false;
 
@@ -633,7 +591,7 @@ subclass(Caret, Marker);
 Caret.prototype.show = function() {
 	this.shown = true;
 	this.blinked = false;
-	system.startBlinker(); // TODO make constant input checking in system instead.
+	system.restartBlinker();
 }
 
 /**
@@ -641,7 +599,6 @@ Caret.prototype.show = function() {
 */
 Caret.prototype.hide = function() {
 	this.shown = false;
-	system.stopBlinker();
 }
 
 /**
@@ -649,22 +606,17 @@ Caret.prototype.hide = function() {
 */
 Caret.prototype.update = function(face) {
 	var fabric = face.fabric;
-//	debug('TODO caret.update');
-	return;
-	/*
 
 	// erases the old caret
-	if (this.save$image) {
-		fabric.putImageData(this.save$image, this.save$point);
-		this.save$image = this.save$point = null;
+	if (face.caret$save) {
+		face.fabric.putImageData(face.caret$save, face.caret$point);
+		face.caret$save = face.caret$point = null;
 	}
 
 	// draws new
 	if (this.shown && !this.blinked) {
-		var entity = meshio.get(this.path);
-		entity.drawCaret(face);
+		if (this.entity) this.entity.drawCaret(face);
 	}
-	*/
 }
 
 /**
@@ -689,6 +641,8 @@ Caret.prototype.newline = function() {
 | returns true if the element needs to be redrawn.
 */
 Caret.prototype.specialKey = function(item, keycode, shift, ctrl) {
+	throw new Error('TODO');
+
 	if (!item) return false;
 	var refresh = false;
 	var redraw = false;
@@ -834,10 +788,10 @@ Caret.prototype.specialKey = function(item, keycode, shift, ctrl) {
 	}
 
 	if (refresh || redraw) {
-		caret.show();
+		this.show();
 	}
 	if (refresh && !redraw) {
-		this.updateCaret();
+		this.update(face);
 	}
 	return redraw;
 }
@@ -846,15 +800,10 @@ Caret.prototype.specialKey = function(item, keycode, shift, ctrl) {
 | Switches caret visibility state.
 */
 Caret.prototype.blink = function(face) {
-//debug('TODO BLINK', face);
-	return;
-
-/*
 	if (this.shown) {
 		this.blinked = !this.blinked;
 		this.update(face);
 	}
-	*/
 }
 
 
@@ -1117,11 +1066,18 @@ FrontFace.prototype.systemFocus = function() {
 }
 
 /**
-| Meschraft lost the systems focus.
+| Meshraft lost the systems focus.
 */
 FrontFace.prototype.systemBlur = function() {
 	this.caret.hide();
 	this.caret.update(this);
+}
+
+/**
+| Blink the caret (if shown)
+*/
+FrontFace.prototype.blink = function() {
+	this.caret.blink(this);
 }
 
 /**
@@ -1142,8 +1098,9 @@ FrontFace.prototype.endAction = function() {
 | Redraws the cockpit and the space.
 */
 FrontFace.prototype.redraw = function() {
-	this.fabric.attune();  // <- bad name for clear();
-	this.caret.save = null;
+	this.fabric.attune();   // <- bad name for clear();
+	this.caret$save = null; // remove caret blink cache.
+
 	this.space.redraw(this);
 	this.cockpit.redraw(this);
 	this.caret.update(this);
@@ -1518,7 +1475,7 @@ Space.prototype.redraw = function(face) {
 		it.draw(face, this.fabric);
 	}
 
-	if (this.focus) this.focus.drawHandles(face);
+	if (this.focus) this.focus.drawHandles(face, this.fabric);
 
 	var action = face.action;
 	switch (action && action.type) {
@@ -1788,7 +1745,7 @@ Space.prototype.dragmove = function(face, bubble, p, shift, ctrl) {
 
 	switch(action.type) {
 	case Action.PAN :
-		this.pan = this.fabric.pan = p.sub(action.start); // TODO double pan?
+		this.fabric.pan = p.sub(action.start);
 		// system.repository.savePan(this.pan); TODO!
 		bubble.redraw = true;
 		return;
@@ -2064,17 +2021,17 @@ Para.prototype._flow = function(width) {
 	var flow  = this._flow$ = [];
 	var spread = 0;  // width really used.
 
-	var doca = this.getAnchestor('DocAlley');
-	var fontsize = doca.fontsize;
+	var doc = this.getAnchestor('DocAlley');
+	var fontsize = doc.fontsize;
 
 	// current x positon, and current x including last tokens width
 	var x = 0, xw = 0;
 
 	var y = fontsize;
-	Measure.font = doca.getFont();
+	Measure.font = doc.getFont();
 	var space = Measure.width(' ');
 	var line = 0;
-	flow[line] = {a: [], y: y};
+	flow[line] = { a: [], y: y, o: 0 };
 
 	// TODO go into subnodes instead
 	var text = this.get('text');
@@ -2094,10 +2051,10 @@ Para.prototype._flow = function(width) {
 				// soft break
 				if (spread < xw) spread = xw;
 				x = 0; xw = x + w + space;
-				//y += R(doca.fontsize * (dtree.pre ? 1 : 1 + settings.bottombox));
-				y += R(doca.fontsize * (1 + settings.bottombox));
+				//y += R(doc.fontsize * (dtree.pre ? 1 : 1 + settings.bottombox));
+				y += R(doc.fontsize * (1 + settings.bottombox));
 				line++;
-				flow[line] = {a: [], y: y};
+				flow[line] = {a: [], y: y, o: ca.index};
 			} else {
 				// horizontal overflow
 				console.log('HORIZONTAL OVERFLOW'); // TODO
@@ -2112,7 +2069,7 @@ Para.prototype._flow = function(width) {
 
 		x = xw;
 	}
-	if (spread < xw) spread = xw; 
+	if (spread < xw) spread = xw;
 
 	this._flow$height = y;
 	this._flow$width  = width;
@@ -2143,8 +2100,8 @@ Para.prototype.getFlowHeight = function(width) {
 
 Para.prototype.getHeight = function(width) {
 	this._flow(width);
-	var doca = this.getAnchestor('DocAlley');
-	return this.getFlowHeight(width) + R(doca.fontsize * settings.bottombox) + 10;
+	var doc = this.getAnchestor('DocAlley');
+	return this.getFlowHeight(width) + R(doc.fontsize * settings.bottombox) + 10;
 }
 
 /**
@@ -2162,9 +2119,9 @@ Para.prototype.getFabric = function(width) {
 	var fabric = this._fabric$;
 
 	// TODO: work out exact height for text below baseline
-	var doca = this.getAnchestor('DocAlley');
+	var doc = this.getAnchestor('DocAlley');
 	fabric.attune(width, height);
-	fabric.fontStyle(doca.getFont(), 'black', 'start', 'alphabetic');
+	fabric.fontStyle(doc.getFont(), 'black', 'start', 'alphabetic');
 
 	// draws text into the fabric
 	for(var a = 0, flowLen = flow.length; a < flowLen; a++) {
@@ -2191,29 +2148,68 @@ Para.prototype.set = function(path, val, a0, al, oplace) {
 }
 
 /**
+| returns the point of a given offset
+*/
+Para.prototype.getOffsetPoint = function(face, offset) {
+	// TODO cache position
+	var doc = this.getAnchestor('DocAlley');
+	Measure.font = doc.font;
+	var text = this.get('text');
+	var flow = this._flow$;
+
+	var line = flow[flow.length - 1];
+	for (var a = 1; a < flow.length; a++) {
+		if (flow[a].o > offset) {
+			line = flow[a - 1];
+			break;
+		}
+	}
+	var token = line.a[line.a.length - 1];
+	for (var a = 1; a < line.a.length; a++) {
+		if (line.a[a].o > offset) {
+			token = line.a[a - 1];
+			break;
+		}
+	}
+
+	return new Point(
+		token.x + Measure.width(text.substring(token.o, offset)),
+		line.y);
+}
+
+
+/**
 | Draws the caret if its in this paragraph.
 */
 Para.prototype.drawCaret = function(face) {
-	debug('TODO DRAWCARET');
-	return;
+	if (face.caret.entity !== this) {
+		throw new Error('Drawing caret for invalid para');
+	}
 
+	var doc  = this.getAnchestor('DocAlley');
+	var item = doc.parent;
 	var zone = item.getZone(face);
+	var cp = this.getOffsetPoint(face, face.caret.offset);
+	var pan = face.space.fabric.pan;
+	var th = R(doc.fontsize * (1 + settings.bottombox));
 
 	//var sy = (it.scrollbarY && it.scrollbarY.visible && it.scrollbarY.pos) || 0; TODO
-	var th = R(item.doc.fontsize * (1 + settings.bottombox));
 
-	var cyn = cp.y /* - sy*/;
+	/*var cyn = cp.y;
 	var cys = cyn + th;
 	cyn = min(max(cyn, 0), zone.height);
 	cys = min(max(cys, 0), zone.height);
+	
+	debug('CY', cyn, cys);
+	if (cyn === cys) return;*/
 
-	if (cyn === cys) return;
+	cp = new Point(
+		cp.x + zone.pnw.x + pan.x + this.pnw.x - 1,
+		cp.y + zone.pnw.y + pan.y + this.pnw.y - th + 2);
 
-	var sp = this.save$point = face.space.pan.add(  // TODO getPan()
-		zone.pnw.x + cp.x,
-		zone.pnw.y + cyn);
-	caret.save = f.getImageData(sp.x - 1, sp.y - 1, 3, cys - cyn + 1);
-	f.fillRect('black', sp.x, sp.y, 1, cys - cyn);
+	face.caret$point = cp;
+	face.caret$save  = face.fabric.getImageData(cp.x, cp.y, 3, th + 2);
+	face.fabric.fillRect('black', cp.x + 1, cp.y + 1, 1, th);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2574,13 +2570,13 @@ Item.prototype.pathResizeHandles = function(fabric, border, edge, face) {
 /**
 | Draws the handles of an item (resize, itemmenu)
 */
-Item.prototype.drawHandles = function(face) {
+Item.prototype.drawHandles = function(face, fabric) {
 	// draws the resize handles
-	face.fabric.edge(settings.handle.style.edge, this, 'pathResizeHandles', face);
+	fabric.edge(settings.handle.style.edge, this, 'pathResizeHandles', face);
 
 	// draws item menu handler
 	var sstyle = settings.itemmenu.slice.style;
-	face.fabric.paint(sstyle.fill, sstyle.edge, this.getH6Slice(face), 'path');
+	fabric.paint(sstyle.fill, sstyle.edge, this.getH6Slice(face), 'path');
 }
 
 /**
@@ -2885,7 +2881,10 @@ Note.prototype.transfix = function(txe, face, bubble, p, shift, ctrl) {
 
 		var para = this.paraAtPoint(pi, face);
 		if (para) {
-			face.caret.setFromPoint(para, pi.sub(para.pnw));
+			// face.caret.setFromPoint(para, pi.sub(para.pnw));
+			// TODOX
+			face.caret.entity = para;
+			face.caret.offset = 0;
 			face.caret.show();
 			// face.selection.deselect(); TODO
 		}
@@ -3097,8 +3096,8 @@ Note.prototype.draw = function(face, fabric) {
 
 		f.fill(settings.note.style.fill, silhoutte, 'path');
 
-		var doca = this.doc;
-//		doca.flowWidth = this.iwidth; TODOX
+		var doc = this.doc;
+//		doc.flowWidth = this.iwidth; TODOX
 
 		// calculates if a scrollbar is needed
 		/* TODO 
@@ -3117,7 +3116,7 @@ Note.prototype.draw = function(face, fabric) {
 
 		// paints selection and text
 		//dtree.draw(f, selection, this.imargin, sbary.visible ? sbary.pos : 0);
-		doca.draw(face, f, this.imargin, Point.zero); // TODO scrollp
+		doc.draw(face, f, this.imargin, Point.zero); // TODO scrollp
 
 		/*
 		// paints the scrollbar
@@ -3786,7 +3785,11 @@ function MeshIO() {
 */
 MeshIO.prototype.newNote = function(space, zone) {
 	// TODO new Path is itchy here.
-	
+
+	var path = new Path(space);
+	path.set(path.length, 'items');
+	path.set(path.length, '$new');
+
 	var asw = this.mm.alter(-1,
 		new Signature({
 			val: {
@@ -3798,7 +3801,8 @@ MeshIO.prototype.newNote = function(space, zone) {
 				},
 			},
 		}), new Signature({
-			path: new Path([space.key$, 'items', '$new']),
+			//path: new Path([space.key$, 'items', '$new']),
+			path: path,
 		})
 	);
 
@@ -3846,10 +3850,10 @@ MeshIO.prototype.moveToTop = function(space, item) {
 	var at1 = space.z.indexOf(item.key$);
 
 	if (at1 === 0) return;
-	
-	this.mm.alter(-1, 
+
+	this.mm.alter(-1,
 		new Signature({
-			path: path, 
+			path: path,
 			at1: at1,
 		}),
 		new Signature({
@@ -3863,7 +3867,7 @@ MeshIO.prototype.moveToTop = function(space, item) {
 			val: item.key$,
 		}),
 		new Signature({
-			path: path, 
+			path: path,
 			at1 : 0,
 		})
 	);
