@@ -359,182 +359,6 @@ Marker.prototype.set = function(entity, offset) {
 	this.offset = offset;
 }
 
-/**
-| Returns chunk at x/y
-*/
-/*Marker.prototype._getPinfoAtP = function(flowbox, p) {
-	var pinfo = flowbox.pinfo;
-	var plen = pinfo.length;
-	var li;
-	for (li = 0; li < plen; li++) {
-		if (p.y <= pinfo[li].y) {
-			break;
-		}
-	}
-	if (li >= plen) {
-		li--; // got to last line if overflow
-	}
-	this._pli = li;
-	var l = pinfo[li];
-	var llen = l.length;
-	var c;
-	for (var ci = 0; ci < llen; ci++) {
-		c = l[ci];
-		if (p.x <= c.x + c.w) {
-			this._pci = ci;
-			return pinfo;
-		}
-	}
-	// set to last chunk if overflow
-	this._pci = llen - 1;
-	return pinfo;
-}*/
-
-/**
-| Sets the marker to position closest to x, y.
-*/
-Marker.prototype.setFromPoint = function(item, p) {
-	// TODO remove
-
-/*	if (item.constructor !== Para) throw new Error('invalid item.');
-	this.entity = entity;
-	this.offset = 0;*/
-
-	/* TODO
-	var flow =
-	var pinfo = this._getPinfoAtP(flowbox, p);
-	var l = pinfo[this._pli];
-	var c = l[this._pci]; // x,y is in this chunk
-
-	if (!c) {
-		// todo?
-		this._element = flowbox.first;
-		this._offset = 0;
-		return;
-	}
-	var dx   = p.x - c.x;
-	Measure.font = flowbox.anchestor(DTree).font;
-	var t    = c.text;
-	var tlen = t.length;
-
-	var x1 = 0, x2 = 0;
-	var o;
-	for(o = 0; o < tlen; o++) {
-		x1 = x2;
-		x2 = Measure.width(t.substr(0, o));
-		if (x2 > dx) {
-			break;
-		}
-	}
-	if (dx - x1 <= x2 - dx) o--;
-	this._element = c.node;
-	this._offset = c.offset + o;
-	*/
-}
-
-/**
-| Sets this.pline and this.pchunk according to the chunk
-| the marker is in
-*/
-/*Marker.prototype.getPinfo = function() {
-	var te = this._element;
-	var to = this._offset;
-	var para  = te.anchestor(Para);
-	var pinfo = para.pinfo;
-	var bli =  0; // buffer for line count
-	var bci = -1; // buffer for chunk count
-	var plen  = pinfo.length;
-	for(var li= 0; li < plen; li++) {
-		var l = pinfo[li];
-		var llen = l.length;
-		for(var ci = 0; ci < llen; ci++) {
-			var c = l[ci];
-			if (c.offset == to) {
-				this._pli = li; this._pci = ci;
-				return pinfo;
-			}
-			if (c.offset > to) {
-				this._pli = bli; this._pci = bci;
-				return pinfo;
-			}
-			bli = li; bci = ci;
-		}
-	}
-	this._pli = bli; this._pci = bci;
-	return pinfo;
-}*/
-
-/**
-| Moves the marker a line up (dir == true) or down
-| returns true if moved
-*/
-/*Marker.prototype.moveUpDown = function(dir) {
-	throw new Error('TODO');
-
-	var e  = this._element;
-	var o  = this._offset;
-	Measure.font = e.anchestor(DTree).font;
-	var p  = e.anchestor(Para);
-	var pinfo = this.getPinfo();
-	var li = this._pli;
-	var ci = this._pci;
-	var l = pinfo[li];
-	var c = l[ci];
-	var x = c ? c.x + Measure.width(c.text.substr(0, o - c.offset)) : l.x;
-	if (dir) {
-		if (li == 0) {
-			p = p.prev;
-			if (!p) return false;
-			pinfo = p.pinfo;
-			l = pinfo[pinfo.length - 1];
-		} else {
-			l = pinfo[li - 1];
-		}
-	} else {
-		if (li + 1 >= pinfo.length) {
-			p = p.next;
-			if (!p) return false;
-			pinfo = p.pinfo;
-			l = pinfo[0];
-		} else {
-			l = pinfo[li + 1];
-		}
-	}
-	var llen = l.length;
-	for(ci = 0; ci < llen && x > l[ci].x + l[ci].w; ci++);
-	if (ci >= llen) {
-		c = l[llen - 1];
-		if (c) {
-			this._element = c.node;
-			this._offset  = c.offset + c.text.length;
-		} else {
-			this._element = p.first;
-			this._offset = 0;
-		}
-		return true;
-	}
-	c = l[ci];
-
-	var t = c.text;
-	var tlen = t.length;
-	var x1 = 0, x2 = 0;
-	var dx = x - c.x;
-	var o;
-	for(o = 0; o < tlen; o++) {
-		x1 = x2;
-		x2 = Measure.width(t.substr(0, o));
-		if (x2 > dx) {
-			break;
-		}
-	}
-	if (dx - x1 <= x2 - dx) o--;
-	this._element = c.node;
-	this._offset  = c.offset + o;
-	return true;
-}
-*/
-
-
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,--.             .
  | `-' ,-. ,-. ,-. |-
@@ -734,6 +558,8 @@ Selection.prototype.innerText = function() {
 | TODO was deleteSelection.
 */
 Selection.prototype.remove = function() {
+	throw new Error('TODO');
+	/*
 	var select = this.selection;
 	select.normalize();
 	var b = select.begin;
@@ -759,6 +585,7 @@ Selection.prototype.remove = function() {
 	this.caret.set(b);
 	select.active = false;
 	// setInput('') is done by System
+	*/
 }
 
 /**
@@ -1507,7 +1334,7 @@ Space.prototype.dragstart = function(face, bubble, p, shift, ctrl) {
 Space.prototype.click = function(face, bubble, p, shift, ctrl) {
 	var pp = p.sub(this.fabric.pan);
 
-	/* TODO
+	/* TODO X2
 	var focus = this.focus;
 	if (focus && focus.withinItemMenu(face, pp)) {
 		this._itemmenu = focus.newItemMenu(this.pan);
@@ -1705,110 +1532,6 @@ ItemCopse.prototype.seeds = {
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ,--,--'                    .
- `- | ,-. ,-. ,-. ,-. ,-. ,-| ,-.
-  , | |   |-' |-' | | | | | | |-'
-  `-' '   `-' `-' ' ' `-' `-^ `-'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- Part of a tree-structure.
- TODO remove???
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Treenode() {
-	// nada
-}
-
-// appends tnode to list of children
-/*
-Treenode.prototype.append = function(tnode) {
-	if (tnode.parent) {
-		throw new Error('append() on a node already part of a tree');
-	}
-	tnode.parent = this;
-	if (!this.last) {
-		this.first = this.last = tnode;
-		tnode.prev = tnode.next = null;
-	} else {
-		this.last.next = tnode;
-		tnode.prev = this.last;
-		this.last = tnode;
-		tnode.next = null;
-	}
-	this.listen();
-}
-
-// default pass to parent
-Treenode.prototype.listen = function() {
-	if (this.parent) this.parent.listen();
-}
-
-// inserts tnode before child bnode
-Treenode.prototype.insertBefore = function(tnode, bnode) {
-	if (!bnode) {
-		this.append(tnode);
-		return
-	}
-
-	if (tnode.parent) {
-		throw new Error('Treenode.append() on a node already part of a tree');
-	}
-	tnode.parent = this;
-
-	if (bnode == this.first) {
-		this.first.prev = tnode;
-		tnode.next = this.first;
-		this.first = tnode;
-		tnode.prev = null;
-	}
-
-	tnode.next = bnode;
-	tnode.prev = bnode.prev;
-	bnode.prev.next = tnode;
-	bnode.prev = tnode;
-	this.listen();
-}
-
-// removes child tnode
-Treenode.prototype.remove = function(tnode) {
-	if (tnode == this.first) this.first = tnode.next;
-	if (tnode == this.last) this.last = tnode.prev;
-	if (tnode.next) tnode.next.prev = tnode.prev;
-	if (tnode.prev) tnode.prev.next = tnode.next;
-	tnode.parent = null;
-	this.listen();
-}
-
-*/
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ,--,--'      .            .
- `- | ,-. . , |- ,-. ,-. ,-| ,-.
-  , | |-'  X  |  | | | | | | |-'
-  `-' `-' ' ` `' ' ' `-' `-^ `-'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-TODO remove
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/*function Textnode(text)
-{
-	Treenode.call(this);
-	this._text = text ? text : '';
-}
-subclass(Textnode, Treenode);
-
-Object.defineProperty(Textnode.prototype, 'text', {
-	get: function() {
-		return this._text;
-	},
-
-	set: function(text) {
-		if (this._text != text) {
-			this._text = text;
-			this.listen();
-		}
-	}
-});
-*/
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .-,--.                             .
   '|__/ ,-. ,-. ,-. ,-. ,-. ,-. ,-. |-.
   ,|    ,-| |   ,-| | | |   ,-| | | | |
@@ -1842,6 +1565,12 @@ subclass(Para, Woods.Para);
 Para.prototype._flow = function(face) {
 	var width = this.getFlowWidth(face);
 	if (this._flow$flag && this._flow$width === width) return this._flow$;
+
+	if (face.caret.entity === this) {
+		// remove caret cache if its within this flow.
+		face.caret.cp$line  = null;
+		face.caret.cp$token = null;
+	}
 
 	// builds position informations.
 	var flow  = this._flow$ = [];
@@ -1905,11 +1634,97 @@ Para.prototype._flow = function(face) {
 }
 
 /**
+| Returns the offset closest to a point.
+|
+| point: the point to look for
+| hit: if set ... TODO
+*/
+Para.prototype.getPointOffset = function(face, point, hit) {
+	var flow = this._flow(face);
+	Measure.font = this.parent.font;
+
+	var al;
+	for (al = 0; al < flow.length; al++) {
+		if (point.y <= flow[al].y) {
+			break;
+		}
+	}
+	if (al >= flow.length) {
+		debug('getPointOffset: overshot');
+		al--;
+	}
+	var line = flow[al];
+
+	var at;
+	var token;
+	for (var at = 0; at < line.a.length; at++) {
+		token = line.a[at];
+ 		if (point.x <= token.x + token.w) break;
+	}
+	if (at >= line.a.length) {
+		at--;
+		token = line.a[at];
+	}
+
+	var dx   = point.x - token.x;
+	var text = token.t;
+
+	var x1 = 0, x2 = 0;
+	var a;
+	for(a = 0; a < text.length; a++) {
+		x1 = x2;
+		x2 = Measure.width(text.substr(0, a));
+		if (x2 > dx) break;
+	}
+	debug(token.x, point.x);
+	debug(x1, dx, x2);
+	if (dx - x1 <= x2 - dx) a--;
+	return token.o + a;
+}
+
+/**
+| Sets this.pline and this.pchunk according to the chunk
+| the marker is in
+*/
+/*Marker.prototype.getPinfo = function() {
+	var te = this._element;
+	var to = this._offset;
+	var para  = te.anchestor(Para);
+	var pinfo = para.pinfo;
+	var bli =  0; // buffer for line count
+	var bci = -1; // buffer for chunk count
+	var plen  = pinfo.length;
+	for(var li= 0; li < plen; li++) {
+		var l = pinfo[li];
+		var llen = l.length;
+		for(var ci = 0; ci < llen; ci++) {
+			var c = l[ci];
+			if (c.offset == to) {
+				this._pli = li; this._pci = ci;
+				return pinfo;
+			}
+			if (c.offset > to) {
+				this._pli = bli; this._pci = bci;
+				return pinfo;
+			}
+			bli = li; bci = ci;
+		}
+	}
+	this._pli = bli; this._pci = bci;
+	return pinfo;
+}*/
+
+
+/**
 | XXX
+|
+| UPDOWN!
 */
 /*
 Para.prototype.XXX = function(dir) {
 	throw new Error('TODO');
+
+	
 
 	var e  = this._element;
 	var o  = this._offset;
@@ -2961,9 +2776,8 @@ Note.prototype.transfix = function(txe, face, bubble, p, shift, ctrl) {
 
 		var para = this.paraAtPoint(pi, face);
 		if (para) {
-			// face.caret.setFromPoint(para, pi.sub(para.pnw));
-			// TODOX
-			face.caret.set(para, 0);
+			var offset = para.getPointOffset(face, pi.sub(para.pnw));
+			face.caret.set(para, offset);
 			face.caret.show();
 			// face.selection.deselect(); TODO
 		}
