@@ -330,7 +330,10 @@ Fabric.prototype.closePath = function() {
 */
 Fabric.prototype.drawImage = function(image, a1, a2) {
 	var pan = this.pan;
-	if (image instanceof Fabric) image = image._canvas;
+	if (image instanceof Fabric) {
+		if (!(image.width > 0 && image.height > 0)) return;
+		image = image._canvas;
+	}
 	if (typeof(a1) === 'object') {
 		this._cx.drawImage(image, a1.x + pan.x, a1.y + pan.y);
 		return;

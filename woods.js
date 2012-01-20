@@ -293,8 +293,17 @@ Object.defineProperty(StemAlley.prototype, 'length',  {
 });
 
 
-StemAlley.prototype.indexOf = function(searchElement) {
-	return this._twigs.alley.indexOf(searchElement);
+/**
+| Returns the index of child element.
+*/
+StemAlley.prototype.indexOf = function(element) {
+	var alley = this._twigs.alley;
+
+	if (!Woods.cogging) return alley.indexOf(element);
+
+	if (element.parent && element.parent !== this) throw new Error('damaged cogging');
+	if (alley[element.key$] === element) return element.key$;
+	return element.key$ = alley.indexOf(element);
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

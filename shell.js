@@ -350,6 +350,13 @@ Bubble.prototype.init = function() {
 function Marker() {
 	this.entity = null;
 	this.offset = 0;
+	this.op$line = null;
+	this.op$token = null;
+}
+
+Marker.prototype.set = function(entity, offset) {
+	this.entity = entity;
+	this.offset = offset;
 }
 
 /**
@@ -527,39 +534,6 @@ Marker.prototype.setFromPoint = function(item, p) {
 }
 */
 
-/**
-| Moves the marker a character left (dir == true) or right
-| returns true if moved.
-*/
-/*
-Marker.prototype.moveLeftRight = function(dir) {
-	if (dir) {
-		if (this._offset > 0) {
-			this._offset--;
-		} else {
-			var pev = this._element.parent.prev;
-			if (!pev) {
-				return false;
-			}
-			var e = this._element = pev.last;
-			this._offset = e.text.length;
-		}
-	} else {
-		var t = this._element.text;
-		if (this._offset < t.length) {
-			this._offset++;
-		} else {
-			var pnext = this._element.parent.next;
-			if (!pnext) {
-				return false;
-			}
-			this._element = pnext.first;
-			this._offset = 0;
-		}
-	}
-	return true;
-}
-*/
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,--.             .
@@ -622,7 +596,7 @@ Caret.prototype.update = function(face) {
 /**
 | Inserts a new line
 */
-Caret.prototype.newline = function() {
+/*Caret.prototype.newline = function() {
 	var caret  = this.caret;
 	var ce    = caret.element;
 	var co    = caret.offset;
@@ -634,7 +608,8 @@ Caret.prototype.newline = function() {
 	var npara = new Para(ct.substring(co, ct.length));
 	opara.parent.insertBefore(npara, opara.next);
 	caret.set(npara.first, 0);
-}
+}*/
+
 
 
 /**
@@ -652,7 +627,7 @@ Caret.prototype.blink = function(face) {
 | Received a input from user
 | returns true if redraw is needed
 */
-Caret.prototype.input = function(item, text) {
+/*Caret.prototype.input = function(item, text) {
 	if (!item) return false;
 	var caret = this.caret;
 	if (this.selection.active) {
@@ -674,7 +649,7 @@ Caret.prototype.input = function(item, text) {
 	throw new Error('TODO');
 	//System.repository.updateItem(item);
 	return true;
-}
+}*/
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .---.     .          .
@@ -940,7 +915,9 @@ FrontFace.prototype.endAction = function() {
 */
 FrontFace.prototype.redraw = function() {
 	this.fabric.attune();   // <- bad name for clear();
-	this.caret$save = null; // remove caret blink cache.
+
+	// remove caret cache.
+	this.caret$save = null; 
 
 	this.space.redraw(this);
 	this.cockpit.redraw(this);
@@ -1424,7 +1401,6 @@ Space.prototype.mousehover = function(face, bubble, p, shift, ctrl) {
 	}
 
 	// todo remove nulls by shiftKey, ctrlKey
-	// XXX
 	this._transfix(TXE.HOVER, face, bubble, pp, null, null);
 	if (!bubble.hit) system.setCursor('crosshair');
 }
@@ -1863,7 +1839,8 @@ subclass(Para, Woods.Para);
 /**
 | (re)flows the paragraph, positioning all chunks.
 */
-Para.prototype._flow = function(width) {
+Para.prototype._flow = function(face) {
+	var width = this.getFlowWidth(face);
 	if (this._flow$flag && this._flow$width === width) return this._flow$;
 
 	// builds position informations.
@@ -1928,11 +1905,80 @@ Para.prototype._flow = function(width) {
 }
 
 /**
+| XXX
+*/
+/*
+Para.prototype.XXX = function(dir) {
+	throw new Error('TODO');
+
+	var e  = this._element;
+	var o  = this._offset;
+	Measure.font = e.anchestor(DTree).font;
+	var p  = e.anchestor(Para);
+	var pinfo = this.getPinfo();
+	var li = this._pli;
+	var ci = this._pci;
+	var l = pinfo[li];
+	var c = l[ci];
+	var x = c ? c.x + Measure.width(c.text.substr(0, o - c.offset)) : l.x;
+	if (dir) {
+		if (li == 0) {
+			p = p.prev;
+			if (!p) return false;
+			pinfo = p.pinfo;
+			l = pinfo[pinfo.length - 1];
+		} else {
+			l = pinfo[li - 1];
+		}
+	} else {
+		if (li + 1 >= pinfo.length) {
+			p = p.next;
+			if (!p) return false;
+			pinfo = p.pinfo;
+			l = pinfo[0];
+		} else {
+			l = pinfo[li + 1];
+		}
+	}
+	var llen = l.length;
+	for(ci = 0; ci < llen && x > l[ci].x + l[ci].w; ci++);
+	if (ci >= llen) {
+		c = l[llen - 1];
+		if (c) {
+			this._element = c.node;
+			this._offset  = c.offset + c.text.length;
+		} else {
+			this._element = p.first;
+			this._offset = 0;
+		}
+		return true;
+	}
+	c = l[ci];
+
+	var t = c.text;
+	var tlen = t.length;
+	var x1 = 0, x2 = 0;
+	var dx = x - c.x;
+	var o;
+	for(o = 0; o < tlen; o++) {
+		x1 = x2;
+		x2 = Measure.width(t.substr(0, o));
+		if (x2 > dx) {
+			break;
+		}
+	}
+	if (dx - x1 <= x2 - dx) o--;
+	this._element = c.node;
+	this._offset  = c.offset + o;
+	return true;
+}
+*/
+
+/**
 | Handles a special(control) key
 | returns true if the element needs to be redrawn.
 */
 Para.prototype.specialKey = function(face, bubble, keycode, shift, ctrl) {
-	var refresh = false; // TODO needed?
 	var redraw = false;
 	var caret  = face.caret;
 	var select = face.selection;
@@ -2020,27 +2066,38 @@ Para.prototype.specialKey = function(face, bubble, keycode, shift, ctrl) {
 		throw new Error('TODO');
 		//System.repository.updateItem(item);
 	case 35 : // end
-		throw new Error('TODO');
-		/*caret.offset = caret.element.text.length;
-		refresh = true;
-		break;*/
+		caret.set(this, this.get('text').length);
+		break;
 	case 36 : // pos1
-		throw new Error('TODO');
-		/*
-		caret.offset = 0;
-		refresh = true;
-		break;*/
+		caret.set(this, 0);
+		break;
 	case 37 : // left
-		if (caret.offset > 0) caret.offset--;
-		//refresh = caret.moveLeftRight(true);
+		if (caret.offset > 0) {
+			caret.set(this, caret.offset - 1);
+		} else {
+			var doc = this.parent;
+			var x = doc.indexOf(this);
+			if (x > 0) {
+				var e = doc.get(x - 1);
+				caret.set(e, e.get('text').length);
+			}
+		}
 		break;
 	case 38 : // up
 		throw new Error('TODO');
 		//refresh = caret.moveUpDown(true);
 		//break;
 	case 39 : // right
-		if (caret.offset < this.get('text').length) caret.offset++;
-		//refresh = caret.moveLeftRight(false);
+		if (caret.offset < this.get('text').length) {
+			caret.offset++;
+		} else {
+			var doc = this.parent;
+			var x = doc.indexOf(this);
+			if (x < doc.length - 1) {
+				var e = doc.get(x + 1);
+				caret.set(e, 0);
+			}
+		}
 		break;
 	case 40 : // down
 		throw new Error('TODO');
@@ -2085,13 +2142,6 @@ Para.prototype.specialKey = function(face, bubble, keycode, shift, ctrl) {
 		}
 	}*/
 
-	/*if (refresh || redraw) {
-		this.show();
-	}
-	if (refresh && !redraw) {
-		this.update(face);
-	}*/
-
 	caret.show();
 	bubble.redraw = true;
 }
@@ -2111,23 +2161,23 @@ Para.prototype.getFlowWidth = function(face) {
 |
 | (without addition of box below last line base line for 'gpq' etc.)
 */
-Para.prototype.getFlowHeight = function(width) {
-	this._flow(width);
+Para.prototype.getFlowHeight = function(face) {
+	this._flow(face);
 	return this._flow$height;
 }
 
-Para.prototype.getHeight = function(width) {
-	this._flow(width);
+Para.prototype.getHeight = function(face) {
 	var doc = this.getAnchestor('DocAlley');
-	return this.getFlowHeight(width) + R(doc.fontsize * settings.bottombox) + 10;
+	return this.getFlowHeight(face) + R(doc.fontsize * settings.bottombox) + 10;
 }
 
 /**
 | Draws the paragraph in its cache and returns it.
 */
-Para.prototype.getFabric = function(width) {
-	var flow   = this._flow(width);
-	var height = this.getHeight(width);
+Para.prototype.getFabric = function(face) {
+	var flow   = this._flow(face);
+	var width  = this._flow$width;
+	var height = this.getHeight(face);
 
 	// cache hit?
 	if (this._fabric$flag && this._fabric$width === width && this._fabric$height === height) {
@@ -2166,32 +2216,45 @@ Para.prototype.set = function(path, val, a0, al, oplace) {
 }
 
 /**
-| returns the point of a given offset
+| Returns the point of a given offset.
+|
+| face:     the face the para is visualized.
+| offset:   the offset to get the point from.
+| flowpos:  if set, writes flowpos.op$line and flowpos.op$token to
+|           the flowpos used.
 */
-Para.prototype.getOffsetPoint = function(face, offset) {
+Para.prototype.getOffsetPoint = function(face, offset, flowpos) {
 	// TODO cache position
 	var doc = this.getAnchestor('DocAlley');
 	Measure.font = doc.font;
 	var text = this.get('text');
 	var flow = this._flow$;
 
-	var line = flow[flow.length - 1];
+	var al = flow.length - 1;
 	for (var a = 1; a < flow.length; a++) {
 		if (flow[a].o > offset) {
-			line = flow[a - 1];
+			al = a - 1;
 			break;
 		}
 	}
-	var token = line.a[line.a.length - 1];
+	var line = flow[al];
+
+	var at = line.a.length - 1;
 	for (var a = 1; a < line.a.length; a++) {
 		if (line.a[a].o > offset) {
-			token = line.a[a - 1];
+			at = a - 1;
 			break;
 		}
+	}
+	var token = line.a[at];
+
+	if (flowpos) {
+		flowpos.op$line  = al;
+		flowpos.op$token = at;
 	}
 
 	return new Point(
-		token.x + Measure.width(text.substring(token.o, offset)),
+		R(token.x + Measure.width(text.substring(token.o, offset))),
 		line.y);
 }
 
@@ -2207,7 +2270,7 @@ Para.prototype.drawCaret = function(face) {
 	var doc  = this.getAnchestor('DocAlley');
 	var item = doc.parent;
 	var zone = item.getZone(face);
-	var cp = this.getOffsetPoint(face, face.caret.offset);
+	var cp = this.getOffsetPoint(face, face.caret.offset, face.caret);
 	var pan = face.space.fabric.pan;
 	var th = R(doc.fontsize * (1 + settings.bottombox));
 
@@ -2703,7 +2766,8 @@ DocAlley.prototype.seeds = {
 | scrollp: scroll position
 */
 DocAlley.prototype.draw = function(face, fabric, imargin, scrollp) {
-	var paraSep = /* TODO this.pre ? 0 :*/ this.fontsize;
+	// TODO <pre>
+	var paraSep = half(this.fontsize);
 
 	// paints the selection
 	/* TODO
@@ -2720,18 +2784,17 @@ DocAlley.prototype.draw = function(face, fabric, imargin, scrollp) {
 
 	var y = imargin.n;
 
-	// draws tha paragraphs
+	// draws the paragraphs
 	for (var a = 0; a < this.length; a++) {
 		var para = this.get(a);
-		var pw = para.getFlowWidth(face);
-		var pf = para.getFabric(pw);
+		var pf = para.getFabric(face);
+
+		// TODO name pnw$
 		para.pnw = new Point(imargin.w, R(y));
+		fabric.drawImage(pf, imargin.w, y - scrollp.y);
 
-		if (pf.width > 0 && pf.height > 0) {
-			fabric.drawImage(pf, imargin.w, y - scrollp.y);
-		}
-
-		y += para.getFlowHeight(pw) + paraSep;
+		//y += para.getFlowHeight(fabric) + paraSep;
+		y += pf.height + paraSep;
 	}
 }
 
@@ -2895,14 +2958,12 @@ Note.prototype.transfix = function(txe, face, bubble, p, shift, ctrl) {
 
 		// var op = p.sub(this.zone.pnw.w, this.zone.pnw.y - max(0, this.scrollbarY.pos)); TODO
 		var pi = p.sub(this.zone.pnw.x, this.zone.pnw.y);
-		debug('PI', pi);
 
 		var para = this.paraAtPoint(pi, face);
 		if (para) {
 			// face.caret.setFromPoint(para, pi.sub(para.pnw));
 			// TODOX
-			face.caret.entity = para;
-			face.caret.offset = 0;
+			face.caret.set(para, 0);
 			face.caret.show();
 			// face.selection.deselect(); TODO
 		}
@@ -3106,7 +3167,6 @@ Note.prototype.draw = function(face, fabric) {
 
 	// no buffer hit?
 	if (!this.fabricUp2d8(zone)) {
-		debug('draw');
 		var silhoutte = this.getSilhoutte(zone);
 
 		// resize the canvas
