@@ -354,9 +354,10 @@ function Marker() {
 	this.op$token = null;
 }
 
-Marker.prototype.set = function(entity, offset) {
+Marker.prototype.set = function(entity, offset, retainX) {
 	this.entity = entity;
 	this.offset = offset;
+	this.retain$x = typeof retainX !== 'undefined' ? retainX : null;
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1566,7 +1567,7 @@ Para.prototype.getFlow = function(face) {
 	var width = zone.width - item.imargin.x;
 
 	if (this._flow$ && this._flow$.width === width) return this._flow$;
-	debug('flowing');
+	// debug('flowing');
 
 	if (face.caret.entity === this) {
 		// remove caret cache if its within this flow.
@@ -1637,6 +1638,7 @@ Para.prototype.getFlow = function(face) {
 /**
 | Returns the offset closest to a point.
 |
+| face: the frontface
 | point: the point to look for
 | hit: if set ... TODO
 */
@@ -1644,31 +1646,34 @@ Para.prototype.getPointOffset = function(face, point, hit) {
 	var flow = this.getFlow(face);
 	Measure.font = this.parent.font;
 
-	var al;
-	for (al = 0; al < flow.length; al++) {
-		if (point.y <= flow[al].y) {
+	var line;
+	for (line = 0; line < flow.length; line++) {
+		if (point.y <= flow[line].y) {
 			break;
 		}
 	}
-	if (al >= flow.length) {
-		debug('getPointOffset: overshot');
-		al--;
-	}
-	var line = flow[al];
+	if (line >= flow.length) line--;
 
-	var at;
-	var token;
-	for (var at = 0; at < line.a.length; at++) {
-		token = line.a[at];
- 		if (point.x <= token.x + token.w) break;
-	}
-	if (at >= line.a.length) {
-		at--;
-		token = line.a[at];
-	}
+	return this.getLineXOffset(face, line, point.x, hit);
+}
 
-	var dx   = point.x - token.x;
-	var text = token.t;
+/**
+| Returns the offset in flowed line number and x coordinate.
+|
+| hit: todo
+*/
+Para.prototype.getLineXOffset = function(face, line, x, hit) {
+	var flow = this.getFlow(face);
+	var fline = flow[line];
+	var ftoken;
+	for (var token = 0; token < fline.a.length; token++) {
+		ftoken = fline.a[token];
+ 		if (x <= ftoken.x + ftoken.w) break;
+	}
+	if (token >= fline.a.length) ftoken = fline.a[--token];
+
+	var dx   = x - ftoken.x;
+	var text = ftoken.t;
 
 	var x1 = 0, x2 = 0;
 	var a;
@@ -1678,40 +1683,8 @@ Para.prototype.getPointOffset = function(face, point, hit) {
 		if (x2 > dx) break;
 	}
 	if (dx - x1 <= x2 - dx) a--;
-	return token.o + a;
+	return ftoken.o + a;
 }
-
-/**
-| Sets this.pline and this.pchunk according to the chunk
-| the marker is in
-*/
-/*Marker.prototype.getPinfo = function() {
-	var te = this._element;
-	var to = this._offset;
-	var para  = te.anchestor(Para);
-	var pinfo = para.pinfo;
-	var bli =  0; // buffer for line count
-	var bci = -1; // buffer for chunk count
-	var plen  = pinfo.length;
-	for(var li= 0; li < plen; li++) {
-		var l = pinfo[li];
-		var llen = l.length;
-		for(var ci = 0; ci < llen; ci++) {
-			var c = l[ci];
-			if (c.offset == to) {
-				this._pli = li; this._pci = ci;
-				return pinfo;
-			}
-			if (c.offset > to) {
-				this._pli = bli; this._pci = bci;
-				return pinfo;
-			}
-			bli = li; bci = ci;
-		}
-	}
-	this._pli = bli; this._pci = bci;
-	return pinfo;
-}*/
 
 
 /**
@@ -1890,33 +1863,64 @@ Para.prototype.specialKey = function(face, bubble, keycode, shift, ctrl) {
 			caret.set(this, caret.offset - 1);
 		} else {
 			var doc = this.parent;
-			var x = doc.indexOf(this);
-			if (x > 0) {
-				var e = doc.get(x - 1);
+			var key = doc.indexOf(this); // TODO, use getSelfKey()
+			if (key > 0) {
+				var e = doc.get(key - 1);
 				caret.set(e, e.get('text').length);
 			}
 		}
 		break;
 	case 38 : // up
-		throw new Error('TODO');
-		//refresh = caret.moveUpDown(true);
-		//break;
+		var flow = this.getFlow(face);
+		var caret = face.caret;
+		var x = caret.retain$x !== null ? caret.retain$x : caret.pos$.x;
+
+		if (caret.flow$line > 0) {
+			// stay within this para
+			var offset = this.getLineXOffset(face, caret.flow$line - 1, x);
+			caret.set(this, offset, x);
+		} else {
+			// goto prev para
+			var doc = this.parent;
+			var key = doc.indexOf(this); // TODO, user getSelfKey()
+			if (key > 0) {
+				var e = doc.get(key - 1);
+				var offset = e.getLineXOffset(face, e.getFlow(face).length - 1, x);
+				caret.set(e, offset, x); 
+			}
+		}
+		break;
 	case 39 : // right
 		if (caret.offset < this.get('text').length) {
 			caret.offset++;
 		} else {
 			var doc = this.parent;
-			var x = doc.indexOf(this);
-			if (x < doc.length - 1) {
-				var e = doc.get(x + 1);
+			var key = doc.indexOf(this); // TODO, use getSelfKey() 
+			if (key < doc.length - 1) {
+				var e = doc.get(key + 1);
 				caret.set(e, 0);
 			}
 		}
 		break;
 	case 40 : // down
-		this.flow = this.getFlow(face);
-		
-		//refresh = caret.moveUpDown(false);
+		var flow = this.getFlow(face);
+		var caret = face.caret;
+		var x = caret.retain$x !== null ? caret.retain$x : caret.pos$.x;
+
+		if (caret.flow$line < flow.length - 1) {
+			// stay within this para
+			var offset = this.getLineXOffset(face, caret.flow$line + 1, x);
+			caret.set(this, offset, x);
+		} else {
+			// goto next para
+			var doc = this.parent;
+			var key = doc.indexOf(this); // TODO, user getSelfKey()
+			if (key < doc.length - 1) {
+				var e = doc.get(key + 1);
+				var offset = e.getLineXOffset(face, 0, x);
+				caret.set(e, offset, x); 
+			}
+		}
 		break;
 	case 46 : // del
 		throw new Error('TODO');
@@ -2079,7 +2083,6 @@ Para.prototype.drawCaret = function(face) {
 	cyn = min(max(cyn, 0), zone.height);
 	cys = min(max(cys, 0), zone.height);
 
-	debug('CY', cyn, cys);
 	if (cyn === cys) return;*/
 
 	var cp = new Point(

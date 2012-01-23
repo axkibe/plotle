@@ -78,26 +78,16 @@ var mime_js = 'text/javascript';
 var mime_xi = 'image/x-icon';
 
 var content = {
-	'/':
-		meshcraft_html,
-	'/index.html':
-		meshcraft_html,
-	'/meshcraft.html':
-		meshcraft_html,
-	'/browser-system.js':
-		{ file: './browser-system.js', mime: mime_js, code: 'utf-8',  },
-	'/fabric.js':
-		{ file: './fabric.js',         mime: mime_js, code: 'utf-8',  },
-	'/jools.js':
-		{ file: './jools.js',          mime: mime_js, code: 'utf-8',  },
-	'/woods.js':
-		{ file: './woods.js',          mime: mime_js, code: 'utf-8',  },
-	'/shell.js':
-		{ file: './shell.js',          mime: mime_js, code: 'utf-8',  },
-	'/meshmashine.js':
-		{ file: './meshmashine.js',    mime: mime_js, code: 'utf-8',  },
-	'/favicon.ico':
-		{ file: './icons/hexicon.ico', mime: mime_xi, code: 'binary', },
+	'/':               meshcraft_html,
+	'/index.html':     meshcraft_html,
+	'/meshcraft.html': meshcraft_html,
+	'/browser.js':     { file: './browser.js',        mime: mime_js, code: 'utf-8',  },
+	'/fabric.js':      { file: './fabric.js',         mime: mime_js, code: 'utf-8',  },
+	'/jools.js':       { file: './jools.js',          mime: mime_js, code: 'utf-8',  },
+	'/woods.js':       { file: './woods.js',          mime: mime_js, code: 'utf-8',  },
+	'/shell.js':       { file: './shell.js',          mime: mime_js, code: 'utf-8',  },
+	'/meshmashine.js': { file: './meshmashine.js',    mime: mime_js, code: 'utf-8',  },
+	'/favicon.ico':    { file: './icons/hexicon.ico', mime: mime_xi, code: 'binary', },
 };
 
 /**
