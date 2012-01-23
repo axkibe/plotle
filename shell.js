@@ -2602,14 +2602,11 @@ DocAlley.prototype.draw = function(face, fabric, imargin, scrollp) {
 	// draws the paragraphs
 	for (var a = 0; a < this.length; a++) {
 		var para = this.get(a);
-		var pf = para.getFabric(face);
 
 		// TODO name pnw$
 		para.pnw = new Point(imargin.w, R(y));
-		fabric.drawImage(pf, imargin.w, y - scrollp.y);
-
-		//y += para.getFlowHeight(fabric) + paraSep;
-		y += pf.height + paraSep;
+		fabric.drawImage(para.getFabric(face), imargin.w, y - scrollp.y);
+		y += para.getFlowHeight(face) + paraSep;
 	}
 }
 
