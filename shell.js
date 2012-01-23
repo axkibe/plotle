@@ -406,14 +406,14 @@ Caret.prototype.update = function(face) {
 	var fabric = face.fabric;
 
 	// erases the old caret
-	if (face.caret$save) {
-		face.fabric.putImageData(face.caret$save, face.caret$point);
-		face.caret$save = face.caret$point = null;
+	if (face.caret.save$) {
+		face.fabric.putImageData(face.caret.save$, face.caret.screenPos$);
+		face.caret.save$ = face.caret.screenPos$ = null;
 	}
 
 	// draws new
-	if (this.shown && !this.blinked) {
-		if (this.entity) this.entity.drawCaret(face);
+	if (this.shown && !this.blinked && this.entity) {
+		this.entity.drawCaret(face);
 	}
 }
 
@@ -744,7 +744,8 @@ FrontFace.prototype.redraw = function() {
 	this.fabric.attune();   // <- bad name for clear();
 
 	// remove caret cache.
-	this.caret$save = null; 
+	this.caret.save$ = null;
+	this.caret.screenPos$ = null;
 
 	this.space.redraw(this);
 	this.cockpit.redraw(this);
@@ -1550,11 +1551,8 @@ function Para(master) {
 
 	// flow caching
 	this._flow$       = [];
-	this._flow$flag   = false;
-	this._flow$width  = null;
-	this._flow$spread = null;
-	this._flow$height = null;
 
+	// TODO rename pnw$
 	this.pnw = null; // position of para in doc.
 }
 subclass(Para, Woods.Para);
@@ -1562,9 +1560,13 @@ subclass(Para, Woods.Para);
 /**
 | (re)flows the paragraph, positioning all chunks.
 */
-Para.prototype._flow = function(face) {
-	var width = this.getFlowWidth(face);
-	if (this._flow$flag && this._flow$width === width) return this._flow$;
+Para.prototype.getFlow = function(face) {
+	var item = this.getAnchestor('DocAlley').parent;
+	var zone = item.getZone(face);
+	var width = zone.width - item.imargin.x;
+
+	if (this._flow$ && this._flow$.width === width) return this._flow$;
+	debug('flowing');
 
 	if (face.caret.entity === this) {
 		// remove caret cache if its within this flow.
@@ -1626,10 +1628,9 @@ Para.prototype._flow = function(face) {
 	}
 	if (spread < xw) spread = xw;
 
-	this._flow$height = y;
-	this._flow$width  = width;
-	this._flow$spread = spread;
-	this._flow$flag   = true;
+	flow.height = y;
+	flow.width  = width;
+	flow.spread = spread;
 	return flow;
 }
 
@@ -1640,7 +1641,7 @@ Para.prototype._flow = function(face) {
 | hit: if set ... TODO
 */
 Para.prototype.getPointOffset = function(face, point, hit) {
-	var flow = this._flow(face);
+	var flow = this.getFlow(face);
 	Measure.font = this.parent.font;
 
 	var al;
@@ -1676,8 +1677,6 @@ Para.prototype.getPointOffset = function(face, point, hit) {
 		x2 = Measure.width(text.substr(0, a));
 		if (x2 > dx) break;
 	}
-	debug(token.x, point.x);
-	debug(x1, dx, x2);
 	if (dx - x1 <= x2 - dx) a--;
 	return token.o + a;
 }
@@ -1915,7 +1914,8 @@ Para.prototype.specialKey = function(face, bubble, keycode, shift, ctrl) {
 		}
 		break;
 	case 40 : // down
-		throw new Error('TODO');
+		this.flow = this.getFlow(face);
+		
 		//refresh = caret.moveUpDown(false);
 		break;
 	case 46 : // del
@@ -1966,33 +1966,16 @@ Para.prototype.specialKey = function(face, bubble, keycode, shift, ctrl) {
 |
 */
 Para.prototype.getFlowWidth = function(face) {
-	var item = this.getAnchestor('DocAlley').parent;
-	var zone = item.getZone(face);
-	return zone.width - item.imargin.x;
-}
-
-/**
-| Return the flow height.
-|
-| (without addition of box below last line base line for 'gpq' etc.)
-*/
-Para.prototype.getFlowHeight = function(face) {
-	this._flow(face);
-	return this._flow$height;
-}
-
-Para.prototype.getHeight = function(face) {
-	var doc = this.getAnchestor('DocAlley');
-	return this.getFlowHeight(face) + R(doc.fontsize * settings.bottombox) + 10;
 }
 
 /**
 | Draws the paragraph in its cache and returns it.
 */
 Para.prototype.getFabric = function(face) {
-	var flow   = this._flow(face);
-	var width  = this._flow$width;
-	var height = this.getHeight(face);
+	var flow   = this.getFlow(face);
+	var width  = flow.width;
+	var doc = this.getAnchestor('DocAlley');
+	var height = flow.height + R(doc.fontsize * settings.bottombox);
 
 	// cache hit?
 	if (this._fabric$flag && this._fabric$width === width && this._fabric$height === height) {
@@ -2025,8 +2008,8 @@ Para.prototype.getFabric = function(face) {
 | Drops the cache (cause something has changed)
 */
 Para.prototype.set = function(path, val, a0, al, oplace) {
-	this._flow$flag = false;
-	this._fabric$flag = false;
+	this._flow$ = null;
+	this._fabric$flag = false; // TODO set fabric$ = null
 	Woods.Para.prototype.set.apply(this, arguments);
 }
 
@@ -2035,15 +2018,15 @@ Para.prototype.set = function(path, val, a0, al, oplace) {
 |
 | face:     the face the para is visualized.
 | offset:   the offset to get the point from.
-| flowpos:  if set, writes flowpos.op$line and flowpos.op$token to
-|           the flowpos used.
+| flowPos$: if set, writes flow$line and flow$token to
+|           the flow position used.
 */
-Para.prototype.getOffsetPoint = function(face, offset, flowpos) {
+Para.prototype.getOffsetPoint = function(face, offset, flowPos$) {
 	// TODO cache position
 	var doc = this.getAnchestor('DocAlley');
 	Measure.font = doc.font;
 	var text = this.get('text');
-	var flow = this._flow$;
+	var flow = this.getFlow(face);
 
 	var al = flow.length - 1;
 	for (var a = 1; a < flow.length; a++) {
@@ -2063,9 +2046,9 @@ Para.prototype.getOffsetPoint = function(face, offset, flowpos) {
 	}
 	var token = line.a[at];
 
-	if (flowpos) {
-		flowpos.op$line  = al;
-		flowpos.op$token = at;
+	if (flowPos$) {
+		flowPos$.flow$line  = al;
+		flowPos$.flow$token = at;
 	}
 
 	return new Point(
@@ -2078,16 +2061,16 @@ Para.prototype.getOffsetPoint = function(face, offset, flowpos) {
 | Draws the caret if its in this paragraph.
 */
 Para.prototype.drawCaret = function(face) {
-	if (face.caret.entity !== this) {
-		throw new Error('Drawing caret for invalid para');
-	}
+	if (face.caret.entity !== this) throw new Error('Drawing caret for invalid para');
 
 	var doc  = this.getAnchestor('DocAlley');
 	var item = doc.parent;
 	var zone = item.getZone(face);
-	var cp = this.getOffsetPoint(face, face.caret.offset, face.caret);
+	var caret = face.caret;
 	var pan = face.space.fabric.pan;
 	var th = R(doc.fontsize * (1 + settings.bottombox));
+	
+	caret.pos$ = this.getOffsetPoint(face, face.caret.offset, face.caret);
 
 	//var sy = (it.scrollbarY && it.scrollbarY.visible && it.scrollbarY.pos) || 0; TODO
 
@@ -2099,12 +2082,12 @@ Para.prototype.drawCaret = function(face) {
 	debug('CY', cyn, cys);
 	if (cyn === cys) return;*/
 
-	cp = new Point(
-		cp.x + zone.pnw.x + pan.x + this.pnw.x - 1,
-		cp.y + zone.pnw.y + pan.y + this.pnw.y - th + 2);
+	var cp = new Point(
+		caret.pos$.x + zone.pnw.x + pan.x + this.pnw.x - 1,
+		caret.pos$.y + zone.pnw.y + pan.y + this.pnw.y - th + 2);
 
-	face.caret$point = cp;
-	face.caret$save  = face.fabric.getImageData(cp.x, cp.y, 3, th + 2);
+	face.caret.screenPos$ = cp;
+	face.caret.save$ = face.fabric.getImageData(cp.x, cp.y, 3, th + 2);
 	face.fabric.fillRect('black', cp.x + 1, cp.y + 1, 1, th);
 }
 
@@ -2602,11 +2585,12 @@ DocAlley.prototype.draw = function(face, fabric, imargin, scrollp) {
 	// draws the paragraphs
 	for (var a = 0; a < this.length; a++) {
 		var para = this.get(a);
+		var flow = para.getFlow(face);
 
 		// TODO name pnw$
 		para.pnw = new Point(imargin.w, R(y));
 		fabric.drawImage(para.getFabric(face), imargin.w, y - scrollp.y);
-		y += para.getFlowHeight(face) + paraSep;
+		y += flow.height + paraSep;
 	}
 }
 
@@ -2623,9 +2607,8 @@ DocAlley.prototype.getFont = function() {
 DocAlley.prototype.paraAtPoint = function(p, face) {
 	for(var a = 0; a < this.length; a++) {
 		var para = this.get(a);
-		var w = para.getFlowWidth(face);
-		var h = para.getFlowHeight(w);
-		if (p.y < para.pnw.y + h) return para;
+		var flow = para.getFlow(face);
+		if (p.y < para.pnw.y + flow.height) return para;
 	}
 	return null;
 }

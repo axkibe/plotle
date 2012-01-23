@@ -368,7 +368,7 @@ function System(FrontFace) {
 		atweenTimer = null;
 		this.frontface.dragstart(msp, mms, mmc);
 		if (!mmp.eq(msp)) {
-			frontface.dragmove(mmp, mms, mmc);
+			this.frontface.dragmove(mmp, mms, mmc);
 		}
 	}
 
