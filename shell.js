@@ -1680,90 +1680,15 @@ Para.prototype.getLineXOffset = function(face, line, x, hit) {
 	for(a = 0; a < text.length; a++) {
 		x1 = x2;
 		x2 = Measure.width(text.substr(0, a));
-		if (x2 > dx) break;
+		if (x2 >= dx) break;
 	}
-	if (dx - x1 <= x2 - dx) a--;
+
+	if (dx - x1 < x2 - dx) a--;
 	return ftoken.o + a;
 }
 
-
 /**
-| XXX
-|
-| UPDOWN!
-*/
-/*
-Para.prototype.XXX = function(dir) {
-	throw new Error('TODO');
-
-	
-
-	var e  = this._element;
-	var o  = this._offset;
-	Measure.font = e.anchestor(DTree).font;
-	var p  = e.anchestor(Para);
-	var pinfo = this.getPinfo();
-	var li = this._pli;
-	var ci = this._pci;
-	var l = pinfo[li];
-	var c = l[ci];
-	var x = c ? c.x + Measure.width(c.text.substr(0, o - c.offset)) : l.x;
-	if (dir) {
-		if (li == 0) {
-			p = p.prev;
-			if (!p) return false;
-			pinfo = p.pinfo;
-			l = pinfo[pinfo.length - 1];
-		} else {
-			l = pinfo[li - 1];
-		}
-	} else {
-		if (li + 1 >= pinfo.length) {
-			p = p.next;
-			if (!p) return false;
-			pinfo = p.pinfo;
-			l = pinfo[0];
-		} else {
-			l = pinfo[li + 1];
-		}
-	}
-	var llen = l.length;
-	for(ci = 0; ci < llen && x > l[ci].x + l[ci].w; ci++);
-	if (ci >= llen) {
-		c = l[llen - 1];
-		if (c) {
-			this._element = c.node;
-			this._offset  = c.offset + c.text.length;
-		} else {
-			this._element = p.first;
-			this._offset = 0;
-		}
-		return true;
-	}
-	c = l[ci];
-
-	var t = c.text;
-	var tlen = t.length;
-	var x1 = 0, x2 = 0;
-	var dx = x - c.x;
-	var o;
-	for(o = 0; o < tlen; o++) {
-		x1 = x2;
-		x2 = Measure.width(t.substr(0, o));
-		if (x2 > dx) {
-			break;
-		}
-	}
-	if (dx - x1 <= x2 - dx) o--;
-	this._element = c.node;
-	this._offset  = c.offset + o;
-	return true;
-}
-*/
-
-/**
-| Handles a special(control) key
-| returns true if the element needs to be redrawn.
+| Handles a special key
 */
 Para.prototype.specialKey = function(face, bubble, keycode, shift, ctrl) {
 	var redraw = false;
@@ -1886,16 +1811,16 @@ Para.prototype.specialKey = function(face, bubble, keycode, shift, ctrl) {
 			if (key > 0) {
 				var e = doc.get(key - 1);
 				var offset = e.getLineXOffset(face, e.getFlow(face).length - 1, x);
-				caret.set(e, offset, x); 
+				caret.set(e, offset, x);
 			}
 		}
 		break;
 	case 39 : // right
 		if (caret.offset < this.get('text').length) {
-			caret.offset++;
+			caret.set(this, caret.offset + 1);
 		} else {
 			var doc = this.parent;
-			var key = doc.indexOf(this); // TODO, use getSelfKey() 
+			var key = doc.indexOf(this); // TODO, use getSelfKey()
 			if (key < doc.length - 1) {
 				var e = doc.get(key + 1);
 				caret.set(e, 0);
@@ -1918,7 +1843,7 @@ Para.prototype.specialKey = function(face, bubble, keycode, shift, ctrl) {
 			if (key < doc.length - 1) {
 				var e = doc.get(key + 1);
 				var offset = e.getLineXOffset(face, 0, x);
-				caret.set(e, offset, x); 
+				caret.set(e, offset, x);
 			}
 		}
 		break;
@@ -2073,7 +1998,7 @@ Para.prototype.drawCaret = function(face) {
 	var caret = face.caret;
 	var pan = face.space.fabric.pan;
 	var th = R(doc.fontsize * (1 + settings.bottombox));
-	
+
 	caret.pos$ = this.getOffsetPoint(face, face.caret.offset, face.caret);
 
 	//var sy = (it.scrollbarY && it.scrollbarY.visible && it.scrollbarY.pos) || 0; TODO
@@ -3093,7 +3018,7 @@ Label.prototype.transfix = function(txe, face, bubble, p, shift, ctrl) {
 		var pi = p.sub(this.zone.pnw);
 		var para = this.paraAtPoint(pi, face);
 		if (para) {
-			debug('TODO');
+			throw new Error('TODO');
 			/*
 			var editor = System.editor;
 			editor.caret.setFromPoint(para, op.sub(para.p));
