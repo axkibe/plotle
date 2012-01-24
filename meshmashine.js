@@ -177,8 +177,8 @@ function alter(meshtree, alternation, backward) {
 		var pnew = new ppre.constructor(ppre);
 
 		var text = ppre.get('text');
-		pnew.set('text', text.substring(src.at1));
-		ppre.set('text', text.substring(0, src.at1));
+		pnew.mmSet('text', text.substring(src.at1));
+		ppre.mmSet('text', text.substring(0, src.at1));
 
 		pivotNode.splice(sig_splice + 1, 0, pnew);
 		break;
@@ -204,7 +204,7 @@ function alter(meshtree, alternation, backward) {
 		var pnex = pivotNode.get(sig_splice + 1);
 		check(ppre.constructor === pnex.constructor, 'cannot join different types')
 
-		ppre.set('text', ppre.get('text') + pnex.get('text'));
+		ppre.mmSet('text', ppre.get('text') + pnex.get('text'));
 		pivotNode.splice(sig_splice + 1, 1);
 		break;
 	case 'set':
@@ -233,7 +233,7 @@ function alter(meshtree, alternation, backward) {
 			src.path = trg.path;
 		}
 
-		meshtree.set(trg.path, src.val);
+		meshtree.mmSet(trg.path, src.val);
 		break;
 	case 'insert':
 		// a string is inserted into a string item.
@@ -251,7 +251,7 @@ function alter(meshtree, alternation, backward) {
 			trg.at2 = tat2;
 		}
 		var nstr = str.substring(0, trg.at1) + src.val + str.substring(trg.at1);
-		meshtree.set(trg.path, nstr);
+		meshtree.mmSet(trg.path, nstr);
 		break;
 	case 'remove':
 		// a part of a string item is removed.
@@ -270,7 +270,7 @@ function alter(meshtree, alternation, backward) {
 			trg.val = val;
 		}
 		var nstr = str.substring(0, src.at1) + str.substring(src.at2);
-		meshtree.set(src.path, nstr);
+		meshtree.mmSet(src.path, nstr);
 		break;
 
 	case 'alley-place' :

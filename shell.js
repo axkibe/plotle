@@ -408,7 +408,8 @@ Caret.prototype.update = function(face) {
 
 	// erases the old caret
 	if (face.caret.save$) {
-		face.fabric.putImageData(face.caret.save$, face.caret.screenPos$);
+//		face.fabric.putImageData(face.caret.save$, face.caret.screenPos$);
+		face.fabric.drawImage(face.caret.save$, 0, 0);
 		face.caret.save$ = face.caret.screenPos$ = null;
 	}
 
@@ -2015,7 +2016,15 @@ Para.prototype.drawCaret = function(face) {
 		caret.pos$.y + zone.pnw.y + pan.y + this.pnw.y - th + 2);
 
 	face.caret.screenPos$ = cp;
-	face.caret.save$ = face.fabric.getImageData(cp.x, cp.y, 3, th + 2);
+
+	// Paradoxically in Firefox creating a complete copy of the whole canvas
+	// is way faster than just getting a small region :-/
+	// Thus following alternative is not used:
+	//   face.caret.save$ = face.fabric.getImageData(cp.x, cp.y, 3, th + 2);
+
+	face.caret.save$ = new Fabric(face.fabric.width, face.fabric.height);
+	face.caret.save$.drawImage(face.fabric, 0, 0);
+
 	face.fabric.fillRect('black', cp.x + 1, cp.y + 1, 1, th);
 }
 

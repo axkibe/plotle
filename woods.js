@@ -67,10 +67,12 @@ function Stem(twigs, master) {
 			twigs[k].parent = this;
 			twigs[k].key$ = k;
 		}
+
+		this.listeners = null;
 	}
 	for (var k in master) {
 		if (k === 'type' || k === 'alley') continue;
-		twigs[k] = this._sprout(master[k], this, k);
+		twigs[k] = this._sprout(k, master[k], this);
 	}
 }
 
@@ -92,29 +94,34 @@ Stem.prototype.get = function(path, a0, al) {
 
 /**
 | Sets the value of a twig.
+|
+| Only to be used by the meshmashine.
 */
-Stem.prototype.set = function(path, val, a0, al, oplace) {
+Stem.prototype.mmSet = function(path, val, a0, al, oplace) {
 	if (oplace) throw new Error('out of place not yet supported');
-	if (!(path instanceof Path)) { // direct?
-		this._twigs[path] = this._sprout(val, this, path);
+	if (!(path instanceof Path)) { // direct? TODO allow only strings!
+		this._twigs[path] = this._sprout(path, val, this);
+		if (this.listeners) this._tellSetVal('setval', path, val);
 		return;
 	}
 	a0 = path.fit(a0, false);
 	al = path.fit(al, true);
 	var pa0 = path.get(a0);
 	if (a0 + 1 === al) {
-		this._twigs[pa0] = this._sprout(val, this, pa0);
+		this._twigs[pa0] = this._sprout(pa0, val, this);
+		if (this.listeners) this._tellSetVal(pa0, val);
 	} else {
 		var twig = this._twigs[pa0];
-		if (!twig || !twig.set) throw reject('path goes nowhere');
-		twig.set(path, val, a0 + 1, al);
+		if (!twig || !twig.mmSet) throw reject('path goes nowhere');
+		twig.mmSet(path, val, a0 + 1, al);
+		if (this.listeners) this._tellSetSub(path, a0, al, val);
 	}
 }
 
 /**
 | Sprouts a new twig.
 */
-Stem.prototype._sprout = function(master, parent, key$) {
+Stem.prototype._sprout = function(key$, master, parent) {
 	if (typeof(master) === 'undefined') return undefined;
 	if (master === null) return null;
 
@@ -148,13 +155,15 @@ Stem.prototype.toJSON = function() {
 
 /**
 | Grows a new subnode
+|
+| TODO remove and replace by getNewKey()
 */
 Stem.prototype.grow = function(path) {
 	if (!this.isGrowable) throw reject('Node not growable');
 	if (!this._grow) throw new Error('_grow not set');
 
 	while (is(this.get('' + this._grow))) this._grow++;
-	path.set(-1, '' + this._grow);
+	path.mmSet(-1, '' + this._grow);
 }
 
 /**
@@ -199,16 +208,90 @@ Stem.prototype.matches = function(master) {
 }
 
 /**
-| Gets the first anchestor of 'type', as long the
-| parent variables have been set
+| Gets the first anchestor of 'type'.
 */
 Stem.prototype.getAnchestor = function(type) {
-	if (!Woods.cogging) throw new Error('getAnchestor not avaible without cogging');
+	if (!Woods.cogging) throw new Error('getAnchestor() requires cogging');
 
 	var n = this;
 	while (n && n.type !== type) { n = n.parent; }
 	if (!n) throw new Error('anchestor not there: '+type);
 	return n;
+}
+
+/**
+| Adds a listener for set events.
+|
+| TODO rework or remove this
+*/
+Stem.prototype.addListener = function(type, listener) {
+	if (!Woods.cogging) throw new Error('addListener() requires cogging');
+
+	if (this.listeners === null) {
+		this.listeners = {
+			setval: [],
+			setsub: [],
+		}
+	}
+
+	switch (type) {
+	case 'setval' :
+		var setval = this.listeners.setval;
+		if (setval.indexOf(listener) !== -1) return;
+		setval.push(listener);
+		break;
+	case 'setsub' :
+		var setsub = this.listeners.setsub;
+		if (setsub.indexOf(listener) !== -1) return;
+		setsub.push(listener);
+		break;
+	default :
+		throw new Error('Invalid listener type: '+type);
+	}
+}
+
+Stem.prototype.removeListener = function(type, listener) {
+	if (!Woods.cogging) throw new Error('removeListener() requires cogging');
+	if (this.listeners === null) return;
+
+	switch (type) {
+	case 'setval' :
+		var setval = this.listeners.setval;
+		var idx = setval.index(listener);
+		if (idx === -1) return;
+		setval.splice(idx, 1);
+		break;
+	case 'setsub' :
+		var setsub = this.listeners.setsub;
+		var idx = setsub.index(listener);
+		if (idx === -1) return;
+		setsub.splice(idx, 1);
+		break;
+	default :
+		throw new Error('Invalid listener type: '+type);
+	}
+}
+
+/**
+| Tells all setval listeners of a set.
+| TODO: remove
+*/
+Stem.prototype._tellSetVal = function(key, val) {
+	var setval = this.listeners.setval;
+	for (var a = 0; a < setval.length; a++) {
+		setval[a].listenSetVal(key, val);
+	}
+}
+
+/**
+| Tells all setsub listeners of a set.
+| TODO: remove
+*/
+Stem.prototype._tellSetSub = function(path, a0, al, val) {
+	var setval = this.listeners.setval;
+	for (var a = 0; a < setval.length; a++) {
+		setval[a].listenSetVal(path, a0, al, val);
+	}
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -224,7 +307,7 @@ function StemAlley(master) {
 		throw new Error('StemAlley master.alley not an Array');
 	}
 	for (var k = 0; k < master.alley.length; k++) {
-		this._twigs.alley[k] = this._sprout(master.alley[k], this, k);
+		this._twigs.alley[k] = this._sprout(k, master.alley[k], this);
 	}
 }
 subclass(StemAlley, Stem);
@@ -247,34 +330,44 @@ StemAlley.prototype.get = function(path, a0, al) {
 	var base = pa0.constructor === Number ? this._twigs.alley : this._twigs;
 	var twig = base[pa0];
 	if (a0 + 1 === al) return twig;
-	if (!twig || !twig.get) throw reject('path goes nowhere (sa)');
+	if (!twig || !twig.get) throw reject('path goes nowhere');
 	return twig.get(path, a0 + 1, al);
 }
 
 /**
 | Sets the value of a twig.
+|
+| Only to be used by the meshmashine.
 */
-StemAlley.prototype.set = function(path, val, a0, al, oplace) {
+StemAlley.prototype.mmSet = function(path, val, a0, al, oplace) {
 	if (oplace) throw new Error('out of place not yet supported');
-	if (path.constructor === Number) { // direct alley? TODO switch
-		this._twigs.alley[path] = this._sprout(val, this, path);
+
+	if (path.constructor === Number) { // direct alley?
+		this._twigs.alley[path] = this._sprout(path, val, this);
+		if (this.listeners) this._tellSetVal('setval', path, val);
 		return;
 	}
 	if (!(path instanceof Path)) { // direct copse? TODO only strings
-		this._twigs[path] = this._sprout(val, this, path);
+		this._twigs[path] = this._sprout(path, val, this);
+		if (this.listeners) this._tellSetVal('setval', path, val);
 		return;
 	}
+
 	a0 = path.fit(a0, false);
 	al = path.fit(al, true);
 	var pa0 = path.get(a0);
 	if (a0 + 1 === al) {
+		// set for this
 		var base = pa0.constructor === Number ? this._twigs.alley : this._twigs;
-		base[pa0] = this._sprout(val, this, pa0);
+		base[pa0] = this._sprout(pa0, val, this);
+		if (this.listeners) this._tellSetVal('setval', pa0, val);
 	} else {
+		// set a sub
 		var base = pa0.constructor === Number ? this._twigs.alley : this._twigs;
 		var twig = base[pa0];
-		if (!twig || !twig.set) throw reject('path goes nowhere (sa)');
-		twig.set(path, val, a0 + 1, al);
+		if (!twig || !twig.mmSet) throw reject('path goes nowhere');
+		twig.mmSet(path, val, a0 + 1, al);
+		if (this.listeners) this._tellSetVal('setsub', path, a0, al, val);
 	}
 }
 
@@ -402,12 +495,12 @@ Space.prototype.seeds = {
 /**
 | Sets the value of a node.
 */
-Space.prototype.set = function(path, val, a0, al, oplace) {
+Space.prototype.mmSet = function(path, val, a0, al, oplace) {
 	if (oplace) throw new Error('out of place not yet supported');
 	a0 = path.fit(a0, false);
 	al = path.fit(al, true);
 	if (a0 + 1 === al) throw new Error('Cannot set Space twigs themselves');
-	Stem.prototype.set.call(this, path, val, a0, al, oplace);
+	Stem.prototype.mmSet.call(this, path, val, a0, al, oplace);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -475,7 +568,7 @@ Note.prototype.seeds = {
 /**
 | Sets the value of a node.
 */
-Note.prototype.set = function(path, val, a0, al, oplace) {
+Note.prototype.mmSet = function(path, val, a0, al, oplace) {
 	if (oplace) throw new Error('out of place not yet supported');
 	a0 = path.fit(a0, false);
 	al = path.fit(al, true);
@@ -484,12 +577,12 @@ Note.prototype.set = function(path, val, a0, al, oplace) {
 		if (a0 + 1 === al) {
 			this.zone = new Rect(val);
 		} else {
-			this.zone = this.zone.set(path, val, a0 + 1, al, true);
+			this.zone = this.zone.mmSet(path, val, a0 + 1, al, true);
 		}
 		return;
 	}
 	if (a0 + 1 === al) throw new Error('Cannot set Note.'+path.get(a0)+' itself');
-	Stem.prototype.set.call(this, path, val, a0, al);
+	Stem.prototype.mmSet.call(this, path, val, a0, al);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -589,7 +682,7 @@ Rect.prototype.noCogs = true;
 | Returns a new rectangle with changed value.
 | Thus supports only out-of-place operations.
 */
-Rect.prototype.set = function(path, val, a0, al, oplace) {
+Rect.prototype.mmSet = function(path, val, a0, al, oplace) {
 	if (!oplace) throw new Error('Rect can only be set out of place');
 	a0 = path.fit(a0, false);
 	al = path.fit(al, true);
@@ -604,7 +697,7 @@ Rect.prototype.set = function(path, val, a0, al, oplace) {
 	if (a0 + 1 === al) {
 		npoint = new Point(val);
 	} else {
-		npoint = this[path.get(a0)].set(path, val, a0 + 1, al, true);
+		npoint = this[path.get(a0)].mmSet(path, val, a0 + 1, al, true);
 	}
 
 	return new Rect(
@@ -649,7 +742,11 @@ function Point(master) {
 }
 subclass(Point, Fabric.Point);
 
-Point.prototype.set = function(path, val, a0, al, oplace) {
+/**
+| Returns a new rectangle with changed value.
+| Thus supports only out-of-place operations.
+*/
+Point.prototype.mmSet = function(path, val, a0, al, oplace) {
 	if (!oplace) throw new Error('Point can only be set out of place');
 	a0 = path.fit(a0, false);
 	al = path.fit(al, true);
