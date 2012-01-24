@@ -364,16 +364,13 @@ Fabric.prototype.getImageData = function(a1, a2, a3, a4) {
 	var pan = this.pan;
 	if (typeof(p) === 'object') {
 		if (a1 instanceof Rect) {
-			debug('getImageData2', a1.pnw.x, a1.pnw.y, a1.pse.x, a1.pse.y);
 			return this._cx.getImageData(a1.pnw.x, a1.pnw.y, a1.pse.x, a1.pse.y);
 		}
 		if (a1 instanceof Point) {
-			debug('getImageData2', a1.x, a1.y, a2.x, a2.y);
 			return this._cx.getImageData(a1.x, a1.y, a2.x, a2.y);
 		}
 		throw new Error('getImageData not a rectangle');
 	}
-	debug('getImageData3', a1, a2, a3, a4);
 	return this._cx.getImageData(a1, a2, a3, a4);
 }
 

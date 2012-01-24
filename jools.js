@@ -59,8 +59,9 @@ if (typeof(window) === 'undefined') {
 */
 function is(o)        { return typeof(o) !== 'undefined'; }
 function isnon(o)     { return typeof(o) !== 'undefined' && o !== null; }
-function isString(o)  { return typeof(o) === 'string' || o instanceof String; }
 function isInteger(o) { return typeof(o) === 'number' && Math.floor(o) === o; }
+function isPath(o)    { return o instanceof Path; }
+function isString(o)  { return typeof(o) === 'string' || o instanceof String; }
 
 /**
 | Returns a rejection error
@@ -402,9 +403,7 @@ Signature.prototype.attune = function(str, name) {
  TODO, make immuteable?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Path(master) {
-	if (master instanceof Path) {
-		master = master._path;
-	}
+	if (isPath(master)) master = master._path;
 
 	if (master instanceof Array) {
 		for (var i = 0, mlen = master.length; i < mlen; i++) {
@@ -557,8 +556,9 @@ Jools = {
 	inspect            : inspect,
 	is                 : is,
 	isnon              : isnon,
-	isString           : isString,
 	isInteger          : isInteger,
+	isPath             : isPath,
+	isString           : isString,
 	jsonfy             : jsonfy,
 	log                : log,
 	reject             : reject,

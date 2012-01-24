@@ -37,8 +37,9 @@ var Signature = Jools.Signature;
 var debug     = Jools.debug;
 var is        = Jools.is;
 var isnon     = Jools.isnon;
-var isString  = Jools.isString;
 var isInteger = Jools.isInteger;
+var isString  = Jools.isString;
+var isPath    = Jools.isPath;
 var log       = Jools.log;
 var jsonfy    = Jools.jsonfy;
 var reject    = Jools.reject;
@@ -80,11 +81,13 @@ function Stem(twigs, master) {
 | Returns the twig the path points at.
 */
 Stem.prototype.get = function(path, a0, al) {
-	if (!(path instanceof Path)) { // direct? TODO check strings
-		return this._twigs[path];
-	}
+	if (isString(path)) return this._twigs[path];
+	if (!isPath(path)) throw new Error('get path no string or path');
+
 	a0 = path.fit(a0, false);
 	al = path.fit(al, true);
+
+	if (al === 0) return this;
 	var pa0 = path.get(a0);
 	var twig = this._twigs[pa0];
 	if (a0 + 1 === al) return twig;
@@ -99,11 +102,13 @@ Stem.prototype.get = function(path, a0, al) {
 */
 Stem.prototype.mmSet = function(path, val, a0, al, oplace) {
 	if (oplace) throw new Error('out of place not yet supported');
-	if (!(path instanceof Path)) { // direct? TODO allow only strings!
+	if (isString(path)) { // direct set 
 		this._twigs[path] = this._sprout(path, val, this);
 		if (this.listeners) this._tellSetVal('setval', path, val);
 		return;
 	}
+
+	if (!isPath(path)) throw new Error('get path no string or path');
 	a0 = path.fit(a0, false);
 	al = path.fit(al, true);
 	var pa0 = path.get(a0);
@@ -221,76 +226,32 @@ Stem.prototype.getAnchestor = function(type) {
 
 /**
 | Adds a listener for set events.
-|
-| TODO rework or remove this
 */
 Stem.prototype.addListener = function(type, listener) {
-	if (!Woods.cogging) throw new Error('addListener() requires cogging');
-
-	if (this.listeners === null) {
-		this.listeners = {
-			setval: [],
-			setsub: [],
-		}
-	}
-
-	switch (type) {
-	case 'setval' :
-		var setval = this.listeners.setval;
-		if (setval.indexOf(listener) !== -1) return;
-		setval.push(listener);
-		break;
-	case 'setsub' :
-		var setsub = this.listeners.setsub;
-		if (setsub.indexOf(listener) !== -1) return;
-		setsub.push(listener);
-		break;
-	default :
-		throw new Error('Invalid listener type: '+type);
-	}
+	if (!this.listen) this.listen = {};
+	var listen = this.listen;
+	if (listen.indexOf(listener) !== -1) return false;
+	listen.push(listener);
+	return true;
 }
 
 Stem.prototype.removeListener = function(type, listener) {
-	if (!Woods.cogging) throw new Error('removeListener() requires cogging');
-	if (this.listeners === null) return;
-
-	switch (type) {
-	case 'setval' :
-		var setval = this.listeners.setval;
-		var idx = setval.index(listener);
-		if (idx === -1) return;
-		setval.splice(idx, 1);
-		break;
-	case 'setsub' :
-		var setsub = this.listeners.setsub;
-		var idx = setsub.index(listener);
-		if (idx === -1) return;
-		setsub.splice(idx, 1);
-		break;
-	default :
-		throw new Error('Invalid listener type: '+type);
-	}
+	var listen = this.listen;
+	if (!listen) return false;
+	var idx = listen.index(listener);
+	if (idx === -1) return false;
+	listen.splice(idx, 1);
+	return true;
 }
 
 /**
-| Tells all setval listeners of a set.
-| TODO: remove
+| Tells all listeners of an event.
 */
-Stem.prototype._tellSetVal = function(key, val) {
-	var setval = this.listeners.setval;
-	for (var a = 0; a < setval.length; a++) {
-		setval[a].listenSetVal(key, val);
-	}
-}
-
-/**
-| Tells all setsub listeners of a set.
-| TODO: remove
-*/
-Stem.prototype._tellSetSub = function(path, a0, al, val) {
-	var setval = this.listeners.setval;
-	for (var a = 0; a < setval.length; a++) {
-		setval[a].listenSetVal(path, a0, al, val);
+Stem.prototype.tell = function() {
+	var listen = this.listen;
+	for (var a = 0; a < this.listen.length; a++) {
+		var v = listen[a];
+		v.event(v, arguments);
 	}
 }
 
@@ -570,8 +531,11 @@ Note.prototype.seeds = {
 */
 Note.prototype.mmSet = function(path, val, a0, al, oplace) {
 	if (oplace) throw new Error('out of place not yet supported');
-	a0 = path.fit(a0, false);
-	al = path.fit(al, true);
+
+	if (isPath(path)) {
+		a0 = path.fit(a0, false);
+		al = path.fit(al, true);
+	}
 
 	if (path === 'zone' || path.get(a0) === 'zone') {
 		if (a0 + 1 === al) {
@@ -684,39 +648,47 @@ Rect.prototype.noCogs = true;
 */
 Rect.prototype.mmSet = function(path, val, a0, al, oplace) {
 	if (!oplace) throw new Error('Rect can only be set out of place');
-	a0 = path.fit(a0, false);
-	al = path.fit(al, true);
+	var key;
 
-	switch(path.get(a0)) {
+	if (isString(path)) {
+		key = path;
+	} else {
+		if (!isPath(path)) throw new Error('mmSet path no string or path');
+		a0 = path.fit(a0, false);
+		al = path.fit(al, true);
+		key = path.get(a0);
+	}
+
+	switch(key) {
 	case 'pnw': break;
 	case 'pse': break;
-	default : throw reject('path goes nowhere');
+	default : throw reject('path goes nowhere (Rect:mmSet)');
 	}
 
 	var npoint;
-	if (a0 + 1 === al) {
+	if ((!(path instanceof Path)) || a0 + 1 === al) {
 		npoint = new Point(val);
 	} else {
-		npoint = this[path.get(a0)].mmSet(path, val, a0 + 1, al, true);
+		npoint = this[key].mmSet(path, val, a0 + 1, al, true);
 	}
 
 	return new Rect(
-		path.get(a0) === 'pnw' ? npoint : this.pnw,
-		path.get(a0) === 'pse' ? npoint : this.pse);
+		key === 'pnw' ? npoint : this.pnw,
+		key === 'pse' ? npoint : this.pse);
 }
 
 /**
 | Returns the value the path points at.
 */
 Rect.prototype.get = function(path, a0, al) {
-	if (!(path instanceof Path)) { // direct?
-		return this[path];
-	}
+	if (isString(path)) return this[path];
+	if (!isPath(path)) throw new Error('get path no string or path');
+
 	a0 = path.fit(a0, false);
 	al = path.fit(al, true);
 	var twig = this[path.get(a0)];
 	if (a0 + 1 === al) return twig;
-	if (!twig || !twig.get) throw reject('path goes nowhere');
+	if (!twig || !twig.get) throw reject('path goes nowhere (Rect)');
 	return twig.get(path, a0 + 1, al);
 }
 
@@ -748,31 +720,39 @@ subclass(Point, Fabric.Point);
 */
 Point.prototype.mmSet = function(path, val, a0, al, oplace) {
 	if (!oplace) throw new Error('Point can only be set out of place');
-	a0 = path.fit(a0, false);
-	al = path.fit(al, true);
 
-	switch(path.get(a0)) {
+	var key;
+	if (isString(path)) {
+		key = path;
+	} else {
+		if (!isPath(path)) throw new Error('mmSet path no string or path');
+		a0 = path.fit(a0, false);
+		al = path.fit(al, true);
+		key = path.get(a0);
+	}
+
+	switch(key) {
 	case 'x': break;
 	case 'y': break;
-	default : throw reject('path goes nowhere');
+	default : throw reject('path goes nowhere (Point:mmSet)');
 	}
 
 	return new Point(
-		path.get(a0) === 'x' ? val : this.x,
-		path.get(a0) === 'y' ? val : this.y);
+		key === 'x' ? val : this.x,
+		key === 'y' ? val : this.y);
 }
 
 /**
 | Returns the value the path points at.
 */
 Point.prototype.get = function(path, a0, al) {
-	if (!(path instanceof Path)) { // direct?
-		return this[path];
-	}
+	if (isString(path)) return this[path];
+	if (!isPath(path)) throw new Error('get path no string or path');
+	
 	a0 = path.fit(a0, false);
 	al = path.fit(al, true);
 	var twig = this[path.get(a0)];
-	if (a0 + 1 !== al) throw reject('path goes nowhere');
+	if (a0 + 1 !== al) throw reject('path goes nowhere (Point)');
 	return this[path.get(a0)];
 }
 

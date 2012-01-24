@@ -384,6 +384,14 @@ function Caret() {
 }
 subclass(Caret, Marker);
 
+
+/**
+| If true uses getImageData() to cache the image without the caret to achieve blinking.
+| Without it uses drawImage() for the whole canvas. On firefox this is paradoxically way 
+| faster.
+*/
+Caret.useGetImageData = true;
+
 /**
 | Shows the caret or resets the blink timer if already shown
 */
@@ -408,8 +416,11 @@ Caret.prototype.update = function(face) {
 
 	// erases the old caret
 	if (face.caret.save$) {
-//		face.fabric.putImageData(face.caret.save$, face.caret.screenPos$);
-		face.fabric.drawImage(face.caret.save$, 0, 0);
+		if (Caret.useGetImageData) {
+			face.fabric.putImageData(face.caret.save$, face.caret.screenPos$);
+		} else {
+			face.fabric.drawImage(face.caret.save$, 0, 0);
+		}
 		face.caret.save$ = face.caret.screenPos$ = null;
 	}
 
@@ -2017,13 +2028,13 @@ Para.prototype.drawCaret = function(face) {
 
 	face.caret.screenPos$ = cp;
 
-	// Paradoxically in Firefox creating a complete copy of the whole canvas
-	// is way faster than just getting a small region :-/
-	// Thus following alternative is not used:
-	//   face.caret.save$ = face.fabric.getImageData(cp.x, cp.y, 3, th + 2);
-
-	face.caret.save$ = new Fabric(face.fabric.width, face.fabric.height);
-	face.caret.save$.drawImage(face.fabric, 0, 0);
+	if (Caret.useGetImageData) {
+		face.caret.save$ = face.fabric.getImageData(cp.x, cp.y, 3, th + 2);
+	} else {
+		// Paradoxically this is often way faster. Especially firefox:
+		face.caret.save$ = new Fabric(face.fabric.width, face.fabric.height);
+		face.caret.save$.drawImage(face.fabric, 0, 0);
+	}
 
 	face.fabric.fillRect('black', cp.x + 1, cp.y + 1, 1, th);
 }
@@ -3519,7 +3530,7 @@ Relation.prototype.onlook = function(event, item) {
  Communicates with the server, holds caches.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function MeshIO() {
-	this.mm = new MeshMashine(Nexus, null);
+	this.mm = new MeshMashine(Nexus, null, true);
 
 	var spacepath = new Path(['welcome']);
 
