@@ -258,7 +258,8 @@ function System(FrontFace) {
 	function onresize(event) {
 		canvas.width  = window.innerWidth - 1;
 		canvas.height = window.innerHeight - 1;
-		this.shell.redraw();
+	
+		this.shell.resize(canvas.width, canvas.height);
 	}
 
 	/**
@@ -436,7 +437,7 @@ window.onload = function() {
 		system    = new System();
 		system.shell = new Shell(system.fabric);
 		meshio    = new MeshIO();
-		system.shell.redraw();
+		system.shell._draw(); // TODO private 
 	})();
 }
 

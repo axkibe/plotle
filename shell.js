@@ -336,7 +336,6 @@ function Bubble() {
 */
 Bubble.prototype.init = function() {
 	this.hit    = false;
-	this.redraw = false;
 	return this;
 }
 
@@ -654,7 +653,7 @@ function Cockpit() {
 /**
 | Redraws the cockpit.
 */
-Cockpit.prototype.redraw = function() {
+Cockpit.prototype.draw = function() {
 	// TODO
 }
 
@@ -667,7 +666,6 @@ Cockpit.prototype.mousehover = function(bubble, p, shift, ctrl) {
 	if (this.edgemenu.mousepos >= 0) {
 		// mouse floated on edge menu, no need to look further
 		system.setCursor('default');
-		if (redraw) this.redraw();
 		return;
 	}
 	*/
@@ -714,6 +712,9 @@ function Shell(fabric) {
 
 	this.action    = null;
 	this.selection = new Selection();
+	
+	// A flag set to true if anything requests a redraw.
+	this.redraw = false;
 }
 
 /**
@@ -758,18 +759,20 @@ Shell.prototype.endAction = function() {
 }
 
 /**
-| Redraws the cockpit and the space.
+| Draws the cockpit and the space.
 */
-Shell.prototype.redraw = function() {
+Shell.prototype._draw = function() {
 	this.fabric.attune();   // <- bad name for clear();
 
 	// remove caret cache.
 	this.caret.save$ = null;
 	this.caret.screenPos$ = null;
 
-	this.space.redraw();
-	this.cockpit.redraw();
+	this.space.draw();
+	this.cockpit.draw();
 	this.caret.update();
+
+	this.redraw = false;
 }
 
 // TODO move shift/ctrl state to frontface
@@ -781,7 +784,7 @@ Shell.prototype.click = function(p, shift, ctrl) {
 	// TODO cockpit
 	var bubble = this.bubble.init();
 	this.space.click(bubble, p, shift, ctrl);
-	if (bubble.redraw) this.redraw();
+	if (this.redraw) this._draw();
 }
 
 /**
@@ -793,7 +796,7 @@ Shell.prototype.mousehover = function(p, shift, ctrl) {
 	// TODO cockpit
 	var bubble = this.bubble.init();
 	this.space.mousehover(bubble, p, shift, ctrl);
-	if (bubble.redraw) this.redraw();
+	if (this.redraw) this._draw();
 }
 
 /**
@@ -806,7 +809,7 @@ Shell.prototype.mousedown = function(p, shift, ctrl) {
 	var bubble = this.bubble.init();
 	// TODO rename mst -> mouseState
 	var mst = this.space.mousedown(bubble, p, shift, ctrl);
-	if (bubble.redraw) this.redraw();
+	if (this.redraw) this._draw();
 	return mst;
 }
 
@@ -820,7 +823,7 @@ Shell.prototype.specialKey = function(keyCode, shift, ctrl) {
 		this.caret.entity.specialKey(bubble, keyCode, shift, ctrl);
 	}
 
-	if (bubble.redraw) this.redraw();
+	if (this.redraw) this._draw();
 }
 
 /**
@@ -833,7 +836,7 @@ Shell.prototype.input = function(text) {
 		this.caret.entity.input(bubble, text);
 	}
 
-	if (bubble.redraw) this.redraw();
+	if (this.redraw) this._draw();
 }
 
 /**
@@ -843,7 +846,7 @@ Shell.prototype.dragstart = function(p, shift, ctrl) {
 	// TODO cockpit
 	var bubble = this.bubble.init();
 	this.space.dragstart(bubble, p, shift, ctrl);
-	if (bubble.redraw) this.redraw();
+	if (this.redraw) this._draw();
 }
 
 /**
@@ -853,7 +856,7 @@ Shell.prototype.dragmove = function(p, shift, ctrl) {
 	// TODO cockpit
 	var bubble = this.bubble.init();
 	this.space.dragmove(bubble, p, shift, ctrl);
-	if (bubble.redraw) this.redraw();
+	if (this.redraw) this._draw();
 }
 
 /**
@@ -863,7 +866,7 @@ Shell.prototype.dragstop = function(p, shift, ctrl) {
 	// TODO cockpit
 	var bubble = this.bubble.init();
 	this.space.dragstop(bubble, p, shift, ctrl);
-	if (bubble.redraw) this.redraw();
+	if (this.redraw) this._draw();
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -986,7 +989,7 @@ Space.prototype.seeds = {
 /**
 | Redraws the complete space.
 */
-Space.prototype.redraw = function() {
+Space.prototype.draw = function() {
 	for(var zi = this.z.length - 1; zi >= 0; zi--) {
 		var it = this.items.get(this.z.get(zi));
 		it.draw(this.fabric);
@@ -1053,7 +1056,7 @@ Space.prototype.mousehover = function(bubble, p, shift, ctrl) {
 	case Action.FLOATMENU :
 		if (action.floatmenu.mousepos !== action.floatmenu.getMousepos(p)) {
 			// float menu changed
-			bubble.redraw = true;
+			shell.redraw = true;
 		}
 		if (action.floatmenu.mousepos >= 0) {
 			// mouse floated on float menu
@@ -1215,7 +1218,7 @@ Space.prototype.click = function(bubble, p, shift, ctrl) {
 		action.floatmenu = new Hexmenu(p, settings.floatmenu, this._floatMenuLabels);
 		system.setCursor('default');
 		this.setFocus(null);
-		bubble.redraw = true;
+		shell.redraw = true;
 	}
 }
 
@@ -1231,7 +1234,7 @@ Space.prototype.dragstop = function(bubble, p, shift, ctrl) {
 	case Action.ITEMRESIZE :
 		action.item.setZone(action.item.getZone());
 		system.setCursor('default');
-		bubble.redraw = true;
+		shell.redraw = true;
 		break;
 	case Action.PAN :
 		break;
@@ -1263,12 +1266,12 @@ Space.prototype.dragmove = function(bubble, p, shift, ctrl) {
 	case Action.PAN :
 		this.fabric.pan = p.sub(action.start);
 		// system.repository.savePan(this.pan); TODO!
-		bubble.redraw = true;
+		shell.redraw = true;
 		return;
 	case Action.ITEMRESIZE :
 	case Action.ITEMDRAG :
 		action.move = pp;
-		bubble.redraw = true;
+		shell.redraw = true;
 		return;
 	/* TODO
 	case ACT.SCROLLY:
@@ -1330,7 +1333,7 @@ Space.prototype.mousedown = function(bubble, p, shift, ctrl) {
 			this.setFocus(label);
 			break;
 		}
-		bubble.redraw = true;
+		shell.redraw = true;
 		return MST.NONE;
 	/* TODO
 	case ACT.IMENU :
@@ -1562,7 +1565,6 @@ ViPara.prototype.specialKey = function(bubble, keycode, shift, ctrl) {
 	if (shell.caret.entity !== this) throw new Error('Invalid caret on specialKey');
 
 	var para = this.para;
-	var redraw = false;
 	var caret  = shell.caret;
 	var select = shell.selection;
 
@@ -1596,19 +1598,19 @@ ViPara.prototype.specialKey = function(bubble, keycode, shift, ctrl) {
 		case 39 : // right
 		case 40 : // down
 			this.deselect();
-			redraw = true;
+			shell.redraw = true;
 			break;
 		case  8 : // backspace
 		case 46 : // del
 			this.deleteSelection();
-			redraw = true;
+			shell.redraw = true;
 			keycode = 0;
 			throw new Error('TODO');
 			//System.repository.updateItem(item);
 			break;
 		case 13 : // return
 			this.deleteSelection();
-			redraw = true;
+			shell.redraw = true;
 			break;
 		}
 	} else if (shift && !select.active) {
@@ -1633,10 +1635,10 @@ ViPara.prototype.specialKey = function(bubble, keycode, shift, ctrl) {
 			var t = ce.text;
 			ce.text = t.substring(0, co - 1) + t.substring(co, t.length);
 			caret.offset--;
-			redraw = true;
+			shell.redraw = true;
 		} else {
 			var para = ce.anchestor(Para);
-			redraw = para.joinToPrevious(ce, caret);
+			shell.redraw = para.joinToPrevious(ce, caret);
 		}
 		throw new Error('TODO');
 		//System.repository.updateItem(item);
@@ -1644,7 +1646,7 @@ ViPara.prototype.specialKey = function(bubble, keycode, shift, ctrl) {
 	case 13 : // return
 		/*
 		this.newline();
-		redraw = true;
+		shell.redraw = true;
 		*/
 		throw new Error('TODO');
 		//System.repository.updateItem(item);
@@ -1730,10 +1732,10 @@ ViPara.prototype.specialKey = function(bubble, keycode, shift, ctrl) {
 		var ct = ce.text;
 		if (co < ct.length) {
 			ce.text = ct.substring(0, co) + ct.substring(co + 1, ct.length);
-			redraw = true;
+			shell.redraw = true;
 		} else {
 			var para = ce.anchestor(Para);
-			redraw = para.joinToNext(ce, caret);
+			shell.redraw = para.joinToNext(ce, caret);
 		}
 		//System.repository.updateItem(item);
 		*/
@@ -1757,12 +1759,12 @@ ViPara.prototype.specialKey = function(bubble, keycode, shift, ctrl) {
 			system.setInput(select.innerText());
 			// clears item cache
 			item.listen();  // todo rename.
-			redraw = true;
+			shell.redraw = true;
 		}
 	}*/
 
 	caret.show();
-	bubble.redraw = true;
+	shell.redraw = true; // TODO?
 }
 
 /**
@@ -1805,8 +1807,6 @@ ViPara.prototype.getFabric = function() {
 | Drops the cache (cause something has changed)
 */
 ViPara.prototype.event = function(event, p1, p2, p3) {
-	debug('EVENT');
-
 	var para = this.para;
 	var doc  = para.getAnchestor('DocAlley'); //XXX replace with vdoc.
 	doc.parent.poke();
@@ -2379,11 +2379,11 @@ Note.prototype.transfix = function(txe, bubble, p, shift, ctrl) {
 		if (ctrl) {
 			//space.actionSpawnRelation(this, p);
 			throw new Error('TODO');
-			bubble.redraw = true;
+			shell.redraw = true;
 			return;
 		}
 		shell.space.setFocus(this);
-		bubble.redraw = true;
+		shell.redraw = true;
 
 		var sbary = this.scrollbarY;
 		var pr = p.sub(this.zone.pnw);
@@ -2397,7 +2397,7 @@ Note.prototype.transfix = function(txe, bubble, p, shift, ctrl) {
 		return;
 	case TXE.CLICK :
 		shell.space.setFocus(this);
-		bubble.redraw = true;
+		shell.redraw = true;
 
 		// var op = p.sub(this.zone.pnw.w, this.zone.pnw.y - max(0, this.scrollbarY.pos)); TODO
 		var pi = p.sub(this.zone.pnw.x, this.zone.pnw.y);
@@ -2413,12 +2413,12 @@ Note.prototype.transfix = function(txe, bubble, p, shift, ctrl) {
 	case TXE.RBINDHOVER :
 		//space.actionRBindHover(this);
 		throw new Error('TODO');
-		bubble.redraw = true;
+		shell.redraw = true;
 		return;
 	case TXE.RBINDTO :
 		//space.actionRBindTo(this);
 		throw new Error('TODO');
-		bubble.redraw = true;
+		shell.redraw = true;
 		return;
 	default :
 		throw new Error('Unknown transfix code:'+txe);
@@ -2549,6 +2549,7 @@ Note.prototype.getInnerZone = function() {
 */
 Note.prototype.poke = function() {
 	this._fabric$flag = false;
+	shell.redraw = true;
 }
 
 /**
@@ -2703,7 +2704,7 @@ Label.prototype.transfix = function(txe, bubble, p, shift, ctrl) {
 		if (ctrl) {
 			//space.actionSpawnRelation(this, p);
 			throw new Error('TODO');
-			bubble.redraw = true;
+			shell.redraw = true;
 			return txr;
 		}
 		shell.space.setFocus(this);
@@ -2723,18 +2724,18 @@ Label.prototype.transfix = function(txe, bubble, p, shift, ctrl) {
 			editor.caret.show();
 			editor.deselect();
 			*/
-			bubble.redraw = true;
+			shell.redraw = true;
 		}
 		return;
 	case TXE.RBINDHOVER :
 		//space.actionRBindHover(this);
 		throw new Error('TODO');
-		bubble.redraw = true;
+		shell.redraw = true;
 		return;
 	case TXE.RBINDTO :
 		throw new Error('TODO');
 		//space.actionRBindTo(this);
-		bubble.redraw = true;
+		shell.redraw = true;
 		return;
 	default :
 		throw new Error('Unknown transfix code:'+txe);
@@ -3031,7 +3032,7 @@ Relation.prototype.transfix = function(txe, bubble, p, shift, ctrl) {
 		if (ctrl) {
 			//space.actionSpawnRelation(this, p);
 			throw new Error('TODO');
-			bubble.redraw = true;
+			shell.redraw = true;
 			return;
 		}
 		shell.space.setFocus(this);
@@ -3051,18 +3052,18 @@ Relation.prototype.transfix = function(txe, bubble, p, shift, ctrl) {
 			editor.caret.show();
 			editor.deselect();
 			*/
-			bubble.redraw = true;
+			shell.redraw = true;
 		}
 		return;
 	case TXE.RBINDHOVER :
 		//space.actionRBindHover(this);
 		throw new Error('TODO');
-		bubble.redraw = true;
+		shell.redraw = true;
 		return;
 	case TXE.RBINDTO :
 		//space.actionRBindTo(this);
 		throw new Error('TODO');
-		bubble.redraw = true;
+		shell.redraw = true;
 		return;
 	default :
 		throw new Error('Unknown transfix code:'+txe);
