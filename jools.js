@@ -410,7 +410,9 @@ function Path(master) {
 		return;
 	}
 
-	if (!master.parent) throw new Error('invalid path master');
+	if (!master.parent) {
+		throw new Error('invalid path master');
+	}
 	var path = [];
 	var len = 0;
 	// count size

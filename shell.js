@@ -970,7 +970,7 @@ function Space(master) {
 	Woods.Space.call(this, master);
 
 	// TODO make a 'spaceface' or something like that
-	this.fabric = new Fabric(system.fabric); 
+	this.fabric = new Fabric(system.fabric);
 	this.zoom = 1; // TODO
 
 	this._floatMenuLabels = {c: 'new', n: 'Note', ne: 'Label'};
@@ -990,8 +990,8 @@ Space.prototype.seeds = {
 */
 Space.prototype.draw = function() {
 	for(var zi = this.z.length - 1; zi >= 0; zi--) {
-		var it = this.items.get(this.z.get(zi));
-		it.draw(this.fabric);
+		var vit = this.items.vitems[this.z.get(zi)]; // XXX
+		vit.draw(this.fabric);
 	}
 
 	if (this.focus) this.focus.drawHandles(this.fabric);
@@ -1022,12 +1022,12 @@ Space.prototype.draw = function() {
 /**
 | Sets the focussed item or loses it if null
 */
-Space.prototype.setFocus = function(item) {
-	if (this.focus === item) return;
-	this.focus = item;
+Space.prototype.setFocus = function(vitem) {
+	if (this.focus === vitem) return;
+	this.focus = vitem;
 
 	var caret = shell.caret;
-	if (item) {
+	if (vitem) {
 		// caret.set(item.doc.get(0), 0);
 		debug('TODO CARET:SET');
 		caret.show();
@@ -1036,9 +1036,9 @@ Space.prototype.setFocus = function(item) {
 		caret.set(null);
 	}
 
-	if (item === null) return;
+	if (vitem === null) return;
 
-	meshio.moveToTop(this, item);
+	meshio.moveToTop(this, vitem.item);
 }
 
 /**
@@ -1101,8 +1101,8 @@ Space.prototype.mousehover = function(p, shift, ctrl) {
 */
 Space.prototype._transfix = function(txe, p, shift, ctrl) {
 	for(var zi = 0, zlen = this.z.length; zi < zlen; zi++) {
-		var it = this.items.get(this.z.get(zi));
-		if (it.transfix(txe, p, shift, ctrl)) return true;
+		var vit = this.items.vitems[this.z.get(zi)]; // TODO
+		if (vit.transfix(txe, p, shift, ctrl)) return true;
 	}
 	return false;
 }
@@ -1373,6 +1373,12 @@ Space.prototype.mousedown = function(p, shift, ctrl) {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function ItemCopse(master) {
 	Woods.ItemCopse.call(this, master);
+	this.addListener(this); // TODO
+	this.vitems = {};
+
+	for(var k in this.loop()) {
+		this.vitems[k] = new VNote(this.get(k));
+	}
 }
 subclass(ItemCopse, Woods.ItemCopse);
 
@@ -1380,8 +1386,15 @@ subclass(ItemCopse, Woods.ItemCopse);
 | Seeds. Things that can grow on this twig.
 */
 ItemCopse.prototype.seeds = {
-    'Note' : Note,
+    'Note' : Woods.Note,
 };
+
+/**
+| The meshmashine issued an event.
+*/
+ItemCopse.prototype.event = function(event, p1, p2, p3) {
+	debug('VItemCopse:event', event, p1, p2, p3);
+}
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  +++ VPara +++
@@ -1409,11 +1422,10 @@ function VPara(para, vdoc) {
 */
 VPara.prototype.getFlow = function() {
 	var para  = this.para;
-	var doc   = para.getAnchestor('DocAlley');  // TODO remove
 	var vdoc  = this.vdoc;
-	var item  = doc.parent;
-	var zone  = item.getZone();
-	var width = zone.width - item.imargin.x;
+	var vitem = vdoc.vitem;
+	var zone  = vitem.getZone();
+	var width = zone.width - vitem.imargin.x;
 
 	if (this._flow$ && this._flow$.width === width) return this._flow$;
 
@@ -1853,14 +1865,14 @@ VPara.prototype.getOffsetPoint = function(offset, flowPos$) {
 */
 VPara.prototype.drawCaret = function() {
 	if (shell.caret.entity !== this) throw new Error('Drawing caret for invalid para');
-	var para = this.para;
-	var doc  = para.getAnchestor('DocAlley'); // todo remove
-	var vdoc = this.vdoc;
-	var item = doc.parent;
-	var zone = item.getZone();
+	var para  = this.para;
+	var doc   = para.getAnchestor('DocAlley'); // todo remove
+	var vdoc  = this.vdoc;
+	var vitem = vdoc.vitem;
+	var zone  = vitem.getZone();
 	var caret = shell.caret;
-	var pan = shell.space.fabric.pan;
-	var th = R(vdoc.doc.get('fontsize') * (1 + settings.bottombox));
+	var pan   = shell.space.fabric.pan;
+	var th    = R(vdoc.doc.get('fontsize') * (1 + settings.bottombox));
 
 	caret.pos$ = this.getOffsetPoint(shell.caret.offset, shell.caret);
 
@@ -1974,14 +1986,11 @@ DTree.prototype.pathSelection = function(fabric, border, edge, select, imargin, 
 */
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ,-_/ .
- '  | |- ,-. ,-,-.
- .^ | |  |-' | | |
- `--' `' `-' ' ' '
+ VItem
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- Something in a Space.
+ Something visual in a Space.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Item() {
+function VItem() {
 	// TODO add $
 	this._h6slice = null;
 }
@@ -1989,7 +1998,7 @@ function Item() {
 /**
 | Return the hexagon slice that is the handle
 */
-Item.prototype.getH6Slice = function() {
+VItem.prototype.getH6Slice = function() {
 	var zone = this.getZone();
 
 	if (this._h6slice && this._h6slice.psw.eq(zone.pnw)) return this._h6slice;
@@ -2001,7 +2010,7 @@ Item.prototype.getH6Slice = function() {
 /**
 | Returns if point is within the item menu
 */
-Item.prototype.withinItemMenu = function(p) {
+VItem.prototype.withinItemMenu = function(p) {
 	return this.getH6Slice().within(p);
 }
 
@@ -2009,7 +2018,7 @@ Item.prototype.withinItemMenu = function(p) {
 | Returns the compass direction of the handle if p is on a resizer handle.
 | todo rename
 */
-Item.prototype.checkItemCompass = function(p) {
+VItem.prototype.checkItemCompass = function(p) {
 	var ha = this.handles;
 	var zone = this.getZone();
 
@@ -2043,7 +2052,7 @@ Item.prototype.checkItemCompass = function(p) {
 /**
 | Paths the resize handles.
 */
-Item.prototype.pathResizeHandles = function(fabric, border, edge) {
+VItem.prototype.pathResizeHandles = function(fabric, border, edge) {
 	if (border !== 0) throw new Error('borders unsupported for handles');
 	var ha = this.handles;
 	var zone = this.getZone();
@@ -2103,7 +2112,7 @@ Item.prototype.pathResizeHandles = function(fabric, border, edge) {
 /**
 | Draws the handles of an item (resize, itemmenu)
 */
-Item.prototype.drawHandles = function(fabric) {
+VItem.prototype.drawHandles = function(fabric) {
 	// draws the resize handles
 	fabric.edge(settings.handle.style.edge, this, 'pathResizeHandles');
 
@@ -2115,7 +2124,7 @@ Item.prototype.drawHandles = function(fabric) {
 /**
 | Called when item is removed
 */
-Item.prototype.removed = function() {
+VItem.prototype.removed = function() {
 	// nothing
 }
 
@@ -2185,12 +2194,13 @@ Scrollbar.prototype.paint = function(fabric) {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  An array of paragraph visuals.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function VDoc(doc) {
+function VDoc(doc, vitem) {
 	this.doc = doc;
+	this.vitem = vitem;
 
 	doc.addListener(this);
 
-	// virtual-alley
+	// visual-alley
 	var valley = this.valley = [];
 
 	for (var a = 0; a < doc.length; a++) {
@@ -2284,34 +2294,25 @@ VDoc.prototype.vParaAtPoint = function(p) {
 | zone:  position and size of note.
 | dtree: document tree.
 */
-function Note(master) {
-	Item.call(this);
-	Woods.Note.call(this, master);
-
-	this.vdoc = new VDoc(this.doc);
+function VNote(item) {
+	this.item = item;
+	this.vdoc = new VDoc(item.doc, this);
 	this._fabric = new Fabric();
 	this._fabric$flag = false; // up-to-date-flag
-	this.imargin = Note.imargin;  // todo needed?
+	this.imargin = VNote.imargin;  // todo needed?
 	this.scrollbarY = new Scrollbar(this, null);
 }
-subclass(Note, {Note: Woods.Note, Item: Item});
-
-/**
-| Seeds. Things that can grow on this twig.
-*/
-Note.prototype.seeds = {
-	'DocAlley'  : Woods.DocAlley,
-}
+subclass(VNote, VItem);
 
 /**
 | Default margin for all notes.
 */
-Note.imargin = new Margin(settings.note.imargin);
+VNote.imargin = new Margin(settings.note.imargin);
 
 /**
 | Resize handles to show on notes.
 */
-Note.prototype.handles = {
+VNote.prototype.handles = {
 	n  : true,
 	ne : true,
 	e  : true,
@@ -2321,12 +2322,12 @@ Note.prototype.handles = {
 	w  : true,
 	nw : true,
 }
-Object.freeze(Note.prototype.handles);
+Object.freeze(VNote.prototype.handles);
 
 /**
-| Highlights the  note
+| Highlights the note
 */
-Note.prototype.highlight = function(fabric) {
+VNote.prototype.highlight = function(fabric) {
 	// todo round rects
 	fabric.edge(settings.note.style.highlight, this.zone, 'path');
 }
@@ -2334,7 +2335,7 @@ Note.prototype.highlight = function(fabric) {
 /**
 | Returns the para at point. todo, honor scroll here.
 */
-Note.prototype.vParaAtPoint = function(p, action) {
+VNote.prototype.vParaAtPoint = function(p, action) {
 	// TODO rename imargin to innerMargin
 	if (p.y < this.imargin.n) return null;
 	return this.vdoc.vParaAtPoint(p, action);
@@ -2344,8 +2345,8 @@ Note.prototype.vParaAtPoint = function(p, action) {
 | Checks if this items reacts on an event.
 | Returns transfix code.
 */
-Note.prototype.transfix = function(txe, p, shift, ctrl) {
-	if (!this.zone.within(p)) return false;
+VNote.prototype.transfix = function(txe, p, shift, ctrl) {
+	if (!this.getZone().within(p)) return false;
 
 	switch (txe) {
 	case TXE.HOVER :
@@ -2362,7 +2363,8 @@ Note.prototype.transfix = function(txe, p, shift, ctrl) {
 		shell.redraw = true;
 
 		var sbary = this.scrollbarY;
-		var pr = p.sub(this.zone.pnw);
+		var pnw = this.getZone().pnw;
+		var pr = p.sub(pnw);
 		if (sbary.visible && sbary.zone.within(pr)) {
 			//space.actionScrollY(this, p.y, this.scrollbarY);
 			throw new Error('TODO');
@@ -2376,7 +2378,8 @@ Note.prototype.transfix = function(txe, p, shift, ctrl) {
 		shell.redraw = true;
 
 		// var op = p.sub(this.zone.pnw.w, this.zone.pnw.y - max(0, this.scrollbarY.pos)); TODO
-		var pi = p.sub(this.zone.pnw.x, this.zone.pnw.y);
+		var pnw = this.getZone().pnw;
+		var pi = p.sub(pnw);
 
 		var vpara = this.vParaAtPoint(pi);
 		if (vpara) {
@@ -2407,18 +2410,20 @@ Note.prototype.transfix = function(txe, p, shift, ctrl) {
 | Returns the zone of the item.
 | An ongoing action can modify this to be different than meshmashine data.
 */
-Note.prototype.getZone = function() {
+VNote.prototype.getZone = function() {
+	var item   = this.item;
 	var action = shell.action;
-	if (!action || action.item !== this) return this.zone;
+
+	if (!action || action.item !== this) return item.zone;
 	// TODO cache the last zone
 
 	switch (action.type) {
 	case Action.ITEMDRAG:
-		if (!action.move) return this.zone;
-		return this.zone.add(action.move.x - action.start.x, action.move.y - action.start.y);
+		if (!action.move) return item.zone;
+		return item.zone.add(action.move.x - action.start.x, action.move.y - action.start.y);
 
 	case Action.ITEMRESIZE:
-		if (!action.move) return this.zone;
+		if (!action.move) return item.zone;
 		var ipnw = action.startZone.pnw;
 		var ipse = action.startZone.pse;
 		var dx = action.move.x - action.start.x;
@@ -2462,7 +2467,7 @@ Note.prototype.getZone = function() {
 			break;
 		case 'nw' :
 			pnw = Point.renew(
-				min(ipnw.x + dx, ipse.x - minw), 
+				min(ipnw.x + dx, ipse.x - minw),
 				min(ipnw.y + dy, ipse.y - minh), ipnw, ipse);
 			pse = ipse;
 			break;
@@ -2472,7 +2477,7 @@ Note.prototype.getZone = function() {
 		}
 		return new Rect(pnw, pse);
 	default :
-		return this.zone;
+		return item.zone;
 	}
 }
 
@@ -2482,13 +2487,14 @@ Note.prototype.getZone = function() {
 |
 | TODO this might as well be removed.
 */
-Note.prototype.setZone = function(zone) {
+VNote.prototype.setZone = function(zone) {
+	debug('setZONE');
 	// ensures minimum size
 	if (zone.width < settings.note.minWidth || zone.height < settings.note.minHeight) {
 		log('fail', 'Note under minimum size!');
 	}
-	if (this.zone.eq(zone)) return;
-	meshio.setZone(this, zone);
+	if (this.item.zone.eq(zone)) return;
+	meshio.setZone(this.item, zone);
 
 	// TODO this should happen by MeshIO settings...
 	this._fabric$flag = false;
@@ -2499,7 +2505,7 @@ Note.prototype.setZone = function(zone) {
 /**
 | Returns the notes silhoutte.
 */
-Note.prototype.getSilhoutte = function(zone) {
+VNote.prototype.getSilhoutte = function(zone) {
 	if (!this._silhoutte ||
 		this._silhoutte.width  !== zone.width ||
 		this._silhoutte.height !== zone.height)
@@ -2516,7 +2522,7 @@ Note.prototype.getSilhoutte = function(zone) {
 | Returns the inner zone
 */
 /* TODO unused?
-Note.prototype.getInnerZone = function() {
+VNote.prototype.getInnerZone = function() {
 	return this.getZone().reduce(this.imargin);
 }
 */
@@ -2524,7 +2530,7 @@ Note.prototype.getInnerZone = function() {
 /**
 | Called by subvisuals when they got changed.
 */
-Note.prototype.poke = function() {
+VNote.prototype.poke = function() {
 	this._fabric$flag = false;
 	shell.redraw = true;
 }
@@ -2532,7 +2538,7 @@ Note.prototype.poke = function() {
 /**
 | Actualizes the scrollbar.
 */
-Note.prototype.setScrollbar = function(pos) {
+VNote.prototype.setScrollbar = function(pos) {
 	var sbary = this.scrollbarY;
 	if (!sbary.visible) return;
 	sbary.max = this.dtree.height;
@@ -2562,9 +2568,8 @@ Note.prototype.setScrollbar = function(pos) {
 | fabric: to draw upon.
 | selection: current selection to highlight.
 */
-Note.prototype.draw = function(fabric) {
-	var f  = this._fabric;
-
+VNote.prototype.draw = function(fabric) {
+	var f    = this._fabric;
 	var zone = this.getZone();
 
 	// no buffer hit?
@@ -2646,7 +2651,7 @@ function Label(id, zone, dtree) {
 	this._fabric$flag = false;
 	if (typeof(this.zone.pse.x) === 'undefined') throw new Error('Invalid label'); // todo remove
 }
-subclass(Label, Item);
+subclass(Label, VItem);
 
 /**
 | Default margin for all labels.
@@ -2858,7 +2863,7 @@ function Relation(id, i1id, i2id, textZone, dtree) {
 	//System.repository.addOnlook(this.id, this.i1id);  TODO
 	//System.repository.addOnlook(this.id, this.i2id);
 }
-subclass(Relation, Item);
+subclass(Relation, VItem);
 
 /**
 | Default margin for all relations.

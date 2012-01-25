@@ -153,6 +153,13 @@ Stem.prototype.toJSON = function() {
 }
 
 /**
+| Used to loop through all non-alley children.
+*/
+Stem.prototype.loop = function() {
+	return this._twigs;
+}
+
+/**
 | Grows a new subnode
 |
 | TODO remove and replace by getNewKey()
