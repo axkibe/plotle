@@ -1025,20 +1025,20 @@ Space.prototype.draw = function() {
 Space.prototype.setFocus = function(item) {
 	if (this.focus === item) return;
 	this.focus = item;
-	if (item === null) return;
 
-	meshio.moveToTop(this, item);
-
-	/* TODO XXX
-	var caret = system.editor.caret;
+	var caret = shell.caret;
 	if (item) {
-		caret.set(item, item.dtree.first.first, 0);
+		// caret.set(item.doc.get(0), 0);
+		debug('TODO CARET:SET');
 		caret.show();
 	} else {
 		caret.hide();
-		caret.set(null, null, null);
+		caret.set(null);
 	}
-	*/
+
+	if (item === null) return;
+
+	meshio.moveToTop(this, item);
 }
 
 /**
@@ -1340,8 +1340,8 @@ Space.prototype.mousedown = function(p, shift, ctrl) {
 		if (!im) break; 
 		switch(md) {
 		case 'n': // remove
+			meshio.removeItem(this, this.focus);
 			this.setFocus(null);
-			meshio.removeItem(this.focus);
 			break;
 		}
 		shell.redraw = true;
@@ -3280,7 +3280,7 @@ MeshIO.prototype.setZone = function(item, zone) {
 */
 MeshIO.prototype.moveToTop = function(space, item) {
 	var path = new Path(space);
-	path.set(path.length, 'z');
+	path.push('z');
 	var key = item.getOwnKey();
 	var at1 = space.z.indexOf(key);
 
@@ -3329,6 +3329,30 @@ MeshIO.prototype.insertText = function(item, offset, text) {
 /**
 | Removes an item.
 */
-MeshIO.prototype.removeItem = function(item) {
-	debug('TODO');
+MeshIO.prototype.removeItem = function(space, item) {
+	var path = new Path(space);
+	path.push('z');
+	var key = item.getOwnKey();
+	var at1 = space.z.indexOf(key);
+
+	// remove from z-index
+	this.mm.alter(-1,
+		new Signature({
+			path: path,
+			at1: at1,
+		}),
+		new Signature({
+			proc: 'arrange',
+		})
+	);
+
+	// remove from doc alley
+	this.mm.alter(-1,
+		new Signature({
+			val: null,
+		}),
+		new Signature({
+			path: new Path(item),
+		})
+	);
 }
