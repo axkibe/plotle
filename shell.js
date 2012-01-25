@@ -1384,11 +1384,11 @@ ItemCopse.prototype.seeds = {
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- +++ ViPara +++
+ +++ VPara +++
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  A visual paragraph representation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function ViPara(para, vdoc) {
+function VPara(para, vdoc) {
 	this.para = para;
 
 	// fabric caching
@@ -1407,9 +1407,10 @@ function ViPara(para, vdoc) {
 /**
 | (re)flows the paragraph, positioning all chunks.
 */
-ViPara.prototype.getFlow = function() {
+VPara.prototype.getFlow = function() {
 	var para  = this.para;
-	var doc   = para.getAnchestor('DocAlley');
+	var doc   = para.getAnchestor('DocAlley');  // TODO remove
+	var vdoc  = this.vdoc;
 	var item  = doc.parent;
 	var zone  = item.getZone();
 	var width = zone.width - item.imargin.x;
@@ -1426,13 +1427,13 @@ ViPara.prototype.getFlow = function() {
 	var flow  = this._flow$ = [];
 	var spread = 0;  // width really used.
 
-	var fontsize = doc.fontsize;
+	var fontsize = vdoc.doc.get('fontsize');
 
 	// current x positon, and current x including last tokens width
 	var x = 0, xw = 0;
 
 	var y = fontsize;
-	Measure.font = doc.getFont();
+	Measure.font = vdoc.getFont();
 	var space = Measure.width(' ');
 	var line = 0;
 	flow[line] = { a: [], y: y, o: 0 };
@@ -1455,8 +1456,8 @@ ViPara.prototype.getFlow = function() {
 				// soft break
 				if (spread < xw) spread = xw;
 				x = 0; xw = x + w + space;
-				//y += R(doc.fontsize * (dtree.pre ? 1 : 1 + settings.bottombox));
-				y += R(doc.fontsize * (1 + settings.bottombox));
+				//y += R(vdoc.fontsize * (dtree.pre ? 1 : 1 + settings.bottombox));
+				y += R(vdoc.doc.get('fontsize') * (1 + settings.bottombox));
 				line++;
 				flow[line] = {a: [], y: y, o: ca.index};
 			} else {
@@ -1487,7 +1488,7 @@ ViPara.prototype.getFlow = function() {
 | point: the point to look for
 | hit: if set ... TODO
 */
-ViPara.prototype.getPointOffset = function(point, hit) {
+VPara.prototype.getPointOffset = function(point, hit) {
 	var flow = this.getFlow();
 	var para = this.para;
 	var doc  = para.getAnchestor('DocAlley');
@@ -1509,7 +1510,7 @@ ViPara.prototype.getPointOffset = function(point, hit) {
 |
 | hit: todo
 */
-ViPara.prototype.getLineXOffset = function(line, x, hit) {
+VPara.prototype.getLineXOffset = function(line, x, hit) {
 	var flow = this.getFlow();
 	var fline = flow[line];
 	var ftoken;
@@ -1537,7 +1538,7 @@ ViPara.prototype.getLineXOffset = function(line, x, hit) {
 /**
 | Text has been inputted.
 */
-ViPara.prototype.input = function(text) {
+VPara.prototype.input = function(text) {
 	if (shell.caret.entity !== this) throw new Error('Invalid caret on input');
 	var para = this.para;
 	meshio.insertText(para, shell.caret.offset, text);
@@ -1546,7 +1547,7 @@ ViPara.prototype.input = function(text) {
 /**
 | Handles a special key
 */
-ViPara.prototype.specialKey = function(keycode, shift, ctrl) {
+VPara.prototype.specialKey = function(keycode, shift, ctrl) {
 	if (shell.caret.entity !== this) throw new Error('Invalid caret on specialKey');
 
 	var para = this.para;
@@ -1647,9 +1648,9 @@ ViPara.prototype.specialKey = function(keycode, shift, ctrl) {
 		} else {
 			var vdoc = this.vdoc;
 			var key = para.getOwnKey();
-			if (vdoc.vAlley[key] !== this) throw new Error('vdoc.vAlley inconsistency');
+			if (vdoc.valley[key] !== this) throw new Error('vdoc.valley inconsistency');
 			if (key > 0) {
-				var ve = vdoc.vAlley[key - 1];
+				var ve = vdoc.valley[key - 1];
 				caret.set(ve, ve.para.get('text').length);
 			}
 		}
@@ -1667,9 +1668,9 @@ ViPara.prototype.specialKey = function(keycode, shift, ctrl) {
 			// goto prev para
 			var vdoc = this.vdoc;
 			var key  = para.getOwnKey();
-			if (vdoc.vAlley[key] !== this) throw new Error('vdoc.vAlley inconsistency');
+			if (vdoc.valley[key] !== this) throw new Error('vdoc.valley inconsistency');
 			if (key > 0) {
-				var ve = vdoc.vAlley[key - 1];
+				var ve = vdoc.valley[key - 1];
 				var offset = ve.getLineXOffset(ve.getFlow().length - 1, x);
 				caret.set(ve, offset, x);
 			}
@@ -1681,9 +1682,9 @@ ViPara.prototype.specialKey = function(keycode, shift, ctrl) {
 		} else {
 			var vdoc = this.vdoc;
 			var key = para.getOwnKey();
-			if (vdoc.vAlley[key] !== this) throw new Error('vdoc.vAlley inconsistency');
-			if (key < vdoc.vAlley.length - 1) {
-				var ve = vdoc.vAlley[key + 1];
+			if (vdoc.valley[key] !== this) throw new Error('vdoc.valley inconsistency');
+			if (key < vdoc.valley.length - 1) {
+				var ve = vdoc.valley[key + 1];
 				caret.set(ve, 0);
 			}
 		}
@@ -1701,9 +1702,9 @@ ViPara.prototype.specialKey = function(keycode, shift, ctrl) {
 			// goto next para
 			var vdoc = this.vdoc;
 			var key = para.getOwnKey();
-			if (vdoc.vAlley[key] !== this) throw new Error('vdoc.vAlley inconsistency');
-			if (key < vdoc.vAlley.length - 1) {
-				var ve = vdoc.vAlley[key + 1];
+			if (vdoc.valley[key] !== this) throw new Error('vdoc.valley inconsistency');
+			if (key < vdoc.valley.length - 1) {
+				var ve = vdoc.valley[key + 1];
 				var offset = ve.getLineXOffset(0, x);
 				caret.set(ve, offset, x);
 			}
@@ -1755,12 +1756,13 @@ ViPara.prototype.specialKey = function(keycode, shift, ctrl) {
 /**
 | Draws the paragraph in its cache and returns it.
 */
-ViPara.prototype.getFabric = function() {
+VPara.prototype.getFabric = function() {
 	var para   = this.para;
 	var flow   = this.getFlow();
 	var width  = flow.width;
+	var vdoc   = this.vdoc;
 	var doc    = para.getAnchestor('DocAlley');
-	var height = flow.height + R(doc.fontsize * settings.bottombox);
+	var height = flow.height + R(vdoc.doc.get('fontsize') * settings.bottombox);
 
 	// cache hit?
 	if (this._fabric$flag && this._fabric$width === width && this._fabric$height === height) {
@@ -1771,7 +1773,7 @@ ViPara.prototype.getFabric = function() {
 
 	// TODO: work out exact height for text below baseline
 	fabric.attune(width, height);
-	fabric.fontStyle(doc.getFont(), 'black', 'start', 'alphabetic');
+	fabric.fontStyle(vdoc.getFont(), 'black', 'start', 'alphabetic');
 
 	// draws text into the fabric
 	for(var a = 0, flowLen = flow.length; a < flowLen; a++) {
@@ -1791,7 +1793,7 @@ ViPara.prototype.getFabric = function() {
 /**
 | Drops the cache (cause something has changed)
 */
-ViPara.prototype.event = function(event, p1, p2, p3) {
+VPara.prototype.event = function(event, p1, p2, p3) {
 	var para = this.para;
 	var doc  = para.getAnchestor('DocAlley'); //XXX replace with vdoc.
 	doc.parent.poke();
@@ -1808,7 +1810,7 @@ ViPara.prototype.event = function(event, p1, p2, p3) {
 | flowPos$: if set, writes flow$line and flow$token to
 |           the flow position used.
 */
-ViPara.prototype.getOffsetPoint = function(offset, flowPos$) {
+VPara.prototype.getOffsetPoint = function(offset, flowPos$) {
 	// TODO cache position
 	var para = this.para;
 	var doc  = para.getAnchestor('DocAlley');
@@ -1849,15 +1851,16 @@ ViPara.prototype.getOffsetPoint = function(offset, flowPos$) {
 /**
 | Draws the caret if its in this paragraph.
 */
-ViPara.prototype.drawCaret = function() {
+VPara.prototype.drawCaret = function() {
 	if (shell.caret.entity !== this) throw new Error('Drawing caret for invalid para');
 	var para = this.para;
-	var doc  = para.getAnchestor('DocAlley');
+	var doc  = para.getAnchestor('DocAlley'); // todo remove
+	var vdoc = this.vdoc;
 	var item = doc.parent;
 	var zone = item.getZone();
 	var caret = shell.caret;
 	var pan = shell.space.fabric.pan;
-	var th = R(doc.fontsize * (1 + settings.bottombox));
+	var th = R(vdoc.doc.get('fontsize') * (1 + settings.bottombox));
 
 	caret.pos$ = this.getOffsetPoint(shell.caret.offset, shell.caret);
 
@@ -2178,46 +2181,40 @@ Scrollbar.prototype.paint = function(fabric) {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ++ DocAlley ++
+ ++ VDoc ++
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- An array of paragraphs
+ An array of paragraph visuals.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function DocAlley(master) {
-    Woods.DocAlley.call(this, master);
-	this.addListener(this); // TODO
-	var valley = this.vAlley = [];
+function VDoc(doc) {
+	this.doc = doc;
 
-	for (var a = 0; a < this.length; a++) {
-		valley[a] = new ViPara(this.get(a), this);
+	doc.addListener(this);
+
+	// virtual-alley
+	var valley = this.valley = [];
+
+	for (var a = 0; a < doc.length; a++) {
+		valley[a] = new VPara(doc.get(a), this);
 	}
 }
-subclass(DocAlley, Woods.DocAlley);
 
 /**
-| Seeds. Things that can grow on this twig.
+| The meshmashine issued an event.
 */
-DocAlley.prototype.seeds = {
-    'Para'    : Woods.Para,
-	'Number'  : true,
-};
-
-/**
-| TODO
-*/
-DocAlley.prototype.event = function(event, p1, p2, p3) {
+VDoc.prototype.event = function(event, p1, p2, p3) {
 	debug('DocAlley:event', event, p1, p2, p3);
 }
 
 /**
 | Draws the document alley on a fabric.
+|
 | fabric: to draw upon.
-| select:  selection object (for highlighting the selection)
 | imargin: distance of text to edge
 | scrollp: scroll position
 */
-DocAlley.prototype.draw = function(fabric, imargin, scrollp) {
+VDoc.prototype.draw = function(fabric, imargin, scrollp) {
 	// TODO <pre>
-	var paraSep = half(this.fontsize);
+	var paraSep = half(this.doc.get('fontsize'));
 
 	// paints the selection
 	/* TODO
@@ -2234,7 +2231,7 @@ DocAlley.prototype.draw = function(fabric, imargin, scrollp) {
 
 	var y = imargin.n;
 
-	var valley = this.vAlley;
+	var valley = this.valley;
 	// draws the paragraphs
 	for (var a = 0; a < valley.length; a++) {
 		var vpara = valley[a];
@@ -2250,15 +2247,15 @@ DocAlley.prototype.draw = function(fabric, imargin, scrollp) {
 /**
 | Returns the default font of the dtree.
 */
-DocAlley.prototype.getFont = function() {
-	return this.fontsize + 'px ' + settings.defaultFont;
+VDoc.prototype.getFont = function() {
+	return this.doc.get('fontsize') + 'px ' + settings.defaultFont;
 }
 
 /**
 | Returns the paragraph at point
 */
-DocAlley.prototype.vParaAtPoint = function(p) {
-	var valley = this.vAlley;
+VDoc.prototype.vParaAtPoint = function(p) {
+	var valley = this.valley;
 	for(var a = 0; a < valley.length; a++) {
 		var vpara = valley[a];
 		var flow = vpara.getFlow();
@@ -2291,6 +2288,7 @@ function Note(master) {
 	Item.call(this);
 	Woods.Note.call(this, master);
 
+	this.vdoc = new VDoc(this.doc);
 	this._fabric = new Fabric();
 	this._fabric$flag = false; // up-to-date-flag
 	this.imargin = Note.imargin;  // todo needed?
@@ -2302,7 +2300,7 @@ subclass(Note, {Note: Woods.Note, Item: Item});
 | Seeds. Things that can grow on this twig.
 */
 Note.prototype.seeds = {
-	'DocAlley'  : DocAlley,
+	'DocAlley'  : Woods.DocAlley,
 }
 
 /**
@@ -2339,7 +2337,7 @@ Note.prototype.highlight = function(fabric) {
 Note.prototype.vParaAtPoint = function(p, action) {
 	// TODO rename imargin to innerMargin
 	if (p.y < this.imargin.n) return null;
-	return this.doc.vParaAtPoint(p, action);
+	return this.vdoc.vParaAtPoint(p, action);
 }
 
 /**
@@ -2582,7 +2580,6 @@ Note.prototype.draw = function(fabric) {
 
 		f.fill(settings.note.style.fill, silhoutte, 'path');
 
-		var doc = this.doc;
 //		doc.flowWidth = this.iwidth; TODOX
 
 		// calculates if a scrollbar is needed
@@ -2602,7 +2599,7 @@ Note.prototype.draw = function(fabric) {
 
 		// paints selection and text
 		//dtree.draw(f, selection, this.imargin, sbary.visible ? sbary.pos : 0);
-		doc.draw(f, this.imargin, Point.zero); // TODO scrollp
+		this.vdoc.draw(f, this.imargin, Point.zero); // TODO scrollp
 
 		/*
 		// paints the scrollbar
