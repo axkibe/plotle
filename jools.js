@@ -146,15 +146,6 @@ function fixateNoEnum(obj, key, value) {
 }
 
 /**
-| Turns an object to it JSON representation (as objects yet, not string)
-*/
-function jsonfy(obj) {
-	if (typeof(obj) === 'undefined' || obj === null) return obj;
-	if (obj.toJSON) obj = obj.toJSON();
-	return obj;
-}
-
-/**
 | Pushes a 2-decimal number on an array.
 */
 function _pushpad(a, n, s) {
@@ -565,7 +556,6 @@ Jools = {
 	isInteger          : isInteger,
 	isPath             : isPath,
 	isString           : isString,
-	jsonfy             : jsonfy,
 	log                : log,
 	reject             : reject,
 	subclass           : subclass,

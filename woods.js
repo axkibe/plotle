@@ -41,7 +41,6 @@ var isInteger = Jools.isInteger;
 var isString  = Jools.isString;
 var isPath    = Jools.isPath;
 var log       = Jools.log;
-var jsonfy    = Jools.jsonfy;
 var reject    = Jools.reject;
 var subclass  = Jools.subclass;
 
@@ -53,11 +52,11 @@ var subclass  = Jools.subclass;
 function Stem(twigs, master) {
 	if (master && master._twigs) master = master._twigs;
 	this._twigs = twigs;
+
 	if (Woods.cogging) {
 		this.parent = null;
 		this.key$ = null;
-	}
-	if (Woods.cogging) {
+
 		for (var k in twigs) {
 			if (k === 'type' || k === 'alley') continue;
 			switch (twigs.constructor) {
@@ -68,8 +67,6 @@ function Stem(twigs, master) {
 			twigs[k].parent = this;
 			twigs[k].key$ = k;
 		}
-
-		this.listeners = null;
 	}
 	for (var k in master) {
 		if (k === 'type' || k === 'alley') continue;
@@ -104,7 +101,6 @@ Stem.prototype.mmSet = function(path, val, a0, al, oplace) {
 	if (oplace) throw new Error('out of place not yet supported');
 	if (isString(path)) { // direct set
 		this._twigs[path] = this._sprout(path, val, this);
-		if (this.listeners) this._tellSetVal('setval', path, val);
 		return;
 	}
 
@@ -114,12 +110,10 @@ Stem.prototype.mmSet = function(path, val, a0, al, oplace) {
 	var pa0 = path.get(a0);
 	if (a0 + 1 === al) {
 		this._twigs[pa0] = this._sprout(pa0, val, this);
-		if (this.listeners) this._tellSetVal(pa0, val);
 	} else {
 		var twig = this._twigs[pa0];
 		if (!twig || !twig.mmSet) throw reject('path goes nowhere');
 		twig.mmSet(path, val, a0 + 1, al);
-		if (this.listeners) this._tellSetSub(path, a0, al, val);
 	}
 }
 
@@ -168,7 +162,7 @@ Stem.prototype.grow = function(path) {
 	if (!this._grow) throw new Error('_grow not set');
 
 	while (is(this.get('' + this._grow))) this._grow++;
-	path.mmSet(-1, '' + this._grow);
+	path.set(-1, '' + this._grow);
 }
 
 /**
@@ -220,15 +214,17 @@ Stem.prototype.getAnchestor = function(type) {
 
 	var n = this;
 	while (n && n.type !== type) { n = n.parent; }
-	if (!n) throw new Error('anchestor not there: '+type);
+	if (!n) {
+		throw new Error('anchestor not there: '+type);
+	}
 	return n;
 }
 
 /**
 | Adds a listener for set events.
 */
-Stem.prototype.addListener = function(type, listener) {
-	if (!this.listen) this.listen = {};
+Stem.prototype.addListener = function(listener) {
+	if (!this.listen) this.listen = [];
 	var listen = this.listen;
 	if (listen.indexOf(listener) !== -1) return false;
 	listen.push(listener);
@@ -238,7 +234,7 @@ Stem.prototype.addListener = function(type, listener) {
 /**
 | Removes a listener.
 */
-Stem.prototype.removeListener = function(type, listener) {
+Stem.prototype.removeListener = function(listener) {
 	var listen = this.listen;
 	if (!listen) return false;
 	var idx = listen.index(listener);
@@ -345,12 +341,10 @@ StemAlley.prototype.mmSet = function(path, val, a0, al, oplace) {
 
 	if (path.constructor === Number) { // direct alley?
 		this._twigs.alley[path] = this._sprout(path, val, this);
-		if (this.listeners) this._tellSetVal('setval', path, val);
 		return;
 	}
 	if (!(path instanceof Path)) { // direct copse? TODO only strings
 		this._twigs[path] = this._sprout(path, val, this);
-		if (this.listeners) this._tellSetVal('setval', path, val);
 		return;
 	}
 
@@ -361,14 +355,12 @@ StemAlley.prototype.mmSet = function(path, val, a0, al, oplace) {
 		// set for this
 		var base = pa0.constructor === Number ? this._twigs.alley : this._twigs;
 		base[pa0] = this._sprout(pa0, val, this);
-		if (this.listeners) this._tellSetVal('setval', pa0, val);
 	} else {
 		// set a sub
 		var base = pa0.constructor === Number ? this._twigs.alley : this._twigs;
 		var twig = base[pa0];
 		if (!twig || !twig.mmSet) throw reject('path goes nowhere');
 		twig.mmSet(path, val, a0 + 1, al);
-		if (this.listeners) this._tellSetVal('setsub', path, a0, al, val);
 	}
 }
 
@@ -788,7 +780,7 @@ Point.prototype.mmSet = function(path, val, a0, al, oplace) {
 Point.prototype.get = function(path, a0, al) {
 	if (isString(path)) return this[path];
 	if (!isPath(path)) throw new Error('get path no string or path');
-	
+
 	a0 = path.fit(a0, false);
 	al = path.fit(al, true);
 	var twig = this[path.get(a0)];

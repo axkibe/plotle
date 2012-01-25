@@ -62,7 +62,6 @@ var is         = Jools.is;
 var isnon      = Jools.isnon;
 var isString   = Jools.isString;
 var isInteger  = Jools.isInteger;
-var jsonfy     = Jools.jsonfy;
 var fixate     = Jools.fixate;
 var reject     = Jools.reject;
 
@@ -181,7 +180,7 @@ function alter(meshtree, alternation, backward, tell) {
 		ppre.mmSet('text', text.substring(0, src.at1));
 
 		pivotNode.splice(sig_splice + 1, 0, pnew);
-		
+
 		if (tell && ppre.listen) ppre.tell('split', src.at1, pnew);
 		break;
 	case 'join' :
@@ -246,7 +245,6 @@ function alter(meshtree, alternation, backward, tell) {
 
 		var str = meshtree.get(trg.path);
 		check(isString(str), cm, 'trg.path signates no string');
-		var parent = meshtree.get(trg.path, 0, -1);
 
 		trg.attune(str, 'trg.path');
 
@@ -260,7 +258,10 @@ function alter(meshtree, alternation, backward, tell) {
 		var nstr = str.substring(0, trg.at1) + src.val + str.substring(trg.at1);
 		meshtree.mmSet(trg.path, nstr);
 
-		if (tell && node.listen) node.tell('insert', trg.at1, src.val);
+		if (tell) {
+			var parent = meshtree.get(trg.path, 0, -1);
+			if (parent.listen) parent.tell('insert', trg.at1, src.val);
+		}
 		break;
 	case 'remove':
 		// a part of a string item is removed.

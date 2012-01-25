@@ -593,16 +593,6 @@ function Point(a1, a2) {
 Point.zero = new Point(0, 0);
 
 /**
-| Creates a point from json.
-*/
-Point.jnew = function(js) {
-	if (typeof(js.x) !== 'number' || typeof(js.y) !== 'number') {
-		throw new Error('JSON malformed point.');
-	}
-	return new Point(js);
-}
-
-/**
 | Creates a new point.
 | However it will look through a list of points to see if
 | this point has already this x/y to save creation of yet
@@ -675,13 +665,6 @@ function Rect(pnw, pse) {
 	fixate(this, 'pse',    pse);
 	fixateNoEnum(this, 'width',  pse.x - pnw.x);
 	fixateNoEnum(this, 'height', pse.y - pnw.y);
-}
-
-/**
-| Creates a point from json
-*/
-Rect.jnew = function(js) {
-	return new Rect(Point.jnew(js.pnw), Point.jnew(js.pse));
 }
 
 /**
@@ -851,29 +834,29 @@ lazyFixate(Rect.prototype, 'pc', function() {
 |
 | Margin(n, e, s, w)
 |
-| n: north margin
+| n: master or north margin
 | e: east margin
 | s: south margin
 | w: west margin
 */
-function Margin(n, e, s, w) {
-	fixate(this, 'n', n);
-	fixate(this, 'e', e);
-	fixate(this, 's', s);
-	fixate(this, 'w', w);
+function Margin(m, e, s, w) {
+	if (typeof(m) === 'object') {
+		fixate(this, 'n', m.n);
+		fixate(this, 'e', m.e);
+		fixate(this, 's', m.s);
+		fixate(this, 'w', m.w);
+	} else {
+		fixate(this, 'n', m);
+		fixate(this, 'e', e);
+		fixate(this, 's', s);
+		fixate(this, 'w', w);
+	}
 }
 
 /**
 | A margin with all distances 0.
 */
 Margin.zero = new Margin(0, 0, 0, 0);
-
-/**
-| Creates a margin from json.
-*/
-Margin.jnew = function(js) {
-	return new Margin(js.n, js.e, js.s, js.w);
-}
 
 /**
 | Returns a json object for this margin

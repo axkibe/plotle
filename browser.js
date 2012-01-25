@@ -128,7 +128,7 @@ function System(FrontFace) {
 		if (ctrl) {
 			switch(keyCode) {
 			case 65 : // ctrl+a
-				this.frontface.specialKey(keyCode, shift, ctrl);
+				this.shell.specialKey(keyCode, shift, ctrl);
 				return false;
 			default :
 				return true;
@@ -144,7 +144,7 @@ function System(FrontFace) {
 		case 39 : // right
 		case 40 : // down
 		case 46 : // del
-			this.frontface.specialKey(keyCode, shift, ctrl);
+			this.shell.specialKey(keyCode, shift, ctrl);
 			return false;
 		default :
 			return true;
@@ -192,10 +192,7 @@ function System(FrontFace) {
 			return;
 		}
 		hiddenInput.value = inputval = '';
-		if (!this) {
-			debug('WAAASS?');
-		}
-		this.frontface.input(text);
+		this.shell.input(text);
 	}
 
 	/**
@@ -205,7 +202,7 @@ function System(FrontFace) {
 		// hackish, also look into the hidden input field,
 		// maybe the user pasted something using the browser menu.
 		testinput.call(this);
-		this.frontface.blink();
+		this.shell.blink();
 	}
 
 	/**
@@ -245,14 +242,14 @@ function System(FrontFace) {
 	| Hidden input lost focus.
 	*/
 	function onblur(event) {
-		this.frontface.systemBlur();
+		this.shell.systemBlur();
 	}
 
 	/**
 	| Hidden input got focus.
 	*/
 	function onfocus(event) {
-		this.frontface.systemFocus();
+		this.shell.systemFocus();
 	}
 
 	/**
@@ -261,7 +258,7 @@ function System(FrontFace) {
 	function onresize(event) {
 		canvas.width  = window.innerWidth - 1;
 		canvas.height = window.innerHeight - 1;
-		this.frontface.redraw();
+		this.shell.redraw();
 	}
 
 	/**
@@ -272,7 +269,7 @@ function System(FrontFace) {
 
 		switch(mst) {
 		case MST.NONE :
-			this.frontface.mousehover(p, event.shiftKey, event.ctrlKey || event.metaKey);
+			this.shell.mousehover(p, event.shiftKey, event.ctrlKey || event.metaKey);
 			return true;
 		case MST.ATWEEN :
 			var dragbox = settings.dragbox;
@@ -281,9 +278,9 @@ function System(FrontFace) {
 				clearTimeout(atweenTimer);
 				atweenTimer = null;
 				mst = MST.DRAG;
-				this.frontface.dragstart(msp, event.shiftKey, event.ctrlKey || event.metaKey);
+				this.shell.dragstart(msp, event.shiftKey, event.ctrlKey || event.metaKey);
 				if (!p.eq(msp)) {
-					this.frontface.dragmove(p, event.shiftKey, event.ctrlKey || event.metaKey);
+					this.shell.dragmove(p, event.shiftKey, event.ctrlKey || event.metaKey);
 				}
 				captureEvents();
 			} else {
@@ -294,7 +291,7 @@ function System(FrontFace) {
 			}
 			return true;
 		case MST.DRAG :
-			this.frontface.dragmove(p, event.shiftKey, event.ctrlKey || event.metaKey);
+			this.shell.dragmove(p, event.shiftKey, event.ctrlKey || event.metaKey);
 			return true;
 		default :
 			throw new Error('invalid mst');
@@ -309,7 +306,7 @@ function System(FrontFace) {
 		hiddenInput.focus();
 		var p = new Point (event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop);
 		// asks the face if it forces this to be a drag or click, or yet unknown.
-		mst = this.frontface.mousedown(p, event.shiftKey, event.ctrlKey || event.metaKey);
+		mst = this.shell.mousedown(p, event.shiftKey, event.ctrlKey || event.metaKey);
 		switch(mst) {
 		case MST.ATWEEN :
 			msp = mmp = p;
@@ -340,11 +337,11 @@ function System(FrontFace) {
 			// not having moved out of 'dragbox'.
 			clearTimeout(atweenTimer);
 			atweenTimer = null;
-			this.frontface.click(p, event.shiftKey, event.ctrlKey || event.metaKey);
+			this.shell.click(p, event.shiftKey, event.ctrlKey || event.metaKey);
 			mst = MST.NONE;
 			return false;
 		case MST.DRAG :
-			this.frontface.dragstop(p, event.shiftKey, event.ctrlKey || event.metaKey);
+			this.shell.dragstop(p, event.shiftKey, event.ctrlKey || event.metaKey);
 			mst = MST.NONE;
 			return false;
 		}
@@ -356,7 +353,7 @@ function System(FrontFace) {
 	function onmousewheel(event) {
 		var wheel = event.wheelDelta || event.detail;
 		wheel = wheel > 0 ? 1 : -1;
-		this.frontface.mousewheel(wheel);
+		this.shell.mousewheel(wheel);
 	}
 
 	/**
@@ -369,9 +366,9 @@ function System(FrontFace) {
 		}
 		mst = MST.DRAG;
 		atweenTimer = null;
-		this.frontface.dragstart(msp, mms, mmc);
+		this.shell.dragstart(msp, mms, mmc);
 		if (!mmp.eq(msp)) {
-			this.frontface.dragmove(mmp, mms, mmc);
+			this.shell.dragmove(mmp, mms, mmc);
 		}
 	}
 
@@ -437,9 +434,9 @@ function System(FrontFace) {
 window.onload = function() {
 	makeCatcher(this, function() {
 		system    = new System();
-		system.frontface = new FrontFace(system.fabric);
+		system.shell = new Shell(system.fabric);
 		meshio    = new MeshIO();
-		system.frontface.redraw();
+		system.shell.redraw();
 	})();
 }
 
