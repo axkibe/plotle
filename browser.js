@@ -192,6 +192,9 @@ function System(FrontFace) {
 			return;
 		}
 		hiddenInput.value = inputval = '';
+		if (!this) {
+			debug('WAAASS?');
+		}
 		this.frontface.input(text);
 	}
 
@@ -201,7 +204,7 @@ function System(FrontFace) {
 	function blink() {
 		// hackish, also look into the hidden input field,
 		// maybe the user pasted something using the browser menu.
-		testinput();
+		testinput.call(this);
 		this.frontface.blink();
 	}
 
@@ -225,7 +228,7 @@ function System(FrontFace) {
 			return specialKey.call(this, ek, event.shiftKey, event.ctrlKey || event.metaKey);
 		}
 		lastSpecialKey = -1;
-		testinput();
+		testinput.call(this);
 		setTimeout('system.ontestinput();', 0);
 		return true;
 	}
@@ -234,7 +237,7 @@ function System(FrontFace) {
 	| Hidden input key up.
 	*/
 	function onkeyup(event) {
-		testinput();
+		testinput.call(this);
 		return true;
 	}
 

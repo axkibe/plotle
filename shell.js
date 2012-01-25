@@ -387,10 +387,10 @@ subclass(Caret, Marker);
 
 /**
 | If true uses getImageData() to cache the image without the caret to achieve blinking.
-| Without it uses drawImage() for the whole canvas. On firefox this is paradoxically way 
+| Without it uses drawImage() for the whole canvas. On firefox this is paradoxically way
 | faster.
 */
-Caret.useGetImageData = true;
+Caret.useGetImageData = false;
 
 /**
 | Shows the caret or resets the blink timer if already shown
@@ -820,9 +820,13 @@ FrontFace.prototype.specialKey = function(keyCode, shift, ctrl) {
 | User entered normal text (one character or more).
 */
 FrontFace.prototype.input = function(text) {
-	throw new Error('TODO');
-	//system.editor.input(this.focus, text);
-	//if (redraw) this.redraw();
+	var bubble = this.bubble.init();
+
+	if (this.caret.entity !== null) {
+		this.caret.entity.input(this, bubble, text);
+	}
+
+	if (bubble.redraw) this.redraw();
 }
 
 /**
@@ -887,6 +891,7 @@ function Hexmenu(pc, style, labels) {
 
 /**
 | Draws the hexmenu.
+| TODO: give face
 */
 Hexmenu.prototype.draw = function() {
 	var f = system.fabric; // TODO! <- don't
@@ -917,168 +922,6 @@ Hexmenu.prototype.draw = function() {
 Hexmenu.prototype.getMousepos = function(p) {
 	return this.mousepos = this.hflower.within(p);
 }
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-.-,--.   .
- `\__  ,-| ,-. ,-. ,-,-. ,-. ,-. . .
-  /    | | | | |-' | | | |-' | | | |
- '`--' `-^ `-| `-' ' ' ' `-' ' ' `-^
-~ ~ ~ ~ ~ ~ ,|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-            `'
-  The menu at the screen edge.
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-/**
-| Constructor.
-*/
-/*
-function Edgemenu() {
-	// section mouse hovers over/clicks
-	this.mousepos = -1;
-
-	// widths of buttons (meassured on bottom)
-	this.buttonWidths = [100, 150, 100];
-
-	// label texts
-	this.labels = ['Export', 'Meshcraft Demospace', 'Import'];
-
-	// total width
-	var width = 0;
-	for(var b in this.buttonWidths) {
-		width += this.buttonWidths[b];
-	}
-	this.width = width;
-
-	// total height
-	this.height = 30;
-}
-*/
-
-/**
-| Makes the edgemenu's path.
-|
-| fabric : to path upon
-| border : additional inward distance
-| section:
-|   -2 structure frame
-|   -1 outer frame
-|   >0 buttons
-*/
-/*
-Edgemenu.prototype.path = function(fabric, border, edge, section) {
-	var b =  border;
-	// width half
-	var w2 = half(this.width);
-	// x in the middle
-	var xm = half(this.pnw.x + this.pse.x);
-	// edge width (diagonal extra)
-	var ew  = R((this.pse.y - this.pnw.y) * tan30);
-
-	fabric.beginPath();
-	if (section === -2) {
-		// structure frame
-		fabric.moveTo(this.pnw.x + b,      this.pse.y,     edge);
-		fabric.lineTo(this.pnw.x + ew + b, this.pnw.y + b, edge);
-		fabric.lineTo(this.pse.x - ew - b, this.pnw.y + b, edge);
-		fabric.lineTo(this.pse.x - b,      this.pse.y,     edge);
-
-		// x-position of button
-		var bx = this.pnw.x;
-		for(var b = 0; b < this.buttonWidths.length - 1; b++) {
-			bx += this.buttonWidths[b];
-			fabric.moveTo(bx, this.pse.y);
-			if (b % 2 === 0) {
-				fabric.lineTo(bx - ew, this.pnw.y, edge);
-			} else {
-				fabric.lineTo(bx + ew, this.pnw.y, edge);
-			}
-		}
-	} else if (section === -1) {
-		// outer frame
-		fabric.moveTo(this.pnw.x + b,      this.pse.y,     edge);
-		fabric.lineTo(this.pnw.x + ew + b, this.pnw.y + b, edge);
-		fabric.lineTo(this.pse.x - ew - b, this.pnw.y + b, edge);
-		fabric.lineTo(this.pse.x - b,      this.pse.y,     edge);
-	} else {
-		if (section < 0) throw new Error('invalid section');
-		var bx = this.pnw.x;
-		for(var b = 0; b < section; b++) {
-			bx += this.buttonWidths[b];
-		}
-		fabric.moveTo(bx, this.pse.y);
-		if (section % 2 === 0) {
-			fabric.lineTo(bx + ew, this.pnw.y, edge);
-			bx += this.buttonWidths[section];
-			fabric.lineTo(bx - ew, this.pnw.y, edge);
-			fabric.lineTo(bx,      this.pse.y, edge);
-		} else {
-			fabric.lineTo(bx - ew, this.pnw.y, edge);
-			bx += this.buttonWidths[section];
-			fabric.lineTo(bx + ew, this.pnw.y, edge);
-			fabric.lineTo(bx,      this.pse.y, edge);
-		}
-	}
-}
-*/
-
-/**
-| Draws the edgemenu.
-*/
-/*
-Edgemenu.prototype.draw = function() {
-	var f = System.fabric;
-	var xm  = half(f.width);
-	var w2  = half(this.width);
-
-	this.pnw = Point.renew(xm - w2, f.height - this.height, this.pnw, this.pse);
-	this.pse = Point.renew(xm + w2, f.height, this.pnw, this.pse);
-
-	f.fill(settings.edgemenu.style.fill, this, 'path', -1); // todo combine path-1
-	if (this.mousepos >= 0) {
-		f.fill(settings.edgemenu.style.select, this, 'path', this.mousepos);
-	}
-	f.edge(settings.edgemenu.style.edge, this, 'path', -2);
-
-	f.fontStyle('12px ' + settings.defaultFont, 'black', 'center', 'middle');
-	var bx = this.pnw.x;
-	var my = half(this.pnw.y + this.pse.y);
-	for(var i = 0; i < this.labels.length; i++) {
-		f.fillText(this.labels[i], bx + half(this.buttonWidths[i]), my);
-		bx += this.buttonWidths[i];
-	}
-}
-*/
-
-/**
-| Returns which section the position is at.
-| todo rename
-*/
-/*
-Edgemenu.prototype.getMousepos = function(p) {
-	var f = System.fabric;
-	if (!this.pnw || !this.pse) return this.mousepos = -1;
-	if (p.y < this.pnw.y) return this.mousepos = -1;
-	var mx = half(f.width);  // todo give it pc
-	var ew = R((this.pse.y - this.pnw.y) * tan30); // todo simplify
-	// shortcut name = letters for formula
-	var pymcht6 = (p.y - f.height) * tan30;
-
-	if (p.x - this.pnw.x < -pymcht6) return this.mousepos = -1;
-	if (p.x - this.pse.x >  pymcht6) return this.mousepos = -1;
-	var bx = this.pnw.x;
-	for(var mp = 0; mp < this.buttonWidths.length; mp++) {
-		bx += this.buttonWidths[mp];
-		if (mp % 2 === 0) {
-			if (p.x - bx < pymcht6) return this.mousepos = mp;
-		} else {
-			if (p.x - bx < -pymcht6) return this.mousepos = mp;
-		}
-	}
-	throw new Error('this code should not be reached');
-	return this.mousepos = -1;
-}
-*/
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1546,12 +1389,8 @@ ItemCopse.prototype.seeds = {
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- .-,--.                             .
-  '|__/ ,-. ,-. ,-. ,-. ,-. ,-. ,-. |-.
-  ,|    ,-| |   ,-| | | |   ,-| | | | |
-  `'    `-^ '   `-^ `-| '   `-^ |-' ' '
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ | ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- A paragraph.        `'         '
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ A paragraph.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 function Para(master) {
@@ -1700,9 +1539,19 @@ Para.prototype.getLineXOffset = function(face, line, x, hit) {
 }
 
 /**
+| Text has been inputted.
+*/
+Para.prototype.input = function(face, bubble, text) {
+	if (face.caret.entity !== this) throw new Error('Invalid caret on input');
+	meshio.insertText(this, face.caret.offset, text);
+}
+
+/**
 | Handles a special key
 */
 Para.prototype.specialKey = function(face, bubble, keycode, shift, ctrl) {
+	if (face.caret.entity !== this) throw new Error('Invalid caret on specialKey');
+
 	var redraw = false;
 	var caret  = face.caret;
 	var select = face.selection;
@@ -2015,23 +1864,24 @@ Para.prototype.drawCaret = function(face) {
 
 	//var sy = (it.scrollbarY && it.scrollbarY.visible && it.scrollbarY.pos) || 0; TODO
 
-	/*var cyn = cp.y;
+	var cyn = caret.pos$.y + this.pnw.y;
 	var cys = cyn + th;
+	var cyx = caret.pos$.x + this.pnw.x;
+
 	cyn = min(max(cyn, 0), zone.height);
 	cys = min(max(cys, 0), zone.height);
-
-	if (cyn === cys) return;*/
+	if (cyn === cys) return;
 
 	var cp = new Point(
-		caret.pos$.x + zone.pnw.x + pan.x + this.pnw.x - 1,
-		caret.pos$.y + zone.pnw.y + pan.y + this.pnw.y - th + 2);
+		cyx + zone.pnw.x + pan.x - 1,
+		cyn + zone.pnw.y + pan.y - th + 2);
 
 	face.caret.screenPos$ = cp;
 
 	if (Caret.useGetImageData) {
 		face.caret.save$ = face.fabric.getImageData(cp.x, cp.y, 3, th + 2);
 	} else {
-		// Paradoxically this is often way faster. Especially firefox:
+		// paradoxically this is often way faster, especially on firefox
 		face.caret.save$ = new Fabric(face.fabric.width, face.fabric.height);
 		face.caret.save$.drawImage(face.fabric, 0, 0);
 	}
@@ -2052,55 +1902,6 @@ Para.prototype.drawCaret = function(face) {
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/**
-| Constructor.
-*/
-/*
-function DTree(fontsize) {
-	Treenode.call(this);
-	this._fontsize = fontsize || 13;
-}
-subclass(DTree, Treenode);
-*/
-
-/**
-| Creates a Dtree from json representation.
-*/
-/*
-DTree.jnew = function(js) {
-	var o = new DTree(js.fs);
-	var d = js.d;
-	for(var i = 0, dlen = d.length; i < dlen; i++) {
-		o.append(new Para(d[i]));
-	}
-	return o;
-}*/
-
-
-/**
-| Turns the document tree into a json representation.
-*/
-/*DTree.prototype.jsonfy = function() {
-	var js = {fs : this._fontsize, d: []};
-	var d = js.d;
-	for (var n = this.first; n; n = n.next) {
-		d.push(n.first.text);
-	}
-	return js;
-}
-*/
-
-/**
-| Returns the paragraph at point
-*/
-/*DTree.prototype.paraAtPoint = function(p) {
-	var para = this.first;
-	while (para && p.y > para.p.y + para.softHeight) {
-		para = para.next;
-	}
-	return para;
-}
-*/
 /**
 | Draws the selection
 |
@@ -2168,96 +1969,6 @@ DTree.prototype.pathSelection = function(fabric, border, edge, select, imargin, 
 		if (!edge) fabric.lineTo(rx, ey, edge);
 	}
 }
-*/
-
-/**
-| Overloads Treenodes.append() to set the new paragraphs width.
-| todo, change this to ask for the parents width on the flow?
-*/
-/*
-DTree.prototype.append = function(tnode) {
-	if (this._flowWidth) {
-		tnode.flowWidth = this._flowWidth;
-	}
-	return Treenode.prototype.append.call(this, tnode);
-}
-*/
-
-/**
-| Overloads Treenodes insertBefore to set the paragraphs width.
-*/
-/*
-DTree.prototype.insertBefore = function(tnode, bnode) {
-	if (this._flowWidth && bnode) {
-		// if not bnode append will be called
-		tnode.flowWidth = this._flowWidth;
-	}
-	return Treenode.prototype.insertBefore.call(this, tnode, bnode);
-}
-*/
-
-
-/**
-* Gets/Sets the font size.
-*/
-
-/*
-Object.defineProperty(DTree.prototype, 'fontsize', {
-	get: function() { return this._fontsize; },
-	set: function(fs) {
-		if (this._fonsize == fs) return;
-		this._fontsize = fs;
-		for(var para = this.first; para; para = para.next) {
-			para.listen();
-		}
-	}
-});
-*/
-
-
-/**
-| Something changed.
-*/
-/*
-DTree.prototype.listen = function() {
-	this._cacheWidth  = null;
-	this._cacheHeight = null;
-	if (this.parent) this.parent.listen();
-}*/
-
-/**
-| Returns the width of the document tree.
-*/
-/*
-Object.defineProperty(DTree.prototype, 'width', {
-	get: function() {
-		if (this._cacheWidth) return this._cacheWidth;
-		var w = 0;
-		for(var para = this.first; para; para = para.next) {
-			if (para.width > w) w = para.width;
-		}
-		return this._cacheWidth = R(w);
-	},
-});
-*/
-
-/**
-| Returns the height of the document tree.
-*/
-/*
-Object.defineProperty(DTree.prototype, 'height', {
-	get: function() {
-		if (this._cacheHeight) return this._cacheHeight;
-		var h = 0;
-		var paraSep = this.pre ? 0 : this._fontsize;
-		var first = true;
-		for(var para = this.first; para; para = para.next) {
-			if (!first) h += paraSep; else first = false;
-			h += para.softHeight;
-		}
-		return this._cacheHeight = h;
-	},
-});
 */
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2412,18 +2123,6 @@ Item.prototype.drawHandles = function(face, fabric) {
 Item.prototype.removed = function() {
 	// nothing
 }
-
-/**
-| Returns first anchestor with constructor constructor
-*/
-/*
-getAnchestor = function(constructor) {
-	var n;
-	for(n = this; n && n.constructor !== construct; n = n.parent);
-	if (!n) throw new Error('anchestor not there:'+construct);
-	return n;
-}
-*/
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .---.             .  .  .
@@ -3694,296 +3393,22 @@ MeshIO.prototype.moveToTop = function(space, item) {
 	);
 }
 
+/**
+| Inserts some text.
+*/
+MeshIO.prototype.insertText = function(item, offset, text) {
+	var path = new Path(item);
+	path.push('text');
+	debug(path);
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- .-,--.                   .
-  `|__/ ,-. ,-. ,-. ,-. . |- ,-. ,-. . .
-  )| \  |-' | | | | `-. | |  | | |   | |
-  `'  ` `-' |-' `-' `-' ' `' `-' '   `-|
-~ ~ ~ ~ ~ ~ | ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ /|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-            '                        `-'
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/*
-Repository.prototype.reset = function() {
-	// all items
-	this.items = {};
-	// z information of the items, 0 is topmost
-	this.zidx = [];
-
-	// do not save changes, used during loadup
-	this._nosave    = false;
-	// do not notify onlookers, used during import
-	this._noonlooks = false;
-
-	this.onlookeds = {};
-	this.onlookers = {};
+	debug('INPUT', offset, text);
+	this.mm.alter(-1,
+		new Signature({
+			val: text,
+		}),
+		new Signature({
+			path: path,
+			at1: offset,
+		})
+	);
 }
-*/
-
-/**
-| Loads the repository from HTML5 localStorage.
-*/
-/*Repository.prototype.loadLocalStorage = function() {
-	this.reset();
-	var idfjs = window.localStorage.getItem('idf');
-	if (idfjs) {
-		try {
-			this._idFactory = JSON.parse(idfjs);
-		} catch(err) {
-			this._idFactory = null;
-			console.log('JSON error reading idfactory', err.name, err.message);
-		}
-	}
-	if (!this._idFactory) {
-		console.log('no repository found. (no idf)');
-		this._idFactory = {nid: 1};
-		return false;
-	}
-
-	System.space.pan = System.space.c2d.pan = this._getPan(); // todo space setFunction
-	var zjs = window.localStorage.getItem('zidx');
-	if (!zjs) {
-		console.log('no repository found. (no zidx)');
-		return false;
-	}
-	var zidx = JSON.parse(zjs);
-	this._nosave = true;
-	this._noonlooks = true;
-	for (var i = zidx.length - 1; i >= 0; i--) {
-		var id = zidx[i];
-		var itstr = window.localStorage.getItem(id);
-		var itjs;
-		try {
-			itjs = JSON.parse(itstr);
-		} catch (err) {
-			this._nosave = false;
-			this._noonlooks = false;
-			throw err;
-		}
-		this._loadItem(id, itjs);
-	}
-	this._nosave = false;
-	this._noonlooks = false;
-	return true;
-}*/
-
-/**
-| Erases the local repository.
-*/
-/*Repository.prototype.eraseLocalStorage = function() {
-	var items = this.items;
-	window.localStorage.setItem('idf', '');
-	window.localStorage.setItem('zidx', '');
-	for(var id in items) {
-		window.localStorage.setItem(id, '');
-	}
-}*/
-
-/**
-| Saves this repository into a JSON-String that is returned
-*/
-/*Repository.prototype.exportToJString = function() {
-	var js = {}
-	js.formatversion = 0;
-	js.idf = this._idFactory;
-	var items = this.items;
-	var jitems = js.items = {};
-	for (var id in items) {
-		jitems[id] = items[id].jsonfy();
-	}
-	js.z = this.zidx;
-	js.pan = System.space.pan.jsonfy();
-	return JSON.stringify(js, null, 1);
-}*/
-
-/**
-| Moves an item top
-*/
-/*Repository.prototype.moveToTop = function(z) {
-	var zidx = this.zidx;
-	var id = zidx[z];
-	zidx.splice(z, 1);
-	zidx.unshift(id);
-	this._saveZIDX();
-	return 0;
-}*/
-
-/**
-| One item wants to watch another item.
-*/
-/*Repository.prototype.addOnlook = function(onlooker, onlooked) {
-	var its = this.items;
-	if (!this._noonlooks && (!its[onlooker] || !its[onlooked])) {
-		throw new Error('adding Onlook to invalid item ids:');
-	}
-	var od = this.onlookeds[onlooked];
-	var or = this.onlookers[onlooker];
-	if (!od) this.onlookeds[onlooked] = od = [];
-	if (!or) this.onlookers[onlooker] = or = [];
-	if (od.indexOf(onlooker) < 0) od.push(onlooker);
-	if (or.indexOf(onlooked) < 0) or.push(onlooked);
-}*/
-
-/**
-| One item stops to watch another item.
-*/
-/*Repository.prototype.removeOnlook = function(onlooker, onlooked) {
-	var od = this.onlookeds[onlooked];
-	var odi = od.indexOf(onlooker);
-	if (odi >= 0) od.splice(odi, 1);
-
-	var or = this.onlookers[onlooker];
-	var ori = or.indexOf(onlooked);
-	if (ori >= 0) or.splice(ori, 1);
-}*/
-
-/* loads the repository from a JSON string */
-/*Repository.prototype.importFromJString = function(str) {
-	try {
-		var js = JSON.parse(str);
-	} catch (err) {
-		window.alert('Repository save not valid JSON.');
-		return;
-	}
-	if (js.formatversion != 0 || !js.idf || !js.items || !js.z) {
-		window.alert('Repository not recognized.');
-		return;
-	}
-	this.reset();
-	this.eraseLocalStorage();
-	// erase current local repository
-	var items = this.items;
-	var zidx  = js.z;
-	this._idFactory = js.idf;
-	window.localStorage.setItem('idf', JSON.stringify(this._idFactory));
-	this._noonlooks = true;
-	for (var i = zidx.length - 1; i >= 0; i--) {
-		var id = zidx[i];
-		if (typeof zidx[i] !== 'number') id = parseInt(id);
-		this._loadItem(id, js.items[id]);
-	}
-	this._saveZIDX();
-	this._noonlooks = false;
-
-	System.space.setFocus(null);
-	System.space.pan = System.space.c2d.pan = js.pan ? Point.jnew(js.pan) : new Point(0, 0); // todo
-	this.savePan(System.space.pan);
-}*/
-
-/**
-| Creates a new ID.
-*/
-/*Repository.prototype._newItemID = function() {
-	var idf = this._idFactory;
-	idf.nid++;
-	window.localStorage.setItem('idf', JSON.stringify(idf));
-	return idf.nid;
-}*/
-
-/**
-| Loads an Item from JSON.
-*/
-/*
-Repository.prototype._loadItem = function(id, js) {
-	if (!js || !js.t) throw new Error('JSON error: attributes missing from ('+id+'): '+js);
-	switch(js.t) {
-	case 'note'  : return Note.jnew(js, id);
-	case 'label' : return Label.jnew(js, id);
-	case 'rel'   : return Relation.jnew(js, id);
-	default      : throw new Error('unknown item type');
-	}
-}
-*/
-
-/*Repository.prototype._saveZIDX = function() {
-	window.localStorage.setItem('zidx', JSON.stringify(this.zidx));
-}*/
-
-/**
-| Adds an item to the space
-*/
-/*
-Repository.prototype.addItem = function(item, top) {
-	if (!item.id) item.id  = this._newItemID();
-	this.items[item.id] = item;
-	if (top) {
-		this.zidx.unshift(item.id);
-	} else {
-		this.zidx.push(item.id);
-	}
-
-	if (!this._nosave) {
-		this._saveItem(item);
-		this._saveZIDX();
-	}
-}*/
-
-/**
-| Removes an item from the repository.
-*/
-/*Repository.prototype.removeItem = function(item) {
-	var zidx = this.zidx;
-	var id = item.id;
-	zidx.splice(zidx.indexOf(id), 1);
-	delete this.items[id];
-	item.removed();
-
-	// notifies onlookers
-	if (!this._noonlooks) {
-		var od = this.onlookeds[id];
-		if (od) {
-			// copies the array so it can be changed during traversal
-			var odc = od.slice();
-			for (var i = 0; i < odc.length; i++) {
-				var it = this.items[odc[i]];
-				if (it) it.onlook(ONLOOK.REMOVE, item);
-			}
-		}
-	}
-
-	if (!this._nosave) {
-		window.localStorage.setItem(item.id, '');
-		this._saveZIDX();
-	}
-}*/
-
-/**
-| Stores an item into local storage.
-*/
-/*Repository.prototype._saveItem = function(item) {
-	window.localStorage.setItem(item.id, JSON.stringify(item.jsonfy()));
-}*/
-
-/**
-| Changes an item in local storage.
-*/
-/*Repository.prototype.updateItem = function(item) {
-	if (!this._nosave) this._saveItem(item);
-
-	// notifies onlookers
-	if (this._noonlooks) return;
-	var od = this.onlookeds[item.id];
-	if (!od) return;
-	for (var i = 0; i < od.length; i++) {
-		var it = this.items[od[i]];
-		if (it) it.onlook(ONLOOK.UPDATE, item);
-	}
-}*/
-
-
-/**
-| Loads panning offset.
-*/
-/*Repository.prototype._getPan = function() {
-	var jstr = window.localStorage.getItem('pan');
-	var js   = JSON.parse(jstr);
-	return js ? Point.jnew(js) : new Point(0, 0);
-}*/
-
-/**
-| Saves the panning offset.
-*/
-/*Repository.prototype.savePan = function(pan) {
-	if (!this._nosave) window.localStorage.setItem('pan', JSON.stringify(pan.jsonfy()));
-}*/
-

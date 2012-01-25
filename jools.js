@@ -416,30 +416,29 @@ function Path(master) {
 			throw reject('Path arcs must be String or Integer');
 		}
 		this._path = master.slice();
-	} else if (master.key$ && master.parent) {
-		var path = [];
-		var len = 0;
-		// count size
-		for(var n = master; n; n = n.parent) {
-			if (n.parent) {
-				path.push(null);
-				len++;
-			}
-		}
-		// reverse fill the path;
-		n = master;
-		for(var i = len; i > 0; i--) {
-			if (n.parent && n.parent.get(n.key$) !== n) {
-				throw new Error('cogging defect');
-			}
-			path[--len] = n.key$;
-			n = n.parent;
-		}
-		this._path = path;
-	} else {
-		log('fail', 'master:', master);
-		throw new Error('invalid path master');
+		return;
 	}
+
+	if (!master.parent) throw new Error('invalid path master');
+	var path = [];
+	var len = 0;
+	// count size
+	for(var n = master; n; n = n.parent) {
+		if (n.parent) {
+			path.push(null);
+			len++;
+		}
+	}
+
+	// reverse fill the path;
+	n = master;
+	for(var a = len; a > 0; a--) {
+		var key = n.getOwnKey();
+		if (key === null) throw new Error('Cannot get path key');
+		path[--len] = key;
+		n = n.parent;
+	}
+	this._path = path;
 }
 
 /**
@@ -474,7 +473,7 @@ Path.prototype.fit = function(a, edge) {
 }
 
 /**
-| Sets arc i
+| Sets arc [i]
 */
 Path.prototype.set = function(i, v) {
 	if (i < 0) i += this._path.length;
@@ -482,14 +481,21 @@ Path.prototype.set = function(i, v) {
 }
 
 /**
-| Adds to integer arc i
+| Appends an arc
 */
-Path.prototype.add = function(i, v) {
-	if (i < 0) i = this._path.length + i;
-	if (!isInteger(this._path[i])) {
-		throw new Error('cannot change non-integer arc: '+this._path[i]);
+Path.prototype.push = function(v) {
+	return this._path[this._path.length] = v;
+}
+
+/**
+| Adds to integer arc[a]
+*/
+Path.prototype.add = function(a, v) {
+	if (a < 0) a = this._path.length + a;
+	if (!isInteger(this._path[a])) {
+		throw new Error('cannot change non-integer arc: '+this._path[a]);
 	}
-	return this._path[i] += v;
+	return this._path[a] += v;
 }
 
 /**

@@ -102,7 +102,7 @@ Stem.prototype.get = function(path, a0, al) {
 */
 Stem.prototype.mmSet = function(path, val, a0, al, oplace) {
 	if (oplace) throw new Error('out of place not yet supported');
-	if (isString(path)) { // direct set 
+	if (isString(path)) { // direct set
 		this._twigs[path] = this._sprout(path, val, this);
 		if (this.listeners) this._tellSetVal('setval', path, val);
 		return;
@@ -235,6 +235,9 @@ Stem.prototype.addListener = function(type, listener) {
 	return true;
 }
 
+/**
+| Removes a listener.
+*/
 Stem.prototype.removeListener = function(type, listener) {
 	var listen = this.listen;
 	if (!listen) return false;
@@ -253,6 +256,43 @@ Stem.prototype.tell = function() {
 		var v = listen[a];
 		v.event(v, arguments);
 	}
+}
+
+/**
+| Gets the key of this node.
+*/
+Stem.prototype.getOwnKey = function() {
+	if (!Woods.cogging) throw new Error('getOwnKey() requires cogging');
+	if (this.parent === null) return null;
+	if (this.parent.get(this.key$) === this) return this.key$;
+	return this.key$ = this.parent.getKeyOf(this);
+}
+
+/**
+| Gets the key of a child node
+*/
+Stem.prototype.getKeyOf = function(v, nocache) {
+	if (!Woods.cogging) throw new Error('getKeyOf() requires cogging');
+	if (v.parent !== this) return null;
+	if (!nocache && this.get(v.key$) === v) return v.key$;
+
+	var twigs = this._twigs;
+	if (twigs.alley) {
+		var idx = twigs.alley.indexOf(v);
+		if (idx >= 0) {
+			if (!nocache) v.key$ = idx;
+			return idx;
+		}
+	}
+
+	for(var k in twigs) {
+		if (twigs[k] === v) {
+			if (!nocache) v.key$ = k;
+			return k;
+		}
+	}
+
+	return null;
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
