@@ -181,7 +181,7 @@ function alter(meshtree, alternation, backward, tell) {
 
 		pivotNode.splice(sig_splice + 1, 0, pnew);
 
-		if (tell && ppre.listen) ppre.tell('split', src.at1, pnew);
+		if (tell && ppre.listen) ppre.tell('split', src.path.get(-1), src.at1, pnew);
 		break;
 	case 'join' :
 		// two string items are joined into one.
@@ -208,7 +208,7 @@ function alter(meshtree, alternation, backward, tell) {
 		ppre.mmSet('text', ppre.get('text') + pnex.get('text'));
 		pivotNode.splice(sig_splice + 1, 1);
 
-		if (tell && ppre.listen) ppre.tell('join', trg.at1);
+		if (tell && ppre.listen) ppre.tell('join', trg.path.get(-1), trg.at1);
 		break;
 	case 'set':
 		// a new item is inserted or replaces an existing
@@ -238,7 +238,7 @@ function alter(meshtree, alternation, backward, tell) {
 
 		meshtree.mmSet(trg.path, src.val);
 
-		if (tell && parent.listen) parent.tell('set', src.val);
+		if (tell && parent.listen) parent.tell('set', trg.path.get(-1), src.val);
 		break;
 	case 'insert':
 		// a string is inserted into a string item.
@@ -260,7 +260,7 @@ function alter(meshtree, alternation, backward, tell) {
 
 		if (tell) {
 			var parent = meshtree.get(trg.path, 0, -1);
-			if (parent.listen) parent.tell('insert', trg.at1, src.val);
+			if (parent.listen) parent.tell('insert', trg.path.get(-1), trg.at1, src.val);
 		}
 		break;
 	case 'remove':
@@ -284,7 +284,7 @@ function alter(meshtree, alternation, backward, tell) {
 
 		if (tell) {
 			var parent = meshtree.get(trg.path, 0, -1);
-			if (parent.listen) parent.tell('remove', src.at1, src.at2, val);
+			if (parent.listen) parent.tell('remove', src.path.get(-1), src.at1, src.at2, val);
 		}
 		break;
 
@@ -303,7 +303,7 @@ function alter(meshtree, alternation, backward, tell) {
 
 		alley.splice(trg.at1, 0, src.val);
 
-		if (tell && alley.listen) alley.tell('alley-place', trg.at1, src.val);
+		if (tell && alley.listen) alley.tell('alley-place', trg.path.get(-1), trg.at1, src.val);
 		break;
 
 	case 'alley-take' :
@@ -323,7 +323,7 @@ function alter(meshtree, alternation, backward, tell) {
 		}
 		alley.splice(src.at1, 1);
 
-		if (tell && alley.listen) alley.tell('alley-take', src.at1, val);
+		if (tell && alley.listen) alley.tell('alley-take', src.path.get(-1), src.at1, val);
 		break;
 
 	default:

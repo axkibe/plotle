@@ -257,7 +257,7 @@ Stem.prototype.tell = function() {
 	var listen = this.listen;
 	for (var a = 0; a < this.listen.length; a++) {
 		var v = listen[a];
-		v.event(v, arguments);
+		v.event.apply(v, arguments);
 	}
 }
 

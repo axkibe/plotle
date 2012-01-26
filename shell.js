@@ -969,9 +969,9 @@ Nexus.prototype.seeds = {
 function Space(master) {
 	Woods.Space.call(this, master);
 
-	// TODO make a 'spaceface' or something like that
 	this.fabric = new Fabric(system.fabric);
 	this.zoom = 1; // TODO
+	this.vitems = new VItemCopse(this.items);
 
 	this._floatMenuLabels = {c: 'new', n: 'Note', ne: 'Label'};
 }
@@ -981,7 +981,7 @@ subclass(Space, Woods.Space);
 | Seeds. Things that can grow on this twig.
 */
 Space.prototype.seeds = {
-    'ItemCopse' : ItemCopse,
+    'ItemCopse' : Woods.ItemCopse,
     'ArcAlley'  : Woods.ArcAlley,
 }
 
@@ -990,7 +990,7 @@ Space.prototype.seeds = {
 */
 Space.prototype.draw = function() {
 	for(var zi = this.z.length - 1; zi >= 0; zi--) {
-		var vit = this.items.vitems[this.z.get(zi)]; // XXX
+		var vit = this.vitems.vcopse[this.z.get(zi)];
 		vit.draw(this.fabric);
 	}
 
@@ -1029,7 +1029,7 @@ Space.prototype.setFocus = function(vitem) {
 	var caret = shell.caret;
 	if (vitem) {
 		// caret.set(item.doc.get(0), 0);
-		debug('TODO CARET:SET');
+		caret.set(vitem.vdoc.valley[0], 0);
 		caret.show();
 	} else {
 		caret.hide();
@@ -1101,7 +1101,7 @@ Space.prototype.mousehover = function(p, shift, ctrl) {
 */
 Space.prototype._transfix = function(txe, p, shift, ctrl) {
 	for(var zi = 0, zlen = this.z.length; zi < zlen; zi++) {
-		var vit = this.items.vitems[this.z.get(zi)]; // TODO
+		var vit = this.vitems.vcopse[this.z.get(zi)];
 		if (vit.transfix(txe, p, shift, ctrl)) return true;
 	}
 	return false;
@@ -1315,8 +1315,10 @@ Space.prototype.mousedown = function(p, shift, ctrl) {
 			var nh = settings.note.newHeight;
 			var pnw = fm.p.sub(this.fabric.pan.x + half(nw) , this.fabric.pan.y + half(nh));
 			var pse = pnw.add(nw, nh);
-			var note = meshio.newNote(this, new Rect(pnw, pse));
-			this.setFocus(note);
+			var note  = meshio.newNote(this, new Rect(pnw, pse));
+			var vnote = new VNote(note, this);
+			this.vitems.vcopse[note.getOwnKey()] = vnote;
+			this.setFocus(vnote);
 			break;
 		case 'ne' : // label
 			throw new Error('TODO');
@@ -1336,11 +1338,11 @@ Space.prototype.mousedown = function(p, shift, ctrl) {
 		var im = action.itemmenu;
 		var md = im.getMousepos(p);
 		shell.endAction();
-		
-		if (!im) break; 
+
+		if (!im) break;
 		switch(md) {
 		case 'n': // remove
-			meshio.removeItem(this, this.focus);
+			meshio.removeItem(this, this.focus.item);
 			this.setFocus(null);
 			break;
 		}
@@ -1367,33 +1369,33 @@ Space.prototype.mousedown = function(p, shift, ctrl) {
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ++ ItemCopse ++
+ ++ VItemCopse ++
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- A copse of items (in a space).
+ A visual collection of items.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function ItemCopse(master) {
-	Woods.ItemCopse.call(this, master);
-	this.addListener(this); // TODO
-	this.vitems = {};
+function VItemCopse(copse) {
+	this.copse = copse;
+	copse.addListener(this);
+	this.vcopse = {};
 
-	for(var k in this.loop()) {
-		this.vitems[k] = new VNote(this.get(k));
+	for(var k in copse.loop()) {
+		this.vcopse[k] = new VNote(copse.get(k));
 	}
 }
-subclass(ItemCopse, Woods.ItemCopse);
-
-/**
-| Seeds. Things that can grow on this twig.
-*/
-ItemCopse.prototype.seeds = {
-    'Note' : Woods.Note,
-};
 
 /**
 | The meshmashine issued an event.
 */
-ItemCopse.prototype.event = function(event, p1, p2, p3) {
-	debug('VItemCopse:event', event, p1, p2, p3);
+VItemCopse.prototype.event = function(type, key, p1, p2, p3) {
+	log('event', type, key, p1, p2, p3);
+	switch(type) {
+	case 'set' :
+		var vitem = this.vcopse[key];
+		if (!vitem) return;
+		vitem.item.removeListener(this);
+		this.vcopse[key] = null;
+		break;
+	}
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1806,9 +1808,7 @@ VPara.prototype.getFabric = function() {
 | Drops the cache (cause something has changed)
 */
 VPara.prototype.event = function(event, p1, p2, p3) {
-	var para = this.para;
-	var doc  = para.getAnchestor('DocAlley'); //XXX replace with vdoc.
-	doc.parent.poke();
+	this.vdoc.vitem.poke();
 
 	this._flow$ = null;
 	// TODO set fabric$ = null
@@ -2212,7 +2212,7 @@ function VDoc(doc, vitem) {
 | The meshmashine issued an event.
 */
 VDoc.prototype.event = function(event, p1, p2, p3) {
-	debug('DocAlley:event', event, p1, p2, p3);
+	debug('DocAlley:event');
 }
 
 /**
@@ -2488,7 +2488,6 @@ VNote.prototype.getZone = function() {
 | TODO this might as well be removed.
 */
 VNote.prototype.setZone = function(zone) {
-	debug('setZONE');
 	// ensures minimum size
 	if (zone.width < settings.note.minWidth || zone.height < settings.note.minHeight) {
 		log('fail', 'Note under minimum size!');

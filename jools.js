@@ -182,7 +182,14 @@ function _pushindent(indent, a) {
 | that fails on circles. This is the jools-internal version that pushes directly on the
 | stack.
 */
-function _inspect(o, a, indent) {
+function _inspect(o, a, indent, circle) {
+	if (circle.indexOf(o) !== -1) {
+		a.push('^circle^');
+		return;
+	}
+	circle = circle.slice();
+	circle.push(o);
+
 	if (!indent) indent = 0;
 	if (o && o.toJSON) o = o.toJSON();
 	var to = typeof(o);
@@ -227,7 +234,7 @@ function _inspect(o, a, indent) {
 				a.push(puffed ? '\n' : ' ');
 			}
 			if (puffed) _pushindent(indent + 1, a);
-			_inspect(o[k], a, indent + 1);
+			_inspect(o[k], a, indent + 1, circle);
 		}
 		var first = true;
 		for(var k in o) {
@@ -245,7 +252,7 @@ function _inspect(o, a, indent) {
 			}
 			a.push(k);
 			a.push(': ');
-			_inspect(o[k], a, indent + 1);
+			_inspect(o[k], a, indent + 1, circle);
 			a.push(puffed ? '\n' : ' ');
 		}
 		a.push(puffed ? '\n' : ' ');
@@ -271,7 +278,7 @@ function _inspect(o, a, indent) {
 				a.push('###');
 				continue;
 			}
-			_inspect(o[k], a, indent + 1);
+			_inspect(o[k], a, indent + 1, circle);
 		}
 		a.push(puffed ? '\n' : ' ');
 			if (puffed) _pushindent(indent, a);
@@ -300,7 +307,7 @@ function log(category) {
 	}
 	for(var i = 1; i < arguments.length; i++) {
 		if (i > 1) a.push(' ');
-		_inspect(arguments[i], a, 0);
+		_inspect(arguments[i], a, 0, []);
 	}
 	console.log(a.join(''));
 };
@@ -314,7 +321,7 @@ function debug() {
 	a.push('(debug) ');
 	for(var i = 0; i < arguments.length; i++) {
 		if (i > 0) a.push(' ');
-		_inspect(arguments[i], a, 0);
+		_inspect(arguments[i], a, 0, []);
 	}
 	console.log(a.join(''));
 }
@@ -324,7 +331,7 @@ function debug() {
 */
 function inspect(o) {
 	var a = [];
-	_inspect(o, a, 0);
+	_inspect(o, a, 0, []);
 	return a.join('');
 }
 
