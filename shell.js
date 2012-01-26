@@ -358,6 +358,7 @@ Marker.prototype.event = function(type, key, p1, p2, p3) {
 		var offset = p1;
 		var val = p2;
 		if (offset <= this.offset) this.offset += val.length;
+		break;
 	}
 }
 
@@ -1374,7 +1375,10 @@ VItemCopse.prototype.event = function(type, key, p1, p2, p3) {
  A visual paragraph representation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function VPara(para, vdoc) {
+	if (para.constructor !== Woods.Para) throw new Error('type error');
+	if (vdoc.constructor !== VDoc) throw new Error('type error');
 	this.para = para;
+	this.vdoc = vdoc;
 
 	// fabric caching
 	this._fabric$      = new Fabric(0 ,0);
@@ -1386,7 +1390,6 @@ function VPara(para, vdoc) {
 
 	this.pnw = null; // position of para in doc.
 	para.addListener(this);
-	this.vdoc = vdoc;
 }
 
 /**
@@ -2181,6 +2184,12 @@ function VDoc(doc, vitem) {
 VDoc.prototype.event = function(type, key, p1, p2, p3) {
 	log('event', 'vdoc', type, key, p1, p2, p3);
 
+	switch(type) {
+	case 'split' :
+		var nvp = new VPara(this.doc.get(key + 1), this);
+		this.valley.splice(key + 1, 0, nvp);
+		break;
+	}
 }
 
 /**
@@ -3116,7 +3125,7 @@ Relation.prototype.onlook = function(event, item) {
  Communicates with the server, holds caches.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function MeshIO() {
-	this.mm = new MeshMashine(Woods.Nexus, true);
+	this.mm = new MeshMashine(Woods.Nexus, true, true);
 
 	var spacepath = new Path(['welcome']);
 
@@ -3302,18 +3311,18 @@ MeshIO.prototype.insertText = function(node, offset, text) {
 }
 
 /**
-| Splits a para 
+| Splits a para
 */
 MeshIO.prototype.split = function(node, offset) {
 	var path = new Path(node);
 	path.push('text');
 
-	this.mm.alter(-1, 
+	this.mm.alter(-1,
 		new Signature({
 			at1 : offset,
 			pivot: path.length - 2,
 			path: path,
-		}), 
+		}),
 		new Signature({
 			proc: 'splice',
 		})

@@ -144,7 +144,7 @@ Alternation.prototype.type = function(backward) {
 /**
 | Alters the repository.
 */
-function alter(meshtree, alternation, backward, tell) {
+function alter(meshtree, alternation, backward, telling, cogging) {
 	var atype = alternation.type(backward);
 	var cm = 'alter('+atype+')';
 	var src = !backward ? alternation.src : alternation.trg;
@@ -174,6 +174,10 @@ function alter(meshtree, alternation, backward, tell) {
 
 		// no rejects after here
 		var pnew = new ppre.constructor(ppre);
+		if (cogging) {
+			pnew.parent = ppre.parent;
+			pnew.key$ = ppre.key$ + 1;
+		}
 
 		var text = ppre.get('text');
 		pnew.mmSet('text', text.substring(src.at1));
@@ -181,7 +185,7 @@ function alter(meshtree, alternation, backward, tell) {
 
 		pivot.splice(sig_splice + 1, 0, pnew);
 
-		if (tell) {
+		if (telling) {
 			if (ppre.listen)   ppre.tell('split', src.path.get(-1), src.at1, pnew);
 			if (pivot.listen) pivot.tell('split', src.path.get(src.pivot), src.at1, pnew);
 		}
@@ -211,7 +215,7 @@ function alter(meshtree, alternation, backward, tell) {
 		ppre.mmSet('text', ppre.get('text') + pnex.get('text'));
 		pivotNode.splice(sig_splice + 1, 1);
 
-		if (tell && ppre.listen) ppre.tell('join', trg.path.get(-1), trg.at1);
+		if (telling && ppre.listen) ppre.tell('join', trg.path.get(-1), trg.at1);
 		break;
 	case 'set':
 		// a new item is inserted or replaces an existing
@@ -241,7 +245,7 @@ function alter(meshtree, alternation, backward, tell) {
 
 		meshtree.mmSet(trg.path, src.val);
 
-		if (tell && parent.listen) parent.tell('set', trg.path.get(-1), src.val);
+		if (telling && parent.listen) parent.tell('set', trg.path.get(-1), src.val);
 		break;
 	case 'insert':
 		// a string is inserted into a string item.
@@ -261,7 +265,7 @@ function alter(meshtree, alternation, backward, tell) {
 		var nstr = str.substring(0, trg.at1) + src.val + str.substring(trg.at1);
 		meshtree.mmSet(trg.path, nstr);
 
-		if (tell) {
+		if (telling) {
 			var parent = meshtree.get(trg.path, 0, -1);
 			if (parent.listen) parent.tell('insert', trg.path.get(-1), trg.at1, src.val);
 		}
@@ -285,7 +289,7 @@ function alter(meshtree, alternation, backward, tell) {
 		var nstr = str.substring(0, src.at1) + str.substring(src.at2);
 		meshtree.mmSet(src.path, nstr);
 
-		if (tell) {
+		if (telling) {
 			var parent = meshtree.get(trg.path, 0, -1);
 			if (parent.listen) parent.tell('remove', src.path.get(-1), src.at1, src.at2, val);
 		}
@@ -306,7 +310,7 @@ function alter(meshtree, alternation, backward, tell) {
 
 		alley.splice(trg.at1, 0, src.val);
 
-		if (tell && alley.listen) alley.tell('alley-place', trg.path.get(-1), trg.at1, src.val);
+		if (telling && alley.listen) alley.tell('alley-place', trg.path.get(-1), trg.at1, src.val);
 		break;
 
 	case 'alley-take' :
@@ -326,7 +330,7 @@ function alter(meshtree, alternation, backward, tell) {
 		}
 		alley.splice(src.at1, 1);
 
-		if (tell && alley.listen) alley.tell('alley-take', src.path.get(-1), src.at1, val);
+		if (telling && alley.listen) alley.tell('alley-take', src.path.get(-1), src.at1, val);
 		break;
 
 	default:
@@ -347,10 +351,11 @@ function alter(meshtree, alternation, backward, tell) {
 /**
 | Constructor.
 */
-MeshMashine = function(RootType, telling) {
+MeshMashine = function(RootType, telling, cogging) {
 	this.repository = new RootType();
 	this.history    = [];
 	this.telling    = telling;
+	this.cogging    = cogging;
 }
 
 /**
@@ -567,7 +572,7 @@ MeshMashine.prototype._reflect = function(time, path) {
 
 		// playback
 		for(var hi = this.history.length - 1; hi >= time; hi--) {
-			alter(reflect, this.history[hi], true, false);
+			alter(reflect, this.history[hi], true, false, this.cogging);
 		}
 	} catch (err) {
 		// this should not ever fail, does rethrow a lethal error
@@ -606,7 +611,7 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 		}
 
 		var apply = function (alt) {
-			alter(this.repository, alt, false, this.telling);
+			alter(this.repository, alt, false, this.telling, this.cogging);
 			deepFreeze(alt);
 			this.history.push(alt);
 		}
