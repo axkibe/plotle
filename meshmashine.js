@@ -158,8 +158,8 @@ function alter(meshtree, alternation, backward, tell) {
 		check(is(src.at1), cm, 'src.at1 missing');
 		check(isInteger(src.pivot), cm, 'src.pivot not an integer');
 
-		var pivotNode = meshtree.get(src.path, 0, src.pivot);
-		check(pivotNode.isAlley, cm, 'src.path[src.pivot] not an alley');
+		var pivot = meshtree.get(src.path, 0, src.pivot);
+		check(pivot.isAlley, cm, 'src.path[src.pivot] not an alley');
 
 		var str = meshtree.get(src.path);
 		check(isString(str), cm, 'src.path signates no string');
@@ -167,10 +167,10 @@ function alter(meshtree, alternation, backward, tell) {
 		check(src.pivot === src.path.length - 2,  cm, 'currently cannot splice trees');
 		src.attune(str, 'src.path');
 		var sig_splice = src.path.get(src.pivot);
-		checkWithin(sig_splice, 0, pivotNode.length, cm, 'splice out of range');
+		checkWithin(sig_splice, 0, pivot.length, cm, 'splice out of range');
 		check(src.path.get(-1) === 'text', cm, 'split must be on .text');
 
-		var ppre = pivotNode.get(sig_splice);
+		var ppre = pivot.get(sig_splice);
 
 		// no rejects after here
 		var pnew = new ppre.constructor(ppre);
@@ -179,9 +179,12 @@ function alter(meshtree, alternation, backward, tell) {
 		pnew.mmSet('text', text.substring(src.at1));
 		ppre.mmSet('text', text.substring(0, src.at1));
 
-		pivotNode.splice(sig_splice + 1, 0, pnew);
+		pivot.splice(sig_splice + 1, 0, pnew);
 
-		if (tell && ppre.listen) ppre.tell('split', src.path.get(-1), src.at1, pnew);
+		if (tell) {
+			if (ppre.listen)   ppre.tell('split', src.path.get(-1), src.at1, pnew);
+			if (pivot.listen) pivot.tell('split', src.path.get(src.pivot), src.at1, pnew);
+		}
 		break;
 	case 'join' :
 		// two string items are joined into one.

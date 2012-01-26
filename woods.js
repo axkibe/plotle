@@ -244,7 +244,7 @@ Stem.prototype.addListener = function(listener) {
 Stem.prototype.removeListener = function(listener) {
 	var listen = this.listen;
 	if (!listen) return false;
-	var idx = listen.index(listener);
+	var idx = listen.indexOf(listener);
 	if (idx === -1) return false;
 	listen.splice(idx, 1);
 	return true;
