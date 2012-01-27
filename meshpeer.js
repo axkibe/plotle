@@ -222,6 +222,22 @@ MeshPeer.prototype.insertText = function(node, offset, text) {
 	);
 }
 
+MeshPeer.prototype.removeText = function(node, offset, len) {
+	var path = new Path(node);
+	path.push('text');
+
+	this.mm.alter(-1,
+		new Signature({
+			path: path,
+			at1: offset,
+			at2: offset + len
+		}),
+		new Signature({
+			val: null
+		})
+	);
+}
+
 /**
 | Splits a para
 */

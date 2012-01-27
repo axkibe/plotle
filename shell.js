@@ -361,6 +361,17 @@ Marker.prototype.event = function(type, key, p1, p2, p3) {
 			this.offset += val.length;
 		}
 		break;
+	case 'remove' :
+		var at1 = p1;
+		var at2 = p2;
+		if (at2 <= this.offset) {
+			if (at1 <= this.offset) {
+				this.offset -= at2 - at1;
+			} else {
+				this.offset = at1;
+			}
+		}
+		break;
 	case 'split' :
 		var offset = p1;
 		if (offset <= this.offset) {
@@ -1609,22 +1620,10 @@ VPara.prototype.specialKey = function(keycode, shift, ctrl) {
 
 	switch(keycode) {
 	case  8 : // backspace
-		throw new Error('TODO');
-		/*
-		var co = caret.offset;
-		var ce = caret.element;
-		if (co > 0) {
-			var t = ce.text;
-			ce.text = t.substring(0, co - 1) + t.substring(co, t.length);
-			caret.offset--;
-			shell.redraw = true;
-		} else {
-			var para = ce.anchestor(Para);
-			shell.redraw = para.joinToPrevious(ce, caret);
+		if (caret.offset > 0) {
+			meshpeer.removeText(para, caret.offset - 1, 1);
 		}
-		throw new Error('TODO');
-		//System.repository.updateItem(item);
-		break;*/
+		break;
 	case 13 : // return
 		meshpeer.split(para, caret.offset);
 		break;

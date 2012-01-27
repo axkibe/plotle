@@ -290,7 +290,7 @@ function alter(meshtree, alternation, backward, telling, cogging) {
 		meshtree.mmSet(src.path, nstr);
 
 		if (telling) {
-			var parent = meshtree.get(trg.path, 0, -1);
+			var parent = meshtree.get(src.path, 0, -1);
 			if (parent.listen) parent.tell('remove', src.path.get(-1), src.at1, src.at2, val);
 		}
 		break;
