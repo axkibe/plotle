@@ -36,12 +36,13 @@
 var Jools;
 var Fabric;
 var FrontFace;
-var MeshIO;
+var MeshPeer;
 
 /**
 | Export
 */
 var system;
+var meshpeer;
 
 /**
 | Export/Capsule
@@ -434,9 +435,9 @@ function System(FrontFace) {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 window.onload = function() {
 	makeCatcher(this, function() {
-		system    = new System();
+		system       = new System();
 		system.shell = new Shell(system.fabric);
-		meshio    = new MeshIO();
+		meshpeer     = new MeshPeer();
 		system.shell._draw(); // TODO private 
 	})();
 }

@@ -186,8 +186,8 @@ function alter(meshtree, alternation, backward, telling, cogging) {
 		pivot.splice(sig_splice + 1, 0, pnew);
 
 		if (telling) {
-			if (ppre.listen)   ppre.tell('split', src.path.get(-1), src.at1, pnew);
 			if (pivot.listen) pivot.tell('split', src.path.get(src.pivot), src.at1, pnew);
+			if (ppre.listen)   ppre.tell('split', src.path.get(-1), src.at1, pnew);
 		}
 		break;
 	case 'join' :

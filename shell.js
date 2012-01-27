@@ -28,7 +28,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 'use strict';
-var meshio;
+var meshpeer;
 var shell = null;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -357,7 +357,16 @@ Marker.prototype.event = function(type, key, p1, p2, p3) {
 	case 'insert' :
 		var offset = p1;
 		var val = p2;
-		if (offset <= this.offset) this.offset += val.length;
+		if (offset <= this.offset) {
+			this.offset += val.length;
+		}
+		break;
+	case 'split' :
+		var offset = p1;
+		if (offset <= this.offset) {
+			var pkey = this.entity.para.getOwnKey();
+			this.set(this.entity.vdoc.valley[pkey + 1], this.offset - offset);
+		}
 		break;
 	}
 }
@@ -1019,7 +1028,7 @@ VSpace.prototype.setFocus = function(vitem) {
 
 	if (vitem === null) return;
 
-	meshio.moveToTop(this.space, vitem.item);
+	meshpeer.moveToTop(this.space, vitem.item);
 }
 
 /**
@@ -1286,7 +1295,7 @@ VSpace.prototype.mousedown = function(p, shift, ctrl) {
 			var nh = settings.note.newHeight;
 			var pnw = fm.p.sub(this.fabric.pan.x + half(nw) , this.fabric.pan.y + half(nh));
 			var pse = pnw.add(nw, nh);
-			var note  = meshio.newNote(this.space, new Rect(pnw, pse));
+			var note  = meshpeer.newNote(this.space, new Rect(pnw, pse));
 			var vnote = new VNote(note, this);
 			this.vitems.vcopse[note.getOwnKey()] = vnote;
 			this.setFocus(vnote);
@@ -1313,7 +1322,7 @@ VSpace.prototype.mousedown = function(p, shift, ctrl) {
 		if (!im) break;
 		switch(md) {
 		case 'n': // remove
-			meshio.removeItem(this.space, this.focus.item);
+			meshpeer.removeItem(this.space, this.focus.item);
 			this.setFocus(null);
 			break;
 		}
@@ -1528,7 +1537,7 @@ VPara.prototype.getLineXOffset = function(line, x, hit) {
 VPara.prototype.input = function(text) {
 	if (shell.caret.entity !== this) throw new Error('Invalid caret on input');
 	var para = this.para;
-	meshio.insertText(para, shell.caret.offset, text);
+	meshpeer.insertText(para, shell.caret.offset, text);
 }
 
 /**
@@ -1617,7 +1626,7 @@ VPara.prototype.specialKey = function(keycode, shift, ctrl) {
 		//System.repository.updateItem(item);
 		break;*/
 	case 13 : // return
-		meshio.split(para, caret.offset);
+		meshpeer.split(para, caret.offset);
 		break;
 	case 35 : // end
 		caret.set(this, para.get('text').length);
@@ -2471,7 +2480,7 @@ VNote.prototype.setZone = function(zone) {
 		log('fail', 'Note under minimum size!');
 	}
 	if (this.item.zone.eq(zone)) return;
-	meshio.setZone(this.item, zone);
+	meshpeer.setZone(this.item, zone);
 
 	// TODO this should happen by MeshIO settings...
 	this._fabric$flag = false;
