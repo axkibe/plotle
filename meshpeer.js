@@ -69,7 +69,43 @@ function MeshPeer() {
 	                }, {
 		              type: 'Para',
 		              text: 'And treat those two impostors just the same',
-		            },
+	                }, {
+		              type: 'Para',
+		              text: 'If you can bear to hear the truth you\'ve spoken',
+	                }, {
+		              type: 'Para',
+		              text: 'Twisted by knaves to make a trap for fools,',
+	                }, {
+		              type: 'Para',
+		              text: 'Or watch the things you gave your life to broken,',
+	                }, {
+		              type: 'Para',
+		              text: 'And stoop and build \'em up with wornout tools;',
+	                }, {
+		              type: 'Para',
+		              text: 'If you can make one heap of all your winnings',
+	                }, {
+		              type: 'Para',
+		              text: 'And risk it on one turn of pitch-and-toss,',
+	                }, {
+		              type: 'Para',
+		              text: 'And lose, and start again at your beginnings',
+	                }, {
+		              type: 'Para',
+		              text: 'And never breath a word about your loss;',
+	                }, {
+		              type: 'Para',
+		              text: 'If you can force your heart and nerve and sinew',
+	                }, {
+		              type: 'Para',
+		              text: 'To serve your turn long after they are gone,',
+	                }, {
+		              type: 'Para',
+		              text: 'And so hold on when there is nothing in you',
+	                }, {
+		              type: 'Para',
+		              text: 'Except the Will which says to them: "Hold on";',
+	                }
 		          ],
 		        },
 		      },
@@ -239,7 +275,7 @@ MeshPeer.prototype.removeText = function(node, offset, len) {
 }
 
 /**
-| Splits a para
+| Splits a text node.
 */
 MeshPeer.prototype.split = function(node, offset) {
 	var path = new Path(node);
@@ -253,6 +289,25 @@ MeshPeer.prototype.split = function(node, offset) {
 		}),
 		new Signature({
 			proc: 'splice',
+		})
+	);
+}
+
+/**
+| Joins a text nodes with its next one
+*/
+MeshPeer.prototype.join = function(node) {
+	var path = new Path(node);
+	path.push('text');
+
+	this.mm.alter(-1,
+		new Signature({
+			proc : 'splice',
+		}),
+		new Signature({
+			at1 : '$end',
+			pivot: path.length - 2,
+			path: path,
 		})
 	);
 }

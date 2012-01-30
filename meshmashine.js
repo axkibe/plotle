@@ -196,26 +196,34 @@ function alter(meshtree, alternation, backward, telling, cogging) {
 		check(is(trg.at1), cm, 'trg.at1 missing');
 		check(isInteger(trg.pivot), cm, 'trg.pivot not an integer');
 
-		var pivotNode = meshtree.get(trg.path, 0, trg.pivot);
-		check(pivotNode.isAlley, cm, 'trg.path[pivot] not an Alley');
+		var pivot = meshtree.get(trg.path, 0, trg.pivot);
+
+		check(pivot.isAlley, cm, 'trg.path[pivot] not an Alley');
 
 		var str = meshtree.get(trg.path);
-		check(isString(str, cm, 'trg.path signates no string'));
 
+		check(isString(str, cm, 'trg.path signates no string'));
 		check(trg.pivot === trg.path.length - 2, cm, 'corrently cannot splice trees');
+
 		trg.attune(str, 'trg.path');
 		var sig_splice = trg.path.get(trg.pivot);
-		checkWithin(sig_splice, 0, pivotNode.length -1, cm, 'splice out of range');
+
+		checkWithin(sig_splice, 0, pivot.length -1, cm, 'splice out of range');
 		check(trg.path.get(trg.pivot + 1) === 'text', cm, 'join must be on .text');
 
-		var ppre = pivotNode.get(sig_splice);
-		var pnex = pivotNode.get(sig_splice + 1);
+		var ppre = pivot.get(sig_splice);
+		var pnex = pivot.get(sig_splice + 1);
+
 		check(ppre.constructor === pnex.constructor, 'cannot join different types');
 
 		ppre.mmSet('text', ppre.get('text') + pnex.get('text'));
-		pivotNode.splice(sig_splice + 1, 1);
+		pivot.splice(sig_splice + 1, 1);
 
-		if (telling && ppre.listen) ppre.tell('join', trg.path.get(-1), trg.at1);
+		if (telling) {
+			if (pivot.listen) pivot.tell('join', trg.path.get(trg.pivot), trg.at1, ppre);
+			if (ppre.listen) ppre.tell('join>', trg.path.get(-1), trg.path.get(trg.pivot), trg.at1);
+			if (pnex.listen) pnex.tell('join<', trg.path.get(-1), trg.path.get(trg.pivot), trg.at1);
+		}
 		break;
 	case 'set':
 		// a new item is inserted or replaces an existing

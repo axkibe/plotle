@@ -372,6 +372,12 @@ Marker.prototype.event = function(type, key, p1, p2, p3) {
 			}
 		}
 		break;
+	case 'join<' :
+		var pivot = p1;
+		var at1 = p2;
+		var vnode = this.entity.vdoc.valley[pivot];
+		this.set(vnode, this.offset + at1);
+		break;
 	case 'split' :
 		var offset = p1;
 		if (offset <= this.offset) {
@@ -1622,6 +1628,11 @@ VPara.prototype.specialKey = function(keycode, shift, ctrl) {
 	case  8 : // backspace
 		if (caret.offset > 0) {
 			meshpeer.removeText(para, caret.offset - 1, 1);
+		} else {
+			var key = para.getOwnKey();
+			if (key > 0) {
+				meshpeer.join(para.parent.get(key - 1));
+			}
 		}
 		break;
 	case 13 : // return
@@ -1702,22 +1713,16 @@ VPara.prototype.specialKey = function(keycode, shift, ctrl) {
 		}
 		break;
 	case 46 : // del
-		throw new Error('TODO');
-		/*
-		var co = caret.offset;
-		var ce = caret.element;
-		var ct = ce.text;
-		if (co < ct.length) {
-			ce.text = ct.substring(0, co) + ct.substring(co + 1, ct.length);
-			shell.redraw = true;
+		if (caret.offset < para.get('text').length) {
+			meshpeer.removeText(para, caret.offset, 1);
 		} else {
-			var para = ce.anchestor(Para);
-			shell.redraw = para.joinToNext(ce, caret);
+			var vdoc = this.vdoc;
+			var key = para.getOwnKey();
+			if (vdoc.valley[key] !== this) throw new Error('vdoc.valley inconsistency');
+			if (key < vdoc.valley.length - 1) {
+				meshpeer.join(para);
+			}
 		}
-		//System.repository.updateItem(item);
-		*/
-		break;
-	default :
 		break;
 	}
 
@@ -2193,6 +2198,9 @@ VDoc.prototype.event = function(type, key, p1, p2, p3) {
 	log('event', 'vdoc', type, key, p1, p2, p3);
 
 	switch(type) {
+	case 'join' :
+		this.valley.splice(key + 1, 1);
+		break;
 	case 'split' :
 		var nvp = new VPara(this.doc.get(key + 1), this);
 		this.valley.splice(key + 1, 0, nvp);

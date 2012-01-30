@@ -14,7 +14,7 @@ module.exports = {
 		alter:  false,
 		ajax:   false,
 		debug:  true,
-		event:  true,
+		event:  false,
 		fail:   true,
 		mm:     false,
 		start:  true,
