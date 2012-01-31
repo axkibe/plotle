@@ -51,7 +51,7 @@ function MeshPeer() {
 		        type: 'Note',
 		        zone: {
 		          pnw : { 'x': 100, 'y': 100 },
-		          pse : { 'x': 400, 'y': 250 },
+		          pse : { 'x': 488, 'y': 250 },
 		        },
 		        doc: {
 		          fontsize : 13,
@@ -112,7 +112,7 @@ function MeshPeer() {
 		      '1' : {
 		        type: 'Note',
 		        zone: {
-		          pnw : { 'x': 450, 'y': 120 },
+		          pnw : { 'x': 550, 'y': 150 },
 		          pse : { 'x': 650, 'y': 250 },
 		        },
 		        doc: {

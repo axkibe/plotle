@@ -19,11 +19,13 @@
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  A networked node item editor.
-
  This is the client-side script for the user interface.
 
  Authors: Axel Kittenberger
  License: GNU Affero AGPLv3
+
+ A variable with $ in its name signifies something cached.
+ @03 are milestones for release 0.3
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -299,8 +301,10 @@ var ACT = {
 };
 Object.freeze(ACT);
 
+/**
+| which kind of event transfix() calls for all items which intersect x/y
+*/
 var TXE = {
-	/* which kind of event transfix() calls for all items which intersect x/y */
 	NONE       : 0,
 	DRAGSTART  : 1,
 	HOVER      : 2,
@@ -309,16 +313,6 @@ var TXE = {
 }
 Object.freeze(TXE);
 
-
-/**
-| onlook() events
-*/
-var ONLOOK = {
-	NONE   : 0,
-	UPDATE : 1,
-	REMOVE : 2,
-}
-Object.freeze(ONLOOK);
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,-,-,-.           .
@@ -657,13 +651,13 @@ function Action(type, item, start) {
 }
 
 /**
-| Action enums. TODO fixate
+| Action enums.
 */
-Action.PAN        = 1; // panning the background
-Action.ITEMDRAG   = 2; // draggine one item
-Action.ITEMRESIZE = 3; // resizing one item
-Action.FLOATMENU  = 4; // clicked the float menu (background click)
-Action.ITEMMENU   = 5; // clicked one item menu
+fixate(Action, 'PAN',       1); // panning the background
+fixate(Action, 'ITEMDRAG',  2); // draggine one item
+fixate(Action, 'ITEMRESIZE',3); // resizing one item
+fixate(Action, 'FLOATMENU', 4); // clicked the float menu (background click)
+fixate(Action, 'ITEMMENU',  5); // clicked one item menu
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,--.         .         .
@@ -708,14 +702,12 @@ Cockpit.prototype.mousedown = function(p, shift, ctrl) {
 	/*
 	var md = this.edgemenu.getMousepos(p);
 	if (md >= 0) {
-		iaction.act = ACT.NONE;
-		redraw = true;
+		shell.redraw = true;
 		switch(md) {
 		case 0: this._exportDialog(); break;
 		case 1: this._revertDialog(); break;
 		case 2: this._importDialog(); break;
 		}
-		if (redraw) this.redraw();
 		return MST.NONE;
 	}
 	*/
@@ -723,11 +715,15 @@ Cockpit.prototype.mousedown = function(p, shift, ctrl) {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ++Shell++
+ .---. .       .  .
+ \___  |-. ,-. |  |
+     \ | | |-' |  |
+ `---' ' ' `-' `' `'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- The users shell.
 
- Consists of the Cockpit and the Space s/he is viewing.
+ The users shell.
+ Consists of the Cockpit and the Space the user is viewing.
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Shell(fabric) {
 	if (shell !== null) throw new Error('Singleton not single');
@@ -741,7 +737,7 @@ function Shell(fabric) {
 	this.caret     = new Caret();
 	this.action    = null;
 	this.selection = new Selection();
-	
+
 	// A flag set to true if anything requests a redraw.
 	this.redraw = false;
 }
@@ -750,7 +746,6 @@ function Shell(fabric) {
 | Meshcraft got the systems focus.
 */
 Shell.prototype.systemFocus = function() {
-	// if (!this.focus) return // TODO
 	this.caret.show();
 	this.caret.update();
 }
@@ -773,8 +768,7 @@ Shell.prototype.blink = function() {
 /**
 | Creates an action.
 */
-// TODO rather name it start/stop Action
-Shell.prototype.beginAction = function(type, item, start) {
+Shell.prototype.startAction = function(type, item, start) {
 	if (this.action) throw new Error('double action');
 	return this.action = new Action(type, item, start);
 }
@@ -782,7 +776,7 @@ Shell.prototype.beginAction = function(type, item, start) {
 /**
 | Ends an action.
 */
-Shell.prototype.endAction = function() {
+Shell.prototype.stopAction = function() {
 	if (!this.action) throw new Error('ending no action');
 	this.action = null;
 }
@@ -977,9 +971,14 @@ Hexmenu.prototype.getMousepos = function(p) {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- +++ VSpace +++ 
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ ,.   ,. .---.
+ `|  /   \___  ,-. ,-. ,-. ,-.
+  | /        \ | | ,-| |   |-'
+  `'     `---' |-' `-^ `-' `-'
+~ ~ ~ ~ ~ ~ ~ ~|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+               '
  The visual of a space.
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
@@ -1131,7 +1130,6 @@ VSpace.prototype._transfix = function(txe, p, shift, ctrl) {
 */
 /*VSpace.prototype.actionScrollY = function(item, startY, scrollbar) {
 	var ia  = this.iaction;
-	ia.act  = ACT.SCROLLY;
 	ia.item = item;
 	ia.sy   = startY;
 	ia.ssy  = scrollbar.pos;
@@ -1181,7 +1179,7 @@ VSpace.prototype.dragstart = function(p, shift, ctrl) {
 	if (this._transfix(TXE.DRAGSTART, pp, shift, ctrl)) return true;
 
 	// otherwise do panning
-	shell.beginAction(Action.PAN, null, pp);
+	shell.startAction(Action.PAN, null, pp);
 	system.setCursor('crosshair');
 	return true;
 }
@@ -1196,7 +1194,7 @@ VSpace.prototype.click = function(p, shift, ctrl) {
 	// clicked the tab of the focused item?
 	var focus = this.focus;
 	if (focus && focus.withinItemMenu(pp)) {
-		var action = shell.beginAction(Action.ITEMMENU, null, pp);
+		var action = shell.startAction(Action.ITEMMENU, null, pp);
 		var labels = {n : 'Remove'};
 		action.itemmenu = new Hexmenu(focus.getH6Slice().pm.add(pan), settings.itemmenu, labels);
 		shell.redraw = true;
@@ -1207,7 +1205,7 @@ VSpace.prototype.click = function(p, shift, ctrl) {
 	if (this._transfix(TXE.CLICK, pp, shift, ctrl)) return true;
 
 	// otherwhise pop up the float menu
-	var action = shell.beginAction(Action.FLOATMENU, null, p);
+	var action = shell.startAction(Action.FLOATMENU, null, p);
 	action.floatmenu = new Hexmenu(p, settings.floatmenu, this._floatMenuLabels);
 	system.setCursor('default');
 	this.setFocus(null);
@@ -1245,7 +1243,7 @@ VSpace.prototype.dragstop = function(p, shift, ctrl) {
 	default :
 		throw new Error('Invalid action in "Space.dragstop"');
 	}
-	shell.endAction();
+	shell.stopAction();
 }
 
 /**
@@ -1303,7 +1301,7 @@ VSpace.prototype.mousedown = function(p, shift, ctrl) {
 	case Action.FLOATMENU :
 		var fm = action.floatmenu;
 		var md = fm.getMousepos(p);
-		shell.endAction();
+		shell.stopAction();
 
 		if (!md) break;
 		switch(md) {
@@ -1334,7 +1332,7 @@ VSpace.prototype.mousedown = function(p, shift, ctrl) {
 	case Action.ITEMMENU :
 		var im = action.itemmenu;
 		var md = im.getMousepos(p);
-		shell.endAction();
+		shell.stopAction();
 
 		if (!im) break;
 		switch(md) {
@@ -1352,7 +1350,7 @@ VSpace.prototype.mousedown = function(p, shift, ctrl) {
 		var com = this.focus.checkItemCompass(pp);
 		if (com) {
 			// resizing
-			var action = shell.beginAction(Action.ITEMRESIZE, this.focus, pp);
+			var action = shell.startAction(Action.ITEMRESIZE, this.focus, pp);
 			action.align = com;
 			action.startZone = this.focus.getZone();
 			system.setCursor(com+'-resize');
@@ -1366,9 +1364,16 @@ VSpace.prototype.mousedown = function(p, shift, ctrl) {
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ++ VItemCopse ++
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ ,.   ,. ,-_/ .             ,--.
+ `|  /   '  | |- ,-. ,-,-. | `-' ,-. ,-. ,-. ,-.
+  | /    .^ | |  |-' | | | |   . | | | | `-. |-'
+  `'     `--' `' `-' ' ' ' `--'  `-' |-' `-' `-'
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                                     '
  A visual collection of items.
+
+ @03: remove this.
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function VItemCopse(copse) {
 	this.copse = copse;
@@ -1426,12 +1431,15 @@ VPara.prototype.getFlow = function() {
 	var vdoc  = this.vdoc;
 	var vitem = vdoc.vitem;
 	var zone  = vitem.getZone();
-	var width = zone.width - vitem.imargin.x;
+	var sbary = vitem.scrollbarY;
+	var width = zone.width - vitem.imargin.x -
+		(sbary.visible ? settings.scrollbar.strength : 0);
 
 	if (this._flow$ && this._flow$.width === width) return this._flow$;
 
 	if (shell.caret.entity === this) {
 		// remove caret cache if its within this flow.
+		// @03 use a function
 		shell.caret.cp$line  = null;
 		shell.caret.cp$token = null;
 	}
@@ -1451,11 +1459,10 @@ VPara.prototype.getFlow = function() {
 	var line = 0;
 	flow[line] = { a: [], y: y, o: 0 };
 
-	// TODO go into subnodes instead
+	// @03 go into subnodes instead
 	var text = para.get('text');
 
-	//var reg = !dtree.pre ? (/(\s*\S+)\s?(\s*)/g) : (/(.+)()$/g);
-	//var reg = !dtree.pre ? (/(\s*\S+|\s+$)\s?(\s*)/g) : (/(.+)()$/g); TODO
+	//var reg = !pre ? (/(\s*\S+|\s+$)\s?(\s*)/g) : (/(.+)()$/g); @03
 	var reg = (/(\s*\S+|\s+$)\s?(\s*)/g);
 
 	for(var ca = reg.exec(text); ca != null; ca = reg.exec(text)) {
@@ -1469,13 +1476,13 @@ VPara.prototype.getFlow = function() {
 				// soft break
 				if (spread < xw) spread = xw;
 				x = 0; xw = x + w + space;
-				//y += R(vdoc.fontsize * (dtree.pre ? 1 : 1 + settings.bottombox));
+				//y += R(vdoc.fontsize * (pre ? 1 : 1 + settings.bottombox)); @03
 				y += R(vdoc.doc.get('fontsize') * (1 + settings.bottombox));
 				line++;
 				flow[line] = {a: [], y: y, o: ca.index};
 			} else {
 				// horizontal overflow
-				console.log('HORIZONTAL OVERFLOW'); // TODO
+				console.log('HORIZONTAL OVERFLOW'); // @03
 			}
 		}
 		flow[line].a.push({
@@ -1499,9 +1506,8 @@ VPara.prototype.getFlow = function() {
 | Returns the offset closest to a point.
 |
 | point: the point to look for
-| hit: if set ... TODO
 */
-VPara.prototype.getPointOffset = function(point, hit) {
+VPara.prototype.getPointOffset = function(point) {
 	var flow = this.getFlow();
 	var para = this.para;
 	var doc  = para.getAnchestor('DocAlley');
@@ -1515,15 +1521,13 @@ VPara.prototype.getPointOffset = function(point, hit) {
 	}
 	if (line >= flow.length) line--;
 
-	return this.getLineXOffset(line, point.x, hit);
+	return this.getLineXOffset(line, point.x);
 }
 
 /**
 | Returns the offset in flowed line number and x coordinate.
-|
-| hit: todo
 */
-VPara.prototype.getLineXOffset = function(line, x, hit) {
+VPara.prototype.getLineXOffset = function(line, x) {
 	var flow = this.getFlow();
 	var fline = flow[line];
 	var ftoken;
@@ -2119,11 +2123,8 @@ VItem.prototype.removed = function() {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  A scrollbar.
- todo when finished moved above item.
 
  currently only vertical scrollbars.
-
- -8833 is a special position for 'not set'.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /**
@@ -2131,21 +2132,22 @@ VItem.prototype.removed = function() {
 |
 | parent: parent holding the scrollbar
 */
-function Scrollbar(parent) {
-	this.parent = parent;
+function Scrollbar(item) {
+	this.parent   = item;
 	this.max      = null;
 	this.visible  = false;
 	this.pos      = 0;
-	this.aperture = null;
+	this.aperture = null; // the size of the bar
 	this.zone     = null;
 }
 
 /**
 | Makes the path for fabric.edge/fill/paint.
-| todo change descr on all path()s
+| TODO change descr on all path()s
 */
 Scrollbar.prototype.path = function(fabric, border, edge) {
 	if (border !== 0) throw new Error('Scrollbar.path does not support borders');
+
 	var z = this.zone;
 	var w = z.width;
 	var size  = R(this.aperture * z.height / this.max);
@@ -2166,16 +2168,21 @@ Scrollbar.prototype.path = function(fabric, border, edge) {
 }
 
 /**
-| Paints the scrollbar.
+| Draws the scrollbar.
 */
-Scrollbar.prototype.paint = function(fabric) {
+Scrollbar.prototype.draw = function(fabric) {
 	fabric.paint(settings.scrollbar.style.fill, settings.scrollbar.style.edge, this, 'path');
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ++ VDoc ++
+ ,.   ,. .-,--.
+ `|  /   ' |   \ ,-. ,-.
+  | /    , |   / | | |
+  `'     `-^--'  `-' `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
  An array of paragraph visuals.
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function VDoc(doc, vitem) {
 	this.doc = doc;
@@ -2248,6 +2255,23 @@ VDoc.prototype.draw = function(fabric, imargin, scrollp) {
 }
 
 /**
+| Returns the height of the document.
+| TODO caching
+*/
+VDoc.prototype.getHeight = function() {
+	var paraSep = half(this.doc.get('fontsize'));
+	var valley = this.valley;
+
+	var height = 0;
+	for (var a = 0, aZ = valley.length; a < aZ; a++) {
+		var vpara = valley[a];
+		var flow = vpara.getFlow();
+		height += flow.height + paraSep;
+	}
+	return height;
+}
+
+/**
 | Returns the default font of the dtree.
 */
 VDoc.prototype.getFont = function() {
@@ -2257,7 +2281,7 @@ VDoc.prototype.getFont = function() {
 /**
 | Returns the paragraph at point
 */
-VDoc.prototype.vParaAtPoint = function(p) {
+VDoc.prototype.getVParaAtPoint = function(p) {
 	var valley = this.valley;
 	for(var a = 0; a < valley.length; a++) {
 		var vpara = valley[a];
@@ -2329,10 +2353,10 @@ VNote.prototype.highlight = function(fabric) {
 /**
 | Returns the para at point. todo, honor scroll here.
 */
-VNote.prototype.vParaAtPoint = function(p, action) {
+VNote.prototype.getVParaAtPoint = function(p, action) {
 	// TODO rename imargin to innerMargin
 	if (p.y < this.imargin.n) return null;
-	return this.vdoc.vParaAtPoint(p, action);
+	return this.vdoc.getVParaAtPoint(p, action);
 }
 
 /**
@@ -2363,7 +2387,7 @@ VNote.prototype.transfix = function(txe, p, shift, ctrl) {
 			//space.actionScrollY(this, p.y, this.scrollbarY);
 			throw new Error('TODO');
 		} else {
-			shell.beginAction(Action.ITEMDRAG, this, p);
+			shell.startAction(Action.ITEMDRAG, this, p);
 			system.setCursor('move');
 		}
 		return true;
@@ -2375,7 +2399,7 @@ VNote.prototype.transfix = function(txe, p, shift, ctrl) {
 		var pnw = this.getZone().pnw;
 		var pi = p.sub(pnw);
 
-		var vpara = this.vParaAtPoint(pi);
+		var vpara = this.getVParaAtPoint(pi);
 		if (vpara) {
 			var offset = vpara.getPointOffset(pi.sub(vpara.pnw));
 			shell.caret.set(vpara, offset);
@@ -2409,7 +2433,7 @@ VNote.prototype.getZone = function() {
 	var action = shell.action;
 
 	if (!action || action.item !== this) return item.zone;
-	// TODO cache the last zone
+	// @03 cache the last zone
 
 	switch (action.type) {
 	case Action.ITEMDRAG:
@@ -2479,7 +2503,7 @@ VNote.prototype.getZone = function() {
 /**
 | Sets the notes position and size.
 |
-| TODO this might as well be removed.
+| @03 this might as well be removed.
 */
 VNote.prototype.setZone = function(zone) {
 	// ensures minimum size
@@ -2489,7 +2513,7 @@ VNote.prototype.setZone = function(zone) {
 	if (this.item.zone.eq(zone)) return;
 	meshpeer.setZone(this.item, zone);
 
-	// TODO this should happen by MeshIO settings...
+	// @03 this should happen by MeshIO settings...
 	this._fabric$flag = false;
 	// adapts scrollbar position
 	this.setScrollbar();
@@ -2512,15 +2536,6 @@ VNote.prototype.getSilhoutte = function(zone) {
 }
 
 /**
-| Returns the inner zone
-*/
-/* TODO unused?
-VNote.prototype.getInnerZone = function() {
-	return this.getZone().reduce(this.imargin);
-}
-*/
-
-/**
 | Called by subvisuals when they got changed.
 */
 VNote.prototype.poke = function() {
@@ -2534,24 +2549,28 @@ VNote.prototype.poke = function() {
 VNote.prototype.setScrollbar = function(pos) {
 	var sbary = this.scrollbarY;
 	if (!sbary.visible) return;
-	sbary.max = this.dtree.height;
-	// todo make a Rect.renew!
+
+	// @03 double call to getHeight, also in VDoc.draw()
+	sbary.max = this.vdoc.getHeight();
+
+	var zone = this.getZone();
+	// @03 make a Rect.renew
 	sbary.zone = new Rect(
 		Point.renew(
-			this.zone.width - this.imargin.e - settings.scrollbar.strength,
+			zone.width - this.imargin.e - settings.scrollbar.strength,
 			this.imargin.n,
 			sbary.zone && sbary.zone.pnw),
 		Point.renew(
-			this.zone.width - this.imargin.e,
-			this.zone.height - this.imargin.s - 1,
+			zone.width - this.imargin.e,
+			zone.height - this.imargin.s - 1,
 			sbary.zone && sbary.zone.pse));
-	sbary.aperture = this.iheight;
-	var smaxy = max(0, this.dtree.height - this.iheight);
+
+	sbary.aperture = zone.height - this.imargin.y;
+	var smaxy = max(0, sbary.max - zone.height);
 
 	if (typeof(pos) !== 'undefined') sbary.pos = pos;
 	if (sbary.pos > smaxy) sbary.pos = smaxy;
 	if (sbary.pos < 0) sbary.pos = 0;
-	if (typeof(pos) !== 'undefined') this.listen();
 }
 
 
@@ -2570,44 +2589,38 @@ VNote.prototype.draw = function(fabric) {
 		zone.width  !== this._fabric$size.width ||
 		zone.height !== this._fabric$size.height)
 	{
-		var silhoutte = this.getSilhoutte(zone);
+		var vdoc = this.vdoc;
+		var imargin = this.imargin;
+		
+		// calculates if a scrollbar is needed
+		var sbary  = this.scrollbarY;
+		var vheight = vdoc.getHeight();
+		if (!sbary.visible && vheight > zone.height - imargin.y) {
+			// doesn't use a scrollbar but should
+			debug('turning scrollbar on');
+			sbary.visible = true;
+		} else if (sbary.visible && vheight <= zone.height - imargin.y) {
+			// uses a scrollbar but shouldn't
+			debug('turning scrollbar off');
+			sbary.visible = false;
+		}
 
-		// resize the canvas
+		// resizes the canvas
 		f.attune(zone);
-
-
+		var silhoutte = this.getSilhoutte(zone);
 		f.fill(settings.note.style.fill, silhoutte, 'path');
 
-//		doc.flowWidth = this.iwidth; TODOX
+		// draws selection and text
+		sbary.point = Point.renew(0, sbary.visible ? sbary.pos : 0, sbary.point);
+		vdoc.draw(f, imargin, sbary.point);
 
-		// calculates if a scrollbar is needed
-		/* TODO
-		var sbary = this.scrollbarY;
-
-		if (!sbary.visible && dtree.height > this.iheight) {
-			// doesn't use a scrollbar but should
-			sbary.visible = true;
-			dtree.flowWidth = this.iwidth;
-		} else if (sbary.visible && dtree.height <= this.iheight) {
-			// uses a scrollbar but shouldn't
-			sbary.visible = false;
-			dtree.flowWidth = this.iwidth;
-		}
-		*/
-
-		// paints selection and text
-		//dtree.draw(f, selection, this.imargin, sbary.visible ? sbary.pos : 0);
-		this.vdoc.draw(f, this.imargin, Point.zero); // TODO scrollp
-
-		/*
-		// paints the scrollbar
+		// draws the scrollbar
 		if (sbary.visible) {
 			this.setScrollbar();
-			sbary.paint(f);
+			sbary.draw(f);
 		}
-		*/
 
-		// paints the border
+		// draws the border
 		f.edge(settings.note.style.edge, silhoutte, 'path');
 
 		this._fabric$flag = true;
@@ -2682,13 +2695,13 @@ Label.prototype.transfix = function(txe, p, shift, ctrl) {
 		}
 		shell.vspace.setFocus(this);
 
-		shell.beginAction(Action.ITEMDRAG, this, p.sub(this.zone.pnw));
+		shell.startAction(Action.ITEMDRAG, this, p.sub(this.zone.pnw));
 		System.setCursor('move');
 		return true;
 	case TXE.CLICK:
 		shell.vspace.setFocus(this);
 		var pi = p.sub(this.zone.pnw);
-		var para = this.vParaAtPoint(pi);
+		var para = this.getVParaAtPoint(pi);
 		if (para) {
 			throw new Error('TODO');
 			/*
@@ -2781,8 +2794,8 @@ Label.prototype.moveto = function(pnw) {
 /**
 | returns the para at point.
 */
-Label.prototype.vParaAtPoint = function(p) {
-	return this.dtree.vParaAtPoint(p);
+Label.prototype.getVParaAtPoint = function(p) {
+	return this.dtree.getVParaAtPoint(p);
 }
 
 /* drops the cache */
@@ -3010,14 +3023,14 @@ Relation.prototype.transfix = function(txe, p, shift, ctrl) {
 		}
 		shell.vspace.setFocus(this);
 
-		shell.beginAction(Action.ITEMDRAG, this, p.sub(this.handlezone.pnw));
+		shell.startAction(Action.ITEMDRAG, this, p.sub(this.handlezone.pnw));
 		system.setCursor('move');
 		return true;
 	case TXE.CLICK:
 		shell.vspace.setFocus(this);
 
 		var pi = p.sub(this.textZone.pnw);
-		var para = this.vParaAtPoint(pi);
+		var para = this.getVParaAtPoint(pi);
 		if (para) {
 			/* TODO
 			var editor = System.editor;
@@ -3056,8 +3069,8 @@ Relation.prototype.moveto = function(pnw) {
 /**
 | Returns the para at point.
 */
-Relation.prototype.vParaAtPoint = function(p) {
-	return this.dtree.vParaAtPoint(p);
+Relation.prototype.getVParaAtPoint = function(p) {
+	return this.dtree.getVParaAtPoint(p);
 }
 
 
