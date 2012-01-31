@@ -1,7 +1,5 @@
 Meshcraft
 =========
-Description
------------
 With Meshcraft you can organize your notes/presentations/texts in a mesh using your browser.
 
 Currently version 0.1 is running live at http://meshcraft.net/
