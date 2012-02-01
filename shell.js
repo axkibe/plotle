@@ -100,7 +100,7 @@ var settings = {
 		newHeight : 150,
 
 		// inner margin to text
-		imargin  : { n: 5, e: 5, s: 5, w: 5 },
+		imargin  : { n: 4, e: 5, s: 4, w: 5 },
 
 		style : {
 			fill : {
@@ -296,7 +296,6 @@ Object.freeze(MST);
 // TODO remove
 var ACT = {
 	NONE    : 0, // idle
-	SCROLLY : 4, // scrolling a note
 	RBIND   : 7  // dragging a new relation
 };
 Object.freeze(ACT);
@@ -644,9 +643,9 @@ Caret.prototype.deselect = function() {
 /**
 | Constructor.
 */
-function Action(type, item, start) {
+function Action(type, vitem, start) {
 	this.type  = type;
-	this.item  = item;
+	this.vitem = vitem;
 	this.start = start;
 }
 
@@ -658,6 +657,7 @@ fixate(Action, 'ITEMDRAG',  2); // draggine one item
 fixate(Action, 'ITEMRESIZE',3); // resizing one item
 fixate(Action, 'FLOATMENU', 4); // clicked the float menu (background click)
 fixate(Action, 'ITEMMENU',  5); // clicked one item menu
+fixate(Action, 'SCROLLY',   6); // scrolling a note
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,--.         .         .
@@ -768,9 +768,9 @@ Shell.prototype.blink = function() {
 /**
 | Creates an action.
 */
-Shell.prototype.startAction = function(type, item, start) {
+Shell.prototype.startAction = function(type, vitem, start) {
 	if (this.action) throw new Error('double action');
-	return this.action = new Action(type, item, start);
+	return this.action = new Action(type, vitem, start);
 }
 
 /**
@@ -1126,16 +1126,6 @@ VSpace.prototype._transfix = function(txe, p, shift, ctrl) {
 }*/
 
 /**
-| Starts a scrolling action
-*/
-/*VSpace.prototype.actionScrollY = function(item, startY, scrollbar) {
-	var ia  = this.iaction;
-	ia.item = item;
-	ia.sy   = startY;
-	ia.ssy  = scrollbar.pos;
-}*/
-
-/**
 | Binds a relation.
 */
 /*VSpace.prototype.actionRBindTo = function(toItem) {
@@ -1223,17 +1213,15 @@ VSpace.prototype.dragstop = function(p, shift, ctrl) {
 	switch (action.type) {
 	case Action.ITEMDRAG :
 	case Action.ITEMRESIZE :
-		action.item.setZone(action.item.getZone());
+		action.vitem.setZone(action.vitem.getZone());
 		system.setCursor('default');
 		shell.redraw = true;
 		break;
 	case Action.PAN :
 		break;
-
-	/* TODO
-	case ACT.SCROLLY :
-		iaction.sy   = null;
+	case Action.SCROLLY :
 		break;
+	/* TODO
 	case ACT.RBIND :
 		iaction.smp = null;
 		this._transfix(TXE.RBINDTO, pp, shift, ctrl);
@@ -1264,16 +1252,18 @@ VSpace.prototype.dragmove = function(p, shift, ctrl) {
 		action.move = pp;
 		shell.redraw = true;
 		return;
-	/* TODO
-	case ACT.SCROLLY:
+	case Action.SCROLLY:
 		// todo let the item scroll itself
-		var dy = pp.y - iaction.sy;
-		var it = iaction.item;
-		var sbary = it.scrollbarY;
-		var spos = iaction.ssy + sbary.max / sbary.zone.height * dy;
-		it.setScrollbar(spos);
-		this.redraw();
-		return true;
+		var start = action.start;
+		var dy = pp.y - start.y;
+		var vitem = action.vitem;
+		var sbary = vitem.scrollbarY;
+		var spos = action.startPos + sbary.max / sbary.zone.height * dy;
+		vitem.setScrollbar(spos);
+		vitem.poke();
+		shell.redraw = true;
+		return;
+	/* TODO
 	case ACT.RBIND :
 		iaction.item2 = null;
 		this._transfix(TXE.RBINDHOVER, pp, shift, ctrl);
@@ -2155,15 +2145,15 @@ Scrollbar.prototype.path = function(fabric, border, edge) {
 	var sy = z.pnw.y + R(this.pos * ((z.height - msize + size) / this.max));
 
 	fabric.beginPath();
-	fabric.moveTo(z.pnw.x, R(sy + cos30 * w / 2), edge);
-	fabric.lineTo(z.pnw.x + R(w / 4),     sy,         edge);
-	fabric.lineTo(z.pnw.x + R(w * 3 / 4), sy,         edge);
-	fabric.lineTo(z.pse.x, R(sy + cos30 * w / 2), edge);
+	fabric.moveTo(z.pnw.x,                R(sy + cos30 * w / 2), edge);
+	fabric.lineTo(z.pnw.x + R(w / 4),     sy,                    edge);
+	fabric.lineTo(z.pnw.x + R(w * 3 / 4), sy,                    edge);
+	fabric.lineTo(z.pse.x,                R(sy + cos30 * w / 2), edge);
 
-	fabric.lineTo(z.pse.x, R(sy + msize - cos30 * w / 2), edge);
-	fabric.lineTo(z.pnw.x + R(w * 3 / 4), sy + msize,         edge);
-	fabric.lineTo(z.pnw.x + R(w / 4),     sy + msize,         edge);
-	fabric.lineTo(z.pnw.x, R(sy + msize - cos30 * w / 2), edge);
+	fabric.lineTo(z.pse.x,                R(sy + msize - cos30 * w / 2), edge);
+	fabric.lineTo(z.pnw.x + R(w * 3 / 4), sy + msize,                    edge);
+	fabric.lineTo(z.pnw.x + R(w / 4),     sy + msize,                    edge);
+	fabric.lineTo(z.pnw.x,                R(sy + msize - cos30 * w / 2), edge);
 	fabric.closePath();
 }
 
@@ -2384,8 +2374,8 @@ VNote.prototype.transfix = function(txe, p, shift, ctrl) {
 		var pnw = this.getZone().pnw;
 		var pr = p.sub(pnw);
 		if (sbary.visible && sbary.zone.within(pr)) {
-			//space.actionScrollY(this, p.y, this.scrollbarY);
-			throw new Error('TODO');
+			var action = shell.startAction(Action.SCROLLY, this, p);
+			action.startPos = sbary.pos;
 		} else {
 			shell.startAction(Action.ITEMDRAG, this, p);
 			system.setCursor('move');
@@ -2432,7 +2422,7 @@ VNote.prototype.getZone = function() {
 	var item   = this.item;
 	var action = shell.action;
 
-	if (!action || action.item !== this) return item.zone;
+	if (!action || action.vitem !== this) return item.zone;
 	// @03 cache the last zone
 
 	switch (action.type) {
@@ -2566,7 +2556,7 @@ VNote.prototype.setScrollbar = function(pos) {
 			sbary.zone && sbary.zone.pse));
 
 	sbary.aperture = zone.height - this.imargin.y;
-	var smaxy = max(0, sbary.max - zone.height);
+	var smaxy = max(0, sbary.max - sbary.aperture);
 
 	if (typeof(pos) !== 'undefined') sbary.pos = pos;
 	if (sbary.pos > smaxy) sbary.pos = smaxy;
@@ -2591,17 +2581,15 @@ VNote.prototype.draw = function(fabric) {
 	{
 		var vdoc = this.vdoc;
 		var imargin = this.imargin;
-		
+
 		// calculates if a scrollbar is needed
 		var sbary  = this.scrollbarY;
 		var vheight = vdoc.getHeight();
 		if (!sbary.visible && vheight > zone.height - imargin.y) {
 			// doesn't use a scrollbar but should
-			debug('turning scrollbar on');
 			sbary.visible = true;
 		} else if (sbary.visible && vheight <= zone.height - imargin.y) {
 			// uses a scrollbar but shouldn't
-			debug('turning scrollbar off');
 			sbary.visible = false;
 		}
 

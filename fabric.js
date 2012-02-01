@@ -581,7 +581,6 @@ function Point(a1, a2) {
 		fixate(this, 'x', a1.x);
 		fixate(this, 'y', a1.y);
 	} else {
-		ensureInteger(a1, a2);
 		fixate(this, 'x', a1);
 		fixate(this, 'y', a2);
 	}
