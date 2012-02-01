@@ -334,11 +334,14 @@ Fabric.prototype.drawImage = function(image, a1, a2) {
 		if (!(image.width > 0 && image.height > 0)) return;
 		image = image._canvas;
 	}
+	var x, y;
 	if (typeof(a1) === 'object') {
-		this._cx.drawImage(image, a1.x + pan.x, a1.y + pan.y);
-		return;
+		x = a1.x; y = a1.y;
+	} else {
+		x = a1; y = a2;
 	}
-	this._cx.drawImage(image, a1 + pan.x, a2 + pan.y);
+	ensureInteger(x, y);
+	this._cx.drawImage(image, x + pan.x, y + pan.y);
 }
 
 
@@ -348,11 +351,14 @@ Fabric.prototype.drawImage = function(image, a1, a2) {
 */
 Fabric.prototype.putImageData = function(imagedata, a1, a2) {
 	var pan = this.pan;
+	var x, y;
 	if (typeof(a1) === 'object') {
-		this._cx.putImageData(imagedata, a1.x + pan.x, a1.y + pan.y);
-		return;
+		x = a1.x; y = a1.y;
+	} else {
+		x = a1;   y = a2;
 	}
-	this._cx.putImageData(imagedata, a1 + pan.x, a2 + pan.y);
+	ensureInteger(x, y);
+	this._cx.putImageData(imagedata, x + pan.x, y + pan.y);
 }
 
 /**
@@ -362,15 +368,23 @@ Fabric.prototype.putImageData = function(imagedata, a1, a2) {
 */
 Fabric.prototype.getImageData = function(a1, a2, a3, a4) {
 	var pan = this.pan;
+	var x1, y1, x2, y2;
 	if (typeof(p) === 'object') {
 		if (a1 instanceof Rect) {
-			return this._cx.getImageData(a1.pnw.x, a1.pnw.y, a1.pse.x, a1.pse.y);
+			x1 = a1.pnw.x; y1 = a1.pnw.y;
+			x2 = a1.pse.x; y2 = a1.pse.y;
+		} else if (a1 instanceof Point) {
+			x1 = a1.x; y1 = a1.y;
+			x2 = a2.x; y2 = a2.y;
+		} else {
+			throw new Error('getImageData not a rectangle');
 		}
-		if (a1 instanceof Point) {
-			return this._cx.getImageData(a1.x, a1.y, a2.x, a2.y);
-		}
-		throw new Error('getImageData not a rectangle');
+	} else {
+		x1 = a1; y1 = a2;
+		x2 = a3; y2 = a4;
 	}
+
+	ensureInteger(x1, y2, x1, y2);
 	return this._cx.getImageData(a1, a2, a3, a4);
 }
 

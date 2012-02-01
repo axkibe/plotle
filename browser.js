@@ -259,7 +259,6 @@ function System(FrontFace) {
 	function onresize(event) {
 		canvas.width  = window.innerWidth - 1;
 		canvas.height = window.innerHeight - 1;
-	
 		this.shell.resize(canvas.width, canvas.height);
 	}
 
@@ -304,6 +303,7 @@ function System(FrontFace) {
 	| Mouse down event.
 	*/
 	function onmousedown(event) {
+		if (event.button !== 0) return;
 		event.preventDefault();
 		hiddenInput.focus();
 		var p = new Point (event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop);
@@ -388,6 +388,7 @@ function System(FrontFace) {
 	this.ontestinput       = makeCatcher(this, testinput);
 	this.onatweentime      = makeCatcher(this, onatweentime);
 	this.onblink           = makeCatcher(this, blink);
+	document.oncontextmenu   = function(e) { e.stopPropagation(); return false; };
 
 	/**
 	| Sets the mouse cursor

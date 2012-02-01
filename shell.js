@@ -1853,31 +1853,31 @@ VPara.prototype.drawCaret = function() {
 
 	caret.pos$ = this.getOffsetPoint(shell.caret.offset, shell.caret);
 
-	//var sy = (it.scrollbarY && it.scrollbarY.visible && it.scrollbarY.pos) || 0; TODO
+	var sbary   = vitem.scrollbarY;
+	var scrolly = sbary ? sbary.getPos() : 0;
 
-	var cyn = caret.pos$.y + this.pnw.y;
+	var cyn = R(caret.pos$.y + this.pnw.y - th - scrolly + 2);
 	var cys = cyn + th;
-	var cyx = caret.pos$.x + this.pnw.x;
+	var cx  = caret.pos$.x + this.pnw.x - 1;
 
 	cyn = min(max(cyn, 0), zone.height);
 	cys = min(max(cys, 0), zone.height);
-	if (cyn === cys) return;
+	var ch  = cys - cyn;
+	if (ch === 0) return;
 
-	var cp = new Point(
-		cyx + zone.pnw.x + pan.x - 1,
-		cyn + zone.pnw.y + pan.y - th + 2);
+	var cp = new Point(cx + zone.pnw.x + pan.x, cyn + zone.pnw.y + pan.y);
 
 	shell.caret.screenPos$ = cp;
 
 	if (Caret.useGetImageData) {
-		shell.caret.save$ = shell.fabric.getImageData(cp.x, cp.y, 3, th + 2);
+		shell.caret.save$ = shell.fabric.getImageData(cp.x, cp.y, 3, ch + 2);
 	} else {
 		// paradoxically this is often way faster, especially on firefox
 		shell.caret.save$ = new Fabric(shell.fabric.width, shell.fabric.height);
 		shell.caret.save$.drawImage(shell.fabric, 0, 0);
 	}
 
-	shell.fabric.fillRect('black', cp.x + 1, cp.y + 1, 1, th);
+	shell.fabric.fillRect('black', cp.x + 1, cp.y + 1, 1, ch);
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2098,13 +2098,6 @@ VItem.prototype.drawHandles = function(fabric) {
 	fabric.paint(sstyle.fill, sstyle.edge, this.getH6Slice(), 'path');
 }
 
-/**
-| Called when item is removed
-*/
-VItem.prototype.removed = function() {
-	// nothing
-}
-
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .---.             .  .  .
  \___  ,-. ,-. ,-. |  |  |-. ,-. ,-.
@@ -2126,7 +2119,7 @@ function Scrollbar(item) {
 	this.parent   = item;
 	this.max      = null;
 	this.visible  = false;
-	this.pos      = 0;
+	this._pos     = 0;
 	this.aperture = null; // the size of the bar
 	this.zone     = null;
 }
@@ -2136,13 +2129,14 @@ function Scrollbar(item) {
 | TODO change descr on all path()s
 */
 Scrollbar.prototype.path = function(fabric, border, edge) {
-	if (border !== 0) throw new Error('Scrollbar.path does not support borders');
+	if (border !== 0)  throw new Error('Scrollbar.path does not support borders');
+	if (!this.visible) throw new Error('Pathing an invisible scrollbar');
 
 	var z = this.zone;
 	var w = z.width;
 	var size  = R(this.aperture * z.height / this.max);
 	var msize = max(size, settings.scrollbar.minSize);
-	var sy = z.pnw.y + R(this.pos * ((z.height - msize + size) / this.max));
+	var sy = z.pnw.y + R(this._pos * ((z.height - msize + size) / this.max));
 
 	fabric.beginPath();
 	fabric.moveTo(z.pnw.x,                R(sy + cos30 * w / 2), edge);
@@ -2162,6 +2156,22 @@ Scrollbar.prototype.path = function(fabric, border, edge) {
 */
 Scrollbar.prototype.draw = function(fabric) {
 	fabric.paint(settings.scrollbar.style.fill, settings.scrollbar.style.edge, this, 'path');
+}
+
+/**
+| Returns the scrollbars position.
+*/
+Scrollbar.prototype.getPos = function() {
+	if (!this.visible) return 0;
+	return this._pos;
+}
+
+/**
+| Sets the scrollbars position.
+*/
+Scrollbar.prototype.setPos = function(pos) {
+	if (pos < 0) throw new Error('Scrollbar.setPos < 0');
+	return this._pos = pos;
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2239,7 +2249,7 @@ VDoc.prototype.draw = function(fabric, imargin, scrollp) {
 
 		// TODO name pnw$
 		vpara.pnw = new Point(imargin.w, R(y));
-		fabric.drawImage(vpara.getFabric(), imargin.w, y - scrollp.y);
+		fabric.drawImage(vpara.getFabric(), imargin.w, y - R(scrollp.y));
 		y += flow.height + paraSep;
 	}
 }
@@ -2375,7 +2385,7 @@ VNote.prototype.transfix = function(txe, p, shift, ctrl) {
 		var pr = p.sub(pnw);
 		if (sbary.visible && sbary.zone.within(pr)) {
 			var action = shell.startAction(Action.SCROLLY, this, p);
-			action.startPos = sbary.pos;
+			action.startPos = sbary.getPos();
 		} else {
 			shell.startAction(Action.ITEMDRAG, this, p);
 			system.setCursor('move');
@@ -2385,9 +2395,8 @@ VNote.prototype.transfix = function(txe, p, shift, ctrl) {
 		shell.vspace.setFocus(this);
 		shell.redraw = true;
 
-		// var op = p.sub(this.zone.pnw.w, this.zone.pnw.y - max(0, this.scrollbarY.pos)); TODO
 		var pnw = this.getZone().pnw;
-		var pi = p.sub(pnw);
+		var pi = p.sub(pnw.x, pnw.y - this.scrollbarY.getPos());
 
 		var vpara = this.getVParaAtPoint(pi);
 		if (vpara) {
@@ -2558,9 +2567,11 @@ VNote.prototype.setScrollbar = function(pos) {
 	sbary.aperture = zone.height - this.imargin.y;
 	var smaxy = max(0, sbary.max - sbary.aperture);
 
-	if (typeof(pos) !== 'undefined') sbary.pos = pos;
-	if (sbary.pos > smaxy) sbary.pos = smaxy;
-	if (sbary.pos < 0) sbary.pos = 0;
+	if (typeof(pos) === 'undefined') pos = sbary.getPos();
+	// TODO use limit()
+	if (pos > smaxy) pos = smaxy;
+	if (pos < 0) pos = 0;
+	sbary.setPos(pos);
 }
 
 
@@ -2599,7 +2610,7 @@ VNote.prototype.draw = function(fabric) {
 		f.fill(settings.note.style.fill, silhoutte, 'path');
 
 		// draws selection and text
-		sbary.point = Point.renew(0, sbary.visible ? sbary.pos : 0, sbary.point);
+		sbary.point = Point.renew(0, sbary.getPos(), sbary.point);
 		vdoc.draw(f, imargin, sbary.point);
 
 		// draws the scrollbar
