@@ -123,6 +123,8 @@ var settings = {
 	},
 
 	label : {
+		minHeight :  20,
+
 		style : {
 			edge : [
 				{ border: 0, width: 0.2, color: 'rgba(200, 100, 0, 0.5)' },
@@ -452,25 +454,6 @@ Caret.prototype.update = function() {
 }
 
 /**
-| Inserts a new line
-*/
-/*Caret.prototype.newline = function() {
-	var caret  = this.caret;
-	var ce    = caret.element;
-	var co    = caret.offset;
-	var ct    = ce.text;
-	// todo multi node ability
-	var opara = ce.anchestor(Para);
-
-	ce.text = ct.substring(0, co);
-	var npara = new Para(ct.substring(co, ct.length));
-	opara.parent.insertBefore(npara, opara.next);
-	caret.set(npara.first, 0);
-}*/
-
-
-
-/**
 | Switches caret visibility state.
 */
 Caret.prototype.blink = function() {
@@ -479,35 +462,6 @@ Caret.prototype.blink = function() {
 		this.update();
 	}
 }
-
-
-/**
-| Received a input from user
-| returns true if redraw is needed
-*/
-/*Caret.prototype.input = function(item, text) {
-	if (!item) return false;
-	var caret = this.caret;
-	if (this.selection.active) {
-		this.deleteSelection();
-	}
-	var reg = /([^\n]+)(\n?)/g;
-	for(var ca = reg.exec(text); ca != null; ca = reg.exec(text)) {
-		var line = ca[1];
-		var ce = caret.element;
-		var co = caret.offset;
-		var ct = ce.text;
-		ce.text = ct.substring(0, co) + line + ct.substring(co, ct.length);
-		this.caret.offset += text.length;
-		if (ca[2]) {
-			this.newline();
-		}
-	}
-	ce.listen();
-	throw new Error('TODO');
-	//System.repository.updateItem(item);
-	return true;
-}*/
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .---.     .          .
@@ -577,7 +531,7 @@ Selection.prototype.innerText = function() {
 
 	var buf = [bet.substring(bo, bet.length)];
 	for (var n = be.parent.next.first; n != ee; n = n.parent.next.first) {
-		// ^ todo make multi child compatible
+		// ^ TODO make multi child compatible
 		if (!n) { throw new Error('selection akward');}
 		buf.push('\n');
 		buf.push(n.text);
@@ -610,7 +564,7 @@ Selection.prototype.remove = function() {
 		be.text = be.text.substring(0, bo) + eet.substring(eo, eet.length);
 		var pn;
 		for (pn = be.parent.next; pn.first != ee; pn = pn.next) {
-			// ^ todo make multi child compatible
+			// ^ TODO make multi child compatible
 			pn.parent.remove(pn);
 		}
 		pn.parent.remove(pn);
@@ -670,7 +624,7 @@ fixate(Action, 'SCROLLY',   6); // scrolling a note
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Cockpit() {
-// todo, use this!
+// TODO, use this!
 }
 
 /**
@@ -987,7 +941,7 @@ Hexmenu.prototype.getMousepos = function(p) {
 function VSpace(space) {
 	this.space = space;
 	this.fabric = new Fabric(system.fabric);
-	this.zoom = 1; // TODO
+	this.zoom = 1; // @03
 	this.vitems = new VItemCopse(space.items);
 	this._floatMenuLabels = {c: 'new', n: 'Note', ne: 'Label'};
 }
@@ -1018,7 +972,7 @@ VSpace.prototype.draw = function() {
 		var arrow = Line.connect(
 				ia.item.handlezone, 'normal',
 			(ia.item2 && ia.item2.handlezone) || ia.smp , 'arrow');
-			// todo use something like bindzone
+			// TODO use something like bindzone
 			if (ia.item2) ia.item2.highlight(this.fabric);
 		arrow.draw(this.fabric);
 		*/
@@ -1083,7 +1037,7 @@ VSpace.prototype.mousehover = function(p, shift, ctrl) {
 	}
 
 	if (this.focus) {
-		// todo move into items
+		// TODO move into items
 		if (this.focus.withinItemMenu(pp)) {
 			system.setCursor('pointer');
 			return true;
@@ -1096,7 +1050,7 @@ VSpace.prototype.mousehover = function(p, shift, ctrl) {
 		}
 	}
 
-	// todo remove nulls by shiftKey, ctrlKey
+	// TODO remove nulls by shiftKey, ctrlKey
 	var hit = this._transfix(TXE.HOVER, pp, null, null);
 	if (!hit) system.setCursor('crosshair');
 	return true;
@@ -1253,7 +1207,7 @@ VSpace.prototype.dragmove = function(p, shift, ctrl) {
 		shell.redraw = true;
 		return;
 	case Action.SCROLLY:
-		// todo let the item scroll itself
+		// TODO let the item scroll itself
 		var start = action.start;
 		var dy = pp.y - start.y;
 		var vitem = action.vitem;
@@ -1371,7 +1325,12 @@ function VItemCopse(copse) {
 	this.vcopse = {};
 
 	for(var k in copse.loop()) {
-		this.vcopse[k] = new VNote(copse.get(k));
+		var item = copse.get(k);
+		switch (item.get('type')) {
+		case 'Note'  : this.vcopse[k] = new VNote(copse.get(k)); break;
+		case 'Label' : this.vcopse[k] = new VLabel(copse.get(k)); break;
+		default : throw new Error('unknown type: '+item.type);
+		}
 	}
 }
 
@@ -1422,8 +1381,10 @@ VPara.prototype.getFlow = function() {
 	var vitem = vdoc.vitem;
 	var zone  = vitem.getZone();
 	var sbary = vitem.scrollbarY;
-	var width = zone.width - vitem.imargin.x -
-		(sbary.visible ? settings.scrollbar.strength : 0);
+	var width = zone.width - vitem.imargin.x
+	if (sbary && sbary.visible) {
+		width -= settings.scrollbar.strength;
+	}
 
 	if (this._flow$ && this._flow$.width === width) return this._flow$;
 
@@ -1734,7 +1695,7 @@ VPara.prototype.specialKey = function(keycode, shift, ctrl) {
 			select.mark2.set(caret);
 			system.setInput(select.innerText());
 			// clears item cache
-			item.listen();  // todo rename.
+			item.listen();  // TODO rename.
 			shell.redraw = true;
 		}
 	}*/
@@ -1843,7 +1804,7 @@ VPara.prototype.getOffsetPoint = function(offset, flowPos$) {
 VPara.prototype.drawCaret = function() {
 	if (shell.caret.entity !== this) throw new Error('Drawing caret for invalid para');
 	var para  = this.para;
-	var doc   = para.getAnchestor('DocAlley'); // todo remove
+	var doc   = para.getAnchestor('DocAlley'); // TODO remove
 	var vdoc  = this.vdoc;
 	var vitem = vdoc.vitem;
 	var zone  = vitem.getZone();
@@ -1904,7 +1865,7 @@ VPara.prototype.drawCaret = function() {
 */
 /*
 DTree.prototype.pathSelection = function(fabric, border, edge, select, imargin, scrolly) {
-	// todo make part of selection to use shortcut with XY
+	// TODO make part of selection to use shortcut with XY
 	var b = select.mark1;
 	var e = select.mark2;
 	var bp = b.getPoint();
@@ -1961,142 +1922,6 @@ DTree.prototype.pathSelection = function(fabric, border, edge, select, imargin, 
 	}
 }
 */
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- VItem
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- Something visual in a Space.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function VItem() {
-	// TODO add $
-	this._h6slice = null;
-}
-
-/**
-| Return the hexagon slice that is the handle
-*/
-VItem.prototype.getH6Slice = function() {
-	var zone = this.getZone();
-
-	if (this._h6slice && this._h6slice.psw.eq(zone.pnw)) return this._h6slice;
-
-	return this._h6slice = new HexagonSlice(
-		zone.pnw, settings.itemmenu.innerRadius, settings.itemmenu.slice.height);
-};
-
-/**
-| Returns if point is within the item menu
-*/
-VItem.prototype.withinItemMenu = function(p) {
-	return this.getH6Slice().within(p);
-}
-
-/**
-| Returns the compass direction of the handle if p is on a resizer handle.
-| todo rename
-*/
-VItem.prototype.checkItemCompass = function(p) {
-	var ha = this.handles;
-	var zone = this.getZone();
-
-	if (!ha) return null;
-	var d   =       settings.handle.size; // distance
-	var din = 0.5 * settings.handle.size; // inner distance
-	var dou =       settings.handle.size; // outer distance
-
-	var n = p.y >= zone.pnw.y - dou && p.y <= zone.pnw.y + din;
-	var e = p.x >= zone.pse.x - din && p.x <= zone.pse.x + dou;
-	var s = p.y >= zone.pse.y - din && p.y <= zone.pse.y + dou;
-	var w = p.x >= zone.pnw.x - dou && p.x <= zone.pnw.x + din;
-
-	if (n) {
-		if (w && ha.nw) return 'nw';
-		if (e && ha.ne) return 'ne';
-		if (ha.n && abs(p.x - zone.pc.x) <= d) return 'n';
-		return null;
-	}
-	if (s) {
-		if (w && ha.sw) return 'sw';
-		if (e && ha.se) return 'se';
-		if (ha.s && abs(p.x - zone.pc.x) <= d) return 's';
-		return null;
-	}
-	if (w && ha.w && abs(p.y - zone.pc.y) <= d) return 'w';
-	if (e && ha.e && abs(p.y - zone.pc.y) <= d) return 'e';
-	return null;
-}
-
-/**
-| Paths the resize handles.
-*/
-VItem.prototype.pathResizeHandles = function(fabric, border, edge) {
-	if (border !== 0) throw new Error('borders unsupported for handles');
-	var ha = this.handles;
-	var zone = this.getZone();
-	var pnw = zone.pnw;
-	var pse = zone.pse;
-
-	var ds = settings.handle.distance;
-	var hs = settings.handle.size;
-	var hs2 = half(hs);
-
-	var x1 = pnw.x - ds;
-	var y1 = pnw.y - ds;
-	var x2 = pse.x + ds;
-	var y2 = pse.y + ds;
-	var xm = half(x1 + x2);
-	var ym = half(y1 + y2);
-
-	fabric.beginPath();
-	if (ha.n ) {
-		fabric.moveTo(xm - hs2, y1, edge);
-		fabric.lineTo(xm + hs2, y1, edge);
-	}
-	if (ha.ne) {
-		fabric.moveTo(x2 - hs,  y1, edge);
-		fabric.lineTo(x2, y1, edge);
-		fabric.lineTo(x2, y1 + hs, edge);
-	}
-	if (ha.e ) {
-		fabric.moveTo(x2, ym - hs2, edge);
-		fabric.lineTo(x2, ym + hs2, edge);
-	}
-	if (ha.se) {
-		fabric.moveTo(x2, y2 - hs,  edge);
-		fabric.lineTo(x2, y2, edge);
-		fabric.lineTo(x2 - hs, y2, edge);
-	}
-	if (ha.s ) {
-		fabric.moveTo(xm - hs2, y2, edge);
-		fabric.lineTo(xm + hs2, y2, edge);
-	}
-	if (ha.sw) {
-		fabric.moveTo(x1 + hs, y2,  edge);
-		fabric.lineTo(x1, y2, edge);
-		fabric.lineTo(x1, y2 - hs, edge);
-	}
-	if (ha.w ) {
-		fabric.moveTo(x1, ym - hs2, edge);
-		fabric.lineTo(x1, ym + hs2, edge);
-	}
-	if (ha.nw) {
-		fabric.moveTo(x1, y1 + hs,  edge);
-		fabric.lineTo(x1, y1, edge);
-		fabric.lineTo(x1 + hs, y1, edge);
-	}
-}
-
-/**
-| Draws the handles of an item (resize, itemmenu)
-*/
-VItem.prototype.drawHandles = function(fabric) {
-	// draws the resize handles
-	fabric.edge(settings.handle.style.edge, this, 'pathResizeHandles');
-
-	// draws item menu handler
-	var sstyle = settings.itemmenu.slice.style;
-	fabric.paint(sstyle.fill, sstyle.edge, this.getH6Slice(), 'path');
-}
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .---.             .  .  .
@@ -2229,7 +2054,7 @@ VDoc.prototype.draw = function(fabric, imargin, scrollp) {
 	// paints the selection
 	/* TODO
 	if (selection.active && selection.mark1.item === this.parent) {
-		// todo make paint()
+		// TODO make paint()
 		fabric.fill(
 			settings.selection.style.fill, this, 'pathSelection',
 			selection, imargin, scrolly);
@@ -2292,69 +2117,159 @@ VDoc.prototype.getVParaAtPoint = function(p) {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ,-,-.       .
- ` | |   ,-. |- ,-.
-   | |-. | | |  |-'
-  ,' `-' `-' `' `-'
+ ,.   ,. ,-_/ .
+ `|  /   '  | |- ,-. ,-,-.
+  | /    .^ | |  |-' | | |
+  `'     `--' `' `-' ' ' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- An item with text and a scrollbar.
+ Common base of VNote and VLabel.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-// todo make scrollbars an own object?
-
 /**
-| Constructor.
-|
-| id:    item id
-| zone:  position and size of note.
-| dtree: document tree.
+| Constructor
 */
-function VNote(item, vspace) {
+function VItem(item, vspace) {
+	this._h6slice$ = null;
 	this.item         = item;
 	this.vspace       = vspace;
 	this.vdoc         = new VDoc(item.doc, this);
 	this._fabric      = new Fabric();
 	this._fabric$flag = false; // up-to-date-flag
-	this.imargin      = VNote.imargin;  // todo needed?
-	this.scrollbarY   = new Scrollbar(this, null);
-}
-subclass(VNote, VItem);
-
-/**
-| Default margin for all notes.
-*/
-VNote.imargin = new Margin(settings.note.imargin);
-
-/**
-| Resize handles to show on notes.
-*/
-VNote.prototype.handles = {
-	n  : true,
-	ne : true,
-	e  : true,
-	se : true,
-	s  : true,
-	sw : true,
-	w  : true,
-	nw : true,
-}
-Object.freeze(VNote.prototype.handles);
-
-/**
-| Highlights the note
-*/
-VNote.prototype.highlight = function(fabric) {
-	// todo round rects
-	fabric.edge(settings.note.style.highlight, this.zone, 'path');
+	this.imargin      = VNote.imargin;
 }
 
 /**
-| Returns the para at point. todo, honor scroll here.
+| Return the hexagon slice that is the handle
 */
-VNote.prototype.getVParaAtPoint = function(p, action) {
-	// TODO rename imargin to innerMargin
+VItem.prototype.getH6Slice = function() {
+	var zone = this.getZone();
+
+	if (this._h6slice$ && this._h6slice$.psw.eq(zone.pnw)) return this._h6slice$;
+
+	return this._h6slice$ = new HexagonSlice(
+		zone.pnw, settings.itemmenu.innerRadius, settings.itemmenu.slice.height);
+};
+
+/**
+| Returns if point is within the item menu
+*/
+VItem.prototype.withinItemMenu = function(p) {
+	return this.getH6Slice().within(p);
+}
+
+/**
+| Returns the compass direction of the handle if p is on a resizer handle.
+| TODO rename
+*/
+VItem.prototype.checkItemCompass = function(p) {
+	var ha = this.handles;
+	var zone = this.getZone();
+
+	if (!ha) return null;
+	var d   =       settings.handle.size; // distance
+	var din = 0.5 * settings.handle.size; // inner distance
+	var dou =       settings.handle.size; // outer distance
+
+	var n = p.y >= zone.pnw.y - dou && p.y <= zone.pnw.y + din;
+	var e = p.x >= zone.pse.x - din && p.x <= zone.pse.x + dou;
+	var s = p.y >= zone.pse.y - din && p.y <= zone.pse.y + dou;
+	var w = p.x >= zone.pnw.x - dou && p.x <= zone.pnw.x + din;
+
+	if (n) {
+		if (w && ha.nw) return 'nw';
+		if (e && ha.ne) return 'ne';
+		if (ha.n && abs(p.x - zone.pc.x) <= d) return 'n';
+		return null;
+	}
+	if (s) {
+		if (w && ha.sw) return 'sw';
+		if (e && ha.se) return 'se';
+		if (ha.s && abs(p.x - zone.pc.x) <= d) return 's';
+		return null;
+	}
+	if (w && ha.w && abs(p.y - zone.pc.y) <= d) return 'w';
+	if (e && ha.e && abs(p.y - zone.pc.y) <= d) return 'e';
+	return null;
+}
+
+/**
+| Paths the resize handles.
+*/
+VItem.prototype.pathResizeHandles = function(fabric, border, edge) {
+	if (border !== 0) throw new Error('borders unsupported for handles');
+	var ha = this.handles;
+	var zone = this.getZone();
+	var pnw = zone.pnw;
+	var pse = zone.pse;
+
+	var ds = settings.handle.distance;
+	var hs = settings.handle.size;
+	var hs2 = half(hs);
+
+	var x1 = pnw.x - ds;
+	var y1 = pnw.y - ds;
+	var x2 = pse.x + ds;
+	var y2 = pse.y + ds;
+	var xm = half(x1 + x2);
+	var ym = half(y1 + y2);
+
+	fabric.beginPath();
+	if (ha.n ) {
+		fabric.moveTo(xm - hs2, y1, edge);
+		fabric.lineTo(xm + hs2, y1, edge);
+	}
+	if (ha.ne) {
+		fabric.moveTo(x2 - hs,  y1, edge);
+		fabric.lineTo(x2, y1, edge);
+		fabric.lineTo(x2, y1 + hs, edge);
+	}
+	if (ha.e ) {
+		fabric.moveTo(x2, ym - hs2, edge);
+		fabric.lineTo(x2, ym + hs2, edge);
+	}
+	if (ha.se) {
+		fabric.moveTo(x2, y2 - hs,  edge);
+		fabric.lineTo(x2, y2, edge);
+		fabric.lineTo(x2 - hs, y2, edge);
+	}
+	if (ha.s ) {
+		fabric.moveTo(xm - hs2, y2, edge);
+		fabric.lineTo(xm + hs2, y2, edge);
+	}
+	if (ha.sw) {
+		fabric.moveTo(x1 + hs, y2,  edge);
+		fabric.lineTo(x1, y2, edge);
+		fabric.lineTo(x1, y2 - hs, edge);
+	}
+	if (ha.w ) {
+		fabric.moveTo(x1, ym - hs2, edge);
+		fabric.lineTo(x1, ym + hs2, edge);
+	}
+	if (ha.nw) {
+		fabric.moveTo(x1, y1 + hs,  edge);
+		fabric.lineTo(x1, y1, edge);
+		fabric.lineTo(x1 + hs, y1, edge);
+	}
+}
+
+/**
+| Draws the handles of an item (resize, itemmenu)
+*/
+VItem.prototype.drawHandles = function(fabric) {
+	// draws the resize handles
+	fabric.edge(settings.handle.style.edge, this, 'pathResizeHandles');
+
+	// draws item menu handler
+	var sstyle = settings.itemmenu.slice.style;
+	fabric.paint(sstyle.fill, sstyle.edge, this.getH6Slice(), 'path');
+}
+
+/**
+| Returns the para at point. @03, honor scroll here.
+*/
+VItem.prototype.getVParaAtPoint = function(p, action) {
+	// @03 rename imargin to innerMargin
 	if (p.y < this.imargin.n) return null;
 	return this.vdoc.getVParaAtPoint(p, action);
 }
@@ -2363,7 +2278,7 @@ VNote.prototype.getVParaAtPoint = function(p, action) {
 | Checks if this items reacts on an event.
 | Returns transfix code.
 */
-VNote.prototype.transfix = function(txe, p, shift, ctrl) {
+VItem.prototype.transfix = function(txe, p, shift, ctrl) {
 	if (!this.getZone().within(p)) return false;
 
 	switch (txe) {
@@ -2383,7 +2298,7 @@ VNote.prototype.transfix = function(txe, p, shift, ctrl) {
 		var sbary = this.scrollbarY;
 		var pnw = this.getZone().pnw;
 		var pr = p.sub(pnw);
-		if (sbary.visible && sbary.zone.within(pr)) {
+		if (sbary && sbary.visible && sbary.zone.within(pr)) {
 			var action = shell.startAction(Action.SCROLLY, this, p);
 			action.startPos = sbary.getPos();
 		} else {
@@ -2396,7 +2311,7 @@ VNote.prototype.transfix = function(txe, p, shift, ctrl) {
 		shell.redraw = true;
 
 		var pnw = this.getZone().pnw;
-		var pi = p.sub(pnw.x, pnw.y - this.scrollbarY.getPos());
+		var pi = p.sub(pnw.x, pnw.y - (this.scrollbarY ? this.scrollbarY.getPos() : 0 ));
 
 		var vpara = this.getVParaAtPoint(pi);
 		if (vpara) {
@@ -2422,12 +2337,11 @@ VNote.prototype.transfix = function(txe, p, shift, ctrl) {
 	throw new Error('iFail');
 }
 
-
 /**
 | Returns the zone of the item.
 | An ongoing action can modify this to be different than meshmashine data.
 */
-VNote.prototype.getZone = function() {
+VItem.prototype.getZone = function() {
 	var item   = this.item;
 	var action = shell.action;
 
@@ -2445,8 +2359,8 @@ VNote.prototype.getZone = function() {
 		var ipse = action.startZone.pse;
 		var dx = action.move.x - action.start.x;
 		var dy = action.move.y - action.start.y;
-		var minw = settings.note.minWidth;
-		var minh = settings.note.minHeight;
+		var minw = this.minWidth;
+		var minh = this.minHeight;
 		var pnw, pse;
 
 		switch (action.align) {
@@ -2498,15 +2412,14 @@ VNote.prototype.getZone = function() {
 	}
 }
 
-
 /**
-| Sets the notes position and size.
+| Sets the items position and size.
 |
 | @03 this might as well be removed.
 */
-VNote.prototype.setZone = function(zone) {
+VItem.prototype.setZone = function(zone) {
 	// ensures minimum size
-	if (zone.width < settings.note.minWidth || zone.height < settings.note.minHeight) {
+	if (zone.width < this.minWidth || zone.height < this.minHeight) {
 		log('fail', 'Note under minimum size!');
 	}
 	if (this.item.zone.eq(zone)) return;
@@ -2515,8 +2428,69 @@ VNote.prototype.setZone = function(zone) {
 	// @03 this should happen by MeshIO settings...
 	this._fabric$flag = false;
 	// adapts scrollbar position
-	this.setScrollbar();
+	if (this.setScrollbar) this.setScrollbar();
 }
+
+/**
+| Called by subvisuals when they got changed.
+*/
+VItem.prototype.poke = function() {
+	this._fabric$flag = false;
+	shell.redraw = true;
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ,.   ,. ,-,-.       .
+ `|  /   ` | |   ,-. |- ,-.
+  | /      | |-. | | |  |-'
+  `'      ,' `-' `-' `' `-'
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+ An item with text and a scrollbar.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/**
+| Constructor.
+*/
+function VNote(item, vspace) {
+	VItem.call(this, item, vspace);
+	this.scrollbarY   = new Scrollbar(this, null);
+}
+subclass(VNote, VItem);
+
+/**
+| Default margin for all notes.
+*/
+VNote.imargin = new Margin(settings.note.imargin);
+
+/**
+| Resize handles to show on notes.
+*/
+fixate(VNote.prototype, 'handles', {
+	n  : true,
+	ne : true,
+	e  : true,
+	se : true,
+	s  : true,
+	sw : true,
+	w  : true,
+	nw : true,
+});
+
+/**
+| Minimum sizes
+*/
+VNote.prototype.minWidth  = settings.note.minWidth;
+VNote.prototype.minHeight = settings.note.minHeight;
+
+/**
+| Highlights the note.
+*/
+VNote.prototype.highlight = function(fabric) {
+	// TODO round rects
+	fabric.edge(settings.note.style.highlight, this.zone, 'path');
+}
+
 
 /**
 | Returns the notes silhoutte.
@@ -2532,14 +2506,6 @@ VNote.prototype.getSilhoutte = function(zone) {
 	}
 
 	return this._silhoutte;
-}
-
-/**
-| Called by subvisuals when they got changed.
-*/
-VNote.prototype.poke = function() {
-	this._fabric$flag = false;
-	shell.redraw = true;
 }
 
 /**
@@ -2579,7 +2545,6 @@ VNote.prototype.setScrollbar = function(pos) {
 | Draws the note.
 |
 | fabric: to draw upon.
-| selection: current selection to highlight.
 */
 VNote.prototype.draw = function(fabric) {
 	var f    = this._fabric;
@@ -2630,19 +2595,108 @@ VNote.prototype.draw = function(fabric) {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ,       .       .
-  )   ,-. |-. ,-. |
- /    ,-| | | |-' |
- `--' `-^ ^-' `-' `'
+ ++ VLabel ++
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- An sizeable item with sizing text.
+ A sizeable item with sizing text.
 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/**
+| Constructor.
+*/
+function VLabel(item, vspace) {
+	VItem.call(this, item, vspace);
+}
+subclass(VLabel, VItem);
+
+/**
+| Default margin for all notes.
+*/
+VLabel.imargin = new Margin(settings.note.imargin);
+
+/**
+| Resize handles to show on notes.
+*/
+fixate(VLabel.prototype, 'handles', {
+	ne : true,
+	se : true,
+	sw : true,
+	nw : true,
+});
+
+/**
+| Minimum sizes
+*/
+VLabel.prototype.minWidth  = false;
+VLabel.prototype.minHeight = settings.label.minHeight;
+
+/**
+| Highlights the note.
+*/
+VLabel.prototype.highlight = function(fabric) {
+	// TODO round rects
+	fabric.edge(settings.note.style.highlight, this.zone, 'path');
+}
+
+
+/**
+| Returns the notes silhoutte.
+*/
+VLabel.prototype.getSilhoutte = function(zone) {
+	if (!this._silhoutte ||
+		this._silhoutte.width  !== zone.width ||
+		this._silhoutte.height !== zone.height)
+	{
+		return this._silhoutte = new Rect(
+			Point.zero, new Point(zone.width, zone.height),
+			settings.note.cornerRadius);
+	}
+
+	return this._silhoutte;
+}
+
+
+/**
+| Draws the label.
+|
+| fabric: to draw upon. // @03 remove this parameter.
+*/
+VLabel.prototype.draw = function(fabric) {
+	var f    = this._fabric;
+	var zone = this.getZone();
+
+	// no buffer hit?
+	if (!this._fabric$flag || !this._fabric$size ||
+		zone.width  !== this._fabric$size.width ||
+		zone.height !== this._fabric$size.height)
+	{
+		var vdoc = this.vdoc;
+		var imargin = this.imargin;
+
+		// resizes the canvas
+		f.attune(zone);
+		var silhoutte = this.getSilhoutte(zone);
+
+		// draws selection and text
+		vdoc.draw(f, imargin, Point.zero);
+
+		// draws the border
+		f.edge(settings.label.style.edge, silhoutte, 'path');
+
+		this._fabric$flag = true;
+		this._fabric$size = zone;
+	}
+
+	fabric.drawImage(f, zone.pnw);
+}
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ OLD LABEL: TODO REMOVE
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
 | Constructor.
 */
+/*
 function Label(id, zone, dtree) {
 	Item.call(this, id);
 	this.dtree = dtree;
@@ -2654,30 +2708,34 @@ function Label(id, zone, dtree) {
 	// buffer
 	this._fabric = new Fabric();
 	this._fabric$flag = false;
-	if (typeof(this.zone.pse.x) === 'undefined') throw new Error('Invalid label'); // todo remove
+	if (typeof(this.zone.pse.x) === 'undefined') throw new Error('Invalid label'); // TODO remove
 }
 subclass(Label, VItem);
+*/
 
 /**
 | Default margin for all labels.
-*/
+*//*
 Label.imargin = new Margin(settings.label.imargin);
+*/
 
 /**
 | The resize handles the item presents.
 */
-Label.handles = {
+/*Label.handles = {
 	ne : true,
 	se : true,
 	sw : true,
 	nw : true,
 }
 Object.freeze(Label.handles);
+*/
 
 /**
 | An event happened at p.
 | returns transfix code.
 */
+/*
 Label.prototype.transfix = function(txe, p, shift, ctrl) {
 	if (!this.zone.within(p)) return false;
 
@@ -2703,12 +2761,10 @@ Label.prototype.transfix = function(txe, p, shift, ctrl) {
 		var para = this.getVParaAtPoint(pi);
 		if (para) {
 			throw new Error('TODO');
-			/*
 			var editor = System.editor;
 			editor.caret.setFromPoint(para, op.sub(para.p));
 			editor.caret.show();
 			editor.deselect();
-			*/
 			shell.redraw = true;
 		}
 		return true;
@@ -2727,13 +2783,16 @@ Label.prototype.transfix = function(txe, p, shift, ctrl) {
 	}
 	throw new Error('iFail');
 }
+*/
 
 /**
 | Highlights the label.
 */
+/*
 Label.prototype.highlight = function(fabric) {
 	fabric.edge(settings.label.style.highlight, this.zone, 'path');
 }
+*/
 
 /**
 | Sets the zone of the label.
@@ -2743,6 +2802,7 @@ Label.prototype.highlight = function(fabric) {
 | zone: a rectangle
 | align: compass direction
 */
+/*
 Label.prototype.setZone = function(zone, align) {
 	if (this.zone && this.zone.eq(zone)) return false;
 	var dtree = this.dtree;
@@ -2759,46 +2819,58 @@ Label.prototype.setZone = function(zone, align) {
 	this._fabric$flag = false;
 	return true;
 }
+*/
 
 /**
-| todo
+| TODO
 */
+/*
 Label.prototype._dHeight = function() {
 	return R(this.dtree.height * (1 + settings.bottombox));
 }
+*/
 
 /**
-| todo
+| TODO
 */
+/*
 Label.prototype._dWidth = function() {
 	return max(this.dtree.width, R(0.4 * this.dtree.fontsize));
 }
+*/
 
 /**
 | The zone the handles appear on.
 */
+/*
 Object.defineProperty(Label.prototype, 'handlezone', {
 	get : function() { return this.zone; }
 });
+*/
 
 /**
 | Sets a new position.
 */
+/*
 Label.prototype.moveto = function(pnw) {
 	if (this.zone.pnw.eq(pnw)) return false;
 	this.zone = this.zone.moveto(pnw);
 	return this;
 }
+*/
 
 /**
 | returns the para at point.
 */
+/*
 Label.prototype.getVParaAtPoint = function(p) {
 	return this.dtree.getVParaAtPoint(p);
 }
+*/
 
 /* drops the cache */
 // TODO remove all listen()
+/*
 Label.prototype.listen = function() {
 	if (this._lock) return;
 	this._fabric$flag = false;
@@ -2807,6 +2879,8 @@ Label.prototype.listen = function() {
 	}
 	// end of listen-chain
 }
+*/
+
 
 /**
 | Draws the Label.
@@ -2814,6 +2888,7 @@ Label.prototype.listen = function() {
 | fabric: to draw upon.
 | selection: Selection to highlight.
 */
+/*
 Label.prototype.draw = function() {
 	throw new Error('TODO');
 
@@ -2834,6 +2909,7 @@ Label.prototype.draw = function() {
 	this._canvasActual = true;
 	fabric.drawImage(f, this.zone.pnw);
 }
+*/
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .-,--.     .      .
@@ -2894,8 +2970,8 @@ Relation.create = function(item1, item2) {
 	throw new Error('TODO');
 	var dtree = new DTree(20);
 	dtree.append(new Para('relates to'));
-	var cline = Line.connect(item1.handlezone, null, item2.handlezone, null); // todo bindzone
-	var mx = (cline.p1.x + cline.p2.x) / 2; // todo teach line pc
+	var cline = Line.connect(item1.handlezone, null, item2.handlezone, null); // TODO bindzone
+	var mx = (cline.p1.x + cline.p2.x) / 2; // TODO teach line pc
 	var my = (cline.p1.y + cline.p2.y) / 2;
 	var textZone = new Rect(
 		new Point(R(mx - dtree.width / 2), R(my - dtree.height / 2)),
@@ -2944,7 +3020,7 @@ Relation.prototype.setTextZone = function(zone, align) {
 	if (this.zone && dfs === fs) return false;
 	dtree.fontsize = fs;
 	th = R(this.dtree.height * (1 + settings.bottombox));
-	// todo use rect resize?
+	// TODO use rect resize?
 	switch(align) {
 	case 'sw' :
 	case 'w'  :
@@ -2986,14 +3062,14 @@ Relation.prototype.setZone = function(zone, align) {
 }
 
 /**
-| todo
+| TODO
 */
 Relation.prototype._dHeight = function() {
 	return R(this.dtree.height * (1 + settings.bottombox));
 }
 
 /**
-| todo
+| TODO
 */
 Relation.prototype._dWidth = function() {
 	return max(this.dtree.width, R(0.4 * this.dtree.fontsize));
@@ -3102,7 +3178,7 @@ Relation.prototype.draw = function(fabric, action, selection) {
 	/* TODO
 	var f = this._fabric;
 	var dtree = this.dtree;
-	var it1 = System.repository.items[this.i1id]; // todo funcall
+	var it1 = System.repository.items[this.i1id]; // TODO funcall
 	var it2 = System.repository.items[this.i2id];
 	if (!this._fabric$flag) {
 		f.attune(this.textZone);
@@ -3110,9 +3186,9 @@ Relation.prototype.draw = function(fabric, action, selection) {
 		dtree.draw(f, action, selection, this.imargin, 0);
 		this._fabric$flag = true;
 	}
-	var l1 = Line.connect(it1.handlezone, 'normal', this.textZone, 'normal'); // todo bindzone
-	var l2 = Line.connect(this.textZone,  'normal', it2.handlezone, 'arrow'); // todo bindzone
-	// todo combine into one call;
+	var l1 = Line.connect(it1.handlezone, 'normal', this.textZone, 'normal'); // TODO bindzone
+	var l2 = Line.connect(this.textZone,  'normal', it2.handlezone, 'arrow'); // TODO bindzone
+	// TODO combine into one call;
 	fabric.paint(settings.relation.style.fill, settings.relation.style.edge, l1, 'path');
 	fabric.paint(settings.relation.style.fill, settings.relation.style.edge, l2, 'path');
 	// draws text
@@ -3131,7 +3207,7 @@ Relation.prototype.onlook = function(event, item) {
 			throw new Error('Got onlook for not my item?');
 		}
 		System.repository.removeItem(this);
-		// todo check for cycles
+		// TODO check for cycles
 		break;
 	case ONLOOK.UPDATE :
 		//if ((item.id === this.i1id && !item.zone.eq(this.i1zone)) ||

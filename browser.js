@@ -103,7 +103,7 @@ function System(FrontFace) {
 	// if false needs work around
 	var useCapture = canvas.setCapture != null;
 
-	// mouse state  todox
+	// mouse state  TODO rename variables
 	var mst = MST.NONE;
 	// position the mouse went down to atween state
 	var msp = null;

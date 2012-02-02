@@ -573,7 +573,7 @@ MeshMashine.prototype.transform = function(time, sign) {
 | Reflects the state of the repository at time.
 | If path is not null it cares only to rebuild what is necessary to see the ida.
 */
-// todo partial reflects
+// TODO partial reflects
 MeshMashine.prototype._reflect = function(time, path) {
 	try {
 		var reflect = new this.repository.constructor(this.repository);

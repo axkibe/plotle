@@ -110,10 +110,10 @@ function MeshPeer() {
 		        },
 		      },
 		      '1' : {
-		        type: 'Note',
+		        type: 'Label',
 		        zone: {
 		          pnw : { 'x': 550, 'y': 150 },
-		          pse : { 'x': 650, 'y': 250 },
+		          pse : { 'x': 650, 'y': 200 },
 		        },
 		        doc: {
 		          fontsize : 13,

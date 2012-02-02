@@ -470,7 +470,7 @@ function Space(master) {
 	if (master && !(master instanceof Space) && master.type !== 'Space') {
 		throw new Error('Space master typed wrongly: '+master.type);
 	}
-	// todo check if master has other keys.
+	// @03 check if master has other keys.
 
 	Stem.call(this, {
 			type  : 'Space',
@@ -526,7 +526,8 @@ ItemCopse.prototype.type = 'ItemCopse';
 | Seeds. Things that can grow on this twig.
 */
 ItemCopse.prototype.seeds = {
-	'Note' : Note,
+	'Note'  : Note,
+	'Label' : Label,
 };
 
 /**
@@ -535,35 +536,35 @@ ItemCopse.prototype.seeds = {
 ItemCopse.prototype.isGrowable = true;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ++ Note ++
+ ++ Item ++
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- a note
+
+ a Note or Label
+
+ master: master to create this item from
+ type: 'Note' or 'Label'
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Note(master) {
-	if (master && !(master instanceof Note) && master.type !== 'Note') {
-		throw new Error('Note master typed wrongly: '+master.type);
+function Item(master, type) {
+	if (master && !(master instanceof Item) && master.type !== type) {
+		throw new Error(type + ' master typed wrongly: '+master.type);
 	}
-	// TODO check if master has other keys.
+	// @03 check if master has other keys.
 
 	Stem.call(this, {
-			type  : 'Note',
+			type  : type,
 			doc   : new this.seeds.DocAlley(master && master.doc),
 			zone  : new Rect(master.zone),
 		}, null);
 	this.doc  = this._twigs.doc;
 	this.zone = this._twigs.zone;
 }
-subclass(Note, Stem);
-
-/**
-| Type
-*/
-Note.prototype.type = 'Note';
+subclass(Item, Stem);
 
 /**
 | Seeds. Things that can grow on this twig.
 */
-Note.prototype.seeds = {
+Item.prototype.seeds = {
 	'DocAlley'  : DocAlley,
 }
 
@@ -571,7 +572,7 @@ Note.prototype.seeds = {
 /**
 | Sets the value of a node.
 */
-Note.prototype.mmSet = function(path, val, a0, al, oplace) {
+Item.prototype.mmSet = function(path, val, a0, al, oplace) {
 	if (oplace) throw new Error('out of place not yet supported');
 
 	if (isPath(path)) {
@@ -587,9 +588,44 @@ Note.prototype.mmSet = function(path, val, a0, al, oplace) {
 		}
 		return;
 	}
-	if (a0 + 1 === al) throw new Error('Cannot set Note.'+path.get(a0)+' itself');
+	if (a0 + 1 === al) throw new Error('Cannot set '+this.type+'.'+path.get(a0)+' itself');
 	Stem.prototype.mmSet.call(this, path, val, a0, al);
 }
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ++ Note ++
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+ a note
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+function Note(master) {
+	Item.call(this, master, 'Note');
+}
+subclass(Note, Item);
+
+/**
+| Type
+*/
+Note.prototype.type = 'Note';
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ++ Label ++
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+ a label
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+function Label(master) {
+	Item.call(this, master, 'Label');
+}
+subclass(Label, Item);
+
+/**
+| Type
+*/
+Note.prototype.type = 'Label';
+
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++ ArcAlley ++

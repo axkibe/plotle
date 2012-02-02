@@ -259,7 +259,6 @@ Fabric.prototype.path = function(self, border, edge) {
 	if (this !== self) throw new Error('Fabric.path: self != this');
 	var cx = this._cx;
 	cx.beginPath();
-	// todo -> moveTo lineTo
 	cx.rect(
 		0.5 + border, 0.5 + border,
 		this._canvas.width - 1 - border, this._canvas.height - 1 - border);
@@ -269,10 +268,9 @@ Fabric.prototype.path = function(self, border, edge) {
 | rect(rect)     -or-
 | rect(pnw, pse) -or-
 | rect(nwx, nwy, w, h)
-| todo remove by rect.path
+| TODO remove by rect.path
 */
 Fabric.prototype.rect = function(a1, a2, a3, a4) {
-//	throw new Error('todo');
 	var pan = this.pan;
 	var cx = this._cx;
 	if (typeof(r) === 'object') {
@@ -401,7 +399,7 @@ Fabric.prototype._colorStyle = function(style, shape) {
 	var grad;
 	switch (style.gradient) {
 	case 'askew' :
-		// todo use gradientPNW
+		// TODO use gradientPNW
 		if (!shape.pnw || !shape.pse)
 			throw new Error(style.gradient+' gradiend misses pnw/pse');
 		grad = this._cx.createLinearGradient(
@@ -409,7 +407,7 @@ Fabric.prototype._colorStyle = function(style, shape) {
 			shape.pnw.x + shape.width / 10 + this.pan.x, shape.pse.y + this.pan.y);
 		break;
 	case 'horizontal' :
-		// todo use gradientPNW
+		// TODO use gradientPNW
 		if (!shape.pnw || !shape.pse)
 			throw new Error(style.gradient+' gradient misses pnw/pse');
 		grad = this._cx.createLinearGradient(
@@ -514,7 +512,7 @@ Fabric.prototype.fillText = function(text, a1, a2) {
 | text: text to draw
 | p: center point of rotation
 | phi: rotation angle
-| d: distance from center // todo rename
+| d: distance from center // TODO rename
 */
 Fabric.prototype.fillRotateText = function(text, pc, phi, d) {
 	var cx = this._cx;
@@ -1385,7 +1383,7 @@ Line.prototype.path = function(c2d, border, edge) {
 	var p2 = this.p2;
 
 	c2d.beginPath();
-	// todo, multiple lineend types
+	// TODO, multiple lineend types
 	switch(this.p1end) {
 	case 'normal':
 		if (edge) c2d.moveTo(p1, edge);
@@ -1445,8 +1443,7 @@ Line.prototype.draw = function(c2d) {
 | Returns true if p is near the line spawned by p1 and p2.
 */
 Line.prototype.isNear = function(p, dis) {
-	throw new Error('unimplemented');
-	// todo
+	throw new Error('TODO');
 	var dx = p.x - p1.x;
 	var dy = p.y - p1.y;
 	if (Math.abs(dx) < 8 && Math.abs(dy) < 8) {
