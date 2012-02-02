@@ -17,23 +17,23 @@ Roadmap
 =======
 
 Version 0.2:
-+ Live communication with the server using a multi-user editing protocol (causal consistency / action transformation)
-+ Undo/Redo
-+ Multiple Spaces (at least "Welcome", "Sandbox" and one personal per user)
+ * Live communication with the server using a multi-user editing protocol (causal consistency / action transformation)
+ * Undo/Redo
+ * Multiple Spaces (at least "Welcome", "Sandbox" and one personal per user)
 
 Further Down the Road
 ---------------------
 
 (in no particular order)
-+ Bold / Italic texts (text trees go deeper than just paragraphs)
-+ Include Images. (also for space consideration be able to use hosted images elsewhere)
-+ Zooming
-+ Zooming Presentations
-+ Spell checking
-+ Create TeX-documents from a Path through Notes.
-+ QDA: Use the Meshcraft infrastructure to offer QDA-abilities
-+ ease usage as Concept Maps ("mindmaps" (TM))
-+ Item grouping
-+ Accessibility
-+ Literature administrative nodes.
+ * Bold / Italic texts (text trees go deeper than just paragraphs)
+ * Include Images. (also for space consideration be able to use hosted images elsewhere)
+ * Zooming
+ * Zooming Presentations
+ * Spell checking
+ * Create TeX-documents from a Path through Notes.
+ * QDA: Use the Meshcraft infrastructure to offer QDA-abilities
+ * ease usage as Concept Maps ("mindmaps" (TM))
+ * Item grouping
+ * Accessibility
+ * Literature administriation nodes
 
