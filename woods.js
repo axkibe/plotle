@@ -45,9 +45,14 @@ var reject    = Jools.reject;
 var subclass  = Jools.subclass;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ++ Stem ++
+ .---. .
+ \___  |- ,-. ,-,-.
+     \ |  |-' | | |
+ `---' `' `-' ' ' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
  The base of all meshcraft-nodes.
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Stem(twigs, master) {
 	if (master && master._twigs) master = master._twigs;
@@ -79,9 +84,6 @@ function Stem(twigs, master) {
 */
 Stem.prototype.get = function(path, a0, al) {
 	if (isString(path)) return this._twigs[path];
-	if (typeof(path) === 'undefined') {
-		throw new Error('AAAAAAAAAAAAAAAA'); //TODO
-	}
 	if (!isPath(path)) throw new Error('get path no string or path');
 
 	a0 = path.fit(a0, false);
@@ -165,7 +167,7 @@ Stem.prototype.loop = function() {
 /**
 | Grows a new subnode
 |
-| TODO remove and replace by getNewKey()
+| @03 remove and replace by getNewKey()
 */
 Stem.prototype.grow = function(path) {
 	if (!this.isGrowable) throw reject('Node not growable');
@@ -302,9 +304,14 @@ Stem.prototype.getKeyOf = function(v, nocache) {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ++ StemAlley ++
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ .---. .                ,.   .  .
+ \___  |- ,-. ,-,-.    / |   |  |  ,-. . .
+     \ |  |-' | | |   /~~|-. |  |  |-' | |
+ `---' `' `-' ' ' ' ,'   `-' `' `' `-' `-|
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ /|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                                       `-'
  An array of any kind
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function StemAlley(master) {
 	Stem.call(this, { alley: [] }, master);
@@ -403,9 +410,14 @@ StemAlley.prototype.indexOf = function(element) {
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ++ Generic ++
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- a generic twig allowing any kind of subtwigs.
+ ,---.                         ,--.
+ |  -'  ,-. ,-. ,-. ,-. . ,-. | `-' ,-. ,-. ,-. ,-.
+ |  ,-' |-' | | |-' |   | |   |   . | | | | `-. |-'
+ `---|  `-' ' ' `-' '   ' `-' `--'  `-' |-' `-' `-'
+~ ,-.|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ | ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+  `-+'                                  '
+ A generic twig allowing any kind of subtwigs.
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function GenericCopse(master) {
 	Stem.call(this, {}, master);
@@ -425,9 +437,14 @@ GenericCopse.prototype.seeds = {
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ++ Alley ++
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- a generic array allowing any kind of subtwigs.
+ ,---.                            ,.   .  .
+ |  -'  ,-. ,-. ,-. ,-. . ,-.    / |   |  |  ,-. . .
+ |  ,-' |-' | | |-' |   | |     /~~|-. |  |  |-' | |
+ `---|  `-' ' ' `-' '   ' `-' ,'   `-' `' `' `-' `-|
+~ ,-.|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ /|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+  `-+'                                           `-'
+ A generic array allowing any kind of twigs.
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function GenericAlley(master) {
 	StemAlley.call(this, master);
@@ -440,9 +457,14 @@ subclass(GenericAlley, StemAlley);
 GenericAlley.prototype.seeds  = GenericCopse.prototype.seeds;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ++ Nexus ++
+ ,-,-.
+ ` | |   ,-. . , . . ,-.
+   | |-. |-'  X  | | `-.
+  ,' `-' `-' ' ` `-^ `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
  The root of spaces.
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Nexus(master) {
 	Stem.call(this, {type: 'Nexus'}, master);
@@ -462,9 +484,14 @@ Nexus.prototype.seeds = {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ++ Space ++
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- a space
+ .---.
+ \___  ,-. ,-. ,-. ,-.
+     \ | | ,-| |   |-'
+ `---' |-' `-^ `-' `-'
+~ ~ ~ ~|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+       '
+ A space.
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Space(master) {
 	if (master && !(master instanceof Space) && master.type !== 'Space') {
@@ -477,8 +504,8 @@ function Space(master) {
 			items : new this.seeds.ItemCopse(master && master.items),
 			z     : new this.seeds.ArcAlley (master && master.z),
 		}, null);
-	this.items = this._twigs.items;
-	this.z     = this._twigs.z;
+	this.items = this._twigs.items; // @03 dont
+	this.z     = this._twigs.z;     // @03 dont
 }
 subclass(Space, Stem);
 
@@ -545,19 +572,9 @@ ItemCopse.prototype.isGrowable = true;
  type: 'Note' or 'Label'
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Item(master, type) {
-	if (master && !(master instanceof Item) && master.type !== type) {
-		throw new Error(type + ' master typed wrongly: '+master.type);
-	}
-	// @03 check if master has other keys.
-
-	Stem.call(this, {
-			type  : type,
-			doc   : new this.seeds.DocAlley(master && master.doc),
-			zone  : new Rect(master.zone),
-		}, null);
+function Item(twigs) {
+	Stem.call(this, twigs, null);
 	this.doc  = this._twigs.doc;
-	this.zone = this._twigs.zone;
 }
 subclass(Item, Stem);
 
@@ -568,11 +585,41 @@ Item.prototype.seeds = {
 	'DocAlley'  : DocAlley,
 }
 
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ,-,-.       .
+ ` | |   ,-. |- ,-.
+   | |-. | | |  |-'
+  ,' `-' `-' `' `-'
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+ a note
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+function Note(master) {
+	if (master && !(master instanceof Note) && master.type !== 'Note') {
+		throw new Error(type + ' master typed wrongly: '+master.type);
+	}
+	// @03 check if master has other keys.
+
+	Item.call(this, {
+			type  : 'Note',
+			doc   : new this.seeds.DocAlley(master && master.doc),
+			zone  : new Rect(master.zone),
+		});
+
+	this.zone = this._twigs.zone; // @03 dont
+}
+subclass(Note, Item);
+
+/**
+| Type
+*/
+Note.prototype.type = 'Note';
 
 /**
 | Sets the value of a node.
 */
-Item.prototype.mmSet = function(path, val, a0, al, oplace) {
+Note.prototype.mmSet = function(path, val, a0, al, oplace) {
 	if (oplace) throw new Error('out of place not yet supported');
 
 	if (isPath(path)) {
@@ -593,44 +640,68 @@ Item.prototype.mmSet = function(path, val, a0, al, oplace) {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ++ Note ++
+  ,       .       .
+  )   ,-. |-. ,-. |
+ /    ,-| | | |-' |
+ `--' `-^ ^-' `-' `'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- a note
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Note(master) {
-	Item.call(this, master, 'Note');
-}
-subclass(Note, Item);
-
-/**
-| Type
-*/
-Note.prototype.type = 'Note';
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ++ Label ++
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
- a label
+ A Label
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Label(master) {
-	Item.call(this, master, 'Label');
+	if (master && !(master instanceof Label) && master.type !== 'Label') {
+		throw new Error(type + ' master typed wrongly: '+master.type);
+	}
+	// @03 check if master has other keys.
+
+	Item.call(this, {
+			type  : 'Label',
+			doc   : new this.seeds.DocAlley(master && master.doc),
+			zone  : new Rect(master.zone),
+		});
+
+	this.zone = this._twigs.zone; // @03 dont
 }
 subclass(Label, Item);
 
 /**
 | Type
 */
-Note.prototype.type = 'Label';
+Label.prototype.type = 'Label';
 
+/**
+| Sets the value of a node.
+*/
+Label.prototype.mmSet = function(path, val, a0, al, oplace) {
+	if (oplace) throw new Error('out of place not yet supported');
+
+	if (isPath(path)) {
+		a0 = path.fit(a0, false);
+		al = path.fit(al, true);
+	}
+
+	if (path === 'zone' || path.get(a0) === 'zone') {
+		if (a0 + 1 === al) {
+			this.zone = new Rect(val);
+		} else {
+			this.zone = this.zone.mmSet(path, val, a0 + 1, al, true);
+		}
+		return;
+	}
+	if (a0 + 1 === al) throw new Error('Cannot set '+this.type+'.'+path.get(a0)+' itself');
+	Stem.prototype.mmSet.call(this, path, val, a0, al);
+}
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ++ ArcAlley ++
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+     ,.               ,.   .  .
+    / |   ,-. ,-.    / |   |  |  ,-. . .
+   /~~|-. |   |     /~~|-. |  |  |-' | |
+ ,'   `-' '   `-' ,'   `-' `' `' `-' `-|
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ /|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                                     `-'
  An array of Numbers and Strings (Arcs)
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function ArcAlley(master) {
 	StemAlley.call(this, master);
@@ -651,9 +722,14 @@ ArcAlley.prototype.seeds = {
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ++ DocAlley ++
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ .-,--.              ,.   .  .
+ ' |   \ ,-. ,-.    / |   |  |  ,-. . .
+ , |   / | | |     /~~|-. |  |  |-' | |
+ `-^--'  `-' `-' ,'   `-' `' `' `-' `-|
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~/| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                                    `-'
  An array of Paragraphs
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function DocAlley(master) {
 	StemAlley.call(this, master);
@@ -680,9 +756,14 @@ DocAlley.prototype.seeds = {
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ++ Para ++
+ .-,--.
+  '|__/ ,-. ,-. ,-.
+  ,|    ,-| |   ,-|
+  `'    `-^ '   `-^
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
  A paragraph
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Para(master) {
 	Stem.call(this, {type : 'Para'}, master);
@@ -703,9 +784,14 @@ Para.prototype.seeds = {
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ++ Rect ++
+ .-,--.         .
+  `|__/ ,-. ,-. |-
+  )| \  |-' |   |
+  `'  ` `-' `-' `'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
  A rectangle inherits fabric.Rect and is immutable
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Rect(master) {
 	Fabric.Rect.call(this,
@@ -783,7 +869,10 @@ Rect.prototype.matches = function(master) {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ++ Point ++
+ .-,--.           .
+  '|__/ ,-. . ,-. |-
+  ,|    | | | | | |
+  `'    `-' ' ' ' `'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  A Points inherits Fabric.Point and is immutable
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/

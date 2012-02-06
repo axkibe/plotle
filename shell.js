@@ -2496,16 +2496,16 @@ VNote.prototype.highlight = function(fabric) {
 | Returns the notes silhoutte.
 */
 VNote.prototype.getSilhoutte = function(zone) {
-	if (!this._silhoutte ||
-		this._silhoutte.width  !== zone.width ||
-		this._silhoutte.height !== zone.height)
+	if (!this._silhoutte$ ||
+		this._silhoutte$.width  !== zone.width ||
+		this._silhoutte$.height !== zone.height)
 	{
-		return this._silhoutte = new RoundRect(
+		return this._silhoutte$ = new RoundRect(
 			Point.zero, new Point(zone.width, zone.height),
 			settings.note.cornerRadius);
 	}
 
-	return this._silhoutte;
+	return this._silhoutte$;
 }
 
 /**
@@ -2595,7 +2595,10 @@ VNote.prototype.draw = function(fabric) {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ++ VLabel ++
+  ,.   ,. ,       .       .
+  `|  /   )   ,-. |-. ,-. |
+   | /   /    ,-| | | |-' |
+   `'    `--' `-^ ^-' `-' `'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  A sizeable item with sizing text.
@@ -2612,7 +2615,7 @@ subclass(VLabel, VItem);
 /**
 | Default margin for all notes.
 */
-VLabel.imargin = new Margin(settings.note.imargin);
+VLabel.imargin = new Margin(settings.label.imargin);
 
 /**
 | Resize handles to show on notes.
@@ -2635,7 +2638,7 @@ VLabel.prototype.minHeight = settings.label.minHeight;
 */
 VLabel.prototype.highlight = function(fabric) {
 	// TODO round rects
-	fabric.edge(settings.note.style.highlight, this.zone, 'path');
+	fabric.edge(settings.label.style.highlight, this.zone, 'path');
 }
 
 
@@ -2643,16 +2646,16 @@ VLabel.prototype.highlight = function(fabric) {
 | Returns the notes silhoutte.
 */
 VLabel.prototype.getSilhoutte = function(zone) {
-	if (!this._silhoutte ||
-		this._silhoutte.width  !== zone.width ||
-		this._silhoutte.height !== zone.height)
+	if (!this._silhoutte$ ||
+		this._silhoutte$.width  !== zone.width ||
+		this._silhoutte$.height !== zone.height)
 	{
-		return this._silhoutte = new Rect(
-			Point.zero, new Point(zone.width, zone.height),
+		return this._silhoutte$ = new Rect(
+			Point.zero, new Point(zone.width - 1, zone.height - 1),
 			settings.note.cornerRadius);
 	}
 
-	return this._silhoutte;
+	return this._silhoutte$;
 }
 
 
@@ -2689,110 +2692,10 @@ VLabel.prototype.draw = function(fabric) {
 
 	fabric.drawImage(f, zone.pnw);
 }
+
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  OLD LABEL: TODO REMOVE
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-/**
-| Constructor.
-*/
-/*
-function Label(id, zone, dtree) {
-	Item.call(this, id);
-	this.dtree = dtree;
-	dtree.parent = this;
-	dtree.pre = true;
-	this.handles = Label.handles;
-	this.imargin = Label.imargin;
-	this.setZone(zone, 'c');
-	// buffer
-	this._fabric = new Fabric();
-	this._fabric$flag = false;
-	if (typeof(this.zone.pse.x) === 'undefined') throw new Error('Invalid label'); // TODO remove
-}
-subclass(Label, VItem);
-*/
-
-/**
-| Default margin for all labels.
-*//*
-Label.imargin = new Margin(settings.label.imargin);
-*/
-
-/**
-| The resize handles the item presents.
-*/
-/*Label.handles = {
-	ne : true,
-	se : true,
-	sw : true,
-	nw : true,
-}
-Object.freeze(Label.handles);
-*/
-
-/**
-| An event happened at p.
-| returns transfix code.
-*/
-/*
-Label.prototype.transfix = function(txe, p, shift, ctrl) {
-	if (!this.zone.within(p)) return false;
-
-	switch(txe) {
-	case TXE.HOVER :
-		system.setCursor('default');
-		return true;
-	case TXE.DRAGSTART :
-		if (ctrl) {
-			//space.actionSpawnRelation(this, p);
-			throw new Error('TODO');
-			shell.redraw = true;
-			return true;
-		}
-		shell.vspace.setFocus(this);
-
-		shell.startAction(Action.ITEMDRAG, this, p.sub(this.zone.pnw));
-		System.setCursor('move');
-		return true;
-	case TXE.CLICK:
-		shell.vspace.setFocus(this);
-		var pi = p.sub(this.zone.pnw);
-		var para = this.getVParaAtPoint(pi);
-		if (para) {
-			throw new Error('TODO');
-			var editor = System.editor;
-			editor.caret.setFromPoint(para, op.sub(para.p));
-			editor.caret.show();
-			editor.deselect();
-			shell.redraw = true;
-		}
-		return true;
-	case TXE.RBINDHOVER :
-		//space.actionRBindHover(this);
-		throw new Error('TODO');
-		shell.redraw = true;
-		return true;
-	case TXE.RBINDTO :
-		throw new Error('TODO');
-		//space.actionRBindTo(this);
-		shell.redraw = true;
-		return true;
-	default :
-		throw new Error('Unknown transfix code:'+txe);
-	}
-	throw new Error('iFail');
-}
-*/
-
-/**
-| Highlights the label.
-*/
-/*
-Label.prototype.highlight = function(fabric) {
-	fabric.edge(settings.label.style.highlight, this.zone, 'path');
-}
-*/
 
 /**
 | Sets the zone of the label.
@@ -2839,35 +2742,6 @@ Label.prototype._dWidth = function() {
 }
 */
 
-/**
-| The zone the handles appear on.
-*/
-/*
-Object.defineProperty(Label.prototype, 'handlezone', {
-	get : function() { return this.zone; }
-});
-*/
-
-/**
-| Sets a new position.
-*/
-/*
-Label.prototype.moveto = function(pnw) {
-	if (this.zone.pnw.eq(pnw)) return false;
-	this.zone = this.zone.moveto(pnw);
-	return this;
-}
-*/
-
-/**
-| returns the para at point.
-*/
-/*
-Label.prototype.getVParaAtPoint = function(p) {
-	return this.dtree.getVParaAtPoint(p);
-}
-*/
-
 /* drops the cache */
 // TODO remove all listen()
 /*
@@ -2878,36 +2752,6 @@ Label.prototype.listen = function() {
 		this.zone = this.zone.resize(this._dWidth(), this._dHeight(), 'c');
 	}
 	// end of listen-chain
-}
-*/
-
-
-/**
-| Draws the Label.
-|
-| fabric: to draw upon.
-| selection: Selection to highlight.
-*/
-/*
-Label.prototype.draw = function() {
-	throw new Error('TODO');
-
-	var f = this._fabric;
-	var dtree = this.dtree;
-
-	// buffer hit?
-	if (this._fabric$flag) {
-		fabric.drawImage(f, this.zone.pnw);
-		return;
-	}
-
-	f.attune(this.zone);
-	// draws text
-	dtree.draw(f, action, selection, this.imargin, 0);
-	// draws the border
-	f.edge(settings.label.style.edge, f, 'path');
-	this._canvasActual = true;
-	fabric.drawImage(f, this.zone.pnw);
 }
 */
 
