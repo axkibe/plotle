@@ -420,7 +420,7 @@ function System(FrontFace) {
 	*/
 	this.restartBlinker = function() {
 		if (blinkTimer) clearInterval(blinkTimer);
-		testinput();
+		testinput.call(this);
 		blinkTimer = setInterval('system.onblink()', settings.caretBlinkSpeed);
 	}
 

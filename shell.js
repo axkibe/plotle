@@ -1261,15 +1261,12 @@ VSpace.prototype.mousedown = function(p, shift, ctrl) {
 			this.setFocus(vnote);
 			break;
 		case 'ne' : // label
-			throw new Error('TODO');
-			var pnw = fm.p.sub(this.fabric.pan);
-			var pse = pnw.add(100, 50);
-
-			//var dtree = new DTree(20);  TODO
-			//dtree.append(new Para('Label'));
-			var label = new Label(null, new Rect(pnw, pse), dtree);
-			label.moveto(pnw.sub(half(label.zone.width), half(label.zone.height)));
-			this.setFocus(label);
+			// TODO center label
+			var pnw = fm.p.sub(this.fabric.pan.x - 10, this.fabric.pan.y - 20);
+			var label = peer.newLabel(this.space, pnw, 20);
+			var vlabel = new VLabel(label, this);
+			this.vitems.vcopse[label.getOwnKey()] = vlabel;
+			this.setFocus(vlabel);
 			break;
 		}
 		shell.redraw = true;
@@ -1395,7 +1392,7 @@ VPara.prototype.getFlow = function() {
 	var flow  = this._flow$ = [];
 	var spread = 0;  // width really used.
 
-	var fontsize = vdoc.doc.get('fontsize');
+	var fontsize = vdoc.getFontSize();
 
 	// current x positon, and current x including last tokens width
 	var x = 0, xw = 0;
@@ -1709,7 +1706,7 @@ VPara.prototype.getFabric = function() {
 	var width  = flow.spread;
 	var vdoc   = this.vdoc;
 	var doc    = para.getAnchestor('DocAlley');
-	var height = flow.height + R(vdoc.doc.get('fontsize') * settings.bottombox);
+	var height = flow.height + R(vdoc.getFontSize() * settings.bottombox);
 
 	// cache hit?
 	if (this._fabric$flag && this._fabric$width === width && this._fabric$height === height) {
@@ -1807,7 +1804,7 @@ VPara.prototype.drawCaret = function() {
 	var zone  = vitem.getZone();
 	var caret = shell.caret;
 	var pan   = shell.vspace.fabric.pan;
-	var th    = R(vdoc.doc.get('fontsize') * (1 + settings.bottombox));
+	var th    = R(vdoc.getFontSize() * (1 + settings.bottombox));
 
 	caret.pos$ = this.getOffsetPoint(shell.caret.offset, shell.caret);
 
@@ -2045,10 +2042,10 @@ VDoc.prototype.event = function(type, key, p1, p2, p3) {
 | scrollp: scroll position
 */
 VDoc.prototype.draw = function(fabric, imargin, scrollp) {
-	// TODO <pre>
-	var paraSep = half(this.doc.get('fontsize'));
+	// @03 <pre>
+	var paraSep = half(this.getFontSize());
 
-	// paints the selection
+	// draws the selection
 	/* TODO
 	if (selection.active && selection.mark1.item === this.parent) {
 		// TODO make paint()
@@ -2106,11 +2103,15 @@ VDoc.prototype.getSpread = function() {
 	return spread;
 }
 
+VDoc.prototype.getFontSize = function() {
+	return this.doc.get('fontsize');
+}
+
 /**
 | Returns the default font of the dtree.
 */
 VDoc.prototype.getFont = function() {
-	return this.doc.get('fontsize') + 'px ' + settings.defaultFont;
+	return this.getFontSize() + 'px ' + settings.defaultFont;
 }
 
 /**
@@ -2146,7 +2147,6 @@ function VItem(item, vspace) {
 	this.vdoc         = new VDoc(item.doc, this);
 	this._fabric      = new Fabric();
 	this._fabric$flag = false; // up-to-date-flag
-	this.imargin      = VNote.imargin;
 }
 
 /**
@@ -2377,7 +2377,7 @@ subclass(VNote, VItem);
 /**
 | Default margin for all notes.
 */
-VNote.imargin = new Margin(settings.note.imargin);
+VNote.prototype.imargin = new Margin(settings.note.imargin);
 
 /**
 | Resize handles to show on notes.
@@ -2635,7 +2635,7 @@ subclass(VLabel, VItem);
 /**
 | Default margin for all notes.
 */
-VLabel.imargin = new Margin(settings.label.imargin);
+VLabel.prototype.imargin = new Margin(settings.label.imargin);
 
 /**
 | Resize handles to show on notes.

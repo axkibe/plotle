@@ -206,6 +206,52 @@ Peer.prototype.setZone = function(item, zone) {
 }
 
 /**
+| Creates a new note.
+*/
+Peer.prototype.newLabel = function(space, pnw, fontsize) {
+	var path = new Path(space);
+	path.push('items');
+	path.push('$new');
+
+	var asw = this.mm.alter(-1,
+		new Signature({
+			val: {
+				'type': 'Label',
+				'pnw': pnw,
+				'doc': {
+					fontsize : fontsize,
+					alley: [
+	                	{
+		            		type: 'Para',
+		            		text: 'Label',
+		            	},
+					]
+				},
+			},
+		}), new Signature({
+			path: path,
+		})
+	);
+
+	var apath = asw.alts.trg.path;
+	if (!(apath instanceof Path)) throw new Error('Cannot reget new Note');
+
+	this.mm.alter(-1,
+		new Signature({
+			proc: 'arrange',
+			val: apath.get(-1),
+		}),
+		new Signature({
+			at1 : 0,
+			path: new Path([space.key$, 'z']), // TODO getOwnKey
+		})
+	);
+
+	var k = apath.get(-1);
+	return space.items.get(k);
+}
+
+/**
 | Moves an item up to the z-index
 */
 Peer.prototype.moveToTop = function(space, item) {
