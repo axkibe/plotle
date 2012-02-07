@@ -36,13 +36,13 @@
 var Jools;
 var Fabric;
 var FrontFace;
-var MeshPeer;
+var Peer;
 
 /**
 | Export
 */
 var system;
-var meshpeer;
+var peer;
 
 /**
 | Export/Capsule
@@ -438,7 +438,7 @@ window.onload = function() {
 	makeCatcher(this, function() {
 		system       = new System();
 		system.shell = new Shell(system.fabric);
-		meshpeer     = new MeshPeer();
+		peer         = new Peer();
 		system.shell._draw(); // TODO private 
 	})();
 }

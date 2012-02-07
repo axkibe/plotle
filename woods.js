@@ -656,12 +656,12 @@ function Label(master) {
 	// @03 check if master has other keys.
 
 	Item.call(this, {
-			type  : 'Label',
-			doc   : new this.seeds.DocAlley(master && master.doc),
-			zone  : new Rect(master.zone),
+			type : 'Label',
+			doc  : new this.seeds.DocAlley(master && master.doc),
+			pnw  : new Point(master.pnw),
 		});
 
-	this.zone = this._twigs.zone; // @03 dont
+	this.pnw = this._twigs.pnw; // @03 dont
 }
 subclass(Label, Item);
 

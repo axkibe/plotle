@@ -87,7 +87,7 @@ var content = {
 	'/woods.js':       { file: './woods.js',          mime: mime_js, code: 'utf-8',  },
 	'/shell.js':       { file: './shell.js',          mime: mime_js, code: 'utf-8',  },
 	'/meshmashine.js': { file: './meshmashine.js',    mime: mime_js, code: 'utf-8',  },
-	'/meshpeer.js':    { file: './meshpeer.js',       mime: mime_js, code: 'utf-8',  },
+	'/peer.js':        { file: './peer.js',           mime: mime_js, code: 'utf-8',  },
 	'/favicon.ico':    { file: './icons/hexicon.ico', mime: mime_xi, code: 'binary', },
 };
 

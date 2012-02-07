@@ -30,13 +30,13 @@ var MeshMashine;
 var Path;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- +++ MeshPeer +++
+ +++ Peer +++
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  Communicates with the server, holds caches.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function MeshPeer() {
+function Peer() {
 	this.mm = new MeshMashine(Woods.Nexus, true, true);
 
 	var spacepath = new Path(['welcome']);
@@ -47,6 +47,7 @@ function MeshPeer() {
 	 	  val: {
 		    type: 'Space',
 		    items: {
+				/*
 		      '0' : {
 		        type: 'Note',
 		        zone: {
@@ -108,13 +109,10 @@ function MeshPeer() {
 	                }
 		          ],
 		        },
-		      },
+		      },*/
 		      '1' : {
 		        type: 'Label',
-		        zone: {
-		          pnw : { 'x': 550, 'y': 150 },
-		          pse : { 'x': 650, 'y': 200 },
-		        },
+		        pnw: { 'x': 550, 'y': 150 },
 		        doc: {
 		          fontsize : 13,
 
@@ -129,7 +127,7 @@ function MeshPeer() {
 		    },
 			'z' : {
 			  alley : [
-			    '0', '1',
+			    /*'0',*/ '1',
 			  ],
 			}
 		  },
@@ -147,7 +145,7 @@ function MeshPeer() {
 /**
 | Creates a new note.
 */
-MeshPeer.prototype.newNote = function(space, zone) {
+Peer.prototype.newNote = function(space, zone) {
 	var path = new Path(space);
 	path.push('items');
 	path.push('$new');
@@ -193,7 +191,7 @@ MeshPeer.prototype.newNote = function(space, zone) {
 /**
 | Sets the zone for item.
 */
-MeshPeer.prototype.setZone = function(item, zone) {
+Peer.prototype.setZone = function(item, zone) {
 	var path = new Path(item);
 	path.set(path.length, 'zone');
 
@@ -210,7 +208,7 @@ MeshPeer.prototype.setZone = function(item, zone) {
 /**
 | Moves an item up to the z-index
 */
-MeshPeer.prototype.moveToTop = function(space, item) {
+Peer.prototype.moveToTop = function(space, item) {
 	var path = new Path(space);
 	path.push('z');
 	var key = item.getOwnKey();
@@ -243,7 +241,7 @@ MeshPeer.prototype.moveToTop = function(space, item) {
 /**
 | Inserts some text.
 */
-MeshPeer.prototype.insertText = function(node, offset, text) {
+Peer.prototype.insertText = function(node, offset, text) {
 	var path = new Path(node);
 	path.push('text');
 
@@ -258,7 +256,7 @@ MeshPeer.prototype.insertText = function(node, offset, text) {
 	);
 }
 
-MeshPeer.prototype.removeText = function(node, offset, len) {
+Peer.prototype.removeText = function(node, offset, len) {
 	var path = new Path(node);
 	path.push('text');
 
@@ -277,7 +275,7 @@ MeshPeer.prototype.removeText = function(node, offset, len) {
 /**
 | Splits a text node.
 */
-MeshPeer.prototype.split = function(node, offset) {
+Peer.prototype.split = function(node, offset) {
 	var path = new Path(node);
 	path.push('text');
 
@@ -296,7 +294,7 @@ MeshPeer.prototype.split = function(node, offset) {
 /**
 | Joins a text nodes with its next one
 */
-MeshPeer.prototype.join = function(node) {
+Peer.prototype.join = function(node) {
 	var path = new Path(node);
 	path.push('text');
 
@@ -315,7 +313,7 @@ MeshPeer.prototype.join = function(node) {
 /**
 | Removes an item.
 */
-MeshPeer.prototype.removeItem = function(space, item) {
+Peer.prototype.removeItem = function(space, item) {
 	var path = new Path(space);
 	path.push('z');
 	var key = item.getOwnKey();

@@ -30,7 +30,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 'use strict';
-var meshpeer;
+var peer;
 var shell = null;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -127,7 +127,8 @@ var settings = {
 
 		style : {
 			edge : [
-				{ border: 0, width: 0.2, color: 'rgba(200, 100, 0, 0.5)' },
+				//{ border: 0, width: 0.2, color: 'rgba(200, 100, 0, 0.5)' },
+				{ border: 0, width: 1, color: 'rgba(100, 100, 0, 0.5)' },
 			],
 			highlight : [
 				{ border: 0, width: 3, color: 'rgba(255, 183, 15, 0.5)' },
@@ -998,7 +999,7 @@ VSpace.prototype.setFocus = function(vitem) {
 
 	if (vitem === null) return;
 
-	meshpeer.moveToTop(this.space, vitem.item);
+	peer.moveToTop(this.space, vitem.item);
 }
 
 /**
@@ -1254,7 +1255,7 @@ VSpace.prototype.mousedown = function(p, shift, ctrl) {
 			var nh = settings.note.newHeight;
 			var pnw = fm.p.sub(this.fabric.pan.x + half(nw) , this.fabric.pan.y + half(nh));
 			var pse = pnw.add(nw, nh);
-			var note  = meshpeer.newNote(this.space, new Rect(pnw, pse));
+			var note  = peer.newNote(this.space, new Rect(pnw, pse));
 			var vnote = new VNote(note, this);
 			this.vitems.vcopse[note.getOwnKey()] = vnote;
 			this.setFocus(vnote);
@@ -1281,7 +1282,7 @@ VSpace.prototype.mousedown = function(p, shift, ctrl) {
 		if (!im) break;
 		switch(md) {
 		case 'n': // remove
-			meshpeer.removeItem(this.space, this.focus.item);
+			peer.removeItem(this.space, this.focus.item);
 			this.setFocus(null);
 			break;
 		}
@@ -1379,14 +1380,9 @@ VPara.prototype.getFlow = function() {
 	var para  = this.para;
 	var vdoc  = this.vdoc;
 	var vitem = vdoc.vitem;
-	var zone  = vitem.getZone();
-	var sbary = vitem.scrollbarY;
-	var width = zone.width - vitem.imargin.x
-	if (sbary && sbary.visible) {
-		width -= settings.scrollbar.strength;
-	}
+	var flowWidth = vitem.getFlowWidth();
 
-	if (this._flow$ && this._flow$.width === width) return this._flow$;
+	if (this._flow$ && this._flow$.flowWidth === flowWidth) return this._flow$;
 
 	if (shell.caret.entity === this) {
 		// remove caret cache if its within this flow.
@@ -1422,7 +1418,7 @@ VPara.prototype.getFlow = function() {
 		var w = Measure.width(token);
 		xw = x + w + space;
 
-		if (width > 0 && xw > width) {
+		if (flowWidth > 0 && xw > flowWidth) {
 			if (x > 0) {
 				// soft break
 				if (spread < xw) spread = xw;
@@ -1448,7 +1444,7 @@ VPara.prototype.getFlow = function() {
 	if (spread < xw) spread = xw;
 
 	flow.height = y;
-	flow.width  = width;
+	flow.flowWidth = flowWidth;
 	flow.spread = spread;
 	return flow;
 }
@@ -1509,7 +1505,7 @@ VPara.prototype.getLineXOffset = function(line, x) {
 VPara.prototype.input = function(text) {
 	if (shell.caret.entity !== this) throw new Error('Invalid caret on input');
 	var para = this.para;
-	meshpeer.insertText(para, shell.caret.offset, text);
+	peer.insertText(para, shell.caret.offset, text);
 }
 
 /**
@@ -1582,16 +1578,16 @@ VPara.prototype.specialKey = function(keycode, shift, ctrl) {
 	switch(keycode) {
 	case  8 : // backspace
 		if (caret.offset > 0) {
-			meshpeer.removeText(para, caret.offset - 1, 1);
+			peer.removeText(para, caret.offset - 1, 1);
 		} else {
 			var key = para.getOwnKey();
 			if (key > 0) {
-				meshpeer.join(para.parent.get(key - 1));
+				peer.join(para.parent.get(key - 1));
 			}
 		}
 		break;
 	case 13 : // return
-		meshpeer.split(para, caret.offset);
+		peer.split(para, caret.offset);
 		break;
 	case 35 : // end
 		caret.set(this, para.get('text').length);
@@ -1669,13 +1665,13 @@ VPara.prototype.specialKey = function(keycode, shift, ctrl) {
 		break;
 	case 46 : // del
 		if (caret.offset < para.get('text').length) {
-			meshpeer.removeText(para, caret.offset, 1);
+			peer.removeText(para, caret.offset, 1);
 		} else {
 			var vdoc = this.vdoc;
 			var key = para.getOwnKey();
 			if (vdoc.valley[key] !== this) throw new Error('vdoc.valley inconsistency');
 			if (key < vdoc.valley.length - 1) {
-				meshpeer.join(para);
+				peer.join(para);
 			}
 		}
 		break;
@@ -1710,7 +1706,7 @@ VPara.prototype.specialKey = function(keycode, shift, ctrl) {
 VPara.prototype.getFabric = function() {
 	var para   = this.para;
 	var flow   = this.getFlow();
-	var width  = flow.width;
+	var width  = flow.spread;
 	var vdoc   = this.vdoc;
 	var doc    = para.getAnchestor('DocAlley');
 	var height = flow.height + R(vdoc.doc.get('fontsize') * settings.bottombox);
@@ -1727,9 +1723,9 @@ VPara.prototype.getFabric = function() {
 	fabric.fontStyle(vdoc.getFont(), 'black', 'start', 'alphabetic');
 
 	// draws text into the fabric
-	for(var a = 0, flowLen = flow.length; a < flowLen; a++) {
+	for(var a = 0, aZ = flow.length; a < aZ; a++) {
 		var line = flow[a];
-		for(var b = 0, lineLen = line.a.length; b < lineLen; b++) {
+		for(var b = 0, bZ = line.a.length; b < bZ; b++) {
 			var chunk = line.a[b];
 			fabric.fillText(chunk.t, chunk.x, line.y);
 		}
@@ -1803,6 +1799,7 @@ VPara.prototype.getOffsetPoint = function(offset, flowPos$) {
 */
 VPara.prototype.drawCaret = function() {
 	if (shell.caret.entity !== this) throw new Error('Drawing caret for invalid para');
+
 	var para  = this.para;
 	var doc   = para.getAnchestor('DocAlley'); // TODO remove
 	var vdoc  = this.vdoc;
@@ -2086,7 +2083,6 @@ VDoc.prototype.draw = function(fabric, imargin, scrollp) {
 VDoc.prototype.getHeight = function() {
 	var paraSep = half(this.doc.get('fontsize'));
 	var valley = this.valley;
-
 	var height = 0;
 	for (var a = 0, aZ = valley.length; a < aZ; a++) {
 		var vpara = valley[a];
@@ -2094,6 +2090,20 @@ VDoc.prototype.getHeight = function() {
 		height += flow.height + paraSep;
 	}
 	return height;
+}
+
+/**
+| Returns the width actually used of the document.
+*/
+VDoc.prototype.getSpread = function() {
+	var valley = this.valley;
+	var spread = 0;
+	for (var a = 0, aZ = valley.length; a < aZ; a++) {
+		var vpara = valley[a];
+		var flow = vpara.getFlow();
+		spread += flow.spread;
+	}
+	return spread;
 }
 
 /**
@@ -2338,100 +2348,6 @@ VItem.prototype.transfix = function(txe, p, shift, ctrl) {
 }
 
 /**
-| Returns the zone of the item.
-| An ongoing action can modify this to be different than meshmashine data.
-*/
-VItem.prototype.getZone = function() {
-	var item   = this.item;
-	var action = shell.action;
-
-	if (!action || action.vitem !== this) return item.zone;
-	// @03 cache the last zone
-
-	switch (action.type) {
-	case Action.ITEMDRAG:
-		if (!action.move) return item.zone;
-		return item.zone.add(action.move.x - action.start.x, action.move.y - action.start.y);
-
-	case Action.ITEMRESIZE:
-		if (!action.move) return item.zone;
-		var ipnw = action.startZone.pnw;
-		var ipse = action.startZone.pse;
-		var dx = action.move.x - action.start.x;
-		var dy = action.move.y - action.start.y;
-		var minw = this.minWidth;
-		var minh = this.minHeight;
-		var pnw, pse;
-
-		switch (action.align) {
-		case 'n'  :
-			pnw = Point.renew(ipnw.x, min(ipnw.y + dy, ipse.y - minh), ipnw, ipse);
-			pse = ipse;
-			break;
-		case 'ne' :
-			pnw = Point.renew(
-				ipnw.x, min(ipnw.y + dy, ipse.y - minh), ipnw, ipse);
-			pse = Point.renew(
-				max(ipse.x + dx, ipnw.x + minw), ipse.y, ipnw, ipse);
-			break;
-		case 'e'  :
-			pnw = ipnw;
-			pse = Point.renew(max(ipse.x + dx, ipnw.x + minw), ipse.y, ipnw, ipse);
-			break;
-		case 'se' :
-			pnw = ipnw;
-			pse = Point.renew(
-				max(ipse.x + dx, ipnw.x + minw),
-				max(ipse.y + dy, ipnw.y + minh), ipnw, ipse);
-			break;
-		case 's' :
-			pnw = ipnw;
-			pse = Point.renew(ipse.x, max(ipse.y + dy, ipnw.y + minh), ipnw, ipse);
-			break;
-		case 'sw'  :
-			pnw = Point.renew(min(ipnw.x + dx, ipse.x - minw), ipnw.y, ipnw, ipse),
-			pse = Point.renew(ipse.x, max(ipse.y + dy, ipnw.y + minh), ipnw, ipse);
-			break;
-		case 'w'   :
-			pnw = Point.renew(min(ipnw.x + dx, ipse.x - minw), ipnw.y, ipnw, ipse),
-			pse = ipse;
-			break;
-		case 'nw' :
-			pnw = Point.renew(
-				min(ipnw.x + dx, ipse.x - minw),
-				min(ipnw.y + dy, ipse.y - minh), ipnw, ipse);
-			pse = ipse;
-			break;
-		case 'c' :
-		default  :
-			throw new Error('unknown align');
-		}
-		return new Rect(pnw, pse);
-	default :
-		return item.zone;
-	}
-}
-
-/**
-| Sets the items position and size.
-|
-| @03 this might as well be removed.
-*/
-VItem.prototype.setZone = function(zone) {
-	// ensures minimum size
-	if (zone.width < this.minWidth || zone.height < this.minHeight) {
-		log('fail', 'Note under minimum size!');
-	}
-	if (this.item.zone.eq(zone)) return;
-	meshpeer.setZone(this.item, zone);
-
-	// @03 this should happen by MeshIO settings...
-	this._fabric$flag = false;
-	// adapts scrollbar position
-	if (this.setScrollbar) this.setScrollbar();
-}
-
-/**
 | Called by subvisuals when they got changed.
 */
 VItem.prototype.poke = function() {
@@ -2540,6 +2456,22 @@ VNote.prototype.setScrollbar = function(pos) {
 	sbary.setPos(pos);
 }
 
+/**
+| Sets the items position and size.
+*/
+VNote.prototype.setZone = function(zone) {
+	// ensures minimum size
+	if (zone.width < this.minWidth || zone.height < this.minHeight) {
+		log('fail', 'Note under minimum size!');
+	}
+	if (this.item.zone.eq(zone)) return;
+	peer.setZone(this.item, zone);
+
+	// @03 this should happen by MeshIO settings...
+	this._fabric$flag = false;
+	// adapts scrollbar position
+	if (this.setScrollbar) this.setScrollbar();
+}
 
 /**
 | Draws the note.
@@ -2592,6 +2524,94 @@ VNote.prototype.draw = function(fabric) {
 	}
 
 	fabric.drawImage(f, zone.pnw);
+}
+
+/**
+| Returns the width for the contents flow.
+*/
+VNote.prototype.getFlowWidth = function() {
+	var sbary = this.scrollbarY;
+	var zone = this.getZone();
+	var flowWidth = zone.width - this.imargin.x;
+	if (sbary && sbary.visible) {
+		flowWidth -= settings.scrollbar.strength;
+	}
+	return flowWidth;
+}
+
+/**
+| Returns the zone of the item.
+| An ongoing action can modify this to be different than meshmashine data.
+*/
+VNote.prototype.getZone = function() {
+	var item   = this.item;
+	var action = shell.action;
+
+	if (!action || action.vitem !== this) return item.zone;
+	// @03 cache the last zone
+
+	switch (action.type) {
+	case Action.ITEMDRAG:
+		if (!action.move) return item.zone;
+		return item.zone.add(action.move.x - action.start.x, action.move.y - action.start.y);
+
+	case Action.ITEMRESIZE:
+		if (!action.move) return item.zone;
+		var ipnw = action.startZone.pnw;
+		var ipse = action.startZone.pse;
+		var dx = action.move.x - action.start.x;
+		var dy = action.move.y - action.start.y;
+		var minw = this.minWidth;
+		var minh = this.minHeight;
+		var pnw, pse;
+
+		switch (action.align) {
+		case 'n'  :
+			pnw = Point.renew(ipnw.x, min(ipnw.y + dy, ipse.y - minh), ipnw, ipse);
+			pse = ipse;
+			break;
+		case 'ne' :
+			pnw = Point.renew(
+				ipnw.x, min(ipnw.y + dy, ipse.y - minh), ipnw, ipse);
+			pse = Point.renew(
+				max(ipse.x + dx, ipnw.x + minw), ipse.y, ipnw, ipse);
+			break;
+		case 'e'  :
+			pnw = ipnw;
+			pse = Point.renew(max(ipse.x + dx, ipnw.x + minw), ipse.y, ipnw, ipse);
+			break;
+		case 'se' :
+			pnw = ipnw;
+			pse = Point.renew(
+				max(ipse.x + dx, ipnw.x + minw),
+				max(ipse.y + dy, ipnw.y + minh), ipnw, ipse);
+			break;
+		case 's' :
+			pnw = ipnw;
+			pse = Point.renew(ipse.x, max(ipse.y + dy, ipnw.y + minh), ipnw, ipse);
+			break;
+		case 'sw'  :
+			pnw = Point.renew(min(ipnw.x + dx, ipse.x - minw), ipnw.y, ipnw, ipse),
+			pse = Point.renew(ipse.x, max(ipse.y + dy, ipnw.y + minh), ipnw, ipse);
+			break;
+		case 'w'   :
+			pnw = Point.renew(min(ipnw.x + dx, ipse.x - minw), ipnw.y, ipnw, ipse),
+			pse = ipse;
+			break;
+		case 'nw' :
+			pnw = Point.renew(
+				min(ipnw.x + dx, ipse.x - minw),
+				min(ipnw.y + dy, ipse.y - minh), ipnw, ipse);
+			pse = ipse;
+			break;
+		case 'c' :
+		default  :
+			throw new Error('unknown align');
+		}
+		return new Rect(pnw, pse);
+	default :
+		return item.zone;
+	}
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2692,6 +2712,112 @@ VLabel.prototype.draw = function(fabric) {
 
 	fabric.drawImage(f, zone.pnw);
 }
+
+/**
+| Returns the width for the contents flow.
+*/
+VLabel.prototype.getFlowWidth = function() {
+	return 0;
+}
+
+/**
+| Returns the zone of the item.
+| An ongoing action can modify this to be different than meshmashine data.
+*/
+VLabel.prototype.getZone = function() {
+	var item   = this.item;
+	var action = shell.action;
+	var pnw = item.pnw;
+
+	// xxxx Caching! TODO
+	var vdoc = this.vdoc;
+	var zone = new Rect(pnw, pnw.add(vdoc.getSpread(), vdoc.getHeight()));
+
+	if (!action || action.vitem !== this) return zone;
+	// @03 cache the last zone
+
+	switch (action.type) {
+	case Action.ITEMDRAG:
+		if (!action.move) return zone;
+		return zone.add(action.move.x - action.start.x, action.move.y - action.start.y);
+
+	case Action.ITEMRESIZE:
+		if (!action.move) return zone;
+		var ipnw = action.startZone.pnw;
+		var ipse = action.startZone.pse;
+		var dx = action.move.x - action.start.x;
+		var dy = action.move.y - action.start.y;
+		var minw = this.minWidth;
+		var minh = this.minHeight;
+		var pnw, pse;
+
+		switch (action.align) {
+		case 'n'  :
+			pnw = Point.renew(ipnw.x, min(ipnw.y + dy, ipse.y - minh), ipnw, ipse);
+			pse = ipse;
+			break;
+		case 'ne' :
+			pnw = Point.renew(
+				ipnw.x, min(ipnw.y + dy, ipse.y - minh), ipnw, ipse);
+			pse = Point.renew(
+				max(ipse.x + dx, ipnw.x + minw), ipse.y, ipnw, ipse);
+			break;
+		case 'e'  :
+			pnw = ipnw;
+			pse = Point.renew(max(ipse.x + dx, ipnw.x + minw), ipse.y, ipnw, ipse);
+			break;
+		case 'se' :
+			pnw = ipnw;
+			pse = Point.renew(
+				max(ipse.x + dx, ipnw.x + minw),
+				max(ipse.y + dy, ipnw.y + minh), ipnw, ipse);
+			break;
+		case 's' :
+			pnw = ipnw;
+			pse = Point.renew(ipse.x, max(ipse.y + dy, ipnw.y + minh), ipnw, ipse);
+			break;
+		case 'sw'  :
+			pnw = Point.renew(min(ipnw.x + dx, ipse.x - minw), ipnw.y, ipnw, ipse),
+			pse = Point.renew(ipse.x, max(ipse.y + dy, ipnw.y + minh), ipnw, ipse);
+			break;
+		case 'w'   :
+			pnw = Point.renew(min(ipnw.x + dx, ipse.x - minw), ipnw.y, ipnw, ipse),
+			pse = ipse;
+			break;
+		case 'nw' :
+			pnw = Point.renew(
+				min(ipnw.x + dx, ipse.x - minw),
+				min(ipnw.y + dy, ipse.y - minh), ipnw, ipse);
+			pse = ipse;
+			break;
+		case 'c' :
+		default  :
+			throw new Error('unknown align');
+		}
+		return new Rect(pnw, pse);
+	default :
+		return zone;
+	}
+}
+
+/**
+| Sets the items position and size.
+*/
+VLabel.prototype.setZone = function(zone) {
+	throw new Error('TODO');
+	// ensures minimum size
+	if (zone.width < this.minWidth || zone.height < this.minHeight) {
+		log('fail', 'Note under minimum size!');
+	}
+	if (this.item.zone.eq(zone)) return;
+	peer.setZone(this.item, zone);
+
+	// @03 this should happen by MeshIO settings...
+	this._fabric$flag = false;
+	// adapts scrollbar position
+	if (this.setScrollbar) this.setScrollbar();
+}
+
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  OLD LABEL: TODO REMOVE
