@@ -2844,6 +2844,7 @@ VLabel.prototype.dragstop = function(p, shift, ctrl) {
 	var fontsize = this.vdoc.getFontSize();
 
 	if (!this.item.pnw.eq(zone.pnw)) {
+		debug(zone.pnw);
 		peer.setPNW(this.item, zone.pnw);
 		this._fabric$flag = false; // TODO this should happen by setting in peer<F12>...
 	}

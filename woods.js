@@ -681,11 +681,11 @@ Label.prototype.mmSet = function(path, val, a0, al, oplace) {
 		al = path.fit(al, true);
 	}
 
-	if (path === 'zone' || path.get(a0) === 'zone') {
+	if (path === 'pnw' || path.get(a0) === 'pnw') {
 		if (a0 + 1 === al) {
-			this.zone = new Rect(val);
+			this.pnw = new Point(val);
 		} else {
-			this.zone = this.zone.mmSet(path, val, a0 + 1, al, true);
+			this.pnw = this.pnw.mmSet(path, val, a0 + 1, al, true);
 		}
 		return;
 	}
@@ -880,6 +880,11 @@ function Point(master) {
 	Fabric.Point.call(this, master.x, master.y);
 }
 subclass(Point, Fabric.Point);
+
+/**
+| Since points are immutable, they have no cogs.
+*/
+Point.prototype.noCogs = true;
 
 /**
 | Returns a new rectangle with changed value.
