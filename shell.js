@@ -1379,7 +1379,7 @@ VPara.prototype.getFlow = function() {
 	var vitem = vdoc.vitem;
 	var flowWidth = vitem.getFlowWidth();
 
-	if (this._flow$ && this._flow$.flowWidth === flowWidth) return this._flow$;
+//	if (this._flow$ && this._flow$.flowWidth === flowWidth) return this._flow$; TODO xxx
 
 	if (shell.caret.entity === this) {
 		// remove caret cache if its within this flow.
@@ -1421,7 +1421,7 @@ VPara.prototype.getFlow = function() {
 				if (spread < xw) spread = xw;
 				x = 0; xw = x + w + space;
 				//y += R(vdoc.fontsize * (pre ? 1 : 1 + settings.bottombox)); @03
-				y += R(vdoc.doc.get('fontsize') * (1 + settings.bottombox));
+				y += R(vdoc.getFontSize() * (1 + settings.bottombox));
 				line++;
 				flow[line] = {a: [], y: y, o: ca.index};
 			} else {
@@ -2078,7 +2078,7 @@ VDoc.prototype.draw = function(fabric, imargin, scrollp) {
 | TODO caching
 */
 VDoc.prototype.getHeight = function() {
-	var paraSep = half(this.doc.get('fontsize'));
+	var paraSep = half(this.getFontSize());
 	var valley = this.valley;
 	var height = 0;
 	for (var a = 0, aZ = valley.length; a < aZ; a++) {
@@ -2104,7 +2104,10 @@ VDoc.prototype.getSpread = function() {
 }
 
 VDoc.prototype.getFontSize = function() {
-	return this.doc.get('fontsize');
+	var vitem = this.vitem;
+	var fontsize = this.doc.get('fontsize');
+	if (!vitem.fontSizeChange) return fontsize;
+	return vitem.fontSizeChange(fontsize);
 }
 
 /**
@@ -2721,6 +2724,29 @@ VLabel.prototype.getFlowWidth = function() {
 }
 
 /**
+| Calculates the change of fontsize due to resizing.
+*/
+VLabel.prototype.fontSizeChange = function(fontsize) {
+	var action = shell.action;
+	if (!action || action.vitem !== this) return fontsize;
+	switch (action.type) {
+	default: return fontsize;
+	case Action.ITEMRESIZE:
+		if (!action.move) return fontsize;
+		var vdoc = this.vdoc;
+		var height = action.startZone.height;
+		var dy;
+		switch (action.align) {
+		case 'ne': case 'nw' : dy = action.start.y - action.move.y;  break;
+		case 'se': case 'sw' : dy = action.move.y  - action.start.y; break;
+		default  : throw new Error('unknown align: '+action.align);
+		}
+		return max(fontsize * (height + dy) / height, 8);
+	}
+	return fontsize;
+}
+
+/**
 | Returns the zone of the item.
 | An ongoing action can modify this to be different than meshmashine data.
 */
@@ -2731,7 +2757,7 @@ VLabel.prototype.getZone = function() {
 
 	// xxxx Caching! TODO
 	var vdoc = this.vdoc;
-	var zone = new Rect(pnw, pnw.add(vdoc.getSpread(), vdoc.getHeight()));
+	var zone = new Rect(pnw, pnw.add(Math.ceil(vdoc.getSpread()), Math.ceil(vdoc.getHeight())));
 
 	if (!action || action.vitem !== this) return zone;
 	// @03 cache the last zone
@@ -2742,6 +2768,9 @@ VLabel.prototype.getZone = function() {
 		return zone.add(action.move.x - action.start.x, action.move.y - action.start.y);
 
 	case Action.ITEMRESIZE:
+		// resizing is done by fontSizeChange()
+		return zone;
+		/*
 		if (!action.move) return zone;
 		var ipnw = action.startZone.pnw;
 		var ipse = action.startZone.pse;
@@ -2795,6 +2824,7 @@ VLabel.prototype.getZone = function() {
 			throw new Error('unknown align');
 		}
 		return new Rect(pnw, pse);
+		*/
 	default :
 		return zone;
 	}
