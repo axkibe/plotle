@@ -1165,10 +1165,11 @@ VSpace.prototype.dragstop = function(p, shift, ctrl) {
 	var action = shell.action;
 	var pp = p.sub(this.fabric.pan);
 	if (!action) throw new Error('Dragstop without action?');
+
 	switch (action.type) {
 	case Action.ITEMDRAG :
 	case Action.ITEMRESIZE :
-		action.vitem.setZone(action.vitem.getZone());
+		action.vitem.dragstop(p, shift, ctrl);
 		system.setCursor('default');
 		shell.redraw = true;
 		break;
@@ -2460,20 +2461,24 @@ VNote.prototype.setScrollbar = function(pos) {
 }
 
 /**
-| Sets the items position and size.
+| Sets the items position and size after an action.
 */
-VNote.prototype.setZone = function(zone) {
-	// ensures minimum size
+VNote.prototype.dragstop = function(p, shift, ctrl) {
+	var zone = this.getZone();
+
 	if (zone.width < this.minWidth || zone.height < this.minHeight) {
-		log('fail', 'Note under minimum size!');
+		throw new Error('Note under minimum size!');
 	}
+
 	if (this.item.zone.eq(zone)) return;
+
 	peer.setZone(this.item, zone);
 
-	// @03 this should happen by MeshIO settings...
+	// TODO this should happen by setting in peer<F12>...
 	this._fabric$flag = false;
+
 	// adapts scrollbar position
-	if (this.setScrollbar) this.setScrollbar();
+	this.setScrollbar();
 }
 
 /**
@@ -2830,22 +2835,22 @@ VLabel.prototype.getZone = function() {
 	}
 }
 
-/**
-| Sets the items position and size.
-*/
-VLabel.prototype.setZone = function(zone) {
-	throw new Error('TODO');
-	// ensures minimum size
-	if (zone.width < this.minWidth || zone.height < this.minHeight) {
-		log('fail', 'Note under minimum size!');
-	}
-	if (this.item.zone.eq(zone)) return;
-	peer.setZone(this.item, zone);
 
-	// @03 this should happen by MeshIO settings...
-	this._fabric$flag = false;
-	// adapts scrollbar position
-	if (this.setScrollbar) this.setScrollbar();
+/**
+| Sets the items position and size aften an action.
+*/
+VLabel.prototype.dragstop = function(p, shift, ctrl) {
+	var zone = this.getZone();
+	var fontsize = this.vdoc.getFontSize();
+
+	if (!this.item.pnw.eq(zone.pnw)) {
+		peer.setPNW(this.item, zone.pnw);
+		this._fabric$flag = false; // TODO this should happen by setting in peer<F12>...
+	}
+	if (fontsize !== this.item.get('fontsize')) {
+		peer.setFontSize(this.item, fontsize);
+		this._fabric$flag = false; // TODO same
+	}
 }
 
 
@@ -3220,246 +3225,3 @@ Relation.prototype.onlook = function(event, item) {
 	}*/
 }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ,-,-,-.           .   ,-_/ ,,--.
- `,| | |   ,-. ,-. |-. '  | |`, |
-   | ; | . |-' `-. | | .^ | |   |
-   '   `-' `-' `-' ' ' `--' `---'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- Communicates with the server, holds caches.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function MeshIO() {
-	this.mm = new MeshMashine(Woods.Nexus, true, true);
-
-	var spacepath = new Path(['welcome']);
-
-	// for now hand init
-	var asw = this.mm.alter(0,
-		new Signature({
-	 	  val: {
-		    type: 'Space',
-		    items: {
-		      '0' : {
-		        type: 'Note',
-		        zone: {
-		          pnw : { 'x': 100, 'y': 100 },
-		          pse : { 'x': 400, 'y': 250 },
-		        },
-		        doc: {
-		          fontsize : 13,
-
-		          alley : [
-		            {
-		              type: 'Para',
-		              text: 'If you can dream---and not make dreams your master;',
-		            }, {
-	                  type: 'Para',
-	                  text: 'If you can think---and not make thoughts your aim,',
-	                }, {
-		              type: 'Para',
-		              text: 'If you can meet with Triumph and Disaster',
-	                }, {
-		              type: 'Para',
-		              text: 'And treat those two impostors just the same',
-		            },
-		          ],
-		        },
-		      },
-		      '1' : {
-		        type: 'Note',
-		        zone: {
-		          pnw : { 'x': 450, 'y': 120 },
-		          pse : { 'x': 650, 'y': 250 },
-		        },
-		        doc: {
-		          fontsize : 13,
-
-		          alley : [
-		            {
-		              type: 'Para',
-		              text: 'Muhkuh',
-		            },
-		          ],
-		        },
-			  },
-		    },
-			'z' : {
-			  alley : [
-			    '0', '1',
-			  ],
-			}
-		  },
-		}), new Signature({
-		  path: spacepath
-		})
-	);
-	if (asw.ok !== true) throw new Error('Cannot init Repository');
-
-	asw = this.mm.get(-1, spacepath);
-	if (asw.ok !== true) throw new Error('Cannot reget own Space');
-	system.shell.vspace = new VSpace(asw.node);  // TODO HACK
-}
-
-/**
-| Creates a new note.
-*/
-MeshIO.prototype.newNote = function(space, zone) {
-	var path = new Path(space);
-	path.push('items');
-	path.push('$new');
-
-	var asw = this.mm.alter(-1,
-		new Signature({
-			val: {
-				'type': 'Note',
-				'zone': zone,
-				'doc': {
-					fontsize : 13,
-					alley: [ 
-	                	{
-		            		type: 'Para',
-		            		text: '',
-		            	},
-					]
-				},
-			},
-		}), new Signature({
-			path: path,
-		})
-	);
-
-	var apath = asw.alts.trg.path;
-	if (!(apath instanceof Path)) throw new Error('Cannot reget new Note');
-
-	this.mm.alter(-1,
-		new Signature({
-			proc: 'arrange',
-			val: apath.get(-1),
-		}),
-		new Signature({
-			at1 : 0,
-			path: new Path([space.key$, 'z']), // TODO getOwnKey
-		})
-	);
-
-	var k = apath.get(-1);
-	return space.items.get(k);
-}
-
-/**
-| Sets the zone for item.
-*/
-MeshIO.prototype.setZone = function(item, zone) {
-	var path = new Path(item);
-	path.set(path.length, 'zone');
-
-	this.mm.alter(-1,
-		new Signature({
-			val: zone,
-		}),
-		new Signature({
-			path: path,
-		})
-	);
-}
-
-/**
-| Moves an item up to the z-index
-*/
-MeshIO.prototype.moveToTop = function(space, item) {
-	var path = new Path(space);
-	path.push('z');
-	var key = item.getOwnKey();
-	var at1 = space.z.indexOf(key);
-
-	if (at1 === 0) return;
-
-	this.mm.alter(-1,
-		new Signature({
-			path: path,
-			at1: at1,
-		}),
-		new Signature({
-			proc: 'arrange',
-		})
-	);
-
-	this.mm.alter(-1,
-		new Signature({
-			proc: 'arrange',
-			val: key,
-		}),
-		new Signature({
-			path: path,
-			at1 : 0,
-		})
-	);
-}
-
-/**
-| Inserts some text.
-*/
-MeshIO.prototype.insertText = function(node, offset, text) {
-	var path = new Path(node);
-	path.push('text');
-
-	this.mm.alter(-1,
-		new Signature({
-			val: text,
-		}),
-		new Signature({
-			path: path,
-			at1: offset,
-		})
-	);
-}
-
-/**
-| Splits a para
-*/
-MeshIO.prototype.split = function(node, offset) {
-	var path = new Path(node);
-	path.push('text');
-
-	this.mm.alter(-1,
-		new Signature({
-			at1 : offset,
-			pivot: path.length - 2,
-			path: path,
-		}),
-		new Signature({
-			proc: 'splice',
-		})
-	);
-}
-
-/**
-| Removes an item.
-*/
-MeshIO.prototype.removeItem = function(space, item) {
-	var path = new Path(space);
-	path.push('z');
-	var key = item.getOwnKey();
-	var at1 = space.z.indexOf(key);
-
-	// remove from z-index
-	this.mm.alter(-1,
-		new Signature({
-			path: path,
-			at1: at1,
-		}),
-		new Signature({
-			proc: 'arrange',
-		})
-	);
-
-	// remove from doc alley
-	this.mm.alter(-1,
-		new Signature({
-			val: null,
-		}),
-		new Signature({
-			path: new Path(item),
-		})
-	);
-}

@@ -47,7 +47,6 @@ function Peer() {
 	 	  val: {
 		    type: 'Space',
 		    items: {
-				/*
 		      '0' : {
 		        type: 'Note',
 		        zone: {
@@ -109,7 +108,7 @@ function Peer() {
 	                }
 		          ],
 		        },
-		      },*/
+		      },
 		      '1' : {
 		        type: 'Label',
 		        pnw: { 'x': 550, 'y': 150 },
@@ -127,7 +126,7 @@ function Peer() {
 		    },
 			'z' : {
 			  alley : [
-			    /*'0',*/ '1',
+			    '0', '1',
 			  ],
 			}
 		  },
@@ -193,11 +192,46 @@ Peer.prototype.newNote = function(space, zone) {
 */
 Peer.prototype.setZone = function(item, zone) {
 	var path = new Path(item);
-	path.set(path.length, 'zone');
+	path.push('zone');
 
 	this.mm.alter(-1,
 		new Signature({
 			val: zone,
+		}),
+		new Signature({
+			path: path,
+		})
+	);
+}
+
+/**
+| Sets an items fontsize
+*/
+Peer.prototype.setFontSize = function(item, fontsize) {
+	var path = new Path(item);
+	path.push('doc');
+	path.push('fontsize');
+
+	this.mm.alter(-1,
+		new Signature({
+			val: fontsize,
+		}),
+		new Signature({
+			path: path,
+		})
+	);
+}
+
+/**
+| Sets an items PNW. (point in north-west)
+*/
+Peer.prototype.setPNW = function(item, pnw) {
+	var path = new Path(item);
+	path.push('pnw');
+
+	this.mm.alter(-1,
+		new Signature({
+			val: pnw
 		}),
 		new Signature({
 			path: path,
