@@ -91,7 +91,7 @@ var settings = {
 	dragbox  : 10,
 
 	// factor to add to the bottom of font height
-	bottombox : 0.22,
+	bottombox : 0.25,
 
 	// standard note in space
 	note : {
@@ -2783,7 +2783,7 @@ VLabel.prototype.fontSizeChange = function(fontsize) {
 		}
 		return max(fontsize * (height + dy) / height, 8);
 	}
-	return fontsize;
+	return max(fontsize, 4);
 }
 
 /**
@@ -2798,31 +2798,33 @@ VLabel.prototype.getZone = function() {
 	// xxxx Caching! TODO
 	var vdoc = this.vdoc;
 	var fs = vdoc.getFontSize();
-	var zone = new Rect(pnw,
-		pnw.add(max(Math.ceil(vdoc.getSpread()), R(fs * 0.3)),
-		        max(Math.ceil(vdoc.getHeight()), R(fs))));
+	var width  = max(Math.ceil(vdoc.getSpread()), R(fs * 0.3));
+	var height = max(Math.ceil(vdoc.getHeight()), R(fs));
 
-	if (!action || action.vitem !== this) return zone;
+	if (!action || action.vitem !== this) return new Rect(pnw, pnw.add(width, height));
 	// @03 cache the last zone
 
 	switch (action.type) {
 	default : return zone;
 	case Action.ITEMDRAG:
-		if (!action.move) return zone;
-		return zone.add(action.move.x - action.start.x, action.move.y - action.start.y);
+		if (!action.move) return new Rect(pnw, pnw.add(width, height));
+		var mx = action.move.x - action.start.x;
+		var my = action.move.y - action.start.y;
+		return new Rect(pnw.add(mx, my), pnw.add(mx + width, my + height));
 
 	case Action.ITEMRESIZE:
 		// resizing is done by fontSizeChange()
-		if (!action.move) return zone;
 		var szone = action.startZone;
+		if (!action.move) return new Rect(pnw, pnw.add(width, height));
+
 		switch (action.align) {
 		default   : throw new Error('unknown align');
-		case 'ne' : pnw = pnw.add(0, szone.height - zone.height); break;
+		case 'ne' : pnw = pnw.add(0, szone.height - height); break;
 		case 'se' : break;
-		case 'sw' : pnw = pnw.add(szone.width - zone.width, 0); break;
-		case 'nw' : pnw = pnw.add(szone.width - zone.width, szone.height - zone.height); break;
+		case 'sw' : pnw = pnw.add(szone.width - width, 0); break;
+		case 'nw' : pnw = pnw.add(szone.width - width, szone.height - height); break;
 		}
-		return new Rect(pnw, pnw.add(Math.ceil(vdoc.getSpread()), Math.ceil(vdoc.getHeight())));
+		return new Rect(pnw, pnw.add(width, height));
 	}
 }
 
