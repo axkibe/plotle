@@ -92,7 +92,6 @@ var settings = {
 
 	// factor to add to the bottom of font height
 	bottombox : 0.22,
-	//bottombox : 2,
 
 	// standard note in space
 	note : {
@@ -627,7 +626,7 @@ Cockpit.prototype.draw = function() {
 /**
 | Mouse hover.
 */
-Cockpit.prototype.mousehover = function(p, shift, ctrl) {
+Cockpit.prototype.mousehover = function(p) {
 	/* TODO
 	var redraw = this.edgemenu.mousepos !== this.edgemenu.getMousepos(p);
 	if (this.edgemenu.mousepos >= 0) {
@@ -642,7 +641,7 @@ Cockpit.prototype.mousehover = function(p, shift, ctrl) {
 /**
 | Mouse button down event
 */
-Cockpit.prototype.mousedown = function(p, shift, ctrl) {
+Cockpit.prototype.mousedown = function(p) {
 	/*
 	var md = this.edgemenu.getMousepos(p);
 	if (md >= 0) {
@@ -742,14 +741,14 @@ Shell.prototype._draw = function() {
 	this.redraw = false;
 }
 
-// TODO move shift/ctrl state to frontface
-
 /**
 | A mouse click.
 */
 Shell.prototype.click = function(p, shift, ctrl) {
+	this.shift = shift;
+	this.ctrl  = ctrl;
 	// TODO cockpit
-	this.vspace.click(p, shift, ctrl);
+	this.vspace.click(p);
 	if (this.redraw) this._draw();
 }
 
@@ -759,8 +758,10 @@ Shell.prototype.click = function(p, shift, ctrl) {
 | TODO shift+ctrl.
 */
 Shell.prototype.mousehover = function(p, shift, ctrl) {
+	this.shift = shift;
+	this.ctrl  = ctrl;
 	// TODO cockpit
-	this.vspace.mousehover(p, shift, ctrl);
+	this.vspace.mousehover(p);
 	if (this.redraw) this._draw();
 }
 
@@ -770,9 +771,11 @@ Shell.prototype.mousehover = function(p, shift, ctrl) {
 | Returns the mouse state code, wheter this is a click/drag or undecided.
 */
 Shell.prototype.mousedown = function(p, shift, ctrl) {
-	// TODO cockpit
 	// TODO rename mst -> mouseState
-	var mst = this.vspace.mousedown(p, shift, ctrl);
+	this.shift = shift;
+	this.ctrl  = ctrl;
+	// TODO cockpit
+	var mst = this.vspace.mousedown(p);
 	if (this.redraw) this._draw();
 	return mst;
 }
@@ -781,8 +784,11 @@ Shell.prototype.mousedown = function(p, shift, ctrl) {
 | User pressed a special key.
 */
 Shell.prototype.specialKey = function(keyCode, shift, ctrl) {
+	this.shift = shift;
+	this.ctrl  = ctrl;
+
 	if (this.caret.entity !== null) {
-		this.caret.entity.specialKey(keyCode, shift, ctrl);
+		this.caret.entity.specialKey(keyCode);
 	}
 
 	if (this.redraw) this._draw();
@@ -792,6 +798,9 @@ Shell.prototype.specialKey = function(keyCode, shift, ctrl) {
 | User entered normal text (one character or more).
 */
 Shell.prototype.input = function(text) {
+	this.shift = false;
+	this.ctrl  = false;
+
 	if (this.caret.entity !== null) {
 		this.caret.entity.input(text);
 	}
@@ -803,8 +812,10 @@ Shell.prototype.input = function(text) {
 | Starts an operation with the mouse button held down.
 */
 Shell.prototype.dragstart = function(p, shift, ctrl) {
+	this.shift = shift;
+	this.ctrl  = ctrl;
 	// TODO cockpit
-	this.vspace.dragstart(p, shift, ctrl);
+	this.vspace.dragstart(p);
 	if (this.redraw) this._draw();
 }
 
@@ -812,8 +823,10 @@ Shell.prototype.dragstart = function(p, shift, ctrl) {
 | Moving during an operation with the mouse button held down.
 */
 Shell.prototype.dragmove = function(p, shift, ctrl) {
+	this.shift = shift;
+	this.ctrl  = ctrl;
 	// TODO cockpit
-	this.vspace.dragmove(p, shift, ctrl);
+	this.vspace.dragmove(p);
 	if (this.redraw) this._draw();
 }
 
@@ -821,8 +834,10 @@ Shell.prototype.dragmove = function(p, shift, ctrl) {
 | Stops an operation with the mouse button held down.
 */
 Shell.prototype.dragstop = function(p, shift, ctrl) {
+	this.shift = shift;
+	this.ctrl  = ctrl;
 	// TODO cockpit
-	this.vspace.dragstop(p, shift, ctrl);
+	this.vspace.dragstop(p);
 	if (this.redraw) this._draw();
 }
 
@@ -846,7 +861,6 @@ Shell.prototype.mousewheel = function(wheel) {
 | The window has been resized
 */
 Shell.prototype.resize = function(width, height) {
-	// if we get all fancy we could do a delay here.
 	this._draw();
 }
 
@@ -996,7 +1010,7 @@ VSpace.prototype.setFocus = function(vitem) {
 |
 | Returns true if the mouse pointer hovers over anything.
 */
-VSpace.prototype.mousehover = function(p, shift, ctrl) {
+VSpace.prototype.mousehover = function(p) {
 	var pp = p.sub(this.fabric.pan);
 
 	var action = shell.action;
@@ -1043,7 +1057,7 @@ VSpace.prototype.mousehover = function(p, shift, ctrl) {
 	var hit = false;
 	for(var zi = 0, zlen = this.space.z.length; zi < zlen; zi++) {
 		var vit = this.vitems.vcopse[this.space.z.get(zi)];
-		if (vit.mousehover(pp, shift, ctrl)) {
+		if (vit.mousehover(pp)) {
 			hit = true;
 			break;		
 		}
@@ -1055,10 +1069,10 @@ VSpace.prototype.mousehover = function(p, shift, ctrl) {
 /**
 | Asks every item that intersects with a point if it feels reponsible for an event.
 */
-VSpace.prototype._transfix = function(txe, p, shift, ctrl) {
+VSpace.prototype._transfix = function(txe, p) {
 	for(var zi = 0, zlen = this.space.z.length; zi < zlen; zi++) {
 		var vit = this.vitems.vcopse[this.space.z.get(zi)];
-		if (vit.transfix(txe, p, shift, ctrl)) return true;
+		if (vit.transfix(txe, p)) return true;
 	}
 	return false;
 }
@@ -1107,7 +1121,7 @@ VSpace.prototype._transfix = function(txe, p, shift, ctrl) {
 /**
 | Starts an operation with the mouse button held down.
 */
-VSpace.prototype.dragstart = function(p, shift, ctrl) {
+VSpace.prototype.dragstart = function(p) {
 	var pp = p.sub(this.fabric.pan);
 
 	/* if (this.focus && this.focus.withinItemMenu(pp)) {
@@ -1118,7 +1132,7 @@ VSpace.prototype.dragstart = function(p, shift, ctrl) {
 	
 	for(var zi = 0, zlen = this.space.z.length; zi < zlen; zi++) {
 		var vit = this.vitems.vcopse[this.space.z.get(zi)];
-		if (vit.dragstart(pp, shift, ctrl)) return true;
+		if (vit.dragstart(pp)) return true;
 	}
 
 	// otherwise do panning
@@ -1130,7 +1144,7 @@ VSpace.prototype.dragstart = function(p, shift, ctrl) {
 /**
 | A mouse click.
 */
-VSpace.prototype.click = function(p, shift, ctrl) {
+VSpace.prototype.click = function(p) {
 	var pan = this.fabric.pan;
 	var pp = p.sub(pan);
 
@@ -1147,7 +1161,7 @@ VSpace.prototype.click = function(p, shift, ctrl) {
 	// clicked some item?
 	for(var zi = 0, zlen = this.space.z.length; zi < zlen; zi++) {
 		var vit = this.vitems.vcopse[this.space.z.get(zi)];
-		if (vit.click(pp, shift, ctrl)) return true;
+		if (vit.click(pp)) return true;
 	}
 
 	// otherwhise pop up the float menu
@@ -1162,7 +1176,7 @@ VSpace.prototype.click = function(p, shift, ctrl) {
 /**
 | Stops an operation with the mouse button held down.
 */
-VSpace.prototype.dragstop = function(p, shift, ctrl) {
+VSpace.prototype.dragstop = function(p) {
 	var action = shell.action;
 	var pp = p.sub(this.fabric.pan);
 	if (!action) throw new Error('Dragstop without action?');
@@ -1170,7 +1184,7 @@ VSpace.prototype.dragstop = function(p, shift, ctrl) {
 	switch (action.type) {
 	case Action.ITEMDRAG :
 	case Action.ITEMRESIZE :
-		action.vitem.dragstop(p, shift, ctrl);
+		action.vitem.dragstop(p);
 		system.setCursor('default');
 		shell.redraw = true;
 		break;
@@ -1181,7 +1195,7 @@ VSpace.prototype.dragstop = function(p, shift, ctrl) {
 	/* TODO
 	case ACT.RBIND :
 		iaction.smp = null;
-		this._transfix(RBINDTO, pp, shift, ctrl);
+		this._transfix(RBINDTO, pp);
 		redraw = true;
 		break;
 	*/
@@ -1194,13 +1208,13 @@ VSpace.prototype.dragstop = function(p, shift, ctrl) {
 /**
 | Moving during an operation with the mouse button held down.
 */
-VSpace.prototype.dragmove = function(p, shift, ctrl) {
+VSpace.prototype.dragmove = function(p) {
 	var pp = p.sub(this.fabric.pan);
 	var action = shell.action;
 
 	switch(action.type) {
 	default :
-		action.vitem.dragmove(pp, shift, ctrl); 
+		action.vitem.dragmove(pp); 
 		return;
 	case Action.PAN :
 		this.fabric.pan = p.sub(action.start);
@@ -1209,7 +1223,7 @@ VSpace.prototype.dragmove = function(p, shift, ctrl) {
 	/* TODO
 	case Action.RBIND :
 		iaction.item2 = null;
-		this._transfix(RBINDHOVER, pp, shift, ctrl);
+		this._transfix(RBINDHOVER, pp);
 		iaction.smp = pp;
 		this.redraw();
 		return true;
@@ -1220,7 +1234,7 @@ VSpace.prototype.dragmove = function(p, shift, ctrl) {
 /**
 | Mouse button down event.
 */
-VSpace.prototype.mousedown = function(p, shift, ctrl) {
+VSpace.prototype.mousedown = function(p) {
 	var pp = p.sub(this.fabric.pan);
 	var action = shell.action;
 
@@ -1492,14 +1506,14 @@ VPara.prototype.input = function(text) {
 /**
 | Handles a special key
 */
-VPara.prototype.specialKey = function(keycode, shift, ctrl) {
+VPara.prototype.specialKey = function(keycode) {
 	if (shell.caret.entity !== this) throw new Error('Invalid caret on specialKey');
 
 	var para = this.para;
 	var caret  = shell.caret;
 	var select = shell.selection;
 
-	if (ctrl) {
+	if (shell.ctrl) {
 		switch(keycode) {
 		case 65 : // ctrl+a
 			throw new Error('TODO');
@@ -1520,7 +1534,7 @@ VPara.prototype.specialKey = function(keycode, shift, ctrl) {
 	}
 
 	/*
-	if (!shift && select.active) {
+	if (!shell.shift && select.active) {
 		switch(keycode) {
 		case 35 : // end
 		case 36 : // pos1
@@ -1544,7 +1558,7 @@ VPara.prototype.specialKey = function(keycode, shift, ctrl) {
 			shell.redraw = true;
 			break;
 		}
-	} else if (shift && !select.active) {
+	} else if (shell.shift && !select.active) {
 		switch(keycode) {
 		case 35 : // end
 		case 36 : // pos1
@@ -1660,7 +1674,7 @@ VPara.prototype.specialKey = function(keycode, shift, ctrl) {
 
 
 	/*
-	if (shift && refresh) {
+	if (shell.shift && refresh) {
 		switch(keycode) {
 		case 35 : // end
 		case 36 : // pos1
@@ -2285,10 +2299,10 @@ VItem.prototype.getVParaAtPoint = function(p, action) {
 | Dragstart.
 | Checks if a dragstart targets this item.
 */
-VItem.prototype.dragstart = function(p, shift, ctrl) {
+VItem.prototype.dragstart = function(p) {
 	if (!this.getZone().within(p)) return false;
 
-	if (ctrl) {
+	if (shell.ctrl) {
 		//space.actionSpawnRelation(this, p);
 		throw new Error('TODO');
 		shell.redraw = true;
@@ -2313,7 +2327,7 @@ VItem.prototype.dragstart = function(p, shift, ctrl) {
 /**
 | dragmove?
 */
-VItem.prototype.dragmove = function(p, shift, ctrl) {
+VItem.prototype.dragmove = function(p) {
 	var action = shell.action;
 	if (action.vitem !== this) throw new Error('Itemmismatch in dragmove');
 	// no zone test, since while dragmoving the item selected is fixed to the action.
@@ -2342,7 +2356,7 @@ VItem.prototype.dragmove = function(p, shift, ctrl) {
 | Mouse is hovering around.
 | Checks if this item reacts on this.
 */
-VItem.prototype.mousehover = function(p, shift, ctrl) {
+VItem.prototype.mousehover = function(p) {
 	if (!this.getZone().within(p)) return false;
 	system.setCursor('default');
 	return true;
@@ -2351,7 +2365,7 @@ VItem.prototype.mousehover = function(p, shift, ctrl) {
 /**
 | Sees if this item reacts on a click event.
 */
-VItem.prototype.click = function(p, shift, ctrl) {
+VItem.prototype.click = function(p) {
 	if (!this.getZone().within(p)) return false;
 
 	shell.vspace.setFocus(this);
@@ -2482,7 +2496,7 @@ VNote.prototype.setScrollbar = function(pos) {
 /**
 | Sets the items position and size after an action.
 */
-VNote.prototype.dragstop = function(p, shift, ctrl) {
+VNote.prototype.dragstop = function(p) {
 	var zone = this.getZone();
 
 	if (zone.width < this.minWidth || zone.height < this.minHeight) {
@@ -2811,7 +2825,7 @@ VLabel.prototype.getZone = function() {
 /**
 | Sets the items position and size aften an action.
 */
-VLabel.prototype.dragstop = function(p, shift, ctrl) {
+VLabel.prototype.dragstop = function(p) {
 	var zone = this.getZone();
 	var fontsize = this.vdoc.getFontSize();
 
@@ -3056,9 +3070,9 @@ Relation.prototype._dWidth = function() {
 /**
 | TODO
 */
-Relation.prototype.dragstart = function(p, shift, ctrl) {
+Relation.prototype.dragstart = function(p) {
 	if (!this.textZone.within(p)) return false;
-	if (ctrl) {
+	if (shell.ctrl) {
 		//space.actionSpawnRelation(this, p);
 		throw new Error('TODO');
 		shell.redraw = true;
@@ -3074,7 +3088,7 @@ Relation.prototype.dragstart = function(p, shift, ctrl) {
 /**
 | TODO
 */
-Relation.prototype.mousehover = function(p, shift, ctrl) {
+Relation.prototype.mousehover = function(p) {
 	if (!this.textZone.within(p)) return false;
 	system.setCursor('default');
 	return true;
@@ -3083,7 +3097,7 @@ Relation.prototype.mousehover = function(p, shift, ctrl) {
 /**
 | TODO 
 */
-Relation.prototype.click = function(p, shift, ctrl) {
+Relation.prototype.click = function(p) {
 	if (!this.textZone.within(p)) return false;
 	shell.vspace.setFocus(this);
 
