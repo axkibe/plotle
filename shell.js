@@ -1472,12 +1472,14 @@ VPara.prototype.getPointOffset = function(point) {
 VPara.prototype.getLineXOffset = function(line, x) {
 	var flow = this.getFlow();
 	var fline = flow[line];
-	var ftoken;
+	var ftoken = null;
 	for (var token = 0; token < fline.a.length; token++) {
 		ftoken = fline.a[token];
  		if (x <= ftoken.x + ftoken.w) break;
 	}
 	if (token >= fline.a.length) ftoken = fline.a[--token];
+
+	if (!ftoken) return 0;
 
 	var dx   = x - ftoken.x;
 	var text = ftoken.t;
@@ -2361,7 +2363,7 @@ VItem.prototype.mousehover = function(p) {
 	system.setCursor('default');
 	return true;
 }
-	
+
 /**
 | Sees if this item reacts on a click event.
 */
@@ -2795,7 +2797,10 @@ VLabel.prototype.getZone = function() {
 
 	// xxxx Caching! TODO
 	var vdoc = this.vdoc;
-	var zone = new Rect(pnw, pnw.add(Math.ceil(vdoc.getSpread()), Math.ceil(vdoc.getHeight())));
+	var fs = vdoc.getFontSize();
+	var zone = new Rect(pnw,
+		pnw.add(max(Math.ceil(vdoc.getSpread()), R(fs * 0.3)),
+		        max(Math.ceil(vdoc.getHeight()), R(fs))));
 
 	if (!action || action.vitem !== this) return zone;
 	// @03 cache the last zone
@@ -2839,68 +2844,6 @@ VLabel.prototype.dragstop = function(p) {
 	}
 }
 
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- OLD LABEL: TODO REMOVE
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-/**
-| Sets the zone of the label.
-| Also determines its fontsize.
-| Returns true if something changed.
-|
-| zone: a rectangle
-| align: compass direction
-*/
-/*
-Label.prototype.setZone = function(zone, align) {
-	if (this.zone && this.zone.eq(zone)) return false;
-	var dtree = this.dtree;
-	var zh = zone.height;
-	var th = R(this.dtree.height * (1 + settings.bottombox));
-	var dfs = dtree.fontsize;
-	var fs = max(dfs * zh / th, 8);
-	if (this.zone && dfs === fs) return false;
-	this._lock = true;
-	dtree.fontsize = fs;
-	if (!this.zone) this.zone = zone;
-	this.zone = this.zone.resize(this._dWidth(), this._dHeight(), align);
-	this._lock = false;
-	this._fabric$flag = false;
-	return true;
-}
-*/
-
-/**
-| TODO
-*/
-/*
-Label.prototype._dHeight = function() {
-	return R(this.dtree.height * (1 + settings.bottombox));
-}
-*/
-
-/**
-| TODO
-*/
-/*
-Label.prototype._dWidth = function() {
-	return max(this.dtree.width, R(0.4 * this.dtree.fontsize));
-}
-*/
-
-/* drops the cache */
-// TODO remove all listen()
-/*
-Label.prototype.listen = function() {
-	if (this._lock) return;
-	this._fabric$flag = false;
-	if (this.zone) {
-		this.zone = this.zone.resize(this._dWidth(), this._dHeight(), 'c');
-	}
-	// end of listen-chain
-}
-*/
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .-,--.     .      .
