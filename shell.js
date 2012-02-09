@@ -2780,70 +2780,23 @@ VLabel.prototype.getZone = function() {
 	// @03 cache the last zone
 
 	switch (action.type) {
+	default : return zone;
 	case Action.ITEMDRAG:
 		if (!action.move) return zone;
 		return zone.add(action.move.x - action.start.x, action.move.y - action.start.y);
 
 	case Action.ITEMRESIZE:
 		// resizing is done by fontSizeChange()
-		return zone;
-		/*
 		if (!action.move) return zone;
-		var ipnw = action.startZone.pnw;
-		var ipse = action.startZone.pse;
-		var dx = action.move.x - action.start.x;
-		var dy = action.move.y - action.start.y;
-		var minw = this.minWidth;
-		var minh = this.minHeight;
-		var pnw, pse;
-
+		var szone = action.startZone;
 		switch (action.align) {
-		case 'n'  :
-			pnw = Point.renew(ipnw.x, min(ipnw.y + dy, ipse.y - minh), ipnw, ipse);
-			pse = ipse;
-			break;
-		case 'ne' :
-			pnw = Point.renew(
-				ipnw.x, min(ipnw.y + dy, ipse.y - minh), ipnw, ipse);
-			pse = Point.renew(
-				max(ipse.x + dx, ipnw.x + minw), ipse.y, ipnw, ipse);
-			break;
-		case 'e'  :
-			pnw = ipnw;
-			pse = Point.renew(max(ipse.x + dx, ipnw.x + minw), ipse.y, ipnw, ipse);
-			break;
-		case 'se' :
-			pnw = ipnw;
-			pse = Point.renew(
-				max(ipse.x + dx, ipnw.x + minw),
-				max(ipse.y + dy, ipnw.y + minh), ipnw, ipse);
-			break;
-		case 's' :
-			pnw = ipnw;
-			pse = Point.renew(ipse.x, max(ipse.y + dy, ipnw.y + minh), ipnw, ipse);
-			break;
-		case 'sw'  :
-			pnw = Point.renew(min(ipnw.x + dx, ipse.x - minw), ipnw.y, ipnw, ipse),
-			pse = Point.renew(ipse.x, max(ipse.y + dy, ipnw.y + minh), ipnw, ipse);
-			break;
-		case 'w'   :
-			pnw = Point.renew(min(ipnw.x + dx, ipse.x - minw), ipnw.y, ipnw, ipse),
-			pse = ipse;
-			break;
-		case 'nw' :
-			pnw = Point.renew(
-				min(ipnw.x + dx, ipse.x - minw),
-				min(ipnw.y + dy, ipse.y - minh), ipnw, ipse);
-			pse = ipse;
-			break;
-		case 'c' :
-		default  :
-			throw new Error('unknown align');
+		default   : throw new Error('unknown align');
+		case 'ne' : pnw = pnw.add(0, szone.height - zone.height); break;
+		case 'se' : break;
+		case 'sw' : pnw = pnw.add(szone.width - zone.width, 0); break;
+		case 'nw' : pnw = pnw.add(szone.width - zone.width, szone.height - zone.height); break;
 		}
-		return new Rect(pnw, pse);
-		*/
-	default :
-		return zone;
+		return new Rect(pnw, pnw.add(Math.ceil(vdoc.getSpread()), Math.ceil(vdoc.getHeight())));
 	}
 }
 
@@ -2856,7 +2809,6 @@ VLabel.prototype.dragstop = function(p, shift, ctrl) {
 	var fontsize = this.vdoc.getFontSize();
 
 	if (!this.item.pnw.eq(zone.pnw)) {
-		debug(zone.pnw);
 		peer.setPNW(this.item, zone.pnw);
 		this._fabric$flag = false; // TODO this should happen by setting in peer<F12>...
 	}
