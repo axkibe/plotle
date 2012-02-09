@@ -81,6 +81,7 @@ Woods.cogging = true;
 
 var settings = {
 	// standard font
+	//defaultFont : 'Zapfino, Verdana,Geneva,Kalimati,sans-serif',
 	defaultFont : 'Verdana,Geneva,Kalimati,sans-serif',
 
 	// milliseconds after mouse down, dragging starts
@@ -91,6 +92,7 @@ var settings = {
 
 	// factor to add to the bottom of font height
 	bottombox : 0.22,
+	//bottombox : 2,
 
 	// standard note in space
 	note : {
@@ -1699,6 +1701,14 @@ VPara.prototype.specialKey = function(keycode, shift, ctrl) {
 }
 
 /**
+| Returns the height of the para
+*/
+VPara.prototype.getHeight = function() {
+	var flow = this.getFlow();
+	return flow.height + R(this.vdoc.getFontSize() * settings.bottombox);
+}
+
+/**
 | Draws the paragraph in its cache and returns it.
 */
 VPara.prototype.getFabric = function() {
@@ -1707,7 +1717,7 @@ VPara.prototype.getFabric = function() {
 	var width  = flow.spread;
 	var vdoc   = this.vdoc;
 	var doc    = para.getAnchestor('DocAlley');
-	var height = flow.height + R(vdoc.getFontSize() * settings.bottombox);
+	var height = this.getHeight();
 
 	// cache hit?
 	if (this._fabric$flag && this._fabric$width === width && this._fabric$height === height) {
@@ -2069,7 +2079,7 @@ VDoc.prototype.draw = function(fabric, imargin, scrollp) {
 
 		// TODO name pnw$
 		vpara.pnw = new Point(imargin.w, R(y));
-		fabric.drawImage(vpara.getFabric(), imargin.w, y - R(scrollp.y));
+		fabric.drawImage(vpara.getFabric(), imargin.w, R(y - scrollp.y));
 		y += flow.height + paraSep;
 	}
 }
@@ -2085,8 +2095,10 @@ VDoc.prototype.getHeight = function() {
 	for (var a = 0, aZ = valley.length; a < aZ; a++) {
 		var vpara = valley[a];
 		var flow = vpara.getFlow();
-		height += flow.height + paraSep;
+		if (a > 0) height += paraSep;
+		height += flow.height;
 	}
+	height += R(this.getFontSize() * settings.bottombox);
 	return height;
 }
 

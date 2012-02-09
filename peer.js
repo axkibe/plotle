@@ -113,12 +113,12 @@ function Peer() {
 		        type: 'Label',
 		        pnw: { 'x': 550, 'y': 150 },
 		        doc: {
-		          fontsize : 13,
+		          fontsize : 90,
 
 		          alley : [
 		            {
 		              type: 'Para',
-		              text: 'Muhkuh',
+		              text: 'abcdefghijkl',
 		            },
 		          ],
 		        },
