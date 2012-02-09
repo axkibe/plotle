@@ -305,19 +305,6 @@ var ACT = {
 };
 Object.freeze(ACT);
 
-/**
-| which kind of event transfix() calls for all items which intersect x/y
-*/
-var TXE = {
-	NONE       : 0,
-	DRAGSTART  : 1,
-	HOVER      : 2,
-	RBINDHOVER : 3,
-	RBINDTO    : 4,
-}
-Object.freeze(TXE);
-
-
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,-,-,-.           .
  `,| | |   ,-. ,-. | , ,-. ,-.
@@ -1053,8 +1040,14 @@ VSpace.prototype.mousehover = function(p, shift, ctrl) {
 		}
 	}
 
-	// TODO remove nulls by shiftKey, ctrlKey
-	var hit = this._transfix(TXE.HOVER, pp, null, null);
+	var hit = false;
+	for(var zi = 0, zlen = this.space.z.length; zi < zlen; zi++) {
+		var vit = this.vitems.vcopse[this.space.z.get(zi)];
+		if (vit.mousehover(pp, shift, ctrl)) {
+			hit = true;
+			break;		
+		}
+	}
 	if (!hit) system.setCursor('crosshair');
 	return true;
 }
@@ -1122,8 +1115,11 @@ VSpace.prototype.dragstart = function(p, shift, ctrl) {
 		this.redraw();
 		return;
 	} */
-
-	if (this._transfix(TXE.DRAGSTART, pp, shift, ctrl)) return true;
+	
+	for(var zi = 0, zlen = this.space.z.length; zi < zlen; zi++) {
+		var vit = this.vitems.vcopse[this.space.z.get(zi)];
+		if (vit.dragstart(pp, shift, ctrl)) return true;
+	}
 
 	// otherwise do panning
 	shell.startAction(Action.PAN, null, pp);
@@ -1149,7 +1145,10 @@ VSpace.prototype.click = function(p, shift, ctrl) {
 	}
 
 	// clicked some item?
-	if (this._transfix(TXE.CLICK, pp, shift, ctrl)) return true;
+	for(var zi = 0, zlen = this.space.z.length; zi < zlen; zi++) {
+		var vit = this.vitems.vcopse[this.space.z.get(zi)];
+		if (vit.click(pp, shift, ctrl)) return true;
+	}
 
 	// otherwhise pop up the float menu
 	var action = shell.startAction(Action.FLOATMENU, null, p);
@@ -1182,7 +1181,7 @@ VSpace.prototype.dragstop = function(p, shift, ctrl) {
 	/* TODO
 	case ACT.RBIND :
 		iaction.smp = null;
-		this._transfix(TXE.RBINDTO, pp, shift, ctrl);
+		this._transfix(RBINDTO, pp, shift, ctrl);
 		redraw = true;
 		break;
 	*/
@@ -1200,41 +1199,23 @@ VSpace.prototype.dragmove = function(p, shift, ctrl) {
 	var action = shell.action;
 
 	switch(action.type) {
+	default :
+		action.vitem.dragmove(pp, shift, ctrl); 
+		return;
 	case Action.PAN :
 		this.fabric.pan = p.sub(action.start);
-		// system.repository.savePan(this.pan); TODO!
-		shell.redraw = true;
-		return;
-	case Action.ITEMRESIZE :
-	case Action.ITEMDRAG :
-		action.move = pp;
-		shell.redraw = true;
-		return;
-	case Action.SCROLLY:
-		// TODO let the item scroll itself
-		var start = action.start;
-		var dy = pp.y - start.y;
-		var vitem = action.vitem;
-		var sbary = vitem.scrollbarY;
-		var spos = action.startPos + sbary.max / sbary.zone.height * dy;
-		vitem.setScrollbar(spos);
-		vitem.poke();
 		shell.redraw = true;
 		return;
 	/* TODO
-	case ACT.RBIND :
+	case Action.RBIND :
 		iaction.item2 = null;
-		this._transfix(TXE.RBINDHOVER, pp, shift, ctrl);
+		this._transfix(RBINDHOVER, pp, shift, ctrl);
 		iaction.smp = pp;
 		this.redraw();
 		return true;
 	*/
-	default :
-		throw new Error('unknown action code in Space.dragging: '+ action.type);
 	}
 }
-
-
 
 /**
 | Mouse button down event.
@@ -2301,66 +2282,92 @@ VItem.prototype.getVParaAtPoint = function(p, action) {
 }
 
 /**
-| Checks if this items reacts on an event.
-| Returns transfix code.
+| Dragstart.
+| Checks if a dragstart targets this item.
 */
-VItem.prototype.transfix = function(txe, p, shift, ctrl) {
+VItem.prototype.dragstart = function(p, shift, ctrl) {
 	if (!this.getZone().within(p)) return false;
 
-	switch (txe) {
-	case TXE.HOVER :
-		system.setCursor('default');
-		return true;
-	case TXE.DRAGSTART :
-		if (ctrl) {
-			//space.actionSpawnRelation(this, p);
-			throw new Error('TODO');
-			shell.redraw = true;
-			return true;
-		}
-		shell.vspace.setFocus(this);
-		shell.redraw = true;
-
-		var sbary = this.scrollbarY;
-		var pnw = this.getZone().pnw;
-		var pr = p.sub(pnw);
-		if (sbary && sbary.visible && sbary.zone.within(pr)) {
-			var action = shell.startAction(Action.SCROLLY, this, p);
-			action.startPos = sbary.getPos();
-		} else {
-			shell.startAction(Action.ITEMDRAG, this, p);
-			system.setCursor('move');
-		}
-		return true;
-	case TXE.CLICK :
-		shell.vspace.setFocus(this);
-		shell.redraw = true;
-
-		var pnw = this.getZone().pnw;
-		var pi = p.sub(pnw.x, pnw.y - (this.scrollbarY ? this.scrollbarY.getPos() : 0 ));
-
-		var vpara = this.getVParaAtPoint(pi);
-		if (vpara) {
-			var offset = vpara.getPointOffset(pi.sub(vpara.pnw));
-			shell.caret.set(vpara, offset);
-			shell.caret.show();
-			// shell.selection.deselect(); TODO
-		}
-		return true;
-	case TXE.RBINDHOVER :
-		//space.actionRBindHover(this);
+	if (ctrl) {
+		//space.actionSpawnRelation(this, p);
 		throw new Error('TODO');
 		shell.redraw = true;
 		return true;
-	case TXE.RBINDTO :
-		//space.actionRBindTo(this);
-		throw new Error('TODO');
-		shell.redraw = true;
-		return true;
-	default :
-		throw new Error('Unknown transfix code:'+txe);
 	}
-	throw new Error('iFail');
+	shell.vspace.setFocus(this);
+	shell.redraw = true;
+
+	var sbary = this.scrollbarY;
+	var pnw = this.getZone().pnw;
+	var pr = p.sub(pnw);
+	if (sbary && sbary.visible && sbary.zone.within(pr)) {
+		var action = shell.startAction(Action.SCROLLY, this, p);
+		action.startPos = sbary.getPos();
+	} else {
+		shell.startAction(Action.ITEMDRAG, this, p);
+		system.setCursor('move');
+	}
+	return true;
+}
+
+/**
+| dragmove?
+*/
+VItem.prototype.dragmove = function(p, shift, ctrl) {
+	var action = shell.action;
+	if (action.vitem !== this) throw new Error('Itemmismatch in dragmove');
+	// no zone test, since while dragmoving the item selected is fixed to the action.
+	switch (action.type) {
+	default : throw new Error('invalid dragmove');
+	case Action.ITEMRESIZE :
+	case Action.ITEMDRAG :
+		action.move = p;
+		shell.redraw = true;
+		return true;
+	case Action.SCROLLY :
+		var start = action.start;
+		var dy = p.y - start.y;
+		var vitem = action.vitem;
+		var sbary = vitem.scrollbarY;
+		var spos = action.startPos + sbary.max / sbary.zone.height * dy;
+		vitem.setScrollbar(spos);
+		vitem.poke();
+		shell.redraw = true;
+		return true;
+	}
+	return true;
+}
+
+/**
+| Mouse is hovering around.
+| Checks if this item reacts on this.
+*/
+VItem.prototype.mousehover = function(p, shift, ctrl) {
+	if (!this.getZone().within(p)) return false;
+	system.setCursor('default');
+	return true;
+}
+	
+/**
+| Sees if this item reacts on a click event.
+*/
+VItem.prototype.click = function(p, shift, ctrl) {
+	if (!this.getZone().within(p)) return false;
+
+	shell.vspace.setFocus(this);
+	shell.redraw = true;
+
+	var pnw = this.getZone().pnw;
+	var pi = p.sub(pnw.x, pnw.y - (this.scrollbarY ? this.scrollbarY.getPos() : 0 ));
+
+	var vpara = this.getVParaAtPoint(pi);
+	if (vpara) {
+		var offset = vpara.getPointOffset(pi.sub(vpara.pnw));
+		shell.caret.set(vpara, offset);
+		shell.caret.show();
+		// shell.selection.deselect(); TODO
+	}
+	return true;
 }
 
 /**
@@ -3047,59 +3054,51 @@ Relation.prototype._dWidth = function() {
 
 
 /**
-| An action happend.
-| Returns transfix code.
+| TODO
 */
-Relation.prototype.transfix = function(txe, p, shift, ctrl) {
-	throw new Error('TODO');
-
+Relation.prototype.dragstart = function(p, shift, ctrl) {
 	if (!this.textZone.within(p)) return false;
-
-	switch(txe) {
-	case TXE.HOVER :
-		system.setCursor('default');
-		return true;
-	case TXE.DRAGSTART :
-		if (ctrl) {
-			//space.actionSpawnRelation(this, p);
-			throw new Error('TODO');
-			shell.redraw = true;
-			return true;
-		}
-		shell.vspace.setFocus(this);
-
-		shell.startAction(Action.ITEMDRAG, this, p.sub(this.handlezone.pnw));
-		system.setCursor('move');
-		return true;
-	case TXE.CLICK:
-		shell.vspace.setFocus(this);
-
-		var pi = p.sub(this.textZone.pnw);
-		var para = this.getVParaAtPoint(pi);
-		if (para) {
-			/* TODO
-			var editor = System.editor;
-			editor.caret.setFromPoint(para, op.sub(para.p));
-			editor.caret.show();
-			editor.deselect();
-			*/
-			shell.redraw = true;
-		}
-		return true;
-	case TXE.RBINDHOVER :
-		//space.actionRBindHover(this);
+	if (ctrl) {
+		//space.actionSpawnRelation(this, p);
 		throw new Error('TODO');
 		shell.redraw = true;
 		return true;
-	case TXE.RBINDTO :
-		//space.actionRBindTo(this);
-		throw new Error('TODO');
-		shell.redraw = true;
-		return true;
-	default :
-		throw new Error('Unknown transfix code:'+txe);
 	}
-	throw new Error('iFail');
+	shell.vspace.setFocus(this);
+
+	shell.startAction(Action.ITEMDRAG, this, p.sub(this.handlezone.pnw));
+	system.setCursor('move');
+	return true;
+}
+
+/**
+| TODO
+*/
+Relation.prototype.mousehover = function(p, shift, ctrl) {
+	if (!this.textZone.within(p)) return false;
+	system.setCursor('default');
+	return true;
+}
+
+/**
+| TODO 
+*/
+Relation.prototype.click = function(p, shift, ctrl) {
+	if (!this.textZone.within(p)) return false;
+	shell.vspace.setFocus(this);
+
+	var pi = p.sub(this.textZone.pnw);
+	var para = this.getVParaAtPoint(pi);
+	if (para) {
+		/* TODO
+		var editor = System.editor;
+		editor.caret.setFromPoint(para, op.sub(para.p));
+		editor.caret.show();
+		editor.deselect();
+		*/
+		shell.redraw = true;
+	}
+	return true;
 }
 
 /**
