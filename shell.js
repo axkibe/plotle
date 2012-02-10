@@ -437,9 +437,7 @@ Caret.prototype.update = function() {
 	}
 
 	// draws new
-	if (this.shown && !this.blinked && this.entity) {
-		this.entity.drawCaret();
-	}
+	if (this.shown && !this.blinked && this.entity) this.entity.drawCaret();
 }
 
 /**
@@ -1805,22 +1803,22 @@ VPara.prototype.getOffsetPoint = function(offset, flowPos$) {
 VPara.prototype.drawCaret = function() {
 	if (shell.caret.entity !== this) throw new Error('Drawing caret for invalid para');
 
-	var para  = this.para;
-	var doc   = para.getAnchestor('DocAlley'); // TODO remove
 	var vdoc  = this.vdoc;
 	var vitem = vdoc.vitem;
 	var zone  = vitem.getZone();
 	var caret = shell.caret;
 	var pan   = shell.vspace.fabric.pan;
-	var th    = R(vdoc.getFontSize() * (1 + settings.bottombox));
+	var fs    = vdoc.getFontSize();
+	var descend = R(fs * settings.bottombox);
+	var th    = R(vdoc.getFontSize()) + descend;
 
 	caret.pos$ = this.getOffsetPoint(shell.caret.offset, shell.caret);
 
 	var sbary   = vitem.scrollbarY;
 	var scrolly = sbary ? sbary.getPos() : 0;
 
-	var cyn = R(caret.pos$.y + this.pnw.y - th - scrolly + 2);
-	var cys = cyn + th;
+	var cys = R(caret.pos$.y + this.pnw.y + descend - scrolly);
+	var cyn = cys - th;
 	var cx  = caret.pos$.x + this.pnw.x - 1;
 
 	cyn = min(max(cyn, 0), zone.height);
@@ -2051,7 +2049,7 @@ VDoc.prototype.event = function(type, key, p1, p2, p3) {
 */
 VDoc.prototype.draw = function(fabric, imargin, scrollp) {
 	// @03 <pre>
-	var paraSep = half(this.getFontSize());
+	var paraSep = this.vitem.getParaSep(this.getFontSize());
 
 	// draws the selection
 	/* TODO
@@ -2086,7 +2084,8 @@ VDoc.prototype.draw = function(fabric, imargin, scrollp) {
 | TODO caching
 */
 VDoc.prototype.getHeight = function() {
-	var paraSep = half(this.getFontSize());
+	var fontsize = this.getFontSize();
+	var paraSep = this.vitem.getParaSep(fontsize);
 	var valley = this.valley;
 	var height = 0;
 	for (var a = 0, aZ = valley.length; a < aZ; a++) {
@@ -2095,7 +2094,7 @@ VDoc.prototype.getHeight = function() {
 		if (a > 0) height += paraSep;
 		height += flow.height;
 	}
-	height += R(this.getFontSize() * settings.bottombox);
+	height += R(fontsize * settings.bottombox);
 	return height;
 }
 
@@ -2106,9 +2105,7 @@ VDoc.prototype.getSpread = function() {
 	var valley = this.valley;
 	var spread = 0;
 	for (var a = 0, aZ = valley.length; a < aZ; a++) {
-		var vpara = valley[a];
-		var flow = vpara.getFlow();
-		spread += flow.spread;
+		spread = max(spread, valley[a].getFlow().spread);
 	}
 	return spread;
 }
@@ -2583,6 +2580,13 @@ VNote.prototype.getFlowWidth = function() {
 }
 
 /**
+| Returns the para seperation height.
+*/
+VNote.prototype.getParaSep = function(fontsize) {
+	return half(fontsize);
+}
+
+/**
 | Returns the zone of the item.
 | An ongoing action can modify this to be different than meshmashine data.
 */
@@ -2784,6 +2788,13 @@ VLabel.prototype.fontSizeChange = function(fontsize) {
 		return max(fontsize * (height + dy) / height, 8);
 	}
 	return max(fontsize, 4);
+}
+
+/**
+| Returns the para seperation height.
+*/
+VLabel.prototype.getParaSep = function(fontsize) {
+	return 0;
 }
 
 /**
