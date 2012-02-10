@@ -285,7 +285,7 @@ var settings = {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /**
-| Mouse state
+| Mouse state. TODO Rename to something more verbatim
 */
 var MST = {
 	NONE   : 0, // button is up
@@ -293,16 +293,6 @@ var MST = {
 	DRAG   : 2  // mouse is dragging
 };
 Object.freeze(MST);
-
-/**
-| Interface action active.
-*/
-// TODO remove
-var ACT = {
-	NONE    : 0, // idle
-	RBIND   : 7  // dragging a new relation
-};
-Object.freeze(ACT);
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,-,-,-.           .
@@ -599,6 +589,7 @@ fixate(Action, 'ITEMRESIZE',3); // resizing one item
 fixate(Action, 'FLOATMENU', 4); // clicked the float menu (background click)
 fixate(Action, 'ITEMMENU',  5); // clicked one item menu
 fixate(Action, 'SCROLLY',   6); // scrolling a note
+fixate(Action, 'RELBIND',   7); // binding a new relation
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,--.         .         .
@@ -961,23 +952,14 @@ VSpace.prototype.draw = function() {
 
 	var action = shell.action;
 	switch (action && action.type) {
-	case null:
-		break;
-	case Action.FLOATMENU :
-		action.floatmenu.draw();
-		break;
-	case Action.ITEMMENU :
-		action.itemmenu.draw();
-		break;
-	/* TODO
-	case ACT.RBIND :
-		var arrow = Line.connect(
-				ia.item.handlezone, 'normal',
-			(ia.item2 && ia.item2.handlezone) || ia.smp , 'arrow');
-			// TODO use something like bindzone
-			if (ia.item2) ia.item2.highlight(this.fabric);
+	case Action.FLOATMENU : action.floatmenu.draw(); break;
+	case Action.ITEMMENU  : action.itemmenu.draw();  break;
+	case Action.RELBIND :
+		var vitem = action.vitem;
+		var arrow = Line.connect(vitem.getZone(), 'normal', action.move, 'arrow');
+//			(ia.item2 && ia.item2.handlezone) || ia.smp , 'arrow'); TODO
+		// if (ia.item2) ia.item2.highlight(this.fabric); TODO
 		arrow.draw(this.fabric);
-		*/
 	}
 }
 
@@ -1079,7 +1061,7 @@ VSpace.prototype._transfix = function(txe, p) {
 /**
 | Starts creating a new relation.
 */
-/*VSpace.prototype.actionSpawnRelation = function(item, p) {
+/*VSpace.prototype.actionSpawnRelation = function(item, p) { TODO REMOVE
 	var ia = this.iaction;
 	ia.act = ACT.RBIND;
 	ia.item = item;
@@ -1123,11 +1105,11 @@ VSpace.prototype.dragstart = function(p) {
 	var pp = p.sub(this.fabric.pan);
 
 	/* if (this.focus && this.focus.withinItemMenu(pp)) {
-		this.actionSpawnRelation(this.focus, pp);
+		this.actionSpawnRelation(this.focus, pp); TODO xxx
 		this.redraw();
 		return;
 	} */
-	
+
 	for(var zi = 0, zlen = this.space.z.length; zi < zlen; zi++) {
 		var vit = this.vitems.vcopse[this.space.z.get(zi)];
 		if (vit.dragstart(pp)) return true;
@@ -2301,14 +2283,13 @@ VItem.prototype.getVParaAtPoint = function(p, action) {
 VItem.prototype.dragstart = function(p) {
 	if (!this.getZone().within(p)) return false;
 
+	shell.redraw = true;
+
 	if (shell.ctrl) {
-		//space.actionSpawnRelation(this, p);
-		throw new Error('TODO');
-		shell.redraw = true;
+		shell.startAction(Action.RELBIND, this, p);
 		return true;
 	}
 	shell.vspace.setFocus(this);
-	shell.redraw = true;
 
 	var sbary = this.scrollbarY;
 	var pnw = this.getZone().pnw;
@@ -2816,7 +2797,7 @@ VLabel.prototype.getZone = function() {
 	// @03 cache the last zone
 
 	switch (action.type) {
-	default : return zone;
+	default : return new Rect(pnw, pnw.add(width, height));
 	case Action.ITEMDRAG:
 		if (!action.move) return new Rect(pnw, pnw.add(width, height));
 		var mx = action.move.x - action.start.x;
@@ -2874,7 +2855,7 @@ VLabel.prototype.dragstop = function(p) {
 |
 | TODO!|
 */
-function Relation(id, i1id, i2id, textZone, dtree) {
+/*function Relation(id, i1id, i2id, textZone, dtree) {
 	Item.call(this, id);
 	this.handles      = Relation.handles;
 	this.i1id         = i1id;
@@ -2892,28 +2873,17 @@ function Relation(id, i1id, i2id, textZone, dtree) {
 	//System.repository.addOnlook(this.id, this.i2id);
 }
 subclass(Relation, VItem);
+*/
 
 /**
 | Default margin for all relations.
 */
-Relation.imargin = new Margin(settings.relation.imargin);
-
-/**
-| The resize handles a relation presents.
-*/
-// TODO into prototype
-Relation.handles = {
-	ne : true,
-	se : true,
-	sw : true,
-	nw : true,
-}
-Object.freeze(Relation.handles);
+//Relation.imargin = new Margin(settings.relation.imargin);
 
 /**
 | Creates a new Relation.
 */
-Relation.create = function(item1, item2) {
+/*Relation.create = function(item1, item2) {
 	throw new Error('TODO');
 	var dtree = new DTree(20);
 	dtree.append(new Para('relates to'));
@@ -2924,197 +2894,20 @@ Relation.create = function(item1, item2) {
 		new Point(R(mx - dtree.width / 2), R(my - dtree.height / 2)),
 		new Point(R(mx + dtree.width / 2), R(my + dtree.height / 2)));
 	return new Relation(null, item1.id, item2.id, textZone, dtree);
-}
-
-/**
-| The zone the handles appear on.
-*/
-Object.defineProperty(Relation.prototype, 'handlezone', {
-	get : function() { return this.textZone; }
-});
+}*/
 
 /**
 | Called when an item is removed.
 */
-Relation.prototype.removed = function() {
+/*Relation.prototype.removed = function() {
 	// TODO
 	//System.repository.removeOnlook(this.id, this.i1id);
 	//System.repository.removeOnlook(this.id, this.i2id);
-}
-
-/**
-| Highlights the label.
-*/
-Relation.prototype.highlight = function(fabric) {
-	fabric.edge(settings.relation.style.highlight, this.textZone, 'path');
-}
-
-/**
-| Sets the text zone of the relation.
-| Also determines its fontsize.
-| Returns true if something changed.
-|
-| zone: a rectangle
-| align: compass direction
-*/
-Relation.prototype.setTextZone = function(zone, align) {
-	if (this.textZone && this.textZone.eq(textZone)) return false;
-	var dtree = this.dtree;
-	var zh = zone.height;
-	var th = R(this.dtree.height * (1 + settings.bottombox)) * settings.relation.demagnify;
-	var dfs = dtree.fontsize;
-	var fs = max(dfs * zh / th, 8);
-	if (this.zone && dfs === fs) return false;
-	dtree.fontsize = fs;
-	th = R(this.dtree.height * (1 + settings.bottombox));
-	// TODO use rect resize?
-	switch(align) {
-	case 'sw' :
-	case 'w'  :
-	case 'nw' : // align right
-		this.textZone = new Rect(zone.pse.add(-this.dtree.width, -zh), zone.pse);
-		break;
-	case 'c': // center
-	default : // align left
-		this.textZone = new Rect(zone.pnw, zone.pnw.add(this.dtree.width, zh));
-		break;
-	}
-	this._fabric$flag = false;
-	return true;
-}
-
-/**
-| Sets the textZone of the relation.
-| Also determines its fontsize.
-| Returns true if something changed.
-|
-| zone: a rectangle
-| align: compass direction
-*/
-Relation.prototype.setZone = function(zone, align) {
-	if (this.textZone && this.textZone.eq(zone)) return false;
-	var dtree = this.dtree;
-	var zh = zone.height;
-	var th = R(this.dtree.height * (1 + settings.bottombox));
-	var dfs = dtree.fontsize;
-	var fs = max(dfs * zh / th, 8);
-	if (this.textZone && dfs === fs) return false;
-	this._lock = true;
-	dtree.fontsize = fs;
-	if (!this.textZone) this.textZone = zone;
-	this.textZone = this.textZone.resize(this._dWidth(), this._dHeight(), align);
-	this._lock = false;
-	this._fabric$flag = false;
-	return true;
-}
-
-/**
-| TODO
-*/
-Relation.prototype._dHeight = function() {
-	return R(this.dtree.height * (1 + settings.bottombox));
-}
-
-/**
-| TODO
-*/
-Relation.prototype._dWidth = function() {
-	return max(this.dtree.width, R(0.4 * this.dtree.fontsize));
-}
+}*/
 
 
-/**
-| TODO
-*/
-Relation.prototype.dragstart = function(p) {
-	if (!this.textZone.within(p)) return false;
-	if (shell.ctrl) {
-		//space.actionSpawnRelation(this, p);
-		throw new Error('TODO');
-		shell.redraw = true;
-		return true;
-	}
-	shell.vspace.setFocus(this);
-
-	shell.startAction(Action.ITEMDRAG, this, p.sub(this.handlezone.pnw));
-	system.setCursor('move');
-	return true;
-}
-
-/**
-| TODO
-*/
-Relation.prototype.mousehover = function(p) {
-	if (!this.textZone.within(p)) return false;
-	system.setCursor('default');
-	return true;
-}
-
-/**
-| TODO 
-*/
-Relation.prototype.click = function(p) {
-	if (!this.textZone.within(p)) return false;
-	shell.vspace.setFocus(this);
-
-	var pi = p.sub(this.textZone.pnw);
-	var para = this.getVParaAtPoint(pi);
-	if (para) {
-		/* TODO
-		var editor = System.editor;
-		editor.caret.setFromPoint(para, op.sub(para.p));
-		editor.caret.show();
-		editor.deselect();
-		*/
-		shell.redraw = true;
-	}
-	return true;
-}
-
-/**
-| Sets a new position of the textlabel.
-*/
-Relation.prototype.moveto = function(pnw) {
-	if (this.textZone.pnw.eq(pnw)) return false;
-	this.textZone = this.textZone.moveto(pnw);
-	return this;
-}
-
-/**
-| Returns the para at point.
-*/
-Relation.prototype.getVParaAtPoint = function(p) {
-	return this.dtree.getVParaAtPoint(p);
-}
-
-
-/**
-| Something has changed.
-*/
-Relation.prototype.listen = function() {
-	if (this._lock) return;
-	this._fabric$flag = false;
-	if (this.textZone) {
-		this.textZone = this.textZone.resize(this._dWidth(), this._dHeight(), 'c');
-	}
-	// end of listen chain
-}
-
-Relation.prototype.resize = function(width, height) {
-	/*var dtree = this.dtree;
-	var fs = max(dtree.fontsize * height / this.height, 8);
-	if (dtree._fontsize == fs) return false;
-	dtree.fontsize = fs;
-	this._fabric$flag = false;
-	return true;*/
-	throw new Error('unimplemented');
-}
-
-/**
-| Draws the item.
-*/
+/*
 Relation.prototype.draw = function(fabric, action, selection) {
-	/* TODO
 	var f = this._fabric;
 	var dtree = this.dtree;
 	var it1 = System.repository.items[this.i1id]; // TODO funcall
@@ -3132,30 +2925,5 @@ Relation.prototype.draw = function(fabric, action, selection) {
 	fabric.paint(settings.relation.style.fill, settings.relation.style.edge, l2, 'path');
 	// draws text
 	fabric.drawImage(f, this.textZone.pnw);
-	*/
 }
-
-/**
-| Something happend on an item onlooked.
 */
-Relation.prototype.onlook = function(event, item) {
-	/* TODO
-	switch(event) {
-	case ONLOOK.REMOVE :
-		if (item.id != this.i1id && item.id != this.i2id) {
-			throw new Error('Got onlook for not my item?');
-		}
-		System.repository.removeItem(this);
-		// TODO check for cycles
-		break;
-	case ONLOOK.UPDATE :
-		//if ((item.id === this.i1id && !item.zone.eq(this.i1zone)) ||
-		//    (item.id === this.i2id && !item.zone.eq(this.i2zone))) {
-		//	this._arrow = null;
-		//}
-		break;
-	default :
-		throw new Error('unknown unlook event');
-	}*/
-}
-
