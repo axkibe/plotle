@@ -578,6 +578,7 @@ function Action(type, vitem, start) {
 	this.type  = type;
 	this.vitem = vitem;
 	this.start = start;
+	this.move  = start;
 }
 
 /**
@@ -944,8 +945,8 @@ function VSpace(space) {
 */
 VSpace.prototype.draw = function() {
 	for(var zi = this.space.z.length - 1; zi >= 0; zi--) {
-		var vit = this.vitems.vcopse[this.space.z.get(zi)];
-		vit.draw(this.fabric);
+		var vitem = this.vitems.vcopse[this.space.z.get(zi)];
+		vitem.draw(this.fabric);
 	}
 
 	if (this.focus) this.focus.drawHandles(this.fabric);
@@ -955,10 +956,11 @@ VSpace.prototype.draw = function() {
 	case Action.FLOATMENU : action.floatmenu.draw(); break;
 	case Action.ITEMMENU  : action.itemmenu.draw();  break;
 	case Action.RELBIND :
-		var vitem = action.vitem;
-		var arrow = Line.connect(vitem.getZone(), 'normal', action.move, 'arrow');
-//			(ia.item2 && ia.item2.handlezone) || ia.smp , 'arrow'); TODO
-		// if (ia.item2) ia.item2.highlight(this.fabric); TODO
+		var vitem  = action.vitem;
+		var vitem2 = action.vitem2;
+		var target = vitem2 ? vitem2.getZone() : action.move; 
+		var arrow = Line.connect(vitem.getZone(), 'normal', target, 'arrow');
+		if (vitem2) vitem2.highlight(this.fabric);
 		arrow.draw(this.fabric);
 	}
 }
@@ -1036,8 +1038,8 @@ VSpace.prototype.mousehover = function(p) {
 
 	var hit = false;
 	for(var zi = 0, zlen = this.space.z.length; zi < zlen; zi++) {
-		var vit = this.vitems.vcopse[this.space.z.get(zi)];
-		if (vit.mousehover(pp)) {
+		var vitem = this.vitems.vcopse[this.space.z.get(zi)];
+		if (vitem.mousehover(pp)) {
 			hit = true;
 			break;		
 		}
@@ -1045,29 +1047,6 @@ VSpace.prototype.mousehover = function(p) {
 	if (!hit) system.setCursor('crosshair');
 	return true;
 }
-
-/**
-| Asks every item that intersects with a point if it feels reponsible for an event.
-*/
-VSpace.prototype._transfix = function(txe, p) {
-	for(var zi = 0, zlen = this.space.z.length; zi < zlen; zi++) {
-		var vit = this.vitems.vcopse[this.space.z.get(zi)];
-		if (vit.transfix(txe, p)) return true;
-	}
-	return false;
-}
-
-
-/**
-| Starts creating a new relation.
-*/
-/*VSpace.prototype.actionSpawnRelation = function(item, p) { TODO REMOVE
-	var ia = this.iaction;
-	ia.act = ACT.RBIND;
-	ia.item = item;
-	ia.sp = ia.smp = p;
-	system.setCursor('not-allowed');
-}*/
 
 /**
 | Binds a relation.
@@ -1103,16 +1082,20 @@ VSpace.prototype._transfix = function(txe, p) {
 */
 VSpace.prototype.dragstart = function(p) {
 	var pp = p.sub(this.fabric.pan);
+	var focus = this.focus;
 
-	/* if (this.focus && this.focus.withinItemMenu(pp)) {
-		this.actionSpawnRelation(this.focus, pp); TODO xxx
-		this.redraw();
-		return;
-	} */
+	// see if the itemmenu of the focus was targeted
+	if (focus && focus.withinItemMenu(pp)) {
+		shell.startAction(Action.RELBIND, focus, p);
+		system.setCursor('default');
+		shell.redraw = true;
+		return true;
+	}
 
+	// see if one item was targeted
 	for(var zi = 0, zlen = this.space.z.length; zi < zlen; zi++) {
-		var vit = this.vitems.vcopse[this.space.z.get(zi)];
-		if (vit.dragstart(pp)) return true;
+		var vitem = this.vitems.vcopse[this.space.z.get(zi)];
+		if (vitem.dragstart(pp)) return true;
 	}
 
 	// otherwise do panning
@@ -1140,8 +1123,8 @@ VSpace.prototype.click = function(p) {
 
 	// clicked some item?
 	for(var zi = 0, zlen = this.space.z.length; zi < zlen; zi++) {
-		var vit = this.vitems.vcopse[this.space.z.get(zi)];
-		if (vit.click(pp)) return true;
+		var vitem = this.vitems.vcopse[this.space.z.get(zi)];
+		if (vitem.click(pp)) return true;
 	}
 
 	// otherwhise pop up the float menu
@@ -1168,19 +1151,20 @@ VSpace.prototype.dragstop = function(p) {
 		system.setCursor('default');
 		shell.redraw = true;
 		break;
-	case Action.PAN :
-		break;
-	case Action.SCROLLY :
-		break;
 	/* TODO
 	case ACT.RBIND :
 		iaction.smp = null;
+		-- tranxfix --
+	for(var zi = 0, zlen = this.space.z.length; zi < zlen; zi++) {
+		var vit = this.vitems.vcopse[this.space.z.get(zi)];
+		if (vit.transfix(txe, p)) return true;
+	}
+	return false;
+	    ---
 		this._transfix(RBINDTO, pp);
 		redraw = true;
 		break;
 	*/
-	default :
-		throw new Error('Invalid action in "Space.dragstop"');
 	}
 	shell.stopAction();
 }
@@ -1195,19 +1179,20 @@ VSpace.prototype.dragmove = function(p) {
 	switch(action.type) {
 	default :
 		action.vitem.dragmove(pp); 
-		return;
+		return true;
 	case Action.PAN :
 		this.fabric.pan = p.sub(action.start);
 		shell.redraw = true;
-		return;
-	/* TODO
-	case Action.RBIND :
-		iaction.item2 = null;
-		this._transfix(RBINDHOVER, pp);
-		iaction.smp = pp;
-		this.redraw();
 		return true;
-	*/
+	case Action.RELBIND :
+		action.vitem2 = null;
+		action.move = p;
+		shell.redraw = true;
+		for(var zi = 0, zlen = this.space.z.length; zi < zlen; zi++) {
+			var vitem = this.vitems.vcopse[this.space.z.get(zi)];
+			if (vitem.dragmove(p)) return true;
+		}
+		return true;
 	}
 }
 
@@ -1273,6 +1258,7 @@ VSpace.prototype.mousedown = function(p) {
 			var action = shell.startAction(Action.ITEMRESIZE, this.focus, pp);
 			action.align = com;
 			action.startZone = this.focus.getZone();
+			debug('SZ', action.startZone);
 			system.setCursor(com+'-resize');
 
 			return MST.DRAG;
@@ -2286,11 +2272,14 @@ VItem.prototype.dragstart = function(p) {
 	shell.redraw = true;
 
 	if (shell.ctrl) {
+		// relation binding
 		shell.startAction(Action.RELBIND, this, p);
+		system.setCursor('default');
 		return true;
 	}
-	shell.vspace.setFocus(this);
 
+	// scrolling or dragging
+	shell.vspace.setFocus(this);
 	var sbary = this.scrollbarY;
 	var pnw = this.getZone().pnw;
 	var pr = p.sub(pnw);
@@ -2308,13 +2297,19 @@ VItem.prototype.dragstart = function(p) {
 | dragmove?
 */
 VItem.prototype.dragmove = function(p) {
+	// no general zone test, since while dragmoving the item might be fixed by the action.
 	var action = shell.action;
-	if (action.vitem !== this) throw new Error('Itemmismatch in dragmove');
-	// no zone test, since while dragmoving the item selected is fixed to the action.
+
 	switch (action.type) {
 	default : throw new Error('invalid dragmove');
+	case Action.RELBIND    :
+		if (!this.getZone().within(p)) return false;
+		action.move = p;
+		action.vitem2 = this;
+		shell.redraw = true;
+		return true;
 	case Action.ITEMRESIZE :
-	case Action.ITEMDRAG :
+	case Action.ITEMDRAG   :
 		action.move = p;
 		shell.redraw = true;
 		return true;
@@ -2338,6 +2333,7 @@ VItem.prototype.dragmove = function(p) {
 */
 VItem.prototype.mousehover = function(p) {
 	if (!this.getZone().within(p)) return false;
+	
 	system.setCursor('default');
 	return true;
 }
@@ -2418,27 +2414,32 @@ VNote.prototype.minHeight = settings.note.minHeight;
 
 /**
 | Highlights the note.
+| TODO MOVE TO VITEM.
 */
 VNote.prototype.highlight = function(fabric) {
-	// TODO round rects
-	fabric.edge(settings.note.style.highlight, this.zone, 'path');
+	var silhoutte = this.getSilhoutte(this.getZone(), false); 
+	fabric.edge(settings.note.style.highlight, silhoutte, 'path');
 }
 
 
 /**
 | Returns the notes silhoutte.
+|
+| zone$:  the cache for the items zone
+| zAnchor: if true anchor the silhoute at zero.
 */
-VNote.prototype.getSilhoutte = function(zone) {
-	if (!this._silhoutte$ ||
-		this._silhoutte$.width  !== zone.width ||
-		this._silhoutte$.height !== zone.height)
-	{
-		return this._silhoutte$ = new RoundRect(
-			Point.zero, new Point(zone.width, zone.height),
-			settings.note.cornerRadius);
-	}
+VNote.prototype.getSilhoutte = function(zone$, zAnchor) {
+	var s$ = zAnchor ? this._silhoutte$0 : this._silhoutte$1;
+	var z$ = zone$; 
 
-	return this._silhoutte$;
+	if (s$ && s$.width === z$.width && s$.height === z$.height) return s$;
+	
+	var cr = settings.note.cornerRadius 
+	if (zAnchor) {
+		return this._silhoutte$0 = new RoundRect(Point.zero, new Point(z$.width, z$.height), cr);
+	} else {
+		return this._silhoutte$1 = new RoundRect(z$.pnw, z$.pse, cr); 
+	}
 }
 
 /**
@@ -2524,7 +2525,7 @@ VNote.prototype.draw = function(fabric) {
 
 		// resizes the canvas
 		f.attune(zone);
-		var silhoutte = this.getSilhoutte(zone);
+		var silhoutte = this.getSilhoutte(zone, true);
 		f.fill(settings.note.style.fill, silhoutte, 'path');
 
 		// draws selection and text
@@ -2580,13 +2581,13 @@ VNote.prototype.getZone = function() {
 
 	switch (action.type) {
 	case Action.ITEMDRAG:
-		if (!action.move) return item.zone;
 		return item.zone.add(action.move.x - action.start.x, action.move.y - action.start.y);
 
 	case Action.ITEMRESIZE:
-		if (!action.move) return item.zone;
-		var ipnw = action.startZone.pnw;
-		var ipse = action.startZone.pse;
+		var szone = action.startZone;
+		if (!szone) return item.zone;
+		var ipnw = szone.pnw; // TODO rename spnw
+		var ipse = szone.pse; // TODO spse
 		var dx = action.move.x - action.start.x;
 		var dy = action.move.y - action.start.y;
 		var minw = this.minWidth;
@@ -2685,25 +2686,25 @@ VLabel.prototype.minHeight = settings.label.minHeight;
 | Highlights the note.
 */
 VLabel.prototype.highlight = function(fabric) {
-	// TODO round rects
-	fabric.edge(settings.label.style.highlight, this.zone, 'path');
+	var silhoutte = this.getSilhoutte(this.getZone(), false); 
+	fabric.edge(settings.note.style.highlight, silhoutte, 'path');
 }
 
 
 /**
 | Returns the notes silhoutte.
 */
-VLabel.prototype.getSilhoutte = function(zone) {
-	if (!this._silhoutte$ ||
-		this._silhoutte$.width  !== zone.width ||
-		this._silhoutte$.height !== zone.height)
-	{
-		return this._silhoutte$ = new Rect(
-			Point.zero, new Point(zone.width - 1, zone.height - 1),
-			settings.note.cornerRadius);
-	}
+VLabel.prototype.getSilhoutte = function(zone$, zAnchor) {
+	var s$ = zAnchor ? this._silhoutte$0 : this._silhoutte$1;
+	var z$ = zone$; 
 
-	return this._silhoutte$;
+	if (s$ && s$.width === z$.width && s$.height === z$.height) return s$;
+	
+	if (zAnchor) {
+		return this._silhoutte$0 = new Rect(Point.zero, new Point(z$.width - 1, z$.height - 1));
+	} else {
+		return this._silhoutte$1 = new Rect(z$.pnw, z$.pse.sub(1, 1)); 
+	}
 }
 
 
@@ -2726,7 +2727,7 @@ VLabel.prototype.draw = function(fabric) {
 
 		// resizes the canvas
 		f.attune(zone);
-		var silhoutte = this.getSilhoutte(zone);
+		var silhoutte = this.getSilhoutte(zone, true);
 
 		// draws selection and text
 		vdoc.draw(f, imargin, Point.zero);
@@ -2757,7 +2758,7 @@ VLabel.prototype.fontSizeChange = function(fontsize) {
 	switch (action.type) {
 	default: return fontsize;
 	case Action.ITEMRESIZE:
-		if (!action.move) return fontsize;
+		if (!action.startZone) return fontsize;
 		var vdoc = this.vdoc;
 		var height = action.startZone.height;
 		var dy;
@@ -2799,7 +2800,6 @@ VLabel.prototype.getZone = function() {
 	switch (action.type) {
 	default : return new Rect(pnw, pnw.add(width, height));
 	case Action.ITEMDRAG:
-		if (!action.move) return new Rect(pnw, pnw.add(width, height));
 		var mx = action.move.x - action.start.x;
 		var my = action.move.y - action.start.y;
 		return new Rect(pnw.add(mx, my), pnw.add(mx + width, my + height));
@@ -2807,7 +2807,7 @@ VLabel.prototype.getZone = function() {
 	case Action.ITEMRESIZE:
 		// resizing is done by fontSizeChange()
 		var szone = action.startZone;
-		if (!action.move) return new Rect(pnw, pnw.add(width, height));
+		if (!szone) return new Rect(pnw, pnw.add(width, height));
 
 		switch (action.align) {
 		default   : throw new Error('unknown align');

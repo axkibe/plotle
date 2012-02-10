@@ -50,8 +50,8 @@ function Peer() {
 		      '0' : {
 		        type: 'Note',
 		        zone: {
-		          pnw : { 'x': 100, 'y': 100 },
-		          pse : { 'x': 488, 'y': 250 },
+		          pnw : { 'x':  10, 'y':  10 },
+		          pse : { 'x': 478, 'y': 140 },
 		        },
 		        doc: {
 		          fontsize : 13,
@@ -111,7 +111,7 @@ function Peer() {
 		      },
 		      '1' : {
 		        type: 'Label',
-		        pnw: { 'x': 550, 'y': 150 },
+		        pnw: { 'x': 100, 'y': 250 },
 		        doc: {
 		          fontsize : 90,
 

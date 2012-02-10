@@ -1311,6 +1311,7 @@ function Line(p1, p1end, p2, p2end) {
 */
 Line.connect = function(shape1, end1, shape2, end2) {
 	if (!shape1 || !shape2) throw new Error('error');
+
 	if (shape1 instanceof Rect && shape2 instanceof Point) {
 		var p2 = shape2;
 		var z1 = shape1;
