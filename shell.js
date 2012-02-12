@@ -958,7 +958,7 @@ VSpace.prototype.draw = function() {
 	case Action.RELBIND :
 		var vitem  = action.vitem;
 		var vitem2 = action.vitem2;
-		var target = vitem2 ? vitem2.getZone() : action.move; 
+		var target = vitem2 ? vitem2.getZone() : action.move.sub(this.fabric.pan);
 		var arrow = Line.connect(vitem.getZone(), 'normal', target, 'arrow');
 		if (vitem2) vitem2.highlight(this.fabric);
 		arrow.draw(this.fabric);
@@ -1041,7 +1041,7 @@ VSpace.prototype.mousehover = function(p) {
 		var vitem = this.vitems.vcopse[this.space.z.get(zi)];
 		if (vitem.mousehover(pp)) {
 			hit = true;
-			break;		
+			break;
 		}
 	}
 	if (!hit) system.setCursor('crosshair');
@@ -1178,7 +1178,7 @@ VSpace.prototype.dragmove = function(p) {
 
 	switch(action.type) {
 	default :
-		action.vitem.dragmove(pp); 
+		action.vitem.dragmove(pp);
 		return true;
 	case Action.PAN :
 		this.fabric.pan = p.sub(action.start);
@@ -1190,7 +1190,7 @@ VSpace.prototype.dragmove = function(p) {
 		shell.redraw = true;
 		for(var zi = 0, zlen = this.space.z.length; zi < zlen; zi++) {
 			var vitem = this.vitems.vcopse[this.space.z.get(zi)];
-			if (vitem.dragmove(p)) return true;
+			if (vitem.dragmove(pp)) return true;
 		}
 		return true;
 	}
@@ -2417,7 +2417,7 @@ VNote.prototype.minHeight = settings.note.minHeight;
 | TODO MOVE TO VITEM.
 */
 VNote.prototype.highlight = function(fabric) {
-	var silhoutte = this.getSilhoutte(this.getZone(), false); 
+	var silhoutte = this.getSilhoutte(this.getZone(), false);
 	fabric.edge(settings.note.style.highlight, silhoutte, 'path');
 }
 
@@ -2429,16 +2429,17 @@ VNote.prototype.highlight = function(fabric) {
 | zAnchor: if true anchor the silhoute at zero.
 */
 VNote.prototype.getSilhoutte = function(zone$, zAnchor) {
-	var s$ = zAnchor ? this._silhoutte$0 : this._silhoutte$1;
-	var z$ = zone$; 
+	var z$ = zone$;
 
-	if (s$ && s$.width === z$.width && s$.height === z$.height) return s$;
-	
-	var cr = settings.note.cornerRadius 
+	var cr = settings.note.cornerRadius;
 	if (zAnchor) {
+		var s$ = this._silhoutte$0;
+		if (s$ && s$.width === z$.width && s$.height === z$.height) return s$;
 		return this._silhoutte$0 = new RoundRect(Point.zero, new Point(z$.width, z$.height), cr);
 	} else {
-		return this._silhoutte$1 = new RoundRect(z$.pnw, z$.pse, cr); 
+		var s$ = this._silhoutte$1;
+		if (s$ && s$.eq(z$)) return s$;
+		return this._silhoutte$1 = new RoundRect(z$.pnw, z$.pse, cr);
 	}
 }
 
