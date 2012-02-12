@@ -67,7 +67,7 @@ function Stem(twigs, master) {
 			case String : continue;
 			case Number : continue;
 			}
-			if (twigs[k].noCogs) continue;
+			if (!twigs[k] || twigs[k].noCogs) continue;
 			twigs[k].parent = this;
 			twigs[k].key$ = k;
 		}
@@ -678,6 +678,7 @@ Label.prototype.mmSet = function(path, val, a0, al, oplace) {
 		al = path.fit(al, true);
 	}
 
+	// TODO this doesnt seem to work for just setting 'pnw'
 	if (path === 'pnw' || path.get(a0) === 'pnw') {
 		if (a0 + 1 === al) {
 			this.pnw = new Point(val);
@@ -741,6 +742,7 @@ Relation.prototype.mmSet = function(path, val, a0, al, oplace) {
 		}
 		return;
 	}
+
 	if (path === 'item1key') { this.item1key = val; return; }
 	if (path === 'item2key') { this.item2key = val; return; }
 	if (path.get(a0) === 'item1key') {

@@ -111,7 +111,7 @@ function Peer() {
 		      },
 		      '1' : {
 		        type: 'Label',
-		        pnw: { 'x': 100, 'y': 250 },
+		        pnw: { 'x': 700, 'y': 200 },
 		        doc: {
 		          fontsize : 90,
 
@@ -123,10 +123,26 @@ function Peer() {
 		          ],
 		        },
 			  },
+		      '2' : {
+		        type: 'Relation',
+		        pnw: { 'x': 600, 'y': 150 },
+				item1key : '0',
+				item2key : '1',
+		        doc: {
+		          fontsize : 20,
+
+		          alley : [
+		            {
+		              type: 'Para',
+		              text: 'relates to',
+		            },
+		          ],
+		        },
+			  },
 		    },
 			'z' : {
 			  alley : [
-			    '0', '1',
+			    '0', '1', '2',
 			  ],
 			}
 		  },
