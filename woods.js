@@ -52,7 +52,6 @@ var subclass  = Jools.subclass;
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  The base of all meshcraft-nodes.
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Stem(twigs, master) {
 	if (master && master._twigs) master = master._twigs;
@@ -311,7 +310,6 @@ Stem.prototype.getKeyOf = function(v, nocache) {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ /|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
                                        `-'
  An array of any kind
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function StemAlley(master) {
 	Stem.call(this, { alley: [] }, master);
@@ -417,7 +415,6 @@ StemAlley.prototype.indexOf = function(element) {
 ~ ,-.|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ | ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
   `-+'                                  '
  A generic twig allowing any kind of subtwigs.
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function GenericCopse(master) {
 	Stem.call(this, {}, master);
@@ -464,7 +461,6 @@ GenericAlley.prototype.seeds  = GenericCopse.prototype.seeds;
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  The root of spaces.
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Nexus(master) {
 	Stem.call(this, {type: 'Nexus'}, master);
@@ -491,7 +487,6 @@ Nexus.prototype.seeds = {
 ~ ~ ~ ~|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
        '
  A space.
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Space(master) {
 	if (master && !(master instanceof Space) && master.type !== 'Space') {
@@ -534,8 +529,12 @@ Space.prototype.mmSet = function(path, val, a0, al, oplace) {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ++ ItemCopse ++
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ ,-_/ .             ,--.
+ '  | |- ,-. ,-,-. | `-' ,-. ,-. ,-. ,-.
+ .^ | |  |-' | | | |   . | | | | `-. |-'
+ `--' `' `-' ' ' ' `--'  `-' |-' `-' `-'
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                             '
  A copse of items (in a space).
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function ItemCopse(master) {
@@ -563,14 +562,13 @@ ItemCopse.prototype.seeds = {
 ItemCopse.prototype.isGrowable = true;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ++ Item ++
+ ,-_/ .
+ '  | |- ,-. ,-,-.
+ .^ | |  |-' | | |
+ `--' `' `-' ' ' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  a Note or Label
-
- master: master to create this item from
- type: 'Note' or 'Label'
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Item(twigs) {
 	Stem.call(this, twigs, null);
@@ -592,8 +590,7 @@ Item.prototype.seeds = {
   ,' `-' `-' `' `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- a note
-
+ a note.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Note(master) {
 	if (master && !(master instanceof Note) && master.type !== 'Note') {
@@ -646,8 +643,7 @@ Note.prototype.mmSet = function(path, val, a0, al, oplace) {
  `--' `-^ ^-' `-' `'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- A Label
-
+ A Label.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Label(master) {
 	if (master && !(master instanceof Label) && master.type !== 'Label') {
@@ -694,6 +690,74 @@ Label.prototype.mmSet = function(path, val, a0, al, oplace) {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ .-,--.     .      .
+  `|__/ ,-. |  ,-. |- . ,-. ,-.
+  )| \  |-' |  ,-| |  | | | | |
+  `'  ` `-' `' `-^ `' ' `-' ' '
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+ A Relation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+function Relation(master) {
+	if (master && !(master instanceof Relation) && master.type !== 'Relation') {
+		throw new Error(type + ' master typed wrongly: '+master.type);
+	}
+	// @03 check if master has other keys.
+
+	Item.call(this, {
+			type     : 'Relation',
+			doc      : new this.seeds.DocAlley(master && master.doc),
+			pnw      : new Point(master.pnw),
+			item1key : master.item1key,
+			item2key : master.item2key,
+		});
+
+	this.pnw = this._twigs.pnw; // @03 dont
+}
+subclass(Relation, Item);
+
+/**
+| Type
+*/
+Relation.prototype.type = 'Relation';
+
+/**
+| Sets the value of a node.
+*/
+Relation.prototype.mmSet = function(path, val, a0, al, oplace) {
+	if (oplace) throw new Error('out of place not yet supported');
+
+	if (isPath(path)) {
+		a0 = path.fit(a0, false);
+		al = path.fit(al, true);
+	}
+
+	if (path === 'pnw' || path.get(a0) === 'pnw') {
+		if (a0 + 1 === al) {
+			this.pnw = new Point(val);
+		} else {
+			this.pnw = this.pnw.mmSet(path, val, a0 + 1, al, true);
+		}
+		return;
+	}
+	if (path === 'item1key') { this.item1key = val; return; }
+	if (path === 'item2key') { this.item2key = val; return; }
+	if (path.get(a0) === 'item1key') {
+		if (a0 + 1 !== al) throw new Error('item1key cannot be a subpath');
+		this.item1key = val;
+		return;
+	}
+	if (path.get(a0) === 'item2key') {
+		if (a0 + 1 !== al) throw new Error('item2key cannot be a subpath');
+		this.item2key = val;
+		return;
+	}
+
+	if (a0 + 1 === al) throw new Error('Cannot set '+this.type+'.'+path.get(a0)+' itself');
+	Stem.prototype.mmSet.call(this, path, val, a0, al);
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      ,.               ,.   .  .
     / |   ,-. ,-.    / |   |  |  ,-. . .
    /~~|-. |   |     /~~|-. |  |  |-' | |
@@ -701,7 +765,6 @@ Label.prototype.mmSet = function(path, val, a0, al, oplace) {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ /|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
                                      `-'
  An array of Numbers and Strings (Arcs)
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function ArcAlley(master) {
 	StemAlley.call(this, master);
@@ -729,7 +792,6 @@ ArcAlley.prototype.seeds = {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~/| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
                                     `-'
  An array of Paragraphs
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function DocAlley(master) {
 	StemAlley.call(this, master);
@@ -763,7 +825,6 @@ DocAlley.prototype.seeds = {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  A paragraph
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Para(master) {
 	Stem.call(this, {type : 'Para'}, master);
@@ -874,6 +935,7 @@ Rect.prototype.matches = function(master) {
   ,|    | | | | | |
   `'    `-' ' ' ' `'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
  A Points inherits Fabric.Point and is immutable
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Point(master) {

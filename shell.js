@@ -2686,7 +2686,7 @@ VLabel.prototype.minHeight = settings.label.minHeight;
 | Highlights the note.
 */
 VLabel.prototype.highlight = function(fabric) {
-	var silhoutte = this.getSilhoutte(this.getZone(), false); 
+	var silhoutte = this.getSilhoutte(this.getZone(), false);
 	fabric.edge(settings.note.style.highlight, silhoutte, 'path');
 }
 
@@ -2696,14 +2696,14 @@ VLabel.prototype.highlight = function(fabric) {
 */
 VLabel.prototype.getSilhoutte = function(zone$, zAnchor) {
 	var s$ = zAnchor ? this._silhoutte$0 : this._silhoutte$1;
-	var z$ = zone$; 
+	var z$ = zone$;
 
 	if (s$ && s$.width === z$.width && s$.height === z$.height) return s$;
-	
+
 	if (zAnchor) {
 		return this._silhoutte$0 = new Rect(Point.zero, new Point(z$.width - 1, z$.height - 1));
 	} else {
-		return this._silhoutte$1 = new Rect(z$.pnw, z$.pse.sub(1, 1)); 
+		return this._silhoutte$1 = new Rect(z$.pnw, z$.pse.sub(1, 1));
 	}
 }
 
@@ -2840,15 +2840,19 @@ VLabel.prototype.dragstop = function(p) {
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- .-,--.     .      .
-  `|__/ ,-. |  ,-. |- . ,-. ,-.
-  )| \  |-' |  ,-| |  | | | | |
-  `'  ` `-' `' `-^ `' ' `-' ' '
+ VRelation
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- Relates two items (or other relations)
+ Relates two items (including other relations)
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/**
+| Constructor.
+*/
+function VRelation(item, vspace) {
+	VLabel.call(this, item, vspace);
+}
+subclass(VRelation, VLabel);
 
 /**
 | Constructor.
