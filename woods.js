@@ -552,8 +552,9 @@ ItemCopse.prototype.type = 'ItemCopse';
 | Seeds. Things that can grow on this twig.
 */
 ItemCopse.prototype.seeds = {
-	'Note'  : Note,
-	'Label' : Label,
+	'Note'     : Note,
+	'Label'    : Label,
+	'Relation' : Relation,
 };
 
 /**
@@ -568,7 +569,7 @@ ItemCopse.prototype.isGrowable = true;
  `--' `' `-' ' ' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- a Note or Label
+ a Note, Label or Relation.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Item(twigs) {
 	Stem.call(this, twigs, null);

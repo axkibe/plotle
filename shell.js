@@ -1289,8 +1289,9 @@ function VItemCopse(copse) {
 	for(var k in copse.loop()) {
 		var item = copse.get(k);
 		switch (item.get('type')) {
-		case 'Note'  : this.vcopse[k] = new VNote(copse.get(k)); break;
-		case 'Label' : this.vcopse[k] = new VLabel(copse.get(k)); break;
+		case 'Note'     : this.vcopse[k] = new VNote    (copse.get(k)); break;
+		case 'Label'    : this.vcopse[k] = new VLabel   (copse.get(k)); break;
+		case 'Relation' : this.vcopse[k] = new VRelation(copse.get(k)); break;
 		default : throw new Error('unknown type: '+item.type);
 		}
 	}
@@ -2112,7 +2113,7 @@ VDoc.prototype.getVParaAtPoint = function(p) {
   `'     `--' `' `-' ' ' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- Common base of VNote and VLabel.
+ Common base of VNote, VLabel, VRelation.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /**
