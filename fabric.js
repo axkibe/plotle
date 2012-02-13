@@ -55,6 +55,8 @@ var fixate       = Jools.fixate;
 var fixateNoEnum = Jools.fixate;
 var reject       = Jools.reject;
 var subclass     = Jools.subclass;
+var min          = Math.min;
+var max          = Math.max;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
@@ -1276,7 +1278,7 @@ HexagonFlower.prototype.within = function(p) {
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,
-  )   . ,-. ,-.
+  )   * ,-. ,-.
  /    | | | |-'
  `--' ' ' ' `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
@@ -1320,8 +1322,8 @@ Line.connect = function(shape1, end1, shape2, end2) {
 			p1 = z1.pc;
 		} else {
 			p1 = new Point(
-				Math.max(z1.pnw.x, Math.min(p2.x, z1.pse.x)),
-				Math.max(z1.pnw.y, Math.min(p2.y, z1.pse.y)));
+				max(z1.pnw.x, min(p2.x, z1.pse.x)),  // @@ make limit() call
+				max(z1.pnw.y, min(p2.y, z1.pse.y)));
 		}
 		return new Line(p1, end1, p2, end2);
 	}
@@ -1339,7 +1341,7 @@ Line.connect = function(shape1, end1, shape2, end2) {
 			x2 = z2.pse.x;
 		} else {
 			// an intersection
-			x1 = x2 = half(Math.max(z1.pnw.x, z2.pnw.x) + Math.min(z1.pse.x, z2.pse.x));
+			x1 = x2 = half(max(z1.pnw.x, z2.pnw.x) + min(z1.pse.x, z2.pse.x));
 		}
 		if (z2.pnw.y > z1.pse.y) {
 			// zone2 is clearly on the bottom
@@ -1351,7 +1353,7 @@ Line.connect = function(shape1, end1, shape2, end2) {
 			y2 = z2.pse.y;
 		} else {
 			// an intersection
-			y1 = y2 = half(Math.max(z1.pnw.y, z2.pnw.y) + Math.min(z1.pse.y, z2.pse.y));
+			y1 = y2 = half(max(z1.pnw.y, z2.pnw.y) + min(z1.pse.y, z2.pse.y));
 		}
 		return new Line(new Point(x1, y1), end1, new Point(x2, y2), end2);
 	}
@@ -1360,18 +1362,23 @@ Line.connect = function(shape1, end1, shape2, end2) {
 
 /**
 | Returns the zone of the arrow.
-| Result is cached.
 */
-Object.defineProperty(Line.prototype, 'zone', {
-	get: function() {
-		return fixate(this, 'zone', new Rect(
-			Point.renew(
-				Math.min(this.p1.x, this.p2.x), Math.min(this.p1.y, this.p2.y),
-				this.p1, this.p2),
-			Point.renew(
-				Math.max(this.p1.x, this.p2.x), Math.max(this.p1.y, this.p2.y),
-				this.p1, this.p2)));
-	}
+lazyFixate(Line.prototype, 'zone', function() {
+	var p1 = this.p1;
+	var p2 = this.p2;
+	return new Rect(
+		Point.renew(min(p1.x, p2.x), min(p1.y, p2.y), p1, p2),
+		Point.renew(max(p1.x, p2.x), max(p1.y, p2.y), p1, p2));
+});
+
+
+/**
+| Returns the point at center.
+*/
+lazyFixate(Line.prototype, 'pc', function() {
+	var p1 = this.p1;
+	var p2 = this.p2;
+	return new Point(half(p1.x + p2.x), half(p1.y + p2.y));
 });
 
 /**
@@ -1384,7 +1391,7 @@ Line.prototype.path = function(c2d, border, edge) {
 	var p2 = this.p2;
 
 	c2d.beginPath();
-	// TODO, multiple lineend types
+	// TODO, multiple line end types
 	switch(this.p1end) {
 	case 'normal':
 		if (edge) c2d.moveTo(p1, edge);

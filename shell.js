@@ -138,6 +138,9 @@ var settings = {
 
 		// inner margin to text
 		imargin  : { n: 1, e: 1, s: 1, w: 1 },
+
+		// offset for creation // @@ calculate dynamically
+		createOffset : { x: 27, y: 12 }
 	},
 
 	// menu at the bottom of cockpit
@@ -269,8 +272,8 @@ var settings = {
 		// inner margin to text
 		imargin  : { n: 1, e: 1, s: 1, w: 1 },
 
-		// scale down relation text
-		demagnify : 1.2,
+		// offset for creation // @@ calculate dynamically
+		createOffset : { x: 44, y: 12 }
 	},
 
 	// Blink speed of the caret.
@@ -936,7 +939,7 @@ function VSpace(space) {
 	this.space = space;
 	this.fabric = new Fabric(system.fabric);
 	this.zoom = 1; // @03
-	this.vitems = new VItemCopse(space.items);
+	this.vitems = new VItemCopse(space.items, this);
 	this._floatMenuLabels = {c: 'new', n: 'Note', ne: 'Label'};
 }
 
@@ -1148,25 +1151,16 @@ VSpace.prototype.dragstop = function(p) {
 	case Action.ITEMDRAG :
 	case Action.ITEMRESIZE :
 		action.vitem.dragstop(p);
-		system.setCursor('default');
-		shell.redraw = true;
 		break;
-	/* TODO
-	case ACT.RBIND :
-		iaction.smp = null;
-		-- tranxfix --
-	for(var zi = 0, zlen = this.space.z.length; zi < zlen; zi++) {
-		var vit = this.vitems.vcopse[this.space.z.get(zi)];
-		if (vit.transfix(txe, p)) return true;
-	}
-	return false;
-	    ---
-		this._transfix(RBINDTO, pp);
-		redraw = true;
+	case Action.RELBIND:
+		for(var zi = 0, zlen = this.space.z.length; zi < zlen; zi++) {
+			var vit = this.vitems.vcopse[this.space.z.get(zi)];
+			if (vit.dragstop(pp)) break;
+		}
 		break;
-	*/
 	}
 	shell.stopAction();
+	return true;
 }
 
 /**
@@ -1224,9 +1218,9 @@ VSpace.prototype.mousedown = function(p) {
 			this.setFocus(vnote);
 			break;
 		case 'ne' : // label
-			// TODO center label
-			var pnw = fm.p.sub(this.fabric.pan.x - 10, this.fabric.pan.y - 20);
-			var label = peer.newLabel(this.space, pnw, 20);
+			var pnw = fm.p.sub(this.fabric.pan);
+			pnw = pnw.sub(settings.label.createOffset);
+			var label = peer.newLabel(this.space, pnw, 'Label', 20);
 			var vlabel = new VLabel(label, this);
 			this.vitems.vcopse[label.getOwnKey()] = vlabel;
 			this.setFocus(vlabel);
@@ -1258,7 +1252,6 @@ VSpace.prototype.mousedown = function(p) {
 			var action = shell.startAction(Action.ITEMRESIZE, this.focus, pp);
 			action.align = com;
 			action.startZone = this.focus.getZone();
-			debug('SZ', action.startZone);
 			system.setCursor(com+'-resize');
 
 			return MST.DRAG;
@@ -1281,17 +1274,18 @@ VSpace.prototype.mousedown = function(p) {
  @03: remove this.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function VItemCopse(copse) {
+function VItemCopse(copse, vspace) {
 	this.copse = copse;
 	copse.addListener(this);
 	this.vcopse = {};
+	this.vspace = vspace;
 
 	for(var k in copse.loop()) {
 		var item = copse.get(k);
 		switch (item.get('type')) {
-		case 'Note'     : this.vcopse[k] = new VNote    (copse.get(k)); break;
-		case 'Label'    : this.vcopse[k] = new VLabel   (copse.get(k)); break;
-		case 'Relation' : this.vcopse[k] = new VRelation(copse.get(k)); break;
+		case 'Note'     : this.vcopse[k] = new VNote    (copse.get(k), vspace); break;
+		case 'Label'    : this.vcopse[k] = new VLabel   (copse.get(k), vspace); break;
+		case 'Relation' : this.vcopse[k] = new VRelation(copse.get(k), vspace); break;
 		default : throw new Error('unknown type: '+item.type);
 		}
 	}
@@ -2329,12 +2323,29 @@ VItem.prototype.dragmove = function(p) {
 }
 
 /**
+| Sets the items position and size after an action.
+*/
+VItem.prototype.dragstop = function(p) {
+	var action = shell.action;
+	switch (action.type) {
+	default : return false;
+	case Action.RELBIND :
+		if (!this.getZone().within(p)) return false;
+		VRelation.create(this.vspace, action.vitem, this);
+		system.setCursor('default');
+		shell.redraw = true;
+		return true;
+	}
+}
+
+
+/**
 | Mouse is hovering around.
 | Checks if this item reacts on this.
 */
 VItem.prototype.mousehover = function(p) {
 	if (!this.getZone().within(p)) return false;
-	
+
 	system.setCursor('default');
 	return true;
 }
@@ -2480,21 +2491,28 @@ VNote.prototype.setScrollbar = function(pos) {
 | Sets the items position and size after an action.
 */
 VNote.prototype.dragstop = function(p) {
-	var zone = this.getZone();
+	var action = shell.action;
+	switch (action.type) {
+	default : return VItem.prototype.dragstop.call(this, p);
+	case Action.ITEMDRAG :
+	case Action.ITEMRESIZE :
+		var zone = this.getZone();
 
-	if (zone.width < this.minWidth || zone.height < this.minHeight) {
-		throw new Error('Note under minimum size!');
+		if (zone.width < this.minWidth || zone.height < this.minHeight) {
+			throw new Error('Note under minimum size!');
+		}
+
+		if (this.item.zone.eq(zone)) return;
+		peer.setZone(this.item, zone);
+		// TODO this should happen by setting in peer...
+		this._fabric$flag = false;
+		// adapts scrollbar position
+		this.setScrollbar();
+
+		system.setCursor('default');
+		shell.redraw = true;
+		return true;
 	}
-
-	if (this.item.zone.eq(zone)) return;
-
-	peer.setZone(this.item, zone);
-
-	// TODO this should happen by setting in peer<F12>...
-	this._fabric$flag = false;
-
-	// adapts scrollbar position
-	this.setScrollbar();
 }
 
 /**
@@ -2827,109 +2845,77 @@ VLabel.prototype.getZone = function() {
 | Sets the items position and size aften an action.
 */
 VLabel.prototype.dragstop = function(p) {
-	var zone = this.getZone();
-	var fontsize = this.vdoc.getFontSize();
+	var action = shell.action;
+	switch (action.type) {
+	default : return VItem.prototype.dragstop.call(this, p);
+	case Action.ITEMDRAG :
+	case Action.ITEMRESIZE :
+		var zone = this.getZone();
+		var fontsize = this.vdoc.getFontSize();
 
-	if (!this.item.pnw.eq(zone.pnw)) {
-		peer.setPNW(this.item, zone.pnw);
-		this._fabric$flag = false; // TODO this should happen by setting in peer<F12>...
-	}
-	if (fontsize !== this.item.get('fontsize')) {
-		peer.setFontSize(this.item, fontsize);
-		this._fabric$flag = false; // TODO same
+		if (!this.item.pnw.eq(zone.pnw)) {
+			peer.setPNW(this.item, zone.pnw);
+			this._fabric$flag = false; // TODO this should happen by setting in peer<F12>...
+		}
+		if (fontsize !== this.item.get('fontsize')) {
+			peer.setFontSize(this.item, fontsize);
+			this._fabric$flag = false; // TODO same
+		}
+
+		system.setCursor('default');
+		shell.redraw = true;
+		break;
 	}
 }
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- VRelation
+ ,.   ,. .-,--.     .      .
+ `|  /    `|__/ ,-. |  ,-. |- . ,-. ,-.
+  | /     )| \  |-' |  ,-| |  | | | | |
+  `'      `'  ` `-' `' `-^ `' ' `-' ' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  Relates two items (including other relations)
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /**
 | Constructor.
 */
 function VRelation(item, vspace) {
 	VLabel.call(this, item, vspace);
+	//System.repository.addOnlook(this.id, this.i1id);  TODO
+	//System.repository.addOnlook(this.id, this.i2id);
 }
 subclass(VRelation, VLabel);
 
 /**
-| Constructor.
-|
-| TODO!|
-*/
-/*function Relation(id, i1id, i2id, textZone, dtree) {
-	Item.call(this, id);
-	this.handles      = Relation.handles;
-	this.i1id         = i1id;
-	this.i2id         = i2id;
-	this.dtree        = dtree;
-	dtree.parent      = this;
-	dtree.pre         = true;
-	this.imargin      = Relation.imargin;
-	this.setTextZone(textZone);
-	this._fabric      = new Fabric();
-	this._fabric$flag = false;
-
-	//System.repository.addItem(this, true);
-	//System.repository.addOnlook(this.id, this.i1id);  TODO
-	//System.repository.addOnlook(this.id, this.i2id);
-}
-subclass(Relation, VItem);
-*/
-
-/**
 | Default margin for all relations.
 */
-//Relation.imargin = new Margin(settings.relation.imargin);
+VRelation.imargin = new Margin(settings.relation.imargin);
 
 /**
-| Creates a new Relation.
+| Creates a new Relation by specifing its relates.
 */
-/*Relation.create = function(item1, item2) {
-	throw new Error('TODO');
-	var dtree = new DTree(20);
-	dtree.append(new Para('relates to'));
-	var cline = Line.connect(item1.handlezone, null, item2.handlezone, null); // TODO bindzone
-	var mx = (cline.p1.x + cline.p2.x) / 2; // TODO teach line pc
-	var my = (cline.p1.y + cline.p2.y) / 2;
-	var textZone = new Rect(
-		new Point(R(mx - dtree.width / 2), R(my - dtree.height / 2)),
-		new Point(R(mx + dtree.width / 2), R(my + dtree.height / 2)));
-	return new Relation(null, item1.id, item2.id, textZone, dtree);
-}*/
-
-/**
-| Called when an item is removed.
-*/
-/*Relation.prototype.removed = function() {
-	// TODO
-	//System.repository.removeOnlook(this.id, this.i1id);
-	//System.repository.removeOnlook(this.id, this.i2id);
-}*/
-
-
-/*
-Relation.prototype.draw = function(fabric, action, selection) {
-	var f = this._fabric;
-	var dtree = this.dtree;
-	var it1 = System.repository.items[this.i1id]; // TODO funcall
-	var it2 = System.repository.items[this.i2id];
-	if (!this._fabric$flag) {
-		f.attune(this.textZone);
-		f.edge(settings.relation.style.labeledge, f, 'path');
-		dtree.draw(f, action, selection, this.imargin, 0);
-		this._fabric$flag = true;
-	}
-	var l1 = Line.connect(it1.handlezone, 'normal', this.textZone, 'normal'); // TODO bindzone
-	var l2 = Line.connect(this.textZone,  'normal', it2.handlezone, 'arrow'); // TODO bindzone
-	// TODO combine into one call;
-	fabric.paint(settings.relation.style.fill, settings.relation.style.edge, l1, 'path');
-	fabric.paint(settings.relation.style.fill, settings.relation.style.edge, l2, 'path');
-	// draws text
-	fabric.drawImage(f, this.textZone.pnw);
+VRelation.create = function(vspace, vitem1, vitem2) {
+	var cline = Line.connect(vitem1.getZone(), null, vitem2.getZone(), null);
+	var pnw = cline.pc.sub(settings.relation.createOffset);
+	return peer.newRelation(vspace, pnw, 'relates to', 20, vitem1, vitem2);
 }
-*/
+
+VRelation.prototype.draw = function(fabric) {
+	var vitem1 = this.vspace.vitems.vcopse[this.item.get('item1key')];
+	var vitem2 = this.vspace.vitems.vcopse[this.item.get('item2key')];
+	var zone = this.getZone();
+
+	if (vitem1) {
+		var l1 = Line.connect(vitem1.getZone(), 'normal', zone, 'normal');
+		fabric.paint(settings.relation.style.fill, settings.relation.style.edge, l1, 'path');
+	}
+
+	if (vitem2) {
+		var l2 = Line.connect(zone,  'normal', vitem2.getZone(), 'arrow');
+		fabric.paint(settings.relation.style.fill, settings.relation.style.edge, l2, 'path');
+	}
+
+	VLabel.prototype.draw.call(this, fabric);
+}

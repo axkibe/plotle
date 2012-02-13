@@ -153,7 +153,7 @@ function Peer() {
 	if (asw.ok !== true) throw new Error('Cannot init Repository');
 
 	asw = this.mm.get(-1, spacepath);
-	if (asw.ok !== true) throw new Error('Cannot reget own Space');
+	if (asw.ok !== true) throw new Error('Cannot re-get own Space');
 	system.shell.vspace = new VSpace(asw.node);  // TODO HACK
 }
 
@@ -186,7 +186,7 @@ Peer.prototype.newNote = function(space, zone) {
 	);
 
 	var apath = asw.alts.trg.path;
-	if (!(apath instanceof Path)) throw new Error('Cannot reget new Note');
+	if (!(apath instanceof Path)) throw new Error('Cannot re-get new item');
 
 	this.mm.alter(-1,
 		new Signature({
@@ -256,9 +256,9 @@ Peer.prototype.setPNW = function(item, pnw) {
 }
 
 /**
-| Creates a new note.
+| Creates a new label.
 */
-Peer.prototype.newLabel = function(space, pnw, fontsize) {
+Peer.prototype.newLabel = function(space, pnw, text, fontsize) {
 	var path = new Path(space);
 	path.push('items');
 	path.push('$new');
@@ -273,7 +273,7 @@ Peer.prototype.newLabel = function(space, pnw, fontsize) {
 					alley: [
 	                	{
 		            		type: 'Para',
-		            		text: 'Label',
+		            		text: text,
 		            	},
 					]
 				},
@@ -284,7 +284,55 @@ Peer.prototype.newLabel = function(space, pnw, fontsize) {
 	);
 
 	var apath = asw.alts.trg.path;
-	if (!(apath instanceof Path)) throw new Error('Cannot reget new Note');
+	if (!(apath instanceof Path)) throw new Error('Cannot re-get new item');
+
+	this.mm.alter(-1,
+		new Signature({
+			proc: 'arrange',
+			val: apath.get(-1),
+		}),
+		new Signature({
+			at1 : 0,
+			path: new Path([space.key$, 'z']), // TODO getOwnKey
+		})
+	);
+
+	var k = apath.get(-1);
+	return space.items.get(k);
+}
+
+/**
+| Creates a new relation.
+*/
+Peer.prototype.newRelation = function(space, pnw, text, fontsize, vitem1, vitem2) {
+	var path = new Path(space);
+	path.push('items');
+	path.push('$new');
+
+	var asw = this.mm.alter(-1,
+		new Signature({
+			val: {
+				'type': 'Relation',
+				'item1key': vitem1.getOwnKey(),
+				'item2key': vitem2.getOwnKey(),
+				'pnw': pnw,
+				'doc': {
+					fontsize : fontsize,
+					alley: [
+	                	{
+		            		type: 'Para',
+		            		text: text,
+		            	},
+					]
+				},
+			},
+		}), new Signature({
+			path: path,
+		})
+	);
+
+	var apath = asw.alts.trg.path;
+	if (!(apath instanceof Path)) throw new Error('Cannot re-get new Item');
 
 	this.mm.alter(-1,
 		new Signature({
