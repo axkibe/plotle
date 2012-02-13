@@ -353,9 +353,9 @@ function System(FrontFace) {
 	| Mouse down event.
 	*/
 	function onmousewheel(event) {
-		var wheel = event.wheelDelta || event.detail;
-		wheel = wheel > 0 ? 1 : -1;
-		this.shell.mousewheel(wheel);
+		var p = new Point(event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop);
+		var dir = (event.wheelDelta || event.detail) > 0 ? 1 : -1;
+		this.shell.mousewheel(p, dir, event.shiftKey, event.ctrlKey);
 	}
 
 	/**

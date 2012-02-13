@@ -230,6 +230,9 @@ var settings = {
 
 	// scrollbar
 	scrollbar : {
+		// pixels to scroll for a wheel event
+		textWheelSpeed : 12,
+
 		style : {
 			fill : 'rgb(255, 188, 87)',
 			edge : [
@@ -837,17 +840,12 @@ Shell.prototype.dragstop = function(p, shift, ctrl) {
 /**
 | Mouse wheel has turned
 */
-Shell.prototype.mousewheel = function(wheel) {
-	log('shell', 'wheel', wheel);
-	/*
-	if (wheel > 0) {
-		this.zoom *= 1.1;
-	} else {
-		this.zoom /= 1.1;
-	}
-	if (abs(this.zoom - 1) < 0.0001) {
-		this.zoom = 1;
-	}*/
+Shell.prototype.mousewheel = function(p, dir, shift, ctrl) {
+	this.shift = shift;
+	this.ctrl  = ctrl;
+	// TODO cockpict
+	this.vspace.mousewheel(p, dir);
+	if (this.redraw) this._draw();
 }
 
 /**
@@ -991,6 +989,20 @@ VSpace.prototype.setFocus = function(vitem) {
 }
 
 /**
+| Mouse wheel
+*/
+VSpace.prototype.mousewheel = function(p, dir) {
+	var pp = p.sub(this.fabric.pan);
+	for(var zi = 0, zlen = this.space.z.length; zi < zlen; zi++) {
+		var vitem = this.vitems.vcopse[this.space.z.get(zi)];
+		if (vitem.mousewheel(pp, dir)) { return true; }
+	}
+	
+	// @03 zooming.
+	return true;
+}
+
+/**
 | Mouse hover.
 |
 | Returns true if the mouse pointer hovers over anything.
@@ -1050,35 +1062,6 @@ VSpace.prototype.mousehover = function(p) {
 	if (!hit) system.setCursor('crosshair');
 	return true;
 }
-
-/**
-| Binds a relation.
-*/
-/*VSpace.prototype.actionRBindTo = function(toItem) {
-	throw new Error('TODO');
-
-	if (toItem.id === this.iaction.item.id) {
-		console.log('not binding to itself');
-		system.setCursor('default');
-		return;
-	}
-	var rel = Relation.create(this.iaction.item, toItem);
-	system.repository.updateItem(rel);
-}*/
-
-/**
-| Hovering during relation binding.
-*/
-/* Space.prototype.actionRBindHover = function(toItem) {
-	throw new Error('TODO');
-
-	if (toItem.id === this.iaction.item.id) {
-		system.setCursor('not-allowed');
-		return;
-	}
-	system.setCursor('default');
-	this.iaction.item2 = toItem;
-}*/
 
 /**
 | Starts an operation with the mouse button held down.
@@ -2571,6 +2554,17 @@ VNote.prototype.draw = function(fabric) {
 }
 
 /**
+| Mouse wheel turned.
+*/
+VNote.prototype.mousewheel = function(p, dir) {
+	if (!this.getZone().within(p)) return false;
+	this.setScrollbar(this.scrollbarY.getPos() - dir * settings.scrollbar.textWheelSpeed);
+	this._fabric$flag = false;	
+	shell.redraw = true;
+	return true;
+}
+
+/**
 | Returns the width for the contents flow.
 */
 VNote.prototype.getFlowWidth = function() {
@@ -2797,8 +2791,14 @@ VLabel.prototype.fontSizeChange = function(fontsize) {
 /**
 | Returns the para seperation height.
 */
-VLabel.prototype.getParaSep = function(fontsize) {
-	return 0;
+VLabel.prototype.getParaSep = function(fontsize) { return 0; }
+
+/**
+| Mouse wheel turned.
+*/
+VLabel.prototype.mousewheel = function(p, dir) {
+	if (!this.getZone().within(p)) return false;
+	return true;
 }
 
 /**
