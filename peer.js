@@ -111,14 +111,14 @@ function Peer() {
 		      },
 		      '1' : {
 		        type: 'Label',
-		        pnw: { 'x': 700, 'y': 200 },
+		        pnw: { 'x': 200, 'y': 250 },
 		        doc: {
 		          fontsize : 90,
 
 		          alley : [
 		            {
 		              type: 'Para',
-		              text: 'abcdefghijkl',
+		              text: 'FooBar',
 		            },
 		          ],
 		        },

@@ -1211,8 +1211,8 @@ VSpace.prototype.mousedown = function(p) {
 			var nw = settings.note.newWidth;
 			var nh = settings.note.newHeight;
 			var pnw = fm.p.sub(this.fabric.pan.x + half(nw) , this.fabric.pan.y + half(nh));
-			var pse = pnw.add(nw, nh);
-			var note  = peer.newNote(this.space, new Rect(pnw, pse));
+			var note  = peer.newNote(this.space, new Rect(pnw, pnw.add(nw, nh)));
+			// TODO move VNote creation into event listener
 			var vnote = new VNote(note, this);
 			this.vitems.vcopse[note.getOwnKey()] = vnote;
 			this.setFocus(vnote);
@@ -1221,6 +1221,7 @@ VSpace.prototype.mousedown = function(p) {
 			var pnw = fm.p.sub(this.fabric.pan);
 			pnw = pnw.sub(settings.label.createOffset);
 			var label = peer.newLabel(this.space, pnw, 'Label', 20);
+			// TODO move VLabel creation into event listener
 			var vlabel = new VLabel(label, this);
 			this.vitems.vcopse[label.getOwnKey()] = vlabel;
 			this.setFocus(vlabel);
@@ -1296,6 +1297,7 @@ function VItemCopse(copse, vspace) {
 */
 VItemCopse.prototype.event = function(type, key, p1, p2, p3) {
 	log('event', 'vitemcopse', type, key, p1, p2, p3);
+
 	switch(type) {
 	case 'set' :
 		var vitem = this.vcopse[key];
@@ -2883,7 +2885,7 @@ VLabel.prototype.dragstop = function(p) {
 */
 function VRelation(item, vspace) {
 	VLabel.call(this, item, vspace);
-	//System.repository.addOnlook(this.id, this.i1id);  TODO
+	//System.repository.addOnlook(this.id, this.i1id);  @03
 	//System.repository.addOnlook(this.id, this.i2id);
 }
 subclass(VRelation, VLabel);
@@ -2899,7 +2901,11 @@ VRelation.imargin = new Margin(settings.relation.imargin);
 VRelation.create = function(vspace, vitem1, vitem2) {
 	var cline = Line.connect(vitem1.getZone(), null, vitem2.getZone(), null);
 	var pnw = cline.pc.sub(settings.relation.createOffset);
-	return peer.newRelation(vspace, pnw, 'relates to', 20, vitem1, vitem2);
+	var rel = peer.newRelation(vspace.space, pnw, 'relates to', 20, vitem1.item, vitem2.item);
+	// TODO move VRelation creation into event listener.
+	var vrel = new VRelation(rel, vspace);
+	vspace.vitems.vcopse[rel.getOwnKey()] = vrel;
+	vspace.setFocus(vrel);
 }
 
 VRelation.prototype.draw = function(fabric) {
