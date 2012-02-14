@@ -1952,7 +1952,7 @@ VDoc.prototype.event = function(type, key, p1, p2, p3) {
 | imargin: distance of text to edge
 | scrollp: scroll position
 */
-VDoc.prototype.draw = function(fabric, imargin, scrollp) {
+VDoc.prototype.draw = function(fabric, width, imargin, scrollp) {
 	// @03 <pre>
 	var paraSep = this.vitem.getParaSep(this.getFontSize());
 	var select = shell.selection;
@@ -1961,7 +1961,7 @@ VDoc.prototype.draw = function(fabric, imargin, scrollp) {
 	if (select.active && select.mark1.entity.vdoc === this) {
 		fabric.paint(
 			settings.selection.style.fill, settings.selection.style.edge,
-			this, 'pathSelection', imargin, scrollp
+			this, 'pathSelection', width, imargin, scrollp
 		);
 	}
 
@@ -2041,16 +2041,18 @@ VDoc.prototype.getVParaAtPoint = function(p) {
 /**
 | Paths a selection
 */
-VDoc.prototype.pathSelection = function(fabric, border, twist, imargin, scrollp) {
+VDoc.prototype.pathSelection = function(fabric, border, twist, width, imargin, scrollp) {
 	// TODO make part of selection to use shortcut with XYi
 	var select = shell.selection;
+	var sp = scrollp;
 	var m1 = select.mark1;
 	var m2 = select.mark2;
-
+	var pnw1 = m1.entity.pnw;
+	var pnw2 = m2.entity.pnw
 	var p1 = m1.entity.getOffsetPoint(m1.offset);
-	p1 = p1.add(m1.entity.pnw).sub(scrollp);
 	var p2 = m2.entity.getOffsetPoint(m2.offset);
-	p2 = p2.add(m2.entity.pnw).sub(scrollp);
+	p1 = p1.add(R(pnw2.x - sp.x), R(pnw2.y - sp.y));
+	p2 = p2.add(R(pnw2.x - sp.x), R(pnw2.y - sp.y));
 
 	if (p2.y < p1.y || (p2.y === p1.y && p2.x < p1.x)) {
 		m1 = select.mark2;
@@ -2061,10 +2063,9 @@ VDoc.prototype.pathSelection = function(fabric, border, twist, imargin, scrollp)
 	var fontsize = this.getFontSize();
 	fabric.beginPath(twist);
 	var descend = R(fontsize * settings.bottombox);
-	var height  = fontsize + descend;
-
-	var rx = this.width + half(imargin.e);
-	var lx = half(imargin.w);
+	var height  = fontsize + descend; // TODO used?
+	var rx = width - imargin.e;
+	var lx = imargin.w;
 	if ((abs(p2.y - p1.y) < 2)) {
 		// ***
 		fabric.moveTo(p1.x, p1.y + descend);
@@ -2072,36 +2073,35 @@ VDoc.prototype.pathSelection = function(fabric, border, twist, imargin, scrollp)
 		fabric.lineTo(p2.x, p2.y - fontsize);
 		fabric.lineTo(p2.x, p2.y + descend);
 		fabric.lineTo(p1.x, p1.y + descend);
-	}
-	/* else if (abs(by + lh - ey) < 2 && (bx >= ex))  {
+	} else if (abs(p1.y + height - p2.y) < 2 && (p2.x <= p1.x))  {
 		//      ***
 		// ***
-		fabric.moveTo(rx, by + lh);
-		fabric.lineTo(bx, by + lh);
-		fabric.lineTo(bx, by);
-		fabric.lineTo(rx, by);
+		fabric.moveTo(rx,   p1.y - fontsize);
+		fabric.lineTo(p1.x, p1.y - fontsize);
+		fabric.lineTo(p1.x, p1.y + descend);
+		fabric.lineTo(rx,   p1.y + descend);
 
-		fabric.moveTo(lx, ey);
-		fabric.lineTo(ex, ey);
-		fabric.lineTo(ex, ey + lh);
-		fabric.lineTo(lx, ey + lh);
+		fabric.moveTo(lx,   p2.y - fontsize);
+		fabric.lineTo(p2.x, p2.y - fontsize);
+		fabric.lineTo(p2.x, p2.y + descend);
+		fabric.lineTo(lx,   p2.y + descend);
 	} else {
 		//    *****
 		// *****
-		fabric.moveTo(rx, ey);
-		fabric.lineTo(ex, ey);
-		fabric.lineTo(ex, ey + lh);
-		fabric.lineTo(lx, ey + lh);
+		fabric.moveTo(rx,   p2.y - fontsize);
+		fabric.lineTo(p2.x, p2.y - fontsize);
+		fabric.lineTo(p2.x, p2.y + descend);
+		fabric.lineTo(lx,   p2.y + descend);
 
 		if (twist)
-			fabric.moveTo(lx, by + lh);
+			fabric.moveTo(lx, p1.y + descend);
 		else
-			fabric.lineTo(lx, by + lh);
-		fabric.lineTo(bx, by + lh);
-		fabric.lineTo(bx, by);
-		fabric.lineTo(rx, by);
-		if (!twist) fabric.lineTo(rx, ey);
-	}*/
+			fabric.lineTo(lx, p1.y + descend);
+		fabric.lineTo(p1.x, p1.y + descend);
+		fabric.lineTo(p1.x, p1.y - fontsize);
+		fabric.lineTo(rx,   p1.y - fontsize);
+		if (!twist) fabric.lineTo(rx, p2.y - fontsize);
+	}
 
 }
 
@@ -2555,7 +2555,7 @@ VNote.prototype.draw = function(fabric) {
 
 		// draws selection and text
 		sbary.point = Point.renew(0, sbary.getPos(), sbary.point);
-		vdoc.draw(f, imargin, sbary.point);
+		vdoc.draw(f, zone.width, imargin, sbary.point);
 
 		// draws the scrollbar
 		if (sbary.visible) {
@@ -2766,7 +2766,7 @@ VLabel.prototype.draw = function(fabric) {
 		var silhoutte = this.getSilhoutte(zone, true);
 
 		// draws selection and text
-		vdoc.draw(f, imargin, Point.zero);
+		vdoc.draw(f, zone.width, imargin, Point.zero);
 
 		// draws the border
 		f.edge(settings.label.style.edge, silhoutte, 'path');

@@ -51,7 +51,7 @@ function Peer() {
 		        type: 'Note',
 		        zone: {
 		          pnw : { 'x':  10, 'y':  10 },
-		          pse : { 'x': 178, 'y': 140 },
+		          pse : { 'x': 378, 'y': 140 },
 		        },
 		        doc: {
 		          fontsize : 13,
@@ -59,7 +59,8 @@ function Peer() {
 		          alley : [
 		            {
 		              type: 'Para',
-		              text: 'If you can dream---and not make dreams your master;',
+		              //text: 'If you can dream---and not make dreams your master;',
+		              text: 'If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;',
 		            }, {
 	                  type: 'Para',
 	                  text: 'If you can think---and not make thoughts your aim,',
