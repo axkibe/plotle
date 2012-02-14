@@ -69,6 +69,11 @@ var opposite      = Fabric.opposite;
 // configures meshcraft-woods.
 Woods.cogging = true;
 
+/**
+| Debugging mode, don't cache anything.
+*/
+var noCache = true;
+
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .---.     .  .
  \___  ,-. |- |- . ,-. ,-. ,-.
@@ -78,11 +83,10 @@ Woods.cogging = true;
                         `'
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-
 var settings = {
 	// standard font
-	//defaultFont : 'Zapfino, Verdana,Geneva,Kalimati,sans-serif',
 	defaultFont : 'Verdana,Geneva,Kalimati,sans-serif',
+	//defaultFont : 'Freebooter Script,Verdana,Geneva,Kalimati,sans-serif',
 
 	// milliseconds after mouse down, dragging starts
 	dragtime : 400,
@@ -471,11 +475,11 @@ function Selection() {
 | Sets begin/end so begin is before end.
 */
 Selection.prototype.normalize = function() {
-	var e1 = this.mark1.element;
-	var e2 = this.mark2.element;
+	var m1 = this.mark1;
+	var m2 = this.mark2;
 
-	if (e1 === e2) {
-		if (this.mark1.offset <= this.mark2.offset) {
+	if (m1.entity === m2.entity) {
+		if (m1.offset <= m2.offset) {
 			this.begin = this.mark1;
 			this.end   = this.mark2;
 		} else {
@@ -484,11 +488,12 @@ Selection.prototype.normalize = function() {
 		}
 		return;
 	}
+	var k1 = m1.entity.para.getOwnKey();
+	var k2 = m2.entity.para.getOwnKey();
 
-	var pn;
-	for (pn = e1.parent.next; pn && pn.first != e2; pn = pn.next);
+	if (k1 === k2) throw new Error('sel has equal keys');
 
-	if (!pn) {
+	if (k1 < k2) {
 		this.end   = this.mark1;
 		this.begin = this.mark2;
 	} else {
@@ -503,15 +508,19 @@ Selection.prototype.normalize = function() {
 Selection.prototype.innerText = function() {
 	if (!this.active) return '';
 	this.normalize();
-	var be = this.begin.element;
-	var bo = this.begin.offset;
-	var ee = this.end.element;
-	var eo = this.end.offset;
-	var bet = be.text;
-	if (be == ee) {
-		return bet.substring(bo, eo);
+	var b = this.begin;
+	var e = this.end;
+
+	if (b.entity === b.entity) {
+		var text = b.entity.para.get('text');
+		var itxt = text.substring(b.offset, e.offset);
+		debug('itext', itxt);
+		return itxt;
 	}
 
+	return 'TODO';
+
+	/*
 	var buf = [bet.substring(bo, bet.length)];
 	for (var n = be.parent.next.first; n != ee; n = n.parent.next.first) {
 		// ^ TODO make multi child compatible
@@ -522,6 +531,7 @@ Selection.prototype.innerText = function() {
 	buf.push('\n');
 	buf.push(ee.text.substring(0, eo));
 	return buf.join('');
+	*/
 }
 
 /**
@@ -562,10 +572,9 @@ Selection.prototype.remove = function() {
 /**
 | Deselects the selection.
 */
-Caret.prototype.deselect = function() {
-	if (!this.selection.active) return;
-	var item = this.selection.mark1.item;
-	this.selection.active = false;
+Selection.prototype.deselect = function() {
+	if (!this.active) return;
+	this.active = false;
 	system.setInput('');
 }
 
@@ -898,7 +907,7 @@ Hexmenu.prototype.draw = function() {
 	}
 	f.edge(settings.floatmenu.style.edge, this.hflower, 'path', 'structure');
 
-	f.fontStyle('12px ' + settings.defaultFont, 'black', 'center', 'middle');
+	f.fontStyle('12px '+settings.defaultFont, 'black', 'center', 'middle');
 	var labels = this.labels;
 
 	var rd = this.style.outerRadius * (1 - 1 / 3.5);
@@ -997,7 +1006,7 @@ VSpace.prototype.mousewheel = function(p, dir) {
 		var vitem = this.vitems.vcopse[this.space.z.get(zi)];
 		if (vitem.mousewheel(pp, dir)) { return true; }
 	}
-	
+
 	// @03 zooming.
 	return true;
 }
@@ -1506,7 +1515,9 @@ VPara.prototype.specialKey = function(keycode) {
 			shell.redraw = true;
 			break;
 		}
-	} else if (shell.shift && !select.active) {
+	} else*/
+
+	if (shell.shift && !select.active) {
 		switch(keycode) {
 		case 35 : // end
 		case 36 : // pos1
@@ -1514,9 +1525,9 @@ VPara.prototype.specialKey = function(keycode) {
 		case 38 : // up
 		case 39 : // right
 		case 40 : // down
-			select.mark1.set(caret);
+			select.mark1.set(caret.entity, caret.offset);
 		}
-	}*/
+	}
 
 	switch(keycode) {
 	case  8 : // backspace
@@ -1621,8 +1632,7 @@ VPara.prototype.specialKey = function(keycode) {
 	}
 
 
-	/*
-	if (shell.shift && refresh) {
+	if (shell.shift) {
 		switch(keycode) {
 		case 35 : // end
 		case 36 : // pos1
@@ -1631,16 +1641,15 @@ VPara.prototype.specialKey = function(keycode) {
 		case 39 : // right
 		case 40 : // down
 			select.active = true;
-			select.mark2.set(caret);
+			select.mark2.set(caret.entity, caret.offset);
 			system.setInput(select.innerText());
-			// clears item cache
-			item.listen();  // TODO rename.
+			// TODO cache clearing
 			shell.redraw = true;
 		}
-	}*/
+	}
 
 	caret.show();
-	shell.redraw = true; // TODO?
+	shell.redraw = true; // @@ might be optimized
 }
 
 /**
@@ -1663,7 +1672,9 @@ VPara.prototype.getFabric = function() {
 	var height = this.getHeight();
 
 	// cache hit?
-	if (this._fabric$flag && this._fabric$width === width && this._fabric$height === height) {
+	if (!noCache && this._fabric$flag &&
+		this._fabric$width === width && this._fabric$height === height
+	) {
 		return this._fabric$;
 	}
 
@@ -1812,63 +1823,6 @@ VPara.prototype.drawCaret = function() {
 | scrolly : scroll position of item
 */
 /*
-DTree.prototype.pathSelection = function(fabric, border, edge, select, imargin, scrolly) {
-	// TODO make part of selection to use shortcut with XY
-	var b = select.mark1;
-	var e = select.mark2;
-	var bp = b.getPoint();
-	var ep = e.getPoint();
-	if (ep.y < bp.y || (ep.y == bp.y && ep.x < bp.x)) {
-		b = select.mark2;
-		e = select.mark1;
-		{ var _ = bp; bp = ep; ep = _; }
-	}
-
-	fabric.beginPath();
-	var lh = R(this.fontsize * (1 + settings.bottombox));
-	var bx = R(bp.x);
-	var by = R(bp.y - scrolly);
-	var ex = R(ep.x);
-	var ey = R(ep.y - scrolly);
-	var rx = this.width + half(imargin.e);
-	var lx = half(imargin.w);
-	if ((abs(by - ey) < 2)) {
-		// ***
-		fabric.moveTo(bx, by, edge);
-		fabric.lineTo(bx, by + lh, edge);
-		fabric.lineTo(ex, ey + lh, edge);
-		fabric.lineTo(ex, ey, edge);
-		fabric.lineTo(bx, by, edge);
-	} else if (abs(by + lh - ey) < 2 && (bx >= ex))  {
-		//      ***
-		// ***
-		fabric.moveTo(rx, by + lh, edge);
-		fabric.lineTo(bx, by + lh, edge);
-		fabric.lineTo(bx, by, edge);
-		fabric.lineTo(rx, by, edge);
-
-		fabric.moveTo(lx, ey, edge);
-		fabric.lineTo(ex, ey, edge);
-		fabric.lineTo(ex, ey + lh, edge);
-		fabric.lineTo(lx, ey + lh, edge);
-	} else {
-		//    *****
-		// *****
-		fabric.moveTo(rx, ey, edge);
-		fabric.lineTo(ex, ey, edge);
-		fabric.lineTo(ex, ey + lh, edge);
-		fabric.lineTo(lx, ey + lh, edge);
-
-		if (edge)
-			fabric.moveTo(lx, by + lh, edge);
-		else
-			fabric.lineTo(lx, by + lh, edge);
-		fabric.lineTo(bx, by + lh, edge);
-		fabric.lineTo(bx, by, edge);
-		fabric.lineTo(rx, by, edge);
-		if (!edge) fabric.lineTo(rx, ey, edge);
-	}
-}
 */
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1901,26 +1855,29 @@ function Scrollbar(item) {
 | Makes the path for fabric.edge/fill/paint.
 | TODO change descr on all path()s
 */
-Scrollbar.prototype.path = function(fabric, border, edge) {
+Scrollbar.prototype.path = function(fabric, border, twist) {
 	if (border !== 0)  throw new Error('Scrollbar.path does not support borders');
 	if (!this.visible) throw new Error('Pathing an invisible scrollbar');
 
-	var z = this.zone;
-	var w = z.width;
-	var size  = R(this.aperture * z.height / this.max);
-	var msize = max(size, settings.scrollbar.minSize);
-	var sy = z.pnw.y + R(this._pos * ((z.height - msize + size) / this.max));
+	var z      = this.zone;
+	var w      = z.width;
+	var co30w2 = cos30 * w / 2;
+	var w025   = R(w * 0.25);
+	var w075   = R(w * 0.75);
+	var size   = R(this.aperture * z.height / this.max);
+	var msize  = max(size, settings.scrollbar.minSize);
+	var sy     = z.pnw.y + R(this._pos * ((z.height - msize + size) / this.max));
 
-	fabric.beginPath();
-	fabric.moveTo(z.pnw.x,                R(sy + cos30 * w / 2), edge);
-	fabric.lineTo(z.pnw.x + R(w / 4),     sy,                    edge);
-	fabric.lineTo(z.pnw.x + R(w * 3 / 4), sy,                    edge);
-	fabric.lineTo(z.pse.x,                R(sy + cos30 * w / 2), edge);
+	fabric.beginPath(twist);
+	fabric.moveTo(z.pnw.x,        R(sy + co30w2));
+	fabric.lineTo(z.pnw.x + w025, sy);
+	fabric.lineTo(z.pnw.x + w075, sy);
+	fabric.lineTo(z.pse.x,        R(sy + co30w2));
 
-	fabric.lineTo(z.pse.x,                R(sy + msize - cos30 * w / 2), edge);
-	fabric.lineTo(z.pnw.x + R(w * 3 / 4), sy + msize,                    edge);
-	fabric.lineTo(z.pnw.x + R(w / 4),     sy + msize,                    edge);
-	fabric.lineTo(z.pnw.x,                R(sy + msize - cos30 * w / 2), edge);
+	fabric.lineTo(z.pse.x,        R(sy + msize - co30w2));
+	fabric.lineTo(z.pnw.x + w075, sy + msize);
+	fabric.lineTo(z.pnw.x + w025, sy + msize);
+	fabric.lineTo(z.pnw.x,        R(sy + msize - co30w2));
 	fabric.closePath();
 }
 
@@ -1998,19 +1955,15 @@ VDoc.prototype.event = function(type, key, p1, p2, p3) {
 VDoc.prototype.draw = function(fabric, imargin, scrollp) {
 	// @03 <pre>
 	var paraSep = this.vitem.getParaSep(this.getFontSize());
+	var select = shell.selection;
 
 	// draws the selection
-	/* TODO
-	if (selection.active && selection.mark1.item === this.parent) {
-		// TODO make paint()
-		fabric.fill(
-			settings.selection.style.fill, this, 'pathSelection',
-			selection, imargin, scrolly);
-		fabric.edge(
-			settings.selection.style.edge, this, 'pathSelection',
-			selection, imargin, scrolly);
+	if (select.active && select.mark1.entity.vdoc === this) {
+		fabric.paint(
+			settings.selection.style.fill, settings.selection.style.edge,
+			this, 'pathSelection', imargin, scrollp
+		);
 	}
-	*/
 
 	var y = imargin.n;
 
@@ -2083,6 +2036,73 @@ VDoc.prototype.getVParaAtPoint = function(p) {
 		if (p.y < vpara.pnw.y + flow.height) return vpara;
 	}
 	return null;
+}
+
+/**
+| Paths a selection
+*/
+VDoc.prototype.pathSelection = function(fabric, border, twist, imargin, scrollp) {
+	// TODO make part of selection to use shortcut with XYi
+	var select = shell.selection;
+	var m1 = select.mark1;
+	var m2 = select.mark2;
+
+	var p1 = m1.entity.getOffsetPoint(m1.offset);
+	p1 = p1.add(m1.entity.pnw).sub(scrollp);
+	var p2 = m2.entity.getOffsetPoint(m2.offset);
+	p2 = p2.add(m2.entity.pnw).sub(scrollp);
+
+	if (p2.y < p1.y || (p2.y === p1.y && p2.x < p1.x)) {
+		m1 = select.mark2;
+		m2 = select.mark1;
+		var p_ = p1; p1 = p2; p2 = p_;
+	}
+
+	var fontsize = this.getFontSize();
+	fabric.beginPath(twist);
+	var descend = R(fontsize * settings.bottombox);
+	var height  = fontsize + descend;
+
+	var rx = this.width + half(imargin.e);
+	var lx = half(imargin.w);
+	if ((abs(p2.y - p1.y) < 2)) {
+		// ***
+		fabric.moveTo(p1.x, p1.y + descend);
+		fabric.lineTo(p1.x, p1.y - fontsize);
+		fabric.lineTo(p2.x, p2.y - fontsize);
+		fabric.lineTo(p2.x, p2.y + descend);
+		fabric.lineTo(p1.x, p1.y + descend);
+	}
+	/* else if (abs(by + lh - ey) < 2 && (bx >= ex))  {
+		//      ***
+		// ***
+		fabric.moveTo(rx, by + lh);
+		fabric.lineTo(bx, by + lh);
+		fabric.lineTo(bx, by);
+		fabric.lineTo(rx, by);
+
+		fabric.moveTo(lx, ey);
+		fabric.lineTo(ex, ey);
+		fabric.lineTo(ex, ey + lh);
+		fabric.lineTo(lx, ey + lh);
+	} else {
+		//    *****
+		// *****
+		fabric.moveTo(rx, ey);
+		fabric.lineTo(ex, ey);
+		fabric.lineTo(ex, ey + lh);
+		fabric.lineTo(lx, ey + lh);
+
+		if (twist)
+			fabric.moveTo(lx, by + lh);
+		else
+			fabric.lineTo(lx, by + lh);
+		fabric.lineTo(bx, by + lh);
+		fabric.lineTo(bx, by);
+		fabric.lineTo(rx, by);
+		if (!twist) fabric.lineTo(rx, ey);
+	}*/
+
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2164,7 +2184,7 @@ VItem.prototype.checkItemCompass = function(p) {
 /**
 | Paths the resize handles.
 */
-VItem.prototype.pathResizeHandles = function(fabric, border, edge) {
+VItem.prototype.pathResizeHandles = function(fabric, border, twist) {
 	if (border !== 0) throw new Error('borders unsupported for handles');
 	var ha = this.handles;
 	var zone = this.getZone();
@@ -2182,42 +2202,42 @@ VItem.prototype.pathResizeHandles = function(fabric, border, edge) {
 	var xm = half(x1 + x2);
 	var ym = half(y1 + y2);
 
-	fabric.beginPath();
+	fabric.beginPath(twist);
 	if (ha.n ) {
-		fabric.moveTo(xm - hs2, y1, edge);
-		fabric.lineTo(xm + hs2, y1, edge);
+		fabric.moveTo(xm - hs2, y1);
+		fabric.lineTo(xm + hs2, y1);
 	}
 	if (ha.ne) {
-		fabric.moveTo(x2 - hs,  y1, edge);
-		fabric.lineTo(x2, y1, edge);
-		fabric.lineTo(x2, y1 + hs, edge);
+		fabric.moveTo(x2 - hs,  y1);
+		fabric.lineTo(x2, y1);
+		fabric.lineTo(x2, y1 + hs);
 	}
 	if (ha.e ) {
-		fabric.moveTo(x2, ym - hs2, edge);
-		fabric.lineTo(x2, ym + hs2, edge);
+		fabric.moveTo(x2, ym - hs2);
+		fabric.lineTo(x2, ym + hs2);
 	}
 	if (ha.se) {
-		fabric.moveTo(x2, y2 - hs,  edge);
-		fabric.lineTo(x2, y2, edge);
-		fabric.lineTo(x2 - hs, y2, edge);
+		fabric.moveTo(x2, y2 - hs);
+		fabric.lineTo(x2, y2);
+		fabric.lineTo(x2 - hs, y2);
 	}
 	if (ha.s ) {
-		fabric.moveTo(xm - hs2, y2, edge);
-		fabric.lineTo(xm + hs2, y2, edge);
+		fabric.moveTo(xm - hs2, y2);
+		fabric.lineTo(xm + hs2, y2);
 	}
 	if (ha.sw) {
-		fabric.moveTo(x1 + hs, y2,  edge);
-		fabric.lineTo(x1, y2, edge);
-		fabric.lineTo(x1, y2 - hs, edge);
+		fabric.moveTo(x1 + hs, y2);
+		fabric.lineTo(x1, y2);
+		fabric.lineTo(x1, y2 - hs);
 	}
 	if (ha.w ) {
-		fabric.moveTo(x1, ym - hs2, edge);
-		fabric.lineTo(x1, ym + hs2, edge);
+		fabric.moveTo(x1, ym - hs2);
+		fabric.lineTo(x1, ym + hs2);
 	}
 	if (ha.nw) {
-		fabric.moveTo(x1, y1 + hs,  edge);
-		fabric.lineTo(x1, y1, edge);
-		fabric.lineTo(x1 + hs, y1, edge);
+		fabric.moveTo(x1, y1 + hs);
+		fabric.lineTo(x1, y1);
+		fabric.lineTo(x1 + hs, y1);
 	}
 }
 
@@ -2510,7 +2530,7 @@ VNote.prototype.draw = function(fabric) {
 	var zone = this.getZone();
 
 	// no buffer hit?
-	if (!this._fabric$flag || !this._fabric$size ||
+	if (noCache || !this._fabric$flag || !this._fabric$size ||
 		zone.width  !== this._fabric$size.width ||
 		zone.height !== this._fabric$size.height)
 	{
@@ -2559,7 +2579,7 @@ VNote.prototype.draw = function(fabric) {
 VNote.prototype.mousewheel = function(p, dir) {
 	if (!this.getZone().within(p)) return false;
 	this.setScrollbar(this.scrollbarY.getPos() - dir * settings.scrollbar.textWheelSpeed);
-	this._fabric$flag = false;	
+	this._fabric$flag = false;
 	shell.redraw = true;
 	return true;
 }
@@ -2734,7 +2754,7 @@ VLabel.prototype.draw = function(fabric) {
 	var zone = this.getZone();
 
 	// no buffer hit?
-	if (!this._fabric$flag || !this._fabric$size ||
+	if (noCache || !this._fabric$flag || !this._fabric$size ||
 		zone.width  !== this._fabric$size.width ||
 		zone.height !== this._fabric$size.height)
 	{

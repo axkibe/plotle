@@ -513,15 +513,15 @@ Path.prototype.equals = function(o) {
 | True if this path is a subpath of another.
 |
 | o: the other path
-| [slen]: the length of this path to consider.
+| [len]: the length of this path to consider.
 */
-Path.prototype.like = function(o, slen) {
-	if (!is(slen)) slen  = this.length;
-	if (slen < 0)  slen += this.length;
-	if (slen < 0)  slen  = 0;
+Path.prototype.like = function(o, len) {
+	if (!is(len)) len  = this.length;
+	if (len < 0)  len += this.length;
+	if (len < 0)  len  = 0;
 
-	if (slen > o.length) return false;
-	for(var i = 0; i < slen; i++) {
+	if (len > o.length) return false;
+	for(var i = 0; i < len; i++) {
 		if (this._path[i] !== o._path[i]) return false;
 	}
 	return true;

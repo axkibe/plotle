@@ -51,7 +51,7 @@ function Peer() {
 		        type: 'Note',
 		        zone: {
 		          pnw : { 'x':  10, 'y':  10 },
-		          pse : { 'x': 478, 'y': 140 },
+		          pse : { 'x': 178, 'y': 140 },
 		        },
 		        doc: {
 		          fontsize : 13,

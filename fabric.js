@@ -40,7 +40,6 @@ var Fabric;
 /**
 | Capsule
 */
-
 (function(){
 
 'use strict';
@@ -105,17 +104,19 @@ function lazyFixate(proto, key, getter) {
 	});
 };
 
-/* divides by 2 and rounds up */
-function half(v) {
-	return Math.round(v / 2);
-};
+/**
+| Shortcuts
+*/
+var R     = Math.round;
+var PI    = Math.PI;
+var cos   = Math.cos;
+var sin   = Math.sin;
+var tan   = Math.tan;
+var cos30 = cos(PI / 6);   // cos(30°)
+var tan30 = tan(PI / 6);   // tan(30°)
 
-/* cos(30°) */
-
-var cos30 = Math.cos(Math.PI / 6);
-
-/* tan(30°) */
-var tan30 = Math.tan(Math.PI / 6);
+// divides by 2 and rounds up
+function half(v) { return R(v / 2); };
 
 /**
 | Returns the compass direction opposite of a direction.
@@ -199,54 +200,51 @@ Fabric.prototype.attune = function(a1, a2) {
 /**
 | Moves the path maker.
 |
-| moveTo(point, edge) -or-
-| moveTo(x, y,  edge)
+| moveTo(point) -or-
+| moveTo(x, y)
 */
-Fabric.prototype.moveTo = function(a1, a2, a3) {
-	var pan = this.pan;
-	var x, y, e;
+Fabric.prototype.moveTo = function(a1, a2) {
+	var pan = this.pan, tw = this._twist, x, y;
 	if (typeof(a1) === 'object') {
-		x = a1.x; y = a1.y; e = a2;
+		x = a1.x; y = a1.y;
 	} else {
-		x = a1;   y = a2;   e = a3;
+		x = a1;   y = a2;
 	}
 	ensureInteger(x, y);
-	this._cx.moveTo(x + pan.x + (e ? 0.5 : 0), y + pan.y + (e ? 0.5 : 0));
+	this._cx.moveTo(x + pan.x + tw, y + pan.y + tw);
 }
 
 /**
 | Draws a line.
 |
-| lineto(point, edge) -or-
-| lineto(x, y, edge)
+| lineto(point) -or-
+| lineto(x, y)
 */
-Fabric.prototype.lineTo = function(a1, a2, a3) {
-	var pan = this.pan;
-	var x, y, e;
+Fabric.prototype.lineTo = function(a1, a2) {
+	var pan = this.pan, tw = this._twist, x, y;
 	if (typeof(a1) === 'object') {
-		x = a1.x; y = a1.y; e = a2;
+		x = a1.x; y = a1.y;
 	} else {
-		x = a1;   y = a2;   e = a3;
+		x = a1;   y = a2;
 	}
 	ensureInteger(x, y);
-	this._cx.lineTo(x + pan.x + (e ? 0.5 : 0), y + pan.y + (e ? 0.5 : 0));
+	this._cx.lineTo(x + pan.x + tw, y + pan.y + tw);
 }
 
 /**
 | Draws an arc.
 |
-| arc(p,    radius, startAngle, endAngle, anticlockwise, edge)   -or-
-| arc(x, y, radius, startAngle, endAngle, anticlockwise, edge)   -or-
+| arc(p,    radius, startAngle, endAngle, anticlockwise)   -or-
+| arc(x, y, radius, startAngle, endAngle, anticlockwise)   -or-
 */
 Fabric.prototype.arc = function(a1, a2, a3, a4, a5, a6, a7) {
-	var pan = this.pan;
-	var x, y, r, sa, ea, ac, e;
+	var pan = this.pan, tw = this._twist, x, y, r, sa, ea, ac;
 	if (typeof(a1) === 'object') {
-		x = a1.x; y = a1.y; r = a2; sa = a3; ea = a4; ac = a5; e = a6;
+		x = a1.x; y = a1.y; r = a2; sa = a3; ea = a4; ac = a5;
 	} else {
-		x = a1;   y = a2;   r = a3; sa = a4; ea = a5; ac = a6; e = a7;
+		x = a1;   y = a2;   r = a3; sa = a4; ea = a5; ac = a6;
 	}
-	this._cx.arc(x + pan.x + (e ? 0.5 : 0), y + pan.y + (e ? 0.5 : 0), r, sa, ea, ac);
+	this._cx.arc(x + pan.x + tw, y + pan.y + tw, r, sa, ea, ac);
 }
 
 /**
@@ -256,14 +254,16 @@ Fabric.prototype.arc = function(a1, a2, a3, a4, a5, a6, a7) {
 |
 | border: increase/decrease total size
 */
-Fabric.prototype.path = function(self, border, edge) {
-	// TODO why self?
+Fabric.prototype.path = function(self, border, twist) {
+	// @@03 why self?
+	throw new Error('Why self pathing??');
 	if (this !== self) throw new Error('Fabric.path: self != this');
 	var cx = this._cx;
-	cx.beginPath();
+	cx.beginPath(twist);
 	cx.rect(
-		0.5 + border, 0.5 + border,
-		this._canvas.width - 1 - border, this._canvas.height - 1 - border);
+		0.5 + border,                    0.5 + border,
+		this._canvas.width - 1 - border, this._canvas.height - 1 - border
+	);
 }
 
 /**
@@ -311,7 +311,10 @@ Fabric.prototype.fillRect = function(style, a1, a2, a3, a4) {
 /**
 | Begins a path.
 */
-Fabric.prototype.beginPath = function() {
+Fabric.prototype.beginPath = function(twist) {
+	if (typeof(twist) !== 'boolean') throw new Error('beginPath() needs twist argument');
+	// lines are targed at .5 coords.
+	this._twist = twist ? 0.5 : 0;
 	this._cx.beginPath();
 }
 
@@ -444,6 +447,7 @@ Fabric.prototype.fill = function(style, shape, path, a1, a2, a3, a4) {
 	var cx = this._cx;
 	shape[path](this, 0, false, a1, a2, a3, a4);
 	cx.fillStyle = this._colorStyle(style, shape);
+	if (this._twist !== 0) throw new Error('wrong twist');
 	cx.fill();
 }
 
@@ -458,6 +462,7 @@ Fabric.prototype._edge = function(style, shape, path, a1, a2, a3, a4) {
 	shape[path](this, style.border, true, a1, a2, a3, a4);
 	cx.strokeStyle = this._colorStyle(style.color, shape);
 	cx.lineWidth = style.width;
+	if (this._twist !== 0.5) throw new Error('wrong twist');
 	cx.stroke();
 }
 
@@ -481,11 +486,9 @@ Fabric.prototype.edge = function(style, shape, path, a1, a2, a3, a4) {
 /**
 | Fills an aera and draws its borders
 */
+// TODO make this auto use .fill and .style
 Fabric.prototype.paint = function(fillStyle, edgeStyle, shape, path, a1, a2, a3, a4) {
 	var cx = this._cx;
-	if (!shape) {
-		debug('NOT SHAPE');
-	}
 	shape[path](this, 0, false, a1, a2, a3, a4);
 	cx.fillStyle = this._colorStyle(fillStyle, shape);
 	cx.fill();
@@ -518,8 +521,8 @@ Fabric.prototype.fillText = function(text, a1, a2) {
 */
 Fabric.prototype.fillRotateText = function(text, pc, phi, d) {
 	var cx = this._cx;
-	var t1 = Math.cos(phi);
-	var t2 = Math.sin(phi);
+	var t1 = cos(phi);
+	var t2 = sin(phi);
 	var det = t1 * t1 + t2 * t2;
 	var x = pc.x + d * t2;
 	var y = pc.y - d * t1;
@@ -711,12 +714,12 @@ Rect.prototype.within = function(p) {
 /**
 | Draws the rectangle.
 */
-Rect.prototype.path = function(c2d, border, edge) {
-	c2d.beginPath();
-	c2d.moveTo(this.pnw.x + border, this.pnw.y + border, edge);
-	c2d.lineTo(this.pse.x - border, this.pnw.y + border, edge);
-	c2d.lineTo(this.pse.x - border, this.pse.y - border, edge);
-	c2d.lineTo(this.pnw.x + border, this.pse.y - border, edge);
+Rect.prototype.path = function(c2d, border, twist) {
+	c2d.beginPath(twist);
+	c2d.moveTo(this.pnw.x + border, this.pnw.y + border);
+	c2d.lineTo(this.pse.x - border, this.pnw.y + border);
+	c2d.lineTo(this.pse.x - border, this.pse.y - border);
+	c2d.lineTo(this.pnw.x + border, this.pse.y - border);
 	c2d.closePath();
 }
 
@@ -923,7 +926,7 @@ subclass(RoundRect, Rect);
 | c2d: Canvas2D area to draw upon.
 | border: additional distance.
 */
-RoundRect.prototype.path = function(c2d, border, edge) {
+RoundRect.prototype.path = function(c2d, border, twist) {
 	var nwx = this.pnw.x + border;
 	var nwy = this.pnw.y + border;
 	var sex = this.pse.x - border - 1;
@@ -931,12 +934,12 @@ RoundRect.prototype.path = function(c2d, border, edge) {
 	var cr  = this.crad  - border;
 	var pi = Math.PI;
 	var ph = pi / 2;
-	c2d.beginPath();
+	c2d.beginPath(twist);
 	c2d.moveTo(nwx + cr, nwy);
-	c2d.arc(sex - cr, nwy + cr, cr, -ph,   0, false, edge);
-	c2d.arc(sex - cr, sey - cr, cr,   0,  ph, false, edge);
-	c2d.arc(nwx + cr, sey - cr, cr,  ph,  pi, false, edge);
-	c2d.arc(nwx + cr, nwy + cr, cr,  pi, -ph, false, edge);
+	c2d.arc(sex - cr, nwy + cr, cr, -ph,   0, false);
+	c2d.arc(sex - cr, sey - cr, cr,   0,  ph, false);
+	c2d.arc(nwx + cr, sey - cr, cr,  ph,  pi, false);
+	c2d.arc(nwx + cr, nwy + cr, cr,  pi, -ph, false);
 }
 
 
@@ -1073,13 +1076,13 @@ lazyFixate(HexagonSlice.prototype, 'pse', function() {
 /**
 | Draws the hexagon.
 */
-HexagonSlice.prototype.path = function(c2d, border, edge) {
+HexagonSlice.prototype.path = function(c2d, border, twist) {
 	var r05 = half(this.rad);
-	c2d.beginPath();
-	c2d.moveTo(this.psw.x                 + border, this.psw.y               - border, edge);
-	c2d.lineTo(this.pm.x - r05            + border, this.psw.y - this.height + border, edge);
-	c2d.lineTo(this.pm.x + r05            - border, this.psw.y - this.height + border, edge);
-	c2d.lineTo(2 * this.pm.x - this.psw.x - border, this.psw.y               - border, edge);
+	c2d.beginPath(twist);
+	c2d.moveTo(this.psw.x                 + border, this.psw.y               - border);
+	c2d.lineTo(this.pm.x - r05            + border, this.psw.y - this.height + border);
+	c2d.lineTo(this.pm.x + r05            - border, this.psw.y - this.height + border);
+	c2d.lineTo(2 * this.pm.x - this.psw.x - border, this.psw.y               - border);
 }
 
 /**
@@ -1138,7 +1141,7 @@ function HexagonFlower(pc, ri, ro, segs) {
 /**
 | Makes the flower-hex-6 path.
 */
-HexagonFlower.prototype.path = function(c2d, border, edge, segment) {
+HexagonFlower.prototype.path = function(c2d, border, twist, segment) {
 	var ri  = this.ri;
 	var ri2 = half(this.ri);
 	var ric = Math.round(this.ri * cos30);
@@ -1151,97 +1154,97 @@ HexagonFlower.prototype.path = function(c2d, border, edge, segment) {
 	var b2  = half(border);
 	var bc6 = Math.round(border * cos30);
 	var segs = this.segs;
-	c2d.beginPath();
+	c2d.beginPath(twist);
 	/* inner hex */
 	if (segment === 'innerHex' || segment === 'structure') {
-		c2d.moveTo(pcx - ri  - b,  pcy,             edge);
-		c2d.lineTo(pcx - ri2 - b2, pcy - ric - bc6, edge);
-		c2d.lineTo(pcx + ri2 + b2, pcy - ric - bc6, edge);
-		c2d.lineTo(pcx + ri  + b,  pcy,             edge);
-		c2d.lineTo(pcx + ri2 + b2, pcy + ric + bc6, edge);
-		c2d.lineTo(pcx - ri2 - b2, pcy + ric + bc6, edge);
-		c2d.lineTo(pcx - ri  - b,  pcy,             edge);
+		c2d.moveTo(pcx - ri  - b,  pcy);
+		c2d.lineTo(pcx - ri2 - b2, pcy - ric - bc6);
+		c2d.lineTo(pcx + ri2 + b2, pcy - ric - bc6);
+		c2d.lineTo(pcx + ri  + b,  pcy);
+		c2d.lineTo(pcx + ri2 + b2, pcy + ric + bc6);
+		c2d.lineTo(pcx - ri2 - b2, pcy + ric + bc6);
+		c2d.lineTo(pcx - ri  - b,  pcy);
 	}
 
 	/* outer hex */
 	if (segment === 'outerHex' || segment === 'structure') {
-		c2d.moveTo(pcx - ro  + b,  pcy,             edge);
-		c2d.lineTo(pcx - ro2 + b2, pcy - roc + bc6, edge);
-		c2d.lineTo(pcx + ro2 - b2, pcy - roc + bc6, edge);
-		c2d.lineTo(pcx + ro  - b,  pcy,             edge);
-		c2d.lineTo(pcx + ro2 - b2, pcy + roc - bc6, edge);
-		c2d.lineTo(pcx - ro2 + b2, pcy + roc - bc6, edge);
-		c2d.lineTo(pcx - ro  + b,  pcy,             edge);
+		c2d.moveTo(pcx - ro  + b,  pcy);
+		c2d.lineTo(pcx - ro2 + b2, pcy - roc + bc6);
+		c2d.lineTo(pcx + ro2 - b2, pcy - roc + bc6);
+		c2d.lineTo(pcx + ro  - b,  pcy);
+		c2d.lineTo(pcx + ro2 - b2, pcy + roc - bc6);
+		c2d.lineTo(pcx - ro2 + b2, pcy + roc - bc6);
+		c2d.lineTo(pcx - ro  + b,  pcy);
 	}
 
 	switch (segment) {
 	case 'structure' :
 		if (segs.n || segs.nw) {
-			c2d.moveTo(pcx - ri2,  pcy - ric, edge);
-			c2d.lineTo(pcx - ro2,  pcy - roc, edge);
+			c2d.moveTo(pcx - ri2,  pcy - ric);
+			c2d.lineTo(pcx - ro2,  pcy - roc);
 		}
 		if (segs.n  || segs.ne) {
-			c2d.moveTo(pcx + ri2, pcy - ric, edge);
-			c2d.lineTo(pcx + ro2, pcy - roc, edge);
+			c2d.moveTo(pcx + ri2, pcy - ric);
+			c2d.lineTo(pcx + ro2, pcy - roc);
 		}
 		if (segs.ne || segs.se) {
-			c2d.moveTo(pcx + ri,  pcy, edge);
-			c2d.lineTo(pcx + ro,  pcy, edge);
+			c2d.moveTo(pcx + ri,  pcy);
+			c2d.lineTo(pcx + ro,  pcy);
 		}
 		if (segs.se || segs.s) {
-			c2d.moveTo(pcx + ri2, pcy + ric + bc6, edge);
-			c2d.lineTo(pcx + ro2, pcy + roc - bc6, edge);
+			c2d.moveTo(pcx + ri2, pcy + ric + bc6);
+			c2d.lineTo(pcx + ro2, pcy + roc - bc6);
 		}
 		if (segs.s || segs.sw) {
-			c2d.moveTo(pcx - ri2, pcy + ric + bc6, edge);
-			c2d.lineTo(pcx - ro2, pcy + roc - bc6, edge);
+			c2d.moveTo(pcx - ri2, pcy + ric + bc6);
+			c2d.lineTo(pcx - ro2, pcy + roc - bc6);
 		}
 		if (segs.sw || segs.nw) {
-			c2d.moveTo(pcx - ri, pcy, edge);
-			c2d.lineTo(pcx - ro, pcy, edge);
+			c2d.moveTo(pcx - ri, pcy);
+			c2d.lineTo(pcx - ro, pcy);
 		}
 		break;
 	case 'n':
-		c2d.moveTo(pcx - ro2 + b2, pcy - roc + bc6, edge);
-		c2d.lineTo(pcx + ro2 - b2, pcy - roc + bc6, edge);
-		c2d.lineTo(pcx + ri2 + b2, pcy - ric - bc6, edge);
-		c2d.lineTo(pcx - ri2 - b2, pcy - ric - bc6, edge);
-		c2d.lineTo(pcx - ro2 + b2, pcy - roc + bc6, edge);
+		c2d.moveTo(pcx - ro2 + b2, pcy - roc + bc6);
+		c2d.lineTo(pcx + ro2 - b2, pcy - roc + bc6);
+		c2d.lineTo(pcx + ri2 + b2, pcy - ric - bc6);
+		c2d.lineTo(pcx - ri2 - b2, pcy - ric - bc6);
+		c2d.lineTo(pcx - ro2 + b2, pcy - roc + bc6);
 		break;
 	case 'ne':
-		c2d.moveTo(pcx + ro2 - b2, pcy - roc + bc6, edge);
-		c2d.lineTo(pcx + ro  - b,  pcy, edge);
-		c2d.lineTo(pcx + ri  + b,  pcy, edge);
-		c2d.lineTo(pcx + ri2 + b2, pcy - ric - bc6, edge);
-		c2d.lineTo(pcx + ro2 - b2, pcy - roc + bc6, edge);
+		c2d.moveTo(pcx + ro2 - b2, pcy - roc + bc6);
+		c2d.lineTo(pcx + ro  - b,  pcy);
+		c2d.lineTo(pcx + ri  + b,  pcy);
+		c2d.lineTo(pcx + ri2 + b2, pcy - ric - bc6);
+		c2d.lineTo(pcx + ro2 - b2, pcy - roc + bc6);
 		break;
 	case 'se':
-		c2d.moveTo(pcx + ro  - b,  pcy, edge);
-		c2d.lineTo(pcx + ro2 - b2, pcy + roc - bc6, edge);
-		c2d.lineTo(pcx + ri2 + b2, pcy + ric + bc6, edge);
-		c2d.lineTo(pcx + ri  + b,  pcy, edge);
-		c2d.lineTo(pcx + ro  - b,  pcy, edge);
+		c2d.moveTo(pcx + ro  - b,  pcy);
+		c2d.lineTo(pcx + ro2 - b2, pcy + roc - bc6);
+		c2d.lineTo(pcx + ri2 + b2, pcy + ric + bc6);
+		c2d.lineTo(pcx + ri  + b,  pcy);
+		c2d.lineTo(pcx + ro  - b,  pcy);
 		break;
 	case 's':
-		c2d.moveTo(pcx + ro2 - b2, pcy + roc - bc6, edge);
-		c2d.lineTo(pcx - ro2 + b2, pcy + roc - bc6, edge);
-		c2d.lineTo(pcx - ri2 - b2, pcy + ric + bc6, edge);
-		c2d.lineTo(pcx + ri2 + b2, pcy + ric + bc6, edge);
-		c2d.lineTo(pcx + ro2 - b2, pcy + roc - bc6, edge);
+		c2d.moveTo(pcx + ro2 - b2, pcy + roc - bc6);
+		c2d.lineTo(pcx - ro2 + b2, pcy + roc - bc6);
+		c2d.lineTo(pcx - ri2 - b2, pcy + ric + bc6);
+		c2d.lineTo(pcx + ri2 + b2, pcy + ric + bc6);
+		c2d.lineTo(pcx + ro2 - b2, pcy + roc - bc6);
 		break;
 	case 'sw':
-		c2d.moveTo(pcx - ro2 + b2, pcy + roc - bc6, edge);
-		c2d.lineTo(pcx - ro  + b,  pcy, edge);
-		c2d.lineTo(pcx - ri  - b,  pcy, edge);
-		c2d.lineTo(pcx - ri2 - b2, pcy + ric + bc6, edge);
-		c2d.lineTo(pcx - ro2 + b2, pcy + roc - bc6, edge);
+		c2d.moveTo(pcx - ro2 + b2, pcy + roc - bc6);
+		c2d.lineTo(pcx - ro  + b,  pcy);
+		c2d.lineTo(pcx - ri  - b,  pcy);
+		c2d.lineTo(pcx - ri2 - b2, pcy + ric + bc6);
+		c2d.lineTo(pcx - ro2 + b2, pcy + roc - bc6);
 		break;
 	case 'nw':
-		c2d.moveTo(pcx - ro  + b,  pcy, edge);
-		c2d.lineTo(pcx - ro2 + b2, pcy - roc + bc6, edge);
-		c2d.lineTo(pcx - ri2 - b2, pcy - ric - bc6, edge);
-		c2d.lineTo(pcx - ri  - b,  pcy, edge);
-		c2d.lineTo(pcx - ro  + b,  pcy, edge);
+		c2d.moveTo(pcx - ro  + b,  pcy);
+		c2d.lineTo(pcx - ro2 + b2, pcy - roc + bc6);
+		c2d.lineTo(pcx - ri2 - b2, pcy - ric - bc6);
+		c2d.lineTo(pcx - ri  - b,  pcy);
+		c2d.lineTo(pcx - ro  + b,  pcy);
 		break;
 	}
 }
@@ -1386,15 +1389,15 @@ lazyFixate(Line.prototype, 'pc', function() {
 |
 | c2d: Canvas2D to draw upon.
 */
-Line.prototype.path = function(c2d, border, edge) {
+Line.prototype.path = function(c2d, border, twist) {
 	var p1 = this.p1;
 	var p2 = this.p2;
 
-	c2d.beginPath();
+	c2d.beginPath(twist);
 	// TODO, multiple line end types
 	switch(this.p1end) {
 	case 'normal':
-		if (edge) c2d.moveTo(p1, edge);
+		if (twist) c2d.moveTo(p1);
 		break;
 	default :
 		throw new Error('unknown line end');
@@ -1402,7 +1405,7 @@ Line.prototype.path = function(c2d, border, edge) {
 
 	switch(this.p2end) {
 	case 'normal' :
-		if (edge) c2d.lineTo(p2, edge);
+		if (twist) c2d.lineTo(p2);
 		break;
 	case 'arrow' :
 		// arrow size
@@ -1413,25 +1416,15 @@ Line.prototype.path = function(c2d, border, edge) {
 		var ad = Math.PI/12;
 		// arrow span, the arrow is formed as hexagon piece
 		var ms = 2 / Math.sqrt(3) * as;
-		if (edge) {
-			c2d.lineTo(
-				p2.x - Math.round(ms * Math.cos(d)),
-				p2.y - Math.round(ms * Math.sin(d)), edge);
+		if (twist) {
+			c2d.lineTo(p2.x - R(ms * cos(d)), p2.y - R(ms * sin(d)));
 		} else {
-			c2d.moveTo(
-				p2.x - Math.round(ms * Math.cos(d)),
-				p2.y - Math.round(ms * Math.sin(d)), edge);
+			c2d.moveTo(p2.x - R(ms * cos(d)), p2.y - R(ms * sin(d)));
 		}
-		c2d.lineTo(
-			p2.x - Math.round(as * Math.cos(d - ad)),
-			p2.y - Math.round(as * Math.sin(d - ad)), edge);
-		c2d.lineTo(p2, edge);
-		c2d.lineTo(
-			p2.x - Math.round(as * Math.cos(d + ad)),
-			p2.y - Math.round(as * Math.sin(d + ad)), edge);
-		c2d.lineTo(
-			p2.x - Math.round(ms * Math.cos(d)),
-			p2.y - Math.round(ms * Math.sin(d)), edge);
+		c2d.lineTo(p2.x - R(as * cos(d - ad)), p2.y - R(as * sin(d - ad)));
+		c2d.lineTo(p2);
+		c2d.lineTo(p2.x - R(as * cos(d + ad)), p2.y - R(as * sin(d + ad)));
+		c2d.lineTo(p2.x - R(ms * cos(d)), p2.y - R(ms * sin(d)));
 		break;
 	default :
 		throw new Error('unknown line end');
@@ -1443,7 +1436,7 @@ Line.prototype.path = function(c2d, border, edge) {
 | Draws the line.
 */
 Line.prototype.draw = function(c2d) {
-	var style = settings.relation.style;
+	var style = settings.relation.style;  // @03 what the heck, why use relation.style?
 	c2d.paint(style.fill, style.edge, this, 'path');
 }
 
