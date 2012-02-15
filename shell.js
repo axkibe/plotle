@@ -494,11 +494,11 @@ Selection.prototype.normalize = function() {
 	if (k1 === k2) throw new Error('sel has equal keys');
 
 	if (k1 < k2) {
-		this.end   = this.mark1;
-		this.begin = this.mark2;
-	} else {
 		this.begin = this.mark1;
 		this.end   = this.mark2;
+	} else {
+		this.begin = this.mark2;
+		this.end   = this.mark1;
 	}
 }
 
@@ -508,30 +508,31 @@ Selection.prototype.normalize = function() {
 Selection.prototype.innerText = function() {
 	if (!this.active) return '';
 	this.normalize();
-	var b = this.begin;
-	var e = this.end;
+	var mb = this.begin;
+	var me = this.end;
 
-	if (b.entity === b.entity) {
-		var text = b.entity.para.get('text');
-		var itxt = text.substring(b.offset, e.offset);
-		debug('itext', itxt);
+	if (mb.entity === me.entity) {
+		var text = mb.entity.para.get('text');
+		var itxt = text.substring(mb.offset, me.offset);
 		return itxt;
 	}
 
-	return 'TODO';
-
-	/*
-	var buf = [bet.substring(bo, bet.length)];
-	for (var n = be.parent.next.first; n != ee; n = n.parent.next.first) {
-		// ^ TODO make multi child compatible
-		if (!n) { throw new Error('selection akward');}
+	var bpara = mb.entity.para;
+	var epara = me.entity.para;
+	var btxt = bpara.get('text');
+	var etxt = epara.get('text');
+	var bkey = bpara.getOwnKey();
+	var ekey = epara.getOwnKey();
+	var doc  = mb.entity.vdoc.doc;
+	if (me.entity.vdoc.doc !== doc) throw new Error('selection isn\'t in one doc!');
+	var buf = [ btxt.substring(mb.offset, mb.length) ];
+	for (var a = bkey + 1, aZ = ekey; a < aZ; a++) {
 		buf.push('\n');
-		buf.push(n.text);
+		buf.push(doc.get(a).get('text'));
 	}
 	buf.push('\n');
-	buf.push(ee.text.substring(0, eo));
+	buf.push(etxt.substring(0, me.offset));
 	return buf.join('');
-	*/
 }
 
 /**
@@ -1473,24 +1474,21 @@ VPara.prototype.specialKey = function(keycode) {
 	if (shell.ctrl) {
 		switch(keycode) {
 		case 65 : // ctrl+a
-			throw new Error('TODO');
-			/*
-			var pfirst = item.dtree.first;
-			select.mark1.set(item, pfirst.first, 0);
-			var plast = item.dtree.last;
-			select.mark2.set(item, plast.first, plast.first.text.length);
+			var valley = this.vdoc.valley;
+			var v0 = valley[0];
+			var vZ = valley[valley.length - 1];
+			var vZL = vZ.para.get('text').length;
+			select.mark1.set(v0, 0);
+			select.mark2.set(vZ, vZL);
 			select.active = true;
-			for(var n = pfirst; n; n = n.next) {
-				n.listen();
-			}
-			caret.set(select.mark2);
+			caret.set(vZ, vZL);
 			system.setInput(select.innerText());
 			caret.show();
-			return true;*/
+			shell.redraw = true
+			return true;
 		}
 	}
 
-	/*
 	if (!shell.shift && select.active) {
 		switch(keycode) {
 		case 35 : // end
@@ -1499,25 +1497,23 @@ VPara.prototype.specialKey = function(keycode) {
 		case 38 : // up
 		case 39 : // right
 		case 40 : // down
-			this.deselect();
+			select.deselect();
 			shell.redraw = true;
 			break;
 		case  8 : // backspace
 		case 46 : // del
+			throw new Error('TODO');
 			this.deleteSelection();
 			shell.redraw = true;
 			keycode = 0;
-			throw new Error('TODO');
-			//System.repository.updateItem(item);
 			break;
 		case 13 : // return
+			throw new Error('TODO');
 			this.deleteSelection();
 			shell.redraw = true;
 			break;
 		}
-	} else*/
-
-	if (shell.shift && !select.active) {
+	} else if (shell.shift && !select.active) {
 		switch(keycode) {
 		case 35 : // end
 		case 36 : // pos1
@@ -2051,7 +2047,7 @@ VDoc.prototype.pathSelection = function(fabric, border, twist, width, imargin, s
 	var pnw2 = m2.entity.pnw
 	var p1 = m1.entity.getOffsetPoint(m1.offset);
 	var p2 = m2.entity.getOffsetPoint(m2.offset);
-	p1 = p1.add(R(pnw2.x - sp.x), R(pnw2.y - sp.y));
+	p1 = p1.add(R(pnw1.x - sp.x), R(pnw1.y - sp.y));
 	p2 = p2.add(R(pnw2.x - sp.x), R(pnw2.y - sp.y));
 
 	if (p2.y < p1.y || (p2.y === p1.y && p2.x < p1.x)) {
