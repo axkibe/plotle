@@ -90,7 +90,7 @@ function makeCatcher(that, fun) {
        `-'
  The wrapper around the HTML5 browser.
 
- TODO use more prototyping.
+ @03 use more prototyping.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function System(FrontFace) {
@@ -102,18 +102,18 @@ function System(FrontFace) {
 	// if true browser supports the setCapture() call
 	// if false needs work around
 	var useCapture = canvas.setCapture != null;
+	var mouseState  = false;   // false, 'atween' or 'drag'
 
-	// mouse state  TODO rename variables
-	var mst = MST.NONE;
-	// position the mouse went down to atween state
-	var msp = null;
-	// latest mouse position seen in atween state
-	var mmp = null;
-	// latest shift/ctrl key status in atween state
-	var mms = null;
-	var mmc = null;
-	// timer for atween state
-	var atweenTimer = null;
+	// atween is the state where the mouse button went down,
+	// and its yet unsure if this is a click or drag.
+	// if the mouse moves out of the atweenBox or the atweenTimer ticks its
+	// a drag, if it goes up before either happens, its a click
+
+	var atweenTimer = null;    // timer for atween state
+	var atweenPos   = null;    // position mouse button went down
+	var atweenMove  = null;    // latest mouse position seen in atween state
+	var atweenShift = null;    // shift key in atween state
+	var atweenCtrl  = null;    // ctrl  key in atween state
 
 	// hidden input that forwards all events
 	var hiddenInput = document.getElementById('input');
@@ -268,34 +268,33 @@ function System(FrontFace) {
 	function onmousemove(event) {
 		var p = new Point(event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop);
 
-		switch(mst) {
-		case MST.NONE :
+		switch(mouseState) {
+		default : throw new Error('invalid mouseState');
+		case false:
 			this.shell.mousehover(p, event.shiftKey, event.ctrlKey || event.metaKey);
 			return true;
-		case MST.ATWEEN :
+		case 'atween':
 			var dragbox = settings.dragbox;
-			if ((abs(p.x - msp.x) > dragbox) || (abs(p.y - msp.y) > dragbox)) {
+			if ((abs(p.x - atweenPos.x) > dragbox) || (abs(p.y - atweenPos.y) > dragbox)) {
 				// moved out of dragbox -> start dragging
 				clearTimeout(atweenTimer);
 				atweenTimer = null;
-				mst = MST.DRAG;
-				this.shell.dragstart(msp, event.shiftKey, event.ctrlKey || event.metaKey);
-				if (!p.eq(msp)) {
+				mouseState = 'drag';
+				this.shell.dragstart(atweenPos, event.shiftKey, event.ctrlKey || event.metaKey);
+				if (!p.eq(atweenPos)) {
 					this.shell.dragmove(p, event.shiftKey, event.ctrlKey || event.metaKey);
 				}
 				captureEvents();
 			} else {
 				// saves position for possible atween timeout
-				mmp = p;
-				mms = event.shiftKey;
-				mmc = event.ctrlKey || event.metaKey;
+				atweenMove  = p;
+				atweenShift = event.shiftKey;
+				atweenCtrl  = event.ctrlKey || event.metaKey;
 			}
 			return true;
-		case MST.DRAG :
+		case 'drag':
 			this.shell.dragmove(p, event.shiftKey, event.ctrlKey || event.metaKey);
 			return true;
-		default :
-			throw new Error('invalid mst');
 		}
 	}
 
@@ -308,15 +307,15 @@ function System(FrontFace) {
 		hiddenInput.focus();
 		var p = new Point (event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop);
 		// asks the face if it forces this to be a drag or click, or yet unknown.
-		mst = this.shell.mousedown(p, event.shiftKey, event.ctrlKey || event.metaKey);
-		switch(mst) {
-		case MST.ATWEEN :
-			msp = mmp = p;
-			mms = event.shiftKey;
-			mmc = event.ctrlKey || event.metaKey;
+		mouseState = this.shell.mousedown(p, event.shiftKey, event.ctrlKey || event.metaKey);
+		switch(mouseState) {
+		case 'atween' :
+			atweenPos   = atweenMove = p;
+			atweenShift = event.shiftKey;
+			atweenCtrl  = event.ctrlKey || event.metaKey;
 			atweenTimer = setTimeout('system.onatweentime();', settings.dragtime);
 			break;
-		case MST.DRAG :
+		case 'drag' :
 			captureEvents();
 			break;
 		}
@@ -331,21 +330,19 @@ function System(FrontFace) {
 		releaseEvents();
 		var p = new Point(event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop);
 
-		switch (mst) {
-		case MST.NONE :
-			return false;
-		case MST.ATWEEN :
+		switch (mouseState) {
+		default : throw new Error('invalid mouseState');
+		case false : return false;
+		case 'atween' :
 			// A click is a mouse down followed within dragtime by 'mouseup' and
 			// not having moved out of 'dragbox'.
 			clearTimeout(atweenTimer);
 			atweenTimer = null;
 			this.shell.click(p, event.shiftKey, event.ctrlKey || event.metaKey);
-			mst = MST.NONE;
-			return false;
-		case MST.DRAG :
+			return mouseState = false;
+		case 'drag' :
 			this.shell.dragstop(p, event.shiftKey, event.ctrlKey || event.metaKey);
-			mst = MST.NONE;
-			return false;
+			return mouseState = false;
 		}
 	}
 
@@ -362,15 +359,15 @@ function System(FrontFace) {
 	| Timeout after mouse down so dragging starts.
 	*/
 	function onatweentime() {
-		if (mst != MST.ATWEEN) {
+		if (mouseState !== 'atween') {
 			console.log('dragTime() in wrong action mode');
 			return;
 		}
-		mst = MST.DRAG;
+		mouseState = 'drag';
 		atweenTimer = null;
-		this.shell.dragstart(msp, mms, mmc);
-		if (!mmp.eq(msp)) {
-			this.shell.dragmove(mmp, mms, mmc);
+		this.shell.dragstart(atweenPos, atweenShift, atweenCtrl);
+		if (!atweenMove.eq(atweenPos)) {
+			this.shell.dragmove(atweenMove, atweenShift, atweenCtrl);
 		}
 	}
 

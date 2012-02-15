@@ -288,23 +288,6 @@ var settings = {
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- .-,--.
-  `\__  ,-. . . ,-,-. ,-.
-   /    | | | | | | | `-.
-  '`--' ' ' `-^ ' ' ' `-'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/**
-| Mouse state. TODO Rename to something more verbatim
-*/
-var MST = {
-	NONE   : 0, // button is up
-	ATWEEN : 1, // mouse just came down, unsure if click or drag
-	DRAG   : 2  // mouse is dragging
-};
-Object.freeze(MST);
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,-,-,-.           .
  `,| | |   ,-. ,-. | , ,-. ,-.
    | ; | . ,-| |   |<  |-' |
@@ -657,7 +640,7 @@ Cockpit.prototype.mousedown = function(p) {
 		case 1: this._revertDialog(); break;
 		case 2: this._importDialog(); break;
 		}
-		return MST.NONE;
+		return 'none';
 	}
 	*/
 	return false;
@@ -674,6 +657,9 @@ Cockpit.prototype.mousedown = function(p) {
  Consists of the Cockpit and the Space the user is viewing.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/**
+| Constructor.
+*/
 function Shell(fabric) {
 	if (shell !== null) throw new Error('Singleton not single');
 	shell = this;
@@ -1221,7 +1207,7 @@ VSpace.prototype.mousedown = function(p) {
 			break;
 		}
 		shell.redraw = true;
-		return MST.NONE;
+		return false;
 	case Action.ITEMMENU :
 		var im = action.itemmenu;
 		var md = im.getMousepos(p);
@@ -1235,11 +1221,11 @@ VSpace.prototype.mousedown = function(p) {
 			break;
 		}
 		shell.redraw = true;
-		return MST.NONE;
+		return false;
 	}
 
 	if (this.focus) {
-		if (this.focus.withinItemMenu(p)) return MST.ATWEEN;
+		if (this.focus.withinItemMenu(p)) return 'atween';
 		var com = this.focus.checkItemCompass(pp);
 		if (com) {
 			// resizing
@@ -1248,11 +1234,11 @@ VSpace.prototype.mousedown = function(p) {
 			action.startZone = this.focus.getZone();
 			system.setCursor(com+'-resize');
 
-			return MST.DRAG;
+			return 'drag';
 		}
 	}
 
-	return MST.ATWEEN;
+	return 'atween';
 }
 
 
