@@ -60,7 +60,6 @@ function Peer() {
 		            {
 		              type: 'Para',
 		              text: 'If you can dream---and not make dreams your master;',
-		              //text: 'If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;If you can dream---and not make dreams your master;',
 		            }, {
 	                  type: 'Para',
 	                  text: 'If you can think---and not make thoughts your aim,',
@@ -152,11 +151,18 @@ function Peer() {
 		})
 	);
 	if (asw.ok !== true) throw new Error('Cannot init Repository');
-
-	asw = this.mm.get(-1, spacepath);
-	if (asw.ok !== true) throw new Error('Cannot re-get own Space');
-	system.shell.vspace = new VSpace(asw.node);  // TODO HACK
 }
+
+/**
+| gets a space
+*/
+Peer.prototype.getSpace = function(name) {
+	var asw = this.mm.get(-1, name);
+	if (asw.ok !== true) throw new Error('Cannot get own space: '+name);
+	return asw.node;
+}
+
+
 
 /**
 | Creates a new note.
@@ -401,6 +407,9 @@ Peer.prototype.insertText = function(node, offset, text) {
 	);
 }
 
+/**
+| Removes some text within one node
+*/
 Peer.prototype.removeText = function(node, offset, len) {
 	var path = new Path(node);
 	path.push('text');
@@ -415,6 +424,13 @@ Peer.prototype.removeText = function(node, offset, len) {
 			val: null
 		})
 	);
+}
+
+/**
+| Removes a text spawning over severa entities
+*/
+Peer.prototype.removeSpawn = function(node1, o1, node2, o2) {
+	XXXX
 }
 
 /**

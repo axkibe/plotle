@@ -434,9 +434,8 @@ function System(FrontFace) {
 window.onload = function() {
 	makeCatcher(this, function() {
 		system       = new System();
-		system.shell = new Shell(system.fabric);
 		peer         = new Peer();
-		system.shell._draw(); // TODO private 
+		system.shell = new Shell(system.fabric);
 	})();
 }
 

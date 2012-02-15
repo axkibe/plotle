@@ -520,37 +520,14 @@ Selection.prototype.innerText = function() {
 
 /**
 | Removes the selection including its contents.
-| TODO was deleteSelection.
 */
 Selection.prototype.remove = function() {
-	throw new Error('TODO');
-	/*
-	var select = this.selection;
-	select.normalize();
-	var b = select.begin;
-	var e = select.end;
-	var be = b.element;
-	var bo = b.offset;
-	var ee = e.element;
-	var eo = e.offset;
-	if (be == ee) {
-		var bet = be.text;
-		be.text = bet.substring(0, bo) + bet.substring(eo, bet.length);
-	} else {
-		var eet = ee.text;
-		be.text = be.text.substring(0, bo) + eet.substring(eo, eet.length);
-		var pn;
-		for (pn = be.parent.next; pn.first != ee; pn = pn.next) {
-			// ^ TODO make multi child compatible
-			pn.parent.remove(pn);
-		}
-		pn.parent.remove(pn);
-	}
-	be.listen();
-	this.caret.set(b);
-	select.active = false;
-	// setInput('') is done by System
-	*/
+	this.deselect();
+	shell.redraw = true;
+	peer.removeSpawn(
+		this.mark1.entity.para, this.mark1.offset,
+		this.mark2.entity.para, this.mark2.offset
+	);
 }
 
 /**
@@ -666,7 +643,8 @@ function Shell(fabric) {
 
 	Measure.init();
 	this.fabric    = fabric;
-	this.vspace    = null;
+	//this.vspace    = new VSpace(peer.space);  // TODO HACK
+	this.vspace    = new VSpace(peer.getSpace('welcome'));
 
 	this.cockpit   = new Cockpit();
 	this.caret     = new Caret();
@@ -675,6 +653,7 @@ function Shell(fabric) {
 
 	// A flag set to true if anything requests a redraw.
 	this.redraw = false;
+	this._draw();
 }
 
 /**
@@ -1488,14 +1467,12 @@ VPara.prototype.specialKey = function(keycode) {
 			break;
 		case  8 : // backspace
 		case 46 : // del
-			throw new Error('TODO');
-			this.deleteSelection();
+			select.remove();
 			shell.redraw = true;
 			keycode = 0;
 			break;
 		case 13 : // return
-			throw new Error('TODO');
-			this.deleteSelection();
+			select.remove();
 			shell.redraw = true;
 			break;
 		}
@@ -2354,7 +2331,7 @@ VItem.prototype.click = function(p) {
 		var offset = vpara.getPointOffset(pi.sub(vpara.pnw));
 		shell.caret.set(vpara, offset);
 		shell.caret.show();
-		// shell.selection.deselect(); TODO
+		shell.selection.deselect();
 	}
 	return true;
 }
