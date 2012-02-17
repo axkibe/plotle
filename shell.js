@@ -522,11 +522,12 @@ Selection.prototype.innerText = function() {
 | Removes the selection including its contents.
 */
 Selection.prototype.remove = function() {
+	this.normalize();
 	this.deselect();
 	shell.redraw = true;
 	peer.removeSpawn(
-		this.mark1.entity.para, this.mark1.offset,
-		this.mark2.entity.para, this.mark2.offset
+		this.begin.entity.para, this.begin.offset,
+		this.end.entity.para, this.end.offset
 	);
 }
 
@@ -1423,6 +1424,7 @@ VPara.prototype.getLineXOffset = function(line, x) {
 VPara.prototype.input = function(text) {
 	if (shell.caret.entity !== this) throw new Error('Invalid caret on input');
 	var para = this.para;
+	// XXX do splits.
 	peer.insertText(para, shell.caret.offset, text);
 }
 

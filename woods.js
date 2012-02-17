@@ -258,8 +258,8 @@ Stem.prototype.removeListener = function(listener) {
 | Tells all listeners of an event.
 */
 Stem.prototype.tell = function() {
-	var listen = this.listen;
-	for (var a = 0; a < this.listen.length; a++) {
+	var listen = this.listen.slice();
+	for (var a = 0, aZ = listen.length; a < aZ; a++) {
 		var v = listen[a];
 		v.event.apply(v, arguments);
 	}

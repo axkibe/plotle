@@ -430,7 +430,23 @@ Peer.prototype.removeText = function(node, offset, len) {
 | Removes a text spawning over severa entities
 */
 Peer.prototype.removeSpawn = function(node1, o1, node2, o2) {
-	XXXX
+	if (node1 === node2) {
+		if (o1 === o2) return;
+		if (o1 > o2) throw new Error('malformed spawn');
+		return this.removeText(node1, o1, o2 - o1);
+	}
+
+	// @@03 combine into one call
+	var k1 = node1.getOwnKey();
+	var k2 = node2.getOwnKey();
+	var len1 = node1.get('text').length;
+	for (var a = k1; a < k2 - 1; a++) {
+		this.join(node1);
+	}
+	var len2 = node1.get('text').length;
+	this.join(node1);
+
+	this.removeText(node1, o1, len1 - o1 + o2 + len2 - len1);
 }
 
 /**
@@ -439,6 +455,7 @@ Peer.prototype.removeSpawn = function(node1, o1, node2, o2) {
 Peer.prototype.split = function(node, offset) {
 	var path = new Path(node);
 	path.push('text');
+	debug('peer.split', offset);
 
 	this.mm.alter(-1,
 		new Signature({
