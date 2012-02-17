@@ -1309,21 +1309,27 @@ VPara.prototype.getFlow = function() {
 	var vdoc  = this.vdoc;
 	var vitem = vdoc.vitem;
 	var flowWidth = vitem.getFlowWidth();
+	var fontsize = vdoc.getFontSize();
+	var flow  = this._flow$;
+	// @03 go into subnodes instead
+	var text = para.get('text');
 
-//	if (this._flow$ && this._flow$.flowWidth === flowWidth) return this._flow$; TODO xxx
+	if (!noCache && flow &&
+		flow.flowWidth === flowWidth &&
+		flow.fontsize  === fontsize &&
+		flow.text      === text
+	) return flow;
 
 	if (shell.caret.entity === this) {
 		// remove caret cache if its within this flow.
-		// @03 use a function
+		// @@03 use a function
 		shell.caret.cp$line  = null;
 		shell.caret.cp$token = null;
 	}
 
 	// builds position informations.
-	var flow  = this._flow$ = [];
+	flow  = this._flow$ = [];
 	var spread = 0;  // width really used.
-
-	var fontsize = vdoc.getFontSize();
 
 	// current x positon, and current x including last tokens width
 	var x = 0, xw = 0;
@@ -1333,9 +1339,6 @@ VPara.prototype.getFlow = function() {
 	var space = Measure.width(' ');
 	var line = 0;
 	flow[line] = { a: [], y: y, o: 0 };
-
-	// @03 go into subnodes instead
-	var text = para.get('text');
 
 	//var reg = !pre ? (/(\s*\S+|\s+$)\s?(\s*)/g) : (/(.+)()$/g); @03
 	var reg = (/(\s*\S+|\s+$)\s?(\s*)/g);
@@ -1374,6 +1377,7 @@ VPara.prototype.getFlow = function() {
 	flow.height = y;
 	flow.flowWidth = flowWidth;
 	flow.spread = spread;
+	flow.fontsize = fontsize;
 	return flow;
 }
 
@@ -1840,7 +1844,7 @@ Scrollbar.prototype.path = function(fabric, border, twist) {
 | Draws the scrollbar.
 */
 Scrollbar.prototype.draw = function(fabric) {
-	fabric.paint(settings.scrollbar.style.fill, settings.scrollbar.style.edge, this, 'path');
+	fabric.paint(settings.scrollbar.style, this, 'path');
 }
 
 /**
@@ -1909,15 +1913,13 @@ VDoc.prototype.event = function(type, key, p1, p2, p3) {
 */
 VDoc.prototype.draw = function(fabric, width, imargin, scrollp) {
 	// @03 <pre>
-	var paraSep = this.vitem.getParaSep(this.getFontSize());
+	var fontsize = this.getFontSize();
+	var paraSep = this.vitem.getParaSep(fontsize);
 	var select = shell.selection;
 
 	// draws the selection
 	if (select.active && select.mark1.entity.vdoc === this) {
-		fabric.paint(
-			settings.selection.style.fill, settings.selection.style.edge,
-			this, 'pathSelection', width, imargin, scrollp
-		);
+		fabric.paint(settings.selection.style, this, 'pathSelection', width, imargin, scrollp);
 	}
 
 	var y = imargin.n;
@@ -1930,7 +1932,13 @@ VDoc.prototype.draw = function(fabric, width, imargin, scrollp) {
 
 		// @@03 name pnw$
 		vpara.pnw = new Point(imargin.w, R(y));
+		//debug('1', imargin.w);
+		//debug('2', y);
+		//debug('3', y - scrollp.y);
+		//debug('4', R(y - scrollp.y));
 		fabric.drawImage(vpara.getFabric(), imargin.w, R(y - scrollp.y));
+		//debug('5', flow.height);
+		//debug('6', paraSep);
 		y += flow.height + paraSep;
 	}
 }
@@ -2203,8 +2211,7 @@ VItem.prototype.drawHandles = function(fabric) {
 	fabric.edge(settings.handle.style.edge, this, 'pathResizeHandles');
 
 	// draws item menu handler
-	var sstyle = settings.itemmenu.slice.style;
-	fabric.paint(sstyle.fill, sstyle.edge, this.getH6Slice(), 'path');
+	fabric.paint(settings.itemmenu.slice.style, this.getH6Slice(), 'path');
 }
 
 /**
@@ -2440,10 +2447,7 @@ VNote.prototype.setScrollbar = function(pos) {
 	var smaxy = max(0, sbary.max - sbary.aperture);
 
 	if (typeof(pos) === 'undefined') pos = sbary.getPos();
-	// TODO use limit()
-	if (pos > smaxy) pos = smaxy;
-	if (pos < 0) pos = 0;
-	sbary.setPos(pos);
+	sbary.setPos(limit(0, pos, smaxy));
 }
 
 /**
@@ -2576,8 +2580,8 @@ VNote.prototype.getZone = function() {
 	case Action.ITEMRESIZE:
 		var szone = action.startZone;
 		if (!szone) return item.zone;
-		var ipnw = szone.pnw; // TODO rename spnw
-		var ipse = szone.pse; // TODO spse
+		var spnw = szone.pnw;
+		var spse = szone.pse;
 		var dx = action.move.x - action.start.x;
 		var dy = action.move.y - action.start.y;
 		var minw = this.minWidth;
@@ -2586,42 +2590,42 @@ VNote.prototype.getZone = function() {
 
 		switch (action.align) {
 		case 'n'  :
-			pnw = Point.renew(ipnw.x, min(ipnw.y + dy, ipse.y - minh), ipnw, ipse);
-			pse = ipse;
+			pnw = Point.renew(spnw.x, min(spnw.y + dy, spse.y - minh), spnw, spse);
+			pse = spse;
 			break;
 		case 'ne' :
 			pnw = Point.renew(
-				ipnw.x, min(ipnw.y + dy, ipse.y - minh), ipnw, ipse);
+				spnw.x, min(spnw.y + dy, spse.y - minh), spnw, spse);
 			pse = Point.renew(
-				max(ipse.x + dx, ipnw.x + minw), ipse.y, ipnw, ipse);
+				max(spse.x + dx, spnw.x + minw), spse.y, spnw, spse);
 			break;
 		case 'e'  :
-			pnw = ipnw;
-			pse = Point.renew(max(ipse.x + dx, ipnw.x + minw), ipse.y, ipnw, ipse);
+			pnw = spnw;
+			pse = Point.renew(max(spse.x + dx, spnw.x + minw), spse.y, spnw, spse);
 			break;
 		case 'se' :
-			pnw = ipnw;
+			pnw = spnw;
 			pse = Point.renew(
-				max(ipse.x + dx, ipnw.x + minw),
-				max(ipse.y + dy, ipnw.y + minh), ipnw, ipse);
+				max(spse.x + dx, spnw.x + minw),
+				max(spse.y + dy, spnw.y + minh), spnw, spse);
 			break;
 		case 's' :
-			pnw = ipnw;
-			pse = Point.renew(ipse.x, max(ipse.y + dy, ipnw.y + minh), ipnw, ipse);
+			pnw = spnw;
+			pse = Point.renew(spse.x, max(spse.y + dy, spnw.y + minh), spnw, spse);
 			break;
 		case 'sw'  :
-			pnw = Point.renew(min(ipnw.x + dx, ipse.x - minw), ipnw.y, ipnw, ipse),
-			pse = Point.renew(ipse.x, max(ipse.y + dy, ipnw.y + minh), ipnw, ipse);
+			pnw = Point.renew(min(spnw.x + dx, spse.x - minw), spnw.y, spnw, spse),
+			pse = Point.renew(spse.x, max(spse.y + dy, spnw.y + minh), spnw, spse);
 			break;
 		case 'w'   :
-			pnw = Point.renew(min(ipnw.x + dx, ipse.x - minw), ipnw.y, ipnw, ipse),
-			pse = ipse;
+			pnw = Point.renew(min(spnw.x + dx, spse.x - minw), spnw.y, spnw, spse),
+			pse = spse;
 			break;
 		case 'nw' :
 			pnw = Point.renew(
-				min(ipnw.x + dx, ipse.x - minw),
-				min(ipnw.y + dy, ipse.y - minh), ipnw, ipse);
-			pse = ipse;
+				min(spnw.x + dx, spse.x - minw),
+				min(spnw.y + dy, spse.y - minh), spnw, spse);
+			pse = spse;
 			break;
 		case 'c' :
 		default  :
@@ -2775,7 +2779,7 @@ VLabel.prototype.getZone = function() {
 	var action = shell.action;
 	var pnw = item.pnw;
 
-	// xxxx Caching! TODO
+	// TODO Caching!
 	var vdoc = this.vdoc;
 	var fs = vdoc.getFontSize();
 	var width  = max(Math.ceil(vdoc.getSpread()), R(fs * 0.3));
@@ -2822,7 +2826,7 @@ VLabel.prototype.dragstop = function(p) {
 
 		if (!this.item.pnw.eq(zone.pnw)) {
 			peer.setPNW(this.item, zone.pnw);
-			this._fabric$flag = false; // TODO this should happen by setting in peer<F12>...
+			this._fabric$flag = false; // TODO this should happen by setting in peer
 		}
 		if (fontsize !== this.item.get('fontsize')) {
 			peer.setFontSize(this.item, fontsize);
@@ -2879,12 +2883,12 @@ VRelation.prototype.draw = function(fabric) {
 
 	if (vitem1) {
 		var l1 = Line.connect(vitem1.getZone(), 'normal', zone, 'normal');
-		fabric.paint(settings.relation.style.fill, settings.relation.style.edge, l1, 'path');
+		fabric.paint(settings.relation.style, l1, 'path');
 	}
 
 	if (vitem2) {
 		var l2 = Line.connect(zone,  'normal', vitem2.getZone(), 'arrow');
-		fabric.paint(settings.relation.style.fill, settings.relation.style.edge, l2, 'path');
+		fabric.paint(settings.relation.style, l2, 'path');
 	}
 
 	VLabel.prototype.draw.call(this, fabric);

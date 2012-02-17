@@ -163,7 +163,6 @@ var mmAjax = function(req, red, res) {
 function webConfig(req, red, res) {
 	res.writeHead(200, {'Content-Type': 'application/json'});
 	res.write('var config = {\n');
-	// TODO this is jools job:
 	res.write('\tdevel : '+ Jools.configSwitchClient(config.devel) + ',\n');
 	res.write('\tpuffed : ' + Jools.configSwitchClient(config.puffed) + ',\n');
 	res.write('\tlog : {\n');

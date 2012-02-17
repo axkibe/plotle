@@ -202,7 +202,7 @@ Peer.prototype.newNote = function(space, zone) {
 		}),
 		new Signature({
 			at1 : 0,
-			path: new Path([space.key$, 'z']), // TODO getOwnKey
+			path: new Path([space.getOwnKey(), 'z']),
 		})
 	);
 
@@ -300,7 +300,7 @@ Peer.prototype.newLabel = function(space, pnw, text, fontsize) {
 		}),
 		new Signature({
 			at1 : 0,
-			path: new Path([space.key$, 'z']), // TODO getOwnKey
+			path: new Path([space.getOwnKey(), 'z']),
 		})
 	);
 
@@ -348,7 +348,7 @@ Peer.prototype.newRelation = function(space, pnw, text, fontsize, vitem1, vitem2
 		}),
 		new Signature({
 			at1 : 0,
-			path: new Path([space.key$, 'z']), // TODO getOwnKey
+			path: new Path([space.getOwnKey(), 'z']),
 		})
 	);
 

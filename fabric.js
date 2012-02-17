@@ -405,16 +405,14 @@ Fabric.prototype._colorStyle = function(style, shape) {
 	switch (style.gradient) {
 	case 'askew' :
 		// TODO use gradientPNW
-		if (!shape.pnw || !shape.pse)
-			throw new Error(style.gradient+' gradiend misses pnw/pse');
+		if (!shape.pnw || !shape.pse) throw new Error(style.gradient+' gradiend misses pnw/pse');
 		grad = this._cx.createLinearGradient(
 			shape.pnw.x + this.pan.x, shape.pnw.y + this.pan.y,
 			shape.pnw.x + shape.width / 10 + this.pan.x, shape.pse.y + this.pan.y);
 		break;
 	case 'horizontal' :
 		// TODO use gradientPNW
-		if (!shape.pnw || !shape.pse)
-			throw new Error(style.gradient+' gradient misses pnw/pse');
+		if (!shape.pnw || !shape.pse) throw new Error(style.gradient+' gradient misses pnw/pse');
 		grad = this._cx.createLinearGradient(
 			0, this.pan.y + shape.pnw.y,
 			0, this.pan.y + shape.pse.y);
@@ -486,8 +484,9 @@ Fabric.prototype.edge = function(style, shape, path, a1, a2, a3, a4) {
 /**
 | Fills an aera and draws its borders
 */
-// TODO make this auto use .fill and .style
-Fabric.prototype.paint = function(fillStyle, edgeStyle, shape, path, a1, a2, a3, a4) {
+Fabric.prototype.paint = function(style, shape, path, a1, a2, a3, a4) {
+	var fillStyle = style.fill;
+	var edgeStyle = style.edge;
 	var cx = this._cx;
 	shape[path](this, 0, false, a1, a2, a3, a4);
 	cx.fillStyle = this._colorStyle(fillStyle, shape);
@@ -1437,7 +1436,7 @@ Line.prototype.path = function(c2d, border, twist) {
 */
 Line.prototype.draw = function(c2d) {
 	var style = settings.relation.style;  // @03 what the heck, why use relation.style?
-	c2d.paint(style.fill, style.edge, this, 'path');
+	c2d.paint(style, this, 'path');
 }
 
 /**
