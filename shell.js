@@ -1422,10 +1422,17 @@ VPara.prototype.getLineXOffset = function(line, x) {
 | Text has been inputted.
 */
 VPara.prototype.input = function(text) {
-	if (shell.caret.entity !== this) throw new Error('Invalid caret on input');
+	var caret = shell.caret;
+	if (caret.entity !== this) throw new Error('Invalid caret on input');
 	var para = this.para;
-	// XXX do splits.
-	peer.insertText(para, shell.caret.offset, text);
+	
+    var reg = /([^\n]+)(\n?)/g;
+    for(var rx = reg.exec(text); rx != null; rx = reg.exec(text)) {
+		var line = rx[1];
+		peer.insertText(para, caret.offset, line);
+        if (rx[2]) peer.split(para, caret.offset);
+		para = para.parent.get(para.getOwnKey() + 1);
+    }
 }
 
 /**
