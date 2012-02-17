@@ -64,6 +64,16 @@ function isPath(o)    { return o instanceof Path; }
 function isString(o)  { return typeof(o) === 'string' || o instanceof String; }
 
 /**
+| Limits value to be between min and max
+*/
+function limit(min, value, max) {
+	if (min > max) throw new Error('limit() min > max');
+	if (value < min) return min;
+	if (value > max) return max;
+	return value;
+}
+
+/**
 | Returns a rejection error
 */
 function reject(message) {
@@ -565,6 +575,7 @@ Jools = {
 	isInteger          : isInteger,
 	isPath             : isPath,
 	isString           : isString,
+	limit              : limit,
 	log                : log,
 	reject             : reject,
 	subclass           : subclass,

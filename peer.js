@@ -455,7 +455,6 @@ Peer.prototype.removeSpawn = function(node1, o1, node2, o2) {
 Peer.prototype.split = function(node, offset) {
 	var path = new Path(node);
 	path.push('text');
-	debug('peer.split', offset);
 
 	this.mm.alter(-1,
 		new Signature({

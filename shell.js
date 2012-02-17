@@ -47,6 +47,7 @@ var min = Math.min;
 
 var debug     = Jools.debug;
 var fixate    = Jools.fixate;
+var limit     = Jools.limit;
 var log       = Jools.log;
 var subclass  = Jools.subclass;
 var Path      = Jools.Path;
@@ -72,7 +73,7 @@ Woods.cogging = true;
 /**
 | Debugging mode, don't cache anything.
 */
-var noCache = true;
+var noCache = false;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .---.     .  .
@@ -86,7 +87,7 @@ var noCache = true;
 var settings = {
 	// standard font
 	defaultFont : 'Verdana,Geneva,Kalimati,sans-serif',
-	//defaultFont : 'Freebooter Script,Verdana,Geneva,Kalimati,sans-serif',
+	//defaultFont : 'Freebooter Script,Zapfino,serif',
 
 	// milliseconds after mouse down, dragging starts
 	dragtime : 400,
@@ -1262,7 +1263,6 @@ VItemCopse.prototype.event = function(type, key, p1, p2, p3) {
 		}
 		if (item && !vitem) {
 			// an item has been created
-			debug('CREATE');
 			var vspace = this.vspace;
 			switch (item.type) {
 			default : throw new Error('unknown item created: '+item.type);
@@ -1270,7 +1270,6 @@ VItemCopse.prototype.event = function(type, key, p1, p2, p3) {
 			case 'Label':    vitem = new VLabel   (item, vspace); break;
 			case 'Relation': vitem = new VRelation(item, vspace); break;
 			}
-			debug(key);
 			this.vcopse[key] = vitem;
 			return;
 		}
@@ -1470,7 +1469,8 @@ VPara.prototype.specialKey = function(keycode) {
 			caret.set(vZ, vZL);
 			system.setInput(select.innerText());
 			caret.show();
-			shell.redraw = true
+			this.vdoc.vitem.poke();
+			shell.redraw = true;
 			return true;
 		}
 	}
@@ -1506,6 +1506,7 @@ VPara.prototype.specialKey = function(keycode) {
 		case 39 : // right
 		case 40 : // down
 			select.mark1.set(caret.entity, caret.offset);
+			this.vdoc.vitem.poke();
 		}
 	}
 
@@ -1623,7 +1624,7 @@ VPara.prototype.specialKey = function(keycode) {
 			select.active = true;
 			select.mark2.set(caret.entity, caret.offset);
 			system.setInput(select.innerText());
-			// TODO cache clearing
+			this.vdoc.vitem.poke();
 			shell.redraw = true;
 		}
 	}
@@ -1660,7 +1661,7 @@ VPara.prototype.getFabric = function() {
 
 	var fabric = this._fabric$;
 
-	// TODO: work out exact height for text below baseline
+	// @@03: work out exact height for text below baseline
 	fabric.attune(width, height);
 	fabric.fontStyle(vdoc.getFont(), 'black', 'start', 'alphabetic');
 
@@ -1686,7 +1687,6 @@ VPara.prototype.event = function(event, p1, p2, p3) {
 	this.vdoc.vitem.poke();
 
 	this._flow$ = null;
-	// TODO set fabric$ = null
 	this._fabric$flag = false;
 }
 
@@ -1698,7 +1698,7 @@ VPara.prototype.event = function(event, p1, p2, p3) {
 |           the flow position used.
 */
 VPara.prototype.getOffsetPoint = function(offset, flowPos$) {
-	// TODO cache position
+	// @@03 cache position
 	var para = this.para;
 	var doc  = para.getAnchestor('DocAlley');
 	Measure.font = doc.font;
@@ -1729,7 +1729,7 @@ VPara.prototype.getOffsetPoint = function(offset, flowPos$) {
 		flowPos$.flow$token = at;
 	}
 
-	// TODO use token.t text instead.
+	// @@03 use token. text instead.
 	return new Point(
 		R(token.x + Measure.width(text.substring(token.o, offset))),
 		line.y);
@@ -1781,31 +1781,6 @@ VPara.prototype.drawCaret = function() {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- .-,--.  ,--,--'
- ' |   \ `- | ,-. ,-. ,-.
- , |   /  , | |   |-' |-'
- `-^--'   `-' '   `-' `-'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
- A document with nodes in tree structure.
-
- TODO remove
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-/**
-| Draws the selection
-|
-| fabric  : Fabric to draw upon
-| isEdge  : true if this is an edge
-| border  : extra border for edge, must be 0
-| imargin : inner margin of item
-| scrolly : scroll position of item
-*/
-/*
-*/
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .---.             .  .  .
  \___  ,-. ,-. ,-. |  |  |-. ,-. ,-.
      \ |   |   | | |  |  | | ,-| |
@@ -1833,7 +1808,7 @@ function Scrollbar(item) {
 
 /**
 | Makes the path for fabric.edge/fill/paint.
-| TODO change descr on all path()s
+| @@03 change descr on all path()s
 */
 Scrollbar.prototype.path = function(fabric, border, twist) {
 	if (border !== 0)  throw new Error('Scrollbar.path does not support borders');
@@ -1953,7 +1928,7 @@ VDoc.prototype.draw = function(fabric, width, imargin, scrollp) {
 		var vpara = valley[a];
 		var flow = vpara.getFlow();
 
-		// TODO name pnw$
+		// @@03 name pnw$
 		vpara.pnw = new Point(imargin.w, R(y));
 		fabric.drawImage(vpara.getFabric(), imargin.w, R(y - scrollp.y));
 		y += flow.height + paraSep;
@@ -1962,7 +1937,7 @@ VDoc.prototype.draw = function(fabric, width, imargin, scrollp) {
 
 /**
 | Returns the height of the document.
-| TODO caching
+| @@03 caching
 */
 VDoc.prototype.getHeight = function() {
 	var fontsize = this.getFontSize();
@@ -2022,7 +1997,7 @@ VDoc.prototype.getVParaAtPoint = function(p) {
 | Paths a selection
 */
 VDoc.prototype.pathSelection = function(fabric, border, twist, width, imargin, scrollp) {
-	// TODO make part of selection to use shortcut with XYi
+	// @@03 make part of selection to use shortcut with XYi
 	var select = shell.selection;
 	var sp = scrollp;
 	var m1 = select.mark1;
@@ -2043,7 +2018,6 @@ VDoc.prototype.pathSelection = function(fabric, border, twist, width, imargin, s
 	var fontsize = this.getFontSize();
 	fabric.beginPath(twist);
 	var descend = R(fontsize * settings.bottombox);
-	var height  = fontsize + descend; // TODO used?
 	var rx = width - imargin.e;
 	var lx = imargin.w;
 	if ((abs(p2.y - p1.y) < 2)) {
@@ -2053,7 +2027,7 @@ VDoc.prototype.pathSelection = function(fabric, border, twist, width, imargin, s
 		fabric.lineTo(p2.x, p2.y - fontsize);
 		fabric.lineTo(p2.x, p2.y + descend);
 		fabric.lineTo(p1.x, p1.y + descend);
-	} else if (abs(p1.y + height - p2.y) < 2 && (p2.x <= p1.x))  {
+	} else if (abs(p1.y + fontsize + descend - p2.y) < 2 && (p2.x <= p1.x))  {
 		//      ***
 		// ***
 		fabric.moveTo(rx,   p1.y - fontsize);
@@ -2128,7 +2102,7 @@ VItem.prototype.withinItemMenu = function(p) {
 
 /**
 | Returns the compass direction of the handle if p is on a resizer handle.
-| TODO rename
+| @@03 rename
 */
 VItem.prototype.checkItemCompass = function(p) {
 	var ha = this.handles;
@@ -2358,6 +2332,16 @@ VItem.prototype.click = function(p) {
 }
 
 /**
+| Highlights the item.
+*/
+VItem.prototype.highlight = function(fabric) {
+	var silhoutte = this.getSilhoutte(this.getZone(), false);
+	fabric.edge(settings.note.style.highlight, silhoutte, 'path');
+}
+
+
+
+/**
 | Called by subvisuals when they got changed.
 */
 VItem.prototype.poke = function() {
@@ -2408,16 +2392,6 @@ fixate(VNote.prototype, 'handles', {
 */
 VNote.prototype.minWidth  = settings.note.minWidth;
 VNote.prototype.minHeight = settings.note.minHeight;
-
-/**
-| Highlights the note.
-| TODO MOVE TO VITEM.
-*/
-VNote.prototype.highlight = function(fabric) {
-	var silhoutte = this.getSilhoutte(this.getZone(), false);
-	fabric.edge(settings.note.style.highlight, silhoutte, 'path');
-}
-
 
 /**
 | Returns the notes silhoutte.
@@ -2697,15 +2671,6 @@ fixate(VLabel.prototype, 'handles', {
 */
 VLabel.prototype.minWidth  = false;
 VLabel.prototype.minHeight = settings.label.minHeight;
-
-/**
-| Highlights the note.
-*/
-VLabel.prototype.highlight = function(fabric) {
-	var silhoutte = this.getSilhoutte(this.getZone(), false);
-	fabric.edge(settings.note.style.highlight, silhoutte, 'path');
-}
-
 
 /**
 | Returns the notes silhoutte.
