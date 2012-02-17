@@ -644,7 +644,6 @@ function Shell(fabric) {
 
 	Measure.init();
 	this.fabric    = fabric;
-	//this.vspace    = new VSpace(peer.space);  // TODO HACK
 	this.vspace    = new VSpace(peer.getSpace('welcome'));
 
 	this.cockpit   = new Cockpit();
@@ -726,8 +725,6 @@ Shell.prototype.click = function(p, shift, ctrl) {
 
 /**
 | Mouse hover.
-|
-| TODO shift+ctrl.
 */
 Shell.prototype.mousehover = function(p, shift, ctrl) {
 	this.shift = shift;
@@ -743,13 +740,12 @@ Shell.prototype.mousehover = function(p, shift, ctrl) {
 | Returns the mouse state code, wheter this is a click/drag or undecided.
 */
 Shell.prototype.mousedown = function(p, shift, ctrl) {
-	// TODO rename mst -> mouseState
 	this.shift = shift;
 	this.ctrl  = ctrl;
 	// TODO cockpit
-	var mst = this.vspace.mousedown(p);
+	var mouseState = this.vspace.mousedown(p);
 	if (this.redraw) this._draw();
-	return mst;
+	return mouseState;
 }
 
 /**
@@ -863,10 +859,9 @@ function Hexmenu(pc, style, labels) {
 
 /**
 | Draws the hexmenu.
-| TODO: give face
 */
 Hexmenu.prototype.draw = function() {
-	var f = system.fabric; // TODO! <- don't
+	var f = shell.fabric;
 
 	f.fill(settings.floatmenu.style.fill, this.hflower, 'path', 'outerHex');
 	if (this.mousepos && this.mousepos !== 'center') {
@@ -1014,7 +1009,7 @@ VSpace.prototype.mousehover = function(p) {
 	}
 
 	if (this.focus) {
-		// TODO move into items
+		// @@03 move into items
 		if (this.focus.withinItemMenu(pp)) {
 			system.setCursor('pointer');
 			return true;
@@ -1171,18 +1166,16 @@ VSpace.prototype.mousedown = function(p) {
 			var nh = settings.note.newHeight;
 			var pnw = fm.p.sub(this.fabric.pan.x + half(nw) , this.fabric.pan.y + half(nh));
 			var note  = peer.newNote(this.space, new Rect(pnw, pnw.add(nw, nh)));
-			// TODO move VNote creation into event listener
-			var vnote = new VNote(note, this);
-			this.vitems.vcopse[note.getOwnKey()] = vnote;
+			// event listener has created the vnote
+			var vnote = this.vitems.vcopse[note.getOwnKey()];
 			this.setFocus(vnote);
 			break;
 		case 'ne' : // label
 			var pnw = fm.p.sub(this.fabric.pan);
 			pnw = pnw.sub(settings.label.createOffset);
 			var label = peer.newLabel(this.space, pnw, 'Label', 20);
-			// TODO move VLabel creation into event listener
-			var vlabel = new VLabel(label, this);
-			this.vitems.vcopse[label.getOwnKey()] = vlabel;
+			// event listener has created the vnote
+			var vlabel = this.vitems.vcopse[label.getOwnKey()];
 			this.setFocus(vlabel);
 			break;
 		}
@@ -1259,10 +1252,29 @@ VItemCopse.prototype.event = function(type, key, p1, p2, p3) {
 
 	switch(type) {
 	case 'set' :
+		var item = this.copse.get(key);
 		var vitem = this.vcopse[key];
-		if (!vitem) return;
-		vitem.item.removeListener(this);
-		this.vcopse[key] = null;
+		if (!item && vitem) {
+			// an item has been removed
+			vitem.item.removeListener(this);
+			this.vcopse[key] = null;
+			return;
+		}
+		if (item && !vitem) {
+			// an item has been created
+			debug('CREATE');
+			var vspace = this.vspace;
+			switch (item.type) {
+			default : throw new Error('unknown item created: '+item.type);
+			case 'Note':     vitem = new VNote    (item, vspace); break;
+			case 'Label':    vitem = new VLabel   (item, vspace); break;
+			case 'Relation': vitem = new VRelation(item, vspace); break;
+			}
+			debug(key);
+			this.vcopse[key] = vitem;
+			return;
+		}
+		log(true, 'strange event');
 		break;
 	}
 }
@@ -2890,9 +2902,8 @@ VRelation.create = function(vspace, vitem1, vitem2) {
 	var cline = Line.connect(vitem1.getZone(), null, vitem2.getZone(), null);
 	var pnw = cline.pc.sub(settings.relation.createOffset);
 	var rel = peer.newRelation(vspace.space, pnw, 'relates to', 20, vitem1.item, vitem2.item);
-	// TODO move VRelation creation into event listener.
-	var vrel = new VRelation(rel, vspace);
-	vspace.vitems.vcopse[rel.getOwnKey()] = vrel;
+	// event listener has created the vrel
+	var vrel = vspace.vitems.vcopse[rel.getOwnKey()];
 	vspace.setFocus(vrel);
 }
 

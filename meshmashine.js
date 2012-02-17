@@ -583,8 +583,9 @@ MeshMashine.prototype._reflect = function(time, path) {
 			alter(reflect, this.history[hi], true, false, this.cogging);
 		}
 	} catch (err) {
-		// this should not ever fail, does rethrow a lethal error
-		err.ok = null; throw err;
+		// this should not ever fail, thus rethrow a lethal error
+		err.ok = null;
+		throw new Error(err.stack);
 	}
 	return reflect.get(path);
 }
@@ -638,7 +639,7 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 	} catch(err) {
 		// returns rejections but rethrows coding errors.
 		log('fail', 'error', err);
-		if (err.ok !== false) throw err; else return err;
+		if (err.ok !== false) throw new Error(err.stack); else return err;
 	}
 }
 
@@ -665,7 +666,7 @@ MeshMashine.prototype.get = function(time, path) {
 		return {ok: true, time: time, node: reflect };
 	} catch(err) {
 		// returns rejections but rethrows coding errors.
-		if (err.ok !== false) throw err; else return err;
+		if (err.ok !== false) throw new Error(err.stack); else return err;
 	}
 }
 
