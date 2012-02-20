@@ -124,6 +124,8 @@ var mmAjax = function(req, red, res) {
 		try {
 			switch (cmd.cmd) {
 			case 'alter':
+				if (cmd.src.path) cmd.src.path = new Jools.Path(cmd.src.path);
+				if (cmd.trg.path) cmd.trg.path = new Jools.Path(cmd.trg.path);
 				var src = new Jools.Signature(cmd.src);
 				var trg = new Jools.Signature(cmd.trg);
 				asw = mm.alter(cmd.time, src, trg);

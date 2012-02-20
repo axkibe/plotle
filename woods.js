@@ -83,7 +83,7 @@ function Stem(twigs, master) {
 */
 Stem.prototype.get = function(path, a0, al) {
 	if (isString(path)) return this._twigs[path];
-	if (!isPath(path)) throw new Error('get path no string or path');
+	if (!isPath(path)) throw new Error('get: path no string or path:');
 
 	a0 = path.fit(a0, false);
 	al = path.fit(al, true);

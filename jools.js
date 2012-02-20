@@ -77,12 +77,20 @@ function limit(min, val, max) {
 }
 
 /**
+| Returns true if min <= val <= max
+*/
+function within(min, val, max) {
+	if (val < min) return false;
+	if (val > max) return false;
+	return true;
+}
+
+/**
 | Returns a rejection error
 */
 function reject(message) {
-	if (Jools.devel) {
-		throw new Error(message); // in devel mode any failure is fatal.
-	}
+	// in devel mode any failure is fatal.{
+	if (Jools.devel) throw new Error(message); 
 	log('reject', 'reject', message);
 	return {ok: false, message: message};
 }
@@ -374,6 +382,26 @@ function deepFreeze(obj) {
 	}
 }
 
+/**
+| TODO
+*/
+var oleng$id = 0;
+
+/**
+| TODO
+*/
+function immute(obj) {
+	if (obj.o$id) throw new Error('already immutable');
+	var names = Object.getOwnPropertyNames(obj);
+	for (var a = 0, aZ = names.length; a < aZ; a++) {
+		var desc = Object.getOwnPropertyDescriptor(obj, names[a]);
+		if (!desc.configurable) continue;
+		desc.configurable = false;
+		desc.writable = false;
+		Object.defineProperty(obj, names[a], desc);
+	}
+    Object.defineProperty(obj, 'o$id', {value: ++oleng$id});
+}
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++Signature++
@@ -381,27 +409,50 @@ function deepFreeze(obj) {
  Signates an entry, string index or string span.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Signature(master) {
-	if (is(master.path))  this.path  = new Path(master.path); // TODO senseless copy if immutable
-	if (is(master.at1))   this.at1   = master.at1;
-	if (is(master.at2))   this.at2   = master.at2;
-	if (is(master.pivot)) this.pivot = master.pivot;
-	if (is(master.proc))  this.proc  = master.proc;
-	if (is(master.val))   this.val   = JSON.parse(JSON.stringify(master.val));
+	for(var k in master) {
+		if (!Object.hasOwnProperty.call(master, k)) continue;
+		if (!Signature.field[k]) throw reject('invalid Signature property: '+k);
+		this[k] = master[k];
+	}
+	for (var a = 1, aZ = arguments.length; a < aZ; a+=2) {
+		var k = arguments[a];
+		if (!Signature.field[k]) throw reject('invalid Signature property: '+k);
+		this[k] = arguments[a + 1];
+	}
+	if (is(this.val)) {
+		// TODO remove this evil once immutables rule
+		this.val = JSON.parse(JSON.stringify(this.val));
+	}
+	//immute(this);
 }
+
+/**
+| TODO
+*/
+Signature.field = {
+	'path'  : true,
+	'at1'   : true,
+	'at2'   : true,
+	'pivot' : true,
+	'proc'  : true,
+	'val'   : true,
+}
+immute(Signature.field);
 
 /**
 | Attunes '$end' ats to match a string.
 */
 Signature.prototype.attune = function(str, name) {
-	if (this.at1 === '$end') this.at1 = str.length;
-	if (this.at2 === '$end') this.at2 = str.length;
-	if(is(this.at1) && (this.at1 < 0 || this.at1 > str.length))
-		throw reject(name+' at1 not within string');
-	if(is(this.at2) && (this.at2 < 0 || this.at2 > str.length))
-		throw reject(name+' at2 not within string');
-	return this;
+	var at1 = this.at1;
+	var at2 = this.at2;
+	if (this.at1 === '$end') at1 = str.length;
+	if (this.at2 === '$end') at2 = str.length;
+	if (is(at1) && !within(0, at1, str.length)) throw reject(name+' at1 not within string');
+	if (is(at2) && !within(0, at2, str.length)) throw reject(name+' at2 not within string');
+	return new Signature(this, 'at1', at1, 'at2', at2);
 }
 
+immute(Signature.prototype);
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++Path++
@@ -465,6 +516,7 @@ function Path(master) {
 
 	Object.freeze(path);
 	fixateNoEnum(this, '_path', path);
+	immute(this);
 }
 
 /**

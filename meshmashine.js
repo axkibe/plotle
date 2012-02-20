@@ -82,7 +82,6 @@ function check(condition) {
 }
 
 function checkWithin(v, low, high) {
-	// TODO rename checkLimits(low, v, high);
 	if (v < low || v > high) fail(arguments, 3, low, '<=', v, '<=', high);
 }
 
@@ -111,9 +110,10 @@ function Alternation(src, trg) {
 	this.trg = trg;
 }
 
-Alternation.prototype.type = function(backward) {
-	var src = backward ? this.trg : this.src;
-	var trg = backward ? this.src : this.trg;
+/**
+| TODO 
+*/
+Alternation.type = function(src, trg) {
 	if (trg.proc === 'splice') return 'split';
 	if (src.proc === 'splice') return 'join';
 
@@ -137,11 +137,9 @@ Alternation.prototype.type = function(backward) {
 /**
 | Alters the repository.
 */
-function alter(meshtree, alternation, backward, telling, cogging) {
-	var atype = alternation.type(backward);
+function alter(meshtree, src, trg, telling, cogging) {
+	var atype = Alternation.type(src, trg);
 	var cm = 'alter('+atype+')';
-	var src = !backward ? alternation.src : alternation.trg;
-	var trg = !backward ? alternation.trg : alternation.src;
 
 	log('alter', 'src:', src, 'trg:', trg, 'atype:', atype);
 	switch (atype) {
@@ -158,7 +156,8 @@ function alter(meshtree, alternation, backward, telling, cogging) {
 		check(isString(str), cm, 'src.path signates no string');
 
 		check(src.pivot === src.path.length - 2,  cm, 'currently cannot splice trees');
-		src.attune(str, 'src.path');
+		src = src.attune(str, 'src.path');
+
 		var sig_splice = src.path.get(src.pivot);
 		checkWithin(sig_splice, 0, pivot.length, cm, 'splice out of range');
 		check(src.path.get(-1) === 'text', cm, 'split must be on .text');
@@ -198,7 +197,7 @@ function alter(meshtree, alternation, backward, telling, cogging) {
 		check(isString(str, cm, 'trg.path signates no string'));
 		check(trg.pivot === trg.path.length - 2, cm, 'corrently cannot splice trees');
 
-		trg.attune(str, 'trg.path');
+		trg = trg.attune(str, 'trg.path');
 		var sig_splice = trg.path.get(trg.pivot);
 
 		checkWithin(sig_splice, 0, pivot.length -1, cm, 'splice out of range');
@@ -234,14 +233,14 @@ function alter(meshtree, alternation, backward, telling, cogging) {
 			check(matches(save, trg.val), cm, 'trg.val preset incorrectly');
 		} else {
 			if (!is(save)) save = null;
-			//trg.val = (save && save.constructor) ? new save.constructor(save) : save; TODO
+			// TODO remove evil copy for immutables
 			trg.val = JSON.parse(JSON.stringify(save));
 		}
 
 		if (is(src.path)) {
 			check(trg.path.equals(src.path), cm, 'src.path preset incorrectly');
 		} else {
-			src.path = trg.path;
+			src = new Signature(src, 'path', trg.path);
 		}
 
 		meshtree.mmSet(trg.path, src.val);
@@ -254,7 +253,7 @@ function alter(meshtree, alternation, backward, telling, cogging) {
 		var str = meshtree.get(trg.path);
 		check(isString(str), cm, 'trg.path signates no string');
 
-		trg.attune(str, 'trg.path');
+		trg = trg.attune(str, 'trg.path');
 
 		// where trg span should end
 		var tat2 = trg.at1 + src.val.length;
@@ -277,7 +276,7 @@ function alter(meshtree, alternation, backward, telling, cogging) {
 		var str = meshtree.get(src.path);
 		check(isString(str), cm, 'src.path signates no string');
 
-		src.attune(str, 'src.path');
+		src = src.attune(str, 'src.path');
 		if (src.at1 === src.at2) { log('alter', 'removed nothing'); return; }
 
 		var val = str.substring(src.at1, src.at2);
@@ -337,6 +336,8 @@ function alter(meshtree, alternation, backward, telling, cogging) {
 	default:
 		throw reject('invalid atype:', atype);
 	}
+	
+	return new Alternation(src, trg);
 }
 
 
@@ -573,7 +574,8 @@ MeshMashine.prototype._reflect = function(time, path) {
 
 		// playback
 		for(var hi = this.history.length - 1; hi >= time; hi--) {
-			alter(reflect, this.history[hi], true, false, this.cogging);
+			var moment = this.history[hi];
+			alter(reflect, moment.trg, moment.src, false, this.cogging);
 		}
 	} catch (err) {
 		// this should not ever fail, thus rethrow a lethal error
@@ -613,8 +615,8 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 		}
 
 		var apply = function (alt) {
-			alter(this.repository, alt, false, this.telling, this.cogging);
-			deepFreeze(alt);
+			alt = alter(this.repository, alt.src, alt.trg, this.telling, this.cogging);
+			deepFreeze(alt);  // @@ extra safety, but superflous.
 			this.history.push(alt);
 		}
 

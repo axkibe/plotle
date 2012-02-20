@@ -53,8 +53,8 @@ function j2o() {
 | Options to connect to meshmashine
 */
 var mmops = {
-	host: config().ip,
-	port: config().port,
+	host: config.ip,
+	port: config.port,
 	path: '/mm',
 	method: 'POST'
 };
@@ -208,10 +208,11 @@ function message(s) {
 	drawScreen();
 }
 
+/*
 function request(cmd, callback) {
 	cmd.time = time;
 	tin.pause();
-	libclient.request(cmd,
+	XXX libclient.request(cmd,
 		function(err, asw) {
 			tin.resume();
 			if (err) {
@@ -222,6 +223,7 @@ function request(cmd, callback) {
 			callback(err, asw);
 		});
 }
+*/
 
 function update(callback) {
 	request(
