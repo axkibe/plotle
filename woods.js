@@ -173,7 +173,7 @@ Stem.prototype.grow = function(path) {
 	if (!this._grow) throw new Error('_grow not set');
 
 	while (is(this.get('' + this._grow))) this._grow++;
-	path.set(-1, '' + this._grow);
+	return path.set(-1, '' + this._grow);
 }
 
 /**
@@ -235,6 +235,7 @@ Stem.prototype.getAnchestor = function(type) {
 | Adds a listener for set events.
 */
 Stem.prototype.addListener = function(listener) {
+	// TODO make a copy.
 	if (!this.listen) this.listen = [];
 	var listen = this.listen;
 	if (listen.indexOf(listener) !== -1) return false;
@@ -246,6 +247,7 @@ Stem.prototype.addListener = function(listener) {
 | Removes a listener.
 */
 Stem.prototype.removeListener = function(listener) {
+	// TODO make a copy.
 	var listen = this.listen;
 	if (!listen) return false;
 	var idx = listen.indexOf(listener);
@@ -330,12 +332,13 @@ StemAlley.prototype.isAlley = true;
 | Returns the twig the path points at.
 */
 StemAlley.prototype.get = function(path, a0, al) {
-	if (path.constructor === Number) { // direct alley?
-		return this._twigs.alley[path];
-	}
-	if (!(path instanceof Path)) { // direct copse?
-		return this._twigs[path];
-	}
+	// direct alley?
+	if (path.constructor === Number) return this._twigs.alley[path];
+	// direct copse?
+	if (path.constructor === String) return this._twigs[path];
+	// otherwise it must be path
+	if (!isPath(path)) throw new Error('invalid get path');
+
 	a0 = path.fit(a0, false);
 	al = path.fit(al, true);
 	var pa0 = path.get(a0);

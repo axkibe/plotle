@@ -82,20 +82,13 @@ function check(condition) {
 }
 
 function checkWithin(v, low, high) {
+	// TODO rename checkLimits(low, v, high);
 	if (v < low || v > high) fail(arguments, 3, low, '<=', v, '<=', high);
 }
 
 
-
-function keysLength(o) {
-	var n = 0;
-	for(var k in o) {
-		n++;
-	}
-	return n;
-}
-
 function matches(v, w) {
+	// TODO change to checkMatch
 	if (v === w) return true;
 	if (v.matches) return v.matches(w);
 	if (w.matches) return w.matches(v);
@@ -233,7 +226,7 @@ function alter(meshtree, alternation, backward, telling, cogging) {
 
 		if (trg.path.get(-1) === '$new') {
 			log('alter', 'grow new');
- 			parent.grow(trg.path);
+ 			trg.path = parent.grow(trg.path);
 		}
 
 		var save = meshtree.get(trg.path);
@@ -395,7 +388,7 @@ MeshMashine.prototype.transformOnMoment = function(sign, alter) {
 		if (sig_i > src_i) {
 			// split was before -> index shifted
 			log('te', 'split upside');
-			sign.path.add(src.pivot, 1);
+			sign.path = sign.path.add(src.pivot, 1);
 			return sign;
 		}
 		log('te', 'split here');
@@ -412,7 +405,7 @@ MeshMashine.prototype.transformOnMoment = function(sign, alter) {
 			// case 1:
 			if (sign.at1 > src.at1) {
 				log('te', 'split leftside');
-				sign.path.add(src.pivot, 1);
+				sign.path = sign.path.add(src.pivot, 1);
 				sign.at1 -= src.at1;
 				sign.at2 -= src.at1;
 				return sign;
@@ -423,7 +416,7 @@ MeshMashine.prototype.transformOnMoment = function(sign, alter) {
 			sign.at2 = src.at1;
 
 			var sign2 = new Signature(sign);
-			sign2.path.add(src.pivot, 1);
+			sign2.path = sign2.path.add(src.pivot, 1);
 			sign2.at1 = 0;
 			sign2.at2 = sat2;
 			return [sign, sign2];
@@ -435,7 +428,7 @@ MeshMashine.prototype.transformOnMoment = function(sign, alter) {
 				return sign;
 			}
 			log('te', 'split leftside');
-			sign.path.add(src.pivot, 1);
+			sign.path = sign.path.add(src.pivot, 1);
 			sign.at1 -= src.at1;
 			return sign;
 		}
@@ -452,12 +445,12 @@ MeshMashine.prototype.transformOnMoment = function(sign, alter) {
 		if (sig_i > trg_i) {
 			// split was before -> index shifted
 			log('te', 'join upside');
-			sign.path.add(src.pivot, -1);
+			sign.path = sign.path.add(src.pivot, -1);
 			return sign;
 		}
 		log('te', 'join here');
 		// join is in same line;
-		sign.path.add(trg.pivot, -1);
+		sign.path = sign.path.add(trg.pivot, -1);
 		sign.at1 += trg.at1;
 		if (is(sign.at2)) sign.at1 += trg.at1;
 		return sign;
@@ -516,7 +509,7 @@ MeshMashine.prototype.transformOnMoment = function(sign, alter) {
 		if (sig_i >= trg_i) {
 			// insert was before -> index shifted
 			log('te', 'place shifted');
-			sign.path.add(trg.alley.length, 1);
+			sign.path = sign.path.add(trg.alley.length, 1);
 		}
 		return sign;
 	case 'alley-take' :
@@ -529,7 +522,7 @@ MeshMashine.prototype.transformOnMoment = function(sign, alter) {
 		if (sig_i >= src_i) {
 			// take was before -> index shifted
 			log('te', 'place shifted');
-			sign.path.add(src.alley.length, -1);
+			sign.path = sign.path.add(src.alley.length, -1);
 		}
 		return sign;
 	default :

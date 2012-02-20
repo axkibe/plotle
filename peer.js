@@ -168,9 +168,7 @@ Peer.prototype.getSpace = function(name) {
 | Creates a new note.
 */
 Peer.prototype.newNote = function(space, zone) {
-	var path = new Path(space);
-	path.push('items');
-	path.push('$new');
+	var path = new Path(space, 'items', '$new');
 
 	var asw = this.mm.alter(-1,
 		new Signature({
@@ -214,8 +212,7 @@ Peer.prototype.newNote = function(space, zone) {
 | Sets the zone for item.
 */
 Peer.prototype.setZone = function(item, zone) {
-	var path = new Path(item);
-	path.push('zone');
+	var path = new Path(item, 'zone');
 
 	this.mm.alter(-1,
 		new Signature({
@@ -231,9 +228,7 @@ Peer.prototype.setZone = function(item, zone) {
 | Sets an items fontsize
 */
 Peer.prototype.setFontSize = function(item, fontsize) {
-	var path = new Path(item);
-	path.push('doc');
-	path.push('fontsize');
+	var path = new Path(item, 'doc', 'fontsize');
 
 	this.mm.alter(-1,
 		new Signature({
@@ -249,8 +244,7 @@ Peer.prototype.setFontSize = function(item, fontsize) {
 | Sets an items PNW. (point in north-west)
 */
 Peer.prototype.setPNW = function(item, pnw) {
-	var path = new Path(item);
-	path.push('pnw');
+	var path = new Path(item, 'pnw');
 
 	this.mm.alter(-1,
 		new Signature({
@@ -266,9 +260,7 @@ Peer.prototype.setPNW = function(item, pnw) {
 | Creates a new label.
 */
 Peer.prototype.newLabel = function(space, pnw, text, fontsize) {
-	var path = new Path(space);
-	path.push('items');
-	path.push('$new');
+	var path = new Path(space, 'items', '$new');
 
 	var asw = this.mm.alter(-1,
 		new Signature({
@@ -312,9 +304,7 @@ Peer.prototype.newLabel = function(space, pnw, text, fontsize) {
 | Creates a new relation.
 */
 Peer.prototype.newRelation = function(space, pnw, text, fontsize, vitem1, vitem2) {
-	var path = new Path(space);
-	path.push('items');
-	path.push('$new');
+	var path = new Path(space, 'items', '$new');
 
 	var asw = this.mm.alter(-1,
 		new Signature({
@@ -360,8 +350,7 @@ Peer.prototype.newRelation = function(space, pnw, text, fontsize, vitem1, vitem2
 | Moves an item up to the z-index
 */
 Peer.prototype.moveToTop = function(space, item) {
-	var path = new Path(space);
-	path.push('z');
+	var path = new Path(space, 'z');
 	var key = item.getOwnKey();
 	var at1 = space.z.indexOf(key);
 
@@ -393,8 +382,7 @@ Peer.prototype.moveToTop = function(space, item) {
 | Inserts some text.
 */
 Peer.prototype.insertText = function(node, offset, text) {
-	var path = new Path(node);
-	path.push('text');
+	var path = new Path(node, 'text');
 
 	this.mm.alter(-1,
 		new Signature({
@@ -411,8 +399,7 @@ Peer.prototype.insertText = function(node, offset, text) {
 | Removes some text within one node
 */
 Peer.prototype.removeText = function(node, offset, len) {
-	var path = new Path(node);
-	path.push('text');
+	var path = new Path(node, 'text');
 
 	this.mm.alter(-1,
 		new Signature({
@@ -453,8 +440,7 @@ Peer.prototype.removeSpawn = function(node1, o1, node2, o2) {
 | Splits a text node.
 */
 Peer.prototype.split = function(node, offset) {
-	var path = new Path(node);
-	path.push('text');
+	var path = new Path(node, 'text');
 
 	this.mm.alter(-1,
 		new Signature({
@@ -472,8 +458,7 @@ Peer.prototype.split = function(node, offset) {
 | Joins a text nodes with its next one
 */
 Peer.prototype.join = function(node) {
-	var path = new Path(node);
-	path.push('text');
+	var path = new Path(node, 'text');
 
 	this.mm.alter(-1,
 		new Signature({
@@ -491,8 +476,7 @@ Peer.prototype.join = function(node) {
 | Removes an item.
 */
 Peer.prototype.removeItem = function(space, item) {
-	var path = new Path(space);
-	path.push('z');
+	var path = new Path(space, 'z');
 	var key = item.getOwnKey();
 	var at1 = space.z.indexOf(key);
 

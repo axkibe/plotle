@@ -46,10 +46,12 @@ function configSwitchServer(param) {
 | Running in node or browser?
 */
 if (typeof(window) === 'undefined') {
+	// in node
 	config = require('./config');
 	devel  = configSwitchServer(config.devel);
 	puffed = configSwitchServer(config.puffed);
-} else { // inBrowser
+} else {
+	// ini browser
 	devel  = configSwitchClient(config.devel);
 	puffed = configSwitchClient(config.puffed);
 }
@@ -60,17 +62,18 @@ if (typeof(window) === 'undefined') {
 function is(o)        { return typeof(o) !== 'undefined'; }
 function isnon(o)     { return typeof(o) !== 'undefined' && o !== null; }
 function isInteger(o) { return typeof(o) === 'number' && Math.floor(o) === o; }
-function isPath(o)    { return o instanceof Path; }
+function isPath(o)    { return o instanceof Path; } // TODO .con
+function isArray(o)   { return o.constructor === Array; }
 function isString(o)  { return typeof(o) === 'string' || o instanceof String; }
 
 /**
 | Limits value to be between min and max
 */
-function limit(min, value, max) {
+function limit(min, val, max) {
 	if (min > max) throw new Error('limit() min > max');
-	if (value < min) return min;
-	if (value > max) return max;
-	return value;
+	if (val < min) return min;
+	if (val > max) return max;
+	return val;
 }
 
 /**
@@ -85,8 +88,7 @@ function reject(message) {
 }
 
 /**
-| Legacy
-| (Opera Browser)
+| Legacy | (for opera browser)
 */
 if (!Object.defineProperty) {
 	console.log('Using legacy Object.defineProperty');
@@ -95,12 +97,8 @@ if (!Object.defineProperty) {
 			obj[label] = funcs.value;
 			return;
 		}
-		if (funcs.get) {
-			obj.__defineGetter__(label, funcs.get);
-		}
-		if (funcs.set) {
-			obj.__defineSetter__(label, funcs.set);
-		}
+		if (funcs.get) obj.__defineGetter__(label, funcs.get);
+		if (funcs.set) obj.__defineSetter__(label, funcs.set);
 	}
 }
 
@@ -188,9 +186,9 @@ function _pushindent(indent, a) {
 /**
 | Inspects an object and creates a descriptive string for it.
 |
-| Self-written instead of nodeJS` since not available in browser. Not using toJSON since
-| that fails on circles. This is the jools-internal version that pushes directly on the
-| stack.
+| Self-written instead of node.JS' since not available in browser.
+| Not using toJSON since that fails on circles.
+| This is the jools-internal version that pushes data directly on the array stack.
 */
 function _inspect(o, a, indent, circle) {
 	if (circle.indexOf(o) !== -1) {
@@ -306,7 +304,7 @@ function _inspect(o, a, indent, circle) {
 */
 function log(category) {
 	if (category === 'fail') {
-		console.log('FAIL'); // TODO BREAKPOINT
+		console.log('FAIL'); // TODO Just a line for breakpoints.
 	}
 	if (category !== true && !config.log.all && !config.log[category]) return;
 	var a = _timestamp([]);
@@ -383,7 +381,7 @@ function deepFreeze(obj) {
  Signates an entry, string index or string span.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Signature(master) {
-	if (is(master.path))  this.path  = new Path(master.path);
+	if (is(master.path))  this.path  = new Path(master.path); // TODO senseless copy if immutable
 	if (is(master.at1))   this.at1   = master.at1;
 	if (is(master.at2))   this.at2   = master.at2;
 	if (is(master.pivot)) this.pivot = master.pivot;
@@ -404,63 +402,87 @@ Signature.prototype.attune = function(str, name) {
 	return this;
 }
 
+
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++Path++
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- Path to a node.
+ Path to an entitiy.
  TODO, make immuteable?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+/**
+| Constructs a new Path.
+| master can be an array or another path or null
+| arguments followed by master are appended to the path
+*/
 function Path(master) {
-	if (isPath(master)) master = master._path;
+	var path;
+	// if true the path needs to be copied
+	var copy = arguments.length > 1;
 
-	if (master instanceof Array) {
-		for (var i = 0, mlen = master.length; i < mlen; i++) {
-			var v = master[i];
-			if (isInteger(v)) continue;
-			if (isString(v)) {
-				if (v[0] === '_') throw reject('Path arcs must not start with _');
-				continue;
+	switch(master.constructor) {
+	case Path  : path = master._path; break;
+	case Array : path = master; break;
+	case null  : path = []; copy = false; break;
+	default    :
+		if (!master.parent) throw new Error('invalid path master');
+		// constructs the path from an entities key chain
+		path = [];
+		copy = false;
+		var len = 0;
+		// count size
+		// TODO simplify
+		for(var n = master; n; n = n.parent) {
+			if (n.parent) {
+				path.push(null);
+				len++;
 			}
-			throw reject('Path arcs must be String or Integer');
 		}
-		this._path = master.slice();
-		return;
+
+		// reverse fills the path;
+		n = master;
+		for(var a = len; a > 0; a--) {
+			var key = n.getOwnKey();
+			if (key === null) throw new Error('Cannot get path key');
+			path[--len] = key;
+			n = n.parent;
+		}
+		break;
 	}
 
-	if (!master.parent) {
-		throw new Error('invalid path master');
-	}
-	var path = [];
-	var len = 0;
-	// count size
-	for(var n = master; n; n = n.parent) {
-		if (n.parent) {
-			path.push(null);
-			len++;
-		}
+	if (copy) path = path.slice();
+
+	// appends additional arguments.
+	for (var a = 1, aZ = arguments.length; a < aZ; a++) {
+		path[path.length] = arguments[a];
 	}
 
-	// reverse fill the path;
-	n = master;
-	for(var a = len; a > 0; a--) {
-		var key = n.getOwnKey();
-		if (key === null) throw new Error('Cannot get path key');
-		path[--len] = key;
-		n = n.parent;
+	// checks the path lengths
+	// @@ might be needed only for copies
+	for (var a = 0, aZ = path.length; a < aZ; a++) {
+		if (!_isValidPathArc(path[a])) throw reject('invalid path arc');
 	}
-	this._path = path;
+
+	Object.freeze(path);
+	fixateNoEnum(this, '_path', path);
 }
+
+/**
+| Returns true is arc is a valid path arc.
+*/
+function _isValidPathArc(arc) {
+	if (isInteger(arc)) return true;
+	if (!isString(arc)) return false;
+	if (arc[0] === '_') return false;
+	return true;
+}
+
 
 /**
 | Length of the signature.
 */
 Object.defineProperty(Path.prototype, 'length', {
-	get: function() {
-		if (!this._path) {
-			debug('NO PATH');
-		}
-		return this._path.length;
-	},
+	get: function() { return this._path.length; },
 });
 
 /**
@@ -468,7 +490,7 @@ Object.defineProperty(Path.prototype, 'length', {
 */
 Path.prototype.get = function(i) {
 	if (i < 0) i += this._path.length;
-	if (i < 0) return undefined;
+	if (i < 0 || i >= this._path.length) throw new Error('invalid get');
 	return this._path[i];
 }
 
@@ -478,7 +500,7 @@ Path.prototype.get = function(i) {
 Path.prototype.fit = function(a, edge) {
 	if (!is(a)) a = edge ? this._path.length : 0;
 	if (a < 0) a += this._path.length;
-	if (a < 0) a = 0;
+	if (a < 0) throw new Error('invalid fit');
 	return a;
 }
 
@@ -486,26 +508,34 @@ Path.prototype.fit = function(a, edge) {
 | Sets arc [i]
 */
 Path.prototype.set = function(i, v) {
-	if (i < 0) i += this._path.length;
-	return this._path[i] = v;
+	var path = this._path.slice();
+	if (i < 0) i += path.length;
+	path[i] = v;
+	return new Path(path);
 }
 
 /**
 | Appends an arc
 */
-Path.prototype.push = function(v) {
-	return this._path[this._path.length] = v;
+Path.prototype.push = function() {
+	var path = this._path.slice();
+	for (var a = 0, aZ = arguments.length; a < aZ; a++) {
+		path[path.length] = arguments[a];
+	}
+	return new Path(path);
 }
 
 /**
 | Adds to integer arc[a]
 */
 Path.prototype.add = function(a, v) {
-	if (a < 0) a = this._path.length + a;
-	if (!isInteger(this._path[a])) {
+	var path = this._path.slice();
+	if (a < 0) a = path.length + a;
+	if (!isInteger(path[a])) {
 		throw new Error('cannot change non-integer arc: '+this._path[a]);
 	}
-	return this._path[a] += v;
+	path[a] += v;
+	return new Path(path);
 }
 
 /**
