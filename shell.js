@@ -1297,7 +1297,16 @@ function VPara(para, vdoc) {
 	// flow caching
 	this._flow$ = [];
 
-	this.pnw = null; // position of para in doc.
+	// XXX
+	Object.defineProperty(this, 'pnw', {
+		get: function() {
+			throw new Error('TODO');
+		},
+		set: function() {
+			throw new Error('TODO');
+		}
+	});
+	//this.pnw = null; // position of para in doc.
 	para.addListener(this);
 }
 
@@ -1760,9 +1769,10 @@ VPara.prototype.drawCaret = function() {
 	var sbary   = vitem.scrollbarY;
 	var scrolly = sbary ? sbary.getPos() : 0;
 
-	var cys = R(caret.pos$.y + this.pnw.y + descend - scrolly);
+	var pnw = vdoc.getPNW(this);
+	var cys = R(caret.pos$.y + pnw.y + descend - scrolly);
 	var cyn = cys - th;
-	var cx  = caret.pos$.x + this.pnw.x - 1;
+	var cx  = caret.pos$.x + pnw.x - 1;
 
 	cyn = min(max(cyn, 0), zone.height);
 	cys = min(max(cys, 0), zone.height);
@@ -1874,8 +1884,9 @@ Scrollbar.prototype.setPos = function(pos) {
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function VDoc(doc, vitem) {
-	this.doc = doc;
+	this.doc   = doc;
 	this.vitem = vitem;
+	this.pnws  = null;
 
 	doc.addListener(this);
 
@@ -1923,6 +1934,7 @@ VDoc.prototype.draw = function(fabric, width, imargin, scrollp) {
 	}
 
 	var y = imargin.n;
+	var pnws = [];   // north-west points of paras
 
 	var valley = this.valley;
 	// draws the paragraphs
@@ -1931,7 +1943,7 @@ VDoc.prototype.draw = function(fabric, width, imargin, scrollp) {
 		var flow = vpara.getFlow();
 
 		// @@03 name pnw$
-		vpara.pnw = new Point(imargin.w, R(y));
+		pnws[a] = new Point(imargin.w, R(y));
 		//debug('1', imargin.w);
 		//debug('2', y);
 		//debug('3', y - scrollp.y);
@@ -1941,6 +1953,16 @@ VDoc.prototype.draw = function(fabric, width, imargin, scrollp) {
 		//debug('6', paraSep);
 		y += flow.height + paraSep;
 	}
+
+	this.pnws = pnws;
+}
+
+VDoc.prototype.getPNW = function(vpara) {
+	// TODO use Oleng-IDs
+	if (!vpara) {
+		throw new Error('TODO');
+	}
+	return this.pnws[vpara.para.getOwnKey()];
 }
 
 /**
@@ -1996,7 +2018,8 @@ VDoc.prototype.getVParaAtPoint = function(p) {
 	for(var a = 0; a < valley.length; a++) {
 		var vpara = valley[a];
 		var flow = vpara.getFlow();
-		if (p.y < vpara.pnw.y + flow.height) return vpara;
+		var pnw = this.pnws[a];
+		if (p.y < pnw.y + flow.height) return vpara;
 	}
 	return null;
 }
@@ -2010,8 +2033,8 @@ VDoc.prototype.pathSelection = function(fabric, border, twist, width, imargin, s
 	var sp = scrollp;
 	var m1 = select.mark1;
 	var m2 = select.mark2;
-	var pnw1 = m1.entity.pnw;
-	var pnw2 = m2.entity.pnw
+	var pnw1 = this.getPNW(m1.entity);
+	var pnw2 = this.getPNW(m2.entity);
 	var p1 = m1.entity.getOffsetPoint(m1.offset);
 	var p2 = m2.entity.getOffsetPoint(m2.offset);
 	p1 = p1.add(R(pnw1.x - sp.x), R(pnw1.y - sp.y));
@@ -2330,7 +2353,8 @@ VItem.prototype.click = function(p) {
 
 	var vpara = this.getVParaAtPoint(pi);
 	if (vpara) {
-		var offset = vpara.getPointOffset(pi.sub(vpara.pnw));
+		var ppnw = this.vdoc.getPNW(vpara);
+		var offset = vpara.getPointOffset(pi.sub(ppnw));
 		shell.caret.set(vpara, offset);
 		shell.caret.show();
 		shell.selection.deselect();
