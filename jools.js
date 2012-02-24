@@ -387,7 +387,6 @@ function immute(obj) {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Signature(master) {
 	var k;
-	debug(1, this._$id);
 	for(k in master) {
 		if (!Object.hasOwnProperty.call(master, k)) continue;
 		if (!Signature.field[k]) throw reject('invalid Signature property: '+k);
@@ -399,7 +398,6 @@ function Signature(master) {
 		if (!Signature.field[k]) throw reject('invalid Signature property: '+k);
 		this[k] = arguments[a + 1];
 	}
-	debug(2, this._$id);
 
 	immute(this);
 }

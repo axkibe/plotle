@@ -191,6 +191,8 @@ function grow(model /* ... */) {
 	// TODO do not grow if the model was a twig.
 	for (k in twig) {
 		if (!Object.hasOwnProperty.call(twig, k)) continue;
+		if (k === 'alley') continue; // TODO remove?
+		debug('subgrow', k);
 		twig[k] = grow(twig[k]);
 	}
 
@@ -199,6 +201,7 @@ function grow(model /* ... */) {
 		if (constructor !== Array) throw new Error('Alleys need Arrays');
 		for (var ka in alley) {
 			if (!Object.hasOwnProperty.call(alley, k)) continue;
+			debug('subgrow', ka);
 			twig[ka] = grow(alley[ka]);
 		}
 	}
