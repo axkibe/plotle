@@ -678,6 +678,14 @@ function Rect(pnw, pse) {
 	}
 	fixate(this, 'pnw',    pnw);
 	fixate(this, 'pse',    pse);
+	this.init();
+}
+
+/**
+| Additional initialization (needed by woods)
+*/
+Rect.prototype.init = function() {
+	var pse = this.pse, pnw = this.pnw;
 	fixateNoEnum(this, 'width',  pse.x - pnw.x);
 	fixateNoEnum(this, 'height', pse.y - pnw.y);
 }

@@ -31,6 +31,7 @@
 | Imports
 */
 var Jools;
+var Tree;
 
 /**
 | Exports
@@ -49,6 +50,7 @@ var MeshMashine;
 */
 if (typeof(window) === 'undefined') {
 	Jools = require('./jools');
+	Tree  = require('./tree');
 }
 
 var Path       = Jools.Path;
@@ -73,7 +75,7 @@ function fail(args, aoffset) {
 	}
 	var b = a.slice();
 	b.unshift('fail');
-	log.apply(this, b);
+	log.apply(null, b);
 	throw reject(a.join(' '));
 }
 
@@ -111,14 +113,14 @@ function Alternation(src, trg) {
 }
 
 /**
-| TODO 
+| TODO
 */
 Alternation.type = function(src, trg) {
 	if (trg.proc === 'splice') return 'split';
 	if (src.proc === 'splice') return 'join';
 
-	if (src.proc === 'arrange') return 'alley-place';
-	if (trg.proc === 'arrange') return 'alley-take';
+	if (src.proc === 'arrange') return 'place';
+	if (trg.proc === 'arrange') return 'take';
 
 	if (is(src.val) && !is(trg.at1)) return 'set';
 	if (is(src.val) &&  is(trg.at1)) return 'insert';
@@ -127,7 +129,7 @@ Alternation.type = function(src, trg) {
 	if (Jools.prissy) { log('fail', this); throw new Error('invalid type'); }
 
 	return null;
-}
+};
 
 
 /**
@@ -135,209 +137,232 @@ Alternation.type = function(src, trg) {
 */
 
 /**
-| Alters the repository.
+| Alters a tree
 */
-function alter(meshtree, src, trg, telling, cogging) {
+function alter(tree, src, trg, report) {
 	var atype = Alternation.type(src, trg);
-	var cm = 'alter('+atype+')';
+	var cm = 'alter('+atype+')';  // check message TODO optimize away
 
 	log('alter', 'src:', src, 'trg:', trg, 'atype:', atype);
+	var result;
+
 	switch (atype) {
-	case 'split' :
-		// a string item is splitted into two.
-
-		check(is(src.at1), cm, 'src.at1 missing');
-		check(isInteger(src.pivot), cm, 'src.pivot not an integer');
-
-		var pivot = meshtree.get(src.path, 0, src.pivot);
-		check(pivot.isAlley, cm, 'src.path[src.pivot] not an alley');
-
-		var str = meshtree.get(src.path);
-		check(isString(str), cm, 'src.path signates no string');
-
-		check(src.pivot === src.path.length - 2,  cm, 'currently cannot splice trees');
-		src = src.attune(str, 'src.path');
-
-		var sig_splice = src.path.get(src.pivot);
-		checkWithin(sig_splice, 0, pivot.length, cm, 'splice out of range');
-		check(src.path.get(-1) === 'text', cm, 'split must be on .text');
-
-		var ppre = pivot.get(sig_splice);
-
-		// no rejects after here
-		var pnew = new ppre.constructor(ppre);
-		if (cogging) {
-			pnew.parent = ppre.parent;
-			pnew.key$ = ppre.key$ + 1;
-		}
-
-		var text = ppre.get('text');
-		pnew.mmSet('text', text.substring(src.at1));
-		ppre.mmSet('text', text.substring(0, src.at1));
-
-		pivot.splice(sig_splice + 1, 0, pnew);
-
-		if (telling) {
-			if (pivot.listen) pivot.tell('split', src.path.get(src.pivot), src.at1, pnew);
-			if (ppre.listen)   ppre.tell('split', src.path.get(-1), src.at1, pnew);
-		}
-		break;
-	case 'join' :
-		// two string items are joined into one.
-
-		check(is(trg.at1), cm, 'trg.at1 missing');
-		check(isInteger(trg.pivot), cm, 'trg.pivot not an integer');
-
-		var pivot = meshtree.get(trg.path, 0, trg.pivot);
-
-		check(pivot.isAlley, cm, 'trg.path[pivot] not an Alley');
-
-		var str = meshtree.get(trg.path);
-
-		check(isString(str, cm, 'trg.path signates no string'));
-		check(trg.pivot === trg.path.length - 2, cm, 'corrently cannot splice trees');
-
-		trg = trg.attune(str, 'trg.path');
-		var sig_splice = trg.path.get(trg.pivot);
-
-		checkWithin(sig_splice, 0, pivot.length -1, cm, 'splice out of range');
-		check(trg.path.get(trg.pivot + 1) === 'text', cm, 'join must be on .text');
-
-		var ppre = pivot.get(sig_splice);
-		var pnex = pivot.get(sig_splice + 1);
-
-		check(ppre.constructor === pnex.constructor, 'cannot join different types');
-
-		ppre.mmSet('text', ppre.get('text') + pnex.get('text'));
-		pivot.splice(sig_splice + 1, 1);
-
-		if (telling) {
-			if (pivot.listen) pivot.tell('join', trg.path.get(trg.pivot), trg.at1, ppre);
-			if (ppre.listen) ppre.tell('join>', trg.path.get(-1), trg.path.get(trg.pivot), trg.at1);
-			if (pnex.listen) pnex.tell('join<', trg.path.get(-1), trg.path.get(trg.pivot), trg.at1);
-		}
-		break;
-	case 'set':
-		// a new item is inserted or replaces an existing
-
-		check(!is(trg.at1), cm, 'trg.at1 must not exist.');
-		var parent = meshtree.get(trg.path, 0, -1);
-
-		if (trg.path.get(-1) === '$new') {
-			log('alter', 'grow new');
- 			trg.path = parent.grow(trg.path);
-		}
-
-		var save = meshtree.get(trg.path);
-		if (is(trg.val)) {
-			check(matches(save, trg.val), cm, 'trg.val preset incorrectly');
-		} else {
-			if (!is(save)) save = null;
-			// TODO remove evil copy for immutables
-			trg.val = JSON.parse(JSON.stringify(save));
-		}
-
-		if (is(src.path)) {
-			check(trg.path.equals(src.path), cm, 'src.path preset incorrectly');
-		} else {
-			src = new Signature(src, 'path', trg.path);
-		}
-
-		meshtree.mmSet(trg.path, src.val);
-
-		if (telling && parent.listen) parent.tell('set', trg.path.get(-1), src.val);
-		break;
-	case 'insert':
-		// a string is inserted into a string item.
-
-		var str = meshtree.get(trg.path);
-		check(isString(str), cm, 'trg.path signates no string');
-
-		trg = trg.attune(str, 'trg.path');
-
-		// where trg span should end
-		var tat2 = trg.at1 + src.val.length;
-		if (is(trg.at2)) {
-			check(trg.at2 === tat2, cm, 'trg.at2 preset incorrectly');
-		} else {
-			trg.at2 = tat2;
-		}
-		var nstr = str.substring(0, trg.at1) + src.val + str.substring(trg.at1);
-		meshtree.mmSet(trg.path, nstr);
-
-		if (telling) {
-			var parent = meshtree.get(trg.path, 0, -1);
-			if (parent.listen) parent.tell('insert', trg.path.get(-1), trg.at1, src.val);
-		}
-		break;
-	case 'remove':
-		// a part of a string item is removed.
-
-		var str = meshtree.get(src.path);
-		check(isString(str), cm, 'src.path signates no string');
-
-		src = src.attune(str, 'src.path');
-		if (src.at1 === src.at2) { log('alter', 'removed nothing'); return; }
-
-		var val = str.substring(src.at1, src.at2);
-		if (isnon(trg.val)) {
-			check(matches(val, trg.val), cm, 'trg.val preset incorrectly:',
-				val, '!==', trg.val);
-		} else {
-			trg.val = val;
-		}
-		var nstr = str.substring(0, src.at1) + str.substring(src.at2);
-		meshtree.mmSet(src.path, nstr);
-
-		if (telling) {
-			var parent = meshtree.get(src.path, 0, -1);
-			if (parent.listen) parent.tell('remove', src.path.get(-1), src.at1, src.at2, val);
-		}
-		break;
-
-	case 'alley-place' :
-		// a new item is placed (inserted) into an alley.
-
-		check(is(src.val),  cm, 'src.val not present');
-		check(is(trg.path), cm, 'trg.path not present');
-		check(is(trg.at1),  cm, 'trg.at1 not present');
-		var alley = meshtree.get(trg.path);
-		check(alley && alley.isAlley, cm, 'trg.path not an alley');
-
-		if (trg.at1 === '$top') trg.at1 = 0;
-		if (trg.at1 === '$end') trg.at1 = alley.length;
-		check(trg.at1 >= 0 && trg.at1 <= alley.length, cm, 'trg.at1 not inside alley');
-
-		alley.splice(trg.at1, 0, src.val);
-
-		if (telling && alley.listen) alley.tell('alley-place', trg.path.get(-1), trg.at1, src.val);
-		break;
-
-	case 'alley-take' :
-		// an item is taken (removed) from an alley.
-
-		check(is(src.path), cm, 'src.path not present');
-		check(is(src.at1),  cm, 'src.at1 not present');
-		var alley = meshtree.get(src.path);
-		check(alley && alley.isAlley, cm, 'src.path not an alley');
-		check(src.at1 >= 0 && src.at1 <= alley.length, cm, 'src.at1 not inside alley');
-
-		var val = alley.get(src.at1);
-		if (is(trg.val)) {
-			check(matches(val, trg.val), cm, 'trg.val preset incorrectly');
-		} else {
-			trg.val = val;
-		}
-		alley.splice(src.at1, 1);
-
-		if (telling && alley.listen) alley.tell('alley-take', src.path.get(-1), src.at1, val);
-		break;
-
-	default:
-		throw reject('invalid atype:', atype);
+	case 'set'    : result = alterSet   (tree, src, trg, report); break;
+	case 'join'   : result = alterJoin  (tree, src, trg, report); break;
+	case 'split'  : result = alterSplit (tree, src, trg, report); break;
+	case 'insert' : result = alterInsert(tree, src, trg, report); break;
+	case 'remove' : result = alterRemove(tree, src, trg, report); break;
+	case 'place'  : result = alterPlace (tree, src, trg, report); break;
+	case 'take'   : result = alterTake  (tree, src, trg, report); break;
+	default       : throw reject('invalid atype:', atype);
 	}
-	
-	return new Alternation(src, trg);
+
+	return result;
+}
+
+/**
+| Alter: A new item is inserted or replaces an existing.
+*/
+function alterSet(tree, src, trg, report) {
+	var cm = 'alterSet';
+
+	check(!is(trg.at1), cm, 'trg.at1 must not exist.');
+	check(is(src.val), cm, 'src.val missing');
+	var path = trg.path;
+	//var ppath = new Path(path, '--', 1);
+	//var parent = tree.get(ppath);
+
+	if (path.get(-1) === '$new') path = Tree.newKey(tree, path);
+
+	var save = Tree.getPath(tree, path);
+
+	if (is(trg.val)) {
+		check(matches(save, trg.val), cm, 'trg.val preset incorrectly');
+	} else {
+		if (!is(save)) save = null;
+		trg = new Signature(trg, 'val', save);
+	}
+
+	if (is(src.path)) {
+		check(path.equals(src.path), cm, 'src.path preset incorrectly');
+	} else {
+		src = new Signature(src, 'path', trg.path);
+	}
+
+	tree = Tree.setPath(tree, path, src.val);
+
+	//if (report && parent.report) parent.report('set', trg.path.get(-1), src.val);
+	return { tree: tree, src: src, trg: trg };
+}
+
+/**
+| Alter: A string is inserted into a string item.
+*/
+function alterInsert(tree, src, trg, report) {
+	var cm = 'alterInsert';
+	var str = tree.get(trg.path);
+	check(isString(str), cm, 'trg.path signates no string');
+
+	trg = trg.attune(str, 'trg.path');
+
+	// where trg span should end
+	var tat2 = trg.at1 + src.val.length;
+	if (is(trg.at2)) {
+		check(trg.at2 === tat2, cm, 'trg.at2 preset incorrectly');
+	} else {
+		trg.at2 = tat2;
+	}
+	var nstr = str.substring(0, trg.at1) + src.val + str.substring(trg.at1);
+	tree.mmSet(trg.path, nstr);
+
+	if (report) {
+		var parent = tree.get(trg.path, 0, -1);
+		if (parent.report) parent.report('insert', trg.path.get(-1), trg.at1, src.val);
+	}
+	return { tree: tree, src: src, trg: trg };
+}
+
+/**
+| Alter: a part of a string item is removed.
+*/
+function alterRemove(tree, src, trg, report) {
+	var cm = 'alterRemove';
+	var str = tree.get(src.path);
+	check(isString(str), cm, 'src.path signates no string');
+
+	src = src.attune(str, 'src.path');
+	if (src.at1 === src.at2) { log('alter', 'removed nothing'); return; }
+
+	var val = str.substring(src.at1, src.at2);
+	if (isnon(trg.val)) {
+		check(matches(val, trg.val), cm, 'trg.val preset incorrectly:',
+			val, '!==', trg.val);
+	} else {
+		trg.val = val;
+	}
+	var nstr = str.substring(0, src.at1) + str.substring(src.at2);
+	tree.mmSet(src.path, nstr);
+
+	if (report) {
+		var parent = tree.get(src.path, 0, -1);
+		if (parent.report) parent.report('remove', src.path.get(-1), src.at1, src.at2, val);
+	}
+	return { tree: tree, src: src, trg: trg };
+}
+
+/**
+| Alter: two texts are joined into one.
+*/
+function alterJoin(tree, src, trg, report) {
+	var cm = 'alterJoin';
+
+	check(is(trg.at1), cm, 'trg.at1 missing');
+	var path = trg.path;
+	var text = tree.get(path);
+	check(isString(text), cm, 'trg.path signates no text');
+
+	var vpath = new Path(path, '--', 2);
+	var pivot = Tree.getPath(tree, vpath);
+	check(pivot instanceof Array, cm, 'pivot not an array');
+
+	trg = trg.attune(text, 'trg');
+	var key = path.get(-2);
+
+	checkWithin(key, 0, pivot.length -1, cm, 'splice out of range');
+
+	var para1 = pivot[key];
+	var para2 = pivot[key + 1];
+
+	// @@ check other keys to be equal
+	para1 = Tree.grow(para1, 'text', para1.text + para2.text);
+	pivot = Tree.grow(pivot, key, para1, '-', key + 1);
+	tree  = Tree.setPath(tree, vpath, pivot);
+
+//	if (report) {
+//		if (pivot.report) pivot.report('join', path.get(trg.pivot), trg.at1, ppre);
+//		if (ppre.report)  ppre.report('join>', path.get(-1), path.get(trg.pivot), trg.at1);
+//		if (pnex.report)  pnex.report('join<', path.get(-1), path.get(trg.pivot), trg.at1);
+//	}
+	return { tree: tree, src: src, trg: trg };
+}
+
+/**
+| Alter: a text is split into two.
+*/
+function alterSplit(tree, src, trg, report) {
+	var cm = 'alterSplit';
+	var path = src.path;
+	check(is(src.at1), cm, 'src.at1 missing');
+	check(path.get(-1) === 'text', cm, 'splits must be on .text');
+	var text = Tree.getPath(tree, path);
+	check(isString(text), cm, 'src signates no string');
+
+	var vpath = new Path(path, '--', 2);
+	var pivot = Tree.getPath(tree, vpath);
+	check(pivot instanceof Array, cm, 'pivot not an array');
+
+	src = src.attune(text, 'src');
+
+	var key = path.get(-2);
+	checkWithin(key, 0, pivot.length, cm, 'splice out of range');
+
+	var para1 = pivot[key], para2;
+	para1 = Tree.grow(para1, 'text', text.substring(src.at1));
+	para2 = Tree.grow(para1, 'text', text.substring(0, src.at1));
+	pivot = Tree.grow(pivot, key, para1, '+', key + 1, para2);
+	tree  = Tree.setPath(tree, vpath, pivot);
+
+//	if (report) {
+//		if (pivot.report) pivot.report('split', src.path.get(src.pivot), src.at1, pnew);
+//		if (ppre.report)   ppre.report('split', src.path.get(-1), src.at1, pnew);
+//	}
+	return { tree: tree, src: src, trg: trg };
+}
+
+/**
+| Alter: a value is placed into an alley(array)
+*/
+function alterPlace(tree, src, trg, report) {
+	var cm = 'alterPlace';
+	check(is(src.val),  cm, 'src.val not present');
+	check(is(trg.path), cm, 'trg.path not present');
+	check(is(trg.at1),  cm, 'trg.at1 not present');
+	var alley = tree.get(trg.path);
+	check(alley && alley.isAlley, cm, 'trg.path not an alley');
+
+	if (trg.at1 === '$top') trg.at1 = 0;
+	if (trg.at1 === '$end') trg.at1 = alley.length;
+	check(trg.at1 >= 0 && trg.at1 <= alley.length, cm, 'trg.at1 not inside alley');
+
+	alley.splice(trg.at1, 0, src.val);
+
+	if (report && alley.report) alley.report('place', trg.path.get(-1), trg.at1, src.val);
+	return { tree: tree, src: src, trg: trg };
+}
+
+/**
+| Alter: a value is taken from an alley(array)
+*/
+function alterTake(tree, src, trg, report) {
+	// an item is taken (removed) from an alley.
+	var cm = alterTake;
+
+	check(is(src.path), cm, 'src.path not present');
+	check(is(src.at1),  cm, 'src.at1 not present');
+	var alley = tree.get(src.path);
+	check(alley && alley.isAlley, cm, 'src.path not an alley');
+	check(src.at1 >= 0 && src.at1 <= alley.length, cm, 'src.at1 not inside alley');
+
+	var val = alley.get(src.at1);
+	if (is(trg.val)) {
+		check(matches(val, trg.val), cm, 'trg.val preset incorrectly');
+	} else {
+		trg.val = val;
+	}
+	alley.splice(src.at1, 1);
+
+	if (report && alley.report) alley.report('take', src.path.get(-1), src.at1, val);
+	return { tree: tree, src: src, trg: trg };
 }
 
 
@@ -353,19 +378,19 @@ function alter(meshtree, src, trg, telling, cogging) {
 /**
 | Constructor.
 */
-MeshMashine = function(RootType, telling, cogging) {
-	this.repository = new RootType();
-	this.history    = [];
-	this.telling    = telling;
-	this.cogging    = cogging;
-}
+// XXX repository
+MeshMashine = function(tree, report) {
+	this.tree    = tree;
+	this.history = [];
+	this.report  = report;
+};
 
 /**
 | Returns true if time is valid.
 */
 MeshMashine.prototype._isValidTime = function(time) {
 	return isInteger(time) && time >= 0 && time <= this.history.length;
-}
+};
 
 /**
 | Transforms a single signature (src or trg) on one historic moment
@@ -374,13 +399,14 @@ MeshMashine.prototype.transformOnMoment = function(sign, alter) {
 	if (!is(sign.path)) return sign;
 	var src = alter.src;
 	var trg = alter.trg;
-	var atype = alter.type();
+	var atype = Alternation.type(src, trg);
+	var src_i, trg_i, sig_i; // TODO split case into functions.
 	switch(atype) {
 	case 'split':
 		if (!src.path.like(sign.path, src.pivot)) return sign;
 		log('te', 'alter-split');
-		var src_i = src.path.get(src.pivot);
-		var sig_i = sign.path.get(src.pivot);
+		src_i = src.path.get(src.pivot);
+		sig_i = sign.path.get(src.pivot);
 		log('te', 'sig_i', sig_i, 'src_i', src_i);
 		if (sig_i < src_i) {
 			log('te', 'split downside');
@@ -437,8 +463,8 @@ MeshMashine.prototype.transformOnMoment = function(sign, alter) {
 	case 'join':
 		if (!trg.path.like(sign, trg.pivot)) return sign; // TODO this looks wrong
 		log('te', 'alter-join');
-		var trg_i =  trg.path.get(trg.pivot);
-		var sig_i = sign.path.get(trg.pivot);
+		trg_i =  trg.path.get(trg.pivot);
+		sig_i = sign.path.get(trg.pivot);
 		if (sig_i < trg_i) {
 			log('te', 'join downside');
 			return sign;
@@ -460,7 +486,7 @@ MeshMashine.prototype.transformOnMoment = function(sign, alter) {
 		return sign;
 	case 'insert':
 		if (!trg.path || !trg.path.equals(sign.path)) return sign;
-		log('te', 'alter-insert');
+		log('te', 'insert');
 		check(is(trg.at1) && is(trg.at2), 'history mangled');
 		if (sign.at1 > trg.at1) { // or >= ?
 			log('te', 'at1 += ',src.val.length);
@@ -473,7 +499,7 @@ MeshMashine.prototype.transformOnMoment = function(sign, alter) {
 		return sign;
 	case 'remove':
 		if (!src.path.equals(sign.path)) return sign;
-		log('te', 'alter-remove');
+		log('te', 'remove');
 		check(is(src.at1) && is(src.at2), 'history mangled');
 		//       123456789
 		//         ^^^    <- removed
@@ -499,11 +525,11 @@ MeshMashine.prototype.transformOnMoment = function(sign, alter) {
 			}
 		}
 		return sign;
-	case 'alley-place' :
+	case 'place' :
 		if (!trg.path.like(sign.path)) return sign;
-		log('te', 'alter-alley-place');
-		var trg_i =  trg.alley.get(-1);
-		var sig_i = sign.path.get(trg.alley.length);
+		log('te', 'place');
+		trg_i =  trg.alley.get(-1);
+		sig_i = sign.path.get(trg.alley.length);
 
 		log('te', 'sig_i', sig_i, 'trg_i', trg_i);
 
@@ -513,11 +539,11 @@ MeshMashine.prototype.transformOnMoment = function(sign, alter) {
 			sign.path = sign.path.add(trg.alley.length, 1);
 		}
 		return sign;
-	case 'alley-take' :
+	case 'take' :
 		if (!src.alley.like(sign.path)) return sign;
-		log('te', 'alter-alley-take');
-		var src_i =  src.path.get(-1);
-		var sig_i = sign.path.get(src.alley.length);
+		log('te', 'take');
+		src_i =  src.path.get(-1);
+		sig_i = sign.path.get(src.alley.length);
 		log('te', 'sig_i', sig_i, 'src_i', src_i);
 
 		if (sig_i >= src_i) {
@@ -529,7 +555,7 @@ MeshMashine.prototype.transformOnMoment = function(sign, alter) {
 	default :
 		throw new Error('unknown atype: '+atype);
 	}
-}
+};
 
 /**
 | Transforms a signature, possibly splitting it up into several.
@@ -560,30 +586,34 @@ MeshMashine.prototype.transform = function(time, sign) {
 	}
 	log('te', 'out', signa);
 	return signa;
-}
+};
 
 
 /**
-| Reflects the state of the repository at time.
+| Reflects the state of the tree at a time.
 | If path is not null it cares only to rebuild what is necessary to see the ida.
 */
 // TODO partial reflects
 MeshMashine.prototype._reflect = function(time, path) {
+
+	// XXX TODO
+	throw new Error('TODO');
+	/*
 	try {
 		var reflect = new this.repository.constructor(this.repository);
 
 		// playback
 		for(var hi = this.history.length - 1; hi >= time; hi--) {
 			var moment = this.history[hi];
-			alter(reflect, moment.trg, moment.src, false, this.cogging);
+			alter(reflect, moment.trg, moment.src, false);
 		}
 	} catch (err) {
 		// this should not ever fail, thus rethrow a lethal error
 		err.ok = null;
 		throw new Error(err.stack);
 	}
-	return reflect.get(path);
-}
+	return reflect.get(path);*/
+};
 
 /**
 | Alters the repository.
@@ -599,29 +629,32 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 		var tsrca = this.transform(time, src);
 		var ttrga = this.transform(time, trg);
 
-		var alts;
+		// TODO beautify this, (especially the loops)
+		var alts, i;
 		if (!(tsrca instanceof Array) && !(ttrga instanceof Array)) {
 			alts = new Alternation(tsrca, ttrga);
 		} else if (!(tsrca instanceof Array) && (ttrga instanceof Array))  {
 			alts = [];
-			for(var i = 0; i < ttrga.length; i++) {
-				alts[i] = new Alternation(clone(tsrca), ttrga[i]);
+			for(i = 0; i < ttrga.length; i++) {
+				alts[i] = new Alternation(tsrca, ttrga[i]);
 			}
 		} else if ((tsrca instanceof Array) && !(ttrga instanceof Array)) {
 			alts = [];
-			for(var i = 0; i < tsrca.length; i++) {
-				alts[i] = new Alternation(tsrca[i], clone(ttrga));
+			for(i = 0; i < tsrca.length; i++) {
+				alts[i] = new Alternation(tsrca[i], ttrga);
 			}
 		}
 
 		var apply = function (alt) {
-			alt = alter(this.repository, alt.src, alt.trg, this.telling, this.cogging);
+			var result = alter(this.tree, alt.src, alt.trg, this.report);
+			alt = new Alternation(result.src, result.trg);
 			deepFreeze(alt);  // @@ extra safety, but superflous.
 			this.history.push(alt);
-		}
+		};
 
+		// TODO ugly for
 		if (alts instanceof Array) {
-			for(var i = 0; i < alts.length; i++) apply.call(this, alts[i]);
+			for(i = 0; i < alts.length; i++) apply.call(this, alts[i]);
 		} else {
 			apply.call(this, alts);
 		}
@@ -629,32 +662,29 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 		return {
 			ok: true,
 			time: this.history.length,
-			alts: alts,
+			alts: alts
 		};
 	} catch(err) {
 		// returns rejections but rethrows coding errors.
 		log('fail', 'error', err);
 		if (err.ok !== false) throw new Error(err.stack); else return err;
 	}
-}
+};
 
 /**
-| Gets a node (which can go up to the complete repository).
+| Gets a subtree.
 | TODO add timespans
 */
 MeshMashine.prototype.get = function(time, path) {
 	try {
 		log('mm', 'get time:', time, ' path:', path);
+		var reflect;
+
 		if (time >= 0) {
 			if (!this._isValidTime(time)) return reject('invalid time');
-
-			var reflect = this._reflect(time, path);
-			// remove nulls
-			//for(var key in reflect) {
-			//	if (reflect[key] === null) delete reflect[key];
-			//}
+			reflect = this._reflect(time, path);
 		} else {
-			reflect = this.repository.get(path);
+			reflect = this.tree.get(path); // xxx
 			time = this.history.length;
 		}
 		log('mm', 'ok', time, reflect);
@@ -663,7 +693,7 @@ MeshMashine.prototype.get = function(time, path) {
 		// returns rejections but rethrows coding errors.
 		if (err.ok !== false) throw new Error(err.stack); else return err;
 	}
-}
+};
 
 /**
 | Returns the current time position
@@ -673,7 +703,7 @@ MeshMashine.prototype.now = function() {
 	log('mm', 'now');
 	log('mm', 'ok', this.history.length);
 	return {ok: true, time: this.history.length };
-}
+};
 
 /**
 | Returns all changes from time to now.
@@ -688,7 +718,7 @@ MeshMashine.prototype.update = function(time) {
 	}
 	log('mm', 'ok', this.history.length, update);
 	return {ok: true, time: this.history.length, update: update };
-}
+};
 
 if (typeof(window) === 'undefined') {
 	module.exports = MeshMashine;

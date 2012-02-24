@@ -29,7 +29,7 @@ var fs   = require('fs');
 
 var config = require('./config');
 var Jools  = require('./jools');
-var Woods  = require('./woods');
+var Tree   = require('./tree');
 var MeshMashine = require('./meshmashine');
 
 var log    = Jools.log;
@@ -59,8 +59,11 @@ try {
 }
 var debug = config.debug === true || (config.debug % 4 - config.debug % 2) === 2;
 
-//var mm = new meshmashine.MeshMashine(woods.GenericCopse);
-var mm = new MeshMashine(Woods.Nexus, false, false);
+var mm;
+(function() {
+	var nexus = Tree.grow( { type : 'Nexus' } );
+	mm = new MeshMashine(nexus, false, false);
+})();
 
 /**
 | Files served.
@@ -81,7 +84,7 @@ var content = {
 	'/browser.js':     { file: './browser.js',        mime: mime_js, code: 'utf-8',  },
 	'/fabric.js':      { file: './fabric.js',         mime: mime_js, code: 'utf-8',  },
 	'/jools.js':       { file: './jools.js',          mime: mime_js, code: 'utf-8',  },
-	'/woods.js':       { file: './woods.js',          mime: mime_js, code: 'utf-8',  },
+	'/tree.js':        { file: './tree.js',           mime: mime_js, code: 'utf-8',  },
 	'/shell.js':       { file: './shell.js',          mime: mime_js, code: 'utf-8',  },
 	'/meshmashine.js': { file: './meshmashine.js',    mime: mime_js, code: 'utf-8',  },
 	'/peer.js':        { file: './peer.js',           mime: mime_js, code: 'utf-8',  },

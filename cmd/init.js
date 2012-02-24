@@ -5,13 +5,16 @@
     val: {
       type: 'Space',
       items: {
+        type: 'ItemCopse',
         '0' : {
           type: 'Note',
           zone: {
- 	        pnw : { x: 100, y: 100 },
-	        pse : { x: 300, y: 200 },
+		    type: 'Rect',
+ 	        pnw : { type: 'Point', x: 100, y: 100 },
+	        pse : { type: 'Point', x: 300, y: 200 },
 	      },
 	      doc: {
+			 type: 'Doc',
 	         alley : [
 	          {
                 type: 'Para',
@@ -31,6 +34,7 @@
         },
       },
       z : {
+		type : 'ArcAlley',
         alley : [
           '0',
 	    ],

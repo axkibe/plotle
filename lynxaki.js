@@ -62,7 +62,7 @@ var mmops = {
 /**
 | Issues an ajax request.
 */
-function request(cmd, callback) {
+function do_request(cmd, callback) {
 	var req = http.request(mmops, function(res) {
 		if (res.statusCode !== 200) {
 			callback(new Error('Status code: '+res.statusCode));
@@ -208,11 +208,10 @@ function message(s) {
 	drawScreen();
 }
 
-/*
 function request(cmd, callback) {
 	cmd.time = time;
 	tin.pause();
-	XXX libclient.request(cmd,
+	do_request(cmd,
 		function(err, asw) {
 			tin.resume();
 			if (err) {
@@ -221,18 +220,20 @@ function request(cmd, callback) {
 				message('<- '+util.inspect(asw));
 			}
 			callback(err, asw);
-		});
+		}
+	);
 }
-*/
 
 function update(callback) {
 	request(
 		{
 			cmd: 'update',
-			time: time},
+			time: time
+		},
 		function(err, asw) {
 			callback(err, asw);
-		});
+		}
+	);
 }
 
 function get(path, callback) {
@@ -242,7 +243,8 @@ function get(path, callback) {
 			time: time,
 			path: path,
 		},
-		callback);
+		callback
+	);
 }
 
 function set(path, val, callback) {
@@ -253,7 +255,8 @@ function set(path, val, callback) {
 			path: path,
 			val:  val
 		},
-		callback);
+		callback
+	);
 }
 
 function send() {
@@ -269,7 +272,6 @@ function send() {
 			},
 			trg: {
 				at1: '$end',
-				pivot: path.length - 2,
 				path: path,
 			},
 		}, function(err, asw) {
@@ -285,7 +287,6 @@ function send() {
 			cmd: 'alter',
 			src: {
 				at1:   change.at1,
-				pivot: path.length - 2,
 				path:  path,
 			},
 			trg: {
@@ -357,7 +358,7 @@ function getRoot(callback) {
 		}
 		drawScreen();
 		if (callback) callback();
-	})
+	});
 }
 
 

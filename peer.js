@@ -28,6 +28,7 @@
 
 var MeshMashine;
 var Path;
+var Tree;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  +++ Peer +++
@@ -37,7 +38,8 @@ var Path;
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Peer() {
-	this.mm = new MeshMashine(Woods.Nexus, true, true);
+	var nexus = Tree.grow( { type: 'Nexus' } );
+	this.mm = new MeshMashine(nexus, true, true);
 
 	var spacepath = new Path(['welcome']);
 
@@ -445,7 +447,6 @@ Peer.prototype.split = function(node, offset) {
 	this.mm.alter(-1,
 		new Signature({
 			at1 : offset,
-			pivot: path.length - 2,
 			path: path,
 		}),
 		new Signature({
@@ -466,7 +467,6 @@ Peer.prototype.join = function(node) {
 		}),
 		new Signature({
 			at1 : '$end',
-			pivot: path.length - 2,
 			path: path,
 		})
 	);

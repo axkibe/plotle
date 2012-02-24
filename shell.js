@@ -67,13 +67,16 @@ var Rect          = Fabric.Rect;
 var RoundRect     = Fabric.RoundRect;
 var opposite      = Fabric.opposite;
 
-// configures meshcraft-woods.
-Woods.cogging = true;
+// configures tree.
+Tree.cogging = true;
 
 /**
 | Debugging mode, don't cache anything.
+|
+| In case of doubt, if caching is faulty, just set this true and see if the error
+| vanishes.
 */
-var noCache = false;
+var noCache = true;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .---.     .  .
@@ -1284,7 +1287,7 @@ VItemCopse.prototype.event = function(type, key, p1, p2, p3) {
  A visual paragraph representation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function VPara(para, vdoc) {
-	if (para.constructor !== Woods.Para) throw new Error('type error');
+	if (para.type !== 'Para') throw new Error('type error');
 	if (vdoc.constructor !== VDoc) throw new Error('type error');
 	this.para = para;
 	this.vdoc = vdoc;
@@ -2104,7 +2107,7 @@ VDoc.prototype.pathSelection = function(fabric, border, twist, width, imargin, s
 | Constructor
 */
 function VItem(item, vspace) {
-	this._h6slice$ = null;
+	this._h6slice$    = null;
 	this.item         = item;
 	this.vspace       = vspace;
 	this.vdoc         = new VDoc(item.doc, this);
@@ -2407,7 +2410,7 @@ VNote.prototype.imargin = new Margin(settings.note.imargin);
 /**
 | Resize handles to show on notes.
 */
-fixate(VNote.prototype, 'handles', {
+VNote.prototype.handles = {
 	n  : true,
 	ne : true,
 	e  : true,
@@ -2416,7 +2419,7 @@ fixate(VNote.prototype, 'handles', {
 	sw : true,
 	w  : true,
 	nw : true,
-});
+};
 
 /**
 | Minimum sizes

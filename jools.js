@@ -90,7 +90,7 @@ function within(min, val, max) {
 */
 function reject(message) {
 	// in devel mode any failure is fatal.{
-	if (Jools.devel) throw new Error(message); 
+	if (Jools.devel) throw new Error(message);
 	log('reject', 'reject', message);
 	return {ok: false, message: message};
 }
@@ -107,7 +107,7 @@ if (!Object.defineProperty) {
 		}
 		if (funcs.get) obj.__defineGetter__(label, funcs.get);
 		if (funcs.set) obj.__defineSetter__(label, funcs.set);
-	}
+	};
 }
 
 if (!Object.freeze) {
@@ -125,23 +125,23 @@ if (!Object.freeze) {
 |       inheritance.
 */
 function subclass(sub, base) {
-	function inherit() {}
+	function Inherit() {}
 	if (base.constructor === Object) {
 		// multiple inheritance
 		for(var name in base) {
 			for(var k in base[name].prototype) {
 				if (k === 'constructor') continue;
-				if(inherit.prototype[k]) {
+				if(Inherit.prototype[k]) {
 					throw new Error('Multiple inheritance clash for '+sub+' :'+k);
 				}
-				inherit.prototype[k] = base[name].prototype[k];
+				Inherit.prototype[k] = base[name].prototype[k];
 			}
 		}
 	} else {
 		// single inheritance
-		inherit.prototype = base.prototype;
+		Inherit.prototype = base.prototype;
 	}
-	sub.prototype = new inherit();
+	sub.prototype = new Inherit();
 	sub.prototype.constructor = sub;
 }
 
@@ -198,9 +198,9 @@ function _pushindent(indent, a) {
 | Not using toJSON since that fails on circles.
 | This is the jools-internal version that pushes data directly on the array stack.
 */
-function _inspect(o, a, indent, circle) {
+function _inspect(o, array, indent, circle) {
 	if (circle.indexOf(o) !== -1) {
-		a.push('^circle^');
+		array.push('^circle^');
 		return;
 	}
 	circle = circle.slice();
@@ -219,91 +219,68 @@ function _inspect(o, a, indent, circle) {
 		}
 	}
 
+	var k, first;
 	switch (to) {
-	case 'undefined':
-		a.push('undefined');
-		return;
-	case 'boolean':
-		a.push(o ? 'true' : 'false');
-		return;
-	case 'function' :
-		a.push('function ');
-		if (o.name) a.push(o.name);
-		return;
-	case 'string' :
-		a.push('"');
-		a.push(o);
-		a.push('"');
-		return;
-	case 'number':
-		a.push(o);
-		return;
-	case 'null':
-		a.push('null');
-		return;
+	case 'undefined': array.push('undefined'); return;
+	case 'boolean'  : array.push(o ? 'true' : 'false'); return;
+	case 'function' : array.push('function '); if (o.name) array.push(o.name); return;
+	case 'string'   : array.push('"', o, '"'); return;
+	case 'number'   : array.push(o); return;
+	case 'null'     : array.push('null'); return;
 	case 'array' :
-		a.push('[');
-		if (puffed) a.push('\n');
-		for(var k = 0; k < o.length; k++) {
-			if(k > 0) {
-				a.push(',');
-				a.push(puffed ? '\n' : ' ');
+		array.push('[');
+		if (puffed) array.push('\n');
+		for(var a = 0, aZ = o.length; a < aZ; a++) {
+			if(a > 0) {
+				array.push(',');
+				array.push(puffed ? '\n' : ' ');
 			}
-			if (puffed) _pushindent(indent + 1, a);
-			_inspect(o[k], a, indent + 1, circle);
+			if (puffed) _pushindent(indent + 1, array);
+			_inspect(o[a], array, indent + 1, circle);
 		}
-		var first = true;
-		for(var k in o) {
-			if (typeof(k) === 'number' || parseInt(k) == k || !o.hasOwnProperty(k)) continue;
+		first = true;
+		for(k in o) {
+			if (typeof(k) === 'number' || parseInt(k, 10) == k || !o.hasOwnProperty(k)) continue;
 			if (first) {
-				a.push(puffed ? '\n' : ' ');
-				if (puffed) _pushindent(indent + 1, a);
-				a.push('|');
-				a.push(puffed ? '\n' : ' ');
+				array.push(puffed ? '\n' : ' ');
+				if (puffed) _pushindent(indent + 1, array);
+				array.push('|');
+				array.push(puffed ? '\n' : ' ');
 				first = false;
 			} else {
-				a.push(',');
-				a.push(puffed ? '\n' : ' ');
-				if (puffed) _pushindent(indent + 1, a);
+				array.push(',');
+				array.push(puffed ? '\n' : ' ');
+				if (puffed) _pushindent(indent + 1, array);
 			}
-			a.push(k);
-			a.push(': ');
-			_inspect(o[k], a, indent + 1, circle);
-			a.push(puffed ? '\n' : ' ');
+			array.push(k);
+			array.push(': ');
+			_inspect(o[k], array, indent + 1, circle);
+			array.push(puffed ? '\n' : ' ');
 		}
-		a.push(puffed ? '\n' : ' ');
+		array.push(puffed ? '\n' : ' ');
 		if (puffed) _pushindent(indent, a);
-		a.push(']');
+		array.push(']');
 		return;
 	case 'object' :
-		a.push('{');
-		a.push(puffed ? '\n' : ' ');
-	 	var first = true;
-		for(var k in o) {
+		array.push('{', puffed ? '\n' : ' ');
+		first = true;
+		for(k in o) {
 			if (!o.hasOwnProperty(k)) continue;
-			if (first) {
-				first = false;
-			} else {
-				a.push(',');
-				a.push(puffed ? '\n' : ' ');
-			};
-			if (puffed) _pushindent(indent + 1, a);
-			a.push(k);
-			a.push(': ');
+			if (!first) array.push(',', puffed ? '\n' : ' '); else first = false;
+			if (puffed) _pushindent(indent + 1, array);
+			array.push(k, ': ');
 			if (k === 'parent') {
-				a.push('###');
+				array.push('###');
 				continue;
 			}
-			_inspect(o[k], a, indent + 1, circle);
+			_inspect(o[k], array, indent + 1, circle);
 		}
-		a.push(puffed ? '\n' : ' ');
-			if (puffed) _pushindent(indent, a);
-		a.push('}');
+		array.push(puffed ? '\n' : ' ');
+		if (puffed) _pushindent(indent, array);
+		array.push('}');
 		return;
 	default :
-		a.push('!!Unknown Type: ');
-		a.push(to);
-		a.push('!!');
+		array.push('!!Unknown Type: ', to, '!!');
 	}
 }
 
@@ -326,7 +303,7 @@ function log(category) {
 		_inspect(arguments[i], a, 0, []);
 	}
 	console.log(a.join(''));
-};
+}
 
 /**
 | Shortcut for log('debug', ...);
@@ -391,7 +368,7 @@ var oleng$id = 0;
 | TODO
 */
 function immute(obj) {
-	if (obj.o$id) throw new Error('already immutable');
+	if (obj._$id) throw new Error('already immutable');
 	var names = Object.getOwnPropertyNames(obj);
 	for (var a = 0, aZ = names.length; a < aZ; a++) {
 		var desc = Object.getOwnPropertyDescriptor(obj, names[a]);
@@ -400,7 +377,7 @@ function immute(obj) {
 		desc.writable = false;
 		Object.defineProperty(obj, names[a], desc);
 	}
-    Object.defineProperty(obj, 'o$id', {value: ++oleng$id});
+    Object.defineProperty(obj, '_$id', {value: ++oleng$id});
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -409,50 +386,48 @@ function immute(obj) {
  Signates an entry, string index or string span.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Signature(master) {
-	for(var k in master) {
+	var k;
+	debug(1, this._$id);
+	for(k in master) {
 		if (!Object.hasOwnProperty.call(master, k)) continue;
 		if (!Signature.field[k]) throw reject('invalid Signature property: '+k);
 		this[k] = master[k];
 	}
+
 	for (var a = 1, aZ = arguments.length; a < aZ; a+=2) {
-		var k = arguments[a];
+		k = arguments[a];
 		if (!Signature.field[k]) throw reject('invalid Signature property: '+k);
 		this[k] = arguments[a + 1];
 	}
-	if (is(this.val)) {
-		// TODO remove this evil once immutables rule
-		this.val = JSON.parse(JSON.stringify(this.val));
-	}
-	//immute(this);
+	debug(2, this._$id);
+
+	immute(this);
 }
 
 /**
 | TODO
 */
 Signature.field = {
-	'path'  : true,
-	'at1'   : true,
-	'at2'   : true,
-	'pivot' : true,
-	'proc'  : true,
-	'val'   : true,
-}
+	'path' : true,
+	'at1'  : true,
+	'at2'  : true,
+	'proc' : true,
+	'val'  : true
+};
 immute(Signature.field);
 
 /**
 | Attunes '$end' ats to match a string.
 */
-Signature.prototype.attune = function(str, name) {
+Signature.prototype.attune = function(text, name) {
 	var at1 = this.at1;
 	var at2 = this.at2;
-	if (this.at1 === '$end') at1 = str.length;
-	if (this.at2 === '$end') at2 = str.length;
-	if (is(at1) && !within(0, at1, str.length)) throw reject(name+' at1 not within string');
-	if (is(at2) && !within(0, at2, str.length)) throw reject(name+' at2 not within string');
+	if (this.at1 === '$end') at1 = text.length;
+	if (this.at2 === '$end') at2 = text.length;
+	if (is(at1) && !within(0, at1, text.length)) throw reject(name+'.at1 not within text');
+	if (is(at2) && !within(0, at2, text.length)) throw reject(name+'.at2 not within text');
 	return new Signature(this, 'at1', at1, 'at2', at2);
-}
-
-immute(Signature.prototype);
+};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++Path++
@@ -463,57 +438,44 @@ immute(Signature.prototype);
 
 /**
 | Constructs a new Path.
-| master can be an array or another path or null
+| model can be an array or another path or null
 | arguments followed by master are appended to the path
 */
-function Path(master) {
+function Path(model) {
 	var path;
 	// if true the path needs to be copied
-	var copy = arguments.length > 1;
+	var slice = arguments.length > 1;
+	switch(model.constructor) {
+	case Path  : path = model._path; break;
+	case Array : path = model; break;
+	case null  : path = []; slice = false; break;
+	default    : throw new Error('invalid path-model');
+	}
+	if (slice) path = path.slice();
 
-	switch(master.constructor) {
-	case Path  : path = master._path; break;
-	case Array : path = master; break;
-	case null  : path = []; copy = false; break;
-	default    :
-		if (!master.parent) throw new Error('invalid path master');
-		// constructs the path from an entities key chain
-		path = [];
-		copy = false;
-		var len = 0;
-		// count size
-		// TODO simplify
-		for(var n = master; n; n = n.parent) {
-			if (n.parent) {
-				path.push(null);
-				len++;
-			}
-		}
-
-		// reverse fills the path;
-		n = master;
-		for(var a = len; a > 0; a--) {
-			var key = n.getOwnKey();
-			if (key === null) throw new Error('Cannot get path key');
-			path[--len] = key;
-			n = n.parent;
-		}
-		break;
+	// appends additional arguments
+	var a = 1, aZ = arguments.length;
+	while(a < aZ && arguments[a] !== '--' && arguments[a] !== '++') {
+		path[arguments[a]] = path[arguments[a + 1]];
+		a += 2;
+	}
+	if (arguments[a] === '--') {
+		var short = arguments[a + 1];
+		path.splice(path.length - short, short);
+		a += 2;
+	}
+	if (arguments[a] === '++') {
+		a++;
+		while (a < aZ) path[path.length] = arguments[a++];
 	}
 
-	if (copy) path = path.slice();
-
-	// appends additional arguments.
-	for (var a = 1, aZ = arguments.length; a < aZ; a++) {
-		path[path.length] = arguments[a];
-	}
-
-	// checks the path lengths
+	// checks the path arcs
 	// @@ might be needed only for copies
-	for (var a = 0, aZ = path.length; a < aZ; a++) {
+	for (a = 0, aZ = path.length; a < aZ; a++) {
 		if (!_isValidPathArc(path[a])) throw reject('invalid path arc');
 	}
 
+	// @@ might change Path to be child of Array.
 	Object.freeze(path);
 	fixateNoEnum(this, '_path', path);
 	immute(this);
@@ -534,7 +496,7 @@ function _isValidPathArc(arc) {
 | Length of the signature.
 */
 Object.defineProperty(Path.prototype, 'length', {
-	get: function() { return this._path.length; },
+	get: function() { return this._path.length; }
 });
 
 /**
@@ -544,43 +506,46 @@ Path.prototype.get = function(i) {
 	if (i < 0) i += this._path.length;
 	if (i < 0 || i >= this._path.length) throw new Error('invalid get');
 	return this._path[i];
-}
+};
 
 /**
 | Fits the arc numeration to be in this signature.
+| TODO remove?
 */
+/*
 Path.prototype.fit = function(a, edge) {
 	if (!is(a)) a = edge ? this._path.length : 0;
 	if (a < 0) a += this._path.length;
 	if (a < 0) throw new Error('invalid fit');
 	return a;
-}
+}*/
 
 /**
-| Sets arc [i]
+| Returns new path with arc i set to v.
 */
-Path.prototype.set = function(i, v) {
-	var path = this._path.slice();
+/*Path.prototype.set = function(i, v) {
 	if (i < 0) i += path.length;
-	path[i] = v;
-	return new Path(path);
-}
+	return new Path(this, i, v);
+};
+*/
 
 /**
 | Appends an arc
+| TODO move into constructor
 */
-Path.prototype.push = function() {
+/*Path.prototype.push = function() {
 	var path = this._path.slice();
 	for (var a = 0, aZ = arguments.length; a < aZ; a++) {
 		path[path.length] = arguments[a];
 	}
 	return new Path(path);
-}
+}*/
 
 /**
 | Adds to integer arc[a]
+| TODO remove
 */
-Path.prototype.add = function(a, v) {
+/*Path.prototype.add = function(a, v) {
 	var path = this._path.slice();
 	if (a < 0) a = path.length + a;
 	if (!isInteger(path[a])) {
@@ -588,7 +553,7 @@ Path.prototype.add = function(a, v) {
 	}
 	path[a] += v;
 	return new Path(path);
-}
+}*/
 
 /**
 | True if this path is the same as another.
@@ -599,7 +564,7 @@ Path.prototype.equals = function(o) {
 		if (this._path[k] !== o._path[k]) return false;
 	}
 	return true;
-}
+};
 
 /**
 | True if this path is a subpath of another.
@@ -607,7 +572,7 @@ Path.prototype.equals = function(o) {
 | o: the other path
 | [len]: the length of this path to consider.
 */
-Path.prototype.like = function(o, len) {
+/*Path.prototype.like = function(o, len) {
 	if (!is(len)) len  = this.length;
 	if (len < 0)  len += this.length;
 	if (len < 0)  len  = 0;
@@ -617,23 +582,14 @@ Path.prototype.like = function(o, len) {
 		if (this._path[i] !== o._path[i]) return false;
 	}
 	return true;
-}
-
-
-/**
-| stringify
-*/
-Path.prototype.toString = function() {
-	throw new Error("is this used?");
-	return this._path.toString();
-}
+}*/
 
 /**
 | jsonfy
 */
 Path.prototype.toJSON = function() {
 	return this._path;
-}
+};
 
 
 /**
@@ -657,10 +613,11 @@ Jools = {
 	isInteger          : isInteger,
 	isPath             : isPath,
 	isString           : isString,
+	immute             : immute,
 	limit              : limit,
 	log                : log,
 	reject             : reject,
-	subclass           : subclass,
+	subclass           : subclass
 };
 
 if (typeof(window) === 'undefined') {
