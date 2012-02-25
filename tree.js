@@ -48,51 +48,53 @@ var	subclass  = Jools.subclass;
 | TODO
 */
 var Patterns = {
-	Nexus : {
-		'*': { Space : 'opt' }
+	'Nexus' : {
+		'*'        : { allows : 'Space' },
 	},
 
-	Space : {
-		items : { ItemCopse : 'must' },
-		z     : { ArcAlley  : 'must' }
+	'Space' : {
+		'items'    : { must : 'ItemCopse' },
+		'z'        : { must : 'Array'     }
 	},
 
-	ItemCopse : {
-		'*' : {
-			Note     : 'opt',
-			Label    : 'opt',
-			Relation : 'opt'
-		},
-		'_new' : true // support '_new' keys
+	'ItemCopse'    : {
+		'*'        : { allows : [ 'Note', 'Label', 'Relation' ], inc : true }
 	},
 
-	ArcAlley : {
-		'#' : { '*' : 'opt' }
+	'Note' : {
+		'doc'      : { must : 'Doc'  },
+		'zone'     : { must : 'Rect' }
 	},
 
-	Note : {
-		doc  : { Doc  : 'must' },
-		zone : { Rect : 'must' }
+	'Label' : {
+		'doc'      : { must : 'Doc'   },
+		'pnw'      : { must : 'Point' }
 	},
 
-	Label : {
-		doc : { Doc   : 'must' },
-		pnw : { Point : 'must'}
+	'Doc' : {
+		'fontsize' : { must : 'Number'    },
+		'paras'    : { must : 'ParaCopse' },
+		'alley'    : { must : 'Array'     }
 	},
 
-	Doc : {
-		'#'      : { Para : 'opt' },
-		fontsize : { '#'  : 'must'}
+	'ParaCopse'    : {
+		'*'        : { allows : [ 'Para' ], inc : true }
 	},
 
-	Rect : {
-		'^' : Fabric.Rect   // take prototype from Fabric.Rect
+	'Para' : {
+		'text'     : { must : 'String' },
+	}
+
+	'Rect' : {
+		'^'        : function(obj) { return new Fabric.Rect(o.pnw, o.pse); },
+		'pnw'      : { must : 'Point' },
+		'pse'      : { must : 'Point' },
 	},
 
-	Point : {
-		'^' : Fabric.Point, // take prototype from Fabric.Point
-		'x' : { '#' : 'must' },
-		'y' : { '#' : 'must' }
+	'Point' : {
+		'^'        : function(obj) { return new Fabric.Point(o.x, o.y); },
+		'x'        : { must : 'Number' }, // @@ Integer
+		'y'        : { must : 'Number' }
 	}
 };
 
@@ -110,69 +112,43 @@ var Twig = function () { };
 /**
 | Creates new twigs, either extending an existing twig or creates one from a master.
 */
-function grow(model /* ... */) {
+function grow(model, type, /* ... */) {
 	var a, aZ = arguments.length;
-	switch (model.constructor) {
-	case Number :
-		if (aZ !== 1) throw new Error('Cannot grow Numbers with arguments.');
-		return model;
-	case String :
-		if (aZ !== 1) throw new Error('Cannot grow Strings with arguments.');
-		return model;
-	}
 
 	// determines the constructor of the twig to grow
-	var constructor = model.constructor.prototype.constructor;
+	var pattern = null;
+	var twig;
 
-	var pattern = Patterns[model.type];
-	if (!pattern) throw new Error('No matching pattern to: '+model.type);
-
-	// sees if an Object should become an Array
-	if (constructor === Object) {
-		for(a = 1; a < aZ; a+=2) {
-			var arg = arguments[a];
-			if (arg === '++' || arg === '+' || arg === '-') {
-				constructor = Array;
-				break;
-			}
-		}
+	if (type === 'Array') {
+		if (model.constructor !== Array) throw new Error('Invalid Array');
+		pattern = 'Array';
+		twig = [];
+	} else {
+		pattern = patterns[type];
+		if (!pattern) throw new Error('Invalid type: '+type);
+		// if a creator is given, uses a typeless object so far.
+		twig = pattern['^'] ? {} : new Twig();
 	}
-
-	// sees if the pattern defines the constructor
-	if (pattern['^'] && constructor !== pattern['^']) {
-		if (constructor !== Object) throw new Error('Constructor mismatch');
-		constructor = pattern['^'];
-	}
-
-	// creates the twig
-	Twig.prototype = constructor.prototype;
-	var twig = new Twig();
 
 	// first copies over the model
 	var k;
 	for (k in model) {
 		if (!Object.hasOwnProperty.call(model, k)) continue;
-		if (k.constructor === Number && constructor !== Array) {
-			throw new Error('Numbers need Arrays');
-		}
 		twig[k] = model[k];
 	}
 
 	// set the new values from the arguments
-	a = 1;
-	while(a < aZ && arguments[a] !== '++') {
+	a = 2;
+	while(a < aZ && arguments[a] !== '++' && arguments[a] !== '--') {
 		k = arguments[a];
-		if (k.constructor === Number && constructor !== Array) {
-			throw new Error('Numbers need Arrays');
-		}
 		switch(k) {
 		case '+' :
-			if (constructor !== Array) throw new Error('Splicing needs Arrays');
+			if (creator !== Array) throw new Error(type+' is no Array');
 			twig.splice(arguments[a + 1], 0, arguments[a + 2]);
 			a += 3;
 			break;
 		case '-' :
-			if (constructor !== Array) throw new Error('Splicing needs Arrays');
+			if (creator !== Array) throw new Error(type+' is no Array');
 			twig.splice(arguments[a + 1], 1);
 			a += 2;
 			break;
@@ -182,36 +158,58 @@ function grow(model /* ... */) {
 			break;
 		}
 	}
-	// if there was an '++' append the rest of the arguments
-	if (a < aZ && constructor !== Array) throw new Error('Appending needs Arrays');
-	while (a < aZ) twig[twig.length] = arguments[a++];
-
-	// TODO check pattern
+	if (a < aZ && constructor !== Array) throw new Error(type+' is no Array');
+	if (arguments[a] === '--') {
+		if (creator !== Array) throw new Error(type+' is no Array');
+		var shorten = arguments[a + 1];
+		twig.splice(twig.length - shorten, shorten);
+		a += 2;
+	}
+	if (arguments[a] === '++') {
+		if (creator !== Array) throw new Error(type+' is no Array');
+		while (a < aZ) twig[twig.length] = arguments[a++];
+	}
+	if (a < aZ) throw new Error('a < aZ should never happen here');
 
 	// TODO do not grow if the model was a twig.
 	for (k in twig) {
 		if (!Object.hasOwnProperty.call(twig, k)) continue;
-		if (k === 'alley') continue; // TODO remove?
-		debug('subgrow', k);
-		twig[k] = grow(twig[k]);
-	}
-
-	if (twig.alley) {
-		var alley = twig.alley;
-		if (constructor !== Array) throw new Error('Alleys need Arrays');
-		for (var ka in alley) {
-			if (!Object.hasOwnProperty.call(alley, k)) continue;
-			debug('subgrow', ka);
-			twig[ka] = grow(alley[ka]);
+		var val = twig[k];
+		switch(k.constructor) {
+		case Number :
+			if (creator !== Array) throw new Error(type+' is no Array');
+			if (k.constructor !== String) throw new Error('Arrays only allow String values');
+			break;
+		case String :
+			var p = pattern['*'];
+			if (p) {
+				if (p.allows.indexOf(val.type) < 0) {
+					throw new Error(type+' does not all subtype: '+val.type);
+				}
+			} else {
+				p = pattern[k];
+				if (!p) throw new Error(type+' does not allow key: '+k);
+				if (val.type !== p.must) {
+					throw new Error(type+'['+k+'] requires '+p.must+' got '+val.type);
+				}
+			}
+			break;
+		default : throw new Error('Impossible key');
 		}
+		debug('subgrow', k);
+		twig[k] = grow(twig[k], val.type);
 	}
 
-	// if _new is supported, set it accordingly
-	if (pattern._new) {
-		var _new = isnon(model._new) ? model._new : '1';
-		while(is(twig[_new])) _new = '' + (1 + _new);
-		Object.defineProperty(twig, '_new', { value: _new });
+
+	// if _inc is supported, sets it accordingly
+	if (pattern['*'] && pattern['*'].inc) {
+		var inc = isnon(model._inc) ? model._inc : '1';
+		while(is(twig[inc])) inc = '' + (1 + inc);
+		Object.defineProperty(twig, '_inc', { value: inc });
 	}
+
+	// calls a custom constructor if specified
+	if (pattern['^']) twig = pattern['^'](twig);
 
 	immute(twig);
 	return twig;
@@ -237,7 +235,7 @@ function grow(model /* ... */) {
 /**
 | Returns a path for from a path ending with '_new' to grow a new twig.
 */
-function newKey(tree, path) {
+function incPath(tree, path) {
 	//if (!tree._grow) throw new Error('_grow not set');
 	//while (is(tree.get('' + this._grow))) this._grow++;
 	//return path.set(-1, '' + this._grow);
@@ -408,6 +406,7 @@ Stem.prototype.tell = function() {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 Tree = {
 	grow    : grow,
+	incPath : incPath,
 	getPath : getPath,
 	setPath : setPath
 //	cogging : false,

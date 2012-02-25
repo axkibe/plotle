@@ -14,31 +14,30 @@
 	        pse : { type: 'Point', x: 300, y: 200 },
 	      },
 	      doc: {
-			 type: 'Doc',
-	         alley : [
-	          {
+			 type  : 'Doc',
+	         paras : {
+	          '0' : {
                 type: 'Para',
                 text: 'If you can dream---and not make dreams your master;',
-              }, {
+              },
+			  '1' : {
                 type: 'Para',
                 text: 'If you can think---and not make thoughts your aim,',
-              }, {
+              },
+			  '2' : {
                 type: 'Para',
                 text: 'If you can meet with Triumph and Disaster',
-              }, {
+              },
+			  '3' : {
                 type: 'Para',
                 text: 'And treat those two impostors just the same',
               },
-            ],
+			  alley : ['0', '1', '2', '3'],
+            },
           },
         },
       },
-      z : {
-		type : 'ArcAlley',
-        alley : [
-          '0',
-	    ],
-      },
+      z : [ '0', ],
     },
   },
   trg: {
