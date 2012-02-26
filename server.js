@@ -54,7 +54,7 @@ try {
 		debug : false,
 		ip    : '127.0.0.1',
 		port  : 8833,
-		log   : {},
+		log   : {}
 	};
 }
 var debug = config.debug === true || (config.debug % 4 - config.debug % 2) === 2;
@@ -63,6 +63,134 @@ var mm;
 (function() {
 	var nexus = Tree.grow( { type : 'Nexus' } );
 	mm = new MeshMashine(nexus, false, false);
+
+	// startup init
+	var spacepath = new Jools.Path(['welcome']);
+	var src = new Jools.Signature({
+		val: {
+			type: 'Space',
+			items: {
+				type: 'ItemCopse',
+				'0' : {
+					type: 'Note',
+					zone: {
+						type : 'Rect',
+						pnw : { type: 'Point', 'x':  10, 'y':  10 },
+						pse : { type: 'Point', 'x': 378, 'y': 140 }
+					},
+					doc: {
+						type: 'Doc',
+						paras : {
+							type: 'ParaCopse',
+							'0': {
+								type: 'Para',
+								text: 'If you can dream---and not make dreams your master;'
+							},
+							'1': {
+								type: 'Para',
+								text: 'If you can think---and not make thoughts your aim,'
+							},
+							'2': {
+								type: 'Para',
+								text: 'If you can meet with Triumph and Disaster'
+							},
+							'3': {
+								type: 'Para',
+								text: 'And treat those two impostors just the same'
+							},
+							'4': {
+								type: 'Para',
+								text: 'If you can bear to hear the truth you\'ve spoken'
+							},
+							'5': {
+								type: 'Para',
+								text: 'Twisted by knaves to make a trap for fools,'
+							},
+							'6': {
+								type: 'Para',
+								text: 'Or watch the things you gave your life to broken,'
+							},
+							'7': {
+								type: 'Para',
+								text: 'And stoop and build \'em up with wornout tools;'
+							},
+							'8': {
+								type: 'Para',
+								text: 'If you can make one heap of all your winnings'
+							},
+							'9': {
+								type: 'Para',
+								text: 'And risk it on one turn of pitch-and-toss,'
+							},
+							'10': {
+								type: 'Para',
+								text: 'And lose, and start again at your beginnings'
+							},
+							'11': {
+								type: 'Para',
+								text: 'And never breath a word about your loss;'
+							},
+							'12': {
+								type: 'Para',
+								text: 'If you can force your heart and nerve and sinew'
+							},
+							'13': {
+								type: 'Para',
+								text: 'To serve your turn long after they are gone,'
+							},
+							'14': {
+								type: 'Para',
+								text: 'And so hold on when there is nothing in you'
+							},
+							'15': {
+								type: 'Para',
+								text: 'Except the Will which says to them: "Hold on";'
+							}
+						},
+						alley : [
+							'1', '2', '3', '4', '5',
+							'6', '7', '8', '9', '10',
+							'11', '12', '13', '14', '15'
+						]
+					}
+				}
+//				'1' : {
+//					type: 'Label',
+//					pnw: { 'x': 200, 'y': 250 },
+//					doc: {
+//						fontsize : 90,
+//						paras : {
+//							'0' : {
+//								type: 'Para',
+//								text: 'FooBar',
+//							},
+//						},
+//					},
+//				},
+//				'2' : {
+//					type: 'Relation',
+//					pnw: { 'x': 600, 'y': 150 },
+//					item1key : '0',
+//					item2key : '1',
+//					doc: {
+//						fontsize : 20,
+//						paras : {
+//							'0': {
+//								type: 'Para',
+//								text: 'relates to',
+//							},
+//						},
+//					},
+//				},
+			},
+			'z' : [ '0' ]
+		}
+	});
+	var trg = new Jools.Signature({
+		path: spacepath
+	});
+	var asw = mm.alter(0, src, trg);
+	if (asw.ok !== true) throw new Error('Cannot init Repository');
 })();
 
 /**
@@ -71,7 +199,7 @@ var mm;
 var meshcraft_html = {
 	file: './meshcraft.html',
 	mime: 'text/html',
-	code: 'utf-8',
+	code: 'utf-8'
 };
 
 var mime_js = 'text/javascript';
@@ -81,14 +209,14 @@ var content = {
 	'/':               meshcraft_html,
 	'/index.html':     meshcraft_html,
 	'/meshcraft.html': meshcraft_html,
-	'/browser.js':     { file: './browser.js',        mime: mime_js, code: 'utf-8',  },
-	'/fabric.js':      { file: './fabric.js',         mime: mime_js, code: 'utf-8',  },
-	'/jools.js':       { file: './jools.js',          mime: mime_js, code: 'utf-8',  },
-	'/tree.js':        { file: './tree.js',           mime: mime_js, code: 'utf-8',  },
-	'/shell.js':       { file: './shell.js',          mime: mime_js, code: 'utf-8',  },
-	'/meshmashine.js': { file: './meshmashine.js',    mime: mime_js, code: 'utf-8',  },
-	'/peer.js':        { file: './peer.js',           mime: mime_js, code: 'utf-8',  },
-	'/favicon.ico':    { file: './icons/hexicon.ico', mime: mime_xi, code: 'binary', },
+	'/browser.js':     { file: './browser.js',        mime: mime_js, code: 'utf-8'  },
+	'/fabric.js':      { file: './fabric.js',         mime: mime_js, code: 'utf-8'  },
+	'/jools.js':       { file: './jools.js',          mime: mime_js, code: 'utf-8'  },
+	'/tree.js':        { file: './tree.js',           mime: mime_js, code: 'utf-8'  },
+	'/shell.js':       { file: './shell.js',          mime: mime_js, code: 'utf-8'  },
+	'/meshmashine.js': { file: './meshmashine.js',    mime: mime_js, code: 'utf-8'  },
+	'/peer.js':        { file: './peer.js',           mime: mime_js, code: 'utf-8'  },
+	'/favicon.ico':    { file: './icons/hexicon.ico', mime: mime_xi, code: 'binary' }
 };
 
 /**
@@ -159,7 +287,7 @@ var mmAjax = function(req, red, res) {
 		res.writeHead(200, {'Content-Type': 'application/json'});
 		res.end(JSON.stringify(asw));
 	});
-}
+};
 
 
 /**
@@ -171,11 +299,11 @@ function webConfig(req, red, res) {
 	res.write('\tdevel : '+ Jools.configSwitchClient(config.devel) + ',\n');
 	res.write('\tpuffed : ' + Jools.configSwitchClient(config.puffed) + ',\n');
 	res.write('\tlog : {\n');
-	for(k in config.log) {
+	for(var k in config.log) {
 		res.write('\t\t'+k+' : '+Jools.configSwitchClient(config.log[k])+',\n');
 	}
 	res.write('\t}\n');
-	res.end('};\n')
+	res.end('};\n');
 }
 
 /**
@@ -204,14 +332,13 @@ var dispatch = function(req, red, res) {
 		res.writeHead(200, {'Content-Type': co.mime});
 		res.end(data, co.code);
 	});
-}
+};
 
 /**
 | Startup.
 */
 log('start', 'Starting server @ http://'+(config.ip || '*')+'/:'+config.port);
-http.createServer(
-function (req, res) {
+http.createServer(function (req, res) {
 	var red = url.parse(req.url);
 	log('web', req.connection.remoteAddress, red.href);
 	dispatch(req, red, res);

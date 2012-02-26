@@ -132,6 +132,7 @@ function twigtype(o) {
 */
 function grow(model /*, ... */) {
 	var a, aZ = arguments.length;
+	if (model._$grown && aZ === 1) return model;
 	var pattern = null;
 	var twig, k;
 	var ttype = twigtype(model);
@@ -233,7 +234,7 @@ function grow(model /*, ... */) {
 			switch (val.constructor) {
 			case String : continue;
 			case Number : continue;
-			default : twig[k] = grow(twig[k]);
+			default : if (!val._$grown) twig[k] = grow(twig[k]);
 			}
 		}
 	}
@@ -250,6 +251,9 @@ function grow(model /*, ... */) {
 
 	// calls a custom constructor if specified
 	if (pattern['^']) twig = pattern['^'](twig);
+
+	// mark the object to be fine
+	Object.defineProperty(twig, '_$grown', { value : true });
 
 	immute(twig);
 	return twig;
