@@ -83,16 +83,16 @@ var Patterns = {
 
 	'Para' : {
 		'text'     : { must : 'String' },
-	}
+	},
 
 	'Rect' : {
-		'^'        : function(obj) { return new Fabric.Rect(o.pnw, o.pse); },
+		'^'        : function(t) { return new Fabric.Rect(t.pnw, t.pse); },
 		'pnw'      : { must : 'Point' },
 		'pse'      : { must : 'Point' },
 	},
 
 	'Point' : {
-		'^'        : function(obj) { return new Fabric.Point(o.x, o.y); },
+		'^'        : function(t) { return new Fabric.Point(t.x, t.y); },
 		'x'        : { must : 'Number' }, // @@ Integer
 		'y'        : { must : 'Number' }
 	}
@@ -110,45 +110,67 @@ var Patterns = {
 var Twig = function () { };
 
 /**
-| Creates new twigs, either extending an existing twig or creates one from a master.
+| Gets the twigs type
 */
-function grow(model, type, /* ... */) {
+function twigtype(o) {
+	switch(o.constructor) {
+	case Array  : return 'Array';
+	case Number : return 'Number';
+	case String : return 'String';
+	default : return o.type;
+	}
+}
+
+/**
+| Grows new twigs, the model is copies and extended by addtional arguments.
+| Possible Arguments:
+|  'key', value        sets [key] = value
+|  '+', key, value     inserts a key if this an array
+|  '-', key            removes a key if this an array
+|  '--', count         shortens an array by count
+|  '++', values...     for an array everything after '++' is extended.
+*/
+function grow(model /*, ... */) {
 	var a, aZ = arguments.length;
-
-	// determines the constructor of the twig to grow
 	var pattern = null;
-	var twig;
+	var twig, k;
+	var ttype = twigtype(model);
 
-	if (type === 'Array') {
-		if (model.constructor !== Array) throw new Error('Invalid Array');
+	log('grow', twigtype(model), model);
+
+	switch (ttype) {
+	case 'Array' :
 		pattern = 'Array';
 		twig = [];
-	} else {
-		pattern = patterns[type];
-		if (!pattern) throw new Error('Invalid type: '+type);
-		// if a creator is given, uses a typeless object so far.
+		break;
+	case 'Number' :
+	case 'String' :
+		throw new Error('no need to "grow" native types');
+	default :
+		pattern = Patterns[ttype];
+		if (!pattern) throw new Error('invalid type: '+ttype);
+		// if a creator is given, aquire its data in a typeless object to be constructed later
 		twig = pattern['^'] ? {} : new Twig();
 	}
 
-	// first copies over the model
-	var k;
+	// first copies the model
 	for (k in model) {
 		if (!Object.hasOwnProperty.call(model, k)) continue;
 		twig[k] = model[k];
 	}
 
-	// set the new values from the arguments
-	a = 2;
+	// then apply changes specified by the arguments
+	a = 1;
 	while(a < aZ && arguments[a] !== '++' && arguments[a] !== '--') {
 		k = arguments[a];
 		switch(k) {
 		case '+' :
-			if (creator !== Array) throw new Error(type+' is no Array');
+			if (ttype !== 'Array') throw new Error(ttype+' is no Array');
 			twig.splice(arguments[a + 1], 0, arguments[a + 2]);
 			a += 3;
 			break;
 		case '-' :
-			if (creator !== Array) throw new Error(type+' is no Array');
+			if (ttype !== 'Array') throw new Error(type+' is no Array');
 			twig.splice(arguments[a + 1], 1);
 			a += 2;
 			break;
@@ -158,47 +180,65 @@ function grow(model, type, /* ... */) {
 			break;
 		}
 	}
-	if (a < aZ && constructor !== Array) throw new Error(type+' is no Array');
+
+	if (a < aZ && ttype !== 'Array') {
+		throw new Error(ttype+' is no Array');
+	}
+
 	if (arguments[a] === '--') {
-		if (creator !== Array) throw new Error(type+' is no Array');
+		if (ttype !== 'Array') throw new Error(ttype+' is no Array');
 		var shorten = arguments[a + 1];
 		twig.splice(twig.length - shorten, shorten);
 		a += 2;
 	}
+
 	if (arguments[a] === '++') {
-		if (creator !== Array) throw new Error(type+' is no Array');
+		if (ttype !== 'Array') throw new Error(ttype+' is no Array');
 		while (a < aZ) twig[twig.length] = arguments[a++];
 	}
-	if (a < aZ) throw new Error('a < aZ should never happen here');
+
+	if (a < aZ) {
+		throw new Error('a < aZ should never happen here');
+	}
 
 	// TODO do not grow if the model was a twig.
-	for (k in twig) {
-		if (!Object.hasOwnProperty.call(twig, k)) continue;
-		var val = twig[k];
-		switch(k.constructor) {
-		case Number :
-			if (creator !== Array) throw new Error(type+' is no Array');
-			if (k.constructor !== String) throw new Error('Arrays only allow String values');
-			break;
-		case String :
+
+	// now grow subtwigs, checks if all are valids
+	if (ttype === 'Array') {
+		for (var n = 0, nZ = twig.length; n < nZ; n++) {
+			if (twig[n].constructor !== String) {
+				throw new Error('Twig-Arrays may only have Strings');
+			}
+		}
+	} else { // not an Array
+		for (k in twig) {
+			// checking
+			if (!Object.hasOwnProperty.call(twig, k)) continue;
+			var val = twig[k];
+			if (k.constructor !== String) throw new Error('typeof key no String: '+k);
 			var p = pattern['*'];
+			if (k === 'type') continue;
 			if (p) {
 				if (p.allows.indexOf(val.type) < 0) {
-					throw new Error(type+' does not all subtype: '+val.type);
+					throw new Error(ttype+' does not allow '+val.type+' for '+k);
 				}
 			} else {
 				p = pattern[k];
-				if (!p) throw new Error(type+' does not allow key: '+k);
-				if (val.type !== p.must) {
-					throw new Error(type+'['+k+'] requires '+p.must+' got '+val.type);
+				if (!p) throw new Error(ttype+' does not allow key: '+k);
+				if (twigtype(val) !== p.must) {
+					throw new Error(ttype+'['+k+'] requires '+p.must+' got '+val.type);
 				}
 			}
-			break;
-		default : throw new Error('Impossible key');
+			// and sub-grow non-natives
+			switch (val.constructor) {
+			case String : continue;
+			case Number : continue;
+			default : twig[k] = grow(twig[k]);
+			}
 		}
-		debug('subgrow', k);
-		twig[k] = grow(twig[k], val.type);
 	}
+
+	// TODO check all musts
 
 
 	// if _inc is supported, sets it accordingly

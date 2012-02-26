@@ -16,6 +16,7 @@ module.exports = {
 		debug:  true,
 		event:  false,
 		fail:   true,
+		grow:   true,
 		mm:     false,
 		start:  true,
 		shell:  true,

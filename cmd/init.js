@@ -16,6 +16,7 @@
 	      doc: {
 			 type  : 'Doc',
 	         paras : {
+              type : 'ParaCopse',
 	          '0' : {
                 type: 'Para',
                 text: 'If you can dream---and not make dreams your master;',
@@ -32,8 +33,8 @@
                 type: 'Para',
                 text: 'And treat those two impostors just the same',
               },
-			  alley : ['0', '1', '2', '3'],
             },
+			alley : ['0', '1', '2', '3'],
           },
         },
       },
