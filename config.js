@@ -17,7 +17,7 @@ module.exports = {
 		event:  false,
 		fail:   true,
 		grow:   true,
-		mm:     false,
+		mm:     true,
 		start:  true,
 		shell:  true,
 		te:     false,

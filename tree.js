@@ -49,55 +49,67 @@ var	subclass  = Jools.subclass;
 */
 var Patterns = {
 	'Nexus' : {
-		'*'        : { allows : 'Space' },
+		copse : { 'Space' : true },
 	},
 
 	'Space' : {
-		'items'    : { must : 'ItemCopse' },
-		'z'        : { must : 'Array'     }
-	},
-
-	'ItemCopse'    : {
-		'*'        : { allows : [ 'Note', 'Label', 'Relation' ], inc : true }
+		copse : {
+			'Note'     : true,
+			'Label'    : true,
+			'Relation' : true
+		},
+		alley : true,
+		inc   : true
 	},
 
 	'Note' : {
-		'doc'      : { must : 'Doc'  },
-		'zone'     : { must : 'Rect' }
+		must : {
+			'doc'      : 'Doc',
+			'zone'     : 'Rect',
+			'fontsize' : 'Number'
+		}
 	},
 
 	'Label' : {
-		'doc'      : { must : 'Doc'   },
-		'pnw'      : { must : 'Point' }
+		must : {
+			'doc'      : 'Doc',
+			'pnw'      : 'Point'
+			'fontsize' : 'Number'
+		}
 	},
 
 	'Doc' : {
-		'fontsize' : { must : 'Number'    },
-		'paras'    : { must : 'ParaCopse' },
-		'alley'    : { must : 'Array'     }
-	},
-
-	'ParaCopse'    : {
-		'*'        : { allows : [ 'Para' ], inc : true }
+		copse : { 'Para' : true },
+		alley : true,
+		inc   : true,
 	},
 
 	'Para' : {
-		'text'     : { must : 'String' },
+		must : { 'text' : 'String' }
 	},
 
 	'Rect' : {
-		'^'        : function(t) { return new Fabric.Rect(t.pnw, t.pse); },
-		'pnw'      : { must : 'Point' },
-		'pse'      : { must : 'Point' },
+		creator : function(t) {
+			return new Fabric.Rect(t.pnw, t.pse);
+		},
+
+		must : {
+			'pnw' : 'Point',
+			'pse' : 'Point'
+		}
 	},
 
 	'Point' : {
-		'^'        : function(t) { return new Fabric.Point(t.x, t.y); },
-		'x'        : { must : 'Number' }, // @@ Integer
-		'y'        : { must : 'Number' }
+		creator : function(t) {
+			return new Fabric.Point(t.x, t.y);
+		},
+
+		must : {
+			'x' : 'Number', // @@ Integer
+			'y' : 'Number'
+		}
 	}
 };
-
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  +++ Twig +++
@@ -117,8 +129,22 @@ function twigtype(o) {
 	case Array  : return 'Array';
 	case Number : return 'Number';
 	case String : return 'String';
-	default : return o.type;
+	default     : return o.type;
 	}
+}
+
+/**
+| Copies one object (not deep!)
+|
+| o ... the object to copy from
+| c ... the object to copy into
+*/
+function copy(o, c) {
+	for (k in o) {
+		if (!Object.hasOwnProperty.call(o, k)) continue;
+		c[k] = o[k];
+	}
+	return c;
 }
 
 /**
@@ -133,76 +159,84 @@ function twigtype(o) {
 function grow(model /*, ... */) {
 	var a, aZ = arguments.length;
 	if (model._$grown && aZ === 1) return model;
-	var pattern = null;
-	var twig, k;
+	var twig, k, k1, k2;
 	var ttype = twigtype(model);
 
-	log('grow', twigtype(model), model);
+	log('grow', ttype, model);
 
-	switch (ttype) {
-	case 'Array' :
-		pattern = 'Array';
-		twig = [];
-		break;
-	case 'Number' :
-	case 'String' :
-		throw new Error('no need to "grow" native types');
-	default :
-		pattern = Patterns[ttype];
-		if (!pattern) throw new Error('invalid type: '+ttype);
-		// if a creator is given, aquire its data in a typeless object to be constructed later
-		twig = pattern['^'] ? {} : new Twig();
+	var pattern = Patterns[ttype];
+	if (!pattern) throw new Error('cannot grow type: '+ttype);
+	if (pattern.copse && (pattern.must || pattern.opt)) {
+		throw new Error('pattern cannot mix copse with must or opt')
 	}
 
-	// first copies the model
-	for (k in model) {
-		if (!Object.hasOwnProperty.call(model, k)) continue;
-		twig[k] = model[k];
-	}
+	twig = new Twig();
 
-	// then apply changes specified by the arguments
+	// copies the model
+	if (pattern.copse) {
+		twig.copse = model.copse ? copy(model.copse, {}) || {};
+		if (pattern.alley) {
+			twig.alley = model.alley ? model.alley.slice() || [];
+		}
+	} else {
+		copy(model, twig);
+	}
+	// applies changes specified by the arguments
 	a = 1;
 	while(a < aZ && arguments[a] !== '++' && arguments[a] !== '--') {
 		k = arguments[a];
+		k1 = arguments[a + 1];
 		switch(k) {
 		case '+' :
-			if (ttype !== 'Array') throw new Error(ttype+' is no Array');
-			twig.splice(arguments[a + 1], 0, arguments[a + 2]);
+			if (!pattern.alley) reject('"+": '+ttype+' has no alley');
+			k2 = arguments[a + 2];
+			if (!isInteger(k1)) reject('"+": key must be an Integer');
+			if (!isString (k2)) reject('"+": value must be a String');
+			twig.alley.splice(k1, 0, k2);
 			a += 3;
 			break;
 		case '-' :
-			if (ttype !== 'Array') throw new Error(type+' is no Array');
-			twig.splice(arguments[a + 1], 1);
+			if (!pattern.alley) reject('"-": '+ttype+' has no alley');
+			if (!isInteger(k1)) reject('"-": key must be an Integer');
+			twig.alley.splice(k1, 1);
 			a += 2;
 			break;
 		default  :
-			twig[k] = arguments[a + 1];
+			if (isInteger(k)) {
+				if (!pattern.alley) reject('"'+k+'": '+ttype+' has no alley');
+				twig.alley[k] = k1;
+			} else {
+				if (!isString(k)) reject('"'+k+'": is neither String or Integer');
+				twig[k] = k1
+			}
+			if (pattern.copse) {
+				twig.copse[k] = k1;
+			} else {
+				twig[k] = k1;
+			}
 			a += 2;
 			break;
 		}
 	}
 
-	if (a < aZ && ttype !== 'Array') {
-		throw new Error(ttype+' is no Array');
-	}
-
-	if (arguments[a] === '--') {
-		if (ttype !== 'Array') throw new Error(ttype+' is no Array');
-		var shorten = arguments[a + 1];
-		twig.splice(twig.length - shorten, shorten);
-		a += 2;
-	}
-
-	if (arguments[a] === '++') {
-		if (ttype !== 'Array') throw new Error(ttype+' is no Array');
-		while (a < aZ) twig[twig.length] = arguments[a++];
-	}
-
 	if (a < aZ) {
-		throw new Error('a < aZ should never happen here');
+		if (!pattern.alley) throw new Error('"'+arguments[a]+'": '+ttype+' has no alley');
+		if (arguments[a] === '--') {
+			var shorten = arguments[a + 1];
+			twig.alley.splice(twig.alley.length - shorten, shorten);
+			a += 2;
+		}
+		if (arguments[a] === '++') {
+			for(a++; a < aZ; a++) {
+				var k = arguments[a++];
+				if (!isString(k)) reject ('"++": '+k+' is no String');
+				twig.push(k);
+			}
+		}
+		if (a < aZ) throw new Error('a < aZ should never happen here');
 	}
 
-	// TODO do not grow if the model was a twig.
+xxx
 
 	// now grow subtwigs, checks if all are valids
 	if (ttype === 'Array') {

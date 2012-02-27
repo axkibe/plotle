@@ -95,7 +95,7 @@ Peer.prototype._get = function(path) {
 		asw = ajax.responseText;
 		debug('ASW', asw);
 		try {
-			asw = json.parse(asw);
+			asw = JSON.parse(asw);
 		} catch (e) {
 			throw new Error('Server answered no JSON!');
 		}

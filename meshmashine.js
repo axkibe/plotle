@@ -171,8 +171,7 @@ function alterSet(tree, src, trg, report) {
 	var path = trg.path;
 	//var ppath = new Path(path, '--', 1);
 	//var parent = tree.get(ppath);
-
-	if (path.get(-1) === '$new') path = Tree.newKey(tree, path);
+	//if (path.get(-1) === '$new') path = Tree.newKey(tree, path);
 
 	var save = Tree.getPath(tree, path);
 

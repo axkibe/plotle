@@ -332,6 +332,8 @@ function inspect(o) {
 | Deep copies an object.
 */
 function clone(original) {
+	throw new Error('TODO REMOVE XXX');
+
 	//return JSON.parse(JSON.stringify(original));
 	if(typeof(original) !== 'object' || original === null) {
 		return original;
