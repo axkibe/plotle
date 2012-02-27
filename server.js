@@ -196,27 +196,26 @@ var mm;
 /**
 | Files served.
 */
-var meshcraft_html = {
-	file: './meshcraft.html',
-	mime: 'text/html',
-	code: 'utf-8'
+var mime = {
+	ht : 'text/html',
+	js : 'text/javascript',
+	xi : 'image/x-icon'
 };
 
-var mime_js = 'text/javascript';
-var mime_xi = 'image/x-icon';
-
 var content = {
-	'/':               meshcraft_html,
-	'/index.html':     meshcraft_html,
-	'/meshcraft.html': meshcraft_html,
-	'/browser.js':     { file: './browser.js',        mime: mime_js, code: 'utf-8'  },
-	'/fabric.js':      { file: './fabric.js',         mime: mime_js, code: 'utf-8'  },
-	'/jools.js':       { file: './jools.js',          mime: mime_js, code: 'utf-8'  },
-	'/tree.js':        { file: './tree.js',           mime: mime_js, code: 'utf-8'  },
-	'/shell.js':       { file: './shell.js',          mime: mime_js, code: 'utf-8'  },
-	'/meshmashine.js': { file: './meshmashine.js',    mime: mime_js, code: 'utf-8'  },
-	'/peer.js':        { file: './peer.js',           mime: mime_js, code: 'utf-8'  },
-	'/favicon.ico':    { file: './icons/hexicon.ico', mime: mime_xi, code: 'binary' }
+	'/'               : { file: './meshcraft.html',    mime: mime.ht, code: 'utf-8'  },
+	'/index.html'     : { file: './meshcraft.html',    mime: mime.ht, code: 'utf-8'  },
+	'/meshcraft.html' : { file: './meshcraft.html',    mime: mime.ht, code: 'utf-8'  },
+	'/browser.js'     : { file: './browser.js',        mime: mime.js, code: 'utf-8'  },
+	'/fabric.js'      : { file: './fabric.js',         mime: mime.js, code: 'utf-8'  },
+	'/jools.js'       : { file: './jools.js',          mime: mime.js, code: 'utf-8'  },
+	'/tree.js'        : { file: './tree.js',           mime: mime.js, code: 'utf-8'  },
+	'/shell.js'       : { file: './shell.js',          mime: mime.js, code: 'utf-8'  },
+	'/meshmashine.js' : { file: './meshmashine.js',    mime: mime.js, code: 'utf-8'  },
+	'/peer.js'        : { file: './peer.js',           mime: mime.js, code: 'utf-8'  },
+	'/favicon.ico'    : { file: './icons/hexicon.ico', mime: mime.xi, code: 'binary' },
+	'/testpad.html'   : { file: './testpad.html',      mime: mime.ht, code: 'utf-8'  },
+	'/testpad.js'     : { file: './testpad.js',        mime: mime.js, code: 'utf-8'  },
 };
 
 /**

@@ -35,7 +35,6 @@
 */
 var Jools;
 var Fabric;
-var FrontFace;
 var Peer;
 
 /**
@@ -93,7 +92,7 @@ function makeCatcher(that, fun) {
  @03 use more prototyping.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function System(FrontFace) {
+function System() {
 	var canvas = document.getElementById('canvas');
 	canvas.width  = window.innerWidth - 1;
 	canvas.height = window.innerHeight - 1;

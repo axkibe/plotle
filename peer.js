@@ -26,9 +26,34 @@
 
 'use strict';
 
+/**
+| Imports
+*/
 var MeshMashine;
 var Path;
 var Tree;
+var Jools;
+
+/**
+| Exports
+*/
+var Peer;
+
+/**
+| Capsule
+*/
+(function () {
+
+"use strict";
+
+/**
+| Running in node or browser?
+*/
+if (typeof (window) === 'undefined') throw new Error('Peer nees a browser!');
+
+var Path      = Jools.Path;
+var Signature = Jools.Signature;
+var debug     = Jools.debug;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  +++ Peer +++
@@ -37,21 +62,55 @@ var Tree;
  Communicates with the server, holds caches.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Peer() {
-	var nexus = Tree.grow( { type: 'Nexus' } );
-	this.mm = new MeshMashine(nexus, true, true);
+Peer = function(async) {
+	this._async = async = async ? true : false;
+	if (async) {
+		var nexus = Tree.grow( { type: 'Nexus' } );
+		this.mm = new MeshMashine(nexus, true, true);
+	}
+};
+
+
+/**
+| Issues a get request
+*/
+Peer.prototype._get = function(path) {
+	var asw;
+
+	if (this.async) {
+		asw = this.mm.get(-1, path);
+		if (asw.ok !== true) throw new Error('Cannot get own space: '+name);
+		return asw.node;
+	} else {
+		var ajax = new XMLHttpRequest();
+	    ajax.open('POST', '/mm', false);
+		ajax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+		var request = JSON.stringify({
+			time : -1,
+			cmd  : 'get',
+			path : path
+		});
+		debug('SEND', request);
+	    ajax.send(request);
+		asw = ajax.responseText;
+		debug('ASW', asw);
+		try {
+			asw = json.parse(asw);
+		} catch (e) {
+			throw new Error('Server answered no JSON!');
+		}
+		if (asw.ok !== true) throw new Error('AJAX not ok: '+asw.message);
+	    return asw;
+	}
 }
+
 
 /**
 | gets a space
 */
 Peer.prototype.getSpace = function(name) {
-	var asw = this.mm.get(-1, name);
-	if (asw.ok !== true) throw new Error('Cannot get own space: '+name);
-	return asw.node;
+	return this._get(new Path([name]));
 }
-
-
 
 /**
 | Creates a new note.
@@ -388,3 +447,5 @@ Peer.prototype.removeItem = function(space, item) {
 		})
 	);
 }
+
+})();

@@ -684,7 +684,7 @@ MeshMashine.prototype.get = function(time, path) {
 			if (!this._isValidTime(time)) return reject('invalid time');
 			reflect = this._reflect(time, path);
 		} else {
-			reflect = this.tree.get(path); // xxx
+			reflect = Tree.getPath(this.tree, path);
 			time = this.history.length;
 		}
 		log('mm', 'ok', time, reflect);
