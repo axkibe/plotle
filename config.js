@@ -18,6 +18,7 @@ module.exports = {
 		fail:   true,
 		grow:   true,
 		mm:     true,
+		peer:   true,
 		start:  true,
 		shell:  true,
 		te:     false,

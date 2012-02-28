@@ -172,7 +172,7 @@ function copy(o, c) {
 function grow(model /*, ... */) {
 	var a, aZ = arguments.length;
 	if (model._$grown && aZ === 1) return model;
-	var twig, k, k1, k2, val, vtype;
+	var twig, k, k1, k2, val, vtype, klen;
 	var ttype = twigtype(model);
 
 	log('grow', ttype, model);
@@ -243,13 +243,17 @@ function grow(model /*, ... */) {
 		if (a < aZ) reject('a < aZ should never happen here');
 	}
 
-	// grow the subtwigs
+	// grows the subtwigs
+	klen = 0;
+
 	if (pattern.copse) {
 		for (k in twig.copse) {
 			if (!Object.hasOwnProperty.call(twig, k)) continue;
 			if (!isString(k)) reject('key of copse no String: '+k);
+			klen++;
 
-			val = twig[k];
+			val = twig.copse[k];
+			if (val === null) { delete twig.copse[k]; break; }
 			vtype = twigtype(val);
 			if (!pattern.copse[vtype]) reject(ttype+'.copse does not allow '+val.type);
 			switch(val.constructor) {
@@ -262,8 +266,10 @@ function grow(model /*, ... */) {
 		for (k in twig) {
 			if (!Object.hasOwnProperty.call(twig, k)) continue;
 			if (!isString(k)) reject('key of twig is no String: '+k);
+			klen++;
 
 			val = twig[k];
+			if (val === null) { delete twig[k]; break; }
 			vtype = twigtype(val);
 			if (!pattern.must[k]) reject(ttype+' does not allow key: '+k);
 			switch(val.constructor) {
@@ -274,9 +280,26 @@ function grow(model /*, ... */) {
 		}
 	}
 
+	// makes some additional checks
 	if (pattern.must) {
 		for (k in pattern.must) {
 			if (!twig[k]) reject(ttype+' requires "'+k+'"');
+		}
+	}
+
+	if (pattern.alley) {
+		aZ = twig.alley.length;
+		if (aZ !== Object.keys(twig.alley).length) {
+			reject('Alley not a sequence');
+		}
+		if (aZ !== klen) {
+			reject('Alley length does not match to copse');
+		}
+		for (a = 0; a < aZ; a++) {
+			var k = twig.alley[a;]
+			if (!is(twig.copse[k])) {
+				throw new Error('Copse misses Alley value: '+k);
+			}
 		}
 	}
 

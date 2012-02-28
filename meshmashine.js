@@ -87,7 +87,9 @@ function checkWithin(v, low, high) {
 	if (v < low || v > high) fail(arguments, 3, low, '<=', v, '<=', high);
 }
 
-
+/**
+| Returns true if v .matches w or w .matches v
+*/
 function matches(v, w) {
 	// TODO change to checkMatch
 	if (v === w) return true;
@@ -679,7 +681,6 @@ MeshMashine.prototype.get = function(time, path) {
 	try {
 		log('mm', 'get time:', time, ' path:', path);
 		var reflect;
-		debug('thistree', this.tree);
 
 		if (time >= 0) {
 			if (!this._isValidTime(time)) return reject('invalid time');

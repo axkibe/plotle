@@ -26,6 +26,18 @@ var log       = Jools.log;
 var subclass  = Jools.subclass;
 
 var peer;
+var space;
+var note;
+var pad;
+
+/**
+| TODO
+*/
+function updatePad() {
+	pad.innerHTML = '<span id="cursor">M</span>uhkuh';
+}
+
+
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,.   ,   ,.       .
@@ -35,9 +47,12 @@ var peer;
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 window.onload = function() {
-	// XXX
+	pad = document.getElementById('pad');
 	peer = new Peer(false);
-	peer.getSpace('welcome');
+	space = peer.getSpace('welcome');
+	note = space.copse['0'];
+	if (!note) throw new Error('No Note with default ID 0');
+	updatePad();
 }
 
 })();

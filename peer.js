@@ -54,6 +54,7 @@ if (typeof (window) === 'undefined') throw new Error('Peer nees a browser!');
 var Path      = Jools.Path;
 var Signature = Jools.Signature;
 var debug     = Jools.debug;
+var log       = Jools.log;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  +++ Peer +++
@@ -90,17 +91,17 @@ Peer.prototype._get = function(path) {
 			cmd  : 'get',
 			path : path
 		});
-		debug('SEND', request);
+		log('peer', '->', request);
 	    ajax.send(request);
 		asw = ajax.responseText;
-		debug('ASW', asw);
+		log('peer', '<-', asw);
 		try {
 			asw = JSON.parse(asw);
 		} catch (e) {
 			throw new Error('Server answered no JSON!');
 		}
 		if (asw.ok !== true) throw new Error('AJAX not ok: '+asw.message);
-	    return asw;
+	    return asw.node;
 	}
 }
 
