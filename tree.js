@@ -296,7 +296,7 @@ function grow(model /*, ... */) {
 			reject('Alley length does not match to copse');
 		}
 		for (a = 0; a < aZ; a++) {
-			var k = twig.alley[a;]
+			var k = twig.alley[a];
 			if (!is(twig.copse[k])) {
 				throw new Error('Copse misses Alley value: '+k);
 			}
