@@ -49,7 +49,7 @@ var	subclass  = Jools.subclass;
 */
 var Patterns = {
 	'Nexus' : {
-		copse : { 'Space' : true },
+		copse : { 'Space' : true }
 	},
 
 	'Space' : {
@@ -73,7 +73,7 @@ var Patterns = {
 	'Label' : {
 		must : {
 			'doc'      : 'Doc',
-			'pnw'      : 'Point'
+			'pnw'      : 'Point',
 			'fontsize' : 'Number'
 		}
 	},
@@ -81,7 +81,7 @@ var Patterns = {
 	'Doc' : {
 		copse : { 'Para' : true },
 		alley : true,
-		inc   : true,
+		inc   : true
 	},
 
 	'Para' : {
@@ -110,6 +110,19 @@ var Patterns = {
 		}
 	}
 };
+
+/**
+| Some sanity tests on the patterns.
+| @@ this might be disabled in release mode.
+*/
+function checkPatterns(patterns) {
+	for(var k in patterns) {
+		var p = patterns[k];
+		if (p.must && p.copse)   throw new Error('Patterns must not have .must and .copse');
+		if (p.alley && !p.copse) throw new Error('Patterns must not have .alley without .copse');
+	}
+}
+checkPatterns(Patterns);
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  +++ Twig +++
@@ -140,7 +153,7 @@ function twigtype(o) {
 | c ... the object to copy into
 */
 function copy(o, c) {
-	for (k in o) {
+	for (var k in o) {
 		if (!Object.hasOwnProperty.call(o, k)) continue;
 		c[k] = o[k];
 	}
@@ -159,28 +172,20 @@ function copy(o, c) {
 function grow(model /*, ... */) {
 	var a, aZ = arguments.length;
 	if (model._$grown && aZ === 1) return model;
-	var twig, k, k1, k2;
+	var twig, k, k1, k2, val, vtype;
 	var ttype = twigtype(model);
 
 	log('grow', ttype, model);
 
 	var pattern = Patterns[ttype];
-	if (!pattern) throw new Error('cannot grow type: '+ttype);
-	if (pattern.copse && (pattern.must || pattern.opt)) {
-		throw new Error('pattern cannot mix copse with must or opt')
-	}
-
-	twig = new Twig();
+	if (!pattern) reject('cannot grow type: '+ttype);
 
 	// copies the model
-	if (pattern.copse) {
-		twig.copse = model.copse ? copy(model.copse, {}) || {};
-		if (pattern.alley) {
-			twig.alley = model.alley ? model.alley.slice() || [];
-		}
-	} else {
-		copy(model, twig);
-	}
+	twig = copy(model, new Twig());
+
+	if (pattern.copse) twig.copse = model.copse ? copy(model.copse, {}) : {};
+	if (pattern.alley) twig.alley = model.alley ? model.alley.slice()   : [];
+
 	// applies changes specified by the arguments
 	a = 1;
 	while(a < aZ && arguments[a] !== '++' && arguments[a] !== '--') {
@@ -207,12 +212,11 @@ function grow(model /*, ... */) {
 				twig.alley[k] = k1;
 			} else {
 				if (!isString(k)) reject('"'+k+'": is neither String or Integer');
-				twig[k] = k1
-			}
-			if (pattern.copse) {
-				twig.copse[k] = k1;
-			} else {
-				twig[k] = k1;
+				if (pattern.copse) {
+					twig.copse[k] = k1;
+				} else {
+					twig[k] = k1;
+				}
 			}
 			a += 2;
 			break;
@@ -220,71 +224,71 @@ function grow(model /*, ... */) {
 	}
 
 	if (a < aZ) {
-		if (!pattern.alley) throw new Error('"'+arguments[a]+'": '+ttype+' has no alley');
+		if (!pattern.alley) reject('"'+arguments[a]+'": '+ttype+' has no alley');
+
 		if (arguments[a] === '--') {
 			var shorten = arguments[a + 1];
 			twig.alley.splice(twig.alley.length - shorten, shorten);
 			a += 2;
 		}
+
 		if (arguments[a] === '++') {
 			for(a++; a < aZ; a++) {
-				var k = arguments[a++];
+				k = arguments[a++];
 				if (!isString(k)) reject ('"++": '+k+' is no String');
 				twig.push(k);
 			}
 		}
-		if (a < aZ) throw new Error('a < aZ should never happen here');
+
+		if (a < aZ) reject('a < aZ should never happen here');
 	}
 
-xxx
-
-	// now grow subtwigs, checks if all are valids
-	if (ttype === 'Array') {
-		for (var n = 0, nZ = twig.length; n < nZ; n++) {
-			if (twig[n].constructor !== String) {
-				throw new Error('Twig-Arrays may only have Strings');
-			}
-		}
-	} else { // not an Array
-		for (k in twig) {
-			// checking
+	// grow the subtwigs
+	if (pattern.copse) {
+		for (k in twig.copse) {
 			if (!Object.hasOwnProperty.call(twig, k)) continue;
-			var val = twig[k];
-			if (k.constructor !== String) throw new Error('typeof key no String: '+k);
-			var p = pattern['*'];
-			if (k === 'type') continue;
-			if (p) {
-				if (p.allows.indexOf(val.type) < 0) {
-					throw new Error(ttype+' does not allow '+val.type+' for '+k);
-				}
-			} else {
-				p = pattern[k];
-				if (!p) throw new Error(ttype+' does not allow key: '+k);
-				if (twigtype(val) !== p.must) {
-					throw new Error(ttype+'['+k+'] requires '+p.must+' got '+val.type);
-				}
+			if (!isString(k)) reject('key of copse no String: '+k);
+
+			val = twig[k];
+			vtype = twigtype(val);
+			if (!pattern.copse[vtype]) reject(ttype+'.copse does not allow '+val.type);
+			switch(val.constructor) {
+			case String : break;
+			case Number : break;
+			default     : if (!val._$grown) twig.copse[k] = grow(twig.copse[k]);
 			}
-			// and sub-grow non-natives
-			switch (val.constructor) {
-			case String : continue;
-			case Number : continue;
-			default : if (!val._$grown) twig[k] = grow(twig[k]);
+		}
+	} else {
+		for (k in twig) {
+			if (!Object.hasOwnProperty.call(twig, k)) continue;
+			if (!isString(k)) reject('key of twig is no String: '+k);
+
+			val = twig[k];
+			vtype = twigtype(val);
+			if (!pattern.must[k]) reject(ttype+' does not allow key: '+k);
+			switch(val.constructor) {
+			case String : break;
+			case Number : break;
+			default     : if (!val._$grown) twig[k] = grow(twig[k]);
 			}
 		}
 	}
 
-	// TODO check all musts
-
+	if (pattern.must) {
+		for (k in pattern.must) {
+			if (!twig[k]) reject(ttype+' requires "'+k+'"');
+		}
+	}
 
 	// if _inc is supported, sets it accordingly
-	if (pattern['*'] && pattern['*'].inc) {
+	if (pattern.inc) {
 		var inc = isnon(model._inc) ? model._inc : '1';
 		while(is(twig[inc])) inc = '' + (1 + inc);
 		Object.defineProperty(twig, '_inc', { value: inc });
 	}
 
-	// calls a custom constructor if specified
-	if (pattern['^']) twig = pattern['^'](twig);
+	// if there is a custom construcgtor, calls it to replace the new twig
+	if (pattern.creator) twig = pattern.creator(twig);
 
 	// mark the object to be fine
 	Object.defineProperty(twig, '_$grown', { value : true });
@@ -292,22 +296,7 @@ xxx
 	immute(twig);
 	return twig;
 
-	/*if (Tree.cogging) {
-		throw new Error('TODO');
-		//this.parent = null;
-		//this.key$ = null;
-		//
-		//for (var k in twigs) {
-		//	if (k === 'type' || k === 'alley') continue;
-		//	switch (twigs.constructor) {
-		//	case String : continue;
-		//	case Number : continue;
-		//	}
-		//	if (!twigs[k] || twigs[k].noCogs) continue;
-		//	twigs[k].parent = this;
-		//	twigs[k].key$ = k;
-		//}
-	}*/
+	// if (Tree.cogging) {} TODO
 }
 
 /**
@@ -325,12 +314,11 @@ function incPath(tree, path) {
 */
 function getPath(tree, path) {
 	if (!isPath(path)) throw new Error('Tree.get no path');
-	var twig = tree;
 	for (var a = 0, aZ = path.length; a < aZ; a++) {
-		if (!isnon(twig)) throw reject('path goes nowhere');
-		twig = twig[path.get(a)];
+		if (!isnon(tree)) throw reject('path goes nowhere');
+		tree = tree[path.get(a)];
 	}
-	return twig;
+	return tree;
 }
 
 /**
@@ -339,14 +327,11 @@ function getPath(tree, path) {
 function setPath(tree, path, val) {
 	if (!isPath(path)) throw new Error('Tree.get no path');
 	var a, aZ;
-	debug('SETPATH', tree, path, val);
 	for (a = 0, aZ = path.length - 1; a < aZ; a++) {
 		if (!isnon(tree)) throw reject('path goes nowhere');
 		tree = tree[path.get(a)];
-		debug('GOD', path.get(a), tree);
 	}
 	for(a; a >= 0; a--) {
-		debug('setPath', a, tree);
 		tree = grow(tree, path.get(a), val);
 		val = tree;
 	}

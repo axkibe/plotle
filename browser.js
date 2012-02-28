@@ -64,15 +64,15 @@ var subclass  = Jools.subclass;
 */
 function makeCatcher(that, fun) {
 	return function() {
-		'use strict';
 		if (!config.devel) {
 			try {
 				fun.apply(that, arguments);
 			} catch(err) {
-				alert('Internal failure, '+err.name+': '+err.message+'\n\n' +
-				      'file: '+err.fileName+'\n'+
-					  'line: '+err.lineNumber+'\n'+
-					  'stack: '+err.stack);
+				alert(
+					'Internal failure, '+err.name+': '+err.message+'\n\n' +
+					'file: '+err.fileName+'\n'+
+					'line: '+err.lineNumber+'\n'+
+					'stack: '+err.stack);
 			}
 		} else {
 			fun.apply(that, arguments);
@@ -100,7 +100,7 @@ function System() {
 
 	// if true browser supports the setCapture() call
 	// if false needs work around
-	var useCapture = canvas.setCapture != null;
+	var useCapture = canvas.setCapture !== null;
 	var mouseState  = false;   // false, 'atween' or 'drag'
 
 	// atween is the state where the mouse button went down,
@@ -209,7 +209,7 @@ function System() {
 	| Key down in hidden input field.
 	*/
 	function onkeydown(event) {
-		if (!specialKey.call(this,
+		if (!specialKey(this,
 			lastSpecialKey = event.keyCode, event.shiftKey, event.ctrlKey || event.metaKey
 		)) event.preventDefault();
 	}

@@ -649,6 +649,7 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 			alt = new Alternation(result.src, result.trg);
 			deepFreeze(alt);  // @@ extra safety, but superflous.
 			this.history.push(alt);
+			this.tree = result.tree;
 		};
 
 		// TODO ugly for
@@ -678,6 +679,7 @@ MeshMashine.prototype.get = function(time, path) {
 	try {
 		log('mm', 'get time:', time, ' path:', path);
 		var reflect;
+		debug('thistree', this.tree);
 
 		if (time >= 0) {
 			if (!this._isValidTime(time)) return reject('invalid time');

@@ -69,7 +69,7 @@ var mm;
 	var src = new Jools.Signature({
 		val: {
 			type: 'Space',
-			items: {
+			copse: {
 				type: 'ItemCopse',
 				'0' : {
 					type: 'Note',
@@ -80,7 +80,7 @@ var mm;
 					},
 					doc: {
 						type: 'Doc',
-						paras : {
+						copse : {
 							type: 'ParaCopse',
 							'0': {
 								type: 'Para',
@@ -183,7 +183,7 @@ var mm;
 //					},
 //				},
 			},
-			'z' : [ '0' ]
+			alley : [ '0' ]
 		}
 	});
 	var trg = new Jools.Signature({

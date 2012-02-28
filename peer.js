@@ -109,7 +109,7 @@ Peer.prototype._get = function(path) {
 | gets a space
 */
 Peer.prototype.getSpace = function(name) {
-	return this._get(new Path([name]));
+	return this._get(new Path(['copse', name]));
 }
 
 /**
