@@ -87,9 +87,10 @@ function makeCatcher(that, fun) {
  `---' `-| `-' `' `-' ' ' '
 ~ ~ ~ ~ /|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
        `-'
- The wrapper around the HTML5 browser.
+ Meshcraft Wrapper around the HTML5 browser.
 
- @03 use more prototyping.
+ @@ use more prototyping.
+ @@ or remove this logic.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function System() {
@@ -175,10 +176,11 @@ function System() {
 		}
 	}
 
-	// the value that is expected to be in input.
-	// either nothing or the text selection.
-	// if it changes the user did something.
-
+	/**
+	| The value that is expected to be in input.
+	| either nothing or the text selection.
+	| if it changes the user did something.
+	*/
 	var inputval = '';
 
 	//---------------------------------
@@ -188,9 +190,7 @@ function System() {
 	// tests if the hidden input field got data
 	function testinput() {
 		var text = hiddenInput.value;
-		if (text == inputval) {
-			return;
-		}
+		if (text == inputval) { return; }
 		hiddenInput.value = inputval = '';
 		this.shell.input(text);
 	}

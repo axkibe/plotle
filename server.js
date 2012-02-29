@@ -84,20 +84,21 @@ var mm;
 							type: 'ParaCopse',
 							'3': {
 								type: 'Para',
-								text: 'If you can dream---and <not> make dreams your master;'
+								text: 'If you can dream---and not make dreams your master;'
 							},
 							'1': {
 								type: 'Para',
-								text: 'If you can think---&& not make thoughts your aim,'
+								text: 'If you can think---and not make thoughts your aim,'
 							},
 							'2': {
 								type: 'Para',
-								text: 'If you can meet with "Triumph" and Disaster'
+								text: 'If you can meet with Triumph and Disaster'
 							},
 							'4': {
 								type: 'Para',
 								text: 'And treat those two impostors just the same'
 							},
+							/*
 							'5': {
 								type: 'Para',
 								text: 'If you can bear to hear the truth you\'ve spoken'
@@ -146,12 +147,13 @@ var mm;
 								type: 'Para',
 								text: 'Except the Will which says to them: "Hold on";'
 							}
+							*/
 						},
 						alley : [
-							'3', '1', '2', '4', '5',
+							'3', '1', '2', '4' /*, '5',
 							'6', '7', '8', '9', '10',
 							'11', '12', '13', '14', '15',
-							'16'
+							'16' */
 						]
 					}
 				}

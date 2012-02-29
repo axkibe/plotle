@@ -11,6 +11,7 @@
 var Jools;
 var Fabric;
 var Peer;
+var testinput;
 
 /**
 | Export/Capsule
@@ -24,6 +25,7 @@ var debug     = Jools.debug;
 var fixate    = Jools.fixate;
 var log       = Jools.log;
 var subclass  = Jools.subclass;
+var action    = null;
 
 var peer;
 var space;
@@ -59,22 +61,52 @@ function onmousedown(event) {
 }
 
 /**
-| TODO
+| Down event to (hidden) input.
 */
 function onkeydown(event) {
 	if (isSpecialKey(event.keyCode)) {
 		event.preventDefault();
 		inputSpecialKey(event.keyCode);
 		updatePad();
+	} else {
+		testinput();
 	}
 }
 
 /**
-| TODO
+| Press event to (hidden) input.
 */
 function onkeypress(event) {
-
+	testinput();
+	setTimeout('testinput();', 0);
 }
+
+/**
+| Up event to (hidden) input.
+*/
+function onkeyup(event) {
+	testinput();
+}
+
+/**
+| Aquires non-special input from (hidden) input.
+*/
+testinput = function() {
+	var text = input.value;
+	input.value = '';
+	if (text === '') return;
+
+	if (action === null) {
+		action = {
+			type : 'insert',
+			line : cursor.line,
+			at1  : cursor. offset
+		}
+		return;
+	}
+
+	console.log('another input active');
+};
 
 
 /**
@@ -138,6 +170,14 @@ function updatePad() {
 		}
 	}
 
+	// inserts the action
+	switch(action && action.type) {
+	case null : break;
+	case 'insert'
+
+	}
+
+	// inserts the cursor
 	var cline = cursor.line;
 	if (cline < 0) cline = cursor.line = 0;
 	if (cline > alley.length - 1) cline = cursor.line = alley.length - 1;
@@ -148,11 +188,10 @@ function updatePad() {
 	lines[cline].splice(coff, 0, '<span id="cursor">');
 	if (coff === clen) lines[cline].push(' ');
 	lines[cline].splice(coff + 2, 0, '</span>');
-	for (a = 0, aZ = lines.length; a < aZ; a++) {
-		lines[a] = lines[a].join('');
-	}
-	var html = lines.join('\n');
-	pad.innerHTML = html;
+
+	// transforms to HTML
+	for (a = 0, aZ = lines.length; a < aZ; a++) { lines[a] = lines[a].join(''); }
+	pad.innerHTML = lines.join('\n');
 }
 
 
@@ -171,6 +210,7 @@ window.onload = function() {
 	pad.onmousedown = onmousedown;
 	input.onkeypress  = onkeypress;
 	input.onkeydown   = onkeydown;
+	input.onkeyup     = onkeyup;
 
 	peer = new Peer(false);
 	space = peer.getSpace('welcome');
