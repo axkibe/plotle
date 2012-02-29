@@ -417,7 +417,7 @@ function System() {
 	this.restartBlinker = function() {
 		if (blinkTimer) clearInterval(blinkTimer);
 		testinput.call(this);
-		blinkTimer = setInterval('system.onblink()', settings.caretBlinkSpeed);
+		blinkTimer = setInterval('system.onblink();', settings.caretBlinkSpeed);
 	}
 
 	this.restartBlinker();

@@ -71,7 +71,6 @@ Peer = function(async) {
 	}
 };
 
-
 /**
 | Issues a get request
 */
@@ -80,7 +79,7 @@ Peer.prototype._get = function(path) {
 
 	if (this.async) {
 		asw = this.mm.get(-1, path);
-		if (asw.ok !== true) throw new Error('Cannot get own space: '+name);
+		if (asw.ok !== true) throw new Error('Meshmashine not ok: '+asw.message);
 		return asw.node;
 	} else {
 		var ajax = new XMLHttpRequest();
@@ -105,7 +104,38 @@ Peer.prototype._get = function(path) {
 	}
 }
 
-
+/**
+| Issues an alter request
+*/
+Peer.prototype._alter = function(path, src, trg) {
+	if (this.async) {
+		asw = this.mm.alter(-1, new Signature(src), new Signature(trg));
+		if (asw.ok !== true) throw new Error('Meshmashine not OK: '+asw.message);
+		return asw.node;
+	} else {
+		var ajax = new XMLHttpRequest();
+	    ajax.open('POST', '/mm', false);
+		ajax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+		var request = JSON.stringify({
+			time : -1,
+			cmd  : 'alter',
+			src  : src,
+			trg  : trg
+		});
+		log('peer', '->', request);
+	    ajax.send(request);
+		asw = ajax.responseText;
+		log('peer', '<-', asw);
+		try {
+			asw = JSON.parse(asw);
+		} catch (e) {
+			throw new Error('Server answered no JSON!');
+		}
+		if (asw.ok !== true) throw new Error('AJAX not ok: '+asw.message);
+	    return asw.node;
+	}
+}
+	
 /**
 | gets a space
 */
@@ -330,18 +360,14 @@ Peer.prototype.moveToTop = function(space, item) {
 /**
 | Inserts some text.
 */
-Peer.prototype.insertText = function(node, offset, text) {
-	var path = new Path(node, 'text');
-
-	this.mm.alter(-1,
-		new Signature({
-			val: text,
-		}),
-		new Signature({
-			path: path,
-			at1: offset,
-		})
-	);
+Peer.prototype.insertText = function(path, offset, text) {
+	var path = new Path(path, '++', 'text');
+	this._alter({
+		val: text,
+	}, {
+		path : path,
+		at1  : offset,
+	});
 }
 
 /**
