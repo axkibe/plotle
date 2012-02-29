@@ -302,7 +302,7 @@ function System() {
 	*/
 	function onmousedown(event) {
 		if (event.button !== 0) return;
-		event.preventDefault();
+		event.preventDefault();  // TODO maybe preventDefault before button test?
 		hiddenInput.focus();
 		var p = new Point (event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop);
 		// asks the face if it forces this to be a drag or click, or yet unknown.

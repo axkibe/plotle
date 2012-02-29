@@ -71,7 +71,7 @@ var mm;
 			type: 'Space',
 			copse: {
 				type: 'ItemCopse',
-				'0' : {
+				'1' : {
 					type: 'Note',
 					zone: {
 						type : 'Rect',
@@ -82,79 +82,80 @@ var mm;
 						type: 'Doc',
 						copse : {
 							type: 'ParaCopse',
-							'0': {
+							'3': {
 								type: 'Para',
-								text: 'If you can dream---and not make dreams your master;'
+								text: 'If you can dream---and <not> make dreams your master;'
 							},
 							'1': {
 								type: 'Para',
-								text: 'If you can think---and not make thoughts your aim,'
+								text: 'If you can think---&& not make thoughts your aim,'
 							},
 							'2': {
 								type: 'Para',
-								text: 'If you can meet with Triumph and Disaster'
-							},
-							'3': {
-								type: 'Para',
-								text: 'And treat those two impostors just the same'
+								text: 'If you can meet with "Triumph" and Disaster'
 							},
 							'4': {
 								type: 'Para',
-								text: 'If you can bear to hear the truth you\'ve spoken'
+								text: 'And treat those two impostors just the same'
 							},
 							'5': {
 								type: 'Para',
-								text: 'Twisted by knaves to make a trap for fools,'
+								text: 'If you can bear to hear the truth you\'ve spoken'
 							},
 							'6': {
 								type: 'Para',
-								text: 'Or watch the things you gave your life to broken,'
+								text: 'Twisted by knaves to make a trap for fools,'
 							},
 							'7': {
 								type: 'Para',
-								text: 'And stoop and build \'em up with wornout tools;'
+								text: 'Or watch the things you gave your life to broken,'
 							},
 							'8': {
 								type: 'Para',
-								text: 'If you can make one heap of all your winnings'
+								text: 'And stoop and build \'em up with wornout tools;'
 							},
 							'9': {
 								type: 'Para',
-								text: 'And risk it on one turn of pitch-and-toss,'
+								text: 'If you can make one heap of all your winnings'
 							},
 							'10': {
 								type: 'Para',
-								text: 'And lose, and start again at your beginnings'
+								text: 'And risk it on one turn of pitch-and-toss,'
 							},
 							'11': {
 								type: 'Para',
-								text: 'And never breath a word about your loss;'
+								text: 'And lose, and start again at your beginnings'
 							},
 							'12': {
 								type: 'Para',
-								text: 'If you can force your heart and nerve and sinew'
+								text: 'And never breath a word about your loss;'
 							},
 							'13': {
 								type: 'Para',
-								text: 'To serve your turn long after they are gone,'
+								text: 'If you can force your heart and nerve and sinew'
 							},
 							'14': {
 								type: 'Para',
-								text: 'And so hold on when there is nothing in you'
+								text: 'To serve your turn long after they are gone,'
 							},
 							'15': {
+								type: 'Para',
+								text: 'And so hold on when there is nothing in you'
+							},
+							'16': {
 								type: 'Para',
 								text: 'Except the Will which says to them: "Hold on";'
 							}
 						},
 						alley : [
-							'1', '2', '3', '4', '5',
+							'3', '1', '2', '4', '5',
 							'6', '7', '8', '9', '10',
-							'11', '12', '13', '14', '15'
+							'11', '12', '13', '14', '15',
+							'16'
 						]
 					}
 				}
-//				'1' : {
+//				'2' : {
 //					type: 'Label',
 //					pnw: { 'x': 200, 'y': 250 },
 //					doc: {
@@ -167,7 +168,7 @@ var mm;
 //						},
 //					},
 //				},
-//				'2' : {
+//				'3' : {
 //					type: 'Relation',
 //					pnw: { 'x': 600, 'y': 150 },
 //					item1key : '0',
@@ -183,7 +184,7 @@ var mm;
 //					},
 //				},
 			},
-			alley : [ '0' ]
+			alley : [ '1' ]
 		}
 	});
 	var trg = new Jools.Signature({
