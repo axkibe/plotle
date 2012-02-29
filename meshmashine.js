@@ -62,8 +62,9 @@ var clone      = Jools.clone;
 var deepFreeze = Jools.deepFreeze;
 var is         = Jools.is;
 var isnon      = Jools.isnon;
-var isString   = Jools.isString;
+var isPath     = Jools.isPath;
 var isInteger  = Jools.isInteger;
+var isString   = Jools.isString;
 var fixate     = Jools.fixate;
 var reject     = Jools.reject;
 
@@ -201,7 +202,9 @@ function alterSet(tree, src, trg, report) {
 */
 function alterInsert(tree, src, trg, report) {
 	var cm = 'alterInsert';
-	var str = tree.get(trg.path);
+
+	check(isPath(trg.path), cm, 'trg.path missing');
+	var str = Tree.get(tree, trg.path);
 	check(isString(str), cm, 'trg.path signates no string');
 
 	trg = trg.attune(str, 'trg.path');

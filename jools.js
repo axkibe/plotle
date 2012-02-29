@@ -62,7 +62,7 @@ if (typeof(window) === 'undefined') {
 function is(o)        { return typeof(o) !== 'undefined'; }
 function isnon(o)     { return typeof(o) !== 'undefined' && o !== null; }
 function isInteger(o) { return typeof(o) === 'number' && Math.floor(o) === o; }
-function isPath(o)    { return o instanceof Path; } // TODO .con
+function isPath(o)    { return o.constructor === Path;  }
 function isArray(o)   { return o.constructor === Array; }
 function isString(o)  { return typeof(o) === 'string' || o instanceof String; }
 

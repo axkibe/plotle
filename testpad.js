@@ -22,6 +22,7 @@ var blink;
 
 if (typeof(window) === 'undefined') throw new Error('testpad needs a browser!');
 
+var Path      = Jools.Path;
 var debug     = Jools.debug;
 var fixate    = Jools.fixate;
 var log       = Jools.log;
@@ -39,6 +40,9 @@ var element = {
 var peer;
 var space;
 var note;
+var alley;
+var copse;
+
 var cursor = {
 	line   : 0,
 	offset : 0,
@@ -148,14 +152,16 @@ function onblur() {
 | Sends the current action to server
 */
 function send() {
-	action = null;
-	element.cancel.disabled = true;
-	element.send.disabled = true;
 
 	// TODO store keys in the nodes or so
 	var path = new Path(['copse', 'welcome', 'copse', '1', 'doc', 'copse', alley[action.line] ]);
 	peer.insertText(path, action.at1, action.val);
 
+	element.cancel.disabled = true;
+	element.send.disabled = true;
+	action = null;
+
+	update();
 	resetBlink();
 	updatePad();
 }
@@ -219,7 +225,7 @@ function inputSpecialKey(keyCode) {
     case 13 : // return
 		break;
     case 35 : // end
-		cursor.offset = note.doc.copse[note.doc.alley[cursor.line]].text.length;
+		cursor.offset = copse[alley[cursor.line]].text.length;
 		break;
     case 36 : // pos1
 		cursor.offset = 0;
@@ -236,7 +242,7 @@ function inputSpecialKey(keyCode) {
 		cursor.offset ++;
 		break;
     case 40 : // down
-		if (cursor.line >= note.doc.alley.length) break;
+		if (cursor.line >= alley.length) break;
 		cursor.line++;
 		break;
     case 46 : // del
@@ -247,12 +253,20 @@ function inputSpecialKey(keyCode) {
 }
 
 /**
+| Updates data from server
+*/
+function update() {
+	space = peer.getSpace('welcome');
+	note = space.copse['1'];
+	alley = note.doc.alley;
+	copse = note.doc.copse;
+}
+
+/**
 | TODO
 */
 function updatePad() {
 	var lines = [];
-	var alley = note.doc.alley;
-	var copse = note.doc.copse;
 	var a, aZ, b, bZ;
 	for(a = 0, aZ = alley.length; a < aZ; a++) {
 		lines.push(copse[alley[a]].text.split(''));
@@ -270,7 +284,7 @@ function updatePad() {
 			}
 		}
 	}
-	
+
 	// inserts the cursor
 	if (focus && !cursor.blink) {
 		var cline = cursor.line;
@@ -326,11 +340,10 @@ window.onload = function() {
 	element.cancel.onclick    = cancel;
 
 	peer = new Peer(false);
-	space = peer.getSpace('welcome');
-	note = space.copse['1'];
-	if (!note) throw new Error('No Note with default ID "1"');
+	update();
 	updatePad();
 	resetBlink();
+	element.input.focus();
 }
 
 })();

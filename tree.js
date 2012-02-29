@@ -178,7 +178,7 @@ function grow(model /*, ... */) {
 	log('grow', ttype, model);
 
 	var pattern = Patterns[ttype];
-	if (!pattern) reject('cannot grow type: '+ttype);
+	if (!pattern) throw reject('cannot grow type: '+ttype);
 
 	// copies the model
 	twig = copy(model, new Twig());
@@ -193,25 +193,25 @@ function grow(model /*, ... */) {
 		k1 = arguments[a + 1];
 		switch(k) {
 		case '+' :
-			if (!pattern.alley) reject('"+": '+ttype+' has no alley');
+			if (!pattern.alley) throw reject('"+": '+ttype+' has no alley');
 			k2 = arguments[a + 2];
-			if (!isInteger(k1)) reject('"+": key must be an Integer');
-			if (!isString (k2)) reject('"+": value must be a String');
+			if (!isInteger(k1)) throw reject('"+": key must be an Integer');
+			if (!isString (k2)) throw reject('"+": value must be a String');
 			twig.alley.splice(k1, 0, k2);
 			a += 3;
 			break;
 		case '-' :
-			if (!pattern.alley) reject('"-": '+ttype+' has no alley');
-			if (!isInteger(k1)) reject('"-": key must be an Integer');
+			if (!pattern.alley) throw reject('"-": '+ttype+' has no alley');
+			if (!isInteger(k1)) throw reject('"-": key must be an Integer');
 			twig.alley.splice(k1, 1);
 			a += 2;
 			break;
 		default  :
 			if (isInteger(k)) {
-				if (!pattern.alley) reject('"'+k+'": '+ttype+' has no alley');
+				if (!pattern.alley) throw reject('"'+k+'": '+ttype+' has no alley');
 				twig.alley[k] = k1;
 			} else {
-				if (!isString(k)) reject('"'+k+'": is neither String or Integer');
+				if (!isString(k)) throw reject('"'+k+'": is neither String or Integer');
 				if (pattern.copse) {
 					twig.copse[k] = k1;
 				} else {
@@ -224,7 +224,7 @@ function grow(model /*, ... */) {
 	}
 
 	if (a < aZ) {
-		if (!pattern.alley) reject('"'+arguments[a]+'": '+ttype+' has no alley');
+		if (!pattern.alley) throw reject('"'+arguments[a]+'": '+ttype+' has no alley');
 
 		if (arguments[a] === '--') {
 			var shorten = arguments[a + 1];
@@ -235,12 +235,12 @@ function grow(model /*, ... */) {
 		if (arguments[a] === '++') {
 			for(a++; a < aZ; a++) {
 				k = arguments[a++];
-				if (!isString(k)) reject ('"++": '+k+' is no String');
+				if (!isString(k)) throw reject ('"++": '+k+' is no String');
 				twig.push(k);
 			}
 		}
 
-		if (a < aZ) reject('a < aZ should never happen here');
+		if (a < aZ) throw reject('a < aZ should never happen here');
 	}
 
 	// grows the subtwigs
@@ -249,13 +249,13 @@ function grow(model /*, ... */) {
 	if (pattern.copse) {
 		for (k in twig.copse) {
 			if (!Object.hasOwnProperty.call(twig, k)) continue;
-			if (!isString(k)) reject('key of copse no String: '+k);
+			if (!isString(k)) throw reject('key of copse no String: '+k);
 			klen++;
 
 			val = twig.copse[k];
 			if (val === null) { delete twig.copse[k]; break; }
 			vtype = twigtype(val);
-			if (!pattern.copse[vtype]) reject(ttype+'.copse does not allow '+val.type);
+			if (!pattern.copse[vtype]) throw reject(ttype+'.copse does not allow '+val.type);
 			switch(val.constructor) {
 			case String : break;
 			case Number : break;
@@ -265,13 +265,13 @@ function grow(model /*, ... */) {
 	} else {
 		for (k in twig) {
 			if (!Object.hasOwnProperty.call(twig, k)) continue;
-			if (!isString(k)) reject('key of twig is no String: '+k);
+			if (!isString(k)) throw reject('key of twig is no String: '+k);
 			klen++;
 
 			val = twig[k];
 			if (val === null) { delete twig[k]; break; }
 			vtype = twigtype(val);
-			if (!pattern.must[k]) reject(ttype+' does not allow key: '+k);
+			if (!pattern.must[k]) throw reject(ttype+' does not allow key: '+k);
 			switch(val.constructor) {
 			case String : break;
 			case Number : break;
@@ -283,17 +283,17 @@ function grow(model /*, ... */) {
 	// makes some additional checks
 	if (pattern.must) {
 		for (k in pattern.must) {
-			if (!twig[k]) reject(ttype+' requires "'+k+'"');
+			if (!twig[k]) throw reject(ttype+' requires "'+k+'"');
 		}
 	}
 
 	if (pattern.alley) {
 		aZ = twig.alley.length;
 		if (aZ !== Object.keys(twig.alley).length) {
-			reject('Alley not a sequence');
+			throw reject('Alley not a sequence');
 		}
 		if (aZ !== klen) {
-			reject('Alley length does not match to copse');
+			throw reject('Alley length does not match to copse');
 		}
 		for (a = 0; a < aZ; a++) {
 			var k = twig.alley[a];

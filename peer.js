@@ -107,7 +107,9 @@ Peer.prototype._get = function(path) {
 /**
 | Issues an alter request
 */
-Peer.prototype._alter = function(path, src, trg) {
+Peer.prototype._alter = function(src, trg) {
+	var asw;
+
 	if (this.async) {
 		asw = this.mm.alter(-1, new Signature(src), new Signature(trg));
 		if (asw.ok !== true) throw new Error('Meshmashine not OK: '+asw.message);
@@ -135,7 +137,7 @@ Peer.prototype._alter = function(path, src, trg) {
 	    return asw.node;
 	}
 }
-	
+
 /**
 | gets a space
 */
@@ -252,10 +254,10 @@ Peer.prototype.newLabel = function(space, pnw, text, fontsize) {
 	                	{
 		            		type: 'Para',
 		            		text: text,
-		            	},
+		            	}
 					]
-				},
-			},
+				}
+			}
 		}), new Signature({
 			path: path,
 		})
@@ -297,7 +299,7 @@ Peer.prototype.newRelation = function(space, pnw, text, fontsize, vitem1, vitem2
 					alley: [
 	                	{
 		            		type: 'Para',
-		            		text: text,
+		            		text: text
 		            	},
 					]
 				},
@@ -362,12 +364,10 @@ Peer.prototype.moveToTop = function(space, item) {
 */
 Peer.prototype.insertText = function(path, offset, text) {
 	var path = new Path(path, '++', 'text');
-	this._alter({
-		val: text,
-	}, {
-		path : path,
-		at1  : offset,
-	});
+	this._alter(
+		{ val  : text, },
+		{ path : path, at1  : offset, }
+	);
 }
 
 /**

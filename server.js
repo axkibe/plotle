@@ -32,7 +32,9 @@ var Jools  = require('./jools');
 var Tree   = require('./tree');
 var MeshMashine = require('./meshmashine');
 
+var debug  = Jools.debug;
 var log    = Jools.log;
+var reject = Jools.reject;
 
 /**
 | Loads the configuration file
@@ -51,14 +53,15 @@ try {
 } catch (e) {
 	console.log(true, 'no config found, defaulting to localhost:8833');
 	config = {
-		debug : false,
 		ip    : '127.0.0.1',
 		port  : 8833,
 		log   : {}
 	};
 }
-var debug = config.debug === true || (config.debug % 4 - config.debug % 2) === 2;
 
+/**
+| Startup
+*/
 var mm;
 (function() {
 	var nexus = Tree.grow( { type : 'Nexus' } );
@@ -257,6 +260,9 @@ var mmAjax = function(req, red, res) {
 		try {
 			switch (cmd.cmd) {
 			case 'alter':
+				debug(cmd.src, cmd.trg);
+				if (!cmd.src) { throw reject('cmd.src missing'); }
+				if (!cmd.trg) { throw reject('cmd.trg missing'); }
 				if (cmd.src.path) cmd.src.path = new Jools.Path(cmd.src.path);
 				if (cmd.trg.path) cmd.trg.path = new Jools.Path(cmd.trg.path);
 				var src = new Jools.Signature(cmd.src);
