@@ -191,7 +191,7 @@ testinput = function() {
 			type : 'insert',
 			line : cursor.line,
 			at1  : cursor.offset,
-			val  : text 
+			val  : text
 		}
 		element.send.disabled = false;
 		element.cancel.disabled = false;

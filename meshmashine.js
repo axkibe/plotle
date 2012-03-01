@@ -204,7 +204,7 @@ function alterInsert(tree, src, trg, report) {
 	var cm = 'alterInsert';
 
 	check(isPath(trg.path), cm, 'trg.path missing');
-	var str = Tree.get(tree, trg.path);
+	var str = Tree.getPath(tree, trg.path);
 	check(isString(str), cm, 'trg.path signates no string');
 
 	trg = trg.attune(str, 'trg.path');
@@ -214,15 +214,16 @@ function alterInsert(tree, src, trg, report) {
 	if (is(trg.at2)) {
 		check(trg.at2 === tat2, cm, 'trg.at2 preset incorrectly');
 	} else {
-		trg.at2 = tat2;
+		trg = new Signature(trg, 'at2', tat2);
 	}
 	var nstr = str.substring(0, trg.at1) + src.val + str.substring(trg.at1);
-	tree.mmSet(trg.path, nstr);
+	debug('setpath1', tree);
+	tree = Tree.setPath(tree, trg.path, nstr);
 
-	if (report) {
-		var parent = tree.get(trg.path, 0, -1);
-		if (parent.report) parent.report('insert', trg.path.get(-1), trg.at1, src.val);
-	}
+	//if (report) {
+	//	var parent = tree.get(trg.path, 0, -1);
+	//	if (parent.report) parent.report('insert', trg.path.get(-1), trg.at1, src.val);
+	//}
 	return { tree: tree, src: src, trg: trg };
 }
 

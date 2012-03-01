@@ -175,7 +175,7 @@ function grow(model /*, ... */) {
 	var twig, k, k1, k2, val, vtype, klen;
 	var ttype = twigtype(model);
 
-	log('grow', ttype, model);
+	log('grow', ttype, arguments);
 
 	var pattern = Patterns[ttype];
 	if (!pattern) throw reject('cannot grow type: '+ttype);
@@ -248,7 +248,7 @@ function grow(model /*, ... */) {
 
 	if (pattern.copse) {
 		for (k in twig.copse) {
-			if (!Object.hasOwnProperty.call(twig, k)) continue;
+			if (!Object.hasOwnProperty.call(twig.copse, k)) continue;
 			if (!isString(k)) throw reject('key of copse no String: '+k);
 			klen++;
 
@@ -266,6 +266,7 @@ function grow(model /*, ... */) {
 		for (k in twig) {
 			if (!Object.hasOwnProperty.call(twig, k)) continue;
 			if (!isString(k)) throw reject('key of twig is no String: '+k);
+			if (k === 'type') { continue; }
 			klen++;
 
 			val = twig[k];
@@ -333,11 +334,20 @@ function incPath(tree, path) {
 }
 
 /**
-| TODO
+| Gets the node a path leads to.
 */
-function getPath(tree, path) {
-	if (!isPath(path)) throw new Error('Tree.get no path');
-	for (var a = 0, aZ = path.length; a < aZ; a++) {
+function getPath(tree, path, shorten) {
+	if (!isnon(tree)) throw reject('Tree.getPath not a tree.');
+	if (!isPath(path)) throw new Error('Tree.getPath not a path.');
+	var a, aZ;
+
+	if (is(shorten)) {
+		aZ = shorten >= 0 ? shorten : path.length + shorten; 
+	} else {
+		aZ = path.length;
+	}
+
+	for (a = 0; a < aZ; a++) {
 		if (!isnon(tree)) throw reject('path goes nowhere');
 		tree = tree[path.get(a)];
 	}
@@ -349,16 +359,33 @@ function getPath(tree, path) {
 */
 function setPath(tree, path, val) {
 	if (!isPath(path)) throw new Error('Tree.get no path');
-	var a, aZ;
-	for (a = 0, aZ = path.length - 1; a < aZ; a++) {
-		if (!isnon(tree)) throw reject('path goes nowhere');
-		tree = tree[path.get(a)];
+	debug('setPath tree', tree);
+	debug('setPath path', path);
+	debug('setPath  val', val);
+
+	for(var a = path.length - 1; a >= 0; a--) {
+		debug('setPathL    a', a);
+		debug('   path(a)'   , path.get(a));
+		if (path.get(a - 1) === 'copse') {
+			debug('REDUX!');
+			var node = Tree.getPath(tree, path, a - 1);
+			debug('setPathL node', node);
+			debug('setPathL key', path.get(a));
+			debug('setPathL val', val);
+			val = grow(node, path.get(a), val);
+			a--;
+		} else {
+			debug('NORMAL!');
+			var node = Tree.getPath(tree, path, a);
+			debug('setPathL node', node);
+			debug('setPathL key', path.get(a));
+			debug('setPathL val', val);
+			val = grow(node, path.get(a), val);
+		}
 	}
-	for(a; a >= 0; a--) {
-		tree = grow(tree, path.get(a), val);
-		val = tree;
-	}
-	return tree;
+
+	debug('RETURN', val);
+	return val;
 }
 
 

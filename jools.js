@@ -258,7 +258,7 @@ function _inspect(o, array, indent, circle) {
 			array.push(puffed ? '\n' : ' ');
 		}
 		array.push(puffed ? '\n' : ' ');
-		if (puffed) _pushindent(indent, a);
+		if (puffed) _pushindent(indent, array);
 		array.push(']');
 		return;
 	case 'object' :

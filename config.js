@@ -4,10 +4,10 @@ module.exports = {
 	port    : 8833,
 
 	// development mode: client, server or both.
-	devel   : 'client',
+	devel   : 'both',
 
 	//messages and JSON with whitespace/newlines for debugging.
-	puffed  : false,
+	puffed  : true,
 
 	log     : {
 		//all:   true,

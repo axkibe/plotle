@@ -73,9 +73,9 @@ var mm;
 		val: {
 			type: 'Space',
 			copse: {
-				type: 'ItemCopse',
 				'1' : {
 					type: 'Note',
+					fontsize : 13,
 					zone: {
 						type : 'Rect',
 						pnw : { type: 'Point', 'x':  10, 'y':  10 },
@@ -84,7 +84,6 @@ var mm;
 					doc: {
 						type: 'Doc',
 						copse : {
-							type: 'ParaCopse',
 							'3': {
 								type: 'Para',
 								text: 'If you can dream---and not make dreams your master;'
@@ -260,7 +259,6 @@ var mmAjax = function(req, red, res) {
 		try {
 			switch (cmd.cmd) {
 			case 'alter':
-				debug(cmd.src, cmd.trg);
 				if (!cmd.src) { throw reject('cmd.src missing'); }
 				if (!cmd.trg) { throw reject('cmd.trg missing'); }
 				if (cmd.src.path) cmd.src.path = new Jools.Path(cmd.src.path);
