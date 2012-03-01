@@ -217,7 +217,6 @@ function alterInsert(tree, src, trg, report) {
 		trg = new Signature(trg, 'at2', tat2);
 	}
 	var nstr = str.substring(0, trg.at1) + src.val + str.substring(trg.at1);
-	debug('setpath1', tree);
 	tree = Tree.setPath(tree, trg.path, nstr);
 
 	//if (report) {

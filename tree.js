@@ -359,32 +359,19 @@ function getPath(tree, path, shorten) {
 */
 function setPath(tree, path, val) {
 	if (!isPath(path)) throw new Error('Tree.get no path');
-	debug('setPath tree', tree);
-	debug('setPath path', path);
-	debug('setPath  val', val);
 
 	for(var a = path.length - 1; a >= 0; a--) {
-		debug('setPathL    a', a);
-		debug('   path(a)'   , path.get(a));
 		if (path.get(a - 1) === 'copse') {
-			debug('REDUX!');
+			// in case of copse, alter the node one level further above
 			var node = Tree.getPath(tree, path, a - 1);
-			debug('setPathL node', node);
-			debug('setPathL key', path.get(a));
-			debug('setPathL val', val);
 			val = grow(node, path.get(a), val);
 			a--;
 		} else {
-			debug('NORMAL!');
 			var node = Tree.getPath(tree, path, a);
-			debug('setPathL node', node);
-			debug('setPathL key', path.get(a));
-			debug('setPathL val', val);
 			val = grow(node, path.get(a), val);
 		}
 	}
 
-	debug('RETURN', val);
 	return val;
 }
 
