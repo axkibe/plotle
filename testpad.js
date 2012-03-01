@@ -27,8 +27,15 @@ var debug     = Jools.debug;
 var fixate    = Jools.fixate;
 var log       = Jools.log;
 var subclass  = Jools.subclass;
+
+/**
+| Current action
+*/
 var action    = null;
 
+/**
+| References to the pages html elements
+*/
 var element = {
 	pad    : null,
 	input  : null,
@@ -43,6 +50,9 @@ var note;
 var alley;
 var copse;
 
+/**
+| The current cursor position and blink state
+*/
 var cursor = {
 	line   : 0,
 	offset : 0,
@@ -50,6 +60,9 @@ var cursor = {
 };
 var focus     = false;
 
+/**
+| Returns true if a keyCode is known to be a "special key".
+*/
 function isSpecialKey(keyCode) {
     switch(keyCode) {
     case  8 : // backspace
@@ -86,7 +99,7 @@ blink = function() {
 /**
 | Resets the blink timer
 */
-function resetBlink() {
+var resetBlink = function() {
 	cursor.blink = false;
 	element.beep.innerHTML = '';
 	if (blinkTimer) clearInterval(blinkTimer);
@@ -98,7 +111,7 @@ function resetBlink() {
 /**
 | Mouse down event on pad -> focuses the hidden input,
 */
-function onmousedown(event) {
+var onmousedown = function(event) {
 	if (event.button !== 0) return;
 	event.preventDefault();
 	element.input.focus();
@@ -107,7 +120,7 @@ function onmousedown(event) {
 /**
 | Down event to (hidden) input.
 */
-function onkeydown(event) {
+var onkeydown = function(event) {
 	if (isSpecialKey(event.keyCode)) {
 		event.preventDefault();
 		inputSpecialKey(event.keyCode, event.ctrlKey);
@@ -119,62 +132,86 @@ function onkeydown(event) {
 /**
 | Press event to (hidden) input.
 */
-function onkeypress(event) {
-	setTimeout('testinput();', 0);
-}
+var onkeypress = function(event) { setTimeout('testinput();', 0); }
 
 /**
 | Up event to (hidden) input.
 */
-function onkeyup(event) {
-	testinput();
-}
+var onkeyup = function(event) { testinput(); }
 
 /**
 | Hidden input got focus.
 */
-function onfocus() {
+var onfocus = function() {
 	focus = true;
 	resetBlink();
 	updatePad();
-}
+};
 
 /**
 | Hidden input lost focus.
 */
-function onblur() {
+var onblur = function() {
 	focus = false;
 	resetBlink();
 	updatePad();
-}
+};
+
+/**
+| Clears the current action
+*/
+var clearAction = function() {
+	element.cancel.disabled = true;
+	element.send.disabled   = true;
+	action = null;
+};
 
 /**
 | Sends the current action to server
 */
-function send() {
+var send = function() {
+	if (!action) { beep(); return; }
 
-	// TODO store keys in the nodes or so
-	var path = new Path(['copse', 'welcome', 'copse', '1', 'doc', 'copse', alley[action.line] ]);
-	peer.insertText(path, action.at1, action.val);
+	switch(action.type) {
+	case 'insert' :
+		// TODO store keys in the nodes or so
+		var path = new Path(['copse', 'welcome', 'copse', '1', 'doc', 'copse', alley[action.line] ]);
+		peer.insertText(path, action.at1, action.val);
+		break;
+	case 'delete' :
+		break;
+	default : throw new Error('invalid action.type');
+	}
 
-	element.cancel.disabled = true;
-	element.send.disabled = true;
-	action = null;
+	clearAction();
 
 	update();
 	resetBlink();
 	updatePad();
-}
+};
 
 /**
 | Cancels the current action
 */
-function cancel() {
-	action = null;
-	element.cancel.disabled = true;
-	element.send.disabled = true;
+var cancel = function() {
+	clearAction();
 	resetBlink();
 	updatePad();
+};
+
+/**
+| Displays a beep message.
+*/
+var beep = function() {
+	resetBlink();
+	element.beep.innerHTML = 'BEEP!';
+};
+
+var startAction = function(newAction) {
+	if (action) throw new Error('double action');
+	action = newAction;
+	element.send.disabled = false;
+	element.cancel.disabled = false;
 }
 
 /**
@@ -187,14 +224,12 @@ testinput = function() {
 
 
 	if (action === null) {
-		action = {
+		startAction({
 			type : 'insert',
 			line : cursor.line,
 			at1  : cursor.offset,
 			val  : text
-		}
-		element.send.disabled = false;
-		element.cancel.disabled = false;
+		});
 		resetBlink();
 		updatePad();
 		return;
@@ -207,17 +242,31 @@ testinput = function() {
 		}
 	}
 
-	resetBlink();
-	element.beep.innerHTML = 'BEEP!';
+	beep();
 };
 
 
 /**
 | TODO
 */
-function inputSpecialKey(keyCode, ctrlKey) {
+var inputSpecialKey = function(keyCode, ctrlKey) {
 	switch(keyCode) {
     case  8 : // backspace
+		if (cursor.offset <= 0) { beep(); return; }
+		if (!action) {
+			startAction({
+				type : 'delete',
+				line : cursor.line,
+				at1  : cursor.offset - 1,
+				at2  : cursor.offset,
+			});
+			cursor.offset--;
+			break;
+		}
+		if (action.type !== 'delete') { beep(); return; }
+		if (cursor.offset !== action.at1) { beep(); return; }
+		action.at1--;
+		cursor.offset--;
 		break;
 	case 27 : // esc
 		cancel();
@@ -232,21 +281,37 @@ function inputSpecialKey(keyCode, ctrlKey) {
 		cursor.offset = 0;
 		break;
     case 37 : // left
-		if (cursor.offset <= 0) break;
+		if (cursor.offset <= 0) { beep(); return; }
 		cursor.offset--;
 		break;
     case 38 : // up
-		if (cursor.line <= 0) break;
+		if (cursor.line <= 0) { beep(); return; }
 		cursor.line--;
 		break;
     case 39 : // right
 		cursor.offset ++;
 		break;
     case 40 : // down
-		if (cursor.line >= alley.length) break;
+		if (cursor.line >= alley.length) { beep(); return; }
 		cursor.line++;
 		break;
     case 46 : // del
+		var text = copse[alley[cursor.line]].text;
+		if (cursor.offset >= text.length) { beep(); return; }
+		if (!action) {
+			startAction({
+				type : 'delete',
+				line : cursor.line,
+				at1  : cursor.offset,
+				at2  : cursor.offset + 1,
+			});
+			cursor.offset++;
+			break;
+		}
+		if (action.type !== 'delete') { beep(); return; }
+		if (cursor.offset !== action.at2) { beep(); return; }
+		action.at2++;
+		cursor.offset++;
 		break;
 	}
 	resetBlink();
@@ -256,7 +321,7 @@ function inputSpecialKey(keyCode, ctrlKey) {
 /**
 | Updates data from server
 */
-function update() {
+var update = function() {
 	space = peer.getSpace('welcome');
 	note = space.copse['1'];
 	alley = note.doc.alley;
@@ -266,7 +331,7 @@ function update() {
 /**
 | TODO
 */
-function updatePad() {
+var updatePad = function() {
 	var lines = [];
 	var a, aZ, b, bZ;
 	for(a = 0, aZ = alley.length; a < aZ; a++) {
@@ -298,7 +363,7 @@ function updatePad() {
 			coff = cursor.offset = ctext.length;
 			lines[cline][coff] = ' ';
 		}
-	
+
 		lines[cline][coff] = '<span id="cursor">'+lines[cline][coff]+'</span>';
 		if (coff === clen) lines[cline].push(' ');
 	}
@@ -309,6 +374,13 @@ function updatePad() {
 	case 'insert' :
 		lines[action.line].splice(action.at1, 0, '<span id="insert">', action.val, '</span>');
 		break;
+	case 'delete' :
+		if (action.at1 > action.at2) throw new Error('Invalid delete action');
+		lines[action.line].splice(action.at1, 0, '<span id="delete">');
+		lines[action.line].splice(action.at2 + 1, 0, '</span>');
+		break;
+	default :
+		throw new Error('Unknown action.type');
 	}
 
 
@@ -316,7 +388,6 @@ function updatePad() {
 	for (a = 0, aZ = lines.length; a < aZ; a++) { lines[a] = lines[a].join(''); }
 	element.pad.innerHTML = lines.join('\n');
 }
-
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
