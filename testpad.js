@@ -110,7 +110,7 @@ function onmousedown(event) {
 function onkeydown(event) {
 	if (isSpecialKey(event.keyCode)) {
 		event.preventDefault();
-		inputSpecialKey(event.keyCode);
+		inputSpecialKey(event.keyCode, event.ctrlKey);
 	} else {
 		testinput();
 	}
@@ -215,7 +215,7 @@ testinput = function() {
 /**
 | TODO
 */
-function inputSpecialKey(keyCode) {
+function inputSpecialKey(keyCode, ctrlKey) {
 	switch(keyCode) {
     case  8 : // backspace
 		break;
@@ -223,6 +223,7 @@ function inputSpecialKey(keyCode) {
 		cancel();
 		break;
     case 13 : // return
+		if (ctrlKey) { send(); break; }
 		break;
     case 35 : // end
 		cursor.offset = copse[alley[cursor.line]].text.length;
