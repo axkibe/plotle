@@ -24,8 +24,6 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-'use strict';
-
 /**
 | Imports
 */
@@ -83,7 +81,7 @@ Peer.prototype._get = function(path) {
 		return asw.node;
 	} else {
 		var ajax = new XMLHttpRequest();
-	    ajax.open('POST', '/mm', false);
+		ajax.open('POST', '/mm', false);
 		ajax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 		var request = JSON.stringify({
 			time : -1,
@@ -91,7 +89,7 @@ Peer.prototype._get = function(path) {
 			path : path
 		});
 		log('peer', '->', request);
-	    ajax.send(request);
+		ajax.send(request);
 		asw = ajax.responseText;
 		log('peer', '<-', asw);
 		try {
@@ -100,9 +98,9 @@ Peer.prototype._get = function(path) {
 			throw new Error('Server answered no JSON!');
 		}
 		if (asw.ok !== true) throw new Error('AJAX not ok: '+asw.message);
-	    return asw.node;
+		return asw.node;
 	}
-}
+};
 
 /**
 | Issues an alter request
@@ -116,7 +114,7 @@ Peer.prototype._alter = function(src, trg) {
 		return asw.node;
 	} else {
 		var ajax = new XMLHttpRequest();
-	    ajax.open('POST', '/mm', false);
+		ajax.open('POST', '/mm', false);
 		ajax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 		var request = JSON.stringify({
 			time : -1,
@@ -125,7 +123,7 @@ Peer.prototype._alter = function(src, trg) {
 			trg  : trg
 		});
 		log('peer', '->', request);
-	    ajax.send(request);
+		ajax.send(request);
 		asw = ajax.responseText;
 		log('peer', '<-', asw);
 		try {
@@ -134,21 +132,23 @@ Peer.prototype._alter = function(src, trg) {
 			throw new Error('Server answered no JSON!');
 		}
 		if (asw.ok !== true) throw new Error('AJAX not ok: '+asw.message);
-	    return asw.node;
+		return asw.node;
 	}
-}
+};
 
 /**
 | gets a space
 */
 Peer.prototype.getSpace = function(name) {
 	return this._get(new Path(['copse', name]));
-}
+};
 
 /**
 | Creates a new note.
 */
 Peer.prototype.newNote = function(space, zone) {
+	throw new Error('TODO');
+	/*
 	var path = new Path(space, 'items', '$new');
 
 	var asw = this.mm.alter(-1,
@@ -159,10 +159,10 @@ Peer.prototype.newNote = function(space, zone) {
 				'doc': {
 					fontsize : 13,
 					alley: [
-	                	{
-		            		type: 'Para',
-		            		text: '',
-		            	},
+						{
+							type: 'Para',
+							text: '',
+						},
 					]
 				},
 			},
@@ -187,12 +187,15 @@ Peer.prototype.newNote = function(space, zone) {
 
 	var k = apath.get(-1);
 	return space.items.get(k);
-}
+	*/
+};
 
 /**
 | Sets the zone for item.
 */
 Peer.prototype.setZone = function(item, zone) {
+	throw new Error('TODO');
+	/*
 	var path = new Path(item, 'zone');
 
 	this.mm.alter(-1,
@@ -202,13 +205,15 @@ Peer.prototype.setZone = function(item, zone) {
 		new Signature({
 			path: path,
 		})
-	);
-}
+	);*/
+};
 
 /**
 | Sets an items fontsize
 */
 Peer.prototype.setFontSize = function(item, fontsize) {
+	throw new Error('TODO');
+	/*
 	var path = new Path(item, 'doc', 'fontsize');
 
 	this.mm.alter(-1,
@@ -218,13 +223,15 @@ Peer.prototype.setFontSize = function(item, fontsize) {
 		new Signature({
 			path: path,
 		})
-	);
-}
+	);*/
+};
 
 /**
 | Sets an items PNW. (point in north-west)
 */
 Peer.prototype.setPNW = function(item, pnw) {
+	throw new Error('TODO');
+	/*
 	var path = new Path(item, 'pnw');
 
 	this.mm.alter(-1,
@@ -234,13 +241,15 @@ Peer.prototype.setPNW = function(item, pnw) {
 		new Signature({
 			path: path,
 		})
-	);
-}
+	);*/
+};
 
 /**
 | Creates a new label.
 */
 Peer.prototype.newLabel = function(space, pnw, text, fontsize) {
+	throw new Error('TODO');
+	/*
 	var path = new Path(space, 'items', '$new');
 
 	var asw = this.mm.alter(-1,
@@ -251,10 +260,10 @@ Peer.prototype.newLabel = function(space, pnw, text, fontsize) {
 				'doc': {
 					fontsize : fontsize,
 					alley: [
-	                	{
-		            		type: 'Para',
-		            		text: text,
-		            	}
+						{
+							type: 'Para',
+							text: text,
+						}
 					]
 				}
 			}
@@ -279,12 +288,15 @@ Peer.prototype.newLabel = function(space, pnw, text, fontsize) {
 
 	var k = apath.get(-1);
 	return space.items.get(k);
-}
+	*/
+};
 
 /**
 | Creates a new relation.
 */
 Peer.prototype.newRelation = function(space, pnw, text, fontsize, vitem1, vitem2) {
+	throw new Error('TODO');
+	/*
 	var path = new Path(space, 'items', '$new');
 
 	var asw = this.mm.alter(-1,
@@ -297,10 +309,10 @@ Peer.prototype.newRelation = function(space, pnw, text, fontsize, vitem1, vitem2
 				'doc': {
 					fontsize : fontsize,
 					alley: [
-	                	{
-		            		type: 'Para',
-		            		text: text
-		            	},
+						{
+							type: 'Para',
+							text: text
+						},
 					]
 				},
 			},
@@ -325,12 +337,15 @@ Peer.prototype.newRelation = function(space, pnw, text, fontsize, vitem1, vitem2
 
 	var k = apath.get(-1);
 	return space.items.get(k);
-}
+	*/
+};
 
 /**
 | Moves an item up to the z-index
 */
 Peer.prototype.moveToTop = function(space, item) {
+	throw new Error('TODO');
+	/*
 	var path = new Path(space, 'z');
 	var key = item.getOwnKey();
 	var at1 = space.z.indexOf(key);
@@ -357,48 +372,44 @@ Peer.prototype.moveToTop = function(space, item) {
 			at1 : 0,
 		})
 	);
-}
+	*/
+};
 
 /**
 | Inserts some text.
 */
 Peer.prototype.insertText = function(path, offset, text) {
-	var path = new Path(path, '++', 'text');
+	path = new Path(path, '++', 'text');
 	this._alter(
-		{ val  : text, },
-		{ path : path, at1  : offset, }
+		{ val  : text },
+		{ path : path, at1  : offset }
 	);
-}
+};
 
 /**
 | Removes some text within one node
 */
-Peer.prototype.removeText = function(node, offset, len) {
-	var path = new Path(node, 'text');
+Peer.prototype.removeText = function(path, offset, len) {
+	path = new Path(path, '++', 'text');
+	if (len === 0) return;
+	if (len < 0) throw new Error('malformed removeText');
 
-	this.mm.alter(-1,
-		new Signature({
-			path: path,
-			at1: offset,
-			at2: offset + len
-		}),
-		new Signature({
-			val: null
-		})
+	this._alter(
+		{ path: path, at1: offset, at2: offset + len },
+		{ val: null }
 	);
-}
+};
 
 /**
 | Removes a text spawning over severa entities
 */
-Peer.prototype.removeSpawn = function(node1, o1, node2, o2) {
-	if (node1 === node2) {
-		if (o1 === o2) return;
-		if (o1 > o2) throw new Error('malformed spawn');
-		return this.removeText(node1, o1, o2 - o1);
+Peer.prototype.removeSpawn = function(path1, offset1, path2, offset2) {
+	if (path1.equals(path2)) {
+		return this.removeText(path1, offset1, offset2 - offset1);
 	}
 
-	// @@03 combine into one call
+	throw new Error('TODO');
+	/*
 	var k1 = node1.getOwnKey();
 	var k2 = node2.getOwnKey();
 	var len1 = node1.get('text').length;
@@ -409,13 +420,15 @@ Peer.prototype.removeSpawn = function(node1, o1, node2, o2) {
 	this.join(node1);
 
 	this.removeText(node1, o1, len1 - o1 + o2 + len2 - len1);
-}
+	*/
+};
 
 /**
 | Splits a text node.
 */
 Peer.prototype.split = function(node, offset) {
-	var path = new Path(node, 'text');
+	throw new Error('TODO');
+	/*var path = new Path(node, 'text');
 
 	this.mm.alter(-1,
 		new Signature({
@@ -426,12 +439,15 @@ Peer.prototype.split = function(node, offset) {
 			proc: 'splice',
 		})
 	);
-}
+	*/
+};
 
 /**
 | Joins a text nodes with its next one
 */
 Peer.prototype.join = function(node) {
+	throw new Error('TODO');
+	/*
 	var path = new Path(node, 'text');
 
 	this.mm.alter(-1,
@@ -443,12 +459,16 @@ Peer.prototype.join = function(node) {
 			path: path,
 		})
 	);
-}
+	*/
+};
 
 /**
 | Removes an item.
 */
 Peer.prototype.removeItem = function(space, item) {
+
+	throw new Error('TODO');
+	/*
 	var path = new Path(space, 'z');
 	var key = item.getOwnKey();
 	var at1 = space.z.indexOf(key);
@@ -472,7 +492,7 @@ Peer.prototype.removeItem = function(space, item) {
 		new Signature({
 			path: new Path(item),
 		})
-	);
-}
+	);*/
+};
 
 })();

@@ -231,7 +231,8 @@ function alterInsert(tree, src, trg, report) {
 */
 function alterRemove(tree, src, trg, report) {
 	var cm = 'alterRemove';
-	var str = tree.get(src.path);
+	check(isPath(src.path), cm, 'src.path missing');
+	var str = Tree.getPath(tree, src.path);
 	check(isString(str), cm, 'src.path signates no string');
 
 	src = src.attune(str, 'src.path');
@@ -239,18 +240,20 @@ function alterRemove(tree, src, trg, report) {
 
 	var val = str.substring(src.at1, src.at2);
 	if (isnon(trg.val)) {
-		check(matches(val, trg.val), cm, 'trg.val preset incorrectly:',
-			val, '!==', trg.val);
+		check(matches(val, trg.val), cm,
+			'trg.val preset incorrectly:',
+			val, '!==', trg.val
+		);
 	} else {
-		trg.val = val;
+		trg = new Signature(trg, 'val', val);
 	}
 	var nstr = str.substring(0, src.at1) + str.substring(src.at2);
-	tree.mmSet(src.path, nstr);
+	tree = Tree.setPath(tree, src.path, nstr);
 
-	if (report) {
-		var parent = tree.get(src.path, 0, -1);
-		if (parent.report) parent.report('remove', src.path.get(-1), src.at1, src.at2, val);
-	}
+	//if (report) {
+	//	var parent = tree.get(src.path, 0, -1);
+	//	if (parent.report) parent.report('remove', src.path.get(-1), src.at1, src.at2, val);
+	//}
 	return { tree: tree, src: src, trg: trg };
 }
 

@@ -49,6 +49,7 @@ var space;
 var note;
 var alley;
 var copse;
+var notepath = new Path(['copse', 'welcome', 'copse', '1', ]);
 
 /**
 | The current cursor position and blink state
@@ -174,17 +175,22 @@ var send = function() {
 
 	switch(action.type) {
 	case 'insert' :
-		// TODO store keys in the nodes or so
-		var path = new Path(['copse', 'welcome', 'copse', '1', 'doc', 'copse', alley[action.line] ]);
+		var path = new Path(notepath, '++', 'doc', 'copse', alley[action.line]);
 		peer.insertText(path, action.at1, action.val);
+		cursor.offset += action.val.length;
 		break;
-	case 'delete' :
+	case 'remove' :
+		var path = new Path(notepath, '++', 'doc', 'copse', alley[action.line]);
+		peer.removeText(path, action.at1, action.at2 - action.at1);
+		if (cursor.offset >= action.at2) {
+			cursor.offset -= action.at2 - action.at1;
+		}
 		break;
-	default : throw new Error('invalid action.type');
+	default :
+		throw new Error('invalid action.type');
 	}
 
 	clearAction();
-
 	update();
 	resetBlink();
 	updatePad();
@@ -255,7 +261,7 @@ var inputSpecialKey = function(keyCode, ctrlKey) {
 		if (cursor.offset <= 0) { beep(); return; }
 		if (!action) {
 			startAction({
-				type : 'delete',
+				type : 'remove',
 				line : cursor.line,
 				at1  : cursor.offset - 1,
 				at2  : cursor.offset,
@@ -263,7 +269,7 @@ var inputSpecialKey = function(keyCode, ctrlKey) {
 			cursor.offset--;
 			break;
 		}
-		if (action.type !== 'delete') { beep(); return; }
+		if (action.type !== 'remove') { beep(); return; }
 		if (cursor.offset !== action.at1) { beep(); return; }
 		action.at1--;
 		cursor.offset--;
@@ -300,7 +306,7 @@ var inputSpecialKey = function(keyCode, ctrlKey) {
 		if (cursor.offset >= text.length) { beep(); return; }
 		if (!action) {
 			startAction({
-				type : 'delete',
+				type : 'remove',
 				line : cursor.line,
 				at1  : cursor.offset,
 				at2  : cursor.offset + 1,
@@ -308,7 +314,7 @@ var inputSpecialKey = function(keyCode, ctrlKey) {
 			cursor.offset++;
 			break;
 		}
-		if (action.type !== 'delete') { beep(); return; }
+		if (action.type !== 'remove') { beep(); return; }
 		if (cursor.offset !== action.at2) { beep(); return; }
 		action.at2++;
 		cursor.offset++;
@@ -374,9 +380,9 @@ var updatePad = function() {
 	case 'insert' :
 		lines[action.line].splice(action.at1, 0, '<span id="insert">', action.val, '</span>');
 		break;
-	case 'delete' :
-		if (action.at1 > action.at2) throw new Error('Invalid delete action');
-		lines[action.line].splice(action.at1, 0, '<span id="delete">');
+	case 'remove' :
+		if (action.at1 > action.at2) throw new Error('Invalid remove action');
+		lines[action.line].splice(action.at1, 0, '<span id="remove">');
 		lines[action.line].splice(action.at2 + 1, 0, '</span>');
 		break;
 	default :

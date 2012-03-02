@@ -34,40 +34,74 @@
 	background-color : rgb(125, 255, 125);
 }
 
-#delete {
+#remove {
 	background-color : rgb(255, 0, 0);
 	color            : rgb(255, 255, 255);
 }
 
 #input {
-	position: absolute;
-	top: 10px;
-	left:10px;
+	position       : absolute;
+	top            : 10px;
+	left           : 10px;
 }
 
 #beep {
-	position    : absolute;
-	top         : 320px;
-	left        : 400px;
-	font-family : monospace;
-	font-weight : bold;
-	font-size   : 16pt;
+	position       : absolute;
+	top            : 320px;
+	left           : 400px;
+	font-family    : monospace;
+	font-weight    : bold;
+	font-size      :  16pt;
 }
 
 #send {
-	position    : absolute;
-	top         : 10px;
-	left        : 470px;
-	height      : 20px;
-	width       : 70px;
+	position       : absolute;
+	top            :  10px;
+	left           : 470px;
+	height         :  20px;
+	width          :  70px;
 }
 
 #cancel {
-	position    : absolute;
-	top         : 35px;
-	left        : 470px;
-	height      : 20px;
-	width       : 70px;
+	position       : absolute;
+	top            :  30px;
+	left           : 470px;
+	height         :  20px;
+	width          :  70px;
+}
+
+#upnow {
+	position       : absolute;
+	top            :  60px;
+	left           : 470px;
+	height         :  20px;
+	width          :  70px;
+}
+
+#up {
+	position       : absolute;
+	top            :  80px;
+	left           : 470px;
+	height         :  20px;
+	width          :  70px;
+}
+
+#now {
+	position       : absolute;
+	top            : 100px;
+	left           : 470px;
+	height         :  20px;
+	width          :  70px;
+	text-align     : center;
+	vertical-align : middle;
+}
+
+#down {
+	position       : absolute;
+	top            : 120px;
+	left           : 470px;
+	height         :  20px;
+	width          :  70px;
 }
 
 </style>
@@ -79,5 +113,9 @@
 <div id="beep"></div>
 <button id="send">Send</button>
 <button id="cancel">Cancel</button>
+<button id="upnow">⇧⇧</button>
+<button id="up">⇧</button>
+<div id="now">-1</div>
+<button id="down">⇓</button>
 </body>
 </html>
