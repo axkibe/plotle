@@ -492,6 +492,8 @@ function _isValidPathArc(arc) {
 	if (isInteger(arc)) return true;
 	if (!isString(arc)) return false;
 	if (arc[0] === '_') return false;
+	if (arc === 'copse') { throw new Error('copse in Path'); }  // TODO remove this later
+	if (arc === 'alley') { throw new Error('alley in Path'); }  // TODO remove this later
 	return true;
 }
 

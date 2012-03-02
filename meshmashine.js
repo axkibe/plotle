@@ -166,10 +166,12 @@ function alterSet(tree, src, trg, report) {
 
 	var save = Tree.getPath(tree, path);
 
+	debug('TRG.VAL', trg.val);
 	if (is(trg.val)) {
 		check(Tree.matches(save, trg.val), cm, 'trg.val preset incorrectly');
 	} else {
 		if (!is(save)) save = null;
+		debug('SAVING', save);
 		trg = new Signature(trg, 'val', save);
 	}
 
@@ -375,7 +377,7 @@ function alterTake(tree, src, trg, report) {
 */
 // XXX repository
 MeshMashine = function(tree, report) {
-	this.tree    = tree;
+	this.tree    = tree;  // TODO make private
 	this.history = [];
 	this.report  = report;
 };

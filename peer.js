@@ -141,7 +141,7 @@ Peer.prototype._alter = function(src, trg) {
 | gets a space
 */
 Peer.prototype.getSpace = function(time, name) {
-	return this._get(time, new Path(['copse', name]));
+	return this._get(time, new Path([name]));
 };
 
 /**

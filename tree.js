@@ -342,14 +342,18 @@ function getPath(tree, path, shorten) {
 	var a, aZ;
 
 	if (is(shorten)) {
-		aZ = shorten >= 0 ? shorten : path.length + shorten; 
+		aZ = shorten >= 0 ? shorten : path.length + shorten;
 	} else {
 		aZ = path.length;
 	}
 
 	for (a = 0; a < aZ; a++) {
 		if (!isnon(tree)) throw reject('path goes nowhere: '+path);
-		tree = tree[path.get(a)];
+		if (Patterns[twigtype(tree)].copse) {
+			tree = tree.copse[path.get(a)];
+		} else {
+			tree = tree[path.get(a)];
+		}
 	}
 	return tree;
 }
@@ -361,15 +365,8 @@ function setPath(tree, path, val) {
 	if (!isPath(path)) throw new Error('Tree.get no path');
 
 	for(var a = path.length - 1; a >= 0; a--) {
-		if (path.get(a - 1) === 'copse') {
-			// in case of copse, alter the node one level further above
-			var node = Tree.getPath(tree, path, a - 1);
-			val = grow(node, path.get(a), val);
-			a--;
-		} else {
-			var node = Tree.getPath(tree, path, a);
-			val = grow(node, path.get(a), val);
-		}
+		var node = Tree.getPath(tree, path, a);
+		val = grow(node, path.get(a), val);
 	}
 
 	return val;

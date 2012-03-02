@@ -68,8 +68,7 @@ var mm;
 	mm = new MeshMashine(nexus, false, false);
 
 	// startup init
-	var spacepath = new Jools.Path(['copse', 'welcome']);
-	// var spacepath = new Jools.Path(['welcome']);  THIS SHOULD FAIL (!) TODO XXX
+	var spacepath = new Jools.Path(['welcome']);
 	var src = new Jools.Signature({
 		val: {
 			type: 'Space',
@@ -196,6 +195,7 @@ var mm;
 		path: spacepath
 	});
 	var asw = mm.alter(0, src, trg);
+	debug('TREE', mm.tree);
 	if (asw.ok !== true) throw new Error('Cannot init Repository');
 })();
 

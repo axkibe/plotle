@@ -59,7 +59,7 @@ var alley;
 var copse;
 var time = -1;
 var maxtime = -1;
-var notepath = new Path(['copse', 'welcome', 'copse', '1', ]);
+var notepath = new Path(['welcome', '1' ]);
 
 /**
 | The current cursor position and blink state
@@ -185,12 +185,12 @@ var send = function() {
 
 	switch(action.type) {
 	case 'insert' :
-		var path = new Path(notepath, '++', 'doc', 'copse', alley[action.line]);
+		var path = new Path(notepath, '++', 'doc', alley[action.line]);
 		peer.insertText(path, action.at1, action.val);
 		cursor.offset += action.val.length;
 		break;
 	case 'remove' :
-		var path = new Path(notepath, '++', 'doc', 'copse', alley[action.line]);
+		var path = new Path(notepath, '++', 'doc', alley[action.line]);
 		peer.removeText(path, action.at1, action.at2 - action.at1);
 		if (cursor.offset >= action.at2) {
 			cursor.offset -= action.at2 - action.at1;
@@ -239,7 +239,7 @@ testinput = function() {
 	var text = element.input.value;
 	element.input.value = '';
 	if (text === '') return;
-
+	if (!alley) { beep(); return; };
 
 	if (action === null) {
 		startAction({
@@ -270,6 +270,7 @@ testinput = function() {
 var inputSpecialKey = function(keyCode, ctrlKey) {
 	switch(keyCode) {
     case  8 : // backspace
+		if (!alley) { beep(); return; }
 		if (cursor.offset <= 0) { beep(); return; }
 		if (!action) {
 			startAction({
@@ -290,30 +291,38 @@ var inputSpecialKey = function(keyCode, ctrlKey) {
 		cancel();
 		break;
     case 13 : // return
+		if (!alley) { beep(); return; }
 		if (ctrlKey) { send(); break; }
 		break;
     case 35 : // end
+		if (!alley) { beep(); return; }
 		cursor.offset = copse[alley[cursor.line]].text.length;
 		break;
     case 36 : // pos1
+		if (!alley) { beep(); return; }
 		cursor.offset = 0;
 		break;
     case 37 : // left
+		if (!alley) { beep(); return; }
 		if (cursor.offset <= 0) { beep(); return; }
 		cursor.offset--;
 		break;
     case 38 : // up
 		if (cursor.line <= 0) { beep(); return; }
+		if (!alley) { beep(); return; }
 		cursor.line--;
 		break;
     case 39 : // right
+		if (!alley) { beep(); return; }
 		cursor.offset ++;
 		break;
     case 40 : // down
+		if (!alley) { beep(); return; }
 		if (cursor.line >= alley.length) { beep(); return; }
 		cursor.line++;
 		break;
     case 46 : // del
+		if (!alley) { beep(); return; }
 		var text = copse[alley[cursor.line]].text;
 		if (cursor.offset >= text.length) { beep(); return; }
 		if (!action) {
@@ -341,12 +350,19 @@ var inputSpecialKey = function(keyCode, ctrlKey) {
 */
 var update = function(totime) {
 	space = peer.getSpace(totime, 'welcome');
-	note = space.copse['1'];
-	alley = note.doc.alley;
-	copse = note.doc.copse;
 	time  = peer.time;
 	maxtime = max(time, maxtime);
 	element.now.innerHTML = '' + time;
+	if (space) {
+		note = space.copse['1'];
+		alley = note.doc.alley;
+		copse = note.doc.copse;
+	} else {
+		space = null;
+		note  = null;
+		alley = null;
+		copse = null;
+	}
 }
 
 /**
@@ -386,6 +402,18 @@ var ondown = function() {
 var updatePad = function() {
 	var lines = [];
 	var a, aZ, b, bZ;
+
+	if (!alley) {
+		// no data
+		var line = [];
+		for(var a = 0; a < 100; a++) { line.push('{}  '); }
+		line = line.join('');
+		var line2 = '  ' + line;
+		for(var a = 0; a < 50; a++) { lines.push(line, line2); };
+		element.pad.innerHTML = lines.join('\n');
+		return;
+	}
+
 	for(a = 0, aZ = alley.length; a < aZ; a++) {
 		lines.push(copse[alley[a]].text.split(''));
 	}
