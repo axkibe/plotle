@@ -578,17 +578,20 @@ Path.prototype.equals = function(o) {
 | o: the other path
 | [len]: the length of this path to consider.
 */
-/*Path.prototype.like = function(o, len) {
-	if (!is(len)) len  = this.length;
-	if (len < 0)  len += this.length;
-	if (len < 0)  len  = 0;
+Path.prototype.subpathOf = function(o, len) {
+	if (!is(len)) {
+		len  = this._path.length;
+	} else {
+		if (len < 0) len += this._path.length;
+		if (len < 0) throw new Error('subpathOf out of range');
+	}
 
-	if (len > o.length) return false;
-	for(var i = 0; i < len; i++) {
-		if (this._path[i] !== o._path[i]) return false;
+	if (len > o._path.length) return false;
+	for(var a = 0; a < len; a++) {
+		if (this._path[a] !== o._path[a]) return false;
 	}
 	return true;
-}*/
+}
 
 /**
 | Turns the path to a String.

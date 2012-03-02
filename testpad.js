@@ -25,8 +25,11 @@ if (typeof(window) === 'undefined') throw new Error('testpad needs a browser!');
 var Path      = Jools.Path;
 var debug     = Jools.debug;
 var fixate    = Jools.fixate;
+var limit     = Jools.limit;
 var log       = Jools.log;
 var subclass  = Jools.subclass;
+var R         = Math.round;
+var F         = Math.floor;
 var max       = Math.max;
 var min       = Math.min;
 
@@ -138,11 +141,9 @@ var onmousedown = function(event) {
 	var y = event.pageY - element.pad.offsetTop;
 
 	if (!alley) { beep(); return; }
-	cursor.line = min(alley.length - 1, Math.floor(y / measure.offsetHeight));
-	cursor.offset = min(
-		copse[alley[cursor.line]].text.length,
-		Math.round(x / measure.offsetWidth - 0.5)
-	);
+	cursor.line   = limit(0, F(y / measure.offsetHeight), alley.length - 1);
+	var text = copse[alley[cursor.line]].text;
+	cursor.offset = limit(0, F(x / measure.offsetWidth), text.length);
 	resetBlink();
 	updatePad();
 }
@@ -458,7 +459,6 @@ var onup = function() {
 | Button one-down-the-timeline has been clicked.
 */
 var ondown = function() {
-	debug('TIME', time, max(time - 1, 0));
 	update(max(time - 1, 0));
 	resetBlink();
 	updatePad();

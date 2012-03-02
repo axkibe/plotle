@@ -110,8 +110,8 @@ Alternation.type = function(src, trg) {
 	if (trg.proc === 'splice') return 'split';
 	if (src.proc === 'splice') return 'join';
 
-	if (src.proc === 'arrange') return 'place';
-	if (trg.proc === 'arrange') return 'take';
+	if (src.proc === 'arrange') return 'place'; // TODO changed?
+	if (trg.proc === 'arrange') return 'take';  // TODO changed?
 
 	if (is(src.val) && !is(trg.at1)) return 'set';
 	if (is(src.val) &&  is(trg.at1)) return 'insert';
@@ -132,23 +132,17 @@ Alternation.type = function(src, trg) {
 */
 function alter(tree, src, trg, report) {
 	var atype = Alternation.type(src, trg);
-	var cm = 'alter('+atype+')';  // check message TODO optimize away
-
 	log('alter', 'src:', src, 'trg:', trg, 'atype:', atype);
-	var result;
-
 	switch (atype) {
-	case 'set'    : result = alterSet   (tree, src, trg, report); break;
-	case 'join'   : result = alterJoin  (tree, src, trg, report); break;
-	case 'split'  : result = alterSplit (tree, src, trg, report); break;
-	case 'insert' : result = alterInsert(tree, src, trg, report); break;
-	case 'remove' : result = alterRemove(tree, src, trg, report); break;
-	case 'place'  : result = alterPlace (tree, src, trg, report); break;
-	case 'take'   : result = alterTake  (tree, src, trg, report); break;
+	case 'set'    : return alterSet   (tree, src, trg, report);
+	case 'join'   : return alterJoin  (tree, src, trg, report);
+	case 'split'  : return alterSplit (tree, src, trg, report);
+	case 'insert' : return alterInsert(tree, src, trg, report);
+	case 'remove' : return alterRemove(tree, src, trg, report);
+	case 'place'  : return alterPlace (tree, src, trg, report);
+	case 'take'   : return alterTake  (tree, src, trg, report);
 	default       : throw reject('invalid atype:', atype);
 	}
-
-	return result;
 }
 
 /**
@@ -166,12 +160,10 @@ function alterSet(tree, src, trg, report) {
 
 	var save = Tree.getPath(tree, path);
 
-	debug('TRG.VAL', trg.val);
 	if (is(trg.val)) {
 		check(Tree.matches(save, trg.val), cm, 'trg.val preset incorrectly');
 	} else {
 		if (!is(save)) save = null;
-		debug('SAVING', save);
 		trg = new Signature(trg, 'val', save);
 	}
 
@@ -362,6 +354,216 @@ function alterTake(tree, src, trg, report) {
 	return { tree: tree, src: src, trg: trg };
 }
 
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+,--,--'
+`- | ,-. ,-. ,-. ,-. ," ,-. ,-. ,-,-.
+ , | |   ,-| | | `-. |- | | |   | | |
+ `-' '   `-^ ' ' `-' |  `-' '   ' ' '
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~'~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+ Action Transformation. Changes Signatures due to past alternations.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+var Transform = {};
+
+/**
+| Transforms a signature on one history moment
+*/
+Transform.one = function(sign, src, trg) {
+	if (!is(sign.path)) return sign;
+	var atype = Alternation.type(src, trg);
+	if (!Transform[atype]) { throw new Error('unknown atype: '+atype); }
+	return Transform[atype](sign, src, trg);
+};
+
+/**
+| Transforms a signature on one a split.
+*/
+Transform.split = function(sign, src, trg) {
+	log('te', 'split');
+	if (!src.path.subpathOf(sign.path)) return sign;
+	var src_i = src.path.get(src.pivot); // TODO
+	var	sig_i = sign.path.get(src.pivot); // TODO
+	log('te', 'sig_i', sig_i, 'src_i', src_i);
+	if (sig_i < src_i) {
+		log('te', 'split downside');
+		return sign;
+	}
+	if (sig_i > src_i) {
+		// split was before -> index shifted
+		log('te', 'split upside');
+		sign.path = sign.path.add(src.pivot, 1);
+		return sign;
+	}
+	log('te', 'split here');
+	// split is in same line;
+	if (is(sign.at1) && is(sign.at2)) {
+		log('te', 'split span');
+		//Span        mmmmm      <-- sig_p.at1--sig_at2
+		//Splits:  1    2    3   <-- src_p.at1
+		//case 3:
+		if (sign.at2 < src.at1) {
+			log('te', 'split rightside');
+			return sign;
+		}
+		// case 1:
+		if (sign.at1 > src.at1) {
+			log('te', 'split leftside');
+			sign.path = sign.path.add(src.pivot, 1);
+			sign.at1 -= src.at1;
+			sign.at2 -= src.at1;
+			return sign;
+		}
+		// case 2 -> have to split!
+		log('te', 'split split');
+		var sat2 = sign.at2 - src.at1;
+		sign.at2 = src.at1;
+
+		var sign2 = new Signature(sign);
+		sign2.path = sign2.path.add(src.pivot, 1);
+		sign2.at1 = 0;
+		sign2.at2 = sat2;
+		return [sign, sign2];
+	}
+	if (is(sign.at1)) {
+		log('te', 'split index');
+		if (src.at1 > sign.at1) {
+			log('te', 'split rigtside');
+			return sign;
+		}
+		log('te', 'split leftside');
+		sign.path = sign.path.add(src.pivot, 1);
+		sign.at1 -= src.at1;
+		return sign;
+	}
+	throw reject('invalid split');
+};
+
+/**
+| Transforms a signature on one a join.
+*/
+Transform.join = function(sign, src, trg) {
+	if (!trg.path.like(sign, trg.pivot)) return sign; // TODO this looks wrong
+	log('te', 'alter-join');
+	var trg_i =  trg.path.get(trg.pivot);
+	var sig_i = sign.path.get(trg.pivot);
+	if (sig_i < trg_i) {
+		log('te', 'join downside');
+		return sign;
+	}
+	if (sig_i > trg_i) {
+		// split was before -> index shifted
+		log('te', 'join upside');
+		sign.path = sign.path.add(src.pivot, -1);
+		return sign;
+	}
+	log('te', 'join here');
+	// join is in same line;
+	sign.path = sign.path.add(trg.pivot, -1);
+	sign.at1 += trg.at1;
+	if (is(sign.at2)) sign.at1 += trg.at1;
+	return sign;
+};
+
+/**
+| Transforms a signature on a join.
+*/
+Transform.set = function(sign, src, trg) {
+	log('te', 'nothing to do');
+	return sign;
+};
+
+
+/**
+| Transforms a signature on an insert.
+*/
+Transform.insert = function(sign, src, trg) {
+	if (!trg.path || !trg.path.equals(sign.path)) return sign;
+	log('te', 'insert');
+	check(is(trg.at1) && is(trg.at2), 'history mangled');
+	if (sign.at1 > trg.at1) { // or >= ?
+		log('te', 'at1 += ',src.val.length);
+		sign.at1 += src.val.length;
+		if (is(sign.at2)) {
+			log('te', 'at2 +=', src.val.length);
+			sign.at2 += src.val.length;
+		}
+	}
+	return sign;
+};
+
+/**
+| Transforms a signature on a insert
+*/
+Transform.remove = function(sign, src, trg) {
+	if (!src.path.equals(sign.path)) return sign;
+	log('te', 'remove');
+	check(is(src.at1) && is(src.at2), 'history mangled');
+	//       123456789
+	//         ^^^    <- removed
+	//case1:       <->
+	//case2:    <->
+	if (sign.at1 > src.at1) {
+		if (sign.at1 > src.at2) {
+			log('te', 'at1 -=', trg.val.length);
+			// case1
+			sign.at1 -= trg.val.length;
+			if (is(sign.at2)) {
+				log('te', 'at2 -=', trg.val.length);
+				sign.at2 -= trg.val.length;
+			}
+		} else {
+			// case2
+			if (is(sign.at2)) {
+				sign.at2 = sign.at2 - sign.at1 + src.at1;
+				log('te', 'at2 =', sign.at2);
+			}
+			log('te', 'at1 =', src.at1);
+			sign.at1 = src.at1;
+		}
+	}
+	return sign;
+};
+
+/**
+| Transforms a signature on a place
+| TODO needed?
+*/
+Transform.place = function(sign, src, trg) {
+	if (!trg.path.like(sign.path)) return sign;
+	log('te', 'place');
+	var trg_i =  trg.alley.get(-1);
+	var sig_i = sign.path.get(trg.alley.length);
+	log('te', 'sig_i', sig_i, 'trg_i', trg_i);
+	if (sig_i >= trg_i) {
+		// insert was before -> index shifted
+		log('te', 'place shifted');
+		sign.path = sign.path.add(trg.alley.length, 1);
+	}
+	return sign;
+};
+
+
+/**
+| Transforms a signature on a take.
+| TODO needed?
+*/
+Transform.take = function(sign, src, trg) {
+	if (!src.alley.like(sign.path)) return sign;
+	log('te', 'take');
+	var src_i =  src.path.get(-1);
+	var sig_i = sign.path.get(src.alley.length);
+	log('te', 'sig_i', sig_i, 'src_i', src_i);
+
+	if (sig_i >= src_i) {
+		// take was before -> index shifted
+		log('te', 'place shifted');
+		sign.path = sign.path.add(src.alley.length, -1);
+	}
+	return sign;
+};
+
+
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,-,-,-.           .   ,-,-,-.           .
@@ -369,7 +571,9 @@ function alterTake(tree, src, trg, report) {
    | ; | . |-' `-. | |   | ; | . ,-| `-. | | | | | |-'
    '   `-' `-' `-' ' '   '   `-' `-^ `-' ' ' ' ' ' `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
  Thats the thing.
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
@@ -389,170 +593,6 @@ MeshMashine.prototype._isValidTime = function(time) {
 	return isInteger(time) && time >= 0 && time <= this.history.length;
 };
 
-/**
-| Transforms a single signature (src or trg) on one historic moment
-*/
-MeshMashine.prototype.transformOnMoment = function(sign, alter) {
-	if (!is(sign.path)) return sign;
-	var src = alter.src;
-	var trg = alter.trg;
-	var atype = Alternation.type(src, trg);
-	var src_i, trg_i, sig_i; // TODO split case into functions.
-	switch(atype) {
-	case 'split':
-		if (!src.path.like(sign.path, src.pivot)) return sign;
-		log('te', 'alter-split');
-		src_i = src.path.get(src.pivot);
-		sig_i = sign.path.get(src.pivot);
-		log('te', 'sig_i', sig_i, 'src_i', src_i);
-		if (sig_i < src_i) {
-			log('te', 'split downside');
-			return sign;
-		}
-		if (sig_i > src_i) {
-			// split was before -> index shifted
-			log('te', 'split upside');
-			sign.path = sign.path.add(src.pivot, 1);
-			return sign;
-		}
-		log('te', 'split here');
-		// split is in same line;
-		if (is(sign.at1) && is(sign.at2)) {
-			log('te', 'split span');
-			//Span        mmmmm      <-- sig_p.at1--sig_at2
-			//Splits:  1    2    3   <-- src_p.at1
-			//case 3:
-			if (sign.at2 < src.at1) {
-				log('te', 'split rightside');
-				return sign;
-			}
-			// case 1:
-			if (sign.at1 > src.at1) {
-				log('te', 'split leftside');
-				sign.path = sign.path.add(src.pivot, 1);
-				sign.at1 -= src.at1;
-				sign.at2 -= src.at1;
-				return sign;
-			}
-			// case 2 -> have to split!
-			log('te', 'split split');
-			var sat2 = sign.at2 - src.at1;
-			sign.at2 = src.at1;
-
-			var sign2 = new Signature(sign);
-			sign2.path = sign2.path.add(src.pivot, 1);
-			sign2.at1 = 0;
-			sign2.at2 = sat2;
-			return [sign, sign2];
-		}
-		if (is(sign.at1)) {
-			log('te', 'split index');
-			if (src.at1 > sign.at1) {
-				log('te', 'split rigtside');
-				return sign;
-			}
-			log('te', 'split leftside');
-			sign.path = sign.path.add(src.pivot, 1);
-			sign.at1 -= src.at1;
-			return sign;
-		}
-		throw reject('invalid split');
-	case 'join':
-		if (!trg.path.like(sign, trg.pivot)) return sign; // TODO this looks wrong
-		log('te', 'alter-join');
-		trg_i =  trg.path.get(trg.pivot);
-		sig_i = sign.path.get(trg.pivot);
-		if (sig_i < trg_i) {
-			log('te', 'join downside');
-			return sign;
-		}
-		if (sig_i > trg_i) {
-			// split was before -> index shifted
-			log('te', 'join upside');
-			sign.path = sign.path.add(src.pivot, -1);
-			return sign;
-		}
-		log('te', 'join here');
-		// join is in same line;
-		sign.path = sign.path.add(trg.pivot, -1);
-		sign.at1 += trg.at1;
-		if (is(sign.at2)) sign.at1 += trg.at1;
-		return sign;
-	case 'set':
-		log('te', 'nothing to do');
-		return sign;
-	case 'insert':
-		if (!trg.path || !trg.path.equals(sign.path)) return sign;
-		log('te', 'insert');
-		check(is(trg.at1) && is(trg.at2), 'history mangled');
-		if (sign.at1 > trg.at1) { // or >= ?
-			log('te', 'at1 += ',src.val.length);
-			sign.at1 += src.val.length;
-			if (is(sign.at2)) {
-				log('te', 'at2 +=', src.val.length);
-				sign.at2 += src.val.length;
-			}
-		}
-		return sign;
-	case 'remove':
-		if (!src.path.equals(sign.path)) return sign;
-		log('te', 'remove');
-		check(is(src.at1) && is(src.at2), 'history mangled');
-		//       123456789
-		//         ^^^    <- removed
-		//case1:       <->
-		//case2:    <->
-		if (sign.at1 > src.at1) {
-			if (sign.at1 > src.at2) {
-				log('te', 'at1 -=', trg.val.length);
-				// case1
-				sign.at1 -= trg.val.length;
-				if (is(sign.at2)) {
-					log('te', 'at2 -=', trg.val.length);
-					sign.at2 -= trg.val.length;
-				}
-			} else {
-				// case2
-				if (is(sign.at2)) {
-					sign.at2 = sign.at2 - sign.at1 + src.at1;
-					log('te', 'at2 =', sign.at2);
-				}
-				log('te', 'at1 =', src.at1);
-				sign.at1 = src.at1;
-			}
-		}
-		return sign;
-	case 'place' :
-		if (!trg.path.like(sign.path)) return sign;
-		log('te', 'place');
-		trg_i =  trg.alley.get(-1);
-		sig_i = sign.path.get(trg.alley.length);
-
-		log('te', 'sig_i', sig_i, 'trg_i', trg_i);
-
-		if (sig_i >= trg_i) {
-			// insert was before -> index shifted
-			log('te', 'place shifted');
-			sign.path = sign.path.add(trg.alley.length, 1);
-		}
-		return sign;
-	case 'take' :
-		if (!src.alley.like(sign.path)) return sign;
-		log('te', 'take');
-		src_i =  src.path.get(-1);
-		sig_i = sign.path.get(src.alley.length);
-		log('te', 'sig_i', sig_i, 'src_i', src_i);
-
-		if (sig_i >= src_i) {
-			// take was before -> index shifted
-			log('te', 'place shifted');
-			sign.path = sign.path.add(src.alley.length, -1);
-		}
-		return sign;
-	default :
-		throw new Error('unknown atype: '+atype);
-	}
-};
 
 /**
 | Transforms a signature, possibly splitting it up into several.
@@ -567,10 +607,10 @@ MeshMashine.prototype.transform = function(time, sign) {
 		var moment = this.history[t];
 
 		if (!(signa instanceof Array)) {
-			signa = this.transformOnMoment(signa, moment);
+			signa = Transform.one(signa, moment.src, moment.trg);
 		} else {
 			for(var i = 0; i < signa.length; i++) {
-				var tom = this.transformOnMoment(signa[i], moment);
+				var tom = Transform.one(signa[i], moment.src, moment.trg);
 				if (tom instanceof Array) {
 					for(var tomi = 0; tomi < tom.length; tomi++) {
 						signa.splice(i++, tom[tomi]);
@@ -602,12 +642,12 @@ MeshMashine.prototype._reflect = function(time, path) {
 			var asw = alter(reflect, moment.trg, moment.src, false);
 			reflect = asw.tree;
 		}
+		return reflect;
 	} catch (err) {
 		// this should not ever fail, thus rethrow a lethal error
 		err.ok = null;
 		throw new Error(err.stack);
 	}
-	return reflect;
 };
 
 /**
