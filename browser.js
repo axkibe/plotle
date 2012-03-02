@@ -101,6 +101,7 @@ function System() {
 
 	// if true browser supports the setCapture() call
 	// if false needs work around
+	// TODO why !== null and not ? true : false ??
 	var useCapture = canvas.setCapture !== null;
 	var mouseState  = false;   // false, 'atween' or 'drag'
 

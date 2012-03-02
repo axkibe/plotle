@@ -36,20 +36,26 @@ var min       = Math.min;
 var action    = null;
 
 /**
+| True when mouse is down
+*/
+var mousedown = false;
+
+/**
 | References to the pages html elements
 */
 var element = {
-	pad    : null,
-	input  : null,
-	beep   : null,
+	measure : null,
+	pad     : null,
+	input   : null,
+	beep    : null,
 
-	send   : null,
-	cancel : null,
+	send    : null,
+	cancel  : null,
 
-	upnow  : null,
-	up     : null,
-	now    : null,
-	down   : null
+	upnow   : null,
+	up      : null,
+	now     : null,
+	down    : null
 };
 
 var peer;
@@ -125,7 +131,70 @@ var resetBlink = function() {
 var onmousedown = function(event) {
 	if (event.button !== 0) return;
 	event.preventDefault();
+	captureEvents();
+	mousedown = true;
 	element.input.focus();
+	var x = event.pageX - element.pad.offsetLeft;
+	var y = event.pageY - element.pad.offsetTop;
+
+	if (!alley) { beep(); return; }
+	cursor.line = min(alley.length - 1, Math.floor(y / measure.offsetHeight));
+	cursor.offset = min(
+		copse[alley[cursor.line]].text.length,
+		Math.round(x / measure.offsetWidth - 0.5)
+	);
+	resetBlink();
+	updatePad();
+}
+
+/**
+| Captures all mouseevents event
+*/
+var captureEvents = function() {
+    if (element.pad.setCapture) {
+        element.pad.setCapture(canvas);
+    } else {
+        document.onmouseup   = onmouseup;
+        document.onmousemove = onmousemove;
+    }
+};
+
+/**
+| Stops capturing all mouseevents
+*/
+var releaseEvents = function() {
+    if (element.pad.setCapture) {
+        element.pad.releaseCapture(canvas);
+    } else {
+        document.onmouseup = null;
+        document.onmousemove = null;
+    }
+};
+
+/**
+| Mouse button released
+*/
+var onmouseup = function(event) {
+	if (event.button !== 0) return;
+	event.preventDefault();
+	mousedown = false;
+	releaseEvents();
+};
+
+
+
+/**
+| Mouse clicked on pad -> move the cursor there.
+*/
+var onmouseclick = function(event) {
+	event.preventDefault();
+}
+
+/**
+| Mouse moved over pad (or while dragging around it);
+*/
+var onmousemove = function(event) {
+	if (mousedown) onmousedown(event);
 }
 
 /**
@@ -480,7 +549,10 @@ var updatePad = function() {
 window.onload = function() {
 	for (var id in element) { element[id] = document.getElementById(id); }
 
-	element.pad.onmousedown = onmousedown;
+	element.pad.onmousedown   = onmousedown;
+	element.pad.onmousemove   = onmousemove;
+	element.pad.onmouseup     = onmouseup;
+	element.pad.onclick       = onmouseclick;
 	element.input.onkeypress  = onkeypress;
 	element.input.onkeydown   = onkeydown;
 	element.input.onkeyup     = onkeyup;
