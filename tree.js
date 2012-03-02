@@ -348,7 +348,7 @@ function getPath(tree, path, shorten) {
 	}
 
 	for (a = 0; a < aZ; a++) {
-		if (!isnon(tree)) throw reject('path goes nowhere');
+		if (!isnon(tree)) throw reject('path goes nowhere: '+path);
 		tree = tree[path.get(a)];
 	}
 	return tree;
@@ -380,43 +380,20 @@ function setPath(tree, path, val) {
 | Returns true if this node matches a master or a node of equal class
 */
 function matches(twig1, twig2) {
-	throw new Error('TODO');
-	/*
-	if (!isnon(master) || !master.constructor) return false;
-
-	if (this.constructor === master.constructor) {
-		// allow matching of nodes equal class
-		master = master._twigs;
+	if (twig1 === twig2) return true;
+	switch(twig1.constructor) {
+	case String : return false;
+	case Number : return false;
 	}
 
-	var klen = 0;
-	for(var k in this._twigs) {
-		if (k === 'type') continue;
-		var v1 = this._twigs[k];
-		var v2 = master[k];
-
-		if (k === 'alley') {
-			if (v1.length !== v2.length) return false;
-			for (var i = 0, len = v1.length; i < len; i++) {
-				if (v1[i].matches) {
-					if (!v1[i].matches(v2[i])) return false;
-				} else {
-					if (v1[i] !== v2[i]) return false;
-				}
-			}
-		} else if (v1.matches) {
-			if (!v1.matches(v2)) return false;
-		} else {
-			if (v1 !== v2) return false;
-		}
-		klen++;
+	var k1 = Object.keys(twig1);
+	var k2 = Object.keys(twig2);
+	if (k1.length !== k2.length) { return false; }
+	for (var a = 0, aZ = k1.length; a < aZ; a++) {
+		var k = k1[a];
+		if (!matches(twig1[k], twig2[k])) return false;
 	}
-
-	// tests if there aren't additional keys in o.
-	for (var k in master) {
-		if (k !== 'type') klen--;
-	}
-	return klen === 0;*/
+	return true;
 }
 
 /**
@@ -508,7 +485,8 @@ Tree = {
 	grow    : grow,
 	incPath : incPath,
 	getPath : getPath,
-	setPath : setPath
+	setPath : setPath,
+	matches : matches
 //	cogging : false,
 };
 

@@ -27,6 +27,8 @@ var debug     = Jools.debug;
 var fixate    = Jools.fixate;
 var log       = Jools.log;
 var subclass  = Jools.subclass;
+var max       = Math.max;
+var min       = Math.min;
 
 /**
 | Current action
@@ -40,8 +42,14 @@ var element = {
 	pad    : null,
 	input  : null,
 	beep   : null,
+
 	send   : null,
 	cancel : null,
+
+	upnow  : null,
+	up     : null,
+	now    : null,
+	down   : null
 };
 
 var peer;
@@ -49,6 +57,8 @@ var space;
 var note;
 var alley;
 var copse;
+var time = -1;
+var maxtime = -1;
 var notepath = new Path(['copse', 'welcome', 'copse', '1', ]);
 
 /**
@@ -191,9 +201,10 @@ var send = function() {
 	}
 
 	clearAction();
-	update();
+	update(-1);
 	resetBlink();
 	updatePad();
+	element.input.focus();
 };
 
 /**
@@ -203,6 +214,7 @@ var cancel = function() {
 	clearAction();
 	resetBlink();
 	updatePad();
+	element.input.focus();
 };
 
 /**
@@ -327,12 +339,46 @@ var inputSpecialKey = function(keyCode, ctrlKey) {
 /**
 | Updates data from server
 */
-var update = function() {
-	space = peer.getSpace('welcome');
+var update = function(totime) {
+	space = peer.getSpace(totime, 'welcome');
 	note = space.copse['1'];
 	alley = note.doc.alley;
 	copse = note.doc.copse;
+	time  = peer.time;
+	maxtime = max(time, maxtime);
+	element.now.innerHTML = '' + time;
 }
+
+/**
+| Button update-to-now has been clicked
+*/
+var onupnow = function() {
+	update(-1);
+	resetBlink();
+	updatePad();
+	element.input.focus();
+};
+
+/**
+| Button one-up-the-timeline has been clicked.
+*/
+var onup = function() {
+	update(min(time + 1, maxtime));
+	resetBlink();
+	updatePad();
+	element.input.focus();
+};
+
+/**
+| Button one-down-the-timeline has been clicked.
+*/
+var ondown = function() {
+	debug('TIME', time, max(time - 1, 0));
+	update(max(time - 1, 0));
+	resetBlink();
+	updatePad();
+	element.input.focus();
+};
 
 /**
 | TODO
@@ -416,9 +462,12 @@ window.onload = function() {
 	element.send.onclick      = send;
 	element.cancel.disabled   = true;
 	element.cancel.onclick    = cancel;
+	element.upnow.onclick     = onupnow;
+	element.up.onclick        = onup;
+	element.down.onclick      = ondown;
 
 	peer = new Peer(false);
-	update();
+	update(-1);
 	updatePad();
 	resetBlink();
 	element.input.focus();

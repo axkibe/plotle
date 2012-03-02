@@ -51,7 +51,7 @@ if (typeof(window) === 'undefined') {
 var debug        = Jools.debug;
 var log          = Jools.log;
 var fixate       = Jools.fixate;
-var fixateNoEnum = Jools.fixate;
+var fixateNoEnum = Jools.fixateNoEnum;
 var reject       = Jools.reject;
 var subclass     = Jools.subclass;
 var min          = Math.min;
@@ -593,13 +593,14 @@ Object.defineProperty(Measure, 'font', {
 | Point(p)
 */
 function Point(a1, a2) {
-	if (typeof(a1) === 'object') { // TODO typeof Point
+	if (typeof(a1) === 'object') {
 		fixate(this, 'x', a1.x);
 		fixate(this, 'y', a1.y);
 	} else {
 		fixate(this, 'x', a1);
 		fixate(this, 'y', a2);
 	}
+	fixate(this, 'type', 'Point'); // @@ So Tree is happy
 }
 
 /**
@@ -678,16 +679,9 @@ function Rect(pnw, pse) {
 	}
 	fixate(this, 'pnw',    pnw);
 	fixate(this, 'pse',    pse);
-	this.init();
-}
-
-/**
-| Additional initialization (needed by woods)
-*/
-Rect.prototype.init = function() {
-	var pse = this.pse, pnw = this.pnw;
 	fixateNoEnum(this, 'width',  pse.x - pnw.x);
 	fixateNoEnum(this, 'height', pse.y - pnw.y);
+	fixate(this, 'type', 'Rect'); // @@ So Tree is happy
 }
 
 /**

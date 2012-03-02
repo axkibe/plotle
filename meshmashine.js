@@ -88,18 +88,6 @@ function checkWithin(v, low, high) {
 	if (v < low || v > high) fail(arguments, 3, low, '<=', v, '<=', high);
 }
 
-/**
-| Returns true if v .matches w or w .matches v
-*/
-function matches(v, w) {
-	// TODO change to checkMatch
-	if (v === w) return true;
-	if (v.matches) return v.matches(w);
-	if (w.matches) return w.matches(v);
-	log('warn', 'matches failed cause neither has matches()');
-	return false;
-}
-
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      ,.   .  .                  .
     / |   |  |- ,-. ,-. ,-. ,-. |- . ,-. ,-.
@@ -179,7 +167,7 @@ function alterSet(tree, src, trg, report) {
 	var save = Tree.getPath(tree, path);
 
 	if (is(trg.val)) {
-		check(matches(save, trg.val), cm, 'trg.val preset incorrectly');
+		check(Tree.matches(save, trg.val), cm, 'trg.val preset incorrectly');
 	} else {
 		if (!is(save)) save = null;
 		trg = new Signature(trg, 'val', save);
@@ -240,7 +228,7 @@ function alterRemove(tree, src, trg, report) {
 
 	var val = str.substring(src.at1, src.at2);
 	if (isnon(trg.val)) {
-		check(matches(val, trg.val), cm,
+		check(Tree.matches(val, trg.val), cm,
 			'trg.val preset incorrectly:',
 			val, '!==', trg.val
 		);
@@ -362,7 +350,7 @@ function alterTake(tree, src, trg, report) {
 
 	var val = alley.get(src.at1);
 	if (is(trg.val)) {
-		check(matches(val, trg.val), cm, 'trg.val preset incorrectly');
+		check(Tree.matches(val, trg.val), cm, 'trg.val preset incorrectly');
 	} else {
 		trg.val = val;
 	}
@@ -598,28 +586,26 @@ MeshMashine.prototype.transform = function(time, sign) {
 
 /**
 | Reflects the state of the tree at a time.
-| If path is not null it cares only to rebuild what is necessary to see the ida.
+| If path is not null it cares only to rebuild what is necessary to see the node.
 */
 // TODO partial reflects
 MeshMashine.prototype._reflect = function(time, path) {
-
-	// XXX TODO
-	throw new Error('TODO');
-	/*
+	if (is(path)) { throw new Error('Not yet supported!'); }
 	try {
-		var reflect = new this.repository.constructor(this.repository);
+		var reflect = this.tree;
 
 		// playback
 		for(var hi = this.history.length - 1; hi >= time; hi--) {
 			var moment = this.history[hi];
-			alter(reflect, moment.trg, moment.src, false);
+			var asw = alter(reflect, moment.trg, moment.src, false);
+			reflect = asw.tree;
 		}
 	} catch (err) {
 		// this should not ever fail, thus rethrow a lethal error
 		err.ok = null;
 		throw new Error(err.stack);
 	}
-	return reflect.get(path);*/
+	return reflect;
 };
 
 /**
@@ -690,7 +676,8 @@ MeshMashine.prototype.get = function(time, path) {
 
 		if (time >= 0) {
 			if (!this._isValidTime(time)) return reject('invalid time');
-			reflect = this._reflect(time, path);
+			reflect = this._reflect(time);
+			reflect = Tree.getPath(reflect, path);
 		} else {
 			reflect = Tree.getPath(this.tree, path);
 			time = this.history.length;

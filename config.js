@@ -7,7 +7,7 @@ module.exports = {
 	devel   : 'both',
 
 	//messages and JSON with whitespace/newlines for debugging.
-	puffed  : false,
+	puffed  : true,
 
 	log     : {
 		//all:   true,
@@ -16,7 +16,7 @@ module.exports = {
 		debug:  true,
 		event:  false,
 		fail:   true,
-		grow:   true,
+		grow:   false,
 		mm:     true,
 		peer:   true,
 		start:  true,

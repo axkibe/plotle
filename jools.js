@@ -352,13 +352,15 @@ function clone(original) {
 | Deep freezes an object.
 */
 function deepFreeze(obj) {
+	return false;
+	/*
 	if (typeof(obj) !== 'object' || obj === null) return;
 
 	Object.freeze(obj);
 	for (var k in obj) {
 		if (k === 'parent') throw new Error('deepFreezing a parent?');
 		deepFreeze(obj[k]);
-	}
+	}*/
 }
 
 /**
@@ -386,6 +388,9 @@ function immute(obj) {
  ++Signature++
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  Signates an entry, string index or string span.
+
+ TODO remove this from Jools.
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function Signature(master) {
 	var k;
@@ -430,10 +435,9 @@ Signature.prototype.attune = function(text, name) {
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ++Path++
+ +++Path+++
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  Path to an entitiy.
- TODO, make immuteable?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
@@ -585,7 +589,14 @@ Path.prototype.equals = function(o) {
 }*/
 
 /**
-| jsonfy
+| Turns the path to a String.
+*/
+Path.prototype.toString = function() {
+	return '['+this._path.toString()+']';
+}
+
+/**
+| Jsonfy.
 */
 Path.prototype.toJSON = function() {
 	return this._path;

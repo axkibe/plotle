@@ -35,8 +35,7 @@ var Jools;
 /**
 | Exports
 */
-var Peer;
-
+var Peer; 
 /**
 | Capsule
 */
@@ -67,12 +66,13 @@ Peer = function(async) {
 		var nexus = Tree.grow( { type: 'Nexus' } );
 		this.mm = new MeshMashine(nexus, true, true);
 	}
+	this.time = -1;  // @@ See if this is permanently needed
 };
 
 /**
 | Issues a get request
 */
-Peer.prototype._get = function(path) {
+Peer.prototype._get = function(time, path) {
 	var asw;
 
 	if (this.async) {
@@ -84,7 +84,7 @@ Peer.prototype._get = function(path) {
 		ajax.open('POST', '/mm', false);
 		ajax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 		var request = JSON.stringify({
-			time : -1,
+			time : time,
 			cmd  : 'get',
 			path : path
 		});
@@ -98,6 +98,7 @@ Peer.prototype._get = function(path) {
 			throw new Error('Server answered no JSON!');
 		}
 		if (asw.ok !== true) throw new Error('AJAX not ok: '+asw.message);
+		this.time = asw.time;
 		return asw.node;
 	}
 };
@@ -139,8 +140,8 @@ Peer.prototype._alter = function(src, trg) {
 /**
 | gets a space
 */
-Peer.prototype.getSpace = function(name) {
-	return this._get(new Path(['copse', name]));
+Peer.prototype.getSpace = function(time, name) {
+	return this._get(time, new Path(['copse', name]));
 };
 
 /**

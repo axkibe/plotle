@@ -68,7 +68,8 @@ var mm;
 	mm = new MeshMashine(nexus, false, false);
 
 	// startup init
-	var spacepath = new Jools.Path(['welcome']);
+	var spacepath = new Jools.Path(['copse', 'welcome']);
+	// var spacepath = new Jools.Path(['welcome']);  THIS SHOULD FAIL (!) TODO XXX
 	var src = new Jools.Signature({
 		val: {
 			type: 'Space',
