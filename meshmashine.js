@@ -473,24 +473,53 @@ Transform.insert = function(sign, src, trg) {
 	if (sign.at1 < trg.at1) return sign;
 	var len = src.val.length;
 	if (is(sign.at2)) { return new Signature(sign, 'at1', sign.at1 + len, 'at2', sign.at2 + len); }
-	return new Signature (sign, 'at1', sign.at1 + len);
+	return new Signature(sign, 'at1', sign.at1 + len);
 };
 
 /**
 | Transforms a signature on a insert
 */
 Transform.remove = function(sign, src, trg) {
-	if (!src.path.equals(sign.path)) return sign;
+	if (!src.path || !src.path.equals(sign.path)) return sign;
 	log('te', 'remove');
-	check(is(src.at1) && is(src.at2), 'history mangled');
-	//       123456789
-	//         ^^^    <- removed
-	//case1:       <->
-	//case2:    <->
-	if (sign.at1 > src.at1) {
-		if (sign.at1 > src.at2) {
+	if (!is(src.at1) || !is(src.at2)) { throw new Error('history mangled'); }
+	var len = src.at2 - src.at1;
+
+	// simpler case signature is only one point
+	if (!is(sign.at2)) {
+		if (sign.at1 <= src.at1) return sign;
+		return new Signature(sign, 'at1', sign.at1 - len);
+	}
+
+	// more complicated signature is a span that may be affected
+	// supposedly its a remove as well.
+	//
+	//                     ............
+	// src (removed span)      ######
+	// sign, case0:        +++ '    '      (sign to left,  no effect)
+	// sign, case1:            '    ' +++  (sign to right, move to left)
+	// sign, case2:          ++++   '      (part of sign removed)
+	// sign, case3:            '   ++++    (part of sign removed)
+	// sign, case4:          +++++++++     (sign splitted into two)
+	// sign, case5:            ' ++ '      (sign completely removed)
+
+	// case0
+	if (sign.at2 <= src.at1) { return sign; }
+
+	// case1
+	if (sign.at1 >= src.at2) {
+		return new Signature(sign, 'at1', sign.at1 - len, 'at2', sign.at2 - len);
+	}
+
+	// case2
+	if (sign.at1 <= src.at1 && sign.at2 <= src.at2) {
+		return new Signature(sign, 'at2', src.at1);
+	}
+
+	// case3
+	if (sign.at2 <= src.at2 && 
+XXX
 			log('te', 'at1 -=', trg.val.length);
-			// case1
 			sign.at1 -= trg.val.length;
 			if (is(sign.at2)) {
 				log('te', 'at2 -=', trg.val.length);
@@ -506,6 +535,7 @@ Transform.remove = function(sign, src, trg) {
 			sign.at1 = src.at1;
 		}
 	}
+
 	return sign;
 };
 
