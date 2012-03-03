@@ -118,7 +118,7 @@ Peer.prototype._alter = function(src, trg) {
 		ajax.open('POST', '/mm', false);
 		ajax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 		var request = JSON.stringify({
-			time : -1,
+			time : this.time,
 			cmd  : 'alter',
 			src  : src,
 			trg  : trg

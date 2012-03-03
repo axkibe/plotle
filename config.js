@@ -17,11 +17,11 @@ module.exports = {
 		event:  false,
 		fail:   true,
 		grow:   false,
-		mm:     true,
+		mm:     false,
 		peer:   true,
 		start:  true,
 		shell:  true,
-		te:     false,
+		te:     true,
 		web:    true,
 		warn:   true,
 	}

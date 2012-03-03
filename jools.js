@@ -382,17 +382,18 @@ function immute(obj) {
 		Object.defineProperty(obj, names[a], desc);
 	}
     Object.defineProperty(obj, '_$id', {value: ++oleng$id});
+	return obj;
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ++Signature++
+ +++Signature+++
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  Signates an entry, string index or string span.
 
  TODO remove this from Jools.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Signature(master) {
+function Signature(master/*, ...*/) {
 	var k;
 	for(k in master) {
 		if (!Object.hasOwnProperty.call(master, k)) continue;

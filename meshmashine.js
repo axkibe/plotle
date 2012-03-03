@@ -53,38 +53,42 @@ if (typeof(window) === 'undefined') {
 	Tree  = require('./tree');
 }
 
-var Path       = Jools.Path;
-var Signature  = Jools.Signature;
+var Path        = Jools.Path;
+var Signature   = Jools.Signature;
 
-var debug      = Jools.debug;
-var log        = Jools.log;
-var clone      = Jools.clone;
-var deepFreeze = Jools.deepFreeze;
-var is         = Jools.is;
-var isnon      = Jools.isnon;
-var isPath     = Jools.isPath;
-var isInteger  = Jools.isInteger;
-var isString   = Jools.isString;
-var fixate     = Jools.fixate;
-var reject     = Jools.reject;
-
+var debug       = Jools.debug;
+var log         = Jools.log;
+var clone       = Jools.clone;
+var deepFreeze  = Jools.deepFreeze;
+var is          = Jools.is;
+var isnon       = Jools.isnon;
+var isArray     = Jools.isArray;
+var isPath      = Jools.isPath;
+var isInteger   = Jools.isInteger;
+var isString    = Jools.isString;
+var fixate      = Jools.fixate;
+var reject      = Jools.reject;
 
 function fail(args, aoffset) {
 	var a = Array.prototype.slice.call(args, aoffset, args.length);
-	for(var i = 2; i < arguments.length; i++) {
-		a.push(arguments[i]);
-	}
+	for(var i = 2; i < arguments.length; i++) { a.push(arguments[i]); }
 	var b = a.slice();
 	b.unshift('fail');
 	log.apply(null, b);
 	throw reject(a.join(' '));
 }
 
+/**
+| Throws a reject if condition is not met.
+*/
 function check(condition) {
 	if (!condition) fail(arguments, 1);
 }
 
-function checkWithin(v, low, high) {
+/**
+| Throws a reject if v is not within limits
+*/
+function checkLimits(v, low, high) {
 	if (v < low || v > high) fail(arguments, 3, low, '<=', v, '<=', high);
 }
 
@@ -94,19 +98,16 @@ function checkWithin(v, low, high) {
    /~~|-. |  |  |-' |   | | ,-| |  | | | | |
  ,'   `-' `' `' `-' '   ' ' `-^ `' ' `-' ' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- A single alternation (point in history)
+
+ The causal consistency engine.
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Alternation(src, trg) {
-	if (!(src instanceof Signature)) throw new Error('Alternation.src is no siganture');
-	if (!(trg instanceof Signature)) throw new Error('Alternation.trg is no siganture');
-	this.src = src;
-	this.trg = trg;
-}
+var Alter = {};
 
 /**
 | TODO
 */
-Alternation.type = function(src, trg) {
+Alter.type = function(src, trg) {
 	if (trg.proc === 'splice') return 'split';
 	if (src.proc === 'splice') return 'join';
 
@@ -122,33 +123,20 @@ Alternation.type = function(src, trg) {
 	return null;
 };
 
-
-/**
-| ++Causal consistency++
-*/
-
 /**
 | Alters a tree
 */
-function alter(tree, src, trg, report) {
-	var atype = Alternation.type(src, trg);
-	log('alter', 'src:', src, 'trg:', trg, 'atype:', atype);
-	switch (atype) {
-	case 'set'    : return alterSet   (tree, src, trg, report);
-	case 'join'   : return alterJoin  (tree, src, trg, report);
-	case 'split'  : return alterSplit (tree, src, trg, report);
-	case 'insert' : return alterInsert(tree, src, trg, report);
-	case 'remove' : return alterRemove(tree, src, trg, report);
-	case 'place'  : return alterPlace (tree, src, trg, report);
-	case 'take'   : return alterTake  (tree, src, trg, report);
-	default       : throw reject('invalid atype:', atype);
-	}
-}
+Alter.apply = function(tree, src, trg, report) {
+	var atype = Alter.type(src, trg);
+	log('Aplternation.apply', 'src:', src, 'trg:', trg, 'atype:', atype);
+	if (!Alter[atype]) throw reject('invalid atype:', atype);
+	return Alter[atype](tree, src, trg, report);
+};
 
 /**
 | Alter: A new item is inserted or replaces an existing.
 */
-function alterSet(tree, src, trg, report) {
+Alter.set = function(tree, src, trg, report) {
 	var cm = 'alterSet';
 
 	check(!is(trg.at1), cm, 'trg.at1 must not exist.');
@@ -177,12 +165,12 @@ function alterSet(tree, src, trg, report) {
 
 	//if (report && parent.report) parent.report('set', trg.path.get(-1), src.val);
 	return { tree: tree, src: src, trg: trg };
-}
+};
 
 /**
 | Alter: A string is inserted into a string item.
 */
-function alterInsert(tree, src, trg, report) {
+Alter.insert = function(tree, src, trg, report) {
 	var cm = 'alterInsert';
 
 	check(isPath(trg.path), cm, 'trg.path missing');
@@ -206,12 +194,12 @@ function alterInsert(tree, src, trg, report) {
 	//	if (parent.report) parent.report('insert', trg.path.get(-1), trg.at1, src.val);
 	//}
 	return { tree: tree, src: src, trg: trg };
-}
+};
 
 /**
 | Alter: a part of a string item is removed.
 */
-function alterRemove(tree, src, trg, report) {
+Alter.remove = function(tree, src, trg, report) {
 	var cm = 'alterRemove';
 	check(isPath(src.path), cm, 'src.path missing');
 	var str = Tree.getPath(tree, src.path);
@@ -237,12 +225,12 @@ function alterRemove(tree, src, trg, report) {
 	//	if (parent.report) parent.report('remove', src.path.get(-1), src.at1, src.at2, val);
 	//}
 	return { tree: tree, src: src, trg: trg };
-}
+};
 
 /**
 | Alter: two texts are joined into one.
 */
-function alterJoin(tree, src, trg, report) {
+Alter.join = function(tree, src, trg, report) {
 	var cm = 'alterJoin';
 
 	check(is(trg.at1), cm, 'trg.at1 missing');
@@ -257,7 +245,7 @@ function alterJoin(tree, src, trg, report) {
 	trg = trg.attune(text, 'trg');
 	var key = path.get(-2);
 
-	checkWithin(key, 0, pivot.length -1, cm, 'splice out of range');
+	checkLimits(key, 0, pivot.length -1, cm, 'splice out of range');
 
 	var para1 = pivot[key];
 	var para2 = pivot[key + 1];
@@ -273,12 +261,12 @@ function alterJoin(tree, src, trg, report) {
 //		if (pnex.report)  pnex.report('join<', path.get(-1), path.get(trg.pivot), trg.at1);
 //	}
 	return { tree: tree, src: src, trg: trg };
-}
+};
 
 /**
 | Alter: a text is split into two.
 */
-function alterSplit(tree, src, trg, report) {
+Alter.split = function(tree, src, trg, report) {
 	var cm = 'alterSplit';
 	var path = src.path;
 	check(is(src.at1), cm, 'src.at1 missing');
@@ -293,7 +281,7 @@ function alterSplit(tree, src, trg, report) {
 	src = src.attune(text, 'src');
 
 	var key = path.get(-2);
-	checkWithin(key, 0, pivot.length, cm, 'splice out of range');
+	checkLimits(key, 0, pivot.length, cm, 'splice out of range');
 
 	var para1 = pivot[key], para2;
 	para1 = Tree.grow(para1, 'text', text.substring(src.at1));
@@ -306,12 +294,12 @@ function alterSplit(tree, src, trg, report) {
 //		if (ppre.report)   ppre.report('split', src.path.get(-1), src.at1, pnew);
 //	}
 	return { tree: tree, src: src, trg: trg };
-}
+};
 
 /**
 | Alter: a value is placed into an alley(array)
 */
-function alterPlace(tree, src, trg, report) {
+Alter.place = function(tree, src, trg, report) {
 	var cm = 'alterPlace';
 	check(is(src.val),  cm, 'src.val not present');
 	check(is(trg.path), cm, 'trg.path not present');
@@ -327,12 +315,12 @@ function alterPlace(tree, src, trg, report) {
 
 	if (report && alley.report) alley.report('place', trg.path.get(-1), trg.at1, src.val);
 	return { tree: tree, src: src, trg: trg };
-}
+};
 
 /**
 | Alter: a value is taken from an alley(array)
 */
-function alterTake(tree, src, trg, report) {
+Alter.take = function(tree, src, trg, report) {
 	// an item is taken (removed) from an alley.
 	var cm = alterTake;
 
@@ -352,7 +340,7 @@ function alterTake(tree, src, trg, report) {
 
 	if (report && alley.report) alley.report('take', src.path.get(-1), src.at1, val);
 	return { tree: tree, src: src, trg: trg };
-}
+};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ,--,--'
@@ -371,7 +359,7 @@ var Transform = {};
 */
 Transform.one = function(sign, src, trg) {
 	if (!is(sign.path)) return sign;
-	var atype = Alternation.type(src, trg);
+	var atype = Alter.type(src, trg);
 	if (!Transform[atype]) { throw new Error('unknown atype: '+atype); }
 	return Transform[atype](sign, src, trg);
 };
@@ -480,16 +468,12 @@ Transform.set = function(sign, src, trg) {
 Transform.insert = function(sign, src, trg) {
 	if (!trg.path || !trg.path.equals(sign.path)) return sign;
 	log('te', 'insert');
-	check(is(trg.at1) && is(trg.at2), 'history mangled');
-	if (sign.at1 > trg.at1) { // or >= ?
-		log('te', 'at1 += ',src.val.length);
-		sign.at1 += src.val.length;
-		if (is(sign.at2)) {
-			log('te', 'at2 +=', src.val.length);
-			sign.at2 += src.val.length;
-		}
-	}
-	return sign;
+	if (!is(trg.at1) || !is(trg.at2)) throw new Error('history mangled');
+
+	if (sign.at1 < trg.at1) return sign;
+	var len = src.val.length;
+	if (is(sign.at2)) { return new Signature(sign, 'at1', sign.at1 + len, 'at2', sign.at2 + len); }
+	return new Signature (sign, 'at1', sign.at1 + len);
 };
 
 /**
@@ -600,29 +584,35 @@ MeshMashine.prototype._isValidTime = function(time) {
 MeshMashine.prototype.transform = function(time, sign) {
 	log('te', 'in', time, sign);
 	if (!is(sign.path)) return sign;
+	debug('PL', sign.path.length);
+	debug('T',  time);
+	debug('TZ', this.history.length);
 	if (sign.path.length === 0) return sign;
 
-	var signa = sign; // sign or array of signs // TODO dont rename
-	for(var t = time; t < this.history.length; t++) {
+	for(var t = time, tZ = this.history.length; t < tZ; t++) {
 		var moment = this.history[t];
+		log('te', 'transform one', t);
 
-		if (!(signa instanceof Array)) {
-			signa = Transform.one(signa, moment.src, moment.trg);
-		} else {
-			for(var i = 0; i < signa.length; i++) {
-				var tom = Transform.one(signa[i], moment.src, moment.trg);
-				if (tom instanceof Array) {
-					for(var tomi = 0; tomi < tom.length; tomi++) {
-						signa.splice(i++, tom[tomi]);
+		switch(sign.constructor) {
+		case Signature : sign = Transform.one(sign, moment.src, moment.trg); break;
+		case Array :
+			for(var a = 0, aZ = sign.length; a < aZ; a++) {
+				var tom = Transform.one(sign[i], moment.src, moment.trg);
+				switch (tom.constructor) {
+				case Signature : sign[a] = tom; break;
+				case Array :
+					for(var b = 0, bZ = tom.length; b < bZ; b++) {
+						sign.splice(a++, 0, tom[b]);
 					}
-				} else {
-					check(tom === signa[i], 'tom !== signa[i]');
+				default : throw new Error('Invalid sign');
 				}
 			}
+			break;
+		default : throw new Error('Invalid sign');
 		}
 	}
-	log('te', 'out', signa);
-	return signa;
+	log('te', 'out', sign);
+	return sign;
 };
 
 
@@ -639,7 +629,7 @@ MeshMashine.prototype._reflect = function(time, path) {
 		// playback
 		for(var hi = this.history.length - 1; hi >= time; hi--) {
 			var moment = this.history[hi];
-			var asw = alter(reflect, moment.trg, moment.src, false);
+			var asw = Alter.apply(reflect, moment.trg, moment.src, false);
 			reflect = asw.tree;
 		}
 		return reflect;
@@ -667,23 +657,22 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 		// TODO beautify this, (especially the loops)
 		var alts, i;
 		if (!(tsrca instanceof Array) && !(ttrga instanceof Array)) {
-			alts = new Alternation(tsrca, ttrga);
+			alts = { src : tsrca, trg : ttrga };  // TODO immute
 		} else if (!(tsrca instanceof Array) && (ttrga instanceof Array))  {
 			alts = [];
 			for(i = 0; i < ttrga.length; i++) {
-				alts[i] = new Alternation(tsrca, ttrga[i]);
+				alts[i] = { src : tsrca, trg : ttrga[1] };  // TODO immute
 			}
 		} else if ((tsrca instanceof Array) && !(ttrga instanceof Array)) {
 			alts = [];
 			for(i = 0; i < tsrca.length; i++) {
-				alts[i] = new Alternation(tsrca[i], ttrga);
+				alts[i] = { src : tsrca[i], trg : ttrga };  // TODO immute
 			}
 		}
 
 		var apply = function (alt) {
-			var result = alter(this.tree, alt.src, alt.trg, this.report);
-			alt = new Alternation(result.src, result.trg);
-			deepFreeze(alt);  // @@ extra safety, but superflous.
+			var result = Alter.apply(this.tree, alt.src, alt.trg, this.report);
+			alt = { src : result.src, trg : result.trg}; // TODO immute
 			this.history.push(alt);
 			this.tree = result.tree;
 		};
