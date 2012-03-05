@@ -184,7 +184,7 @@ function getPattern(o) {
 function grow(model /*, ... */) {
 	var a, aZ = arguments.length;
 	if (model._$grown && aZ === 1) return model;
-	var twig, k, k1, k2, val, vtype, klen;
+	var twig, k, k1, k2, val, vtype;
 	var ttype = twigtype(model);
 
 	log('grow', ttype, arguments);
@@ -256,16 +256,19 @@ function grow(model /*, ... */) {
 	}
 
 	// grows the subtwigs
-	klen = 0;
+	var klen = 0;
 
 	if (pattern.copse) {
 		for (k in twig.copse) {
+			debug('K', k);
 			if (!Object.hasOwnProperty.call(twig.copse, k)) continue;
 			if (!isString(k)) throw reject('key of copse no String: '+k);
-			klen++;
 
 			val = twig.copse[k];
-			if (val === null) { delete twig.copse[k]; break; }
+			debug('V', val);
+			if (val === null) { delete twig.copse[k]; continue; }
+			debug('KLEN++');
+			klen++;
 			vtype = twigtype(val);
 			if (!pattern.copse[vtype]) throw reject(ttype+'.copse does not allow '+val.type);
 			switch(val.constructor) {
@@ -279,10 +282,10 @@ function grow(model /*, ... */) {
 			if (!Object.hasOwnProperty.call(twig, k)) continue;
 			if (!isString(k)) throw reject('key of twig is no String: '+k);
 			if (k === 'type') { continue; }
-			klen++;
 
 			val = twig[k];
-			if (val === null) { delete twig[k]; break; }
+			if (val === null) { delete twig[k]; continue; }
+			klen++;
 			vtype = twigtype(val);
 			if (!pattern.must[k]) throw reject(ttype+' does not allow key: '+k);
 			switch(val.constructor) {
@@ -306,6 +309,7 @@ function grow(model /*, ... */) {
 			throw reject('Alley not a sequence');
 		}
 		if (aZ !== klen) {
+			debug(twig.copse, ':', klen, ' vs ', twig.alley, ':', aZ);
 			throw reject('Alley length does not match to copse');
 		}
 		for (a = 0; a < aZ; a++) {
@@ -318,9 +322,9 @@ function grow(model /*, ... */) {
 
 	// if _inc is supported, sets it accordingly
 	if (pattern.inc) {
-		var inc = isnon(model._inc) ? model._inc : '1';
-		while(is(twig.copse[inc])) inc = '' + (1 + inc);
-		Object.defineProperty(twig, '_inc', { value: inc });
+		var inc = isnon(model._inc) ? model._inc : 1;
+		while(is(twig.copse['' + inc])) inc++;
+		Object.defineProperty(twig, '_inc', { value: '' + inc });
 	}
 
 	// if there is a custom construcgtor, calls it to replace the new twig

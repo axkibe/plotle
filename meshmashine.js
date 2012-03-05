@@ -237,26 +237,31 @@ Alter.join = function(tree, src, trg, report) {
 	var cm = 'alterJoin';
 	var path = trg.path;
 
-	check(is(trg.at1), cm, 'trg.at1 missing');
-	var text = Tree.getPath(path);
-	check(isString(text), cm, 'trg.path signates no text');
+	var at1 = trg.at1;
+	check(is(at1), cm, 'trg.at1 missing');
+	var text = Tree.getPath(tree, path);
+	check(isString(text), cm, 'trg signates no text');
 
 	var pivot   = Tree.getPath(tree, path, -2);
 	var pattern = Tree.getPattern(pivot);
 	check(pattern.alley, cm, 'pivot has no alley');
 
 	trg = trg.attune(text, 'trg');
-	var key = path.get(-2);
-	var kn = pivot.alley.indexOf(key);
+	var key2 = path.get(-2);
+	var kn   = pivot.alley.indexOf(key2);
 	check(kn >= 0, cm, 'line key not found in alley');
+	check(kn > 0,  cm, 'cannot join first line');
+	var key  = pivot.alley[kn - 1];
+	debug('KEY', key, key2, kn);
 
-	var para1 = pivot[key];
-	var para2 = pivot[key + 1];
-
+	var para1 = pivot.copse[key];
+	var para2 = pivot.copse[key2];
 	// @@ check other keys to be equal
 	para1 = Tree.grow(para1, 'text', para1.text + para2.text);
-	pivot = Tree.grow(pivot, key, para1, '-', key + 1);
-	tree  = Tree.setPath(tree, vpath, pivot);
+	pivot = Tree.grow(pivot, key, para1, key2, null, '-', kn);
+
+	var ppath = new Path(path, '--', 2); // TODO, add a shorten parameter to setPath instead.
+	tree  = Tree.setPath(tree, ppath, pivot);
 
 //	if (report) {
 //		if (pivot.report) pivot.report('join', path.get(trg.pivot), trg.at1, ppre);
@@ -278,7 +283,7 @@ Alter.split = function(tree, src, trg, report) {
 	var text = Tree.getPath(tree, path);
 	check(isString(text), cm, 'src signates no text');
 
-	var pivot = Tree.getPath(tree, path, -2);
+	var pivot   = Tree.getPath(tree, path, -2);
 	var pattern = Tree.getPattern(pivot);
 	check(pattern.alley, cm, 'pivot has no alley');
 	check(pattern.inc, cm, 'pivot does not increment');
@@ -290,10 +295,9 @@ Alter.split = function(tree, src, trg, report) {
 
 	var para1, para2;
 	para1 = pivot.copse[key];
+	para2 = Tree.grow(para1, 'text', text.substring(at1, text.length));
 	para1 = Tree.grow(para1, 'text', text.substring(0, at1));
-	para2 = Tree.grow(para1, 'text', text.substring(0, src.at1));
-	debug('INC', pivot._inc);
-	var path2 = Tree.grow(pivot, pivot._inc, para2, '+', kn + 1, pivot._inc);
+	pivot = Tree.grow(pivot, key, para1, pivot._inc, para2, '+', kn + 1, pivot._inc);
 
 	var ppath = new Path(path, '--', 2); // TODO, add a shorten parameter to setPath instead.
 	tree  = Tree.setPath(tree, ppath, pivot);

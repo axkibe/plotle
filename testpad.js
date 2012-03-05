@@ -270,6 +270,10 @@ var send = function() {
 		var path = new Path(notepath, '++', 'doc', alley[action.line]);
 		peer.split(path, action.at1);
 		break;
+	case 'join' :
+		var path = new Path(notepath, '++', 'doc', alley[action.line]);
+		peer.join(path);
+		break;
 	default :
 		throw new Error('invalid action.type');
 	}
@@ -345,7 +349,15 @@ var inputSpecialKey = function(keyCode, ctrlKey) {
 	switch(keyCode) {
     case  8 : // backspace
 		if (!alley) { beep(); return; }
-		if (cursor.offset <= 0) { beep(); return; }
+		if (cursor.offset <= 0) {
+			if (action) { beep(); return; }
+			if (cursor.line <= 0) { beep(); return }
+			startAction({
+				type : 'join',
+				line : cursor.line
+			});
+			break;
+		}
 		if (!action) {
 			startAction({
 				type : 'remove',
