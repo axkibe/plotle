@@ -319,7 +319,7 @@ function grow(model /*, ... */) {
 	// if _inc is supported, sets it accordingly
 	if (pattern.inc) {
 		var inc = isnon(model._inc) ? model._inc : '1';
-		while(is(twig[inc])) inc = '' + (1 + inc);
+		while(is(twig.copse[inc])) inc = '' + (1 + inc);
 		Object.defineProperty(twig, '_inc', { value: inc });
 	}
 
@@ -336,12 +336,12 @@ function grow(model /*, ... */) {
 /**
 | Returns a path for from a path ending with '_new' to grow a new twig.
 */
-function incPath(tree, path) {
+//function sproutPath(tree, path) {
 	//if (!tree._grow) throw new Error('_grow not set');
 	//while (is(tree.get('' + this._grow))) this._grow++;
 	//return path.set(-1, '' + this._grow);
-	throw new Error('TODO');
-}
+//	throw new Error('TODO');
+//}
 
 /**
 | Gets the node a path leads to.
@@ -369,7 +369,7 @@ function getPath(tree, path, shorten) {
 }
 
 /**
-| TODO
+| Returns a tree where the node pointed by path is replaced by val.
 */
 function setPath(tree, path, val) {
 	if (!isPath(path)) throw new Error('Tree.get no path');
@@ -409,7 +409,6 @@ function matches(twig1, twig2) {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 Tree = {
 	grow       : grow,
-	incPath    : incPath,
 	getPattern : getPattern,
 	getPath    : getPath,
 	setPath    : setPath,

@@ -273,24 +273,30 @@ Alter.split = function(tree, src, trg, report) {
 	var cm = 'alterSplit';
 	var path = src.path;
 
-	check(is(src.at1), cm, 'src.at1 missing');
+	var at1 = src.at1;
+	check(is(at1), cm, 'src.at1 missing');
 	var text = Tree.getPath(tree, path);
 	check(isString(text), cm, 'src signates no text');
 
 	var pivot = Tree.getPath(tree, path, -2);
 	var pattern = Tree.getPattern(pivot);
 	check(pattern.alley, cm, 'pivot has no alley');
+	check(pattern.inc, cm, 'pivot does not increment');
 
 	src = src.attune(text, 'src');
 	var key = path.get(-2);
 	var kn = pivot.alley.indexOf(key);
 	check(kn >= 0, cm, 'line key not found in alley');
 
-	var para1 = pivot[key], para2;
-	para1 = Tree.grow(para1, 'text', text.substring(src.at1));
+	var para1, para2;
+	para1 = pivot.copse[key];
+	para1 = Tree.grow(para1, 'text', text.substring(0, at1));
 	para2 = Tree.grow(para1, 'text', text.substring(0, src.at1));
-	pivot = Tree.grow(pivot, key, para1, '+', key + 1, para2);
-	tree  = Tree.setPath(tree, vpath, pivot);
+	debug('INC', pivot._inc);
+	var path2 = Tree.grow(pivot, pivot._inc, para2, '+', kn + 1, pivot._inc);
+
+	var ppath = new Path(path, '--', 2); // TODO, add a shorten parameter to setPath instead.
+	tree  = Tree.setPath(tree, ppath, pivot);
 
 //	if (report) {
 //		if (pivot.report) pivot.report('split', src.path.get(src.pivot), src.at1, pnew);
