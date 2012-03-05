@@ -247,18 +247,17 @@ Alter.join = function(tree, src, trg, report) {
 	check(pattern.alley, cm, 'pivot has no alley');
 
 	trg = trg.attune(text, 'trg');
-	var key2 = path.get(-2);
-	var kn   = pivot.alley.indexOf(key2);
+	var key = path.get(-2);
+	var kn  = pivot.alley.indexOf(key);
 	check(kn >= 0, cm, 'line key not found in alley');
-	check(kn > 0,  cm, 'cannot join first line');
-	var key  = pivot.alley[kn - 1];
-	debug('KEY', key, key2, kn);
+	check(kn < pivot.alley.length,  cm, 'cannot join last line');
+	var key2 = pivot.alley[kn + 1];
 
 	var para1 = pivot.copse[key];
 	var para2 = pivot.copse[key2];
 	// @@ check other keys to be equal
 	para1 = Tree.grow(para1, 'text', para1.text + para2.text);
-	pivot = Tree.grow(pivot, key, para1, key2, null, '-', kn);
+	pivot = Tree.grow(pivot, key, para1, key2, null, '-', kn + 1);
 
 	var ppath = new Path(path, '--', 2); // TODO, add a shorten parameter to setPath instead.
 	tree  = Tree.setPath(tree, ppath, pivot);
@@ -625,9 +624,6 @@ MeshMashine.prototype.transform = function(time, sign) {
 		log('te', 'out', sign);
 		return sign;
 	}
-	debug('PL', sign.path.length);
-	debug('T',  time);
-	debug('TZ', this.history.length);
 	if (sign.path.length === 0) return sign;
 
 	for(var t = time, tZ = this.history.length; t < tZ; t++) {

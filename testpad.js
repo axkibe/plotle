@@ -271,7 +271,7 @@ var send = function() {
 		peer.split(path, action.at1);
 		break;
 	case 'join' :
-		var path = new Path(notepath, '++', 'doc', alley[action.line]);
+		var path = new Path(notepath, '++', 'doc', alley[action.line - 1]);
 		peer.join(path);
 		break;
 	default :

@@ -260,14 +260,11 @@ function grow(model /*, ... */) {
 
 	if (pattern.copse) {
 		for (k in twig.copse) {
-			debug('K', k);
 			if (!Object.hasOwnProperty.call(twig.copse, k)) continue;
 			if (!isString(k)) throw reject('key of copse no String: '+k);
 
 			val = twig.copse[k];
-			debug('V', val);
 			if (val === null) { delete twig.copse[k]; continue; }
-			debug('KLEN++');
 			klen++;
 			vtype = twigtype(val);
 			if (!pattern.copse[vtype]) throw reject(ttype+'.copse does not allow '+val.type);
