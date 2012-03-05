@@ -206,7 +206,10 @@ Alter.remove = function(tree, src, trg, report) {
 	check(isString(str), cm, 'src.path signates no string');
 
 	src = src.attune(str, 'src.path');
-	if (src.at1 === src.at2) { log('alter', 'removed nothing'); return; }
+	if (src.at1 === src.at2) {
+		log('alter', 'removed nothing');
+		return null;
+	}
 
 	var val = str.substring(src.at1, src.at2);
 	if (isnon(trg.val)) {
@@ -232,20 +235,20 @@ Alter.remove = function(tree, src, trg, report) {
 */
 Alter.join = function(tree, src, trg, report) {
 	var cm = 'alterJoin';
+	var path = trg.path;
 
 	check(is(trg.at1), cm, 'trg.at1 missing');
-	var path = trg.path;
-	var text = tree.get(path);
+	var text = Tree.getPath(path);
 	check(isString(text), cm, 'trg.path signates no text');
 
-	var vpath = new Path(path, '--', 2);
-	var pivot = Tree.getPath(tree, vpath);
-	check(pivot instanceof Array, cm, 'pivot not an array');
+	var pivot   = Tree.getPath(tree, path, -2);
+	var pattern = Tree.getPattern(pivot);
+	check(pattern.alley, cm, 'pivot has no alley');
 
 	trg = trg.attune(text, 'trg');
 	var key = path.get(-2);
-
-	checkLimits(key, 0, pivot.length -1, cm, 'splice out of range');
+	var kn = pivot.alley.indexOf(key);
+	check(kn >= 0, cm, 'line key not found in alley');
 
 	var para1 = pivot[key];
 	var para2 = pivot[key + 1];
@@ -269,19 +272,19 @@ Alter.join = function(tree, src, trg, report) {
 Alter.split = function(tree, src, trg, report) {
 	var cm = 'alterSplit';
 	var path = src.path;
-	check(is(src.at1), cm, 'src.at1 missing');
-	check(path.get(-1) === 'text', cm, 'splits must be on .text');
-	var text = Tree.getPath(tree, path);
-	check(isString(text), cm, 'src signates no string');
 
-	var vpath = new Path(path, '--', 2);
-	var pivot = Tree.getPath(tree, vpath);
-	check(pivot instanceof Array, cm, 'pivot not an array');
+	check(is(src.at1), cm, 'src.at1 missing');
+	var text = Tree.getPath(tree, path);
+	check(isString(text), cm, 'src signates no text');
+
+	var pivot = Tree.getPath(tree, path, -2);
+	var pattern = Tree.getPattern(pivot);
+	check(pattern.alley, cm, 'pivot has no alley');
 
 	src = src.attune(text, 'src');
-
 	var key = path.get(-2);
-	checkLimits(key, 0, pivot.length, cm, 'splice out of range');
+	var kn = pivot.alley.indexOf(key);
+	check(kn >= 0, cm, 'line key not found in alley');
 
 	var para1 = pivot[key], para2;
 	para1 = Tree.grow(para1, 'text', text.substring(src.at1));
@@ -481,12 +484,12 @@ Transform.insert = function(sign, src, trg) {
 */
 Transform.remove = function(sign, src, trg) {
 	if (!src.path || !src.path.equals(sign.path)) return sign;
-	log('te', 'remove');
 	if (!is(src.at1) || !is(src.at2)) { throw new Error('history mangled'); }
 	var len = src.at2 - src.at1;
 
 	// simpler case signature is only one point
 	if (!is(sign.at2)) {
+		log('te', 'remove (simple)');
 		if (sign.at1 <= src.at1) return sign;
 		return new Signature(sign, 'at1', sign.at1 - len);
 	}
@@ -503,40 +506,35 @@ Transform.remove = function(sign, src, trg) {
 	// sign, case4:          +++++++++     (sign splitted into two)
 	// sign, case5:            ' ++ '      (sign completely removed)
 
-	// case0
-	if (sign.at2 <= src.at1) { return sign; }
-
-	// case1
+	if (sign.at2 <= src.at1) { 
+		log('te', 'remove (case 0)');
+		return sign; 
+	}
 	if (sign.at1 >= src.at2) {
+		log('te', 'remove (case 1)');
 		return new Signature(sign, 'at1', sign.at1 - len, 'at2', sign.at2 - len);
 	}
-
-	// case2
-	if (sign.at1 <= src.at1 && sign.at2 <= src.at2) {
+	if (sign.at1 < src.at1 && sign.at2 <= src.at2) {
+		log('te', 'remove (case 2)');
 		return new Signature(sign, 'at2', src.at1);
 	}
-
-	// case3
-	if (sign.at2 <= src.at2 && 
-XXX
-			log('te', 'at1 -=', trg.val.length);
-			sign.at1 -= trg.val.length;
-			if (is(sign.at2)) {
-				log('te', 'at2 -=', trg.val.length);
-				sign.at2 -= trg.val.length;
-			}
-		} else {
-			// case2
-			if (is(sign.at2)) {
-				sign.at2 = sign.at2 - sign.at1 + src.at1;
-				log('te', 'at2 =', sign.at2);
-			}
-			log('te', 'at1 =', src.at1);
-			sign.at1 = src.at1;
-		}
+	if (sign.at1 <= src.at2 && sign.at2 > src.at2) {
+		log('te', 'remove (case 3)');
+		return new Signature(sign, 'at2', src.at2);
 	}
-
-	return sign;
+	if (sign.at1 < src.at1 && sign.at2 > src.at2) {
+		log('te', 'remove (case 4)');
+		return [
+			new Signature(sign, 'at2', src.at1),
+			new Signature(sign, 'at1', src.at2)
+		];
+	}
+	if (sign.at1 >= src.at1 && sign.at2 <= src.at2) {
+		log('te', 'remove (case 5)');
+		return null;
+	}
+	// should never happen
+	throw new Error('remove no case fitted? '+sign.at1+'-'+sign.at2+' '+src.at1+'-'+src.at2);
 };
 
 /**
@@ -613,7 +611,10 @@ MeshMashine.prototype._isValidTime = function(time) {
 */
 MeshMashine.prototype.transform = function(time, sign) {
 	log('te', 'in', time, sign);
-	if (!is(sign.path)) return sign;
+	if (!is(sign.path)) {
+		log('te', 'out', sign);
+		return sign;
+	}
 	debug('PL', sign.path.length);
 	debug('T',  time);
 	debug('TZ', this.history.length);
@@ -629,10 +630,15 @@ MeshMashine.prototype.transform = function(time, sign) {
 			for(var a = 0, aZ = sign.length; a < aZ; a++) {
 				var tom = Transform.one(sign[i], moment.src, moment.trg);
 				switch (tom.constructor) {
-				case Signature : sign[a] = tom; break;
+				case Signature :
+					if (tom !== null) {
+						sign[a] = tom; 
+					} else {
+						sign.splice(a--, 1);
+					}
+					break;
 				case Array :
-					for(var b = 0, bZ = tom.length; b < bZ; b++) {
-						sign.splice(a++, 0, tom[b]);
+					for(var b = 0, bZ = tom.length; b < bZ; b++) {sign.splice(a++, 0, tom[b]);
 					}
 				default : throw new Error('Invalid sign');
 				}
@@ -683,6 +689,14 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 
 		var tsrca = this.transform(time, src);
 		var ttrga = this.transform(time, trg);
+		if (tsrca === null || ttrga === null) {
+			log('mm', 'action transformed to null');
+			return {
+				ok: true,
+				time: this.history.length,
+				alts: null,
+			};
+		}
 
 		// TODO beautify this, (especially the loops)
 		var alts, i;
@@ -700,18 +714,20 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 			}
 		}
 
-		var apply = function (alt) {
-			var result = Alter.apply(this.tree, alt.src, alt.trg, this.report);
-			alt = { src : result.src, trg : result.trg}; // TODO immute
-			this.history.push(alt);
-			this.tree = result.tree;
+		var apply = function (src, trg) {
+			var result = Alter.apply(this.tree, src, trg, this.report);
+			if (result) {
+				var alt = { src : result.src, trg : result.trg}; // TODO immute
+				this.history.push(alt);
+				this.tree = result.tree;
+			}
 		};
 
 		// TODO ugly for
 		if (alts instanceof Array) {
-			for(i = 0; i < alts.length; i++) apply.call(this, alts[i]);
+			for(i = 0; i < alts.length; i++) apply.call(this, alts[i].src, alts[i].trg);
 		} else {
-			apply.call(this, alts);
+			apply.call(this, alts.src, alts.trg);
 		}
 
 		return {

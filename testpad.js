@@ -266,6 +266,10 @@ var send = function() {
 			cursor.offset -= action.at2 - action.at1;
 		}
 		break;
+	case 'split' :
+		var path = new Path(notepath, '++', 'doc', alley[action.line]);
+		peer.split(path, action.at1);
+		break;
 	default :
 		throw new Error('invalid action.type');
 	}
@@ -335,7 +339,7 @@ testinput = function() {
 
 
 /**
-| TODO
+| Handles all kind of special keys.
 */
 var inputSpecialKey = function(keyCode, ctrlKey) {
 	switch(keyCode) {
@@ -347,7 +351,7 @@ var inputSpecialKey = function(keyCode, ctrlKey) {
 				type : 'remove',
 				line : cursor.line,
 				at1  : cursor.offset - 1,
-				at2  : cursor.offset,
+				at2  : cursor.offset
 			});
 			cursor.offset--;
 			break;
@@ -357,12 +361,18 @@ var inputSpecialKey = function(keyCode, ctrlKey) {
 		action.at1--;
 		cursor.offset--;
 		break;
-	case 27 : // esc
-		cancel();
-		break;
     case 13 : // return
 		if (!alley) { beep(); return; }
 		if (ctrlKey) { send(); break; }
+		if (action) { beep(); return; }
+		startAction({
+			type : 'split',
+			line : cursor.line,
+			at1  : cursor.offset
+		});
+		break;
+	case 27 : // esc
+		cancel();
 		break;
     case 35 : // end
 		if (!alley) { beep(); return; }
@@ -466,7 +476,7 @@ var ondown = function() {
 };
 
 /**
-| TODO
+| (re)computes the pads contents to match the current data and action.
 */
 var updatePad = function() {
 	var lines = [];
@@ -520,6 +530,12 @@ var updatePad = function() {
 	// inserts the action
 	switch(action && action.type) {
 	case null : break;
+	case 'join' :
+       lines[action.line].unshift('<span id="join">↰</span>');
+       break;
+	case 'split' :
+		lines[action.line].splice(action.at1, 0, '<span id="split">⤶</span>');
+		break;
 	case 'insert' :
 		lines[action.line].splice(action.at1, 0, '<span id="insert">', action.val, '</span>');
 		break;

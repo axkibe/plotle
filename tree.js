@@ -115,14 +115,19 @@ var Patterns = {
 | Some sanity tests on the patterns.
 | @@ this might be disabled in release mode.
 */
-function checkPatterns(patterns) {
+(function(patterns) {
 	for(var k in patterns) {
 		var p = patterns[k];
+
+		// TODO turn on immuting
+		// immute(p)
+		//if (p.copse) immute(p.copse);
+		//if (p.must) immute(p.must);
+
 		if (p.must && p.copse)   throw new Error('Patterns must not have .must and .copse');
 		if (p.alley && !p.copse) throw new Error('Patterns must not have .alley without .copse');
 	}
-}
-checkPatterns(Patterns);
+})(Patterns);
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  +++ Twig +++
@@ -158,6 +163,13 @@ function copy(o, c) {
 		c[k] = o[k];
 	}
 	return c;
+}
+
+/**
+| Returns the pattern for object o
+*/
+function getPattern(o) {
+	return Patterns[twigtype(o)];
 }
 
 /**
@@ -319,8 +331,6 @@ function grow(model /*, ... */) {
 
 	immute(twig);
 	return twig;
-
-	// if (Tree.cogging) {} TODO
 }
 
 /**
@@ -393,98 +403,17 @@ function matches(twig1, twig2) {
 	return true;
 }
 
-/**
-| Adds a listener for set events.
-*/
-/*
-Stem.prototype.addListener = function(listener) {
-	// TODO make a copy.
-	if (!this.listen) this.listen = [];
-	var listen = this.listen;
-	if (listen.indexOf(listener) !== -1) return false;
-	listen.push(listener);
-	return true;
-}
-*/
-
-/**
-| Removes a listener.
-*/
-/*
-Stem.prototype.removeListener = function(listener) {
-	// TODO make a copy.
-	var listen = this.listen;
-	if (!listen) return false;
-	var idx = listen.indexOf(listener);
-	if (idx === -1) return false;
-	listen.splice(idx, 1);
-	return true;
-}
-*/
-
-/**
-| Tells all listeners of an event.
-*/
-/*
-Stem.prototype.tell = function() {
-	var listen = this.listen.slice();
-	for (var a = 0, aZ = listen.length; a < aZ; a++) {
-		var v = listen[a];
-		v.event.apply(v, arguments);
-	}
-}
-*/
-
-/**
-| Gets the key of this node.
-*/
-/*Stem.prototype.getOwnKey = function() {
-	if (!Tree.cogging) throw new Error('getOwnKey() requires cogging');
-	if (this.parent === null) return null;
-	if (this.parent.get(this.key$) === this) return this.key$;
-	return this.key$ = this.parent.getKeyOf(this);
-}
-*/
-
-/**
-| Gets the key of a child node
-*/
-/*Stem.prototype.getKeyOf = function(v, nocache) {
-	if (!Tree.cogging) throw new Error('getKeyOf() requires cogging');
-	if (v.parent !== this) return null;
-	if (!nocache && this.get(v.key$) === v) return v.key$;
-
-	var twigs = this._twigs;
-	if (twigs.alley) {
-		var idx = twigs.alley.indexOf(v);
-		if (idx >= 0) {
-			if (!nocache) v.key$ = idx;
-			return idx;
-		}
-	}
-
-	for(var k in twigs) {
-		if (twigs[k] === v) {
-			if (!nocache) v.key$ = k;
-			return k;
-		}
-	}
-
-	return null;
-}
-*/
-
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  Module Export
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 Tree = {
-	grow    : grow,
-	incPath : incPath,
-	getPath : getPath,
-	setPath : setPath,
-	matches : matches
-//	cogging : false,
+	grow       : grow,
+	incPath    : incPath,
+	getPattern : getPattern,
+	getPath    : getPath,
+	setPath    : setPath,
+	matches    : matches
 };
 
 if (typeof(window) === 'undefined') {

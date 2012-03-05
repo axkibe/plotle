@@ -11,7 +11,7 @@ module.exports = {
 
 	log     : {
 		//all:   true,
-		alter:  false,
+		alter:  true,
 		ajax:   false,
 		debug:  true,
 		event:  false,

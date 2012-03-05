@@ -427,40 +427,23 @@ Peer.prototype.removeSpawn = function(path1, offset1, path2, offset2) {
 /**
 | Splits a text node.
 */
-Peer.prototype.split = function(node, offset) {
-	throw new Error('TODO');
-	/*var path = new Path(node, 'text');
-
-	this.mm.alter(-1,
-		new Signature({
-			at1 : offset,
-			path: path,
-		}),
-		new Signature({
-			proc: 'splice',
-		})
+Peer.prototype.split = function(path, offset) {
+	path = new Path(path, '++', 'text');
+	this._alter(
+		{ path: path, at1: offset },
+		{ proc: 'splice' }
 	);
-	*/
 };
 
 /**
-| Joins a text nodes with its next one
+| Joins a text node with its next one
 */
-Peer.prototype.join = function(node) {
-	throw new Error('TODO');
-	/*
-	var path = new Path(node, 'text');
-
-	this.mm.alter(-1,
-		new Signature({
-			proc : 'splice',
-		}),
-		new Signature({
-			at1 : '$end',
-			path: path,
-		})
+Peer.prototype.join = function(path) {
+	var path = new Path(path, '++', 'text');
+	this._alter(
+		{ proc: 'splice' },
+		{ path: path, at1 : '$end' }
 	);
-	*/
 };
 
 /**

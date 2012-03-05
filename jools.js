@@ -424,6 +424,7 @@ immute(Signature.field);
 
 /**
 | Attunes '$end' ats to match a string.
+| TODO move this into meshmachine
 */
 Signature.prototype.attune = function(text, name) {
 	var at1 = this.at1;
