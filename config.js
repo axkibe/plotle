@@ -7,8 +7,8 @@ module.exports = {
 	devel   : 'both',
 
 	//messages and JSON with whitespace/newlines for debugging.
-	//puffed  : false,
-	puffed  : true,
+	puffed  : false,
+	//puffed  : true,
 
 	log     : {
 		//all:   true,

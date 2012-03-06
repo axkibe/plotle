@@ -296,7 +296,7 @@ function grow(model /*, ... */) {
 	// makes some additional checks
 	if (pattern.must) {
 		for (k in pattern.must) {
-			if (!twig[k]) throw reject(ttype+' requires "'+k+'"');
+			if (!isnon(twig[k])) throw reject(ttype+' requires "'+k+'"');
 		}
 	}
 

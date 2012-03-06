@@ -219,6 +219,9 @@ Alter.remove = function(tree, src, trg, report) {
 		trg = new Signature(trg, 'val', val);
 	}
 	var nstr = str.substring(0, src.at1) + str.substring(src.at2);
+	debug('nstr', nstr);
+	debug('str', str);
+	debug('at', src.at1, src.at2);
 	tree = Tree.setPath(tree, src.path, nstr);
 
 	//if (report) {
@@ -385,6 +388,9 @@ Transform.one = function(sign, src, trg) {
 Transform.split = function(sign, src, trg) {
 	log('te', 'split');
 	if (!src.path.subpathOf(sign.path)) return sign;
+
+	throw new Error('TODO');
+
 	var src_i = src.path.get(src.pivot); // TODO
 	var	sig_i = sign.path.get(src.pivot); // TODO
 	log('te', 'sig_i', sig_i, 'src_i', src_i);
@@ -398,6 +404,7 @@ Transform.split = function(sign, src, trg) {
 		sign.path = sign.path.add(src.pivot, 1);
 		return sign;
 	}
+
 	log('te', 'split here');
 	// split is in same line;
 	if (is(sign.at1) && is(sign.at2)) {
@@ -513,10 +520,10 @@ Transform.remove = function(sign, src, trg) {
 	// src (removed span)      ######
 	// sign, case0:        +++ '    '      (sign to left,  no effect)
 	// sign, case1:            '    ' +++  (sign to right, move to left)
-	// sign, case2:          ++++   '      (part of sign removed)
-	// sign, case3:            '   ++++    (part of sign removed)
-	// sign, case4:          +++++++++     (sign splitted into two)
-	// sign, case5:            ' ++ '      (sign completely removed)
+	// sign, case2:          +++++++++     (sign splitted into two)
+	// sign, case3:            ' ++ '      (sign completely removed)
+	// sign, case4:          ++++   '      (part of sign removed)
+	// sign, case5:            '   ++++    (part of sign removed)
 
 	if (sign.at2 <= src.at1) {
 		log('te', 'remove (case 0)');
@@ -526,24 +533,21 @@ Transform.remove = function(sign, src, trg) {
 		log('te', 'remove (case 1)');
 		return new Signature(sign, 'at1', sign.at1 - len, 'at2', sign.at2 - len);
 	}
-	if (sign.at1 < src.at1 && sign.at2 <= src.at2) {
+	if (sign.at1 < src.at1 && sign.at2 > src.at2) {
 		log('te', 'remove (case 2)');
+		return new Signature(sign, 'at2', sign.at2 - len);
+	}
+	if (sign.at1 >= src.at1 && sign.at2 <= src.at2) {
+		log('te', 'remove (case 3)');
+		return null;
+	}
+	if (sign.at1 < src.at1 && sign.at2 <= src.at2) {
+		log('te', 'remove (case 4)');
 		return new Signature(sign, 'at2', src.at1);
 	}
 	if (sign.at1 <= src.at2 && sign.at2 > src.at2) {
-		log('te', 'remove (case 3)');
-		return new Signature(sign, 'at2', src.at2);
-	}
-	if (sign.at1 < src.at1 && sign.at2 > src.at2) {
-		log('te', 'remove (case 4)');
-		return [
-			new Signature(sign, 'at2', src.at1),
-			new Signature(sign, 'at1', src.at2)
-		];
-	}
-	if (sign.at1 >= src.at1 && sign.at2 <= src.at2) {
 		log('te', 'remove (case 5)');
-		return null;
+		return new Signature(sign, 'at2', src.at2);
 	}
 	// should never happen
 	throw new Error('remove no case fitted? '+sign.at1+'-'+sign.at2+' '+src.at1+'-'+src.at2);
