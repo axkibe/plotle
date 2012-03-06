@@ -51,7 +51,6 @@ var limit     = Jools.limit;
 var log       = Jools.log;
 var subclass  = Jools.subclass;
 var Path      = Jools.Path;
-var Signature = Jools.Signature;
 
 var cos30         = Fabric.cos30;
 var half          = Fabric.half;

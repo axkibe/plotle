@@ -35,7 +35,7 @@ var Jools;
 /**
 | Exports
 */
-var Peer; 
+var Peer;
 /**
 | Capsule
 */
@@ -49,7 +49,6 @@ var Peer;
 if (typeof (window) === 'undefined') throw new Error('Peer nees a browser!');
 
 var Path      = Jools.Path;
-var Signature = Jools.Signature;
 var debug     = Jools.debug;
 var log       = Jools.log;
 
@@ -110,7 +109,7 @@ Peer.prototype._alter = function(src, trg) {
 	var asw;
 
 	if (this.async) {
-		asw = this.mm.alter(-1, new Signature(src), new Signature(trg));
+		asw = this.mm.alter(-1, src, trg);
 		if (asw.ok !== true) throw new Error('Meshmashine not OK: '+asw.message);
 		return asw.node;
 	} else {
@@ -153,7 +152,7 @@ Peer.prototype.newNote = function(space, zone) {
 	var path = new Path(space, 'items', '$new');
 
 	var asw = this.mm.alter(-1,
-		new Signature({
+		{
 			val: {
 				'type': 'Note',
 				'zone': zone,
@@ -167,23 +166,23 @@ Peer.prototype.newNote = function(space, zone) {
 					]
 				},
 			},
-		}), new Signature({
+		}, {
 			path: path,
-		})
+		}
 	);
 
 	var apath = asw.alts.trg.path;
 	if (!(apath instanceof Path)) throw new Error('Cannot re-get new item');
 
 	this.mm.alter(-1,
-		new Signature({
+		{
 			proc: 'arrange',
 			val: apath.get(-1),
-		}),
-		new Signature({
+		},
+		{
 			at1 : 0,
 			path: new Path([space.getOwnKey(), 'z']),
-		})
+		}
 	);
 
 	var k = apath.get(-1);
@@ -200,12 +199,12 @@ Peer.prototype.setZone = function(item, zone) {
 	var path = new Path(item, 'zone');
 
 	this.mm.alter(-1,
-		new Signature({
+		{
 			val: zone,
-		}),
-		new Signature({
+		},
+		{
 			path: path,
-		})
+		}
 	);*/
 };
 
@@ -218,12 +217,12 @@ Peer.prototype.setFontSize = function(item, fontsize) {
 	var path = new Path(item, 'doc', 'fontsize');
 
 	this.mm.alter(-1,
-		new Signature({
+		{
 			val: fontsize,
-		}),
-		new Signature({
+		},
+		{
 			path: path,
-		})
+		}
 	);*/
 };
 
@@ -236,12 +235,12 @@ Peer.prototype.setPNW = function(item, pnw) {
 	var path = new Path(item, 'pnw');
 
 	this.mm.alter(-1,
-		new Signature({
+		{
 			val: pnw
-		}),
-		new Signature({
+		),
+		{
 			path: path,
-		})
+		}
 	);*/
 };
 
@@ -254,7 +253,7 @@ Peer.prototype.newLabel = function(space, pnw, text, fontsize) {
 	var path = new Path(space, 'items', '$new');
 
 	var asw = this.mm.alter(-1,
-		new Signature({
+		{
 			val: {
 				'type': 'Label',
 				'pnw': pnw,
@@ -268,23 +267,23 @@ Peer.prototype.newLabel = function(space, pnw, text, fontsize) {
 					]
 				}
 			}
-		}), new Signature({
+		}, {
 			path: path,
-		})
+		}
 	);
 
 	var apath = asw.alts.trg.path;
 	if (!(apath instanceof Path)) throw new Error('Cannot re-get new item');
 
 	this.mm.alter(-1,
-		new Signature({
+		{
 			proc: 'arrange',
 			val: apath.get(-1),
-		}),
-		new Signature({
+		},
+		{
 			at1 : 0,
 			path: new Path([space.getOwnKey(), 'z']),
-		})
+		}
 	);
 
 	var k = apath.get(-1);
@@ -301,7 +300,7 @@ Peer.prototype.newRelation = function(space, pnw, text, fontsize, vitem1, vitem2
 	var path = new Path(space, 'items', '$new');
 
 	var asw = this.mm.alter(-1,
-		new Signature({
+		{
 			val: {
 				'type': 'Relation',
 				'item1key': vitem1.getOwnKey(),
@@ -317,23 +316,23 @@ Peer.prototype.newRelation = function(space, pnw, text, fontsize, vitem1, vitem2
 					]
 				},
 			},
-		}), new Signature({
+		}, {
 			path: path,
-		})
+		}
 	);
 
 	var apath = asw.alts.trg.path;
 	if (!(apath instanceof Path)) throw new Error('Cannot re-get new Item');
 
 	this.mm.alter(-1,
-		new Signature({
+		{
 			proc: 'arrange',
 			val: apath.get(-1),
-		}),
-		new Signature({
+		},
+		{
 			at1 : 0,
 			path: new Path([space.getOwnKey(), 'z']),
-		})
+		}
 	);
 
 	var k = apath.get(-1);
@@ -354,24 +353,24 @@ Peer.prototype.moveToTop = function(space, item) {
 	if (at1 === 0) return;
 
 	this.mm.alter(-1,
-		new Signature({
+		{
 			path: path,
 			at1: at1,
-		}),
-		new Signature({
+		},
+		{
 			proc: 'arrange',
-		})
+		}
 	);
 
 	this.mm.alter(-1,
-		new Signature({
+		{
 			proc: 'arrange',
 			val: key,
-		}),
-		new Signature({
+		},
+		{
 			path: path,
 			at1 : 0,
-		})
+		}
 	);
 	*/
 };
@@ -459,23 +458,23 @@ Peer.prototype.removeItem = function(space, item) {
 
 	// remove from z-index
 	this.mm.alter(-1,
-		new Signature({
+		{
 			path: path,
 			at1: at1,
-		}),
-		new Signature({
+		},
+		{
 			proc: 'arrange',
-		})
+		}
 	);
 
 	// remove from doc alley
 	this.mm.alter(-1,
-		new Signature({
+		{
 			val: null,
-		}),
-		new Signature({
+		},
+		{
 			path: new Path(item),
-		})
+		}
 	);*/
 };
 

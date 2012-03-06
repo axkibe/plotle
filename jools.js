@@ -385,57 +385,6 @@ function immute(obj) {
 	return obj;
 }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- +++Signature+++
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- Signates an entry, string index or string span.
-
- TODO remove this from Jools.
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Signature(master/*, ...*/) {
-	var k;
-	for(k in master) {
-		if (!Object.hasOwnProperty.call(master, k)) continue;
-		if (!Signature.field[k]) throw reject('invalid Signature property: '+k);
-		this[k] = master[k];
-	}
-
-	for (var a = 1, aZ = arguments.length; a < aZ; a+=2) {
-		k = arguments[a];
-		if (!Signature.field[k]) throw reject('invalid Signature property: '+k);
-		this[k] = arguments[a + 1];
-	}
-
-	immute(this);
-}
-
-/**
-| TODO
-*/
-Signature.field = {
-	'path' : true,
-	'at1'  : true,
-	'at2'  : true,
-	'proc' : true,
-	'val'  : true,
-	'inc'  : true
-};
-immute(Signature.field);
-
-/**
-| Attunes '$end' ats to match a string.
-| TODO move this into meshmachine
-*/
-Signature.prototype.attune = function(text, name) {
-	var at1 = this.at1;
-	var at2 = this.at2;
-	if (this.at1 === '$end') at1 = text.length;
-	if (this.at2 === '$end') at2 = text.length;
-	if (is(at1) && !within(0, at1, text.length)) throw reject(name+'.at1 not within text');
-	if (is(at2) && !within(0, at2, text.length)) throw reject(name+'.at2 not within text');
-	return new Signature(this, 'at1', at1, 'at2', at2);
-};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  +++Path+++
@@ -616,8 +565,6 @@ Path.prototype.toJSON = function() {
 */
 Jools = {
 	Path               : Path,
-	Signature          : Signature,
-
 	clone              : clone,
 	configSwitchClient : configSwitchClient,
 	configSwitchServer : configSwitchServer,

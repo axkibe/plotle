@@ -60,6 +60,7 @@ var debug       = Jools.debug;
 var log         = Jools.log;
 var clone       = Jools.clone;
 var deepFreeze  = Jools.deepFreeze;
+var immute      = Jools.immute;
 var is          = Jools.is;
 var isnon       = Jools.isnon;
 var isArray     = Jools.isArray;
@@ -91,6 +92,57 @@ function check(condition) {
 function checkLimits(v, low, high) {
 	if (v < low || v > high) fail(arguments, 3, low, '<=', v, '<=', high);
 }
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ +++Signature+++
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+ Signates an entry, string index or string span.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+var Signature = function(master/*, ...*/) {
+	var k;
+	for(k in master) {
+		if (!Object.hasOwnProperty.call(master, k)) continue;
+		if (!Signature.field[k]) throw reject('invalid Signature property: '+k);
+		this[k] = master[k];
+	}
+
+	for (var a = 1, aZ = arguments.length; a < aZ; a+=2) {
+		k = arguments[a];
+		if (!Signature.field[k]) throw reject('invalid Signature property: '+k);
+		this[k] = arguments[a + 1];
+	}
+
+	immute(this);
+};
+
+/**
+| TODO
+*/
+Signature.field = {
+	'path' : true,
+	'at1'  : true,
+	'at2'  : true,
+	'proc' : true,
+	'val'  : true,
+	'inc'  : true
+};
+immute(Signature.field);
+
+/**
+| Attunes '$end' ats to match a string.
+| TODO move this into meshmachine
+*/
+Signature.prototype.attune = function(text, name) {
+	var at1 = this.at1;
+	var at2 = this.at2;
+	if (this.at1 === '$end') at1 = text.length;
+	if (this.at2 === '$end') at2 = text.length;
+	check(at1, 0, text.lext.length, name, 'at1 not within text', at1, text);
+	check(at2, 0, text.lext.length, name, 'at2 not within text', at2, text);
+	return new Signature(this, 'at1', at1, 'at2', at2);
+};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      ,.   .  .                  .
@@ -699,8 +751,8 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 		log('mm', 'alter time:', time, 'src:', src, 'trg:', trg);
 		if (time < 0) time = this.history.length;
 		if (!this._isValidTime(time)) return reject('invalid time');
-		if (!(src instanceof Signature)) throw new Error('alter src not a Signature');
-		if (!(trg instanceof Signature)) throw new Error('alter trg not a Signature');
+		src = new Signature(src);
+		trg = new Signature(trg);
 
 		var tsrca = this.transform(time, src);
 		var ttrga = this.transform(time, trg);

@@ -32,7 +32,6 @@ if (typeof (window) === 'undefined') {
 }
 
 var Path      = Jools.Path;
-var Signature = Jools.Signature;
 var	debug     = Jools.debug;
 var immute    = Jools.immute;
 var	is        = Jools.is;

@@ -69,7 +69,7 @@ var mm;
 
 	// startup init
 	var spacepath = new Jools.Path(['welcome']);
-	var src = new Jools.Signature({
+	var src = {
 		val: {
 			type: 'Space',
 			copse: {
@@ -190,10 +190,8 @@ var mm;
 			},
 			alley : [ '1' ]
 		}
-	});
-	var trg = new Jools.Signature({
-		path: spacepath
-	});
+	};
+	var trg = { path: spacepath };
 	var asw = mm.alter(0, src, trg);
 	debug('TREE', mm.tree);
 	if (asw.ok !== true) throw new Error('Cannot init Repository');
@@ -264,9 +262,7 @@ var mmAjax = function(req, red, res) {
 				if (!cmd.trg) { throw reject('cmd.trg missing'); }
 				if (cmd.src.path) cmd.src.path = new Jools.Path(cmd.src.path);
 				if (cmd.trg.path) cmd.trg.path = new Jools.Path(cmd.trg.path);
-				var src = new Jools.Signature(cmd.src);
-				var trg = new Jools.Signature(cmd.trg);
-				asw = mm.alter(cmd.time, src, trg);
+				asw = mm.alter(cmd.time, cmd.src, cmd.trg);
 				break;
 			case 'get':
 				if (!cmd.path) {
