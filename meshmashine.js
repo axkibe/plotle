@@ -149,14 +149,15 @@ Alter.set = function(tree, src, trg, report) {
 	var save = Tree.getPath(tree, path);
 
 	if (is(trg.val)) {
-		check(Tree.matches(save, trg.val), cm, 'trg.val preset incorrectly');
+		debug(save, trg.val);
+		check(Tree.matches(save, trg.val), cm, 'trg.val faulty preset');
 	} else {
 		if (!is(save)) save = null;
 		trg = new Signature(trg, 'val', save);
 	}
 
 	if (is(src.path)) {
-		check(path.equals(src.path), cm, 'src.path preset incorrectly');
+		check(path.equals(src.path), cm, 'src.path faulty preset');
 	} else {
 		src = new Signature(src, 'path', trg.path);
 	}
@@ -182,7 +183,7 @@ Alter.insert = function(tree, src, trg, report) {
 	// where trg span should end
 	var tat2 = trg.at1 + src.val.length;
 	if (is(trg.at2)) {
-		check(trg.at2 === tat2, cm, 'trg.at2 preset incorrectly');
+		check(trg.at2 === tat2, cm, 'trg.at2 faulty preset');
 	} else {
 		trg = new Signature(trg, 'at2', tat2);
 	}
@@ -213,10 +214,7 @@ Alter.remove = function(tree, src, trg, report) {
 
 	var val = str.substring(src.at1, src.at2);
 	if (isnon(trg.val)) {
-		check(Tree.matches(val, trg.val), cm,
-			'trg.val preset incorrectly:',
-			val, '!==', trg.val
-		);
+		check(Tree.matches(val, trg.val), cm, 'trg.val faulty preset');
 	} else {
 		trg = new Signature(trg, 'val', val);
 	}
@@ -252,6 +250,8 @@ Alter.join = function(tree, src, trg, report) {
 	check(kn >= 0, cm, 'line key not found in alley');
 	check(kn < pivot.alley.length,  cm, 'cannot join last line');
 	var key2 = pivot.alley[kn + 1];
+	check(!src.inc || src.inc === key2, cm, 'inc key faulty preset');
+	src = new Signature(src, 'inc', key2);
 
 	var para1 = pivot.copse[key];
 	var para2 = pivot.copse[key2];
@@ -287,6 +287,9 @@ Alter.split = function(tree, src, trg, report) {
 	check(pattern.alley, cm, 'pivot has no alley');
 	check(pattern.inc, cm, 'pivot does not increment');
 
+	var inc = is(trg.inc) ? trg.inc : pivot._inc;
+	check(!pivot.copse[inc], cm, 'inc-key already used');
+
 	src = src.attune(text, 'src');
 	var key = path.get(-2);
 	var kn = pivot.alley.indexOf(key);
@@ -296,7 +299,7 @@ Alter.split = function(tree, src, trg, report) {
 	para1 = pivot.copse[key];
 	para2 = Tree.grow(para1, 'text', text.substring(at1, text.length));
 	para1 = Tree.grow(para1, 'text', text.substring(0, at1));
-	pivot = Tree.grow(pivot, key, para1, pivot._inc, para2, '+', kn + 1, pivot._inc);
+	pivot = Tree.grow(pivot, key, para1, inc, para2, '+', kn + 1, inc);
 
 	var ppath = new Path(path, '--', 2); // TODO, add a shorten parameter to setPath instead.
 	tree  = Tree.setPath(tree, ppath, pivot);
@@ -334,7 +337,7 @@ Alter.place = function(tree, src, trg, report) {
 */
 Alter.take = function(tree, src, trg, report) {
 	// an item is taken (removed) from an alley.
-	var cm = alterTake;
+	var cm = 'alterTake';
 
 	check(is(src.path), cm, 'src.path not present');
 	check(is(src.at1),  cm, 'src.at1 not present');
@@ -344,7 +347,7 @@ Alter.take = function(tree, src, trg, report) {
 
 	var val = alley.get(src.at1);
 	if (is(trg.val)) {
-		check(Tree.matches(val, trg.val), cm, 'trg.val preset incorrectly');
+		check(Tree.matches(val, trg.val), cm, 'trg.val faulty preset');
 	} else {
 		trg.val = val;
 	}
@@ -515,9 +518,9 @@ Transform.remove = function(sign, src, trg) {
 	// sign, case4:          +++++++++     (sign splitted into two)
 	// sign, case5:            ' ++ '      (sign completely removed)
 
-	if (sign.at2 <= src.at1) { 
+	if (sign.at2 <= src.at1) {
 		log('te', 'remove (case 0)');
-		return sign; 
+		return sign;
 	}
 	if (sign.at1 >= src.at2) {
 		log('te', 'remove (case 1)');
@@ -634,18 +637,20 @@ MeshMashine.prototype.transform = function(time, sign) {
 		case Signature : sign = Transform.one(sign, moment.src, moment.trg); break;
 		case Array :
 			for(var a = 0, aZ = sign.length; a < aZ; a++) {
-				var tom = Transform.one(sign[i], moment.src, moment.trg);
+				var tom = Transform.one(sign[a], moment.src, moment.trg);
 				switch (tom.constructor) {
 				case Signature :
 					if (tom !== null) {
-						sign[a] = tom; 
+						sign[a] = tom;
 					} else {
 						sign.splice(a--, 1);
 					}
 					break;
 				case Array :
-					for(var b = 0, bZ = tom.length; b < bZ; b++) {sign.splice(a++, 0, tom[b]);
+					for(var b = 0, bZ = tom.length; b < bZ; b++) {
+						sign.splice(a++, 0, tom[b]);
 					}
+					break;
 				default : throw new Error('Invalid sign');
 				}
 			}
@@ -700,7 +705,7 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 			return {
 				ok: true,
 				time: this.history.length,
-				alts: null,
+				alts: null
 			};
 		}
 
