@@ -22,7 +22,6 @@ var blink;
 
 if (typeof(window) === 'undefined') throw new Error('testpad needs a browser!');
 
-var Path      = Jools.Path;
 var debug     = Jools.debug;
 var fixate    = Jools.fixate;
 var limit     = Jools.limit;
@@ -32,6 +31,7 @@ var R         = Math.round;
 var F         = Math.floor;
 var max       = Math.max;
 var min       = Math.min;
+var Path      = Tree.Path;
 
 /**
 | Current action

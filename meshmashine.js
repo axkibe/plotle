@@ -53,9 +53,6 @@ if (typeof(window) === 'undefined') {
 	Tree  = require('./tree');
 }
 
-var Path        = Jools.Path;
-var Signature   = Jools.Signature;
-
 var debug       = Jools.debug;
 var log         = Jools.log;
 var clone       = Jools.clone;
@@ -64,11 +61,12 @@ var immute      = Jools.immute;
 var is          = Jools.is;
 var isnon       = Jools.isnon;
 var isArray     = Jools.isArray;
-var isPath      = Jools.isPath;
 var isInteger   = Jools.isInteger;
 var isString    = Jools.isString;
 var fixate      = Jools.fixate;
 var reject      = Jools.reject;
+var isPath      = Tree.isPath;
+var Path        = Tree.Path;
 
 function fail(args, aoffset) {
 	var a = Array.prototype.slice.call(args, aoffset, args.length);
@@ -132,16 +130,18 @@ immute(Signature.field);
 
 /**
 | Attunes '$end' ats to match a string.
-| TODO move this into meshmachine
 */
-Signature.prototype.attune = function(text, name) {
-	var at1 = this.at1;
-	var at2 = this.at2;
-	if (this.at1 === '$end') at1 = text.length;
-	if (this.at2 === '$end') at2 = text.length;
-	check(at1, 0, text.lext.length, name, 'at1 not within text', at1, text);
-	check(at2, 0, text.lext.length, name, 'at2 not within text', at2, text);
-	return new Signature(this, 'at1', at1, 'at2', at2);
+Signature.attune = function(sig, text, name) {
+	var at1 = sig.at1;
+	if (sig.at1 === '$end') at1 = text.length;
+
+	if (is(sig.at2)) {
+		var at2 = sig.at2;
+		if (sig.at2 === '$end') at2 = text.length;
+		return at1 === sig.at1 && at2 === sig.at2 ? sig : new Signature(sig, 'at2', at2);
+	} else {
+		return at1 === sig.at1 ? sig : new Signature(sig, 'at1', at1);
+	}
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -230,7 +230,7 @@ Alter.insert = function(tree, src, trg, report) {
 	var str = Tree.getPath(tree, trg.path);
 	check(isString(str), cm, 'trg.path signates no string');
 
-	trg = trg.attune(str, 'trg.path');
+	trg = Signature.attune(trg, str, 'trg.path');
 
 	// where trg span should end
 	var tat2 = trg.at1 + src.val.length;
@@ -258,7 +258,7 @@ Alter.remove = function(tree, src, trg, report) {
 	var str = Tree.getPath(tree, src.path);
 	check(isString(str), cm, 'src.path signates no string');
 
-	src = src.attune(str, 'src.path');
+	src = Signature.attune(src, str, 'src.path');
 	if (src.at1 === src.at2) {
 		log('alter', 'removed nothing');
 		return null;
@@ -299,7 +299,7 @@ Alter.join = function(tree, src, trg, report) {
 	var pattern = Tree.getPattern(pivot);
 	check(pattern.alley, cm, 'pivot has no alley');
 
-	trg = trg.attune(text, 'trg');
+	trg = Signature.attune(trg, text, 'trg');
 	var key = path.get(-2);
 	var kn  = pivot.alley.indexOf(key);
 	check(kn >= 0, cm, 'line key not found in alley');
@@ -345,7 +345,7 @@ Alter.split = function(tree, src, trg, report) {
 	var inc = is(trg.inc) ? trg.inc : pivot._inc;
 	check(!pivot.copse[inc], cm, 'inc-key already used');
 
-	src = src.attune(text, 'src');
+	src = Signature.attune(src, text, 'src');
 	var key = path.get(-2);
 	var kn = pivot.alley.indexOf(key);
 	check(kn >= 0, cm, 'line key not found in alley');

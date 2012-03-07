@@ -48,9 +48,9 @@ var Peer;
 */
 if (typeof (window) === 'undefined') throw new Error('Peer nees a browser!');
 
-var Path      = Jools.Path;
 var debug     = Jools.debug;
 var log       = Jools.log;
+var Path      = Tree.Path;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  +++ Peer +++

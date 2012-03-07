@@ -68,7 +68,7 @@ var mm;
 	mm = new MeshMashine(nexus, false, false);
 
 	// startup init
-	var spacepath = new Jools.Path(['welcome']);
+	var spacepath = new Tree.Path(['welcome']);
 	var src = {
 		val: {
 			type: 'Space',
@@ -260,8 +260,8 @@ var mmAjax = function(req, red, res) {
 			case 'alter':
 				if (!cmd.src) { throw reject('cmd.src missing'); }
 				if (!cmd.trg) { throw reject('cmd.trg missing'); }
-				if (cmd.src.path) cmd.src.path = new Jools.Path(cmd.src.path);
-				if (cmd.trg.path) cmd.trg.path = new Jools.Path(cmd.trg.path);
+				if (cmd.src.path) cmd.src.path = new Tree.Path(cmd.src.path);
+				if (cmd.trg.path) cmd.trg.path = new Tree.Path(cmd.trg.path);
 				asw = mm.alter(cmd.time, cmd.src, cmd.trg);
 				break;
 			case 'get':
@@ -269,7 +269,7 @@ var mmAjax = function(req, red, res) {
 					webError(res, 400, 'cmd get requires .path');
 					break;
 				}
-				var path = new Jools.Path(cmd.path);
+				var path = new Tree.Path(cmd.path);
 				asw = mm.get(cmd.time, path);
 				break;
 			case 'now':
