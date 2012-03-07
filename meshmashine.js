@@ -191,7 +191,7 @@ Alter.apply = function(tree, src, trg, report) {
 | Alter: A new item is inserted or replaces an existing.
 */
 Alter.set = function(tree, src, trg, report) {
-	var cm = 'alterSet';
+	var cm = 'alter.set';
 
 	check(!is(trg.at1), cm, 'trg.at1 must not exist.');
 	check(is(src.val), cm, 'src.val missing');
@@ -225,7 +225,7 @@ Alter.set = function(tree, src, trg, report) {
 | Alter: A string is inserted into a string item.
 */
 Alter.insert = function(tree, src, trg, report) {
-	var cm = 'alterInsert';
+	var cm = 'alter.insert';
 
 	check(isPath(trg.path), cm, 'trg.path missing');
 	var str = Tree.getPath(tree, trg.path);
@@ -254,7 +254,7 @@ Alter.insert = function(tree, src, trg, report) {
 | Alter: a part of a string item is removed.
 */
 Alter.remove = function(tree, src, trg, report) {
-	var cm = 'alterRemove';
+	var cm = 'alter.remove';
 	check(isPath(src.path), cm, 'src.path missing');
 	var str = Tree.getPath(tree, src.path);
 	check(isString(str), cm, 'src.path signates no string');
@@ -285,7 +285,7 @@ Alter.remove = function(tree, src, trg, report) {
 | Alter: two texts are joined into one.
 */
 Alter.join = function(tree, src, trg, report) {
-	var cm = 'alterJoin';
+	var cm = 'alter.join';
 	var path = trg.path;
 
 	var at1 = trg.at1;
@@ -304,7 +304,7 @@ Alter.join = function(tree, src, trg, report) {
 	check(kn >= 0, cm, 'line key not found in alley');
 	check(kn < pivot.alley.length,  cm, 'cannot join last line');
 	var key2 = pivot.alley[kn + 1];
-	var path2 = new Path(path, -2, key2);
+	var path2 = new Path(path, path.length - 2, key2);
 
 	check(!src.path || src.path.equals(path2), cm, 'src.path faulty preset');
 	src = new Signature(src, 'path', path2);
@@ -330,7 +330,7 @@ Alter.join = function(tree, src, trg, report) {
 | Alter: a text is split into two.
 */
 Alter.split = function(tree, src, trg, report) {
-	var cm = 'alterSplit';
+	var cm = 'alter.split';
 	var path = src.path;
 
 	var at1 = src.at1;
@@ -343,8 +343,11 @@ Alter.split = function(tree, src, trg, report) {
 	check(pattern.alley, cm, 'pivot has no alley');
 	check(pattern.inc, cm, 'pivot does not increment');
 
+	debug('TREE', tree);
+	debug('SRC.PATH', src.path);
+	debug('TRG.PATH', trg.path);
 	var incKey = is(trg.path) ? trg.path.get(-2) : pivot._inc;
-	check(!pivot.copse[incKey], cm, 'incKey already used');
+	check(!pivot.copse[incKey], cm, 'incKey already used: ', incKey);
 
 	src = Signature.attune(src, text, 'src');
 	var key = path.get(-2);
@@ -371,7 +374,7 @@ Alter.split = function(tree, src, trg, report) {
 | Alter: a value is placed into an alley(array)
 */
 Alter.place = function(tree, src, trg, report) {
-	var cm = 'alterPlace';
+	var cm = 'alter.place';
 	check(is(src.val),  cm, 'src.val not present');
 	check(is(trg.path), cm, 'trg.path not present');
 	check(is(trg.at1),  cm, 'trg.at1 not present');
@@ -393,7 +396,7 @@ Alter.place = function(tree, src, trg, report) {
 */
 Alter.take = function(tree, src, trg, report) {
 	// an item is taken (removed) from an alley.
-	var cm = 'alterTake';
+	var cm = 'alter.take';
 
 	check(is(src.path), cm, 'src.path not present');
 	check(is(src.at1),  cm, 'src.at1 not present');
@@ -496,7 +499,8 @@ Transform.split = function(tree, sign, src, trg) {
 Transform.join = function(tree, sign, src, trg) {
 	// trg.path is the line that got the join
 	// src.path is the line that was removed
-	if (!path || !path.equals(src.path)) return sign;
+	if (!src.path || !sign.path.equals(src.path)) return sign;
+	if (!trg.path) throw new Error('join missing trg.path');
 	// @@ alter alley take/place
 	log('te', 'join');
 	return !is(sign.at2) ?
