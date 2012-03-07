@@ -201,7 +201,6 @@ Alter.set = function(tree, src, trg, report) {
 	var save = Tree.getPath(tree, path);
 
 	if (is(trg.val)) {
-		debug(save, trg.val);
 		check(Tree.matches(save, trg.val), cm, 'trg.val faulty preset');
 	} else {
 		if (!is(save)) save = null;
@@ -271,9 +270,6 @@ Alter.remove = function(tree, src, trg, report) {
 		trg = new Signature(trg, 'val', val);
 	}
 	var nstr = str.substring(0, src.at1) + str.substring(src.at2);
-	debug('nstr', nstr);
-	debug('str', str);
-	debug('at', src.at1, src.at2);
 	tree = Tree.setPath(tree, src.path, nstr);
 
 	//if (report) {
@@ -428,6 +424,7 @@ var Transform = {};
 | Transforms a signature on one history moment
 */
 Transform.one = function(tree, sign, src, trg) {
+	log('te', 'one', sign, src, trg);
 	if (!is(sign.path)) return sign;
 	var atype = Alter.type(src, trg);
 	if (!Transform[atype]) { throw new Error('unknown atype: '+atype); }
@@ -438,8 +435,6 @@ Transform.one = function(tree, sign, src, trg) {
 | Transforms a signature on one a split.
 */
 Transform.split = function(tree, sign, src, trg) {
-	debug('SP', src.path);
-	debug('GP', sign.path);
 	if (!src.path || !src.path.subpathOf(sign.path)) return sign;
 	var path = src.path;
 
@@ -454,48 +449,40 @@ Transform.split = function(tree, sign, src, trg) {
 		if(!pattern.alley) throw new Error('pivot has no alley');
 		var key = path.get(-2);
 		var kn = pivot.alley.indexOf(key);
-		debug('kn', kn);
-		debug('alley', pivot.alley);
-		debug('new key', pivot.alley[kn + 1]);
-		debug('path', path, path.length);
 		var next = new Path(path, path.length - 2, pivot.alley[kn + 1]);
-		debug('next path', next);
 		return new Signature(sign, 'path', next, 'at1', sign.at1 - src.at1);
 	}
 
-	log('te', 'split (span)');
-	throw new Error('TODO');
 
-	// More complicated signature is affected.
-	//
-	//                  ............
-	//Span                  mmmmm
-	//Splits cases:      1    2    3
+	// A more complicated signature is affected.
+	//                   ............
+	// Span                  mmmmm
+	// Splits cases:      1    2    3
 
-	/*
-	if (sign.at2 < src.at1) {
-		log('te', 'split rightside');
+	if (sign.at2 <= src.at1) {
+		log('te', 'split (span, case 1)');
 		return sign;
 	}
-	// case 1:
-	if (sign.at1 > src.at1) {
-		log('te', 'split leftside');
-		sign.path = sign.path.add(src.pivot, 1);
-		sign.at1 -= src.at1;
-		sign.at2 -= src.at1;
-		return sign;
-	}
-	// case 2 -> have to split!
-	log('te', 'split split');
-	var sat2 = sign.at2 - src.at1;
-	sign.at2 = src.at1;
 
-	var sign2 = new Signature(sign);
-	sign2.path = sign2.path.add(src.pivot, 1);
-	sign2.at1 = 0;
-	sign2.at2 = sat2;
-	return [sign, sign2];
-	*/
+	var pivot = Tree.getPath(tree, path, -2);
+	var pattern = Tree.getPattern(pivot);
+	if(!pattern.alley) throw new Error('pivot has no alley');
+	var key = path.get(-2);
+	var kn = pivot.alley.indexOf(key);
+	var path2 = new Path(path, path.length - 2, pivot.alley[kn + 1]);
+
+	if (sign.at1 >= src.at1) {
+		log('te', 'split (span, case 2)');
+		// signature goes into splitted line instead
+		return new Signature(sign,
+			'path', path2, 'at1', sign.at1 - src.at1, 'at2', sign.at2 - src.at1);
+	}
+	log('te', 'split (span, case 3');
+	// the signature is splited into a part that stays and one that goes to next line.
+
+	var sign1 = new Signature(sign, 'at2', src.at1);
+	var sign2 = new Signature(sign, 'path', path2, 'at1', 0, 'at2', sign.at2 - src.at1);
+	return [sign1, sign2];
 };
 
 /**
@@ -548,9 +535,9 @@ Transform.insert = function(tree, sign, src, trg) {
 };
 
 /**
-| Transforms a signature on a insert
+| Transforms a signature on a remove
 */
-Transform.remove = function(sign, src, trg) {
+Transform.remove = function(tree, sign, src, trg) {
 	if (!src.path || !src.path.equals(sign.path)) return sign;
 	if (!is(src.at1) || !is(src.at2)) { throw new Error('history mangled'); }
 	var len = src.at2 - src.at1;
@@ -684,10 +671,11 @@ MeshMashine.prototype.transform = function(time, sign) {
 
 	for(var t = time, tZ = this.history.length; t < tZ; t++) {
 		var moment = this.history[t];
-		log('te', 'transform one', t);
+		log('te', 'transform at time', t);
 
 		switch(sign.constructor) {
-		case Signature : sign = Transform.one(this.tree, sign, moment.src, moment.trg); break;
+		case Signature :
+			sign = Transform.one(this.tree, sign, moment.src, moment.trg); break;
 		case Array :
 			for(var a = 0, aZ = sign.length; a < aZ; a++) {
 				var tom = Transform.one(this.tree, sign[a], moment.src, moment.trg);
