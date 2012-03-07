@@ -92,9 +92,12 @@ function checkLimits(v, low, high) {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- +++Signature+++
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
+.---.               .
+\___  . ,-. ,-. ,-. |- . . ,-. ,-.
+    \ | | | | | ,-| |  | | |   |-'
+`---' ' `-| ' ' `-^ `' `-^ '   `-'
+~ ~ ~ ~ ~,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+         `'
  Signates an entry, string index or string span.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -124,7 +127,6 @@ Signature.field = {
 	'at2'  : true,
 	'proc' : true,
 	'val'  : true,
-	'inc'  : true
 };
 immute(Signature.field);
 
@@ -157,7 +159,7 @@ Signature.attune = function(sig, text, name) {
 var Alter = {};
 
 /**
-| TODO
+| Returns the type of an Alternation.
 */
 Alter.type = function(src, trg) {
 	if (trg.proc === 'splice') return 'split';
@@ -296,13 +298,16 @@ Alter.join = function(tree, src, trg, report) {
 	check(pattern.alley, cm, 'pivot has no alley');
 
 	trg = Signature.attune(trg, text, 'trg');
+	debug('TRG', trg.at1, text.length);
 	var key = path.get(-2);
 	var kn  = pivot.alley.indexOf(key);
 	check(kn >= 0, cm, 'line key not found in alley');
 	check(kn < pivot.alley.length,  cm, 'cannot join last line');
 	var key2 = pivot.alley[kn + 1];
-	check(!src.inc || src.inc === key2, cm, 'inc key faulty preset');
-	src = new Signature(src, 'inc', key2);
+	var path2 = new Path(path, -2, key2);
+
+	check(!src.path || src.path.equals(path2), cm, 'src.path faulty preset');
+	src = new Signature(src, 'path', path2);
 
 	var para1 = pivot.copse[key];
 	var para2 = pivot.copse[key2];
@@ -338,8 +343,8 @@ Alter.split = function(tree, src, trg, report) {
 	check(pattern.alley, cm, 'pivot has no alley');
 	check(pattern.inc, cm, 'pivot does not increment');
 
-	var inc = is(trg.inc) ? trg.inc : pivot._inc;
-	check(!pivot.copse[inc], cm, 'inc-key already used');
+	var incKey = is(trg.path) ? trg.path.get(-2) : pivot._inc;
+	check(!pivot.copse[incKey], cm, 'incKey already used');
 
 	src = Signature.attune(src, text, 'src');
 	var key = path.get(-2);
@@ -350,7 +355,7 @@ Alter.split = function(tree, src, trg, report) {
 	para1 = pivot.copse[key];
 	para2 = Tree.grow(para1, 'text', text.substring(at1, text.length));
 	para1 = Tree.grow(para1, 'text', text.substring(0, at1));
-	pivot = Tree.grow(pivot, key, para1, inc, para2, '+', kn + 1, inc);
+	pivot = Tree.grow(pivot, key, para1, incKey, para2, '+', kn + 1, incKey);
 
 	var ppath = new Path(path, '--', 2); // TODO, add a shorten parameter to setPath instead.
 	tree  = Tree.setPath(tree, ppath, pivot);
@@ -415,7 +420,7 @@ Alter.take = function(tree, src, trg, report) {
  `-' '   `-^ ' ' `-' |  `-' '   ' ' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~'~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- Action Transformation. Changes Signatures due to past alternations.
+ Action Transformation. Changes signatures due to past alternations.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 var Transform = {};
@@ -435,10 +440,10 @@ Transform.one = function(tree, sign, src, trg) {
 | Transforms a signature on one a split.
 */
 Transform.split = function(tree, sign, src, trg) {
-	if (!src.path || !src.path.subpathOf(sign.path)) return sign;
 	var path = src.path;
+	if (!path || !path.equals(sign.path)) return sign;
 
-	// TODO alter alley take/place
+	// @@ alter alley take/place
 	// simpler case signature is only one point
 	if (!is(sign.at2)) {
 		log('te', 'split (simple)');
@@ -489,26 +494,19 @@ Transform.split = function(tree, sign, src, trg) {
 | Transforms a signature on one a join.
 */
 Transform.join = function(tree, sign, src, trg) {
-	if (!trg.path.subpathOf(sign, trg.pivot)) return sign; // TODO this looks wrong
-	log('te', 'alter-join');
-	var trg_i =  trg.path.get(trg.pivot);
-	var sig_i = sign.path.get(trg.pivot);
-	if (sig_i < trg_i) {
-		log('te', 'join downside');
-		return sign;
-	}
-	if (sig_i > trg_i) {
-		// split was before -> index shifted
-		log('te', 'join upside');
-		sign.path = sign.path.add(src.pivot, -1);
-		return sign;
-	}
-	log('te', 'join here');
-	// join is in same line;
-	sign.path = sign.path.add(trg.pivot, -1);
-	sign.at1 += trg.at1;
-	if (is(sign.at2)) sign.at1 += trg.at1;
-	return sign;
+	// trg.path is the line that got the join
+	// src.path is the line that was removed
+	if (!path || !path.equals(src.path)) return sign;
+	// @@ alter alley take/place
+	log('te', 'join');
+	return !is(sign.at2) ?
+		new Signature(sign,
+			'path', trg.path,
+			'at1', sign.at1 + trg.at1) :
+		new Signature(sign,
+			'path', trg.path,
+			'at1', sign.at1 + trg.at1,
+			'at2', sign.at2 + trg.at1);
 };
 
 /**
