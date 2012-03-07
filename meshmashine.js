@@ -427,85 +427,82 @@ var Transform = {};
 /**
 | Transforms a signature on one history moment
 */
-Transform.one = function(sign, src, trg) {
+Transform.one = function(tree, sign, src, trg) {
 	if (!is(sign.path)) return sign;
 	var atype = Alter.type(src, trg);
 	if (!Transform[atype]) { throw new Error('unknown atype: '+atype); }
-	return Transform[atype](sign, src, trg);
+	return Transform[atype](tree, sign, src, trg);
 };
 
 /**
 | Transforms a signature on one a split.
 */
-Transform.split = function(sign, src, trg) {
-	log('te', 'split');
-	if (!src.path.subpathOf(sign.path)) return sign;
+Transform.split = function(tree, sign, src, trg) {
+	debug('SP', src.path);
+	debug('GP', sign.path);
+	if (!src.path || !src.path.subpathOf(sign.path)) return sign;
+	var path = src.path;
 
+	// TODO alter alley take/place
+	// simpler case signature is only one point
+	if (!is(sign.at2)) {
+		log('te', 'split (simple)');
+		if (sign.at1 < src.at1) return sign;
+
+		var pivot = Tree.getPath(tree, path, -2);
+		var pattern = Tree.getPattern(pivot);
+		if(!pattern.alley) throw new Error('pivot has no alley');
+		var key = path.get(-2);
+		var kn = pivot.alley.indexOf(key);
+		debug('kn', kn);
+		debug('alley', pivot.alley);
+		debug('new key', pivot.alley[kn + 1]);
+		debug('path', path, path.length);
+		var next = new Path(path, path.length - 2, pivot.alley[kn + 1]);
+		debug('next path', next);
+		return new Signature(sign, 'path', next, 'at1', sign.at1 - src.at1);
+	}
+
+	log('te', 'split (span)');
 	throw new Error('TODO');
 
-	var src_i = src.path.get(src.pivot); // TODO
-	var	sig_i = sign.path.get(src.pivot); // TODO
-	log('te', 'sig_i', sig_i, 'src_i', src_i);
-	if (sig_i < src_i) {
-		log('te', 'split downside');
+	// More complicated signature is affected.
+	//
+	//                  ............
+	//Span                  mmmmm
+	//Splits cases:      1    2    3
+
+	/*
+	if (sign.at2 < src.at1) {
+		log('te', 'split rightside');
 		return sign;
 	}
-	if (sig_i > src_i) {
-		// split was before -> index shifted
-		log('te', 'split upside');
-		sign.path = sign.path.add(src.pivot, 1);
-		return sign;
-	}
-
-	log('te', 'split here');
-	// split is in same line;
-	if (is(sign.at1) && is(sign.at2)) {
-		log('te', 'split span');
-		//Span        mmmmm      <-- sig_p.at1--sig_at2
-		//Splits:  1    2    3   <-- src_p.at1
-		//case 3:
-		if (sign.at2 < src.at1) {
-			log('te', 'split rightside');
-			return sign;
-		}
-		// case 1:
-		if (sign.at1 > src.at1) {
-			log('te', 'split leftside');
-			sign.path = sign.path.add(src.pivot, 1);
-			sign.at1 -= src.at1;
-			sign.at2 -= src.at1;
-			return sign;
-		}
-		// case 2 -> have to split!
-		log('te', 'split split');
-		var sat2 = sign.at2 - src.at1;
-		sign.at2 = src.at1;
-
-		var sign2 = new Signature(sign);
-		sign2.path = sign2.path.add(src.pivot, 1);
-		sign2.at1 = 0;
-		sign2.at2 = sat2;
-		return [sign, sign2];
-	}
-	if (is(sign.at1)) {
-		log('te', 'split index');
-		if (src.at1 > sign.at1) {
-			log('te', 'split rigtside');
-			return sign;
-		}
+	// case 1:
+	if (sign.at1 > src.at1) {
 		log('te', 'split leftside');
 		sign.path = sign.path.add(src.pivot, 1);
 		sign.at1 -= src.at1;
+		sign.at2 -= src.at1;
 		return sign;
 	}
-	throw reject('invalid split');
+	// case 2 -> have to split!
+	log('te', 'split split');
+	var sat2 = sign.at2 - src.at1;
+	sign.at2 = src.at1;
+
+	var sign2 = new Signature(sign);
+	sign2.path = sign2.path.add(src.pivot, 1);
+	sign2.at1 = 0;
+	sign2.at2 = sat2;
+	return [sign, sign2];
+	*/
 };
 
 /**
 | Transforms a signature on one a join.
 */
-Transform.join = function(sign, src, trg) {
-	if (!trg.path.like(sign, trg.pivot)) return sign; // TODO this looks wrong
+Transform.join = function(tree, sign, src, trg) {
+	if (!trg.path.subpathOf(sign, trg.pivot)) return sign; // TODO this looks wrong
 	log('te', 'alter-join');
 	var trg_i =  trg.path.get(trg.pivot);
 	var sig_i = sign.path.get(trg.pivot);
@@ -530,7 +527,7 @@ Transform.join = function(sign, src, trg) {
 /**
 | Transforms a signature on a join.
 */
-Transform.set = function(sign, src, trg) {
+Transform.set = function(tree, sign, src, trg) {
 	log('te', 'nothing to do');
 	return sign;
 };
@@ -539,7 +536,7 @@ Transform.set = function(sign, src, trg) {
 /**
 | Transforms a signature on an insert.
 */
-Transform.insert = function(sign, src, trg) {
+Transform.insert = function(tree, sign, src, trg) {
 	if (!trg.path || !trg.path.equals(sign.path)) return sign;
 	log('te', 'insert');
 	if (!is(trg.at1) || !is(trg.at2)) throw new Error('history mangled');
@@ -565,8 +562,8 @@ Transform.remove = function(sign, src, trg) {
 		return new Signature(sign, 'at1', sign.at1 - len);
 	}
 
-	// more complicated signature is a span that may be affected
-	// supposedly its a remove as well.
+	// More complicated signature is affected.
+	// Supposedly its a remove as well.
 	//
 	//                     ............
 	// src (removed span)      ######
@@ -609,7 +606,7 @@ Transform.remove = function(sign, src, trg) {
 | Transforms a signature on a place
 | TODO needed?
 */
-Transform.place = function(sign, src, trg) {
+Transform.place = function(tree, sign, src, trg) {
 	if (!trg.path.like(sign.path)) return sign;
 	log('te', 'place');
 	var trg_i =  trg.alley.get(-1);
@@ -628,7 +625,7 @@ Transform.place = function(sign, src, trg) {
 | Transforms a signature on a take.
 | TODO needed?
 */
-Transform.take = function(sign, src, trg) {
+Transform.take = function(tree, sign, src, trg) {
 	if (!src.alley.like(sign.path)) return sign;
 	log('te', 'take');
 	var src_i =  src.path.get(-1);
@@ -690,10 +687,10 @@ MeshMashine.prototype.transform = function(time, sign) {
 		log('te', 'transform one', t);
 
 		switch(sign.constructor) {
-		case Signature : sign = Transform.one(sign, moment.src, moment.trg); break;
+		case Signature : sign = Transform.one(this.tree, sign, moment.src, moment.trg); break;
 		case Array :
 			for(var a = 0, aZ = sign.length; a < aZ; a++) {
-				var tom = Transform.one(sign[a], moment.src, moment.trg);
+				var tom = Transform.one(this.tree, sign[a], moment.src, moment.trg);
 				switch (tom.constructor) {
 				case Signature :
 					if (tom !== null) {

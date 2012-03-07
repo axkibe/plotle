@@ -159,7 +159,7 @@ function Path(model) {
 	// appends additional arguments
 	var a = 1, aZ = arguments.length;
 	while(a < aZ && arguments[a] !== '--' && arguments[a] !== '++') {
-		path[arguments[a]] = path[arguments[a + 1]];
+		path[arguments[a]] = arguments[a + 1];
 		a += 2;
 	}
 	if (arguments[a] === '--') {
@@ -175,7 +175,7 @@ function Path(model) {
 	// checks the path arcs
 	// @@ might be needed only for copies
 	for (a = 0, aZ = path.length; a < aZ; a++) {
-		if (!_isValidPathArc(path[a])) throw reject('invalid path arc');
+		if (!_isValidPathArc(path[a])) throw reject('invalid path arc: '+path[a]);
 	}
 
 	// @@ might change Path to be child of Array.
