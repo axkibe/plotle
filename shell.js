@@ -907,11 +907,11 @@ Hexmenu.prototype.getMousepos = function(p) {
 /**
 | Constructor
 */
-function VSpace(space) {
-	this.space = space;
-	this.fabric = new Fabric(system.fabric);
-	this.zoom = 1; // @03
-	this.vitems = new VItemCopse(space.items, this);
+function VSpace(tree) {
+	this.tree             = tree;
+	this.fabric           = new Fabric(system.fabric);
+	this.zoom             = 1; // @03
+	this.vitems           = new VItemCopse(space.items, this);
 	this._floatMenuLabels = {c: 'new', n: 'Note', ne: 'Label'};
 }
 
@@ -1946,13 +1946,7 @@ VDoc.prototype.draw = function(fabric, width, imargin, scrollp) {
 
 		// @@03 name pnw$
 		pnws[a] = new Point(imargin.w, R(y));
-		//debug('1', imargin.w);
-		//debug('2', y);
-		//debug('3', y - scrollp.y);
-		//debug('4', R(y - scrollp.y));
 		fabric.drawImage(vpara.getFabric(), imargin.w, R(y - scrollp.y));
-		//debug('5', flow.height);
-		//debug('6', paraSep);
 		y += flow.height + paraSep;
 	}
 

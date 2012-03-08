@@ -437,11 +437,11 @@ Peer.prototype.split = function(path, offset) {
 /**
 | Joins a text node with its next one
 */
-Peer.prototype.join = function(path) {
+Peer.prototype.join = function(path, at1) {
 	var path = new Path(path, '++', 'text');
 	this._alter(
 		{ proc: 'splice' },
-		{ path: path, at1 : '$end' }
+		{ path: path, at1 : at1 }
 	);
 };
 

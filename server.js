@@ -84,15 +84,35 @@ var mm;
 					doc: {
 						type: 'Doc',
 						copse : {
+							/*
+							'1': {
+								type: 'Para',
+								text: 'abc'
+							},
+							'2': {
+								type: 'Para',
+								text: 'def'
+							},
 							'3': {
+								type: 'Para',
+								text: 'ghi'
+							},
+							'4': {
+								type: 'Para',
+								text: 'jkl'
+							},
+							*/
+
+
+							'1': {
 								type: 'Para',
 								text: 'If you can dream---and not make dreams your master;'
 							},
-							'1': {
+							'2': {
 								type: 'Para',
 								text: 'If you can think---and not make thoughts your aim,'
 							},
-							'2': {
+							'3': {
 								type: 'Para',
 								text: 'If you can meet with Triumph and Disaster'
 							},
@@ -100,6 +120,8 @@ var mm;
 								type: 'Para',
 								text: 'And treat those two impostors just the same'
 							},
+
+
 							/*
 							'5': {
 								type: 'Para',
@@ -152,7 +174,7 @@ var mm;
 							*/
 						},
 						alley : [
-							'3', '1', '2', '4' /*, '5',
+							'1', '2', '3', '4' /*, '5',
 							'6', '7', '8', '9', '10',
 							'11', '12', '13', '14', '15',
 							'16' */
@@ -193,7 +215,6 @@ var mm;
 	};
 	var trg = { path: spacepath };
 	var asw = mm.alter(0, src, trg);
-	debug('TREE', mm.tree);
 	if (asw.ok !== true) throw new Error('Cannot init Repository');
 })();
 

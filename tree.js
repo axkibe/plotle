@@ -491,7 +491,6 @@ function grow(model /*, ... */) {
 			throw reject('Alley not a sequence');
 		}
 		if (aZ !== klen) {
-			debug(twig.copse, ':', klen, ' vs ', twig.alley, ':', aZ);
 			throw reject('Alley length does not match to copse');
 		}
 		for (a = 0; a < aZ; a++) {

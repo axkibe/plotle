@@ -272,7 +272,7 @@ var send = function() {
 		break;
 	case 'join' :
 		var path = new Path(notepath, '++', 'doc', alley[action.line - 1]);
-		peer.join(path);
+		peer.join(path, copse[alley[action.line - 1]].text.length);
 		break;
 	default :
 		throw new Error('invalid action.type');

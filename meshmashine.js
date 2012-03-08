@@ -130,22 +130,6 @@ Signature.field = {
 };
 immute(Signature.field);
 
-/**
-| Attunes '$end' ats to match a string.
-*/
-Signature.attune = function(sig, text, name) {
-	var at1 = sig.at1;
-	if (sig.at1 === '$end') at1 = text.length;
-
-	if (is(sig.at2)) {
-		var at2 = sig.at2;
-		if (sig.at2 === '$end') at2 = text.length;
-		return at1 === sig.at1 && at2 === sig.at2 ? sig : new Signature(sig, 'at2', at2);
-	} else {
-		return at1 === sig.at1 ? sig : new Signature(sig, 'at1', at1);
-	}
-};
-
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      ,.   .  .                  .
     / |   |  |- ,-. ,-. ,-. ,-. |- . ,-. ,-.
@@ -231,8 +215,6 @@ Alter.insert = function(tree, src, trg, report) {
 	var str = Tree.getPath(tree, trg.path);
 	check(isString(str), cm, 'trg.path signates no string');
 
-	trg = Signature.attune(trg, str, 'trg.path');
-
 	// where trg span should end
 	var tat2 = trg.at1 + src.val.length;
 	if (is(trg.at2)) {
@@ -259,7 +241,6 @@ Alter.remove = function(tree, src, trg, report) {
 	var str = Tree.getPath(tree, src.path);
 	check(isString(str), cm, 'src.path signates no string');
 
-	src = Signature.attune(src, str, 'src.path');
 	if (src.at1 === src.at2) {
 		log('alter', 'removed nothing');
 		return null;
@@ -293,13 +274,10 @@ Alter.join = function(tree, src, trg, report) {
 	var text = Tree.getPath(tree, path);
 	check(isString(text), cm, 'trg signates no text');
 
+	var key = path.get(-2);
 	var pivot   = Tree.getPath(tree, path, -2);
 	var pattern = Tree.getPattern(pivot);
 	check(pattern.alley, cm, 'pivot has no alley');
-
-	trg = Signature.attune(trg, text, 'trg');
-	debug('TRG', trg.at1, text.length);
-	var key = path.get(-2);
 	var kn  = pivot.alley.indexOf(key);
 	check(kn >= 0, cm, 'line key not found in alley');
 	check(kn < pivot.alley.length,  cm, 'cannot join last line');
@@ -343,13 +321,16 @@ Alter.split = function(tree, src, trg, report) {
 	check(pattern.alley, cm, 'pivot has no alley');
 	check(pattern.inc, cm, 'pivot does not increment');
 
-	debug('TREE', tree);
-	debug('SRC.PATH', src.path);
-	debug('TRG.PATH', trg.path);
-	var incKey = is(trg.path) ? trg.path.get(-2) : pivot._inc;
+	var incKey;
+	if (is(trg.path)) {
+		incKey = trg.path.get(-2);
+	} else {
+		incKey = pivot._inc;
+		trg = new Signature(trg, 'path', new Path(src.path, src.path.length -2, incKey));
+		// TODO allow -2 as parameter. to new Path
+	}
 	check(!pivot.copse[incKey], cm, 'incKey already used: ', incKey);
 
-	src = Signature.attune(src, text, 'src');
 	var key = path.get(-2);
 	var kn = pivot.alley.indexOf(key);
 	check(kn >= 0, cm, 'line key not found in alley');
@@ -431,34 +412,28 @@ var Transform = {};
 /**
 | Transforms a signature on one history moment
 */
-Transform.one = function(tree, sign, src, trg) {
+Transform.one = function(sign, src, trg) {
 	log('te', 'one', sign, src, trg);
 	if (!is(sign.path)) return sign;
 	var atype = Alter.type(src, trg);
 	if (!Transform[atype]) { throw new Error('unknown atype: '+atype); }
-	return Transform[atype](tree, sign, src, trg);
+	return Transform[atype](sign, src, trg);
 };
 
 /**
 | Transforms a signature on one a split.
 */
-Transform.split = function(tree, sign, src, trg) {
-	var path = src.path;
-	if (!path || !path.equals(sign.path)) return sign;
+Transform.split = function(sign, src, trg) {
+	// src.path -- the line splitted
+	// trg.path -- the new line
+	if (!src.path || !src.path.equals(sign.path)) return sign;
 
 	// @@ alter alley take/place
 	// simpler case signature is only one point
 	if (!is(sign.at2)) {
 		log('te', 'split (simple)');
 		if (sign.at1 < src.at1) return sign;
-
-		var pivot = Tree.getPath(tree, path, -2);
-		var pattern = Tree.getPattern(pivot);
-		if(!pattern.alley) throw new Error('pivot has no alley');
-		var key = path.get(-2);
-		var kn = pivot.alley.indexOf(key);
-		var next = new Path(path, path.length - 2, pivot.alley[kn + 1]);
-		return new Signature(sign, 'path', next, 'at1', sign.at1 - src.at1);
+		return new Signature(sign, 'path', trg.path, 'at1', sign.at1 - src.at1);
 	}
 
 
@@ -472,52 +447,47 @@ Transform.split = function(tree, sign, src, trg) {
 		return sign;
 	}
 
-	var pivot = Tree.getPath(tree, path, -2);
-	var pattern = Tree.getPattern(pivot);
-	if(!pattern.alley) throw new Error('pivot has no alley');
-	var key = path.get(-2);
-	var kn = pivot.alley.indexOf(key);
-	var path2 = new Path(path, path.length - 2, pivot.alley[kn + 1]);
-
 	if (sign.at1 >= src.at1) {
 		log('te', 'split (span, case 2)');
 		// signature goes into splitted line instead
 		return new Signature(sign,
-			'path', path2, 'at1', sign.at1 - src.at1, 'at2', sign.at2 - src.at1);
+			'path', trg.path, 'at1', sign.at1 - src.at1, 'at2', sign.at2 - src.at1);
 	}
 	log('te', 'split (span, case 3');
 	// the signature is splited into a part that stays and one that goes to next line.
 
 	var sign1 = new Signature(sign, 'at2', src.at1);
-	var sign2 = new Signature(sign, 'path', path2, 'at1', 0, 'at2', sign.at2 - src.at1);
+	var sign2 = new Signature(sign, 'path', trg.path, 'at1', 0, 'at2', sign.at2 - src.at1);
 	return [sign1, sign2];
 };
 
 /**
 | Transforms a signature on one a join.
 */
-Transform.join = function(tree, sign, src, trg) {
+Transform.join = function(sign, src, trg) {
 	// trg.path is the line that got the join
 	// src.path is the line that was removed
 	if (!src.path || !sign.path.equals(src.path)) return sign;
 	if (!trg.path) throw new Error('join missing trg.path');
 	// @@ alter alley take/place
-	log('te', 'join');
-	return !is(sign.at2) ?
-		new Signature(sign,
+	log('te', 'join', sign);
+	if (!is(sign.at2)) {
+		return new Signature(sign,
 			'path', trg.path,
-			'at1', sign.at1 + trg.at1) :
-		new Signature(sign,
+			'at1', sign.at1 + trg.at1);
+	} else {
+		return new Signature(sign,
 			'path', trg.path,
 			'at1', sign.at1 + trg.at1,
 			'at2', sign.at2 + trg.at1);
+	}
 };
 
 /**
 | Transforms a signature on a join.
 */
-Transform.set = function(tree, sign, src, trg) {
-	log('te', 'nothing to do');
+Transform.set = function(sign, src, trg) {
+	log('te', 'set');
 	return sign;
 };
 
@@ -525,7 +495,7 @@ Transform.set = function(tree, sign, src, trg) {
 /**
 | Transforms a signature on an insert.
 */
-Transform.insert = function(tree, sign, src, trg) {
+Transform.insert = function(sign, src, trg) {
 	if (!trg.path || !trg.path.equals(sign.path)) return sign;
 	log('te', 'insert');
 	if (!is(trg.at1) || !is(trg.at2)) throw new Error('history mangled');
@@ -539,7 +509,7 @@ Transform.insert = function(tree, sign, src, trg) {
 /**
 | Transforms a signature on a remove
 */
-Transform.remove = function(tree, sign, src, trg) {
+Transform.remove = function(sign, src, trg) {
 	if (!src.path || !src.path.equals(sign.path)) return sign;
 	if (!is(src.at1) || !is(src.at2)) { throw new Error('history mangled'); }
 	var len = src.at2 - src.at1;
@@ -595,7 +565,7 @@ Transform.remove = function(tree, sign, src, trg) {
 | Transforms a signature on a place
 | TODO needed?
 */
-Transform.place = function(tree, sign, src, trg) {
+Transform.place = function(sign, src, trg) {
 	if (!trg.path.like(sign.path)) return sign;
 	log('te', 'place');
 	var trg_i =  trg.alley.get(-1);
@@ -614,7 +584,7 @@ Transform.place = function(tree, sign, src, trg) {
 | Transforms a signature on a take.
 | TODO needed?
 */
-Transform.take = function(tree, sign, src, trg) {
+Transform.take = function(sign, src, trg) {
 	if (!src.alley.like(sign.path)) return sign;
 	log('te', 'take');
 	var src_i =  src.path.get(-1);
@@ -665,11 +635,10 @@ MeshMashine.prototype._isValidTime = function(time) {
 */
 MeshMashine.prototype.transform = function(time, sign) {
 	log('te', 'in', time, sign);
-	if (!is(sign.path)) {
+	if (!is(sign.path) || sign.path.length === 0) {
 		log('te', 'out', sign);
 		return sign;
 	}
-	if (sign.path.length === 0) return sign;
 
 	for(var t = time, tZ = this.history.length; t < tZ; t++) {
 		var moment = this.history[t];
@@ -677,10 +646,11 @@ MeshMashine.prototype.transform = function(time, sign) {
 
 		switch(sign.constructor) {
 		case Signature :
-			sign = Transform.one(this.tree, sign, moment.src, moment.trg); break;
+			sign = Transform.one(sign, moment.src, moment.trg);
+			break;
 		case Array :
 			for(var a = 0, aZ = sign.length; a < aZ; a++) {
-				var tom = Transform.one(this.tree, sign[a], moment.src, moment.trg);
+				var tom = Transform.one(sign[a], moment.src, moment.trg);
 				switch (tom.constructor) {
 				case Signature :
 					if (tom !== null) {
@@ -698,7 +668,8 @@ MeshMashine.prototype.transform = function(time, sign) {
 				}
 			}
 			break;
-		default : throw new Error('Invalid sign');
+		default :
+			throw new Error('Invalid sign');
 		}
 	}
 	log('te', 'out', sign);
@@ -814,6 +785,7 @@ MeshMashine.prototype.get = function(time, path) {
 			time = this.history.length;
 		}
 		log('mm', 'ok', time, reflect);
+		debug('HISTORY', this.history);
 		return {ok: true, time: time, node: reflect };
 	} catch(err) {
 		// returns rejections but rethrows coding errors.
