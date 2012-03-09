@@ -43,6 +43,8 @@ var system;
 | Exports
 */
 var shell = null;
+var Shell;
+var settings;
 
 /**
 | Capsule
@@ -104,7 +106,7 @@ var noCache = true;
                         `'
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-var settings = {
+settings = {
 	// standard font
 	defaultFont : 'Verdana,Geneva,Kalimati,sans-serif',
 	//defaultFont : 'Freebooter Script,Zapfino,serif',
@@ -312,7 +314,7 @@ var settings = {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  Marks a position in an element of an item.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Marker() {
+var Marker = function() {
 	this.entity = null;
 	this.offset = 0;
 	this.op$line = null;
@@ -386,7 +388,7 @@ Marker.prototype.event = function(type, key, p1, p2, p3) {
 /**
 | Constructor.
 */
-function Caret() {
+var Caret = function() {
 	Marker.call(this);
 
 	// true if visible
@@ -464,7 +466,7 @@ Caret.prototype.blink = function() {
 /**
 | Constructor.
 */
-function Selection() {
+var Selection = function() {
 	this.active = false;
 	this.mark1 = new Marker();
 	this.mark2 = new Marker();
@@ -569,7 +571,7 @@ Selection.prototype.deselect = function() {
 /**
 | Constructor.
 */
-function Action(type, vitem, start) {
+var Action = function(type, vitem, start) {
 	this.type  = type;
 	this.vitem = vitem;
 	this.start = start;
@@ -597,7 +599,7 @@ fixate(Action, 'RELBIND',   7); // binding a new relation
  The unmoving interface.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function Cockpit() {
+var Cockpit = function() {
 // TODO, use this!
 }
 
@@ -656,13 +658,13 @@ Cockpit.prototype.mousedown = function(p) {
 /**
 | Constructor.
 */
-function Shell(fabric) {
+Shell = function(fabric) {
 	if (shell !== null) throw new Error('Singleton not single');
 	shell = this;
 
 	Measure.init();
 	this.fabric    = fabric;
-	this.vspace    = new VSpace(peer.getSpace('welcome'));
+	this.vspace    = new VSpace(peer.getSpace(-1, 'welcome'));
 
 	this.cockpit   = new Cockpit();
 	this.caret     = new Caret();
@@ -867,13 +869,13 @@ Shell.prototype.resize = function(width, height) {
 /**
 | Constructor.
 */
-function Hexmenu(pc, style, labels) {
+var Hexmenu = function(pc, style, labels) {
 	this.p = pc;
 	this.style = style;
 	this.hflower = new HexagonFlower(pc, style.innerRadius, style.outerRadius, labels);
 	this.labels = labels;
 	this.mousepos = null;
-}
+};
 
 /**
 | Draws the hexmenu.
@@ -922,7 +924,7 @@ Hexmenu.prototype.getMousepos = function(p) {
 /**
 | Constructor
 */
-function VSpace(tree) {
+var VSpace = function(tree) {
 	this.tree   = tree;
 	this.fabric = new Fabric(system.fabric);
 	this.zoom   = 1; // @03
@@ -1821,8 +1823,8 @@ VPara.prototype.drawCaret = function() {
 |
 | parent: parent holding the scrollbar
 */
-function Scrollbar(item) {
-	this.parent   = item;
+var Scrollbar = function(item) {
+	this.parent   = item;  // TODO rename "parent"
 	this.max      = null;
 	this.visible  = false;
 	this._pos     = 0;
@@ -1893,7 +1895,7 @@ Scrollbar.prototype.setPos = function(pos) {
  An array of paragraph visuals.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function VDoc(doc, vitem) {
+var VDoc = function(doc, vitem) {
 	this.doc   = doc;
 	this.vitem = vitem;
 	this.pnws  = null;
@@ -2682,7 +2684,7 @@ VNote.prototype.getZone = function() {
 /**
 | Constructor.
 */
-function VLabel(item, vspace) {
+var VLabel = function(item, vspace) {
 	VItem.call(this, item, vspace);
 }
 subclass(VLabel, VItem);

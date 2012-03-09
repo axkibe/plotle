@@ -36,6 +36,8 @@
 var Jools;
 var Fabric;
 var Peer;
+var Shell;
+var settings; // TODO - remove this dependency
 
 /**
 | Export

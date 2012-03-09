@@ -1421,9 +1421,9 @@ Line.prototype.path = function(c2d, border, twist) {
 /**
 | Draws the line.
 */
-Line.prototype.draw = function(c2d) {
-	var style = settings.relation.style;  // TODO what the heck, why use relation.style?
-	c2d.paint(style, this, 'path');
+Line.prototype.draw = function(fabric, style) {
+	if (!style) throw new Error('Line.draw misses style');
+	fabric.paint(style, this, 'path');
 };
 
 /**
