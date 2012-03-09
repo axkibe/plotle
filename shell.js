@@ -29,9 +29,20 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-'use strict';
+/**
+| Imports
+*/
 var peer;
 var shell = null;
+var Jools;
+var Fabric;
+
+/**
+| Capsule
+*/
+(function(){
+
+'use strict';
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .---. .           .          .
@@ -115,19 +126,17 @@ var settings = {
 				gradient : 'askew',
 				steps : [
 					[0, 'rgba(255, 255, 248, 0.955)'],
-				    [1, 'rgba(255, 255, 160, 0.955)'],
-				],
+					[1, 'rgba(255, 255, 160, 0.955)']
+				]
 			},
 			edge : [
 				{ border: 1, width : 1, color : 'rgb(255, 188, 87)' },
-				{ border: 0, width : 1, color : 'black' },
+				{ border: 0, width : 1, color : 'black' }
 			],
-			highlight : [
-				{ border: 0, width: 3, color: 'rgba(255, 183, 15, 0.5)' },
-			],
+			highlight : [ { border: 0, width: 3, color: 'rgba(255, 183, 15, 0.5)' } ]
 		},
 
-		cornerRadius : 6,
+		cornerRadius : 6
 	},
 
 	label : {
@@ -136,11 +145,9 @@ var settings = {
 		style : {
 			edge : [
 				//{ border: 0, width: 0.2, color: 'rgba(200, 100, 0, 0.5)' },
-				{ border: 0, width: 1, color: 'rgba(100, 100, 0, 0.5)' },
+				{ border: 0, width: 1, color: 'rgba(100, 100, 0, 0.5)' }
 			],
-			highlight : [
-				{ border: 0, width: 3, color: 'rgba(255, 183, 15, 0.5)' },
-			],
+			highlight : [ { border: 0, width: 3, color: 'rgba(255, 183, 15, 0.5)' } ]
 		},
 
 		// inner margin to text
@@ -183,23 +190,23 @@ var settings = {
 		style : {
 			edge : [
 				{ border: 1, width :   2, color : 'rgb(255, 200, 105)' },
-				{ border: 0, width : 0.5, color : 'black' },
+				{ border: 0, width : 0.5, color : 'black' }
 			],
 			fill : {
 				gradient : 'radial',
 				steps : [
 					[ 0, 'rgba(255, 255, 168, 0.955)' ],
-					[ 1, 'rgba(255, 255, 243, 0.955)' ],
-				],
+					[ 1, 'rgba(255, 255, 243, 0.955)' ]
+				]
 			},
 			select : {
 				gradient : 'radial',
 				steps : [
 					[0, 'rgb(255, 185, 81)'  ],
-					[1, 'rgb(255, 237, 210)' ],
-				],
-			},
-		},
+					[1, 'rgb(255, 237, 210)' ]
+				]
+			}
+		}
 	},
 
 	// item menu
@@ -213,15 +220,15 @@ var settings = {
 					gradient : 'horizontal',
 					steps : [
 						[ 0, 'rgba(255, 255, 200, 0.9)' ],
-						[ 1, 'rgba(255, 255, 205, 0.9)' ],
-					],
+						[ 1, 'rgba(255, 255, 205, 0.9)' ]
+					]
 				},
 				edge : [
 					{ border: 1, width :   1, color : 'rgb(255, 200, 105)' },
-					{ border: 0, width : 0.7, color : 'black' },
-				],
-			},
-		},
+					{ border: 0, width : 0.7, color : 'black' }
+				]
+			}
+		}
 	},
 
 	// selection
@@ -230,8 +237,8 @@ var settings = {
 			fill   : 'rgba(243, 203, 255, 0.9)',
 			edge : [
 				//{ border : 0, width : 1, color: 'rgb(254,183,253)' },
-				{ border : 0, width : 1, color: 'black' },
-			],
+				{ border : 0, width : 1, color: 'black' }
+			]
 		}
 	},
 
@@ -243,12 +250,12 @@ var settings = {
 		style : {
 			fill : 'rgb(255, 188, 87)',
 			edge : [
-				{ border : 0, width : 1, color: 'rgb(221, 154, 52)' },
-			],
+				{ border : 0, width : 1, color: 'rgb(221, 154, 52)' }
+			]
 		},
 		strength :  8,
 		minSize  : 12,
-		imarginw :  2,
+		imarginw :  2
 	},
 
 	// size of resize handles
@@ -259,9 +266,9 @@ var settings = {
 		style : {
 			edge : [
 				{ border: 0, width: 3, color: 'rgb(125,120,32)' },
-				{ border: 0, width: 1, color: 'rgb(255,180,90)' },
-			],
-		},
+				{ border: 0, width: 1, color: 'rgb(255,180,90)' }
+			]
+		}
 	},
 
 	relation : {
@@ -269,14 +276,14 @@ var settings = {
 			fill : 'rgba(255, 225, 40, 0.5)',
 			edge : [
 				{ border: 0, width : 3, color : 'rgba(255, 225, 80, 0.4)' },
-				{ border: 0, width : 1, color : 'rgba(200, 100, 0,  0.8)' },
+				{ border: 0, width : 1, color : 'rgba(200, 100, 0,  0.8)' }
 			],
 			labeledge : [
-				{ border: 0, width : 0.2, color : 'rgba(200, 100, 0, 0.5)' },
+				{ border: 0, width : 0.2, color : 'rgba(200, 100, 0, 0.5)' }
 			],
 			highlight : [
-				{ border: 0, width: 3, color: 'rgba(255, 183, 15, 0.5)' },
-			],
+				{ border: 0, width: 3, color: 'rgba(255, 183, 15, 0.5)' }
+			]
 		},
 
 		// inner margin to text
@@ -287,7 +294,7 @@ var settings = {
 	},
 
 	// Blink speed of the caret.
-	caretBlinkSpeed : 530,
+	caretBlinkSpeed : 530
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -316,24 +323,25 @@ Marker.prototype.set = function(entity, offset, retainX) {
 	this.entity = entity;
 	this.offset = offset;
 	this.retain$x = typeof(retainX) !== 'undefined' ? retainX : null;
-}
+};
 
 /**
 | The meshmashine issued an event.
 */
 Marker.prototype.event = function(type, key, p1, p2, p3) {
 	log('event', 'marker', type, key, p1, p2, p3);
+
+	var at1, at2, offset;
+
 	switch(type) {
 	case 'insert' :
-		var offset = p1;
+		offset = p1;
 		var val = p2;
-		if (offset <= this.offset) {
-			this.offset += val.length;
-		}
+		if (offset <= this.offset) { this.offset += val.length; }
 		break;
 	case 'remove' :
-		var at1 = p1;
-		var at2 = p2;
+		at1 = p1;
+		at2 = p2;
 		if (at2 <= this.offset) {
 			if (at1 <= this.offset) {
 				this.offset -= at2 - at1;
@@ -344,19 +352,19 @@ Marker.prototype.event = function(type, key, p1, p2, p3) {
 		break;
 	case 'join<' :
 		var pivot = p1;
-		var at1 = p2;
+		at1 = p2;
 		var vnode = this.entity.vdoc.valley[pivot];
 		this.set(vnode, this.offset + at1);
 		break;
 	case 'split' :
-		var offset = p1;
+		offset = p1;
 		if (offset <= this.offset) {
 			var pkey = this.entity.para.getOwnKey();
 			this.set(this.entity.vdoc.valley[pkey + 1], this.offset - offset);
 		}
 		break;
 	}
-}
+};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,--.             .
@@ -397,14 +405,14 @@ Caret.prototype.show = function() {
 	this.shown = true;
 	this.blinked = false;
 	system.restartBlinker();
-}
+};
 
 /**
 | Hides the caret.
 */
 Caret.prototype.hide = function() {
 	this.shown = false;
-}
+};
 
 /**
 | Draws or erases the caret.
@@ -424,7 +432,7 @@ Caret.prototype.update = function() {
 
 	// draws new
 	if (this.shown && !this.blinked && this.entity) this.entity.drawCaret();
-}
+};
 
 /**
 | Switches caret visibility state.
@@ -434,7 +442,7 @@ Caret.prototype.blink = function() {
 		this.blinked = !this.blinked;
 		this.update();
 	}
-}
+};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .---.     .          .
@@ -486,7 +494,7 @@ Selection.prototype.normalize = function() {
 		this.begin = this.mark2;
 		this.end   = this.mark1;
 	}
-}
+};
 
 /**
 | The text the selection selects.
@@ -519,7 +527,7 @@ Selection.prototype.innerText = function() {
 	buf.push('\n');
 	buf.push(etxt.substring(0, me.offset));
 	return buf.join('');
-}
+};
 
 /**
 | Removes the selection including its contents.
@@ -532,7 +540,7 @@ Selection.prototype.remove = function() {
 		this.begin.entity.para, this.begin.offset,
 		this.end.entity.para, this.end.offset
 	);
-}
+};
 
 /**
 | Deselects the selection.
@@ -541,7 +549,7 @@ Selection.prototype.deselect = function() {
 	if (!this.active) return;
 	this.active = false;
 	system.setInput('');
-}
+};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ++ Action ++
@@ -591,7 +599,7 @@ function Cockpit() {
 */
 Cockpit.prototype.draw = function() {
 	// TODO
-}
+};
 
 /**
 | Mouse hover.
@@ -606,7 +614,7 @@ Cockpit.prototype.mousehover = function(p) {
 	}
 	*/
 	return false;
-}
+};
 
 /**
 | Mouse button down event
@@ -625,7 +633,7 @@ Cockpit.prototype.mousedown = function(p) {
 	}
 	*/
 	return false;
-}
+};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .---. .       .  .
@@ -665,7 +673,7 @@ function Shell(fabric) {
 Shell.prototype.systemFocus = function() {
 	this.caret.show();
 	this.caret.update();
-}
+};
 
 /**
 | Meshraft lost the systems focus.
@@ -673,14 +681,14 @@ Shell.prototype.systemFocus = function() {
 Shell.prototype.systemBlur = function() {
 	this.caret.hide();
 	this.caret.update();
-}
+};
 
 /**
 | Blink the caret (if shown)
 */
 Shell.prototype.blink = function() {
 	this.caret.blink();
-}
+};
 
 /**
 | Creates an action.
@@ -688,7 +696,7 @@ Shell.prototype.blink = function() {
 Shell.prototype.startAction = function(type, vitem, start) {
 	if (this.action) throw new Error('double action');
 	return this.action = new Action(type, vitem, start);
-}
+};
 
 /**
 | Ends an action.
@@ -696,7 +704,7 @@ Shell.prototype.startAction = function(type, vitem, start) {
 Shell.prototype.stopAction = function() {
 	if (!this.action) throw new Error('ending no action');
 	this.action = null;
-}
+};
 
 /**
 | Draws the cockpit and the vspace.
@@ -713,7 +721,7 @@ Shell.prototype._draw = function() {
 	this.caret.update();
 
 	this.redraw = false;
-}
+};
 
 /**
 | A mouse click.
@@ -724,7 +732,7 @@ Shell.prototype.click = function(p, shift, ctrl) {
 	// TODO cockpit
 	this.vspace.click(p);
 	if (this.redraw) this._draw();
-}
+};
 
 /**
 | Mouse hover.
@@ -735,7 +743,7 @@ Shell.prototype.mousehover = function(p, shift, ctrl) {
 	// TODO cockpit
 	this.vspace.mousehover(p);
 	if (this.redraw) this._draw();
-}
+};
 
 /**
 | Mouse button down event.
@@ -749,7 +757,7 @@ Shell.prototype.mousedown = function(p, shift, ctrl) {
 	var mouseState = this.vspace.mousedown(p);
 	if (this.redraw) this._draw();
 	return mouseState;
-}
+};
 
 /**
 | User pressed a special key.
@@ -763,7 +771,7 @@ Shell.prototype.specialKey = function(keyCode, shift, ctrl) {
 	}
 
 	if (this.redraw) this._draw();
-}
+};
 
 /**
 | User entered normal text (one character or more).
@@ -777,7 +785,7 @@ Shell.prototype.input = function(text) {
 	}
 
 	if (this.redraw) this._draw();
-}
+};
 
 /**
 | Starts an operation with the mouse button held down.
@@ -788,7 +796,7 @@ Shell.prototype.dragstart = function(p, shift, ctrl) {
 	// TODO cockpit
 	this.vspace.dragstart(p);
 	if (this.redraw) this._draw();
-}
+};
 
 /**
 | Moving during an operation with the mouse button held down.
@@ -799,7 +807,7 @@ Shell.prototype.dragmove = function(p, shift, ctrl) {
 	// TODO cockpit
 	this.vspace.dragmove(p);
 	if (this.redraw) this._draw();
-}
+};
 
 /**
 | Stops an operation with the mouse button held down.
@@ -810,7 +818,7 @@ Shell.prototype.dragstop = function(p, shift, ctrl) {
 	// TODO cockpit
 	this.vspace.dragstop(p);
 	if (this.redraw) this._draw();
-}
+};
 
 /**
 | Mouse wheel has turned
@@ -821,14 +829,14 @@ Shell.prototype.mousewheel = function(p, dir, shift, ctrl) {
 	// TODO cockpict
 	this.vspace.mousewheel(p, dir);
 	if (this.redraw) this._draw();
-}
+};
 
 /**
 | The window has been resized
 */
 Shell.prototype.resize = function(width, height) {
 	this._draw();
-}
+};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,-_/,.
@@ -839,13 +847,13 @@ Shell.prototype.resize = function(width, height) {
 
  outerRadius |------>|
  innerRadius |->|    '
-         .------'.   '      -1
-		/ \  n  / \	 '
-	   /nw .---.'ne\ '
-	  /___/  .  \___\'
-	  \   \ pc  /   /
-	   \sw `---´ se/
- 	    \ /  s  \ /
+         .------'.   '   -1
+        / \  n  / \  '
+       /nw .---.'ne\ '
+      /___/  .  \___\'
+      \   \ pc  /   /
+       \sw `---´ se/
+        \ /  s  \ /
          `-------´
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -884,14 +892,14 @@ Hexmenu.prototype.draw = function() {
 	if (labels.sw) f.fillRotateText(labels.sw, this.p, Math.PI / 3 * 4, rd);
 	if (labels.nw) f.fillRotateText(labels.nw, this.p, Math.PI / 3 * 5, rd);
 	if (labels.c)  f.fillText(labels.c, this.p);
-}
+};
 
 /**
 | Sets this.mousepos and returns it according to p.
 */
 Hexmenu.prototype.getMousepos = function(p) {
 	return this.mousepos = this.hflower.within(p);
-}
+};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,.   ,. .---.
@@ -908,10 +916,23 @@ Hexmenu.prototype.getMousepos = function(p) {
 | Constructor
 */
 function VSpace(tree) {
-	this.tree             = tree;
-	this.fabric           = new Fabric(system.fabric);
-	this.zoom             = 1; // @03
-	this.vitems           = new VItemCopse(space.items, this);
+	this.tree   = tree;
+	this.fabric = new Fabric(system.fabric);
+	this.zoom   = 1; // @03
+	this.vitems = {};
+
+	for (var t in tree.copse) {
+		var item = tree.copse[t];
+		var vitem;
+		switch (item.type) {
+		case 'Note'     : vitem = new VNote    (item, this); break;
+		case 'Label'    : vitem = new VLabel   (item, this); break;
+		case 'Relation' : vitem = new VRelation(item, this); break;
+		default : throw new Error('unknown type: '+item.type);
+		}
+		this.vitems[k] = vitem;
+	}
+
 	this._floatMenuLabels = {c: 'new', n: 'Note', ne: 'Label'};
 }
 
@@ -919,8 +940,10 @@ function VSpace(tree) {
 | Redraws the complete space.
 */
 VSpace.prototype.draw = function() {
+	var vitem;
+
 	for(var zi = this.space.z.length - 1; zi >= 0; zi--) {
-		var vitem = this.vitems.vcopse[this.space.z.get(zi)];
+		vitem = this.vitems.vcopse[this.space.z.get(zi)];
 		vitem.draw(this.fabric);
 	}
 
@@ -931,14 +954,14 @@ VSpace.prototype.draw = function() {
 	case Action.FLOATMENU : action.floatmenu.draw(); break;
 	case Action.ITEMMENU  : action.itemmenu.draw();  break;
 	case Action.RELBIND :
-		var vitem  = action.vitem;
+		vitem  = action.vitem;
 		var vitem2 = action.vitem2;
 		var target = vitem2 ? vitem2.getZone() : action.move.sub(this.fabric.pan);
 		var arrow = Line.connect(vitem.getZone(), 'normal', target, 'arrow');
 		if (vitem2) vitem2.highlight(this.fabric);
 		arrow.draw(this.fabric);
 	}
-}
+};
 
 
 /**
@@ -960,7 +983,7 @@ VSpace.prototype.setFocus = function(vitem) {
 	if (vitem === null) return;
 
 	peer.moveToTop(this.space, vitem.item);
-}
+};
 
 /**
 | Mouse wheel
@@ -974,7 +997,7 @@ VSpace.prototype.mousewheel = function(p, dir) {
 
 	// @03 zooming.
 	return true;
-}
+};
 
 /**
 | Mouse hover.
@@ -1035,7 +1058,7 @@ VSpace.prototype.mousehover = function(p) {
 	}
 	if (!hit) system.setCursor('crosshair');
 	return true;
-}
+};
 
 /**
 | Starts an operation with the mouse button held down.
@@ -1062,7 +1085,7 @@ VSpace.prototype.dragstart = function(p) {
 	shell.startAction(Action.PAN, null, pp);
 	system.setCursor('crosshair');
 	return true;
-}
+};
 
 /**
 | A mouse click.
@@ -1070,11 +1093,12 @@ VSpace.prototype.dragstart = function(p) {
 VSpace.prototype.click = function(p) {
 	var pan = this.fabric.pan;
 	var pp = p.sub(pan);
+	var action;
 
 	// clicked the tab of the focused item?
 	var focus = this.focus;
 	if (focus && focus.withinItemMenu(pp)) {
-		var action = shell.startAction(Action.ITEMMENU, null, pp);
+		action = shell.startAction(Action.ITEMMENU, null, pp);
 		var labels = {n : 'Remove'};
 		action.itemmenu = new Hexmenu(focus.getH6Slice().pm.add(pan), settings.itemmenu, labels);
 		shell.redraw = true;
@@ -1088,13 +1112,13 @@ VSpace.prototype.click = function(p) {
 	}
 
 	// otherwhise pop up the float menu
-	var action = shell.startAction(Action.FLOATMENU, null, p);
+	action = shell.startAction(Action.FLOATMENU, null, p);
 	action.floatmenu = new Hexmenu(p, settings.floatmenu, this._floatMenuLabels);
 	system.setCursor('default');
 	this.setFocus(null);
 	shell.redraw = true;
 	return true;
-}
+};
 
 /**
 | Stops an operation with the mouse button held down.
@@ -1118,7 +1142,7 @@ VSpace.prototype.dragstop = function(p) {
 	}
 	shell.stopAction();
 	return true;
-}
+};
 
 /**
 | Moving during an operation with the mouse button held down.
@@ -1128,9 +1152,6 @@ VSpace.prototype.dragmove = function(p) {
 	var action = shell.action;
 
 	switch(action.type) {
-	default :
-		action.vitem.dragmove(pp);
-		return true;
 	case Action.PAN :
 		this.fabric.pan = p.sub(action.start);
 		shell.redraw = true;
@@ -1144,8 +1165,11 @@ VSpace.prototype.dragmove = function(p) {
 			if (vitem.dragmove(pp)) return true;
 		}
 		return true;
+	default :
+		action.vitem.dragmove(pp);
+		return true;
 	}
-}
+};
 
 /**
 | Mouse button down event.
@@ -1153,13 +1177,14 @@ VSpace.prototype.dragmove = function(p) {
 VSpace.prototype.mousedown = function(p) {
 	var pp = p.sub(this.fabric.pan);
 	var action = shell.action;
+	var pnw, md;
 
 	switch (action && action.type) {
 	case null :
 		break;
 	case Action.FLOATMENU :
 		var fm = action.floatmenu;
-		var md = fm.getMousepos(p);
+		md = fm.getMousepos(p);
 		shell.stopAction();
 
 		if (!md) break;
@@ -1167,14 +1192,14 @@ VSpace.prototype.mousedown = function(p) {
 		case 'n' : // note
 			var nw = settings.note.newWidth;
 			var nh = settings.note.newHeight;
-			var pnw = fm.p.sub(this.fabric.pan.x + half(nw) , this.fabric.pan.y + half(nh));
+			pnw = fm.p.sub(this.fabric.pan.x + half(nw) , this.fabric.pan.y + half(nh));
 			var note  = peer.newNote(this.space, new Rect(pnw, pnw.add(nw, nh)));
 			// event listener has created the vnote
 			var vnote = this.vitems.vcopse[note.getOwnKey()];
 			this.setFocus(vnote);
 			break;
 		case 'ne' : // label
-			var pnw = fm.p.sub(this.fabric.pan);
+			pnw = fm.p.sub(this.fabric.pan);
 			pnw = pnw.sub(settings.label.createOffset);
 			var label = peer.newLabel(this.space, pnw, 'Label', 20);
 			// event listener has created the vnote
@@ -1186,7 +1211,7 @@ VSpace.prototype.mousedown = function(p) {
 		return false;
 	case Action.ITEMMENU :
 		var im = action.itemmenu;
-		var md = im.getMousepos(p);
+		md = im.getMousepos(p);
 		shell.stopAction();
 
 		if (!im) break;
@@ -1194,6 +1219,8 @@ VSpace.prototype.mousedown = function(p) {
 		case 'n': // remove
 			peer.removeItem(this.space, this.focus.item);
 			this.setFocus(null);
+			break;
+		default :
 			break;
 		}
 		shell.redraw = true;
@@ -1205,7 +1232,7 @@ VSpace.prototype.mousedown = function(p) {
 		var com = this.focus.checkItemCompass(pp);
 		if (com) {
 			// resizing
-			var action = shell.startAction(Action.ITEMRESIZE, this.focus, pp);
+			action = shell.startAction(Action.ITEMRESIZE, this.focus, pp);
 			action.align = com;
 			action.startZone = this.focus.getZone();
 			system.setCursor(com+'-resize');
@@ -1215,42 +1242,14 @@ VSpace.prototype.mousedown = function(p) {
 	}
 
 	return 'atween';
-}
-
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ,.   ,. ,-_/ .             ,--.
- `|  /   '  | |- ,-. ,-,-. | `-' ,-. ,-. ,-. ,-.
-  | /    .^ | |  |-' | | | |   . | | | | `-. |-'
-  `'     `--' `' `-' ' ' ' `--'  `-' |-' `-' `-'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-                                     '
- A visual collection of items.
-
- @03: remove this.
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function VItemCopse(copse, vspace) {
-	this.copse = copse;
-	copse.addListener(this);
-	this.vcopse = {};
-	this.vspace = vspace;
-
-	for(var k in copse.loop()) {
-		var item = copse.get(k);
-		switch (item.get('type')) {
-		case 'Note'     : this.vcopse[k] = new VNote    (copse.get(k), vspace); break;
-		case 'Label'    : this.vcopse[k] = new VLabel   (copse.get(k), vspace); break;
-		case 'Relation' : this.vcopse[k] = new VRelation(copse.get(k), vspace); break;
-		default : throw new Error('unknown type: '+item.type);
-		}
-	}
-}
+};
 
 /**
 | The meshmashine issued an event.
+|
+| TODO
 */
-VItemCopse.prototype.event = function(type, key, p1, p2, p3) {
+VSpace.prototype.ev$TODO = function(type, key, p1, p2, p3) {
 	log('event', 'vitemcopse', type, key, p1, p2, p3);
 
 	switch(type) {
@@ -1267,10 +1266,10 @@ VItemCopse.prototype.event = function(type, key, p1, p2, p3) {
 			// an item has been created
 			var vspace = this.vspace;
 			switch (item.type) {
-			default : throw new Error('unknown item created: '+item.type);
 			case 'Note':     vitem = new VNote    (item, vspace); break;
 			case 'Label':    vitem = new VLabel   (item, vspace); break;
 			case 'Relation': vitem = new VRelation(item, vspace); break;
+			default : throw new Error('unknown item created: '+item.type);
 			}
 			this.vcopse[key] = vitem;
 			return;
@@ -1278,14 +1277,14 @@ VItemCopse.prototype.event = function(type, key, p1, p2, p3) {
 		log(true, 'strange event');
 		break;
 	}
-}
+};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  +++ VPara +++
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  A visual paragraph representation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function VPara(para, vdoc) {
+var VPara = function(para, vdoc) {
 	if (para.type !== 'Para') throw new Error('type error');
 	if (vdoc.constructor !== VDoc) throw new Error('type error');
 	this.para = para;
@@ -1310,7 +1309,7 @@ function VPara(para, vdoc) {
 	});
 	//this.pnw = null; // position of para in doc.
 	para.addListener(this);
-}
+};
 
 /**
 | (re)flows the paragraph, positioning all chunks.
@@ -1354,7 +1353,7 @@ VPara.prototype.getFlow = function() {
 	//var reg = !pre ? (/(\s*\S+|\s+$)\s?(\s*)/g) : (/(.+)()$/g); @03
 	var reg = (/(\s*\S+|\s+$)\s?(\s*)/g);
 
-	for(var ca = reg.exec(text); ca != null; ca = reg.exec(text)) {
+	for(var ca = reg.exec(text); ca !== null; ca = reg.exec(text)) {
 		// a token is a word plus following hard spaces
 		var token = ca[1] + ca[2];
 		var w = Measure.width(token);
@@ -1364,7 +1363,8 @@ VPara.prototype.getFlow = function() {
 			if (x > 0) {
 				// soft break
 				if (spread < xw) spread = xw;
-				x = 0; xw = x + w + space;
+				x = 0;
+				xw = x + w + space;
 				//y += R(vdoc.fontsize * (pre ? 1 : 1 + settings.bottombox)); @03
 				y += R(vdoc.getFontSize() * (1 + settings.bottombox));
 				line++;
@@ -1378,7 +1378,7 @@ VPara.prototype.getFlow = function() {
 			x: x,
 			w: w,
 			o: ca.index,
-			t: token,
+			t: token
 		});
 
 		x = xw;
@@ -1390,7 +1390,7 @@ VPara.prototype.getFlow = function() {
 	flow.spread = spread;
 	flow.fontsize = fontsize;
 	return flow;
-}
+};
 
 /**
 | Returns the offset closest to a point.
@@ -1412,7 +1412,7 @@ VPara.prototype.getPointOffset = function(point) {
 	if (line >= flow.length) line--;
 
 	return this.getLineXOffset(line, point.x);
-}
+};
 
 /**
 | Returns the offset in flowed line number and x coordinate.
@@ -1423,7 +1423,7 @@ VPara.prototype.getLineXOffset = function(line, x) {
 	var ftoken = null;
 	for (var token = 0; token < fline.a.length; token++) {
 		ftoken = fline.a[token];
- 		if (x <= ftoken.x + ftoken.w) break;
+		if (x <= ftoken.x + ftoken.w) { break; }
 	}
 	if (token >= fline.a.length) ftoken = fline.a[--token];
 
@@ -1442,7 +1442,7 @@ VPara.prototype.getLineXOffset = function(line, x) {
 
 	if (dx - x1 < x2 - dx) a--;
 	return ftoken.o + a;
-}
+};
 
 /**
 | Text has been inputted.
@@ -1451,15 +1451,15 @@ VPara.prototype.input = function(text) {
 	var caret = shell.caret;
 	if (caret.entity !== this) throw new Error('Invalid caret on input');
 	var para = this.para;
-	
+
     var reg = /([^\n]+)(\n?)/g;
-    for(var rx = reg.exec(text); rx != null; rx = reg.exec(text)) {
+    for(var rx = reg.exec(text); rx !== null; rx = reg.exec(text)) {
 		var line = rx[1];
 		peer.insertText(para, caret.offset, line);
         if (rx[2]) peer.split(para, caret.offset);
 		para = para.parent.get(para.getOwnKey() + 1);
     }
-}
+};
 
 /**
 | Handles a special key
@@ -1467,14 +1467,20 @@ VPara.prototype.input = function(text) {
 VPara.prototype.specialKey = function(keycode) {
 	if (shell.caret.entity !== this) throw new Error('Invalid caret on specialKey');
 
+	// TODO split into smaller functions
 	var para = this.para;
 	var caret  = shell.caret;
 	var select = shell.selection;
 
+	var vdoc = this.vdoc;
+	var key, ve, offset, flow;
+	var x;
+	var unused; // TODO
+
 	if (shell.ctrl) {
 		switch(keycode) {
 		case 65 : // ctrl+a
-			var valley = this.vdoc.valley;
+			var valley = vdoc.valley;
 			var v0 = valley[0];
 			var vZ = valley[valley.length - 1];
 			var vZL = vZ.para.get('text').length;
@@ -1484,7 +1490,7 @@ VPara.prototype.specialKey = function(keycode) {
 			caret.set(vZ, vZL);
 			system.setInput(select.innerText());
 			caret.show();
-			this.vdoc.vitem.poke();
+			vdoc.vitem.poke();
 			shell.redraw = true;
 			return true;
 		}
@@ -1521,7 +1527,7 @@ VPara.prototype.specialKey = function(keycode) {
 		case 39 : // right
 		case 40 : // down
 			select.mark1.set(caret.entity, caret.offset);
-			this.vdoc.vitem.poke();
+			vdoc.vitem.poke();
 		}
 	}
 
@@ -1530,7 +1536,7 @@ VPara.prototype.specialKey = function(keycode) {
 		if (caret.offset > 0) {
 			peer.removeText(para, caret.offset - 1, 1);
 		} else {
-			var key = para.getOwnKey();
+			key = para.getOwnKey();
 			if (key > 0) {
 				peer.join(para.parent.get(key - 1));
 			}
@@ -1549,32 +1555,29 @@ VPara.prototype.specialKey = function(keycode) {
 		if (caret.offset > 0) {
 			caret.set(this, caret.offset - 1);
 		} else {
-			var vdoc = this.vdoc;
-			var key = para.getOwnKey();
+			key = para.getOwnKey();
 			if (vdoc.valley[key] !== this) throw new Error('vdoc.valley inconsistency');
 			if (key > 0) {
-				var ve = vdoc.valley[key - 1];
+				ve = vdoc.valley[key - 1];
 				caret.set(ve, ve.para.get('text').length);
 			}
 		}
 		break;
 	case 38 : // up
-		var flow = this.getFlow();
-		var caret = shell.caret;
-		var x = caret.retain$x !== null ? caret.retain$x : caret.pos$.x;
+		flow = this.getFlow();
+		x = caret.retain$x !== null ? caret.retain$x : caret.pos$.x;
 
 		if (caret.flow$line > 0) {
 			// stay within this para
-			var offset = this.getLineXOffset(caret.flow$line - 1, x);
+			offset = this.getLineXOffset(caret.flow$line - 1, x);
 			caret.set(this, offset, x);
 		} else {
 			// goto prev para
-			var vdoc = this.vdoc;
-			var key  = para.getOwnKey();
+			key  = para.getOwnKey();
 			if (vdoc.valley[key] !== this) throw new Error('vdoc.valley inconsistency');
 			if (key > 0) {
-				var ve = vdoc.valley[key - 1];
-				var offset = ve.getLineXOffset(ve.getFlow().length - 1, x);
+				ve = vdoc.valley[key - 1];
+				offset = ve.getLineXOffset(ve.getFlow().length - 1, x);
 				caret.set(ve, offset, x);
 			}
 		}
@@ -1583,32 +1586,29 @@ VPara.prototype.specialKey = function(keycode) {
 		if (caret.offset < para.get('text').length) {
 			caret.set(this, caret.offset + 1);
 		} else {
-			var vdoc = this.vdoc;
-			var key = para.getOwnKey();
+			key = para.getOwnKey();
 			if (vdoc.valley[key] !== this) throw new Error('vdoc.valley inconsistency');
 			if (key < vdoc.valley.length - 1) {
-				var ve = vdoc.valley[key + 1];
+				ve = vdoc.valley[key + 1];
 				caret.set(ve, 0);
 			}
 		}
 		break;
 	case 40 : // down
-		var flow = this.getFlow();
-		var caret = shell.caret;
-		var x = caret.retain$x !== null ? caret.retain$x : caret.pos$.x;
+		flow = this.getFlow();
+		x = caret.retain$x !== null ? caret.retain$x : caret.pos$.x;
 
 		if (caret.flow$line < flow.length - 1) {
 			// stay within this para
-			var offset = this.getLineXOffset(caret.flow$line + 1, x);
+			offset = this.getLineXOffset(caret.flow$line + 1, x);
 			caret.set(this, offset, x);
 		} else {
 			// goto next para
-			var vdoc = this.vdoc;
-			var key = para.getOwnKey();
+			key = para.getOwnKey();
 			if (vdoc.valley[key] !== this) throw new Error('vdoc.valley inconsistency');
 			if (key < vdoc.valley.length - 1) {
-				var ve = vdoc.valley[key + 1];
-				var offset = ve.getLineXOffset(0, x);
+				ve = vdoc.valley[key + 1];
+				offset = ve.getLineXOffset(0, x);
 				caret.set(ve, offset, x);
 			}
 		}
@@ -1617,8 +1617,7 @@ VPara.prototype.specialKey = function(keycode) {
 		if (caret.offset < para.get('text').length) {
 			peer.removeText(para, caret.offset, 1);
 		} else {
-			var vdoc = this.vdoc;
-			var key = para.getOwnKey();
+			key = para.getOwnKey();
 			if (vdoc.valley[key] !== this) throw new Error('vdoc.valley inconsistency');
 			if (key < vdoc.valley.length - 1) {
 				peer.join(para);
@@ -1639,14 +1638,14 @@ VPara.prototype.specialKey = function(keycode) {
 			select.active = true;
 			select.mark2.set(caret.entity, caret.offset);
 			system.setInput(select.innerText());
-			this.vdoc.vitem.poke();
+			vdoc.vitem.poke();
 			shell.redraw = true;
 		}
 	}
 
 	caret.show();
 	shell.redraw = true; // @@ might be optimized
-}
+};
 
 /**
 | Returns the height of the para
@@ -1654,7 +1653,7 @@ VPara.prototype.specialKey = function(keycode) {
 VPara.prototype.getHeight = function() {
 	var flow = this.getFlow();
 	return flow.height + R(this.vdoc.getFontSize() * settings.bottombox);
-}
+};
 
 /**
 | Draws the paragraph in its cache and returns it.
@@ -1693,7 +1692,7 @@ VPara.prototype.getFabric = function() {
 	this._fabric$width  = width;
 	this._fabric$height = height;
 	return fabric;
-}
+};
 
 /**
 | Drops the cache (cause something has changed)
@@ -1703,7 +1702,7 @@ VPara.prototype.event = function(event, p1, p2, p3) {
 
 	this._flow$ = null;
 	this._fabric$flag = false;
-}
+};
 
 /**
 | Returns the point of a given offset.
@@ -1719,9 +1718,11 @@ VPara.prototype.getOffsetPoint = function(offset, flowPos$) {
 	Measure.font = doc.font;
 	var text = para.get('text');
 	var flow = this.getFlow();
+	var a;
 
+	// TODO improve loops
 	var al = flow.length - 1;
-	for (var a = 1; a < flow.length; a++) {
+	for (a = 1; a < flow.length; a++) {
 		if (flow[a].o > offset) {
 			al = a - 1;
 			break;
@@ -1730,14 +1731,14 @@ VPara.prototype.getOffsetPoint = function(offset, flowPos$) {
 	var line = flow[al];
 
 	var at = line.a.length - 1;
-	for (var a = 1; a < line.a.length; a++) {
+	for (a = 1; a < line.a.length; a++) {
 		if (line.a[a].o > offset) {
 			at = a - 1;
 			break;
 		}
 	}
 	var token = line.a[at];
-	if (!token) token = {x: 0, o :0}
+	if (!token) { token = { x: 0, o : 0 }; }
 
 	if (flowPos$) {
 		flowPos$.flow$line  = al;
@@ -1748,7 +1749,7 @@ VPara.prototype.getOffsetPoint = function(offset, flowPos$) {
 	return new Point(
 		R(token.x + Measure.width(text.substring(token.o, offset))),
 		line.y);
-}
+};
 
 
 /**
@@ -1794,7 +1795,7 @@ VPara.prototype.drawCaret = function() {
 	}
 
 	shell.fabric.fillRect('black', cp.x + 1, cp.y + 1, 1, ch);
-}
+};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .---.             .  .  .
@@ -1850,14 +1851,14 @@ Scrollbar.prototype.path = function(fabric, border, twist) {
 	fabric.lineTo(z.pnw.x + w025, sy + msize);
 	fabric.lineTo(z.pnw.x,        R(sy + msize - co30w2));
 	fabric.closePath();
-}
+};
 
 /**
 | Draws the scrollbar.
 */
 Scrollbar.prototype.draw = function(fabric) {
 	fabric.paint(settings.scrollbar.style, this, 'path');
-}
+};
 
 /**
 | Returns the scrollbars position.
@@ -1865,7 +1866,7 @@ Scrollbar.prototype.draw = function(fabric) {
 Scrollbar.prototype.getPos = function() {
 	if (!this.visible) return 0;
 	return this._pos;
-}
+};
 
 /**
 | Sets the scrollbars position.
@@ -1873,7 +1874,7 @@ Scrollbar.prototype.getPos = function() {
 Scrollbar.prototype.setPos = function(pos) {
 	if (pos < 0) throw new Error('Scrollbar.setPos < 0');
 	return this._pos = pos;
-}
+};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,.   ,. .-,--.
@@ -1895,7 +1896,7 @@ function VDoc(doc, vitem) {
 	// visual-alley
 	var valley = this.valley = [];
 
-	for (var a = 0; a < doc.length; a++) {
+	for (var a = 0, aZ = doc.length; a < aZ; a++) {
 		valley[a] = new VPara(doc.get(a), this);
 	}
 }
@@ -1915,7 +1916,7 @@ VDoc.prototype.event = function(type, key, p1, p2, p3) {
 		this.valley.splice(key + 1, 0, nvp);
 		break;
 	}
-}
+};
 
 /**
 | Draws the document alley on a fabric.
@@ -1959,7 +1960,7 @@ VDoc.prototype.getPNW = function(vpara) {
 		throw new Error('TODO');
 	}
 	return this.pnws[vpara.para.getOwnKey()];
-}
+};
 
 /**
 | Returns the height of the document.
@@ -1978,7 +1979,7 @@ VDoc.prototype.getHeight = function() {
 	}
 	height += R(fontsize * settings.bottombox);
 	return height;
-}
+};
 
 /**
 | Returns the width actually used of the document.
@@ -2004,7 +2005,7 @@ VDoc.prototype.getFontSize = function() {
 */
 VDoc.prototype.getFont = function() {
 	return this.getFontSize() + 'px ' + settings.defaultFont;
-}
+};
 
 /**
 | Returns the paragraph at point
@@ -2018,7 +2019,7 @@ VDoc.prototype.getVParaAtPoint = function(p) {
 		if (p.y < pnw.y + flow.height) return vpara;
 	}
 	return null;
-}
+};
 
 /**
 | Paths a selection
@@ -2084,7 +2085,7 @@ VDoc.prototype.pathSelection = function(fabric, border, twist, width, imargin, s
 		if (!twist) fabric.lineTo(rx, p2.y - fontsize);
 	}
 
-}
+};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,.   ,. ,-_/ .
@@ -2125,7 +2126,7 @@ VItem.prototype.getH6Slice = function() {
 */
 VItem.prototype.withinItemMenu = function(p) {
 	return this.getH6Slice().within(p);
-}
+};
 
 /**
 | Returns the compass direction of the handle if p is on a resizer handle.
@@ -2160,7 +2161,7 @@ VItem.prototype.checkItemCompass = function(p) {
 	if (w && ha.w && abs(p.y - zone.pc.y) <= d) return 'w';
 	if (e && ha.e && abs(p.y - zone.pc.y) <= d) return 'e';
 	return null;
-}
+};
 
 /**
 | Paths the resize handles.
@@ -2220,7 +2221,7 @@ VItem.prototype.pathResizeHandles = function(fabric, border, twist) {
 		fabric.lineTo(x1, y1);
 		fabric.lineTo(x1 + hs, y1);
 	}
-}
+};
 
 /**
 | Draws the handles of an item (resize, itemmenu)
@@ -2231,7 +2232,7 @@ VItem.prototype.drawHandles = function(fabric) {
 
 	// draws item menu handler
 	fabric.paint(settings.itemmenu.slice.style, this.getH6Slice(), 'path');
-}
+};
 
 /**
 | Returns the para at point. @03, honor scroll here.
@@ -2240,7 +2241,7 @@ VItem.prototype.getVParaAtPoint = function(p, action) {
 	// @03 rename imargin to innerMargin
 	if (p.y < this.imargin.n) return null;
 	return this.vdoc.getVParaAtPoint(p, action);
-}
+};
 
 /**
 | Dragstart.
@@ -2271,7 +2272,7 @@ VItem.prototype.dragstart = function(p) {
 		system.setCursor('move');
 	}
 	return true;
-}
+};
 
 /**
 | dragmove?
@@ -2321,7 +2322,7 @@ VItem.prototype.dragstop = function(p) {
 		shell.redraw = true;
 		return true;
 	}
-}
+};
 
 
 /**
@@ -2333,7 +2334,7 @@ VItem.prototype.mousehover = function(p) {
 
 	system.setCursor('default');
 	return true;
-}
+};
 
 /**
 | Sees if this item reacts on a click event.
@@ -2356,7 +2357,7 @@ VItem.prototype.click = function(p) {
 		shell.selection.deselect();
 	}
 	return true;
-}
+};
 
 /**
 | Highlights the item.
@@ -2364,7 +2365,7 @@ VItem.prototype.click = function(p) {
 VItem.prototype.highlight = function(fabric) {
 	var silhoutte = this.getSilhoutte(this.getZone(), false);
 	fabric.edge(settings.note.style.highlight, silhoutte, 'path');
-}
+};
 
 
 
@@ -2374,7 +2375,7 @@ VItem.prototype.highlight = function(fabric) {
 VItem.prototype.poke = function() {
 	this._fabric$flag = false;
 	shell.redraw = true;
-}
+};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,.   ,. ,-,-.       .
@@ -2468,7 +2469,7 @@ VNote.prototype.setScrollbar = function(pos) {
 
 	if (typeof(pos) === 'undefined') pos = sbary.getPos();
 	sbary.setPos(limit(0, pos, smaxy));
-}
+};
 
 /**
 | Sets the items position and size after an action.
@@ -2496,7 +2497,7 @@ VNote.prototype.dragstop = function(p) {
 		shell.redraw = true;
 		return true;
 	}
-}
+};
 
 /**
 | Draws the note.
@@ -2549,7 +2550,7 @@ VNote.prototype.draw = function(fabric) {
 	}
 
 	fabric.drawImage(f, zone.pnw);
-}
+};
 
 /**
 | Mouse wheel turned.
@@ -2560,7 +2561,7 @@ VNote.prototype.mousewheel = function(p, dir) {
 	this._fabric$flag = false;
 	shell.redraw = true;
 	return true;
-}
+};
 
 /**
 | Returns the width for the contents flow.
@@ -2573,14 +2574,14 @@ VNote.prototype.getFlowWidth = function() {
 		flowWidth -= settings.scrollbar.strength;
 	}
 	return flowWidth;
-}
+};
 
 /**
 | Returns the para seperation height.
 */
 VNote.prototype.getParaSep = function(fontsize) {
 	return half(fontsize);
-}
+};
 
 /**
 | Returns the zone of the item.
@@ -2655,7 +2656,7 @@ VNote.prototype.getZone = function() {
 	default :
 		return item.zone;
 	}
-}
+};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,.   ,. ,       .       .
@@ -2913,3 +2914,6 @@ VRelation.prototype.draw = function(fabric) {
 
 	VLabel.prototype.draw.call(this, fabric);
 }
+
+
+})();
