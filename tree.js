@@ -292,14 +292,14 @@ Path.prototype.subpathOf = function(o, len) {
 		if (this._path[a] !== o._path[a]) return false;
 	}
 	return true;
-}
+};
 
 /**
 | Turns the path to a String.
 */
 Path.prototype.toString = function() {
 	return '['+this._path.toString()+']';
-}
+};
 
 /**
 | Jsonfy.
@@ -307,7 +307,6 @@ Path.prototype.toString = function() {
 Path.prototype.toJSON = function() {
 	return this._path;
 };
-
 
 
 
@@ -327,14 +326,14 @@ var Twig = function () { };
 /**
 | Gets the twigs type
 */
-function twigtype(o) {
+var twigtype = function(o) {
 	switch(o.constructor) {
 	case Array  : return 'Array';
 	case Number : return 'Number';
 	case String : return 'String';
 	default     : return o.type;
 	}
-}
+};
 
 /**
 | Copies one object (not deep!)
@@ -342,20 +341,20 @@ function twigtype(o) {
 | o ... the object to copy from
 | c ... the object to copy into
 */
-function copy(o, c) {
+var copy = function(o, c) {
 	for (var k in o) {
 		if (!Object.hasOwnProperty.call(o, k)) continue;
 		c[k] = o[k];
 	}
 	return c;
-}
+};
 
 /**
 | Returns the pattern for object o
 */
-function getPattern(o) {
+var getPattern = function(o) {
 	return Patterns[twigtype(o)];
-}
+};
 
 /**
 | Grows new twigs, the model is copies and extended by addtional arguments.
@@ -494,7 +493,7 @@ function grow(model /*, ... */) {
 			throw reject('Alley length does not match to copse');
 		}
 		for (a = 0; a < aZ; a++) {
-			var k = twig.alley[a];
+			k = twig.alley[a];
 			if (!is(twig.copse[k])) {
 				throw new Error('Copse misses Alley value: '+k);
 			}

@@ -328,41 +328,6 @@ function inspect(o) {
 }
 
 /**
-| Deep copies an object.
-*/
-function clone(original) {
-	throw new Error('TODO REMOVE XXX');
-
-	//return JSON.parse(JSON.stringify(original));
-	if(typeof(original) !== 'object' || original === null) {
-		return original;
-	}
-
-	if (original.clone) return new original.clone();
-
-	var copy = original.constructor();
-	for(var k in original) {
-		copy[k] = clone(original[k]);
-	}
-	return copy;
-}
-
-/**
-| Deep freezes an object.
-*/
-function deepFreeze(obj) {
-	return false;
-	/*
-	if (typeof(obj) !== 'object' || obj === null) return;
-
-	Object.freeze(obj);
-	for (var k in obj) {
-		if (k === 'parent') throw new Error('deepFreezing a parent?');
-		deepFreeze(obj[k]);
-	}*/
-}
-
-/**
 | TODO
 */
 var oleng$id = 0;
@@ -388,11 +353,9 @@ function immute(obj) {
 | Exports
 */
 Jools = {
-	clone              : clone,
 	configSwitchClient : configSwitchClient,
 	configSwitchServer : configSwitchServer,
 	debug              : debug,
-	deepFreeze         : deepFreeze,
 	devel              : devel,
 	fixate             : fixate,
 	fixateNoEnum       : fixateNoEnum,

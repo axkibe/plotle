@@ -22,6 +22,9 @@
  License: GNU Affero AGPLv3
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+/**
+| Imports
+*/
 var util = require('util');
 var http = require('http');
 var url  = require('url');
@@ -31,6 +34,12 @@ var config = require('./config');
 var Jools  = require('./jools');
 var Tree   = require('./tree');
 var MeshMashine = require('./meshmashine');
+
+/**
+| Capsule
+*/
+(function(){
+"use strict";
 
 var debug  = Jools.debug;
 var log    = Jools.log;
@@ -119,7 +128,7 @@ var mm;
 							'4': {
 								type: 'Para',
 								text: 'And treat those two impostors just the same'
-							},
+							}
 
 
 							/*
@@ -240,7 +249,7 @@ var content = {
 	'/peer.js'        : { file: './peer.js',           mime: mime.js, code: 'utf-8'  },
 	'/favicon.ico'    : { file: './icons/hexicon.ico', mime: mime.xi, code: 'binary' },
 	'/testpad.html'   : { file: './testpad.html',      mime: mime.ht, code: 'utf-8'  },
-	'/testpad.js'     : { file: './testpad.js',        mime: mime.js, code: 'utf-8'  },
+	'/testpad.js'     : { file: './testpad.js',        mime: mime.js, code: 'utf-8'  }
 };
 
 /**
@@ -370,3 +379,4 @@ http.createServer(function (req, res) {
 	log('start', 'Server running');
 });
 
+})();

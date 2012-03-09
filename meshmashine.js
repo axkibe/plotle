@@ -126,7 +126,7 @@ Signature.field = {
 	'at1'  : true,
 	'at2'  : true,
 	'proc' : true,
-	'val'  : true,
+	'val'  : true
 };
 immute(Signature.field);
 

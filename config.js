@@ -24,6 +24,6 @@ module.exports = {
 		shell:  true,
 		te:     true,
 		web:    true,
-		warn:   true,
+		warn:   true
 	}
 }

@@ -11,11 +11,10 @@
 var Jools;
 var Fabric;
 var Peer;
-var testinput;
-var blink;
+var Tree;
 
 /**
-| Export/Capsule
+| Capsule
 */
 (function(){
 'use strict';
@@ -109,12 +108,12 @@ var blinkTimer = null;
 /**
 | Blinks the cursor on/off.
 */
-blink = function() {
+var blink = function() {
 	cursor.blink = !cursor.blink;
 	testinput();
 	updatePad();
 	element.beep.innerHTML = '';
-}
+};
 
 /**
 | Resets the blink timer
@@ -124,9 +123,9 @@ var resetBlink = function() {
 	element.beep.innerHTML = '';
 	if (blinkTimer) clearInterval(blinkTimer);
 	if (focus) {
-		blinkTimer = setInterval("blink();", 540);
+		blinkTimer = setInterval(blink, 540);
 	}
-}
+};
 
 /**
 | Mouse down event on pad -> focuses the hidden input,
@@ -141,19 +140,19 @@ var onmousedown = function(event) {
 	var y = event.pageY - element.pad.offsetTop;
 
 	if (!alley) { beep(); return; }
-	cursor.line   = limit(0, F(y / measure.offsetHeight), alley.length - 1);
+	cursor.line   = limit(0, F(y / element.measure.offsetHeight), alley.length - 1);
 	var text = copse[alley[cursor.line]].text;
-	cursor.offset = limit(0, F(x / measure.offsetWidth), text.length);
+	cursor.offset = limit(0, F(x / element.measure.offsetWidth), text.length);
 	resetBlink();
 	updatePad();
-}
+};
 
 /**
 | Captures all mouseevents event
 */
 var captureEvents = function() {
     if (element.pad.setCapture) {
-        element.pad.setCapture(canvas);
+        element.pad.setCapture(element.pad);
     } else {
         document.onmouseup   = onmouseup;
         document.onmousemove = onmousemove;
@@ -165,7 +164,7 @@ var captureEvents = function() {
 */
 var releaseEvents = function() {
     if (element.pad.setCapture) {
-        element.pad.releaseCapture(canvas);
+        element.pad.releaseCapture(element.pad);
     } else {
         document.onmouseup = null;
         document.onmousemove = null;
@@ -189,14 +188,14 @@ var onmouseup = function(event) {
 */
 var onmouseclick = function(event) {
 	event.preventDefault();
-}
+};
 
 /**
 | Mouse moved over pad (or while dragging around it);
 */
 var onmousemove = function(event) {
 	if (mousedown) onmousedown(event);
-}
+};
 
 /**
 | Down event to (hidden) input.
@@ -208,17 +207,21 @@ var onkeydown = function(event) {
 	} else {
 		testinput();
 	}
-}
+};
 
 /**
 | Press event to (hidden) input.
 */
-var onkeypress = function(event) { setTimeout('testinput();', 0); }
+var onkeypress = function(event) {
+	setTimeout(testinput, 0);
+};
 
 /**
 | Up event to (hidden) input.
 */
-var onkeyup = function(event) { testinput(); }
+var onkeyup = function(event) {
+	testinput();
+};
 
 /**
 | Hidden input got focus.
@@ -252,26 +255,27 @@ var clearAction = function() {
 */
 var send = function() {
 	if (!action) { beep(); return; }
+	var path;
 
 	switch(action.type) {
 	case 'insert' :
-		var path = new Path(notepath, '++', 'doc', alley[action.line]);
+		path = new Path(notepath, '++', 'doc', alley[action.line]);
 		peer.insertText(path, action.at1, action.val);
 		cursor.offset += action.val.length;
 		break;
 	case 'remove' :
-		var path = new Path(notepath, '++', 'doc', alley[action.line]);
+		path = new Path(notepath, '++', 'doc', alley[action.line]);
 		peer.removeText(path, action.at1, action.at2 - action.at1);
 		if (cursor.offset >= action.at2) {
 			cursor.offset -= action.at2 - action.at1;
 		}
 		break;
 	case 'split' :
-		var path = new Path(notepath, '++', 'doc', alley[action.line]);
+		path = new Path(notepath, '++', 'doc', alley[action.line]);
 		peer.split(path, action.at1);
 		break;
 	case 'join' :
-		var path = new Path(notepath, '++', 'doc', alley[action.line - 1]);
+		path = new Path(notepath, '++', 'doc', alley[action.line - 1]);
 		peer.join(path, copse[alley[action.line - 1]].text.length);
 		break;
 	default :
@@ -308,16 +312,16 @@ var startAction = function(newAction) {
 	action = newAction;
 	element.send.disabled = false;
 	element.cancel.disabled = false;
-}
+};
 
 /**
 | Aquires non-special input from (hidden) input.
 */
-testinput = function() {
+var testinput = function() {
 	var text = element.input.value;
 	element.input.value = '';
 	if (text === '') return;
-	if (!alley) { beep(); return; };
+	if (!alley) { beep(); return; }
 
 	if (action === null) {
 		startAction({
@@ -351,7 +355,7 @@ var inputSpecialKey = function(keyCode, ctrlKey) {
 		if (!alley) { beep(); return; }
 		if (cursor.offset <= 0) {
 			if (action) { beep(); return; }
-			if (cursor.line <= 0) { beep(); return }
+			if (cursor.line <= 0) { beep(); return; }
 			startAction({
 				type : 'join',
 				line : cursor.line
@@ -422,7 +426,7 @@ var inputSpecialKey = function(keyCode, ctrlKey) {
 				type : 'remove',
 				line : cursor.line,
 				at1  : cursor.offset,
-				at2  : cursor.offset + 1,
+				at2  : cursor.offset + 1
 			});
 			cursor.offset++;
 			break;
@@ -435,7 +439,7 @@ var inputSpecialKey = function(keyCode, ctrlKey) {
 	}
 	resetBlink();
 	updatePad();
-}
+};
 
 /**
 | Updates data from server
@@ -455,7 +459,7 @@ var update = function(totime) {
 		alley = null;
 		copse = null;
 	}
-}
+};
 
 /**
 | Button update-to-now has been clicked
@@ -492,15 +496,15 @@ var ondown = function() {
 */
 var updatePad = function() {
 	var lines = [];
-	var a, aZ, b, bZ;
+	var a, aZ, b, bZ, line;
 
 	if (!alley) {
 		// no data
-		var line = [];
-		for(var a = 0; a < 100; a++) { line.push('{}  '); }
+		line = [];
+		for(a = 0; a < 100; a++) { line.push('{}  '); }
 		line = line.join('');
 		var line2 = '  ' + line;
-		for(var a = 0; a < 50; a++) { lines.push(line, line2); };
+		for(a = 0; a < 50; a++) { lines.push(line, line2); }
 		element.pad.innerHTML = lines.join('\n');
 		return;
 	}
@@ -511,7 +515,7 @@ var updatePad = function() {
 
 	// replaces HTML entities.
 	for(a = 0, aZ = lines.length; a < aZ; a++) {
-		var line = lines[a];
+		line = lines[a];
 		for(b = 0, bZ = line.length; b < bZ; b++) {
 			switch(line[b]) {
 			case '&' : line[b] = '&amp;';  break;
@@ -564,7 +568,7 @@ var updatePad = function() {
 	// transforms to HTML
 	for (a = 0, aZ = lines.length; a < aZ; a++) { lines[a] = lines[a].join(''); }
 	element.pad.innerHTML = lines.join('\n');
-}
+};
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -599,7 +603,7 @@ window.onload = function() {
 	updatePad();
 	resetBlink();
 	element.input.focus();
-}
+};
 
 })();
 

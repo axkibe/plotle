@@ -15,11 +15,16 @@ var util     = require('util');
 var Jools    = require('./jools');
 var config   = require('./config');
 
+/**
+| Capsule
+*/
+(function() {
+"use strict";
 
 /**
 | Loads command history.
 */
-function loadHistory() {
+var loadHistory = function() {
 	var lines;
 	var history = [];
 	try {
@@ -80,7 +85,6 @@ function jsonRequest(cmd, callback) {
 	try {
 		// o = JSON.parse(line); <- strict JSON
 		// instead eval relaxed JSON, insecure but this is for testing anyway.N
-		var o;
 		eval('o='+cmd);
 	} catch (err) {
 		console.log('# invalid input: '+err.message);
@@ -139,10 +143,8 @@ if (process.argv.length <= 2) {
 		process.stdin.destroy();
 	});
 } else {
-	function loop(a) {
-		if (a >= process.argv.length) {
-			return;
-		}
+	var loop = function(a) {
+		if (a >= process.argv.length) { return; }
 		var cmd;
 		try {
 			cmd = fs.readFileSync(process.argv[a]);
@@ -151,8 +153,10 @@ if (process.argv.length <= 2) {
 			loop(a + 1);
 			return;
 		}
-		jsonRequest(cmd, function() {loop(a + 1)});
-	}
+		jsonRequest(cmd, function() { loop(a + 1);} );
+	};
 
 	loop(2);
 }
+
+})();

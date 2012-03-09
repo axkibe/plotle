@@ -32,10 +32,17 @@
 /**
 | Imports
 */
-var peer;
-var shell = null;
 var Jools;
 var Fabric;
+var Tree;
+
+var peer;
+var system;
+
+/**
+| Exports
+*/
+var shell = null;
 
 /**
 | Capsule
@@ -921,8 +928,8 @@ function VSpace(tree) {
 	this.zoom   = 1; // @03
 	this.vitems = {};
 
-	for (var t in tree.copse) {
-		var item = tree.copse[t];
+	for (var k in tree.copse) {
+		var item = tree.copse[k];
 		var vitem;
 		switch (item.type) {
 		case 'Note'     : vitem = new VNote    (item, this); break;
@@ -1952,7 +1959,7 @@ VDoc.prototype.draw = function(fabric, width, imargin, scrollp) {
 	}
 
 	this.pnws = pnws;
-}
+};
 
 VDoc.prototype.getPNW = function(vpara) {
 	// TODO use Oleng-IDs
@@ -1991,14 +1998,14 @@ VDoc.prototype.getSpread = function() {
 		spread = max(spread, valley[a].getFlow().spread);
 	}
 	return spread;
-}
+};
 
 VDoc.prototype.getFontSize = function() {
 	var vitem = this.vitem;
 	var fontsize = this.doc.get('fontsize');
 	if (!vitem.fontSizeChange) return fontsize;
 	return vitem.fontSizeChange(fontsize);
-}
+};
 
 /**
 | Returns the default font of the dtree.
@@ -2100,14 +2107,14 @@ VDoc.prototype.pathSelection = function(fabric, border, twist, width, imargin, s
 /**
 | Constructor
 */
-function VItem(item, vspace) {
+var VItem = function(item, vspace) {
 	this._h6slice$    = null;
 	this.item         = item;
 	this.vspace       = vspace;
 	this.vdoc         = new VDoc(item.doc, this);
 	this._fabric      = new Fabric();
 	this._fabric$flag = false; // up-to-date-flag
-}
+};
 
 /**
 | Return the hexagon slice that is the handle
@@ -2282,7 +2289,6 @@ VItem.prototype.dragmove = function(p) {
 	var action = shell.action;
 
 	switch (action.type) {
-	default : throw new Error('invalid dragmove');
 	case Action.RELBIND    :
 		if (!this.getZone().within(p)) return false;
 		action.move = p;
@@ -2304,9 +2310,11 @@ VItem.prototype.dragmove = function(p) {
 		vitem.poke();
 		shell.redraw = true;
 		return true;
+	default :
+		throw new Error('invalid dragmove');
 	}
 	return true;
-}
+};
 
 /**
 | Sets the items position and size after an action.
@@ -2314,13 +2322,14 @@ VItem.prototype.dragmove = function(p) {
 VItem.prototype.dragstop = function(p) {
 	var action = shell.action;
 	switch (action.type) {
-	default : return false;
 	case Action.RELBIND :
 		if (!this.getZone().within(p)) return false;
 		VRelation.create(this.vspace, action.vitem, this);
 		system.setCursor('default');
 		shell.redraw = true;
 		return true;
+	default :
+		return false;
 	}
 };
 
@@ -2390,10 +2399,10 @@ VItem.prototype.poke = function() {
 /**
 | Constructor.
 */
-function VNote(item, vspace) {
+var VNote = function(item, vspace) {
 	VItem.call(this, item, vspace);
 	this.scrollbarY   = new Scrollbar(this, null);
-}
+};
 subclass(VNote, VItem);
 
 /**
@@ -2412,7 +2421,7 @@ VNote.prototype.handles = {
 	s  : true,
 	sw : true,
 	w  : true,
-	nw : true,
+	nw : true
 };
 
 /**
@@ -2429,18 +2438,19 @@ VNote.prototype.minHeight = settings.note.minHeight;
 */
 VNote.prototype.getSilhoutte = function(zone$, zAnchor) {
 	var z$ = zone$;
+	var s$;
 
 	var cr = settings.note.cornerRadius;
 	if (zAnchor) {
-		var s$ = this._silhoutte$0;
+		s$ = this._silhoutte$0;
 		if (s$ && s$.width === z$.width && s$.height === z$.height) return s$;
 		return this._silhoutte$0 = new RoundRect(Point.zero, new Point(z$.width, z$.height), cr);
 	} else {
-		var s$ = this._silhoutte$1;
+		s$ = this._silhoutte$1;
 		if (s$ && s$.eq(z$)) return s$;
 		return this._silhoutte$1 = new RoundRect(z$.pnw, z$.pse, cr);
 	}
-}
+};
 
 /**
 | Actualizes the scrollbar.
@@ -2477,7 +2487,6 @@ VNote.prototype.setScrollbar = function(pos) {
 VNote.prototype.dragstop = function(p) {
 	var action = shell.action;
 	switch (action.type) {
-	default : return VItem.prototype.dragstop.call(this, p);
 	case Action.ITEMDRAG :
 	case Action.ITEMRESIZE :
 		var zone = this.getZone();
@@ -2496,6 +2505,8 @@ VNote.prototype.dragstop = function(p) {
 		system.setCursor('default');
 		shell.redraw = true;
 		return true;
+	default :
+		return VItem.prototype.dragstop.call(this, p);
 	}
 };
 
@@ -2635,11 +2646,11 @@ VNote.prototype.getZone = function() {
 			pse = Point.renew(spse.x, max(spse.y + dy, spnw.y + minh), spnw, spse);
 			break;
 		case 'sw'  :
-			pnw = Point.renew(min(spnw.x + dx, spse.x - minw), spnw.y, spnw, spse),
+			pnw = Point.renew(min(spnw.x + dx, spse.x - minw), spnw.y, spnw, spse);
 			pse = Point.renew(spse.x, max(spse.y + dy, spnw.y + minh), spnw, spse);
 			break;
 		case 'w'   :
-			pnw = Point.renew(min(spnw.x + dx, spse.x - minw), spnw.y, spnw, spse),
+			pnw = Point.renew(min(spnw.x + dx, spse.x - minw), spnw.y, spnw, spse);
 			pse = spse;
 			break;
 		case 'nw' :
@@ -2648,7 +2659,7 @@ VNote.prototype.getZone = function() {
 				min(spnw.y + dy, spse.y - minh), spnw, spse);
 			pse = spse;
 			break;
-		case 'c' :
+		//case 'c' :
 		default  :
 			throw new Error('unknown align');
 		}
@@ -2688,7 +2699,7 @@ fixate(VLabel.prototype, 'handles', {
 	ne : true,
 	se : true,
 	sw : true,
-	nw : true,
+	nw : true
 });
 
 /**
@@ -2711,7 +2722,7 @@ VLabel.prototype.getSilhoutte = function(zone$, zAnchor) {
 	} else {
 		return this._silhoutte$1 = new Rect(z$.pnw, z$.pse.sub(1, 1));
 	}
-}
+};
 
 
 /**
@@ -2746,14 +2757,14 @@ VLabel.prototype.draw = function(fabric) {
 	}
 
 	fabric.drawImage(f, zone.pnw);
-}
+};
 
 /**
 | Returns the width for the contents flow.
 */
 VLabel.prototype.getFlowWidth = function() {
 	return 0;
-}
+};
 
 /**
 | Calculates the change of fontsize due to resizing.
@@ -2762,7 +2773,6 @@ VLabel.prototype.fontSizeChange = function(fontsize) {
 	var action = shell.action;
 	if (!action || action.vitem !== this) return fontsize;
 	switch (action.type) {
-	default: return fontsize;
 	case Action.ITEMRESIZE:
 		if (!action.startZone) return fontsize;
 		var vdoc = this.vdoc;
@@ -2774,22 +2784,26 @@ VLabel.prototype.fontSizeChange = function(fontsize) {
 		default  : throw new Error('unknown align: '+action.align);
 		}
 		return max(fontsize * (height + dy) / height, 8);
+	default:
+		return fontsize;
 	}
 	return max(fontsize, 4);
-}
+};
 
 /**
 | Returns the para seperation height.
 */
-VLabel.prototype.getParaSep = function(fontsize) { return 0; }
+VLabel.prototype.getParaSep = function(fontsize) {
+	return 0;
+};
 
 /**
 | Mouse wheel turned.
 */
 VLabel.prototype.mousewheel = function(p, dir) {
-	if (!this.getZone().within(p)) return false;
+	if (!this.getZone().within(p)) { return false; }
 	return true;
-}
+};
 
 /**
 | Returns the zone of the item.
@@ -2810,7 +2824,6 @@ VLabel.prototype.getZone = function() {
 	// @03 cache the last zone
 
 	switch (action.type) {
-	default : return new Rect(pnw, pnw.add(width, height));
 	case Action.ITEMDRAG:
 		var mx = action.move.x - action.start.x;
 		var my = action.move.y - action.start.y;
@@ -2822,15 +2835,18 @@ VLabel.prototype.getZone = function() {
 		if (!szone) return new Rect(pnw, pnw.add(width, height));
 
 		switch (action.align) {
-		default   : throw new Error('unknown align');
 		case 'ne' : pnw = pnw.add(0, szone.height - height); break;
 		case 'se' : break;
 		case 'sw' : pnw = pnw.add(szone.width - width, 0); break;
 		case 'nw' : pnw = pnw.add(szone.width - width, szone.height - height); break;
+		default   : throw new Error('unknown align');
 		}
 		return new Rect(pnw, pnw.add(width, height));
+
+	default :
+		return new Rect(pnw, pnw.add(width, height));
 	}
-}
+};
 
 
 /**
@@ -2839,7 +2855,6 @@ VLabel.prototype.getZone = function() {
 VLabel.prototype.dragstop = function(p) {
 	var action = shell.action;
 	switch (action.type) {
-	default : return VItem.prototype.dragstop.call(this, p);
 	case Action.ITEMDRAG :
 	case Action.ITEMRESIZE :
 		var zone = this.getZone();
@@ -2857,8 +2872,10 @@ VLabel.prototype.dragstop = function(p) {
 		system.setCursor('default');
 		shell.redraw = true;
 		break;
+	default :
+		return VItem.prototype.dragstop.call(this, p);
 	}
-}
+};
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2873,11 +2890,11 @@ VLabel.prototype.dragstop = function(p) {
 /**
 | Constructor.
 */
-function VRelation(item, vspace) {
+var VRelation = function(item, vspace) {
 	VLabel.call(this, item, vspace);
 	//System.repository.addOnlook(this.id, this.i1id);  @03
 	//System.repository.addOnlook(this.id, this.i2id);
-}
+};
 subclass(VRelation, VLabel);
 
 /**
@@ -2895,7 +2912,7 @@ VRelation.create = function(vspace, vitem1, vitem2) {
 	// event listener has created the vrel
 	var vrel = vspace.vitems.vcopse[rel.getOwnKey()];
 	vspace.setFocus(vrel);
-}
+};
 
 VRelation.prototype.draw = function(fabric) {
 	var vitem1 = this.vspace.vitems.vcopse[this.item.get('item1key')];
@@ -2913,7 +2930,7 @@ VRelation.prototype.draw = function(fabric) {
 	}
 
 	VLabel.prototype.draw.call(this, fabric);
-}
+};
 
 
 })();
