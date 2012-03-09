@@ -20,6 +20,8 @@
  This is not a full blown feature complete everything library,
  but enhanced on the fly for what meshcraft needs.
 
+ TODO remove all references to "c2d".
+
  Defines: fabric
 
  Authors: Axel Kittenberger
@@ -94,13 +96,14 @@ Fabric = function(a1, a2) {
 /**
 * A value is computed and fixated only when needed.
 */
-function lazyFixate(proto, key, getter) {
+// TODO this belongs to Jools
+var lazyFixate = function(proto, key, getter) {
 	Object.defineProperty(proto, key, {
 		// this clever overriding does not work in IE9 :-( or Android 2.2 Browser
 		// get : function() { return fixate(this, key, getter.call(this)); },
 		get : function() {
 			return this['_cache_'+key] || (this['_cache_'+key] = getter.call(this));
-		},
+		}
 	});
 };
 
@@ -116,7 +119,7 @@ var cos30 = cos(PI / 6);   // cos(30°)
 var tan30 = tan(PI / 6);   // tan(30°)
 
 // divides by 2 and rounds up
-function half(v) { return R(v / 2); };
+var half = function(v) { return R(v / 2); };
 
 /**
 | Returns the compass direction opposite of a direction.
@@ -152,14 +155,14 @@ function ensureInteger() {
 | Canvas width.
 */
 Object.defineProperty(Fabric.prototype, 'width',  {
-	get: function() { return this._canvas.width; },
+	get: function() { return this._canvas.width; }
 });
 
 /**
 | Canvas height.
 */
 Object.defineProperty(Fabric.prototype, "height", {
-	get: function() { return this._canvas.height; },
+	get: function() { return this._canvas.height; }
 });
 
 /**
@@ -194,7 +197,7 @@ Fabric.prototype.attune = function(a1, a2) {
 	/* setting width or height clears the contents */
 	if (c.width  !== w) c.width  = w;
 	if (c.height !== h) c.height = h;
-}
+};
 
 
 /**
@@ -212,7 +215,7 @@ Fabric.prototype.moveTo = function(a1, a2) {
 	}
 	ensureInteger(x, y);
 	this._cx.moveTo(x + pan.x + tw, y + pan.y + tw);
-}
+};
 
 /**
 | Draws a line.
@@ -229,7 +232,7 @@ Fabric.prototype.lineTo = function(a1, a2) {
 	}
 	ensureInteger(x, y);
 	this._cx.lineTo(x + pan.x + tw, y + pan.y + tw);
-}
+};
 
 /**
 | Draws an arc.
@@ -245,36 +248,17 @@ Fabric.prototype.arc = function(a1, a2, a3, a4, a5, a6, a7) {
 		x = a1;   y = a2;   r = a3; sa = a4; ea = a5; ac = a6;
 	}
 	this._cx.arc(x + pan.x + tw, y + pan.y + tw, r, sa, ea, ac);
-}
-
-/**
-| Draws a frame around the canvas.
-| Called 'path', because it is the general purpose name for object to draw themselves
-| and a c2d has it defined as shortcut to frame itself.
-|
-| border: increase/decrease total size
-*/
-Fabric.prototype.path = function(self, border, twist) {
-	// @@03 why self?
-	throw new Error('Why self pathing??');
-	if (this !== self) throw new Error('Fabric.path: self != this');
-	var cx = this._cx;
-	cx.beginPath(twist);
-	cx.rect(
-		0.5 + border,                    0.5 + border,
-		this._canvas.width - 1 - border, this._canvas.height - 1 - border
-	);
-}
+};
 
 /**
 | rect(rect)     -or-
 | rect(pnw, pse) -or-
 | rect(nwx, nwy, w, h)
-| TODO remove by rect.path
 */
 Fabric.prototype.rect = function(a1, a2, a3, a4) {
 	var pan = this.pan;
 	var cx = this._cx;
+	/*
 	if (typeof(r) === 'object') {
 		if (r instanceof Rect)
 			return this._cx.rect(
@@ -286,8 +270,9 @@ Fabric.prototype.rect = function(a1, a2, a3, a4) {
 				a2.x - a1.x,        a2.y - a1.y);
 		throw new Error('fillRect not a rectangle');
 	}
+	*/
 	return this._cx.rect(a1 + pan.x + 0.5,  a2 + pan.y + 0.5, a3, a4);
-}
+};
 
 /**
 | fillRect(style, rect)     -or-
@@ -298,6 +283,7 @@ Fabric.prototype.fillRect = function(style, a1, a2, a3, a4) {
 	var pan = this.pan;
 	var cx = this._cx;
 	cx.fillStyle = style;
+	/*
 	if (typeof(p) === 'object') {
 		if (a1 instanceof Rect)
 			return this._cx.fillRect(a1.pnw.x, a1.pnw.y, a1.pse.x, a1.pse.y);
@@ -305,8 +291,9 @@ Fabric.prototype.fillRect = function(style, a1, a2, a3, a4) {
 			return this._cx.fillRect(a1.x, a1.y, a2.x, a2.y);
 		throw new Error('fillRect not a rectangle');
 	}
-	return this._cx.fillRect(a1, a2, a3, a4);
-}
+	*/
+	return this._cx.fillRect(a1 + pan.x, a2 + pan.y, a3, a4);
+};
 
 /**
 | Begins a path.
@@ -316,14 +303,14 @@ Fabric.prototype.beginPath = function(twist) {
 	// lines are targed at .5 coords.
 	this._twist = twist ? 0.5 : 0;
 	this._cx.beginPath();
-}
+};
 
 /**
 | Closes a path.
 */
 Fabric.prototype.closePath = function() {
 	this._cx.closePath();
-}
+};
 
 /**
 | Draws an image.
@@ -345,7 +332,7 @@ Fabric.prototype.drawImage = function(image, a1, a2) {
 	}
 	ensureInteger(x, y);
 	this._cx.drawImage(image, x + pan.x, y + pan.y);
-}
+};
 
 
 /**
@@ -362,7 +349,7 @@ Fabric.prototype.putImageData = function(imagedata, a1, a2) {
 	}
 	ensureInteger(x, y);
 	this._cx.putImageData(imagedata, x + pan.x, y + pan.y);
-}
+};
 
 /**
 | getImageData(rect)     -or-
@@ -389,7 +376,7 @@ Fabric.prototype.getImageData = function(a1, a2, a3, a4) {
 
 	ensureInteger(x1, y2, x1, y2);
 	return this._cx.getImageData(a1, a2, a3, a4);
-}
+};
 
 /**
 | Returns a HTML5 color style for a meshcraft style notation.
@@ -433,7 +420,7 @@ Fabric.prototype._colorStyle = function(style, shape) {
 		grad.addColorStop(steps[i][0], steps[i][1]);
 	}
 	return grad;
-}
+};
 
 /**
 | Draws a filled area.
@@ -447,7 +434,7 @@ Fabric.prototype.fill = function(style, shape, path, a1, a2, a3, a4) {
 	cx.fillStyle = this._colorStyle(style, shape);
 	if (this._twist !== 0) throw new Error('wrong twist');
 	cx.fill();
-}
+};
 
 /**
 | Draws a single edge.
@@ -462,7 +449,7 @@ Fabric.prototype._edge = function(style, shape, path, a1, a2, a3, a4) {
 	cx.lineWidth = style.width;
 	if (this._twist !== 0.5) throw new Error('wrong twist');
 	cx.stroke();
-}
+};
 
 /**
 | Draws an edge.
@@ -477,9 +464,9 @@ Fabric.prototype.edge = function(style, shape, path, a1, a2, a3, a4) {
 			this._edge(style[i], shape, path, a1, a2, a3, a4);
 		}
 	} else {
-		this._edge(style[i], shape, path, a1, a2, a3, a4);
+		this._edge(style, shape, path, a1, a2, a3, a4);
 	}
-}
+};
 
 /**
 | Fills an aera and draws its borders
@@ -491,15 +478,14 @@ Fabric.prototype.paint = function(style, shape, path, a1, a2, a3, a4) {
 	shape[path](this, 0, false, a1, a2, a3, a4);
 	cx.fillStyle = this._colorStyle(fillStyle, shape);
 	cx.fill();
-	var cx = this._cx;
 	if (edgeStyle instanceof Array) {
 		for(var i = 0; i < edgeStyle.length; i++) {
 			this._edge(edgeStyle[i], shape, path, a1, a2, a3, a4);
 		}
 	} else {
-		this._edge(edgeStyle[i], shape, path, a1, a2, a3, a4);
+		this._edge(edgeStyle, shape, path, a1, a2, a3, a4);
 	}
-}
+};
 
 /**
 | Draws some text.
@@ -509,7 +495,7 @@ Fabric.prototype.fillText = function(text, a1, a2) {
 		return this._cx.fillText(text, a1.x, a1.y);
 	}
 	return this._cx.fillText(text, a1, a2);
-}
+};
 
 /**
 | Draws some text rotated by phi
@@ -535,7 +521,7 @@ Fabric.prototype.fillRotateText = function(text, pc, phi, d) {
 	var y1 = (y * t1 - x * t2) / det;
 	cx.fillText(text, x1, y1);
 	cx.setTransform(1, 0, 0, 1, 0, 0);
-}
+};
 
 
 /**
@@ -552,7 +538,7 @@ Fabric.prototype.fontStyle = function(font, fill, align, baseline) {
 	cx.fillStyle    = fill;
 	cx.textAlign    = align;
 	cx.textBaseline = baseline;
-}
+};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,-,-,-.
@@ -570,7 +556,7 @@ var Measure = {
 	width : function(text) {
 		return Measure._cx.measureText(text).width;
 	}
-}
+};
 
 Object.defineProperty(Measure, 'font', {
 	get: function() { return Measure._cx.font; },
@@ -592,7 +578,7 @@ Object.defineProperty(Measure, 'font', {
 | Point(x, y) or
 | Point(p)
 */
-function Point(a1, a2) {
+var Point = function(a1, a2) {
 	if (typeof(a1) === 'object') {
 		fixate(this, 'x', a1.x);
 		fixate(this, 'y', a1.y);
@@ -601,7 +587,7 @@ function Point(a1, a2) {
 		fixate(this, 'y', a2);
 	}
 	fixate(this, 'type', 'Point'); // @@ So Tree is happy
-}
+};
 
 /**
 | Shortcut for point at 0/0.
@@ -622,7 +608,7 @@ Point.renew = function(x, y) {
 		if (p instanceof Point && p.x === x && p.y === y) return p;
 	}
 	return new Point(x, y);
-}
+};
 
 /**
 | Returns a json object for this point.
@@ -638,7 +624,7 @@ Point.prototype.eq = function(a1, a2) {
 	return typeof(a1) === 'object' ?
 		this.x === a1.x && this.y === a1.y :
 		this.x === a1   && this.y === a2;
-}
+};
 
 /**
 | Adds two points or x/y values, returns a new point.
@@ -647,7 +633,7 @@ Point.prototype.add = function(a1, a2) {
 	return typeof(a1) === 'object' ?
 		new Point(this.x + a1.x, this.y + a1.y) :
 		new Point(this.x + a1,   this.y + a2);
-}
+};
 
 /**
 | Subtracts a points (or x/y from this), returns new point
@@ -656,7 +642,7 @@ Point.prototype.sub = function(a1, a2) {
 	return typeof(a1) === 'object' ?
 		new Point(this.x - a1.x, this.y - a1.y) :
 		new Point(this.x - a1,   this.y - a2);
-}
+};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .-,--.         .
@@ -673,7 +659,7 @@ Point.prototype.sub = function(a1, a2) {
 | pnw: point to north west.
 | pse: point to south east.
 */
-function Rect(pnw, pse) {
+var Rect = function(pnw, pse) {
 	if (!pnw || !pse || pnw.x > pse.x || pnw.y > pse.y) {
 		throw reject('not a rectangle.');
 	}
@@ -682,7 +668,7 @@ function Rect(pnw, pse) {
 	fixateNoEnum(this, 'width',  pse.x - pnw.x);
 	fixateNoEnum(this, 'height', pse.y - pnw.y);
 	fixate(this, 'type', 'Rect'); // @@ So Tree is happy
-}
+};
 
 /**
 | Returns a rect moved by a point or x/y
@@ -692,7 +678,7 @@ function Rect(pnw, pse) {
 */
 Rect.prototype.add = function(a1, a2) {
 	return new Rect(this.pnw.add(a1, a2), this.pse.add(a1, a2));
-}
+};
 
 /**
 | Returns a rect moved by a -point or -x/-y.
@@ -702,27 +688,26 @@ Rect.prototype.add = function(a1, a2) {
 */
 Rect.prototype.sub = function(a1, a2) {
 	return new Rect(this.pnw.sub(a1, a2), this.pse.sub(a1, a2));
-}
+};
 
 /**
 | Returns true if point is within this rect.
 */
 Rect.prototype.within = function(p) {
-	return p.x >= this.pnw.x && p.y >= this.pnw.y &&
-	       p.x <= this.pse.x && p.y <= this.pse.y;
-}
+	return p.x >= this.pnw.x && p.y >= this.pnw.y && p.x <= this.pse.x && p.y <= this.pse.y;
+};
 
 /**
 | Draws the rectangle.
 */
-Rect.prototype.path = function(c2d, border, twist) {
-	c2d.beginPath(twist);
-	c2d.moveTo(this.pnw.x + border, this.pnw.y + border);
-	c2d.lineTo(this.pse.x - border, this.pnw.y + border);
-	c2d.lineTo(this.pse.x - border, this.pse.y - border);
-	c2d.lineTo(this.pnw.x + border, this.pse.y - border);
-	c2d.closePath();
-}
+Rect.prototype.path = function(fabric, border, twist) {
+	fabric.beginPath(twist);
+	fabric.moveTo(this.pnw.x + border, this.pnw.y + border);
+	fabric.lineTo(this.pse.x - border, this.pnw.y + border);
+	fabric.lineTo(this.pse.x - border, this.pse.y - border);
+	fabric.lineTo(this.pnw.x + border, this.pse.y - border);
+	fabric.closePath();
+};
 
 /**
 | Returns a resized rectangle.
@@ -796,7 +781,7 @@ Rect.prototype.resize = function(width, height, align) {
 		throw new Error('invalid align: '+align);
 	}
 	return new Rect(pnw, pse);
-}
+};
 
 /**
 | Returns a rectangle with same size at position.
@@ -807,14 +792,14 @@ Rect.prototype.resize = function(width, height, align) {
 Rect.prototype.moveto = function(a1, a2) {
 	if (typeof(a1) !== 'object') a1 = new Point(a1, a2);
 	return new Rect(a1, a1.add(this.width, this.height));
-}
+};
 
 /**
 | Returns true if this rectangle is the same as another
 */
 Rect.prototype.eq = function(r) {
 	return this.pnw.eq(r.pnw) && this.pse.eq(r.pse);
-}
+};
 
 /**
 | Returns a rectangle thats reduced on every side by a margin object
@@ -826,7 +811,7 @@ Rect.prototype.reduce = function(margin) {
 	return new Rect(
 		Point.renew(this.pnw.x + margin.e, this.pnw.y + margin.n, this.pnw, this.pse),
 		Point.renew(this.pse.x - margin.w, this.pse.y - margin.s, this.pnw, this.pse));
-}
+};
 
 /**
 | Point in the center.
@@ -856,7 +841,7 @@ lazyFixate(Rect.prototype, 'pc', function() {
 | s: south margin
 | w: west margin
 */
-function Margin(m, e, s, w) {
+var Margin = function(m, e, s, w) {
 	if (typeof(m) === 'object') {
 		fixate(this, 'n', m.n);
 		fixate(this, 'e', m.e);
@@ -868,7 +853,7 @@ function Margin(m, e, s, w) {
 		fixate(this, 's', s);
 		fixate(this, 'w', w);
 	}
-}
+};
 
 /**
 | A margin with all distances 0.
@@ -880,7 +865,7 @@ Margin.zero = new Margin(0, 0, 0, 0);
 */
 Margin.prototype.toJSON = function() {
 	return this._json || (this._json = { n: this.n, e: this.e, s: this.s, w: this.w });
-}
+};
 
 /**
 | East + west margin = x
@@ -941,7 +926,7 @@ RoundRect.prototype.path = function(c2d, border, twist) {
 	c2d.arc(sex - cr, sey - cr, cr,   0,  ph, false);
 	c2d.arc(nwx + cr, sey - cr, cr,  ph,  pi, false);
 	c2d.arc(nwx + cr, nwy + cr, cr,  pi, -ph, false);
-}
+};
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -963,12 +948,12 @@ RoundRect.prototype.path = function(c2d, border, twist) {
 | pc: center
 | r: radius
 */
-function Hexagon(pc, r) {
+var Hexagon = function(pc, r) {
 	if (typeof(pc) !== 'object' || !(pc instanceof Point)) throw new Error('invalid pc');
 	fixate(this, 'pc', pc);
 	fixate(this, 'r', r);
 	Object.freeze(this);
-}
+};
 
 
 /**
@@ -976,21 +961,21 @@ function Hexagon(pc, r) {
 */
 Hexagon.jnew = function(js) {
 	return new Hexagon(js.pc, js.r);
-}
+};
 
 /**
 | Returns a json object for this hexagon.
 */
 Hexagon.prototype.toJSON = function() {
 	return this._json || (this._json = { pc: this.pc, r: this.r });
-}
+};
 
 /**
 | Returns a hexagon moved by a point or x/y.
 */
 Hexagon.prototype.add = function(a1, a2) {
 	return new Hexagon(this.pc.add(a1, a2), this.r);
-}
+};
 
 /**
 | Returns true if point is within this hexagon.
@@ -1003,7 +988,7 @@ Hexagon.prototype.within = function(p) {
 	return dy >= -rc && dy <= rc &&
            dx - this.r < -yhc6 &&
            dx + this.r >  yhc6;
-}
+};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,-_/,.                         .---. .
@@ -1084,7 +1069,7 @@ HexagonSlice.prototype.path = function(c2d, border, twist) {
 	c2d.lineTo(this.pm.x - r05            + border, this.psw.y - this.height + border);
 	c2d.lineTo(this.pm.x + r05            - border, this.psw.y - this.height + border);
 	c2d.lineTo(2 * this.pm.x - this.psw.x - border, this.psw.y               - border);
-}
+};
 
 /**
 | Returns true if point is within the slice.
@@ -1093,9 +1078,8 @@ HexagonSlice.prototype.within = function(p) {
 	var dy = p.y - this.psw.y;
 	var dx = p.x - this.psw.x;
 	var hy = dy * tan30;
-	return dy >= -this.height && dy <= 0 &&
-	       dx >= -hy && dx - this.width <= hy;
-}
+	return dy >= -this.height && dy <= 0 && dx >= -hy && dx - this.width <= hy;
+};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,-_/,.                        .-,--' .
@@ -1129,7 +1113,7 @@ HexagonSlice.prototype.within = function(p) {
  segs: which segments to include
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function HexagonFlower(pc, ri, ro, segs) {
+var HexagonFlower = function(pc, ri, ro, segs) {
 	if (ri > ro) throw new Error('inner radius > outer radius');
 	fixate(this, 'pc', pc);
 	fixate(this, 'ri', ri);
@@ -1137,7 +1121,7 @@ function HexagonFlower(pc, ri, ro, segs) {
 	fixate(this, 'gradientPC', pc);
 	fixate(this, 'gradientR1', ro);
 	fixate(this, 'segs', segs);
-}
+};
 
 /**
 | Makes the flower-hex-6 path.
@@ -1248,7 +1232,7 @@ HexagonFlower.prototype.path = function(c2d, border, twist, segment) {
 		c2d.lineTo(pcx - ro  + b,  pcy);
 		break;
 	}
-}
+};
 
 /**
 | Returns the segment the point is within.
@@ -1278,7 +1262,7 @@ HexagonFlower.prototype.within = function(p) {
 	else if (lor && !aom)  return 'sw';
 	else if (!rol && aom)  return 'nw';
 	else return 'center';
-}
+};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,
@@ -1300,12 +1284,12 @@ HexagonFlower.prototype.within = function(p) {
 | p2: point 1
 | p2end: 'normal' or 'arrow'
 */
-function Line(p1, p1end, p2, p2end) {
+var Line = function(p1, p1end, p2, p2end) {
 	fixate(this, 'p1', p1);
 	fixate(this, 'p1end', p1end);
 	fixate(this, 'p2', p2);
 	fixate(this, 'p2end', p2end);
-}
+};
 
 /**
 | Returns the line connecting entity1 to entity2
@@ -1317,10 +1301,11 @@ function Line(p1, p1end, p2, p2end) {
 */
 Line.connect = function(shape1, end1, shape2, end2) {
 	if (!shape1 || !shape2) throw new Error('error');
+	var z1, z2;
 
 	if (shape1 instanceof Rect && shape2 instanceof Point) {
 		var p2 = shape2;
-		var z1 = shape1;
+		z1 = shape1;
 		var p1;
 		if (z1.within(p2)) {
 			p1 = z1.pc;
@@ -1332,8 +1317,8 @@ Line.connect = function(shape1, end1, shape2, end2) {
 		return new Line(p1, end1, p2, end2);
 	}
 	if (shape1 instanceof Rect && shape2 instanceof Rect) {
-		var z1 = shape1;
-		var z2 = shape2;
+		z1 = shape1;
+		z2 = shape2;
 		var x1, y1, x2, y2;
 		if (z2.pnw.x > z1.pse.x) {
 			// zone2 is clearly on the right
@@ -1362,7 +1347,7 @@ Line.connect = function(shape1, end1, shape2, end2) {
 		return new Line(new Point(x1, y1), end1, new Point(x2, y2), end2);
 	}
 	throw new Error('do not know how to create connection.');
-}
+};
 
 /**
 | Returns the zone of the arrow.
@@ -1431,21 +1416,21 @@ Line.prototype.path = function(c2d, border, twist) {
 		throw new Error('unknown line end');
 	}
 
-}
+};
 
 /**
 | Draws the line.
 */
 Line.prototype.draw = function(c2d) {
-	var style = settings.relation.style;  // @03 what the heck, why use relation.style?
+	var style = settings.relation.style;  // TODO what the heck, why use relation.style?
 	c2d.paint(style, this, 'path');
-}
+};
 
 /**
 | Returns true if p is near the line spawned by p1 and p2.
 */
+/*
 Line.prototype.isNear = function(p, dis) {
-	throw new Error('TODO');
 	var dx = p.x - p1.x;
 	var dy = p.y - p1.y;
 	if (Math.abs(dx) < 8 && Math.abs(dy) < 8) {
@@ -1457,6 +1442,7 @@ Line.prototype.isNear = function(p, dis) {
 		return Math.abs(dy - (p2.y - p1.y) / (p2.x - p1.x) * dx) < dis;
 	}
 }
+*/
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  Module Export

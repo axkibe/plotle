@@ -26,4 +26,4 @@ module.exports = {
 		web:    true,
 		warn:   true
 	}
-}
+};
