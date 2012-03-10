@@ -10,6 +10,7 @@
 */
 var Jools;
 var Fabric;
+var Path;
 var Peer;
 var Tree;
 
@@ -30,7 +31,6 @@ var R         = Math.round;
 var F         = Math.floor;
 var max       = Math.max;
 var min       = Math.min;
-var Path      = Tree.Path;
 
 /**
 | Current action

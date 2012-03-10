@@ -21,25 +21,27 @@
  Authors: Axel Kittenberger
  License: GNU Affero AGPLv3
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-/**
-| Imports
-*/
-var util = require('util');
-var http = require('http');
-var url  = require('url');
-var fs   = require('fs');
-
-var config = require('./config');
-var Jools  = require('./jools');
-var Tree   = require('./tree');
-var MeshMashine = require('./meshmashine');
-
 /**
 | Capsule
 */
 (function(){
 "use strict";
+
+/**
+| Imports
+*/
+var util        = require('util');
+var http        = require('http');
+var url         = require('url');
+var fs          = require('fs');
+
+var config      = require('./config');
+var Jools       = require('./jools');
+var MeshMashine = require('./meshmashine');
+var Path        = require('./path');
+var Patterns    = require('./patterns');
+var Tree        = require('./tree');
+
 
 var debug  = Jools.debug;
 var log    = Jools.log;
@@ -73,11 +75,11 @@ try {
 */
 var mm;
 (function() {
-	var nexus = Tree.grow( { type : 'Nexus' } );
-	mm = new MeshMashine(nexus, false, false);
+	var tree = new Tree({ type : 'Nexus' }, Patterns.mUniverse, false);
+	mm = new MeshMashine(tree, false);
 
 	// startup init
-	var spacepath = new Tree.Path(['welcome']);
+	var spacepath = new Path(['welcome']);
 	var src = {
 		val: {
 			type: 'Space',
@@ -236,20 +238,25 @@ var mime = {
 	xi : 'image/x-icon'
 };
 
+
+// TODO make little functions that set .mime and .code
+
 var content = {
 	'/'               : { file: './meshcraft.html',    mime: mime.ht, code: 'utf-8'  },
-	'/index.html'     : { file: './meshcraft.html',    mime: mime.ht, code: 'utf-8'  },
-	'/meshcraft.html' : { file: './meshcraft.html',    mime: mime.ht, code: 'utf-8'  },
 	'/browser.js'     : { file: './browser.js',        mime: mime.js, code: 'utf-8'  },
 	'/fabric.js'      : { file: './fabric.js',         mime: mime.js, code: 'utf-8'  },
-	'/jools.js'       : { file: './jools.js',          mime: mime.js, code: 'utf-8'  },
-	'/tree.js'        : { file: './tree.js',           mime: mime.js, code: 'utf-8'  },
-	'/shell.js'       : { file: './shell.js',          mime: mime.js, code: 'utf-8'  },
-	'/meshmashine.js' : { file: './meshmashine.js',    mime: mime.js, code: 'utf-8'  },
-	'/peer.js'        : { file: './peer.js',           mime: mime.js, code: 'utf-8'  },
+	'/index.html'     : { file: './meshcraft.html',    mime: mime.ht, code: 'utf-8'  },
 	'/favicon.ico'    : { file: './icons/hexicon.ico', mime: mime.xi, code: 'binary' },
+	'/jools.js'       : { file: './jools.js',          mime: mime.js, code: 'utf-8'  },
+	'/meshcraft.html' : { file: './meshcraft.html',    mime: mime.ht, code: 'utf-8'  },
+	'/meshmashine.js' : { file: './meshmashine.js',    mime: mime.js, code: 'utf-8'  },
+	'/path.js'        : { file: './path.js',           mime: mime.js, code: 'utf-8'  },
+	'/patterns.js'    : { file: './patterns.js',       mime: mime.js, code: 'utf-8'  },
+	'/peer.js'        : { file: './peer.js',           mime: mime.js, code: 'utf-8'  },
+	'/shell.js'       : { file: './shell.js',          mime: mime.js, code: 'utf-8'  },
 	'/testpad.html'   : { file: './testpad.html',      mime: mime.ht, code: 'utf-8'  },
-	'/testpad.js'     : { file: './testpad.js',        mime: mime.js, code: 'utf-8'  }
+	'/testpad.js'     : { file: './testpad.js',        mime: mime.js, code: 'utf-8'  },
+	'/tree.js'        : { file: './tree.js',           mime: mime.js, code: 'utf-8'  }
 };
 
 /**
@@ -290,8 +297,8 @@ var mmAjax = function(req, red, res) {
 			case 'alter':
 				if (!cmd.src) { throw reject('cmd.src missing'); }
 				if (!cmd.trg) { throw reject('cmd.trg missing'); }
-				if (cmd.src.path) cmd.src.path = new Tree.Path(cmd.src.path);
-				if (cmd.trg.path) cmd.trg.path = new Tree.Path(cmd.trg.path);
+				if (cmd.src.path) cmd.src.path = new Path(cmd.src.path);
+				if (cmd.trg.path) cmd.trg.path = new Path(cmd.trg.path);
 				asw = mm.alter(cmd.time, cmd.src, cmd.trg);
 				break;
 			case 'get':
@@ -299,7 +306,7 @@ var mmAjax = function(req, red, res) {
 					webError(res, 400, 'cmd get requires .path');
 					break;
 				}
-				var path = new Tree.Path(cmd.path);
+				var path = new Path(cmd.path);
 				asw = mm.get(cmd.time, path);
 				break;
 			case 'now':

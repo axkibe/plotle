@@ -31,6 +31,7 @@
 | Imports
 */
 var Jools;
+var Path;
 var Tree;
 
 /**
@@ -42,7 +43,6 @@ var MeshMashine;
 | Capsule
 */
 (function() {
-
 "use strict";
 
 /**
@@ -50,6 +50,7 @@ var MeshMashine;
 */
 if (typeof(window) === 'undefined') {
 	Jools = require('./jools');
+	Path  = require('./path');
 	Tree  = require('./tree');
 }
 
@@ -57,16 +58,17 @@ var debug       = Jools.debug;
 var log         = Jools.log;
 var clone       = Jools.clone;
 var deepFreeze  = Jools.deepFreeze;
+var fixate      = Jools.fixate;
 var immute      = Jools.immute;
 var is          = Jools.is;
 var isnon       = Jools.isnon;
 var isArray     = Jools.isArray;
 var isInteger   = Jools.isInteger;
 var isString    = Jools.isString;
-var fixate      = Jools.fixate;
+var matches     = Jools.matches;
 var reject      = Jools.reject;
-var isPath      = Tree.isPath;
-var Path        = Tree.Path;
+
+var isPath      = Path.isPath;
 
 function fail(args, aoffset) {
 	var a = Array.prototype.slice.call(args, aoffset, args.length);
@@ -184,10 +186,10 @@ Alter.set = function(tree, src, trg, report) {
 	//var parent = tree.get(ppath);
 	//if (path.get(-1) === '$new') path = Tree.newKey(tree, path);
 
-	var save = Tree.getPath(tree, path);
+	var save = tree.getPath(path);
 
 	if (is(trg.val)) {
-		check(Tree.matches(save, trg.val), cm, 'trg.val faulty preset');
+		check(matches(save, trg.val), cm, 'trg.val faulty preset');
 	} else {
 		if (!is(save)) save = null;
 		trg = new Signature(trg, 'val', save);
@@ -199,7 +201,7 @@ Alter.set = function(tree, src, trg, report) {
 		src = new Signature(src, 'path', trg.path);
 	}
 
-	tree = Tree.setPath(tree, path, src.val);
+	tree = tree.setPath(path, src.val);
 
 	//if (report && parent.report) parent.report('set', trg.path.get(-1), src.val);
 	return { tree: tree, src: src, trg: trg };
@@ -212,7 +214,7 @@ Alter.insert = function(tree, src, trg, report) {
 	var cm = 'alter.insert';
 
 	check(isPath(trg.path), cm, 'trg.path missing');
-	var str = Tree.getPath(tree, trg.path);
+	var str = tree.getPath(trg.path);
 	check(isString(str), cm, 'trg.path signates no string');
 
 	// where trg span should end
@@ -223,7 +225,7 @@ Alter.insert = function(tree, src, trg, report) {
 		trg = new Signature(trg, 'at2', tat2);
 	}
 	var nstr = str.substring(0, trg.at1) + src.val + str.substring(trg.at1);
-	tree = Tree.setPath(tree, trg.path, nstr);
+	tree = tree.setPath(trg.path, nstr);
 
 	//if (report) {
 	//	var parent = tree.get(trg.path, 0, -1);
@@ -238,7 +240,7 @@ Alter.insert = function(tree, src, trg, report) {
 Alter.remove = function(tree, src, trg, report) {
 	var cm = 'alter.remove';
 	check(isPath(src.path), cm, 'src.path missing');
-	var str = Tree.getPath(tree, src.path);
+	var str = tree.getPath(src.path);
 	check(isString(str), cm, 'src.path signates no string');
 
 	if (src.at1 === src.at2) {
@@ -248,12 +250,12 @@ Alter.remove = function(tree, src, trg, report) {
 
 	var val = str.substring(src.at1, src.at2);
 	if (isnon(trg.val)) {
-		check(Tree.matches(val, trg.val), cm, 'trg.val faulty preset');
+		check(matches(val, trg.val), cm, 'trg.val faulty preset');
 	} else {
 		trg = new Signature(trg, 'val', val);
 	}
 	var nstr = str.substring(0, src.at1) + str.substring(src.at2);
-	tree = Tree.setPath(tree, src.path, nstr);
+	tree = tree.setPath(src.path, nstr);
 
 	//if (report) {
 	//	var parent = tree.get(src.path, 0, -1);
@@ -271,12 +273,12 @@ Alter.join = function(tree, src, trg, report) {
 
 	var at1 = trg.at1;
 	check(is(at1), cm, 'trg.at1 missing');
-	var text = Tree.getPath(tree, path);
+	var text = tree.getPath(path);
 	check(isString(text), cm, 'trg signates no text');
 
 	var key = path.get(-2);
-	var pivot   = Tree.getPath(tree, path, -2);
-	var pattern = Tree.getPattern(pivot);
+	var pivot   = tree.getPath(path, -2);
+	var pattern = tree.getPattern(pivot);
 	check(pattern.alley, cm, 'pivot has no alley');
 	var kn  = pivot.alley.indexOf(key);
 	check(kn >= 0, cm, 'line key not found in alley');
@@ -290,11 +292,11 @@ Alter.join = function(tree, src, trg, report) {
 	var para1 = pivot.copse[key];
 	var para2 = pivot.copse[key2];
 	// @@ check other keys to be equal
-	para1 = Tree.grow(para1, 'text', para1.text + para2.text);
-	pivot = Tree.grow(pivot, key, para1, key2, null, '-', kn + 1);
+	para1 = tree.grow(para1, 'text', para1.text + para2.text);
+	pivot = tree.grow(pivot, key, para1, key2, null, '-', kn + 1);
 
 	var ppath = new Path(path, '--', 2); // TODO, add a shorten parameter to setPath instead.
-	tree  = Tree.setPath(tree, ppath, pivot);
+	tree = tree.setPath(ppath, pivot);
 
 //	if (report) {
 //		if (pivot.report) pivot.report('join', path.get(trg.pivot), trg.at1, ppre);
@@ -313,11 +315,11 @@ Alter.split = function(tree, src, trg, report) {
 
 	var at1 = src.at1;
 	check(is(at1), cm, 'src.at1 missing');
-	var text = Tree.getPath(tree, path);
+	var text = tree.getPath(path);
 	check(isString(text), cm, 'src signates no text');
 
-	var pivot   = Tree.getPath(tree, path, -2);
-	var pattern = Tree.getPattern(pivot);
+	var pivot   = tree.getPath(path, -2);
+	var pattern = tree.getPattern(pivot);
 	check(pattern.alley, cm, 'pivot has no alley');
 	check(pattern.inc, cm, 'pivot does not increment');
 
@@ -337,12 +339,12 @@ Alter.split = function(tree, src, trg, report) {
 
 	var para1, para2;
 	para1 = pivot.copse[key];
-	para2 = Tree.grow(para1, 'text', text.substring(at1, text.length));
-	para1 = Tree.grow(para1, 'text', text.substring(0, at1));
-	pivot = Tree.grow(pivot, key, para1, incKey, para2, '+', kn + 1, incKey);
+	para2 = tree.grow(para1, 'text', text.substring(at1, text.length));
+	para1 = tree.grow(para1, 'text', text.substring(0, at1));
+	pivot = tree.grow(pivot, key, para1, incKey, para2, '+', kn + 1, incKey);
 
 	var ppath = new Path(path, '--', 2); // TODO, add a shorten parameter to setPath instead.
-	tree  = Tree.setPath(tree, ppath, pivot);
+	tree  = tree.setPath(ppath, pivot);
 
 //	if (report) {
 //		if (pivot.report) pivot.report('split', src.path.get(src.pivot), src.at1, pnew);
@@ -387,7 +389,7 @@ Alter.take = function(tree, src, trg, report) {
 
 	var val = alley.get(src.at1);
 	if (is(trg.val)) {
-		check(Tree.matches(val, trg.val), cm, 'trg.val faulty preset');
+		check(matches(val, trg.val), cm, 'trg.val faulty preset');
 	} else {
 		trg.val = val;
 	}
@@ -779,13 +781,12 @@ MeshMashine.prototype.get = function(time, path) {
 		if (time >= 0) {
 			if (!this._isValidTime(time)) return reject('invalid time');
 			reflect = this._reflect(time);
-			reflect = Tree.getPath(reflect, path);
+			reflect = reflect.getPath(path);
 		} else {
-			reflect = Tree.getPath(this.tree, path);
+			reflect = this.tree.getPath(path);
 			time = this.history.length;
 		}
 		log('mm', 'ok', time, reflect);
-		debug('HISTORY', this.history);
 		return {ok: true, time: time, node: reflect };
 	} catch(err) {
 		// returns rejections but rethrows coding errors.

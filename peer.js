@@ -29,6 +29,7 @@
 */
 var MeshMashine;
 var Path;
+var Patterns;
 var Tree;
 var Jools;
 
@@ -36,34 +37,35 @@ var Jools;
 | Exports
 */
 var Peer;
+
 /**
 | Capsule
 */
 (function () {
-
 "use strict";
-
-/**
-| Running in node or browser?
-*/
 if (typeof (window) === 'undefined') throw new Error('Peer nees a browser!');
 
 var debug     = Jools.debug;
 var log       = Jools.log;
-var Path      = Tree.Path;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- +++ Peer +++
+ .-,--.
+  '|__/ ,-. ,-. ,-.
+  ,|    |-' |-' |
+  `'    `-' `-' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  Communicates with the server, holds caches.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+/**
+| Constructor
+*/
 Peer = function(async) {
 	this._async = async = async ? true : false;
 	if (async) {
-		var nexus = Tree.grow( { type: 'Nexus' } );
-		this.mm = new MeshMashine(nexus, true, true);
+		this.mm = new MeshMashine({ type: 'Nexus'}, Patterns.mUniverse, true);
 	}
 	this.time = -1;  // @@ See if this is permanently needed
 };

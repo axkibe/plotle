@@ -31,14 +31,15 @@ var puffed;
 /**
 | returns true if param is true for the client
 */
-function configSwitchClient(param) {
+var configSwitchClient = function(param) {
 	return param === true || param === 'client' || param === 'both';
 }
 
 /**
 | returns true if param is true for the server
+| TODO combine with configSwitchClient into one function
 */
-function configSwitchServer(param) {
+var configSwitchServer = function(param) {
 	return param === true || param === 'server' || param === 'both';
 }
 
@@ -59,43 +60,43 @@ if (typeof(window) === 'undefined') {
 /**
 | Testers
 */
-function is(o)        { return typeof(o) !== 'undefined'; }
-function isnon(o)     { return typeof(o) !== 'undefined' && o !== null; }
-function isInteger(o) { return typeof(o) === 'number' && Math.floor(o) === o; }
-function isArray(o)   { return o.constructor === Array; }
-function isString(o)  { return typeof(o) === 'string' || o instanceof String; }
+var is        = function(o) { return typeof(o) !== 'undefined'; };
+var isnon     = function(o) { return typeof(o) !== 'undefined' && o !== null; };
+var isInteger = function(o) { return typeof(o) === 'number' && Math.floor(o) === o; };
+var isArray   = function(o) { return o.constructor === Array; };
+var isString  = function(o) { return typeof(o) === 'string' || o instanceof String; };
 
 /**
 | Limits value to be between min and max
 */
-function limit(min, val, max) {
+var limit = function(min, val, max) {
 	if (min > max) throw new Error('limit() min > max');
 	if (val < min) return min;
 	if (val > max) return max;
 	return val;
-}
+};
 
 /**
 | Returns true if min <= val <= max
 */
-function within(min, val, max) {
+var within = function(min, val, max) {
 	if (val < min) return false;
 	if (val > max) return false;
 	return true;
-}
+};
 
 /**
 | Returns a rejection error
 */
-function reject(message) {
+var reject = function(message) {
 	// in devel mode any failure is fatal.{
 	if (Jools.devel) throw new Error(message);
 	log('reject', 'reject', message);
 	return {ok: false, message: message};
-}
+};
 
 /**
-| Legacy | (for opera browser)
+| Legacy (for opera browser)
 */
 if (!Object.defineProperty) {
 	console.log('Using legacy Object.defineProperty');
@@ -123,7 +124,7 @@ if (!Object.freeze) {
 |       or a table of prototype to become the base for multiple
 |       inheritance.
 */
-function subclass(sub, base) {
+var subclass = function(sub, base) {
 	function Inherit() {}
 	if (base.constructor === Object) {
 		// multiple inheritance
@@ -142,38 +143,73 @@ function subclass(sub, base) {
 	}
 	sub.prototype = new Inherit();
 	sub.prototype.constructor = sub;
-}
+};
 
 /**
 | Fixates a value to an object (not changeable)
 */
-function fixate(obj, key, value) {
+var fixate = function(obj, key, value) {
     Object.defineProperty(obj, key, {enumerable: true, value: value});
     return value;
-}
+};
 
 /**
 | Fixates a value to an object (not changeable) and makes it non enumerable.
 */
-function fixateNoEnum(obj, key, value) {
+var fixateNoEnum = function(obj, key, value) {
     Object.defineProperty(obj, key, {value: value});
     return value;
-}
+};
+
+/**
+| Copies one object (not deep!)
+|
+| o ... the object to copy from
+| c ... the object to copy into
+*/
+var copy = function(o, c) {
+	for (var k in o) {
+		if (!Object.hasOwnProperty.call(o, k)) continue;
+		c[k] = o[k];
+	}
+	return c;
+};
+
+
+/**
+| Returns true if this node matches a master or a node of equal class
+*/
+var matches = function(twig1, twig2) {
+	if (twig1 === twig2) return true;
+	switch(twig1.constructor) {
+	case String : return false;
+	case Number : return false;
+	}
+
+	var k1 = Object.keys(twig1);
+	var k2 = Object.keys(twig2);
+	if (k1.length !== k2.length) { return false; }
+	for (var a = 0, aZ = k1.length; a < aZ; a++) {
+		var k = k1[a];
+		if (!matches(twig1[k], twig2[k])) return false;
+	}
+	return true;
+};
 
 /**
 | Pushes a 2-decimal number on an array.
 */
-function _pushpad(a, n, s) {
+var _pushpad = function(a, n, s) {
 	if (n < 10) a.push('0');
 	a.push(n);
 	a.push(s);
 	return a;
-}
+};
 
 /**
 | Creates a timestamp which will be returned as joinable array.
 */
-function _timestamp(a) {
+var _timestamp = function(a) {
 	var now = new Date();
 	_pushpad(a, now.getMonth() + 1, '-');
 	_pushpad(a, now.getDate(),      ' ');
@@ -181,14 +217,14 @@ function _timestamp(a) {
 	_pushpad(a, now.getMinutes(),   ':');
 	_pushpad(a, now.getSeconds(),   ' ');
 	return a;
-}
+};
 
 /**
 | Pushes spaces into array for indentation.
 */
-function _pushindent(indent, a) {
+var _pushindent = function(indent, a) {
 	for (var i = 0; i < indent; i++) a.push('  ');
-}
+};
 
 /**
 | Inspects an object and creates a descriptive string for it.
@@ -197,7 +233,7 @@ function _pushindent(indent, a) {
 | Not using toJSON since that fails on circles.
 | This is the jools-internal version that pushes data directly on the array stack.
 */
-function _inspect(o, array, indent, circle) {
+var _inspect = function(o, array, indent, circle) {
 	if (circle.indexOf(o) !== -1) {
 		array.push('^circle^');
 		return;
@@ -281,12 +317,12 @@ function _inspect(o, array, indent, circle) {
 	default :
 		array.push('!!Unknown Type: ', to, '!!');
 	}
-}
+};
 
 /**
 | Logs a number of inspected argument if category is configured to be logged.
 */
-function log(category) {
+var log = function(category) {
 	if (category === 'fail') {
 		console.log('FAIL'); // TODO Just a line for breakpoints.
 	}
@@ -302,7 +338,7 @@ function log(category) {
 		_inspect(arguments[i], a, 0, []);
 	}
 	console.log(a.join(''));
-}
+};
 
 /**
 | Shortcut for log('debug', ...);
@@ -321,11 +357,11 @@ function debug() {
 /**
 | Returns a descriptive string for an object.
 */
-function inspect(o) {
+var inspect = function(o) {
 	var a = [];
 	_inspect(o, a, 0, []);
 	return a.join('');
-}
+};
 
 /**
 | TODO
@@ -335,7 +371,7 @@ var oleng$id = 0;
 /**
 | TODO
 */
-function immute(obj) {
+var immute = function(obj) {
 	if (obj._$id) throw new Error('already immutable');
 	var names = Object.getOwnPropertyNames(obj);
 	for (var a = 0, aZ = names.length; a < aZ; a++) {
@@ -355,6 +391,7 @@ function immute(obj) {
 Jools = {
 	configSwitchClient : configSwitchClient,
 	configSwitchServer : configSwitchServer,
+	copy               : copy,
 	debug              : debug,
 	devel              : devel,
 	fixate             : fixate,
@@ -367,6 +404,7 @@ Jools = {
 	immute             : immute,
 	limit              : limit,
 	log                : log,
+	matches            : matches,
 	reject             : reject,
 	subclass           : subclass
 };
