@@ -181,7 +181,7 @@ Peer.prototype.newNote = function(space, zone) {
 		},
 		{
 			at1 : 0,
-			path: new Path([space.getOwnKey(), 'z']),
+			path: new Path([space.key]),
 		}
 	);
 
@@ -282,7 +282,7 @@ Peer.prototype.newLabel = function(space, pnw, text, fontsize) {
 		},
 		{
 			at1 : 0,
-			path: new Path([space.getOwnKey(), 'z']),
+			path: new Path([space.key, 'z']),
 		}
 	);
 
@@ -303,8 +303,8 @@ Peer.prototype.newRelation = function(space, pnw, text, fontsize, vitem1, vitem2
 		{
 			val: {
 				'type': 'Relation',
-				'item1key': vitem1.getOwnKey(),
-				'item2key': vitem2.getOwnKey(),
+				'item1key': vitem1.key,
+				'item2key': vitem2.key,
 				'pnw': pnw,
 				'doc': {
 					fontsize : fontsize,
@@ -331,7 +331,7 @@ Peer.prototype.newRelation = function(space, pnw, text, fontsize, vitem1, vitem2
 		},
 		{
 			at1 : 0,
-			path: new Path([space.getOwnKey(), 'z']),
+			path: new Path([space.key, 'z']),
 		}
 	);
 
@@ -347,7 +347,7 @@ Peer.prototype.moveToTop = function(space, item) {
 	throw new Error('TODO');
 	/*
 	var path = new Path(space, 'z');
-	var key = item.getOwnKey();
+	var key = item.key;
 	var at1 = space.z.indexOf(key);
 
 	if (at1 === 0) return;
@@ -410,8 +410,8 @@ Peer.prototype.removeSpawn = function(path1, offset1, path2, offset2) {
 
 	throw new Error('TODO');
 	/*
-	var k1 = node1.getOwnKey();
-	var k2 = node2.getOwnKey();
+	var k1 = node1.key;
+	var k2 = node2.key;
 	var len1 = node1.get('text').length;
 	for (var a = k1; a < k2 - 1; a++) {
 		this.join(node1);
@@ -453,7 +453,7 @@ Peer.prototype.removeItem = function(space, item) {
 	throw new Error('TODO');
 	/*
 	var path = new Path(space, 'z');
-	var key = item.getOwnKey();
+	var key = item.key;
 	var at1 = space.z.indexOf(key);
 
 	// remove from z-index

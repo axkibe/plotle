@@ -25,7 +25,7 @@
  License: GNU Affero AGPLv3
 
  A variable with $ in its name signifies something cached.
- @03 are milestones for release 0.3
+ @@ are milestones for later releases than upcoming
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -337,7 +337,10 @@ Marker.prototype.set = function(entity, offset, retainX) {
 /**
 | The meshmashine issued an event.
 */
-Marker.prototype.event = function(type, key, p1, p2, p3) {
+/*
+TODO
+
+Marker.prototype.ev-XXX = function(type, key, p1, p2, p3) {
 	log('event', 'marker', type, key, p1, p2, p3);
 
 	var at1, at2, offset;
@@ -368,12 +371,13 @@ Marker.prototype.event = function(type, key, p1, p2, p3) {
 	case 'split' :
 		offset = p1;
 		if (offset <= this.offset) {
-			var pkey = this.entity.para.getOwnKey();
+			var pkey = this.entity.para.key;
 			this.set(this.entity.vdoc.valley[pkey + 1], this.offset - offset);
 		}
 		break;
 	}
 };
+*/
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,--.             .
@@ -491,8 +495,8 @@ Selection.prototype.normalize = function() {
 		}
 		return;
 	}
-	var k1 = m1.entity.para.getOwnKey();
-	var k2 = m2.entity.para.getOwnKey();
+	var k1 = m1.entity.para.key;
+	var k2 = m2.entity.para.key;
 
 	if (k1 === k2) throw new Error('sel has equal keys');
 
@@ -524,8 +528,8 @@ Selection.prototype.innerText = function() {
 	var epara = me.entity.para;
 	var btxt = bpara.get('text');
 	var etxt = epara.get('text');
-	var bkey = bpara.getOwnKey();
-	var ekey = epara.getOwnKey();
+	var bkey = bpara.key;
+	var ekey = epara.key;
 	var doc  = mb.entity.vdoc.doc;
 	if (me.entity.vdoc.doc !== doc) throw new Error('selection isn\'t in one doc!');
 	var buf = [ btxt.substring(mb.offset, mb.length) ];
@@ -927,7 +931,7 @@ Hexmenu.prototype.getMousepos = function(p) {
 var VSpace = function(tree) {
 	this.tree   = tree;
 	this.fabric = new Fabric(system.fabric);
-	this.zoom   = 1; // @03
+	this.zoom   = 1; // @@
 	this.vitems = {};
 
 	for (var k in tree.copse) {
@@ -949,32 +953,36 @@ var VSpace = function(tree) {
 | Redraws the complete space.
 */
 VSpace.prototype.draw = function() {
-	var vitem;
-
-	for(var zi = this.space.z.length - 1; zi >= 0; zi--) {
-		vitem = this.vitems.vcopse[this.space.z.get(zi)];
-		vitem.draw(this.fabric);
+	var alley  = this.tree.alley;
+	var vitems = this.vitems;
+	for(var a = alley.length - 1; a >= 0; a--) {
+		vitems[alley[a]].draw(this.fabric);
 	}
 
-	if (this.focus) this.focus.drawHandles(this.fabric);
+	if (this.focus) { this.focus.drawHandles(this.fabric); }
 
 	var action = shell.action;
 	switch (action && action.type) {
-	case Action.FLOATMENU : action.floatmenu.draw(); break;
-	case Action.ITEMMENU  : action.itemmenu.draw();  break;
+	case Action.FLOATMENU :
+		action.floatmenu.draw();
+		break;
+	case Action.ITEMMENU :
+		action.itemmenu.draw();
+		break;
 	case Action.RELBIND :
-		vitem  = action.vitem;
-		var vitem2 = action.vitem2;
-		var target = vitem2 ? vitem2.getZone() : action.move.sub(this.fabric.pan);
-		var arrow = Line.connect(vitem.getZone(), 'normal', target, 'arrow');
-		if (vitem2) vitem2.highlight(this.fabric);
-		arrow.draw(this.fabric);
+		var av  = action.vitem;
+		var av2 = action.vitem2;
+		var target = av2 ? av2.getZone() : action.move.sub(this.fabric.pan);
+		var arrow = Line.connect(av.getZone(), 'normal', target, 'arrow');
+		if (av2) av2.highlight(this.fabric);
+		arrow.draw(this.fabric, settings.relation.style);
+		break;
 	}
 };
 
 
 /**
-| Sets the focussed item or loses it if null
+| Sets the focused item or blurs it if vitem is null
 */
 VSpace.prototype.setFocus = function(vitem) {
 	if (this.focus === vitem) return;
@@ -982,7 +990,7 @@ VSpace.prototype.setFocus = function(vitem) {
 
 	var caret = shell.caret;
 	if (vitem) {
-		caret.set(vitem.vdoc.valley[0], 0);
+		caret.set(vitem.vdoc.vparas[0], 0);
 		caret.show();
 	} else {
 		caret.hide();
@@ -1004,7 +1012,7 @@ VSpace.prototype.mousewheel = function(p, dir) {
 		if (vitem.mousewheel(pp, dir)) { return true; }
 	}
 
-	// @03 zooming.
+	// @@ zooming.
 	return true;
 };
 
@@ -1044,7 +1052,7 @@ VSpace.prototype.mousehover = function(p) {
 	}
 
 	if (this.focus) {
-		// @@03 move into items
+		// @@ move into items
 		if (this.focus.withinItemMenu(pp)) {
 			system.setCursor('pointer');
 			return true;
@@ -1204,7 +1212,7 @@ VSpace.prototype.mousedown = function(p) {
 			pnw = fm.p.sub(this.fabric.pan.x + half(nw) , this.fabric.pan.y + half(nh));
 			var note  = peer.newNote(this.space, new Rect(pnw, pnw.add(nw, nh)));
 			// event listener has created the vnote
-			var vnote = this.vitems.vcopse[note.getOwnKey()];
+			var vnote = this.vitems.vcopse[note.key];
 			this.setFocus(vnote);
 			break;
 		case 'ne' : // label
@@ -1212,7 +1220,7 @@ VSpace.prototype.mousedown = function(p) {
 			pnw = pnw.sub(settings.label.createOffset);
 			var label = peer.newLabel(this.space, pnw, 'Label', 20);
 			// event listener has created the vnote
-			var vlabel = this.vitems.vcopse[label.getOwnKey()];
+			var vlabel = this.vitems.vcopse[label.key];
 			this.setFocus(vlabel);
 			break;
 		}
@@ -1293,10 +1301,10 @@ VSpace.prototype.ev$TODO = function(type, key, p1, p2, p3) {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  A visual paragraph representation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-var VPara = function(para, vdoc) {
-	if (para.type !== 'Para') throw new Error('type error');
+var VPara = function(tree, vdoc) {
+	if (tree.type !== 'Para') throw new Error('type error');
 	if (vdoc.constructor !== VDoc) throw new Error('type error');
-	this.para = para;
+	this.tree = tree;
 	this.vdoc = vdoc;
 
 	// fabric caching
@@ -1309,29 +1317,22 @@ var VPara = function(para, vdoc) {
 
 	// XXX
 	Object.defineProperty(this, 'pnw', {
-		get: function() {
-			throw new Error('TODO');
-		},
-		set: function() {
-			throw new Error('TODO');
-		}
+		get: function() { throw new Error('TODO'); },
+		set: function() { throw new Error('TODO'); }
 	});
-	//this.pnw = null; // position of para in doc.
-	para.addListener(this);
 };
 
 /**
 | (re)flows the paragraph, positioning all chunks.
 */
 VPara.prototype.getFlow = function() {
-	var para  = this.para;
 	var vdoc  = this.vdoc;
 	var vitem = vdoc.vitem;
 	var flowWidth = vitem.getFlowWidth();
 	var fontsize = vdoc.getFontSize();
 	var flow  = this._flow$;
-	// @03 go into subnodes instead
-	var text = para.get('text');
+	// @@ go into subnodes instead
+	var text = this.tree.text;
 
 	if (!noCache && flow &&
 		flow.flowWidth === flowWidth &&
@@ -1341,7 +1342,7 @@ VPara.prototype.getFlow = function() {
 
 	if (shell.caret.entity === this) {
 		// remove caret cache if its within this flow.
-		// @@03 use a function
+		// @@ use a function
 		shell.caret.cp$line  = null;
 		shell.caret.cp$token = null;
 	}
@@ -1359,7 +1360,7 @@ VPara.prototype.getFlow = function() {
 	var line = 0;
 	flow[line] = { a: [], y: y, o: 0 };
 
-	//var reg = !pre ? (/(\s*\S+|\s+$)\s?(\s*)/g) : (/(.+)()$/g); @03
+	//var reg = !pre ? (/(\s*\S+|\s+$)\s?(\s*)/g) : (/(.+)()$/g); @@
 	var reg = (/(\s*\S+|\s+$)\s?(\s*)/g);
 
 	for(var ca = reg.exec(text); ca !== null; ca = reg.exec(text)) {
@@ -1374,13 +1375,13 @@ VPara.prototype.getFlow = function() {
 				if (spread < xw) spread = xw;
 				x = 0;
 				xw = x + w + space;
-				//y += R(vdoc.fontsize * (pre ? 1 : 1 + settings.bottombox)); @03
+				//y += R(vdoc.fontsize * (pre ? 1 : 1 + settings.bottombox)); @@
 				y += R(vdoc.getFontSize() * (1 + settings.bottombox));
 				line++;
 				flow[line] = {a: [], y: y, o: ca.index};
 			} else {
 				// horizontal overflow
-				console.log('HORIZONTAL OVERFLOW'); // @03
+				console.log('HORIZONTAL OVERFLOW'); // @@
 			}
 		}
 		flow[line].a.push({
@@ -1466,7 +1467,7 @@ VPara.prototype.input = function(text) {
 		var line = rx[1];
 		peer.insertText(para, caret.offset, line);
         if (rx[2]) peer.split(para, caret.offset);
-		para = para.parent.get(para.getOwnKey() + 1);
+		para = para.parent.get(para.key + 1);
     }
 };
 
@@ -1484,15 +1485,14 @@ VPara.prototype.specialKey = function(keycode) {
 	var vdoc = this.vdoc;
 	var key, ve, offset, flow;
 	var x;
-	var unused; // TODO
 
 	if (shell.ctrl) {
 		switch(keycode) {
 		case 65 : // ctrl+a
-			var valley = vdoc.valley;
-			var v0 = valley[0];
-			var vZ = valley[valley.length - 1];
-			var vZL = vZ.para.get('text').length;
+			var vparas = vdoc.vparas;
+			var v0 = vparas[0];
+			var vZ = vparas[vparas.length - 1];
+			var vZL = vZ.tree.text.length;
 			select.mark1.set(v0, 0);
 			select.mark2.set(vZ, vZL);
 			select.active = true;
@@ -1545,7 +1545,7 @@ VPara.prototype.specialKey = function(keycode) {
 		if (caret.offset > 0) {
 			peer.removeText(para, caret.offset - 1, 1);
 		} else {
-			key = para.getOwnKey();
+			key = para.key;
 			if (key > 0) {
 				peer.join(para.parent.get(key - 1));
 			}
@@ -1564,8 +1564,8 @@ VPara.prototype.specialKey = function(keycode) {
 		if (caret.offset > 0) {
 			caret.set(this, caret.offset - 1);
 		} else {
-			key = para.getOwnKey();
-			if (vdoc.valley[key] !== this) throw new Error('vdoc.valley inconsistency');
+			key = para.key();
+			if (vdoc.vparas[key] !== this) throw new Error('vdoc.vparas inconsistency');
 			if (key > 0) {
 				ve = vdoc.valley[key - 1];
 				caret.set(ve, ve.para.get('text').length);
@@ -1582,7 +1582,7 @@ VPara.prototype.specialKey = function(keycode) {
 			caret.set(this, offset, x);
 		} else {
 			// goto prev para
-			key  = para.getOwnKey();
+			key  = para.key;
 			if (vdoc.valley[key] !== this) throw new Error('vdoc.valley inconsistency');
 			if (key > 0) {
 				ve = vdoc.valley[key - 1];
@@ -1595,7 +1595,7 @@ VPara.prototype.specialKey = function(keycode) {
 		if (caret.offset < para.get('text').length) {
 			caret.set(this, caret.offset + 1);
 		} else {
-			key = para.getOwnKey();
+			key = para.key;
 			if (vdoc.valley[key] !== this) throw new Error('vdoc.valley inconsistency');
 			if (key < vdoc.valley.length - 1) {
 				ve = vdoc.valley[key + 1];
@@ -1613,7 +1613,7 @@ VPara.prototype.specialKey = function(keycode) {
 			caret.set(this, offset, x);
 		} else {
 			// goto next para
-			key = para.getOwnKey();
+			key = para.key;
 			if (vdoc.valley[key] !== this) throw new Error('vdoc.valley inconsistency');
 			if (key < vdoc.valley.length - 1) {
 				ve = vdoc.valley[key + 1];
@@ -1626,7 +1626,7 @@ VPara.prototype.specialKey = function(keycode) {
 		if (caret.offset < para.get('text').length) {
 			peer.removeText(para, caret.offset, 1);
 		} else {
-			key = para.getOwnKey();
+			key = para.key;
 			if (vdoc.valley[key] !== this) throw new Error('vdoc.valley inconsistency');
 			if (key < vdoc.valley.length - 1) {
 				peer.join(para);
@@ -1684,7 +1684,7 @@ VPara.prototype.getFabric = function() {
 
 	var fabric = this._fabric$;
 
-	// @@03: work out exact height for text below baseline
+	// @@: work out exact height for text below baseline
 	fabric.attune(width, height);
 	fabric.fontStyle(vdoc.getFont(), 'black', 'start', 'alphabetic');
 
@@ -1721,7 +1721,7 @@ VPara.prototype.event = function(event, p1, p2, p3) {
 |           the flow position used.
 */
 VPara.prototype.getOffsetPoint = function(offset, flowPos$) {
-	// @@03 cache position
+	// @@ cache position
 	var para = this.para;
 	var doc  = para.getAnchestor('DocAlley');
 	Measure.font = doc.font;
@@ -1754,7 +1754,7 @@ VPara.prototype.getOffsetPoint = function(offset, flowPos$) {
 		flowPos$.flow$token = at;
 	}
 
-	// @@03 use token. text instead.
+	// @@ use token. text instead.
 	return new Point(
 		R(token.x + Measure.width(text.substring(token.o, offset))),
 		line.y);
@@ -1834,7 +1834,7 @@ var Scrollbar = function(item) {
 
 /**
 | Makes the path for fabric.edge/fill/paint.
-| @@03 change descr on all path()s
+| @@ change descr on all path()s
 */
 Scrollbar.prototype.path = function(fabric, border, twist) {
 	if (border !== 0)  throw new Error('Scrollbar.path does not support borders');
@@ -1900,20 +1900,18 @@ var VDoc = function(doc, vitem) {
 	this.vitem = vitem;
 	this.pnws  = null;
 
-	doc.addListener(this);
-
-	// visual-alley
-	var valley = this.valley = [];
+	var vparas = this.vparas = [];
 
 	for (var a = 0, aZ = doc.length; a < aZ; a++) {
-		valley[a] = new VPara(doc.get(a), this);
+		vparas[a] = new VPara(doc.get(a), this);
 	}
 }
 
 /**
 | The meshmashine issued an event.
 */
-VDoc.prototype.event = function(type, key, p1, p2, p3) {
+/* TODO
+VDoc.prototype.ev-XXX = function(type, key, p1, p2, p3) {
 	log('event', 'vdoc', type, key, p1, p2, p3);
 
 	switch(type) {
@@ -1926,6 +1924,7 @@ VDoc.prototype.event = function(type, key, p1, p2, p3) {
 		break;
 	}
 };
+*/
 
 /**
 | Draws the document alley on a fabric.
@@ -1935,7 +1934,7 @@ VDoc.prototype.event = function(type, key, p1, p2, p3) {
 | scrollp: scroll position
 */
 VDoc.prototype.draw = function(fabric, width, imargin, scrollp) {
-	// @03 <pre>
+	// @@ <pre>
 	var fontsize = this.getFontSize();
 	var paraSep = this.vitem.getParaSep(fontsize);
 	var select = shell.selection;
@@ -1954,7 +1953,7 @@ VDoc.prototype.draw = function(fabric, width, imargin, scrollp) {
 		var vpara = valley[a];
 		var flow = vpara.getFlow();
 
-		// @@03 name pnw$
+		// @@ name pnw$
 		pnws[a] = new Point(imargin.w, R(y));
 		fabric.drawImage(vpara.getFabric(), imargin.w, R(y - scrollp.y));
 		y += flow.height + paraSep;
@@ -1968,12 +1967,12 @@ VDoc.prototype.getPNW = function(vpara) {
 	if (!vpara) {
 		throw new Error('TODO');
 	}
-	return this.pnws[vpara.para.getOwnKey()];
+	return this.pnws[vpara.para.key];
 };
 
 /**
 | Returns the height of the document.
-| @@03 caching
+| @@ caching
 */
 VDoc.prototype.getHeight = function() {
 	var fontsize = this.getFontSize();
@@ -2004,9 +2003,8 @@ VDoc.prototype.getSpread = function() {
 
 VDoc.prototype.getFontSize = function() {
 	var vitem = this.vitem;
-	var fontsize = this.doc.get('fontsize');
-	if (!vitem.fontSizeChange) return fontsize;
-	return vitem.fontSizeChange(fontsize);
+	var fontsize = vitem.tree.fontsize;
+	return !vitem.fontSizeChange ? fontsize : vitem.fontSizeChange(fontsize);
 };
 
 /**
@@ -2034,7 +2032,7 @@ VDoc.prototype.getVParaAtPoint = function(p) {
 | Paths a selection
 */
 VDoc.prototype.pathSelection = function(fabric, border, twist, width, imargin, scrollp) {
-	// @@03 make part of selection to use shortcut with XYi
+	// @@ make part of selection to use shortcut with XYi
 	var select = shell.selection;
 	var sp = scrollp;
 	var m1 = select.mark1;
@@ -2109,11 +2107,11 @@ VDoc.prototype.pathSelection = function(fabric, border, twist, width, imargin, s
 /**
 | Constructor
 */
-var VItem = function(item, vspace) {
+var VItem = function(tree, vspace) {
 	this._h6slice$    = null;
-	this.item         = item;
+	this.tree         = tree;
 	this.vspace       = vspace;
-	this.vdoc         = new VDoc(item.doc, this);
+	this.vdoc         = new VDoc(tree.doc, this);
 	this._fabric      = new Fabric();
 	this._fabric$flag = false; // up-to-date-flag
 };
@@ -2139,7 +2137,7 @@ VItem.prototype.withinItemMenu = function(p) {
 
 /**
 | Returns the compass direction of the handle if p is on a resizer handle.
-| @@03 rename
+| @@ rename
 */
 VItem.prototype.checkItemCompass = function(p) {
 	var ha = this.handles;
@@ -2244,10 +2242,10 @@ VItem.prototype.drawHandles = function(fabric) {
 };
 
 /**
-| Returns the para at point. @03, honor scroll here.
+| Returns the para at point. @@, honor scroll here.
 */
 VItem.prototype.getVParaAtPoint = function(p, action) {
-	// @03 rename imargin to innerMargin
+	// @@ rename imargin to innerMargin
 	if (p.y < this.imargin.n) return null;
 	return this.vdoc.getVParaAtPoint(p, action);
 };
@@ -2401,9 +2399,9 @@ VItem.prototype.poke = function() {
 /**
 | Constructor.
 */
-var VNote = function(item, vspace) {
-	VItem.call(this, item, vspace);
-	this.scrollbarY   = new Scrollbar(this, null);
+var VNote = function(tree, vspace) {
+	VItem.call(this, tree, vspace);
+	this.scrollbarY = new Scrollbar(this, null);
 };
 subclass(VNote, VItem);
 
@@ -2461,11 +2459,11 @@ VNote.prototype.setScrollbar = function(pos) {
 	var sbary = this.scrollbarY;
 	if (!sbary.visible) return;
 
-	// @03 double call to getHeight, also in VDoc.draw()
+	// @@ double call to getHeight, also in VDoc.draw()
 	sbary.max = this.vdoc.getHeight();
 
 	var zone = this.getZone();
-	// @03 make a Rect.renew
+	// @@ make a Rect.renew
 	sbary.zone = new Rect(
 		Point.renew(
 			zone.width - this.imargin.e - settings.scrollbar.strength,
@@ -2601,11 +2599,11 @@ VNote.prototype.getParaSep = function(fontsize) {
 | An ongoing action can modify this to be different than meshmashine data.
 */
 VNote.prototype.getZone = function() {
-	var item   = this.item;
+	var tree   = this.tree;
 	var action = shell.action;
 
-	if (!action || action.vitem !== this) return item.zone;
-	// @03 cache the last zone
+	if (!action || action.vitem !== this) return tree.zone;
+	// @@ cache the last zone
 
 	switch (action.type) {
 	case Action.ITEMDRAG:
@@ -2730,7 +2728,7 @@ VLabel.prototype.getSilhoutte = function(zone$, zAnchor) {
 /**
 | Draws the label.
 |
-| fabric: to draw upon. // @03 remove this parameter.
+| fabric: to draw upon. // @@ remove this parameter.
 */
 VLabel.prototype.draw = function(fabric) {
 	var f    = this._fabric;
@@ -2823,7 +2821,7 @@ VLabel.prototype.getZone = function() {
 	var height = max(Math.ceil(vdoc.getHeight()), R(fs));
 
 	if (!action || action.vitem !== this) return new Rect(pnw, pnw.add(width, height));
-	// @03 cache the last zone
+	// @@ cache the last zone
 
 	switch (action.type) {
 	case Action.ITEMDRAG:
@@ -2894,7 +2892,7 @@ VLabel.prototype.dragstop = function(p) {
 */
 var VRelation = function(item, vspace) {
 	VLabel.call(this, item, vspace);
-	//System.repository.addOnlook(this.id, this.i1id);  @03
+	//System.repository.addOnlook(this.id, this.i1id);  @@
 	//System.repository.addOnlook(this.id, this.i2id);
 };
 subclass(VRelation, VLabel);
@@ -2912,7 +2910,7 @@ VRelation.create = function(vspace, vitem1, vitem2) {
 	var pnw = cline.pc.sub(settings.relation.createOffset);
 	var rel = peer.newRelation(vspace.space, pnw, 'relates to', 20, vitem1.item, vitem2.item);
 	// event listener has created the vrel
-	var vrel = vspace.vitems.vcopse[rel.getOwnKey()];
+	var vrel = vspace.vitems.vcopse[rel.key];
 	vspace.setFocus(vrel);
 };
 
