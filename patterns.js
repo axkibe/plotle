@@ -6,10 +6,14 @@
 */
 
 /**
+| Imports
+*/
+var Fabric;
+
+/**
 | Exports
 */
 var Patterns;
-var Fabric;
 
 /**
 | Capsule
@@ -24,7 +28,7 @@ if (typeof (window) === 'undefined') {
 /**
 | Patterns are the rules a tree must abide to.
 */
-var Patterns = {};
+Patterns = {};
 
 /**
 | The meshcraft universe
@@ -72,7 +76,7 @@ Patterns.mUniverse = {
 
 	'Rect' : {
 		creator : function(t) {
-			return new Fabric.Rect(t.pnw, t.pse);
+			return new Fabric.Rect(t.pnw, t.pse, t.key);
 		},
 
 		must : {
@@ -83,7 +87,7 @@ Patterns.mUniverse = {
 
 	'Point' : {
 		creator : function(t) {
-			return new Fabric.Point(t.x, t.y);
+			return new Fabric.Point(t.x, t.y, t.key);
 		},
 
 		must : {
@@ -106,7 +110,10 @@ Patterns.mUniverse = {
 		//if (p.copse) immute(p.copse);
 		//if (p.must) immute(p.must);
 
-		if (p.must && p.copse)   throw new Error('Patterns must not have .must and .copse');
+		if (p.must) {
+			if (p.copse) throw new Error('Patterns must not have .must and .copse');
+			if (p.must.index) throw new Error('indexOf must not be a must');
+		}
 		if (p.alley && !p.copse) throw new Error('Patterns must not have .alley without .copse');
 	}
 })(Patterns.mUniverse);

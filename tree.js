@@ -32,6 +32,7 @@ var	debug        = Jools.debug;
 var immute       = Jools.immute;
 var	is           = Jools.is;
 var	isnon        = Jools.isnon;
+var isArray      = Jools.isArray;
 var	isInteger    = Jools.isInteger;
 var	isString     = Jools.isString;
 var	log          = Jools.log;
@@ -50,6 +51,16 @@ var isPath       = Path.isPath;
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 var Twig = function () { };
+
+/**
+| Returns the index of key in the alley
+*/
+Twig.prototype.index = function(key) {
+	if (!isArray(this.alley)) throw new Error('twig has no alley');
+	// TODO caching!
+	if (is(this.copse[key])) return -1;
+	return twig.alley.indexOf(key);
+};
 
 /**
 | Gets the twigs type
@@ -78,7 +89,7 @@ var twigtype = function(o) {
 Tree = function(root, pattern, cogs) {
 	this.pattern = pattern;
 	this.cogs = cogs;
-	this.root = this.grow(root);
+	this.root = this.grow(root, 'root');
 };
 
 /**
@@ -89,15 +100,22 @@ Tree.prototype.getPattern = function(o) {
 };
 
 /**
-| Grows new twigs, the model is copies and extended by addtional arguments.
-| Possible Arguments:
-|  'key', value        sets [key] = value
-|  '+', key, value     inserts a key if this an array
-|  '-', key            removes a key if this an array
-|  '--', count         shortens an array by count
-|  '++', values...     for an array everything after '++' is extended.
+| Grows new twigs.
+|
+| The model is copied and extended by additional arguments.
+|
+| mandatory arguments:
+|    model : the model to copy
+|    cog   : the new twigs own key
+|
+| additional arguments:
+|    'key', value        sets [key] = value
+|    '+', key, value     inserts a key if this an array.
+|    '-', key            removes a key if this an array,
+|    '--', count         shortens an array by count.
+|    '++', values...     for an array everything after '++' is extended.
 */
-Tree.prototype.grow = function(model /*, ... */) {
+Tree.prototype.grow = function(model, cog /*, ... */) {
 	var a, aZ = arguments.length;
 	if (model._$grown && aZ === 1) return model;
 	var twig, k, k1, k2, val, vtype;
@@ -115,7 +133,7 @@ Tree.prototype.grow = function(model /*, ... */) {
 	if (pattern.alley) twig.alley = model.alley ? model.alley.slice()   : [];
 
 	// applies changes specified by the arguments
-	a = 1;
+	a = 2;
 	while(a < aZ && arguments[a] !== '++' && arguments[a] !== '--') {
 		k = arguments[a];
 		k1 = arguments[a + 1];
@@ -189,7 +207,7 @@ Tree.prototype.grow = function(model /*, ... */) {
 			case Number :
 				break;
 			default     :
-				if (!val._$grown) twig.copse[k] = this.grow(twig.copse[k]);
+				if (!val._$grown) twig.copse[k] = this.grow(twig.copse[k], k);
 			}
 		}
 	} else {
@@ -208,7 +226,7 @@ Tree.prototype.grow = function(model /*, ... */) {
 			case Number :
 				break;
 			default     :
-				if (!val._$grown) twig[k] = this.grow(twig[k]);
+				if (!val._$grown) twig[k] = this.grow(twig[k], k);
 			}
 		}
 	}
@@ -237,10 +255,24 @@ Tree.prototype.grow = function(model /*, ... */) {
 	}
 
 	// if _inc is supported, sets it accordingly
+	// TODO might as well remove it and calculate only when needed
 	if (pattern.inc) {
 		var inc = isnon(model._inc) ? model._inc : 1;
 		while(is(twig.copse['' + inc])) inc++;
 		Object.defineProperty(twig, '_inc', { value: '' + inc });
+	}
+
+	// if cogs are enabled, set .key
+	if (this.cogs) {
+		if (!is(cog)) {
+			if (!is(twig.key)) throw reject('twig misses cog and key');
+		} else {
+			if (is(twig.key)) {
+				if (twig.key !== cog) throw reject('twig cog !== key: '+cog+' !== '+key);
+			} else {
+				twig.key = cog;
+			}
+		}
 	}
 
 	// if there is a custom construcgtor, calls it to replace the new twig
@@ -288,7 +320,7 @@ Tree.prototype.setPath = function(path, val) {
 
 	for(var a = path.length - 1; a >= 0; a--) {
 		var twig = this.getPath(path, a);
-		val = this.grow(twig, path.get(a), val);
+		val = this.grow(twig, null, path.get(a), val);
 	}
 
 	return new Tree(val, this.pattern, this.cogs);

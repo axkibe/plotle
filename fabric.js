@@ -1,7 +1,7 @@
 /**                                                      _.._
                                                       .-'_.._''.
  __  __   ___       _....._              .          .' .'     '.\
-|  |/  `.'   `.   .´       '.          .'|         / .'                                _.._
+|  |/  `.'   `.   .'       '.          .'|         / .'                                _.._
 |   .-.  .-.   ' /   .-'"'.  \        (  |        . '            .-,.-~.             .' .._|    .|
 |  |  |  |  |  |/   /______\  |        | |        | |            |  .-. |    __      | '      .' |_
 |  |  |  |  |  ||   __________|    _   | | .'''-. | |            | |  | | .:-`.'.  __| |__  .'     |
@@ -10,7 +10,7 @@
 |__|  |__|  |__|  `         .'.'.'| |//| |     | |  '. `.____.-'/| |      .'.''| |   | |      |  |
                    `'-.....-.'.'.-'  / | |     | |    `-._____ / | |     / /   | |_  | |      |  '.'
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
-                                       '___)   '___)                      `~~'  `"   |_|      `--´
+                                       '___)   '___)                      `~~'  `"   |_|      `--'
 
                                    +++ Fabric ++++
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
@@ -51,6 +51,7 @@ if (typeof(window) === 'undefined') {
 }
 
 var debug        = Jools.debug;
+var is           = Jools.is;
 var log          = Jools.log;
 var fixate       = Jools.fixate;
 var fixateNoEnum = Jools.fixateNoEnum;
@@ -578,7 +579,7 @@ Object.defineProperty(Measure, 'font', {
 | Point(x, y) or
 | Point(p)
 */
-var Point = function(a1, a2) {
+var Point = function(a1, a2, key) {
 	if (typeof(a1) === 'object') {
 		fixate(this, 'x', a1.x);
 		fixate(this, 'y', a1.y);
@@ -587,6 +588,7 @@ var Point = function(a1, a2) {
 		fixate(this, 'y', a2);
 	}
 	fixate(this, 'type', 'Point'); // @@ So Tree is happy
+	if (is(key)) { fixateNoEnum(this, 'key', key); }
 };
 
 /**
@@ -659,7 +661,7 @@ Point.prototype.sub = function(a1, a2) {
 | pnw: point to north west.
 | pse: point to south east.
 */
-var Rect = function(pnw, pse) {
+var Rect = function(pnw, pse, key) {
 	if (!pnw || !pse || pnw.x > pse.x || pnw.y > pse.y) {
 		throw reject('not a rectangle.');
 	}
@@ -668,6 +670,7 @@ var Rect = function(pnw, pse) {
 	fixateNoEnum(this, 'width',  pse.x - pnw.x);
 	fixateNoEnum(this, 'height', pse.y - pnw.y);
 	fixate(this, 'type', 'Rect'); // @@ So Tree is happy
+	if (is(key)) { fixateNoEnum(this, 'key', key); }
 };
 
 /**

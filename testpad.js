@@ -445,7 +445,7 @@ var inputSpecialKey = function(keyCode, ctrlKey) {
 | Updates data from server
 */
 var update = function(totime) {
-	space = peer.getSpace(totime, 'welcome');
+	space = peer.get(totime, new Path(['welcome']));
 	time  = peer.time;
 	maxtime = max(time, maxtime);
 	element.now.innerHTML = '' + time;

@@ -1,16 +1,16 @@
 /**                                                      _.._
                                                       .-'_.._''.
  __  __   ___       _....._              .          .' .'     '.\
-|  |/  `.'   `.   .´       '.          .'|         / .'                                _.._
+|  |/  `.'   `.   .'       '.          .'|         / .'                                _.._
 |   .-.  .-.   ' /   .-'"'.  \        (  |        . '            .-,.-~.             .' .._|    .|
 |  |  |  |  |  |/   /______\  |        | |        | |            |  .-. |    __      | '      .' |_
 |  |  |  |  |  ||   __________|    _   | | .'''-. | |            | |  | | .:-`.'.  __| |__  .'     |
 |  |  |  |  |  |\  (          '  .' |  | |/.'''. \. '            | |  | |/ |   \ ||__   __|'-..  .-'
 |  |  |  |  |  | \  '-.___..-~. .   | /|  /    | | \ '.         .| |  '- `" __ | |   | |      |  |
 |__|  |__|  |__|  `         .'.'.'| |//| |     | |  '. `.____.-'/| |      .'.''| |   | |      |  |
-                   `'-.....-.'.'.-'  / | |     | |    `-._____ / | |     / /   | |_  | |      |  '.'
+                   `'-.....-.'.'.-'  / | |     | |    `-._____ / | |     / /   | |_  | |      |  '.
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
-                                       '___)   '___)                      `~~'  `"   |_|      `--´
+                                       '___)   '___)                      `~~'  `"   |_|      `--'
 
   ++ Meshpeer ++
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
@@ -71,9 +71,12 @@ Peer = function(async) {
 };
 
 /**
-| Issues a get request
+| Gets a twig
+|
+| time: to get twig for (-1 means now)
+| path: path to twig
 */
-Peer.prototype._get = function(time, path) {
+Peer.prototype.get = function(time, path) {
 	var asw;
 
 	if (this.async) {
@@ -100,7 +103,7 @@ Peer.prototype._get = function(time, path) {
 		}
 		if (asw.ok !== true) throw new Error('AJAX not ok: '+asw.message);
 		this.time = asw.time;
-		return asw.node;
+		return new Tree(asw.node, Patterns.mUniverse, true).root;
 	}
 };
 
@@ -136,13 +139,6 @@ Peer.prototype._alter = function(src, trg) {
 		if (asw.ok !== true) throw new Error('AJAX not ok: '+asw.message);
 		return asw.node;
 	}
-};
-
-/**
-| gets a space
-*/
-Peer.prototype.getSpace = function(time, name) {
-	return this._get(time, new Path([name]));
 };
 
 /**

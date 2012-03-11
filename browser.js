@@ -1,7 +1,7 @@
 /**                                                      _.._
                                                       .-'_.._''.
  __  __   ___       _....._              .          .' .'     '.\
-|  |/  `.'   `.   .´       '.          .'|         / .'                                _.._
+|  |/  `.'   `.   .'       '.          .'|         / .'                                _.._
 |   .-.  .-.   ' /   .-'"'.  \        (  |        . '            .-,.-~.             .' .._|    .|
 |  |  |  |  |  |/   /______\  |        | |        | |            |  .-. |    __      | '      .' |_
 |  |  |  |  |  ||   __________|    _   | | .'''-. | |            | |  | | .:-`.'.  __| |__  .'     |
@@ -10,7 +10,7 @@
 |__|  |__|  |__|  `         .'.'.'| |//| |     | |  '. `.____.-'/| |      .'.''| |   | |      |  |
                    `'-.....-.'.'.-'  / | |     | |    `-._____ / | |     / /   | |_  | |      |  '.'
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
-                                       '___)   '___)                      `~~'  `"   |_|      `--´
+                                       '___)   '___)                      `~~'  `"   |_|      `--'
 
                     ,-,---.                           .---.         .
                      '|___/ ,-. ,-. . , , ,-. ,-. ,-. \___  . . ,-. |- ,-. ,-,-.
@@ -49,13 +49,11 @@ var peer;
 | Export/Capsule
 */
 (function(){
-
 'use strict';
+if (typeof(window) === 'undefined') { throw new Error('browser.js needs a browser!'); }
 
-if (typeof(window) === 'undefined') {
-	throw new Error('Browser-System needs a browser!');
-}
-
+var abs       = Math.abs;
+var Point     = Fabric.Point;
 var debug     = Jools.debug;
 var fixate    = Jools.fixate;
 var log       = Jools.log;
@@ -103,8 +101,7 @@ function System() {
 
 	// if true browser supports the setCapture() call
 	// if false needs work around
-	// TODO why !== null and not ? true : false ??
-	var useCapture = canvas.setCapture !== null;
+	var useCapture = !!canvas.setCapture;
 	var mouseState  = false;   // false, 'atween' or 'drag'
 
 	// atween is the state where the mouse button went down,
@@ -172,7 +169,7 @@ function System() {
 	*/
 	function releaseEvents() {
 		if (useCapture) {
-			canvas.releaseCapture(canvas);
+			document.releaseCapture(canvas);
 		} else {
 			document.onmouseup = null;
 			document.onmousemove = null;
