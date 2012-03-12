@@ -32,6 +32,7 @@ var Path;
 var Patterns;
 var Tree;
 var Jools;
+var Emulate;
 
 /**
 | Exports
@@ -62,10 +63,27 @@ var log       = Jools.log;
 /**
 | Constructor
 */
-Peer = function(async) {
-	this._async = async = async ? true : false;
-	if (async) {
-		this.mm = new MeshMashine({ type: 'Nexus'}, Patterns.mUniverse, true);
+Peer = function(mode) {
+	this._mode = mode;
+	var tree;
+	switch(mode) {
+	case 'async' :
+		tree = new Tree({ type : 'Nexus' }, Patterns.mUniverse, false);
+		this.mm = new MeshMashine(tree, false);
+		break;
+	case 'sync' :
+		break;
+	case 'emulate' :
+		tree = new Tree({ type : 'Nexus' }, Patterns.mUniverse, false);
+		this.mm = new MeshMashine(tree, false);
+
+		var src = Emulate.src;
+		var trg = { path: new Path(Emulate.path) };
+		var asw = this.mm.alter(0, src, trg);
+		if (asw.ok !== true) throw new Error('Cannot emulate Repository');
+		break;
+	default :
+		throw new Error('unknown mode: '+mode);
 	}
 	this.time = -1;  // @@ See if this is permanently needed
 };
@@ -79,11 +97,13 @@ Peer = function(async) {
 Peer.prototype.get = function(time, path) {
 	var asw;
 
-	if (this.async) {
+	switch(this._mode) {
+	case 'async'   :
+	case 'emulate' :
 		asw = this.mm.get(-1, path);
 		if (asw.ok !== true) throw new Error('Meshmashine not ok: '+asw.message);
 		return asw.node;
-	} else {
+	case 'sync' :
 		var ajax = new XMLHttpRequest();
 		ajax.open('POST', '/mm', false);
 		ajax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -104,6 +124,8 @@ Peer.prototype.get = function(time, path) {
 		if (asw.ok !== true) throw new Error('AJAX not ok: '+asw.message);
 		this.time = asw.time;
 		return new Tree(asw.node, Patterns.mUniverse, true).root;
+	default :
+		throw new Error('unknown mode: '+this._mode);
 	}
 };
 
@@ -113,11 +135,13 @@ Peer.prototype.get = function(time, path) {
 Peer.prototype._alter = function(src, trg) {
 	var asw;
 
-	if (this.async) {
+	switch (this._mode) {
+	case 'async'   :
+	case 'emulate' :
 		asw = this.mm.alter(-1, src, trg);
 		if (asw.ok !== true) throw new Error('Meshmashine not OK: '+asw.message);
 		return asw.node;
-	} else {
+	case 'sync' :
 		var ajax = new XMLHttpRequest();
 		ajax.open('POST', '/mm', false);
 		ajax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -138,6 +162,8 @@ Peer.prototype._alter = function(src, trg) {
 		}
 		if (asw.ok !== true) throw new Error('AJAX not ok: '+asw.message);
 		return asw.node;
+	default :
+		throw new Error('unknown mode: '+this._mode);
 	}
 };
 

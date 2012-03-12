@@ -669,7 +669,7 @@ Shell = function(fabric) {
 	Measure.init();
 	this.fabric    = fabric;
 
-	var vspath = new Path(['welcome']);
+	var vspath     = new Path(['welcome']);
 	this.vspace    = new VSpace(peer.get(-1, vspath), vspath);
 
 	this.cockpit   = new Cockpit();

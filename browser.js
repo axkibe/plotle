@@ -433,7 +433,7 @@ function System() {
 window.onload = function() {
 	makeCatcher(this, function() {
 		system       = new System();
-		peer         = new Peer();
+		peer         = new Peer('emulate');
 		system.shell = new Shell(system.fabric);
 	})();
 }
