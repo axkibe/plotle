@@ -33,7 +33,7 @@ var puffed;
 */
 var configSwitchClient = function(param) {
 	return param === true || param === 'client' || param === 'both';
-}
+};
 
 /**
 | returns true if param is true for the server
@@ -41,7 +41,7 @@ var configSwitchClient = function(param) {
 */
 var configSwitchServer = function(param) {
 	return param === true || param === 'server' || param === 'both';
-}
+};
 
 /**
 | Running in node or browser?
@@ -383,7 +383,7 @@ var immute = function(obj) {
 	}
     Object.defineProperty(obj, '_$id', {value: ++oleng$id});
 	return obj;
-}
+};
 
 /**
 | Exports

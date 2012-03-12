@@ -37,7 +37,6 @@ var Fabric;
 var Path;
 var Tree;
 
-var peer;
 var system;
 
 /**
@@ -51,8 +50,8 @@ var settings;
 | Capsule
 */
 (function(){
-
 'use strict';
+if (typeof(window) === 'undefined') { throw new Error('shell.js needs a browser!'); }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .---. .           .          .
@@ -96,6 +95,11 @@ Tree.cogging = true;
 | vanishes.
 */
 var noCache = true;
+
+/**
+| The server peer
+*/
+var peer;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .---.     .  .
@@ -319,7 +323,7 @@ var Marker = function() {
 	this.offset = 0;
 	this.op$line = null;
 	this.op$token = null;
-}
+};
 
 /**
 | Sets the marker.
@@ -400,7 +404,7 @@ var Caret = function() {
 
 	// true when just blinked away
 	this.blinked = false;
-}
+};
 subclass(Caret, Marker);
 
 
@@ -476,7 +480,7 @@ var Selection = function() {
 	this.mark2 = new Marker();
 	this.begin = null;
 	this.end   = null;
-}
+};
 
 /**
 | Sets begin/end so begin is before end.
@@ -580,7 +584,7 @@ var Action = function(type, vitem, start) {
 	this.vitem = vitem;
 	this.start = start;
 	this.move  = start;
-}
+};
 
 /**
 | Action enums.
@@ -605,7 +609,7 @@ fixate(Action, 'RELBIND',   7); // binding a new relation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 var Cockpit = function() {
 // TODO, use this!
-}
+};
 
 /**
 | Redraws the cockpit.
@@ -662,9 +666,10 @@ Cockpit.prototype.mousedown = function(p) {
 /**
 | Constructor.
 */
-Shell = function(fabric) {
+Shell = function(fabric, sPeer) {
 	if (shell !== null) throw new Error('Singleton not single');
 	shell = this;
+	peer  = sPeer;
 
 	Measure.init();
 	this.fabric    = fabric;
@@ -678,9 +683,10 @@ Shell = function(fabric) {
 	this.selection = new Selection();
 
 	// A flag set to true if anything requests a redraw.
+	peer.setListener(this);
 	this.redraw = false;
 	this._draw();
-}
+};
 
 /**
 | Meshcraft got the systems focus.
@@ -867,9 +873,9 @@ Shell.prototype.resize = function(width, height) {
        /nw .---.'ne\ '
       /___/  .  \___\'
       \   \ pc  /   /
-       \sw `---´ se/
+       \sw `---' se/
         \ /  s  \ /
-         `-------´
+         `-------'
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /**
@@ -951,7 +957,7 @@ var VSpace = function(twig, path) {
 	}
 
 	this._floatMenuLabels = {c: 'new', n: 'Note', ne: 'Label'};
-}
+};
 
 /**
 | Redraws the complete space.
@@ -1272,6 +1278,7 @@ VSpace.prototype.mousedown = function(p) {
 | TODO
 */
 VSpace.prototype.ev$TODO = function(type, key, p1, p2, p3) {
+	/*
 	log('event', 'vitemcopse', type, key, p1, p2, p3);
 
 	switch(type) {
@@ -1300,6 +1307,7 @@ VSpace.prototype.ev$TODO = function(type, key, p1, p2, p3) {
 		log(true, 'strange event');
 		break;
 	}
+	*/
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1547,7 +1555,7 @@ VPara.prototype.specialKey = function(keycode) {
 		if (caret.offset > 0) {
 			peer.removeText(para, caret.offset - 1, 1);
 		} else {
-			var kn = this.getAlleyIndex();
+			kn = this.getAlleyIndex();
 			if (kn > 0) {
 				throw new Error('TODO');
 				// peer.join(para.parent.get(kn - 1));  XXX
@@ -1567,7 +1575,7 @@ VPara.prototype.specialKey = function(keycode) {
 		if (caret.offset > 0) {
 			caret.set(this, caret.offset - 1);
 		} else {
-			var kn = vdoc.twig.index(para.key);
+			kn = vdoc.twig.index(para.key);
 			if (kn > 0) {
 				ve = vdoc.vparas[kn - 1];
 				caret.set(ve, ve.para.get('text').length);
@@ -1584,7 +1592,7 @@ VPara.prototype.specialKey = function(keycode) {
 			caret.set(this, offset, x);
 		} else {
 			// goto prev para
-			var kn = vdoc.twig.index(para.key);
+			kn = vdoc.twig.index(para.key);
 			if (kn > 0) {
 				ve = vdoc.vparas[kn - 1];
 				offset = ve.getLineXOffset(ve.getFlow().length - 1, x);
@@ -1826,7 +1834,7 @@ var Scrollbar = function(item) {
 	this._pos     = 0;
 	this.aperture = null; // the size of the bar
 	this.zone     = null;
-}
+};
 
 /**
 | Makes the path for fabric.edge/fill/paint.
@@ -1905,7 +1913,7 @@ var VDoc = function(twig, path, vitem) {
 		var key = alley[a];
 		vparas[a] = new VPara(copse[key], new Path(path, '++', key), this);
 	}
-}
+};
 
 /**
 | The meshmashine issued an event.
@@ -2610,11 +2618,11 @@ VNote.prototype.getZone = function() {
 
 	switch (action.type) {
 	case Action.ITEMDRAG:
-		return item.zone.add(action.move.x - action.start.x, action.move.y - action.start.y);
+		return twig.zone.add(action.move.x - action.start.x, action.move.y - action.start.y);
 
 	case Action.ITEMRESIZE:
 		var szone = action.startZone;
-		if (!szone) return item.zone;
+		if (!szone) return twig.zone;
 		var spnw = szone.pnw;
 		var spse = szone.pse;
 		var dx = action.move.x - action.start.x;
@@ -2668,7 +2676,7 @@ VNote.prototype.getZone = function() {
 		}
 		return new Rect(pnw, pse);
 	default :
-		return item.zone;
+		return twig.zone;
 	}
 };
 
@@ -2687,7 +2695,7 @@ VNote.prototype.getZone = function() {
 */
 var VLabel = function(twig, path, vspace) {
 	VItem.call(this, twig, path, vspace);
-}
+};
 subclass(VLabel, VItem);
 
 /**

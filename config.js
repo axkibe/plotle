@@ -3,8 +3,8 @@ module.exports = {
 	ip      : '127.0.0.1',
 	port    : 8833,
 
-	// development mode: client, server or both.
-	devel   : 'both',
+	// development mode: none, client, server or both.
+	devel   : 'client',
 
 	//messages and JSON with whitespace/newlines for debugging.
 	//puffed  : false,
@@ -22,7 +22,7 @@ module.exports = {
 		peer:   true,
 		start:  true,
 		shell:  true,
-		te:     true,
+		te:     false,
 		web:    true,
 		warn:   true
 	}

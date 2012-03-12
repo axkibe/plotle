@@ -38,12 +38,12 @@ var Fabric;
 var Peer;
 var Shell;
 var settings; // TODO - remove this dependency
+var config;
 
 /**
 | Export
 */
 var system;
-var peer;
 
 /**
 | Export/Capsule
@@ -62,20 +62,20 @@ var subclass  = Jools.subclass;
 /**
 | Catches all errors a function throws if enabledCatcher is set.
 */
-function makeCatcher(that, fun) {
+function makeCatcher(fun) {
 	return function() {
 		if (!config.devel) {
 			try {
-				fun.apply(that, arguments);
+				fun.apply(null, arguments);
 			} catch(err) {
-				alert(
+				window.alert(
 					'Internal failure, '+err.name+': '+err.message+'\n\n' +
 					'file: '+err.fileName+'\n'+
 					'line: '+err.lineNumber+'\n'+
 					'stack: '+err.stack);
 			}
 		} else {
-			fun.apply(that, arguments);
+			fun.apply(null, arguments);
 		}
 	};
 }
@@ -90,14 +90,15 @@ function makeCatcher(that, fun) {
  Meshcraft Wrapper around the HTML5 browser.
 
  @@ use more prototyping.
- @@ or remove this logic.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 function System() {
+	if (system) throw new Error('System not a singleton');
+	system = this;
 	var canvas = document.getElementById('canvas');
 	canvas.width  = window.innerWidth - 1;
 	canvas.height = window.innerHeight - 1;
-	this.fabric = new Fabric(canvas);
+	system.fabric = new Fabric(canvas);
 
 	// if true browser supports the setCapture() call
 	// if false needs work around
@@ -129,7 +130,7 @@ function System() {
 		if (ctrl) {
 			switch(keyCode) {
 			case 65 : // ctrl+a
-				this.shell.specialKey(keyCode, shift, ctrl);
+				system.shell.specialKey(keyCode, shift, ctrl);
 				return false;
 			default :
 				return true;
@@ -145,7 +146,7 @@ function System() {
 		case 39 : // right
 		case 40 : // down
 		case 46 : // del
-			this.shell.specialKey(keyCode, shift, ctrl);
+			system.shell.specialKey(keyCode, shift, ctrl);
 			return false;
 		default :
 			return true;
@@ -192,7 +193,7 @@ function System() {
 		var text = hiddenInput.value;
 		if (text == inputval) { return; }
 		hiddenInput.value = inputval = '';
-		this.shell.input(text);
+		system.shell.input(text);
 	}
 
 	/**
@@ -201,15 +202,15 @@ function System() {
 	function blink() {
 		// hackish, also look into the hidden input field,
 		// maybe the user pasted something using the browser menu.
-		testinput.call(this);
-		this.shell.blink();
+		testinput();
+		system.shell.blink();
 	}
 
 	/**
 	| Key down in hidden input field.
 	*/
 	function onkeydown(event) {
-		if (!specialKey(this,
+		if (!specialKey(
 			lastSpecialKey = event.keyCode, event.shiftKey, event.ctrlKey || event.metaKey
 		)) event.preventDefault();
 	}
@@ -220,13 +221,13 @@ function System() {
 	function onkeypress(event) {
 		var ew = event.which;
 		var ek = event.keyCode;
-		if (((ek > 0 && ek < 32) || ew == 0) && lastSpecialKey != ek) {
+		if (((ek > 0 && ek < 32) || ew === 0) && lastSpecialKey !== ek) {
 			lastSpecialKey = -1;
-			return specialKey.call(this, ek, event.shiftKey, event.ctrlKey || event.metaKey);
+			return specialKey(ek, event.shiftKey, event.ctrlKey || event.metaKey);
 		}
 		lastSpecialKey = -1;
-		testinput.call(this);
-		setTimeout('system.ontestinput();', 0);
+		testinput();
+		setTimeout(system.ontestinput, 0);
 		return true;
 	}
 
@@ -234,7 +235,7 @@ function System() {
 	| Hidden input key up.
 	*/
 	function onkeyup(event) {
-		testinput.call(this);
+		testinput();
 		return true;
 	}
 
@@ -242,14 +243,14 @@ function System() {
 	| Hidden input lost focus.
 	*/
 	function onblur(event) {
-		this.shell.systemBlur();
+		system.shell.systemBlur();
 	}
 
 	/**
 	| Hidden input got focus.
 	*/
 	function onfocus(event) {
-		this.shell.systemFocus();
+		system.shell.systemFocus();
 	}
 
 	/**
@@ -258,7 +259,7 @@ function System() {
 	function onresize(event) {
 		canvas.width  = window.innerWidth - 1;
 		canvas.height = window.innerHeight - 1;
-		this.shell.resize(canvas.width, canvas.height);
+		system.shell.resize(canvas.width, canvas.height);
 	}
 
 	/**
@@ -268,9 +269,8 @@ function System() {
 		var p = new Point(event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop);
 
 		switch(mouseState) {
-		default : throw new Error('invalid mouseState');
 		case false:
-			this.shell.mousehover(p, event.shiftKey, event.ctrlKey || event.metaKey);
+			system.shell.mousehover(p, event.shiftKey, event.ctrlKey || event.metaKey);
 			return true;
 		case 'atween':
 			var dragbox = settings.dragbox;
@@ -279,9 +279,9 @@ function System() {
 				clearTimeout(atweenTimer);
 				atweenTimer = null;
 				mouseState = 'drag';
-				this.shell.dragstart(atweenPos, event.shiftKey, event.ctrlKey || event.metaKey);
+				system.shell.dragstart(atweenPos, event.shiftKey, event.ctrlKey || event.metaKey);
 				if (!p.eq(atweenPos)) {
-					this.shell.dragmove(p, event.shiftKey, event.ctrlKey || event.metaKey);
+					system.shell.dragmove(p, event.shiftKey, event.ctrlKey || event.metaKey);
 				}
 				captureEvents();
 			} else {
@@ -292,8 +292,10 @@ function System() {
 			}
 			return true;
 		case 'drag':
-			this.shell.dragmove(p, event.shiftKey, event.ctrlKey || event.metaKey);
+			system.shell.dragmove(p, event.shiftKey, event.ctrlKey || event.metaKey);
 			return true;
+		default :
+			throw new Error('invalid mouseState');
 		}
 	}
 
@@ -306,13 +308,13 @@ function System() {
 		hiddenInput.focus();
 		var p = new Point (event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop);
 		// asks the face if it forces this to be a drag or click, or yet unknown.
-		mouseState = this.shell.mousedown(p, event.shiftKey, event.ctrlKey || event.metaKey);
+		mouseState = system.shell.mousedown(p, event.shiftKey, event.ctrlKey || event.metaKey);
 		switch(mouseState) {
 		case 'atween' :
 			atweenPos   = atweenMove = p;
 			atweenShift = event.shiftKey;
 			atweenCtrl  = event.ctrlKey || event.metaKey;
-			atweenTimer = setTimeout('system.onatweentime();', settings.dragtime);
+			atweenTimer = setTimeout(system.onatweentime, settings.dragtime);
 			break;
 		case 'drag' :
 			captureEvents();
@@ -330,18 +332,19 @@ function System() {
 		var p = new Point(event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop);
 
 		switch (mouseState) {
-		default : throw new Error('invalid mouseState');
 		case false : return false;
 		case 'atween' :
 			// A click is a mouse down followed within dragtime by 'mouseup' and
 			// not having moved out of 'dragbox'.
 			clearTimeout(atweenTimer);
 			atweenTimer = null;
-			this.shell.click(p, event.shiftKey, event.ctrlKey || event.metaKey);
-			return mouseState = false;
+			system.shell.click(p, event.shiftKey, event.ctrlKey || event.metaKey);
+			return (mouseState = false);
 		case 'drag' :
-			this.shell.dragstop(p, event.shiftKey, event.ctrlKey || event.metaKey);
-			return mouseState = false;
+			system.shell.dragstop(p, event.shiftKey, event.ctrlKey || event.metaKey);
+			return (mouseState = false);
+		default :
+			throw new Error('invalid mouseState');
 		}
 	}
 
@@ -351,7 +354,7 @@ function System() {
 	function onmousewheel(event) {
 		var p = new Point(event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop);
 		var dir = (event.wheelDelta || event.detail) > 0 ? 1 : -1;
-		this.shell.mousewheel(p, dir, event.shiftKey, event.ctrlKey);
+		system.shell.mousewheel(p, dir, event.shiftKey, event.ctrlKey);
 	}
 
 	/**
@@ -364,34 +367,34 @@ function System() {
 		}
 		mouseState = 'drag';
 		atweenTimer = null;
-		this.shell.dragstart(atweenPos, atweenShift, atweenCtrl);
+		system.shell.dragstart(atweenPos, atweenShift, atweenCtrl);
 		if (!atweenMove.eq(atweenPos)) {
-			this.shell.dragmove(atweenMove, atweenShift, atweenCtrl);
+			system.shell.dragmove(atweenMove, atweenShift, atweenCtrl);
 		}
 	}
 
-	canvas.onmouseup       = makeCatcher(this, onmouseup);
-	canvas.onmousemove     = makeCatcher(this, onmousemove);
-	canvas.onmousedown     = makeCatcher(this, onmousedown);
-	canvas.onmousewheel    = makeCatcher(this, onmousewheel);
+	canvas.onmouseup       = makeCatcher(onmouseup);
+	canvas.onmousemove     = makeCatcher(onmousemove);
+	canvas.onmousedown     = makeCatcher(onmousedown);
+	canvas.onmousewheel    = makeCatcher(onmousewheel);
 	canvas.addEventListener('DOMMouseScroll', canvas.onmousewheel, false); // Firefox.
-	window.onresize        = makeCatcher(this, onresize);
-	hiddenInput.onfocus    = makeCatcher(this, onfocus);
-	hiddenInput.onblur     = makeCatcher(this, onblur);
-	hiddenInput.onkeydown  = makeCatcher(this, onkeydown);
-	hiddenInput.onkeypress = makeCatcher(this, onkeypress);
-	hiddenInput.onkeyup    = makeCatcher(this, onkeyup);
-	this.ontestinput       = makeCatcher(this, testinput);
-	this.onatweentime      = makeCatcher(this, onatweentime);
-	this.onblink           = makeCatcher(this, blink);
-	document.oncontextmenu   = function(e) { e.stopPropagation(); return false; };
+	window.onresize        = makeCatcher(onresize);
+	hiddenInput.onfocus    = makeCatcher(onfocus);
+	hiddenInput.onblur     = makeCatcher(onblur);
+	hiddenInput.onkeydown  = makeCatcher(onkeydown);
+	hiddenInput.onkeypress = makeCatcher(onkeypress);
+	hiddenInput.onkeyup    = makeCatcher(onkeyup);
+	system.ontestinput     = makeCatcher(testinput);
+	system.onatweentime    = makeCatcher(onatweentime);
+	system.onblink         = makeCatcher(blink);
+	document.oncontextmenu = function(e) { e.stopPropagation(); return false; };
 
 	/**
 	| Sets the mouse cursor
 	*/
-	this.setCursor = function(cursor) {
+	system.setCursor = function(cursor) {
 		canvas.style.cursor = cursor;
-	}
+	};
 
 	//-------------------------------------
 	//-- Interface for the System object --
@@ -400,13 +403,13 @@ function System() {
 	/**
 	| Sets the input (text selection).
 	*/
-	this.setInput = function(text) {
+	system.setInput = function(text) {
 		hiddenInput.value = inputval = text;
-		if (text != '') {
+		if (text !== '') {
 			hiddenInput.selectionStart = 0;
 			hiddenInput.selectionEnd = text.length;
 		}
-	}
+	};
 
 	// the blink (and check input) timer
 	var blinkTimer = null;
@@ -414,13 +417,13 @@ function System() {
 	/**
 	| (re)starts the blink timer
 	*/
-	this.restartBlinker = function() {
+	system.restartBlinker = function() {
 		if (blinkTimer) clearInterval(blinkTimer);
-		testinput.call(this);
-		blinkTimer = setInterval('system.onblink();', settings.caretBlinkSpeed);
-	}
+		testinput();
+		blinkTimer = setInterval(system.onblink, settings.caretBlinkSpeed);
+	};
 
-	this.restartBlinker();
+	system.restartBlinker();
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -431,12 +434,12 @@ function System() {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 window.onload = function() {
-	makeCatcher(this, function() {
-		system       = new System();
-		peer         = new Peer('emulate');
-		system.shell = new Shell(system.fabric);
+	makeCatcher(function() {
+		new System();
+		var peer     = new Peer('emulate');
+		system.shell = new Shell(system.fabric, peer);
 	})();
-}
+};
 
 })();
 

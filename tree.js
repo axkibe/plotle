@@ -59,7 +59,7 @@ Twig.prototype.index = function(key) {
 	if (!isArray(this.alley)) throw new Error('twig has no alley');
 	// TODO caching!
 	if (is(this.copse[key])) return -1;
-	return twig.alley.indexOf(key);
+	return this.alley.indexOf(key);
 };
 
 /**
@@ -268,7 +268,7 @@ Tree.prototype.grow = function(model, cog /*, ... */) {
 			if (!is(twig.key)) throw reject('twig misses cog and key');
 		} else {
 			if (is(twig.key)) {
-				if (twig.key !== cog) throw reject('twig cog !== key: '+cog+' !== '+key);
+				if (twig.key !== cog) throw reject('twig cog !== key: '+cog+' !== '+twig.key);
 			} else {
 				twig.key = cog;
 			}
@@ -283,7 +283,7 @@ Tree.prototype.grow = function(model, cog /*, ... */) {
 
 	immute(twig);
 	return twig;
-}
+};
 
 /**
 | Gets the node a path leads to.
@@ -310,7 +310,7 @@ Tree.prototype.getPath = function(path, shorten) {
 		}
 	}
 	return twig;
-}
+};
 
 /**
 | Returns a tree where the node pointed by path is replaced by val.
@@ -324,7 +324,7 @@ Tree.prototype.setPath = function(path, val) {
 	}
 
 	return new Tree(val, this.pattern, this.cogs);
-}
+};
 
 if (typeof(window) === 'undefined') {
 	module.exports = Tree;

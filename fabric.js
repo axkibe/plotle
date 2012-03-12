@@ -92,7 +92,7 @@ Fabric = function(a1, a2) {
 	}
 	this._cx = this._canvas.getContext('2d');
 	this.pan = Point.zero;
-}
+};
 
 /**
 * A value is computed and fixated only when needed.
@@ -125,7 +125,7 @@ var half = function(v) { return R(v / 2); };
 /**
 | Returns the compass direction opposite of a direction.
 */
-function opposite(dir) {
+var opposite = function(dir) {
 	switch (dir) {
 	case 'n'  : return 's';
 	case 'ne' : return 'sw';
@@ -138,19 +138,19 @@ function opposite(dir) {
 	case 'c'  : return 'c';
 	default   : throw new Error('unknown compass direction');
 	}
-}
+};
 
 /**
 | Throws an error if any argument is not an integer.
 */
-function ensureInteger() {
+var ensureInteger = function() {
 	for(var a in arguments) {
 		var arg = arguments[a];
 		if (Math.floor(arg) - arg !== 0) {
 			throw new Error(arg + ' not an integer');
 		}
 	}
-}
+};
 
 /**
 | Canvas width.
@@ -898,7 +898,7 @@ lazyFixate(Margin.prototype, 'y', function() { return this.n + this.s; });
 | Rect(rect, crad)      -or-
 | Rect(pnw, pse, crad)
 */
-function RoundRect(a1, a2, a3) {
+var RoundRect = function(a1, a2, a3) {
 	if (a1 instanceof Point) {
 		Rect.call(this, a1, a2);
 		fixate(this, 'crad', a3);
@@ -906,7 +906,7 @@ function RoundRect(a1, a2, a3) {
 		Rect.call(this, a1.pnw, a1.pse);
 		fixate(this, 'crad', a2);
 	}
-}
+};
 subclass(RoundRect, Rect);
 
 /**
@@ -1024,13 +1024,13 @@ Hexagon.prototype.within = function(p) {
 | rad: radius.
 | height: slice height.
 */
-function HexagonSlice(psw, rad, height) {
+var HexagonSlice = function(psw, rad, height) {
 	fixate(this, 'psw', psw);
 	fixate(this, 'rad', rad);
 	fixate(this, 'height', height);
 
 	if (height > rad) throw new Error('Cannot make slice larger than radius');
-}
+};
 
 /**
 | Middle(center) point of Hexagon.

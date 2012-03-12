@@ -16,6 +16,7 @@ var Emulate = {};
 "use strict";
 
 Emulate.path = ['welcome'];
+
 Emulate.src =  {
 	val: {
 		type: 'Space',
@@ -159,7 +160,7 @@ Emulate.src =  {
 		},
 		alley : [ '1' ]
 	}
-}
+};
 
 if (typeof(window) === 'undefined') {
 	module.exports = Emulate;
