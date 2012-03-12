@@ -59,23 +59,23 @@ var log       = Jools.log;
  Communicates with the server, holds caches.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
 /**
 | Constructor
 */
 Peer = function(mode) {
 	this._mode = mode;
 	var tree;
+
 	switch(mode) {
 	case 'async' :
 		tree = new Tree({ type : 'Nexus' }, Patterns.mUniverse, false);
-		this.mm = new MeshMashine(tree, false);
+		this.mm = new MeshMashine(tree);
 		break;
 	case 'sync' :
 		break;
 	case 'emulate' :
 		tree = new Tree({ type : 'Nexus' }, Patterns.mUniverse, false);
-		this.mm = new MeshMashine(tree, false);
+		this.mm = new MeshMashine(tree);
 
 		var src = Emulate.src;
 		var trg = { path: new Path(Emulate.path) };
@@ -166,6 +166,23 @@ Peer.prototype._alter = function(src, trg) {
 		throw new Error('unknown mode: '+this._mode);
 	}
 };
+
+/**
+| Sets the listener
+*/
+Peer.prototype.setReport = function(report) {
+	switch (this._mode) {
+	case 'async'   :
+	case 'emulate' :
+		this.mm.setReport(report);
+		break;
+	case 'sync' :
+		throw new Error('No reporting on sync operation');
+	default :
+		throw new Error('unknown mode: '+this._mode);
+	}
+}
+
 
 /**
 | Creates a new note.

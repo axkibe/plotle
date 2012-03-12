@@ -67,7 +67,6 @@ var isInteger   = Jools.isInteger;
 var isString    = Jools.isString;
 var matches     = Jools.matches;
 var reject      = Jools.reject;
-
 var isPath      = Path.isPath;
 
 function fail(args, aoffset) {
@@ -82,16 +81,16 @@ function fail(args, aoffset) {
 /**
 | Throws a reject if condition is not met.
 */
-function check(condition) {
+var check = function(condition) {
 	if (!condition) fail(arguments, 1);
-}
+};
 
 /**
 | Throws a reject if v is not within limits
 */
-function checkLimits(v, low, high) {
+var checkLimits = function(v, low, high) {
 	if (v < low || v > high) fail(arguments, 3, low, '<=', v, '<=', high);
-}
+};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .---.               .
@@ -617,20 +616,18 @@ Transform.take = function(sign, src, trg) {
 /**
 | Constructor.
 */
-// XXX repository
-MeshMashine = function(tree, report) {
+MeshMashine = function(tree) {
 	this.tree    = tree;  // TODO make private
 	this.history = [];
-	this.report  = report;
 };
 
 /**
-| Returns true if time is valid.
+| Sets the report receiver
 */
-MeshMashine.prototype._isValidTime = function(time) {
-	return isInteger(time) && time >= 0 && time <= this.history.length;
-};
-
+MeshMashine.prototype.setReport = function(report) {
+	if (is(this.report)) throw new Error('MeshMashine.report already set');
+	fixate(this, 'report', report);
+}
 
 /**
 | Transforms a signature, possibly splitting it up into several.
@@ -704,7 +701,7 @@ MeshMashine.prototype._reflect = function(time, path) {
 };
 
 /**
-| Alters the repository.
+| Alters the tree
 */
 MeshMashine.prototype.alter = function(time, src, trg) {
 	try {
@@ -819,6 +816,16 @@ MeshMashine.prototype.update = function(time) {
 	return {ok: true, time: this.history.length, update: update };
 };
 
+/**
+| Returns true if time is valid.
+*/
+MeshMashine.prototype._isValidTime = function(time) {
+	return isInteger(time) && time >= 0 && time <= this.history.length;
+};
+
+/**
+| Node
+*/
 if (typeof(window) === 'undefined') {
 	module.exports = MeshMashine;
 }

@@ -319,21 +319,17 @@ settings = {
  Marks a position in an element of an item.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 var Marker = function() {
-	this.entity = null;
-	this.offset = 0;
-	this.op$line = null;
+	this.vnode    = null;
+	this.offset   = 0;
+	this.op$line  = null;
 	this.op$token = null;
 };
 
 /**
 | Sets the marker.
 */
-Marker.prototype.set = function(entity, offset, retainX) {
-	if (entity !== this.entity) {
-		if (this.entity) this.entity.para.removeListener(this);
-		if (entity) entity.para.addListener(this);
-	}
-	this.entity = entity;
+Marker.prototype.set = function(vnode, offset, retainX) {
+	this.vnode  = vnode;
 	this.offset = offset;
 	this.retain$x = typeof(retainX) !== 'undefined' ? retainX : null;
 };
@@ -345,7 +341,7 @@ Marker.prototype.set = function(entity, offset, retainX) {
 TODO
 
 Marker.prototype.ev-XXX = function(type, key, p1, p2, p3) {
-	log('event', 'marker', type, key, p1, p2, p3);
+	log('xxx', 'marker', type, key, p1, p2, p3);
 
 	var at1, at2, offset;
 
@@ -448,7 +444,7 @@ Caret.prototype.update = function() {
 	}
 
 	// draws new
-	if (this.shown && !this.blinked && this.entity) this.entity.drawCaret();
+	if (this.shown && !this.blinked && this.vnode) this.vnode.drawCaret();
 };
 
 /**
@@ -489,7 +485,7 @@ Selection.prototype.normalize = function() {
 	var m1 = this.mark1;
 	var m2 = this.mark2;
 
-	if (m1.entity === m2.entity) {
+	if (m1.vnode.path.equals(m2.vnode.path)) {
 		if (m1.offset <= m2.offset) {
 			this.begin = this.mark1;
 			this.end   = this.mark2;
@@ -499,10 +495,10 @@ Selection.prototype.normalize = function() {
 		}
 		return;
 	}
-	var k1 = m1.entity.para.key;
-	var k2 = m2.entity.para.key;
-
+	var k1 = m1.vnode.twig.key;
+	var k2 = m2.vnode.twig.key;
 	if (k1 === k2) throw new Error('sel has equal keys');
+	throw new Error('TODO KN'); // TODO
 
 	if (k1 < k2) {
 		this.begin = this.mark1;
@@ -517,6 +513,9 @@ Selection.prototype.normalize = function() {
 | The text the selection selects.
 */
 Selection.prototype.innerText = function() {
+	throw new Error('TODO');
+
+	/*
 	if (!this.active) return '';
 	this.normalize();
 	var mb = this.begin;
@@ -544,12 +543,15 @@ Selection.prototype.innerText = function() {
 	buf.push('\n');
 	buf.push(etxt.substring(0, me.offset));
 	return buf.join('');
+	*/
 };
 
 /**
 | Removes the selection including its contents.
 */
 Selection.prototype.remove = function() {
+	throw new Error('TODO'); // TODO
+	/*
 	this.normalize();
 	this.deselect();
 	shell.redraw = true;
@@ -557,6 +559,7 @@ Selection.prototype.remove = function() {
 		this.begin.entity.para, this.begin.offset,
 		this.end.entity.para, this.end.offset
 	);
+	*/
 };
 
 /**
@@ -683,10 +686,17 @@ Shell = function(fabric, sPeer) {
 	this.selection = new Selection();
 
 	// A flag set to true if anything requests a redraw.
-	peer.setListener(this);
+	peer.setReport(this.report);
 	this.redraw = false;
 	this._draw();
 };
+
+/**
+| MeshMashine reporting changes
+*/
+Shell.prototype.report = function() {
+	log('report');
+}
 
 /**
 | Meshcraft got the systems focus.
@@ -786,11 +796,7 @@ Shell.prototype.mousedown = function(p, shift, ctrl) {
 Shell.prototype.specialKey = function(keyCode, shift, ctrl) {
 	this.shift = shift;
 	this.ctrl  = ctrl;
-
-	if (this.caret.entity !== null) {
-		this.caret.entity.specialKey(keyCode);
-	}
-
+	if (this.caret.vnode) { this.caret.vnode.specialKey(keyCode); }
 	if (this.redraw) this._draw();
 };
 
@@ -800,11 +806,7 @@ Shell.prototype.specialKey = function(keyCode, shift, ctrl) {
 Shell.prototype.input = function(text) {
 	this.shift = false;
 	this.ctrl  = false;
-
-	if (this.caret.entity !== null) {
-		this.caret.entity.input(text);
-	}
-
+	if (this.caret.vnode) { this.caret.vnode.input(text); }
 	if (this.redraw) this._draw();
 };
 
@@ -1279,7 +1281,7 @@ VSpace.prototype.mousedown = function(p) {
 */
 VSpace.prototype.ev$TODO = function(type, key, p1, p2, p3) {
 	/*
-	log('event', 'vitemcopse', type, key, p1, p2, p3);
+	log('xxx', 'vitemcopse', type, key, p1, p2, p3);
 
 	switch(type) {
 	case 'set' :
@@ -1350,7 +1352,7 @@ VPara.prototype.getFlow = function() {
 		flow.text      === text
 	) return flow;
 
-	if (shell.caret.entity === this) {
+	if (shell.caret.vnode.path.equals(this.path)) {
 		// remove caret cache if its within this flow.
 		// @@ use a function
 		shell.caret.cp$line  = null;
@@ -1469,7 +1471,7 @@ VPara.prototype.getLineXOffset = function(line, x) {
 */
 VPara.prototype.input = function(text) {
 	var caret = shell.caret;
-	if (caret.entity !== this) throw new Error('Invalid caret on input');
+	if (caret.vnode !== this) throw new Error('Invalid caret on input');
 	var para = this.para;
 
     var reg = /([^\n]+)(\n?)/g;
@@ -1485,7 +1487,7 @@ VPara.prototype.input = function(text) {
 | Handles a special key
 */
 VPara.prototype.specialKey = function(keycode) {
-	if (shell.caret.entity !== this) throw new Error('Invalid caret on specialKey');
+	if (shell.caret.vnode !== this) throw new Error('Invalid caret on specialKey');
 
 	// TODO split into smaller functions
 	var para = this.para;
@@ -1545,7 +1547,7 @@ VPara.prototype.specialKey = function(keycode) {
 		case 38 : // up
 		case 39 : // right
 		case 40 : // down
-			select.mark1.set(caret.entity, caret.offset);
+			select.mark1.set(caret.vnode, caret.offset); // TODO 
 			vdoc.vitem.poke();
 		}
 	}
@@ -1651,7 +1653,7 @@ VPara.prototype.specialKey = function(keycode) {
 		case 39 : // right
 		case 40 : // down
 			select.active = true;
-			select.mark2.set(caret.entity, caret.offset);
+			select.mark2.set(caret.vnode, caret.offset);  // TODO
 			system.setInput(select.innerText());
 			vdoc.vitem.poke();
 			shell.redraw = true;
@@ -1769,7 +1771,7 @@ VPara.prototype.getOffsetPoint = function(offset, flowPos$) {
 | Draws the caret if its in this paragraph.
 */
 VPara.prototype.drawCaret = function() {
-	if (shell.caret.entity !== this) throw new Error('Drawing caret for invalid para');
+	if (shell.caret.vnode !== this) throw new Error('Drawing caret for invalid para');
 
 	var vdoc  = this.vdoc;
 	var vitem = vdoc.vitem;
@@ -1920,7 +1922,7 @@ var VDoc = function(twig, path, vitem) {
 */
 /* TODO
 VDoc.prototype.ev-XXX = function(type, key, p1, p2, p3) {
-	log('event', 'vdoc', type, key, p1, p2, p3);
+	log('xxx', 'vdoc', type, key, p1, p2, p3);
 
 	switch(type) {
 	case 'join' :
@@ -1949,9 +1951,10 @@ VDoc.prototype.draw = function(fabric, width, imargin, scrollp) {
 	var select = shell.selection;
 
 	// draws the selection
+	/* TODO
 	if (select.active && select.mark1.entity.vdoc === this) {
 		fabric.paint(settings.selection.style, this, 'pathSelection', width, imargin, scrollp);
-	}
+	}*/
 
 	var y = imargin.n;
 	var pnws = [];   // north-west points of paras
@@ -2042,14 +2045,17 @@ VDoc.prototype.getVParaAtPoint = function(p) {
 */
 VDoc.prototype.pathSelection = function(fabric, border, twist, width, imargin, scrollp) {
 	// @@ make part of selection to use shortcut with XYi
+	throw new Error('TODO');
+
+	/*
 	var select = shell.selection;
 	var sp = scrollp;
 	var m1 = select.mark1;
 	var m2 = select.mark2;
 	var pnw1 = this.getPNW(m1.entity);
 	var pnw2 = this.getPNW(m2.entity);
-	var p1 = m1.entity.getOffsetPoint(m1.offset);
-	var p2 = m2.entity.getOffsetPoint(m2.offset);
+	var p1 = m1.vnode.getOffsetPoint(m1.offset);
+	var p2 = m2.vnode.getOffsetPoint(m2.offset);
 	p1 = p1.add(R(pnw1.x - sp.x), R(pnw1.y - sp.y));
 	p2 = p2.add(R(pnw2.x - sp.x), R(pnw2.y - sp.y));
 

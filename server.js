@@ -78,7 +78,7 @@ try {
 var mm;
 (function() {
 	var tree = new Tree({ type : 'Nexus' }, Patterns.mUniverse, false);
-	mm = new MeshMashine(tree, false);
+	mm = new MeshMashine(tree);
 
 	// startup init
 	var src = Emulate.src;
