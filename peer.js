@@ -383,9 +383,10 @@ Peer.prototype.newRelation = function(space, pnw, text, fontsize, vitem1, vitem2
 /**
 | Moves an item up to the z-index
 */
-Peer.prototype.moveToTop = function(space, item) {
-	throw new Error('TODO');
-	/*
+Peer.prototype.moveToTop = function(path, key) {
+	debug('moveToTop', arguments) // TODO
+
+/*
 	var path = new Path(space, 'z');
 	var key = item.key;
 	var at1 = space.z.indexOf(key);

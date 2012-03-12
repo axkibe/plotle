@@ -694,6 +694,22 @@ Shell = function(fabric, sPeer) {
 };
 
 /**
+| Returns the vnode path points to.
+*/
+Shell.prototype.vget = function(path, plen) {
+	if (!is(plen)) { plen = path.length; }
+	else if (plen < 0) { plen += path.length; }
+	if (plen <= 0) throw new Error('cannot vget path of length <= 0');
+	if (path[0] !== 'welcome') throw new Error('currently space must be "welcome"'); // TODO
+
+	var vnode = this.vspace;
+	for (var a = 1, a < plen; a++) {
+		vnode = vnode.vv[path.get(a)];
+	}
+	return vnode;
+}
+
+/**
 | MeshMashine reporting changes
 */
 Shell.prototype.report = function() {
@@ -945,7 +961,7 @@ var VSpace = function(twig, path) {
 	this.path   = path;
 	this.fabric = new Fabric(system.fabric);
 	this.zoom   = 1; // @@
-	this.vitems = {};
+	this.vv     = {};
 
 	for (var k in twig.copse) {
 		var item = twig.copse[k];
@@ -957,7 +973,7 @@ var VSpace = function(twig, path) {
 		case 'Relation' : vitem = new VRelation(item, ipath, this); break;
 		default : throw new Error('unknown type: '+item.type);
 		}
-		this.vitems[k] = vitem;
+		this.copse[k] = vitem;
 	}
 
 	this._floatMenuLabels = {c: 'new', n: 'Note', ne: 'Label'};
@@ -968,9 +984,9 @@ var VSpace = function(twig, path) {
 */
 VSpace.prototype.draw = function() {
 	var alley  = this.twig.alley;
-	var vitems = this.vitems;
+	var vv     = this.vv;
 	for(var a = alley.length - 1; a >= 0; a--) {
-		vitems[alley[a]].draw(this.fabric);
+		vv[alley[a]].draw(this.fabric);
 	}
 
 	if (this.focus) { this.focus.drawHandles(this.fabric); }
@@ -1020,14 +1036,18 @@ VSpace.prototype.setFocus = function(vitem) {
 | Mouse wheel
 */
 VSpace.prototype.mousewheel = function(p, dir) {
+	debug('TODO'); // TODO
+	/*
 	var pp = p.sub(this.fabric.pan);
 	for(var zi = 0, zlen = this.space.z.length; zi < zlen; zi++) {
-		var vitem = this.vitems.vcopse[this.space.z.get(zi)];
+
+		var vitem = this.vv[this.space.z.get(zi)];
 		if (vitem.mousewheel(pp, dir)) { return true; }
 	}
 
 	// @@ zooming.
 	return true;
+	*/
 };
 
 /**
@@ -1080,9 +1100,9 @@ VSpace.prototype.mousehover = function(p) {
 	}
 
 	var alley = this.twig.alley;
-	var vitems = this.vitems;
+	var vv    = this.vv;
 	for(var a = 0, aZ = alley.length; a < aZ; a++) {
-		var vitem = vitems[alley[a]];
+		var vitem = vv[alley[a]];
 		if (vitem.mousehover(pp)) { return true; }
 	}
 	// no hits
@@ -1107,8 +1127,9 @@ VSpace.prototype.dragstart = function(p) {
 
 	// see if one item was targeted
 	var alley = this.twig.alley;
+	var vv    = this.vv;
 	for(var a = 0, aZ = alley.length; a < aZ; a++) {
-		var vitem = this.vitems[alley[a]];
+		var vitem = copse[alley[a]];
 		if (vitem.dragstart(pp)) return true;
 	}
 
@@ -1138,8 +1159,9 @@ VSpace.prototype.click = function(p) {
 
 	// clicked some item?
 	var alley = this.twig.alley;
+	var vv    = this.vv;
 	for(var a = 0, aZ = alley.length; a < aZ; a++) {
-		var vitem = this.vitems[alley[a]];
+		var vitem = vv[alley[a]];
 		if (vitem.click(pp)) return true;
 	}
 
@@ -1166,8 +1188,10 @@ VSpace.prototype.dragstop = function(p) {
 		action.vitem.dragstop(p);
 		break;
 	case Action.RELBIND:
+		var vv = this.vv;
+		throw new Error('TODO') // TODO
 		for(var zi = 0, zlen = this.space.z.length; zi < zlen; zi++) {
-			var vit = this.vitems.vcopse[this.space.z.get(zi)];
+			var vit = vv[this.space.z.get(zi)];
 			if (vit.dragstop(pp)) break;
 		}
 		break;
@@ -1192,8 +1216,10 @@ VSpace.prototype.dragmove = function(p) {
 		action.vitem2 = null;
 		action.move = p;
 		shell.redraw = true;
+		throw new Error('TODO'); // TODO
+		var vv = this.vv;
 		for(var zi = 0, zlen = this.space.z.length; zi < zlen; zi++) {
-			var vitem = this.vitems.vcopse[this.space.z.get(zi)];
+			var vitem = vv[this.space.z.get(zi)];
 			if (vitem.dragmove(pp)) return true;
 		}
 		return true;
@@ -1227,7 +1253,7 @@ VSpace.prototype.mousedown = function(p) {
 			pnw = fm.p.sub(this.fabric.pan.x + half(nw) , this.fabric.pan.y + half(nh));
 			var note  = peer.newNote(this.space, new Rect(pnw, pnw.add(nw, nh)));
 			// event listener has created the vnote
-			var vnote = this.vitems.vcopse[note.key];
+			var vnote = this.vv[note.key];
 			this.setFocus(vnote);
 			break;
 		case 'ne' : // label
@@ -1235,7 +1261,7 @@ VSpace.prototype.mousedown = function(p) {
 			pnw = pnw.sub(settings.label.createOffset);
 			var label = peer.newLabel(this.space, pnw, 'Label', 20);
 			// event listener has created the vnote
-			var vlabel = this.vitems.vcopse[label.key];
+			var vlabel = this.vv[label.key];
 			this.setFocus(vlabel);
 			break;
 		}
@@ -1288,11 +1314,11 @@ VSpace.prototype.ev$TODO = function(type, key, p1, p2, p3) {
 	switch(type) {
 	case 'set' :
 		var item = this.copse.get(key);
-		var vitem = this.vcopse[key];
+		var vitem = this.vv[key];
 		if (!item && vitem) {
 			// an item has been removed
 			vitem.item.removeListener(this);
-			this.vcopse[key] = null;
+			this.vv[key] = null;
 			return;
 		}
 		if (item && !vitem) {
@@ -1305,7 +1331,7 @@ VSpace.prototype.ev$TODO = function(type, key, p1, p2, p3) {
 			case 'Relation': vitem = new VRelation(item, ipath, vspace); break;
 			default : throw new Error('unknown item created: '+item.type);
 			}
-			this.vcopse[key] = vitem;
+			this.vv[key] = vitem;
 			return;
 		}
 		log(true, 'strange event');
@@ -1354,9 +1380,9 @@ VPara.prototype.getFlow = function() {
 		flow.text      === text
 	) return flow;
 
-	if (shell.caret.vnode.path.equals(this.path)) {
+	if (shell.caret.vnode && shell.caret.vnode.path.equals(this.path)) {
 		// remove caret cache if its within this flow.
-		// @@ use a function
+		// TODO change
 		shell.caret.cp$line  = null;
 		shell.caret.cp$token = null;
 	}
@@ -1730,10 +1756,10 @@ VPara.prototype.event = function(event, p1, p2, p3) {
 */
 VPara.prototype.getOffsetPoint = function(offset, flowPos$) {
 	// @@ cache position
-	var para = this.para;
-	var doc  = para.getAnchestor('DocAlley');
-	Measure.font = doc.font;
-	var text = para.get('text');
+	var twig = this.twig;
+	var vdoc  = shell.vget(this.twig.path, -1);
+	Measure.font = vdoc.getFont();
+	var text = twig.text;
 	var flow = this.getFlow();
 	var a;
 
@@ -2125,11 +2151,13 @@ VDoc.prototype.pathSelection = function(fabric, border, twist, width, imargin, s
 | Constructor
 */
 var VItem = function(twig, path, vspace) {
-	this._h6slice$    = null;
-	this.twig         = twig;
-	this.path         = path;
-	this.vspace       = vspace;
-	this.vdoc         = new VDoc(twig.doc, new Path(path, '++', 'doc'), this);
+	this._h6slice$ = null;
+	this.twig      = twig;
+	this.path      = path;
+	this.vspace    = vspace;
+	this.vv        = immute({
+		doc : new VDoc(twig.doc, new Path(path, '++', 'doc'), this);
+	});
 
 	this._fabric      = new Fabric();
 	this._fabric$flag = false; // up-to-date-flag
@@ -2927,13 +2955,15 @@ VRelation.create = function(vspace, vitem1, vitem2) {
 	var pnw = cline.pc.sub(settings.relation.createOffset);
 	var rel = peer.newRelation(vspace.space, pnw, 'relates to', 20, vitem1.item, vitem2.item);
 	// event listener has created the vrel
-	var vrel = vspace.vitems.vcopse[rel.key];
+	var vrel = vspace.vv[rel.key];
 	vspace.setFocus(vrel);
 };
 
 VRelation.prototype.draw = function(fabric) {
-	var vitem1 = this.vspace.vitems.vcopse[this.item.get('item1key')];
-	var vitem2 = this.vspace.vitems.vcopse[this.item.get('item2key')];
+	throw new Error('TODO');
+	/*
+	var vitem1 = this.vspace.vv[this.item.get('item1key')];
+	var vitem2 = this.vspace.vv[this.item.get('item2key')];
 	var zone = this.getZone();
 
 	if (vitem1) {
@@ -2947,6 +2977,7 @@ VRelation.prototype.draw = function(fabric) {
 	}
 
 	VLabel.prototype.draw.call(this, fabric);
+	*/
 };
 
 
