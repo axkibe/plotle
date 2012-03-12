@@ -482,6 +482,9 @@ var Selection = function() {
 | Sets begin/end so begin is before end.
 */
 Selection.prototype.normalize = function() {
+	throw new Error('TODO'); // TODO
+
+	/*
 	var m1 = this.mark1;
 	var m2 = this.mark2;
 
@@ -498,7 +501,6 @@ Selection.prototype.normalize = function() {
 	var k1 = m1.vnode.twig.key;
 	var k2 = m2.vnode.twig.key;
 	if (k1 === k2) throw new Error('sel has equal keys');
-	throw new Error('TODO KN'); // TODO
 
 	if (k1 < k2) {
 		this.begin = this.mark1;
@@ -506,7 +508,7 @@ Selection.prototype.normalize = function() {
 	} else {
 		this.begin = this.mark2;
 		this.end   = this.mark1;
-	}
+	}*/
 };
 
 /**
@@ -695,8 +697,8 @@ Shell = function(fabric, sPeer) {
 | MeshMashine reporting changes
 */
 Shell.prototype.report = function() {
-	log('report');
-}
+	log('report', arguments);
+};
 
 /**
 | Meshcraft got the systems focus.
@@ -1547,7 +1549,7 @@ VPara.prototype.specialKey = function(keycode) {
 		case 38 : // up
 		case 39 : // right
 		case 40 : // down
-			select.mark1.set(caret.vnode, caret.offset); // TODO 
+			select.mark1.set(caret.vnode, caret.offset); // TODO
 			vdoc.vitem.poke();
 		}
 	}
@@ -2106,7 +2108,7 @@ VDoc.prototype.pathSelection = function(fabric, border, twist, width, imargin, s
 		fabric.lineTo(rx,   p1.y - fontsize);
 		if (!twist) fabric.lineTo(rx, p2.y - fontsize);
 	}
-
+	*/
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

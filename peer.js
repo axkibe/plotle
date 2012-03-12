@@ -181,8 +181,7 @@ Peer.prototype.setReport = function(report) {
 	default :
 		throw new Error('unknown mode: '+this._mode);
 	}
-}
-
+};
 
 /**
 | Creates a new note.

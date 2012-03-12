@@ -627,7 +627,7 @@ MeshMashine = function(tree) {
 MeshMashine.prototype.setReport = function(report) {
 	if (is(this.report)) throw new Error('MeshMashine.report already set');
 	fixate(this, 'report', report);
-}
+};
 
 /**
 | Transforms a signature, possibly splitting it up into several.
