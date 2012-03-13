@@ -703,7 +703,7 @@ Shell.prototype.vget = function(path, plen) {
 	if (!is(plen)) { plen = path.length; }
 	else if (plen < 0) { plen += path.length; }
 	if (plen <= 0) throw new Error('cannot vget path of length <= 0');
-	if (path[0] !== 'welcome') throw new Error('currently space must be "welcome"'); // TODO
+	if (path.get(0) !== 'welcome') throw new Error('currently space must be "welcome"'); // TODO
 
 	var vnode = this.vspace;
 	for (var a = 1; a < plen; a++) {
@@ -1459,8 +1459,7 @@ VPara.prototype.getFlow = function() {
 VPara.prototype.getPointOffset = function(point) {
 	var flow = this.getFlow();
 	var para = this.para;
-	var doc  = para.getAnchestor('DocAlley');
-	Measure.font = doc.font;
+	Measure.font = this.vdoc.getFont(); // TODO no vdoc
 
 	var line;
 	for (line = 0; line < flow.length; line++) {
@@ -1645,7 +1644,7 @@ VPara.prototype.specialKey = function(keycode) {
 		if (caret.offset < para.get('text').length) {
 			caret.set(this, caret.offset + 1);
 		} else {
-			r = vdoc.twig.rang(this.twig.key);
+			r = vdoc.twig.rank(this.twig.key);
 			if (r < vdoc.twig.ranks() - 1) {
 				ve = vdoc.vv[vdoc.twig.alley[r + 1]];
 				caret.set(ve, 0);
@@ -1768,7 +1767,7 @@ VPara.prototype.event = function(event, p1, p2, p3) {
 VPara.prototype.getOffsetPoint = function(offset, flowPos$) {
 	// @@ cache position
 	var twig = this.twig;
-	var vdoc  = shell.vget(this.twig.path, -1);
+	var vdoc  = shell.vget(this.path, -1);
 	Measure.font = vdoc.getFont();
 	var text = twig.text;
 	var flow = this.getFlow();
@@ -1826,7 +1825,12 @@ VPara.prototype.drawCaret = function() {
 	var sbary   = vitem.scrollbarY;
 	var scrolly = sbary ? sbary.getPos() : 0;
 
-	var pnw = vdoc.getPNW(this);
+	//debug('this.twig.key', this.twig.key);
+	console.log('1');
+	console.log('this.twig.key:'+ this.twig.key);
+	console.log('2');
+	throw new Error('WTF');
+	var pnw = vdoc.getPNW(this.twig.key);
 	var cys = R(caret.pos$.y + pnw.y + descend - scrolly);
 	var cyn = cys - th;
 	var cx  = caret.pos$.x + pnw.x - 1;
@@ -1996,7 +2000,7 @@ VDoc.prototype.draw = function(fabric, width, imargin, scrollp) {
 	}*/
 
 	var y = imargin.n;
-	var pnws = this.pnws = [];   // north-west points of paras
+	var pnws = {};   // north-west points of paras
 
 	// draws the paragraphs
 	var twig = this.twig;
@@ -2008,10 +2012,13 @@ VDoc.prototype.draw = function(fabric, width, imargin, scrollp) {
 		fabric.drawImage(vpara.getFabric(), imargin.w, R(y - scrollp.y));
 		y += flow.height + paraSep;
 	}
+	this.pnws = pnws;   // north-west points of paras
 };
 
-VDoc.prototype.getPNW = function(vpara) {
-	return this.pnws[vpara.twig.key];
+VDoc.prototype.getPNW = function(key) {
+	debug('PWNS', this.pnws);
+	debug('getPNW', key, this.pnws[key]);
+	return this.pnws[key];
 };
 
 /**
@@ -2064,15 +2071,14 @@ VDoc.prototype.getFont = function() {
 | Returns the paragraph at point
 */
 VDoc.prototype.getVParaAtPoint = function(p) {
-	var vparas = this.vparas;
 	var twig   = this.twig;
 	var vv     = this.vv;
 
 	for(var r = 0, rZ = twig.ranks(); r < rZ; r++) {
-		var vpara = vparas[r];
-
+		var k = twig.alley[r];
+		var vpara = vv[k];
 		var flow = vpara.getFlow();
-		var pnw = this.pnws[a];
+		var pnw = this.pnws[k];
 		if (p.y < pnw.y + flow.height) return vpara;
 	}
 	return null;
@@ -2416,7 +2422,7 @@ VItem.prototype.click = function(p) {
 
 	var vpara = this.getVParaAtPoint(pi);
 	if (vpara) {
-		var ppnw = this.vdoc.getPNW(vpara);
+		var ppnw = this.vv.doc.getPNW(vpara);
 		var offset = vpara.getPointOffset(pi.sub(ppnw));
 		shell.caret.set(vpara, offset);
 		shell.caret.show();
