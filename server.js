@@ -77,7 +77,7 @@ try {
 */
 var mm;
 (function() {
-	var tree = new Tree({ type : 'Nexus' }, Patterns.mUniverse, false);
+	var tree = new Tree({ type : 'Nexus' }, Patterns.mUniverse);
 	mm = new MeshMashine(tree);
 
 	// startup init

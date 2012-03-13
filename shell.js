@@ -962,6 +962,7 @@ Hexmenu.prototype.getMousepos = function(p) {
 var VSpace = function(twig, path) {
 	this.twig   = twig;
 	this.path   = path;
+	this.key    = path.get(-1);
 	this.fabric = new Fabric(system.fabric);
 	this.zoom   = 1; // @@
 	this.vv     = {};
@@ -1244,7 +1245,7 @@ VSpace.prototype.dragmove = function(p) {
 VSpace.prototype.mousedown = function(p) {
 	var pp = p.sub(this.fabric.pan);
 	var action = shell.action;
-	var pnw, md;
+	var pnw, md, key;
 
 	switch (action && action.type) {
 	case null :
@@ -1260,17 +1261,15 @@ VSpace.prototype.mousedown = function(p) {
 			var nw = settings.note.newWidth;
 			var nh = settings.note.newHeight;
 			pnw = fm.p.sub(this.fabric.pan.x + half(nw) , this.fabric.pan.y + half(nh));
-			var note  = peer.newNote(this.space, new Rect(pnw, pnw.add(nw, nh)));
-			// event listener has created the vnote
-			var vnote = this.vv[note.key];
+			key = peer.newNote(this.space, new Rect(pnw, pnw.add(nw, nh)));
+			var vnote = this.vv[key];
 			this.setFocus(vnote);
 			break;
 		case 'ne' : // label
 			pnw = fm.p.sub(this.fabric.pan);
 			pnw = pnw.sub(settings.label.createOffset);
-			var label = peer.newLabel(this.space, pnw, 'Label', 20);
-			// event listener has created the vnote
-			var vlabel = this.vv[label.key];
+			key = peer.newLabel(this.space, pnw, 'Label', 20);
+			var vlabel = this.vv[key];
 			this.setFocus(vlabel);
 			break;
 		}
@@ -1360,6 +1359,7 @@ var VPara = function(twig, path, vdoc) {
 
 	this.twig = twig;
 	this.path = path;
+	this.key  = path.get(-1);
 	this.vdoc = vdoc;
 
 	// fabric caching
@@ -1514,8 +1514,9 @@ VPara.prototype.input = function(text) {
     for(var rx = reg.exec(text); rx !== null; rx = reg.exec(text)) {
 		var line = rx[1];
 		peer.insertText(para, caret.offset, line);
-        if (rx[2]) peer.split(para, caret.offset);
-		para = para.parent.get(para.key + 1);
+		if (rx[2]) throw new Error('TODO');
+//        if (rx[2]) peer.split(para, caret.offset);
+//		para = para.parent.get(para.key + 1);
     }
 };
 
@@ -1595,7 +1596,7 @@ VPara.prototype.specialKey = function(keycode) {
 		if (caret.offset > 0) {
 			peer.removeText(para, caret.offset - 1, 1);
 		} else {
-			r = vdoc.twig.rank(this.twig.key);
+			r = vdoc.twig.rank(this.key);
 			if (r > 0) {
 				throw new Error('TODO');  // XXX
 				// peer.join(para.parent.get(r - 1));
@@ -1615,7 +1616,7 @@ VPara.prototype.specialKey = function(keycode) {
 		if (caret.offset > 0) {
 			caret.set(this, caret.offset - 1);
 		} else {
-			r = vdoc.twig.rank(this.twig.key);
+			r = vdoc.twig.rank(this.key);
 			if (r > 0) {
 				ve = vdoc.vv[vdoc.twig.alley[r - 1]];
 				caret.set(ve, ve.para.get('text').length);
@@ -1632,7 +1633,7 @@ VPara.prototype.specialKey = function(keycode) {
 			caret.set(this, offset, x);
 		} else {
 			// goto prev para
-			r = vdoc.twig.rank(this.twig.key);
+			r = vdoc.twig.rank(this.key);
 			if (r > 0) {
 				ve = vdoc.vv[vdoc.twig.alley[r - 1]];
 				offset = ve.getLineXOffset(ve.getFlow().length - 1, x);
@@ -1644,7 +1645,7 @@ VPara.prototype.specialKey = function(keycode) {
 		if (caret.offset < para.get('text').length) {
 			caret.set(this, caret.offset + 1);
 		} else {
-			r = vdoc.twig.rank(this.twig.key);
+			r = vdoc.twig.rank(this.key);
 			if (r < vdoc.twig.ranks() - 1) {
 				ve = vdoc.vv[vdoc.twig.alley[r + 1]];
 				caret.set(ve, 0);
@@ -1661,7 +1662,7 @@ VPara.prototype.specialKey = function(keycode) {
 			caret.set(this, offset, x);
 		} else {
 			// goto next para
-			r = vdoc.twig.rank(this.twig.key);
+			r = vdoc.twig.rank(this.key);
 			if (r < vdoc.twig.ranks() - 1) {
 				ve = vdoc.vv[vdoc.twig.alley[r + 1]];
 				offset = ve.getLineXOffset(0, x);
@@ -1673,7 +1674,7 @@ VPara.prototype.specialKey = function(keycode) {
 		if (caret.offset < para.get('text').length) {
 			peer.removeText(para, caret.offset, 1);
 		} else {
-			r = vdoc.twig.rang(this.twig.key);
+			r = vdoc.twig.rang(this.key);
 			if (r < vdoc.twig.ranks() - 1) {
 				peer.join(para);
 			}
@@ -1825,12 +1826,7 @@ VPara.prototype.drawCaret = function() {
 	var sbary   = vitem.scrollbarY;
 	var scrolly = sbary ? sbary.getPos() : 0;
 
-	//debug('this.twig.key', this.twig.key);
-	console.log('1');
-	console.log('this.twig.key:'+ this.twig.key);
-	console.log('2');
-	throw new Error('WTF');
-	var pnw = vdoc.getPNW(this.twig.key);
+	var pnw = vdoc.getPNW(this.key);
 	var cys = R(caret.pos$.y + pnw.y + descend - scrolly);
 	var cyn = cys - th;
 	var cx  = caret.pos$.x + pnw.x - 1;
@@ -1947,6 +1943,7 @@ Scrollbar.prototype.setPos = function(pos) {
 var VDoc = function(twig, path, vitem) {
 	this.twig  = twig;
 	this.path  = path;
+	this.key   = path.get(-1);
 	this.vitem = vitem;
 
 	this.pnws  = null;
@@ -2016,8 +2013,6 @@ VDoc.prototype.draw = function(fabric, width, imargin, scrollp) {
 };
 
 VDoc.prototype.getPNW = function(key) {
-	debug('PWNS', this.pnws);
-	debug('getPNW', key, this.pnws[key]);
 	return this.pnws[key];
 };
 
@@ -2170,6 +2165,7 @@ var VItem = function(twig, path, vspace) {
 	this._h6slice$ = null;
 	this.twig      = twig;
 	this.path      = path;
+	this.key       = path.get(-1);
 	this.vspace    = vspace;
 	this.vv        = immute({
 		doc : new VDoc(twig.doc, new Path(path, '++', 'doc'), this)

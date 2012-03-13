@@ -68,13 +68,13 @@ Peer = function(mode) {
 
 	switch(mode) {
 	case 'async' :
-		tree = new Tree({ type : 'Nexus' }, Patterns.mUniverse, false);
+		tree = new Tree({ type : 'Nexus' }, Patterns.mUniverse);
 		this.mm = new MeshMashine(tree);
 		break;
 	case 'sync' :
 		break;
 	case 'emulate' :
-		tree = new Tree({ type : 'Nexus' }, Patterns.mUniverse, false);
+		tree = new Tree({ type : 'Nexus' }, Patterns.mUniverse);
 		this.mm = new MeshMashine(tree);
 
 		var src = Emulate.src;
@@ -123,7 +123,7 @@ Peer.prototype.get = function(time, path) {
 		}
 		if (asw.ok !== true) throw new Error('AJAX not ok: '+asw.message);
 		this.time = asw.time;
-		return new Tree(asw.node, Patterns.mUniverse, true).root;
+		return new Tree(asw.node, Patterns.mUniverse).root;
 	default :
 		throw new Error('unknown mode: '+this._mode);
 	}

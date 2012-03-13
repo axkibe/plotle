@@ -76,7 +76,7 @@ Patterns.mUniverse = {
 
 	'Rect' : {
 		creator : function(t) {
-			return new Fabric.Rect(t.pnw, t.pse, t.key);
+			return new Fabric.Rect(t.pnw, t.pse);
 		},
 
 		must : {
@@ -87,7 +87,7 @@ Patterns.mUniverse = {
 
 	'Point' : {
 		creator : function(t) {
-			return new Fabric.Point(t.x, t.y, t.key);
+			return new Fabric.Point(t.x, t.y);
 		},
 
 		must : {

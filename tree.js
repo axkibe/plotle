@@ -105,12 +105,11 @@ var twigtype = function(o) {
 /**
 | Constructor.
 |
-| cogs: if true sets the 'key' attribute of nodes
+| TODO
 */
-Tree = function(root, pattern, cogs) {
+Tree = function(root, pattern) {
 	this.pattern = pattern;
-	this.cogs = cogs;
-	this.root = this.grow(root, 'root');
+	this.root = this.grow(root);
 };
 
 /**
@@ -127,7 +126,6 @@ Tree.prototype.getPattern = function(o) {
 |
 | mandatory arguments:
 |    model : the model to copy
-|    cog   : the new twigs own key
 |
 | additional arguments:
 |    'key', value        sets [key] = value
@@ -136,7 +134,7 @@ Tree.prototype.getPattern = function(o) {
 |    '--', count         shortens an array by count.
 |    '++', values...     for an array everything after '++' is extended.
 */
-Tree.prototype.grow = function(model, cog /*, ... */) {
+Tree.prototype.grow = function(model /*, ... */) {
 	var a, aZ = arguments.length;
 	if (model._$grown && aZ === 1) return model;
 	var twig, k, k1, k2, val, vtype;
@@ -154,7 +152,7 @@ Tree.prototype.grow = function(model, cog /*, ... */) {
 	if (pattern.alley) twig.alley = model.alley ? model.alley.slice()   : [];
 
 	// applies changes specified by the arguments
-	a = 2;
+	a = 1;
 	while(a < aZ && arguments[a] !== '++' && arguments[a] !== '--') {
 		k = arguments[a];
 		k1 = arguments[a + 1];
@@ -228,7 +226,7 @@ Tree.prototype.grow = function(model, cog /*, ... */) {
 			case Number :
 				break;
 			default     :
-				if (!val._$grown) twig.copse[k] = this.grow(twig.copse[k], k);
+				if (!val._$grown) twig.copse[k] = this.grow(twig.copse[k]);
 			}
 		}
 	} else {
@@ -247,7 +245,7 @@ Tree.prototype.grow = function(model, cog /*, ... */) {
 			case Number :
 				break;
 			default     :
-				if (!val._$grown) twig[k] = this.grow(twig[k], k);
+				if (!val._$grown) twig[k] = this.grow(twig[k]);
 			}
 		}
 	}
@@ -281,19 +279,6 @@ Tree.prototype.grow = function(model, cog /*, ... */) {
 		var inc = isnon(model._inc) ? model._inc : 1;
 		while(is(twig.copse['' + inc])) inc++;
 		Object.defineProperty(twig, '_inc', { value: '' + inc });
-	}
-
-	// if cogs are enabled, set .key
-	if (this.cogs) {
-		if (!is(cog)) {
-			if (!is(twig.key)) throw reject('twig misses cog and key');
-		} else {
-			if (is(twig.key)) {
-				if (twig.key !== cog) throw reject('twig cog !== key: '+cog+' !== '+twig.key);
-			} else {
-				twig.key = cog;
-			}
-		}
 	}
 
 	// if there is a custom construcgtor, calls it to replace the new twig
@@ -341,10 +326,10 @@ Tree.prototype.setPath = function(path, val) {
 
 	for(var a = path.length - 1; a >= 0; a--) {
 		var twig = this.getPath(path, a);
-		val = this.grow(twig, null, path.get(a), val);
+		val = this.grow(twig, path.get(a), val);
 	}
 
-	return new Tree(val, this.pattern, this.cogs);
+	return new Tree(val, this.pattern);
 };
 
 if (typeof(window) === 'undefined') {

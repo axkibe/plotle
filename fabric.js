@@ -579,7 +579,7 @@ Object.defineProperty(Measure, 'font', {
 | Point(x, y) or
 | Point(p)
 */
-var Point = function(a1, a2, key) {
+var Point = function(a1, a2) {
 	if (typeof(a1) === 'object') {
 		fixate(this, 'x', a1.x);
 		fixate(this, 'y', a1.y);
@@ -587,8 +587,7 @@ var Point = function(a1, a2, key) {
 		fixate(this, 'x', a1);
 		fixate(this, 'y', a2);
 	}
-	fixate(this, 'type', 'Point'); // @@ So Tree is happy
-	if (is(key)) { fixateNoEnum(this, 'key', key); }
+	fixate(this, 'type', 'Point'); // @@ So Tree is happy TODO prototype
 };
 
 /**
@@ -669,8 +668,7 @@ var Rect = function(pnw, pse, key) {
 	fixate(this, 'pse',    pse);
 	fixateNoEnum(this, 'width',  pse.x - pnw.x);
 	fixateNoEnum(this, 'height', pse.y - pnw.y);
-	fixate(this, 'type', 'Rect'); // @@ So Tree is happy
-	if (is(key)) { fixateNoEnum(this, 'key', key); }
+	fixate(this, 'type', 'Rect'); // @@ So Tree is happy TODO prototype
 };
 
 /**

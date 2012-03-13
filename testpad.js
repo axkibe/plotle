@@ -598,7 +598,7 @@ window.onload = function() {
 	element.up.onclick        = onup;
 	element.down.onclick      = ondown;
 
-	peer = new Peer(false);
+	peer = new Peer('sync');
 	update(-1);
 	updatePad();
 	resetBlink();
