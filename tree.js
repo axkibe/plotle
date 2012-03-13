@@ -53,14 +53,34 @@ var isPath       = Path.isPath;
 var Twig = function () { };
 
 /**
-| Returns the index of key in the alley
+| Returns the rank of the key (Returns the index of key in the alley)
 */
-Twig.prototype.index = function(key) {
-	if (!isArray(this.alley)) throw new Error('twig has no alley');
+Twig.prototype.rank = function(key) {
+	var alley = this.alley;
+	if (!isArray(alley)) throw new Error('twig has no alley');
 	// TODO caching!
 	if (is(this.copse[key])) return -1;
-	return this.alley.indexOf(key);
+	return alley.indexOf(key);
 };
+
+/**
+| Returns the twig that has rank r
+*/
+Twig.prototype.at = function(r) {
+	var alley = this.alley;
+	if (!isArray(alley)) throw new Error('twig has no alley');
+	if (is(alley[r])) throw new Error('indexBy, invalid index');
+	return this.copse[alley[r]];
+};
+
+/**
+| Returns the amount of ranks (length of the alley)
+*/
+Twig.prototype.ranks = function() {
+	var alley = this.alley;
+	if (!isArray(alley)) throw new Error('twig has no alley');
+	return this.alley.length;
+}
 
 /**
 | Gets the twigs type

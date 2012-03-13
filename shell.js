@@ -983,10 +983,10 @@ var VSpace = function(twig, path) {
 | Redraws the complete space.
 */
 VSpace.prototype.draw = function() {
-	var alley  = this.twig.alley;
-	var vv     = this.vv;
-	for(var a = alley.length - 1; a >= 0; a--) {
-		vv[alley[a]].draw(this.fabric);
+	var twig = this.twig;
+	var vv   = this.vv;
+	for(var r = twig.ranks - 1; r >= 0; r--) {
+		twig.at(r).draw(this.fabric);
 	}
 
 	if (this.focus) { this.focus.drawHandles(this.fabric); }
@@ -1020,7 +1020,8 @@ VSpace.prototype.setFocus = function(vitem) {
 
 	var caret = shell.caret;
 	if (vitem) {
-		caret.set(vitem.vdoc.vparas[0], 0);
+		var dov = vitem.vv.doc;
+		caret.set(doc.vv[doc.twig.alley[0]], 0);
 		caret.show();
 	} else {
 		caret.hide();
@@ -1524,8 +1525,9 @@ VPara.prototype.specialKey = function(keycode) {
 
 	var vdoc = this.vdoc;
 	var ve, offset, flow;
-	var kn, x;
+	var r, x;
 
+/*  TODO
 	if (shell.ctrl) {
 		switch(keycode) {
 		case 65 : // ctrl+a
@@ -1544,6 +1546,7 @@ VPara.prototype.specialKey = function(keycode) {
 			return true;
 		}
 	}
+*/
 
 	if (!shell.shift && select.active) {
 		switch(keycode) {
@@ -1585,10 +1588,10 @@ VPara.prototype.specialKey = function(keycode) {
 		if (caret.offset > 0) {
 			peer.removeText(para, caret.offset - 1, 1);
 		} else {
-			kn = this.getAlleyIndex();
-			if (kn > 0) {
+			r = vdoc.twig.rank(twig.key));
+			if (r > 0) {
 				throw new Error('TODO');
-				// peer.join(para.parent.get(kn - 1));  XXX
+				// peer.join(para.parent.get(r - 1));  XXX
 			}
 		}
 		break;
@@ -1605,9 +1608,9 @@ VPara.prototype.specialKey = function(keycode) {
 		if (caret.offset > 0) {
 			caret.set(this, caret.offset - 1);
 		} else {
-			kn = vdoc.twig.index(para.key);
-			if (kn > 0) {
-				ve = vdoc.vparas[kn - 1];
+			r = vdoc.twig.rank(twig.key);
+			if (r > 0) {
+				ve = vdoc.vv[vdoc.twig.alley[r - 1]];
 				caret.set(ve, ve.para.get('text').length);
 			}
 		}
@@ -1622,9 +1625,9 @@ VPara.prototype.specialKey = function(keycode) {
 			caret.set(this, offset, x);
 		} else {
 			// goto prev para
-			kn = vdoc.twig.index(para.key);
-			if (kn > 0) {
-				ve = vdoc.vparas[kn - 1];
+			r = vdoc.twig.rank(twig.key);
+			if (r > 0) {
+				ve = vdoc.vv[vdoc.twig.alley[r - 1]];
 				offset = ve.getLineXOffset(ve.getFlow().length - 1, x);
 				caret.set(ve, offset, x);
 			}
@@ -1634,9 +1637,9 @@ VPara.prototype.specialKey = function(keycode) {
 		if (caret.offset < para.get('text').length) {
 			caret.set(this, caret.offset + 1);
 		} else {
-			kn = vdoc.twig.index(para.key);
-			if (kn < vdoc.twig.alley.length - 1) {
-				ve = vdoc.vparas[kn + 1];
+			r = vdoc.twig.rang(twig.key);
+			if (r < vdoc.twig.ranks() - 1) {
+				ve = vdoc.vv[vdoc.twig.alley[r + 1]];
 				caret.set(ve, 0);
 			}
 		}
@@ -1651,9 +1654,9 @@ VPara.prototype.specialKey = function(keycode) {
 			caret.set(this, offset, x);
 		} else {
 			// goto next para
-			kn = vdoc.twig.index(para.key);
-			if (kn < vdoc.twig.alley.length - 1) {
-				ve = vdoc.vparas[kn + 1];
+			r = vdoc.twig.rank(twig.key);
+			if (r < vdoc.twig.ranks() - 1) {
+				ve = vdoc.vv[vdoc.twig.alley[r + 1]];
 				offset = ve.getLineXOffset(0, x);
 				caret.set(ve, offset, x);
 			}
@@ -1663,8 +1666,8 @@ VPara.prototype.specialKey = function(keycode) {
 		if (caret.offset < para.get('text').length) {
 			peer.removeText(para, caret.offset, 1);
 		} else {
-			kn = vdoc.twig.index(para.key);
-			if (kn < vdoc.twig.alley.length - 1) {
+			r = vdoc.twig.rang(twig.key);
+			if (r < vdoc.twig.ranks() - 1) {
 				peer.join(para);
 			}
 		}
@@ -1935,13 +1938,13 @@ var VDoc = function(twig, path, vitem) {
 	this.vitem = vitem;
 
 	this.pnws  = null;
-	var vparas = this.vparas = [];
+	var vv = this.vv = [];
 
 	var alley = twig.alley;
 	var copse = twig.copse;
-	for (var a = 0, aZ = alley.length; a < aZ; a++) {
+	for (var r = 0, rZ = r.ranks(); r < rZ; r++) {
 		var key = alley[a];
-		vparas[a] = new VPara(copse[key], new Path(path, '++', key), this);
+		vv[key] = new VPara(copse[key], new Path(path, '++', key), this);
 	}
 };
 
@@ -1985,29 +1988,22 @@ VDoc.prototype.draw = function(fabric, width, imargin, scrollp) {
 	}*/
 
 	var y = imargin.n;
-	var pnws = [];   // north-west points of paras
+	var pnws = this.pnws = [];   // north-west points of paras
 
-	var vparas = this.vparas;
 	// draws the paragraphs
-	for (var a = 0, aZ = vparas.length; a < aZ; a++) {
-		var vpara = vparas[a];
+	var twig = this.twig;
+	for (var r = 0, rZ = twig.ranks(); r < rZ; r++) {
+		var vpara = this.vv[twig.alley[r]];
 		var flow = vpara.getFlow();
 
-		// @@ name pnw$
-		pnws[a] = new Point(imargin.w, R(y));
+		pnws[twig.alley[r]] = new Point(imargin.w, R(y));
 		fabric.drawImage(vpara.getFabric(), imargin.w, R(y - scrollp.y));
 		y += flow.height + paraSep;
 	}
-
-	this.pnws = pnws;
 };
 
 VDoc.prototype.getPNW = function(vpara) {
-	// TODO use Oleng-IDs
-	if (!vpara) {
-		throw new Error('TODO');
-	}
-	return this.pnws[vpara.para.key];
+	return this.pnws[vpara.twig.key];
 };
 
 /**
@@ -2017,10 +2013,12 @@ VDoc.prototype.getPNW = function(vpara) {
 VDoc.prototype.getHeight = function() {
 	var fontsize = this.getFontSize();
 	var paraSep  = this.vitem.getParaSep(fontsize);
-	var vparas   = this.vparas;
+	var twig     = this.twig;
+	var vv       = this.vv;
 	var height   = 0;
-	for (var a = 0, aZ = vparas.length; a < aZ; a++) {
-		var vpara = vparas[a];
+	for (var r = 0, rZ = twig.ranks(); r < rZ; r++) {
+		var vpara = vv[twig.alley[r]];
+
 		var flow = vpara.getFlow();
 		if (a > 0) height += paraSep;
 		height += flow.height;
