@@ -399,6 +399,7 @@ Jools = {
 	inspect            : inspect,
 	is                 : is,
 	isnon              : isnon,
+	isArray            : isArray,
 	isInteger          : isInteger,
 	isString           : isString,
 	immute             : immute,

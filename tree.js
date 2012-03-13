@@ -69,8 +69,9 @@ Twig.prototype.rank = function(key) {
 Twig.prototype.at = function(r) {
 	var alley = this.alley;
 	if (!isArray(alley)) throw new Error('twig has no alley');
-	if (is(alley[r])) throw new Error('indexBy, invalid index');
-	return this.copse[alley[r]];
+	var k = alley[r];
+	if (!is(k)) throw new Error('at, invalid index');
+	return this.copse[k];
 };
 
 /**
@@ -80,7 +81,7 @@ Twig.prototype.ranks = function() {
 	var alley = this.alley;
 	if (!isArray(alley)) throw new Error('twig has no alley');
 	return this.alley.length;
-}
+};
 
 /**
 | Gets the twigs type

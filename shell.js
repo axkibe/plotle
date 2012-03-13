@@ -67,6 +67,9 @@ var min = Math.min;
 
 var debug     = Jools.debug;
 var fixate    = Jools.fixate;
+var immute    = Jools.immute;
+var is        = Jools.is;
+var isnon     = Jools.isnon;
 var limit     = Jools.limit;
 var log       = Jools.log;
 var subclass  = Jools.subclass;
@@ -703,11 +706,11 @@ Shell.prototype.vget = function(path, plen) {
 	if (path[0] !== 'welcome') throw new Error('currently space must be "welcome"'); // TODO
 
 	var vnode = this.vspace;
-	for (var a = 1, a < plen; a++) {
+	for (var a = 1; a < plen; a++) {
 		vnode = vnode.vv[path.get(a)];
 	}
 	return vnode;
-}
+};
 
 /**
 | MeshMashine reporting changes
@@ -973,7 +976,7 @@ var VSpace = function(twig, path) {
 		case 'Relation' : vitem = new VRelation(item, ipath, this); break;
 		default : throw new Error('unknown type: '+item.type);
 		}
-		this.copse[k] = vitem;
+		this.vv[k] = vitem;
 	}
 
 	this._floatMenuLabels = {c: 'new', n: 'Note', ne: 'Label'};
@@ -983,10 +986,11 @@ var VSpace = function(twig, path) {
 | Redraws the complete space.
 */
 VSpace.prototype.draw = function() {
-	var twig = this.twig;
-	var vv   = this.vv;
-	for(var r = twig.ranks - 1; r >= 0; r--) {
-		twig.at(r).draw(this.fabric);
+	var twig  = this.twig;
+	var alley = twig.alley;
+	var vv    = this.vv;
+	for(var r = twig.ranks() - 1; r >= 0; r--) {
+		vv[alley[r]].draw(this.fabric);
 	}
 
 	if (this.focus) { this.focus.drawHandles(this.fabric); }
@@ -1020,7 +1024,7 @@ VSpace.prototype.setFocus = function(vitem) {
 
 	var caret = shell.caret;
 	if (vitem) {
-		var dov = vitem.vv.doc;
+		var doc = vitem.vv.doc;
 		caret.set(doc.vv[doc.twig.alley[0]], 0);
 		caret.show();
 	} else {
@@ -1130,7 +1134,7 @@ VSpace.prototype.dragstart = function(p) {
 	var alley = this.twig.alley;
 	var vv    = this.vv;
 	for(var a = 0, aZ = alley.length; a < aZ; a++) {
-		var vitem = copse[alley[a]];
+		var vitem = vv[alley[a]];
 		if (vitem.dragstart(pp)) return true;
 	}
 
@@ -1190,12 +1194,14 @@ VSpace.prototype.dragstop = function(p) {
 		break;
 	case Action.RELBIND:
 		var vv = this.vv;
-		throw new Error('TODO') // TODO
+		throw new Error('TODO'); // TODO
+		/*
 		for(var zi = 0, zlen = this.space.z.length; zi < zlen; zi++) {
 			var vit = vv[this.space.z.get(zi)];
 			if (vit.dragstop(pp)) break;
 		}
 		break;
+		*/
 	}
 	shell.stopAction();
 	return true;
@@ -1218,12 +1224,14 @@ VSpace.prototype.dragmove = function(p) {
 		action.move = p;
 		shell.redraw = true;
 		throw new Error('TODO'); // TODO
+		/*
 		var vv = this.vv;
 		for(var zi = 0, zlen = this.space.z.length; zi < zlen; zi++) {
 			var vitem = vv[this.space.z.get(zi)];
 			if (vitem.dragmove(pp)) return true;
 		}
 		return true;
+		*/
 	default :
 		action.vitem.dragmove(pp);
 		return true;
@@ -1588,10 +1596,10 @@ VPara.prototype.specialKey = function(keycode) {
 		if (caret.offset > 0) {
 			peer.removeText(para, caret.offset - 1, 1);
 		} else {
-			r = vdoc.twig.rank(twig.key));
+			r = vdoc.twig.rank(this.twig.key);
 			if (r > 0) {
-				throw new Error('TODO');
-				// peer.join(para.parent.get(r - 1));  XXX
+				throw new Error('TODO');  // XXX
+				// peer.join(para.parent.get(r - 1));
 			}
 		}
 		break;
@@ -1608,7 +1616,7 @@ VPara.prototype.specialKey = function(keycode) {
 		if (caret.offset > 0) {
 			caret.set(this, caret.offset - 1);
 		} else {
-			r = vdoc.twig.rank(twig.key);
+			r = vdoc.twig.rank(this.twig.key);
 			if (r > 0) {
 				ve = vdoc.vv[vdoc.twig.alley[r - 1]];
 				caret.set(ve, ve.para.get('text').length);
@@ -1625,7 +1633,7 @@ VPara.prototype.specialKey = function(keycode) {
 			caret.set(this, offset, x);
 		} else {
 			// goto prev para
-			r = vdoc.twig.rank(twig.key);
+			r = vdoc.twig.rank(this.twig.key);
 			if (r > 0) {
 				ve = vdoc.vv[vdoc.twig.alley[r - 1]];
 				offset = ve.getLineXOffset(ve.getFlow().length - 1, x);
@@ -1637,7 +1645,7 @@ VPara.prototype.specialKey = function(keycode) {
 		if (caret.offset < para.get('text').length) {
 			caret.set(this, caret.offset + 1);
 		} else {
-			r = vdoc.twig.rang(twig.key);
+			r = vdoc.twig.rang(this.twig.key);
 			if (r < vdoc.twig.ranks() - 1) {
 				ve = vdoc.vv[vdoc.twig.alley[r + 1]];
 				caret.set(ve, 0);
@@ -1654,7 +1662,7 @@ VPara.prototype.specialKey = function(keycode) {
 			caret.set(this, offset, x);
 		} else {
 			// goto next para
-			r = vdoc.twig.rank(twig.key);
+			r = vdoc.twig.rank(this.twig.key);
 			if (r < vdoc.twig.ranks() - 1) {
 				ve = vdoc.vv[vdoc.twig.alley[r + 1]];
 				offset = ve.getLineXOffset(0, x);
@@ -1666,7 +1674,7 @@ VPara.prototype.specialKey = function(keycode) {
 		if (caret.offset < para.get('text').length) {
 			peer.removeText(para, caret.offset, 1);
 		} else {
-			r = vdoc.twig.rang(twig.key);
+			r = vdoc.twig.rang(this.twig.key);
 			if (r < vdoc.twig.ranks() - 1) {
 				peer.join(para);
 			}
@@ -1942,9 +1950,9 @@ var VDoc = function(twig, path, vitem) {
 
 	var alley = twig.alley;
 	var copse = twig.copse;
-	for (var r = 0, rZ = r.ranks(); r < rZ; r++) {
-		var key = alley[a];
-		vv[key] = new VPara(copse[key], new Path(path, '++', key), this);
+	for (var r = 0, rZ = twig.ranks(); r < rZ; r++) {
+		var k = alley[r];
+		vv[k] = new VPara(copse[k], new Path(path, '++', k), this);
 	}
 };
 
@@ -2020,7 +2028,7 @@ VDoc.prototype.getHeight = function() {
 		var vpara = vv[twig.alley[r]];
 
 		var flow = vpara.getFlow();
-		if (a > 0) height += paraSep;
+		if (r > 0) { height += paraSep; }
 		height += flow.height;
 	}
 	height += R(fontsize * settings.bottombox);
@@ -2057,8 +2065,12 @@ VDoc.prototype.getFont = function() {
 */
 VDoc.prototype.getVParaAtPoint = function(p) {
 	var vparas = this.vparas;
-	for(var a = 0; a < vparas.length; a++) {
-		var vpara = vparas[a];
+	var twig   = this.twig;
+	var vv     = this.vv;
+
+	for(var r = 0, rZ = twig.ranks(); r < rZ; r++) {
+		var vpara = vparas[r];
+
 		var flow = vpara.getFlow();
 		var pnw = this.pnws[a];
 		if (p.y < pnw.y + flow.height) return vpara;
@@ -2154,7 +2166,7 @@ var VItem = function(twig, path, vspace) {
 	this.path      = path;
 	this.vspace    = vspace;
 	this.vv        = immute({
-		doc : new VDoc(twig.doc, new Path(path, '++', 'doc'), this);
+		doc : new VDoc(twig.doc, new Path(path, '++', 'doc'), this)
 	});
 
 	this._fabric      = new Fabric();
@@ -2292,7 +2304,7 @@ VItem.prototype.drawHandles = function(fabric) {
 VItem.prototype.getVParaAtPoint = function(p, action) {
 	// @@ rename imargin to innerMargin
 	if (p.y < this.imargin.n) return null;
-	return this.vdoc.getVParaAtPoint(p, action);
+	return this.vv.doc.getVParaAtPoint(p, action);
 };
 
 /**
@@ -2505,7 +2517,7 @@ VNote.prototype.setScrollbar = function(pos) {
 	if (!sbary.visible) return;
 
 	// @@ double call to getHeight, also in VDoc.draw()
-	sbary.max = this.vdoc.getHeight();
+	sbary.max = this.vv.doc.getHeight();
 
 	var zone = this.getZone();
 	// @@ make a Rect.renew
@@ -2569,7 +2581,7 @@ VNote.prototype.draw = function(fabric) {
 		zone.width  !== this._fabric$size.width ||
 		zone.height !== this._fabric$size.height)
 	{
-		var vdoc = this.vdoc;
+		var vdoc = this.vv.doc;
 		var imargin = this.imargin;
 
 		// calculates if a scrollbar is needed
