@@ -22,7 +22,7 @@
  This is the client-side script for the user interface.
 
  Authors: Axel Kittenberger
- License: GNU Affero AGPLv3
+ License: MIT(Expat), see accompanying 'License'-file
 
  A variable with $ in its name signifies something cached.
  @@ are milestones for later releases than upcoming

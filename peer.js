@@ -20,7 +20,7 @@
  A peer to a meshcraft repository. Utilizes its own meshmashine.
 
  Authors: Axel Kittenberger
- License: GNU Affero AGPLv3
+ License: MIT(Expat), see accompanying 'License'-file
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 

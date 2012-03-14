@@ -25,7 +25,7 @@
  Defines: fabric
 
  Authors: Axel Kittenberger
- License: GNU Affero GPLv3
+ License: MIT(Expat), see accompanying 'License'-file
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 

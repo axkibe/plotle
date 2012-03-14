@@ -6,7 +6,7 @@ The live site at http://meshcraft.net/ is currently running version 0.1.
 
 Meshcraft tries to be compatible with all major browsers. However, Chrome/Chromium performs best.
 
-License: [AGPLv3](http://www.gnu.org/licenses/agpl.html) or any later AGPL version.
+License: [MIT (expat)][License]
 
 Versions
 ========
