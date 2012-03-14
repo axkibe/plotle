@@ -6,7 +6,7 @@ The live site at http://meshcraft.net/ is currently running version 0.1.
 
 Meshcraft tries to be compatible with all major browsers. However, Chrome/Chromium performs best.
 
-License: [MIT(expat)][License]
+License: [MIT][License]
 
 Versions
 ========
