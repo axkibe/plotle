@@ -233,19 +233,12 @@ Peer.prototype.newNote = function(space, zone) {
 /**
 | Sets the zone for item.
 */
-Peer.prototype.setZone = function(item, zone) {
-	throw new Error('TODO');
-	/*
-	var path = new Path(item, 'zone');
-
-	this.mm.alter(-1,
-		{
-			val: zone,
-		},
-		{
-			path: path,
-		}
-	);*/
+Peer.prototype.setZone = function(path, zone) {
+	var path = new Path(path, '++', 'zone');
+	this._alter(
+		{ val  : zone },
+		{ path : path }
+	);
 };
 
 /**

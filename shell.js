@@ -717,6 +717,7 @@ Shell.prototype.vget = function(path, plen) {
 */
 Shell.prototype.report = function() {
 	log('report', arguments);
+	debug('report', arguments);
 };
 
 /**
@@ -2091,8 +2092,8 @@ VDoc.prototype.pathSelection = function(fabric, border, twist, width, imargin, s
 	var sp = scrollp;
 	var m1 = select.mark1;
 	var m2 = select.mark2;
-	var pnw1 = this.getPNW(m1.entity);
-	var pnw2 = this.getPNW(m2.entity);
+	var pnw1 = this.getPNW(m1.vnode.key);
+	var pnw2 = this.getPNW(m2.vnode.key);
 	var p1 = m1.vnode.getOffsetPoint(m1.offset);
 	var p2 = m2.vnode.getOffsetPoint(m2.offset);
 	p1 = p1.add(R(pnw1.x - sp.x), R(pnw1.y - sp.y));
@@ -2418,7 +2419,7 @@ VItem.prototype.click = function(p) {
 
 	var vpara = this.getVParaAtPoint(pi);
 	if (vpara) {
-		var ppnw = this.vv.doc.getPNW(vpara);
+		var ppnw = this.vv.doc.getPNW(vpara.key);
 		var offset = vpara.getPointOffset(pi.sub(ppnw));
 		shell.caret.set(vpara, offset);
 		shell.caret.show();
@@ -2554,8 +2555,8 @@ VNote.prototype.dragstop = function(p) {
 			throw new Error('Note under minimum size!');
 		}
 
-		if (this.item.zone.eq(zone)) return;
-		peer.setZone(this.item, zone);
+		if (this.twig.zone.eq(zone)) return;
+		peer.setZone(this.path, zone);
 		// TODO this should happen by setting in peer...
 		this._fabric$flag = false;
 		// adapts scrollbar position
