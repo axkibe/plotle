@@ -424,6 +424,7 @@ Caret.prototype.hide = function() {
 
 /**
 | Draws or erases the caret.
+| TODO rename update to display()
 */
 Caret.prototype.update = function() {
 	var fabric = shell.fabric;
@@ -683,7 +684,7 @@ Shell = function(fabric, sPeer) {
 	this.selection = new Selection();
 
 	// A flag set to true if anything requests a redraw.
-	peer.setReport(this.report);
+	peer.setReport(this);
 	this.redraw = false;
 	this._draw();
 };
@@ -985,7 +986,7 @@ VSpace.prototype.update = function(twig) {
 	var vv = {};
 	var vo = this.vv;
 	var copse = twig.copse;
-	for(k in copse) {
+	for(var k in copse) {
 		var sub = twig.copse[k];
 		var o = vo[k];
 		if (is(o)) {
@@ -1005,11 +1006,12 @@ VSpace.prototype.update = function(twig) {
 */
 VSpace.prototype.createVItem = function(twig, k) {
 	var ipath = new Path(this.path, '++', k);
-	switch (item.type) {
-	case 'Note'     : return VNote    (item, ipath, this);
-	case 'Label'    : return VLabel   (item, ipath, this);
-	case 'Relation' : return VRelation(item, ipath, this);
-	default : throw new Error('unknown type: '+item.type);
+	switch (twig.type) {
+	case 'Note'     : return new VNote    (twig, ipath, this);
+	case 'Label'    : return new VLabel   (twig, ipath, this);
+	case 'Relation' : return new VRelation(twig, ipath, this);
+	default : throw new Error('unknown type: '+twig.type);
+	}
 };
 
 /**
@@ -1398,6 +1400,13 @@ var VPara = function(twig, path, vdoc) {
 
 	// flow caching
 	this._flow$ = [];
+};
+
+/**
+| Updates v-vine to match a new twig.
+*/
+VPara.prototype.update = function(twig) {
+	this.twig = twig;
 };
 
 /**
@@ -2000,7 +2009,7 @@ VDoc.prototype.update = function(twig) {
 	var vv = {};
 	var vo = this.vv;
 	var copse = twig.copse;
-	for(k in copse) {
+	for(var k in copse) {
 		var sub = twig.copse[k];
 		var o = vo[k];
 		if (is(o)) {

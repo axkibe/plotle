@@ -234,7 +234,7 @@ Peer.prototype.newNote = function(space, zone) {
 | Sets the zone for item.
 */
 Peer.prototype.setZone = function(path, zone) {
-	var path = new Path(path, '++', 'zone');
+	path = new Path(path, '++', 'zone');
 	this._alter(
 		{ val  : zone },
 		{ path : path }
