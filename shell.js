@@ -1517,7 +1517,7 @@ VPara.prototype.input = function(text) {
 | Handles a special key
 */
 VPara.prototype.specialKey = function(keycode) {
-	if (shell.caret.vnode !== this) throw new Error('Invalid caret on specialKey');
+	if (shell.caret.mark.vnode !== this) throw new Error('Invalid caret on specialKey');
 
 	// TODO split into smaller functions
 	var para = this.para;
@@ -1645,7 +1645,7 @@ VPara.prototype.specialKey = function(keycode) {
 			r = vdoc.twig.rank(this.key);
 			if (r < vdoc.twig.ranks() - 1) {
 				ve = vdoc.vv[vdoc.twig.alley[r + 1]];
-				caret.mark.set(ve, 0);
+				caret.mark = new Marker(ve, 0);
 			}
 		}
 		break;
