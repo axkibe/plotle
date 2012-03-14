@@ -2,7 +2,7 @@
 | Meshcraft Path.
 |
 | Authors: Axel Kittenberger
-| License: GNU Affero AGPLv3
+| License: MIT(Expat), see accompanying 'License'-file
 */
 
 /**

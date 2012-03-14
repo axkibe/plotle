@@ -2,7 +2,7 @@
 | Meshcraft Tree structure.
 |
 | Authors: Axel Kittenberger
-| License: GNU Affero AGPLv3
+| License: MIT(Expat), see accompanying 'License'-file
 */
 
 /**
@@ -59,7 +59,7 @@ Twig.prototype.rank = function(key) {
 	var alley = this.alley;
 	if (!isArray(alley)) throw new Error('twig has no alley');
 	// TODO caching!
-	if (is(this.copse[key])) return -1;
+	if (!is(this.copse[key])) return -1;
 	return alley.indexOf(key);
 };
 
