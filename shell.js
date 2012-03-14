@@ -321,20 +321,13 @@ settings = {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  Marks a position in an element of an item.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-var Marker = function() {
-	this.vnode    = null;
-	this.offset   = 0;
-	this.op$line  = null;
-	this.op$token = null;
-};
+var Marker = function(vnode, offset, retainX) {
+	if (!vnode) throw new Error('Marker.vnode missing');
 
-/**
-| Sets the marker.
-*/
-Marker.prototype.set = function(vnode, offset, retainX) {
-	this.vnode  = vnode;
-	this.offset = offset;
+	this.vnode    = vnode;
+	this.offset   = offset;
 	this.retain$x = typeof(retainX) !== 'undefined' ? retainX : null;
+	immute(this);
 };
 
 /**
@@ -396,7 +389,7 @@ Marker.prototype.ev-XXX = function(type, key, p1, p2, p3) {
 | Constructor.
 */
 var Caret = function() {
-	Marker.call(this);
+	this.mark = null;
 
 	// true if visible
 	this.shown = false;
@@ -404,7 +397,6 @@ var Caret = function() {
 	// true when just blinked away
 	this.blinked = false;
 };
-subclass(Caret, Marker);
 
 
 /**
@@ -447,7 +439,7 @@ Caret.prototype.update = function() {
 	}
 
 	// draws new
-	if (this.shown && !this.blinked && this.vnode) this.vnode.drawCaret();
+	if (this.shown && !this.blinked && this.mark) this.mark.vnode.drawCaret();
 };
 
 /**
@@ -475,8 +467,8 @@ Caret.prototype.blink = function() {
 */
 var Selection = function() {
 	this.active = false;
-	this.mark1 = new Marker();
-	this.mark2 = new Marker();
+	this.mark1 = null;
+	this.mark2 = null;
 	this.begin = null;
 	this.end   = null;
 };
@@ -717,6 +709,7 @@ Shell.prototype.vget = function(path, plen) {
 */
 Shell.prototype.report = function() {
 	log('report', arguments);
+	debug('report', arguments);
 };
 
 /**
@@ -817,7 +810,7 @@ Shell.prototype.mousedown = function(p, shift, ctrl) {
 Shell.prototype.specialKey = function(keyCode, shift, ctrl) {
 	this.shift = shift;
 	this.ctrl  = ctrl;
-	if (this.caret.vnode) { this.caret.vnode.specialKey(keyCode); }
+	if (this.caret.mark) { this.caret.mark.vnode.specialKey(keyCode); }
 	if (this.redraw) this._draw();
 };
 
@@ -827,7 +820,7 @@ Shell.prototype.specialKey = function(keyCode, shift, ctrl) {
 Shell.prototype.input = function(text) {
 	this.shift = false;
 	this.ctrl  = false;
-	if (this.caret.vnode) { this.caret.vnode.input(text); }
+	if (this.caret.mark) { this.caret.mark.vnode.input(text); }
 	if (this.redraw) this._draw();
 };
 
@@ -1026,11 +1019,11 @@ VSpace.prototype.setFocus = function(vitem) {
 	var caret = shell.caret;
 	if (vitem) {
 		var doc = vitem.vv.doc;
-		caret.set(doc.vv[doc.twig.alley[0]], 0);
+		caret.marker = new Marker(doc.vv[doc.twig.alley[0]], 0);
 		caret.show();
 	} else {
 		caret.hide();
-		caret.set(null);
+		caret.marker = null;
 	}
 
 	if (vitem === null) return;
@@ -1513,7 +1506,7 @@ VPara.prototype.input = function(text) {
     var reg = /([^\n]+)(\n?)/g;
     for(var rx = reg.exec(text); rx !== null; rx = reg.exec(text)) {
 		var line = rx[1];
-		peer.insertText(para, caret.offset, line);
+		peer.insertText(para, caret.mark.offset, line);
 		if (rx[2]) throw new Error('TODO');
 //        if (rx[2]) peer.split(para, caret.offset);
 //		para = para.parent.get(para.key + 1);
@@ -1556,6 +1549,7 @@ VPara.prototype.specialKey = function(keycode) {
 	}
 */
 
+/*
 	if (!shell.shift && select.active) {
 		switch(keycode) {
 		case 35 : // end
@@ -1586,15 +1580,17 @@ VPara.prototype.specialKey = function(keycode) {
 		case 38 : // up
 		case 39 : // right
 		case 40 : // down
-			select.mark1.set(caret.vnode, caret.offset); // TODO
-			vdoc.vitem.poke();
+			debug('TODO');
+			//select.mark1.set(caret.vnode, caret.offset);
+			//vdoc.vitem.poke();
 		}
 	}
+	*/
 
 	switch(keycode) {
 	case  8 : // backspace
 		if (caret.offset > 0) {
-			peer.removeText(para, caret.offset - 1, 1);
+			peer.removeText(para, caret.mark.offset - 1, 1);
 		} else {
 			r = vdoc.twig.rank(this.key);
 			if (r > 0) {
@@ -1604,22 +1600,23 @@ VPara.prototype.specialKey = function(keycode) {
 		}
 		break;
 	case 13 : // return
-		peer.split(para, caret.offset);
+		peer.split(para, caret.mark.offset);
 		break;
 	case 35 : // end
-		caret.set(this, para.get('text').length);
+		caret.mark = new Marker(this, this.twig.text.length);
 		break;
 	case 36 : // pos1
-		caret.set(this, 0);
+		caret.mark = new Marker(this, 0);
 		break;
 	case 37 : // left
-		if (caret.offset > 0) {
-			caret.set(this, caret.offset - 1);
+		debug('left');
+		if (caret.mark.offset > 0) {
+			caret.mark = new Marker(this, caret.mark.offset - 1);
 		} else {
 			r = vdoc.twig.rank(this.key);
 			if (r > 0) {
 				ve = vdoc.vv[vdoc.twig.alley[r - 1]];
-				caret.set(ve, ve.para.get('text').length);
+				caret.mark = new Marker(ve, ve.twig.text.length);
 			}
 		}
 		break;
@@ -1630,49 +1627,49 @@ VPara.prototype.specialKey = function(keycode) {
 		if (caret.flow$line > 0) {
 			// stay within this para
 			offset = this.getLineXOffset(caret.flow$line - 1, x);
-			caret.set(this, offset, x);
+			caret.mark = new Marker(this, offset, x);
 		} else {
 			// goto prev para
 			r = vdoc.twig.rank(this.key);
 			if (r > 0) {
 				ve = vdoc.vv[vdoc.twig.alley[r - 1]];
 				offset = ve.getLineXOffset(ve.getFlow().length - 1, x);
-				caret.set(ve, offset, x);
+				caret.mark = new Marker(ve, offset, x);
 			}
 		}
 		break;
 	case 39 : // right
-		if (caret.offset < para.get('text').length) {
-			caret.set(this, caret.offset + 1);
+		if (caret.mark.offset < this.twig.text.length) {
+			caret.mark.set(this, caret.mark.offset + 1);
 		} else {
 			r = vdoc.twig.rank(this.key);
 			if (r < vdoc.twig.ranks() - 1) {
 				ve = vdoc.vv[vdoc.twig.alley[r + 1]];
-				caret.set(ve, 0);
+				caret.mark.set(ve, 0);
 			}
 		}
 		break;
 	case 40 : // down
 		flow = this.getFlow();
-		x = caret.retain$x !== null ? caret.retain$x : caret.pos$.x;
+		x = caret.mark.retain$x !== null ? caret.mark.retain$x : caret.pos$.x;
 
 		if (caret.flow$line < flow.length - 1) {
 			// stay within this para
 			offset = this.getLineXOffset(caret.flow$line + 1, x);
-			caret.set(this, offset, x);
+			caret.mark = new Marker(this, offset, x);
 		} else {
 			// goto next para
 			r = vdoc.twig.rank(this.key);
 			if (r < vdoc.twig.ranks() - 1) {
 				ve = vdoc.vv[vdoc.twig.alley[r + 1]];
 				offset = ve.getLineXOffset(0, x);
-				caret.set(ve, offset, x);
+				caret.mark = new Marker(ve, offset, x);
 			}
 		}
 		break;
 	case 46 : // del
-		if (caret.offset < para.get('text').length) {
-			peer.removeText(para, caret.offset, 1);
+		if (caret.mark.offset < this.twig.text.length) {
+			peer.removeText(para, caret.mark.offset, 1);
 		} else {
 			r = vdoc.twig.rang(this.key);
 			if (r < vdoc.twig.ranks() - 1) {
@@ -1691,11 +1688,13 @@ VPara.prototype.specialKey = function(keycode) {
 		case 38 : // up
 		case 39 : // right
 		case 40 : // down
+			debug('TODO'); // TODO
+			/*
 			select.active = true;
-			select.mark2.set(caret.vnode, caret.offset);  // TODO
+			select.mark2.set(caret.vnode, caret.offset);
 			system.setInput(select.innerText());
 			vdoc.vitem.poke();
-			shell.redraw = true;
+			shell.redraw = true;*/
 		}
 	}
 
@@ -1810,7 +1809,7 @@ VPara.prototype.getOffsetPoint = function(offset, flowPos$) {
 | Draws the caret if its in this paragraph.
 */
 VPara.prototype.drawCaret = function() {
-	if (shell.caret.vnode !== this) throw new Error('Drawing caret for invalid para');
+	if (shell.caret.mark.vnode !== this) throw new Error('Drawing caret for invalid para');
 
 	var vdoc  = this.vdoc;
 	var vitem = vdoc.vitem;
@@ -2418,10 +2417,11 @@ VItem.prototype.click = function(p) {
 
 	var vpara = this.getVParaAtPoint(pi);
 	if (vpara) {
-		var ppnw = this.vv.doc.getPNW(vpara);
+		var ppnw   = this.vv.doc.getPNW(vpara);
 		var offset = vpara.getPointOffset(pi.sub(ppnw));
-		shell.caret.set(vpara, offset);
-		shell.caret.show();
+		var caret  = shell.caret;
+		caret.mark = new Marker(vpara, offset);
+		caret.show();
 		shell.selection.deselect();
 	}
 	return true;
@@ -2554,8 +2554,8 @@ VNote.prototype.dragstop = function(p) {
 			throw new Error('Note under minimum size!');
 		}
 
-		if (this.item.zone.eq(zone)) return;
-		peer.setZone(this.item, zone);
+		if (this.twig.zone.eq(zone)) return;
+		peer.setZone(this.path, zone);
 		// TODO this should happen by setting in peer...
 		this._fabric$flag = false;
 		// adapts scrollbar position

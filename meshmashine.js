@@ -1,7 +1,7 @@
 /**                                                      _.._
                                                       .-'_.._''.
  __  __   ___       _....._              .          .' .'     '.\
-|  |/  `.'   `.   .´       '.          .'|         / .'                                _.._
+|  |/  `.'   `.   .'       '.          .'|         / .'                                _.._
 |   .-.  .-.   ' /   .-'"'.  \        (  |        . '            .-,.-~.             .' .._|    .|
 |  |  |  |  |  |/   /______\  |        | |        | |            |  .-. |    __      | '      .' |_
 |  |  |  |  |  ||   __________|    _   | | .'''-. | |            | |  | | .:-`.'.  __| |__  .'     |
@@ -10,7 +10,7 @@
 |__|  |__|  |__|  `         .'.'.'| |//| |     | |  '. `.____.-'/| |      .'.''| |   | |      |  |
                    `'-.....-.'.'.-'  / | |     | |    `-._____ / | |     / /   | |_  | |      |  '.'
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
-                                       '___)   '___)                      `~~'  `"   |_|      `--´
+                                       '___)   '___)                      `~~'  `"   |_|      `--'
 
 
                        ,-,-,-.           .   ,-,-,-.           .
@@ -165,17 +165,19 @@ Alter.type = function(src, trg) {
 /**
 | Alters a tree
 */
-Alter.apply = function(tree, src, trg, report) {
+Alter.one = function(tree, src, trg, report) {
 	var atype = Alter.type(src, trg);
-	log('Aplternation.apply', 'src:', src, 'trg:', trg, 'atype:', atype);
+	log('alter', 'src:', src, 'trg:', trg, 'atype:', atype);
 	if (!Alter[atype]) throw reject('invalid atype:', atype);
-	return Alter[atype](tree, src, trg, report);
+	var asw = Alter[atype](tree, src, trg);
+	if (report) report(atype, asw.src, asw.trg, asw.tree);
+	return asw;
 };
 
 /**
 | Alter: A new item is inserted or replaces an existing.
 */
-Alter.set = function(tree, src, trg, report) {
+Alter.set = function(tree, src, trg) {
 	var cm = 'alter.set';
 
 	check(!is(trg.at1), cm, 'trg.at1 must not exist.');
@@ -202,14 +204,13 @@ Alter.set = function(tree, src, trg, report) {
 
 	tree = tree.setPath(path, src.val);
 
-	//if (report && parent.report) parent.report('set', trg.path.get(-1), src.val);
 	return { tree: tree, src: src, trg: trg };
 };
 
 /**
 | Alter: A string is inserted into a string item.
 */
-Alter.insert = function(tree, src, trg, report) {
+Alter.insert = function(tree, src, trg) {
 	var cm = 'alter.insert';
 
 	check(isPath(trg.path), cm, 'trg.path missing');
@@ -226,17 +227,13 @@ Alter.insert = function(tree, src, trg, report) {
 	var nstr = str.substring(0, trg.at1) + src.val + str.substring(trg.at1);
 	tree = tree.setPath(trg.path, nstr);
 
-	//if (report) {
-	//	var parent = tree.get(trg.path, 0, -1);
-	//	if (parent.report) parent.report('insert', trg.path.get(-1), trg.at1, src.val);
-	//}
 	return { tree: tree, src: src, trg: trg };
 };
 
 /**
 | Alter: a part of a string item is removed.
 */
-Alter.remove = function(tree, src, trg, report) {
+Alter.remove = function(tree, src, trg) {
 	var cm = 'alter.remove';
 	check(isPath(src.path), cm, 'src.path missing');
 	var str = tree.getPath(src.path);
@@ -254,19 +251,16 @@ Alter.remove = function(tree, src, trg, report) {
 		trg = new Signature(trg, 'val', val);
 	}
 	var nstr = str.substring(0, src.at1) + str.substring(src.at2);
+
 	tree = tree.setPath(src.path, nstr);
 
-	//if (report) {
-	//	var parent = tree.get(src.path, 0, -1);
-	//	if (parent.report) parent.report('remove', src.path.get(-1), src.at1, src.at2, val);
-	//}
 	return { tree: tree, src: src, trg: trg };
 };
 
 /**
 | Alter: two texts are joined into one.
 */
-Alter.join = function(tree, src, trg, report) {
+Alter.join = function(tree, src, trg) {
 	var cm = 'alter.join';
 	var path = trg.path;
 
@@ -297,18 +291,13 @@ Alter.join = function(tree, src, trg, report) {
 	var ppath = new Path(path, '--', 2); // TODO, add a shorten parameter to setPath instead.
 	tree = tree.setPath(ppath, pivot);
 
-//	if (report) {
-//		if (pivot.report) pivot.report('join', path.get(trg.pivot), trg.at1, ppre);
-//		if (ppre.report)  ppre.report('join>', path.get(-1), path.get(trg.pivot), trg.at1);
-//		if (pnex.report)  pnex.report('join<', path.get(-1), path.get(trg.pivot), trg.at1);
-//	}
 	return { tree: tree, src: src, trg: trg };
 };
 
 /**
 | Alter: a text is split into two.
 */
-Alter.split = function(tree, src, trg, report) {
+Alter.split = function(tree, src, trg) {
 	var cm = 'alter.split';
 	var path = src.path;
 
@@ -345,17 +334,13 @@ Alter.split = function(tree, src, trg, report) {
 	var ppath = new Path(path, '--', 2); // TODO, add a shorten parameter to setPath instead.
 	tree  = tree.setPath(ppath, pivot);
 
-//	if (report) {
-//		if (pivot.report) pivot.report('split', src.path.get(src.pivot), src.at1, pnew);
-//		if (ppre.report)   ppre.report('split', src.path.get(-1), src.at1, pnew);
-//	}
 	return { tree: tree, src: src, trg: trg };
 };
 
 /**
 | Alter: a value is placed into an alley(array)
 */
-Alter.place = function(tree, src, trg, report) {
+Alter.place = function(tree, src, trg) {
 	var cm = 'alter.place';
 	check(is(src.val),  cm, 'src.val not present');
 	check(is(trg.path), cm, 'trg.path not present');
@@ -369,14 +354,13 @@ Alter.place = function(tree, src, trg, report) {
 
 	alley.splice(trg.at1, 0, src.val);
 
-	if (report && alley.report) alley.report('place', trg.path.get(-1), trg.at1, src.val);
 	return { tree: tree, src: src, trg: trg };
 };
 
 /**
 | Alter: a value is taken from an alley(array)
 */
-Alter.take = function(tree, src, trg, report) {
+Alter.take = function(tree, src, trg) {
 	// an item is taken (removed) from an alley.
 	var cm = 'alter.take';
 
@@ -394,7 +378,6 @@ Alter.take = function(tree, src, trg, report) {
 	}
 	alley.splice(src.at1, 1);
 
-	if (report && alley.report) alley.report('take', src.path.get(-1), src.at1, val);
 	return { tree: tree, src: src, trg: trg };
 };
 
@@ -689,7 +672,7 @@ MeshMashine.prototype._reflect = function(time, path) {
 		// playback
 		for(var hi = this.history.length - 1; hi >= time; hi--) {
 			var moment = this.history[hi];
-			var asw = Alter.apply(reflect, moment.trg, moment.src, false);
+			var asw = Alter.one(reflect, moment.trg, moment.src, false);
 			reflect = asw.tree;
 		}
 		return reflect;
@@ -738,8 +721,9 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 			}
 		}
 
+		// TODO include in if below.
 		var apply = function (src, trg) {
-			var result = Alter.apply(this.tree, src, trg, this.report);
+			var result = Alter.one(this.tree, src, trg, this.report);
 			if (result) {
 				var alt = { src : result.src, trg : result.trg}; // TODO immute
 				this.history.push(alt);
