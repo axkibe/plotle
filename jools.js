@@ -1,3 +1,34 @@
+/**                                                      _.._
+                                                      .-'_.._''.
+ __  __   ___       _....._              .          .' .'     '.\
+|  |/  `.'   `.   .'       '.          .'|         / .'                                _.._
+|   .-.  .-.   ' /   .-'"'.  \        (  |        . '            .-,.-~.             .' .._|    .|
+|  |  |  |  |  |/   /______\  |        | |        | |            |  .-. |    __      | '      .' |_
+|  |  |  |  |  ||   __________|    _   | | .'''-. | |            | |  | | .:-`.'.  __| |__  .'     |
+|  |  |  |  |  |\  (          '  .' |  | |/.'''. \. '            | |  | |/ |   \ ||__   __|'-..  .-'
+|  |  |  |  |  | \  '-.___..-~. .   | /|  /    | | \ '.         .| |  '- `" __ | |   | |      |  |
+|__|  |__|  |__|  `         .'.'.'| |//| |     | |  '. `.____.-'/| |      .'.''| |   | |      |  |
+                   `'-.....-.'.'.-'  / | |     | |    `-._____ / | |     / /   | |_  | |      |  '.'
+                                 \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
+                                       '___)   '___)                      `~~'  `"   |_|      `--'
+
+                                   +++ Fabric ++++
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+ A graphic 2D-Object library for HTML Canvas 5
+
+ This is not a full blown feature complete, everything library
+ but enhanced on the fly for what the meshcraft shell needs.
+
+ TODO remove all references to "c2d".
+
+ Defines: fabric
+
+ Authors: Axel Kittenberger
+ License: MIT(Expat), see accompanying 'License'-file
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 /**
 | Common Javascript Tools for Meshcraft.
 |

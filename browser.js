@@ -22,13 +22,13 @@
 
  A networked node item editor.
 
- This is a wrapper around the HTML5 browsers. It makes a more comfortable interface for a pure
- graphic system like the meshcraft shell.
+ This is a wrapper around HTML5 browsers, creating a more comfortable interface for a pure
+ graphical systems like the meshcraft shell.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
 | Imports

@@ -17,8 +17,8 @@
 
  A graphic 2D-Object library for HTML Canvas 5
 
- This is not a full blown feature complete everything library,
- but enhanced on the fly for what meshcraft needs.
+ This is not a full blown feature complete, everything library
+ but enhanced on the fly for what the meshcraft shell needs.
 
  TODO remove all references to "c2d".
 
@@ -27,7 +27,7 @@
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
 | Imports

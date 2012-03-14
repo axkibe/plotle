@@ -25,9 +25,9 @@
  License: MIT(Expat), see accompanying 'License'-file
 
  A variable with $ in its name signifies something cached.
- @@ are milestones for later releases than upcoming
+ @@ are milestones for later releases
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
 | Imports
@@ -705,11 +705,10 @@ Shell.prototype.vget = function(path, plen) {
 };
 
 /**
-| MeshMashine reporting changes
+| MeshMashine reports changes
 */
-Shell.prototype.report = function() {
-	log('report', arguments);
-	debug('report', arguments);
+Shell.prototype.report = function(tree, src, trg) {
+	this.vspace.report(tree, src, trg);
 };
 
 /**
@@ -953,27 +952,64 @@ Hexmenu.prototype.getMousepos = function(p) {
 | Constructor
 */
 var VSpace = function(twig, path) {
-	this.twig   = twig;
-	this.path   = path;
-	this.key    = path.get(-1);
-	this.fabric = new Fabric(system.fabric);
-	this.zoom   = 1; // @@
-	this.vv     = {};
+	this.twig        = twig;
+	this.path        = path;
+	this.key         = path.get(-1);
+	this.fabric      = new Fabric(system.fabric);
+	this.zoom        = 1; // @@
+	var vv = this.vv = {};
 
 	for (var k in twig.copse) {
-		var item = twig.copse[k];
-		var vitem;
-		var ipath = new Path(path, '++', k);
-		switch (item.type) {
-		case 'Note'     : vitem = new VNote    (item, ipath, this); break;
-		case 'Label'    : vitem = new VLabel   (item, ipath, this); break;
-		case 'Relation' : vitem = new VRelation(item, ipath, this); break;
-		default : throw new Error('unknown type: '+item.type);
-		}
-		this.vv[k] = vitem;
+		vv[k] = this.createVItem(twig.copse[k], k);
 	}
 
 	this._floatMenuLabels = {c: 'new', n: 'Note', ne: 'Label'};
+};
+
+
+/**
+| MeshMashine reports changes
+*/
+VSpace.prototype.report = function(tree, src, trg) {
+	//update twig pointers
+	var twig = tree.copse[this.key];
+	if (this.twig === twig) return;
+	this.twig = twig;
+	this.update(twig);
+};
+
+/**
+| Updates v-vine to match a new twig.
+*/
+VSpace.prototype.update = function(twig) {
+	var vv = {};
+	var vo = this.vv;
+	var copse = twig.copse;
+	for(k in copse) {
+		var sub = twig.copse[k];
+		var o = vo[k];
+		if (is(o)) {
+			if (o.twig !== sub) {
+				o.update(sub);
+			}
+			vv[k] = o;
+		} else {
+			vv[k] = this.createVItem(sub, k);
+		}
+	}
+	this.vv = vo;
+};
+
+/**
+| Creates a new visual representation of an item.
+*/
+VSpace.prototype.createVItem = function(twig, k) {
+	var ipath = new Path(this.path, '++', k);
+	switch (item.type) {
+	case 'Note'     : return VNote    (item, ipath, this);
+	case 'Label'    : return VLabel   (item, ipath, this);
+	case 'Relation' : return VRelation(item, ipath, this);
+	default : throw new Error('unknown type: '+item.type);
 };
 
 /**
@@ -1958,6 +1994,28 @@ var VDoc = function(twig, path, vitem) {
 };
 
 /**
+| Updates v-vine to match a new twig.
+*/
+VDoc.prototype.update = function(twig) {
+	var vv = {};
+	var vo = this.vv;
+	var copse = twig.copse;
+	for(k in copse) {
+		var sub = twig.copse[k];
+		var o = vo[k];
+		if (is(o)) {
+			if (o.twig !== sub) {
+				o.update(sub);
+			}
+			vv[k] = o;
+		} else {
+			vv[k] = new VPara(sub, new Path(this.path, '++', k), this);
+		}
+	}
+	this.vv = vo;
+};
+
+/**
 | The meshmashine issued an event.
 */
 /* TODO
@@ -2173,6 +2231,16 @@ var VItem = function(twig, path, vspace) {
 
 	this._fabric      = new Fabric();
 	this._fabric$flag = false; // up-to-date-flag
+};
+
+/**
+| Updates v-vine to match a new twig.
+*/
+VItem.prototype.update = function(twig) {
+	var vdoc = this.vv.doc;
+	if (vdoc.twig !== twig.doc) {
+		vdoc.update(twig.doc);
+	}
 };
 
 /**
