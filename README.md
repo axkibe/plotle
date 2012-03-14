@@ -6,8 +6,6 @@ The live site at http://meshcraft.net/ is currently running version 0.1.
 
 Meshcraft tries to be compatible with all major browsers. However, Chrome/Chromium performs best.
 
-License: [MIT][License]
-
 Versions
 ========
 Version 0.1 is a demo of the clients user interface (shell). It is not yet ready for productive work and does not communicate with server. Everything is cached in the browser.
@@ -35,4 +33,14 @@ Further Down the Road
  * Item grouping
  * Accessibility
  * Literature administriation nodes
+
+License (MIT/Expat)
+===================
+Copyright (C) 2011-2012 Axel Kittenberger (axkibe@gmail.com)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
