@@ -1640,7 +1640,7 @@ VPara.prototype.specialKey = function(keycode) {
 		break;
 	case 39 : // right
 		if (caret.mark.offset < this.twig.text.length) {
-			caret.mark.set(this, caret.mark.offset + 1);
+			caret.mark = new Marker(this, caret.mark.offset + 1);
 		} else {
 			r = vdoc.twig.rank(this.key);
 			if (r < vdoc.twig.ranks() - 1) {
@@ -1763,6 +1763,8 @@ VPara.prototype.event = function(event, p1, p2, p3) {
 | offset:   the offset to get the point from.
 | flowPos$: if set, writes flow$line and flow$token to
 |           the flow position used.
+|
+| TODO change to multireturn.
 */
 VPara.prototype.getOffsetPoint = function(offset, flowPos$) {
 	// @@ cache position
@@ -1820,7 +1822,7 @@ VPara.prototype.drawCaret = function() {
 	var descend = R(fs * settings.bottombox);
 	var th    = R(vdoc.getFontSize()) + descend;
 
-	caret.pos$ = this.getOffsetPoint(shell.caret.offset, shell.caret);
+	caret.pos$ = this.getOffsetPoint(shell.caret.mark.offset, shell.caret);
 
 	var sbary   = vitem.scrollbarY;
 	var scrolly = sbary ? sbary.getPos() : 0;
