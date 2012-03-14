@@ -1609,7 +1609,6 @@ VPara.prototype.specialKey = function(keycode) {
 		caret.mark = new Marker(this, 0);
 		break;
 	case 37 : // left
-		debug('left');
 		if (caret.mark.offset > 0) {
 			caret.mark = new Marker(this, caret.mark.offset - 1);
 		} else {
@@ -1622,7 +1621,7 @@ VPara.prototype.specialKey = function(keycode) {
 		break;
 	case 38 : // up
 		flow = this.getFlow();
-		x = caret.retain$x !== null ? caret.retain$x : caret.pos$.x;
+		x = caret.mark.retain$x !== null ? caret.mark.retain$x : caret.pos$.x;
 
 		if (caret.flow$line > 0) {
 			// stay within this para
