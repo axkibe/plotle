@@ -170,7 +170,7 @@ Alter.one = function(tree, src, trg, report) {
 	log('alter', 'src:', src, 'trg:', trg, 'atype:', atype);
 	if (!Alter[atype]) throw reject('invalid atype:', atype);
 	var asw = Alter[atype](tree, src, trg);
-	if (report) report.report(atype, asw.src, asw.trg, asw.tree);
+	if (report) report.report(atype, asw.tree, asw.src, asw.trg);
 	return asw;
 };
 

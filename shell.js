@@ -708,8 +708,8 @@ Shell.prototype.vget = function(path, plen) {
 /**
 | MeshMashine reports changes
 */
-Shell.prototype.report = function(tree, src, trg) {
-	this.vspace.report(tree, src, trg);
+Shell.prototype.report = function(type, tree, src, trg) {
+	this.vspace.report(type, tree, src, trg);
 };
 
 /**
@@ -971,9 +971,9 @@ var VSpace = function(twig, path) {
 /**
 | MeshMashine reports changes
 */
-VSpace.prototype.report = function(tree, src, trg) {
+VSpace.prototype.report = function(type, tree, src, trg) {
 	//update twig pointers
-	var twig = tree.copse[this.key];
+	var twig = tree.root.copse[this.key];
 	if (this.twig === twig) return;
 	this.twig = twig;
 	this.update(twig);
@@ -983,6 +983,8 @@ VSpace.prototype.report = function(tree, src, trg) {
 | Updates v-vine to match a new twig.
 */
 VSpace.prototype.update = function(twig) {
+	this.twig = twig;
+
 	var vv = {};
 	var vo = this.vv;
 	var copse = twig.copse;
@@ -1468,7 +1470,7 @@ VPara.prototype.getFlow = function() {
 				flow[line] = {a: [], y: y, o: ca.index};
 			} else {
 				// horizontal overflow
-				console.log('HORIZONTAL OVERFLOW'); // @@
+//				console.log('HORIZONTAL OVERFLOW'); // @@
 			}
 		}
 		flow[line].a.push({
@@ -2246,6 +2248,8 @@ var VItem = function(twig, path, vspace) {
 | Updates v-vine to match a new twig.
 */
 VItem.prototype.update = function(twig) {
+	this.twig = twig;
+
 	var vdoc = this.vv.doc;
 	if (vdoc.twig !== twig.doc) {
 		vdoc.update(twig.doc);
