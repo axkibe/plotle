@@ -22,7 +22,7 @@ module.exports = {
 		report: true,
 		start:  true,
 		shell:  true,
-		te:     false,
+		te:     true,
 		web:    true,
 		warn:   true
 	}
