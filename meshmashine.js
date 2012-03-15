@@ -808,6 +808,13 @@ MeshMashine.prototype._isValidTime = function(time) {
 };
 
 /**
+| Access to Transform.one for other modules
+*/
+MeshMashine.transformOne = function(sign, src, trg) {
+	return Transform.one(sign, src, trg);
+}
+
+/**
 | Node
 */
 if (typeof(window) === 'undefined') {
