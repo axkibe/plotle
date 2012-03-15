@@ -812,7 +812,7 @@ MeshMashine.prototype._isValidTime = function(time) {
 */
 MeshMashine.transformOne = function(sign, src, trg) {
 	return Transform.one(sign, src, trg);
-}
+};
 
 /**
 | Node

@@ -34,6 +34,7 @@
 */
 var Jools;
 var Fabric;
+var MeshMashine;
 var Path;
 var Tree;
 
@@ -645,7 +646,7 @@ Shell.prototype.setCaret = function(mark, retainx) {
 	caret.mark = mark;
 	caret.retainx = is(retainx) ? retainx : null;
 	return caret;
-}
+};
 
 /**
 | Returns the visual node path points to.
@@ -1723,7 +1724,7 @@ VPara.prototype.specialKey = function(keycode) {
 VPara.prototype.textpath = function() {
 	if (this._textpath) return this._textpath;
 	return (this._textpath = new Path(this.path, '++', 'text'));
-}
+};
 
 /**
 | Returns the height of the para
