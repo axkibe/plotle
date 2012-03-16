@@ -371,9 +371,8 @@ Caret.prototype.hide = function() {
 
 /**
 | Draws or erases the caret.
-| TODO rename update to display()
 */
-Caret.prototype.update = function() {
+Caret.prototype.display = function() {
 	var fabric = shell.fabric;
 
 	// erases the old caret
@@ -398,7 +397,7 @@ Caret.prototype.update = function() {
 Caret.prototype.blink = function() {
 	if (this.shown) {
 		this.blinked = !this.blinked;
-		this.update();
+		this.display();
 	}
 };
 
@@ -685,7 +684,7 @@ Shell.prototype.report = function(type, tree, src, trg) {
 */
 Shell.prototype.systemFocus = function() {
 	this.caret.show();
-	this.caret.update();
+	this.caret.display();
 };
 
 /**
@@ -693,7 +692,7 @@ Shell.prototype.systemFocus = function() {
 */
 Shell.prototype.systemBlur = function() {
 	this.caret.hide();
-	this.caret.update();
+	this.caret.display();
 };
 
 /**
@@ -731,7 +730,7 @@ Shell.prototype._draw = function() {
 
 	this.vspace.draw();
 	this.cockpit.draw();
-	this.caret.update();
+	this.caret.display();
 
 	this.redraw = false;
 };
@@ -942,7 +941,7 @@ var VSpace = function(twig, path) {
 | MeshMashine reports changes
 */
 VSpace.prototype.report = function(type, tree, src, trg) {
-	//update twig pointers
+	// updates twig pointers
 	var twig = tree.root.copse[this.key];
 	if (this.twig === twig) return;
 	this.twig = twig;
@@ -1997,7 +1996,6 @@ VDoc.prototype.update = function(twig) {
 			}
 			vv[k] = o;
 		} else {
-			debug('NEW VPARA');
 			o = new VPara(sub, new Path(this.path, '++', k), this);
 			o.update(sub);
 			vv[k] = o;
