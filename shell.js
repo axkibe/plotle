@@ -670,7 +670,6 @@ Shell.prototype.vget = function(path, plen) {
 Shell.prototype.report = function(type, tree, src, trg) {
 	this.vspace.report(type, tree, src, trg);
 
-	debug('TRANSFORM CARET');
 	var caret = this.caret;
 	var tmark = MeshMashine.transformOne(caret.mark, src, trg);
 	if (tmark !== caret.mark) {
@@ -1524,7 +1523,7 @@ VPara.prototype.input = function(text) {
     var reg = /([^\n]+)(\n?)/g;
     for(var rx = reg.exec(text); rx !== null; rx = reg.exec(text)) {
 		var line = rx[1];
-		peer.insertText(this.path, caret.mark.at1, line);
+		peer.insertText(this.textpath(), caret.mark.at1, line);
 		if (rx[2]) throw new Error('TODO');
 //        if (rx[2]) peer.split(para, caret.mark.at1);
 //		para = para.parent.get(para.key + 1);
@@ -1606,17 +1605,17 @@ VPara.prototype.specialKey = function(keycode) {
 	switch(keycode) {
 	case  8 : // backspace
 		if (caret.mark.at1 > 0) {
-			peer.removeText(para, caret.mark.at1 - 1, 1);
+			peer.removeText(this.textpath(), caret.mark.at1 - 1, 1);
 		} else {
 			r = vdoc.twig.rank(this.key);
 			if (r > 0) {
-				throw new Error('TODO');  // XXX
-				// peer.join(para.parent.get(r - 1));
+				ve = vdoc.vv[vdoc.twig.alley[r - 1]];
+				peer.join(ve.textpath(), ve.twig.text.length);
 			}
 		}
 		break;
 	case 13 : // return
-		peer.split(para, caret.mark.at1);
+		peer.split(this.textpath(), caret.mark.at1);
 		break;
 	case 35 : // end
 		caret = shell.setCaret({ path: this.textpath(), at1:  this.twig.text.length });
@@ -1642,7 +1641,7 @@ VPara.prototype.specialKey = function(keycode) {
 		if (caret.flow$line > 0) {
 			// stay within this para
 			at1 = this.getLineXOffset(caret.flow$line - 1, x);
-			this.setCaret({ path: this.textpath(), at1: at1 }, x);
+			shell.setCaret({ path: this.textpath(), at1: at1 }, x);
 		} else {
 			// goto prev para
 			r = vdoc.twig.rank(this.key);
@@ -1684,7 +1683,7 @@ VPara.prototype.specialKey = function(keycode) {
 		break;
 	case 46 : // del
 		if (caret.mark.at1 < this.twig.text.length) {
-			peer.removeText(para, caret.mark.at1, 1);
+			peer.removeText(this.textpath(), caret.mark.at1, 1);
 		} else {
 			r = vdoc.twig.rang(this.key);
 			if (r < vdoc.twig.ranks() - 1) {
@@ -1985,8 +1984,9 @@ var VDoc = function(twig, path, vitem) {
 | Updates v-vine to match a new twig.
 */
 VDoc.prototype.update = function(twig) {
-	var vv = {};
+	this.twig = twig;
 	var vo = this.vv;
+	var vv = this.vv = {};
 	var copse = twig.copse;
 	for(var k in copse) {
 		var sub = twig.copse[k];
@@ -1997,10 +1997,12 @@ VDoc.prototype.update = function(twig) {
 			}
 			vv[k] = o;
 		} else {
-			vv[k] = new VPara(sub, new Path(this.path, '++', k), this);
+			debug('NEW VPARA');
+			o = new VPara(sub, new Path(this.path, '++', k), this);
+			o.update(sub);
+			vv[k] = o;
 		}
 	}
-	this.vv = vo;
 };
 
 /**

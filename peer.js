@@ -413,7 +413,6 @@ Peer.prototype.moveToTop = function(path, key) {
 | Inserts some text.
 */
 Peer.prototype.insertText = function(path, offset, text) {
-	path = new Path(path, '++', 'text');
 	this._alter(
 		{ val  : text },
 		{ path : path, at1  : offset }
@@ -424,7 +423,6 @@ Peer.prototype.insertText = function(path, offset, text) {
 | Removes some text within one node
 */
 Peer.prototype.removeText = function(path, offset, len) {
-	path = new Path(path, '++', 'text');
 	if (len === 0) return;
 	if (len < 0) throw new Error('malformed removeText');
 
@@ -461,7 +459,6 @@ Peer.prototype.removeSpawn = function(path1, offset1, path2, offset2) {
 | Splits a text node.
 */
 Peer.prototype.split = function(path, offset) {
-	path = new Path(path, '++', 'text');
 	this._alter(
 		{ path: path, at1: offset },
 		{ proc: 'splice' }
@@ -472,7 +469,6 @@ Peer.prototype.split = function(path, offset) {
 | Joins a text node with its next one
 */
 Peer.prototype.join = function(path, at1) {
-	path = new Path(path, '++', 'text');
 	this._alter(
 		{ proc: 'splice' },
 		{ path: path, at1 : at1 }

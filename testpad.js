@@ -259,23 +259,23 @@ var send = function() {
 
 	switch(action.type) {
 	case 'insert' :
-		path = new Path(notepath, '++', 'doc', alley[action.line]);
+		path = new Path(notepath, '++', 'doc', alley[action.line], 'text');
 		peer.insertText(path, action.at1, action.val);
 		cursor.offset += action.val.length;
 		break;
 	case 'remove' :
-		path = new Path(notepath, '++', 'doc', alley[action.line]);
+		path = new Path(notepath, '++', 'doc', alley[action.line], 'text');
 		peer.removeText(path, action.at1, action.at2 - action.at1);
 		if (cursor.offset >= action.at2) {
 			cursor.offset -= action.at2 - action.at1;
 		}
 		break;
 	case 'split' :
-		path = new Path(notepath, '++', 'doc', alley[action.line]);
+		path = new Path(notepath, '++', 'doc', alley[action.line], 'text');
 		peer.split(path, action.at1);
 		break;
 	case 'join' :
-		path = new Path(notepath, '++', 'doc', alley[action.line - 1]);
+		path = new Path(notepath, '++', 'doc', alley[action.line - 1], 'text');
 		peer.join(path, copse[alley[action.line - 1]].text.length);
 		break;
 	default :
