@@ -178,14 +178,16 @@ Alter.one = function(tree, src, trg, report) {
 */
 Alter.set = function(tree, src, trg) {
 	var cm = 'alter.set';
+	var pivot = null;
+	var key = null;
 
 	check(!is(trg.at1), cm, 'trg.at1 must not exist.');
 	check(is(src.val), cm, 'src.val missing');
 
 	if (trg.path.get(-1) === '$vacant') {
-		var pivot = tree.getPath(trg.path, -1);
-		var vKey = pivot.vacantKey();
-		trg = new Signature(trg, 'path', new Path(trg.path, -2, incKey));
+		pivot = tree.getPath(trg.path, -1);
+		key = pivot.vacantKey();
+		trg = new Signature(trg, 'path', new Path(trg.path, -1, key));
 	}
 
 	// stores the old value to be able restore the history
@@ -197,13 +199,37 @@ Alter.set = function(tree, src, trg) {
 		trg = new Signature(trg, 'val', save);
 	}
 
+	// TODO make a subfunction for this common set/preset check doings
 	if (is(src.path)) {
 		check(trg.path.equals(src.path), cm, 'src.path faulty preset');
 	} else {
 		src = new Signature(src, 'path', trg.path);
 	}
 
-	tree = tree.setPath(trg.path, src.val);
+	if (!is(trg.rank)) {
+		tree = tree.setPath(trg.path, src.val);
+	} else {
+		if (is(src.rank)) {
+			check(trg.rank === src.rank, cm, 'src.rank faulty preset');
+		} else {
+			src = new Signature(src, 'rank', trg.path);
+		}
+
+		pivot = pivot || tree.getPath(trg.path, -1);
+		if (src.val !== null) {
+			pivot = tree.grow(pivot,
+				key, src.val,
+				'+', trg.rank, key
+			);
+		} else {
+			pivot = tree.grow(pivot,
+				key, src.val,
+				'-', trg.rank
+			);
+		}
+		var ppath = new Path(path, '--', 1); // TODO, add a shorten parameter to setPath instead.
+		tree = tree.setPath(ppath, pivot);
+	}
 
 	return { tree: tree, src: src, trg: trg };
 };
@@ -286,8 +312,14 @@ Alter.join = function(tree, src, trg) {
 	var para1 = pivot.copse[key];
 	var para2 = pivot.copse[key2];
 	// @@ check other keys to be equal
-	para1 = tree.grow(para1, 'text', para1.text + para2.text);
-	pivot = tree.grow(pivot, key, para1, key2, null, '-', kn + 1);
+	para1 = tree.grow(para1,
+		'text', para1.text + para2.text
+	);
+	pivot = tree.grow(pivot,
+		key, para1,
+		key2, null,
+		'-', kn + 1
+	);
 
 	var ppath = new Path(path, '--', 2); // TODO, add a shorten parameter to setPath instead.
 	tree = tree.setPath(ppath, pivot);

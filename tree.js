@@ -297,19 +297,13 @@ Tree.prototype.grow = function(model /*, ... */) {
 */
 Tree.prototype.getPath = function(path, shorten) {
 	if (!isPath(path)) throw new Error('getPath not a path.');
-	var a, aZ;
 
-	// if (shorten < 0) shorten += path.length; // TODO use this instead
-
-	// TODO restructure
-	if (is(shorten)) {
-		aZ = shorten >= 0 ? shorten : path.length + shorten;
-	} else {
-		aZ = path.length;
-	}
+	if (shorten < 0) shorten += path.length;
+	if (shorten < 0) throw new Error('getPath invalid shorten');
+	var aZ = is(shorten) ? shorten : path.length;
 
 	var twig = this.root;
-	for (a = 0; a < aZ; a++) {
+	for (var a = 0; a < aZ; a++) {
 		if (!isnon(twig)) throw reject('path goes nowhere: '+path);
 		if (this.pattern[twigtype(twig)].copse) {
 			twig = twig.copse[path.get(a)];
@@ -323,10 +317,14 @@ Tree.prototype.getPath = function(path, shorten) {
 /**
 | Returns a tree where the node pointed by path is replaced by val.
 */
-Tree.prototype.setPath = function(path, val) {
+Tree.prototype.setPath = function(path, val, shorten) {
 	if (!isPath(path)) throw new Error('Tree.get no path');
 
-	for(var a = path.length - 1; a >= 0; a--) {
+	if (shorten < 0) shorten += path.length;
+	if (shorten < 0) throw new Error('getPath invalid shorten');
+	var aZ = is(shorten) ? shorten : path.length;
+
+	for(var a = aZ - 1; a >= 0; a--) {
 		var twig = this.getPath(path, a);
 		val = this.grow(twig, path.get(a), val);
 	}
