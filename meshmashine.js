@@ -227,8 +227,7 @@ Alter.set = function(tree, src, trg) {
 				'-', trg.rank
 			);
 		}
-		var ppath = new Path(path, '--', 1); // TODO, add a shorten parameter to setPath instead.
-		tree = tree.setPath(ppath, pivot);
+		tree = tree.setPath(path, pivot, -1);
 	}
 
 	return { tree: tree, src: src, trg: trg };
@@ -321,8 +320,7 @@ Alter.join = function(tree, src, trg) {
 		'-', kn + 1
 	);
 
-	var ppath = new Path(path, '--', 2); // TODO, add a shorten parameter to setPath instead.
-	tree = tree.setPath(ppath, pivot);
+	tree = tree.setPath(path, pivot, -2);
 
 	return { tree: tree, src: src, trg: trg };
 };
@@ -362,8 +360,7 @@ Alter.split = function(tree, src, trg) {
 	para1 = tree.grow(para1, /**/ 'text', text.substring(0, at1));
 	pivot = tree.grow(pivot, /**/ key, para1, /**/ vKey, para2, /**/ '+', kn + 1, vKey);
 
-	var ppath = new Path(path, '--', 2); // TODO, add a shorten parameter to setPath instead.
-	tree  = tree.setPath(ppath, pivot);
+	tree  = tree.setPath(path, pivot, -2);
 
 	return { tree: tree, src: src, trg: trg };
 };
@@ -776,8 +773,7 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 			var alt = aX ? alts[a] : alts;
 			var result = Alter.one(this.tree, alt.src, alt.trg, this.report);
 			if (!result) continue;
-			//alt = immute({ src : result.src, trg : result.trg });
-			alt = { src : result.src, trg : result.trg };
+			alt = immute({ src : result.src, trg : result.trg });
 			this.history.push(alt);
 			this.tree = result.tree;
 		}
