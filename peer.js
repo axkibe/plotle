@@ -186,58 +186,31 @@ Peer.prototype.setReport = function(report) {
 /**
 | Creates a new note.
 */
-Peer.prototype.newNote = function(space, zone) {
-	throw new Error('TODO');
-	/*
-	var path = new Path(space, 'items', '$new');
+Peer.prototype.newNote = function(spacePath, zone) {
+	var path = new Path(spacePath, 'items', '$vacant');
 
-	var asw = this.mm.alter(-1,
+	var asw = this._alter(
 		{
-			val: {
-				'type': 'Note',
-				'zone': zone,
-				'doc': {
-					fontsize : 13,
-					alley: [
-						{
-							type: 'Para',
-							text: '',
-						},
-					]
-				},
-			},
-		}, {
-			path: path,
-		}
-	);
-
-	var apath = asw.alts.trg.path;
-	if (!(apath instanceof Path)) throw new Error('Cannot re-get new item');
-
-	this.mm.alter(-1,
-		{
-			proc: 'arrange',
-			val: apath.get(-1),
+			type: 'Note',
+			fontsize : 13,
+			zone: zone,
+			'doc': {
+				type : 'Doc',
+				copse : { '1' : { type: 'Para', text: '' } },
+				alley: [ '1' ]
+			}
 		},
-		{
-			at1 : 0,
-			path: new Path([space.key]),
-		}
+		{ path: path, rank: 0 }
 	);
-
-	var k = apath.get(-1);
-	return space.items.get(k);
-	*/
 };
 
 /**
 | Sets the zone for item.
 */
-Peer.prototype.setZone = function(path, zone) {
-	path = new Path(path, '++', 'zone');
+Peer.prototype.setZone = function(itemPath, zone) {
 	this._alter(
 		{ val  : zone },
-		{ path : path }
+		{ path : new Path(itemPath, '++', 'zone') }
 	);
 };
 

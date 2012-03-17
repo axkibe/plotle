@@ -84,6 +84,15 @@ Twig.prototype.ranks = function() {
 };
 
 /**
+| Returns a key not used in the copse
+*/
+Twig.prototype.vacantKey = function() {
+	var copse = this.copse, inc = 1, sInc;
+	while(is(copse[(sInc = '' + inc)])) inc++;
+	return sInc;
+};
+
+/**
 | Gets the twigs type
 */
 var twigtype = function(o) {
@@ -273,14 +282,6 @@ Tree.prototype.grow = function(model /*, ... */) {
 		}
 	}
 
-	// if _inc is supported, sets it accordingly
-	// TODO might as well remove it and calculate only when needed
-	if (pattern.inc) {
-		var inc = isnon(model._inc) ? model._inc : 1;
-		while(is(twig.copse['' + inc])) inc++;
-		Object.defineProperty(twig, '_inc', { value: '' + inc });
-	}
-
 	// if there is a custom construcgtor, calls it to replace the new twig
 	if (pattern.creator) twig = pattern.creator(twig);
 
@@ -300,6 +301,7 @@ Tree.prototype.getPath = function(path, shorten) {
 
 	// if (shorten < 0) shorten += path.length; // TODO use this instead
 
+	// TODO restructure
 	if (is(shorten)) {
 		aZ = shorten >= 0 ? shorten : path.length + shorten;
 	} else {

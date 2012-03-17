@@ -44,8 +44,8 @@ Patterns.mUniverse = {
 			'Label'    : true,
 			'Relation' : true
 		},
-		alley : true,
-		inc   : true
+		alley : true
+		//inc   : true
 	},
 
 	'Note' : {
@@ -66,8 +66,8 @@ Patterns.mUniverse = {
 
 	'Doc' : {
 		copse : { 'Para' : true },
-		alley : true,
-		inc   : true
+		alley : true
+		//inc   : true
 	},
 
 	'Para' : {

@@ -182,13 +182,22 @@ Alter.set = function(tree, src, trg) {
 
 	check(!is(trg.at1), cm, 'trg.at1 must not exist.');
 	check(is(src.val), cm, 'src.val missing');
-	var path = trg.path;
+
+	/*
+	if (trg.path.get(-1) === '$new') {
+		var pivot = tree.getPath(trg.path, -1);
+		incKey = pivot._inc;
+		trg = new Signature(trg, 'path', new Path(src.path, src.path.length -2, incKey));
+		// TODO allow -2 as parameter. to new Path
+		xxx:w
+	}
+	*/
 	//var ppath = new Path(path, '--', 1);
 	//var parent = tree.get(ppath);
-	//if (path.get(-1) === '$new') path = Tree.newKey(tree, path);
+	//if (path.get(-1) === '$new') path = Tree.newKey(tree, path);
 
-	var save = tree.getPath(path);
-
+	// stores the old value to be able restore the history
+	var save = tree.getPath(trg.path);
 	if (is(trg.val)) {
 		check(matches(save, trg.val), cm, 'trg.val faulty preset');
 	} else {
@@ -197,12 +206,12 @@ Alter.set = function(tree, src, trg) {
 	}
 
 	if (is(src.path)) {
-		check(path.equals(src.path), cm, 'src.path faulty preset');
+		check(trg.path.equals(src.path), cm, 'src.path faulty preset');
 	} else {
 		src = new Signature(src, 'path', trg.path);
 	}
 
-	tree = tree.setPath(path, src.val);
+	tree = tree.setPath(trg.path, src.val);
 
 	return { tree: tree, src: src, trg: trg };
 };
@@ -309,27 +318,26 @@ Alter.split = function(tree, src, trg) {
 	var pivot   = tree.getPath(path, -2);
 	var pattern = tree.getPattern(pivot);
 	check(pattern.alley, cm, 'pivot has no alley');
-	check(pattern.inc, cm, 'pivot does not increment');
 
-	var incKey;
+	var vKey;
 	if (is(trg.path)) {
-		incKey = trg.path.get(-2);
+		vKey = trg.path.get(-2);
 	} else {
-		incKey = pivot._inc;
-		trg = new Signature(trg, 'path', new Path(src.path, src.path.length -2, incKey));
+		vKey = pivot.vacantKey();
+		trg = new Signature(trg, 'path', new Path(src.path, src.path.length -2, vKey));
 		// TODO allow -2 as parameter. to new Path
 	}
-	check(!pivot.copse[incKey], cm, 'incKey already used: ', incKey);
+	check(!isnon(pivot.copse[vKey]), cm, 'vacantKey not vacant: ', vKey);
 
 	var key = path.get(-2);
-	var kn = pivot.alley.indexOf(key);
+	var kn  = pivot.alley.indexOf(key);
 	check(kn >= 0, cm, 'line key not found in alley');
 
 	var para1, para2;
 	para1 = pivot.copse[key];
-	para2 = tree.grow(para1, 'text', text.substring(at1, text.length));
-	para1 = tree.grow(para1, 'text', text.substring(0, at1));
-	pivot = tree.grow(pivot, key, para1, incKey, para2, '+', kn + 1, incKey);
+	para2 = tree.grow(para1, /**/ 'text', text.substring(at1, text.length));
+	para1 = tree.grow(para1, /**/ 'text', text.substring(0, at1));
+	pivot = tree.grow(pivot, /**/ key, para1, /**/ vKey, para2, /**/ '+', kn + 1, vKey);
 
 	var ppath = new Path(path, '--', 2); // TODO, add a shorten parameter to setPath instead.
 	tree  = tree.setPath(ppath, pivot);
