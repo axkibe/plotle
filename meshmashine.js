@@ -126,6 +126,7 @@ Signature.field = {
 	'at1'  : true,
 	'at2'  : true,
 	'proc' : true,
+	'rank' : true,
 	'val'  : true
 };
 immute(Signature.field);
@@ -216,6 +217,7 @@ Alter.set = function(tree, src, trg) {
 		}
 
 		pivot = pivot || tree.getPath(trg.path, -1);
+		if (key === null) key = trg.path.get(-1);
 		if (src.val !== null) {
 			pivot = tree.grow(pivot,
 				key, src.val,
@@ -227,7 +229,7 @@ Alter.set = function(tree, src, trg) {
 				'-', trg.rank
 			);
 		}
-		tree = tree.setPath(path, pivot, -1);
+		tree = tree.setPath(trg.path, pivot, -1);
 	}
 
 	return { tree: tree, src: src, trg: trg };

@@ -670,10 +670,12 @@ Shell.prototype.report = function(type, tree, src, trg) {
 	this.vspace.report(type, tree, src, trg);
 
 	var caret = this.caret;
-	var tmark = MeshMashine.transformOne(caret.mark, src, trg);
-	if (tmark !== caret.mark) {
-		if (tmark.constructor === Array) throw new Error('Invalid caret transformation');
-		caret.mark = tmark;
+	if (caret.mark !== null) {
+		var tmark = MeshMashine.transformOne(caret.mark, src, trg);
+		if (tmark !== caret.mark) {
+			if (tmark.constructor === Array) throw new Error('Invalid caret transformation');
+			caret.mark = tmark;
+		}
 	}
 
 	this._draw();
@@ -954,8 +956,8 @@ VSpace.prototype.report = function(type, tree, src, trg) {
 VSpace.prototype.update = function(twig) {
 	this.twig = twig;
 
-	var vv = {};
 	var vo = this.vv;
+	var vv = this.vv = {};
 	var copse = twig.copse;
 	for(var k in copse) {
 		var sub = twig.copse[k];
@@ -969,13 +971,13 @@ VSpace.prototype.update = function(twig) {
 			vv[k] = this.createVItem(sub, k);
 		}
 	}
-	this.vv = vo;
 };
 
 /**
 | Creates a new visual representation of an item.
 */
 VSpace.prototype.createVItem = function(twig, k) {
+	debug('CREATEVITEM', twig);
 	var ipath = new Path(this.path, '++', k);
 	switch (twig.type) {
 	case 'Note'     : return new VNote    (twig, ipath, this);
@@ -992,6 +994,8 @@ VSpace.prototype.draw = function() {
 	var twig  = this.twig;
 	var alley = twig.alley;
 	var vv    = this.vv;
+	debug('DRAW', Object.keys(vv), twig.ranks());
+
 	for(var r = twig.ranks() - 1; r >= 0; r--) {
 		vv[alley[r]].draw(this.fabric);
 	}
@@ -1266,14 +1270,14 @@ VSpace.prototype.mousedown = function(p) {
 			var nw = settings.note.newWidth;
 			var nh = settings.note.newHeight;
 			pnw = fm.p.sub(this.fabric.pan.x + half(nw) , this.fabric.pan.y + half(nh));
-			key = peer.newNote(this.space, new Rect(pnw, pnw.add(nw, nh)));
+			key = peer.newNote(this.path, new Rect(pnw, pnw.add(nw, nh)));
 			var vnote = this.vv[key];
 			this.setFocus(vnote);
 			break;
 		case 'ne' : // label
 			pnw = fm.p.sub(this.fabric.pan);
 			pnw = pnw.sub(settings.label.createOffset);
-			key = peer.newLabel(this.space, pnw, 'Label', 20);
+			key = peer.newLabel(this.path, pnw, 'Label', 20);
 			var vlabel = this.vv[key];
 			this.setFocus(vlabel);
 			break;

@@ -188,17 +188,19 @@ Peer.prototype.setReport = function(report) {
 | Creates a new note.
 */
 Peer.prototype.newNote = function(spacePath, zone) {
-	var path = new Path(spacePath, 'items', '$vacant');
+	var path = new Path(spacePath, '++', '$vacant');
 
 	var asw = this._alter(
 		{
-			type : 'Note',
-			fontsize : 13,
-			zone : zone,
-			doc  : {
-				type  : 'Doc',
-				copse : { '1' : { type: 'Para', text: '' } },
-				alley : [ '1' ]
+			val : {
+				type : 'Note',
+				fontsize : 13,
+				zone : zone,
+				doc  : {
+					type  : 'Doc',
+					copse : { '1' : { type: 'Para', text: '' } },
+					alley : [ '1' ]
+				}
 			}
 		},
 		{ path: path, rank: 0 }
