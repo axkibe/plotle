@@ -46,8 +46,9 @@ var Peer;
 "use strict";
 if (typeof (window) === 'undefined') throw new Error('Peer nees a browser!');
 
-var debug     = Jools.debug;
-var log       = Jools.log;
+var debug = Jools.debug;
+var log   = Jools.log;
+var is    = Jools.is;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .-,--.
@@ -123,7 +124,7 @@ Peer.prototype.get = function(time, path) {
 		}
 		if (asw.ok !== true) throw new Error('AJAX not ok: '+asw.message);
 		this.time = asw.time;
-		return new Tree(asw.node, Patterns.mUniverse).root;
+		return is(asw.node) ? new Tree(asw.node, Patterns.mUniverse).root : null;
 	default :
 		throw new Error('unknown mode: '+this._mode);
 	}

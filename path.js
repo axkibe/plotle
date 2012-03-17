@@ -60,12 +60,17 @@ Path = function(model) {
 	case null  : path = []; slice = false; break;
 	default    : throw new Error('invalid path-model');
 	}
+
+	var mlen = path.length; // length of model
 	if (slice) path = path.slice();
 
 	// appends additional arguments
 	var a = 1, aZ = arguments.length;
 	while(a < aZ && arguments[a] !== '--' && arguments[a] !== '++') {
-		path[arguments[a]] = arguments[a + 1];
+		var k = arguments[a];
+		if (k < 0) k += mlen;
+		if (k < 0) throw new Error('invalid path key');
+		path[k] = arguments[a + 1];
 		a += 2;
 	}
 	if (arguments[a] === '--') {

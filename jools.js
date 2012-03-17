@@ -12,29 +12,16 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--'
 
-                                   +++ Fabric ++++
+                                   +++ Jools ++++
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- A graphic 2D-Object library for HTML Canvas 5
+ Common Javascript Tools for Meshcraft.
 
- This is not a full blown feature complete, everything library
- but enhanced on the fly for what the meshcraft shell needs.
-
- TODO remove all references to "c2d".
-
- Defines: fabric
-
+ Defines: Jools
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-/**
-| Common Javascript Tools for Meshcraft.
-|
-| Authors: Axel Kittenberger
-| License: MIT(Expat), see accompanying 'License'-file
-*/
 
 /**
 | Imports
@@ -91,10 +78,10 @@ if (typeof(window) === 'undefined') {
 /**
 | Testers
 */
-var is        = function(o) { return typeof(o) !== 'undefined'; };
-var isnon     = function(o) { return typeof(o) !== 'undefined' && o !== null; };
+var is        = function(o) { return typeof(o) !== 'undefined';                     };
+var isnon     = function(o) { return typeof(o) !== 'undefined' && o !== null;       };
 var isInteger = function(o) { return typeof(o) === 'number' && Math.floor(o) === o; };
-var isArray   = function(o) { return o.constructor === Array; };
+var isArray   = function(o) { return o.constructor === Array;                       };
 var isString  = function(o) { return typeof(o) === 'string' || o instanceof String; };
 
 /**

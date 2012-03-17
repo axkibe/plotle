@@ -54,20 +54,19 @@ if (typeof(window) === 'undefined') {
 	Tree  = require('./tree');
 }
 
-var debug       = Jools.debug;
-var log         = Jools.log;
-var clone       = Jools.clone;
-var deepFreeze  = Jools.deepFreeze;
-var fixate      = Jools.fixate;
-var immute      = Jools.immute;
-var is          = Jools.is;
-var isnon       = Jools.isnon;
-var isArray     = Jools.isArray;
-var isInteger   = Jools.isInteger;
-var isString    = Jools.isString;
-var matches     = Jools.matches;
-var reject      = Jools.reject;
-var isPath      = Path.isPath;
+var debug      = Jools.debug;
+var log        = Jools.log;
+var clone      = Jools.clone;
+var fixate     = Jools.fixate;
+var immute     = Jools.immute;
+var is         = Jools.is;
+var isnon      = Jools.isnon;
+var isArray    = Jools.isArray;
+var isInteger  = Jools.isInteger;
+var isString   = Jools.isString;
+var matches    = Jools.matches;
+var reject     = Jools.reject;
+var isPath     = Path.isPath;
 
 function fail(args, aoffset) {
 	var a = Array.prototype.slice.call(args, aoffset, args.length);
@@ -183,18 +182,11 @@ Alter.set = function(tree, src, trg) {
 	check(!is(trg.at1), cm, 'trg.at1 must not exist.');
 	check(is(src.val), cm, 'src.val missing');
 
-	/*
-	if (trg.path.get(-1) === '$new') {
+	if (trg.path.get(-1) === '$vacant') {
 		var pivot = tree.getPath(trg.path, -1);
-		incKey = pivot._inc;
-		trg = new Signature(trg, 'path', new Path(src.path, src.path.length -2, incKey));
-		// TODO allow -2 as parameter. to new Path
-		xxx:w
+		var vKey = pivot.vacantKey();
+		trg = new Signature(trg, 'path', new Path(trg.path, -2, incKey));
 	}
-	*/
-	//var ppath = new Path(path, '--', 1);
-	//var parent = tree.get(ppath);
-	//if (path.get(-1) === '$new') path = Tree.newKey(tree, path);
 
 	// stores the old value to be able restore the history
 	var save = tree.getPath(trg.path);
@@ -286,7 +278,7 @@ Alter.join = function(tree, src, trg) {
 	check(kn >= 0, cm, 'line key not found in alley');
 	check(kn < pivot.alley.length,  cm, 'cannot join last line');
 	var key2 = pivot.alley[kn + 1];
-	var path2 = new Path(path, path.length - 2, key2);
+	var path2 = new Path(path, -2, key2);
 
 	check(!src.path || src.path.equals(path2), cm, 'src.path faulty preset');
 	src = new Signature(src, 'path', path2);
@@ -324,8 +316,7 @@ Alter.split = function(tree, src, trg) {
 		vKey = trg.path.get(-2);
 	} else {
 		vKey = pivot.vacantKey();
-		trg = new Signature(trg, 'path', new Path(src.path, src.path.length -2, vKey));
-		// TODO allow -2 as parameter. to new Path
+		trg = new Signature(trg, /**/ 'path', new Path(src.path, -2, vKey));
 	}
 	check(!isnon(pivot.copse[vKey]), cm, 'vacantKey not vacant: ', vKey);
 
@@ -443,14 +434,24 @@ Transform.split = function(sign, src, trg) {
 		log('te', 'split (span, case 2)');
 		// signature goes into splitted line instead
 		return new Signature(sign,
-			'path', trg.path, 'at1', sign.at1 - src.at1, 'at2', sign.at2 - src.at1);
+			'path', trg.path,
+			'at1', sign.at1 - src.at1,
+			'at2', sign.at2 - src.at1
+		);
 	}
 	log('te', 'split (span, case 3');
 	// the signature is splited into a part that stays and one that goes to next line.
 
-	var sign1 = new Signature(sign, 'at2', src.at1);
-	var sign2 = new Signature(sign, 'path', trg.path, 'at1', 0, 'at2', sign.at2 - src.at1);
-	return [sign1, sign2];
+	return [
+		new Signature(sign,
+			'at2', src.at1
+		),
+		new Signature(sign,
+			'path', trg.path,
+			'at1', 0,
+			'at2', sign.at2 - src.at1
+		)
+	];
 };
 
 /**
@@ -466,12 +467,14 @@ Transform.join = function(sign, src, trg) {
 	if (!is(sign.at2)) {
 		return new Signature(sign,
 			'path', trg.path,
-			'at1', sign.at1 + trg.at1);
+			'at1', sign.at1 + trg.at1
+		);
 	} else {
 		return new Signature(sign,
 			'path', trg.path,
 			'at1', sign.at1 + trg.at1,
-			'at2', sign.at2 + trg.at1);
+			'at2', sign.at2 + trg.at1
+		);
 	}
 };
 
@@ -494,8 +497,16 @@ Transform.insert = function(sign, src, trg) {
 
 	if (sign.at1 < trg.at1) return sign;
 	var len = src.val.length;
-	if (is(sign.at2)) { return new Signature(sign, 'at1', sign.at1 + len, 'at2', sign.at2 + len); }
-	return new Signature(sign, 'at1', sign.at1 + len);
+
+	return (is(sign.at2) ?
+		new Signature(sign,
+			'at1', sign.at1 + len,
+			'at2', sign.at2 + len
+		) :
+		new Signature(sign,
+			'at1', sign.at1 + len
+		)
+	);
 };
 
 /**
@@ -608,7 +619,7 @@ Transform.take = function(sign, src, trg) {
 | Constructor.
 */
 MeshMashine = function(tree) {
-	this.tree    = tree;  // TODO make private
+	this.tree    = tree;
 	this.history = [];
 };
 
@@ -671,7 +682,6 @@ MeshMashine.prototype.transform = function(time, sign) {
 | Reflects the state of the tree at a time.
 | If path is not null it cares only to rebuild what is necessary to see the node.
 */
-// TODO partial reflects
 MeshMashine.prototype._reflect = function(time, path) {
 	if (is(path)) { throw new Error('Not yet supported!'); }
 	try {
@@ -685,7 +695,7 @@ MeshMashine.prototype._reflect = function(time, path) {
 		}
 		return reflect;
 	} catch (err) {
-		// this should not ever fail, thus rethrow a lethal error
+		// this should never fail, thus rethrow a lethal error
 		err.ok = null;
 		throw new Error(err.stack);
 	}
@@ -714,7 +724,7 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 		}
 
 		// TODO beautify this, (especially the loops)
-		var alts, i;
+		var alts, i, a, aX, aZ;
 		if (!(tsrca instanceof Array) && !(ttrga instanceof Array)) {
 			alts = { src : tsrca, trg : ttrga };  // TODO immute
 		} else if (!(tsrca instanceof Array) && (ttrga instanceof Array))  {
@@ -729,21 +739,15 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 			}
 		}
 
-		// TODO include in if below.
-		var apply = function (src, trg) {
-			var result = Alter.one(this.tree, src, trg, this.report);
-			if (result) {
-				var alt = { src : result.src, trg : result.trg}; // TODO immute
-				this.history.push(alt);
-				this.tree = result.tree;
-			}
-		};
-
-		// TODO ugly for
-		if (alts instanceof Array) {
-			for(i = 0; i < alts.length; i++) apply.call(this, alts[i].src, alts[i].trg);
-		} else {
-			apply.call(this, alts.src, alts.trg);
+		// executes the alter for a single alteration or an Array of alterations
+		for(a = 0, aX = isArray(alts), aZ = aX ? alts.length : 1; a < aZ; a++) {
+			var alt = aX ? alts[a] : alts;
+			var result = Alter.one(this.tree, alt.src, alt.trg, this.report);
+			if (!result) continue;
+			//alt = immute({ src : result.src, trg : result.trg });
+			alt = { src : result.src, trg : result.trg };
+			this.history.push(alt);
+			this.tree = result.tree;
 		}
 
 		return {
