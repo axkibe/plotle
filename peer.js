@@ -192,13 +192,13 @@ Peer.prototype.newNote = function(spacePath, zone) {
 
 	var asw = this._alter(
 		{
-			type: 'Note',
+			type : 'Note',
 			fontsize : 13,
-			zone: zone,
-			'doc': {
-				type : 'Doc',
+			zone : zone,
+			doc  : {
+				type  : 'Doc',
 				copse : { '1' : { type: 'Para', text: '' } },
-				alley: [ '1' ]
+				alley : [ '1' ]
 			}
 		},
 		{ path: path, rank: 0 }
