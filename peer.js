@@ -352,37 +352,11 @@ Peer.prototype.newRelation = function(space, pnw, text, fontsize, vitem1, vitem2
 /**
 | Moves an item up to the z-index
 */
-Peer.prototype.moveToTop = function(path, key) {
-	debug('moveToTop', arguments); // TODO
-
-/*
-	var path = new Path(space, 'z');
-	var key = item.key;
-	var at1 = space.z.indexOf(key);
-
-	if (at1 === 0) return;
-
-	this.mm.alter(-1,
-		{
-			path: path,
-			at1: at1,
-		},
-		{
-			proc: 'arrange',
-		}
+Peer.prototype.moveToTop = function(path) {
+	this._alter(
+		{ path: path },
+		{ rank: 0    }
 	);
-
-	this.mm.alter(-1,
-		{
-			proc: 'arrange',
-			val: key,
-		},
-		{
-			path: path,
-			at1 : 0,
-		}
-	);
-	*/
 };
 
 /**

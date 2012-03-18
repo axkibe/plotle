@@ -994,7 +994,6 @@ VSpace.prototype.draw = function() {
 	var twig  = this.twig;
 	var alley = twig.alley;
 	var vv    = this.vv;
-	debug('DRAW', Object.keys(vv), twig.ranks());
 
 	for(var r = twig.ranks() - 1; r >= 0; r--) {
 		vv[alley[r]].draw(this.fabric);
@@ -1037,14 +1036,11 @@ VSpace.prototype.setFocus = function(vitem) {
 			at1: 0
 		});
 		caret.show();
+		peer.moveToTop(vitem.path);
 	} else {
 		caret.hide();
 		caret.marker = null;
 	}
-
-	if (vitem === null) return;
-
-	peer.moveToTop(this.space, vitem.item);
 };
 
 /**

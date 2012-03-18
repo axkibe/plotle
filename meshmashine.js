@@ -144,18 +144,34 @@ immute(Signature.field);
 var Alter = {};
 
 /**
+| Sets a new value of a signature.
+| If the signature has the value preset, it checks equality.
+|
+| sign : signature to affix
+| cm   : check message for failed checks
+| base : base message for failed checks
+| key  : key to affix at
+| val  : value to affix
+*/
+var affixSign = function(sign, cm, base, key, val) {
+	if (is(sign[key])) {
+		check(matches(save, trg.val), cm,base,'.',key,' faulty preset');
+	} else {
+		sign = new Signature(sign, key, val);
+	}
+	return sign;
+}
+
+/**
 | Returns the type of an Alternation.
 */
 Alter.type = function(src, trg) {
 	if (trg.proc === 'splice') return 'split';
 	if (src.proc === 'splice') return 'join';
-
-	if (src.proc === 'arrange') return 'place'; // TODO changed?
-	if (trg.proc === 'arrange') return 'take';  // TODO changed?
-
 	if (is(src.val) && !is(trg.at1)) return 'set';
 	if (is(src.val) &&  is(trg.at1)) return 'insert';
 	if (is(src.at1) &&  is(src.at2) && !is(trg.at1)) return 'remove';
+	if (is(trg.rank)) return 'rank';
 
 	if (Jools.prissy) { log('fail', this); throw new Error('invalid type'); }
 
@@ -168,7 +184,7 @@ Alter.type = function(src, trg) {
 Alter.one = function(tree, src, trg, report) {
 	var atype = Alter.type(src, trg);
 	log('alter', 'src:', src, 'trg:', trg, 'atype:', atype);
-	if (!Alter[atype]) throw reject('invalid atype:', atype);
+	if (!Alter[atype]) throw reject('invalid atype:'+atype);
 	var asw = Alter[atype](tree, src, trg);
 	if (report) report.report(atype, asw.tree, asw.src, asw.trg);
 	return asw;
@@ -368,46 +384,24 @@ Alter.split = function(tree, src, trg) {
 };
 
 /**
-| Alter: a value is placed into an alley(array)
+| Alter: a twigs rank in a copse is changed.
 */
-Alter.place = function(tree, src, trg) {
-	var cm = 'alter.place';
-	check(is(src.val),  cm, 'src.val not present');
-	check(is(trg.path), cm, 'trg.path not present');
-	check(is(trg.at1),  cm, 'trg.at1 not present');
-	var alley = tree.get(trg.path);
-	check(alley && alley.isAlley, cm, 'trg.path not an alley');
-
-	if (trg.at1 === '$top') trg.at1 = 0;
-	if (trg.at1 === '$end') trg.at1 = alley.length;
-	check(trg.at1 >= 0 && trg.at1 <= alley.length, cm, 'trg.at1 not inside alley');
-
-	alley.splice(trg.at1, 0, src.val);
-
-	return { tree: tree, src: src, trg: trg };
-};
-
-/**
-| Alter: a value is taken from an alley(array)
-*/
-Alter.take = function(tree, src, trg) {
-	// an item is taken (removed) from an alley.
-	var cm = 'alter.take';
-
+Alter.rank = function(tree, src, trg) {
+	var cm = 'alter.rank';
 	check(is(src.path), cm, 'src.path not present');
-	check(is(src.at1),  cm, 'src.at1 not present');
-	var alley = tree.get(src.path);
-	check(alley && alley.isAlley, cm, 'src.path not an alley');
-	check(src.at1 >= 0 && src.at1 <= alley.length, cm, 'src.at1 not inside alley');
+	check(is(trg.rank), cm, 'trg.rank not present');
 
-	var val = alley.get(src.at1);
-	if (is(trg.val)) {
-		check(matches(val, trg.val), cm, 'trg.val faulty preset');
-	} else {
-		trg.val = val;
-	}
-	alley.splice(src.at1, 1);
+	var pivot = tree.getPath(src.path, -1);
+	check(is(pivot.alley), cm, 'pivot not an ally');
+	var key = src.path.get(-1);
+	var orank = pivot.rank(key);
+	if (orank < 0) throw reject('invalid key :'+key);
+	// TODO if (orank === trg.rank) return null;
 
+	src = affixSign(src, cm, 'src', 'rank', orank);
+	trg = affixSign(trg, cm, 'trg', 'path', src.path);
+	pivot = tree.grow(pivot, '-', orank, '+', trg.rank, key);
+	tree = tree.setPath(src.path, pivot, -1);
 	return { tree: tree, src: src, trg: trg };
 };
 
@@ -596,43 +590,14 @@ Transform.remove = function(sign, src, trg) {
 };
 
 /**
-| Transforms a signature on a place
-| TODO needed?
+| Transforms a signature on a rank
 */
-Transform.place = function(sign, src, trg) {
-	if (!trg.path.like(sign.path)) return sign;
-	log('te', 'place');
-	var trg_i =  trg.alley.get(-1);
-	var sig_i = sign.path.get(trg.alley.length);
-	log('te', 'sig_i', sig_i, 'trg_i', trg_i);
-	if (sig_i >= trg_i) {
-		// insert was before -> index shifted
-		log('te', 'place shifted');
-		sign.path = sign.path.add(trg.alley.length, 1);
-	}
+Transform.rank = function(sign, src, trg) {
+	if (!src.path || !src.path.equals(sign.path)) return sign;
+	log('te', 'rank');
+	// TODO transform other rank commands
 	return sign;
 };
-
-
-/**
-| Transforms a signature on a take.
-| TODO needed?
-*/
-Transform.take = function(sign, src, trg) {
-	if (!src.alley.like(sign.path)) return sign;
-	log('te', 'take');
-	var src_i =  src.path.get(-1);
-	var sig_i = sign.path.get(src.alley.length);
-	log('te', 'sig_i', sig_i, 'src_i', src_i);
-
-	if (sig_i >= src_i) {
-		// take was before -> index shifted
-		log('te', 'place shifted');
-		sign.path = sign.path.add(src.alley.length, -1);
-	}
-	return sign;
-};
-
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
