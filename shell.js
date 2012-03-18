@@ -977,7 +977,6 @@ VSpace.prototype.update = function(twig) {
 | Creates a new visual representation of an item.
 */
 VSpace.prototype.createVItem = function(twig, k) {
-	debug('CREATEVITEM', twig);
 	var ipath = new Path(this.path, '++', k);
 	switch (twig.type) {
 	case 'Note'     : return new VNote    (twig, ipath, this);
@@ -2087,10 +2086,11 @@ VDoc.prototype.getHeight = function() {
 | Returns the width actually used of the document.
 */
 VDoc.prototype.getSpread = function() {
-	var vparas = this.vparas;
+	var twig = this.twig;
+	var vv   = this.vv;
 	var spread = 0;
-	for (var a = 0, aZ = vparas.length; a < aZ; a++) {
-		spread = max(spread, vparas[a].getFlow().spread);
+	for (var r = 0, rZ = twig.ranks(); r < rZ; r++) {
+		spread = max(spread, vv[twig.alley[r]].getFlow().spread);
 	}
 	return spread;
 };
@@ -2544,6 +2544,7 @@ VNote.prototype.handles = {
 
 /**
 | Minimum sizes
+| TODO no longer needs to be part of the prototype.
 */
 VNote.prototype.minWidth  = settings.note.minWidth;
 VNote.prototype.minHeight = settings.note.minHeight;
@@ -2842,7 +2843,6 @@ VLabel.prototype.getSilhoutte = function(zone$, zAnchor) {
 	}
 };
 
-
 /**
 | Draws the label.
 |
@@ -2857,7 +2857,7 @@ VLabel.prototype.draw = function(fabric) {
 		zone.width  !== this._fabric$size.width ||
 		zone.height !== this._fabric$size.height)
 	{
-		var vdoc = this.vdoc;
+		var vdoc = this.vv.doc;
 		var imargin = this.imargin;
 
 		// resizes the canvas
@@ -2928,12 +2928,12 @@ VLabel.prototype.mousewheel = function(p, dir) {
 | An ongoing action can modify this to be different than meshmashine data.
 */
 VLabel.prototype.getZone = function() {
-	var item   = this.item;
+	var twig = this.twig;
 	var action = shell.action;
-	var pnw = item.pnw;
+	var pnw = this.twig.pnw;
 
 	// TODO Caching!
-	var vdoc = this.vdoc;
+	var vdoc = this.vv.doc;
 	var fs = vdoc.getFontSize();
 	var width  = max(Math.ceil(vdoc.getSpread()), R(fs * 0.3));
 	var height = max(Math.ceil(vdoc.getHeight()), R(fs));
@@ -2976,14 +2976,14 @@ VLabel.prototype.dragstop = function(p) {
 	case Action.ITEMDRAG :
 	case Action.ITEMRESIZE :
 		var zone = this.getZone();
-		var fontsize = this.vdoc.getFontSize();
+		var fontsize = this.vv.doc.getFontSize();
 
-		if (!this.item.pnw.eq(zone.pnw)) {
-			peer.setPNW(this.item, zone.pnw);
+		if (!this.twig.pnw.eq(zone.pnw)) {
+			peer.setPNW(this.path, zone.pnw);
 			this._fabric$flag = false; // TODO this should happen by setting in peer
 		}
-		if (fontsize !== this.item.get('fontsize')) {
-			peer.setFontSize(this.item, fontsize);
+		if (fontsize !== this.twig.fontsize) {
+			peer.setFontSize(this.path, fontsize);
 			this._fabric$flag = false; // TODO same
 		}
 

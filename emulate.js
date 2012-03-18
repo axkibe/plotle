@@ -21,6 +21,7 @@ Emulate.src =  {
 	val: {
 		type: 'Space',
 		copse: {
+			// NOTE
 			'1' : {
 				type: 'Note',
 				fontsize : 13,
@@ -128,20 +129,21 @@ Emulate.src =  {
 						'16' */
 					]
 				}
+			},
+
+			// LABEL
+			'2' : {
+				type: 'Label',
+				fontsize : 20,
+				pnw: { type: 'Point', 'x': 200, 'y': 150 },
+				doc: {
+					type: 'Doc',
+					copse : {
+						'1': { type: 'Para', text: 'Hallo!' }
+					},
+					alley : [ '1' ]
+				}
 			}
-//			'2' : {
-//				type: 'Label',
-//				pnw: { 'x': 200, 'y': 250 },
-//				doc: {
-//					fontsize : 90,
-//					paras : {
-//						'0' : {
-//							type: 'Para',
-//							text: 'FooBar',
-//						},
-//					},
-//				},
-//			},
 //			'3' : {
 //				type: 'Relation',
 //				pnw: { 'x': 600, 'y': 150 },
@@ -158,7 +160,7 @@ Emulate.src =  {
 //				},
 //			},
 		},
-		alley : [ '1' ]
+		alley : [ '2', '1' ]
 	}
 };
 

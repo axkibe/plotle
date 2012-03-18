@@ -119,7 +119,7 @@ var Signature = function(master/*, ...*/) {
 };
 
 /**
-| TODO
+| List of keys allowed in a signature
 */
 Signature.field = {
 	'path' : true,
@@ -155,7 +155,6 @@ var Alter = {};
 | val  : value to affix
 */
 var affixSign = function(sign, test, cm, base, key, val) {
-	debug('AFFIX', sign[key], is(sign[key]), isnon(sign[key]));
 	if (test(sign[key])) {
 		check(matches(val, sign[key]), cm,base,'.',key,' faulty preset',
 			typeof(val), '!=', typeof(sign[key]));
@@ -304,9 +303,7 @@ Alter.join = function(tree, src, trg) {
 	check(kn < pivot.alley.length,  cm, 'cannot join last line');
 	var key2 = pivot.alley[kn + 1];
 	var path2 = new Path(path, -2, key2);
-
-	check(!src.path || src.path.equals(path2), cm, 'src.path faulty preset');
-	src = new Signature(src, 'path', path2);
+	src = affixSign(src, is, cm, 'src', 'path', path2);
 
 	var para1 = pivot.copse[key];
 	var para2 = pivot.copse[key2];
@@ -346,7 +343,9 @@ Alter.split = function(tree, src, trg) {
 		vKey = trg.path.get(-2);
 	} else {
 		vKey = pivot.vacantKey();
-		trg = new Signature(trg, /**/ 'path', new Path(src.path, -2, vKey));
+		trg = new Signature(trg,
+			'path', new Path(src.path, -2, vKey)
+		);
 	}
 	check(!isnon(pivot.copse[vKey]), cm, 'vacantKey not vacant: ', vKey);
 
@@ -356,9 +355,17 @@ Alter.split = function(tree, src, trg) {
 
 	var para1, para2;
 	para1 = pivot.copse[key];
-	para2 = tree.grow(para1, /**/ 'text', text.substring(at1, text.length));
-	para1 = tree.grow(para1, /**/ 'text', text.substring(0, at1));
-	pivot = tree.grow(pivot, /**/ key, para1, /**/ vKey, para2, /**/ '+', kn + 1, vKey);
+	para2 = tree.grow(para1,
+		'text', text.substring(at1, text.length)
+	);
+	para1 = tree.grow(para1,
+		'text', text.substring(0, at1)
+	);
+	pivot = tree.grow(pivot,
+		key,  para1,
+		vKey, para2,
+		'+', kn + 1, vKey
+	);
 
 	tree  = tree.setPath(path, pivot, -2);
 
@@ -703,27 +710,31 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 
 		// TODO beautify this, (especially the loops)
 		var alts, i, a, aX, aZ;
-		if (!(tsrca instanceof Array) && !(ttrga instanceof Array)) {
-			alts = { src : tsrca, trg : ttrga };  // TODO immute
-		} else if (!(tsrca instanceof Array) && (ttrga instanceof Array))  {
+
+		if (!isArray(tsrca) && !isArray(ttrga)) {
+			alts = immute({ src : tsrca, trg : ttrga });
+		} else if (!isArray(tsrca) && isArray(ttrga))  {
 			alts = [];
-			for(i = 0; i < ttrga.length; i++) {
-				alts[i] = { src : tsrca, trg : ttrga[1] };  // TODO immute
+			for(a = 0, aZ = ttrga.length; a < aZ; a++) {
+				alts[i] = immute({ src : tsrca, trg : ttrga[a] });
 			}
-		} else if ((tsrca instanceof Array) && !(ttrga instanceof Array)) {
+		} else if (isArray(tsrca) && !isArray(ttrga)) {
 			alts = [];
-			for(i = 0; i < tsrca.length; i++) {
-				alts[i] = { src : tsrca[i], trg : ttrga };  // TODO immute
+			for(a = 0, aZ = tsrca.length; a < aZ; a++) {
+				alts[i] = immute({ src : tsrca[a], trg : ttrga });
 			}
+		} else {
+			throw reject('src and target cannot both be an array');
 		}
 
-		// executes the alter for a single alteration or an Array of alterations
+		// executes the alter for a single alteration or an array of alterations
 		for(a = 0, aX = isArray(alts), aZ = aX ? alts.length : 1; a < aZ; a++) {
 			var alt = aX ? alts[a] : alts;
 			var result = Alter.one(this.tree, alt.src, alt.trg, this.report);
 			if (!result) continue;
 			alt = immute({ src : result.src, trg : result.trg });
 			this.history.push(alt);
+			if (aX) alts[a] = alt; else alts = alt;
 			this.tree = result.tree;
 		}
 

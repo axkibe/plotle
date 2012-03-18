@@ -141,7 +141,7 @@ Peer.prototype._alter = function(src, trg) {
 	case 'emulate' :
 		asw = this.mm.alter(-1, src, trg);
 		if (asw.ok !== true) throw new Error('Meshmashine not OK: '+asw.message);
-		return asw.node;
+		return asw;
 	case 'sync' :
 		var ajax = new XMLHttpRequest();
 		ajax.open('POST', '/mm', false);
@@ -162,7 +162,7 @@ Peer.prototype._alter = function(src, trg) {
 			throw new Error('Server answered no JSON!');
 		}
 		if (asw.ok !== true) throw new Error('AJAX not ok: '+asw.message);
-		return asw.node;
+		return asw;
 	default :
 		throw new Error('unknown mode: '+this._mode);
 	}
@@ -205,6 +205,8 @@ Peer.prototype.newNote = function(spacePath, zone) {
 		},
 		{ path: path, rank: 0 }
 	);
+
+	return asw.alts.trg.path.get(-1);
 };
 
 /**
@@ -220,84 +222,43 @@ Peer.prototype.setZone = function(itemPath, zone) {
 /**
 | Sets an items fontsize
 */
-Peer.prototype.setFontSize = function(item, fontsize) {
-	throw new Error('TODO');
-	/*
-	var path = new Path(item, 'doc', 'fontsize');
-
-	this.mm.alter(-1,
-		{
-			val: fontsize,
-		},
-		{
-			path: path,
-		}
-	);*/
+Peer.prototype.setFontSize = function(itemPath, fontsize) {
+	this._alter(
+		{ val  : fontsize },
+		{ path : new Path(itemPath, '++', 'fontsize') }
+	);
 };
 
 /**
 | Sets an items PNW. (point in north-west)
 */
-Peer.prototype.setPNW = function(item, pnw) {
-	throw new Error('TODO');
-	/*
-	var path = new Path(item, 'pnw');
-
-	this.mm.alter(-1,
-		{
-			val: pnw
-		),
-		{
-			path: path,
-		}
-	);*/
+Peer.prototype.setPNW = function(itemPath, pnw) {
+	this._alter(
+		{ val  : pnw },
+		{ path : new Path(itemPath, '++', 'pnw') }
+	);
 };
 
 /**
 | Creates a new label.
 */
-Peer.prototype.newLabel = function(space, pnw, text, fontsize) {
-	throw new Error('TODO');
-	/*
-	var path = new Path(space, 'items', '$new');
-
-	var asw = this.mm.alter(-1,
+Peer.prototype.newLabel = function(spacePath, pnw, text, fontsize) {
+	var path = new Path(spacePath, '++', '$vacant');
+	var asw = this._alter(
 		{
-			val: {
-				'type': 'Label',
-				'pnw': pnw,
-				'doc': {
-					fontsize : fontsize,
-					alley: [
-						{
-							type: 'Para',
-							text: text,
-						}
-					]
+			val : {
+				type : 'Label',
+				fontsize : fontsize,
+				pnw  : pnw,
+				doc  : {
+					type  : 'Doc',
+					copse : { '1' : { type: 'Para', text: 'text' } },
+					alley : [ '1' ]
 				}
 			}
-		}, {
-			path: path,
-		}
-	);
-
-	var apath = asw.alts.trg.path;
-	if (!(apath instanceof Path)) throw new Error('Cannot re-get new item');
-
-	this.mm.alter(-1,
-		{
-			proc: 'arrange',
-			val: apath.get(-1),
 		},
-		{
-			at1 : 0,
-			path: new Path([space.key, 'z']),
-		}
+		{ path: path, rank: 0 }
 	);
-
-	var k = apath.get(-1);
-	return space.items.get(k);
-	*/
 };
 
 /**
