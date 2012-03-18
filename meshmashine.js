@@ -148,14 +148,17 @@ var Alter = {};
 | If the signature has the value preset, it checks equality.
 |
 | sign : signature to affix
+| test : function to test existence of key (is or isnon)
 | cm   : check message for failed checks
 | base : base message for failed checks
 | key  : key to affix at
 | val  : value to affix
 */
-var affixSign = function(sign, cm, base, key, val) {
-	if (is(sign[key])) {
-		check(matches(save, trg.val), cm,base,'.',key,' faulty preset');
+var affixSign = function(sign, test, cm, base, key, val) {
+	debug('AFFIX', sign[key], is(sign[key]), isnon(sign[key]));
+	if (test(sign[key])) {
+		check(matches(val, sign[key]), cm,base,'.',key,' faulty preset',
+			typeof(val), '!=', typeof(sign[key]));
 	} else {
 		sign = new Signature(sign, key, val);
 	}
@@ -210,13 +213,13 @@ Alter.set = function(tree, src, trg) {
 	// stores the old value to be able restore the history
 	var save = tree.getPath(trg.path);
 	if (!is(save)) save = null;
-	trg = affixSign(trg, cm, 'trg', 'val', save);
-	src = affixSign(src, cm, 'src', 'path', trg.path);
+	trg = affixSign(trg, is, cm, 'trg', 'val', save);
+	src = affixSign(src, is, cm, 'src', 'path', trg.path);
 
 	if (!is(trg.rank)) {
 		tree = tree.setPath(trg.path, src.val);
 	} else {
-		src = affixSign(src, cm, 'src', 'rank', trg.rank);
+		src = affixSign(src, is, cm, 'src', 'rank', trg.rank);
 
 		pivot = pivot || tree.getPath(trg.path, -1);
 		if (key === null) key = trg.path.get(-1);
@@ -249,11 +252,8 @@ Alter.insert = function(tree, src, trg) {
 
 	// where trg span should end
 	var tat2 = trg.at1 + src.val.length;
-	if (is(trg.at2)) {
-		check(trg.at2 === tat2, cm, 'trg.at2 faulty preset');
-	} else {
-		trg = new Signature(trg, 'at2', tat2);
-	}
+
+	trg = affixSign(trg, is, cm, 'trg', 'at2', tat2);
 	var nstr = str.substring(0, trg.at1) + src.val + str.substring(trg.at1);
 	tree = tree.setPath(trg.path, nstr);
 
@@ -275,11 +275,7 @@ Alter.remove = function(tree, src, trg) {
 	}
 
 	var val = str.substring(src.at1, src.at2);
-	if (isnon(trg.val)) {
-		check(matches(val, trg.val), cm, 'trg.val faulty preset');
-	} else {
-		trg = new Signature(trg, 'val', val);
-	}
+	trg = affixSign(trg, isnon, cm, 'trg', 'val', val);
 	var nstr = str.substring(0, src.at1) + str.substring(src.at2);
 
 	tree = tree.setPath(src.path, nstr);
@@ -384,8 +380,8 @@ Alter.rank = function(tree, src, trg) {
 	if (orank < 0) throw reject('invalid key :'+key);
 	// TODO if (orank === trg.rank) return null;
 
-	src = affixSign(src, cm, 'src', 'rank', orank);
-	trg = affixSign(trg, cm, 'trg', 'path', src.path);
+	src = affixSign(src, is, cm, 'src', 'rank', orank);
+	trg = affixSign(trg, is, cm, 'trg', 'path', src.path);
 	pivot = tree.grow(pivot, '-', orank, '+', trg.rank, key);
 	tree = tree.setPath(src.path, pivot, -1);
 	return { tree: tree, src: src, trg: trg };
