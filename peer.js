@@ -12,7 +12,7 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--'
 
-  ++ Meshpeer ++
+  +++ Meshpeer +++
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  A networked node item editor.
@@ -346,7 +346,7 @@ Peer.prototype.removeText = function(path, offset, len) {
 /**
 | Removes a text spawning over severa entities
 */
-Peer.prototype.removeSpawn = function(path1, offset1, path2, offset2) {
+Peer.prototype.removeSpan = function(path1, offset1, path2, offset2) {
 	if (path1.equals(path2)) {
 		return this.removeText(path1, offset1, offset2 - offset1);
 	}
@@ -389,34 +389,11 @@ Peer.prototype.join = function(path, at1) {
 /**
 | Removes an item.
 */
-Peer.prototype.removeItem = function(space, item) {
-
-	throw new Error('TODO');
-	/*
-	var path = new Path(space, 'z');
-	var key = item.key;
-	var at1 = space.z.indexOf(key);
-
-	// remove from z-index
-	this.mm.alter(-1,
-		{
-			path: path,
-			at1: at1,
-		},
-		{
-			proc: 'arrange',
-		}
+Peer.prototype.removeItem = function(path) {
+	this._alter(
+		{ val  : null  },
+		{ path : path  }
 	);
-
-	// remove from doc alley
-	this.mm.alter(-1,
-		{
-			val: null,
-		},
-		{
-			path: new Path(item),
-		}
-	);*/
 };
 
 })();

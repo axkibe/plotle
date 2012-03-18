@@ -71,6 +71,7 @@ var fixate        = Jools.fixate;
 var immute        = Jools.immute;
 var is            = Jools.is;
 var isnon         = Jools.isnon;
+var isArray       = Jools.isArray;
 var limit         = Jools.limit;
 var log           = Jools.log;
 var subclass      = Jools.subclass;
@@ -332,8 +333,7 @@ settings = {
 */
 var Caret = function() {
 	// a signature pointing to the caret pos
-	// TODO rename .sign
-	this.mark = null;
+	this.sign = null;
 
 	// x position to retain when using up/down keys.
 	this.retainx = null;
@@ -386,8 +386,8 @@ Caret.prototype.display = function() {
 	}
 
 	// draws new
-	if (this.shown && !this.blinked && this.mark) {
-		shell.vget(this.mark.path, -1).drawCaret();
+	if (this.shown && !this.blinked && this.sign) {
+		shell.vget(this.sign.path, -1).drawCaret();
 	}
 };
 
@@ -501,7 +501,7 @@ Selection.prototype.remove = function() {
 	this.normalize();
 	this.deselect();
 	shell.redraw = true;
-	peer.removeSpawn(
+	peer.removeSpan(
 		this.begin.entity.para, this.begin.offset,
 		this.end.entity.para, this.end.offset
 	);
@@ -640,9 +640,9 @@ Shell = function(fabric, sPeer) {
 /**
 | Sets the caret position.
 */
-Shell.prototype.setCaret = function(mark, retainx) {
+Shell.prototype.setCaret = function(sign, retainx) {
 	var caret = this.caret;
-	caret.mark = mark;
+	caret.sign = sign;
 	caret.retainx = is(retainx) ? retainx : null;
 	return caret;
 };
@@ -670,11 +670,11 @@ Shell.prototype.report = function(type, tree, src, trg) {
 	this.vspace.report(type, tree, src, trg);
 
 	var caret = this.caret;
-	if (caret.mark !== null) {
-		var tmark = MeshMashine.transformOne(caret.mark, src, trg);
-		if (tmark !== caret.mark) {
-			if (tmark.constructor === Array) throw new Error('Invalid caret transformation');
-			caret.mark = tmark;
+	if (caret.sign !== null) {
+		var tsign = MeshMashine.transformOne(caret.sign, src, trg);
+		if (tsign !== caret.sign) {
+			if (isArray(tmark)) throw new Error('Invalid caret transformation');
+			caret.sign = tsign;
 		}
 	}
 
@@ -780,7 +780,7 @@ Shell.prototype.specialKey = function(keyCode, shift, ctrl) {
 	this.shift = shift;
 	this.ctrl  = ctrl;
 	var caret  = this.caret;
-	if (caret.mark) { this.vget(caret.mark.path, -1).specialKey(keyCode); }
+	if (caret.sign) { this.vget(caret.sign.path, -1).specialKey(keyCode); }
 	if (this.redraw) this._draw();
 };
 
@@ -791,7 +791,7 @@ Shell.prototype.input = function(text) {
 	this.shift = false;
 	this.ctrl  = false;
 	var caret  = this.caret;
-	if (caret.mark) { this.vget(caret.mark.path, -1).input(text); }
+	if (caret.sign) { this.vget(caret.sign.path, -1).input(text); }
 	if (this.redraw) this._draw();
 };
 
@@ -1287,7 +1287,7 @@ VSpace.prototype.mousedown = function(p) {
 		if (!im) break;
 		switch(md) {
 		case 'n': // remove
-			peer.removeItem(this.space, this.focus.item);
+			peer.removeItem(this.focus.path);
 			this.setFocus(null);
 			break;
 		default :
@@ -1521,9 +1521,9 @@ VPara.prototype.input = function(text) {
     var reg = /([^\n]+)(\n?)/g;
     for(var rx = reg.exec(text); rx !== null; rx = reg.exec(text)) {
 		var line = rx[1];
-		peer.insertText(this.textpath(), caret.mark.at1, line);
+		peer.insertText(this.textpath(), caret.sign.at1, line);
 		if (rx[2]) throw new Error('TODO');
-//        if (rx[2]) peer.split(para, caret.mark.at1);
+//        if (rx[2]) peer.split(para, caret.sign.at1);
 //		para = para.parent.get(para.key + 1);
     }
 };
@@ -1594,7 +1594,7 @@ VPara.prototype.specialKey = function(keycode) {
 		case 39 : // right
 		case 40 : // down
 			debug('TODO');
-			//select.mark1.set(caret.vnode, caret.mark.at1);
+			//select.mark1.set(caret.vnode, caret.sign.at1);
 			//vdoc.vitem.poke();
 		}
 	}
@@ -1602,8 +1602,8 @@ VPara.prototype.specialKey = function(keycode) {
 
 	switch(keycode) {
 	case  8 : // backspace
-		if (caret.mark.at1 > 0) {
-			peer.removeText(this.textpath(), caret.mark.at1 - 1, 1);
+		if (caret.sign.at1 > 0) {
+			peer.removeText(this.textpath(), caret.sign.at1 - 1, 1);
 		} else {
 			r = vdoc.twig.rank(this.key);
 			if (r > 0) {
@@ -1613,7 +1613,7 @@ VPara.prototype.specialKey = function(keycode) {
 		}
 		break;
 	case 13 : // return
-		peer.split(this.textpath(), caret.mark.at1);
+		peer.split(this.textpath(), caret.sign.at1);
 		break;
 	case 35 : // end
 		caret = shell.setCaret({ path: this.textpath(), at1:  this.twig.text.length });
@@ -1622,8 +1622,8 @@ VPara.prototype.specialKey = function(keycode) {
 		caret = shell.setCaret({ path: this.textpath(), at1: 0 });
 		break;
 	case 37 : // left
-		if (caret.mark.at1 > 0) {
-			caret = shell.setCaret({ path: this.textpath(), at1: caret.mark.at1 - 1 });
+		if (caret.sign.at1 > 0) {
+			caret = shell.setCaret({ path: this.textpath(), at1: caret.sign.at1 - 1 });
 		} else {
 			r = vdoc.twig.rank(this.key);
 			if (r > 0) {
@@ -1651,8 +1651,8 @@ VPara.prototype.specialKey = function(keycode) {
 		}
 		break;
 	case 39 : // right
-		if (caret.mark.at1 < this.twig.text.length) {
-			caret = shell.setCaret({ path: this.textpath(), at1: caret.mark.at1 + 1 });
+		if (caret.sign.at1 < this.twig.text.length) {
+			caret = shell.setCaret({ path: this.textpath(), at1: caret.sign.at1 + 1 });
 		} else {
 			r = vdoc.twig.rank(this.key);
 			if (r < vdoc.twig.ranks() - 1) {
@@ -1680,8 +1680,8 @@ VPara.prototype.specialKey = function(keycode) {
 		}
 		break;
 	case 46 : // del
-		if (caret.mark.at1 < this.twig.text.length) {
-			peer.removeText(this.textpath(), caret.mark.at1, 1);
+		if (caret.sign.at1 < this.twig.text.length) {
+			peer.removeText(this.textpath(), caret.sign.at1, 1);
 		} else {
 			r = vdoc.twig.rank(this.key);
 			if (r < vdoc.twig.ranks() - 1) {
@@ -1703,7 +1703,7 @@ VPara.prototype.specialKey = function(keycode) {
 			debug('TODO'); // TODO
 			/*
 			select.active = true;
-			select.mark2.set(caret.vnode, caret.mark.at1);
+			select.mark2.set(caret.vnode, caret.sign.at1);
 			system.setInput(select.innerText());
 			vdoc.vitem.poke();
 			shell.redraw = true;*/
@@ -1842,7 +1842,7 @@ VPara.prototype.drawCaret = function() {
 	var descend = R(fs * settings.bottombox);
 	var th    = R(vdoc.getFontSize()) + descend;
 
-	caret.pos$ = this.getOffsetPoint(shell.caret.mark.at1, shell.caret);
+	caret.pos$ = this.getOffsetPoint(shell.caret.sign.at1, shell.caret);
 
 	var sbary   = vitem.scrollbarY;
 	var scrolly = sbary ? sbary.getPos() : 0;
