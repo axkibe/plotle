@@ -1684,9 +1684,9 @@ VPara.prototype.specialKey = function(keycode) {
 		if (caret.mark.at1 < this.twig.text.length) {
 			peer.removeText(this.textpath(), caret.mark.at1, 1);
 		} else {
-			r = vdoc.twig.rang(this.key);
+			r = vdoc.twig.rank(this.key);
 			if (r < vdoc.twig.ranks() - 1) {
-				peer.join(para);
+				peer.join(this.textpath(), this.twig.text.length);
 			}
 		}
 		break;

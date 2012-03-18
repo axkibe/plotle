@@ -209,28 +209,14 @@ Alter.set = function(tree, src, trg) {
 
 	// stores the old value to be able restore the history
 	var save = tree.getPath(trg.path);
-	if (is(trg.val)) {
-		check(matches(save, trg.val), cm, 'trg.val faulty preset');
-	} else {
-		if (!is(save)) save = null;
-		trg = new Signature(trg, 'val', save);
-	}
-
-	// TODO make a subfunction for this common set/preset check doings
-	if (is(src.path)) {
-		check(trg.path.equals(src.path), cm, 'src.path faulty preset');
-	} else {
-		src = new Signature(src, 'path', trg.path);
-	}
+	if (!is(save)) save = null;
+	trg = affixSign(trg, cm, 'trg', 'val', save);
+	src = affixSign(src, cm, 'src', 'path', trg.path);
 
 	if (!is(trg.rank)) {
 		tree = tree.setPath(trg.path, src.val);
 	} else {
-		if (is(src.rank)) {
-			check(trg.rank === src.rank, cm, 'src.rank faulty preset');
-		} else {
-			src = new Signature(src, 'rank', trg.path);
-		}
+		src = affixSign(src, cm, 'src', 'rank', trg.rank);
 
 		pivot = pivot || tree.getPath(trg.path, -1);
 		if (key === null) key = trg.path.get(-1);
