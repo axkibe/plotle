@@ -1228,15 +1228,14 @@ VSpace.prototype.dragmove = function(p) {
 		action.vitem2 = null;
 		action.move = p;
 		shell.redraw = true;
-		throw new Error('TODO'); // TODO
-		/*
-		var vv = this.vv;
-		for(var zi = 0, zlen = this.space.z.length; zi < zlen; zi++) {
-			var vitem = vv[this.space.z.get(zi)];
+
+		var vv   = this.vv;
+		var twig = this.twig;
+		for(var r = 0, rZ = twig.length; r < rZ; r++) {
+			var vitem = vv[twig.ranks[r]];  // @@ use func
 			if (vitem.dragmove(pp)) return true;
 		}
 		return true;
-		*/
 	default :
 		action.vitem.dragmove(pp);
 		return true;
@@ -2394,8 +2393,8 @@ VItem.prototype.dragmove = function(p) {
 		action.vitem2 = this;
 		shell.redraw = true;
 		return true;
-	case Action.ITEMRESIZE :
 	case Action.ITEMDRAG   :
+	case Action.ITEMRESIZE :
 		action.move = p;
 		shell.redraw = true;
 		return true;
@@ -3013,10 +3012,9 @@ VRelation.create = function(vspace, vitem1, vitem2) {
 };
 
 VRelation.prototype.draw = function(fabric) {
-	throw new Error('TODO');
-	/*
-	var vitem1 = this.vspace.vv[this.item.get('item1key')];
-	var vitem2 = this.vspace.vv[this.item.get('item2key')];
+	var vspace = this.vspace;
+	var vitem1 = vspace.vv[this.twig.item1key];
+	var vitem2 = vspace.vv[this.twig.item2key];
 	var zone = this.getZone();
 
 	if (vitem1) {
@@ -3030,7 +3028,6 @@ VRelation.prototype.draw = function(fabric) {
 	}
 
 	VLabel.prototype.draw.call(this, fabric);
-	*/
 };
 
 

@@ -203,9 +203,9 @@ Alter.set = function(tree, src, trg) {
 	check(!is(trg.at1), cm, 'trg.at1 must not exist.');
 	check(is(src.val), cm, 'src.val missing');
 
-	if (trg.path.get(-1) === '$vacant') {
+	if (trg.path.get(-1) === '$new') {
 		pivot = tree.getPath(trg.path, -1);
-		key = pivot.vacantKey();
+		key = pivot.newUID();
 		trg = new Signature(trg, 'path', new Path(trg.path, -1, key));
 	}
 
@@ -344,12 +344,12 @@ Alter.split = function(tree, src, trg) {
 	if (is(trg.path)) {
 		vKey = trg.path.get(-2);
 	} else {
-		vKey = pivot.vacantKey();
+		vKey = pivot.newUID();
 		trg = new Signature(trg,
 			'path', new Path(src.path, -2, vKey)
 		);
 	}
-	check(!isnon(pivot.copse[vKey]), cm, 'vacantKey not vacant: ', vKey);
+	check(!isnon(pivot.copse[vKey]), cm, 'newUID not vacant: ', vKey);
 
 	var key = path.get(-2);
 	var kn  = pivot.rankOf(key);

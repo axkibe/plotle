@@ -45,7 +45,7 @@ Patterns.mUniverse = {
 			'Relation' : true
 		},
 		ranks : true
-		//inc   : true
+		//novel : true
 	},
 
 	'Note' : {
@@ -64,10 +64,20 @@ Patterns.mUniverse = {
 		}
 	},
 
+	'Relation' : {
+		must : {
+			'doc'      : 'Doc',
+			'pnw'      : 'Point',
+			'item1key' : 'Key',
+			'item2key' : 'Key',
+			'fontsize' : 'Number'
+		}
+	},
+
 	'Doc' : {
 		copse : { 'Para' : true },
 		ranks : true
-		//inc   : true
+		//novel : true
 	},
 
 	'Para' : {

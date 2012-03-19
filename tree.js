@@ -76,27 +76,21 @@ Twig.prototype.at = function(r) {
 };
 */
 
-/**
-| Returns the amount of ranks (length of the ranks)
-*/
-Twig.prototype.ranksLen = function() {
-	var ranks = this.ranks;
-	if (!isArray(ranks)) throw new Error('twig has no ranks');
-	return this.ranks.length;
-};
-
 Object.defineProperty(Twig.prototype, 'length', {
 	// @@ lazy fixate
 	get : function() { return this.ranks.length; }
 });
 
 /**
-| Returns a key not used in the copse
+| Creates a new unique identifier
 */
-Twig.prototype.vacantKey = function() {
-	var copse = this.copse, inc = 1, sInc;
-	while(is(copse[(sInc = '' + inc)])) inc++;
-	return sInc;
+Twig.prototype.newUID = function() {
+	while (true) {
+		var nk = Date.now().toString(16) +
+			'-' +
+			Math.floor(Math.random() * 16*16*16*16*16*16).toString(16);
+		if (!is(this.copse[nk])) return nk;
+	}
 };
 
 /**

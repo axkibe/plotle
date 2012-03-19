@@ -188,7 +188,7 @@ Peer.prototype.setReport = function(report) {
 | Creates a new note.
 */
 Peer.prototype.newNote = function(spacePath, zone) {
-	var path = new Path(spacePath, '++', '$vacant');
+	var path = new Path(spacePath, '++', '$new');
 
 	var asw = this._alter(
 		{
@@ -243,7 +243,7 @@ Peer.prototype.setPNW = function(itemPath, pnw) {
 | Creates a new label.
 */
 Peer.prototype.newLabel = function(spacePath, pnw, text, fontsize) {
-	var path = new Path(spacePath, '++', '$vacant');
+	var path = new Path(spacePath, '++', '$new');
 	var asw = this._alter(
 		{
 			val : {

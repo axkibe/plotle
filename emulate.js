@@ -134,8 +134,8 @@ Emulate.src =  {
 			// LABEL
 			'2' : {
 				type: 'Label',
-				fontsize : 20,
-				pnw: { type: 'Point', 'x': 200, 'y': 150 },
+				fontsize : 25,
+				pnw: { type: 'Point', 'x': 250, 'y': 200 },
 				doc: {
 					type: 'Doc',
 					copse : {
@@ -143,24 +143,25 @@ Emulate.src =  {
 					},
 					ranks : [ '1' ]
 				}
+			},
+
+			// RELATION
+			'3' : {
+				type: 'Relation',
+				fontsize : 20,
+				pnw: { type: 'Point', 'x': 150, 'y': 100 },
+				item1key : '1',
+				item2key : '2',
+				doc: {
+					type : 'Doc',
+					copse : {
+						'1': { type: 'Para', text: 'relates to' }
+					},
+					ranks : [ '1' ]
+				}
 			}
-//			'3' : {
-//				type: 'Relation',
-//				pnw: { 'x': 600, 'y': 150 },
-//				item1key : '0',
-//				item2key : '1',
-//				doc: {
-//					fontsize : 20,
-//					paras : {
-//						'0': {
-//							type: 'Para',
-//							text: 'relates to',
-//						},
-//					},
-//				},
-//			},
 		},
-		ranks : [ '2', '1' ]
+		ranks : [ '3', '2', '1' ]
 	}
 };
 
