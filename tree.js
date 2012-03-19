@@ -56,11 +56,11 @@ var Twig = function () { };
 | Returns the rank of the key (Returns the index of key in the ranks array)
 */
 Twig.prototype.rankOf = function(key) {
-	var alley = this.alley;
-	if (!isArray(alley)) throw new Error('twig has no alley');
+	var ranks = this.ranks;
+	if (!isArray(ranks)) throw new Error('twig has no ranks');
 	// TODO caching!
 	if (!is(this.copse[key])) return -1;
-	return alley.indexOf(key);
+	return ranks.indexOf(key);
 };
 
 /**
@@ -68,22 +68,27 @@ Twig.prototype.rankOf = function(key) {
 */
 /*
 Twig.prototype.at = function(r) {
-	var alley = this.alley;
-	if (!isArray(alley)) throw new Error('twig has no alley');
-	var k = alley[r];
+	var ranks = this.ranks;
+	if (!isArray(ranks)) throw new Error('twig has no ranks');
+	var k = ranks[r];
 	if (!is(k)) throw new Error('at, invalid index');
 	return this.copse[k];
 };
 */
 
 /**
-| Returns the amount of ranks (length of the alley)
+| Returns the amount of ranks (length of the ranks)
 */
 Twig.prototype.ranksLen = function() {
-	var alley = this.alley;
-	if (!isArray(alley)) throw new Error('twig has no alley');
-	return this.alley.length;
+	var ranks = this.ranks;
+	if (!isArray(ranks)) throw new Error('twig has no ranks');
+	return this.ranks.length;
 };
+
+Object.defineProperty(Twig.prototype, 'length', {
+	// @@ lazy fixate
+	get : function() { return this.ranks.length; }
+});
 
 /**
 | Returns a key not used in the copse
@@ -160,7 +165,7 @@ Tree.prototype.grow = function(model /*, ... */) {
 	twig = copy(model, new Twig());
 
 	if (pattern.copse) twig.copse = model.copse ? copy(model.copse, {}) : {};
-	if (pattern.alley) twig.alley = model.alley ? model.alley.slice()   : [];
+	if (pattern.ranks) twig.ranks = model.ranks ? model.ranks.slice()   : [];
 
 	// applies changes specified by the arguments
 	a = 1;
@@ -169,23 +174,23 @@ Tree.prototype.grow = function(model /*, ... */) {
 		k1 = arguments[a + 1];
 		switch(k) {
 		case '+' :
-			if (!pattern.alley) throw reject('"+": '+ttype+' has no alley');
+			if (!pattern.ranks) throw reject('"+": '+ttype+' has no ranks');
 			k2 = arguments[a + 2];
 			if (!isInteger(k1)) throw reject('"+": key must be an Integer');
 			if (!isString (k2)) throw reject('"+": value must be a String');
-			twig.alley.splice(k1, 0, k2);
+			twig.ranks.splice(k1, 0, k2);
 			a += 3;
 			break;
 		case '-' :
-			if (!pattern.alley) throw reject('"-": '+ttype+' has no alley');
+			if (!pattern.ranks) throw reject('"-": '+ttype+' has no ranks');
 			if (!isInteger(k1)) throw reject('"-": key must be an Integer');
-			twig.alley.splice(k1, 1);
+			twig.ranks.splice(k1, 1);
 			a += 2;
 			break;
 		default  :
 			if (isInteger(k)) {
-				if (!pattern.alley) throw reject('"'+k+'": '+ttype+' has no alley');
-				twig.alley[k] = k1;
+				if (!pattern.ranks) throw reject('"'+k+'": '+ttype+' has no ranks');
+				twig.ranks[k] = k1;
 			} else {
 				if (!isString(k)) throw reject('"'+k+'": is neither String or Integer');
 				if (pattern.copse) {
@@ -200,11 +205,11 @@ Tree.prototype.grow = function(model /*, ... */) {
 	}
 
 	if (a < aZ) {
-		if (!pattern.alley) throw reject('"'+arguments[a]+'": '+ttype+' has no alley');
+		if (!pattern.ranks) throw reject('"'+arguments[a]+'": '+ttype+' has no ranks');
 
 		if (arguments[a] === '--') {
 			var shorten = arguments[a + 1];
-			twig.alley.splice(twig.alley.length - shorten, shorten);
+			twig.ranks.splice(twig.ranks.length - shorten, shorten);
 			a += 2;
 		}
 
@@ -268,18 +273,18 @@ Tree.prototype.grow = function(model /*, ... */) {
 		}
 	}
 
-	if (pattern.alley) {
-		aZ = twig.alley.length;
-		if (aZ !== Object.keys(twig.alley).length) {
-			throw reject('Alley not a sequence');
+	if (pattern.ranks) {
+		aZ = twig.ranks.length;
+		if (aZ !== Object.keys(twig.ranks).length) {
+			throw reject('ranks not a sequence');
 		}
 		if (aZ !== klen) {
-			throw reject('Alley length does not match to copse');
+			throw reject('ranks length does not match to copse');
 		}
 		for (a = 0; a < aZ; a++) {
-			k = twig.alley[a];
+			k = twig.ranks[a];
 			if (!is(twig.copse[k])) {
-				throw new Error('Copse misses Alley value: '+k);
+				throw new Error('copse misses ranks value: '+k);
 			}
 		}
 	}

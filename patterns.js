@@ -44,7 +44,7 @@ Patterns.mUniverse = {
 			'Label'    : true,
 			'Relation' : true
 		},
-		alley : true
+		ranks : true
 		//inc   : true
 	},
 
@@ -66,7 +66,7 @@ Patterns.mUniverse = {
 
 	'Doc' : {
 		copse : { 'Para' : true },
-		alley : true
+		ranks : true
 		//inc   : true
 	},
 
@@ -114,7 +114,7 @@ Patterns.mUniverse = {
 			if (p.copse) throw new Error('Patterns must not have .must and .copse');
 			if (p.must.index) throw new Error('indexOf must not be a must');
 		}
-		if (p.alley && !p.copse) throw new Error('Patterns must not have .alley without .copse');
+		if (p.ranks && !p.copse) throw new Error('Patterns must not have .ranks without .copse');
 	}
 })(Patterns.mUniverse);
 

@@ -299,11 +299,11 @@ Alter.join = function(tree, src, trg) {
 	var key = path.get(-2);
 	var pivot   = tree.getPath(path, -2);
 	var pattern = tree.getPattern(pivot);
-	check(pattern.alley, cm, 'pivot has no alley');
-	var kn  = pivot.alley.indexOf(key);
-	check(kn >= 0, cm, 'line key not found in alley');
-	check(kn < pivot.alley.length,  cm, 'cannot join last line');
-	var key2 = pivot.alley[kn + 1];
+	check(pattern.ranks, cm, 'pivot has no ranks');
+	var kn  = pivot.rankOf(key);
+	check(kn >= 0, cm, 'invalid line key');
+	check(kn < pivot.ranks.length,  cm, 'cannot join last line');
+	var key2 = pivot.ranks[kn + 1];
 	var path2 = new Path(path, -2, key2);
 	src = affixSign(src, is, cm, 'src', 'path', path2);
 
@@ -338,7 +338,7 @@ Alter.split = function(tree, src, trg) {
 
 	var pivot   = tree.getPath(path, -2);
 	var pattern = tree.getPattern(pivot);
-	check(pattern.alley, cm, 'pivot has no alley');
+	check(pattern.ranks, cm, 'pivot has no ranks');
 
 	var vKey;
 	if (is(trg.path)) {
@@ -352,8 +352,8 @@ Alter.split = function(tree, src, trg) {
 	check(!isnon(pivot.copse[vKey]), cm, 'vacantKey not vacant: ', vKey);
 
 	var key = path.get(-2);
-	var kn  = pivot.alley.indexOf(key);
-	check(kn >= 0, cm, 'line key not found in alley');
+	var kn  = pivot.rankOf(key);
+	check(kn >= 0, cm, 'invalid line key');
 
 	var para1, para2;
 	para1 = pivot.copse[key];
@@ -383,7 +383,7 @@ Alter.rank = function(tree, src, trg) {
 	check(is(trg.rank), cm, 'trg.rank not present');
 
 	var pivot = tree.getPath(src.path, -1);
-	check(is(pivot.alley), cm, 'pivot not an ally');
+	check(is(pivot.ranks), cm, 'pivot not an ranks');
 	var key = src.path.get(-1);
 	var orank = pivot.rankOf(key);
 	if (orank < 0) throw reject('invalid key :'+key);
@@ -427,7 +427,7 @@ Transform.split = function(sign, src, trg) {
 	// trg.path -- the new line
 	if (!src.path || !src.path.equals(sign.path)) return sign;
 
-	// @@ alter alley take/place
+	// @@ alter ranks
 	// simpler case signature is only one point
 	if (!is(sign.at2)) {
 		log('te', 'split (simple)');
@@ -478,7 +478,7 @@ Transform.join = function(sign, src, trg) {
 	// src.path is the line that was removed
 	if (!src.path || !sign.path.equals(src.path)) return sign;
 	if (!trg.path) throw new Error('join missing trg.path');
-	// @@ alter alley take/place
+	// @@ alter ranks
 	log('te', 'join', sign);
 	if (!is(sign.at2)) {
 		return new Signature(sign,

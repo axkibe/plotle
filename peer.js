@@ -199,7 +199,7 @@ Peer.prototype.newNote = function(spacePath, zone) {
 				doc  : {
 					type  : 'Doc',
 					copse : { '1' : { type: 'Para', text: '' } },
-					alley : [ '1' ]
+					ranks : [ '1' ]
 				}
 			}
 		},
@@ -253,7 +253,7 @@ Peer.prototype.newLabel = function(spacePath, pnw, text, fontsize) {
 				doc  : {
 					type  : 'Doc',
 					copse : { '1' : { type: 'Para', text: 'text' } },
-					alley : [ '1' ]
+					ranks : [ '1' ]
 				}
 			}
 		},
@@ -278,7 +278,7 @@ Peer.prototype.newRelation = function(space, pnw, text, fontsize, vitem1, vitem2
 				'pnw': pnw,
 				'doc': {
 					fontsize : fontsize,
-					alley: [
+					ranks: [
 						{
 							type: 'Para',
 							text: text

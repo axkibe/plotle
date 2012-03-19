@@ -991,11 +991,11 @@ VSpace.prototype.createVItem = function(twig, k) {
 */
 VSpace.prototype.draw = function() {
 	var twig  = this.twig;
-	var alley = twig.alley;
+	var ranks = twig.ranks;
 	var vv    = this.vv;
 
-	for(var r = twig.ranksLen() - 1; r >= 0; r--) {
-		vv[alley[r]].draw(this.fabric);
+	for(var r = twig.length - 1; r >= 0; r--) {
+		vv[ranks[r]].draw(this.fabric);
 	}
 
 	if (this.focus) { this.focus.drawHandles(this.fabric); }
@@ -1031,7 +1031,7 @@ VSpace.prototype.setFocus = function(vitem) {
 	if (vitem) {
 		var doc = vitem.vv.doc;
 		caret = shell.setCaret({
-			path: doc.vv[doc.twig.alley[0]].textpath(),
+			path: doc.vv[doc.twig.ranks[0]].textpath(),
 			at1: 0
 		});
 		caret.show();
@@ -1109,10 +1109,10 @@ VSpace.prototype.mousehover = function(p) {
 		}
 	}
 
-	var alley = this.twig.alley;
+	var ranks = this.twig.ranks;
 	var vv    = this.vv;
-	for(var a = 0, aZ = alley.length; a < aZ; a++) {
-		var vitem = vv[alley[a]];
+	for(var a = 0, aZ = ranks.length; a < aZ; a++) {
+		var vitem = vv[ranks[a]];
 		if (vitem.mousehover(pp)) { return true; }
 	}
 	// no hits
@@ -1136,10 +1136,10 @@ VSpace.prototype.dragstart = function(p) {
 	}
 
 	// see if one item was targeted
-	var alley = this.twig.alley;
+	var ranks = this.twig.ranks;
 	var vv    = this.vv;
-	for(var a = 0, aZ = alley.length; a < aZ; a++) {
-		var vitem = vv[alley[a]];
+	for(var a = 0, aZ = ranks.length; a < aZ; a++) {
+		var vitem = vv[ranks[a]];
 		if (vitem.dragstart(pp)) return true;
 	}
 
@@ -1168,10 +1168,10 @@ VSpace.prototype.click = function(p) {
 	}
 
 	// clicked some item?
-	var alley = this.twig.alley;
+	var ranks = this.twig.ranks;
 	var vv    = this.vv;
-	for(var a = 0, aZ = alley.length; a < aZ; a++) {
-		var vitem = vv[alley[a]];
+	for(var a = 0, aZ = ranks.length; a < aZ; a++) {
+		var vitem = vv[ranks[a]];
 		if (vitem.click(pp)) return true;
 	}
 
@@ -1287,8 +1287,9 @@ VSpace.prototype.mousedown = function(p) {
 		if (!im) break;
 		switch(md) {
 		case 'n': // remove
-			peer.removeItem(this.focus.path);
+			var item = this.focus;
 			this.setFocus(null);
+			peer.removeItem(item.path);
 			break;
 		default :
 			break;
@@ -1607,7 +1608,7 @@ VPara.prototype.specialKey = function(keycode) {
 		} else {
 			r = vdoc.twig.rankOf(this.key);
 			if (r > 0) {
-				ve = vdoc.vv[vdoc.twig.alley[r - 1]];
+				ve = vdoc.vv[vdoc.twig.ranks[r - 1]];
 				peer.join(ve.textpath(), ve.twig.text.length);
 			}
 		}
@@ -1627,7 +1628,7 @@ VPara.prototype.specialKey = function(keycode) {
 		} else {
 			r = vdoc.twig.rankOf(this.key);
 			if (r > 0) {
-				ve = vdoc.vv[vdoc.twig.alley[r - 1]];
+				ve = vdoc.vv[vdoc.twig.ranks[r - 1]];
 				caret = shell.setCaret({ path: ve.textpath(), at1: ve.twig.text.length });
 			}
 		}
@@ -1644,7 +1645,7 @@ VPara.prototype.specialKey = function(keycode) {
 			// goto prev para
 			r = vdoc.twig.rankOf(this.key);
 			if (r > 0) {
-				ve = vdoc.vv[vdoc.twig.alley[r - 1]];
+				ve = vdoc.vv[vdoc.twig.ranks[r - 1]];
 				at1 = ve.getLineXOffset(ve.getFlow().length - 1, x);
 				caret = shell.setCaret({ path: ve.textpath(), at1: at1 }, x);
 			}
@@ -1655,8 +1656,8 @@ VPara.prototype.specialKey = function(keycode) {
 			caret = shell.setCaret({ path: this.textpath(), at1: caret.sign.at1 + 1 });
 		} else {
 			r = vdoc.twig.rankOf(this.key);
-			if (r < vdoc.twig.ranksLen() - 1) {
-				ve = vdoc.vv[vdoc.twig.alley[r + 1]];
+			if (r < vdoc.twig.length - 1) {
+				ve = vdoc.vv[vdoc.twig.ranks[r + 1]];
 				caret = shell.setCaret({ path: ve.textpath(), at1: 0 });
 			}
 		}
@@ -1672,8 +1673,8 @@ VPara.prototype.specialKey = function(keycode) {
 		} else {
 			// goto next para
 			r = vdoc.twig.rankOf(this.key);
-			if (r < vdoc.twig.ranksLen() - 1) {
-				ve = vdoc.vv[vdoc.twig.alley[r + 1]];
+			if (r < vdoc.twig.length - 1) {
+				ve = vdoc.vv[vdoc.twig.ranks[r + 1]];
 				at1 = ve.getLineXOffset(0, x);
 				caret = shell.setCaret({ path: ve.textpath(), at1: at1 }, x);
 			}
@@ -1684,7 +1685,7 @@ VPara.prototype.specialKey = function(keycode) {
 			peer.removeText(this.textpath(), caret.sign.at1, 1);
 		} else {
 			r = vdoc.twig.rankOf(this.key);
-			if (r < vdoc.twig.ranksLen() - 1) {
+			if (r < vdoc.twig.length - 1) {
 				peer.join(this.textpath(), this.twig.text.length);
 			}
 		}
@@ -1970,10 +1971,10 @@ var VDoc = function(twig, path, vitem) {
 	this.pnws  = null;
 	var vv = this.vv = [];
 
-	var alley = twig.alley;
+	var ranks = twig.ranks;
 	var copse = twig.copse;
-	for (var r = 0, rZ = twig.ranksLen(); r < rZ; r++) {
-		var k = alley[r];
+	for (var r = 0, rZ = twig.length; r < rZ; r++) {
+		var k = ranks[r];
 		vv[k] = new VPara(copse[k], new Path(path, '++', k), this);
 	}
 };
@@ -2003,25 +2004,6 @@ VDoc.prototype.update = function(twig) {
 };
 
 /**
-| The meshmashine issued an event.
-*/
-/* TODO
-VDoc.prototype.ev-XXX = function(type, key, p1, p2, p3) {
-	log('xxx', 'vdoc', type, key, p1, p2, p3);
-
-	switch(type) {
-	case 'join' :
-		this.valley.splice(key + 1, 1);
-		break;
-	case 'split' :
-		var nvp = new VPara(this.doc.get(key + 1), this);
-		this.valley.splice(key + 1, 0, nvp);
-		break;
-	}
-};
-*/
-
-/**
 | Draws the document on a fabric.
 |
 | fabric:  to draw upon.
@@ -2046,11 +2028,11 @@ VDoc.prototype.draw = function(fabric, width, imargin, scrollp) {
 
 	// draws the paragraphs
 	var twig = this.twig;
-	for (var r = 0, rZ = twig.ranksLen(); r < rZ; r++) {
-		var vpara = this.vv[twig.alley[r]];
+	for (var r = 0, rZ = twig.length; r < rZ; r++) {
+		var vpara = this.vv[twig.ranks[r]];  // TODO replace with func
 		var flow = vpara.getFlow();
 
-		pnws[twig.alley[r]] = new Point(imargin.w, R(y));
+		pnws[twig.ranks[r]] = new Point(imargin.w, R(y));
 		fabric.drawImage(vpara.getFabric(), imargin.w, R(y - scrollp.y));
 		y += flow.height + paraSep;
 	}
@@ -2071,8 +2053,8 @@ VDoc.prototype.getHeight = function() {
 	var twig     = this.twig;
 	var vv       = this.vv;
 	var height   = 0;
-	for (var r = 0, rZ = twig.ranksLen(); r < rZ; r++) {
-		var vpara = vv[twig.alley[r]];
+	for (var r = 0, rZ = twig.length; r < rZ; r++) {
+		var vpara = vv[twig.ranks[r]];
 
 		var flow = vpara.getFlow();
 		if (r > 0) { height += paraSep; }
@@ -2089,8 +2071,8 @@ VDoc.prototype.getSpread = function() {
 	var twig = this.twig;
 	var vv   = this.vv;
 	var spread = 0;
-	for (var r = 0, rZ = twig.ranksLen(); r < rZ; r++) {
-		spread = max(spread, vv[twig.alley[r]].getFlow().spread);
+	for (var r = 0, rZ = twig.length; r < rZ; r++) {
+		spread = max(spread, vv[twig.ranks[r]].getFlow().spread);
 	}
 	return spread;
 };
@@ -2115,8 +2097,8 @@ VDoc.prototype.getVParaAtPoint = function(p) {
 	var twig   = this.twig;
 	var vv     = this.vv;
 
-	for(var r = 0, rZ = twig.ranksLen(); r < rZ; r++) {
-		var k = twig.alley[r];
+	for(var r = 0, rZ = twig.length; r < rZ; r++) {
+		var k = twig.ranks[r];
 		var vpara = vv[k];
 		var flow = vpara.getFlow();
 		var pnw = this.pnws[k];
