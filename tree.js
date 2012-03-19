@@ -53,9 +53,9 @@ var isPath       = Path.isPath;
 var Twig = function () { };
 
 /**
-| Returns the rank of the key (Returns the index of key in the alley)
+| Returns the rank of the key (Returns the index of key in the ranks array)
 */
-Twig.prototype.rank = function(key) {
+Twig.prototype.rankOf = function(key) {
 	var alley = this.alley;
 	if (!isArray(alley)) throw new Error('twig has no alley');
 	// TODO caching!
@@ -66,6 +66,7 @@ Twig.prototype.rank = function(key) {
 /**
 | Returns the twig that has rank r
 */
+/*
 Twig.prototype.at = function(r) {
 	var alley = this.alley;
 	if (!isArray(alley)) throw new Error('twig has no alley');
@@ -73,11 +74,12 @@ Twig.prototype.at = function(r) {
 	if (!is(k)) throw new Error('at, invalid index');
 	return this.copse[k];
 };
+*/
 
 /**
 | Returns the amount of ranks (length of the alley)
 */
-Twig.prototype.ranks = function() {
+Twig.prototype.ranksLen = function() {
 	var alley = this.alley;
 	if (!isArray(alley)) throw new Error('twig has no alley');
 	return this.alley.length;

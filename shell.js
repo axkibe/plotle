@@ -673,7 +673,7 @@ Shell.prototype.report = function(type, tree, src, trg) {
 	if (caret.sign !== null) {
 		var tsign = MeshMashine.transformOne(caret.sign, src, trg);
 		if (tsign !== caret.sign) {
-			if (isArray(tmark)) throw new Error('Invalid caret transformation');
+			if (isArray(tsign)) throw new Error('Invalid caret transformation');
 			caret.sign = tsign;
 		}
 	}
@@ -994,7 +994,7 @@ VSpace.prototype.draw = function() {
 	var alley = twig.alley;
 	var vv    = this.vv;
 
-	for(var r = twig.ranks() - 1; r >= 0; r--) {
+	for(var r = twig.ranksLen() - 1; r >= 0; r--) {
 		vv[alley[r]].draw(this.fabric);
 	}
 
@@ -1605,7 +1605,7 @@ VPara.prototype.specialKey = function(keycode) {
 		if (caret.sign.at1 > 0) {
 			peer.removeText(this.textpath(), caret.sign.at1 - 1, 1);
 		} else {
-			r = vdoc.twig.rank(this.key);
+			r = vdoc.twig.rankOf(this.key);
 			if (r > 0) {
 				ve = vdoc.vv[vdoc.twig.alley[r - 1]];
 				peer.join(ve.textpath(), ve.twig.text.length);
@@ -1625,7 +1625,7 @@ VPara.prototype.specialKey = function(keycode) {
 		if (caret.sign.at1 > 0) {
 			caret = shell.setCaret({ path: this.textpath(), at1: caret.sign.at1 - 1 });
 		} else {
-			r = vdoc.twig.rank(this.key);
+			r = vdoc.twig.rankOf(this.key);
 			if (r > 0) {
 				ve = vdoc.vv[vdoc.twig.alley[r - 1]];
 				caret = shell.setCaret({ path: ve.textpath(), at1: ve.twig.text.length });
@@ -1642,7 +1642,7 @@ VPara.prototype.specialKey = function(keycode) {
 			shell.setCaret({ path: this.textpath(), at1: at1 }, x);
 		} else {
 			// goto prev para
-			r = vdoc.twig.rank(this.key);
+			r = vdoc.twig.rankOf(this.key);
 			if (r > 0) {
 				ve = vdoc.vv[vdoc.twig.alley[r - 1]];
 				at1 = ve.getLineXOffset(ve.getFlow().length - 1, x);
@@ -1654,8 +1654,8 @@ VPara.prototype.specialKey = function(keycode) {
 		if (caret.sign.at1 < this.twig.text.length) {
 			caret = shell.setCaret({ path: this.textpath(), at1: caret.sign.at1 + 1 });
 		} else {
-			r = vdoc.twig.rank(this.key);
-			if (r < vdoc.twig.ranks() - 1) {
+			r = vdoc.twig.rankOf(this.key);
+			if (r < vdoc.twig.ranksLen() - 1) {
 				ve = vdoc.vv[vdoc.twig.alley[r + 1]];
 				caret = shell.setCaret({ path: ve.textpath(), at1: 0 });
 			}
@@ -1671,8 +1671,8 @@ VPara.prototype.specialKey = function(keycode) {
 			caret = shell.setCaret({ path: this.textpath(), at1: at1 }, x);
 		} else {
 			// goto next para
-			r = vdoc.twig.rank(this.key);
-			if (r < vdoc.twig.ranks() - 1) {
+			r = vdoc.twig.rankOf(this.key);
+			if (r < vdoc.twig.ranksLen() - 1) {
 				ve = vdoc.vv[vdoc.twig.alley[r + 1]];
 				at1 = ve.getLineXOffset(0, x);
 				caret = shell.setCaret({ path: ve.textpath(), at1: at1 }, x);
@@ -1683,8 +1683,8 @@ VPara.prototype.specialKey = function(keycode) {
 		if (caret.sign.at1 < this.twig.text.length) {
 			peer.removeText(this.textpath(), caret.sign.at1, 1);
 		} else {
-			r = vdoc.twig.rank(this.key);
-			if (r < vdoc.twig.ranks() - 1) {
+			r = vdoc.twig.rankOf(this.key);
+			if (r < vdoc.twig.ranksLen() - 1) {
 				peer.join(this.textpath(), this.twig.text.length);
 			}
 		}
@@ -1972,7 +1972,7 @@ var VDoc = function(twig, path, vitem) {
 
 	var alley = twig.alley;
 	var copse = twig.copse;
-	for (var r = 0, rZ = twig.ranks(); r < rZ; r++) {
+	for (var r = 0, rZ = twig.ranksLen(); r < rZ; r++) {
 		var k = alley[r];
 		vv[k] = new VPara(copse[k], new Path(path, '++', k), this);
 	}
@@ -2046,7 +2046,7 @@ VDoc.prototype.draw = function(fabric, width, imargin, scrollp) {
 
 	// draws the paragraphs
 	var twig = this.twig;
-	for (var r = 0, rZ = twig.ranks(); r < rZ; r++) {
+	for (var r = 0, rZ = twig.ranksLen(); r < rZ; r++) {
 		var vpara = this.vv[twig.alley[r]];
 		var flow = vpara.getFlow();
 
@@ -2071,7 +2071,7 @@ VDoc.prototype.getHeight = function() {
 	var twig     = this.twig;
 	var vv       = this.vv;
 	var height   = 0;
-	for (var r = 0, rZ = twig.ranks(); r < rZ; r++) {
+	for (var r = 0, rZ = twig.ranksLen(); r < rZ; r++) {
 		var vpara = vv[twig.alley[r]];
 
 		var flow = vpara.getFlow();
@@ -2089,7 +2089,7 @@ VDoc.prototype.getSpread = function() {
 	var twig = this.twig;
 	var vv   = this.vv;
 	var spread = 0;
-	for (var r = 0, rZ = twig.ranks(); r < rZ; r++) {
+	for (var r = 0, rZ = twig.ranksLen(); r < rZ; r++) {
 		spread = max(spread, vv[twig.alley[r]].getFlow().spread);
 	}
 	return spread;
@@ -2115,7 +2115,7 @@ VDoc.prototype.getVParaAtPoint = function(p) {
 	var twig   = this.twig;
 	var vv     = this.vv;
 
-	for(var r = 0, rZ = twig.ranks(); r < rZ; r++) {
+	for(var r = 0, rZ = twig.ranksLen(); r < rZ; r++) {
 		var k = twig.alley[r];
 		var vpara = vv[k];
 		var flow = vpara.getFlow();

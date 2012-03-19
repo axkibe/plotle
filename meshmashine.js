@@ -228,9 +228,11 @@ Alter.set = function(tree, src, trg) {
 				'+', trg.rank, key
 			);
 		} else {
+			check(trg.rank === null, cm, 'val <- null implies rank <- null');
+			var orank = pivot.rankOf(key);
 			pivot = tree.grow(pivot,
 				key, src.val,
-				'-', trg.rank
+				'-', orank
 			);
 		}
 		tree = tree.setPath(trg.path, pivot, -1);
@@ -383,7 +385,7 @@ Alter.rank = function(tree, src, trg) {
 	var pivot = tree.getPath(src.path, -1);
 	check(is(pivot.alley), cm, 'pivot not an ally');
 	var key = src.path.get(-1);
-	var orank = pivot.rank(key);
+	var orank = pivot.rankOf(key);
 	if (orank < 0) throw reject('invalid key :'+key);
 	// TODO if (orank === trg.rank) return null;
 
