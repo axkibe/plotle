@@ -188,8 +188,6 @@ Peer.prototype.setReport = function(report) {
 | Creates a new note.
 */
 Peer.prototype.newNote = function(spacePath, zone) {
-	var path = new Path(spacePath, '++', '$new');
-
 	var asw = this._alter(
 		{
 			val : {
@@ -203,7 +201,7 @@ Peer.prototype.newNote = function(spacePath, zone) {
 				}
 			}
 		},
-		{ path: path, rank: 0 }
+		{ path: new Path(spacePath, '++', '$new'), rank: 0 }
 	);
 
 	return asw.alts.trg.path.get(-1);
@@ -243,71 +241,48 @@ Peer.prototype.setPNW = function(itemPath, pnw) {
 | Creates a new label.
 */
 Peer.prototype.newLabel = function(spacePath, pnw, text, fontsize) {
-	var path = new Path(spacePath, '++', '$new');
 	var asw = this._alter(
 		{
-			val : {
-				type : 'Label',
-				fontsize : fontsize,
-				pnw  : pnw,
-				doc  : {
+			val           : {
+				type      : 'Label',
+				fontsize  : fontsize,
+				pnw       : pnw,
+				doc       : {
 					type  : 'Doc',
-					copse : { '1' : { type: 'Para', text: 'text' } },
+					copse : { '1' : { type: 'Para', text: text } },
 					ranks : [ '1' ]
 				}
 			}
 		},
-		{ path: path, rank: 0 }
+		{ path: new Path(spacePath, '++', '$new'), rank: 0 }
 	);
+
+	return asw.alts.trg.path.get(-1);
 };
 
 /**
 | Creates a new relation.
 */
-Peer.prototype.newRelation = function(space, pnw, text, fontsize, vitem1, vitem2) {
-	throw new Error('TODO');
-	/*
-	var path = new Path(space, 'items', '$new');
-
-	var asw = this.mm.alter(-1,
+Peer.prototype.newRelation = function(spacePath, pnw, text, fontsize, item1key, item2key) {
+	var asw = this._alter(
 		{
-			val: {
-				'type': 'Relation',
-				'item1key': vitem1.key,
-				'item2key': vitem2.key,
-				'pnw': pnw,
-				'doc': {
-					fontsize : fontsize,
-					ranks: [
-						{
-							type: 'Para',
-							text: text
-						},
-					]
-				},
-			},
-		}, {
-			path: path,
-		}
-	);
-
-	var apath = asw.alts.trg.path;
-	if (!(apath instanceof Path)) throw new Error('Cannot re-get new Item');
-
-	this.mm.alter(-1,
-		{
-			proc: 'arrange',
-			val: apath.get(-1),
+			val           : {
+				type      : 'Relation',
+				item1key  : item1key,
+				item2key  : item2key,
+				pnw       : pnw,
+				fontsize  : fontsize,
+				doc       : {
+					type  : 'Doc',
+					copse : { '1' : { type: 'Para', text: text } },
+					ranks : [ '1' ]
+				}
+			}
 		},
-		{
-			at1 : 0,
-			path: new Path([space.key, 'z']),
-		}
+		{ path: new Path(spacePath, '++', '$new'), rank: 0 }
 	);
 
-	var k = apath.get(-1);
-	return space.items.get(k);
-	*/
+	return asw.alts.trg.path.get(-1);
 };
 
 /**

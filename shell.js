@@ -1199,14 +1199,12 @@ VSpace.prototype.dragstop = function(p) {
 		break;
 	case Action.RELBIND:
 		var vv = this.vv;
-		throw new Error('TODO'); // TODO
-		/*
-		for(var zi = 0, zlen = this.space.z.length; zi < zlen; zi++) {
-			var vit = vv[this.space.z.get(zi)];
-			if (vit.dragstop(pp)) break;
+		var twig = this.twig;
+		for(var r = 0, rZ = twig.length; r < rZ; r++) {
+			var vitem = vv[twig.ranks[r]];
+			if (vitem.dragstop(pp)) break;
 		}
 		break;
-		*/
 	}
 	shell.stopAction();
 	return true;
@@ -3005,9 +3003,9 @@ VRelation.imargin = new Margin(settings.relation.imargin);
 VRelation.create = function(vspace, vitem1, vitem2) {
 	var cline = Line.connect(vitem1.getZone(), null, vitem2.getZone(), null);
 	var pnw = cline.pc.sub(settings.relation.createOffset);
-	var rel = peer.newRelation(vspace.space, pnw, 'relates to', 20, vitem1.item, vitem2.item);
+	var key = peer.newRelation(vspace.path, pnw, 'relates to', 20, vitem1.key, vitem2.key);
 	// event listener has created the vrel
-	var vrel = vspace.vv[rel.key];
+	var vrel = vspace.vv[key];
 	vspace.setFocus(vrel);
 };
 
