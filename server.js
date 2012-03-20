@@ -171,9 +171,6 @@ var mmAjax = function(req, red, res) {
 				var path = new Path(cmd.path);
 				asw = mm.get(cmd.time, path);
 				break;
-			case 'now':
-				asw = mm.now();
-				break;
 			case 'update':
 				asw = mm.update(cmd.time);
 				break;

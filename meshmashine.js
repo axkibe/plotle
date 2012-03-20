@@ -694,8 +694,8 @@ MeshMashine.prototype._reflect = function(time, path) {
 MeshMashine.prototype.alter = function(time, src, trg) {
 	try {
 		log('mm', 'alter time:', time, 'src:', src, 'trg:', trg);
-		if (time < 0) time = this.history.length;
 		if (!this._isValidTime(time)) return reject('invalid time');
+		if (time < 0) time = this.history.length;
 		src = new Signature(src);
 		trg = new Signature(trg);
 
@@ -746,23 +746,21 @@ MeshMashine.prototype.alter = function(time, src, trg) {
 			alts: alts
 		};
 	} catch(err) {
-		// returns rejections but rethrows coding errors.
-		log('fail', 'error', err);
-		if (err.ok !== false) throw new Error(err.stack); else return err;
+		// returns rejections, but rethrows coding errors.
+		if (err.ok !== false) { throw new Error(err.stack); } else { return err; }
 	}
 };
 
 /**
 | Gets a subtree.
-| TODO add timespans
 */
 MeshMashine.prototype.get = function(time, path) {
 	try {
 		log('mm', 'get time:', time, ' path:', path);
+		if (!this._isValidTime(time)) return reject('invalid time');
 		var reflect;
 
 		if (time >= 0) {
-			if (!this._isValidTime(time)) return reject('invalid time');
 			reflect = this._reflect(time);
 			reflect = reflect.getPath(path);
 		} else {
@@ -772,27 +770,17 @@ MeshMashine.prototype.get = function(time, path) {
 		log('mm', 'ok', time, reflect);
 		return {ok: true, time: time, node: reflect };
 	} catch(err) {
-		// returns rejections but rethrows coding errors.
-		if (err.ok !== false) throw new Error(err.stack); else return err;
+		// returns rejections, but rethrows coding errors.
+		if (err.ok !== false) { throw new Error(err.stack); } else { return err; }
 	}
 };
 
 /**
-| Returns the current time position
-| TODO remove
-*/
-MeshMashine.prototype.now = function() {
-	log('mm', 'now');
-	log('mm', 'ok', this.history.length);
-	return {ok: true, time: this.history.length };
-};
-
-/**
 | Returns all changes from time to now.
-| TODO remove
 */
 MeshMashine.prototype.update = function(time) {
 	log('mm', 'update time:', time);
+
 	if (!this._isValidTime(time)) return reject('invalid time');
 	var update = [];
 	for(var ti = time; ti < this.history.length; ti++) {
@@ -806,7 +794,8 @@ MeshMashine.prototype.update = function(time) {
 | Returns true if time is valid.
 */
 MeshMashine.prototype._isValidTime = function(time) {
-	return isInteger(time) && time >= 0 && time <= this.history.length;
+	if (!isInteger(time)) { return false; }
+	return time === -1 || time <= this.history.length;
 };
 
 /**
