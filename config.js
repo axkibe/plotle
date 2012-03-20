@@ -12,7 +12,7 @@ module.exports = {
 
 	log     : {
 		//all:   true,
-		alter:  true,
+		alter:  false,
 		ajax:   false,
 		debug:  true,
 		fail:   true,
@@ -22,7 +22,7 @@ module.exports = {
 		report: true,
 		start:  true,
 		shell:  true,
-		te:     true,
+		te:     false,
 		web:    true,
 		warn:   true
 	}

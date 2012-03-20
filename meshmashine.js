@@ -162,7 +162,7 @@ var affixSign = function(sign, test, cm, base, key, val) {
 		sign = new Signature(sign, key, val);
 	}
 	return sign;
-}
+};
 
 /**
 | Returns the type of an Alternation.

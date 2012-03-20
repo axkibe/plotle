@@ -1,9 +1,30 @@
-/**
-| Meshcraft Path.
-|
-| Authors: Axel Kittenberger
-| License: MIT(Expat), see accompanying 'License'-file
-*/
+/**                                                      _.._
+                                                      .-'_.._''.
+ __  __   ___       _....._              .          .' .'     '.\
+|  |/  `.'   `.   .'       '.          .'|         / .'                                _.._
+|   .-.  .-.   ' /   .-'"'.  \        (  |        . '            .-,.-~.             .' .._|    .|
+|  |  |  |  |  |/   /______\  |        | |        | |            |  .-. |    __      | '      .' |_
+|  |  |  |  |  ||   __________|    _   | | .'''-. | |            | |  | | .:-`.'.  __| |__  .'     |
+|  |  |  |  |  |\  (          '  .' |  | |/.'''. \. '            | |  | |/ |   \ ||__   __|'-..  .-'
+|  |  |  |  |  | \  '-.___..-~. .   | /|  /    | | \ '.         .| |  '- `" __ | |   | |      |  |
+|__|  |__|  |__|  `         .'.'.'| |//| |     | |  '. `.____.-'/| |      .'.''| |   | |      |  |
+                   `'-.....-.'.'.-'  / | |     | |    `-._____ / | |     / /   | |_  | |      |  '.'
+                                 \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
+                                       '___)   '___)                      `~~'  `"   |_|      `--'
+
+                                          .-,--.     .  .
+                                           '|__/ ,-. |- |-.
+                                           ,|    ,-| |  | |
+                                           `'    `-^ `' ' '
+
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+ Paths into a tree.
+
+ Authors: Axel Kittenberger
+ License: MIT(Expat), see accompanying 'License'-file
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
 | Imports
@@ -190,23 +211,24 @@ Path.prototype.equals = function(o) {
 };
 
 /**
-| True if this path is a subpath of another.
+| True if this path is a subPath of another.
 |
 | o: the other path
 | [len]: the length of this path to consider.
 */
-Path.prototype.subpathOf = function(o, len) {
+Path.prototype.subPathOf = function(o, len) {
 	if (!is(len)) {
 		len  = this._path.length;
 	} else {
 		if (len < 0) len += this._path.length;
-		if (len < 0) throw new Error('subpathOf out of range');
+		if (len < 0) throw new Error('subPathOf out of range');
 	}
 
 	if (len > o._path.length) return false;
 	for(var a = 0; a < len; a++) {
 		if (this._path[a] !== o._path[a]) return false;
 	}
+
 	return true;
 };
 

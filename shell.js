@@ -16,6 +16,7 @@
                                         \___  |-. ,-. |  |
                                             \ | | |-' |  |
                                         `---' ' ' `-' `' `'
+
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  A networked node item editor.
@@ -416,8 +417,8 @@ Caret.prototype.blink = function() {
 */
 var Selection = function() {
 	this.active = false;
-	this.mark1 = null;
-	this.mark2 = null;
+	this.sign1 = null;
+	this.sign2 = null;
 	this.begin = null;
 	this.end   = null;
 };
@@ -425,71 +426,73 @@ var Selection = function() {
 /**
 | Sets begin/end so begin is before end.
 */
-Selection.prototype.normalize = function() {
-	throw new Error('TODO'); // TODO
+Selection.prototype.normalize = function(tree) {
+	var s1 = this.sign1;
+	var s2 = this.sign2;
 
-	/*
-	var m1 = this.mark1;
-	var m2 = this.mark2;
-
-	if (m1.path.equals(m2.path)) {
-		if (m1.at1 <= m2.at1) {
-			this.begin = this.mark1;
-			this.end   = this.mark2;
+	if (s1.path.equals(s2.path)) {
+		if (s1.at1 <= s2.at1) {
+			this.begin = this.sign1;
+			this.end   = this.sign2;
 		} else {
-			this.begin = this.mark2;
-			this.end   = this.mark1;
+			this.begin = this.sign2;
+			this.end   = this.sign1;
 		}
 		return;
 	}
-	var k1 = m1.path.get(-1);
-	var k2 = m2.path.get(-1);
-	if (k1 === k2) throw new Error('sel has equal keys');
 
-	if (k1 < k2) {
-		this.begin = this.mark1;
-		this.end   = this.mark2;
+	if (s1.path.get(-1) !== 'tree') throw new Error('s1.path.get(-1) !== "tree"');
+	if (s2.path.get(-1) !== 'tree') throw new Error('s2.path.get(-1) !== "tree"');
+
+	var k1 = s1.path.get(-2);
+	var k2 = s2.path.get(-2);
+	if (k1 === k2) throw new Error('k1 === k2');
+
+	var pivot = shell.tree.getPath(s1.path, -2);
+	if (pivot !== shell.tree.getPath(s2.path, -2)) throw new Error('pivot(s1) !== pivot(s2)');
+
+	var r1 = pivot.rankOf(k1);
+	var r2 = pivot.rankOf(k2);
+
+	if (r1 < r2) {
+		this.begin = s1;
+		this.end   = s2;
 	} else {
-		this.begin = this.mark2;
-		this.end   = this.mark1;
-	}*/
+		this.begin = s2;
+		this.end   = s1;
+	}
 };
 
 /**
 | The text the selection selects.
 */
 Selection.prototype.innerText = function() {
-	throw new Error('TODO');
-
-	/*
 	if (!this.active) return '';
 	this.normalize();
-	var mb = this.begin;
-	var me = this.end;
+	var s1 = this.begin;
+	var s2 = this.end;
 
-	if (mb.entity === me.entity) {
-		var text = mb.entity.para.get('text');
-		var itxt = text.substring(mb.offset, me.offset);
-		return itxt;
+	if (s1.path.equals(s2.path)) {
+		var text = shell.tree.getPath(s1.path);
+		return text.substring(s1.at1, s2.at1);
 	}
 
-	var bpara = mb.entity.para;
-	var epara = me.entity.para;
-	var btxt = bpara.get('text');
-	var etxt = epara.get('text');
-	var bkey = bpara.key;
-	var ekey = epara.key;
-	var doc  = mb.entity.vdoc.doc;
-	if (me.entity.vdoc.doc !== doc) throw new Error('selection isn\'t in one doc!');
-	var buf = [ btxt.substring(mb.offset, mb.length) ];
-	for (var a = bkey + 1, aZ = ekey; a < aZ; a++) {
+	var pivot = shell.tree.getPath(s1.path, -2);
+
+	var key1  = s1.path.get(-2);
+	var key2  = s2.path.get(-2);
+
+	var text1 = pivot.copse[key1].text;
+	var text2 = pivot.copse[key2].text;
+
+	var buf = [ text1.substring(s1.at1, text1.length) ];
+	for (var r = pivot.rankOf(key1), rZ = pivot.rankOf(key2); r < rZ; r++) {
 		buf.push('\n');
-		buf.push(doc.get(a).get('text'));
+		buf.push(pivot.copse[pivot.ranks[r]].text);
 	}
 	buf.push('\n');
-	buf.push(etxt.substring(0, me.offset));
+	buf.push(text2.substring(0, s2.offset));
 	return buf.join('');
-	*/
 };
 
 /**
@@ -667,6 +670,8 @@ Shell.prototype.vget = function(path, plen) {
 | MeshMashine reports changes
 */
 Shell.prototype.report = function(type, tree, src, trg) {
+	this.tree = tree;
+
 	this.vspace.report(type, tree, src, trg);
 
 	var caret = this.caret;
@@ -1038,7 +1043,7 @@ VSpace.prototype.setFocus = function(vitem) {
 		peer.moveToTop(vitem.path);
 	} else {
 		caret.hide();
-		caret.marker = null;
+		caret.sign = null;
 	}
 };
 
@@ -1312,44 +1317,6 @@ VSpace.prototype.mousedown = function(p) {
 	return 'atween';
 };
 
-/**
-| The meshmashine issued an event.
-|
-| TODO
-*/
-VSpace.prototype.ev$TODO = function(type, key, p1, p2, p3) {
-	/*
-	log('xxx', 'vitemcopse', type, key, p1, p2, p3);
-
-	switch(type) {
-	case 'set' :
-		var item = this.copse.get(key);
-		var vitem = this.vv[key];
-		if (!item && vitem) {
-			// an item has been removed
-			vitem.item.removeListener(this);
-			this.vv[key] = null;
-			return;
-		}
-		if (item && !vitem) {
-			// an item has been created
-			var vspace = this.vspace;
-			// TODO ipath
-			switch (item.type) {
-			case 'Note':     vitem = new VNote    (item, ipath, vspace); break;
-			case 'Label':    vitem = new VLabel   (item, ipath, vspace); break;
-			case 'Relation': vitem = new VRelation(item, ipath, vspace); break;
-			default : throw new Error('unknown item created: '+item.type);
-			}
-			this.vv[key] = vitem;
-			return;
-		}
-		log(true, 'strange event');
-		break;
-	}
-	*/
-};
-
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  +++ VPara +++
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
@@ -1439,7 +1406,7 @@ VPara.prototype.getFlow = function() {
 				flow[line] = {a: [], y: y, o: ca.index};
 			} else {
 				// horizontal overflow
-//				console.log('HORIZONTAL OVERFLOW'); // @@
+				// console.log('HORIZONTAL OVERFLOW'); // @@
 			}
 		}
 		flow[line].a.push({
@@ -1560,7 +1527,6 @@ VPara.prototype.specialKey = function(keycode) {
 	}
 */
 
-/*
 	if (!shell.shift && select.active) {
 		switch(keycode) {
 		case 35 : // end
@@ -1591,12 +1557,10 @@ VPara.prototype.specialKey = function(keycode) {
 		case 38 : // up
 		case 39 : // right
 		case 40 : // down
-			debug('TODO');
-			//select.mark1.set(caret.vnode, caret.sign.at1);
-			//vdoc.vitem.poke();
+			select.sign1 = caret.sign;
+			vdoc.vitem.poke();
 		}
 	}
-	*/
 
 	switch(keycode) {
 	case  8 : // backspace
@@ -1698,13 +1662,12 @@ VPara.prototype.specialKey = function(keycode) {
 		case 38 : // up
 		case 39 : // right
 		case 40 : // down
-			debug('TODO'); // TODO
-			/*
 			select.active = true;
-			select.mark2.set(caret.vnode, caret.sign.at1);
+			select.sign2 = caret.sign;
 			system.setInput(select.innerText());
 			vdoc.vitem.poke();
-			shell.redraw = true;*/
+			shell.redraw = true;
+			debug('ACTIVE', select);
 		}
 	}
 
@@ -2015,10 +1978,9 @@ VDoc.prototype.draw = function(fabric, width, imargin, scrollp) {
 	var select = shell.selection;
 
 	// draws the selection
-	/* TODO
-	if (select.active && select.mark1.entity.vdoc === this) {
+	if (select.active && this.path.subPathOf(select.sign1.path)) {
 		fabric.paint(settings.selection.style, this, 'pathSelection', width, imargin, scrollp);
-	}*/
+	}
 
 	var y = imargin.n;
 	var pnws = {};   // north-west points of paras
@@ -2106,28 +2068,37 @@ VDoc.prototype.getVParaAtPoint = function(p) {
 
 /**
 | Paths a selection
+|
+| fabric  : the fabric to path for
+| border  : width of the path (ignored)
+| twist   : ??? TODO
+| width   : ??? TODO
+| imargin : inner margin of the doc     TODO needed?
+| scrollp : scroll position of the doc.
 */
 VDoc.prototype.pathSelection = function(fabric, border, twist, width, imargin, scrollp) {
-	// @@ make part of selection to use shortcut with XYi
-	throw new Error('TODO');
-
-	/*
 	var select = shell.selection;
+	select.normalize();
+
 	var sp = scrollp;
-	var m1 = select.mark1;
-	var m2 = select.mark2;
-	var pnw1 = this.getPNW(m1.vnode.key);
-	var pnw2 = this.getPNW(m2.vnode.key);
-	var p1 = m1.vnode.getOffsetPoint(m1.at1);
-	var p2 = m2.vnode.getOffsetPoint(m2.at1);
+
+	var s1 = select.begin;
+	var s2 = select.end;
+
+	var key1 = s1.path.get(-2);
+	var key2 = s2.path.get(-2);
+
+	var pnw1 = this.getPNW(key1);
+	var pnw2 = this.getPNW(key2);
+
+	var vpara1 = this.vv[key1];
+	var vpara2 = this.vv[key2];
+
+	var p1 = vpara1.getOffsetPoint(s1.at1);
+	var p2 = vpara2.getOffsetPoint(s2.at1);
+
 	p1 = p1.add(R(pnw1.x - sp.x), R(pnw1.y - sp.y));
 	p2 = p2.add(R(pnw2.x - sp.x), R(pnw2.y - sp.y));
-
-	if (p2.y < p1.y || (p2.y === p1.y && p2.x < p1.x)) {
-		m1 = select.mark2;
-		m2 = select.mark1;
-		var p_ = p1; p1 = p2; p2 = p_;
-	}
 
 	var fontsize = this.getFontSize();
 	fabric.beginPath(twist);
@@ -2170,7 +2141,6 @@ VDoc.prototype.pathSelection = function(fabric, border, twist, width, imargin, s
 		fabric.lineTo(rx,   p1.y - fontsize);
 		if (!twist) fabric.lineTo(rx, p2.y - fontsize);
 	}
-	*/
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

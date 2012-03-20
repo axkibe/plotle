@@ -149,7 +149,7 @@ Emulate.src =  {
 			'3' : {
 				type: 'Relation',
 				fontsize : 20,
-				pnw: { type: 'Point', 'x': 150, 'y': 100 },
+				pnw: { type: 'Point', 'x': 80, 'y': 200 },
 				item1key : '1',
 				item2key : '2',
 				doc: {
