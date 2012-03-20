@@ -499,16 +499,13 @@ Selection.prototype.innerText = function() {
 | Removes the selection including its contents.
 */
 Selection.prototype.remove = function() {
-	throw new Error('TODO'); // TODO
-	/*
 	this.normalize();
 	this.deselect();
 	shell.redraw = true;
 	peer.removeSpan(
-		this.begin.entity.para, this.begin.offset,
-		this.end.entity.para, this.end.offset
+		this.begin.path, this.begin.at1,
+		this.end.path,   this.end.at11
 	);
-	*/
 };
 
 /**

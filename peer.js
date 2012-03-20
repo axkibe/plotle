@@ -308,12 +308,12 @@ Peer.prototype.insertText = function(path, offset, text) {
 /**
 | Removes some text within one node
 */
-Peer.prototype.removeText = function(path, offset, len) {
+Peer.prototype.removeText = function(path, at1, len) {
 	if (len === 0) return;
 	if (len < 0) throw new Error('malformed removeText');
 
 	this._alter(
-		{ path: path, at1: offset, at2: offset + len },
+		{ path: path, at1: at1, at2: at1 + len },
 		{ val: null }
 	);
 };
@@ -321,24 +321,29 @@ Peer.prototype.removeText = function(path, offset, len) {
 /**
 | Removes a text spawning over severa entities
 */
-Peer.prototype.removeSpan = function(path1, offset1, path2, offset2) {
+Peer.prototype.removeSpan = function(path1, at1, path2, at2) {
+	if (this._mode === 'sync')    { throw new Error('cannot removeSpan in sync mode'); }
+	if (path1.get(-1) !== 'text') { throw new Error('removeSpan invalid path'); }
+	if (path2.get(-1) !== 'text') { throw new Error('removeSpan invalid path'); }
+
 	if (path1.equals(path2)) {
-		return this.removeText(path1, offset1, offset2 - offset1);
+		return this.removeText(path1, at1, at2 - at1);
 	}
 
-	throw new Error('TODO');
-	/*
-	var k1 = node1.key;
-	var k2 = node2.key;
-	var len1 = node1.get('text').length;
-	for (var a = k1; a < k2 - 1; a++) {
-		this.join(node1);
-	}
-	var len2 = node1.get('text').length;
-	this.join(node1);
+	var k1 = path1.get(-2);
+	var k2 = path2.get(-2);
 
-	this.removeText(node1, o1, len1 - o1 + o2 + len2 - len1);
-	*/
+	var pivot = this.mm.getPath(path1, -2);
+	var r1 = pivot.rankOf(k1);
+	var r2 = pivot.rankOf(k1);
+
+	for (var r = r1; r < r2 - 1; r++) {
+		this.join(path1, this.mm.getPath(path1).length);
+	}
+	var len2 = this.mm.getPath(path1).length;
+	this.join(path1, len2);
+
+	this.removeText(path1, at1, len2 - at1 + at2);
 };
 
 /**
