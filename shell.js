@@ -504,7 +504,7 @@ Selection.prototype.remove = function() {
 	shell.redraw = true;
 	peer.removeSpan(
 		this.begin.path, this.begin.at1,
-		this.end.path,   this.end.at11
+		this.end.path,   this.end.at1
 	);
 };
 
@@ -2090,49 +2090,53 @@ VDoc.prototype.pathSelection = function(fabric, border, twist, width, imargin, s
 	var p1 = vpara1.getOffsetPoint(s1.at1);
 	var p2 = vpara2.getOffsetPoint(s2.at1);
 
-	p1 = p1.add(R(pnw1.x - sp.x), R(pnw1.y - sp.y));
-	p2 = p2.add(R(pnw2.x - sp.x), R(pnw2.y - sp.y));
+	p1 = new Point(R(p1.x + pnw1.x - sp.x), R(p1.y + pnw1.y - sp.y));
+	p2 = new Point(R(p2.x + pnw2.x - sp.x), R(p2.y + pnw2.y - sp.y));
 
 	var fontsize = this.getFontSize();
 	fabric.beginPath(twist);
 	var descend = R(fontsize * settings.bottombox);
+	var  ascend = R(fontsize);
 	var rx = width - imargin.e;
 	var lx = imargin.w;
 	if ((abs(p2.y - p1.y) < 2)) {
 		// ***
 		fabric.moveTo(p1.x, p1.y + descend);
-		fabric.lineTo(p1.x, p1.y - fontsize);
-		fabric.lineTo(p2.x, p2.y - fontsize);
+		fabric.lineTo(p1.x, p1.y -  ascend);
+		fabric.lineTo(p2.x, p2.y -  ascend);
 		fabric.lineTo(p2.x, p2.y + descend);
 		fabric.lineTo(p1.x, p1.y + descend);
 	} else if (abs(p1.y + fontsize + descend - p2.y) < 2 && (p2.x <= p1.x))  {
 		//      ***
 		// ***
-		fabric.moveTo(rx,   p1.y - fontsize);
-		fabric.lineTo(p1.x, p1.y - fontsize);
+		fabric.moveTo(rx,   p1.y -  ascend);
+		fabric.lineTo(p1.x, p1.y -  ascend);
 		fabric.lineTo(p1.x, p1.y + descend);
 		fabric.lineTo(rx,   p1.y + descend);
 
-		fabric.moveTo(lx,   p2.y - fontsize);
-		fabric.lineTo(p2.x, p2.y - fontsize);
+		fabric.moveTo(lx,   p2.y -  ascend);
+		fabric.lineTo(p2.x, p2.y -  ascend);
 		fabric.lineTo(p2.x, p2.y + descend);
 		fabric.lineTo(lx,   p2.y + descend);
 	} else {
 		//    *****
 		// *****
-		fabric.moveTo(rx,   p2.y - fontsize);
-		fabric.lineTo(p2.x, p2.y - fontsize);
+		fabric.moveTo(rx,   p2.y -  ascend);
+		fabric.lineTo(p2.x, p2.y -  ascend);
 		fabric.lineTo(p2.x, p2.y + descend);
 		fabric.lineTo(lx,   p2.y + descend);
 
-		if (twist)
+		if (twist) {
 			fabric.moveTo(lx, p1.y + descend);
-		else
+		} else {
 			fabric.lineTo(lx, p1.y + descend);
+		}
 		fabric.lineTo(p1.x, p1.y + descend);
-		fabric.lineTo(p1.x, p1.y - fontsize);
-		fabric.lineTo(rx,   p1.y - fontsize);
-		if (!twist) fabric.lineTo(rx, p2.y - fontsize);
+		fabric.lineTo(p1.x, p1.y -  ascend);
+		fabric.lineTo(rx,   p1.y -  ascend);
+		if (!twist) {
+			fabric.lineTo(rx, p2.y - ascend);
+		}
 	}
 };
 

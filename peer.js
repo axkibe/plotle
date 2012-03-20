@@ -333,14 +333,14 @@ Peer.prototype.removeSpan = function(path1, at1, path2, at2) {
 	var k1 = path1.get(-2);
 	var k2 = path2.get(-2);
 
-	var pivot = this.mm.getPath(path1, -2);
+	var pivot = this.mm.tree.getPath(path1, -2);
 	var r1 = pivot.rankOf(k1);
-	var r2 = pivot.rankOf(k1);
+	var r2 = pivot.rankOf(k2);
 
 	for (var r = r1; r < r2 - 1; r++) {
-		this.join(path1, this.mm.getPath(path1).length);
+		this.join(path1, this.mm.tree.getPath(path1).length);
 	}
-	var len2 = this.mm.getPath(path1).length;
+	var len2 = this.mm.tree.getPath(path1).length;
 	this.join(path1, len2);
 
 	this.removeText(path1, at1, len2 - at1 + at2);
