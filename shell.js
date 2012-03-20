@@ -430,6 +430,9 @@ Selection.prototype.normalize = function(tree) {
 	var s1 = this.sign1;
 	var s2 = this.sign2;
 
+	if (s1.path.get(-1) !== 'text') throw new Error('s1.path.get(-1) !== "text"');
+	if (s2.path.get(-1) !== 'text') throw new Error('s2.path.get(-1) !== "text"');
+
 	if (s1.path.equals(s2.path)) {
 		if (s1.at1 <= s2.at1) {
 			this.begin = this.sign1;
@@ -440,9 +443,6 @@ Selection.prototype.normalize = function(tree) {
 		}
 		return;
 	}
-
-	if (s1.path.get(-1) !== 'tree') throw new Error('s1.path.get(-1) !== "tree"');
-	if (s2.path.get(-1) !== 'tree') throw new Error('s2.path.get(-1) !== "tree"');
 
 	var k1 = s1.path.get(-2);
 	var k2 = s2.path.get(-2);
@@ -645,7 +645,8 @@ Shell = function(fabric, sPeer) {
 */
 Shell.prototype.setCaret = function(sign, retainx) {
 	var caret = this.caret;
-	caret.sign = sign;
+	//caret.sign = sign;
+	caret.sign = immute(sign);
 	caret.retainx = is(retainx) ? retainx : null;
 	return caret;
 };
@@ -1036,7 +1037,7 @@ VSpace.prototype.setFocus = function(vitem) {
 	if (vitem) {
 		var doc = vitem.vv.doc;
 		caret = shell.setCaret({
-			path: doc.vv[doc.twig.ranks[0]].textpath(),
+			path: doc.vv[doc.twig.ranks[0]].textPath(),
 			at1: 0
 		});
 		caret.show();
@@ -1051,18 +1052,16 @@ VSpace.prototype.setFocus = function(vitem) {
 | Mouse wheel
 */
 VSpace.prototype.mousewheel = function(p, dir) {
-	debug('TODO'); // TODO
-	/*
-	var pp = p.sub(this.fabric.pan);
-	for(var zi = 0, zlen = this.space.z.length; zi < zlen; zi++) {
+	var twig = this.twig;
 
-		var vitem = this.vv[this.space.z.get(zi)];
+	var pp = p.sub(this.fabric.pan);
+	for(var r = 0, rZ = twig.length; r < rZ; r++) {
+		var vitem = this.vv[twig.ranks[r]];
 		if (vitem.mousewheel(pp, dir)) { return true; }
 	}
 
 	// @@ zooming.
 	return true;
-	*/
 };
 
 /**
@@ -1486,7 +1485,7 @@ VPara.prototype.input = function(text) {
     var reg = /([^\n]+)(\n?)/g;
     for(var rx = reg.exec(text); rx !== null; rx = reg.exec(text)) {
 		var line = rx[1];
-		peer.insertText(this.textpath(), caret.sign.at1, line);
+		peer.insertText(this.textPath(), caret.sign.at1, line);
 		if (rx[2]) throw new Error('TODO');
 //        if (rx[2]) peer.split(para, caret.sign.at1);
 //		para = para.parent.get(para.key + 1);
@@ -1506,18 +1505,16 @@ VPara.prototype.specialKey = function(keycode) {
 	var ve, at1, flow;
 	var r, x;
 
-/*  TODO
 	if (shell.ctrl) {
 		switch(keycode) {
 		case 65 : // ctrl+a
-			var vparas = vdoc.vparas;
-			var v0 = vparas[0];
-			var vZ = vparas[vparas.length - 1];
-			var vZL = vZ.twig.text.length;
-			select.mark1.set(v0, 0);
-			select.mark2.set(vZ, vZL);
+			var v0 = vdoc.vv[vdoc.twig.ranks[0]];
+			var v1 = vdoc.vv[vdoc.twig.ranks[vdoc.twig.length - 1]];
+
+			select.sign1 = immute({ path: v0.textPath(), at1: 0 });
+			select.sign2 = immute({ path: v1.textPath(), at1: v1.twig.text.length });
 			select.active = true;
-			caret.set(vZ, vZL);
+			shell.setCaret(select.sign2);
 			system.setInput(select.innerText());
 			caret.show();
 			vdoc.vitem.poke();
@@ -1525,7 +1522,6 @@ VPara.prototype.specialKey = function(keycode) {
 			return true;
 		}
 	}
-*/
 
 	if (!shell.shift && select.active) {
 		switch(keycode) {
@@ -1565,32 +1561,32 @@ VPara.prototype.specialKey = function(keycode) {
 	switch(keycode) {
 	case  8 : // backspace
 		if (caret.sign.at1 > 0) {
-			peer.removeText(this.textpath(), caret.sign.at1 - 1, 1);
+			peer.removeText(this.textPath(), caret.sign.at1 - 1, 1);
 		} else {
 			r = vdoc.twig.rankOf(this.key);
 			if (r > 0) {
 				ve = vdoc.vv[vdoc.twig.ranks[r - 1]];
-				peer.join(ve.textpath(), ve.twig.text.length);
+				peer.join(ve.textPath(), ve.twig.text.length);
 			}
 		}
 		break;
 	case 13 : // return
-		peer.split(this.textpath(), caret.sign.at1);
+		peer.split(this.textPath(), caret.sign.at1);
 		break;
 	case 35 : // end
-		caret = shell.setCaret({ path: this.textpath(), at1:  this.twig.text.length });
+		caret = shell.setCaret({ path: this.textPath(), at1: this.twig.text.length });
 		break;
 	case 36 : // pos1
-		caret = shell.setCaret({ path: this.textpath(), at1: 0 });
+		caret = shell.setCaret({ path: this.textPath(), at1: 0 });
 		break;
 	case 37 : // left
 		if (caret.sign.at1 > 0) {
-			caret = shell.setCaret({ path: this.textpath(), at1: caret.sign.at1 - 1 });
+			caret = shell.setCaret({ path: this.textPath(), at1: caret.sign.at1 - 1 });
 		} else {
 			r = vdoc.twig.rankOf(this.key);
 			if (r > 0) {
 				ve = vdoc.vv[vdoc.twig.ranks[r - 1]];
-				caret = shell.setCaret({ path: ve.textpath(), at1: ve.twig.text.length });
+				caret = shell.setCaret({ path: ve.textPath(), at1: ve.twig.text.length });
 			}
 		}
 		break;
@@ -1601,25 +1597,25 @@ VPara.prototype.specialKey = function(keycode) {
 		if (caret.flow$line > 0) {
 			// stay within this para
 			at1 = this.getLineXOffset(caret.flow$line - 1, x);
-			shell.setCaret({ path: this.textpath(), at1: at1 }, x);
+			shell.setCaret({ path: this.textPath(), at1: at1 }, x);
 		} else {
 			// goto prev para
 			r = vdoc.twig.rankOf(this.key);
 			if (r > 0) {
 				ve = vdoc.vv[vdoc.twig.ranks[r - 1]];
 				at1 = ve.getLineXOffset(ve.getFlow().length - 1, x);
-				caret = shell.setCaret({ path: ve.textpath(), at1: at1 }, x);
+				caret = shell.setCaret({ path: ve.textPath(), at1: at1 }, x);
 			}
 		}
 		break;
 	case 39 : // right
 		if (caret.sign.at1 < this.twig.text.length) {
-			caret = shell.setCaret({ path: this.textpath(), at1: caret.sign.at1 + 1 });
+			caret = shell.setCaret({ path: this.textPath(), at1: caret.sign.at1 + 1 });
 		} else {
 			r = vdoc.twig.rankOf(this.key);
 			if (r < vdoc.twig.length - 1) {
 				ve = vdoc.vv[vdoc.twig.ranks[r + 1]];
-				caret = shell.setCaret({ path: ve.textpath(), at1: 0 });
+				caret = shell.setCaret({ path: ve.textPath(), at1: 0 });
 			}
 		}
 		break;
@@ -1630,24 +1626,24 @@ VPara.prototype.specialKey = function(keycode) {
 		if (caret.flow$line < flow.length - 1) {
 			// stay within this para
 			at1 = this.getLineXOffset(caret.flow$line + 1, x);
-			caret = shell.setCaret({ path: this.textpath(), at1: at1 }, x);
+			caret = shell.setCaret({ path: this.textPath(), at1: at1 }, x);
 		} else {
 			// goto next para
 			r = vdoc.twig.rankOf(this.key);
 			if (r < vdoc.twig.length - 1) {
 				ve = vdoc.vv[vdoc.twig.ranks[r + 1]];
 				at1 = ve.getLineXOffset(0, x);
-				caret = shell.setCaret({ path: ve.textpath(), at1: at1 }, x);
+				caret = shell.setCaret({ path: ve.textPath(), at1: at1 }, x);
 			}
 		}
 		break;
 	case 46 : // del
 		if (caret.sign.at1 < this.twig.text.length) {
-			peer.removeText(this.textpath(), caret.sign.at1, 1);
+			peer.removeText(this.textPath(), caret.sign.at1, 1);
 		} else {
 			r = vdoc.twig.rankOf(this.key);
 			if (r < vdoc.twig.length - 1) {
-				peer.join(this.textpath(), this.twig.text.length);
+				peer.join(this.textPath(), this.twig.text.length);
 			}
 		}
 		break;
@@ -1667,7 +1663,6 @@ VPara.prototype.specialKey = function(keycode) {
 			system.setInput(select.innerText());
 			vdoc.vitem.poke();
 			shell.redraw = true;
-			debug('ACTIVE', select);
 		}
 	}
 
@@ -1679,9 +1674,9 @@ VPara.prototype.specialKey = function(keycode) {
 | Return the path to the .text attribute if this para.
 | @@ use lazyFixate.
 */
-VPara.prototype.textpath = function() {
-	if (this._textpath) return this._textpath;
-	return (this._textpath = new Path(this.path, '++', 'text'));
+VPara.prototype.textPath = function() {
+	if (this._textPath) return this._textPath;
+	return (this._textPath = new Path(this.path, '++', 'text'));
 };
 
 /**
@@ -2071,9 +2066,10 @@ VDoc.prototype.getVParaAtPoint = function(p) {
 |
 | fabric  : the fabric to path for
 | border  : width of the path (ignored)
-| twist   : ??? TODO
-| width   : ??? TODO
-| imargin : inner margin of the doc     TODO needed?
+| twist   : paramter for beginPath() 
+|           +0.5 to everything for line pathing
+| width   : width the vdoc is drawn
+| imargin : inner margin of the doc
 | scrollp : scroll position of the doc.
 */
 VDoc.prototype.pathSelection = function(fabric, border, twist, width, imargin, scrollp) {
@@ -2428,7 +2424,7 @@ VItem.prototype.click = function(p) {
 		var ppnw   = this.vv.doc.getPNW(vpara.key);
 		var at1    = vpara.getPointOffset(pi.sub(ppnw));
 		var caret  = shell.caret;
-		caret = shell.setCaret({ path: vpara.textpath(), at1: at1 });
+		caret = shell.setCaret({ path: vpara.textPath(), at1: at1 });
 		caret.show();
 		shell.selection.deselect();
 	}

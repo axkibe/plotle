@@ -20,8 +20,6 @@
  This is not a full blown feature complete, everything library
  but enhanced on the fly for what the meshcraft shell needs.
 
- TODO remove all references to "c2d".
-
  Defines: fabric
 
  Authors: Axel Kittenberger
@@ -68,9 +66,9 @@ var max          = Math.max;
  objects as arguments.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /**
-| Fabric()        -or-    creates new Canvas2D
+| Fabric()        -or-    creates a new fabric
 | Fabric(canvas)  -or-    encloses an existing HTML5 canvas
-| Fabric(width, height)   creates a new Canvas2D and sets its size;
+| Fabric(width, height)   creates a new fabric and sets its size;
 */
 Fabric = function(a1, a2) {
 	switch (typeof(a1)) {
@@ -153,14 +151,14 @@ var ensureInteger = function() {
 };
 
 /**
-| Canvas width.
+| Fabric width.
 */
 Object.defineProperty(Fabric.prototype, 'width',  {
 	get: function() { return this._canvas.width; }
 });
 
 /**
-| Canvas height.
+| Fabric height.
 */
 Object.defineProperty(Fabric.prototype, "height", {
 	get: function() { return this._canvas.height; }
@@ -910,10 +908,11 @@ subclass(RoundRect, Rect);
 /**
 | Draws the roundrect.
 |
-| c2d: Canvas2D area to draw upon.
-| border: additional distance.
+| fabric : fabric to draw the path upon.
+| border : additional distance.
+| twist  : parameter to beginPath, add +0.5 on everything for lines
 */
-RoundRect.prototype.path = function(c2d, border, twist) {
+RoundRect.prototype.path = function(fabric, border, twist) {
 	var nwx = this.pnw.x + border;
 	var nwy = this.pnw.y + border;
 	var sex = this.pse.x - border - 1;
@@ -921,12 +920,12 @@ RoundRect.prototype.path = function(c2d, border, twist) {
 	var cr  = this.crad  - border;
 	var pi = Math.PI;
 	var ph = pi / 2;
-	c2d.beginPath(twist);
-	c2d.moveTo(nwx + cr, nwy);
-	c2d.arc(sex - cr, nwy + cr, cr, -ph,   0, false);
-	c2d.arc(sex - cr, sey - cr, cr,   0,  ph, false);
-	c2d.arc(nwx + cr, sey - cr, cr,  ph,  pi, false);
-	c2d.arc(nwx + cr, nwy + cr, cr,  pi, -ph, false);
+	fabric.beginPath(twist);
+	fabric.moveTo(nwx + cr, nwy);
+	fabric.arc(sex - cr, nwy + cr, cr, -ph,   0, false);
+	fabric.arc(sex - cr, sey - cr, cr,   0,  ph, false);
+	fabric.arc(nwx + cr, sey - cr, cr,  ph,  pi, false);
+	fabric.arc(nwx + cr, nwy + cr, cr,  pi, -ph, false);
 };
 
 
@@ -1063,13 +1062,13 @@ lazyFixate(HexagonSlice.prototype, 'pse', function() {
 /**
 | Draws the hexagon.
 */
-HexagonSlice.prototype.path = function(c2d, border, twist) {
+HexagonSlice.prototype.path = function(fabric, border, twist) {
 	var r05 = half(this.rad);
-	c2d.beginPath(twist);
-	c2d.moveTo(this.psw.x                 + border, this.psw.y               - border);
-	c2d.lineTo(this.pm.x - r05            + border, this.psw.y - this.height + border);
-	c2d.lineTo(this.pm.x + r05            - border, this.psw.y - this.height + border);
-	c2d.lineTo(2 * this.pm.x - this.psw.x - border, this.psw.y               - border);
+	fabric.beginPath(twist);
+	fabric.moveTo(this.psw.x                 + border, this.psw.y               - border);
+	fabric.lineTo(this.pm.x - r05            + border, this.psw.y - this.height + border);
+	fabric.lineTo(this.pm.x + r05            - border, this.psw.y - this.height + border);
+	fabric.lineTo(2 * this.pm.x - this.psw.x - border, this.psw.y               - border);
 };
 
 /**
@@ -1127,7 +1126,7 @@ var HexagonFlower = function(pc, ri, ro, segs) {
 /**
 | Makes the flower-hex-6 path.
 */
-HexagonFlower.prototype.path = function(c2d, border, twist, segment) {
+HexagonFlower.prototype.path = function(fabric, border, twist, segment) {
 	var ri  = this.ri;
 	var ri2 = half(this.ri);
 	var ric = Math.round(this.ri * cos30);
@@ -1140,97 +1139,97 @@ HexagonFlower.prototype.path = function(c2d, border, twist, segment) {
 	var b2  = half(border);
 	var bc6 = Math.round(border * cos30);
 	var segs = this.segs;
-	c2d.beginPath(twist);
+	fabric.beginPath(twist);
 	/* inner hex */
 	if (segment === 'innerHex' || segment === 'structure') {
-		c2d.moveTo(pcx - ri  - b,  pcy);
-		c2d.lineTo(pcx - ri2 - b2, pcy - ric - bc6);
-		c2d.lineTo(pcx + ri2 + b2, pcy - ric - bc6);
-		c2d.lineTo(pcx + ri  + b,  pcy);
-		c2d.lineTo(pcx + ri2 + b2, pcy + ric + bc6);
-		c2d.lineTo(pcx - ri2 - b2, pcy + ric + bc6);
-		c2d.lineTo(pcx - ri  - b,  pcy);
+		fabric.moveTo(pcx - ri  - b,  pcy);
+		fabric.lineTo(pcx - ri2 - b2, pcy - ric - bc6);
+		fabric.lineTo(pcx + ri2 + b2, pcy - ric - bc6);
+		fabric.lineTo(pcx + ri  + b,  pcy);
+		fabric.lineTo(pcx + ri2 + b2, pcy + ric + bc6);
+		fabric.lineTo(pcx - ri2 - b2, pcy + ric + bc6);
+		fabric.lineTo(pcx - ri  - b,  pcy);
 	}
 
 	/* outer hex */
 	if (segment === 'outerHex' || segment === 'structure') {
-		c2d.moveTo(pcx - ro  + b,  pcy);
-		c2d.lineTo(pcx - ro2 + b2, pcy - roc + bc6);
-		c2d.lineTo(pcx + ro2 - b2, pcy - roc + bc6);
-		c2d.lineTo(pcx + ro  - b,  pcy);
-		c2d.lineTo(pcx + ro2 - b2, pcy + roc - bc6);
-		c2d.lineTo(pcx - ro2 + b2, pcy + roc - bc6);
-		c2d.lineTo(pcx - ro  + b,  pcy);
+		fabric.moveTo(pcx - ro  + b,  pcy);
+		fabric.lineTo(pcx - ro2 + b2, pcy - roc + bc6);
+		fabric.lineTo(pcx + ro2 - b2, pcy - roc + bc6);
+		fabric.lineTo(pcx + ro  - b,  pcy);
+		fabric.lineTo(pcx + ro2 - b2, pcy + roc - bc6);
+		fabric.lineTo(pcx - ro2 + b2, pcy + roc - bc6);
+		fabric.lineTo(pcx - ro  + b,  pcy);
 	}
 
 	switch (segment) {
 	case 'structure' :
 		if (segs.n || segs.nw) {
-			c2d.moveTo(pcx - ri2,  pcy - ric);
-			c2d.lineTo(pcx - ro2,  pcy - roc);
+			fabric.moveTo(pcx - ri2,  pcy - ric);
+			fabric.lineTo(pcx - ro2,  pcy - roc);
 		}
 		if (segs.n  || segs.ne) {
-			c2d.moveTo(pcx + ri2, pcy - ric);
-			c2d.lineTo(pcx + ro2, pcy - roc);
+			fabric.moveTo(pcx + ri2, pcy - ric);
+			fabric.lineTo(pcx + ro2, pcy - roc);
 		}
 		if (segs.ne || segs.se) {
-			c2d.moveTo(pcx + ri,  pcy);
-			c2d.lineTo(pcx + ro,  pcy);
+			fabric.moveTo(pcx + ri,  pcy);
+			fabric.lineTo(pcx + ro,  pcy);
 		}
 		if (segs.se || segs.s) {
-			c2d.moveTo(pcx + ri2, pcy + ric + bc6);
-			c2d.lineTo(pcx + ro2, pcy + roc - bc6);
+			fabric.moveTo(pcx + ri2, pcy + ric + bc6);
+			fabric.lineTo(pcx + ro2, pcy + roc - bc6);
 		}
 		if (segs.s || segs.sw) {
-			c2d.moveTo(pcx - ri2, pcy + ric + bc6);
-			c2d.lineTo(pcx - ro2, pcy + roc - bc6);
+			fabric.moveTo(pcx - ri2, pcy + ric + bc6);
+			fabric.lineTo(pcx - ro2, pcy + roc - bc6);
 		}
 		if (segs.sw || segs.nw) {
-			c2d.moveTo(pcx - ri, pcy);
-			c2d.lineTo(pcx - ro, pcy);
+			fabric.moveTo(pcx - ri, pcy);
+			fabric.lineTo(pcx - ro, pcy);
 		}
 		break;
 	case 'n':
-		c2d.moveTo(pcx - ro2 + b2, pcy - roc + bc6);
-		c2d.lineTo(pcx + ro2 - b2, pcy - roc + bc6);
-		c2d.lineTo(pcx + ri2 + b2, pcy - ric - bc6);
-		c2d.lineTo(pcx - ri2 - b2, pcy - ric - bc6);
-		c2d.lineTo(pcx - ro2 + b2, pcy - roc + bc6);
+		fabric.moveTo(pcx - ro2 + b2, pcy - roc + bc6);
+		fabric.lineTo(pcx + ro2 - b2, pcy - roc + bc6);
+		fabric.lineTo(pcx + ri2 + b2, pcy - ric - bc6);
+		fabric.lineTo(pcx - ri2 - b2, pcy - ric - bc6);
+		fabric.lineTo(pcx - ro2 + b2, pcy - roc + bc6);
 		break;
 	case 'ne':
-		c2d.moveTo(pcx + ro2 - b2, pcy - roc + bc6);
-		c2d.lineTo(pcx + ro  - b,  pcy);
-		c2d.lineTo(pcx + ri  + b,  pcy);
-		c2d.lineTo(pcx + ri2 + b2, pcy - ric - bc6);
-		c2d.lineTo(pcx + ro2 - b2, pcy - roc + bc6);
+		fabric.moveTo(pcx + ro2 - b2, pcy - roc + bc6);
+		fabric.lineTo(pcx + ro  - b,  pcy);
+		fabric.lineTo(pcx + ri  + b,  pcy);
+		fabric.lineTo(pcx + ri2 + b2, pcy - ric - bc6);
+		fabric.lineTo(pcx + ro2 - b2, pcy - roc + bc6);
 		break;
 	case 'se':
-		c2d.moveTo(pcx + ro  - b,  pcy);
-		c2d.lineTo(pcx + ro2 - b2, pcy + roc - bc6);
-		c2d.lineTo(pcx + ri2 + b2, pcy + ric + bc6);
-		c2d.lineTo(pcx + ri  + b,  pcy);
-		c2d.lineTo(pcx + ro  - b,  pcy);
+		fabric.moveTo(pcx + ro  - b,  pcy);
+		fabric.lineTo(pcx + ro2 - b2, pcy + roc - bc6);
+		fabric.lineTo(pcx + ri2 + b2, pcy + ric + bc6);
+		fabric.lineTo(pcx + ri  + b,  pcy);
+		fabric.lineTo(pcx + ro  - b,  pcy);
 		break;
 	case 's':
-		c2d.moveTo(pcx + ro2 - b2, pcy + roc - bc6);
-		c2d.lineTo(pcx - ro2 + b2, pcy + roc - bc6);
-		c2d.lineTo(pcx - ri2 - b2, pcy + ric + bc6);
-		c2d.lineTo(pcx + ri2 + b2, pcy + ric + bc6);
-		c2d.lineTo(pcx + ro2 - b2, pcy + roc - bc6);
+		fabric.moveTo(pcx + ro2 - b2, pcy + roc - bc6);
+		fabric.lineTo(pcx - ro2 + b2, pcy + roc - bc6);
+		fabric.lineTo(pcx - ri2 - b2, pcy + ric + bc6);
+		fabric.lineTo(pcx + ri2 + b2, pcy + ric + bc6);
+		fabric.lineTo(pcx + ro2 - b2, pcy + roc - bc6);
 		break;
 	case 'sw':
-		c2d.moveTo(pcx - ro2 + b2, pcy + roc - bc6);
-		c2d.lineTo(pcx - ro  + b,  pcy);
-		c2d.lineTo(pcx - ri  - b,  pcy);
-		c2d.lineTo(pcx - ri2 - b2, pcy + ric + bc6);
-		c2d.lineTo(pcx - ro2 + b2, pcy + roc - bc6);
+		fabric.moveTo(pcx - ro2 + b2, pcy + roc - bc6);
+		fabric.lineTo(pcx - ro  + b,  pcy);
+		fabric.lineTo(pcx - ri  - b,  pcy);
+		fabric.lineTo(pcx - ri2 - b2, pcy + ric + bc6);
+		fabric.lineTo(pcx - ro2 + b2, pcy + roc - bc6);
 		break;
 	case 'nw':
-		c2d.moveTo(pcx - ro  + b,  pcy);
-		c2d.lineTo(pcx - ro2 + b2, pcy - roc + bc6);
-		c2d.lineTo(pcx - ri2 - b2, pcy - ric - bc6);
-		c2d.lineTo(pcx - ri  - b,  pcy);
-		c2d.lineTo(pcx - ro  + b,  pcy);
+		fabric.moveTo(pcx - ro  + b,  pcy);
+		fabric.lineTo(pcx - ro2 + b2, pcy - roc + bc6);
+		fabric.lineTo(pcx - ri2 - b2, pcy - ric - bc6);
+		fabric.lineTo(pcx - ri  - b,  pcy);
+		fabric.lineTo(pcx - ro  + b,  pcy);
 		break;
 	}
 };
@@ -1374,17 +1373,19 @@ lazyFixate(Line.prototype, 'pc', function() {
 /**
 | Draws the path of the line.
 |
-| c2d: Canvas2D to draw upon.
+| fabric: Fabric to draw upon.
+| border: pixel offset for fancy borders (unused)
+| twist:  0.5 if drawing lines
 */
-Line.prototype.path = function(c2d, border, twist) {
+Line.prototype.path = function(fabric, border, twist) {
 	var p1 = this.p1;
 	var p2 = this.p2;
 
-	c2d.beginPath(twist);
+	fabric.beginPath(twist);
 	// TODO, multiple line end types
 	switch(this.p1end) {
 	case 'normal':
-		if (twist) c2d.moveTo(p1);
+		if (twist) fabric.moveTo(p1);
 		break;
 	default :
 		throw new Error('unknown line end');
@@ -1392,7 +1393,7 @@ Line.prototype.path = function(c2d, border, twist) {
 
 	switch(this.p2end) {
 	case 'normal' :
-		if (twist) c2d.lineTo(p2);
+		if (twist) fabric.lineTo(p2);
 		break;
 	case 'arrow' :
 		// arrow size
@@ -1404,14 +1405,14 @@ Line.prototype.path = function(c2d, border, twist) {
 		// arrow span, the arrow is formed as hexagon piece
 		var ms = 2 / Math.sqrt(3) * as;
 		if (twist) {
-			c2d.lineTo(p2.x - R(ms * cos(d)), p2.y - R(ms * sin(d)));
+			fabric.lineTo(p2.x - R(ms * cos(d)), p2.y - R(ms * sin(d)));
 		} else {
-			c2d.moveTo(p2.x - R(ms * cos(d)), p2.y - R(ms * sin(d)));
+			fabric.moveTo(p2.x - R(ms * cos(d)), p2.y - R(ms * sin(d)));
 		}
-		c2d.lineTo(p2.x - R(as * cos(d - ad)), p2.y - R(as * sin(d - ad)));
-		c2d.lineTo(p2);
-		c2d.lineTo(p2.x - R(as * cos(d + ad)), p2.y - R(as * sin(d + ad)));
-		c2d.lineTo(p2.x - R(ms * cos(d)), p2.y - R(ms * sin(d)));
+		fabric.lineTo(p2.x - R(as * cos(d - ad)), p2.y - R(as * sin(d - ad)));
+		fabric.lineTo(p2);
+		fabric.lineTo(p2.x - R(as * cos(d + ad)), p2.y - R(as * sin(d + ad)));
+		fabric.lineTo(p2.x - R(ms * cos(d)), p2.y - R(ms * sin(d)));
 		break;
 	default :
 		throw new Error('unknown line end');

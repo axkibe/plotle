@@ -387,10 +387,10 @@ var inspect = function(o) {
 var oleng$id = 0;
 
 /**
-| TODO
+| Makes an object immutable
 */
 var immute = function(obj) {
-	if (obj._$id) throw new Error('already immutable');
+	if (obj._$id) return obj;
 	var names = Object.getOwnPropertyNames(obj);
 	for (var a = 0, aZ = names.length; a < aZ; a++) {
 		var desc = Object.getOwnPropertyDescriptor(obj, names[a]);
