@@ -436,7 +436,7 @@ function System() {
 window.onload = function() {
 	makeCatcher(function() {
 		new System();
-		var peer     = new Peer('emulate');
+		var peer     = new Peer('async');
 		system.shell = new Shell(system.fabric, peer);
 	})();
 };

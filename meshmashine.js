@@ -778,16 +778,27 @@ MeshMashine.prototype.get = function(time, path) {
 /**
 | Returns all changes from time to now.
 */
-MeshMashine.prototype.update = function(time) {
-	log('mm', 'update time:', time);
+MeshMashine.prototype.changes = function(time1, time2) {
+	log('mm', 'changes:', time1, time2);
 
-	if (!this._isValidTime(time)) return reject('invalid time');
-	var update = [];
-	for(var ti = time; ti < this.history.length; ti++) {
-		update.push((this.history[ti]));
+	if (!this._isValidTime(time1)) { return reject('invalid time1'); }
+	if (!this._isValidTime(time2)) { return reject('invalid time2'); }
+
+	if (time1 === -1) { time1 = this.history.length; }
+	if (time2 === -1) { time2 = this.history.length; }
+
+	if (time1 === time2) {
+		log('mm', 'ok', time1, time2);
+		return {ok: true, time1: time1, time2: time2, changes: null };
 	}
-	log('mm', 'ok', this.history.length, update);
-	return {ok: true, time: this.history.length, update: update };
+
+	var clist = [];
+	for(var t = time1; t < time2; t++) {
+		clist.push((this.history[t]));
+	}
+
+	log('mm', 'ok', time1, time2);
+	return {ok: true, time1: time1, time2: time2, changes: clist };
 };
 
 /**

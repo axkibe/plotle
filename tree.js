@@ -37,6 +37,7 @@ var	isInteger    = Jools.isInteger;
 var	isString     = Jools.isString;
 var	log          = Jools.log;
 var	reject       = Jools.reject;
+var uid          = Jools.uid;
 var isPath       = Path.isPath;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -85,12 +86,8 @@ Object.defineProperty(Twig.prototype, 'length', {
 | Creates a new unique identifier
 */
 Twig.prototype.newUID = function() {
-	while (true) {
-		var nk = Date.now().toString(16) +
-			'-' +
-			Math.floor(Math.random() * 16*16*16*16*16*16).toString(16);
-		if (!is(this.copse[nk])) return nk;
-	}
+	var u = uid();
+	return (!is(this.copse[u])) ? u : this.newUID();
 };
 
 /**

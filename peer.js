@@ -32,7 +32,6 @@ var Path;
 var Patterns;
 var Tree;
 var Jools;
-var Emulate;
 
 /**
 | Exports
@@ -67,27 +66,63 @@ Peer = function(mode) {
 	this._mode = mode;
 	var tree;
 
+	var src, trg, asw;
+
 	switch(mode) {
 	case 'async' :
 		tree = new Tree({ type : 'Nexus' }, Patterns.mUniverse);
 		this.mm = new MeshMashine(tree);
+		var path = new Path([ 'welcome' ]);
+		src = { val  : this._getSync(-1, path).node };
+		trg = { path : path };
+		asw = this.mm.alter(0, src, trg);
+		if (asw.ok !== true) throw new Error('Cannot load space "welcome"');
 		break;
 	case 'sync' :
 		break;
+/*
 	case 'emulate' :
 		tree = new Tree({ type : 'Nexus' }, Patterns.mUniverse);
 		this.mm = new MeshMashine(tree);
 
-		var src = Emulate.src;
-		var trg = { path: new Path(Emulate.path) };
-		var asw = this.mm.alter(0, src, trg);
+		src = Emulate.src;
+		trg = { path: new Path(Emulate.path) };
+		asw = this.mm.alter(0, src, trg);
 		if (asw.ok !== true) throw new Error('Cannot emulate Repository');
 		break;
+*/
 	default :
 		throw new Error('unknown mode: '+mode);
 	}
 	this.time = -1;  // @@ See if this is permanently needed
 };
+
+
+/**
+| Issues a synchronous get request.
+*/
+Peer.prototype._getSync = function(time, path) {
+	var ajax = new XMLHttpRequest();
+	ajax.open('POST', '/mm', false);
+	ajax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	var request = JSON.stringify({
+		time : time,
+		cmd  : 'get',
+		path : path
+	});
+	log('peer', 's->', request);
+	ajax.send(request);
+	var asw = ajax.responseText;
+	log('peer', '<-s', asw);
+	try {
+		asw = JSON.parse(asw);
+	} catch (e) {
+		throw new Error('Server answered no JSON!');
+	}
+	if (asw.ok !== true) throw new Error('AJAX not ok: '+asw.message);
+	this.time = asw.time;
+	return asw;
+}
 
 /**
 | Gets a twig
@@ -105,25 +140,7 @@ Peer.prototype.get = function(time, path) {
 		if (asw.ok !== true) throw new Error('Meshmashine not ok: '+asw.message);
 		return asw.node;
 	case 'sync' :
-		var ajax = new XMLHttpRequest();
-		ajax.open('POST', '/mm', false);
-		ajax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-		var request = JSON.stringify({
-			time : time,
-			cmd  : 'get',
-			path : path
-		});
-		log('peer', '->', request);
-		ajax.send(request);
-		asw = ajax.responseText;
-		log('peer', '<-', asw);
-		try {
-			asw = JSON.parse(asw);
-		} catch (e) {
-			throw new Error('Server answered no JSON!');
-		}
-		if (asw.ok !== true) throw new Error('AJAX not ok: '+asw.message);
-		this.time = asw.time;
+		asw = this._getSync(this.time, path);
 		return is(asw.node) ? new Tree(asw.node, Patterns.mUniverse).root : null;
 	default :
 		throw new Error('unknown mode: '+this._mode);
