@@ -132,8 +132,6 @@ Peer.prototype._getSync = function(time, path) {
 | path: path to twig
 */
 Peer.prototype.get = function(path) {
-	throw new Error('Peer.get no longer suppoerted!!!');
-	/*
 	var asw;
 	switch(this._mode) {
 	case 'async'   :
@@ -146,7 +144,7 @@ Peer.prototype.get = function(path) {
 		return is(asw.node) ? new Tree(asw.node, Patterns.mUniverse).root : null;
 	default :
 		throw new Error('unknown mode: '+this._mode);
-	}*/
+	}
 };
 
 /**

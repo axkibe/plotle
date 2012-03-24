@@ -37,6 +37,7 @@ var url         = require('url');
 var fs          = require('fs');
 
 var config      = require('./config');
+
 var Jools       = require('./jools');
 var MeshMashine = require('./meshmashine');
 var Path        = require('./path');
@@ -46,7 +47,9 @@ var Emulate     = require('./emulate');
 
 var Change      = MeshMashine.Change;
 var Signature   = MeshMashine.Signature;
+
 var debug       = Jools.debug;
+var is          = Jools.is;
 var log         = Jools.log;
 var reject      = Jools.reject;
 
@@ -86,18 +89,16 @@ var Server = function() {
 	this.history = [];
 
 	// startup init
-	var chg = new Change(
-		new Signature(Emulate.src),
-		new Signature({ path: new Path(Emulate.path) })
-	);
+	var asw = this.alter({
+		time : 0,
+		src  : Emulate.src,
+		trg  : { path : new Path(Emulate.path) }
+	});
 
-	var asw = this.alter(0, chg);
 	if (asw.ok !== true) throw new Error('Cannot init Repository');
 
-	log(true, this.history);
-
 	var self = this;
-	log('start', 'Starting server @ http://'+(config.ip || '*')+'/:'+config.port);
+	log('start', 'Starting server @ http://' + (config.ip || '*') + '/:' + config.port);
 
 	http.createServer(function(req, res) {
 		self.requestListener(req, res);
@@ -107,27 +108,67 @@ var Server = function() {
 };
 
 /**
-| Executes an alter
+| Executes an alter command.
 */
-Server.prototype.alter = function(time, chg) {
-	debug('ALTER', time, chg);
+Server.prototype.alter = function(cmd) {
+	if (!is(cmd.time)) { throw reject('time missing'); }
+	if (!is(cmd.src))  { throw reject('src missing');  }
+	if (!is(cmd.trg))  { throw reject('trg missing');  }
+
+	var time = cmd.time;
 	if (time === -1) { time = this.history.length; }
-	if (time < 0) throw reject('invalid time');
+	if (!(time >= 0 && time <= this.history.length)) { throw reject('invalid time'); }
 
-	var chgX = chg;
-	if (time < this.history.length - 1) {
-		chgX = MeshMashine.tfxChange(chg, this.history, time, this.history.length);
+	var chgX;
+	try {
+		if (cmd.src.path) { cmd.src.path = new Path(cmd.src.path); }
+		if (cmd.trg.path) { cmd.trg.path = new Path(cmd.trg.path); }
+		chgX = new Change( new Signature(cmd.src), new Signature(cmd.trg) );
+	} catch(e) {
+		throw reject('invalid cmd: '+e.message);
 	}
-	debug('CHGX', chgX);
-	var res = MeshMashine.changeTree(this.tree, chgX);
-	debug('RESULT', res);
 
+	if (time < this.history.length - 1) {
+		chgX = MeshMashine.tfxChange(chgX, this.history, time, this.history.length);
+	}
+
+	var res = MeshMashine.changeTree(this.tree, chgX);
 	this.tree = res.tree;
+
 	chgX      = res.chgX;
 	for(var a = 0, aZ = chgX.length; a < aZ; a++) {
 		this.history.push(chgX[a]);
 	}
+
 	return { ok: true, chgX: chgX };
+};
+
+/**
+| Executes a get command.
+*/
+Server.prototype.get = function(cmd) {
+	if (!is(cmd.time)) { throw reject('time missing'); }
+	if (!is(cmd.path)) { throw reject('path missing'); }
+
+	var time = cmd.time;
+	if (time === -1) { time = this.history.length; }
+	if (!(time >= 0 && time <= this.history.length)) { throw reject('invalid time'); }
+
+	var path;
+	try {
+		path = new Path(cmd.path);
+	} catch (e) {
+		throw reject('invalid path: ' + e.message);
+	}
+
+	var tree = this.tree;
+	if (time < this.history.length - 1) {
+		for (var t = this.history.length - 1; t >= time; t++) {
+			tree = MeshMashine.changeTree(tree, this.history[t].reverse());
+		}
+	}
+
+	return { ok: true, time : time, tree: tree };
 };
 
 /**
@@ -192,6 +233,7 @@ Server.prototype.requestListener = function(req, res) {
 | Handles ajax requests to the MeshMashine.
 */
 Server.prototype.ajax = function(req, red, res) {
+	var self = this;
 	var data = [];
 
 	if (req.method !== 'POST') {
@@ -210,38 +252,17 @@ Server.prototype.ajax = function(req, red, res) {
 		try {
 			cmd = JSON.parse(query);
 		} catch (err) {
-			this.webError(res, 400, 'Not valid JSON');
+			self.webError(res, 400, 'Not valid JSON');
 			return;
 		}
 		var asw;
 		try {
 			switch (cmd.cmd) {
-			case 'alter':
-				if (!cmd.src) { throw reject('cmd.src missing'); }
-				if (!cmd.trg) { throw reject('cmd.trg missing'); }
-				if (cmd.src.path) { cmd.src.path = new Path(cmd.src.path); }
-				if (cmd.trg.path) { cmd.trg.path = new Path(cmd.trg.path); }
-				var chg = new Change( new Signature(cmd.src), new Signature(cmd.trg) );
-				asw = this.alter(cmd.time, chg);
-
-				break;
-			case 'get':
-				if (!cmd.path) {
-					this.webError(res, 400, 'cmd get requires .path');
-					break;
-				}
-				var path = new Path(cmd.path);
-				throw new Error('TODO');
-				//asw = mm.get(cmd.time, path);
-				//break;
-
-			case 'update':
-				throw new Error('TODO');
-				//asw = mm.update(cmd.time);
-				//break;
-
+			case 'alter':  asw = self.alter(cmd); break;
+			case 'get':    asw = self.get(cmd);   break;
+			case 'update': throw new Error('TODO');
 			default:
-				this.webError(res, 400, 'unknown command "'+cmd.cmd+'"');
+				self.webError(res, 400, 'unknown command "'+cmd.cmd+'"');
 				return;
 			}
 		} catch (e) {
@@ -270,7 +291,7 @@ Server.prototype.webConfig = function(req, red, res) {
 	}
 	res.write('\t}\n');
 	res.end('};\n');
-}
+};
 
 var server = new Server();
 
