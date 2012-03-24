@@ -12,17 +12,17 @@ module.exports = {
 
 	log     : {
 		//all:   true,
-		alter:  false,
+
 		ajax:   false,
+		change: true,
 		debug:  true,
 		fail:   true,
 		grow:   false,
-		mm:     true,
 		peer:   true,
 		report: true,
 		start:  true,
 		shell:  true,
-		te:     false,
+		tfx:    true,
 		web:    true,
 		warn:   true
 	}

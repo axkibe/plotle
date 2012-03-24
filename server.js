@@ -94,14 +94,14 @@ var Server = function() {
 	var asw = this.alter(0, chg);
 	if (asw.ok !== true) throw new Error('Cannot init Repository');
 
+	log(true, this.history);
+
 	var self = this;
 	log('start', 'Starting server @ http://'+(config.ip || '*')+'/:'+config.port);
 
 	http.createServer(function(req, res) {
 		self.requestListener(req, res);
-	});
-
-	http.listen(config.port, config.ip, function() {
+	}).listen(config.port, config.ip, function() {
 		log('start', 'Server running');
 	});
 };
@@ -110,6 +110,7 @@ var Server = function() {
 | Executes an alter
 */
 Server.prototype.alter = function(time, chg) {
+	debug('ALTER', time, chg);
 	if (time === -1) { time = this.history.length; }
 	if (time < 0) throw reject('invalid time');
 
@@ -117,7 +118,9 @@ Server.prototype.alter = function(time, chg) {
 	if (time < this.history.length - 1) {
 		chgX = MeshMashine.tfxChange(chg, this.history, time, this.history.length);
 	}
+	debug('CHGX', chgX);
 	var res = MeshMashine.changeTree(this.tree, chgX);
+	debug('RESULT', res);
 
 	this.tree = res.tree;
 	chgX      = res.chgX;
@@ -256,7 +259,7 @@ Server.prototype.ajax = function(req, red, res) {
 /**
 | Transmits the config relevant to the client
 */
-function webConfig(req, red, res) {
+Server.prototype.webConfig = function(req, red, res) {
 	res.writeHead(200, {'Content-Type': 'application/json'});
 	res.write('var config = {\n');
 	res.write('\tdevel : '+ Jools.configSwitchClient(config.devel) + ',\n');

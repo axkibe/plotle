@@ -279,6 +279,7 @@ ChangeOps.set = function(tree, chg) {
 	check(!is(trg.at1), cm, 'trg.at1 must not exist.');
 	check(is(src.val), cm, 'src.val missing');
 
+
 	if (trg.path.get(-1) === '$new') {
 		pivot = tree.getPath(trg.path, -1);
 		key = pivot.newUID();
@@ -289,7 +290,7 @@ ChangeOps.set = function(tree, chg) {
 	var save = tree.getPath(trg.path);
 	if (!is(save)) save = null;
 	trg = trg.affix(is, cm, 'trg', 'val', save);
-	src = trg.affix(is, cm, 'src', 'path', trg.path);
+	src = src.affix(is, cm, 'src', 'path', trg.path);
 
 	if (!is(trg.rank)) {
 		tree = tree.setPath(trg.path, src.val);
