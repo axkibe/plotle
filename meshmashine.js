@@ -54,19 +54,20 @@ if (typeof(window) === 'undefined') {
 	Tree  = require('./tree');
 }
 
-var debug      = Jools.debug;
-var log        = Jools.log;
-var clone      = Jools.clone;
-var fixate     = Jools.fixate;
-var immute     = Jools.immute;
-var is         = Jools.is;
-var isnon      = Jools.isnon;
-var isArray    = Jools.isArray;
-var isInteger  = Jools.isInteger;
-var isString   = Jools.isString;
-var matches    = Jools.matches;
-var reject     = Jools.reject;
-var isPath     = Path.isPath;
+var debug        = Jools.debug;
+var log          = Jools.log;
+var clone        = Jools.clone;
+var fixate       = Jools.fixate;
+var fixateNoEnum = Jools.fixateNoEnum;
+var immute       = Jools.immute;
+var is           = Jools.is;
+var isnon        = Jools.isnon;
+var isArray      = Jools.isArray;
+var isInteger    = Jools.isInteger;
+var isString     = Jools.isString;
+var matches      = Jools.matches;
+var reject       = Jools.reject;
+var isPath       = Path.isPath;
 
 function fail(args, aoffset) {
 	var a = Array.prototype.slice.call(args, aoffset, args.length);
@@ -92,21 +93,21 @@ var checkLimits = function(v, low, high) {
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-.---.               .
-\___  . ,-. ,-. ,-. |- . . ,-. ,-.
-    \ | | | | | ,-| |  | | |   |-'
-`---' ' `-| ' ' `-^ `' `-^ '   `-'
-~ ~ ~ ~ ~,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-         `'
+ .---.               .
+ \___  . ,-. ,-. ,-. |- . . ,-. ,-.
+     \ | | | | | ,-| |  | | |   |-'
+ `---' ' `-| ' ' `-^ `' `-^ '   `-'
+~ ~ ~ ~ ~ ,|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+          `'
  Signates an entry, string index or string span.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-var Signature = function(master/*, ...*/) {
+var Signature = function(model /*, ...*/) {
 	var k;
-	for(k in master) {
-		if (!Object.hasOwnProperty.call(master, k)) continue;
+	for(k in model) {
+		if (!Object.hasOwnProperty.call(model, k)) continue;
 		if (!Signature.field[k]) throw reject('invalid Signature property: '+k);
-		this[k] = master[k];
+		this[k] = model[k];
 	}
 
 	for (var a = 1, aZ = arguments.length; a < aZ; a+=2) {
@@ -131,18 +132,6 @@ Signature.field = {
 };
 immute(Signature.field);
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     ,.   .  .                  .
-    / |   |  |- ,-. ,-. ,-. ,-. |- . ,-. ,-.
-   /~~|-. |  |  |-' |   | | ,-| |  | | | | |
- ,'   `-' `' `' `-' '   ' ' `-^ `' ' `-' ' '
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
- The causal consistency engine.
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-var Alter = {};
-
 /**
 | Sets a new value of a signature.
 | If the signature has the value preset, it checks equality.
@@ -154,49 +143,136 @@ var Alter = {};
 | key  : key to affix at
 | val  : value to affix
 */
-var affixSign = function(sign, test, cm, base, key, val) {
-	if (test(sign[key])) {
-		check(matches(val, sign[key]), cm,base,'.',key,' faulty preset',
-			typeof(val), '!=', typeof(sign[key]));
+Signature.prototype.affix = function(test, cm, base, key, val) {
+	if (test(this[key])) {
+		check(matches(val, this[key]), cm, base,'.',key,' faulty preset');
+		return this;
 	} else {
-		sign = new Signature(sign, key, val);
+		return new Signature(this, key, val);
 	}
-	return sign;
+};
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ,--. .
+ | `-' |-. ,-. ,-. ,-. ,-.
+ |   . | | ,-| | | | | |-'
+ `--'  ' ' `-^ ' ' `-| `-'
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                    `'
+ A change to a tree.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+var Change = function(src, trg) {
+	this.src = src;
+	this.trg = trg;
+	immute(this);
 };
 
 /**
 | Returns the type of an Alternation.
 */
-Alter.type = function(src, trg) {
-	if (trg.proc === 'splice') return 'split';
-	if (src.proc === 'splice') return 'join';
-	if (is(src.val) && !is(trg.at1)) return 'set';
-	if (is(src.val) &&  is(trg.at1)) return 'insert';
-	if (is(src.at1) &&  is(src.at2) && !is(trg.at1)) return 'remove';
-	if (is(trg.rank)) return 'rank';
+Change.prototype.type = function() {
+	if (is(this._type)) { return this._type; }
 
-	if (Jools.prissy) { log('fail', this); throw new Error('invalid type'); }
+	var src = this.src;
+	var trg = this.trg;
+	var type;
 
-	return null;
+	/**/ if (trg.proc === 'splice')                       { type = 'split';  }
+	else if (src.proc === 'splice')                       { type = 'join';   }
+	else if (is(src.val) && !is(trg.at1))                 { type = 'set';    }
+	else if (is(src.val) &&  is(trg.at1))                 { type = 'insert'; }
+	else if (is(src.at1) &&  is(src.at2) && !is(trg.at1)) { type = 'remove'; }
+	else if (is(trg.rank))                                { type = 'rank';   }
+	else {
+		type = null;
+		if (Jools.prissy) { log('fail', this); throw new Error('invalid type'); }
+	}
+
+	fixateNoEnum(this, '_type', type);
+	return type;
 };
 
 /**
-| Alters a tree
+| Returns a reversed change.
 */
-Alter.one = function(tree, src, trg, report) {
-	var atype = Alter.type(src, trg);
-	log('alter', 'src:', src, 'trg:', trg, 'atype:', atype);
-	if (!Alter[atype]) throw reject('invalid atype:'+atype);
-	var asw = Alter[atype](tree, src, trg);
-	if (report) report.report(atype, asw.tree, asw.src, asw.trg);
-	return asw;
+Change.prototype.reverse = function() {
+	if (is(this._reverse)) { return this._reverse; }
+	var r = new Change(this.trg, this.src);
+	fixateNoEnum(this, '_reverse', r);
+	fixateNoEnum(r, '_reverse', this);
+	return r;
 };
+
+/**
+| Change emulates an Array with the length of 1
+*/
+Change.prototype.length = 1;
+
+Object.defineProperty(Change.prototype, 0, {
+	get: function() { return this; }
+});
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ,--. .                   ,,--.                 .
+ | `-' |-. ,-. ,-. ,-. ,-. |`, | ,-. ,-. ,-. ,-. |- . ,-. ,-.
+ |   . | | ,-| | | | | |-' |   | | | |-' |   ,-| |  | | | | |
+ `--'  ' ' `-^ ' ' `-| `-' `---' |-' `-' '   `-^ `' ' `-' ' '
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ,|~ ~ ~ ~ ~ ~|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                    `'           '
+ Changes a tree according to a change.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+/**
+| Performes one or many changes on a tree
+|
+| TODO remove report.
+*/
+var changeTree = function(tree, chgX, report) {
+	var achgX = null;
+
+	for(var a = 0, aZ = chgX.length; a < aZ; a++) {
+		var chg = chgX[a];
+
+		var ctype = chg.type();
+		log('change', 'src:', chg.src, 'trg:', chg.trg, 'type:', ctype);
+
+		var op = ChangeOps[ctype];
+		if (!op) throw reject('invalid change: '+ctype);
+		var res = op(tree, chg);
+
+		if (report) report.report(ctype, res.tree, res.src, res.trg);
+
+		if (!res) { debug('CAN THIS HAPPEND?'); continue; }
+
+		var reschg = new Change(res.src, res.trg);
+		tree = res.tree;
+
+		if (aZ > 1) {
+			if (achgX === null) { achgX = []; }
+			achgX.push(reschg);
+		} else {
+			achgX = reschg;
+		}
+	}
+
+	return { tree: tree, chgX : achgX };
+};
+
+/**
+| The change operations.
+*/
+var ChangeOps = {};
 
 /**
 | Alter: A new item is inserted or replaces an existing.
 */
-Alter.set = function(tree, src, trg) {
-	var cm = 'alter.set';
+ChangeOps.set = function(tree, chg) {
+	var cm = 'change.set';
+	var src = chg.src;
+	var trg = chg.trg;
 	var pivot = null;
 	var key = null;
 
@@ -212,13 +288,13 @@ Alter.set = function(tree, src, trg) {
 	// stores the old value to be able restore the history
 	var save = tree.getPath(trg.path);
 	if (!is(save)) save = null;
-	trg = affixSign(trg, is, cm, 'trg', 'val', save);
-	src = affixSign(src, is, cm, 'src', 'path', trg.path);
+	trg = trg.affix(is, cm, 'trg', 'val', save);
+	src = trg.affix(is, cm, 'src', 'path', trg.path);
 
 	if (!is(trg.rank)) {
 		tree = tree.setPath(trg.path, src.val);
 	} else {
-		src = affixSign(src, is, cm, 'src', 'rank', trg.rank);
+		src = src.affix(is, cm, 'src', 'rank', trg.rank);
 
 		pivot = pivot || tree.getPath(trg.path, -1);
 		if (key === null) key = trg.path.get(-1);
@@ -244,8 +320,10 @@ Alter.set = function(tree, src, trg) {
 /**
 | Alter: A string is inserted into a string item.
 */
-Alter.insert = function(tree, src, trg) {
-	var cm = 'alter.insert';
+ChangeOps.insert = function(tree, chg) {
+	var cm = 'change.insert';
+	var src = chg.src;
+	var trg = chg.trg;
 
 	check(isPath(trg.path), cm, 'trg.path missing');
 	var str = tree.getPath(trg.path);
@@ -254,7 +332,7 @@ Alter.insert = function(tree, src, trg) {
 	// where trg span should end
 	var tat2 = trg.at1 + src.val.length;
 
-	trg = affixSign(trg, is, cm, 'trg', 'at2', tat2);
+	trg = trg.affix(is, cm, 'trg', 'at2', tat2);
 	var nstr = str.substring(0, trg.at1) + src.val + str.substring(trg.at1);
 	tree = tree.setPath(trg.path, nstr);
 
@@ -264,19 +342,22 @@ Alter.insert = function(tree, src, trg) {
 /**
 | Alter: a part of a string item is removed.
 */
-Alter.remove = function(tree, src, trg) {
-	var cm = 'alter.remove';
+ChangeOps.remove = function(tree, chg) {
+	var cm = 'change.remove';
+	var src = chg.src;
+	var trg = chg.trg;
+
 	check(isPath(src.path), cm, 'src.path missing');
 	var str = tree.getPath(src.path);
 	check(isString(str), cm, 'src.path signates no string');
 
 	if (src.at1 === src.at2) {
-		log('alter', 'removed nothing');
+		log('change', 'removed nothing');
 		return null;
 	}
 
 	var val = str.substring(src.at1, src.at2);
-	trg = affixSign(trg, isnon, cm, 'trg', 'val', val);
+	trg = trg.affix(isnon, cm, 'trg', 'val', val);
 	var nstr = str.substring(0, src.at1) + str.substring(src.at2);
 
 	tree = tree.setPath(src.path, nstr);
@@ -287,8 +368,10 @@ Alter.remove = function(tree, src, trg) {
 /**
 | Alter: two texts are joined into one.
 */
-Alter.join = function(tree, src, trg) {
-	var cm = 'alter.join';
+ChangeOps.join = function(tree, chg) {
+	var cm   = 'change.join';
+	var src  = chg.src;
+	var trg  = chg.trg;
 	var path = trg.path;
 
 	var at1 = trg.at1;
@@ -305,7 +388,7 @@ Alter.join = function(tree, src, trg) {
 	check(kn < pivot.ranks.length,  cm, 'cannot join last line');
 	var key2 = pivot.ranks[kn + 1];
 	var path2 = new Path(path, -2, key2);
-	src = affixSign(src, is, cm, 'src', 'path', path2);
+	src = src.affix(is, cm, 'src', 'path', path2);
 
 	var para1 = pivot.copse[key];
 	var para2 = pivot.copse[key2];
@@ -327,8 +410,10 @@ Alter.join = function(tree, src, trg) {
 /**
 | Alter: a text is split into two.
 */
-Alter.split = function(tree, src, trg) {
-	var cm = 'alter.split';
+ChangeOps.split = function(tree, chg) {
+	var cm   = 'change.split';
+	var src  = chg.src;
+	var trg  = chg.trg;
 	var path = src.path;
 
 	var at1 = src.at1;
@@ -375,10 +460,13 @@ Alter.split = function(tree, src, trg) {
 };
 
 /**
-| Alter: a twigs rank in a copse is changed.
+| A twig's rank in a copse is changed.
 */
-Alter.rank = function(tree, src, trg) {
-	var cm = 'alter.rank';
+ChangeOps.rank = function(tree, chg) {
+	var cm  = 'change.rank';
+	var src = chg.src;
+	var trg = chg.trg;
+
 	check(is(src.path), cm, 'src.path not present');
 	check(is(trg.rank), cm, 'trg.rank not present');
 
@@ -389,52 +477,147 @@ Alter.rank = function(tree, src, trg) {
 	if (orank < 0) throw reject('invalid key :'+key);
 	// TODO if (orank === trg.rank) return null;
 
-	src = affixSign(src, is, cm, 'src', 'rank', orank);
-	trg = affixSign(trg, is, cm, 'trg', 'path', src.path);
+	src = src.affix(is, cm, 'src', 'rank', orank);
+	trg = trg.affix(is, cm, 'trg', 'path', src.path);
 	pivot = tree.grow(pivot, '-', orank, '+', trg.rank, key);
 	tree = tree.setPath(src.path, pivot, -1);
 	return { tree: tree, src: src, trg: trg };
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-,--,--'
-`- | ,-. ,-. ,-. ,-. ," ,-. ,-. ,-,-.
- , | |   ,-| | | `-. |- | | |   | | |
- `-' '   `-^ ' ' `-' |  `-' '   ' ' '
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~'~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ ++ Transformation +++
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  Action Transformation. Changes signatures due to past alternations.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-var Transform = {};
+/**
+| List of formation action on different alternation types
+*/
+var TFXOps = {};
 
 /**
-| Transforms a signature on one history moment
+| Transforms a signature on a single change
+| If the signature is a span, it can return an array of signs.
 */
-Transform.one = function(sign, src, trg) {
-	log('te', 'one', sign, src, trg);
+var tfxSign1 = function(sign, chg) {
+	if (chg.length !== 1) { throw new Error('tfxSign1 chg.length !== 1'); }
 	if (!is(sign.path)) return sign;
-	var atype = Alter.type(src, trg);
-	if (!Transform[atype]) { throw new Error('unknown atype: '+atype); }
-	return Transform[atype](sign, src, trg);
+
+	var op = TFXOps[chg.type()];
+	if (!op) { throw new Error('tfxSign1, no op'); }
+	return op(sign, chg.src, chg.trg);  // TODO give, chg.
+};
+
+/**
+| Transforms a signature on a list of alternations.
+| If the signature is a span, it can return an array of signs.
+*/
+var tfxSign = function(sign, chgX, t1, t2) {
+	log('tfx', 'tfxSign', sign, t1, t2);
+
+	if (sign.constructor !== Signature) { throw new Error('tfxSign param fail'); }
+
+	if (!is(sign.path) || sign.path.length === 0) {
+		log('tfx', 'out', sign);
+		return sign;
+	}
+
+	var signX = sign;
+
+	for(var t = t1; t < t2; t++) {
+		var chg = chgX[t];
+
+		switch(signX.constructor) {
+
+		case Signature :
+			signX = tfxSign1(signX, chg);
+			break;
+
+		case Array :
+			for(var a = 0, aZ = signX.length; a < aZ; a++) {
+				var fs = tfxSign1(sign[a], chg);
+				if (fs === null) {
+					sign.splice(a--, 1);
+					continue;
+				}
+				switch (fs.constructor) {
+				case Signature :
+					signX[a] = fs;
+					break;
+				case Array :
+					for(var b = 0, bZ = fs.length; b < bZ; b++) {
+						signX.splice(a++, 0, fs[b]);
+					}
+					break;
+				default :
+					throw new Error('Invalid fs');
+				}
+			}
+			break;
+
+		default :
+			throw new Error('Invalid signX');
+		}
+	}
+
+	log('tfx', 'out', signX);
+	return signX;
+};
+
+/**
+| TODO
+*/
+var tfxChange = function(chg, chgX, t1, t2) {
+	log('tfx', 'tfxChange', chg, t1, t2);
+	if (chg.constructor !== Change) { throw new Error('tfxChange param error'); }
+
+	var srcX = tfxSign(chg.src, chgX, t1, t2);
+	var trgX = tfxSign(chg.trg, chgX, t1, t2);
+
+	if (srcX === null || trgX === null) {
+		log('tfx', 'transformed to null');
+		return null;
+	}
+
+	var a, aZ, asw;
+	var srcIA = isArray(srcX);
+	var trgIA = isArray(trgX);
+
+	if (!srcIA && trgIA) {
+		return new Change(srcX, trgX);
+	} else if (!srcIA && trgIA)  {
+		asw = [];
+		for(a = 0, aZ = trgX.length; a < aZ; a++) {
+			asw[a] = new Change(srcX, trgX[a]);
+		}
+		return asw;
+	} else if (srcIA && !trgIA) {
+		asw = [];
+		for(a = 0, aZ = srcX.length; a < aZ; a++) {
+			asw[a] = new Change(srcX[a], trgX);
+		}
+		return asw;
+	} else {
+		throw new Error('srcIS and trgIA true :-(');
+	}
 };
 
 /**
 | Transforms a signature on one a split.
 */
-Transform.split = function(sign, src, trg) {
+TFXOps.split = function(sign, src, trg) {
 	// src.path -- the line splitted
 	// trg.path -- the new line
 	if (!src.path || !src.path.equals(sign.path)) return sign;
 
-	// @@ alter ranks
+	// @@ form ranks
 	// simpler case signature is only one point
 	if (!is(sign.at2)) {
-		log('te', 'split (simple)');
+		log('tfx', 'split (simple)');
 		if (sign.at1 < src.at1) return sign;
 		return new Signature(sign, 'path', trg.path, 'at1', sign.at1 - src.at1);
 	}
-
 
 	// A more complicated signature is affected.
 	//                   ............
@@ -442,12 +625,12 @@ Transform.split = function(sign, src, trg) {
 	// Splits cases:      1    2    3
 
 	if (sign.at2 <= src.at1) {
-		log('te', 'split (span, case 1)');
+		log('tfx', 'split (span, case 1)');
 		return sign;
 	}
 
 	if (sign.at1 >= src.at1) {
-		log('te', 'split (span, case 2)');
+		log('tfx', 'split (span, case 2)');
 		// signature goes into splitted line instead
 		return new Signature(sign,
 			'path', trg.path,
@@ -455,7 +638,7 @@ Transform.split = function(sign, src, trg) {
 			'at2', sign.at2 - src.at1
 		);
 	}
-	log('te', 'split (span, case 3');
+	log('tfx', 'split (span, case 3');
 	// the signature is splited into a part that stays and one that goes to next line.
 
 	return [
@@ -471,15 +654,17 @@ Transform.split = function(sign, src, trg) {
 };
 
 /**
-| Transforms a signature on one a join.
+| Transforms a signature on a join.
 */
-Transform.join = function(sign, src, trg) {
+TFXOps.join = function(sign, src, trg) {
 	// trg.path is the line that got the join
 	// src.path is the line that was removed
 	if (!src.path || !sign.path.equals(src.path)) return sign;
 	if (!trg.path) throw new Error('join missing trg.path');
-	// @@ alter ranks
-	log('te', 'join', sign);
+
+	// @@ tfx ranks
+
+	log('tfx', 'join', sign);
 	if (!is(sign.at2)) {
 		return new Signature(sign,
 			'path', trg.path,
@@ -497,8 +682,8 @@ Transform.join = function(sign, src, trg) {
 /**
 | Transforms a signature on a join.
 */
-Transform.set = function(sign, src, trg) {
-	log('te', 'set');
+TFXOps.set = function(sign, src, trg) {
+	log('tfx', 'set');
 	return sign;
 };
 
@@ -506,9 +691,9 @@ Transform.set = function(sign, src, trg) {
 /**
 | Transforms a signature on an insert.
 */
-Transform.insert = function(sign, src, trg) {
+TFXOps.insert = function(sign, src, trg) {
 	if (!trg.path || !trg.path.equals(sign.path)) return sign;
-	log('te', 'insert');
+	log('tfx', 'insert');
 	if (!is(trg.at1) || !is(trg.at2)) throw new Error('history mangled');
 
 	if (sign.at1 < trg.at1) return sign;
@@ -528,14 +713,14 @@ Transform.insert = function(sign, src, trg) {
 /**
 | Transforms a signature on a remove
 */
-Transform.remove = function(sign, src, trg) {
+TFXOps.remove = function(sign, src, trg) {
 	if (!src.path || !src.path.equals(sign.path)) return sign;
 	if (!is(src.at1) || !is(src.at2)) { throw new Error('history mangled'); }
 	var len = src.at2 - src.at1;
 
 	// simpler case signature is only one point
 	if (!is(sign.at2)) {
-		log('te', 'remove (simple)');
+		log('tfx', 'remove (simple)');
 		if (sign.at1 <= src.at1) return sign;
 		return new Signature(sign, 'at1', sign.at1 - len);
 	}
@@ -553,27 +738,27 @@ Transform.remove = function(sign, src, trg) {
 	// sign, case5:            '   ++++    (part of sign removed)
 
 	if (sign.at2 <= src.at1) {
-		log('te', 'remove (case 0)');
+		log('tfx', 'remove (case 0)');
 		return sign;
 	}
 	if (sign.at1 >= src.at2) {
-		log('te', 'remove (case 1)');
+		log('tfx', 'remove (case 1)');
 		return new Signature(sign, 'at1', sign.at1 - len, 'at2', sign.at2 - len);
 	}
 	if (sign.at1 < src.at1 && sign.at2 > src.at2) {
-		log('te', 'remove (case 2)');
+		log('tfx', 'remove (case 2)');
 		return new Signature(sign, 'at2', sign.at2 - len);
 	}
 	if (sign.at1 >= src.at1 && sign.at2 <= src.at2) {
-		log('te', 'remove (case 3)');
+		log('tfx', 'remove (case 3)');
 		return null;
 	}
 	if (sign.at1 < src.at1 && sign.at2 <= src.at2) {
-		log('te', 'remove (case 4)');
+		log('tfx', 'remove (case 4)');
 		return new Signature(sign, 'at2', src.at1);
 	}
 	if (sign.at1 <= src.at2 && sign.at2 > src.at2) {
-		log('te', 'remove (case 5)');
+		log('tfx', 'remove (case 5)');
 		return new Signature(sign, 'at2', src.at2);
 	}
 	// should never happen
@@ -583,92 +768,20 @@ Transform.remove = function(sign, src, trg) {
 /**
 | Transforms a signature on a rank
 */
-Transform.rank = function(sign, src, trg) {
+TFXOps.rank = function(sign, src, trg) {
 	if (!src.path || !src.path.equals(sign.path)) return sign;
-	log('te', 'rank');
+	log('tfx', 'rank');
 	// TODO transform other rank commands
 	return sign;
 };
 
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ,-,-,-.           .   ,-,-,-.           .
- `,| | |   ,-. ,-. |-. `,| | |   ,-. ,-. |-. . ,-. ,-.
-   | ; | . |-' `-. | |   | ; | . ,-| `-. | | | | | |-'
-   '   `-' `-' `-' ' '   '   `-' `-^ `-' ' ' ' ' ' `-'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
- Thats the thing.
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-/**
-| Constructor.
-*/
-MeshMashine = function(tree) {
-	this.tree    = tree;
-	this.history = [];
-};
-
-/**
-| Sets the report receiver
-*/
-MeshMashine.prototype.setReport = function(report) {
-	if (is(this.report)) throw new Error('MeshMashine.report already set');
-	fixate(this, 'report', report);
-};
-
-/**
-| Transforms a signature, possibly splitting it up into several.
-*/
-MeshMashine.prototype.transform = function(time, sign) {
-	log('te', 'in', time, sign);
-	if (!is(sign.path) || sign.path.length === 0) {
-		log('te', 'out', sign);
-		return sign;
-	}
-
-	for(var t = time, tZ = this.history.length; t < tZ; t++) {
-		var moment = this.history[t];
-		log('te', 'transform at time', t);
-
-		switch(sign.constructor) {
-		case Signature :
-			sign = Transform.one(sign, moment.src, moment.trg);
-			break;
-		case Array :
-			for(var a = 0, aZ = sign.length; a < aZ; a++) {
-				var tom = Transform.one(sign[a], moment.src, moment.trg);
-				switch (tom.constructor) {
-				case Signature :
-					if (tom !== null) {
-						sign[a] = tom;
-					} else {
-						sign.splice(a--, 1);
-					}
-					break;
-				case Array :
-					for(var b = 0, bZ = tom.length; b < bZ; b++) {
-						sign.splice(a++, 0, tom[b]);
-					}
-					break;
-				default : throw new Error('Invalid sign');
-				}
-			}
-			break;
-		default :
-			throw new Error('Invalid sign');
-		}
-	}
-	log('te', 'out', sign);
-	return sign;
-};
 
 
 /**
 | Reflects the state of the tree at a time.
 | If path is not null it cares only to rebuild what is necessary to see the node.
 */
+/*
 MeshMashine.prototype._reflect = function(time, path) {
 	if (is(path)) { throw new Error('Not yet supported!'); }
 	try {
@@ -687,133 +800,15 @@ MeshMashine.prototype._reflect = function(time, path) {
 		throw new Error(err.stack);
 	}
 };
-
-/**
-| Alters the tree
 */
-MeshMashine.prototype.alter = function(time, src, trg) {
-	try {
-		log('mm', 'alter time:', time, 'src:', src, 'trg:', trg);
-		if (!this._isValidTime(time)) return reject('invalid time');
-		if (time < 0) time = this.history.length;
-		src = new Signature(src);
-		trg = new Signature(trg);
 
-		var tsrca = this.transform(time, src);
-		var ttrga = this.transform(time, trg);
-		if (tsrca === null || ttrga === null) {
-			log('mm', 'action transformed to null');
-			return {
-				ok: true,
-				time: this.history.length,
-				alts: null
-			};
-		}
+MeshMashine = {
+	Change      : Change,
+	Signature   : Signature,
 
-		// TODO beautify this, (especially the loops)
-		var alts, i, a, aX, aZ;
-
-		if (!isArray(tsrca) && !isArray(ttrga)) {
-			alts = immute({ src : tsrca, trg : ttrga });
-		} else if (!isArray(tsrca) && isArray(ttrga))  {
-			alts = [];
-			for(a = 0, aZ = ttrga.length; a < aZ; a++) {
-				alts[i] = immute({ src : tsrca, trg : ttrga[a] });
-			}
-		} else if (isArray(tsrca) && !isArray(ttrga)) {
-			alts = [];
-			for(a = 0, aZ = tsrca.length; a < aZ; a++) {
-				alts[i] = immute({ src : tsrca[a], trg : ttrga });
-			}
-		} else {
-			throw reject('src and target cannot both be an array');
-		}
-
-		// executes the alter for a single alteration or an array of alterations
-		for(a = 0, aX = isArray(alts), aZ = aX ? alts.length : 1; a < aZ; a++) {
-			var alt = aX ? alts[a] : alts;
-			var result = Alter.one(this.tree, alt.src, alt.trg, this.report);
-			if (!result) continue;
-			alt = immute({ src : result.src, trg : result.trg });
-			this.history.push(alt);
-			if (aX) alts[a] = alt; else alts = alt;
-			this.tree = result.tree;
-		}
-
-		return {
-			ok: true,
-			time: this.history.length,
-			alts: alts
-		};
-	} catch(err) {
-		// returns rejections, but rethrows coding errors.
-		if (err.ok !== false) { throw new Error(err.stack); } else { return err; }
-	}
-};
-
-/**
-| Gets a subtree.
-*/
-MeshMashine.prototype.get = function(time, path) {
-	try {
-		log('mm', 'get time:', time, ' path:', path);
-		if (!this._isValidTime(time)) return reject('invalid time');
-		var reflect;
-
-		if (time >= 0) {
-			reflect = this._reflect(time);
-			reflect = reflect.getPath(path);
-		} else {
-			reflect = this.tree.getPath(path);
-			time = this.history.length;
-		}
-		log('mm', 'ok', time, reflect);
-		return {ok: true, time: time, node: reflect };
-	} catch(err) {
-		// returns rejections, but rethrows coding errors.
-		if (err.ok !== false) { throw new Error(err.stack); } else { return err; }
-	}
-};
-
-/**
-| Returns all changes from time to now.
-*/
-MeshMashine.prototype.changes = function(time1, time2) {
-	log('mm', 'changes:', time1, time2);
-
-	if (!this._isValidTime(time1)) { return reject('invalid time1'); }
-	if (!this._isValidTime(time2)) { return reject('invalid time2'); }
-
-	if (time1 === -1) { time1 = this.history.length; }
-	if (time2 === -1) { time2 = this.history.length; }
-
-	if (time1 === time2) {
-		log('mm', 'ok', time1, time2);
-		return {ok: true, time1: time1, time2: time2, changes: null };
-	}
-
-	var clist = [];
-	for(var t = time1; t < time2; t++) {
-		clist.push((this.history[t]));
-	}
-
-	log('mm', 'ok', time1, time2);
-	return {ok: true, time1: time1, time2: time2, changes: clist };
-};
-
-/**
-| Returns true if time is valid.
-*/
-MeshMashine.prototype._isValidTime = function(time) {
-	if (!isInteger(time)) { return false; }
-	return time === -1 || time <= this.history.length;
-};
-
-/**
-| Access to Transform.one for other modules
-*/
-MeshMashine.transformOne = function(sign, src, trg) {
-	return Transform.one(sign, src, trg);
+	tfxChange   : tfxChange,
+	tfxSign     : tfxSign,
+	changeTree  : changeTree
 };
 
 /**

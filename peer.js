@@ -72,9 +72,12 @@ Peer = function(mode) {
 	case 'async' :
 		tree = new Tree({ type : 'Nexus' }, Patterns.mUniverse);
 		this.mm = new MeshMashine(tree);
+		this._changes = [];
 		var path = new Path([ 'welcome' ]);
-		src = { val  : this._getSync(-1, path).node };
-		trg = { path : path };
+		var gets = this._getSync(-1, path);
+		this._remoteTime = gets.time;
+		src = { val  : gets.node };
+		trg = { path : path      };
 		asw = this.mm.alter(0, src, trg);
 		if (asw.ok !== true) throw new Error('Cannot load space "welcome"');
 		break;
@@ -94,7 +97,7 @@ Peer = function(mode) {
 	default :
 		throw new Error('unknown mode: '+mode);
 	}
-	this.time = -1;  // @@ See if this is permanently needed
+	this._remoteTime = false;
 };
 
 
@@ -110,29 +113,28 @@ Peer.prototype._getSync = function(time, path) {
 		cmd  : 'get',
 		path : path
 	});
-	log('peer', 's->', request);
+	log('peer', 'gs->', request);
 	ajax.send(request);
 	var asw = ajax.responseText;
-	log('peer', '<-s', asw);
+	log('peer', '<-gs', asw);
 	try {
 		asw = JSON.parse(asw);
 	} catch (e) {
 		throw new Error('Server answered no JSON!');
 	}
 	if (asw.ok !== true) throw new Error('AJAX not ok: '+asw.message);
-	this.time = asw.time;
 	return asw;
-}
+};
 
 /**
 | Gets a twig
 |
-| time: to get twig for (-1 means now)
 | path: path to twig
 */
-Peer.prototype.get = function(time, path) {
+Peer.prototype.get = function(path) {
+	throw new Error('Peer.get no longer suppoerted!!!');
+	/*
 	var asw;
-
 	switch(this._mode) {
 	case 'async'   :
 	case 'emulate' :
@@ -140,11 +142,11 @@ Peer.prototype.get = function(time, path) {
 		if (asw.ok !== true) throw new Error('Meshmashine not ok: '+asw.message);
 		return asw.node;
 	case 'sync' :
-		asw = this._getSync(this.time, path);
+		asw = this._getSync(this._remoteTime, path);
 		return is(asw.node) ? new Tree(asw.node, Patterns.mUniverse).root : null;
 	default :
 		throw new Error('unknown mode: '+this._mode);
-	}
+	}*/
 };
 
 /**
@@ -155,6 +157,12 @@ Peer.prototype._alter = function(src, trg) {
 
 	switch (this._mode) {
 	case 'async'   :
+		debug('_ALTER');
+		asw = this.mm.alter(-1, src, trg);
+		if (asw.ok !== true) throw new Error('Meshmashine not OK: '+asw.message);
+		this._changes.push({ src: asw.src, trg: asw.trg, remoteTime: this._remoteTime });
+		this._sendChanges();
+		return asw;
 	case 'emulate' :
 		asw = this.mm.alter(-1, src, trg);
 		if (asw.ok !== true) throw new Error('Meshmashine not OK: '+asw.message);
@@ -164,7 +172,7 @@ Peer.prototype._alter = function(src, trg) {
 		ajax.open('POST', '/mm', false);
 		ajax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 		var request = JSON.stringify({
-			time : this.time,
+			time : this._remoteTime,
 			cmd  : 'alter',
 			src  : src,
 			trg  : trg
@@ -184,6 +192,78 @@ Peer.prototype._alter = function(src, trg) {
 		throw new Error('unknown mode: '+this._mode);
 	}
 };
+
+/**
+| Sends the stored changes to remote meshmashine
+*/
+Peer.prototype._sendChanges = function() {
+	if (this._mode !== 'async') { throw new Error('_sendChanges requires mode === async'); }
+	if (this._sendChangesAJAX) {
+		// already one ajax active
+		debug('already one ajax active');
+		return;
+	}
+
+	if (this._changes.length === 0) {
+		// nothing to send
+		debug('nothing to send');
+		return;
+	}
+
+	var ajax = this._sendChangesAJAX = new XMLHttpRequest();
+	ajax.open('POST', '/mm', true);
+	ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	ajax.onreadystatechange = this._sendChangesRSC;
+
+	var chg = this._changes[0];
+
+	var request = JSON.stringify({
+		cmd  : 'alter',
+		time : chg.remoteTime,
+		src  : chg.src,
+		trg  : chg.trg
+	});
+
+	log('peer', 'sc->', request);
+	ajax.send(request);
+};
+
+/**
+| ready state changed for the sendChanges request
+| TODO encapsulate error catcher
+*/
+Peer.prototype._sendChangesRSC = function(ev) {
+	debug('RSC', 'ev');
+	var ajax = this._sendChangesAJAX;
+	var asw;
+	if (!ajax) { throw new Error('_sendChangesRSC: ajax missing'); }
+	if (ajax.readyState !== 4) { return; }
+	if (ajax.status !== 200) {
+		this._sendChangesAJAX = null;
+		throw new Error('Cannot send changed to server');
+		// TODO proper error handling
+	}
+	try {
+		asw = JSON.parse(ajax.responseText);
+	} catch (e) {
+		this._sendChangesAJAX = null;
+		throw new Error('Server answered no JSON!');
+	}
+	log('peer', '<-sc', asw);
+	if (!asw.ok) {
+		this._sendChangesAJAX = null;
+		throw new Error('send changes, server not OK!');
+	}
+
+	// TODO list..
+	this._changes.unshift();
+
+	this._sendChangesAJAX = null;
+	if (this._changes.length > 0) {
+		this._sendChanges();
+	}
+};
+
 
 /**
 | Sets the listener

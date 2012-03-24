@@ -117,10 +117,10 @@ var reject = function(message) {
 | Returns an unique identifier.
 */
 var uid = function() {
-	var mime ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+	var mime ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 	var ua   = [];
 	for(var a = 0; a < 3; a++) {
-	    var r32  = Math.floor(0x100000000 * Math.random());
+		var r32  = Math.floor(0x100000000 * Math.random());
 		for(var b = 0; b < 6; b++) {
 			ua.push(mime[r32 & 0x3F]);
 			r32 = r32 >>> 6;
@@ -189,6 +189,7 @@ var fixate = function(obj, key, value) {
 
 /**
 | Fixates a value to an object (not changeable) and makes it non enumerable.
+| TODO rename
 */
 var fixateNoEnum = function(obj, key, value) {
     Object.defineProperty(obj, key, {value: value});

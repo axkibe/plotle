@@ -2063,7 +2063,7 @@ VDoc.prototype.getVParaAtPoint = function(p) {
 |
 | fabric  : the fabric to path for
 | border  : width of the path (ignored)
-| twist   : paramter for beginPath() 
+| twist   : paramter for beginPath()
 |           +0.5 to everything for line pathing
 | width   : width the vdoc is drawn
 | imargin : inner margin of the doc
