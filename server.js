@@ -22,7 +22,7 @@
  License: MIT(Expat), see accompanying 'License'-file
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /**
-| Capsule
+| Capsule (just to make jshint happy)
 */
 (function(){
 "use strict";
@@ -44,113 +44,170 @@ var Patterns    = require('./patterns');
 var Tree        = require('./tree');
 var Emulate     = require('./emulate');
 
-
-var debug  = Jools.debug;
-var log    = Jools.log;
-var reject = Jools.reject;
+var Change      = MeshMashine.Change;
+var Signature   = MeshMashine.Signature;
+var debug       = Jools.debug;
+var log         = Jools.log;
+var reject      = Jools.reject;
 
 /**
 | Loads the configuration file
-|
-| To listen for example on all interfaces on port 80 'config.js'
-| should look like this:
-| ----------------------
-| module.exports = {
-|     ip   : null,
-|     port : 80,
-| };
-| ----------------------
 */
 try {
 	config = require('./config');
 } catch (e) {
-	console.log(true, 'no config found, defaulting to localhost:8833');
-	config = {
-		ip    : '127.0.0.1',
-		port  : 8833,
-		log   : {}
-	};
+	throw new Error('no config.js file found!');
 }
 
 /**
-| Startup
+| Server
 */
-var mm;
-(function() {
-	var tree = new Tree({ type : 'Nexus' }, Patterns.mUniverse);
-	mm = new MeshMashine(tree);
+var Server = function() {
+	this.files = {};
+
+	this.registerFile('/',               'html', './meshcraft.html'   );
+	this.registerFile('/browser.js',     'js',   './browser.js'       );
+	this.registerFile('/emulate.js',     'js',   './emulate.js'       );
+	this.registerFile('/fabric.js',      'js',   './fabric.js'        );
+	this.registerFile('/index.html',     'js',   './meshcraft.html'   );
+	this.registerFile('/favicon.ico',    'ico',  './icons/hexicon.ico');
+	this.registerFile('/jools.js',       'js',   './jools.js'         );
+	this.registerFile('/meshcraft.html', 'html', './meshcraft.html'   );
+	this.registerFile('/meshmashine.js', 'js',   './meshmashine.js'   );
+	this.registerFile('/path.js',        'js',   './path.js'          );
+	this.registerFile('/patterns.js',    'js',   './patterns.js'      );
+	this.registerFile('/peer.js',        'js',   './peer.js'          );
+	this.registerFile('/shell.js',       'js',   './shell.js'         );
+	this.registerFile('/testpad.html',   'html', './testpad.html'     );
+	this.registerFile('/testpad.js',     'js',   './testpad.js'       );
+	this.registerFile('/tree.js',        'js',   './tree.js'          );
+
+	this.tree    = new Tree({ type : 'Nexus' }, Patterns.mUniverse);
+	this.history = [];
 
 	// startup init
-	var src = Emulate.src;
-	var trg = { path: new Path(Emulate.path) };
-	var asw = mm.alter(0, src, trg);
-	if (asw.ok !== true) throw new Error('Cannot init Repository');
-})();
+	var chg = new Change(
+		new Signature(Emulate.src),
+		new Signature({ path: new Path(Emulate.path) })
+	);
 
-/**
-| Returns a registery for a file to be served.
-*/
-var register = function(type, filename) {
-	switch (type) {
-	case 'html' : return { file: filename, mime: 'text/html',       code: 'utf-8'  };
-	case 'js'   : return { file: filename, mime: 'text/javascript', code: 'utf-8'  };
-	case 'ico'  : return { file: filename, mime: 'image/x-icon',    code: 'binary' };
-	default : throw new Error('unknown file type: '+type);
-	}
+	var asw = this.alter(0, chg);
+	if (asw.ok !== true) throw new Error('Cannot init Repository');
+
+	var self = this;
+	log('start', 'Starting server @ http://'+(config.ip || '*')+'/:'+config.port);
+
+	http.createServer(function(req, res) {
+		self.requestListener(req, res);
+	});
+
+	http.listen(config.port, config.ip, function() {
+		log('start', 'Server running');
+	});
 };
 
 /**
-| Files served.
+| Executes an alter
 */
-var content = {
-	'/'               : register('html', './meshcraft.html'    ),
-	'/browser.js'     : register('js',   './browser.js'        ),
-	'/emulate.js'     : register('js',   './emulate.js'        ),
-	'/fabric.js'      : register('js',   './fabric.js'         ),
-	'/index.html'     : register('js',   './meshcraft.html'    ),
-	'/favicon.ico'    : register('ico',  './icons/hexicon.ico' ),
-	'/jools.js'       : register('js',   './jools.js'          ),
-	'/meshcraft.html' : register('html', './meshcraft.html'    ),
-	'/meshmashine.js' : register('js',   './meshmashine.js'    ),
-	'/path.js'        : register('js',   './path.js'           ),
-	'/patterns.js'    : register('js',   './patterns.js'       ),
-	'/peer.js'        : register('js',   './peer.js'           ),
-	'/shell.js'       : register('js',   './shell.js'          ),
-	'/testpad.html'   : register('html', './testpad.html'      ),
-	'/testpad.js'     : register('js',   './testpad.js'        ),
-	'/tree.js'        : register('js',   './tree.js'           )
+Server.prototype.alter = function(time, chg) {
+	if (time === -1) { time = this.history.length; }
+	if (time < 0) throw reject('invalid time');
+
+	var chgX = chg;
+	if (time < this.history.length - 1) {
+		chgX = MeshMashine.tfxChange(chg, this.history, time, this.history.length);
+	}
+	var res = MeshMashine.changeTree(this.tree, chgX);
+
+	this.tree = res.tree;
+	chgX      = res.chgX;
+	for(var a = 0, aZ = chgX.length; a < aZ; a++) {
+		this.history.push(chgX[a]);
+	}
+	return { ok: true, chgX: chgX };
 };
 
 /**
 | Logs and returns a web error
 */
-function webError(res, code, message) {
+Server.prototype.webError = function(res, code, message) {
 	res.writeHead(code, {'Content-Type': 'text/plain'});
 	message = code+' '+message;
-	log('web', 'err', message);
+	log('web', 'error', code, message);
 	res.end(message);
-}
+};
 
 /**
-| Handles an Ajax request to the MeshMashine.
+| Registers a file for serving.
 */
-var mmAjax = function(req, red, res) {
-	var data = [];
-	if (req.method !== 'POST') {
-		webError(res, 400, 'Must use POST');
+Server.prototype.registerFile = function(path, type, filename) {
+	var e = { filename : filename };
+
+	switch (type) {
+	case 'html' : e.code = 'utf-8';  e.mime = 'text/html';       break;
+	case 'js'   : e.code = 'utf-8';  e.mime = 'text/javascript'; break;
+	case 'ico'  : e.code = 'binary'; e.mime = 'image/x-icon';    break;
+	default : throw new Error('unknown file type: '+type);
+	}
+	this.files[path] = e;
+};
+
+/**
+| Listens to http requests
+*/
+Server.prototype.requestListener = function(req, res) {
+	var red = url.parse(req.url);
+	log('web', req.connection.remoteAddress, red.href);
+
+	if (red.pathname === '/mm') {
+		this.ajax(req, red, res);
 		return;
 	}
+
+	if (red.pathname === '/config.js') {
+		this.webConfig(req, red, res);
+		return;
+	}
+
+	var f = this.files[red.pathname];
+	if (!f) {
+		res.writeHead(404, {'Content-Type': 'text/plain'});
+		this.webError(res, '404 Bad Reqeust');
+		return;
+	}
+
+	fs.readFile(f.filename, function(err, data) {
+		if (err) { this.webError(res, 500, 'Internal Server Error'); }
+		res.writeHead(200, {'Content-Type': f.mime});
+		res.end(data, f.code);
+	});
+};
+
+
+
+/**
+| Handles ajax requests to the MeshMashine.
+*/
+Server.prototype.ajax = function(req, red, res) {
+	var data = [];
+
+	if (req.method !== 'POST') {
+		this.webError(res, 400, 'Must use POST');
+		return;
+	}
+
 	req.on('data', function(chunk) {
 		data.push(chunk);
 	});
+
 	req.on('end', function() {
 		var query = data.join('');
-		log('ajax', 'in ', query);
+		log('ajax', '<-', query);
 		var cmd;
 		try {
 			cmd = JSON.parse(query);
 		} catch (err) {
-			webError(res, 400, 'Not valid JSON');
+			this.webError(res, 400, 'Not valid JSON');
 			return;
 		}
 		var asw;
@@ -159,30 +216,37 @@ var mmAjax = function(req, red, res) {
 			case 'alter':
 				if (!cmd.src) { throw reject('cmd.src missing'); }
 				if (!cmd.trg) { throw reject('cmd.trg missing'); }
-				if (cmd.src.path) cmd.src.path = new Path(cmd.src.path);
-				if (cmd.trg.path) cmd.trg.path = new Path(cmd.trg.path);
-				asw = mm.alter(cmd.time, cmd.src, cmd.trg);
+				if (cmd.src.path) { cmd.src.path = new Path(cmd.src.path); }
+				if (cmd.trg.path) { cmd.trg.path = new Path(cmd.trg.path); }
+				var chg = new Change( new Signature(cmd.src), new Signature(cmd.trg) );
+				asw = this.alter(cmd.time, chg);
+
 				break;
 			case 'get':
 				if (!cmd.path) {
-					webError(res, 400, 'cmd get requires .path');
+					this.webError(res, 400, 'cmd get requires .path');
 					break;
 				}
 				var path = new Path(cmd.path);
-				asw = mm.get(cmd.time, path);
-				break;
+				throw new Error('TODO');
+				//asw = mm.get(cmd.time, path);
+				//break;
+
 			case 'update':
-				asw = mm.update(cmd.time);
-				break;
+				throw new Error('TODO');
+				//asw = mm.update(cmd.time);
+				//break;
+
 			default:
-				webError(res, 400, 'unknown command "'+cmd.cmd+'"');
+				this.webError(res, 400, 'unknown command "'+cmd.cmd+'"');
 				return;
 			}
 		} catch (e) {
 			console.log(util.inspect(e));
 			if (e.ok !== false) throw e; else asw = e;
 		}
-		log('ajax', 'out', asw);
+
+		log('ajax', '->', asw);
 		res.writeHead(200, {'Content-Type': 'application/json'});
 		res.end(JSON.stringify(asw));
 	});
@@ -205,44 +269,6 @@ function webConfig(req, red, res) {
 	res.end('};\n');
 }
 
-/**
-| Dispatches web request
-*/
-var dispatch = function(req, red, res) {
-	if (red.pathname === '/mm') {
-		mmAjax(req, red, res);
-		return;
-	}
-
-	if (red.pathname === '/config.js') {
-		webConfig(req, red, res);
-		return;
-	}
-
-	var co = content[red.pathname];
-	if (!co) {
-		res.writeHead(404, {'Content-Type': 'text/plain'});
-		webError(res, '404 Bad Reqeust');
-		return;
-	}
-
-	fs.readFile(co.file, function(err, data) {
-		if (err) { webError(res, 500, 'Internal Server Error'); }
-		res.writeHead(200, {'Content-Type': co.mime});
-		res.end(data, co.code);
-	});
-};
-
-/**
-| Startup.
-*/
-log('start', 'Starting server @ http://'+(config.ip || '*')+'/:'+config.port);
-http.createServer(function (req, res) {
-	var red = url.parse(req.url);
-	log('web', req.connection.remoteAddress, red.href);
-	dispatch(req, red, res);
-}).listen(config.port, config.ip, function() {
-	log('start', 'Server running');
-});
+var server = new Server();
 
 })();
