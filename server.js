@@ -132,10 +132,10 @@ Server.prototype.alter = function(cmd) {
 		chgX = MeshMashine.tfxChange(chgX, this.history, time, this.history.length);
 	}
 
-	var res = MeshMashine.changeTree(this.tree, chgX);
-	this.tree = res.tree;
+	var r = MeshMashine.changeTree(this.tree, chgX);
+	this.tree = r.tree;
 
-	chgX      = res.chgX;
+	chgX      = r.chgX;
 	for(var a = 0, aZ = chgX.length; a < aZ; a++) {
 		this.history.push(chgX[a]);
 	}
@@ -154,21 +154,23 @@ Server.prototype.get = function(cmd) {
 	if (time === -1) { time = this.history.length; }
 	if (!(time >= 0 && time <= this.history.length)) { throw reject('invalid time'); }
 
-	var path;
-	try {
-		path = new Path(cmd.path);
-	} catch (e) {
-		throw reject('invalid path: ' + e.message);
-	}
-
+	debug('GET', time, this.history.length);
 	var tree = this.tree;
-	if (time < this.history.length - 1) {
-		for (var t = this.history.length - 1; t >= time; t++) {
-			tree = MeshMashine.changeTree(tree, this.history[t].reverse());
-		}
+	for (var t = this.history.length - 1; t >= time; t--) {
+		var r = MeshMashine.changeTree(tree, this.history[t].reverse());
+		tree = r.tree;
+	}
+	debug('TREEE', tree);
+
+	var node;
+	try {
+		var path = new Path(cmd.path);
+		node = tree.getPath(path);
+	} catch(e) {
+		throw reject('cannot get path: '+e.message);
 	}
 
-	return { ok: true, time : time, tree: tree };
+	return { ok: true, time : time, node: node };
 };
 
 /**

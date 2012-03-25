@@ -445,9 +445,18 @@ var inputSpecialKey = function(keyCode, ctrlKey) {
 | Updates data from server
 */
 var update = function(totime) {
-	space = peer.get(totime, new Path(['welcome']));
-	time  = peer.time;
+	var res;
+
+	peer.toTime(totime);
+
+	res   = peer.get(new Path(['welcome']));
+	debug('RES', res);
+	time  = res.time;
+	space = res.node;
+	debug('ASW', space);
+
 	maxtime = max(time, maxtime);
+
 	element.now.innerHTML = '' + time;
 	if (space) {
 		note = space.copse['1'];

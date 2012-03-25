@@ -582,25 +582,27 @@ var tfxChange = function(chg, chgX, t1, t2) {
 	}
 
 	var a, aZ, asw;
-	var srcIA = isArray(srcX);
-	var trgIA = isArray(trgX);
+	debug('SRCX', srcX);
+	debug('TRGX', trgX);
+	var srcA = isArray(srcX);
+	var trgA = isArray(trgX);
 
-	if (!srcIA && trgIA) {
+	if (!srcA && !trgA) {
 		return new Change(srcX, trgX);
-	} else if (!srcIA && trgIA)  {
+	} else if (!srcA && trgA)  {
 		asw = [];
 		for(a = 0, aZ = trgX.length; a < aZ; a++) {
 			asw[a] = new Change(srcX, trgX[a]);
 		}
 		return asw;
-	} else if (srcIA && !trgIA) {
+	} else if (srcA && !trgA) {
 		asw = [];
 		for(a = 0, aZ = srcX.length; a < aZ; a++) {
 			asw[a] = new Change(srcX[a], trgX);
 		}
 		return asw;
 	} else {
-		throw new Error('srcIS and trgIA true :-(');
+		throw new Error('srcX and trgX arrays :-(');
 	}
 };
 

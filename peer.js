@@ -127,21 +127,43 @@ Peer.prototype._getSync = function(time, path) {
 };
 
 /**
+| Sets the time
+*/
+Peer.prototype.toTime = function(time) {
+	switch(this._mode) {
+	case 'async'   :
+		throw new Error('Cannot Peer.toTime in async mode');
+	case 'sync' :
+		this._remoteTime = time;
+		break;
+	case 'emulate' :
+		throw new Error('Cannot Peer.toTime in emulate mode');
+	}
+}
+
+/**
 | Gets a twig
 |
 | path: path to twig
 */
 Peer.prototype.get = function(path) {
-	var asw;
+	var res;
 	switch(this._mode) {
 	case 'async'   :
 	case 'emulate' :
-		asw = this.mm.get(-1, path);
-		if (asw.ok !== true) throw new Error('Meshmashine not ok: '+asw.message);
-		return asw.node;
+		throw new Error('TODO');
+		/*
+		res = this.mm.get(-1, path);
+		if (res.ok !== true) throw new Error('Meshmashine not ok: '+res.message);
+		return res.node;
+		*/
 	case 'sync' :
-		asw = this._getSync(this._remoteTime, path);
-		return is(asw.node) ? new Tree(asw.node, Patterns.mUniverse).root : null;
+		debug('PEER:GET', path);
+		res = this._getSync(this._remoteTime, path);
+		return {
+			node : is(res.node) ? new Tree(res.node, Patterns.mUniverse).root : null,
+			time : res.time
+		};
 	default :
 		throw new Error('unknown mode: '+this._mode);
 	}

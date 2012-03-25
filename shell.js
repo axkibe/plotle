@@ -624,7 +624,7 @@ Shell = function(fabric, sPeer) {
 	this.fabric    = fabric;
 
 	var vspath     = new Path(['welcome']);
-	this.vspace    = new VSpace(peer.get(-1, vspath), vspath);
+	this.vspace    = new VSpace(-1, peer.get(vspath), vspath);
 
 	this.cockpit   = new Cockpit();
 	this.caret     = new Caret();
