@@ -53,9 +53,10 @@ var Peer;
 "use strict";
 if (typeof (window) === 'undefined') throw new Error('Peer nees a browser!');
 
-var debug = Jools.debug;
-var log   = Jools.log;
-var is    = Jools.is;
+var Change    = MeshMashine.Change;
+var Signature = MeshMashine.Signature;
+var log       = Jools.log;
+var is        = Jools.is;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .-,--.
@@ -71,8 +72,6 @@ var is    = Jools.is;
 | Constructor
 */
 Peer = function(mode) {
-	this._mode = mode; // TODO
-
 	switch(mode) {
 	case 'async'   : this._iface = new IFaceASync();   break;
 	case 'sync'    : this._iface = new IFaceSync();    break;
@@ -99,17 +98,253 @@ Peer.prototype.get = function(path) {
 };
 
 /**
-| Issues an alter request
+| Sets the listener
 */
-Peer.prototype._alter = function(src, trg) {
-	return this._iface.alter(src, trg);
+Peer.prototype.setReport = function(report) {
+	this._report = report;
+};
+
+/**
+| Creates a new note.
+*/
+Peer.prototype.newNote = function(spacePath, zone) {
+	var chgX = this._iface.alter(
+		{
+			val : {
+				type : 'Note',
+				fontsize : 13,
+				zone : zone,
+				doc  : {
+					type  : 'Doc',
+					copse : { '1' : { type: 'Para', text: '' } },
+					ranks : [ '1' ]
+				}
+			}
+		},
+		{ path: new Path(spacePath, '++', '$new'), rank: 0 }
+	);
+	return chgX.trg.path.get(-1);
+};
+
+/**
+| Sets the zone for item.
+*/
+Peer.prototype.setZone = function(itemPath, zone) {
+	this._iface.alter(
+		{ val  : zone },
+		{ path : new Path(itemPath, '++', 'zone') }
+	);
+};
+
+/**
+| Sets an items fontsize
+*/
+Peer.prototype.setFontSize = function(itemPath, fontsize) {
+	this._iface.alter(
+		{ val  : fontsize },
+		{ path : new Path(itemPath, '++', 'fontsize') }
+	);
+};
+
+/**
+| Sets an items PNW. (point in north-west)
+*/
+Peer.prototype.setPNW = function(itemPath, pnw) {
+	this._iface.alter(
+		{ val  : pnw },
+		{ path : new Path(itemPath, '++', 'pnw') }
+	);
+};
+
+/**
+| Creates a new label.
+*/
+Peer.prototype.newLabel = function(spacePath, pnw, text, fontsize) {
+	var asw = this._iface.alter(
+		{
+			val           : {
+				type      : 'Label',
+				fontsize  : fontsize,
+				pnw       : pnw,
+				doc       : {
+					type  : 'Doc',
+					copse : { '1' : { type: 'Para', text: text } },
+					ranks : [ '1' ]
+				}
+			}
+		},
+		{ path: new Path(spacePath, '++', '$new'), rank: 0 }
+	);
+
+	return asw.alts.trg.path.get(-1);
+};
+
+/**
+| Creates a new relation.
+*/
+Peer.prototype.newRelation = function(spacePath, pnw, text, fontsize, item1key, item2key) {
+	var asw = this._iface.alter(
+		{
+			val           : {
+				type      : 'Relation',
+				item1key  : item1key,
+				item2key  : item2key,
+				pnw       : pnw,
+				fontsize  : fontsize,
+				doc       : {
+					type  : 'Doc',
+					copse : { '1' : { type: 'Para', text: text } },
+					ranks : [ '1' ]
+				}
+			}
+		},
+		{ path: new Path(spacePath, '++', '$new'), rank: 0 }
+	);
+
+	return asw.alts.trg.path.get(-1);
+};
+
+/**
+| Moves an item up to the z-index
+*/
+Peer.prototype.moveToTop = function(path) {
+	this._iface.alter(
+		{ path: path },
+		{ rank: 0    }
+	);
+};
+
+/**
+| Inserts some text.
+*/
+Peer.prototype.insertText = function(path, offset, text) {
+	this._iface.alter(
+		{ val  : text },
+		{ path : path, at1  : offset }
+	);
+};
+
+/**
+| Removes some text within one node
+*/
+Peer.prototype.removeText = function(path, at1, len) {
+	if (len === 0) return;
+	if (len < 0) throw new Error('malformed removeText');
+
+	this._iface.alter(
+		{ path: path, at1: at1, at2: at1 + len },
+		{ val: null }
+	);
+};
+
+/**
+| Removes a text spawning over severa entities
+*/
+Peer.prototype.removeSpan = function(path1, at1, path2, at2) {
+	if (path1.get(-1) !== 'text') { throw new Error('removeSpan invalid path'); }
+	if (path2.get(-1) !== 'text') { throw new Error('removeSpan invalid path'); }
+
+	if (path1.equals(path2)) {
+		return this.removeText(path1, at1, at2 - at1);
+	}
+
+	var k1 = path1.get(-2);
+	var k2 = path2.get(-2);
+
+	var pivot = this.mm.tree.getPath(path1, -2);
+	var r1 = pivot.rankOf(k1);
+	var r2 = pivot.rankOf(k2);
+
+	for (var r = r1; r < r2 - 1; r++) {
+		this.join(path1, this.mm.tree.getPath(path1).length);
+	}
+	var len2 = this.mm.tree.getPath(path1).length;
+	this.join(path1, len2);
+
+	this.removeText(path1, at1, len2 - at1 + at2);
+};
+
+/**
+| Splits a text node.
+*/
+Peer.prototype.split = function(path, offset) {
+	this._iface.alter(
+		{ path: path, at1: offset },
+		{ proc: 'splice' }
+	);
+};
+
+/**
+| Joins a text node with its next one
+*/
+Peer.prototype.join = function(path, at1) {
+	this._iface.alter(
+		{ proc: 'splice' },
+		{ path: path, at1 : at1 }
+	);
+};
+
+/**
+| Removes an item.
+*/
+Peer.prototype.removeItem = function(path) {
+	this._iface.alter(
+		{ val  : null  },
+		{ path : path, rank : null  }
+	);
+};
+
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ,-_/ .-,--'                ,.   .---.
+ '  |  \|__ ,-. ,-. ,-.    / |   \___  . . ,-. ,-.
+ .^ |   |   ,-| |   |-'   /~~|-.     \ | | | | |
+ `--'  `'   `-^ `-' `-' ,'   `-' `---' `-| ' ' `-'
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ /|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                                       `-'
+ Peer interface that talks asynchronously with the server.
+ This is the normal way the meshcraft shell operates.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+var IFaceASync = function() {
+	this.tree = new Tree({ type : 'Nexus' }, Patterns.mUniverse);
+	this._changes = [];
+	var path = new Path([ 'welcome' ]);
+	var gets = this._getSync(-1, path);
+	this._remoteTime = gets.time;
+	var r = this.alter(
+		{ val  : gets.node },
+		{ path : path      }
+	);
+	if (r.ok !== true) throw new Error('Cannot load space "welcome"');
+};
+
+/**
+| Gets a twig
+*/
+IFaceASync.prototype.get = function() {
+	throw new Error('TODO');
+};
+
+/**
+| Alters the tree
+*/
+IFaceASync.prototype.alter = function(src, trg) {
+	throw new Error('TODO');
+	/*
+	asw = this.mm.alter(src, trg);
+	if (asw.ok !== true) throw new Error('Meshmashine not OK: '+asw.message);
+	this._changes.push({ src: asw.src, trg: asw.trg, remoteTime: this._remoteTime });
+	this._sendChanges();
+	return asw;
+	*/
 };
 
 /**
 | Sends the stored changes to remote meshmashine
 */
-Peer.prototype._sendChanges = function() {
-	if (this._mode !== 'async') { throw new Error('_sendChanges requires mode === async'); }
+IFaceASync.prototype._sendChanges = function() {
 	if (this._sendChangesAJAX) {
 		// already one ajax active
 		debug('already one ajax active');
@@ -144,7 +379,7 @@ Peer.prototype._sendChanges = function() {
 | ready state changed for the sendChanges request
 | TODO encapsulate error catcher
 */
-Peer.prototype._sendChangesRSC = function(ev) {
+IFaceASync.prototype._sendChangesRSC = function(ev) {
 	var ajax = this._sendChangesAJAX;
 	var asw;
 	if (!ajax) { throw new Error('_sendChangesRSC: ajax missing'); }
@@ -175,308 +410,50 @@ Peer.prototype._sendChangesRSC = function(ev) {
 	}
 };
 
-
-/**
-| Sets the listener
-*/
-Peer.prototype.setReport = function(report) {
-	switch (this._mode) {
-	case 'async'   :
-	case 'emulate' :
-		this.mm.setReport(report);
-		break;
-	case 'sync' :
-		throw new Error('No reporting on sync operation');
-	default :
-		throw new Error('unknown mode: '+this._mode);
-	}
-};
-
-/**
-| Creates a new note.
-*/
-Peer.prototype.newNote = function(spacePath, zone) {
-	var asw = this._alter(
-		{
-			val : {
-				type : 'Note',
-				fontsize : 13,
-				zone : zone,
-				doc  : {
-					type  : 'Doc',
-					copse : { '1' : { type: 'Para', text: '' } },
-					ranks : [ '1' ]
-				}
-			}
-		},
-		{ path: new Path(spacePath, '++', '$new'), rank: 0 }
-	);
-
-	return asw.alts.trg.path.get(-1);
-};
-
-/**
-| Sets the zone for item.
-*/
-Peer.prototype.setZone = function(itemPath, zone) {
-	this._alter(
-		{ val  : zone },
-		{ path : new Path(itemPath, '++', 'zone') }
-	);
-};
-
-/**
-| Sets an items fontsize
-*/
-Peer.prototype.setFontSize = function(itemPath, fontsize) {
-	this._alter(
-		{ val  : fontsize },
-		{ path : new Path(itemPath, '++', 'fontsize') }
-	);
-};
-
-/**
-| Sets an items PNW. (point in north-west)
-*/
-Peer.prototype.setPNW = function(itemPath, pnw) {
-	this._alter(
-		{ val  : pnw },
-		{ path : new Path(itemPath, '++', 'pnw') }
-	);
-};
-
-/**
-| Creates a new label.
-*/
-Peer.prototype.newLabel = function(spacePath, pnw, text, fontsize) {
-	var asw = this._alter(
-		{
-			val           : {
-				type      : 'Label',
-				fontsize  : fontsize,
-				pnw       : pnw,
-				doc       : {
-					type  : 'Doc',
-					copse : { '1' : { type: 'Para', text: text } },
-					ranks : [ '1' ]
-				}
-			}
-		},
-		{ path: new Path(spacePath, '++', '$new'), rank: 0 }
-	);
-
-	return asw.alts.trg.path.get(-1);
-};
-
-/**
-| Creates a new relation.
-*/
-Peer.prototype.newRelation = function(spacePath, pnw, text, fontsize, item1key, item2key) {
-	var asw = this._alter(
-		{
-			val           : {
-				type      : 'Relation',
-				item1key  : item1key,
-				item2key  : item2key,
-				pnw       : pnw,
-				fontsize  : fontsize,
-				doc       : {
-					type  : 'Doc',
-					copse : { '1' : { type: 'Para', text: text } },
-					ranks : [ '1' ]
-				}
-			}
-		},
-		{ path: new Path(spacePath, '++', '$new'), rank: 0 }
-	);
-
-	return asw.alts.trg.path.get(-1);
-};
-
-/**
-| Moves an item up to the z-index
-*/
-Peer.prototype.moveToTop = function(path) {
-	this._alter(
-		{ path: path },
-		{ rank: 0    }
-	);
-};
-
-/**
-| Inserts some text.
-*/
-Peer.prototype.insertText = function(path, offset, text) {
-	this._alter(
-		{ val  : text },
-		{ path : path, at1  : offset }
-	);
-};
-
-/**
-| Removes some text within one node
-*/
-Peer.prototype.removeText = function(path, at1, len) {
-	if (len === 0) return;
-	if (len < 0) throw new Error('malformed removeText');
-
-	this._alter(
-		{ path: path, at1: at1, at2: at1 + len },
-		{ val: null }
-	);
-};
-
-/**
-| Removes a text spawning over severa entities
-*/
-Peer.prototype.removeSpan = function(path1, at1, path2, at2) {
-	if (this._mode === 'sync')    { throw new Error('cannot removeSpan in sync mode'); }
-	if (path1.get(-1) !== 'text') { throw new Error('removeSpan invalid path'); }
-	if (path2.get(-1) !== 'text') { throw new Error('removeSpan invalid path'); }
-
-	if (path1.equals(path2)) {
-		return this.removeText(path1, at1, at2 - at1);
-	}
-
-	var k1 = path1.get(-2);
-	var k2 = path2.get(-2);
-
-	var pivot = this.mm.tree.getPath(path1, -2);
-	var r1 = pivot.rankOf(k1);
-	var r2 = pivot.rankOf(k2);
-
-	for (var r = r1; r < r2 - 1; r++) {
-		this.join(path1, this.mm.tree.getPath(path1).length);
-	}
-	var len2 = this.mm.tree.getPath(path1).length;
-	this.join(path1, len2);
-
-	this.removeText(path1, at1, len2 - at1 + at2);
-};
-
-/**
-| Splits a text node.
-*/
-Peer.prototype.split = function(path, offset) {
-	this._alter(
-		{ path: path, at1: offset },
-		{ proc: 'splice' }
-	);
-};
-
-/**
-| Joins a text node with its next one
-*/
-Peer.prototype.join = function(path, at1) {
-	this._alter(
-		{ proc: 'splice' },
-		{ path: path, at1 : at1 }
-	);
-};
-
-/**
-| Removes an item.
-*/
-Peer.prototype.removeItem = function(path) {
-	this._alter(
-		{ val  : null  },
-		{ path : path, rank : null  }
-	);
-};
-
-
-
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- .-,--. ,                      ,.   .---.
-  '|__/ )   ,-. . . ,-. ,-.   / |   \___  . . ,-. ,-.
-  ,|   /    ,-| | | |-' |    /~~|-.     \ | | | | |
-  `'   `--' `-^ `-| `-' '  ,'   `-' `---' `-| ' ' `-'
-                 /|                        /|
-                `-'                       `-'
+ ,-_/ .-,--'           .-,--.           .      .
+ '  |  \|__ ,-. ,-. ,-. `\__  ,-,-. . . |  ,-. |- ,-.
+ .^ |   |   ,-| |   |-'  /    | | | | | |  ,-| |  |-'
+ `--'  `'   `-^ `-' `-' '`--' ' ' ' `-^ `' `-^ `' `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- Peer layer that talks asynchronously with the server.
- This is the normal way the meshcraft shell operates.
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-var IFaceASync = function() {
-	this.tree = new Tree({ type : 'Nexus' }, Patterns.mUniverse);
-	this._changes = [];
-	var path = new Path([ 'welcome' ]);
-	var gets = this._getSync(-1, path);
-	this._remoteTime = gets.time;
-	var r = this.alter(
-		{ val  : gets.node },
-		{ path : path      }
-	);
-	if (r.ok !== true) throw new Error('Cannot load space "welcome"');
-};
-
-/**
-| Gets a twig
-*/
-IFaceASync.prototype.get = function() {
-	throw new Error('TODO');
-};
-
-
-IFaceASync.prototype.alter = function(src, trg) {
-	throw new Error('TODO');
-	/*
-	asw = this.mm.alter(src, trg);
-	if (asw.ok !== true) throw new Error('Meshmashine not OK: '+asw.message);
-	this._changes.push({ src: asw.src, trg: asw.trg, remoteTime: this._remoteTime });
-	this._sendChanges();
-	return asw;
-	*/
-};
-
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ,-_/ .-,--'            .---.             
- '  |  \|__ ,-. ,-. ,-. \___  . . ,-. ,-. 
- .^ |   |   ,-| |   |-'     \ | | | | |   
- `--'  `'   `-^ `-' `-' `---' `-| ' ' `-' 
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~/| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-                              `-'    
- Peer layer that emulates a server
+Peer inteface that emulates a server.
  Used for development.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 var IFaceEmulate = function() {
 	this.tree = new Tree({ type : 'Nexus' }, Patterns.mUniverse);
 	this.history = [];
-
-	var r = this._alter(Emulate.src, { path: new Path(Emulate.path) });
-	if (r.ok !== true) throw new Error('Cannot emulate Repository');
+	this.alter(Emulate.src, { path: new Path(Emulate.path) });
 };
 
 /**
 | Gets a twig
 */
 IFaceEmulate.prototype.get = function(path) {
-	// TODO
-	var r = this.mm.get(-1, path);
-	if (res.ok !== true) throw new Error('Meshmashine not ok: '+res.message);
-	return res.node;
+	return this.tree.getPath(path);
 };
 
 
 IFaceEmulate.prototype.alter = function(src, trg) {
-	var r = MeshMashine.changeTree(this.tree, new Change(src, trg));
-	asw = this.mm.alter(-1, src, trg);
-	if (asw.ok !== true) throw new Error('Meshmashine not OK: '+asw.message);
-	return asw;
+	var chg = new Change(new Signature(src), new Signature(trg));
+	var r = MeshMashine.changeTree(this.tree, chg);
+	this.tree = r.tree;
+	var chgX = r.chgX;
+	for (var a = 0, aZ = chgX.length; a < aZ; a++) {
+		this.history.push(chgX[a]);
+	}
+	return chgX;
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ,-_/ .-,--'            .---.             
- '  |  \|__ ,-. ,-. ,-. \___  . . ,-. ,-. 
- .^ |   |   ,-| |   |-'     \ | | | | |   
- `--'  `'   `-^ `-' `-' `---' `-| ' ' `-' 
+ ,-_/ .-,--'            .---.
+ '  |  \|__ ,-. ,-. ,-. \___  . . ,-. ,-.
+ .^ |   |   ,-| |   |-'     \ | | | | |
+ `--'  `'   `-^ `-' `-' `---' `-| ' ' `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~/| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-                              `-'         
- Peer layer that talks in a synchronous way with the server.
+                              `-'
+ Peer interface that talks in a synchronous way with the server.
  Used for debugging (testpad).
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -487,16 +464,18 @@ var IFaceSync = function() {
 /**
 | Gets a twig.
 */
-IFaceSync.prototype.get = function() {
-	res = this._getSync(this._remoteTime, path);
+IFaceSync.prototype.get = function(path) {
+	var r = this._getSync(this._remoteTime, path);
 	return {
-		node : is(res.node) ? new Tree(res.node, Patterns.mUniverse).root : null,
-		time : res.time
+		node : is(r.node) ? new Tree(r.node, Patterns.mUniverse).root : null,
+		time : r.time
 	};
 };
 
-
-IFaceSync.prototype.alter = function() {
+/**
+| Alters the tree.
+*/
+IFaceSync.prototype.alter = function(src, trg) {
 	var ajax = new XMLHttpRequest();
 	ajax.open('POST', '/mm', false);
 	ajax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -508,7 +487,8 @@ IFaceSync.prototype.alter = function() {
 	});
 	log('peer', '->', request);
 	ajax.send(request);
-	asw = ajax.responseText;
+	
+	var asw = ajax.responseText;
 	log('peer', '<-', asw);
 	try {
 		asw = JSON.parse(asw);
@@ -519,6 +499,9 @@ IFaceSync.prototype.alter = function() {
 	return asw;
 };
 
+/**
+| Goes forth/back in time
+*/
 IFaceSync.prototype.toTime = function(time) {
 	this._remoteTime = time;
 };

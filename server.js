@@ -135,7 +135,7 @@ Server.prototype.alter = function(cmd) {
 	var r = MeshMashine.changeTree(this.tree, chgX);
 	this.tree = r.tree;
 
-	chgX      = r.chgX;
+	chgX = r.chgX;
 	for(var a = 0, aZ = chgX.length; a < aZ; a++) {
 		this.history.push(chgX[a]);
 	}

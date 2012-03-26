@@ -227,11 +227,10 @@ Object.defineProperty(Change.prototype, 0, {
 
 /**
 | Performes one or many changes on a tree
-|
-| TODO remove report.
 */
-var changeTree = function(tree, chgX, report) {
-	var achgX = null;
+var changeTree = function(tree, chgX) {
+	if (arguments.length !== 2) { throw new Error('changeTree arguments fail'); }
+	var aChgX = null;
 
 	for(var a = 0, aZ = chgX.length; a < aZ; a++) {
 		var chg = chgX[a];
@@ -241,24 +240,20 @@ var changeTree = function(tree, chgX, report) {
 
 		var op = ChangeOps[ctype];
 		if (!op) throw reject('invalid change: '+ctype);
-		var res = op(tree, chg);
+		var r = op(tree, chg);
 
-		if (report) report.report(ctype, res.tree, res.src, res.trg);
-
-		if (!res) { throw new Error('CAN THIS HAPPEND?'); /*continue;*/ } // TODO
-
-		var reschg = new Change(res.src, res.trg);
-		tree = res.tree;
+		var rChg = new Change(r.src, r.trg);
+		tree = r.tree;
 
 		if (aZ > 1) {
-			if (achgX === null) { achgX = []; }
-			achgX.push(reschg);
+			if (aChgX === null) { aChgX = []; }
+			aChgX.push(rChg);
 		} else {
-			achgX = reschg;
+			aChgX = rChg;
 		}
 	}
 
-	return { tree: tree, chgX : achgX };
+	return { tree: tree, chgX : aChgX };
 };
 
 /**
