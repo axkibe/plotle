@@ -245,7 +245,7 @@ var changeTree = function(tree, chgX, report) {
 
 		if (report) report.report(ctype, res.tree, res.src, res.trg);
 
-		if (!res) { throw new Error('CAN THIS HAPPEND?'); continue; } // TODO
+		if (!res) { throw new Error('CAN THIS HAPPEND?'); /*continue;*/ } // TODO
 
 		var reschg = new Change(res.src, res.trg);
 		tree = res.tree;
