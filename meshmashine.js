@@ -245,7 +245,7 @@ var changeTree = function(tree, chgX, report) {
 
 		if (report) report.report(ctype, res.tree, res.src, res.trg);
 
-		if (!res) { debug('CAN THIS HAPPEND?'); continue; }
+		if (!res) { throw new Error('CAN THIS HAPPEND?'); continue; } // TODO
 
 		var reschg = new Change(res.src, res.trg);
 		tree = res.tree;
@@ -582,8 +582,6 @@ var tfxChange = function(chg, chgX, t1, t2) {
 	}
 
 	var a, aZ, asw;
-	debug('SRCX', srcX);
-	debug('TRGX', trgX);
 	var srcA = isArray(srcX);
 	var trgA = isArray(trgX);
 

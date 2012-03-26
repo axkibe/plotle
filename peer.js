@@ -12,12 +12,19 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--'
 
-  +++ Meshpeer +++
+
+                                         .-,--.
+                                          '|__/ ,-. ,-. ,-.
+                                          ,|    |-' |-' |
+                                          `'    `-' `-' '
+
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  A networked node item editor.
 
  A peer to a meshcraft repository. Utilizes its own meshmashine.
+
+ TODO remove all mm
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -63,82 +70,22 @@ var is    = Jools.is;
 | Constructor
 */
 Peer = function(mode) {
-	this._mode = mode;
-	var tree;
-
-	var src, trg, asw;
+	this._mode = mode; // TODO
 
 	switch(mode) {
-	case 'async' :
-		tree = new Tree({ type : 'Nexus' }, Patterns.mUniverse);
-		this.mm = new MeshMashine(tree);
-		this._changes = [];
-		var path = new Path([ 'welcome' ]);
-		var gets = this._getSync(-1, path);
-		this._remoteTime = gets.time;
-		src = { val  : gets.node };
-		trg = { path : path      };
-		asw = this.mm.alter(0, src, trg);
-		if (asw.ok !== true) throw new Error('Cannot load space "welcome"');
-		break;
-	case 'sync' :
-		break;
-/*
-	case 'emulate' :
-		tree = new Tree({ type : 'Nexus' }, Patterns.mUniverse);
-		this.mm = new MeshMashine(tree);
-
-		src = Emulate.src;
-		trg = { path: new Path(Emulate.path) };
-		asw = this.mm.alter(0, src, trg);
-		if (asw.ok !== true) throw new Error('Cannot emulate Repository');
-		break;
-*/
-	default :
-		throw new Error('unknown mode: '+mode);
+	case 'async'   : this._player = new PLayerAsync();   break;
+	case 'sync'    : this._player = new PLayerSync();    break;
+	case 'emulate' : this._player = new PLayerEmulate(); break;
+	default : throw new Error('unknown mode: '+mode);
 	}
-	this._remoteTime = false;
-};
-
-
-/**
-| Issues a synchronous get request.
-*/
-Peer.prototype._getSync = function(time, path) {
-	var ajax = new XMLHttpRequest();
-	ajax.open('POST', '/mm', false);
-	ajax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-	var request = JSON.stringify({
-		time : time,
-		cmd  : 'get',
-		path : path
-	});
-	log('peer', 'gs->', request);
-	ajax.send(request);
-	var asw = ajax.responseText;
-	log('peer', '<-gs', asw);
-	try {
-		asw = JSON.parse(asw);
-	} catch (e) {
-		throw new Error('Server answered no JSON!');
-	}
-	if (asw.ok !== true) throw new Error('AJAX not ok: '+asw.message);
-	return asw;
 };
 
 /**
 | Sets the time
+| @@ remove
 */
 Peer.prototype.toTime = function(time) {
-	switch(this._mode) {
-	case 'async'   :
-		throw new Error('Cannot Peer.toTime in async mode');
-	case 'sync' :
-		this._remoteTime = time;
-		break;
-	case 'emulate' :
-		throw new Error('Cannot Peer.toTime in emulate mode');
-	}
+	return this._player.toTime(time);
 }
 
 /**
@@ -147,46 +94,18 @@ Peer.prototype.toTime = function(time) {
 | path: path to twig
 */
 Peer.prototype.get = function(path) {
-	var res;
-	switch(this._mode) {
-	case 'async'   :
-	case 'emulate' :
-		throw new Error('TODO');
-		/*
-		res = this.mm.get(-1, path);
-		if (res.ok !== true) throw new Error('Meshmashine not ok: '+res.message);
-		return res.node;
-		*/
-	case 'sync' :
-		debug('PEER:GET', path);
-		res = this._getSync(this._remoteTime, path);
-		return {
-			node : is(res.node) ? new Tree(res.node, Patterns.mUniverse).root : null,
-			time : res.time
-		};
-	default :
-		throw new Error('unknown mode: '+this._mode);
-	}
+	return this._player.get(path);
 };
 
 /**
 | Issues an alter request
 */
 Peer.prototype._alter = function(src, trg) {
-	var asw;
+	return this._player.alter(src, trg);
 
 	switch (this._mode) {
 	case 'async'   :
-		debug('_ALTER');
-		asw = this.mm.alter(-1, src, trg);
-		if (asw.ok !== true) throw new Error('Meshmashine not OK: '+asw.message);
-		this._changes.push({ src: asw.src, trg: asw.trg, remoteTime: this._remoteTime });
-		this._sendChanges();
-		return asw;
 	case 'emulate' :
-		asw = this.mm.alter(-1, src, trg);
-		if (asw.ok !== true) throw new Error('Meshmashine not OK: '+asw.message);
-		return asw;
 	case 'sync' :
 		var ajax = new XMLHttpRequest();
 		ajax.open('POST', '/mm', false);
@@ -253,7 +172,6 @@ Peer.prototype._sendChanges = function() {
 | TODO encapsulate error catcher
 */
 Peer.prototype._sendChangesRSC = function(ev) {
-	debug('RSC', 'ev');
 	var ajax = this._sendChangesAJAX;
 	var asw;
 	if (!ajax) { throw new Error('_sendChangesRSC: ajax missing'); }
@@ -492,5 +410,155 @@ Peer.prototype.removeItem = function(path) {
 		{ path : path, rank : null  }
 	);
 };
+
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ .-,--. ,                      ,.   .---.
+  '|__/ )   ,-. . . ,-. ,-.   / |   \___  . . ,-. ,-.
+  ,|   /    ,-| | | |-' |    /~~|-.     \ | | | | |
+  `'   `--' `-^ `-| `-' '  ,'   `-' `---' `-| ' ' `-'
+                 /|                        /|
+                `-'                       `-'
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+ Peer layer that talks asynchronously with the server.
+ This is the normal way the meshcraft shell operates.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+var PLayerASync = function() {
+	this.tree = new Tree({ type : 'Nexus' }, Patterns.mUniverse);
+	this._changes = [];
+	var path = new Path([ 'welcome' ]);
+	var gets = this._getSync(-1, path);
+	this._remoteTime = gets.time;
+	src = { val  : gets.node };
+	trg = { path : path      };
+	asw = this.mm.alter(0, src, trg);
+	if (asw.ok !== true) throw new Error('Cannot load space "welcome"');
+	break;
+}
+
+/**
+| Gets a twig
+*/
+PLayerEmulate.prototype.get = function() {
+	// TODO
+}
+
+
+PLayerEmulate.prototype.alter = function(src, trg) {
+	asw = this.mm.alter(src, trg);
+	if (asw.ok !== true) throw new Error('Meshmashine not OK: '+asw.message);
+	this._changes.push({ src: asw.src, trg: asw.trg, remoteTime: this._remoteTime });
+	this._sendChanges();
+	return asw;
+}
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ .-,--. ,                  .-,--.           .      .
+  '|__/ )   ,-. . . ,-. ,-. `\__  ,-,-. . . |  ,-. |- ,-.
+  ,|   /    ,-| | | |-' |    /    | | | | | |  ,-| |  |-'
+  `'   `--' `-^ `-| `-' '   '`--' ' ' ' `-^ `' `-^ `' `-'
+                 /|
+                `-'
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+ Peer layer that emulates a server
+ Used for development.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+var PLayerEmulate = function() {
+	this.tree = new Tree({ type : 'Nexus' }, Patterns.mUniverse);
+	this.history = [];
+
+	src = Emulate.src;
+	trg = { path: new Path(Emulate.path) };
+	this._alter(src, trg);
+	if (asw.ok !== true) throw new Error('Cannot emulate Repository');
+}
+
+/**
+| Gets a twig
+*/
+PLayerEmulate.prototype.get = function(path) {
+	// TODO
+	res = this.mm.get(-1, path);
+	if (res.ok !== true) throw new Error('Meshmashine not ok: '+res.message);
+	return res.node;
+}
+
+
+PLayerEmulate.prototype.alter = function(src, trg) {
+	var r = MeshMashine.changeTree(this.tree, new Change(src, trg));
+	asw = this.mm.alter(-1, src, trg);
+	if (asw.ok !== true) throw new Error('Meshmashine not OK: '+asw.message);
+	return asw;
+}
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ .-,--. ,                   .---.
+  '|__/ )   ,-. . . ,-. ,-. \___  . . ,-. ,-.
+  ,|   /    ,-| | | |-' |       \ | | | | |
+  `'   `--' `-^ `-| `-' '   `---' `-| ' ' `-'
+                 /|                /|
+                `-'               `-'
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+ Peer layer that talks in a synchronous way with the server.
+ Used for debugging (testpad).
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+var PLayerSync = function() {
+	this._remoteTime = false;
+}
+
+/**
+| Gets a twig.
+*/
+PLayerSync.prototype.get = function() {
+	res = this._getSync(this._remoteTime, path);
+	return {
+		node : is(res.node) ? new Tree(res.node, Patterns.mUniverse).root : null,
+		time : res.time
+	};
+};
+
+
+PLayerSync.prototype.alter = function() {
+	// TODO
+};
+
+PLayerSync.prototype.toTime = function(time) {
+	this._remoteTime = time;
+};
+
+/**
+| Issues a synchronous get request.
+*/
+PLayerSync.prototype._getSync = function(time, path) {
+	var ajax = new XMLHttpRequest();
+	ajax.open('POST', '/mm', false);
+	ajax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	var request = JSON.stringify({
+		time : time,
+		cmd  : 'get',
+		path : path
+	});
+	log('peer', 'gs->', request);
+	ajax.send(request);
+	var asw = ajax.responseText;
+	log('peer', '<-gs', asw);
+	try {
+		asw = JSON.parse(asw);
+	} catch (e) {
+		throw new Error('Server answered no JSON!');
+	}
+	if (asw.ok !== true) throw new Error('AJAX not ok: '+asw.message);
+	return asw;
+};
+
+
 
 })();

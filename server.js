@@ -154,13 +154,11 @@ Server.prototype.get = function(cmd) {
 	if (time === -1) { time = this.history.length; }
 	if (!(time >= 0 && time <= this.history.length)) { throw reject('invalid time'); }
 
-	debug('GET', time, this.history.length);
 	var tree = this.tree;
 	for (var t = this.history.length - 1; t >= time; t--) {
 		var r = MeshMashine.changeTree(tree, this.history[t].reverse());
 		tree = r.tree;
 	}
-	debug('TREEE', tree);
 
 	var node;
 	try {

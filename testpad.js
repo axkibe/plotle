@@ -450,10 +450,8 @@ var update = function(totime) {
 	peer.toTime(totime);
 
 	res   = peer.get(new Path(['welcome']));
-	debug('RES', res);
 	time  = res.time;
 	space = res.node;
-	debug('ASW', space);
 
 	maxtime = max(time, maxtime);
 
