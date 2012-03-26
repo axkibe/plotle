@@ -624,7 +624,7 @@ Shell = function(fabric, sPeer) {
 	this.fabric    = fabric;
 
 	var vspath     = new Path(['welcome']);
-	this.vspace    = new VSpace(-1, peer.get(vspath), vspath);
+	this.vspace    = new VSpace(peer.get(vspath), vspath);
 
 	this.cockpit   = new Cockpit();
 	this.caret     = new Caret();
@@ -667,18 +667,16 @@ Shell.prototype.vget = function(path, plen) {
 /**
 | MeshMashine reports changes
 */
-Shell.prototype.report = function(type, tree, src, trg) {
+Shell.prototype.report = function(tree, chgX) {
 	this.tree = tree;
 
-	this.vspace.report(type, tree, src, trg);
+	this.vspace.report(tree, chgX);
 
 	var caret = this.caret;
 	if (caret.sign !== null) {
-		var tsign = MeshMashine.transformOne(caret.sign, src, trg);
-		if (tsign !== caret.sign) {
-			if (isArray(tsign)) throw new Error('Invalid caret transformation');
-			caret.sign = tsign;
-		}
+		var tsign = MeshMashine.tfxSign(caret.sign, chgX, 0, chgX.length);
+		if (isArray(tsign)) throw new Error('Invalid caret transformation');
+		caret.sign = tsign;
 	}
 
 	this._draw();
@@ -945,7 +943,7 @@ var VSpace = function(twig, path) {
 /**
 | MeshMashine reports changes
 */
-VSpace.prototype.report = function(type, tree, src, trg) {
+VSpace.prototype.report = function(tree, chgX) {
 	// updates twig pointers
 	var twig = tree.root.copse[this.key];
 	if (this.twig === twig) return;

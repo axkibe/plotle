@@ -101,7 +101,7 @@ Peer.prototype.get = function(path) {
 | Sets the listener
 */
 Peer.prototype.setReport = function(report) {
-	this._report = report;
+	this._iface.report = report;
 };
 
 /**
@@ -424,6 +424,7 @@ Peer inteface that emulates a server.
 var IFaceEmulate = function() {
 	this.tree = new Tree({ type : 'Nexus' }, Patterns.mUniverse);
 	this.history = [];
+	this.report = null;
 	this.alter(Emulate.src, { path: new Path(Emulate.path) });
 };
 
@@ -440,9 +441,12 @@ IFaceEmulate.prototype.alter = function(src, trg) {
 	var r = MeshMashine.changeTree(this.tree, chg);
 	this.tree = r.tree;
 	var chgX = r.chgX;
+
 	for (var a = 0, aZ = chgX.length; a < aZ; a++) {
 		this.history.push(chgX[a]);
 	}
+
+	if (this.report) { this.report.report(r.tree, chgX); }
 	return chgX;
 };
 
