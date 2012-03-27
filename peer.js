@@ -55,6 +55,7 @@ if (typeof (window) === 'undefined') throw new Error('Peer nees a browser!');
 
 var Change    = MeshMashine.Change;
 var Signature = MeshMashine.Signature;
+var debug     = Jools.debug;
 var log       = Jools.log;
 var is        = Jools.is;
 
@@ -93,8 +94,8 @@ Peer.prototype.toTime = function(time) {
 |
 | path: path to twig
 */
-Peer.prototype.get = function(path) {
-	return this._iface.get(path);
+Peer.prototype.get = function(path, len) {
+	return this._iface.get(path, len);
 };
 
 /**
@@ -160,7 +161,7 @@ Peer.prototype.setPNW = function(itemPath, pnw) {
 | Creates a new label.
 */
 Peer.prototype.newLabel = function(spacePath, pnw, text, fontsize) {
-	var asw = this._iface.alter(
+	var chgX = this._iface.alter(
 		{
 			val           : {
 				type      : 'Label',
@@ -176,14 +177,14 @@ Peer.prototype.newLabel = function(spacePath, pnw, text, fontsize) {
 		{ path: new Path(spacePath, '++', '$new'), rank: 0 }
 	);
 
-	return asw.alts.trg.path.get(-1);
+	return chgX.trg.path.get(-1);
 };
 
 /**
 | Creates a new relation.
 */
 Peer.prototype.newRelation = function(spacePath, pnw, text, fontsize, item1key, item2key) {
-	var asw = this._iface.alter(
+	var chgX = this._iface.alter(
 		{
 			val           : {
 				type      : 'Relation',
@@ -201,7 +202,7 @@ Peer.prototype.newRelation = function(spacePath, pnw, text, fontsize, item1key, 
 		{ path: new Path(spacePath, '++', '$new'), rank: 0 }
 	);
 
-	return asw.alts.trg.path.get(-1);
+	return chgX.trg.path.get(-1);
 };
 
 /**
@@ -251,14 +252,14 @@ Peer.prototype.removeSpan = function(path1, at1, path2, at2) {
 	var k1 = path1.get(-2);
 	var k2 = path2.get(-2);
 
-	var pivot = this.mm.tree.getPath(path1, -2);
+	var pivot = this._iface.get(path1, -2);
 	var r1 = pivot.rankOf(k1);
 	var r2 = pivot.rankOf(k2);
 
 	for (var r = r1; r < r2 - 1; r++) {
-		this.join(path1, this.mm.tree.getPath(path1).length);
+		this.join(path1, this._iface.get(path1).length);
 	}
-	var len2 = this.mm.tree.getPath(path1).length;
+	var len2 = this._iface.get(path1).length;
 	this.join(path1, len2);
 
 	this.removeText(path1, at1, len2 - at1 + at2);
@@ -431,8 +432,8 @@ var IFaceEmulate = function() {
 /**
 | Gets a twig
 */
-IFaceEmulate.prototype.get = function(path) {
-	return this.tree.getPath(path);
+IFaceEmulate.prototype.get = function(path, len) {
+	return this.tree.getPath(path, len);
 };
 
 
@@ -468,7 +469,10 @@ var IFaceSync = function() {
 /**
 | Gets a twig.
 */
-IFaceSync.prototype.get = function(path) {
+IFaceSync.prototype.get = function(path, len) {
+	// shortens the path
+	if (is(len)) { path = new Path(path, '--', path.length - len); }
+
 	var r = this._getSync(this._remoteTime, path);
 	return {
 		node : is(r.node) ? new Tree(r.node, Patterns.mUniverse).root : null,
@@ -491,7 +495,7 @@ IFaceSync.prototype.alter = function(src, trg) {
 	});
 	log('peer', '->', request);
 	ajax.send(request);
-	
+
 	var asw = ajax.responseText;
 	log('peer', '<-', asw);
 	try {

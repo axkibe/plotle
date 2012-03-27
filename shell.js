@@ -93,6 +93,7 @@ var Rect          = Fabric.Rect;
 var RoundRect     = Fabric.RoundRect;
 var opposite      = Fabric.opposite;
 
+var Signature     = MeshMashine.Signature;
 
 // configures tree.
 Tree.cogging = true;
@@ -641,6 +642,7 @@ Shell = function(fabric, sPeer) {
 | Sets the caret position.
 */
 Shell.prototype.setCaret = function(sign, retainx) {
+	if (sign.constructor !== Signature) { throw new Error('setCaret argument fail (1)'); }
 	var caret = this.caret;
 	//caret.sign = sign;
 	caret.sign = immute(sign);
@@ -1031,10 +1033,9 @@ VSpace.prototype.setFocus = function(vitem) {
 	var caret = shell.caret;
 	if (vitem) {
 		var doc = vitem.vv.doc;
-		caret = shell.setCaret({
-			path: doc.vv[doc.twig.ranks[0]].textPath(),
-			at1: 0
-		});
+		caret = shell.setCaret(
+			new Signature({ path: doc.vv[doc.twig.ranks[0]].textPath(), at1: 0 })
+		);
 		caret.show();
 		peer.moveToTop(vitem.path);
 	} else {
@@ -1506,8 +1507,8 @@ VPara.prototype.specialKey = function(keycode) {
 			var v0 = vdoc.vv[vdoc.twig.ranks[0]];
 			var v1 = vdoc.vv[vdoc.twig.ranks[vdoc.twig.length - 1]];
 
-			select.sign1 = immute({ path: v0.textPath(), at1: 0 });
-			select.sign2 = immute({ path: v1.textPath(), at1: v1.twig.text.length });
+			select.sign1 = new Signature({ path: v0.textPath(), at1: 0 });
+			select.sign2 = new Signature({ path: v1.textPath(), at1: v1.twig.text.length });
 			select.active = true;
 			shell.setCaret(select.sign2);
 			system.setInput(select.innerText());
@@ -1569,19 +1570,27 @@ VPara.prototype.specialKey = function(keycode) {
 		peer.split(this.textPath(), caret.sign.at1);
 		break;
 	case 35 : // end
-		caret = shell.setCaret({ path: this.textPath(), at1: this.twig.text.length });
+		caret = shell.setCaret(
+			new Signature({ path: this.textPath(), at1: this.twig.text.length })
+		);
 		break;
 	case 36 : // pos1
-		caret = shell.setCaret({ path: this.textPath(), at1: 0 });
+		caret = shell.setCaret(
+			new Signature({ path: this.textPath(), at1: 0 })
+		);
 		break;
 	case 37 : // left
 		if (caret.sign.at1 > 0) {
-			caret = shell.setCaret({ path: this.textPath(), at1: caret.sign.at1 - 1 });
+			caret = shell.setCaret(
+				new Signature({ path: this.textPath(), at1: caret.sign.at1 - 1 })
+			);
 		} else {
 			r = vdoc.twig.rankOf(this.key);
 			if (r > 0) {
 				ve = vdoc.vv[vdoc.twig.ranks[r - 1]];
-				caret = shell.setCaret({ path: ve.textPath(), at1: ve.twig.text.length });
+				caret = shell.setCaret(
+					new Signature({ path: ve.textPath(), at1: ve.twig.text.length })
+				);
 			}
 		}
 		break;
@@ -1592,25 +1601,33 @@ VPara.prototype.specialKey = function(keycode) {
 		if (caret.flow$line > 0) {
 			// stay within this para
 			at1 = this.getLineXOffset(caret.flow$line - 1, x);
-			shell.setCaret({ path: this.textPath(), at1: at1 }, x);
+			shell.setCaret(
+				new Signature({ path: this.textPath(), at1: at1 }), x
+			);
 		} else {
 			// goto prev para
 			r = vdoc.twig.rankOf(this.key);
 			if (r > 0) {
 				ve = vdoc.vv[vdoc.twig.ranks[r - 1]];
 				at1 = ve.getLineXOffset(ve.getFlow().length - 1, x);
-				caret = shell.setCaret({ path: ve.textPath(), at1: at1 }, x);
+				caret = shell.setCaret(
+					new Signature({ path: ve.textPath(), at1: at1 }), x
+				);
 			}
 		}
 		break;
 	case 39 : // right
 		if (caret.sign.at1 < this.twig.text.length) {
-			caret = shell.setCaret({ path: this.textPath(), at1: caret.sign.at1 + 1 });
+			caret = shell.setCaret(
+				new Signature({ path: this.textPath(), at1: caret.sign.at1 + 1 })
+			);
 		} else {
 			r = vdoc.twig.rankOf(this.key);
 			if (r < vdoc.twig.length - 1) {
 				ve = vdoc.vv[vdoc.twig.ranks[r + 1]];
-				caret = shell.setCaret({ path: ve.textPath(), at1: 0 });
+				caret = shell.setCaret(
+					new Signature({ path: ve.textPath(), at1: 0 })
+				);
 			}
 		}
 		break;
@@ -1619,16 +1636,20 @@ VPara.prototype.specialKey = function(keycode) {
 		x = caret.retainx !== null ? caret.retainx : caret.pos$.x;
 
 		if (caret.flow$line < flow.length - 1) {
-			// stay within this para
+			// stays within this para
 			at1 = this.getLineXOffset(caret.flow$line + 1, x);
-			caret = shell.setCaret({ path: this.textPath(), at1: at1 }, x);
+			caret = shell.setCaret(
+				new Signature({ path: this.textPath(), at1: at1 }), x
+			);
 		} else {
 			// goto next para
 			r = vdoc.twig.rankOf(this.key);
 			if (r < vdoc.twig.length - 1) {
 				ve = vdoc.vv[vdoc.twig.ranks[r + 1]];
 				at1 = ve.getLineXOffset(0, x);
-				caret = shell.setCaret({ path: ve.textPath(), at1: at1 }, x);
+				caret = shell.setCaret(
+					new Signature({ path: ve.textPath(), at1: at1 }), x
+				);
 			}
 		}
 		break;
@@ -2423,7 +2444,9 @@ VItem.prototype.click = function(p) {
 		var ppnw   = this.vv.doc.getPNW(vpara.key);
 		var at1    = vpara.getPointOffset(pi.sub(ppnw));
 		var caret  = shell.caret;
-		caret = shell.setCaret({ path: vpara.textPath(), at1: at1 });
+		caret = shell.setCaret(
+			new Signature({ path: vpara.textPath(), at1: at1 })
+		);
 		caret.show();
 		shell.selection.deselect();
 	}

@@ -1,2 +1,2 @@
 #!/bin/bash
-/usr/local/bin/jshint *.js --config jshint.json
+/usr/local/bin/jshint *.js --config jshint.json | head -n 15

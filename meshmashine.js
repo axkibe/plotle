@@ -512,7 +512,8 @@ var tfxSign1 = function(sign, chg) {
 var tfxSign = function(sign, chgX, t1, t2) {
 	log('tfx', 'tfxSign', sign, t1, t2);
 
-	if (sign.constructor !== Signature) { throw new Error('tfxSign param fail'); }
+	if (arguments.length !== 4) { throw new Error('tfxSign argument fail (n)'); }
+	if (sign.constructor !== Signature) { throw new Error('tfxSign argument faili (1)'); }
 
 	if (!is(sign.path) || sign.path.length === 0) {
 		log('tfx', 'out', sign);
