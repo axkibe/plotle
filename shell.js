@@ -558,14 +558,18 @@ fixate(Action, 'RELBIND',   7); // binding a new relation
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 var Cockpit = function() {
-// TODO, use this!
+	this.fabric = system.fabric;
 };
 
 /**
 | Redraws the cockpit.
 */
 Cockpit.prototype.draw = function() {
-	// TODO
+	var fabric = this.fabric;
+	var msg = 'Loading space "welcome" ...';
+
+	fabric.fontStyle('12px ' + settings.defaultFont, 'rgb(128, 92, 8)', 'start', 'alphabetic');
+	fabric.fillText(msg, 24, fabric.height - 12);
 };
 
 /**
@@ -622,15 +626,15 @@ Shell = function(fabric, sPeer) {
 	peer  = sPeer;
 
 	Measure.init();
-	this.fabric    = fabric;
+	this.fabric     = fabric;
 
-	var vspath     = new Path(['welcome']);
-	this.vspace    = new VSpace(peer.get(vspath), vspath);
+	this.vSpacePath = new Path(['welcome']);
+	this.vSpace     = null;
 
-	this.cockpit   = new Cockpit();
-	this.caret     = new Caret();
-	this.action    = null;
-	this.selection = new Selection();
+	this.cockpit    = new Cockpit();
+	this.caret      = new Caret();
+	this.action     = null;
+	this.selection  = new Selection();
 
 	// A flag set to true if anything requests a redraw.
 	peer.setReport(this);
@@ -659,7 +663,7 @@ Shell.prototype.vget = function(path, plen) {
 	if (plen <= 0) throw new Error('cannot vget path of length <= 0');
 	if (path.get(0) !== 'welcome') throw new Error('currently space must be "welcome"'); // TODO
 
-	var vnode = this.vspace;
+	var vnode = this.vSpace;
 	for (var a = 1; a < plen; a++) {
 		vnode = vnode.vv[path.get(a)];
 	}
@@ -669,16 +673,25 @@ Shell.prototype.vget = function(path, plen) {
 /**
 | MeshMashine reports changes
 */
-Shell.prototype.report = function(tree, chgX) {
-	this.tree = tree;
+Shell.prototype.report = function(status, tree, chgX) {
+	debug('SHELL.REPORT', status);
 
-	this.vspace.report(tree, chgX);
-
-	var caret = this.caret;
-	if (caret.sign !== null) {
-		var tsign = MeshMashine.tfxSign(caret.sign, chgX, 0, chgX.length);
-		if (isArray(tsign)) throw new Error('Invalid caret transformation');
-		caret.sign = tsign;
+	switch (status) {
+	case 'start' :
+		this.vSpace = new VSpace(tree.root.copse.welcome, this.vSpacePath);
+		break;
+	case 'update' :
+		this.tree = tree;
+		this.vSpace.report(tree, chgX);
+		var caret = this.caret;
+		if (caret.sign !== null) {
+			var tsign = MeshMashine.tfxSign(caret.sign, chgX, 0, chgX.length);
+			if (isArray(tsign)) throw new Error('Invalid caret transformation');
+			caret.sign = tsign;
+		}
+		break;
+	default :
+		throw new Error('unknown status: '+status);
 	}
 
 	this._draw();
@@ -724,16 +737,16 @@ Shell.prototype.stopAction = function() {
 };
 
 /**
-| Draws the cockpit and the vspace.
+| Draws the cockpit and the vSpace.
 */
 Shell.prototype._draw = function() {
-	this.fabric.attune();   // <- bad name for clear();
+	this.fabric.attune();   // @@ <- bad name for clear();
 
 	// remove caret cache.
 	this.caret.save$ = null;
 	this.caret.screenPos$ = null;
 
-	this.vspace.draw();
+	if (this.vSpace) { this.vSpace.draw(); }
 	this.cockpit.draw();
 	this.caret.display();
 
@@ -746,9 +759,10 @@ Shell.prototype._draw = function() {
 Shell.prototype.click = function(p, shift, ctrl) {
 	this.shift = shift;
 	this.ctrl  = ctrl;
+
 	// TODO cockpit
-	this.vspace.click(p);
-	if (this.redraw) this._draw();
+	if (this.vSpace) { this.vSpace.click(p); }
+	if (this.redraw) { this._draw(); }
 };
 
 /**
@@ -757,9 +771,10 @@ Shell.prototype.click = function(p, shift, ctrl) {
 Shell.prototype.mousehover = function(p, shift, ctrl) {
 	this.shift = shift;
 	this.ctrl  = ctrl;
+
 	// TODO cockpit
-	this.vspace.mousehover(p);
-	if (this.redraw) this._draw();
+	if (this.vSpace) { this.vSpace.mousehover(p); }
+	if (this.redraw) { this._draw(); }
 };
 
 /**
@@ -770,11 +785,62 @@ Shell.prototype.mousehover = function(p, shift, ctrl) {
 Shell.prototype.mousedown = function(p, shift, ctrl) {
 	this.shift = shift;
 	this.ctrl  = ctrl;
+
 	// TODO cockpit
-	var mouseState = this.vspace.mousedown(p);
-	if (this.redraw) this._draw();
+	var mouseState = false;
+	if (this.vSpace) { mouseState = this.vSpace.mousedown(p); }
+	if (this.redraw) { this._draw(); }
 	return mouseState;
 };
+
+/**
+| Starts an operation with the mouse button held down.
+*/
+Shell.prototype.dragstart = function(p, shift, ctrl) {
+	this.shift = shift;
+	this.ctrl  = ctrl;
+
+	// TODO cockpit
+	if (this.vSpace) { this.vSpace.dragstart(p); }
+	if (this.redraw) { this._draw(); }
+};
+
+/**
+| Moving during an operation with the mouse button held down.
+*/
+Shell.prototype.dragmove = function(p, shift, ctrl) {
+	this.shift = shift;
+	this.ctrl  = ctrl;
+
+	// TODO cockpit
+	if (this.vSpace) { this.vSpace.dragmove(p); }
+	if (this.redraw) { this._draw(); }
+};
+
+/**
+| Stops an operation with the mouse button held down.
+*/
+Shell.prototype.dragstop = function(p, shift, ctrl) {
+	this.shift = shift;
+	this.ctrl  = ctrl;
+
+	// TODO cockpit
+	if (this.vSpace) { this.vSpace.dragstop(p); }
+	if (this.redraw) { this._draw(); }
+};
+
+/**
+| Mouse wheel has turned
+*/
+Shell.prototype.mousewheel = function(p, dir, shift, ctrl) {
+	this.shift = shift;
+	this.ctrl  = ctrl;
+
+	// TODO cockpict
+	if (this.vSpace) { this.vSpace.mousewheel(p, dir); }
+	if (this.redraw) { this._draw(); }
+};
+
 
 /**
 | User pressed a special key.
@@ -782,6 +848,7 @@ Shell.prototype.mousedown = function(p, shift, ctrl) {
 Shell.prototype.specialKey = function(keyCode, shift, ctrl) {
 	this.shift = shift;
 	this.ctrl  = ctrl;
+
 	var caret  = this.caret;
 	if (caret.sign) { this.vget(caret.sign.path, -1).specialKey(keyCode); }
 	if (this.redraw) this._draw();
@@ -793,52 +860,9 @@ Shell.prototype.specialKey = function(keyCode, shift, ctrl) {
 Shell.prototype.input = function(text) {
 	this.shift = false;
 	this.ctrl  = false;
+
 	var caret  = this.caret;
 	if (caret.sign) { this.vget(caret.sign.path, -1).input(text); }
-	if (this.redraw) this._draw();
-};
-
-/**
-| Starts an operation with the mouse button held down.
-*/
-Shell.prototype.dragstart = function(p, shift, ctrl) {
-	this.shift = shift;
-	this.ctrl  = ctrl;
-	// TODO cockpit
-	this.vspace.dragstart(p);
-	if (this.redraw) this._draw();
-};
-
-/**
-| Moving during an operation with the mouse button held down.
-*/
-Shell.prototype.dragmove = function(p, shift, ctrl) {
-	this.shift = shift;
-	this.ctrl  = ctrl;
-	// TODO cockpit
-	this.vspace.dragmove(p);
-	if (this.redraw) this._draw();
-};
-
-/**
-| Stops an operation with the mouse button held down.
-*/
-Shell.prototype.dragstop = function(p, shift, ctrl) {
-	this.shift = shift;
-	this.ctrl  = ctrl;
-	// TODO cockpit
-	this.vspace.dragstop(p);
-	if (this.redraw) this._draw();
-};
-
-/**
-| Mouse wheel has turned
-*/
-Shell.prototype.mousewheel = function(p, dir, shift, ctrl) {
-	this.shift = shift;
-	this.ctrl  = ctrl;
-	// TODO cockpict
-	this.vspace.mousewheel(p, dir);
 	if (this.redraw) this._draw();
 };
 
@@ -944,11 +968,17 @@ var VSpace = function(twig, path) {
 
 /**
 | MeshMashine reports changes
+| updates twig pointers
 */
-VSpace.prototype.report = function(tree, chgX) {
-	// updates twig pointers
+VSpace.prototype.report = function(status, tree, chgX) {
+	debug('VSPACE.REPORT', status);
 	var twig = tree.root.copse[this.key];
-	if (this.twig === twig) return;
+
+	if (this.twig === twig) {
+		// no change
+		return;
+	}
+
 	this.twig = twig;
 	this.update(twig);
 };
@@ -1153,8 +1183,8 @@ VSpace.prototype.dragstart = function(p) {
 | A mouse click.
 */
 VSpace.prototype.click = function(p) {
-	var pan = this.fabric.pan;
-	var pp = p.sub(pan);
+	var pan  = this.fabric.pan;
+	var pp   = p.sub(pan);
 	var action;
 
 	// clicked the tab of the focused item?
@@ -1809,7 +1839,7 @@ VPara.prototype.drawCaret = function() {
 	var vdoc  = this.vdoc;
 	var vitem = vdoc.vitem;
 	var zone  = vitem.getZone();
-	var pan   = shell.vspace.fabric.pan;
+	var pan   = shell.vSpace.fabric.pan;
 	var fs    = vdoc.getFontSize();
 	var descend = R(fs * settings.bottombox);
 	var th    = R(vdoc.getFontSize()) + descend;
@@ -2172,12 +2202,12 @@ VDoc.prototype.pathSelection = function(fabric, border, twist, width, imargin, s
 /**
 | Constructor
 */
-var VItem = function(twig, path, vspace) {
+var VItem = function(twig, path, vSpace) {
 	this._h6slice$ = null;
 	this.twig      = twig;
 	this.path      = path;
 	this.key       = path.get(-1);
-	this.vspace    = vspace;
+	this.vSpace    = vSpace;  // TODO remove
 	this.vv        = immute({
 		doc : new VDoc(twig.doc, new Path(path, '++', 'doc'), this)
 	});
@@ -2349,7 +2379,7 @@ VItem.prototype.dragstart = function(p) {
 	}
 
 	// scrolling or dragging
-	shell.vspace.setFocus(this);
+	shell.vSpace.setFocus(this);
 	var sbary = this.scrollbarY;
 	var pnw = this.getZone().pnw;
 	var pr = p.sub(pnw);
@@ -2406,7 +2436,7 @@ VItem.prototype.dragstop = function(p) {
 	switch (action.type) {
 	case Action.RELBIND :
 		if (!this.getZone().within(p)) return false;
-		VRelation.create(this.vspace, action.vitem, this);
+		VRelation.create(this.vSpace, action.vitem, this);
 		system.setCursor('default');
 		shell.redraw = true;
 		return true;
@@ -2433,7 +2463,7 @@ VItem.prototype.mousehover = function(p) {
 VItem.prototype.click = function(p) {
 	if (!this.getZone().within(p)) return false;
 
-	shell.vspace.setFocus(this);
+	shell.vSpace.setFocus(this);
 	shell.redraw = true;
 
 	var pnw = this.getZone().pnw;
@@ -2484,8 +2514,8 @@ VItem.prototype.poke = function() {
 /**
 | Constructor.
 */
-var VNote = function(twig, path, vspace) {
-	VItem.call(this, twig, path, vspace);
+var VNote = function(twig, path, vSpace) {
+	VItem.call(this, twig, path, vSpace);
 	this.scrollbarY = new Scrollbar(this, null);
 };
 subclass(VNote, VItem);
@@ -2768,8 +2798,8 @@ VNote.prototype.getZone = function() {
 /**
 | Constructor.
 */
-var VLabel = function(twig, path, vspace) {
-	VItem.call(this, twig, path, vspace);
+var VLabel = function(twig, path, vSpace) {
+	VItem.call(this, twig, path, vSpace);
 };
 subclass(VLabel, VItem);
 
@@ -2975,8 +3005,8 @@ VLabel.prototype.dragstop = function(p) {
 /**
 | Constructor.
 */
-var VRelation = function(twig, path, vspace) {
-	VLabel.call(this, twig, path, vspace);
+var VRelation = function(twig, path, vSpace) {
+	VLabel.call(this, twig, path, vSpace);
 };
 subclass(VRelation, VLabel);
 
@@ -2988,19 +3018,19 @@ VRelation.imargin = new Margin(settings.relation.imargin);
 /**
 | Creates a new Relation by specifing its relates.
 */
-VRelation.create = function(vspace, vitem1, vitem2) {
+VRelation.create = function(vSpace, vitem1, vitem2) {
 	var cline = Line.connect(vitem1.getZone(), null, vitem2.getZone(), null);
 	var pnw = cline.pc.sub(settings.relation.createOffset);
-	var key = peer.newRelation(vspace.path, pnw, 'relates to', 20, vitem1.key, vitem2.key);
+	var key = peer.newRelation(vSpace.path, pnw, 'relates to', 20, vitem1.key, vitem2.key);
 	// event listener has created the vrel
-	var vrel = vspace.vv[key];
-	vspace.setFocus(vrel);
+	var vrel = vSpace.vv[key];
+	vSpace.setFocus(vrel);
 };
 
 VRelation.prototype.draw = function(fabric) {
-	var vspace = this.vspace;
-	var vitem1 = vspace.vv[this.twig.item1key];
-	var vitem2 = vspace.vv[this.twig.item2key];
+	var vSpace = this.vSpace;
+	var vitem1 = vSpace.vv[this.twig.item1key];
+	var vitem2 = vSpace.vv[this.twig.item2key];
 	var zone = this.getZone();
 
 	if (vitem1) {

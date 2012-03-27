@@ -309,35 +309,106 @@ Peer.prototype.removeItem = function(path) {
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 var IFaceASync = function() {
-	this.tree = new Tree({ type : 'Nexus' }, Patterns.mUniverse);
-	this._changes = [];
+	//this.tree = new Tree({ type : 'Nexus' }, Patterns.mUniverse);
+	this.tree    = null;
+	this.history = [];
+	this.report  = null;
+
 	var path = new Path([ 'welcome' ]);
-	var gets = this._getSync(-1, path);
-	this._remoteTime = gets.time;
-	var r = this.alter(
-		{ val  : gets.node },
-		{ path : path      }
-	);
-	if (r.ok !== true) throw new Error('Cannot load space "welcome"');
+	this.startGet(path);
+};
+
+/**
+| TODO generalize
+*/
+IFaceASync.prototype.startGet = function(path) {
+    if (this.startGetActive) { throw new Error('There is already a startup get'); }
+	this.startGetActive = true;
+
+    var ajax = new XMLHttpRequest();
+    ajax.open('POST', '/mm', true);
+    ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	var self = this;
+
+    ajax.onreadystatechange = function() {
+		var asw;
+		debug('STARTGETRSC', ajax.status);
+		if (ajax.readyState !== 4) { return; }
+
+		if (ajax.status !== 200) {
+			self.startGetActive = false;
+			log('peer', 'startGet.status == ' + ajax.status);
+			if (self.report) { self.report.report('fail', null, null); }
+			return;
+		}
+
+		try {
+			asw = JSON.parse(ajax.responseText);
+		} catch (e) {
+			self.startGetActive = false;
+			throw new Error('Server answered no JSON!');
+		}
+
+		log('peer', '<-sg', asw);
+		if (!asw.ok) {
+			self.startGetActive = false;
+			log('peer', 'startGet, server not ok');
+			if (self.report) { self.report.report('fail', null, null); }
+			return;
+		}
+
+		debug('STARTGETOK');
+		self.startGetActive = false;
+
+		self.remoteTime = asw.time;
+		self.tree = new Tree({
+			type  : 'Nexus',
+			copse : {
+				'welcome' : asw.node
+			}
+		}, Patterns.mUniverse);
+
+		if (self.report) { self.report.report('start', self.tree, null); }
+	};
+
+    var request = JSON.stringify({
+        cmd  : 'get',
+        time : -1,
+		path : path
+    });
+
+    log('peer', 'sg->', request);
+    ajax.send(request);
 };
 
 /**
 | Gets a twig
 */
-IFaceASync.prototype.get = function() {
-	throw new Error('TODO');
+IFaceASync.prototype.get = function(path, len) {
+    return this.tree.getPath(path, len);
 };
 
 /**
 | Alters the tree
 */
 IFaceASync.prototype.alter = function(src, trg) {
-	throw new Error('TODO');
+    var chg = new Change(new Signature(src), new Signature(trg));
+    var r = MeshMashine.changeTree(this.tree, chg);
+    this.tree = r.tree;
+    var chgX = r.chgX;
+
+    for (var a = 0, aZ = chgX.length; a < aZ; a++) {
+        this.history.push(chgX[a]);
+    }
+
+    if (this.report) { this.report.report('update', r.tree, chgX); }
+    return chgX;
+
 	/*
 	asw = this.mm.alter(src, trg);
 	if (asw.ok !== true) throw new Error('Meshmashine not OK: '+asw.message);
-	this._changes.push({ src: asw.src, trg: asw.trg, remoteTime: this._remoteTime });
-	this._sendChanges();
+	this._changes.push({ src: asw.src, trg: asw.trg, remoteTime: this.remoteTime });
+	this.sendChanges();
 	return asw;
 	*/
 };
@@ -345,7 +416,7 @@ IFaceASync.prototype.alter = function(src, trg) {
 /**
 | Sends the stored changes to remote meshmashine
 */
-IFaceASync.prototype._sendChanges = function() {
+IFaceASync.prototype.sendChanges = function() {
 	if (this._sendChangesAJAX) {
 		// already one ajax active
 		debug('already one ajax active');
@@ -381,8 +452,8 @@ IFaceASync.prototype._sendChanges = function() {
 | TODO encapsulate error catcher
 */
 IFaceASync.prototype._sendChangesRSC = function(ev) {
-	var ajax = this._sendChangesAJAX;
-	var asw;
+	var ajax = this._sendChangesAJAX, asw;
+
 	if (!ajax) { throw new Error('_sendChangesRSC: ajax missing'); }
 	if (ajax.readyState !== 4) { return; }
 	if (ajax.status !== 200) {
@@ -407,7 +478,7 @@ IFaceASync.prototype._sendChangesRSC = function(ev) {
 
 	this._sendChangesAJAX = null;
 	if (this._changes.length > 0) {
-		this._sendChanges();
+		this.sendChanges();
 	}
 };
 
@@ -447,7 +518,7 @@ IFaceEmulate.prototype.alter = function(src, trg) {
 		this.history.push(chgX[a]);
 	}
 
-	if (this.report) { this.report.report(r.tree, chgX); }
+	if (this.report) { this.report.report('ok', r.tree, chgX); }
 	return chgX;
 };
 
@@ -463,7 +534,7 @@ IFaceEmulate.prototype.alter = function(src, trg) {
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 var IFaceSync = function() {
-	this._remoteTime = false;
+	this.remoteTime = false;
 };
 
 /**
@@ -473,7 +544,7 @@ IFaceSync.prototype.get = function(path, len) {
 	// shortens the path
 	if (is(len)) { path = new Path(path, '--', path.length - len); }
 
-	var r = this._getSync(this._remoteTime, path);
+	var r = this._getSync(this.remoteTime, path);
 	return {
 		node : is(r.node) ? new Tree(r.node, Patterns.mUniverse).root : null,
 		time : r.time
@@ -488,7 +559,7 @@ IFaceSync.prototype.alter = function(src, trg) {
 	ajax.open('POST', '/mm', false);
 	ajax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 	var request = JSON.stringify({
-		time : this._remoteTime,
+		time : this.remoteTime,
 		cmd  : 'alter',
 		src  : src,
 		trg  : trg
@@ -511,7 +582,7 @@ IFaceSync.prototype.alter = function(src, trg) {
 | Goes forth/back in time
 */
 IFaceSync.prototype.toTime = function(time) {
-	this._remoteTime = time;
+	this.remoteTime = time;
 };
 
 /**

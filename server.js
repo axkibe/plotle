@@ -35,6 +35,7 @@ var util        = require('util');
 var http        = require('http');
 var url         = require('url');
 var fs          = require('fs');
+var sleep       = require('sleep'); // TODO remove
 
 var config      = require('./config');
 
@@ -159,6 +160,10 @@ Server.prototype.get = function(cmd) {
 		var r = MeshMashine.changeTree(tree, this.history[t].reverse());
 		tree = r.tree;
 	}
+
+	console.log('SLEEP 1');
+	sleep.sleep(1); // TODO remove;
+	console.log('END OF SLEEP');
 
 	var node;
 	try {
