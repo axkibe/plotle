@@ -14,7 +14,7 @@
                                        '___)   '___)                      `~~'  `"   |_|      `--´
 
 
- +++ Server +++
+                                        +++ Server +++
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  The server-side repository.
 
@@ -69,22 +69,25 @@ try {
 var Server = function() {
 	this.files = {};
 
-	this.registerFile('/',               'html', './meshcraft.html'   );
-	this.registerFile('/browser.js',     'js',   './browser.js'       );
-	this.registerFile('/emulate.js',     'js',   './emulate.js'       );
-	this.registerFile('/fabric.js',      'js',   './fabric.js'        );
-	this.registerFile('/index.html',     'js',   './meshcraft.html'   );
-	this.registerFile('/favicon.ico',    'ico',  './icons/hexicon.ico');
-	this.registerFile('/jools.js',       'js',   './jools.js'         );
-	this.registerFile('/meshcraft.html', 'html', './meshcraft.html'   );
-	this.registerFile('/meshmashine.js', 'js',   './meshmashine.js'   );
-	this.registerFile('/path.js',        'js',   './path.js'          );
-	this.registerFile('/patterns.js',    'js',   './patterns.js'      );
-	this.registerFile('/peer.js',        'js',   './peer.js'          );
-	this.registerFile('/shell.js',       'js',   './shell.js'         );
-	this.registerFile('/testpad.html',   'html', './testpad.html'     );
-	this.registerFile('/testpad.js',     'js',   './testpad.js'       );
-	this.registerFile('/tree.js',        'js',   './tree.js'          );
+	this.registerFile('/',                 'html', './meshcraft.html'    );
+	this.registerFile('/browser.js',       'js',   './browser.js'        );
+	this.registerFile('/emulate.js',       'js',   './emulate.js'        );
+	this.registerFile('/fabric.js',        'js',   './fabric.js'         );
+	this.registerFile('/index.html',       'html', './meshcraft.html'    );
+	this.registerFile('/iface-async.js',   'js',   './iface-async.js'    );
+	this.registerFile('/iface-emulate.js', 'js',   './iface-emulate.js'  );
+	this.registerFile('/iface-sync.js',    'js',   './iface-sync.js'     );
+	this.registerFile('/favicon.ico',      'ico',  './icons/hexicon.ico' );
+	this.registerFile('/jools.js',         'js',   './jools.js'          );
+	this.registerFile('/meshcraft.html',   'html', './meshcraft.html'    );
+	this.registerFile('/meshmashine.js',   'js',   './meshmashine.js'    );
+	this.registerFile('/path.js',          'js',   './path.js'           );
+	this.registerFile('/patterns.js',      'js',   './patterns.js'       );
+	this.registerFile('/peer.js',          'js',   './peer.js'           );
+	this.registerFile('/shell.js',         'js',   './shell.js'          );
+	this.registerFile('/testpad.html',     'html', './testpad.html'      );
+	this.registerFile('/testpad.js',       'js',   './testpad.js'        );
+	this.registerFile('/tree.js',          'js',   './tree.js'           );
 
 	this.tree    = new Tree({ type : 'Nexus' }, Patterns.mUniverse);
 	this.history = [];
@@ -161,9 +164,7 @@ Server.prototype.get = function(cmd) {
 		tree = r.tree;
 	}
 
-	console.log('SLEEP 1');
-	sleep.sleep(1); // TODO remove;
-	console.log('END OF SLEEP');
+	//console.log('SLEEP'); sleep.sleep(1); console.log('END OF SLEEP'); // TODO REMOVE
 
 	var node;
 	try {

@@ -16,7 +16,6 @@
                                         \___  |-. ,-. |  |
                                             \ | | |-' |  |
                                         `---' ' ' `-' `' `'
-
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  A networked node item editor.
@@ -674,15 +673,16 @@ Shell.prototype.vget = function(path, plen) {
 | MeshMashine reports changes
 */
 Shell.prototype.report = function(status, tree, chgX) {
-	debug('SHELL.REPORT', status);
-
 	switch (status) {
+	case 'fail':
+		throw new Error('Connection failed'); // TODO
+		break;
 	case 'start' :
 		this.vSpace = new VSpace(tree.root.copse.welcome, this.vSpacePath);
 		break;
 	case 'update' :
 		this.tree = tree;
-		this.vSpace.report(tree, chgX);
+		this.vSpace.report(status, tree, chgX);
 		var caret = this.caret;
 		if (caret.sign !== null) {
 			var tsign = MeshMashine.tfxSign(caret.sign, chgX, 0, chgX.length);
@@ -971,7 +971,6 @@ var VSpace = function(twig, path) {
 | updates twig pointers
 */
 VSpace.prototype.report = function(status, tree, chgX) {
-	debug('VSPACE.REPORT', status);
 	var twig = tree.root.copse[this.key];
 
 	if (this.twig === twig) {
