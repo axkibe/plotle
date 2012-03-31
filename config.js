@@ -13,7 +13,7 @@ module.exports = {
 	log     : {
 		//all:   true,
 
-		ajax:   false,
+		ajax:   true,
 		change: true,
 		debug:  true,
 		fail:   true,

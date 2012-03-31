@@ -33,26 +33,12 @@ Emulate.src =  {
 				doc: {
 					type: 'Doc',
 					copse : {
-						/*
 						'1': {
 							type: 'Para',
-							text: 'abc'
-						},
-						'2': {
-							type: 'Para',
-							text: 'def'
-						},
-						'3': {
-							type: 'Para',
-							text: 'ghi'
-						},
-						'4': {
-							type: 'Para',
-							text: 'jkl'
-						},
-						*/
+							text: ''
+						}
 
-
+						/*
 						'1': {
 							type: 'Para',
 							text: 'If you can dream---and not make dreams your master;'
@@ -68,7 +54,7 @@ Emulate.src =  {
 						'4': {
 							type: 'Para',
 							text: 'And treat those two impostors just the same'
-						}
+						}*/
 
 
 						/*
@@ -123,15 +109,18 @@ Emulate.src =  {
 						*/
 					},
 					ranks : [
-						'1', '2', '3', '4' /*, '5',
-						'6', '7', '8', '9', '10',
-						'11', '12', '13', '14', '15',
-						'16' */
+						'1', /* '2', '3', '4' */
+
+						/*,
+						 '5',  '6',  '7',  '8',  '9',
+						'10', '11', '12', '13', '14',
+						'15', '16' */
 					]
 				}
 			},
 
 			// LABEL
+			/*
 			'2' : {
 				type: 'Label',
 				fontsize : 25,
@@ -160,8 +149,9 @@ Emulate.src =  {
 					ranks : [ '1' ]
 				}
 			}
+			*/
 		},
-		ranks : [ '3', '2', '1' ]
+		ranks : [ /*'3', '2',*/ '1' ]
 	}
 };
 

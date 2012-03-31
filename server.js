@@ -136,12 +136,14 @@ Server.prototype.alter = function(cmd) {
 		chgX = MeshMashine.tfxChange(chgX, this.history, time, this.history.length);
 	}
 
-	var r = MeshMashine.changeTree(this.tree, chgX);
-	this.tree = r.tree;
+	if (chgX !== null) {
+		var r = MeshMashine.changeTree(this.tree, chgX);
+		this.tree = r.tree;
 
-	chgX = r.chgX;
-	for(var a = 0, aZ = chgX.length; a < aZ; a++) {
-		this.history.push(chgX[a]);
+		chgX = r.chgX;
+		for(var a = 0, aZ = chgX.length; a < aZ; a++) {
+			this.history.push(chgX[a]);
+		}
 	}
 
 	return { ok: true, chgX: chgX };
@@ -163,8 +165,6 @@ Server.prototype.get = function(cmd) {
 		var r = MeshMashine.changeTree(tree, this.history[t].reverse());
 		tree = r.tree;
 	}
-
-	//console.log('SLEEP'); sleep.sleep(1); console.log('END OF SLEEP'); // TODO REMOVE
 
 	var node;
 	try {
@@ -279,6 +279,7 @@ Server.prototype.ajax = function(req, red, res) {
 		log('ajax', '->', asw);
 		res.writeHead(200, {'Content-Type': 'application/json'});
 		res.end(JSON.stringify(asw));
+		//debug('SLEEP'); sleep.sleep(1); debug('EOS');
 	});
 };
 

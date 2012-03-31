@@ -141,9 +141,10 @@ IFaceASync.prototype.alter = function(src, trg) {
     this.tree = r.tree;
     var chgX = r.chgX;
 
-    for (var a = 0, aZ = chgX.length; a < aZ; a++) {
-        this.changes.push({chg: chgX[a], remoteTime: this.remoteTime});
-    }
+	for(var a = 0, aZ = chgX.length; a < aZ; a++) {
+	    this.changes.push(chgX[a]);
+	}
+
 	this.sendChanges();
 
     if (this.report) { this.report.report('update', r.tree, chgX); }
@@ -158,6 +159,7 @@ IFaceASync.prototype.sendChanges = function() {
 		debug('already one sendChanges active');
 		return;
 	}
+	this.sendChangesActive = true;
 
 	if (this.changes.length === 0) {
 		// nothing to send
@@ -170,6 +172,7 @@ IFaceASync.prototype.sendChanges = function() {
 	ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
 	var self = this;
+
 	ajax.onreadystatechange = function() {
 		var asw;
 		if (ajax.readyState !== 4) { return; }
@@ -184,7 +187,7 @@ IFaceASync.prototype.sendChanges = function() {
 		try {
 			asw = JSON.parse(ajax.responseText);
 		} catch (e) {
-			this.sendChangesActive = false;
+			self.sendChangesActive = false;
 			throw new Error('Server answered no JSON!');
 		}
 
@@ -195,23 +198,23 @@ IFaceASync.prototype.sendChanges = function() {
 		}
 
 		self.sendChangesActive = false;
-		self.remoteTime = asw.time;
-
 
 		// TODO do a proper list.
-		this.changes.unshift();
-		if (this.changes.length > 0) {
-			this.sendChanges();
+		self.remoteTime++; // TODO
+		self.changes.splice(0, 1);
+
+		if (self.changes.length > 0) {
+			self.sendChanges();
 		}
 	};
 
-	var chg = this.changes[0];
+	var c = this.changes[0];
 
 	var request = JSON.stringify({
 		cmd  : 'alter',
-		time : chg.remoteTime,
-		src  : chg.chg.src,
-		trg  : chg.chg.trg
+		time : this.remoteTime,
+		src  : c.src,
+		trg  : c.trg
 	});
 
 	log('peer', 'sc->', request);
