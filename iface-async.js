@@ -52,6 +52,7 @@ var Signature = MeshMashine.Signature;
 var debug     = Jools.debug;
 var log       = Jools.log;
 var is        = Jools.is;
+var uid       = Jools.uid;
 
 /**
 | Constructor.
@@ -142,7 +143,7 @@ IFaceASync.prototype.alter = function(src, trg) {
     var chgX = r.chgX;
 
 	for(var a = 0, aZ = chgX.length; a < aZ; a++) {
-	    this.changes.push(chgX[a]);
+	    this.changes.push({ cid: uid(), chg: chgX[a] });
 	}
 
 	this.sendChanges();
@@ -212,9 +213,10 @@ IFaceASync.prototype.sendChanges = function() {
 
 	var request = JSON.stringify({
 		cmd  : 'alter',
+		cid  : c.cid,
 		time : this.remoteTime,
-		src  : c.src,
-		trg  : c.trg
+		src  : c.chg.src,
+		trg  : c.chg.trg
 	});
 
 	log('peer', 'sc->', request);
