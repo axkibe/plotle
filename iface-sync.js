@@ -46,9 +46,10 @@ var IFaceSync;
 "use strict";
 if (typeof (window) === 'undefined') throw new Error('IFaceSync nees a browser!');
 
-var debug     = Jools.debug;
-var log       = Jools.log;
-var is        = Jools.is;
+var debug = Jools.debug;
+var log   = Jools.log;
+var is    = Jools.is;
+var uid   = Jools.uid;
 
 /**
 | Constructor
@@ -81,6 +82,7 @@ IFaceSync.prototype.alter = function(src, trg) {
 	var request = JSON.stringify({
 		time : this.remoteTime,
 		cmd  : 'alter',
+		cid  : uid(),
 		src  : src,
 		trg  : trg
 	});

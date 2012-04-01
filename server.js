@@ -90,11 +90,12 @@ var Server = function() {
 	this.registerFile('/tree.js',          'js',   './tree.js'           );
 
 	this.tree    = new Tree({ type : 'Nexus' }, Patterns.mUniverse);
-	this.history = [];
+	this.changes = [];
 
 	// startup init
 	var asw = this.alter({
 		time : 0,
+		cid  : 'startup',
 		src  : Emulate.src,
 		trg  : { path : new Path(Emulate.path) }
 	});
@@ -115,14 +116,20 @@ var Server = function() {
 | Executes an alter command.
 */
 Server.prototype.alter = function(cmd) {
-	if (!is(cmd.time)) { throw reject('time missing'); }
-	if (!is(cmd.src))  { throw reject('src missing');  }
-	if (!is(cmd.trg))  { throw reject('trg missing');  }
-
 	var time = cmd.time;
-	if (time === -1) { time = this.history.length; }
-	if (!(time >= 0 && time <= this.history.length)) { throw reject('invalid time'); }
 
+	var chgs = this.changes;
+	var chgZ = chgs.length;
+
+	// some tests
+	if (!is(time))    { throw reject('time missing'); }
+	if (!is(cmd.src)) { throw reject('src missing');  }
+	if (!is(cmd.trg)) { throw reject('trg missing');  }
+	if (!is(cmd.cid)) { throw reject('cid missing');  }
+	if (time === -1)  { time = chgZ; }
+	if (!(time >= 0 && time <= chgZ)) { throw reject('invalid time'); }
+
+	// fits the cmd into data structures
 	var chgX;
 	try {
 		if (cmd.src.path) { cmd.src.path = new Path(cmd.src.path); }
@@ -132,18 +139,22 @@ Server.prototype.alter = function(cmd) {
 		throw reject('invalid cmd: '+e.message);
 	}
 
-	if (time < this.history.length - 1) {
-		chgX = MeshMashine.tfxChange(chgX, this.history, time, this.history.length);
+	// if (time < chgZ - 1)
+	// { chgX = MeshMashine.tfxChange(chgX, history, time, historyZ); } TODO REM
+
+	// translates the changes if not most recent
+	for (var a = time; time < chgZ - 1; a--) {
+		chgX = MeshMashine.tfxChange(chgX, chgs[a].chgX, 0, chgs[a].chgX.length);
+		// TODO change tfxChange to simple work through the whole array
 	}
 
+
+	// applies the changes
 	if (chgX !== null) {
 		var r = MeshMashine.changeTree(this.tree, chgX);
 		this.tree = r.tree;
-
-		chgX = r.chgX;
-		for(var a = 0, aZ = chgX.length; a < aZ; a++) {
-			this.history.push(chgX[a]);
-		}
+		chgX      = r.chgX;
+		chgs.push({ cid : cmd.cid, chgX : chgX });
 	}
 
 	return { ok: true, chgX: chgX };
@@ -153,23 +164,30 @@ Server.prototype.alter = function(cmd) {
 | Executes a get command.
 */
 Server.prototype.get = function(cmd) {
+	var chgs = this.changes;
+	var chgZ = chgs.length;
+	var time = cmd.time;
+
+	// checks
 	if (!is(cmd.time)) { throw reject('time missing'); }
 	if (!is(cmd.path)) { throw reject('path missing'); }
+	if (time === -1) { time = chgZ; }
+	if (!(time >= 0 && time <= chgZ)) { throw reject('invalid time'); }
 
-	var time = cmd.time;
-	if (time === -1) { time = this.history.length; }
-	if (!(time >= 0 && time <= this.history.length)) { throw reject('invalid time'); }
-
+	// if the requested data is in the past go back in time
 	var tree = this.tree;
-	for (var t = this.history.length - 1; t >= time; t--) {
-		var r = MeshMashine.changeTree(tree, this.history[t].reverse());
-		tree = r.tree;
+	for (var a = chgZ - 1; a >= time; a--) {
+		var chgX = chgs[a].chgX;
+		for (var b = 0; b < chgX.length; b++) {
+			var r = MeshMashine.changeTree(tree, chgX[b].reverse());
+			tree = r.tree;
+		}
 	}
 
+	// returns the path requested
 	var node;
 	try {
-		var path = new Path(cmd.path);
-		node = tree.getPath(path);
+		node = tree.getPath(new Path(cmd.path));
 	} catch(e) {
 		throw reject('cannot get path: '+e.message);
 	}
