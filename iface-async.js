@@ -61,8 +61,15 @@ IFaceASync = function() {
 	// the current tree;
 	this.tree    = null;
 
-	// all changes known to the client
-	this.changes = [];
+	// the remote tree.
+	// what the client thinks the server has.
+	this.rtree   = null;
+
+	// changes to be send to the server
+	this._outbox = [];
+
+	// changes that are currently on the way to the server
+	this._postbox = [];
 
 	// if set report changes to this object
 	this.report  = null;
@@ -112,7 +119,7 @@ IFaceASync.prototype.startGet = function(path) {
 		self.startGetActive = false;
 
 		self.remoteTime = asw.time;
-		self.tree = new Tree({
+		self.tree = self.rtree = new Tree({
 			type  : 'Nexus',
 			copse : {
 				'welcome' : asw.node
@@ -120,6 +127,7 @@ IFaceASync.prototype.startGet = function(path) {
 		}, Patterns.mUniverse);
 
 		if (self.report) { self.report.report('start', self.tree, null); }
+		self._update();
 	};
 
     var request = JSON.stringify({
@@ -139,6 +147,66 @@ IFaceASync.prototype.get = function(path, len) {
     return this.tree.getPath(path, len);
 };
 
+IFaceASync.prototype._update = function() {
+	if (this._updateActive) { throw new Error('double update?'); }
+
+	var ajax = new XMLHttpRequest();
+	ajax.open('POST', '/mm', true);
+	ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+	var self = this;
+	ajax.onreadystatechange = function() {
+		var asw;
+		if (ajax.readyState !== 4) { return; }
+		if (ajax.status !== 200) {
+			log('peer', 'update.status == ' + ajax.status);
+			throw new Error('Update Error');
+			// TODO proper error handling
+		}
+
+		try {
+			asw = JSON.parse(ajax.responseText);
+		} catch (e) {
+			throw new Error('Server answered no JSON!');
+		}
+
+		log('peer', '<-u', asw);
+		if (!asw.ok) { throw new Error('update, server not OK!'); }
+		var chgs = asw.chgs;
+
+		if (chgs) {
+			// this wasn't an empty timeout?
+			var postbox = self._postbox;
+			for(var a = 0, aZ = chgs.length; a < aZ; a++) {
+				var c = chgs[a];
+				var cid = c.cid;
+				if (postbox.length > 0 && postbox[0].cid === cid) {
+					debug('updating own change');
+					self._postbox.splice(0, 1);
+					continue;
+				}
+				debug('CANNOT YET DO OTHERS CHANGES');
+			}
+		}
+
+		self.remoteTime = asw.timeZ;
+
+		// issue the following update
+		self._update();
+	};
+
+	var c = this._outbox[0];
+	this._outbox.splice(0, 1);
+
+	var request = JSON.stringify({
+		cmd  : 'update',
+		time : this.remoteTime
+	});
+
+	log('peer', 'u->', request);
+	ajax.send(request);
+};
+
 /**
 | Alters the tree
 */
@@ -149,7 +217,7 @@ IFaceASync.prototype.alter = function(src, trg) {
     var chgX = r.chgX;
 
 	for(var a = 0, aZ = chgX.length; a < aZ; a++) {
-		this.changes.push({ cid: uid(), chg: chgX[a] });
+		this._outbox.push({ cid: uid(), chg: chgX[a] });
 	}
 
 	this.sendChanges();
@@ -162,13 +230,12 @@ IFaceASync.prototype.alter = function(src, trg) {
 | Sends the stored changes to remote meshmashine
 */
 IFaceASync.prototype.sendChanges = function() {
-	if (this.sendChangesActive) {
-		debug('already one sendChanges active');
+	if (this._postbox.length > 0) {
+		debug('postbox active');
 		return;
 	}
-	this.sendChangesActive = true;
 
-	if (this.changes.length === 0) {
+	if (this._outbox.length === 0) {
 		// nothing to send
 		debug('nothing to send');
 		return;
@@ -185,37 +252,23 @@ IFaceASync.prototype.sendChanges = function() {
 		if (ajax.readyState !== 4) { return; }
 
 		if (ajax.status !== 200) {
-			self.sendChangesActive = false;
 			log('peer', 'sendChanges.status == ' + ajax.status);
-			throw new Error('Cannot send changed to server');
+			throw new Error('Cannot send changes to server');
 			// TODO proper error handling
 		}
 
 		try {
 			asw = JSON.parse(ajax.responseText);
 		} catch (e) {
-			self.sendChangesActive = false;
 			throw new Error('Server answered no JSON!');
 		}
 
 		log('peer', '<-sc', asw);
-		if (!asw.ok) {
-			self.sendChangesActive = false;
-			throw new Error('send changes, server not OK!');
-		}
-
-		self.sendChangesActive = false;
-
-		// TODO do a proper list.
-		self.remoteTime++; // TODO
-		self.changes.splice(0, 1);
-
-		if (self.changes.length > 0) {
-			self.sendChanges();
-		}
+		if (!asw.ok) { throw new Error('send changes, server not OK!'); }
 	};
 
-	var c = this.changes[0];
+	var c = this._outbox[0];
+	this._postbox.push(c);
 
 	var request = JSON.stringify({
 		cmd  : 'alter',
