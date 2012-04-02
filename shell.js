@@ -676,7 +676,7 @@ Shell.prototype.report = function(status, tree, chgX) {
 	switch (status) {
 	case 'fail':
 		throw new Error('Connection failed'); // TODO
-		break;
+		//break;
 	case 'start' :
 		this.vSpace = new VSpace(tree.root.copse.welcome, this.vSpacePath);
 		break;
@@ -1342,9 +1342,14 @@ VSpace.prototype.mousedown = function(p) {
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- +++ VPara +++
+ ,.   ,. .-,--.
+ `|  /    '|__/ ,-. ,-. ,-.
+  | /     ,|    ,-| |   ,-|
+  `'      `'    `-^ '   `-^
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
  A visual paragraph representation
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 var VPara = function(twig, path, vdoc) {
 	if (twig.type !== 'Para') throw new Error('type error');

@@ -13,14 +13,19 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--´
 
-
-                                        +++ Server +++
+                                .---.
+                                \___  ,-. ,-. .  , ,-. ,-.
+                                    \ |-' |   | /  |-' |
+                                `---' `-' '   `'   `-' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
  The server-side repository.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 /**
 | Capsule (just to make jshint happy)
 */
@@ -91,6 +96,7 @@ var Server = function() {
 
 	this.tree    = new Tree({ type : 'Nexus' }, Patterns.mUniverse);
 	this.changes = [];
+	this.upsleep = [];
 
 	// startup init
 	var asw = this.alter({
@@ -104,7 +110,6 @@ var Server = function() {
 
 	var self = this;
 	log('start', 'Starting server @ http://' + (config.ip || '*') + '/:' + config.port);
-
 	http.createServer(function(req, res) {
 		self.requestListener(req, res);
 	}).listen(config.port, config.ip, function() {
@@ -139,8 +144,49 @@ Server.prototype.alter = function(cmd) {
 		throw reject('invalid cmd: '+e.message);
 	}
 
-	// if (time < chgZ - 1)
-	// { chgX = MeshMashine.tfxChange(chgX, history, time, historyZ); } TODO REM
+	// translates the changes if not most recent
+	for (var a = time; time < chgZ - 1; a--) {
+		chgX = MeshMashine.tfxChange(chgX, chgs[a].chgX, 0, chgs[a].chgX.length);
+		// TODO change tfxChange to simple work through the whole array
+	}
+
+	// applies the changes
+	if (chgX !== null) {
+		var r = MeshMashine.changeTree(this.tree, chgX);
+		this.tree = r.tree;
+		chgX      = r.chgX;
+		chgs.push({ cid : cmd.cid, chgX : chgX });
+	}
+
+	return { ok: true, chgX: chgX };
+};
+
+/**
+| Gets new changes or waits for them.
+*/
+Server.prototype.update = function(cmd, res) {
+	var time = cmd.time;
+
+	var chgs = this.changes;
+	var chgZ = chgs.length;
+
+	// some tests
+	if (!is(time))    { throw reject('time missing'); }
+	if (!is(cmd.src)) { throw reject('src missing');  }
+	if (!is(cmd.trg)) { throw reject('trg missing');  }
+	if (!is(cmd.cid)) { throw reject('cid missing');  }
+	if (time === -1)  { time = chgZ; }
+	if (!(time >= 0 && time <= chgZ)) { throw reject('invalid time'); }
+
+	// fits the cmd into data structures
+	var chgX;
+	try {
+		if (cmd.src.path) { cmd.src.path = new Path(cmd.src.path); }
+		if (cmd.trg.path) { cmd.trg.path = new Path(cmd.trg.path); }
+		chgX = new Change( new Signature(cmd.src), new Signature(cmd.trg) );
+	} catch(e) {
+		throw reject('invalid cmd: '+e.message);
+	}
 
 	// translates the changes if not most recent
 	for (var a = time; time < chgZ - 1; a--) {
@@ -252,7 +298,6 @@ Server.prototype.requestListener = function(req, res) {
 };
 
 
-
 /**
 | Handles ajax requests to the MeshMashine.
 */
@@ -282,9 +327,9 @@ Server.prototype.ajax = function(req, red, res) {
 		var asw;
 		try {
 			switch (cmd.cmd) {
-			case 'alter':  asw = self.alter(cmd); break;
-			case 'get':    asw = self.get(cmd);   break;
-			case 'update': throw new Error('TODO');
+			case 'alter':  asw = self.alter(cmd);       break;
+			case 'get':    asw = self.get(cmd);         break;
+			case 'update': asw = self.update(cmd, res); break;
 			default:
 				self.webError(res, 400, 'unknown command "'+cmd.cmd+'"');
 				return;
@@ -294,10 +339,12 @@ Server.prototype.ajax = function(req, red, res) {
 			if (e.ok !== false) throw e; else asw = e;
 		}
 
-		log('ajax', '->', asw);
-		res.writeHead(200, {'Content-Type': 'application/json'});
-		res.end(JSON.stringify(asw));
-		//debug('SLEEP'); sleep.sleep(1); debug('EOS');
+		if (asw !== null) {
+			log('ajax', '->', asw);
+			res.writeHead(200, {'Content-Type': 'application/json'});
+			res.end(JSON.stringify(asw));
+		}
+		// else assume sleeping call
 	});
 };
 

@@ -12,12 +12,14 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--'
 
-                                   +++ Jools ++++
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
+                                      ,-_/         .
+                                      '  | ,-. ,-. |  ,-.
+                                         | | | | | |  `-.
+                                         | `-' `-' `' `-'
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ /` | ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                                      `--'
  Common Javascript Tools for Meshcraft.
 
- Defines: Jools
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
 

@@ -58,11 +58,17 @@ var uid       = Jools.uid;
 | Constructor.
 */
 IFaceASync = function() {
+	// the current tree;
 	this.tree    = null;
+
+	// all changes known to the client
 	this.changes = [];
+
+	// if set report changes to this object
 	this.report  = null;
-	var path     = new Path([ 'welcome' ]);
-	this.startGet(path);
+
+	// startup
+	this.startGet(new Path([ 'welcome' ]));
 };
 
 /**
@@ -143,7 +149,7 @@ IFaceASync.prototype.alter = function(src, trg) {
     var chgX = r.chgX;
 
 	for(var a = 0, aZ = chgX.length; a < aZ; a++) {
-	    this.changes.push({ cid: uid(), chg: chgX[a] });
+		this.changes.push({ cid: uid(), chg: chgX[a] });
 	}
 
 	this.sendChanges();
