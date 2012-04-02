@@ -94,9 +94,10 @@ var Server = function() {
 	this.registerFile('/testpad.js',       'js',   './testpad.js'        );
 	this.registerFile('/tree.js',          'js',   './tree.js'           );
 
-	this.tree    = new Tree({ type : 'Nexus' }, Patterns.mUniverse);
-	this.changes = [];
-	this.upsleep = [];
+	this.tree      = new Tree({ type : 'Nexus' }, Patterns.mUniverse);
+	this.changes   = [];
+	this.upsleep   = {};
+	this.nextSleep = 1;
 
 	// startup init
 	var asw = this.alter({
@@ -158,6 +159,9 @@ Server.prototype.alter = function(cmd) {
 		chgs.push({ cid : cmd.cid, chgX : chgX });
 	}
 
+	var self = this;
+	process.nextTick(function() { self.wakeAll(); });
+
 	return { ok: true, chgX: chgX };
 };
 
@@ -166,44 +170,76 @@ Server.prototype.alter = function(cmd) {
 */
 Server.prototype.update = function(cmd, res) {
 	var time = cmd.time;
-
 	var chgs = this.changes;
 	var chgZ = chgs.length;
 
 	// some tests
 	if (!is(time))    { throw reject('time missing'); }
-	if (!is(cmd.src)) { throw reject('src missing');  }
-	if (!is(cmd.trg)) { throw reject('trg missing');  }
-	if (!is(cmd.cid)) { throw reject('cid missing');  }
-	if (time === -1)  { time = chgZ; }
 	if (!(time >= 0 && time <= chgZ)) { throw reject('invalid time'); }
 
-	// fits the cmd into data structures
-	var chgX;
-	try {
-		if (cmd.src.path) { cmd.src.path = new Path(cmd.src.path); }
-		if (cmd.trg.path) { cmd.trg.path = new Path(cmd.trg.path); }
-		chgX = new Change( new Signature(cmd.src), new Signature(cmd.trg) );
-	} catch(e) {
-		throw reject('invalid cmd: '+e.message);
+	if (time < chgZ) {
+		// immediate answer
+		var chga = [];
+		for (var c = time; c < chgZ; c++) {
+			chga.push(chgs[c]);
+		}
+
+		return { ok : true, time: time, timeZ: chgZ, chgs : chga };
+	} else {
+		// sleep
+		var sleepID = '' + this.nextSleep++;
+		var timerID = setTimeout(this.expireSleep, 60000, this, sleepID);
+		this.upsleep[sleepID] = {
+			timerID : timerID,
+			time    : time,
+			res     : res
+		};
+		return null;
+	}
+};
+
+/**
+| A sleeping update expired.
+*/
+Server.prototype.expireSleep = function(self, sleepID) {
+	var chgZ = self.changes.length;
+	var sleep = self.upsleep[sleepID];
+	delete self.upsleep[sleepID];
+
+	var asw = { ok : true, time: sleep.time, timeZ : chgZ, chgs : null};
+	var res = sleep.res;
+	log('ajax', '->', asw);
+	res.writeHead(200, {'Content-Type': 'application/json'});
+	res.end(JSON.stringify(asw));
+};
+
+/**
+| Wakes up any sleeping updates and gives them data if applicatable.
+*/
+Server.prototype.wakeAll = function() {
+	var sleepKeys = Object.keys(this.upsleep);
+	var chgs = this.changes;
+	var chgZ = chgs.length;
+
+	// @@ cache change lists to answer the same to multiple clients.
+	for(var a = 0, aZ = sleepKeys.length; a < aZ; a++) {
+		var sKey = sleepKeys[a];
+		var sleep = this.upsleep[sKey];
+		clearTimeout(sleep.timerID);
+
+		var chga = [];
+		for (var c = sleep.time; c < chgZ; c++) {
+			chga.push(chgs[c]);
+		}
+
+		var asw = { ok : true, time: sleep.time, timeZ: chgZ, chgs : chga };
+		var res = sleep.res;
+		log('ajax', '->', asw);
+		res.writeHead(200, {'Content-Type': 'application/json'});
+		res.end(JSON.stringify(asw));
 	}
 
-	// translates the changes if not most recent
-	for (var a = time; time < chgZ - 1; a--) {
-		chgX = MeshMashine.tfxChange(chgX, chgs[a].chgX, 0, chgs[a].chgX.length);
-		// TODO change tfxChange to simple work through the whole array
-	}
-
-
-	// applies the changes
-	if (chgX !== null) {
-		var r = MeshMashine.changeTree(this.tree, chgX);
-		this.tree = r.tree;
-		chgX      = r.chgX;
-		chgs.push({ cid : cmd.cid, chgX : chgX });
-	}
-
-	return { ok: true, chgX: chgX };
+	this.upsleep = {};
 };
 
 /**
