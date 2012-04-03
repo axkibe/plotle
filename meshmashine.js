@@ -144,7 +144,6 @@ immute(Signature.field);
 */
 Signature.prototype.affix = function(test, cm, base, key, val) {
 	if (test(this[key])) {
-		debug(val, '=?=', this[key]);
 		check(matches(val, this[key]), cm, base,'.',key,' faulty preset', val, '!==', this[key]);
 		return this;
 	} else {
@@ -644,29 +643,19 @@ var tfxChg = function(chg, chgX) {
 var tfxChgX = function(chgX1, chgX2) {
 
 	switch(chgX1.constructor) {
-
-	case Change : return tfxChg(chgX1, chgX2);
-
+	case Change :
+		return tfxChg(chgX1, chgX2);
 	case Array :
+		var chgA = [];
 		for(var a = 0, aZ = chgX1.length; a < aZ; a++) {
-			var cX = tfxChg(chgX1[a], chgX2);
-			switch (cX.constructor) {
-
-			case Change : chgX1[a] = cX; break;
-
-			case Array :
-				for(var b = 0, bZ = cX.length; b < bZ; b++) {
-					chgX1.splice(a++, 0, cX[b]);
-				}
-				aZ = chgX1.length;
-				break;
-
-			default : throw new Error('invalid tfxChg answer');
+			var rX = tfxChg(chgX1[a], chgX2);
+			for(var b = 0, bZ = rX.length; b < bZ; b++) {
+				chgA.push(rX[b]);
 			}
 		}
-		break;
-
-	default : throw new Error('invalid chgX1');
+		return chgA;
+	default :
+		throw new Error('invalid chgX1');
 	}
 };
 

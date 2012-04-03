@@ -174,34 +174,35 @@ IFaceASync.prototype._update = function() {
 		if (!asw.ok) { throw new Error('update, server not OK!'); }
 		var chgs = asw.chgs;
 
+		var report = [];
 		if (chgs) {
 			// this wasn't an empty timeout?
 			var postbox = self._postbox;
 			for(var a = 0, aZ = chgs.length; a < aZ; a++) {
-				var c = chgs[a];
-				var cid = c.cid;
+				var chgX = new Change(chgs[a].chgX);
+				var cid = chgs[a].cid;
 
 				// changes the clients understanding of the server tree
-				var r = MeshMashine.changeTree(this.rtree, c.chgX);
-				this.rtree = r.tree;
+				var r = MeshMashine.changeTree(self.rtree, chgX);
+				self.rtree = r.tree;
 
 				if (postbox.length > 0 && postbox[0].cid === cid) {
-					debug('updating own change');
 					self._postbox.splice(0, 1);
 					continue;
 				}
 
-/*
-				for(var b = 0, bZ = this._outbox.length; b < bZ; b++) {
-					this._outbox[b] = MeshMashine.tfxChangeX(chgX,
-XXX
-				}
-				*/
-				debug('CANNOT YET DO OTHERS CHANGES');
+				// adapts all queued changes
+				report.push(chgX);
+				self._outbox = MeshMashine.tfxChgX(self._outbox, chgX);
+				r = MeshMashine.changeTree(self.rtree, self._outbox);
+				self.tree = r.tree;
 			}
 		}
-
 		self.remoteTime = asw.timeZ;
+
+		if (report.length > 0 && self.report) {
+			self.report.report('update', self.tree, report);
+		}
 
 		// issue the following update
 		self._update();

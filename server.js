@@ -145,7 +145,7 @@ Server.prototype.alter = function(cmd) {
 	}
 
 	// translates the changes if not most recent
-	for (var a = time; time < chgZ - 1; a++) {
+	for (var a = time; a < chgZ; a++) {
 		chgX = MeshMashine.tfxChgX(chgX, chgs[a].chgX);
 	}
 
