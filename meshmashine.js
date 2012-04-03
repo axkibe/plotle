@@ -162,9 +162,42 @@ Signature.prototype.affix = function(test, cm, base, key, val) {
  A change to a tree.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-var Change = function(src, trg) {
-	this.src = src;
-	this.trg = trg;
+
+/**
+| Constructor:
+|
+|   Change(src, trg)  -or-
+|   Change(o)  where o contains o.src and o.trg
+*/
+var Change = function(a1, a2) {
+	var src, trg;
+	switch (arguments.length) {
+	case 2:
+		src = a1;
+		trg = a2;
+		break;
+	case 1:
+		src = a1.src;
+		trg = a1.trg;
+		break;
+	default :
+		throw new Error('#argument fail');
+	}
+
+	if (src.constructor === Signature) {
+		this.src = src;
+	} else {
+		if (src.path && !isPath(src.path)) src.path = new Path(src.path);
+		this.src = new Signature(src);
+	}
+
+	if (trg.constructor === Signature) {
+		this.trg = trg;
+	} else {
+		if (trg.path && !isPath(trg.path)) trg.path = new Path(trg.path);
+		this.trg = new Signature(trg);
+	}
+
 	immute(this);
 };
 

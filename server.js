@@ -103,8 +103,10 @@ var Server = function() {
 	var asw = this.alter({
 		time : 0,
 		cid  : 'startup',
-		src  : Emulate.src,
-		trg  : { path : new Path(Emulate.path) }
+		chgX : new Change(
+			new Signature(Emulate.src),
+			new Signature({ path : new Path(Emulate.path) })
+		)
 	});
 
 	if (asw.ok !== true) throw new Error('Cannot init Repository');
@@ -123,24 +125,23 @@ var Server = function() {
 */
 Server.prototype.alter = function(cmd) {
 	var time = cmd.time;
+	var chgX = cmd.chgX;
+	var cid  = cmd.cid;
 
 	var chgs = this.changes;
 	var chgZ = chgs.length;
 
 	// some tests
-	if (!is(time))    { throw reject('time missing'); }
-	if (!is(cmd.src)) { throw reject('src missing');  }
-	if (!is(cmd.trg)) { throw reject('trg missing');  }
-	if (!is(cmd.cid)) { throw reject('cid missing');  }
+	if (!is(time)) { throw reject('time missing'); }
+	if (!is(chgX)) { throw reject('chgX missing');  }
+	if (!is(cid))  { throw reject('cid missing');  }
 	if (time === -1)  { time = chgZ; }
 	if (!(time >= 0 && time <= chgZ)) { throw reject('invalid time'); }
 
 	// fits the cmd into data structures
-	var chgX;
 	try {
-		if (cmd.src.path) { cmd.src.path = new Path(cmd.src.path); }
-		if (cmd.trg.path) { cmd.trg.path = new Path(cmd.trg.path); }
-		chgX = new Change( new Signature(cmd.src), new Signature(cmd.trg) );
+		if (isArray(chgX)  { throw new Error('TODO Array chgX not yet supported'); // TODO
+		chgX = new Change( chgX );
 	} catch(e) {
 		throw reject('invalid cmd: '+e.message);
 	}

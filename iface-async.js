@@ -182,9 +182,12 @@ IFaceASync.prototype._update = function() {
 				var cid = c.cid;
 				if (postbox.length > 0 && postbox[0].cid === cid) {
 					debug('updating own change');
+					var r = MeshMashine.changeTree(this.rtree, c.chgX);
+					this.rtree = r.tree;
 					self._postbox.splice(0, 1);
 					continue;
 				}
+
 				debug('CANNOT YET DO OTHERS CHANGES');
 			}
 		}
@@ -214,12 +217,8 @@ IFaceASync.prototype.alter = function(src, trg) {
     var chg = new Change(new Signature(src), new Signature(trg));
     var r = MeshMashine.changeTree(this.tree, chg);
     this.tree = r.tree;
-    var chgX = r.chgX;
 
-	for(var a = 0, aZ = chgX.length; a < aZ; a++) {
-		this._outbox.push({ cid: uid(), chg: chgX[a] });
-	}
-
+	this._outbox.push({ cid: uid(), chgX: r.chgX });
 	this.sendChanges();
 
     if (this.report) { this.report.report('update', r.tree, chgX); }
@@ -274,8 +273,7 @@ IFaceASync.prototype.sendChanges = function() {
 		cmd  : 'alter',
 		cid  : c.cid,
 		time : this.remoteTime,
-		src  : c.chg.src,
-		trg  : c.chg.trg
+		chgX : c.chgX,
 	});
 
 	log('peer', 'sc->', request);
