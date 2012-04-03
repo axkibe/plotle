@@ -544,6 +544,8 @@ var tfxSign1 = function(sign, chg) {
 /**
 | Transforms a signature on a list of alternations.
 | If the signature is a span, it can return an array of signs.
+|
+| TODO check if t1/t2 params are ever user
 */
 var tfxSign = function(sign, chgX, t1, t2) {
 	log('tfx', 'tfxSign', sign, t1, t2);
@@ -601,12 +603,12 @@ var tfxSign = function(sign, chgX, t1, t2) {
 /**
 | TODO
 */
-var tfxChange = function(chg, chgX, t1, t2) {
-	log('tfx', 'tfxChange', chg, t1, t2);
-	if (chg.constructor !== Change) { throw new Error('tfxChange param error'); }
+var tfxChg = function(chg, chgX) {
+	log('tfx', 'tfxChg', chg);
+	if (chg.constructor !== Change) { throw new Error('tfxChg param error'); }
 
-	var srcX = tfxSign(chg.src, chgX, t1, t2);
-	var trgX = tfxSign(chg.trg, chgX, t1, t2);
+	var srcX = tfxSign(chg.src, chgX, 0, chgX.length);
+	var trgX = tfxSign(chg.trg, chgX, 0, chgX.length);
 
 	if (srcX === null || trgX === null) {
 		log('tfx', 'transformed to null');
@@ -633,6 +635,38 @@ var tfxChange = function(chg, chgX, t1, t2) {
 		return asw;
 	} else {
 		throw new Error('srcX and trgX arrays :-(');
+	}
+};
+
+/**
+| Changes an a Change or Array of Changes upon a Change or Array of Changes.
+*/
+var tfxChgX = function(chgX1, chgX2) {
+
+	switch(chgX1.constructor) {
+
+	case Change : return tfxChg(chgX1, chgX2);
+
+	case Array :
+		for(var a = 0, aZ = chgX1.length; a < aZ; a++) {
+			var cX = tfxChg(chgX1[a], chgX2);
+			switch (cX.constructor) {
+
+			case Change : chgX1[a] = cX; break;
+
+			case Array :
+				for(var b = 0, bZ = cX.length; b < bZ; b++) {
+					chgX1.splice(a++, 0, cX[b]);
+				}
+				aZ = chgX1.length;
+				break;
+
+			default : throw new Error('invalid tfxChg answer');
+			}
+		}
+		break;
+
+	default : throw new Error('invalid chgX1');
 	}
 };
 
@@ -809,37 +843,12 @@ TFXOps.rank = function(sign, src, trg) {
 };
 
 
-
-/**
-| Reflects the state of the tree at a time.
-| If path is not null it cares only to rebuild what is necessary to see the node.
-*/
-/*
-MeshMashine.prototype._reflect = function(time, path) {
-	if (is(path)) { throw new Error('Not yet supported!'); }
-	try {
-		var reflect = this.tree;
-
-		// playback
-		for(var hi = this.history.length - 1; hi >= time; hi--) {
-			var moment = this.history[hi];
-			var asw = Alter.one(reflect, moment.trg, moment.src, false);
-			reflect = asw.tree;
-		}
-		return reflect;
-	} catch (err) {
-		// this should never fail, thus rethrow a lethal error
-		err.ok = null;
-		throw new Error(err.stack);
-	}
-};
-*/
-
 MeshMashine = {
 	Change      : Change,
 	Signature   : Signature,
 
-	tfxChange   : tfxChange,
+	tfxChg      : tfxChg,
+	tfxChgX     : tfxChgX,
 	tfxSign     : tfxSign,
 	changeTree  : changeTree
 };

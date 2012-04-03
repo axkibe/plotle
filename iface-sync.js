@@ -83,8 +83,7 @@ IFaceSync.prototype.alter = function(src, trg) {
 		time : this.remoteTime,
 		cmd  : 'alter',
 		cid  : uid(),
-		src  : src,
-		trg  : trg
+		chgX : { src: src, trg: trg }
 	});
 	log('peer', '->', request);
 	ajax.send(request);

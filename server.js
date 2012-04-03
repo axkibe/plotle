@@ -58,6 +58,7 @@ var debug       = Jools.debug;
 var is          = Jools.is;
 var log         = Jools.log;
 var reject      = Jools.reject;
+var isArray     = Jools.isArray;
 
 /**
 | Loads the configuration file
@@ -102,11 +103,8 @@ var Server = function() {
 	// startup init
 	var asw = this.alter({
 		time : 0,
-		cid  : 'startup',
-		chgX : new Change(
-			new Signature(Emulate.src),
-			new Signature({ path : new Path(Emulate.path) })
-		)
+		chgX : new Change(Emulate.src, { path : Emulate.path }),
+		cid  : 'startup'
 	});
 
 	if (asw.ok !== true) throw new Error('Cannot init Repository');
@@ -140,16 +138,15 @@ Server.prototype.alter = function(cmd) {
 
 	// fits the cmd into data structures
 	try {
-		if (isArray(chgX)  { throw new Error('TODO Array chgX not yet supported'); // TODO
-		chgX = new Change( chgX );
+		if (isArray(chgX))  { throw new Error('TODO Array chgX not yet supported'); } // TODO
+		chgX = new Change(chgX);
 	} catch(e) {
 		throw reject('invalid cmd: '+e.message);
 	}
 
 	// translates the changes if not most recent
-	for (var a = time; time < chgZ - 1; a--) {
-		chgX = MeshMashine.tfxChange(chgX, chgs[a].chgX, 0, chgs[a].chgX.length);
-		// TODO change tfxChange to simple work through the whole array
+	for (var a = time; time < chgZ - 1; a++) {
+		chgX = MeshMashine.tfxChgX(chgX, chgs[a].chgX);
 	}
 
 	// applies the changes
