@@ -174,7 +174,8 @@ IFaceASync.prototype._update = function() {
 		if (!asw.ok) { throw new Error('update, server not OK!'); }
 		var chgs = asw.chgs;
 
-		var report = [];
+		var report  = [];
+		var gotOwnChgs = false;
 		if (chgs) {
 			// this wasn't an empty timeout?
 			var postbox = self._postbox;
@@ -188,6 +189,7 @@ IFaceASync.prototype._update = function() {
 
 				if (postbox.length > 0 && postbox[0].cid === cid) {
 					self._postbox.splice(0, 1);
+					gotOwnChgs = true;
 					continue;
 				}
 
@@ -204,12 +206,11 @@ IFaceASync.prototype._update = function() {
 			self.report.report('update', self.tree, report);
 		}
 
+		if (gotOwnChgs) { self.sendChanges(); }
+
 		// issue the following update
 		self._update();
 	};
-
-	var c = this._outbox[0];
-	this._outbox.splice(0, 1);
 
 	var request = JSON.stringify({
 		cmd  : 'update',
@@ -278,6 +279,7 @@ IFaceASync.prototype.sendChanges = function() {
 	};
 
 	var c = this._outbox[0];
+	this._outbox.splice(0, 1);
 	this._postbox.push(c);
 
 	var request = JSON.stringify({
