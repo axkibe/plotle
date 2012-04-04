@@ -33,12 +33,11 @@ Emulate.src =  {
 				doc: {
 					type: 'Doc',
 					copse : {
-						'1': {
+						/*'1': {
 							type: 'Para',
 							text: ''
-						}
+						}*/
 
-						/*
 						'1': {
 							type: 'Para',
 							text: 'If you can dream---and not make dreams your master;'
@@ -54,7 +53,7 @@ Emulate.src =  {
 						'4': {
 							type: 'Para',
 							text: 'And treat those two impostors just the same'
-						}*/
+						}
 
 
 						/*
@@ -109,7 +108,7 @@ Emulate.src =  {
 						*/
 					},
 					ranks : [
-						'1' /* '2', '3', '4' */
+						'1', '2', '3', '4'
 
 						/*,
 						'5',  '6',  '7',  '8',  '9',

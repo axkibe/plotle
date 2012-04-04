@@ -93,6 +93,7 @@ var RoundRect     = Fabric.RoundRect;
 var opposite      = Fabric.opposite;
 
 var Signature     = MeshMashine.Signature;
+var tfxSign       = MeshMashine.tfxSign;
 
 // configures tree.
 Tree.cogging = true;
@@ -685,9 +686,13 @@ Shell.prototype.report = function(status, tree, chgX) {
 		this.vSpace.report(status, tree, chgX);
 		var caret = this.caret;
 		if (caret.sign !== null) {
-			var tsign = MeshMashine.tfxSign(caret.sign, chgX);
-			if (isArray(tsign)) throw new Error('Invalid caret transformation');
-			caret.sign = tsign;
+			caret.sign = tfxSign(caret.sign, chgX);
+			if (isArray(caret.sign)) throw new Error('Invalid caret transformation');
+		}
+		var selection = this.selection;
+		if (selection.active) {
+			selection.sign1 = tfxSign(selection.sign1, chgX);
+			selection.sign2 = tfxSign(selection.sign2, chgX);
 		}
 		break;
 	default :
@@ -1022,11 +1027,9 @@ VSpace.prototype.createVItem = function(twig, k) {
 */
 VSpace.prototype.draw = function() {
 	var twig  = this.twig;
-	var ranks = twig.ranks;
-	var vv    = this.vv;
 
 	for(var r = twig.length - 1; r >= 0; r--) {
-		vv[ranks[r]].draw(this.fabric);
+		this.vAtRank(r).draw(this.fabric);
 	}
 
 	if (this.focus) { this.focus.drawHandles(this.fabric); }
@@ -1060,9 +1063,9 @@ VSpace.prototype.setFocus = function(vitem) {
 
 	var caret = shell.caret;
 	if (vitem) {
-		var doc = vitem.vv.doc;
+		var vdoc = vitem.vv.doc;
 		caret = shell.setCaret(
-			new Signature({ path: doc.vv[doc.twig.ranks[0]].textPath(), at1: 0 })
+			new Signature({ path: vdoc.vAtRank(0).textPath(), at1: 0 })
 		);
 		caret.show();
 		peer.moveToTop(vitem.path);
@@ -1073,6 +1076,15 @@ VSpace.prototype.setFocus = function(vitem) {
 };
 
 /**
+| Returns the vtwig at rank 'rank'.
+|
+| @@: put in a common prototype for all visuals with ranks?
+*/
+VSpace.prototype.vAtRank = function(rank) {
+	return this.vv[this.twig.ranks[rank]];
+}
+
+/**
 | Mouse wheel
 */
 VSpace.prototype.mousewheel = function(p, dir) {
@@ -1080,7 +1092,7 @@ VSpace.prototype.mousewheel = function(p, dir) {
 
 	var pp = p.sub(this.fabric.pan);
 	for(var r = 0, rZ = twig.length; r < rZ; r++) {
-		var vitem = this.vv[twig.ranks[r]];
+		var vitem = this.vAtRank(r);
 		if (vitem.mousewheel(pp, dir)) { return true; }
 	}
 
@@ -1137,10 +1149,8 @@ VSpace.prototype.mousehover = function(p) {
 		}
 	}
 
-	var ranks = this.twig.ranks;
-	var vv    = this.vv;
-	for(var a = 0, aZ = ranks.length; a < aZ; a++) {
-		var vitem = vv[ranks[a]];
+	for(var a = 0, aZ = this.twig.length; a < aZ; a++) {
+		var vitem = this.vAtRank(a);
 		if (vitem.mousehover(pp)) { return true; }
 	}
 	// no hits
@@ -1164,10 +1174,8 @@ VSpace.prototype.dragstart = function(p) {
 	}
 
 	// see if one item was targeted
-	var ranks = this.twig.ranks;
-	var vv    = this.vv;
-	for(var a = 0, aZ = ranks.length; a < aZ; a++) {
-		var vitem = vv[ranks[a]];
+	for(var a = 0, aZ = this.twig.length; a < aZ; a++) {
+		var vitem = this.vAtRank(a);
 		if (vitem.dragstart(pp)) return true;
 	}
 
@@ -1196,10 +1204,8 @@ VSpace.prototype.click = function(p) {
 	}
 
 	// clicked some item?
-	var ranks = this.twig.ranks;
-	var vv    = this.vv;
-	for(var a = 0, aZ = ranks.length; a < aZ; a++) {
-		var vitem = vv[ranks[a]];
+	for(var a = 0, aZ = this.twig.length; a < aZ; a++) {
+		var vitem = this.vAtRank(a);
 		if (vitem.click(pp)) return true;
 	}
 
@@ -1226,10 +1232,8 @@ VSpace.prototype.dragstop = function(p) {
 		action.vitem.dragstop(p);
 		break;
 	case Action.RELBIND:
-		var vv = this.vv;
-		var twig = this.twig;
-		for(var r = 0, rZ = twig.length; r < rZ; r++) {
-			var vitem = vv[twig.ranks[r]];
+		for(var r = 0, rZ = this.twig.length; r < rZ; r++) {
+			var vitem = this.vAtRank(r);
 			if (vitem.dragstop(pp)) break;
 		}
 		break;
@@ -1255,10 +1259,8 @@ VSpace.prototype.dragmove = function(p) {
 		action.move = p;
 		shell.redraw = true;
 
-		var vv   = this.vv;
-		var twig = this.twig;
-		for(var r = 0, rZ = twig.length; r < rZ; r++) {
-			var vitem = vv[twig.ranks[r]];  // @@ use func
+		for(var r = 0, rZ = this.twig.length; r < rZ; r++) {
+			var vitem = this.vAtRank(r);
 			if (vitem.dragmove(pp)) return true;
 		}
 		return true;
@@ -1537,8 +1539,8 @@ VPara.prototype.specialKey = function(keycode) {
 	if (shell.ctrl) {
 		switch(keycode) {
 		case 65 : // ctrl+a
-			var v0 = vdoc.vv[vdoc.twig.ranks[0]];
-			var v1 = vdoc.vv[vdoc.twig.ranks[vdoc.twig.length - 1]];
+			var v0 = vdoc.vAtRank(0);
+			var v1 = vdoc.vAtRank(vdoc.twig.length - 1);
 
 			select.sign1 = new Signature({ path: v0.textPath(), at1: 0 });
 			select.sign2 = new Signature({ path: v1.textPath(), at1: v1.twig.text.length });
@@ -1594,7 +1596,7 @@ VPara.prototype.specialKey = function(keycode) {
 		} else {
 			r = vdoc.twig.rankOf(this.key);
 			if (r > 0) {
-				ve = vdoc.vv[vdoc.twig.ranks[r - 1]];
+				ve = vdoc.vAtRank(r - 1);
 				peer.join(ve.textPath(), ve.twig.text.length);
 			}
 		}
@@ -1620,7 +1622,7 @@ VPara.prototype.specialKey = function(keycode) {
 		} else {
 			r = vdoc.twig.rankOf(this.key);
 			if (r > 0) {
-				ve = vdoc.vv[vdoc.twig.ranks[r - 1]];
+				ve = vdoc.vAtRank(r - 1);
 				caret = shell.setCaret(
 					new Signature({ path: ve.textPath(), at1: ve.twig.text.length })
 				);
@@ -1641,7 +1643,7 @@ VPara.prototype.specialKey = function(keycode) {
 			// goto prev para
 			r = vdoc.twig.rankOf(this.key);
 			if (r > 0) {
-				ve = vdoc.vv[vdoc.twig.ranks[r - 1]];
+				ve = vdoc.vAtRank(r - 1);
 				at1 = ve.getLineXOffset(ve.getFlow().length - 1, x);
 				caret = shell.setCaret(
 					new Signature({ path: ve.textPath(), at1: at1 }), x
@@ -1657,7 +1659,7 @@ VPara.prototype.specialKey = function(keycode) {
 		} else {
 			r = vdoc.twig.rankOf(this.key);
 			if (r < vdoc.twig.length - 1) {
-				ve = vdoc.vv[vdoc.twig.ranks[r + 1]];
+				ve = vdoc.vAtRank(r + 1);
 				caret = shell.setCaret(
 					new Signature({ path: ve.textPath(), at1: 0 })
 				);
@@ -1678,7 +1680,7 @@ VPara.prototype.specialKey = function(keycode) {
 			// goto next para
 			r = vdoc.twig.rankOf(this.key);
 			if (r < vdoc.twig.length - 1) {
-				ve = vdoc.vv[vdoc.twig.ranks[r + 1]];
+				ve = vdoc.vAtRank(r + 1);
 				at1 = ve.getLineXOffset(0, x);
 				caret = shell.setCaret(
 					new Signature({ path: ve.textPath(), at1: at1 }), x
@@ -1885,8 +1887,9 @@ VPara.prototype.drawCaret = function() {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  A scrollbar.
+ Currently there are only vertical scrollbars.
 
- currently only vertical scrollbars.
+ TODO scroll cursor into view.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /**
@@ -1894,8 +1897,7 @@ VPara.prototype.drawCaret = function() {
 |
 | parent: parent holding the scrollbar
 */
-var Scrollbar = function(item) {
-	this.parent   = item;  // TODO rename "parent"
+var Scrollbar = function() {
 	this.max      = null;
 	this.visible  = false;
 	this._pos     = 0;
@@ -1984,6 +1986,13 @@ var VDoc = function(twig, path, vitem) {
 };
 
 /**
+| Returns the vtwig at rank 'rank'.
+*/
+VDoc.prototype.vAtRank = function(rank) {
+	return this.vv[this.twig.ranks[rank]];
+}
+
+/**
 | Updates v-vine to match a new twig.
 */
 VDoc.prototype.update = function(twig) {
@@ -2032,7 +2041,7 @@ VDoc.prototype.draw = function(fabric, width, imargin, scrollp) {
 	// draws the paragraphs
 	var twig = this.twig;
 	for (var r = 0, rZ = twig.length; r < rZ; r++) {
-		var vpara = this.vv[twig.ranks[r]];  // TODO replace with func
+		var vpara = this.vAtRank(r);
 		var flow = vpara.getFlow();
 
 		pnws[twig.ranks[r]] = new Point(imargin.w, R(y));
@@ -2057,7 +2066,7 @@ VDoc.prototype.getHeight = function() {
 	var vv       = this.vv;
 	var height   = 0;
 	for (var r = 0, rZ = twig.length; r < rZ; r++) {
-		var vpara = vv[twig.ranks[r]];
+		var vpara = this.vAtRank(r);
 
 		var flow = vpara.getFlow();
 		if (r > 0) { height += paraSep; }
@@ -2071,11 +2080,9 @@ VDoc.prototype.getHeight = function() {
 | Returns the width actually used of the document.
 */
 VDoc.prototype.getSpread = function() {
-	var twig = this.twig;
-	var vv   = this.vv;
 	var spread = 0;
-	for (var r = 0, rZ = twig.length; r < rZ; r++) {
-		spread = max(spread, vv[twig.ranks[r]].getFlow().spread);
+	for (var r = 0, rZ = this.twig.length; r < rZ; r++) {
+		spread = max(spread, this.vAtRank(r).getFlow().spread);
 	}
 	return spread;
 };
@@ -2101,6 +2108,7 @@ VDoc.prototype.getVParaAtPoint = function(p) {
 	var vv     = this.vv;
 
 	for(var r = 0, rZ = twig.length; r < rZ; r++) {
+		// TODO beautify
 		var k = twig.ranks[r];
 		var vpara = vv[k];
 		var flow = vpara.getFlow();
@@ -2519,7 +2527,7 @@ VItem.prototype.poke = function() {
 */
 var VNote = function(twig, path, vSpace) {
 	VItem.call(this, twig, path, vSpace);
-	this.scrollbarY = new Scrollbar(this, null);
+	this.scrollbarY = new Scrollbar();
 };
 subclass(VNote, VItem);
 

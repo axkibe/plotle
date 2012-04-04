@@ -194,11 +194,6 @@ IFaceASync.prototype._update = function() {
 				report.push(chgX);
 			}
 
-			debug('SELF.RTREE',   self.rtree.root);
-			debug('SELF.TREE',    self.tree.root);
-			debug('SELF POSTBOX', self._postbox);
-			debug('SELF OUTBOX',  self._outbox);
-
 			// adapts all queued changes
 			// and rebuilds the clients understanding of its own tree
 			var outbox = self._outbox;
@@ -217,7 +212,6 @@ IFaceASync.prototype._update = function() {
 				tree = MeshMashine.changeTree(tree, chgX).tree;
 			}
 			self.tree = tree;
-			debug('SELF.TREE2',    self.tree.root);
 		}
 		self.remoteTime = asw.timeZ;
 

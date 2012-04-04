@@ -14,17 +14,17 @@ module.exports = {
 	log     : {
 		//all:   true,
 
-		ajax:   true,
-		change: true,
+		ajax:   false,
+		change: false,
 		debug:  true,
 		fail:   true,
 		grow:   false,
-		peer:   true,
-		report: true,
+		peer:   false,
+		report: false,
 		start:  true,
 		shell:  true,
-		tfx:    true,
-		web:    true,
+		tfx:    false,
+		web:    false,
 		warn:   true
 	}
 };
