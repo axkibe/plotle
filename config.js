@@ -1,6 +1,6 @@
 // editable configuration
 module.exports = {
-	ip      : null,
+	ip      : 'meshcraft.net',
 	port    : 8833,
 
 	// development mode: none, client, server or both.
@@ -14,7 +14,7 @@ module.exports = {
 		//all:   true,
 
 		ajax:   true,
-		change: false,
+		change: true,
 		debug:  true,
 		fail:   true,
 		grow:   false,

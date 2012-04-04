@@ -126,15 +126,15 @@ Server.prototype.alter = function(cmd) {
 	var chgX = cmd.chgX;
 	var cid  = cmd.cid;
 
-	var chgs = this.changes;
-	var chgZ = chgs.length;
+	var changes  = this.changes;
+	var changesZ = changes.length;
 
 	// some tests
 	if (!is(time)) { throw reject('time missing'); }
 	if (!is(chgX)) { throw reject('chgX missing');  }
 	if (!is(cid))  { throw reject('cid missing');  }
-	if (time === -1)  { time = chgZ; }
-	if (!(time >= 0 && time <= chgZ)) { throw reject('invalid time'); }
+	if (time === -1)  { time = changesZ; }
+	if (!(time >= 0 && time <= changesZ)) { throw reject('invalid time'); }
 
 	// fits the cmd into data structures
 	try {
@@ -145,8 +145,8 @@ Server.prototype.alter = function(cmd) {
 	}
 
 	// translates the changes if not most recent
-	for (var a = time; a < chgZ; a++) {
-		chgX = MeshMashine.tfxChgX(chgX, chgs[a].chgX);
+	for (var a = time; a < changesZ; a++) {
+		chgX = MeshMashine.tfxChgX(chgX, changes[a].chgX);
 	}
 
 	// applies the changes
@@ -154,7 +154,9 @@ Server.prototype.alter = function(cmd) {
 		var r = MeshMashine.changeTree(this.tree, chgX);
 		this.tree = r.tree;
 		chgX      = r.chgX;
-		chgs.push({ cid : cmd.cid, chgX : chgX });
+		if (chgX !== null && chgX.length > 0) {
+			changes.push({ cid : cmd.cid, chgX : chgX });
+		}
 	}
 
 	var self = this;
@@ -167,22 +169,22 @@ Server.prototype.alter = function(cmd) {
 | Gets new changes or waits for them.
 */
 Server.prototype.update = function(cmd, res) {
-	var time = cmd.time;
-	var chgs = this.changes;
-	var chgZ = chgs.length;
+	var time     = cmd.time;
+	var changes  = this.changes;
+	var changesZ = changes.length;
 
 	// some tests
 	if (!is(time))    { throw reject('time missing'); }
-	if (!(time >= 0 && time <= chgZ)) { throw reject('invalid time'); }
+	if (!(time >= 0 && time <= changesZ)) { throw reject('invalid time'); }
 
-	if (time < chgZ) {
+	if (time < changesZ) {
 		// immediate answer
 		var chga = [];
-		for (var c = time; c < chgZ; c++) {
-			chga.push(chgs[c]);
+		for (var c = time; c < changesZ; c++) {
+			chga.push(changes[c]);
 		}
 
-		return { ok : true, time: time, timeZ: chgZ, chgs : chga };
+		return { ok : true, time: time, timeZ: changesZ, chgs : chga };
 	} else {
 		// sleep
 		var sleepID = '' + this.nextSleep++;
@@ -200,11 +202,11 @@ Server.prototype.update = function(cmd, res) {
 | A sleeping update expired.
 */
 Server.prototype.expireSleep = function(self, sleepID) {
-	var chgZ = self.changes.length;
+	var changesZ = self.changes.length;
 	var sleep = self.upsleep[sleepID];
 	delete self.upsleep[sleepID];
 
-	var asw = { ok : true, time: sleep.time, timeZ : chgZ, chgs : null};
+	var asw = { ok : true, time: sleep.time, timeZ : changesZ, chgs : null};
 	var res = sleep.res;
 	log('ajax', '->', asw);
 	res.writeHead(200, {'Content-Type': 'application/json'});
@@ -216,8 +218,8 @@ Server.prototype.expireSleep = function(self, sleepID) {
 */
 Server.prototype.wakeAll = function() {
 	var sleepKeys = Object.keys(this.upsleep);
-	var chgs = this.changes;
-	var chgZ = chgs.length;
+	var changes   = this.changes;
+	var changesZ  = changes.length;
 
 	// @@ cache change lists to answer the same to multiple clients.
 	for(var a = 0, aZ = sleepKeys.length; a < aZ; a++) {
@@ -226,11 +228,11 @@ Server.prototype.wakeAll = function() {
 		clearTimeout(sleep.timerID);
 
 		var chga = [];
-		for (var c = sleep.time; c < chgZ; c++) {
-			chga.push(chgs[c]);
+		for (var c = sleep.time; c < changesZ; c++) {
+			chga.push(changes[c]);
 		}
 
-		var asw = { ok : true, time: sleep.time, timeZ: chgZ, chgs : chga };
+		var asw = { ok : true, time: sleep.time, timeZ: changesZ, chgs : chga };
 		var res = sleep.res;
 		log('ajax', '->', asw);
 		res.writeHead(200, {'Content-Type': 'application/json'});
@@ -244,20 +246,20 @@ Server.prototype.wakeAll = function() {
 | Executes a get command.
 */
 Server.prototype.get = function(cmd) {
-	var chgs = this.changes;
-	var chgZ = chgs.length;
-	var time = cmd.time;
+	var changes  = this.changes;
+	var changesZ = changes.length;
+	var time     = cmd.time;
 
 	// checks
 	if (!is(cmd.time)) { throw reject('time missing'); }
 	if (!is(cmd.path)) { throw reject('path missing'); }
-	if (time === -1) { time = chgZ; }
-	if (!(time >= 0 && time <= chgZ)) { throw reject('invalid time'); }
+	if (time === -1)   { time = changesZ; }
+	if (!(time >= 0 && time <= changesZ)) { throw reject('invalid time'); }
 
 	// if the requested data is in the past go back in time
 	var tree = this.tree;
-	for (var a = chgZ - 1; a >= time; a--) {
-		var chgX = chgs[a].chgX;
+	for (var a = changesZ - 1; a >= time; a--) {
+		var chgX = changes[a].chgX;
 		for (var b = 0; b < chgX.length; b++) {
 			var r = MeshMashine.changeTree(tree, chgX[b].reverse());
 			tree = r.tree;
