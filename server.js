@@ -150,7 +150,7 @@ Server.prototype.alter = function(cmd) {
 	}
 
 	// applies the changes
-	if (chgX !== null) {
+	if (chgX !== null && chgX.length > 0) {
 		var r = MeshMashine.changeTree(this.tree, chgX);
 		this.tree = r.tree;
 		chgX      = r.chgX;

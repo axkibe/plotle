@@ -685,7 +685,7 @@ Shell.prototype.report = function(status, tree, chgX) {
 		this.vSpace.report(status, tree, chgX);
 		var caret = this.caret;
 		if (caret.sign !== null) {
-			var tsign = MeshMashine.tfxSign(caret.sign, chgX, 0, chgX.length);
+			var tsign = MeshMashine.tfxSign(caret.sign, chgX);
 			if (isArray(tsign)) throw new Error('Invalid caret transformation');
 			caret.sign = tsign;
 		}

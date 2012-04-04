@@ -273,6 +273,7 @@ var changeTree = function(tree, chgX) {
 		var op = ChangeOps[ctype];
 		if (!op) throw reject('invalid change: '+ctype);
 		var r = op(tree, chg);
+		if (r === null) { continue; }
 
 		var rChg = new Change(r.src, r.trg);
 		tree = r.tree;
@@ -546,10 +547,10 @@ var tfxSign1 = function(sign, chg) {
 |
 | TODO check if t1/t2 params are ever user
 */
-var tfxSign = function(sign, chgX, t1, t2) {
-	log('tfx', 'tfxSign', sign, t1, t2);
+var tfxSign = function(sign, chgX) {
+	log('tfx', 'tfxSign', sign);
 
-	if (arguments.length !== 4) { throw new Error('tfxSign argument fail (n)'); }
+	if (arguments.length !== 2) { throw new Error('tfxSign argument fail (n)'); }
 	if (sign.constructor !== Signature) { throw new Error('tfxSign argument faili (1)'); }
 
 	if (!is(sign.path) || sign.path.length === 0) {
@@ -559,7 +560,7 @@ var tfxSign = function(sign, chgX, t1, t2) {
 
 	var signX = sign;
 
-	for(var t = t1; t < t2; t++) {
+	for(var t = 0, tZ = chgX.length; t < tZ; t++) {
 		var chg = chgX[t];
 
 		switch(signX.constructor) {
@@ -606,8 +607,8 @@ var tfxChg = function(chg, chgX) {
 	log('tfx', 'tfxChg', chg);
 	if (chg.constructor !== Change) { throw new Error('tfxChg param error'); }
 
-	var srcX = tfxSign(chg.src, chgX, 0, chgX.length);
-	var trgX = tfxSign(chg.trg, chgX, 0, chgX.length);
+	var srcX = tfxSign(chg.src, chgX);
+	var trgX = tfxSign(chg.trg, chgX);
 
 	if (srcX === null || trgX === null) {
 		log('tfx', 'transformed to null');

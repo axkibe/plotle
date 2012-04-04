@@ -12,8 +12,8 @@ var http     = require('http');
 var readline = require('readline');
 var util     = require('util');
 
-var Jools    = require('./jools');
-var config   = require('./config');
+var Jools    = require('../jools');
+var config   = require('../config');
 
 /**
 | Capsule
@@ -86,47 +86,78 @@ function jsonRequest(cmd, callback) {
 */
 console.log('Talking to '+ops.host+':'+ops.port+ops.path);
 
-var p     =  0;
-var alpha = 'abcdefghijklmnopqrstuvxyz';
-var rtime = -1;
+var p      =  -1;
+var alpha  = 'abcdefghijklmnopqrstuvwxyz';
+var ralpha = 'zyxwvutsrpqonmlkjihgfedcba';
+var rtime  = -1;
 
-var fget = function(asw) {
-	rtime = parseInt(asw.time, 10);
-	var text = asw.node.copse['1'].doc.copse['1'].text;
-	console.log('text:', text);
+var fget = function() {
 	jsonRequest(
 		{
-			cmd:   'alter',
-			time: rtime,
-			cid:  uid(),
-			chgX: {
-				src : {
-					path: ['welcome', '1', 'doc', '1', 'text'],
-					at1:   0,
-					at2:   text.length
-				},
-				trg : {
-					val: null
-				}
-			}
+			cmd: 'get',
+			path: ['welcome'],
+			time: -1
 		},
-		fdel
+		function(asw) {
+			rtime = parseInt(asw.time, 10);
+			var text = asw.node.copse['1'].doc.copse['1'].text;
+			console.log('text:', text);
+			flet(text);
+		}
 	);
-};
+}
 
-var fdel = function(asw) {
-	// nada
-};
+var fletasw = function(asw) {
+	p++;
+	setTimeout(fget, 1000);
+}
 
+var flet = function(text) {
+	if (p >= ralpha.length) { p = -1; }
 
-jsonRequest(
-	{
-		cmd: 'get',
-		path: ['welcome'],
-		time: -1
-	},
-	fget
-);
+	if (p < 0) {
+		// delete line
+		jsonRequest(
+			{
+				cmd:   'alter',
+				time: rtime,
+				cid:  uid(),
+				chgX: {
+					src : {
+						path: ['welcome', '1', 'doc', '1', 'text'],
+						at1:   0,
+						at2:   text.length
+					},
+					trg : {
+						val: null
+					}
+				}
+			},
+			fletasw
+		);
+	} else {
+		jsonRequest(
+			{
+				cmd:   'alter',
+				time: rtime,
+				cid:  uid(),
+				chgX: {
+					src : {
+						val: ralpha[p]
+					},
+					trg : {
+						path: ['welcome', '1', 'doc', '1', 'text'],
+						at1:   0,
+					}
+				}
+			},
+			fletasw
+		);
+	}
+}
+
+fget();
+
 
 
 })();
