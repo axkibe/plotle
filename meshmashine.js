@@ -548,7 +548,7 @@ var tfxSign1 = function(sign, chg) {
 | TODO check if t1/t2 params are ever user
 */
 var tfxSign = function(sign, chgX) {
-	log('tfx', 'tfxSign', sign);
+	log('tfx', 'tfxSign', sign, chgX);
 
 	if (arguments.length !== 2) { throw new Error('tfxSign argument fail (n)'); }
 	if (sign.constructor !== Signature) { throw new Error('tfxSign argument faili (1)'); }
@@ -604,8 +604,11 @@ var tfxSign = function(sign, chgX) {
 | TODO
 */
 var tfxChg = function(chg, chgX) {
-	log('tfx', 'tfxChg', chg);
-	if (chg.constructor !== Change) { throw new Error('tfxChg param error'); }
+	log('tfx', 'tfxChg', chg, chgX);
+	if (chg.constructor !== Change) {
+		log('fail','tfxChg param error', chg.constructor.name, chg); // TODO
+		throw new Error('tfxChg param error');
+	}
 
 	var srcX = tfxSign(chg.src, chgX);
 	var trgX = tfxSign(chg.trg, chgX);
@@ -642,7 +645,6 @@ var tfxChg = function(chg, chgX) {
 | Changes an a Change or Array of Changes upon a Change or Array of Changes.
 */
 var tfxChgX = function(chgX1, chgX2) {
-
 	switch(chgX1.constructor) {
 	case Change :
 		return tfxChg(chgX1, chgX2);

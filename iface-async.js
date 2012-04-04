@@ -156,7 +156,7 @@ IFaceASync.prototype._update = function() {
 
 	var self = this;
 	ajax.onreadystatechange = function() {
-		var asw;
+		var a, aZ, asw, b, bZ, chgX;
 		if (ajax.readyState !== 4) { return; }
 		if (ajax.status !== 200) {
 			log('peer', 'update.status == ' + ajax.status);
@@ -179,26 +179,45 @@ IFaceASync.prototype._update = function() {
 		if (chgs) {
 			// this wasn't an empty timeout?
 			var postbox = self._postbox;
-			for(var a = 0, aZ = chgs.length; a < aZ; a++) {
-				var chgX = new Change(chgs[a].chgX);
+			for(a = 0, aZ = chgs.length; a < aZ; a++) {
+				chgX = new Change(chgs[a].chgX);
 				var cid = chgs[a].cid;
 
 				// changes the clients understanding of the server tree
-				var r = MeshMashine.changeTree(self.rtree, chgX);
-				self.rtree = r.tree;
+				self.rtree = MeshMashine.changeTree(self.rtree, chgX).tree;
 
 				if (postbox.length > 0 && postbox[0].cid === cid) {
 					self._postbox.splice(0, 1);
 					gotOwnChgs = true;
 					continue;
 				}
-
-				// adapts all queued changes
 				report.push(chgX);
-				self._outbox = MeshMashine.tfxChgX(self._outbox, chgX);
-				r = MeshMashine.changeTree(self.rtree, self._outbox);
-				self.tree = r.tree;
 			}
+
+			debug('SELF.RTREE',   self.rtree.root);
+			debug('SELF.TREE',    self.tree.root);
+			debug('SELF POSTBOX', self._postbox);
+			debug('SELF OUTBOX',  self._outbox);
+
+			// adapts all queued changes
+			// and rebuilds the clients understanding of its own tree
+			var outbox = self._outbox;
+			var tree = self.rtree;
+
+			for(a = 0, aZ = postbox.length; a < aZ; a++) {
+				tree = MeshMashine.changeTree(tree, postbox[a].chgX).tree;
+			}
+
+			for(a = 0, aZ = outbox.length; a < aZ; a++) {
+				chgX = outbox[a].chgX;
+				for(b = 0, bZ = report.length; b < bZ; b++) {
+					chgX = MeshMashine.tfxChgX(chgX, report[b]);
+				}
+				outbox[a].chgX = chgX;
+				tree = MeshMashine.changeTree(tree, chgX).tree;
+			}
+			self.tree = tree;
+			debug('SELF.TREE2',    self.tree.root);
 		}
 		self.remoteTime = asw.timeZ;
 
@@ -242,13 +261,11 @@ IFaceASync.prototype.alter = function(src, trg) {
 */
 IFaceASync.prototype.sendChanges = function() {
 	if (this._postbox.length > 0) {
-		debug('postbox active');
 		return;
 	}
 
 	if (this._outbox.length === 0) {
 		// nothing to send
-		debug('nothing to send');
 		return;
 	}
 

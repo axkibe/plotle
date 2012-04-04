@@ -1,6 +1,7 @@
 // editable configuration
 module.exports = {
-	ip      : 'meshcraft.net',
+	//ip      : 'meshcraft.net',
+	ip      : '127.0.0.1',
 	port    : 8833,
 
 	// development mode: none, client, server or both.

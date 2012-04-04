@@ -34,6 +34,13 @@
 if (typeof(window) !== 'undefined') { throw new Error('server.js needs node!'); }
 
 /**
+| Delays in coming ajax requests by n milliseconds.
+| Issued for development to simulate slow network connections.
+| Normally this should be 0;
+*/
+var ajaxInDelay = 0;
+
+/**
 | Imports
 */
 var util        = require('util');
@@ -121,7 +128,7 @@ var Server = function() {
 /**
 | Executes an alter command.
 */
-Server.prototype.alter = function(cmd) {
+Server.prototype.alter = function(cmd, res) {
 	var time = cmd.time;
 	var chgX = cmd.chgX;
 	var cid  = cmd.cid;
@@ -245,7 +252,7 @@ Server.prototype.wakeAll = function() {
 /**
 | Executes a get command.
 */
-Server.prototype.get = function(cmd) {
+Server.prototype.get = function(cmd, res) {
 	var changes  = this.changes;
 	var changesZ = changes.length;
 	var time     = cmd.time;
@@ -360,30 +367,45 @@ Server.prototype.ajax = function(req, red, res) {
 			self.webError(res, 400, 'Not valid JSON');
 			return;
 		}
-		var asw;
-		try {
-			switch (cmd.cmd) {
-			case 'alter':  asw = self.alter(cmd);       break;
-			case 'get':    asw = self.get(cmd);         break;
-			case 'update': asw = self.update(cmd, res); break;
-			default:
-				self.webError(res, 400, 'unknown command "'+cmd.cmd+'"');
-				return;
-			}
-		} catch (e) {
-			console.log(util.inspect(e));
-			if (e.ok !== false) throw e; else asw = e;
-		}
 
-		if (asw !== null) {
-			log('ajax', '->', asw);
-			res.writeHead(200, {'Content-Type': 'application/json'});
-			res.end(JSON.stringify(asw));
+		if (ajaxInDelay === 0) {
+			self.ajaxCmd(cmd, res);
+		} else {
+			setTimeout(
+				function(self, cmd, res) { self.ajaxCmd(cmd, res); },
+				ajaxInDelay,
+				self, cmd, res
+			);
 		}
-		// else assume sleeping call
 	});
 };
 
+/**
+| Executes an ajaxCmd
+*/
+Server.prototype.ajaxCmd = function(cmd, res) {
+	var asw;
+	try {
+		switch (cmd.cmd) {
+		case 'alter':  asw = this.alter (cmd, res); break;
+		case 'get':    asw = this.get   (cmd, res); break;
+		case 'update': asw = this.update(cmd, res); break;
+		default:
+			this.webError(res, 400, 'unknown command "'+cmd.cmd+'"');
+			return;
+		}
+	} catch (e) {
+		console.log(util.inspect(e));
+		if (e.ok !== false) throw e; else asw = e;
+	}
+
+	if (asw !== null) {
+		log('ajax', '->', asw);
+		res.writeHead(200, {'Content-Type': 'application/json'});
+		res.end(JSON.stringify(asw));
+	}
+	// else assume sleeping call
+};
 
 /**
 | Transmits the config relevant to the client

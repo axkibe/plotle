@@ -388,7 +388,6 @@ Caret.prototype.display = function() {
 
 	// draws new
 	if (this.shown && !this.blinked && this.sign) {
-		debug('DRAW CARET', this.sign);
 		shell.vget(this.sign.path, -1).drawCaret();
 	}
 };
@@ -686,17 +685,14 @@ Shell.prototype.report = function(status, tree, chgX) {
 		this.vSpace.report(status, tree, chgX);
 		var caret = this.caret;
 		if (caret.sign !== null) {
-			debug('TSIGN0', caret.sign);
 			var tsign = MeshMashine.tfxSign(caret.sign, chgX);
 			if (isArray(tsign)) throw new Error('Invalid caret transformation');
 			caret.sign = tsign;
-			debug('TSIGN1', caret.sign);
 		}
 		break;
 	default :
 		throw new Error('unknown status: '+status);
 	}
-
 	this._draw();
 };
 
@@ -1654,7 +1650,6 @@ VPara.prototype.specialKey = function(keycode) {
 		}
 		break;
 	case 39 : // right
-		debug('CARET', caret.sign, this.twig.text);
 		if (caret.sign.at1 < this.twig.text.length) {
 			caret = shell.setCaret(
 				new Signature({ path: this.textPath(), at1: caret.sign.at1 + 1 })
