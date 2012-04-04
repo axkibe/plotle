@@ -777,8 +777,22 @@ TFXOps.remove = function(sign, src, trg) {
 
 	// simpler case signature is only one point
 	if (!is(sign.at2)) {
-		log('tfx', 'remove (simple)');
-		if (sign.at1 <= src.at1) return sign;
+		// src (removed span)      ######
+		// sign, case0:        +   '    '      (sign to left,  no effect)
+		// sign, case1:            ' +  '      (sign in middle, move to left)
+		// sign, case2:            '    ' +    (sign to right, substract)
+
+		if (sign.at1 <= src.at1) {
+			log('tfx', 'remove (case s0)');
+			return sign;
+		}
+
+		if (sign.at1 <= src.at2) {
+			log('tfx', 'remove (case s1)');
+			return new Signature(sign, 'at1', src.at1);
+		}
+
+		log('tfx', 'remove (case s2)');
 		return new Signature(sign, 'at1', sign.at1 - len);
 	}
 

@@ -1651,6 +1651,7 @@ VPara.prototype.specialKey = function(keycode) {
 		}
 		break;
 	case 39 : // right
+		debug('CARET', caret.sign, this.twig.text);
 		if (caret.sign.at1 < this.twig.text.length) {
 			caret = shell.setCaret(
 				new Signature({ path: this.textPath(), at1: caret.sign.at1 + 1 })

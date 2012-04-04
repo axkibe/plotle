@@ -14,7 +14,7 @@ module.exports = {
 		//all:   true,
 
 		ajax:   true,
-		change: true,
+		change: false,
 		debug:  true,
 		fail:   true,
 		grow:   false,
