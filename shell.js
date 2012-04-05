@@ -104,7 +104,7 @@ Tree.cogging = true;
 | In case of doubt, if caching is faulty, just set this true and see if the error
 | vanishes.
 */
-var noCache = true;
+var noCache = false;
 
 /**
 | The server peer
@@ -1358,20 +1358,18 @@ var VPara = function(twig, path) {
 	this.path = path;
 	this.key  = path.get(-1);
 
-	// fabric caching
-	this._fabric$      = new Fabric(0 ,0);
-	this._fabric$flag  = false; // fabric up-to-date flag
-	this._fabric$width = 0;
-
-	// flow caching
-	this._flow$ = [];
+	// caching
+	this.$fabric = null;
+	this.$flow   = null;
 };
 
 /**
 | Updates v-vine to match a new twig.
 */
 VPara.prototype.update = function(twig) {
-	this.twig = twig;
+	this.twig    = twig;
+	this.$flow   = null;
+	this.$fabric = null;
 };
 
 /**
@@ -1382,14 +1380,14 @@ VPara.prototype.getFlow = function() {
 	var vdoc  = vitem.vv.doc;
 	var flowWidth = vitem.getFlowWidth();
 	var fontsize = vdoc.getFontSize();
-	var flow  = this._flow$;
+
+	var flow  = this.$flow;
 	// @@ go into subnodes instead
 	var text = this.twig.text;
 
 	if (!noCache && flow &&
 		flow.flowWidth === flowWidth &&
-		flow.fontsize  === fontsize &&
-		flow.text      === text
+		flow.fontsize  === fontsize
 	) return flow;
 
 	if (shell.caret.path && shell.caret.path.equals(this.path)) {
@@ -1400,7 +1398,7 @@ VPara.prototype.getFlow = function() {
 	}
 
 	// builds position informations.
-	flow  = this._flow$ = [];
+	flow  = this.$flow = [];
 	var spread = 0;  // width really used.
 
 	// current x positon, and current x including last tokens width
@@ -1510,7 +1508,6 @@ VPara.prototype.getLineXOffset = function(line, x) {
 | Text has been inputted.
 */
 VPara.prototype.input = function(text) {
-	debug('INPUT');
 	var caret = shell.caret;
     var reg   = /([^\n]+)(\n?)/g;
 	var para  = this;
@@ -1752,18 +1749,16 @@ VPara.prototype.getFabric = function() {
 	var width  = flow.spread;
 	var vdoc   = shell.vget(this.path, -1);
 	var height = this.getHeight();
+	var fabric = this.$fabric;
 
 	// cache hit?
-	if (!noCache && this._fabric$flag &&
-		this._fabric$width === width && this._fabric$height === height
-	) {
-		return this._fabric$;
-	}
-
-	var fabric = this._fabric$;
+	if (!noCache && fabric &&
+		fabric.width === width &&
+		fabric.height === height)
+	{ return fabric; }
 
 	// @@: work out exact height for text below baseline
-	fabric.attune(width, height);
+	var fabric = this.$fabric = new Fabric(width, height);
 	fabric.fontStyle(vdoc.getFont(), 'black', 'start', 'alphabetic');
 
 	// draws text into the fabric
@@ -1775,9 +1770,6 @@ VPara.prototype.getFabric = function() {
 		}
 	}
 
-	this._fabric$flag   = true;
-	this._fabric$width  = width;
-	this._fabric$height = height;
 	return fabric;
 };
 
@@ -2230,15 +2222,16 @@ var VItem = function(twig, path) {
 		doc : new VDoc(twig.doc, new Path(path, '++', 'doc'))
 	});
 
-	this._fabric      = new Fabric();
-	this._fabric$flag = false; // up-to-date-flag
+	// caching
+	this.$fabric   = null;
 };
 
 /**
 | Updates the vvine to match a new twig.
 */
 VItem.prototype.update = function(twig) {
-	this.twig = twig;
+	this.twig    = twig;
+	this.$fabric = null;
 
 	var vdoc = this.vv.doc;
 	if (vdoc.twig !== twig.doc) {
@@ -2482,7 +2475,11 @@ VItem.prototype.mousehover = function(p) {
 VItem.prototype.click = function(p) {
 	if (!this.getZone().within(p)) return false;
 
-	shell.vSpace.setFocus(this);
+	var vSpace = shell.vSpace;
+	if (vSpace.focus !== this) {
+		shell.vSpace.setFocus(this);
+		shell.selection.deselect();
+	}
 	shell.redraw = true;
 
 	var pnw = this.getZone().pnw;
@@ -2516,7 +2513,7 @@ VItem.prototype.highlight = function(fabric) {
 | Called by subvisuals when they got changed.
 */
 VItem.prototype.poke = function() {
-	this._fabric$flag = false;
+	this.$fabric = null;
 	shell.redraw = true;
 };
 
@@ -2632,10 +2629,8 @@ VNote.prototype.dragstop = function(p) {
 
 		if (this.twig.zone.eq(zone)) return;
 		peer.setZone(this.path, zone);
-		// TODO this should happen by setting in peer...
-		this._fabric$flag = false;
 		// adapts scrollbar position
-		this.setScrollbar();
+		// this.setScrollbar(); TODO
 
 		system.setCursor('default');
 		shell.redraw = true;
@@ -2651,16 +2646,17 @@ VNote.prototype.dragstop = function(p) {
 | fabric: to draw upon.
 */
 VNote.prototype.draw = function(fabric) {
-	var f    = this._fabric;
 	var zone = this.getZone();
+	var f = this.$fabric;
 
 	// no buffer hit?
-	if (noCache || !this._fabric$flag || !this._fabric$size ||
-		zone.width  !== this._fabric$size.width ||
-		zone.height !== this._fabric$size.height)
+	if (noCache || !f ||
+		zone.width  !== f.width ||
+		zone.height !== f.height)
 	{
-		var vdoc    = this.vv.doc;
-		var imargin = this.imargin;
+		f = this.$fabric = new Fabric(zone.width, zone.height);
+		var vdoc         = this.vv.doc;
+		var imargin      = this.imargin;
 
 		// calculates if a scrollbar is needed
 		var sbary  = this.scrollbarY;
@@ -2690,9 +2686,6 @@ VNote.prototype.draw = function(fabric) {
 
 		// draws the border
 		f.edge(settings.note.style.edge, silhoutte, 'path');
-
-		this._fabric$flag = true;
-		this._fabric$size = zone;
 	}
 
 	fabric.drawImage(f, zone.pnw);
@@ -2865,16 +2858,17 @@ VLabel.prototype.getSilhoutte = function(zone$, zAnchor) {
 | fabric: to draw upon. // @@ remove this parameter.
 */
 VLabel.prototype.draw = function(fabric) {
-	var f    = this._fabric;
+	var f    = this.$fabric;
 	var zone = this.getZone();
 
 	// no buffer hit?
-	if (noCache || !this._fabric$flag || !this._fabric$size ||
-		zone.width  !== this._fabric$size.width ||
-		zone.height !== this._fabric$size.height)
+	if (noCache || !f ||
+		zone.width  !== f.width ||
+		zone.height !== f.height)
 	{
-		var vdoc = this.vv.doc;
-		var imargin = this.imargin;
+		f = this.$fabric = new Fabric(zone.width, zone.height);
+		var vdoc         = this.vv.doc;
+		var imargin      = this.imargin;
 
 		// resizes the canvas
 		f.attune(zone);
@@ -2885,9 +2879,6 @@ VLabel.prototype.draw = function(fabric) {
 
 		// draws the border
 		f.edge(settings.label.style.edge, silhoutte, 'path');
-
-		this._fabric$flag = true;
-		this._fabric$size = zone;
 	}
 
 	fabric.drawImage(f, zone.pnw);
