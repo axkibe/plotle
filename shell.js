@@ -32,8 +32,9 @@
 /**
 | Imports
 */
-var Jools;
+var Cockpit;
 var Fabric;
+var Jools;
 var MeshMashine;
 var Path;
 var Tree;
@@ -513,6 +514,7 @@ Selection.prototype.remove = function() {
 */
 Selection.prototype.deselect = function() {
 	if (!this.active) return;
+	shell.vget(this.sign1.path, -3).poke();
 	this.active = false;
 	system.setInput('');
 };
@@ -545,65 +547,6 @@ fixate(Action, 'FLOATMENU', 4); // clicked the float menu (background click)
 fixate(Action, 'ITEMMENU',  5); // clicked one item menu
 fixate(Action, 'SCROLLY',   6); // scrolling a note
 fixate(Action, 'RELBIND',   7); // binding a new relation
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ,--.         .         .
- | `-' ,-. ,-. | , ,-. . |-
- |   . | | |   |<  | | | |
- `--'  `-' `-' ' ` |-' ' `'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-                   '
- The unmoving interface.
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-var Cockpit = function() {
-	this.fabric = system.fabric;
-};
-
-/**
-| Redraws the cockpit.
-*/
-Cockpit.prototype.draw = function() {
-	var fabric = this.fabric;
-	var msg = 'Loading space "welcome" ...';
-
-	fabric.fontStyle('12px ' + settings.defaultFont, 'rgb(128, 92, 8)', 'start', 'alphabetic');
-	fabric.fillText(msg, 24, fabric.height - 12);
-};
-
-/**
-| Mouse hover.
-*/
-Cockpit.prototype.mousehover = function(p) {
-	/* TODO
-	var redraw = this.edgemenu.mousepos !== this.edgemenu.getMousepos(p);
-	if (this.edgemenu.mousepos >= 0) {
-		// mouse floated on edge menu, no need to look further
-		system.setCursor('default');
-		return;
-	}
-	*/
-	return false;
-};
-
-/**
-| Mouse button down event
-*/
-Cockpit.prototype.mousedown = function(p) {
-	/*
-	var md = this.edgemenu.getMousepos(p);
-	if (md >= 0) {
-		shell.redraw = true;
-		switch(md) {
-		case 0: this._exportDialog(); break;
-		case 1: this._revertDialog(); break;
-		case 2: this._importDialog(); break;
-		}
-		return 'none';
-	}
-	*/
-	return false;
-};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .---. .       .  .
@@ -863,6 +806,7 @@ Shell.prototype.specialKey = function(keyCode, shift, ctrl) {
 Shell.prototype.input = function(text) {
 	this.shift = false;
 	this.ctrl  = false;
+	if (this.selection.active) { this.selection.remove(); }
 
 	var caret  = this.caret;
 	if (caret.sign) { this.vget(caret.sign.path, -1).input(text); }
