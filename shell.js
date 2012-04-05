@@ -479,7 +479,6 @@ Selection.prototype.innerText = function() {
 	}
 
 	var pivot = shell.tree.getPath(s1.path, -2);
-
 	var key1  = s1.path.get(-2);
 	var key2  = s2.path.get(-2);
 
@@ -487,12 +486,12 @@ Selection.prototype.innerText = function() {
 	var text2 = pivot.copse[key2].text;
 
 	var buf = [ text1.substring(s1.at1, text1.length) ];
-	for (var r = pivot.rankOf(key1), rZ = pivot.rankOf(key2); r < rZ; r++) {
+	for (var r = pivot.rankOf(key1), rZ = pivot.rankOf(key2); r < rZ - 1; r++) {
 		buf.push('\n');
 		buf.push(pivot.copse[pivot.ranks[r]].text);
 	}
 	buf.push('\n');
-	buf.push(text2.substring(0, s2.offset));
+	buf.push(text2.substring(0, s2.at1));
 	return buf.join('');
 };
 
@@ -658,9 +657,9 @@ Shell.prototype.setCaret = function(sign, retainx) {
 | Returns the visual node path points to.
 */
 Shell.prototype.vget = function(path, plen) {
-	if (!is(plen)) { plen = path.length; }
-	else if (plen < 0) { plen += path.length; }
-	if (plen <= 0) throw new Error('cannot vget path of length <= 0');
+	/**/ if (!is(plen)) { plen  = path.length; }
+	else if (plen < 0)  { plen += path.length; }
+	/**/ if (plen <= 0) { throw new Error('cannot vget path of length <= 0'); }
 	if (path.get(0) !== 'welcome') throw new Error('currently space must be "welcome"'); // TODO
 
 	var vnode = this.vSpace;
@@ -1352,14 +1351,12 @@ VSpace.prototype.mousedown = function(p) {
  A visual paragraph representation
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-var VPara = function(twig, path, vdoc) {
+var VPara = function(twig, path) {
 	if (twig.type !== 'Para') throw new Error('type error');
-	if (vdoc.constructor !== VDoc) throw new Error('type error');
 
 	this.twig = twig;
 	this.path = path;
 	this.key  = path.get(-1);
-	this.vdoc = vdoc;
 
 	// fabric caching
 	this._fabric$      = new Fabric(0 ,0);
@@ -1381,8 +1378,8 @@ VPara.prototype.update = function(twig) {
 | (re)flows the paragraph, positioning all chunks.
 */
 VPara.prototype.getFlow = function() {
-	var vdoc  = this.vdoc;
-	var vitem = vdoc.vitem;
+	var vitem = shell.vget(this.path, -2);
+	var vdoc  = vitem.vv.doc;
 	var flowWidth = vitem.getFlowWidth();
 	var fontsize = vdoc.getFontSize();
 	var flow  = this._flow$;
@@ -1465,7 +1462,8 @@ VPara.prototype.getFlow = function() {
 VPara.prototype.getPointOffset = function(point) {
 	var flow = this.getFlow();
 	var para = this.para;
-	Measure.font = this.vdoc.getFont(); // TODO no vdoc
+	var vdoc = shell.vget(this.path, -1);
+	Measure.font = vdoc.getFont();
 
 	var line;
 	for (line = 0; line < flow.length; line++) {
@@ -1512,14 +1510,20 @@ VPara.prototype.getLineXOffset = function(line, x) {
 | Text has been inputted.
 */
 VPara.prototype.input = function(text) {
+	debug('INPUT');
 	var caret = shell.caret;
-    var reg = /([^\n]+)(\n?)/g;
+    var reg   = /([^\n]+)(\n?)/g;
+	var para  = this;
+	var vdoc  = null;
+
     for(var rx = reg.exec(text); rx !== null; rx = reg.exec(text)) {
 		var line = rx[1];
-		peer.insertText(this.textPath(), caret.sign.at1, line);
-		if (rx[2]) throw new Error('TODO');
-//        if (rx[2]) peer.split(para, caret.sign.at1);
-//		para = para.parent.get(para.key + 1);
+		peer.insertText(para.textPath(), caret.sign.at1, line);
+        if (rx[2]) {
+			peer.split(para.textPath(), caret.sign.at1);
+			if (vdoc === null) { vdoc = shell.vget(para.path, -1); }
+			para = vdoc.vAtRank(vdoc.twig.rankOf(para.key) + 1);
+		}
     }
 };
 
@@ -1532,7 +1536,8 @@ VPara.prototype.specialKey = function(keycode) {
 	var para = this.para;
 	var select = shell.selection;
 
-	var vdoc = this.vdoc;
+	var vitem = shell.vget(this.path, -2);
+	var vdoc  = vitem.vv.doc;
 	var ve, at1, flow;
 	var r, x;
 
@@ -1548,7 +1553,7 @@ VPara.prototype.specialKey = function(keycode) {
 			shell.setCaret(select.sign2);
 			system.setInput(select.innerText());
 			caret.show();
-			vdoc.vitem.poke();
+			vitem.poke();
 			shell.redraw = true;
 			return true;
 		}
@@ -1585,7 +1590,7 @@ VPara.prototype.specialKey = function(keycode) {
 		case 39 : // right
 		case 40 : // down
 			select.sign1 = caret.sign;
-			vdoc.vitem.poke();
+			vitem.poke();
 		}
 	}
 
@@ -1712,7 +1717,7 @@ VPara.prototype.specialKey = function(keycode) {
 			select.active = true;
 			select.sign2 = caret.sign;
 			system.setInput(select.innerText());
-			vdoc.vitem.poke();
+			vitem.poke();
 			shell.redraw = true;
 		}
 	}
@@ -1735,7 +1740,8 @@ VPara.prototype.textPath = function() {
 */
 VPara.prototype.getHeight = function() {
 	var flow = this.getFlow();
-	return flow.height + R(this.vdoc.getFontSize() * settings.bottombox);
+	var vdoc = shell.vget(this.path, -1);
+	return flow.height + R(vdoc.getFontSize() * settings.bottombox);
 };
 
 /**
@@ -1744,7 +1750,7 @@ VPara.prototype.getHeight = function() {
 VPara.prototype.getFabric = function() {
 	var flow   = this.getFlow();
 	var width  = flow.spread;
-	var vdoc   = this.vdoc;
+	var vdoc   = shell.vget(this.path, -1);
 	var height = this.getHeight();
 
 	// cache hit?
@@ -1773,16 +1779,6 @@ VPara.prototype.getFabric = function() {
 	this._fabric$width  = width;
 	this._fabric$height = height;
 	return fabric;
-};
-
-/**
-| Drops the cache (cause something has changed)
-*/
-VPara.prototype.event = function(event, p1, p2, p3) {
-	this.vdoc.vitem.poke();
-
-	this._flow$ = null;
-	this._fabric$flag = false;
 };
 
 /**
@@ -1841,8 +1837,8 @@ VPara.prototype.getOffsetPoint = function(offset, flowPos$) {
 */
 VPara.prototype.drawCaret = function() {
 	var caret = shell.caret;
-	var vdoc  = this.vdoc;
-	var vitem = vdoc.vitem;
+	var vitem = shell.vget(this.path, -2);
+	var vdoc  = vitem.vv.doc;
 	var zone  = vitem.getZone();
 	var pan   = shell.vSpace.fabric.pan;
 	var fs    = vdoc.getFontSize();
@@ -1968,11 +1964,10 @@ Scrollbar.prototype.setPos = function(pos) {
  An array of paragraph visuals.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-var VDoc = function(twig, path, vitem) {
+var VDoc = function(twig, path) {
 	this.twig  = twig;
 	this.path  = path;
 	this.key   = path.get(-1);
-	this.vitem = vitem;
 
 	this.pnws  = null;
 	var vv = this.vv = [];
@@ -1981,7 +1976,7 @@ var VDoc = function(twig, path, vitem) {
 	var copse = twig.copse;
 	for (var r = 0, rZ = twig.length; r < rZ; r++) {
 		var k = ranks[r];
-		vv[k] = new VPara(copse[k], new Path(path, '++', k), this);
+		vv[k] = new VPara(copse[k], new Path(path, '++', k));
 	}
 };
 
@@ -2009,7 +2004,7 @@ VDoc.prototype.update = function(twig) {
 			}
 			vv[k] = o;
 		} else {
-			o = new VPara(sub, new Path(this.path, '++', k), this);
+			o = new VPara(sub, new Path(this.path, '++', k));
 			o.update(sub);
 			vv[k] = o;
 		}
@@ -2026,8 +2021,7 @@ VDoc.prototype.update = function(twig) {
 */
 VDoc.prototype.draw = function(fabric, width, imargin, scrollp) {
 	// @@ <pre>
-	var fontsize = this.getFontSize();
-	var paraSep = this.vitem.getParaSep(fontsize);
+	var paraSep = this.getParaSep();
 	var select = shell.selection;
 
 	// draws the selection
@@ -2061,7 +2055,7 @@ VDoc.prototype.getPNW = function(key) {
 */
 VDoc.prototype.getHeight = function() {
 	var fontsize = this.getFontSize();
-	var paraSep  = this.vitem.getParaSep(fontsize);
+	var paraSep  = this.getParaSep();
 	var twig     = this.twig;
 	var vv       = this.vv;
 	var height   = 0;
@@ -2087,10 +2081,24 @@ VDoc.prototype.getSpread = function() {
 	return spread;
 };
 
-VDoc.prototype.getFontSize = function() {
-	var vitem = this.vitem;
+/**
+| Returns the (default) fontsize for this document
+| Argument vitem is optional, just to safe double and tripple lookups
+*/
+VDoc.prototype.getFontSize = function(vitem) {
+	if (!is(vitem)) { vitem = shell.vget(this.path, -1); }
 	var fontsize = vitem.twig.fontsize;
-	return !vitem.fontSizeChange ? fontsize : vitem.fontSizeChange(fontsize);
+	return (!vitem.fontSizeChange) ? fontsize : vitem.fontSizeChange(fontsize);
+};
+
+/**
+| Returns the (default) paraSeperator for this document
+| Argument vitem is optional, just to safe double and tripple lookups
+*/
+VDoc.prototype.getParaSep = function(vitem) {
+	if (!is(vitem)) { vitem = shell.vget(this.path, -1); }
+	var fontsize = this.getFontSize(vitem);
+	return vitem.getParaSep(fontsize);
 };
 
 /**
@@ -2213,14 +2221,13 @@ VDoc.prototype.pathSelection = function(fabric, border, twist, width, imargin, s
 /**
 | Constructor
 */
-var VItem = function(twig, path, vSpace) {
+var VItem = function(twig, path) {
 	this._h6slice$ = null;
 	this.twig      = twig;
 	this.path      = path;
 	this.key       = path.get(-1);
-	this.vSpace    = vSpace;  // TODO remove
 	this.vv        = immute({
-		doc : new VDoc(twig.doc, new Path(path, '++', 'doc'), this)
+		doc : new VDoc(twig.doc, new Path(path, '++', 'doc'))
 	});
 
 	this._fabric      = new Fabric();
@@ -2228,7 +2235,7 @@ var VItem = function(twig, path, vSpace) {
 };
 
 /**
-| Updates v-vine to match a new twig.
+| Updates the vvine to match a new twig.
 */
 VItem.prototype.update = function(twig) {
 	this.twig = twig;
@@ -2447,7 +2454,8 @@ VItem.prototype.dragstop = function(p) {
 	switch (action.type) {
 	case Action.RELBIND :
 		if (!this.getZone().within(p)) return false;
-		VRelation.create(this.vSpace, action.vitem, this);
+		var vSpace = shell.vget(this.path, -1);
+		VRelation.create(vSpace, action.vitem, this);
 		system.setCursor('default');
 		shell.redraw = true;
 		return true;
@@ -2525,8 +2533,8 @@ VItem.prototype.poke = function() {
 /**
 | Constructor.
 */
-var VNote = function(twig, path, vSpace) {
-	VItem.call(this, twig, path, vSpace);
+var VNote = function(twig, path) {
+	VItem.call(this, twig, path);
 	this.scrollbarY = new Scrollbar();
 };
 subclass(VNote, VItem);
@@ -2651,7 +2659,7 @@ VNote.prototype.draw = function(fabric) {
 		zone.width  !== this._fabric$size.width ||
 		zone.height !== this._fabric$size.height)
 	{
-		var vdoc = this.vv.doc;
+		var vdoc    = this.vv.doc;
 		var imargin = this.imargin;
 
 		// calculates if a scrollbar is needed
@@ -2809,8 +2817,8 @@ VNote.prototype.getZone = function() {
 /**
 | Constructor.
 */
-var VLabel = function(twig, path, vSpace) {
-	VItem.call(this, twig, path, vSpace);
+var VLabel = function(twig, path) {
+	VItem.call(this, twig, path);
 };
 subclass(VLabel, VItem);
 
@@ -2901,7 +2909,7 @@ VLabel.prototype.fontSizeChange = function(fontsize) {
 	switch (action.type) {
 	case Action.ITEMRESIZE:
 		if (!action.startZone) return fontsize;
-		var vdoc = this.vdoc;
+		var vdoc = this.vv.doc;
 		var height = action.startZone.height;
 		var dy;
 		switch (action.align) {
@@ -2941,8 +2949,8 @@ VLabel.prototype.getZone = function() {
 	var pnw = this.twig.pnw;
 
 	// TODO Caching!
-	var vdoc = this.vv.doc;
-	var fs = vdoc.getFontSize();
+	var vdoc   = this.vv.doc;
+	var fs     = vdoc.getFontSize();
 	var width  = max(Math.ceil(vdoc.getSpread()), R(fs * 0.3));
 	var height = max(Math.ceil(vdoc.getHeight()), R(fs));
 
@@ -3016,8 +3024,8 @@ VLabel.prototype.dragstop = function(p) {
 /**
 | Constructor.
 */
-var VRelation = function(twig, path, vSpace) {
-	VLabel.call(this, twig, path, vSpace);
+var VRelation = function(twig, path) {
+	VLabel.call(this, twig, path);
 };
 subclass(VRelation, VLabel);
 
@@ -3039,7 +3047,7 @@ VRelation.create = function(vSpace, vitem1, vitem2) {
 };
 
 VRelation.prototype.draw = function(fabric) {
-	var vSpace = this.vSpace;
+	var vSpace = shell.vget(this.path, -1);
 	var vitem1 = vSpace.vv[this.twig.item1key];
 	var vitem2 = vSpace.vv[this.twig.item2key];
 	var zone = this.getZone();
