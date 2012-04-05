@@ -303,9 +303,12 @@ Selection.prototype.remove = function() {
 /**
 | Deselects the selection.
 */
-Selection.prototype.deselect = function() {
+Selection.prototype.deselect = function(nopoke) {
 	if (!this.active) return;
-	shell.vget(this.sign1.path, -3).poke();
+	if (!nopoke) {
+		shell.vget(this.sign1.path, -3).poke();
+	}
+
 	this.active = false;
 	system.setInput('');
 };
@@ -369,8 +372,9 @@ Shell = function(fabric, sPeer) {
 	this.action     = null;
 	this.selection  = new Selection();
 
-	// A flag set to true if anything requests a redraw.
 	peer.setReport(this);
+
+	// a flag set to true if anything requests a redraw.
 	this.redraw = false;
 	this._draw();
 };
@@ -417,11 +421,13 @@ Shell.prototype.report = function(status, tree, chgX) {
 	case 'update' :
 		this.tree = tree;
 		this.vSpace.report(status, tree, chgX);
+
 		var caret = this.caret;
 		if (caret.sign !== null) {
 			caret.sign = tfxSign(caret.sign, chgX);
 			if (isArray(caret.sign)) throw new Error('Invalid caret transformation');
 		}
+
 		var selection = this.selection;
 		if (selection.active) {
 			selection.sign1 = tfxSign(selection.sign1, chgX);
@@ -739,6 +745,17 @@ VSpace.prototype.update = function(twig) {
 			vv[k] = o;
 		} else {
 			vv[k] = this.createVItem(sub, k);
+		}
+	}
+
+	// remove the focus if the focussed item is removed.
+	if (this.focus) {
+		if (!is(vv[this.focus.key])) {
+			if (shell.selection.active &&
+				shell.selection.sign1.path.get(-4) === this.focus.key)
+			{ shell.selection.deselect(true); }
+
+			this.setFocus(null);
 		}
 	}
 };
@@ -1246,17 +1263,18 @@ VPara.prototype.input = function(text) {
 	var caret = shell.caret;
     var reg   = /([^\n]+)(\n?)/g;
 	var para  = this;
-	var vdoc  = null;
+	var vitem = shell.vget(para.path, -2);
+	var vdoc  = vitem.vv.doc;
 
     for(var rx = reg.exec(text); rx !== null; rx = reg.exec(text)) {
 		var line = rx[1];
 		peer.insertText(para.textPath(), caret.sign.at1, line);
         if (rx[2]) {
 			peer.split(para.textPath(), caret.sign.at1);
-			if (vdoc === null) { vdoc = shell.vget(para.path, -1); }
 			para = vdoc.vAtRank(vdoc.twig.rankOf(para.key) + 1);
 		}
     }
+	vitem.scrollCaretIntoView();
 };
 
 /**
@@ -1337,9 +1355,11 @@ VPara.prototype.specialKey = function(keycode) {
 				peer.join(ve.textPath(), ve.twig.text.length);
 			}
 		}
+		vitem.scrollCaretIntoView();
 		break;
 	case 13 : // return
 		peer.split(this.textPath(), caret.sign.at1);
+		vitem.scrollCaretIntoView();
 		break;
 	case 35 : // end
 		caret = shell.setCaret(
@@ -1350,6 +1370,7 @@ VPara.prototype.specialKey = function(keycode) {
 		caret = shell.setCaret(
 			new Signature({ path: this.textPath(), at1: 0 })
 		);
+		vitem.scrollCaretIntoView();
 		break;
 	case 37 : // left
 		if (caret.sign.at1 > 0) {
@@ -1427,7 +1448,6 @@ VPara.prototype.specialKey = function(keycode) {
 				);
 			}
 		}
-		vitem.scrollCaretIntoView();
 		vitem.scrollCaretIntoView();
 		break;
 	case 46 : // del
@@ -1587,16 +1607,16 @@ VPara.prototype.getCaretPos = function() {
 | Draws the caret if its in this paragraph.
 */
 VPara.prototype.drawCaret = function() {
-	var caret   = shell.caret;
-	var pan     = shell.vSpace.fabric.pan;
-	var vitem   = shell.vget(this.path, -2);
-	var zone    = vitem.getZone();
-	var cpos    = caret.pos$  = this.getCaretPos();
-	var sbary   = vitem.scrollbarY;
-	var scrolly = sbary ? sbary.getPos() : 0;
+	var caret = shell.caret;
+	var pan   = shell.vSpace.fabric.pan;
+	var vitem = shell.vget(this.path, -2);
+	var zone  = vitem.getZone();
+	var cpos  = caret.pos$  = this.getCaretPos();
+	var sbary = vitem.scrollbarY;
+	var sy    = sbary ? R(sbary.getPos()) : 0;
 
-	var cyn = min(max(cpos.n - scrolly, 0), zone.height); // TODO limit
-	var cys = min(max(cpos.s,           0), zone.height);
+	var cyn = min(max(cpos.n - sy, 0), zone.height); // TODO limit
+	var cys = min(max(cpos.s - sy, 0), zone.height);
 	var cx  = cpos.x;
 
 	var ch  = cys - cyn;
@@ -2373,8 +2393,17 @@ VNote.prototype.scrollCaretIntoView = function() {
 	var vpara   = shell.vget(caret.sign.path, -1);
 	if (vpara.constructor !== VPara) { throw new Error('iFail'); }
 	var cp      = vpara.getCaretPos();
-	debug('CP', cp);
-	//scrolly.setPos(
+	var zone    = this.getZone();
+	var imargin = this.imargin;
+
+	if (cp.n - imargin.n < sy) {
+		this.setScrollbar(cp.n - imargin.n);
+		this.poke();
+	} else if (cp.s + imargin.s > sy + zone.height) {
+		// TODO 
+		this.setScrollbar(cp.s - zone.height + imargin.s);
+		this.poke();
+	}
 };
 
 /**
@@ -2461,7 +2490,7 @@ VNote.prototype.draw = function(fabric) {
 VNote.prototype.mousewheel = function(p, dir) {
 	if (!this.getZone().within(p)) return false;
 	this.setScrollbar(this.scrollbarY.getPos() - dir * theme.scrollbar.textWheelSpeed);
-	this._fabric$flag = false;
+	this.poke();
 	shell.redraw = true;
 	return true;
 };
@@ -2758,11 +2787,9 @@ VLabel.prototype.dragstop = function(p) {
 
 		if (!this.twig.pnw.eq(zone.pnw)) {
 			peer.setPNW(this.path, zone.pnw);
-			this._fabric$flag = false; // TODO this should happen by setting in peer
 		}
 		if (fontsize !== this.twig.fontsize) {
 			peer.setFontSize(this.path, fontsize);
-			this._fabric$flag = false; // TODO same
 		}
 
 		system.setCursor('default');
