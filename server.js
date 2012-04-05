@@ -101,6 +101,7 @@ var Server = function() {
 	this.registerFile('/shell.js',         'js',   './shell.js'          );
 	this.registerFile('/testpad.html',     'html', './testpad.html'      );
 	this.registerFile('/testpad.js',       'js',   './testpad.js'        );
+	this.registerFile('/theme.js'  ,       'js',   './theme.js'          );
 	this.registerFile('/tree.js',          'js',   './tree.js'           );
 
 	this.tree      = new Tree({ type : 'Nexus' }, Patterns.mUniverse);

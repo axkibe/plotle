@@ -33,6 +33,7 @@ var Fabric;
 var Path;
 var Tree;
 
+var theme;
 var system;
 
 /**
@@ -87,7 +88,7 @@ Cockpit.prototype.draw = function() {
 	var fabric = this.fabric;
 	var msg = 'Loading space "welcome" ...';
 
-	fabric.fontStyle('12px ' + settings.defaultFont, 'rgb(128, 92, 8)', 'start', 'alphabetic');
+	fabric.fontStyle('12px ' + theme.defaultFont, 'rgb(128, 92, 8)', 'start', 'alphabetic');
 	fabric.fillText(msg, 24, fabric.height - 12);
 };
 
@@ -124,6 +125,5 @@ Cockpit.prototype.mousedown = function(p) {
 	*/
 	return false;
 };
-
 
 })();

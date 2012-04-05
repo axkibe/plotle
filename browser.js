@@ -35,7 +35,6 @@ var Jools;
 var Fabric;
 var Peer;
 var Shell;
-var settings; // TODO - remove this dependency
 var config;
 
 /**
@@ -77,6 +76,28 @@ function makeCatcher(fun) {
 		}
 	};
 }
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ .---.     .  .
+ \___  ,-. |- |- . ,-. ,-. ,-.
+     \ |-' |  |  | | | | | `-.
+ `---' `-' `' `' ' ' ' `-| `-'
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ,|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                        `'
+ Default behavior settings.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+var settings = {
+	// Blink speed of the caret.
+	caretBlinkSpeed : 530,
+
+	// milliseconds after mouse down, dragging starts
+	dragtime : 400,
+
+	// pixels after mouse down and move, dragging starts
+	dragbox  : 10
+};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .---.         .

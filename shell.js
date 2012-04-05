@@ -40,13 +40,13 @@ var Path;
 var Tree;
 
 var system;
+var theme;
 
 /**
 | Exports
 */
 var shell = null;
 var Shell;
-var settings;
 
 /**
 | Capsule
@@ -111,215 +111,6 @@ var noCache = false;
 | The server peer
 */
 var peer;
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- .---.     .  .
- \___  ,-. |- |- . ,-. ,-. ,-.
-     \ |-' |  |  | | | | | `-.
- `---' `-' `' `' ' ' ' `-| `-'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ,|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-                        `'
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-settings = {
-	// standard font
-	defaultFont : 'Verdana,Geneva,Kalimati,sans-serif',
-	//defaultFont : 'Freebooter Script,Zapfino,serif',
-
-	// milliseconds after mouse down, dragging starts
-	dragtime : 400,
-
-	// pixels after mouse down and move, dragging starts
-	dragbox  : 10,
-
-	// factor to add to the bottom of font height
-	bottombox : 0.25,
-
-	// standard note in space
-	note : {
-		minWidth  :  40,
-		minHeight :  40,
-		newWidth  : 300,
-		newHeight : 150,
-
-		// inner margin to text
-		imargin  : { n: 4, e: 5, s: 4, w: 5 },
-
-		style : {
-			fill : {
-				gradient : 'askew',
-				steps : [
-					[0, 'rgba(255, 255, 248, 0.955)'],
-					[1, 'rgba(255, 255, 160, 0.955)']
-				]
-			},
-			edge : [
-				{ border: 1, width : 1, color : 'rgb(255, 188, 87)' },
-				{ border: 0, width : 1, color : 'black' }
-			],
-			highlight : [ { border: 0, width: 3, color: 'rgba(255, 183, 15, 0.5)' } ]
-		},
-
-		cornerRadius : 6
-	},
-
-	label : {
-		minHeight :  20,
-
-		style : {
-			edge : [
-				//{ border: 0, width: 0.2, color: 'rgba(200, 100, 0, 0.5)' },
-				{ border: 0, width: 1, color: 'rgba(100, 100, 0, 0.5)' }
-			],
-			highlight : [ { border: 0, width: 3, color: 'rgba(255, 183, 15, 0.5)' } ]
-		},
-
-		// inner margin to text
-		imargin  : { n: 1, e: 1, s: 1, w: 1 },
-
-		// offset for creation // @@ calculate dynamically
-		createOffset : { x: 27, y: 12 }
-	},
-
-	// menu at the bottom of cockpit
-	/*
-	edgemenu : {
-		style : {
-			fill : {
-				gradient : 'horizontal',
-				steps : [
-					[ 0, 'rgba(255, 255, 200, 0.90)' ],
-					[ 1, 'rgba(255, 255, 160, 0.90)' ],
-				],
-			},
-			edge : [
-				{ border: 1, width :   2, color : 'rgb(255, 200, 105)' },
-				{ border: 0, width : 0.5, color : 'black' },
-			],
-			select : {
-				gradient : 'horizontal',
-				steps : [
-					[0, 'rgb(255, 237, 210)' ],
-					[1, 'rgb(255, 185, 81)'  ],
-				],
-			},
-		},
-	},*/
-
-
-	// float menu
-	floatmenu : {
-		outerRadius : 75,
-		innerRadius : 30,
-		style : {
-			edge : [
-				{ border: 1, width :   2, color : 'rgb(255, 200, 105)' },
-				{ border: 0, width : 0.5, color : 'black' }
-			],
-			fill : {
-				gradient : 'radial',
-				steps : [
-					[ 0, 'rgba(255, 255, 168, 0.955)' ],
-					[ 1, 'rgba(255, 255, 243, 0.955)' ]
-				]
-			},
-			select : {
-				gradient : 'radial',
-				steps : [
-					[0, 'rgb(255, 185, 81)'  ],
-					[1, 'rgb(255, 237, 210)' ]
-				]
-			}
-		}
-	},
-
-	// item menu
-	itemmenu : {
-		outerRadius : 75,
-		innerRadius : 30,
-		slice : {
-			height : 17,
-			style : {
-				fill : {
-					gradient : 'horizontal',
-					steps : [
-						[ 0, 'rgba(255, 255, 200, 0.9)' ],
-						[ 1, 'rgba(255, 255, 205, 0.9)' ]
-					]
-				},
-				edge : [
-					{ border: 1, width :   1, color : 'rgb(255, 200, 105)' },
-					{ border: 0, width : 0.7, color : 'black' }
-				]
-			}
-		}
-	},
-
-	// selection
-	selection : {
-		style : {
-			fill   : 'rgba(243, 203, 255, 0.9)',
-			edge : [
-				//{ border : 0, width : 1, color: 'rgb(254,183,253)' },
-				{ border : 0, width : 1, color: 'black' }
-			]
-		}
-	},
-
-	// scrollbar
-	scrollbar : {
-		// pixels to scroll for a wheel event
-		textWheelSpeed : 12,
-
-		style : {
-			fill : 'rgb(255, 188, 87)',
-			edge : [
-				{ border : 0, width : 1, color: 'rgb(221, 154, 52)' }
-			]
-		},
-		strength :  8,
-		minSize  : 12,
-		imarginw :  2
-	},
-
-	// size of resize handles
-	handle : {
-		size      : 10,
-		distance  : 0,
-
-		style : {
-			edge : [
-				{ border: 0, width: 3, color: 'rgb(125,120,32)' },
-				{ border: 0, width: 1, color: 'rgb(255,180,90)' }
-			]
-		}
-	},
-
-	relation : {
-		style : {
-			fill : 'rgba(255, 225, 40, 0.5)',
-			edge : [
-				{ border: 0, width : 3, color : 'rgba(255, 225, 80, 0.4)' },
-				{ border: 0, width : 1, color : 'rgba(200, 100, 0,  0.8)' }
-			],
-			labeledge : [
-				{ border: 0, width : 0.2, color : 'rgba(200, 100, 0, 0.5)' }
-			],
-			highlight : [
-				{ border: 0, width: 3, color: 'rgba(255, 183, 15, 0.5)' }
-			]
-		},
-
-		// inner margin to text
-		imargin  : { n: 1, e: 1, s: 1, w: 1 },
-
-		// offset for creation // @@ calculate dynamically
-		createOffset : { x: 44, y: 12 }
-	},
-
-	// Blink speed of the caret.
-	caretBlinkSpeed : 530
-};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,--.             .
@@ -856,13 +647,13 @@ var Hexmenu = function(pc, style, labels) {
 Hexmenu.prototype.draw = function() {
 	var f = shell.fabric;
 
-	f.fill(settings.floatmenu.style.fill, this.hflower, 'path', 'outerHex');
+	f.fill(theme.floatmenu.style.fill, this.hflower, 'path', 'outerHex');
 	if (this.mousepos && this.mousepos !== 'center') {
-		f.fill(settings.floatmenu.style.select, this.hflower, 'path', this.mousepos);
+		f.fill(theme.floatmenu.style.select, this.hflower, 'path', this.mousepos);
 	}
-	f.edge(settings.floatmenu.style.edge, this.hflower, 'path', 'structure');
+	f.edge(theme.floatmenu.style.edge, this.hflower, 'path', 'structure');
 
-	f.fontStyle('12px '+settings.defaultFont, 'black', 'center', 'middle');
+	f.fontStyle('12px ' + theme.defaultFont, 'black', 'center', 'middle');
 	var labels = this.labels;
 
 	var rd = this.style.outerRadius * (1 - 1 / 3.5);
@@ -991,7 +782,7 @@ VSpace.prototype.draw = function() {
 		var target = av2 ? av2.getZone() : action.move.sub(this.fabric.pan);
 		var arrow = Line.connect(av.getZone(), 'normal', target, 'arrow');
 		if (av2) av2.highlight(this.fabric);
-		arrow.draw(this.fabric, settings.relation.style);
+		arrow.draw(this.fabric, theme.relation.style);
 		break;
 	}
 };
@@ -1025,7 +816,7 @@ VSpace.prototype.setFocus = function(vitem) {
 */
 VSpace.prototype.vAtRank = function(rank) {
 	return this.vv[this.twig.ranks[rank]];
-}
+};
 
 /**
 | Mouse wheel
@@ -1141,7 +932,7 @@ VSpace.prototype.click = function(p) {
 	if (focus && focus.withinItemMenu(pp)) {
 		action = shell.startAction(Action.ITEMMENU, null, pp);
 		var labels = {n : 'Remove'};
-		action.itemmenu = new Hexmenu(focus.getH6Slice().pm.add(pan), settings.itemmenu, labels);
+		action.itemmenu = new Hexmenu(focus.getH6Slice().pm.add(pan), theme.itemmenu, labels);
 		shell.redraw = true;
 		return;
 	}
@@ -1154,7 +945,7 @@ VSpace.prototype.click = function(p) {
 
 	// otherwhise pop up the float menu
 	action = shell.startAction(Action.FLOATMENU, null, p);
-	action.floatmenu = new Hexmenu(p, settings.floatmenu, this._floatMenuLabels);
+	action.floatmenu = new Hexmenu(p, theme.floatmenu, this._floatMenuLabels);
 	system.setCursor('default');
 	this.setFocus(null);
 	shell.redraw = true;
@@ -1232,8 +1023,8 @@ VSpace.prototype.mousedown = function(p) {
 		if (!md) break;
 		switch(md) {
 		case 'n' : // note
-			var nw = settings.note.newWidth;
-			var nh = settings.note.newHeight;
+			var nw = theme.note.newWidth;
+			var nh = theme.note.newHeight;
 			pnw = fm.p.sub(this.fabric.pan.x + half(nw) , this.fabric.pan.y + half(nh));
 			key = peer.newNote(this.path, new Rect(pnw, pnw.add(nw, nh)));
 			var vnote = this.vv[key];
@@ -1241,7 +1032,7 @@ VSpace.prototype.mousedown = function(p) {
 			break;
 		case 'ne' : // label
 			pnw = fm.p.sub(this.fabric.pan);
-			pnw = pnw.sub(settings.label.createOffset);
+			pnw = pnw.sub(theme.label.createOffset);
 			key = peer.newLabel(this.path, pnw, 'Label', 20);
 			var vlabel = this.vv[key];
 			this.setFocus(vlabel);
@@ -1369,8 +1160,8 @@ VPara.prototype.getFlow = function() {
 				if (spread < xw) spread = xw;
 				x = 0;
 				xw = x + w + space;
-				//y += R(vdoc.fontsize * (pre ? 1 : 1 + settings.bottombox)); @@
-				y += R(vdoc.getFontSize() * (1 + settings.bottombox));
+				//y += R(vdoc.fontsize * (pre ? 1 : 1 + theme.bottombox)); @@
+				y += R(vdoc.getFontSize() * (1 + theme.bottombox));
 				line++;
 				flow[line] = {a: [], y: y, o: ca.index};
 			} else {
@@ -1574,6 +1365,7 @@ VPara.prototype.specialKey = function(keycode) {
 				);
 			}
 		}
+		vitem.scrollCaretIntoView();
 		break;
 	case 38 : // up
 		flow = this.getFlow();
@@ -1596,6 +1388,7 @@ VPara.prototype.specialKey = function(keycode) {
 				);
 			}
 		}
+		vitem.scrollCaretIntoView();
 		break;
 	case 39 : // right
 		if (caret.sign.at1 < this.twig.text.length) {
@@ -1611,6 +1404,7 @@ VPara.prototype.specialKey = function(keycode) {
 				);
 			}
 		}
+		vitem.scrollCaretIntoView();
 		break;
 	case 40 : // down
 		flow = this.getFlow();
@@ -1633,6 +1427,8 @@ VPara.prototype.specialKey = function(keycode) {
 				);
 			}
 		}
+		vitem.scrollCaretIntoView();
+		vitem.scrollCaretIntoView();
 		break;
 	case 46 : // del
 		if (caret.sign.at1 < this.twig.text.length) {
@@ -1682,7 +1478,7 @@ VPara.prototype.textPath = function() {
 VPara.prototype.getHeight = function() {
 	var flow = this.getFlow();
 	var vdoc = shell.vget(this.path, -1);
-	return flow.height + R(vdoc.getFontSize() * settings.bottombox);
+	return flow.height + R(vdoc.getFontSize() * theme.bottombox);
 };
 
 /**
@@ -1702,7 +1498,7 @@ VPara.prototype.getFabric = function() {
 	{ return fabric; }
 
 	// @@: work out exact height for text below baseline
-	var fabric = this.$fabric = new Fabric(width, height);
+	fabric = this.$fabric = new Fabric(width, height);
 	fabric.fontStyle(vdoc.getFont(), 'black', 'start', 'alphabetic');
 
 	// draws text into the fabric
@@ -1767,37 +1563,46 @@ VPara.prototype.getOffsetPoint = function(offset, flowPos$) {
 		line.y);
 };
 
+/**
+| Returns the caret position relative to the vdoc.
+*/
+VPara.prototype.getCaretPos = function() {
+	var caret   = shell.caret;
+	var vitem   = shell.vget(this.path, -2);
+	var vdoc    = vitem.vv.doc;
+	var fs      = vdoc.getFontSize();
+	var descend = fs * theme.bottombox;
+	var p       = this.getOffsetPoint(shell.caret.sign.at1, shell.caret);
+
+	var pnw = vdoc.getPNW(this.key);
+	var s = R(p.y + pnw.y + descend);
+	var n = s - R(vdoc.getFontSize() + descend);
+	var	x = p.x + pnw.x - 1;
+
+	return immute({ s: s, n: n, x: x });
+};
+
 
 /**
 | Draws the caret if its in this paragraph.
 */
 VPara.prototype.drawCaret = function() {
-	var caret = shell.caret;
-	var vitem = shell.vget(this.path, -2);
-	var vdoc  = vitem.vv.doc;
-	var zone  = vitem.getZone();
-	var pan   = shell.vSpace.fabric.pan;
-	var fs    = vdoc.getFontSize();
-	var descend = R(fs * settings.bottombox);
-	var th    = R(vdoc.getFontSize()) + descend;
-
-	caret.pos$ = this.getOffsetPoint(shell.caret.sign.at1, shell.caret);
-
+	var caret   = shell.caret;
+	var pan     = shell.vSpace.fabric.pan;
+	var vitem   = shell.vget(this.path, -2);
+	var zone    = vitem.getZone();
+	var cpos    = caret.pos$  = this.getCaretPos();
 	var sbary   = vitem.scrollbarY;
 	var scrolly = sbary ? sbary.getPos() : 0;
 
-	var pnw = vdoc.getPNW(this.key);
-	var cys = R(caret.pos$.y + pnw.y + descend - scrolly);
-	var cyn = cys - th;
-	var cx  = caret.pos$.x + pnw.x - 1;
+	var cyn = min(max(cpos.n - scrolly, 0), zone.height); // TODO limit
+	var cys = min(max(cpos.s,           0), zone.height);
+	var cx  = cpos.x;
 
-	cyn = min(max(cyn, 0), zone.height);
-	cys = min(max(cys, 0), zone.height);
 	var ch  = cys - cyn;
 	if (ch === 0) return;
 
 	var cp = new Point(cx + zone.pnw.x + pan.x, cyn + zone.pnw.y + pan.y);
-
 	shell.caret.screenPos$ = cp;
 
 	if (Caret.useGetImageData) {
@@ -1851,7 +1656,7 @@ Scrollbar.prototype.path = function(fabric, border, twist) {
 	var w025   = R(w * 0.25);
 	var w075   = R(w * 0.75);
 	var size   = R(this.aperture * z.height / this.max);
-	var msize  = max(size, settings.scrollbar.minSize);
+	var msize  = max(size, theme.scrollbar.minSize);
 	var sy     = z.pnw.y + R(this._pos * ((z.height - msize + size) / this.max));
 
 	fabric.beginPath(twist);
@@ -1871,7 +1676,7 @@ Scrollbar.prototype.path = function(fabric, border, twist) {
 | Draws the scrollbar.
 */
 Scrollbar.prototype.draw = function(fabric) {
-	fabric.paint(settings.scrollbar.style, this, 'path');
+	fabric.paint(theme.scrollbar.style, this, 'path');
 };
 
 /**
@@ -1921,7 +1726,7 @@ var VDoc = function(twig, path) {
 */
 VDoc.prototype.vAtRank = function(rank) {
 	return this.vv[this.twig.ranks[rank]];
-}
+};
 
 /**
 | Updates v-vine to match a new twig.
@@ -1962,7 +1767,7 @@ VDoc.prototype.draw = function(fabric, width, imargin, scrollp) {
 
 	// draws the selection
 	if (select.active && this.path.subPathOf(select.sign1.path)) {
-		fabric.paint(settings.selection.style, this, 'pathSelection', width, imargin, scrollp);
+		fabric.paint(theme.selection.style, this, 'pathSelection', width, imargin, scrollp);
 	}
 
 	var y = imargin.n;
@@ -2002,7 +1807,7 @@ VDoc.prototype.getHeight = function() {
 		if (r > 0) { height += paraSep; }
 		height += flow.height;
 	}
-	height += R(fontsize * settings.bottombox);
+	height += R(fontsize * theme.bottombox);
 	return height;
 };
 
@@ -2041,7 +1846,7 @@ VDoc.prototype.getParaSep = function(vitem) {
 | Returns the default font for the document.
 */
 VDoc.prototype.getFont = function() {
-	return this.getFontSize() + 'px ' + settings.defaultFont;
+	return this.getFontSize() + 'px ' + theme.defaultFont;
 };
 
 /**
@@ -2099,7 +1904,7 @@ VDoc.prototype.pathSelection = function(fabric, border, twist, width, imargin, s
 
 	var fontsize = this.getFontSize();
 	fabric.beginPath(twist);
-	var descend = R(fontsize * settings.bottombox);
+	var descend = R(fontsize * theme.bottombox);
 	var  ascend = R(fontsize);
 	var rx = width - imargin.e;
 	var lx = imargin.w;
@@ -2192,7 +1997,7 @@ VItem.prototype.getH6Slice = function() {
 	if (this._h6slice$ && this._h6slice$.psw.eq(zone.pnw)) return this._h6slice$;
 
 	return this._h6slice$ = new HexagonSlice(
-		zone.pnw, settings.itemmenu.innerRadius, settings.itemmenu.slice.height);
+		zone.pnw, theme.itemmenu.innerRadius, theme.itemmenu.slice.height);
 };
 
 /**
@@ -2211,9 +2016,9 @@ VItem.prototype.checkItemCompass = function(p) {
 	var zone = this.getZone();
 
 	if (!ha) return null;
-	var d   =       settings.handle.size; // distance
-	var din = 0.5 * settings.handle.size; // inner distance
-	var dou =       settings.handle.size; // outer distance
+	var d   =       theme.handle.size; // distance
+	var din = 0.5 * theme.handle.size; // inner distance
+	var dou =       theme.handle.size; // outer distance
 
 	var n = p.y >= zone.pnw.y - dou && p.y <= zone.pnw.y + din;
 	var e = p.x >= zone.pse.x - din && p.x <= zone.pse.x + dou;
@@ -2247,8 +2052,8 @@ VItem.prototype.pathResizeHandles = function(fabric, border, twist) {
 	var pnw = zone.pnw;
 	var pse = zone.pse;
 
-	var ds = settings.handle.distance;
-	var hs = settings.handle.size;
+	var ds = theme.handle.distance;
+	var hs = theme.handle.size;
 	var hs2 = half(hs);
 
 	var x1 = pnw.x - ds;
@@ -2302,10 +2107,10 @@ VItem.prototype.pathResizeHandles = function(fabric, border, twist) {
 */
 VItem.prototype.drawHandles = function(fabric) {
 	// draws the resize handles
-	fabric.edge(settings.handle.style.edge, this, 'pathResizeHandles');
+	fabric.edge(theme.handle.style.edge, this, 'pathResizeHandles');
 
 	// draws item menu handler
-	fabric.paint(settings.itemmenu.slice.style, this.getH6Slice(), 'path');
+	fabric.paint(theme.itemmenu.slice.style, this.getH6Slice(), 'path');
 };
 
 /**
@@ -2448,7 +2253,7 @@ VItem.prototype.click = function(p) {
 */
 VItem.prototype.highlight = function(fabric) {
 	var silhoutte = this.getSilhoutte(this.getZone(), false);
-	fabric.edge(settings.note.style.highlight, silhoutte, 'path');
+	fabric.edge(theme.note.style.highlight, silhoutte, 'path');
 };
 
 
@@ -2483,7 +2288,7 @@ subclass(VNote, VItem);
 /**
 | Default margin for all notes.
 */
-VNote.prototype.imargin = new Margin(settings.note.imargin);
+VNote.prototype.imargin = new Margin(theme.note.imargin);
 
 /**
 | Resize handles to show on notes.
@@ -2503,8 +2308,8 @@ VNote.prototype.handles = {
 | Minimum sizes
 | TODO no longer needs to be part of the prototype.
 */
-VNote.prototype.minWidth  = settings.note.minWidth;
-VNote.prototype.minHeight = settings.note.minHeight;
+VNote.prototype.minWidth  = theme.note.minWidth;
+VNote.prototype.minHeight = theme.note.minHeight;
 
 /**
 | Returns the notes silhoutte.
@@ -2516,7 +2321,7 @@ VNote.prototype.getSilhoutte = function(zone$, zAnchor) {
 	var z$ = zone$;
 	var s$;
 
-	var cr = settings.note.cornerRadius;
+	var cr = theme.note.cornerRadius;
 	if (zAnchor) {
 		s$ = this._silhoutte$0;
 		if (s$ && s$.width === z$.width && s$.height === z$.height) return s$;
@@ -2539,10 +2344,11 @@ VNote.prototype.setScrollbar = function(pos) {
 	sbary.max = this.vv.doc.getHeight();
 
 	var zone = this.getZone();
+
 	// @@ make a Rect.renew
 	sbary.zone = new Rect(
 		Point.renew(
-			zone.width - this.imargin.e - settings.scrollbar.strength,
+			zone.width - this.imargin.e - theme.scrollbar.strength,
 			this.imargin.n,
 			sbary.zone && sbary.zone.pnw),
 		Point.renew(
@@ -2555,6 +2361,20 @@ VNote.prototype.setScrollbar = function(pos) {
 
 	if (typeof(pos) === 'undefined') pos = sbary.getPos();
 	sbary.setPos(limit(0, pos, smaxy));
+};
+
+/**
+| TODO
+*/
+VNote.prototype.scrollCaretIntoView = function() {
+	var caret   = shell.caret;
+	var scrolly = this.scrollbarY;
+	var sy      = scrolly.getPos();
+	var vpara   = shell.vget(caret.sign.path, -1);
+	if (vpara.constructor !== VPara) { throw new Error('iFail'); }
+	var cp      = vpara.getCaretPos();
+	debug('CP', cp);
+	//scrolly.setPos(
 };
 
 /**
@@ -2616,7 +2436,7 @@ VNote.prototype.draw = function(fabric) {
 		// resizes the canvas
 		f.attune(zone);
 		var silhoutte = this.getSilhoutte(zone, true);
-		f.fill(settings.note.style.fill, silhoutte, 'path');
+		f.fill(theme.note.style.fill, silhoutte, 'path');
 
 		// draws selection and text
 		sbary.point = Point.renew(0, sbary.getPos(), sbary.point);
@@ -2629,7 +2449,7 @@ VNote.prototype.draw = function(fabric) {
 		}
 
 		// draws the border
-		f.edge(settings.note.style.edge, silhoutte, 'path');
+		f.edge(theme.note.style.edge, silhoutte, 'path');
 	}
 
 	fabric.drawImage(f, zone.pnw);
@@ -2640,7 +2460,7 @@ VNote.prototype.draw = function(fabric) {
 */
 VNote.prototype.mousewheel = function(p, dir) {
 	if (!this.getZone().within(p)) return false;
-	this.setScrollbar(this.scrollbarY.getPos() - dir * settings.scrollbar.textWheelSpeed);
+	this.setScrollbar(this.scrollbarY.getPos() - dir * theme.scrollbar.textWheelSpeed);
 	this._fabric$flag = false;
 	shell.redraw = true;
 	return true;
@@ -2654,7 +2474,7 @@ VNote.prototype.getFlowWidth = function() {
 	var zone = this.getZone();
 	var flowWidth = zone.width - this.imargin.x;
 	if (sbary && sbary.visible) {
-		flowWidth -= settings.scrollbar.strength;
+		flowWidth -= theme.scrollbar.strength;
 	}
 	return flowWidth;
 };
@@ -2762,7 +2582,7 @@ subclass(VLabel, VItem);
 /**
 | Default margin for all notes.
 */
-VLabel.prototype.imargin = new Margin(settings.label.imargin);
+VLabel.prototype.imargin = new Margin(theme.label.imargin);
 
 /**
 | Resize handles to show on notes.
@@ -2778,7 +2598,7 @@ fixate(VLabel.prototype, 'handles', {
 | Minimum sizes
 */
 VLabel.prototype.minWidth  = false;
-VLabel.prototype.minHeight = settings.label.minHeight;
+VLabel.prototype.minHeight = theme.label.minHeight;
 
 /**
 | Returns the notes silhoutte.
@@ -2795,6 +2615,13 @@ VLabel.prototype.getSilhoutte = function(zone$, zAnchor) {
 		return this._silhoutte$1 = new Rect(z$.pnw, z$.pse.sub(1, 1));
 	}
 };
+
+/**
+| Scroll caret into view.
+*/
+VLabel.prototype.scrollCaretIntoView = function() {
+	// nothing, since no scrolling for label.
+}
 
 /**
 | Draws the label.
@@ -2822,7 +2649,7 @@ VLabel.prototype.draw = function(fabric) {
 		vdoc.draw(f, zone.width, imargin, Point.zero);
 
 		// draws the border
-		f.edge(settings.label.style.edge, silhoutte, 'path');
+		f.edge(theme.label.style.edge, silhoutte, 'path');
 	}
 
 	fabric.drawImage(f, zone.pnw);
@@ -2967,14 +2794,14 @@ subclass(VRelation, VLabel);
 /**
 | Default margin for all relations.
 */
-VRelation.imargin = new Margin(settings.relation.imargin);
+VRelation.imargin = new Margin(theme.relation.imargin);
 
 /**
 | Creates a new Relation by specifing its relates.
 */
 VRelation.create = function(vSpace, vitem1, vitem2) {
 	var cline = Line.connect(vitem1.getZone(), null, vitem2.getZone(), null);
-	var pnw = cline.pc.sub(settings.relation.createOffset);
+	var pnw = cline.pc.sub(theme.relation.createOffset);
 	var key = peer.newRelation(vSpace.path, pnw, 'relates to', 20, vitem1.key, vitem2.key);
 	// event listener has created the vrel
 	var vrel = vSpace.vv[key];
@@ -2989,12 +2816,12 @@ VRelation.prototype.draw = function(fabric) {
 
 	if (vitem1) {
 		var l1 = Line.connect(vitem1.getZone(), 'normal', zone, 'normal');
-		fabric.paint(settings.relation.style, l1, 'path');
+		fabric.paint(theme.relation.style, l1, 'path');
 	}
 
 	if (vitem2) {
 		var l2 = Line.connect(zone,  'normal', vitem2.getZone(), 'arrow');
-		fabric.paint(settings.relation.style, l2, 'path');
+		fabric.paint(theme.relation.style, l2, 'path');
 	}
 
 	VLabel.prototype.draw.call(this, fabric);
