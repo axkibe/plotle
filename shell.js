@@ -530,9 +530,8 @@ Shell.prototype.mousedown = function(p, shift, ctrl) {
 	this.shift = shift;
 	this.ctrl  = ctrl;
 
-	// TODO cockpit
-	var mouseState = false;
-	if (this.vSpace) { mouseState = this.vSpace.mousedown(p); }
+	var mouseState = this.cockpit.mousedown(p);
+	if (mouseState === null && this.vSpace) { mouseState = this.vSpace.mousedown(p); }
 	if (this.redraw) { this._draw(); }
 	return mouseState;
 };

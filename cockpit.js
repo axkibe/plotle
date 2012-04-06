@@ -79,9 +79,15 @@ var Mainboard = function(fw, fh) {
 
 	this.pnw = new Point(fmx - 650, fh - 70);
 	this.pse = new Point(fmx + 650, fh);
+	this.width       = 650 * 2;
+	this.gradientPC  = new Point(fmx, fh + 450);
+	this.gradientR0  = 0;
+	this.gradientR1  = 650;
 
 	this.mTopCurve = 300;
 	this.sideCurve =  70;
+	this.sideRaise =   0;  // @@ remove if staying 0
+	this.sideSkew  = 200;
 };
 
 /**
@@ -93,12 +99,18 @@ Mainboard.prototype.path = function(fabric, border, twist) {
 	var fmx = this.fmx;
 	var tc  = this.mTopCurve;
 	var sc  = this.sideCurve;
+	var sr  = this.sideRaise;
+	var sk  = this.sideSkew;
 	var b   = border;
 
 	fabric.beginPath(twist);
-	fabric.moveTo(pnw.x + b, pse.y - b);
-	fabric.beziTo(0,  -sc, -tc,   0,   fmx    , pnw.y + b);
-	fabric.beziTo(tc,   0,   0, -sc, pse.x - b, pse.y - b);
+	fabric.moveTo(pnw.x + b, pse.y);
+	fabric.lineTo(pnw.x + b, pse.y - sr);
+
+	fabric.beziTo(sk, -sc + b, -tc,      0,       fmx,  pnw.y + b);
+	fabric.beziTo(tc,       0,  -sk, -sc +b, pse.x - b, pse.y - sr);
+
+	fabric.lineTo(pse.x - b, pse.y);
 };
 
 
@@ -111,7 +123,19 @@ Mainboard.prototype.draw = function(fabric, msg) {
 	var pse = this.pse;
 
 	fabric.fontStyle('12px ' + theme.defaultFont, 'rgb(0, 0, 0)', 'start', 'alphabetic');
-	fabric.fillText(msg, fmx - 550, pse.y - 16);
+	fabric.fillText(msg, pse.x - 300, pse.y - 18);
+}
+
+/**
+| Returns true if point is on this mainboard
+*/
+Mainboard.prototype.within = function(fabric, p) {
+	var pnw = this.pnw;
+	var pse = this.pse;
+
+	if (p.y < pnw.y || p.x < pnw.x || p.x > pse.x) { return false; }
+
+	return fabric.within(this, p);
 }
 
 
@@ -155,10 +179,10 @@ Cockpit.prototype.draw = function() {
 | Mouse hover.
 */
 Cockpit.prototype.mousehover = function(p) {
-	var mainboard = this.mainboard(fabric);
 	var fabric    = this.fabric;
+	var mainboard = this.mainboard(fabric);
 
-	if (fabric.within(mainboard, p)) {
+	if (mainboard.within(fabric, p)) {
 		system.setCursor('default');
 		return true;
 	}
@@ -170,19 +194,15 @@ Cockpit.prototype.mousehover = function(p) {
 | Mouse button down event
 */
 Cockpit.prototype.mousedown = function(p) {
-	/*
-	var md = this.edgemenu.getMousepos(p);
-	if (md >= 0) {
-		shell.redraw = true;
-		switch(md) {
-		case 0: this._exportDialog(); break;
-		case 1: this._revertDialog(); break;
-		case 2: this._importDialog(); break;
-		}
-		return 'none';
+	var fabric    = this.fabric;
+	var mainboard = this.mainboard(fabric);
+
+	if (mainboard.within(fabric, p)) {
+		system.setCursor('default');
+		return false;
 	}
-	*/
-	return false;
+
+	return null;
 };
 
 })();

@@ -612,6 +612,29 @@ Fabric.prototype.fontStyle = function(font, fill, align, baseline) {
 	cx.textBaseline = baseline;
 };
 
+/**
+| TODO
+*/
+Fabric.prototype.within = function(shape, a1, a2) {
+	shape.path(this, 0, true);
+	var px, py;
+	var pan = this.pan, tw = this._twist;
+
+	if (typeof(a1) === 'object') {
+		px = a1.x;
+		py = a1.y;
+	} else {
+		px = a1;
+		py = a2;
+	}
+
+	px += pan.x + tw;
+	py += pan.y + tw;
+
+	return this._cx.isPointInPath(px, py);
+}
+
+
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,-,-,-.
  `,| | |   ,-. ,-. ,-. . . ,-. ,-.
