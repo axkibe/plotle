@@ -53,6 +53,7 @@ if (typeof(window) === 'undefined') {
 
 var debug        = Jools.debug;
 var is           = Jools.is;
+var isnon        = Jools.isnon;
 var log          = Jools.log;
 var fixate       = Jools.fixate;
 var fixateNoEnum = Jools.fixateNoEnum;
@@ -548,8 +549,12 @@ Fabric.prototype.paint = function(style, shape, path, a1, a2, a3, a4) {
 	var edgeStyle = style.edge;
 	var cx = this._cx;
 	shape[path](this, 0, false, a1, a2, a3, a4);
-	cx.fillStyle = this._colorStyle(fillStyle, shape);
-	cx.fill();
+
+	if (isnon(style.fill)) {
+		cx.fillStyle = this._colorStyle(fillStyle, shape);
+		cx.fill();
+	}
+
 	if (edgeStyle instanceof Array) {
 		for(var i = 0; i < edgeStyle.length; i++) {
 			this._edge(edgeStyle[i], shape, path, a1, a2, a3, a4);

@@ -83,10 +83,10 @@ var Mainboard = function(fw, fh) {
 	this.gradientPC  = new Point(fmx, fh + 450);
 	this.gradientR0  = 0;
 	this.gradientR1  = 650;
+	this.sideButtonWidth = 190;
 
 	this.mTopCurve = 300;
 	this.sideCurve =  60;
-	this.sideRaise =   0;  // @@ remove if staying 0
 	this.sideSkew  = 200;
 };
 
@@ -99,18 +99,48 @@ Mainboard.prototype.path = function(fabric, border, twist) {
 	var fmx = this.fmx;
 	var tc  = this.mTopCurve;
 	var sc  = this.sideCurve;
-	var sr  = this.sideRaise;
 	var sk  = this.sideSkew;
 	var b   = border;
 
 	fabric.beginPath(twist);
 	fabric.moveTo(pnw.x + b, pse.y);
-	fabric.lineTo(pnw.x + b, pse.y - sr);
 
 	fabric.beziTo(sk, -sc + b, -tc,      0,       fmx,  pnw.y + b);
-	fabric.beziTo(tc,       0,  -sk, -sc +b, pse.x - b, pse.y - sr);
+	fabric.beziTo(tc,       0,  -sk, -sc +b, pse.x - b, pse.y);
+};
 
-	fabric.lineTo(pse.x - b, pse.y);
+/**
+| Paths the left side button
+*/
+Mainboard.prototype.pathLeft = function(fabric, border, twist) {
+	var pnw = this.pnw;
+	var pse = this.pse;
+	var sc  = R(this.sideCurve / 2);
+	var sk  = R(this.sideSkew  / 2);
+	var sbw = this.sideButtonWidth;
+	var sk2 = 15;
+	var sc2 = 50;
+	var b    = border;
+	fabric.beginPath(twist);
+	fabric.moveTo(pnw.x + b, pse.y);
+	fabric.beziTo(sk, -sc + b, -sk2, -sc2 + b, pnw.x + sbw - b,  pse.y);
+};
+
+/**
+| Paths the right side button
+*/
+Mainboard.prototype.pathRight = function(fabric, border, twist) {
+	var pnw = this.pnw;
+	var pse = this.pse;
+	var sc  = R(this.sideCurve / 2);
+	var sk  = R(this.sideSkew  / 2);
+	var sbw = this.sideButtonWidth;
+	var sk2 = 15;
+	var sc2 = 50;
+	var b    = border;
+	fabric.beginPath(twist);
+	fabric.moveTo(pse.x - b, pse.y);
+	fabric.beziTo(-sk, -sc + b, sk2, -sc2 + b, pse.x - sbw + b,  pse.y);
 };
 
 
@@ -118,29 +148,41 @@ Mainboard.prototype.path = function(fabric, border, twist) {
 | Draws the mainboards contents
 */
 Mainboard.prototype.draw = function(fabric, user, curSpace, msg) {
+	fabric.paint(theme.cockpit.style, this, 'path');
+	fabric.paint(theme.cockpit.sides, this, 'pathLeft');
+	fabric.paint(theme.cockpit.sides, this, 'pathRight');
+
+	msg = "This is a message just for testing.";
+
 	var fmx = this.fmx;
 	var pnw = this.pnw;
 	var pse = this.pse;
 
-	var userX  = pnw.x + 240;
-	var spaceX = fmx;
-	var msgX   = pse.x - 300;
+	var userX        = pnw.x + 280;
+	var spaceX       = fmx;
+	var msgX         = pse.x - 450;
+	var sideButtonX1 = pnw.x + 135;
+	var sideButtonX2 = pse.x - 135;
 
-	var spaceY1 = pse.y - 39;
-	var spaceY2 = pse.y - 15;
+	var spaceY1      = pse.y - 39;
+	var spaceY2      = pse.y - 15;
+	var userY1       = pse.y - 31;
+	var userY2       = pse.y - 11;
+	var msgY1        = pse.y - 20;
+	var sideButtonY  = pse.y -  9;
 
-	var userY1  = pse.y - 31;
-	var userY2  = pse.y - 11;
 
-	var msgY1   = pse.y - 11;
+	fabric.fontStyle('14px ' + theme.defaultFont, 'rgb(0, 0, 0)', 'center', 'alphabetic');
+	fabric.fillText('login', sideButtonX1, sideButtonY);
+	fabric.fillText('register', sideButtonX2, sideButtonY);
 
 	if (isnon(msg)) {
-		fabric.fontStyle('12px ' + theme.defaultFont, 'rgb(0, 0, 0)', 'start', 'alphabetic');
+		fabric.fontStyle('14px ' + theme.defaultFont, 'rgb(0, 0, 0)', 'start', 'alphabetic');
 		fabric.fillText(msg, msgX, msgY1);
 	}
 
 	if (isnon(curSpace)) {
-		fabric.fontStyle('10px ' + theme.defaultFont, 'rgb(0, 0, 0)', 'center', 'alphabetic');
+		fabric.fontStyle('12px ' + theme.defaultFont, 'rgb(0, 0, 0)', 'center', 'alphabetic');
 		fabric.fillText('current space:', spaceX, spaceY1);
 
 		fabric.fontStyle('22px bold  ' + theme.defaultFont, 'rgb(0, 0, 0)', 'center', 'alphabetic');
@@ -148,7 +190,7 @@ Mainboard.prototype.draw = function(fabric, user, curSpace, msg) {
 	}
 
 	if (isnon(user)) {
-		fabric.fontStyle('10px ' + theme.defaultFont, 'rgb(0, 0, 0)', 'center', 'alphabetic');
+		fabric.fontStyle('12px ' + theme.defaultFont, 'rgb(0, 0, 0)', 'center', 'alphabetic');
 		fabric.fillText('Hello ', userX, userY1);
 
 		fabric.fontStyle('18px ' + theme.defaultFont, 'rgb(0, 0, 0)', 'center', 'alphabetic');
@@ -229,7 +271,6 @@ Cockpit.prototype.draw = function() {
 	var fabric    = this.fabric;
 	var mainboard = this.mainboard(fabric);
 
-	fabric.paint(theme.cockpit.style, mainboard, 'path');
 	mainboard.draw(fabric, this._user, this._curSpace, this._message);
 };
 
