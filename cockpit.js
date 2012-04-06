@@ -123,7 +123,7 @@ Mainboard.prototype.draw = function(fabric, user, curSpace, msg) {
 	var pse = this.pse;
 
 	var userX  = pnw.x + 240;
-	var spaceX = fmx   - 100;
+	var spaceX = fmx;
 	var msgX   = pse.x - 300;
 
 	var spaceY1 = pse.y - 39;
@@ -140,10 +140,10 @@ Mainboard.prototype.draw = function(fabric, user, curSpace, msg) {
 	}
 
 	if (isnon(curSpace)) {
-		fabric.fontStyle('10px ' + theme.defaultFont, 'rgb(0, 0, 0)', 'start', 'alphabetic');
+		fabric.fontStyle('10px ' + theme.defaultFont, 'rgb(0, 0, 0)', 'center', 'alphabetic');
 		fabric.fillText('current space:', spaceX, spaceY1);
 
-		fabric.fontStyle('22px bold  ' + theme.defaultFont, 'rgb(0, 0, 0)', 'start', 'alphabetic');
+		fabric.fontStyle('22px bold  ' + theme.defaultFont, 'rgb(0, 0, 0)', 'center', 'alphabetic');
 		fabric.fillText(curSpace, spaceX, spaceY2);
 	}
 
