@@ -660,7 +660,7 @@ Hexmenu.prototype.draw = function() {
 
 	f.fill(theme.floatmenu.style.fill, this.hflower, 'path', 'outerHex');
 	if (this.mousepos && this.mousepos !== 'center') {
-		f.fill(theme.floatmenu.style.select, this.hflower, 'path', this.mousepos);
+		f.fill(theme.floatmenu.style.highlight, this.hflower, 'path', this.mousepos);
 	}
 	f.edge(theme.floatmenu.style.edge, this.hflower, 'path', 'structure');
 

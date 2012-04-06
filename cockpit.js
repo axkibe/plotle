@@ -77,17 +77,19 @@ var Mainboard = function(fw, fh) {
 	this.fh            = fh;
 	var fmx = this.fmx = half(fw);
 
-	this.pnw = new Point(fmx - 650, fh - 60);
-	this.pse = new Point(fmx + 650, fh);
-	this.width       = 650 * 2;
+	this.pnw = new Point(fmx - 512, fh - 60);
+	this.pse = new Point(fmx + 512, fh);
+	this.width       = 512 * 2;
 	this.gradientPC  = new Point(fmx, fh + 450);
 	this.gradientR0  = 0;
 	this.gradientR1  = 650;
-	this.sideButtonWidth = 190;
 
-	this.mTopCurve = 300;
-	this.sideCurve =  60;
-	this.sideSkew  = 200;
+	this._sideButtonWidth = 190;
+	this._mTopCurve       = 300;
+	this._sideCurve       =  60;
+	this._sideSkew        = 200;
+
+	this._highlight       = null;
 };
 
 /**
@@ -97,9 +99,9 @@ Mainboard.prototype.path = function(fabric, border, twist) {
 	var pnw = this.pnw;
 	var pse = this.pse;
 	var fmx = this.fmx;
-	var tc  = this.mTopCurve;
-	var sc  = this.sideCurve;
-	var sk  = this.sideSkew;
+	var tc  = this._mTopCurve;
+	var sc  = this._sideCurve;
+	var sk  = this._sideSkew;
 	var b   = border;
 
 	fabric.beginPath(twist);
@@ -115,9 +117,9 @@ Mainboard.prototype.path = function(fabric, border, twist) {
 Mainboard.prototype.pathLeft = function(fabric, border, twist) {
 	var pnw = this.pnw;
 	var pse = this.pse;
-	var sc  = R(this.sideCurve / 2);
-	var sk  = R(this.sideSkew  / 2);
-	var sbw = this.sideButtonWidth;
+	var sc  = R(this._sideCurve / 2);
+	var sk  = R(this._sideSkew  / 2);
+	var sbw = this._sideButtonWidth;
 	var sk2 = 15;
 	var sc2 = 50;
 	var b    = border;
@@ -132,9 +134,9 @@ Mainboard.prototype.pathLeft = function(fabric, border, twist) {
 Mainboard.prototype.pathRight = function(fabric, border, twist) {
 	var pnw = this.pnw;
 	var pse = this.pse;
-	var sc  = R(this.sideCurve / 2);
-	var sk  = R(this.sideSkew  / 2);
-	var sbw = this.sideButtonWidth;
+	var sc  = R(this._sideCurve / 2);
+	var sk  = R(this._sideSkew  / 2);
+	var sbw = this._sideButtonWidth;
 	var sk2 = 15;
 	var sc2 = 50;
 	var b    = border;
@@ -149,8 +151,17 @@ Mainboard.prototype.pathRight = function(fabric, border, twist) {
 */
 Mainboard.prototype.draw = function(fabric, user, curSpace, msg) {
 	fabric.paint(theme.cockpit.style, this, 'path');
-	fabric.paint(theme.cockpit.sides, this, 'pathLeft');
-	fabric.paint(theme.cockpit.sides, this, 'pathRight');
+
+	var stHighlight = theme.cockpit.highlight;
+	var stSides     = theme.cockpit.sides;
+	var hl          = this._highlight;
+
+	fabric.paint(hl === 'left'  ? stHighlight : stSides, this, 'pathLeft');
+	fabric.paint(hl === 'right' ? stHighlight : stSides, this, 'pathRight');
+
+	if (this.mousepos && this.mousepos !== 'center') {
+		f.fill(theme.floatmenu.style.highlight, this.hflower, 'path', this.mousepos);
+	}
 
 	msg = "This is a message just for testing.";
 
@@ -158,7 +169,7 @@ Mainboard.prototype.draw = function(fabric, user, curSpace, msg) {
 	var pnw = this.pnw;
 	var pse = this.pse;
 
-	var userX        = pnw.x + 280;
+	var userX        = pnw.x + 240;
 	var spaceX       = fmx;
 	var msgX         = pse.x - 450;
 	var sideButtonX1 = pnw.x + 135;
@@ -166,7 +177,7 @@ Mainboard.prototype.draw = function(fabric, user, curSpace, msg) {
 
 	var spaceY1      = pse.y - 39;
 	var spaceY2      = pse.y - 15;
-	var userY1       = pse.y - 31;
+	var userY1       = pse.y - 34;
 	var userY2       = pse.y - 11;
 	var msgY1        = pse.y - 20;
 	var sideButtonY  = pse.y -  9;
@@ -177,7 +188,7 @@ Mainboard.prototype.draw = function(fabric, user, curSpace, msg) {
 	fabric.fillText('register', sideButtonX2, sideButtonY);
 
 	if (isnon(msg)) {
-		fabric.fontStyle('14px ' + theme.defaultFont, 'rgb(0, 0, 0)', 'start', 'alphabetic');
+		fabric.fontStyle('12px ' + theme.defaultFont, 'rgb(0, 0, 0)', 'start', 'alphabetic');
 		fabric.fillText(msg, msgX, msgY1);
 	}
 
@@ -201,13 +212,26 @@ Mainboard.prototype.draw = function(fabric, user, curSpace, msg) {
 /**
 | Returns true if point is on this mainboard
 */
-Mainboard.prototype.within = function(fabric, p) {
+Mainboard.prototype.within = function(fabric, p, area) {
 	var pnw = this.pnw;
 	var pse = this.pse;
 
 	if (p.y < pnw.y || p.x < pnw.x || p.x > pse.x) { return false; }
+	switch (area) {
+	case null:    return fabric.within(this, 'path',      p);
+	case 'left':  return fabric.within(this, 'pathLeft',  p);
+	case 'right': return fabric.within(this, 'pathRight', p);
+	default:      throw new Error('invalid mainboard area');
+	}
+}
 
-	return fabric.within(this, p);
+
+/**
+| Sets the highlighted element.
+*/
+Mainboard.prototype.setHighlight = function(highlight) {
+	if (this._highlight !== highlight) { shell.redraw = true; }
+	this._highlight = highlight;
 }
 
 
@@ -280,14 +304,23 @@ Cockpit.prototype.draw = function() {
 */
 Cockpit.prototype.mousehover = function(p) {
 	var fabric    = this.fabric;
-	var mainboard = this.mainboard(fabric);
+	var mb = this.mainboard(fabric);
 
-	if (mainboard.within(fabric, p)) {
-		system.setCursor('default');
-		return true;
+	if (!mb.within(fabric, p, null)) {
+		mb.setHighlight(null);
+		return false;
 	}
 
-	return false;
+	system.setCursor('default');
+	if (mb.within(fabric, p, 'left')) {
+		mb.setHighlight('left');
+	} else if (mb.within(fabric, p, 'right')) {
+		mb.setHighlight('right');
+	} else {
+		mb.setHighlight(null);
+	}
+
+	return true;
 };
 
 /**
@@ -297,7 +330,7 @@ Cockpit.prototype.mousedown = function(p) {
 	var fabric    = this.fabric;
 	var mainboard = this.mainboard(fabric);
 
-	if (mainboard.within(fabric, p)) {
+	if (mainboard.within(fabric, p, null)) {
 		system.setCursor('default');
 		return false;
 	}

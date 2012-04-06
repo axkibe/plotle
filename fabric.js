@@ -620,8 +620,8 @@ Fabric.prototype.fontStyle = function(font, fill, align, baseline) {
 /**
 | TODO
 */
-Fabric.prototype.within = function(shape, a1, a2) {
-	shape.path(this, 0, true);
+Fabric.prototype.within = function(shape, path, a1, a2) {
+	shape[path](this, 0, true);
 	var px, py;
 	var pan = this.pan, tw = this._twist;
 
