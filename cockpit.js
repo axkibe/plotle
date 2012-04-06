@@ -77,7 +77,7 @@ var Mainboard = function(fw, fh) {
 	this.fh            = fh;
 	var fmx = this.fmx = half(fw);
 
-	this.pnw = new Point(fmx - 650, fh - 70);
+	this.pnw = new Point(fmx - 650, fh - 60);
 	this.pse = new Point(fmx + 650, fh);
 	this.width       = 650 * 2;
 	this.gradientPC  = new Point(fmx, fh + 450);
@@ -85,7 +85,7 @@ var Mainboard = function(fw, fh) {
 	this.gradientR1  = 650;
 
 	this.mTopCurve = 300;
-	this.sideCurve =  70;
+	this.sideCurve =  60;
 	this.sideRaise =   0;  // @@ remove if staying 0
 	this.sideSkew  = 200;
 };
@@ -117,13 +117,43 @@ Mainboard.prototype.path = function(fabric, border, twist) {
 /**
 | Draws the mainboards contents
 */
-Mainboard.prototype.draw = function(fabric, msg) {
+Mainboard.prototype.draw = function(fabric, user, curSpace, msg) {
 	var fmx = this.fmx;
 	var pnw = this.pnw;
 	var pse = this.pse;
 
-	fabric.fontStyle('12px ' + theme.defaultFont, 'rgb(0, 0, 0)', 'start', 'alphabetic');
-	fabric.fillText(msg, pse.x - 300, pse.y - 18);
+	var userX  = pnw.x + 240;
+	var spaceX = fmx   - 100;
+	var msgX   = pse.x - 300;
+
+	var spaceY1 = pse.y - 39;
+	var spaceY2 = pse.y - 15;
+
+	var userY1  = pse.y - 31;
+	var userY2  = pse.y - 11;
+
+	var msgY1   = pse.y - 11;
+
+	if (isnon(msg)) {
+		fabric.fontStyle('12px ' + theme.defaultFont, 'rgb(0, 0, 0)', 'start', 'alphabetic');
+		fabric.fillText(msg, msgX, msgY1);
+	}
+
+	if (isnon(curSpace)) {
+		fabric.fontStyle('10px ' + theme.defaultFont, 'rgb(0, 0, 0)', 'start', 'alphabetic');
+		fabric.fillText('current space:', spaceX, spaceY1);
+
+		fabric.fontStyle('22px bold  ' + theme.defaultFont, 'rgb(0, 0, 0)', 'start', 'alphabetic');
+		fabric.fillText(curSpace, spaceX, spaceY2);
+	}
+
+	if (isnon(user)) {
+		fabric.fontStyle('10px ' + theme.defaultFont, 'rgb(0, 0, 0)', 'center', 'alphabetic');
+		fabric.fillText('Hello ', userX, userY1);
+
+		fabric.fontStyle('18px ' + theme.defaultFont, 'rgb(0, 0, 0)', 'center', 'alphabetic');
+		fabric.fillText(user, userX, userY2);
+	}
 }
 
 /**
@@ -152,8 +182,37 @@ Mainboard.prototype.within = function(fabric, p) {
 Cockpit = function() {
 	this.fabric     = system.fabric;
 	this.$mainboard = null;
+	this._user      = null;
+	this._curSpace  = null;
+	this._message   = null;
 };
 
+/**
+| Sends a message over the mainboard.
+*/
+Cockpit.prototype.message = function(message) {
+	this._message = message;
+}
+
+/**
+| Sets the space name displayed on the mainboard.
+*/
+Cockpit.prototype.setCurSpace = function(curSpace) {
+	this._curSpace = curSpace;
+}
+
+/**
+| Sets the user greeted on the mainboard
+*/
+Cockpit.prototype.setUser = function(user, loggedIn) {
+	this._user     = user;
+	this._loggedIn = loggedIn;
+}
+
+
+/**
+| Returns the shape of the mainboard
+*/
 Cockpit.prototype.mainboard = function(fabric) {
 	if (this.$mainboard &&
 		this.$mainboard.fw === fabric.width &&
@@ -171,7 +230,7 @@ Cockpit.prototype.draw = function() {
 	var mainboard = this.mainboard(fabric);
 
 	fabric.paint(theme.cockpit.style, mainboard, 'path');
-	mainboard.draw(fabric, 'Loading space "welcome" ...');
+	mainboard.draw(fabric, this._user, this._curSpace, this._message);
 };
 
 

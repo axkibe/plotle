@@ -368,6 +368,8 @@ Shell = function(fabric, sPeer) {
 	this.vSpace     = null;
 
 	this.cockpit    = new Cockpit();
+	this.cockpit.message("Loading space 'welcome'...");
+
 	this.caret      = new Caret();
 	this.action     = null;
 	this.selection  = new Selection();
@@ -417,6 +419,9 @@ Shell.prototype.report = function(status, tree, chgX) {
 		//break;
 	case 'start' :
 		this.vSpace = new VSpace(tree.root.copse.welcome, this.vSpacePath);
+		this.cockpit.message(null);
+		this.cockpit.setCurSpace('welcome'); // TODO
+		this.cockpit.setUser('Visitor');     // TODO
 		break;
 	case 'update' :
 		this.tree = tree;
