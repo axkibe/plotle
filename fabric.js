@@ -93,6 +93,9 @@ Fabric = function(a1, a2) {
 	}
 	this._cx = this._canvas.getContext('2d');
 	this.pan = Point.zero;
+
+	// curren positiont (without twist)
+	this._posx = this._posy = null;
 };
 
 /**
@@ -217,6 +220,7 @@ Fabric.prototype.moveTo = function(a1, a2) {
 		x = a1;   y = a2;
 	}
 	ensureInteger(x, y);
+	this._posx = x, this._posy = y;
 	this._cx.moveTo(x + pan.x + tw, y + pan.y + tw);
 };
 
@@ -234,7 +238,70 @@ Fabric.prototype.lineTo = function(a1, a2) {
 		x = a1;   y = a2;
 	}
 	ensureInteger(x, y);
+	this._posx = x, this._posy = y;
 	this._cx.lineTo(x + pan.x + tw, y + pan.y + tw);
+};
+
+/**
+| Draws a bezier.
+|
+| bezier(cp1,  cp2,  p)   -or-
+| bezier(cp1x, cp1y, cp2x, cp2y, x, y) -or-
+| any combination of points and arguments.
+*/
+Fabric.prototype.beziTo = function() {
+	var a   = 0, aZ = arguments.length;
+	var pan = this.pan;
+	var tw  = this._twist;
+	var px  = this.pan.x + tw;
+	var py  = this.pan.y + tw;
+
+	var cp1x, cp1y, cp2x, cp2y, x, y;
+
+	if (this._posx === null || this._posy === null) {
+		throw new Error('beziTo: pFail');
+	}
+
+	if (a >= aZ) throw new Error('beziTo: aFail');
+	if (typeof(arguments[a]) === 'object') {
+		cp1x = arguments[a].x;
+		cp1y = arguments[a++].y;
+	} else {
+		cp1x = arguments[a++];
+		if (a >= aZ) throw new Error('beziTo: aFail');
+		cp1y = arguments[a++];
+	}
+
+	if (a >= aZ) throw new Error('beziTo: aFail');
+	if (typeof(arguments[a]) === 'object') {
+		cp2x = arguments[a].x;
+		cp2y = arguments[a++].y;
+	} else {
+		cp2x = arguments[a++];
+		if (a >= aZ) throw new Error('beziTo: aFail');
+		cp2y = arguments[a++];
+	}
+
+	if (a >= aZ) throw new Error('beziTo: aFail');
+	if (typeof(arguments[a]) === 'object') {
+		x = arguments[a].x;
+		y = arguments[a++].y;
+	} else {
+		x = arguments[a++];
+		if (a >= aZ) throw new Error('beziTo: aFail');
+		y = arguments[a++];
+	}
+
+	cp1x += this._posx + px;
+	cp1y += this._posy + py;
+	cp2x += x + px;
+	cp2y += y + py;
+	this._posx = x;
+	this._posy = y;
+	x += px;
+	y += py;
+
+	this._cx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y);
 };
 
 /**
@@ -306,6 +373,7 @@ Fabric.prototype.beginPath = function(twist) {
 	// lines are targed at .5 coords.
 	this._twist = twist ? 0.5 : 0;
 	this._cx.beginPath();
+	this._posx = this.posy = null;
 };
 
 /**
@@ -313,6 +381,7 @@ Fabric.prototype.beginPath = function(twist) {
 */
 Fabric.prototype.closePath = function() {
 	this._cx.closePath();
+	this._posx = this.posy = null;
 };
 
 /**

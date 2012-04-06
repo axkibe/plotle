@@ -515,8 +515,9 @@ Shell.prototype.mousehover = function(p, shift, ctrl) {
 	this.shift = shift;
 	this.ctrl  = ctrl;
 
-	// TODO cockpit
-	if (this.vSpace) { this.vSpace.mousehover(p); }
+	if (!this.cockpit.mousehover(p)) {
+		if (this.vSpace) { this.vSpace.mousehover(p); }
+	}
 	if (this.redraw) { this._draw(); }
 };
 
@@ -1311,6 +1312,8 @@ VPara.prototype.specialKey = function(keycode) {
 
 	if (!shell.shift && select.active) {
 		switch(keycode) {
+		case 33 : // pageup
+		case 34 : // pagedown
 		case 35 : // end
 		case 36 : // pos1
 		case 37 : // left
@@ -1333,6 +1336,8 @@ VPara.prototype.specialKey = function(keycode) {
 		}
 	} else if (shell.shift && !select.active) {
 		switch(keycode) {
+		case 33 : // pageup
+		case 34 : // pagedown
 		case 35 : // end
 		case 36 : // pos1
 		case 37 : // left
@@ -1360,6 +1365,12 @@ VPara.prototype.specialKey = function(keycode) {
 	case 13 : // return
 		peer.split(this.textPath(), caret.sign.at1);
 		vitem.scrollCaretIntoView();
+		break;
+	case 33 : // pageup
+		vitem.scrollPage(true);
+		break;
+	case 34 : // pagedown
+		vitem.scrollPage(false);
 		break;
 	case 35 : // end
 		caret = shell.setCaret(
@@ -2384,7 +2395,7 @@ VNote.prototype.setScrollbar = function(pos) {
 };
 
 /**
-| TODO
+| Scrolls the note so the caret comes into view.
 */
 VNote.prototype.scrollCaretIntoView = function() {
 	var caret   = shell.caret;
@@ -2400,10 +2411,21 @@ VNote.prototype.scrollCaretIntoView = function() {
 		this.setScrollbar(cp.n - imargin.n);
 		this.poke();
 	} else if (cp.s + imargin.s > sy + zone.height) {
-		// TODO 
 		this.setScrollbar(cp.s - zone.height + imargin.s);
 		this.poke();
 	}
+};
+
+
+/**
+| Scrolls the note so the caret comes into view.
+*/
+VNote.prototype.scrollPage = function(up) {
+	var zone = this.getZone();
+	var dir  = up ? -1 : 1;
+	var fs   = this.vv.doc.getFontSize();
+	this.setScrollbar(this.scrollbarY.getPos() + dir * zone.height - fs * 2);
+	this.poke();
 };
 
 /**
@@ -2646,11 +2668,18 @@ VLabel.prototype.getSilhoutte = function(zone$, zAnchor) {
 };
 
 /**
-| Scroll caret into view.
+| Dummy since a label does not scroll.
 */
 VLabel.prototype.scrollCaretIntoView = function() {
-	// nothing, since no scrolling for label.
-}
+	// nada
+};
+
+/**
+| Dummy since a label does not scroll.
+*/
+VLabel.prototype.scrollPage = function(up) {
+	// nada
+};
 
 /**
 | Draws the label.

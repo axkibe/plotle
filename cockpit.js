@@ -63,9 +63,57 @@ var limit         = Jools.limit;
 var log           = Jools.log;
 var subclass      = Jools.subclass;
 
+var half          = Fabric.half;
 var Point         = Fabric.Point;
 var Rect          = Fabric.Rect;
 var RoundRect     = Fabric.RoundRect;
+
+
+/**
+| +++Mainboard+++
+*/
+var Mainboard = function(fw, fh) {
+	this.fw            = fw;
+	this.fh            = fh;
+	var fmx = this.fmx = half(fw);
+
+	this.pnw = new Point(fmx - 650, fh - 70);
+	this.pse = new Point(fmx + 650, fh);
+
+	this.mTopCurve = 300;
+	this.sideCurve =  70;
+};
+
+/**
+| Paths the mainboards frame
+*/
+Mainboard.prototype.path = function(fabric, border, twist) {
+	var pnw = this.pnw;
+	var pse = this.pse;
+	var fmx = this.fmx;
+	var tc  = this.mTopCurve;
+	var sc  = this.sideCurve;
+	var b   = border;
+
+	fabric.beginPath(twist);
+	fabric.moveTo(pnw.x + b, pse.y - b);
+	fabric.beziTo(0,  -sc, -tc,   0,   fmx    , pnw.y + b);
+	fabric.beziTo(tc,   0,   0, -sc, pse.x - b, pse.y - b);
+};
+
+
+/**
+| Draws the mainboards contents
+*/
+Mainboard.prototype.draw = function(fabric, msg) {
+	var fmx = this.fmx;
+	var pnw = this.pnw;
+	var pse = this.pse;
+
+	fabric.fontStyle('12px ' + theme.defaultFont, 'rgb(0, 0, 0)', 'start', 'alphabetic');
+	fabric.fillText(msg, fmx - 550, pse.y - 16);
+}
+
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,--.         .         .
@@ -78,32 +126,43 @@ var RoundRect     = Fabric.RoundRect;
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 Cockpit = function() {
-	this.fabric = system.fabric;
+	this.fabric     = system.fabric;
+	this.$mainboard = null;
 };
+
+Cockpit.prototype.mainboard = function(fabric) {
+	if (this.$mainboard &&
+		this.$mainboard.fw === fabric.width &&
+		this.$mainboard.fh === fabric.height)
+	{ return this.$mainboard}
+
+	return this.$mainboard = new Mainboard(fabric.width, fabric.height);
+}
 
 /**
 | Redraws the cockpit.
 */
 Cockpit.prototype.draw = function() {
-	var fabric = this.fabric;
-	var msg = 'Loading space "welcome" ...';
+	var fabric    = this.fabric;
+	var mainboard = this.mainboard(fabric);
 
-	fabric.fontStyle('12px ' + theme.defaultFont, 'rgb(128, 92, 8)', 'start', 'alphabetic');
-	fabric.fillText(msg, 24, fabric.height - 12);
+	fabric.paint(theme.cockpit.style, mainboard, 'path');
+	mainboard.draw(fabric, 'Loading space "welcome" ...');
 };
+
 
 /**
 | Mouse hover.
 */
 Cockpit.prototype.mousehover = function(p) {
-	/* TODO
-	var redraw = this.edgemenu.mousepos !== this.edgemenu.getMousepos(p);
-	if (this.edgemenu.mousepos >= 0) {
-		// mouse floated on edge menu, no need to look further
+	var mainboard = this.mainboard(fabric);
+	var fabric    = this.fabric;
+
+	if (fabric.within(mainboard, p)) {
 		system.setCursor('default');
-		return;
+		return true;
 	}
-	*/
+
 	return false;
 };
 

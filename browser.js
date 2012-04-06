@@ -158,6 +158,8 @@ function System() {
 		switch(keyCode) {
 		case  8 : // backspace
 		case 13 : // return
+		case 33 : // pageup
+		case 34 : // pagedown
 		case 35 : // end
 		case 36 : // pos1
 		case 37 : // left
