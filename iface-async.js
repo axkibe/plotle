@@ -127,7 +127,11 @@ IFaceASync.prototype.startGet = function(path) {
 		}, Patterns.mUniverse);
 
 		if (self.report) { self.report.report('start', self.tree, null); }
-		self._update();
+
+		// waits a second before going into update cycle, so safari
+		// stops its wheely thing.
+		// TODO make proper wrapping through browser
+		window.setTimeout(function() {self._update(); }, 1000);
 	};
 
     var request = JSON.stringify({

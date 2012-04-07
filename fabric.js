@@ -52,6 +52,7 @@ if (typeof(window) === 'undefined') {
 }
 
 var debug        = Jools.debug;
+var immute       = Jools.immute;
 var is           = Jools.is;
 var isnon        = Jools.isnon;
 var log          = Jools.log;
@@ -61,6 +62,7 @@ var reject       = Jools.reject;
 var subclass     = Jools.subclass;
 var min          = Math.min;
 var max          = Math.max;
+var ovalDebug    = false;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
@@ -122,8 +124,9 @@ var PI    = Math.PI;
 var cos   = Math.cos;
 var sin   = Math.sin;
 var tan   = Math.tan;
-var cos30 = cos(PI / 6);   // cos(30Â°)
-var tan30 = tan(PI / 6);   // tan(30Â°)
+var cos30 = cos(PI / 6);   // cos(30°)
+var tan30 = tan(PI / 6);   // tan(30°)
+var magic = 0.551784;      // 'magic' number to approximate ellipses with beziers.
 
 // divides by 2 and rounds up
 var half = function(v) { return R(v / 2); };
@@ -620,21 +623,28 @@ Fabric.prototype.fontStyle = function(font, fill, align, baseline) {
 /**
 | TODO
 */
-Fabric.prototype.within = function(shape, path, a1, a2) {
-	shape[path](this, 0, true);
+Fabric.prototype.within = function(shape, path, a1, a2, a3, a4, a5) {
 	var px, py;
 	var pan = this.pan, tw = this._twist;
-
+	var pobj;
 	if (typeof(a1) === 'object') {
-		px = a1.x;
-		py = a1.y;
+		px   = a1.x;
+		py   = a1.y;
+		pobj = true;
 	} else {
-		px = a1;
-		py = a2;
+		px   = a1;
+		py   = a2;
+		pobj = false;
 	}
 
 	px += pan.x + tw;
 	py += pan.y + tw;
+
+	if (pobj) {
+		shape[path](this, 0, true, a2, a3, a4);
+	} else {
+		shape[path](this, 0, true, a3, a4, a5);
+	}
 
 	return this._cx.isPointInPath(px, py);
 }
@@ -1092,27 +1102,10 @@ Hexagon.prototype.within = function(p) {
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ,-_/,.                         .---. .
- ' |_|/ ,-. . , ,-. ,-. ,-. ,-. \___  |  . ,-. ,-.
-  /| |  |-'  X  ,-| | | | | | |     \ |  | |   |-'
-  `' `' `-' ' ` `-^ `-| `-' ' ' `---' `' ' `-' `-'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-                     `'
- The top slice of a hexagon.
+ +++ OvalSlice +++
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-       ------------        ^
-      /............\       |  height
-     /..............\      |
- psw*................\     v
-   /                  \
-  *<-------->*         *
-   \   rad   pm       /
-    \                /
-     \              /
-      \            /
-       *----------*
-
- height must be <= rad
+ Top half of an oval.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /**
@@ -1122,247 +1115,248 @@ Hexagon.prototype.within = function(p) {
 | rad: radius.
 | height: slice height.
 */
-var HexagonSlice = function(psw, rad, height) {
-	fixate(this, 'psw', psw);
-	fixate(this, 'rad', rad);
-	fixate(this, 'height', height);
+var OvalSlice = function(psw, dimensions) {
+	this.psw       = psw;
+	var a = this.a = dimensions.a1;
+	var b = this.b = dimensions.b1;
+	var am         = magic * a;
+	var bm         = magic * b;
+	this.slice = sliceBezier(
+		-am, 0,
+		0, -bm,
+		-a, b,
+		dimensions.slice);
 
-	if (height > rad) throw new Error('Cannot make slice larger than radius');
+	immute(this);
 };
+
+var sliceBezier = function(x2, y2, x3, y3, x4, y4, f) {
+	var ff  = f*f;
+    var rx2 = x2*f;
+    var ry2 = y2*f;
+
+	var rx3 = ((-3*x2 + 3*x3 + 2 * x4) * f + 4*x2 - 2*x3 - 2*x4)*ff - rx2;
+	var ry3 = ((-3*y2 + 3*y3 + 2 * y4) * f + 4*y2 - 2*y3 - 2*y4)*ff - ry2;
+
+	var rx4 = (-2*x2 + x3 + x4)*ff + 2*rx2 - rx3;
+	var ry4 = (-2*y2 + y3 + y4)*ff + 2*ry2 - ry3;
+
+    return immute({x2 : rx2, y2 : ry2, x3 : rx3, y3 : ry3, x4 : rx4, y4 : ry4});
+};
+
 
 /**
 | Middle(center) point of Hexagon.
 */
-lazyFixate(HexagonSlice.prototype, 'pm', function() {
-	return new Point(
-		this.psw.x + this.rad - Math.round((this.rad * cos30 - this.height) * tan30),
-		this.psw.y + Math.round(this.rad * cos30) - this.height);
+lazyFixate(OvalSlice.prototype, 'pm', function() {
+	return this.psw.add(R(-this.slice.x4), R(this.b - this.slice.y4));
 });
 
 /**
 | pnw (used by gradients)
 */
-lazyFixate(HexagonSlice.prototype, 'pnw', function() {
-	return new Point(this.psw.x, this.psw.y - this.height);
+lazyFixate(OvalSlice.prototype, 'pnw', function() {
+	return this.psw.add(0, R(-this.slice.y4));
 });
 
 /**
 | pnw (used by gradients)
 */
-lazyFixate(HexagonSlice.prototype, 'width', function() {
-	return 2 * Math.round(this.rad - (this.rad * cos30 - this.height) * tan30);
+lazyFixate(OvalSlice.prototype, 'width', function() {
+	return R(-2 * this.slice.x4);
 });
 
 /**
 | pse (used by gradients)
 */
-lazyFixate(HexagonSlice.prototype, 'pse', function() {
-	return new Point(this.psw.x + this.width, this.psw.y);
+lazyFixate(OvalSlice.prototype, 'pse', function() {
+	return this.psw.add(2 * this.a, 0);
 });
 
 /**
 | Draws the hexagon.
 */
-HexagonSlice.prototype.path = function(fabric, border, twist) {
-	var r05 = half(this.rad);
+OvalSlice.prototype.path = function(fabric, border, twist) {
+	var a   = this.a;
+	var b   = this.b;
+	var am  = magic * this.a;
+	var bm  = magic * this.b;
+	var bo  = border;
+	var psw = this.psw;
+
 	fabric.beginPath(twist);
-	fabric.moveTo(this.psw.x                 + border, this.psw.y               - border);
-	fabric.lineTo(this.pm.x - r05            + border, this.psw.y - this.height + border);
-	fabric.lineTo(this.pm.x + r05            - border, this.psw.y - this.height + border);
-	fabric.lineTo(2 * this.pm.x - this.psw.x - border, this.psw.y               - border);
+	fabric.moveTo(                    psw.x + bo,          psw.y);
+	//fabric.beziTo(  0, -bm, -am,   0, psw.x + a,           psw.y - b - bo);
+
+	var slice  = this.slice;
+
+	//fabric.moveTo(R(psw.x + a + slice.x4), R(psw.y - b + slice.y4));
+	fabric.moveTo(R(psw.x), R(psw.y));
+	fabric.beziTo(
+		slice.x3, slice.y3,
+		slice.x2, slice.y2,
+		psw.x - slice.x4, psw.y - slice.y4);
+	fabric.beziTo(
+		-slice.x2, slice.y2,
+		-slice.x3, slice.y3,
+		psw.x - 2 * slice.x4,  psw.y);
 };
 
 /**
 | Returns true if point is within the slice.
 */
-HexagonSlice.prototype.within = function(p) {
-	var dy = p.y - this.psw.y;
-	var dx = p.x - this.psw.x;
-	var hy = dy * tan30;
-	return dy >= -this.height && dy <= 0 && dx >= -hy && dx - this.width <= hy;
+OvalSlice.prototype.within = function(fabric, p) {
+	return fabric.within(this, 'path', p);
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ,-_/,.                        .-,--' .
- ' |_|/ ,-. . , ,-. ,-. ,-. ,-. \|__  |  ,-. . , , ,-. ,-.
-  /| |  |-'  X  ,-| | | | | | |  |    |  | | |/|/  |-' |
-  `' `' `-' ' ` `-^ `-| `-' ' ' `'    `' `-' ' '   `-' '
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-                     `'
- Makes a double hexagon with 6 segments.
- It kinda looks like a flower.
+ OvalFlower
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+ Makes a double oval with 6 segments.
 
-                 pc.x
-                  |--------->| ro
-                  |--->| ri  '
-                  '    '     '
-            *-----'----'*    '     -1
-           / \    n    ' \   '
-          /   \   '   /'  \  '
-         / nw  *-----* 'ne \ '
-        /   ' /   '   \'    \
- pc.y  *-----*    +    *-----*
-        \     \    p  /     /
-         \ sw  *-----*  se /
-          \   /       \   /
-           \ /    s    \ /
-            *-----------*
 
- pc:   center
- ri:   inner radius
- ro:   outer radius
+      a1      |----->|
+      a2      |->|   '
+			  '  '   '           b2
+          ..-----.. .' . . . . . A
+        ,' \  n  / ','       b1  |
+       , nw .---. ne , . . . A   |
+ pc>   |---(  +  )---| . . . v . v
+       ` sw `---' se '
+        `. /  s  \ .´
+          ``-----´´            outside = null
+
+ pc:     center
+ a1,b1:  width and height of inner oval
+ a2,b2:  width and height of outer oval
  segs: which segments to include
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-var HexagonFlower = function(pc, ri, ro, segs) {
-	if (ri > ro) throw new Error('inner radius > outer radius');
-	fixate(this, 'pc', pc);
-	fixate(this, 'ri', ri);
-	fixate(this, 'ro', ro);
-	fixate(this, 'gradientPC', pc);
-	fixate(this, 'gradientR1', ro);
-	fixate(this, 'segs', segs);
+var OvalFlower = function(pc, dimensions, segs) {
+	this.pc = pc;
+	this.a1 = dimensions.a1;
+	this.a2 = dimensions.a2;
+	this.b1 = dimensions.b1;
+	this.b2 = dimensions.b2;
+
+	this.gradientPC = pc;
+	this.gradientR0 = 0;
+	this.gradientR1 = max(this.a2, this.b2);
+	this.segs = segs;
+//	immute(this);
 };
 
 /**
-| Makes the flower-hex-6 path.
+| Makes the OvalFlower path.
 */
-HexagonFlower.prototype.path = function(fabric, border, twist, segment) {
-	var ri  = this.ri;
-	var ri2 = half(this.ri);
-	var ric = Math.round(this.ri * cos30);
-	var ro  = this.ro;
-	var ro2 = half(this.ro);
-	var roc = Math.round(this.ro * cos30);
-	var pc  = this.pc;
-	var pcx = pc.x, pcy = pc.y;
-	var b   = border;
-	var b2  = half(border);
-	var bc6 = Math.round(border * cos30);
+OvalFlower.prototype.path = function(fabric, border, twist, segment) {
+	var pc   = this.pc;
+	var pcx  = pc.x;
+	var pcy  = pc.y;
 	var segs = this.segs;
+	var a1   = this.a1;
+	var b1   = this.b1;
+	var a2   = this.a2;
+	var b2   = this.b2;
+	var bo   = border;
+
+	var m    = magic;
+	var am1  = m * this.a1;
+	var bm1  = m * this.b1;
+	var am2  = m * this.a2;
+	var bm2  = m * this.b2;
+
 	fabric.beginPath(twist);
-	/* inner hex */
-	if (segment === 'innerHex' || segment === 'structure') {
-		fabric.moveTo(pcx - ri  - b,  pcy);
-		fabric.lineTo(pcx - ri2 - b2, pcy - ric - bc6);
-		fabric.lineTo(pcx + ri2 + b2, pcy - ric - bc6);
-		fabric.lineTo(pcx + ri  + b,  pcy);
-		fabric.lineTo(pcx + ri2 + b2, pcy + ric + bc6);
-		fabric.lineTo(pcx - ri2 - b2, pcy + ric + bc6);
-		fabric.lineTo(pcx - ri  - b,  pcy);
+	// inner oval
+	if (segment === null || segment === 'c') {
+		fabric.moveTo(                       pcx - a1 + bo, pcy);
+		fabric.beziTo(  0, -bm1, -am1,    0, pcx,           pcy - b1 + bo);
+		fabric.beziTo( am1,   0,    0, -bm1, pcx + a1 - bo, pcy);
+		fabric.beziTo(  0,  bm1,  am1,    0, pcx,           pcy + b1 - bo);
+		fabric.beziTo(-am1,   0,    0,  bm1, pcx - a1 + bo, pcy);
 	}
 
-	/* outer hex */
-	if (segment === 'outerHex' || segment === 'structure') {
-		fabric.moveTo(pcx - ro  + b,  pcy);
-		fabric.lineTo(pcx - ro2 + b2, pcy - roc + bc6);
-		fabric.lineTo(pcx + ro2 - b2, pcy - roc + bc6);
-		fabric.lineTo(pcx + ro  - b,  pcy);
-		fabric.lineTo(pcx + ro2 - b2, pcy + roc - bc6);
-		fabric.lineTo(pcx - ro2 + b2, pcy + roc - bc6);
-		fabric.lineTo(pcx - ro  + b,  pcy);
+	// outer oval
+	if (segment === null || segment === 'outer') {
+		fabric.moveTo(                       pcx - a2 + bo, pcy);
+		fabric.beziTo(  0, -bm2, -am2,    0, pcx,           pcy - b2 + bo);
+		fabric.beziTo( am2,   0,    0, -bm2, pcx + a2 - bo, pcy);
+		fabric.beziTo(  0,  bm2,  am2,    0, pcx,           pcy + b2 - bo);
+		fabric.beziTo(-am2,   0,    0,  bm2, pcx - a2 + bo, pcy);
 	}
 
-	switch (segment) {
-	case 'structure' :
-		if (segs.n || segs.nw) {
-			fabric.moveTo(pcx - ri2,  pcy - ric);
-			fabric.lineTo(pcx - ro2,  pcy - roc);
-		}
-		if (segs.n  || segs.ne) {
-			fabric.moveTo(pcx + ri2, pcy - ric);
-			fabric.lineTo(pcx + ro2, pcy - roc);
-		}
-		if (segs.ne || segs.se) {
-			fabric.moveTo(pcx + ri,  pcy);
-			fabric.lineTo(pcx + ro,  pcy);
-		}
-		if (segs.se || segs.s) {
-			fabric.moveTo(pcx + ri2, pcy + ric + bc6);
-			fabric.lineTo(pcx + ro2, pcy + roc - bc6);
-		}
-		if (segs.s || segs.sw) {
-			fabric.moveTo(pcx - ri2, pcy + ric + bc6);
-			fabric.lineTo(pcx - ro2, pcy + roc - bc6);
-		}
-		if (segs.sw || segs.nw) {
-			fabric.moveTo(pcx - ri, pcy);
-			fabric.lineTo(pcx - ro, pcy);
-		}
-		break;
-	case 'n':
-		fabric.moveTo(pcx - ro2 + b2, pcy - roc + bc6);
-		fabric.lineTo(pcx + ro2 - b2, pcy - roc + bc6);
-		fabric.lineTo(pcx + ri2 + b2, pcy - ric - bc6);
-		fabric.lineTo(pcx - ri2 - b2, pcy - ric - bc6);
-		fabric.lineTo(pcx - ro2 + b2, pcy - roc + bc6);
-		break;
-	case 'ne':
-		fabric.moveTo(pcx + ro2 - b2, pcy - roc + bc6);
-		fabric.lineTo(pcx + ro  - b,  pcy);
-		fabric.lineTo(pcx + ri  + b,  pcy);
-		fabric.lineTo(pcx + ri2 + b2, pcy - ric - bc6);
-		fabric.lineTo(pcx + ro2 - b2, pcy - roc + bc6);
-		break;
-	case 'se':
-		fabric.moveTo(pcx + ro  - b,  pcy);
-		fabric.lineTo(pcx + ro2 - b2, pcy + roc - bc6);
-		fabric.lineTo(pcx + ri2 + b2, pcy + ric + bc6);
-		fabric.lineTo(pcx + ri  + b,  pcy);
-		fabric.lineTo(pcx + ro  - b,  pcy);
-		break;
-	case 's':
-		fabric.moveTo(pcx + ro2 - b2, pcy + roc - bc6);
-		fabric.lineTo(pcx - ro2 + b2, pcy + roc - bc6);
-		fabric.lineTo(pcx - ri2 - b2, pcy + ric + bc6);
-		fabric.lineTo(pcx + ri2 + b2, pcy + ric + bc6);
-		fabric.lineTo(pcx + ro2 - b2, pcy + roc - bc6);
-		break;
-	case 'sw':
-		fabric.moveTo(pcx - ro2 + b2, pcy + roc - bc6);
-		fabric.lineTo(pcx - ro  + b,  pcy);
-		fabric.lineTo(pcx - ri  - b,  pcy);
-		fabric.lineTo(pcx - ri2 - b2, pcy + ric + bc6);
-		fabric.lineTo(pcx - ro2 + b2, pcy + roc - bc6);
-		break;
-	case 'nw':
-		fabric.moveTo(pcx - ro  + b,  pcy);
-		fabric.lineTo(pcx - ro2 + b2, pcy - roc + bc6);
-		fabric.lineTo(pcx - ri2 - b2, pcy - ric - bc6);
-		fabric.lineTo(pcx - ri  - b,  pcy);
-		fabric.lineTo(pcx - ro  + b,  pcy);
-		break;
+	var bs  = half(b2 - b1 - 0.5);
+	var bss = half(b2 - b1) - 2;
+	var bms =   R((b2 - b1) / 2 * m);
+	var odbg = segment === null && ovalDebug;
+
+	if (segment === 'n' || odbg) {
+		var pny = pcy - b1 - bs;
+		fabric.moveTo(                       pcx - a1 + bo, pny);
+		fabric.beziTo(  0, -bms, -am1,    0, pcx,           pny - bss + bo);
+		fabric.beziTo( am1,   0,    0, -bms, pcx + a1 - bo, pny);
+		fabric.beziTo(  0,  bms,  am1,    0, pcx,           pny + bss - bo);
+		fabric.beziTo(-am1,   0,    0,  bms, pcx - a1 + bo, pny);
+	}
+	if (segment === 'ne' || odbg) {
+		var pney = pcy - bs;
+		var pnex = pcx + R(a2 * m);
+		fabric.moveTo(                       pnex - a1 + bo, pney);
+		fabric.beziTo(  0, -bms, -am1,    0, pnex,           pney - bss + bo);
+		fabric.beziTo( am1,   0,    0, -bms, pnex + a1 - bo, pney);
+		fabric.beziTo(  0,  bms,  am1,    0, pnex,           pney + bss - bo);
+		fabric.beziTo(-am1,   0,    0,  bms, pnex - a1 + bo, pney);
+	}
+	if (segment === 'se' || odbg) {
+		var psey = pcy + bs;
+		var psex = pcx + R(a2 * m);
+		fabric.moveTo(                       psex - a1 + bo, psey);
+		fabric.beziTo(  0, -bms, -am1,    0, psex,           psey - bss + bo);
+		fabric.beziTo( am1,   0,    0, -bms, psex + a1 - bo, psey);
+		fabric.beziTo(  0,  bms,  am1,    0, psex,           psey + bss - bo);
+		fabric.beziTo(-am1,   0,    0,  bms, psex - a1 + bo, psey);
+	}
+	if (segment === 's' || odbg) {
+		var psy = pcy + b1 + bs;
+		fabric.moveTo(                       pcx - a1 + bo, psy);
+		fabric.beziTo(  0, -bms, -am1,    0, pcx,           psy - bss + bo);
+		fabric.beziTo( am1,   0,    0, -bms, pcx + a1 - bo, psy);
+		fabric.beziTo(  0,  bms,  am1,    0, pcx,           psy + bss - bo);
+		fabric.beziTo(-am1,   0,    0,  bms, pcx - a1 + bo, psy);
+	}
+	if (segment === 'sw' || odbg) {
+		var pswy = pcy + bs;
+		var pswx = pcx - R(a2 * m);
+		fabric.moveTo(                       pswx - a1 + bo, pswy);
+		fabric.beziTo(  0, -bms, -am1,    0, pswx,           pswy - bss + bo);
+		fabric.beziTo( am1,   0,    0, -bms, pswx + a1 - bo, pswy);
+		fabric.beziTo(  0,  bms,  am1,    0, pswx,           pswy + bss - bo);
+		fabric.beziTo(-am1,   0,    0,  bms, pswx - a1 + bo, pswy);
+	}
+	if (segment === 'nw' || odbg) {
+		var pnwy = pcy - bs;
+		var pnwx = pcx - R(a2 * m);
+		fabric.moveTo(                       pnwx - a1 + bo, pnwy);
+		fabric.beziTo(  0, -bms, -am1,    0, pnwx,           pnwy - bss + bo);
+		fabric.beziTo( am1,   0,    0, -bms, pnwx + a1 - bo, pnwy);
+		fabric.beziTo(  0,  bms,  am1,    0, pnwx,           pnwy + bss - bo);
+		fabric.beziTo(-am1,   0,    0,  bms, pnwx - a1 + bo, pnwy);
 	}
 };
 
 /**
 | Returns the segment the point is within.
 */
-HexagonFlower.prototype.within = function(p) {
-	var roc6 = this.ro * cos30;
-	var dy = p.y - this.pc.y;
-	var dx = p.x - this.pc.x;
-	var dyc6 = Math.abs(dy * tan30);
-
-	if (dy <  -roc6 || dy >  roc6 || dx - this.ro >= -dyc6 || dx + this.ro <= dyc6) {
-		return null;
-	}
-
-	var ric6 = this.ri * cos30;
-	if (dy >= -ric6 && dy <= ric6 && dx - this.ri <  -dyc6 && dx + this.ri >  dyc6) {
-		return 'center';
-	}
-
-	var lor = dx <= -dy * tan30; // left of right diagonal
-	var rol = dx >=  dy * tan30; // right of left diagonal
-	var aom = dy <= 0;           // above of middle line
-	if (lor && rol)        return 'n';
-	else if (!lor && aom)  return 'ne';
-	else if (rol && !aom)  return 'se';
-	else if (!rol && !lor) return 's';
-	else if (lor && !aom)  return 'sw';
-	else if (!rol && aom)  return 'nw';
-	else return 'center';
+OvalFlower.prototype.within = function(fabric, p) {
+	// TODO quick null if out of box.
+	if (!fabric.within(this, 'path', p, 'outer')) { return null };
+	if (isnon(this.segs.c ) && fabric.within(this, 'path', p, 'c' )) { return 'c';  }
+	if (isnon(this.segs.n ) && fabric.within(this, 'path', p, 'n' )) { return 'n';  }
+	if (isnon(this.segs.ne) && fabric.within(this, 'path', p, 'ne')) { return 'ne'; }
+	if (isnon(this.segs.se) && fabric.within(this, 'path', p, 'se')) { return 'se'; }
+	if (isnon(this.segs.e ) && fabric.within(this, 'path', p, 'e' )) { return 's';  }
+	if (isnon(this.segs.sw) && fabric.within(this, 'path', p, 'sw')) { return 'sw'; }
+	if (isnon(this.segs.nw) && fabric.within(this, 'path', p, 'nw')) { return 'nw'; }
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1553,11 +1547,11 @@ Line.prototype.isNear = function(p, dis) {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 Fabric.Hexagon       = Hexagon;
-Fabric.HexagonFlower = HexagonFlower;
-Fabric.HexagonSlice  = HexagonSlice;
 Fabric.Line          = Line;
 Fabric.Margin        = Margin;
 Fabric.Measure       = Measure;
+Fabric.OvalFlower    = OvalFlower;
+Fabric.OvalSlice     = OvalSlice;
 Fabric.Point         = Point;
 Fabric.Rect          = Rect;
 Fabric.RoundRect     = RoundRect;

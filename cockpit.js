@@ -86,8 +86,13 @@ var Mainboard = function(fw, fh) {
 
 	this._sideButtonWidth = 190;
 	this._mTopCurve       = 300;
-	this._sideCurve       =  60;
 	this._sideSkew        = 200;
+	this._sideCurve       =  60;
+
+	this._sideButtonBX1 = R(this._sideSkew  / 1.4);
+	this._sideButtonBY1 = R(this._sideCurve / 1.4);
+	this._sideButtonBX2 =  15;
+	this._sideButtonBY2 =  50;
 
 	this._highlight       = null;
 };
@@ -117,15 +122,15 @@ Mainboard.prototype.path = function(fabric, border, twist) {
 Mainboard.prototype.pathLeft = function(fabric, border, twist) {
 	var pnw = this.pnw;
 	var pse = this.pse;
-	var sc  = R(this._sideCurve / 2);
-	var sk  = R(this._sideSkew  / 2);
 	var sbw = this._sideButtonWidth;
-	var sk2 = 15;
-	var sc2 = 50;
+	var x1  = this._sideButtonBX1;
+	var y1  = this._sideButtonBY1;
+	var x2  = this._sideButtonBX2;
+	var y2  = this._sideButtonBY2;
 	var b    = border;
 	fabric.beginPath(twist);
 	fabric.moveTo(pnw.x + b, pse.y);
-	fabric.beziTo(sk, -sc + b, -sk2, -sc2 + b, pnw.x + sbw - b,  pse.y);
+	fabric.beziTo(x1, -y1 + b, -x2, -y2 + b, pnw.x + sbw - b,  pse.y);
 };
 
 /**
@@ -134,15 +139,15 @@ Mainboard.prototype.pathLeft = function(fabric, border, twist) {
 Mainboard.prototype.pathRight = function(fabric, border, twist) {
 	var pnw = this.pnw;
 	var pse = this.pse;
-	var sc  = R(this._sideCurve / 2);
-	var sk  = R(this._sideSkew  / 2);
 	var sbw = this._sideButtonWidth;
-	var sk2 = 15;
-	var sc2 = 50;
+	var x1  = this._sideButtonBX1;
+	var y1  = this._sideButtonBY1;
+	var x2  = this._sideButtonBX2;
+	var y2  = this._sideButtonBY2;
 	var b    = border;
 	fabric.beginPath(twist);
 	fabric.moveTo(pse.x - b, pse.y);
-	fabric.beziTo(-sk, -sc + b, sk2, -sc2 + b, pse.x - sbw + b,  pse.y);
+	fabric.beziTo(-x1, -y1 + b, x2, -y2 + b, pse.x - sbw + b,  pse.y);
 };
 
 
@@ -158,10 +163,6 @@ Mainboard.prototype.draw = function(fabric, user, curSpace, msg) {
 
 	fabric.paint(hl === 'left'  ? stHighlight : stSides, this, 'pathLeft');
 	fabric.paint(hl === 'right' ? stHighlight : stSides, this, 'pathRight');
-
-	if (this.mousepos && this.mousepos !== 'center') {
-		f.fill(theme.floatmenu.style.highlight, this.hflower, 'path', this.mousepos);
-	}
 
 	msg = "This is a message just for testing.";
 
@@ -324,18 +325,29 @@ Cockpit.prototype.mousehover = function(p) {
 };
 
 /**
+| Login button clicked.
+*/
+Cockpit.prototype.loginButtonClick = function() {
+	debug('LOGIN');
+}
+
+/**
 | Mouse button down event
 */
 Cockpit.prototype.mousedown = function(p) {
-	var fabric    = this.fabric;
-	var mainboard = this.mainboard(fabric);
+	var fabric = this.fabric;
+	var mb     = this.mainboard(fabric);
 
-	if (mainboard.within(fabric, p, null)) {
-		system.setCursor('default');
+	if (!mb.within(fabric, p, null)) {
+		return null;
+	}
+
+	if (mb.within(fabric, p, 'left')) {
+		this.loginButtonClick();
 		return false;
 	}
 
-	return null;
+	return false;
 };
 
 })();

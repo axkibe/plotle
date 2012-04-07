@@ -82,9 +82,8 @@ var isPath        = Path.isPath;
 var cos30         = Fabric.cos30;
 var half          = Fabric.half;
 var tan30         = Fabric.tan30;
-var Hexagon       = Fabric.Hexagon;
-var HexagonFlower = Fabric.HexagonFlower;
-var HexagonSlice  = Fabric.HexagonSlice;
+var OvalFlower    = Fabric.OvalFlower;
+var OvalSlice     = Fabric.OvalSlice;
 var Line          = Fabric.Line;
 var Margin        = Fabric.Margin;
 var Measure       = Fabric.Measure;
@@ -623,66 +622,83 @@ Shell.prototype.resize = function(width, height) {
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ,-_/,.
- ' |_|/ ,-. . , ,-,-. ,-. ,-. . .
-  /| |  |-'  X  | | | |-' | | | |
-  `' `' `-' ' ` ' ' ' `-' ' ' `-^
+ +++ OvalMenu +++
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- outerRadius |------>|
- innerRadius |->|    '
-         .------'.   '   -1
-        / \  n  / \  '
-       /nw .---.'ne\ '
-      /___/  .  \___\'
-      \   \ pc  /   /
-       \sw `---' se/
-        \ /  s  \ /
-         `-------'
+      a1      |----->|
+      a2      |->|   '
+			  '  '   '           b2
+          ..-----.. .' . . . . . A
+        ,' \  n  / ','       b1  |
+       , nw .---. ne , . . . A   |
+       |---(  c  )---| . . . v . v
+       ` sw `---' se '
+        `. /  s  \ .´
+          ``-----´´            outside = null
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /**
 | Constructor.
 */
-var Hexmenu = function(pc, style, labels) {
-	this.p = pc;
-	this.style = style;
-	this.hflower = new HexagonFlower(pc, style.innerRadius, style.outerRadius, labels);
-	this.labels = labels;
-	this.mousepos = null;
+var OvalMenu = function(pc, settings, labels) {
+	this.p           = pc;
+	this.labels      = labels;
+
+	this._style      = settings.style;
+	this._highlight  = settings.highlight;
+	this._dimensions = settings.dimensions;
+	this._oflower    = new OvalFlower(pc, settings.dimensions, labels);
+	this._within     = null;
 };
 
 /**
 | Draws the hexmenu.
 */
-Hexmenu.prototype.draw = function() {
+OvalMenu.prototype.draw = function() {
 	var f = shell.fabric;
 
-	f.fill(theme.floatmenu.style.fill, this.hflower, 'path', 'outerHex');
-	if (this.mousepos && this.mousepos !== 'center') {
-		f.fill(theme.floatmenu.style.highlight, this.hflower, 'path', this.mousepos);
+	f.fill(this._style.fill, this._oflower, 'path', 'outer');
+	switch(this._within) {
+		case 'n'  :
+		case 'ne' :
+		case 'se' :
+		case 's'  :
+		case 'se' :
+		case 'ne' :
+			f.paint(this._highlight, this._oflower, 'path', this._within);
+			break;
 	}
-	f.edge(theme.floatmenu.style.edge, this.hflower, 'path', 'structure');
+	f.edge(this._style.edge, this._oflower, 'path', null);
+
 
 	f.fontStyle('12px ' + theme.defaultFont, 'black', 'center', 'middle');
 	var labels = this.labels;
 
-	var rd = this.style.outerRadius * (1 - 1 / 3.5);
+	var b1  = this._dimensions.b1;
+	var b2  = this._dimensions.b2;
+	var bs  = half(b2 - b1);
+	var b2t = b1 + bs;
+	var m   = 0.551784;
+	var a2h = R(this._dimensions.a2 * m);
+	var pc  = this.p;
 
-	if (labels.n)  f.fillText(labels.n, this.p.x, this.p.y - rd);
-	if (labels.ne) f.fillRotateText(labels.ne, this.p, Math.PI / 3 * 1, rd);
-	if (labels.se) f.fillRotateText(labels.se, this.p, Math.PI / 3 * 2, rd);
-	if (labels.s)  f.fillText(labels.n, this.p.x, this.p.y + rd);
-	if (labels.sw) f.fillRotateText(labels.sw, this.p, Math.PI / 3 * 4, rd);
-	if (labels.nw) f.fillRotateText(labels.nw, this.p, Math.PI / 3 * 5, rd);
-	if (labels.c)  f.fillText(labels.c, this.p);
+	if (labels.n)  f.fillText(labels.n,  pc.x,       pc.y - b2t);
+	if (labels.ne) f.fillText(labels.ne, pc.x + a2h, pc.y - bs );
+	if (labels.se) f.fillText(labels.se, pc.x + a2h, pc.y + bs );
+	if (labels.s)  f.fillText(labels.s,  pc.x,       pc.y + b2t);
+	if (labels.sw) f.fillText(labels.sw, pc.x - a2h, pc.y + bs );
+	if (labels.nw) f.fillText(labels.nw, pc.x - a2h, pc.y - bs );
+	if (labels.c)  f.fillText(labels.c,  pc);
 };
 
 /**
 | Sets this.mousepos and returns it according to p.
 */
-Hexmenu.prototype.getMousepos = function(p) {
-	return this.mousepos = this.hflower.within(p);
+OvalMenu.prototype.within = function(p) {
+	var w = this._oflower.within(system.fabric, p);
+	if (w === this._within) return w;
+	shell.redraw = true;
+	return this._within = w;
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -868,22 +884,14 @@ VSpace.prototype.mousehover = function(p) {
 	switch(action && action.type) {
 	case null : break;
 	case Action.FLOATMENU :
-		if (action.floatmenu.mousepos !== action.floatmenu.getMousepos(p)) {
-			// float menu changed
-			shell.redraw = true;
-		}
-		if (action.floatmenu.mousepos >= 0) {
+		if (isnon(action.floatmenu.within(p))) {
 			// mouse floated on float menu
 			system.setCursor('default');
 			return true;
 		}
 		break;
 	case Action.ITEMMENU :
-		if (action.itemmenu.mousepos !== action.itemmenu.getMousepos(p)) {
-			// menu changed
-			shell.redraw = true;
-		}
-		if (action.itemmenu.mousepos >= 0) {
+		if (isnon(action.itemmenu.within(p))) {
 			// mouse floated on item menu
 			system.setCursor('default');
 			return true;
@@ -954,7 +962,7 @@ VSpace.prototype.click = function(p) {
 	if (focus && focus.withinItemMenu(pp)) {
 		action = shell.startAction(Action.ITEMMENU, null, pp);
 		var labels = {n : 'Remove'};
-		action.itemmenu = new Hexmenu(focus.getH6Slice().pm.add(pan), theme.itemmenu, labels);
+		action.itemmenu = new OvalMenu(focus.getOvalSlice().pm.add(pan), theme.itemmenu, labels);
 		shell.redraw = true;
 		return;
 	}
@@ -967,7 +975,7 @@ VSpace.prototype.click = function(p) {
 
 	// otherwhise pop up the float menu
 	action = shell.startAction(Action.FLOATMENU, null, p);
-	action.floatmenu = new Hexmenu(p, theme.floatmenu, this._floatMenuLabels);
+	action.floatmenu = new OvalMenu(p, theme.ovalmenu, this._floatMenuLabels);
 	system.setCursor('default');
 	this.setFocus(null);
 	shell.redraw = true;
@@ -1039,7 +1047,7 @@ VSpace.prototype.mousedown = function(p) {
 		break;
 	case Action.FLOATMENU :
 		var fm = action.floatmenu;
-		md = fm.getMousepos(p);
+		md = fm.within(p);
 		shell.stopAction();
 
 		if (!md) break;
@@ -1064,7 +1072,7 @@ VSpace.prototype.mousedown = function(p) {
 		return false;
 	case Action.ITEMMENU :
 		var im = action.itemmenu;
-		md = im.getMousepos(p);
+		md = im.within(p);
 		shell.stopAction();
 
 		if (!im) break;
@@ -2024,22 +2032,23 @@ VItem.prototype.update = function(twig) {
 };
 
 /**
-| Return the hexagon slice that is the handle
+| Return the handle oval slice.
 */
-VItem.prototype.getH6Slice = function() {
+VItem.prototype.getOvalSlice = function() {
 	var zone = this.getZone();
 
-	if (this._h6slice$ && this._h6slice$.psw.eq(zone.pnw)) return this._h6slice$;
+	if (this._$ovalslice && this._$ovalslice.psw.eq(zone.pnw)) return this._$ovalslice;
+	// getH6Slice;  TODO
+	// this._h6slice$; TODO
 
-	return this._h6slice$ = new HexagonSlice(
-		zone.pnw, theme.itemmenu.innerRadius, theme.itemmenu.slice.height);
+	return this._$ovalslice = new OvalSlice(zone.pnw, theme.ovalmenu.dimensions);
 };
 
 /**
 | Returns if point is within the item menu
 */
 VItem.prototype.withinItemMenu = function(p) {
-	return this.getH6Slice().within(p);
+	return this.getOvalSlice().within(system.fabric, p);
 };
 
 /**
@@ -2145,7 +2154,7 @@ VItem.prototype.drawHandles = function(fabric) {
 	fabric.edge(theme.handle.style.edge, this, 'pathResizeHandles');
 
 	// draws item menu handler
-	fabric.paint(theme.itemmenu.slice.style, this.getH6Slice(), 'path');
+	fabric.paint(theme.ovalmenu.slice, this.getOvalSlice(), 'path');
 };
 
 /**
