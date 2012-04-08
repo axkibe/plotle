@@ -125,7 +125,7 @@ var theme = {
 			b1    :  null, // calculated below
 			a2    :  90,
 			b2    :  null, // calculated below
-			slice :  0.85,
+			slice :  0.82,
 		},
 
 		style : {

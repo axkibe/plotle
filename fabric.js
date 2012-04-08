@@ -1132,8 +1132,8 @@ var OvalSlice = function(psw, dimensions) {
 
 var sliceBezier = function(x2, y2, x3, y3, x4, y4, f) {
 	var ff  = f*f;
-    var rx2 = x2*f;
-    var ry2 = y2*f;
+	var rx2 = x2*f;
+	var ry2 = y2*f;
 
 	var rx3 = ((-3*x2 + 3*x3 + 2 * x4) * f + 4*x2 - 2*x3 - 2*x4)*ff - rx2;
 	var ry3 = ((-3*y2 + 3*y3 + 2 * y4) * f + 4*y2 - 2*y3 - 2*y4)*ff - ry2;
@@ -1141,7 +1141,7 @@ var sliceBezier = function(x2, y2, x3, y3, x4, y4, f) {
 	var rx4 = (-2*x2 + x3 + x4)*ff + 2*rx2 - rx3;
 	var ry4 = (-2*y2 + y3 + y4)*ff + 2*ry2 - ry3;
 
-    return immute({x2 : rx2, y2 : ry2, x3 : rx3, y3 : ry3, x4 : rx4, y4 : ry4});
+	return immute({x2 : rx2, y2 : ry2, x3 : rx3, y3 : ry3, x4 : rx4, y4 : ry4});
 };
 
 

@@ -2006,11 +2006,11 @@ VDoc.prototype.pathSelection = function(fabric, border, twist, width, imargin, s
 | Constructor
 */
 var VItem = function(twig, path) {
-	this._h6slice$ = null;
-	this.twig      = twig;
-	this.path      = path;
-	this.key       = path.get(-1);
-	this.vv        = immute({
+	this._$ovalslice = null;
+	this.twig        = twig;
+	this.path        = path;
+	this.key         = path.get(-1);
+	this.vv          = immute({
 		doc : new VDoc(twig.doc, new Path(path, '++', 'doc'))
 	});
 
@@ -2036,11 +2036,7 @@ VItem.prototype.update = function(twig) {
 */
 VItem.prototype.getOvalSlice = function() {
 	var zone = this.getZone();
-
 	if (this._$ovalslice && this._$ovalslice.psw.eq(zone.pnw)) return this._$ovalslice;
-	// getH6Slice;  TODO
-	// this._h6slice$; TODO
-
 	return this._$ovalslice = new OvalSlice(zone.pnw, theme.ovalmenu.dimensions);
 };
 

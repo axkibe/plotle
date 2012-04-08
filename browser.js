@@ -327,6 +327,7 @@ function System() {
 		if (event.button !== 0) return;
 		event.preventDefault();  // TODO maybe preventDefault before button test?
 		hiddenInput.focus();
+		setTimeout(function() { hiddenInput.selectionStart = 0; }, 0);
 		var p = new Point (event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop);
 		// asks the face if it forces this to be a drag or click, or yet unknown.
 		mouseState = system.shell.mousedown(p, event.shiftKey, event.ctrlKey || event.metaKey);
@@ -349,6 +350,7 @@ function System() {
 	*/
 	function onmouseup(event) {
 		event.preventDefault();
+		
 		releaseEvents();
 		var p = new Point(event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop);
 
