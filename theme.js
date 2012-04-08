@@ -115,6 +115,14 @@ var theme = {
 				{ border: 0, width : 1, color : 'rgb(128, 128, 0)' }
 			],
 		},
+
+		field : {
+			fill : 'white',
+			edge : [
+				{ border: 1, width : 1, color : 'rgb(255, 188, 87)' },
+				{ border: 0, width : 1, color : 'black' }
+			],
+		}
 	},
 
 

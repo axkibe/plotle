@@ -236,6 +236,148 @@ Mainboard.prototype.setHighlight = function(highlight) {
 }
 
 
+/**
+| +++Loginboard+++
+*/
+var Loginboard = function(fw, fh) {
+	this.fw            = fw;
+	this.fh            = fh;
+	var fmx = this.fmx = half(fw);
+
+	this.pnw = new Point(fmx - 512, fh - 130);
+	this.pse = new Point(fmx + 512, fh);
+	this.width       = 512 * 2;
+	this.gradientPC  = new Point(fmx, fh + 450);
+	this.gradientR0  = 0;
+	this.gradientR1  = 650;
+
+	this._sideButtonWidth = 190;
+	this._mTopCurve       = 300;
+	this._sideSkew        = 200;
+	this._sideCurve       =  60;
+
+/*	this._sideButtonBX1 = R(this._sideSkew  / 1.4);
+	this._sideButtonBY1 = R(this._sideCurve / 1.4);
+	this._sideButtonBX2 =  15;
+	this._sideButtonBY2 =  50;*/
+
+	this._highlight       = null;
+};
+
+/**
+| Paths the loginboards frame
+*/
+Loginboard.prototype.path = function(fabric, border, twist) {
+	var pnw = this.pnw;
+	var pse = this.pse;
+	var fmx = this.fmx;
+	var tc  = this._mTopCurve;
+	var sc  = this._sideCurve;
+	var sk  = this._sideSkew;
+	var b   = border;
+
+	fabric.beginPath(twist);
+	fabric.moveTo(pnw.x + b, pse.y);
+
+	fabric.beziTo(sk, -sc + b, -tc,      0,       fmx,  pnw.y + b);
+	fabric.beziTo(tc,       0,  -sk, -sc +b, pse.x - b, pse.y);
+};
+
+/**
+| Paths the usernames input field.
+*/
+Loginboard.prototype.pathUsername = function(fabric, border, twist) {
+	var pnw = this.pnw;
+	var pse = this.pse;
+	var fmx = this.fmx;
+	var bo  = border;
+
+	var px  = fmx - 15;
+	var py  = this.pse.y - 81;
+	var w   = 220;
+	var h   = 28;
+	var ww  = half(w);
+	var hh  = half(h);
+	var wwk = R(w * 0.4);
+	var wwl = ww - wwk;
+	var hhk = R(h * 0.3);
+	var hhl = hh - hhk;
+
+	fabric.beginPath(twist);
+	fabric.moveTo(                         px + wwk,     py - hh  + bo);
+	fabric.beziTo( wwl,     0,    0, -hhl, px + ww - bo, py - hhk);
+	fabric.lineTo(                         px + ww - bo, py + hhk);
+	fabric.beziTo(   0,   hhl,  wwl,    0, px + wwk,     py + hh - bo);
+	fabric.lineTo(                         px - wwk,     py + hh - bo);
+	fabric.beziTo(-wwl,     0,    0,  hhl, px - ww + bo, py + hhk);
+	// @@ workarounds chrome pixel error
+	fabric.lineTo(                         px - ww + bo, py + hhk + 1);
+	fabric.lineTo(                         px - ww + bo, py - hhk);
+	fabric.beziTo(    0, -hhl, -wwl,    0, px - wwk,     py - hh + bo);
+	fabric.lineTo(                         px + wwk,     py - hh + bo);
+
+	//fabric.moveTo(pnwx, pnwy);
+	//fabric.lineTo(psex, pnwy);
+	//fabric.lineTo(psex, psey);
+	//fabric.lineTo(pnwx, psey);
+	//fabric.lineTo(pnwx, pnwy);
+};
+
+/**
+| Draws the mainboards contents
+*/
+Loginboard.prototype.draw = function(fabric) {
+	fabric.paint(theme.cockpit.style, this, 'path');
+
+	var stHighlight = theme.cockpit.highlight;
+	var hl          = this._highlight;
+
+	var fmx = this.fmx;
+	var pnw = this.pnw;
+	var pse = this.pse;
+
+	var sideLabelX = pnw.x + 145;
+	var sideLabelY = pse.y -  13;
+
+	var userLabelX = fmx    - 220;
+	var userLabelY = pse.y  -  75;
+	var passLabelX = fmx    - 220;
+	var passLabelY = pse.y  -  40;
+
+	//fabric.fontStyle('22px bold ' + theme.defaultFont, 'rgb(0, 0, 0)', 'center', 'alphabetic');
+	//fabric.fillText('login', sideLabelX, sideLabelY);
+
+	fabric.fontStyle('16px ' + theme.defaultFont, 'rgb(0, 0, 0)', 'left', 'alphabetic');
+	fabric.fillText('username', userLabelX, userLabelY);
+	fabric.fillText('password', passLabelX, passLabelY);
+
+	fabric.paint(theme.cockpit.field, this, 'pathUsername');
+}
+
+/**
+| Returns true if point is on this mainboard
+*/
+Loginboard.prototype.within = function(fabric, p, area) {
+	var pnw = this.pnw;
+	var pse = this.pse;
+
+	if (p.y < pnw.y || p.x < pnw.x || p.x > pse.x) { return false; }
+	switch (area) {
+	case null:    return fabric.within(this, 'path',      p);
+	default:      throw new Error('invalid loginboard area');
+	}
+}
+
+
+/**
+| Sets the highlighted element.
+*/
+Mainboard.prototype.setHighlight = function(highlight) {
+	if (this._highlight !== highlight) { shell.redraw = true; }
+	this._highlight = highlight;
+}
+
+
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,--.         .         .
  | `-' ,-. ,-. | , ,-. . |-
@@ -247,11 +389,15 @@ Mainboard.prototype.setHighlight = function(highlight) {
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 Cockpit = function() {
-	this.fabric     = system.fabric;
-	this.$mainboard = null;
-	this._user      = null;
-	this._curSpace  = null;
-	this._message   = null;
+	this.fabric      = system.fabric;
+	this._state      = null;
+
+	this.$mainboard  = null;
+	this.$loginboard = null;
+
+	this._user       = null;
+	this._curSpace   = null;
+	this._message    = null;
 };
 
 /**
@@ -284,9 +430,19 @@ Cockpit.prototype.mainboard = function(fabric) {
 	if (this.$mainboard &&
 		this.$mainboard.fw === fabric.width &&
 		this.$mainboard.fh === fabric.height)
-	{ return this.$mainboard}
+	{ return this.$mainboard } else
+	{ return this.$mainboard = new Mainboard(fabric.width, fabric.height); }
+}
 
-	return this.$mainboard = new Mainboard(fabric.width, fabric.height);
+/**
+| Returns the shape of the loginboard
+*/
+Cockpit.prototype.loginboard = function(fabric) {
+	if (this.$loginboard &&
+		this.$loginboard.fw === fabric.width &&
+		this.$loginboard.fh === fabric.height)
+	{ return this.$loginboard } else
+	{ return this.$loginboard = new Loginboard(fabric.width, fabric.height); }
 }
 
 /**
@@ -294,9 +450,15 @@ Cockpit.prototype.mainboard = function(fabric) {
 */
 Cockpit.prototype.draw = function() {
 	var fabric    = this.fabric;
-	var mainboard = this.mainboard(fabric);
 
-	mainboard.draw(fabric, this._user, this._curSpace, this._message);
+	switch (this._state) {
+	case null :
+		this.mainboard(fabric).draw(fabric, this._user, this._curSpace, this._message);
+		break;
+	case 'login' :
+		this.loginboard(fabric).draw(fabric);
+		break;
+	}
 };
 
 
@@ -305,20 +467,26 @@ Cockpit.prototype.draw = function() {
 */
 Cockpit.prototype.mousehover = function(p) {
 	var fabric    = this.fabric;
-	var mb = this.mainboard(fabric);
-
-	if (!mb.within(fabric, p, null)) {
-		mb.setHighlight(null);
-		return false;
-	}
-
-	system.setCursor('default');
-	if (mb.within(fabric, p, 'left')) {
-		mb.setHighlight('left');
-	} else if (mb.within(fabric, p, 'right')) {
-		mb.setHighlight('right');
-	} else {
-		mb.setHighlight(null);
+	switch (this._state) {
+	case null :
+		var mb = this.mainboard(fabric);
+		if (!mb.within(fabric, p, null)) {
+			mb.setHighlight(null);
+			return false;
+		}
+		system.setCursor('default');
+		if (mb.within(fabric, p, 'left')) {
+			mb.setHighlight('left');
+		} else if (mb.within(fabric, p, 'right')) {
+			mb.setHighlight('right');
+		} else {
+			mb.setHighlight(null);
+		}
+		break;
+	case 'login' :
+		break;
+	default :
+		throw new Error('invalid cockpit state' + this._state);
 	}
 
 	return true;
@@ -328,7 +496,8 @@ Cockpit.prototype.mousehover = function(p) {
 | Login button clicked.
 */
 Cockpit.prototype.loginButtonClick = function() {
-	debug('LOGIN');
+	this._state  = 'login';
+	shell.redraw = true;
 }
 
 /**
@@ -336,15 +505,21 @@ Cockpit.prototype.loginButtonClick = function() {
 */
 Cockpit.prototype.mousedown = function(p) {
 	var fabric = this.fabric;
-	var mb     = this.mainboard(fabric);
 
-	if (!mb.within(fabric, p, null)) {
-		return null;
-	}
-
-	if (mb.within(fabric, p, 'left')) {
-		this.loginButtonClick();
-		return false;
+	switch(this._state) {
+	case null:
+		var mb     = this.mainboard(fabric);
+		if (!mb.within(fabric, p, null)) { return null; }
+		if (mb.within(fabric, p, 'left')) {
+			this.loginButtonClick();
+			return false;
+		}
+	case 'login' :
+		this._state  = null;
+		shell.redraw = true;
+		break;
+	default :
+		throw new Error('invalid cockpit state: ' + this._state);
 	}
 
 	return false;
