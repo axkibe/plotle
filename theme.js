@@ -90,15 +90,16 @@ var theme = {
 				]
 			},
 			edge : [
-				{ border: 1, width : 2, color : 'rgb(255, 188, 87)' },
-				{ border: 0, width : 1, color : 'rgb(128, 128, 0)' }
+				//{ border: 1, width : 2, color : 'rgb(255, 188, 87)' },
+				{ border: 1, width : 1, color : 'rgb(255, 94, 44)' },
+				{ border: 0, width : 1, color : 'rgb( 94, 94,  0)' }
 			],
 		},
 
 		sides : {
 			edge : [
-				{ border: 1, width : 2, color : 'rgb(255, 188, 87)' },
-				{ border: 0, width : 1, color : 'rgb(128, 128, 0)' }
+				{ border:  1, width :  1, color : 'rgb(255, 94, 44)' },
+				{ border:  0, width :  1, color : 'rgb( 94, 94,  0)' }
 			]
 		},
 

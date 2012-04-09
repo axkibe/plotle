@@ -773,6 +773,7 @@ var Rect = function(pnw, pse, key) {
 	if (!pnw || !pse || pnw.x > pse.x || pnw.y > pse.y) {
 		throw reject('not a rectangle.');
 	}
+	// TODO use immute
 	fixate(this, 'pnw',    pnw);
 	fixate(this, 'pse',    pse);
 	fixateNoEnum(this, 'width',  pse.x - pnw.x);
@@ -988,13 +989,91 @@ lazyFixate(Margin.prototype, 'x', function() { return this.e + this.w; });
 lazyFixate(Margin.prototype, 'y', function() { return this.n + this.s; });
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ +++ BeziRect +++
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+ A rectangle with rounded (beziers) corners
+ BeziRects are immutable objects.
+
+      <-> a
+      | |
+ pnw  +.------------------.  - - A
+      .                    . _ _ V b
+      |                    |
+      |                    |
+      |                    |
+      '                    '
+       `------------------´+ pse
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+/**
+| Constructor.
+|
+| BeziRect(rect, a, b)      -or-
+| BeziRect(pnw, pse, a, b)
+*/
+var BeziRect = function(a1, a2, a3, a4) {
+	if (a1.constructor === Point) {
+		Rect.call(this, a1, a2);
+		this.a = a3;
+		this.b = a4;
+	} else {
+		Rect.call(this, a1.pnw, a1.pse);
+		this.a = a2;
+		this.b = a3;
+	}
+};
+subclass(BeziRect, Rect);
+
+/**
+| Draws the roundrect.
+|
+| fabric : fabric to draw the path upon.
+| border : additional distance.
+| twist  : parameter to beginPath, add +0.5 on everything for lines
+*/
+BeziRect.prototype.path = function(fabric, border, twist) {
+	var nwx = this.pnw.x + border;
+	var nwy = this.pnw.y + border;
+	var sex = this.pse.x - border - 1;
+	var sey = this.pse.y - border - 1;
+	var a = this.a;
+	var b = this.b;
+
+	fabric.beginPath(twist);
+	fabric.moveTo(nwx + a, nwy    );
+	fabric.lineTo(sex - a, nwy    );
+	fabric.lineTo(sex    , nwy + b);
+	fabric.lineTo(sex    , sey - b);
+	fabric.lineTo(sex - a, sey    );
+	fabric.lineTo(nwx + a, sey    );
+	fabric.lineTo(nwx    , sey - b);
+	fabric.lineTo(nwx    , nwy + b);
+	fabric.lineTo(nwx + a, nwy    );
+
+/*	fabric.moveTo(                         px + wwk,     py - hh  + bo);
+	fabric.beziTo( wwl,     0,    0, -hhl, px + ww - bo, py - hhk);
+	fabric.lineTo(                         px + ww - bo, py + hhk);
+	fabric.beziTo(   0,   hhl,  wwl,    0, px + wwk,     py + hh - bo);
+	fabric.lineTo(                         px - wwk,     py + hh - bo);
+	fabric.beziTo(-wwl,     0,    0,  hhl, px - ww + bo, py + hhk);
+	// @@ works around chrome pixel error
+	fabric.lineTo(                         px - ww + bo, py + hhk + 1);
+	fabric.lineTo(                         px - ww + bo, py - hhk);
+	fabric.beziTo(    0, -hhl, -wwl,    0, px - wwk,     py - hh + bo);
+	fabric.lineTo(                         px + wwk,     py - hh + bo);*/
+};
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .-,--.               . .-,--.         .
   `|__/ ,-. . . ,-. ,-|  `|__/ ,-. ,-. |-
   )| \  | | | | | | | |  )| \  |-' |   |
   `'  ` `-' `-^ ' ' `-^  `'  ` `-' `-' `'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- A rectangle in a 2D plane with rounded corners
+ A rectangle with round (circle) corners
  Rectangles are immutable objects.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -1243,7 +1322,7 @@ var OvalFlower = function(pc, dimensions, segs) {
 	this.gradientR0 = 0;
 	this.gradientR1 = max(this.a2, this.b2);
 	this.segs = segs;
-//	immute(this);
+	immute(this);
 };
 
 /**

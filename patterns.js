@@ -32,6 +32,7 @@ Patterns = {};
 
 /**
 | The meshcraft universe
+| TODO remove the m
 */
 Patterns.mUniverse = {
 	'Nexus' : {
@@ -45,7 +46,6 @@ Patterns.mUniverse = {
 			'Relation' : true
 		},
 		ranks : true
-		//novel : true
 	},
 
 	'Note' : {
@@ -77,7 +77,6 @@ Patterns.mUniverse = {
 	'Doc' : {
 		copse : { 'Para' : true },
 		ranks : true
-		//novel : true
 	},
 
 	'Para' : {
@@ -106,6 +105,102 @@ Patterns.mUniverse = {
 		}
 	}
 };
+
+/**
+| Designs (for the cockpit)
+*/
+Patterns.mDesign = {
+	'Design' : {
+		must : {
+			'layout' : 'Layout',
+			'frame'  : 'Frame'
+		}
+	},
+
+	'Frame' : {
+		must : {
+			pnw : 'Point',
+			pse : 'Point'
+		}
+	},
+
+	'MoveTo': {
+		must : {
+			to : 'Point',
+			bx : 'Number',
+			by : 'Number',
+		}
+	},
+
+	'LineTo': {
+		must : {
+			to : 'Point',
+			bx : 'Number',
+			by : 'Number',
+		}
+	},
+
+	'BeziTo': {
+		must : {
+			to  : 'Point',
+			bx  : 'Number',
+			by  : 'Number',
+			// @@ Maybe replace with "Tangent"
+			c1x : 'Number',
+			c1y : 'Number',
+			c2x : 'Number',
+			c2y : 'Number',
+		}
+	},
+
+	'Curve' : {
+		copse : {
+			'MoveTo' : true,
+			'LineTo' : true,
+			'BeziTo' : true
+		}
+	},
+
+	'Custom' : {
+		must : {
+			'curve' : 'Curve'
+		}
+	},
+
+	'Layout' : {
+		copse : {
+			'Custom' : true,
+			'Label'  : true
+		},
+		ranks : true
+	},
+
+	'FontStyle' : {
+		must : {
+			'font'  : 'String',
+			'align' : 'String',
+			'fill'  : 'String',
+			'base'  : 'String'
+		}
+	},
+
+	'Label' : {
+		must : {
+			'text'      : 'String',
+			'pos'       : 'Point',
+			'fontStyle' : 'FontStyle'
+		}
+	},
+
+	'Point' : {
+		must : {
+			'anchor' : 'String',
+			'x' : 'Number',
+			'y' : 'Number'
+		}
+	}
+};
+
 
 /**
 | Some sanity tests on the patterns.
