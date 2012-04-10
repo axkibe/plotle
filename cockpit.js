@@ -527,7 +527,6 @@ Methods.login.mousehover = function(board, ele, p) {
 	}
 	var fabric = ele.getFabric();
 	var pp = p.sub(ele.pnw);
-	debug(pp);
 	if (!fabric.within(ele, 'path', pp))  { return false; }
 
 	system.setCursor('default');
