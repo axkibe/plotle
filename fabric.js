@@ -77,16 +77,25 @@ var ovalDebug    = false;
 | Fabric(width, height)   creates a new fabric and sets its size;
 */
 Fabric = function(a1, a2) {
+	// @@ this is strange, replace with switch(a1.constructor)
 	switch (typeof(a1)) {
 	case 'undefined' :
 		this._canvas = document.createElement('canvas');
 		break;
 	case 'object' :
-		if (a1.constructor === Fabric) {
+		switch(a1.constructor) {
+		case Fabric:
 			this._canvas = a1._canvas;
-		} else {
+			break;
+		case Rect :
+			this._canvas = document.createElement('canvas');
+			this._canvas.width  = a1.width;
+			this._canvas.height = a1.height;
+			break;
+		default :
 			if (!a1.getContext) throw new Error('Invalid parameter to new Farbic: ' + a1);
 			this._canvas = a1;
+			break;
 		}
 		break;
 	default :

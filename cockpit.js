@@ -49,6 +49,11 @@ var Cockpit;
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('shell.js needs a browser!'); }
 
+/**
+| If true draws boxes around all frames
+*/
+var dbgBoxes = false;
+
 var R   = Math.round;
 var abs = Math.abs;
 var max = Math.max;
@@ -109,6 +114,16 @@ var sideButtonC2X   =  15;
 var sideButtonC2Y   =  50;
 var mTopCurve       = 300;
 
+var styles = {
+	'sides'     : theme.cockpit.sides,
+	'highlight' : theme.cockpit.highlight,
+	'boxes'     : {
+		edge : [
+			{ border: 0, width : 1, color : 'black' },
+		],
+	}
+};
+
 var designs = {};
 
 designs.mainboard = {
@@ -124,44 +139,71 @@ designs.mainboard = {
 	layout :  {
 		type  : 'Layout',
 		copse : {
-			'greet' : {
+			'greet'       : {
 				type      : 'Label',
 				text      : 'Hello',
 				fontStyle : fontStyles.center12,
-				pos: { type : 'Point', anchor : 'sw', x:  240, y:  -34 }
+				pos       : { type : 'Point', anchor : 'sw', x:  240, y:  -34 }
 			},
-			'username' : {
+
+			'username'    : {
 				type      : 'Label',
 				text      : 'Visitor',
 				fontStyle : fontStyles.center18,
-				pos: { type : 'Point', anchor : 'sw', x :  240, y :  -11 }
+				pos       : { type : 'Point', anchor : 'sw', x :  240, y :  -11 }
 			},
-			'saycurrent' : {
+
+			'saycurrent'  : {
 				type      : 'Label',
 				text      : 'current space',
 				fontStyle : fontStyles.center12,
-				pos: { type : 'Point', anchor :  's', x :    0, y :  -39 }
+				pos       : { type : 'Point', anchor :  's', x :    0, y :  -39 }
 			},
-			'cspace' : {
+
+			'cspace'      : {
 				type      : 'Label',
 				text      : 'welcome',
 				fontStyle : fontStyles.center22b,
-				pos: { type : 'Point', anchor :  's', x :    0, y :  -15 }
+				pos       : { type : 'Point', anchor :  's', x :    0, y :  -15 }
 			},
-			'message' : {
+
+			'message'     : {
 				type      : 'Label',
 				text      : 'This is a message just for testing.',
 				fontStyle : fontStyles.left12,
-				pos: { type : 'Point', anchor : 'se', x : -450, y : -20  }
+				pos       : { type : 'Point', anchor : 'se', x : -450, y : -20  }
 			},
+
 			'login' : {
-				type : 'Custom',
-				curve :  {
-					type : 'Curve',
+				type      : 'Custom',
+				style     : 'sides',
+				highlight : 'highlight',
+				frame : {
+					type  : 'Frame',
+					pnw   : {
+						type   : 'Point',
+						anchor : 'sw',
+						x      : 0,
+						y      : -36,
+					},
+					pse   : {
+						type   : 'Point',
+						anchor : 'sw',
+						x      : sideButtonWidth,
+						y      : 0
+					}
+				},
+				curve     :  {
+					type  : 'Curve',
 					copse : {
 						'1' : {
 							type : 'MoveTo',
-							to   : { type : 'Point',  anchor : 'sw', x : 0, y : 0 },
+							to   : {
+								type : 'Point',
+								anchor : 'sw',
+								x : 0,
+								y : 0
+							},
 							bx   : 1,
 							by   : 0,
 						},
@@ -171,7 +213,12 @@ designs.mainboard = {
 							c1y  : -sideButtonC1Y,
 							c2x  : -sideButtonC2X,
 							c2y  : -sideButtonC2Y,
-							to   : { type : 'Point', anchor : 'sw', x : sideButtonWidth, y : 0 },
+							to   : {
+								type   : 'Point',
+								anchor : 'se',
+								x      : 0,
+								y      : 0
+							},
 							bx   : -1,
 							by   :  0,
 						},
@@ -179,14 +226,37 @@ designs.mainboard = {
 					ranks : [ '1', '2' ]
 				},
 			},
+
 			'register' : {
-				type : 'Custom',
+				type      : 'Custom',
+				style     : 'sides',
+				highlight : 'highlight',
+				frame : {
+					type  : 'Frame',
+					pnw   : {
+						type   : 'Point',
+						anchor : 'se',
+						x : -sideButtonWidth,
+						y : -36,
+					},
+					pse   : {
+						type   : 'Point',
+						anchor : 'se',
+						x      : 0,
+						y      : 0
+					}
+				},
 				curve :  {
 					type : 'Curve',
 					copse : {
 						'1' : {
 							type : 'MoveTo',
-							to   : { type : 'Point',  anchor : 'se', x : 0, y : 0 },
+							to   : {
+								type   : 'Point',
+								anchor : 'se',
+								x      : 0,
+								y      : 0
+							},
 							bx   : 1,
 							by   : 0,
 						},
@@ -196,7 +266,12 @@ designs.mainboard = {
 							c1y  : -sideButtonC1Y,
 							c2x  :  sideButtonC2X,
 							c2y  : -sideButtonC2Y,
-							to   : { type : 'Point', anchor : 'se', x : -sideButtonWidth, y : 0 },
+							to   : {
+								type   : 'Point',
+								anchor : 'sw',
+								x : 0,
+								y : 0
+							},
 							bx   : -1,
 							by   :  0,
 						},
@@ -205,7 +280,15 @@ designs.mainboard = {
 				},
 			}
 		},
-		ranks : [ 'greet', 'username', 'saycurrent', 'cspace', 'message', 'login', 'register' ]
+		ranks : [
+			'greet',
+			'username',
+			'saycurrent',
+			'cspace',
+			'message',
+			'login',
+			'register'
+		]
     },
 };
 
@@ -271,10 +354,14 @@ designs.loginboard = {
 /**
 | Computes a point by its anchor
 */
-var computePoint = function(model, pnw, pse) {
+var computePoint = function(model, oframe) {
 	var p;
+	var pnw = oframe.pnw;
+	var pse = oframe.pse;
+
 	switch (model.anchor) {
-	// TODO integrate add into switch
+	// @@ integrate add into switch
+	// @@ make this part of oframe logic
 	case 'n'  : p = new Point(half(pnw.x + pse.x), pnw.y);               break;
 	case 'ne' : p = new Point(pse.x,               pnw.y);               break;
 	case 'e'  : p = new Point(pse.x,               half(pnw.y + pse.y)); break;
@@ -289,16 +376,20 @@ var computePoint = function(model, pnw, pse) {
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- +++ CLabel +++
+  ,--.  ,       .       .
+ | `-'  )   ,-. |-. ,-. |
+ |   . /    ,-| | | |-' |
+ `--'  `--' `-^ ^-' `-' `'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  A computed Label
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-var CLabel = function(twig, board, inherit) {
-	this.twig  = twig;
-	this.board = board;
-	this.pos   = computePoint(twig.pos, board.frame.pnw, board.frame.pse);
+var CLabel = function(twig, board, inherit, methods) {
+	this.twig    = twig;
+	this.board   = board;
+	this.pos     = computePoint(twig.pos, board.iframe);
+	this.methods = methods ? methods : {};
 }
 
 CLabel.prototype.draw = function(fabric) {
@@ -308,28 +399,38 @@ CLabel.prototype.draw = function(fabric) {
 }
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- +++ CCustom +++
+  ,--.  ,--.         .
+ | `-' | `-' . . ,-. |- ,-. ,-,-.
+ |   . |   . | | `-. |  | | | | |
+ `--'  `--'  `-^ `-' `' `-' ' ' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  A computed custom element.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-var CCustom = function(twig, board, inherit) {
-	this.twig  = twig;
-	this.board = board;
-	var curve  = twig.curve;
-	this.curve = [];
+var CCustom = function(twig, board, inherit, methods) {
+	this.twig    = twig;
+	this.board   = board;
+	this.methods = methods ? methods : {};
+	var pnw      = this.pnw    = computePoint(twig.frame.pnw, board.iframe);
+	var pse      = this.pse    = computePoint(twig.frame.pse, board.iframe);
+	var iframe   = this.iframe = new Rect(Point.zero, pse.sub(pnw));
+
+	var curve    = twig.curve;
+	this.curve   = [];
 	if (curve.copse[curve.ranks[0]].type !== 'MoveTo') {
 		throw new Error('Curve does not begin with MoveTo');
 	}
-
 	for(var a = 0, aZ = curve.length; a < aZ; a++) {
 		var ct = curve.copse[curve.ranks[a]];
 		this.curve.push({
-			to   : computePoint(ct.to, board.frame.pnw, board.frame.pse),
+			to   : computePoint(ct.to, iframe),
 			twig : ct,
 		});
 	}
+
+	this.$fabric    = null;
+	this.$highlight = false;
 }
 
 /**
@@ -352,8 +453,6 @@ CCustom.prototype.path = function(fabric, border, twist) {
 			fabric.lineTo(to.x + bx * border, to.y + by * border);
 			break;
 		case 'BeziTo':
-			debug(ct.c1x / ct.c1y);
-			debug(bx * border);
 			fabric.beziTo(ct.c1x , ct.c1y - bx * border,
 						  ct.c2x , ct.c2y - bx * border,
 						  to.x + bx * border,
@@ -366,119 +465,46 @@ CCustom.prototype.path = function(fabric, border, twist) {
 };
 
 /**
+| Returns the fabric for the custom element.
+*/
+CCustom.prototype.getFabric = function(highlight) {
+	var fabric = this.$fabric;
+	if (fabric && this.$highlight === highlight) { return fabric; }
+
+	var fabric = this.$fabric = new Fabric(this.iframe);
+	var sname = highlight ? this.twig.highlight : this.twig.style;
+	var style = styles[sname];
+	if (!isnon(style)) { throw new Error('Invalid style: ' + sname); }
+	fabric.paint(style, this, 'path');
+
+	if (dbgBoxes) {
+		fabric.paint(styles.boxes, new Rect(this.iframe.pnw, this.iframe.pse.sub(1, 1)), 'path');
+	}
+
+	return fabric;
+}
+
+/**
 | Draws the custom control.
 */
-CCustom.prototype.draw = function(fabric) {
-	fabric.paint(theme.cockpit.sides, this, 'path');
+CCustom.prototype.draw = function(fabric, highlight) {
+	fabric.drawImage(this.getFabric(highlight), this.pnw);
 }
 
 
-/**
-| +++Mainboard+++
-*/
+
 /*
-var Mainboard = function(model, fw, fh) {
-	this.fw            = fw;
-	this.fh            = fh;
-	var fmx = this.fmx = half(fw);
-
-	this.width       = 512 * 2;
-	this.gradientPC  = new Point(fmx, fh + 450);
-	this.gradientR0  = 0;
-	this.gradientR1  = 650;
-
-	this._sideButtonWidth = 190;
-	this._mTopCurve       = 300;
-
-	this._highlight = model ? model._highlight : null;
-};
-*/
-
-/**
-| Paths the mainboards frame
-*/
-/*
-Mainboard.prototype.path = function(fabric, border, twist) {
-	var pnw = this.pnw;
-	var pse = this.pse;
-	var fmx = this.fmx;
-	var tc  = this._mTopCurve;
-	var sc  = this.sideCurve;
-	var sk  = this.sideSkew;
-	var bo  = border;
-
-	fabric.beginPath(twist);
-	fabric.moveTo(pnw.x + bo, pse.y);
-
-	fabric.beziTo(sk, -sc + bo, -tc,       0,        fmx, pnw.y + bo);
-	fabric.beziTo(tc,        0, -sk, -sc +bo, pse.x - bo, pse.y);
-};
-*/
-
-/**
-| Paths the left side button
-*/
-/*
-Mainboard.prototype.pathLeft = function(fabric, border, twist) {
-	var pnw = this.pnw;
-	var pse = this.pse;
-	var sbw = this._sideButtonWidth;
-	var x1  = this._sideButtonBX1;
-	var y1  = this._sideButtonBY1;
-	var x2  = this._sideButtonBX2;
-	var y2  = this._sideButtonBY2;
-	var bo  = border;
-	fabric.beginPath(twist);
-	fabric.moveTo(pnw.x + bo, pse.y);
-	fabric.beziTo(x1, -y1 + bo, -x2, -y2 + bo, pnw.x + sbw - bo,  pse.y);
-};
-*/
-
-/**
-| Paths the right side button
-*/
-/*
-Mainboard.prototype.pathRight = function(fabric, border, twist) {
-	var pnw = this.pnw;
-	var pse = this.pse;
-	var sbw = this._sideButtonWidth;
-	var x1  = this._sideButtonBX1;
-	var y1  = this._sideButtonBY1;
-	var x2  = this._sideButtonBX2;
-	var y2  = this._sideButtonBY2;
-	var bo  = border;
-	fabric.beginPath(twist);
-	fabric.moveTo(pse.x - bo, pse.y);
-	fabric.beziTo(-x1, -y1 + bo, x2, -y2 + bo, pse.x - sbw + bo,  pse.y);
-};
-*/
-
-
-/**
-| Draws the mainboards contents
-*/
-/*
-Mainboard.prototype.draw = function(fabric, user, curSpace, msg) {
-	fabric.paint(theme.cockpit.style, this, 'path');
-
+ // Draws the mainboards contents
 	var stHighlight = theme.cockpit.highlight;
 	var stSides     = theme.cockpit.sides;
 	var hl          = this._highlight;
-
 	fabric.paint(hl === 'left'  ? stHighlight : stSides, this, 'pathLeft');
 	fabric.paint(hl === 'right' ? stHighlight : stSides, this, 'pathRight');
 
 
-	var fmx = this.fmx;
-	var pnw = this.pnw;
-	var pse = this.pse;
-
 	var sideButtonX1 = pnw.x + 135;
 	var sideButtonX2 = pse.x - 135;
-
 	var sideButtonY  = pse.y -  9;
-
-
 	fabric.fontStyle('14px ' + theme.defaultFont, 'rgb(0, 0, 0)', 'center', 'alphabetic');
 	fabric.fillText('login', sideButtonX1, sideButtonY);
 	fabric.fillText('register', sideButtonX2, sideButtonY);
@@ -486,80 +512,98 @@ Mainboard.prototype.draw = function(fabric, user, curSpace, msg) {
 }
 */
 
-/**
-| Returns true if point is on this mainboard
-*/
-/*
-Mainboard.prototype.within = function(fabric, p, area) {
-	var pnw = this.pnw;
-	var pse = this.pse;
+var Methods = {};
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ +++ meth-login +++
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-	if (p.y < pnw.y || p.x < pnw.x || p.x > pse.x) { return false; }
-	switch (area) {
-	case null:    return fabric.within(this, 'path',      p);
-	case 'left':  return fabric.within(this, 'pathLeft',  p);
-	case 'right': return fabric.within(this, 'pathRight', p);
-	default:      throw new Error('invalid mainboard area');
+ methods of the login custom element.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+Methods.login = {};
+Methods.login.mousehover = function(board, ele, p) {
+	if (p.x < ele.pnw.x || p.y < ele.pnw.y || p.x > ele.pse.x || p.y > ele.pse.y) {
+		return false;
 	}
-}
-*/
+	var fabric = ele.getFabric();
+	var pp = p.sub(ele.pnw);
+	debug(pp);
+	if (!fabric.within(ele, 'path', pp))  { return false; }
 
-
-/**
-| Sets the highlighted element.
-*/
-/*
-Mainboard.prototype.setHighlight = function(highlight) {
-	if (this._highlight !== highlight) { shell.redraw = true; }
-	this._highlight = highlight;
-}
-*/
+	system.setCursor('default');
+	board.setHighlight('login');
+	board.$fabric = null;
+	shell.redraw = true;
+	return true;
+};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- +++ CFrame +++
+ +++ meth-register +++
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- A computed frame
+
+ methods of the login custom element.
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-var CFrame = function(twig, pnw, pse) {
-	this.pnw = computePoint(twig.pnw, pnw, pse);
-	this.pse = computePoint(twig.pse, pnw, pse);
-	immute(this);
-}
+Methods.register = {};
+Methods.register.mousehover = function(board, ele, p) {
+	if (p.x < ele.pnw.x || p.y < ele.pnw.y || p.x > ele.pse.x || p.y > ele.pse.y) {
+		return false;
+	}
+	var fabric = ele.getFabric();
+	var pp = p.sub(ele.pnw);
+	if (!fabric.within(ele, 'path', pp))  { return false; }
+
+	system.setCursor('default');
+	board.setHighlight('register');
+	board.$fabric = null;
+	shell.redraw = true;
+	return true;
+};
+
+
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- +++ Board +++
+  ,--. ,-,---.               .
+ | `-'  '|___/ ,-. ,-. ,-. ,-|
+ |   .  ,|   \ | | ,-| |   | |
+ `--'  `-^---' `-' `-^ '   `-^
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- A board
+ A cockpit board.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-var Board = function(design, inherit, size) {
-	var tree  = this.tree  = new Tree(design, Patterns.mDesign);
-	var frame = this.frame = new CFrame(tree.root.frame, Point.zero, size);
+var CBoard = function(design, inherit, screensize) {
+	var tree    = this.tree  = new Tree(design, Patterns.mDesign);
+	var frameD  = tree.root.frame;
+	var oframe  = new Rect(Point.zero, screensize);
+	var pnw     = this.pnw    = computePoint(frameD.pnw, oframe);
+	var pse     = this.pse    = computePoint(frameD.pse, oframe);
+	var iframe  = this.iframe = new Rect(Point.zero, pse.sub(pnw));
 
-	this.gradientPC  = new Point(half(frame.pnw.x + frame.pse.x), frame.pse.y + 450);
-	this.gradientR0  = 0;
-	this.gradientR1  = 650;
-	this.size        = size;
+	// TODO use point arithmetic
+	this.gradientPC = new Point(half(iframe.width), iframe.height + 450);
+	this.gradientR0 = 0;
+	this.gradientR1 = 650;
+	this.screensize = screensize;
 
+	this._highlight = inherit ? inherit._highlight : null;
 
-	this._highlight       = inherit ? inherit._highlight : null;
 	this.cc = {};
-	var layout = this.tree.root.layout;
+	var layout = tree.root.layout;
 	for(var a = 0, aZ = layout.length; a < aZ; a++) {
 		var name = layout.ranks[a];
 		var twig = layout.copse[name];
-		this.cc[name] =  this.newCC(twig, inherit && inherit.cc[name]);
+		this.cc[name] = this.newCC(twig, inherit && inherit.cc[name], Methods[name]);
 	}
 };
 
 /**
 | Creates a new enhanced element.
 */
-Board.prototype.newCC = function(twig, inherit) {
+CBoard.prototype.newCC = function(twig, inherit, methods) {
 	switch(twig.type) {
-	case 'Label'  : return new CLabel (twig, this, inherit);
-	case 'Custom' : return new CCustom(twig, this, inherit);
+	case 'Label'  : return new CLabel (twig, this, inherit, methods);
+	case 'Custom' : return new CCustom(twig, this, inherit, methods);
 	default       : throw new Error('Invalid element type: ' + twig.type);
 	}
 }
@@ -567,19 +611,18 @@ Board.prototype.newCC = function(twig, inherit) {
 /**
 | Paths the boards frame
 */
-Board.prototype.path = function(fabric, border, twist) {
-	var pnw = this.frame.pnw;
-	var pse = this.frame.pse;
-	var fmx = half(this.frame.pnw.x + this.frame.pse.x);
+CBoard.prototype.path = function(fabric, border, twist) {
+	var iframe = this.iframe;
+	var fmx = half(iframe.width);
 	var tc  = mTopCurve;
 	var sc  = sideCurve;
 	var sk  = sideSkew;
 	var bo  = border;
 
 	fabric.beginPath(twist);
-	fabric.moveTo(pnw.x + bo, pse.y);
-	fabric.beziTo(sk, -sc + bo, -tc,        0,        fmx, pnw.y + bo);
-	fabric.beziTo(tc,        0, -sk, -sc + bo, pse.x - bo, pse.y);
+	fabric.moveTo(bo, iframe.height);
+	fabric.beziTo(sk, -sc + bo, -tc,        0,               fmx, bo);
+	fabric.beziTo(tc,        0, -sk, -sc + bo, iframe.width - bo, iframe.height);
 };
 
 /**
@@ -587,7 +630,7 @@ Board.prototype.path = function(fabric, border, twist) {
 | TODO remove
 */
 /*
-Board.prototype.pathPassword = function(fabric, border, twist) {
+CBoard.prototype.pathPassword = function(fabric, border, twist) {
 	var bo  = border;
 	var px  = this.fmx - 15;
 	var py  = this.pse.y - 45;
@@ -618,13 +661,23 @@ Board.prototype.pathPassword = function(fabric, border, twist) {
 /**
 | Draws the mainboards contents
 */
-Board.prototype.draw = function(fabric) {
+CBoard.prototype.getFabric = function() {
+	if (this.$fabric) { return this.$fabric; }
+	var iframe = this.iframe;
+	var fabric = this.$fabric = new Fabric(iframe);
+
 	fabric.paint(theme.cockpit.style, this, 'path');
 	var layout = this.tree.root.layout;
 
 	for(var a = 0, aZ = layout.length; a < aZ; a++) {
-		var c = this.cc[layout.ranks[a]]; // TODO
-		c.draw(fabric);
+		var cname = layout.ranks[a];
+		var c = this.cc[cname];
+		c.draw(fabric, cname == this._highlight);
+	}
+
+	if (dbgBoxes) {
+		fabric.paint(styles.boxes,
+			new Rect(iframe.pnw, iframe.pse.sub(1, 1)), 'path');
 	}
 
 	/*
@@ -647,36 +700,54 @@ Board.prototype.draw = function(fabric) {
 
 	fabric.paint(theme.cockpit.field, this, 'pathUsername');
 	fabric.paint(theme.cockpit.field, this, 'pathPassword');*/
+
+	return fabric;
 }
 
 /**
 | Returns true if point is on this mainboard
 */
-Board.prototype.within = function(fabric, p) {
-	var pnw = this.frame.pnw;
-	var pse = this.frame.pse;
+CBoard.prototype.mousehover = function(p) {
+	var pnw = this.pnw;
+	var pse = this.pse;
+	var fabric = this.getFabric();
+	var a, aZ;
+	if (p.y < pnw.y || p.x < pnw.x || p.x > pse.x) {
+		this.setHighlight(null);
+		return false;
+	}
+	var pp = p.sub(pnw);
 
-	if (p.y < pnw.y || p.x < pnw.x || p.x > pse.x) { return false; }
-	return fabric.within(this, 'path',      p);
+	// @@ Optimize by reusing the latest path of this.$fabric
+	if (!fabric.within(this, 'path', pp))  {
+		this.setHighlight(null);
+		return false;
+	}
+
+	var layout = this.tree.root.layout;
+	for(var a = 0, aZ = layout.length; a < aZ; a++) {
+		var cname = layout.ranks[a];
+		var ce = this.cc[cname];
+		if (!ce.methods.mousehover) { continue; }
+		if (ce.methods.mousehover(this, ce, pp)) { break; }
+	}
+	if (a >= aZ) {
+		system.setCursor('default');
+		this.setHighlight(null);
+	}
+	return true;
 }
-
-/**
-| Returns true if point is on this mainboard
-*/
-Board.prototype.mousehover = function(fabric, p) {
-	var pnw = this.frame.pnw;
-	var pse = this.frame.pse;
-	if (p.y < pnw.y || p.x < pnw.x || p.x > pse.x) { return false; }
-	return this.within(fabric, p);
-}
-
-
 
 /**
 | Sets the highlighted element.
 */
-Board.prototype.setHighlight = function(highlight) {
-	if (this._highlight !== highlight) { shell.redraw = true; }
+CBoard.prototype.setHighlight = function(highlight) {
+	if (this._highlight === highlight) { return; }
+
+	this.$fabric = null;
+	shell.redraw = true;
+	if (this._highlight) { this.cc[this._highlight].$fabric = null; }
+	if (      highlight) { this.cc[      highlight].$fabric = null; }
 	this._highlight = highlight;
 }
 
@@ -692,12 +763,12 @@ Board.prototype.setHighlight = function(highlight) {
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 Cockpit = function() {
-	this.fabric      = system.fabric;
-	this._state      = null;
-
-	this.$mainboard  = null;
-	this.$loginboard = null;
-
+	this.fabric       = system.fabric;
+	this.curBoardName = 'mainboard';
+	this.boards = {
+		mainboard  : null,
+		loginboard : null,
+	};
 	this._user       = null;
 	this._curSpace   = null;
 	this._message    = null;
@@ -710,10 +781,33 @@ Cockpit.prototype.message = function(message) {
 	this._message = message;
 }
 
+
+/**
+| Returns the current cockpit board
+*/
+Cockpit.prototype.curBoard = function() {
+	var fabric = this.fabric;
+	var cboard = this.boards[this.curBoardName];
+	if (!is(cboard)) { throw new Error('invalid curBoardName: ' + this.curBoardName); }
+
+	if (cboard &&
+		cboard.screensize.x === fabric.width &&
+		cboard.screensize.y === fabric.height)
+	{
+		return cboard;
+	} else {
+		return this.boards[this.curBoardName] = new CBoard(
+			designs[this.curBoardName],
+			cboard,
+			new Point(fabric.width, fabric.height));
+	}
+}
+
 /**
 | Sets the space name displayed on the mainboard.
 */
 Cockpit.prototype.setCurSpace = function(curSpace) {
+	// TODO
 	this._curSpace = curSpace;
 }
 
@@ -721,53 +815,19 @@ Cockpit.prototype.setCurSpace = function(curSpace) {
 | Sets the user greeted on the mainboard
 */
 Cockpit.prototype.setUser = function(user, loggedIn) {
+	// TODO
 	this._user     = user;
 	this._loggedIn = loggedIn;
 }
 
 
 /**
-| Returns the shape of the mainboard
-*/
-Cockpit.prototype.mainboard = function(fabric) {
-	if (this.$mainboard &&
-		this.$mainboard.size.x === fabric.width &&
-		this.$mainboard.size.y === fabric.height)
-	{ return this.$mainboard; } else
-	{ return this.$mainboard = new Board(
-			designs.mainboard, this.$mainboard,
-			new Point(fabric.width, fabric.height));
-	}
-}
-
-/**
-| Returns the shape of the loginboard
-*/
-Cockpit.prototype.loginboard = function(fabric) {
-	if (this.$loginboard &&
-		this.$loginboard.fw === fabric.width &&
-		this.$loginboard.fh === fabric.height)
-	{ return this.$loginboard } else
-	{ return this.$loginboard = new Board(
-			designs.loginboard, this.$loginboard,
-			new Point(fabric.width, fabric.height));
-	}
-}
-
-/**
 | Redraws the cockpit.
 */
 Cockpit.prototype.draw = function() {
 	var fabric    = this.fabric;
-
-	switch (this._state) {
-	case null :
-		this.mainboard(fabric).draw(fabric, this._user, this._curSpace, this._message);
-		break;
-	case 'login' :
-		this.loginboard(fabric).draw(fabric);
-		break;
-	}
+	var cb = this.curBoard(fabric);
+	fabric.drawImage(cb.getFabric(), cb.pnw);
 };
 
 
@@ -775,41 +835,16 @@ Cockpit.prototype.draw = function() {
 | Mouse hover.
 */
 Cockpit.prototype.mousehover = function(p) {
-	var fabric    = this.fabric;
-	switch (this._state) {
-	case null :
-		var board = this.mainboard(fabric);
-		return board.mousehover(fabric, p);
-
-		/*
-		if (!board.within(fabric, p, null)) {
-			board.setHighlight(null);
-			return false;
-		}
-		system.setCursor('default');
-		if (board.within(fabric, p, 'left')) {
-			board.setHighlight('left');
-		} else if (board.within(fabric, p, 'right')) {
-			board.setHighlight('right');
-		} else {
-			board.setHighlight(null);
-		}
-		break;*/
-	case 'login' :
-		break;
-	default :
-		throw new Error('invalid cockpit state' + this._state);
-	}
-
-	return true;
+	return this.curBoard().mousehover(p);
 };
 
 /**
 | Login button clicked.
 */
 Cockpit.prototype.loginButtonClick = function() {
+	// TODO
 	this.mainboard(this.fabric).setHighlight(null);
-	this._state  = 'login';
+	this.curBoardName  = 'login';
 	shell.redraw = true;
 }
 

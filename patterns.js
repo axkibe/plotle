@@ -163,7 +163,10 @@ Patterns.mDesign = {
 
 	'Custom' : {
 		must : {
-			'curve' : 'Curve'
+			'style'     : 'String',
+			'highlight' : 'String',
+			'frame'     : 'Frame',
+			'curve'     : 'Curve'
 		}
 	},
 
