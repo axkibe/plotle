@@ -39,6 +39,7 @@ var MeshMashine;
 var Path;
 var Tree;
 
+var settings;
 var system;
 var theme;
 
@@ -2520,7 +2521,7 @@ VNote.prototype.draw = function(fabric) {
 */
 VNote.prototype.mousewheel = function(p, dir) {
 	if (!this.getZone().within(p)) return false;
-	this.setScrollbar(this.scrollbarY.getPos() - dir * theme.scrollbar.textWheelSpeed);
+	this.setScrollbar(this.scrollbarY.getPos() - dir * settings.textWheelSpeed);
 	this.poke();
 	shell.redraw = true;
 	return true;

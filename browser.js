@@ -36,6 +36,7 @@ var Fabric;
 var Peer;
 var Shell;
 var config;
+var settings;
 
 /**
 | Export
@@ -88,7 +89,10 @@ function makeCatcher(fun) {
  Default behavior settings.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-var settings = {
+settings = {
+	// pixels to scroll for a wheel event
+	textWheelSpeed : 12 * 5,
+
 	// Blink speed of the caret.
 	caretBlinkSpeed : 530,
 

@@ -192,9 +192,6 @@ var theme = {
 
 	// scrollbar
 	scrollbar : {
-		// pixels to scroll for a wheel event
-		textWheelSpeed : 12,
-
 		style : {
 			fill : 'rgb(255, 188, 87)',
 			edge : [
