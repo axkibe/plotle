@@ -112,8 +112,9 @@ Patterns.mUniverse = {
 Patterns.mDesign = {
 	'Design' : {
 		must : {
-			'layout' : 'Layout',
-			'frame'  : 'Frame'
+			'frame'  : 'Frame',
+			'curve'  : 'Curve',
+			'layout' : 'Layout'
 		}
 	},
 

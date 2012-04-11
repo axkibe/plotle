@@ -110,17 +110,25 @@ var fontStyles = {
 		fill  : 'black',
 		align : 'start',
 		base  : 'alphabetic'
+	},
+	left16    : {
+		type  : 'FontStyle',
+		font  : '12px ' + theme.defaultFont,
+		fill  : 'black',
+		align : 'start',
+		base  : 'alphabetic'
 	}
 };
 
 var sideButtonWidth = 190;
-var sideSkew        = 200;  // TODO rename
-var sideCurve       =  60;  // TODO rename
-var sideButtonC1X   = R(sideSkew  / 1.4);
-var sideButtonC1Y   = R(sideCurve / 1.4);
+var mainboardC1X    = 200;
+var mainboardC1Y    = -60;
+var mainboardC2X    = 300;
+var mainboardC2Y    =   0;
+var sideButtonC1X   = R(mainboardC1X / 1.4);
+var sideButtonC1Y   = R(mainboardC1Y / 1.4);
 var sideButtonC2X   =  15;
 var sideButtonC2Y   =  50;
-var mTopCurve       = 300;
 
 var styles = {
 	'sides'     : theme.cockpit.sides,
@@ -134,244 +142,288 @@ var styles = {
 
 var designs = {};
 
+/**
+| Main Board
+*/
 designs.mainboard = {
 	type   : 'Design',
 
 	frame : {
 		type  : 'Frame',
-		pnw   : { type   : 'Point', anchor : 's', x : -512, y : -60 },
-		pse   : { type   : 'Point', anchor : 's', x :  512, y :   0 }
+		pnw   : { type: 'Point', anchor: 's', x: -512, y: -60 },
+		pse   : { type: 'Point', anchor: 's', x:  512, y:   0 }
 	},
 
+	curve : {
+		type  : 'Curve',
+		copse : {
+		'1' : {
+			type : 'MoveTo',
+			to   : { type: 'Point', anchor: 'sw', x: 0, y: 0 },
+			bx   : 1, by   : 0
+		},
+		'2' : {
+			type : 'BeziTo',
+			c1x  :  mainboardC1X, c1y  :  mainboardC1Y,
+			c2x  : -mainboardC2X, c2y  :  mainboardC2Y,
+			to   : { type: 'Point', anchor:  'n', x: 0, y: 0 },
+			bx   :  0, by   :  1
+		},
+		'3' : {
+			type : 'BeziTo',
+			c1x  :  mainboardC2X, c1y  : -mainboardC2Y,
+			c2x  : -mainboardC1X, c2y  :  mainboardC1Y,
+			to   : { type: 'Point', anchor: 'se', x: 0, y: 0 },
+			bx   : -1, by   :  0
+		}},
+		ranks : [ '1', '2', '3' ]
+	},
 
 	layout :  {
 		type  : 'Layout',
 		copse : {
-			'greet'       : {
-				type      : 'Label',
-				text      : 'Hello',
-				fontStyle : fontStyles.center12,
-				pos       : { type: 'Point', anchor: 'sw', x:  240, y: -34 }
-			},
-
-			'username'    : {
-				type      : 'Label',
-				text      : 'Visitor',
-				fontStyle : fontStyles.center18,
-				pos       : { type: 'Point', anchor: 'sw', x:  240, y: -11 }
-			},
-
-			'saycurrent'  : {
-				type      : 'Label',
-				text      : 'current space',
-				fontStyle : fontStyles.center12,
-				pos       : { type: 'Point', anchor:  's', x:    0, y: -39 }
-			},
-
-			'cspace'      : {
-				type      : 'Label',
-				text      : 'welcome',
-				fontStyle : fontStyles.center22b,
-				pos       : { type: 'Point', anchor:  's', x:    0, y: -15 }
-			},
-
-			'message'     : {
-				type      : 'Label',
-				text      : 'This is a message just for testing.',
-				fontStyle : fontStyles.left12,
-				pos       : { type: 'Point', anchor: 'se', x: -450, y: -20 }
-			},
-
-			'login' : {
-				type      : 'Custom',
-				style     : 'sides',
-				highlight : 'highlight',
-				frame : {
-					type  : 'Frame',
-					pnw   : {
-						type   : 'Point',
-						anchor : 'sw',
-						x      : 0,
-						y      : -36
-					},
-					pse   : {
-						type   : 'Point',
-						anchor : 'sw',
-						x      : sideButtonWidth,
-						y      : 0
-					}
-				},
-				curve     :  {
-					type  : 'Curve',
-					copse : {
-						'1' : {
-							type : 'MoveTo',
-							to   : {
-								type : 'Point',
-								anchor : 'sw',
-								x : 0,
-								y : 0
-							},
-							bx   : 1,
-							by   : 0
-						},
-						'2' : {
-							type : 'BeziTo',
-							c1x  :  sideButtonC1X,
-							c1y  : -sideButtonC1Y,
-							c2x  : -sideButtonC2X,
-							c2y  : -sideButtonC2Y,
-							to   : {
-								type   : 'Point',
-								anchor : 'se',
-								x      : 0,
-								y      : 0
-							},
-							bx   : -1,
-							by   :  0
-						}
-					},
-					ranks : [ '1', '2' ]
-				}
-			},
-
-			'loginL'      : {
-				type      : 'Label',
-				text      : 'login',
-				fontStyle : fontStyles.center14,
-				pos       : { type: 'Point', anchor: 'sw', x:  135, y:  -9 }
-			},
-
-			'register' : {
-				type      : 'Custom',
-				style     : 'sides',
-				highlight : 'highlight',
-				frame : {
-					type  : 'Frame',
-					pnw   : {
-						type   : 'Point',
-						anchor : 'se',
-						x : -sideButtonWidth,
-						y : -36
-					},
-					pse   : {
-						type   : 'Point',
-						anchor : 'se',
-						x      : 0,
-						y      : 0
-					}
-				},
-				curve :  {
-					type : 'Curve',
-					copse : {
-						'1' : {
-							type : 'MoveTo',
-							to   : {
-								type   : 'Point',
-								anchor : 'se',
-								x      : 0,
-								y      : 0
-							},
-							bx   : 1,
-							by   : 0
-						},
-						'2' : {
-							type : 'BeziTo',
-							c1x  : -sideButtonC1X,
-							c1y  : -sideButtonC1Y,
-							c2x  :  sideButtonC2X,
-							c2y  : -sideButtonC2Y,
-							to   : {
-								type   : 'Point',
-								anchor : 'sw',
-								x : 0,
-								y : 0
-							},
-							bx   : -1,
-							by   :  0
-						}
-					},
-					ranks : [ '1', '2' ]
-				}
-			},
-
-			'registerL'      : {
-				type      : 'Label',
-				text      : 'register',
-				fontStyle : fontStyles.center14,
-				pos       : { type: 'Point', anchor: 'se', x: -135, y:  -9 }
-			}
+		'greet'       : {
+			type      : 'Label',
+			text      : 'Hello',
+			fontStyle : fontStyles.center12,
+			pos       : { type: 'Point', anchor: 'sw', x:  240, y: -34 }
 		},
+
+		'username'    : {
+			type      : 'Label',
+			text      : 'Visitor',
+			fontStyle : fontStyles.center18,
+			pos       : { type: 'Point', anchor: 'sw', x:  240, y: -11 }
+		},
+
+		'saycurrent'  : {
+			type      : 'Label',
+			text      : 'current space',
+			fontStyle : fontStyles.center12,
+			pos       : { type: 'Point', anchor:  's', x:    0, y: -39 }
+		},
+
+		'cspace'      : {
+			type      : 'Label',
+			text      : 'welcome',
+			fontStyle : fontStyles.center22b,
+			pos       : { type: 'Point', anchor:  's', x:    0, y: -15 }
+		},
+
+		'message'     : {
+			type      : 'Label',
+			text      : 'This is a message just for testing.',
+			fontStyle : fontStyles.left12,
+			pos       : { type: 'Point', anchor: 'se', x: -450, y: -20 }
+		},
+
+		'loginMC' : {
+			type      : 'Custom',
+			style     : 'sides',
+			highlight : 'highlight',
+			frame : {
+				type  : 'Frame',
+				pnw   : { type: 'Point', anchor: 'sw', x:               0, y: -36 },
+				pse   : { type: 'Point', anchor: 'sw', x: sideButtonWidth, y:   0 }
+			},
+			curve     :  {
+				type  : 'Curve',
+				copse : {
+				'1' : {
+					type : 'MoveTo',
+					to   : { type : 'Point', anchor: 'sw', x: 0, y: 0 },
+					bx   : 1, by   : 0
+				},
+				'2' : {
+					type : 'BeziTo',
+					c1x  :  sideButtonC1X, c1y  :  sideButtonC1Y,
+					c2x  : -sideButtonC2X, c2y  : -sideButtonC2Y,
+					to   : { type: 'Point', anchor: 'se', x: 0, y: 0 },
+					bx   : -1, by   :  0
+				}
+			},
+			ranks : [ '1', '2' ]
+		}},
+
+		'loginL'      : {
+			type      : 'Label',
+			text      : 'login',
+			fontStyle : fontStyles.center14,
+			pos       : { type: 'Point', anchor: 'sw', x:  135, y:  -9 }
+		},
+
+		'registerMC' : {
+			type      : 'Custom',
+			style     : 'sides',
+			highlight : 'highlight',
+			frame : {
+				type  : 'Frame',
+				pnw   : { type: 'Point', anchor: 'se', x: -sideButtonWidth, y: -36 },
+				pse   : { type: 'Point', anchor: 'se', x: 0,                y:   0 }
+			},
+			curve :  {
+				type : 'Curve',
+				copse : {
+				'1' : {
+					type : 'MoveTo',
+					to   : { type: 'Point', anchor: 'se', x: 0, y: 0 },
+					bx   : 1, by   : 0
+				},
+				'2' : {
+					type : 'BeziTo',
+					c1x  : -sideButtonC1X, c1y  :  sideButtonC1Y,
+					c2x  :  sideButtonC2X, c2y  : -sideButtonC2Y,
+					to   : { type: 'Point', anchor: 'sw', x : 0, y : 0 },
+					bx   : -1, by   :  0
+				}
+			},
+			ranks : [ '1', '2' ]
+		}},
+
+		'registerL'   : {
+			type      : 'Label',
+			text      : 'register',
+			fontStyle : fontStyles.center14,
+			pos       : { type: 'Point', anchor: 'se', x: -135, y:  -9 }
+		},
+
+		'loginBC'     : {
+			type      : 'Custom',
+			style     : 'sides',
+			highlight : 'highlight',
+			frame : {
+				type  : 'Frame',
+				pnw   : { type: 'Point', anchor: 'se', x: -sideButtonWidth, y: -36 },
+				pse   : { type: 'Point', anchor: 'se', x: 0,                y: 0   }
+			},
+			curve :  {
+				type : 'Curve',
+				copse : {
+				'1' : {
+					type : 'MoveTo',
+					to   : {
+						type   : 'Point',
+						anchor : 'se',
+						x      : 0,
+						y      : 0
+					},
+					bx   : 1,
+					by   : 0
+				},
+				'2' : {
+					type : 'BeziTo',
+					c1x  : -sideButtonC1X,
+					c1y  :  sideButtonC1Y,
+					c2x  :  sideButtonC2X,
+					c2y  : -sideButtonC2Y,
+					to   : {
+						type   : 'Point',
+						anchor : 'sw',
+						x : 0,
+						y : 0
+					},
+					bx   : -1,
+					by   :  0
+				}},
+
+				ranks : [ '1', '2' ]
+			}
+		}},
+
 		ranks : [
+			'loginBC',
+			'loginMC',
+			'registerMC',
+			'loginL',
+			'registerL',
 			'greet',
 			'username',
 			'saycurrent',
 			'cspace',
-			'message',
-			'login',
-			'register',
-			'loginL',
-			'registerL'
+			'message'
 		]
     }
 };
 
 
+/**
+| Login Board
+*/
 designs.loginboard = {
 	type   : 'Design',
+
+	frame : {
+		type  : 'Frame',
+		pnw   : { type   : 'Point', anchor : 's', x : -512, y : -100 },
+		pse   : { type   : 'Point', anchor : 's', x :  512, y :    0 }
+	},
+
+	curve : {
+		type  : 'Curve',
+		copse : {
+		'1' : {
+			type : 'MoveTo',
+			to   : {
+				type   : 'Point',
+				anchor : 'sw',
+				x      : 0,
+				y      : 0
+			},
+			bx   : 1,
+			by   : 0
+		},
+		'2' : {
+			type : 'BeziTo',
+			c1x  :  mainboardC1X, c1y  :  mainboardC1Y,
+			c2x  : -mainboardC2X, c2y  :  mainboardC2Y,
+			to   : { type: 'Point', anchor:  'n', x: 0, y: 0 },
+			bx:  0, by :  1
+		},
+		'3' : {
+			type : 'BeziTo',
+			c1x  :  mainboardC2X, c1y  : -mainboardC2Y,
+			c2x  : -mainboardC1X, c2y  :  mainboardC1Y,
+			to   : { type: 'Point', anchor: 'se', x: 0, y: 0 },
+			bx   : -1, by :  0
+		}},
+		ranks : [ '1', '2', '3' ]
+	},
+
 	layout :  {
 		type  : 'Layout',
 		copse : {
-			'userLabel' : {
-				type : 'Label',
-				text : 'username',
-				fontStyle : {
-					type : 'FontStyle',
-					font  : '16px ' + theme.defaultFont,
-					fill  : 'black',
-					align : 'left',
-					base  : 'alphabetic'
-				},
-				pos: {
-					type : 'Point',
-					anchor : 's',
-					x: -220,
-					y:  -75
-				}
-			},
-			'passLabel' : {
-				type : 'Label',
-				text : 'password',
-				fontStyle : {
-					type  : 'FontStyle',
-					font  : '16px ' + theme.defaultFont,
-					fill  : 'black',
-					align : 'left',
-					base  : 'alphabetic'
-				},
-				pos: {
-					type   : 'Point',
-					anchor : 's',
-					x      : -220,
-					y      :  -75
-				}
-			}
-			//{
-			//	type : 'Input',
-			//	name : 'userinput',
-			//	pos : {
-			//		pnw : {
-			//			x : { anchor : 'm', v : -100},
-			//			y : { anchor : 's', v :  -40}
-			//		},
-			//		pse : {
-			//			x : { anchor : 'm', v :  100},
-			//			y : { anchor : 's', v :  -20}
-			//		}
-			//	}
-			//}
+		'userL' : {
+			type : 'Label',
+			text : 'username',
+			fontStyle : fontStyles.left16,
+			pos: { type: 'Point', anchor: 's', x: -220, y:  -55 }
 		},
-		ranks : [ 'userLabel', 'passLabel' ]
+		'passL' : {
+			type : 'Label',
+			text : 'password',
+			fontStyle : fontStyles.left16,
+			pos: { type: 'Point', anchor: 's', x: -220, y:  -20 }
+		}},
+
+		//{
+		//	type : 'Input',
+		//	name : 'userinput',
+		//	pos : {
+		//		pnw : {
+		//			x : { anchor : 'm', v : -100},
+		//			y : { anchor : 's', v :  -40}
+		//		},
+		//		pse : {
+		//			x : { anchor : 'm', v :  100},
+		//			y : { anchor : 's', v :  -20}
+		//		}
+		//	}
+		//}
+
+		ranks : [
+			'userL',
+			'passL'
+		]
     }
 };
 
@@ -398,6 +450,58 @@ var computePoint = function(model, oframe) {
 	return p.add(model.x, model.y);
 };
 
+
+/**
+| Computes a curve for a frame.
+*/
+var computeCurve = function(twig, frame) {
+	var asw = [];
+	if (twig.copse[twig.ranks[0]].type !== 'MoveTo') {
+		throw new Error('Curve does not begin with MoveTo');
+	}
+
+	for(var a = 0, aZ = twig.length; a < aZ; a++) {
+		var ct = twig.copse[twig.ranks[a]];
+		asw.push({
+			to   : computePoint(ct.to, frame),
+			twig : ct
+		});
+	}
+
+	return asw;
+}
+
+
+/**
+| Paths a curve in a fabric
+*/
+var pathCurve = function(fabric, border, twist, curve) {
+	fabric.beginPath(twist);
+	for(var a = 0, aZ = curve.length; a < aZ; a++) {
+		var c = curve[a];
+		var ct = c.twig;
+		var to = c.to;
+		var bx = ct.bx;
+		var by = ct.by;
+		switch(ct.type) {
+		case 'MoveTo':
+			fabric.moveTo(to.x + bx * border, to.y + by * border);
+			break;
+		case 'LineTo':
+			fabric.lineTo(to.x + bx * border, to.y + by * border);
+			break;
+		case 'BeziTo':
+			fabric.beziTo(
+				ct.c1x - by * border, ct.c1y - bx * border,
+				ct.c2x - by * border, ct.c2y - bx * border,
+				to.x   + bx * border, to.y   + by * border
+			);
+			break;
+		default :
+			throw new Error('invalid curve type: ' + ct.type);
+		}
+	}
+}
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,--.  ,       .       .
@@ -440,18 +544,7 @@ var CCustom = function(twig, board, inherit, methods) {
 	var pse      = this.pse    = computePoint(twig.frame.pse, board.iframe);
 	var iframe   = this.iframe = new Rect(Point.zero, pse.sub(pnw));
 
-	var curve    = twig.curve;
-	this.curve   = [];
-	if (curve.copse[curve.ranks[0]].type !== 'MoveTo') {
-		throw new Error('Curve does not begin with MoveTo');
-	}
-	for(var a = 0, aZ = curve.length; a < aZ; a++) {
-		var ct = curve.copse[curve.ranks[a]];
-		this.curve.push({
-			to   : computePoint(ct.to, iframe),
-			twig : ct
-		});
-	}
+	this.curve   = computeCurve(twig.curve, iframe);
 
 	this.$fabric    = null;
 	this.$highlight = false;
@@ -461,32 +554,7 @@ var CCustom = function(twig, board, inherit, methods) {
 | Paths the custom control
 */
 CCustom.prototype.path = function(fabric, border, twist) {
-	var curve = this.curve;
-	fabric.beginPath(twist);
-	for(var a = 0, aZ = curve.length; a < aZ; a++) {
-		var c = curve[a];
-		var ct = c.twig;
-		var to = c.to;
-		var bx = ct.bx;
-		var by = ct.by;
-		switch(ct.type) {
-		case 'MoveTo':
-			fabric.moveTo(to.x + bx * border, to.y + by * border);
-			break;
-		case 'LineTo':
-			fabric.lineTo(to.x + bx * border, to.y + by * border);
-			break;
-		case 'BeziTo':
-			fabric.beziTo(
-				ct.c1x - by * border, ct.c1y - bx * border,
-				ct.c2x - by * border, ct.c2y - bx * border,
-				to.x   + bx * border, to.y   + by * border
-			);
-			break;
-		default :
-			throw new Error('invalid curve type: ' + ct.type);
-		}
-	}
+	pathCurve(fabric, border, twist, this.curve);
 };
 
 /**
@@ -536,8 +604,8 @@ var Methods = {};
  methods for the login custom element.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-Methods.login = {};
-Methods.login.mousehover = function(board, ele, p) {
+Methods.loginMC = {};
+Methods.loginMC.mousehover = function(board, ele, p) {
 	if (p.x < ele.pnw.x || p.y < ele.pnw.y || p.x > ele.pse.x || p.y > ele.pse.y) {
 		return false;
 	}
@@ -546,10 +614,22 @@ Methods.login.mousehover = function(board, ele, p) {
 	if (!fabric.within(ele, 'path', pp))  { return false; }
 
 	system.setCursor('default');
-	board.setHighlight('login');
+	board.setHighlight('loginMC');
 	board.$fabric = null;
 	shell.redraw = true;
 	return true;
+};
+
+Methods.loginMC.mousedown = function(board, ele, p) {
+	if (p.x < ele.pnw.x || p.y < ele.pnw.y || p.x > ele.pse.x || p.y > ele.pse.y) {
+		return false;
+	}
+	var fabric = ele.getFabric();
+	var pp = p.sub(ele.pnw);
+	if (!fabric.within(ele, 'path', pp))  { return false; }
+
+	board.cockpit.setCurBoard('loginboard');
+	return false;
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -562,8 +642,8 @@ Methods.login.mousehover = function(board, ele, p) {
  methods of the login custom element.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-Methods.register = {};
-Methods.register.mousehover = function(board, ele, p) {
+Methods.registerMC = {};
+Methods.registerMC.mousehover = function(board, ele, p) {
 	if (p.x < ele.pnw.x || p.y < ele.pnw.y || p.x > ele.pse.x || p.y > ele.pse.y) {
 		return false;
 	}
@@ -572,7 +652,7 @@ Methods.register.mousehover = function(board, ele, p) {
 	if (!fabric.within(ele, 'path', pp))  { return false; }
 
 	system.setCursor('default');
-	board.setHighlight('register');
+	board.setHighlight('registerMC');
 	board.$fabric = null;
 	shell.redraw = true;
 	return true;
@@ -590,13 +670,15 @@ Methods.register.mousehover = function(board, ele, p) {
  A cockpit board.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-var CBoard = function(design, inherit, screensize) {
-	var tree    = this.tree  = new Tree(design, Patterns.mDesign);
-	var frameD  = tree.root.frame;
-	var oframe  = new Rect(Point.zero, screensize);
-	var pnw     = this.pnw    = computePoint(frameD.pnw, oframe);
-	var pse     = this.pse    = computePoint(frameD.pse, oframe);
-	var iframe  = this.iframe = new Rect(Point.zero, pse.sub(pnw));
+var CBoard = function(design, inherit, cockpit, screensize) {
+	this.cockpit = cockpit;
+	var tree     = this.tree  = new Tree(design, Patterns.mDesign);
+	var frameD   = tree.root.frame;
+	var oframe   = new Rect(Point.zero, screensize);
+	var pnw      = this.pnw    = computePoint(frameD.pnw, oframe);
+	var pse      = this.pse    = computePoint(frameD.pse, oframe);
+	var iframe   = this.iframe = new Rect(Point.zero, pse.sub(pnw));
+	this.curve   = computeCurve(tree.root.curve, iframe);
 
 	// TODO use point arithmetic
 	this.gradientPC = new Point(half(iframe.width), iframe.height + 450);
@@ -630,17 +712,18 @@ CBoard.prototype.newCC = function(twig, inherit, methods) {
 | Paths the boards frame
 */
 CBoard.prototype.path = function(fabric, border, twist) {
+	pathCurve(fabric, border, twist, this.curve);
+	/*
 	var iframe = this.iframe;
 	var fmx = half(iframe.width);
 	var tc  = mTopCurve;
-	var sc  = sideCurve;
-	var sk  = sideSkew;
 	var bo  = border;
 
 	fabric.beginPath(twist);
 	fabric.moveTo(bo, iframe.height);
 	fabric.beziTo(sk, -sc + bo, -tc,        0,               fmx, bo);
 	fabric.beziTo(tc,        0, -sk, -sc + bo, iframe.width - bo, iframe.height);
+	*/
 };
 
 /**
@@ -747,14 +830,46 @@ CBoard.prototype.mousehover = function(p) {
 		var cname = layout.ranks[a];
 		var ce = this.cc[cname];
 		if (!ce.methods.mousehover) { continue; }
-		if (ce.methods.mousehover(this, ce, pp)) { break; }
+		if (ce.methods.mousehover(this, ce, pp)) { return true; }
 	}
-	if (a >= aZ) {
-		system.setCursor('default');
-		this.setHighlight(null);
-	}
+	system.setCursor('default');
+	this.setHighlight(null);
 	return true;
 };
+
+/**
+| Returns true if point is on this mainboard
+*/
+CBoard.prototype.mousedown = function(p) {
+	var pnw = this.pnw;
+	var pse = this.pse;
+	var fabric = this.getFabric();
+	var a, aZ;
+	if (p.y < pnw.y || p.x < pnw.x || p.x > pse.x) {
+		this.setHighlight(null);
+		return null;
+	}
+	var pp = p.sub(pnw);
+
+	// @@ Optimize by reusing the latest path of this.$fabric
+	if (!fabric.within(this, 'path', pp))  {
+		this.setHighlight(null);
+		return null;
+	}
+
+	var layout = this.tree.root.layout;
+	for(a = 0, aZ = layout.length; a < aZ; a++) {
+		var cname = layout.ranks[a];
+		var ce = this.cc[cname];
+		if (!ce.methods.mousedown) { continue; }
+		var r = ce.methods.mousedown(this, ce, pp);
+		if (isnon(r)) { return r; }
+	}
+	system.setCursor('default');
+	this.setHighlight(null);
+	return false;
+};
+
 
 /**
 | Sets the highlighted element.
@@ -817,9 +932,18 @@ Cockpit.prototype.curBoard = function() {
 		return this.boards[this.curBoardName] = new CBoard(
 			designs[this.curBoardName],
 			cboard,
+			this,
 			new Point(fabric.width, fabric.height));
 	}
 };
+
+/**
+| sets the current board
+*/
+Cockpit.prototype.setCurBoard = function(boardName) {
+	this.curBoardName = boardName;
+	shell.redraw = true;
+}
 
 /**
 | Sets the space name displayed on the mainboard.
@@ -857,41 +981,10 @@ Cockpit.prototype.mousehover = function(p) {
 };
 
 /**
-| Login button clicked.
-*/
-Cockpit.prototype.loginButtonClick = function() {
-	// TODO
-	this.mainboard(this.fabric).setHighlight(null);
-	this.curBoardName  = 'login';
-	shell.redraw = true;
-};
-
-/**
 | Mouse button down event
 */
 Cockpit.prototype.mousedown = function(p) {
-	var fabric = this.fabric;
-	return null;
-	/*
-	switch(this._state) {
-	case null:
-		var board = this.mainboard(fabric);
-		if (!board.within(fabric, p, null)) { return null; }
-		if (board.within(fabric, p, 'left')) {
-			this.loginButtonClick();
-			return false;
-		}
-	case 'login' :
-		var board = this.loginboard(fabric);
-		if (!board.within(fabric, p, null)) { return null; }
-		this._state  = null;
-		shell.redraw = true;
-		break;
-	default :
-		throw new Error('invalid cockpit state: ' + this._state);
-	}*/
-
-	//return false;
+	return this.curBoard().mousedown(p);
 };
 
 })();
