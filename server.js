@@ -85,6 +85,7 @@ var Server = function() {
 	this.registerFile('/',                 'html', './meshcraft.html'    );
 	this.registerFile('/browser.js',       'js',   './browser.js'        );
 	this.registerFile('/cockpit.js',       'js',   './cockpit.js'        );
+	this.registerFile('/design.js',        'js',   './design.js'         );
 	this.registerFile('/emulate.js',       'js',   './emulate.js'        );
 	this.registerFile('/fabric.js',        'js',   './fabric.js'         );
 	this.registerFile('/index.html',       'html', './meshcraft.html'    );
