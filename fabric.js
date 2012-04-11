@@ -133,8 +133,8 @@ var PI    = Math.PI;
 var cos   = Math.cos;
 var sin   = Math.sin;
 var tan   = Math.tan;
-var cos30 = cos(PI / 6);   // cos(30°)
-var tan30 = tan(PI / 6);   // tan(30°)
+var cos30 = cos(PI / 6);   // cos(30)
+var tan30 = tan(PI / 6);   // tan(30)
 var magic = 0.551784;      // 'magic' number to approximate ellipses with beziers.
 
 // divides by 2 and rounds up
@@ -233,7 +233,8 @@ Fabric.prototype.moveTo = function(a1, a2) {
 		x = a1;   y = a2;
 	}
 	ensureInteger(x, y);
-	this._posx = x, this._posy = y;
+	this._posx = x;
+	this._posy = y;
 	this._cx.moveTo(x + pan.x + tw, y + pan.y + tw);
 };
 
@@ -251,7 +252,8 @@ Fabric.prototype.lineTo = function(a1, a2) {
 		x = a1;   y = a2;
 	}
 	ensureInteger(x, y);
-	this._posx = x, this._posy = y;
+	this._posx = x;
+	this._posy = y;
 	this._cx.lineTo(x + pan.x + tw, y + pan.y + tw);
 };
 
@@ -656,8 +658,7 @@ Fabric.prototype.within = function(shape, path, a1, a2, a3, a4, a5) {
 	}
 
 	return this._cx.isPointInPath(px, py);
-}
-
+};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,-,-,-.
@@ -1012,7 +1013,7 @@ lazyFixate(Margin.prototype, 'y', function() { return this.n + this.s; });
       |                    |
       |                    |
       '                    '
-       `------------------´+ pse
+       `------------------'+ pse
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -1305,14 +1306,14 @@ OvalSlice.prototype.within = function(fabric, p) {
 
       a1      |----->|
       a2      |->|   '
-			  '  '   '           b2
+              '  '   '           b2
           ..-----.. .' . . . . . A
         ,' \  n  / ','       b1  |
        , nw .---. ne , . . . A   |
  pc>   |---(  +  )---| . . . v . v
-       ` sw `---' se '
-        `. /  s  \ .´
-          ``-----´´            outside = null
+       ' sw `---' se '
+        `. /  s  \ .'
+          ``-----''             outside = null
 
  pc:     center
  a1,b1:  width and height of inner oval
@@ -1437,7 +1438,7 @@ OvalFlower.prototype.path = function(fabric, border, twist, segment) {
 */
 OvalFlower.prototype.within = function(fabric, p) {
 	// TODO quick null if out of box.
-	if (!fabric.within(this, 'path', p, 'outer')) { return null };
+	if (!fabric.within(this, 'path', p, 'outer')) { return null; }
 	if (isnon(this.segs.c ) && fabric.within(this, 'path', p, 'c' )) { return 'c';  }
 	if (isnon(this.segs.n ) && fabric.within(this, 'path', p, 'n' )) { return 'n';  }
 	if (isnon(this.segs.ne) && fabric.within(this, 'path', p, 'ne')) { return 'ne'; }

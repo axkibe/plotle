@@ -93,7 +93,7 @@ var theme = {
 				//{ border: 1, width : 2, color : 'rgb(255, 188, 87)' },
 				{ border: 1, width : 1, color : 'rgb(255, 94, 44)' },
 				{ border: 0, width : 1, color : 'rgb( 94, 94,  0)' }
-			],
+			]
 		},
 
 		sides : {
@@ -107,14 +107,21 @@ var theme = {
 			fill : {
 				gradient : 'horizontal',
 				steps : [
+					[0, 'rgb(255, 188, 88)' ],
+					[1, 'rgb(255,  99, 44)' ]
+				]
+			},
+			/*fill : {
+				gradient : 'horizontal',
+				steps : [
 					[0, 'rgb(255, 237, 210)' ],
 					[1, 'rgb(255, 185, 81)'  ],
 				],
-			},
+			},*/
 			edge : [
 				{ border: 1, width : 2, color : 'rgb(255, 188, 87)' },
 				{ border: 0, width : 1, color : 'rgb(128, 128, 0)' }
-			],
+			]
 		},
 
 		field : {
@@ -122,7 +129,7 @@ var theme = {
 			edge : [
 				{ border: 1, width : 1, color : 'rgb(255, 188, 87)' },
 				{ border: 0, width : 1, color : 'black' }
-			],
+			]
 		}
 	},
 
@@ -134,7 +141,7 @@ var theme = {
 			b1    :  null, // calculated below
 			a2    :  90,
 			b2    :  null, // calculated below
-			slice :  0.82,
+			slice :  0.82
 		},
 
 		style : {
@@ -148,7 +155,7 @@ var theme = {
 					[ 0, 'rgba(255, 255, 168, 0.955)' ],
 					[ 1, 'rgba(255, 255, 243, 0.955)' ]
 				]
-			},
+			}
 		},
 
 		slice : {
@@ -156,13 +163,13 @@ var theme = {
 				gradient : 'horizontal',
 				steps : [
 					[ 0, 'rgba(255, 255, 200, 0.9)' ],
-					[ 1, 'rgba(255, 255, 205, 0.9)' ],
-				],
+					[ 1, 'rgba(255, 255, 205, 0.9)' ]
+				]
 			},
 			edge : [
 				{ border: 1, width :   1, color : 'rgb(255, 200, 105)' },
-				{ border: 0, width : 0.7, color : 'black' },
-			],
+				{ border: 0, width : 0.7, color : 'black' }
+			]
 		},
 
 		highlight : {
@@ -247,7 +254,7 @@ theme.ovalmenu.dimensions.b2 = Math.round(
 	theme.ovalmenu.dimensions.a1 *
 	theme.ovalmenu.dimensions.a2);
 
-theme.itemmenu = theme.ovalmenu
+theme.itemmenu = theme.ovalmenu;
 
 // rose
 //					[ 0, 'rgba(255, 234, 234, 0.90)' ],

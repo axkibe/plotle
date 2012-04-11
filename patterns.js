@@ -128,7 +128,7 @@ Patterns.mDesign = {
 		must : {
 			to : 'Point',
 			bx : 'Number',
-			by : 'Number',
+			by : 'Number'
 		}
 	},
 
@@ -136,7 +136,7 @@ Patterns.mDesign = {
 		must : {
 			to : 'Point',
 			bx : 'Number',
-			by : 'Number',
+			by : 'Number'
 		}
 	},
 
@@ -149,7 +149,7 @@ Patterns.mDesign = {
 			c1x : 'Number',
 			c1y : 'Number',
 			c2x : 'Number',
-			c2y : 'Number',
+			c2y : 'Number'
 		}
 	},
 

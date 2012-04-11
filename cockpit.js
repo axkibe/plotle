@@ -36,6 +36,7 @@ var Patterns;
 
 var theme;
 var system;
+var shell;
 
 /**
 | Exports
@@ -75,14 +76,21 @@ var Rect          = Fabric.Rect;
 var RoundRect     = Fabric.RoundRect;
 
 var fontStyles = {
-	center12 : {
+	center12  : {
 		type  : 'FontStyle',
 		font  : '12px ' + theme.defaultFont,
 		fill  : 'black',
 		align : 'center',
 		base  : 'alphabetic'
 	},
-	center18 : {
+	center14  : {
+		type  : 'FontStyle',
+		font  : '14px ' + theme.defaultFont,
+		fill  : 'black',
+		align : 'center',
+		base  : 'alphabetic'
+	},
+	center18  : {
 		type  : 'FontStyle',
 		font  : '18px ' + theme.defaultFont,
 		fill  : 'black',
@@ -96,7 +104,7 @@ var fontStyles = {
 		align : 'center',
 		base  : 'alphabetic'
 	},
-	left12 : {
+	left12    : {
 		type  : 'FontStyle',
 		font  : '12px ' + theme.defaultFont,
 		fill  : 'black',
@@ -119,8 +127,8 @@ var styles = {
 	'highlight' : theme.cockpit.highlight,
 	'boxes'     : {
 		edge : [
-			{ border: 0, width : 1, color : 'black' },
-		],
+			{ border: 0, width : 1, color : 'black' }
+		]
 	}
 };
 
@@ -143,35 +151,35 @@ designs.mainboard = {
 				type      : 'Label',
 				text      : 'Hello',
 				fontStyle : fontStyles.center12,
-				pos       : { type : 'Point', anchor : 'sw', x:  240, y:  -34 }
+				pos       : { type: 'Point', anchor: 'sw', x:  240, y: -34 }
 			},
 
 			'username'    : {
 				type      : 'Label',
 				text      : 'Visitor',
 				fontStyle : fontStyles.center18,
-				pos       : { type : 'Point', anchor : 'sw', x :  240, y :  -11 }
+				pos       : { type: 'Point', anchor: 'sw', x:  240, y: -11 }
 			},
 
 			'saycurrent'  : {
 				type      : 'Label',
 				text      : 'current space',
 				fontStyle : fontStyles.center12,
-				pos       : { type : 'Point', anchor :  's', x :    0, y :  -39 }
+				pos       : { type: 'Point', anchor:  's', x:    0, y: -39 }
 			},
 
 			'cspace'      : {
 				type      : 'Label',
 				text      : 'welcome',
 				fontStyle : fontStyles.center22b,
-				pos       : { type : 'Point', anchor :  's', x :    0, y :  -15 }
+				pos       : { type: 'Point', anchor:  's', x:    0, y: -15 }
 			},
 
 			'message'     : {
 				type      : 'Label',
 				text      : 'This is a message just for testing.',
 				fontStyle : fontStyles.left12,
-				pos       : { type : 'Point', anchor : 'se', x : -450, y : -20  }
+				pos       : { type: 'Point', anchor: 'se', x: -450, y: -20 }
 			},
 
 			'login' : {
@@ -184,7 +192,7 @@ designs.mainboard = {
 						type   : 'Point',
 						anchor : 'sw',
 						x      : 0,
-						y      : -36,
+						y      : -36
 					},
 					pse   : {
 						type   : 'Point',
@@ -205,7 +213,7 @@ designs.mainboard = {
 								y : 0
 							},
 							bx   : 1,
-							by   : 0,
+							by   : 0
 						},
 						'2' : {
 							type : 'BeziTo',
@@ -220,11 +228,18 @@ designs.mainboard = {
 								y      : 0
 							},
 							bx   : -1,
-							by   :  0,
-						},
+							by   :  0
+						}
 					},
 					ranks : [ '1', '2' ]
-				},
+				}
+			},
+
+			'loginL'      : {
+				type      : 'Label',
+				text      : 'login',
+				fontStyle : fontStyles.center14,
+				pos       : { type: 'Point', anchor: 'sw', x:  135, y:  -9 }
 			},
 
 			'register' : {
@@ -237,7 +252,7 @@ designs.mainboard = {
 						type   : 'Point',
 						anchor : 'se',
 						x : -sideButtonWidth,
-						y : -36,
+						y : -36
 					},
 					pse   : {
 						type   : 'Point',
@@ -258,7 +273,7 @@ designs.mainboard = {
 								y      : 0
 							},
 							bx   : 1,
-							by   : 0,
+							by   : 0
 						},
 						'2' : {
 							type : 'BeziTo',
@@ -273,11 +288,18 @@ designs.mainboard = {
 								y : 0
 							},
 							bx   : -1,
-							by   :  0,
-						},
+							by   :  0
+						}
 					},
 					ranks : [ '1', '2' ]
-				},
+				}
+			},
+
+			'registerL'      : {
+				type      : 'Label',
+				text      : 'register',
+				fontStyle : fontStyles.center14,
+				pos       : { type: 'Point', anchor: 'se', x: -135, y:  -9 }
 			}
 		},
 		ranks : [
@@ -287,9 +309,11 @@ designs.mainboard = {
 			'cspace',
 			'message',
 			'login',
-			'register'
+			'register',
+			'loginL',
+			'registerL'
 		]
-    },
+    }
 };
 
 
@@ -348,7 +372,7 @@ designs.loginboard = {
 			//}
 		},
 		ranks : [ 'userLabel', 'passLabel' ]
-    },
+    }
 };
 
 /**
@@ -372,7 +396,7 @@ var computePoint = function(model, oframe) {
 	case 'nw' : p = pnw;                                                 break;
 	}
 	return p.add(model.x, model.y);
-}
+};
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -390,13 +414,13 @@ var CLabel = function(twig, board, inherit, methods) {
 	this.board   = board;
 	this.pos     = computePoint(twig.pos, board.iframe);
 	this.methods = methods ? methods : {};
-}
+};
 
 CLabel.prototype.draw = function(fabric) {
 	var fs = this.twig.fontStyle;
 	fabric.fontStyle(fs.font, fs.fill, fs.align, fs.base);
 	fabric.fillText(this.twig.text, this.pos);
-}
+};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,--.  ,--.         .
@@ -425,13 +449,13 @@ var CCustom = function(twig, board, inherit, methods) {
 		var ct = curve.copse[curve.ranks[a]];
 		this.curve.push({
 			to   : computePoint(ct.to, iframe),
-			twig : ct,
+			twig : ct
 		});
 	}
 
 	this.$fabric    = null;
 	this.$highlight = false;
-}
+};
 
 /**
 | Paths the custom control
@@ -453,10 +477,11 @@ CCustom.prototype.path = function(fabric, border, twist) {
 			fabric.lineTo(to.x + bx * border, to.y + by * border);
 			break;
 		case 'BeziTo':
-			fabric.beziTo(ct.c1x , ct.c1y - bx * border,
-						  ct.c2x , ct.c2y - bx * border,
-						  to.x + bx * border,
-						  to.y + by * border);
+			fabric.beziTo(
+				ct.c1x - by * border, ct.c1y - bx * border,
+				ct.c2x - by * border, ct.c2y - bx * border,
+				to.x   + bx * border, to.y   + by * border
+			);
 			break;
 		default :
 			throw new Error('invalid curve type: ' + ct.type);
@@ -471,7 +496,7 @@ CCustom.prototype.getFabric = function(highlight) {
 	var fabric = this.$fabric;
 	if (fabric && this.$highlight === highlight) { return fabric; }
 
-	var fabric = this.$fabric = new Fabric(this.iframe);
+	fabric = this.$fabric = new Fabric(this.iframe);
 	var sname = highlight ? this.twig.highlight : this.twig.style;
 	var style = styles[sname];
 	if (!isnon(style)) { throw new Error('Invalid style: ' + sname); }
@@ -482,42 +507,33 @@ CCustom.prototype.getFabric = function(highlight) {
 	}
 
 	return fabric;
-}
+};
 
 /**
 | Draws the custom control.
 */
 CCustom.prototype.draw = function(fabric, highlight) {
 	fabric.drawImage(this.getFabric(highlight), this.pnw);
-}
+};
 
-
-
-/*
- // Draws the mainboards contents
-	var stHighlight = theme.cockpit.highlight;
-	var stSides     = theme.cockpit.sides;
-	var hl          = this._highlight;
-	fabric.paint(hl === 'left'  ? stHighlight : stSides, this, 'pathLeft');
-	fabric.paint(hl === 'right' ? stHighlight : stSides, this, 'pathRight');
-
-
-	var sideButtonX1 = pnw.x + 135;
-	var sideButtonX2 = pse.x - 135;
-	var sideButtonY  = pse.y -  9;
-	fabric.fontStyle('14px ' + theme.defaultFont, 'rgb(0, 0, 0)', 'center', 'alphabetic');
-	fabric.fillText('login', sideButtonX1, sideButtonY);
-	fabric.fillText('register', sideButtonX2, sideButtonY);
-
-}
-*/
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ,-,-,-.       .  .         .
+ `,| | |   ,-. |- |-. ,-. ,-| ,-.
+   | ; | . |-' |  | | | | | | `-.
+   '   `-' `-' `' ' ' `-' `-^ `-'
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 var Methods = {};
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- +++ meth-login +++
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- methods of the login custom element.
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+           .  .         .    .
+ ,-,-. ,-. |- |-. ,-. ,-|    |  ,-. ,-. . ,-.
+ | | | |-' |  | | | | | |    |  | | | | | | |
+ ' ' ' `-' `' ' ' `-' `-^    `' `-' `-| ' ' '
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                                     `'
+ methods for the login custom element.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 Methods.login = {};
@@ -537,9 +553,12 @@ Methods.login.mousehover = function(board, ele, p) {
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- +++ meth-register +++
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
+           .  .         .                      .
+ ,-,-. ,-. |- |-. ,-. ,-|    ,-. ,-. ,-. . ,-. |- ,-. ,-.
+ | | | |-' |  | | | | | |    |   |-' | | | `-. |  |-' |
+ ' ' ' `-' `' ' ' `-' `-^    '   `-' `-| ' `-' `' `-' '
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ,|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                                      `'
  methods of the login custom element.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -605,7 +624,7 @@ CBoard.prototype.newCC = function(twig, inherit, methods) {
 	case 'Custom' : return new CCustom(twig, this, inherit, methods);
 	default       : throw new Error('Invalid element type: ' + twig.type);
 	}
-}
+};
 
 /**
 | Paths the boards frame
@@ -701,7 +720,7 @@ CBoard.prototype.getFabric = function() {
 	fabric.paint(theme.cockpit.field, this, 'pathPassword');*/
 
 	return fabric;
-}
+};
 
 /**
 | Returns true if point is on this mainboard
@@ -724,7 +743,7 @@ CBoard.prototype.mousehover = function(p) {
 	}
 
 	var layout = this.tree.root.layout;
-	for(var a = 0, aZ = layout.length; a < aZ; a++) {
+	for(a = 0, aZ = layout.length; a < aZ; a++) {
 		var cname = layout.ranks[a];
 		var ce = this.cc[cname];
 		if (!ce.methods.mousehover) { continue; }
@@ -735,7 +754,7 @@ CBoard.prototype.mousehover = function(p) {
 		this.setHighlight(null);
 	}
 	return true;
-}
+};
 
 /**
 | Sets the highlighted element.
@@ -748,7 +767,7 @@ CBoard.prototype.setHighlight = function(highlight) {
 	if (this._highlight) { this.cc[this._highlight].$fabric = null; }
 	if (      highlight) { this.cc[      highlight].$fabric = null; }
 	this._highlight = highlight;
-}
+};
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -766,7 +785,7 @@ Cockpit = function() {
 	this.curBoardName = 'mainboard';
 	this.boards = {
 		mainboard  : null,
-		loginboard : null,
+		loginboard : null
 	};
 	this._user       = null;
 	this._curSpace   = null;
@@ -778,7 +797,7 @@ Cockpit = function() {
 */
 Cockpit.prototype.message = function(message) {
 	this._message = message;
-}
+};
 
 
 /**
@@ -800,7 +819,7 @@ Cockpit.prototype.curBoard = function() {
 			cboard,
 			new Point(fabric.width, fabric.height));
 	}
-}
+};
 
 /**
 | Sets the space name displayed on the mainboard.
@@ -808,7 +827,7 @@ Cockpit.prototype.curBoard = function() {
 Cockpit.prototype.setCurSpace = function(curSpace) {
 	// TODO
 	this._curSpace = curSpace;
-}
+};
 
 /**
 | Sets the user greeted on the mainboard
@@ -817,7 +836,7 @@ Cockpit.prototype.setUser = function(user, loggedIn) {
 	// TODO
 	this._user     = user;
 	this._loggedIn = loggedIn;
-}
+};
 
 
 /**
@@ -845,7 +864,7 @@ Cockpit.prototype.loginButtonClick = function() {
 	this.mainboard(this.fabric).setHighlight(null);
 	this.curBoardName  = 'login';
 	shell.redraw = true;
-}
+};
 
 /**
 | Mouse button down event
