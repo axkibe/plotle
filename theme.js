@@ -110,6 +110,21 @@ var theme = {
 			]
 		},
 
+		zero : {
+			edge : [ ]  // @@ allow to be left away
+		},
+
+		zhighlight : {
+			edge : [ ],
+			fill : {
+				gradient : 'horizontal',
+				steps : [
+					[0, 'rgb(255, 188, 88)' ],
+					[1, 'rgb(255,  99, 44)' ]
+				]
+			},
+		},
+
 		sides : {
 			edge : [
 				{ border:  1, width :  1, color : 'rgb(255, 94, 44)' },

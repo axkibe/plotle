@@ -78,10 +78,12 @@ var Rect          = Fabric.Rect;
 var RoundRect     = Fabric.RoundRect;
 
 var styles = {
-	'boxes'     : { edge : [ { border: 0, width : 1, color : 'black' } ] },
-	'button'    : theme.cockpit.button,
-	'highlight' : theme.cockpit.highlight,
-	'sides'     : theme.cockpit.sides
+	'boxes'      : { edge : [ { border: 0, width : 1, color : 'black' } ] },
+	'button'     : theme.cockpit.button,
+	'highlight'  : theme.cockpit.highlight,
+	'sides'      : theme.cockpit.sides,
+	'zero'       : theme.cockpit.zero,
+	'zhighlight' : theme.cockpit.zhighlight
 };
 
 

@@ -76,6 +76,14 @@ var cancelBCXM       = cancelBCW * magic / 2;
 var cancelBCYM       = cancelBCH * magic / 2;
 
 /**
+| Forgot password control on Loginboard width and height
+*/
+var forgotBCW        = 110;
+var forgotBCH        = 22;
+var forgotBCXM       = forgotBCW * magic;
+var forgotBCYM       = forgotBCH * magic;
+
+/**
 | Shortcuts for fontstyles
 */
 var fontStyles = {
@@ -99,6 +107,13 @@ var fontStyles = {
 		fill  : 'black',
 		align : 'center',
 		base  : 'alphabetic'
+	},
+	cm12  : {
+		type  : 'FontStyle',
+		font  : '12px ' + theme.defaultFont,
+		fill  : 'black',
+		align : 'center',
+		base  : 'middle'
 	},
 	cm14  : {
 		type  : 'FontStyle',
@@ -356,8 +371,8 @@ Design.loginboard = {
 			highlight : 'highlight',
 			frame : {
 				type  : 'Frame',
-				pnw   : { type: 'Point', anchor: 'se', x: -380,            y: -15 - loginBCH },
-				pse   : { type: 'Point', anchor: 'se', x: -380 + loginBCW, y: -15 }
+				pnw   : { type: 'Point', anchor: 'se', x: -380,            y: -10 - loginBCH },
+				pse   : { type: 'Point', anchor: 'se', x: -380 + loginBCW, y: -10 }
 			},
 			caption : {
 				type      : 'Label',
@@ -411,8 +426,8 @@ Design.loginboard = {
 			highlight : 'highlight',
 			frame : {
 				type  : 'Frame',
-				pnw   : { type: 'Point', anchor: 'se', x: -300,             y: -15 - cancelBCH },
-				pse   : { type: 'Point', anchor: 'se', x: -300 + cancelBCW, y: -15 }
+				pnw   : { type: 'Point', anchor: 'se', x: -300,             y: -10 - cancelBCH },
+				pse   : { type: 'Point', anchor: 'se', x: -300 + cancelBCW, y: -10 }
 			},
 			caption : {
 				type      : 'Label',
@@ -459,6 +474,61 @@ Design.loginboard = {
 
 				ranks : [ '1', '2', '3', '4', '5' ]
 			}
+		},
+		'forgotBC'    : {
+			type      : 'Custom',
+			style     : 'zero',
+			highlight : 'zhighlight',
+			frame : {
+				type  : 'Frame',
+				pnw   : { type: 'Point', anchor: 'se', x: -240,             y: -10 - forgotBCH },
+				pse   : { type: 'Point', anchor: 'se', x: -240 + forgotBCW, y: -10 }
+			},
+			caption : {
+				type      : 'Label',
+				text      : 'forgot password?',
+				fontStyle : fontStyles.cm12,
+				pos       : { type: 'Point', anchor: 'c', x:  0, y: 0 }
+			},
+			curve :  {
+				type : 'Curve',
+				copse : {
+				'1' : {
+					type : 'MoveTo',
+					to   : { type: 'Point', anchor:  'n', x:  0, y:  1 },
+					bx   :  0, by : 1
+				},
+				'2' : {
+					type : 'BeziTo',
+					to   :  { type: 'Point', anchor: 'e', x: -1, y:  0 },
+					c1x  :  forgotBCXM, c1y :           0,
+					c2x  :           0, c2y : -forgotBCYM,
+					bx   : -1, by:  0
+				},
+				'3' : {
+					type : 'BeziTo',
+					to   :  { type: 'Point', anchor: 's', x:  0, y: -1 },
+					c1x  :           0, c1y :  forgotBCYM,
+					c2x  :  forgotBCXM, c2y :           0,
+					bx   :  0, by: -1
+				},
+				'4' : {
+					type : 'BeziTo',
+					to   :  { type: 'Point', anchor: 'w', x:  1, y:  0 },
+					c1x  : -forgotBCXM, c1y :          0,
+					c2x  :           0, c2y : forgotBCYM,
+					bx   :  1, by:  0
+				},
+				'5' : {
+					type : 'BeziTo',
+					to   :  { type: 'Point', anchor: 'n', x:  0, y:  1 },
+					c1x  :           0, c1y : -forgotBCYM,
+					c2x  : -forgotBCXM, c2y :           0,
+					bx   :  0, by:  1
+				}},
+
+				ranks : [ '1', '2', '3', '4', '5' ]
+			}
 		}},
 
 		//{
@@ -480,7 +550,8 @@ Design.loginboard = {
 			'userL',
 			'passL',
 			'loginBC',
-			'cancelBC'
+			'cancelBC',
+			'forgotBC'
 		]
     }
 };
