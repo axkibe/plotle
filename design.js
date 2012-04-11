@@ -129,6 +129,13 @@ var fontStyles = {
 		align : 'center',
 		base  : 'alphabetic'
 	},
+	ca22  : {
+		type  : 'FontStyle',
+		font  : '22px ' + theme.defaultFont,
+		fill  : 'black',
+		align : 'center',
+		base  : 'alphabetic'
+	},
 	la12    : {
 		type  : 'FontStyle',
 		font  : '12px ' + theme.defaultFont,
@@ -353,17 +360,23 @@ Design.loginboard = {
 	layout :  {
 		type  : 'Layout',
 		copse : {
-		'userL' : {
-			type : 'Label',
-			text : 'username',
-			fontStyle : fontStyles.la16,
-			pos: { type: 'Point', anchor: 's', x: -220, y:  -55 }
+		'loginL'      : {
+			type      : 'Label',
+			text      : 'Login',
+			fontStyle : fontStyles.ca22,
+			pos       : { type: 'Point', anchor: 'sw', x: 160, y: -14 }
 		},
-		'passL' : {
-			type : 'Label',
-			text : 'password',
+		'userL' : {
+			type      : 'Label',
+			text      : 'username',
 			fontStyle : fontStyles.la16,
-			pos: { type: 'Point', anchor: 's', x: -220, y:  -20 }
+			pos       : { type: 'Point', anchor: 's', x: -220, y:  -55 }
+		},
+		'passL'       : {
+			type      : 'Label',
+			text      : 'password',
+			fontStyle : fontStyles.la16,
+			pos       : { type: 'Point', anchor: 's', x: -220, y:  -20 }
 		},
 		'loginBC'     : {
 			type      : 'Custom',
@@ -547,11 +560,12 @@ Design.loginboard = {
 		//}
 
 		ranks : [
-			'userL',
-			'passL',
 			'loginBC',
 			'cancelBC',
-			'forgotBC'
+			'forgotBC',
+			'loginL',
+			'userL',
+			'passL'
 		]
     }
 };
