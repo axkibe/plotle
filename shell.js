@@ -50,6 +50,15 @@ var shell = null;
 var Shell;
 
 /**
+| Debugging mode, don't cache anything.
+|
+| In case of doubt, if caching is faulty, just set this true and see if the error
+| vanishes.
+*/
+var dbgNoCache = false;
+
+
+/**
 | Capsule
 */
 (function(){
@@ -98,14 +107,6 @@ var tfxSign       = MeshMashine.tfxSign;
 
 // configures tree.
 Tree.cogging = true;
-
-/**
-| Debugging mode, don't cache anything.
-|
-| In case of doubt, if caching is faulty, just set this true and see if the error
-| vanishes.
-*/
-var noCache = false;
 
 /**
 | The server peer
@@ -1151,7 +1152,7 @@ VPara.prototype.getFlow = function() {
 	// @@ go into subnodes instead
 	var text = this.twig.text;
 
-	if (!noCache && flow &&
+	if (!dbgNoCache && flow &&
 		flow.flowWidth === flowWidth &&
 		flow.fontsize  === fontsize
 	) return flow;
@@ -1536,7 +1537,7 @@ VPara.prototype.getFabric = function() {
 	var fabric = this.$fabric;
 
 	// cache hit?
-	if (!noCache && fabric &&
+	if (!dbgNoCache && fabric &&
 		fabric.width === width &&
 		fabric.height === height)
 	{ return fabric; }
@@ -2475,7 +2476,7 @@ VNote.prototype.draw = function(fabric) {
 	var f = this.$fabric;
 
 	// no buffer hit?
-	if (noCache || !f ||
+	if (dbgNoCache || !f ||
 		zone.width  !== f.width ||
 		zone.height !== f.height)
 	{
@@ -2701,7 +2702,7 @@ VLabel.prototype.draw = function(fabric) {
 	var zone = this.getZone();
 
 	// no buffer hit?
-	if (noCache || !f ||
+	if (dbgNoCache || !f ||
 		zone.width  !== f.width ||
 		zone.height !== f.height)
 	{

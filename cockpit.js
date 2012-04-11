@@ -38,6 +38,7 @@ var Patterns;
 var theme;
 var system;
 var shell;
+var dbgNoCache;
 
 /**
 | Exports
@@ -77,13 +78,10 @@ var Rect          = Fabric.Rect;
 var RoundRect     = Fabric.RoundRect;
 
 var styles = {
-	'sides'     : theme.cockpit.sides,
+	'boxes'     : { edge : [ { border: 0, width : 1, color : 'black' } ] },
+	'button'    : theme.cockpit.button,
 	'highlight' : theme.cockpit.highlight,
-	'boxes'     : {
-		edge : [
-			{ border: 0, width : 1, color : 'black' }
-		]
-	}
+	'sides'     : theme.cockpit.sides
 };
 
 
@@ -98,6 +96,7 @@ var computePoint = function(model, oframe) {
 	switch (model.anchor) {
 	// @@ integrate add into switch
 	// @@ make this part of oframe logic
+	case 'c'  : p = new Point(half(pnw.x + pse.x), half(pnw.y + pse.y)); break;
 	case 'n'  : p = new Point(half(pnw.x + pse.x), pnw.y);               break;
 	case 'ne' : p = new Point(pse.x,               pnw.y);               break;
 	case 'e'  : p = new Point(pse.x,               half(pnw.y + pse.y)); break;
@@ -173,17 +172,33 @@ var pathCurve = function(fabric, border, twist, curve) {
  A computed Label
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-var CLabel = function(twig, board, inherit, methods) {
+var CLabel = function(twig, board, inherit, name) {
 	this.twig    = twig;
 	this.board   = board;
+	this.name    = name;
 	this.pos     = computePoint(twig.pos, board.iframe);
-	this.methods = methods ? methods : {};
+	this.methods = Methods[name];
+	if (!this.methods) { this.methods = {}; }
 };
 
 CLabel.prototype.draw = function(fabric) {
 	var fs = this.twig.fontStyle;
 	fabric.fontStyle(fs.font, fs.fill, fs.align, fs.base);
 	fabric.fillText(this.twig.text, this.pos);
+};
+
+/**
+| Mouse hover
+*/
+CLabel.prototype.mousehover = function(board, p) {
+	return false;
+};
+
+/**
+| Mouse down
+*/
+CLabel.prototype.mousedown = function(board, p) {
+	return null;
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -196,16 +211,21 @@ CLabel.prototype.draw = function(fabric) {
  A computed custom element.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-var CCustom = function(twig, board, inherit, methods) {
+var CCustom = function(twig, board, inherit, name) {
 	this.twig    = twig;
 	this.board   = board;
-	this.methods = methods ? methods : {};
+	this.name    = name;
+	this.methods = Methods[name];
+	if (!this.methods) { this.methods = {}; }
+
 	var pnw      = this.pnw    = computePoint(twig.frame.pnw, board.iframe);
 	var pse      = this.pse    = computePoint(twig.frame.pse, board.iframe);
 	var iframe   = this.iframe = new Rect(Point.zero, pse.sub(pnw));
-
 	this.curve   = computeCurve(twig.curve, iframe);
 
+	this.caption = immute({
+		pos : computePoint(twig.caption.pos, iframe)
+	});
 	this.$fabric    = null;
 	this.$highlight = false;
 };
@@ -222,7 +242,7 @@ CCustom.prototype.path = function(fabric, border, twist) {
 */
 CCustom.prototype.getFabric = function(highlight) {
 	var fabric = this.$fabric;
-	if (fabric && this.$highlight === highlight) { return fabric; }
+	if (fabric && this.$highlight === highlight && !dbgNoCache) { return fabric; }
 
 	fabric = this.$fabric = new Fabric(this.iframe);
 	var sname = highlight ? this.twig.highlight : this.twig.style;
@@ -230,11 +250,53 @@ CCustom.prototype.getFabric = function(highlight) {
 	if (!isnon(style)) { throw new Error('Invalid style: ' + sname); }
 	fabric.paint(style, this, 'path');
 
+	var fs = this.twig.caption.fontStyle;
+	fabric.fontStyle(fs.font, fs.fill, fs.align, fs.base);
+	fabric.fillText(this.twig.caption.text, this.caption.pos);
+
 	if (dbgBoxes) {
 		fabric.paint(styles.boxes, new Rect(this.iframe.pnw, this.iframe.pse.sub(1, 1)), 'path');
 	}
 
 	return fabric;
+};
+
+/**
+| Mouse hover.
+*/
+CCustom.prototype.mousehover = function(board, p) {
+	if (p.x < this.pnw.x || p.y < this.pnw.y || p.x > this.pse.x || p.y > this.pse.y) {
+		return false;
+	}
+	var fabric = this.getFabric();
+	var pp = p.sub(this.pnw);
+	if (!fabric.within(this, 'path', pp))  { return false; }
+
+	system.setCursor('default');
+	board.setHighlight(this.name);
+	this.$fabric = board.$fabric = null;
+	shell.redraw = true;
+
+	if (this.methods.mousehover) { this.methods.mousehover(board, this, p); }
+	return true;
+};
+
+/**
+| Mouse down.
+*/
+CCustom.prototype.mousedown = function(board, p) {
+	if (p.x < this.pnw.x || p.y < this.pnw.y || p.x > this.pse.x || p.y > this.pse.y) {
+		return false;
+	}
+	var fabric = this.getFabric();
+	var pp = p.sub(this.pnw);
+	if (!fabric.within(this, 'path', pp))  { return false; }
+
+	if (this.methods.mousedown) {
+		this.methods.mousedown(board, this, p);
+		shell.redraw = true;
+	}
+	return true;
 };
 
 /**
@@ -255,69 +317,44 @@ CCustom.prototype.draw = function(fabric, highlight) {
 var Methods = {};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-           .  .         .    .
- ,-,-. ,-. |- |-. ,-. ,-|    |  ,-. ,-. . ,-.
- | | | |-' |  | | | | | |    |  | | | | | | |
- ' ' ' `-' `' ' ' `-' `-^    `' `-' `-| ' ' '
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-                                     `'
- methods for the login custom element.
+ +++Mainboard:loginMC+++
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+ The side button on the mainboard.
+ Switches to the loginboard.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 Methods.loginMC = {};
-Methods.loginMC.mousehover = function(board, ele, p) {
-	if (p.x < ele.pnw.x || p.y < ele.pnw.y || p.x > ele.pse.x || p.y > ele.pse.y) {
-		return false;
-	}
-	var fabric = ele.getFabric();
-	var pp = p.sub(ele.pnw);
-	if (!fabric.within(ele, 'path', pp))  { return false; }
-
-	system.setCursor('default');
-	board.setHighlight('loginMC');
-	board.$fabric = null;
-	shell.redraw = true;
-	return true;
-};
 
 Methods.loginMC.mousedown = function(board, ele, p) {
-	if (p.x < ele.pnw.x || p.y < ele.pnw.y || p.x > ele.pse.x || p.y > ele.pse.y) {
-		return false;
-	}
-	var fabric = ele.getFabric();
-	var pp = p.sub(ele.pnw);
-	if (!fabric.within(ele, 'path', pp))  { return false; }
-
 	board.cockpit.setCurBoard('loginboard');
-	return false;
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-           .  .         .                      .
- ,-,-. ,-. |- |-. ,-. ,-|    ,-. ,-. ,-. . ,-. |- ,-. ,-.
- | | | |-' |  | | | | | |    |   |-' | | | `-. |  |-' |
- ' ' ' `-' `' ' ' `-' `-^    '   `-' `-| ' `-' `' `-' '
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ,|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-                                      `'
- methods of the login custom element.
+ +++Mainboard:registerMC+++
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+ The register button on the mainboard.
+ Switches to the registerboard.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 Methods.registerMC = {};
-Methods.registerMC.mousehover = function(board, ele, p) {
-	if (p.x < ele.pnw.x || p.y < ele.pnw.y || p.x > ele.pse.x || p.y > ele.pse.y) {
-		return false;
-	}
-	var fabric = ele.getFabric();
-	var pp = p.sub(ele.pnw);
-	if (!fabric.within(ele, 'path', pp))  { return false; }
 
-	system.setCursor('default');
-	board.setHighlight('registerMC');
-	board.$fabric = null;
-	shell.redraw = true;
-	return true;
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ +++Loginboard:cancelBC+++
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+ The cancel button on the loginboard.
+ Switches back to the mainboard.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+Methods.cancelBC = {};
+
+Methods.cancelBC.mousedown = function(board, ele, p) {
+	board.cockpit.setCurBoard('mainboard');
 };
-
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -353,17 +390,17 @@ var CBoard = function(design, inherit, cockpit, screensize) {
 	for(var a = 0, aZ = layout.length; a < aZ; a++) {
 		var name = layout.ranks[a];
 		var twig = layout.copse[name];
-		this.cc[name] = this.newCC(twig, inherit && inherit.cc[name], Methods[name]);
+		this.cc[name] = this.newCC(twig, inherit && inherit.cc[name], name);
 	}
 };
 
 /**
 | Creates a new enhanced element.
 */
-CBoard.prototype.newCC = function(twig, inherit, methods) {
+CBoard.prototype.newCC = function(twig, inherit, name) {
 	switch(twig.type) {
-	case 'Label'  : return new CLabel (twig, this, inherit, methods);
-	case 'Custom' : return new CCustom(twig, this, inherit, methods);
+	case 'Label'  : return new CLabel (twig, this, inherit, name);
+	case 'Custom' : return new CCustom(twig, this, inherit, name);
 	default       : throw new Error('Invalid element type: ' + twig.type);
 	}
 };
@@ -423,7 +460,7 @@ CBoard.prototype.pathPassword = function(fabric, border, twist) {
 | Draws the mainboards contents
 */
 CBoard.prototype.getFabric = function() {
-	if (this.$fabric) { return this.$fabric; }
+	if (this.$fabric && !dbgNoCache) { return this.$fabric; }
 	var iframe = this.iframe;
 	var fabric = this.$fabric = new Fabric(iframe);
 
@@ -489,8 +526,7 @@ CBoard.prototype.mousehover = function(p) {
 	for(a = 0, aZ = layout.length; a < aZ; a++) {
 		var cname = layout.ranks[a];
 		var ce = this.cc[cname];
-		if (!ce.methods.mousehover) { continue; }
-		if (ce.methods.mousehover(this, ce, pp)) { return true; }
+		if (ce.mousehover(this, pp)) { return true; }
 	}
 	system.setCursor('default');
 	this.setHighlight(null);
@@ -521,9 +557,7 @@ CBoard.prototype.mousedown = function(p) {
 	for(a = 0, aZ = layout.length; a < aZ; a++) {
 		var cname = layout.ranks[a];
 		var ce = this.cc[cname];
-		if (!ce.methods.mousedown) { continue; }
-		var r = ce.methods.mousedown(this, ce, pp);
-		if (isnon(r)) { return r; }
+		if (ce.mousedown(this, pp)) { return false; }
 	}
 	system.setCursor('default');
 	this.setHighlight(null);
@@ -644,7 +678,10 @@ Cockpit.prototype.mousehover = function(p) {
 | Mouse button down event
 */
 Cockpit.prototype.mousedown = function(p) {
-	return this.curBoard().mousedown(p);
+	var r = this.curBoard().mousedown(p);
+	if (r === null) { return null; }
+	this.curBoard().mousehover(p);
+	return r;
 };
 
 })();
