@@ -394,42 +394,44 @@ Design.loginboard = {
 
 		},
 		'userI' : {
-			type      : 'Input',
-			style     : 'input',
-			fontStyle : fontStyles.la16,
-			frame     : {
-				type  : 'Frame',
-				pnw   : { type: 'Point', anchor: 's', x: -135, y:  -73 },
-				pse   : { type: 'Point', anchor: 's', x:   95, y:  -49 }
+			type       : 'Input',
+			style      : 'input',
+			styleFocus : 'inputfocus',
+			fontStyle  : fontStyles.la16,
+			frame      : {
+				type   : 'Frame',
+				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -73 },
+				pse    : { type: 'Point', anchor: 's', x:   95, y:  -49 }
 			}
 		},
 		'passI' : {
-			type      : 'Input',
-			style     : 'input',
-			fontStyle : fontStyles.la16,
-			frame     : {
-				type  : 'Frame',
-				pnw   : { type: 'Point', anchor: 's', x: -135, y:  -39 },
-				pse   : { type: 'Point', anchor: 's', x:   95, y:  -15 }
+			type       : 'Input',
+			style      : 'input',
+			styleFocus : 'inputfocus',
+			fontStyle  : fontStyles.la16,
+			frame      : {
+				type   : 'Frame',
+				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -39 },
+				pse    : { type: 'Point', anchor: 's', x:   95, y:  -15 }
 			}
 		},
-		'loginBC'     : {
-			type      : 'Custom',
-			style     : 'button',
-			highlight : 'highlight',
-			frame : {
-				type  : 'Frame',
-				pnw   : { type: 'Point', anchor: 'se', x: -380,            y: -10 - loginBCH },
-				pse   : { type: 'Point', anchor: 'se', x: -380 + loginBCW, y: -10 }
+		'loginBC'      : {
+			type       : 'Custom',
+			style      : 'button',
+			highlight  : 'highlight',
+			frame      : {
+				type   : 'Frame',
+				pnw    : { type: 'Point', anchor: 'se', x: -380,            y: -10 - loginBCH },
+				pse    : { type: 'Point', anchor: 'se', x: -380 + loginBCW, y: -10            }
 			},
-			caption : {
+			caption       : {
 				type      : 'Label',
 				text      : 'login',
 				fontStyle : fontStyles.cm14,
 				pos       : { type: 'Point', anchor: 'c', x:  0, y: 0 }
 			},
 			curve :  {
-				type : 'Curve',
+				type  : 'Curve',
 				copse : {
 				'1' : {
 					type : 'MoveTo',
@@ -484,7 +486,7 @@ Design.loginboard = {
 				pos       : { type: 'Point', anchor: 'c', x:  0, y: 0 }
 			},
 			curve :  {
-				type : 'Curve',
+				type  : 'Curve',
 				copse : {
 				'1' : {
 					type : 'MoveTo',

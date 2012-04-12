@@ -83,6 +83,7 @@ var styles = {
 	'button'     : theme.cockpit.button,
 	'highlight'  : theme.cockpit.highlight,
 	'input'      : theme.cockpit.input,
+	'inputfocus' : theme.cockpit.inputfocus,
 	'sides'      : theme.cockpit.sides,
 	'zero'       : theme.cockpit.zero,
 	'zhighlight' : theme.cockpit.zhighlight
@@ -317,7 +318,7 @@ CInput.prototype.path = function(fabric, border, twist) {
 };
 
 CInput.prototype.getFabric = function() {
-	var fabric = new Fabric(this.bezi.width, this.bezi.height); 
+	var fabric = new Fabric(this.bezi.width, this.bezi.height);
 	var sname  = this.twig.style;
 	var style  = styles[sname];
 	if (!isnon(style)) { throw new Error('Invalid style: ' + sname); }

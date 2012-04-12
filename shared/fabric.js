@@ -24,7 +24,7 @@
  but enhanced on the fly for what the meshcraft shell needs.
 
  TODO: Make not shared.
- 
+
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
 
@@ -1050,8 +1050,8 @@ BeziRect.prototype.path = function(fabric, border, twist) {
 	var sey = this.pse.y - border - 1;
 	var a = this.a;
 	var b = this.b;
-	var ma = magic * a;
-	var mb = magic * b;
+	var ma = magic * (a + border);
+	var mb = magic * (b + border) ;
 
 	fabric.beginPath(twist);
 	fabric.moveTo(                     nwx + a, nwy    );
@@ -1063,6 +1063,20 @@ BeziRect.prototype.path = function(fabric, border, twist) {
 	fabric.beziTo( -ma,   0,   0,  mb, nwx    , sey - b);
 	fabric.lineTo(                     nwx    , nwy + b);
 	fabric.beziTo(   0, -mb, -ma,   0, nwx + a, nwy    );
+
+/*
+	var tbx = to.x + bx;
+	var tby = to.y + by;
+	fabric.beziTo(
+		ct.c1x + (tbx && tbx + lbx ? (tbx / (tbx + lbx)) : 0),
+		ct.c1y + (tby && tby + lby ? (tby / (tby + lby)) : 0),
+
+		ct.c2x + (tbx && tbx +  bx ? (tbx / (tbx + bx)) : 0),
+		ct.c2y + (tby && tby +  by ? (tby / (tby + by)) : 0),
+
+		tbx         , tby
+	);
+	*/
 };
 
 

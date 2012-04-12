@@ -142,8 +142,16 @@ var theme = {
 		input : {
 			fill : 'white',
 			edge : [
-				{ border: 1, width : 1, color : 'rgb(255, 188, 87)' },
-				{ border: 0, width : 1, color : 'black' }
+				{ border: 1, width : 1.5, color : 'rgb(255, 188, 87)' },
+				{ border: 0, width :   1, color : 'black' }
+			]
+		},
+
+		inputfocus : {
+			fill : 'white',
+			edge : [
+				{ border: 1, width : 1.5, color : 'rgb(255, 188, 255)' },
+				{ border: 0, width :   1, color : 'black' }
 			]
 		}
 	},

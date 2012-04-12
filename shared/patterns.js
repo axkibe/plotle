@@ -114,105 +114,106 @@ Patterns.mUniverse = {
 Patterns.mDesign = {
 	'Design' : {
 		must : {
-			'frame'  : 'Frame',
-			'curve'  : 'Curve',
-			'layout' : 'Layout'
+			'frame'      : 'Frame',
+			'curve'      : 'Curve',
+			'layout'     : 'Layout'
 		}
 	},
 
-	'Frame' : {
+	'Frame'  : {
 		must : {
-			pnw : 'Point',
-			pse : 'Point'
+			pnw          : 'Point',
+			pse          : 'Point'
 		}
 	},
 
-	'MoveTo': {
+	'MoveTo' : {
 		must : {
-			to : 'Point',
-			bx : 'Number',
-			by : 'Number'
+			to           : 'Point',
+			bx           : 'Number',
+			by           : 'Number'
 		}
 	},
 
-	'LineTo': {
+	'LineTo' : {
 		must : {
-			to : 'Point',
-			bx : 'Number',
-			by : 'Number'
+			to           : 'Point',
+			bx           : 'Number',
+			by           : 'Number'
 		}
 	},
 
-	'BeziTo': {
+	'BeziTo' : {
 		must : {
-			to  : 'Point',
-			bx  : 'Number',
-			by  : 'Number',
+			to           : 'Point',
+			bx           : 'Number',
+			by           : 'Number',
 			// @@ Maybe replace with "Tangent"
-			c1x : 'Number',
-			c1y : 'Number',
-			c2x : 'Number',
-			c2y : 'Number'
+			c1x          : 'Number',
+			c1y          : 'Number',
+			c2x          : 'Number',
+			c2y          : 'Number'
 		}
 	},
 
-	'Curve' : {
+	'Curve'   : {
 		copse : {
-			'MoveTo' : true,
-			'LineTo' : true,
-			'BeziTo' : true
+			'MoveTo'     : true,
+			'LineTo'     : true,
+			'BeziTo'     : true
 		}
 	},
 
 	'Custom' : {
 		must : {
-			'frame'     : 'Frame',
-			'caption'   : 'Label',
-			'curve'     : 'Curve',
-			'style'     : 'String',
-			'highlight' : 'String'
+			'frame'      : 'Frame',
+			'caption'    : 'Label',
+			'curve'      : 'Curve',
+			'style'      : 'String',
+			'highlight'  : 'String'
 		}
 	},
 
-	'Input' : {
+	'Input'  : {
 		must : {
-			'frame'     : 'Frame',
-			'style'     : 'String',
-			'fontStyle' : 'FontStyle'
+			'frame'      : 'Frame',
+			'style'      : 'String',
+			'focusStyle' : 'String',
+			'fontStyle'  : 'FontStyle'
 		}
 	},
 
-	'Layout' : {
+	'Layout'  : {
 		copse : {
-			'Custom' : true,
-			'Input'  : true,
-			'Label'  : true
+			'Custom'     : true,
+			'Input'      : true,
+			'Label'      : true
 		},
 		ranks : true
 	},
 
 	'FontStyle' : {
-		must : {
-			'font'  : 'String',
-			'align' : 'String',
-			'fill'  : 'String',
-			'base'  : 'String'
+		must    : {
+			'font'       : 'String',
+			'align'      : 'String',
+			'fill'       : 'String',
+			'base'       : 'String'
 		}
 	},
 
-	'Label' : {
+	'Label'  : {
 		must : {
-			'text'      : 'String',
-			'pos'       : 'Point',
-			'fontStyle' : 'FontStyle'
+			'text'       : 'String',
+			'pos'        : 'Point',
+			'fontStyle'  : 'FontStyle'
 		}
 	},
 
-	'Point' : {
+	'Point'  : {
 		must : {
-			'anchor' : 'String',
-			'x' : 'Number',
-			'y' : 'Number'
+			'anchor'     : 'String',
+			'x'          : 'Number',
+			'y'          : 'Number'
 		}
 	}
 };
