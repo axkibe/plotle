@@ -172,9 +172,18 @@ Patterns.mDesign = {
 		}
 	},
 
+	'Input' : {
+		must : {
+			'frame'     : 'Frame',
+			'style'     : 'String',
+			'fontStyle' : 'FontStyle'
+		}
+	},
+
 	'Layout' : {
 		copse : {
 			'Custom' : true,
+			'Input'  : true,
 			'Label'  : true
 		},
 		ranks : true

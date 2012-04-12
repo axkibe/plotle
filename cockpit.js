@@ -81,6 +81,7 @@ var styles = {
 	'boxes'      : { edge : [ { border: 0, width : 1, color : 'black' } ] },
 	'button'     : theme.cockpit.button,
 	'highlight'  : theme.cockpit.highlight,
+	'input'      : theme.cockpit.input,
 	'sides'      : theme.cockpit.sides,
 	'zero'       : theme.cockpit.zero,
 	'zhighlight' : theme.cockpit.zhighlight
@@ -138,69 +139,41 @@ var computeCurve = function(twig, frame) {
 */
 var pathCurve = function(fabric, border, twist, curve) {
 	fabric.beginPath(twist);
+	var lbx = 0;
+	var lby = 0;
+	var bo = border;
 	for(var a = 0, aZ = curve.length; a < aZ; a++) {
 		var c = curve[a];
 		var ct = c.twig;
 		var to = c.to;
-		var bx = ct.bx;
-		var by = ct.by;
+		var bx = ct.bx * bo;
+		var by = ct.by * bo;
 		switch(ct.type) {
 		case 'MoveTo':
-			fabric.moveTo(to.x + bx * border, to.y + by * border);
+			fabric.moveTo(to.x + bx, to.y + by);
 			break;
 		case 'LineTo':
-			fabric.lineTo(to.x + bx * border, to.y + by * border);
+			fabric.lineTo(to.x + bx, to.y + by);
 			break;
 		case 'BeziTo':
+			var tbx = to.x + bx;
+			var tby = to.y + by;
 			fabric.beziTo(
-				ct.c1x - by * border, ct.c1y - bx * border,
-				ct.c2x - by * border, ct.c2y - bx * border,
-				to.x   + bx * border, to.y   + by * border
+				ct.c1x + (tbx && tbx + lbx ? (tbx / (tbx + lbx)) : 0),
+				ct.c1y + (tby && tby + lby ? (tby / (tby + lby)) : 0),
+
+				ct.c2x + (tbx && tbx +  bx ? (tbx / (tbx + bx)) : 0),
+				ct.c2y + (tby && tby +  by ? (tby / (tby + by)) : 0),
+
+				tbx         , tby
 			);
 			break;
 		default :
 			throw new Error('invalid curve type: ' + ct.type);
 		}
+		lbx = bx;
+		lby = by;
 	}
-};
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ,--.  ,       .       .
- | `-'  )   ,-. |-. ,-. |
- |   . /    ,-| | | |-' |
- `--'  `--' `-^ ^-' `-' `'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
- A computed Label
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-var CLabel = function(twig, board, inherit, name) {
-	this.twig    = twig;
-	this.board   = board;
-	this.name    = name;
-	this.pos     = computePoint(twig.pos, board.iframe);
-	this.methods = Methods[name];
-	if (!this.methods) { this.methods = {}; }
-};
-
-CLabel.prototype.draw = function(fabric) {
-	var fs = this.twig.fontStyle;
-	fabric.fontStyle(fs.font, fs.fill, fs.align, fs.base);
-	fabric.fillText(this.twig.text, this.pos);
-};
-
-/**
-| Mouse hover
-*/
-CLabel.prototype.mousehover = function(board, p) {
-	return false;
-};
-
-/**
-| Mouse down
-*/
-CLabel.prototype.mousedown = function(board, p) {
-	return null;
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -225,9 +198,9 @@ var CCustom = function(twig, board, inherit, name) {
 	var iframe   = this.iframe = new Rect(Point.zero, pse.sub(pnw));
 	this.curve   = computeCurve(twig.curve, iframe);
 
-	this.caption = immute({
+	this.caption = {
 		pos : computePoint(twig.caption.pos, iframe)
-	});
+	};
 	this.$fabric    = null;
 	this.$highlight = false;
 };
@@ -307,6 +280,102 @@ CCustom.prototype.mousedown = function(board, p) {
 CCustom.prototype.draw = function(fabric, highlight) {
 	fabric.drawImage(this.getFabric(highlight), this.pnw);
 };
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ +++ CInput +++
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+ A computed Label
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+var CInput = function(twig, board, inherit, name) {
+	this.twig    = twig;
+	this.board   = board;
+	this.name    = name;
+	this.methods = Methods[name];
+	if (!this.methods) { this.methods = {}; }
+
+	var pnw      = this.pnw    = computePoint(twig.frame.pnw, board.iframe);
+	var pse      = this.pse    = computePoint(twig.frame.pse, board.iframe);
+	var iframe   = this.iframe = new Rect(Point.zero, pse.sub(pnw));
+
+	this.$fabric    = null;
+	this.$highlight = false;
+};
+
+/**
+| TODO
+*/
+CInput.prototype.path = function(fabric, border, twist) {
+	fabric.beginPath(twist);
+	fabric.moveTo(this.pnw);
+	fabric.lineTo(this.pse.x, this.pnw.y);
+	fabric.lineTo(this.pse);
+	fabric.lineTo(this.pnw.x, this.pse.y);
+	fabric.lineTo(this.pnw);
+}
+
+CInput.prototype.draw = function(fabric) {
+	var sname = this.twig.style;
+	var style = styles[sname];
+	if (!isnon(style)) { throw new Error('Invalid style: ' + sname); }
+	fabric.paint(style, this, 'path');
+};
+
+/**
+| Mouse hover
+*/
+CInput.prototype.mousehover = function(board, p) {
+	return false;
+};
+
+/**
+| Mouse down
+*/
+CInput.prototype.mousedown = function(board, p) {
+	return null;
+};
+
+
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ,--.  ,       .       .
+ | `-'  )   ,-. |-. ,-. |
+ |   . /    ,-| | | |-' |
+ `--'  `--' `-^ ^-' `-' `'
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+ A computed Label
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+var CLabel = function(twig, board, inherit, name) {
+	this.twig    = twig;
+	this.board   = board;
+	this.name    = name;
+	this.pos     = computePoint(twig.pos, board.iframe);
+	this.methods = Methods[name];
+	if (!this.methods) { this.methods = {}; }
+};
+
+CLabel.prototype.draw = function(fabric) {
+	var fs = this.twig.fontStyle;
+	fabric.fontStyle(fs.font, fs.fill, fs.align, fs.base);
+	fabric.fillText(this.twig.text, this.pos);
+};
+
+/**
+| Mouse hover
+*/
+CLabel.prototype.mousehover = function(board, p) {
+	return false;
+};
+
+/**
+| Mouse down
+*/
+CLabel.prototype.mousedown = function(board, p) {
+	return null;
+};
+
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,-,-,-.       .  .         .
@@ -401,8 +470,9 @@ var CBoard = function(design, inherit, cockpit, screensize) {
 */
 CBoard.prototype.newCC = function(twig, inherit, name) {
 	switch(twig.type) {
-	case 'Label'  : return new CLabel (twig, this, inherit, name);
 	case 'Custom' : return new CCustom(twig, this, inherit, name);
+	case 'Input'  : return new CInput (twig, this, inherit, name);
+	case 'Label'  : return new CLabel (twig, this, inherit, name);
 	default       : throw new Error('Invalid element type: ' + twig.type);
 	}
 };

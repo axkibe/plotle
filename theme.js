@@ -90,7 +90,6 @@ var theme = {
 				]
 			},
 			edge : [
-				//{ border: 1, width : 2, color : 'rgb(255, 188, 87)' },
 				{ border: 1, width : 1, color : 'rgb(255, 94, 44)' },
 				{ border: 0, width : 1, color : 'rgb( 94, 94,  0)' }
 			]
@@ -105,8 +104,8 @@ var theme = {
 				]
 			},
 			edge : [
-				{ border:  1, width :  1, color : 'rgb(255, 94, 44)' },
-				{ border:  0, width :  1, color : 'rgb( 94, 94,  0)' }
+				{ border:  1, width : 1.5, color : 'rgb(255, 141, 66)' },
+				{ border:  0, width :   1, color : 'rgb( 94,  94,  0)' }
 			]
 		},
 
@@ -133,27 +132,14 @@ var theme = {
 		},
 
 		highlight : {
-			fill : {
-				gradient : 'horizontal',
-				steps : [
-					[0, 'rgb(255, 188, 88)' ],
-					[1, 'rgb(255,  99, 44)' ]
-				]
-			},
-			/*fill : {
-				gradient : 'horizontal',
-				steps : [
-					[0, 'rgb(255, 237, 210)' ],
-					[1, 'rgb(255, 185, 81)'  ],
-				],
-			},*/
+			fill : 'rgb(255, 188, 88)',
 			edge : [
 				{ border: 1, width : 2, color : 'rgb(255, 188, 87)' },
 				{ border: 0, width : 1, color : 'rgb(128, 128, 0)' }
 			]
 		},
 
-		field : {
+		input : {
 			fill : 'white',
 			edge : [
 				{ border: 1, width : 1, color : 'rgb(255, 188, 87)' },
@@ -175,15 +161,23 @@ var theme = {
 
 		style : {
 			edge : [
+				{ border: 1, width : 1, color : 'rgb(255, 94, 44)' },
+				{ border: 0, width : 1, color : 'rgb( 94, 94,  0)' }
+			],
+			/*edge : [
 				{ border: 1, width :   2, color : 'rgb(255, 200, 105)' },
 				{ border: 0, width : 0.5, color : 'black' }
-			],
+			],*/
 			fill : {
 				gradient : 'radial',
 				steps : [
+					[ 0, 'rgba(255, 255, 140, 0.955)' ],
+					[ 1, 'rgba(255, 255, 200, 0.955)' ]
+				]
+				/*steps : [
 					[ 0, 'rgba(255, 255, 168, 0.955)' ],
 					[ 1, 'rgba(255, 255, 243, 0.955)' ]
-				]
+				]*/
 			}
 		},
 
@@ -202,13 +196,14 @@ var theme = {
 		},
 
 		highlight : {
-			fill : {
+			fill : 'rgb(255, 188, 88)',
+			/*fill : {
 				gradient : 'radial',
 				steps : [
 					[0, 'rgb(255, 185, 81)'  ],
 					[1, 'rgb(255, 237, 210)' ]
 				]
-			},
+			},*/
 			edge : [
 				{ border: 0, width : 0.4, color : 'black' }
 			]

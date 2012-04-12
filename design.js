@@ -143,6 +143,13 @@ var fontStyles = {
 		align : 'start',
 		base  : 'alphabetic'
 	},
+	la14r : {
+		type  : 'FontStyle',
+		font  : '14px ' + theme.defaultFont,
+		fill  : 'red',
+		align : 'left',
+		base  : 'alphabetic'
+	},
 	la16    : {
 		type  : 'FontStyle',
 		font  : '16px ' + theme.defaultFont,
@@ -321,7 +328,7 @@ Design.loginboard = {
 
 	frame : {
 		type  : 'Frame',
-		pnw   : { type   : 'Point', anchor : 's', x : -512, y : -100 },
+		pnw   : { type   : 'Point', anchor : 's', x : -512, y : -110 },
 		pse   : { type   : 'Point', anchor : 's', x :  512, y :    0 }
 	},
 
@@ -370,13 +377,41 @@ Design.loginboard = {
 			type      : 'Label',
 			text      : 'username',
 			fontStyle : fontStyles.la16,
-			pos       : { type: 'Point', anchor: 's', x: -220, y:  -55 }
+			pos       : { type: 'Point', anchor: 's', x: -230, y:  -55 }
 		},
 		'passL'       : {
 			type      : 'Label',
 			text      : 'password',
 			fontStyle : fontStyles.la16,
-			pos       : { type: 'Point', anchor: 's', x: -220, y:  -20 }
+			pos       : { type: 'Point', anchor: 's', x: -230, y:  -20 }
+		},
+		'errL'        : {
+			type      : 'Label',
+			//text      : 'username/password not accepted',
+			text      : '',
+			fontStyle : fontStyles.la14r,
+			pos       : { type: 'Point', anchor: 's', x: -135, y:  -81 }
+
+		},
+		'userI' : {
+			type      : 'Input',
+			style     : 'input',
+			fontStyle : fontStyles.la16,
+			frame     : {
+				type  : 'Frame',
+				pnw   : { type: 'Point', anchor: 's', x: -135, y:  -71 },
+				pse   : { type: 'Point', anchor: 's', x:   95, y:  -51 }
+			}
+		},
+		'passI' : {
+			type      : 'Input',
+			style     : 'input',
+			fontStyle : fontStyles.la16,
+			frame     : {
+				type  : 'Frame',
+				pnw   : { type: 'Point', anchor: 's', x: -135, y:  -41 },
+				pse   : { type: 'Point', anchor: 's', x:   95, y:  -21 }
+			}
 		},
 		'loginBC'     : {
 			type      : 'Custom',
@@ -487,7 +522,8 @@ Design.loginboard = {
 
 				ranks : [ '1', '2', '3', '4', '5' ]
 			}
-		},
+		}
+		/*
 		'forgotBC'    : {
 			type      : 'Custom',
 			style     : 'zero',
@@ -542,7 +578,8 @@ Design.loginboard = {
 
 				ranks : [ '1', '2', '3', '4', '5' ]
 			}
-		}},
+		}*/
+		},
 
 		//{
 		//	type : 'Input',
@@ -560,12 +597,15 @@ Design.loginboard = {
 		//}
 
 		ranks : [
+			'userI',
+			'passI',
 			'loginBC',
 			'cancelBC',
-			'forgotBC',
+			//'forgotBC',
 			'loginL',
 			'userL',
-			'passL'
+			'passL',
+			'errL'
 		]
     }
 };
