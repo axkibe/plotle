@@ -7,8 +7,8 @@ Files
 <table>
 
  <tr><td>   fabric.js
-</td><td>   a graphic 2D-Object library for HTML Canvas 5\n
-            shared, because the server uses Point and Rect definitions
+</td><td>   a graphic 2D-Object library for HTML Canvas 5
+     <br/>  shared, because the server uses Point and Rect definitions
 </td></tr>
  
  <tr><td>   jools.js
