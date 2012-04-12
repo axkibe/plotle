@@ -33,7 +33,7 @@ var Jools;
 var Fabric;
 var Path;
 var Tree;
-var Patterns;
+var Deverse;
 
 var theme;
 var system;
@@ -454,7 +454,7 @@ Methods.cancelBC.mousedown = function(board, ele, p) {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 var CBoard = function(design, inherit, cockpit, screensize) {
 	this.cockpit = cockpit;
-	var tree     = this.tree  = new Tree(design, Patterns.mDesign);
+	var tree     = this.tree  = new Tree(design, Deverse);
 	var frameD   = tree.root.frame;
 	var oframe   = new Rect(Point.zero, screensize);
 	var pnw      = this.pnw    = computePoint(frameD.pnw, oframe);

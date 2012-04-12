@@ -138,6 +138,7 @@ var twigtype = function(o) {
 | TODO
 */
 Tree = function(root, pattern) {
+	if (!isnon(pattern)) { throw new Error('aFail'); }
 	this.pattern = pattern;
 	this.root = this.grow(root);
 };

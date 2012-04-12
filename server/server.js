@@ -54,7 +54,7 @@ var config      = require('../config');
 var Jools       = require('../shared/jools');
 var MeshMashine = require('../shared/meshmashine');
 var Path        = require('../shared/path');
-var Patterns    = require('../shared/patterns');
+var Meshverse   = require('../shared/meshverse');
 var Tree        = require('../shared/tree');
 var Emulate     = require('./emulate');
 
@@ -77,6 +77,7 @@ var Server = function() {
 	this.registerFile('/action.js',        'js',   'client/action.js'         );
 	this.registerFile('/browser.js',       'js',   'client/browser.js'        );
 	this.registerFile('/cockpit.js',       'js',   'client/cockpit.js'        );
+	this.registerFile('/deverse.js',       'js',   'client/deverse.js'        );
 	this.registerFile('/design.js',        'js',   'client/design.js'         );
 //	this.registerFile('/emulate.js',       'js',   './emulate.js'             );
 	this.registerFile('/fabric.js',        'js',   'shared/fabric.js'         );
@@ -88,8 +89,8 @@ var Server = function() {
 	this.registerFile('/jools.js',         'js',   'shared/jools.js'          );
 	this.registerFile('/meshcraft.html',   'html', 'client/meshcraft.html'    );
 	this.registerFile('/meshmashine.js',   'js',   'shared/meshmashine.js'    );
+	this.registerFile('/meshverse.js',     'js',   'shared/meshverse.js'      );
 	this.registerFile('/path.js',          'js',   'shared/path.js'           );
-	this.registerFile('/patterns.js',      'js',   'shared/patterns.js'       );
 	this.registerFile('/peer.js',          'js',   'client/peer.js'           );
 	this.registerFile('/shell.js',         'js',   'client/shell.js'          );
 	this.registerFile('/testpad.html',     'html', 'client/testpad.html'      );
@@ -98,7 +99,7 @@ var Server = function() {
 	this.registerFile('/tree.js',          'js',   'shared/tree.js'           );
 	this.registerFile('/visual.js',        'js',   'client/visual.js'         );
 
-	this.tree      = new Tree({ type : 'Nexus' }, Patterns.mUniverse);
+	this.tree      = new Tree({ type : 'Nexus' }, Meshverse);
 	this.changes   = [];
 	this.upsleep   = {};
 	this.nextSleep = 1;

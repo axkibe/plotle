@@ -9,17 +9,21 @@ Files
  <tr><td>   action.js
 </td><td>   an action in the making by the user.
 </td></tr>
- 
+
  <tr><td>   browser.js
-</td><td>   wrapper around HTML5 browsers. 
+</td><td>   wrapper around HTML5 browsers.
 </td></tr>
 
  <tr><td>   cockpit.js
 </td><td>   the unmoveable part of the user interface
 </td></tr>
- 
+
  <tr><td>   design.js
 </td><td>   element placements on the cockpit
+</td></tr>
+
+ <tr><td>   deverse.js
+</td><td>   pattern rules for (cockpit) design
 </td></tr>
 
  <tr><td>   iface-async.js
@@ -29,11 +33,11 @@ Files
  <tr><td>   iface-sync.js
 </td><td>   a synchronous version of communications with the server (used for debugging)
 </td></tr>
- 
+
  <tr><td>   meshcraft.html
 </td><td>   the shells html file
 </td></tr>
- 
+
  <tr><td>   peer.js
 </td><td>   routines for abstracting the communicating with the server
 </td></tr>
@@ -41,11 +45,11 @@ Files
  <tr><td>   shell.js
 </td><td>   the main shell (caret/selection + links cockpit with visual)
 </td></tr>
- 
+
  <tr><td>   testpad.html
 </td><td>   a testing utility
 </td></tr>
- 
+
  <tr><td>   testpad.js
 </td><td>   a testing utility
 </td></tr>

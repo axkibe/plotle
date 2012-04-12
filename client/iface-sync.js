@@ -30,7 +30,7 @@
 | Imports
 */
 var Path;
-var Patterns;
+var Meshverse;
 var Tree;
 var Jools;
 
@@ -67,7 +67,7 @@ IFaceSync.prototype.get = function(path, len) {
 
 	var r = this._getSync(this.remoteTime, path);
 	return {
-		node : is(r.node) ? new Tree(r.node, Patterns.mUniverse).root : null,
+		node : is(r.node) ? new Tree(r.node, Meshverse).root : null,
 		time : r.time
 	};
 };

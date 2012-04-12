@@ -396,7 +396,7 @@ Design.loginboard = {
 		'userI' : {
 			type       : 'Input',
 			style      : 'input',
-			styleFocus : 'inputfocus',
+			focusStyle : 'inputfocus',
 			fontStyle  : fontStyles.la16,
 			frame      : {
 				type   : 'Frame',
@@ -407,7 +407,7 @@ Design.loginboard = {
 		'passI' : {
 			type       : 'Input',
 			style      : 'input',
-			styleFocus : 'inputfocus',
+			focusStyle : 'inputfocus',
 			fontStyle  : fontStyles.la16,
 			frame      : {
 				type   : 'Frame',

@@ -10,7 +10,7 @@ Files
 </td><td>   a graphic 2D-Object library for HTML Canvas 5
      <br/>  shared, because the server uses Point and Rect definitions
 </td></tr>
- 
+
  <tr><td>   jools.js
 </td><td>   common javascript tools
 </td></tr>
@@ -22,13 +22,13 @@ Files
  <tr><td>   paths.js
 </td><td>   paths through a tree
 </td></tr>
- 
- <tr><td>   patterns.js
-</td><td>   rules for trees.
+
+ <tr><td>   meshverse.js
+</td><td>   rules MeshCraft data trees must abide to
 </td></tr>
 
  <tr><td>   tree.js
-</td><td>   data trees.
+</td><td>   MeshCraft's data trees
 </td></tr>
 
 </table>
