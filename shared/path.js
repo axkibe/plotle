@@ -18,7 +18,7 @@
                                            `'    `-^ `' ' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- Paths into a tree.
+ Paths describe places in a tree.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file

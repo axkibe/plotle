@@ -23,8 +23,8 @@
  This is not a full blown feature complete, everything library
  but enhanced on the fly for what the meshcraft shell needs.
 
- Defines: fabric
-
+ TODO: Make not shared.
+ 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
 

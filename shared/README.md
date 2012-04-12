@@ -1,61 +1,35 @@
 Meshcraft-Shell
 ===============
-This is the client (browser) code of MeshCraft.
+This code is shared between the MeshCraft server and shell.
 
 Files
 =====
 <table>
 
- <tr><td>   action.js
-</td><td>   an action in the making by the user.
+ <tr><td>   fabric.js
+</td><td>   a graphic 2D-Object library for HTML Canvas 5
+
+            shared, because the server uses Point and Rect definitions
 </td></tr>
  
- <tr><td>   browser.js
-</td><td>   wrapper around HTML5 browsers. 
+ <tr><td>   jools.js
+</td><td>   common javascript tools
 </td></tr>
 
- <tr><td>   cockpit.js
-</td><td>   the unmoveable part of the user interface
+ <tr><td>   meshmashine.js
+</td><td>   the causal consistency / operation transformation engine
+</td></tr>
+
+ <tr><td>   paths.js
+</td><td>   paths through a tree
 </td></tr>
  
- <tr><td>   design.js
-</td><td>   element placements on the cockpit
+ <tr><td>   patterns.js
+</td><td>   rules for trees.
 </td></tr>
 
- <tr><td>   iface-async.js
-</td><td>   communications with the server
-</td></tr>
-
- <tr><td>   iface-sync.js
-</td><td>   a synchronous version of communications with the server (used for debugging)
-</td></tr>
- 
- <tr><td>   meshcraft.html
-</td><td>   the shells html file
-</td></tr>
- 
- <tr><td>   peer.js
-</td><td>   routines for abstracting the communicating with the server
-</td></tr>
-
- <tr><td>   shell.js
-</td><td>   the main shell (caret/selection + links cockpit with visual)
-</td></tr>
- 
- <tr><td>   testpad.html
-</td><td>   a testing utility
-</td></tr>
- 
- <tr><td>   testpad.js
-</td><td>   a testing utility
-</td></tr>
-
- <tr><td>   theme.js
-</td><td>   the look & feel settings (colors and the such)
-</td></tr>
-
- <tr><td>   visual.js
-</td><td>   the space visualisation and its visual contents.
+ <tr><td>   tree.js
+</td><td>   data trees.
 </td></tr>
 
 </table>
