@@ -324,16 +324,10 @@ CInput.prototype.getFabric = function() {
 	if (!isnon(style)) { throw new Error('Invalid style: ' + sname); }
 	fabric.paint(style, this.bezi, 'path');
 	return fabric;
-}
+};
 
 CInput.prototype.draw = function(fabric) {
 	fabric.drawImage(this.getFabric(), this.pnw);
-	/*var sname  = this.twig.style;
-	var style  = styles[sname];
-	fabric.paint(style, this.bezi)
-
-	if (!isnon(style)) { throw new Error('Invalid style: ' + sname); }
-	fabric.paint(style, this, 'path');*/
 };
 
 /**

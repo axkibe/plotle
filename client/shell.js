@@ -30,6 +30,7 @@
 /**
 | Imports
 */
+var Action;
 var Cockpit;
 var Fabric;
 var Jools;
@@ -108,40 +109,6 @@ var tfxSign       = MeshMashine.tfxSign;
 
 // configures tree.
 Tree.cogging = true;
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     ,.       .            
-    / |   ,-. |- . ,-. ,-. 
-   /~~|-. |   |  | | | | | 
- ,'   `-' `-' `' ' `-' ' ' 
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
- An action in the making.
-
- This overlays repository data, so for example a move is not transmitted
- with every pixel changed but when the the object is released.
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/**
-| Constructor.
-*/
-var Action = function(type, vitem, start) {
-	this.type  = type;
-	this.vitem = vitem;
-	this.start = start;
-	this.move  = start;
-};
-
-/**
-| Action enums.
-*/
-fixate(Action, 'PAN',       1); // panning the background
-fixate(Action, 'ITEMDRAG',  2); // draggine one item
-fixate(Action, 'ITEMRESIZE',3); // resizing one item
-fixate(Action, 'FLOATMENU', 4); // clicked the float menu (background click)
-fixate(Action, 'ITEMMENU',  5); // clicked one item menu
-fixate(Action, 'SCROLLY',   6); // scrolling a note
-fixate(Action, 'RELBIND',   7); // binding a new relation
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,--.             .

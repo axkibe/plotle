@@ -333,7 +333,7 @@ Server.prototype.requestListener = function(req, res) {
 	var self = this;
 	fs.readFile(f.filename, function(err, data) {
 		if (err) {
-			self.webError(res, 500, 'Internal Server Error'); 
+			self.webError(res, 500, 'Internal Server Error');
 			console.log('Missing client file: '+f.filename);
 			return;
 		}
