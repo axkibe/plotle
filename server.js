@@ -83,6 +83,7 @@ var Server = function() {
 	this.files = {};
 
 	this.registerFile('/',                 'html', './meshcraft.html'    );
+	this.registerFile('/action.js',        'js',   './action.js'         );
 	this.registerFile('/browser.js',       'js',   './browser.js'        );
 	this.registerFile('/cockpit.js',       'js',   './cockpit.js'        );
 	this.registerFile('/design.js',        'js',   './design.js'         );
@@ -104,6 +105,7 @@ var Server = function() {
 	this.registerFile('/testpad.js',       'js',   './testpad.js'        );
 	this.registerFile('/theme.js'  ,       'js',   './theme.js'          );
 	this.registerFile('/tree.js',          'js',   './tree.js'           );
+	this.registerFile('/visual.js',        'js',   './visual.js'         );
 
 	this.tree      = new Tree({ type : 'Nexus' }, Patterns.mUniverse);
 	this.changes   = [];
@@ -336,8 +338,9 @@ Server.prototype.requestListener = function(req, res) {
 		return;
 	}
 
+	var self = this;
 	fs.readFile(f.filename, function(err, data) {
-		if (err) { this.webError(res, 500, 'Internal Server Error'); }
+		if (err) { self.webError(res, 500, 'Internal Server Error'); }
 		res.writeHead(200, {'Content-Type': f.mime});
 		res.end(data, f.code);
 	});

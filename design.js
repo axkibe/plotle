@@ -33,7 +33,7 @@ var theme;
 /**
 | Exports
 */
-var Design;
+var Design = null;
 
 /**
 | Capsule
@@ -269,7 +269,7 @@ Design.mainboard = {
 				}},
 
 				ranks : [ '1', '2' ]
-			},
+			}
 		},
 
 		'registerMC' : {
@@ -304,7 +304,7 @@ Design.mainboard = {
 				}},
 
 				ranks : [ '1', '2' ]
-			},
+			}
 		}},
 
 		ranks : [
@@ -399,8 +399,8 @@ Design.loginboard = {
 			fontStyle : fontStyles.la16,
 			frame     : {
 				type  : 'Frame',
-				pnw   : { type: 'Point', anchor: 's', x: -135, y:  -71 },
-				pse   : { type: 'Point', anchor: 's', x:   95, y:  -51 }
+				pnw   : { type: 'Point', anchor: 's', x: -135, y:  -73 },
+				pse   : { type: 'Point', anchor: 's', x:   95, y:  -49 }
 			}
 		},
 		'passI' : {
@@ -409,8 +409,8 @@ Design.loginboard = {
 			fontStyle : fontStyles.la16,
 			frame     : {
 				type  : 'Frame',
-				pnw   : { type: 'Point', anchor: 's', x: -135, y:  -41 },
-				pse   : { type: 'Point', anchor: 's', x:   95, y:  -21 }
+				pnw   : { type: 'Point', anchor: 's', x: -135, y:  -39 },
+				pse   : { type: 'Point', anchor: 's', x:   95, y:  -15 }
 			}
 		},
 		'loginBC'     : {

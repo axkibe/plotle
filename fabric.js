@@ -38,7 +38,7 @@ var Jools;
 /**
 | Exports
 */
-var Fabric;
+var Fabric = null;
 
 /**
 | Capsule
@@ -1050,29 +1050,19 @@ BeziRect.prototype.path = function(fabric, border, twist) {
 	var sey = this.pse.y - border - 1;
 	var a = this.a;
 	var b = this.b;
+	var ma = magic * a;
+	var mb = magic * b;
 
 	fabric.beginPath(twist);
-	fabric.moveTo(nwx + a, nwy    );
-	fabric.lineTo(sex - a, nwy    );
-	fabric.lineTo(sex    , nwy + b);
-	fabric.lineTo(sex    , sey - b);
-	fabric.lineTo(sex - a, sey    );
-	fabric.lineTo(nwx + a, sey    );
-	fabric.lineTo(nwx    , sey - b);
-	fabric.lineTo(nwx    , nwy + b);
-	fabric.lineTo(nwx + a, nwy    );
-
-/*	fabric.moveTo(                         px + wwk,     py - hh  + bo);
-	fabric.beziTo( wwl,     0,    0, -hhl, px + ww - bo, py - hhk);
-	fabric.lineTo(                         px + ww - bo, py + hhk);
-	fabric.beziTo(   0,   hhl,  wwl,    0, px + wwk,     py + hh - bo);
-	fabric.lineTo(                         px - wwk,     py + hh - bo);
-	fabric.beziTo(-wwl,     0,    0,  hhl, px - ww + bo, py + hhk);
-	// @@ works around chrome pixel error
-	fabric.lineTo(                         px - ww + bo, py + hhk + 1);
-	fabric.lineTo(                         px - ww + bo, py - hhk);
-	fabric.beziTo(    0, -hhl, -wwl,    0, px - wwk,     py - hh + bo);
-	fabric.lineTo(                         px + wwk,     py - hh + bo);*/
+	fabric.moveTo(                     nwx + a, nwy    );
+	fabric.lineTo(                     sex - a, nwy    );
+	fabric.beziTo(  ma,   0,   0, -mb, sex    , nwy + b);
+	fabric.lineTo(                     sex    , sey - b);
+	fabric.beziTo(   0,  mb,  ma,   0, sex - a, sey    );
+	fabric.lineTo(                     nwx + a, sey    );
+	fabric.beziTo( -ma,   0,   0,  mb, nwx    , sey - b);
+	fabric.lineTo(                     nwx    , nwy + b);
+	fabric.beziTo(   0, -mb, -ma,   0, nwx + a, nwy    );
 };
 
 
@@ -1191,10 +1181,13 @@ Hexagon.prototype.within = function(p) {
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- +++ OvalSlice +++
+ ,,--.          .  .---. .
+ |`, | .  , ,-. |  \___  |  . ,-. ,-.
+ |   | | /  ,-| |      \ |  | |   |-'
+ `---' `'   `-^ `' `---' `' ' `-' `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- Top half of an oval.
+ A vertical slice of the top half of an oval.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /**
@@ -1299,7 +1292,10 @@ OvalSlice.prototype.within = function(fabric, p) {
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- OvalFlower
+ ,,--.          . .-,--' .
+ |`, | .  , ,-. |  \|__  |  ,-. . , , ,-. ,-.
+ |   | | /  ,-| |   |    |  | | |/|/  |-' |
+ `---' `'   `-^ `' `'    `' `-' ' '   `-' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  Makes a double oval with 6 segments.
 
@@ -1361,6 +1357,8 @@ OvalFlower.prototype.path = function(fabric, border, twist, segment) {
 		fabric.moveTo(                       pcx - a1 + bo, pcy);
 		fabric.beziTo(  0, -bm1, -am1,    0, pcx,           pcy - b1 + bo);
 		fabric.beziTo( am1,   0,    0, -bm1, pcx + a1 - bo, pcy);
+		// @@ workaround chrome pixel error
+		fabric.lineTo(                       pcx + a1 - bo, pcy - 1);
 		fabric.beziTo(  0,  bm1,  am1,    0, pcx,           pcy + b1 - bo);
 		fabric.beziTo(-am1,   0,    0,  bm1, pcx - a1 + bo, pcy);
 	}
@@ -1370,6 +1368,8 @@ OvalFlower.prototype.path = function(fabric, border, twist, segment) {
 		fabric.moveTo(                       pcx - a2 + bo, pcy);
 		fabric.beziTo(  0, -bm2, -am2,    0, pcx,           pcy - b2 + bo);
 		fabric.beziTo( am2,   0,    0, -bm2, pcx + a2 - bo, pcy);
+		// @@ workaround chrome pixel error
+		fabric.lineTo(                       pcx + a2 - bo, pcy - 1);
 		fabric.beziTo(  0,  bm2,  am2,    0, pcx,           pcy + b2 - bo);
 		fabric.beziTo(-am2,   0,    0,  bm2, pcx - a2 + bo, pcy);
 	}
@@ -1635,6 +1635,7 @@ Line.prototype.isNear = function(p, dis) {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+Fabric.BeziRect      = BeziRect;
 Fabric.Hexagon       = Hexagon;
 Fabric.Line          = Line;
 Fabric.Margin        = Margin;

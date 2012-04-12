@@ -43,7 +43,7 @@ var dbgNoCache;
 /**
 | Exports
 */
-var Cockpit;
+var Cockpit = null;
 
 /**
 | Capsule
@@ -73,6 +73,7 @@ var log           = Jools.log;
 var subclass      = Jools.subclass;
 
 var half          = Fabric.half;
+var BeziRect      = Fabric.BeziRect;
 var Point         = Fabric.Point;
 var Rect          = Fabric.Rect;
 var RoundRect     = Fabric.RoundRect;
@@ -295,9 +296,9 @@ var CInput = function(twig, board, inherit, name) {
 	this.methods = Methods[name];
 	if (!this.methods) { this.methods = {}; }
 
-	var pnw      = this.pnw    = computePoint(twig.frame.pnw, board.iframe);
-	var pse      = this.pse    = computePoint(twig.frame.pse, board.iframe);
-	var iframe   = this.iframe = new Rect(Point.zero, pse.sub(pnw));
+	var pnw  = this.pnw  = computePoint(twig.frame.pnw, board.iframe);
+	var pse  = this.pse  = computePoint(twig.frame.pse, board.iframe);
+	var bezi = this.bezi = new BeziRect(Point.zero, pse.sub(pnw), 7, 3);
 
 	this.$fabric    = null;
 	this.$highlight = false;
@@ -313,13 +314,25 @@ CInput.prototype.path = function(fabric, border, twist) {
 	fabric.lineTo(this.pse);
 	fabric.lineTo(this.pnw.x, this.pse.y);
 	fabric.lineTo(this.pnw);
+};
+
+CInput.prototype.getFabric = function() {
+	var fabric = new Fabric(this.bezi.width, this.bezi.height); 
+	var sname  = this.twig.style;
+	var style  = styles[sname];
+	if (!isnon(style)) { throw new Error('Invalid style: ' + sname); }
+	fabric.paint(style, this.bezi, 'path');
+	return fabric;
 }
 
 CInput.prototype.draw = function(fabric) {
-	var sname = this.twig.style;
-	var style = styles[sname];
+	fabric.drawImage(this.getFabric(), this.pnw);
+	/*var sname  = this.twig.style;
+	var style  = styles[sname];
+	fabric.paint(style, this.bezi)
+
 	if (!isnon(style)) { throw new Error('Invalid style: ' + sname); }
-	fabric.paint(style, this, 'path');
+	fabric.paint(style, this, 'path');*/
 };
 
 /**
