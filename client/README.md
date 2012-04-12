@@ -4,7 +4,15 @@ This is the client (browser) code of the meshcraft.
 
 Files
 =====
-* *action.js* - An action in the making by the user.
+<table>
+
+ <tr><td>   action.js
+</td><td>   An action in the making by the user.
+</td></tr>
+
+</table>
+
+* *action.js* -
 * *browser.js* - Wrapper around HTML5 browsers.
 * *cockpit.js* - The unmoveable part of the user interface.
 * *design.js* - Element placements on the cockpit.
