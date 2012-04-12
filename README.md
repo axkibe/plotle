@@ -3,6 +3,7 @@ Meshcraft
 With Meshcraft you can organize your notes/presentations/texts in a mesh using your browser.
 
 The live site at http://meshcraft.net/ is currently running version 0.1.
+The live site at http://meshcraft.net:8833 is currently running the next version in development.
 
 Meshcraft tries to be compatible with all major browsers. However, Chrome/Chromium performs best.
 
