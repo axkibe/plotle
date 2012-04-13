@@ -150,7 +150,7 @@ var theme = {
 		inputfocus : {
 			fill : 'white',
 			edge : [
-				{ border: 1, width : 1.5, color : 'rgb(255, 188, 255)' },
+				{ border: 1, width :   2, color : 'rgb(255, 99, 188)' },
 				{ border: 0, width :   1, color : 'black' }
 			]
 		}

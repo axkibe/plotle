@@ -1079,6 +1079,11 @@ BeziRect.prototype.path = function(fabric, border, twist) {
 	*/
 };
 
+/*
+BeziRect.prototype.within = function(fabric, p) {
+	return();
+}*/
+
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .-,--.               . .-,--.         .

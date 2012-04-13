@@ -238,9 +238,9 @@ Design.mainboard = {
 		},
 
 		'loginMC' : {
-			type      : 'Custom',
-			style     : 'sides',
-			highlight : 'highlight',
+			type       : 'Custom',
+			style      : 'sides',
+			hoverStyle : 'highlight',
 			frame : {
 				type  : 'Frame',
 				pnw   : { type: 'Point', anchor: 'sw', x:               0, y: -36 },
@@ -273,9 +273,9 @@ Design.mainboard = {
 		},
 
 		'registerMC' : {
-			type      : 'Custom',
-			style     : 'sides',
-			highlight : 'highlight',
+			type       : 'Custom',
+			style      : 'sides',
+			hoverStyle : 'highlight',
 			frame : {
 				type  : 'Frame',
 				pnw   : { type: 'Point', anchor: 'se', x: -sideButtonWidth, y: -36 },
@@ -395,8 +395,10 @@ Design.loginboard = {
 		},
 		'userI' : {
 			type       : 'Input',
-			style      : 'input',
+			normaStyle : 'input',
 			focusStyle : 'inputfocus',
+			hoverStyle : 'input',
+			hovocStyle : 'inputfocus',
 			fontStyle  : fontStyles.la16,
 			frame      : {
 				type   : 'Frame',
@@ -406,8 +408,10 @@ Design.loginboard = {
 		},
 		'passI' : {
 			type       : 'Input',
-			style      : 'input',
+			normaStyle : 'input',
 			focusStyle : 'inputfocus',
+			hoverStyle : 'input',
+			hovocStyle : 'inputfocus',
 			fontStyle  : fontStyles.la16,
 			frame      : {
 				type   : 'Frame',
@@ -418,7 +422,7 @@ Design.loginboard = {
 		'loginBC'      : {
 			type       : 'Custom',
 			style      : 'button',
-			highlight  : 'highlight',
+			hoverStyle : 'highlight',
 			frame      : {
 				type   : 'Frame',
 				pnw    : { type: 'Point', anchor: 'se', x: -380,            y: -10 - loginBCH },
@@ -470,10 +474,10 @@ Design.loginboard = {
 				ranks : [ '1', '2', '3', '4', '5' ]
 			}
 		},
-		'cancelBC'    : {
-			type      : 'Custom',
-			style     : 'button',
-			highlight : 'highlight',
+		'cancelBC'     : {
+			type       : 'Custom',
+			style      : 'button',
+			hoverStyle : 'highlight',
 			frame : {
 				type  : 'Frame',
 				pnw   : { type: 'Point', anchor: 'se', x: -300,             y: -10 - cancelBCH },
@@ -526,10 +530,10 @@ Design.loginboard = {
 			}
 		}
 		/*
-		'forgotBC'    : {
-			type      : 'Custom',
-			style     : 'zero',
-			highlight : 'zhighlight',
+		'forgotBC'     : {
+			type       : 'Custom',
+			style      : 'zero',
+			hoverStyle : 'zhighlight',
 			frame : {
 				type  : 'Frame',
 				pnw   : { type: 'Point', anchor: 'se', x: -240,             y: -10 - forgotBCH },

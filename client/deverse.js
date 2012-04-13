@@ -98,15 +98,17 @@ Deverse = {
 			'caption'    : 'Label',
 			'curve'      : 'Curve',
 			'style'      : 'String',
-			'highlight'  : 'String'
+			'hoverStyle' : 'String'
 		}
 	},
 
 	'Input'  : {
 		must : {
 			'frame'      : 'Frame',
-			'style'      : 'String',
+			'normaStyle' : 'String',
+			'hoverStyle' : 'String',
 			'focusStyle' : 'String',
+			'hovocStyle' : 'String',
 			'fontStyle'  : 'FontStyle'
 		}
 	},

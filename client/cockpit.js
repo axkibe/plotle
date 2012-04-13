@@ -89,6 +89,26 @@ var styles = {
 	'zhighlight' : theme.cockpit.zhighlight
 };
 
+var Accent = immute({
+	NORMA : 0,
+	HOVER : 1,
+	FOCUS : 2,
+	HOFOC : 3
+});
+
+
+/**
+| Turns the hover and focus state to an accent enum.
+*/
+Accent.state = function(hover, focus) {
+	if (hover) {
+		if (focus) { return Accent.HOFOC; }
+	 	else       { return Accent.HOVER; }
+	} else {
+		if (focus) { return Accent.FOCUS; }
+		else       { return Accent.NORMA; }
+	}
+}
 
 /**
 | Computes a point by its anchor
@@ -203,8 +223,8 @@ var CCustom = function(twig, board, inherit, name) {
 	this.caption = {
 		pos : computePoint(twig.caption.pos, iframe)
 	};
-	this.$fabric    = null;
-	this.$highlight = false;
+	this.$fabric = null;
+	this.$accent = Accent.NORMAL;
 };
 
 /**
@@ -217,12 +237,21 @@ CCustom.prototype.path = function(fabric, border, twist) {
 /**
 | Returns the fabric for the custom element.
 */
-CCustom.prototype.getFabric = function(highlight) {
+CCustom.prototype.getFabric = function(accent) {
 	var fabric = this.$fabric;
-	if (fabric && this.$highlight === highlight && !dbgNoCache) { return fabric; }
+	if (fabric && this.$accent === accent && !dbgNoCache) { return fabric; }
 
 	fabric = this.$fabric = new Fabric(this.iframe);
-	var sname = highlight ? this.twig.highlight : this.twig.style;
+
+	var sname;
+	switch (accent) {
+	case Accent.NORMA : sname = this.twig.style;      break;
+	case Accent.HOVER : sname = this.twig.hoverStyle; break;
+	case Accent.FOCUS : sname = this.twig.style;      break;
+	case Accent.HOVOC : sname = this.twig.hoverStyle; break;
+	default : throw new Error('Invalid accent');
+	}
+
 	var style = styles[sname];
 	if (!isnon(style)) { throw new Error('Invalid style: ' + sname); }
 	fabric.paint(style, this, 'path');
@@ -245,14 +274,12 @@ CCustom.prototype.mousehover = function(board, p) {
 	if (p.x < this.pnw.x || p.y < this.pnw.y || p.x > this.pse.x || p.y > this.pse.y) {
 		return false;
 	}
-	var fabric = this.getFabric();
+	var fabric = this.getFabric(Accent.NORMA);
 	var pp = p.sub(this.pnw);
 	if (!fabric.within(this, 'path', pp))  { return false; }
 
 	system.setCursor('default');
-	board.setHighlight(this.name);
-	this.$fabric = board.$fabric = null;
-	shell.redraw = true;
+	board.setHover(this.name);
 
 	if (this.methods.mousehover) { this.methods.mousehover(board, this, p); }
 	return true;
@@ -279,8 +306,8 @@ CCustom.prototype.mousedown = function(board, p) {
 /**
 | Draws the custom control.
 */
-CCustom.prototype.draw = function(fabric, highlight) {
-	fabric.drawImage(this.getFabric(highlight), this.pnw);
+CCustom.prototype.draw = function(fabric, accent) {
+	fabric.drawImage(this.getFabric(accent), this.pnw);
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -301,8 +328,8 @@ var CInput = function(twig, board, inherit, name) {
 	var pse  = this.pse  = computePoint(twig.frame.pse, board.iframe);
 	var bezi = this.bezi = new BeziRect(Point.zero, pse.sub(pnw), 7, 3);
 
-	this.$fabric    = null;
-	this.$highlight = false;
+	this.$fabric = null;
+	this.$accent = Accent.NORMA;
 };
 
 /**
@@ -317,17 +344,26 @@ CInput.prototype.path = function(fabric, border, twist) {
 	fabric.lineTo(this.pnw);
 };
 
-CInput.prototype.getFabric = function() {
+CInput.prototype.getFabric = function(accent) {
 	var fabric = new Fabric(this.bezi.width, this.bezi.height);
-	var sname  = this.twig.style;
+
+	var sname;
+	switch (accent) {
+	case Accent.NORMA : sname = this.twig.normaStyle; break;
+	case Accent.HOVER : sname = this.twig.hoverStyle; break;
+	case Accent.FOCUS : sname = this.twig.focusStyle; break;
+	case Accent.HOVOC : sname = this.twig.hovocStyle; break;
+	default : throw new Error('Invalid accent');
+	}
 	var style  = styles[sname];
 	if (!isnon(style)) { throw new Error('Invalid style: ' + sname); }
+
 	fabric.paint(style, this.bezi, 'path');
 	return fabric;
 };
 
-CInput.prototype.draw = function(fabric) {
-	fabric.drawImage(this.getFabric(), this.pnw);
+CInput.prototype.draw = function(fabric, accent) {
+	fabric.drawImage(this.getFabric(accent), this.pnw);
 };
 
 /**
@@ -341,7 +377,12 @@ CInput.prototype.mousehover = function(board, p) {
 | Mouse down
 */
 CInput.prototype.mousedown = function(board, p) {
-	return null;
+	var pp = p.sub(this.pnw);
+	var fabric = this.getFabric(Accent.NORMA);
+	if (!fabric.within(this.bezi, 'path', pp))  { return null; }
+
+	board.setFocus(this.name);
+	return false;
 };
 
 
@@ -462,7 +503,8 @@ var CBoard = function(design, inherit, cockpit, screensize) {
 	this.gradientR1 = 650;
 	this.screensize = screensize;
 
-	this._highlight = inherit ? inherit._highlight : null;
+	this.$hover = inherit ? inherit.$hover : null;
+	this.$focus = inherit ? inherit.$focus : null;
 
 	this.cc = {};
 	var layout = tree.root.layout;
@@ -550,34 +592,13 @@ CBoard.prototype.getFabric = function() {
 	for(var a = 0, aZ = layout.length; a < aZ; a++) {
 		var cname = layout.ranks[a];
 		var c = this.cc[cname];
-		c.draw(fabric, cname == this._highlight);
+		c.draw(fabric, Accent.state(cname === this.$hover, cname === this.$focus));
 	}
 
 	if (dbgBoxes) {
 		fabric.paint(styles.boxes,
 			new Rect(iframe.pnw, iframe.pse.sub(1, 1)), 'path');
 	}
-
-	/*
-	var layout   = layouts.loginboard;
-	var elements = layout.elements;
-
-	var stHighlight = theme.cockpit.highlight;
-	var hl          = this._highlight;
-
-	var fmx = this.fmx;
-	var pnw = this.pnw;
-	var pse = this.pse;
-
-	var sideLabelX = pnw.x + 145;
-	var sideLabelY = pse.y -  13;
-
-	var passLabelX = fmx    - 220;
-	var passLabelY = pse.y  -  40;
-	fabric.fillText('password', passLabelX, passLabelY);
-
-	fabric.paint(theme.cockpit.field, this, 'pathUsername');
-	fabric.paint(theme.cockpit.field, this, 'pathPassword');*/
 
 	return fabric;
 };
@@ -591,14 +612,14 @@ CBoard.prototype.mousehover = function(p) {
 	var fabric = this.getFabric();
 	var a, aZ;
 	if (p.y < pnw.y || p.x < pnw.x || p.x > pse.x) {
-		this.setHighlight(null);
+		this.setHover(null);
 		return false;
 	}
 	var pp = p.sub(pnw);
 
 	// @@ Optimize by reusing the latest path of this.$fabric
 	if (!fabric.within(this, 'path', pp))  {
-		this.setHighlight(null);
+		this.setHover(null);
 		return false;
 	}
 
@@ -609,7 +630,7 @@ CBoard.prototype.mousehover = function(p) {
 		if (ce.mousehover(this, pp)) { return true; }
 	}
 	system.setCursor('default');
-	this.setHighlight(null);
+	this.setHover(null);
 	return true;
 };
 
@@ -622,14 +643,14 @@ CBoard.prototype.mousedown = function(p) {
 	var fabric = this.getFabric();
 	var a, aZ;
 	if (p.y < pnw.y || p.x < pnw.x || p.x > pse.x) {
-		this.setHighlight(null);
+		this.setHover(null);
 		return null;
 	}
 	var pp = p.sub(pnw);
 
 	// @@ Optimize by reusing the latest path of this.$fabric
 	if (!fabric.within(this, 'path', pp))  {
-		this.setHighlight(null);
+		this.setHover(null);
 		return null;
 	}
 
@@ -640,22 +661,34 @@ CBoard.prototype.mousedown = function(p) {
 		if (ce.mousedown(this, pp)) { return false; }
 	}
 	system.setCursor('default');
-	this.setHighlight(null);
+	this.setHover(null);
 	return false;
 };
 
-
 /**
-| Sets the highlighted element.
+| Sets the hovered element.
 */
-CBoard.prototype.setHighlight = function(highlight) {
-	if (this._highlight === highlight) { return; }
+CBoard.prototype.setFocus = function(cname) {
+	if (this.$focus === cname) { return; }
 
 	this.$fabric = null;
 	shell.redraw = true;
-	if (this._highlight) { this.cc[this._highlight].$fabric = null; }
-	if (      highlight) { this.cc[      highlight].$fabric = null; }
-	this._highlight = highlight;
+	if (this.$focus) { this.cc[this.$focus].$fabric = null; }
+	if (cname      ) { this.cc[cname      ].$fabric = null; }
+	this.$focus = cname;
+};
+
+/**
+| Sets the hovered element.
+*/
+CBoard.prototype.setHover = function(cname) {
+	if (this.$hover === cname) { return; }
+
+	this.$fabric = null;
+	shell.redraw = true;
+	if (this.$hover) { this.cc[this.$hover].$fabric = null; }
+	if (cname      ) { this.cc[cname      ].$fabric = null; }
+	this.$hover = cname;
 };
 
 
@@ -671,7 +704,8 @@ CBoard.prototype.setHighlight = function(highlight) {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 Cockpit = function() {
 	this.fabric       = system.fabric;
-	this.curBoardName = 'mainboard';
+	//this.curBoardName = 'mainboard';
+	this.curBoardName = 'loginboard';
 	this.boards = {
 		mainboard  : null,
 		loginboard : null
