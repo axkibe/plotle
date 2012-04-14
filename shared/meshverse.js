@@ -41,13 +41,12 @@ var Meshverse;
 (function () {
 "use strict";
 if (typeof (window) === 'undefined') {
-	// node imports
-	Fabric = require('./fabric');
+	// server node imports
+	Fabric = require('./fabris');
 }
 
 /**
 | The meshcraft universe
-| TODO remove the m
 */
 Meshverse = {
 	'Nexus' : {

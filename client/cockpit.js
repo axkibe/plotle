@@ -103,12 +103,12 @@ var Accent = immute({
 Accent.state = function(hover, focus) {
 	if (hover) {
 		if (focus) { return Accent.HOFOC; }
-	 	else       { return Accent.HOVER; }
+		else       { return Accent.HOVER; }
 	} else {
 		if (focus) { return Accent.FOCUS; }
 		else       { return Accent.NORMA; }
 	}
-}
+};
 
 /**
 | Computes a point by its anchor

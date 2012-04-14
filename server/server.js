@@ -80,7 +80,7 @@ var Server = function() {
 	this.registerFile('/deverse.js',       'js',   'client/deverse.js'        );
 	this.registerFile('/design.js',        'js',   'client/design.js'         );
 //	this.registerFile('/emulate.js',       'js',   './emulate.js'             );
-	this.registerFile('/fabric.js',        'js',   'shared/fabric.js'         );
+	this.registerFile('/fabric.js',        'js',   'client/fabric.js'         );
 	this.registerFile('/index.html',       'html', 'client/meshcraft.html'    );
 	this.registerFile('/iface-async.js',   'js',   'client/iface-async.js'    );
 	this.registerFile('/iface-emulate.js', 'js',   'client/iface-emulate.js'  );

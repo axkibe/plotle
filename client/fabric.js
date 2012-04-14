@@ -23,8 +23,6 @@
  This is not a full blown feature complete, everything library
  but enhanced on the fly for what the meshcraft shell needs.
 
- TODO: Make not shared.
-
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
 
@@ -44,12 +42,8 @@ var Fabric = null;
 | Capsule
 */
 (function(){
-
 'use strict';
-
-if (typeof(window) === 'undefined') {
-    Jools = require('./jools');
-}
+if (typeof(window) === 'undefined') { throw new Error('fabric needs a browser'); }
 
 var debug        = Jools.debug;
 var immute       = Jools.immute;
@@ -700,13 +694,14 @@ Object.defineProperty(Measure, 'font', {
 */
 var Point = function(a1, a2) {
 	if (typeof(a1) === 'object') {
-		fixate(this, 'x', a1.x);
-		fixate(this, 'y', a1.y);
+		this.x = a1.x;
+		this.y = a1.y;
 	} else {
-		fixate(this, 'x', a1);
-		fixate(this, 'y', a2);
+		this.x = a1;
+		this.y = a2;
 	}
-	fixate(this, 'type', 'Point'); // @@ So Tree is happy TODO prototype
+	this.type = 'Point'; // @@ So Tree is happy TODO prototype
+	immute(this);
 };
 
 /**
