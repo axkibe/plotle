@@ -1127,14 +1127,14 @@ VPara.prototype.drawCaret = function() {
 	if (ch === 0) return;
 
 	var cp = new Point(cx + zone.pnw.x + pan.x, cyn + zone.pnw.y + pan.y);
-	shell.caret.screenPos$ = cp;
+	shell.caret.$screenPos = cp;
 
 	if (Caret.useGetImageData) {
-		shell.caret.save$ = shell.fabric.getImageData(cp.x, cp.y, 3, ch + 2);
+		shell.caret.$save = shell.fabric.getImageData(cp.x, cp.y, 3, ch + 2);
 	} else {
 		// paradoxically this is often way faster, especially on firefox
-		shell.caret.save$ = new Fabric(shell.fabric.width, shell.fabric.height);
-		shell.caret.save$.drawImage(shell.fabric, 0, 0);
+		shell.caret.$save = new Fabric(shell.fabric.width, shell.fabric.height);
+		shell.caret.$save.drawImage(shell.fabric, 0, 0);
 	}
 
 	shell.fabric.fillRect('black', cp.x + 1, cp.y + 1, 1, ch);

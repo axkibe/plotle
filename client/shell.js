@@ -168,13 +168,13 @@ Caret.prototype.display = function() {
 	var fabric = shell.fabric;
 
 	// erases the old caret
-	if (shell.caret.save$) {
+	if (shell.caret.$save) {
 		if (Caret.useGetImageData) {
-			shell.fabric.putImageData(shell.caret.save$, shell.caret.screenPos$);
+			shell.fabric.putImageData(shell.caret.$save, shell.caret.$screenPos);
 		} else {
-			shell.fabric.drawImage(shell.caret.save$, 0, 0);
+			shell.fabric.drawImage(shell.caret.$save, 0, 0);
 		}
-		shell.caret.save$ = shell.caret.screenPos$ = null;
+		shell.caret.$save = shell.caret.$screenPos = null;
 	}
 
 	// draws new
@@ -460,8 +460,8 @@ Shell.prototype._draw = function() {
 	this.fabric.attune();   // @@ <- bad name for clear();
 
 	// remove caret cache.
-	this.caret.save$ = null;
-	this.caret.screenPos$ = null;
+	this.caret.$save = null;
+	this.caret.$screenPos = null;
 
 	if (this.vSpace) { this.vSpace.draw(); }
 	this.cockpit.draw();
