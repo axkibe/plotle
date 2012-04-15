@@ -24,7 +24,7 @@
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
 | Capsule (just to make jshint happy)
@@ -76,10 +76,10 @@ var Server = function() {
 	this.registerFile('/',                 'html', 'client/meshcraft.html'    );
 	this.registerFile('/action.js',        'js',   'client/action.js'         );
 	this.registerFile('/browser.js',       'js',   'client/browser.js'        );
+	this.registerFile('/caret.js',         'js',   'client/caret.js'          );
 	this.registerFile('/cockpit.js',       'js',   'client/cockpit.js'        );
 	this.registerFile('/deverse.js',       'js',   'client/deverse.js'        );
 	this.registerFile('/design.js',        'js',   'client/design.js'         );
-//	this.registerFile('/emulate.js',       'js',   './emulate.js'             );
 	this.registerFile('/fabric.js',        'js',   'client/fabric.js'         );
 	this.registerFile('/index.html',       'html', 'client/meshcraft.html'    );
 	this.registerFile('/iface-async.js',   'js',   'client/iface-async.js'    );

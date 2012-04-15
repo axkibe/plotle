@@ -18,7 +18,7 @@
                                         `---' ' ' `-' `' `'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- The main shell, manages the caret, the selection and links cockpit and the visuals.
+ The main shell links cockpit and the visuals.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -31,6 +31,7 @@
 | Imports
 */
 var Action;
+var Caret;
 var Cockpit;
 var Fabric;
 var Jools;
@@ -48,7 +49,6 @@ var theme;
 */
 var shell = null;
 var peer  = null;
-var Caret = null;
 var Shell = null;
 
 /**
@@ -109,89 +109,6 @@ var tfxSign       = MeshMashine.tfxSign;
 
 // configures tree.
 Tree.cogging = true;
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ,--.             .
- | `-' ,-. ,-. ,-. |-
- |   . ,-| |   |-' |
- `--'  `-^ '   `-' `'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
- The Caret.
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/**
-| Constructor.
-*/
-Caret = function() {
-	// a signature pointing to the caret pos
-	this.sign = null;
-
-	// x position to retain when using up/down keys.
-	this.retainx = null;
-
-	// true if visible
-	this.shown = false;
-
-	// true when just blinked away
-	this.blinked = false;
-};
-
-
-/**
-| If true uses getImageData() to cache the image without the caret to achieve blinking.
-| Without it uses drawImage() for the whole canvas. On firefox this is paradoxically way
-| faster.
-*/
-Caret.useGetImageData = true;
-
-/**
-| Shows the caret or resets the blink timer if already shown
-*/
-Caret.prototype.show = function() {
-	this.shown = true;
-	this.blinked = false;
-	system.restartBlinker();
-};
-
-/**
-| Hides the caret.
-*/
-Caret.prototype.hide = function() {
-	this.shown = false;
-};
-
-/**
-| Draws or erases the caret.
-*/
-Caret.prototype.display = function() {
-	var fabric = shell.fabric;
-
-	// erases the old caret
-	if (shell.caret.$save) {
-		if (Caret.useGetImageData) {
-			shell.fabric.putImageData(shell.caret.$save, shell.caret.$screenPos);
-		} else {
-			shell.fabric.drawImage(shell.caret.$save, 0, 0);
-		}
-		shell.caret.$save = shell.caret.$screenPos = null;
-	}
-
-	// draws new
-	if (this.shown && !this.blinked && this.sign) {
-		shell.vget(this.sign.path, -1).drawCaret();
-	}
-};
-
-/**
-| Switches caret visibility state.
-*/
-Caret.prototype.blink = function() {
-	if (this.shown) {
-		this.blinked = !this.blinked;
-		this.display();
-	}
-};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .---.     .          .
