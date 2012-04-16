@@ -73,7 +73,7 @@ var isArray     = Jools.isArray;
 var Server = function() {
 	this.files = {};
 	this.packfiles = [ { path: '/config.js', filename: null } ];
-	
+
 	// client config
 	var cconfig = [];
 	cconfig.push('var config = {\n');
@@ -110,6 +110,9 @@ var Server = function() {
 	this.registerFile('/cockpit.js',       'js',   1, 'client/cockpit.js'        );
 	this.registerFile('/action.js',        'js',   1, 'client/action.js'         );
 	this.registerFile('/ovalmenu.js',      'js',   1, 'client/ovalmenu.js'       );
+	this.registerFile('/vpara.js',         'js',   1, 'client/vpara.js'          );
+	this.registerFile('/scrollbar.js',     'js',   1, 'client/scrollbar.js'      );
+	this.registerFile('/vdoc.js',          'js',   1, 'client/vdoc.js'           );
 	this.registerFile('/visual.js',        'js',   1, 'client/visual.js'         );
 	this.registerFile('/vspace.js',        'js',   1, 'client/vspace.js'         );
 	this.registerFile('/browser.js',       'js',   1, 'client/browser.js'        );

@@ -1,0 +1,617 @@
+/**                                                      _.._
+                                                      .-'_.._''.
+ __  __   ___       _....._              .          .' .'     '.\
+|  |/  `.'   `.   .'       '.          .'|         / .'                                _.._
+|   .-.  .-.   ' /   .-'"'.  \        (  |        . '            .-,.-~.             .' .._|    .|
+|  |  |  |  |  |/   /______\  |        | |        | |            |  .-. |    __      | '      .' |_
+|  |  |  |  |  ||   __________|    _   | | .'''-. | |            | |  | | .:-`.'.  __| |__  .'     |
+|  |  |  |  |  |\  (          '  .' |  | |/.'''. \. '            | |  | |/ |   \ ||__   __|'-..  .-'
+|  |  |  |  |  | \  '-.___..-~. .   | /|  /    | | \ '.         .| |  '- `" __ | |   | |      |  |
+|__|  |__|  |__|  `         .'.'.'| |//| |     | |  '. `.____.-'/| |      .'.''| |   | |      |  |
+                   `'-.....-.'.'.-'  / | |     | |    `-._____ / | |     / /   | |_  | |      |  '.'
+                                 \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
+                                       '___)   '___)                      `~~'  `"   |_|      `--'
+
+                                  ,.   ,..-,--.
+                                  `|  /   '|__/ ,-. ,-. ,-.
+                                   | /    ,|    ,-| |   ,-|
+                                   `'     `'    `-^ '   `-^
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+ A visual paragraph representation
+
+ Authors: Axel Kittenberger
+ License: MIT(Expat), see accompanying 'License'-file
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/**
+| Exports
+*/
+var VPara     = null;
+
+/**
+| Imports
+*/
+var Caret;
+var Fabric;
+var Jools;
+var MeshMashine;
+var Path;
+
+var dbgNoCache;
+var shell;
+var system;
+var theme;
+var peer;
+
+/**
+| Capsule
+*/
+(function(){
+'use strict';
+if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
+
+/**
+| Shortcuts
+*/
+var Measure       = Fabric.Measure;
+var Point         = Fabric.Point;
+var R             = Math.round;
+var Signature     = MeshMashine.Signature;
+var debug         = Jools.debug;
+var fixate        = Jools.fixate;
+var immute        = Jools.immute;
+var is            = Jools.is;
+var isnon         = Jools.isnon;
+var limit         = Jools.limit;
+var log           = Jools.log;
+var max           = Math.max;
+var min           = Math.min;
+
+
+/**
+| Constructor.
+*/
+VPara = function(twig, path) {
+	if (twig.type !== 'Para') throw new Error('type error');
+
+	this.twig = twig;
+	this.path = path;
+	this.key  = path.get(-1);
+
+	// caching
+	this.$fabric = null;
+	this.$flow   = null;
+};
+
+/**
+| Updates v-vine to match a new twig.
+*/
+VPara.prototype.update = function(twig) {
+	this.twig    = twig;
+	this.$flow   = null;
+	this.$fabric = null;
+};
+
+/**
+| (re)flows the paragraph, positioning all chunks.
+*/
+VPara.prototype.getFlow = function() {
+	var vitem = shell.vget(this.path, -2);
+	var vdoc  = vitem.vv.doc;
+	var flowWidth = vitem.getFlowWidth();
+	var fontsize = vdoc.getFontSize();
+
+	var flow  = this.$flow;
+	// @@ go into subnodes instead
+	var text = this.twig.text;
+
+	if (!dbgNoCache && flow &&
+		flow.flowWidth === flowWidth &&
+		flow.fontsize  === fontsize
+	) return flow;
+
+	if (shell.caret.path && shell.caret.path.equals(this.path)) {
+		// remove caret cache if its within this flow.
+		// TODO change
+		shell.caret.cp$line  = null;
+		shell.caret.cp$token = null;
+	}
+
+	// builds position informations.
+	flow  = this.$flow = [];
+	var spread = 0;  // width really used.
+
+	// current x positon, and current x including last tokens width
+	var x = 0, xw = 0;
+
+	var y = fontsize;
+	Measure.font = vdoc.getFont();
+	var space = Measure.width(' ');
+	var line = 0;
+	flow[line] = { a: [], y: y, o: 0 };
+
+	//var reg = !pre ? (/(\s*\S+|\s+$)\s?(\s*)/g) : (/(.+)()$/g); @@
+	var reg = (/(\s*\S+|\s+$)\s?(\s*)/g);
+
+	for(var ca = reg.exec(text); ca !== null; ca = reg.exec(text)) {
+		// a token is a word plus following hard spaces
+		var token = ca[1] + ca[2];
+		var w = Measure.width(token);
+		xw = x + w + space;
+
+		if (flowWidth > 0 && xw > flowWidth) {
+			if (x > 0) {
+				// soft break
+				if (spread < xw) spread = xw;
+				x = 0;
+				xw = x + w + space;
+				//y += R(vdoc.fontsize * (pre ? 1 : 1 + theme.bottombox)); @@
+				y += R(vdoc.getFontSize() * (1 + theme.bottombox));
+				line++;
+				flow[line] = {a: [], y: y, o: ca.index};
+			} else {
+				// horizontal overflow
+				// console.log('HORIZONTAL OVERFLOW'); // @@
+			}
+		}
+		flow[line].a.push({
+			x: x,
+			w: w,
+			o: ca.index,
+			t: token
+		});
+
+		x = xw;
+	}
+	if (spread < xw) spread = xw;
+
+	flow.height = y;
+	flow.flowWidth = flowWidth;
+	flow.spread = spread;
+	flow.fontsize = fontsize;
+	return flow;
+};
+
+/**
+| Returns the offset closest to a point.
+|
+| point: the point to look for
+*/
+VPara.prototype.getPointOffset = function(point) {
+	var flow = this.getFlow();
+	var para = this.para;
+	var vdoc = shell.vget(this.path, -1);
+	Measure.font = vdoc.getFont();
+
+	var line;
+	for (line = 0; line < flow.length; line++) {
+		if (point.y <= flow[line].y) {
+			break;
+		}
+	}
+	if (line >= flow.length) line--;
+
+	return this.getLineXOffset(line, point.x);
+};
+
+/**
+| Returns the offset in flowed line number and x coordinate.
+*/
+VPara.prototype.getLineXOffset = function(line, x) {
+	var flow = this.getFlow();
+	var fline = flow[line];
+	var ftoken = null;
+	for (var token = 0; token < fline.a.length; token++) {
+		ftoken = fline.a[token];
+		if (x <= ftoken.x + ftoken.w) { break; }
+	}
+	if (token >= fline.a.length) ftoken = fline.a[--token];
+
+	if (!ftoken) return 0;
+
+	var dx   = x - ftoken.x;
+	var text = ftoken.t;
+
+	var x1 = 0, x2 = 0;
+	var a;
+	for(a = 0; a < text.length; a++) {
+		x1 = x2;
+		x2 = Measure.width(text.substr(0, a));
+		if (x2 >= dx) break;
+	}
+
+	if (dx - x1 < x2 - dx) a--;
+	return ftoken.o + a;
+};
+
+/**
+| Text has been inputted.
+*/
+VPara.prototype.input = function(text) {
+    var reg   = /([^\n]+)(\n?)/g;
+	var para  = this;
+	var vitem = shell.vget(para.path, -2);
+	var vdoc  = vitem.vv.doc;
+
+    for(var rx = reg.exec(text); rx !== null; rx = reg.exec(text)) {
+		var line = rx[1];
+		peer.insertText(para.textPath(), shell.caret.sign.at1, line);
+        if (rx[2]) {
+			peer.split(para.textPath(), shell.caret.sign.at1);
+			para = vdoc.vAtRank(vdoc.twig.rankOf(para.key) + 1);
+		}
+    }
+	vitem.scrollCaretIntoView();
+};
+
+/**
+| Handles a special key
+*/
+VPara.prototype.specialKey = function(keycode) {
+	var caret  = shell.caret;
+	// TODO split into smaller functions
+	var para = this.para;
+	var select = shell.selection;
+
+	var vitem = shell.vget(this.path, -2);
+	var vdoc  = vitem.vv.doc;
+	var ve, at1, flow;
+	var r, x;
+
+	if (shell.ctrl) {
+		switch(keycode) {
+		case 65 : // ctrl+a
+			var v0 = vdoc.vAtRank(0);
+			var v1 = vdoc.vAtRank(vdoc.twig.length - 1);
+
+			select.sign1 = new Signature({ path: v0.textPath(), at1: 0 });
+			select.sign2 = new Signature({ path: v1.textPath(), at1: v1.twig.text.length });
+			select.active = true;
+			shell.setCaret(select.sign2);
+			system.setInput(select.innerText());
+			caret.show();
+			vitem.poke();
+			shell.redraw = true;
+			return true;
+		}
+	}
+
+	if (!shell.shift && select.active) {
+		switch(keycode) {
+		case 33 : // pageup
+		case 34 : // pagedown
+		case 35 : // end
+		case 36 : // pos1
+		case 37 : // left
+		case 38 : // up
+		case 39 : // right
+		case 40 : // down
+			select.deselect();
+			shell.redraw = true;
+			break;
+		case  8 : // backspace
+		case 46 : // del
+			select.remove();
+			shell.redraw = true;
+			keycode = 0;
+			break;
+		case 13 : // return
+			select.remove();
+			shell.redraw = true;
+			break;
+		}
+	} else if (shell.shift && !select.active) {
+		switch(keycode) {
+		case 33 : // pageup
+		case 34 : // pagedown
+		case 35 : // end
+		case 36 : // pos1
+		case 37 : // left
+		case 38 : // up
+		case 39 : // right
+		case 40 : // down
+			select.sign1 = caret.sign;
+			vitem.poke();
+		}
+	}
+
+	switch(keycode) {
+	case  8 : // backspace
+		if (caret.sign.at1 > 0) {
+			peer.removeText(this.textPath(), caret.sign.at1 - 1, 1);
+		} else {
+			r = vdoc.twig.rankOf(this.key);
+			if (r > 0) {
+				ve = vdoc.vAtRank(r - 1);
+				peer.join(ve.textPath(), ve.twig.text.length);
+			}
+		}
+		vitem.scrollCaretIntoView();
+		break;
+	case 13 : // return
+		peer.split(this.textPath(), caret.sign.at1);
+		vitem.scrollCaretIntoView();
+		break;
+	case 33 : // pageup
+		vitem.scrollPage(true);
+		break;
+	case 34 : // pagedown
+		vitem.scrollPage(false);
+		break;
+	case 35 : // end
+		caret = shell.setCaret(
+			new Signature({ path: this.textPath(), at1: this.twig.text.length })
+		);
+		break;
+	case 36 : // pos1
+		caret = shell.setCaret(
+			new Signature({ path: this.textPath(), at1: 0 })
+		);
+		vitem.scrollCaretIntoView();
+		break;
+	case 37 : // left
+		if (caret.sign.at1 > 0) {
+			caret = shell.setCaret(
+				new Signature({ path: this.textPath(), at1: caret.sign.at1 - 1 })
+			);
+		} else {
+			r = vdoc.twig.rankOf(this.key);
+			if (r > 0) {
+				ve = vdoc.vAtRank(r - 1);
+				caret = shell.setCaret(
+					new Signature({ path: ve.textPath(), at1: ve.twig.text.length })
+				);
+			}
+		}
+		vitem.scrollCaretIntoView();
+		break;
+	case 38 : // up
+		flow = this.getFlow();
+		x = caret.retainx !== null ? caret.retainx : caret.pos$.x;
+
+		if (caret.flow$line > 0) {
+			// stay within this para
+			at1 = this.getLineXOffset(caret.flow$line - 1, x);
+			shell.setCaret(
+				new Signature({ path: this.textPath(), at1: at1 }), x
+			);
+		} else {
+			// goto prev para
+			r = vdoc.twig.rankOf(this.key);
+			if (r > 0) {
+				ve = vdoc.vAtRank(r - 1);
+				at1 = ve.getLineXOffset(ve.getFlow().length - 1, x);
+				caret = shell.setCaret(
+					new Signature({ path: ve.textPath(), at1: at1 }), x
+				);
+			}
+		}
+		vitem.scrollCaretIntoView();
+		break;
+	case 39 : // right
+		if (caret.sign.at1 < this.twig.text.length) {
+			caret = shell.setCaret(
+				new Signature({ path: this.textPath(), at1: caret.sign.at1 + 1 })
+			);
+		} else {
+			r = vdoc.twig.rankOf(this.key);
+			if (r < vdoc.twig.length - 1) {
+				ve = vdoc.vAtRank(r + 1);
+				caret = shell.setCaret(
+					new Signature({ path: ve.textPath(), at1: 0 })
+				);
+			}
+		}
+		vitem.scrollCaretIntoView();
+		break;
+	case 40 : // down
+		flow = this.getFlow();
+		x = caret.retainx !== null ? caret.retainx : caret.pos$.x;
+
+		if (caret.flow$line < flow.length - 1) {
+			// stays within this para
+			at1 = this.getLineXOffset(caret.flow$line + 1, x);
+			caret = shell.setCaret(
+				new Signature({ path: this.textPath(), at1: at1 }), x
+			);
+		} else {
+			// goto next para
+			r = vdoc.twig.rankOf(this.key);
+			if (r < vdoc.twig.length - 1) {
+				ve = vdoc.vAtRank(r + 1);
+				at1 = ve.getLineXOffset(0, x);
+				caret = shell.setCaret(
+					new Signature({ path: ve.textPath(), at1: at1 }), x
+				);
+			}
+		}
+		vitem.scrollCaretIntoView();
+		break;
+	case 46 : // del
+		if (caret.sign.at1 < this.twig.text.length) {
+			peer.removeText(this.textPath(), caret.sign.at1, 1);
+		} else {
+			r = vdoc.twig.rankOf(this.key);
+			if (r < vdoc.twig.length - 1) {
+				peer.join(this.textPath(), this.twig.text.length);
+			}
+		}
+		break;
+	}
+
+
+	if (shell.shift) {
+		switch(keycode) {
+		case 35 : // end
+		case 36 : // pos1
+		case 37 : // left
+		case 38 : // up
+		case 39 : // right
+		case 40 : // down
+			select.active = true;
+			select.sign2 = caret.sign;
+			system.setInput(select.innerText());
+			vitem.poke();
+			shell.redraw = true;
+		}
+	}
+
+	caret.show();
+	shell.redraw = true; // @@ might be optimized
+};
+
+/**
+| Return the path to the .text attribute if this para.
+| @@ use lazyFixate.
+*/
+VPara.prototype.textPath = function() {
+	if (this._textPath) return this._textPath;
+	return (this._textPath = new Path(this.path, '++', 'text'));
+};
+
+/**
+| Returns the height of the para
+*/
+VPara.prototype.getHeight = function() {
+	var flow = this.getFlow();
+	var vdoc = shell.vget(this.path, -1);
+	return flow.height + R(vdoc.getFontSize() * theme.bottombox);
+};
+
+/**
+| Draws the paragraph in its cache and returns it.
+*/
+VPara.prototype.getFabric = function() {
+	var flow   = this.getFlow();
+	var width  = flow.spread;
+	var vdoc   = shell.vget(this.path, -1);
+	var height = this.getHeight();
+	var fabric = this.$fabric;
+
+	// cache hit?
+	if (!dbgNoCache && fabric &&
+		fabric.width === width &&
+		fabric.height === height)
+	{ return fabric; }
+
+	// @@: work out exact height for text below baseline
+	fabric = this.$fabric = new Fabric(width, height);
+	fabric.fontStyle(vdoc.getFont(), 'black', 'start', 'alphabetic');
+
+	// draws text into the fabric
+	for(var a = 0, aZ = flow.length; a < aZ; a++) {
+		var line = flow[a];
+		for(var b = 0, bZ = line.a.length; b < bZ; b++) {
+			var chunk = line.a[b];
+			fabric.fillText(chunk.t, chunk.x, line.y);
+		}
+	}
+
+	return fabric;
+};
+
+/**
+| Returns the point of a given offset.
+|
+| offset:   the offset to get the point from.
+| flowPos$: if set, writes flow$line and flow$token to
+|           the flow position used.
+|
+| TODO change to multireturn.
+| TODO rename
+*/
+VPara.prototype.getOffsetPoint = function(offset, flowPos$) {
+	// @@ cache position
+	var twig = this.twig;
+	var vdoc  = shell.vget(this.path, -1);
+	Measure.font = vdoc.getFont();
+	var text = twig.text;
+	var flow = this.getFlow();
+	var a;
+
+	// TODO improve loops
+	var al = flow.length - 1;
+	for (a = 1; a < flow.length; a++) {
+		if (flow[a].o > offset) {
+			al = a - 1;
+			break;
+		}
+	}
+	var line = flow[al];
+
+	var at = line.a.length - 1;
+	for (a = 1; a < line.a.length; a++) {
+		if (line.a[a].o > offset) {
+			at = a - 1;
+			break;
+		}
+	}
+	var token = line.a[at];
+	if (!token) { token = { x: 0, o : 0 }; }
+
+	if (flowPos$) {
+		flowPos$.flow$line  = al;
+		flowPos$.flow$token = at;
+	}
+
+	// @@ use token. text instead.
+	return new Point(
+		R(token.x + Measure.width(text.substring(token.o, offset))),
+		line.y);
+};
+
+/**
+| Returns the caret position relative to the vdoc.
+*/
+VPara.prototype.getCaretPos = function() {
+	var caret   = shell.caret;
+	var vitem   = shell.vget(this.path, -2);
+	var vdoc    = vitem.vv.doc;
+	var fs      = vdoc.getFontSize();
+	var descend = fs * theme.bottombox;
+	var p       = this.getOffsetPoint(shell.caret.sign.at1, shell.caret);
+
+	var pnw = vdoc.getPNW(this.key);
+	var s = R(p.y + pnw.y + descend);
+	var n = s - R(vdoc.getFontSize() + descend);
+	var	x = p.x + pnw.x - 1;
+
+	return immute({ s: s, n: n, x: x });
+};
+
+
+/**
+| Draws the caret if its in this paragraph.
+*/
+VPara.prototype.drawCaret = function() {
+	var caret = shell.caret;
+	var pan   = shell.vSpace.fabric.pan;
+	var vitem = shell.vget(this.path, -2);
+	var zone  = vitem.getZone();
+	var cpos  = caret.pos$  = this.getCaretPos();
+	var sbary = vitem.scrollbarY;
+	var sy    = sbary ? R(sbary.getPos()) : 0;
+
+	var cyn = min(max(cpos.n - sy, 0), zone.height); // TODO limit
+	var cys = min(max(cpos.s - sy, 0), zone.height);
+	var cx  = cpos.x;
+
+	var ch  = cys - cyn;
+	if (ch === 0) return;
+
+	var cp = new Point(cx + zone.pnw.x + pan.x, cyn + zone.pnw.y + pan.y);
+	shell.caret.$screenPos = cp;
+
+	if (Caret.useGetImageData) {
+		shell.caret.$save = shell.fabric.getImageData(cp.x, cp.y, 3, ch + 2);
+	} else {
+		// paradoxically this is often way faster, especially on firefox
+		shell.caret.$save = new Fabric(shell.fabric.width, shell.fabric.height);
+		shell.caret.$save.drawImage(shell.fabric, 0, 0);
+	}
+
+	shell.fabric.fillRect('black', cp.x + 1, cp.y + 1, 1, ch);
+};
+
+})();

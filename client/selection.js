@@ -24,6 +24,10 @@
  License: MIT(Expat), see accompanying 'License'-file
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/**
+| Exports
+*/
+var Selection = null;
 
 /**
 | Imports
@@ -32,11 +36,6 @@ var Jools;
 var peer;
 var shell;
 var system;
-
-/**
-| Exports
-*/
-var Selection = null;
 
 /**
 | Capsule
@@ -111,6 +110,7 @@ Selection.prototype.normalize = function(tree) {
 */
 Selection.prototype.innerText = function() {
 	if (!this.active) return '';
+
 	this.normalize();
 	var s1 = this.begin;
 	var s2 = this.end;
