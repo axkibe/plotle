@@ -93,6 +93,7 @@ var Server = function() {
 	this.registerFile('/ovalmenu.js',      'js',   'client/ovalmenu.js'       );
 	this.registerFile('/path.js',          'js',   'shared/path.js'           );
 	this.registerFile('/peer.js',          'js',   'client/peer.js'           );
+	this.registerFile('/selection.js',     'js',   'client/selection.js'      );
 	this.registerFile('/shell.js',         'js',   'client/shell.js'          );
 	this.registerFile('/testpad.html',     'html', 'client/testpad.html'      );
 	this.registerFile('/testpad.js',       'js',   'client/testpad.js'        );
