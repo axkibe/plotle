@@ -43,13 +43,11 @@ var ajaxInDelay = 0;
 /**
 | Imports
 */
+var config      = require('../config');
 var util        = require('util');
 var http        = require('http');
 var url         = require('url');
 var fs          = require('fs');
-//var sleep       = require('sleep'); // TODO remove
-
-var config      = require('../config');
 
 var Jools       = require('../shared/jools');
 var MeshMashine = require('../shared/meshmashine');
@@ -58,14 +56,16 @@ var Meshverse   = require('../shared/meshverse');
 var Tree        = require('../shared/tree');
 var Emulate     = require('./emulate');
 
+/**
+| Shortcuts
+*/
 var Change      = MeshMashine.Change;
-var Signature   = MeshMashine.Signature;
 
 var debug       = Jools.debug;
 var is          = Jools.is;
+var isArray     = Jools.isArray;
 var log         = Jools.log;
 var reject      = Jools.reject;
-var isArray     = Jools.isArray;
 
 /**
 | Server
@@ -113,6 +113,7 @@ var Server = function() {
 	this.registerFile('/vpara.js',         'js',   1, 'client/vpara.js'          );
 	this.registerFile('/scrollbar.js',     'js',   1, 'client/scrollbar.js'      );
 	this.registerFile('/vdoc.js',          'js',   1, 'client/vdoc.js'           );
+	this.registerFile('/vitem.js',         'js',   1, 'client/vitem.js'          );
 	this.registerFile('/visual.js',        'js',   1, 'client/visual.js'         );
 	this.registerFile('/vspace.js',        'js',   1, 'client/vspace.js'         );
 	this.registerFile('/browser.js',       'js',   1, 'client/browser.js'        );
