@@ -72,34 +72,66 @@ var isArray     = Jools.isArray;
 */
 var Server = function() {
 	this.files = {};
+	this.packfiles = [ { path: '/config.js', filename: null } ];
+	
+	// client config
+	var cconfig = [];
+	cconfig.push('var config = {\n');
+	cconfig.push('\tdevel : '  + Jools.configSwitchClient(config.devel) + ',\n');
+	cconfig.push('\tpuffed : ' + Jools.configSwitchClient(config.puffed) + ',\n');
+	cconfig.push('\tlog : {\n');
+	for(var k in config.log) {
+		cconfig.push('\t\t'+k+' : '+Jools.configSwitchClient(config.log[k])+',\n');
+	}
+	cconfig.push('\t}\n');
+	cconfig.push('};\n');
+	this.cconfig = cconfig.join('');
 
-	this.registerFile('/',                 'html', 'client/meshcraft.html'    );
-	this.registerFile('/action.js',        'js',   'client/action.js'         );
-	this.registerFile('/browser.js',       'js',   'client/browser.js'        );
-	this.registerFile('/caret.js',         'js',   'client/caret.js'          );
-	this.registerFile('/cockpit.js',       'js',   'client/cockpit.js'        );
-	this.registerFile('/deverse.js',       'js',   'client/deverse.js'        );
-	this.registerFile('/design.js',        'js',   'client/design.js'         );
-	this.registerFile('/fabric.js',        'js',   'client/fabric.js'         );
-	this.registerFile('/index.html',       'html', 'client/meshcraft.html'    );
-	this.registerFile('/iface-async.js',   'js',   'client/iface-async.js'    );
-	this.registerFile('/iface-emulate.js', 'js',   'client/iface-emulate.js'  );
-	this.registerFile('/iface-sync.js',    'js',   'client/iface-sync.js'     );
-	this.registerFile('/favicon.ico',      'ico',  'icons/hexicon.ico'        );
-	this.registerFile('/jools.js',         'js',   'shared/jools.js'          );
-	this.registerFile('/meshcraft.html',   'html', 'client/meshcraft.html'    );
-	this.registerFile('/meshmashine.js',   'js',   'shared/meshmashine.js'    );
-	this.registerFile('/meshverse.js',     'js',   'shared/meshverse.js'      );
-	this.registerFile('/ovalmenu.js',      'js',   'client/ovalmenu.js'       );
-	this.registerFile('/path.js',          'js',   'shared/path.js'           );
-	this.registerFile('/peer.js',          'js',   'client/peer.js'           );
-	this.registerFile('/selection.js',     'js',   'client/selection.js'      );
-	this.registerFile('/shell.js',         'js',   'client/shell.js'          );
-	this.registerFile('/testpad.html',     'html', 'client/testpad.html'      );
-	this.registerFile('/testpad.js',       'js',   'client/testpad.js'        );
-	this.registerFile('/theme.js'  ,       'js',   'client/theme.js'          );
-	this.registerFile('/tree.js',          'js',   'shared/tree.js'           );
-	this.registerFile('/visual.js',        'js',   'client/visual.js'         );
+	// all other files
+	this.registerFile('/',                 'html', 0, 'client/meshcraft.html'    );
+	this.registerFile('/favicon.ico',      'ico',  0, 'icons/hexicon.ico'        );
+	this.registerFile('/index.html',       'html', 0, 'client/meshcraft.html'    );
+	this.registerFile('/meshcraft.html',   'html', 0, 'client/meshcraft.html'    );
+	this.registerFile('/testpad.html',     'html', 0, 'client/testpad.html'      );
+	this.registerFile('/testpad.js',       'js',   0, 'client/testpad.js'        );
+
+	this.registerFile('/jools.js',         'js',   1, 'shared/jools.js'          );
+	this.registerFile('/fabric.js',        'js',   1, 'client/fabric.js'         );
+	this.registerFile('/theme.js'  ,       'js',   1, 'client/theme.js'          );
+	this.registerFile('/meshverse.js',     'js',   1, 'shared/meshverse.js'      );
+	this.registerFile('/path.js',          'js',   1, 'shared/path.js'           );
+	this.registerFile('/tree.js',          'js',   1, 'shared/tree.js'           );
+	this.registerFile('/meshmashine.js',   'js',   1, 'shared/meshmashine.js'    );
+	this.registerFile('/iface-async.js',   'js',   1, 'client/iface-async.js'    );
+	this.registerFile('/iface-sync.js',    'js',   1, 'client/iface-sync.js'     );
+	this.registerFile('/peer.js',          'js',   1, 'client/peer.js'           );
+	this.registerFile('/deverse.js',       'js',   1, 'client/deverse.js'        );
+	this.registerFile('/design.js',        'js',   1, 'client/design.js'         );
+	this.registerFile('/cockpit.js',       'js',   1, 'client/cockpit.js'        );
+	this.registerFile('/action.js',        'js',   1, 'client/action.js'         );
+	this.registerFile('/ovalmenu.js',      'js',   1, 'client/ovalmenu.js'       );
+	this.registerFile('/visual.js',        'js',   1, 'client/visual.js'         );
+	this.registerFile('/vspace.js',        'js',   1, 'client/vspace.js'         );
+	this.registerFile('/browser.js',       'js',   1, 'client/browser.js'        );
+	this.registerFile('/caret.js',         'js',   1, 'client/caret.js'          );
+	this.registerFile('/selection.js',     'js',   1, 'client/selection.js'      );
+	this.registerFile('/shell.js',         'js',   1, 'client/shell.js'          );
+
+	log('start', 'Preparing pack');
+	this.pack = [ this.cconfig ];
+	var devels = [ '<script src="/config.js" type="text/javascript"></script>' ];
+
+	// position 0 is the generated config file
+	for(var a = 1, aZ = this.packfiles.length; a < aZ; a++) {
+		var pf = this.packfiles[a];
+		devels.push('<script src="' + pf.path + '" type="text/javascript"></script>');
+		this.pack.push(fs.readFileSync(pf.filename));
+	}
+	this.pack = this.pack.join('\n');
+
+	// the devel file
+	this.devel = fs.readFileSync('client/devel.html') + '';
+	this.devel = this.devel.replace(/<!--PACK.*>/, devels.join('\n'));
 
 	this.tree      = new Tree({ type : 'Nexus' }, Meshverse);
 	this.changes   = [];
@@ -296,7 +328,7 @@ Server.prototype.webError = function(res, code, message) {
 /**
 | Registers a file for serving.
 */
-Server.prototype.registerFile = function(path, type, filename) {
+Server.prototype.registerFile = function(path, type, pack, filename) {
 	var e = { filename : filename };
 
 	switch (type) {
@@ -306,6 +338,7 @@ Server.prototype.registerFile = function(path, type, filename) {
 	default : throw new Error('unknown file type: '+type);
 	}
 	this.files[path] = e;
+	if (pack) { this.packfiles.push({ path: path, filename: filename }); }
 };
 
 /**
@@ -315,14 +348,11 @@ Server.prototype.requestListener = function(req, res) {
 	var red = url.parse(req.url);
 	log('web', req.connection.remoteAddress, red.href);
 
-	if (red.pathname === '/mm') {
-		this.ajax(req, red, res);
-		return;
-	}
-
-	if (red.pathname === '/config.js') {
-		this.webConfig(req, red, res);
-		return;
+	switch(red.pathname) {
+	case '/devel.html'     : return this.webDevel  (req, red, res);
+	case '/mm'             : return this.webAjax   (req, red, res);
+	case '/config.js'      : return this.webConfig (req, red, res);
+	case '/meshcraft.js'   : return this.webPack   (req, red, res);
 	}
 
 	var f = this.files[red.pathname];
@@ -348,7 +378,7 @@ Server.prototype.requestListener = function(req, res) {
 /**
 | Handles ajax requests to the MeshMashine.
 */
-Server.prototype.ajax = function(req, red, res) {
+Server.prototype.webAjax = function(req, red, res) {
 	var self = this;
 	var data = [];
 
@@ -416,15 +446,23 @@ Server.prototype.ajaxCmd = function(cmd, res) {
 */
 Server.prototype.webConfig = function(req, red, res) {
 	res.writeHead(200, {'Content-Type': 'application/json'});
-	res.write('var config = {\n');
-	res.write('\tdevel : '+ Jools.configSwitchClient(config.devel) + ',\n');
-	res.write('\tpuffed : ' + Jools.configSwitchClient(config.puffed) + ',\n');
-	res.write('\tlog : {\n');
-	for(var k in config.log) {
-		res.write('\t\t'+k+' : '+Jools.configSwitchClient(config.log[k])+',\n');
-	}
-	res.write('\t}\n');
-	res.end('};\n');
+	res.end(this.cconfig);
+};
+
+/**
+| Transmits the uglified js package.
+*/
+Server.prototype.webPack = function(req, red, res) {
+	res.writeHead(200, {'Content-Type': 'application/json'});
+	res.end(this.pack);
+};
+
+/**
+| Transmits the devel html file.
+*/
+Server.prototype.webDevel = function(req, red, res) {
+	res.writeHead(200, {'Content-Type': 'text/html'});
+	res.end(this.devel);
 };
 
 var server = new Server();

@@ -165,7 +165,7 @@ var Rect = function(pnw, pse, key) {
 	fixateNoEnum(this, 'height', pse.y - pnw.y);
 	this.type = 'Rect'; // @@ So Tree is happy TODO prototype
 	immute(this);
-}
+};
 
 /**
 | Returns a rect moved by a point or x/y
@@ -201,17 +201,6 @@ Rect.prototype.eq = function(r) {
 	return this.pnw.eq(r.pnw) && this.pse.eq(r.pse);
 };
 
-/**
-| Returns a rectangle thats reduced on every side by a margin object
-*/
-Rect.prototype.reduce = function(margin) {
-	if (margin.constructor !== Margin) throw new Error('margin of wrong type');
-
-	// allow margins to reduce the rect to zero size without erroring.
-	return new Rect(
-		Point.renew(this.pnw.x + margin.e, this.pnw.y + margin.n, this.pnw, this.pse),
-		Point.renew(this.pse.x - margin.w, this.pse.y - margin.s, this.pnw, this.pse));
-};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  Module Export

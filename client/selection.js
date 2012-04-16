@@ -29,6 +29,8 @@
 | Imports
 */
 var Jools;
+var peer;
+var shell;
 var system;
 
 /**

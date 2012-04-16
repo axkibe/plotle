@@ -1,7 +1,6 @@
 // configuration for jshint
 {
 	"newcap"    : false,
-	"evil"      : true,
 	"node"      : true,
 	"browser"   : true,
 	"trailing"  : true,
