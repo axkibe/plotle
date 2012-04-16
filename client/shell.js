@@ -256,7 +256,7 @@ Shell = function(fabric, sPeer) {
 	this.cockpit    = new Cockpit();
 	this.cockpit.message("Loading space 'welcome'...");
 
-	this.caret      = new Caret();
+	this.caret      = new Caret(null, null, false);
 	this.action     = null;
 	this.selection  = new Selection();
 
@@ -271,12 +271,14 @@ Shell = function(fabric, sPeer) {
 | Sets the caret position.
 */
 Shell.prototype.setCaret = function(sign, retainx) {
-	if (sign.constructor !== Signature) { throw new Error('setCaret argument fail (1)'); }
-	var caret = this.caret;
-	//caret.sign = sign;
-	caret.sign = immute(sign);
-	caret.retainx = is(retainx) ? retainx : null;
-	return caret;
+	if (sign !== null && sign.constructor !== Signature) {
+		throw new Error('setCaret, aFail = 1');
+	}
+	return this.caret = new Caret(
+		sign,
+		is(retainx) ? retainx : null,
+		this.caret.$shown
+	);
 };
 
 /**
@@ -314,9 +316,10 @@ Shell.prototype.report = function(status, tree, chgX) {
 		this.vSpace.report(status, tree, chgX);
 
 		var caret = this.caret;
+		var shown = this.caret.$shown;
 		if (caret.sign !== null) {
-			caret.sign = tfxSign(caret.sign, chgX);
-			if (isArray(caret.sign)) throw new Error('Invalid caret transformation');
+			this.setCaret(tfxSign(caret.sign, chgX), caret.retainx);
+			if (shown) { this.caret.show(); }
 		}
 
 		var selection = this.selection;

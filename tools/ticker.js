@@ -12,7 +12,7 @@ var http     = require('http');
 var readline = require('readline');
 var util     = require('util');
 
-var Jools    = require('../jools');
+var Jools    = require('../shared/jools');
 var config   = require('../config');
 
 /**

@@ -76,18 +76,20 @@ var log           = Jools.log;
 /**
 | Constructor.
 */
-Caret = function() {
+Caret = function(sign, retainx, shown) {
 	// a signature pointing to the caret pos
-	this.sign = null;
+	this.sign = sign;
 
 	// x position to retain when using up/down keys.
-	this.retainx = null;
+	this.retainx = retainx;
+
+	immute(this);
 
 	// true if visible
-	this.shown = false;
+	this.$shown = !!shown;
 
 	// true when just blinked away
-	this.blinked = false;
+	this.$blinked = false;
 };
 
 
@@ -102,8 +104,8 @@ Caret.useGetImageData = true;
 | Shows the caret or resets the blink timer if already shown
 */
 Caret.prototype.show = function() {
-	this.shown = true;
-	this.blinked = false;
+	this.$shown = true;
+	this.$blinked = false;
 	system.restartBlinker();
 };
 
@@ -111,7 +113,7 @@ Caret.prototype.show = function() {
 | Hides the caret.
 */
 Caret.prototype.hide = function() {
-	this.shown = false;
+	this.$shown = false;
 };
 
 /**
@@ -131,7 +133,7 @@ Caret.prototype.display = function() {
 	}
 
 	// draws new
-	if (this.shown && !this.blinked && this.sign) {
+	if (this.$shown && !this.$blinked && this.sign) {
 		shell.vget(this.sign.path, -1).drawCaret();
 	}
 };
@@ -140,8 +142,8 @@ Caret.prototype.display = function() {
 | Switches caret visibility state.
 */
 Caret.prototype.blink = function() {
-	if (this.shown) {
-		this.blinked = !this.blinked;
+	if (this.$shown) {
+		this.$blinked = !this.$blinked;
 		this.display();
 	}
 };

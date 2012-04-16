@@ -323,8 +323,7 @@ VSpace.prototype.setFocus = function(vitem) {
 		caret.show();
 		peer.moveToTop(vitem.path);
 	} else {
-		caret.hide();
-		caret.sign = null;
+		shell.setCaret(null);
 	}
 };
 
