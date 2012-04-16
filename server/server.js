@@ -90,6 +90,7 @@ var Server = function() {
 	this.registerFile('/meshcraft.html',   'html', 'client/meshcraft.html'    );
 	this.registerFile('/meshmashine.js',   'js',   'shared/meshmashine.js'    );
 	this.registerFile('/meshverse.js',     'js',   'shared/meshverse.js'      );
+	this.registerFile('/ovalmenu.js',      'js',   'client/ovalmenu.js'       );
 	this.registerFile('/path.js',          'js',   'shared/path.js'           );
 	this.registerFile('/peer.js',          'js',   'client/peer.js'           );
 	this.registerFile('/shell.js',         'js',   'client/shell.js'          );

@@ -12,10 +12,10 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--'
 
-                                    ,-,---.
-                                     '|___/ ,-. ,-. . , , ,-. ,-. ,-.
-                                     ,|   \ |   | | |/|/  `-. |-' |
-                                    `-^---' '   `-' ' '   `-' `-' '
+                                  ,-,---.
+                                   '|___/ ,-. ,-. . , , ,-. ,-. ,-.
+                                   ,|   \ |   | | |/|/  `-. |-' |
+                                  `-^---' '   `-' ' '   `-' `-' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  This is a wrapper around HTML5 browsers, creating a more comfortable interface for a pure
@@ -40,6 +40,14 @@ var settings;
 | Export
 */
 var system;
+
+/**
+| Debugging mode, don't cache anything.
+|
+| In case of doubt, if caching is faulty, just set this true and see if the error
+| vanishes.
+*/
+var dbgNoCache = false;
 
 /**
 | Export/Capsule

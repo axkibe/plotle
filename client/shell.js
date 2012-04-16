@@ -52,15 +52,6 @@ var peer  = null;
 var Shell = null;
 
 /**
-| Debugging mode, don't cache anything.
-|
-| In case of doubt, if caching is faulty, just set this true and see if the error
-| vanishes.
-*/
-var dbgNoCache = false;
-
-
-/**
 | Capsule
 */
 (function(){

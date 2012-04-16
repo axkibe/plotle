@@ -33,9 +33,11 @@ var Caret;
 var Fabric;
 var Jools;
 var MeshMashine;
+var OvalMenu;
 var Path;
 var Tree;
 
+var dbgNoCache;
 var settings;
 var shell;
 var system;
@@ -46,16 +48,6 @@ var peer;
 | Exports
 */
 var VSpace;
-
-/**
-| Debugging mode, don't cache anything.
-|
-| In case of doubt, if caching is faulty, just set this true and see if the error
-| vanishes.
-|
-| TODO move to browser.
-*/
-var dbgNoCache = false;
 
 /**
 | Capsule
@@ -98,89 +90,6 @@ var Rect          = Fabric.Rect;
 var RoundRect     = Fabric.RoundRect;
 
 var Signature     = MeshMashine.Signature;
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ,,--.          . ,-,-,-.
- |`, | .  , ,-. | `,| | |   ,-. ,-. . .
- |   | | /  ,-| |   | ; | . |-' | | | |
- `---' `'   `-^ `'  '   `-' `-' ' ' `-^
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
-      a1      |----->|
-      a2      |->|   '
-              '  '   '           b2
-          ..-----.. .' . . . . . A
-        ,' \  n  / ','       b1  |
-       , nw .---. ne , . . . A   |
-       |---(  c  )---| . . . v . v
-       ` sw `---' se '
-        `. /  s  \ .'
-          ``-----''            outside = null
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/**
-| Constructor.
-*/
-var OvalMenu = function(pc, settings, labels) {
-	this.p           = pc;
-	this.labels      = labels;
-
-	this._style      = settings.style;
-	this._highlight  = settings.highlight;
-	this._dimensions = settings.dimensions;
-	this._oflower    = new OvalFlower(pc, settings.dimensions, labels);
-	this._within     = null;
-};
-
-/**
-| Draws the hexmenu.
-*/
-OvalMenu.prototype.draw = function() {
-	var f = shell.fabric;
-
-	f.fill(this._style.fill, this._oflower, 'path', 'outer');
-	switch(this._within) {
-		case 'n'  :
-		case 'ne' :
-		case 'se' :
-		case 's'  :
-		case 'se' :
-		case 'ne' :
-			f.paint(this._highlight, this._oflower, 'path', this._within);
-			break;
-	}
-	f.edge(this._style.edge, this._oflower, 'path', null);
-
-
-	f.fontStyle('12px ' + theme.defaultFont, 'black', 'center', 'middle');
-	var labels = this.labels;
-
-	var b1  = this._dimensions.b1;
-	var b2  = this._dimensions.b2;
-	var bs  = half(b2 - b1);
-	var b2t = b1 + bs;
-	var m   = 0.551784;
-	var a2h = R(this._dimensions.a2 * m);
-	var pc  = this.p;
-
-	if (labels.n)  f.fillText(labels.n,  pc.x,       pc.y - b2t);
-	if (labels.ne) f.fillText(labels.ne, pc.x + a2h, pc.y - bs );
-	if (labels.se) f.fillText(labels.se, pc.x + a2h, pc.y + bs );
-	if (labels.s)  f.fillText(labels.s,  pc.x,       pc.y + b2t);
-	if (labels.sw) f.fillText(labels.sw, pc.x - a2h, pc.y + bs );
-	if (labels.nw) f.fillText(labels.nw, pc.x - a2h, pc.y - bs );
-	if (labels.c)  f.fillText(labels.c,  pc);
-};
-
-/**
-| Sets this.mousepos and returns it according to p.
-*/
-OvalMenu.prototype.within = function(p) {
-	var w = this._oflower.within(system.fabric, p);
-	if (w === this._within) return w;
-	shell.redraw = true;
-	return this._within = w;
-};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,.   ,. .---.
