@@ -43,24 +43,22 @@ var ajaxInDelay = 0;
 /**
 | Imports
 */
+var Emulate     = require('./emulate');
+var Jools       = require('../shared/jools');
+var MeshMashine = require('../shared/meshmashine');
+var Meshverse   = require('../shared/meshverse');
+var Path        = require('../shared/path');
+var Tree        = require('../shared/tree');
 var config      = require('../config');
 var util        = require('util');
 var http        = require('http');
 var url         = require('url');
 var fs          = require('fs');
 
-var Jools       = require('../shared/jools');
-var MeshMashine = require('../shared/meshmashine');
-var Path        = require('../shared/path');
-var Meshverse   = require('../shared/meshverse');
-var Tree        = require('../shared/tree');
-var Emulate     = require('./emulate');
-
 /**
 | Shortcuts
 */
 var Change      = MeshMashine.Change;
-
 var debug       = Jools.debug;
 var is          = Jools.is;
 var isArray     = Jools.isArray;
@@ -114,6 +112,7 @@ var Server = function() {
 	this.registerFile('/scrollbar.js',     'js',   1, 'client/scrollbar.js'      );
 	this.registerFile('/vdoc.js',          'js',   1, 'client/vdoc.js'           );
 	this.registerFile('/vitem.js',         'js',   1, 'client/vitem.js'          );
+	this.registerFile('/vnote.js',         'js',   1, 'client/vnote.js'          );
 	this.registerFile('/visual.js',        'js',   1, 'client/visual.js'         );
 	this.registerFile('/vspace.js',        'js',   1, 'client/vspace.js'         );
 	this.registerFile('/browser.js',       'js',   1, 'client/browser.js'        );
