@@ -129,7 +129,7 @@ Shell = function(fabric, sPeer) {
 	this.cockpit    = new Cockpit();
 	this.cockpit.message("Loading space 'welcome'...");
 
-	this.caret      = new Caret(null, null, null, false);
+	this.caret      = new Caret(null, null, null, null, false);
 	this.action     = null;
 	this.selection  = new Selection();
 
@@ -143,7 +143,7 @@ Shell = function(fabric, sPeer) {
 /**
 | Sets the caret position.
 */
-Shell.prototype.setCaret = function(visec, sign, retainx) {
+Shell.prototype.setCaret = function(visec, sign, element, retainx) {
 	switch (visec) {
 	case null :
 		if (sign !== null) { throw new Error('setCaret visec=null, invalid sign'); }
@@ -154,6 +154,7 @@ Shell.prototype.setCaret = function(visec, sign, retainx) {
 		case Object    : sign = new Signature(sign); break;
 		default        : throw new Error('setCaret visec=space, invalid sign');
 		}
+		if (isnon(element)) { throw new Error('setCaret visec=space, invalid element'); }
 		break;
 	case 'cockpit' :
 		if (sign !== null) { throw new Error('setCaret visec=cockpit, invalid sign'); }
@@ -165,6 +166,7 @@ Shell.prototype.setCaret = function(visec, sign, retainx) {
 	return this.caret = new Caret(
 		visec,
 		sign,
+		element,
 		is(retainx) ? retainx : null,
 		this.caret.$shown
 	);
@@ -192,7 +194,12 @@ Shell.prototype.report = function(status, tree, chgX) {
 		var caret = this.caret;
 		var shown = this.caret.$shown;
 		if (caret.sign !== null) {
-			this.setCaret(caret.visec, tfxSign(caret.sign, chgX), caret.retainx);
+			this.setCaret(
+				caret.visec,
+				tfxSign(caret.sign, chgX),
+				null,
+				caret.retainx
+			);
 			if (shown) { this.caret.show(); }
 		}
 

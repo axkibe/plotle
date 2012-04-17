@@ -666,7 +666,7 @@ CBoard.prototype.mousedown = function(p) {
 };
 
 /**
-| Sets the hovered element.
+| Sets the focused element.
 */
 CBoard.prototype.setFocus = function(cname) {
 	if (this.$focus === cname) { return; }
@@ -676,6 +676,8 @@ CBoard.prototype.setFocus = function(cname) {
 	if (this.$focus) { this.cc[this.$focus].$fabric = null; }
 	if (cname      ) { this.cc[cname      ].$fabric = null; }
 	this.$focus = cname;
+
+	shell.setCaret('cockpit', null, cname);
 };
 
 /**

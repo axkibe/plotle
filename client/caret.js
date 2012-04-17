@@ -77,7 +77,7 @@ var log           = Jools.log;
 /**
 | Constructor.
 */
-Caret = function(visec, sign, retainx, shown) {
+Caret = function(visec, sign, element, retainx, shown) {
 	// the section the caret is in
 	//   space or cockpit.
 	this.visec = visec;
@@ -85,6 +85,9 @@ Caret = function(visec, sign, retainx, shown) {
 	// a signature pointing to the item the caret is in
 	// when visec === space
 	this.sign = sign;
+
+	// the cockpit element when visec === cockpit
+	this.element = element;
 
 	// x position to retain when using up/down keys.
 	this.retainx = retainx;
