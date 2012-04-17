@@ -33,15 +33,9 @@ var VNote     = null;
 | Imports
 */
 var Action;
-var Caret;
 var Fabric;
 var Jools;
-var MeshMashine;
-var OvalMenu;
-var Path;
 var Scrollbar;
-var Tree;
-var VDoc;
 var VItem;
 
 var dbgNoCache;
