@@ -8,7 +8,8 @@ authors: [Christopher Pitt, Enrique Erne]
 ...
 [Axel Kittenberger]
 * imported from:
-https://github.com/sixtyseconds/mootools-string-cryptography/blob/master/Source/String.SHA-1.js
+  https://github.com/sixtyseconds/mootools-string-cryptography/blob/master/Source/String.SHA-1.js
+  https://github.com/sixtyseconds/mootools-string-cryptography/blob/master/Source/String.UTF-8.js
 * made browser/node shared friendly
 * changed it to not alter String.prototype
 * cleaned from jshint warnings
@@ -20,22 +21,33 @@ https://github.com/sixtyseconds/mootools-string-cryptography/blob/master/Source/
 var sha1 = null;
 
 /**
-| Imports
-*/
-var toUTF8;
-
-/**
 | Capsule
 */
 (function(){
 "use strict";
 
-/**
-| Node imports.
-*/
-if (typeof(window) === 'undefined') {
-	toUTF8 = require('./strutf8.js').toUTF8;
-}
+var toUTF8 = function(string) {
+	var a, b,
+		result = '',
+		code = String.fromCharCode;
+
+	string = string.replace(/\r\n/g,"\n");
+
+	for (a = 0; (b = string.charCodeAt(a)); a++){
+		if (b < 128){
+			result += code(b);
+		} else if ((b > 127) && (b < 2048)){
+			result += code((b >> 6) | 192);
+			result += code((b & 63) | 128);
+		} else {
+			result += code((b >> 12) | 224);
+			result += code(((b >> 6) & 63) | 128);
+			result += code((b & 63) | 128);
+		}
+	}
+
+	return result;
+};
 
 var transforms = {
 	'rotateLeft': function(a, b){
