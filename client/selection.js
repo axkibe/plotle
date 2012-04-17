@@ -156,7 +156,7 @@ Selection.prototype.remove = function() {
 Selection.prototype.deselect = function(nopoke) {
 	if (!this.active) return;
 	if (!nopoke) {
-		shell.vget(this.sign1.path, -3).poke();
+		shell.vspace.vget(this.sign1.path, -3).poke();
 	}
 
 	this.active = false;

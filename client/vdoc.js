@@ -195,7 +195,7 @@ VDoc.prototype.getSpread = function() {
 | Argument vitem is optional, just to safe double and tripple lookups
 */
 VDoc.prototype.getFontSize = function(vitem) {
-	if (!is(vitem)) { vitem = shell.vget(this.path, -1); }
+	if (!is(vitem)) { vitem = shell.vspace.vget(this.path, -1); }
 	var fontsize = vitem.twig.fontsize;
 	return (!vitem.fontSizeChange) ? fontsize : vitem.fontSizeChange(fontsize);
 };
@@ -205,7 +205,7 @@ VDoc.prototype.getFontSize = function(vitem) {
 | Argument vitem is optional, just to safe double and tripple lookups
 */
 VDoc.prototype.getParaSep = function(vitem) {
-	if (!is(vitem)) { vitem = shell.vget(this.path, -1); }
+	if (!is(vitem)) { vitem = shell.vspace.vget(this.path, -1); }
 	var fontsize = this.getFontSize(vitem);
 	return vitem.getParaSep(fontsize);
 };

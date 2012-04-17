@@ -97,7 +97,7 @@ VPara.prototype.update = function(twig) {
 | (re)flows the paragraph, positioning all chunks.
 */
 VPara.prototype.getFlow = function() {
-	var vitem = shell.vget(this.path, -2);
+	var vitem = shell.vspace.vget(this.path, -2);
 	var vdoc  = vitem.vv.doc;
 	var flowWidth = vitem.getFlowWidth();
 	var fontsize = vdoc.getFontSize();
@@ -181,7 +181,7 @@ VPara.prototype.getFlow = function() {
 VPara.prototype.getPointOffset = function(point) {
 	var flow = this.getFlow();
 	var para = this.para;
-	var vdoc = shell.vget(this.path, -1);
+	var vdoc = shell.vspace.vget(this.path, -1);
 	Measure.font = vdoc.getFont();
 
 	var line;
@@ -231,7 +231,7 @@ VPara.prototype.getLineXOffset = function(line, x) {
 VPara.prototype.input = function(text) {
     var reg   = /([^\n]+)(\n?)/g;
 	var para  = this;
-	var vitem = shell.vget(para.path, -2);
+	var vitem = shell.vspace.vget(para.path, -2);
 	var vdoc  = vitem.vv.doc;
 
     for(var rx = reg.exec(text); rx !== null; rx = reg.exec(text)) {
@@ -254,7 +254,7 @@ VPara.prototype.specialKey = function(keycode) {
 	var para = this.para;
 	var select = shell.selection;
 
-	var vitem = shell.vget(this.path, -2);
+	var vitem = shell.vspace.vget(this.path, -2);
 	var vdoc  = vitem.vv.doc;
 	var ve, at1, flow;
 	var r, x;
@@ -268,7 +268,7 @@ VPara.prototype.specialKey = function(keycode) {
 			select.sign1 = new Signature({ path: v0.textPath(), at1: 0 });
 			select.sign2 = new Signature({ path: v1.textPath(), at1: v1.twig.text.length });
 			select.active = true;
-			shell.setCaret(select.sign2);
+			shell.setCaret('space', select.sign2);
 			system.setInput(select.innerText());
 			caret.show();
 			vitem.poke();
@@ -318,7 +318,6 @@ VPara.prototype.specialKey = function(keycode) {
 
 	switch(keycode) {
 	case  8 : // backspace
-		debug('BACKSPACE 1');
 		if (caret.sign.at1 > 0) {
 			peer.removeText(this.textPath(), caret.sign.at1 - 1, 1);
 		} else {
@@ -328,9 +327,7 @@ VPara.prototype.specialKey = function(keycode) {
 				peer.join(ve.textPath(), ve.twig.text.length);
 			}
 		}
-		debug('BACKSPACE 2');
 		vitem.scrollCaretIntoView();
-		debug('BACKSPACE 3');
 		break;
 	case 13 : // return
 		peer.split(this.textPath(), caret.sign.at1);
@@ -344,26 +341,42 @@ VPara.prototype.specialKey = function(keycode) {
 		break;
 	case 35 : // end
 		caret = shell.setCaret(
-			new Signature({ path: this.textPath(), at1: this.twig.text.length })
+			'space',
+			{
+				path : this.textPath(),
+				at1  : this.twig.text.length
+			}
 		);
 		break;
 	case 36 : // pos1
 		caret = shell.setCaret(
-			new Signature({ path: this.textPath(), at1: 0 })
+			'space',
+			{
+				path : this.textPath(),
+				at1  : 0
+			}
 		);
 		vitem.scrollCaretIntoView();
 		break;
 	case 37 : // left
 		if (caret.sign.at1 > 0) {
 			caret = shell.setCaret(
-				new Signature({ path: this.textPath(), at1: caret.sign.at1 - 1 })
+				'space',
+				{
+					path : this.textPath(),
+					at1  : caret.sign.at1 - 1
+				}
 			);
 		} else {
 			r = vdoc.twig.rankOf(this.key);
 			if (r > 0) {
 				ve = vdoc.vAtRank(r - 1);
 				caret = shell.setCaret(
-					new Signature({ path: ve.textPath(), at1: ve.twig.text.length })
+					'space',
+					{
+						path : ve.textPath(),
+						at1  : ve.twig.text.length
+					}
 				);
 			}
 		}
@@ -377,7 +390,12 @@ VPara.prototype.specialKey = function(keycode) {
 			// stay within this para
 			at1 = this.getLineXOffset(caret.flow$line - 1, x);
 			shell.setCaret(
-				new Signature({ path: this.textPath(), at1: at1 }), x
+				'space',
+				{
+					path : this.textPath(),
+					at1  : at1
+				},
+				x
 			);
 		} else {
 			// goto prev para
@@ -385,8 +403,14 @@ VPara.prototype.specialKey = function(keycode) {
 			if (r > 0) {
 				ve = vdoc.vAtRank(r - 1);
 				at1 = ve.getLineXOffset(ve.getFlow().length - 1, x);
+
 				caret = shell.setCaret(
-					new Signature({ path: ve.textPath(), at1: at1 }), x
+					'space',
+					{
+						path : ve.textPath(),
+						at1  : at1
+					},
+					x
 				);
 			}
 		}
@@ -395,14 +419,23 @@ VPara.prototype.specialKey = function(keycode) {
 	case 39 : // right
 		if (caret.sign.at1 < this.twig.text.length) {
 			caret = shell.setCaret(
-				new Signature({ path: this.textPath(), at1: caret.sign.at1 + 1 })
+				'space',
+				{
+					path : this.textPath(),
+					at1  : caret.sign.at1 + 1
+				}
 			);
 		} else {
 			r = vdoc.twig.rankOf(this.key);
 			if (r < vdoc.twig.length - 1) {
 				ve = vdoc.vAtRank(r + 1);
+
 				caret = shell.setCaret(
-					new Signature({ path: ve.textPath(), at1: 0 })
+					'space',
+					{
+						path : ve.textPath(),
+					  	at1  : 0
+					}
 				);
 			}
 		}
@@ -415,8 +448,14 @@ VPara.prototype.specialKey = function(keycode) {
 		if (caret.flow$line < flow.length - 1) {
 			// stays within this para
 			at1 = this.getLineXOffset(caret.flow$line + 1, x);
+
 			caret = shell.setCaret(
-				new Signature({ path: this.textPath(), at1: at1 }), x
+				'space',
+				{
+					path: this.textPath(),
+					at1: at1
+				},
+				x
 			);
 		} else {
 			// goto next para
@@ -424,8 +463,14 @@ VPara.prototype.specialKey = function(keycode) {
 			if (r < vdoc.twig.length - 1) {
 				ve = vdoc.vAtRank(r + 1);
 				at1 = ve.getLineXOffset(0, x);
+
 				caret = shell.setCaret(
-					new Signature({ path: ve.textPath(), at1: at1 }), x
+					'space',
+					{
+						path : ve.textPath(),
+						at1  : at1
+					},
+					x
 				);
 			}
 		}
@@ -478,7 +523,7 @@ VPara.prototype.textPath = function() {
 */
 VPara.prototype.getHeight = function() {
 	var flow = this.getFlow();
-	var vdoc = shell.vget(this.path, -1);
+	var vdoc = shell.vspace.vget(this.path, -1);
 	return flow.height + R(vdoc.getFontSize() * theme.bottombox);
 };
 
@@ -488,7 +533,7 @@ VPara.prototype.getHeight = function() {
 VPara.prototype.getFabric = function() {
 	var flow   = this.getFlow();
 	var width  = flow.spread;
-	var vdoc   = shell.vget(this.path, -1);
+	var vdoc   = shell.vspace.vget(this.path, -1);
 	var height = this.getHeight();
 	var fabric = this.$fabric;
 
@@ -527,7 +572,7 @@ VPara.prototype.getFabric = function() {
 VPara.prototype.getOffsetPoint = function(offset, flowPos$) {
 	// @@ cache position
 	var twig = this.twig;
-	var vdoc  = shell.vget(this.path, -1);
+	var vdoc  = shell.vspace.vget(this.path, -1);
 	Measure.font = vdoc.getFont();
 	var text = twig.text;
 	var flow = this.getFlow();
@@ -569,7 +614,7 @@ VPara.prototype.getOffsetPoint = function(offset, flowPos$) {
 */
 VPara.prototype.getCaretPos = function() {
 	var caret   = shell.caret;
-	var vitem   = shell.vget(this.path, -2);
+	var vitem   = shell.vspace.vget(this.path, -2);
 	var vdoc    = vitem.vv.doc;
 	var fs      = vdoc.getFontSize();
 	var descend = fs * theme.bottombox;
@@ -589,8 +634,8 @@ VPara.prototype.getCaretPos = function() {
 */
 VPara.prototype.drawCaret = function() {
 	var caret = shell.caret;
-	var pan   = shell.vSpace.fabric.pan;
-	var vitem = shell.vget(this.path, -2);
+	var pan   = shell.vspace.fabric.pan;
+	var vitem = shell.vspace.vget(this.path, -2);
 	var zone  = vitem.getZone();
 	var cpos  = caret.pos$  = this.getCaretPos();
 	var sbary = vitem.scrollbarY;

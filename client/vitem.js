@@ -89,7 +89,6 @@ VItem = function(twig, path) {
 */
 VItem.prototype.update = function(twig) {
 	this.twig    = twig;
-	debug('VITEM UPDATE');
 	this.$fabric = null;
 
 	var vdoc = this.vv.doc;
@@ -246,7 +245,7 @@ VItem.prototype.dragstart = function(p) {
 	}
 
 	// scrolling or dragging
-	shell.vSpace.setFocus(this);
+	shell.vspace.setFocus(this);
 	var sbary = this.scrollbarY;
 	var pnw = this.getZone().pnw;
 	var pr = p.sub(pnw);
@@ -303,8 +302,8 @@ VItem.prototype.dragstop = function(p) {
 	switch (action.type) {
 	case Action.RELBIND :
 		if (!this.getZone().within(p)) return false;
-		var vSpace = shell.vget(this.path, -1);
-		VRelation.create(vSpace, action.vitem, this);
+		var vspace = shell.vspace.vget(this.path, -1);
+		VRelation.create(vspace, action.vitem, this);
 		system.setCursor('default');
 		shell.redraw = true;
 		return true;
@@ -331,9 +330,9 @@ VItem.prototype.mousehover = function(p) {
 VItem.prototype.click = function(p) {
 	if (!this.getZone().within(p)) return false;
 
-	var vSpace = shell.vSpace;
-	if (vSpace.focus !== this) {
-		shell.vSpace.setFocus(this);
+	var vspace = shell.vspace;
+	if (vspace.focus !== this) {
+		vspace.setFocus(this);
 		shell.selection.deselect();
 	}
 	shell.redraw = true;
@@ -346,9 +345,15 @@ VItem.prototype.click = function(p) {
 		var ppnw   = this.vv.doc.getPNW(vpara.key);
 		var at1    = vpara.getPointOffset(pi.sub(ppnw));
 		var caret  = shell.caret;
+
 		caret = shell.setCaret(
-			new Signature({ path: vpara.textPath(), at1: at1 })
+			'space',
+			{
+				path : vpara.textPath(),
+				at1  : at1
+			}
 		);
+
 		caret.show();
 		shell.selection.deselect();
 	}

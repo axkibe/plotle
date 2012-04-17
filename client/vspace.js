@@ -196,15 +196,22 @@ VSpace.prototype.setFocus = function(vitem) {
 	this.focus = vitem;
 
 	var caret = shell.caret;
+
 	if (vitem) {
 		var vdoc = vitem.vv.doc;
+
 		caret = shell.setCaret(
-			new Signature({ path: vdoc.vAtRank(0).textPath(), at1: 0 })
+			'space',
+			{
+				path : vdoc.vAtRank(0).textPath(),
+				at1  : 0
+			}
 		);
+
 		caret.show();
 		peer.moveToTop(vitem.path);
 	} else {
-		shell.setCaret(null);
+		shell.setCaret(null, null);
 	}
 };
 
@@ -465,6 +472,22 @@ VSpace.prototype.mousedown = function(p) {
 	}
 
 	return 'atween';
+};
+
+/**
+| Returns the visual node the path points to.
+*/
+VSpace.prototype.vget = function(path, plen) {
+	/**/ if (!is(plen)) { plen  = path.length; }
+	else if (plen < 0)  { plen += path.length; }
+	/**/ if (plen <= 0) { throw new Error('cannot vget path of length <= 0'); }
+	if (path.get(0) !== 'welcome') throw new Error('currently space must be "welcome"'); // TODO
+
+	var vnode = this;
+	for (var a = 1; a < plen; a++) {
+		vnode = vnode.vv[path.get(a)];
+	}
+	return vnode;
 };
 
 })();

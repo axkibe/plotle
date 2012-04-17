@@ -360,7 +360,7 @@ function System() {
 	*/
 	function onmouseup(event) {
 		event.preventDefault();
-		
+
 		releaseEvents();
 		var p = new Point(event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop);
 
@@ -451,8 +451,13 @@ function System() {
 	| (re)starts the blink timer
 	*/
 	system.restartBlinker = function() {
-		if (blinkTimer) clearInterval(blinkTimer);
+		// double uses the blink timer
 		testinput();
+
+		if (blinkTimer) {
+			clearInterval(blinkTimer);
+			blinkTimer = null;
+		}
 		blinkTimer = setInterval(system.onblink, settings.caretBlinkSpeed);
 	};
 

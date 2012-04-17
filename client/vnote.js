@@ -164,7 +164,7 @@ VNote.prototype.scrollCaretIntoView = function() {
 	var caret   = shell.caret;
 	var scrolly = this.scrollbarY;
 	var sy      = scrolly.getPos();
-	var vpara   = shell.vget(caret.sign.path, -1);
+	var vpara   = shell.vspace.vget(caret.sign.path, -1);
 	if (vpara.constructor !== VPara) { throw new Error('iFail'); }
 	var cp      = vpara.getCaretPos();
 	var zone    = this.getZone();

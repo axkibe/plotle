@@ -85,22 +85,22 @@ VRelation.imargin = new Margin(theme.relation.imargin);
 /**
 | Creates a new Relation by specifing its relates.
 */
-VRelation.create = function(vSpace, vitem1, vitem2) {
+VRelation.create = function(vspace, vitem1, vitem2) {
 	var cline = Line.connect(vitem1.getZone(), null, vitem2.getZone(), null);
 	var pnw = cline.pc.sub(theme.relation.createOffset);
-	var key = peer.newRelation(vSpace.path, pnw, 'relates to', 20, vitem1.key, vitem2.key);
+	var key = peer.newRelation(vspace.path, pnw, 'relates to', 20, vitem1.key, vitem2.key);
 	// event listener has created the vrel
-	var vrel = vSpace.vv[key];
-	vSpace.setFocus(vrel);
+	var vrel = vspace.vv[key];
+	vspace.setFocus(vrel);
 };
 
 /**
 | Draws the relation on the fabric.
 */
 VRelation.prototype.draw = function(fabric) {
-	var vSpace = shell.vget(this.path, -1);
-	var vitem1 = vSpace.vv[this.twig.item1key];
-	var vitem2 = vSpace.vv[this.twig.item2key];
+	var vspace = shell.vget(this.path, -1);
+	var vitem1 = vspace.vv[this.twig.item1key];
+	var vitem2 = vspace.vv[this.twig.item2key];
 	var zone = this.getZone();
 
 	if (vitem1) {

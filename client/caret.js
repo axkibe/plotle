@@ -77,8 +77,13 @@ var log           = Jools.log;
 /**
 | Constructor.
 */
-Caret = function(sign, retainx, shown) {
-	// a signature pointing to the caret pos
+Caret = function(visec, sign, retainx, shown) {
+	// the section the caret is in
+	//   space or cockpit.
+	this.visec = visec;
+
+	// a signature pointing to the item the caret is in
+	// when visec === space
 	this.sign = sign;
 
 	// x position to retain when using up/down keys.
@@ -135,7 +140,8 @@ Caret.prototype.display = function() {
 
 	// draws new
 	if (this.$shown && !this.$blinked && this.sign) {
-		shell.vget(this.sign.path, -1).drawCaret();
+		// TODO XXX this is evil.
+		shell.vspace.vget(this.sign.path, -1).drawCaret();
 	}
 };
 

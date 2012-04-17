@@ -123,13 +123,13 @@ Shell = function(fabric, sPeer) {
 	Measure.init();
 	this.fabric     = fabric;
 
-	this.vSpacePath = new Path(['welcome']);
-	this.vSpace     = null;
+	this.vSpacePath = new Path(['welcome']);  // TODO move into vspace
+	this.vspace     = null;
 
 	this.cockpit    = new Cockpit();
 	this.cockpit.message("Loading space 'welcome'...");
 
-	this.caret      = new Caret(null, null, false);
+	this.caret      = new Caret(null, null, null, false);
 	this.action     = null;
 	this.selection  = new Selection();
 
@@ -143,32 +143,33 @@ Shell = function(fabric, sPeer) {
 /**
 | Sets the caret position.
 */
-Shell.prototype.setCaret = function(sign, retainx) {
-	if (sign !== null && sign.constructor !== Signature) {
-		throw new Error('setCaret, aFail = 1');
+Shell.prototype.setCaret = function(visec, sign, retainx) {
+	switch (visec) {
+	case null :
+		if (sign !== null) { throw new Error('setCaret visec=null, invalid sign'); }
+	case 'space' :
+		switch(sign && sign.constructor) {
+		case null      : break;
+		case Signature : break;
+		case Object    : sign = new Signature(sign); break;
+		default        : throw new Error('setCaret visec=space, invalid sign');
+		}
+		break;
+	case 'cockpit' :
+		if (sign !== null) { throw new Error('setCaret visec=cockpit, invalid sign'); }
+		break;
+	default :
+		throw new Error('invalid visec');
 	}
+
 	return this.caret = new Caret(
+		visec,
 		sign,
 		is(retainx) ? retainx : null,
 		this.caret.$shown
 	);
 };
 
-/**
-| Returns the visual node path points to.
-*/
-Shell.prototype.vget = function(path, plen) {
-	/**/ if (!is(plen)) { plen  = path.length; }
-	else if (plen < 0)  { plen += path.length; }
-	/**/ if (plen <= 0) { throw new Error('cannot vget path of length <= 0'); }
-	if (path.get(0) !== 'welcome') throw new Error('currently space must be "welcome"'); // TODO
-
-	var vnode = this.vSpace;
-	for (var a = 1; a < plen; a++) {
-		vnode = vnode.vv[path.get(a)];
-	}
-	return vnode;
-};
 
 /**
 | MeshMashine reports changes
@@ -179,19 +180,19 @@ Shell.prototype.report = function(status, tree, chgX) {
 		throw new Error('Connection failed'); // TODO
 		//break;
 	case 'start' :
-		this.vSpace = new VSpace(tree.root.copse.welcome, this.vSpacePath);
+		this.vspace = new VSpace(tree.root.copse.welcome, this.vSpacePath);
 		this.cockpit.message(null);
 		this.cockpit.setCurSpace('welcome'); // TODO
 		this.cockpit.setUser('Visitor');     // TODO
 		break;
 	case 'update' :
 		this.tree = tree;
-		this.vSpace.report(status, tree, chgX);
+		this.vspace.report(status, tree, chgX);
 
 		var caret = this.caret;
 		var shown = this.caret.$shown;
 		if (caret.sign !== null) {
-			this.setCaret(tfxSign(caret.sign, chgX), caret.retainx);
+			this.setCaret(caret.visec, tfxSign(caret.sign, chgX), caret.retainx);
 			if (shown) { this.caret.show(); }
 		}
 
@@ -247,7 +248,7 @@ Shell.prototype.stopAction = function() {
 };
 
 /**
-| Draws the cockpit and the vSpace.
+| Draws the cockpit and the vspace.
 */
 Shell.prototype._draw = function() {
 	this.fabric.attune();   // @@ <- bad name for clear();
@@ -256,7 +257,7 @@ Shell.prototype._draw = function() {
 	this.caret.$save = null;
 	this.caret.$screenPos = null;
 
-	if (this.vSpace) { this.vSpace.draw(); }
+	if (this.vspace) { this.vspace.draw(); }
 	this.cockpit.draw();
 	this.caret.display();
 
@@ -271,7 +272,7 @@ Shell.prototype.click = function(p, shift, ctrl) {
 	this.ctrl  = ctrl;
 
 	// TODO cockpit
-	if (this.vSpace) { this.vSpace.click(p); }
+	if (this.vspace) { this.vspace.click(p); }
 	if (this.redraw) { this._draw(); }
 };
 
@@ -283,7 +284,7 @@ Shell.prototype.mousehover = function(p, shift, ctrl) {
 	this.ctrl  = ctrl;
 
 	if (!this.cockpit.mousehover(p)) {
-		if (this.vSpace) { this.vSpace.mousehover(p); }
+		if (this.vspace) { this.vspace.mousehover(p); }
 	}
 	if (this.redraw) { this._draw(); }
 };
@@ -298,7 +299,7 @@ Shell.prototype.mousedown = function(p, shift, ctrl) {
 	this.ctrl  = ctrl;
 
 	var mouseState = this.cockpit.mousedown(p);
-	if (mouseState === null && this.vSpace) { mouseState = this.vSpace.mousedown(p); }
+	if (mouseState === null && this.vspace) { mouseState = this.vspace.mousedown(p); }
 	if (this.redraw) { this._draw(); }
 	return mouseState;
 };
@@ -311,7 +312,7 @@ Shell.prototype.dragstart = function(p, shift, ctrl) {
 	this.ctrl  = ctrl;
 
 	// TODO cockpit
-	if (this.vSpace) { this.vSpace.dragstart(p); }
+	if (this.vspace) { this.vspace.dragstart(p); }
 	if (this.redraw) { this._draw(); }
 };
 
@@ -323,7 +324,7 @@ Shell.prototype.dragmove = function(p, shift, ctrl) {
 	this.ctrl  = ctrl;
 
 	// TODO cockpit
-	if (this.vSpace) { this.vSpace.dragmove(p); }
+	if (this.vspace) { this.vspace.dragmove(p); }
 	if (this.redraw) { this._draw(); }
 };
 
@@ -335,7 +336,7 @@ Shell.prototype.dragstop = function(p, shift, ctrl) {
 	this.ctrl  = ctrl;
 
 	// TODO cockpit
-	if (this.vSpace) { this.vSpace.dragstop(p); }
+	if (this.vspace) { this.vspace.dragstop(p); }
 	if (this.redraw) { this._draw(); }
 };
 
@@ -347,7 +348,7 @@ Shell.prototype.mousewheel = function(p, dir, shift, ctrl) {
 	this.ctrl  = ctrl;
 
 	// TODO cockpict
-	if (this.vSpace) { this.vSpace.mousewheel(p, dir); }
+	if (this.vspace) { this.vspace.mousewheel(p, dir); }
 	if (this.redraw) { this._draw(); }
 };
 
@@ -360,7 +361,7 @@ Shell.prototype.specialKey = function(keyCode, shift, ctrl) {
 	this.ctrl  = ctrl;
 
 	var caret  = this.caret;
-	if (caret.sign) { this.vget(caret.sign.path, -1).specialKey(keyCode); }
+	if (caret.sign) { this.vspace.vget(caret.sign.path, -1).specialKey(keyCode); }
 	if (this.redraw) this._draw();
 };
 
@@ -373,12 +374,19 @@ Shell.prototype.input = function(text) {
 	if (this.selection.active) { this.selection.remove(); }
 
 	var caret  = this.caret;
-	if (caret.sign) { this.vget(caret.sign.path, -1).input(text); }
+	switch (caret.visec) {
+	case null : break;
+	case 'cockpit' : this.cockpit.input(text); break;
+	case 'space'   :
+		// TODO move this into vspace
+		if (caret.sign) { this.vspace.vget(caret.sign.path, -1).input(text); }
+		break;
+	}
 	if (this.redraw) this._draw();
 };
 
 /**
-| The window has been resized
+| The window has been resized.
 */
 Shell.prototype.resize = function(width, height) {
 	this._draw();
