@@ -106,6 +106,10 @@ var Server = function() {
 	this.registerFile('/deverse.js',       'js',   1, 'client/deverse.js'     );
 	this.registerFile('/design.js',        'js',   1, 'client/design.js'      );
 	this.registerFile('/caccent.js',       'js',   1, 'client/caccent.js'     );
+	this.registerFile('/curve.js',         'js',   1, 'client/curve.js'       );
+	this.registerFile('/ccustom.js',       'js',   1, 'client/ccustom.js'     );
+	this.registerFile('/cinput.js',        'js',   1, 'client/cinput.js'      );
+	this.registerFile('/clabel.js',        'js',   1, 'client/clabel.js'      );
 	this.registerFile('/cockpit.js',       'js',   1, 'client/cockpit.js'     );
 	this.registerFile('/action.js',        'js',   1, 'client/action.js'      );
 	this.registerFile('/ovalmenu.js',      'js',   1, 'client/ovalmenu.js'    );

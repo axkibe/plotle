@@ -12,12 +12,12 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--'
 
-                                      ,--.                  
-                                      | `-' . . ,-. .  , ,-. 
-                                      |   . | | |   | /  |-' 
-                                      `--'  `-^ '   `'   `-' 
+                                      ,--.
+                                      | `-' . . ,-. .  , ,-.
+                                      |   . | | |   | /  |-'
+                                      `--'  `-^ '   `'   `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-                                                   
+
  A bezier curve.
 
  Authors: Axel Kittenberger
@@ -56,7 +56,7 @@ var Point         = Fabric.Point;
 | Constructor.
 */
 Curve = function(twig, frame) {
-	vara data = this.data = [];
+	var data = this.data = [];
 
 	if (twig.copse[twig.ranks[0]].type !== 'MoveTo') {
 		throw new Error('Curve does not begin with MoveTo');
@@ -65,7 +65,7 @@ Curve = function(twig, frame) {
 	for(var a = 0, aZ = twig.length; a < aZ; a++) {
 		var ct = twig.copse[twig.ranks[a]];
 		data.push({
-			to   : computePoint(ct.to, frame),
+			to   : Curve.computePoint(ct.to, frame),
 			twig : ct
 		});
 	}

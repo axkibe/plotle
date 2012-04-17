@@ -29,6 +29,10 @@
 | Imports
 */
 var CAccent;
+var CCustom;
+var CLabel;
+var CInput;
+var Curve;
 var Design;
 var Jools;
 var Fabric;
@@ -45,6 +49,7 @@ var dbgBoxes;
 | Exports
 */
 var Cockpit = null;
+var CMethods = null;
 
 /**
 | Capsule
@@ -69,332 +74,12 @@ var limit         = Jools.limit;
 var log           = Jools.log;
 var subclass      = Jools.subclass;
 
+var computePoint  = Curve.computePoint;
 var half          = Fabric.half;
 var BeziRect      = Fabric.BeziRect;
 var Point         = Fabric.Point;
 var Rect          = Fabric.Rect;
 var RoundRect     = Fabric.RoundRect;
-
-
-/**
-| Computes a point by its anchor
-*/
-var computePoint = function(model, frame) {
-	var p;
-	var pnw = frame.pnw;
-	var pse = frame.pse;
-
-	switch (model.anchor) {
-	// @@ integrate add into switch
-	// @@ make this part of frame logic
-	case 'c'  : p = new Point(half(pnw.x + pse.x), half(pnw.y + pse.y)); break;
-	case 'n'  : p = new Point(half(pnw.x + pse.x), pnw.y);               break;
-	case 'ne' : p = new Point(pse.x,               pnw.y);               break;
-	case 'e'  : p = new Point(pse.x,               half(pnw.y + pse.y)); break;
-	case 'se' : p = pse;                                                 break;
-	case 's'  : p = new Point(half(pnw.x + pse.x), pse.y);               break;
-	case 'sw' : p = new Point(pnw.x,               pse.y);               break;
-	case 'w'  : p = new Point(pnw.x,               half(pnw.y + pse.y)); break;
-	case 'nw' : p = pnw;                                                 break;
-	}
-	return p.add(model.x, model.y);
-};
-
-
-/**
-| Computes a curve for a frame.
-*/
-var computeCurve = function(twig, frame) {
-	var asw = [];
-	if (twig.copse[twig.ranks[0]].type !== 'MoveTo') {
-		throw new Error('Curve does not begin with MoveTo');
-	}
-
-	for(var a = 0, aZ = twig.length; a < aZ; a++) {
-		var ct = twig.copse[twig.ranks[a]];
-		asw.push({
-			to   : computePoint(ct.to, frame),
-			twig : ct
-		});
-	}
-
-	return asw;
-};
-
-
-/**
-| Paths a curve in a fabric
-*/
-var pathCurve = function(fabric, border, twist, curve) {
-	fabric.beginPath(twist);
-	var lbx = 0;
-	var lby = 0;
-	var bo = border;
-	for(var a = 0, aZ = curve.length; a < aZ; a++) {
-		var c = curve[a];
-		var ct = c.twig;
-		var to = c.to;
-		var bx = ct.bx * bo;
-		var by = ct.by * bo;
-		switch(ct.type) {
-		case 'MoveTo':
-			fabric.moveTo(to.x + bx, to.y + by);
-			break;
-		case 'LineTo':
-			fabric.lineTo(to.x + bx, to.y + by);
-			break;
-		case 'BeziTo':
-			var tbx = to.x + bx;
-			var tby = to.y + by;
-			fabric.beziTo(
-				ct.c1x + (tbx && tbx + lbx ? (tbx / (tbx + lbx)) : 0),
-				ct.c1y + (tby && tby + lby ? (tby / (tby + lby)) : 0),
-
-				ct.c2x + (tbx && tbx +  bx ? (tbx / (tbx + bx)) : 0),
-				ct.c2y + (tby && tby +  by ? (tby / (tby + by)) : 0),
-
-				tbx         , tby
-			);
-			break;
-		default :
-			throw new Error('invalid curve type: ' + ct.type);
-		}
-		lbx = bx;
-		lby = by;
-	}
-};
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ,--.  ,--.         .
- | `-' | `-' . . ,-. |- ,-. ,-,-.
- |   . |   . | | `-. |  | | | | |
- `--'  `--'  `-^ `-' `' `-' ' ' '
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
- A computed custom element.
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-var CCustom = function(twig, board, inherit, name) {
-	this.twig    = twig;
-	this.board   = board;
-	this.name    = name;
-	this.methods = Methods[name];
-	if (!this.methods) { this.methods = {}; }
-
-	var pnw      = this.pnw    = computePoint(twig.frame.pnw, board.iframe);
-	var pse      = this.pse    = computePoint(twig.frame.pse, board.iframe);
-	var iframe   = this.iframe = new Rect(Point.zero, pse.sub(pnw));
-	this.curve   = computeCurve(twig.curve, iframe);
-
-	this.caption = {
-		pos : computePoint(twig.caption.pos, iframe)
-	};
-	this.$fabric = null;
-	this.$accent = CAccent.NORMAL;
-};
-
-/**
-| Paths the custom control
-*/
-CCustom.prototype.path = function(fabric, border, twist) {
-	pathCurve(fabric, border, twist, this.curve);
-};
-
-/**
-| Returns the fabric for the custom element.
-*/
-CCustom.prototype.getFabric = function(accent) {
-	var fabric = this.$fabric;
-	if (fabric && this.$accent === accent && !dbgNoCache) { return fabric; }
-
-	fabric = this.$fabric = new Fabric(this.iframe);
-
-	var sname;
-	switch (accent) {
-	case CAccent.NORMA : sname = this.twig.style;      break;
-	case CAccent.HOVER : sname = this.twig.hoverStyle; break;
-	case CAccent.FOCUS : sname = this.twig.style;      break;
-	case CAccent.HOVOC : sname = this.twig.hoverStyle; break;
-	default : throw new Error('Invalid accent');
-	}
-
-	var style = Cockpit.styles[sname];
-	if (!isnon(style)) { throw new Error('Invalid style: ' + sname); }
-	fabric.paint(style, this, 'path');
-
-	var fs = this.twig.caption.fontStyle;
-	fabric.fontStyle(fs.font, fs.fill, fs.align, fs.base);
-	fabric.fillText(this.twig.caption.text, this.caption.pos);
-
-	if (dbgBoxes) {
-		fabric.paint(
-			Cockpit.styles.boxes,
-			new Rect(this.iframe.pnw, this.iframe.pse.sub(1, 1)),
-			'path'
-		);
-	}
-
-	return fabric;
-};
-
-/**
-| Mouse hover.
-*/
-CCustom.prototype.mousehover = function(board, p) {
-	if (p.x < this.pnw.x || p.y < this.pnw.y || p.x > this.pse.x || p.y > this.pse.y) {
-		return false;
-	}
-	var fabric = this.getFabric(CAccent.NORMA);
-	var pp = p.sub(this.pnw);
-	if (!fabric.within(this, 'path', pp))  { return false; }
-
-	system.setCursor('default');
-	board.setHover(this.name);
-
-	if (this.methods.mousehover) { this.methods.mousehover(board, this, p); }
-	return true;
-};
-
-/**
-| Mouse down.
-*/
-CCustom.prototype.mousedown = function(board, p) {
-	if (p.x < this.pnw.x || p.y < this.pnw.y || p.x > this.pse.x || p.y > this.pse.y) {
-		return false;
-	}
-	var fabric = this.getFabric();
-	var pp = p.sub(this.pnw);
-	if (!fabric.within(this, 'path', pp))  { return false; }
-
-	if (this.methods.mousedown) {
-		this.methods.mousedown(board, this, p);
-		shell.redraw = true;
-	}
-	return true;
-};
-
-/**
-| Draws the custom control.
-*/
-CCustom.prototype.draw = function(fabric, accent) {
-	fabric.drawImage(this.getFabric(accent), this.pnw);
-};
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- +++ CInput +++
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
- A computed Label
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-var CInput = function(twig, board, inherit, name) {
-	this.twig    = twig;
-	this.board   = board;
-	this.name    = name;
-	this.methods = Methods[name];
-	if (!this.methods) { this.methods = {}; }
-
-	var pnw  = this.pnw  = computePoint(twig.frame.pnw, board.iframe);
-	var pse  = this.pse  = computePoint(twig.frame.pse, board.iframe);
-	var bezi = this.bezi = new BeziRect(Point.zero, pse.sub(pnw), 7, 3);
-
-	this.$fabric = null;
-	this.$accent = CAccent.NORMA;
-};
-
-/**
-| TODO
-*/
-CInput.prototype.path = function(fabric, border, twist) {
-	fabric.beginPath(twist);
-	fabric.moveTo(this.pnw);
-	fabric.lineTo(this.pse.x, this.pnw.y);
-	fabric.lineTo(this.pse);
-	fabric.lineTo(this.pnw.x, this.pse.y);
-	fabric.lineTo(this.pnw);
-};
-
-CInput.prototype.getFabric = function(accent) {
-	var fabric = new Fabric(this.bezi.width, this.bezi.height);
-
-	var sname;
-	switch (accent) {
-	case CAccent.NORMA : sname = this.twig.normaStyle; break;
-	case CAccent.HOVER : sname = this.twig.hoverStyle; break;
-	case CAccent.FOCUS : sname = this.twig.focusStyle; break;
-	case CAccent.HOVOC : sname = this.twig.hovocStyle; break;
-	default : throw new Error('Invalid accent');
-	}
-	var style  = Cockpit.styles[sname];
-	if (!isnon(style)) { throw new Error('Invalid style: ' + sname); }
-
-	fabric.paint(style, this.bezi, 'path');
-	return fabric;
-};
-
-CInput.prototype.draw = function(fabric, accent) {
-	fabric.drawImage(this.getFabric(accent), this.pnw);
-};
-
-/**
-| Mouse hover
-*/
-CInput.prototype.mousehover = function(board, p) {
-	return false;
-};
-
-/**
-| Mouse down
-*/
-CInput.prototype.mousedown = function(board, p) {
-	var pp = p.sub(this.pnw);
-	var fabric = this.getFabric(CAccent.NORMA);
-	if (!fabric.within(this.bezi, 'path', pp))  { return null; }
-
-	board.setFocus(this.name);
-	return false;
-};
-
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ,--.  ,       .       .
- | `-'  )   ,-. |-. ,-. |
- |   . /    ,-| | | |-' |
- `--'  `--' `-^ ^-' `-' `'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
- A computed Label
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-var CLabel = function(twig, board, inherit, name) {
-	this.twig    = twig;
-	this.board   = board;
-	this.name    = name;
-	this.pos     = computePoint(twig.pos, board.iframe);
-	this.methods = Methods[name];
-	if (!this.methods) { this.methods = {}; }
-};
-
-CLabel.prototype.draw = function(fabric) {
-	var fs = this.twig.fontStyle;
-	fabric.fontStyle(fs.font, fs.fill, fs.align, fs.base);
-	fabric.fillText(this.twig.text, this.pos);
-};
-
-/**
-| Mouse hover
-*/
-CLabel.prototype.mousehover = function(board, p) {
-	return false;
-};
-
-/**
-| Mouse down
-*/
-CLabel.prototype.mousedown = function(board, p) {
-	return null;
-};
-
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,-,-,-.       .  .         .
@@ -404,7 +89,7 @@ CLabel.prototype.mousedown = function(board, p) {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-var Methods = {};
+CMethods = {};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  +++Mainboard:loginMC+++
@@ -414,9 +99,9 @@ var Methods = {};
  Switches to the loginboard.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-Methods.loginMC = {};
+CMethods.loginMC = {};
 
-Methods.loginMC.mousedown = function(board, ele, p) {
+CMethods.loginMC.mousedown = function(board, ele, p) {
 	board.cockpit.setCurBoard('loginboard');
 };
 
@@ -428,7 +113,7 @@ Methods.loginMC.mousedown = function(board, ele, p) {
  Switches to the registerboard.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-Methods.registerMC = {};
+CMethods.registerMC = {};
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -440,9 +125,9 @@ Methods.registerMC = {};
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-Methods.cancelBC = {};
+CMethods.cancelBC = {};
 
-Methods.cancelBC.mousedown = function(board, ele, p) {
+CMethods.cancelBC.mousedown = function(board, ele, p) {
 	board.cockpit.setCurBoard('mainboard');
 };
 
@@ -465,7 +150,7 @@ var CBoard = function(design, inherit, cockpit, screensize) {
 	var pnw      = this.pnw    = computePoint(frameD.pnw, oframe);
 	var pse      = this.pse    = computePoint(frameD.pse, oframe);
 	var iframe   = this.iframe = new Rect(Point.zero, pse.sub(pnw));
-	this.curve   = computeCurve(tree.root.curve, iframe);
+	this.curve   = new Curve(tree.root.curve, iframe);
 
 	// TODO use point arithmetic
 	this.gradientPC = new Point(half(iframe.width), iframe.height + 450);
@@ -501,52 +186,8 @@ CBoard.prototype.newCC = function(twig, inherit, name) {
 | Paths the boards frame
 */
 CBoard.prototype.path = function(fabric, border, twist) {
-	pathCurve(fabric, border, twist, this.curve);
-	/*
-	var iframe = this.iframe;
-	var fmx = half(iframe.width);
-	var tc  = mTopCurve;
-	var bo  = border;
-
-	fabric.beginPath(twist);
-	fabric.moveTo(bo, iframe.height);
-	fabric.beziTo(sk, -sc + bo, -tc,        0,               fmx, bo);
-	fabric.beziTo(tc,        0, -sk, -sc + bo, iframe.width - bo, iframe.height);
-	*/
+	this.curve.path(fabric, border, twist);
 };
-
-/**
-| Paths the passwords input field.
-| TODO remove
-*/
-/*
-CBoard.prototype.pathPassword = function(fabric, border, twist) {
-	var bo  = border;
-	var px  = this.fmx - 15;
-	var py  = this.pse.y - 45;
-	var w   = 220;
-	var h   = 28;
-	var ww  = half(w);
-	var hh  = half(h);
-	var wwk = R(w * 0.4);
-	var hhk = R(h * 0.3);
-	var wwl = ww - wwk;
-	var hhl = hh - hhk;
-
-	fabric.beginPath(twist);
-	fabric.moveTo(                         px + wwk,     py - hh  + bo);
-	fabric.beziTo( wwl,     0,    0, -hhl, px + ww - bo, py - hhk);
-	fabric.lineTo(                         px + ww - bo, py + hhk);
-	fabric.beziTo(   0,   hhl,  wwl,    0, px + wwk,     py + hh - bo);
-	fabric.lineTo(                         px - wwk,     py + hh - bo);
-	fabric.beziTo(-wwl,     0,    0,  hhl, px - ww + bo, py + hhk);
-	// @@ works around chrome pixel error
-	fabric.lineTo(                         px - ww + bo, py + hhk + 1);
-	fabric.lineTo(                         px - ww + bo, py - hhk);
-	fabric.beziTo(    0, -hhl, -wwl,    0, px - wwk,     py - hh + bo);
-	fabric.lineTo(                         px + wwk,     py - hh + bo);
-};
-*/
 
 /**
 | Draws the mainboards contents
