@@ -4,7 +4,6 @@ name: String.SHA-1
 description: String SHA1 hashing.
 license: MIT-style
 authors: [Christopher Pitt, Enrique Erne]
-         [Axel Kittenberger: little adaptions]
 ...
 [Axel Kittenberger]
 * imported from:
@@ -53,6 +52,7 @@ var transforms = {
 	'rotateLeft': function(a, b){
 		return (a << b) | (a >>> (32 - b));
 	},
+
 	'hex': function(a){
 		var b, c, result = '';
 
@@ -196,7 +196,9 @@ sha1 = function(string) {
 | Node exports
 */
 if (typeof(window) === 'undefined') {
-	module.exports = sha1;
+	module.exports = {
+		sha1hex : sha1
+	};
 }
 
 })();
