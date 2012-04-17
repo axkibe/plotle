@@ -157,7 +157,7 @@ if (!Object.freeze) {
 |
 | sub: prototype to become a subclass.
 | base: either a prototype to become the base.
-|       or a table of prototype to become the base for multiple
+|       or a table of prototypes to become the base for multiple
 |       inheritance.
 */
 var subclass = function(sub, base) {

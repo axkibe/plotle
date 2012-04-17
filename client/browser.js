@@ -50,6 +50,11 @@ var system;
 var dbgNoCache = false;
 
 /**
+| If true draws boxes around all frames
+*/
+var dbgBoxes = false;
+
+/**
 | Export/Capsule
 */
 (function(){

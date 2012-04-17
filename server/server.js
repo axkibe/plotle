@@ -105,6 +105,7 @@ var Server = function() {
 	this.registerFile('/peer.js',          'js',   1, 'client/peer.js'        );
 	this.registerFile('/deverse.js',       'js',   1, 'client/deverse.js'     );
 	this.registerFile('/design.js',        'js',   1, 'client/design.js'      );
+	this.registerFile('/caccent.js',       'js',   1, 'client/caccent.js'     );
 	this.registerFile('/cockpit.js',       'js',   1, 'client/cockpit.js'     );
 	this.registerFile('/action.js',        'js',   1, 'client/action.js'      );
 	this.registerFile('/ovalmenu.js',      'js',   1, 'client/ovalmenu.js'    );

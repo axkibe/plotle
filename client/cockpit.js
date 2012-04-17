@@ -28,17 +28,18 @@
 /**
 | Imports
 */
+var CAccent;
 var Design;
 var Jools;
 var Fabric;
 var Path;
 var Tree;
 var Deverse;
-
 var theme;
 var system;
 var shell;
 var dbgNoCache;
+var dbgBoxes;
 
 /**
 | Exports
@@ -50,12 +51,8 @@ var Cockpit = null;
 */
 (function(){
 'use strict';
-if (typeof(window) === 'undefined') { throw new Error('shell.js needs a browser!'); }
+if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
-/**
-| If true draws boxes around all frames
-*/
-var dbgBoxes = false;
 
 var R   = Math.round;
 var abs = Math.abs;
@@ -78,49 +75,18 @@ var Point         = Fabric.Point;
 var Rect          = Fabric.Rect;
 var RoundRect     = Fabric.RoundRect;
 
-var styles = {
-	'boxes'      : { edge : [ { border: 0, width : 1, color : 'black' } ] },
-	'button'     : theme.cockpit.button,
-	'highlight'  : theme.cockpit.highlight,
-	'input'      : theme.cockpit.input,
-	'inputfocus' : theme.cockpit.inputfocus,
-	'sides'      : theme.cockpit.sides,
-	'zero'       : theme.cockpit.zero,
-	'zhighlight' : theme.cockpit.zhighlight
-};
-
-var Accent = immute({
-	NORMA : 0,
-	HOVER : 1,
-	FOCUS : 2,
-	HOFOC : 3
-});
-
-
-/**
-| Turns the hover and focus state to an accent enum.
-*/
-Accent.state = function(hover, focus) {
-	if (hover) {
-		if (focus) { return Accent.HOFOC; }
-		else       { return Accent.HOVER; }
-	} else {
-		if (focus) { return Accent.FOCUS; }
-		else       { return Accent.NORMA; }
-	}
-};
 
 /**
 | Computes a point by its anchor
 */
-var computePoint = function(model, oframe) {
+var computePoint = function(model, frame) {
 	var p;
-	var pnw = oframe.pnw;
-	var pse = oframe.pse;
+	var pnw = frame.pnw;
+	var pse = frame.pse;
 
 	switch (model.anchor) {
 	// @@ integrate add into switch
-	// @@ make this part of oframe logic
+	// @@ make this part of frame logic
 	case 'c'  : p = new Point(half(pnw.x + pse.x), half(pnw.y + pse.y)); break;
 	case 'n'  : p = new Point(half(pnw.x + pse.x), pnw.y);               break;
 	case 'ne' : p = new Point(pse.x,               pnw.y);               break;
@@ -224,7 +190,7 @@ var CCustom = function(twig, board, inherit, name) {
 		pos : computePoint(twig.caption.pos, iframe)
 	};
 	this.$fabric = null;
-	this.$accent = Accent.NORMAL;
+	this.$accent = CAccent.NORMAL;
 };
 
 /**
@@ -245,14 +211,14 @@ CCustom.prototype.getFabric = function(accent) {
 
 	var sname;
 	switch (accent) {
-	case Accent.NORMA : sname = this.twig.style;      break;
-	case Accent.HOVER : sname = this.twig.hoverStyle; break;
-	case Accent.FOCUS : sname = this.twig.style;      break;
-	case Accent.HOVOC : sname = this.twig.hoverStyle; break;
+	case CAccent.NORMA : sname = this.twig.style;      break;
+	case CAccent.HOVER : sname = this.twig.hoverStyle; break;
+	case CAccent.FOCUS : sname = this.twig.style;      break;
+	case CAccent.HOVOC : sname = this.twig.hoverStyle; break;
 	default : throw new Error('Invalid accent');
 	}
 
-	var style = styles[sname];
+	var style = Cockpit.styles[sname];
 	if (!isnon(style)) { throw new Error('Invalid style: ' + sname); }
 	fabric.paint(style, this, 'path');
 
@@ -261,7 +227,11 @@ CCustom.prototype.getFabric = function(accent) {
 	fabric.fillText(this.twig.caption.text, this.caption.pos);
 
 	if (dbgBoxes) {
-		fabric.paint(styles.boxes, new Rect(this.iframe.pnw, this.iframe.pse.sub(1, 1)), 'path');
+		fabric.paint(
+			Cockpit.styles.boxes,
+			new Rect(this.iframe.pnw, this.iframe.pse.sub(1, 1)),
+			'path'
+		);
 	}
 
 	return fabric;
@@ -274,7 +244,7 @@ CCustom.prototype.mousehover = function(board, p) {
 	if (p.x < this.pnw.x || p.y < this.pnw.y || p.x > this.pse.x || p.y > this.pse.y) {
 		return false;
 	}
-	var fabric = this.getFabric(Accent.NORMA);
+	var fabric = this.getFabric(CAccent.NORMA);
 	var pp = p.sub(this.pnw);
 	if (!fabric.within(this, 'path', pp))  { return false; }
 
@@ -329,7 +299,7 @@ var CInput = function(twig, board, inherit, name) {
 	var bezi = this.bezi = new BeziRect(Point.zero, pse.sub(pnw), 7, 3);
 
 	this.$fabric = null;
-	this.$accent = Accent.NORMA;
+	this.$accent = CAccent.NORMA;
 };
 
 /**
@@ -349,13 +319,13 @@ CInput.prototype.getFabric = function(accent) {
 
 	var sname;
 	switch (accent) {
-	case Accent.NORMA : sname = this.twig.normaStyle; break;
-	case Accent.HOVER : sname = this.twig.hoverStyle; break;
-	case Accent.FOCUS : sname = this.twig.focusStyle; break;
-	case Accent.HOVOC : sname = this.twig.hovocStyle; break;
+	case CAccent.NORMA : sname = this.twig.normaStyle; break;
+	case CAccent.HOVER : sname = this.twig.hoverStyle; break;
+	case CAccent.FOCUS : sname = this.twig.focusStyle; break;
+	case CAccent.HOVOC : sname = this.twig.hovocStyle; break;
 	default : throw new Error('Invalid accent');
 	}
-	var style  = styles[sname];
+	var style  = Cockpit.styles[sname];
 	if (!isnon(style)) { throw new Error('Invalid style: ' + sname); }
 
 	fabric.paint(style, this.bezi, 'path');
@@ -378,7 +348,7 @@ CInput.prototype.mousehover = function(board, p) {
 */
 CInput.prototype.mousedown = function(board, p) {
 	var pp = p.sub(this.pnw);
-	var fabric = this.getFabric(Accent.NORMA);
+	var fabric = this.getFabric(CAccent.NORMA);
 	if (!fabric.within(this.bezi, 'path', pp))  { return null; }
 
 	board.setFocus(this.name);
@@ -592,11 +562,11 @@ CBoard.prototype.getFabric = function() {
 	for(var a = 0, aZ = layout.length; a < aZ; a++) {
 		var cname = layout.ranks[a];
 		var c = this.cc[cname];
-		c.draw(fabric, Accent.state(cname === this.$hover, cname === this.$focus));
+		c.draw(fabric, CAccent.state(cname === this.$hover, cname === this.$focus));
 	}
 
 	if (dbgBoxes) {
-		fabric.paint(styles.boxes,
+		fabric.paint(Cockpit.styles.boxes,
 			new Rect(iframe.pnw, iframe.pse.sub(1, 1)), 'path');
 	}
 
@@ -715,6 +685,17 @@ Cockpit = function() {
 	this._user       = null;
 	this._curSpace   = null;
 	this._message    = null;
+};
+
+Cockpit.styles = {
+	'boxes'      : { edge : [ { border: 0, width : 1, color : 'black' } ] },
+	'button'     : theme.cockpit.button,
+	'highlight'  : theme.cockpit.highlight,
+	'input'      : theme.cockpit.input,
+	'inputfocus' : theme.cockpit.inputfocus,
+	'sides'      : theme.cockpit.sides,
+	'zero'       : theme.cockpit.zero,
+	'zhighlight' : theme.cockpit.zhighlight
 };
 
 /**
