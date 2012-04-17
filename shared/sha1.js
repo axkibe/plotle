@@ -196,9 +196,7 @@ sha1 = function(string) {
 | Node exports
 */
 if (typeof(window) === 'undefined') {
-	module.exports = {
-		sha1 : sha1
-	};
+	module.exports = sha1;
 }
 
 })();
