@@ -318,6 +318,7 @@ VPara.prototype.specialKey = function(keycode) {
 
 	switch(keycode) {
 	case  8 : // backspace
+		debug('BACKSPACE 1');
 		if (caret.sign.at1 > 0) {
 			peer.removeText(this.textPath(), caret.sign.at1 - 1, 1);
 		} else {
@@ -327,7 +328,9 @@ VPara.prototype.specialKey = function(keycode) {
 				peer.join(ve.textPath(), ve.twig.text.length);
 			}
 		}
+		debug('BACKSPACE 2');
 		vitem.scrollCaretIntoView();
+		debug('BACKSPACE 3');
 		break;
 	case 13 : // return
 		peer.split(this.textPath(), caret.sign.at1);

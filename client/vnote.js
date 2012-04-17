@@ -247,6 +247,8 @@ VNote.prototype.draw = function(fabric) {
 			sbary.visible = false;
 		}
 
+		if (sbary.visible) { this.setScrollbar(); }
+
 		// resizes the canvas
 		f.attune(zone);
 		var silhoutte = this.getSilhoutte(zone, true);
@@ -257,10 +259,7 @@ VNote.prototype.draw = function(fabric) {
 		vdoc.draw(f, zone.width, imargin, sbary.point);
 
 		// draws the scrollbar
-		if (sbary.visible) {
-			this.setScrollbar();
-			sbary.draw(f);
-		}
+		if (sbary.visible) { sbary.draw(f); }
 
 		// draws the border
 		f.edge(theme.note.style.edge, silhoutte, 'path');

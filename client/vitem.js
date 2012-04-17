@@ -42,7 +42,6 @@ var Scrollbar;
 var Tree;
 var VDoc;
 
-var dbgNoCache;
 var settings;
 var shell;
 var system;
@@ -90,6 +89,7 @@ VItem = function(twig, path) {
 */
 VItem.prototype.update = function(twig) {
 	this.twig    = twig;
+	debug('VITEM UPDATE');
 	this.$fabric = null;
 
 	var vdoc = this.vv.doc;

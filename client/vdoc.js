@@ -48,19 +48,19 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Shortcuts
 */
-var Point         = Fabric.Point;
-var R             = Math.round;
-var abs           = Math.abs;
-var debug         = Jools.debug;
-var fixate        = Jools.fixate;
-var immute        = Jools.immute;
-var is            = Jools.is;
-var isnon         = Jools.isnon;
-var limit         = Jools.limit;
-var log           = Jools.log;
-var max           = Math.max;
-var min           = Math.min;
-var subclass      = Jools.subclass;
+var Point     = Fabric.Point;
+var R         = Math.round;
+var abs       = Math.abs;
+var debug     = Jools.debug;
+var fixate    = Jools.fixate;
+var immute    = Jools.immute;
+var is        = Jools.is;
+var isnon     = Jools.isnon;
+var limit     = Jools.limit;
+var log       = Jools.log;
+var max       = Math.max;
+var min       = Math.min;
+var subclass  = Jools.subclass;
 
 /**
 | Constructor.
@@ -110,6 +110,14 @@ VDoc.prototype.update = function(twig) {
 			vv[k] = o;
 		}
 	}
+
+/*
+	for(var k in vo) {
+		if (!is(vv[k])) {
+			XXX
+		}
+	}
+	*/
 };
 
 /**
