@@ -436,7 +436,7 @@ VPara.prototype.specialKey = function(keycode) {
 					'space',
 					{
 						path : ve.textPath(),
-					  	at1  : 0
+						at1  : 0
 					}
 				);
 			}

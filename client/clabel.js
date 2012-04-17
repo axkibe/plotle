@@ -28,7 +28,7 @@
 /**
 | Imports
 */
-var CMethods;
+var CMeth;
 var Curve;
 var Jools;
 var Fabric;
@@ -62,7 +62,7 @@ CLabel = function(twig, board, inherit, name) {
 	this.board   = board;
 	this.name    = name;
 	this.pos     = computePoint(twig.pos, board.iframe);
-	this.methods = CMethods[name];
+	this.methods = CMeth[name];
 	if (!this.methods) { this.methods = {}; }
 };
 

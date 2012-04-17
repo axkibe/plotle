@@ -29,10 +29,11 @@
 | Imports
 */
 var CAccent;
+var CMeth;
+var Cockpit;
 var Curve;
 var Jools;
 var Fabric;
-var CMethods;
 var system;
 var shell;
 var dbgNoCache;
@@ -69,7 +70,7 @@ CCustom = function(twig, board, inherit, name) {
 	this.twig    = twig;
 	this.board   = board;
 	this.name    = name;
-	this.methods = CMethods[name];
+	this.methods = CMeth[name];
 	if (!this.methods) { this.methods = {}; }
 
 	var pnw      = this.pnw    = computePoint(twig.frame.pnw, board.iframe);

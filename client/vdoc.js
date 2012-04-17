@@ -35,6 +35,7 @@ var VDoc      = null;
 var Fabric;
 var Jools;
 var Path;
+var VPara;
 var shell;
 var theme;
 

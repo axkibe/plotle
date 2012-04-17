@@ -69,7 +69,7 @@ Curve = function(twig, frame) {
 			twig : ct
 		});
 	}
-}
+};
 
 /**
 | Computes a point by its anchor

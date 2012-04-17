@@ -37,6 +37,7 @@ var Fabric;
 var Jools;
 var MeshMashine;
 var Path;
+var Selection;
 var Tree;
 var VSpace;
 
@@ -147,6 +148,7 @@ Shell.prototype.setCaret = function(visec, sign, element, retainx) {
 	switch (visec) {
 	case null :
 		if (sign !== null) { throw new Error('setCaret visec=null, invalid sign'); }
+		break;
 	case 'space' :
 		switch(sign && sign.constructor) {
 		case null      : break;

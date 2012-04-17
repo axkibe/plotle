@@ -41,7 +41,7 @@ var Scrollbar;
 var Tree;
 var VDoc;
 var VItem;
-var vLabel;
+var VLabel;
 
 var dbgNoCache;
 var settings;

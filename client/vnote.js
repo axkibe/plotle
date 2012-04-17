@@ -37,6 +37,7 @@ var Fabric;
 var Jools;
 var Scrollbar;
 var VItem;
+var VPara;
 
 var dbgNoCache;
 var settings;

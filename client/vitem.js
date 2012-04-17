@@ -41,6 +41,7 @@ var Path;
 var Scrollbar;
 var Tree;
 var VDoc;
+var VRelation;
 
 var settings;
 var shell;
