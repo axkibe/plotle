@@ -31,6 +31,7 @@
 */
 var Jools;
 var Path;
+var Sign;
 var Tree;
 
 /**
@@ -50,11 +51,14 @@ var MeshMashine;
 if (typeof(window) === 'undefined') {
 	Jools = require('./jools');
 	Path  = require('./path');
+	Sign  = require('./sign');
 	Tree  = require('./tree');
 }
 
 var debug        = Jools.debug;
 var log          = Jools.log;
+var check        = Jools.check;
+var checkLimits  = Jools.checkLimits;
 var clone        = Jools.clone;
 var fixate       = Jools.fixate;
 var fixateNoEnum = Jools.fixateNoEnum;
@@ -67,89 +71,6 @@ var isString     = Jools.isString;
 var matches      = Jools.matches;
 var reject       = Jools.reject;
 var isPath       = Path.isPath;
-
-function fail(args, aoffset) {
-	var a = Array.prototype.slice.call(args, aoffset, args.length);
-	for(var i = 2; i < arguments.length; i++) { a.push(arguments[i]); }
-	var b = a.slice();
-	b.unshift('fail');
-	log.apply(null, b);
-	throw reject(a.join(' '));
-}
-
-/**
-| Throws a reject if condition is not met.
-*/
-var check = function(condition) {
-	if (!condition) fail(arguments, 1);
-};
-
-/**
-| Throws a reject if v is not within limits
-*/
-var checkLimits = function(v, low, high) {
-	if (v < low || v > high) fail(arguments, 3, low, '<=', v, '<=', high);
-};
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- .---.               .
- \___  . ,-. ,-. ,-. |- . . ,-. ,-.
-     \ | | | | | ,-| |  | | |   |-'
- `---' ' `-| ' ' `-^ `' `-^ '   `-'
-~ ~ ~ ~ ~ ,|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-          `'
- Signates an entry, string index or string span.
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-var Signature = function(model /*, ...*/) {
-	var k;
-	for(k in model) {
-		if (!Object.hasOwnProperty.call(model, k)) continue;
-		if (!Signature.field[k]) throw reject('invalid Signature property: '+k);
-		this[k] = model[k];
-	}
-
-	for (var a = 1, aZ = arguments.length; a < aZ; a+=2) {
-		k = arguments[a];
-		if (!Signature.field[k]) throw reject('invalid Signature property: '+k);
-		this[k] = arguments[a + 1];
-	}
-
-	immute(this);
-};
-
-/**
-| List of keys allowed in a signature
-*/
-Signature.field = {
-	'path' : true,
-	'at1'  : true,
-	'at2'  : true,
-	'proc' : true,
-	'rank' : true,
-	'val'  : true
-};
-immute(Signature.field);
-
-/**
-| Sets a new value of a signature.
-| If the signature has the value preset, it checks equality.
-|
-| sign : signature to affix
-| test : function to test existence of key (is or isnon)
-| cm   : check message for failed checks
-| base : base message for failed checks
-| key  : key to affix at
-| val  : value to affix
-*/
-Signature.prototype.affix = function(test, cm, base, key, val) {
-	if (test(this[key])) {
-		check(matches(val, this[key]), cm, base,'.',key,' faulty preset', val, '!==', this[key]);
-		return this;
-	} else {
-		return new Signature(this, key, val);
-	}
-};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,--. .
@@ -183,18 +104,18 @@ var Change = function(a1, a2) {
 		throw new Error('#argument fail');
 	}
 
-	if (src.constructor === Signature) {
+	if (src.constructor === Sign) {
 		this.src = src;
 	} else {
 		if (src.path && !isPath(src.path)) src.path = new Path(src.path);
-		this.src = new Signature(src);
+		this.src = new Sign(src);
 	}
 
-	if (trg.constructor === Signature) {
+	if (trg.constructor === Sign) {
 		this.trg = trg;
 	} else {
 		if (trg.path && !isPath(trg.path)) trg.path = new Path(trg.path);
-		this.trg = new Signature(trg);
+		this.trg = new Sign(trg);
 	}
 
 	immute(this);
@@ -311,7 +232,7 @@ ChangeOps.set = function(tree, chg) {
 	if (trg.path.get(-1) === '$new') {
 		pivot = tree.getPath(trg.path, -1);
 		key = pivot.newUID();
-		trg = new Signature(trg, 'path', new Path(trg.path, -1, key));
+		trg = new Sign(trg, 'path', new Path(trg.path, -1, key));
 	}
 
 	// stores the old value to be able restore the history
@@ -459,7 +380,7 @@ ChangeOps.split = function(tree, chg) {
 		vKey = trg.path.get(-2);
 	} else {
 		vKey = pivot.newUID();
-		trg = new Signature(trg,
+		trg = new Sign(trg,
 			'path', new Path(src.path, -2, vKey)
 		);
 	}
@@ -551,7 +472,7 @@ var tfxSign = function(sign, chgX) {
 	log('tfx', 'tfxSign', sign, chgX);
 
 	if (arguments.length !== 2) { throw new Error('tfxSign argument fail (n)'); }
-	if (sign.constructor !== Signature) { throw new Error('tfxSign argument faili (1)'); }
+	if (sign.constructor !== Sign) { throw new Error('tfxSign argument faili (1)'); }
 
 	if (!is(sign.path) || sign.path.length === 0) {
 		log('tfx', 'out', sign);
@@ -565,7 +486,7 @@ var tfxSign = function(sign, chgX) {
 
 		switch(signX.constructor) {
 
-		case Signature :
+		case Sign :
 			signX = tfxSign1(signX, chg);
 			break;
 
@@ -577,7 +498,7 @@ var tfxSign = function(sign, chgX) {
 					continue;
 				}
 				switch (fs.constructor) {
-				case Signature :
+				case Sign :
 					signX[a] = fs;
 					break;
 				case Array :
@@ -675,7 +596,7 @@ TFXOps.split = function(sign, src, trg) {
 	if (!is(sign.at2)) {
 		log('tfx', 'split (simple)');
 		if (sign.at1 < src.at1) return sign;
-		return new Signature(sign, 'path', trg.path, 'at1', sign.at1 - src.at1);
+		return new Sign(sign, 'path', trg.path, 'at1', sign.at1 - src.at1);
 	}
 
 	// A more complicated signature is affected.
@@ -691,7 +612,7 @@ TFXOps.split = function(sign, src, trg) {
 	if (sign.at1 >= src.at1) {
 		log('tfx', 'split (span, case 2)');
 		// signature goes into splitted line instead
-		return new Signature(sign,
+		return new Sign(sign,
 			'path', trg.path,
 			'at1', sign.at1 - src.at1,
 			'at2', sign.at2 - src.at1
@@ -701,10 +622,10 @@ TFXOps.split = function(sign, src, trg) {
 	// the signature is splited into a part that stays and one that goes to next line.
 
 	return [
-		new Signature(sign,
+		new Sign(sign,
 			'at2', src.at1
 		),
-		new Signature(sign,
+		new Sign(sign,
 			'path', trg.path,
 			'at1', 0,
 			'at2', sign.at2 - src.at1
@@ -725,12 +646,12 @@ TFXOps.join = function(sign, src, trg) {
 
 	log('tfx', 'join', sign);
 	if (!is(sign.at2)) {
-		return new Signature(sign,
+		return new Sign(sign,
 			'path', trg.path,
 			'at1', sign.at1 + trg.at1
 		);
 	} else {
-		return new Signature(sign,
+		return new Sign(sign,
 			'path', trg.path,
 			'at1', sign.at1 + trg.at1,
 			'at2', sign.at2 + trg.at1
@@ -759,11 +680,11 @@ TFXOps.insert = function(sign, src, trg) {
 	var len = src.val.length;
 
 	return (is(sign.at2) ?
-		new Signature(sign,
+		new Sign(sign,
 			'at1', sign.at1 + len,
 			'at2', sign.at2 + len
 		) :
-		new Signature(sign,
+		new Sign(sign,
 			'at1', sign.at1 + len
 		)
 	);
@@ -791,11 +712,11 @@ TFXOps.remove = function(sign, src, trg) {
 
 		if (sign.at1 <= src.at2) {
 			log('tfx', 'remove (case s1)');
-			return new Signature(sign, 'at1', src.at1);
+			return new Sign(sign, 'at1', src.at1);
 		}
 
 		log('tfx', 'remove (case s2)');
-		return new Signature(sign, 'at1', sign.at1 - len);
+		return new Sign(sign, 'at1', sign.at1 - len);
 	}
 
 	// More complicated signature is affected.
@@ -816,11 +737,11 @@ TFXOps.remove = function(sign, src, trg) {
 	}
 	if (sign.at1 >= src.at2) {
 		log('tfx', 'remove (case 1)');
-		return new Signature(sign, 'at1', sign.at1 - len, 'at2', sign.at2 - len);
+		return new Sign(sign, 'at1', sign.at1 - len, 'at2', sign.at2 - len);
 	}
 	if (sign.at1 < src.at1 && sign.at2 > src.at2) {
 		log('tfx', 'remove (case 2)');
-		return new Signature(sign, 'at2', sign.at2 - len);
+		return new Sign(sign, 'at2', sign.at2 - len);
 	}
 	if (sign.at1 >= src.at1 && sign.at2 <= src.at2) {
 		log('tfx', 'remove (case 3)');
@@ -828,11 +749,11 @@ TFXOps.remove = function(sign, src, trg) {
 	}
 	if (sign.at1 < src.at1 && sign.at2 <= src.at2) {
 		log('tfx', 'remove (case 4)');
-		return new Signature(sign, 'at2', src.at1);
+		return new Sign(sign, 'at2', src.at1);
 	}
 	if (sign.at1 <= src.at2 && sign.at2 > src.at2) {
 		log('tfx', 'remove (case 5)');
-		return new Signature(sign, 'at2', src.at2);
+		return new Sign(sign, 'at2', src.at2);
 	}
 	// should never happen
 	throw new Error('remove no case fitted? '+sign.at1+'-'+sign.at2+' '+src.at1+'-'+src.at2);
@@ -851,7 +772,6 @@ TFXOps.rank = function(sign, src, trg) {
 
 MeshMashine = {
 	Change      : Change,
-	Signature   : Signature,
 
 	tfxChg      : tfxChg,
 	tfxChgX     : tfxChgX,

@@ -99,6 +99,7 @@ var Server = function() {
 	this.registerFile('/meshverse.js',     'js',   1, 'shared/meshverse.js'   );
 	this.registerFile('/path.js',          'js',   1, 'shared/path.js'        );
 	this.registerFile('/tree.js',          'js',   1, 'shared/tree.js'        );
+	this.registerFile('/sign.js',          'js',   1, 'shared/sign.js'        );
 	this.registerFile('/meshmashine.js',   'js',   1, 'shared/meshmashine.js' );
 	this.registerFile('/iface-async.js',   'js',   1, 'client/iface-async.js' );
 	this.registerFile('/iface-sync.js',    'js',   1, 'client/iface-sync.js'  );

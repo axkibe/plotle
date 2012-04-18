@@ -35,19 +35,13 @@ var VItem     = null;
 var Action;
 var Fabric;
 var Jools;
-var MeshMashine;
-var OvalMenu;
 var Path;
-var Scrollbar;
-var Tree;
 var VDoc;
 var VRelation;
 
-var settings;
 var shell;
 var system;
 var theme;
-var peer;
 
 /**
 | Capsule
@@ -61,7 +55,6 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 */
 var OvalSlice     = Fabric.OvalSlice;
 var R             = Math.round;
-var Signature     = MeshMashine.Signature;
 var abs           = Math.abs;
 var debug         = Jools.debug;
 var immute        = Jools.immute;

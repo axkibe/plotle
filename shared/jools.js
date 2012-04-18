@@ -106,6 +106,32 @@ var within = function(min, val, max) {
 };
 
 /**
+| buils a fail message
+*/
+var fail = function(args, aoffset) {
+	var a = Array.prototype.slice.call(args, aoffset, args.length);
+	for(var i = 2; i < arguments.length; i++) { a.push(arguments[i]); }
+	var b = a.slice();
+	b.unshift('fail');
+	log.apply(null, b);
+	throw reject(a.join(' '));
+}
+
+/**
+| Throws a reject if condition is not met.
+*/
+var check = function(condition) {
+	if (!condition) fail(arguments, 1);
+};
+
+/**
+| Throws a reject if v is not within limits
+*/
+var checkLimits = function(v, low, high) {
+	if (v < low || v > high) fail(arguments, 3, low, '<=', v, '<=', high);
+};
+
+/**
 | Returns a rejection error.
 */
 var reject = function(message) {
@@ -426,6 +452,8 @@ var immute = function(obj) {
 | Exports
 */
 Jools = {
+	check              : check,
+	checkLimits        : checkLimits,
 	configSwitchClient : configSwitchClient,
 	configSwitchServer : configSwitchServer,
 	copy               : copy,

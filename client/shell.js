@@ -38,6 +38,7 @@ var Jools;
 var MeshMashine;
 var Path;
 var Selection;
+var Sign;
 var Tree;
 var VSpace;
 
@@ -57,15 +58,11 @@ var Shell = null;
 */
 (function(){
 'use strict';
-if (typeof(window) === 'undefined') { throw new Error('shell.js needs a browser!'); }
+if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- .---. .           .          .
- \___  |-. ,-. ,-. |- ,-. . . |- ,-.
-     \ | | | | |   |  |   | | |  `-.
- `---' ' ' `-' '   `' `-' `-^ `' `-'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/**
+| Shortcuts.
+*/
 var R   = Math.round;
 var abs = Math.abs;
 var max = Math.max;
@@ -83,20 +80,8 @@ var subclass      = Jools.subclass;
 
 var isPath        = Path.isPath;
 
-var cos30         = Fabric.cos30;
-var half          = Fabric.half;
-var tan30         = Fabric.tan30;
-var OvalFlower    = Fabric.OvalFlower;
-var OvalSlice     = Fabric.OvalSlice;
-var Line          = Fabric.Line;
-var Margin        = Fabric.Margin;
 var Measure       = Fabric.Measure;
-var Point         = Fabric.Point;
-var Rect          = Fabric.Rect;
-var RoundRect     = Fabric.RoundRect;
-var opposite      = Fabric.opposite;
 
-var Signature     = MeshMashine.Signature;
 var tfxSign       = MeshMashine.tfxSign;
 
 // configures tree.
@@ -151,10 +136,10 @@ Shell.prototype.setCaret = function(visec, sign, element, retainx) {
 		break;
 	case 'space' :
 		switch(sign && sign.constructor) {
-		case null      : break;
-		case Signature : break;
-		case Object    : sign = new Signature(sign); break;
-		default        : throw new Error('setCaret visec=space, invalid sign');
+		case null   : break;
+		case Sign   : break;
+		case Object : sign = new Sign(sign); break;
+		default     : throw new Error('setCaret visec=space, invalid sign');
 		}
 		if (isnon(element)) { throw new Error('setCaret visec=space, invalid element'); }
 		break;

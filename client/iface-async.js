@@ -32,6 +32,7 @@
 var MeshMashine;
 var Meshverse;
 var Path;
+var Sign;
 var Tree;
 var Jools;
 
@@ -48,7 +49,6 @@ var IFaceASync;
 if (typeof (window) === 'undefined') throw new Error('Peer nees a browser!');
 
 var Change    = MeshMashine.Change;
-var Signature = MeshMashine.Signature;
 var debug     = Jools.debug;
 var log       = Jools.log;
 var is        = Jools.is;
@@ -242,7 +242,7 @@ IFaceASync.prototype._update = function() {
 | Alters the tree
 */
 IFaceASync.prototype.alter = function(src, trg) {
-    var chg = new Change(new Signature(src), new Signature(trg));
+    var chg = new Change(new Sign(src), new Sign(trg));
     var r = MeshMashine.changeTree(this.tree, chg);
     this.tree = r.tree;
 	var chgX  = r.chgX;

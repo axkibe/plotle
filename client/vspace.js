@@ -31,7 +31,6 @@
 var Action;
 var Fabric;
 var Jools;
-var MeshMashine;
 var OvalMenu;
 var Path;
 
@@ -72,7 +71,6 @@ var half      = Fabric.half;
 var Line      = Fabric.Line;
 var Point     = Fabric.Point;
 var Rect      = Fabric.Rect;
-var Signature = MeshMashine.Signature;
 
 /**
 | Constructor

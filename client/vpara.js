@@ -35,7 +35,7 @@ var VPara     = null;
 var Caret;
 var Fabric;
 var Jools;
-var MeshMashine;
+var Sign;
 var Path;
 
 var dbgNoCache;
@@ -57,7 +57,6 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 var Measure       = Fabric.Measure;
 var Point         = Fabric.Point;
 var R             = Math.round;
-var Signature     = MeshMashine.Signature;
 var debug         = Jools.debug;
 var fixate        = Jools.fixate;
 var immute        = Jools.immute;
@@ -265,8 +264,8 @@ VPara.prototype.specialKey = function(keycode) {
 			var v0 = vdoc.vAtRank(0);
 			var v1 = vdoc.vAtRank(vdoc.twig.length - 1);
 
-			select.sign1 = new Signature({ path: v0.textPath(), at1: 0 });
-			select.sign2 = new Signature({ path: v1.textPath(), at1: v1.twig.text.length });
+			select.sign1 = new Sign({ path: v0.textPath(), at1: 0 });
+			select.sign2 = new Sign({ path: v1.textPath(), at1: v1.twig.text.length });
 			select.active = true;
 			shell.setCaret('space', select.sign2);
 			system.setInput(select.innerText());
