@@ -12,12 +12,13 @@ authors: [Christopher Pitt, Enrique Erne]
 * made browser/node shared friendly
 * changed it to not alter String.prototype
 * cleaned from jshint warnings
+* restructured code
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
 | Exports
 */
-var sha1 = null;
+var sha1hex = null;
 
 /**
 | Capsule
@@ -25,14 +26,14 @@ var sha1 = null;
 (function(){
 "use strict";
 
-var toUTF8 = function(string) {
-	var a, b,
-		result = '',
-		code = String.fromCharCode;
+var toUTF8 = function(str) {
+	var a, b;
+	var result = '';
+	var code = String.fromCharCode;
 
-	string = string.replace(/\r\n/g,"\n");
+	str = str.replace(/\r\n/g,"\n");
 
-	for (a = 0; (b = string.charCodeAt(a)); a++){
+	for (a = 0; (b = str.charCodeAt(a)); a++){
 		if (b < 128){
 			result += code(b);
 		} else if ((b > 127) && (b < 2048)){
@@ -48,86 +49,71 @@ var toUTF8 = function(string) {
 	return result;
 };
 
-var transforms = {
-	'rotateLeft': function(a, b){
-		return (a << b) | (a >>> (32 - b));
-	},
-
-	'hex': function(a){
-		var b, c, result = '';
-
-		for (b = 7; b >= 0; b--){
-			c = (a >>> (b * 4)) & 0x0f;
-			result += c.toString(16);
-		}
-
-		return result;
-	}
+var rotateLeft = function(a, b) {
+	return (a << b) | (a >>> (32 - b));
 };
 
-sha1 = function(string) {
-	var a, b, c,
-		h1 = 0x67452301,
-		h2 = 0xEFCDAB89,
-		h3 = 0x98BADCFE,
-		h4 = 0x10325476,
-		h5 = 0xC3D2E1F0,
-		t1, t2, t3, t4, t5;
+var tohex = function(a){
+	var r = '';
+	for (var b = 7; b >= 0; b--) {
+		r += ((a >>> (b * 4)) & 0x0f).toString(16);
+	}
+	return r;
+};
 
-	string = toUTF8(string);
+sha1hex = function(str) {
+	var a, b;
+	var h1 = 0x67452301;
+	var h2 = 0xEFCDAB89;
+	var h3 = 0x98BADCFE;
+	var h4 = 0x10325476;
+	var h5 = 0xC3D2E1F0;
+	var t1, t2, t3, t4, t5;
 
-	var length = string.length,
-		words = [],
-		buffer = new Array(80),
+	str = toUTF8(str);
 
-		code = function(a){
-			return string.charCodeAt(a);
-		},
+	var len = str.length;
+	var words = [];
+	var buffer = new Array(80);
 
-		assign = function(c){
-			t5 = t4;
-			t4 = t3;
-			t3 = transforms.rotateLeft(t2, 30);
-			t2 = t1;
-			t1 = c;
-		};
+	var code = function(a) { return str.charCodeAt(a); };
 
-	for (a = 0; a < length - 3; a += 4){
-		b = code(a) << 24 | code(a + 1) << 16 | code(a + 2) << 8 | code(a + 3);
-		words.push(b);
+	var	assign = function(c){
+		var b5 = t5;
+		t5 = t4;
+		t4 = t3;
+		t3 = rotateLeft(t2, 30);
+		t2 = t1;
+		t1 = (rotateLeft(t1, 5) + b5 + buffer[a] + c) & 0x0ffffffff;
+	};
+
+	for (a = 0; a < len - 3; a += 4){
+		words.push(code(a) << 24 | code(a + 1) << 16 | code(a + 2) << 8 | code(a + 3));
 	}
 
-	switch (length % 4){
-		case 0:
-			a = 0x080000000;
-			break;
-		case 1:
-			a = code(length - 1) << 24 | 0x0800000;
-			break;
-		case 2:
-			a = code(length - 2) << 24 | code(length - 1) << 16 | 0x08000;
-			break;
-		case 3:
-			a = code(length - 3) << 24 | code(length - 2) << 16 | code(length - 1) << 8 | 0x80;
-			break;
+	switch (len % 4){
+		case 0: a = 0x080000000; break;
+		case 1: a = code(len - 1) << 24 | 0x0800000; break;
+		case 2: a = code(len - 2) << 24 | code(len - 1) << 16 | 0x08000; break;
+		case 3: a = code(len - 3) << 24 | code(len - 2) << 16 | code(len - 1) << 8 | 0x80; break;
 	}
 
 	words.push(a);
 
-	while ((words.length % 16) != 14){
+	while ((words.length % 16) != 14) {
 		words.push(0);
 	}
 
-	words.push(length >>> 29);
-	words.push((length << 3) & 0x0ffffffff);
+	words.push(len >>> 29);
+	words.push((len << 3) & 0x0ffffffff);
 
-	for (c = 0; c < words.length; c += 16){
-		for (a = 0; a < 16; a++){
-			buffer[a] = words[c + a];
+	for (b = 0; b < words.length; b += 16) {
+		for (a = 0; a < 16; a++) {
+			buffer[a] = words[b + a];
 		}
 
-		for (a = 16; a <= 79; a++){
-			buffer[a] = transforms.rotateLeft(
+		for (a = 16; a <= 79; a++) {
+			buffer[a] = rotateLeft(
 				buffer[a - 3] ^ buffer[a - 8] ^ buffer[a - 14] ^ buffer[a - 16], 1);
 		}
 
@@ -137,44 +123,11 @@ sha1 = function(string) {
 		t4 = h4;
 		t5 = h5;
 
-		for (a = 0; a <= 19; a++){
-			assign((
-				transforms.rotateLeft(t1, 5) +
-				((t2 & t3) | (~t2 & t4)) +
-				t5 +
-				buffer[a] +
-				0x5A827999
-			) & 0x0ffffffff);
-		}
-
-		for (a = 20; a <= 39; a++){
-			assign((
-				transforms.rotateLeft(t1, 5) +
-				(t2 ^ t3 ^ t4) +
-				t5 +
-				buffer[a] +
-				0x6ED9EBA1
-			) & 0x0ffffffff);
-		}
-
-		for (a = 40; a <= 59; a++){
-			assign((
-				transforms.rotateLeft(t1, 5) +
-				((t2 & t3) | (t2 & t4) | (t3 & t4)) +
-				t5 +
-				buffer[a] +
-				0x8F1BBCDC
-			) & 0x0ffffffff);
-		}
-
-		for (a = 60; a <= 79; a++){
-			assign((transforms.rotateLeft(t1, 5) +
-				(t2 ^ t3 ^ t4) +
-				t5 +
-				buffer[a] +
-				0xCA62C1D6
-			) & 0x0ffffffff);
-		}
+		a = 0;
+		for (; a < 20; a++) { assign(((t2 & t3) | (~t2 & t4))            + 0x5A827999); }
+		for (; a < 40; a++) { assign((t2 ^ t3 ^ t4)                      + 0x6ED9EBA1); }
+		for (; a < 60; a++) { assign(((t2 & t3) | (t2 & t4) | (t3 & t4)) + 0x8F1BBCDC); }
+		for (; a < 80; a++) { assign( (t2 ^ t3 ^ t4)                     + 0xCA62C1D6); }
 
 		h1 = (h1 + t1) & 0x0ffffffff;
 		h2 = (h2 + t2) & 0x0ffffffff;
@@ -184,11 +137,11 @@ sha1 = function(string) {
 	}
 
 	return (
-		transforms.hex(h1) +
-		transforms.hex(h2) +
-		transforms.hex(h3) +
-		transforms.hex(h4) +
-		transforms.hex(h5)
+		tohex(h1) +
+		tohex(h2) +
+		tohex(h3) +
+		tohex(h4) +
+		tohex(h5)
 	).toLowerCase();
 }
 
@@ -197,7 +150,7 @@ sha1 = function(string) {
 */
 if (typeof(window) === 'undefined') {
 	module.exports = {
-		sha1hex : sha1
+		sha1hex : sha1hex
 	};
 }
 

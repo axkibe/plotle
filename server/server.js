@@ -50,10 +50,13 @@ var Meshverse   = require('../shared/meshverse');
 var Path        = require('../shared/path');
 var Tree        = require('../shared/tree');
 var config      = require('../config');
-var util        = require('util');
-var http        = require('http');
-var url         = require('url');
 var fs          = require('fs');
+var http        = require('http');
+var sha1        = require('../shared/sha1');
+var uglify      = config.uglify && require('uglify-js');
+var url         = require('url');
+var util        = require('util');
+var zlib        = require('zlib');
 
 /**
 | Shortcuts
@@ -86,10 +89,7 @@ var Server = function() {
 	this.cconfig = cconfig.join('');
 
 	// all other files
-	this.registerFile('/',                 'html', 0, 'client/meshcraft.html' );
 	this.registerFile('/favicon.ico',      'ico',  0, 'icons/hexicon.ico'     );
-	this.registerFile('/index.html',       'html', 0, 'client/meshcraft.html' );
-	this.registerFile('/meshcraft.html',   'html', 0, 'client/meshcraft.html' );
 	this.registerFile('/testpad.html',     'html', 0, 'client/testpad.html'   );
 	this.registerFile('/testpad.js',       'js',   0, 'client/testpad.js'     );
 
@@ -110,6 +110,7 @@ var Server = function() {
 	this.registerFile('/ccustom.js',       'js',   1, 'client/ccustom.js'     );
 	this.registerFile('/cinput.js',        'js',   1, 'client/cinput.js'      );
 	this.registerFile('/clabel.js',        'js',   1, 'client/clabel.js'      );
+	this.registerFile('/cmeth.js',         'js',   1, 'client/cmeth.js'       );
 	this.registerFile('/cockpit.js',       'js',   1, 'client/cockpit.js'     );
 	this.registerFile('/action.js',        'js',   1, 'client/action.js'      );
 	this.registerFile('/ovalmenu.js',      'js',   1, 'client/ovalmenu.js'    );
@@ -138,9 +139,31 @@ var Server = function() {
 	}
 	this.pack = this.pack.join('\n');
 
+	// uglify
+	if (config.uglify) {
+		var ast;
+		ast = uglify.parser.parse(this.pack);
+		ast = uglify.uglify.ast_mangle(ast, {toplevel: true});
+		ast = uglify.uglify.ast_lift_variables(ast);
+		ast = uglify.uglify.ast_squeeze(ast);
+		this.pack = uglify.uglify.gen_code(ast);
+	}
+
+
+	this.packsha1 = sha1.sha1hex(this.pack);
+	this.mepacksha1 = '/meshcraft-' + this.packsha1 + '.js';
+	log('start', 'pack:', this.mepacksha1);
+
 	// the devel file
 	this.devel = fs.readFileSync('client/devel.html') + '';
-	this.devel = this.devel.replace(/<!--PACK.*>/, devels.join('\n'));
+	this.devel = this.devel.replace(/<!--DEVELPACK.*>/, devels.join('\n'));
+
+	// the main html file
+	this.main = fs.readFileSync('client/meshcraft.html') + '';
+	this.main = this.main.replace(
+		/<!--COPACK.*>/,
+		'<script src="'+this.mepacksha1+'" type="text/javascript"></script>'
+	);
 
 	this.tree      = new Tree({ type : 'Nexus' }, Meshverse);
 	this.changes   = [];
@@ -157,11 +180,18 @@ var Server = function() {
 	if (asw.ok !== true) throw new Error('Cannot init Repository');
 
 	var self = this;
-	log('start', 'Starting server @ http://' + (config.ip || '*') + '/:' + config.port);
-	http.createServer(function(req, res) {
-		self.requestListener(req, res);
-	}).listen(config.port, config.ip, function() {
-		log('start', 'Server running');
+
+	zlib.gzip(this.pack, function(err, packgz) {
+		if (err) throw new Error('GZIP of pack failed');
+		self.packgz = packgz;
+		log('start', 'Compressed pack length is ', packgz.length);
+
+		log('start', 'Starting server @ http://' + (config.ip || '*') + '/:' + config.port);
+		http.createServer(function(req, res) {
+			self.requestListener(req, res);
+		}).listen(config.port, config.ip, function() {
+			log('start', 'Server running');
+		});
 	});
 };
 
@@ -358,10 +388,13 @@ Server.prototype.requestListener = function(req, res) {
 	log('web', req.connection.remoteAddress, red.href);
 
 	switch(red.pathname) {
+	case '/'               : return this.webMain   (req, red, res);
+	case '/index.html'     : return this.webMain   (req, red, res);
+	case '/meshcraft.html' : return this.webMain   (req, red, res);
 	case '/devel.html'     : return this.webDevel  (req, red, res);
 	case '/mm'             : return this.webAjax   (req, red, res);
 	case '/config.js'      : return this.webConfig (req, red, res);
-	case '/meshcraft.js'   : return this.webPack   (req, red, res);
+	case this.mepacksha1   : return this.webPack   (req, red, res);
 	}
 
 	var f = this.files[red.pathname];
@@ -462,8 +495,28 @@ Server.prototype.webConfig = function(req, red, res) {
 | Transmits the uglified js package.
 */
 Server.prototype.webPack = function(req, red, res) {
-	res.writeHead(200, {'Content-Type': 'application/json'});
-	res.end(this.pack);
+	var aenc = req.headers['accept-encoding'];
+
+	if (aenc && aenc.indexOf('gzip') >= 0) {
+		// deliver compressed
+		res.writeHead(200, {
+			'Content-Type'     : 'application/json',
+			'Content-Encoding' : 'gzip'
+		});
+		res.end(this.packgz);
+	} else {
+		// deliver uncompressed
+		res.writeHead(200, {'Content-Type': 'application/json'});
+		res.end(this.pack);
+	}
+};
+
+/**
+| Transmits the main html file.
+*/
+Server.prototype.webMain = function(req, red, res) {
+	res.writeHead(200, {'Content-Type': 'text/html'});
+	res.end(this.main);
 };
 
 /**
