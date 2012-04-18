@@ -386,10 +386,8 @@ Shell.prototype.input = function(text) {
 	switch (caret.visec) {
 	case null : break;
 	case 'cockpit' : this.cockpit.input(text); break;
-	case 'space'   :
-		// TODO move this into vspace
-		if (caret.sign) { this.vspace.vget(caret.sign.path, -1).input(text); }
-		break;
+	case 'space'   : this.vspace.input(text); break;
+	default : throw new Error('invalid visec for caret');
 	}
 	if (this.redraw) this._draw();
 };

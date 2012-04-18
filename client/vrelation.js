@@ -98,7 +98,7 @@ VRelation.create = function(vspace, vitem1, vitem2) {
 | Draws the relation on the fabric.
 */
 VRelation.prototype.draw = function(fabric) {
-	var vspace = shell.vget(this.path, -1);
+	var vspace = shell.vspace.vget(this.path, -1);
 	var vitem1 = vspace.vv[this.twig.item1key];
 	var vitem2 = vspace.vv[this.twig.item2key];
 	var zone = this.getZone();

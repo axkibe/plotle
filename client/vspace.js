@@ -475,6 +475,15 @@ VSpace.prototype.mousedown = function(p) {
 };
 
 /**
+| Text input
+*/
+VSpace.prototype.input = function(text) {
+	var caret = shell.caret;
+	if (!caret.sign) return;
+	this.vget(caret.sign.path, -1).input(text);
+}
+
+/**
 | Returns the visual node the path points to.
 */
 VSpace.prototype.vget = function(path, plen) {

@@ -122,6 +122,13 @@ CInput.prototype.draw = function(fabric, accent) {
 };
 
 /**
+| TODO
+*/
+CInput.prototype.input = function(text) {
+	debug('CINPUT', text);
+}
+
+/**
 | Mouse hover
 */
 CInput.prototype.mousehover = function(board, p) {

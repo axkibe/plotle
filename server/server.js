@@ -111,6 +111,7 @@ var Server = function() {
 	this.registerFile('/cinput.js',        'js',   1, 'client/cinput.js'      );
 	this.registerFile('/clabel.js',        'js',   1, 'client/clabel.js'      );
 	this.registerFile('/cmeth.js',         'js',   1, 'client/cmeth.js'       );
+	this.registerFile('/cboard.js',        'js',   1, 'client/cboard.js'      );
 	this.registerFile('/cockpit.js',       'js',   1, 'client/cockpit.js'     );
 	this.registerFile('/action.js',        'js',   1, 'client/action.js'      );
 	this.registerFile('/ovalmenu.js',      'js',   1, 'client/ovalmenu.js'    );
