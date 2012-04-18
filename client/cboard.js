@@ -210,6 +210,15 @@ CBoard.prototype.input = function(text) {
 }
 
 /**
+| Clears caches.
+*/
+CBoard.prototype.poke = function() {
+	this.$fabric = null;
+	shell.redraw = true;
+}
+
+
+/**
 | Sets the focused element.
 */
 CBoard.prototype.setFocus = function(cname) {

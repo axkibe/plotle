@@ -76,12 +76,13 @@ CInput = function(twig, board, inherit, name) {
 	var pse  = this.pse  = computePoint(twig.frame.pse, board.iframe);
 	var bezi = this.bezi = new BeziRect(Point.zero, pse.sub(pnw), 7, 3);
 
+	this.value   = 'test';
 	this.$fabric = null;
 	this.$accent = CAccent.NORMA;
 };
 
 /**
-| TODO
+| Paths the input field.
 */
 CInput.prototype.path = function(fabric, border, twist) {
 	fabric.beginPath(twist);
@@ -93,7 +94,8 @@ CInput.prototype.path = function(fabric, border, twist) {
 };
 
 /**
-| TODO
+| Returns the fabric for the input field.
+| TODO chaching;
 */
 CInput.prototype.getFabric = function(accent) {
 	var fabric = new Fabric(this.bezi.width, this.bezi.height);
@@ -109,23 +111,30 @@ CInput.prototype.getFabric = function(accent) {
 	var style  = Cockpit.styles[sname];
 	if (!isnon(style)) { throw new Error('Invalid style: ' + sname); }
 
-	fabric.paint(style, this.bezi, 'path');
+	fabric.fill(style.fill, this.bezi, 'path');
+	var fs = this.twig.fontStyle;
+	fabric.fontStyle(fs.font, fs.fill, fs.align, fs.base);
+	fabric.fillText(this.value, 8, 18);
+	fabric.edge(style.edge, this.bezi, 'path');
+
 	return fabric;
 };
 
 
 /**
-| TODO
+| Draws the input field.
 */
 CInput.prototype.draw = function(fabric, accent) {
 	fabric.drawImage(this.getFabric(accent), this.pnw);
 };
 
 /**
-| TODO
+| user input.
 */
 CInput.prototype.input = function(text) {
-	debug('CINPUT', text);
+	this.value += text;
+	this.board.poke();
+//	XXX
 }
 
 /**

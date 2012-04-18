@@ -86,7 +86,7 @@ CCustom = function(twig, board, inherit, name) {
 };
 
 /**
-| Paths the custom control
+| Paths the custom control.
 */
 CCustom.prototype.path = function(fabric, border, twist) {
 	this.curve.path(fabric, border, twist);
