@@ -113,7 +113,7 @@ CInput.prototype.getFabric = function(accent) {
 
 	fabric.fill(style.fill, this.bezi, 'path');
 	var fs = this.twig.fontStyle;
-	fabric.fontStyle(fs.font, fs.fill, fs.align, fs.base);
+	fabric.fontStyle(fs.style, fs.fill, fs.align, fs.base);
 	fabric.fillText(this.value, 8, 18);
 	fabric.edge(style.edge, this.bezi, 'path');
 

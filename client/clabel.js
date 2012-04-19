@@ -71,7 +71,7 @@ CLabel = function(twig, board, inherit, name) {
 */
 CLabel.prototype.draw = function(fabric) {
 	var fs = this.twig.fontStyle;
-	fabric.fontStyle(fs.font, fs.fill, fs.align, fs.base);
+	fabric.fontStyle(fs.style, fs.fill, fs.align, fs.base);
 	fabric.fillText(this.twig.text, this.pos);
 };
 

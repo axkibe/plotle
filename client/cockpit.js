@@ -156,17 +156,21 @@ Cockpit.prototype.setUser = function(user, loggedIn) {
 | Redraws the cockpit.
 */
 Cockpit.prototype.draw = function() {
-	var fabric    = this.fabric;
-	var cb = this.curBoard(fabric);
-	fabric.drawImage(cb.getFabric(), cb.pnw);
+	var cb = this.curBoard();
+	this.fabric.drawImage(cb.getFabric(), cb.pnw);
 };
 
 /**
 | Draws the caret.
 */
 Cockpit.prototype.drawCaret = function() {
-	debug('TODO DRAWCARET');
-}
+	var caret = shell.caret;
+	if (caret.sign.path.get(0) !== this.curBoardName) {
+		log('fail', 'Caret path(0) !== this.curBoardName');
+		return;
+	}
+	this.curBoard().drawCaret();
+};
 
 /**
 | Text input

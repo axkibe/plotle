@@ -102,85 +102,73 @@ var forgotBCYM       = forgotBCH * magic;
 /**
 | Shortcuts for fontstyles
 */
-var fontStyles = {
-	ca12  : {
-		type  : 'FontStyle',
-		font  : '12px ' + theme.defaultFont,
-		fill  : 'black',
-		align : 'center',
-		base  : 'alphabetic'
-	},
-	ca14  : {
-		type  : 'FontStyle',
-		font  : '14px ' + theme.defaultFont,
-		fill  : 'black',
-		align : 'center',
-		base  : 'alphabetic'
-	},
-	ca22b : {
-		type  : 'FontStyle',
-		font  : '22px bold ' + theme.defaultFont,
-		fill  : 'black',
-		align : 'center',
-		base  : 'alphabetic'
-	},
-	cm12  : {
-		type  : 'FontStyle',
-		font  : '12px ' + theme.defaultFont,
-		fill  : 'black',
-		align : 'center',
-		base  : 'middle'
-	},
-	cm14  : {
-		type  : 'FontStyle',
-		font  : '14px ' + theme.defaultFont,
-		fill  : 'black',
-		align : 'center',
-		base  : 'middle'
-	},
-	ca18  : {
-		type  : 'FontStyle',
-		font  : '18px ' + theme.defaultFont,
-		fill  : 'black',
-		align : 'center',
-		base  : 'alphabetic'
-	},
-	ca22  : {
-		type  : 'FontStyle',
-		font  : '22px ' + theme.defaultFont,
-		fill  : 'black',
-		align : 'center',
-		base  : 'alphabetic'
-	},
-	la12    : {
-		type  : 'FontStyle',
-		font  : '12px ' + theme.defaultFont,
-		fill  : 'black',
-		align : 'start',
-		base  : 'alphabetic'
-	},
-	la14r : {
-		type  : 'FontStyle',
-		font  : '14px ' + theme.defaultFont,
-		fill  : 'red',
-		align : 'left',
-		base  : 'alphabetic'
-	},
-	la16    : {
-		type  : 'FontStyle',
-		font  : '16px ' + theme.defaultFont,
-		fill  : 'black',
-		align : 'start',
-		base  : 'alphabetic'
-	},
-	ra16    : {
-		type  : 'FontStyle',
-		font  : '16px ' + theme.defaultFont,
-		fill  : 'black',
-		align : 'end',
-		base  : 'alphabetic'
-	}
-};
+var fontStyles;
+(function(){
+	var $styles = {
+		ca        : {
+			type  : 'FontStyle',
+			font  : theme.defaultFont,
+			fill  : 'black',
+			align : 'center',
+			base  : 'alphabetic',
+			$c    : {}
+		},
+		cab       : {
+			type  : 'FontStyle',
+			font  : 'bold ' + theme.defaultFont,
+			fill  : 'black',
+			align : 'center',
+			base  : 'alphabetic',
+			$c    : {}
+		},
+		cm        : {
+			type  : 'FontStyle',
+			font  :  theme.defaultFont,
+			fill  : 'black',
+			align : 'center',
+			base  : 'middle',
+			$c    : {}
+		},
+		la        : {
+			type  : 'FontStyle',
+			font  :  theme.defaultFont,
+			fill  : 'black',
+			align : 'start',
+			base  : 'alphabetic',
+			$c    : {}
+		},
+		lar       : {
+			type  : 'FontStyle',
+			font  :  theme.defaultFont,
+			fill  : 'red',
+			align : 'left',
+			base  : 'alphabetic',
+			$c    : {}
+		},
+		ra        : {
+			type  : 'FontStyle',
+			font  :  theme.defaultFont,
+			fill  : 'black',
+			align : 'end',
+			base  : 'alphabetic',
+			$c    : {}
+		}
+	};
+
+	fontStyles = function(size, code) {
+		var base = $styles[code];
+		if (!base) { throw new Error('Invalid font style'); }
+		if (base.$c[size]) { return base.$c[size]; }
+		var c = {};
+		for (var k in base) {
+			if (k === '$c') continue;
+			c[k] = base[k];
+		}
+		c.size = size;
+		c.style = size + 'px ' + c.font;
+		return base.$c[size] = c;
+	};
+})();
 
 Design = {};
 
@@ -228,35 +216,35 @@ Design.mainboard = {
 		'greet'       : {
 			type      : 'Label',
 			text      : 'Hello',
-			fontStyle : fontStyles.ca12,
+			fontStyle : fontStyles(12, 'ca'),
 			pos       : { type: 'Point', anchor: 'sw', x:  240, y: -34 }
 		},
 
 		'username'    : {
 			type      : 'Label',
 			text      : 'Visitor',
-			fontStyle : fontStyles.ca18,
+			fontStyle : fontStyles(18, 'ca'),
 			pos       : { type: 'Point', anchor: 'sw', x:  240, y: -11 }
 		},
 
 		'saycurrent'  : {
 			type      : 'Label',
 			text      : 'current space',
-			fontStyle : fontStyles.ca12,
+			fontStyle : fontStyles(12, 'ca'),
 			pos       : { type: 'Point', anchor:  's', x:    0, y: -39 }
 		},
 
 		'cspace'      : {
 			type      : 'Label',
 			text      : 'welcome',
-			fontStyle : fontStyles.ca22b,
+			fontStyle : fontStyles(22, 'cab'),
 			pos       : { type: 'Point', anchor:  's', x:    0, y: -15 }
 		},
 
 		'message'     : {
 			type      : 'Label',
 			text      : 'This is a message just for testing.',
-			fontStyle : fontStyles.la12,
+			fontStyle : fontStyles(12, 'la'),
 			pos       : { type: 'Point', anchor: 'se', x: -450, y: -20 }
 		},
 
@@ -272,7 +260,7 @@ Design.mainboard = {
 			caption : {
 				type      : 'Label',
 				text      : 'login',
-				fontStyle : fontStyles.ca14,
+				fontStyle : fontStyles(14, 'ca'),
 				pos       : { type: 'Point', anchor: 'sw', x:  135, y:  -9 }
 			},
 			curve     :  {
@@ -307,7 +295,7 @@ Design.mainboard = {
 			caption : {
 				type      : 'Label',
 				text      : 'register',
-				fontStyle : fontStyles.ca14,
+				fontStyle : fontStyles(14, 'ca'),
 				pos       : { type: 'Point', anchor: 'se', x:  -135, y:  -9 }
 			},
 			curve :  {
@@ -393,26 +381,26 @@ Design.loginboard = {
 		'loginL'      : {
 			type      : 'Label',
 			text      : 'Login',
-			fontStyle : fontStyles.ca22,
+			fontStyle : fontStyles(22, 'ca'),
 			pos       : { type: 'Point', anchor: 'sw', x: 160, y: -14 }
 		},
 		'userL' : {
 			type      : 'Label',
 			text      : 'username',
-			fontStyle : fontStyles.la16,
+			fontStyle : fontStyles(14, 'la'),
 			pos       : { type: 'Point', anchor: 's', x: -230, y:  -55 }
 		},
 		'passL'       : {
 			type      : 'Label',
 			text      : 'password',
-			fontStyle : fontStyles.la16,
+			fontStyle : fontStyles(16, 'la'),
 			pos       : { type: 'Point', anchor: 's', x: -230, y:  -20 }
 		},
 		'errL'        : {
 			type      : 'Label',
 			//text      : 'username/password not accepted',
 			text      : '',
-			fontStyle : fontStyles.la14r,
+			fontStyle : fontStyles(14, 'lar'),
 			pos       : { type: 'Point', anchor: 's', x: -135, y:  -81 }
 
 		},
@@ -422,7 +410,7 @@ Design.loginboard = {
 			focusStyle : 'inputfocus',
 			hoverStyle : 'input',
 			hovocStyle : 'inputfocus',
-			fontStyle  : fontStyles.la16,
+			fontStyle  : fontStyles(16, 'la'),
 			frame      : {
 				type   : 'Frame',
 				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -73 },
@@ -435,7 +423,7 @@ Design.loginboard = {
 			focusStyle : 'inputfocus',
 			hoverStyle : 'input',
 			hovocStyle : 'inputfocus',
-			fontStyle  : fontStyles.la16,
+			fontStyle  : fontStyles(16, 'la'),
 			frame      : {
 				type   : 'Frame',
 				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -39 },
@@ -454,7 +442,7 @@ Design.loginboard = {
 			caption       : {
 				type      : 'Label',
 				text      : 'login',
-				fontStyle : fontStyles.cm14,
+				fontStyle : fontStyles(14, 'cm'),
 				pos       : { type: 'Point', anchor: 'c', x:  0, y: 0 }
 			},
 			curve :  {
@@ -509,7 +497,7 @@ Design.loginboard = {
 			caption : {
 				type      : 'Label',
 				text      : 'cancel',
-				fontStyle : fontStyles.cm14,
+				fontStyle : fontStyles(14, 'cm'),
 				pos       : { type: 'Point', anchor: 'c', x:  0, y: 0 }
 			},
 			curve :  {
@@ -565,7 +553,7 @@ Design.loginboard = {
 			caption : {
 				type      : 'Label',
 				text      : 'forgot password?',
-				fontStyle : fontStyles.cm12,
+				fontStyle : fontStyles(12, 'cm'),
 				pos       : { type: 'Point', anchor: 'c', x:  0, y: 0 }
 			},
 			curve :  {
@@ -689,57 +677,57 @@ Design.regboard = {
 		'regL'      : {
 			type      : 'Label',
 			text      : 'Register',
-			fontStyle : fontStyles.ca22,
+			fontStyle : fontStyles(22, 'ca'),
 			pos       : { type: 'Point', anchor: 'se', x: -160, y: -14 }
 		},
 		'userL' : {
 			type      : 'Label',
 			text      : 'username',
-			fontStyle : fontStyles.ra16,
+			fontStyle : fontStyles(16, 'ra'),
 			pos       : { type: 'Point', anchor: 's', x: -155, y:  -220 }
 		},
 		'emailL'       : {
 			type      : 'Label',
 			text      : 'email',
-			fontStyle : fontStyles.ra16,
+			fontStyle : fontStyles(16, 'ra'),
 			pos       : { type: 'Point', anchor: 's', x: -155, y:  -185 }
 		},
 		'passL'       : {
 			type      : 'Label',
 			text      : 'password',
-			fontStyle : fontStyles.ra16,
+			fontStyle : fontStyles(16, 'ra'),
 			pos       : { type: 'Point', anchor: 's', x: -155, y:  -150 }
 		},
 		'pass2L'       : {
 			type      : 'Label',
 			text      : 'repeat password',
-			fontStyle : fontStyles.ra16,
+			fontStyle : fontStyles(16, 'ra'),
 			pos       : { type: 'Point', anchor: 's', x: -155, y:  -115 }
 		},
 		'invL'       : {
 			type      : 'Label',
 			text      : 'invitation code*',
-			fontStyle : fontStyles.ra16,
+			fontStyle : fontStyles(16, 'ra'),
 			pos       : { type: 'Point', anchor: 's', x: -155, y:   -80 }
 		},
 		'errL'        : {
 			type      : 'Label',
 			//text      : 'username/password not accepted',
 			text      : 'BLA',
-			fontStyle : fontStyles.la14r,
+			fontStyle : fontStyles(14, 'lar'),
 			pos       : { type: 'Point', anchor: 's', x: -135, y:  -260 }
 
 		},
 		'expL' : {
 			type      : 'Label',
 			text      : '*meshcraft.net is still testing & developing its scalebility',
-			fontStyle : fontStyles.la12,
+			fontStyle : fontStyles(12, 'la'),
 			pos       : { type: 'Point', anchor: 'sw', x: 220, y:   -35 }
 		},
 		'exp2L' : {
 			type      : 'Label',
 			text      : '  please email axkibe@gmail.com to request a code.',
-			fontStyle : fontStyles.la12,
+			fontStyle : fontStyles(12, 'la'),
 			pos       : { type: 'Point', anchor: 'sw', x: 220, y:   -15 }
 		},
 		'userI' : {
@@ -748,7 +736,7 @@ Design.regboard = {
 			focusStyle : 'inputfocus',
 			hoverStyle : 'input',
 			hovocStyle : 'inputfocus',
-			fontStyle  : fontStyles.la16,
+			fontStyle  : fontStyles(16, 'la'),
 			frame      : {
 				type   : 'Frame',
 				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -238 },
@@ -761,7 +749,7 @@ Design.regboard = {
 			focusStyle : 'inputfocus',
 			hoverStyle : 'input',
 			hovocStyle : 'inputfocus',
-			fontStyle  : fontStyles.la16,
+			fontStyle  : fontStyles(16, 'la'),
 			frame      : {
 				type   : 'Frame',
 				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -204 },
@@ -774,7 +762,7 @@ Design.regboard = {
 			focusStyle : 'inputfocus',
 			hoverStyle : 'input',
 			hovocStyle : 'inputfocus',
-			fontStyle  : fontStyles.la16,
+			fontStyle  : fontStyles(16, 'la'),
 			frame      : {
 				type   : 'Frame',
 				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -169 },
@@ -787,7 +775,7 @@ Design.regboard = {
 			focusStyle : 'inputfocus',
 			hoverStyle : 'input',
 			hovocStyle : 'inputfocus',
-			fontStyle  : fontStyles.la16,
+			fontStyle  : fontStyles(16, 'la'),
 			frame      : {
 				type   : 'Frame',
 				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -134 },
@@ -800,7 +788,7 @@ Design.regboard = {
 			focusStyle : 'inputfocus',
 			hoverStyle : 'input',
 			hovocStyle : 'inputfocus',
-			fontStyle  : fontStyles.la16,
+			fontStyle  : fontStyles(16, 'la'),
 			frame      : {
 				type   : 'Frame',
 				pnw    : { type: 'Point', anchor: 's', x: -135, y:   -99 },
@@ -819,7 +807,7 @@ Design.regboard = {
 			caption       : {
 				type      : 'Label',
 				text      : 'register',
-				fontStyle : fontStyles.cm14,
+				fontStyle : fontStyles(14, 'cm'),
 				pos       : { type: 'Point', anchor: 'c', x:  0, y: 0 }
 			},
 			curve :  {
@@ -874,7 +862,7 @@ Design.regboard = {
 			caption : {
 				type      : 'Label',
 				text      : 'cancel',
-				fontStyle : fontStyles.cm14,
+				fontStyle : fontStyles(14, 'cm'),
 				pos       : { type: 'Point', anchor: 'c', x:  0, y: 0 }
 			},
 			curve :  {

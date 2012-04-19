@@ -190,7 +190,7 @@ VSpace.prototype.draw = function() {
 */
 VSpace.prototype.drawCaret = function() {
 	this.vget(shell.caret.sign.path, -1).drawCaret();
-}
+};
 
 /**
 | Sets the focused item or blurs it if vitem is null

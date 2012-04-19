@@ -35,10 +35,11 @@ var CInput;
 var Cockpit;
 var Curve;
 var Design;
-var Jools;
-var Fabric;
-var Tree;
 var Deverse;
+var Fabric;
+var Jools;
+var Path;
+var Tree;
 var theme;
 var system;
 var shell;
@@ -92,9 +93,9 @@ CBoard = function(name, inherit, cockpit, screensize) {
 	this.cc = {};
 	var layout = tree.root.layout;
 	for(var a = 0, aZ = layout.length; a < aZ; a++) {
-		var name = layout.ranks[a];
-		var twig = layout.copse[name];
-		this.cc[name] = this.newCC(twig, inherit && inherit.cc[name], name);
+		var cname = layout.ranks[a];
+		var twig  = layout.copse[cname];
+		this.cc[cname] = this.newCC(twig, inherit && inherit.cc[cname], cname);
 	}
 };
 
@@ -140,6 +141,13 @@ CBoard.prototype.getFabric = function() {
 	}
 
 	return fabric;
+};
+
+/**
+| Draws the caret.
+*/
+CBoard.prototype.drawCaret = function() {
+	debug('TODO DRAWC');
 };
 
 /**

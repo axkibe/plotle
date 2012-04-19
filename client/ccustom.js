@@ -115,7 +115,7 @@ CCustom.prototype.getFabric = function(accent) {
 	fabric.paint(style, this, 'path');
 
 	var fs = this.twig.caption.fontStyle;
-	fabric.fontStyle(fs.font, fs.fill, fs.align, fs.base);
+	fabric.fontStyle(fs.style, fs.fill, fs.align, fs.base);
 	fabric.fillText(this.twig.caption.text, this.caption.pos);
 
 	if (dbgBoxes) {
