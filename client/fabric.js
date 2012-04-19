@@ -36,7 +36,8 @@ var Jools;
 /**
 | Exports
 */
-var Fabric = null;
+var Fabric  = null;
+var Measure = null;
 
 /**
 | Capsule
@@ -661,7 +662,7 @@ Fabric.prototype.within = function(shape, path, a1, a2, a3, a4, a5) {
    '   `-' `-' `-^ `-' `-^ '   `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-var Measure = {
+Measure = {
 	init : function() {
 		Measure._canvas = document.createElement('canvas');
 		Measure._cx = this._canvas.getContext('2d');

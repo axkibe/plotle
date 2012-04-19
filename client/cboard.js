@@ -147,7 +147,10 @@ CBoard.prototype.getFabric = function() {
 | Draws the caret.
 */
 CBoard.prototype.drawCaret = function() {
-	debug('TODO DRAWC');
+	var cname = shell.caret.sign.path.get(1);
+	var ce = this.cc[cname];
+	if (!ce) { throw new Error('Caret element does not exist!'); }
+	ce.drawCaret();
 };
 
 /**

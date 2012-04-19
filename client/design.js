@@ -387,14 +387,14 @@ Design.loginboard = {
 		'userL' : {
 			type      : 'Label',
 			text      : 'username',
-			fontStyle : fontStyles(14, 'la'),
-			pos       : { type: 'Point', anchor: 's', x: -230, y:  -55 }
+			fontStyle : fontStyles(16, 'la'),
+			pos       : { type: 'Point', anchor: 's', x: -230, y:  -56 }
 		},
 		'passL'       : {
 			type      : 'Label',
 			text      : 'password',
 			fontStyle : fontStyles(16, 'la'),
-			pos       : { type: 'Point', anchor: 's', x: -230, y:  -20 }
+			pos       : { type: 'Point', anchor: 's', x: -230, y:  -21 }
 		},
 		'errL'        : {
 			type      : 'Label',
@@ -410,11 +410,11 @@ Design.loginboard = {
 			focusStyle : 'inputfocus',
 			hoverStyle : 'input',
 			hovocStyle : 'inputfocus',
-			fontStyle  : fontStyles(16, 'la'),
+			fontStyle  : fontStyles(14, 'la'),
 			frame      : {
 				type   : 'Frame',
-				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -73 },
-				pse    : { type: 'Point', anchor: 's', x:   95, y:  -49 }
+				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -74 },
+				pse    : { type: 'Point', anchor: 's', x:   95, y:  -48 }
 			}
 		},
 		'passI' : {
@@ -423,11 +423,11 @@ Design.loginboard = {
 			focusStyle : 'inputfocus',
 			hoverStyle : 'input',
 			hovocStyle : 'inputfocus',
-			fontStyle  : fontStyles(16, 'la'),
+			fontStyle  : fontStyles(14, 'la'),
 			frame      : {
 				type   : 'Frame',
-				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -39 },
-				pse    : { type: 'Point', anchor: 's', x:   95, y:  -15 }
+				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -40 },
+				pse    : { type: 'Point', anchor: 's', x:   95, y:  -14 }
 			}
 		},
 		'loginBC'      : {
@@ -684,38 +684,38 @@ Design.regboard = {
 			type      : 'Label',
 			text      : 'username',
 			fontStyle : fontStyles(16, 'ra'),
-			pos       : { type: 'Point', anchor: 's', x: -155, y:  -220 }
+			pos       : { type: 'Point', anchor: 's', x: -155, y:  -221 }
 		},
 		'emailL'       : {
 			type      : 'Label',
 			text      : 'email',
 			fontStyle : fontStyles(16, 'ra'),
-			pos       : { type: 'Point', anchor: 's', x: -155, y:  -185 }
+			pos       : { type: 'Point', anchor: 's', x: -155, y:  -186 }
 		},
 		'passL'       : {
 			type      : 'Label',
 			text      : 'password',
 			fontStyle : fontStyles(16, 'ra'),
-			pos       : { type: 'Point', anchor: 's', x: -155, y:  -150 }
+			pos       : { type: 'Point', anchor: 's', x: -155, y:  -152 }
 		},
 		'pass2L'       : {
 			type      : 'Label',
 			text      : 'repeat password',
 			fontStyle : fontStyles(16, 'ra'),
-			pos       : { type: 'Point', anchor: 's', x: -155, y:  -115 }
+			pos       : { type: 'Point', anchor: 's', x: -155, y:  -117 }
 		},
 		'invL'       : {
 			type      : 'Label',
 			text      : 'invitation code*',
 			fontStyle : fontStyles(16, 'ra'),
-			pos       : { type: 'Point', anchor: 's', x: -155, y:   -80 }
+			pos       : { type: 'Point', anchor: 's', x: -155, y:   -82 }
 		},
 		'errL'        : {
 			type      : 'Label',
 			//text      : 'username/password not accepted',
 			text      : 'BLA',
 			fontStyle : fontStyles(14, 'lar'),
-			pos       : { type: 'Point', anchor: 's', x: -135, y:  -260 }
+			pos       : { type: 'Point', anchor: 's', x: -135, y:  -261 }
 
 		},
 		'expL' : {
@@ -736,11 +736,11 @@ Design.regboard = {
 			focusStyle : 'inputfocus',
 			hoverStyle : 'input',
 			hovocStyle : 'inputfocus',
-			fontStyle  : fontStyles(16, 'la'),
+			fontStyle  : fontStyles(14, 'la'),
 			frame      : {
 				type   : 'Frame',
-				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -238 },
-				pse    : { type: 'Point', anchor: 's', x:   95, y:  -214 }
+				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -239 },
+				pse    : { type: 'Point', anchor: 's', x:   95, y:  -213 }
 			}
 		},
 		'emailI' : {
@@ -749,11 +749,11 @@ Design.regboard = {
 			focusStyle : 'inputfocus',
 			hoverStyle : 'input',
 			hovocStyle : 'inputfocus',
-			fontStyle  : fontStyles(16, 'la'),
+			fontStyle  : fontStyles(14, 'la'),
 			frame      : {
 				type   : 'Frame',
-				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -204 },
-				pse    : { type: 'Point', anchor: 's', x:   95, y:  -180 }
+				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -205 },
+				pse    : { type: 'Point', anchor: 's', x:   95, y:  -179 }
 			}
 		},
 		'passI' : {
@@ -762,11 +762,11 @@ Design.regboard = {
 			focusStyle : 'inputfocus',
 			hoverStyle : 'input',
 			hovocStyle : 'inputfocus',
-			fontStyle  : fontStyles(16, 'la'),
+			fontStyle  : fontStyles(14, 'la'),
 			frame      : {
 				type   : 'Frame',
-				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -169 },
-				pse    : { type: 'Point', anchor: 's', x:   95, y:  -145 }
+				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -172 },
+				pse    : { type: 'Point', anchor: 's', x:   95, y:  -146 }
 			}
 		},
 		'pass2I' : {
@@ -775,11 +775,11 @@ Design.regboard = {
 			focusStyle : 'inputfocus',
 			hoverStyle : 'input',
 			hovocStyle : 'inputfocus',
-			fontStyle  : fontStyles(16, 'la'),
+			fontStyle  : fontStyles(14, 'la'),
 			frame      : {
 				type   : 'Frame',
-				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -134 },
-				pse    : { type: 'Point', anchor: 's', x:   95, y:  -110 }
+				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -135 },
+				pse    : { type: 'Point', anchor: 's', x:   95, y:  -109 }
 			}
 		},
 		'codeI' : {
@@ -788,11 +788,11 @@ Design.regboard = {
 			focusStyle : 'inputfocus',
 			hoverStyle : 'input',
 			hovocStyle : 'inputfocus',
-			fontStyle  : fontStyles(16, 'la'),
+			fontStyle  : fontStyles(14, 'la'),
 			frame      : {
 				type   : 'Frame',
-				pnw    : { type: 'Point', anchor: 's', x: -135, y:   -99 },
-				pse    : { type: 'Point', anchor: 's', x:   95, y:   -75 }
+				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -100 },
+				pse    : { type: 'Point', anchor: 's', x:   95, y:   -74 }
 			}
 		},
 		'regBC'      : {
