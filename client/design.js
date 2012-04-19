@@ -68,6 +68,22 @@ var loginBCXM       = loginBCW * magic / 2;
 var loginBCYM       = loginBCH * magic / 2;
 
 /**
+| Register control on Regboard width and height
+*/
+var regBCW        = 110;
+var regBCH        = 110;
+var regBCXM       = regBCW * magic / 2;
+var regBCYM       = regBCH * magic / 2;
+
+/**
+| Cancel control on Regboard width and height
+*/
+var canrBCW        = 70;
+var canrBCH        = 70;
+var canrBCXM       = canrBCW * magic / 2;
+var canrBCYM       = canrBCH * magic / 2;
+
+/**
 | Cancel control on Loginboard width and height
 */
 var cancelBCW        = 54;
@@ -155,6 +171,13 @@ var fontStyles = {
 		font  : '16px ' + theme.defaultFont,
 		fill  : 'black',
 		align : 'start',
+		base  : 'alphabetic'
+	},
+	ra16    : {
+		type  : 'FontStyle',
+		font  : '16px ' + theme.defaultFont,
+		fill  : 'black',
+		align : 'end',
 		base  : 'alphabetic'
 	}
 };
@@ -615,5 +638,307 @@ Design.loginboard = {
 		]
     }
 };
+
+/**
+| Register Board
+*/
+Design.regboard = {
+	type   : 'Design',
+
+	frame : {
+		type  : 'Frame',
+		pnw   : { type   : 'Point', anchor : 's', x : -512, y : -300 },
+		pse   : { type   : 'Point', anchor : 's', x :  512, y :    0 }
+	},
+
+	curve : {
+		type  : 'Curve',
+		copse : {
+		'1' : {
+			type : 'MoveTo',
+			to   : {
+				type   : 'Point',
+				anchor : 'sw',
+				x      : 0,
+				y      : 0
+			},
+			bx   : 1,
+			by   : 0
+		},
+		'2' : {
+			type :  'BeziTo',
+			to   :  { type: 'Point', anchor:  'n', x: 0, y: 0 },
+			c1x  :  mainboardC1X * 0.8, c1y  :  mainboardC1Y * 4,
+			c2x  : -mainboardC2X * 0.8, c2y  :  mainboardC2Y * 4,
+			bx:  0, by :  1
+		},
+		'3' : {
+			type :  'BeziTo',
+			to   :  { type: 'Point', anchor: 'se', x: 0, y: 0 },
+			c1x  :  mainboardC2X * 0.8, c1y  : -mainboardC2Y * 4,
+			c2x  : -mainboardC1X * 0.8, c2y  :  mainboardC1Y * 4,
+			bx   : -1, by :  0
+		}},
+
+		ranks : [ '1', '2', '3' ]
+	},
+
+	layout :  {
+		type  : 'Layout',
+		copse : {
+		'regL'      : {
+			type      : 'Label',
+			text      : 'Register',
+			fontStyle : fontStyles.ca22,
+			pos       : { type: 'Point', anchor: 'se', x: -160, y: -14 }
+		},
+		'userL' : {
+			type      : 'Label',
+			text      : 'username',
+			fontStyle : fontStyles.ra16,
+			pos       : { type: 'Point', anchor: 's', x: -155, y:  -220 }
+		},
+		'emailL'       : {
+			type      : 'Label',
+			text      : 'email',
+			fontStyle : fontStyles.ra16,
+			pos       : { type: 'Point', anchor: 's', x: -155, y:  -185 }
+		},
+		'passL'       : {
+			type      : 'Label',
+			text      : 'password',
+			fontStyle : fontStyles.ra16,
+			pos       : { type: 'Point', anchor: 's', x: -155, y:  -150 }
+		},
+		'pass2L'       : {
+			type      : 'Label',
+			text      : 'repeat password',
+			fontStyle : fontStyles.ra16,
+			pos       : { type: 'Point', anchor: 's', x: -155, y:  -115 }
+		},
+		'invL'       : {
+			type      : 'Label',
+			text      : 'invitation code*',
+			fontStyle : fontStyles.ra16,
+			pos       : { type: 'Point', anchor: 's', x: -155, y:   -80 }
+		},
+		'errL'        : {
+			type      : 'Label',
+			//text      : 'username/password not accepted',
+			text      : 'BLA',
+			fontStyle : fontStyles.la14r,
+			pos       : { type: 'Point', anchor: 's', x: -135, y:  -260 }
+
+		},
+		'expL' : {
+			type      : 'Label',
+			text      : '*meshcraft.net is still testing & developing its scalebility',
+			fontStyle : fontStyles.la12,
+			pos       : { type: 'Point', anchor: 'sw', x: 220, y:   -35 }
+		},
+		'exp2L' : {
+			type      : 'Label',
+			text      : '  please email axkibe@gmail.com to request a code.',
+			fontStyle : fontStyles.la12,
+			pos       : { type: 'Point', anchor: 'sw', x: 220, y:   -15 }
+		},
+		'userI' : {
+			type       : 'Input',
+			normaStyle : 'input',
+			focusStyle : 'inputfocus',
+			hoverStyle : 'input',
+			hovocStyle : 'inputfocus',
+			fontStyle  : fontStyles.la16,
+			frame      : {
+				type   : 'Frame',
+				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -238 },
+				pse    : { type: 'Point', anchor: 's', x:   95, y:  -214 }
+			}
+		},
+		'emailI' : {
+			type       : 'Input',
+			normaStyle : 'input',
+			focusStyle : 'inputfocus',
+			hoverStyle : 'input',
+			hovocStyle : 'inputfocus',
+			fontStyle  : fontStyles.la16,
+			frame      : {
+				type   : 'Frame',
+				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -204 },
+				pse    : { type: 'Point', anchor: 's', x:   95, y:  -180 }
+			}
+		},
+		'passI' : {
+			type       : 'Input',
+			normaStyle : 'input',
+			focusStyle : 'inputfocus',
+			hoverStyle : 'input',
+			hovocStyle : 'inputfocus',
+			fontStyle  : fontStyles.la16,
+			frame      : {
+				type   : 'Frame',
+				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -169 },
+				pse    : { type: 'Point', anchor: 's', x:   95, y:  -145 }
+			}
+		},
+		'pass2I' : {
+			type       : 'Input',
+			normaStyle : 'input',
+			focusStyle : 'inputfocus',
+			hoverStyle : 'input',
+			hovocStyle : 'inputfocus',
+			fontStyle  : fontStyles.la16,
+			frame      : {
+				type   : 'Frame',
+				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -134 },
+				pse    : { type: 'Point', anchor: 's', x:   95, y:  -110 }
+			}
+		},
+		'codeI' : {
+			type       : 'Input',
+			normaStyle : 'input',
+			focusStyle : 'inputfocus',
+			hoverStyle : 'input',
+			hovocStyle : 'inputfocus',
+			fontStyle  : fontStyles.la16,
+			frame      : {
+				type   : 'Frame',
+				pnw    : { type: 'Point', anchor: 's', x: -135, y:   -99 },
+				pse    : { type: 'Point', anchor: 's', x:   95, y:   -75 }
+			}
+		},
+		'regBC'      : {
+			type       : 'Custom',
+			style      : 'button',
+			hoverStyle : 'highlight',
+			frame      : {
+				type   : 'Frame',
+				pnw    : { type: 'Point', anchor: 'se', x: -380,          y: -80 - regBCH   },
+				pse    : { type: 'Point', anchor: 'se', x: -380 + regBCW, y: -80            }
+			},
+			caption       : {
+				type      : 'Label',
+				text      : 'register',
+				fontStyle : fontStyles.cm14,
+				pos       : { type: 'Point', anchor: 'c', x:  0, y: 0 }
+			},
+			curve :  {
+				type  : 'Curve',
+				copse : {
+				'1' : {
+					type : 'MoveTo',
+					to   : { type: 'Point', anchor:  'n', x:  0, y:  1 },
+					bx   :  0, by : 1
+				},
+				'2' : {
+					type : 'BeziTo',
+					to   :  { type: 'Point', anchor: 'e', x: -1, y:  0 },
+					c1x  :  regBCXM, c1y :        0,
+					c2x  :        0, c2y : -regBCYM,
+					bx   : -1, by:  0
+				},
+				'3' : {
+					type : 'BeziTo',
+					to   :  { type: 'Point', anchor: 's', x:  0, y: -1 },
+					c1x  :        0, c1y :  regBCYM,
+					c2x  :  regBCXM, c2y :        0,
+					bx   :  0, by: -1
+				},
+				'4' : {
+					type : 'BeziTo',
+					to   :  { type: 'Point', anchor: 'w', x:  1, y:  0 },
+					c1x  : -regBCXM, c1y :        0,
+					c2x  :        0, c2y :  regBCYM,
+					bx   :  1, by:  0
+				},
+				'5' : {
+					type : 'BeziTo',
+					to   :  { type: 'Point', anchor: 'n', x:  0, y:  1 },
+					c1x  :        0, c1y : -regBCYM,
+					c2x  : -regBCXM, c2y :        0,
+					bx   :  0, by:  1
+				}},
+
+				ranks : [ '1', '2', '3', '4', '5' ]
+			}
+		},
+		'cancelBC'     : {
+			type       : 'Custom',
+			style      : 'button',
+			hoverStyle : 'highlight',
+			frame : {
+				type  : 'Frame',
+				pnw   : { type: 'Point', anchor: 'se', x: -250,           y: -80 - canrBCH },
+				pse   : { type: 'Point', anchor: 'se', x: -250 + canrBCW, y: -80 }
+			},
+			caption : {
+				type      : 'Label',
+				text      : 'cancel',
+				fontStyle : fontStyles.cm14,
+				pos       : { type: 'Point', anchor: 'c', x:  0, y: 0 }
+			},
+			curve :  {
+				type  : 'Curve',
+				copse : {
+				'1' : {
+					type : 'MoveTo',
+					to   : { type: 'Point', anchor:  'n', x:  0, y:  1 },
+					bx   :  0, by : 1
+				},
+				'2' : {
+					type : 'BeziTo',
+					to   :  { type: 'Point', anchor: 'e', x: -1, y:  0 },
+					c1x  :  canrBCXM, c1y :         0,
+					c2x  :         0, c2y : -canrBCYM,
+					bx   : -1, by:  0
+				},
+				'3' : {
+					type : 'BeziTo',
+					to   :  { type: 'Point', anchor: 's', x:  0, y: -1 },
+					c1x  :         0, c1y :  canrBCYM,
+					c2x  :  canrBCXM, c2y :         0,
+					bx   :  0, by: -1
+				},
+				'4' : {
+					type : 'BeziTo',
+					to   :  { type: 'Point', anchor: 'w', x:  1, y:  0 },
+					c1x  : -canrBCXM, c1y :        0,
+					c2x  :         0, c2y : canrBCYM,
+					bx   :  1, by:  0
+				},
+				'5' : {
+					type : 'BeziTo',
+					to   :  { type: 'Point', anchor: 'n', x:  0, y:  1 },
+					c1x  :         0, c1y : -canrBCYM,
+					c2x  : -canrBCXM, c2y :         0,
+					bx   :  0, by:  1
+				}},
+
+				ranks : [ '1', '2', '3', '4', '5' ]
+			}
+		}},
+
+		ranks : [
+			'userI',
+			'emailI',
+			'passI',
+			'pass2I',
+			'codeI',
+			'regBC',
+			'cancelBC',
+			//'forgotBC',
+			'regL',
+			'userL',
+			'emailL',
+			'passL',
+			'pass2L',
+			'invL',
+			'expL',
+			'exp2L',
+			'errL'
+		]
+    }
+};
+
 
 })();

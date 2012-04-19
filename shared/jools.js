@@ -115,7 +115,7 @@ var fail = function(args, aoffset) {
 	b.unshift('fail');
 	log.apply(null, b);
 	throw reject(a.join(' '));
-}
+};
 
 /**
 | Throws a reject if condition is not met.

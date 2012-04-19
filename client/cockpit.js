@@ -74,10 +74,11 @@ var Point         = Fabric.Point;
 Cockpit = function() {
 	this.fabric       = system.fabric;
 	//this.curBoardName = 'mainboard';
-	this.curBoardName = 'loginboard';
+	this.curBoardName = 'regboard';
 	this.boards = {
 		mainboard  : null,
-		loginboard : null
+		loginboard : null,
+		regboard   : null
 	};
 	this._user       = null;
 	this._curSpace   = null;
@@ -118,7 +119,7 @@ Cockpit.prototype.curBoard = function() {
 		return cboard;
 	} else {
 		return this.boards[this.curBoardName] = new CBoard(
-			Design[this.curBoardName],
+			this.curBoardName,
 			cboard,
 			this,
 			new Point(fabric.width, fabric.height));
@@ -161,11 +162,18 @@ Cockpit.prototype.draw = function() {
 };
 
 /**
+| Draws the caret.
+*/
+Cockpit.prototype.drawCaret = function() {
+	debug('TODO DRAWCARET');
+}
+
+/**
 | Text input
 */
 Cockpit.prototype.input = function(text) {
 	this.curBoard().input(text);
-}
+};
 
 /**
 | Mouse hover.

@@ -185,6 +185,12 @@ VSpace.prototype.draw = function() {
 	}
 };
 
+/**
+| Draws the caret.
+*/
+VSpace.prototype.drawCaret = function() {
+	this.vget(shell.caret.sign.path, -1).drawCaret();
+}
 
 /**
 | Sets the focused item or blurs it if vitem is null
@@ -479,7 +485,7 @@ VSpace.prototype.input = function(text) {
 	var caret = shell.caret;
 	if (!caret.sign) return;
 	this.vget(caret.sign.path, -1).input(text);
-}
+};
 
 /**
 | Returns the visual node the path points to.

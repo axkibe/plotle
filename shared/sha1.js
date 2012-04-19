@@ -117,17 +117,13 @@ sha1hex = function(str) {
 				buffer[a - 3] ^ buffer[a - 8] ^ buffer[a - 14] ^ buffer[a - 16], 1);
 		}
 
-		t1 = h1;
-		t2 = h2;
-		t3 = h3;
-		t4 = h4;
-		t5 = h5;
+		t1 = h1; t2 = h2; t3 = h3; t4 = h4; t5 = h5;
 
 		a = 0;
 		for (; a < 20; a++) { assign(((t2 & t3) | (~t2 & t4))            + 0x5A827999); }
 		for (; a < 40; a++) { assign((t2 ^ t3 ^ t4)                      + 0x6ED9EBA1); }
 		for (; a < 60; a++) { assign(((t2 & t3) | (t2 & t4) | (t3 & t4)) + 0x8F1BBCDC); }
-		for (; a < 80; a++) { assign( (t2 ^ t3 ^ t4)                     + 0xCA62C1D6); }
+		for (; a < 80; a++) { assign((t2 ^ t3 ^ t4)                      + 0xCA62C1D6); }
 
 		h1 = (h1 + t1) & 0x0ffffffff;
 		h2 = (h2 + t2) & 0x0ffffffff;
@@ -143,7 +139,7 @@ sha1hex = function(str) {
 		tohex(h4) +
 		tohex(h5)
 	).toLowerCase();
-}
+};
 
 /**
 | Node exports

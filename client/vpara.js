@@ -394,7 +394,6 @@ VPara.prototype.specialKey = function(keycode) {
 					path : this.textPath(),
 					at1  : at1
 				},
-				null,
 				x
 			);
 		} else {
@@ -410,7 +409,6 @@ VPara.prototype.specialKey = function(keycode) {
 						path : ve.textPath(),
 						at1  : at1
 					},
-					null,
 					x
 				);
 			}
@@ -456,7 +454,6 @@ VPara.prototype.specialKey = function(keycode) {
 					path: this.textPath(),
 					at1: at1
 				},
-				null,
 				x
 			);
 		} else {

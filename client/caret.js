@@ -77,17 +77,16 @@ var log           = Jools.log;
 /**
 | Constructor.
 */
-Caret = function(visec, sign, element, retainx, shown) {
+Caret = function(visec, sign, retainx, shown) {
 	// the section the caret is in
 	//   space or cockpit.
 	this.visec = visec;
 
 	// a signature pointing to the item the caret is in
 	// when visec === space
+	//
+	// the board and cockpit element when visec === cockpit
 	this.sign = sign;
-
-	// the cockpit element when visec === cockpit
-	this.element = element;
 
 	// x position to retain when using up/down keys.
 	this.retainx = retainx;
@@ -143,8 +142,11 @@ Caret.prototype.display = function() {
 
 	// draws new
 	if (this.$shown && !this.$blinked && this.sign) {
-		// TODO XXX this is evil.
-		shell.vspace.vget(this.sign.path, -1).drawCaret();
+		switch(this.visec) {
+		case 'space'   : shell.vspace.drawCaret();  break;
+		case 'cockpit' : shell.cockpit.drawCaret(); break;
+		default : throw new Error('invalid visec');
+		}
 	}
 };
 

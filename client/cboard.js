@@ -32,7 +32,9 @@ var CAccent;
 var CCustom;
 var CLabel;
 var CInput;
+var Cockpit;
 var Curve;
+var Design;
 var Jools;
 var Fabric;
 var Tree;
@@ -67,9 +69,10 @@ var Rect          = Fabric.Rect;
 /**
 | Constructor
 */
-CBoard = function(design, inherit, cockpit, screensize) {
+CBoard = function(name, inherit, cockpit, screensize) {
+	this.name    = name;
 	this.cockpit = cockpit;
-	var tree     = this.tree  = new Tree(design, Deverse);
+	var tree     = this.tree  = new Tree(Design[name], Deverse);
 	var frameD   = tree.root.frame;
 	var oframe   = new Rect(Point.zero, screensize);
 	var pnw      = this.pnw    = computePoint(frameD.pnw, oframe);
@@ -207,7 +210,7 @@ CBoard.prototype.mousedown = function(p) {
 CBoard.prototype.input = function(text) {
 	if (!this.$focus) return;
 	this.cc[this.$focus].input(text);
-}
+};
 
 /**
 | Clears caches.
@@ -215,7 +218,7 @@ CBoard.prototype.input = function(text) {
 CBoard.prototype.poke = function() {
 	this.$fabric = null;
 	shell.redraw = true;
-}
+};
 
 
 /**
@@ -230,7 +233,10 @@ CBoard.prototype.setFocus = function(cname) {
 	if (cname      ) { this.cc[cname      ].$fabric = null; }
 	this.$focus = cname;
 
-	shell.setCaret('cockpit', null, cname);
+	shell.setCaret('cockpit', {
+		path : new Path([this.name, cname]),
+		at1  : 0
+	});
 };
 
 /**

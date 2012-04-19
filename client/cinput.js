@@ -135,7 +135,7 @@ CInput.prototype.input = function(text) {
 	this.value += text;
 	this.board.poke();
 //	XXX
-}
+};
 
 /**
 | Mouse hover
