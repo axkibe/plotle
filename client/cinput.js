@@ -256,7 +256,7 @@ CInput.prototype.delKey = function(board) {
 CInput.prototype.downKey = function(board) {
 	board.cycleFocus(1);
 	return true;
-}
+};
 
 /**
 | User pressed end key.
@@ -339,7 +339,7 @@ CInput.prototype.specialKey = function(board, key) {
 CInput.prototype.upKey = function(board) {
 	board.cycleFocus(-1);
 	return true;
-}
+};
 
 /**
 | Mouse hover

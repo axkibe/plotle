@@ -87,6 +87,12 @@ VSpace = function(twig, path) {
 		vv[k] = this.createVItem(twig.copse[k], k);
 	}
 
+	// TODO
+	Object.defineProperty(this, 'focus', {
+		'get' : function() { throw new Error('ERRRRR'); },
+		'set' : function() { throw new Error('ERRRRR'); }
+	});
+
 	this._floatMenuLabels = {c: 'new', n: 'Note', ne: 'Label'};
 };
 
@@ -130,16 +136,31 @@ VSpace.prototype.update = function(twig) {
 	}
 
 	// remove the focus if the focussed item is removed.
-	if (this.focus) {
-		if (!is(vv[this.focus.key])) {
+	var focus = this.focusedVItem();
+	if (focus) {
+		if (!is(vv[focus.key])) {
 			if (shell.selection.active &&
-				shell.selection.sign1.path.get(-4) === this.focus.key)
+				shell.selection.sign1.path.get(-4) === focus.key)
 			{ shell.selection.deselect(true); }
 
 			this.setFocus(null);
 		}
 	}
 };
+
+
+/**
+| Returns the focused item.
+*/
+VSpace.prototype.focusedVItem = function() {
+	var caret = shell.caret;
+	if (caret.visec !== 'space') { return null; }
+	var sign = caret.sign;
+	var path = sign.path;
+	if (path.get(0) !== 'welcome') /* TODO */ { return null; }
+	return this.vv[path.get(1)] || null;
+};
+
 
 /**
 | Creates a new visual representation of an item.
@@ -164,7 +185,8 @@ VSpace.prototype.draw = function() {
 		this.vAtRank(r).draw(this.fabric);
 	}
 
-	if (this.focus) { this.focus.drawHandles(this.fabric); }
+	var focus = this.focusedVItem();
+	if (focus) { focus.drawHandles(this.fabric); }
 
 	var action = shell.action;
 	switch (action && action.type) {
@@ -196,8 +218,8 @@ VSpace.prototype.drawCaret = function() {
 | Sets the focused item or blurs it if vitem is null
 */
 VSpace.prototype.setFocus = function(vitem) {
-	if (this.focus === vitem) return;
-	this.focus = vitem;
+	var focus = this.focusedVItem();
+	if (focus === vitem) { return; }
 
 	var caret = shell.caret;
 
@@ -271,14 +293,15 @@ VSpace.prototype.mousehover = function(p, shift, ctrl) {
 		break;
 	}
 
-	if (this.focus) {
+	var focus = this.focusedVItem();
+	if (focus) {
 		// @@ move into items
-		if (this.focus.withinItemMenu(pp)) {
+		if (focus.withinItemMenu(pp)) {
 			system.setCursor('pointer');
 			return true;
 		}
 
-		var com = this.focus.checkItemCompass(pp);
+		var com = focus.checkItemCompass(pp);
 		if (com) {
 			system.setCursor(com+'-resize');
 			return true;
@@ -299,7 +322,7 @@ VSpace.prototype.mousehover = function(p, shift, ctrl) {
 */
 VSpace.prototype.dragstart = function(p, shift, ctrl) {
 	var pp = p.sub(this.fabric.pan);
-	var focus = this.focus;
+	var focus = this.focusedVItem();
 
 	// see if the itemmenu of the focus was targeted
 	if (focus && focus.withinItemMenu(pp)) {
@@ -330,7 +353,7 @@ VSpace.prototype.click = function(p, shift, ctrl) {
 	var action;
 
 	// clicked the tab of the focused item?
-	var focus = this.focus;
+	var focus = this.focusedVItem();
 	if (focus && focus.withinItemMenu(pp)) {
 		action = shell.startAction(Action.ITEMMENU, null, pp);
 		var labels = {n : 'Remove'};
@@ -450,7 +473,7 @@ VSpace.prototype.mousedown = function(p, shift, ctrl) {
 		if (!im) break;
 		switch(md) {
 		case 'n': // remove
-			var item = this.focus;
+			var item = this.focusedVItem();
 			this.setFocus(null);
 			peer.removeItem(item.path);
 			break;
@@ -461,14 +484,15 @@ VSpace.prototype.mousedown = function(p, shift, ctrl) {
 		return false;
 	}
 
-	if (this.focus) {
-		if (this.focus.withinItemMenu(p)) return 'atween';
-		var com = this.focus.checkItemCompass(pp);
+	var focus = this.focusedVItem();
+	if (focus) {
+		if (focus.withinItemMenu(p)) return 'atween';
+		var com = focus.checkItemCompass(pp);
 		if (com) {
 			// resizing
-			action = shell.startAction(Action.ITEMRESIZE, this.focus, pp);
+			action = shell.startAction(Action.ITEMRESIZE, focus, pp);
 			action.align = com;
-			action.startZone = this.focus.getZone();
+			action.startZone = focus.getZone();
 			system.setCursor(com+'-resize');
 
 			return 'drag';

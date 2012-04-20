@@ -325,7 +325,8 @@ VItem.prototype.click = function(p) {
 	if (!this.getZone().within(p)) return false;
 
 	var vspace = shell.vspace;
-	if (vspace.focus !== this) {
+	var focus  = vspace.focusedVItem();
+	if (focus !== this) {
 		vspace.setFocus(this);
 		shell.selection.deselect();
 	}

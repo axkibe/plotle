@@ -136,7 +136,7 @@ CMeth.regBC.specialKey = function(board, ele, key) {
 	case 'down' : board.cycleFocus(+1); return;
 	case 'up'   : board.cycleFocus(-1); return;
 	}
-}
+};
 
 CMeth.regBC.mousedown = function(board, ele, p, shift, ctrl) {
 	debug('TODO');

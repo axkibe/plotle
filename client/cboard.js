@@ -241,7 +241,7 @@ CBoard.prototype.cycleFocus = function(dir) {
 	this.setFocus(cname);
 	return;
 
-}
+};
 
 /**
 | User pressed a special key.
