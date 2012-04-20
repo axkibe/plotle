@@ -121,6 +121,16 @@ Shell = function(fabric, sPeer) {
 
 	peer.setReport(this);
 
+	// TODO
+	Object.defineProperty(this, 'shift', {
+		get: function() { throw new Error('so nicht!'); },
+		set: function() { throw new Error('so nicht!'); }
+	});
+	Object.defineProperty(this, 'ctrl', {
+		get: function() { throw new Error('so nicht!'); },
+		set: function() { throw new Error('so nicht!'); }
+	});
+
 	// a flag set to true if anything requests a redraw.
 	this.redraw = false;
 	this._draw();
@@ -257,11 +267,8 @@ Shell.prototype._draw = function() {
 | A mouse click.
 */
 Shell.prototype.click = function(p, shift, ctrl) {
-	this.shift = shift;
-	this.ctrl  = ctrl;
-
 	// TODO cockpit
-	if (this.vspace) { this.vspace.click(p); }
+	if (this.vspace) { this.vspace.click(p, shift, ctrl); }
 	if (this.redraw) { this._draw(); }
 };
 
@@ -269,11 +276,8 @@ Shell.prototype.click = function(p, shift, ctrl) {
 | Mouse hover.
 */
 Shell.prototype.mousehover = function(p, shift, ctrl) {
-	this.shift = shift;
-	this.ctrl  = ctrl;
-
-	if (!this.cockpit.mousehover(p)) {
-		if (this.vspace) { this.vspace.mousehover(p); }
+	if (!this.cockpit.mousehover(p, shift, ctrl)) {
+		if (this.vspace) { this.vspace.mousehover(p, shift, ctrl); }
 	}
 	if (this.redraw) { this._draw(); }
 };
@@ -284,11 +288,14 @@ Shell.prototype.mousehover = function(p, shift, ctrl) {
 | Returns the mouse state code, wheter this is a click/drag or undecided.
 */
 Shell.prototype.mousedown = function(p, shift, ctrl) {
-	this.shift = shift;
-	this.ctrl  = ctrl;
+	var mouseState;
 
-	var mouseState = this.cockpit.mousedown(p);
-	if (mouseState === null && this.vspace) { mouseState = this.vspace.mousedown(p); }
+	mouseState = this.cockpit.mousedown(p, shift, ctrl);
+
+	if (mouseState === null && this.vspace) {
+		mouseState = this.vspace.mousedown(p, shift, ctrl);
+	}
+
 	if (this.redraw) { this._draw(); }
 	return mouseState;
 };
@@ -297,11 +304,10 @@ Shell.prototype.mousedown = function(p, shift, ctrl) {
 | Starts an operation with the mouse button held down.
 */
 Shell.prototype.dragstart = function(p, shift, ctrl) {
-	this.shift = shift;
-	this.ctrl  = ctrl;
-
 	// TODO cockpit
-	if (this.vspace) { this.vspace.dragstart(p); }
+
+	if (this.vspace) { this.vspace.dragstart(p, shift, ctrl); }
+
 	if (this.redraw) { this._draw(); }
 };
 
@@ -309,11 +315,10 @@ Shell.prototype.dragstart = function(p, shift, ctrl) {
 | Moving during an operation with the mouse button held down.
 */
 Shell.prototype.dragmove = function(p, shift, ctrl) {
-	this.shift = shift;
-	this.ctrl  = ctrl;
-
 	// TODO cockpit
-	if (this.vspace) { this.vspace.dragmove(p); }
+
+	if (this.vspace) { this.vspace.dragmove(p, shift, ctrl); }
+
 	if (this.redraw) { this._draw(); }
 };
 
@@ -321,11 +326,10 @@ Shell.prototype.dragmove = function(p, shift, ctrl) {
 | Stops an operation with the mouse button held down.
 */
 Shell.prototype.dragstop = function(p, shift, ctrl) {
-	this.shift = shift;
-	this.ctrl  = ctrl;
-
 	// TODO cockpit
-	if (this.vspace) { this.vspace.dragstop(p); }
+
+	if (this.vspace) { this.vspace.dragstop(p, shift, ctrl); }
+
 	if (this.redraw) { this._draw(); }
 };
 
@@ -333,11 +337,10 @@ Shell.prototype.dragstop = function(p, shift, ctrl) {
 | Mouse wheel has turned
 */
 Shell.prototype.mousewheel = function(p, dir, shift, ctrl) {
-	this.shift = shift;
-	this.ctrl  = ctrl;
-
 	// TODO cockpict
-	if (this.vspace) { this.vspace.mousewheel(p, dir); }
+
+	if (this.vspace) { this.vspace.mousewheel(p, dir, shift, ctrl); }
+
 	if (this.redraw) { this._draw(); }
 };
 
@@ -345,12 +348,14 @@ Shell.prototype.mousewheel = function(p, dir, shift, ctrl) {
 /**
 | User pressed a special key.
 */
-Shell.prototype.specialKey = function(keyCode, shift, ctrl) {
-	this.shift = shift;
-	this.ctrl  = ctrl;
-
+Shell.prototype.specialKey = function(key, shift, ctrl) {
 	var caret  = this.caret;
-	if (caret.sign) { this.vspace.vget(caret.sign.path, -1).specialKey(keyCode); }
+	switch (caret.visec) {
+	case null : break;
+	case 'cockpit' : this.cockpit.specialKey(key, shift, ctrl); break;
+	case 'space'   : this. vspace.specialKey(key, shift, ctrl); break;
+	default : throw new Error('invalid visec');
+	}
 	if (this.redraw) this._draw();
 };
 
@@ -358,16 +363,14 @@ Shell.prototype.specialKey = function(keyCode, shift, ctrl) {
 | User entered normal text (one character or more).
 */
 Shell.prototype.input = function(text) {
-	this.shift = false;
-	this.ctrl  = false;
 	if (this.selection.active) { this.selection.remove(); }
 
 	var caret  = this.caret;
 	switch (caret.visec) {
 	case null : break;
 	case 'cockpit' : this.cockpit.input(text); break;
-	case 'space'   : this.vspace.input(text); break;
-	default : throw new Error('invalid visec for caret');
+	case 'space'   : this. vspace.input(text); break;
+	default : throw new Error('invalid visec');
 	}
 	if (this.redraw) this._draw();
 };

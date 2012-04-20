@@ -231,7 +231,7 @@ VSpace.prototype.vAtRank = function(rank) {
 /**
 | Mouse wheel
 */
-VSpace.prototype.mousewheel = function(p, dir) {
+VSpace.prototype.mousewheel = function(p, dir, shift, ctrl) {
 	var twig = this.twig;
 
 	var pp = p.sub(this.fabric.pan);
@@ -249,7 +249,7 @@ VSpace.prototype.mousewheel = function(p, dir) {
 |
 | Returns true if the mouse pointer hovers over anything.
 */
-VSpace.prototype.mousehover = function(p) {
+VSpace.prototype.mousehover = function(p, shift, ctrl) {
 	var pp = p.sub(this.fabric.pan);
 	var action = shell.action;
 
@@ -297,7 +297,7 @@ VSpace.prototype.mousehover = function(p) {
 /**
 | Starts an operation with the mouse button held down.
 */
-VSpace.prototype.dragstart = function(p) {
+VSpace.prototype.dragstart = function(p, shift, ctrl) {
 	var pp = p.sub(this.fabric.pan);
 	var focus = this.focus;
 
@@ -312,7 +312,7 @@ VSpace.prototype.dragstart = function(p) {
 	// see if one item was targeted
 	for(var a = 0, aZ = this.twig.length; a < aZ; a++) {
 		var vitem = this.vAtRank(a);
-		if (vitem.dragstart(pp)) return true;
+		if (vitem.dragstart(pp, shift, ctrl)) return true;
 	}
 
 	// otherwise do panning
@@ -324,7 +324,7 @@ VSpace.prototype.dragstart = function(p) {
 /**
 | A mouse click.
 */
-VSpace.prototype.click = function(p) {
+VSpace.prototype.click = function(p, shift, ctrl) {
 	var pan  = this.fabric.pan;
 	var pp   = p.sub(pan);
 	var action;
@@ -357,7 +357,7 @@ VSpace.prototype.click = function(p) {
 /**
 | Stops an operation with the mouse button held down.
 */
-VSpace.prototype.dragstop = function(p) {
+VSpace.prototype.dragstop = function(p, shift, ctrl) {
 	var action = shell.action;
 	var pp = p.sub(this.fabric.pan);
 	if (!action) throw new Error('Dragstop without action?');
@@ -381,7 +381,7 @@ VSpace.prototype.dragstop = function(p) {
 /**
 | Moving during an operation with the mouse button held down.
 */
-VSpace.prototype.dragmove = function(p) {
+VSpace.prototype.dragmove = function(p, shift, ctrl) {
 	var pp = p.sub(this.fabric.pan);
 	var action = shell.action;
 
@@ -409,7 +409,7 @@ VSpace.prototype.dragmove = function(p) {
 /**
 | Mouse button down event.
 */
-VSpace.prototype.mousedown = function(p) {
+VSpace.prototype.mousedown = function(p, shift, ctrl) {
 	var pp = p.sub(this.fabric.pan);
 	var action = shell.action;
 	var pnw, md, key;
@@ -485,6 +485,15 @@ VSpace.prototype.input = function(text) {
 	var caret = shell.caret;
 	if (!caret.sign) return;
 	this.vget(caret.sign.path, -1).input(text);
+};
+
+/**
+| User pressed a special key.
+*/
+VSpace.prototype.specialKey = function(key, shift, ctrl) {
+	var caret = shell.caret;
+	if (!caret.sign) return;
+	this.vget(caret.sign.path, -1).specialKey(key, shift, ctrl);
 };
 
 /**

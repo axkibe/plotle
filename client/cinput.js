@@ -31,6 +31,7 @@
 */
 var CAccent;
 var CMeth;
+var Caret;
 var Cockpit;
 var Curve;
 var Fabric;
@@ -84,6 +85,11 @@ CInput = function(twig, board, inherit, name) {
 	this.$fabric = null;
 	this.$accent = CAccent.NORMA;
 };
+
+/**
+| The input field is focusable.
+*/
+CInput.prototype.canFocus = true;
 
 /**
 | Paths the input field.
@@ -148,7 +154,7 @@ CInput.prototype.getOffsetPoint = function(offset) {
 	// @@ use token. text instead.
 	return new Point(
 		R(pitch.x + Measure.width(val.substring(0, offset))),
-		  pitch.y + font.size
+		R(pitch.y + font.size)
 	);
 };
 
@@ -198,25 +204,103 @@ CInput.prototype.drawCaret = function() {
 };
 
 /**
-| user input.
+| User input.
 */
 CInput.prototype.input = function(text) {
-	this.value += text;
+	var caret = shell.caret;
+	var csign = caret.sign;
+	var v = this.value;
+	var at1 = csign.at1;
+
+	this.value = v.substring(0, at1) + text + v.substring(at1);
+	shell.setCaret('cockpit', {
+		path : csign.path,
+		at1  : at1 + text.length
+	});
 	this.board.poke();
-//	XXX
+};
+
+/**
+| User pressed backspace.
+*/
+CInput.prototype.backspaceKey = function() {
+	var caret = shell.caret;
+	var csign = caret.sign;
+	var at1   = csign.at1;
+	if (at1 <= 0) return false;
+	this.value = this.value.substring(0, at1 - 1) + this.value.substring(at1);
+	shell.setCaret('cockpit', {
+		path : csign.path,
+		at1  : csign.at1 - 1
+	});
+	return true;
+};
+
+/**
+| User pressed del.
+*/
+CInput.prototype.delKey = function() {
+	var caret = shell.caret;
+	var csign = caret.sign;
+	var at1   = csign.at1;
+	if (at1 >= this.value.length) return false;
+	this.value = this.value.substring(0, at1) + this.value.substring(at1 + 1);
+	return true;
+};
+
+/**
+| User pressed left key
+*/
+CInput.prototype.leftKey = function() {
+	var caret = shell.caret;
+	var csign = caret.sign;
+	if (csign.at1 <= 0) return false;
+	shell.setCaret('cockpit', {
+		path : csign.path,
+		at1  : csign.at1 - 1
+	});
+	return true;
+};
+
+/**
+| User pressed right key
+*/
+CInput.prototype.rightKey = function() {
+	var caret = shell.caret;
+	var csign = caret.sign;
+	if (csign.at1 >= this.value.text) return false;
+	shell.setCaret('cockpit', {
+		path : csign.path,
+		at1  : csign.at1 + 1
+	});
+	return true;
+};
+
+/**
+| User pressed a special key
+*/
+CInput.prototype.specialKey = function(key) {
+	var poke = false;
+	switch(key) {
+	case 'backspace' : poke = this.backspaceKey(); break;
+	case 'del'       : poke = this.delKey();       break;
+	case 'left'      : poke = this.leftKey();      break;
+	case 'right'     : poke = this.rightKey();     break;
+	}
+	if (poke) { this.board.poke(); }
 };
 
 /**
 | Mouse hover
 */
-CInput.prototype.mousehover = function(board, p) {
+CInput.prototype.mousehover = function(board, p, shift, ctrl) {
 	return false;
 };
 
 /**
 | Mouse down
 */
-CInput.prototype.mousedown = function(board, p) {
+CInput.prototype.mousedown = function(board, p, shift, ctrl) {
 	var pp = p.sub(this.pnw);
 	var fabric = this.getFabric(CAccent.NORMA);
 	if (!fabric.within(this.bezi, 'path', pp))  { return null; }

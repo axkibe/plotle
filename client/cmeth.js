@@ -96,7 +96,7 @@ CMeth = {};
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 CMeth.loginMC = {};
 
-CMeth.loginMC.mousedown = function(board, ele, p) {
+CMeth.loginMC.mousedown = function(board, ele, p, shift, ctrl) {
 	board.cockpit.setCurBoard('loginboard');
 };
 
@@ -110,7 +110,7 @@ CMeth.loginMC.mousedown = function(board, ele, p) {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 CMeth.registerMC = {};
 
-CMeth.registerMC.mousedown = function(board, ele, p) {
+CMeth.registerMC.mousedown = function(board, ele, p, shift, ctrl) {
 	board.cockpit.setCurBoard('regboard');
 };
 
@@ -126,7 +126,7 @@ CMeth.registerMC.mousedown = function(board, ele, p) {
 
 CMeth.cancelBC = {};
 
-CMeth.cancelBC.mousedown = function(board, ele, p) {
+CMeth.cancelBC.mousedown = function(board, ele, p, shift, ctrl) {
 	board.cockpit.setCurBoard('mainboard');
 };
 

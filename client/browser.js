@@ -161,32 +161,30 @@ function System() {
 	| A special key was pressed.
 	*/
 	function specialKey(keyCode, shift, ctrl) {
+		var key = null;
 		if (ctrl) {
 			switch(keyCode) {
-			case 65 : // ctrl+a
-				system.shell.specialKey(keyCode, shift, ctrl);
-				return false;
-			default :
-				return true;
+			case 65 : key = 'a';        break;
+			}
+		} else {
+			switch(keyCode) {
+			case  8 : key = 'backspace'; break;
+			case  9 : key = 'tab';       break;
+			case 13 : key = 'return';    break;
+			case 33 : key = 'pageup';    break;
+			case 34 : key = 'pagedown';  break;
+			case 35 : key = 'end';       break;
+			case 36 : key = 'pos1';      break;
+			case 37 : key = 'left';      break;
+			case 38 : key = 'up';        break;
+			case 39 : key = 'right';     break;
+			case 40 : key = 'down';      break;
+			case 46 : key = 'del';       break;
 			}
 		}
-		switch(keyCode) {
-		case  8 : // backspace
-		case 13 : // return
-		case 33 : // pageup
-		case 34 : // pagedown
-		case 35 : // end
-		case 36 : // pos1
-		case 37 : // left
-		case 38 : // up
-		case 39 : // right
-		case 40 : // down
-		case 46 : // del
-			system.shell.specialKey(keyCode, shift, ctrl);
-			return false;
-		default :
-			return true;
-		}
+		if (key === null) return true;
+		system.shell.specialKey(key, shift, ctrl);
+		return false;
 	}
 
 	/**

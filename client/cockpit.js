@@ -180,19 +180,26 @@ Cockpit.prototype.input = function(text) {
 };
 
 /**
+| User pressed a special key.
+*/
+Cockpit.prototype.specialKey = function(key) {
+	this.curBoard().specialKey(key);
+};
+
+/**
 | Mouse hover.
 */
-Cockpit.prototype.mousehover = function(p) {
-	return this.curBoard().mousehover(p);
+Cockpit.prototype.mousehover = function(p, shift, ctrl) {
+	return this.curBoard().mousehover(p, shift, ctrl);
 };
 
 /**
 | Mouse button down event
 */
-Cockpit.prototype.mousedown = function(p) {
-	var r = this.curBoard().mousedown(p);
+Cockpit.prototype.mousedown = function(p, shift, ctrl) {
+	var r = this.curBoard().mousedown(p, shift. ctrl);
 	if (r === null) { return null; }
-	this.curBoard().mousehover(p);
+	this.curBoard().mousehover(p, shift, ctrl);
 	return r;
 };
 

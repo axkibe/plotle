@@ -247,7 +247,7 @@ VPara.prototype.input = function(text) {
 /**
 | Handles a special key
 */
-VPara.prototype.specialKey = function(keycode) {
+VPara.prototype.specialKey = function(key, shift, ctrl) {
 	var caret  = shell.caret;
 	// TODO split into smaller functions
 	var para = this.para;
@@ -258,9 +258,9 @@ VPara.prototype.specialKey = function(keycode) {
 	var ve, at1, flow;
 	var r, x;
 
-	if (shell.ctrl) {
-		switch(keycode) {
-		case 65 : // ctrl+a
+	if (ctrl) {
+		switch(key) {
+		case 'a' :
 			var v0 = vdoc.vAtRank(0);
 			var v1 = vdoc.vAtRank(vdoc.twig.length - 1);
 
@@ -276,47 +276,47 @@ VPara.prototype.specialKey = function(keycode) {
 		}
 	}
 
-	if (!shell.shift && select.active) {
-		switch(keycode) {
-		case 33 : // pageup
-		case 34 : // pagedown
-		case 35 : // end
-		case 36 : // pos1
-		case 37 : // left
-		case 38 : // up
-		case 39 : // right
-		case 40 : // down
+	if (!shift && select.active) {
+		switch(key) {
+		case 'down'      :
+		case 'end'       :
+		case 'left'      :
+		case 'pageup'    :
+		case 'pagedown'  :
+		case 'pos1'      :
+		case 'right'     :
+		case 'up'        :
 			select.deselect();
 			shell.redraw = true;
 			break;
-		case  8 : // backspace
-		case 46 : // del
+		case 'backspace' :
+		case 'del'       :
 			select.remove();
 			shell.redraw = true;
-			keycode = 0;
+			key = null;
 			break;
-		case 13 : // return
+		case 'return'    :
 			select.remove();
 			shell.redraw = true;
 			break;
 		}
-	} else if (shell.shift && !select.active) {
-		switch(keycode) {
-		case 33 : // pageup
-		case 34 : // pagedown
-		case 35 : // end
-		case 36 : // pos1
-		case 37 : // left
-		case 38 : // up
-		case 39 : // right
-		case 40 : // down
+	} else if (shift && !select.active) {
+		switch(key) {
+		case 'backup'   :
+		case 'down'     :
+		case 'end'      :
+		case 'left'     :
+		case 'pagedown' :
+		case 'pos1'     :
+		case 'right'    :
+		case 'up'       :
 			select.sign1 = caret.sign;
 			vitem.poke();
 		}
 	}
 
-	switch(keycode) {
-	case  8 : // backspace
+	switch(key) {
+	case  'backspace' :
 		if (caret.sign.at1 > 0) {
 			peer.removeText(this.textPath(), caret.sign.at1 - 1, 1);
 		} else {
@@ -328,17 +328,17 @@ VPara.prototype.specialKey = function(keycode) {
 		}
 		vitem.scrollCaretIntoView();
 		break;
-	case 13 : // return
+	case 'return' :
 		peer.split(this.textPath(), caret.sign.at1);
 		vitem.scrollCaretIntoView();
 		break;
-	case 33 : // pageup
+	case 'pageup' :
 		vitem.scrollPage(true);
 		break;
-	case 34 : // pagedown
+	case 'pagedown' :
 		vitem.scrollPage(false);
 		break;
-	case 35 : // end
+	case 'end' :
 		caret = shell.setCaret(
 			'space',
 			{
@@ -347,7 +347,7 @@ VPara.prototype.specialKey = function(keycode) {
 			}
 		);
 		break;
-	case 36 : // pos1
+	case 'pos1' :
 		caret = shell.setCaret(
 			'space',
 			{
@@ -357,7 +357,7 @@ VPara.prototype.specialKey = function(keycode) {
 		);
 		vitem.scrollCaretIntoView();
 		break;
-	case 37 : // left
+	case 'left' :
 		if (caret.sign.at1 > 0) {
 			caret = shell.setCaret(
 				'space',
@@ -381,7 +381,7 @@ VPara.prototype.specialKey = function(keycode) {
 		}
 		vitem.scrollCaretIntoView();
 		break;
-	case 38 : // up
+	case 'up' :
 		flow = this.getFlow();
 		x = caret.retainx !== null ? caret.retainx : caret.pos$.x;
 
@@ -415,7 +415,7 @@ VPara.prototype.specialKey = function(keycode) {
 		}
 		vitem.scrollCaretIntoView();
 		break;
-	case 39 : // right
+	case 'right' :
 		if (caret.sign.at1 < this.twig.text.length) {
 			caret = shell.setCaret(
 				'space',
@@ -440,7 +440,7 @@ VPara.prototype.specialKey = function(keycode) {
 		}
 		vitem.scrollCaretIntoView();
 		break;
-	case 40 : // down
+	case 'down' :
 		flow = this.getFlow();
 		x = caret.retainx !== null ? caret.retainx : caret.pos$.x;
 
@@ -476,7 +476,7 @@ VPara.prototype.specialKey = function(keycode) {
 		}
 		vitem.scrollCaretIntoView();
 		break;
-	case 46 : // del
+	case 'del' :
 		if (caret.sign.at1 < this.twig.text.length) {
 			peer.removeText(this.textPath(), caret.sign.at1, 1);
 		} else {
@@ -489,19 +489,20 @@ VPara.prototype.specialKey = function(keycode) {
 	}
 
 
-	if (shell.shift) {
-		switch(keycode) {
-		case 35 : // end
-		case 36 : // pos1
-		case 37 : // left
-		case 38 : // up
-		case 39 : // right
-		case 40 : // down
+	if (shift) {
+		switch(key) {
+		case 'end'   :
+		case 'pos1'  :
+		case 'left'  :
+		case 'up'    :
+		case 'right' :
+		case 'down'  :
 			select.active = true;
 			select.sign2 = caret.sign;
 			system.setInput(select.innerText());
 			vitem.poke();
 			shell.redraw = true;
+			break;
 		}
 	}
 

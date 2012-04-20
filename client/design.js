@@ -684,51 +684,46 @@ Design.regboard = {
 			type      : 'Label',
 			text      : 'username',
 			fontStyle : fontStyles(16, 'ra'),
-			pos       : { type: 'Point', anchor: 's', x: -155, y:  -221 }
+			pos       : { type: 'Point', anchor: 's', x: -155, y:  -220 }
 		},
 		'emailL'       : {
 			type      : 'Label',
 			text      : 'email',
 			fontStyle : fontStyles(16, 'ra'),
-			pos       : { type: 'Point', anchor: 's', x: -155, y:  -186 }
+			pos       : { type: 'Point', anchor: 's', x: -155, y:  -180 }
 		},
 		'passL'       : {
 			type      : 'Label',
 			text      : 'password',
 			fontStyle : fontStyles(16, 'ra'),
-			pos       : { type: 'Point', anchor: 's', x: -155, y:  -152 }
+			pos       : { type: 'Point', anchor: 's', x: -155, y:  -140 }
 		},
 		'pass2L'       : {
 			type      : 'Label',
 			text      : 'repeat password',
 			fontStyle : fontStyles(16, 'ra'),
-			pos       : { type: 'Point', anchor: 's', x: -155, y:  -117 }
+			pos       : { type: 'Point', anchor: 's', x: -155, y:  -100 }
 		},
-		'invL'       : {
+		'codeL'       : {
 			type      : 'Label',
-			text      : 'invitation code*',
+			text      : 'invitation code',
 			fontStyle : fontStyles(16, 'ra'),
-			pos       : { type: 'Point', anchor: 's', x: -155, y:   -82 }
+			pos       : { type: 'Point', anchor: 's', x: -155, y:   -60 }
 		},
 		'errL'        : {
 			type      : 'Label',
 			//text      : 'username/password not accepted',
-			text      : 'BLA',
+			text      : 'username already taken',
 			fontStyle : fontStyles(14, 'lar'),
-			pos       : { type: 'Point', anchor: 's', x: -135, y:  -261 }
+			pos       : { type: 'Point', anchor: 's', x: -135, y:  -255 }
 
 		},
 		'expL' : {
 			type      : 'Label',
-			text      : '*meshcraft.net is still testing & developing its scalebility',
+			text      : 'meshcraft.net is still testing & developing its scalebility, '+
+						'please email axkibe@gmail.com to request a code.',
 			fontStyle : fontStyles(12, 'la'),
-			pos       : { type: 'Point', anchor: 'sw', x: 220, y:   -35 }
-		},
-		'exp2L' : {
-			type      : 'Label',
-			text      : '  please email axkibe@gmail.com to request a code.',
-			fontStyle : fontStyles(12, 'la'),
-			pos       : { type: 'Point', anchor: 'sw', x: 220, y:   -15 }
+			pos       : { type: 'Point', anchor: 'sw', x:  80, y:   -15 }
 		},
 		'userI' : {
 			type       : 'Input',
@@ -739,8 +734,8 @@ Design.regboard = {
 			fontStyle  : fontStyles(14, 'la'),
 			frame      : {
 				type   : 'Frame',
-				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -239 },
-				pse    : { type: 'Point', anchor: 's', x:   95, y:  -213 }
+				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -238 },
+				pse    : { type: 'Point', anchor: 's', x:   95, y:  -212 }
 			}
 		},
 		'emailI' : {
@@ -752,8 +747,8 @@ Design.regboard = {
 			fontStyle  : fontStyles(14, 'la'),
 			frame      : {
 				type   : 'Frame',
-				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -205 },
-				pse    : { type: 'Point', anchor: 's', x:   95, y:  -179 }
+				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -198 },
+				pse    : { type: 'Point', anchor: 's', x:   95, y:  -172 }
 			}
 		},
 		'passI' : {
@@ -765,8 +760,8 @@ Design.regboard = {
 			fontStyle  : fontStyles(14, 'la'),
 			frame      : {
 				type   : 'Frame',
-				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -172 },
-				pse    : { type: 'Point', anchor: 's', x:   95, y:  -146 }
+				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -158 },
+				pse    : { type: 'Point', anchor: 's', x:   95, y:  -132 }
 			}
 		},
 		'pass2I' : {
@@ -778,8 +773,8 @@ Design.regboard = {
 			fontStyle  : fontStyles(14, 'la'),
 			frame      : {
 				type   : 'Frame',
-				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -135 },
-				pse    : { type: 'Point', anchor: 's', x:   95, y:  -109 }
+				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -118 },
+				pse    : { type: 'Point', anchor: 's', x:   95, y:   -92 }
 			}
 		},
 		'codeI' : {
@@ -791,8 +786,8 @@ Design.regboard = {
 			fontStyle  : fontStyles(14, 'la'),
 			frame      : {
 				type   : 'Frame',
-				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -100 },
-				pse    : { type: 'Point', anchor: 's', x:   95, y:   -74 }
+				pnw    : { type: 'Point', anchor: 's', x: -135, y:   -78 },
+				pse    : { type: 'Point', anchor: 's', x:   95, y:   -52 }
 			}
 		},
 		'regBC'      : {
@@ -801,8 +796,8 @@ Design.regboard = {
 			hoverStyle : 'highlight',
 			frame      : {
 				type   : 'Frame',
-				pnw    : { type: 'Point', anchor: 'se', x: -380,          y: -80 - regBCH   },
-				pse    : { type: 'Point', anchor: 'se', x: -380 + regBCW, y: -80            }
+				pnw    : { type: 'Point', anchor: 'se', x: -360,          y: -100 - regBCH   },
+				pse    : { type: 'Point', anchor: 'se', x: -360 + regBCW, y: -100            }
 			},
 			caption       : {
 				type      : 'Label',
@@ -856,8 +851,8 @@ Design.regboard = {
 			hoverStyle : 'highlight',
 			frame : {
 				type  : 'Frame',
-				pnw   : { type: 'Point', anchor: 'se', x: -250,           y: -80 - canrBCH },
-				pse   : { type: 'Point', anchor: 'se', x: -250 + canrBCW, y: -80 }
+				pnw   : { type: 'Point', anchor: 'se', x: -230,           y: -60 - canrBCH },
+				pse   : { type: 'Point', anchor: 'se', x: -230 + canrBCW, y: -60 }
 			},
 			caption : {
 				type      : 'Label',
@@ -920,9 +915,8 @@ Design.regboard = {
 			'emailL',
 			'passL',
 			'pass2L',
-			'invL',
+			'codeL',
 			'expL',
-			'exp2L',
 			'errL'
 		]
     }

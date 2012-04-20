@@ -156,7 +156,7 @@ CBoard.prototype.drawCaret = function() {
 /**
 | Returns true if point is on this mainboard
 */
-CBoard.prototype.mousehover = function(p) {
+CBoard.prototype.mousehover = function(p, shift, ctrl) {
 	var pnw = this.pnw;
 	var pse = this.pse;
 	var fabric = this.getFabric();
@@ -177,7 +177,7 @@ CBoard.prototype.mousehover = function(p) {
 	for(a = 0, aZ = layout.length; a < aZ; a++) {
 		var cname = layout.ranks[a];
 		var ce = this.cc[cname];
-		if (ce.mousehover(this, pp)) { return true; }
+		if (ce.mousehover(this, pp, shift, ctrl)) { return true; }
 	}
 	system.setCursor('default');
 	this.setHover(null);
@@ -187,7 +187,7 @@ CBoard.prototype.mousehover = function(p) {
 /**
 | Returns true if point is on this mainboard
 */
-CBoard.prototype.mousedown = function(p) {
+CBoard.prototype.mousedown = function(p, shift, ctrl) {
 	var pnw = this.pnw;
 	var pse = this.pse;
 	var fabric = this.getFabric();
@@ -208,7 +208,7 @@ CBoard.prototype.mousedown = function(p) {
 	for(a = 0, aZ = layout.length; a < aZ; a++) {
 		var cname = layout.ranks[a];
 		var ce = this.cc[cname];
-		if (ce.mousedown(this, pp)) { return false; }
+		if (ce.mousedown(this, pp, shift, ctrl)) { return false; }
 	}
 	system.setCursor('default');
 	this.setHover(null);
@@ -221,6 +221,29 @@ CBoard.prototype.mousedown = function(p) {
 CBoard.prototype.input = function(text) {
 	if (!this.$focus) return;
 	this.cc[this.$focus].input(text);
+};
+
+/**
+| User pressed a special key.
+*/
+CBoard.prototype.specialKey = function(key) {
+	if (key === 'tab') {
+		var layout = this.tree.root.layout;
+		var rank = layout.rankOf(this.$focus);
+		var rs = rank;
+		var cname;
+		var ve;
+		do {
+			rank = (rank + 1) % layout.length;
+			if (rank === rs) { throw new Error('no focusable element!'); }
+			cname = layout.ranks[rank];
+			ve    = this.cc[cname];
+		} while (!ve.canFocus);
+		this.setFocus(cname);
+		return;
+	}
+	if (!this.$focus) return;
+	this.cc[this.$focus].specialKey(key);
 };
 
 /**

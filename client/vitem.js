@@ -226,12 +226,12 @@ VItem.prototype.getVParaAtPoint = function(p, action) {
 | Dragstart.
 | Checks if a dragstart targets this item.
 */
-VItem.prototype.dragstart = function(p) {
+VItem.prototype.dragstart = function(p, shift, ctrl) {
 	if (!this.getZone().within(p)) return false;
 
 	shell.redraw = true;
 
-	if (shell.ctrl) {
+	if (ctrl) {
 		// relation binding
 		shell.startAction(Action.RELBIND, this, p);
 		system.setCursor('default');
