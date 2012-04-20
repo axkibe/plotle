@@ -109,6 +109,36 @@ var theme = {
 			]
 		},
 
+		buttonHover : {
+			fill : 'rgb(255, 188, 88)',
+			edge : [
+				{ border: 1, width : 2, color : 'rgb(255, 188, 87)' },
+				{ border: 0, width : 1, color : 'rgb(128, 128, 0)' }
+			]
+		},
+
+		buttonFocus : {
+			fill : {
+				gradient : 'horizontal',
+				steps : [
+					[0, 'rgba(255, 237, 210, 0.5)' ],
+					[1, 'rgba(255, 185, 81,  0.5)' ]
+				]
+			},
+			edge : [
+				{ border: 1, width :   2, color : 'rgb(255, 99, 188)' },
+				{ border: 0, width :   1, color : 'black' }
+			]
+		},
+
+		buttonHofoc : {
+			fill : 'rgb(255, 188, 88)',
+			edge : [
+				{ border: 1, width :   2, color : 'rgb(255, 99, 188)' },
+				{ border: 0, width :   1, color : 'black' }
+			]
+		},
+
 		zero : {
 			edge : [ ]  // @@ allow to be left away
 		},
@@ -131,6 +161,7 @@ var theme = {
 			]
 		},
 
+		// TODO remove?
 		highlight : {
 			fill : 'rgb(255, 188, 88)',
 			edge : [
@@ -147,6 +178,7 @@ var theme = {
 			]
 		},
 
+		// TODO rename inputFocus
 		inputfocus : {
 			fill : 'white',
 			edge : [

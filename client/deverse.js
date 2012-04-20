@@ -97,8 +97,10 @@ Deverse = {
 			'frame'      : 'Frame',
 			'caption'    : 'Label',
 			'curve'      : 'Curve',
-			'style'      : 'String',
-			'hoverStyle' : 'String'
+			'normaStyle' : 'String',
+			'hoverStyle' : 'String',
+			'focusStyle' : 'String',
+			'hofocStyle' : 'String'
 		}
 	},
 
@@ -108,7 +110,7 @@ Deverse = {
 			'normaStyle' : 'String',
 			'hoverStyle' : 'String',
 			'focusStyle' : 'String',
-			'hovocStyle' : 'String',
+			'hofocStyle' : 'String',
 			'fontStyle'  : 'FontStyle'
 		}
 	},

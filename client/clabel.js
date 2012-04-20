@@ -67,6 +67,13 @@ CLabel = function(twig, board, inherit, name) {
 };
 
 /**
+| Labels cannot focus.
+*/
+CLabel.prototype.canFocus = function() {
+	return false;
+};
+
+/**
 | Draws the label on the fabric.
 */
 CLabel.prototype.draw = function(fabric) {

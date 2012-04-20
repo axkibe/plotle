@@ -150,7 +150,7 @@ CBoard.prototype.drawCaret = function() {
 	var cname = shell.caret.sign.path.get(1);
 	var ce = this.cc[cname];
 	if (!ce) { throw new Error('Caret element does not exist!'); }
-	ce.drawCaret();
+	if (ce.drawCaret) { ce.drawCaret(); }
 };
 
 /**
@@ -220,13 +220,13 @@ CBoard.prototype.mousedown = function(p, shift, ctrl) {
 */
 CBoard.prototype.input = function(text) {
 	if (!this.$focus) return;
-	this.cc[this.$focus].input(text);
+	this.cc[this.$focus].input(this, text);
 };
 
 /**
 | User pressed a special key.
 */
-CBoard.prototype.specialKey = function(key) {
+CBoard.prototype.specialKey = function(key, shift, ctrl) {
 	if (key === 'tab') {
 		var layout = this.tree.root.layout;
 		var rank = layout.rankOf(this.$focus);
@@ -234,11 +234,11 @@ CBoard.prototype.specialKey = function(key) {
 		var cname;
 		var ve;
 		do {
-			rank = (rank + 1) % layout.length;
+			rank = (rank + (shift ? (layout.length - 1) : 1)) % layout.length;
 			if (rank === rs) { throw new Error('no focusable element!'); }
 			cname = layout.ranks[rank];
 			ve    = this.cc[cname];
-		} while (!ve.canFocus);
+		} while (!ve.canFocus());
 		this.setFocus(cname);
 		return;
 	}

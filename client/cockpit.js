@@ -86,14 +86,17 @@ Cockpit = function() {
 };
 
 Cockpit.styles = {
-	'boxes'      : { edge : [ { border: 0, width : 1, color : 'black' } ] },
-	'button'     : theme.cockpit.button,
-	'highlight'  : theme.cockpit.highlight,
-	'input'      : theme.cockpit.input,
-	'inputfocus' : theme.cockpit.inputfocus,
-	'sides'      : theme.cockpit.sides,
-	'zero'       : theme.cockpit.zero,
-	'zhighlight' : theme.cockpit.zhighlight
+	'boxes'       : { edge : [ { border: 0, width : 1, color : 'black' } ] },
+	'button'      : theme.cockpit.button,
+	'buttonHover' : theme.cockpit.buttonHover,
+	'buttonFocus' : theme.cockpit.buttonFocus,
+	'buttonHofoc' : theme.cockpit.buttonHofoc,
+	'highlight'   : theme.cockpit.highlight,
+	'input'       : theme.cockpit.input,
+	'inputfocus'  : theme.cockpit.inputfocus,
+	'sides'       : theme.cockpit.sides,
+	'zero'        : theme.cockpit.zero,
+	'zhighlight'  : theme.cockpit.zhighlight
 };
 
 /**
@@ -182,8 +185,8 @@ Cockpit.prototype.input = function(text) {
 /**
 | User pressed a special key.
 */
-Cockpit.prototype.specialKey = function(key) {
-	this.curBoard().specialKey(key);
+Cockpit.prototype.specialKey = function(key, shift, ctrl) {
+	this.curBoard().specialKey(key, shift, ctrl);
 };
 
 /**

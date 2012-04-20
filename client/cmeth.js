@@ -96,6 +96,10 @@ CMeth = {};
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 CMeth.loginMC = {};
 
+CMeth.loginMC.canFocus = function() {
+	return true;
+};
+
 CMeth.loginMC.mousedown = function(board, ele, p, shift, ctrl) {
 	board.cockpit.setCurBoard('loginboard');
 };
@@ -114,6 +118,23 @@ CMeth.registerMC.mousedown = function(board, ele, p, shift, ctrl) {
 	board.cockpit.setCurBoard('regboard');
 };
 
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ +++regBC+++
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+ The register button on the regboard.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+CMeth.regBC = {};
+
+CMeth.regBC.canFocus = function() {
+	return true;
+};
+
+CMeth.regBC.mousedown = function(board, ele, p, shift, ctrl) {
+	debug('TODO');
+};
+
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  +++cancelBC+++
@@ -125,6 +146,10 @@ CMeth.registerMC.mousedown = function(board, ele, p, shift, ctrl) {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 CMeth.cancelBC = {};
+
+CMeth.cancelBC.canFocus = function() {
+	return true;
+};
 
 CMeth.cancelBC.mousedown = function(board, ele, p, shift, ctrl) {
 	board.cockpit.setCurBoard('mainboard');

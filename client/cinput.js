@@ -89,7 +89,9 @@ CInput = function(twig, board, inherit, name) {
 /**
 | The input field is focusable.
 */
-CInput.prototype.canFocus = true;
+CInput.prototype.canFocus = function() {
+	return true;
+};
 
 /**
 | Paths the input field.
@@ -115,7 +117,7 @@ CInput.prototype.getFabric = function(accent) {
 	case CAccent.NORMA : sname = this.twig.normaStyle; break;
 	case CAccent.HOVER : sname = this.twig.hoverStyle; break;
 	case CAccent.FOCUS : sname = this.twig.focusStyle; break;
-	case CAccent.HOVOC : sname = this.twig.hovocStyle; break;
+	case CAccent.HOFOC : sname = this.twig.hofocStyle; break;
 	default : throw new Error('Invalid accent');
 	}
 	var style  = Cockpit.styles[sname];
@@ -206,7 +208,7 @@ CInput.prototype.drawCaret = function() {
 /**
 | User input.
 */
-CInput.prototype.input = function(text) {
+CInput.prototype.input = function(board, text) {
 	var caret = shell.caret;
 	var csign = caret.sign;
 	var v = this.value;

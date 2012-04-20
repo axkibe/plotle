@@ -250,8 +250,10 @@ Design.mainboard = {
 
 		'loginMC' : {
 			type       : 'Custom',
-			style      : 'sides',
+			normaStyle : 'sides',
 			hoverStyle : 'highlight',
+			focusStyle : 'sides',
+			hofocStyle : 'highlight',
 			frame : {
 				type  : 'Frame',
 				pnw   : { type: 'Point', anchor: 'sw', x:               0, y: -36 },
@@ -285,8 +287,10 @@ Design.mainboard = {
 
 		'registerMC' : {
 			type       : 'Custom',
-			style      : 'sides',
+			normaStyle : 'sides',
 			hoverStyle : 'highlight',
+			focusStyle : 'sides',
+			hofocStyle : 'highlight',
 			frame : {
 				type  : 'Frame',
 				pnw   : { type: 'Point', anchor: 'se', x: -sideButtonWidth, y: -36 },
@@ -409,7 +413,7 @@ Design.loginboard = {
 			normaStyle : 'input',
 			focusStyle : 'inputfocus',
 			hoverStyle : 'input',
-			hovocStyle : 'inputfocus',
+			hofocStyle : 'inputfocus',
 			fontStyle  : fontStyles(14, 'la'),
 			frame      : {
 				type   : 'Frame',
@@ -422,7 +426,7 @@ Design.loginboard = {
 			normaStyle : 'input',
 			focusStyle : 'inputfocus',
 			hoverStyle : 'input',
-			hovocStyle : 'inputfocus',
+			hofocStyle : 'inputfocus',
 			fontStyle  : fontStyles(14, 'la'),
 			frame      : {
 				type   : 'Frame',
@@ -432,8 +436,10 @@ Design.loginboard = {
 		},
 		'loginBC'      : {
 			type       : 'Custom',
-			style      : 'button',
-			hoverStyle : 'highlight',
+			normaStyle : 'button',
+			hoverStyle : 'buttonHover',
+			focusStyle : 'buttonFocus',
+			hofocStyle : 'buttonHofoc',
 			frame      : {
 				type   : 'Frame',
 				pnw    : { type: 'Point', anchor: 'se', x: -380,            y: -10 - loginBCH },
@@ -487,8 +493,10 @@ Design.loginboard = {
 		},
 		'cancelBC'     : {
 			type       : 'Custom',
-			style      : 'button',
-			hoverStyle : 'highlight',
+			normaStyle : 'button',
+			hoverStyle : 'buttonHover',
+			focusStyle : 'buttonFocus',
+			hofocStyle : 'buttonHofoc',
 			frame : {
 				type  : 'Frame',
 				pnw   : { type: 'Point', anchor: 'se', x: -300,             y: -10 - cancelBCH },
@@ -545,6 +553,7 @@ Design.loginboard = {
 			type       : 'Custom',
 			style      : 'zero',
 			hoverStyle : 'zhighlight',
+			TODO
 			frame : {
 				type  : 'Frame',
 				pnw   : { type: 'Point', anchor: 'se', x: -240,             y: -10 - forgotBCH },
@@ -730,7 +739,7 @@ Design.regboard = {
 			normaStyle : 'input',
 			focusStyle : 'inputfocus',
 			hoverStyle : 'input',
-			hovocStyle : 'inputfocus',
+			hofocStyle : 'inputfocus',
 			fontStyle  : fontStyles(14, 'la'),
 			frame      : {
 				type   : 'Frame',
@@ -743,7 +752,7 @@ Design.regboard = {
 			normaStyle : 'input',
 			focusStyle : 'inputfocus',
 			hoverStyle : 'input',
-			hovocStyle : 'inputfocus',
+			hofocStyle : 'inputfocus',
 			fontStyle  : fontStyles(14, 'la'),
 			frame      : {
 				type   : 'Frame',
@@ -756,7 +765,7 @@ Design.regboard = {
 			normaStyle : 'input',
 			focusStyle : 'inputfocus',
 			hoverStyle : 'input',
-			hovocStyle : 'inputfocus',
+			hofocStyle : 'inputfocus',
 			fontStyle  : fontStyles(14, 'la'),
 			frame      : {
 				type   : 'Frame',
@@ -769,7 +778,7 @@ Design.regboard = {
 			normaStyle : 'input',
 			focusStyle : 'inputfocus',
 			hoverStyle : 'input',
-			hovocStyle : 'inputfocus',
+			hofocStyle : 'inputfocus',
 			fontStyle  : fontStyles(14, 'la'),
 			frame      : {
 				type   : 'Frame',
@@ -782,7 +791,7 @@ Design.regboard = {
 			normaStyle : 'input',
 			focusStyle : 'inputfocus',
 			hoverStyle : 'input',
-			hovocStyle : 'inputfocus',
+			hofocStyle : 'inputfocus',
 			fontStyle  : fontStyles(14, 'la'),
 			frame      : {
 				type   : 'Frame',
@@ -792,8 +801,10 @@ Design.regboard = {
 		},
 		'regBC'      : {
 			type       : 'Custom',
-			style      : 'button',
-			hoverStyle : 'highlight',
+			normaStyle : 'button',
+			hoverStyle : 'buttonHover',
+			focusStyle : 'buttonFocus',
+			hofocStyle : 'buttonHofoc',
 			frame      : {
 				type   : 'Frame',
 				pnw    : { type: 'Point', anchor: 'se', x: -360,          y: -100 - regBCH   },
@@ -847,8 +858,10 @@ Design.regboard = {
 		},
 		'cancelBC'     : {
 			type       : 'Custom',
-			style      : 'button',
-			hoverStyle : 'highlight',
+			normaStyle : 'button',
+			hoverStyle : 'buttonHover',
+			focusStyle : 'buttonFocus',
+			hofocStyle : 'buttonHofoc',
 			frame : {
 				type  : 'Frame',
 				pnw   : { type: 'Point', anchor: 'se', x: -230,           y: -60 - canrBCH },

@@ -86,6 +86,14 @@ CCustom = function(twig, board, inherit, name) {
 };
 
 /**
+| CCustoms can focus or not depending on their methods
+*/
+CCustom.prototype.canFocus = function() {
+	if (!this.methods.canFocus) { return false; }
+	return this.methods.canFocus();
+};
+
+/**
 | Paths the custom control.
 */
 CCustom.prototype.path = function(fabric, border, twist) {
@@ -103,10 +111,10 @@ CCustom.prototype.getFabric = function(accent) {
 
 	var sname;
 	switch (accent) {
-	case CAccent.NORMA : sname = this.twig.style;      break;
+	case CAccent.NORMA : sname = this.twig.normaStyle; break;
 	case CAccent.HOVER : sname = this.twig.hoverStyle; break;
-	case CAccent.FOCUS : sname = this.twig.style;      break;
-	case CAccent.HOVOC : sname = this.twig.hoverStyle; break;
+	case CAccent.FOCUS : sname = this.twig.focusStyle; break;
+	case CAccent.HOFOC : sname = this.twig.hofocStyle; break;
 	default : throw new Error('Invalid accent');
 	}
 
@@ -127,6 +135,14 @@ CCustom.prototype.getFabric = function(accent) {
 	}
 
 	return fabric;
+};
+
+/**
+| Input
+*/
+CCustom.prototype.input = function(board, text) {
+	if (this.methods.input) { this.methods.input(board, this, text); }
+	return true;
 };
 
 /**
