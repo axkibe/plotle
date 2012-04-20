@@ -224,22 +224,31 @@ CBoard.prototype.input = function(text) {
 };
 
 /**
+| Cycles the focus
+*/
+CBoard.prototype.cycleFocus = function(dir) {
+	var layout = this.tree.root.layout;
+	var rank = layout.rankOf(this.$focus);
+	var rs = rank;
+	var cname;
+	var ve;
+	do {
+		rank = (rank + dir + layout.length) % layout.length;
+		if (rank === rs) { this.setFocus(null); }
+		cname = layout.ranks[rank];
+		ve    = this.cc[cname];
+	} while (!ve.canFocus());
+	this.setFocus(cname);
+	return;
+
+}
+
+/**
 | User pressed a special key.
 */
 CBoard.prototype.specialKey = function(key, shift, ctrl) {
 	if (key === 'tab') {
-		var layout = this.tree.root.layout;
-		var rank = layout.rankOf(this.$focus);
-		var rs = rank;
-		var cname;
-		var ve;
-		do {
-			rank = (rank + (shift ? (layout.length - 1) : 1)) % layout.length;
-			if (rank === rs) { throw new Error('no focusable element!'); }
-			cname = layout.ranks[rank];
-			ve    = this.cc[cname];
-		} while (!ve.canFocus());
-		this.setFocus(cname);
+		this.cycleFocus(shift ? -1 : 1);
 		return;
 	}
 	if (!this.$focus) return;

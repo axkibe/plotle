@@ -131,6 +131,13 @@ CMeth.regBC.canFocus = function() {
 	return true;
 };
 
+CMeth.regBC.specialKey = function(board, ele, key) {
+	switch (key) {
+	case 'down' : board.cycleFocus(+1); return;
+	case 'up'   : board.cycleFocus(-1); return;
+	}
+}
+
 CMeth.regBC.mousedown = function(board, ele, p, shift, ctrl) {
 	debug('TODO');
 };
@@ -156,6 +163,10 @@ CMeth.cancelBC.input = function(board, ele, text) {
 };
 
 CMeth.cancelBC.specialKey = function(board, ele, key) {
+	switch (key) {
+	case 'down' : board.cycleFocus(+1); return;
+	case 'up'   : board.cycleFocus(-1); return;
+	}
 	board.cockpit.setCurBoard('mainboard');
 };
 
