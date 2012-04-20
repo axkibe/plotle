@@ -251,7 +251,22 @@ CInput.prototype.delKey = function() {
 };
 
 /**
-| User pressed left key
+| User pressed end key.
+*/
+CInput.prototype.endKey = function() {
+	var caret = shell.caret;
+	var csign = caret.sign;
+	var at1   = csign.at1;
+	if (at1 >= this.value.length) return false;
+	shell.setCaret('cockpit', {
+		path : csign.path,
+		at1  : this.value.length
+	});
+	return true;
+};
+
+/**
+| User pressed left key.
 */
 CInput.prototype.leftKey = function() {
 	var caret = shell.caret;
@@ -260,6 +275,20 @@ CInput.prototype.leftKey = function() {
 	shell.setCaret('cockpit', {
 		path : csign.path,
 		at1  : csign.at1 - 1
+	});
+	return true;
+};
+
+/**
+| User pressed pos1 key
+*/
+CInput.prototype.pos1Key = function() {
+	var caret = shell.caret;
+	var csign = caret.sign;
+	if (csign.at1 <= 0) return false;
+	shell.setCaret('cockpit', {
+		path : csign.path,
+		at1  : 0
 	});
 	return true;
 };
@@ -281,12 +310,14 @@ CInput.prototype.rightKey = function() {
 /**
 | User pressed a special key
 */
-CInput.prototype.specialKey = function(key) {
+CInput.prototype.specialKey = function(board, key) {
 	var poke = false;
 	switch(key) {
 	case 'backspace' : poke = this.backspaceKey(); break;
 	case 'del'       : poke = this.delKey();       break;
 	case 'left'      : poke = this.leftKey();      break;
+	case 'pos1'      : poke = this.pos1Key();      break;
+	case 'end'       : poke = this.endKey();       break;
 	case 'right'     : poke = this.rightKey();     break;
 	}
 	if (poke) { this.board.poke(); }

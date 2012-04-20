@@ -146,6 +146,14 @@ CCustom.prototype.input = function(board, text) {
 };
 
 /**
+| Input
+*/
+CCustom.prototype.specialKey = function(board, key) {
+	if (this.methods.specialKey) { this.methods.specialKey(board, this, key); }
+	return true;
+};
+
+/**
 | Mouse hover.
 */
 CCustom.prototype.mousehover = function(board, p) {

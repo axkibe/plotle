@@ -151,6 +151,14 @@ CMeth.cancelBC.canFocus = function() {
 	return true;
 };
 
+CMeth.cancelBC.input = function(board, ele, text) {
+	board.cockpit.setCurBoard('mainboard');
+};
+
+CMeth.cancelBC.specialKey = function(board, ele, key) {
+	board.cockpit.setCurBoard('mainboard');
+};
+
 CMeth.cancelBC.mousedown = function(board, ele, p, shift, ctrl) {
 	board.cockpit.setCurBoard('mainboard');
 };

@@ -243,7 +243,7 @@ CBoard.prototype.specialKey = function(key, shift, ctrl) {
 		return;
 	}
 	if (!this.$focus) return;
-	this.cc[this.$focus].specialKey(key);
+	this.cc[this.$focus].specialKey(this, key);
 };
 
 /**
