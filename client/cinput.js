@@ -341,6 +341,11 @@ CInput.prototype.upKey = function(board) {
 	return true;
 };
 
+CInput.prototype.poke = function() {
+	this.$fabric = null;
+	this.board.poke();
+}
+
 /**
 | Mouse hover
 */

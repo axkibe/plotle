@@ -150,17 +150,21 @@ VSpace.prototype.update = function(twig) {
 
 
 /**
+| Returns the entity of path
+*/
+VSpace.prototype.getEntity = function(path) {
+	if (path.get(0) !== 'welcome') /* TODO */ { return null; }
+	return this.vv[path.get(1)] || null;
+};
+
+/**
 | Returns the focused item.
 */
 VSpace.prototype.focusedVItem = function() {
 	var caret = shell.caret;
 	if (caret.visec !== 'space') { return null; }
-	var sign = caret.sign;
-	var path = sign.path;
-	if (path.get(0) !== 'welcome') /* TODO */ { return null; }
-	return this.vv[path.get(1)] || null;
+	return this.getEntity(caret.sign.path);
 };
-
 
 /**
 | Creates a new visual representation of an item.

@@ -108,11 +108,11 @@ Cockpit.prototype.message = function(message) {
 
 
 /**
-| Returns the current cockpit board
+| Returns the board by its name
 */
-Cockpit.prototype.curBoard = function() {
+Cockpit.prototype.getBoard = function(name) {
 	var fabric = this.fabric;
-	var cboard = this.boards[this.curBoardName];
+	var cboard = this.boards[name];
 	if (!is(cboard)) { throw new Error('invalid curBoardName: ' + this.curBoardName); }
 
 	if (cboard &&
@@ -121,12 +121,19 @@ Cockpit.prototype.curBoard = function() {
 	{
 		return cboard;
 	} else {
-		return this.boards[this.curBoardName] = new CBoard(
-			this.curBoardName,
+		return this.boards[name] = new CBoard(
+			name,
 			cboard,
 			this,
 			new Point(fabric.width, fabric.height));
 	}
+};
+
+/**
+| Returns the current cockpit board
+*/
+Cockpit.prototype.curBoard = function() {
+	return this.getBoard(this.curBoardName);
 };
 
 /**
@@ -204,6 +211,11 @@ Cockpit.prototype.mousedown = function(p, shift, ctrl) {
 	if (r === null) { return null; }
 	this.curBoard().mousehover(p, shift, ctrl);
 	return r;
+};
+
+Cockpit.prototype.getEntity = function(path) {
+	var board = this.getBoard(path.get(0));
+	return board.cc[path.get(1)];
 };
 
 })();

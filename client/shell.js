@@ -121,16 +121,6 @@ Shell = function(fabric, sPeer) {
 
 	peer.setReport(this);
 
-	// TODO
-	Object.defineProperty(this, 'shift', {
-		get: function() { throw new Error('so nicht!'); },
-		set: function() { throw new Error('so nicht!'); }
-	});
-	Object.defineProperty(this, 'ctrl', {
-		get: function() { throw new Error('so nicht!'); },
-		set: function() { throw new Error('so nicht!'); }
-	});
-
 	// a flag set to true if anything requests a redraw.
 	this.redraw = false;
 	this._draw();
@@ -157,12 +147,36 @@ Shell.prototype.setCaret = function(visec, sign, retainx) {
 		throw new Error('invalid visec');
 	}
 
-	return this.caret = new Caret(
+	var poke = false;
+	if (this.caret.sign &&
+		(this.caret.visec !== visec || this.caret.sign.path !== sign.path)
+	) {
+		this.getEntity(this.caret.visec, this.caret.sign.path).poke();
+		poke = true;
+	}
+
+	this.caret = new Caret(
 		visec,
 		sign,
 		is(retainx) ? retainx : null,
 		this.caret.$shown
 	);
+
+	if (poke) { this.getEntity(visec, sign.path); }
+
+	return this.caret;
+};
+
+/**
+| Returns the entity in the visual section (cockpit or space) marked by path
+| This is either an item, or an cockpit element.
+*/
+Shell.prototype.getEntity = function(visec, path) {
+	switch(visec) {
+	case 'cockpit' : return this.cockpit.getEntity(path);
+	case 'space'   : return this.vspace. getEntity(path);
+	default : throw new Error('Invalid visec: '+visec);
+	}
 };
 
 

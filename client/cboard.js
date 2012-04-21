@@ -88,7 +88,12 @@ CBoard = function(name, inherit, cockpit, screensize) {
 	this.screensize = screensize;
 
 	this.$hover = inherit ? inherit.$hover : null;
-	this.$focus = inherit ? inherit.$focus : null;
+
+	// TODO
+	Object.defineProperty(this, '$focus', {
+		get : function() { throw new Error('ARRR'); },
+		set : function() { throw new Error('ARRR'); }
+	});
 
 	this.cc = {};
 	var layout = tree.root.layout;
@@ -112,6 +117,18 @@ CBoard.prototype.newCC = function(twig, inherit, name) {
 };
 
 /**
+| Returns the focused item.
+*/
+CBoard.prototype.focusedCC = function() {
+	var caret = shell.caret;
+	if (caret.visec !== 'cockpit') { return null; }
+	var sign = caret.sign;
+	var path = sign.path;
+	if (path.get(0) !== this.name) { return null; }
+	return this.cc[path.get(1)] || null;
+};
+
+/**
 | Paths the boards frame
 */
 CBoard.prototype.path = function(fabric, border, twist) {
@@ -129,10 +146,11 @@ CBoard.prototype.getFabric = function() {
 	fabric.paint(theme.cockpit.style, this, 'path');
 	var layout = this.tree.root.layout;
 
+	var focus = this.focusedCC();
 	for(var a = 0, aZ = layout.length; a < aZ; a++) {
 		var cname = layout.ranks[a];
 		var c = this.cc[cname];
-		c.draw(fabric, CAccent.state(cname === this.$hover, cname === this.$focus));
+		c.draw(fabric, CAccent.state(cname === this.$hover, c == focus));
 	}
 
 	if (dbgBoxes) {
@@ -219,8 +237,9 @@ CBoard.prototype.mousedown = function(p, shift, ctrl) {
 | Text input.
 */
 CBoard.prototype.input = function(text) {
-	if (!this.$focus) return;
-	this.cc[this.$focus].input(this, text);
+	var focus = this.focusedCC();
+	if (!focus) { return; }
+	focus.input(this, text);
 };
 
 /**
@@ -228,7 +247,10 @@ CBoard.prototype.input = function(text) {
 */
 CBoard.prototype.cycleFocus = function(dir) {
 	var layout = this.tree.root.layout;
-	var rank = layout.rankOf(this.$focus);
+	var focus = this.focusedCC();
+	if (!focus) { return; }
+	debug('KEY', focus.name);
+	var rank = layout.rankOf(focus.name);
 	var rs = rank;
 	var cname;
 	var ve;
@@ -238,6 +260,7 @@ CBoard.prototype.cycleFocus = function(dir) {
 		cname = layout.ranks[rank];
 		ve    = this.cc[cname];
 	} while (!ve.canFocus());
+
 	this.setFocus(cname);
 	return;
 
@@ -247,12 +270,13 @@ CBoard.prototype.cycleFocus = function(dir) {
 | User pressed a special key.
 */
 CBoard.prototype.specialKey = function(key, shift, ctrl) {
+	var focus = this.focusedCC();
+	if (!focus) return;
 	if (key === 'tab') {
 		this.cycleFocus(shift ? -1 : 1);
 		return;
 	}
-	if (!this.$focus) return;
-	this.cc[this.$focus].specialKey(this, key);
+	focus.specialKey(this, key);
 };
 
 /**
@@ -268,13 +292,14 @@ CBoard.prototype.poke = function() {
 | Sets the focused element.
 */
 CBoard.prototype.setFocus = function(cname) {
-	if (this.$focus === cname) { return; }
+	var element = this.cc[cname];
+	var focus = this.focusedCC();
+	if (focus === element) { return; }
 
 	this.$fabric = null;
 	shell.redraw = true;
-	if (this.$focus) { this.cc[this.$focus].$fabric = null; }
-	if (cname      ) { this.cc[cname      ].$fabric = null; }
-	this.$focus = cname;
+	if (focus)   {   focus.$fabric = null; }
+	if (element) { element.$fabric = null; }
 
 	shell.setCaret('cockpit', {
 		path : new Path([this.name, cname]),

@@ -115,7 +115,7 @@ CCustom.prototype.getFabric = function(accent) {
 	case CAccent.HOVER : sname = this.twig.hoverStyle; break;
 	case CAccent.FOCUS : sname = this.twig.focusStyle; break;
 	case CAccent.HOFOC : sname = this.twig.hofocStyle; break;
-	default : throw new Error('Invalid accent');
+	default : throw new Error('Invalid accent: ' + accent);
 	}
 
 	var style = Cockpit.styles[sname];
@@ -178,7 +178,7 @@ CCustom.prototype.mousedown = function(board, p) {
 	if (p.x < this.pnw.x || p.y < this.pnw.y || p.x > this.pse.x || p.y > this.pse.y) {
 		return false;
 	}
-	var fabric = this.getFabric();
+	var fabric = this.getFabric(CAccent.NORMA);
 	var pp = p.sub(this.pnw);
 	if (!fabric.within(this, 'path', pp))  { return false; }
 
@@ -195,5 +195,13 @@ CCustom.prototype.mousedown = function(board, p) {
 CCustom.prototype.draw = function(fabric, accent) {
 	fabric.drawImage(this.getFabric(accent), this.pnw);
 };
+
+/**
+| Clears all caches
+*/
+CCustom.prototype.poke = function() {
+	this.$fabric = null;
+	this.board.poke();
+}
 
 })();
