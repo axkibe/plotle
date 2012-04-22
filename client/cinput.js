@@ -225,7 +225,7 @@ CInput.prototype.input = function(board, text) {
 /**
 | User pressed backspace.
 */
-CInput.prototype.backspaceKey = function(board) {
+CInput.prototype.keyBackspace = function(board) {
 	var caret = shell.caret;
 	var csign = caret.sign;
 	var at1   = csign.at1;
@@ -241,7 +241,7 @@ CInput.prototype.backspaceKey = function(board) {
 /**
 | User pressed del.
 */
-CInput.prototype.delKey = function(board) {
+CInput.prototype.keyDel = function(board) {
 	var caret = shell.caret;
 	var csign = caret.sign;
 	var at1   = csign.at1;
@@ -251,9 +251,17 @@ CInput.prototype.delKey = function(board) {
 };
 
 /**
+| User pressed return key.
+*/
+CInput.prototype.keyReturn = function(board) {
+	board.cycleFocus(1);
+	return true;
+};
+
+/**
 | User pressed down key.
 */
-CInput.prototype.downKey = function(board) {
+CInput.prototype.keyDown = function(board) {
 	board.cycleFocus(1);
 	return true;
 };
@@ -261,7 +269,7 @@ CInput.prototype.downKey = function(board) {
 /**
 | User pressed end key.
 */
-CInput.prototype.endKey = function(board) {
+CInput.prototype.keyEnd = function(board) {
 	var caret = shell.caret;
 	var csign = caret.sign;
 	var at1   = csign.at1;
@@ -276,7 +284,7 @@ CInput.prototype.endKey = function(board) {
 /**
 | User pressed left key.
 */
-CInput.prototype.leftKey = function(board) {
+CInput.prototype.keyLeft = function(board) {
 	var caret = shell.caret;
 	var csign = caret.sign;
 	if (csign.at1 <= 0) return false;
@@ -290,7 +298,7 @@ CInput.prototype.leftKey = function(board) {
 /**
 | User pressed pos1 key
 */
-CInput.prototype.pos1Key = function(board) {
+CInput.prototype.keyPos1 = function(board) {
 	var caret = shell.caret;
 	var csign = caret.sign;
 	if (csign.at1 <= 0) return false;
@@ -304,7 +312,7 @@ CInput.prototype.pos1Key = function(board) {
 /**
 | User pressed right key
 */
-CInput.prototype.rightKey = function(board) {
+CInput.prototype.keyRight = function(board) {
 	var caret = shell.caret;
 	var csign = caret.sign;
 	if (csign.at1 >= this.value.text) return false;
@@ -321,14 +329,15 @@ CInput.prototype.rightKey = function(board) {
 CInput.prototype.specialKey = function(board, key) {
 	var poke = false;
 	switch(key) {
-	case 'backspace' : poke = this.backspaceKey(board); break;
-	case 'del'       : poke = this.delKey      (board); break;
-	case 'down'      : poke = this.downKey     (board); break;
-	case 'end'       : poke = this.endKey      (board); break;
-	case 'left'      : poke = this.leftKey     (board); break;
-	case 'pos1'      : poke = this.pos1Key     (board); break;
-	case 'right'     : poke = this.rightKey    (board); break;
-	case 'up'        : poke = this.upKey       (board); break;
+	case 'backspace' : poke = this.keyBackspace(board); break;
+	case 'del'       : poke = this.keyDel      (board); break;
+	case 'down'      : poke = this.keyDown     (board); break;
+	case 'end'       : poke = this.keyEnd      (board); break;
+	case 'left'      : poke = this.keyLeft     (board); break;
+	case 'pos1'      : poke = this.keyPos1     (board); break;
+	case 'return'    : poke = this.keyReturn   (board); break;
+	case 'right'     : poke = this.keyRight    (board); break;
+	case 'up'        : poke = this.keyUp       (board); break;
 	}
 	if (poke) { this.board.poke(); }
 };
@@ -336,7 +345,7 @@ CInput.prototype.specialKey = function(board, key) {
 /**
 | User pressed up key.
 */
-CInput.prototype.upKey = function(board) {
+CInput.prototype.keyUp = function(board) {
 	board.cycleFocus(-1);
 	return true;
 };

@@ -249,7 +249,6 @@ CBoard.prototype.cycleFocus = function(dir) {
 	var layout = this.tree.root.layout;
 	var focus = this.focusedCC();
 	if (!focus) { return; }
-	debug('KEY', focus.name);
 	var rank = layout.rankOf(focus.name);
 	var rs = rank;
 	var cname;

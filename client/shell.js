@@ -162,7 +162,7 @@ Shell.prototype.setCaret = function(visec, sign, retainx) {
 		this.caret.$shown
 	);
 
-	if (poke) { this.getEntity(visec, sign.path); }
+	if (poke && sign) { this.getEntity(visec, sign.path); }
 
 	return this.caret;
 };

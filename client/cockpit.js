@@ -140,6 +140,14 @@ Cockpit.prototype.curBoard = function() {
 | sets the current board
 */
 Cockpit.prototype.setCurBoard = function(boardName) {
+	var caret = shell.caret;
+	if (caret.visec === 'cockpit' &&
+		caret.sign &&
+		caret.sign.path.get(0) === this.curBoardName)
+	{
+		caret = shell.setCaret(null, null);
+	}
+
 	this.curBoardName = boardName;
 	shell.redraw = true;
 };
