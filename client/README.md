@@ -13,20 +13,56 @@ Files
  <tr><td>   browser.js
 </td><td>   wrapper around HTML5 browsers.
 </td></tr>
+ 
+ <tr><td>   caccent.js
+</td><td>   accent for cockpit components.
+</td></tr>
+ 
+ <tr><td>   caret.js
+</td><td>   the virtual caret.
+</td></tr>
+
+ <tr><td>   ccustom.js
+</td><td>   a custom component on the cockpit.
+</td></tr>
+ 
+ <tr><td>   cinput.js
+</td><td>   an input field on the cockpit.
+</td></tr>
+
+ <tr><td>   clabel.js
+</td><td>   a label on the cockpit.
+</td></tr>
+ 
+ <tr><td>   cmeth.js
+</td><td>   component methods, behavior definitions.
+</td></tr>
 
  <tr><td>   cockpit.js
 </td><td>   the unmoveable part of the user interface
 </td></tr>
+ 
+ <tr><td>   curve.js
+</td><td>   a bezier curve.
+</td></tr>
 
  <tr><td>   design.js
-</td><td>   element placements on the cockpit
+</td><td>   component placements on the cockpit
+</td></tr>
+ 
+ <tr><td>   devel.html
+</td><td>   development version of the shells html file
 </td></tr>
 
  <tr><td>   deverse.js
 </td><td>   pattern rules for (cockpit) design
 </td></tr>
+ 
+ <tr><td>   fabric.js
+</td><td>   a graphic 2D-Object library for HTML Canvas 5
+</td></tr>
 
- <tr><td>   iface-async.js
+ <tr><tda   iface-async.js
 </td><td>   communications with the server
 </td></tr>
 

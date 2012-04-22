@@ -169,7 +169,7 @@ Shell.prototype.setCaret = function(visec, sign, retainx) {
 
 /**
 | Returns the entity in the visual section (cockpit or space) marked by path
-| This is either an item, or an cockpit element.
+| This is either an item, or an cockpit component.
 */
 Shell.prototype.getEntity = function(visec, path) {
 	switch(visec) {

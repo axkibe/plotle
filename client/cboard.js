@@ -105,14 +105,14 @@ CBoard = function(name, inherit, cockpit, screensize) {
 };
 
 /**
-| Creates a new enhanced element.
+| Creates a new cockpit component.
 */
 CBoard.prototype.newCC = function(twig, inherit, name) {
 	switch(twig.type) {
 	case 'Custom' : return new CCustom(twig, this, inherit, name);
 	case 'Input'  : return new CInput (twig, this, inherit, name);
 	case 'Label'  : return new CLabel (twig, this, inherit, name);
-	default       : throw new Error('Invalid element type: ' + twig.type);
+	default       : throw new Error('Invalid component type: ' + twig.type);
 	}
 };
 
@@ -167,7 +167,7 @@ CBoard.prototype.getFabric = function() {
 CBoard.prototype.drawCaret = function() {
 	var cname = shell.caret.sign.path.get(1);
 	var ce = this.cc[cname];
-	if (!ce) { throw new Error('Caret element does not exist!'); }
+	if (!ce) { throw new Error('Caret component does not exist!'); }
 	if (ce.drawCaret) { ce.drawCaret(); }
 };
 
@@ -288,17 +288,18 @@ CBoard.prototype.poke = function() {
 
 
 /**
-| Sets the focused element.
+| Sets the focused component.
 */
 CBoard.prototype.setFocus = function(cname) {
-	var element = this.cc[cname];
+	var com = this.cc[cname];
 	var focus = this.focusedCC();
-	if (focus === element) { return; }
+	if (focus === com) { return; }
 
+	// TODO no longer needed!
 	this.$fabric = null;
 	shell.redraw = true;
 	if (focus)   {   focus.$fabric = null; }
-	if (element) { element.$fabric = null; }
+	if (com)     {     com.$fabric = null; }
 
 	shell.setCaret('cockpit', {
 		path : new Path([this.name, cname]),
@@ -307,7 +308,7 @@ CBoard.prototype.setFocus = function(cname) {
 };
 
 /**
-| Sets the hovered element.
+| Sets the hovered component.
 */
 CBoard.prototype.setHover = function(cname) {
 	if (this.$hover === cname) { return; }

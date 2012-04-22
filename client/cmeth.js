@@ -18,7 +18,7 @@
                                   `--'   '   `-' `-' `' ' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- The unmoving interface.
+ Component methods, behavior definitions.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file

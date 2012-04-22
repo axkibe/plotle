@@ -18,7 +18,7 @@
                               `--','   `-' `-' `-' `-' ' ' `'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- The accent for cockpit elements.
+ The accent for cockpit components.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file

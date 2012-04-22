@@ -18,7 +18,7 @@
                                `--'  `--'  `-^ `-' `' `-' ' ' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- A custom element in the cockpit.
+ A custom component on the cockpit.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -101,7 +101,7 @@ CCustom.prototype.path = function(fabric, border, twist) {
 };
 
 /**
-| Returns the fabric for the custom element.
+| Returns the fabric for the custom component.
 */
 CCustom.prototype.getFabric = function(accent) {
 	var fabric = this.$fabric;

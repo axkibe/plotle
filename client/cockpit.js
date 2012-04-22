@@ -73,8 +73,8 @@ var Point         = Fabric.Point;
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 Cockpit = function() {
 	this.fabric       = system.fabric;
-	//this.curBoardName = 'mainboard';
-	this.curBoardName = 'regboard';
+	this.curBoardName = 'mainboard';
+	//this.curBoardName = 'regboard';
 	this.boards = {
 		mainboard  : null,
 		loginboard : null,

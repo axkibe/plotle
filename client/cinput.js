@@ -83,7 +83,7 @@ CInput = function(twig, board, inherit, name) {
 	var pse  = this.pse  = computePoint(twig.frame.pse, board.iframe);
 	var bezi = this.bezi = new BeziRect(Point.zero, pse.sub(pnw), 7, 3);
 
-	this.value   = 'test';
+	this.value   = inherit ? inherit.value : '';
 	this.$fabric = null;
 	this.$accent = CAccent.NORMA;
 };
