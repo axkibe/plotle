@@ -410,6 +410,7 @@ Design.loginboard = {
 		},
 		'userI' : {
 			type       : 'Input',
+			password   :  false,
 			normaStyle : 'input',
 			focusStyle : 'inputfocus',
 			hoverStyle : 'input',
@@ -423,6 +424,7 @@ Design.loginboard = {
 		},
 		'passI' : {
 			type       : 'Input',
+			password   :  true,
 			normaStyle : 'input',
 			focusStyle : 'inputfocus',
 			hoverStyle : 'input',
@@ -736,6 +738,7 @@ Design.regboard = {
 		},
 		'userI' : {
 			type       : 'Input',
+			password   :  false,
 			normaStyle : 'input',
 			focusStyle : 'inputfocus',
 			hoverStyle : 'input',
@@ -749,6 +752,7 @@ Design.regboard = {
 		},
 		'emailI' : {
 			type       : 'Input',
+			password   :  false,
 			normaStyle : 'input',
 			focusStyle : 'inputfocus',
 			hoverStyle : 'input',
@@ -762,6 +766,7 @@ Design.regboard = {
 		},
 		'passI' : {
 			type       : 'Input',
+			password   :  true,
 			normaStyle : 'input',
 			focusStyle : 'inputfocus',
 			hoverStyle : 'input',
@@ -775,6 +780,7 @@ Design.regboard = {
 		},
 		'pass2I' : {
 			type       : 'Input',
+			password   :  true,
 			normaStyle : 'input',
 			focusStyle : 'inputfocus',
 			hoverStyle : 'input',
@@ -788,6 +794,7 @@ Design.regboard = {
 		},
 		'codeI' : {
 			type       : 'Input',
+			password   :  false,
 			normaStyle : 'input',
 			focusStyle : 'inputfocus',
 			hoverStyle : 'input',

@@ -1664,6 +1664,7 @@ Fabric.RoundRect     = RoundRect;
 Fabric.cos30         = cos30;
 Fabric.ensureInteger = ensureInteger;
 Fabric.half          = half;
+Fabric.magic         = magic;
 Fabric.opposite      = opposite;
 Fabric.tan30         = tan30;
 

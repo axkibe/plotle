@@ -61,10 +61,12 @@ var R             = Math.round;
 var Rect          = Fabric.Rect;
 var computePoint  = Curve.computePoint;
 var debug         = Jools.debug;
+var half          = Fabric.half;
 var immute        = Jools.immute;
 var is            = Jools.is;
 var isnon         = Jools.isnon;
 var log           = Jools.log;
+var magic         = Fabric.magic;
 var pitch         = new Point(8, 3);
 
 /**
@@ -87,6 +89,20 @@ CInput = function(twig, board, inherit, name) {
 };
 
 /**
+| Returns the width of a character for password masks.
+*/
+CInput.prototype.maskWidth = function(size) {
+	return R(size * 0.2);
+}
+
+/**
+| Returns the kerning of characters for password masks.
+*/
+CInput.prototype.maskKern = function(size) {
+	return R(size * 0.15);
+}
+
+/**
 | The input field is focusable.
 */
 CInput.prototype.canFocus = function() {
@@ -104,6 +120,30 @@ CInput.prototype.path = function(fabric, border, twist) {
 	fabric.lineTo(this.pnw.x, this.pse.y);
 	fabric.lineTo(this.pnw);
 };
+
+/**
+| Draws the mask for password fields
+*/
+CInput.prototype.maskPath = function(fabric, border, twist, length, size) {
+	var x  = pitch.x;
+	var y  = R(pitch.y + size * 0.7);
+	var h  = R(size * 0.32);
+	var w  = this.maskWidth(size);
+	var w2 = w * 2;
+	var k  = this.maskKern(size);
+	var wm = w * magic;
+	var wh = h * magic;
+
+	fabric.beginPath(twist);
+	for (var a = 0; a < length; a++) {
+		fabric.moveTo(                    x + w,  y - h);
+		fabric.beziTo( wm,   0,   0, -wh, x + w2, y);
+		fabric.beziTo(  0,  wh,  wm,   0, x + w,  y + h);
+		fabric.beziTo(-wm,   0,   0,  wh, x,      y);
+		fabric.beziTo(  0, -wh, -wm,   0, x + w,  y - h);
+		x += w2 + k;
+	}
+}
 
 /**
 | Returns the fabric for the input field.
@@ -126,7 +166,11 @@ CInput.prototype.getFabric = function(accent) {
 	fabric.fill(style.fill, this.bezi, 'path');
 	var fs = this.twig.fontStyle;
 	fabric.fontStyle(fs.style, fs.fill, fs.align, fs.base);
-	fabric.fillText(this.value, pitch.x, fs.size + pitch.y);
+	if(this.twig.password) {
+		fabric.fill('black', this, 'maskPath', this.value.length, fs.size);
+	} else {
+		fabric.fillText(this.value, pitch.x, fs.size + pitch.y);
+	}
 	fabric.edge(style.edge, this.bezi, 'path');
 
 	return fabric;
@@ -148,16 +192,25 @@ CInput.prototype.draw = function(fabric, accent) {
 */
 CInput.prototype.getOffsetPoint = function(offset) {
 	// @@ cache position
+	debug(offset);
+
 	var twig = this.twig;
 	var font = twig.fontStyle;
 	Measure.font = font.style;
 	var val = this.value;
 
 	// @@ use token. text instead.
-	return new Point(
-		R(pitch.x + Measure.width(val.substring(0, offset))),
-		R(pitch.y + font.size)
-	);
+	if (this.twig.password) {
+		return new Point(
+			pitch.x + (2 * this.maskWidth(font.size) + this.maskKern(font.size)) * offset - 1,
+			R(pitch.y + font.size)
+		);
+	} else {
+		return new Point(
+			R(pitch.x + Measure.width(val.substring(0, offset))),
+			R(pitch.y + font.size)
+		);
+	}
 };
 
 /**
@@ -315,7 +368,7 @@ CInput.prototype.keyPos1 = function(board) {
 CInput.prototype.keyRight = function(board) {
 	var caret = shell.caret;
 	var csign = caret.sign;
-	if (csign.at1 >= this.value.text) return false;
+	if (csign.at1 >= this.value.length) return false;
 	shell.setCaret('cockpit', {
 		path : csign.path,
 		at1  : csign.at1 + 1

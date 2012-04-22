@@ -115,10 +115,11 @@ Twig.prototype.newUID = function() {
 */
 var twigtype = function(o) {
 	switch(o.constructor) {
-	case Array  : return 'Array';
-	case Number : return 'Number';
-	case String : return 'String';
-	default     : return o.type;
+	case Array   : return 'Array';
+	case Boolean : return 'Boolean';
+	case Number  : return 'Number';
+	case String  : return 'String';
+	default      : return o.type;
 	}
 };
 
@@ -253,8 +254,9 @@ Tree.prototype.grow = function(model /*, ... */) {
 			vtype = twigtype(val);
 			if (!pattern.copse[vtype]) throw reject(ttype+'.copse does not allow '+val.type);
 			switch(val.constructor) {
-			case String :
-			case Number :
+			case Boolean :
+			case Number  :
+			case String  :
 				break;
 			default     :
 				if (!val._$grown) twig.copse[k] = this.grow(twig.copse[k]);
@@ -272,8 +274,9 @@ Tree.prototype.grow = function(model /*, ... */) {
 			vtype = twigtype(val);
 			if (!pattern.must[k]) throw reject(ttype+' does not allow key: '+k);
 			switch(val.constructor) {
-			case String :
-			case Number :
+			case Boolean :
+			case Number  :
+			case String  :
 				break;
 			default     :
 				if (!val._$grown) twig[k] = this.grow(twig[k]);

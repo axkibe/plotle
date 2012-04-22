@@ -107,6 +107,7 @@ Deverse = {
 	'Input'  : {
 		must : {
 			'frame'      : 'Frame',
+			'password'   : 'Boolean',
 			'normaStyle' : 'String',
 			'hoverStyle' : 'String',
 			'focusStyle' : 'String',
