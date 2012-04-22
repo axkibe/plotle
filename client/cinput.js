@@ -192,8 +192,6 @@ CInput.prototype.draw = function(fabric, accent) {
 */
 CInput.prototype.getOffsetPoint = function(offset) {
 	// @@ cache position
-	debug(offset);
-
 	var twig = this.twig;
 	var font = twig.fontStyle;
 	Measure.font = font.style;
