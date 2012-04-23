@@ -43,8 +43,6 @@ var Deverse;
 var theme;
 var system;
 var shell;
-var dbgNoCache;
-var dbgBoxes;
 
 /**
 | Exports

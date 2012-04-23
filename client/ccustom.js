@@ -36,8 +36,6 @@ var Jools;
 var Fabric;
 var system;
 var shell;
-var dbgNoCache;
-var dbgBoxes;
 
 /**
 | Exports
@@ -105,7 +103,7 @@ CCustom.prototype.path = function(fabric, border, twist) {
 */
 CCustom.prototype.getFabric = function(accent) {
 	var fabric = this.$fabric;
-	if (fabric && this.$accent === accent && !dbgNoCache) { return fabric; }
+	if (fabric && this.$accent === accent && !config.debug.noCache) { return fabric; }
 
 	fabric = this.$fabric = new Fabric(this.iframe);
 
@@ -126,7 +124,7 @@ CCustom.prototype.getFabric = function(accent) {
 	fabric.fontStyle(fs.style, fs.fill, fs.align, fs.base);
 	fabric.fillText(this.twig.caption.text, this.caption.pos);
 
-	if (dbgBoxes) {
+	if (config.debug.drawBoxes) {
 		fabric.paint(
 			Cockpit.styles.boxes,
 			new Rect(this.iframe.pnw, this.iframe.pse.sub(1, 1)),

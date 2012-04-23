@@ -36,11 +36,10 @@ var Action;
 var Fabric;
 var Jools;
 var VItem;
-var dbgNoCache;
+var peer;
 var shell;
 var system;
 var theme;
-var peer;
 
 /**
 | Capsule
@@ -136,7 +135,7 @@ VLabel.prototype.draw = function(fabric) {
 	var zone = this.getZone();
 
 	// no buffer hit?
-	if (dbgNoCache || !f ||
+	if (config.debug.noCache || !f ||
 		zone.width  !== f.width ||
 		zone.height !== f.height)
 	{

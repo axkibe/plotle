@@ -43,8 +43,6 @@ var Tree;
 var theme;
 var system;
 var shell;
-var dbgNoCache;
-var dbgBoxes;
 
 /**
 | Exports
@@ -139,7 +137,7 @@ CBoard.prototype.path = function(fabric, border, twist) {
 | Draws the mainboards contents
 */
 CBoard.prototype.getFabric = function() {
-	if (this.$fabric && !dbgNoCache) { return this.$fabric; }
+	if (this.$fabric && !config.debug.noCache) { return this.$fabric; }
 	var iframe = this.iframe;
 	var fabric = this.$fabric = new Fabric(iframe);
 
@@ -153,7 +151,7 @@ CBoard.prototype.getFabric = function() {
 		c.draw(fabric, CAccent.state(cname === this.$hover, c == focus));
 	}
 
-	if (dbgBoxes) {
+	if (config.debug.drawBoxes) {
 		fabric.paint(Cockpit.styles.boxes,
 			new Rect(iframe.pnw, iframe.pse.sub(1, 1)), 'path');
 	}

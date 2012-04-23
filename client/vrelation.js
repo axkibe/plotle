@@ -42,13 +42,11 @@ var Tree;
 var VDoc;
 var VItem;
 var VLabel;
-
-var dbgNoCache;
+var peer;
 var settings;
 var shell;
 var system;
 var theme;
-var peer;
 
 /**
 | Capsule

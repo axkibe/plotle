@@ -39,7 +39,6 @@ var Scrollbar;
 var VItem;
 var VPara;
 
-var dbgNoCache;
 var settings;
 var shell;
 var system;
@@ -229,7 +228,7 @@ VNote.prototype.draw = function(fabric) {
 	var f = this.$fabric;
 
 	// no buffer hit?
-	if (dbgNoCache || !f ||
+	if (config.debug.noCache || !f ||
 		zone.width  !== f.width ||
 		zone.height !== f.height)
 	{

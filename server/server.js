@@ -53,6 +53,7 @@ var config      = require('../config');
 var fs          = require('fs');
 var http        = require('http');
 var sha1        = require('../shared/sha1');
+var mongodb     = require('mongodb');
 var uglify      = config.uglify && require('uglify-js');
 var url         = require('url');
 var util        = require('util');
@@ -80,11 +81,20 @@ var Server = function() {
 	cconfig.push('var config = {\n');
 	cconfig.push('\tdevel : '  + Jools.configSwitchClient(config.devel) + ',\n');
 	cconfig.push('\tpuffed : ' + Jools.configSwitchClient(config.puffed) + ',\n');
-	cconfig.push('\tlog : {\n');
-	for(var k in config.log) {
-		cconfig.push('\t\t'+k+' : '+Jools.configSwitchClient(config.log[k])+',\n');
+	cconfig.push('\tdebug : {\n');
+	var first = true;
+	for(var k in config.debug) {
+		if (!first) { cconfig.push(',\n'); } else { first = false; }
+		cconfig.push('\t\t' + k + ' : ' + config.debug[k]);
 	}
-	cconfig.push('\t}\n');
+	cconfig.push('\n\t},\n');
+	cconfig.push('\tlog : {\n');
+	var first = true;
+	for(var k in config.log) {
+		if (!first) { cconfig.push(',\n'); } else { first = false; }
+		cconfig.push('\t\t' + k + ' : ' + Jools.configSwitchClient(config.log[k]));
+	}
+	cconfig.push('\n\t}\n');
 	cconfig.push('};\n');
 	this.cconfig = cconfig.join('');
 

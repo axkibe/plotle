@@ -46,13 +46,11 @@ var MeshMashine;
 var OvalMenu;
 var Path;
 var Tree;
-
-var dbgNoCache;
+var peer;
 var settings;
 var shell;
 var system;
 var theme;
-var peer;
 
 /**
 | Capsule

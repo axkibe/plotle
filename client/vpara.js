@@ -37,8 +37,6 @@ var Fabric;
 var Jools;
 var Sign;
 var Path;
-
-var dbgNoCache;
 var shell;
 var system;
 var theme;
@@ -105,7 +103,7 @@ VPara.prototype.getFlow = function() {
 	// @@ go into subnodes instead
 	var text = this.twig.text;
 
-	if (!dbgNoCache && flow &&
+	if (!config.debug.noCache && flow &&
 		flow.flowWidth === flowWidth &&
 		flow.fontsize  === fontsize
 	) return flow;
@@ -539,7 +537,7 @@ VPara.prototype.getFabric = function() {
 	var fabric = this.$fabric;
 
 	// cache hit?
-	if (!dbgNoCache && fabric &&
+	if (!config.debug.noCache && fabric &&
 		fabric.width === width &&
 		fabric.height === height)
 	{ return fabric; }

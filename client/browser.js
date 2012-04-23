@@ -42,21 +42,6 @@ var settings;
 var system;
 
 /**
-| Debugging mode, don't cache anything.
-|
-| In case of doubt, if caching is faulty, just set this true and see if the error
-| vanishes.
-|
-| TODO make part of config
-*/
-var dbgNoCache = false;
-
-/**
-| If true draws boxes around all frames
-*/
-var dbgBoxes = false;
-
-/**
 | Export/Capsule
 */
 (function(){
