@@ -63,6 +63,9 @@ CLabel = function(twig, board, inherit, name) {
 	this.name    = name;
 	this.pos     = computePoint(twig.pos, board.iframe);
 	this.methods = CMeth[name];
+	// if not null, overrides the design text
+	this.text    = inherit ? inherit.text : null;
+
 	if (!this.methods) { this.methods = {}; }
 };
 
@@ -79,7 +82,11 @@ CLabel.prototype.canFocus = function() {
 CLabel.prototype.draw = function(fabric) {
 	var fs = this.twig.fontStyle;
 	fabric.fontStyle(fs.style, fs.fill, fs.align, fs.base);
-	fabric.fillText(this.twig.text, this.pos);
+	fabric.fillText(this.text || this.twig.text, this.pos);
+};
+
+CLabel.prototype.poke = function() {
+	this.board.poke();
 };
 
 /**

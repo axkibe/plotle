@@ -41,7 +41,7 @@ var Jools;
 /**
 | Exports
 */
-var IFaceASync;
+var IFace;
 
 /**
 | Capsule
@@ -59,7 +59,7 @@ var uid       = Jools.uid;
 /**
 | Constructor.
 */
-IFaceASync = function() {
+IFace = function() {
 	// the current tree;
 	this.tree    = null;
 
@@ -80,7 +80,7 @@ IFaceASync = function() {
 /**
 | Authentication
 */
-IFaceASync.prototype.auth = function(user, pass, callback) {
+IFace.prototype.auth = function(user, pass, callback) {
     if (this.authActive) { throw new Error('Already authenticating'); }
 	this.authActive = true;
 	
@@ -135,7 +135,7 @@ IFaceASync.prototype.auth = function(user, pass, callback) {
 /**
 | Aquires a space
 */
-IFaceASync.prototype.aquireSpace = function(name) {
+IFace.prototype.aquireSpace = function(name, callback) {
     if (this.aquireSpaceActive) { throw new Error('Already aquiring a space'); }
 	this.aquireSpaceActive = true;
 	
@@ -153,7 +153,7 @@ IFaceASync.prototype.aquireSpace = function(name) {
 		if (ajax.status !== 200) {
 			self.aquireSpaceActive = false;
 			log('peer', 'aquireSpace.status == ' + ajax.status);
-			if (self.report) { self.report.report('fail', null, null); }
+			callback( { error: 'connection' , status: ajax.status }, null);
 			return;
 		}
 
@@ -161,28 +161,32 @@ IFaceASync.prototype.aquireSpace = function(name) {
 			asw = JSON.parse(ajax.responseText);
 		} catch (e) {
 			self.aquireSpaceActive = false;
-			throw new Error('Server answered no JSON!');
+			callback( { error: 'nojson' }, null);
+			return;
 		}
 
 		log('peer', '<-sg', asw);
 		if (!asw.ok) {
 			self.aquireSpaceActive = false;
 			log('peer', 'aquireSpace, server not ok');
-			if (self.report) { self.report.report('fail', null, null); }
+			callback( asw, null);
 			return;
 		}
 
 		self.aquireSpaceActive = false;
 
 		self.remoteTime = asw.time;
-		self.tree = self.rtree = new Tree({
-			type  : 'Nexus',
-			copse : {
-				'welcome' : asw.node
-			}
-		}, Meshverse);
+		self.tree = self.rtree = new Tree(
+			{
+				type  : 'Nexus',
+				copse : {
+					'welcome' : asw.node  // TODO
+				}
+			},
+			Meshverse
+		);
 
-		if (self.report) { self.report.report('aquire', self.tree, name); }
+		callback(null, { tree: self.tree, spacename: name });
 
 		// waits a second before going into update cycle, so safari
 		// stops its wheely thing.
@@ -203,11 +207,11 @@ IFaceASync.prototype.aquireSpace = function(name) {
 /**
 | Gets a twig
 */
-IFaceASync.prototype.get = function(path, len) {
+IFace.prototype.get = function(path, len) {
     return this.tree.getPath(path, len);
 };
 
-IFaceASync.prototype._update = function() {
+IFace.prototype._update = function() {
 	if (this._updateActive) { throw new Error('double update?'); }
 
 	var ajax = new XMLHttpRequest();
@@ -297,7 +301,7 @@ IFaceASync.prototype._update = function() {
 /**
 | Alters the tree
 */
-IFaceASync.prototype.alter = function(src, trg) {
+IFace.prototype.alter = function(src, trg) {
     var chg = new Change(new Sign(src), new Sign(trg));
     var r = MeshMashine.changeTree(this.tree, chg);
     this.tree = r.tree;
@@ -313,7 +317,7 @@ IFaceASync.prototype.alter = function(src, trg) {
 /**
 | Sends the stored changes to remote meshmashine
 */
-IFaceASync.prototype.sendChanges = function() {
+IFace.prototype.sendChanges = function() {
 	if (this._postbox.length > 0) {
 		return;
 	}

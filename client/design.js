@@ -217,14 +217,14 @@ Design.mainboard = {
 			type      : 'Label',
 			text      : 'Hello',
 			fontStyle : fontStyles(12, 'ca'),
-			pos       : { type: 'Point', anchor: 'sw', x:  240, y: -34 }
+			pos       : { type: 'Point', anchor: 'sw', x:  260, y: -34 }
 		},
 
 		'username'    : {
 			type      : 'Label',
-			text      : 'Visitor',
+			text      : '',
 			fontStyle : fontStyles(18, 'ca'),
-			pos       : { type: 'Point', anchor: 'sw', x:  240, y: -11 }
+			pos       : { type: 'Point', anchor: 'sw', x:  260, y: -11 }
 		},
 
 		'saycurrent'  : {

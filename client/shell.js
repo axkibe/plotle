@@ -119,6 +119,10 @@ Shell = function(fabric, sPeer) {
 	this.action     = null;
 	this.selection  = new Selection();
 
+	// current user
+	this.authUser   = null;
+	this.authPass   = null;
+
 	// a flag set to true if anything requests a redraw.
 	this.redraw = false;
 	this._draw();
@@ -189,14 +193,6 @@ Shell.prototype.report = function(status, tree, a1) {
 	case 'fail':
 		throw new Error('Connection failed'); // TODO
 		//break;
-	case 'aquire' :
-		name = a1;
-		this.vspace = new VSpace(tree.root.copse.welcome, this.vSpacePath);
-		this.cockpit.message(null);
-
-		this.cockpit.setCurSpace(name);      // TODO
-		this.cockpit.setUser('Visitor');     // TODO
-		break;
 	case 'update' :
 		this.tree = tree;
 		chgX = a1;
@@ -404,14 +400,26 @@ Shell.prototype.resize = function(width, height) {
 | Called when loading the website
 */
 Shell.prototype.onload = function() {
-	peer = new Peer('async');
+	peer = new Peer();
 	peer.setReport(this);
+	var self = this;
 	peer.auth('visitor', null, function(err, val) {
 		if (err !== null) {
 			log(fail, err);
 			throw new Error(err.message);
 		}
-		peer.aquireSpace('welcome');
+		self.authUser = val.user;
+		self.authPass = val.pass;
+		self.cockpit.setUser(val.user);
+
+		peer.aquireSpace('welcome', function(err, val) {
+			var name = val.name;
+			var tree = val.tree;
+			self.vspace = new VSpace(tree.root.copse.welcome, self.vSpacePath); // TODO welcome
+			self.cockpit.message(null);
+			self.cockpit.setCurSpace(name);      // TODO
+			self._draw();
+		});
 	});
 }
 

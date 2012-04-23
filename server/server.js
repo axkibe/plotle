@@ -101,8 +101,7 @@ var Server = function() {
 	this.registerFile('/tree.js',          'js',   1, 'shared/tree.js'        );
 	this.registerFile('/sign.js',          'js',   1, 'shared/sign.js'        );
 	this.registerFile('/meshmashine.js',   'js',   1, 'shared/meshmashine.js' );
-	this.registerFile('/iface-async.js',   'js',   1, 'client/iface-async.js' );
-	this.registerFile('/iface-sync.js',    'js',   1, 'client/iface-sync.js'  );
+	this.registerFile('/iface.js',         'js',   1, 'client/iface.js'       );
 	this.registerFile('/peer.js',          'js',   1, 'client/peer.js'        );
 	this.registerFile('/deverse.js',       'js',   1, 'client/deverse.js'     );
 	this.registerFile('/design.js',        'js',   1, 'client/design.js'      );

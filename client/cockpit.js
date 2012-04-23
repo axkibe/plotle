@@ -80,7 +80,6 @@ Cockpit = function() {
 		loginboard : null,
 		regboard   : null
 	};
-	this._user       = null;
 	this._curSpace   = null;
 	this._message    = null;
 };
@@ -164,9 +163,9 @@ Cockpit.prototype.setCurSpace = function(curSpace) {
 | Sets the user greeted on the mainboard
 */
 Cockpit.prototype.setUser = function(user, loggedIn) {
-	// TODO
-	this._user     = user;
-	this._loggedIn = loggedIn;
+	var ulabel = this.getBoard('mainboard').cc.username;
+	ulabel.text = user;
+	ulabel.poke();
 };
 
 

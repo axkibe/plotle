@@ -62,12 +62,8 @@ Files
 </td><td>   a graphic 2D-Object library for HTML Canvas 5
 </td></tr>
 
- <tr><tda   iface-async.js
+ <tr><td>   iface.js
 </td><td>   communications with the server
-</td></tr>
-
- <tr><td>   iface-sync.js
-</td><td>   a synchronous version of communications with the server (used for debugging)
 </td></tr>
 
  <tr><td>   meshcraft.html

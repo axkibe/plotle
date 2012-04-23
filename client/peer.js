@@ -30,9 +30,7 @@
 /**
 | Imports
 */
-var IFaceASync;
-var IFaceEmulate;
-var IFaceSync;
+var IFace;
 var Path;
 var Jools;
 
@@ -65,15 +63,9 @@ var is        = Jools.is;
 /**
 | Constructor
 */
-Peer = function(mode) {
+Peer = function() {
 	this.spaceName = null;
-
-	switch(mode) {
-	case 'async'   : this._iface = new IFaceASync();   break;
-	case 'sync'    : this._iface = new IFaceSync();    break;
-	case 'emulate' : this._iface = new IFaceEmulate(); break;
-	default : throw new Error('unknown mode: '+mode);
-	}
+	this._iface = new IFace();
 };
 
 /**
