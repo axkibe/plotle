@@ -167,6 +167,10 @@ var Server = function() {
 		'<script src="'+this.mepacksha1+'" type="text/javascript"></script>'
 	);
 
+	// visitors
+	this.nextVisitor = 1001;
+	this.visitors = {};
+
 	this.tree      = new Tree({ type : 'Nexus' }, Meshverse);
 	this.changes   = [];
 	this.upsleep   = {};
@@ -242,6 +246,32 @@ Server.prototype.alter = function(cmd, res) {
 	process.nextTick(function() { self.wakeAll(); });
 
 	return { ok: true, chgX: chgX };
+};
+
+/**
+| Executes an auth command.
+*/
+Server.prototype.auth = function(cmd, res) {
+	var user = cmd.user;
+	var pass = cmd.pass;
+	if (!is(user)) { throw reject('user missing'); }
+	if (!is(pass)) { throw reject('pass missing');  }
+
+	if (user === 'visitor') {
+		while (this.visitors[this.nextVisitor]) { this.nextVisitor++; }
+		var nv = this.nextVisitor;
+		var v = {
+			user    : 'visitor-' + nv,
+			pass    : cmd.pass,
+			created : Date.now(),
+			use     : Date.now()
+		};
+		this.visitors[nv] = v;
+		return { ok: true, user: v.user };
+	}
+
+	throw reject('non visitor users yet unsupported');
+	//return { ok: true };
 };
 
 /**
@@ -465,9 +495,10 @@ Server.prototype.ajaxCmd = function(cmd, res) {
 	var asw;
 	try {
 		switch (cmd.cmd) {
-		case 'alter':  asw = this.alter (cmd, res); break;
-		case 'get':    asw = this.get   (cmd, res); break;
-		case 'update': asw = this.update(cmd, res); break;
+		case 'alter'  : asw = this.alter (cmd, res); break;
+		case 'auth'   : asw = this.auth  (cmd, res); break;
+		case 'get'    : asw = this.get   (cmd, res); break;
+		case 'update' : asw = this.update(cmd, res); break;
 		default:
 			this.webError(res, 400, 'unknown command "'+cmd.cmd+'"');
 			return;

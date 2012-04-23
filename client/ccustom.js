@@ -202,6 +202,6 @@ CCustom.prototype.draw = function(fabric, accent) {
 CCustom.prototype.poke = function() {
 	this.$fabric = null;
 	this.board.poke();
-}
+};
 
 })();

@@ -93,14 +93,14 @@ CInput = function(twig, board, inherit, name) {
 */
 CInput.prototype.maskWidth = function(size) {
 	return R(size * 0.2);
-}
+};
 
 /**
 | Returns the kerning of characters for password masks.
 */
 CInput.prototype.maskKern = function(size) {
 	return R(size * 0.15);
-}
+};
 
 /**
 | The input field is focusable.
@@ -143,7 +143,7 @@ CInput.prototype.maskPath = function(fabric, border, twist, length, size) {
 		fabric.beziTo(  0, -wh, -wm,   0, x + w,  y - h);
 		x += w2 + k;
 	}
-}
+};
 
 /**
 | Returns the fabric for the input field.
@@ -404,7 +404,7 @@ CInput.prototype.keyUp = function(board) {
 CInput.prototype.poke = function() {
 	this.$fabric = null;
 	this.board.poke();
-}
+};
 
 /**
 | Mouse hover
