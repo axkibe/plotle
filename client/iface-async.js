@@ -21,6 +21,8 @@
  Peer interface that talks asynchronously with the server.
  This is the normal way the meshcraft shell operates.
 
+ TODO, replace report with callbacks
+
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
 
@@ -73,17 +75,71 @@ IFaceASync = function() {
 
 	// if set report changes to this object
 	this.report  = null;
-
-	// startup
-	this.startGet(new Path([ 'welcome' ]));
 };
 
 /**
-| TODO generalize
+| Authentication
 */
-IFaceASync.prototype.startGet = function(path) {
-    if (this.startGetActive) { throw new Error('There is already a startup get'); }
-	this.startGetActive = true;
+IFaceASync.prototype.auth = function(user, pass, callback) {
+    if (this.authActive) { throw new Error('Already authenticating'); }
+	this.authActive = true;
+	
+    var ajax = new XMLHttpRequest();
+    ajax.open('POST', '/mm', true);
+    ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	var self = this;
+
+    ajax.onreadystatechange = function() {
+		var asw;
+		if (ajax.readyState !== 4) { return; }
+
+		if (ajax.status !== 200) {
+			self.authActive = false;
+			log('peer', 'auth.status == ' + ajax.status);
+
+			callback( { error: 'connection' , status: ajax.status }, null);
+			return;
+		}
+
+		try {
+			asw = JSON.parse(ajax.responseText);
+		} catch (e) {
+			self.authActive = false;
+			callback( { error: 'nojson' }, null);
+		}
+
+		log('peer', '<-sg', asw);
+		if (!asw.ok) {
+			self.authActive = false;
+			log('peer', 'euth, server not ok');
+			callback( asw, null);
+			return;
+		}
+
+		self.authActive = false;
+		self.authUser = asw.user;
+		self.authPass = asw.pass;
+		callback(null, asw);
+	};
+
+    var request = JSON.stringify({
+        cmd  : 'auth',
+        user : user,
+		pass : pass
+    });
+
+    log('peer', 'auth->', request);
+    ajax.send(request);
+};
+
+/**
+| Aquires a space
+*/
+IFaceASync.prototype.aquireSpace = function(name) {
+    if (this.aquireSpaceActive) { throw new Error('Already aquiring a space'); }
+	this.aquireSpaceActive = true;
+	
+	var path = new Path([name]);
 
     var ajax = new XMLHttpRequest();
     ajax.open('POST', '/mm', true);
@@ -95,8 +151,8 @@ IFaceASync.prototype.startGet = function(path) {
 		if (ajax.readyState !== 4) { return; }
 
 		if (ajax.status !== 200) {
-			self.startGetActive = false;
-			log('peer', 'startGet.status == ' + ajax.status);
+			self.aquireSpaceActive = false;
+			log('peer', 'aquireSpace.status == ' + ajax.status);
 			if (self.report) { self.report.report('fail', null, null); }
 			return;
 		}
@@ -104,19 +160,19 @@ IFaceASync.prototype.startGet = function(path) {
 		try {
 			asw = JSON.parse(ajax.responseText);
 		} catch (e) {
-			self.startGetActive = false;
+			self.aquireSpaceActive = false;
 			throw new Error('Server answered no JSON!');
 		}
 
 		log('peer', '<-sg', asw);
 		if (!asw.ok) {
-			self.startGetActive = false;
-			log('peer', 'startGet, server not ok');
+			self.aquireSpaceActive = false;
+			log('peer', 'aquireSpace, server not ok');
 			if (self.report) { self.report.report('fail', null, null); }
 			return;
 		}
 
-		self.startGetActive = false;
+		self.aquireSpaceActive = false;
 
 		self.remoteTime = asw.time;
 		self.tree = self.rtree = new Tree({
@@ -126,11 +182,11 @@ IFaceASync.prototype.startGet = function(path) {
 			}
 		}, Meshverse);
 
-		if (self.report) { self.report.report('start', self.tree, null); }
+		if (self.report) { self.report.report('aquire', self.tree, name); }
 
 		// waits a second before going into update cycle, so safari
 		// stops its wheely thing.
-		// TODO make proper wrapping through browser
+		// TODO make proper wrapping through browser.js
 		window.setTimeout(function() {self._update(); }, 1000);
 	};
 

@@ -119,8 +119,6 @@ Shell = function(fabric, sPeer) {
 	this.action     = null;
 	this.selection  = new Selection();
 
-	peer.setReport(this);
-
 	// a flag set to true if anything requests a redraw.
 	this.redraw = false;
 	this._draw();
@@ -183,19 +181,25 @@ Shell.prototype.getEntity = function(visec, path) {
 /**
 | MeshMashine reports changes
 */
-Shell.prototype.report = function(status, tree, chgX) {
+Shell.prototype.report = function(status, tree, a1) {
+	var chgX;
+	var name;
+
 	switch (status) {
 	case 'fail':
 		throw new Error('Connection failed'); // TODO
 		//break;
-	case 'start' :
+	case 'aquire' :
+		name = a1;
 		this.vspace = new VSpace(tree.root.copse.welcome, this.vSpacePath);
 		this.cockpit.message(null);
-		this.cockpit.setCurSpace('welcome'); // TODO
+
+		this.cockpit.setCurSpace(name);      // TODO
 		this.cockpit.setUser('Visitor');     // TODO
 		break;
 	case 'update' :
 		this.tree = tree;
+		chgX = a1;
 		this.vspace.report(status, tree, chgX);
 
 		var caret = this.caret;
@@ -311,7 +315,7 @@ Shell.prototype.mousedown = function(p, shift, ctrl) {
 	}
 
 	if (this.redraw) { this._draw(); }
-	return mouseState;
+	return mouseState || false;
 };
 
 /**
@@ -395,5 +399,20 @@ Shell.prototype.input = function(text) {
 Shell.prototype.resize = function(width, height) {
 	this._draw();
 };
+
+/**
+| Called when loading the website
+*/
+Shell.prototype.onload = function() {
+	peer = new Peer('async');
+	peer.setReport(this);
+	peer.auth('visitor', null, function(err, val) {
+		if (err !== null) {
+			log(fail, err);
+			throw new Error(err.message);
+		}
+		peer.aquireSpace('welcome');
+	});
+}
 
 })();

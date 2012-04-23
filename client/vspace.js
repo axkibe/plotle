@@ -87,12 +87,6 @@ VSpace = function(twig, path) {
 		vv[k] = this.createVItem(twig.copse[k], k);
 	}
 
-	// TODO
-	Object.defineProperty(this, 'focus', {
-		'get' : function() { throw new Error('ERRRRR'); },
-		'set' : function() { throw new Error('ERRRRR'); }
-	});
-
 	this._floatMenuLabels = {c: 'new', n: 'Note', ne: 'Label'};
 };
 

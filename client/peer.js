@@ -66,12 +66,30 @@ var is        = Jools.is;
 | Constructor
 */
 Peer = function(mode) {
+	this.spaceName = null;
+
 	switch(mode) {
 	case 'async'   : this._iface = new IFaceASync();   break;
 	case 'sync'    : this._iface = new IFaceSync();    break;
 	case 'emulate' : this._iface = new IFaceEmulate(); break;
 	default : throw new Error('unknown mode: '+mode);
 	}
+};
+
+/**
+| auth
+*/
+Peer.prototype.auth = function(user, pass, callback) {
+	this._iface.auth(user, pass, callback);
+};
+
+/**
+| aquire space
+*/
+Peer.prototype.aquireSpace = function(name, callback) {
+	if (this.spaceName === name) { return; }
+	this.spaceName = name;
+	this._iface.aquireSpace(name, callback);
 };
 
 /**

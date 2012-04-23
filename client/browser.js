@@ -46,6 +46,8 @@ var system;
 |
 | In case of doubt, if caching is faulty, just set this true and see if the error
 | vanishes.
+|
+| TODO make part of config
 */
 var dbgNoCache = false;
 
@@ -477,9 +479,8 @@ function System() {
 window.onload = function() {
 	makeCatcher(function() {
 		new System();
-		var peer     = new Peer('async');
-		//var peer     = new Peer('emulate');
 		system.shell = new Shell(system.fabric, peer);
+		system.shell.onload();
 	})();
 };
 
