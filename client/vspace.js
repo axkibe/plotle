@@ -100,7 +100,6 @@ VSpace.prototype.update = function(tree, chgX) {
 	if (this.twig === twig) { return; }
 
 	this.twig = twig;
-	debug('UPDATE');
 
 	var vo = this.vv;
 	var vv = this.vv = {};
@@ -122,17 +121,11 @@ VSpace.prototype.update = function(tree, chgX) {
 	var caret = shell.caret;
 	var csign = caret.sign;
 	
-	if (csign && csign.path) {
-		debug('VISEC', caret.visec);
-		debug('PATH', caret.path);
-		debug('VV', isnon(vv[csign.path.get(1)]));
-	}
 	if (caret.visec === 'space' &&
 		csign && csign.path &&
 		csign.path.get(0) === 'welcome' &&
 		!isnon(vv[csign.path.get(1)])
 	) {
-		debug('REMOVED FOCUS');
 		if (shell.selection.active &&
 			shell.selection.sign1.path.get(-4) === csign.path.get(1))
 		{ shell.selection.deselect(true); }
