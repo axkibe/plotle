@@ -183,40 +183,27 @@ Shell.prototype.getEntity = function(visec, path) {
 
 
 /**
-| MeshMashine reports changes
+| MeshMashine reports updates.
 */
-Shell.prototype.report = function(status, tree, a1) {
-	var chgX;
-	var name;
+Shell.prototype.update = function(tree, chgX) {
+	this.tree = tree;
+	this.vspace.update(tree, chgX);
 
-	switch (status) {
-	case 'fail':
-		throw new Error('Connection failed'); // TODO
-		//break;
-	case 'update' :
-		this.tree = tree;
-		chgX = a1;
-		this.vspace.report(status, tree, chgX);
+	var caret = this.caret;
+	var shown = this.caret.$shown;
+	if (caret.sign !== null) {
+		this.setCaret(
+			caret.visec,
+			tfxSign(caret.sign, chgX),
+			caret.retainx
+		);
+		if (shown) { this.caret.show(); }
+	}
 
-		var caret = this.caret;
-		var shown = this.caret.$shown;
-		if (caret.sign !== null) {
-			this.setCaret(
-				caret.visec,
-				tfxSign(caret.sign, chgX),
-				caret.retainx
-			);
-			if (shown) { this.caret.show(); }
-		}
-
-		var selection = this.selection;
-		if (selection.active) {
-			selection.sign1 = tfxSign(selection.sign1, chgX);
-			selection.sign2 = tfxSign(selection.sign2, chgX);
-		}
-		break;
-	default :
-		throw new Error('unknown status: '+status);
+	var selection = this.selection;
+	if (selection.active) {
+		selection.sign1 = tfxSign(selection.sign1, chgX);
+		selection.sign2 = tfxSign(selection.sign2, chgX);
 	}
 	this._draw();
 };
@@ -401,7 +388,7 @@ Shell.prototype.resize = function(width, height) {
 */
 Shell.prototype.onload = function() {
 	peer = new Peer();
-	peer.setReport(this);
+	peer.setUpdate(this);
 	var self = this;
 	peer.auth('visitor', null, function(err, val) {
 		if (err !== null) {

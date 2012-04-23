@@ -12,16 +12,14 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--'
 
-                        ,-_/ .-,--'                ,.   .---.
-                        '  |  \|__ ,-. ,-. ,-.    / |   \___  . . ,-. ,-.
-                        .^ |   |   ,-| |   |-'   /~~|-.     \ | | | | |
-                        `--'  `'   `-^ `-' `-' ,'   `-' `---' `-| ' ' `-'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~/| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-                                                              `-'
- Peer interface that talks asynchronously with the server.
- This is the normal way the meshcraft shell operates.
+                                         ,-_/ .-,--' 
+                                         '  |  \|__ ,-. ,-. ,-.
+                                         .^ |   |   ,-| |   |-'
+                                         `--'  `'   `-^ `-' `-'
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- TODO, replace report with callbacks
+ The interface that talks asynchronously with the server.
+ This is the normal way the meshcraft shell operates.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -73,8 +71,8 @@ IFace = function() {
 	// changes that are currently on the way to the server
 	this._postbox = [];
 
-	// if set report changes to this object
-	this.report  = null;
+	// if set report updates to this object
+	this.update  = null;
 };
 
 /**
@@ -95,7 +93,7 @@ IFace.prototype.auth = function(user, pass, callback) {
 
 		if (ajax.status !== 200) {
 			self.authActive = false;
-			log('peer', 'auth.status == ' + ajax.status);
+			log('iface', 'auth.status == ' + ajax.status);
 
 			callback( { error: 'connection' , status: ajax.status }, null);
 			return;
@@ -108,10 +106,10 @@ IFace.prototype.auth = function(user, pass, callback) {
 			callback( { error: 'nojson' }, null);
 		}
 
-		log('peer', '<-sg', asw);
+		log('iface', '<-sg', asw);
 		if (!asw.ok) {
 			self.authActive = false;
-			log('peer', 'euth, server not ok');
+			log('iface', 'euth, server not ok');
 			callback( asw, null);
 			return;
 		}
@@ -128,7 +126,7 @@ IFace.prototype.auth = function(user, pass, callback) {
 		pass : pass
     });
 
-    log('peer', 'auth->', request);
+    log('iface', 'auth->', request);
     ajax.send(request);
 };
 
@@ -152,7 +150,7 @@ IFace.prototype.aquireSpace = function(name, callback) {
 
 		if (ajax.status !== 200) {
 			self.aquireSpaceActive = false;
-			log('peer', 'aquireSpace.status == ' + ajax.status);
+			log('iface', 'aquireSpace.status == ' + ajax.status);
 			callback( { error: 'connection' , status: ajax.status }, null);
 			return;
 		}
@@ -165,10 +163,10 @@ IFace.prototype.aquireSpace = function(name, callback) {
 			return;
 		}
 
-		log('peer', '<-sg', asw);
+		log('iface', '<-sg', asw);
 		if (!asw.ok) {
 			self.aquireSpaceActive = false;
-			log('peer', 'aquireSpace, server not ok');
+			log('iface', 'aquireSpace, server not ok');
 			callback( asw, null);
 			return;
 		}
@@ -200,17 +198,21 @@ IFace.prototype.aquireSpace = function(name, callback) {
 		path : path
     });
 
-    log('peer', 'sg->', request);
+    log('iface', 'sg->', request);
     ajax.send(request);
 };
 
 /**
-| Gets a twig
+| Gets a twig.
 */
 IFace.prototype.get = function(path, len) {
     return this.tree.getPath(path, len);
 };
 
+
+/**
+| Sends an update request to the server and computes its answer.
+*/
 IFace.prototype._update = function() {
 	if (this._updateActive) { throw new Error('double update?'); }
 
@@ -223,7 +225,7 @@ IFace.prototype._update = function() {
 		var a, aZ, asw, b, bZ, chgX;
 		if (ajax.readyState !== 4) { return; }
 		if (ajax.status !== 200) {
-			log('peer', 'update.status == ' + ajax.status);
+			log('iface', 'update.status == ' + ajax.status);
 			throw new Error('Update Error');
 			// TODO proper error handling
 		}
@@ -234,7 +236,7 @@ IFace.prototype._update = function() {
 			throw new Error('Server answered no JSON!');
 		}
 
-		log('peer', '<-u', asw);
+		log('iface', '<-u', asw);
 		if (!asw.ok) { throw new Error('update, server not OK!'); }
 		var chgs = asw.chgs;
 
@@ -279,8 +281,8 @@ IFace.prototype._update = function() {
 		}
 		self.remoteTime = asw.timeZ;
 
-		if (report.length > 0 && self.report) {
-			self.report.report('update', self.tree, report);
+		if (report.length > 0 && self.update) {
+			self.update.update(self.tree, report);
 		}
 
 		if (gotOwnChgs) { self.sendChanges(); }
@@ -294,7 +296,7 @@ IFace.prototype._update = function() {
 		time : this.remoteTime
 	});
 
-	log('peer', 'u->', request);
+	log('iface', 'u->', request);
 	ajax.send(request);
 };
 
@@ -310,7 +312,7 @@ IFace.prototype.alter = function(src, trg) {
 	this._outbox.push({ cid: uid(), chgX: chgX });
 	this.sendChanges();
 
-    if (this.report) { this.report.report('update', r.tree, chgX); }
+    if (this.update) { this.update.update(r.tree, chgX); }
     return chgX;
 };
 
@@ -338,7 +340,7 @@ IFace.prototype.sendChanges = function() {
 		if (ajax.readyState !== 4) { return; }
 
 		if (ajax.status !== 200) {
-			log('peer', 'sendChanges.status == ' + ajax.status);
+			log('iface', 'sendChanges.status == ' + ajax.status);
 			throw new Error('Cannot send changes to server');
 			// TODO proper error handling
 		}
@@ -349,7 +351,7 @@ IFace.prototype.sendChanges = function() {
 			throw new Error('Server answered no JSON!');
 		}
 
-		log('peer', '<-sc', asw);
+		log('iface', '<-sc', asw);
 		if (!asw.ok) { throw new Error('send changes, server not OK!'); }
 	};
 
@@ -364,7 +366,7 @@ IFace.prototype.sendChanges = function() {
 		chgX : c.chgX
 	});
 
-	log('peer', 'sc->', request);
+	log('iface', 'sc->', request);
 	ajax.send(request);
 };
 

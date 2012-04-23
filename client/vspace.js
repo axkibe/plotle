@@ -90,27 +90,15 @@ VSpace = function(twig, path) {
 	this._floatMenuLabels = {c: 'new', n: 'Note', ne: 'Label'};
 };
 
-
-/**
-| MeshMashine reported changes
-| updates twig pointers
-*/
-VSpace.prototype.report = function(status, tree, chgX) {
-	var twig = tree.root.copse[this.key];
-
-	if (this.twig === twig) {
-		// no change
-		return;
-	}
-
-	this.twig = twig;
-	this.update(twig);
-};
-
 /**
 | Updates v-vine to match a new twig.
 */
-VSpace.prototype.update = function(twig) {
+VSpace.prototype.update = function(tree, chgX) {
+	var twig = tree.root.copse[this.key];
+
+	// no change?
+	if (this.twig === twig) { return; }
+
 	this.twig = twig;
 
 	var vo = this.vv;
@@ -140,6 +128,7 @@ VSpace.prototype.update = function(twig) {
 			this.setFocus(null);
 		}
 	}
+	shell.redraw = true;
 };
 
 

@@ -23,6 +23,7 @@ module.exports = {
 		debug:  true,
 		fail:   true,
 		grow:   false,
+		iface:  false,
 		peer:   false,
 		report: false,
 		start:  true,

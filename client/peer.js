@@ -102,10 +102,10 @@ Peer.prototype.get = function(path, len) {
 };
 
 /**
-| Sets the listener
+| Sets the update listener
 */
-Peer.prototype.setReport = function(report) {
-	this._iface.report = report;
+Peer.prototype.setUpdate = function(update) {
+	this._iface.update = update;
 };
 
 /**

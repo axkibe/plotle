@@ -111,14 +111,6 @@ VDoc.prototype.update = function(twig) {
 			vv[k] = o;
 		}
 	}
-
-/*
-	for(var k in vo) {
-		if (!is(vv[k])) {
-			XXX
-		}
-	}
-	*/
 };
 
 /**
