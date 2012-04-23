@@ -46,7 +46,6 @@ var Jools;
 | Config variables
 */
 var devel;
-var puffed;
 
 /**
 | returns true if param is true for the client
@@ -70,12 +69,12 @@ if (typeof(window) === 'undefined') {
 	// in node
 	config = require('../config');
 	devel  = configSwitchServer(config.devel);
-	puffed = configSwitchServer(config.puffed);
 } else {
 	// ini browser
 	devel  = configSwitchClient(config.devel);
-	puffed = configSwitchClient(config.puffed);
 }
+
+var puffed = config.debug.puffed;
 
 /**
 | Testers

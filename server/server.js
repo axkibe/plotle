@@ -80,7 +80,6 @@ var Server = function() {
 	var cconfig = [];
 	cconfig.push('var config = {\n');
 	cconfig.push('\tdevel : '  + Jools.configSwitchClient(config.devel) + ',\n');
-	cconfig.push('\tpuffed : ' + Jools.configSwitchClient(config.puffed) + ',\n');
 	cconfig.push('\tdebug : {\n');
 	var first = true;
 	for(var k in config.debug) {
