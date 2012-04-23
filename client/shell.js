@@ -153,7 +153,8 @@ Shell.prototype.setCaret = function(visec, sign, retainx) {
 	if (this.caret.sign &&
 		(this.caret.visec !== visec || this.caret.sign.path !== sign.path)
 	) {
-		this.getEntity(this.caret.visec, this.caret.sign.path).poke();
+		var entity = this.getEntity(this.caret.visec, this.caret.sign.path);
+		if (entity) { entity.poke() };
 		poke = true;
 	}
 

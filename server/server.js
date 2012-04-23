@@ -178,7 +178,10 @@ var Server = function() {
 	// startup init
 	var asw = this.alter({
 		time : 0,
-		chgX : new Change(Emulate.src, { path : Emulate.path }),
+		chgX : new Change(
+			{ val: { type: 'Space', cope: {}, ranks: [] } },
+			{ path : ['welcome'] }
+		),
 		cid  : 'startup'
 	});
 
@@ -220,7 +223,7 @@ Server.prototype.alter = function(cmd, res) {
 
 	// fits the cmd into data structures
 	try {
-		if (isArray(chgX))  { throw new Error('TODO Array chgX not yet supported'); } // TODO
+		if (isArray(chgX))  { throw new Error('Array chgX not yet supported'); } // @@
 		chgX = new Change(chgX);
 	} catch(e) {
 		throw reject('invalid cmd: '+e.message);
