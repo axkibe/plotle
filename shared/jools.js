@@ -218,8 +218,8 @@ var fixate = function(obj, key, value) {
 */
 var innumerable = function(obj, key, value, writable) {
     Object.defineProperty(
-		obj, key, 
-		{ 
+		obj, key,
+		{
 			value: value,
 			writable: typeof(writable) === 'undefined' ? false : writable
 		}

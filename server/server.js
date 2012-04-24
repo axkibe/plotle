@@ -292,6 +292,7 @@ Server.prototype.registerFiles = function() {
 	registerFile('/testpad.html',     'html', 0, 'client/testpad.html'   );
 	registerFile('/testpad.js',       'js',   0, 'client/testpad.js'     );
 	registerFile('/jools.js',         'js',   1, 'shared/jools.js'       );
+	registerFile('/euclid.js',        'js',   1, 'shared/euclid.js'      );
 	registerFile('/fabric.js',        'js',   1, 'client/fabric.js'      );
 	registerFile('/theme.js'  ,       'js',   1, 'client/theme.js'       );
 	registerFile('/meshverse.js',     'js',   1, 'shared/meshverse.js'   );

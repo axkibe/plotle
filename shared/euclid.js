@@ -12,11 +12,13 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--'
 
-									+++ Fabris +++
-                                    (Fabric-Server)
+                                   .-,--.         .      .
+                                    `\__  . . ,-. |  . ,-|
+                                     /    | | |   |  | | |
+                                    '`--' `-^ `-' `' ' `-^
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- This is the shared/server's view of the fabric's data structures.
+ Objects and operations on an euclidian plane.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -31,15 +33,20 @@ var Jools;
 /**
 | Exports
 */
-var Fabric = null;
+var Euclid = null;
 
 /**
 | Capsule
 */
 (function(){
 'use strict';
-if (typeof(window) !== 'undefined') { throw new Error('Fabric(server) runs in a browser?'); }
-Jools = require('./jools');
+
+/**
+| Node imports
+*/
+if (typeof(window) === 'undefined') {
+	Jools = require('./jools');
+}
 
 var debug        = Jools.debug;
 var immute       = Jools.immute;
@@ -47,13 +54,10 @@ var innumerable  = Jools.innumerable;
 var is           = Jools.is;
 var isnon        = Jools.isnon;
 var log          = Jools.log;
-var fixate       = Jools.fixate;
 var reject       = Jools.reject;
 var subclass     = Jools.subclass;
 var min          = Math.min;
 var max          = Math.max;
-
-Fabric = {};
 
 /**
 | Returns the compass direction opposite of a direction.
@@ -105,13 +109,21 @@ var Point = function(a1, a2) {
 */
 Point.zero = new Point(0, 0);
 
-
 /**
-| Returns a json object for this point.
+| Creates a new point.
+| However it will look through a list of points to see if
+| this point has already this x/y to save creation of yet
+| another object
+|
+| Point.renew(x, y, p1, p2, p3, ...)
 */
-/*Point.prototype.toJSON = function() {
-	return this._json || (this._json = { x: this.x, y: this.y });
-}*/
+Point.renew = function(x, y) {
+	for(var a = 2; a < arguments.length; a++) {
+		var p = arguments[a];
+		if (p instanceof Point && p.x === x && p.y === y) return p;
+	}
+	return new Point(x, y);
+};
 
 /**
 | Returns true if this point is equal to another.
@@ -207,9 +219,14 @@ Rect.prototype.eq = function(r) {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-Fabric.Point    = Point;
-Fabric.Rect     = Rect;
-Fabric.opposite = opposite;
-module.exports  = Fabric;
+Euclid = {
+	Point    : Point,
+	Rect     : Rect,
+	opposite : opposite
+};
+
+if (typeof(window) === 'undefined') {
+	module.exports = Euclid;
+}
 
 })();

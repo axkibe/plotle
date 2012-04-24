@@ -28,6 +28,7 @@
 /**
 | Imports
 */
+var Euclid;
 var Fabric;
 
 /**
@@ -40,9 +41,18 @@ var Meshverse;
 */
 (function () {
 "use strict";
+
+var Point;
+var Rect;
 if (typeof (window) === 'undefined') {
-	// server node imports
-	Fabric = require('./fabris');
+	// node imports
+	Euclid = require('./euclid');
+	Point  = Euclid.Point;
+	Rect   = Euclid.Rect;
+} else {
+	// browser creates Fabric
+	Point  = Fabric.Point;
+	Rect   = Fabric.Rect;
 }
 
 /**
@@ -99,7 +109,7 @@ Meshverse = {
 
 	'Rect' : {
 		creator : function(t) {
-			return new Fabric.Rect(t.pnw, t.pse);
+			return new Rect(t.pnw, t.pse);
 		},
 
 		must : {
@@ -110,7 +120,7 @@ Meshverse = {
 
 	'Point' : {
 		creator : function(t) {
-			return new Fabric.Point(t.x, t.y);
+			return new Point(t.x, t.y);
 		},
 
 		must : {
