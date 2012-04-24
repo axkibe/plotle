@@ -186,7 +186,7 @@ var Rect = function(pnw, pse, key) {
 | add(x, y)
 */
 Rect.prototype.add = function(a1, a2) {
-	return new Rect(this.pnw.add(a1, a2), this.pse.add(a1, a2));
+	return new this.constructor(this.pnw.add(a1, a2), this.pse.add(a1, a2));
 };
 
 /**
@@ -196,7 +196,7 @@ Rect.prototype.add = function(a1, a2) {
 | sub(x, y)
 */
 Rect.prototype.sub = function(a1, a2) {
-	return new Rect(this.pnw.sub(a1, a2), this.pse.sub(a1, a2));
+	return new this.constructor(this.pnw.sub(a1, a2), this.pse.sub(a1, a2));
 };
 
 /**

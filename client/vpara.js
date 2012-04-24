@@ -212,13 +212,13 @@ VPara.prototype.getLineXOffset = function(line, x) {
 
 	var x1 = 0, x2 = 0;
 	var a;
-	for(a = 0; a < text.length; a++) {
+	for(a = 0; a <= text.length; a++) {
 		x1 = x2;
 		x2 = Measure.width(text.substr(0, a));
 		if (x2 >= dx) break;
 	}
 
-	if (dx - x1 < x2 - dx) a--;
+	if (dx - x1 < x2 - dx && a > 0) a--;
 	return ftoken.o + a;
 };
 
@@ -381,7 +381,7 @@ VPara.prototype.specialKey = function(key, shift, ctrl) {
 		break;
 	case 'up' :
 		flow = this.getFlow();
-		x = caret.retainx !== null ? caret.retainx : caret.pos$.x;
+		x = caret.retainx !== null ? caret.retainx : caret.$pos.x;
 
 		if (caret.flow$line > 0) {
 			// stay within this para
@@ -440,7 +440,7 @@ VPara.prototype.specialKey = function(key, shift, ctrl) {
 		break;
 	case 'down' :
 		flow = this.getFlow();
-		x = caret.retainx !== null ? caret.retainx : caret.pos$.x;
+		x = caret.retainx !== null ? caret.retainx : caret.$pos.x;
 
 		if (caret.flow$line < flow.length - 1) {
 			// stays within this para
@@ -467,7 +467,6 @@ VPara.prototype.specialKey = function(key, shift, ctrl) {
 						path : ve.textPath(),
 						at1  : at1
 					},
-					null,
 					x
 				);
 			}
@@ -619,10 +618,9 @@ VPara.prototype.getCaretPos = function() {
 	var descend = fs * theme.bottombox;
 	var p       = this.getOffsetPoint(shell.caret.sign.at1, shell.caret);
 
-	var pnw = vdoc.getPNW(this.key);
-	var s = R(p.y + pnw.y + descend);
-	var n = s - R(vdoc.getFontSize() + descend);
-	var	x = p.x + pnw.x - 1;
+	var s = R(p.y + descend);
+	var n = s - R(fs + descend);
+	var	x = p.x - 1;
 
 	return immute({ s: s, n: n, x: x });
 };
@@ -635,14 +633,16 @@ VPara.prototype.drawCaret = function() {
 	var caret = shell.caret;
 	var pan   = shell.vspace.fabric.pan;
 	var vitem = shell.vspace.vget(this.path, -2);
+	var vdoc  = vitem.vv.doc;
 	var zone  = vitem.getZone();
-	var cpos  = caret.pos$  = this.getCaretPos();
+	var cpos  = caret.$pos  = this.getCaretPos();
+	var pnw   = vdoc.getPNW(this.key);
 	var sbary = vitem.scrollbarY;
 	var sy    = sbary ? R(sbary.getPos()) : 0;
 
-	var cyn = min(max(cpos.n - sy, 0), zone.height); // TODO limit
-	var cys = min(max(cpos.s - sy, 0), zone.height);
-	var cx  = cpos.x;
+	var cyn = min(max(cpos.n + pnw.y - sy, 0), zone.height); // TODO limit
+	var cys = min(max(cpos.s + pnw.y - sy, 0), zone.height);
+	var cx  = cpos.x + pnw.x;
 
 	var ch  = cys - cyn;
 	if (ch === 0) return;
