@@ -212,7 +212,7 @@ VPara.prototype.getLineXOffset = function(line, x) {
 
 	var x1 = 0, x2 = 0;
 	var a;
-	for(a = 0; a <= text.length; a++) {
+	for(a = 0; a < text.length; a++) {
 		x1 = x2;
 		x2 = Measure.width(text.substr(0, a));
 		if (x2 >= dx) break;

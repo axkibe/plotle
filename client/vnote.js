@@ -167,14 +167,16 @@ VNote.prototype.scrollCaretIntoView = function() {
 	var vpara   = shell.vspace.vget(caret.sign.path, -1);
 	if (vpara.constructor !== VPara) { throw new Error('iFail'); }
 	var cp      = vpara.getCaretPos();
+	var pnw     = this.vv.doc.getPNW(vpara.key);
+	debug('PNW', pnw);
 	var zone    = this.getZone();
 	var imargin = this.imargin;
 
-	if (cp.n - imargin.n < sy) {
-		this.setScrollbar(cp.n - imargin.n);
+	if (cp.n + pnw.y - imargin.n < sy) {
+		this.setScrollbar(cp.n + pnw.y - imargin.n);
 		this.poke();
-	} else if (cp.s + imargin.s > sy + zone.height) {
-		this.setScrollbar(cp.s - zone.height + imargin.s);
+	} else if (cp.s + pnw.y + imargin.s > sy + zone.height) {
+		this.setScrollbar(cp.s + pnw.y - zone.height + imargin.s);
 		this.poke();
 	}
 };
