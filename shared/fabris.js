@@ -96,7 +96,7 @@ var Point = function(a1, a2) {
 		this.x = a1;
 		this.y = a2;
 	}
-	this.type = 'Point'; // @@ So Tree is happy TODO prototype
+	this.type = 'Point';
 	immute(this);
 };
 
@@ -163,7 +163,7 @@ var Rect = function(pnw, pse, key) {
 	this.pse = pse;
 	fixateNoEnum(this, 'width',  pse.x - pnw.x);
 	fixateNoEnum(this, 'height', pse.y - pnw.y);
-	this.type = 'Rect'; // @@ So Tree is happy TODO prototype
+	this.type = 'Rect';
 	immute(this);
 };
 

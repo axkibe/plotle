@@ -425,7 +425,7 @@ ChangeOps.rank = function(tree, chg) {
 	var key = src.path.get(-1);
 	var orank = pivot.rankOf(key);
 	if (orank < 0) throw reject('invalid key :'+key);
-	// TODO if (orank === trg.rank) return null;
+	// @@ if (orank === trg.rank) return null;
 
 	src = src.affix(is, cm, 'src', 'rank', orank);
 	trg = trg.affix(is, cm, 'trg', 'path', src.path);
@@ -459,14 +459,14 @@ var tfxSign1 = function(sign, chg) {
 
 	var op = TFXOps[chg.type()];
 	if (!op) { throw new Error('tfxSign1, no op'); }
-	return op(sign, chg.src, chg.trg);  // TODO give, chg.
+	return op(sign, chg.src, chg.trg);  // @@ give, chg.
 };
 
 /**
 | Transforms a signature on a list of alternations.
 | If the signature is a span, it can return an array of signs.
 |
-| TODO check if t1/t2 params are ever user
+| @@ check if t1/t2 params are ever user
 */
 var tfxSign = function(sign, chgX) {
 	log('tfx', 'tfxSign', sign, chgX);

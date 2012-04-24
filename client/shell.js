@@ -104,7 +104,6 @@ Shell = function(fabric, sPeer) {
 	Measure.init();
 	this.fabric     = fabric;
 
-	this.vSpacePath = new Path(['welcome']);  // TODO move into vspace
 	this.vspace     = null;
 
 	this.cockpit    = new Cockpit();
@@ -256,11 +255,11 @@ Shell.prototype.pathFrowny = function(fabric, border, twist, pos) {
 	fabric.lineTo(pos.x, pos.y - 50);
 	fabric.lineTo(pos.x + 100, pos.y);
 
-	fabric.moveTo(pos.x - 100, pos.y - 140);
-	fabric.lineTo(pos.x -  50, pos.y - 140);
+	fabric.moveTo(pos.x - 100, pos.y - 150);
+	fabric.lineTo(pos.x -  50, pos.y - 160);
 	
-	fabric.moveTo(pos.x + 100, pos.y - 140);
-	fabric.lineTo(pos.x +  50, pos.y - 140);
+	fabric.moveTo(pos.x + 100, pos.y - 150);
+	fabric.lineTo(pos.x +  50, pos.y - 160);
 };
 
 /**
@@ -460,12 +459,15 @@ Shell.prototype.onload = function() {
 		self.authPass = val.pass;
 		self.cockpit.setUser(val.user);
 
-		peer.aquireSpace('welcome', function(err, val) {
-			var name = val.name;
+		var spaceName = 'welcome';
+		peer.aquireSpace(spaceName, function(err, val) {
+			if (val.name !== spaceName) {
+				throw new Error('got wrong spaceName!');
+			}
 			var tree = val.tree;
-			self.vspace = new VSpace(tree.root.copse.welcome, self.vSpacePath); // TODO welcome
+			self.vspace = new VSpace(tree.root.copse.welcome, new Path([spaceName]));
 			self.cockpit.message(null);
-			self.cockpit.setCurSpace(name);      // TODO
+			self.cockpit.setCurSpace(spaceName);
 			self._draw();
 		});
 	});

@@ -128,7 +128,7 @@ Meshverse = {
 	for(var k in patterns) {
 		var p = patterns[k];
 
-		// TODO turn on immuting
+		// @@ turn on immuting
 		// immute(p)
 		//if (p.copse) immute(p.copse);
 		//if (p.must) immute(p.must);

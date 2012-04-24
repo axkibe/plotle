@@ -185,7 +185,7 @@ IFace.prototype.aquireSpace = function(name, callback) {
 			Meshverse
 		);
 
-		callback(null, { tree: self.tree, spacename: name });
+		callback(null, { tree: self.tree, name: name });
 
 		// waits a second before going into update cycle, so safari
 		// stops its wheely thing.
