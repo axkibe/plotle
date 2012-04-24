@@ -37,6 +37,7 @@ var Fabric;
 var Jools;
 var MeshMashine;
 var Path;
+var Peer;
 var Selection;
 var Sign;
 var Tree;
@@ -154,7 +155,7 @@ Shell.prototype.setCaret = function(visec, sign, retainx) {
 		(this.caret.visec !== visec || this.caret.sign.path !== sign.path)
 	) {
 		var entity = this.getEntity(this.caret.visec, this.caret.sign.path);
-		if (entity) { entity.poke() };
+		if (entity) { entity.poke(); }
 		poke = true;
 	}
 
@@ -393,7 +394,7 @@ Shell.prototype.onload = function() {
 	var self = this;
 	peer.auth('visitor', null, function(err, val) {
 		if (err !== null) {
-			log(fail, err);
+			log('fail', err);
 			throw new Error(err.message);
 		}
 		self.authUser = val.user;
@@ -409,6 +410,6 @@ Shell.prototype.onload = function() {
 			self._draw();
 		});
 	});
-}
+};
 
 })();

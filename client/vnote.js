@@ -38,7 +38,7 @@ var Jools;
 var Scrollbar;
 var VItem;
 var VPara;
-
+var config;
 var settings;
 var shell;
 var system;

@@ -36,6 +36,7 @@ var Action;
 var Fabric;
 var Jools;
 var VItem;
+var config;
 var peer;
 var shell;
 var system;

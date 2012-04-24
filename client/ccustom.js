@@ -34,8 +34,9 @@ var Cockpit;
 var Curve;
 var Jools;
 var Fabric;
-var system;
+var config;
 var shell;
+var system;
 
 /**
 | Exports

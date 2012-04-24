@@ -40,6 +40,7 @@ var Fabric;
 var Jools;
 var Path;
 var Tree;
+var config;
 var theme;
 var system;
 var shell;

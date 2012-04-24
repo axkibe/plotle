@@ -35,6 +35,27 @@ config.ip = null;
 config.port = 8833;
 
 /**
+| Database settings (mongodb)
+*/
+config.database = {};
+
+/**
+| Host the database runs on
+*/
+config.database.host = '127.0.0.1';
+
+/**
+| Port the database runs on
+*/
+config.database.port = 27017;
+
+
+/**
+| Name of the database
+*/
+config.database.name = 'meshcraft02';
+
+/**
 | development mode
 |    none, client, server or both.
 |

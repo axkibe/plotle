@@ -34,6 +34,7 @@ var Fabric;
 var Peer;
 var Shell;
 var config;
+var peer;
 var settings;
 
 /**
@@ -113,7 +114,7 @@ settings = {
  @@ use more prototyping.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-function System() {
+var System = function() {
 	if (system) throw new Error('System not a singleton');
 	system = this;
 	var canvas = document.getElementById('canvas');
@@ -452,7 +453,7 @@ function System() {
 	};
 
 	system.restartBlinker();
-}
+};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,.   ,   ,.       .

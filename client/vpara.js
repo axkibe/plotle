@@ -37,6 +37,7 @@ var Fabric;
 var Jools;
 var Sign;
 var Path;
+var config;
 var shell;
 var system;
 var theme;

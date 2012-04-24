@@ -73,78 +73,206 @@ var reject      = Jools.reject;
 | Server
 */
 var Server = function() {
-	this.files = {};
-	this.packfiles = [ { path: '/config.js', filename: null } ];
+	this.startup = true;
+	this.packfiles = [ ];
 
-	// client config
+	this.buildClientConfig();
+	this.registerFiles();
+	this.buildPack();
+	this.buildHTMLs();
+
+	// dabase connection
+	this.dbserver    = new mongodb.Server(
+		config.database.host,
+		config.database.port,
+		{}
+	);
+
+	this.dbconnector = new mongodb.Db(
+		config.database.name,
+		this.dbserver,
+		{}
+	);
+
+	this.db = null;
+
+	// visitors
+	this.nextVisitor = 1001;
+	this.visitors = {};
+
+	// the whole tree
+	this.tree      = new Tree({ type : 'Nexus' }, Meshverse);
+
+	// all changes
+	this.changes   = [];
+
+	// a table of all clients waiting for an update
+	this.upsleep   = {};
+	// next upsleepID
+	this.nextSleep = 1;
+
+	// startup init
+	var asw = this.alter({
+		time : 0,
+		chgX : new Change(
+			{ val: { type: 'Space', cope: {}, ranks: [] } },
+			{ path : ['welcome'] }
+		),
+		cid  : 'startup'
+	});
+
+	if (asw.ok !== true) throw new Error('Cannot init Repository');
+
+	// all other steps of the startup sequence are done in
+	// async waterfall model from here.
+	this.connectDatabase();
+};
+
+/**
+| Connects to the database.
+*/
+Server.prototype.connectDatabase = function(db) {
+	var self = this;
+	this.dbconnector.open(function(err, db) {
+		if (err !== null) { throw new Error('Cannot connect to database: '+err); }
+		log('start', 'Connected to database');
+		self.db = db;
+
+		self.compressPack();
+	});
+};
+
+/**
+| Compresses the javascript pack to reduce download size
+*/
+Server.prototype.compressPack = function() {
+	var self = this;
+	zlib.gzip(this.pack, function(err, packgz) {
+		if (err) throw new Error('GZIP of pack failed');
+		self.packgz = packgz;
+		log('start', 'Compressed pack length is ', packgz.length);
+		self.startWebServer();
+	});
+};
+
+/**
+| Starts the webserver.
+*/
+Server.prototype.startWebServer = function() {
+	var self = this;
+	log('start', 'Starting server @ http://' + (config.ip || '*') + '/:' + config.port);
+
+	http.createServer(function(req, res) {
+		self.requestListener(req, res);
+	}).listen(config.port, config.ip, function() {
+		log('start', 'Server running');
+		self.startup = false;
+	});
+};
+
+/**
+| Builds the client config.js file
+*/
+Server.prototype.buildClientConfig = function() {
+	if (!this.startup) { throw new Error('function is only for startup'); }
+	var k;
+
 	var cconfig = [];
 	cconfig.push('var config = {\n');
 	cconfig.push('\tdevel : '  + Jools.configSwitchClient(config.devel) + ',\n');
 	cconfig.push('\tdebug : {\n');
 	var first = true;
-	for(var k in config.debug) {
+	for(k in config.debug) {
 		if (!first) { cconfig.push(',\n'); } else { first = false; }
 		cconfig.push('\t\t' + k + ' : ' + config.debug[k]);
 	}
 	cconfig.push('\n\t},\n');
 	cconfig.push('\tlog : {\n');
-	var first = true;
-	for(var k in config.log) {
+	first = true;
+	for(k in config.log) {
 		if (!first) { cconfig.push(',\n'); } else { first = false; }
 		cconfig.push('\t\t' + k + ' : ' + Jools.configSwitchClient(config.log[k]));
 	}
 	cconfig.push('\n\t}\n');
 	cconfig.push('};\n');
 	this.cconfig = cconfig.join('');
+};
 
-	// all other files
-	this.registerFile('/favicon.ico',      'ico',  0, 'icons/hexicon.ico'     );
-	this.registerFile('/testpad.html',     'html', 0, 'client/testpad.html'   );
-	this.registerFile('/testpad.js',       'js',   0, 'client/testpad.js'     );
+/**
+| Registers files to be REST served.
+*/
+Server.prototype.registerFiles = function() {
+	var self = this;
+	if (!this.startup) { throw new Error('function is only for startup'); }
+	this.files = {};
 
-	this.registerFile('/jools.js',         'js',   1, 'shared/jools.js'       );
-	this.registerFile('/fabric.js',        'js',   1, 'client/fabric.js'      );
-	this.registerFile('/theme.js'  ,       'js',   1, 'client/theme.js'       );
-	this.registerFile('/meshverse.js',     'js',   1, 'shared/meshverse.js'   );
-	this.registerFile('/path.js',          'js',   1, 'shared/path.js'        );
-	this.registerFile('/tree.js',          'js',   1, 'shared/tree.js'        );
-	this.registerFile('/sign.js',          'js',   1, 'shared/sign.js'        );
-	this.registerFile('/meshmashine.js',   'js',   1, 'shared/meshmashine.js' );
-	this.registerFile('/iface.js',         'js',   1, 'client/iface.js'       );
-	this.registerFile('/peer.js',          'js',   1, 'client/peer.js'        );
-	this.registerFile('/deverse.js',       'js',   1, 'client/deverse.js'     );
-	this.registerFile('/design.js',        'js',   1, 'client/design.js'      );
-	this.registerFile('/caccent.js',       'js',   1, 'client/caccent.js'     );
-	this.registerFile('/curve.js',         'js',   1, 'client/curve.js'       );
-	this.registerFile('/ccustom.js',       'js',   1, 'client/ccustom.js'     );
-	this.registerFile('/cinput.js',        'js',   1, 'client/cinput.js'      );
-	this.registerFile('/clabel.js',        'js',   1, 'client/clabel.js'      );
-	this.registerFile('/cmeth.js',         'js',   1, 'client/cmeth.js'       );
-	this.registerFile('/cboard.js',        'js',   1, 'client/cboard.js'      );
-	this.registerFile('/cockpit.js',       'js',   1, 'client/cockpit.js'     );
-	this.registerFile('/action.js',        'js',   1, 'client/action.js'      );
-	this.registerFile('/ovalmenu.js',      'js',   1, 'client/ovalmenu.js'    );
-	this.registerFile('/vpara.js',         'js',   1, 'client/vpara.js'       );
-	this.registerFile('/scrollbar.js',     'js',   1, 'client/scrollbar.js'   );
-	this.registerFile('/vdoc.js',          'js',   1, 'client/vdoc.js'        );
-	this.registerFile('/vitem.js',         'js',   1, 'client/vitem.js'       );
-	this.registerFile('/vnote.js',         'js',   1, 'client/vnote.js'       );
-	this.registerFile('/vlabel.js',        'js',   1, 'client/vlabel.js'      );
-	this.registerFile('/vrelation.js',     'js',   1, 'client/vrelation.js'   );
-	this.registerFile('/vspace.js',        'js',   1, 'client/vspace.js'      );
-	this.registerFile('/browser.js',       'js',   1, 'client/browser.js'     );
-	this.registerFile('/caret.js',         'js',   1, 'client/caret.js'       );
-	this.registerFile('/selection.js',     'js',   1, 'client/selection.js'   );
-	this.registerFile('/shell.js',         'js',   1, 'client/shell.js'       );
+	var registerFile = function(path, type, pack, filename) {
+		var e = { filename : filename };
+
+		switch (type) {
+		case 'html' : e.code = 'utf-8';  e.mime = 'text/html';       break;
+		case 'js'   : e.code = 'utf-8';  e.mime = 'text/javascript'; break;
+		case 'ico'  : e.code = 'binary'; e.mime = 'image/x-icon';    break;
+		default : throw new Error('unknown file type: '+type);
+		}
+		self.files[path] = e;
+		if (pack) { self.packfiles.push({ path: path, filename: filename }); }
+	};
+
+	registerFile('/favicon.ico',      'ico',  0, 'icons/hexicon.ico'     );
+	registerFile('/testpad.html',     'html', 0, 'client/testpad.html'   );
+	registerFile('/testpad.js',       'js',   0, 'client/testpad.js'     );
+	registerFile('/jools.js',         'js',   1, 'shared/jools.js'       );
+	registerFile('/fabric.js',        'js',   1, 'client/fabric.js'      );
+	registerFile('/theme.js'  ,       'js',   1, 'client/theme.js'       );
+	registerFile('/meshverse.js',     'js',   1, 'shared/meshverse.js'   );
+	registerFile('/path.js',          'js',   1, 'shared/path.js'        );
+	registerFile('/tree.js',          'js',   1, 'shared/tree.js'        );
+	registerFile('/sign.js',          'js',   1, 'shared/sign.js'        );
+	registerFile('/meshmashine.js',   'js',   1, 'shared/meshmashine.js' );
+	registerFile('/iface.js',         'js',   1, 'client/iface.js'       );
+	registerFile('/peer.js',          'js',   1, 'client/peer.js'        );
+	registerFile('/deverse.js',       'js',   1, 'client/deverse.js'     );
+	registerFile('/design.js',        'js',   1, 'client/design.js'      );
+	registerFile('/caccent.js',       'js',   1, 'client/caccent.js'     );
+	registerFile('/curve.js',         'js',   1, 'client/curve.js'       );
+	registerFile('/ccustom.js',       'js',   1, 'client/ccustom.js'     );
+	registerFile('/cinput.js',        'js',   1, 'client/cinput.js'      );
+	registerFile('/clabel.js',        'js',   1, 'client/clabel.js'      );
+	registerFile('/cmeth.js',         'js',   1, 'client/cmeth.js'       );
+	registerFile('/cboard.js',        'js',   1, 'client/cboard.js'      );
+	registerFile('/cockpit.js',       'js',   1, 'client/cockpit.js'     );
+	registerFile('/action.js',        'js',   1, 'client/action.js'      );
+	registerFile('/ovalmenu.js',      'js',   1, 'client/ovalmenu.js'    );
+	registerFile('/vpara.js',         'js',   1, 'client/vpara.js'       );
+	registerFile('/scrollbar.js',     'js',   1, 'client/scrollbar.js'   );
+	registerFile('/vdoc.js',          'js',   1, 'client/vdoc.js'        );
+	registerFile('/vitem.js',         'js',   1, 'client/vitem.js'       );
+	registerFile('/vnote.js',         'js',   1, 'client/vnote.js'       );
+	registerFile('/vlabel.js',        'js',   1, 'client/vlabel.js'      );
+	registerFile('/vrelation.js',     'js',   1, 'client/vrelation.js'   );
+	registerFile('/vspace.js',        'js',   1, 'client/vspace.js'      );
+	registerFile('/browser.js',       'js',   1, 'client/browser.js'     );
+	registerFile('/caret.js',         'js',   1, 'client/caret.js'       );
+	registerFile('/selection.js',     'js',   1, 'client/selection.js'   );
+	registerFile('/shell.js',         'js',   1, 'client/shell.js'       );
+};
+	
+
+/**
+| Builds the javascript pack,
+| so the client loads way faster in release mode.
+*/
+Server.prototype.buildPack = function() {
+	if (!this.startup) { throw new Error('function is only for startup'); }
 
 	log('start', 'Preparing pack');
 	this.pack = [ this.cconfig ];
-	var devels = [ '<script src="/config.js" type="text/javascript"></script>' ];
+	this.devels = [ '<script src="/config.js" type="text/javascript"></script>' ];
 
-	// position 0 is the generated config file
-	for(var a = 1, aZ = this.packfiles.length; a < aZ; a++) {
+	for(var a = 0, aZ = this.packfiles.length; a < aZ; a++) {
 		var pf = this.packfiles[a];
-		devels.push('<script src="' + pf.path + '" type="text/javascript"></script>');
+		this.devels.push('<script src="' + pf.path + '" type="text/javascript"></script>');
 		this.pack.push(fs.readFileSync(pf.filename));
 	}
 	this.pack = this.pack.join('\n');
@@ -163,10 +291,18 @@ var Server = function() {
 	this.packsha1 = sha1.sha1hex(this.pack);
 	this.mepacksha1 = '/meshcraft-' + this.packsha1 + '.js';
 	log('start', 'pack:', this.mepacksha1);
+};
+
+
+/**
+| Builds HTML files
+*/
+Server.prototype.buildHTMLs = function() {
+	if (!this.startup) { throw new Error('function is only for startup'); }
 
 	// the devel file
 	this.devel = fs.readFileSync('client/devel.html') + '';
-	this.devel = this.devel.replace(/<!--DEVELPACK.*>/, devels.join('\n'));
+	this.devel = this.devel.replace(/<!--DEVELPACK.*>/, this.devels.join('\n'));
 
 	// the main html file
 	this.main = fs.readFileSync('client/meshcraft.html') + '';
@@ -174,42 +310,6 @@ var Server = function() {
 		/<!--COPACK.*>/,
 		'<script src="'+this.mepacksha1+'" type="text/javascript"></script>'
 	);
-
-	// visitors
-	this.nextVisitor = 1001;
-	this.visitors = {};
-
-	this.tree      = new Tree({ type : 'Nexus' }, Meshverse);
-	this.changes   = [];
-	this.upsleep   = {};
-	this.nextSleep = 1;
-
-	// startup init
-	var asw = this.alter({
-		time : 0,
-		chgX : new Change(
-			{ val: { type: 'Space', cope: {}, ranks: [] } },
-			{ path : ['welcome'] }
-		),
-		cid  : 'startup'
-	});
-
-	if (asw.ok !== true) throw new Error('Cannot init Repository');
-
-	var self = this;
-
-	zlib.gzip(this.pack, function(err, packgz) {
-		if (err) throw new Error('GZIP of pack failed');
-		self.packgz = packgz;
-		log('start', 'Compressed pack length is ', packgz.length);
-
-		log('start', 'Starting server @ http://' + (config.ip || '*') + '/:' + config.port);
-		http.createServer(function(req, res) {
-			self.requestListener(req, res);
-		}).listen(config.port, config.ip, function() {
-			log('start', 'Server running');
-		});
-	});
 };
 
 /**
@@ -407,21 +507,6 @@ Server.prototype.webError = function(res, code, message) {
 	res.end(message);
 };
 
-/**
-| Registers a file for serving.
-*/
-Server.prototype.registerFile = function(path, type, pack, filename) {
-	var e = { filename : filename };
-
-	switch (type) {
-	case 'html' : e.code = 'utf-8';  e.mime = 'text/html';       break;
-	case 'js'   : e.code = 'utf-8';  e.mime = 'text/javascript'; break;
-	case 'ico'  : e.code = 'binary'; e.mime = 'image/x-icon';    break;
-	default : throw new Error('unknown file type: '+type);
-	}
-	this.files[path] = e;
-	if (pack) { this.packfiles.push({ path: path, filename: filename }); }
-};
 
 /**
 | Listens to http requests
