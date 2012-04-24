@@ -302,7 +302,8 @@ Shell.prototype._draw = function() {
 Shell.prototype.click = function(p, shift, ctrl) {
 	if (this.green) { return; }
 
-	// TODO cockpit
+	// @@ cockpit
+
 	if (this.vspace) { this.vspace.click(p, shift, ctrl); }
 	if (this.redraw) { this._draw(); }
 };
@@ -355,7 +356,7 @@ Shell.prototype.mousedown = function(p, shift, ctrl) {
 Shell.prototype.dragstart = function(p, shift, ctrl) {
 	if (this.green) { return; }
 
-	// TODO cockpit
+	// cockpit?
 
 	if (this.vspace) { this.vspace.dragstart(p, shift, ctrl); }
 
@@ -368,7 +369,7 @@ Shell.prototype.dragstart = function(p, shift, ctrl) {
 Shell.prototype.dragmove = function(p, shift, ctrl) {
 	if (this.green) { return; }
 
-	// TODO cockpit
+	// cockpit?
 
 	if (this.vspace) { this.vspace.dragmove(p, shift, ctrl); }
 
@@ -381,7 +382,7 @@ Shell.prototype.dragmove = function(p, shift, ctrl) {
 Shell.prototype.dragstop = function(p, shift, ctrl) {
 	if (this.green) { return; }
 
-	// TODO cockpit
+	// cockpit?
 
 	if (this.vspace) { this.vspace.dragstop(p, shift, ctrl); }
 
@@ -394,7 +395,7 @@ Shell.prototype.dragstop = function(p, shift, ctrl) {
 Shell.prototype.mousewheel = function(p, dir, shift, ctrl) {
 	if (this.green) { return; }
 
-	// TODO cockpict
+	// cockpit?
 
 	if (this.vspace) { this.vspace.mousewheel(p, dir, shift, ctrl); }
 

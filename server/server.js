@@ -43,7 +43,6 @@ var ajaxInDelay = 0;
 /**
 | Imports
 */
-var Emulate     = require('./emulate');
 var Jools       = require('../shared/jools');
 var MeshMashine = require('../shared/meshmashine');
 var Meshverse   = require('../shared/meshverse');
@@ -414,33 +413,34 @@ Server.prototype.alter = function(cmd, res) {
 		chgX = MeshMashine.tfxChgX(chgX, changes[a].chgX);
 	}
 
+	if (chgX === null || chgX.length === 0) {
+		return { ok: true, chgX: chgX };
+	}
+
 	// applies the changes
-	// TODO early returns
-	if (chgX !== null && chgX.length > 0) {
-		var r = MeshMashine.changeTree(this.tree, chgX);
-		this.tree = r.tree;
-		chgX      = r.chgX;
-		if (chgX !== null && chgX.length > 0) {
-			changes.push({ cid : cmd.cid, chgX : chgX });
-			// saves the change in the database
-			if (cmd.cid !== 'startup') {
-				debug('INSERTING', chgX);
-				this.db.changes.insert({
-					_id  : changes.length,
-					cid  : cmd.cid,
-					chgX : JSON.parse(JSON.stringify(chgX)),
-					// TODO user
-					date : Date.now()
-				}, function(error, count) {
-					if (error !== null) { throw new Error('Database fail!'); }
-				});
-			}
-		}
+	var r = MeshMashine.changeTree(this.tree, chgX);
+	this.tree = r.tree;
+	chgX      = r.chgX;
+	if (chgX === null || chgX.length === 0) {
+		return { ok: true, chgX: chgX };
+	}
+
+	changes.push({ cid : cmd.cid, chgX : chgX });
+	// saves the change in the database
+	if (cmd.cid !== 'startup') {
+		this.db.changes.insert({
+			_id  : changes.length,
+			cid  : cmd.cid,
+			chgX : JSON.parse(JSON.stringify(chgX)),
+			// TODO user
+			date : Date.now()
+		}, function(error, count) {
+			if (error !== null) { throw new Error('Database fail!'); }
+		});
 	}
 
 	var self = this;
 	process.nextTick(function() { self.wakeAll(); });
-
 	return { ok: true, chgX: chgX };
 };
 

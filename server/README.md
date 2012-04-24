@@ -8,10 +8,6 @@ Files
 =====
 <table>
 
- <tr><td>   emulate.js
-</td><td>   currently used to startup
-</td></tr>
- 
  <tr><td>   server.js
 </td><td>   the server
 </td></tr>

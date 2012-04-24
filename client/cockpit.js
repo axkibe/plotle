@@ -53,7 +53,6 @@ var Cockpit = null;
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
 var debug         = Jools.debug;
-var fixate        = Jools.fixate;
 var immute        = Jools.immute;
 var is            = Jools.is;
 var isnon         = Jools.isnon;

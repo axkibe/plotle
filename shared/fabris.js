@@ -43,11 +43,11 @@ Jools = require('./jools');
 
 var debug        = Jools.debug;
 var immute       = Jools.immute;
+var innumerable  = Jools.innumerable;
 var is           = Jools.is;
 var isnon        = Jools.isnon;
 var log          = Jools.log;
 var fixate       = Jools.fixate;
-var fixateNoEnum = Jools.fixateNoEnum;
 var reject       = Jools.reject;
 var subclass     = Jools.subclass;
 var min          = Math.min;
@@ -161,8 +161,8 @@ var Rect = function(pnw, pse, key) {
 	}
 	this.pnw = pnw;
 	this.pse = pse;
-	fixateNoEnum(this, 'width',  pse.x - pnw.x);
-	fixateNoEnum(this, 'height', pse.y - pnw.y);
+	innumerable(this, 'width',  pse.x - pnw.x);
+	innumerable(this, 'height', pse.y - pnw.y);
 	this.type = 'Rect';
 	immute(this);
 };

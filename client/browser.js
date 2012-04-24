@@ -52,7 +52,6 @@ if (typeof(window) === 'undefined') { throw new Error('browser.js needs a browse
 var abs       = Math.abs;
 var Point     = Fabric.Point;
 var debug     = Jools.debug;
-var fixate    = Jools.fixate;
 var log       = Jools.log;
 var subclass  = Jools.subclass;
 

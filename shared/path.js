@@ -45,8 +45,8 @@ if (typeof (window) === 'undefined') { Jools  = require('./jools'); }
 var copy         = Jools.copy;
 var	debug        = Jools.debug;
 var fixate       = Jools.fixate;
-var fixateNoEnum = Jools.fixateNoEnum;
 var immute       = Jools.immute;
+var innumerable  = Jools.innumerable;
 var	is           = Jools.is;
 var	isnon        = Jools.isnon;
 var	isInteger    = Jools.isInteger;
@@ -111,7 +111,7 @@ Path = function(model) {
 
 	// @@ might change Path to be child of Array.
 	Object.freeze(path);
-	fixateNoEnum(this, '_path', path);
+	innumerable(this, '_path', path);
 	immute(this);
 };
 

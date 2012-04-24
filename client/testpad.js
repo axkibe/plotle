@@ -23,7 +23,6 @@ var Tree;
 if (typeof(window) === 'undefined') throw new Error('testpad needs a browser!');
 
 var debug     = Jools.debug;
-var fixate    = Jools.fixate;
 var limit     = Jools.limit;
 var log       = Jools.log;
 var subclass  = Jools.subclass;

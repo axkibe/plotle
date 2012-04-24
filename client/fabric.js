@@ -48,11 +48,12 @@ if (typeof(window) === 'undefined') { throw new Error('fabric needs a browser');
 
 var debug        = Jools.debug;
 var immute       = Jools.immute;
+var innumerable  = Jools.innumerable;
 var is           = Jools.is;
 var isnon        = Jools.isnon;
 var log          = Jools.log;
 var fixate       = Jools.fixate;
-var fixateNoEnum = Jools.fixateNoEnum;
+var lazyFixate   = Jools.lazyFixate;
 var reject       = Jools.reject;
 var subclass     = Jools.subclass;
 var min          = Math.min;
@@ -103,21 +104,6 @@ Fabric = function(a1, a2) {
 
 	// curren positiont (without twist)
 	this._posx = this._posy = null;
-};
-
-/**
-* A value is computed and fixated only when needed.
-*/
-// TODO this belongs to Jools
-var lazyFixate = function(proto, key, getter) {
-	Object.defineProperty(proto, key, {
-		// this clever overriding does not work in IE9 :-( or Android 2.2 Browser
-		// get : function() { return fixate(this, key, getter.call(this)); },
-		get : function() {
-			var ckey = '_$'+key;
-			return is(this[ckey]) ? this[ckey] : fixateNoEnum(this, ckey, getter.call(this));
-		}
-	});
 };
 
 /**
@@ -782,9 +768,9 @@ var Rect = function(pnw, pse, key) {
 	// TODO use immute
 	fixate(this, 'pnw',    pnw);
 	fixate(this, 'pse',    pse);
-	fixateNoEnum(this, 'width',  pse.x - pnw.x);
-	fixateNoEnum(this, 'height', pse.y - pnw.y);
-	fixate(this, 'type', 'Rect'); // @@ So Tree is happy TODO prototype
+	innumerable(this, 'width',  pse.x - pnw.x);
+	innumerable(this, 'height', pse.y - pnw.y);
+	fixate(this, 'type', 'Rect');
 };
 
 /**
@@ -960,16 +946,17 @@ lazyFixate(Rect.prototype, 'pc', function() {
 */
 var Margin = function(m, e, s, w) {
 	if (typeof(m) === 'object') {
-		fixate(this, 'n', m.n);
-		fixate(this, 'e', m.e);
-		fixate(this, 's', m.s);
-		fixate(this, 'w', m.w);
+		this.n = m.n;
+		this.e = m.e;
+		this.s = m.s;
+		this.w = m.w;
 	} else {
-		fixate(this, 'n', m);
-		fixate(this, 'e', e);
-		fixate(this, 's', s);
-		fixate(this, 'w', w);
+		this.n = m;
+		this.e = e;
+		this.s = s;
+		this.w = w;
 	}
+	immute(this);
 };
 
 /**

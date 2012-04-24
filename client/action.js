@@ -48,7 +48,6 @@ if (typeof(window) === 'undefined') { throw new Error('shell.js needs a browser!
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 var debug         = Jools.debug;
-var fixate        = Jools.fixate;
 var immute        = Jools.immute;
 var is            = Jools.is;
 var isnon         = Jools.isnon;
@@ -83,12 +82,13 @@ Action = function(type, vitem, start) {
 /**
 | Action enums.
 */
-fixate(Action, 'PAN',       1); // panning the background
-fixate(Action, 'ITEMDRAG',  2); // draggine one item
-fixate(Action, 'ITEMRESIZE',3); // resizing one item
-fixate(Action, 'FLOATMENU', 4); // clicked the float menu (background click)
-fixate(Action, 'ITEMMENU',  5); // clicked one item menu
-fixate(Action, 'SCROLLY',   6); // scrolling a note
-fixate(Action, 'RELBIND',   7); // binding a new relation
+Action.PAN        = 1; // panning the background
+Action.ITEMDRAG   = 2; // draggine one item
+Action.ITEMRESIZE = 3; // resizing one item
+Action.FLOATMENU  = 4; // clicked the float menu (background click)
+Action.ITEMMENU   = 5; // clicked one item menu
+Action.SCROLLY    = 6; // scrolling a note
+Action.RELBIND    = 7; // binding a new relation
+immute(Action);
 
 })();

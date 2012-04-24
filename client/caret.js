@@ -58,7 +58,6 @@ if (typeof(window) === 'undefined') { throw new Error('shell.js needs a browser!
 | Shortcuts
 */
 var debug         = Jools.debug;
-var fixate        = Jools.fixate;
 var immute        = Jools.immute;
 var is            = Jools.is;
 var isnon         = Jools.isnon;

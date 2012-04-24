@@ -212,13 +212,37 @@ var fixate = function(obj, key, value) {
 };
 
 /**
-| Fixates a value to an object (not changeable) and makes it non enumerable.
-| TODO rename
+| Sets an not enumerable value
+|
+| if writable is undefined, defaults to false
 */
-var fixateNoEnum = function(obj, key, value) {
-    Object.defineProperty(obj, key, {value: value});
+var innumerable = function(obj, key, value, writable) {
+    Object.defineProperty(
+		obj, key, 
+		{ 
+			value: value,
+			writable: typeof(writable) === 'undefined' ? false : writable
+		}
+	);
+
     return value;
 };
+
+/**
+* A value is computed and fixated only when needed.
+*/
+var lazyFixate = function(proto, key, getter) {
+	Object.defineProperty(proto, key, {
+		// this clever overriding does not work in IE9 :-( or Android 2.2 Browser
+		// get : function() { return fixate(this, key, getter.call(this)); },
+
+		get : function() {
+			var ckey = '_$'+key;
+			return is(this[ckey]) ? this[ckey] : innumerable(this, ckey, getter.call(this));
+		}
+	});
+};
+
 
 /**
 | Copies one object (not deep!)
@@ -455,14 +479,15 @@ Jools = {
 	debug        : debug,
 	devel        : devel,
 	fixate       : fixate,
-	fixateNoEnum : fixateNoEnum,
 	inspect      : inspect,
+	innumerable  : innumerable,
 	is           : is,
 	isnon        : isnon,
 	isArray      : isArray,
 	isInteger    : isInteger,
 	isString     : isString,
 	immute       : immute,
+	lazyFixate   : lazyFixate,
 	limit        : limit,
 	log          : log,
 	matches      : matches,

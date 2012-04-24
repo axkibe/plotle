@@ -57,7 +57,6 @@ var Measure       = Fabric.Measure;
 var Point         = Fabric.Point;
 var R             = Math.round;
 var debug         = Jools.debug;
-var fixate        = Jools.fixate;
 var immute        = Jools.immute;
 var is            = Jools.is;
 var isnon         = Jools.isnon;
