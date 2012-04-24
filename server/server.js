@@ -80,21 +80,7 @@ var Server = function() {
 	this.registerFiles();
 	this.buildPack();
 	this.buildHTMLs();
-
-	// dabase connection
-	this.dbserver    = new mongodb.Server(
-		config.database.host,
-		config.database.port,
-		{}
-	);
-
-	this.dbconnector = new mongodb.Db(
-		config.database.name,
-		this.dbserver,
-		{}
-	);
-
-	this.db = null;
+	this.initDatabase();
 
 	// visitors
 	this.nextVisitor = 1001;
@@ -125,25 +111,108 @@ var Server = function() {
 
 	// all other steps of the startup sequence are done in
 	// async waterfall model from here.
-	this.connectDatabase();
+	this.connectToDatabase();
+};
+
+/**
+| Initializes the database variables.
+*/
+Server.prototype.initDatabase = function() {
+	this.db = {};
+
+	this.db.server    = new mongodb.Server(
+		config.database.host,
+		config.database.port,
+		{}
+	);
+
+	this.db.connector = new mongodb.Db(
+		config.database.name,
+		this.db.server,
+		{}
+	);
 };
 
 /**
 | Connects to the database.
 */
-Server.prototype.connectDatabase = function(db) {
+Server.prototype.connectToDatabase = function() {
 	var self = this;
-	this.dbconnector.open(function(err, db) {
+	this.db.connector.open(function(err, connection) {
 		if (err !== null) { throw new Error('Cannot connect to database: '+err); }
 		log('start', 'Connected to database');
-		self.db = db;
+		self.db.connection = connection;
 
-		self.compressPack();
+		self.aquireChangesCollection();
 	});
 };
 
 /**
-| Compresses the javascript pack to reduce download size
+| Aquires the changes collection.
+*/
+Server.prototype.aquireChangesCollection = function() {
+	var self = this;
+	this.db.connection.collection('changes', function(err, changes) {
+		if (err !== null) { throw new Error('Cannot aquire changes collection: '+err); }
+		self.db.changes = changes;
+		self.playbackChanges();
+	});
+};
+		
+/**
+| Playbacks the changes.
+*/
+Server.prototype.playbackChanges = function() {
+	var self = this;
+	log('start', 'Playing back change history');
+	this.db.changes.find(function(err, cursor) {
+		if (err !== null) { throw new Error('Database fail!'); }
+		cursor.nextObject(function(err, o) {
+			if (err !== null) { throw new Error('Database fail!'); }
+			if (o === null) {
+				self.compressPack();
+			} else {
+				self.playbackOne(o, cursor);
+			}
+		});
+	});
+};
+
+/**
+| Playbacks one change.
+*/
+Server.prototype.playbackOne = function(o, cursor) {
+	var self = this;
+	var c = {
+		cid  : o.cid,
+		chgX : null,
+	};
+	
+	if (!isArray(o.chgX)) {
+		c.chgX = new Change(o.chgX);
+	} else {
+		c.chgX = [];
+		for(var a = 0, aZ = o.chgX.length; a < aZ; a++) {
+			c.chgX.push(new Change(o.chgX[a]));
+		}
+	}
+
+	this.changes.push(c);
+	var r = MeshMashine.changeTree(this.tree, c.chgX);
+	this.tree = r.tree;
+
+	cursor.nextObject(function(err, o) {
+		if (err !== null) { throw new Error('Database fail!'); }
+		if (o === null) {
+			self.compressPack();
+		} else {
+			self.playbackOne(o, cursor);
+		}
+	});
+};
+
+/**
+| Compresses the javascript pack to reduce download size.
 */
 Server.prototype.compressPack = function() {
 	var self = this;
@@ -171,7 +240,7 @@ Server.prototype.startWebServer = function() {
 };
 
 /**
-| Builds the client config.js file
+| Builds the clients config.js file.
 */
 Server.prototype.buildClientConfig = function() {
 	if (!this.startup) { throw new Error('function is only for startup'); }
@@ -344,12 +413,26 @@ Server.prototype.alter = function(cmd, res) {
 	}
 
 	// applies the changes
+	// TODO early returns
 	if (chgX !== null && chgX.length > 0) {
 		var r = MeshMashine.changeTree(this.tree, chgX);
 		this.tree = r.tree;
 		chgX      = r.chgX;
 		if (chgX !== null && chgX.length > 0) {
 			changes.push({ cid : cmd.cid, chgX : chgX });
+			// saves the change in the database
+			if (cmd.cid !== 'startup') {
+				debug('INSERTING', chgX);
+				this.db.changes.insert({
+					_id  : changes.length,
+					cid  : cmd.cid,
+					chgX : JSON.parse(JSON.stringify(chgX)),
+					// TODO user
+					date : Date.now()
+				}, function(error, count) {
+					if (error !== null) { throw new Error('Database fail!'); }
+				});
+			}
 		}
 	}
 

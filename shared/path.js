@@ -245,6 +245,13 @@ Path.prototype.toJSON = function() {
 	return this._path;
 };
 
+/**
+| Jsonfy.
+*/
+Path.prototype.ToBSON = function() {
+	return this._path;
+};
+
 
 if (typeof(window) === 'undefined') { module.exports = Path; }
 
