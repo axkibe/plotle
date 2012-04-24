@@ -29,6 +29,7 @@
 /**
 | Imports
 */
+var Change;
 var MeshMashine;
 var Meshverse;
 var Path;
@@ -49,7 +50,6 @@ var IFace;
 "use strict";
 if (typeof (window) === 'undefined') throw new Error('Peer nees a browser!');
 
-var Change    = MeshMashine.Change;
 var debug     = Jools.debug;
 var log       = Jools.log;
 var is        = Jools.is;

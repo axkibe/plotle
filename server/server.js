@@ -299,6 +299,7 @@ Server.prototype.registerFiles = function() {
 	registerFile('/path.js',          'js',   1, 'shared/path.js'        );
 	registerFile('/tree.js',          'js',   1, 'shared/tree.js'        );
 	registerFile('/sign.js',          'js',   1, 'shared/sign.js'        );
+	registerFile('/change.js',        'js',   1, 'shared/change.js'      );
 	registerFile('/meshmashine.js',   'js',   1, 'shared/meshmashine.js' );
 	registerFile('/iface.js',         'js',   1, 'client/iface.js'       );
 	registerFile('/peer.js',          'js',   1, 'client/peer.js'        );
