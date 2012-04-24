@@ -64,25 +64,19 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Shortcuts.
 */
-var R   = Math.round;
-var abs = Math.abs;
-var max = Math.max;
-var min = Math.min;
-
+var Measure       = Fabric.Measure;
+var Point         = Fabric.Point;
+var abs           = Math.abs;
 var debug         = Jools.debug;
-var fixate        = Jools.fixate;
+var half          = Fabric.half;
 var immute        = Jools.immute;
 var is            = Jools.is;
 var isnon         = Jools.isnon;
-var isArray       = Jools.isArray;
 var limit         = Jools.limit;
 var log           = Jools.log;
+var max           = Math.max;
+var min           = Math.min;
 var subclass      = Jools.subclass;
-
-var isPath        = Path.isPath;
-
-var Measure       = Fabric.Measure;
-
 var tfxSign       = MeshMashine.tfxSign;
 
 // configures tree.
@@ -123,6 +117,7 @@ Shell = function(fabric, sPeer) {
 	// current user
 	this.authUser   = null;
 	this.authPass   = null;
+	this.green      = false;
 
 	// a flag set to true if anything requests a redraw.
 	this.redraw = false;
@@ -214,6 +209,7 @@ Shell.prototype.update = function(tree, chgX) {
 | Meshcraft got the systems focus.
 */
 Shell.prototype.systemFocus = function() {
+	if (this.green) { return; }
 	this.caret.show();
 	this.caret.display();
 };
@@ -222,6 +218,7 @@ Shell.prototype.systemFocus = function() {
 | Meshraft lost the systems focus.
 */
 Shell.prototype.systemBlur = function() {
+	if (this.green) { return; }
 	this.caret.hide();
 	this.caret.display();
 };
@@ -230,6 +227,7 @@ Shell.prototype.systemBlur = function() {
 | Blink the caret (if shown)
 */
 Shell.prototype.blink = function() {
+	if (this.green) { return; }
 	this.caret.blink();
 };
 
@@ -250,10 +248,43 @@ Shell.prototype.stopAction = function() {
 };
 
 /**
+| Paths the greenscreen frowny.
+*/
+Shell.prototype.pathFrowny = function(fabric, border, twist, pos) {
+	fabric.beginPath(twist);
+	fabric.moveTo(pos.x - 100, pos.y);
+	fabric.lineTo(pos.x, pos.y - 50);
+	fabric.lineTo(pos.x + 100, pos.y);
+
+	fabric.moveTo(pos.x - 100, pos.y - 140);
+	fabric.lineTo(pos.x -  50, pos.y - 140);
+	
+	fabric.moveTo(pos.x + 100, pos.y - 140);
+	fabric.lineTo(pos.x +  50, pos.y - 140);
+}
+
+/**
 | Draws the cockpit and the vspace.
 */
 Shell.prototype._draw = function() {
-	this.fabric.attune();   // @@ <- bad name for clear();
+	var fabric = this.fabric;
+	fabric.attune();   // @@ <- bad name for clear();
+
+	if (this.green) {
+		var m = new Point(half(fabric.width), half(fabric.height));
+		fabric.fillRect('rgb(170, 255, 170)', 0, 0, fabric.width, fabric.height);
+
+		fabric.edge(
+			[ { border: 0, width: 1, color: 'black' } ],
+			this, 'pathFrowny', m.add(0, -100)
+		);
+
+		fabric.fontStyle('40px '+theme.defaultFont, 'black', 'center', 'middle' );
+		fabric.fillText(this.green, m);
+		fabric.fontStyle('24px '+theme.defaultFont, 'black', 'center', 'middle' );
+		fabric.fillText('Please refresh the page to reconnect.', m.x, m.y + 100);
+		return;
+	}
 
 	// remove caret cache.
 	this.caret.$save = null;
@@ -270,6 +301,8 @@ Shell.prototype._draw = function() {
 | A mouse click.
 */
 Shell.prototype.click = function(p, shift, ctrl) {
+	if (this.green) { return; }
+
 	// TODO cockpit
 	if (this.vspace) { this.vspace.click(p, shift, ctrl); }
 	if (this.redraw) { this._draw(); }
@@ -279,6 +312,8 @@ Shell.prototype.click = function(p, shift, ctrl) {
 | Mouse hover.
 */
 Shell.prototype.mousehover = function(p, shift, ctrl) {
+	if (this.green) { return; }
+
 	if (!this.cockpit.mousehover(p, shift, ctrl)) {
 		if (this.vspace) { this.vspace.mousehover(p, shift, ctrl); }
 	}
@@ -286,11 +321,23 @@ Shell.prototype.mousehover = function(p, shift, ctrl) {
 };
 
 /**
+| Changes the shell to a green error screen.
+*/
+Shell.prototype.greenscreen = function(message, contract) {
+	if (!message) { message = 'unknown error.'; }
+	this.green = message;
+	this.greenContact = contract || false;
+	this._draw();
+}
+
+/**
 | Mouse button down event.
 |
 | Returns the mouse state code, wheter this is a click/drag or undecided.
 */
 Shell.prototype.mousedown = function(p, shift, ctrl) {
+	if (this.green) { return false; }
+
 	var mouseState;
 
 	mouseState = this.cockpit.mousedown(p, shift, ctrl);
@@ -307,6 +354,8 @@ Shell.prototype.mousedown = function(p, shift, ctrl) {
 | Starts an operation with the mouse button held down.
 */
 Shell.prototype.dragstart = function(p, shift, ctrl) {
+	if (this.green) { return; }
+
 	// TODO cockpit
 
 	if (this.vspace) { this.vspace.dragstart(p, shift, ctrl); }
@@ -318,6 +367,8 @@ Shell.prototype.dragstart = function(p, shift, ctrl) {
 | Moving during an operation with the mouse button held down.
 */
 Shell.prototype.dragmove = function(p, shift, ctrl) {
+	if (this.green) { return; }
+
 	// TODO cockpit
 
 	if (this.vspace) { this.vspace.dragmove(p, shift, ctrl); }
@@ -329,6 +380,8 @@ Shell.prototype.dragmove = function(p, shift, ctrl) {
 | Stops an operation with the mouse button held down.
 */
 Shell.prototype.dragstop = function(p, shift, ctrl) {
+	if (this.green) { return; }
+
 	// TODO cockpit
 
 	if (this.vspace) { this.vspace.dragstop(p, shift, ctrl); }
@@ -340,6 +393,8 @@ Shell.prototype.dragstop = function(p, shift, ctrl) {
 | Mouse wheel has turned
 */
 Shell.prototype.mousewheel = function(p, dir, shift, ctrl) {
+	if (this.green) { return; }
+
 	// TODO cockpict
 
 	if (this.vspace) { this.vspace.mousewheel(p, dir, shift, ctrl); }
@@ -352,6 +407,8 @@ Shell.prototype.mousewheel = function(p, dir, shift, ctrl) {
 | User pressed a special key.
 */
 Shell.prototype.specialKey = function(key, shift, ctrl) {
+	if (this.green) { return; }
+
 	var caret  = this.caret;
 	switch (caret.visec) {
 	case null : break;
@@ -366,6 +423,8 @@ Shell.prototype.specialKey = function(key, shift, ctrl) {
 | User entered normal text (one character or more).
 */
 Shell.prototype.input = function(text) {
+	if (this.green) { return; }
+
 	if (this.selection.active) { this.selection.remove(); }
 
 	var caret  = this.caret;

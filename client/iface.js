@@ -226,8 +226,8 @@ IFace.prototype._update = function() {
 		if (ajax.readyState !== 4) { return; }
 		if (ajax.status !== 200) {
 			log('iface', 'update.status == ' + ajax.status);
-			throw new Error('Update Error');
-			// TODO proper error handling
+			shell.greenscreen('Connection with server failed.', false);
+			return;
 		}
 
 		try {
