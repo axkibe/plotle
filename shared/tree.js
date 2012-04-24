@@ -79,7 +79,7 @@ var Twig = function () { };
 Twig.prototype.rankOf = function(key) {
 	var ranks = this.ranks;
 	if (!isArray(ranks)) throw new Error('twig has no ranks');
-	// TODO caching!
+	// @@ caching!
 	if (!is(this.copse[key])) return -1;
 	return ranks.indexOf(key);
 };
@@ -135,8 +135,6 @@ var twigtype = function(o) {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /**
 | Constructor.
-|
-| TODO
 */
 Tree = function(root, pattern) {
 	if (!isnon(pattern)) { throw new Error('aFail'); }

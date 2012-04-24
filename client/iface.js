@@ -35,6 +35,7 @@ var Path;
 var Sign;
 var Tree;
 var Jools;
+var shell;
 
 /**
 | Exports

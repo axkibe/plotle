@@ -62,12 +62,13 @@ var zlib        = require('zlib');
 /**
 | Shortcuts
 */
-var Change      = MeshMashine.Change;
-var debug       = Jools.debug;
-var is          = Jools.is;
-var isArray     = Jools.isArray;
-var log         = Jools.log;
-var reject      = Jools.reject;
+var Change       = MeshMashine.Change;
+var configSwitch = Jools.configSwitch;
+var debug        = Jools.debug;
+var is           = Jools.is;
+var isArray      = Jools.isArray;
+var log          = Jools.log;
+var reject       = Jools.reject;
 
 /**
 | Server
@@ -185,7 +186,7 @@ Server.prototype.playbackOne = function(o, cursor) {
 	var self = this;
 	var c = {
 		cid  : o.cid,
-		chgX : null,
+		chgX : null
 	};
 	
 	if (!isArray(o.chgX)) {
@@ -248,7 +249,7 @@ Server.prototype.buildClientConfig = function() {
 
 	var cconfig = [];
 	cconfig.push('var config = {\n');
-	cconfig.push('\tdevel : '  + Jools.configSwitchClient(config.devel) + ',\n');
+	cconfig.push('\tdevel : '  + configSwitch(config.devel, 'client') + ',\n');
 	cconfig.push('\tdebug : {\n');
 	var first = true;
 	for(k in config.debug) {
@@ -260,7 +261,7 @@ Server.prototype.buildClientConfig = function() {
 	first = true;
 	for(k in config.log) {
 		if (!first) { cconfig.push(',\n'); } else { first = false; }
-		cconfig.push('\t\t' + k + ' : ' + Jools.configSwitchClient(config.log[k]));
+		cconfig.push('\t\t' + k + ' : ' + configSwitch(config.log[k], 'client'));
 	}
 	cconfig.push('\n\t}\n');
 	cconfig.push('};\n');

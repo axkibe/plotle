@@ -261,7 +261,7 @@ Shell.prototype.pathFrowny = function(fabric, border, twist, pos) {
 	
 	fabric.moveTo(pos.x + 100, pos.y - 140);
 	fabric.lineTo(pos.x +  50, pos.y - 140);
-}
+};
 
 /**
 | Draws the cockpit and the vspace.
@@ -328,7 +328,7 @@ Shell.prototype.greenscreen = function(message, contract) {
 	this.green = message;
 	this.greenContact = contract || false;
 	this._draw();
-}
+};
 
 /**
 | Mouse button down event.

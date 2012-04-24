@@ -48,18 +48,15 @@ var Jools;
 var devel;
 
 /**
-| returns true if param is true for the client
+| returns true if param is true for the client or server.
+| param: the param
+| side:  'client' or 'server'
 */
-var configSwitchClient = function(param) {
-	return param === true || param === 'client' || param === 'both';
-};
-
-/**
-| returns true if param is true for the server
-| TODO combine with configSwitchClient into one function
-*/
-var configSwitchServer = function(param) {
-	return param === true || param === 'server' || param === 'both';
+var configSwitch = function(param, side) {
+	if (side !== 'client' && side !== 'server') {
+		throw new Error('configSwitch side must be client or server');
+	}
+	return param === true || param === 'both' || param === side;
 };
 
 /**
@@ -68,10 +65,10 @@ var configSwitchServer = function(param) {
 if (typeof(window) === 'undefined') {
 	// in node
 	config = require('../config');
-	devel  = configSwitchServer(config.devel);
+	devel  = configSwitch(config.devel, 'server');
 } else {
 	// ini browser
-	devel  = configSwitchClient(config.devel);
+	devel  = configSwitch(config.devel, 'client');
 }
 
 var puffed = config.debug.puffed;
@@ -451,28 +448,27 @@ var immute = function(obj) {
 | Exports
 */
 Jools = {
-	check              : check,
-	checkLimits        : checkLimits,
-	configSwitchClient : configSwitchClient,
-	configSwitchServer : configSwitchServer,
-	copy               : copy,
-	debug              : debug,
-	devel              : devel,
-	fixate             : fixate,
-	fixateNoEnum       : fixateNoEnum,
-	inspect            : inspect,
-	is                 : is,
-	isnon              : isnon,
-	isArray            : isArray,
-	isInteger          : isInteger,
-	isString           : isString,
-	immute             : immute,
-	limit              : limit,
-	log                : log,
-	matches            : matches,
-	reject             : reject,
-	subclass           : subclass,
-	uid                : uid
+	check        : check,
+	checkLimits  : checkLimits,
+	configSwitch : configSwitch,
+	copy         : copy,
+	debug        : debug,
+	devel        : devel,
+	fixate       : fixate,
+	fixateNoEnum : fixateNoEnum,
+	inspect      : inspect,
+	is           : is,
+	isnon        : isnon,
+	isArray      : isArray,
+	isInteger    : isInteger,
+	isString     : isString,
+	immute       : immute,
+	limit        : limit,
+	log          : log,
+	matches      : matches,
+	reject       : reject,
+	subclass     : subclass,
+	uid          : uid
 };
 
 if (typeof(window) === 'undefined') {

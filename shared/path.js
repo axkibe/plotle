@@ -129,8 +129,6 @@ var _isValidPathArc = function(arc) {
 	if (isInteger(arc)) return true;
 	if (!isString(arc)) return false;
 	if (arc[0] === '_') return false;
-	if (arc === 'copse') { throw new Error('copse in Path'); }  // TODO remove this later
-	if (arc === 'ranks') { throw new Error('ranks in Path'); }  // TODO remove this later
 	return true;
 };
 
@@ -150,53 +148,6 @@ Path.prototype.get = function(i) {
 	if (i < 0 || i >= this._path.length) throw new Error('invalid get');
 	return this._path[i];
 };
-
-/**
-| Fits the arc numeration to be in this signature.
-| TODO remove?
-*/
-/*
-Path.prototype.fit = function(a, edge) {
-	if (!is(a)) a = edge ? this._path.length : 0;
-	if (a < 0) a += this._path.length;
-	if (a < 0) throw new Error('invalid fit');
-	return a;
-}*/
-
-/**
-| Returns new path with arc i set to v.
-*/
-/*Path.prototype.set = function(i, v) {
-	if (i < 0) i += path.length;
-	return new Path(this, i, v);
-};
-*/
-
-/**
-| Appends an arc
-| TODO move into constructor
-*/
-/*Path.prototype.push = function() {
-	var path = this._path.slice();
-	for (var a = 0, aZ = arguments.length; a < aZ; a++) {
-		path[path.length] = arguments[a];
-	}
-	return new Path(path);
-}*/
-
-/**
-| Adds to integer arc[a]
-| TODO remove
-*/
-/*Path.prototype.add = function(a, v) {
-	var path = this._path.slice();
-	if (a < 0) a = path.length + a;
-	if (!isInteger(path[a])) {
-		throw new Error('cannot change non-integer arc: '+this._path[a]);
-	}
-	path[a] += v;
-	return new Path(path);
-}*/
 
 /**
 | True if this path is the same as another.
