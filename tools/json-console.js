@@ -12,8 +12,8 @@ var http     = require('http');
 var readline = require('readline');
 var util     = require('util');
 
-var Jools    = require('./jools');
-var config   = require('./config');
+var Jools    = require('../shared/jools');
+var config   = require('../config');
 
 /**
 | Capsule
@@ -83,9 +83,7 @@ function request(cmd, callback) {
 function jsonRequest(cmd, callback) {
 	var o;
 	try {
-		// o = JSON.parse(line); <- strict JSON
-		// instead eval relaxed JSON, insecure but this is for testing anyway.N
-		eval('o='+cmd);
+		o = JSON.parse(cmd);
 	} catch (err) {
 		console.log('# invalid input: '+err.message);
 		shell.prompt();

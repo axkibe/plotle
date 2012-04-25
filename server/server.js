@@ -155,6 +155,33 @@ Server.prototype.aquireChangesCollection = function() {
 	this.db.connection.collection('changes', function(err, changes) {
 		if (err !== null) { throw new Error('Cannot aquire changes collection: '+err); }
 		self.db.changes = changes;
+
+		self.aquireInvitesCollection();
+	});
+};
+		
+/**
+| Aquires the invites collection.
+*/
+Server.prototype.aquireInvitesCollection = function() {
+	var self = this;
+	this.db.connection.collection('invites', function(err, invites) {
+		if (err !== null) { throw new Error('Cannot aquire invites collection: '+err); }
+		self.db.invites = invites;
+
+		self.aquireUsersCollection();
+	});
+};
+
+/**
+| Aquires the users collection.
+*/
+Server.prototype.aquireUsersCollection = function() {
+	var self = this;
+	this.db.connection.collection('users', function(err, users) {
+		if (err !== null) { throw new Error('Cannot aquire invites collection: '+err); }
+		self.db.users = users;
+
 		self.playbackChanges();
 	});
 };
@@ -472,6 +499,76 @@ Server.prototype.auth = function(cmd, res) {
 };
 
 /**
+| Executes an register command.
+*/
+Server.prototype.register = function(cmd, res) {
+	var self = this;
+	var user = cmd.user;
+	var pass = cmd.pass;
+	var mail = cmd.mail;
+	var code = cmd.code;
+	if (!is(user)) { throw reject('user missing'); }
+	if (!is(pass)) { throw reject('pass missing');  }
+	if (!is(mail)) { throw reject('mail missing');  }
+	if (!is(code)) { throw reject('code missing');  }
+
+	if (user.substr(0, 7) === 'visitor') {
+		throw reject('Username must not start with "visitor"');
+	}
+	if (user.length < 4) {
+		throw reject('Username too short, min. 4 characters');
+	}
+
+	/**
+	| Username is unique and the result of looking up the 
+	| invitation code is ...
+	*/
+	var gotCode = function(err, val) {
+		if (err !== null) { throw new Error('Database fail: '+err); }
+
+		if (val === null) {
+			var asw = reject('Unknown invitation key');
+			log('ajax', '->', asw);
+			res.writeHead(200, { 'Content-Type': 'application/json' });
+			res.end(JSON.stringify(asw));
+			return;
+		} else {
+			self.db.users.insert({
+				_id  : cmd.user,
+				pass : cmd.pass,
+				mail : cmd.mail,
+				code : cmd.code
+			}, function(err, count) {
+				if (err !== null) { throw new Error('Database fail: '+err); }
+				// Everything OK
+				var asw = { ok: true, user: cmd.user };
+				log('ajax', '->', asw);
+				res.writeHead(200, { 'Content-Type': 'application/json' });
+				res.end(JSON.stringify(asw));
+				return;
+			});
+		}
+	};
+
+	self.db.users.findOne({ _id : cmd.user}, function(err, val) {
+		if (err !== null) { throw new Error('Database fail: '+err); }
+		if (val !== null) {
+			var asw = reject('Username already taken');
+			log('ajax', '->', asw);
+			res.writeHead(200, { 'Content-Type': 'application/json' });
+			res.end(JSON.stringify(asw));
+			return;
+		}
+		// aquires an inivitation code and invalidates it if found.
+		self.db.invites.findAndModify(
+			{ _id : cmd.code }, {  }, null, { remove: true }, gotCode 
+		);
+	});
+
+	return null;
+};
+
+/**
 | Gets new changes or waits for them.
 */
 Server.prototype.update = function(cmd, res) {
@@ -677,10 +774,11 @@ Server.prototype.ajaxCmd = function(cmd, res) {
 	var asw;
 	try {
 		switch (cmd.cmd) {
-		case 'alter'  : asw = this.alter (cmd, res); break;
-		case 'auth'   : asw = this.auth  (cmd, res); break;
-		case 'get'    : asw = this.get   (cmd, res); break;
-		case 'update' : asw = this.update(cmd, res); break;
+		case 'alter'    : asw = this.alter    (cmd, res); break;
+		case 'auth'     : asw = this.auth     (cmd, res); break;
+		case 'get'      : asw = this.get      (cmd, res); break;
+		case 'register' : asw = this.register (cmd, res); break;
+		case 'update'   : asw = this.update   (cmd, res); break;
 		default:
 			this.webError(res, 400, 'unknown command "'+cmd.cmd+'"');
 			return;
