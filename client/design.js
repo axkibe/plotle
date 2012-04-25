@@ -60,12 +60,19 @@ var sideButtonC2X   =  15;
 var sideButtonC2Y   =  50;
 
 /**
+| switch control on Mainboard
+*/
+var switchMCW  = 200;
+var switchMCH  =  35;
+
+/**
 | Login control on Loginboard width and height
 */
-var loginBCW        = 70;
-var loginBCH        = 70;
-var loginBCXM       = loginBCW * magic / 2;
-var loginBCYM       = loginBCH * magic / 2;
+var loginBCW   = 70;
+var loginBCH   = 70;
+var loginBCXM  = loginBCW * magic / 2;
+var loginBCYM  = loginBCH * magic / 2;
+
 
 /**
 | Register control on Regboard width and height
@@ -213,41 +220,6 @@ Design.mainboard = {
 	layout :  {
 		type  : 'Layout',
 		copse : {
-		'greet'       : {
-			type      : 'Label',
-			text      : 'Hello',
-			fontStyle : fontStyles(12, 'ca'),
-			pos       : { type: 'Point', anchor: 'sw', x:  260, y: -34 }
-		},
-
-		'username'    : {
-			type      : 'Label',
-			text      : '',
-			fontStyle : fontStyles(18, 'ca'),
-			pos       : { type: 'Point', anchor: 'sw', x:  260, y: -11 }
-		},
-
-		'saycurrent'  : {
-			type      : 'Label',
-			text      : 'current space',
-			fontStyle : fontStyles(12, 'ca'),
-			pos       : { type: 'Point', anchor:  's', x:    0, y: -39 }
-		},
-
-		'cspace'      : {
-			type      : 'Label',
-			text      : 'welcome',
-			fontStyle : fontStyles(22, 'cab'),
-			pos       : { type: 'Point', anchor:  's', x:    0, y: -15 }
-		},
-
-		'message'     : {
-			type      : 'Label',
-			text      : 'This is a message just for testing.',
-			fontStyle : fontStyles(12, 'la'),
-			pos       : { type: 'Point', anchor: 'se', x: -450, y: -20 }
-		},
-
 		'loginMC' : {
 			type       : 'Custom',
 			normaStyle : 'sides',
@@ -262,7 +234,7 @@ Design.mainboard = {
 			caption : {
 				type      : 'Label',
 				text      : 'login',
-				fontStyle : fontStyles(14, 'ca'),
+				fontStyle : fontStyles(16, 'ca'),
 				pos       : { type: 'Point', anchor: 'sw', x:  135, y:  -9 }
 			},
 			curve     :  {
@@ -299,7 +271,7 @@ Design.mainboard = {
 			caption : {
 				type      : 'Label',
 				text      : 'register',
-				fontStyle : fontStyles(14, 'ca'),
+				fontStyle : fontStyles(16, 'ca'),
 				pos       : { type: 'Point', anchor: 'se', x:  -135, y:  -9 }
 			},
 			curve :  {
@@ -320,11 +292,92 @@ Design.mainboard = {
 
 				ranks : [ '1', '2' ]
 			}
-		}},
+		},
+
+		'switchMC'     : {
+			type       : 'Custom',
+			normaStyle : 'sides',
+			hoverStyle : 'highlight',
+			focusStyle : 'sides',
+			hofocStyle : 'highlight',
+			frame      : {
+				type   : 'Frame',
+				pnw    : { type: 'Point', anchor: 'n', x: -100,             y:         0 },
+				pse    : { type: 'Point', anchor: 'n', x: -100 + switchMCW, y: switchMCH }
+			},
+			caption       : {
+				type      : 'Label',
+				text      : 'switch',
+				fontStyle : fontStyles(16, 'cm'),
+				pos       : { type: 'Point', anchor: 'c', x:  0, y: -3 }
+			},
+			curve :  {
+				type  : 'Curve',
+				copse : {
+				'1' : {
+					type : 'MoveTo',
+					to   : { type: 'Point', anchor:  'nw', x:  0, y:  0 },
+					bx   :  0, by : 1
+				},
+				'2' : {
+					type : 'BeziTo',
+					to   :  { type: 'Point', anchor: 's', x:  0, y:  -2 },
+					c1x  :  30, c1y :  0,
+					c2x  : -30, c2y :  0,
+					bx   :   0, by  : -1
+				},
+				'3' : {
+					type : 'BeziTo',
+					to   :  { type: 'Point', anchor: 'ne', x:  0, y:  0 },
+					c1x  :  30, c1y :  0,
+					c2x  : -30, c2y :  0,
+					bx   : -1, by:  0
+				}},
+
+				ranks : [ '1', '2', '3' ]
+			}
+		},
+
+		'greet'       : {
+			type      : 'Label',
+			text      : 'Hello',
+			fontStyle : fontStyles(12, 'ca'),
+			pos       : { type: 'Point', anchor: 'sw', x:  260, y: -34 }
+		},
+
+		'username'    : {
+			type      : 'Label',
+			text      : '',
+			fontStyle : fontStyles(18, 'ca'),
+			pos       : { type: 'Point', anchor: 'sw', x:  260, y: -11 }
+		},
+
+
+		'saycurrent'  : {
+			type      : 'Label',
+			text      : 'current space',
+			fontStyle : fontStyles(12, 'ca'),
+			pos       : { type: 'Point', anchor:  's', x: -130, y: -34 }
+		},
+
+		'cspace'      : {
+			type      : 'Label',
+			text      : 'welcome',
+			fontStyle : fontStyles(22, 'cab'),
+			pos       : { type: 'Point', anchor:  's', x: -130, y: -11 }
+		},
+
+		'message'     : {
+			type      : 'Label',
+			text      : 'This is a message just for testing.',
+			fontStyle : fontStyles(12, 'la'),
+			pos       : { type: 'Point', anchor: 'se', x: -450, y: -20 }
+		}}, 
 
 		ranks : [
 			'loginMC',
 			'registerMC',
+			'switchMC',
 			'greet',
 			'username',
 			'saycurrent',

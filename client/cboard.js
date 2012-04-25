@@ -142,7 +142,7 @@ CBoard.prototype.getFabric = function() {
 	var iframe = this.iframe;
 	var fabric = this.$fabric = new Fabric(iframe);
 
-	fabric.paint(theme.cockpit.style, this, 'path');
+	fabric.fill(theme.cockpit.style.fill, this, 'path');
 	var layout = this.tree.root.layout;
 
 	var focus = this.focusedCC();
@@ -151,6 +151,7 @@ CBoard.prototype.getFabric = function() {
 		var c = this.cc[cname];
 		c.draw(fabric, CAccent.state(cname === this.$hover, c == focus));
 	}
+	fabric.edge(theme.cockpit.style.edge, this, 'path');
 
 	if (config.debug.drawBoxes) {
 		fabric.paint(Cockpit.styles.boxes,
