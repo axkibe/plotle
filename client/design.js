@@ -776,8 +776,7 @@ Design.regboard = {
 		},
 		'errL'        : {
 			type      : 'Label',
-			//text      : 'username/password not accepted',
-			text      : 'username already taken',
+			text      : '',
 			fontStyle : fontStyles(14, 'lar'),
 			pos       : { type: 'Point', anchor: 's', x: -135, y:  -255 }
 

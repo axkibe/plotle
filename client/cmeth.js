@@ -79,6 +79,60 @@ var Rect          = Fabric.Rect;
 var RoundRect     = Fabric.RoundRect;
 
 /**
+| Registers the user
+*/
+var register = function(board) {
+	var user   = board.cc.userI.value;
+	var email  = board.cc.emailI.value;
+	var pass   = board.cc.passI.value;
+	var pass2  = board.cc.pass2I.value;
+	var code   = board.cc.codeI.value;
+
+	if (user.length < 4) {
+		board.cc.errL.text = 'Username too short, min. 4 characters';
+		board.cc.errL.poke();
+		shell.setCaret('cockpit', { 
+			path : new Path(['regboard', 'userI']),
+			at1  : user.length 
+		});
+		return;
+	}
+
+	if (user.substr(0, 5) === 'visit') {
+		board.cc.errL.text = 'Username must not start with "visit"';
+		board.cc.errL.poke();
+		shell.setCaret('cockpit', { 
+			path : new Path(['regboard', 'userI']),
+			at1  : 0
+		});
+		return;
+	}
+	
+	if (pass.length < 5) {
+		board.cc.errL.text = 'Password too short, min. 5 characters';
+		board.cc.errL.poke();
+		shell.setCaret('cockpit', { 
+			path : new Path(['regboard', 'passI']),
+			at1  : pass.length 
+		});
+		return;
+	}
+
+	if (pass !== pass2) {
+		board.cc.errL.text = 'Passwords to not match';
+		board.cc.errL.poke();
+		shell.setCaret('cockpit', { 
+			path : new Path(['regboard', 'pass2I']),
+			at1  : pass2.length 
+		});
+		return;
+	}
+
+	debug('OK?');
+}
+
+
+/**
 | The container.
 */
 CMeth = {};
@@ -153,15 +207,20 @@ CMeth.regBC.canFocus = function() {
 	return true;
 };
 
+CMeth.regBC.input = function(board, ele, text) {
+	register(board);
+}
+
 CMeth.regBC.specialKey = function(board, ele, key) {
 	switch (key) {
-	case 'down' : board.cycleFocus(+1); return;
-	case 'up'   : board.cycleFocus(-1); return;
+	case 'return' : register(board); return;
+	case 'down'   : board.cycleFocus(+1); return;
+	case 'up'     : board.cycleFocus(-1); return;
 	}
 };
 
 CMeth.regBC.mousedown = function(board, ele, p, shift, ctrl) {
-	debug('TODO');
+	register(board);
 };
 
 

@@ -527,7 +527,7 @@ Server.prototype.register = function(cmd, res) {
 		if (err !== null) { throw new Error('Database fail: '+err); }
 
 		if (val === null) {
-			var asw = reject('Unknown invitation key');
+			var asw = reject('Unknown invitation code');
 			log('ajax', '->', asw);
 			res.writeHead(200, { 'Content-Type': 'application/json' });
 			res.end(JSON.stringify(asw));

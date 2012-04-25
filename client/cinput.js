@@ -147,7 +147,7 @@ CInput.prototype.maskPath = function(fabric, border, twist, length, size) {
 
 /**
 | Returns the fabric for the input field.
-| TODO chaching;
+| TODO caching;
 */
 CInput.prototype.getFabric = function(accent) {
 	var fabric = new Fabric(this.bezi.width, this.bezi.height);
@@ -235,7 +235,7 @@ CInput.prototype.getCaretPos = function() {
 CInput.prototype.drawCaret = function() {
 	var caret = shell.caret;
 	var board = this.board;
-	var cpos  = caret.pos$  = this.getCaretPos();
+	var cpos  = caret.$pos = this.getCaretPos();
 
 	var cx  = cpos.x;
 	var ch  = cpos.s - cpos.n;
