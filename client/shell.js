@@ -251,14 +251,14 @@ Shell.prototype.stopAction = function() {
 Shell.prototype.pathFrowny = function(fabric, border, twist, pos) {
 	fabric.beginPath(twist);
 	fabric.moveTo(pos.x - 100, pos.y);
-	fabric.lineTo(pos.x, pos.y - 50);
+	fabric.lineTo(pos.x,       pos.y - 30);
 	fabric.lineTo(pos.x + 100, pos.y);
 
-	fabric.moveTo(pos.x - 100, pos.y - 150);
-	fabric.lineTo(pos.x -  50, pos.y - 160);
+	fabric.moveTo(pos.x - 100, pos.y - 130);
+	fabric.lineTo(pos.x -  50, pos.y - 140);
 	
-	fabric.moveTo(pos.x + 100, pos.y - 150);
-	fabric.lineTo(pos.x +  50, pos.y - 160);
+	fabric.moveTo(pos.x + 100, pos.y - 130);
+	fabric.lineTo(pos.x +  50, pos.y - 140);
 };
 
 /**
