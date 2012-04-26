@@ -115,9 +115,9 @@ var login = function(board) {
 		return;
 	}
 
-	pass = peer.passhash(pass);
+	var passhash = peer.passhash(pass);
 
-	peer.login(user, pass, function(res) {
+	peer.auth(user, passhash, function(res) {
 		if (!res.ok) {
 			board.cc.errL.text = res.message;
 			board.cc.errL.poke();
@@ -136,7 +136,7 @@ var login = function(board) {
 			return;
 		}
 
-		shell.setUser(user, pass);
+		shell.setUser(user, passhash);
 		board.cockpit.setCurBoard('mainboard');
 		clearLogin(board);
 	});

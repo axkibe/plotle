@@ -477,26 +477,42 @@ Server.prototype.alter = function(cmd, res) {
 | Executes an auth command.
 */
 Server.prototype.auth = function(cmd, res) {
+	var self = this;
 	var user = cmd.user;
 	var pass = cmd.pass;
 	if (!is(user)) { throw reject('user missing'); }
 	if (!is(pass)) { throw reject('pass missing');  }
 
 	if (user === 'visitor') {
-		while (this.visitors[this.nextVisitor]) { this.nextVisitor++; }
-		var nv = this.nextVisitor;
+		while (self.visitors[self.nextVisitor]) { self.nextVisitor++; }
+		var nv = self.nextVisitor;
 		var v = {
 			user    : 'visitor-' + nv,
 			pass    : cmd.pass,
 			created : Date.now(),
 			use     : Date.now()
 		};
-		this.visitors[nv] = v;
+		self.visitors[nv] = v;
 		return { ok: true, user: v.user };
 	}
+	
+	self.db.users.findOne({ _id : cmd.user}, function(err, val) {
+		if (err !== null) { throw new Error('Database fail: '+err); }
+		var asw;
+		if (val === null) {
+			asw = reject('Username unknown');
+		} else if (val.pass !== pass) {
+			asw = reject('Invalid password');
+		} else {
+			asw = { ok : true, user: user }; 
+		}
+		log('ajax', '->', asw);
+		res.writeHead(200, { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify(asw));
+		return;
+	});
 
-	throw reject('non visitor users yet unsupported');
-	//return { ok: true };
+	return null;
 };
 
 /**
