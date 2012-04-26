@@ -604,13 +604,11 @@ Design.loginboard = {
 
 				ranks : [ '1', '2', '3', '4', '5' ]
 			}
-		}
-		/*
+		/* @@
 		'forgotBC'     : {
 			type       : 'Custom',
 			style      : 'zero',
 			hoverStyle : 'zhighlight',
-			TODO
 			frame : {
 				type  : 'Frame',
 				pnw   : { type: 'Point', anchor: 'se', x: -240,             y: -10 - forgotBCH },
@@ -662,29 +660,14 @@ Design.loginboard = {
 				ranks : [ '1', '2', '3', '4', '5' ]
 			}
 		}*/
-		},
 
-		//{
-		//	type : 'Input',
-		//	name : 'userinput',
-		//	pos : {
-		//		pnw : {
-		//			x : { anchor : 'm', v : -100},
-		//			y : { anchor : 's', v :  -40}
-		//		},
-		//		pse : {
-		//			x : { anchor : 'm', v :  100},
-		//			y : { anchor : 's', v :  -20}
-		//		}
-		//	}
-		//}
-
+		}},
+		
 		ranks : [
 			'userI',
 			'passI',
 			'loginBC',
 			'cancelBC',
-			//'forgotBC',
 			'loginL',
 			'userL',
 			'passL',

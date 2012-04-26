@@ -80,19 +80,12 @@ CBoard = function(name, inherit, cockpit, screensize) {
 	var iframe   = this.iframe = new Rect(Point.zero, pse.sub(pnw));
 	this.curve   = new Curve(tree.root.curve, iframe);
 
-	// TODO use point arithmetic
 	this.gradientPC = new Point(half(iframe.width), iframe.height + 450);
 	this.gradientR0 = 0;
 	this.gradientR1 = 650;
 	this.screensize = screensize;
 
 	this.$hover = inherit ? inherit.$hover : null;
-
-	// TODO
-	Object.defineProperty(this, '$focus', {
-		get : function() { throw new Error('ARRR'); },
-		set : function() { throw new Error('ARRR'); }
-	});
 
 	this.cc = {};
 	var layout = tree.root.layout;
@@ -294,12 +287,6 @@ CBoard.prototype.setFocus = function(cname) {
 	var com = this.cc[cname];
 	var focus = this.focusedCC();
 	if (focus === com) { return; }
-
-	// TODO no longer needed!
-	this.$fabric = null;
-	shell.redraw = true;
-	if (focus)   {   focus.$fabric = null; }
-	if (com)     {     com.$fabric = null; }
 
 	shell.setCaret('cockpit', {
 		path : new Path([this.name, cname]),

@@ -76,6 +76,73 @@ var Rect          = Fabric.Rect;
 var RoundRect     = Fabric.RoundRect;
 
 /**
+| Logins the user
+*/
+var login = function(board) {
+	board.cc.errL.text = '';
+	board.cc.errL.poke();
+
+	var user   = board.cc.userI.value;
+	var pass   = board.cc.passI.value;
+
+	if (user.length < 4) {
+		board.cc.errL.text = 'Username too short, min. 4 characters';
+		board.cc.errL.poke();
+		shell.setCaret('cockpit', {
+			path : new Path(['loginboard', 'userI']),
+			at1  : user.length
+		});
+		return;
+	}
+
+	if (user.substr(0, 5) === 'visit') {
+		board.cc.errL.text = 'Username must not start with "visit"';
+		board.cc.errL.poke();
+		shell.setCaret('cockpit', {
+			path : new Path(['loginboard', 'userI']),
+			at1  : 0
+		});
+		return;
+	}
+	
+	if (pass.length < 5) {
+		board.cc.errL.text = 'Password too short, min. 5 characters';
+		board.cc.errL.poke();
+		shell.setCaret('cockpit', {
+			path : new Path(['loginboard', 'passI']),
+			at1  : pass.length
+		});
+		return;
+	}
+
+	pass = peer.passhash(pass);
+
+	peer.login(user, pass, function(res) {
+		if (!res.ok) {
+			board.cc.errL.text = res.message;
+			board.cc.errL.poke();
+
+			if (res.message.search(/Username/) >= 0) {
+				shell.setCaret('cockpit', {
+					path : new Path(['loginboard', 'userI']),
+					at1  : user.length
+				});
+			} else {
+				shell.setCaret('cockpit', {
+					path : new Path(['loginboard', 'passI']),
+					at1  : pass.length
+				});
+			}
+			return;
+		}
+
+		shell.setUser(user, pass);
+		board.cockpit.setCurBoard('mainboard');
+		clearLogin(board);
+	});
+};
+
+/**
 | Registers the user
 */
 var register = function(board) {
@@ -165,22 +232,30 @@ var register = function(board) {
 	});
 };
 
+/**
+| Clears all fields on the login board
+*/
+var clearLogin = function(board) {
+	board.cc.userI.value  = '';
+	board.cc.passI.value  = '';
+	board.cc.userI.poke();
+	board.cc.passI.poke();
+};
 
 /**
 | Clears all fields on the register board
 */
 var clearRegister = function(board) {
-	board.cc.userI.value  = '';
+	board.cc.userI. value = '';
 	board.cc.emailI.value = '';
-	board.cc.passI.value  = ''; 
+	board.cc.passI. value = '';
 	board.cc.pass2I.value = '';
-	board.cc.codeI.value  = '';
-	
-	board.cc.userI.poke();
+	board.cc.codeI. value = '';
+	board.cc.userI. poke();
 	board.cc.emailI.poke();
-	board.cc.passI.poke();
+	board.cc.passI. poke();
 	board.cc.pass2I.poke();
-	board.cc.codeI.poke();
+	board.cc.codeI. poke();
 };
 
 /**
@@ -235,13 +310,14 @@ CMeth.loginBC.canFocus = function() {
 
 CMeth.loginBC.specialKey = function(board, ele, key) {
 	switch (key) {
-	case 'down' : board.cycleFocus(+1); return;
-	case 'up'   : board.cycleFocus(-1); return;
+	case 'down'   : board.cycleFocus(+1); return;
+	case 'up'     : board.cycleFocus(-1); return;
+	case 'return' : login(board);         return;
 	}
 };
 
 CMeth.loginBC.mousedown = function(board, ele, p, shift, ctrl) {
-	debug('TODO');
+	login(board);
 };
 
 
@@ -299,7 +375,8 @@ CMeth.cancelBC.specialKey = function(board, ele, key) {
 	case 'down' : board.cycleFocus(+1); return;
 	case 'up'   : board.cycleFocus(-1); return;
 	}
-	if (board.name == 'regboard') { clearRegister(board); }
+	if (board.name == 'regboard')   { clearRegister(board); }
+	if (board.name == 'loginboard') { clearLogin(board);    }
 	board.cockpit.setCurBoard('mainboard');
 };
 

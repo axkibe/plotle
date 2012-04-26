@@ -92,12 +92,6 @@ Caret = function(visec, sign, retainx, shown) {
 
 	immute(this);
 
-	// TODO
-	Object.defineProperty(this, 'pos$', {
-		get: function() { throw new Error('ERRRR'); },
-		set: function() { throw new Error('ERRRR'); }
-	});
-
 	// position cache
 	this.$pos = null;
 

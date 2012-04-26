@@ -147,7 +147,7 @@ CInput.prototype.maskPath = function(fabric, border, twist, length, size) {
 
 /**
 | Returns the fabric for the input field.
-| TODO caching;
+| @@ caching;
 */
 CInput.prototype.getFabric = function(accent) {
 	var fabric = new Fabric(this.bezi.width, this.bezi.height);

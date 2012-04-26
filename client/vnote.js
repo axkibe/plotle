@@ -168,7 +168,6 @@ VNote.prototype.scrollCaretIntoView = function() {
 	if (vpara.constructor !== VPara) { throw new Error('iFail'); }
 	var cp      = vpara.getCaretPos();
 	var pnw     = this.vv.doc.getPNW(vpara.key);
-	debug('PNW', pnw);
 	var zone    = this.getZone();
 	var imargin = this.imargin;
 

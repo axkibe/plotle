@@ -325,7 +325,7 @@ var System = function() {
 	*/
 	function onmousedown(event) {
 		if (event.button !== 0) return;
-		event.preventDefault();  // TODO maybe preventDefault before button test?
+		event.preventDefault();  // @@ maybe preventDefault before button test?
 		hiddenInput.focus();
 		setTimeout(function() { hiddenInput.selectionStart = 0; }, 0);
 		var p = new Point (event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop);

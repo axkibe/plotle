@@ -141,13 +141,11 @@ Shell.prototype.setCaret = function(visec, sign, retainx) {
 		throw new Error('invalid visec');
 	}
 
-	var poke = false;
 	if (this.caret.sign &&
 		(this.caret.visec !== visec || this.caret.sign.path !== sign.path)
 	) {
 		var entity = this.getEntity(this.caret.visec, this.caret.sign.path);
 		if (entity) { entity.poke(); }
-		poke = true;
 	}
 
 	this.caret = new Caret(
@@ -157,7 +155,11 @@ Shell.prototype.setCaret = function(visec, sign, retainx) {
 		this.caret.$shown
 	);
 
-	if (poke && sign) { this.getEntity(visec, sign.path); }
+	if (sign) {
+		var entity = this.getEntity(visec, sign.path);
+		if (entity) { entity.poke(); }
+		shell.redraw = true;
+	}
 
 	return this.caret;
 };
