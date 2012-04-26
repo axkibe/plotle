@@ -319,6 +319,7 @@ Server.prototype.registerFiles = function() {
 	registerFile('/testpad.html',     'html', 0, 'client/testpad.html'   );
 	registerFile('/testpad.js',       'js',   0, 'client/testpad.js'     );
 	registerFile('/jools.js',         'js',   1, 'shared/jools.js'       );
+	registerFile('/sha1.js' ,         'js',   1, 'shared/sha1.js'        );
 	registerFile('/euclid.js',        'js',   1, 'shared/euclid.js'      );
 	registerFile('/fabric.js',        'js',   1, 'client/fabric.js'      );
 	registerFile('/theme.js'  ,       'js',   1, 'client/theme.js'       );
@@ -520,7 +521,7 @@ Server.prototype.register = function(cmd, res) {
 	}
 
 	/**
-	| Username is unique and the result of looking up the 
+	| Username is unique and the result of looking up the
 	| invitation code is ...
 	*/
 	var gotCode = function(err, val) {
@@ -537,7 +538,8 @@ Server.prototype.register = function(cmd, res) {
 				_id  : cmd.user,
 				pass : cmd.pass,
 				mail : cmd.mail,
-				code : cmd.code
+				code : cmd.code,
+				icom : val.comment
 			}, function(err, count) {
 				if (err !== null) { throw new Error('Database fail: '+err); }
 				// Everything OK
@@ -561,7 +563,7 @@ Server.prototype.register = function(cmd, res) {
 		}
 		// aquires an inivitation code and invalidates it if found.
 		self.db.invites.findAndModify(
-			{ _id : cmd.code }, {  }, null, { remove: true }, gotCode 
+			{ _id : cmd.code }, {  }, null, { remove: true }, gotCode
 		);
 	});
 

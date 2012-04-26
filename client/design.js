@@ -372,7 +372,7 @@ Design.mainboard = {
 			text      : 'This is a message just for testing.',
 			fontStyle : fontStyles(12, 'la'),
 			pos       : { type: 'Point', anchor: 'se', x: -450, y: -20 }
-		}}, 
+		}},
 
 		ranks : [
 			'loginMC',
@@ -469,6 +469,7 @@ Design.loginboard = {
 			hoverStyle : 'input',
 			hofocStyle : 'inputfocus',
 			fontStyle  : fontStyles(14, 'la'),
+			maxlen     : 100,
 			frame      : {
 				type   : 'Frame',
 				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -74 },
@@ -483,6 +484,7 @@ Design.loginboard = {
 			hoverStyle : 'input',
 			hofocStyle : 'inputfocus',
 			fontStyle  : fontStyles(14, 'la'),
+			maxlen     : 0,
 			frame      : {
 				type   : 'Frame',
 				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -40 },
@@ -796,6 +798,7 @@ Design.regboard = {
 			hoverStyle : 'input',
 			hofocStyle : 'inputfocus',
 			fontStyle  : fontStyles(14, 'la'),
+			maxlen     : 100,
 			frame      : {
 				type   : 'Frame',
 				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -238 },
@@ -810,6 +813,7 @@ Design.regboard = {
 			hoverStyle : 'input',
 			hofocStyle : 'inputfocus',
 			fontStyle  : fontStyles(14, 'la'),
+			maxlen     : 0,
 			frame      : {
 				type   : 'Frame',
 				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -198 },
@@ -824,6 +828,7 @@ Design.regboard = {
 			hoverStyle : 'input',
 			hofocStyle : 'inputfocus',
 			fontStyle  : fontStyles(14, 'la'),
+			maxlen     : 0,
 			frame      : {
 				type   : 'Frame',
 				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -158 },
@@ -838,6 +843,7 @@ Design.regboard = {
 			hoverStyle : 'input',
 			hofocStyle : 'inputfocus',
 			fontStyle  : fontStyles(14, 'la'),
+			maxlen     : 0,
 			frame      : {
 				type   : 'Frame',
 				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -118 },
@@ -852,6 +858,7 @@ Design.regboard = {
 			hoverStyle : 'input',
 			hofocStyle : 'inputfocus',
 			fontStyle  : fontStyles(14, 'la'),
+			maxlen     : 8,
 			frame      : {
 				type   : 'Frame',
 				pnw    : { type: 'Point', anchor: 's', x: -135, y:   -78 },

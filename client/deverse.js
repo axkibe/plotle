@@ -112,7 +112,8 @@ Deverse = {
 			'hoverStyle' : 'String',
 			'focusStyle' : 'String',
 			'hofocStyle' : 'String',
-			'fontStyle'  : 'FontStyle'
+			'fontStyle'  : 'FontStyle',
+			'maxlen'     : 'Number'
 		}
 	},
 

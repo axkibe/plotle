@@ -34,15 +34,12 @@ var CLabel;
 var CInput;
 var Cockpit;
 var Curve;
-var Design;
 var Jools;
 var Fabric;
 var Path;
-var Tree;
-var Deverse;
-var theme;
-var system;
+var peer;
 var shell;
+var system;
 
 /**
 | Exports
@@ -82,6 +79,9 @@ var RoundRect     = Fabric.RoundRect;
 | Registers the user
 */
 var register = function(board) {
+	board.cc.errL.text = '';
+	board.cc.errL.poke();
+
 	var user   = board.cc.userI.value;
 	var email  = board.cc.emailI.value;
 	var pass   = board.cc.passI.value;
@@ -91,9 +91,9 @@ var register = function(board) {
 	if (user.length < 4) {
 		board.cc.errL.text = 'Username too short, min. 4 characters';
 		board.cc.errL.poke();
-		shell.setCaret('cockpit', { 
+		shell.setCaret('cockpit', {
 			path : new Path(['regboard', 'userI']),
-			at1  : user.length 
+			at1  : user.length
 		});
 		return;
 	}
@@ -101,7 +101,7 @@ var register = function(board) {
 	if (user.substr(0, 5) === 'visit') {
 		board.cc.errL.text = 'Username must not start with "visit"';
 		board.cc.errL.poke();
-		shell.setCaret('cockpit', { 
+		shell.setCaret('cockpit', {
 			path : new Path(['regboard', 'userI']),
 			at1  : 0
 		});
@@ -111,9 +111,9 @@ var register = function(board) {
 	if (pass.length < 5) {
 		board.cc.errL.text = 'Password too short, min. 5 characters';
 		board.cc.errL.poke();
-		shell.setCaret('cockpit', { 
+		shell.setCaret('cockpit', {
 			path : new Path(['regboard', 'passI']),
-			at1  : pass.length 
+			at1  : pass.length
 		});
 		return;
 	}
@@ -121,16 +121,67 @@ var register = function(board) {
 	if (pass !== pass2) {
 		board.cc.errL.text = 'Passwords to not match';
 		board.cc.errL.poke();
-		shell.setCaret('cockpit', { 
+		shell.setCaret('cockpit', {
 			path : new Path(['regboard', 'pass2I']),
-			at1  : pass2.length 
+			at1  : pass2.length
 		});
 		return;
 	}
 
-	debug('OK?');
-}
+	if (code.length === 0) {
+		board.cc.errL.text = 'Invitation code missing';
+		board.cc.errL.poke();
+		shell.setCaret('cockpit', {
+			path : new Path(['regboard', 'codeI']),
+			at1  : pass2.length
+		});
+		return;
+	}
 
+	pass = peer.passhash(pass);
+
+	peer.register(user, email, pass, code, function(res) {
+		if (!res.ok) {
+			board.cc.errL.text = res.message;
+			board.cc.errL.poke();
+
+			if (res.message.search(/Username/) >= 0) {
+				shell.setCaret('cockpit', {
+					path : new Path(['regboard', 'userI']),
+					at1  : pass2.length
+				});
+			} else if (res.message.search(/code/) >= 0) {
+				shell.setCaret('cockpit', {
+					path : new Path(['regboard', 'codeI']),
+					at1  : pass2.length
+				});
+			}
+			return;
+		}
+
+		shell.setUser(user, pass);
+		board.cockpit.setCurBoard('mainboard');
+		clearRegister(board);
+	});
+};
+
+
+/**
+| Clears all fields on the register board
+*/
+var clearRegister = function(board) {
+	board.cc.userI.value  = '';
+	board.cc.emailI.value = '';
+	board.cc.passI.value  = ''; 
+	board.cc.pass2I.value = '';
+	board.cc.codeI.value  = '';
+	
+	board.cc.userI.poke();
+	board.cc.emailI.poke();
+	board.cc.passI.poke();
+	board.cc.pass2I.poke();
+	board.cc.codeI.poke();
+};
 
 /**
 | The container.
@@ -209,7 +260,7 @@ CMeth.regBC.canFocus = function() {
 
 CMeth.regBC.input = function(board, ele, text) {
 	register(board);
-}
+};
 
 CMeth.regBC.specialKey = function(board, ele, key) {
 	switch (key) {
@@ -248,10 +299,12 @@ CMeth.cancelBC.specialKey = function(board, ele, key) {
 	case 'down' : board.cycleFocus(+1); return;
 	case 'up'   : board.cycleFocus(-1); return;
 	}
+	if (board.name == 'regboard') { clearRegister(board); }
 	board.cockpit.setCurBoard('mainboard');
 };
 
 CMeth.cancelBC.mousedown = function(board, ele, p, shift, ctrl) {
+	if (board.name == 'regboard') { clearRegister(board); }
 	board.cockpit.setCurBoard('mainboard');
 };
 

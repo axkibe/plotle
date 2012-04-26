@@ -31,8 +31,9 @@
 | Imports
 */
 var IFace;
-var Path;
 var Jools;
+var Path;
+var sha1hex;
 
 /**
 | Exports
@@ -49,6 +50,7 @@ if (typeof (window) === 'undefined') throw new Error('Peer nees a browser!');
 var debug     = Jools.debug;
 var log       = Jools.log;
 var is        = Jools.is;
+var uid       = Jools.uid;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .-,--.
@@ -69,10 +71,25 @@ Peer = function() {
 };
 
 /**
+| hashes the password
+*/
+Peer.prototype.passhash = function(pass) {
+	return sha1hex(pass + '-meshcraft-8833');
+};
+
+/**
 | auth
 */
 Peer.prototype.auth = function(user, pass, callback) {
+	if (user === 'visitor' && pass === null) {
+		pass = uid();
+	}
+
 	this._iface.auth(user, pass, callback);
+};
+
+Peer.prototype.register = function(user, mail, pass, code, callback) {
+	this._iface.register(user, mail, pass, code, callback);
 };
 
 /**

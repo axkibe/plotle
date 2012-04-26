@@ -76,59 +76,92 @@ IFace = function() {
 	this.update  = null;
 };
 
+
 /**
-| Authentication
+| General ajax.
 */
-IFace.prototype.auth = function(user, pass, callback) {
-    if (this.authActive) { throw new Error('Already authenticating'); }
-	this.authActive = true;
-	
+IFace.prototype._ajax = function(request, callback) {
+	if (!request.cmd) { throw new Error('ajax request.cmd missing'); }
+
     var ajax = new XMLHttpRequest();
     ajax.open('POST', '/mm', true);
     ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	var self = this;
 
     ajax.onreadystatechange = function() {
-		var asw;
 		if (ajax.readyState !== 4) { return; }
 
 		if (ajax.status !== 200) {
-			self.authActive = false;
-			log('iface', 'auth.status == ' + ajax.status);
-
-			callback( { error: 'connection' , status: ajax.status }, null);
+			log('iface', request.cmd, 'status: ', ajax.status);
+			callback( { ok: false, message: 'connection' , status: ajax.status } );
 			return;
 		}
 
+		var asw;
 		try {
 			asw = JSON.parse(ajax.responseText);
 		} catch (e) {
-			self.authActive = false;
-			callback( { error: 'nojson' }, null);
+			callback( { ok: false, message: 'nojson' } );
 		}
 
-		log('iface', '<-sg', asw);
+		log('iface', '<-', asw);
 		if (!asw.ok) {
-			self.authActive = false;
-			log('iface', 'euth, server not ok');
+			log('iface', request.cmd, 'server not ok');
 			callback( asw, null);
 			return;
 		}
 
-		self.authActive = false;
-		self.authUser = asw.user;
-		self.authPass = asw.pass;
-		callback(null, asw);
+		callback(asw);
 	};
 
-    var request = JSON.stringify({
+    var rs = JSON.stringify(request);
+    log('iface', '->', rs);
+    ajax.send(rs);
+};
+
+
+/**
+| Authentication
+*/
+IFace.prototype.auth = function(user, pass, callback) {
+	var self = this;
+    if (self.$authActive) { throw new Error('Auth already active'); }
+	self.$authActive = true;
+	self._ajax({
         cmd  : 'auth',
         user : user,
 		pass : pass
-    });
+	}, function(asw) {
+		self.$authActive = false;
+		if (asw.ok) {
+			self.$authUser   = user;
+			self.$authPass   = pass;
+		}
+		callback(asw);
+	});
+};
 
-    log('iface', 'auth->', request);
-    ajax.send(request);
+/**
+| Register a user
+*/
+IFace.prototype.register = function(user, mail, pass, code, callback) {
+	var self = this;
+    if (self.$regActive) { throw new Error('Auth already active'); }
+	self.$regActive = true;
+	self._ajax({
+        cmd   : 'register',
+        user  : user,
+		mail  : mail,
+		pass  : pass,
+		code  : code
+	}, function(asw) {
+		self.$regActive = false;
+		if (asw.ok) {
+			self.$authUser   = user;
+			self.$authPass   = pass;
+		}
+		callback(asw);
+	});
 };
 
 /**

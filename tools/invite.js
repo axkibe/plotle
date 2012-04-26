@@ -3,9 +3,17 @@
 | Creates an invitation code.
 */
 
-var Jools       = require('../shared/jools');
-var config      = require('../config');
-var mongodb     = require('mongodb');
+var Jools    = require('../shared/jools');
+var config   = require('../config');
+var mongodb  = require('mongodb');
+var debug    = Jools.debug;
+
+var args = process.argv;
+if (args.length < 3) {
+	console.log('Comment missing');
+	process.exit(1);
+}
+var comment = process.argv[2];
 
 var db = {};
 
@@ -27,7 +35,6 @@ db.connector = new mongodb.Db(
 var connect = function() {
 	db.connector.open(function(err, connection) {
 		if (err !== null) { throw new Error('Cannot connect to database: '+err); }
-		console.log('Connected to database');
 		db.connection = connection;
 		aquireInvites();
 	});
@@ -56,8 +63,9 @@ var aquireInvites = function() {
 
 var insertCode = function() {
 	db.invites.insert({
-		_id  : code,
-		date : Date.now()
+		_id     : code,
+		comment : comment,
+		date    : Date.now()
 	}, function(err, count) {
 		if (err !== null) {
 			console.log('Oops invitation code already exists trying another.');		
@@ -65,7 +73,9 @@ var insertCode = function() {
 			insertCode();
 			return;
 		}
-		console.log('Added invite: ' + code);
+		console.log();
+		console.log('CODE: ' + code);
+		console.log();
 		db.connection.close();
 	});
 };

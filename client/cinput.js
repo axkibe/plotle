@@ -265,6 +265,11 @@ CInput.prototype.input = function(board, text) {
 	var v = this.value;
 	var at1 = csign.at1;
 
+	var mlen = this.twig.maxlen;
+	if (mlen > 0 && v.length + text.length > mlen) {
+		text = text.substring(0, mlen - v.length);
+	}
+
 	this.value = v.substring(0, at1) + text + v.substring(at1);
 	shell.setCaret('cockpit', {
 		path : csign.path,

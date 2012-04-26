@@ -113,9 +113,6 @@ Shell = function(fabric, sPeer) {
 	this.action     = null;
 	this.selection  = new Selection();
 
-	// current user
-	this.authUser   = null;
-	this.authPass   = null;
 	this.green      = false;
 
 	// a flag set to true if anything requests a redraw.
@@ -324,6 +321,7 @@ Shell.prototype.mousehover = function(p, shift, ctrl) {
 | Changes the shell to a green error screen.
 */
 Shell.prototype.greenscreen = function(message, contract) {
+	if (this.green) { return; }
 	if (!message) { message = 'unknown error.'; }
 	this.green = message;
 	this.greenContact = contract || false;
@@ -445,23 +443,38 @@ Shell.prototype.resize = function(width, height) {
 };
 
 /**
+| Sets the current user
+*/
+Shell.prototype.setUser = function(user, pass) {
+	this.cockpit.setUser(user);
+
+	if (user.substr(0, 5) !== 'visit') {
+		debug('STORE', user, pass);
+		// TODO store user/pass in browser
+	}
+};
+
+/**
 | Called when loading the website
 */
 Shell.prototype.onload = function() {
 	peer = new Peer();
 	peer.setUpdate(this);
 	var self = this;
-	peer.auth('visitor', null, function(err, val) {
-		if (err !== null) {
-			log('fail', err);
-			throw new Error(err.message);
+	peer.auth('visitor', null, function(res) {
+		if (!res.ok) {
+			log('fail', res.message);
+			self.greenscreen(res.message);
+			return;
 		}
-		self.authUser = val.user;
-		self.authPass = val.pass;
-		self.cockpit.setUser(val.user);
+		self.setUser(res.user, res.pass);
 
 		var spaceName = 'welcome';
 		peer.aquireSpace(spaceName, function(err, val) {
+			if (err !== null) {
+				this.greenscreen('Cannot aquire space');
+				return;
+			}
 			if (val.name !== spaceName) {
 				throw new Error('got wrong spaceName!');
 			}
