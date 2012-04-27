@@ -460,10 +460,11 @@ Shell.prototype.setUser = function(user, pass) {
 	this.cockpit.setUser(user);
 
 	if (user.substr(0, 5) !== 'visit') {
-		// TODO store user/pass in browser
-		debug('STORE', user, pass);
+		window.localStorage.setItem('user', user);
+		window.localStorage.setItem('pass', pass);
 	}
 };
+
 
 /**
 | Called when loading the website
@@ -472,30 +473,58 @@ Shell.prototype.onload = function() {
 	peer = new Peer();
 	peer.setUpdate(this);
 	var self = this;
-	peer.auth('visitor', null, function(res) {
-		if (!res.ok) {
-			log('fail', res.message);
-			self.greenscreen(res.message);
-			return;
-		}
-		self.setUser(res.user, res.pass);
 
-		var spaceName = 'welcome';
-		peer.aquireSpace(spaceName, function(err, val) {
-			if (err !== null) {
-				this.greenscreen('Cannot aquire space');
-				return;
-			}
-			if (val.name !== spaceName) {
-				throw new Error('got wrong spaceName!');
-			}
-			var tree = val.tree;
-			self.vspace = new VSpace(tree.root.copse.welcome, new Path([spaceName]));
-			self.cockpit.message(null);
-			self.cockpit.setCurSpace(spaceName);
-			self._draw();
-		});
+	var user = window.localStorage.getItem('user');
+	var pass = null;
+	if (user) {
+		pass = window.localStorage.getItem('pass');
+	} else {
+		user = 'visitor';
+	}
+
+	peer.auth(user, pass, function(res) {
+		self.onLoadAuth(user, res);
 	});
 };
+
+/**
+| Answer to on loading authentication
+*/
+Shell.prototype.onLoadAuth = function(user, res) {
+	var self = this;
+
+	if (!res.ok) {
+		// when logging in with a real user failed
+		// takes a visitor instead
+		if (user !== 'visitor') {
+			peer.auth('visitor', null, function(res) {
+				self.onLoadAuth('visitor', res); 
+			});
+			return;
+		}
+		// if even that failed, bails to greenscreen
+		log('fail', res.message);
+		self.greenscreen(res.message);
+		return;
+	}
+
+	self.setUser(res.user, res.pass);
+	var spaceName = 'welcome';
+	peer.aquireSpace(spaceName, function(err, val) {
+		if (err !== null) {
+			this.greenscreen('Cannot aquire space');
+			return;
+		}
+		if (val.name !== spaceName) {
+			throw new Error('got wrong spaceName!');
+		}
+		var tree = val.tree;
+		self.vspace = new VSpace(tree.root.copse.welcome, new Path([spaceName]));
+		self.cockpit.message(null);
+		self.cockpit.setCurSpace(spaceName);
+		self._draw();
+	});
+};
+
 
 })();

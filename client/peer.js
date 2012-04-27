@@ -81,7 +81,7 @@ Peer.prototype.passhash = function(pass) {
 
 Peer.prototype.logout = function(callback) {
 	if (this.$visitUser) {
-		this._peer.setUser(this.$visitUser, this.$visitPass);
+		this._iface.setUser(this.$visitUser, this.$visitPass);
 		callback({ ok : true, user : this.$visitUser, pass : this.$visitPass });
 	} else {
 		this.auth('visitor', null, callback);
@@ -99,8 +99,8 @@ Peer.prototype.auth = function(user, pass, callback) {
 
 	self._iface.auth(user, pass, function(asw) {
 		if (asw.ok && user.substring(0, 5) === 'visit') {
-			self.$visitUser = user;
-			self.$visitPass = pass;
+			self.$visitUser = asw.user;
+			self.$visitPass = asw.pass;
 		}
 		callback(asw);
 	});
