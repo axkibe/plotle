@@ -498,7 +498,7 @@ Shell.prototype.onLoadAuth = function(user, res) {
 		// takes a visitor instead
 		if (user !== 'visitor') {
 			peer.auth('visitor', null, function(res) {
-				self.onLoadAuth('visitor', res); 
+				self.onLoadAuth('visitor', res);
 			});
 			return;
 		}

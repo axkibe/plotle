@@ -31,11 +31,12 @@
 var CBoard;
 var Curve;
 var Design;
-var Jools;
-var Fabric;
-var Path;
-var Tree;
 var Deverse;
+var Fabric;
+var Jools;
+var Path;
+var SwitchPanel;
+var Tree;
 var theme;
 var system;
 var shell;
@@ -53,6 +54,7 @@ var Cockpit = null;
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
 var debug         = Jools.debug;
+var half          = Fabric.half;
 var immute        = Jools.immute;
 var is            = Jools.is;
 var isnon         = Jools.isnon;
@@ -78,6 +80,9 @@ Cockpit = function() {
 		loginboard : null,
 		regboard   : null
 	};
+
+	// the switch panel
+	this.switchpanel = new SwitchPanel();
 
 	this._curSpace   = null;
 	this._message    = null;
@@ -185,6 +190,8 @@ Cockpit.prototype.setUser = function(user) {
 Cockpit.prototype.draw = function() {
 	var cb = this.curBoard();
 	this.fabric.drawImage(cb.getFabric(), cb.pnw);
+	var pnw = new Point(half(this.fabric.width) - 90, this.fabric.height - 159);
+	this.fabric.drawImage(this.switchpanel.getFabric(), pnw);
 };
 
 /**

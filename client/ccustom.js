@@ -89,6 +89,7 @@ CCustom = function(twig, board, inherit, name) {
 | CCustoms can focus or not depending on their methods
 */
 CCustom.prototype.canFocus = function() {
+	if (!this.$visible) { return false; }
 	if (!this.methods.canFocus) { return false; }
 	return this.methods.canFocus();
 };
@@ -141,6 +142,7 @@ CCustom.prototype.getFabric = function(accent) {
 | Input
 */
 CCustom.prototype.input = function(text) {
+	if (!this.$visible) { return; }
 	if (this.methods.input) { this.methods.input.call(this, text); }
 	return true;
 };
@@ -149,6 +151,7 @@ CCustom.prototype.input = function(text) {
 | Input
 */
 CCustom.prototype.specialKey = function(key, shift, ctrl) {
+	if (!this.$visible) { return; }
 	if (this.methods.specialKey) { this.methods.specialKey.call(this, key, shift, ctrl); }
 	return true;
 };
@@ -157,6 +160,7 @@ CCustom.prototype.specialKey = function(key, shift, ctrl) {
 | Mouse hover.
 */
 CCustom.prototype.mousehover = function(p) {
+	if (!this.$visible) { return; }
 	if (p.x < this.pnw.x || p.y < this.pnw.y || p.x > this.pse.x || p.y > this.pse.y) {
 		return false;
 	}
@@ -175,6 +179,7 @@ CCustom.prototype.mousehover = function(p) {
 | Mouse down.
 */
 CCustom.prototype.mousedown = function(p, shift, ctrl) {
+	if (!this.$visible) { return; }
 	if (p.x < this.pnw.x || p.y < this.pnw.y || p.x > this.pse.x || p.y > this.pse.y) {
 		return false;
 	}
