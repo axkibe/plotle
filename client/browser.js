@@ -157,7 +157,7 @@ var System = function() {
 			switch(keyCode) {
 			case  8 : key = 'backspace'; break;
 			case  9 : key = 'tab';       break;
-			case 13 : key = 'return';    break;
+			case 13 : key = 'enter';     break;
 			case 33 : key = 'pageup';    break;
 			case 34 : key = 'pagedown';  break;
 			case 35 : key = 'end';       break;

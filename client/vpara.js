@@ -293,7 +293,7 @@ VPara.prototype.specialKey = function(key, shift, ctrl) {
 			shell.redraw = true;
 			key = null;
 			break;
-		case 'return'    :
+		case 'enter'     :
 			select.remove();
 			shell.redraw = true;
 			break;
@@ -326,7 +326,7 @@ VPara.prototype.specialKey = function(key, shift, ctrl) {
 		}
 		vitem.scrollCaretIntoView();
 		break;
-	case 'return' :
+	case 'enter' :
 		peer.split(this.textPath(), caret.sign.at1);
 		vitem.scrollCaretIntoView();
 		break;

@@ -68,6 +68,8 @@ var uid       = Jools.uid;
 Peer = function() {
 	this.spaceName = null;
 	this._iface = new IFace();
+	this.$visitUser = null;
+	this.$visitPass = null;
 };
 
 /**
@@ -77,23 +79,42 @@ Peer.prototype.passhash = function(pass) {
 	return sha1hex(pass + '-meshcraft-8833');
 };
 
+Peer.prototype.logout = function(callback) {
+	if (this.$visitUser) {
+		this._peer.setUser(this.$visitUser, this.$visitPass);
+		callback({ ok : true, user : this.$visitUser, pass : this.$visitPass });
+	} else {
+		this.auth('visitor', null, callback);
+	}
+};
+
 /**
 | auth
 */
 Peer.prototype.auth = function(user, pass, callback) {
+	var self = this;
 	if (user === 'visitor' && pass === null) {
 		pass = uid();
 	}
 
-	this._iface.auth(user, pass, callback);
+	self._iface.auth(user, pass, function(asw) {
+		if (asw.ok && user.substring(0, 5) === 'visit') {
+			self.$visitUser = user;
+			self.$visitPass = pass;
+		}
+		callback(asw);
+	});
 };
 
+/**
+| Registers a new user.
+*/
 Peer.prototype.register = function(user, mail, pass, code, callback) {
 	this._iface.register(user, mail, pass, code, callback);
 };
 
 /**
-| aquire space
+| Aquires a space.
 */
 Peer.prototype.aquireSpace = function(name, callback) {
 	if (this.spaceName === name) { return; }

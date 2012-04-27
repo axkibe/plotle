@@ -243,6 +243,7 @@ Server.prototype.playbackOne = function(o, cursor) {
 */
 Server.prototype.compressPack = function() {
 	var self = this;
+	log('start', 'Uncompressed pack length is ', this.pack.length);
 	zlib.gzip(this.pack, function(err, packgz) {
 		if (err) throw new Error('GZIP of pack failed');
 		self.packgz = packgz;
@@ -504,7 +505,7 @@ Server.prototype.auth = function(cmd, res) {
 		} else if (val.pass !== pass) {
 			asw = reject('Invalid password');
 		} else {
-			asw = { ok : true, user: user }; 
+			asw = { ok : true, user: user };
 		}
 		log('ajax', '->', asw);
 		res.writeHead(200, { 'Content-Type': 'application/json' });

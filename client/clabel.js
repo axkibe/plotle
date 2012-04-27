@@ -62,7 +62,7 @@ CLabel = function(twig, board, inherit, name) {
 	this.board   = board;
 	this.name    = name;
 	this.pos     = computePoint(twig.pos, board.iframe);
-	this.methods = CMeth[name];
+	this.methods = CMeth[board.name][name];
 	// if not null, overrides the design text
 	this.text    = inherit ? inherit.text : null;
 

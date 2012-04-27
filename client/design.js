@@ -62,8 +62,8 @@ var sideButtonC2Y   =  50;
 /**
 | switch control on Mainboard
 */
-var switchMCW  = 200;
-var switchMCH  =  35;
+var switchBCW  = 200;
+var switchBCH  =  35;
 
 /**
 | Login control on Loginboard width and height
@@ -220,7 +220,7 @@ Design.mainboard = {
 	layout :  {
 		type  : 'Layout',
 		copse : {
-		'loginMC' : {
+		'leftBC' : {
 			type       : 'Custom',
 			normaStyle : 'sides',
 			hoverStyle : 'highlight',
@@ -257,7 +257,7 @@ Design.mainboard = {
 			}
 		},
 
-		'registerMC' : {
+		'rightBC' : {
 			type       : 'Custom',
 			normaStyle : 'sides',
 			hoverStyle : 'highlight',
@@ -294,7 +294,7 @@ Design.mainboard = {
 			}
 		},
 
-		'switchMC'     : {
+		'switchBC'     : {
 			type       : 'Custom',
 			normaStyle : 'sides',
 			hoverStyle : 'highlight',
@@ -303,7 +303,7 @@ Design.mainboard = {
 			frame      : {
 				type   : 'Frame',
 				pnw    : { type: 'Point', anchor: 'n', x: -100,             y:         0 },
-				pse    : { type: 'Point', anchor: 'n', x: -100 + switchMCW, y: switchMCH }
+				pse    : { type: 'Point', anchor: 'n', x: -100 + switchBCW, y: switchBCH }
 			},
 			caption       : {
 				type      : 'Label',
@@ -375,9 +375,9 @@ Design.mainboard = {
 		}},
 
 		ranks : [
-			'loginMC',
-			'registerMC',
-			'switchMC',
+			'leftBC',
+			'rightBC',
+			'switchBC',
 			'greet',
 			'username',
 			'saycurrent',

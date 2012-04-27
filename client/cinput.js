@@ -76,7 +76,7 @@ CInput = function(twig, board, inherit, name) {
 	this.twig    = twig;
 	this.board   = board;
 	this.name    = name;
-	this.methods = CMeth[name];
+	this.methods = CMeth[board.name][name];
 	if (!this.methods) { this.methods = {}; }
 
 	var pnw  = this.pnw  = computePoint(twig.frame.pnw, board.iframe);
@@ -259,7 +259,7 @@ CInput.prototype.drawCaret = function() {
 /**
 | User input.
 */
-CInput.prototype.input = function(board, text) {
+CInput.prototype.input = function(text) {
 	var caret = shell.caret;
 	var csign = caret.sign;
 	var v = this.value;
@@ -309,7 +309,8 @@ CInput.prototype.keyDel = function(board) {
 /**
 | User pressed return key.
 */
-CInput.prototype.keyReturn = function(board) {
+CInput.prototype.keyEnter = function(board) {
+	if (this.methods.keyEnter) { return this.methods.keyEnter.call(this, board); }
 	board.cycleFocus(1);
 	return true;
 };
@@ -382,18 +383,18 @@ CInput.prototype.keyRight = function(board) {
 /**
 | User pressed a special key
 */
-CInput.prototype.specialKey = function(board, key) {
+CInput.prototype.specialKey = function(key) {
 	var poke = false;
 	switch(key) {
-	case 'backspace' : poke = this.keyBackspace(board); break;
-	case 'del'       : poke = this.keyDel      (board); break;
-	case 'down'      : poke = this.keyDown     (board); break;
-	case 'end'       : poke = this.keyEnd      (board); break;
-	case 'left'      : poke = this.keyLeft     (board); break;
-	case 'pos1'      : poke = this.keyPos1     (board); break;
-	case 'return'    : poke = this.keyReturn   (board); break;
-	case 'right'     : poke = this.keyRight    (board); break;
-	case 'up'        : poke = this.keyUp       (board); break;
+	case 'backspace' : poke = this.keyBackspace(); break;
+	case 'del'       : poke = this.keyDel();       break;
+	case 'down'      : poke = this.keyDown();      break;
+	case 'end'       : poke = this.keyEnd();       break;
+	case 'enter'     : poke = this.keyEnter();     break;
+	case 'left'      : poke = this.keyLeft();      break;
+	case 'pos1'      : poke = this.keyPos1();      break;
+	case 'right'     : poke = this.keyRight();     break;
+	case 'up'        : poke = this.keyUp();        break;
 	}
 	if (poke) { this.board.poke(); }
 };
@@ -414,19 +415,19 @@ CInput.prototype.poke = function() {
 /**
 | Mouse hover
 */
-CInput.prototype.mousehover = function(board, p, shift, ctrl) {
+CInput.prototype.mousehover = function(p, shift, ctrl) {
 	return false;
 };
 
 /**
 | Mouse down
 */
-CInput.prototype.mousedown = function(board, p, shift, ctrl) {
+CInput.prototype.mousedown = function(p, shift, ctrl) {
 	var pp = p.sub(this.pnw);
 	var fabric = this.getFabric(CAccent.NORMA);
 	if (!fabric.within(this.bezi, 'path', pp))  { return null; }
 
-	board.setFocus(this.name);
+	this.board.setFocus(this.name);
 	return false;
 };
 

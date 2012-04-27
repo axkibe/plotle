@@ -119,6 +119,13 @@ IFace.prototype._ajax = function(request, callback) {
     ajax.send(rs);
 };
 
+/**
+| Sets the current user
+*/
+IFace.prototype.setUser = function(user, pass) {
+	this.$user = user;
+	this.$pass = pass;
+};
 
 /**
 | Authentication
@@ -134,10 +141,10 @@ IFace.prototype.auth = function(user, pass, callback) {
 	}, function(asw) {
 		self.$authActive = false;
 		if (asw.ok) {
-			self.$authUser   = user;
-			self.$authPass   = pass;
+			callback({ ok: true, user: asw.user, pass: pass });
+		} else {
+			callback(asw);
 		}
-		callback(asw);
 	});
 };
 
@@ -156,10 +163,6 @@ IFace.prototype.register = function(user, mail, pass, code, callback) {
 		code  : code
 	}, function(asw) {
 		self.$regActive = false;
-		if (asw.ok) {
-			self.$authUser   = user;
-			self.$authPass   = pass;
-		}
 		callback(asw);
 	});
 };

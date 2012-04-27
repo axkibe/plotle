@@ -141,10 +141,11 @@ Shell.prototype.setCaret = function(visec, sign, retainx) {
 		throw new Error('invalid visec');
 	}
 
+	var entity;
 	if (this.caret.sign &&
 		(this.caret.visec !== visec || this.caret.sign.path !== sign.path)
 	) {
-		var entity = this.getEntity(this.caret.visec, this.caret.sign.path);
+		entity = this.getEntity(this.caret.visec, this.caret.sign.path);
 		if (entity) { entity.poke(); }
 	}
 
@@ -156,7 +157,7 @@ Shell.prototype.setCaret = function(visec, sign, retainx) {
 	);
 
 	if (sign) {
-		var entity = this.getEntity(visec, sign.path);
+		entity = this.getEntity(visec, sign.path);
 		if (entity) { entity.poke(); }
 		shell.redraw = true;
 	}
@@ -243,6 +244,14 @@ Shell.prototype.startAction = function(type, vitem, start) {
 Shell.prototype.stopAction = function() {
 	if (!this.action) throw new Error('ending no action');
 	this.action = null;
+};
+
+/**
+| Lets the shell check if it should redraw.
+| Used by async handlers.
+*/
+Shell.prototype.poke = function() {
+	if (this.redraw) { this._draw(); }
 };
 
 /**
@@ -451,8 +460,8 @@ Shell.prototype.setUser = function(user, pass) {
 	this.cockpit.setUser(user);
 
 	if (user.substr(0, 5) !== 'visit') {
-		debug('STORE', user, pass);
 		// TODO store user/pass in browser
+		debug('STORE', user, pass);
 	}
 };
 

@@ -133,12 +133,31 @@ var login = function(board) {
 					at1  : pass.length
 				});
 			}
+
+			shell.poke();
 			return;
 		}
 
 		shell.setUser(user, passhash);
 		board.cockpit.setCurBoard('mainboard');
 		clearLogin(board);
+		shell.poke();
+	});
+};
+
+/**
+| Logouts the user
+*/
+var logout = function(board) {
+	peer.logout(function(res) {
+		if (!res.ok) {
+			shell.greenscreen('Cannot logout: ' + res.message);
+			return;
+		}
+
+		shell.setUser(res.user, res.pass);
+		board.cockpit.setCurBoard('mainboard');
+		shell.poke();
 	});
 };
 
@@ -261,128 +280,159 @@ var clearRegister = function(board) {
 /**
 | The container.
 */
-CMeth = {};
+CMeth = {
+	loginboard : {},
+	mainboard  : {},
+	regboard   : {}
+};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- +++loginMC+++
+                 .                 .
+ ,-,-. ,-. . ,-. |-. ,-. ,-. ,-. ,-|
+ | | | ,-| | | | | | | | ,-| |   | |
+ ' ' ' `-^ ' ' ' ^-' `-' `-^ '   `-^
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
- The side button on the mainboard.
- Switches to the loginboard.
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-CMeth.loginMC = {};
 
-CMeth.loginMC.canFocus = function() {
-	return true;
+/**
+| Left button control.
+| Login/Logout
+*/
+CMeth.mainboard.leftBC = {
+
+	mousedown :
+	function(p, shift, ctrl) {
+		this.board.cockpit.setCurBoard('loginboard');
+	}
+
 };
 
-CMeth.loginMC.mousedown = function(board, ele, p, shift, ctrl) {
-	board.cockpit.setCurBoard('loginboard');
-};
+/**
+| Right button control.
+| Register
+*/
+CMeth.mainboard.rightBC = {
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- +++registerMC+++
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
- The register button on the mainboard.
- Switches to the registerboard.
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-CMeth.registerMC = {};
-
-CMeth.registerMC.mousedown = function(board, ele, p, shift, ctrl) {
-	board.cockpit.setCurBoard('regboard');
-};
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- +++loginBC+++
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
- The login button on the loginboard.
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-CMeth.loginBC = {};
-
-CMeth.loginBC.canFocus = function() {
-	return true;
-};
-
-CMeth.loginBC.specialKey = function(board, ele, key) {
-	switch (key) {
-	case 'down'   : board.cycleFocus(+1); return;
-	case 'up'     : board.cycleFocus(-1); return;
-	case 'return' : login(board);         return;
+	mousedown :
+	function(p, shift, ctrl) {
+		this.board.cockpit.setCurBoard('regboard');
 	}
 };
 
-CMeth.loginBC.mousedown = function(board, ele, p, shift, ctrl) {
-	login(board);
+/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ .                .                 .
+ |  ,-. ,-. . ,-. |-. ,-. ,-. ,-. ,-|
+ |  | | | | | | | | | | | ,-| |   | |
+ `' `-' `-| ' ' ' ^-' `-' `-^ '   `-^
+~ ~ ~ ~ ~,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+~~~~~~~~~`'~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+/**
+| The login button
+*/
+CMeth.loginboard.loginBC = {
+
+	canFocus :
+	function() {
+		return true;
+	},
+
+	specialKey :
+	function(key) {
+		switch (key) {
+		case 'down'  : this.board.cycleFocus(+1); return;
+		case 'up'    : this.board.cycleFocus(-1); return;
+		case 'enter' : login(this.board);         return;
+		}
+	},
+	
+	input :
+	function(text) {
+		this.board.cockpit.setCurBoard('mainboard');
+	},
+
+	mousedown :
+	function(p, shift, ctrl) {
+		login(this.board);
+	}
+};
+
+
+/**
+| The cancel button switches back to the mainboard.
+*/
+CMeth.loginboard.cancelBC = {
+
+	canFocus :
+	function() { return true; },
+
+	input :
+	function(text) {
+		this.board.cockpit.setCurBoard('mainboard');
+	},
+
+	specialKey :
+	function(key) {
+		switch (key) {
+		case 'down' : this.board.cycleFocus(+1); return;
+		case 'up'   : this.board.cycleFocus(-1); return;
+		}
+		if (this.board.name == 'regboard'  ) { clearRegister(this.board); }
+		if (this.board.name == 'loginboard') { clearLogin   (this.board); }
+		this.board.cockpit.setCurBoard('mainboard');
+	},
+
+	mousedown :
+	function(p, shift, ctrl) {
+		if (this.board.name == 'regboard') { clearRegister(this.board); }
+		this.board.cockpit.setCurBoard('mainboard');
+	}
+};
+
+/**
+| Password input field
+*/
+CMeth.loginboard.passI = {
+	keyEnter :
+	function() { login(this.board); }
 };
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- +++regBC+++
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+             .                 .
+ ,-. ,-. ,-. |-. ,-. ,-. ,-. ,-|
+ |   |-' | | | | | | ,-| |   | |
+ '   `-' `-| ^-' `-' `-^ '   `-^
+~ ~ ~ ~ ~ ,|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+~~~~~~~~~~`'~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/**
+| The cancel button switches back to the mainboard.
+*/
+CMeth.regboard.cancelBC = CMeth.loginboard.cancelBC;
 
- The register button on the regboard.
+/**
+| The register button.
+*/
+CMeth.regboard.regBC = {
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-CMeth.regBC = {};
+	canFocus :
+	function() { return true; },
 
-CMeth.regBC.canFocus = function() {
-	return true;
+	input :
+	function(text) { register(this.board); },
+
+	specialKey :
+	function(key) {
+		switch (key) {
+		case 'enter' : register(this.board); return;
+		case 'down'  : this.board.cycleFocus(+1); return;
+		case 'up'    : this.board.cycleFocus(-1); return;
+		}
+	},
+
+	mousedown :
+	function(p, shift, ctrl) { register(this.board); }
 };
 
-CMeth.regBC.input = function(board, ele, text) {
-	register(board);
-};
-
-CMeth.regBC.specialKey = function(board, ele, key) {
-	switch (key) {
-	case 'return' : register(board); return;
-	case 'down'   : board.cycleFocus(+1); return;
-	case 'up'     : board.cycleFocus(-1); return;
-	}
-};
-
-CMeth.regBC.mousedown = function(board, ele, p, shift, ctrl) {
-	register(board);
-};
-
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- +++cancelBC+++
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
- The cancel button on the loginboard and regboard.
- Switches back to the mainboard.
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-CMeth.cancelBC = {};
-
-CMeth.cancelBC.canFocus = function() {
-	return true;
-};
-
-CMeth.cancelBC.input = function(board, ele, text) {
-	board.cockpit.setCurBoard('mainboard');
-};
-
-CMeth.cancelBC.specialKey = function(board, ele, key) {
-	switch (key) {
-	case 'down' : board.cycleFocus(+1); return;
-	case 'up'   : board.cycleFocus(-1); return;
-	}
-	if (board.name == 'regboard')   { clearRegister(board); }
-	if (board.name == 'loginboard') { clearLogin(board);    }
-	board.cockpit.setCurBoard('mainboard');
-};
-
-CMeth.cancelBC.mousedown = function(board, ele, p, shift, ctrl) {
-	if (board.name == 'regboard') { clearRegister(board); }
-	board.cockpit.setCurBoard('mainboard');
-};
 
 })();

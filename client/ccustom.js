@@ -69,7 +69,7 @@ CCustom = function(twig, board, inherit, name) {
 	this.twig    = twig;
 	this.board   = board;
 	this.name    = name;
-	this.methods = CMeth[name];
+	this.methods = CMeth[board.name][name];
 	if (!this.methods) { this.methods = {}; }
 
 	var pnw      = this.pnw    = computePoint(twig.frame.pnw, board.iframe);
@@ -77,11 +77,12 @@ CCustom = function(twig, board, inherit, name) {
 	var iframe   = this.iframe = new Rect(Point.zero, pse.sub(pnw));
 	this.curve   = new Curve(twig.curve, iframe);
 
-	this.caption = {
-		pos : computePoint(twig.caption.pos, iframe)
-	};
-	this.$fabric = null;
-	this.$accent = CAccent.NORMAL;
+	this.captionPos = computePoint(twig.caption.pos, iframe);
+
+	this.$fabric  = null;
+	this.$visible = inherit ? inherit.$visible : true;
+	this.$captionText = inherit ? inherit.$captionText : twig.caption.text;
+	this.$accent  = CAccent.NORMAL;
 };
 
 /**
@@ -123,7 +124,7 @@ CCustom.prototype.getFabric = function(accent) {
 
 	var fs = this.twig.caption.fontStyle;
 	fabric.fontStyle(fs.style, fs.fill, fs.align, fs.base);
-	fabric.fillText(this.twig.caption.text, this.caption.pos);
+	fabric.fillText(this.$captionText, this.captionPos);
 
 	if (config.debug.drawBoxes) {
 		fabric.paint(
@@ -139,23 +140,23 @@ CCustom.prototype.getFabric = function(accent) {
 /**
 | Input
 */
-CCustom.prototype.input = function(board, text) {
-	if (this.methods.input) { this.methods.input(board, this, text); }
+CCustom.prototype.input = function(text) {
+	if (this.methods.input) { this.methods.input.call(this, text); }
 	return true;
 };
 
 /**
 | Input
 */
-CCustom.prototype.specialKey = function(board, key) {
-	if (this.methods.specialKey) { this.methods.specialKey(board, this, key); }
+CCustom.prototype.specialKey = function(key, shift, ctrl) {
+	if (this.methods.specialKey) { this.methods.specialKey.call(this, key, shift, ctrl); }
 	return true;
 };
 
 /**
 | Mouse hover.
 */
-CCustom.prototype.mousehover = function(board, p) {
+CCustom.prototype.mousehover = function(p) {
 	if (p.x < this.pnw.x || p.y < this.pnw.y || p.x > this.pse.x || p.y > this.pse.y) {
 		return false;
 	}
@@ -164,16 +165,16 @@ CCustom.prototype.mousehover = function(board, p) {
 	if (!fabric.within(this, 'path', pp))  { return false; }
 
 	system.setCursor('default');
-	board.setHover(this.name);
+	this.board.setHover(this.name);
 
-	if (this.methods.mousehover) { this.methods.mousehover(board, this, p); }
+	if (this.methods.mousehover) { this.methods.mousehover.call(this, p); }
 	return true;
 };
 
 /**
 | Mouse down.
 */
-CCustom.prototype.mousedown = function(board, p) {
+CCustom.prototype.mousedown = function(p, shift, ctrl) {
 	if (p.x < this.pnw.x || p.y < this.pnw.y || p.x > this.pse.x || p.y > this.pse.y) {
 		return false;
 	}
@@ -182,7 +183,7 @@ CCustom.prototype.mousedown = function(board, p) {
 	if (!fabric.within(this, 'path', pp))  { return false; }
 
 	if (this.methods.mousedown) {
-		this.methods.mousedown(board, this, p);
+		this.methods.mousedown.call(this, p, shift, ctrl);
 		shell.redraw = true;
 	}
 	return true;
@@ -192,6 +193,7 @@ CCustom.prototype.mousedown = function(board, p) {
 | Draws the custom control.
 */
 CCustom.prototype.draw = function(fabric, accent) {
+	if (!this.$visible) { return; }
 	fabric.drawImage(this.getFabric(accent), this.pnw);
 };
 

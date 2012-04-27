@@ -161,10 +161,21 @@ Cockpit.prototype.setCurSpace = function(curSpace) {
 /**
 | Sets the user greeted on the mainboard
 */
-Cockpit.prototype.setUser = function(user, loggedIn) {
-	var ulabel = this.getBoard('mainboard').cc.username;
+Cockpit.prototype.setUser = function(user) {
+	this.$amVisitor = user.substring(0,5) === 'visit';
+	var mainboard = this.getBoard('mainboard');
+	var ulabel = mainboard.cc.username;
 	ulabel.text = user;
 	ulabel.poke();
+
+
+	var leftBC = mainboard.cc.leftBC;
+	leftBC.$captionText = this.$amVisitor ? 'login' : 'logout';
+	leftBC.poke();
+
+	var rightBC = mainboard.cc.rightBC;
+	rightBC.$visible = this.$amVisitor;
+	rightBC.poke();
 };
 
 

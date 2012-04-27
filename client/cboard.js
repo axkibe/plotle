@@ -188,7 +188,7 @@ CBoard.prototype.mousehover = function(p, shift, ctrl) {
 	for(a = 0, aZ = layout.length; a < aZ; a++) {
 		var cname = layout.ranks[a];
 		var ce = this.cc[cname];
-		if (ce.mousehover(this, pp, shift, ctrl)) { return true; }
+		if (ce.mousehover(pp, shift, ctrl)) { return true; }
 	}
 	system.setCursor('default');
 	this.setHover(null);
@@ -219,7 +219,7 @@ CBoard.prototype.mousedown = function(p, shift, ctrl) {
 	for(a = 0, aZ = layout.length; a < aZ; a++) {
 		var cname = layout.ranks[a];
 		var ce = this.cc[cname];
-		if (ce.mousedown(this, pp, shift, ctrl)) { return false; }
+		if (ce.mousedown(pp, shift, ctrl)) { return false; }
 	}
 	system.setCursor('default');
 	this.setHover(null);
@@ -232,7 +232,7 @@ CBoard.prototype.mousedown = function(p, shift, ctrl) {
 CBoard.prototype.input = function(text) {
 	var focus = this.focusedCC();
 	if (!focus) { return; }
-	focus.input(this, text);
+	focus.input(text);
 };
 
 /**
@@ -268,7 +268,7 @@ CBoard.prototype.specialKey = function(key, shift, ctrl) {
 		this.cycleFocus(shift ? -1 : 1);
 		return;
 	}
-	focus.specialKey(this, key);
+	focus.specialKey(key, shift, ctrl);
 };
 
 /**
