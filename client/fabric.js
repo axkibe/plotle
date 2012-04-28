@@ -1076,12 +1076,9 @@ OvalSlice.prototype.path = function(fabric, border, twist) {
 	var psw = this.psw;
 
 	fabric.beginPath(twist);
-	fabric.moveTo(                    psw.x + bo,          psw.y);
-	//fabric.beziTo(  0, -bm, -am,   0, psw.x + a,           psw.y - b - bo);
 
 	var slice  = this.slice;
 
-	//fabric.moveTo(R(psw.x + a + slice.x4), R(psw.y - b + slice.y4));
 	fabric.moveTo(R(psw.x), R(psw.y));
 	fabric.beziTo(
 		slice.x3, slice.y3,

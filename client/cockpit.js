@@ -188,10 +188,12 @@ Cockpit.prototype.setUser = function(user) {
 | Redraws the cockpit.
 */
 Cockpit.prototype.draw = function() {
+	var swidim = theme.switchpanel.dimensions;
+	var pnw = new Point(half(this.fabric.width) - swidim.a, this.fabric.height - swidim.b - 59);
+	this.fabric.drawImage(this.switchpanel.getFabric(), pnw);
+
 	var cb = this.curBoard();
 	this.fabric.drawImage(cb.getFabric(), cb.pnw);
-	var pnw = new Point(half(this.fabric.width) - 90, this.fabric.height - 159);
-	this.fabric.drawImage(this.switchpanel.getFabric(), pnw);
 };
 
 /**

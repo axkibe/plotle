@@ -24,8 +24,25 @@
  License: MIT(Expat), see accompanying 'License'-file
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/**
+| Exports
+*/
+var theme = null;
 
-var theme = {
+/**
+| Capsule
+*/
+
+(function(){
+"use strict";
+if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
+
+var cos = Math.cos;
+var pi  = Math.PI;
+var ro  = Math.round;
+var c30 = cos(pi / 6);
+
+theme = {
 	// standard font
 	defaultFont : 'Verdana,Geneva,Kalimati,sans-serif',
 	//defaultFont : 'Freebooter Script,Zapfino,serif',
@@ -190,6 +207,11 @@ var theme = {
 
 	// switchpanel
 	switchpanel : {
+		dimensions : {
+			a    : 120,
+			b    :  null // calculated below
+		},
+
 		style : {
 			fill : {
 				gradient : 'radial',
@@ -201,6 +223,13 @@ var theme = {
 			edge : [
 				{ border: 1, width : 1, color : 'rgb(255, 94, 44)' },
 				{ border: 0, width : 1, color : 'rgb( 94, 94,  0)' }
+			]
+		},
+
+		hover : {
+			fill : 'rgb(255, 188, 88)',
+			edge : [
+				{ border: 0, width : 0.4, color : 'black' }
 			]
 		}
 	},
@@ -326,13 +355,12 @@ var theme = {
 	}
 };
 
-theme.ovalmenu.dimensions.b1 = Math.round(
-	theme.ovalmenu.dimensions.a1 * Math.cos(Math.PI / 6));
+var odim = theme.ovalmenu.dimensions;
+odim.b1 = ro(odim.a1 * c30);
+odim.b2 = ro(odim.b1 / odim.a1 * odim.a2);
 
-theme.ovalmenu.dimensions.b2 = Math.round(
-	theme.ovalmenu.dimensions.b1 /
-	theme.ovalmenu.dimensions.a1 *
-	theme.ovalmenu.dimensions.a2);
+var swidim = theme.switchpanel.dimensions;
+swidim.b = ro(swidim.a * c30);
 
 theme.itemmenu = theme.ovalmenu;
 
@@ -342,3 +370,4 @@ theme.itemmenu = theme.ovalmenu;
 //
 //{ border: 1, width :   2, color : 'rgb(182, 42, 42)' } rose
 
+})();
