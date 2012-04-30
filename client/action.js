@@ -85,10 +85,9 @@ Action = function(type, vitem, start) {
 Action.PAN        = 1; // panning the background
 Action.ITEMDRAG   = 2; // draggine one item
 Action.ITEMRESIZE = 3; // resizing one item
-Action.FLOATMENU  = 4; // clicked the float menu (background click)
-Action.ITEMMENU   = 5; // clicked one item menu
-Action.SCROLLY    = 6; // scrolling a note
-Action.RELBIND    = 7; // binding a new relation
+Action.ITEMMENU   = 4; // clicked one item menu
+Action.SCROLLY    = 5; // scrolling a note
+Action.RELBIND    = 6; // binding a new relation
 immute(Action);
 
 })();

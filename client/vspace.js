@@ -181,9 +181,6 @@ VSpace.prototype.draw = function() {
 
 	var action = shell.action;
 	switch (action && action.type) {
-	case Action.FLOATMENU :
-		action.floatmenu.draw();
-		break;
 	case Action.ITEMMENU :
 		action.itemmenu.draw();
 		break;
