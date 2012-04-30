@@ -171,7 +171,7 @@ OvalMenu.prototype.fadeout = function() {
 	
 	shell.redraw = true;
 	shell.poke();
-}
+};
 
 /**
 | Mouse hover.

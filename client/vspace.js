@@ -181,9 +181,6 @@ VSpace.prototype.draw = function() {
 
 	var action = shell.action;
 	switch (action && action.type) {
-	case Action.ITEMMENU :
-		action.itemmenu.draw();
-		break;
 	case Action.RELBIND :
 		var av  = action.vitem;
 		var av2 = action.vitem2;
@@ -263,17 +260,6 @@ VSpace.prototype.mousehover = function(p, shift, ctrl) {
 	var pp = p.sub(this.fabric.pan);
 	var action = shell.action;
 
-	switch(action && action.type) {
-	case null : break;
-	case Action.ITEMMENU :
-		if (isnon(action.itemmenu.within(p))) {
-			// mouse floated on item menu
-			system.setCursor('default');
-			return true;
-		}
-		break;
-	}
-
 	var focus = this.focusedVItem();
 	if (focus) {
 		// @@ move into items
@@ -337,14 +323,16 @@ VSpace.prototype.click = function(p, shift, ctrl) {
 	// clicked the tab of the focused item?
 	var focus = this.focusedVItem();
 	if (focus && focus.withinItemMenu(pp)) {
-		action = shell.startAction(Action.ITEMMENU, null, pp);
 		var labels = {n : 'Remove'};
-		action.itemmenu = new OvalMenu(
+		shell.setMenu(new OvalMenu(
 			system.fabric,
 			focus.getOvalSlice().pm.add(pan),
-			theme.itemmenu, 
-			labels
-		);
+			theme.ovalmenu,
+			labels,
+			function(entry, p) {
+				self.itemMenuSelect(entry, p, focus);
+			}
+		));
 		shell.redraw = true;
 		return;
 	}
@@ -359,8 +347,8 @@ VSpace.prototype.click = function(p, shift, ctrl) {
 	shell.setMenu(new OvalMenu(
 		system.fabric,
 		p,
-		theme.ovalmenu, 
-		this._floatMenuLabels, 
+		theme.ovalmenu,
+		this._floatMenuLabels,
 		function(entry, p) {
 			self.floatMenuSelect(entry, p);
 		}
@@ -448,6 +436,18 @@ VSpace.prototype.floatMenuSelect = function(entry, p) {
 		break;
 	}
 };
+		
+/**
+| An entry of the item menu has been selected
+*/
+VSpace.prototype.itemMenuSelect = function(entry, p, focus) {
+	switch(entry) {
+	case 'n': // remove
+		this.setFocus(null);
+		peer.removeItem(focus.path);
+		break;
+	}
+};
 
 /**
 | Mouse button down event.
@@ -456,28 +456,6 @@ VSpace.prototype.mousedown = function(p, shift, ctrl) {
 	var pp = p.sub(this.fabric.pan);
 	var action = shell.action;
 	var pnw, md, key;
-
-	switch (action && action.type) {
-	case null :
-		break;
-	case Action.ITEMMENU :
-		var im = action.itemmenu;
-		md = im.within(p);
-		shell.stopAction();
-
-		if (!im) break;
-		switch(md) {
-		case 'n': // remove
-			var item = this.focusedVItem();
-			this.setFocus(null);
-			peer.removeItem(item.path);
-			break;
-		default :
-			break;
-		}
-		shell.redraw = true;
-		return false;
-	}
 
 	var focus = this.focusedVItem();
 	if (focus) {

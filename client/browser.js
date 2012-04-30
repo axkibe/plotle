@@ -429,14 +429,14 @@ var System = function() {
 	system.setTimer = function(time, callback) {
 		// TODO make all use window.setTimeout
 		return window.setTimeout(makeCatcher(callback), time);
-	}
+	};
 	
 	/**
 	| Cancels a timer
 	*/
 	system.cancelTimer = function(id) {
 		return window.clearTimeout(id);
-	}
+	};
 
 	/**
 	| Sets the input (text selection).

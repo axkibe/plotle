@@ -335,9 +335,9 @@ Shell.prototype.mousehover = function(p, shift, ctrl) {
 	if (this.green) { return; }
 
 	// stops at first true
-	(this.menu && this.menu.mousehover(p, shift, ctrl)) ||
-	(this.cockpit.mousehover(p, shift, ctrl))	        ||
-	(this.vspace && this.vspace.mousehover(p, shift, ctrl)); 
+	((this.menu && this.menu.mousehover(p, shift, ctrl)) ||
+	(this.cockpit.mousehover(p, shift, ctrl))            ||
+	(this.vspace && this.vspace.mousehover(p, shift, ctrl)));
 
 	if (this.redraw) { this._draw(); }
 };

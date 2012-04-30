@@ -55,7 +55,7 @@ theme = {
 		time : 50,
 
 		// alpha reducition by each step
-		step : 0.08
+		step : 0.1
 	},
 
 	// standard note in space
