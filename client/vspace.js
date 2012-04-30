@@ -343,7 +343,7 @@ VSpace.prototype.click = function(p, shift, ctrl) {
 		action = shell.startAction(Action.ITEMMENU, null, pp);
 		var labels = {n : 'Remove'};
 		action.itemmenu = new OvalMenu(
-			this.fabric,
+			system.fabric,
 			focus.getOvalSlice().pm.add(pan),
 			theme.itemmenu, 
 			labels
@@ -360,7 +360,7 @@ VSpace.prototype.click = function(p, shift, ctrl) {
 
 	// otherwhise pop up the float menu
 	shell.setMenu(new OvalMenu(
-		this.fabric,
+		system.fabric,
 		p,
 		theme.ovalmenu, 
 		this._floatMenuLabels, 

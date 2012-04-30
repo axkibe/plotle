@@ -564,10 +564,11 @@ Fabric.prototype.paint = function(style, shape, path, a1, a2, a3, a4) {
 | Draws some text.
 */
 Fabric.prototype.fillText = function(text, a1, a2) {
+	var pan = this.pan;
 	if (typeof(a1) === 'object') {
-		return this._cx.fillText(text, a1.x, a1.y);
+		return this._cx.fillText(text, a1.x + pan.x, a1.y + pan.y);
 	}
-	return this._cx.fillText(text, a1, a2);
+	return this._cx.fillText(text, a1 + pan.x, a2 + pan.y);
 };
 
 /**

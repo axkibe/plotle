@@ -102,8 +102,8 @@ OvalMenu.prototype.draw = function() {
 		case 'ne' :
 		case 'se' :
 		case 's'  :
-		case 'se' :
-		case 'ne' :
+		case 'sw' :
+		case 'nw' :
 			f.paint(this._highlight, this._oflower, 'path', this.$within);
 			break;
 	}
