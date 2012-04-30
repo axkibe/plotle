@@ -43,7 +43,6 @@ var Caret;
 var Fabric;
 var Jools;
 var MeshMashine;
-var OvalMenu;
 var Path;
 var Tree;
 var peer;

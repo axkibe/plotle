@@ -74,32 +74,37 @@ var OvalFlower    = Fabric.OvalFlower;
 /**
 | Constructor.
 */
-OvalMenu = function(pc, settings, labels) {
+OvalMenu = function(fabric, pc, settings, labels, callback) {
+	this.fabric      = fabric;
 	this.p           = pc;
 	this.labels      = labels;
 
+	this._callback   = callback;
 	this._style      = settings.style;
 	this._highlight  = settings.highlight;
 	this._dimensions = settings.dimensions;
 	this._oflower    = new OvalFlower(pc, settings.dimensions, labels);
-	this._within     = null;
+	this.$within     = null;
+	this.$fadeTimer  = null;
+	this.$fade       = false;
 };
 
 /**
 | Draws the hexmenu.
 */
 OvalMenu.prototype.draw = function() {
-	var f = shell.fabric;
+	var f = this.fabric;
+	if (this.$fade) { f.globalAlpha(this.$fade); }
 
 	f.fill(this._style.fill, this._oflower, 'path', 'outer');
-	switch(this._within) {
+	switch(this.$within) {
 		case 'n'  :
 		case 'ne' :
 		case 'se' :
 		case 's'  :
 		case 'se' :
 		case 'ne' :
-			f.paint(this._highlight, this._oflower, 'path', this._within);
+			f.paint(this._highlight, this._oflower, 'path', this.$within);
 			break;
 	}
 	f.edge(this._style.edge, this._oflower, 'path', null);
@@ -123,16 +128,79 @@ OvalMenu.prototype.draw = function() {
 	if (labels.sw) f.fillText(labels.sw, pc.x - a2h, pc.y + bs );
 	if (labels.nw) f.fillText(labels.nw, pc.x - a2h, pc.y - bs );
 	if (labels.c)  f.fillText(labels.c,  pc);
+	
+	if (this.$fade) { f.globalAlpha(1); }
 };
 
 /**
 | Sets this.mousepos and returns it according to p.
 */
 OvalMenu.prototype.within = function(p) {
-	var w = this._oflower.within(system.fabric, p);  // TODO not system!
-	if (w === this._within) return w;
+	var w = this._oflower.within(this.fabric, p);
+	if (w === this.$within) return w;
 	shell.redraw = true;
-	return this._within = w;
+	return this.$within = w;
 };
+
+/**
+| Mouse button down event.
+*/
+OvalMenu.prototype.mousedown = function(p, shift, ctrl) {
+	var w = this.within(p);
+	if (!w) return null;
+	
+	this._callback(w, this.p);
+	shell.setMenu(null);
+	return false;
+};
+
+OvalMenu.prototype.fadeout = function() {
+	var self = this;
+
+	if (shell.menu !== self) {
+		// cancels all fading
+		return;
+	}
+	self.$fade -= theme.fade.step;
+
+	if (self.$fade <= 0) {
+		shell.setMenu(null);
+	} else {
+		this.$fadeTimer = system.setTimer(theme.fade.time, function() { self.fadeout(); });
+	}
+	
+	shell.redraw = true;
+	shell.poke();
+}
+
+/**
+| Mouse hover.
+|
+| Returns true if the mouse pointer hovers over anything.
+*/
+OvalMenu.prototype.mousehover = function(p, shift, ctrl) {
+	var self = this;
+	var w = this.within(p);
+	if (!w) {
+		if (!this.$fade) {
+			this.$fade = 1 - theme.fade.step;
+			this.$fadeTimer = system.setTimer(theme.fade.time, function() { self.fadeout(); });
+		}
+		return false;
+	} else {
+		// cancels fading
+		if (this.$fade) {
+			this.$fade = false;
+			system.cancelTimer(this.$fadeTimer);
+			this.$fadeTimer = null;
+			shell.redraw = true;
+		}
+	}
+
+	// mouse floated on float menu
+	system.setCursor('default');
+	return true;
+};
+
 
 })();

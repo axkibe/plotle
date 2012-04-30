@@ -268,13 +268,6 @@ VSpace.prototype.mousehover = function(p, shift, ctrl) {
 
 	switch(action && action.type) {
 	case null : break;
-	case Action.FLOATMENU :
-		if (isnon(action.floatmenu.within(p))) {
-			// mouse floated on float menu
-			system.setCursor('default');
-			return true;
-		}
-		break;
 	case Action.ITEMMENU :
 		if (isnon(action.itemmenu.within(p))) {
 			// mouse floated on item menu
@@ -339,6 +332,7 @@ VSpace.prototype.dragstart = function(p, shift, ctrl) {
 | A mouse click.
 */
 VSpace.prototype.click = function(p, shift, ctrl) {
+	var self = this;
 	var pan  = this.fabric.pan;
 	var pp   = p.sub(pan);
 	var action;
@@ -348,7 +342,12 @@ VSpace.prototype.click = function(p, shift, ctrl) {
 	if (focus && focus.withinItemMenu(pp)) {
 		action = shell.startAction(Action.ITEMMENU, null, pp);
 		var labels = {n : 'Remove'};
-		action.itemmenu = new OvalMenu(focus.getOvalSlice().pm.add(pan), theme.itemmenu, labels);
+		action.itemmenu = new OvalMenu(
+			this.fabric,
+			focus.getOvalSlice().pm.add(pan),
+			theme.itemmenu, 
+			labels
+		);
 		shell.redraw = true;
 		return;
 	}
@@ -360,8 +359,16 @@ VSpace.prototype.click = function(p, shift, ctrl) {
 	}
 
 	// otherwhise pop up the float menu
-	action = shell.startAction(Action.FLOATMENU, null, p);
-	action.floatmenu = new OvalMenu(p, theme.ovalmenu, this._floatMenuLabels);
+	shell.setMenu(new OvalMenu(
+		this.fabric,
+		p,
+		theme.ovalmenu, 
+		this._floatMenuLabels, 
+		function(entry, p) {
+			self.floatMenuSelect(entry, p);
+		}
+	));
+
 	system.setCursor('default');
 	this.setFocus(null);
 	shell.redraw = true;
@@ -421,6 +428,31 @@ VSpace.prototype.dragmove = function(p, shift, ctrl) {
 };
 
 /**
+| An entry of the float menu has been selected
+*/
+VSpace.prototype.floatMenuSelect = function(entry, p) {
+	var pnw, key;
+
+	switch(entry) {
+	case 'n' : // note
+		var nw = theme.note.newWidth;
+		var nh = theme.note.newHeight;
+		pnw = p.sub(this.fabric.pan.x + half(nw) , this.fabric.pan.y + half(nh));
+		key = peer.newNote(this.path, new Rect(pnw, pnw.add(nw, nh)));
+		var vnote = this.vv[key];
+		this.setFocus(vnote);
+		break;
+	case 'ne' : // label
+		pnw = p.sub(this.fabric.pan);
+		pnw = pnw.sub(theme.label.createOffset);
+		key = peer.newLabel(this.path, pnw, 'Label', 20);
+		var vlabel = this.vv[key];
+		this.setFocus(vlabel);
+		break;
+	}
+};
+
+/**
 | Mouse button down event.
 */
 VSpace.prototype.mousedown = function(p, shift, ctrl) {
@@ -431,31 +463,6 @@ VSpace.prototype.mousedown = function(p, shift, ctrl) {
 	switch (action && action.type) {
 	case null :
 		break;
-	case Action.FLOATMENU :
-		var fm = action.floatmenu;
-		md = fm.within(p);
-		shell.stopAction();
-
-		if (!md) break;
-		switch(md) {
-		case 'n' : // note
-			var nw = theme.note.newWidth;
-			var nh = theme.note.newHeight;
-			pnw = fm.p.sub(this.fabric.pan.x + half(nw) , this.fabric.pan.y + half(nh));
-			key = peer.newNote(this.path, new Rect(pnw, pnw.add(nw, nh)));
-			var vnote = this.vv[key];
-			this.setFocus(vnote);
-			break;
-		case 'ne' : // label
-			pnw = fm.p.sub(this.fabric.pan);
-			pnw = pnw.sub(theme.label.createOffset);
-			key = peer.newLabel(this.path, pnw, 'Label', 20);
-			var vlabel = this.vv[key];
-			this.setFocus(vlabel);
-			break;
-		}
-		shell.redraw = true;
-		return false;
 	case Action.ITEMMENU :
 		var im = action.itemmenu;
 		md = im.within(p);

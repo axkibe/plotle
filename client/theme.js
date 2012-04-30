@@ -50,6 +50,14 @@ theme = {
 	// factor to add to the bottom of font height
 	bottombox : 0.25,
 
+	fade : {
+		// ms between each fading step.
+		time : 50,
+
+		// alpha reducition by each step
+		step : 0.08
+	},
+
 	// standard note in space
 	note : {
 		minWidth  :  40,

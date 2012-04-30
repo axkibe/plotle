@@ -327,7 +327,7 @@ var System = function() {
 		if (event.button !== 0) return;
 		event.preventDefault();  // @@ maybe preventDefault before button test?
 		hiddenInput.focus();
-		setTimeout(function() { hiddenInput.selectionStart = 0; }, 0);
+		setTimeout(function() { hiddenInput.selectionStart = 0; }, 0); // TODO go over catcher
 		var p = new Point (event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop);
 		// asks the face if it forces this to be a drag or click, or yet unknown.
 		mouseState = system.shell.mousedown(p, event.shiftKey, event.ctrlKey || event.metaKey);
@@ -422,6 +422,21 @@ var System = function() {
 	//-------------------------------------
 	//-- Interface for the System object --
 	//-------------------------------------
+
+	/**
+	| Sets a time through the error catcher
+	*/
+	system.setTimer = function(time, callback) {
+		// TODO make all use window.setTimeout
+		return window.setTimeout(makeCatcher(callback), time);
+	}
+	
+	/**
+	| Cancels a timer
+	*/
+	system.cancelTimer = function(id) {
+		return window.clearTimeout(id);
+	}
 
 	/**
 	| Sets the input (text selection).

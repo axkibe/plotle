@@ -80,7 +80,7 @@ SwitchPanel = function() {
 	this.gradientR0 = 0;
 	this.gradientR1 = 650;
 	this.buttonDim = immute({
-		width  : 80, 
+		width  : 80,
 		height : 45,
 		xoff   : 60,
 		yoff   : 54
@@ -133,16 +133,16 @@ SwitchPanel.prototype.pathButton = function(fabric, border, twist) {
 	fabric.beziTo(  0,  my,  mx,   0,              cx, -bo + bh05 + cy);
 	fabric.beziTo(-mx,  0,    0,  my,  bo - bw05 + cx,              cy);
 	
-	var cx   = round(w / 2 + bx);
-	var cy   = round(by);
+	cx   = round(w / 2 + bx);
+	cy   = round(by);
 	fabric.moveTo(                     bo - bw05 + cx,              cy);
 	fabric.beziTo(  0, -my, -mx,   0,              cx,  bo - bh05 + cy);
 	fabric.beziTo( mx,  0,    0, -my, -bo + bw05 + cx,              cy);
 	fabric.beziTo(  0,  my,  mx,   0,              cx, -bo + bh05 + cy);
 	fabric.beziTo(-mx,  0,    0,  my,  bo - bw05 + cx,              cy);
 	
-	var cx   = round(w / 2 - bx);
-	var cy   = round(by);
+	cx   = round(w / 2 - bx);
+	cy   = round(by);
 	fabric.moveTo(                     bo - bw05 + cx,              cy);
 	fabric.beziTo(  0, -my, -mx,   0,              cx,  bo - bh05 + cy);
 	fabric.beziTo( mx,  0,    0, -my, -bo + bw05 + cx,              cy);

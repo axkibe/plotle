@@ -35,7 +35,6 @@ var VRelation = null;
 var Fabric;
 var Jools;
 var MeshMashine;
-var OvalMenu;
 var Path;
 var Scrollbar;
 var Tree;

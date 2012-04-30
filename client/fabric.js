@@ -642,6 +642,13 @@ Fabric.prototype.within = function(shape, path, a1, a2, a3, a4, a5) {
 	return this._cx.isPointInPath(px, py);
 };
 
+/**
+| Sets the global alpha
+*/
+Fabric.prototype.globalAlpha = function(a) {
+	this._cx.globalAlpha = a;
+}
+
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,-,-,-.
  `,| | |   ,-. ,-. ,-. . . ,-. ,-.
@@ -1253,6 +1260,7 @@ OvalFlower.prototype.within = function(fabric, p) {
 	if (isnon(this.segs.e ) && fabric.within(this, 'path', p, 'e' )) { return 's';  }
 	if (isnon(this.segs.sw) && fabric.within(this, 'path', p, 'sw')) { return 'sw'; }
 	if (isnon(this.segs.nw) && fabric.within(this, 'path', p, 'nw')) { return 'nw'; }
+	return 'gap';
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

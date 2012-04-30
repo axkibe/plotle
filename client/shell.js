@@ -102,18 +102,20 @@ Shell = function(fabric, sPeer) {
 	peer  = sPeer;
 
 	Measure.init();
-	this.fabric     = fabric;
+	this.fabric    = fabric;
 
-	this.vspace     = null;
+	this.vspace    = null;
 
-	this.cockpit    = new Cockpit();
+	this.cockpit   = new Cockpit();
 	this.cockpit.message("Loading space 'welcome'...");
 
-	this.caret      = new Caret(null, null, null, false);
-	this.action     = null;
-	this.selection  = new Selection();
+	this.menu      = null;
 
-	this.green      = false;
+	this.caret     = new Caret(null, null, null, false);
+	this.action    = null;
+	this.selection = new Selection();
+
+	this.green     = false;
 
 	// a flag set to true if anything requests a redraw.
 	this.redraw = false;
@@ -271,6 +273,14 @@ Shell.prototype.pathFrowny = function(fabric, border, twist, pos) {
 };
 
 /**
+| Sets the current popup menu.
+*/
+Shell.prototype.setMenu = function(menu) {
+	this.menu   = menu;
+	this.redraw = this;
+};
+
+/**
 | Draws the cockpit and the vspace.
 */
 Shell.prototype._draw = function() {
@@ -299,6 +309,8 @@ Shell.prototype._draw = function() {
 
 	if (this.vspace) { this.vspace.draw(); }
 	this.cockpit.draw();
+	if (this.menu) { this.menu.draw(); }
+
 	this.caret.display();
 
 	this.redraw = false;
@@ -322,9 +334,11 @@ Shell.prototype.click = function(p, shift, ctrl) {
 Shell.prototype.mousehover = function(p, shift, ctrl) {
 	if (this.green) { return; }
 
-	if (!this.cockpit.mousehover(p, shift, ctrl)) {
-		if (this.vspace) { this.vspace.mousehover(p, shift, ctrl); }
-	}
+	// stops at first true
+	(this.menu && this.menu.mousehover(p, shift, ctrl)) ||
+	(this.cockpit.mousehover(p, shift, ctrl))	        ||
+	(this.vspace && this.vspace.mousehover(p, shift, ctrl)); 
+
 	if (this.redraw) { this._draw(); }
 };
 
@@ -347,9 +361,15 @@ Shell.prototype.greenscreen = function(message, contract) {
 Shell.prototype.mousedown = function(p, shift, ctrl) {
 	if (this.green) { return false; }
 
-	var mouseState;
+	var mouseState = null;
 
-	mouseState = this.cockpit.mousedown(p, shift, ctrl);
+	if (this.menu) {
+		mouseState = this.menu.mousedown(p, shift, ctrl);
+	}
+	
+	if (mouseState === null) {
+		mouseState = this.cockpit.mousedown(p, shift, ctrl);
+	}
 
 	if (mouseState === null && this.vspace) {
 		mouseState = this.vspace.mousedown(p, shift, ctrl);
