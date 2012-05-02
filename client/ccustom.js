@@ -79,6 +79,7 @@ CCustom = function(twig, board, inherit, name) {
 
 	this.captionPos = computePoint(twig.caption.pos, iframe);
 
+	this.$active  = inherit ? inherit.$active : false;
 	this.$fabric  = null;
 	this.$visible = inherit ? inherit.$visible : true;
 	this.$captionText = inherit ? inherit.$captionText : twig.caption.text;
@@ -164,6 +165,7 @@ CCustom.prototype.mousehover = function(p) {
 	if (p.x < this.pnw.x || p.y < this.pnw.y || p.x > this.pse.x || p.y > this.pse.y) {
 		return false;
 	}
+
 	var fabric = this.getFabric(CAccent.NORMA);
 	var pp = p.sub(this.pnw);
 	if (!fabric.within(this, 'path', pp))  { return false; }

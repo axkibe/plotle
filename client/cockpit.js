@@ -182,6 +182,15 @@ Cockpit.prototype.setUser = function(user) {
 	left2BC.poke();
 };
 
+/*
+| Toggles the switch board
+*/
+Cockpit.prototype.toggleSwitch = function() {
+	this.switchActive = !this.switchActive;
+	var swBC = this.getBoard('MainBoard').cc.switchBC;
+	swBC.$active = this.switchActive;
+	swBC.poke();
+}
 
 /**
 | Redraws the cockpit.

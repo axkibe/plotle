@@ -53,12 +53,6 @@ var CMeth = null;
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
-
-var R   = Math.round;
-var abs = Math.abs;
-var max = Math.max;
-var min = Math.min;
-
 var debug         = Jools.debug;
 var immute        = Jools.immute;
 var is            = Jools.is;
@@ -67,13 +61,6 @@ var isArray       = Jools.isArray;
 var limit         = Jools.limit;
 var log           = Jools.log;
 var subclass      = Jools.subclass;
-
-var computePoint  = Curve.computePoint;
-var half          = Fabric.half;
-var BeziRect      = Fabric.BeziRect;
-var Point         = Fabric.Point;
-var Rect          = Fabric.Rect;
-var RoundRect     = Fabric.RoundRect;
 
 /**
 | Logins the user
@@ -299,7 +286,6 @@ CMeth = {
 | Login/Logout
 */
 CMeth.MainBoard.leftBC = {
-
 	mousedown :
 	function(p, shift, ctrl) {
 		switch (this.$captionText) {
@@ -312,7 +298,17 @@ CMeth.MainBoard.leftBC = {
 };
 
 /**
-| Right button control.
+| Switch push button
+*/
+CMeth.MainBoard.switchBC = {
+	mousedown :
+	function(p, shift, ctrl) {
+		this.board.cockpit.toggleSwitch(); 
+	}
+}
+
+/**
+| Second left button control.
 | Register
 */
 CMeth.MainBoard.left2BC = {

@@ -142,7 +142,7 @@ CBoard.prototype.getFabric = function() {
 	for(var a = 0, aZ = layout.length; a < aZ; a++) {
 		var cname = layout.ranks[a];
 		var c = this.cc[cname];
-		c.draw(fabric, CAccent.state(cname === this.$hover, c == focus));
+		c.draw(fabric, CAccent.state(cname === this.$hover || c.$active, c === focus));
 	}
 	fabric.edge(theme.cockpit.style.edge, this, 'path');
 
