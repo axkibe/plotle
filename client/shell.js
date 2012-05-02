@@ -482,6 +482,9 @@ Shell.prototype.setUser = function(user, pass) {
 	if (user.substr(0, 5) !== 'visit') {
 		window.localStorage.setItem('user', user);
 		window.localStorage.setItem('pass', pass);
+	} else {
+		window.localStorage.setItem('user', null);
+		window.localStorage.setItem('pass', null);
 	}
 };
 

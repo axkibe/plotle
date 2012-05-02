@@ -315,7 +315,7 @@ CMeth.MainBoard.leftBC = {
 | Right button control.
 | Register
 */
-CMeth.MainBoard.rightBC = {
+CMeth.MainBoard.left2BC = {
 
 	mousedown :
 	function(p, shift, ctrl) {

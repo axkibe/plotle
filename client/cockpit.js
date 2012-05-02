@@ -173,14 +173,13 @@ Cockpit.prototype.setUser = function(user) {
 	ulabel.text = user;
 	ulabel.poke();
 
-
 	var leftBC = mainboard.cc.leftBC;
 	leftBC.$captionText = this.$amVisitor ? 'login' : 'logout';
 	leftBC.poke();
 
-	var rightBC = mainboard.cc.rightBC;
-	rightBC.$visible = this.$amVisitor;
-	rightBC.poke();
+	var left2BC = mainboard.cc.left2BC;
+	left2BC.$visible = this.$amVisitor;
+	left2BC.poke();
 };
 
 

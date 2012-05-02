@@ -51,7 +51,8 @@ var innumerable = Jools.innumerable;
 var ro          = Math.round;
 var fontStyle   = Design.fontStyle;
 
-var sideButtonWidth = 170;
+var sideBW  = 120;
+var sideB2W = 190;
 
 /**
 | switch control
@@ -74,10 +75,10 @@ var consts = innumerable(MainBoard, 'consts', immute({
 	C2Y :   0
 }));
 
-var sideButtonC1X   = ro(consts.C1X / 1.4);
-var sideButtonC1Y   = ro(consts.C1Y / 1.4);
-var sideButtonC2X   =  15;
-var sideButtonC2Y   =  50;
+var sideButtonC1X   = ro(consts.C1X / 2);
+var sideButtonC1Y   = ro(consts.C1Y / 2);
+var sideButtonC2X   =  12;
+var sideButtonC2Y   =  40;
 
 MainBoard.frame = {
 	type  : 'Frame',
@@ -122,14 +123,14 @@ MainBoard.layout = {
 		hofocStyle : 'highlight',
 		frame : {
 			type  : 'Frame',
-			pnw   : { type: 'Point', anchor: 'sw', x:               0, y: -36 },
-			pse   : { type: 'Point', anchor: 'sw', x: sideButtonWidth, y:   0 }
+			pnw   : { type: 'Point', anchor: 'sw', x:      0, y: -36 },
+			pse   : { type: 'Point', anchor: 'sw', x: sideBW, y:   0 }
 		},
 		caption : {
 			type      : 'Label',
 			text      : 'login',
 			fontStyle : fontStyle(14, 'ca'),
-			pos       : { type: 'Point', anchor: 'sw', x:  125, y:  -9 }
+			pos       : { type: 'Point', anchor: 'sw', x: 90, y:  -7 }
 		},
 		curve     :  {
 			type  : 'Curve',
@@ -150,6 +151,50 @@ MainBoard.layout = {
 			ranks : [ '1', '2' ]
 		}
 	},
+	
+	'left2BC' : {
+		type       : 'Custom',
+		normaStyle : 'sides',
+		hoverStyle : 'highlight',
+		focusStyle : 'sides',
+		hofocStyle : 'highlight',
+		frame : {
+			type  : 'Frame',
+			pnw   : { type: 'Point', anchor: 'sw', x:       0, y: -45 },
+			pse   : { type: 'Point', anchor: 'sw', x: sideB2W, y:   0 }
+		},
+		caption : {
+			type      : 'Label',
+			text      : 'register',
+			fontStyle : fontStyle(14, 'ca'),
+			pos       : { type: 'Point', anchor: 'sw', x: half(sideBW + sideB2W) - 5, y: -14 }
+		},
+		curve     :  {
+			type  : 'Curve',
+			copse : {
+			'1' : {
+				type : 'MoveTo',
+				to   : { type : 'Point', anchor: 'sw', x: sideBW, y: 0 },
+				bx   : 1, by   : 0
+			},
+			'2' : {
+				type :  'BeziTo',
+				to   :  { type: 'Point', anchor: 'sw', x: 90, y: -25},
+				c1x  : -sideButtonC2X, c1y : -sideButtonC2Y,
+				c2x  :  0, c2y  :  0,
+				bx   : -1, by   :  0
+			},
+			'3' : {
+				type :  'BeziTo',
+				to   :  { type: 'Point', anchor: 'se', x: 0, y: 0 },
+				c1x  :  10, c1y :   0,
+				c2x  : -12, c2y : -70,
+				bx   : -1, by   :  0
+			}},
+
+			ranks : [ '1', '2', '3' ]
+		}
+	},
 
 	'rightBC' : {
 		type       : 'Custom',
@@ -159,14 +204,14 @@ MainBoard.layout = {
 		hofocStyle : 'highlight',
 		frame : {
 			type  : 'Frame',
-			pnw   : { type: 'Point', anchor: 'se', x: -sideButtonWidth, y: -36 },
-			pse   : { type: 'Point', anchor: 'se', x: 0,                y:   0 }
+			pnw   : { type: 'Point', anchor: 'se', x: -sideBW, y: -36 },
+			pse   : { type: 'Point', anchor: 'se', x: 0,           y:   0 }
 		},
 		caption : {
 			type      : 'Label',
 			text      : 'help',
 			fontStyle : fontStyle(14, 'ca'),
-			pos       : { type: 'Point', anchor: 'se', x:  -125, y:  -9 }
+			pos       : { type: 'Point', anchor: 'se', x: -90, y:  -7 }
 		},
 		curve :  {
 			type : 'Curve',
@@ -202,7 +247,7 @@ MainBoard.layout = {
 		caption       : {
 			type      : 'Label',
 			text      : 'switch',
-			fontStyle : fontStyle(16, 'cm'),
+			fontStyle : fontStyle(14, 'cm'),
 			pos       : { type: 'Point', anchor: 'c', x:  0, y: -3 }
 		},
 		curve :  {
@@ -270,6 +315,7 @@ MainBoard.layout = {
 
 	ranks : [
 		'leftBC',
+		'left2BC',
 		'rightBC',
 		'switchBC',
 		'greet',

@@ -112,7 +112,7 @@ Design.RegBoard.layout = {
 		type      : 'Label',
 		text      : 'Register',
 		fontStyle : fontStyle(22, 'ca'),
-		pos       : { type: 'Point', anchor: 'se', x: -160, y: -14 }
+		pos       : { type: 'Point', anchor: 'sw', x: 120, y: -14 }
 	},
 	'userL' : {
 		type      : 'Label',
@@ -156,7 +156,7 @@ Design.RegBoard.layout = {
 		text      : 'meshcraft.net is still testing & developing its scalebility, '+
 					'please email axkibe@gmail.com to request a code.',
 		fontStyle : fontStyle(12, 'la'),
-		pos       : { type: 'Point', anchor: 'sw', x:  80, y:   -15 }
+		pos       : { type: 'Point', anchor: 'sw', x: 380, y:   -15 }
 	},
 	'userI' : {
 		type       : 'Input',
