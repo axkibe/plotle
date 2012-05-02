@@ -29,8 +29,9 @@
 /**
 | Imports
 */
-var theme;
+var Fabric;
 var Jools;
+var theme;
 
 /**
 | Exports
@@ -44,18 +45,25 @@ Design = Design || {};
 (function(){
 'use strict';
 
+var half        = Fabric.half;
 var immute      = Jools.immute;
 var innumerable = Jools.innumerable;
 var ro          = Math.round;
 var fontStyle   = Design.fontStyle;
 
-var sideButtonWidth = 190;
+var sideButtonWidth = 170;
 
 /**
 | switch control
 */
-var switchBCW  = 200;
+var switchBCW  = 180;
 var switchBCH  =  35;
+
+/**
+| help control
+*/
+var helpBCW  = 150;
+var helpBCH  =  23;
 
 var MainBoard = Design.MainBoard = { type : 'Design' };
 
@@ -120,8 +128,8 @@ MainBoard.layout = {
 		caption : {
 			type      : 'Label',
 			text      : 'login',
-			fontStyle : fontStyle(16, 'ca'),
-			pos       : { type: 'Point', anchor: 'sw', x:  135, y:  -9 }
+			fontStyle : fontStyle(14, 'ca'),
+			pos       : { type: 'Point', anchor: 'sw', x:  125, y:  -9 }
 		},
 		curve     :  {
 			type  : 'Curve',
@@ -156,9 +164,9 @@ MainBoard.layout = {
 		},
 		caption : {
 			type      : 'Label',
-			text      : 'register',
-			fontStyle : fontStyle(16, 'ca'),
-			pos       : { type: 'Point', anchor: 'se', x:  -135, y:  -9 }
+			text      : 'help',
+			fontStyle : fontStyle(14, 'ca'),
+			pos       : { type: 'Point', anchor: 'se', x:  -125, y:  -9 }
 		},
 		curve :  {
 			type : 'Curve',
@@ -188,8 +196,8 @@ MainBoard.layout = {
 		hofocStyle : 'highlight',
 		frame      : {
 			type   : 'Frame',
-			pnw    : { type: 'Point', anchor: 'n', x: -100,             y:         0 },
-			pse    : { type: 'Point', anchor: 'n', x: -100 + switchBCW, y: switchBCH }
+			pnw    : { type: 'Point', anchor: 'n', x: -half(switchBCW), y:         0 },
+			pse    : { type: 'Point', anchor: 'n', x:  half(switchBCW), y: switchBCH }
 		},
 		caption       : {
 			type      : 'Label',
@@ -202,19 +210,19 @@ MainBoard.layout = {
 			copse : {
 			'1' : {
 				type : 'MoveTo',
-				to   : { type: 'Point', anchor:  'nw', x:  0, y:  0 },
+				to   : { type: 'Point', anchor:  'nw', x: 0, y:  0 },
 				bx   :  0, by : 1
 			},
 			'2' : {
 				type : 'BeziTo',
-				to   :  { type: 'Point', anchor: 's', x:  0, y:  -2 },
+				to   :  { type: 'Point', anchor: 's',  x: 0, y:  -2 },
 				c1x  :  30, c1y :  0,
 				c2x  : -30, c2y :  0,
 				bx   :   0, by  : -1
 			},
 			'3' : {
 				type : 'BeziTo',
-				to   :  { type: 'Point', anchor: 'ne', x:  0, y:  0 },
+				to   :  { type: 'Point', anchor: 'ne', x: 0, y:  0 },
 				c1x  :  30, c1y :  0,
 				c2x  : -30, c2y :  0,
 				bx   : -1, by:  0
@@ -223,7 +231,7 @@ MainBoard.layout = {
 			ranks : [ '1', '2', '3' ]
 		}
 	},
-
+	
 	'greet'       : {
 		type      : 'Label',
 		text      : 'Hello',
