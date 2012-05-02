@@ -139,7 +139,7 @@ var login = function(board) {
 		}
 
 		shell.setUser(user, passhash);
-		board.cockpit.setCurBoard('mainboard');
+		board.cockpit.setCurBoard('MainBoard');
 		clearLogin(board);
 		shell.poke();
 	});
@@ -156,7 +156,7 @@ var logout = function(board) {
 		}
 
 		shell.setUser(res.user, res.pass);
-		board.cockpit.setCurBoard('mainboard');
+		board.cockpit.setCurBoard('MainBoard');
 		shell.poke();
 	});
 };
@@ -246,7 +246,7 @@ var register = function(board) {
 		}
 
 		shell.setUser(user, pass);
-		board.cockpit.setCurBoard('mainboard');
+		board.cockpit.setCurBoard('MainBoard');
 		clearRegister(board);
 	});
 };
@@ -282,7 +282,7 @@ var clearRegister = function(board) {
 */
 CMeth = {
 	loginboard : {},
-	mainboard  : {},
+	MainBoard  : {},
 	regboard   : {}
 };
 
@@ -298,7 +298,7 @@ CMeth = {
 | Left button control.
 | Login/Logout
 */
-CMeth.mainboard.leftBC = {
+CMeth.MainBoard.leftBC = {
 
 	mousedown :
 	function(p, shift, ctrl) {
@@ -315,7 +315,7 @@ CMeth.mainboard.leftBC = {
 | Right button control.
 | Register
 */
-CMeth.mainboard.rightBC = {
+CMeth.MainBoard.rightBC = {
 
 	mousedown :
 	function(p, shift, ctrl) {
@@ -352,7 +352,7 @@ CMeth.loginboard.loginBC = {
 	
 	input :
 	function(text) {
-		this.board.cockpit.setCurBoard('mainboard');
+		this.board.cockpit.setCurBoard('MainBoard');
 	},
 
 	mousedown :
@@ -363,7 +363,7 @@ CMeth.loginboard.loginBC = {
 
 
 /**
-| The cancel button switches back to the mainboard.
+| The cancel button switches back to the MainBoard.
 */
 CMeth.loginboard.cancelBC = {
 
@@ -372,7 +372,7 @@ CMeth.loginboard.cancelBC = {
 
 	input :
 	function(text) {
-		this.board.cockpit.setCurBoard('mainboard');
+		this.board.cockpit.setCurBoard('MainBoard');
 	},
 
 	specialKey :
@@ -383,13 +383,13 @@ CMeth.loginboard.cancelBC = {
 		}
 		if (this.board.name == 'regboard'  ) { clearRegister(this.board); }
 		if (this.board.name == 'loginboard') { clearLogin   (this.board); }
-		this.board.cockpit.setCurBoard('mainboard');
+		this.board.cockpit.setCurBoard('MainBoard');
 	},
 
 	mousedown :
 	function(p, shift, ctrl) {
 		if (this.board.name == 'regboard') { clearRegister(this.board); }
-		this.board.cockpit.setCurBoard('mainboard');
+		this.board.cockpit.setCurBoard('MainBoard');
 	}
 };
 
@@ -410,7 +410,7 @@ CMeth.loginboard.passI = {
 ~ ~ ~ ~ ~ ,|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 ~~~~~~~~~~`'~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /**
-| The cancel button switches back to the mainboard.
+| The cancel button switches back to the MainBoard.
 */
 CMeth.regboard.cancelBC = CMeth.loginboard.cancelBC;
 

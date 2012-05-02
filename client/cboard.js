@@ -128,7 +128,7 @@ CBoard.prototype.path = function(fabric, border, twist) {
 };
 
 /**
-| Draws the mainboards contents
+| Draws the boards contents
 */
 CBoard.prototype.getFabric = function() {
 	if (this.$fabric && !config.debug.noCache) { return this.$fabric; }
@@ -165,7 +165,7 @@ CBoard.prototype.drawCaret = function() {
 };
 
 /**
-| Returns true if point is on this mainboard
+| Returns true if point is on this board
 */
 CBoard.prototype.mousehover = function(p, shift, ctrl) {
 	var pnw = this.pnw;
@@ -196,7 +196,7 @@ CBoard.prototype.mousehover = function(p, shift, ctrl) {
 };
 
 /**
-| Returns true if point is on this mainboard
+| Returns true if point is on this board
 */
 CBoard.prototype.mousedown = function(p, shift, ctrl) {
 	var pnw = this.pnw;

@@ -28,42 +28,26 @@
 /**
 | Imports
 */
+var Fabric;
 var theme;
 
 /**
 | Exports
 */
-var Design = null;
+var Design;
+Design = Design || {};
 
 /**
 | Capsule
 */
 (function(){
 'use strict';
-if (typeof(window) === 'undefined') { throw new Error('shell.js needs a browser!'); }
 
-var R   = Math.round;
-var abs = Math.abs;
-var max = Math.max;
-var min = Math.min;
+var fontStyle = Design.fontStyle;
 
-var magic = 0.551784;      // 'magic' number to approximate ellipses with beziers.
-
-var sideButtonWidth = 190;
-var mainboardC1X    = 200;
-var mainboardC1Y    = -60;
-var mainboardC2X    = 300;
-var mainboardC2Y    =   0;
-var sideButtonC1X   = R(mainboardC1X / 1.4);
-var sideButtonC1Y   = R(mainboardC1Y / 1.4);
-var sideButtonC2X   =  15;
-var sideButtonC2Y   =  50;
-
-/**
-| switch control on Mainboard
-*/
-var switchBCW  = 200;
-var switchBCH  =  35;
+// 'magic' number to approximate ellipses with beziers
+var magic     = Fabric.magic;
+var mbConsts   = Design.MainBoard.consts; 
 
 /**
 | Login control on Loginboard width and height
@@ -72,7 +56,6 @@ var loginBCW   = 70;
 var loginBCH   = 70;
 var loginBCXM  = loginBCW * magic / 2;
 var loginBCYM  = loginBCH * magic / 2;
-
 
 /**
 | Register control on Regboard width and height
@@ -107,288 +90,6 @@ var forgotBCXM       = forgotBCW * magic;
 var forgotBCYM       = forgotBCH * magic;
 
 /**
-| Shortcuts for fontstyles
-*/
-var fontStyles;
-(function(){
-	var $styles = {
-		ca        : {
-			type  : 'FontStyle',
-			font  : theme.defaultFont,
-			fill  : 'black',
-			align : 'center',
-			base  : 'alphabetic',
-			$c    : {}
-		},
-		cab       : {
-			type  : 'FontStyle',
-			font  : 'bold ' + theme.defaultFont,
-			fill  : 'black',
-			align : 'center',
-			base  : 'alphabetic',
-			$c    : {}
-		},
-		cm        : {
-			type  : 'FontStyle',
-			font  :  theme.defaultFont,
-			fill  : 'black',
-			align : 'center',
-			base  : 'middle',
-			$c    : {}
-		},
-		la        : {
-			type  : 'FontStyle',
-			font  :  theme.defaultFont,
-			fill  : 'black',
-			align : 'start',
-			base  : 'alphabetic',
-			$c    : {}
-		},
-		lar       : {
-			type  : 'FontStyle',
-			font  :  theme.defaultFont,
-			fill  : 'red',
-			align : 'left',
-			base  : 'alphabetic',
-			$c    : {}
-		},
-		ra        : {
-			type  : 'FontStyle',
-			font  :  theme.defaultFont,
-			fill  : 'black',
-			align : 'end',
-			base  : 'alphabetic',
-			$c    : {}
-		}
-	};
-
-	fontStyles = function(size, code) {
-		var base = $styles[code];
-		if (!base) { throw new Error('Invalid font style'); }
-		if (base.$c[size]) { return base.$c[size]; }
-		var c = {};
-		for (var k in base) {
-			if (k === '$c') continue;
-			c[k] = base[k];
-		}
-		c.size = size;
-		c.style = size + 'px ' + c.font;
-		return base.$c[size] = c;
-	};
-})();
-
-Design = {};
-
-/**
-| Main Board
-*/
-Design.mainboard = {
-	type   : 'Design',
-
-	frame : {
-		type  : 'Frame',
-		pnw   : { type: 'Point', anchor: 's', x: -512, y: -60 },
-		pse   : { type: 'Point', anchor: 's', x:  512, y:   0 }
-	},
-
-	curve : {
-		type  : 'Curve',
-		copse : {
-		'1' : {
-			type :  'MoveTo',
-			to   :  { type: 'Point', anchor: 'sw', x: 0, y: 0 },
-			bx   :  1, by : 0
-		},
-		'2' : {
-			type :  'BeziTo',
-			to   :  { type: 'Point', anchor:  'n', x: 0, y: 0 },
-			c1x  :  mainboardC1X, c1y :  mainboardC1Y,
-			c2x  : -mainboardC2X, c2y :  mainboardC2Y,
-			bx   :  0, by : 1
-		},
-		'3' : {
-			type :  'BeziTo',
-			to   :  { type: 'Point', anchor: 'se', x: 0, y: 0 },
-			c1x  :  mainboardC2X, c1y : -mainboardC2Y,
-			c2x  : -mainboardC1X, c2y :  mainboardC1Y,
-			bx   : -1, by :  0
-		}},
-
-		ranks : [ '1', '2', '3' ]
-	},
-
-	layout :  {
-		type  : 'Layout',
-		copse : {
-		'leftBC' : {
-			type       : 'Custom',
-			normaStyle : 'sides',
-			hoverStyle : 'highlight',
-			focusStyle : 'sides',
-			hofocStyle : 'highlight',
-			frame : {
-				type  : 'Frame',
-				pnw   : { type: 'Point', anchor: 'sw', x:               0, y: -36 },
-				pse   : { type: 'Point', anchor: 'sw', x: sideButtonWidth, y:   0 }
-			},
-			caption : {
-				type      : 'Label',
-				text      : 'login',
-				fontStyle : fontStyles(16, 'ca'),
-				pos       : { type: 'Point', anchor: 'sw', x:  135, y:  -9 }
-			},
-			curve     :  {
-				type  : 'Curve',
-				copse : {
-				'1' : {
-					type : 'MoveTo',
-					to   : { type : 'Point', anchor: 'sw', x: 0, y: 0 },
-					bx   : 1, by   : 0
-				},
-				'2' : {
-					type :  'BeziTo',
-					to   :  { type: 'Point', anchor: 'se', x: 0, y: 0 },
-					c1x  :  sideButtonC1X, c1y :  sideButtonC1Y,
-					c2x  : -sideButtonC2X, c2y : -sideButtonC2Y,
-					bx   : -1, by   :  0
-				}},
-
-				ranks : [ '1', '2' ]
-			}
-		},
-
-		'rightBC' : {
-			type       : 'Custom',
-			normaStyle : 'sides',
-			hoverStyle : 'highlight',
-			focusStyle : 'sides',
-			hofocStyle : 'highlight',
-			frame : {
-				type  : 'Frame',
-				pnw   : { type: 'Point', anchor: 'se', x: -sideButtonWidth, y: -36 },
-				pse   : { type: 'Point', anchor: 'se', x: 0,                y:   0 }
-			},
-			caption : {
-				type      : 'Label',
-				text      : 'register',
-				fontStyle : fontStyles(16, 'ca'),
-				pos       : { type: 'Point', anchor: 'se', x:  -135, y:  -9 }
-			},
-			curve :  {
-				type : 'Curve',
-				copse : {
-				'1' : {
-					type : 'MoveTo',
-					to   : { type: 'Point', anchor: 'se', x: 0, y: 0 },
-					bx   : 1, by   : 0
-				},
-				'2' : {
-					type :  'BeziTo',
-					to   :  { type: 'Point', anchor: 'sw', x : 0, y : 0 },
-					c1x  : -sideButtonC1X, c1y :  sideButtonC1Y,
-					c2x  :  sideButtonC2X, c2y : -sideButtonC2Y,
-					bx   : -1, by   :  0
-				}},
-
-				ranks : [ '1', '2' ]
-			}
-		},
-
-		'switchBC'     : {
-			type       : 'Custom',
-			normaStyle : 'sides',
-			hoverStyle : 'highlight',
-			focusStyle : 'sides',
-			hofocStyle : 'highlight',
-			frame      : {
-				type   : 'Frame',
-				pnw    : { type: 'Point', anchor: 'n', x: -100,             y:         0 },
-				pse    : { type: 'Point', anchor: 'n', x: -100 + switchBCW, y: switchBCH }
-			},
-			caption       : {
-				type      : 'Label',
-				text      : 'switch',
-				fontStyle : fontStyles(16, 'cm'),
-				pos       : { type: 'Point', anchor: 'c', x:  0, y: -3 }
-			},
-			curve :  {
-				type  : 'Curve',
-				copse : {
-				'1' : {
-					type : 'MoveTo',
-					to   : { type: 'Point', anchor:  'nw', x:  0, y:  0 },
-					bx   :  0, by : 1
-				},
-				'2' : {
-					type : 'BeziTo',
-					to   :  { type: 'Point', anchor: 's', x:  0, y:  -2 },
-					c1x  :  30, c1y :  0,
-					c2x  : -30, c2y :  0,
-					bx   :   0, by  : -1
-				},
-				'3' : {
-					type : 'BeziTo',
-					to   :  { type: 'Point', anchor: 'ne', x:  0, y:  0 },
-					c1x  :  30, c1y :  0,
-					c2x  : -30, c2y :  0,
-					bx   : -1, by:  0
-				}},
-
-				ranks : [ '1', '2', '3' ]
-			}
-		},
-
-		'greet'       : {
-			type      : 'Label',
-			text      : 'Hello',
-			fontStyle : fontStyles(12, 'ca'),
-			pos       : { type: 'Point', anchor: 'sw', x:  260, y: -34 }
-		},
-
-		'username'    : {
-			type      : 'Label',
-			text      : '',
-			fontStyle : fontStyles(18, 'ca'),
-			pos       : { type: 'Point', anchor: 'sw', x:  260, y: -11 }
-		},
-
-
-		'saycurrent'  : {
-			type      : 'Label',
-			text      : 'current space',
-			fontStyle : fontStyles(12, 'ca'),
-			pos       : { type: 'Point', anchor:  's', x: -130, y: -34 }
-		},
-
-		'cspace'      : {
-			type      : 'Label',
-			text      : 'welcome',
-			fontStyle : fontStyles(22, 'cab'),
-			pos       : { type: 'Point', anchor:  's', x: -130, y: -11 }
-		},
-
-		'message'     : {
-			type      : 'Label',
-			text      : 'This is a message just for testing.',
-			fontStyle : fontStyles(12, 'la'),
-			pos       : { type: 'Point', anchor: 'se', x: -450, y: -20 }
-		}},
-
-		ranks : [
-			'leftBC',
-			'rightBC',
-			'switchBC',
-			'greet',
-			'username',
-			'saycurrent',
-			'cspace',
-			'message'
-		]
-    }
-};
-
-
-/**
 | Login Board
 */
 Design.loginboard = {
@@ -417,15 +118,15 @@ Design.loginboard = {
 		'2' : {
 			type :  'BeziTo',
 			to   :  { type: 'Point', anchor:  'n', x: 0, y: 0 },
-			c1x  :  mainboardC1X, c1y  :  mainboardC1Y,
-			c2x  : -mainboardC2X, c2y  :  mainboardC2Y,
+			c1x  :  mbConsts.C1X, c1y  :  mbConsts.C1Y,
+			c2x  : -mbConsts.C2X, c2y  :  mbConsts.C2Y,
 			bx:  0, by :  1
 		},
 		'3' : {
 			type :  'BeziTo',
 			to   :  { type: 'Point', anchor: 'se', x: 0, y: 0 },
-			c1x  :  mainboardC2X, c1y  : -mainboardC2Y,
-			c2x  : -mainboardC1X, c2y  :  mainboardC1Y,
+			c1x  :  mbConsts.C2X, c1y  : -mbConsts.C2Y,
+			c2x  : -mbConsts.C1X, c2y  :  mbConsts.C1Y,
 			bx   : -1, by :  0
 		}},
 
@@ -438,26 +139,26 @@ Design.loginboard = {
 		'loginL'      : {
 			type      : 'Label',
 			text      : 'Login',
-			fontStyle : fontStyles(22, 'ca'),
+			fontStyle : fontStyle(22, 'ca'),
 			pos       : { type: 'Point', anchor: 'sw', x: 160, y: -14 }
 		},
 		'userL' : {
 			type      : 'Label',
 			text      : 'username',
-			fontStyle : fontStyles(16, 'la'),
+			fontStyle : fontStyle(16, 'la'),
 			pos       : { type: 'Point', anchor: 's', x: -230, y:  -56 }
 		},
 		'passL'       : {
 			type      : 'Label',
 			text      : 'password',
-			fontStyle : fontStyles(16, 'la'),
+			fontStyle : fontStyle(16, 'la'),
 			pos       : { type: 'Point', anchor: 's', x: -230, y:  -21 }
 		},
 		'errL'        : {
 			type      : 'Label',
 			//text      : 'username/password not accepted',
 			text      : '',
-			fontStyle : fontStyles(14, 'lar'),
+			fontStyle : fontStyle(14, 'lar'),
 			pos       : { type: 'Point', anchor: 's', x: -135, y:  -81 }
 
 		},
@@ -468,7 +169,7 @@ Design.loginboard = {
 			focusStyle : 'inputfocus',
 			hoverStyle : 'input',
 			hofocStyle : 'inputfocus',
-			fontStyle  : fontStyles(14, 'la'),
+			fontStyle  : fontStyle(14, 'la'),
 			maxlen     : 100,
 			frame      : {
 				type   : 'Frame',
@@ -483,7 +184,7 @@ Design.loginboard = {
 			focusStyle : 'inputfocus',
 			hoverStyle : 'input',
 			hofocStyle : 'inputfocus',
-			fontStyle  : fontStyles(14, 'la'),
+			fontStyle  : fontStyle(14, 'la'),
 			maxlen     : 0,
 			frame      : {
 				type   : 'Frame',
@@ -505,7 +206,7 @@ Design.loginboard = {
 			caption       : {
 				type      : 'Label',
 				text      : 'login',
-				fontStyle : fontStyles(14, 'cm'),
+				fontStyle : fontStyle(14, 'cm'),
 				pos       : { type: 'Point', anchor: 'c', x:  0, y: 0 }
 			},
 			curve :  {
@@ -562,7 +263,7 @@ Design.loginboard = {
 			caption : {
 				type      : 'Label',
 				text      : 'cancel',
-				fontStyle : fontStyles(14, 'cm'),
+				fontStyle : fontStyle(14, 'cm'),
 				pos       : { type: 'Point', anchor: 'c', x:  0, y: 0 }
 			},
 			curve :  {
@@ -617,7 +318,7 @@ Design.loginboard = {
 			caption : {
 				type      : 'Label',
 				text      : 'forgot password?',
-				fontStyle : fontStyles(12, 'cm'),
+				fontStyle : fontStyle(12, 'cm'),
 				pos       : { type: 'Point', anchor: 'c', x:  0, y: 0 }
 			},
 			curve :  {
@@ -705,15 +406,15 @@ Design.regboard = {
 		'2' : {
 			type :  'BeziTo',
 			to   :  { type: 'Point', anchor:  'n', x: 0, y: 0 },
-			c1x  :  mainboardC1X * 0.8, c1y  :  mainboardC1Y * 4,
-			c2x  : -mainboardC2X * 0.8, c2y  :  mainboardC2Y * 4,
+			c1x  :  mbConsts.C1X * 0.8, c1y  :  mbConsts.C1Y * 4,
+			c2x  : -mbConsts.C2X * 0.8, c2y  :  mbConsts.C2Y * 4,
 			bx:  0, by :  1
 		},
 		'3' : {
 			type :  'BeziTo',
 			to   :  { type: 'Point', anchor: 'se', x: 0, y: 0 },
-			c1x  :  mainboardC2X * 0.8, c1y  : -mainboardC2Y * 4,
-			c2x  : -mainboardC1X * 0.8, c2y  :  mainboardC1Y * 4,
+			c1x  :  mbConsts.C2X * 0.8, c1y  : -mbConsts.C2Y * 4,
+			c2x  : -mbConsts.C1X * 0.8, c2y  :  mbConsts.C1Y * 4,
 			bx   : -1, by :  0
 		}},
 
@@ -726,43 +427,43 @@ Design.regboard = {
 		'regL'      : {
 			type      : 'Label',
 			text      : 'Register',
-			fontStyle : fontStyles(22, 'ca'),
+			fontStyle : fontStyle(22, 'ca'),
 			pos       : { type: 'Point', anchor: 'se', x: -160, y: -14 }
 		},
 		'userL' : {
 			type      : 'Label',
 			text      : 'username',
-			fontStyle : fontStyles(16, 'ra'),
+			fontStyle : fontStyle(16, 'ra'),
 			pos       : { type: 'Point', anchor: 's', x: -155, y:  -220 }
 		},
 		'emailL'       : {
 			type      : 'Label',
 			text      : 'email',
-			fontStyle : fontStyles(16, 'ra'),
+			fontStyle : fontStyle(16, 'ra'),
 			pos       : { type: 'Point', anchor: 's', x: -155, y:  -180 }
 		},
 		'passL'       : {
 			type      : 'Label',
 			text      : 'password',
-			fontStyle : fontStyles(16, 'ra'),
+			fontStyle : fontStyle(16, 'ra'),
 			pos       : { type: 'Point', anchor: 's', x: -155, y:  -140 }
 		},
 		'pass2L'       : {
 			type      : 'Label',
 			text      : 'repeat password',
-			fontStyle : fontStyles(16, 'ra'),
+			fontStyle : fontStyle(16, 'ra'),
 			pos       : { type: 'Point', anchor: 's', x: -155, y:  -100 }
 		},
 		'codeL'       : {
 			type      : 'Label',
 			text      : 'invitation code',
-			fontStyle : fontStyles(16, 'ra'),
+			fontStyle : fontStyle(16, 'ra'),
 			pos       : { type: 'Point', anchor: 's', x: -155, y:   -60 }
 		},
 		'errL'        : {
 			type      : 'Label',
 			text      : '',
-			fontStyle : fontStyles(14, 'lar'),
+			fontStyle : fontStyle(14, 'lar'),
 			pos       : { type: 'Point', anchor: 's', x: -135, y:  -255 }
 
 		},
@@ -770,7 +471,7 @@ Design.regboard = {
 			type      : 'Label',
 			text      : 'meshcraft.net is still testing & developing its scalebility, '+
 						'please email axkibe@gmail.com to request a code.',
-			fontStyle : fontStyles(12, 'la'),
+			fontStyle : fontStyle(12, 'la'),
 			pos       : { type: 'Point', anchor: 'sw', x:  80, y:   -15 }
 		},
 		'userI' : {
@@ -780,7 +481,7 @@ Design.regboard = {
 			focusStyle : 'inputfocus',
 			hoverStyle : 'input',
 			hofocStyle : 'inputfocus',
-			fontStyle  : fontStyles(14, 'la'),
+			fontStyle  : fontStyle(14, 'la'),
 			maxlen     : 100,
 			frame      : {
 				type   : 'Frame',
@@ -795,7 +496,7 @@ Design.regboard = {
 			focusStyle : 'inputfocus',
 			hoverStyle : 'input',
 			hofocStyle : 'inputfocus',
-			fontStyle  : fontStyles(14, 'la'),
+			fontStyle  : fontStyle(14, 'la'),
 			maxlen     : 0,
 			frame      : {
 				type   : 'Frame',
@@ -810,7 +511,7 @@ Design.regboard = {
 			focusStyle : 'inputfocus',
 			hoverStyle : 'input',
 			hofocStyle : 'inputfocus',
-			fontStyle  : fontStyles(14, 'la'),
+			fontStyle  : fontStyle(14, 'la'),
 			maxlen     : 0,
 			frame      : {
 				type   : 'Frame',
@@ -825,7 +526,7 @@ Design.regboard = {
 			focusStyle : 'inputfocus',
 			hoverStyle : 'input',
 			hofocStyle : 'inputfocus',
-			fontStyle  : fontStyles(14, 'la'),
+			fontStyle  : fontStyle(14, 'la'),
 			maxlen     : 0,
 			frame      : {
 				type   : 'Frame',
@@ -840,7 +541,7 @@ Design.regboard = {
 			focusStyle : 'inputfocus',
 			hoverStyle : 'input',
 			hofocStyle : 'inputfocus',
-			fontStyle  : fontStyles(14, 'la'),
+			fontStyle  : fontStyle(14, 'la'),
 			maxlen     : 8,
 			frame      : {
 				type   : 'Frame',
@@ -862,7 +563,7 @@ Design.regboard = {
 			caption       : {
 				type      : 'Label',
 				text      : 'register',
-				fontStyle : fontStyles(14, 'cm'),
+				fontStyle : fontStyle(14, 'cm'),
 				pos       : { type: 'Point', anchor: 'c', x:  0, y: 0 }
 			},
 			curve :  {
@@ -919,7 +620,7 @@ Design.regboard = {
 			caption : {
 				type      : 'Label',
 				text      : 'cancel',
-				fontStyle : fontStyles(14, 'cm'),
+				fontStyle : fontStyle(14, 'cm'),
 				pos       : { type: 'Point', anchor: 'c', x:  0, y: 0 }
 			},
 			curve :  {

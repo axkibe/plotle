@@ -74,9 +74,9 @@ var Point         = Fabric.Point;
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 Cockpit = function() {
 	this.fabric       = system.fabric;
-	this.curBoardName = 'mainboard';
+	this.curBoardName = 'MainBoard';
 	this.boards = {
-		mainboard  : null,
+		MainBoard  : null,
 		loginboard : null,
 		regboard   : null
 	};
@@ -103,7 +103,7 @@ Cockpit.styles = {
 };
 
 /**
-| Sends a message over the mainboard.
+| Sends a message over the MainBoard.
 */
 Cockpit.prototype.message = function(message) {
 	this._message = message;
@@ -156,7 +156,7 @@ Cockpit.prototype.setCurBoard = function(boardName) {
 };
 
 /**
-| Sets the space name displayed on the mainboard.
+| Sets the space name displayed on the MainBoard.
 */
 Cockpit.prototype.setCurSpace = function(curSpace) {
 	// TODO
@@ -164,11 +164,11 @@ Cockpit.prototype.setCurSpace = function(curSpace) {
 };
 
 /**
-| Sets the user greeted on the mainboard
+| Sets the user greeted on the MainBoard
 */
 Cockpit.prototype.setUser = function(user) {
 	this.$amVisitor = user.substring(0,5) === 'visit';
-	var mainboard = this.getBoard('mainboard');
+	var mainboard = this.getBoard('MainBoard');
 	var ulabel = mainboard.cc.username;
 	ulabel.text = user;
 	ulabel.poke();
