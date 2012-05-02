@@ -77,8 +77,8 @@ Cockpit = function() {
 	this.curBoardName = 'MainBoard';
 	this.boards = {
 		MainBoard  : null,
-		loginboard : null,
-		regboard   : null
+		LoginBoard : null,
+		RegBoard   : null
 	};
 
 	// the switch panel

@@ -89,7 +89,7 @@ var login = function(board) {
 		board.cc.errL.text = 'Username too short, min. 4 characters';
 		board.cc.errL.poke();
 		shell.setCaret('cockpit', {
-			path : new Path(['loginboard', 'userI']),
+			path : new Path(['LoginBoard', 'userI']),
 			at1  : user.length
 		});
 		return;
@@ -99,7 +99,7 @@ var login = function(board) {
 		board.cc.errL.text = 'Username must not start with "visit"';
 		board.cc.errL.poke();
 		shell.setCaret('cockpit', {
-			path : new Path(['loginboard', 'userI']),
+			path : new Path(['LoginBoard', 'userI']),
 			at1  : 0
 		});
 		return;
@@ -109,7 +109,7 @@ var login = function(board) {
 		board.cc.errL.text = 'Password too short, min. 5 characters';
 		board.cc.errL.poke();
 		shell.setCaret('cockpit', {
-			path : new Path(['loginboard', 'passI']),
+			path : new Path(['LoginBoard', 'passI']),
 			at1  : pass.length
 		});
 		return;
@@ -124,12 +124,12 @@ var login = function(board) {
 
 			if (res.message.search(/Username/) >= 0) {
 				shell.setCaret('cockpit', {
-					path : new Path(['loginboard', 'userI']),
+					path : new Path(['LoginBoard', 'userI']),
 					at1  : user.length
 				});
 			} else {
 				shell.setCaret('cockpit', {
-					path : new Path(['loginboard', 'passI']),
+					path : new Path(['LoginBoard', 'passI']),
 					at1  : pass.length
 				});
 			}
@@ -178,7 +178,7 @@ var register = function(board) {
 		board.cc.errL.text = 'Username too short, min. 4 characters';
 		board.cc.errL.poke();
 		shell.setCaret('cockpit', {
-			path : new Path(['regboard', 'userI']),
+			path : new Path(['RegBoard', 'userI']),
 			at1  : user.length
 		});
 		return;
@@ -188,7 +188,7 @@ var register = function(board) {
 		board.cc.errL.text = 'Username must not start with "visit"';
 		board.cc.errL.poke();
 		shell.setCaret('cockpit', {
-			path : new Path(['regboard', 'userI']),
+			path : new Path(['RegBoard', 'userI']),
 			at1  : 0
 		});
 		return;
@@ -198,7 +198,7 @@ var register = function(board) {
 		board.cc.errL.text = 'Password too short, min. 5 characters';
 		board.cc.errL.poke();
 		shell.setCaret('cockpit', {
-			path : new Path(['regboard', 'passI']),
+			path : new Path(['RegBoard', 'passI']),
 			at1  : pass.length
 		});
 		return;
@@ -208,7 +208,7 @@ var register = function(board) {
 		board.cc.errL.text = 'Passwords to not match';
 		board.cc.errL.poke();
 		shell.setCaret('cockpit', {
-			path : new Path(['regboard', 'pass2I']),
+			path : new Path(['RegBoard', 'pass2I']),
 			at1  : pass2.length
 		});
 		return;
@@ -218,7 +218,7 @@ var register = function(board) {
 		board.cc.errL.text = 'Invitation code missing';
 		board.cc.errL.poke();
 		shell.setCaret('cockpit', {
-			path : new Path(['regboard', 'codeI']),
+			path : new Path(['RegBoard', 'codeI']),
 			at1  : pass2.length
 		});
 		return;
@@ -233,12 +233,12 @@ var register = function(board) {
 
 			if (res.message.search(/Username/) >= 0) {
 				shell.setCaret('cockpit', {
-					path : new Path(['regboard', 'userI']),
+					path : new Path(['RegBoard', 'userI']),
 					at1  : pass2.length
 				});
 			} else if (res.message.search(/code/) >= 0) {
 				shell.setCaret('cockpit', {
-					path : new Path(['regboard', 'codeI']),
+					path : new Path(['RegBoard', 'codeI']),
 					at1  : pass2.length
 				});
 			}
@@ -281,9 +281,9 @@ var clearRegister = function(board) {
 | The container.
 */
 CMeth = {
-	loginboard : {},
+	LoginBoard : {},
 	MainBoard  : {},
-	regboard   : {}
+	RegBoard   : {}
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -303,7 +303,7 @@ CMeth.MainBoard.leftBC = {
 	mousedown :
 	function(p, shift, ctrl) {
 		switch (this.$captionText) {
-		case 'login'  : this.board.cockpit.setCurBoard('loginboard'); break;
+		case 'login'  : this.board.cockpit.setCurBoard('LoginBoard'); break;
 		case 'logout' : logout(this.board); break;
 		default : throw new Error('unknown state of leftBC');
 		}
@@ -319,7 +319,7 @@ CMeth.MainBoard.rightBC = {
 
 	mousedown :
 	function(p, shift, ctrl) {
-		this.board.cockpit.setCurBoard('regboard');
+		this.board.cockpit.setCurBoard('RegBoard');
 	}
 };
 
@@ -334,7 +334,7 @@ CMeth.MainBoard.rightBC = {
 /**
 | The login button
 */
-CMeth.loginboard.loginBC = {
+CMeth.LoginBoard.loginBC = {
 
 	canFocus :
 	function() {
@@ -365,7 +365,7 @@ CMeth.loginboard.loginBC = {
 /**
 | The cancel button switches back to the MainBoard.
 */
-CMeth.loginboard.cancelBC = {
+CMeth.LoginBoard.cancelBC = {
 
 	canFocus :
 	function() { return true; },
@@ -381,14 +381,14 @@ CMeth.loginboard.cancelBC = {
 		case 'down' : this.board.cycleFocus(+1); return;
 		case 'up'   : this.board.cycleFocus(-1); return;
 		}
-		if (this.board.name == 'regboard'  ) { clearRegister(this.board); }
-		if (this.board.name == 'loginboard') { clearLogin   (this.board); }
+		if (this.board.name == 'RegBoard'  ) { clearRegister(this.board); }
+		if (this.board.name == 'LoginBoard') { clearLogin   (this.board); }
 		this.board.cockpit.setCurBoard('MainBoard');
 	},
 
 	mousedown :
 	function(p, shift, ctrl) {
-		if (this.board.name == 'regboard') { clearRegister(this.board); }
+		if (this.board.name == 'RegBoard') { clearRegister(this.board); }
 		this.board.cockpit.setCurBoard('MainBoard');
 	}
 };
@@ -396,28 +396,28 @@ CMeth.loginboard.cancelBC = {
 /**
 | Password input field
 */
-CMeth.loginboard.passI = {
+CMeth.LoginBoard.passI = {
 	keyEnter :
 	function() { login(this.board); }
 };
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-             .                 .
- ,-. ,-. ,-. |-. ,-. ,-. ,-. ,-|
- |   |-' | | | | | | ,-| |   | |
- '   `-' `-| ^-' `-' `-^ '   `-^
-~ ~ ~ ~ ~ ,|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-~~~~~~~~~~`'~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ .-,--.         ,-,---.               . 
+  `|__/ ,-. ,-.  '|___/ ,-. ,-. ,-. ,-| 
+  )| \  |-' | |  ,|   \ | | ,-| |   | | 
+  `'  ` `-' `-| `-^---' `-' `-^ '   `-^ 
+~ ~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+~~~~~~~~~~~~~`'~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /**
 | The cancel button switches back to the MainBoard.
 */
-CMeth.regboard.cancelBC = CMeth.loginboard.cancelBC;
+CMeth.RegBoard.cancelBC = CMeth.LoginBoard.cancelBC;
 
 /**
 | The register button.
 */
-CMeth.regboard.regBC = {
+CMeth.RegBoard.regBC = {
 
 	canFocus :
 	function() { return true; },

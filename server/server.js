@@ -335,7 +335,8 @@ Server.prototype.registerFiles = function() {
 	registerFile('/deverse.js',           'js',   1, 'client/deverse.js'           );
 	registerFile('/design/fontstyles.js', 'js',   1, 'client/design/fontstyles.js' );
 	registerFile('/design/mainboard.js',  'js',   1, 'client/design/mainboard.js'  );
-	registerFile('/design/design.js',     'js',   1, 'client/design/design.js'     );
+	registerFile('/design/loginboard.js', 'js',   1, 'client/design/loginboard.js' );
+	registerFile('/design/regboard.js',   'js',   1, 'client/design/regboard.js'   );
 	registerFile('/caccent.js',           'js',   1, 'client/caccent.js'           );
 	registerFile('/curve.js',             'js',   1, 'client/curve.js'             );
 	registerFile('/ccustom.js',           'js',   1, 'client/ccustom.js'           );
