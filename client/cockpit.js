@@ -89,17 +89,18 @@ Cockpit = function() {
 };
 
 Cockpit.styles = {
-	'boxes'       : { edge : [ { border: 0, width : 1, color : 'black' } ] },
-	'button'      : theme.cockpit.button,
-	'buttonHover' : theme.cockpit.buttonHover,
-	'buttonFocus' : theme.cockpit.buttonFocus,
-	'buttonHofoc' : theme.cockpit.buttonHofoc,
-	'highlight'   : theme.cockpit.highlight,
-	'input'       : theme.cockpit.input,
-	'inputfocus'  : theme.cockpit.inputfocus,
-	'sides'       : theme.cockpit.sides,
-	'zero'        : theme.cockpit.zero,
-	'zhighlight'  : theme.cockpit.zhighlight
+	boxes       : { edge : [ { border: 0, width : 1, color : 'black' } ] },
+	button      : theme.cockpit.button,
+	buttonHover : theme.cockpit.buttonHover,
+	buttonFocus : theme.cockpit.buttonFocus,
+	buttonHofoc : theme.cockpit.buttonHofoc,
+	chat        : theme.cockpit.chat,
+	highlight   : theme.cockpit.highlight,
+	input       : theme.cockpit.input,
+	inputfocus  : theme.cockpit.inputfocus,
+	sides       : theme.cockpit.sides,
+	zero        : theme.cockpit.zero,
+	zhighlight  : theme.cockpit.zhighlight
 };
 
 /**
@@ -174,7 +175,7 @@ Cockpit.prototype.setUser = function(user) {
 	ulabel.poke();
 
 	var leftBC = mainboard.cc.leftBC;
-	leftBC.$captionText = this.$amVisitor ? 'login' : 'logout';
+	leftBC.$captionText = this.$amVisitor ? 'log in' : 'log out';
 	leftBC.poke();
 
 	var left2BC = mainboard.cc.left2BC;

@@ -58,15 +58,14 @@ var Point         = Fabric.Point;
 | Constructor.
 */
 CLabel = function(twig, board, inherit, name) {
+	this.name    = name;
 	this.twig    = twig;
 	this.board   = board;
-	this.name    = name;
 	this.pos     = computePoint(twig.pos, board.iframe);
-	this.methods = CMeth[board.name][name];
+	this.methods = CMeth[board.name][name] || {};
 	// if not null, overrides the design text
+	// @@ rename $text
 	this.text    = inherit ? inherit.text : null;
-
-	if (!this.methods) { this.methods = {}; }
 };
 
 /**

@@ -54,7 +54,6 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 | Shotcuts
 */
 var OvalSlice     = Fabric.OvalSlice;
-var R             = Math.round;
 var abs           = Math.abs;
 var debug         = Jools.debug;
 var immute        = Jools.immute;

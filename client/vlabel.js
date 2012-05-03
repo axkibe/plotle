@@ -54,7 +54,6 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 */
 var Margin        = Fabric.Margin;
 var Point         = Fabric.Point;
-var R             = Math.round;
 var Rect          = Fabric.Rect;
 var abs           = Math.abs;
 var debug         = Jools.debug;

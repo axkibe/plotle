@@ -101,6 +101,7 @@ CBoard = function(name, inherit, cockpit, screensize) {
 */
 CBoard.prototype.newCC = function(twig, inherit, name) {
 	switch(twig.type) {
+	case 'Chat'   : return new CChat  (twig, this, inherit, name);
 	case 'Custom' : return new CCustom(twig, this, inherit, name);
 	case 'Input'  : return new CInput (twig, this, inherit, name);
 	case 'Label'  : return new CLabel (twig, this, inherit, name);

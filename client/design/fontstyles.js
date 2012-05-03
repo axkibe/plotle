@@ -75,6 +75,14 @@ var styles = {
 		base  : 'alphabetic',
 		$c    : {}
 	},
+	lac       : {
+		type  : 'FontStyle',
+		font  :  theme.defaultFont,
+		fill  : 'rgb(128, 44, 0)',
+		align : 'start',
+		base  : 'alphabetic',
+		$c    : {}
+	},
 	lar       : {
 		type  : 'FontStyle',
 		font  :  theme.defaultFont,

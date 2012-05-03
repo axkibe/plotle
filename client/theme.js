@@ -164,29 +164,15 @@ theme = {
 			]
 		},
 
-		zero : {
-			edge : [ ]  // @@ allow to be left away
-		},
 
-		zhighlight : {
-			edge : [ ],
-			fill : {
-				gradient : 'horizontal',
-				steps : [
-					[0, 'rgb(255, 188, 88)' ],
-					[1, 'rgb(255,  99, 44)' ]
-				]
-			}
-		},
-
-		sides : {
+		chat : {
+			fill : 'rgba(255, 128, 128, 0.1)',
 			edge : [
-				{ border:  1, width :  1, color : 'rgb(255, 94, 44)' },
-				{ border:  0, width :  1, color : 'rgb( 94, 94,  0)' }
+				{ border:  0, width :   0.5, color : 'rgba(184,  64,  0, 1)' }
 			]
 		},
 
-		// TODO remove?
+		// @@ remove?
 		highlight : {
 			fill : 'rgb(255, 188, 88)',
 			edge : [
@@ -194,6 +180,7 @@ theme = {
 				{ border: 0, width : 1, color : 'rgb(128, 128, 0)' }
 			]
 		},
+		
 
 		input : {
 			fill : 'white',
@@ -210,7 +197,40 @@ theme = {
 				{ border: 1, width :   2, color : 'rgb(255, 99, 188)' },
 				{ border: 0, width :   1, color : 'black' }
 			]
-		}
+		},
+		
+		sides : {
+			//edge : [
+			//	{ border:  1, width :  1, color : 'rgb(255, 94, 44)' },
+			//	{ border:  0, width :  1, color : 'rgb( 94, 94,  0)' }
+			//]
+			fill : {
+				gradient : 'horizontal',
+				steps : [
+					[0, 'rgba(255, 237, 210, 0.5)' ],
+					[1, 'rgba(255, 185, 81,  0.5)' ]
+				]
+			},
+			edge : [
+				{ border:  1, width : 1.5, color : 'rgb(255, 141, 66)' },
+				{ border:  0, width :   1, color : 'rgb( 94,  94,  0)' }
+			]
+		},
+
+		zero : {
+			edge : [ ]  // @@ allow to be left away
+		},
+
+		zhighlight : {
+			edge : [ ],
+			fill : {
+				gradient : 'horizontal',
+				steps : [
+					[0, 'rgb(255, 188, 88)' ],
+					[1, 'rgb(255,  99, 44)' ]
+				]
+			}
+		},
 	},
 
 	// switchpanel

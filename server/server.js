@@ -342,6 +342,7 @@ Server.prototype.registerFiles = function() {
 	registerFile('/ccustom.js',           'js',   1, 'client/ccustom.js'           );
 	registerFile('/cinput.js',            'js',   1, 'client/cinput.js'            );
 	registerFile('/clabel.js',            'js',   1, 'client/clabel.js'            );
+	registerFile('/cchat.js',             'js',   1, 'client/cchat.js'             );
 	registerFile('/cmeth.js',             'js',   1, 'client/cmeth.js'             );
 	registerFile('/cboard.js',            'js',   1, 'client/cboard.js'            );
 	registerFile('/switchpanel.js',       'js',   1, 'client/switchpanel.js'       );

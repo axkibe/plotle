@@ -121,7 +121,7 @@ LoginBoard.layout = {
 	copse : {
 	'loginL'      : {
 		type      : 'Label',
-		text      : 'Login',
+		text      : 'Log In',
 		fontStyle : fontStyle(22, 'ca'),
 		pos       : { type: 'Point', anchor: 'sw', x: 160, y: -14 }
 	},

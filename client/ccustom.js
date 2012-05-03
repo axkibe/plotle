@@ -66,11 +66,10 @@ var log           = Jools.log;
 | Constructor.
 */
 CCustom = function(twig, board, inherit, name) {
+	this.name    = name;
 	this.twig    = twig;
 	this.board   = board;
-	this.name    = name;
-	this.methods = CMeth[board.name][name];
-	if (!this.methods) { this.methods = {}; }
+	this.methods = CMeth[board.name][name] || {};
 
 	var pnw      = this.pnw    = computePoint(twig.frame.pnw, board.iframe);
 	var pse      = this.pse    = computePoint(twig.frame.pse, board.iframe);

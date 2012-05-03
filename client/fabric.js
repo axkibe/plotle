@@ -110,7 +110,7 @@ Fabric = function(a1, a2) {
 /**
 | Shortcuts
 */
-var R     = Math.round;
+var ro    = Math.round;
 var PI    = Math.PI;
 var cos   = Math.cos;
 var sin   = Math.sin;
@@ -120,7 +120,7 @@ var tan30 = tan(PI / 6);   // tan(30)
 var magic = 0.551784;      // 'magic' number to approximate ellipses with beziers.
 
 // divides by 2 and rounds up
-var half = function(v) { return R(v / 2); };
+var half = function(v) { return ro(v / 2); };
 
 /**
 | Returns the compass direction opposite of a direction.
@@ -1048,21 +1048,21 @@ var sliceBezier = function(x2, y2, x3, y3, x4, y4, f) {
 | Middle(center) point of Hexagon.
 */
 lazyFixate(OvalSlice.prototype, 'pm', function() {
-	return this.psw.add(R(-this.slice.x4), R(this.b - this.slice.y4));
+	return this.psw.add(ro(-this.slice.x4), ro(this.b - this.slice.y4));
 });
 
 /**
 | pnw (used by gradients)
 */
 lazyFixate(OvalSlice.prototype, 'pnw', function() {
-	return this.psw.add(0, R(-this.slice.y4));
+	return this.psw.add(0, ro(-this.slice.y4));
 });
 
 /**
 | pnw (used by gradients)
 */
 lazyFixate(OvalSlice.prototype, 'width', function() {
-	return R(-2 * this.slice.x4);
+	return ro(-2 * this.slice.x4);
 });
 
 /**
@@ -1087,7 +1087,7 @@ OvalSlice.prototype.path = function(fabric, border, twist) {
 
 	var slice  = this.slice;
 
-	fabric.moveTo(R(psw.x), R(psw.y));
+	fabric.moveTo(ro(psw.x), ro(psw.y));
 	fabric.beziTo(
 		slice.x3, slice.y3,
 		slice.x2, slice.y2,
@@ -1191,7 +1191,7 @@ OvalFlower.prototype.path = function(fabric, border, twist, segment) {
 
 	var bs  = half(b2 - b1 - 0.5);
 	var bss = half(b2 - b1) - 2;
-	var bms =   R((b2 - b1) / 2 * m);
+	var bms =  ro((b2 - b1) / 2 * m);
 	var odbg = segment === null && ovalDebug;
 
 	if (segment === 'n' || odbg) {
@@ -1204,7 +1204,7 @@ OvalFlower.prototype.path = function(fabric, border, twist, segment) {
 	}
 	if (segment === 'ne' || odbg) {
 		var pney = pcy - bs;
-		var pnex = pcx + R(a2 * m);
+		var pnex = pcx + ro(a2 * m);
 		fabric.moveTo(                       pnex - a1 + bo, pney);
 		fabric.beziTo(  0, -bms, -am1,    0, pnex,           pney - bss + bo);
 		fabric.beziTo( am1,   0,    0, -bms, pnex + a1 - bo, pney);
@@ -1213,7 +1213,7 @@ OvalFlower.prototype.path = function(fabric, border, twist, segment) {
 	}
 	if (segment === 'se' || odbg) {
 		var psey = pcy + bs;
-		var psex = pcx + R(a2 * m);
+		var psex = pcx + ro(a2 * m);
 		fabric.moveTo(                       psex - a1 + bo, psey);
 		fabric.beziTo(  0, -bms, -am1,    0, psex,           psey - bss + bo);
 		fabric.beziTo( am1,   0,    0, -bms, psex + a1 - bo, psey);
@@ -1230,7 +1230,7 @@ OvalFlower.prototype.path = function(fabric, border, twist, segment) {
 	}
 	if (segment === 'sw' || odbg) {
 		var pswy = pcy + bs;
-		var pswx = pcx - R(a2 * m);
+		var pswx = pcx - ro(a2 * m);
 		fabric.moveTo(                       pswx - a1 + bo, pswy);
 		fabric.beziTo(  0, -bms, -am1,    0, pswx,           pswy - bss + bo);
 		fabric.beziTo( am1,   0,    0, -bms, pswx + a1 - bo, pswy);
@@ -1239,7 +1239,7 @@ OvalFlower.prototype.path = function(fabric, border, twist, segment) {
 	}
 	if (segment === 'nw' || odbg) {
 		var pnwy = pcy - bs;
-		var pnwx = pcx - R(a2 * m);
+		var pnwx = pcx - ro(a2 * m);
 		fabric.moveTo(                       pnwx - a1 + bo, pnwy);
 		fabric.beziTo(  0, -bms, -am1,    0, pnwx,           pnwy - bss + bo);
 		fabric.beziTo( am1,   0,    0, -bms, pnwx + a1 - bo, pnwy);
@@ -1405,14 +1405,14 @@ Line.prototype.path = function(fabric, border, twist) {
 		// arrow span, the arrow is formed as hexagon piece
 		var ms = 2 / Math.sqrt(3) * as;
 		if (twist) {
-			fabric.lineTo(p2.x - R(ms * cos(d)), p2.y - R(ms * sin(d)));
+			fabric.lineTo(p2.x - ro(ms * cos(d)), p2.y - ro(ms * sin(d)));
 		} else {
-			fabric.moveTo(p2.x - R(ms * cos(d)), p2.y - R(ms * sin(d)));
+			fabric.moveTo(p2.x - ro(ms * cos(d)), p2.y - ro(ms * sin(d)));
 		}
-		fabric.lineTo(p2.x - R(as * cos(d - ad)), p2.y - R(as * sin(d - ad)));
+		fabric.lineTo(p2.x - ro(as * cos(d - ad)), p2.y - ro(as * sin(d - ad)));
 		fabric.lineTo(p2);
-		fabric.lineTo(p2.x - R(as * cos(d + ad)), p2.y - R(as * sin(d + ad)));
-		fabric.lineTo(p2.x - R(ms * cos(d)), p2.y - R(ms * sin(d)));
+		fabric.lineTo(p2.x - ro(as * cos(d + ad)), p2.y - ro(as * sin(d + ad)));
+		fabric.lineTo(p2.x - ro(ms * cos(d)), p2.y - ro(ms * sin(d)));
 		break;
 	default :
 		throw new Error('unknown line end');

@@ -154,6 +154,9 @@ OvalMenu.prototype.mousedown = function(p, shift, ctrl) {
 	return false;
 };
 
+/**
+| Called on every step to fade away when mouse isn't on the menu
+*/
 OvalMenu.prototype.fadeout = function() {
 	var self = this;
 

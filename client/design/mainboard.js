@@ -57,8 +57,8 @@ var sideB2W = 190;
 /**
 | switch control
 */
-var switchBCW  = 180;
-var switchBCH  =  35;
+var switchBCW  = 170;
+var switchBCH  =  32;
 
 /**
 | help control
@@ -128,8 +128,8 @@ MainBoard.layout = {
 		},
 		caption : {
 			type      : 'Label',
-			text      : 'login',
-			fontStyle : fontStyle(14, 'ca'),
+			text      : 'log in',
+			fontStyle : fontStyle(13, 'ca'),
 			pos       : { type: 'Point', anchor: 'sw', x: 90, y:  -7 }
 		},
 		curve     :  {
@@ -210,7 +210,7 @@ MainBoard.layout = {
 		caption : {
 			type      : 'Label',
 			text      : 'help',
-			fontStyle : fontStyle(14, 'ca'),
+			fontStyle : fontStyle(13, 'ca'),
 			pos       : { type: 'Point', anchor: 'se', x: -90, y:  -7 }
 		},
 		curve :  {
@@ -232,7 +232,7 @@ MainBoard.layout = {
 			ranks : [ '1', '2' ]
 		}
 	},
-
+	
 	'switchBC'     : {
 		type       : 'Custom',
 		normaStyle : 'sides',
@@ -277,6 +277,16 @@ MainBoard.layout = {
 		}
 	},
 	
+	'chat'        : {
+		type      : 'Chat',
+		fontStyle : fontStyle(12, 'lac'),
+		frame      : {
+			type   : 'Frame',
+			pnw    : { type: 'Point', anchor: 'se', x: -470, y: -60 },
+			pse    : { type: 'Point', anchor: 'se', x: -125, y:   0 }
+		},
+	},
+	
 	'greet'       : {
 		type      : 'Label',
 		text      : 'Hello',
@@ -304,25 +314,19 @@ MainBoard.layout = {
 		text      : 'welcome',
 		fontStyle : fontStyle(22, 'cab'),
 		pos       : { type: 'Point', anchor:  's', x: -130, y: -11 }
-	},
-
-	'message'     : {
-		type      : 'Label',
-		text      : 'This is a message just for testing.',
-		fontStyle : fontStyle(12, 'la'),
-		pos       : { type: 'Point', anchor: 'se', x: -450, y: -20 }
 	}},
+
 
 	ranks : [
 		'leftBC',
 		'left2BC',
 		'rightBC',
 		'switchBC',
+		'chat',
 		'greet',
 		'username',
 		'saycurrent',
 		'cspace',
-		'message'
 	]
 };
 

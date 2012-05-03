@@ -66,7 +66,7 @@ var isnon        = Jools.isnon;
 var computePoint = Curve.computePoint;
 var half         = Fabric.half;
 var magic        = Fabric.magic;
-var round        = Math.round;
+var ro           = Math.round;
 var Point        = Fabric.Point;
 var Rect         = Fabric.Rect;
 
@@ -120,8 +120,8 @@ SwitchPanel.prototype.pathButton = function(fabric, border, twist) {
 
 	var bw05 = half(bw);
 	var bh05 = half(bh);
-	var mx   = round(bw / 2 * magic); // TODO round needed?
-	var my   = round(bh / 2 * magic);
+	var mx   = ro(bw / 2 * magic); // TODO round needed?
+	var my   = ro(bh / 2 * magic);
 
 	fabric.beginPath(twist);
 
@@ -133,16 +133,16 @@ SwitchPanel.prototype.pathButton = function(fabric, border, twist) {
 	fabric.beziTo(  0,  my,  mx,   0,              cx, -bo + bh05 + cy);
 	fabric.beziTo(-mx,  0,    0,  my,  bo - bw05 + cx,              cy);
 	
-	cx   = round(w / 2 + bx);
-	cy   = round(by);
+	cx   = ro(w / 2 + bx);
+	cy   = ro(by);
 	fabric.moveTo(                     bo - bw05 + cx,              cy);
 	fabric.beziTo(  0, -my, -mx,   0,              cx,  bo - bh05 + cy);
 	fabric.beziTo( mx,  0,    0, -my, -bo + bw05 + cx,              cy);
 	fabric.beziTo(  0,  my,  mx,   0,              cx, -bo + bh05 + cy);
 	fabric.beziTo(-mx,  0,    0,  my,  bo - bw05 + cx,              cy);
 	
-	cx   = round(w / 2 - bx);
-	cy   = round(by);
+	cx   = ro(w / 2 - bx);
+	cy   = ro(by);
 	fabric.moveTo(                     bo - bw05 + cx,              cy);
 	fabric.beziTo(  0, -my, -mx,   0,              cx,  bo - bh05 + cy);
 	fabric.beziTo( mx,  0,    0, -my, -bo + bw05 + cx,              cy);

@@ -289,8 +289,8 @@ CMeth.MainBoard.leftBC = {
 	mousedown :
 	function(p, shift, ctrl) {
 		switch (this.$captionText) {
-		case 'login'  : this.board.cockpit.setCurBoard('LoginBoard'); break;
-		case 'logout' : logout(this.board); break;
+		case 'log in'  : this.board.cockpit.setCurBoard('LoginBoard'); break;
+		case 'log out' : logout(this.board); break;
 		default : throw new Error('unknown state of leftBC');
 		}
 	}

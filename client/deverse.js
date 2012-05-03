@@ -119,6 +119,7 @@ Deverse = {
 
 	'Layout'  : {
 		copse : {
+			'Chat'       : true,
 			'Custom'     : true,
 			'Input'      : true,
 			'Label'      : true
@@ -134,6 +135,13 @@ Deverse = {
 			'align'      : 'String',
 			'fill'       : 'String',
 			'base'       : 'String'
+		}
+	},
+	
+	'Chat'  : {
+		must : {
+			'frame'      : 'Frame',
+			'fontStyle'  : 'FontStyle'
 		}
 	},
 
