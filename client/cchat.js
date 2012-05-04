@@ -117,9 +117,9 @@ CChat.prototype.getFabric = function() {
 	y -= lh;
 	fabric.fillText('visitor-1001 entered "welcome"', x, y);
 	y -= lh;
-	fabric.fillText('Loading "welcome"', x, y);
+	fabric.fillText('Loading "welcomwelcomwelcomwelcomeeeewelcome"', x, y);
 
-	if (config.debug.drawBoxes) {
+	if (true || config.debug.drawBoxes) {
 		fabric.paint(
 			Cockpit.styles.boxes,
 			new Rect(this.iframe.pnw, this.iframe.pse.sub(1, 1)),
