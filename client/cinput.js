@@ -57,7 +57,7 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 */
 var BeziRect      = Fabric.BeziRect;
 var Point         = Fabric.Point;
-var R             = Math.round;
+var ro            = Math.round;
 var Rect          = Fabric.Rect;
 var computePoint  = Curve.computePoint;
 var debug         = Jools.debug;
@@ -91,14 +91,14 @@ CInput = function(twig, board, inherit, name) {
 | Returns the width of a character for password masks.
 */
 CInput.prototype.maskWidth = function(size) {
-	return R(size * 0.2);
+	return ro(size * 0.2);
 };
 
 /**
 | Returns the kerning of characters for password masks.
 */
 CInput.prototype.maskKern = function(size) {
-	return R(size * 0.15);
+	return ro(size * 0.15);
 };
 
 /**
@@ -125,8 +125,8 @@ CInput.prototype.path = function(fabric, border, twist) {
 */
 CInput.prototype.maskPath = function(fabric, border, twist, length, size) {
 	var x  = pitch.x;
-	var y  = R(pitch.y + size * 0.7);
-	var h  = R(size * 0.32);
+	var y  = ro(pitch.y + size * 0.7);
+	var h  = ro(size * 0.32);
 	var w  = this.maskWidth(size);
 	var w2 = w * 2;
 	var k  = this.maskKern(size);
@@ -191,21 +191,21 @@ CInput.prototype.draw = function(fabric, accent) {
 */
 CInput.prototype.getOffsetPoint = function(offset) {
 	// @@ cache position
-	var twig = this.twig;
-	var font = twig.fontStyle;
+	var twig     = this.twig;
+	var font     = twig.fontStyle;
 	Measure.font = font.style;
-	var val = this.value;
+	var val      = this.value;
 
 	// @@ use token. text instead.
 	if (this.twig.password) {
 		return new Point(
 			pitch.x + (2 * this.maskWidth(font.size) + this.maskKern(font.size)) * offset - 1,
-			R(pitch.y + font.size)
+			ro(pitch.y + font.size)
 		);
 	} else {
 		return new Point(
-			R(pitch.x + Measure.width(val.substring(0, offset))),
-			R(pitch.y + font.size)
+			ro(pitch.x + Measure.width(val.substring(0, offset))),
+			ro(pitch.y + font.size)
 		);
 	}
 };
@@ -221,15 +221,15 @@ CInput.prototype.getCaretPos = function() {
 	//var p = { x: 2, y : 2};
 
 	var pnw = this.pnw;
-	var s = R(p.y + pnw.y + descend);
-	var n = s - R(fs + descend);
+	var s = ro(p.y + pnw.y + descend);
+	var n = s - ro(fs + descend);
 	var	x = p.x + this.pnw.x - 1;
 
 	return immute({ s: s, n: n, x: x });
 };
 
 /**
-| Draws the caret if its in this paragraph.
+| Draws the caret.
 */
 CInput.prototype.drawCaret = function() {
 	var caret = shell.caret;
@@ -280,7 +280,7 @@ CInput.prototype.input = function(text) {
 /**
 | User pressed backspace.
 */
-CInput.prototype.keyBackspace = function(board) {
+CInput.prototype.keyBackspace = function() {
 	var caret = shell.caret;
 	var csign = caret.sign;
 	var at1   = csign.at1;
@@ -296,7 +296,7 @@ CInput.prototype.keyBackspace = function(board) {
 /**
 | User pressed del.
 */
-CInput.prototype.keyDel = function(board) {
+CInput.prototype.keyDel = function() {
 	var caret = shell.caret;
 	var csign = caret.sign;
 	var at1   = csign.at1;
@@ -308,7 +308,7 @@ CInput.prototype.keyDel = function(board) {
 /**
 | User pressed return key.
 */
-CInput.prototype.keyEnter = function(board) {
+CInput.prototype.keyEnter = function() {
 	if (this.methods.keyEnter) { return this.methods.keyEnter.call(this, board); }
 	board.cycleFocus(1);
 	return true;
@@ -317,7 +317,7 @@ CInput.prototype.keyEnter = function(board) {
 /**
 | User pressed down key.
 */
-CInput.prototype.keyDown = function(board) {
+CInput.prototype.keyDown = function() {
 	board.cycleFocus(1);
 	return true;
 };
@@ -325,7 +325,7 @@ CInput.prototype.keyDown = function(board) {
 /**
 | User pressed end key.
 */
-CInput.prototype.keyEnd = function(board) {
+CInput.prototype.keyEnd = function() {
 	var caret = shell.caret;
 	var csign = caret.sign;
 	var at1   = csign.at1;
@@ -340,7 +340,7 @@ CInput.prototype.keyEnd = function(board) {
 /**
 | User pressed left key.
 */
-CInput.prototype.keyLeft = function(board) {
+CInput.prototype.keyLeft = function() {
 	var caret = shell.caret;
 	var csign = caret.sign;
 	if (csign.at1 <= 0) return false;
@@ -354,7 +354,7 @@ CInput.prototype.keyLeft = function(board) {
 /**
 | User pressed pos1 key
 */
-CInput.prototype.keyPos1 = function(board) {
+CInput.prototype.keyPos1 = function() {
 	var caret = shell.caret;
 	var csign = caret.sign;
 	if (csign.at1 <= 0) return false;
@@ -368,7 +368,7 @@ CInput.prototype.keyPos1 = function(board) {
 /**
 | User pressed right key
 */
-CInput.prototype.keyRight = function(board) {
+CInput.prototype.keyRight = function() {
 	var caret = shell.caret;
 	var csign = caret.sign;
 	if (csign.at1 >= this.value.length) return false;
@@ -376,6 +376,14 @@ CInput.prototype.keyRight = function(board) {
 		path : csign.path,
 		at1  : csign.at1 + 1
 	});
+	return true;
+};
+
+/**
+| User pressed up key.
+*/
+CInput.prototype.keyUp = function() {
+	board.cycleFocus(-1);
 	return true;
 };
 
@@ -396,14 +404,6 @@ CInput.prototype.specialKey = function(key) {
 	case 'up'        : poke = this.keyUp();        break;
 	}
 	if (poke) { this.board.poke(); }
-};
-
-/**
-| User pressed up key.
-*/
-CInput.prototype.keyUp = function(board) {
-	board.cycleFocus(-1);
-	return true;
 };
 
 CInput.prototype.poke = function() {

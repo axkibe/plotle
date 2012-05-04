@@ -387,20 +387,26 @@ Fabric.prototype.closePath = function() {
 | drawImage(image, pnw)   -or-
 | drawImage(image, x, y)
 */
-Fabric.prototype.drawImage = function(image, a1, a2) {
+Fabric.prototype.drawImage = function(image, a1, a2, a3) {
 	var pan = this.pan;
 	if (image instanceof Fabric) {
 		if (!(image.width > 0 && image.height > 0)) return;
 		image = image._canvas;
 	}
-	var x, y;
+	var x, y, c;
 	if (typeof(a1) === 'object') {
-		x = a1.x; y = a1.y;
+		x = a1.x;
+		y = a1.y;
+		c = a2;
 	} else {
-		x = a1; y = a2;
+		x = a1;
+		y = a2;
+		c = a3;
 	}
 	ensureInteger(x, y);
+	if (is(c)) { this._cx.globalCompositeOperation = c; }
 	this._cx.drawImage(image, x + pan.x, y + pan.y);
+	if (is(c)) { this._cx.globalCompositeOperation = 'source-over'; }
 };
 
 

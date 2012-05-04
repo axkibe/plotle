@@ -91,14 +91,14 @@ CLabel.prototype.poke = function() {
 /**
 | Mouse hover
 */
-CLabel.prototype.mousehover = function(board, p) {
+CLabel.prototype.mousehover = function(p, shift, ctrl) {
 	return false;
 };
 
 /**
 | Mouse down
 */
-CLabel.prototype.mousedown = function(board, p) {
+CLabel.prototype.mousedown = function(p, shift, ctrl) {
 	return null;
 };
 

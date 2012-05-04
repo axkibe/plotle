@@ -61,7 +61,6 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Shotcuts
 */
-var R             = Math.round;
 var cos30         = Fabric.cos30;
 var debug         = Jools.debug;
 var immute        = Jools.immute;
@@ -71,6 +70,7 @@ var limit         = Jools.limit;
 var log           = Jools.log;
 var max           = Math.max;
 var min           = Math.min;
+var ro            = Math.round;
 var subclass      = Jools.subclass;
 
 /**
@@ -96,22 +96,22 @@ Scrollbar.prototype.path = function(fabric, border, twist) {
 	var z      = this.zone;
 	var w      = z.width;
 	var co30w2 = cos30 * w / 2;
-	var w025   = R(w * 0.25);
-	var w075   = R(w * 0.75);
-	var size   = R(this.aperture * z.height / this.max);
+	var w025   = ro(w * 0.25);
+	var w075   = ro(w * 0.75);
+	var size   = ro(this.aperture * z.height / this.max);
 	var msize  = max(size, theme.scrollbar.minSize);
-	var sy     = z.pnw.y + R(this._pos * ((z.height - msize + size) / this.max));
+	var sy     = z.pnw.y + ro(this._pos * ((z.height - msize + size) / this.max));
 
 	fabric.beginPath(twist);
-	fabric.moveTo(z.pnw.x,        R(sy + co30w2));
+	fabric.moveTo(z.pnw.x,        ro(sy + co30w2));
 	fabric.lineTo(z.pnw.x + w025, sy);
 	fabric.lineTo(z.pnw.x + w075, sy);
-	fabric.lineTo(z.pse.x,        R(sy + co30w2));
+	fabric.lineTo(z.pse.x,        ro(sy + co30w2));
 
-	fabric.lineTo(z.pse.x,        R(sy + msize - co30w2));
+	fabric.lineTo(z.pse.x,        ro(sy + msize - co30w2));
 	fabric.lineTo(z.pnw.x + w075, sy + msize);
 	fabric.lineTo(z.pnw.x + w025, sy + msize);
-	fabric.lineTo(z.pnw.x,        R(sy + msize - co30w2));
+	fabric.lineTo(z.pnw.x,        ro(sy + msize - co30w2));
 	fabric.closePath();
 };
 

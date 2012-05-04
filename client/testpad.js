@@ -23,13 +23,12 @@ var Tree;
 if (typeof(window) === 'undefined') throw new Error('testpad needs a browser!');
 
 var debug     = Jools.debug;
+var F         = Math.floor;
 var limit     = Jools.limit;
 var log       = Jools.log;
-var subclass  = Jools.subclass;
-var ro        = Math.round;
-var F         = Math.floor;
 var max       = Math.max;
 var min       = Math.min;
+var subclass  = Jools.subclass;
 
 /**
 | Current action

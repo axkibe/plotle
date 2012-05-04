@@ -62,14 +62,14 @@ if (typeof(window) === 'undefined') { throw new Error('this code requires a brow
 /**
 | Shortcuts
 */
-var R   = Math.round;
-var debug         = Jools.debug;
-var immute        = Jools.immute;
-var is            = Jools.is;
-var isnon         = Jools.isnon;
-var log           = Jools.log;
-var half          = Fabric.half;
-var OvalFlower    = Fabric.OvalFlower;
+var debug      = Jools.debug;
+var immute     = Jools.immute;
+var is         = Jools.is;
+var isnon      = Jools.isnon;
+var log        = Jools.log;
+var half       = Fabric.half;
+var OvalFlower = Fabric.OvalFlower;
+var ro         = Math.round;
 
 /**
 | Constructor.
@@ -118,7 +118,7 @@ OvalMenu.prototype.draw = function() {
 	var bs  = half(b2 - b1);
 	var b2t = b1 + bs;
 	var m   = 0.551784;
-	var a2h = R(this._dimensions.a2 * m);
+	var a2h = ro(this._dimensions.a2 * m);
 	var pc  = this.p;
 
 	if (labels.n)  f.fillText(labels.n,  pc.x,       pc.y - b2t);
