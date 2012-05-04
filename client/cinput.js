@@ -239,8 +239,8 @@ CInput.prototype.drawCaret = function() {
 	var cx  = cpos.x;
 	var ch  = cpos.s - cpos.n;
 	var cp = new Point(
-		board.pnw.x + cpos.x,
-		board.pnw.y + cpos.n
+		this.board.pnw.x + cpos.x,
+		this.board.pnw.y + cpos.n
 	);
 	shell.caret.$screenPos = cp;
 
@@ -309,8 +309,8 @@ CInput.prototype.keyDel = function() {
 | User pressed return key.
 */
 CInput.prototype.keyEnter = function() {
-	if (this.methods.keyEnter) { return this.methods.keyEnter.call(this, board); }
-	board.cycleFocus(1);
+	if (this.methods.keyEnter) { return this.methods.keyEnter.call(this, this.board); }
+	this.board.cycleFocus(1);
 	return true;
 };
 
@@ -318,7 +318,7 @@ CInput.prototype.keyEnter = function() {
 | User pressed down key.
 */
 CInput.prototype.keyDown = function() {
-	board.cycleFocus(1);
+	this.board.cycleFocus(1);
 	return true;
 };
 
@@ -383,7 +383,7 @@ CInput.prototype.keyRight = function() {
 | User pressed up key.
 */
 CInput.prototype.keyUp = function() {
-	board.cycleFocus(-1);
+	this.board.cycleFocus(-1);
 	return true;
 };
 
