@@ -166,9 +166,9 @@ theme = {
 
 
 		chat : {
-			fill : 'rgba(255, 128, 128, 0.1)',
+			fill : 'rgba(255, 128, 128, 0.3)',
 			edge : [
-				{ border:  0, width :   0.5, color : 'rgba(184,  64,  0, 1)' }
+				{ border:  0, width :   0.5, color : 'rgba(184,  64,  0, 0.2)' }
 			]
 		},
 

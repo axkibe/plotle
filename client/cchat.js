@@ -71,7 +71,7 @@ CChat = function(twig, board, inherit, name) {
 	var fs = this.twig.fontStyle;
 
 	this.lineHeight = ro(fs.size * 1.2);
-	this.sideSlopeX = 30;
+	this.sideSlopeX = 20;
 };
 
 
@@ -87,11 +87,11 @@ CChat.prototype.pathILine = function(fabric, border, twist) {
 	var pnwx = this.sideSlopeX;
 	var pnwy = psey - this.lineHeight - 2; 
 
-	fabric.moveTo(               0, psey);
-	fabric.beziTo(0, 0, 0, 0, pnwx, pnwy);
-	fabric.lineTo(            psex, pnwy);
-	fabric.lineTo(               w, psey);
-	fabric.lineTo(            pnwx, psey);
+	fabric.moveTo(                    0, psey);
+	fabric.beziTo(  7,-7, -15,  0, pnwx, pnwy);
+	fabric.lineTo(                 psex, pnwy);
+	fabric.beziTo( 15, 0,  -7, -7,    w, psey);
+	fabric.lineTo(                 pnwx, psey);
 }
 
 CChat.prototype.getFabric = function() {
@@ -111,7 +111,7 @@ CChat.prototype.getFabric = function() {
 	var y = h - descend;
 	var lh = this.lineHeight;
 	fabric.fillText('»', x - 10, y);
-	fabric.fillText('blagqy', x, y);
+	fabric.fillText('', x, y);
 	y -= lh + 2;
 	fabric.fillText('visitor-9999: Hallo!', x, y);
 	y -= lh;

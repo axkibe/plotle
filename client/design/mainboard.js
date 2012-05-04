@@ -282,7 +282,7 @@ MainBoard.layout = {
 		fontStyle : fontStyle(12, 'lac'),
 		frame      : {
 			type   : 'Frame',
-			pnw    : { type: 'Point', anchor: 'se', x: -470, y: -60 },
+			pnw    : { type: 'Point', anchor: 'se', x: -450, y: -60 },
 			pse    : { type: 'Point', anchor: 'se', x: -125, y:   0 }
 		},
 	},

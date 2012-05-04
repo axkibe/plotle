@@ -52,19 +52,20 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Shortcuts.
 */
-var Margin        = Fabric.Margin;
-var Point         = Fabric.Point;
-var Rect          = Fabric.Rect;
-var abs           = Math.abs;
-var debug         = Jools.debug;
-var immute        = Jools.immute;
-var is            = Jools.is;
-var isnon         = Jools.isnon;
-var limit         = Jools.limit;
-var log           = Jools.log;
-var max           = Math.max;
-var min           = Math.min;
-var subclass      = Jools.subclass;
+var abs      = Math.abs;
+var debug    = Jools.debug;
+var immute   = Jools.immute;
+var is       = Jools.is;
+var isnon    = Jools.isnon;
+var limit    = Jools.limit;
+var log      = Jools.log;
+var max      = Math.max;
+var Margin   = Fabric.Margin;
+var min      = Math.min;
+var Point    = Fabric.Point;
+var Rect     = Fabric.Rect;
+var ro       = Math.round;
+var subclass = Jools.subclass;
 
 /**
 | Constructor.
@@ -215,8 +216,8 @@ VLabel.prototype.getZone = function() {
 	// TODO Caching!
 	var vdoc   = this.vv.doc;
 	var fs     = vdoc.getFontSize();
-	var width  = max(Math.ceil(vdoc.getSpread()), R(fs * 0.3));
-	var height = max(Math.ceil(vdoc.getHeight()), R(fs));
+	var width  = max(Math.ceil(vdoc.getSpread()), ro(fs * 0.3));
+	var height = max(Math.ceil(vdoc.getHeight()), ro(fs));
 
 	if (!action || action.vitem !== this) return new Rect(pnw, pnw.add(width, height));
 	// @@ cache the last zone
