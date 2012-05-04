@@ -52,6 +52,7 @@ var immute        = Jools.immute;
 var is            = Jools.is;
 var isnon         = Jools.isnon;
 var log           = Jools.log;
+var max           = Math.max;
 var Point         = Fabric.Point;
 var Rect          = Fabric.Rect;
 var ro            = Math.round;
@@ -70,11 +71,7 @@ CChat = function(twig, board, inherit, name) {
 	this.methods = CMeth[board.name][name] || {};
 	var fs = this.twig.fontStyle;
 
-	this.messages   = [
-		'Loading "welcome"',
-		'visitor-1001 entered "welcome"',
-		'visitor-9999: Hallo!'
-	];
+	this.messages   = [ ];
 
 	this.lineHeight = ro(fs.size * 1.2);
 	this.sideSlopeX = 20;
@@ -127,7 +124,7 @@ CChat.prototype.getFabric = function() {
 	fabric.fillText(this.itext, x, y);
 	y -= 2;
 
-	for(var a = this.messages.length - 1, aA = a - 5; a > aA; a--) {
+	for(var a = this.messages.length - 1, aA = max(a - 5, 0); a >= aA; a--) {
 		y -= lh;
 		fabric.fillText(this.messages[a], x, y);
 	}
@@ -350,7 +347,11 @@ CChat.prototype.mousedown = function(p, shift, ctrl) {
 	var fabric = this.getFabric();
 	if (!fabric.within(this, 'pathILine', pp))  { return null; }
 
-	this.board.setFocus(this.name);
+	shell.setCaret('cockpit', {
+		path : new Path([this.board.name, this.name]),
+		at1  : this.itext.length
+	});
+
 	return false;
 };
 

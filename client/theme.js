@@ -92,7 +92,8 @@ theme = {
 		style : {
 			edge : [
 				//{ border: 0, width: 0.2, color: 'rgba(200, 100, 0, 0.5)' },
-				{ border: 0, width: 1, color: 'rgba(100, 100, 0, 0.5)' }
+				//{ border: 0, width: 1, color: 'rgba(100, 100, 0, 0.5)' }
+				{ border: 0, width: 1, color: 'rgba(100, 100, 0, 0.1)' }
 			],
 			highlight : [ { border: 0, width: 3, color: 'rgba(255, 183, 15, 0.5)' } ]
 		},

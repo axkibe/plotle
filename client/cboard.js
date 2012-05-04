@@ -291,7 +291,7 @@ CBoard.prototype.setFocus = function(cname) {
 
 	shell.setCaret('cockpit', {
 		path : new Path([this.name, cname]),
-		at1  : 0
+		at1  : is(at1) ? at1 : 0
 	});
 };
 

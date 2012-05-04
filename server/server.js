@@ -82,6 +82,9 @@ var Server = function() {
 	this.buildHTMLs();
 	this.initDatabase();
 
+	// messages for each space
+	this.messages = {};
+
 	// visitors
 	this.nextVisitor = 1001;
 	this.visitors = {};
@@ -237,6 +240,19 @@ Server.prototype.playbackOne = function(o, cursor) {
 		}
 	});
 };
+
+/**
+| Creates a message for a space
+*/
+Server.prototype.message = function(spacename, message) {
+	var spm = this.messages[spacename];
+	if (!spm) {
+		spm = this.messages[spacename] = [];
+	}
+	spm.push(message);
+
+	// TODO XXX wakes
+}
 
 /**
 | Compresses the javascript pack to reduce download size.
@@ -597,32 +613,34 @@ Server.prototype.register = function(cmd, res) {
 */
 Server.prototype.update = function(cmd, res) {
 	var time     = cmd.time;
+	//var mid      = cmd.mid;
+	//var space    = cmd.space;
 	var changes  = this.changes;
-	var changesZ = changes.length;
+	var cZ       = changes.length;
 
 	// some tests
 	if (!is(time))    { throw reject('time missing'); }
-	if (!(time >= 0 && time <= changesZ)) { throw reject('invalid time'); }
+	if (!(time >= 0 && time <= cZ)) { throw reject('invalid time'); }
 
-	if (time < changesZ) {
+	if (time < cZ) {
 		// immediate answer
 		var chga = [];
-		for (var c = time; c < changesZ; c++) {
+		for (var c = time; c < cZ; c++) {
 			chga.push(changes[c]);
 		}
 
-		return { ok : true, time: time, timeZ: changesZ, chgs : chga };
-	} else {
-		// sleep
-		var sleepID = '' + this.nextSleep++;
-		var timerID = setTimeout(this.expireSleep, 60000, this, sleepID);
-		this.upsleep[sleepID] = {
-			timerID : timerID,
-			time    : time,
-			res     : res
-		};
-		return null;
-	}
+		return { ok : true, time: time, timeZ: cZ, chgs : chga };
+	} 
+
+	// sleep
+	var sleepID = '' + this.nextSleep++;
+	var timerID = setTimeout(this.expireSleep, 60000, this, sleepID);
+	this.upsleep[sleepID] = {
+		timerID : timerID,
+		time    : time,
+		res     : res
+	};
+	return null;
 };
 
 /**
