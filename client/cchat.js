@@ -70,6 +70,12 @@ CChat = function(twig, board, inherit, name) {
 	this.methods = CMeth[board.name][name] || {};
 	var fs = this.twig.fontStyle;
 
+	this.messages   = [
+		'Loading "welcome"',
+		'visitor-1001 entered "welcome"',
+		'visitor-9999: Hallo!'
+	];
+
 	this.lineHeight = ro(fs.size * 1.2);
 	this.sideSlopeX = 20;
 	var descend     = ro(fs.size * theme.bottombox);
@@ -119,12 +125,12 @@ CChat.prototype.getFabric = function() {
 	var lh = this.lineHeight;
 	fabric.fillText('»', x - 10, y);
 	fabric.fillText(this.itext, x, y);
-	y -= lh + 2;
-	fabric.fillText('visitor-9999: Hallo!', x, y);
-	y -= lh;
-	fabric.fillText('visitor-1001 entered "welcome"', x, y);
-	y -= lh;
-	fabric.fillText('Loading "welcomwelcomwelcomwelcomeeeewelcome"', x, y);
+	y -= 2;
+
+	for(var a = this.messages.length - 1, aA = a - 5; a > aA; a--) {
+		y -= lh;
+		fabric.fillText(this.messages[a], x, y);
+	}
 
 	if (config.debug.drawBoxes) {
 		fabric.paint(
@@ -264,7 +270,17 @@ CChat.prototype.keyEnd = function() {
 | User pressed return key.
 */
 CChat.prototype.keyEnter = function() {
-	if (this.methods.keyEnter) { return this.methods.keyEnter.call(this, board); }
+	if (this.itext === '') { return false; }
+
+	var caret = shell.caret;
+	var csign = caret.sign;
+	this.addMessage(this.itext);
+	this.itext = '';
+	shell.setCaret('cockpit', {
+		path : csign.path,
+		at1  : 0
+	});
+
 	return true;
 };
 
@@ -316,6 +332,15 @@ CChat.prototype.keyRight = function() {
 CChat.prototype.keyUp = function() {
 	return true;
 };
+
+/**
+| Adds a message.
+*/
+CChat.prototype.addMessage = function(msg) {
+	this.messages.push(msg);
+	if (this.messages.length > 10) { this.messages.unshift(); }
+	this.poke();
+}
 
 /**
 | Mouse down.
