@@ -79,12 +79,23 @@ SwitchPanel = function() {
 	this.gradientPC = new Point(half(iframe.width), half(iframe.height) + 600);
 	this.gradientR0 = 0;
 	this.gradientR1 = 650;
+
 	this.buttonDim = immute({
 		width  : 80,
-		height : 45,
-		xoff   : 60,
-		yoff   : 54
+		height : 36,
 	});
+
+	var x2 = 55;
+	var y1 =  5;
+	var y2 = 36;
+	var mx = half(iframe.width);
+	var hh = half(this.buttonDim.height);
+
+	this.buttonPos    = {
+		n  : new Point(mx,      hh + y1),
+		ne : new Point(mx + x2, hh + y2),
+		nw : new Point(mx - x2, hh + y2)
+	};
 };
 
 /**
@@ -108,11 +119,9 @@ SwitchPanel.prototype.pathFrame = function(fabric, border, twist) {
 /**
 | Paths the  buttons
 */
-SwitchPanel.prototype.pathButton = function(fabric, border, twist) {
+SwitchPanel.prototype.pathButton = function(fabric, border, twist, dir) {
 	var bh = this.buttonDim.height;
 	var bw = this.buttonDim.width;
-	var bx = this.buttonDim.xoff;
-	var by = this.buttonDim.yoff;
 
 	var w = this.iframe.width  - 1;
 	var h = this.iframe.height - 1;
@@ -125,29 +134,12 @@ SwitchPanel.prototype.pathButton = function(fabric, border, twist) {
 
 	fabric.beginPath(twist);
 
-	var cx   = half(w);
-	var cy   = half(bh);
-	fabric.moveTo(                     bo - bw05 + cx,              cy);
-	fabric.beziTo(  0, -my, -mx,   0,              cx,  bo - bh05 + cy);
-	fabric.beziTo( mx,  0,    0, -my, -bo + bw05 + cx,              cy);
-	fabric.beziTo(  0,  my,  mx,   0,              cx, -bo + bh05 + cy);
-	fabric.beziTo(-mx,  0,    0,  my,  bo - bw05 + cx,              cy);
-	
-	cx   = ro(w / 2 + bx);
-	cy   = ro(by);
-	fabric.moveTo(                     bo - bw05 + cx,              cy);
-	fabric.beziTo(  0, -my, -mx,   0,              cx,  bo - bh05 + cy);
-	fabric.beziTo( mx,  0,    0, -my, -bo + bw05 + cx,              cy);
-	fabric.beziTo(  0,  my,  mx,   0,              cx, -bo + bh05 + cy);
-	fabric.beziTo(-mx,  0,    0,  my,  bo - bw05 + cx,              cy);
-	
-	cx   = ro(w / 2 - bx);
-	cy   = ro(by);
-	fabric.moveTo(                     bo - bw05 + cx,              cy);
-	fabric.beziTo(  0, -my, -mx,   0,              cx,  bo - bh05 + cy);
-	fabric.beziTo( mx,  0,    0, -my, -bo + bw05 + cx,              cy);
-	fabric.beziTo(  0,  my,  mx,   0,              cx, -bo + bh05 + cy);
-	fabric.beziTo(-mx,  0,    0,  my,  bo - bw05 + cx,              cy);
+	var p = this.buttonPos[dir];
+	fabric.moveTo(                     bo - bw05 + p.x,              p.y);
+	fabric.beziTo(  0, -my, -mx,   0,              p.x,  bo - bh05 + p.y);
+	fabric.beziTo( mx,  0,    0, -my, -bo + bw05 + p.x,              p.y);
+	fabric.beziTo(  0,  my,  mx,   0,              p.x, -bo + bh05 + p.y);
+	fabric.beziTo(-mx,  0,    0,  my,  bo - bw05 + p.x,              p.y);
 };
 
 /**
@@ -160,21 +152,24 @@ SwitchPanel.prototype.getFabric = function() {
 
 	fabric.fill(theme.switchpanel.style.fill, this, 'pathFrame');
 
-	//fabric.paint(theme.switchpanel.hover, this, 'pathButton');
+	fabric.paint(theme.switchpanel.space, this, 'pathButton', 'nw');
+	fabric.paint(theme.switchpanel.space, this, 'pathButton', 'n' );
+	fabric.paint(theme.switchpanel.space, this, 'pathButton', 'ne');
+
 	fabric.fontStyle('14px ' + theme.defaultFont, 'black', 'center', 'middle');
 	var bd = this.buttonDim;
 	var cx = half(iframe.width);
 	var cy = half(bd.height);
-	fabric.fillText('Welcome',   cx,           cy);
-	fabric.fillText('Sandbox',   cx + bd.xoff, bd.yoff);
-	fabric.fillText('Your Home', cx - bd.xoff, bd.yoff);
-	fabric.fillText('Your Home', cx - bd.xoff, bd.yoff);
+
+	var bp = this.buttonPos;
+	fabric.fillText('Welcome',   bp.n .x, bp.n. y);
+	fabric.fillText('Sandbox',   bp.ne.x, bp.ne.y);
+	fabric.fillText('Your Home', bp.nw.x, bp.nw.y);
 	
 	fabric.fontStyle('12px ' + theme.defaultFont, 'black', 'center', 'middle');
 	fabric.fillText('A space view&editable by everyone', cx, iframe.height - 12);
 	
 	fabric.edge(theme.switchpanel.style.edge, this, 'pathFrame');
-	
 
 	if (config.debug.drawBoxes) {
 		fabric.paint(Cockpit.styles.boxes,

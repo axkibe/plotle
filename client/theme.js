@@ -255,11 +255,18 @@ theme = {
 				{ border: 0, width : 1, color : 'rgb( 94, 94,  0)' }
 			]
 		},
+		
+		space : {
+			fill : 'rgba(255, 255, 255, 0.8)',
+			edge : [
+				{ border: 0, width : 0.5, color : 'black' }
+			]
+		},
 
 		hover : {
-			fill : 'rgb(255, 188, 88)',
+			fill : 'rgba(255, 188, 88, 1)',
 			edge : [
-				{ border: 0, width : 0.4, color : 'black' }
+				{ border: 0, width : 0.5, color : 'black' }
 			]
 		}
 	},
