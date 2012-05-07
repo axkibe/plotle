@@ -363,6 +363,8 @@ Server.prototype.registerFiles = function() {
 	registerFile('/ccode/mbleftb.js',     'js',   1, 'client/ccode/mbleftb.js'     );
 	registerFile('/ccode/mbleft2b.js',    'js',   1, 'client/ccode/mbleft2b.js'    );
 	registerFile('/ccode/mbswitchb.js',   'js',   1, 'client/ccode/mbswitchb.js'   );
+	registerFile('/ccode/mbrightb.js',    'js',   1, 'client/ccode/mbrightb.js'    );
+	registerFile('/ccode/lbloginb.js',    'js',   1, 'client/ccode/lbloginb.js'    );
 	registerFile('/cmeth.js',             'js',   1, 'client/cmeth.js'             );
 	registerFile('/cboard.js',            'js',   1, 'client/cboard.js'            );
 	registerFile('/switchpanel.js',       'js',   1, 'client/switchpanel.js'       );
