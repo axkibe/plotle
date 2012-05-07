@@ -115,8 +115,9 @@ MainBoard.curve = {
 MainBoard.layout = {
 	type  : 'Layout',
 	copse : {
-	'leftBC' : {
+	'leftBC' : {  // TODO rename leftB
 		type       : 'Custom',
+		code       : 'mbLeftB',
 		normaStyle : 'sides',
 		hoverStyle : 'highlight',
 		focusStyle : 'sides',
@@ -154,6 +155,7 @@ MainBoard.layout = {
 	
 	'left2BC' : {
 		type       : 'Custom',
+		code       : 'mbLeft2B',
 		normaStyle : 'sides',
 		hoverStyle : 'highlight',
 		focusStyle : 'sides',
@@ -198,6 +200,7 @@ MainBoard.layout = {
 
 	'rightBC' : {
 		type       : 'Custom',
+		code       : 'mbRightB',
 		normaStyle : 'sides',
 		hoverStyle : 'highlight',
 		focusStyle : 'sides',
@@ -235,6 +238,7 @@ MainBoard.layout = {
 	
 	'switchBC'     : {
 		type       : 'Custom',
+		code       : 'mbSwitchB',
 		normaStyle : 'sides',
 		hoverStyle : 'highlight',
 		focusStyle : 'sides',

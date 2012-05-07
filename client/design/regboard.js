@@ -235,6 +235,7 @@ Design.RegBoard.layout = {
 	},
 	'regBC'      : {
 		type       : 'Custom',
+		code       : 'rbRegB',
 		normaStyle : 'button',
 		hoverStyle : 'buttonHover',
 		focusStyle : 'buttonFocus',
@@ -292,6 +293,7 @@ Design.RegBoard.layout = {
 	},
 	'cancelBC'     : {
 		type       : 'Custom',
+		code       : 'rbCancelB',
 		normaStyle : 'button',
 		hoverStyle : 'buttonHover',
 		focusStyle : 'buttonFocus',

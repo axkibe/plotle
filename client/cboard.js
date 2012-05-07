@@ -35,7 +35,6 @@ var CInput;
 var Cockpit;
 var Curve;
 var Design;
-var Deverse;
 var Fabric;
 var Jools;
 var Path;
@@ -72,7 +71,7 @@ var Rect          = Fabric.Rect;
 CBoard = function(name, inherit, cockpit, screensize) {
 	this.name    = name;
 	this.cockpit = cockpit;
-	var tree     = this.tree  = new Tree(Design[name], Deverse);
+	var tree     = this.tree  = new Tree(Design[name], Design.Pattern);
 	var frameD   = tree.root.frame;
 	var oframe   = new Rect(Point.zero, screensize);
 	var pnw      = this.pnw    = computePoint(frameD.pnw, oframe);

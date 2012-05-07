@@ -23,12 +23,15 @@
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
 
+ @@ Rename to DesignPattern
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
 | Exports
 */
-var Deverse;
+var Design;
+Design = Design || { };
 
 /**
 | Capsule
@@ -39,7 +42,7 @@ var Deverse;
 /**
 | Designs (for the cockpit)
 */
-Deverse = {
+Design.Pattern = {
 	'Design' : {
 		must : {
 			'frame'      : 'Frame',
@@ -96,6 +99,7 @@ Deverse = {
 		must : {
 			'frame'      : 'Frame',
 			'caption'    : 'Label',
+			'code'       : 'String',
 			'curve'      : 'Curve',
 			'normaStyle' : 'String',
 			'hoverStyle' : 'String',

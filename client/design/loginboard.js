@@ -177,6 +177,7 @@ LoginBoard.layout = {
 	},
 	'loginBC'      : {
 		type       : 'Custom',
+		code       : 'lbLoginB',
 		normaStyle : 'button',
 		hoverStyle : 'buttonHover',
 		focusStyle : 'buttonFocus',
@@ -234,6 +235,7 @@ LoginBoard.layout = {
 	},
 	'cancelBC'     : {
 		type       : 'Custom',
+		code       : 'lbCancelB',
 		normaStyle : 'button',
 		hoverStyle : 'buttonHover',
 		focusStyle : 'buttonFocus',

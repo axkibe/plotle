@@ -348,7 +348,7 @@ Server.prototype.registerFiles = function() {
 	registerFile('/meshmashine.js',       'js',   1, 'shared/meshmashine.js'       );
 	registerFile('/iface.js',             'js',   1, 'client/iface.js'             );
 	registerFile('/peer.js',              'js',   1, 'client/peer.js'              );
-	registerFile('/deverse.js',           'js',   1, 'client/deverse.js'           );
+	registerFile('/design/pattern.js',    'js',   1, 'client/design/pattern.js'    );
 	registerFile('/design/fontstyles.js', 'js',   1, 'client/design/fontstyles.js' );
 	registerFile('/design/mainboard.js',  'js',   1, 'client/design/mainboard.js'  );
 	registerFile('/design/loginboard.js', 'js',   1, 'client/design/loginboard.js' );

@@ -31,7 +31,6 @@
 var CBoard;
 var Curve;
 var Design;
-var Deverse;
 var Fabric;
 var Jools;
 var Path;
