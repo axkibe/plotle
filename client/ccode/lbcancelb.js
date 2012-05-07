@@ -12,14 +12,14 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--'
 
-                       ,-,-,-.   ,-,---.  ,          .  ,-,---.
-                       `,| | |    '|___/  )   ,-. ," |-  '|___/
-                         | ; | .  ,|   \ /    |-' |- |   ,|   \
-                         '   `-' `-^---' `--' `-' |  `' `-^---'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ' ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                      ,   ,-,---.  ,--.                 .  ,-,---.
+                      )    '|___/ | `-' ,-. ,-. ,-. ,-. |   '|___/
+                     /     ,|   \ |   . ,-| | | |   |-' |   ,|   \
+                     `--' `-^---' `--'  `-^ ' ' `-' `-' `' `-^---'
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- Left Button on Mainboard.
- Log in / Log out
+ loginboard, cancel button
+ cancel
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -29,6 +29,7 @@
 /**
 | Imports
 */
+var CCode;
 var CCustom;
 var Jools;
 var shell;
@@ -36,7 +37,7 @@ var shell;
 /**
 | Exports
 */
-var CCode;
+var CMeth = null;
 
 /**
 | Capsule
@@ -45,32 +46,46 @@ var CCode;
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
-var debug         = Jools.debug;
-var immute        = Jools.immute;
-var is            = Jools.is;
-var isnon         = Jools.isnon;
-var isArray       = Jools.isArray;
-var log           = Jools.log;
-var subclass      = Jools.subclass;
+var debug    = Jools.debug;
+var immute   = Jools.immute;
+var is       = Jools.is;
+var isnon    = Jools.isnon;
+var log      = Jools.log;
+var subclass = Jools.subclass;
+var Util     = CCode.Util;
 
 /**
 | Constructor
 */
-var MBLeftB = CCode.MBLeftB = function(twig, board, inherit, name) {
+var LBCancelB = CCode.LBCancelB = function(twig, board, inherit, name) {
 	CCustom.call(this, twig, board, inherit, name);
 };
+subclass(LBCancelB, CCustom);
 
-subclass(MBLeftB, CCustom);
+LBCancelB.prototype.canFocus = function() {
+	return true;
+};
 
-MBLeftB.prototype.mousedown = function(p, shift, ctrl) {
+LBCancelB.prototype.input = function(text) {
+	this.board.cockpit.setCurBoard('MainBoard');
+};
+
+LBCancelB.prototype.specialKey = function(key) {
+	switch (key) {
+	case 'down' : this.board.cycleFocus(+1); return;
+	case 'up'   : this.board.cycleFocus(-1); return;
+	}
+	if (this.board.name == 'RegBoard'  ) { Util.clearRegister(this.board); }
+	if (this.board.name == 'LoginBoard') { Util.clearLogin   (this.board); }
+	this.board.cockpit.setCurBoard('MainBoard');
+};
+
+LBCancelB.prototype.mousedown = function(p, shift, ctrl) {
 	var r = CCustom.prototype.mousedown.call(this, p, shift, ctrl);
 	if (!r) return r;
 
-	switch (this.$captionText) {
-	case 'log in'  : this.board.cockpit.setCurBoard('LoginBoard'); break;
-	case 'log out' : CCode.Util.logout(this.board); break;
-	default : throw new Error('unknown state of leftB');
-	}
+	//if (this.board.name == 'RegBoard') { Util.clearRegister(this.board); }
+	this.board.cockpit.setCurBoard('MainBoard');
 	
 	shell.redraw = true;
 	return true;

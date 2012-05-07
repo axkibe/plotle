@@ -365,6 +365,7 @@ Server.prototype.registerFiles = function() {
 	registerFile('/ccode/mbswitchb.js',   'js',   1, 'client/ccode/mbswitchb.js'   );
 	registerFile('/ccode/mbrightb.js',    'js',   1, 'client/ccode/mbrightb.js'    );
 	registerFile('/ccode/lbloginb.js',    'js',   1, 'client/ccode/lbloginb.js'    );
+	registerFile('/ccode/lbcancelb.js',   'js',   1, 'client/ccode/lbcancelb.js'   );
 	registerFile('/cmeth.js',             'js',   1, 'client/cmeth.js'             );
 	registerFile('/cboard.js',            'js',   1, 'client/cboard.js'            );
 	registerFile('/switchpanel.js',       'js',   1, 'client/switchpanel.js'       );
