@@ -81,7 +81,7 @@ SwitchPanel = function() {
 
 	this.buttonDim = immute({
 		width  : 80,
-		height : 36,
+		height : 36
 	});
 
 	var x2 = 55;

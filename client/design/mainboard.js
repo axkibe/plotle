@@ -117,7 +117,7 @@ MainBoard.layout = {
 	copse : {
 	'leftB' : {  // TODO rename leftB
 		type       : 'Custom',
-		code       : 'mbLeftB',
+		code       : 'MBLeftB',
 		normaStyle : 'sides',
 		hoverStyle : 'highlight',
 		focusStyle : 'sides',
@@ -155,7 +155,7 @@ MainBoard.layout = {
 	
 	'left2B' : {
 		type       : 'Custom',
-		code       : 'mbLeft2B',
+		code       : 'MBLeft2B',
 		normaStyle : 'sides',
 		hoverStyle : 'highlight',
 		focusStyle : 'sides',
@@ -200,7 +200,7 @@ MainBoard.layout = {
 
 	'rightB' : {
 		type       : 'Custom',
-		code       : 'mbRightB',
+		code       : 'MBRightB',
 		normaStyle : 'sides',
 		hoverStyle : 'highlight',
 		focusStyle : 'sides',
@@ -238,7 +238,7 @@ MainBoard.layout = {
 	
 	'switchB'     : {
 		type       : 'Custom',
-		code       : 'mbSwitchB',
+		code       : 'MBSwitchB',
 		normaStyle : 'sides',
 		hoverStyle : 'highlight',
 		focusStyle : 'sides',
@@ -288,7 +288,7 @@ MainBoard.layout = {
 			type   : 'Frame',
 			pnw    : { type: 'Point', anchor: 'se', x: -450, y: -60 },
 			pse    : { type: 'Point', anchor: 'se', x: -125, y:   0 }
-		},
+		}
 	},
 	
 	'greet'       : {
@@ -330,7 +330,7 @@ MainBoard.layout = {
 		'greet',
 		'username',
 		'saycurrent',
-		'cspace',
+		'cspace'
 	]
 };
 

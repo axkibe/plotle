@@ -29,6 +29,8 @@
 | Imports
 */
 var CAccent;
+var CChat;
+var CCode;
 var CCustom;
 var CLabel;
 var CInput;
@@ -99,6 +101,15 @@ CBoard = function(name, inherit, cockpit, screensize) {
 | Creates a new cockpit component.
 */
 CBoard.prototype.newCC = function(twig, inherit, name) {
+	if (twig.code && twig.code !== '') {
+		var Proto = CCode[twig.code];
+		if (Proto) {
+			return new Proto(twig, this, inherit, name);
+		} else {
+			debug('WARN', 'TODO', 'no', twig.code); // TODO
+		}
+	}
+
 	switch(twig.type) {
 	case 'Chat'   : return new CChat  (twig, this, inherit, name);
 	case 'Custom' : return new CCustom(twig, this, inherit, name);

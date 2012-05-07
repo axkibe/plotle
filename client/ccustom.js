@@ -66,6 +66,7 @@ var log           = Jools.log;
 | Constructor.
 */
 CCustom = function(twig, board, inherit, name) {
+	if (twig.type !== 'Custom') { throw new Error('invalid twig type'); }
 	this.name    = name;
 	this.twig    = twig;
 	this.board   = board;

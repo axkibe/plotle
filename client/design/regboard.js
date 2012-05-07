@@ -12,12 +12,12 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--'
 
-                             .-,--.         ,-,---.               . 
-                              `|__/ ,-. ,-.  '|___/ ,-. ,-. ,-. ,-| 
-                              )| \  |-' | |  ,|   \ | | ,-| |   | | 
-                              `'  ` `-' `-| `-^---' `-' `-^ '   `-^ 
+                             .-,--.         ,-,---.               .
+                              `|__/ ,-. ,-.  '|___/ ,-. ,-. ,-. ,-|
+                              )| \  |-' | |  ,|   \ | | ,-| |   | |
+                              `'  ` `-' `-| `-^---' `-' `-^ '   `-^
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-                                         `'    
+                                         `'
  Design of the register board.
 
  Authors: Axel Kittenberger
@@ -235,7 +235,7 @@ Design.RegBoard.layout = {
 	},
 	'regB'      : {
 		type       : 'Custom',
-		code       : 'rbRegB',
+		code       : 'RBRegB',
 		normaStyle : 'button',
 		hoverStyle : 'buttonHover',
 		focusStyle : 'buttonFocus',
@@ -293,7 +293,7 @@ Design.RegBoard.layout = {
 	},
 	'cancelB'      : {
 		type       : 'Custom',
-		code       : 'rbCancelB',
+		code       : 'RBCancelB',
 		normaStyle : 'button',
 		hoverStyle : 'buttonHover',
 		focusStyle : 'buttonFocus',

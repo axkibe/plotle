@@ -12,10 +12,10 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--'
 
-                                       ,--.  ,--. .       .  
-                                      | `-' | `-' |-. ,-. |- 
-                                      |   . |   . | | ,-| |  
-                                      `--'  `--'  ' ' `-^ `' 
+                                       ,--.  ,--. .       .
+                                      | `-' | `-' |-. ,-. |-
+                                      |   . |   . | | ,-| |
+                                      `--'  `--'  ' ' `-^ `'
                       
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
@@ -29,10 +29,17 @@
 /**
 | Imports
 */
+var Caret;
 var CMeth;
+var Cockpit;
+var config;
 var Curve;
 var Fabric;
 var Jools;
+var Measure;
+var Path;
+var shell;
+var theme;
 
 /**
 | Exports
@@ -337,7 +344,7 @@ CChat.prototype.addMessage = function(msg) {
 	this.messages.push(msg);
 	if (this.messages.length > 10) { this.messages.unshift(); }
 	this.poke();
-}
+};
 
 /**
 | Mouse down.
@@ -372,14 +379,14 @@ CChat.prototype.pathILine = function(fabric, border, twist) {
 	var psex = w  - this.sideSlopeX;
 	var psey = fabric.height;
 	var pnwx = this.sideSlopeX;
-	var pnwy = psey - this.lineHeight - 2; 
+	var pnwy = psey - this.lineHeight - 2;
 
 	fabric.moveTo(                    0, psey);
 	fabric.beziTo(  7,-7, -15,  0, pnwx, pnwy);
 	fabric.lineTo(                 psex, pnwy);
 	fabric.beziTo( 15, 0,  -7, -7,    w, psey);
 	fabric.lineTo(                 pnwx, psey);
-}
+};
 
 /**
 | Pokes the component

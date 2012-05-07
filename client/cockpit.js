@@ -190,7 +190,7 @@ Cockpit.prototype.toggleSwitch = function() {
 	var swB = this.getBoard('MainBoard').cc.switchB;
 	swB.$active = this.switchActive;
 	swB.poke();
-}
+};
 
 /**
 | Redraws the cockpit.
