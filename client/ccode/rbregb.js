@@ -12,13 +12,14 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--'
 
-                                   ,--.,-,-,-.       .  .
-                                  | `-'`,| | |   ,-. |- |-.
-                                  |   .  | ; | . |-' |  | |
-                                  `--'   '   `-' `-' `' ' '
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
- Component methods, behavior definitions.
+                            .-,--. ,-,---. .-,--.         ,-,---. 
+                             `|__/  '|___/  `|__/ ,-. ,-.  '|___/ 
+                             )| \   ,|   \  )| \  |-' | |  ,|   \ 
+                             `'  ` `-^---'  `'  ` `-' `-| `-^---' 
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                                                       `'     
+ register board, register button
+ register/sign up
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -51,38 +52,35 @@ var log      = Jools.log;
 var subclass = Jools.subclass;
 var Util     = CCode.Util;
 
-/**
-| The container.
-*/
-CMeth = {
-	LoginBoard : {},
-	MainBoard  : {},
-	RegBoard   : {}
+var RBRegB = CCode.RBRegB = function(twig, board, inherit, name) {
+	CCustom.call(this, twig, board, inherit, name);
+};
+subclass(RBRegB, CCustom);
+
+RBRegB.prototype.canFocus = function() {
+	return true;
 };
 
-/**
-| The register button.
-*/
-CMeth.RegBoard.regB = {
-
-	canFocus :
-	function() { return true; },
-
-	input :
-	function(text) { Util.register(this.board); },
-
-	specialKey :
-	function(key) {
-		switch (key) {
-		case 'enter' : Util.register(this.board); return;
-		case 'down'  : this.board.cycleFocus(+1); return;
-		case 'up'    : this.board.cycleFocus(-1); return;
-		}
-	},
-
-	mousedown :
-	function(p, shift, ctrl) { Util.register(this.board); }
+RBRegB.prototype.input = function(text) {
+	Util.register(this.board);
 };
 
+RBRegB.prototype.specialKey = function(key) {
+	switch (key) {
+	case 'enter' : Util.register(this.board); return;
+	case 'down'  : this.board.cycleFocus(+1); return;
+	case 'up'    : this.board.cycleFocus(-1); return;
+	}
+};
+
+RBRegB.prototype.mousedown = function(p, shift, ctrl) {
+	var r = CCustom.prototype.mousedown.call(this, p, shift, ctrl);
+	if (!r) return r;
+
+	Util.register(this.board);
+	
+	shell.redraw = true;
+	return true;
+};
 
 })();

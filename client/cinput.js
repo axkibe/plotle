@@ -30,7 +30,6 @@
 | Imports
 */
 var CAccent;
-var CMeth;
 var Caret;
 var Cockpit;
 var Curve;
@@ -76,7 +75,6 @@ CInput = function(twig, board, inherit, name) {
 	this.twig    = twig;
 	this.board   = board;
 	this.name    = name;
-	this.methods = CMeth[board.name][name] || {};
 
 	var pnw  = this.pnw  = computePoint(twig.frame.pnw, board.iframe);
 	var pse  = this.pse  = computePoint(twig.frame.pse, board.iframe);
@@ -309,7 +307,6 @@ CInput.prototype.keyDel = function() {
 | User pressed return key.
 */
 CInput.prototype.keyEnter = function() {
-	if (this.methods.keyEnter) { return this.methods.keyEnter.call(this, this.board); }
 	this.board.cycleFocus(1);
 	return true;
 };

@@ -30,7 +30,6 @@
 | Imports
 */
 var Caret;
-var CMeth;
 var Cockpit;
 var config;
 var Curve;
@@ -75,7 +74,6 @@ CChat = function(twig, board, inherit, name) {
 	var pse      = this.pse    = computePoint(twig.frame.pse, board.iframe);
 	var iframe   = this.iframe = new Rect(Point.zero, pse.sub(pnw));
 
-	this.methods = CMeth[board.name][name] || {};
 	var fs = this.twig.fontStyle;
 
 	this.messages   = [ ];

@@ -29,7 +29,6 @@
 | Imports
 */
 var CAccent;
-var CMeth;
 var Cockpit;
 var Curve;
 var Jools;
@@ -70,7 +69,6 @@ CCustom = function(twig, board, inherit, name) {
 	this.name    = name;
 	this.twig    = twig;
 	this.board   = board;
-	this.methods = CMeth[board.name][name] || {};
 
 	var pnw      = this.pnw    = computePoint(twig.frame.pnw, board.iframe);
 	var pse      = this.pse    = computePoint(twig.frame.pse, board.iframe);
@@ -90,9 +88,7 @@ CCustom = function(twig, board, inherit, name) {
 | CCustoms can focus or not depending on their methods
 */
 CCustom.prototype.canFocus = function() {
-	if (!this.$visible) { return false; }
-	if (!this.methods.canFocus) { return false; }
-	return this.methods.canFocus();
+	return this.$visible;
 };
 
 /**
@@ -143,8 +139,6 @@ CCustom.prototype.getFabric = function(accent) {
 | Input
 */
 CCustom.prototype.input = function(text) {
-	if (!this.$visible) { return; }
-	if (this.methods.input) { this.methods.input.call(this, text); }
 	return true;
 };
 
@@ -152,8 +146,6 @@ CCustom.prototype.input = function(text) {
 | Input
 */
 CCustom.prototype.specialKey = function(key, shift, ctrl) {
-	if (!this.$visible) { return; }
-	if (this.methods.specialKey) { this.methods.specialKey.call(this, key, shift, ctrl); }
 	return true;
 };
 
@@ -173,7 +165,6 @@ CCustom.prototype.mousehover = function(p) {
 	system.setCursor('default');
 	this.board.setHover(this.name);
 
-	if (this.methods.mousehover) { this.methods.mousehover.call(this, p); }
 	return true;
 };
 
@@ -189,10 +180,7 @@ CCustom.prototype.mousedown = function(p, shift, ctrl) {
 	var pp = p.sub(this.pnw);
 	if (!fabric.within(this, 'path', pp))  { return false; }
 
-	if (this.methods.mousedown) {
-		this.methods.mousedown.call(this, p, shift, ctrl);
-		shell.redraw = true;
-	}
+	shell.redraw = true; // @@ needed?
 	return true;
 };
 

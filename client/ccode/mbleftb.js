@@ -59,7 +59,6 @@ var subclass      = Jools.subclass;
 var MBLeftB = CCode.MBLeftB = function(twig, board, inherit, name) {
 	CCustom.call(this, twig, board, inherit, name);
 };
-
 subclass(MBLeftB, CCustom);
 
 MBLeftB.prototype.mousedown = function(p, shift, ctrl) {
