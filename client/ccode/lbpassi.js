@@ -12,13 +12,15 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--'
 
-                                   ,--.,-,-,-.       .  .
-                                  | `-'`,| | |   ,-. |- |-.
-                                  |   .  | ; | . |-' |  | |
-                                  `--'   '   `-' `-' `' ' '
+
+                                ,   ,-,---. .-,--.             ,-_/
+                                )    '|___/  '|__/ ,-. ,-. ,-. '  |
+                               /     ,|   \  ,|    ,-| `-. `-. .^ |
+                               `--' `-^---'  `'    `-^ `-' `-' `--'
+
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- Component methods, behavior definitions.
+ login board, password input
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -29,6 +31,7 @@
 | Imports
 */
 var CCode;
+var CInput;
 var Jools;
 
 /**
@@ -52,37 +55,19 @@ var subclass = Jools.subclass;
 var Util     = CCode.Util;
 
 /**
-| The container.
+| Constructor
 */
-CMeth = {
-	LoginBoard : {},
-	MainBoard  : {},
-	RegBoard   : {}
+var LBPassI = CCode.LBPassI = function(twig, board, inherit, name) {
+	CInput.call(this, twig, board, inherit, name);
 };
+
+subclass(LBPassI, CInput);
 
 /**
-| The register button.
+| Password input field
 */
-CMeth.RegBoard.regB = {
-
-	canFocus :
-	function() { return true; },
-
-	input :
-	function(text) { Util.register(this.board); },
-
-	specialKey :
-	function(key) {
-		switch (key) {
-		case 'enter' : Util.register(this.board); return;
-		case 'down'  : this.board.cycleFocus(+1); return;
-		case 'up'    : this.board.cycleFocus(-1); return;
-		}
-	},
-
-	mousedown :
-	function(p, shift, ctrl) { Util.register(this.board); }
+LBPassI.prototype.keyEnter = function() {
+	Util.login(this.board);
 };
-
 
 })();

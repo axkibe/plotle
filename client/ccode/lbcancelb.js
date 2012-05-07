@@ -75,8 +75,7 @@ LBCancelB.prototype.specialKey = function(key) {
 	case 'down' : this.board.cycleFocus(+1); return;
 	case 'up'   : this.board.cycleFocus(-1); return;
 	}
-	if (this.board.name == 'RegBoard'  ) { Util.clearRegister(this.board); }
-	if (this.board.name == 'LoginBoard') { Util.clearLogin   (this.board); }
+	Util.clearLogin(this.board);
 	this.board.cockpit.setCurBoard('MainBoard');
 };
 
@@ -84,7 +83,7 @@ LBCancelB.prototype.mousedown = function(p, shift, ctrl) {
 	var r = CCustom.prototype.mousedown.call(this, p, shift, ctrl);
 	if (!r) return r;
 
-	//if (this.board.name == 'RegBoard') { Util.clearRegister(this.board); }
+	Util.clearLogin(this.board);
 	this.board.cockpit.setCurBoard('MainBoard');
 	
 	shell.redraw = true;

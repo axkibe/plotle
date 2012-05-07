@@ -97,10 +97,10 @@ Design.Pattern = {
 
 	'Custom' : {
 		must : {
-			'frame'      : 'Frame',
 			'caption'    : 'Label',
 			'code'       : 'String',
 			'curve'      : 'Curve',
+			'frame'      : 'Frame',
 			'normaStyle' : 'String',
 			'hoverStyle' : 'String',
 			'focusStyle' : 'String',
@@ -110,6 +110,7 @@ Design.Pattern = {
 
 	'Input'  : {
 		must : {
+			'code'       : 'String',
 			'frame'      : 'Frame',
 			'password'   : 'Boolean',
 			'normaStyle' : 'String',

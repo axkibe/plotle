@@ -147,6 +147,7 @@ LoginBoard.layout = {
 	},
 	'userI' : {
 		type       : 'Input',
+		code       : '',
 		password   :  false,
 		normaStyle : 'input',
 		focusStyle : 'inputfocus',
@@ -162,6 +163,7 @@ LoginBoard.layout = {
 	},
 	'passI' : {
 		type       : 'Input',
+		code       : 'LBPassI',
 		password   :  true,
 		normaStyle : 'input',
 		focusStyle : 'inputfocus',

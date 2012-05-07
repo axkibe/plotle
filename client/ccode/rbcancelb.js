@@ -12,13 +12,14 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--'
 
-                                   ,--.,-,-,-.       .  .
-                                  | `-'`,| | |   ,-. |- |-.
-                                  |   .  | ; | . |-' |  | |
-                                  `--'   '   `-' `-' `' ' '
+                        .-,--. ,-,---.  ,--.                 .  ,-,---.
+                         `|__/  '|___/ | `-' ,-. ,-. ,-. ,-. |   '|___/
+                         )| \   ,|   \ |   . ,-| | | |   |-' |   ,|   \
+                         `'  ` `-^---' `--'  `-^ ' ' `-' `-' `' `-^---'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- Component methods, behavior definitions.
+ register board, cancel button
+ cancel
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -29,7 +30,9 @@
 | Imports
 */
 var CCode;
+var CCustom;
 var Jools;
+var shell;
 
 /**
 | Exports
@@ -52,37 +55,39 @@ var subclass = Jools.subclass;
 var Util     = CCode.Util;
 
 /**
-| The container.
+| Constructor
 */
-CMeth = {
-	LoginBoard : {},
-	MainBoard  : {},
-	RegBoard   : {}
+var RBCancelB = CCode.RBCancelB = function(twig, board, inherit, name) {
+	CCustom.call(this, twig, board, inherit, name);
+};
+subclass(RBCancelB, CCustom);
+
+RBCancelB.prototype.canFocus = function() {
+	return true;
 };
 
-/**
-| The register button.
-*/
-CMeth.RegBoard.regB = {
-
-	canFocus :
-	function() { return true; },
-
-	input :
-	function(text) { Util.register(this.board); },
-
-	specialKey :
-	function(key) {
-		switch (key) {
-		case 'enter' : Util.register(this.board); return;
-		case 'down'  : this.board.cycleFocus(+1); return;
-		case 'up'    : this.board.cycleFocus(-1); return;
-		}
-	},
-
-	mousedown :
-	function(p, shift, ctrl) { Util.register(this.board); }
+RBCancelB.prototype.input = function(text) {
+	this.board.cockpit.setCurBoard('MainBoard');
 };
 
+RBCancelB.prototype.specialKey = function(key) {
+	switch (key) {
+	case 'down' : this.board.cycleFocus(+1); return;
+	case 'up'   : this.board.cycleFocus(-1); return;
+	}
+	Util.clearRegister(this.board);
+	this.board.cockpit.setCurBoard('MainBoard');
+};
+
+RBCancelB.prototype.mousedown = function(p, shift, ctrl) {
+	var r = CCustom.prototype.mousedown.call(this, p, shift, ctrl);
+	if (!r) return r;
+
+	Util.clearRegister(this.board);
+	this.board.cockpit.setCurBoard('MainBoard');
+	
+	shell.redraw = true;
+	return true;
+};
 
 })();

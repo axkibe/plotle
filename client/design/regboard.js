@@ -160,6 +160,7 @@ Design.RegBoard.layout = {
 	},
 	'userI' : {
 		type       : 'Input',
+		code       : '',
 		password   :  false,
 		normaStyle : 'input',
 		focusStyle : 'inputfocus',
@@ -175,6 +176,7 @@ Design.RegBoard.layout = {
 	},
 	'emailI' : {
 		type       : 'Input',
+		code       : '',
 		password   :  false,
 		normaStyle : 'input',
 		focusStyle : 'inputfocus',
@@ -190,6 +192,7 @@ Design.RegBoard.layout = {
 	},
 	'passI' : {
 		type       : 'Input',
+		code       : '',
 		password   :  true,
 		normaStyle : 'input',
 		focusStyle : 'inputfocus',
@@ -205,6 +208,7 @@ Design.RegBoard.layout = {
 	},
 	'pass2I' : {
 		type       : 'Input',
+		code       : '',
 		password   :  true,
 		normaStyle : 'input',
 		focusStyle : 'inputfocus',
@@ -220,6 +224,7 @@ Design.RegBoard.layout = {
 	},
 	'codeI' : {
 		type       : 'Input',
+		code       : '',
 		password   :  false,
 		normaStyle : 'input',
 		focusStyle : 'inputfocus',
