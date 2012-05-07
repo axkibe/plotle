@@ -285,13 +285,13 @@ CMeth = {
 | Left button control.
 | Login/Logout
 */
-CMeth.MainBoard.leftBC = {
+CMeth.MainBoard.leftB = {
 	mousedown :
 	function(p, shift, ctrl) {
 		switch (this.$captionText) {
 		case 'log in'  : this.board.cockpit.setCurBoard('LoginBoard'); break;
 		case 'log out' : logout(this.board); break;
-		default : throw new Error('unknown state of leftBC');
+		default : throw new Error('unknown state of leftB');
 		}
 	}
 
@@ -300,7 +300,7 @@ CMeth.MainBoard.leftBC = {
 /**
 | Switch push button
 */
-CMeth.MainBoard.switchBC = {
+CMeth.MainBoard.switchB = {
 	mousedown :
 	function(p, shift, ctrl) {
 		this.board.cockpit.toggleSwitch(); 
@@ -311,7 +311,7 @@ CMeth.MainBoard.switchBC = {
 | Second left button control.
 | Register
 */
-CMeth.MainBoard.left2BC = {
+CMeth.MainBoard.left2B = {
 
 	mousedown :
 	function(p, shift, ctrl) {
@@ -330,7 +330,7 @@ CMeth.MainBoard.left2BC = {
 /**
 | The login button
 */
-CMeth.LoginBoard.loginBC = {
+CMeth.LoginBoard.loginB = {
 
 	canFocus :
 	function() {
@@ -361,7 +361,7 @@ CMeth.LoginBoard.loginBC = {
 /**
 | The cancel button switches back to the MainBoard.
 */
-CMeth.LoginBoard.cancelBC = {
+CMeth.LoginBoard.cancelB = {
 
 	canFocus :
 	function() { return true; },
@@ -408,12 +408,12 @@ CMeth.LoginBoard.passI = {
 /**
 | The cancel button switches back to the MainBoard.
 */
-CMeth.RegBoard.cancelBC = CMeth.LoginBoard.cancelBC;
+CMeth.RegBoard.cancelB = CMeth.LoginBoard.cancelB;
 
 /**
 | The register button.
 */
-CMeth.RegBoard.regBC = {
+CMeth.RegBoard.regB = {
 
 	canFocus :
 	function() { return true; },

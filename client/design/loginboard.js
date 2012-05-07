@@ -52,26 +52,26 @@ var mbConsts   = Design.MainBoard.consts;
 /**
 | Login control
 */
-var loginBCW   = 70;
-var loginBCH   = 70;
-var loginBCXM  = loginBCW * magic / 2;
-var loginBCYM  = loginBCH * magic / 2;
+var loginBW   = 70;
+var loginBH   = 70;
+var loginBXM  = loginBW * magic / 2;
+var loginBYM  = loginBH * magic / 2;
 
 /**
 | Cancel control
 */
-var cancelBCW        = 54;
-var cancelBCH        = 54;
-var cancelBCXM       = cancelBCW * magic / 2;
-var cancelBCYM       = cancelBCH * magic / 2;
+var cancelBW  = 54;
+var cancelBH  = 54;
+var cancelBXM = cancelBW * magic / 2;
+var cancelBYM = cancelBH * magic / 2;
 
 /**
 | Forgot password control
 */
-var forgotBCW        = 110;
-var forgotBCH        = 22;
-var forgotBCXM       = forgotBCW * magic;
-var forgotBCYM       = forgotBCH * magic;
+var forgotBW        = 110;
+var forgotBH        = 22;
+var forgotBXM       = forgotBW * magic;
+var forgotBYM       = forgotBH * magic;
 
 /**
 | Login Board
@@ -175,7 +175,7 @@ LoginBoard.layout = {
 			pse    : { type: 'Point', anchor: 's', x:   95, y:  -14 }
 		}
 	},
-	'loginBC'      : {
+	'loginB'       : {
 		type       : 'Custom',
 		code       : 'lbLoginB',
 		normaStyle : 'button',
@@ -184,8 +184,8 @@ LoginBoard.layout = {
 		hofocStyle : 'buttonHofoc',
 		frame      : {
 			type   : 'Frame',
-			pnw    : { type: 'Point', anchor: 'se', x: -380,            y: -10 - loginBCH },
-			pse    : { type: 'Point', anchor: 'se', x: -380 + loginBCW, y: -10            }
+			pnw    : { type: 'Point', anchor: 'se', x: -380,           y: -10 - loginBH },
+			pse    : { type: 'Point', anchor: 'se', x: -380 + loginBW, y: -10           }
 		},
 		caption       : {
 			type      : 'Label',
@@ -204,36 +204,36 @@ LoginBoard.layout = {
 			'2' : {
 				type : 'BeziTo',
 				to   :  { type: 'Point', anchor: 'e', x: -1, y:  0 },
-				c1x  :  loginBCXM, c1y :          0,
-				c2x  :          0, c2y : -loginBCYM,
+				c1x  :  loginBXM, c1y :         0,
+				c2x  :         0, c2y : -loginBYM,
 				bx   : -1, by:  0
 			},
 			'3' : {
 				type : 'BeziTo',
 				to   :  { type: 'Point', anchor: 's', x:  0, y: -1 },
-				c1x  :          0, c1y :  loginBCYM,
-				c2x  :  loginBCXM, c2y :          0,
+				c1x  :         0, c1y :  loginBYM,
+				c2x  :  loginBXM, c2y :         0,
 				bx   :  0, by: -1
 			},
 			'4' : {
 				type : 'BeziTo',
 				to   :  { type: 'Point', anchor: 'w', x:  1, y:  0 },
-				c1x  : -loginBCXM, c1y :          0,
-				c2x  :          0, c2y :  loginBCYM,
+				c1x  : -loginBXM, c1y :         0,
+				c2x  :         0, c2y :  loginBYM,
 				bx   :  1, by:  0
 			},
 			'5' : {
 				type : 'BeziTo',
 				to   :  { type: 'Point', anchor: 'n', x:  0, y:  1 },
-				c1x  :          0, c1y : -loginBCYM,
-				c2x  : -loginBCXM, c2y :          0,
+				c1x  :         0, c1y : -loginBYM,
+				c2x  : -loginBXM, c2y :         0,
 				bx   :  0, by:  1
 			}},
 
 			ranks : [ '1', '2', '3', '4', '5' ]
 		}
 	},
-	'cancelBC'     : {
+	'cancelB'      : {
 		type       : 'Custom',
 		code       : 'lbCancelB',
 		normaStyle : 'button',
@@ -242,8 +242,8 @@ LoginBoard.layout = {
 		hofocStyle : 'buttonHofoc',
 		frame : {
 			type  : 'Frame',
-			pnw   : { type: 'Point', anchor: 'se', x: -300,             y: -10 - cancelBCH },
-			pse   : { type: 'Point', anchor: 'se', x: -300 + cancelBCW, y: -10 }
+			pnw   : { type: 'Point', anchor: 'se', x: -300,            y: -10 - cancelBH },
+			pse   : { type: 'Point', anchor: 'se', x: -300 + cancelBW, y: -10 }
 		},
 		caption : {
 			type      : 'Label',
@@ -262,43 +262,43 @@ LoginBoard.layout = {
 			'2' : {
 				type : 'BeziTo',
 				to   :  { type: 'Point', anchor: 'e', x: -1, y:  0 },
-				c1x  :  cancelBCXM, c1y :           0,
-				c2x  :           0, c2y : -cancelBCYM,
+				c1x  :  cancelBXM, c1y :          0,
+				c2x  :          0, c2y : -cancelBYM,
 				bx   : -1, by:  0
 			},
 			'3' : {
 				type : 'BeziTo',
 				to   :  { type: 'Point', anchor: 's', x:  0, y: -1 },
-				c1x  :           0, c1y :  cancelBCYM,
-				c2x  :  cancelBCXM, c2y :           0,
+				c1x  :          0, c1y :  cancelBYM,
+				c2x  :  cancelBXM, c2y :          0,
 				bx   :  0, by: -1
 			},
 			'4' : {
 				type : 'BeziTo',
 				to   :  { type: 'Point', anchor: 'w', x:  1, y:  0 },
-				c1x  : -cancelBCXM, c1y :          0,
-				c2x  :           0, c2y : cancelBCYM,
+				c1x  : -cancelBXM, c1y :         0,
+				c2x  :          0, c2y : cancelBYM,
 				bx   :  1, by:  0
 			},
 			'5' : {
 				type : 'BeziTo',
 				to   :  { type: 'Point', anchor: 'n', x:  0, y:  1 },
-				c1x  :           0, c1y : -cancelBCYM,
-				c2x  : -cancelBCXM, c2y :           0,
+				c1x  :          0, c1y : -cancelBYM,
+				c2x  : -cancelBXM, c2y :          0,
 				bx   :  0, by:  1
 			}},
 
 			ranks : [ '1', '2', '3', '4', '5' ]
 		}
 	/* @@
-	'forgotBC'     : {
+	'forgotB'     : {
 		type       : 'Custom',
 		style      : 'zero',
 		hoverStyle : 'zhighlight',
 		frame : {
 			type  : 'Frame',
-			pnw   : { type: 'Point', anchor: 'se', x: -240,             y: -10 - forgotBCH },
-			pse   : { type: 'Point', anchor: 'se', x: -240 + forgotBCW, y: -10 }
+			pnw   : { type: 'Point', anchor: 'se', x: -240,            y: -10 - forgotBH },
+			pse   : { type: 'Point', anchor: 'se', x: -240 + forgotBW, y: -10 }
 		},
 		caption : {
 			type      : 'Label',
@@ -317,29 +317,29 @@ LoginBoard.layout = {
 			'2' : {
 				type : 'BeziTo',
 				to   :  { type: 'Point', anchor: 'e', x: -1, y:  0 },
-				c1x  :  forgotBCXM, c1y :           0,
-				c2x  :           0, c2y : -forgotBCYM,
+				c1x  :  forgotBXM, c1y :          0,
+				c2x  :          0, c2y : -forgotBYM,
 				bx   : -1, by:  0
 			},
 			'3' : {
 				type : 'BeziTo',
 				to   :  { type: 'Point', anchor: 's', x:  0, y: -1 },
-				c1x  :           0, c1y :  forgotBCYM,
-				c2x  :  forgotBCXM, c2y :           0,
+				c1x  :          0, c1y :  forgotBYM,
+				c2x  :  forgotBXM, c2y :          0,
 				bx   :  0, by: -1
 			},
 			'4' : {
 				type : 'BeziTo',
 				to   :  { type: 'Point', anchor: 'w', x:  1, y:  0 },
-				c1x  : -forgotBCXM, c1y :          0,
-				c2x  :           0, c2y : forgotBCYM,
+				c1x  : -forgotBXM, c1y :         0,
+				c2x  :          0, c2y : forgotBYM,
 				bx   :  1, by:  0
 			},
 			'5' : {
 				type : 'BeziTo',
 				to   :  { type: 'Point', anchor: 'n', x:  0, y:  1 },
-				c1x  :           0, c1y : -forgotBCYM,
-				c2x  : -forgotBCXM, c2y :           0,
+				c1x  :          0, c1y : -forgotBYM,
+				c2x  : -forgotBXM, c2y :          0,
 				bx   :  0, by:  1
 			}},
 
@@ -352,8 +352,8 @@ LoginBoard.layout = {
 	ranks : [
 		'userI',
 		'passI',
-		'loginBC',
-		'cancelBC',
+		'loginB',
+		'cancelB',
 		'loginL',
 		'userL',
 		'passL',

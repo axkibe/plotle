@@ -173,13 +173,13 @@ Cockpit.prototype.setUser = function(user) {
 	ulabel.text = user;
 	ulabel.poke();
 
-	var leftBC = mainboard.cc.leftBC;
-	leftBC.$captionText = this.$amVisitor ? 'log in' : 'log out';
-	leftBC.poke();
+	var leftB = mainboard.cc.leftB;
+	leftB.$captionText = this.$amVisitor ? 'log in' : 'log out';
+	leftB.poke();
 
-	var left2BC = mainboard.cc.left2BC;
-	left2BC.$visible = this.$amVisitor;
-	left2BC.poke();
+	var left2B = mainboard.cc.left2B;
+	left2B.$visible = this.$amVisitor;
+	left2B.poke();
 };
 
 /*
@@ -187,9 +187,9 @@ Cockpit.prototype.setUser = function(user) {
 */
 Cockpit.prototype.toggleSwitch = function() {
 	this.switchActive = !this.switchActive;
-	var swBC = this.getBoard('MainBoard').cc.switchBC;
-	swBC.$active = this.switchActive;
-	swBC.poke();
+	var swB = this.getBoard('MainBoard').cc.switchB;
+	swB.$active = this.switchActive;
+	swB.poke();
 }
 
 /**

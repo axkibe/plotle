@@ -52,18 +52,18 @@ var mbConsts   = Design.MainBoard.consts;
 /**
 | Register control
 */
-var regBCW        = 110;
-var regBCH        = 110;
-var regBCXM       = regBCW * magic / 2;
-var regBCYM       = regBCH * magic / 2;
+var regBW        = 110;
+var regBH        = 110;
+var regBXM       = regBW * magic / 2;
+var regBYM       = regBH * magic / 2;
 
 /**
 | Cancel control
 */
-var canrBCW        = 70;
-var canrBCH        = 70;
-var canrBCXM       = canrBCW * magic / 2;
-var canrBCYM       = canrBCH * magic / 2;
+var canrBW        = 70;
+var canrBH        = 70;
+var canrBXM       = canrBW * magic / 2;
+var canrBYM       = canrBH * magic / 2;
 
 Design.RegBoard = { type   : 'Design' };
 
@@ -233,7 +233,7 @@ Design.RegBoard.layout = {
 			pse    : { type: 'Point', anchor: 's', x:   95, y:   -52 }
 		}
 	},
-	'regBC'      : {
+	'regB'      : {
 		type       : 'Custom',
 		code       : 'rbRegB',
 		normaStyle : 'button',
@@ -242,8 +242,8 @@ Design.RegBoard.layout = {
 		hofocStyle : 'buttonHofoc',
 		frame      : {
 			type   : 'Frame',
-			pnw    : { type: 'Point', anchor: 'se', x: -360,          y: -100 - regBCH   },
-			pse    : { type: 'Point', anchor: 'se', x: -360 + regBCW, y: -100            }
+			pnw    : { type: 'Point', anchor: 'se', x: -360,         y: -100 - regBH },
+			pse    : { type: 'Point', anchor: 'se', x: -360 + regBW, y: -100         }
 		},
 		caption       : {
 			type      : 'Label',
@@ -262,36 +262,36 @@ Design.RegBoard.layout = {
 			'2' : {
 				type : 'BeziTo',
 				to   :  { type: 'Point', anchor: 'e', x: -1, y:  0 },
-				c1x  :  regBCXM, c1y :        0,
-				c2x  :        0, c2y : -regBCYM,
+				c1x  :  regBXM, c1y :       0,
+				c2x  :       0, c2y : -regBYM,
 				bx   : -1, by:  0
 			},
 			'3' : {
 				type : 'BeziTo',
 				to   :  { type: 'Point', anchor: 's', x:  0, y: -1 },
-				c1x  :        0, c1y :  regBCYM,
-				c2x  :  regBCXM, c2y :        0,
+				c1x  :       0, c1y :  regBYM,
+				c2x  :  regBXM, c2y :       0,
 				bx   :  0, by: -1
 			},
 			'4' : {
 				type : 'BeziTo',
 				to   :  { type: 'Point', anchor: 'w', x:  1, y:  0 },
-				c1x  : -regBCXM, c1y :        0,
-				c2x  :        0, c2y :  regBCYM,
+				c1x  : -regBXM, c1y :       0,
+				c2x  :       0, c2y :  regBYM,
 				bx   :  1, by:  0
 			},
 			'5' : {
 				type : 'BeziTo',
 				to   :  { type: 'Point', anchor: 'n', x:  0, y:  1 },
-				c1x  :        0, c1y : -regBCYM,
-				c2x  : -regBCXM, c2y :        0,
+				c1x  :       0, c1y : -regBYM,
+				c2x  : -regBXM, c2y :       0,
 				bx   :  0, by:  1
 			}},
 
 			ranks : [ '1', '2', '3', '4', '5' ]
 		}
 	},
-	'cancelBC'     : {
+	'cancelB'      : {
 		type       : 'Custom',
 		code       : 'rbCancelB',
 		normaStyle : 'button',
@@ -300,8 +300,8 @@ Design.RegBoard.layout = {
 		hofocStyle : 'buttonHofoc',
 		frame : {
 			type  : 'Frame',
-			pnw   : { type: 'Point', anchor: 'se', x: -230,           y: -60 - canrBCH },
-			pse   : { type: 'Point', anchor: 'se', x: -230 + canrBCW, y: -60 }
+			pnw   : { type: 'Point', anchor: 'se', x: -230,          y: -60 - canrBH },
+			pse   : { type: 'Point', anchor: 'se', x: -230 + canrBW, y: -60 }
 		},
 		caption : {
 			type      : 'Label',
@@ -320,29 +320,29 @@ Design.RegBoard.layout = {
 			'2' : {
 				type : 'BeziTo',
 				to   :  { type: 'Point', anchor: 'e', x: -1, y:  0 },
-				c1x  :  canrBCXM, c1y :         0,
-				c2x  :         0, c2y : -canrBCYM,
+				c1x  :  canrBXM, c1y :        0,
+				c2x  :        0, c2y : -canrBYM,
 				bx   : -1, by:  0
 			},
 			'3' : {
 				type : 'BeziTo',
 				to   :  { type: 'Point', anchor: 's', x:  0, y: -1 },
-				c1x  :         0, c1y :  canrBCYM,
-				c2x  :  canrBCXM, c2y :         0,
+				c1x  :        0, c1y :  canrBYM,
+				c2x  :  canrBXM, c2y :        0,
 				bx   :  0, by: -1
 			},
 			'4' : {
 				type : 'BeziTo',
 				to   :  { type: 'Point', anchor: 'w', x:  1, y:  0 },
-				c1x  : -canrBCXM, c1y :        0,
-				c2x  :         0, c2y : canrBCYM,
+				c1x  : -canrBXM, c1y :       0,
+				c2x  :        0, c2y : canrBYM,
 				bx   :  1, by:  0
 			},
 			'5' : {
 				type : 'BeziTo',
 				to   :  { type: 'Point', anchor: 'n', x:  0, y:  1 },
-				c1x  :         0, c1y : -canrBCYM,
-				c2x  : -canrBCXM, c2y :         0,
+				c1x  :        0, c1y : -canrBYM,
+				c2x  : -canrBXM, c2y :        0,
 				bx   :  0, by:  1
 			}},
 
@@ -356,9 +356,9 @@ Design.RegBoard.layout = {
 		'passI',
 		'pass2I',
 		'codeI',
-		'regBC',
-		'cancelBC',
-		//'forgotBC',
+		'regB',
+		'cancelB',
+		//'forgotB',
 		'regL',
 		'userL',
 		'emailL',

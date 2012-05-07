@@ -57,14 +57,14 @@ var sideB2W = 190;
 /**
 | switch control
 */
-var switchBCW  = 170;
-var switchBCH  =  32;
+var switchBW  = 170;
+var switchBH  =  32;
 
 /**
 | help control
 */
-var helpBCW  = 150;
-var helpBCH  =  23;
+var helpBW  = 150;
+var helpBH  =  23;
 
 var MainBoard = Design.MainBoard = { type : 'Design' };
 
@@ -115,7 +115,7 @@ MainBoard.curve = {
 MainBoard.layout = {
 	type  : 'Layout',
 	copse : {
-	'leftBC' : {  // TODO rename leftB
+	'leftB' : {  // TODO rename leftB
 		type       : 'Custom',
 		code       : 'mbLeftB',
 		normaStyle : 'sides',
@@ -153,7 +153,7 @@ MainBoard.layout = {
 		}
 	},
 	
-	'left2BC' : {
+	'left2B' : {
 		type       : 'Custom',
 		code       : 'mbLeft2B',
 		normaStyle : 'sides',
@@ -198,7 +198,7 @@ MainBoard.layout = {
 		}
 	},
 
-	'rightBC' : {
+	'rightB' : {
 		type       : 'Custom',
 		code       : 'mbRightB',
 		normaStyle : 'sides',
@@ -236,7 +236,7 @@ MainBoard.layout = {
 		}
 	},
 	
-	'switchBC'     : {
+	'switchB'     : {
 		type       : 'Custom',
 		code       : 'mbSwitchB',
 		normaStyle : 'sides',
@@ -245,8 +245,8 @@ MainBoard.layout = {
 		hofocStyle : 'highlight',
 		frame      : {
 			type   : 'Frame',
-			pnw    : { type: 'Point', anchor: 'n', x: -half(switchBCW), y:         0 },
-			pse    : { type: 'Point', anchor: 'n', x:  half(switchBCW), y: switchBCH }
+			pnw    : { type: 'Point', anchor: 'n', x: -half(switchBW), y:         0 },
+			pse    : { type: 'Point', anchor: 'n', x:  half(switchBW), y: switchBH }
 		},
 		caption       : {
 			type      : 'Label',
@@ -322,10 +322,10 @@ MainBoard.layout = {
 
 
 	ranks : [
-		'leftBC',
-		'left2BC',
-		'rightBC',
-		'switchBC',
+		'leftB',
+		'left2B',
+		'rightB',
+		'switchB',
 		'chat',
 		'greet',
 		'username',
