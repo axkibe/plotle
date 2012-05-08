@@ -12,14 +12,13 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--'
 
-                            .-,--. ,-,---. .-,--.         ,-,---.
-                             `|__/  '|___/  `|__/ ,-. ,-.  '|___/
-                             )| \   ,|   \  )| \  |-' | |  ,|   \
-                             `'  ` `-^---'  `'  ` `-' `-| `-^---'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-                                                       `'
- register board, register button
- register/sign up
+                        ,-,-,-.             ,-,---.               .
+                        `,| | |   ,-. . ,-.  '|___/ ,-. ,-. ,-. ,-|
+                          | ; | . ,-| | | |  ,|   \ | | ,-| |   | |
+                          '   `-' `-^ ' ' ' `-^---' `-' `-^ '   `-^
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+
+ the cockpits mainboard
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -29,15 +28,17 @@
 /**
 | Imports
 */
-var CCode;
-var CCustom;
+var CBoard;
+var config;
+var Fabric;
 var Jools;
-var shell;
+var SwitchPanel;
+var theme;
 
 /**
 | Exports
 */
-var CMeth = null;
+var MainBoard = null;
 
 /**
 | Capsule
@@ -47,42 +48,64 @@ var CMeth = null;
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
 var debug    = Jools.debug;
+var half     = Fabric.half;
 var immute   = Jools.immute;
 var is       = Jools.is;
 var isnon    = Jools.isnon;
-var log      = Jools.log;
 var subclass = Jools.subclass;
-var Util     = CCode.Util;
+var Point    = Fabric.Point;
 
-var RBRegB = CCode.RBRegB = function(twig, board, inherit, name) {
-	CCustom.call(this, twig, board, inherit, name);
+/**
+| Constructor
+*/
+MainBoard = function(name, inherit, cockpit, screen) {
+	CBoard.call(this, name, inherit, cockpit, screen);
+	// the switch panel
+	var swidim       = theme.switchpanel.dimensions;
+	this.switchpanel = new SwitchPanel(new Point(
+		half(screen.x) - swidim.a,
+		screen.y- 59
+	));
 };
-subclass(RBRegB, CCustom);
+subclass(MainBoard, CBoard);
 
-RBRegB.prototype.canFocus = function() {
-	return true;
+/*
+| Toggles the switch board
+*/
+MainBoard.prototype.toggleSwitch = function() {
+	this.switchActive = !this.switchActive;
+	var swb = this.cc.switchB;
+	swb.$active = this.switchActive;
+	swb.poke();
 };
 
-RBRegB.prototype.input = function(text) {
-	Util.register(this.board);
-};
-
-RBRegB.prototype.specialKey = function(key) {
-	switch (key) {
-	case 'enter' : Util.register(this.board); return;
-	case 'down'  : this.board.cycleFocus(+1); return;
-	case 'up'    : this.board.cycleFocus(-1); return;
+/**
+| Draws the mainboard
+*/
+MainBoard.prototype.draw = function(fabric) {
+	if (this.switchActive) {
+		this.switchpanel.draw(fabric);
 	}
+	fabric.drawImage(this.getFabric(), this.pnw);
 };
 
-RBRegB.prototype.mousedown = function(p, shift, ctrl) {
-	var r = CCustom.prototype.mousedown.call(this, p, shift, ctrl);
-	if (!r) return r;
-
-	Util.register(this.board);
+/**
+| Returns true if point is on this board
+*/
+MainBoard.prototype.mousehover = function(p, shift, ctrl) {
+	if (this.switchActive) {
+		var pp = p.sub(this.pnw);
+		var swb = this.cc.switchB;
+		var over = swb.mousehover(pp);
+		if (!over) {
+			over = this.switchpanel.mousehover(p);
+			if (!over) {
+				this.toggleSwitch();
+			}
+		}
+	}
 	
-	shell.redraw = true;
-	return true;
+	return CBoard.prototype.mousehover.call(this, p, shift, ctrl);
 };
 
 })();

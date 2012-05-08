@@ -66,7 +66,7 @@ MBSwitchB.prototype.mousedown = function(p, shift, ctrl) {
 	var r = CCustom.prototype.mousedown.call(this, p, shift, ctrl);
 	if (!r) return r;
 
-	this.board.cockpit.toggleSwitch();
+	this.board.toggleSwitch();
 	
 	shell.redraw = true;
 	return true;

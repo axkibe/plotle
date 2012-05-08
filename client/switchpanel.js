@@ -72,9 +72,10 @@ var Rect         = Fabric.Rect;
 /**
 | Constructor
 */
-SwitchPanel = function() {
+SwitchPanel = function(psw) {
 	var swidim = theme.switchpanel.dimensions;
 	var iframe = this.iframe = new Rect(Point.zero, new Point(swidim.a * 2, swidim.b));
+	this.pnw = psw.sub(0, this.iframe.height);
 	this.gradientPC = new Point(half(iframe.width), half(iframe.height) + 600);
 	this.gradientR0 = 0;
 	this.gradientR1 = 650;
@@ -95,7 +96,16 @@ SwitchPanel = function() {
 		ne : new Point(mx + x2, hh + y2),
 		nw : new Point(mx - x2, hh + y2)
 	};
+	this.$fadeTimer  = null;
+	this.$fade       = false;
 };
+
+/**
+| Draws the switchpanel.
+*/
+SwitchPanel.prototype.draw = function(fabric) {
+	fabric.drawImage(this.getFabric(), this.pnw);
+}
 
 /**
 | Paths the boards frame
@@ -185,5 +195,25 @@ SwitchPanel.prototype.poke = function() {
 	// this.$fabric = null;  @@
 	shell.redraw = true;
 };
+
+/**
+| Mouse hover.
+*/
+SwitchPanel.prototype.mousehover = function(p) {
+	p = p.sub(this.pnw);
+	var pnw = this.iframe.pnw;
+	var pse = this.iframe.pse;
+
+	// @@ use iframe.within
+	if (p.x < pnw.x || p.y < pnw.y || p.x > pse.x || p.y > pse.y) {
+		return false;
+	}
+
+	var fabric = this.getFabric();
+	if (!fabric.within(this, 'pathFrame', p))  { return false; }
+
+	return true;
+};
+
 
 })();

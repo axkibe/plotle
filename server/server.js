@@ -359,7 +359,9 @@ Server.prototype.registerFiles = function() {
 	registerFile('/cinput.js',            'js',   1, 'client/cinput.js'            );
 	registerFile('/clabel.js',            'js',   1, 'client/clabel.js'            );
 	registerFile('/cchat.js',             'js',   1, 'client/cchat.js'             );
+	registerFile('/cboard.js',            'js',   1, 'client/cboard.js'            );
 	registerFile('/ccode/util.js',        'js',   1, 'client/ccode/util.js'        );
+	registerFile('/ccode/mainboard.js',   'js',   1, 'client/ccode/mainboard.js'   );
 	registerFile('/ccode/mbleftb.js',     'js',   1, 'client/ccode/mbleftb.js'     );
 	registerFile('/ccode/mbleft2b.js',    'js',   1, 'client/ccode/mbleft2b.js'    );
 	registerFile('/ccode/mbswitchb.js',   'js',   1, 'client/ccode/mbswitchb.js'   );
@@ -369,7 +371,6 @@ Server.prototype.registerFiles = function() {
 	registerFile('/ccode/lbpassi.js',     'js',   1, 'client/ccode/lbpassi.js'     );
 	registerFile('/ccode/rbcancelb.js',   'js',   1, 'client/ccode/rbcancelb.js'   );
 	registerFile('/ccode/rbregb.js',      'js',   1, 'client/ccode/rbregb.js'      );
-	registerFile('/cboard.js',            'js',   1, 'client/cboard.js'            );
 	registerFile('/switchpanel.js',       'js',   1, 'client/switchpanel.js'       );
 	registerFile('/cockpit.js',           'js',   1, 'client/cockpit.js'           );
 	registerFile('/action.js',            'js',   1, 'client/action.js'            );

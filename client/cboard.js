@@ -166,6 +166,13 @@ CBoard.prototype.getFabric = function() {
 };
 
 /**
+| Draws the board
+*/
+CBoard.prototype.draw = function(fabric) {
+	fabric.drawImage(this.getFabric(), this.pnw);
+};
+
+/**
 | Draws the caret.
 */
 CBoard.prototype.drawCaret = function() {

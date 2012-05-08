@@ -33,12 +33,12 @@ var Curve;
 var Design;
 var Fabric;
 var Jools;
+var MainBoard;
 var Path;
-var SwitchPanel;
-var Tree;
 var theme;
-var system;
+var Tree;
 var shell;
+var system;
 
 /**
 | Exports
@@ -80,9 +80,6 @@ Cockpit = function() {
 		RegBoard   : null
 	};
 
-	// the switch panel
-	this.switchpanel = new SwitchPanel();
-
 	this._curSpace   = null;
 	this._message    = null;
 };
@@ -121,15 +118,22 @@ Cockpit.prototype.getBoard = function(name) {
 	if (cboard &&
 		cboard.screensize.x === fabric.width &&
 		cboard.screensize.y === fabric.height)
-	{
-		return cboard;
-	} else {
-		return this.boards[name] = new CBoard(
-			name,
-			cboard,
-			this,
-			new Point(fabric.width, fabric.height));
+	{ return cboard; }
+	
+	var Proto;
+	switch(name) {
+	case 'MainBoard': Proto = MainBoard; break;
+	default         : Proto = CBoard;    break;
 	}
+
+	var board = new Proto(
+		name,
+		cboard,
+		this,
+		new Point(fabric.width, fabric.height)
+	);
+
+	return this.boards[name] = board;
 };
 
 /**
@@ -182,28 +186,12 @@ Cockpit.prototype.setUser = function(user) {
 	left2B.poke();
 };
 
-/*
-| Toggles the switch board
-*/
-Cockpit.prototype.toggleSwitch = function() {
-	this.switchActive = !this.switchActive;
-	var swB = this.getBoard('MainBoard').cc.switchB;
-	swB.$active = this.switchActive;
-	swB.poke();
-};
-
 /**
 | Redraws the cockpit.
 */
 Cockpit.prototype.draw = function() {
-	if (this.switchActive) {
-		var swidim = theme.switchpanel.dimensions;
-		var pnw = new Point(half(this.fabric.width) - swidim.a, this.fabric.height - swidim.b - 59);
-		this.fabric.drawImage(this.switchpanel.getFabric(), pnw);
-	}
+	this.curBoard().draw(this.fabric);
 
-	var cb = this.curBoard();
-	this.fabric.drawImage(cb.getFabric(), cb.pnw);
 };
 
 /**
