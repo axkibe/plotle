@@ -72,11 +72,12 @@ var Rect         = Fabric.Rect;
 /**
 | Constructor
 */
-SwitchPanel = function(board, psw) {
-	this.board = board;
-	var swidim = theme.switchpanel.dimensions;
-	var iframe = this.iframe = new Rect(Point.zero, new Point(swidim.a * 2, swidim.b));
-	this.pnw = psw.sub(0, this.iframe.height);
+SwitchPanel = function(board, current, psw) {
+	this.board      = board;
+	this.current    = current;
+	var swidim      = theme.switchpanel.dimensions;
+	var iframe      = this.iframe = new Rect(Point.zero, new Point(swidim.a * 2, swidim.b));
+	this.pnw        = psw.sub(0, this.iframe.height);
 	this.gradientPC = new Point(half(iframe.width), half(iframe.height) + 600);
 	this.gradientR0 = 0;
 	this.gradientR1 = 650;
@@ -97,8 +98,10 @@ SwitchPanel = function(board, psw) {
 		ne : new Point(mx + x2, hh + y2),
 		nw : new Point(mx - x2, hh + y2)
 	};
-	this.$fadeTimer  = null;
-	this.$fade       = false;
+	this.$fabric    = null;
+	this.$fadeTimer = null;
+	this.$fade      = false;
+	this.$hover     = null;
 };
 		
 /**
@@ -186,6 +189,20 @@ SwitchPanel.prototype.pathButton = function(fabric, border, twist, dir) {
 };
 
 /**
+| Paints button dir on the fabric
+*/
+SwitchPanel.prototype._paintButton = function(fabric, dir) {
+	var style;
+	if (dir === this.$hover) {
+		style = dir === this.current ? theme.switchpanel.curhov  : theme.switchpanel.hover;
+	} else {
+		style = dir === this.current ? theme.switchpanel.current : theme.switchpanel.space;
+	}
+
+	fabric.paint(style, this, 'pathButton', dir);
+}
+
+/**
 | Draws the contents.
 | @@ Caching
 */
@@ -194,10 +211,9 @@ SwitchPanel.prototype.getFabric = function() {
 	var fabric = new Fabric(iframe);
 
 	fabric.fill(theme.switchpanel.style.fill, this, 'pathFrame');
-
-	fabric.paint(theme.switchpanel.space, this, 'pathButton', 'nw');
-	fabric.paint(theme.switchpanel.space, this, 'pathButton', 'n' );
-	fabric.paint(theme.switchpanel.space, this, 'pathButton', 'ne');
+	this._paintButton(fabric, 'nw');
+	this._paintButton(fabric, 'n');
+	this._paintButton(fabric, 'ne');
 
 	fabric.fontStyle('14px ' + theme.defaultFont, 'black', 'center', 'middle');
 	var bd = this.buttonDim;
@@ -210,7 +226,15 @@ SwitchPanel.prototype.getFabric = function() {
 	fabric.fillText('Your Home', bp.nw.x, bp.nw.y);
 	
 	fabric.fontStyle('12px ' + theme.defaultFont, 'black', 'center', 'middle');
-	fabric.fillText('A space view&editable by everyone', cx, iframe.height - 12);
+	
+	var text;
+	switch(this.$hover || this.current) {
+	case 'n'  : text = 'Welcome, public read-only'; break;
+	case 'ne' : text = 'Sandbox, public read- & writeable'; break;
+	case 'nw' : text = 'Your Home, private to you'; break;
+	default: throw new Error('no valid space text');
+	}
+	fabric.fillText(text, cx, iframe.height - 12);
 	
 	fabric.edge(theme.switchpanel.style.edge, this, 'pathFrame');
 
@@ -226,7 +250,7 @@ SwitchPanel.prototype.getFabric = function() {
 | Clears caches.
 */
 SwitchPanel.prototype.poke = function() {
-	// this.$fabric = null;  @@
+	this.$fabric = null;
 	shell.redraw = true;
 };
 
@@ -234,7 +258,6 @@ SwitchPanel.prototype.poke = function() {
 | Returns true if p is within the panel
 */
 SwitchPanel.prototype.within = function(p) {
-	p = p.sub(this.pnw);
 	var pnw = this.iframe.pnw;
 	var pse = this.iframe.pse;
 
@@ -251,6 +274,7 @@ SwitchPanel.prototype.within = function(p) {
 */
 SwitchPanel.prototype.mousehover = function(p) {
 	var self = this;
+	p = p.sub(this.pnw);
 	var w = this.within(p);
 	if (!w) {
 		if (!this.$fade) {
@@ -260,6 +284,16 @@ SwitchPanel.prototype.mousehover = function(p) {
 		return false;
 	} else {
 		this.cancelFade();
+		var fabric = this.getFabric();
+		var hd = null;
+		if (fabric.within(this, 'pathButton', p, 'n' )) { hd = 'n';  } else
+		if (fabric.within(this, 'pathButton', p, 'ne')) { hd = 'ne'; } else
+		if (fabric.within(this, 'pathButton', p, 'nw')) { hd = 'nw'; } 
+		if (this.$hover !== hd) {
+			this.$hover  = hd;
+			this.poke();
+		}
+		system.setCursor('default');
 	}
 
 	return true;

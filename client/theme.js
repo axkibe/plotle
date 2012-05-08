@@ -255,16 +255,30 @@ theme = {
 				{ border: 0, width : 1, color : 'rgb( 94, 94,  0)' }
 			]
 		},
-		
+
 		space : {
 			fill : 'rgba(255, 255, 255, 0.8)',
 			edge : [
 				{ border: 0, width : 0.5, color : 'black' }
 			]
 		},
+		
+		current  : {
+			fill : 'rgba(255, 255, 255, 0.15)',
+			edge : [
+				{ border: 0, width : 0.5, color : 'black' }
+			]
+		},
+		
+		curhov  : {
+			fill : 'rgba(255, 188, 88, 0.3)',
+			edge : [
+				{ border: 0, width : 0.5, color : 'black' }
+			]
+		},
 
 		hover : {
-			fill : 'rgba(255, 188, 88, 1)',
+			fill : 'rgba(255, 188, 88, 0.8)',
 			edge : [
 				{ border: 0, width : 0.5, color : 'black' }
 			]

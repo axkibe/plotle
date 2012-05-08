@@ -62,7 +62,8 @@ MainBoard = function(name, inherit, cockpit, screen) {
 	CBoard.call(this, name, inherit, cockpit, screen);
 	// the switch panel
 	var swidim       = theme.switchpanel.dimensions;
-	this.switchpanel = new SwitchPanel(this, new Point(
+	// TODO true current
+	this.switchpanel = new SwitchPanel(this, 'n', new Point(
 		half(screen.x) - swidim.a,
 		screen.y- 59
 	));
