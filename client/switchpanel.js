@@ -207,6 +207,7 @@ SwitchPanel.prototype._paintButton = function(fabric, dir) {
 | @@ Caching
 */
 SwitchPanel.prototype.getFabric = function() {
+	if (!config.debug.noCache && this.$fabric) { return $fabric; }
 	var iframe = this.iframe;
 	var fabric = new Fabric(iframe);
 
@@ -270,33 +271,55 @@ SwitchPanel.prototype.within = function(p) {
 };
 
 /**
+| Mouse down.
+*/
+SwitchPanel.prototype.mousedown = function(p) {
+	p = p.sub(this.pnw);
+	if (!this.within(p)) { return null; }
+
+	var button = '';
+	var fabric = this.getFabric();
+	if (fabric.within(this, 'pathButton', p, 'n' )) { button = 'n';  } else
+	if (fabric.within(this, 'pathButton', p, 'ne')) { button = 'ne'; } else
+	if (fabric.within(this, 'pathButton', p, 'nw')) { button = 'nw'; } 
+
+	if (button) {
+		debug('BUTTON: ' + button);
+	}
+
+	return false;
+};
+
+/**
 | Mouse hover.
 */
 SwitchPanel.prototype.mousehover = function(p) {
 	var self = this;
 	p = p.sub(this.pnw);
 	var w = this.within(p);
+	var hd = null;
+
 	if (!w) {
 		if (!this.$fade) {
 			this.$fade = 1 - theme.fade.step;
 			this.$fadeTimer = system.setTimer(theme.fade.time, function() { self.fadeout(); });
 		}
-		return false;
 	} else {
 		this.cancelFade();
 		var fabric = this.getFabric();
-		var hd = null;
+		system.setCursor('default');
+
 		if (fabric.within(this, 'pathButton', p, 'n' )) { hd = 'n';  } else
 		if (fabric.within(this, 'pathButton', p, 'ne')) { hd = 'ne'; } else
 		if (fabric.within(this, 'pathButton', p, 'nw')) { hd = 'nw'; } 
-		if (this.$hover !== hd) {
-			this.$hover  = hd;
-			this.poke();
-		}
-		system.setCursor('default');
 	}
 
-	return true;
+	if (this.$hover !== hd) {
+		this.$hover  = hd;
+		this.poke();
+	}
+
+	return w;
 };
 
 

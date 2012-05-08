@@ -91,6 +91,18 @@ MainBoard.prototype.draw = function(fabric) {
 };
 
 /**
+| Mouse down.
+*/
+MainBoard.prototype.mousedown = function(p, shift, ctrl) {
+	if (this.switchActive) {
+		var res = this.switchpanel.mousedown(p);
+		if (res !== null) { return res; }
+	}
+	
+	return CBoard.prototype.mousedown.call(this, p, shift, ctrl);
+};
+
+/**
 | Returns true if point is on this board
 */
 MainBoard.prototype.mousehover = function(p, shift, ctrl) {
