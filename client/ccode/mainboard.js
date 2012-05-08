@@ -62,7 +62,7 @@ MainBoard = function(name, inherit, cockpit, screen) {
 	CBoard.call(this, name, inherit, cockpit, screen);
 	// the switch panel
 	var swidim       = theme.switchpanel.dimensions;
-	this.switchpanel = new SwitchPanel(new Point(
+	this.switchpanel = new SwitchPanel(this, new Point(
 		half(screen.x) - swidim.a,
 		screen.y- 59
 	));
@@ -97,11 +97,11 @@ MainBoard.prototype.mousehover = function(p, shift, ctrl) {
 		var pp = p.sub(this.pnw);
 		var swb = this.cc.switchB;
 		var over = swb.mousehover(pp);
-		if (!over) {
+		if (over) {
+			this.switchpanel.cancelFade();
+		} else {
 			over = this.switchpanel.mousehover(p);
-			if (!over) {
-				this.toggleSwitch();
-			}
+			if (over) { return over; }
 		}
 	}
 	

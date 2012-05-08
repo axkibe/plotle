@@ -72,7 +72,8 @@ var Rect         = Fabric.Rect;
 /**
 | Constructor
 */
-SwitchPanel = function(psw) {
+SwitchPanel = function(board, psw) {
+	this.board = board;
 	var swidim = theme.switchpanel.dimensions;
 	var iframe = this.iframe = new Rect(Point.zero, new Point(swidim.a * 2, swidim.b));
 	this.pnw = psw.sub(0, this.iframe.height);
@@ -99,13 +100,46 @@ SwitchPanel = function(psw) {
 	this.$fadeTimer  = null;
 	this.$fade       = false;
 };
+		
+/**
+| Cancels fading
+*/
+SwitchPanel.prototype.cancelFade = function() {
+	if (!this.$fade) { return; }
+	this.$fade = false;
+	system.cancelTimer(this.$fadeTimer);
+	this.$fadeTimer = null;
+	shell.redraw = true;
+	shell.poke();
+};
 
 /**
 | Draws the switchpanel.
 */
 SwitchPanel.prototype.draw = function(fabric) {
+	if (this.$fade) { fabric.globalAlpha(this.$fade); }
 	fabric.drawImage(this.getFabric(), this.pnw);
-}
+	if (this.$fade) { fabric.globalAlpha(1); }
+};
+
+/**
+| Called on every step to fade away when mouse isn't on the panel or its switch
+*/
+SwitchPanel.prototype.fadeout = function() {
+	var self = this;
+
+	self.$fade -= theme.fade.step;
+
+	if (self.$fade <= 0) {
+		this.board.toggleSwitch();
+	} else {
+		this.$fadeTimer = system.setTimer(theme.fade.time, function() { self.fadeout(); });
+	}
+	
+	shell.redraw = true;
+	shell.poke();
+};
+
 
 /**
 | Paths the boards frame
@@ -197,9 +231,9 @@ SwitchPanel.prototype.poke = function() {
 };
 
 /**
-| Mouse hover.
+| Returns true if p is within the panel
 */
-SwitchPanel.prototype.mousehover = function(p) {
+SwitchPanel.prototype.within = function(p) {
 	p = p.sub(this.pnw);
 	var pnw = this.iframe.pnw;
 	var pse = this.iframe.pse;
@@ -208,9 +242,25 @@ SwitchPanel.prototype.mousehover = function(p) {
 	if (p.x < pnw.x || p.y < pnw.y || p.x > pse.x || p.y > pse.y) {
 		return false;
 	}
-
 	var fabric = this.getFabric();
-	if (!fabric.within(this, 'pathFrame', p))  { return false; }
+	return fabric.within(this, 'pathFrame', p);
+};
+
+/**
+| Mouse hover.
+*/
+SwitchPanel.prototype.mousehover = function(p) {
+	var self = this;
+	var w = this.within(p);
+	if (!w) {
+		if (!this.$fade) {
+			this.$fade = 1 - theme.fade.step;
+			this.$fadeTimer = system.setTimer(theme.fade.time, function() { self.fadeout(); });
+		}
+		return false;
+	} else {
+		this.cancelFade();
+	}
 
 	return true;
 };
