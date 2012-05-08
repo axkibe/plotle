@@ -121,6 +121,20 @@ theme = {
 			]
 		},
 
+		help : {
+			fill : {
+				gradient : 'radial',
+				steps : [
+					[ 0, 'rgba(255, 255,  20, 0.955)' ],
+					[ 1, 'rgba(255, 255, 255, 0.955)' ]
+				]
+			},
+			edge : [
+				{ border: 1, width : 1, color : 'rgb(255, 94, 44)' },
+				{ border: 0, width : 1, color : 'rgb( 94, 94,  0)' }
+			]
+		},
+
 		button : {
 			fill : {
 				gradient : 'horizontal',

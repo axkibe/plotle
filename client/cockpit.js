@@ -75,17 +75,21 @@ Cockpit = function() {
 	this.fabric       = system.fabric;
 	this.curBoardName = 'MainBoard';
 	this.boards = {
-		MainBoard  : null,
-		LoginBoard : null,
-		RegBoard   : null
+		MainBoard   : null,
+		LoginBoard  : null,
+		RegBoard    : null,
+		HelpRoBoard : null
 	};
 
-	this._curSpace   = null;
-	this._message    = null;
+	this._curSpace = null;
+	this._message  = null;
+	this.showHelp  = true;
 };
 
 Cockpit.styles = {
 	boxes       : { edge : [ { border: 0, width : 1, color : 'black' } ] },
+	cockpit     : theme.cockpit.style,
+	help        : theme.cockpit.help,
 	button      : theme.cockpit.button,
 	buttonHover : theme.cockpit.buttonHover,
 	buttonFocus : theme.cockpit.buttonFocus,
@@ -190,7 +194,11 @@ Cockpit.prototype.setUser = function(user) {
 | Redraws the cockpit.
 */
 Cockpit.prototype.draw = function() {
+	if (this.showHelp) {
+		this.getBoard('HelpRoBoard').draw(this.fabric);
+	}
 	this.curBoard().draw(this.fabric);
+	
 
 };
 

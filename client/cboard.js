@@ -145,8 +145,10 @@ CBoard.prototype.getFabric = function() {
 	if (this.$fabric && !config.debug.noCache) { return this.$fabric; }
 	var iframe = this.iframe;
 	var fabric = this.$fabric = new Fabric(iframe);
+	var style = Cockpit.styles[this.tree.root.style];
+	if (!style) { throw new Error('no style!'); } 
 
-	fabric.fill(theme.cockpit.style.fill, this, 'path');
+	fabric.fill(style.fill, this, 'path');
 	var layout = this.tree.root.layout;
 
 	var focus = this.focusedCC();
@@ -155,7 +157,7 @@ CBoard.prototype.getFabric = function() {
 		var c = this.cc[cname];
 		c.draw(fabric, CAccent.state(cname === this.$hover || c.$active, c === focus));
 	}
-	fabric.edge(theme.cockpit.style.edge, this, 'path');
+	fabric.edge(style.edge, this, 'path');
 
 	if (config.debug.drawBoxes) {
 		fabric.paint(Cockpit.styles.boxes,

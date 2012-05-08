@@ -47,6 +47,7 @@ Design.Pattern = {
 		must : {
 			'frame'      : 'Frame',
 			'curve'      : 'Curve',
+			'style'      : 'String',
 			'layout'     : 'Layout'
 		}
 	},

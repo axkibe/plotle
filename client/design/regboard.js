@@ -65,15 +65,17 @@ var canrBH        = 70;
 var canrBXM       = canrBW * magic / 2;
 var canrBYM       = canrBH * magic / 2;
 
-Design.RegBoard = { type   : 'Design' };
+var RegBoard = Design.RegBoard = { type   : 'Design' };
 
-Design.RegBoard.frame = {
+RegBoard.style = 'cockpit';
+
+RegBoard.frame = {
 	type  : 'Frame',
 	pnw   : { type   : 'Point', anchor : 's', x : -512, y : -300 },
 	pse   : { type   : 'Point', anchor : 's', x :  512, y :    0 }
 };
 
-Design.RegBoard.curve = {
+RegBoard.curve = {
 	type  : 'Curve',
 	copse : {
 	'1' : {
@@ -105,7 +107,7 @@ Design.RegBoard.curve = {
 	ranks : [ '1', '2', '3' ]
 };
 
-Design.RegBoard.layout = {
+RegBoard.layout = {
 	type  : 'Layout',
 	copse : {
 	'regL'      : {

@@ -78,6 +78,8 @@ var forgotBYM       = forgotBH * magic;
 */
 var LoginBoard = Design.LoginBoard = { type   : 'Design' };
 
+LoginBoard.style = 'cockpit';
+
 LoginBoard.frame = {
 	type  : 'Frame',
 	pnw   : { type   : 'Point', anchor : 's', x : -512, y : -110 },

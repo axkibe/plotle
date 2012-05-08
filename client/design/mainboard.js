@@ -80,6 +80,8 @@ var sideButtonC1Y   = ro(consts.C1Y / 2);
 var sideButtonC2X   =  12;
 var sideButtonC2Y   =  40;
 
+MainBoard.style = 'cockpit';
+
 MainBoard.frame = {
 	type  : 'Frame',
 	pnw   : { type: 'Point', anchor: 's', x: -512, y: -60 },
