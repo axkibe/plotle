@@ -107,8 +107,6 @@ Shell = function(fabric, sPeer) {
 	this.vspace    = null;
 
 	this.cockpit   = new Cockpit();
-	this.cockpit.message("Loading space 'welcome'...");
-
 	this.menu      = null;
 
 	this.caret     = new Caret(null, null, null, false);
@@ -511,6 +509,32 @@ Shell.prototype.onload = function() {
 };
 
 /**
+| Moves to space named 'spaceName'.
+*/
+Shell.prototype.moveToSpace = function(spaceName) {
+	var self = this;
+	if (this.caret.visec === 'space') {
+		this.setCaret(null, null);
+	}
+
+	self.cockpit.setCurSpace('');
+	self.cockpit.message('Moving to "'+spaceName+'" ...');
+	peer.aquireSpace(spaceName, function(err, val) {
+		if (err !== null) {
+			this.greenscreen('Cannot aquire space');
+			return;
+		}
+		if (val.name !== spaceName) {
+			throw new Error('server served wrong space!');
+		}
+		var tree = val.tree;
+		self.vspace = new VSpace(tree.root.copse[spaceName], new Path([spaceName]));
+		self.cockpit.setCurSpace(spaceName);
+		self._draw();
+	});
+};
+
+/**
 | Answer to on loading authentication
 */
 Shell.prototype.onLoadAuth = function(user, res) {
@@ -532,21 +556,8 @@ Shell.prototype.onLoadAuth = function(user, res) {
 	}
 
 	self.setUser(res.user, res.pass);
-	var spaceName = 'welcome';
-	peer.aquireSpace(spaceName, function(err, val) {
-		if (err !== null) {
-			this.greenscreen('Cannot aquire space');
-			return;
-		}
-		if (val.name !== spaceName) {
-			throw new Error('got wrong spaceName!');
-		}
-		var tree = val.tree;
-		self.vspace = new VSpace(tree.root.copse.welcome, new Path([spaceName]));
-		self.cockpit.message(null);
-		self.cockpit.setCurSpace(spaceName);
-		self._draw();
-	});
+	//self.moveToSpace('welcome');
+	self.moveToSpace('sandbox');
 };
 
 

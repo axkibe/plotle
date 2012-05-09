@@ -101,6 +101,7 @@ var Server = function() {
 	this.nextSleep = 1;
 
 	// startup init
+	/* TODO REMOVE
 	var asw = this.alter({
 		time : 0,
 		chgX : new Change(
@@ -111,6 +112,7 @@ var Server = function() {
 	});
 
 	if (asw.ok !== true) throw new Error('Cannot init Repository');
+	*/
 
 	// all other steps of the startup sequence are done in
 	// async waterfall model from here.

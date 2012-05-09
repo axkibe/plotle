@@ -76,7 +76,7 @@ CChat = function(twig, board, inherit, name) {
 
 	var fs = this.twig.fontStyle;
 
-	this.messages   = [ ];
+	this.messages   = inherit ? inherit.messages : [ ];
 
 	this.lineHeight = ro(fs.size * 1.2);
 	this.sideSlopeX = 20;

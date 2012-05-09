@@ -317,7 +317,7 @@ MainBoard.layout = {
 
 	'cspace'      : {
 		type      : 'Label',
-		text      : 'welcome',
+		text      : '',
 		fontStyle : fontStyle(22, 'cab'),
 		pos       : { type: 'Point', anchor:  's', x: -130, y: -11 }
 	}},

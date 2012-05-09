@@ -456,13 +456,15 @@ var oleng$id = 0;
 */
 var immute = function(obj) {
 	if (obj._$id) return obj;
-	var names = Object.getOwnPropertyNames(obj);
-	for (var a = 0, aZ = names.length; a < aZ; a++) {
-		var desc = Object.getOwnPropertyDescriptor(obj, names[a]);
-		if (!desc.configurable) continue;
-		desc.configurable = false;
-		desc.writable = false;
-		Object.defineProperty(obj, names[a], desc);
+	if (config.debug.immute) {
+		var names = Object.getOwnPropertyNames(obj);
+		for (var a = 0, aZ = names.length; a < aZ; a++) {
+			var desc = Object.getOwnPropertyDescriptor(obj, names[a]);
+			if (!desc.configurable) continue;
+			desc.configurable = false;
+			desc.writable = false;
+				Object.defineProperty(obj, names[a], desc);
+		}
 	}
     Object.defineProperty(obj, '_$id', {value: ++oleng$id});
 	return obj;

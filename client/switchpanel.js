@@ -200,15 +200,16 @@ SwitchPanel.prototype._paintButton = function(fabric, dir) {
 	}
 
 	fabric.paint(style, this, 'pathButton', dir);
-}
+};
 
 /**
 | Draws the contents.
 | @@ Caching
 */
 SwitchPanel.prototype.getFabric = function() {
-	if (!config.debug.noCache && this.$fabric) { return $fabric; }
+	if (!config.debug.noCache && this.$fabric) { return this.$fabric; }
 	var iframe = this.iframe;
+	//var fabric = this.$fabric = new Fabric(iframe); TODO
 	var fabric = new Fabric(iframe);
 
 	fabric.fill(theme.switchpanel.style.fill, this, 'pathFrame');
@@ -281,10 +282,16 @@ SwitchPanel.prototype.mousedown = function(p) {
 	var fabric = this.getFabric();
 	if (fabric.within(this, 'pathButton', p, 'n' )) { button = 'n';  } else
 	if (fabric.within(this, 'pathButton', p, 'ne')) { button = 'ne'; } else
-	if (fabric.within(this, 'pathButton', p, 'nw')) { button = 'nw'; } 
+	if (fabric.within(this, 'pathButton', p, 'nw')) { button = 'nw'; }
 
-	if (button) {
-		debug('BUTTON: ' + button);
+	if (button !== this.current) {
+		switch(button) {
+		case 'n'  : shell.moveToSpace('welcome'); break;
+		case 'ne' : shell.moveToSpace('sandbox'); break;
+		case 'nw' : shell.moveToSpace('*:home'); break;
+		}
+		this.board.toggleSwitch();
+		this.board.poke();
 	}
 
 	return false;
@@ -311,7 +318,7 @@ SwitchPanel.prototype.mousehover = function(p) {
 
 		if (fabric.within(this, 'pathButton', p, 'n' )) { hd = 'n';  } else
 		if (fabric.within(this, 'pathButton', p, 'ne')) { hd = 'ne'; } else
-		if (fabric.within(this, 'pathButton', p, 'nw')) { hd = 'nw'; } 
+		if (fabric.within(this, 'pathButton', p, 'nw')) { hd = 'nw'; }
 	}
 
 	if (this.$hover !== hd) {

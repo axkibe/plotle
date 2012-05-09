@@ -58,17 +58,29 @@ var Point    = Fabric.Point;
 /**
 | Constructor
 */
-MainBoard = function(name, inherit, cockpit, screen) {
-	CBoard.call(this, name, inherit, cockpit, screen);
-	// the switch panel
-	var swidim       = theme.switchpanel.dimensions;
-	// TODO true current
-	this.switchpanel = new SwitchPanel(this, 'n', new Point(
-		half(screen.x) - swidim.a,
-		screen.y- 59
-	));
+MainBoard = function(name, inherit, cockpit, screensize) {
+	CBoard.call(this, name, inherit, cockpit, screensize);
+	this.$spaceName;
 };
 subclass(MainBoard, CBoard);
+
+
+MainBoard.prototype.getSwitchPanel = function() {
+	var sp = this.$switchPanel;
+	if (sp) return sp;
+	
+	var swidim       = theme.switchpanel.dimensions;
+	var current = '';
+	switch (this.$spaceName) {
+	case 'welcome' : current = 'n'; break;
+	case 'sandbox' : current = 'ne'; break;
+	}
+
+	return this.$switchPanel = new SwitchPanel(this, current, new Point(
+		half(this.screensize.x) - swidim.a,
+		this.screensize.y- 59
+	));
+}
 
 /*
 | Toggles the switch board
@@ -81,11 +93,24 @@ MainBoard.prototype.toggleSwitch = function() {
 };
 
 /**
+| Sets current space.
+*/
+MainBoard.prototype.setCurSpace = function(spaceName) {
+	this.$spaceName = spaceName;
+
+	var cspace = this.cc.cspace;
+	cspace.text = spaceName,
+	cspace.poke();
+
+	this.$switchPanel = null;
+};
+
+/**
 | Draws the mainboard
 */
 MainBoard.prototype.draw = function(fabric) {
 	if (this.switchActive) {
-		this.switchpanel.draw(fabric);
+		this.getSwitchPanel().draw(fabric);
 	}
 	fabric.drawImage(this.getFabric(), this.pnw);
 };
@@ -95,7 +120,7 @@ MainBoard.prototype.draw = function(fabric) {
 */
 MainBoard.prototype.mousedown = function(p, shift, ctrl) {
 	if (this.switchActive) {
-		var res = this.switchpanel.mousedown(p);
+		var res = this.getSwitchPanel().mousedown(p);
 		if (res !== null) { return res; }
 	}
 	
@@ -111,9 +136,9 @@ MainBoard.prototype.mousehover = function(p, shift, ctrl) {
 		var swb = this.cc.switchB;
 		var over = swb.mousehover(pp);
 		if (over) {
-			this.switchpanel.cancelFade();
+			this.getSwitchPanel().cancelFade();
 		} else {
-			over = this.switchpanel.mousehover(p);
+			over = this.getSwitchPanel().mousehover(p);
 			if (over) { return over; }
 		}
 	}

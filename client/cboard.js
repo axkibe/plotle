@@ -146,7 +146,7 @@ CBoard.prototype.getFabric = function() {
 	var iframe = this.iframe;
 	var fabric = this.$fabric = new Fabric(iframe);
 	var style = Cockpit.styles[this.tree.root.style];
-	if (!style) { throw new Error('no style!'); } 
+	if (!style) { throw new Error('no style!'); }
 
 	fabric.fill(style.fill, this, 'path');
 	var layout = this.tree.root.layout;

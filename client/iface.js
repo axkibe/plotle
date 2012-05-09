@@ -211,15 +211,10 @@ IFace.prototype.aquireSpace = function(name, callback) {
 		self.aquireSpaceActive = false;
 
 		self.remoteTime = asw.time;
-		self.tree = self.rtree = new Tree(
-			{
-				type  : 'Nexus',
-				copse : {
-					'welcome' : asw.node  // TODO
-				}
-			},
-			Meshverse
-		);
+
+		var troot = { type : 'Nexus', copse : {} };
+		troot.copse[name] = asw.node;
+		self.tree = self.rtree = new Tree(troot, Meshverse);
 
 		callback(null, { tree: self.tree, name: name });
 

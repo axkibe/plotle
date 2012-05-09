@@ -64,6 +64,7 @@ config.database.name = 'meshcraft02';
 | die on any command it considers unacceptable.
 */
 config.devel = 'client';
+//config.devel = 'none';
 
 /**
 | If true uglifies the javascript pack, that is minizing its size.
@@ -74,24 +75,31 @@ config.uglify = false;
 /**
 | debugging facilities
 */
-config.debug = {};
+config.debug = {
+	/**
+	| In case of doubt, if graphic caching seems faulty, just set this true and
+	| see if the errors vanish.
+	*/
+	noCache : false,
 
-/**
-| In case of doubt, if graphic caching seems faulty, just set this true and
-| see if the errors vanish.
-*/
-config.debug.noCache = false;
+	/**
+	| If true draws boxes around all cockpits frames, to see if
+	| their size is just right.
+	*/
+	drawBoxes : false,
 
-/**
-| If true draws boxes around all cockpits frames, to see if
-| their size is just right.
-*/
-config.debug.drawBoxes = false;
+	/**
+	| If true does messages and JSON with whitespace/newlines
+	*/
+	puffed : false,
 
-/**
-| If true does messages and JSON with whitespace/newlines
-*/
-config.debug.puffed = false;
+	/**
+	| If true ensures that objects that should not be immutable
+	| are made immutable.
+	*/
+	immute : false
+};
+
 
 /**
 | these enable specific logging categories for the console

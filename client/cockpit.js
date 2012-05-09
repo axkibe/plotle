@@ -81,8 +81,7 @@ Cockpit = function() {
 		HelpRoBoard : null
 	};
 
-	this._curSpace = null;
-	this._message  = null;
+	this.$curSpace = null;
 	this.showHelp  = true;
 };
 
@@ -107,7 +106,7 @@ Cockpit.styles = {
 | Sends a message over the MainBoard.
 */
 Cockpit.prototype.message = function(message) {
-	this._message = message;
+	this.getBoard('MainBoard').cc.chat.addMessage(message);
 };
 
 
@@ -167,8 +166,8 @@ Cockpit.prototype.setCurBoard = function(boardName) {
 | Sets the space name displayed on the MainBoard.
 */
 Cockpit.prototype.setCurSpace = function(curSpace) {
-	// TODO
-	this._curSpace = curSpace;
+	this.$curSpace = curSpace;
+	this.getBoard('MainBoard').setCurSpace(curSpace);
 };
 
 /**
@@ -198,8 +197,6 @@ Cockpit.prototype.draw = function() {
 		this.getBoard('HelpRoBoard').draw(this.fabric);
 	}
 	this.curBoard().draw(this.fabric);
-	
-
 };
 
 /**

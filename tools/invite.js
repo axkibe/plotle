@@ -2,6 +2,11 @@
 /**
 | Creates an invitation code.
 */
+/**
+| Capsule
+*/
+(function() {
+"use strict";
 
 var Jools    = require('../shared/jools');
 var config   = require('../config');
@@ -68,7 +73,7 @@ var insertCode = function() {
 		date    : Date.now()
 	}, function(err, count) {
 		if (err !== null) {
-			console.log('Oops invitation code already exists trying another.');		
+			console.log('Oops invitation code already exists trying another.');
 			createCode();
 			insertCode();
 			return;
@@ -80,5 +85,7 @@ var insertCode = function() {
 	});
 };
 
-
 connect();
+
+})();
+

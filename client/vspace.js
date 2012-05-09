@@ -123,7 +123,7 @@ VSpace.prototype.update = function(tree, chgX) {
 	
 	if (caret.visec === 'space' &&
 		csign && csign.path &&
-		csign.path.get(0) === 'welcome' &&
+		csign.path.get(0) === this.key &&
 		!isnon(vv[csign.path.get(1)])
 	) {
 		if (shell.selection.active &&
@@ -140,7 +140,11 @@ VSpace.prototype.update = function(tree, chgX) {
 | Returns the entity of path
 */
 VSpace.prototype.getEntity = function(path) {
-	if (path.get(0) !== 'welcome') /* TODO */ { return null; }
+	if (path.get(0) !== this.key) {
+		throw new Error('getting entity of not current space',
+			path.get(0), '!=', this.key
+		);
+	}
 	return this.vv[path.get(1)] || null;
 };
 
@@ -500,7 +504,11 @@ VSpace.prototype.vget = function(path, plen) {
 	/**/ if (!is(plen)) { plen  = path.length; }
 	else if (plen < 0)  { plen += path.length; }
 	/**/ if (plen <= 0) { throw new Error('cannot vget path of length <= 0'); }
-	if (path.get(0) !== 'welcome') throw new Error('currently space must be "welcome"'); // TODO
+	if (path.get(0) !== this.key) {
+		throw new Error('cannot get path of not current space',
+			path.get(0), '!=', this.key
+		);
+	}
 
 	var vnode = this;
 	for (var a = 1; a < plen; a++) {
