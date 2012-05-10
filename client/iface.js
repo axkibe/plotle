@@ -67,13 +67,16 @@ IFace = function() {
 	this.rtree   = null;
 
 	// changes to be send to the server
-	this._outbox = [];
+	this._outbox = null;
 
 	// changes that are currently on the way to the server
-	this._postbox = [];
+	this._postbox = null;
 
 	// if set report updates to this object
 	this.update  = null;
+
+	// current update request
+	this.$updateAjax = null;
 };
 
 
@@ -173,7 +176,20 @@ IFace.prototype.register = function(user, mail, pass, code, callback) {
 IFace.prototype.aquireSpace = function(name, callback) {
     if (this.aquireSpaceActive) { throw new Error('Already aquiring a space'); }
 	this.aquireSpaceActive = true;
+
+	// aborts the current running update.
+	if (this.$updateAjax) {
+		this.$updateAjax.$abort = true;
+		this.$updateAjax.abort();
+		this.$updateAjax = null;
+	}
 	
+	this.tree    = null;
+	this.rtree   = null;
+	this._outbox = [];
+	this._postbox = [];
+
+
 	var path = new Path([name]);
 
     var ajax = new XMLHttpRequest();
@@ -246,19 +262,24 @@ IFace.prototype.get = function(path, len) {
 | Sends an update request to the server and computes its answer.
 */
 IFace.prototype._update = function() {
-	if (this._updateActive) { throw new Error('double update?'); }
+	var self = this;
+	if (self.$updateAjax) { throw new Error('double update?'); }
 
-	var ajax = new XMLHttpRequest();
+	var ajax = self.$updateAjax = new XMLHttpRequest();
 	ajax.open('POST', '/mm', true);
 	ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
-	var self = this;
 	ajax.onreadystatechange = function() {
 		var a, aZ, asw, b, bZ, chgX;
 		if (ajax.readyState !== 4) { return; }
+		self.$updateAjax = null;
+
 		if (ajax.status !== 200) {
-			log('iface', 'update.status == ' + ajax.status);
-			shell.greenscreen('Connection with server failed.', false);
+			// if not a willing complain to greenscreen
+			if (!ajax.$abort) {
+				log('iface', 'update.status == ' + ajax.status);
+				shell.greenscreen('Connection with server failed.', false);
+			}
 			return;
 		}
 
@@ -325,7 +346,7 @@ IFace.prototype._update = function() {
 
 	var request = JSON.stringify({
 		cmd  : 'update',
-		time : this.remoteTime
+		time : self.remoteTime
 	});
 
 	log('iface', 'u->', request);
