@@ -68,10 +68,10 @@ IFace = function() {
 	this.rtree   = null;
 
 	// changes to be send to the server
-	this._outbox = null;
+	this.$outbox = null;
 
 	// changes that are currently on the way to the server
-	this._postbox = null;
+	this.$postbox = null;
 
 	// if set report updates to this object
 	this.update  = null;
@@ -185,9 +185,8 @@ IFace.prototype.aquireSpace = function(name, callback) {
 
 	self.tree    = null;
 	self.rtree   = null;
-	self._outbox = [];
-	self._postbox = [];
-
+	self.$outbox = [];
+	self.$postbox = [];
 
 	var path = new Path([name]);
 
@@ -200,7 +199,7 @@ IFace.prototype.aquireSpace = function(name, callback) {
 		if (ajax.readyState !== 4) { return; }
 
 		if (ajax.status !== 200) {
-			self.aquireAjax = null;
+			self.$aquireAjax = null;
 			log('iface', 'aquireSpace.status == ' + ajax.status);
 			callback( { error: 'connection' , status: ajax.status }, null);
 			return;
@@ -209,14 +208,14 @@ IFace.prototype.aquireSpace = function(name, callback) {
 		try {
 			asw = JSON.parse(ajax.responseText);
 		} catch (e) {
-			self.aquireAjax = null;
+			self.$aquireAjax = null;
 			callback( { error: 'nojson' }, null);
 			return;
 		}
 
 		log('iface', '<-sg', asw);
 		if (!asw.ok) {
-			self.aquireAjax = null;
+			self.$aquireAjax = null;
 			log('iface', 'aquireSpace, server not ok');
 			callback( asw, null);
 			return;
@@ -235,10 +234,10 @@ IFace.prototype.aquireSpace = function(name, callback) {
 		// waits a second before going into update cycle, so safari
 		// stops its wheely thing.
 		system.setTimer(1000, function() {
-			if (self.aquireAjax === ajax) {
+			if (self.$aquireAjax === ajax) {
 				self._update();
 			}
-			self.aquireAjax = null;
+			self.$aquireAjax = null;
 		});
 	};
 
@@ -272,8 +271,8 @@ IFace.prototype._update = function() {
 	ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
 	ajax.onreadystatechange = function() {
-		var a, aZ, asw, b, bZ, chgX;
 		if (ajax.readyState !== 4) { return; }
+		var a, aZ, asw, b, bZ, chgX;
 		// call was willingfull aborted
 		if (ajax.$abort) { return; }
 
@@ -299,7 +298,7 @@ IFace.prototype._update = function() {
 		var gotOwnChgs = false;
 		if (chgs) {
 			// this wasn't an empty timeout?
-			var postbox = self._postbox;
+			var postbox = self.$postbox;
 			for(a = 0, aZ = chgs.length; a < aZ; a++) {
 				chgX = new Change(chgs[a].chgX);
 				var cid = chgs[a].cid;
@@ -308,7 +307,7 @@ IFace.prototype._update = function() {
 				self.rtree = MeshMashine.changeTree(self.rtree, chgX).tree;
 
 				if (postbox.length > 0 && postbox[0].cid === cid) {
-					self._postbox.splice(0, 1);
+					self.$postbox.splice(0, 1);
 					gotOwnChgs = true;
 					continue;
 				}
@@ -317,7 +316,7 @@ IFace.prototype._update = function() {
 
 			// adapts all queued changes
 			// and rebuilds the clients understanding of its own tree
-			var outbox = self._outbox;
+			var outbox = self.$outbox;
 			var tree = self.rtree;
 
 			for(a = 0, aZ = postbox.length; a < aZ; a++) {
@@ -364,7 +363,7 @@ IFace.prototype.alter = function(src, trg) {
     this.tree = r.tree;
 	var chgX  = r.chgX;
 
-	this._outbox.push({ cid: uid(), chgX: chgX });
+	this.$outbox.push({ cid: uid(), chgX: chgX });
 	this.sendChanges();
 
     if (this.update) { this.update.update(r.tree, chgX); }
@@ -375,11 +374,11 @@ IFace.prototype.alter = function(src, trg) {
 | Sends the stored changes to remote meshmashine
 */
 IFace.prototype.sendChanges = function() {
-	if (this._postbox.length > 0) {
+	if (this.$postbox.length > 0) {
 		return;
 	}
 
-	if (this._outbox.length === 0) {
+	if (this.$outbox.length === 0) {
 		// nothing to send
 		return;
 	}
@@ -410,9 +409,9 @@ IFace.prototype.sendChanges = function() {
 		if (!asw.ok) { throw new Error('send changes, server not OK!'); }
 	};
 
-	var c = this._outbox[0];
-	this._outbox.splice(0, 1);
-	this._postbox.push(c);
+	var c = this.$outbox[0];
+	this.$outbox.splice(0, 1);
+	this.$postbox.push(c);
 
 	var request = JSON.stringify({
 		cmd  : 'alter',
