@@ -37,6 +37,7 @@ var Sign;
 var Tree;
 var Jools;
 var shell;
+var system;
 
 /**
 | Exports
@@ -174,35 +175,32 @@ IFace.prototype.register = function(user, mail, pass, code, callback) {
 | Aquires a space
 */
 IFace.prototype.aquireSpace = function(name, callback) {
-    if (this.aquireSpaceActive) { throw new Error('Already aquiring a space'); }
-	this.aquireSpaceActive = true;
-
+	var self = this;
 	// aborts the current running update.
-	if (this.$updateAjax) {
-		this.$updateAjax.$abort = true;
-		this.$updateAjax.abort();
-		this.$updateAjax = null;
+	if (self.$updateAjax) {
+		self.$updateAjax.$abort = true;
+		self.$updateAjax.abort();
+		self.$updateAjax = null;
 	}
-	
-	this.tree    = null;
-	this.rtree   = null;
-	this._outbox = [];
-	this._postbox = [];
+
+	self.tree    = null;
+	self.rtree   = null;
+	self._outbox = [];
+	self._postbox = [];
 
 
 	var path = new Path([name]);
 
-    var ajax = new XMLHttpRequest();
+    var ajax = self.$aquireAjax = new XMLHttpRequest();
     ajax.open('POST', '/mm', true);
     ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	var self = this;
 
     ajax.onreadystatechange = function() {
 		var asw;
 		if (ajax.readyState !== 4) { return; }
 
 		if (ajax.status !== 200) {
-			self.aquireSpaceActive = false;
+			self.aquireAjax = null;
 			log('iface', 'aquireSpace.status == ' + ajax.status);
 			callback( { error: 'connection' , status: ajax.status }, null);
 			return;
@@ -211,14 +209,14 @@ IFace.prototype.aquireSpace = function(name, callback) {
 		try {
 			asw = JSON.parse(ajax.responseText);
 		} catch (e) {
-			self.aquireSpaceActive = false;
+			self.aquireAjax = null;
 			callback( { error: 'nojson' }, null);
 			return;
 		}
 
 		log('iface', '<-sg', asw);
 		if (!asw.ok) {
-			self.aquireSpaceActive = false;
+			self.aquireAjax = null;
 			log('iface', 'aquireSpace, server not ok');
 			callback( asw, null);
 			return;
@@ -236,8 +234,12 @@ IFace.prototype.aquireSpace = function(name, callback) {
 
 		// waits a second before going into update cycle, so safari
 		// stops its wheely thing.
-		// TODO make proper wrapping through browser.js
-		window.setTimeout(function() {self._update(); }, 1000);
+		system.setTimer(1000, function() {
+			if (self.aquireAjax === ajax) {
+				self._update();
+			}
+			self.aquireAjax = null;
+		});
 	};
 
     var request = JSON.stringify({
@@ -272,14 +274,14 @@ IFace.prototype._update = function() {
 	ajax.onreadystatechange = function() {
 		var a, aZ, asw, b, bZ, chgX;
 		if (ajax.readyState !== 4) { return; }
+		// call was willingfull aborted
+		if (ajax.$abort) { return; }
+
 		self.$updateAjax = null;
 
 		if (ajax.status !== 200) {
-			// if not a willing complain to greenscreen
-			if (!ajax.$abort) {
-				log('iface', 'update.status == ' + ajax.status);
-				shell.greenscreen('Connection with server failed.', false);
-			}
+			log('iface', 'update.status == ' + ajax.status);
+			shell.greenscreen('Connection with server failed.', false);
 			return;
 		}
 

@@ -647,7 +647,8 @@ Server.prototype.update = function(cmd, res) {
 
 	// sleep
 	var sleepID = '' + this.nextSleep++;
-	var timerID = setTimeout(this.expireSleep, 60000, this, sleepID);
+	//var timerID = setTimeout(this.expireSleep, 60000, this, sleepID);
+	var timerID = setTimeout(this.expireSleep, 1000, this, sleepID); // TODO
 	this.upsleep[sleepID] = {
 		timerID : timerID,
 		time    : time,

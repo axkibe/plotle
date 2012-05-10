@@ -74,13 +74,14 @@ MainBoard.prototype.getSwitchPanel = function() {
 	switch (this.$spaceName) {
 	case 'welcome' : current = 'n'; break;
 	case 'sandbox' : current = 'ne'; break;
+	default : current = 'nw'; break;
 	}
 
 	return this.$switchPanel = new SwitchPanel(this, current, new Point(
 		half(this.screensize.x) - swidim.a,
 		this.screensize.y- 59
 	));
-}
+};
 
 /*
 | Toggles the switch board
@@ -99,7 +100,7 @@ MainBoard.prototype.setCurSpace = function(spaceName) {
 	this.$spaceName = spaceName;
 
 	var cspace = this.cc.cspace;
-	cspace.text = spaceName,
+	cspace.text = spaceName;
 	cspace.poke();
 
 	this.$switchPanel = null;

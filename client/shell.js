@@ -475,6 +475,7 @@ Shell.prototype.resize = function(width, height) {
 | Sets the current user
 */
 Shell.prototype.setUser = function(user, pass) {
+	this.$user = user;
 	this.cockpit.setUser(user);
 
 	if (user.substr(0, 5) !== 'visit') {
@@ -517,6 +518,10 @@ Shell.prototype.moveToSpace = function(spaceName) {
 		this.setCaret(null, null);
 	}
 
+	if (spaceName.substr(0, 2) == '*:') {
+		spaceName = this.$user + spaceName.substr(1);
+	}
+
 	self.cockpit.setCurSpace('');
 	self.cockpit.message('Moving to "'+spaceName+'" ...');
 	peer.aquireSpace(spaceName, function(err, val) {
@@ -556,8 +561,7 @@ Shell.prototype.onLoadAuth = function(user, res) {
 	}
 
 	self.setUser(res.user, res.pass);
-	//self.moveToSpace('welcome');
-	self.moveToSpace('sandbox');
+	self.moveToSpace('welcome');
 };
 
 
