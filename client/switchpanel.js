@@ -72,7 +72,7 @@ var Rect         = Fabric.Rect;
 /**
 | Constructor
 */
-SwitchPanel = function(board, current, psw) {
+SwitchPanel = function(board, current, userName, psw) {
 	this.board      = board;
 	this.current    = current;
 	var swidim      = theme.switchpanel.dimensions;
@@ -86,6 +86,7 @@ SwitchPanel = function(board, current, psw) {
 		width  : 80,
 		height : 36
 	});
+	this.amVisitor = userName.substring(0,5) === 'visit';
 
 	var x2 = 55;
 	var y1 =  5;
@@ -213,7 +214,7 @@ SwitchPanel.prototype.getFabric = function() {
 	var fabric = new Fabric(iframe);
 
 	fabric.fill(theme.switchpanel.style.fill, this, 'pathFrame');
-	this._paintButton(fabric, 'nw');
+	if (!this.amVisitor) { this._paintButton(fabric, 'nw'); }
 	this._paintButton(fabric, 'n');
 	this._paintButton(fabric, 'ne');
 
@@ -225,7 +226,7 @@ SwitchPanel.prototype.getFabric = function() {
 	var bp = this.buttonPos;
 	fabric.fillText('Welcome',   bp.n .x, bp.n. y);
 	fabric.fillText('Sandbox',   bp.ne.x, bp.ne.y);
-	fabric.fillText('Your Home', bp.nw.x, bp.nw.y);
+	if (!this.amVisitor) { fabric.fillText('Your Home', bp.nw.x, bp.nw.y); }
 	
 	fabric.fontStyle('12px ' + theme.defaultFont, 'black', 'center', 'middle');
 	
@@ -278,13 +279,13 @@ SwitchPanel.prototype.mousedown = function(p) {
 	p = p.sub(this.pnw);
 	if (!this.within(p)) { return null; }
 
-	var button = '';
+	var button = null;
 	var fabric = this.getFabric();
 	if (fabric.within(this, 'pathButton', p, 'n' )) { button = 'n';  } else
 	if (fabric.within(this, 'pathButton', p, 'ne')) { button = 'ne'; } else
-	if (fabric.within(this, 'pathButton', p, 'nw')) { button = 'nw'; }
+	if (!this.amVisitor && fabric.within(this, 'pathButton', p, 'nw')) { button = 'nw'; }
 
-	if (button !== this.current) {
+	if (button && button !== this.current) {
 		switch(button) {
 		case 'n'  : shell.moveToSpace('welcome'); break;
 		case 'ne' : shell.moveToSpace('sandbox'); break;
@@ -318,7 +319,7 @@ SwitchPanel.prototype.mousehover = function(p) {
 
 		if (fabric.within(this, 'pathButton', p, 'n' )) { hd = 'n';  } else
 		if (fabric.within(this, 'pathButton', p, 'ne')) { hd = 'ne'; } else
-		if (fabric.within(this, 'pathButton', p, 'nw')) { hd = 'nw'; }
+		if (!this.amVisitor && fabric.within(this, 'pathButton', p, 'nw')) { hd = 'nw'; }
 	}
 
 	if (this.$hover !== hd) {

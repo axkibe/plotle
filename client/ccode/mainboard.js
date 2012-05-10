@@ -77,7 +77,7 @@ MainBoard.prototype.getSwitchPanel = function() {
 	default : current = 'nw'; break;
 	}
 
-	return this.$switchPanel = new SwitchPanel(this, current, new Point(
+	return this.$switchPanel = new SwitchPanel(this, current, this.$userName, new Point(
 		half(this.screensize.x) - swidim.a,
 		this.screensize.y- 59
 	));
@@ -105,6 +105,18 @@ MainBoard.prototype.setCurSpace = function(spaceName) {
 
 	this.$switchPanel = null;
 };
+
+/**
+| Sets current user
+*/
+MainBoard.prototype.setUser = function(userName) {
+	this.$userName = userName;
+	this.$switchPanel = null;
+
+	var ulabel = this.cc.username;
+	ulabel.text = userName;
+	ulabel.poke();
+}
 
 /**
 | Draws the mainboard
