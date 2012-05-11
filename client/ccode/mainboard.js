@@ -60,7 +60,8 @@ var Point    = Fabric.Point;
 */
 MainBoard = function(name, inherit, cockpit, screensize) {
 	CBoard.call(this, name, inherit, cockpit, screensize);
-	this.$spaceName;
+	this.$spaceName = inherit ? inherit.$spaceName : null;
+	this.$userName  = inherit ? inherit.$userName  : null;
 };
 subclass(MainBoard, CBoard);
 
@@ -110,6 +111,7 @@ MainBoard.prototype.setCurSpace = function(spaceName) {
 | Sets current user
 */
 MainBoard.prototype.setUser = function(userName) {
+	debug('setUser', userName);
 	this.$userName = userName;
 	this.$switchPanel = null;
 
