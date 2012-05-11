@@ -68,6 +68,7 @@ var is           = Jools.is;
 var isArray      = Jools.isArray;
 var log          = Jools.log;
 var reject       = Jools.reject;
+var uid          = Jools.uid;
 
 /**
 | Server
@@ -100,19 +101,6 @@ var Server = function() {
 	// next upsleepID
 	this.nextSleep = 1;
 
-	// startup init
-	/* TODO REMOVE
-	var asw = this.alter({
-		time : 0,
-		chgX : new Change(
-			{ val: { type: 'Space', cope: {}, ranks: [] } },
-			{ path : ['welcome'] }
-		),
-		cid  : 'startup'
-	});
-
-	if (asw.ok !== true) throw new Error('Cannot init Repository');
-	*/
 
 	// all other steps of the startup sequence are done in
 	// async waterfall model from here.
@@ -246,10 +234,10 @@ Server.prototype.playbackOne = function(o, cursor) {
 /**
 | Creates a message for a space
 */
-Server.prototype.message = function(spacename, message) {
-	var spm = this.messages[spacename];
+Server.prototype.message = function(space, message) {
+	var spm = this.messages[space];
 	if (!spm) {
-		spm = this.messages[spacename] = [];
+		spm = this.messages[space] = [];
 	}
 	spm.push(message);
 
@@ -449,20 +437,20 @@ Server.prototype.buildHTMLs = function() {
 /**
 | Executes an alter command.
 */
-Server.prototype.alter = function(cmd, res) {
+Server.prototype.alter = function(cmd) {
 	var time = cmd.time;
 	var chgX = cmd.chgX;
 	var cid  = cmd.cid;
 
-	var changes  = this.changes;
-	var changesZ = changes.length;
+	var changes = this.changes;
+	var cZ      = changes.length;
 
 	// some tests
 	if (!is(time)) { throw reject('time missing'); }
 	if (!is(chgX)) { throw reject('chgX missing');  }
 	if (!is(cid))  { throw reject('cid missing');  }
-	if (time === -1)  { time = changesZ; }
-	if (!(time >= 0 && time <= changesZ)) { throw reject('invalid time'); }
+	if (time === -1)  { time = cZ; }
+	if (!(time >= 0 && time <= cZ)) { throw reject('invalid time'); }
 
 	// fits the cmd into data structures
 	try {
@@ -473,7 +461,7 @@ Server.prototype.alter = function(cmd, res) {
 	}
 
 	// translates the changes if not most recent
-	for (var a = time; a < changesZ; a++) {
+	for (var a = time; a < cZ; a++) {
 		chgX = MeshMashine.tfxChgX(chgX, changes[a].chgX);
 	}
 
@@ -490,21 +478,23 @@ Server.prototype.alter = function(cmd, res) {
 	}
 
 	changes.push({ cid : cmd.cid, chgX : chgX });
+
+	var spaces = {};
+	MeshMashine.listSpaces(chgX, spaces);
+
 	// saves the change in the database
-	if (cmd.cid !== 'startup') {
-		this.db.changes.insert({
-			_id  : changes.length,
-			cid  : cmd.cid,
-			chgX : JSON.parse(JSON.stringify(chgX)),
-			// TODO user
-			date : Date.now()
-		}, function(error, count) {
-			if (error !== null) { throw new Error('Database fail!'); }
-		});
-	}
+	this.db.changes.insert({
+		_id  : changes.length,
+		cid  : cmd.cid,
+		chgX : JSON.parse(JSON.stringify(chgX)),
+		// TODO user
+		date : Date.now()
+	}, function(error, count) {
+		if (error !== null) { throw new Error('Database fail!'); }
+	});
 
 	var self = this;
-	process.nextTick(function() { self.wakeAll(); });
+	process.nextTick(function() { self.wake(spaces); });
 	return { ok: true, chgX: chgX };
 };
 
@@ -593,8 +583,20 @@ Server.prototype.register = function(cmd, res) {
 				icom : val.comment
 			}, function(err, count) {
 				if (err !== null) { throw new Error('Database fail: '+err); }
-				// Everything OK
-				var asw = { ok: true, user: cmd.user };
+				// everything OK so far, creates the user home space
+				var asw = self.alter({
+					time : 0,
+					chgX : new Change(
+						{ val: { type: 'Space', cope: {}, ranks: [] } },
+						{ path : [cmd.user + ':home'] }
+					),
+					cid  : uid()
+				});
+				if (asw.ok !== true) {
+					throw new Error('Cannot create users home space');
+				}
+
+				asw = { ok: true, user: cmd.user };
 				log('ajax', '->', asw);
 				res.writeHead(200, { 'Content-Type': 'application/json' });
 				res.end(JSON.stringify(asw));
@@ -625,34 +627,36 @@ Server.prototype.register = function(cmd, res) {
 | Gets new changes or waits for them.
 */
 Server.prototype.update = function(cmd, res) {
-	var time     = cmd.time;
-	//var mid      = cmd.mid;
-	//var space    = cmd.space;
-	var changes  = this.changes;
-	var cZ       = changes.length;
+	var time    = cmd.time;
+	//var mid   = cmd.mid;
+	var space   = cmd.space;
+	var changes = this.changes;
+	var cZ      = changes.length;
 
 	// some tests
 	if (!is(time))    { throw reject('time missing'); }
 	if (!(time >= 0 && time <= cZ)) { throw reject('invalid time'); }
 
 	if (time < cZ) {
-		// immediate answer
+		// immediate answer?
 		var chga = [];
 		for (var c = time; c < cZ; c++) {
-			chga.push(changes[c]);
+			MeshMashine.filter(changes[c], space, chga);
 		}
-
-		return { ok : true, time: time, timeZ: cZ, chgs : chga };
+		
+		if (chga.length > 0) {
+			return { ok : true, time: time, timeZ: cZ, chgs : chga };
+		}
 	}
 
-	// sleep
+	// if not immediate puts the request to sleep
 	var sleepID = '' + this.nextSleep++;
-	//var timerID = setTimeout(this.expireSleep, 60000, this, sleepID);
-	var timerID = setTimeout(this.expireSleep, 1000, this, sleepID); // TODO
+	var timerID = setTimeout(this.expireSleep, 60000, this, sleepID);
 	this.upsleep[sleepID] = {
-		timerID : timerID,
-		time    : time,
-		res     : res
+		time     : cZ,
+		timerID  : timerID,
+		res      : res,
+		space    : space
 	};
 	return null;
 };
@@ -661,11 +665,11 @@ Server.prototype.update = function(cmd, res) {
 | A sleeping update expired.
 */
 Server.prototype.expireSleep = function(self, sleepID) {
-	var changesZ = self.changes.length;
+	var cZ = self.changes.length;
 	var sleep = self.upsleep[sleepID];
 	delete self.upsleep[sleepID];
 
-	var asw = { ok : true, time: sleep.time, timeZ : changesZ, chgs : null};
+	var asw = { ok : true, time: sleep.time, timeZ : cZ, chgs : null};
 	var res = sleep.res;
 	log('ajax', '->', asw);
 	res.writeHead(200, {'Content-Type': 'application/json'});
@@ -675,49 +679,51 @@ Server.prototype.expireSleep = function(self, sleepID) {
 /**
 | Wakes up any sleeping updates and gives them data if applicatable.
 */
-Server.prototype.wakeAll = function() {
+Server.prototype.wake = function(spaces) {
 	var sleepKeys = Object.keys(this.upsleep);
 	var changes   = this.changes;
-	var changesZ  = changes.length;
+	var cZ  = changes.length;
 
 	// @@ cache change lists to answer the same to multiple clients.
 	for(var a = 0, aZ = sleepKeys.length; a < aZ; a++) {
 		var sKey = sleepKeys[a];
 		var sleep = this.upsleep[sKey];
+		if (!spaces[sleep.space]) { continue; }
+
 		clearTimeout(sleep.timerID);
+		delete this.upsleep[sKey];
 
 		var chga = [];
-		for (var c = sleep.time; c < changesZ; c++) {
-			chga.push(changes[c]);
+		for (var c = sleep.time; c < cZ; c++) {
+			MeshMashine.filter(changes[c], sleep.space, chga);
+			//chga.push(changes[c]);
 		}
 
-		var asw = { ok : true, time: sleep.time, timeZ: changesZ, chgs : chga };
+		var asw = { ok : true, time: sleep.time, timeZ: cZ, chgs : chga };
 		var res = sleep.res;
 		log('ajax', '->', asw);
 		res.writeHead(200, {'Content-Type': 'application/json'});
 		res.end(JSON.stringify(asw));
 	}
-
-	this.upsleep = {};
 };
 
 /**
 | Executes a get command.
 */
 Server.prototype.get = function(cmd, res) {
-	var changes  = this.changes;
-	var changesZ = changes.length;
-	var time     = cmd.time;
+	var changes = this.changes;
+	var cZ      = changes.length;
+	var time    = cmd.time;
 
 	// checks
 	if (!is(cmd.time)) { throw reject('time missing'); }
 	if (!is(cmd.path)) { throw reject('path missing'); }
-	if (time === -1)   { time = changesZ; }
-	if (!(time >= 0 && time <= changesZ)) { throw reject('invalid time'); }
+	if (time === -1)   { time = cZ; }
+	if (!(time >= 0 && time <= cZ)) { throw reject('invalid time'); }
 
 	// if the requested data is in the past go back in time
 	var tree = this.tree;
-	for (var a = changesZ - 1; a >= time; a--) {
+	for (var a = cZ - 1; a >= time; a--) {
 		var chgX = changes[a].chgX;
 		for (var b = 0; b < chgX.length; b++) {
 			var r = MeshMashine.changeTree(tree, chgX[b].reverse());
@@ -830,7 +836,7 @@ Server.prototype.ajaxCmd = function(cmd, res) {
 	var asw;
 	try {
 		switch (cmd.cmd) {
-		case 'alter'    : asw = this.alter    (cmd, res); break;
+		case 'alter'    : asw = this.alter    (cmd);      break;
 		case 'auth'     : asw = this.auth     (cmd, res); break;
 		case 'get'      : asw = this.get      (cmd, res); break;
 		case 'register' : asw = this.register (cmd, res); break;

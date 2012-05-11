@@ -174,7 +174,7 @@ IFace.prototype.register = function(user, mail, pass, code, callback) {
 /**
 | Aquires a space
 */
-IFace.prototype.aquireSpace = function(name, callback) {
+IFace.prototype.aquireSpace = function(spaceName, callback) {
 	var self = this;
 	// aborts the current running update.
 	if (self.$updateAjax) {
@@ -183,12 +183,13 @@ IFace.prototype.aquireSpace = function(name, callback) {
 		self.$updateAjax = null;
 	}
 
-	self.tree    = null;
-	self.rtree   = null;
-	self.$outbox = [];
-	self.$postbox = [];
+	self.$spaceName = spaceName;
+	self.tree       = null; // @@ $tree
+	self.rtree      = null; // @@ $rtree
+	self.$outbox    = [];
+	self.$postbox   = [];
 
-	var path = new Path([name]);
+	var path = new Path([spaceName]);
 
     var ajax = self.$aquireAjax = new XMLHttpRequest();
     ajax.open('POST', '/mm', true);
@@ -226,10 +227,10 @@ IFace.prototype.aquireSpace = function(name, callback) {
 		self.remoteTime = asw.time;
 
 		var troot = { type : 'Nexus', copse : {} };
-		troot.copse[name] = asw.node;
+		troot.copse[spaceName] = asw.node;
 		self.tree = self.rtree = new Tree(troot, Meshverse);
 
-		callback(null, { tree: self.tree, name: name });
+		callback(null, { tree: self.tree, name: spaceName }); // @@ callback to spaceName
 
 		// waits a second before going into update cycle, so safari
 		// stops its wheely thing.
@@ -346,8 +347,9 @@ IFace.prototype._update = function() {
 	};
 
 	var request = JSON.stringify({
-		cmd  : 'update',
-		time : self.remoteTime
+		cmd   : 'update',
+		space : self.$spaceName,
+		time  : self.remoteTime
 	});
 
 	log('iface', 'u->', request);

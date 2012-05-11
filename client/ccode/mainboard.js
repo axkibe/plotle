@@ -110,13 +110,14 @@ MainBoard.prototype.setCurSpace = function(spaceName) {
 | Sets current user
 */
 MainBoard.prototype.setUser = function(userName) {
+	debug('MAINBOARD:SETUSER', userName);
 	this.$userName = userName;
 	this.$switchPanel = null;
 
 	var ulabel = this.cc.username;
 	ulabel.text = userName;
 	ulabel.poke();
-}
+};
 
 /**
 | Draws the mainboard

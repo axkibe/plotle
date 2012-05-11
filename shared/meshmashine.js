@@ -669,13 +669,42 @@ TFXOps.rank = function(sign, src, trg) {
 };
 
 
-MeshMashine = {
-	Change      : Change,
+/**
+| Appends changes of chgX that matter to space to the array chga.
+| @@ Make a proper filter that splits
+*/
+var filter = function(change, space, chga) {
+	var chgX = change.chgX;
+	var f = false;
+	for(var a = 0, aZ = chgX.length; a < aZ; a++) {
+		var chg = chgX[a];
 
-	tfxChg      : tfxChg,
-	tfxChgX     : tfxChgX,
-	tfxSign     : tfxSign,
-	changeTree  : changeTree
+		if ((chg.src.path && chg.src.path.get(0) === space) ||
+			(chg.trg.path && chg.trg.path.get(0) === space)
+		) { f = true; }
+	}
+	if (f) { chga.push(change); }
+};
+
+/**
+| Sets the names of all spaces that are affected by chgX.
+*/
+var listSpaces = function(chgX, spaces) {
+	for(var a = 0, aZ = chgX.length; a < aZ; a++) {
+		var chg = chgX[a];
+		if (chg.src.path) { spaces[chg.src.path.get(0)] = true; }
+		if (chg.trg.path) { spaces[chg.trg.path.get(0)] = true; }
+	}
+};
+
+MeshMashine = {
+	filter     : filter,
+	Change     : Change,
+	listSpaces : listSpaces,
+	tfxChg     : tfxChg,
+	tfxChgX    : tfxChgX,
+	tfxSign    : tfxSign,
+	changeTree : changeTree
 };
 
 /**
