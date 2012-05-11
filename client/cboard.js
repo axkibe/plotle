@@ -106,7 +106,7 @@ CBoard.prototype.newCC = function(twig, inherit, name) {
 		if (Proto) {
 			return new Proto(twig, this, inherit, name);
 		} else {
-			debug('WARN', 'TODO', 'no', twig.code); // TODO
+			throw new Error('No prototype for :' + twig.code);
 		}
 	}
 
