@@ -83,8 +83,8 @@ var Server = function() {
 	this.buildHTMLs();
 	this.initDatabase();
 
-	// messages for each space
-	this.messages = {};
+	// all messages
+	this.messages = [];
 
 	// visitors
 	this.nextVisitor = 1001;
@@ -98,9 +98,9 @@ var Server = function() {
 
 	// a table of all clients waiting for an update
 	this.upsleep   = {};
+
 	// next upsleepID
 	this.nextSleep = 1;
-
 
 	// all other steps of the startup sequence are done in
 	// async waterfall model from here.
@@ -235,13 +235,8 @@ Server.prototype.playbackOne = function(o, cursor) {
 | Creates a message for a space
 */
 Server.prototype.message = function(space, message) {
-	var spm = this.messages[space];
-	if (!spm) {
-		spm = this.messages[space] = [];
-	}
-	spm.push(message);
-
-	// TODO XXX wakes
+	this.messages.push({ space: space, message: message });
+	this.wake([ space ]);
 };
 
 /**
@@ -627,43 +622,36 @@ Server.prototype.register = function(cmd, res) {
 | Gets new changes or waits for them.
 */
 Server.prototype.update = function(cmd, res) {
-	//var mid   = cmd.mid;
-	var pass    = cmd.pass;
-	var space   = cmd.space;
-	var time    = cmd.time;
-	var user    = cmd.user;
-
-	debug('UPDATE', user, pass);
-
-	var changes = this.changes;
-	var cZ      = changes.length;
+	var pass  = cmd.pass;
+	var space = cmd.space;
+	var time  = cmd.time;
+	var mseq  = cmd.mseq;
+	var user  = cmd.user;
 
 	// some tests
 	if (!is(time))    { throw reject('time missing'); }
-	if (!(time >= 0 && time <= cZ)) { throw reject('invalid time'); }
+	if (!(time >= 0 && time <= this.changes.length)) { throw reject('invalid time'); }
+	if (mseq < 0) { mseq = this.messages.length; }
+//	if (!(mseq <= this.messages.length)) { throw reject('invalid mseq'); } TODO
 
-	if (time < cZ) {
-		// immediate answer?
-		var chga = [];
-		for (var c = time; c < cZ; c++) {
-			MeshMashine.filter(changes[c], space, chga);
-		}
-		
-		if (chga.length > 0) {
-			return { ok : true, time: time, timeZ: cZ, chgs : chga };
-		}
+	var asw = this.conveyUpdate(time, mseq, space);
+
+	// immidiate answer?
+	if (asw.chgs.length > 0 || asw.msgs.length > 0) {
+		return asw;
+	} else {
+		// if not immidiate puts the request to sleep
+		var sleepID = '' + this.nextSleep++;
+		var timerID = setTimeout(this.expireSleep, 60000, this, sleepID);
+		this.upsleep[sleepID] = {
+			time     : time,
+			mseq     : mseq,
+			timerID  : timerID,
+			res      : res,
+			space    : space
+		};
+		return null;
 	}
-
-	// if not immediate puts the request to sleep
-	var sleepID = '' + this.nextSleep++;
-	var timerID = setTimeout(this.expireSleep, 60000, this, sleepID);
-	this.upsleep[sleepID] = {
-		time     : cZ,
-		timerID  : timerID,
-		res      : res,
-		space    : space
-	};
-	return null;
 };
 
 /**
@@ -682,6 +670,35 @@ Server.prototype.expireSleep = function(self, sleepID) {
 };
 
 /**
+| Result for an update operation
+*/
+Server.prototype.conveyUpdate = function(time, mseq, space) {
+	var changes  = this.changes;
+	var messages = this.messages;
+	var cZ       = changes.length;
+	var mZ       = messages.length;
+	var chga     = [];
+	var msga     = [];
+	for (var c = time; c < cZ; c++) {
+		MeshMashine.filter(changes[c], space, chga);
+	}
+	for (var m = mseq; m < mZ; m++) {
+		if (messages[m].space !== space) { continue; }
+		msga.push(messages[m].message);
+	}
+		
+	return {
+		ok : true,
+		time: time,
+		timeZ: cZ,
+		chgs : chga,
+		msgs : msga,
+		mseq : mseq,
+		mseqZ : mZ
+	};
+}
+
+/**
 | Wakes up any sleeping updates and gives them data if applicatable.
 */
 Server.prototype.wake = function(spaces) {
@@ -698,13 +715,8 @@ Server.prototype.wake = function(spaces) {
 		clearTimeout(sleep.timerID);
 		delete this.upsleep[sKey];
 
-		var chga = [];
-		for (var c = sleep.time; c < cZ; c++) {
-			MeshMashine.filter(changes[c], sleep.space, chga);
-			//chga.push(changes[c]);
-		}
+		var asw = this.conveyUpdate(sleep.time, sleep.mseq, sleep.space);
 
-		var asw = { ok : true, time: sleep.time, timeZ: cZ, chgs : chga };
 		var res = sleep.res;
 		log('ajax', '->', asw);
 		res.writeHead(200, {'Content-Type': 'application/json'});
@@ -722,8 +734,6 @@ Server.prototype.get = function(cmd, res) {
 	var changes = this.changes;
 	var cZ      = changes.length;
 	
-	debug('UPDATE', user, pass);
-
 	// checks
 	if (!is(cmd.time)) { throw reject('time missing'); }
 	if (!is(cmd.path)) { throw reject('path missing'); }

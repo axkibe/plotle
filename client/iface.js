@@ -67,6 +67,12 @@ IFace = function() {
 	// what the client thinks the server has.
 	this.rtree   = null;
 
+	// the remote time sequence
+	this.$remoteTime = null;
+
+	// the current message sequence number 
+	this.$mseq = null;
+
 	// changes to be send to the server
 	this.$outbox = null;
 
@@ -224,7 +230,7 @@ IFace.prototype.aquireSpace = function(spaceName, callback) {
 
 		self.aquireSpaceActive = false;
 
-		self.remoteTime = asw.time;
+		self.$remoteTime = asw.time;
 
 		var troot = { type : 'Nexus', copse : {} };
 		troot.copse[spaceName] = asw.node;
@@ -336,7 +342,7 @@ IFace.prototype._update = function() {
 			}
 			self.tree = tree;
 		}
-		self.remoteTime = asw.timeZ;
+		self.$remoteTime = asw.timeZ;
 
 		if (report.length > 0 && self.update) {
 			self.update.update(self.tree, report);
@@ -352,7 +358,7 @@ IFace.prototype._update = function() {
 		cmd   : 'update',
 		pass  : self.$pass,
 		space : self.$spaceName,
-		time  : self.remoteTime,
+		time  : self.$remoteTime,
 		user  : self.$user
 	});
 
@@ -422,7 +428,7 @@ IFace.prototype.sendChanges = function() {
 	var request = JSON.stringify({
 		cmd  : 'alter',
 		cid  : c.cid,
-		time : this.remoteTime,
+		time : this.$remoteTime,
 		chgX : c.chgX
 	});
 
