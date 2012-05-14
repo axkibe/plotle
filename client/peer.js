@@ -79,9 +79,19 @@ Peer.prototype.passhash = function(pass) {
 	return sha1hex(pass + '-meshcraft-8833');
 };
 
+/**
+| sets the current user
+*/
+Peer.prototype.setUser = function(user, pass) {
+	this._iface.setUser(user, pass);
+}
+
+/**
+| Logs out a registered users, switches to visitor
+*/
 Peer.prototype.logout = function(callback) {
 	if (this.$visitUser) {
-		this._iface.setUser(this.$visitUser, this.$visitPass);
+		//this._iface.setUser(this.$visitUser, this.$visitPass); TODO REM
 		callback({ ok : true, user : this.$visitUser, pass : this.$visitPass });
 	} else {
 		this.auth('visitor', null, callback);
@@ -102,6 +112,7 @@ Peer.prototype.auth = function(user, pass, callback) {
 			self.$visitUser = asw.user;
 			self.$visitPass = asw.pass;
 		}
+		//self._iface.setUser(asw.user, asw.pass); TODO REM
 		callback(asw);
 	});
 };

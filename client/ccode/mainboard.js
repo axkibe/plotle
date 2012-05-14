@@ -111,7 +111,6 @@ MainBoard.prototype.setCurSpace = function(spaceName) {
 | Sets current user
 */
 MainBoard.prototype.setUser = function(userName) {
-	debug('setUser', userName);
 	this.$userName = userName;
 	this.$switchPanel = null;
 

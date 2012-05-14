@@ -51,7 +51,7 @@ var theme;
 | Exports
 */
 var shell = null;
-var peer  = null;
+var peer  = null;  // @@ make part of shell
 var Shell = null;
 
 /**
@@ -477,11 +477,17 @@ Shell.prototype.resize = function(width, height) {
 Shell.prototype.setUser = function(user, pass) {
 	this.$user = user;
 	this.cockpit.setUser(user);
+	peer.setUser(user, pass);
 
 	if (user.substr(0, 5) !== 'visit') {
 		window.localStorage.setItem('user', user);
 		window.localStorage.setItem('pass', pass);
 	} else {
+		if (this.vspace && 
+			(this.vspace.key !== 'welcome' && this.vspace.key !== 'sandbox')
+		) {
+			this.moveToSpace('welcome');
+		}
 		window.localStorage.setItem('user', null);
 		window.localStorage.setItem('pass', null);
 	}
@@ -518,6 +524,7 @@ Shell.prototype.moveToSpace = function(spaceName) {
 		this.setCaret(null, null);
 	}
 
+	// TODO remove
 	if (spaceName.substr(0, 2) == '*:') {
 		spaceName = this.$user + spaceName.substr(1);
 	}
@@ -546,7 +553,7 @@ Shell.prototype.onLoadAuth = function(user, res) {
 	var self = this;
 
 	if (!res.ok) {
-		// when logging in with a real user failed
+		// when log in with a real user failed
 		// takes a visitor instead
 		if (user !== 'visitor') {
 			peer.auth('visitor', null, function(res) {
@@ -561,7 +568,7 @@ Shell.prototype.onLoadAuth = function(user, res) {
 	}
 
 	self.setUser(res.user, res.pass);
-	self.moveToSpace('welcome');
+	if (!this.vspace) { self.moveToSpace('welcome'); }
 };
 
 

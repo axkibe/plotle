@@ -627,9 +627,14 @@ Server.prototype.register = function(cmd, res) {
 | Gets new changes or waits for them.
 */
 Server.prototype.update = function(cmd, res) {
-	var time    = cmd.time;
 	//var mid   = cmd.mid;
+	var pass    = cmd.pass;
 	var space   = cmd.space;
+	var time    = cmd.time;
+	var user    = cmd.user;
+
+	debug('UPDATE', user, pass);
+
 	var changes = this.changes;
 	var cZ      = changes.length;
 
@@ -711,9 +716,13 @@ Server.prototype.wake = function(spaces) {
 | Executes a get command.
 */
 Server.prototype.get = function(cmd, res) {
+	var pass    = cmd.pass;
+	var time    = cmd.time;
+	var user    = cmd.user;
 	var changes = this.changes;
 	var cZ      = changes.length;
-	var time    = cmd.time;
+	
+	debug('UPDATE', user, pass);
 
 	// checks
 	if (!is(cmd.time)) { throw reject('time missing'); }

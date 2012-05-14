@@ -244,8 +244,10 @@ IFace.prototype.aquireSpace = function(spaceName, callback) {
 
     var request = JSON.stringify({
         cmd  : 'get',
+		path : path,
+		pass : self.$pass,
         time : -1,
-		path : path
+		user : self.$user
     });
 
     log('iface', 'sg->', request);
@@ -348,8 +350,10 @@ IFace.prototype._update = function() {
 
 	var request = JSON.stringify({
 		cmd   : 'update',
+		pass  : self.$pass,
 		space : self.$spaceName,
-		time  : self.remoteTime
+		time  : self.remoteTime,
+		user  : self.$user
 	});
 
 	log('iface', 'u->', request);
