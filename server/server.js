@@ -102,6 +102,9 @@ var Server = function() {
 	// next upsleepID
 	this.nextSleep = 1;
 
+	// table of all cached user credentials
+	this.$users = {};
+
 	// all other steps of the startup sequence are done in
 	// async waterfall model from here.
 	this.connectToDatabase();
@@ -532,8 +535,8 @@ Server.prototype.auth = function(cmd, res) {
 		self.visitors[nv] = v;
 		return { ok: true, user: v.user };
 	}
-	
-	self.db.users.findOne({ _id : cmd.user}, function(err, val) {
+
+	self.db.users.findOne({ _id : user}, function(err, val) {
 		if (err !== null) { throw new Error('Database fail: '+err); }
 		var asw;
 		if (val === null) {
@@ -541,6 +544,7 @@ Server.prototype.auth = function(cmd, res) {
 		} else if (val.pass !== pass) {
 			asw = reject('Invalid password');
 		} else {
+			self.$users[user] = {user: user, pass: pass};
 			asw = { ok : true, user: user };
 		}
 		log('ajax', '->', asw);
