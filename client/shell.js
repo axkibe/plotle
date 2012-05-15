@@ -179,6 +179,18 @@ Shell.prototype.getEntity = function(visec, path) {
 
 
 /**
+| Peer received a message.
+*/
+Shell.prototype.messageRCV = function(space, user, message) {
+	if (user) {
+		this.cockpit.message(user + ': ' + message);
+	} else {
+		this.cockpit.message(message);
+	}
+	this.poke();
+}
+
+/**
 | MeshMashine reports updates.
 */
 Shell.prototype.update = function(tree, chgX) {
@@ -483,7 +495,7 @@ Shell.prototype.setUser = function(user, pass) {
 		window.localStorage.setItem('user', user);
 		window.localStorage.setItem('pass', pass);
 	} else {
-		if (this.vspace && 
+		if (this.vspace &&
 			(this.vspace.key !== 'welcome' && this.vspace.key !== 'sandbox')
 		) {
 			this.moveToSpace('welcome');
@@ -500,6 +512,7 @@ Shell.prototype.setUser = function(user, pass) {
 Shell.prototype.onload = function() {
 	peer = new Peer();
 	peer.setUpdate(this);
+	peer.setMessageRCV(this);
 	var self = this;
 
 	var user = window.localStorage.getItem('user');

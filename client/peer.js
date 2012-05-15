@@ -84,7 +84,7 @@ Peer.prototype.passhash = function(pass) {
 */
 Peer.prototype.setUser = function(user, pass) {
 	this._iface.setUser(user, pass);
-}
+};
 
 /**
 | Logs out a registered users, switches to visitor
@@ -115,6 +115,13 @@ Peer.prototype.auth = function(user, pass, callback) {
 		//self._iface.setUser(asw.user, asw.pass); TODO REM
 		callback(asw);
 	});
+};
+
+/**
+| Sends a message.
+*/
+Peer.prototype.sendMessage = function(message) {
+	this._iface.sendMessage(message);
 };
 
 /**
@@ -152,9 +159,17 @@ Peer.prototype.get = function(path, len) {
 
 /**
 | Sets the update listener
+| @@ rename setUpdateRCV
 */
 Peer.prototype.setUpdate = function(update) {
 	this._iface.update = update;
+};
+
+/**
+| Sets the message receiver
+*/
+Peer.prototype.setMessageRCV = function(messageRCV) {
+	this._iface.messageRCV = messageRCV;
 };
 
 /**

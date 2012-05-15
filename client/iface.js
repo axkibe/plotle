@@ -70,7 +70,7 @@ IFace = function() {
 	// the remote time sequence
 	this.$remoteTime = null;
 
-	// the current message sequence number 
+	// the current message sequence number
 	this.$mseq = null;
 
 	// changes to be send to the server
@@ -79,8 +79,12 @@ IFace = function() {
 	// changes that are currently on the way to the server
 	this.$postbox = null;
 
-	// if set report updates to this object
+	// if set reports updates to this object.
+	// @@ rename updateRCV
 	this.update  = null;
+
+	// if set reports messages to this object.
+	this.messageRCV = null;
 
 	// current update request
 	this.$updateAjax = null;
@@ -103,7 +107,9 @@ IFace.prototype._ajax = function(request, callback) {
 
 		if (ajax.status !== 200) {
 			log('iface', request.cmd, 'status: ', ajax.status);
-			callback( { ok: false, message: 'connection' , status: ajax.status } );
+			if (callback) {
+				callback( { ok: false, message: 'connection' , status: ajax.status } );
+			}
 			return;
 		}
 
@@ -111,17 +117,17 @@ IFace.prototype._ajax = function(request, callback) {
 		try {
 			asw = JSON.parse(ajax.responseText);
 		} catch (e) {
-			callback( { ok: false, message: 'nojson' } );
+			if (callback) { callback( { ok: false, message: 'nojson' } ); }
 		}
 
 		log('iface', '<-', asw);
 		if (!asw.ok) {
 			log('iface', request.cmd, 'server not ok');
-			callback( asw, null);
+			if (callback) { callback( asw, null); }
 			return;
 		}
 
-		callback(asw);
+		if (callback) { callback(asw); }
 	};
 
     var rs = JSON.stringify(request);
@@ -159,7 +165,7 @@ IFace.prototype.auth = function(user, pass, callback) {
 };
 
 /**
-| Register a user
+| Registers a user.
 */
 IFace.prototype.register = function(user, mail, pass, code, callback) {
 	var self = this;
@@ -178,7 +184,21 @@ IFace.prototype.register = function(user, mail, pass, code, callback) {
 };
 
 /**
-| Aquires a space
+| Sends a message.
+*/
+IFace.prototype.sendMessage = function(message) {
+	var self = this;
+	self._ajax({
+        cmd     : 'message',
+		user    : self.$user,
+		pass    : self.$pass,
+		space   : self.$spaceName,
+		message : message
+	}, null);
+};
+
+/**
+| Aquires a space.
 */
 IFace.prototype.aquireSpace = function(spaceName, callback) {
 	var self = this;
@@ -194,6 +214,7 @@ IFace.prototype.aquireSpace = function(spaceName, callback) {
 	self.rtree      = null; // @@ $rtree
 	self.$outbox    = [];
 	self.$postbox   = [];
+	self.$mseq      = -1;
 
 	var path = new Path([spaceName]);
 
@@ -305,7 +326,7 @@ IFace.prototype._update = function() {
 
 		var report  = [];
 		var gotOwnChgs = false;
-		if (chgs) {
+		if (chgs && chgs.length > 0) {
 			// this wasn't an empty timeout?
 			var postbox = self.$postbox;
 			for(a = 0, aZ = chgs.length; a < aZ; a++) {
@@ -342,7 +363,18 @@ IFace.prototype._update = function() {
 			}
 			self.tree = tree;
 		}
+
+		var msgs = asw.msgs;
+		if (msgs && self.messageRCV) {
+			for(a = 0, aZ = msgs.length; a < aZ; a++) {
+				var m = msgs[a];
+				self.messageRCV.messageRCV(m.space, m.user, m.message);
+			}
+		}
+
 		self.$remoteTime = asw.timeZ;
+		var mseqZ        = asw.mseqZ;
+		if (is(mseqZ)) { self.$mseq = mseqZ; }
 
 		if (report.length > 0 && self.update) {
 			self.update.update(self.tree, report);
@@ -359,6 +391,7 @@ IFace.prototype._update = function() {
 		pass  : self.$pass,
 		space : self.$spaceName,
 		time  : self.$remoteTime,
+		mseq  : self.$mseq,
 		user  : self.$user
 	});
 

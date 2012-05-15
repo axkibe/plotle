@@ -37,6 +37,7 @@ var Fabric;
 var Jools;
 var Measure;
 var Path;
+var peer;
 var shell;
 var theme;
 
@@ -276,7 +277,8 @@ CChat.prototype.keyEnter = function() {
 
 	var caret = shell.caret;
 	var csign = caret.sign;
-	this.addMessage(this.itext);
+	peer.sendMessage(this.itext);
+//	this.addMessage(this.itext);
 	this.itext = '';
 	shell.setCaret('cockpit', {
 		path : csign.path,

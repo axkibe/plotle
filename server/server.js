@@ -234,9 +234,25 @@ Server.prototype.playbackOne = function(o, cursor) {
 /**
 | Creates a message for a space
 */
-Server.prototype.message = function(space, message) {
-	this.messages.push({ space: space, message: message });
-	this.wake([ space ]);
+Server.prototype.message = function(cmd) {
+	var space   = cmd.space;
+	var message = cmd.message;
+	var user    = cmd.user;
+	var pass    = cmd.pass;
+	
+	if (!is(user))    { throw reject('user missing');    }
+	if (!is(pass))    { throw reject('pass missing');    }
+	if (!is(space))   { throw reject('space missing');   }
+	if (!is(message)) { throw reject('message missing'); }
+
+	// TODO check pass
+
+	this.messages.push({ space: space, user: user, message: message });
+	var spaces = [];
+	spaces[space] = true;
+	this.wake(spaces);
+
+	return { ok : true };
 };
 
 /**
@@ -317,6 +333,7 @@ Server.prototype.registerFiles = function() {
 		if (pack) { self.packfiles.push({ path: path, filename: filename }); }
 	};
 
+	// @@ remove first parameter
 	registerFile('/favicon.ico',           'ico',  0, 'icons/hexicon.ico'            );
 	registerFile('/testpad.html',          'html', 0, 'client/testpad.html'          );
 	registerFile('/testpad.js',            'js',   0, 'client/testpad.js'            );
@@ -632,7 +649,7 @@ Server.prototype.update = function(cmd, res) {
 	if (!is(time))    { throw reject('time missing'); }
 	if (!(time >= 0 && time <= this.changes.length)) { throw reject('invalid time'); }
 	if (mseq < 0) { mseq = this.messages.length; }
-//	if (!(mseq <= this.messages.length)) { throw reject('invalid mseq'); } TODO
+	if (!(mseq <= this.messages.length)) { throw reject('invalid mseq: ' + mseq); }
 
 	var asw = this.conveyUpdate(time, mseq, space);
 
@@ -684,19 +701,19 @@ Server.prototype.conveyUpdate = function(time, mseq, space) {
 	}
 	for (var m = mseq; m < mZ; m++) {
 		if (messages[m].space !== space) { continue; }
-		msga.push(messages[m].message);
+		msga.push(messages[m]);
 	}
 		
 	return {
-		ok : true,
-		time: time,
-		timeZ: cZ,
-		chgs : chga,
-		msgs : msga,
-		mseq : mseq,
+		ok    : true,
+		time  : time,
+		timeZ : cZ,
+		chgs  : chga,
+		msgs  : msga,
+		mseq  : mseq,
 		mseqZ : mZ
 	};
-}
+};
 
 /**
 | Wakes up any sleeping updates and gives them data if applicatable.
@@ -858,6 +875,7 @@ Server.prototype.ajaxCmd = function(cmd, res) {
 		case 'alter'    : asw = this.alter    (cmd);      break;
 		case 'auth'     : asw = this.auth     (cmd, res); break;
 		case 'get'      : asw = this.get      (cmd, res); break;
+		case 'message'  : asw = this.message  (cmd);      break;
 		case 'register' : asw = this.register (cmd, res); break;
 		case 'update'   : asw = this.update   (cmd, res); break;
 		default:
