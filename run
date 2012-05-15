@@ -1,2 +1,2 @@
 #!/bin/bash
-/usr/local/bin/node server/server.js
+/usr/local/bin/_node -lp server/server._js

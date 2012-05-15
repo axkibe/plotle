@@ -177,7 +177,6 @@ Shell.prototype.getEntity = function(visec, path) {
 	}
 };
 
-
 /**
 | Peer received a message.
 */
@@ -188,7 +187,7 @@ Shell.prototype.messageRCV = function(space, user, message) {
 		this.cockpit.message(message);
 	}
 	this.poke();
-}
+};
 
 /**
 | MeshMashine reports updates.

@@ -1,4 +1,3 @@
-#!/usr/local/bin/node
 /**                                                      _.._
                                                       .-'_.._''.
  __  __   ___       _....._              .          .' .'     '.\
@@ -34,13 +33,6 @@
 if (typeof(window) !== 'undefined') { throw new Error('server.js needs node!'); }
 
 /**
-| Delays in coming ajax requests by n milliseconds.
-| Issued for development to simulate slow network connections.
-| Normally this should be 0;
-*/
-var ajaxInDelay = 0;
-
-/**
 | Imports
 */
 var Jools       = require('../shared/jools');
@@ -74,14 +66,25 @@ var uid          = Jools.uid;
 | Server
 */
 var Server = function() {
-	this.startup = true;
 	this.packfiles = [ ];
 
 	this.buildClientConfig();
 	this.registerFiles();
 	this.buildPack();
 	this.buildHTMLs();
-	this.initDatabase();
+	
+	// init database
+	this.db = {};
+	this.db.server    = new mongodb.Server(
+		config.database.host,
+		config.database.port,
+		{}
+	);
+	this.db.connector = new mongodb.Db(
+		config.database.name,
+		this.db.server,
+		{}
+	);
 
 	// all messages
 	this.messages = [];
@@ -107,105 +110,46 @@ var Server = function() {
 
 	// all other steps of the startup sequence are done in
 	// async waterfall model from here.
-	this.connectToDatabase();
-};
 
-/**
-| Initializes the database variables.
-*/
-Server.prototype.initDatabase = function() {
-	this.db = {};
-
-	this.db.server    = new mongodb.Server(
-		config.database.host,
-		config.database.port,
-		{}
-	);
-
-	this.db.connector = new mongodb.Db(
-		config.database.name,
-		this.db.server,
-		{}
-	);
+	this.startup(function(err, asw) {
+		if (err) { throw err; }
+	});
 };
 
 /**
 | Connects to the database.
 */
-Server.prototype.connectToDatabase = function() {
+Server.prototype.startup = function(_) {
+	var db = this.db;
+	db.connection = db.connector.open(_);
+	log('start', 'Connected to database');
+	db.changes = db.connection.collection('changes', _);
+	db.invites = db.connection.collection('invites', _);
+	db.users   = db.connection.collection('users', _);
+
+	var cursor = db.changes.find(_);
+	for(var o = cursor.nextObject(_); o !== null; o = cursor.nextObject(_)) {
+		this.playbackOne(o);
+	}
+	
+	log('start', 'Uncompressed pack length is ', this.pack.length);
+	this.packgz = zlib.gzip(this.pack, _);
+	log('start', 'Compressed pack length is ', this.packgz.length);
+	
+	log('start', 'Starting server @ http://' + (config.ip || '*') + '/:' + config.port);
+
 	var self = this;
-	this.db.connector.open(function(err, connection) {
-		if (err !== null) { throw new Error('Cannot connect to database: '+err); }
-		log('start', 'Connected to database');
-		self.db.connection = connection;
-
-		self.aquireChangesCollection();
-	});
-};
-
-/**
-| Aquires the changes collection.
-*/
-Server.prototype.aquireChangesCollection = function() {
-	var self = this;
-	this.db.connection.collection('changes', function(err, changes) {
-		if (err !== null) { throw new Error('Cannot aquire changes collection: '+err); }
-		self.db.changes = changes;
-
-		self.aquireInvitesCollection();
-	});
-};
-		
-/**
-| Aquires the invites collection.
-*/
-Server.prototype.aquireInvitesCollection = function() {
-	var self = this;
-	this.db.connection.collection('invites', function(err, invites) {
-		if (err !== null) { throw new Error('Cannot aquire invites collection: '+err); }
-		self.db.invites = invites;
-
-		self.aquireUsersCollection();
-	});
-};
-
-/**
-| Aquires the users collection.
-*/
-Server.prototype.aquireUsersCollection = function() {
-	var self = this;
-	this.db.connection.collection('users', function(err, users) {
-		if (err !== null) { throw new Error('Cannot aquire invites collection: '+err); }
-		self.db.users = users;
-
-		self.playbackChanges();
-	});
-};
-		
-/**
-| Playbacks the changes.
-*/
-Server.prototype.playbackChanges = function() {
-	var self = this;
-	log('start', 'Playing back change history');
-	this.db.changes.find(function(err, cursor) {
-		if (err !== null) { throw new Error('Database fail!'); }
-		cursor.nextObject(function(err, o) {
-			if (err !== null) { throw new Error('Database fail!'); }
-			if (o === null) {
-				self.compressPack();
-			} else {
-				self.playbackOne(o, cursor);
-			}
-		});
-	});
+	http.createServer(function(req, res) {
+		self.requestListener(req, res);
+	}).listen(config.port, config.ip, _);
+	
+	log('start', 'Server running');
 };
 
 /**
 | Playbacks one change.
 */
-Server.prototype.playbackOne = function(o, cursor) {
-	var self = this;
+Server.prototype.playbackOne = function(o) {
 	var c = {
 		cid  : o.cid,
 		chgX : null
@@ -223,15 +167,6 @@ Server.prototype.playbackOne = function(o, cursor) {
 	this.changes.push(c);
 	var r = MeshMashine.changeTree(this.tree, c.chgX);
 	this.tree = r.tree;
-
-	cursor.nextObject(function(err, o) {
-		if (err !== null) { throw new Error('Database fail!'); }
-		if (o === null) {
-			self.compressPack();
-		} else {
-			self.playbackOne(o, cursor);
-		}
-	});
 };
 
 /**
@@ -259,39 +194,9 @@ Server.prototype.message = function(cmd) {
 };
 
 /**
-| Compresses the javascript pack to reduce download size.
-*/
-Server.prototype.compressPack = function() {
-	var self = this;
-	log('start', 'Uncompressed pack length is ', this.pack.length);
-	zlib.gzip(this.pack, function(err, packgz) {
-		if (err) throw new Error('GZIP of pack failed');
-		self.packgz = packgz;
-		log('start', 'Compressed pack length is ', packgz.length);
-		self.startWebServer();
-	});
-};
-
-/**
-| Starts the webserver.
-*/
-Server.prototype.startWebServer = function() {
-	var self = this;
-	log('start', 'Starting server @ http://' + (config.ip || '*') + '/:' + config.port);
-
-	http.createServer(function(req, res) {
-		self.requestListener(req, res);
-	}).listen(config.port, config.ip, function() {
-		log('start', 'Server running');
-		self.startup = false;
-	});
-};
-
-/**
 | Builds the clients config.js file.
 */
 Server.prototype.buildClientConfig = function() {
-	if (!this.startup) { throw new Error('function is only for startup'); }
 	var k;
 
 	var cconfig = [];
@@ -320,7 +225,6 @@ Server.prototype.buildClientConfig = function() {
 */
 Server.prototype.registerFiles = function() {
 	var self = this;
-	if (!this.startup) { throw new Error('function is only for startup'); }
 	this.files = {};
 
 	var registerFile = function(path, type, pack, filename) {
@@ -401,8 +305,6 @@ Server.prototype.registerFiles = function() {
 | so the client loads way faster in release mode.
 */
 Server.prototype.buildPack = function() {
-	if (!this.startup) { throw new Error('function is only for startup'); }
-
 	log('start', 'Preparing pack');
 	this.pack = [ this.cconfig ];
 	this.devels = [ '<script src="/config.js" type="text/javascript"></script>' ];
@@ -424,7 +326,6 @@ Server.prototype.buildPack = function() {
 		this.pack = uglify.uglify.gen_code(ast);
 	}
 
-
 	this.packsha1 = sha1.sha1hex(this.pack);
 	this.mepacksha1 = '/meshcraft-' + this.packsha1 + '.js';
 	log('start', 'pack:', this.mepacksha1);
@@ -435,8 +336,6 @@ Server.prototype.buildPack = function() {
 | Builds HTML files
 */
 Server.prototype.buildHTMLs = function() {
-	if (!this.startup) { throw new Error('function is only for startup'); }
-
 	// the devel file
 	this.devel = fs.readFileSync('client/devel.html') + '';
 	this.devel = this.devel.replace(/<!--DEVELPACK.*>/, this.devels.join('\n'));
@@ -566,9 +465,9 @@ Server.prototype.register = function(cmd, res) {
 	var mail = cmd.mail;
 	var code = cmd.code;
 	if (!is(user)) { throw reject('user missing'); }
-	if (!is(pass)) { throw reject('pass missing');  }
-	if (!is(mail)) { throw reject('mail missing');  }
-	if (!is(code)) { throw reject('code missing');  }
+	if (!is(pass)) { throw reject('pass missing'); }
+	if (!is(mail)) { throw reject('mail missing'); }
+	if (!is(code)) { throw reject('code missing'); }
 
 	if (user.substr(0, 7) === 'visitor') {
 		throw reject('Username must not start with "visitor"');
@@ -577,63 +476,58 @@ Server.prototype.register = function(cmd, res) {
 		throw reject('Username too short, min. 4 characters');
 	}
 
-	/**
-	| Username is unique and the result of looking up the
-	| invitation code is ...
-	*/
-	var gotCode = function(err, val) {
-		if (err !== null) { throw new Error('Database fail: '+err); }
+	(function(_) {
+		var asw;
+		var val = self.db.users.findOne({ _id : cmd.user}, _);
 
-		if (val === null) {
-			var asw = reject('Unknown invitation code');
-			log('ajax', '->', asw);
-			res.writeHead(200, { 'Content-Type': 'application/json' });
-			res.end(JSON.stringify(asw));
-			return;
-		} else {
-			self.db.users.insert({
-				_id  : cmd.user,
-				pass : cmd.pass,
-				mail : cmd.mail,
-				code : cmd.code,
-				icom : val.comment
-			}, function(err, count) {
-				if (err !== null) { throw new Error('Database fail: '+err); }
-				// everything OK so far, creates the user home space
-				var asw = self.alter({
-					time : 0,
-					chgX : new Change(
-						{ val: { type: 'Space', cope: {}, ranks: [] } },
-						{ path : [cmd.user + ':home'] }
-					),
-					cid  : uid()
-				});
-				if (asw.ok !== true) {
-					throw new Error('Cannot create users home space');
-				}
-
-				asw = { ok: true, user: cmd.user };
-				log('ajax', '->', asw);
-				res.writeHead(200, { 'Content-Type': 'application/json' });
-				res.end(JSON.stringify(asw));
-				return;
-			});
-		}
-	};
-
-	self.db.users.findOne({ _id : cmd.user}, function(err, val) {
-		if (err !== null) { throw new Error('Database fail: '+err); }
 		if (val !== null) {
-			var asw = reject('Username already taken');
+			asw = reject('Username already taken');
 			log('ajax', '->', asw);
 			res.writeHead(200, { 'Content-Type': 'application/json' });
 			res.end(JSON.stringify(asw));
 			return;
 		}
 		// aquires an inivitation code and invalidates it if found.
-		self.db.invites.findAndModify(
-			{ _id : cmd.code }, {  }, null, { remove: true }, gotCode
-		);
+		var code = self.db.invites.findAndModify(
+			{ _id : cmd.code }, {  }, null, { remove: true },
+		_);
+		
+		if (code === null) {
+			asw = reject('Unknown invitation code');
+			log('ajax', '->', asw);
+			res.writeHead(200, { 'Content-Type': 'application/json' });
+			res.end(JSON.stringify(asw));
+			return;
+		}
+		
+		var count = self.db.users.insert({
+				_id  : cmd.user,
+				pass : cmd.pass,
+				mail : cmd.mail,
+				code : cmd.code,
+				icom : code.comment
+		}, _);
+
+		// everything OK so far, creates the user home space
+		asw = self.alter({
+			time : 0,
+			chgX : new Change(
+				{ val: { type: 'Space', cope: {}, ranks: [] } },
+				{ path : [cmd.user + ':home'] }
+			),
+			cid  : uid()
+		});
+		if (asw.ok !== true) {
+			throw new Error('Cannot create users home space');
+		}
+
+		asw = { ok: true, user: cmd.user };
+		log('ajax', '->', asw);
+		res.writeHead(200, { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify(asw));
+		return;
+	})(function(err, res) {
+		if (err !== null) { throw err; }
 	});
 
 	return null;
@@ -857,15 +751,7 @@ Server.prototype.webAjax = function(req, red, res) {
 			return;
 		}
 
-		if (ajaxInDelay === 0) {
-			self.ajaxCmd(cmd, res);
-		} else {
-			setTimeout(
-				function(self, cmd, res) { self.ajaxCmd(cmd, res); },
-				ajaxInDelay,
-				self, cmd, res
-			);
-		}
+		self.ajaxCmd(cmd, res);
 	});
 };
 
