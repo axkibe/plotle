@@ -172,7 +172,7 @@ Server.prototype.playbackOne = function(o) {
 /**
 | Creates a message for a space
 */
-Server.prototype.message = function(cmd) {
+Server.prototype.message = function(cmd, _) {
 	var space   = cmd.space;
 	var message = cmd.message;
 	var user    = cmd.user;
@@ -351,7 +351,7 @@ Server.prototype.buildHTMLs = function() {
 /**
 | Executes an alter command.
 */
-Server.prototype.alter = function(cmd) {
+Server.prototype.alter = function(cmd, _) {
 	var time = cmd.time;
 	var chgX = cmd.chgX;
 	var cid  = cmd.cid;
@@ -415,7 +415,7 @@ Server.prototype.alter = function(cmd) {
 /**
 | Executes an auth command.
 */
-Server.prototype.auth = function(cmd, res) {
+Server.prototype.auth = function(cmd, _) {
 	var self = this;
 	var user = cmd.user;
 	var pass = cmd.pass;
@@ -435,108 +435,76 @@ Server.prototype.auth = function(cmd, res) {
 		return { ok: true, user: v.user };
 	}
 
-	self.db.users.findOne({ _id : user}, function(err, val) {
-		if (err !== null) { throw new Error('Database fail: '+err); }
-		var asw;
-		if (val === null) {
-			asw = reject('Username unknown');
-		} else if (val.pass !== pass) {
-			asw = reject('Invalid password');
-		} else {
-			self.$users[user] = {user: user, pass: pass};
-			asw = { ok : true, user: user };
-		}
-		log('ajax', '->', asw);
-		res.writeHead(200, { 'Content-Type': 'application/json' });
-		res.end(JSON.stringify(asw));
-		return;
-	});
-
-	return null;
+	var val = self.db.users.findOne({ _id : user}, _);
+	if (val === null)      { return reject('Username unknown'); }
+	if (val.pass !== pass) { return reject('Invalid password'); }
+	self.$users[user] = {user: user, pass: pass};
+	return { ok : true, user: user };
 };
 
 /**
 | Executes an register command.
 */
-Server.prototype.register = function(cmd, res) {
-	var self = this;
-	var user = cmd.user;
-	var pass = cmd.pass;
-	var mail = cmd.mail;
-	var code = cmd.code;
-	if (!is(user)) { throw reject('user missing'); }
-	if (!is(pass)) { throw reject('pass missing'); }
-	if (!is(mail)) { throw reject('mail missing'); }
-	if (!is(code)) { throw reject('code missing'); }
+Server.prototype.register = function(cmd, _) {
+	if (!is(cmd.user)) { throw reject('user missing'); } // @@ return reject
+	if (!is(cmd.pass)) { throw reject('pass missing'); }
+	if (!is(cmd.mail)) { throw reject('mail missing'); }
+	if (!is(cmd.code)) { throw reject('code missing'); }
 
-	if (user.substr(0, 7) === 'visitor') {
+	if (cmd.user.substr(0, 7) === 'visitor') {
 		throw reject('Username must not start with "visitor"');
 	}
-	if (user.length < 4) {
+	if (cmd.user.length < 4) {
 		throw reject('Username too short, min. 4 characters');
 	}
 
-	(function(_) {
-		var asw;
-		var val = self.db.users.findOne({ _id : cmd.user}, _);
+	var asw;
+	// @@ rename val to something else
+	var val = this.db.users.findOne({ _id : cmd.user}, _);
+	if (val !== null) {
+		return reject('Username already taken');
+	}
+	// aquires an inivitation code and invalidates it if found.
+	var code = this.db.invites.findAndModify(
+		{ _id : cmd.code },
+		{  },
+		null,
+		{ remove: true },
+	_);
+	
+	if (code === null) {
+		return reject('Unknown invitation code');
+	}
+	
+	var count = this.db.users.insert({
+			_id  : cmd.user,
+			pass : cmd.pass,
+			mail : cmd.mail,
+			code : cmd.code,
+			icom : code.comment
+	}, _);
 
-		if (val !== null) {
-			asw = reject('Username already taken');
-			log('ajax', '->', asw);
-			res.writeHead(200, { 'Content-Type': 'application/json' });
-			res.end(JSON.stringify(asw));
-			return;
-		}
-		// aquires an inivitation code and invalidates it if found.
-		var code = self.db.invites.findAndModify(
-			{ _id : cmd.code }, {  }, null, { remove: true },
-		_);
-		
-		if (code === null) {
-			asw = reject('Unknown invitation code');
-			log('ajax', '->', asw);
-			res.writeHead(200, { 'Content-Type': 'application/json' });
-			res.end(JSON.stringify(asw));
-			return;
-		}
-		
-		var count = self.db.users.insert({
-				_id  : cmd.user,
-				pass : cmd.pass,
-				mail : cmd.mail,
-				code : cmd.code,
-				icom : code.comment
-		}, _);
+	// everything OK so far, creates the user home space
+	asw = this.alter({
+		time : 0,
+		chgX : new Change(
+			{ val: { type: 'Space', cope: {}, ranks: [] } },
+			{ path : [cmd.user + ':home'] }
+		),
+		cid  : uid()
+	}, _);
 
-		// everything OK so far, creates the user home space
-		asw = self.alter({
-			time : 0,
-			chgX : new Change(
-				{ val: { type: 'Space', cope: {}, ranks: [] } },
-				{ path : [cmd.user + ':home'] }
-			),
-			cid  : uid()
-		});
-		if (asw.ok !== true) {
-			throw new Error('Cannot create users home space');
-		}
+	if (asw.ok !== true) {
+		throw new Error('Cannot create users home space');
+	}
 
-		asw = { ok: true, user: cmd.user };
-		log('ajax', '->', asw);
-		res.writeHead(200, { 'Content-Type': 'application/json' });
-		res.end(JSON.stringify(asw));
-		return;
-	})(function(err, res) {
-		if (err !== null) { throw err; }
-	});
-
-	return null;
+	return { ok: true, user: cmd.user };
 };
 
 /**
 | Gets new changes or waits for them.
 */
-Server.prototype.update = function(cmd, res) {
+Server.prototype.update = function(cmd, res, _) {
 	var pass  = cmd.pass;
 	var space = cmd.space;
 	var time  = cmd.time;
@@ -551,22 +519,22 @@ Server.prototype.update = function(cmd, res) {
 
 	var asw = this.conveyUpdate(time, mseq, space);
 
-	// immidiate answer?
+	// immediate answer?
 	if (asw.chgs.length > 0 || asw.msgs.length > 0) {
 		return asw;
-	} else {
-		// if not immidiate puts the request to sleep
-		var sleepID = '' + this.nextSleep++;
-		var timerID = setTimeout(this.expireSleep, 60000, this, sleepID);
-		this.upsleep[sleepID] = {
-			time     : time,
-			mseq     : mseq,
-			timerID  : timerID,
-			res      : res,
-			space    : space
-		};
-		return null;
 	}
+
+	// if not immediate puts the request to sleep
+	var sleepID = '' + this.nextSleep++;
+	var timerID = setTimeout(this.expireSleep, 60000, this, sleepID);
+	this.upsleep[sleepID] = {
+		time     : time,
+		mseq     : mseq,
+		timerID  : timerID,
+		res      : res,
+		space    : space
+	};
+	return null;
 };
 
 /**
@@ -642,7 +610,7 @@ Server.prototype.wake = function(spaces) {
 /**
 | Executes a get command.
 */
-Server.prototype.get = function(cmd, res) {
+Server.prototype.get = function(cmd, _) {
 	var pass    = cmd.pass;
 	var time    = cmd.time;
 	var user    = cmd.user;
@@ -743,46 +711,39 @@ Server.prototype.webAjax = function(req, red, res) {
 	req.on('end', function() {
 		var query = data.join('');
 		log('ajax', '<-', query);
-		var cmd;
+		var asw, cmd;
 		try {
 			cmd = JSON.parse(query);
 		} catch (err) {
 			self.webError(res, 400, 'Not valid JSON');
 			return;
 		}
-
-		self.ajaxCmd(cmd, res);
+	
+		asw = self.ajaxCmd(cmd, res, function(e, asw) {
+			if (e) {
+				if (e.ok !== false) throw e; else asw = e;
+			}
+			if (asw === null) { return; }
+			log('ajax', '->', asw);
+			res.writeHead(200, {'Content-Type': 'application/json'});
+			res.end(JSON.stringify(asw));
+		});
 	});
 };
 
 /**
 | Executes an ajaxCmd
 */
-Server.prototype.ajaxCmd = function(cmd, res) {
-	var asw;
-	try {
-		switch (cmd.cmd) {
-		case 'alter'    : asw = this.alter    (cmd);      break;
-		case 'auth'     : asw = this.auth     (cmd, res); break;
-		case 'get'      : asw = this.get      (cmd, res); break;
-		case 'message'  : asw = this.message  (cmd);      break;
-		case 'register' : asw = this.register (cmd, res); break;
-		case 'update'   : asw = this.update   (cmd, res); break;
-		default:
-			this.webError(res, 400, 'unknown command "'+cmd.cmd+'"');
-			return;
-		}
-	} catch (e) {
-		console.log(util.inspect(e));
-		if (e.ok !== false) throw e; else asw = e;
+Server.prototype.ajaxCmd = function(cmd, res, _) {
+	switch (cmd.cmd) {
+	case 'alter'    : return this.alter   (cmd, _);
+	case 'auth'     : return this.auth    (cmd, _);
+	case 'get'      : return this.get     (cmd, _);
+	case 'message'  : return this.message (cmd, _);
+	case 'register' : return this.register(cmd, _);
+	case 'update'   : return this.update  (cmd, res, _);
+	default: return reject('unknown command');
 	}
-
-	if (asw !== null) {
-		log('ajax', '->', asw);
-		res.writeHead(200, {'Content-Type': 'application/json'});
-		res.end(JSON.stringify(asw));
-	}
-	// else assume sleeping call
 };
 
 /**

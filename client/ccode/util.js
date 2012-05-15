@@ -225,12 +225,14 @@ Util.register = function(board) {
 					at1  : pass2.length
 				});
 			}
+			shell.poke();
 			return;
 		}
 
 		shell.setUser(user, pass);
 		board.cockpit.setCurBoard('MainBoard');
 		Util.clearRegister(board);
+		shell.poke();
 	});
 };
 
