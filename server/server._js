@@ -89,10 +89,6 @@ var Server = function() {
 	// all messages
 	this.messages = [];
 
-	// visitors
-	this.nextVisitor = 1001;
-	this.visitors = {};
-
 	// the whole tree
 	this.tree      = new Tree({ type : 'Nexus' }, Meshverse);
 
@@ -104,9 +100,16 @@ var Server = function() {
 
 	// next upsleepID
 	this.nextSleep = 1;
+	
+	// next visitors ID
+	this.nextVisitor = 1000;
 
 	// table of all cached user credentials
 	this.$users = {};
+
+	// the list where a user is present
+	// user for 'entered' and 'left' messages
+	this.$presences = {};
 
 	// all other steps of the startup sequence are done in
 	// async waterfall model from here.
@@ -416,30 +419,34 @@ Server.prototype.alter = function(cmd, _) {
 | Executes an auth command.
 */
 Server.prototype.auth = function(cmd, _) {
-	var self = this;
-	var user = cmd.user;
-	var pass = cmd.pass;
-	if (!is(user)) { throw reject('user missing'); }
-	if (!is(pass)) { throw reject('pass missing');  }
+	if (!is(cmd.user)) { throw reject('user missing'); }
+	if (!is(cmd.pass)) { throw reject('pass missing');  }
+	var users = this.$users;
 
-	if (user === 'visitor') {
-		while (self.visitors[self.nextVisitor]) { self.nextVisitor++; }
-		var nv = self.nextVisitor;
-		var v = {
-			user    : 'visitor-' + nv,
+	if (cmd.user === 'visitor') {
+		var uid;
+		do {
+			this.nextVisitor++;
+			uid = 'visitor-' + this.nextVisitor;
+		}
+		while (users[uid]);
+		users[uid] = {
+			user    : uid,
 			pass    : cmd.pass,
 			created : Date.now(),
 			use     : Date.now()
 		};
-		self.visitors[nv] = v;
-		return { ok: true, user: v.user };
+		return { ok: true, user: uid };
 	}
 
-	var val = self.db.users.findOne({ _id : user}, _);
-	if (val === null)      { return reject('Username unknown'); }
-	if (val.pass !== pass) { return reject('Invalid password'); }
-	self.$users[user] = {user: user, pass: pass};
-	return { ok : true, user: user };
+	if (!users[cmd.user]) {
+		var val = this.db.users.findOne({ _id : cmd.user}, _);
+		if (val === null) { return reject('Username unknown'); }
+		users[cmd.user] = val;
+	}
+
+	if (users[cmd.user].pass !== cmd.pass) { return reject('Invalid password'); }
+	return { ok : true, user: cmd.user };
 };
 
 /**
@@ -518,6 +525,9 @@ Server.prototype.update = function(cmd, res, _) {
 	if (!(mseq <= this.messages.length)) { throw reject('invalid mseq: ' + mseq); }
 
 	var asw = this.conveyUpdate(time, mseq, space);
+
+	// makes a presence
+	//var pres = this.$presences;
 
 	// immediate answer?
 	if (asw.chgs.length > 0 || asw.msgs.length > 0) {
