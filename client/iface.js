@@ -261,7 +261,7 @@ IFace.prototype.aquireSpace = function(spaceName, callback) {
 
 		// waits a second before going into update cycle, so safari
 		// stops its wheely thing.
-		system.setTimer(1000, function() {
+		system.setTimer(1, function() {
 			if (self.$aquireAjax === ajax) {
 				self._update();
 			}

@@ -135,7 +135,6 @@ Peer.prototype.register = function(user, mail, pass, code, callback) {
 | Aquires a space.
 */
 Peer.prototype.aquireSpace = function(name, callback) {
-	if (this.spaceName === name) { return; }
 	this.spaceName = name;
 	this._iface.aquireSpace(name, callback);
 };

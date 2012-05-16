@@ -173,7 +173,19 @@ Server.prototype.playbackOne = function(o) {
 };
 
 /**
+| sends a message
+*/
+Server.prototype.sendMessage = function(space, user, message) {
+	this.messages.push({ space: space, user: user, message: message });
+	var spaces = [];
+	spaces[space] = true;
+	var self = this;
+	process.nextTick(function() { self.wake(spaces); });
+};
+
+/**
 | Creates a message for a space
+| @@ rename this and others to cmdMessage
 */
 Server.prototype.message = function(cmd, _) {
 	var space   = cmd.space;
@@ -188,10 +200,7 @@ Server.prototype.message = function(cmd, _) {
 
 	// TODO check pass
 
-	this.messages.push({ space: space, user: user, message: message });
-	var spaces = [];
-	spaces[space] = true;
-	this.wake(spaces);
+	this.sendMessage(space, user, message);
 
 	return { ok : true };
 };
@@ -509,6 +518,71 @@ Server.prototype.register = function(cmd, _) {
 };
 
 /**
+| Refreshes a users presence timeout.
+*/
+Server.prototype.refreshPresence = function(user, space) {
+	var pres = this.$presences;
+	var pu = pres[user];
+
+	if (!pu) {
+		pu = pres[user] = { spaces : { } };
+	}
+
+	var pus = pu.spaces[space];
+	if (!pus) {
+		pus = pu.spaces[space] = { establish : 0, timerID : null  };
+		pus.timerID = setTimeout(this.expirePresence, 5000, this, user, space);
+		this.sendMessage(space, null, user + ' entered "' + space + '"');
+	} else {
+		if (pus.timerID !== null) { clearTimeout(pus.timerID); pus.timerID = null; }
+		pus.timerID = setTimeout(this.expirePresence, 5000, this, user, space);
+	}
+};
+
+/**
+| Establishes a longer user presence for a update that goes into sleep
+*/
+Server.prototype.establishPresence = function(user, space, sleepID) {
+	var pres = this.$presences;
+	var pu = pres[user];
+
+	if (!pu) {
+		pu = pres[user] = { spaces : { } };
+	}
+
+	var pus = pu.spaces[space];
+	if (!pus) {
+		pus = pu.spaces[space] = { establish : 1, timerID : null  };
+		this.sendMessage(space, null, user + ' entered "' + space + '"');
+	} else {
+		if (pus.timerID !== null) { clearTimeout(pus.timerID); pus.timerID = null; }
+		pus.establish++;
+	}
+};
+
+Server.prototype.destablishPresence = function(user, space) {
+	var pres = this.$presences;
+	var pu   = pres[user];
+	var pus  = pu.spaces[space];
+	pus.establish--;
+	if (pus.establish <= 0) {
+		if (pus.timerID !== null) { throw new Error("Presence timers mixed up."); }
+		pus.timerID = setTimeout(this.expirePresence, 5000, this, user, space);
+	}
+};
+
+/**
+| Expires a user presence with zero establishments after timeout
+*/
+Server.prototype.expirePresence = function(self, user, space) {
+	self.sendMessage(space, null, user + ' left "' + space + '"');
+	var pres = self.$presences;
+	var pu = pres[user];
+	if (pu.spaces[space].establish !== 0) { throw new Error('Something wrong with presences.'); }
+	delete pu.spaces[space];
+};
+
+/**
 | Gets new changes or waits for them.
 */
 Server.prototype.update = function(cmd, res, _) {
@@ -523,11 +597,9 @@ Server.prototype.update = function(cmd, res, _) {
 	if (!(time >= 0 && time <= this.changes.length)) { throw reject('invalid time'); }
 	if (mseq < 0) { mseq = this.messages.length; }
 	if (!(mseq <= this.messages.length)) { throw reject('invalid mseq: ' + mseq); }
-
+		
+	this.refreshPresence(cmd.user, cmd.space);
 	var asw = this.conveyUpdate(time, mseq, space);
-
-	// makes a presence
-	//var pres = this.$presences;
 
 	// immediate answer?
 	if (asw.chgs.length > 0 || asw.msgs.length > 0) {
@@ -544,6 +616,7 @@ Server.prototype.update = function(cmd, res, _) {
 		res      : res,
 		space    : space
 	};
+	this.establishPresence(cmd.user, cmd.space, sleepID);
 	return null;
 };
 
@@ -554,6 +627,8 @@ Server.prototype.expireSleep = function(self, sleepID) {
 	var cZ = self.changes.length;
 	var sleep = self.upsleep[sleepID];
 	delete self.upsleep[sleepID];
+
+	this.destablishPresence(sleep.user, sleep.space);
 
 	var asw = { ok : true, time: sleep.time, timeZ : cZ, chgs : null};
 	var res = sleep.res;
@@ -607,6 +682,7 @@ Server.prototype.wake = function(spaces) {
 
 		clearTimeout(sleep.timerID);
 		delete this.upsleep[sKey];
+		this.destablishPresence(sleep.user, sleep.space);
 
 		var asw = this.conveyUpdate(sleep.time, sleep.mseq, sleep.space);
 
@@ -713,6 +789,10 @@ Server.prototype.webAjax = function(req, red, res) {
 		this.webError(res, 400, 'Must use POST');
 		return;
 	}
+
+	req.on('close', function() {
+		debug('CLOSE');
+	});
 
 	req.on('data', function(chunk) {
 		data.push(chunk);

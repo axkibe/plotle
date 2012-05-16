@@ -529,6 +529,7 @@ Shell.prototype.onload = function() {
 
 /**
 | Moves to space named 'spaceName'.
+| if spaceName is null, reloads current space.
 */
 Shell.prototype.moveToSpace = function(spaceName) {
 	var self = this;
@@ -536,13 +537,13 @@ Shell.prototype.moveToSpace = function(spaceName) {
 		this.setCaret(null, null);
 	}
 
-	// TODO remove
-	if (spaceName.substr(0, 2) == '*:') {
-		spaceName = this.$user + spaceName.substr(1);
+	if (spaceName === null) {
+		spaceName = self.vspace.key;
+	} else {
+		self.cockpit.message('Moving to "'+spaceName+'" ...');
 	}
 
 	self.cockpit.setCurSpace('');
-	self.cockpit.message('Moving to "'+spaceName+'" ...');
 	peer.aquireSpace(spaceName, function(err, val) {
 		if (err !== null) {
 			this.greenscreen('Cannot aquire space');

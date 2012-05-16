@@ -86,6 +86,7 @@ SwitchPanel = function(board, current, userName, psw) {
 		width  : 80,
 		height : 36
 	});
+	this.userName  = userName;
 	this.amVisitor = userName.substring(0,5) === 'visit';
 
 	var x2 = 55;
@@ -289,7 +290,7 @@ SwitchPanel.prototype.mousedown = function(p) {
 		switch(button) {
 		case 'n'  : shell.moveToSpace('welcome'); break;
 		case 'ne' : shell.moveToSpace('sandbox'); break;
-		case 'nw' : shell.moveToSpace('*:home'); break;
+		case 'nw' : shell.moveToSpace(this.userName+':home'); break;
 		}
 		this.board.toggleSwitch();
 		this.board.poke();

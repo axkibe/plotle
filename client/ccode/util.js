@@ -124,6 +124,7 @@ Util.login = function(board) {
 		shell.setUser(user, passhash);
 		board.cockpit.setCurBoard('MainBoard');
 		Util.clearLogin(board);
+		shell.moveToSpace(null);
 		shell.poke();
 	});
 };
@@ -140,6 +141,7 @@ Util.logout = function(board) {
 
 		shell.setUser(res.user, res.pass);
 		board.cockpit.setCurBoard('MainBoard');
+		shell.moveToSpace(null);
 		shell.poke();
 	});
 };
@@ -232,6 +234,7 @@ Util.register = function(board) {
 		shell.setUser(user, pass);
 		board.cockpit.setCurBoard('MainBoard');
 		Util.clearRegister(board);
+		shell.moveToSpace(null);
 		shell.poke();
 	});
 };
