@@ -540,7 +540,7 @@ Server.prototype.refreshPresence = function(user, space) {
 };
 
 /**
-| Establishes a longer user presence for a update that goes into sleep
+| Establishes a longer user presence for an update that goes into sleep
 */
 Server.prototype.establishPresence = function(user, space, sleepID) {
 	var pres = this.$presences;
@@ -560,6 +560,9 @@ Server.prototype.establishPresence = function(user, space, sleepID) {
 	}
 };
 
+/**
+| Destablishes a longer user presence for an update that went out of sleep.
+*/
 Server.prototype.destablishPresence = function(user, space) {
 	var pres = this.$presences;
 	var pu   = pres[user];
@@ -589,33 +592,42 @@ Server.prototype.update = function(cmd, res, _) {
 	var pass  = cmd.pass;
 	var space = cmd.space;
 	var time  = cmd.time;
-	var mseq  = cmd.mseq;
-	var user  = cmd.user;
+
+	// TODO check creds!
 
 	// some tests
-	if (!is(time))    { throw reject('time missing'); }
-	if (!(time >= 0 && time <= this.changes.length)) { throw reject('invalid time'); }
-	if (mseq < 0) { mseq = this.messages.length; }
-	if (!(mseq <= this.messages.length)) { throw reject('invalid mseq: ' + mseq); }
+	if (!is(cmd.time)) 
+		{ throw reject('time missing'); }
+
+	if (!(cmd.time >= 0 && cmd.time <= this.changes.length))
+		{ throw reject('invalid time'); }
+
+	if (cmd.mseq < 0)
+		{ cmd.mseq = this.messages.length; }
+
+	if (!(cmd.mseq <= this.messages.length))
+		{ throw reject('invalid mseq: ' + mseq); }
 		
 	this.refreshPresence(cmd.user, cmd.space);
-	var asw = this.conveyUpdate(time, mseq, space);
+	var asw = this.conveyUpdate(time, cmd.mseq, space);
 
 	// immediate answer?
-	if (asw.chgs.length > 0 || asw.msgs.length > 0) {
-		return asw;
-	}
+	if (asw.chgs.length > 0 || asw.msgs.length > 0)
+		{ return asw; }
 
 	// if not immediate puts the request to sleep
 	var sleepID = '' + this.nextSleep++;
 	var timerID = setTimeout(this.expireSleep, 60000, this, sleepID);
 	this.upsleep[sleepID] = {
+		user     : cmd.user,
 		time     : time,
-		mseq     : mseq,
+		mseq     : cmd.mseq,
 		timerID  : timerID,
 		res      : res,
 		space    : space
 	};
+	res.sleepID = sleepID;
+
 	this.establishPresence(cmd.user, cmd.space, sleepID);
 	return null;
 };
@@ -628,7 +640,7 @@ Server.prototype.expireSleep = function(self, sleepID) {
 	var sleep = self.upsleep[sleepID];
 	delete self.upsleep[sleepID];
 
-	this.destablishPresence(sleep.user, sleep.space);
+	self.destablishPresence(sleep.user, sleep.space);
 
 	var asw = { ok : true, time: sleep.time, timeZ : cZ, chgs : null};
 	var res = sleep.res;
@@ -638,7 +650,17 @@ Server.prototype.expireSleep = function(self, sleepID) {
 };
 
 /**
-| Result for an update operation
+| A sleeping update closed prematurely.
+*/
+Server.prototype.closeSleep = function(sleepID) {
+	var sleep = this.upsleep[sleepID];
+	clearTimeout(sleep.timerID);
+	delete this.upsleep[sleepID];
+	this.destablishPresence(sleep.user, sleep.space);
+}
+
+/**
+| Returns a result for an update operation.
 */
 Server.prototype.conveyUpdate = function(time, mseq, space) {
 	var changes  = this.changes;
@@ -791,7 +813,7 @@ Server.prototype.webAjax = function(req, red, res) {
 	}
 
 	req.on('close', function() {
-		debug('CLOSE');
+		if (res.sleepID) { self.closeSleep(res.sleepID); }
 	});
 
 	req.on('data', function(chunk) {
