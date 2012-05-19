@@ -52,8 +52,9 @@ var IFace;
 if (typeof (window) === 'undefined') throw new Error('Peer nees a browser!');
 
 var debug     = Jools.debug;
-var log       = Jools.log;
+var immute    = Jools.immute;
 var is        = Jools.is;
+var log       = Jools.log;
 var uid       = Jools.uid;
 
 /**
@@ -257,7 +258,11 @@ IFace.prototype.aquireSpace = function(spaceName, callback) {
 		troot.copse[spaceName] = asw.node;
 		self.tree = self.rtree = new Tree(troot, Meshverse);
 
-		callback(null, { tree: self.tree, name: spaceName }); // @@ callback to spaceName
+		callback(null, immute({
+			tree   : self.tree,
+			name   : spaceName,
+			access : asw.access
+		}));
 
 		// waits a second before going into update cycle, so safari
 		// stops its wheely thing.
@@ -439,19 +444,22 @@ IFace.prototype.sendChanges = function() {
 		if (ajax.readyState !== 4) { return; }
 
 		if (ajax.status !== 200) {
-			log('iface', 'sendChanges.status == ' + ajax.status);
-			throw new Error('Cannot send changes to server');
-			// TODO proper error handling
+			shell.greenscreen('Cannot send changes, error code ' + ajax.status);
+			return;
 		}
 
 		try {
 			asw = JSON.parse(ajax.responseText);
 		} catch (e) {
-			throw new Error('Server answered no JSON!');
+			shell.greenscreen('Server answered no JSON!');
+			return;
 		}
 
 		log('iface', '<-sc', asw);
-		if (!asw.ok) { throw new Error('send changes, server not OK!'); }
+		if (!asw.ok) {
+			shell.greenscreen('Server not OK: ' + asw.message);
+			return;
+		}
 	};
 
 	var c = this.$outbox[0];

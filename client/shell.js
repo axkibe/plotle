@@ -531,30 +531,35 @@ Shell.prototype.onload = function() {
 | Moves to space named 'spaceName'.
 | if spaceName is null, reloads current space.
 */
-Shell.prototype.moveToSpace = function(spaceName) {
+Shell.prototype.moveToSpace = function(name) {
 	var self = this;
 	if (this.caret.visec === 'space') {
 		this.setCaret(null, null);
 	}
 
-	if (spaceName === null) {
-		spaceName = self.vspace.key;
+	if (name === null) {
+		name = self.vspace.key;
 	} else {
-		self.cockpit.message('Moving to "'+spaceName+'" ...');
+		self.cockpit.message('Moving to "' + name + '" ...');
 	}
 
 	self.cockpit.setCurSpace('');
-	peer.aquireSpace(spaceName, function(err, val) {
+	peer.aquireSpace(name, function(err, val) {
 		if (err !== null) {
-			this.greenscreen('Cannot aquire space');
+			self.greenscreen('Cannot aquire space: ' + err.message);
 			return;
 		}
-		if (val.name !== spaceName) {
-			throw new Error('server served wrong space!');
-		}
+
+		if (val.name !== name)
+			{ throw new Error('server served wrong space!'); }
+
 		var tree = val.tree;
-		self.vspace = new VSpace(tree.root.copse[spaceName], new Path([spaceName]));
-		self.cockpit.setCurSpace(spaceName);
+		self.vspace = new VSpace(
+			tree.root.copse[name],
+			new Path([name]),
+			val.access
+		);
+		self.cockpit.setCurSpace(name);
 		self._draw();
 	});
 };

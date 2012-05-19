@@ -49,8 +49,6 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Shortcuts
 */
-var Point     = Fabric.Point;
-var R         = Math.round;
 var abs       = Math.abs;
 var debug     = Jools.debug;
 var immute    = Jools.immute;
@@ -60,6 +58,8 @@ var limit     = Jools.limit;
 var log       = Jools.log;
 var max       = Math.max;
 var min       = Math.min;
+var Point     = Fabric.Point;
+var ro        = Math.round;
 var subclass  = Jools.subclass;
 
 /**
@@ -139,8 +139,8 @@ VDoc.prototype.draw = function(fabric, width, imargin, scrollp) {
 		var vpara = this.vAtRank(r);
 		var flow = vpara.getFlow();
 
-		pnws[twig.ranks[r]] = new Point(imargin.w, R(y));
-		fabric.drawImage(vpara.getFabric(), imargin.w, R(y - scrollp.y));
+		pnws[twig.ranks[r]] = new Point(imargin.w, ro(y));
+		fabric.drawImage(vpara.getFabric(), imargin.w, ro(y - scrollp.y));
 		y += flow.height + paraSep;
 	}
 	this.pnws = pnws;   // north-west points of paras
@@ -167,7 +167,7 @@ VDoc.prototype.getHeight = function() {
 		if (r > 0) { height += paraSep; }
 		height += flow.height;
 	}
-	height += R(fontsize * theme.bottombox);
+	height += ro(fontsize * theme.bottombox);
 	return height;
 };
 
@@ -259,13 +259,13 @@ VDoc.prototype.pathSelection = function(fabric, border, twist, width, imargin, s
 	var p1 = vpara1.getOffsetPoint(s1.at1);
 	var p2 = vpara2.getOffsetPoint(s2.at1);
 
-	p1 = new Point(R(p1.x + pnw1.x - sp.x), R(p1.y + pnw1.y - sp.y));
-	p2 = new Point(R(p2.x + pnw2.x - sp.x), R(p2.y + pnw2.y - sp.y));
+	p1 = new Point(ro(p1.x + pnw1.x - sp.x), ro(p1.y + pnw1.y - sp.y));
+	p2 = new Point(ro(p2.x + pnw2.x - sp.x), ro(p2.y + pnw2.y - sp.y));
 
 	var fontsize = this.getFontSize();
 	fabric.beginPath(twist);
-	var descend = R(fontsize * theme.bottombox);
-	var  ascend = R(fontsize);
+	var descend = ro(fontsize * theme.bottombox);
+	var  ascend = ro(fontsize);
 	var rx = width - imargin.e;
 	var lx = imargin.w;
 	if ((abs(p2.y - p1.y) < 2)) {

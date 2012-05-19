@@ -75,9 +75,11 @@ var Rect      = Fabric.Rect;
 /**
 | Constructor
 */
-VSpace = function(twig, path) {
+VSpace = function(twig, path, access) {
 	this.twig        = twig;
 	this.path        = path;
+	this.access      = access;
+	debug('A', access);
 	this.key         = path.get(-1);
 	this.fabric      = new Fabric(system.fabric);
 	this.zoom        = 1; // @@

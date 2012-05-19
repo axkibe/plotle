@@ -385,6 +385,14 @@ Server.prototype.alter = function(cmd, _) {
 	} catch(e) {
 		throw reject('invalid cmd: '+e.message);
 	}
+	
+	var spaces = {};
+	MeshMashine.listSpaces(chgX, spaces);
+	for (var s in spaces) {
+		if (this.testAccess(cmd.user, s) !== 'rw') {
+			throw reject('no access');
+		}
+	}
 
 	// translates the changes if not most recent
 	for (var a = time; a < cZ; a++) {
@@ -404,9 +412,6 @@ Server.prototype.alter = function(cmd, _) {
 	}
 
 	changes.push({ cid : cmd.cid, chgX : chgX });
-
-	var spaces = {};
-	MeshMashine.listSpaces(chgX, spaces);
 
 	// saves the change in the database
 	this.db.changes.insert({
@@ -596,7 +601,7 @@ Server.prototype.update = function(cmd, res, _) {
 	// TODO check creds!
 
 	// some tests
-	if (!is(cmd.time)) 
+	if (!is(cmd.time))
 		{ throw reject('time missing'); }
 
 	if (!(cmd.time >= 0 && cmd.time <= this.changes.length))
@@ -606,7 +611,7 @@ Server.prototype.update = function(cmd, res, _) {
 		{ cmd.mseq = this.messages.length; }
 
 	if (!(cmd.mseq <= this.messages.length))
-		{ throw reject('invalid mseq: ' + mseq); }
+		{ throw reject('invalid mseq: ' + cmd.mseq); }
 		
 	this.refreshPresence(cmd.user, cmd.space);
 	var asw = this.conveyUpdate(time, cmd.mseq, space);
@@ -657,7 +662,7 @@ Server.prototype.closeSleep = function(sleepID) {
 	clearTimeout(sleep.timerID);
 	delete this.upsleep[sleepID];
 	this.destablishPresence(sleep.user, sleep.space);
-}
+};
 
 /**
 | Returns a result for an update operation.
@@ -716,6 +721,20 @@ Server.prototype.wake = function(spaces) {
 };
 
 /**
+| tests if the user has access to 'space'.
+*/
+Server.prototype.testAccess = function(user, space) {
+	switch (space) {
+	case 'sandbox' : return 'rw';
+	case 'welcome' : return user === config.admin ? 'rw' : 'ro';
+	}
+	var sp = space.split(':', 2);
+	if (sp.length < 2)  { return 'no'; }
+	if (user == sp[0]) { return 'rw'; }
+	return 'no';
+};
+
+/**
 | Executes a get command.
 */
 Server.prototype.get = function(cmd, _) {
@@ -726,10 +745,26 @@ Server.prototype.get = function(cmd, _) {
 	var cZ      = changes.length;
 	
 	// checks
-	if (!is(cmd.time)) { throw reject('time missing'); }
-	if (!is(cmd.path)) { throw reject('path missing'); }
-	if (time === -1)   { time = cZ; }
-	if (!(time >= 0 && time <= cZ)) { throw reject('invalid time'); }
+	if (this.$users[user].pass !== cmd.pass)
+		{ throw reject('wrong password'); }
+
+	if (!is(cmd.time))
+		{ throw reject('time missing'); }
+
+	if (!is(cmd.path))
+		{ throw reject('path missing'); }
+
+	if (time === -1)
+		{ time = cZ; }
+
+	if (!(time >= 0 && time <= cZ))
+		{ throw reject('invalid time'); }
+	
+	var path = new Path(cmd.path);
+
+	var access = this.testAccess(cmd.user, path.get(0));
+	if (access == "no")
+		{ throw reject("no access"); }
 
 	// if the requested data is in the past go back in time
 	var tree = this.tree;
@@ -744,13 +779,14 @@ Server.prototype.get = function(cmd, _) {
 	// returns the path requested
 	var node;
 	try {
-		node = tree.getPath(new Path(cmd.path));
+		node = tree.getPath(path);
 	} catch(e) {
 		throw reject('cannot get path: '+e.message);
 	}
 
-	return { ok: true, time : time, node: node };
+	return { ok: true, access : access, time : time, node: node };
 };
+
 
 /**
 | Logs and returns a web error

@@ -23,6 +23,11 @@
 var config = module.exports = {};
 
 /**
+| the admin user can change 'welcome'
+*/
+config.admin = 'axel';
+
+/**
 | The interface to listen on,.
 |   null       means listens on all interfaces.
 |  '127.0.0.1' means localhost (IPV4)
@@ -48,7 +53,6 @@ config.database.host = '127.0.0.1';
 | Port the database runs on
 */
 config.database.port = 27017;
-
 
 /**
 | Name of the database

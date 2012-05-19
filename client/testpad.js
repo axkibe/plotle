@@ -23,7 +23,7 @@ var Tree;
 if (typeof(window) === 'undefined') throw new Error('testpad needs a browser!');
 
 var debug     = Jools.debug;
-var F         = Math.floor;
+var floor     = Math.floor;
 var limit     = Jools.limit;
 var log       = Jools.log;
 var max       = Math.max;
@@ -138,9 +138,9 @@ var onmousedown = function(event) {
 	var y = event.pageY - element.pad.offsetTop;
 
 	if (!ranks) { beep(); return; }
-	cursor.line   = limit(0, F(y / element.measure.offsetHeight), ranks.length - 1);
+	cursor.line   = limit(0, floor(y / element.measure.offsetHeight), ranks.length - 1);
 	var text = copse[ranks[cursor.line]].text;
-	cursor.offset = limit(0, F(x / element.measure.offsetWidth), text.length);
+	cursor.offset = limit(0, floor(x / element.measure.offsetWidth), text.length);
 	resetBlink();
 	updatePad();
 };

@@ -53,9 +53,6 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Shortcuts
 */
-var Measure       = Fabric.Measure;
-var Point         = Fabric.Point;
-var R             = Math.round;
 var debug         = Jools.debug;
 var immute        = Jools.immute;
 var is            = Jools.is;
@@ -63,7 +60,10 @@ var isnon         = Jools.isnon;
 var limit         = Jools.limit;
 var log           = Jools.log;
 var max           = Math.max;
+var Measure       = Fabric.Measure;
 var min           = Math.min;
+var Point         = Fabric.Point;
+var ro            = Math.round;
 
 
 /**
@@ -143,8 +143,8 @@ VPara.prototype.getFlow = function() {
 				if (spread < xw) spread = xw;
 				x = 0;
 				xw = x + w + space;
-				//y += R(vdoc.fontsize * (pre ? 1 : 1 + theme.bottombox)); @@
-				y += R(vdoc.getFontSize() * (1 + theme.bottombox));
+				//y += ro(vdoc.fontsize * (pre ? 1 : 1 + theme.bottombox)); @@
+				y += ro(vdoc.getFontSize() * (1 + theme.bottombox));
 				line++;
 				flow[line] = {a: [], y: y, o: ca.index};
 			} else {
@@ -522,7 +522,7 @@ VPara.prototype.textPath = function() {
 VPara.prototype.getHeight = function() {
 	var flow = this.getFlow();
 	var vdoc = shell.vspace.vget(this.path, -1);
-	return flow.height + R(vdoc.getFontSize() * theme.bottombox);
+	return flow.height + ro(vdoc.getFontSize() * theme.bottombox);
 };
 
 /**
@@ -603,7 +603,7 @@ VPara.prototype.getOffsetPoint = function(offset, flowPos$) {
 
 	// @@ use token. text instead.
 	return new Point(
-		R(token.x + Measure.width(text.substring(token.o, offset))),
+		ro(token.x + Measure.width(text.substring(token.o, offset))),
 		line.y);
 };
 
@@ -618,8 +618,8 @@ VPara.prototype.getCaretPos = function() {
 	var descend = fs * theme.bottombox;
 	var p       = this.getOffsetPoint(shell.caret.sign.at1, shell.caret);
 
-	var s = R(p.y + descend);
-	var n = s - R(fs + descend);
+	var s = ro(p.y + descend);
+	var n = s - ro(fs + descend);
 	var	x = p.x - 1;
 
 	return immute({ s: s, n: n, x: x });
@@ -638,7 +638,7 @@ VPara.prototype.drawCaret = function() {
 	var cpos  = caret.$pos  = this.getCaretPos();
 	var pnw   = vdoc.getPNW(this.key);
 	var sbary = vitem.scrollbarY;
-	var sy    = sbary ? R(sbary.getPos()) : 0;
+	var sy    = sbary ? ro(sbary.getPos()) : 0;
 
 	var cyn = min(max(cpos.n + pnw.y - sy, 0), zone.height); // TODO limit
 	var cys = min(max(cpos.s + pnw.y - sy, 0), zone.height);
