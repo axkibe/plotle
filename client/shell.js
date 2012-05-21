@@ -385,6 +385,7 @@ Shell.prototype.mousedown = function(p, shift, ctrl) {
 	}
 
 	if (this.redraw) { this._draw(); }
+
 	this.mousehover(p, shift, ctrl);
 	return mouseState || false;
 };
@@ -540,7 +541,7 @@ Shell.prototype.moveToSpace = function(name) {
 
 	if (name === null) {
 		name = self.vspace.key;
-		if ($user.substr(0, 5) === 'visit' && 
+		if (this.$user.substr(0, 5) === 'visit' && 
 			(name !== 'welcome' && name !== 'help')
 		) { name = 'welcome'; }
 	} else {

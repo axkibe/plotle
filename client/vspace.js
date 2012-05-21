@@ -498,6 +498,17 @@ VSpace.prototype.input = function(text) {
 | User pressed a special key.
 */
 VSpace.prototype.specialKey = function(key, shift, ctrl) {
+	if (ctrl) {
+		switch(key) {
+		case 'z' :
+			debug('UNDO');
+			return;
+		case 'y' : 
+			debug('REDO');
+			return;
+		} 
+	}
+
 	var caret = shell.caret;
 	if (!caret.sign) return;
 	this.vget(caret.sign.path, -1).specialKey(key, shift, ctrl);

@@ -247,7 +247,7 @@ VPara.prototype.input = function(text) {
 */
 VPara.prototype.specialKey = function(key, shift, ctrl) {
 	var caret  = shell.caret;
-	// TODO split into smaller functions
+	// @@ split into smaller functions
 	var para = this.para;
 	var select = shell.selection;
 
