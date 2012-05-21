@@ -235,7 +235,13 @@ Cockpit.prototype.mousehover = function(p, shift, ctrl) {
 | Mouse button down event
 */
 Cockpit.prototype.mousedown = function(p, shift, ctrl) {
-	var r = this.curBoard().mousedown(p, shift. ctrl);
+	var r;
+	if (this.showHelp) {
+		r = this.baords.helpBoard.mousedown(p, shift. ctrl);
+		if (r !== null) return r;
+	}
+
+	r = this.curBoard().mousedown(p, shift. ctrl);
 	if (r === null) { return null; }
 	this.curBoard().mousehover(p, shift, ctrl);
 	return r;
