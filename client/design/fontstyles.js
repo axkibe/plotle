@@ -83,6 +83,30 @@ var styles = {
 		base  : 'alphabetic',
 		$c    : {}
 	},
+	lah       : {
+		type  : 'FontStyle',
+		font  :  theme.defaultFont,
+		fill  : 'rgb(128, 44, 0)',
+		align : 'start',
+		base  : 'alphabetic',
+		$c    : {}
+	},
+	lahb      : {
+		type  : 'FontStyle',
+		font  : 'bold ' + theme.defaultFont,
+		fill  : 'rgb(128, 44, 0)',
+		align : 'start',
+		base  : 'alphabetic',
+		$c    : {}
+	},
+	lahr      : {
+		type  : 'FontStyle',
+		font  :  theme.defaultFont,
+		fill  : 'red',
+		align : 'start',
+		base  : 'alphabetic',
+		$c    : {}
+	},
 	lar       : {
 		type  : 'FontStyle',
 		font  :  theme.defaultFont,

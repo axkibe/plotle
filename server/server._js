@@ -138,7 +138,6 @@ Server.prototype.startup = function(_) {
 	log('start', 'Uncompressed pack length is ', this.pack.length);
 	this.packgz = zlib.gzip(this.pack, _);
 	log('start', 'Compressed pack length is ', this.packgz.length);
-	
 	log('start', 'Starting server @ http://' + (config.ip || '*') + '/:' + config.port);
 
 	var self = this;
@@ -284,6 +283,7 @@ Server.prototype.registerFiles = function() {
 	registerFile('/cboard.js',             'js',   1, 'client/cboard.js'             );
 	registerFile('/ccode/util.js',         'js',   1, 'client/ccode/util.js'         );
 	registerFile('/ccode/mainboard.js',    'js',   1, 'client/ccode/mainboard.js'    );
+	registerFile('/ccode/helpboard.js',    'js',   1, 'client/ccode/helpboard.js'    );
 	registerFile('/ccode/mbleftb.js',      'js',   1, 'client/ccode/mbleftb.js'      );
 	registerFile('/ccode/mbleft2b.js',     'js',   1, 'client/ccode/mbleft2b.js'     );
 	registerFile('/ccode/mbswitchb.js',    'js',   1, 'client/ccode/mbswitchb.js'    );

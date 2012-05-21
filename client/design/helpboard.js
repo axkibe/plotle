@@ -55,7 +55,7 @@ HelpBoard.style = 'help';
 
 HelpBoard.frame = {
 	type  : 'Frame',
-	pnw   : { type: 'Point', anchor: 'ne',  x: -170, y:    0 },
+	pnw   : { type: 'Point', anchor: 'ne',  x: -200, y:    0 },
 	pse   : { type: 'Point', anchor: 'ne',  x:    0, y:  400 }
 };
 
@@ -86,6 +86,100 @@ HelpBoard.curve = {
 HelpBoard.layout = {
 	type  : 'Layout',
 	copse : {
+	'getstarted'  : {
+		type      : 'Label',
+		text      : 'Getting started:',
+		fontStyle : fontStyle(15, 'lahb'),
+		pos       : { type: 'Point', anchor: 'nw', x: 10 , y:  20 }
+	},
+	
+	'pan'  : {
+		type      : 'Label',
+		text      : 'to pan, drag the background',
+		fontStyle : fontStyle(13, 'lah'),
+		pos       : { type: 'Point', anchor: 'nw', x: 18 , y:  45 }
+	},
+	
+	'move'  : {
+		type      : 'Label',
+		text      : 'to move items, drag them',
+		fontStyle : fontStyle(13, 'lah'),
+		pos       : { type: 'Point', anchor: 'nw', x: 18 , y:  65 }
+	},
+	
+	'new'  : {
+		type      : 'Label',
+		text      : 'to create new items,',
+		fontStyle : fontStyle(13, 'lah'),
+		pos       : { type: 'Point', anchor: 'nw', x: 18 , y:  85 }
+	},
+	
+	'new2'  : {
+		type      : 'Label',
+		text      : 'click background',
+		fontStyle : fontStyle(13, 'lah'),
+		pos       : { type: 'Point', anchor: 'nw', x: 25 , y: 100 }
+	},
+	
+	'edit'  : {
+		type      : 'Label',
+		text      : 'to edit an item, click it',
+		fontStyle : fontStyle(13, 'lah'),
+		pos       : { type: 'Point', anchor: 'nw', x: 18 , y: 120 }
+	},
+	
+	'delete'  : {
+		type      : 'Label',
+		text      : 'to remove an item, click it\'s oval',
+		fontStyle : fontStyle(13, 'lah'),
+		pos       : { type: 'Point', anchor: 'nw', x: 18 , y: 140 }
+	},
+	
+	'relate1'  : {
+		type      : 'Label',
+		text      : 'to create a relation',
+		fontStyle : fontStyle(13, 'lah'),
+		pos       : { type: 'Point', anchor: 'nw', x: 18 , y: 160 }
+	},
+	
+	'relate2'  : {
+		type      : 'Label',
+		text      : 'drag an items oval',
+		fontStyle : fontStyle(13, 'lah'),
+		pos       : { type: 'Point', anchor: 'nw', x: 25 , y: 175 }
+	},
+
+	'relate3'  : {
+		type      : 'Label',
+		text      : 'or hold ctrl and drag it',
+		fontStyle : fontStyle(13, 'lah'),
+		pos       : { type: 'Point', anchor: 'nw', x: 25 , y: 190 }
+	},
+	
+	'readonly'  : {
+		type      : 'Label',
+		//text      : 'This page is read-only!',
+		text      : '',
+		fontStyle : fontStyle(13, 'lahr'),
+		pos       : { type: 'Point', anchor: 'nw', x: 28 , y: 220 }
+	},
+	
+	'readonly2'  : {
+		type      : 'Label',
+		//text      : 'Click "switch" and select',
+		text      : '',
+		fontStyle : fontStyle(13, 'lahr'),
+		pos       : { type: 'Point', anchor: 'nw', x: 28 , y: 240 }
+	},
+	
+	'readonly3'  : {
+		type      : 'Label',
+		//text      : '"Sandbox" to play around',
+		text      : '',
+		fontStyle : fontStyle(13, 'lahr'),
+		pos       : { type: 'Point', anchor: 'nw', x: 28 , y: 260 }
+	},
+
 	'hideB' : {
 		type       : 'Custom',
 		code       : 'HBHideB',
@@ -116,7 +210,7 @@ HelpBoard.layout = {
 				type :  'BeziTo',
 				to   :  { type: 'Point', anchor: 'ne', x : 0, y : 4 },
 				c1x  : -205, c1y : -53,
-				c2x  :  -55, c2y :  0,
+				c2x  :  -85, c2y :  0,
 				bx   : -1, by   :  0
 			}},
 
@@ -126,7 +220,20 @@ HelpBoard.layout = {
 
 
 	ranks : [
-		'hideB'
+		'getstarted',
+		'pan',
+		'move',
+		'new',
+		'new2',
+		'edit',
+		'delete',
+		'relate1',
+		'relate2',
+		'relate3',
+		'hideB',
+		'readonly',
+		'readonly2',
+		'readonly3'
 	]
 };
 
