@@ -297,14 +297,14 @@ MainBoard.layout = {
 		type      : 'Label',
 		text      : 'Hello',
 		fontStyle : fontStyle(12, 'ca'),
-		pos       : { type: 'Point', anchor: 'sw', x:  260, y: -34 }
+		pos       : { type: 'Point', anchor: 'sw', x:  260, y: -36 }
 	},
 
 	'username'    : {
 		type      : 'Label',
 		text      : '',
 		fontStyle : fontStyle(18, 'ca'),
-		pos       : { type: 'Point', anchor: 'sw', x:  260, y: -11 }
+		pos       : { type: 'Point', anchor: 'sw', x:  260, y: -13 }
 	},
 
 
@@ -312,14 +312,23 @@ MainBoard.layout = {
 		type      : 'Label',
 		text      : 'current space',
 		fontStyle : fontStyle(12, 'ca'),
-		pos       : { type: 'Point', anchor:  's', x: -130, y: -34 }
+		pos       : { type: 'Point', anchor:  's', x: -130, y: -42 }
 	},
 
 	'cspace'      : {
 		type      : 'Label',
 		text      : '',
 		fontStyle : fontStyle(22, 'cab'),
-		pos       : { type: 'Point', anchor:  's', x: -130, y: -11 }
+		pos       : { type: 'Point', anchor:  's', x: -130, y: -20 }
+	},
+	
+	'access'      : {
+		type      : 'Label',
+//		text      : '(readonly)',
+//		text      : '(edit)',
+		text      : '',
+		fontStyle : fontStyle(12, 'cadr'),
+		pos       : { type: 'Point', anchor:  's', x: -130, y: -4 }
 	}},
 
 
@@ -332,7 +341,8 @@ MainBoard.layout = {
 		'greet',
 		'username',
 		'saycurrent',
-		'cspace'
+		'cspace',
+		'access'
 	]
 };
 

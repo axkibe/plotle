@@ -225,12 +225,12 @@ VItem.prototype.getVParaAtPoint = function(p, action) {
 | Dragstart.
 | Checks if a dragstart targets this item.
 */
-VItem.prototype.dragstart = function(p, shift, ctrl) {
+VItem.prototype.dragstart = function(p, shift, ctrl, access) {
 	if (!this.getZone().within(p)) return false;
 
 	shell.redraw = true;
 
-	if (ctrl) {
+	if (ctrl && access == 'rw') {
 		// relation binding
 		shell.startAction(Action.RELBIND, this, p);
 		system.setCursor('default');
@@ -238,7 +238,8 @@ VItem.prototype.dragstart = function(p, shift, ctrl) {
 	}
 
 	// scrolling or dragging
-	shell.vspace.setFocus(this);
+	if (access == 'rw') 
+		{ shell.vspace.setFocus(this); }
 	var sbary = this.scrollbarY;
 	var pnw = this.getZone().pnw;
 	var pr = p.sub(pnw);
@@ -246,7 +247,11 @@ VItem.prototype.dragstart = function(p, shift, ctrl) {
 		var action = shell.startAction(Action.SCROLLY, this, p);
 		action.startPos = sbary.getPos();
 	} else {
-		shell.startAction(Action.ITEMDRAG, this, p);
+		if (access == 'rw') {
+			shell.startAction(Action.ITEMDRAG, this, p);
+		} else {
+			shell.startAction(Action.PAN, null, p);
+		}
 		system.setCursor('move');
 	}
 	return true;

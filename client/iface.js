@@ -468,9 +468,11 @@ IFace.prototype.sendChanges = function() {
 
 	var request = JSON.stringify({
 		cmd  : 'alter',
+		chgX : c.chgX,
 		cid  : c.cid,
+		pass : this.$pass,
 		time : this.$remoteTime,
-		chgX : c.chgX
+		user : this.$user
 	});
 
 	log('iface', 'sc->', request);

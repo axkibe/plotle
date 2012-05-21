@@ -91,6 +91,14 @@ var styles = {
 		base  : 'alphabetic',
 		$c    : {}
 	},
+	cadr      : {
+		type  : 'FontStyle',
+		font  : 'bold ' + theme.defaultFont,
+		fill  : 'rgb(160, 0, 0)',
+		align : 'center',
+		base  : 'alphabetic',
+		$c    : {}
+	},
 	ra        : {
 		type  : 'FontStyle',
 		font  :  theme.defaultFont,

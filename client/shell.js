@@ -543,7 +543,7 @@ Shell.prototype.moveToSpace = function(name) {
 		self.cockpit.message('Moving to "' + name + '" ...');
 	}
 
-	self.cockpit.setCurSpace('');
+	self.cockpit.setCurSpace('', '');
 	peer.aquireSpace(name, function(err, val) {
 		if (err !== null) {
 			self.greenscreen('Cannot aquire space: ' + err.message);
@@ -559,7 +559,7 @@ Shell.prototype.moveToSpace = function(name) {
 			new Path([name]),
 			val.access
 		);
-		self.cockpit.setCurSpace(name);
+		self.cockpit.setCurSpace(name, val.access);
 		self._draw();
 	});
 };

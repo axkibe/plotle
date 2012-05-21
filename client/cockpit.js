@@ -165,9 +165,9 @@ Cockpit.prototype.setCurBoard = function(boardName) {
 /**
 | Sets the space name displayed on the MainBoard.
 */
-Cockpit.prototype.setCurSpace = function(curSpace) {
-	this.$curSpace = curSpace;
-	this.getBoard('MainBoard').setCurSpace(curSpace);
+Cockpit.prototype.setCurSpace = function(space, access) {
+	this.$curSpace = space;
+	this.getBoard('MainBoard').setCurSpace(space, access);
 };
 
 /**

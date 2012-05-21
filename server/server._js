@@ -721,7 +721,7 @@ Server.prototype.wake = function(spaces) {
 };
 
 /**
-| tests if the user has access to 'space'.
+| Tests if the user has access to 'space'.
 */
 Server.prototype.testAccess = function(user, space) {
 	switch (space) {

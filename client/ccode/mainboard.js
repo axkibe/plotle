@@ -97,12 +97,21 @@ MainBoard.prototype.toggleSwitch = function() {
 /**
 | Sets current space.
 */
-MainBoard.prototype.setCurSpace = function(spaceName) {
-	this.$spaceName = spaceName;
+MainBoard.prototype.setCurSpace = function(space, access) {
+	this.$spaceName   = space;
+	this.$spaceAccess = access;
 
 	var cspace = this.cc.cspace;
-	cspace.text = spaceName;
+	cspace.text = space;
 	cspace.poke();
+
+	switch(access) {
+	case 'ro' : this.cc.access.text = '(readonly)'; break;
+	case 'rw' : this.cc.access.text = '(edit)';     break;
+	case ''   : this.cc.access.text = '';           break;
+	default   : throw new Error('unknown access: ' + access);
+	}
+	this.cc.access.poke();
 
 	this.$switchPanel = null;
 };

@@ -79,7 +79,6 @@ VSpace = function(twig, path, access) {
 	this.twig        = twig;
 	this.path        = path;
 	this.access      = access;
-	debug('A', access);
 	this.key         = path.get(-1);
 	this.fabric      = new Fabric(system.fabric);
 	this.zoom        = 1; // @@
@@ -298,7 +297,7 @@ VSpace.prototype.dragstart = function(p, shift, ctrl) {
 	var focus = this.focusedVItem();
 
 	// see if the itemmenu of the focus was targeted
-	if (focus && focus.withinItemMenu(pp)) {
+	if (this.access == 'rw' && focus && focus.withinItemMenu(pp)) {
 		shell.startAction(Action.RELBIND, focus, p);
 		system.setCursor('default');
 		shell.redraw = true;
@@ -308,7 +307,7 @@ VSpace.prototype.dragstart = function(p, shift, ctrl) {
 	// see if one item was targeted
 	for(var a = 0, aZ = this.twig.length; a < aZ; a++) {
 		var vitem = this.vAtRank(a);
-		if (vitem.dragstart(pp, shift, ctrl)) return true;
+		if (vitem.dragstart(pp, shift, ctrl, this.access)) return true;
 	}
 
 	// otherwise do panning
@@ -462,6 +461,11 @@ VSpace.prototype.mousedown = function(p, shift, ctrl) {
 	var pp = p.sub(this.fabric.pan);
 	var action = shell.action;
 	var pnw, md, key;
+
+	if (this.access == 'ro') { 
+		this.dragstart(p, shift, ctrl);
+		return 'drag'; 
+	}
 
 	var focus = this.focusedVItem();
 	if (focus) {
