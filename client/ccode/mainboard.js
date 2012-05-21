@@ -169,4 +169,13 @@ MainBoard.prototype.mousehover = function(p, shift, ctrl) {
 	return CBoard.prototype.mousehover.call(this, p, shift, ctrl);
 };
 
+/**
+| Help Board visible or not.
+*/
+MainBoard.prototype.setShowHelp = function(showHelp) {
+	var rb = this.cc.rightB;
+	rb.$active = showHelp;
+	rb.poke();
+}
+
 })();

@@ -82,7 +82,7 @@ Cockpit = function() {
 	};
 
 	this.$curSpace = null;
-	this.showHelp  = true;
+	this.$showHelp = false;
 };
 
 Cockpit.styles = {
@@ -191,7 +191,7 @@ Cockpit.prototype.setUser = function(userName) {
 | Redraws the cockpit.
 */
 Cockpit.prototype.draw = function() {
-	if (this.showHelp) {
+	if (this.$showHelp) {
 		this.getBoard('HelpBoard').draw(this.fabric);
 	}
 	this.curBoard().draw(this.fabric);
@@ -228,7 +228,7 @@ Cockpit.prototype.specialKey = function(key, shift, ctrl) {
 */
 Cockpit.prototype.mousehover = function(p, shift, ctrl) {
 	return this.curBoard().mousehover(p, shift, ctrl) ||
-		(this.showHelp && this.boards.HelpBoard.mousehover(p, shift, ctrl));
+		(this.$showHelp && this.getBoard('HelpBoard').mousehover(p, shift, ctrl));
 };
 
 /**
@@ -236,8 +236,8 @@ Cockpit.prototype.mousehover = function(p, shift, ctrl) {
 */
 Cockpit.prototype.mousedown = function(p, shift, ctrl) {
 	var r;
-	if (this.showHelp) {
-		r = this.baords.helpBoard.mousedown(p, shift. ctrl);
+	if (this.$showHelp) {
+		r = this.getBoard('HelpBoard').mousedown(p, shift. ctrl);
 		if (r !== null) return r;
 	}
 
@@ -247,9 +247,23 @@ Cockpit.prototype.mousedown = function(p, shift, ctrl) {
 	return r;
 };
 
+/**
+| Returns an entity by its path
+*/
 Cockpit.prototype.getEntity = function(path) {
 	var board = this.getBoard(path.get(0));
 	return board.cc[path.get(1)];
 };
+
+/**
+| Shows or hides the help board
+*/
+Cockpit.prototype.setShowHelp = function(showHelp) {
+	if (this.$showHelp === showHelp) { return; }
+	this.$showHelp = showHelp;
+
+	this.getBoard('MainBoard').setShowHelp(showHelp);
+	shell.redraw = true;
+}
 
 })();

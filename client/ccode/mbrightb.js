@@ -59,7 +59,15 @@ var subclass      = Jools.subclass;
 var MBRightB = CCode.MBRightB = function(twig, board, inherit, name) {
 	CCustom.call(this, twig, board, inherit, name);
 };
-
 subclass(MBRightB, CCustom);
+
+MBRightB.prototype.mousedown = function(p, shift, ctrl) {
+	var r = CCustom.prototype.mousedown.call(this, p, shift, ctrl);
+	if (!r) return r;
+
+	this.board.cockpit.setShowHelp(!this.$active);
+	shell.redraw = true;
+	return true;
+};
 
 })();
