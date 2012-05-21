@@ -32,6 +32,7 @@ var CBoard;
 var Curve;
 var Design;
 var Fabric;
+var HelpBoard;
 var Jools;
 var MainBoard;
 var Path;
@@ -126,8 +127,9 @@ Cockpit.prototype.getBoard = function(name) {
 	
 	var Proto;
 	switch(name) {
-	case 'MainBoard': Proto = MainBoard; break;
-	default         : Proto = CBoard;    break;
+	case 'MainBoard' : Proto = MainBoard; break;
+	case 'HelpBoard' : Proto = HelpBoard; break;
+	default          : Proto = CBoard;    break;
 	}
 
 	var board = new Proto(
@@ -168,6 +170,7 @@ Cockpit.prototype.setCurBoard = function(boardName) {
 */
 Cockpit.prototype.setCurSpace = function(space, access) {
 	this.$curSpace = space;
+	this.$access   = access;
 	this.getBoard('MainBoard').setCurSpace(space, access);
 	if (space === 'sandbox' && this.$autoHelp) {
 		this.$autoHelp = false;
@@ -197,7 +200,9 @@ Cockpit.prototype.setUser = function(userName) {
 */
 Cockpit.prototype.draw = function() {
 	if (this.$showHelp) {
-		this.getBoard('HelpBoard').draw(this.fabric);
+		var helpboard = this.getBoard('HelpBoard');
+		helpboard.setAccess(this.$access);
+		helpboard.draw(this.fabric);
 	}
 	this.curBoard().draw(this.fabric);
 };

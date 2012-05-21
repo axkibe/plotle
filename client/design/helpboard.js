@@ -116,7 +116,7 @@ HelpBoard.layout = {
 	
 	'new2'  : {
 		type      : 'Label',
-		text      : 'click background',
+		text      : 'click the background',
 		fontStyle : fontStyle(13, 'lah'),
 		pos       : { type: 'Point', anchor: 'nw', x: 25 , y: 100 }
 	},
