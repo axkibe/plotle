@@ -12,13 +12,12 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--'
 
-                      ,-_/,.     .     .-,--.     ,-,---.               .
-                      ' |_|/ ,-. |  ,-. `|__/ ,-.  '|___/ ,-. ,-. ,-. ,-|
-                       /| |  |-' |  | | )| \  | |  ,|   \ | | ,-| |   | |
-                       `' `' `-' `' |-' `'  ` `-' `-^---' `-' `-^ '   `-^
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ | ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-                                    '
-
+                          ,-_/,.     .      ,-,---.               .
+                          ' |_|/ ,-. |  ,-.  '|___/ ,-. ,-. ,-. ,-|
+                           /| |  |-' |  | |  ,|   \ | | ,-| |   | |
+                           `' `' `-' `' |-' `-^---' `-' `-^ '   `-^
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ | ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                                        '
  Helpboard for readonly spaces.
 
  Authors: Axel Kittenberger
@@ -50,17 +49,17 @@ var immute      = Jools.immute;
 var innumerable = Jools.innumerable;
 var ro          = Math.round;
 var fontStyle   = Design.fontStyle;
-var HelpRoBoard = Design.HelpRoBoard = { type : 'Design' };
+var HelpBoard   = Design.HelpBoard = { type : 'Design' };
 
-HelpRoBoard.style = 'help';
+HelpBoard.style = 'help';
 
-HelpRoBoard.frame = {
+HelpBoard.frame = {
 	type  : 'Frame',
 	pnw   : { type: 'Point', anchor: 'ne',  x: -170, y:    0 },
 	pse   : { type: 'Point', anchor: 'ne',  x:    0, y:  400 }
 };
 
-HelpRoBoard.curve = {
+HelpBoard.curve = {
 	type  : 'Curve',
 	copse : {
 	'1' : {
@@ -84,15 +83,50 @@ HelpRoBoard.curve = {
 	ranks : [ '1', '2', '3' ]
 };
 
-HelpRoBoard.layout = {
+HelpBoard.layout = {
 	type  : 'Layout',
 	copse : {
-		//
-	},
+	'hideB' : {
+		type       : 'Custom',
+		code       : 'HBHideB',
+		normaStyle : 'sides',
+		hoverStyle : 'highlight',
+		focusStyle : 'sides',
+		hofocStyle : 'highlight',
+		frame : {
+			type  : 'Frame',
+			pnw   : { type: 'Point', anchor: 'se', x: -170, y: -45 },
+			pse   : { type: 'Point', anchor: 'se', x:    0, y:  -3 }
+		},
+		caption : {
+			type      : 'Label',
+			text      : 'hide',
+			fontStyle : fontStyle(13, 'cm'),
+			pos       : { type: 'Point', anchor: 'e', x: -25, y: -3 }
+		},
+		curve :  {
+			type : 'Curve',
+			copse : {
+			'1' : {
+				type : 'MoveTo',
+				to   : { type: 'Point', anchor: 'se', x: 0, y: 0 },
+				bx   : 1, by   : 0
+			},
+			'2' : {
+				type :  'BeziTo',
+				to   :  { type: 'Point', anchor: 'ne', x : 0, y : 4 },
+				c1x  : -205, c1y : -53,
+				c2x  :  -55, c2y :  0,
+				bx   : -1, by   :  0
+			}},
+
+			ranks : [ '1', '2' ]
+		}
+	}},
 
 
 	ranks : [
-		//
+		'hideB'
 	]
 };
 

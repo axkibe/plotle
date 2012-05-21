@@ -462,9 +462,9 @@ VSpace.prototype.mousedown = function(p, shift, ctrl) {
 	var action = shell.action;
 	var pnw, md, key;
 
-	if (this.access == 'ro') { 
+	if (this.access == 'ro') {
 		this.dragstart(p, shift, ctrl);
-		return 'drag'; 
+		return 'drag';
 	}
 
 	var focus = this.focusedVItem();

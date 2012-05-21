@@ -238,7 +238,7 @@ VItem.prototype.dragstart = function(p, shift, ctrl, access) {
 	}
 
 	// scrolling or dragging
-	if (access == 'rw') 
+	if (access == 'rw')
 		{ shell.vspace.setFocus(this); }
 	var sbary = this.scrollbarY;
 	var pnw = this.getZone().pnw;

@@ -75,10 +75,10 @@ Cockpit = function() {
 	this.fabric       = system.fabric;
 	this.curBoardName = 'MainBoard';
 	this.boards = {
-		MainBoard   : null,
-		LoginBoard  : null,
-		RegBoard    : null,
-		HelpRoBoard : null
+		MainBoard  : null,
+		LoginBoard : null,
+		RegBoard   : null,
+		HelpBoard  : null
 	};
 
 	this.$curSpace = null;
@@ -192,7 +192,7 @@ Cockpit.prototype.setUser = function(userName) {
 */
 Cockpit.prototype.draw = function() {
 	if (this.showHelp) {
-		this.getBoard('HelpRoBoard').draw(this.fabric);
+		this.getBoard('HelpBoard').draw(this.fabric);
 	}
 	this.curBoard().draw(this.fabric);
 };
@@ -227,7 +227,8 @@ Cockpit.prototype.specialKey = function(key, shift, ctrl) {
 | Mouse hover.
 */
 Cockpit.prototype.mousehover = function(p, shift, ctrl) {
-	return this.curBoard().mousehover(p, shift, ctrl);
+	return this.curBoard().mousehover(p, shift, ctrl) ||
+		(this.showHelp && this.boards.HelpBoard.mousehover(p, shift, ctrl));
 };
 
 /**
