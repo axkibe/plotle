@@ -385,6 +385,7 @@ Shell.prototype.mousedown = function(p, shift, ctrl) {
 	}
 
 	if (this.redraw) { this._draw(); }
+	this.mousehover(p, shift, ctrl);
 	return mouseState || false;
 };
 

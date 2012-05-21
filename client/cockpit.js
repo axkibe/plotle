@@ -83,6 +83,7 @@ Cockpit = function() {
 
 	this.$curSpace = null;
 	this.$showHelp = false;
+	this.$autoHelp = true;
 };
 
 Cockpit.styles = {
@@ -168,6 +169,10 @@ Cockpit.prototype.setCurBoard = function(boardName) {
 Cockpit.prototype.setCurSpace = function(space, access) {
 	this.$curSpace = space;
 	this.getBoard('MainBoard').setCurSpace(space, access);
+	if (space === 'sandbox' && this.$autoHelp) {
+		this.$autoHelp = false;
+		this.setShowHelp(true);
+	}
 };
 
 /**
@@ -227,8 +232,9 @@ Cockpit.prototype.specialKey = function(key, shift, ctrl) {
 | Mouse hover.
 */
 Cockpit.prototype.mousehover = function(p, shift, ctrl) {
-	return this.curBoard().mousehover(p, shift, ctrl) ||
-		(this.$showHelp && this.getBoard('HelpBoard').mousehover(p, shift, ctrl));
+	var r = false;
+	r = this.curBoard().mousehover(p, shift, ctrl);
+	r = (this.$showHelp && this.getBoard('HelpBoard').mousehover(p, shift, ctrl)) || r;
 };
 
 /**
