@@ -197,7 +197,9 @@ Server.prototype.message = function(cmd, _) {
 	if (!is(space))   { throw reject('space missing');   }
 	if (!is(message)) { throw reject('message missing'); }
 
-	// TODO check pass
+
+	if (this.$users[user].pass !== pass) 
+		{ throw reject('invalid pass'); }
 
 	this.sendMessage(space, user, message);
 
@@ -419,7 +421,7 @@ Server.prototype.alter = function(cmd, _) {
 		_id  : changes.length,
 		cid  : cmd.cid,
 		chgX : JSON.parse(JSON.stringify(chgX)),
-		// TODO user
+		user : cmd.user,
 		date : Date.now()
 	}, function(error, count) {
 		if (error !== null) { throw new Error('Database fail!'); }
@@ -595,11 +597,11 @@ Server.prototype.expirePresence = function(self, user, space) {
 | Gets new changes or waits for them.
 */
 Server.prototype.update = function(cmd, res, _) {
-	var pass  = cmd.pass;
-	var space = cmd.space;
-	var time  = cmd.time;
+	if (this.$users[cmd.user].pass !== cmd.pass)
+		{ throw reject('invalid password'); }
 
-	// TODO check creds!
+	if (this.testAccess(cmd.user, cmd.space) === 'no')
+		{ throw reject('no access'); }
 
 	// some tests
 	if (!is(cmd.time))
@@ -615,7 +617,7 @@ Server.prototype.update = function(cmd, res, _) {
 		{ throw reject('invalid mseq: ' + cmd.mseq); }
 		
 	this.refreshPresence(cmd.user, cmd.space);
-	var asw = this.conveyUpdate(time, cmd.mseq, space);
+	var asw = this.conveyUpdate(cmd.time, cmd.mseq, cmd.space);
 
 	// immediate answer?
 	if (asw.chgs.length > 0 || asw.msgs.length > 0)
@@ -626,11 +628,11 @@ Server.prototype.update = function(cmd, res, _) {
 	var timerID = setTimeout(this.expireSleep, 60000, this, sleepID);
 	this.upsleep[sleepID] = {
 		user     : cmd.user,
-		time     : time,
+		time     : cmd.time,
 		mseq     : cmd.mseq,
 		timerID  : timerID,
 		res      : res,
-		space    : space
+		space    : cmd.space
 	};
 	res.sleepID = sleepID;
 

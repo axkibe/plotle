@@ -406,9 +406,6 @@ var _inspect = function(o, array, indent, circle) {
 | Logs a number of inspected argument if category is configured to be logged.
 */
 var log = function(category) {
-	if (category === 'fail') {
-		console.log('FAIL'); // TODO Just a line for breakpoints.
-	}
 	if (category !== true && !config.log.all && !config.log[category]) return;
 	var a = _timestamp([]);
 	if (category !== true) {
@@ -447,26 +444,19 @@ var inspect = function(o) {
 };
 
 /**
-| TODO
-*/
-var oleng$id = 0;
-
-/**
 | Makes an object immutable
 */
 var immute = function(obj) {
-	if (obj._$id) return obj;
-	if (config.debug.immute) {
-		var names = Object.getOwnPropertyNames(obj);
-		for (var a = 0, aZ = names.length; a < aZ; a++) {
-			var desc = Object.getOwnPropertyDescriptor(obj, names[a]);
-			if (!desc.configurable) continue;
-			desc.configurable = false;
-			desc.writable = false;
-				Object.defineProperty(obj, names[a], desc);
-		}
+	if (!config.debug.immute) { return obj; }
+	
+	var names = Object.getOwnPropertyNames(obj);
+	for (var a = 0, aZ = names.length; a < aZ; a++) {
+		var desc = Object.getOwnPropertyDescriptor(obj, names[a]);
+		if (!desc.configurable) continue;
+		desc.configurable = false;
+		desc.writable = false;
+			Object.defineProperty(obj, names[a], desc);
 	}
-    Object.defineProperty(obj, '_$id', {value: ++oleng$id});
 	return obj;
 };
 
