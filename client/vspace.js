@@ -227,7 +227,7 @@ VSpace.prototype.setFocus = function(vitem) {
 		caret.show();
 		peer.moveToTop(vitem.path);
 	} else {
-		shell.setCaret(null, null); // TODO only one null
+		shell.setCaret(null, null);
 	}
 };
 

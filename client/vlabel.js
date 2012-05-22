@@ -207,7 +207,7 @@ VLabel.prototype.getZone = function() {
 	var action = shell.action;
 	var pnw = this.twig.pnw;
 
-	// TODO Caching!
+	// @@ Caching!
 	var vdoc   = this.vv.doc;
 	var fs     = vdoc.getFontSize();
 	var width  = max(Math.ceil(vdoc.getSpread()), ro(fs * 0.3));

@@ -27,19 +27,10 @@
 
 /**
 | Imports
-| TODO check needs
 */
-var CAccent;
-var CCustom;
-var CLabel;
-var CInput;
 var Cockpit;
-var Curve;
-var Design;
 var Fabric;
 var Jools;
-var Path;
-var Tree;
 var config;
 var theme;
 var system;
@@ -62,7 +53,6 @@ var debug        = Jools.debug;
 var immute       = Jools.immute;
 var is           = Jools.is;
 var isnon        = Jools.isnon;
-var computePoint = Curve.computePoint;
 var half         = Fabric.half;
 var magic        = Fabric.magic;
 var ro           = Math.round;
@@ -177,8 +167,9 @@ SwitchPanel.prototype.pathButton = function(fabric, border, twist, dir) {
 
 	var bw05 = half(bw);
 	var bh05 = half(bh);
-	var mx   = ro(bw / 2 * magic); // TODO round needed?
-	var my   = ro(bh / 2 * magic);
+
+	var mx   = bw / 2 * magic;
+	var my   = bh / 2 * magic;
 
 	fabric.beginPath(twist);
 
@@ -211,8 +202,7 @@ SwitchPanel.prototype._paintButton = function(fabric, dir) {
 SwitchPanel.prototype.getFabric = function() {
 	if (!config.debug.noCache && this.$fabric) { return this.$fabric; }
 	var iframe = this.iframe;
-	//var fabric = this.$fabric = new Fabric(iframe); TODO
-	var fabric = new Fabric(iframe);
+	var fabric = this.$fabric = new Fabric(iframe);
 
 	fabric.fill(theme.switchpanel.style.fill, this, 'pathFrame');
 	if (!this.amVisitor) { this._paintButton(fabric, 'nw'); }
