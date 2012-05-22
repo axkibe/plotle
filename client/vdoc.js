@@ -217,7 +217,7 @@ VDoc.prototype.getVParaAtPoint = function(p) {
 	var vv     = this.vv;
 
 	for(var r = 0, rZ = twig.length; r < rZ; r++) {
-		// TODO beautify
+		// @@ beautify
 		var k = twig.ranks[r];
 		var vpara = vv[k];
 		var flow = vpara.getFlow();

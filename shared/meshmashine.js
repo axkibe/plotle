@@ -425,10 +425,9 @@ var tfxSign = function(sign, chgX) {
 */
 var tfxChg = function(chg, chgX) {
 	log('tfx', 'tfxChg', chg, chgX);
-	if (chg.constructor !== Change) {
-		log('fail','tfxChg param error', chg.constructor.name, chg); // TODO
-		throw new Error('tfxChg param error');
-	}
+
+	if (chg.constructor !== Change)
+		{ throw new Error('tfxChg param error'); }
 
 	var srcX = tfxSign(chg.src, chgX);
 	var trgX = tfxSign(chg.trg, chgX);
@@ -664,7 +663,7 @@ TFXOps.remove = function(sign, src, trg) {
 TFXOps.rank = function(sign, src, trg) {
 	if (!src.path || !src.path.equals(sign.path)) return sign;
 	log('tfx', 'rank');
-	// TODO transform other rank commands
+	// @@ transform other rank commands
 	return sign;
 };
 

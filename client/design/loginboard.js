@@ -152,9 +152,9 @@ LoginBoard.layout = {
 		code       : '',
 		password   :  false,
 		normaStyle : 'input',
-		focusStyle : 'inputfocus',
+		focusStyle : 'inputFocus',
 		hoverStyle : 'input',
-		hofocStyle : 'inputfocus',
+		hofocStyle : 'inputFocus',
 		fontStyle  : fontStyle(14, 'la'),
 		maxlen     : 100,
 		frame      : {
@@ -168,9 +168,9 @@ LoginBoard.layout = {
 		code       : 'LBPassI',
 		password   :  true,
 		normaStyle : 'input',
-		focusStyle : 'inputfocus',
+		focusStyle : 'inputFocus',
 		hoverStyle : 'input',
-		hofocStyle : 'inputfocus',
+		hofocStyle : 'inputFocus',
 		fontStyle  : fontStyle(14, 'la'),
 		maxlen     : 0,
 		frame      : {

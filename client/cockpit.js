@@ -98,7 +98,7 @@ Cockpit.styles = {
 	chat        : theme.cockpit.chat,
 	highlight   : theme.cockpit.highlight,
 	input       : theme.cockpit.input,
-	inputfocus  : theme.cockpit.inputfocus,
+	inputFocus  : theme.cockpit.inputFocus,
 	sides       : theme.cockpit.sides,
 	zero        : theme.cockpit.zero,
 	zhighlight  : theme.cockpit.zhighlight

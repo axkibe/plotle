@@ -201,8 +201,6 @@ VNote.prototype.dragstop = function(p) {
 
 		if (this.twig.zone.eq(zone)) return;
 		peer.setZone(this.path, zone);
-		// adapts scrollbar position
-		// this.setScrollbar(); TODO
 
 		system.setCursor('default');
 		shell.redraw = true;

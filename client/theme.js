@@ -206,8 +206,7 @@ theme = {
 			]
 		},
 
-		// TODO rename inputFocus
-		inputfocus : {
+		inputFocus : {
 			fill : 'white',
 			edge : [
 				{ border: 1, width :   2, color : 'rgb(255, 99, 188)' },
