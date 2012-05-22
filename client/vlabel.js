@@ -91,12 +91,6 @@ VLabel.prototype.handles = immute({
 });
 
 /**
-| Minimum sizes
-*/
-VLabel.prototype.minWidth  = false;
-VLabel.prototype.minHeight = theme.label.minHeight;
-
-/**
 | Returns the notes silhoutte.
 */
 VLabel.prototype.getSilhoutte = function(zone$, zAnchor) {

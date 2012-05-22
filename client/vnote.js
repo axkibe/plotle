@@ -99,13 +99,6 @@ VNote.prototype.handles = {
 };
 
 /**
-| Minimum sizes
-| TODO no longer needs to be part of the prototype.
-*/
-VNote.prototype.minWidth  = theme.note.minWidth;
-VNote.prototype.minHeight = theme.note.minHeight;
-
-/**
 | Returns the notes silhoutte.
 |
 | zone$:  the cache for the items zone
@@ -202,7 +195,7 @@ VNote.prototype.dragstop = function(p) {
 	case Action.ITEMRESIZE :
 		var zone = this.getZone();
 
-		if (zone.width < this.minWidth || zone.height < this.minHeight) {
+		if (zone.width < theme.note.minWidth || zone.height < theme.note.minHeight) {
 			throw new Error('Note under minimum size!');
 		}
 
@@ -322,8 +315,8 @@ VNote.prototype.getZone = function() {
 		var spse = szone.pse;
 		var dx = action.move.x - action.start.x;
 		var dy = action.move.y - action.start.y;
-		var minw = this.minWidth;
-		var minh = this.minHeight;
+		var minw = theme.note.minWidth;
+		var minh = theme.note.minHeight;
 		var pnw, pse;
 
 		switch (action.align) {

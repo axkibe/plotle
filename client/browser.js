@@ -429,7 +429,6 @@ var System = function() {
 	| Sets a time through the error catcher
 	*/
 	system.setTimer = function(time, callback) {
-		// TODO make all use window.setTimeout
 		return window.setTimeout(makeCatcher(callback), time);
 	};
 	

@@ -466,14 +466,14 @@ Fabric.prototype._colorStyle = function(style, shape) {
 	var grad;
 	switch (style.gradient) {
 	case 'askew' :
-		// TODO use gradientPNW
+		// @@ use gradientPNW
 		if (!shape.pnw || !shape.pse) throw new Error(style.gradient+' gradiend misses pnw/pse');
 		grad = this._cx.createLinearGradient(
 			shape.pnw.x + this.pan.x, shape.pnw.y + this.pan.y,
 			shape.pnw.x + shape.width / 10 + this.pan.x, shape.pse.y + this.pan.y);
 		break;
 	case 'horizontal' :
-		// TODO use gradientPNW
+		// @@ use gradientPNW
 		if (!shape.pnw || !shape.pse) throw new Error(style.gradient+' gradient misses pnw/pse');
 		grad = this._cx.createLinearGradient(
 			0, this.pan.y + shape.pnw.y,
@@ -582,7 +582,7 @@ Fabric.prototype.fillText = function(text, a1, a2) {
 | text: text to draw
 | p: center point of rotation
 | phi: rotation angle
-| d: distance from center // TODO rename
+| d: distance from center // @@ rename
 */
 Fabric.prototype.fillRotateText = function(text, pc, phi, d) {
 	var cx = this._cx;

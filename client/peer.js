@@ -91,7 +91,6 @@ Peer.prototype.setUser = function(user, pass) {
 */
 Peer.prototype.logout = function(callback) {
 	if (this.$visitUser) {
-		//this._iface.setUser(this.$visitUser, this.$visitPass); TODO REM
 		callback({ ok : true, user : this.$visitUser, pass : this.$visitPass });
 	} else {
 		this.auth('visitor', null, callback);
@@ -112,7 +111,6 @@ Peer.prototype.auth = function(user, pass, callback) {
 			self.$visitUser = asw.user;
 			self.$visitPass = asw.pass;
 		}
-		//self._iface.setUser(asw.user, asw.pass); TODO REM
 		callback(asw);
 	});
 };

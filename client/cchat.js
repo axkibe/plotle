@@ -113,7 +113,7 @@ CChat.prototype.getCaretPos = function() {
 
 CChat.prototype.getFabric = function() {
 	var fabric = this.$fabric;
-	//if (fabric && !config.debug.noCache) { return fabric; } TODO
+	//if (fabric && !config.debug.noCache) { return fabric; } @@
 
 	fabric = this.$fabric = new Fabric(this.iframe);
 	var w = this.iframe.width;

@@ -117,7 +117,7 @@ MainBoard.curve = {
 MainBoard.layout = {
 	type  : 'Layout',
 	copse : {
-	'leftB' : {  // TODO rename leftB
+	'leftB' : {
 		type       : 'Custom',
 		code       : 'MBLeftB',
 		normaStyle : 'sides',
