@@ -162,7 +162,7 @@ CInput.prototype.getFabric = function(accent) {
 
 	fabric.fill(style.fill, this.bezi, 'path');
 	var fs = this.twig.fontStyle;
-	fabric.fontStyle(fs.style, fs.fill, fs.align, fs.base);
+	fabric.setFontStyle(fs.style, fs.fill, fs.align, fs.base);
 	if(this.twig.password) {
 		fabric.fill('black', this, 'maskPath', this.value.length, fs.size);
 	} else {

@@ -543,7 +543,7 @@ VPara.prototype.getFabric = function() {
 
 	// @@: work out exact height for text below baseline
 	fabric = this.$fabric = new Fabric(width, height);
-	fabric.fontStyle(vdoc.getFont(), 'black', 'start', 'alphabetic');
+	fabric.setFontStyle(vdoc.getFont(), 'black', 'start', 'alphabetic');
 
 	// draws text into the fabric
 	for(var a = 0, aZ = flow.length; a < aZ; a++) {

@@ -305,9 +305,9 @@ Shell.prototype._draw = function() {
 			this, 'pathFrowny', m.add(0, -100)
 		);
 
-		fabric.fontStyle('40px '+theme.defaultFont, 'black', 'center', 'middle' );
+		fabric.setFontStyle('40px '+theme.defaultFont, 'black', 'center', 'middle' );
 		fabric.fillText(this.green, m);
-		fabric.fontStyle('24px '+theme.defaultFont, 'black', 'center', 'middle' );
+		fabric.setFontStyle('24px '+theme.defaultFont, 'black', 'center', 'middle' );
 		fabric.fillText('Please refresh the page to reconnect.', m.x, m.y + 100);
 		return;
 	}

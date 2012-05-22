@@ -110,7 +110,7 @@ OvalMenu.prototype.draw = function() {
 	f.edge(this._style.edge, this._oflower, 'path', null);
 
 
-	f.fontStyle('12px ' + theme.defaultFont, 'black', 'center', 'middle');
+	f.setFontStyle('12px ' + theme.defaultFont, 'black', 'center', 'middle');
 	var labels = this.labels;
 
 	var b1  = this._dimensions.b1;
