@@ -619,7 +619,9 @@ Fabric.prototype.setFontStyle = function(font, fill, align, baseline) {
 };
 
 /**
-| TODO
+| Returns true is a point is in a path.
+| Point is either of type point -or-
+|    x / y
 */
 Fabric.prototype.within = function(shape, path, a1, a2, a3, a4, a5) {
 	var px, py;
@@ -661,7 +663,7 @@ Fabric.prototype.globalAlpha = function(a) {
    '   `-' `-' `-^ `-' `-^ '   `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  
- TODO seperate file.
+ @@ seperate file.
   
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 Measure = {
@@ -1256,7 +1258,7 @@ OvalFlower.prototype.path = function(fabric, border, twist, segment) {
 | Returns the segment the point is within.
 */
 OvalFlower.prototype.within = function(fabric, p) {
-	// TODO quick null if out of box.
+	// @@ quick null if out of box.
 	if (!fabric.within(this, 'path', p, 'outer')) { return null; }
 	if (isnon(this.segs.c ) && fabric.within(this, 'path', p, 'c' )) { return 'c';  }
 	if (isnon(this.segs.n ) && fabric.within(this, 'path', p, 'n' )) { return 'n';  }
@@ -1386,7 +1388,7 @@ Line.prototype.path = function(fabric, border, twist) {
 	var p2 = this.p2;
 
 	fabric.beginPath(twist);
-	// TODO, multiple line end types
+	// @@, multiple line end types
 	switch(this.p1end) {
 	case 'normal':
 		if (twist) fabric.moveTo(p1);

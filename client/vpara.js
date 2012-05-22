@@ -110,7 +110,7 @@ VPara.prototype.getFlow = function() {
 
 	if (shell.caret.path && shell.caret.path.equals(this.path)) {
 		// remove caret cache if its within this flow.
-		// TODO change
+		// @@ change
 		shell.caret.cp$line  = null;
 		shell.caret.cp$token = null;
 	}
@@ -386,7 +386,7 @@ VPara.prototype.specialKey = function(key, shift, ctrl) {
 		if (caret.flow$line > 0) {
 			// stay within this para
 			at1 = this.getLineXOffset(caret.flow$line - 1, x);
-			shell.setCaret(
+			caret = shell.setCaret(
 				'space',
 				{
 					path : this.textPath(),
@@ -400,7 +400,6 @@ VPara.prototype.specialKey = function(key, shift, ctrl) {
 			if (r > 0) {
 				ve = vdoc.vAtRank(r - 1);
 				at1 = ve.getLineXOffset(ve.getFlow().length - 1, x);
-
 				caret = shell.setCaret(
 					'space',
 					{
@@ -445,7 +444,6 @@ VPara.prototype.specialKey = function(key, shift, ctrl) {
 		if (caret.flow$line < flow.length - 1) {
 			// stays within this para
 			at1 = this.getLineXOffset(caret.flow$line + 1, x);
-
 			caret = shell.setCaret(
 				'space',
 				{
@@ -460,7 +458,6 @@ VPara.prototype.specialKey = function(key, shift, ctrl) {
 			if (r < vdoc.twig.length - 1) {
 				ve = vdoc.vAtRank(r + 1);
 				at1 = ve.getLineXOffset(0, x);
-
 				caret = shell.setCaret(
 					'space',
 					{
@@ -564,8 +561,8 @@ VPara.prototype.getFabric = function() {
 | flowPos$: if set, writes flow$line and flow$token to
 |           the flow position used.
 |
-| TODO change to multireturn.
-| TODO rename
+| @@ change to multireturn.
+| @@ rename
 */
 VPara.prototype.getOffsetPoint = function(offset, flowPos$) {
 	// @@ cache position
@@ -576,7 +573,7 @@ VPara.prototype.getOffsetPoint = function(offset, flowPos$) {
 	var flow = this.getFlow();
 	var a;
 
-	// TODO improve loops
+	// @@ improve loops
 	var al = flow.length - 1;
 	for (a = 1; a < flow.length; a++) {
 		if (flow[a].o > offset) {
@@ -640,8 +637,8 @@ VPara.prototype.drawCaret = function() {
 	var sbary = vitem.scrollbarY;
 	var sy    = sbary ? ro(sbary.getPos()) : 0;
 
-	var cyn = min(max(cpos.n + pnw.y - sy, 0), zone.height); // TODO limit
-	var cys = min(max(cpos.s + pnw.y - sy, 0), zone.height);
+	var cyn = limit(0, cpos.n + pnw.y - sy, zone.height);
+	var cys = limit(0, cpos.s + pnw.y - sy, zone.height);
 	var cx  = cpos.x + pnw.x;
 
 	var ch  = cys - cyn;
