@@ -500,12 +500,8 @@ VSpace.prototype.input = function(text) {
 VSpace.prototype.specialKey = function(key, shift, ctrl) {
 	if (ctrl) {
 		switch(key) {
-		case 'z' :
-			debug('UNDO');
-			return;
-		case 'y' : 
-			debug('REDO');
-			return;
+		case 'z' : peer.undo(); return;
+		case 'y' : peer.redo(); return;
 		} 
 	}
 

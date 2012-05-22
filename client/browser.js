@@ -250,7 +250,7 @@ var System = function() {
 		}
 		lastSpecialKey = -1;
 		testinput();
-		setTimeout(system.ontestinput, 0);
+		system.setTimer(0, system.ontestinput);
 		return true;
 	}
 
@@ -329,7 +329,7 @@ var System = function() {
 		if (event.button !== 0) return;
 		event.preventDefault();  // @@ maybe preventDefault before button test?
 		hiddenInput.focus();
-		setTimeout(function() { hiddenInput.selectionStart = 0; }, 0); // TODO go over catcher
+		system.setTimer(0, function() { hiddenInput.selectionStart = 0; });
 		var p = new Point (event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop);
 		// asks the face if it forces this to be a drag or click, or yet unknown.
 		mouseState = system.shell.mousedown(p, event.shiftKey, event.ctrlKey || event.metaKey);
@@ -338,7 +338,7 @@ var System = function() {
 			atweenPos   = atweenMove = p;
 			atweenShift = event.shiftKey;
 			atweenCtrl  = event.ctrlKey || event.metaKey;
-			atweenTimer = setTimeout(system.onatweentime, settings.dragtime);
+			atweenTimer = system.setTimer(settings.dragtime, system.onatweentime);
 			break;
 		case 'drag' :
 			captureEvents();

@@ -25,7 +25,7 @@
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
 | Imports
@@ -245,6 +245,20 @@ Peer.prototype.newLabel = function(spacePath, pnw, text, fontsize) {
 
 	return chgX.trg.path.get(-1);
 };
+
+/**
+| Undoes a change..
+*/
+Peer.prototype.undo = function() {
+	this._iface.undo();
+}
+
+/**
+| Redoes a change.
+*/
+Peer.prototype.redo = function() {
+	this._iface.redo();
+}
 
 /**
 | Creates a new relation.
