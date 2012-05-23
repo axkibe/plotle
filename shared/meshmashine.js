@@ -12,7 +12,6 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--'
 
-
                        ,-,-,-.           .   ,-,-,-.           .
                        `,| | |   ,-. ,-. |-. `,| | |   ,-. ,-. |-. . ,-. ,-.
                          | ; | . |-' `-. | |   | ; | . ,-| `-. | | | | | |-'
@@ -149,18 +148,17 @@ ChangeOps.set = function(tree, chg) {
 
 		pivot = pivot || tree.getPath(trg.path, -1);
 		if (key === null) key = trg.path.get(-1);
-		debug('RANK', trg.rank);
 		var orank;
 		if (src.val !== null) {
-			orank = trg.rank || 0; // @@ dirty fix
+			//orank = trg.rank || 0; // TODO dirty fix
 			pivot = tree.grow(pivot,
 				key, src.val,
-				'+', orank, key
+				'+', trg.rank, key
 			);
 		} else {
-			// check(trg.rank === null, cm, 'val <- null implies rank <- null'); @@ recheck
+			// check(trg.rank === null, cm, 'val <- null implies rank <- null'); TODO recheck
 			orank = pivot.rankOf(key);
-			// trg = new Sign(trg, 'rank', orank); @@ proper ranking
+			trg = new Sign(trg, 'rank', orank); // TODO proper ranking
 			pivot = tree.grow(pivot,
 				key, src.val,
 				'-', orank
@@ -386,7 +384,7 @@ var tfxSign = function(sign, chgX) {
 	case ChangeX :
 		break;
 	default : 
-		throw new Error('invalid chgX: ' + chgX.constructor.name); // TODO
+		throw new Error('invalid chgX');
 	}
 
 	if (arguments.length !== 2) { throw new Error('tfxSign argument fail (n)'); }
@@ -682,7 +680,12 @@ TFXOps.remove = function(sign, src, trg) {
 TFXOps.rank = function(sign, src, trg) {
 	if (!src.path || !src.path.equals(sign.path)) return sign;
 	log('tfx', 'rank');
+
 	// @@ transform other rank commands
+	if (!is(sign.rank)) { return sign; }
+	if (sign.rank >= trg.rank) {
+		return new Sign(sign, 'rank', sign.rank + 1);
+	}
 	return sign;
 };
 
