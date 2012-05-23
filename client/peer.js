@@ -369,7 +369,7 @@ Peer.prototype.join = function(path, at1) {
 Peer.prototype.removeItem = function(path) {
 	this._iface.alter(
 		{ val  : null  },
-		{ path : path, rank : null  }
+		{ path : path, rank : null }
 	);
 };
 

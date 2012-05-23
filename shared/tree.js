@@ -327,7 +327,8 @@ Tree.prototype.getPath = function(path, shorten) {
 
 	var twig = this.root;
 	for (var a = 0; a < aZ; a++) {
-		if (!isnon(twig)) throw reject('path goes nowhere: '+path);
+		// if (!isnon(twig)) throw reject('path goes nowhere: '+path);
+		if (!isnon(twig)) return null;
 		if (this.pattern[twigtype(twig)].copse) {
 			twig = twig.copse[path.get(a)];
 		} else {

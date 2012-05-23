@@ -149,14 +149,18 @@ ChangeOps.set = function(tree, chg) {
 
 		pivot = pivot || tree.getPath(trg.path, -1);
 		if (key === null) key = trg.path.get(-1);
+		debug('RANK', trg.rank);
+		var orank;
 		if (src.val !== null) {
+			orank = trg.rank || 0; // @@ dirty fix
 			pivot = tree.grow(pivot,
 				key, src.val,
-				'+', trg.rank, key
+				'+', orank, key
 			);
 		} else {
-			check(trg.rank === null, cm, 'val <- null implies rank <- null');
-			var orank = pivot.rankOf(key);
+			// check(trg.rank === null, cm, 'val <- null implies rank <- null'); @@ recheck
+			orank = pivot.rankOf(key);
+			// trg = new Sign(trg, 'rank', orank); @@ proper ranking
 			pivot = tree.grow(pivot,
 				key, src.val,
 				'-', orank
@@ -200,7 +204,12 @@ ChangeOps.remove = function(tree, chg) {
 
 	check(isPath(src.path), cm, 'src.path missing');
 	var str = tree.getPath(src.path);
-	check(isString(str), cm, 'src.path signates no string');
+	if (!isString(str)) {
+		log('change', 'src.path signates no string');
+		return null;
+	}
+//	check(isString(str), cm, 'src.path signates no string');
+//  @@ removed item
 
 	if (src.at1 === src.at2) {
 		log('change', 'removed nothing');
@@ -371,6 +380,14 @@ var tfxSign1 = function(sign, chg) {
 */
 var tfxSign = function(sign, chgX) {
 	log('tfx', 'tfxSign', sign, chgX);
+
+	switch(chgX.constructor) {
+	case Change  :
+	case ChangeX :
+		break;
+	default : 
+		throw new Error('invalid chgX: ' + chgX.constructor.name); // TODO
+	}
 
 	if (arguments.length !== 2) { throw new Error('tfxSign argument fail (n)'); }
 	if (sign.constructor !== Sign) { throw new Error('tfxSign argument faili (1)'); }

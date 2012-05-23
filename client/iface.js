@@ -30,12 +30,14 @@
 | Imports
 */
 var Change;
+var ChangeX;
 var MeshMashine;
 var Meshverse;
 var Path;
 var Sign;
 var Tree;
 var Jools;
+var config;
 var shell;
 var system;
 
@@ -333,7 +335,7 @@ IFace.prototype._update = function() {
 		if (!asw.ok) { throw new Error('update, server not OK!'); }
 		var chgs = asw.chgs;
 
-		var report  = [];
+		var report  = new ChangeX();
 		var gotOwnChgs = false;
 		var time = asw.time;
 
@@ -356,20 +358,21 @@ IFace.prototype._update = function() {
 				
 				// alters undo and redo queues.
 				var $undo = self.$undo;
-				for(var b = 0, bZ = $undo.length; b < bZ; b++) {
+				for(b = 0, bZ = $undo.length; b < bZ; b++) {
 					var u = $undo[b];
-					if (u.remoteTime < time + a) {
-						$u[b].chgX = tfxChgX(u.chgX, chgs[a].chgX);
+					if (u.time < time + a) {
+						u.chgX = tfxChgX(u.chgX, chgX);
 					}
 				}
 
 				var $redo = self.$redo;
 				for(var b = 0, bZ = $redo.length; b < bZ; b++) {
 					var u = $redo[b];
-					if (u.remoteTime < time + a) {
-						$u[b].chgX = tfxChgX(u.chgX, chgs[a].chgX);
+					if (u.time < time + a) {
+						u.chgX = tfxChgX(u.chgX, chgX);
 					}
 				}
+
 				report.push(chgX);
 			}
 
@@ -523,6 +526,8 @@ IFace.prototype.undo = function() {
     this.tree = r.tree;
 	chgX      = r.chgX;
 
+	if (chgX === null) { return; }
+
 	var c = immute({
 		cid: uid(),
 		chgX: chgX,
@@ -546,6 +551,8 @@ IFace.prototype.redo = function() {
     var r     = changeTree(this.tree, chgX);
     this.tree = r.tree;
 	chgX      = r.chgX;
+	
+	if (chgX === null) { return; }
 
 	var c = immute({
 		cid: uid(),

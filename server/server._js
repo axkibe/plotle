@@ -214,8 +214,9 @@ Server.prototype.buildClientConfig = function() {
 
 	var cconfig = [];
 	cconfig.push('var config = {\n');
-	cconfig.push('\tdevel : '  + configSwitch(config.devel, 'client') + ',\n');
-	cconfig.push('\tdebug : {\n');
+	cconfig.push('\tdevel   : '  + configSwitch(config.devel, 'client') + ',\n');
+	cconfig.push('\tmaxUndo : '  + config.maxUndo + ',\n');
+	cconfig.push('\tdebug   : {\n');
 	var first = true;
 	for(k in config.debug) {
 		if (!first) { cconfig.push(',\n'); } else { first = false; }
@@ -267,6 +268,7 @@ Server.prototype.registerFiles = function() {
 	registerFile('/tree.js',               'js',   1, 'shared/tree.js'               );
 	registerFile('/sign.js',               'js',   1, 'shared/sign.js'               );
 	registerFile('/change.js',             'js',   1, 'shared/change.js'             );
+	registerFile('/changex.js',            'js',   1, 'shared/changex.js'            );
 	registerFile('/meshmashine.js',        'js',   1, 'shared/meshmashine.js'        );
 	registerFile('/iface.js',              'js',   1, 'client/iface.js'              );
 	registerFile('/peer.js',               'js',   1, 'client/peer.js'               );

@@ -75,6 +75,10 @@ config.devel = 'client';
 */
 config.uglify = false;
 
+/**
+| Max. number of events queued.
+*/
+config.maxUndo = 5000;
 
 /**
 | debugging facilities
