@@ -358,16 +358,17 @@ IFace.prototype._update = function() {
 				
 				// alters undo and redo queues.
 				var $undo = self.$undo;
+				var u;
 				for(b = 0, bZ = $undo.length; b < bZ; b++) {
-					var u = $undo[b];
+					u = $undo[b];
 					if (u.time < time + a) {
 						u.chgX = tfxChgX(u.chgX, chgX);
 					}
 				}
 
 				var $redo = self.$redo;
-				for(var b = 0, bZ = $redo.length; b < bZ; b++) {
-					var u = $redo[b];
+				for(b = 0, bZ = $redo.length; b < bZ; b++) {
+					u = $redo[b];
 					if (u.time < time + a) {
 						u.chgX = tfxChgX(u.chgX, chgX);
 					}

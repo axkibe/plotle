@@ -129,6 +129,7 @@ Server.prototype.startup = function(_) {
 	db.changes = db.connection.collection('changes', _);
 	db.invites = db.connection.collection('invites', _);
 	db.users   = db.connection.collection('users', _);
+	this.ensureRootUser(_);
 
 	var cursor = db.changes.find(_);
 	for(var o = cursor.nextObject(_); o !== null; o = cursor.nextObject(_)) {
@@ -146,6 +147,30 @@ Server.prototype.startup = function(_) {
 	}).listen(config.port, config.ip, _);
 	
 	log('start', 'Server running');
+};
+
+/**
+| Ensures there is a root user
+*/
+Server.prototype.ensureRootUser = function(_) {
+	var db = this.db;
+	var root = this.db.users.findOne({ _id : 'root'}, _);
+	if (root) {
+		log('start', 'root pass:', root.pass);
+		return;
+	}
+
+	// if not create one
+	root = {
+		_id  : 'root',
+		pass : uid(),
+		mail : '',
+		code : '',
+		icom : 'root'
+	};
+
+	this.db.users.insert(root);
+	log('start', 'created root pass:', root.pass);
 };
 
 /**
@@ -501,7 +526,8 @@ Server.prototype.register = function(cmd, _) {
 	if (code === null) {
 		return reject('Unknown invitation code');
 	}
-	
+
+	// @@ remove or use count
 	var count = this.db.users.insert({
 			_id  : cmd.user,
 			pass : cmd.pass,
@@ -729,6 +755,7 @@ Server.prototype.wake = function(spaces) {
 | Tests if the user has access to 'space'.
 */
 Server.prototype.testAccess = function(user, space) {
+	if (user === 'root') { return 'rw' };
 	switch (space) {
 	case 'sandbox' : return 'rw';
 	case 'welcome' : return user === config.admin ? 'rw' : 'ro';

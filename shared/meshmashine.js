@@ -383,7 +383,7 @@ var tfxSign = function(sign, chgX) {
 	case Change  :
 	case ChangeX :
 		break;
-	default : 
+	default :
 		throw new Error('invalid chgX');
 	}
 
