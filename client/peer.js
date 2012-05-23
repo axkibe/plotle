@@ -249,14 +249,14 @@ Peer.prototype.newLabel = function(spacePath, pnw, text, fontsize) {
 */
 Peer.prototype.undo = function() {
 	this._iface.undo();
-}
+};
 
 /**
 | Redoes a change.
 */
 Peer.prototype.redo = function() {
 	this._iface.redo();
-}
+};
 
 /**
 | Creates a new relation.

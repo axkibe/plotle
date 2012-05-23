@@ -30,6 +30,7 @@
 | Imports
 */
 var Change;
+var ChangeX;
 var Jools;
 var Path;
 var Sign;
@@ -49,10 +50,11 @@ var MeshMashine;
 | Node includes.
 */
 if (typeof(window) === 'undefined') {
-	Change = require('./change');
-	Jools  = require('./jools');
-	Path   = require('./path');
-	Sign   = require('./sign');
+	Change  = require('./change');
+	ChangeX = require('./changex');
+	Jools   = require('./jools');
+	Path    = require('./path');
+	Sign    = require('./sign');
 }
 
 var debug        = Jools.debug;
@@ -99,7 +101,7 @@ var changeTree = function(tree, chgX) {
 		tree = r.tree;
 
 		if (aZ > 1) {
-			if (aChgX === null) { aChgX = []; }
+			if (aChgX === null) { aChgX = new ChangeX(); }
 			aChgX.push(rChg);
 		} else {
 			aChgX = rChg;
@@ -421,7 +423,7 @@ var tfxSign = function(sign, chgX) {
 };
 
 /**
-| Transforms a change on an a change or an Array of changes.
+| Transforms a change on an a change/x/.
 */
 var tfxChg = function(chg, chgX) {
 	log('tfx', 'tfxChg', chg, chgX);
@@ -444,13 +446,13 @@ var tfxChg = function(chg, chgX) {
 	if (!srcA && !trgA) {
 		return new Change(srcX, trgX);
 	} else if (!srcA && trgA)  {
-		asw = [];
+		asw = new ChangeX();
 		for(a = 0, aZ = trgX.length; a < aZ; a++) {
 			asw[a] = new Change(srcX, trgX[a]);
 		}
 		return asw;
 	} else if (srcA && !trgA) {
-		asw = [];
+		asw = new ChangeX();
 		for(a = 0, aZ = srcX.length; a < aZ; a++) {
 			asw[a] = new Change(srcX[a], trgX);
 		}
@@ -467,8 +469,8 @@ var tfxChgX = function(chgX1, chgX2) {
 	switch(chgX1.constructor) {
 	case Change :
 		return tfxChg(chgX1, chgX2);
-	case Array :
-		var chgA = [];
+	case ChangeX :
+		var chgA = new ChangeX();
 		for(var a = 0, aZ = chgX1.length; a < aZ; a++) {
 			var rX = tfxChg(chgX1[a], chgX2);
 			for(var b = 0, bZ = rX.length; b < bZ; b++) {

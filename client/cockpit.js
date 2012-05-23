@@ -275,6 +275,6 @@ Cockpit.prototype.setShowHelp = function(showHelp) {
 
 	this.getBoard('MainBoard').setShowHelp(showHelp);
 	shell.redraw = true;
-}
+};
 
 })();

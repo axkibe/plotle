@@ -176,6 +176,6 @@ MainBoard.prototype.setShowHelp = function(showHelp) {
 	var rb = this.cc.rightB;
 	rb.$active = showHelp;
 	rb.poke();
-}
+};
 
 })();

@@ -502,7 +502,7 @@ VSpace.prototype.specialKey = function(key, shift, ctrl) {
 		switch(key) {
 		case 'z' : peer.undo(); return;
 		case 'y' : peer.redo(); return;
-		} 
+		}
 	}
 
 	var caret = shell.caret;

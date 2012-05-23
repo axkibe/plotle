@@ -198,7 +198,7 @@ Server.prototype.message = function(cmd, _) {
 	if (!is(message)) { throw reject('message missing'); }
 
 
-	if (this.$users[user].pass !== pass) 
+	if (this.$users[user].pass !== pass)
 		{ throw reject('invalid pass'); }
 
 	this.sendMessage(space, user, message);

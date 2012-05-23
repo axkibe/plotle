@@ -541,7 +541,7 @@ Shell.prototype.moveToSpace = function(name) {
 
 	if (name === null) {
 		name = self.vspace.key;
-		if (this.$user.substr(0, 5) === 'visit' && 
+		if (this.$user.substr(0, 5) === 'visit' &&
 			(name !== 'welcome' && name !== 'help')
 		) { name = 'welcome'; }
 	} else {

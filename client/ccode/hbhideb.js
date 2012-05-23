@@ -31,6 +31,7 @@
 */
 var CCustom;
 var Jools;
+var shell;
 
 /**
 | Exports

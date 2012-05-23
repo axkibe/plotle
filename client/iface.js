@@ -216,6 +216,8 @@ IFace.prototype.aquireSpace = function(spaceName, callback) {
 	self.$outbox    = [];
 	self.$postbox   = [];
 	self.$mseq      = -1;
+	self.$undo      = [];
+	self.$redo      = [];
 
 	var path = new Path([spaceName]);
 
@@ -413,7 +415,15 @@ IFace.prototype.alter = function(src, trg) {
     this.tree = r.tree;
 	var chgX  = r.chgX;
 
-	this.$outbox.push({ cid: uid(), chgX: chgX });
+	var c = immute({
+		cid: uid(),
+		chgX: chgX,
+		time: this.$remoteTime
+	});
+
+	this.$outbox.push(c);
+	this.$undo.push(c);
+	// TODO max UNDO
 	this.sendChanges();
 
     if (this.update) { this.update.update(r.tree, chgX); }
@@ -424,21 +434,18 @@ IFace.prototype.alter = function(src, trg) {
 | Sends the stored changes to remote meshmashine
 */
 IFace.prototype.sendChanges = function() {
-	if (this.$postbox.length > 0) {
-		return;
-	}
 
-	if (this.$outbox.length === 0) {
-		// nothing to send
-		return;
-	}
+	// already sending?
+	if (this.$postbox.length > 0)  { return; }
+		
+	// nothing to send?
+	if (this.$outbox.length === 0) { return; }
 
 	var ajax = new XMLHttpRequest();
 	ajax.open('POST', '/mm', true);
 	ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
 	var self = this;
-
 	ajax.onreadystatechange = function() {
 		var asw;
 		if (ajax.readyState !== 4) { return; }
@@ -477,6 +484,36 @@ IFace.prototype.sendChanges = function() {
 
 	log('iface', 'sc->', request);
 	ajax.send(request);
+};
+
+
+/**
+| Sends the stored changes to remote meshmashine
+*/
+IFace.prototype.undo = function() {
+/*	var uc  = this.$undo.shift();
+    var r = MeshMashine.changeTree(this.tree, chg);
+    this.tree = r.tree;
+	var chgX  = r.chgX;
+
+	var c = immute({
+		cid: uid(),
+		chgX: chgX,
+		time: this.$remoteTime
+	});
+
+	this.$outbox.push(c);
+	this.$redo.push(c);
+	this.sendChanges();
+
+    if (this.update) { this.update.update(r.tree, chgX); }
+    return chgX;*/
+};
+
+/**
+| Sends the stored changes to remote meshmashine
+*/
+IFace.prototype.redo = function() {
 };
 
 })();
