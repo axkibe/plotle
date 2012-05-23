@@ -69,17 +69,17 @@ ChangeX = function() {
 subclass(ChangeX, Array);
 
 /**
-| Returns a reversed change.
+| Returns an array with inverted changes.
 */
-ChangeX.prototype.reverse = function() {
-	if (is(this._reverse)) { return this._reverse; }
+ChangeX.prototype.invert = function() {
+	if (is(this._invert)) { return this._invert; }
 	var r = new ChangeX();
 	for(var a = 0, aZ = this.length; a < aZ; a++) {
-		r[a] = this[a].reverse();
+		r[a] = this[a].invert();
 	}
 
-	innumerable(this, '_reverse', r);
-	innumerable(r, '_reverse', this);
+	innumerable(this, '_invert', r);
+	innumerable(r, '_invert', this);
 	return r;
 };
 

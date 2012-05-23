@@ -124,13 +124,13 @@ Change.prototype.type = function() {
 };
 
 /**
-| Returns a reversed change.
+| Returns a inverted change.
 */
-Change.prototype.reverse = function() {
-	if (is(this._reverse)) { return this._reverse; }
+Change.prototype.invert = function() {
+	if (is(this._invert)) { return this._invert; }
 	var r = new Change(this.trg, this.src);
-	innumerable(this, '_reverse', r);
-	innumerable(r, '_reverse', this);
+	innumerable(this, '_invert', r);
+	innumerable(r, '_invert', this);
 	return r;
 };
 

@@ -51,11 +51,13 @@ var IFace;
 "use strict";
 if (typeof (window) === 'undefined') throw new Error('Peer nees a browser!');
 
-var debug     = Jools.debug;
-var immute    = Jools.immute;
-var is        = Jools.is;
-var log       = Jools.log;
-var uid       = Jools.uid;
+var changeTree = MeshMashine.changeTree;
+var tfxChgX    = MeshMashine.tfxChgX;
+var debug      = Jools.debug;
+var immute     = Jools.immute;
+var is         = Jools.is;
+var log        = Jools.log;
+var uid        = Jools.uid;
 
 /**
 | Constructor.
@@ -333,7 +335,10 @@ IFace.prototype._update = function() {
 
 		var report  = [];
 		var gotOwnChgs = false;
+		var time = asw.time;
+
 		if (chgs && chgs.length > 0) {
+
 			// this wasn't an empty timeout?
 			var postbox = self.$postbox;
 			for(a = 0, aZ = chgs.length; a < aZ; a++) {
@@ -341,12 +346,29 @@ IFace.prototype._update = function() {
 				var cid = chgs[a].cid;
 
 				// changes the clients understanding of the server tree
-				self.rtree = MeshMashine.changeTree(self.rtree, chgX).tree;
+				self.rtree = changeTree(self.rtree, chgX).tree;
 
 				if (postbox.length > 0 && postbox[0].cid === cid) {
 					self.$postbox.splice(0, 1);
 					gotOwnChgs = true;
 					continue;
+				}
+				
+				// alters undo and redo queues.
+				var $undo = self.$undo;
+				for(var b = 0, bZ = $undo.length; b < bZ; b++) {
+					var u = $undo[b];
+					if (u.remoteTime < time + a) {
+						$u[b].chgX = tfxChgX(u.chgX, chgs[a].chgX);
+					}
+				}
+
+				var $redo = self.$redo;
+				for(var b = 0, bZ = $redo.length; b < bZ; b++) {
+					var u = $redo[b];
+					if (u.remoteTime < time + a) {
+						$u[b].chgX = tfxChgX(u.chgX, chgs[a].chgX);
+					}
 				}
 				report.push(chgX);
 			}
@@ -357,16 +379,16 @@ IFace.prototype._update = function() {
 			var tree = self.rtree;
 
 			for(a = 0, aZ = postbox.length; a < aZ; a++) {
-				tree = MeshMashine.changeTree(tree, postbox[a].chgX).tree;
+				tree = changeTree(tree, postbox[a].chgX).tree;
 			}
 
 			for(a = 0, aZ = outbox.length; a < aZ; a++) {
 				chgX = outbox[a].chgX;
 				for(b = 0, bZ = report.length; b < bZ; b++) {
-					chgX = MeshMashine.tfxChgX(chgX, report[b]);
+					chgX = tfxChgX(chgX, report[b]);
 				}
 				outbox[a].chgX = chgX;
-				tree = MeshMashine.changeTree(tree, chgX).tree;
+				tree = changeTree(tree, chgX).tree;
 			}
 			self.tree = tree;
 		}
@@ -411,19 +433,23 @@ IFace.prototype._update = function() {
 */
 IFace.prototype.alter = function(src, trg) {
     var chg = new Change(new Sign(src), new Sign(trg));
-    var r = MeshMashine.changeTree(this.tree, chg);
+    var r = changeTree(this.tree, chg);
     this.tree = r.tree;
 	var chgX  = r.chgX;
 
-	var c = immute({
+	var c = {
 		cid: uid(),
 		chgX: chgX,
 		time: this.$remoteTime
-	});
+	};
 
 	this.$outbox.push(c);
-	this.$undo.push(c);
-	// TODO max UNDO
+
+	this.$redo = [];
+	var $undo = this.$undo;
+	$undo.push(c);
+	if ($undo.length > config.maxUndo) { $undo.shift(); }
+
 	this.sendChanges();
 
     if (this.update) { this.update.update(r.tree, chgX); }
@@ -491,10 +517,11 @@ IFace.prototype.sendChanges = function() {
 | Sends the stored changes to remote meshmashine
 */
 IFace.prototype.undo = function() {
-/*	var uc  = this.$undo.shift();
-    var r = MeshMashine.changeTree(this.tree, chg);
+	if (this.$undo.length === 0) { return; }
+	var chgX  = this.$undo.pop().chgX.invert();
+    var r     = changeTree(this.tree, chgX);
     this.tree = r.tree;
-	var chgX  = r.chgX;
+	chgX      = r.chgX;
 
 	var c = immute({
 		cid: uid(),
@@ -507,13 +534,31 @@ IFace.prototype.undo = function() {
 	this.sendChanges();
 
     if (this.update) { this.update.update(r.tree, chgX); }
-    return chgX;*/
+    return chgX;
 };
 
 /**
 | Sends the stored changes to remote meshmashine
 */
 IFace.prototype.redo = function() {
+	if (this.$redo.length === 0) { return; }
+	var chgX  = this.$redo.pop().chgX.invert();
+    var r     = changeTree(this.tree, chgX);
+    this.tree = r.tree;
+	chgX      = r.chgX;
+
+	var c = immute({
+		cid: uid(),
+		chgX: chgX,
+		time: this.$remoteTime
+	});
+
+	this.$outbox.push(c);
+	this.$undo.push(c);
+	this.sendChanges();
+
+    if (this.update) { this.update.update(r.tree, chgX); }
+    return chgX;
 };
 
 })();
