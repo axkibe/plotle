@@ -2,26 +2,23 @@ Meshcraft
 =========
 With Meshcraft you can organize your notes/presentations/texts in a mesh using your browser.
 
-The live site at http://meshcraft.net/ is currently running version 0.1.
+The live site at http://meshcraft.net/ is currently running version 0.2.
 
-The live site at http://meshcraft.net:8833 is currently running the next version in development.
-
-Meshcraft tries to be compatible with all major browsers. However, Chrome/Chromium performs best.
+Meshcraft tries to be compatible with all major browsers, but Chrome/Chromium performs best.
 
 Versions
 ========
-Version 0.1 is a demo of the clients user interface (shell). It is not yet ready for productive work and does not communicate with server. Everything is cached in the browser.
+Version 0.2:
+ * Live communication with the server using a multi-user editing protocol (causal consistency / action transformation)
+ * new design
+ * Undo/Redo
+ * Multiple Spaces (for now "welcome", "sandbox" and one personal per user)
+
+Version 0.1
+ * was a demo of the clients user interface (shell), it had no server communication or saving
 
 Roadmap
-=======
-Version 0.2:
-
- * Live communication with the server using a multi-user editing protocol (causal consistency / action transformation)
- * Undo/Redo
- * Multiple Spaces (at least "Welcome", "Sandbox" and one personal per user)
-
-Further Down the Road
----------------------
+-------
 (in no particular order)
 
  * Bold / Italic texts (text trees go deeper than just paragraphs)
