@@ -184,7 +184,8 @@ Peer.prototype.newNote = function(spacePath, zone) {
 					copse : { '1' : { type: 'Para', text: '' } },
 					ranks : [ '1' ]
 				}
-			}
+			},
+			rank : null
 		},
 		{ path: new Path(spacePath, '++', '$new'), rank: 0 }
 	);
@@ -236,7 +237,8 @@ Peer.prototype.newLabel = function(spacePath, pnw, text, fontsize) {
 					copse : { '1' : { type: 'Para', text: text } },
 					ranks : [ '1' ]
 				}
-			}
+			},
+			rank : null
 		},
 		{ path: new Path(spacePath, '++', '$new'), rank: 0 }
 	);
@@ -275,7 +277,8 @@ Peer.prototype.newRelation = function(spacePath, pnw, text, fontsize, item1key, 
 					copse : { '1' : { type: 'Para', text: text } },
 					ranks : [ '1' ]
 				}
-			}
+			},
+			rank : null
 		},
 		{ path: new Path(spacePath, '++', '$new'), rank: 0 }
 	);
@@ -367,8 +370,13 @@ Peer.prototype.join = function(path, at1) {
 | Removes an item.
 */
 Peer.prototype.removeItem = function(path) {
+
+	var key = path.get(-1);
+	var pivot = this._iface.get(path, -1);
+	var r1 = pivot.rankOf(key);
+
 	this._iface.alter(
-		{ val  : null  },
+		{ val  : null, rank : r1   },
 		{ path : path, rank : null }
 	);
 };

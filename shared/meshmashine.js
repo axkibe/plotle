@@ -128,7 +128,6 @@ ChangeOps.set = function(tree, chg) {
 	check(!is(trg.at1), cm, 'trg.at1 must not exist.');
 	check(is(src.val), cm, 'src.val missing');
 
-
 	if (trg.path.get(-1) === '$new') {
 		pivot = tree.getPath(trg.path, -1);
 		key = pivot.newUID();
@@ -144,7 +143,7 @@ ChangeOps.set = function(tree, chg) {
 	if (!is(trg.rank)) {
 		tree = tree.setPath(trg.path, src.val);
 	} else {
-		src = src.affix(is, cm, 'src', 'rank', trg.rank);
+		//src = src.affix(is, cm, 'src', 'rank', trg.rank);
 
 		pivot = pivot || tree.getPath(trg.path, -1);
 		if (key === null) key = trg.path.get(-1);
@@ -575,10 +574,49 @@ TFXOps.join = function(sign, src, trg) {
 };
 
 /**
+| Transforms a signature on a rank
+*/
+TFXOps.rank = function(sign, src, trg) {
+	if (!src.path || !src.path.equals(sign.path)) return sign;
+	if (!is(sign.rank)) { return sign; }
+
+	log('tfx', 'rank');
+
+	if (src.rank <= sign.rank && trg.rank > sign.rank)
+		{ sign = new Sign(sign, 'rank', sign.rank - 1); }
+	else if (src.rank > sign.rank && trg.rank <= sign.rank)
+		{ sign = new Sign(sign, 'rank', sign.rank + 1); }
+
+	return sign;
+};
+
+
+
+/**
 | Transforms a signature on a join.
 */
 TFXOps.set = function(sign, src, trg) {
+	if (!is(sign.rank)) { return sign; }
+	if (!is(trg.rank))  { return sign; }
+	if (!trg.path || !trg.path.subPathOf(sign.path, - 1)) return sign;
+
 	log('tfx', 'set');
+	
+	if (trg.rank === null) {
+		if (sign.rank >= trg.rank)
+			{ sign = new Sign(sign, 'rank', sign.rank - 1); }
+
+	} else if (src.rank === null) {
+		if (sign.rank >= src.rank)
+			{ sign = new Sign(sign, 'rank', sign.rank + 1); }
+
+	} else {
+		if (src.rank <= sign.rank && trg.rank > sign.rank)
+			{ sign = new Sign(sign, 'rank', sign.rank - 1); }
+		else if (src.rank > sign.rank && trg.rank <= sign.rank)
+			{ sign = new Sign(sign, 'rank', sign.rank + 1); }
+	}
+
 	return sign;
 };
 
@@ -673,22 +711,6 @@ TFXOps.remove = function(sign, src, trg) {
 	// should never happen
 	throw new Error('remove no case fitted? '+sign.at1+'-'+sign.at2+' '+src.at1+'-'+src.at2);
 };
-
-/**
-| Transforms a signature on a rank
-*/
-TFXOps.rank = function(sign, src, trg) {
-	if (!src.path || !src.path.equals(sign.path)) return sign;
-	log('tfx', 'rank');
-
-	// @@ transform other rank commands
-	if (!is(sign.rank)) { return sign; }
-	if (sign.rank >= trg.rank) {
-		return new Sign(sign, 'rank', sign.rank + 1);
-	}
-	return sign;
-};
-
 
 /**
 | Appends changes of chgX that matter to space to the array chga.

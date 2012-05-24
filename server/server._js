@@ -155,22 +155,24 @@ Server.prototype.startup = function(_) {
 Server.prototype.ensureRootUser = function(_) {
 	var db = this.db;
 	var root = this.db.users.findOne({ _id : 'root'}, _);
+
 	if (root) {
 		log('start', 'root pass:', root.pass);
-		return;
+	} else {
+		// if not create one
+		root = {
+			_id  : 'root',
+			pass : uid(),
+			mail : '',
+			code : '',
+			icom : 'root'
+		};
+
+		this.db.users.insert(root, _);
+		log('start', 'created root pass:', root.pass);
 	}
 
-	// if not create one
-	root = {
-		_id  : 'root',
-		pass : uid(),
-		mail : '',
-		code : '',
-		icom : 'root'
-	};
-
-	this.db.users.insert(root);
-	log('start', 'created root pass:', root.pass);
+	this.$users.root = root;
 };
 
 /**
@@ -465,7 +467,7 @@ Server.prototype.alter = function(cmd, _) {
 Server.prototype.auth = function(cmd, _) {
 	if (!is(cmd.user)) { throw reject('user missing'); }
 	if (!is(cmd.pass)) { throw reject('pass missing');  }
-	var users = this.$users;
+	var $users = this.$users;
 
 	if (cmd.user === 'visitor') {
 		var uid;
@@ -473,8 +475,8 @@ Server.prototype.auth = function(cmd, _) {
 			this.nextVisitor++;
 			uid = 'visitor-' + this.nextVisitor;
 		}
-		while (users[uid]);
-		users[uid] = {
+		while ($users[uid]);
+		$users[uid] = {
 			user    : uid,
 			pass    : cmd.pass,
 			created : Date.now(),
@@ -483,13 +485,13 @@ Server.prototype.auth = function(cmd, _) {
 		return { ok: true, user: uid };
 	}
 
-	if (!users[cmd.user]) {
+	if (!$users[cmd.user]) {
 		var val = this.db.users.findOne({ _id : cmd.user}, _);
 		if (val === null) { return reject('Username unknown'); }
-		users[cmd.user] = val;
+		$users[cmd.user] = val;
 	}
 
-	if (users[cmd.user].pass !== cmd.pass) { return reject('Invalid password'); }
+	if ($users[cmd.user].pass !== cmd.pass) { return reject('Invalid password'); }
 	return { ok : true, user: cmd.user };
 };
 
@@ -527,18 +529,22 @@ Server.prototype.register = function(cmd, _) {
 		return reject('Unknown invitation code');
 	}
 
-	// @@ remove or use count
-	var count = this.db.users.insert({
-			_id  : cmd.user,
-			pass : cmd.pass,
-			mail : cmd.mail,
-			code : cmd.code,
-			icom : code.comment
-	}, _);
+	var user = {
+		_id  : cmd.user,
+		pass : cmd.pass,
+		mail : cmd.mail,
+		code : cmd.code,
+		icom : code.comment
+	};
+
+	this.db.users.insert(user, _);
+	this.$users[cmd.user] = user;
 
 	// everything OK so far, creates the user home space
 	asw = this.alter({
 		time : 0,
+		user : 'root',
+		pass : this.$users.root.pass,
 		chgX : new Change(
 			{ val: { type: 'Space', cope: {}, ranks: [] } },
 			{ path : [cmd.user + ':home'] }
@@ -549,6 +555,7 @@ Server.prototype.register = function(cmd, _) {
 	if (asw.ok !== true) {
 		throw new Error('Cannot create users home space');
 	}
+
 
 	return { ok: true, user: cmd.user };
 };
@@ -755,7 +762,7 @@ Server.prototype.wake = function(spaces) {
 | Tests if the user has access to 'space'.
 */
 Server.prototype.testAccess = function(user, space) {
-	if (user === 'root') { return 'rw' };
+	if (user === 'root') { return 'rw'; }
 	switch (space) {
 	case 'sandbox' : return 'rw';
 	case 'welcome' : return user === config.admin ? 'rw' : 'ro';
@@ -777,8 +784,8 @@ Server.prototype.get = function(cmd, _) {
 	var cZ      = changes.length;
 	
 	// checks
-	if (this.$users[user].pass !== cmd.pass)
-		{ throw reject('wrong password'); }
+	if (!is(this.$users[user]) || this.$users[user].pass !== cmd.pass)
+		{ throw reject('wrong user/password'); }
 
 	if (!is(cmd.time))
 		{ throw reject('time missing'); }
