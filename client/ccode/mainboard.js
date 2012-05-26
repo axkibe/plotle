@@ -107,7 +107,7 @@ MainBoard.prototype.setCurSpace = function(space, access) {
 
 	switch(access) {
 	case 'ro' : this.cc.access.text = '(readonly)'; break;
-	case 'rw' : this.cc.access.text = '(edit)';     break;
+	case 'rw' : this.cc.access.text = '(editable)'; break;
 	case ''   : this.cc.access.text = '';           break;
 	default   : throw new Error('unknown access: ' + access);
 	}
