@@ -115,7 +115,7 @@ var Server = function() {
 	// async waterfall model from here.
 
 	this.startup(function(err, asw) {
-		if (err) { throw err; }
+		if (err) { debug(err); throw err; }
 	});
 };
 
@@ -211,9 +211,8 @@ Server.prototype.sendMessage = function(space, user, message) {
 
 /**
 | Creates a message for a space
-| @@ rename this and others to cmdMessage
 */
-Server.prototype.message = function(cmd, _) {
+Server.prototype.cmdMessage = function(cmd, _) {
 	var space   = cmd.space;
 	var message = cmd.message;
 	var user    = cmd.user;
@@ -268,9 +267,14 @@ Server.prototype.registerFiles = function() {
 	var self = this;
 	this.files = {};
 
-	var registerFile = function(path, type, pack, filename) {
+	var registerFile = function(filename, pack) {
 		var e = { filename : filename };
 
+		var path = filename.split('/');
+		path.shift();
+		path = '/' + path.join('/');
+
+		var type = filename.split('.')[1];
 		switch (type) {
 		case 'html' : e.code = 'utf-8';  e.mime = 'text/html';       break;
 		case 'js'   : e.code = 'utf-8';  e.mime = 'text/javascript'; break;
@@ -282,65 +286,65 @@ Server.prototype.registerFiles = function() {
 	};
 
 	// @@ remove first parameter
-	registerFile('/favicon.ico',           'ico',  0, 'icons/hexicon.ico'            );
-	registerFile('/testpad.html',          'html', 0, 'client/testpad.html'          );
-	registerFile('/testpad.js',            'js',   0, 'client/testpad.js'            );
-	registerFile('/jools.js',              'js',   1, 'shared/jools.js'              );
-	registerFile('/sha1.js' ,              'js',   1, 'shared/sha1.js'               );
-	registerFile('/euclid.js',             'js',   1, 'shared/euclid.js'             );
-	registerFile('/fabric.js',             'js',   1, 'client/fabric.js'             );
-	registerFile('/theme.js'  ,            'js',   1, 'client/theme.js'              );
-	registerFile('/meshverse.js',          'js',   1, 'shared/meshverse.js'          );
-	registerFile('/path.js',               'js',   1, 'shared/path.js'               );
-	registerFile('/tree.js',               'js',   1, 'shared/tree.js'               );
-	registerFile('/sign.js',               'js',   1, 'shared/sign.js'               );
-	registerFile('/change.js',             'js',   1, 'shared/change.js'             );
-	registerFile('/changex.js',            'js',   1, 'shared/changex.js'            );
-	registerFile('/meshmashine.js',        'js',   1, 'shared/meshmashine.js'        );
-	registerFile('/iface.js',              'js',   1, 'client/iface.js'              );
-	registerFile('/peer.js',               'js',   1, 'client/peer.js'               );
-	registerFile('/design/pattern.js',     'js',   1, 'client/design/pattern.js'     );
-	registerFile('/design/fontstyles.js',  'js',   1, 'client/design/fontstyles.js'  );
-	registerFile('/design/mainboard.js',   'js',   1, 'client/design/mainboard.js'   );
-	registerFile('/design/loginboard.js',  'js',   1, 'client/design/loginboard.js'  );
-	registerFile('/design/regboard.js',    'js',   1, 'client/design/regboard.js'    );
-	registerFile('/design/helpboard.js',   'js',   1, 'client/design/helpboard.js'   );
-	registerFile('/caccent.js',            'js',   1, 'client/caccent.js'            );
-	registerFile('/curve.js',              'js',   1, 'client/curve.js'              );
-	registerFile('/ccustom.js',            'js',   1, 'client/ccustom.js'            );
-	registerFile('/cinput.js',             'js',   1, 'client/cinput.js'             );
-	registerFile('/clabel.js',             'js',   1, 'client/clabel.js'             );
-	registerFile('/cchat.js',              'js',   1, 'client/cchat.js'              );
-	registerFile('/cboard.js',             'js',   1, 'client/cboard.js'             );
-	registerFile('/ccode/util.js',         'js',   1, 'client/ccode/util.js'         );
-	registerFile('/ccode/mainboard.js',    'js',   1, 'client/ccode/mainboard.js'    );
-	registerFile('/ccode/helpboard.js',    'js',   1, 'client/ccode/helpboard.js'    );
-	registerFile('/ccode/mbleftb.js',      'js',   1, 'client/ccode/mbleftb.js'      );
-	registerFile('/ccode/mbleft2b.js',     'js',   1, 'client/ccode/mbleft2b.js'     );
-	registerFile('/ccode/mbswitchb.js',    'js',   1, 'client/ccode/mbswitchb.js'    );
-	registerFile('/ccode/mbrightb.js',     'js',   1, 'client/ccode/mbrightb.js'     );
-	registerFile('/ccode/lbloginb.js',     'js',   1, 'client/ccode/lbloginb.js'     );
-	registerFile('/ccode/lbcancelb.js',    'js',   1, 'client/ccode/lbcancelb.js'    );
-	registerFile('/ccode/lbpassi.js',      'js',   1, 'client/ccode/lbpassi.js'      );
-	registerFile('/ccode/rbcancelb.js',    'js',   1, 'client/ccode/rbcancelb.js'    );
-	registerFile('/ccode/rbregb.js',       'js',   1, 'client/ccode/rbregb.js'       );
-	registerFile('/ccode/hbhideb.js',      'js',   1, 'client/ccode/hbhideb.js'      );
-	registerFile('/switchpanel.js',        'js',   1, 'client/switchpanel.js'        );
-	registerFile('/cockpit.js',            'js',   1, 'client/cockpit.js'            );
-	registerFile('/action.js',             'js',   1, 'client/action.js'             );
-	registerFile('/ovalmenu.js',           'js',   1, 'client/ovalmenu.js'           );
-	registerFile('/vpara.js',              'js',   1, 'client/vpara.js'              );
-	registerFile('/scrollbar.js',          'js',   1, 'client/scrollbar.js'          );
-	registerFile('/vdoc.js',               'js',   1, 'client/vdoc.js'               );
-	registerFile('/vitem.js',              'js',   1, 'client/vitem.js'              );
-	registerFile('/vnote.js',              'js',   1, 'client/vnote.js'              );
-	registerFile('/vlabel.js',             'js',   1, 'client/vlabel.js'             );
-	registerFile('/vrelation.js',          'js',   1, 'client/vrelation.js'          );
-	registerFile('/vspace.js',             'js',   1, 'client/vspace.js'             );
-	registerFile('/browser.js',            'js',   1, 'client/browser.js'            );
-	registerFile('/caret.js',              'js',   1, 'client/caret.js'              );
-	registerFile('/selection.js',          'js',   1, 'client/selection.js'          );
-	registerFile('/shell.js',              'js',   1, 'client/shell.js'              );
+	registerFile('icons/hexicon.ico',           0);
+	registerFile('client/testpad.html',         0);
+	registerFile('client/testpad.js',           0);
+	registerFile('shared/jools.js',             1);
+	registerFile('shared/sha1.js',              1);
+	registerFile('shared/euclid.js',            1);
+	registerFile('client/fabric.js',            1);
+	registerFile('client/theme.js',             1);
+	registerFile('shared/meshverse.js',         1);
+	registerFile('shared/path.js',              1);
+	registerFile('shared/tree.js',              1);
+	registerFile('shared/sign.js',              1);
+	registerFile('shared/change.js',            1);
+	registerFile('shared/changex.js',           1);
+	registerFile('shared/meshmashine.js',       1);
+	registerFile('client/iface.js',             1);
+	registerFile('client/peer.js',              1);
+	registerFile('client/design/pattern.js',    1);
+	registerFile('client/design/fontstyles.js', 1);
+	registerFile('client/design/mainboard.js',  1);
+	registerFile('client/design/loginboard.js', 1);
+	registerFile('client/design/regboard.js',   1);
+	registerFile('client/design/helpboard.js',  1);
+	registerFile('client/caccent.js',           1);
+	registerFile('client/curve.js',             1);
+	registerFile('client/ccustom.js',           1);
+	registerFile('client/cinput.js',            1);
+	registerFile('client/clabel.js',            1);
+	registerFile('client/cchat.js',             1);
+	registerFile('client/cboard.js',            1);
+	registerFile('client/ccode/util.js',        1);
+	registerFile('client/ccode/mainboard.js',   1);
+	registerFile('client/ccode/helpboard.js',   1);
+	registerFile('client/ccode/mbleftb.js',     1);
+	registerFile('client/ccode/mbleft2b.js',    1);
+	registerFile('client/ccode/mbswitchb.js',   1);
+	registerFile('client/ccode/mbrightb.js',    1);
+	registerFile('client/ccode/lbloginb.js',    1);
+	registerFile('client/ccode/lbcancelb.js',   1);
+	registerFile('client/ccode/lbpassi.js',     1);
+	registerFile('client/ccode/rbcancelb.js',   1);
+	registerFile('client/ccode/rbregb.js',      1);
+	registerFile('client/ccode/hbhideb.js',     1);
+	registerFile('client/switchpanel.js',       1);
+	registerFile('client/cockpit.js',           1);
+	registerFile('client/action.js',            1);
+	registerFile('client/ovalmenu.js',          1);
+	registerFile('client/vpara.js',             1);
+	registerFile('client/scrollbar.js',         1);
+	registerFile('client/vdoc.js',              1);
+	registerFile('client/vitem.js',             1);
+	registerFile('client/vnote.js',             1);
+	registerFile('client/vlabel.js',            1);
+	registerFile('client/vrelation.js',         1);
+	registerFile('client/vspace.js',            1);
+	registerFile('client/browser.js',           1);
+	registerFile('client/caret.js',             1);
+	registerFile('client/selection.js',         1);
+	registerFile('client/shell.js',             1);
 };
 	
 
@@ -395,7 +399,7 @@ Server.prototype.buildHTMLs = function() {
 /**
 | Executes an alter command.
 */
-Server.prototype.alter = function(cmd, _) {
+Server.prototype.cmdAlter = function(cmd, _) {
 	var time = cmd.time;
 	var chgX = cmd.chgX;
 	var cid  = cmd.cid;
@@ -464,7 +468,7 @@ Server.prototype.alter = function(cmd, _) {
 /**
 | Executes an auth command.
 */
-Server.prototype.auth = function(cmd, _) {
+Server.prototype.cmdAuth = function(cmd, _) {
 	if (!is(cmd.user)) { throw reject('user missing'); }
 	if (!is(cmd.pass)) { throw reject('pass missing');  }
 	var $users = this.$users;
@@ -498,7 +502,7 @@ Server.prototype.auth = function(cmd, _) {
 /**
 | Executes an register command.
 */
-Server.prototype.register = function(cmd, _) {
+Server.prototype.cmdRegister = function(cmd, _) {
 	if (!is(cmd.user)) { throw reject('user missing'); } // @@ return reject
 	if (!is(cmd.pass)) { throw reject('pass missing'); }
 	if (!is(cmd.mail)) { throw reject('mail missing'); }
@@ -541,7 +545,7 @@ Server.prototype.register = function(cmd, _) {
 	this.$users[cmd.user] = user;
 
 	// everything OK so far, creates the user home space
-	asw = this.alter({
+	asw = this.cmdAlter({
 		time : 0,
 		user : 'root',
 		pass : this.$users.root.pass,
@@ -631,7 +635,7 @@ Server.prototype.expirePresence = function(self, user, space) {
 /**
 | Gets new changes or waits for them.
 */
-Server.prototype.update = function(cmd, res, _) {
+Server.prototype.cmdUpdate = function(cmd, res, _) {
 	if (this.$users[cmd.user].pass !== cmd.pass)
 		{ throw reject('invalid password'); }
 
@@ -776,7 +780,7 @@ Server.prototype.testAccess = function(user, space) {
 /**
 | Executes a get command.
 */
-Server.prototype.get = function(cmd, _) {
+Server.prototype.cmdGet = function(cmd, _) {
 	var pass    = cmd.pass;
 	var time    = cmd.time;
 	var user    = cmd.user;
@@ -923,12 +927,12 @@ Server.prototype.webAjax = function(req, red, res) {
 */
 Server.prototype.ajaxCmd = function(cmd, res, _) {
 	switch (cmd.cmd) {
-	case 'alter'    : return this.alter   (cmd, _);
-	case 'auth'     : return this.auth    (cmd, _);
-	case 'get'      : return this.get     (cmd, _);
-	case 'message'  : return this.message (cmd, _);
-	case 'register' : return this.register(cmd, _);
-	case 'update'   : return this.update  (cmd, res, _);
+	case 'alter'    : return this.cmdAlter   (cmd, _);
+	case 'auth'     : return this.cmdAuth    (cmd, _);
+	case 'get'      : return this.cmdGet     (cmd, _);
+	case 'message'  : return this.cmdMessage (cmd, _);
+	case 'register' : return this.cmdRegister(cmd, _);
+	case 'update'   : return this.cmdUpdate  (cmd, res, _);
 	default: return reject('unknown command');
 	}
 };
