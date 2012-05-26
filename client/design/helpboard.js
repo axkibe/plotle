@@ -86,74 +86,88 @@ HelpBoard.curve = {
 HelpBoard.layout = {
 	type  : 'Layout',
 	copse : {
-	'getstarted'  : {
+	'help'  : {
 		type      : 'Label',
-		text      : 'Getting started:',
+		text      : 'Help',
 		fontStyle : fontStyle(15, 'lahb'),
 		pos       : { type: 'Point', anchor: 'nw', x: 10 , y:  20 }
+	},
+	
+	'getstarted'  : {
+		type      : 'Label',
+		text      : 'getting started',
+		fontStyle : fontStyle(15, 'lahb'),
+		pos       : { type: 'Point', anchor: 'nw', x: 18 , y:  35 }
 	},
 	
 	'pan'  : {
 		type      : 'Label',
 		text      : 'to pan, drag the background',
 		fontStyle : fontStyle(13, 'lah'),
-		pos       : { type: 'Point', anchor: 'nw', x: 18 , y:  45 }
+		pos       : { type: 'Point', anchor: 'nw', x: 18 , y:  60 }
 	},
 	
 	'move'  : {
 		type      : 'Label',
 		text      : 'to move items, drag them',
 		fontStyle : fontStyle(13, 'lah'),
-		pos       : { type: 'Point', anchor: 'nw', x: 18 , y:  65 }
+		pos       : { type: 'Point', anchor: 'nw', x: 18 , y:  80 }
 	},
 	
 	'new'  : {
 		type      : 'Label',
 		text      : 'to create new items,',
 		fontStyle : fontStyle(13, 'lah'),
-		pos       : { type: 'Point', anchor: 'nw', x: 18 , y:  85 }
+		pos       : { type: 'Point', anchor: 'nw', x: 18 , y: 100 }
 	},
 	
 	'new2'  : {
 		type      : 'Label',
 		text      : 'click the background',
 		fontStyle : fontStyle(13, 'lah'),
-		pos       : { type: 'Point', anchor: 'nw', x: 25 , y: 100 }
+		pos       : { type: 'Point', anchor: 'nw', x: 25 , y: 115 }
 	},
 	
 	'edit'  : {
 		type      : 'Label',
 		text      : 'to edit an item, click it',
 		fontStyle : fontStyle(13, 'lah'),
-		pos       : { type: 'Point', anchor: 'nw', x: 18 , y: 120 }
+		pos       : { type: 'Point', anchor: 'nw', x: 18 , y: 135 }
 	},
 	
-	'delete'  : {
+	'delete1'  : {
 		type      : 'Label',
-		text      : 'to remove an item, click it\'s oval',
+		text      : 'to remove an item',
 		fontStyle : fontStyle(13, 'lah'),
-		pos       : { type: 'Point', anchor: 'nw', x: 18 , y: 140 }
+		pos       : { type: 'Point', anchor: 'nw', x: 18 , y: 155 }
+	},
+	
+	'delete2'  : {
+		type      : 'Label',
+		text      : 'click it\'s oval',
+		fontStyle : fontStyle(13, 'lah'),
+		pos       : { type: 'Point', anchor: 'nw', x: 25 , y: 170 }
 	},
 	
 	'relate1'  : {
 		type      : 'Label',
 		text      : 'to create a relation',
 		fontStyle : fontStyle(13, 'lah'),
-		pos       : { type: 'Point', anchor: 'nw', x: 18 , y: 160 }
+		pos       : { type: 'Point', anchor: 'nw', x: 18 , y: 190 }
 	},
 	
 	'relate2'  : {
 		type      : 'Label',
 		text      : 'drag an items oval',
 		fontStyle : fontStyle(13, 'lah'),
-		pos       : { type: 'Point', anchor: 'nw', x: 25 , y: 175 }
+		pos       : { type: 'Point', anchor: 'nw', x: 25 , y: 205 }
 	},
 
 	'relate3'  : {
 		type      : 'Label',
 		text      : 'or hold ctrl and drag it',
 		fontStyle : fontStyle(13, 'lah'),
-		pos       : { type: 'Point', anchor: 'nw', x: 25 , y: 190 }
+		pos       : { type: 'Point', anchor: 'nw', x: 25 , y: 220 }
 	},
 	
 	'readonly'  : {
@@ -161,7 +175,7 @@ HelpBoard.layout = {
 		//text      : 'This page is read-only!',
 		text      : '',
 		fontStyle : fontStyle(13, 'lahr'),
-		pos       : { type: 'Point', anchor: 'nw', x: 28 , y: 220 }
+		pos       : { type: 'Point', anchor: 'nw', x: 28 , y: 250 }
 	},
 	
 	'readonly2'  : {
@@ -169,7 +183,7 @@ HelpBoard.layout = {
 		//text      : 'Click "switch" and select',
 		text      : '',
 		fontStyle : fontStyle(13, 'lahr'),
-		pos       : { type: 'Point', anchor: 'nw', x: 28 , y: 240 }
+		pos       : { type: 'Point', anchor: 'nw', x: 28 , y: 270 }
 	},
 	
 	'readonly3'  : {
@@ -177,7 +191,7 @@ HelpBoard.layout = {
 		//text      : '"Sandbox" to play around',
 		text      : '',
 		fontStyle : fontStyle(13, 'lahr'),
-		pos       : { type: 'Point', anchor: 'nw', x: 28 , y: 260 }
+		pos       : { type: 'Point', anchor: 'nw', x: 28 , y: 290 }
 	},
 
 	'hideB' : {
@@ -220,13 +234,15 @@ HelpBoard.layout = {
 
 
 	ranks : [
+		'help',
 		'getstarted',
 		'pan',
 		'move',
 		'new',
 		'new2',
 		'edit',
-		'delete',
+		'delete1',
+		'delete2',
 		'relate1',
 		'relate2',
 		'relate3',

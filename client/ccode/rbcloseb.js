@@ -12,14 +12,13 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--'
 
-                        .-,--. ,-,---.  ,--.                 .  ,-,---.
-                         `|__/  '|___/ | `-' ,-. ,-. ,-. ,-. |   '|___/
-                         )| \   ,|   \ |   . ,-| | | |   |-' |   ,|   \
-                         `'  ` `-^---' `--'  `-^ ' ' `-' `-' `' `-^---'
+                        .-,--. ,-,---.  ,--. .              ,-,---.
+                         `|__/  '|___/ | `-' |  ,-. ,-. ,-.  '|___/
+                         )| \   ,|   \ |   . |  | | `-. |-'  ,|   \
+                         `'  ` `-^---' `--'  `' `-' `-' `-' `-^---'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- register board, cancel button
- cancel
+ register board, close button
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -57,20 +56,20 @@ var Util     = CCode.Util;
 /**
 | Constructor
 */
-var RBCancelB = CCode.RBCancelB = function(twig, board, inherit, name) {
+var RBCloseB = CCode.RBCloseB = function(twig, board, inherit, name) {
 	CCustom.call(this, twig, board, inherit, name);
 };
-subclass(RBCancelB, CCustom);
+subclass(RBCloseB, CCustom);
 
-RBCancelB.prototype.canFocus = function() {
+RBCloseB.prototype.canFocus = function() {
 	return true;
 };
 
-RBCancelB.prototype.input = function(text) {
+RBCloseB.prototype.input = function(text) {
 	this.board.cockpit.setCurBoard('MainBoard');
 };
 
-RBCancelB.prototype.specialKey = function(key) {
+RBCloseB.prototype.specialKey = function(key) {
 	switch (key) {
 	case 'down' : this.board.cycleFocus(+1); return;
 	case 'up'   : this.board.cycleFocus(-1); return;
@@ -79,7 +78,7 @@ RBCancelB.prototype.specialKey = function(key) {
 	this.board.cockpit.setCurBoard('MainBoard');
 };
 
-RBCancelB.prototype.mousedown = function(p, shift, ctrl) {
+RBCloseB.prototype.mousedown = function(p, shift, ctrl) {
 	var r = CCustom.prototype.mousedown.call(this, p, shift, ctrl);
 	if (!r) return r;
 

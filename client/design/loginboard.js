@@ -58,12 +58,12 @@ var loginBXM  = loginBW * magic / 2;
 var loginBYM  = loginBH * magic / 2;
 
 /**
-| Cancel control
+| CLose control
 */
-var cancelBW  = 54;
-var cancelBH  = 54;
-var cancelBXM = cancelBW * magic / 2;
-var cancelBYM = cancelBH * magic / 2;
+var closeBW  = 54;
+var closeBH  = 54;
+var closeBXM = closeBW * magic / 2;
+var closeBYM = closeBH * magic / 2;
 
 /**
 | Forgot password control
@@ -237,21 +237,21 @@ LoginBoard.layout = {
 			ranks : [ '1', '2', '3', '4', '5' ]
 		}
 	},
-	'cancelB'      : {
+	'closeB'       : {
 		type       : 'Custom',
-		code       : 'LBCancelB',
+		code       : 'LBCloseB',
 		normaStyle : 'button',
 		hoverStyle : 'buttonHover',
 		focusStyle : 'buttonFocus',
 		hofocStyle : 'buttonHofoc',
 		frame : {
 			type  : 'Frame',
-			pnw   : { type: 'Point', anchor: 'se', x: -300,            y: -10 - cancelBH },
-			pse   : { type: 'Point', anchor: 'se', x: -300 + cancelBW, y: -10 }
+			pnw   : { type: 'Point', anchor: 'se', x: -300,           y: -10 - closeBH },
+			pse   : { type: 'Point', anchor: 'se', x: -300 + closeBW, y: -10 }
 		},
 		caption : {
 			type      : 'Label',
-			text      : 'cancel',
+			text      : 'close',
 			fontStyle : fontStyle(14, 'cm'),
 			pos       : { type: 'Point', anchor: 'c', x:  0, y: 0 }
 		},
@@ -266,29 +266,29 @@ LoginBoard.layout = {
 			'2' : {
 				type : 'BeziTo',
 				to   :  { type: 'Point', anchor: 'e', x: -1, y:  0 },
-				c1x  :  cancelBXM, c1y :          0,
-				c2x  :          0, c2y : -cancelBYM,
+				c1x  :  closeBXM, c1y :          0,
+				c2x  :          0, c2y : -closeBYM,
 				bx   : -1, by:  0
 			},
 			'3' : {
 				type : 'BeziTo',
 				to   :  { type: 'Point', anchor: 's', x:  0, y: -1 },
-				c1x  :          0, c1y :  cancelBYM,
-				c2x  :  cancelBXM, c2y :          0,
+				c1x  :         0, c1y :  closeBYM,
+				c2x  :  closeBXM, c2y :         0,
 				bx   :  0, by: -1
 			},
 			'4' : {
 				type : 'BeziTo',
 				to   :  { type: 'Point', anchor: 'w', x:  1, y:  0 },
-				c1x  : -cancelBXM, c1y :         0,
-				c2x  :          0, c2y : cancelBYM,
+				c1x  : -closeBXM, c1y :        0,
+				c2x  :         0, c2y : closeBYM,
 				bx   :  1, by:  0
 			},
 			'5' : {
 				type : 'BeziTo',
 				to   :  { type: 'Point', anchor: 'n', x:  0, y:  1 },
-				c1x  :          0, c1y : -cancelBYM,
-				c2x  : -cancelBXM, c2y :          0,
+				c1x  :         0, c1y : -closeBYM,
+				c2x  : -closeBXM, c2y :         0,
 				bx   :  0, by:  1
 			}},
 
@@ -357,7 +357,7 @@ LoginBoard.layout = {
 		'userI',
 		'passI',
 		'loginB',
-		'cancelB',
+		'closeB',
 		'loginL',
 		'userL',
 		'passL',

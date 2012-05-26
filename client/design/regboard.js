@@ -58,7 +58,7 @@ var regBXM       = regBW * magic / 2;
 var regBYM       = regBH * magic / 2;
 
 /**
-| Cancel control
+| Close control
 */
 var canrBW        = 70;
 var canrBH        = 70;
@@ -153,12 +153,17 @@ RegBoard.layout = {
 		pos       : { type: 'Point', anchor: 's', x: -135, y:  -255 }
 
 	},
-	'expL' : {
+	'expL1' : {
 		type      : 'Label',
-		text      : 'meshcraft.net is still testing & developing its scalebility, '+
-					'please email axkibe@gmail.com to request a code.',
+		text      : 'meshcraft.net is still testing & developing its scalebility, ',
 		fontStyle : fontStyle(12, 'la'),
-		pos       : { type: 'Point', anchor: 'sw', x: 380, y:   -15 }
+		pos       : { type: 'Point', anchor: 'sw', x: 380, y:   -26 }
+	},
+	'expL2' : {
+		type      : 'Label',
+		text      : 'please email axkibe@gmail.com to request a code.',
+		fontStyle : fontStyle(12, 'la'),
+		pos       : { type: 'Point', anchor: 'sw', x: 380, y:   -10 }
 	},
 	'userI' : {
 		type       : 'Input',
@@ -298,9 +303,9 @@ RegBoard.layout = {
 			ranks : [ '1', '2', '3', '4', '5' ]
 		}
 	},
-	'cancelB'      : {
+	'closeB'      : {
 		type       : 'Custom',
-		code       : 'RBCancelB',
+		code       : 'RBCloseB',
 		normaStyle : 'button',
 		hoverStyle : 'buttonHover',
 		focusStyle : 'buttonFocus',
@@ -312,7 +317,7 @@ RegBoard.layout = {
 		},
 		caption : {
 			type      : 'Label',
-			text      : 'cancel',
+			text      : 'close',
 			fontStyle : fontStyle(14, 'cm'),
 			pos       : { type: 'Point', anchor: 'c', x:  0, y: 0 }
 		},
@@ -364,7 +369,7 @@ RegBoard.layout = {
 		'pass2I',
 		'codeI',
 		'regB',
-		'cancelB',
+		'closeB',
 		//'forgotB',
 		'regL',
 		'userL',
@@ -372,7 +377,8 @@ RegBoard.layout = {
 		'passL',
 		'pass2L',
 		'codeL',
-		'expL',
+		'expL1',
+		'expL2',
 		'errL'
 	]
 };

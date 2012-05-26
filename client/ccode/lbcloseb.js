@@ -12,10 +12,10 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--'
 
-                      ,   ,-,---.  ,--.                 .  ,-,---.
-                      )    '|___/ | `-' ,-. ,-. ,-. ,-. |   '|___/
-                     /     ,|   \ |   . ,-| | | |   |-' |   ,|   \
-                     `--' `-^---' `--'  `-^ ' ' `-' `-' `' `-^---'
+                            ,   ,-,---.  ,--. .              ,-,---.
+                            )    '|___/ | `-' |  ,-. ,-. ,-.  '|___/
+                           /     ,|   \ |   . |  | | `-. |-'  ,|   \
+                           `--' `-^---' `--'  `' `-' `-' `-' `-^---'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  loginboard, cancel button
@@ -57,20 +57,20 @@ var Util     = CCode.Util;
 /**
 | Constructor
 */
-var LBCancelB = CCode.LBCancelB = function(twig, board, inherit, name) {
+var LBCloseB = CCode.LBCloseB = function(twig, board, inherit, name) {
 	CCustom.call(this, twig, board, inherit, name);
 };
-subclass(LBCancelB, CCustom);
+subclass(LBCloseB, CCustom);
 
-LBCancelB.prototype.canFocus = function() {
+LBCloseB.prototype.canFocus = function() {
 	return true;
 };
 
-LBCancelB.prototype.input = function(text) {
+LBCloseB.prototype.input = function(text) {
 	this.board.cockpit.setCurBoard('MainBoard');
 };
 
-LBCancelB.prototype.specialKey = function(key) {
+LBCloseB.prototype.specialKey = function(key) {
 	switch (key) {
 	case 'down' : this.board.cycleFocus(+1); return;
 	case 'up'   : this.board.cycleFocus(-1); return;
@@ -79,7 +79,7 @@ LBCancelB.prototype.specialKey = function(key) {
 	this.board.cockpit.setCurBoard('MainBoard');
 };
 
-LBCancelB.prototype.mousedown = function(p, shift, ctrl) {
+LBCloseB.prototype.mousedown = function(p, shift, ctrl) {
 	var r = CCustom.prototype.mousedown.call(this, p, shift, ctrl);
 	if (!r) return r;
 

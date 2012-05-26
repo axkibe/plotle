@@ -323,9 +323,9 @@ Server.prototype.registerFiles = function() {
 	registerFile('client/ccode/mbswitchb.js',   1);
 	registerFile('client/ccode/mbrightb.js',    1);
 	registerFile('client/ccode/lbloginb.js',    1);
-	registerFile('client/ccode/lbcancelb.js',   1);
+	registerFile('client/ccode/lbcloseb.js',    1);
 	registerFile('client/ccode/lbpassi.js',     1);
-	registerFile('client/ccode/rbcancelb.js',   1);
+	registerFile('client/ccode/rbcloseb.js',    1);
 	registerFile('client/ccode/rbregb.js',      1);
 	registerFile('client/ccode/hbhideb.js',     1);
 	registerFile('client/switchpanel.js',       1);
