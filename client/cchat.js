@@ -81,7 +81,7 @@ CChat = function(twig, board, inherit, name) {
 	this.lineHeight = ro(fs.size * 1.2);
 	this.sideSlopeX = 20;
 	var descend     = ro(fs.size * theme.bottombox);
-	this.pitch      = new Point(this.sideSlopeX, iframe.height - descend);
+	this.pitch      = new Point(this.sideSlopeX + 30, iframe.height - descend);
 	this.itext      = '';
 };
 
@@ -126,6 +126,7 @@ CChat.prototype.getFabric = function() {
 	fabric.setFontStyle(fs.style, fs.fill, fs.align, fs.base);
 	var lh = this.lineHeight;
 	fabric.fillText('»', x - 10, y);
+	fabric.fillText('chat', x - 37, y);
 	fabric.fillText(this.itext, x, y);
 	y -= 2;
 
@@ -373,18 +374,19 @@ CChat.prototype.mousehover = function(p, shift, ctrl) {
 */
 CChat.prototype.pathILine = function(fabric, border, twist) {
 	fabric.beginPath(twist);
+	var ox   = 0;
 	var fs   = this.twig.fontStyle;
 	var w    = fabric.width - 1;
 	var psex = w  - this.sideSlopeX;
 	var psey = fabric.height;
-	var pnwx = this.sideSlopeX;
+	var pnwx = this.sideSlopeX + ox;
 	var pnwy = psey - this.lineHeight - 2;
 
-	fabric.moveTo(                    0, psey);
-	fabric.beziTo(  7,-7, -15,  0, pnwx, pnwy);
-	fabric.lineTo(                 psex, pnwy);
-	fabric.beziTo( 15, 0,  -7, -7,    w, psey);
-	fabric.lineTo(                 pnwx, psey);
+	fabric.moveTo(                    ox, psey);
+	fabric.beziTo(  7, -7, -15,  0, pnwx, pnwy);
+	fabric.lineTo(                  psex, pnwy);
+	fabric.beziTo( 15,  0,  -7, -7,    w, psey);
+	fabric.lineTo(                  pnwx, psey);
 };
 
 /**
