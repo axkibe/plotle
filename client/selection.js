@@ -33,7 +33,6 @@ var Selection = null;
 | Imports
 */
 var Jools;
-var peer;
 var shell;
 var system;
 
@@ -143,7 +142,7 @@ Selection.prototype.remove = function() {
 	this.normalize();
 	this.deselect();
 	shell.redraw = true;
-	peer.removeSpan(
+	shell.peer.removeSpan(
 		this.begin.path, this.begin.at1,
 		this.end.path,   this.end.at1
 	);

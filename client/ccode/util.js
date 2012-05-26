@@ -30,7 +30,6 @@
 */
 var Jools;
 var Path;
-var peer;
 var shell;
 
 /**
@@ -98,9 +97,9 @@ Util.login = function(board) {
 		return;
 	}
 
-	var passhash = peer.passhash(pass);
+	var passhash = shell.peer.passhash(pass);
 
-	peer.auth(user, passhash, function(res) {
+	shell.peer.auth(user, passhash, function(res) {
 		if (!res.ok) {
 			board.cc.errL.text = res.message;
 			board.cc.errL.poke();
@@ -133,7 +132,7 @@ Util.login = function(board) {
 | Logouts the user
 */
 Util.logout = function(board) {
-	peer.logout(function(res) {
+	shell.peer.logout(function(res) {
 		if (!res.ok) {
 			shell.greenscreen('Cannot logout: ' + res.message);
 			return;
@@ -209,9 +208,9 @@ Util.register = function(board) {
 		return;
 	}
 
-	pass = peer.passhash(pass);
+	pass = shell.peer.passhash(pass);
 
-	peer.register(user, email, pass, code, function(res) {
+	shell.peer.register(user, email, pass, code, function(res) {
 		if (!res.ok) {
 			board.cc.errL.text = res.message;
 			board.cc.errL.poke();

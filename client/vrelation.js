@@ -41,7 +41,6 @@ var Tree;
 var VDoc;
 var VItem;
 var VLabel;
-var peer;
 var settings;
 var shell;
 var system;
@@ -85,7 +84,14 @@ VRelation.imargin = new Margin(theme.relation.imargin);
 VRelation.create = function(vspace, vitem1, vitem2) {
 	var cline = Line.connect(vitem1.getZone(), null, vitem2.getZone(), null);
 	var pnw = cline.pc.sub(theme.relation.createOffset);
-	var key = peer.newRelation(vspace.path, pnw, 'relates to', 20, vitem1.key, vitem2.key);
+	var key = shell.peer.newRelation(
+		vspace.path,
+		pnw,
+		'relates to',
+		20,
+		vitem1.key,
+		vitem2.key
+	);
 	// event listener has created the vrel
 	var vrel = vspace.vv[key];
 	vspace.setFocus(vrel);

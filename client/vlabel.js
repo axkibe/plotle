@@ -37,7 +37,6 @@ var Fabric;
 var Jools;
 var VItem;
 var config;
-var peer;
 var shell;
 var system;
 var theme;
@@ -254,10 +253,10 @@ VLabel.prototype.dragstop = function(p) {
 		var fontsize = this.vv.doc.getFontSize();
 
 		if (!this.twig.pnw.eq(zone.pnw)) {
-			peer.setPNW(this.path, zone.pnw);
+			shell.peer.setPNW(this.path, zone.pnw);
 		}
 		if (fontsize !== this.twig.fontsize) {
-			peer.setFontSize(this.path, fontsize);
+			shell.peer.setFontSize(this.path, fontsize);
 		}
 
 		system.setCursor('default');

@@ -51,7 +51,6 @@ var theme;
 | Exports
 */
 var shell = null;
-var peer  = null;  // @@ make part of shell
 var Shell = null;
 
 /**
@@ -96,10 +95,9 @@ Tree.cogging = true;
 /**
 | Constructor.
 */
-Shell = function(fabric, sPeer) {
+Shell = function(fabric) {
 	if (shell !== null) throw new Error('Singleton not single');
 	shell = this;
-	peer  = sPeer;
 
 	Measure.init();
 	this.fabric    = fabric;
@@ -490,7 +488,7 @@ Shell.prototype.resize = function(width, height) {
 Shell.prototype.setUser = function(user, pass) {
 	this.$user = user;
 	this.cockpit.setUser(user);
-	peer.setUser(user, pass);
+	this.peer.setUser(user, pass);
 
 	if (user.substr(0, 5) !== 'visit') {
 		window.localStorage.setItem('user', user);
@@ -511,9 +509,9 @@ Shell.prototype.setUser = function(user, pass) {
 | Called when loading the website
 */
 Shell.prototype.onload = function() {
-	peer = new Peer();
-	peer.setUpdate(this);
-	peer.setMessageRCV(this);
+	this.peer = new Peer();
+	this.peer.setUpdate(this);
+	this.peer.setMessageRCV(this);
 	var self = this;
 
 	var user = window.localStorage.getItem('user');
@@ -524,7 +522,7 @@ Shell.prototype.onload = function() {
 		user = 'visitor';
 	}
 
-	peer.auth(user, pass, function(res) {
+	this.peer.auth(user, pass, function(res) {
 		self.onLoadAuth(user, res);
 	});
 };
@@ -549,7 +547,7 @@ Shell.prototype.moveToSpace = function(name) {
 	}
 
 	self.cockpit.setCurSpace('', '');
-	peer.aquireSpace(name, function(err, val) {
+	this.peer.aquireSpace(name, function(err, val) {
 		if (err !== null) {
 			self.greenscreen('Cannot aquire space: ' + err.message);
 			return;
@@ -579,7 +577,7 @@ Shell.prototype.onLoadAuth = function(user, res) {
 		// when log in with a real user failed
 		// takes a visitor instead
 		if (user !== 'visitor') {
-			peer.auth('visitor', null, function(res) {
+			this.peer.auth('visitor', null, function(res) {
 				self.onLoadAuth('visitor', res);
 			});
 			return;

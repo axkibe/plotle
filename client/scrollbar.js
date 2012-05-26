@@ -45,7 +45,6 @@ var Jools;
 var MeshMashine;
 var Path;
 var Tree;
-var peer;
 var settings;
 var shell;
 var system;

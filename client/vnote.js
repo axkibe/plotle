@@ -43,7 +43,6 @@ var settings;
 var shell;
 var system;
 var theme;
-var peer;
 
 /**
 | Capsule
@@ -200,7 +199,7 @@ VNote.prototype.dragstop = function(p) {
 		}
 
 		if (this.twig.zone.eq(zone)) return;
-		peer.setZone(this.path, zone);
+		shell.peer.setZone(this.path, zone);
 
 		system.setCursor('default');
 		shell.redraw = true;

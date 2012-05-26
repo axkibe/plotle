@@ -34,7 +34,6 @@ var Fabric;
 var Peer;
 var Shell;
 var config;
-var peer;
 var settings;
 
 /**
@@ -480,7 +479,7 @@ var System = function() {
 window.onload = function() {
 	makeCatcher(function() {
 		new System();
-		system.shell = new Shell(system.fabric, peer);
+		system.shell = new Shell(system.fabric);
 		system.shell.onload();
 	})();
 };

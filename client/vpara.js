@@ -41,7 +41,6 @@ var config;
 var shell;
 var system;
 var theme;
-var peer;
 
 /**
 | Capsule
@@ -233,9 +232,9 @@ VPara.prototype.input = function(text) {
 
     for(var rx = reg.exec(text); rx !== null; rx = reg.exec(text)) {
 		var line = rx[1];
-		peer.insertText(para.textPath(), shell.caret.sign.at1, line);
+		shell.peer.insertText(para.textPath(), shell.caret.sign.at1, line);
         if (rx[2]) {
-			peer.split(para.textPath(), shell.caret.sign.at1);
+			shell.peer.split(para.textPath(), shell.caret.sign.at1);
 			para = vdoc.vAtRank(vdoc.twig.rankOf(para.key) + 1);
 		}
     }
@@ -316,18 +315,18 @@ VPara.prototype.specialKey = function(key, shift, ctrl) {
 	switch(key) {
 	case  'backspace' :
 		if (caret.sign.at1 > 0) {
-			peer.removeText(this.textPath(), caret.sign.at1 - 1, 1);
+			shell.peer.removeText(this.textPath(), caret.sign.at1 - 1, 1);
 		} else {
 			r = vdoc.twig.rankOf(this.key);
 			if (r > 0) {
 				ve = vdoc.vAtRank(r - 1);
-				peer.join(ve.textPath(), ve.twig.text.length);
+				shell.peer.join(ve.textPath(), ve.twig.text.length);
 			}
 		}
 		vitem.scrollCaretIntoView();
 		break;
 	case 'enter' :
-		peer.split(this.textPath(), caret.sign.at1);
+		shell.peer.split(this.textPath(), caret.sign.at1);
 		vitem.scrollCaretIntoView();
 		break;
 	case 'pageup' :
@@ -472,11 +471,11 @@ VPara.prototype.specialKey = function(key, shift, ctrl) {
 		break;
 	case 'del' :
 		if (caret.sign.at1 < this.twig.text.length) {
-			peer.removeText(this.textPath(), caret.sign.at1, 1);
+			shell.peer.removeText(this.textPath(), caret.sign.at1, 1);
 		} else {
 			r = vdoc.twig.rankOf(this.key);
 			if (r < vdoc.twig.length - 1) {
-				peer.join(this.textPath(), this.twig.text.length);
+				shell.peer.join(this.textPath(), this.twig.text.length);
 			}
 		}
 		break;

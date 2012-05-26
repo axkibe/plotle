@@ -37,7 +37,6 @@ var Path;
 var shell;
 var system;
 var theme;
-var peer;
 
 var VNote;
 var VLabel;
@@ -225,7 +224,7 @@ VSpace.prototype.setFocus = function(vitem) {
 		);
 
 		caret.show();
-		peer.moveToTop(vitem.path);
+		shell.peer.moveToTop(vitem.path);
 	} else {
 		shell.setCaret(null, null);
 	}
@@ -428,14 +427,14 @@ VSpace.prototype.floatMenuSelect = function(entry, p) {
 		var nw = theme.note.newWidth;
 		var nh = theme.note.newHeight;
 		pnw = p.sub(this.fabric.pan.x + half(nw) , this.fabric.pan.y + half(nh));
-		key = peer.newNote(this.path, new Rect(pnw, pnw.add(nw, nh)));
+		key = shell.peer.newNote(this.path, new Rect(pnw, pnw.add(nw, nh)));
 		var vnote = this.vv[key];
 		this.setFocus(vnote);
 		break;
 	case 'ne' : // label
 		pnw = p.sub(this.fabric.pan);
 		pnw = pnw.sub(theme.label.createOffset);
-		key = peer.newLabel(this.path, pnw, 'Label', 20);
+		key = shell.peer.newLabel(this.path, pnw, 'Label', 20);
 		var vlabel = this.vv[key];
 		this.setFocus(vlabel);
 		break;
@@ -449,7 +448,7 @@ VSpace.prototype.itemMenuSelect = function(entry, p, focus) {
 	switch(entry) {
 	case 'n': // remove
 		this.setFocus(null);
-		peer.removeItem(focus.path);
+		shell.peer.removeItem(focus.path);
 		break;
 	}
 };
@@ -500,8 +499,8 @@ VSpace.prototype.input = function(text) {
 VSpace.prototype.specialKey = function(key, shift, ctrl) {
 	if (ctrl) {
 		switch(key) {
-		case 'z' : peer.undo(); return;
-		case 'y' : peer.redo(); return;
+		case 'z' : shell.peer.undo(); return;
+		case 'y' : shell.peer.redo(); return;
 		}
 	}
 

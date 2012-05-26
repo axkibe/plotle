@@ -285,7 +285,6 @@ Server.prototype.registerFiles = function() {
 		if (pack) { self.packfiles.push({ path: path, filename: filename }); }
 	};
 
-	// @@ remove first parameter
 	registerFile('icons/hexicon.ico',           0);
 	registerFile('client/testpad.html',         0);
 	registerFile('client/testpad.js',           0);
@@ -515,12 +514,9 @@ Server.prototype.cmdRegister = function(cmd, _) {
 		throw reject('Username too short, min. 4 characters');
 	}
 
-	var asw;
-	// @@ rename val to something else
-	var val = this.db.users.findOne({ _id : cmd.user}, _);
-	if (val !== null) {
-		return reject('Username already taken');
-	}
+	var user = this.db.users.findOne({ _id : cmd.user}, _);
+	if (user !== null) { return reject('Username already taken'); }
+
 	// aquires an inivitation code and invalidates it if found.
 	var code = this.db.invites.findAndModify(
 		{ _id : cmd.code },
@@ -533,7 +529,7 @@ Server.prototype.cmdRegister = function(cmd, _) {
 		return reject('Unknown invitation code');
 	}
 
-	var user = {
+	user = {
 		_id  : cmd.user,
 		pass : cmd.pass,
 		mail : cmd.mail,
@@ -545,7 +541,7 @@ Server.prototype.cmdRegister = function(cmd, _) {
 	this.$users[cmd.user] = user;
 
 	// everything OK so far, creates the user home space
-	asw = this.cmdAlter({
+	var asw = this.cmdAlter({
 		time : 0,
 		user : 'root',
 		pass : this.$users.root.pass,
@@ -556,10 +552,7 @@ Server.prototype.cmdRegister = function(cmd, _) {
 		cid  : uid()
 	}, _);
 
-	if (asw.ok !== true) {
-		throw new Error('Cannot create users home space');
-	}
-
+	if (asw.ok !== true) { throw new Error('Cannot create users home space'); }
 
 	return { ok: true, user: cmd.user };
 };
@@ -571,9 +564,7 @@ Server.prototype.refreshPresence = function(user, space) {
 	var pres = this.$presences;
 	var pu = pres[user];
 
-	if (!pu) {
-		pu = pres[user] = { spaces : { } };
-	}
+	if (!pu) { pu = pres[user] = { spaces : { } }; }
 
 	var pus = pu.spaces[space];
 	if (!pus) {
@@ -593,9 +584,7 @@ Server.prototype.establishPresence = function(user, space, sleepID) {
 	var pres = this.$presences;
 	var pu = pres[user];
 
-	if (!pu) {
-		pu = pres[user] = { spaces : { } };
-	}
+	if (!pu) { pu = pres[user] = { spaces : { } }; }
 
 	var pus = pu.spaces[space];
 	if (!pus) {
