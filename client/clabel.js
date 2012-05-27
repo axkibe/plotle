@@ -90,7 +90,7 @@ CLabel.prototype.poke = function() {
 | Mouse hover
 */
 CLabel.prototype.mousehover = function(p, shift, ctrl) {
-	return false;
+	return null;
 };
 
 /**

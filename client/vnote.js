@@ -201,7 +201,6 @@ VNote.prototype.dragstop = function(p) {
 		if (this.twig.zone.eq(zone)) return;
 		shell.peer.setZone(this.path, zone);
 
-		system.setCursor('default');
 		shell.redraw = true;
 		return true;
 	default :

@@ -366,7 +366,10 @@ CChat.prototype.mousedown = function(p, shift, ctrl) {
 | Mouse hover
 */
 CChat.prototype.mousehover = function(p, shift, ctrl) {
-	return false;
+	return null;
+
+	// TODO make text on chat line
+	//return 'default';
 };
 
 /**

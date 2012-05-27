@@ -183,13 +183,13 @@ OvalMenu.prototype.fadeout = function() {
 */
 OvalMenu.prototype.mousehover = function(p, shift, ctrl) {
 	var self = this;
-	var w = this.within(p);
-	if (!w) {
+
+	if (!this.within(p)) {
 		if (!this.$fade) {
 			this.$fade = 1 - theme.fade.step;
 			this.$fadeTimer = system.setTimer(theme.fade.time, function() { self.fadeout(); });
 		}
-		return false;
+		return null;
 	} else {
 		// cancels fading
 		if (this.$fade) {
@@ -201,8 +201,7 @@ OvalMenu.prototype.mousehover = function(p, shift, ctrl) {
 	}
 
 	// mouse floated on float menu
-	system.setCursor('default');
-	return true;
+	return 'default';
 };
 
 

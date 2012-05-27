@@ -153,19 +153,23 @@ CCustom.prototype.specialKey = function(key, shift, ctrl) {
 | Mouse hover.
 */
 CCustom.prototype.mousehover = function(p) {
-	if (!this.$visible) { return; }
-	if (p.x < this.pnw.x || p.y < this.pnw.y || p.x > this.pse.x || p.y > this.pse.y) {
-		return false;
-	}
+	if (!this.$visible)
+		{ return null; }
+	
+	if (p === null)
+		{ return null; }
+
+	if (p.x < this.pnw.x || p.y < this.pnw.y || p.x > this.pse.x || p.y > this.pse.y)
+		{ return null; }
 
 	var fabric = this.getFabric(CAccent.NORMA);
 	var pp = p.sub(this.pnw);
-	if (!fabric.within(this, 'path', pp))  { return false; }
 
-	system.setCursor('default');
+	if (!fabric.within(this, 'path', pp))
+		{ return null; }
+
 	this.board.setHover(this.name);
-
-	return true;
+	return 'default';
 };
 
 /**
@@ -173,12 +177,13 @@ CCustom.prototype.mousehover = function(p) {
 */
 CCustom.prototype.mousedown = function(p, shift, ctrl) {
 	if (!this.$visible) { return; }
-	if (p.x < this.pnw.x || p.y < this.pnw.y || p.x > this.pse.x || p.y > this.pse.y) {
-		return false;
-	}
+	if (p.x < this.pnw.x || p.y < this.pnw.y || p.x > this.pse.x || p.y > this.pse.y)
+		{ return false; }
+
 	var fabric = this.getFabric(CAccent.NORMA);
 	var pp = p.sub(this.pnw);
-	if (!fabric.within(this, 'path', pp))  { return false; }
+	if (!fabric.within(this, 'path', pp))
+		{ return false; }
 
 	shell.redraw = true; // @@ needed?
 	return true;

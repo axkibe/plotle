@@ -232,9 +232,11 @@ var System = function() {
 	| Key down in hidden input field.
 	*/
 	function onkeydown(event) {
-		if (!specialKey(
-			lastSpecialKey = event.keyCode, event.shiftKey, event.ctrlKey || event.metaKey
-		)) event.preventDefault();
+		var shift = event.shiftKey;
+		var ctrl  = event.ctrlKey || event.metaKey;
+
+		if (!specialKey(lastSpecialKey = event.keyCode, shift, ctrl))
+			{ event.preventDefault(); }
 	}
 
 	/**
@@ -243,9 +245,12 @@ var System = function() {
 	function onkeypress(event) {
 		var ew = event.which;
 		var ek = event.keyCode;
+		var shift = event.shiftKey;
+		var ctrl  = event.ctrlKey || event.metaKey;
+
 		if (((ek > 0 && ek < 32) || ew === 0) && lastSpecialKey !== ek) {
 			lastSpecialKey = -1;
-			return specialKey(ek, event.shiftKey, event.ctrlKey || event.metaKey);
+			return specialKey(ek, shift, ctrl);
 		}
 		lastSpecialKey = -1;
 		testinput();
@@ -289,11 +294,14 @@ var System = function() {
 	*/
 	function onmousemove(event) {
 		var p = new Point(event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop);
+		var shift = event.shiftKey;
+		var ctrl  = event.ctrlKey || event.metaKey;
+		var cursor = null;
 
 		switch(mouseState) {
 		case false:
-			system.shell.mousehover(p, event.shiftKey, event.ctrlKey || event.metaKey);
-			return true;
+			cursor = system.shell.mousehover(p, shift, ctrl);
+			break;
 		case 'atween':
 			var dragbox = settings.dragbox;
 			if ((abs(p.x - atweenPos.x) > dragbox) || (abs(p.y - atweenPos.y) > dragbox)) {
@@ -301,24 +309,27 @@ var System = function() {
 				clearTimeout(atweenTimer);
 				atweenTimer = null;
 				mouseState = 'drag';
-				system.shell.dragstart(atweenPos, event.shiftKey, event.ctrlKey || event.metaKey);
-				if (!p.eq(atweenPos)) {
-					system.shell.dragmove(p, event.shiftKey, event.ctrlKey || event.metaKey);
-				}
+				system.shell.dragstart(atweenPos, shift, ctrl);
+				cursor = system.shell.dragmove(p, shift, ctrl);
 				captureEvents();
 			} else {
 				// saves position for possible atween timeout
 				atweenMove  = p;
-				atweenShift = event.shiftKey;
-				atweenCtrl  = event.ctrlKey || event.metaKey;
+				atweenShift = shift;
+				atweenCtrl  = ctrl;
 			}
-			return true;
+			break;
 		case 'drag':
-			system.shell.dragmove(p, event.shiftKey, event.ctrlKey || event.metaKey);
-			return true;
+			cursor = system.shell.dragmove(p, shift, ctrl);
+			break;
 		default :
 			throw new Error('invalid mouseState');
 		}
+
+		if (cursor === true || cursor === false) { throw new Error('bool cursor!'); } // TODO
+		if (cursor !== null) { canvas.style.cursor = cursor; }
+
+		return true;
 	}
 
 	/**
@@ -329,20 +340,29 @@ var System = function() {
 		event.preventDefault();  // @@ maybe preventDefault before button test?
 		hiddenInput.focus();
 		system.setTimer(0, function() { hiddenInput.selectionStart = 0; });
+
 		var p = new Point (event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop);
-		// asks the face if it forces this to be a drag or click, or yet unknown.
-		mouseState = system.shell.mousedown(p, event.shiftKey, event.ctrlKey || event.metaKey);
+		var shift = event.shiftKey;
+		var ctrl  = event.ctrlKey || event.metaKey;
+
+		// asks the shell if it forces this to be a drag or click, or yet unknown.
+		mouseState = system.shell.mousedown(p, shift, ctrl);
 		switch(mouseState) {
 		case 'atween' :
 			atweenPos   = atweenMove = p;
-			atweenShift = event.shiftKey;
-			atweenCtrl  = event.ctrlKey || event.metaKey;
+			atweenShift = shift;
+			atweenCtrl  = ctrl;
 			atweenTimer = system.setTimer(settings.dragtime, system.onatweentime);
 			break;
 		case 'drag' :
 			captureEvents();
 			break;
 		}
+
+		var cursor = system.shell.mousehover(p, shift, ctrl);
+		if (cursor === true || cursor === false) { throw new Error('bool cursor!'); } // TODO
+		if (cursor !== null) { canvas.style.cursor = cursor; }
+
 		return false;
 	}
 
@@ -351,25 +371,38 @@ var System = function() {
 	*/
 	function onmouseup(event) {
 		event.preventDefault();
-
 		releaseEvents();
+
 		var p = new Point(event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop);
+		var shift  = event.shiftKey;
+		var ctrl   = event.ctrlKey || event.metaKey;
+		var cursor = null;
 
 		switch (mouseState) {
-		case false : return false;
+		case false :
+			break;
 		case 'atween' :
 			// A click is a mouse down followed within dragtime by 'mouseup' and
 			// not having moved out of 'dragbox'.
 			clearTimeout(atweenTimer);
 			atweenTimer = null;
-			system.shell.click(p, event.shiftKey, event.ctrlKey || event.metaKey);
-			return (mouseState = false);
+			system.shell.click(p, shift, ctrl);
+			cursor = system.shell.mousehover(p, shift, ctrl);
+			mouseState = false;
+			break;
 		case 'drag' :
-			system.shell.dragstop(p, event.shiftKey, event.ctrlKey || event.metaKey);
-			return (mouseState = false);
+			system.shell.dragstop(p, shift, ctrl);
+			cursor = system.shell.mousehover(p, shift, ctrl);
+			mouseState = false;
+			break;
 		default :
 			throw new Error('invalid mouseState');
 		}
+		
+		if (cursor === true || cursor === false) { throw new Error('bool cursor!'); } // TODO
+		if (cursor !== null) { canvas.style.cursor = cursor; }
+		
+		return false;
 	}
 
 	/**
@@ -377,8 +410,11 @@ var System = function() {
 	*/
 	function onmousewheel(event) {
 		var p = new Point(event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop);
-		var dir = (event.wheelDelta || event.detail) > 0 ? 1 : -1;
-		system.shell.mousewheel(p, dir, event.shiftKey, event.ctrlKey);
+		var dir   = (event.wheelDelta || event.detail) > 0 ? 1 : -1;
+		var shift = event.shiftKey;
+		var ctrl  = event.ctrlKey || event.metaKey;
+
+		system.shell.mousewheel(p, dir, shift, ctrl);
 	}
 
 	/**
@@ -391,10 +427,13 @@ var System = function() {
 		}
 		mouseState = 'drag';
 		atweenTimer = null;
+
+		var cursor = null;
 		system.shell.dragstart(atweenPos, atweenShift, atweenCtrl);
-		if (!atweenMove.eq(atweenPos)) {
-			system.shell.dragmove(atweenMove, atweenShift, atweenCtrl);
-		}
+		cursor = system.shell.dragmove(atweenMove, atweenShift, atweenCtrl);
+
+		if (cursor === true || cursor === false) { throw new Error('bool cursor!'); } // TODO
+		if (cursor !== null) { canvas.style.cursor = cursor; }
 	}
 
 	canvas.onmouseup       = makeCatcher(onmouseup);
@@ -417,7 +456,7 @@ var System = function() {
 	| Sets the mouse cursor
 	*/
 	system.setCursor = function(cursor) {
-		canvas.style.cursor = cursor;
+		throw new Error('NOT SO'); // TODO XXX
 	};
 
 	//-------------------------------------

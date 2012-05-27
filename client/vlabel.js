@@ -259,7 +259,6 @@ VLabel.prototype.dragstop = function(p) {
 			shell.peer.setFontSize(this.path, fontsize);
 		}
 
-		system.setCursor('default');
 		shell.redraw = true;
 		break;
 	default :

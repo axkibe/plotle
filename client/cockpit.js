@@ -237,9 +237,17 @@ Cockpit.prototype.specialKey = function(key, shift, ctrl) {
 | Mouse hover.
 */
 Cockpit.prototype.mousehover = function(p, shift, ctrl) {
-	var r = false;
-	r = this.curBoard().mousehover(p, shift, ctrl);
-	r = (this.$showHelp && this.getBoard('HelpBoard').mousehover(p, shift, ctrl)) || r;
+	var cursor = this.curBoard().mousehover(p, shift, ctrl);
+	
+	if (this.$showHelp) {
+		if (cursor) {
+			this.getBoard('HelpBoard').mousehover(null, shift, ctrl);
+		} else {
+			cursor = this.getBoard('HelpBoard').mousehover(p, shift, ctrl);
+		}
+	}
+
+	return cursor;
 };
 
 /**

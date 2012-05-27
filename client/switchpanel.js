@@ -293,12 +293,12 @@ SwitchPanel.prototype.mousedown = function(p) {
 | Mouse hover.
 */
 SwitchPanel.prototype.mousehover = function(p) {
-	var self = this;
-	p = p.sub(this.pnw);
-	var w = this.within(p);
-	var hd = null;
+	var self   = this;
+	p          = p.sub(this.pnw);
+	var hd     = null;
+	var cursor = null;
 
-	if (!w) {
+	if (!this.within(p)) {
 		if (!this.$fade) {
 			this.$fade = 1 - theme.fade.step;
 			this.$fadeTimer = system.setTimer(theme.fade.time, function() { self.fadeout(); });
@@ -306,19 +306,19 @@ SwitchPanel.prototype.mousehover = function(p) {
 	} else {
 		this.cancelFade();
 		var fabric = this.getFabric();
-		system.setCursor('default');
 
 		if (fabric.within(this, 'pathButton', p, 'n' )) { hd = 'n';  } else
 		if (fabric.within(this, 'pathButton', p, 'ne')) { hd = 'ne'; } else
 		if (!this.amVisitor && fabric.within(this, 'pathButton', p, 'nw')) { hd = 'nw'; }
+		cursor = 'default';
 	}
 
 	if (this.$hover !== hd) {
-		this.$hover  = hd;
+		this.$hover = hd;
 		this.poke();
 	}
 
-	return w;
+	return cursor;
 };
 
 

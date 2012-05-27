@@ -85,7 +85,9 @@ LBLoginB.prototype.specialKey = function(key) {
 };
 	
 LBLoginB.prototype.input = function(text) {
-	this.board.cockpit.setCurBoard('MainBoard');
+	Util.login(this.board);
+	shell.redraw = true;
+	return true;
 };
 
 LBLoginB.prototype.mousedown = function(p, shift, ctrl) {

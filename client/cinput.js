@@ -109,6 +109,7 @@ CInput.prototype.canFocus = function() {
 /**
 | Paths the input field.
 */
+/*
 CInput.prototype.path = function(fabric, border, twist) {
 	fabric.beginPath(twist);
 	fabric.moveTo(this.pnw);
@@ -116,7 +117,7 @@ CInput.prototype.path = function(fabric, border, twist) {
 	fabric.lineTo(this.pse);
 	fabric.lineTo(this.pnw.x, this.pse.y);
 	fabric.lineTo(this.pnw);
-};
+};*/
 
 /**
 | Draws the mask for password fields
@@ -412,7 +413,19 @@ CInput.prototype.poke = function() {
 | Mouse hover
 */
 CInput.prototype.mousehover = function(p, shift, ctrl) {
-	return false;
+	if (p === null)
+		{ return null; }
+
+	if (p.x < this.pnw.x || p.y < this.pnw.y || p.x > this.pse.x || p.y > this.pse.y)
+		{ return null; }
+
+	var fabric = this.getFabric(CAccent.NORMA);
+	var pp = p.sub(this.pnw);
+
+	if (!this.bezi.within(fabric, pp))
+		{ return null; }
+
+	return 'text';
 };
 
 /**

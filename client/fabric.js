@@ -883,10 +883,12 @@ BeziRect.prototype.path = function(fabric, border, twist) {
 	*/
 };
 
-/*
+/**
+| Returns true if Point p is within the BeziRect.
+*/
 BeziRect.prototype.within = function(fabric, p) {
-	return();
-}*/
+	return fabric.within(this, 'path', p);
+};
 
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

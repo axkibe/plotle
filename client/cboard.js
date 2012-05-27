@@ -192,27 +192,37 @@ CBoard.prototype.mousehover = function(p, shift, ctrl) {
 	var pse = this.pse;
 	var fabric = this.getFabric();
 	var a, aZ;
+
+	if(p === null) { return this.setHover(null); }
+
 	if (p.y < pnw.y || p.x < pnw.x || p.x > pse.x) {
-		this.setHover(null);
-		return false;
+		return this.setHover(null);
 	}
 	var pp = p.sub(pnw);
 
 	// @@ Optimize by reusing the latest path of this.$fabric
-	if (!fabric.within(this, 'path', pp))  {
-		this.setHover(null);
-		return false;
+	if (!fabric.within(this, 'path', pp)) {
+		return this.setHover(null);
 	}
+
+	var cursor = null;
 
 	var layout = this.tree.root.layout;
 	for(a = 0, aZ = layout.length; a < aZ; a++) {
 		var cname = layout.ranks[a];
 		var ce = this.cc[cname];
-		if (ce.mousehover(pp, shift, ctrl)) { return true; }
+		// TODO continue bubbling with pp = null
+
+		if (cursor) {
+			ce.mousehover(null, shift, ctrl);
+		} else {
+			cursor = ce.mousehover(pp, shift, ctrl);
+		}
 	}
-	system.setCursor('default');
-	this.setHover(null);
-	return true;
+
+	if (cursor === null) { this.setHover(null); }
+
+	return cursor || 'default';
 };
 
 /**
@@ -241,7 +251,6 @@ CBoard.prototype.mousedown = function(p, shift, ctrl) {
 		var ce = this.cc[cname];
 		if (ce.mousedown(pp, shift, ctrl)) { return false; }
 	}
-	system.setCursor('default');
 	this.setHover(null);
 	return false;
 };
@@ -318,13 +327,14 @@ CBoard.prototype.setFocus = function(cname) {
 | Sets the hovered component.
 */
 CBoard.prototype.setHover = function(cname) {
-	if (this.$hover === cname) { return; }
+	if (this.$hover === cname) { return null; }
 
 	this.$fabric = null;
 	shell.redraw = true;
 	if (this.$hover) { this.cc[this.$hover].$fabric = null; }
 	if (cname      ) { this.cc[cname      ].$fabric = null; }
 	this.$hover = cname;
+	return null;
 };
 
 })();

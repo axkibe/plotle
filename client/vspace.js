@@ -16,7 +16,7 @@
                                    `|  /   \___  ,-. ,-. ,-. ,-.
                                     | /        \ | | ,-| |   |-'
                                     `'     `---' |-' `-^ `-' `-'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
                                                  '
  The visual of a space.
 
@@ -261,31 +261,33 @@ VSpace.prototype.mousewheel = function(p, dir, shift, ctrl) {
 | Returns true if the mouse pointer hovers over anything.
 */
 VSpace.prototype.mousehover = function(p, shift, ctrl) {
+	if (p === null) { return null; }
+
 	var pp = p.sub(this.fabric.pan);
 	var action = shell.action;
+	var cursor = null;
 
 	var focus = this.focusedVItem();
 	if (focus) {
 		// @@ move into items
 		if (focus.withinItemMenu(pp)) {
-			system.setCursor('pointer');
-			return true;
-		}
-
-		var com = focus.checkItemCompass(pp);
-		if (com) {
-			system.setCursor(com+'-resize');
-			return true;
+			cursor = 'default';
+		} else {
+			var com = focus.checkItemCompass(pp);
+			if (com) { cursor = com + '-resize'; }
 		}
 	}
 
 	for(var a = 0, aZ = this.twig.length; a < aZ; a++) {
 		var vitem = this.vAtRank(a);
-		if (vitem.mousehover(pp)) { return true; }
+		if (cursor) {
+			vitem.mousehover(null);
+		} else {
+			cursor = vitem.mousehover(pp);
+		}
 	}
-	// no hits
-	system.setCursor('crosshair');
-	return true;
+
+	return cursor || 'pointer';
 };
 
 /**
@@ -298,21 +300,19 @@ VSpace.prototype.dragstart = function(p, shift, ctrl) {
 	// see if the itemmenu of the focus was targeted
 	if (this.access == 'rw' && focus && focus.withinItemMenu(pp)) {
 		shell.startAction(Action.RELBIND, focus, p);
-		system.setCursor('default');
 		shell.redraw = true;
-		return true;
+		return;
 	}
 
 	// see if one item was targeted
 	for(var a = 0, aZ = this.twig.length; a < aZ; a++) {
 		var vitem = this.vAtRank(a);
-		if (vitem.dragstart(pp, shift, ctrl, this.access)) return true;
+		if (vitem.dragstart(pp, shift, ctrl, this.access)) return;
 	}
 
 	// otherwise do panning
 	shell.startAction(Action.PAN, null, pp);
-	system.setCursor('crosshair');
-	return true;
+	return;
 };
 
 /**
@@ -358,7 +358,6 @@ VSpace.prototype.click = function(p, shift, ctrl) {
 		}
 	));
 
-	system.setCursor('default');
 	this.setFocus(null);
 	shell.redraw = true;
 	return true;
@@ -399,7 +398,8 @@ VSpace.prototype.dragmove = function(p, shift, ctrl) {
 	case Action.PAN :
 		this.fabric.pan = p.sub(action.start);
 		shell.redraw = true;
-		return true;
+		return 'pointer';
+
 	case Action.RELBIND :
 		action.vitem2 = null;
 		action.move = p;
@@ -407,12 +407,13 @@ VSpace.prototype.dragmove = function(p, shift, ctrl) {
 
 		for(var r = 0, rZ = this.twig.length; r < rZ; r++) {
 			var vitem = this.vAtRank(r);
-			if (vitem.dragmove(pp)) return true;
+			if (vitem.dragmove(pp)) return 'pointer';
 		}
-		return true;
+		return 'pointer';
+
 	default :
 		action.vitem.dragmove(pp);
-		return true;
+		return 'move';
 	}
 };
 
@@ -475,7 +476,6 @@ VSpace.prototype.mousedown = function(p, shift, ctrl) {
 			action = shell.startAction(Action.ITEMRESIZE, focus, pp);
 			action.align = com;
 			action.startZone = focus.getZone();
-			system.setCursor(com+'-resize');
 
 			return 'drag';
 		}

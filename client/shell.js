@@ -260,6 +260,7 @@ Shell.prototype.stopAction = function() {
 | Used by async handlers.
 */
 Shell.prototype.poke = function() {
+	this.mousehover(this.$hoverP, this.$hoverShift, this.$hoverCtrl);
 	if (this.redraw) { this._draw(); }
 };
 
@@ -341,12 +342,37 @@ Shell.prototype.click = function(p, shift, ctrl) {
 Shell.prototype.mousehover = function(p, shift, ctrl) {
 	if (this.green) { return; }
 
-	// stops at first true
-	((this.menu && this.menu.mousehover(p, shift, ctrl)) ||
-	(this.cockpit.mousehover(p, shift, ctrl))            ||
-	(this.vspace && this.vspace.mousehover(p, shift, ctrl)));
+	this.$hoverP     = p;
+	this.$hoverShift = shift;
+	this.$hoverCtrl  = ctrl;
+
+	var cursor = null;
+
+	// hover menu
+	if (this.menu) {
+		cursor = this.menu.mousehover(p, shift, ctrl);
+	}
+
+
+	// hover cockpit
+	if (cursor) {
+		this.cockpit.mousehover(null, shift, ctrl);
+	} else {
+		cursor = this.cockpit.mousehover(p, shift, ctrl);
+	}
+
+	// hover vspace
+	if (this.vspace) {
+		if (cursor) {
+			this.vspace.mousehover(null, shift, ctrl);
+		} else {
+			cursor = this.vspace.mousehover(p, shift, ctrl);
+		}
+	}
 
 	if (this.redraw) { this._draw(); }
+	
+	return cursor;
 };
 
 /**
@@ -384,7 +410,6 @@ Shell.prototype.mousedown = function(p, shift, ctrl) {
 
 	if (this.redraw) { this._draw(); }
 
-	this.mousehover(p, shift, ctrl);
 	return mouseState || false;
 };
 
@@ -392,52 +417,66 @@ Shell.prototype.mousedown = function(p, shift, ctrl) {
 | Starts an operation with the mouse button held down.
 */
 Shell.prototype.dragstart = function(p, shift, ctrl) {
-	if (this.green) { return; }
+	if (this.green)
+		{ return; }
 
 	// cockpit?
 
-	if (this.vspace) { this.vspace.dragstart(p, shift, ctrl); }
+	if (this.vspace)
+		{ this.vspace.dragstart(p, shift, ctrl); }
 
-	if (this.redraw) { this._draw(); }
+	if (this.redraw)
+		{ this._draw(); }
 };
 
 /**
 | Moving during an operation with the mouse button held down.
 */
 Shell.prototype.dragmove = function(p, shift, ctrl) {
-	if (this.green) { return; }
+	if (this.green)
+		{ return; } // TODO
 
-	// cockpit?
+	var cursor = null;
 
-	if (this.vspace) { this.vspace.dragmove(p, shift, ctrl); }
+	if (this.vspace)
+		{ cursor = this.vspace.dragmove(p, shift, ctrl); }
 
-	if (this.redraw) { this._draw(); }
+	if (this.redraw)
+		{ this._draw(); }
+
+	return cursor;
 };
 
 /**
 | Stops an operation with the mouse button held down.
 */
 Shell.prototype.dragstop = function(p, shift, ctrl) {
-	if (this.green) { return; }
+	if (this.green)
+		{ return; }
 
 	// cockpit?
 
-	if (this.vspace) { this.vspace.dragstop(p, shift, ctrl); }
+	if (this.vspace)
+		{ this.vspace.dragstop(p, shift, ctrl); }
 
-	if (this.redraw) { this._draw(); }
+	if (this.redraw)
+		{ this._draw(); }
 };
 
 /**
 | Mouse wheel has turned
 */
 Shell.prototype.mousewheel = function(p, dir, shift, ctrl) {
-	if (this.green) { return; }
+	if (this.green)
+		{ return; }
 
 	// cockpit?
 
-	if (this.vspace) { this.vspace.mousewheel(p, dir, shift, ctrl); }
+	if (this.vspace)
+		{ this.vspace.mousewheel(p, dir, shift, ctrl); }
 
-	if (this.redraw) { this._draw(); }
+	if (this.redraw)
+		{ this._draw(); }
 };
 
 
@@ -445,7 +484,8 @@ Shell.prototype.mousewheel = function(p, dir, shift, ctrl) {
 | User pressed a special key.
 */
 Shell.prototype.specialKey = function(key, shift, ctrl) {
-	if (this.green) { return; }
+	if (this.green)
+		{ return; }
 
 	var caret  = this.caret;
 	switch (caret.visec) {
@@ -461,7 +501,8 @@ Shell.prototype.specialKey = function(key, shift, ctrl) {
 | User entered normal text (one character or more).
 */
 Shell.prototype.input = function(text) {
-	if (this.green) { return; }
+	if (this.green)
+		{ return; }
 
 	if (this.selection.active) { this.selection.remove(); }
 

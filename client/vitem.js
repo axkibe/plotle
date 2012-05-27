@@ -233,8 +233,7 @@ VItem.prototype.dragstart = function(p, shift, ctrl, access) {
 	if (ctrl && access == 'rw') {
 		// relation binding
 		shell.startAction(Action.RELBIND, this, p);
-		system.setCursor('default');
-		return true;
+		return;
 	}
 
 	// scrolling or dragging
@@ -252,7 +251,6 @@ VItem.prototype.dragstart = function(p, shift, ctrl, access) {
 		} else {
 			shell.startAction(Action.PAN, null, p);
 		}
-		system.setCursor('move');
 	}
 	return true;
 };
@@ -302,7 +300,6 @@ VItem.prototype.dragstop = function(p) {
 		if (!this.getZone().within(p)) return false;
 		var vspace = shell.vspace.vget(this.path, -1);
 		VRelation.create(vspace, action.vitem, this);
-		system.setCursor('default');
 		shell.redraw = true;
 		return true;
 	default :
@@ -316,10 +313,9 @@ VItem.prototype.dragstop = function(p) {
 | Checks if this item reacts on this.
 */
 VItem.prototype.mousehover = function(p) {
-	if (!this.getZone().within(p)) return false;
-
-	system.setCursor('default');
-	return true;
+	if (p === null) { return null; }
+	if (!this.getZone().within(p)) return null;
+	return 'default';
 };
 
 /**
