@@ -29,6 +29,7 @@ var startup;
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
+window.onload = function(){
 WebFont.load({
 	custom: {
 		families: [ 'DejaVuSans', 'DejaVuSansBold' ],
@@ -44,5 +45,6 @@ WebFont.load({
 		console.log('fontactive ' + ff + ' ' + fd);
 	}
 });
+}
 
 })();

@@ -477,10 +477,10 @@ var tfxChg = function(chg, chgX) {
 };
 
 /**
-| Changes an a Change or Array of Changes upon a Change or Array of Changes.
+| Transforms a change or an array of changes upon a change or an array of changes.
 */
 var tfxChgX = function(chgX1, chgX2) {
-	if (!chgX1) throw reject('invalid chgX1');
+	if (chgX1 === null) { return null; }
 	switch(chgX1.constructor) {
 	case Change :
 		return tfxChg(chgX1, chgX2);
