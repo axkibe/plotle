@@ -10,16 +10,17 @@
 }
 
 @font-face {
-    font-family: 'DejaVuSans';
+    font-family: 'DejaVuSansBold';
     src: url('dejavusans-bold-webfont.eot');
     src: url('dejavusans-bold-webfont.eot?#iefix') format('embedded-opentype'),
          url('dejavusans-bold-webfont.woff') format('woff'),
          url('dejavusans-bold-webfont.ttf') format('truetype'),
          url('dejavusans-bold-webfont.svg#DejaVuSansBold') format('svg');
-    font-weight: bold;
+    font-weight: normal;
     font-style: normal;
 }
 
+/*
 @font-face {
     font-family: 'DejaVuSans';
     src: url('dejavusans-boldoblique-webfont.eot');
@@ -41,3 +42,4 @@
     font-weight: normal;
     font-style: italic;
 }
+*/

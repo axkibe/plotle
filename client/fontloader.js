@@ -31,12 +31,17 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 
 WebFont.load({
 	custom: {
-		families: [ 'DejaVuSans' ],
-		urls: [ 'fonts/dejavu.css' ]
+		families: [ 'DejaVuSans', 'DejaVuSansBold' ],
+		urls: [ '/fonts/dejavu.css' ]
 	},
 
 	active: function() {
+		console.log('active');
 		startup();
+	},
+
+	fontactive: function(ff, fd) {
+		console.log('fontactive ' + ff + ' ' + fd);
 	}
 });
 

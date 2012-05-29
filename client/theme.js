@@ -43,9 +43,10 @@ var ro  = Math.round;
 var c30 = cos(pi / 6);
 
 theme = {
-	// standard font
+	defaultFont : 'DejaVuSans',
+	boldFont : 'DejaVuSansBold',
+
 	//defaultFont : 'Verdana,Geneva,Kalimati,sans-serif',
-	defaultFont : 'DejaVuSans,Freebooter Script',
 	//defaultFont : 'Freebooter Script,Zapfino,serif',
 
 	// factor to add to the bottom of font height
