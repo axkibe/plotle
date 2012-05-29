@@ -98,7 +98,7 @@ config.debug = {
 	/**
 	| If true does messages and JSON with whitespace/newlines
 	*/
-	puffed : false,
+	puffed : true,
 
 	/**
 	| If true ensures that objects that should not be immutable
@@ -124,6 +124,10 @@ config.log  = {
 	start:  true,
 	shell:  true,
 	tfx:    false,
-	web:    false,
+	web:    true,
 	warn:   true
+};
+
+config.proxy = {
+	'localhost' : { cmd: 'proxy', host: 'twitterpolitik.net'}
 };

@@ -53,7 +53,7 @@ var styles = {
 	},
 	cab       : {
 		type  : 'FontStyle',
-		font  : 'bold ' + theme.defaultFont,
+		font  :  theme.defaultFont + ' bold',
 		fill  : 'black',
 		align : 'center',
 		base  : 'alphabetic',
@@ -93,7 +93,7 @@ var styles = {
 	},
 	lahb      : {
 		type  : 'FontStyle',
-		font  : 'bold ' + theme.defaultFont,
+		font  : theme.defaultFont + ' bold',
 		fill  : 'rgb(128, 44, 0)',
 		align : 'start',
 		base  : 'alphabetic',
@@ -117,7 +117,7 @@ var styles = {
 	},
 	cadr      : {
 		type  : 'FontStyle',
-		font  : 'bold ' + theme.defaultFont,
+		font  : theme.defaultFont + ' bold',
 		fill  : 'rgb(160, 0, 0)',
 		align : 'center',
 		base  : 'alphabetic',

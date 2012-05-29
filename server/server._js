@@ -276,18 +276,26 @@ Server.prototype.registerFiles = function() {
 
 		var type = filename.split('.')[1];
 		switch (type) {
-		case 'html' : e.code = 'utf-8';  e.mime = 'text/html';       break;
-		case 'js'   : e.code = 'utf-8';  e.mime = 'text/javascript'; break;
-		case 'ico'  : e.code = 'binary'; e.mime = 'image/x-icon';    break;
+		case 'html' : e.code = 'utf-8';  e.mime = 'text/html';          break;
+		case 'js'   : e.code = 'utf-8';  e.mime = 'text/javascript';    break;
+		case 'ico'  : e.code = 'binary'; e.mime = 'image/x-icon';       break;
+		case 'css'  : e.code = 'utf-8';  e.mime = 'text/css';           break;
+		case 'eot'  : e.code = 'binary'; e.mime = 'font/eot';           break;
+		case 'svg'  : e.code = 'utf-8';  e.mime = 'image/svg+xml';      break;
+		case 'ttf'  : e.code = 'binary'; e.mime = 'font/ttf';           break;
+		case 'otf'  : e.code = 'binary'; e.mime = 'font/otf';           break;
+		case 'woff' : e.code = 'binary'; e.mime = 'application/x-font-woff'; break;
 		default : throw new Error('unknown file type: '+type);
 		}
 		self.files[path] = e;
-		if (pack) { self.packfiles.push({ path: path, filename: filename }); }
+		if (pack === 1) { self.packfiles.push({ path: path, filename: filename }); }
 	};
 
 	registerFile('icons/hexicon.ico',           0);
 	registerFile('client/testpad.html',         0);
 	registerFile('client/testpad.js',           0);
+	registerFile('client/fonts/webfont.js',     0);
+
 	registerFile('shared/jools.js',             1);
 	registerFile('shared/sha1.js',              1);
 	registerFile('shared/euclid.js',            1);
@@ -344,6 +352,25 @@ Server.prototype.registerFiles = function() {
 	registerFile('client/caret.js',             1);
 	registerFile('client/selection.js',         1);
 	registerFile('client/shell.js',             1);
+	registerFile('client/fontloader.js',        1);
+
+	registerFile('client/fonts/dejavu.css',                          0);
+	registerFile('client/fonts/dejavusans-boldoblique-webfont.eot',  0);
+	registerFile('client/fonts/dejavusans-boldoblique-webfont.svg',  0);
+	registerFile('client/fonts/dejavusans-boldoblique-webfont.ttf',  0);
+	registerFile('client/fonts/dejavusans-boldoblique-webfont.woff', 0);
+	registerFile('client/fonts/dejavusans-bold-webfont.eot',         0);
+	registerFile('client/fonts/dejavusans-bold-webfont.svg',         0);
+	registerFile('client/fonts/dejavusans-bold-webfont.ttf',         0);
+	registerFile('client/fonts/dejavusans-bold-webfont.woff',        0);
+	registerFile('client/fonts/dejavusans-oblique-webfont.eot',      0);
+	registerFile('client/fonts/dejavusans-oblique-webfont.svg',      0);
+	registerFile('client/fonts/dejavusans-oblique-webfont.ttf',      0);
+	registerFile('client/fonts/dejavusans-oblique-webfont.woff',     0);
+	registerFile('client/fonts/dejavusans-webfont.eot',              0);
+	registerFile('client/fonts/dejavusans-webfont.svg',              0);
+	registerFile('client/fonts/dejavusans-webfont.ttf',              0);
+	registerFile('client/fonts/dejavusans-webfont.woff',             0);
 };
 	
 
@@ -361,7 +388,7 @@ Server.prototype.buildPack = function() {
 		this.devels.push('<script src="' + pf.path + '" type="text/javascript"></script>');
 		this.pack.push(fs.readFileSync(pf.filename));
 	}
-	this.pack = this.pack.join('\n');
+	this.pack = this.pack.join(';\n');
 
 	// uglify
 	if (config.uglify) {
@@ -830,12 +857,57 @@ Server.prototype.webError = function(res, code, message) {
 	res.end(message);
 };
 
+	
+/**
+| Checks if the request should be proxied
+| Returns true if the proxy applies, false otherwise.
+*/
+Server.prototype.webProxy = function(req, res) {
+	/*
+	var host    = req.headers.host;
+	var proxy   = config.proxy;
+	if (!proxy)
+		{ return false; }
+
+	var phost = proxy[host];
+	if (!phost)
+		{ return false; }
+
+	log('web', 'forwarding to', phost, req.url);
+
+	switch(req.method) {
+	case 'POST' :
+		debug('DONT KNOW HOW TO PROXY POST!');
+		break;
+	case 'GET' :
+		client.request({
+			host   : phost,
+			method : 'GET',
+			path   : req.url
+		}, function(pres) {
+
+		});
+			if (forward) {
+			
+
+			}
+		}
+
+
+		break;
+	}
+	*/
+	return false;
+};
 
 /**
 | Listens to http requests
 */
 Server.prototype.requestListener = function(req, res) {
 	var red = url.parse(req.url);
+
+	if (this.webProxy(req, res)) { return; }
+
 	log('web', req.connection.remoteAddress, red.href);
 
 	switch(red.pathname) {

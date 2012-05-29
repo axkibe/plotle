@@ -40,6 +40,7 @@ var settings;
 | Export
 */
 var system;
+var startup;
 
 /**
 | Export/Capsule
@@ -497,14 +498,9 @@ var System = function() {
 	system.restartBlinker();
 };
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ,.   ,   ,.       .
- `|  /|  / . ,-. ,-| ,-. . , ,
-  | / | /  | | | | | | | |/|/
-  `'  `'   ' ' ' `-^ `-' ' '
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-window.onload = function() {
+
+//window.onload = function() {
+startup = function() {
 	makeCatcher(function() {
 		new System();
 		system.shell = new Shell(system.fabric);
