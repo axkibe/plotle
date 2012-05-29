@@ -37,7 +37,7 @@ config.ip = null;
 /**
 | The port to listen on.
 */
-config.port = 8833;
+config.port = 80;
 
 /**
 | Database settings (mongodb)
@@ -124,7 +124,7 @@ config.log  = {
 	start:  true,
 	shell:  true,
 	tfx:    false,
-	web:    true,
+	web:    false,
 	warn:   true
 };
 

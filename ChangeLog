@@ -1,12 +1,4 @@
-Version 0.2 (2012 May 24)
--------------------------
-+ Server communication and storing data in a mongodb database there
-+ Multi-user editability
-+ User management
-+ Undo/Redo functionality
-+ New design based on ovals
-
-Version 0.1 (2011 Oct 17)
+Version 0.1 (2011 Oct. 17th)
 ----------------------------
 
-A not yet workable demo of the client-side GUI. No server communication.
+A not yet workable demo of the clientside GUI. No server communication.
