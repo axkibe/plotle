@@ -43,8 +43,8 @@ var ro  = Math.round;
 var c30 = cos(pi / 6);
 
 theme = {
-	defaultFont : 'DejaVuSans',
-	boldFont : 'DejaVuSansBold',
+	defaultFont : 'DejaVuSans,sans-serif',
+	boldFont : 'DejaVuSansBold,sans-serif',
 
 	//defaultFont : 'Verdana,Geneva,Kalimati,sans-serif',
 	//defaultFont : 'Freebooter Script,Zapfino,serif',
