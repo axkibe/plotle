@@ -326,7 +326,6 @@ var System = function() {
 			throw new Error('invalid mouseState');
 		}
 
-		if (cursor === true || cursor === false) { throw new Error('bool cursor!'); } // TODO
 		if (cursor !== null) { canvas.style.cursor = cursor; }
 
 		return true;
@@ -360,7 +359,6 @@ var System = function() {
 		}
 
 		var cursor = system.shell.mousehover(p, shift, ctrl);
-		if (cursor === true || cursor === false) { throw new Error('bool cursor!'); } // TODO
 		if (cursor !== null) { canvas.style.cursor = cursor; }
 
 		return false;
@@ -399,7 +397,6 @@ var System = function() {
 			throw new Error('invalid mouseState');
 		}
 		
-		if (cursor === true || cursor === false) { throw new Error('bool cursor!'); } // TODO
 		if (cursor !== null) { canvas.style.cursor = cursor; }
 		
 		return false;
@@ -432,7 +429,6 @@ var System = function() {
 		system.shell.dragstart(atweenPos, atweenShift, atweenCtrl);
 		cursor = system.shell.dragmove(atweenMove, atweenShift, atweenCtrl);
 
-		if (cursor === true || cursor === false) { throw new Error('bool cursor!'); } // TODO
 		if (cursor !== null) { canvas.style.cursor = cursor; }
 	}
 
@@ -451,13 +447,6 @@ var System = function() {
 	system.onatweentime    = makeCatcher(onatweentime);
 	system.onblink         = makeCatcher(blink);
 	document.oncontextmenu = function(e) { e.stopPropagation(); return false; };
-
-	/**
-	| Sets the mouse cursor
-	*/
-	system.setCursor = function(cursor) {
-		throw new Error('NOT SO'); // TODO XXX
-	};
 
 	//-------------------------------------
 	//-- Interface for the System object --

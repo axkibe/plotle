@@ -211,7 +211,6 @@ CBoard.prototype.mousehover = function(p, shift, ctrl) {
 	for(a = 0, aZ = layout.length; a < aZ; a++) {
 		var cname = layout.ranks[a];
 		var ce = this.cc[cname];
-		// TODO continue bubbling with pp = null
 
 		if (cursor) {
 			ce.mousehover(null, shift, ctrl);

@@ -366,10 +366,19 @@ CChat.prototype.mousedown = function(p, shift, ctrl) {
 | Mouse hover
 */
 CChat.prototype.mousehover = function(p, shift, ctrl) {
-	return null;
+	if (p === null)
+		{ return null; }
+	
+	var pnw = this.pnw;
+	var pse = this.pse;
 
-	// TODO make text on chat line
-	//return 'default';
+	if (p.x < pnw.x || p.y < pnw.y || p.x > pse.x || p.y > pse.y)
+		{ return null; }
+	
+	if (p.y > pse.y - (this.lineHeight - 2))
+		{ return "text"; }
+	else
+		{ return "default"; }
 };
 
 /**

@@ -260,7 +260,10 @@ Shell.prototype.stopAction = function() {
 | Used by async handlers.
 */
 Shell.prototype.poke = function() {
-	this.mousehover(this.$hoverP, this.$hoverShift, this.$hoverCtrl);
+	if (this.$hoverP) {
+		this.mousehover(this.$hoverP, this.$hoverShift, this.$hoverCtrl);
+	}
+
 	if (this.redraw) { this._draw(); }
 };
 
@@ -434,7 +437,7 @@ Shell.prototype.dragstart = function(p, shift, ctrl) {
 */
 Shell.prototype.dragmove = function(p, shift, ctrl) {
 	if (this.green)
-		{ return; } // TODO
+		{ return; }
 
 	var cursor = null;
 
