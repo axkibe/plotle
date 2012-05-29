@@ -129,5 +129,5 @@ config.log  = {
 };
 
 config.proxy = {
-	'localhost' : { cmd: 'proxy', host: 'twitterpolitik.net'}
+	'localhost:8833' : { cmd: 'proxy', host: 'twitterpolitik.net', port: 80}
 };

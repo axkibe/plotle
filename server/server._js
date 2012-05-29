@@ -50,6 +50,11 @@ var url         = require('url');
 var util        = require('util');
 var zlib        = require('zlib');
 
+/*if (config.proxy) {
+	var httpProxy = require('http-proxy');
+	var proxy = new httpProxy.RoutingProxy();
+}*/
+
 /**
 | Shortcuts
 */
@@ -66,13 +71,13 @@ var uid          = Jools.uid;
 | Server
 */
 var Server = function() {
-	this.packfiles = [ ];
 
-	this.buildClientConfig();
+	// files served
+	this.$files = {};
+	this.$packList = [];
+
 	this.registerFiles();
-	this.buildPack();
-	this.buildHTMLs();
-	
+
 	// init database
 	this.db = {};
 	this.db.server    = new mongodb.Server(
@@ -123,6 +128,8 @@ var Server = function() {
 | Connects to the database.
 */
 Server.prototype.startup = function(_) {
+	this.prepareFiles(_);
+
 	var db = this.db;
 	db.connection = db.connector.open(_);
 	log('start', 'Connected to database');
@@ -136,9 +143,6 @@ Server.prototype.startup = function(_) {
 		this.playbackOne(o);
 	}
 	
-	log('start', 'Uncompressed pack length is ', this.pack.length);
-	this.packgz = zlib.gzip(this.pack, _);
-	log('start', 'Compressed pack length is ', this.packgz.length);
 	log('start', 'Starting server @ http://' + (config.ip || '*') + '/:' + config.port);
 
 	var self = this;
@@ -257,171 +261,236 @@ Server.prototype.buildClientConfig = function() {
 	}
 	cconfig.push('\n\t}\n');
 	cconfig.push('};\n');
-	this.cconfig = cconfig.join('');
+	return cconfig.join('');
+};
+	
+/**
+| Register a files to be REST served.
+*/
+Server.prototype.registerFile = function(filename, pack, cache) {
+	var path = filename.split('/');
+	path.shift();
+	path = '/' + path.join('/');
+	
+	var f = {
+		filename : filename,
+		code     : null,
+		mime     : null,
+		cache    : cache,
+		raw      : null,
+		gzip     : null,
+		pack     : pack
+	};
+
+	var type = filename.split('.')[1];
+	switch (type) {
+	case 'html' : f.code = 'utf-8';  f.mime = 'text/html';               break;
+	case 'js'   : f.code = 'utf-8';  f.mime = 'text/javascript';         break;
+	case 'ico'  : f.code = 'binary'; f.mime = 'image/x-icon';            break;
+	case 'css'  : f.code = 'utf-8';  f.mime = 'text/css';                break;
+	case 'eot'  : f.code = 'binary'; f.mime = 'font/eot';                break;
+	case 'svg'  : f.code = 'utf-8';  f.mime = 'image/svg+xml';           break;
+	case 'ttf'  : f.code = 'binary'; f.mime = 'font/ttf';                break;
+	case 'otf'  : f.code = 'binary'; f.mime = 'font/otf';                break;
+	case 'woff' : f.code = 'binary'; f.mime = 'application/x-font-woff'; break;
+	default : throw new Error('unknown file type: '+type);
+	}
+
+	if (pack) { this.$packList.push({file: f, path: path}); }
+
+	this.$files[path] = f;
 };
 
 /**
 | Registers files to be REST served.
 */
 Server.prototype.registerFiles = function() {
-	var self = this;
-	this.files = {};
+	this.registerFile('icons/hexicon.ico',           false, true );
+	this.registerFile('client/testpad.html',         false, false);
+	this.registerFile('client/testpad.js',           false, false);
+	this.registerFile('client/fonts/webfont.js',     false, true );
 
-	var registerFile = function(filename, pack) {
-		var e = { filename : filename };
+	this.registerFile('shared/jools.js',             true,  false);
+	this.registerFile('shared/sha1.js',              true,  false);
+	this.registerFile('shared/euclid.js',            true,  false);
+	this.registerFile('client/fabric.js',            true,  false);
+	this.registerFile('client/theme.js',             true,  false);
+	this.registerFile('shared/meshverse.js',         true,  false);
+	this.registerFile('shared/path.js',              true,  false);
+	this.registerFile('shared/tree.js',              true,  false);
+	this.registerFile('shared/sign.js',              true,  false);
+	this.registerFile('shared/change.js',            true,  false);
+	this.registerFile('shared/changex.js',           true,  false);
+	this.registerFile('shared/meshmashine.js',       true,  false);
+	this.registerFile('client/iface.js',             true,  false);
+	this.registerFile('client/peer.js',              true,  false);
+	this.registerFile('client/design/pattern.js',    true,  false);
+	this.registerFile('client/design/fontstyles.js', true,  false);
+	this.registerFile('client/design/mainboard.js',  true,  false);
+	this.registerFile('client/design/loginboard.js', true,  false);
+	this.registerFile('client/design/regboard.js',   true,  false);
+	this.registerFile('client/design/helpboard.js',  true,  false);
+	this.registerFile('client/caccent.js',           true,  false);
+	this.registerFile('client/curve.js',             true,  false);
+	this.registerFile('client/ccustom.js',           true,  false);
+	this.registerFile('client/cinput.js',            true,  false);
+	this.registerFile('client/clabel.js',            true,  false);
+	this.registerFile('client/cchat.js',             true,  false);
+	this.registerFile('client/cboard.js',            true,  false);
+	this.registerFile('client/ccode/util.js',        true,  false);
+	this.registerFile('client/ccode/mainboard.js',   true,  false);
+	this.registerFile('client/ccode/helpboard.js',   true,  false);
+	this.registerFile('client/ccode/mbleftb.js',     true,  false);
+	this.registerFile('client/ccode/mbleft2b.js',    true,  false);
+	this.registerFile('client/ccode/mbswitchb.js',   true,  false);
+	this.registerFile('client/ccode/mbrightb.js',    true,  false);
+	this.registerFile('client/ccode/lbloginb.js',    true,  false);
+	this.registerFile('client/ccode/lbcloseb.js',    true,  false);
+	this.registerFile('client/ccode/lbpassi.js',     true,  false);
+	this.registerFile('client/ccode/rbcloseb.js',    true,  false);
+	this.registerFile('client/ccode/rbregb.js',      true,  false);
+	this.registerFile('client/ccode/hbhideb.js',     true,  false);
+	this.registerFile('client/switchpanel.js',       true,  false);
+	this.registerFile('client/cockpit.js',           true,  false);
+	this.registerFile('client/action.js',            true,  false);
+	this.registerFile('client/ovalmenu.js',          true,  false);
+	this.registerFile('client/vpara.js',             true,  false);
+	this.registerFile('client/scrollbar.js',         true,  false);
+	this.registerFile('client/vdoc.js',              true,  false);
+	this.registerFile('client/vitem.js',             true,  false);
+	this.registerFile('client/vnote.js',             true,  false);
+	this.registerFile('client/vlabel.js',            true,  false);
+	this.registerFile('client/vrelation.js',         true,  false);
+	this.registerFile('client/vspace.js',            true,  false);
+	this.registerFile('client/browser.js',           true,  false);
+	this.registerFile('client/caret.js',             true,  false);
+	this.registerFile('client/selection.js',         true,  false);
+	this.registerFile('client/shell.js',             true,  false);
+	this.registerFile('client/fontloader.js',        true,  false);
 
-		var path = filename.split('/');
-		path.shift();
-		path = '/' + path.join('/');
-
-		var type = filename.split('.')[1];
-		switch (type) {
-		case 'html' : e.code = 'utf-8';  e.mime = 'text/html';          break;
-		case 'js'   : e.code = 'utf-8';  e.mime = 'text/javascript';    break;
-		case 'ico'  : e.code = 'binary'; e.mime = 'image/x-icon';       break;
-		case 'css'  : e.code = 'utf-8';  e.mime = 'text/css';           break;
-		case 'eot'  : e.code = 'binary'; e.mime = 'font/eot';           break;
-		case 'svg'  : e.code = 'utf-8';  e.mime = 'image/svg+xml';      break;
-		case 'ttf'  : e.code = 'binary'; e.mime = 'font/ttf';           break;
-		case 'otf'  : e.code = 'binary'; e.mime = 'font/otf';           break;
-		case 'woff' : e.code = 'binary'; e.mime = 'application/x-font-woff'; break;
-		default : throw new Error('unknown file type: '+type);
-		}
-		self.files[path] = e;
-		if (pack === 1) { self.packfiles.push({ path: path, filename: filename }); }
-	};
-
-	registerFile('icons/hexicon.ico',           0);
-	registerFile('client/testpad.html',         0);
-	registerFile('client/testpad.js',           0);
-	registerFile('client/fonts/webfont.js',     0);
-
-	registerFile('shared/jools.js',             1);
-	registerFile('shared/sha1.js',              1);
-	registerFile('shared/euclid.js',            1);
-	registerFile('client/fabric.js',            1);
-	registerFile('client/theme.js',             1);
-	registerFile('shared/meshverse.js',         1);
-	registerFile('shared/path.js',              1);
-	registerFile('shared/tree.js',              1);
-	registerFile('shared/sign.js',              1);
-	registerFile('shared/change.js',            1);
-	registerFile('shared/changex.js',           1);
-	registerFile('shared/meshmashine.js',       1);
-	registerFile('client/iface.js',             1);
-	registerFile('client/peer.js',              1);
-	registerFile('client/design/pattern.js',    1);
-	registerFile('client/design/fontstyles.js', 1);
-	registerFile('client/design/mainboard.js',  1);
-	registerFile('client/design/loginboard.js', 1);
-	registerFile('client/design/regboard.js',   1);
-	registerFile('client/design/helpboard.js',  1);
-	registerFile('client/caccent.js',           1);
-	registerFile('client/curve.js',             1);
-	registerFile('client/ccustom.js',           1);
-	registerFile('client/cinput.js',            1);
-	registerFile('client/clabel.js',            1);
-	registerFile('client/cchat.js',             1);
-	registerFile('client/cboard.js',            1);
-	registerFile('client/ccode/util.js',        1);
-	registerFile('client/ccode/mainboard.js',   1);
-	registerFile('client/ccode/helpboard.js',   1);
-	registerFile('client/ccode/mbleftb.js',     1);
-	registerFile('client/ccode/mbleft2b.js',    1);
-	registerFile('client/ccode/mbswitchb.js',   1);
-	registerFile('client/ccode/mbrightb.js',    1);
-	registerFile('client/ccode/lbloginb.js',    1);
-	registerFile('client/ccode/lbcloseb.js',    1);
-	registerFile('client/ccode/lbpassi.js',     1);
-	registerFile('client/ccode/rbcloseb.js',    1);
-	registerFile('client/ccode/rbregb.js',      1);
-	registerFile('client/ccode/hbhideb.js',     1);
-	registerFile('client/switchpanel.js',       1);
-	registerFile('client/cockpit.js',           1);
-	registerFile('client/action.js',            1);
-	registerFile('client/ovalmenu.js',          1);
-	registerFile('client/vpara.js',             1);
-	registerFile('client/scrollbar.js',         1);
-	registerFile('client/vdoc.js',              1);
-	registerFile('client/vitem.js',             1);
-	registerFile('client/vnote.js',             1);
-	registerFile('client/vlabel.js',            1);
-	registerFile('client/vrelation.js',         1);
-	registerFile('client/vspace.js',            1);
-	registerFile('client/browser.js',           1);
-	registerFile('client/caret.js',             1);
-	registerFile('client/selection.js',         1);
-	registerFile('client/shell.js',             1);
-	registerFile('client/fontloader.js',        1);
-
-	registerFile('client/fonts/dejavu.css',                          0);
-	registerFile('client/fonts/dejavusans-boldoblique-webfont.eot',  0);
-	registerFile('client/fonts/dejavusans-boldoblique-webfont.svg',  0);
-	registerFile('client/fonts/dejavusans-boldoblique-webfont.ttf',  0);
-	registerFile('client/fonts/dejavusans-boldoblique-webfont.woff', 0);
-	registerFile('client/fonts/dejavusans-bold-webfont.eot',         0);
-	registerFile('client/fonts/dejavusans-bold-webfont.svg',         0);
-	registerFile('client/fonts/dejavusans-bold-webfont.ttf',         0);
-	registerFile('client/fonts/dejavusans-bold-webfont.woff',        0);
-	registerFile('client/fonts/dejavusans-oblique-webfont.eot',      0);
-	registerFile('client/fonts/dejavusans-oblique-webfont.svg',      0);
-	registerFile('client/fonts/dejavusans-oblique-webfont.ttf',      0);
-	registerFile('client/fonts/dejavusans-oblique-webfont.woff',     0);
-	registerFile('client/fonts/dejavusans-webfont.eot',              0);
-	registerFile('client/fonts/dejavusans-webfont.svg',              0);
-	registerFile('client/fonts/dejavusans-webfont.ttf',              0);
-	registerFile('client/fonts/dejavusans-webfont.woff',             0);
+	this.registerFile('client/fonts/dejavu.css',                          false, true);
+	this.registerFile('client/fonts/dejavusans-boldoblique-webfont.eot',  false, true);
+	this.registerFile('client/fonts/dejavusans-boldoblique-webfont.svg',  false, true);
+	this.registerFile('client/fonts/dejavusans-boldoblique-webfont.ttf',  false, true);
+	this.registerFile('client/fonts/dejavusans-boldoblique-webfont.woff', false, true);
+	this.registerFile('client/fonts/dejavusans-bold-webfont.eot',         false, true);
+	this.registerFile('client/fonts/dejavusans-bold-webfont.svg',         false, true);
+	this.registerFile('client/fonts/dejavusans-bold-webfont.ttf',         false, true);
+	this.registerFile('client/fonts/dejavusans-bold-webfont.woff',        false, true);
+	this.registerFile('client/fonts/dejavusans-oblique-webfont.eot',      false, true);
+	this.registerFile('client/fonts/dejavusans-oblique-webfont.svg',      false, true);
+	this.registerFile('client/fonts/dejavusans-oblique-webfont.ttf',      false, true);
+	this.registerFile('client/fonts/dejavusans-oblique-webfont.woff',     false, true);
+	this.registerFile('client/fonts/dejavusans-webfont.eot',              false, true);
+	this.registerFile('client/fonts/dejavusans-webfont.svg',              false, true);
+	this.registerFile('client/fonts/dejavusans-webfont.ttf',              false, true);
+	this.registerFile('client/fonts/dejavusans-webfont.woff',             false, true);
 };
-	
 
 /**
-| Builds the javascript pack,
+| Builds the file cache
+| Also builds the javascript pack,
 | so the client loads way faster in release mode.
 */
-Server.prototype.buildPack = function() {
-	log('start', 'Preparing pack');
-	this.pack = [ this.cconfig ];
-	this.devels = [ '<script src="/config.js" type="text/javascript"></script>' ];
+Server.prototype.prepareFiles = function(_) {
+	var f;
+	log('start', 'Preparing files');
 
-	for(var a = 0, aZ = this.packfiles.length; a < aZ; a++) {
-		var pf = this.packfiles[a];
-		this.devels.push('<script src="' + pf.path + '" type="text/javascript"></script>');
-		this.pack.push(fs.readFileSync(pf.filename));
+	for(f in this.$files) {
+		if (f.filename = null)   { continue; }
+		if (!f.cache && !f.pack) { continue; }
+		f.raw = fs.readFile(f.filename, _);
 	}
-	this.pack = this.pack.join(';\n');
+	
+	var cconfig = this.buildClientConfig();
+	this.$files['/config.js'] = {
+		filename : null,
+		code     : 'utf-8',
+		mime     : 'text/javascript',
+		cache    : true,
+		raw      : cconfig,
+		gzip     : null,
+		pack     : false
+	};
 
-	// uglify
+	var pack = [ cconfig ];
+	var packgz = null;
+	var devels = [ '<script src="/config.js" type="text/javascript"></script>' ];
+
+	for(var a = 0, aZ = this.$packList.length; a < aZ; a++) {
+		var f = this.$packList[a];
+		devels.push('<script src="' + f.path + '" type="text/javascript"></script>');
+		pack.push(fs.readFile(f.file.filename, _));
+	}
+	pack = pack.join('\n');
+
+	// uglify pack
 	if (config.uglify) {
 		var ast;
-		ast = uglify.parser.parse(this.pack);
+		ast = uglify.parser.parse(pack);
 		ast = uglify.uglify.ast_mangle(ast, {toplevel: true});
 		ast = uglify.uglify.ast_lift_variables(ast);
 		ast = uglify.uglify.ast_squeeze(ast);
-		this.pack = uglify.uglify.gen_code(ast);
+		pack = uglify.uglify.gen_code(ast);
 	}
 
-	this.packsha1 = sha1.sha1hex(this.pack);
-	this.mepacksha1 = '/meshcraft-' + this.packsha1 + '.js';
+	var packsha1 = sha1.sha1hex(pack);
+	var mepacksha1 = '/meshcraft-' + packsha1 + '.js';
 	log('start', 'pack:', this.mepacksha1);
-};
 
-
-/**
-| Builds HTML files
-*/
-Server.prototype.buildHTMLs = function() {
+	this.$files[mepacksha1] = {
+		filename : null,
+		code     : 'utf-8',
+		mime     : 'text/javascript',
+		cache    : true,
+		raw      : pack,
+		gzip     : null,
+		pack     : false
+	};
+	
 	// the devel file
-	this.devel = fs.readFileSync('client/devel.html') + '';
-	this.devel = this.devel.replace(/<!--DEVELPACK.*>/, this.devels.join('\n'));
+	var devel = fs.readFile('client/devel.html', _) + '';
+	devel = devel.replace(/<!--DEVELPACK.*>/, devels.join('\n'));
+	
+	this.$files['/devel.html'] = {
+		filename : null,
+		code     : 'utf-8',
+		mime     : 'text/html',
+		cache    : false,
+		raw      : devel,
+		gzip     : null,
+		pack     : false
+	};
 
 	// the main html file
-	this.main = fs.readFileSync('client/meshcraft.html') + '';
-	this.main = this.main.replace(
+	var main = fs.readFile('client/meshcraft.html', _) + '';
+	main = main.replace(
 		/<!--COPACK.*>/,
-		'<script src="'+this.mepacksha1+'" type="text/javascript"></script>'
+		'<script src="'+mepacksha1+'" type="text/javascript"></script>'
 	);
-};
+	
+	this.$files['/meshcraft.html'] = 
+	this.$files['/index.html'] =
+	this.$files['/'] = {
+		filename : null,
+		code     : 'utf-8',
+		mime     : 'text/html',
+		cache    : false,
+		raw      : main,
+		gzip     : null,
+		pack     : false
+	};
 
+	for(var path in this.$files) {
+		var f = this.$files[path];
+		if (!f.cache) continue;
+		f.gzip = zlib.gzip(f.raw, _);
+	}
+	
+	log('start', 'Uncompressed pack length is ', this.$files[mepacksha1].raw.length);
+	log('start', 'Compressed pack length is ', this.$files[mepacksha1].gzip.length);
+};
+	
 /**
 | Executes an alter command.
 */
@@ -862,43 +931,27 @@ Server.prototype.webError = function(res, code, message) {
 | Checks if the request should be proxied
 | Returns true if the proxy applies, false otherwise.
 */
+/*
 Server.prototype.webProxy = function(req, res) {
-	/*
 	var host    = req.headers.host;
-	var proxy   = config.proxy;
-	if (!proxy)
+	if (!config.proxy)
 		{ return false; }
 
-	var phost = proxy[host];
-	if (!phost)
+	var p = config.proxy[host];
+	debug(p);
+	if (!p)
 		{ return false; }
 
-	log('web', 'forwarding to', phost, req.url);
+	log('web', 'proxy', p.host, '.', p.port, req.url);
 
-	switch(req.method) {
-	case 'POST' :
-		debug('DONT KNOW HOW TO PROXY POST!');
-		break;
-	case 'GET' :
-		client.request({
-			host   : phost,
-			method : 'GET',
-			path   : req.url
-		}, function(pres) {
+	proxy.proxyRequest(req, res, {
+		host: p.host,
+		port: p.port
+	});
 
-		});
-			if (forward) {
-			
-
-			}
-		}
-
-
-		break;
-	}
-	*/
-	return false;
+	return true;
 };
+*/
 
 /**
 | Listens to http requests
@@ -906,24 +959,34 @@ Server.prototype.webProxy = function(req, res) {
 Server.prototype.requestListener = function(req, res) {
 	var red = url.parse(req.url);
 
-	if (this.webProxy(req, res)) { return; }
+	//if (this.webProxy(req, res)) { return; }
 
 	log('web', req.connection.remoteAddress, red.href);
 
-	switch(red.pathname) {
-	case '/'               : return this.webMain   (req, red, res);
-	case '/index.html'     : return this.webMain   (req, red, res);
-	case '/meshcraft.html' : return this.webMain   (req, red, res);
-	case '/devel.html'     : return this.webDevel  (req, red, res);
-	case '/mm'             : return this.webAjax   (req, red, res);
-	case '/config.js'      : return this.webConfig (req, red, res);
-	case this.mepacksha1   : return this.webPack   (req, red, res);
-	}
+	if (red.pathname === '/mm')
+		{ return this.webAjax(req, red, res); }
 
-	var f = this.files[red.pathname];
+	var f = this.$files[red.pathname];
 	if (!f) {
 		res.writeHead(404, {'Content-Type': 'text/plain'});
 		this.webError(res, '404 Bad Reqeust');
+		return;
+	}
+
+	if (f.raw) {
+		var aenc = f.gzip && req.headers['accept-encoding'];
+		if (aenc && aenc.indexOf('gzip') >= 0) {
+			// deliver compressed
+			res.writeHead(200, {
+				'Content-Type'     :  f.mime,
+				'Content-Encoding' : 'gzip'
+			});
+			res.end(f.gzip, 'binary');
+		} else {
+			// deliver uncompressed
+			res.writeHead(200, {'Content-Type': f.mime});
+			res.end(f.raw, f.code);
+		}
 		return;
 	}
 
@@ -999,16 +1062,9 @@ Server.prototype.ajaxCmd = function(cmd, res, _) {
 };
 
 /**
-| Transmits the config relevant to the client
-*/
-Server.prototype.webConfig = function(req, red, res) {
-	res.writeHead(200, {'Content-Type': 'application/json'});
-	res.end(this.cconfig);
-};
-
-/**
 | Transmits the uglified js package.
 */
+/*
 Server.prototype.webPack = function(req, red, res) {
 	var aenc = req.headers['accept-encoding'];
 
@@ -1024,23 +1080,7 @@ Server.prototype.webPack = function(req, red, res) {
 		res.writeHead(200, {'Content-Type': 'application/json'});
 		res.end(this.pack);
 	}
-};
-
-/**
-| Transmits the main html file.
-*/
-Server.prototype.webMain = function(req, red, res) {
-	res.writeHead(200, {'Content-Type': 'text/html'});
-	res.end(this.main);
-};
-
-/**
-| Transmits the devel html file.
-*/
-Server.prototype.webDevel = function(req, red, res) {
-	res.writeHead(200, {'Content-Type': 'text/html'});
-	res.end(this.devel);
-};
+};*/
 
 var server = new Server();
 

@@ -22,6 +22,13 @@
 var WebFont;
 var startup;
 
+/**
+| Capsule
+*/
+(function(){
+'use strict';
+if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
+
 WebFont.load({
 	custom: {
 		families: [ 'DejaVuSans' ],
@@ -32,3 +39,5 @@ WebFont.load({
 		startup();
 	}
 });
+
+})();
