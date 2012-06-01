@@ -422,7 +422,6 @@ CInput.prototype.mousehover = function(p, shift, ctrl) {
 	var fabric = this.getFabric(CAccent.NORMA);
 	var pp = p.sub(this.pnw);
 
-	// TODO use this.pnw as pan.
 	if (!this.bezi.within(fabric, Point.zero, pp))
 		{ return null; }
 
@@ -435,7 +434,6 @@ CInput.prototype.mousehover = function(p, shift, ctrl) {
 CInput.prototype.mousedown = function(p, shift, ctrl) {
 	var pp = p.sub(this.pnw);
 	var fabric = this.getFabric(CAccent.NORMA);
-	// TODO use this.pnw as pan.
 	if (!fabric.within(this.bezi, 'path', Point.zero, pp))  { return null; }
 
 	this.board.setFocus(this.name);

@@ -112,7 +112,7 @@ CChat.prototype.getCaretPos = function() {
 
 CChat.prototype.getFabric = function() {
 	var fabric = this.$fabric;
-	//if (fabric && !config.debug.noCache) { return fabric; } @@
+	if (fabric && !config.debug.noCache) { return fabric; }
 
 	fabric = this.$fabric = new Fabric(this.iframe);
 	var w = this.iframe.width;
@@ -144,7 +144,7 @@ CChat.prototype.getFabric = function() {
 		);
 	}
 
-	return fabric;
+	return this.$fabric = fabric;
 };
 
 /**
@@ -216,7 +216,7 @@ CChat.prototype.input = function(text) {
 		path : csign.path,
 		at1  : at1 + text.length
 	});
-	this.board.poke();
+	this.poke();
 };
 
 
@@ -233,6 +233,7 @@ CChat.prototype.keyBackspace = function() {
 		path : csign.path,
 		at1  : csign.at1 - 1
 	});
+	this.poke();
 	return true;
 };
 
@@ -376,8 +377,10 @@ CChat.prototype.mousehover = function(p, shift, ctrl) {
 
 	if (p.x < pnw.x || p.y < pnw.y || p.x > pse.x || p.y > pse.y)
 		{ return null; }
-	
-	if (p.y > pse.y - (this.lineHeight - 2))
+
+	var fabric = this.getFabric();
+	var pp = p.sub(this.pnw);
+	if (fabric.within(this, 'pathILine', Point.zero, pp))
 		{ return "text"; }
 	else
 		{ return "default"; }
@@ -407,6 +410,7 @@ CChat.prototype.pathILine = function(fabric, border, twist) {
 | Pokes the component
 */
 CChat.prototype.poke = function() {
+	this.$fabric = null;
 	this.board.poke();
 };
 
@@ -414,19 +418,17 @@ CChat.prototype.poke = function() {
 | User pressed a special key
 */
 CChat.prototype.specialKey = function(key) {
-	var poke = false;
 	switch(key) {
-	case 'backspace' : poke = this.keyBackspace(); break;
-	case 'del'       : poke = this.keyDel();       break;
-	case 'down'      : poke = this.keyDown();      break;
-	case 'end'       : poke = this.keyEnd();       break;
-	case 'enter'     : poke = this.keyEnter();     break;
-	case 'left'      : poke = this.keyLeft();      break;
-	case 'pos1'      : poke = this.keyPos1();      break;
-	case 'right'     : poke = this.keyRight();     break;
-	case 'up'        : poke = this.keyUp();        break;
+	case 'backspace' : this.keyBackspace(); break;
+	case 'del'       : this.keyDel();       break;
+	case 'down'      : this.keyDown();      break;
+	case 'end'       : this.keyEnd();       break;
+	case 'enter'     : this.keyEnter();     break;
+	case 'left'      : this.keyLeft();      break;
+	case 'pos1'      : this.keyPos1();      break;
+	case 'right'     : this.keyRight();     break;
+	case 'up'        : this.keyUp();        break;
 	}
-	if (poke) { this.board.poke(); }
 };
 
 })();
