@@ -124,7 +124,7 @@ VLabel.prototype.scrollPage = function(up) {
 |
 | fabric: to draw upon. // @@ remove this parameter.
 */
-VLabel.prototype.draw = function(fabric) {
+VLabel.prototype.draw = function(fabric, pan) {
 	var f    = this.$fabric;
 	var zone = this.getZone();
 
@@ -142,13 +142,13 @@ VLabel.prototype.draw = function(fabric) {
 		var silhoutte = this.getSilhoutte(zone, true);
 
 		// draws selection and text
-		vdoc.draw(f, zone.width, imargin, Point.zero);
+		vdoc.draw(f, Point.zero, zone.width, imargin, Point.zero);
 
 		// draws the border
-		f.edge(theme.label.style.edge, silhoutte, 'path');
+		f.edge(theme.label.style.edge, silhoutte, 'path', pan);
 	}
 
-	fabric.drawImage(f, zone.pnw);
+	fabric.drawImage(f, zone.pnw.add(pan));
 };
 
 /**

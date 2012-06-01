@@ -213,7 +213,7 @@ VNote.prototype.dragstop = function(p) {
 |
 | fabric: to draw upon.
 */
-VNote.prototype.draw = function(fabric) {
+VNote.prototype.draw = function(fabric, pan) {
 	var zone = this.getZone();
 	var f = this.$fabric;
 
@@ -242,20 +242,20 @@ VNote.prototype.draw = function(fabric) {
 		// resizes the canvas
 		f.attune(zone);
 		var silhoutte = this.getSilhoutte(zone, true);
-		f.fill(theme.note.style.fill, silhoutte, 'path');
+		f.fill(theme.note.style.fill, silhoutte, 'path', Point.zero);
 
 		// draws selection and text
 		sbary.point = Point.renew(0, sbary.getPos(), sbary.point);
-		vdoc.draw(f, zone.width, imargin, sbary.point);
+		vdoc.draw(f, Point.zero, zone.width, imargin, sbary.point);
 
 		// draws the scrollbar
-		if (sbary.visible) { sbary.draw(f); }
+		if (sbary.visible) { sbary.draw(f, Point.zero); }
 
 		// draws the border
-		f.edge(theme.note.style.edge, silhoutte, 'path');
+		f.edge(theme.note.style.edge, silhoutte, 'path', Point.zero);
 	}
 
-	fabric.drawImage(f, zone.pnw);
+	fabric.drawImage(f, zone.pnw.add(pan));
 };
 
 /**

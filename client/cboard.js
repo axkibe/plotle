@@ -160,8 +160,13 @@ CBoard.prototype.getFabric = function() {
 	fabric.edge(style.edge, this, 'path');
 
 	if (config.debug.drawBoxes) {
-		fabric.paint(Cockpit.styles.boxes,
-			new Rect(iframe.pnw, iframe.pse.sub(1, 1)), 'path');
+		fabric.paint(
+			Cockpit.styles.boxes,
+			new Rect(iframe.pnw,
+			iframe.pse.sub(1, 1)),
+			'path',
+			Point.zero
+		);
 	}
 
 	return fabric;
@@ -201,7 +206,7 @@ CBoard.prototype.mousehover = function(p, shift, ctrl) {
 	var pp = p.sub(pnw);
 
 	// @@ Optimize by reusing the latest path of this.$fabric
-	if (!fabric.within(this, 'path', pp)) {
+	if (!fabric.within(this, 'path', Point.zero, pp)) {
 		return this.setHover(null);
 	}
 
@@ -239,7 +244,7 @@ CBoard.prototype.mousedown = function(p, shift, ctrl) {
 	var pp = p.sub(pnw);
 
 	// @@ Optimize by reusing the latest path of this.$fabric
-	if (!fabric.within(this, 'path', pp))  {
+	if (!fabric.within(this, 'path', Point.zero, pp))  {
 		this.setHover(null);
 		return null;
 	}

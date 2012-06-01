@@ -79,8 +79,9 @@ VSpace = function(twig, path, access) {
 	this.path        = path;
 	this.access      = access;
 	this.key         = path.get(-1);
-	this.fabric      = new Fabric(system.fabric);
-	this.zoom        = 1; // @@
+	this.fabric      = system.fabric;
+	this.$zoom       = 1; // @@
+	this.$pan        = Point.zero;
 	var vv = this.vv = {};
 
 	for (var k in twig.copse) {
@@ -174,24 +175,25 @@ VSpace.prototype.createVItem = function(twig, k) {
 | Redraws the complete space.
 */
 VSpace.prototype.draw = function() {
+	// TODO this.$pan var
 	var twig  = this.twig;
 
 	for(var r = twig.length - 1; r >= 0; r--) {
-		this.vAtRank(r).draw(this.fabric);
+		this.vAtRank(r).draw(this.fabric, this.$pan);
 	}
 
 	var focus = this.focusedVItem();
-	if (focus) { focus.drawHandles(this.fabric); }
+	if (focus) { focus.drawHandles(this.fabric, this.$pan); }
 
 	var action = shell.action;
 	switch (action && action.type) {
 	case Action.RELBIND :
 		var av  = action.vitem;
 		var av2 = action.vitem2;
-		var target = av2 ? av2.getZone() : action.move.sub(this.fabric.pan);
+		var target = av2 ? av2.getZone() : action.move.sub(this.$pan);
 		var arrow = Line.connect(av.getZone(), 'normal', target, 'arrow');
-		if (av2) av2.highlight(this.fabric);
-		arrow.draw(this.fabric, theme.relation.style);
+		if (av2) av2.highlight(this.fabric, this.$pan);
+		arrow.draw(this.fabric, this.$pan, theme.relation.style);
 		break;
 	}
 };
@@ -245,7 +247,7 @@ VSpace.prototype.vAtRank = function(rank) {
 VSpace.prototype.mousewheel = function(p, dir, shift, ctrl) {
 	var twig = this.twig;
 
-	var pp = p.sub(this.fabric.pan);
+	var pp = p.sub(this.$pan);
 	for(var r = 0, rZ = twig.length; r < rZ; r++) {
 		var vitem = this.vAtRank(r);
 		if (vitem.mousewheel(pp, dir)) { return true; }
@@ -263,17 +265,17 @@ VSpace.prototype.mousewheel = function(p, dir, shift, ctrl) {
 VSpace.prototype.mousehover = function(p, shift, ctrl) {
 	if (p === null) { return null; }
 
-	var pp = p.sub(this.fabric.pan);
+	var pp = p.sub(this.$pan); // TODO remove
 	var action = shell.action;
 	var cursor = null;
 
 	var focus = this.focusedVItem();
 	if (focus) {
 		// @@ move into items
-		if (focus.withinItemMenu(pp)) {
+		if (focus.withinItemMenu(this.$pan, p)) {
 			cursor = 'default';
 		} else {
-			var com = focus.checkItemCompass(pp);
+			var com = focus.checkItemCompass(this.$pan, p);
 			if (com) { cursor = com + '-resize'; }
 		}
 	}
@@ -294,11 +296,11 @@ VSpace.prototype.mousehover = function(p, shift, ctrl) {
 | Starts an operation with the mouse button held down.
 */
 VSpace.prototype.dragstart = function(p, shift, ctrl) {
-	var pp = p.sub(this.fabric.pan);
+	var pp = p.sub(this.$pan);
 	var focus = this.focusedVItem();
 
 	// see if the itemmenu of the focus was targeted
-	if (this.access == 'rw' && focus && focus.withinItemMenu(pp)) {
+	if (this.access == 'rw' && focus && focus.withinItemMenu(this.$pan, pp)) {
 		shell.startAction(Action.RELBIND, focus, p);
 		shell.redraw = true;
 		return;
@@ -320,13 +322,13 @@ VSpace.prototype.dragstart = function(p, shift, ctrl) {
 */
 VSpace.prototype.click = function(p, shift, ctrl) {
 	var self = this;
-	var pan  = this.fabric.pan;
-	var pp   = p.sub(pan);
+	var pan  = this.$pan;
+	var pp   = p.sub(pan); // TODO
 	var action;
 
 	// clicked the tab of the focused item?
 	var focus = this.focusedVItem();
-	if (focus && focus.withinItemMenu(pp)) {
+	if (focus && focus.withinItemMenu(this.$pan, p)) {
 		var labels = {n : 'Remove'};
 		shell.setMenu(new OvalMenu(
 			system.fabric,
@@ -368,7 +370,7 @@ VSpace.prototype.click = function(p, shift, ctrl) {
 */
 VSpace.prototype.dragstop = function(p, shift, ctrl) {
 	var action = shell.action;
-	var pp = p.sub(this.fabric.pan);
+	var pp = p.sub(this.$pan);
 	if (!action) throw new Error('Dragstop without action?');
 
 	switch (action.type) {
@@ -391,12 +393,12 @@ VSpace.prototype.dragstop = function(p, shift, ctrl) {
 | Moving during an operation with the mouse button held down.
 */
 VSpace.prototype.dragmove = function(p, shift, ctrl) {
-	var pp = p.sub(this.fabric.pan);
+	var pp = p.sub(this.$pan);
 	var action = shell.action;
 
 	switch(action.type) {
 	case Action.PAN :
-		this.fabric.pan = p.sub(action.start);
+		this.$pan = p.sub(action.start);
 		shell.redraw = true;
 		return 'pointer';
 
@@ -427,13 +429,13 @@ VSpace.prototype.floatMenuSelect = function(entry, p) {
 	case 'n' : // note
 		var nw = theme.note.newWidth;
 		var nh = theme.note.newHeight;
-		pnw = p.sub(this.fabric.pan.x + half(nw) , this.fabric.pan.y + half(nh));
+		pnw = p.sub(this.$pan.x + half(nw) , this.$pan.y + half(nh));
 		key = shell.peer.newNote(this.path, new Rect(pnw, pnw.add(nw, nh)));
 		var vnote = this.vv[key];
 		this.setFocus(vnote);
 		break;
 	case 'ne' : // label
-		pnw = p.sub(this.fabric.pan);
+		pnw = p.sub(this.$pan);
 		pnw = pnw.sub(theme.label.createOffset);
 		key = shell.peer.newLabel(this.path, pnw, 'Label', 20);
 		var vlabel = this.vv[key];
@@ -458,7 +460,7 @@ VSpace.prototype.itemMenuSelect = function(entry, p, focus) {
 | Mouse button down event.
 */
 VSpace.prototype.mousedown = function(p, shift, ctrl) {
-	var pp = p.sub(this.fabric.pan);
+	var pp = p.sub(this.$pan);
 	var action = shell.action;
 	var pnw, md, key;
 
@@ -469,8 +471,8 @@ VSpace.prototype.mousedown = function(p, shift, ctrl) {
 
 	var focus = this.focusedVItem();
 	if (focus) {
-		if (focus.withinItemMenu(p)) return 'atween';
-		var com = focus.checkItemCompass(pp);
+		if (focus.withinItemMenu(this.$pan, p)) return 'atween';
+		var com = focus.checkItemCompass(this.$pan, p);
 		if (com) {
 			// resizing
 			action = shell.startAction(Action.ITEMRESIZE, focus, pp);

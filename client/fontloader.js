@@ -14,6 +14,7 @@
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  Loads the web fonts MeshCraft uses.
+ Starts the browser system when finished.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -29,22 +30,18 @@ var startup;
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
+
 window.onload = function(){
-WebFont.load({
-	custom: {
-		families: [ 'DejaVuSans', 'DejaVuSansBold' ],
-		urls: [ '/fonts/dejavu.css' ]
-	},
+	WebFont.load({
+		custom: {
+			families: [ 'DejaVuSans', 'DejaVuSansBold' ],
+			urls: [ '/fonts/dejavu.css' ]
+		},
 
-	active: function() {
-		console.log('active');
-		startup();
-	},
-
-	fontactive: function(ff, fd) {
-		console.log('fontactive ' + ff + ' ' + fd);
-	}
-});
-}
+		active: function() {
+			startup();
+		}
+	});
+};
 
 })();

@@ -122,9 +122,9 @@ CInput.prototype.path = function(fabric, border, twist) {
 /**
 | Draws the mask for password fields
 */
-CInput.prototype.maskPath = function(fabric, border, twist, length, size) {
-	var x  = pitch.x;
-	var y  = ro(pitch.y + size * 0.7);
+CInput.prototype.maskPath = function(fabric, border, twist, pan, length, size) {
+	var x  = pitch.x + pan.x;
+	var y  = ro(pitch.y + size * 0.7) + pan.y;
 	var h  = ro(size * 0.32);
 	var w  = this.maskWidth(size);
 	var w2 = w * 2;
@@ -161,15 +161,15 @@ CInput.prototype.getFabric = function(accent) {
 	var style  = Cockpit.styles[sname];
 	if (!isnon(style)) { throw new Error('Invalid style: ' + sname); }
 
-	fabric.fill(style.fill, this.bezi, 'path');
+	fabric.fill(style.fill, this.bezi, 'path', Point.zero);
 	var fs = this.twig.fontStyle;
 	fabric.setFontStyle(fs.style, fs.fill, fs.align, fs.base);
 	if(this.twig.password) {
-		fabric.fill('black', this, 'maskPath', this.value.length, fs.size);
+		fabric.fill('black', this, 'maskPath', Point.zero, this.value.length, fs.size);
 	} else {
 		fabric.fillText(this.value, pitch.x, fs.size + pitch.y);
 	}
-	fabric.edge(style.edge, this.bezi, 'path');
+	fabric.edge(style.edge, this.bezi, 'path', Point.zero);
 
 	return fabric;
 };
@@ -422,7 +422,8 @@ CInput.prototype.mousehover = function(p, shift, ctrl) {
 	var fabric = this.getFabric(CAccent.NORMA);
 	var pp = p.sub(this.pnw);
 
-	if (!this.bezi.within(fabric, pp))
+	// TODO use this.pnw as pan.
+	if (!this.bezi.within(fabric, Point.zero, pp))
 		{ return null; }
 
 	return 'text';
@@ -434,7 +435,8 @@ CInput.prototype.mousehover = function(p, shift, ctrl) {
 CInput.prototype.mousedown = function(p, shift, ctrl) {
 	var pp = p.sub(this.pnw);
 	var fabric = this.getFabric(CAccent.NORMA);
-	if (!fabric.within(this.bezi, 'path', pp))  { return null; }
+	// TODO use this.pnw as pan.
+	if (!fabric.within(this.bezi, 'path', Point.zero, pp))  { return null; }
 
 	this.board.setFocus(this.name);
 	return false;

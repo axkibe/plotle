@@ -102,17 +102,18 @@ VItem.prototype.getOvalSlice = function() {
 /**
 | Returns if point is within the item menu
 */
-VItem.prototype.withinItemMenu = function(p) {
-	return this.getOvalSlice().within(system.fabric, p);
+VItem.prototype.withinItemMenu = function(pan, p) {
+	return this.getOvalSlice().within(system.fabric, pan, p);
 };
 
 /**
 | Returns the compass direction of the handle if p is on a resizer handle.
 | @@ rename
 */
-VItem.prototype.checkItemCompass = function(p) {
+VItem.prototype.checkItemCompass = function(pan, p) {
 	var ha = this.handles;
 	var zone = this.getZone();
+	p = p.sub(pan); // TODO alter pny pex etc.
 
 	if (!ha) return null;
 	var d   =       theme.handle.size; // distance
@@ -144,7 +145,7 @@ VItem.prototype.checkItemCompass = function(p) {
 /**
 | Paths the resize handles.
 */
-VItem.prototype.pathResizeHandles = function(fabric, border, twist) {
+VItem.prototype.pathResizeHandles = function(fabric, border, twist, pan) {
 	if (border !== 0) throw new Error('borders unsupported for handles');
 	var ha = this.handles;
 	var zone = this.getZone();
@@ -155,10 +156,10 @@ VItem.prototype.pathResizeHandles = function(fabric, border, twist) {
 	var hs = theme.handle.size;
 	var hs2 = half(hs);
 
-	var x1 = pnw.x - ds;
-	var y1 = pnw.y - ds;
-	var x2 = pse.x + ds;
-	var y2 = pse.y + ds;
+	var x1 = pnw.x + pan.x - ds;
+	var y1 = pnw.y + pan.y - ds;
+	var x2 = pse.x + pan.x + ds;
+	var y2 = pse.y + pan.y + ds;
 	var xm = half(x1 + x2);
 	var ym = half(y1 + y2);
 
@@ -204,12 +205,12 @@ VItem.prototype.pathResizeHandles = function(fabric, border, twist) {
 /**
 | Draws the handles of an item (resize, itemmenu)
 */
-VItem.prototype.drawHandles = function(fabric) {
+VItem.prototype.drawHandles = function(fabric, pan) {
 	// draws the resize handles
-	fabric.edge(theme.handle.style.edge, this, 'pathResizeHandles');
+	fabric.edge(theme.handle.style.edge, this, 'pathResizeHandles', pan);
 
 	// draws item menu handler
-	fabric.paint(theme.ovalmenu.slice, this.getOvalSlice(), 'path');
+	fabric.paint(theme.ovalmenu.slice, this.getOvalSlice(), 'path', pan);
 };
 
 /**
@@ -358,9 +359,9 @@ VItem.prototype.click = function(p) {
 /**
 | Highlights the item.
 */
-VItem.prototype.highlight = function(fabric) {
+VItem.prototype.highlight = function(fabric, pan) {
 	var silhoutte = this.getSilhoutte(this.getZone(), false);
-	fabric.edge(theme.note.style.highlight, silhoutte, 'path');
+	fabric.edge(theme.note.style.highlight, silhoutte, 'path', pan);
 };
 
 

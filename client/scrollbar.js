@@ -86,9 +86,9 @@ Scrollbar = function() {
 /**
 | Makes the path for fabric.edge/fill/paint.
 | @@ change descr on all path()s
-| @@ make a tiny oval instead.
+| TODO make a tiny oval instead.
 */
-Scrollbar.prototype.path = function(fabric, border, twist) {
+Scrollbar.prototype.path = function(fabric, border, twist, pan) {
 	if (border !== 0)  throw new Error('Scrollbar.path does not support borders');
 	if (!this.visible) throw new Error('Pathing an invisible scrollbar');
 
@@ -99,26 +99,28 @@ Scrollbar.prototype.path = function(fabric, border, twist) {
 	var w075   = ro(w * 0.75);
 	var size   = ro(this.aperture * z.height / this.max);
 	var msize  = max(size, theme.scrollbar.minSize);
-	var sy     = z.pnw.y + ro(this._pos * ((z.height - msize + size) / this.max));
+	var sy     = z.pnw.y + pan.y + ro(this._pos * ((z.height - msize + size) / this.max));
+	var pwx    = z.pnw.x + pan.x;
+	var pex    = z.pse.x + pan.x;
 
 	fabric.beginPath(twist);
-	fabric.moveTo(z.pnw.x,        ro(sy + co30w2));
-	fabric.lineTo(z.pnw.x + w025, sy);
-	fabric.lineTo(z.pnw.x + w075, sy);
-	fabric.lineTo(z.pse.x,        ro(sy + co30w2));
+	fabric.moveTo(pwx,        ro(sy + co30w2));
+	fabric.lineTo(pwx + w025, sy);
+	fabric.lineTo(pwx + w075, sy);
+	fabric.lineTo(pex,        ro(sy + co30w2));
 
-	fabric.lineTo(z.pse.x,        ro(sy + msize - co30w2));
-	fabric.lineTo(z.pnw.x + w075, sy + msize);
-	fabric.lineTo(z.pnw.x + w025, sy + msize);
-	fabric.lineTo(z.pnw.x,        ro(sy + msize - co30w2));
+	fabric.lineTo(pex,        ro(sy + msize - co30w2));
+	fabric.lineTo(pwx + w075, sy + msize);
+	fabric.lineTo(pwx + w025, sy + msize);
+	fabric.lineTo(pwx,        ro(sy + msize - co30w2));
 	fabric.closePath();
 };
 
 /**
 | Draws the scrollbar.
 */
-Scrollbar.prototype.draw = function(fabric) {
-	fabric.paint(theme.scrollbar.style, this, 'path');
+Scrollbar.prototype.draw = function(fabric, pan) {
+	fabric.paint(theme.scrollbar.style, this, 'path', pan);
 };
 
 /**

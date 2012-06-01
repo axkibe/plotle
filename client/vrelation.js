@@ -100,7 +100,7 @@ VRelation.create = function(vspace, vitem1, vitem2) {
 /**
 | Draws the relation on the fabric.
 */
-VRelation.prototype.draw = function(fabric) {
+VRelation.prototype.draw = function(fabric, pan) {
 	var vspace = shell.vspace.vget(this.path, -1);
 	var vitem1 = vspace.vv[this.twig.item1key];
 	var vitem2 = vspace.vv[this.twig.item2key];
@@ -108,15 +108,15 @@ VRelation.prototype.draw = function(fabric) {
 
 	if (vitem1) {
 		var l1 = Line.connect(vitem1.getZone(), 'normal', zone, 'normal');
-		fabric.paint(theme.relation.style, l1, 'path');
+		fabric.paint(theme.relation.style, l1, 'path', pan);
 	}
 
 	if (vitem2) {
 		var l2 = Line.connect(zone,  'normal', vitem2.getZone(), 'arrow');
-		fabric.paint(theme.relation.style, l2, 'path');
+		fabric.paint(theme.relation.style, l2, 'path', pan);
 	}
 
-	VLabel.prototype.draw.call(this, fabric);
+	VLabel.prototype.draw.call(this, fabric, pan);
 };
 
 

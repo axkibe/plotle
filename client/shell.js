@@ -320,7 +320,7 @@ Shell.prototype._draw = function() {
 
 	if (this.vspace) { this.vspace.draw(); }
 	this.cockpit.draw();
-	if (this.menu) { this.menu.draw(); }
+	if (this.menu) { this.menu.draw(Point.zero); }
 
 	this.caret.display();
 
@@ -352,25 +352,22 @@ Shell.prototype.mousehover = function(p, shift, ctrl) {
 	var cursor = null;
 
 	// hover menu
-	if (this.menu) {
-		cursor = this.menu.mousehover(p, shift, ctrl);
-	}
+	if (this.menu)
+		{ cursor = this.menu.mousehover(Point.zero, p, shift, ctrl); }
 
 
 	// hover cockpit
-	if (cursor) {
-		this.cockpit.mousehover(null, shift, ctrl);
-	} else {
-		cursor = this.cockpit.mousehover(p, shift, ctrl);
-	}
+	if (cursor)
+		{ this.cockpit.mousehover(null, shift, ctrl); }
+	else
+		{ cursor = this.cockpit.mousehover(p, shift, ctrl); }
 
 	// hover vspace
 	if (this.vspace) {
-		if (cursor) {
-			this.vspace.mousehover(null, shift, ctrl);
-		} else {
-			cursor = this.vspace.mousehover(p, shift, ctrl);
-		}
+		if (cursor)
+			{ this.vspace.mousehover(null, shift, ctrl); }
+		else
+			{ cursor = this.vspace.mousehover(p, shift, ctrl); }
 	}
 
 	if (this.redraw) { this._draw(); }
@@ -399,17 +396,14 @@ Shell.prototype.mousedown = function(p, shift, ctrl) {
 
 	var mouseState = null;
 
-	if (this.menu) {
-		mouseState = this.menu.mousedown(p, shift, ctrl);
-	}
+	if (this.menu)
+		{ mouseState = this.menu.mousedown(Point.zero, p, shift, ctrl); }
 	
-	if (mouseState === null) {
-		mouseState = this.cockpit.mousedown(p, shift, ctrl);
-	}
+	if (mouseState === null)
+		{ mouseState = this.cockpit.mousedown(p, shift, ctrl); }
 
-	if (mouseState === null && this.vspace) {
-		mouseState = this.vspace.mousedown(p, shift, ctrl);
-	}
+	if (mouseState === null && this.vspace)
+		{ mouseState = this.vspace.mousedown(p, shift, ctrl); }
 
 	if (this.redraw) { this._draw(); }
 

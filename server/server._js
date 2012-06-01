@@ -397,7 +397,7 @@ Server.prototype.prepareFiles = function(_) {
 	log('start', 'Preparing files');
 
 	for(f in this.$files) {
-		if (f.filename = null)   { continue; }
+		if (f.filename === null) { continue; }
 		if (!f.cache && !f.pack) { continue; }
 		f.raw = fs.readFile(f.filename, _);
 	}
@@ -418,7 +418,7 @@ Server.prototype.prepareFiles = function(_) {
 	var devels = [ '<script src="/config.js" type="text/javascript"></script>' ];
 
 	for(var a = 0, aZ = this.$packList.length; a < aZ; a++) {
-		var f = this.$packList[a];
+		f = this.$packList[a];
 		devels.push('<script src="' + f.path + '" type="text/javascript"></script>');
 		pack.push(fs.readFile(f.file.filename, _));
 	}
@@ -469,7 +469,7 @@ Server.prototype.prepareFiles = function(_) {
 		'<script src="'+mepacksha1+'" type="text/javascript"></script>'
 	);
 	
-	this.$files['/meshcraft.html'] = 
+	this.$files['/meshcraft.html'] =
 	this.$files['/index.html'] =
 	this.$files['/'] = {
 		filename : null,
@@ -482,7 +482,7 @@ Server.prototype.prepareFiles = function(_) {
 	};
 
 	for(var path in this.$files) {
-		var f = this.$files[path];
+		f = this.$files[path];
 		if (!f.cache) continue;
 		f.gzip = zlib.gzip(f.raw, _);
 	}

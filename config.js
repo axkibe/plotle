@@ -37,7 +37,7 @@ config.ip = null;
 /**
 | The port to listen on.
 */
-config.port = 80;
+config.port = 8833;
 
 /**
 | Database settings (mongodb)
@@ -98,7 +98,7 @@ config.debug = {
 	/**
 	| If true does messages and JSON with whitespace/newlines
 	*/
-	puffed : true,
+	puffed : false,
 
 	/**
 	| If true ensures that objects that should not be immutable

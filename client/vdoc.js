@@ -119,15 +119,17 @@ VDoc.prototype.update = function(twig) {
 | width:   the width to draw the document with.
 | imargin: distance of text to edge
 | scrollp: scroll position
+|
+| TODO pan == scrollp double thing?
 */
-VDoc.prototype.draw = function(fabric, width, imargin, scrollp) {
+VDoc.prototype.draw = function(fabric, pan, width, imargin, scrollp) {
 	// @@ <pre>
 	var paraSep = this.getParaSep();
 	var select = shell.selection;
 
 	// draws the selection
 	if (select.active && this.path.subPathOf(select.sign1.path)) {
-		fabric.paint(theme.selection.style, this, 'pathSelection', width, imargin, scrollp);
+		fabric.paint(theme.selection.style, this, 'pathSelection', pan, width, imargin, scrollp);
 	}
 
 	var y = imargin.n;
@@ -139,8 +141,9 @@ VDoc.prototype.draw = function(fabric, width, imargin, scrollp) {
 		var vpara = this.vAtRank(r);
 		var flow = vpara.getFlow();
 
+		// TODO pan on points or not?
 		pnws[twig.ranks[r]] = new Point(imargin.w, ro(y));
-		fabric.drawImage(vpara.getFabric(), imargin.w, ro(y - scrollp.y));
+		fabric.drawImage(vpara.getFabric(), imargin.w + pan.x, ro(y - scrollp.y) + pan.y);
 		y += flow.height + paraSep;
 	}
 	this.pnws = pnws;   // north-west points of paras
@@ -238,7 +241,7 @@ VDoc.prototype.getVParaAtPoint = function(p) {
 | imargin : inner margin of the doc
 | scrollp : scroll position of the doc.
 */
-VDoc.prototype.pathSelection = function(fabric, border, twist, width, imargin, scrollp) {
+VDoc.prototype.pathSelection = function(fabric, border, twist, pan, width, imargin, scrollp) {
 	var select = shell.selection;
 	select.normalize();
 

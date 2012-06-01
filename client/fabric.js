@@ -101,7 +101,11 @@ Fabric = function(a1, a2) {
 		this._canvas.height = a2;
 	}
 	this._cx = this._canvas.getContext('2d');
-	this.pan = Point.zero;
+
+	Object.defineProperty(this, 'pan', {
+		get: function() { throw new Error('pan'); },
+		set: function() { throw new Error('pan'); }
+	});
 
 	// curren positiont (without twist)
 	this._posx = this._posy = null;
@@ -208,7 +212,7 @@ Fabric.prototype.attune = function(a1, a2) {
 | moveTo(x, y)
 */
 Fabric.prototype.moveTo = function(a1, a2) {
-	var pan = this.pan, tw = this._twist, x, y;
+	var tw = this._twist, x, y;
 	if (typeof(a1) === 'object') {
 		x = a1.x; y = a1.y;
 	} else {
@@ -217,7 +221,7 @@ Fabric.prototype.moveTo = function(a1, a2) {
 	ensureInteger(x, y);
 	this._posx = x;
 	this._posy = y;
-	this._cx.moveTo(x + pan.x + tw, y + pan.y + tw);
+	this._cx.moveTo(x + tw, y + tw);
 };
 
 /**
@@ -227,7 +231,7 @@ Fabric.prototype.moveTo = function(a1, a2) {
 | lineto(x, y)
 */
 Fabric.prototype.lineTo = function(a1, a2) {
-	var pan = this.pan, tw = this._twist, x, y;
+	var tw = this._twist, x, y;
 	if (typeof(a1) === 'object') {
 		x = a1.x; y = a1.y;
 	} else {
@@ -236,7 +240,7 @@ Fabric.prototype.lineTo = function(a1, a2) {
 	ensureInteger(x, y);
 	this._posx = x;
 	this._posy = y;
-	this._cx.lineTo(x + pan.x + tw, y + pan.y + tw);
+	this._cx.lineTo(x + tw, y + tw);
 };
 
 /**
@@ -248,10 +252,7 @@ Fabric.prototype.lineTo = function(a1, a2) {
 */
 Fabric.prototype.beziTo = function() {
 	var a   = 0, aZ = arguments.length;
-	var pan = this.pan;
 	var tw  = this._twist;
-	var px  = this.pan.x + tw;
-	var py  = this.pan.y + tw;
 
 	var cp1x, cp1y, cp2x, cp2y, x, y;
 
@@ -289,14 +290,14 @@ Fabric.prototype.beziTo = function() {
 		y = arguments[a++];
 	}
 
-	cp1x += this._posx + px;
-	cp1y += this._posy + py;
-	cp2x += x + px;
-	cp2y += y + py;
+	cp1x += this._posx + tw;
+	cp1y += this._posy + tw;
+	cp2x += x + tw;
+	cp2y += y + tw;
 	this._posx = x;
 	this._posy = y;
-	x += px;
-	y += py;
+	x += tw;
+	y += tw;
 
 	this._cx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y);
 };
@@ -308,37 +309,38 @@ Fabric.prototype.beziTo = function() {
 | arc(x, y, radius, startAngle, endAngle, anticlockwise)   -or-
 */
 Fabric.prototype.arc = function(a1, a2, a3, a4, a5, a6, a7) {
-	var pan = this.pan, tw = this._twist, x, y, r, sa, ea, ac;
+	var tw = this._twist, x, y, r, sa, ea, ac;
 	if (typeof(a1) === 'object') {
 		x = a1.x; y = a1.y; r = a2; sa = a3; ea = a4; ac = a5;
 	} else {
 		x = a1;   y = a2;   r = a3; sa = a4; ea = a5; ac = a6;
 	}
-	this._cx.arc(x + pan.x + tw, y + pan.y + tw, r, sa, ea, ac);
+	this._cx.arc(x + tw, y + tw, r, sa, ea, ac);
 };
 
 /**
 | rect(rect)     -or-
 | rect(pnw, pse) -or-
 | rect(nwx, nwy, w, h)
+|
+| TODO what is this?
 */
 Fabric.prototype.rect = function(a1, a2, a3, a4) {
-	var pan = this.pan;
 	var cx = this._cx;
 	/*
 	if (typeof(r) === 'object') {
 		if (r instanceof Rect)
 			return this._cx.rect(
-				a1.pnw.x + pan.x + 0.5, a1.pnw.y + pan.y + 0.5,
+				a1.pnw.x + 0.5, a1.pnw.y + 0.5,
 				a1.width, a1.height);
 		if (r instanceof Point)
 			return this._cx.rect(
-				a1.x + pan.x + 0.5, a1.y + pan.y + 0.5,
+				a1.x + 0.5, a1.y + 0.5,
 				a2.x - a1.x,        a2.y - a1.y);
 		throw new Error('fillRect not a rectangle');
 	}
 	*/
-	return this._cx.rect(a1 + pan.x + 0.5,  a2 + pan.y + 0.5, a3, a4);
+	return this._cx.rect(a1 + 0.5,  a2 + 0.5, a3, a4);
 };
 
 /**
@@ -347,10 +349,9 @@ Fabric.prototype.rect = function(a1, a2, a3, a4) {
 | fillRect(style, nwx, nwy, width, height)
 */
 Fabric.prototype.fillRect = function(style, a1, a2, a3, a4) {
-	var pan = this.pan;
 	var cx = this._cx;
 	cx.fillStyle = style;
-	/*
+	/* TODO?
 	if (typeof(p) === 'object') {
 		if (a1 instanceof Rect)
 			return this._cx.fillRect(a1.pnw.x, a1.pnw.y, a1.pse.x, a1.pse.y);
@@ -359,7 +360,7 @@ Fabric.prototype.fillRect = function(style, a1, a2, a3, a4) {
 		throw new Error('fillRect not a rectangle');
 	}
 	*/
-	return this._cx.fillRect(a1 + pan.x, a2 + pan.y, a3, a4);
+	return this._cx.fillRect(a1, a2, a3, a4);
 };
 
 /**
@@ -388,7 +389,6 @@ Fabric.prototype.closePath = function() {
 | drawImage(image, x, y)
 */
 Fabric.prototype.drawImage = function(image, a1, a2, a3) {
-	var pan = this.pan;
 	if (image instanceof Fabric) {
 		if (!(image.width > 0 && image.height > 0)) return;
 		image = image._canvas;
@@ -405,7 +405,7 @@ Fabric.prototype.drawImage = function(image, a1, a2, a3) {
 	}
 	ensureInteger(x, y);
 	if (is(c)) { this._cx.globalCompositeOperation = c; }
-	this._cx.drawImage(image, x + pan.x, y + pan.y);
+	this._cx.drawImage(image, x, y);
 	if (is(c)) { this._cx.globalCompositeOperation = 'source-over'; }
 };
 
@@ -415,7 +415,6 @@ Fabric.prototype.drawImage = function(image, a1, a2, a3) {
 | putImageData(imagedata, x, y)
 */
 Fabric.prototype.putImageData = function(imagedata, a1, a2) {
-	var pan = this.pan;
 	var x, y;
 	if (typeof(a1) === 'object') {
 		x = a1.x; y = a1.y;
@@ -423,7 +422,7 @@ Fabric.prototype.putImageData = function(imagedata, a1, a2) {
 		x = a1;   y = a2;
 	}
 	ensureInteger(x, y);
-	this._cx.putImageData(imagedata, x + pan.x, y + pan.y);
+	this._cx.putImageData(imagedata, x, y);
 };
 
 /**
@@ -432,7 +431,6 @@ Fabric.prototype.putImageData = function(imagedata, a1, a2) {
 | getImageData(x1, y1, x2, y2)
 */
 Fabric.prototype.getImageData = function(a1, a2, a3, a4) {
-	var pan = this.pan;
 	var x1, y1, x2, y2;
 	if (typeof(p) === 'object') {
 		if (a1 instanceof Rect) {
@@ -469,23 +467,23 @@ Fabric.prototype._colorStyle = function(style, shape) {
 		// @@ use gradientPNW
 		if (!shape.pnw || !shape.pse) throw new Error(style.gradient+' gradiend misses pnw/pse');
 		grad = this._cx.createLinearGradient(
-			shape.pnw.x + this.pan.x, shape.pnw.y + this.pan.y,
-			shape.pnw.x + shape.width / 10 + this.pan.x, shape.pse.y + this.pan.y);
+			shape.pnw.x, shape.pnw.y,
+			shape.pnw.x + shape.width / 10, shape.pse.y);
 		break;
 	case 'horizontal' :
 		// @@ use gradientPNW
 		if (!shape.pnw || !shape.pse) throw new Error(style.gradient+' gradient misses pnw/pse');
 		grad = this._cx.createLinearGradient(
-			0, this.pan.y + shape.pnw.y,
-			0, this.pan.y + shape.pse.y);
+			0, shape.pnw.y,
+			0, shape.pse.y);
 		break;
 	case 'radial' :
 		if (!shape.gradientPC || !shape.gradientR1)
 			throw new Error(style.gradient+' gradient misses gradient[PC|R0|R1]');
 		var ro = shape.gradientR0 || 0;
 		grad = this._cx.createRadialGradient(
-			shape.gradientPC.x + this.pan.x, shape.gradientPC.y + this.pan.y, ro,
-			shape.gradientPC.x + this.pan.x, shape.gradientPC.y + this.pan.y, shape.gradientR1);
+			shape.gradientPC.x, shape.gradientPC.y, ro,
+			shape.gradientPC.x, shape.gradientPC.y, shape.gradientR1);
 		break;
 	default :
 		throw new Error('unknown gradient');
@@ -503,9 +501,9 @@ Fabric.prototype._colorStyle = function(style, shape) {
 | style: the style formated in meshcraft style notation.
 | shape: an object which has path() defined
 */
-Fabric.prototype.fill = function(style, shape, path, a1, a2, a3, a4) {
+Fabric.prototype.fill = function(style, shape, path, pan, a1, a2, a3, a4) {
 	var cx = this._cx;
-	shape[path](this, 0, false, a1, a2, a3, a4);
+	shape[path](this, 0, false, pan, a1, a2, a3, a4);
 	cx.fillStyle = this._colorStyle(style, shape);
 	if (this._twist !== 0) throw new Error('wrong twist');
 	cx.fill();
@@ -517,9 +515,9 @@ Fabric.prototype.fill = function(style, shape, path, a1, a2, a3, a4) {
 | style: the style formated in meshcraft style notation.
 | shape: an object which has path() defined
 */
-Fabric.prototype._edge = function(style, shape, path, a1, a2, a3, a4) {
+Fabric.prototype._edge = function(style, shape, path, pan, a1, a2, a3, a4) {
 	var cx = this._cx;
-	shape[path](this, style.border, true, a1, a2, a3, a4);
+	shape[path](this, style.border, true, pan, a1, a2, a3, a4);
 	cx.strokeStyle = this._colorStyle(style.color, shape);
 	cx.lineWidth = style.width;
 	if (this._twist !== 0.5) throw new Error('wrong twist');
@@ -532,25 +530,25 @@ Fabric.prototype._edge = function(style, shape, path, a1, a2, a3, a4) {
 | style: the style formated in meshcraft style notation.
 | shape: an object which has path() defined
 */
-Fabric.prototype.edge = function(style, shape, path, a1, a2, a3, a4) {
+Fabric.prototype.edge = function(style, shape, path, pan, a1, a2, a3, a4) {
 	var cx = this._cx;
 	if (style instanceof Array) {
 		for(var i = 0; i < style.length; i++) {
-			this._edge(style[i], shape, path, a1, a2, a3, a4);
+			this._edge(style[i], shape, path, pan, a1, a2, a3, a4);
 		}
 	} else {
-		this._edge(style, shape, path, a1, a2, a3, a4);
+		this._edge(style, shape, path, pan, a1, a2, a3, a4);
 	}
 };
 
 /**
 | Fills an aera and draws its borders
 */
-Fabric.prototype.paint = function(style, shape, path, a1, a2, a3, a4) {
+Fabric.prototype.paint = function(style, shape, path, pan, a1, a2, a3, a4) {
 	var fillStyle = style.fill;
 	var edgeStyle = style.edge;
 	var cx = this._cx;
-	shape[path](this, 0, false, a1, a2, a3, a4);
+	shape[path](this, 0, false, pan, a1, a2, a3, a4);
 
 	if (isnon(style.fill)) {
 		cx.fillStyle = this._colorStyle(fillStyle, shape);
@@ -559,10 +557,10 @@ Fabric.prototype.paint = function(style, shape, path, a1, a2, a3, a4) {
 
 	if (edgeStyle instanceof Array) {
 		for(var i = 0; i < edgeStyle.length; i++) {
-			this._edge(edgeStyle[i], shape, path, a1, a2, a3, a4);
+			this._edge(edgeStyle[i], shape, path, pan, a1, a2, a3, a4);
 		}
 	} else {
-		this._edge(edgeStyle, shape, path, a1, a2, a3, a4);
+		this._edge(edgeStyle, shape, path, pan, a1, a2, a3, a4);
 	}
 };
 
@@ -570,11 +568,10 @@ Fabric.prototype.paint = function(style, shape, path, a1, a2, a3, a4) {
 | Draws some text.
 */
 Fabric.prototype.fillText = function(text, a1, a2) {
-	var pan = this.pan;
 	if (typeof(a1) === 'object') {
-		return this._cx.fillText(text, a1.x + pan.x, a1.y + pan.y);
+		return this._cx.fillText(text, a1.x, a1.y);
 	}
-	return this._cx.fillText(text, a1 + pan.x, a2 + pan.y);
+	return this._cx.fillText(text, a1, a2);
 };
 
 /**
@@ -623,9 +620,11 @@ Fabric.prototype.setFontStyle = function(font, fill, align, baseline) {
 | Point is either of type point -or-
 |    x / y
 */
-Fabric.prototype.within = function(shape, path, a1, a2, a3, a4, a5) {
+Fabric.prototype.within = function(shape, path, pan, a1, a2, a3, a4, a5) {
+	if (!(pan instanceof Point))
+		{ throw new Error('pan not a point!'); }
 	var px, py;
-	var pan = this.pan, tw = this._twist;
+	var tw = this._twist;
 	var pobj;
 	if (typeof(a1) === 'object') {
 		px   = a1.x;
@@ -637,13 +636,16 @@ Fabric.prototype.within = function(shape, path, a1, a2, a3, a4, a5) {
 		pobj = false;
 	}
 
-	px += pan.x + tw;
-	py += pan.y + tw;
+	if (typeof(px) !== 'number' || typeof(py) !== 'number')
+		{ throw new Error('px|py not a number ' + px + ' ' + py); }
+
+	px += tw;
+	py += tw;
 
 	if (pobj) {
-		shape[path](this, 0, true, a2, a3, a4);
+		shape[path](this, 0, true, pan, a2, a3, a4);
 	} else {
-		shape[path](this, 0, true, a3, a4, a5);
+		shape[path](this, 0, true, pan, a3, a4, a5);
 	}
 
 	return this._cx.isPointInPath(px, py);
@@ -716,12 +718,14 @@ subclass(Rect, Euclid.Rect);
 /**
 | Draws the rectangle.
 */
-Rect.prototype.path = function(fabric, border, twist) {
+Rect.prototype.path = function(fabric, border, twist, pan) {
+	var px = pan.x;
+	var py = pan.y;
 	fabric.beginPath(twist);
-	fabric.moveTo(this.pnw.x + border, this.pnw.y + border);
-	fabric.lineTo(this.pse.x - border, this.pnw.y + border);
-	fabric.lineTo(this.pse.x - border, this.pse.y - border);
-	fabric.lineTo(this.pnw.x + border, this.pse.y - border);
+	fabric.moveTo(this.pnw.x + px + border, this.pnw.y + px + border);
+	fabric.lineTo(this.pse.x + px - border, this.pnw.y + px + border);
+	fabric.lineTo(this.pse.x + px - border, this.pse.y + px - border);
+	fabric.lineTo(this.pnw.x + px + border, this.pse.y + px - border);
 	fabric.closePath();
 };
 
@@ -847,11 +851,13 @@ subclass(BeziRect, Rect);
 | border : additional distance.
 | twist  : parameter to beginPath, add +0.5 on everything for lines
 */
-BeziRect.prototype.path = function(fabric, border, twist) {
-	var nwx = this.pnw.x + border;
-	var nwy = this.pnw.y + border;
-	var sex = this.pse.x - border - 1;
-	var sey = this.pse.y - border - 1;
+BeziRect.prototype.path = function(fabric, border, twist, pan) {
+	var px = pan.x;
+	var py = pan.y;
+	var nwx = this.pnw.x + px + border;
+	var nwy = this.pnw.y + py + border;
+	var sex = this.pse.x + px - border - 1;
+	var sey = this.pse.y + py - border - 1;
 	var a = this.a;
 	var b = this.b;
 	var ma = magic * (a + border);
@@ -867,27 +873,13 @@ BeziRect.prototype.path = function(fabric, border, twist) {
 	fabric.beziTo( -ma,   0,   0,  mb, nwx    , sey - b);
 	fabric.lineTo(                     nwx    , nwy + b);
 	fabric.beziTo(   0, -mb, -ma,   0, nwx + a, nwy    );
-
-/*
-	var tbx = to.x + bx;
-	var tby = to.y + by;
-	fabric.beziTo(
-		ct.c1x + (tbx && tbx + lbx ? (tbx / (tbx + lbx)) : 0),
-		ct.c1y + (tby && tby + lby ? (tby / (tby + lby)) : 0),
-
-		ct.c2x + (tbx && tbx +  bx ? (tbx / (tbx + bx)) : 0),
-		ct.c2y + (tby && tby +  by ? (tby / (tby + by)) : 0),
-
-		tbx         , tby
-	);
-	*/
 };
 
 /**
 | Returns true if Point p is within the BeziRect.
 */
-BeziRect.prototype.within = function(fabric, p) {
-	return fabric.within(this, 'path', p);
+BeziRect.prototype.within = function(fabric, pan, p) {
+	return fabric.within(this, 'path', pan, p);
 };
 
 
@@ -927,11 +919,13 @@ subclass(RoundRect, Rect);
 | border : additional distance.
 | twist  : parameter to beginPath, add +0.5 on everything for lines
 */
-RoundRect.prototype.path = function(fabric, border, twist) {
-	var nwx = this.pnw.x + border;
-	var nwy = this.pnw.y + border;
-	var sex = this.pse.x - border - 1;
-	var sey = this.pse.y - border - 1;
+RoundRect.prototype.path = function(fabric, border, twist, pan) {
+	var px  = pan.x;
+	var py  = pan.y;
+	var nwx = this.pnw.x + px + border;
+	var nwy = this.pnw.y + py + border;
+	var sex = this.pse.x + px - border - 1;
+	var sey = this.pse.y + py - border - 1;
 	var cr  = this.crad  - border;
 	var pi = Math.PI;
 	var ph = pi / 2;
@@ -953,6 +947,7 @@ RoundRect.prototype.path = function(fabric, border, twist) {
                      `'
  A hexagon in a 2D plane.
  Hexagons are immutable objects.
+ TODO remove
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -963,39 +958,48 @@ RoundRect.prototype.path = function(fabric, border, twist) {
 | pc: center
 | r: radius
 */
+/*
 var Hexagon = function(pc, r) {
 	if (typeof(pc) !== 'object' || !(pc instanceof Point)) throw new Error('invalid pc');
 	fixate(this, 'pc', pc);
 	fixate(this, 'r', r);
 	Object.freeze(this);
 };
+*/
 
 
 /**
 | Creates a hexgon from json.
 */
+/*
 Hexagon.jnew = function(js) {
 	return new Hexagon(js.pc, js.r);
 };
+*/
 
 /**
 | Returns a json object for this hexagon.
 */
+/*
 Hexagon.prototype.toJSON = function() {
 	return this._json || (this._json = { pc: this.pc, r: this.r });
 };
+*/
 
 /**
 | Returns a hexagon moved by a point or x/y.
 */
+/*
 Hexagon.prototype.add = function(a1, a2) {
 	return new Hexagon(this.pc.add(a1, a2), this.r);
 };
+*/
 
 /**
 | Returns true if point is within this hexagon.
 */
-Hexagon.prototype.within = function(p) {
+/*
+Hexagon.prototype.within = function(p, pan) {
 	var rc = this.r * cos30;
 	var dy = this.p.y - p.y;
 	var dx = this.p.x - p.x;
@@ -1004,6 +1008,7 @@ Hexagon.prototype.within = function(p) {
            dx - this.r < -yhc6 &&
            dx + this.r >  yhc6;
 };
+*/
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,,--.          .  .---. .
@@ -1053,7 +1058,7 @@ var sliceBezier = function(x2, y2, x3, y3, x4, y4, f) {
 
 
 /**
-| Middle(center) point of Hexagon.
+| Middle(center) point an Oval.
 */
 lazyFixate(OvalSlice.prototype, 'pm', function() {
 	return this.psw.add(ro(-this.slice.x4), ro(this.b - this.slice.y4));
@@ -1083,34 +1088,35 @@ lazyFixate(OvalSlice.prototype, 'pse', function() {
 /**
 | Draws the hexagon.
 */
-OvalSlice.prototype.path = function(fabric, border, twist) {
+OvalSlice.prototype.path = function(fabric, border, twist, pan) {
 	var a   = this.a;
 	var b   = this.b;
 	var am  = magic * this.a;
 	var bm  = magic * this.b;
 	var bo  = border;
-	var psw = this.psw;
+	var pswx = ro(this.psw.x + pan.x); // TODO need ro?
+	var pswy = ro(this.psw.y + pan.y);
 
 	fabric.beginPath(twist);
 
 	var slice  = this.slice;
 
-	fabric.moveTo(ro(psw.x), ro(psw.y));
+	fabric.moveTo(pswx, pswy);
 	fabric.beziTo(
 		slice.x3, slice.y3,
 		slice.x2, slice.y2,
-		psw.x - slice.x4, psw.y - slice.y4);
+		pswx - slice.x4, pswy - slice.y4);
 	fabric.beziTo(
 		-slice.x2, slice.y2,
 		-slice.x3, slice.y3,
-		psw.x - 2 * slice.x4,  psw.y);
+		pswx - 2 * slice.x4, pswy);
 };
 
 /**
 | Returns true if point is within the slice.
 */
-OvalSlice.prototype.within = function(fabric, p) {
-	return fabric.within(this, 'path', p);
+OvalSlice.prototype.within = function(fabric, pan, p) {
+	return fabric.within(this, 'path', pan, p);
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1157,10 +1163,10 @@ var OvalFlower = function(pc, dimensions, segs) {
 /**
 | Makes the OvalFlower path.
 */
-OvalFlower.prototype.path = function(fabric, border, twist, segment) {
+OvalFlower.prototype.path = function(fabric, border, twist, pan, segment) {
 	var pc   = this.pc;
-	var pcx  = pc.x;
-	var pcy  = pc.y;
+	var pcx  = pc.x + pan.x;
+	var pcy  = pc.y + pan.y;
 	var segs = this.segs;
 	var a1   = this.a1;
 	var b1   = this.b1;
@@ -1259,16 +1265,16 @@ OvalFlower.prototype.path = function(fabric, border, twist, segment) {
 /**
 | Returns the segment the point is within.
 */
-OvalFlower.prototype.within = function(fabric, p) {
+OvalFlower.prototype.within = function(fabric, pan, p) {
 	// @@ quick null if out of box.
-	if (!fabric.within(this, 'path', p, 'outer')) { return null; }
-	if (isnon(this.segs.c ) && fabric.within(this, 'path', p, 'c' )) { return 'c';  }
-	if (isnon(this.segs.n ) && fabric.within(this, 'path', p, 'n' )) { return 'n';  }
-	if (isnon(this.segs.ne) && fabric.within(this, 'path', p, 'ne')) { return 'ne'; }
-	if (isnon(this.segs.se) && fabric.within(this, 'path', p, 'se')) { return 'se'; }
-	if (isnon(this.segs.e ) && fabric.within(this, 'path', p, 'e' )) { return 's';  }
-	if (isnon(this.segs.sw) && fabric.within(this, 'path', p, 'sw')) { return 'sw'; }
-	if (isnon(this.segs.nw) && fabric.within(this, 'path', p, 'nw')) { return 'nw'; }
+	if (!fabric.within(this, 'path', pan, p, 'outer')) { return null; }
+	if (isnon(this.segs.c ) && fabric.within(this, 'path', pan, p, 'c' )) { return 'c';  }
+	if (isnon(this.segs.n ) && fabric.within(this, 'path', pan, p, 'n' )) { return 'n';  }
+	if (isnon(this.segs.ne) && fabric.within(this, 'path', pan, p, 'ne')) { return 'ne'; }
+	if (isnon(this.segs.se) && fabric.within(this, 'path', pan, p, 'se')) { return 'se'; }
+	if (isnon(this.segs.e ) && fabric.within(this, 'path', pan, p, 'e' )) { return 's';  }
+	if (isnon(this.segs.sw) && fabric.within(this, 'path', pan, p, 'sw')) { return 'sw'; }
+	if (isnon(this.segs.nw) && fabric.within(this, 'path', pan, p, 'nw')) { return 'nw'; }
 	return 'gap';
 };
 
@@ -1313,9 +1319,9 @@ Line.connect = function(shape1, end1, shape2, end2) {
 
 	if (shape1 instanceof Rect && shape2 instanceof Point) {
 		var p2 = shape2;
-		z1 = shape1;
+		z1 = shape1; // REMOVE "z1"
 		var p1;
-		if (z1.within(p2)) {
+		if (z1.within(p2, Point.zero)) {
 			p1 = z1.pc;
 		} else {
 			p1 = new Point(
@@ -1385,15 +1391,18 @@ lazyFixate(Line.prototype, 'pc', function() {
 | border: pixel offset for fancy borders (unused)
 | twist:  0.5 if drawing lines
 */
-Line.prototype.path = function(fabric, border, twist) {
-	var p1 = this.p1;
-	var p2 = this.p2;
+Line.prototype.path = function(fabric, border, twist, pan) {
+	var p1x = this.p1.x + pan.x;
+	var p1y = this.p1.y + pan.y;
+	var p2x = this.p2.x + pan.x;
+	var p2y = this.p2.y + pan.y;
 
 	fabric.beginPath(twist);
 	// @@, multiple line end types
 	switch(this.p1end) {
 	case 'normal':
-		if (twist) fabric.moveTo(p1);
+		if (twist)
+			{ fabric.moveTo(p1x, p1y); }
 		break;
 	default :
 		throw new Error('unknown line end');
@@ -1401,26 +1410,27 @@ Line.prototype.path = function(fabric, border, twist) {
 
 	switch(this.p2end) {
 	case 'normal' :
-		if (twist) fabric.lineTo(p2);
+		if (twist)
+			{ fabric.lineTo(p2x, p2y);}
 		break;
 	case 'arrow' :
 		// arrow size
 		var as = 12;
 		// degree of arrow tail
-		var d = Math.atan2(p2.y - p1.y, p2.x - p1.x);
+		var d = Math.atan2(p2y - p1y, p2x - p1x);
 		// degree of arrow head
 		var ad = Math.PI/12;
 		// arrow span, the arrow is formed as hexagon piece
 		var ms = 2 / Math.sqrt(3) * as;
 		if (twist) {
-			fabric.lineTo(p2.x - ro(ms * cos(d)), p2.y - ro(ms * sin(d)));
+			fabric.lineTo(p2x - ro(ms * cos(d)), p2y - ro(ms * sin(d)));
 		} else {
-			fabric.moveTo(p2.x - ro(ms * cos(d)), p2.y - ro(ms * sin(d)));
+			fabric.moveTo(p2x - ro(ms * cos(d)), p2y - ro(ms * sin(d)));
 		}
-		fabric.lineTo(p2.x - ro(as * cos(d - ad)), p2.y - ro(as * sin(d - ad)));
-		fabric.lineTo(p2);
-		fabric.lineTo(p2.x - ro(as * cos(d + ad)), p2.y - ro(as * sin(d + ad)));
-		fabric.lineTo(p2.x - ro(ms * cos(d)), p2.y - ro(ms * sin(d)));
+		fabric.lineTo(p2x - ro(as * cos(d - ad)), p2y - ro(as * sin(d - ad)));
+		fabric.lineTo(p2x, p2y);
+		fabric.lineTo(p2x - ro(as * cos(d + ad)), p2y - ro(as * sin(d + ad)));
+		fabric.lineTo(p2x - ro(ms * cos(d)), p2y - ro(ms * sin(d)));
 		break;
 	default :
 		throw new Error('unknown line end');
@@ -1431,9 +1441,9 @@ Line.prototype.path = function(fabric, border, twist) {
 /**
 | Draws the line.
 */
-Line.prototype.draw = function(fabric, style) {
+Line.prototype.draw = function(fabric, pan, style) {
 	if (!style) throw new Error('Line.draw misses style');
-	fabric.paint(style, this, 'path');
+	fabric.paint(style, this, 'path', pan);
 };
 
 /**
@@ -1460,7 +1470,6 @@ Line.prototype.isNear = function(p, dis) {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 Fabric.BeziRect      = BeziRect;
-Fabric.Hexagon       = Hexagon;
 Fabric.Line          = Line;
 Fabric.Margin        = Margin;
 Fabric.Measure       = Measure;

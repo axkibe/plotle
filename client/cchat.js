@@ -118,7 +118,7 @@ CChat.prototype.getFabric = function() {
 	var w = this.iframe.width;
 	var h = this.iframe.height;
 
-	fabric.paint(Cockpit.styles.chat, this, 'pathILine');
+	fabric.paint(Cockpit.styles.chat, this, 'pathILine', Point.zero);
 	
 	var x = this.pitch.x;
 	var y = this.pitch.y;
@@ -139,7 +139,8 @@ CChat.prototype.getFabric = function() {
 		fabric.paint(
 			Cockpit.styles.boxes,
 			new Rect(this.iframe.pnw, this.iframe.pse.sub(1, 1)),
-			'path'
+			'path',
+			Point.zero
 		);
 	}
 
@@ -352,7 +353,8 @@ CChat.prototype.addMessage = function(msg) {
 CChat.prototype.mousedown = function(p, shift, ctrl) {
 	var pp = p.sub(this.pnw);
 	var fabric = this.getFabric();
-	if (!fabric.within(this, 'pathILine', pp))  { return null; }
+	if (!fabric.within(this, 'pathILine', Point.zero, pp))
+		{ return null; }
 
 	shell.setCaret('cockpit', {
 		path : new Path([this.board.name, this.name]),
