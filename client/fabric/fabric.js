@@ -665,7 +665,7 @@ Fabric.prototype.globalAlpha = function(a) {
   `'  ` `-' `-' `'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
  A rectangle in a 2D plane.
- Rectangles are immutable objects.
+ Extends the basic euclidian rect with some fabric features
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /**
 | Constructor.
@@ -673,10 +673,11 @@ Fabric.prototype.globalAlpha = function(a) {
 | pnw: point to north west.
 | pse: point to south east.
 */
-var Rect = function(pnw, pse, key) {
-	Euclid.Rect.call(this, pnw, pse, key);
+var eRect = Rect;
+Rect = function(pnw, pse, key) {
+	eRect.call(this, pnw, pse, key);
 };
-subclass(Rect, Euclid.Rect);
+subclass(Rect, eRect);
 
 /**
 | Draws the rectangle.
@@ -694,6 +695,7 @@ Rect.prototype.path = function(fabric, border, twist, pan) {
 
 /**
 | Returns a rectangle thats reduced on every side by a margin object
+| TODO move to euclid
 */
 Rect.prototype.reduce = function(margin) {
 	if (margin.constructor !== Margin) throw new Error('margin of wrong type');
@@ -706,6 +708,7 @@ Rect.prototype.reduce = function(margin) {
 
 /**
 | Point in the center.
+| TODO move to euclid
 */
 lazyFixate(Rect.prototype, 'pc', function() {
 	return new Point(half(this.pse.x + this.pnw.x), half(this.pse.y + this.pnw.y));

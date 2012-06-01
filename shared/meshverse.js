@@ -31,6 +31,7 @@
 var Euclid;
 var Fabric;
 var Point;
+var Rect;
 
 /**
 | Exports
@@ -43,15 +44,11 @@ var Meshverse;
 (function () {
 "use strict";
 
-var Rect;
 if (typeof (window) === 'undefined') {
 	// node imports
 	Euclid = require('./euclid/euclid');
 	Point  = require('./euclid/point');
-	Rect   = Euclid.Rect;
-} else {
-	// browser creates Fabric
-	Rect   = Fabric.Rect;
+	Rect   = require('./euclid/rect');
 }
 
 /**
