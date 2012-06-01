@@ -59,7 +59,6 @@ var isnon         = Jools.isnon;
 var limit         = Jools.limit;
 var log           = Jools.log;
 var max           = Math.max;
-var Measure       = Fabric.Measure;
 var min           = Math.min;
 var Point         = Fabric.Point;
 var ro            = Math.round;

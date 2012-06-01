@@ -313,7 +313,8 @@ Server.prototype.registerFiles = function() {
 	this.registerFile('shared/jools.js',             true,  false);
 	this.registerFile('shared/sha1.js',              true,  false);
 	this.registerFile('shared/euclid.js',            true,  false);
-	this.registerFile('client/fabric.js',            true,  false);
+	this.registerFile('client/fabric/fabric.js',     true,  false);
+	this.registerFile('client/fabric/measure.js',    true,  false);
 	this.registerFile('client/theme.js',             true,  false);
 	this.registerFile('shared/meshverse.js',         true,  false);
 	this.registerFile('shared/path.js',              true,  false);

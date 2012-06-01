@@ -63,7 +63,6 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Shortcuts.
 */
-var Measure       = Fabric.Measure;
 var Point         = Fabric.Point;
 var abs           = Math.abs;
 var debug         = Jools.debug;

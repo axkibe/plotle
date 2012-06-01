@@ -38,14 +38,13 @@ var Jools;
 | Exports
 */
 var Fabric  = null;
-var Measure = null;
 
 /**
 | Capsule
 */
 (function(){
 'use strict';
-if (typeof(window) === 'undefined') { throw new Error('fabric needs a browser'); }
+if (typeof(window) === 'undefined') { throw new Error('this code needs a browser'); }
 
 var debug        = Jools.debug;
 var immute       = Jools.immute;
@@ -657,32 +656,6 @@ Fabric.prototype.within = function(shape, path, pan, a1, a2, a3, a4, a5) {
 Fabric.prototype.globalAlpha = function(a) {
 	this._cx.globalAlpha = a;
 };
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ,-,-,-.
- `,| | |   ,-. ,-. ,-. . . ,-. ,-.
-   | ; | . |-' ,-| `-. | | |   |-'
-   '   `-' `-' `-^ `-' `-^ '   `-'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- 
- @@ seperate file.
-  
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-Measure = {
-	init : function() {
-		Measure._canvas = document.createElement('canvas');
-		Measure._cx = this._canvas.getContext('2d');
-	},
-
-	width : function(text) {
-		return Measure._cx.measureText(text).width;
-	}
-};
-
-Object.defineProperty(Measure, 'font', {
-	get: function() { return Measure._cx.font; },
-	set: function(font) { Measure._cx.font = font; }
-});
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .-,--.           .
@@ -1381,7 +1354,6 @@ Line.prototype.draw = function(fabric, view, style) {
 Fabric.BeziRect      = BeziRect;
 Fabric.Line          = Line;
 Fabric.Margin        = Margin;
-Fabric.Measure       = Measure;
 Fabric.OvalFlower    = OvalFlower;
 Fabric.OvalSlice     = OvalSlice;
 Fabric.Point         = Point;
