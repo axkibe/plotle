@@ -281,7 +281,8 @@ SwitchPanel.prototype.mousedown = function(p) {
 	var fabric = this.getFabric();
 	if (fabric.within(this, 'pathButton', Point.zero, p, 'n' )) { button = 'n';  } else
 	if (fabric.within(this, 'pathButton', Point.zero, p, 'ne')) { button = 'ne'; } else
-	if (!this.amVisitor && fabric.within(this, 'pathButton', p, 'nw')) { button = 'nw'; }
+	if (!this.amVisitor && fabric.within(this, 'pathButton', Point.zero, p, 'nw'))
+		{ button = 'nw'; }
 
 	if (button && button !== this.current) {
 		switch(button) {
