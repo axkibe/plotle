@@ -937,79 +937,6 @@ RoundRect.prototype.path = function(fabric, border, twist, pan) {
 	fabric.arc(nwx + cr, nwy + cr, cr,  pi, -ph, false);
 };
 
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ,-_/,.
- ' |_|/ ,-. . , ,-. ,-. ,-. ,-.
-  /| |  |-'  X  ,-| | | | | | |
-  `' `' `-' ' ` `-^ `-| `-' ' '
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-                     `'
- A hexagon in a 2D plane.
- Hexagons are immutable objects.
- TODO remove
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-/**
-| Constructor.
-|
-| Hexagon(p, r)
-| pc: center
-| r: radius
-*/
-/*
-var Hexagon = function(pc, r) {
-	if (typeof(pc) !== 'object' || !(pc instanceof Point)) throw new Error('invalid pc');
-	fixate(this, 'pc', pc);
-	fixate(this, 'r', r);
-	Object.freeze(this);
-};
-*/
-
-
-/**
-| Creates a hexgon from json.
-*/
-/*
-Hexagon.jnew = function(js) {
-	return new Hexagon(js.pc, js.r);
-};
-*/
-
-/**
-| Returns a json object for this hexagon.
-*/
-/*
-Hexagon.prototype.toJSON = function() {
-	return this._json || (this._json = { pc: this.pc, r: this.r });
-};
-*/
-
-/**
-| Returns a hexagon moved by a point or x/y.
-*/
-/*
-Hexagon.prototype.add = function(a1, a2) {
-	return new Hexagon(this.pc.add(a1, a2), this.r);
-};
-*/
-
-/**
-| Returns true if point is within this hexagon.
-*/
-/*
-Hexagon.prototype.within = function(p, pan) {
-	var rc = this.r * cos30;
-	var dy = this.p.y - p.y;
-	var dx = this.p.x - p.x;
-	var yhc6 = Math.abs(dy * cos30);
-	return dy >= -rc && dy <= rc &&
-           dx - this.r < -yhc6 &&
-           dx + this.r >  yhc6;
-};
-*/
-
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,,--.          .  .---. .
  |`, | .  , ,-. |  \___  |  . ,-. ,-.
@@ -1445,24 +1372,6 @@ Line.prototype.draw = function(fabric, view, style) {
 	if (!style) throw new Error('Line.draw misses style');
 	fabric.paint(style, this, 'path', view.pan);
 };
-
-/**
-| Returns true if p is near the line spawned by p1 and p2.
-*/
-/*
-Line.prototype.isNear = function(p, dis) {
-	var dx = p.x - p1.x;
-	var dy = p.y - p1.y;
-	if (Math.abs(dx) < 8 && Math.abs(dy) < 8) {
-		return true;
-	}
-	if (Math.abs(dx) < dis) {
-		return Math.abs(dx - (p2.x - p1.x) / (p2.y - p1.y) * dy) < dis;
-	} else {
-		return Math.abs(dy - (p2.y - p1.y) / (p2.x - p1.x) * dx) < dis;
-	}
-}
-*/
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  Module Export
