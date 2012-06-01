@@ -102,18 +102,18 @@ VItem.prototype.getOvalSlice = function() {
 /**
 | Returns if point is within the item menu
 */
-VItem.prototype.withinItemMenu = function(pan, p) {
-	return this.getOvalSlice().within(system.fabric, pan, p);
+VItem.prototype.withinItemMenu = function(view, p) {
+	return this.getOvalSlice().within(system.fabric, view.pan, p);
 };
 
 /**
 | Returns the compass direction of the handle if p is on a resizer handle.
 | @@ rename
 */
-VItem.prototype.checkItemCompass = function(pan, p) {
+VItem.prototype.checkItemCompass = function(view, p) {
 	var ha = this.handles;
 	var zone = this.getZone();
-	p = p.sub(pan); // TODO alter pny pex etc.
+	p = p.sub(view.pan); // TODO
 
 	if (!ha) return null;
 	var d   =       theme.handle.size; // distance
@@ -205,12 +205,12 @@ VItem.prototype.pathResizeHandles = function(fabric, border, twist, pan) {
 /**
 | Draws the handles of an item (resize, itemmenu)
 */
-VItem.prototype.drawHandles = function(fabric, pan) {
+VItem.prototype.drawHandles = function(fabric, view) {
 	// draws the resize handles
-	fabric.edge(theme.handle.style.edge, this, 'pathResizeHandles', pan);
+	fabric.edge(theme.handle.style.edge, this, 'pathResizeHandles', view.pan);
 
 	// draws item menu handler
-	fabric.paint(theme.ovalmenu.slice, this.getOvalSlice(), 'path', pan);
+	fabric.paint(theme.ovalmenu.slice, this.getOvalSlice(), 'path', view.pan);
 };
 
 /**
@@ -359,11 +359,10 @@ VItem.prototype.click = function(p) {
 /**
 | Highlights the item.
 */
-VItem.prototype.highlight = function(fabric, pan) {
+VItem.prototype.highlight = function(fabric, view) {
 	var silhoutte = this.getSilhoutte(this.getZone(), false);
-	fabric.edge(theme.note.style.highlight, silhoutte, 'path', pan);
+	fabric.edge(theme.note.style.highlight, silhoutte, 'path', view.pan);
 };
-
 
 
 /**

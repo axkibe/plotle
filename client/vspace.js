@@ -80,8 +80,14 @@ VSpace = function(twig, path, access) {
 	this.access      = access;
 	this.key         = path.get(-1);
 	this.fabric      = system.fabric;
-	this.$zoom       = 1; // @@
-	this.$pan        = Point.zero;
+
+	this.$view       = {
+		pan   : Point.zero,
+		zoom  : 0.5, 
+	};
+
+	Jools.keyNonGrata(this, '$pan');
+
 	var vv = this.vv = {};
 
 	for (var k in twig.copse) {
@@ -175,25 +181,25 @@ VSpace.prototype.createVItem = function(twig, k) {
 | Redraws the complete space.
 */
 VSpace.prototype.draw = function() {
-	// TODO this.$pan var
-	var twig  = this.twig;
+	var twig   = this.twig;
+	var $view  = this.$view;
 
 	for(var r = twig.length - 1; r >= 0; r--) {
-		this.vAtRank(r).draw(this.fabric, this.$pan);
+		this.vAtRank(r).draw(this.fabric, $view);
 	}
 
 	var focus = this.focusedVItem();
-	if (focus) { focus.drawHandles(this.fabric, this.$pan); }
+	if (focus) { focus.drawHandles(this.fabric, $view); }
 
 	var action = shell.action;
 	switch (action && action.type) {
 	case Action.RELBIND :
 		var av  = action.vitem;
 		var av2 = action.vitem2;
-		var target = av2 ? av2.getZone() : action.move.sub(this.$pan);
+		var target = av2 ? av2.getZone() : action.move.sub($view.pan);
 		var arrow = Line.connect(av.getZone(), 'normal', target, 'arrow');
-		if (av2) av2.highlight(this.fabric, this.$pan);
-		arrow.draw(this.fabric, this.$pan, theme.relation.style);
+		if (av2) av2.highlight(this.fabric, $view);
+		arrow.draw(this.fabric, $view, theme.relation.style);
 		break;
 	}
 };
@@ -247,13 +253,14 @@ VSpace.prototype.vAtRank = function(rank) {
 VSpace.prototype.mousewheel = function(p, dir, shift, ctrl) {
 	var twig = this.twig;
 
-	var pp = p.sub(this.$pan);
+	// TODO no pp
+	var pp = p.sub(this.$view.pan);
 	for(var r = 0, rZ = twig.length; r < rZ; r++) {
 		var vitem = this.vAtRank(r);
 		if (vitem.mousewheel(pp, dir)) { return true; }
 	}
 
-	// @@ zooming.
+	// TODO zooming
 	return true;
 };
 
@@ -265,17 +272,17 @@ VSpace.prototype.mousewheel = function(p, dir, shift, ctrl) {
 VSpace.prototype.mousehover = function(p, shift, ctrl) {
 	if (p === null) { return null; }
 
-	var pp = p.sub(this.$pan); // TODO remove
+	var pp = p.sub(this.$view.pan); // TODO remove
 	var action = shell.action;
 	var cursor = null;
 
 	var focus = this.focusedVItem();
 	if (focus) {
 		// @@ move into items
-		if (focus.withinItemMenu(this.$pan, p)) {
+		if (focus.withinItemMenu(this.$view, p)) {
 			cursor = 'default';
 		} else {
-			var com = focus.checkItemCompass(this.$pan, p);
+			var com = focus.checkItemCompass(this.$view, p);
 			if (com) { cursor = com + '-resize'; }
 		}
 	}
@@ -296,11 +303,12 @@ VSpace.prototype.mousehover = function(p, shift, ctrl) {
 | Starts an operation with the mouse button held down.
 */
 VSpace.prototype.dragstart = function(p, shift, ctrl) {
-	var pp = p.sub(this.$pan);
+	var $view = this.$view;
+	var pp = p.sub($view.pan); // TODO
 	var focus = this.focusedVItem();
 
 	// see if the itemmenu of the focus was targeted
-	if (this.access == 'rw' && focus && focus.withinItemMenu(this.$pan, pp)) {
+	if (this.access == 'rw' && focus && focus.withinItemMenu(this.$view, pp)) {
 		shell.startAction(Action.RELBIND, focus, p);
 		shell.redraw = true;
 		return;
@@ -321,18 +329,18 @@ VSpace.prototype.dragstart = function(p, shift, ctrl) {
 | A mouse click.
 */
 VSpace.prototype.click = function(p, shift, ctrl) {
-	var self = this;
-	var pan  = this.$pan;
-	var pp   = p.sub(pan); // TODO
+	var self  = this;
+	var $view = this.$view;
+	var pp    = p.sub($view.pan); // TODO
 	var action;
 
 	// clicked the tab of the focused item?
 	var focus = this.focusedVItem();
-	if (focus && focus.withinItemMenu(this.$pan, p)) {
+	if (focus && focus.withinItemMenu($view, p)) {
 		var labels = {n : 'Remove'};
 		shell.setMenu(new OvalMenu(
 			system.fabric,
-			focus.getOvalSlice().pm.add(pan),
+			focus.getOvalSlice().pm.add($view.pan),
 			theme.ovalmenu,
 			labels,
 			function(entry, p) {
@@ -370,8 +378,11 @@ VSpace.prototype.click = function(p, shift, ctrl) {
 */
 VSpace.prototype.dragstop = function(p, shift, ctrl) {
 	var action = shell.action;
-	var pp = p.sub(this.$pan);
-	if (!action) throw new Error('Dragstop without action?');
+	var $view  = this.$view;
+
+	var pp = p.sub($view.pan); // TODO
+	if (!action)
+		{ throw new Error('Dragstop without action?'); }
 
 	switch (action.type) {
 	case Action.ITEMDRAG :
@@ -381,7 +392,8 @@ VSpace.prototype.dragstop = function(p, shift, ctrl) {
 	case Action.RELBIND:
 		for(var r = 0, rZ = this.twig.length; r < rZ; r++) {
 			var vitem = this.vAtRank(r);
-			if (vitem.dragstop(pp)) break;
+			if (vitem.dragstop(pp))
+				{ break; }
 		}
 		break;
 	}
@@ -393,12 +405,14 @@ VSpace.prototype.dragstop = function(p, shift, ctrl) {
 | Moving during an operation with the mouse button held down.
 */
 VSpace.prototype.dragmove = function(p, shift, ctrl) {
-	var pp = p.sub(this.$pan);
+	var $view = this.$view;
+
+	var pp = p.sub($view.pan);  // TODO
 	var action = shell.action;
 
 	switch(action.type) {
 	case Action.PAN :
-		this.$pan = p.sub(action.start);
+		$view.pan = p.sub(action.start);
 		shell.redraw = true;
 		return 'pointer';
 
@@ -424,18 +438,19 @@ VSpace.prototype.dragmove = function(p, shift, ctrl) {
 */
 VSpace.prototype.floatMenuSelect = function(entry, p) {
 	var pnw, key;
+	var $view = this.$view;
 
 	switch(entry) {
 	case 'n' : // note
 		var nw = theme.note.newWidth;
 		var nh = theme.note.newHeight;
-		pnw = p.sub(this.$pan.x + half(nw) , this.$pan.y + half(nh));
+		pnw = p.sub($view.pan.x + half(nw) , $view.pan.y + half(nh));
 		key = shell.peer.newNote(this.path, new Rect(pnw, pnw.add(nw, nh)));
 		var vnote = this.vv[key];
 		this.setFocus(vnote);
 		break;
 	case 'ne' : // label
-		pnw = p.sub(this.$pan);
+		pnw = p.sub($view.pan);
 		pnw = pnw.sub(theme.label.createOffset);
 		key = shell.peer.newLabel(this.path, pnw, 'Label', 20);
 		var vlabel = this.vv[key];
@@ -460,7 +475,9 @@ VSpace.prototype.itemMenuSelect = function(entry, p, focus) {
 | Mouse button down event.
 */
 VSpace.prototype.mousedown = function(p, shift, ctrl) {
-	var pp = p.sub(this.$pan);
+	var $view = this.$view;
+
+	var pp = p.sub($view.pan); // TODO
 	var action = shell.action;
 	var pnw, md, key;
 
@@ -471,8 +488,8 @@ VSpace.prototype.mousedown = function(p, shift, ctrl) {
 
 	var focus = this.focusedVItem();
 	if (focus) {
-		if (focus.withinItemMenu(this.$pan, p)) return 'atween';
-		var com = focus.checkItemCompass(this.$pan, p);
+		if (focus.withinItemMenu($view, p)) return 'atween';
+		var com = focus.checkItemCompass($view, p);
 		if (com) {
 			// resizing
 			action = shell.startAction(Action.ITEMRESIZE, focus, pp);

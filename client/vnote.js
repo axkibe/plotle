@@ -213,7 +213,7 @@ VNote.prototype.dragstop = function(p) {
 |
 | fabric: to draw upon.
 */
-VNote.prototype.draw = function(fabric, pan) {
+VNote.prototype.draw = function(fabric, view) {
 	var zone = this.getZone();
 	var f = this.$fabric;
 
@@ -255,7 +255,7 @@ VNote.prototype.draw = function(fabric, pan) {
 		f.edge(theme.note.style.edge, silhoutte, 'path', Point.zero);
 	}
 
-	fabric.drawImage(f, zone.pnw.add(pan));
+	fabric.drawImage(f, zone.pnw.add(view.pan));
 };
 
 /**

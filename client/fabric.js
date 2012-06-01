@@ -1441,9 +1441,9 @@ Line.prototype.path = function(fabric, border, twist, pan) {
 /**
 | Draws the line.
 */
-Line.prototype.draw = function(fabric, pan, style) {
+Line.prototype.draw = function(fabric, view, style) {
 	if (!style) throw new Error('Line.draw misses style');
-	fabric.paint(style, this, 'path', pan);
+	fabric.paint(style, this, 'path', view.pan);
 };
 
 /**

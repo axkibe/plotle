@@ -627,7 +627,7 @@ VPara.prototype.getCaretPos = function() {
 */
 VPara.prototype.drawCaret = function() {
 	var caret = shell.caret;
-	var pan   = shell.vspace.$pan; // TODO pass down
+	var pan   = shell.vspace.$view.pan; // TODO pass down
 	var vitem = shell.vspace.vget(this.path, -2);
 	var vdoc  = vitem.vv.doc;
 	var zone  = vitem.getZone();

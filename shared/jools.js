@@ -461,6 +461,19 @@ var immute = function(obj) {
 };
 
 /**
+| Makes a key not to be accessed.
+| Used for developing during changes
+*/
+var keyNonGrata = function(obj, key) {
+	Object.defineProperty(obj, key, {
+		get : function()
+			{ throw new Error('accessed key non grata! ' + key); },
+		set : function(v)
+			{ throw new Error('accessed key non grata! ' + key); }
+	});
+};
+
+/**
 | Exports
 */
 Jools = {
@@ -479,6 +492,7 @@ Jools = {
 	isInteger    : isInteger,
 	isString     : isString,
 	immute       : immute,
+	keyNonGrata  : keyNonGrata,
 	lazyFixate   : lazyFixate,
 	limit        : limit,
 	log          : log,
