@@ -28,7 +28,6 @@
 /**
 | Imports
 */
-var Euclid;
 var Fabric;
 var Point;
 var Rect;
@@ -46,7 +45,6 @@ var Meshverse;
 
 if (typeof (window) === 'undefined') {
 	// node imports
-	Euclid = require('./euclid/euclid');
 	Point  = require('./euclid/point');
 	Rect   = require('./euclid/rect');
 }

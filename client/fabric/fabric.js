@@ -127,24 +127,6 @@ var magic = 0.551784;      // 'magic' number to approximate ellipses with bezier
 var half = function(v) { return ro(v / 2); };
 
 /**
-| Returns the compass direction opposite of a direction.
-*/
-var opposite = function(dir) {
-	switch (dir) {
-	case 'n'  : return 's';
-	case 'ne' : return 'sw';
-	case 'e'  : return 'w';
-	case 'se' : return 'nw';
-	case 's'  : return 'n';
-	case 'sw' : return 'ne';
-	case 'w'  : return 'e';
-	case 'nw' : return 'se';
-	case 'c'  : return 'c';
-	default   : throw new Error('unknown compass direction');
-	}
-};
-
-/**
 | Throws an error if any argument is not an integer.
 */
 var ensureInteger = function() {
@@ -1356,7 +1338,6 @@ Fabric.cos30         = cos30;
 Fabric.ensureInteger = ensureInteger;
 Fabric.half          = half;
 Fabric.magic         = magic;
-Fabric.opposite      = opposite;
 Fabric.tan30         = tan30;
 
 if (typeof(window) === 'undefined') {

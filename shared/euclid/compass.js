@@ -12,13 +12,13 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--'
 
-                                   .-,--.         .      .
-                                    `\__  . . ,-. |  . ,-|
-                                     /    | | |   |  | | |
-                                    '`--' `-^ `-' `' ' `-^
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
- Objects and operations on an euclidian plane.
+                                 ,--.
+                                 | `-' ,-. ,-,-. ,-. ,-. ,-. ,-.
+                                 |   . | | | | | | | ,-| `-. `-.
+                                 `--'  `-' ' ' ' |-' `-^ `-' `-'
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                                                 '               
+ Directions on a compass.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -33,7 +33,7 @@ var Jools;
 /**
 | Exports
 */
-var Euclid = null;
+var Compass = null;
 
 /**
 | Capsule
@@ -50,19 +50,13 @@ if (typeof(window) === 'undefined') {
 
 var debug        = Jools.debug;
 var immute       = Jools.immute;
-var innumerable  = Jools.innumerable;
-var is           = Jools.is;
-var isnon        = Jools.isnon;
-var log          = Jools.log;
-var reject       = Jools.reject;
-var subclass     = Jools.subclass;
-var min          = Math.min;
-var max          = Math.max;
+
+Compass = {};
 
 /**
 | Returns the compass direction opposite of a direction.
 */
-var opposite = function(dir) {
+Compass.opposite = function(dir) {
 	switch (dir) {
 	case 'n'  : return 's';
 	case 'ne' : return 'sw';
@@ -77,18 +71,10 @@ var opposite = function(dir) {
 	}
 };
 
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- Module Export
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-Euclid = {
-	opposite : opposite
-};
-
-if (typeof(window) === 'undefined') {
-	module.exports = Euclid;
-}
+/**
+| Node export
+*/
+if (typeof(window) === 'undefined')
+	{ module.exports = Compass; }
 
 })();
