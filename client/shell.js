@@ -35,9 +35,11 @@ var Caret;
 var Cockpit;
 var Fabric;
 var Jools;
+var Measure;
 var MeshMashine;
 var Path;
 var Peer;
+var Point;
 var Selection;
 var Sign;
 var Tree;
@@ -63,7 +65,6 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Shortcuts.
 */
-var Point         = Fabric.Point;
 var abs           = Math.abs;
 var debug         = Jools.debug;
 var half          = Fabric.half;

@@ -35,6 +35,7 @@ var VDoc      = null;
 var Fabric;
 var Jools;
 var Path;
+var Point;
 var VPara;
 var shell;
 var theme;
@@ -58,7 +59,6 @@ var limit     = Jools.limit;
 var log       = Jools.log;
 var max       = Math.max;
 var min       = Math.min;
-var Point     = Fabric.Point;
 var ro        = Math.round;
 var subclass  = Jools.subclass;
 

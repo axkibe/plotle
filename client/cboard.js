@@ -27,6 +27,7 @@
 
 /**
 | Imports
+| TODO this is really all needed?
 */
 var CAccent;
 var CChat;
@@ -40,6 +41,7 @@ var Design;
 var Fabric;
 var Jools;
 var Path;
+var Point;
 var Tree;
 var config;
 var theme;
@@ -64,7 +66,6 @@ var is            = Jools.is;
 var isnon         = Jools.isnon;
 var computePoint  = Curve.computePoint;
 var half          = Fabric.half;
-var Point         = Fabric.Point;
 var Rect          = Fabric.Rect;
 
 /**

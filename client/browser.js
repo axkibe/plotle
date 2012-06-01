@@ -32,6 +32,7 @@
 var Jools;
 var Fabric;
 var Peer;
+var Point;
 var Shell;
 var config;
 var settings;
@@ -50,7 +51,6 @@ var startup;
 if (typeof(window) === 'undefined') { throw new Error('browser.js needs a browser!'); }
 
 var abs       = Math.abs;
-var Point     = Fabric.Point;
 var debug     = Jools.debug;
 var log       = Jools.log;
 var subclass  = Jools.subclass;

@@ -32,6 +32,7 @@ var CBoard;
 var config;
 var Fabric;
 var Jools;
+var Point;
 var SwitchPanel;
 var theme;
 
@@ -53,7 +54,6 @@ var immute   = Jools.immute;
 var is       = Jools.is;
 var isnon    = Jools.isnon;
 var subclass = Jools.subclass;
-var Point    = Fabric.Point;
 
 /**
 | Constructor

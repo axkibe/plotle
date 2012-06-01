@@ -29,9 +29,10 @@
 | Imports
 */
 var Cockpit;
+var config;
 var Fabric;
 var Jools;
-var config;
+var Point;
 var theme;
 var system;
 var shell;
@@ -56,7 +57,6 @@ var isnon        = Jools.isnon;
 var half         = Fabric.half;
 var magic        = Fabric.magic;
 var ro           = Math.round;
-var Point        = Fabric.Point;
 var Rect         = Fabric.Rect;
 
 /**

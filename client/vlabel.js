@@ -33,13 +33,14 @@ var VLabel    = null;
 | Imports
 */
 var Action;
+var config;
 var Fabric;
 var Jools;
-var VItem;
-var config;
+var Point;
 var shell;
 var system;
 var theme;
+var VItem;
 
 /**
 | Capsule
@@ -61,7 +62,6 @@ var log      = Jools.log;
 var max      = Math.max;
 var Margin   = Fabric.Margin;
 var min      = Math.min;
-var Point    = Fabric.Point;
 var Rect     = Fabric.Rect;
 var ro       = Math.round;
 var subclass = Jools.subclass;

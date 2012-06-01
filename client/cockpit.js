@@ -36,6 +36,7 @@ var HelpBoard;
 var Jools;
 var MainBoard;
 var Path;
+var Point;
 var theme;
 var Tree;
 var shell;
@@ -60,7 +61,6 @@ var is            = Jools.is;
 var isnon         = Jools.isnon;
 var log           = Jools.log;
 var subclass      = Jools.subclass;
-var Point         = Fabric.Point;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ,--.         .         .

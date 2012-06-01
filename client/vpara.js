@@ -35,8 +35,10 @@ var VPara     = null;
 var Caret;
 var Fabric;
 var Jools;
+var Measure;
 var Sign;
 var Path;
+var Point;
 var config;
 var shell;
 var system;
@@ -60,7 +62,6 @@ var limit         = Jools.limit;
 var log           = Jools.log;
 var max           = Math.max;
 var min           = Math.min;
-var Point         = Fabric.Point;
 var ro            = Math.round;
 
 

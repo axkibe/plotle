@@ -37,6 +37,7 @@ var Fabric;
 var Jools;
 var Measure;
 var Path;
+var Point;
 var shell;
 var theme;
 
@@ -59,7 +60,6 @@ var is            = Jools.is;
 var isnon         = Jools.isnon;
 var log           = Jools.log;
 var max           = Math.max;
-var Point         = Fabric.Point;
 var Rect          = Fabric.Rect;
 var ro            = Math.round;
 

@@ -36,6 +36,7 @@ var Curve;
 var Fabric;
 var Jools;
 var Measure;
+var Point;
 var shell;
 var theme;
 
@@ -55,7 +56,6 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 | Shortcuts
 */
 var BeziRect      = Fabric.BeziRect;
-var Point         = Fabric.Point;
 var ro            = Math.round;
 var Rect          = Fabric.Rect;
 var computePoint  = Curve.computePoint;

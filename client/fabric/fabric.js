@@ -33,6 +33,7 @@
 */
 var Euclid;
 var Jools;
+var Point;
 
 /**
 | Exports
@@ -656,17 +657,6 @@ Fabric.prototype.within = function(shape, path, pan, a1, a2, a3, a4, a5) {
 Fabric.prototype.globalAlpha = function(a) {
 	this._cx.globalAlpha = a;
 };
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-.-,--.           .
- '|__/ ,-. . ,-. |-
- ,|    | | | | | |
- `'    `-' ' ' ' `'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- A Point in a 2D plane.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-var Point = Euclid.Point;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .-,--.         .
@@ -1356,7 +1346,6 @@ Fabric.Line          = Line;
 Fabric.Margin        = Margin;
 Fabric.OvalFlower    = OvalFlower;
 Fabric.OvalSlice     = OvalSlice;
-Fabric.Point         = Point;
 Fabric.Rect          = Rect;
 Fabric.RoundRect     = RoundRect;
 

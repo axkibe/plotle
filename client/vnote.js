@@ -33,16 +33,17 @@ var VNote     = null;
 | Imports
 */
 var Action;
+var config;
 var Fabric;
 var Jools;
+var Point;
 var Scrollbar;
-var VItem;
-var VPara;
-var config;
 var settings;
 var shell;
 var system;
 var theme;
+var VItem;
+var VPara;
 
 /**
 | Capsule
@@ -55,7 +56,6 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 | Shortcuts.
 */
 var Margin        = Fabric.Margin;
-var Point         = Fabric.Point;
 var Rect          = Fabric.Rect;
 var RoundRect     = Fabric.RoundRect;
 var debug         = Jools.debug;

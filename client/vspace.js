@@ -33,11 +33,10 @@ var Fabric;
 var Jools;
 var OvalMenu;
 var Path;
-
+var Point;
 var shell;
 var system;
 var theme;
-
 var VNote;
 var VLabel;
 var VRelation;
@@ -68,7 +67,6 @@ var isnon     = Jools.isnon;
 var log       = Jools.log;
 var half      = Fabric.half;
 var Line      = Fabric.Line;
-var Point     = Fabric.Point;
 var Rect      = Fabric.Rect;
 
 /**
@@ -83,7 +81,7 @@ VSpace = function(twig, path, access) {
 
 	this.$view       = {
 		pan   : Point.zero,
-		zoom  : 0.5, 
+		zoom  : 0.5
 	};
 
 	Jools.keyNonGrata(this, '$pan');
@@ -271,18 +269,19 @@ VSpace.prototype.mousewheel = function(p, dir, shift, ctrl) {
 */
 VSpace.prototype.mousehover = function(p, shift, ctrl) {
 	if (p === null) { return null; }
+	var $view = this.$view;
 
-	var pp = p.sub(this.$view.pan); // TODO remove
+	var pp = p.sub($view.pan); // TODO remove
 	var action = shell.action;
 	var cursor = null;
 
 	var focus = this.focusedVItem();
 	if (focus) {
 		// @@ move into items
-		if (focus.withinItemMenu(this.$view, p)) {
+		if (focus.withinItemMenu($view, p)) {
 			cursor = 'default';
 		} else {
-			var com = focus.checkItemCompass(this.$view, p);
+			var com = focus.checkItemCompass($view, p);
 			if (com) { cursor = com + '-resize'; }
 		}
 	}
@@ -308,7 +307,7 @@ VSpace.prototype.dragstart = function(p, shift, ctrl) {
 	var focus = this.focusedVItem();
 
 	// see if the itemmenu of the focus was targeted
-	if (this.access == 'rw' && focus && focus.withinItemMenu(this.$view, pp)) {
+	if (this.access == 'rw' && focus && focus.withinItemMenu($view, p)) {
 		shell.startAction(Action.RELBIND, focus, p);
 		shell.redraw = true;
 		return;

@@ -30,6 +30,7 @@
 */
 var Jools;
 var Fabric;
+var Point;
 
 /**
 | Exports
@@ -50,7 +51,6 @@ var isnon         = Jools.isnon;
 var log           = Jools.log;
 
 var half          = Fabric.half;
-var Point         = Fabric.Point;
 
 /**
 | Constructor.

@@ -51,7 +51,6 @@ var isnon         = Jools.isnon;
 var log           = Jools.log;
 
 var computePoint  = Curve.computePoint;
-var Point         = Fabric.Point;
 
 /**
 | Constructor.
