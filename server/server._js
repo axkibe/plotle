@@ -316,6 +316,7 @@ Server.prototype.registerFiles = function() {
 	this.registerFile('shared/euclid/point.js',      true,  false);
 	this.registerFile('client/fabric/fabric.js',     true,  false);
 	this.registerFile('client/fabric/measure.js',    true,  false);
+	this.registerFile('client/fabric/rect.js',       true,  false);
 	this.registerFile('client/theme.js',             true,  false);
 	this.registerFile('shared/meshverse.js',         true,  false);
 	this.registerFile('shared/path.js',              true,  false);

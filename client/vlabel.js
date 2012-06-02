@@ -37,6 +37,7 @@ var config;
 var Fabric;
 var Jools;
 var Point;
+var Rect;
 var shell;
 var system;
 var theme;
@@ -52,17 +53,13 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Shortcuts.
 */
-var abs      = Math.abs;
 var debug    = Jools.debug;
 var immute   = Jools.immute;
 var is       = Jools.is;
-var isnon    = Jools.isnon;
 var limit    = Jools.limit;
 var log      = Jools.log;
 var max      = Math.max;
 var Margin   = Fabric.Margin;
-var min      = Math.min;
-var Rect     = Fabric.Rect;
 var ro       = Math.round;
 var subclass = Jools.subclass;
 

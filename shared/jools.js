@@ -473,6 +473,9 @@ var keyNonGrata = function(obj, key) {
 	});
 };
 
+// divides by 2 and rounds up
+var half = function(v) { return Math.round(v / 2); };
+
 /**
 | Exports
 */
@@ -484,6 +487,7 @@ Jools = {
 	debug        : debug,
 	devel        : devel,
 	fixate       : fixate,
+	half         : half,
 	inspect      : inspect,
 	innumerable  : innumerable,
 	is           : is,

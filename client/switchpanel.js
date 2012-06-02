@@ -33,9 +33,10 @@ var config;
 var Fabric;
 var Jools;
 var Point;
-var theme;
-var system;
+var Rect;
 var shell;
+var system;
+var theme;
 
 /**
 | Exports
@@ -49,15 +50,12 @@ var SwitchPanel = null;
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
-var cos30        = Fabric.cos30;
 var debug        = Jools.debug;
 var immute       = Jools.immute;
 var is           = Jools.is;
 var isnon        = Jools.isnon;
 var half         = Fabric.half;
 var magic        = Fabric.magic;
-var ro           = Math.round;
-var Rect         = Fabric.Rect;
 
 /**
 | Constructor

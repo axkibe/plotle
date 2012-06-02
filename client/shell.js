@@ -100,18 +100,23 @@ Shell = function(fabric) {
 	shell = this;
 
 	Measure.init();
-	this.fabric    = fabric;
 
-	this.vspace    = null;
+	Measure.font = '20px ' + theme.defaultFont;
+	this.$initWidth = Measure.width('meshcraft$8833');
+	debug(this.$initWidth);
 
-	this.cockpit   = new Cockpit();
-	this.menu      = null;
+	this.fabric     = fabric;
 
-	this.caret     = new Caret(null, null, null, false);
-	this.action    = null;
-	this.selection = new Selection();
+	this.vspace     = null;
 
-	this.green     = false;
+	this.cockpit    = new Cockpit();
+	this.menu       = null;
+
+	this.caret      = new Caret(null, null, null, false);
+	this.action     = null;
+	this.selection  = new Selection();
+
+	this.green      = false;
 
 	// a flag set to true if anything requests a redraw.
 	this.redraw = false;
@@ -236,6 +241,14 @@ Shell.prototype.systemBlur = function() {
 */
 Shell.prototype.blink = function() {
 	if (this.green) { return; }
+
+	Measure.font = '20px ' + theme.defaultFont;
+	var w = Measure.width('meshcraft$8833');
+	if (w !== this.$initWidth) {
+		console.log('fontchange detected')
+		// XXX
+	}
+
 	this.caret.blink();
 };
 

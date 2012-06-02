@@ -42,6 +42,7 @@ var Fabric;
 var Jools;
 var Path;
 var Point;
+var Rect;
 var Tree;
 var config;
 var theme;
@@ -66,7 +67,6 @@ var is            = Jools.is;
 var isnon         = Jools.isnon;
 var computePoint  = Curve.computePoint;
 var half          = Fabric.half;
-var Rect          = Fabric.Rect;
 
 /**
 | Constructor

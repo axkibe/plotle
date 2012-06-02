@@ -30,11 +30,12 @@
 */
 var CAccent;
 var Cockpit;
+var config;
 var Curve;
 var Fabric;
 var Jools;
 var Point;
-var config;
+var Rect;
 var shell;
 var system;
 
@@ -53,7 +54,6 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Shortcuts
 */
-var Rect          = Fabric.Rect;
 var computePoint  = Curve.computePoint;
 var debug         = Jools.debug;
 var immute        = Jools.immute;
