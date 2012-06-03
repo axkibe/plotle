@@ -102,8 +102,8 @@ Shell = function(fabric) {
 	Measure.init();
 
 	Measure.font = '20px ' + theme.defaultFont;
-	this.$initWidth = Measure.width('meshcraft$8833');
-	debug(this.$initWidth);
+	this.$fontWatch = Measure.width('meshcraft$8833');
+	debug(this.$fontWatch);
 
 	this.fabric     = fabric;
 
@@ -244,9 +244,10 @@ Shell.prototype.blink = function() {
 
 	Measure.font = '20px ' + theme.defaultFont;
 	var w = Measure.width('meshcraft$8833');
-	if (w !== this.$initWidth) {
+	if (w !== this.$fontWatch) {
 		console.log('fontchange detected')
-		// XXX
+		this.$fontWatch = w;
+		this.knock();
 	}
 
 	this.caret.blink();
@@ -279,6 +280,22 @@ Shell.prototype.poke = function() {
 
 	if (this.redraw) { this._draw(); }
 };
+
+/**
+| Force-clears all caches.
+*/
+Shell.prototype.knock = function() {
+	if (this.green) return;
+	this.caret.$save = null;
+	this.caret.$screenPos = null;
+
+	if (this.vspace) { this.vspace.knock(); }
+	this.cockpit.knock();
+	if (this.menu) { this.menu.knock(); }
+
+	this._draw();
+}
+
 
 /**
 | Paths the greenscreen frowny.

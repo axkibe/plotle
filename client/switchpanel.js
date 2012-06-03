@@ -254,6 +254,13 @@ SwitchPanel.prototype.poke = function() {
 };
 
 /**
+| Force clears all caches
+*/
+SwitchPanel.prototype.knock = function() {
+	this.$fabric = null;
+};
+
+/**
 | Returns true if p is within the panel
 */
 SwitchPanel.prototype.within = function(p) {

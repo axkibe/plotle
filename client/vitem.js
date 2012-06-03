@@ -364,13 +364,20 @@ VItem.prototype.highlight = function(fabric, view) {
 	fabric.edge(theme.note.style.highlight, silhoutte, 'path', view.pan);
 };
 
-
 /**
 | Called by subvisuals when they got changed.
 */
 VItem.prototype.poke = function() {
 	this.$fabric = null;
 	shell.redraw = true;
+};
+
+/**
+| Force-clears all caches.
+*/
+VItem.prototype.knock = function() {
+	this.$fabric = null;
+	this.vv.doc.knock();
 };
 
 })();

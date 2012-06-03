@@ -206,4 +206,12 @@ CCustom.prototype.poke = function() {
 	this.board.poke();
 };
 
+/**
+| Force clears all caches.
+*/
+CCustom.prototype.knock = function() {
+	this.$fabric = null;
+};
+
+
 })();

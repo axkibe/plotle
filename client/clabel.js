@@ -81,12 +81,22 @@ CLabel.prototype.draw = function(fabric) {
 	fabric.fillText(this.text || this.twig.text, this.pos);
 };
 
+/**
+| Clears cache.
+*/
 CLabel.prototype.poke = function() {
 	this.board.poke();
 };
 
 /**
-| Mouse hover
+| Force clears all caches.
+*/
+CLabel.prototype.knock = function() {
+	// pass
+};
+
+/**
+| Mouse hover.
 */
 CLabel.prototype.mousehover = function(p, shift, ctrl) {
 	return null;

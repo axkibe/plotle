@@ -90,6 +90,14 @@ VPara.prototype.update = function(twig) {
 };
 
 /**
+| Force clears all caches.
+*/
+VPara.prototype.knock = function() {
+	this.$fabric = null;
+	this.$flow   = null;
+};
+
+/**
 | (re)flows the paragraph, positioning all chunks.
 */
 VPara.prototype.getFlow = function() {

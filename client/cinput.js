@@ -410,6 +410,14 @@ CInput.prototype.poke = function() {
 };
 
 /**
+| Force clears all caches.
+*/
+CInput.prototype.knock = function() {
+	this.$fabric = null;
+};
+
+
+/**
 | Mouse hover
 */
 CInput.prototype.mousehover = function(p, shift, ctrl) {

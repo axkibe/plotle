@@ -208,6 +208,16 @@ Cockpit.prototype.draw = function() {
 };
 
 /**
+| Force clears all caches.
+*/
+Cockpit.prototype.knock = function() {
+	for (var b in this.boards) {
+		var bo = this.boards[b];
+		if (bo) { bo.knock(); }
+	}
+};
+
+/**
 | Draws the caret.
 */
 Cockpit.prototype.drawCaret = function() {

@@ -415,6 +415,13 @@ CChat.prototype.poke = function() {
 };
 
 /**
+| Force clears all caches.
+*/
+CChat.prototype.knock = function() {
+	this.$fabric = null;
+};
+
+/**
 | User pressed a special key
 */
 CChat.prototype.specialKey = function(key) {

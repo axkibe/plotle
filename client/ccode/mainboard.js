@@ -151,6 +151,14 @@ MainBoard.prototype.mousedown = function(p, shift, ctrl) {
 };
 
 /**
+| Force clears all caches.
+*/
+MainBoard.prototype.knock = function() {
+	this.getSwitchPanel().knock();
+	CBoard.prototype.poke.call(this);
+};
+
+/**
 | Returns true if point is on this board
 */
 MainBoard.prototype.mousehover = function(p, shift, ctrl) {

@@ -149,6 +149,15 @@ VDoc.prototype.draw = function(fabric, pan, width, imargin, scrollp) {
 	this.pnws = pnws;   // north-west points of paras
 };
 
+/**
+| Force-clears all caches.
+*/
+VDoc.prototype.knock = function() {
+	for (var r = 0, rZ = this.twig.length; r < rZ; r++) {
+		this.vAtRank(r).knock();
+	}
+};
+
 VDoc.prototype.getPNW = function(key) {
 	return this.pnws[key];
 };

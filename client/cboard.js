@@ -140,10 +140,22 @@ CBoard.prototype.path = function(fabric, border, twist) {
 };
 
 /**
+| Force clears all caches.
+*/
+CBoard.prototype.knock = function() {
+	this.$fabric = null;
+	for(var c in this.cc) {
+		this.cc[c].knock();
+	}
+};
+
+/**
 | Draws the boards contents
 */
 CBoard.prototype.getFabric = function() {
-	if (this.$fabric && !config.debug.noCache) { return this.$fabric; }
+	if (this.$fabric && !config.debug.noCache)
+		{ return this.$fabric; }
+
 	var iframe = this.iframe;
 	var fabric = this.$fabric = new Fabric(iframe);
 	var style = Cockpit.styles[this.tree.root.style];
@@ -336,6 +348,7 @@ CBoard.prototype.setHover = function(cname) {
 
 	this.$fabric = null;
 	shell.redraw = true;
+	// TODO use knowck
 	if (this.$hover) { this.cc[this.$hover].$fabric = null; }
 	if (cname      ) { this.cc[cname      ].$fabric = null; }
 	this.$hover = cname;
