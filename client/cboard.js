@@ -66,7 +66,7 @@ var immute        = Jools.immute;
 var is            = Jools.is;
 var isnon         = Jools.isnon;
 var computePoint  = Curve.computePoint;
-var half          = Fabric.half;
+var half          = Jools.half;
 
 /**
 | Constructor

@@ -54,7 +54,7 @@ var debug        = Jools.debug;
 var immute       = Jools.immute;
 var is           = Jools.is;
 var isnon        = Jools.isnon;
-var half         = Fabric.half;
+var half         = Jools.half;
 var magic        = Fabric.magic;
 
 /**

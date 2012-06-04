@@ -321,6 +321,7 @@ Server.prototype.registerFiles = function() {
 	this.registerFile('client/fabric/bezirect.js',   true,  false);
 	this.registerFile('client/fabric/ovalslice.js',  true,  false);
 	this.registerFile('client/fabric/ovalflower.js', true,  false);
+	this.registerFile('client/fabric/line.js',       true,  false);
 	this.registerFile('client/theme.js',             true,  false);
 	this.registerFile('shared/meshverse.js',         true,  false);
 	this.registerFile('shared/path.js',              true,  false);

@@ -29,7 +29,6 @@
 /**
 | Imports
 */
-var Fabric;
 var Jools;
 var theme;
 
@@ -45,7 +44,7 @@ Design = Design || {};
 (function(){
 'use strict';
 
-var half        = Fabric.half;
+var half        = Jools.half;
 var immute      = Jools.immute;
 var innumerable = Jools.innumerable;
 var ro          = Math.round;

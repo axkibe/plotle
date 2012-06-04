@@ -40,7 +40,6 @@
 /**
 | Imports
 */
-var Fabric;
 var Jools;
 var OvalFlower;
 var shell;
@@ -67,7 +66,7 @@ var immute     = Jools.immute;
 var is         = Jools.is;
 var isnon      = Jools.isnon;
 var log        = Jools.log;
-var half       = Fabric.half;
+var half       = Jools.half;
 var ro         = Math.round;
 
 /**

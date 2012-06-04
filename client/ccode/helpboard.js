@@ -47,7 +47,6 @@ var HelpBoard = null;
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
 var debug    = Jools.debug;
-var half     = Fabric.half;
 var immute   = Jools.immute;
 var is       = Jools.is;
 var isnon    = Jools.isnon;

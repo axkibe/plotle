@@ -60,7 +60,6 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 var ro            = Math.round;
 var computePoint  = Curve.computePoint;
 var debug         = Jools.debug;
-var half          = Fabric.half;
 var immute        = Jools.immute;
 var is            = Jools.is;
 var isnon         = Jools.isnon;

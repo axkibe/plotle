@@ -34,6 +34,7 @@ var VRelation = null;
 */
 var Fabric;
 var Jools;
+var Line;
 var Margin;
 var MeshMashine;
 var Path;
@@ -57,7 +58,6 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Shortcuts.
 */
-var Line          = Fabric.Line;
 var debug         = Jools.debug;
 var immute        = Jools.immute;
 var is            = Jools.is;

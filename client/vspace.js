@@ -31,6 +31,7 @@
 var Action;
 var Fabric;
 var Jools;
+var Line;
 var OvalMenu;
 var Path;
 var Point;
@@ -66,8 +67,7 @@ var immute    = Jools.immute;
 var is        = Jools.is;
 var isnon     = Jools.isnon;
 var log       = Jools.log;
-var half      = Fabric.half;
-var Line      = Fabric.Line;
+var half      = Jools.half;
 
 /**
 | Constructor
