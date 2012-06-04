@@ -73,10 +73,10 @@ Rect.prototype.path = function(fabric, border, twist, pan) {
 	var px = pan.x;
 	var py = pan.y;
 	fabric.beginPath(twist);
-	fabric.moveTo(this.pnw.x + px + border, this.pnw.y + px + border);
-	fabric.lineTo(this.pse.x + px - border, this.pnw.y + px + border);
-	fabric.lineTo(this.pse.x + px - border, this.pse.y + px - border);
-	fabric.lineTo(this.pnw.x + px + border, this.pse.y + px - border);
+	fabric.moveTo(this.pnw.x + px + border, this.pnw.y + py + border);
+	fabric.lineTo(this.pse.x + px - border, this.pnw.y + py + border);
+	fabric.lineTo(this.pse.x + px - border, this.pse.y + py - border);
+	fabric.lineTo(this.pnw.x + px + border, this.pse.y + py - border);
 	fabric.closePath();
 };
 
