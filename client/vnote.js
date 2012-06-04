@@ -33,6 +33,7 @@ var VNote     = null;
 | Imports
 */
 var Action;
+var BeziRect;
 var config;
 var Fabric;
 var Jools;
@@ -57,7 +58,6 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Shortcuts.
 */
-var RoundRect     = Fabric.RoundRect;
 var debug         = Jools.debug;
 var half          = Fabric.half;
 var immute        = Jools.immute;
@@ -111,11 +111,11 @@ VNote.prototype.getSilhoutte = function(zone$, zAnchor) {
 	if (zAnchor) {
 		s$ = this._silhoutte$0;
 		if (s$ && s$.width === z$.width && s$.height === z$.height) return s$;
-		return this._silhoutte$0 = new RoundRect(Point.zero, new Point(z$.width, z$.height), cr);
+		return this._silhoutte$0 = new BeziRect(Point.zero, new Point(z$.width, z$.height), cr, cr);
 	} else {
 		s$ = this._silhoutte$1;
 		if (s$ && s$.eq(z$)) return s$;
-		return this._silhoutte$1 = new RoundRect(z$.pnw, z$.pse, cr);
+		return this._silhoutte$1 = new BeziRect(z$.pnw, z$.pse, cr, cr);
 	}
 };
 

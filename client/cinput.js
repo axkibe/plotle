@@ -29,6 +29,7 @@
 /**
 | Imports
 */
+var BeziRect;
 var CAccent;
 var Caret;
 var Cockpit;
@@ -56,7 +57,6 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Shortcuts
 */
-var BeziRect      = Fabric.BeziRect;
 var ro            = Math.round;
 var computePoint  = Curve.computePoint;
 var debug         = Jools.debug;

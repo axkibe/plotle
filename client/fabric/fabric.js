@@ -641,136 +641,6 @@ Fabric.prototype.globalAlpha = function(a) {
 	this._cx.globalAlpha = a;
 };
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- +++ BeziRect +++
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
- A rectangle with rounded (beziers) corners
- BeziRects are immutable objects.
-
-      <-> a
-      | |
- pnw  +.------------------.  - - A
-      .                    . _ _ V b
-      |                    |
-      |                    |
-      |                    |
-      '                    '
-       `------------------'+ pse
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-/**
-| Constructor.
-|
-| BeziRect(rect, a, b)      -or-
-| BeziRect(pnw, pse, a, b)
-*/
-var BeziRect = function(a1, a2, a3, a4) {
-	if (a1.constructor === Point) {
-		Rect.call(this, a1, a2);
-		this.a = a3;
-		this.b = a4;
-	} else {
-		Rect.call(this, a1.pnw, a1.pse);
-		this.a = a2;
-		this.b = a3;
-	}
-};
-subclass(BeziRect, Rect);
-
-/**
-| Draws the roundrect.
-|
-| fabric : fabric to draw the path upon.
-| border : additional distance.
-| twist  : parameter to beginPath, add +0.5 on everything for lines
-*/
-BeziRect.prototype.path = function(fabric, border, twist, pan) {
-	var px = pan.x;
-	var py = pan.y;
-	var nwx = this.pnw.x + px + border;
-	var nwy = this.pnw.y + py + border;
-	var sex = this.pse.x + px - border - 1;
-	var sey = this.pse.y + py - border - 1;
-	var a = this.a;
-	var b = this.b;
-	var ma = magic * (a + border);
-	var mb = magic * (b + border) ;
-
-	fabric.beginPath(twist);
-	fabric.moveTo(                     nwx + a, nwy    );
-	fabric.lineTo(                     sex - a, nwy    );
-	fabric.beziTo(  ma,   0,   0, -mb, sex    , nwy + b);
-	fabric.lineTo(                     sex    , sey - b);
-	fabric.beziTo(   0,  mb,  ma,   0, sex - a, sey    );
-	fabric.lineTo(                     nwx + a, sey    );
-	fabric.beziTo( -ma,   0,   0,  mb, nwx    , sey - b);
-	fabric.lineTo(                     nwx    , nwy + b);
-	fabric.beziTo(   0, -mb, -ma,   0, nwx + a, nwy    );
-};
-
-/**
-| Returns true if Point p is within the BeziRect.
-*/
-BeziRect.prototype.within = function(fabric, pan, p) {
-	return fabric.within(this, 'path', pan, p);
-};
-
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- .-,--.               . .-,--.         .
-  `|__/ ,-. . . ,-. ,-|  `|__/ ,-. ,-. |-
-  )| \  | | | | | | | |  )| \  |-' |   |
-  `'  ` `-' `-^ ' ' `-^  `'  ` `-' `-' `'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
- A rectangle with round (circle) corners
- Rectangles are immutable objects.
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
-/**
-| Constructor.
-|
-| Rect(rect, crad)      -or-
-| Rect(pnw, pse, crad)
-*/
-var RoundRect = function(a1, a2, a3) {
-	if (a1 instanceof Point) {
-		Rect.call(this, a1, a2);
-		fixate(this, 'crad', a3);
-	} else {
-		Rect.call(this, a1.pnw, a1.pse);
-		fixate(this, 'crad', a2);
-	}
-};
-subclass(RoundRect, Rect);
-
-/**
-| Draws the roundrect.
-|
-| fabric : fabric to draw the path upon.
-| border : additional distance.
-| twist  : parameter to beginPath, add +0.5 on everything for lines
-*/
-RoundRect.prototype.path = function(fabric, border, twist, pan) {
-	var px  = pan.x;
-	var py  = pan.y;
-	var nwx = this.pnw.x + px + border;
-	var nwy = this.pnw.y + py + border;
-	var sex = this.pse.x + px - border - 1;
-	var sey = this.pse.y + py - border - 1;
-	var cr  = this.crad  - border;
-	var pi = Math.PI;
-	var ph = pi / 2;
-	fabric.beginPath(twist);
-	fabric.moveTo(nwx + cr, nwy);
-	fabric.arc(sex - cr, nwy + cr, cr, -ph,   0, false);
-	fabric.arc(sex - cr, sey - cr, cr,   0,  ph, false);
-	fabric.arc(nwx + cr, sey - cr, cr,  ph,  pi, false);
-	fabric.arc(nwx + cr, nwy + cr, cr,  pi, -ph, false);
-};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,,--.          .  .---. .
@@ -1213,11 +1083,9 @@ Line.prototype.draw = function(fabric, view, style) {
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-Fabric.BeziRect      = BeziRect;
 Fabric.Line          = Line;
 Fabric.OvalFlower    = OvalFlower;
 Fabric.OvalSlice     = OvalSlice;
-Fabric.RoundRect     = RoundRect;
 
 Fabric.cos30         = cos30;
 Fabric.ensureInteger = ensureInteger;
