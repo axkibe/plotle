@@ -34,6 +34,7 @@ var Jools;
 var OvalMenu;
 var Path;
 var Point;
+var Rect;
 var shell;
 var system;
 var theme;
@@ -67,7 +68,6 @@ var isnon     = Jools.isnon;
 var log       = Jools.log;
 var half      = Fabric.half;
 var Line      = Fabric.Line;
-var Rect      = Fabric.Rect;
 
 /**
 | Constructor
