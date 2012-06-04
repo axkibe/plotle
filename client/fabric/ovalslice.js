@@ -28,10 +28,9 @@
 /**
 | Imports
 */
-var Euclid;
+var Fabric;
 var Jools;
 var Point;
-var Rect;
 
 /**
 | Exports
