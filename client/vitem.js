@@ -35,13 +35,13 @@ var VItem     = null;
 var Action;
 var Fabric;
 var Jools;
+var OvalSlice;
 var Path;
-var VDoc;
-var VRelation;
-
 var shell;
 var system;
 var theme;
+var VDoc;
+var VRelation;
 
 /**
 | Capsule
@@ -53,7 +53,6 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Shotcuts
 */
-var OvalSlice     = Fabric.OvalSlice;
 var abs           = Math.abs;
 var debug         = Jools.debug;
 var immute        = Jools.immute;

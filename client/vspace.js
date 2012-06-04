@@ -209,7 +209,7 @@ VSpace.prototype.knock = function() {
 	for(var r = this.twig.length - 1; r >= 0; r--) {
 		this.vAtRank(r).knock();
 	}
-}
+};
 
 /**
 | Draws the caret.

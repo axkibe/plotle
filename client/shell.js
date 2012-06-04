@@ -244,7 +244,7 @@ Shell.prototype.blink = function() {
 	Measure.font = '20px ' + theme.defaultFont;
 	var w = Measure.width('meshcraft$8833');
 	if (w !== this.$fontWatch) {
-		console.log('fontchange detected')
+		console.log('fontchange detected');
 		this.$fontWatch = w;
 		this.knock();
 	}
@@ -293,8 +293,7 @@ Shell.prototype.knock = function() {
 	if (this.menu) { this.menu.knock(); }
 
 	this._draw();
-}
-
+};
 
 /**
 | Paths the greenscreen frowny.
