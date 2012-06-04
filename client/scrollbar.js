@@ -29,25 +29,13 @@
 | Exports
 */
 var Scrollbar = null;
-var VDoc      = null;
-var VItem     = null;
-var VNote     = null;
-var VLabel    = null;
-var VRelation = null;
 
 /**
 | Imports
 */
-var Action;
-var Caret;
+var BeziRect;
 var Fabric;
 var Jools;
-var MeshMashine;
-var Path;
-var Tree;
-var settings;
-var shell;
-var system;
 var theme;
 
 /**
@@ -60,17 +48,17 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Shotcuts
 */
-var cos30         = Fabric.cos30;
-var debug         = Jools.debug;
-var immute        = Jools.immute;
-var is            = Jools.is;
-var isnon         = Jools.isnon;
-var limit         = Jools.limit;
-var log           = Jools.log;
-var max           = Math.max;
-var min           = Math.min;
-var ro            = Math.round;
-var subclass      = Jools.subclass;
+var debug    = Jools.debug;
+var half     = Jools.half;
+var immute   = Jools.immute;
+var is       = Jools.is;
+var isnon    = Jools.isnon;
+var limit    = Jools.limit;
+var log      = Jools.log;
+var max      = Math.max;
+var min      = Math.min;
+var ro       = Math.round;
+var subclass = Jools.subclass;
 
 /**
 | Constructor.
@@ -84,43 +72,28 @@ Scrollbar = function() {
 };
 
 /**
-| Makes the path for fabric.edge/fill/paint.
-| @@ change descr on all path()s
-| TODO make a tiny oval instead.
+| Draws the scrollbar.
 */
-Scrollbar.prototype.path = function(fabric, border, twist, pan) {
-	if (border !== 0)  throw new Error('Scrollbar.path does not support borders');
-	if (!this.visible) throw new Error('Pathing an invisible scrollbar');
+Scrollbar.prototype.draw = function(fabric, pan) {
+	if (!this.visible) throw new Error('Drawing an invisible scrollbar');
+	var ths = theme.scrollbar;
 
+	// TODO caching
 	var z      = this.zone;
 	var w      = z.width;
-	var co30w2 = cos30 * w / 2;
-	var w025   = ro(w * 0.25);
-	var w075   = ro(w * 0.75);
 	var size   = ro(this.aperture * z.height / this.max);
-	var msize  = max(size, theme.scrollbar.minSize);
+	var msize  = max(size, ths.minSize);
 	var sy     = z.pnw.y + pan.y + ro(this._pos * ((z.height - msize + size) / this.max));
 	var pwx    = z.pnw.x + pan.x;
 	var pex    = z.pse.x + pan.x;
 
-	fabric.beginPath(twist);
-	fabric.moveTo(pwx,        ro(sy + co30w2));
-	fabric.lineTo(pwx + w025, sy);
-	fabric.lineTo(pwx + w075, sy);
-	fabric.lineTo(pex,        ro(sy + co30w2));
-
-	fabric.lineTo(pex,        ro(sy + msize - co30w2));
-	fabric.lineTo(pwx + w075, sy + msize);
-	fabric.lineTo(pwx + w025, sy + msize);
-	fabric.lineTo(pwx,        ro(sy + msize - co30w2));
-	fabric.closePath();
-};
-
-/**
-| Draws the scrollbar.
-*/
-Scrollbar.prototype.draw = function(fabric, pan) {
-	fabric.paint(theme.scrollbar.style, this, 'path', pan);
+	var bezirect = new BeziRect(
+		new Point(pwx, sy),
+		new Point(pex, sy + msize),
+		ths.ovala, ths.ovalb
+	);
+	
+	fabric.paint(theme.scrollbar.style, bezirect, 'path', pan);
 };
 
 /**

@@ -380,8 +380,17 @@ theme = {
 				{ border : 0, width : 1, color: 'rgb(221, 154, 52)' }
 			]
 		},
+		// width
 		strength :  8,
+
+		// oval cap
+		ovala    :  4,
+		ovalb    :  3,
+		
+		// minimum height
 		minSize  : 12,
+
+		// distance from text
 		imarginw :  2
 	},
 

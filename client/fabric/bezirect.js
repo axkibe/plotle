@@ -89,25 +89,25 @@ subclass(BeziRect, Rect);
 BeziRect.prototype.path = function(fabric, border, twist, pan) {
 	var px = pan.x;
 	var py = pan.y;
-	var nwx = this.pnw.x + px + border;
-	var nwy = this.pnw.y + py + border;
-	var sex = this.pse.x + px - border - 1;
-	var sey = this.pse.y + py - border - 1;
+	var wx = this.pnw.x + px + border;
+	var ny = this.pnw.y + py + border;
+	var ex = this.pse.x + px - border - 1;
+	var sy = this.pse.y + py - border - 1;
 	var a = this.a;
 	var b = this.b;
 	var ma = magic * (a + border);
-	var mb = magic * (b + border) ;
+	var mb = magic * (b + border);
 
 	fabric.beginPath(twist);
-	fabric.moveTo(                     nwx + a, nwy    );
-	fabric.lineTo(                     sex - a, nwy    );
-	fabric.beziTo(  ma,   0,   0, -mb, sex    , nwy + b);
-	fabric.lineTo(                     sex    , sey - b);
-	fabric.beziTo(   0,  mb,  ma,   0, sex - a, sey    );
-	fabric.lineTo(                     nwx + a, sey    );
-	fabric.beziTo( -ma,   0,   0,  mb, nwx    , sey - b);
-	fabric.lineTo(                     nwx    , nwy + b);
-	fabric.beziTo(   0, -mb, -ma,   0, nwx + a, nwy    );
+	fabric.moveTo(                     wx + a, ny    );
+	fabric.lineTo(                     ex - a, ny    );
+	fabric.beziTo(  ma,   0,   0, -mb, ex    , ny + b);
+	fabric.lineTo(                     ex    , sy - b);
+	fabric.beziTo(   0,  mb,  ma,   0, ex - a, sy    );
+	fabric.lineTo(                     wx + a, sy    );
+	fabric.beziTo( -ma,   0,   0,  mb, wx    , sy - b);
+	fabric.lineTo(                     wx    , ny + b);
+	fabric.beziTo(   0, -mb, -ma,   0, wx + a, ny    );
 };
 
 /**

@@ -119,8 +119,6 @@ var ro    = Math.round;
 var cos   = Math.cos;
 var sin   = Math.sin;
 var tan   = Math.tan;
-var cos30 = cos(Math.PI / 6);   // cos(30)
-var tan30 = tan(Math.PI / 6);   // tan(30)
 var magic = 0.551784;      // 'magic' number to approximate ellipses with beziers.
 
 /**
@@ -637,9 +635,7 @@ Fabric.prototype.globalAlpha = function(a) {
 	this._cx.globalAlpha = a;
 };
 
-Fabric.cos30         = cos30;
 Fabric.ensureInteger = ensureInteger;
 Fabric.magic         = magic;
-Fabric.tan30         = tan30;
 
 })();
