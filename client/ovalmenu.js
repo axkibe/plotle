@@ -42,7 +42,7 @@
 */
 var Fabric;
 var Jools;
-
+var OvalFlower;
 var shell;
 var system;
 var theme;
@@ -68,7 +68,6 @@ var is         = Jools.is;
 var isnon      = Jools.isnon;
 var log        = Jools.log;
 var half       = Fabric.half;
-var OvalFlower = Fabric.OvalFlower;
 var ro         = Math.round;
 
 /**
