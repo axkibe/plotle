@@ -36,6 +36,7 @@ var Action;
 var config;
 var Fabric;
 var Jools;
+var Margin;
 var Point;
 var Rect;
 var Scrollbar;
@@ -56,7 +57,6 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Shortcuts.
 */
-var Margin        = Fabric.Margin;
 var RoundRect     = Fabric.RoundRect;
 var debug         = Jools.debug;
 var half          = Fabric.half;

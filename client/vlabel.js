@@ -36,6 +36,7 @@ var Action;
 var config;
 var Fabric;
 var Jools;
+var Margin;
 var Point;
 var Rect;
 var shell;
@@ -59,7 +60,6 @@ var is       = Jools.is;
 var limit    = Jools.limit;
 var log      = Jools.log;
 var max      = Math.max;
-var Margin   = Fabric.Margin;
 var ro       = Math.round;
 var subclass = Jools.subclass;
 

@@ -103,7 +103,6 @@ Shell = function(fabric) {
 
 	Measure.font = '20px ' + theme.defaultFont;
 	this.$fontWatch = Measure.width('meshcraft$8833');
-	debug(this.$fontWatch);
 
 	this.fabric     = fabric;
 

@@ -34,17 +34,18 @@ var VRelation = null;
 */
 var Fabric;
 var Jools;
+var Margin;
 var MeshMashine;
 var Path;
 var Scrollbar;
-var Tree;
-var VDoc;
-var VItem;
-var VLabel;
 var settings;
 var shell;
 var system;
 var theme;
+var Tree;
+var VDoc;
+var VItem;
+var VLabel;
 
 /**
 | Capsule
@@ -57,7 +58,6 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 | Shortcuts.
 */
 var Line          = Fabric.Line;
-var Margin        = Fabric.Margin;
 var debug         = Jools.debug;
 var immute        = Jools.immute;
 var is            = Jools.is;
