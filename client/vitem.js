@@ -246,7 +246,7 @@ VItem.prototype.dragstart = function(p, shift, ctrl, access) {
 	var sbary = this.scrollbarY;
 	var pnw = this.getZone().pnw;
 	var pr = p.sub(pnw);
-	if (sbary && sbary.visible && sbary.zone.within(pr)) {
+	if (sbary && sbary.visible && sbary._$zone.within(pr)) { // TODO EVIL move to sbary
 		var action = shell.startAction(Action.SCROLLY, this, p);
 		action.startPos = sbary.getPos();
 	} else {

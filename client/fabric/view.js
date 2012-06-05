@@ -46,13 +46,14 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 var debug        = Jools.debug;
 var immute       = Jools.immute;
 var log          = Jools.log;
+var ro           = Math.round;
 
 /**
 | Constructor.
 */
 View = function(pan, zoom) {
 	this.pan  = pan;
-	this.zoom = zoom;
+	this.zoom = 0.5;
 	immute(this);
 };
 
@@ -63,7 +64,7 @@ View.proper = new View(Point.zero, 1);
 */
 View.prototype.x = function(p) {
 	if (!(p instanceof Point)) { throw new Error('p is no Point'); }
-	return p.x + this.pan.x;
+	return ro((p.x + this.pan.x) * this.zoom);
 };
 
 /**
@@ -71,7 +72,7 @@ View.prototype.x = function(p) {
 */
 View.prototype.y = function(p) {
 	if (!(p instanceof Point)) { throw new Error('p is no Point'); }
-	return p.y + this.pan.y;
+	return ro((p.y + this.pan.y) * this.zoom);
 };
 
 })();
