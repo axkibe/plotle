@@ -36,6 +36,7 @@ var CCustom;
 var CLabel;
 var CInput;
 var Cockpit;
+var config;
 var Curve;
 var Design;
 var Fabric;
@@ -43,11 +44,9 @@ var Jools;
 var Path;
 var Point;
 var Rect;
-var Tree;
-var config;
-var theme;
-var system;
 var shell;
+var Tree;
+var View;
 
 /**
 | Exports
@@ -161,7 +160,7 @@ CBoard.prototype.getFabric = function() {
 	var style = Cockpit.styles[this.tree.root.style];
 	if (!style) { throw new Error('no style!'); }
 
-	fabric.fill(style.fill, this, 'path');
+	fabric.fill(style.fill, this, 'path', View.proper);
 	var layout = this.tree.root.layout;
 
 	var focus = this.focusedCC();
@@ -170,7 +169,7 @@ CBoard.prototype.getFabric = function() {
 		var c = this.cc[cname];
 		c.draw(fabric, CAccent.state(cname === this.$hover || c.$active, c === focus));
 	}
-	fabric.edge(style.edge, this, 'path');
+	fabric.edge(style.edge, this, 'path', View.proper);
 
 	if (config.debug.drawBoxes) {
 		fabric.paint(
@@ -178,7 +177,7 @@ CBoard.prototype.getFabric = function() {
 			new Rect(iframe.pnw,
 			iframe.pse.sub(1, 1)),
 			'path',
-			Point.zero
+			View.proper
 		);
 	}
 
@@ -219,7 +218,7 @@ CBoard.prototype.mousehover = function(p, shift, ctrl) {
 	var pp = p.sub(pnw);
 
 	// @@ Optimize by reusing the latest path of this.$fabric
-	if (!fabric.within(this, 'path', Point.zero, pp)) {
+	if (!fabric.within(this, 'path', View.proper, pp)) {
 		return this.setHover(null);
 	}
 
@@ -257,7 +256,7 @@ CBoard.prototype.mousedown = function(p, shift, ctrl) {
 	var pp = p.sub(pnw);
 
 	// @@ Optimize by reusing the latest path of this.$fabric
-	if (!fabric.within(this, 'path', Point.zero, pp))  {
+	if (!fabric.within(this, 'path', View.proper, pp))  {
 		this.setHover(null);
 		return null;
 	}

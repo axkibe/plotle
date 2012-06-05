@@ -102,9 +102,9 @@ config.debug = {
 
 	/**
 	| If true ensures that objects that should not be immutable
-	| are made immutable.
+	| are made immutable. Turned off on releases simply for performance.
 	*/
-	immute : false
+	immute : true
 };
 
 

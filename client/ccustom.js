@@ -38,6 +38,7 @@ var Point;
 var Rect;
 var shell;
 var system;
+var View;
 
 /**
 | Exports
@@ -118,7 +119,7 @@ CCustom.prototype.getFabric = function(accent) {
 
 	var style = Cockpit.styles[sname];
 	if (!isnon(style)) { throw new Error('Invalid style: ' + sname); }
-	fabric.paint(style, this, 'path', Point.zero);
+	fabric.paint(style, this, 'path', View.proper);
 
 	var fs = this.twig.caption.fontStyle;
 	fabric.setFontStyle(fs.style, fs.fill, fs.align, fs.base);
@@ -129,7 +130,7 @@ CCustom.prototype.getFabric = function(accent) {
 			Cockpit.styles.boxes,
 			new Rect(this.iframe.pnw, this.iframe.pse.sub(1, 1)),
 			'path',
-			Point.zero
+			View.proper
 		);
 	}
 
@@ -166,7 +167,7 @@ CCustom.prototype.mousehover = function(p) {
 	var fabric = this.getFabric(CAccent.NORMA);
 	var pp = p.sub(this.pnw);
 
-	if (!fabric.within(this, 'path', Point.zero, pp))
+	if (!fabric.within(this, 'path', View.proper, pp))
 		{ return null; }
 
 	this.board.setHover(this.name);
@@ -183,7 +184,7 @@ CCustom.prototype.mousedown = function(p, shift, ctrl) {
 
 	var fabric = this.getFabric(CAccent.NORMA);
 	var pp = p.sub(this.pnw);
-	if (!fabric.within(this, 'path', Point.zero, pp))
+	if (!fabric.within(this, 'path', View.proper, pp))
 		{ return false; }
 
 	shell.redraw = true; // @@ needed?

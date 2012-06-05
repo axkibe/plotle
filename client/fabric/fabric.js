@@ -35,6 +35,7 @@ var Euclid;
 var Jools;
 var Point;
 var Rect;
+var View;
 
 /**
 | Exports
@@ -50,17 +51,9 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 
 var debug        = Jools.debug;
 var immute       = Jools.immute;
-var innumerable  = Jools.innumerable;
 var is           = Jools.is;
 var isnon        = Jools.isnon;
 var log          = Jools.log;
-var fixate       = Jools.fixate;
-var lazyFixate   = Jools.lazyFixate;
-var reject       = Jools.reject;
-var subclass     = Jools.subclass;
-var min          = Math.min;
-var max          = Math.max;
-var ovalDebug    = false;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
@@ -102,11 +95,6 @@ Fabric = function(a1, a2) {
 		this._canvas.height = a2;
 	}
 	this._cx = this._canvas.getContext('2d');
-
-	Object.defineProperty(this, 'pan', {
-		get: function() { throw new Error('pan'); },
-		set: function() { throw new Error('pan'); }
-	});
 
 	// curren positiont (without twist)
 	this._posx = this._posy = null;
@@ -478,9 +466,11 @@ Fabric.prototype._colorStyle = function(style, shape) {
 | style: the style formated in meshcraft style notation.
 | shape: an object which has path() defined
 */
-Fabric.prototype.fill = function(style, shape, path, pan, a1, a2, a3, a4) {
+Fabric.prototype.fill = function(style, shape, path, view, a1, a2, a3, a4) {
+	if (!(view instanceof View)) { throw new Error('view is no View'); }
+
 	var cx = this._cx;
-	shape[path](this, 0, false, pan, a1, a2, a3, a4);
+	shape[path](this, 0, false, view, a1, a2, a3, a4);
 	cx.fillStyle = this._colorStyle(style, shape);
 	if (this._twist !== 0) throw new Error('wrong twist');
 	cx.fill();
@@ -492,9 +482,9 @@ Fabric.prototype.fill = function(style, shape, path, pan, a1, a2, a3, a4) {
 | style: the style formated in meshcraft style notation.
 | shape: an object which has path() defined
 */
-Fabric.prototype._edge = function(style, shape, path, pan, a1, a2, a3, a4) {
+Fabric.prototype._edge = function(style, shape, path, view, a1, a2, a3, a4) {
 	var cx = this._cx;
-	shape[path](this, style.border, true, pan, a1, a2, a3, a4);
+	shape[path](this, style.border, true, view, a1, a2, a3, a4);
 	cx.strokeStyle = this._colorStyle(style.color, shape);
 	cx.lineWidth = style.width;
 	if (this._twist !== 0.5) throw new Error('wrong twist');
@@ -507,25 +497,28 @@ Fabric.prototype._edge = function(style, shape, path, pan, a1, a2, a3, a4) {
 | style: the style formated in meshcraft style notation.
 | shape: an object which has path() defined
 */
-Fabric.prototype.edge = function(style, shape, path, pan, a1, a2, a3, a4) {
+Fabric.prototype.edge = function(style, shape, path, view, a1, a2, a3, a4) {
+	if (!(view instanceof View)) { throw new Error('view is no View'); }
+
 	var cx = this._cx;
 	if (style instanceof Array) {
 		for(var i = 0; i < style.length; i++) {
-			this._edge(style[i], shape, path, pan, a1, a2, a3, a4);
+			this._edge(style[i], shape, path, view, a1, a2, a3, a4);
 		}
 	} else {
-		this._edge(style, shape, path, pan, a1, a2, a3, a4);
+		this._edge(style, shape, path, view, a1, a2, a3, a4);
 	}
 };
 
 /**
 | Fills an aera and draws its borders
 */
-Fabric.prototype.paint = function(style, shape, path, pan, a1, a2, a3, a4) {
+Fabric.prototype.paint = function(style, shape, path, view, a1, a2, a3, a4) {
+	if (!(view instanceof View)) { throw new Error('view is no View'); }
 	var fillStyle = style.fill;
 	var edgeStyle = style.edge;
 	var cx = this._cx;
-	shape[path](this, 0, false, pan, a1, a2, a3, a4);
+	shape[path](this, 0, false, view, a1, a2, a3, a4);
 
 	if (isnon(style.fill)) {
 		cx.fillStyle = this._colorStyle(fillStyle, shape);
@@ -534,10 +527,10 @@ Fabric.prototype.paint = function(style, shape, path, pan, a1, a2, a3, a4) {
 
 	if (edgeStyle instanceof Array) {
 		for(var i = 0; i < edgeStyle.length; i++) {
-			this._edge(edgeStyle[i], shape, path, pan, a1, a2, a3, a4);
+			this._edge(edgeStyle[i], shape, path, view, a1, a2, a3, a4);
 		}
 	} else {
-		this._edge(edgeStyle, shape, path, pan, a1, a2, a3, a4);
+		this._edge(edgeStyle, shape, path, view, a1, a2, a3, a4);
 	}
 };
 
@@ -597,9 +590,9 @@ Fabric.prototype.setFontStyle = function(font, fill, align, baseline) {
 | Point is either of type point -or-
 |    x / y
 */
-Fabric.prototype.within = function(shape, path, pan, a1, a2, a3, a4, a5) {
-	if (!(pan instanceof Point))
-		{ throw new Error('pan not a point!'); }
+Fabric.prototype.within = function(shape, path, view, a1, a2, a3, a4, a5) {
+	if (!(view instanceof View)) { throw new Error('view is no View'); }
+
 	var px, py;
 	var tw = this._twist;
 	var pobj;
@@ -620,9 +613,9 @@ Fabric.prototype.within = function(shape, path, pan, a1, a2, a3, a4, a5) {
 	py += tw;
 
 	if (pobj) {
-		shape[path](this, 0, true, pan, a2, a3, a4);
+		shape[path](this, 0, true, view, a2, a3, a4);
 	} else {
-		shape[path](this, 0, true, pan, a3, a4, a5);
+		shape[path](this, 0, true, view, a3, a4, a5);
 	}
 
 	return this._cx.isPointInPath(px, py);

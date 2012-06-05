@@ -42,6 +42,7 @@ var Rect;
 var shell;
 var system;
 var theme;
+var View;
 var VItem;
 
 /**
@@ -139,10 +140,10 @@ VLabel.prototype.draw = function(fabric, view) {
 		var silhoutte = this.getSilhoutte(zone, true);
 
 		// draws selection and text
-		vdoc.draw(f, Point.zero, zone.width, imargin, Point.zero);
+		vdoc.draw(f, View.proper, zone.width, imargin, Point.zero);
 
 		// draws the border
-		f.edge(theme.label.style.edge, silhoutte, 'path', Point.zero);
+		f.edge(theme.label.style.edge, silhoutte, 'path', View.proper);
 	}
 
 	fabric.drawImage(f, zone.pnw.add(view.pan));

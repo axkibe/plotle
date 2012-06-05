@@ -161,11 +161,11 @@ lazyFixate(Line.prototype, 'pc', function() {
 | border: pixel offset for fancy borders (unused)
 | twist:  0.5 if drawing lines
 */
-Line.prototype.path = function(fabric, border, twist, pan) {
-	var p1x = this.p1.x + pan.x;
-	var p1y = this.p1.y + pan.y;
-	var p2x = this.p2.x + pan.x;
-	var p2y = this.p2.y + pan.y;
+Line.prototype.path = function(fabric, border, twist, view) {
+	var p1x = view.x(this.p1);
+	var p1y = view.y(this.p1);
+	var p2x = view.x(this.p2);
+	var p2y = view.y(this.p2);
 
 	fabric.beginPath(twist);
 	// @@, multiple line end types
@@ -213,7 +213,7 @@ Line.prototype.path = function(fabric, border, twist, pan) {
 */
 Line.prototype.draw = function(fabric, view, style) {
 	if (!style) throw new Error('Line.draw misses style');
-	fabric.paint(style, this, 'path', view.pan);
+	fabric.paint(style, this, 'path', view);
 };
 
 })();

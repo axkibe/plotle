@@ -82,7 +82,7 @@ Scrollbar = function() {
 /**
 | Draws the scrollbar.
 */
-Scrollbar.prototype.draw = function(fabric, pan) {
+Scrollbar.prototype.draw = function(fabric, view) {
 	if (!this.visible) throw new Error('Drawing an invisible scrollbar');
 	var ths = theme.scrollbar;
 
@@ -90,9 +90,9 @@ Scrollbar.prototype.draw = function(fabric, pan) {
 	var w      = z.width;
 	var size   = ro(this._$aperture * z.height / this._$max);
 	var msize  = max(size, ths.minSize);
-	var sy     = z.pnw.y + pan.y + ro(this._$pos * ((z.height - msize + size) / this._$max));
-	var pwx    = z.pnw.x + pan.x;
-	var pex    = z.pse.x + pan.x;
+	var sy     = z.pnw.y + ro(this._$pos * ((z.height - msize + size) / this._$max));
+	var pwx    = z.pnw.x;
+	var pex    = z.pse.x;
 
 	var bezirect = new BeziRect(
 		new Point(pwx, sy),
@@ -100,7 +100,7 @@ Scrollbar.prototype.draw = function(fabric, pan) {
 		ths.ovala, ths.ovalb
 	);
 	
-	fabric.paint(theme.scrollbar.style, bezirect, 'path', pan);
+	fabric.paint(theme.scrollbar.style, bezirect, 'path', view);
 };
 
 /**
@@ -127,6 +127,6 @@ Scrollbar.prototype.setPos = function(pos, aperture, max) {
 */
 Scrollbar.prototype.setZone = function(zone) {
 	this._$zone = zone;
-}
+};
 
 })();

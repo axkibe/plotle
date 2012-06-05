@@ -89,10 +89,10 @@ OvalFlower = function(pc, dimensions, segs) {
 /**
 | Makes the OvalFlower path.
 */
-OvalFlower.prototype.path = function(fabric, border, twist, pan, segment) {
+OvalFlower.prototype.path = function(fabric, border, twist, view, segment) {
 	var pc   = this.pc;
-	var pcx  = pc.x + pan.x;
-	var pcy  = pc.y + pan.y;
+	var pcx  = view.x(pc);
+	var pcy  = view.y(pc);
 	var segs = this.segs;
 	var a1   = this.a1;
 	var b1   = this.b1;
@@ -191,16 +191,16 @@ OvalFlower.prototype.path = function(fabric, border, twist, pan, segment) {
 /**
 | Returns the segment the point is within.
 */
-OvalFlower.prototype.within = function(fabric, pan, p) {
+OvalFlower.prototype.within = function(fabric, view, p) {
 	// @@ quick null if out of box.
-	if (!fabric.within(this, 'path', pan, p, 'outer')) { return null; }
-	if (isnon(this.segs.c ) && fabric.within(this, 'path', pan, p, 'c' )) { return 'c';  }
-	if (isnon(this.segs.n ) && fabric.within(this, 'path', pan, p, 'n' )) { return 'n';  }
-	if (isnon(this.segs.ne) && fabric.within(this, 'path', pan, p, 'ne')) { return 'ne'; }
-	if (isnon(this.segs.se) && fabric.within(this, 'path', pan, p, 'se')) { return 'se'; }
-	if (isnon(this.segs.e ) && fabric.within(this, 'path', pan, p, 'e' )) { return 's';  }
-	if (isnon(this.segs.sw) && fabric.within(this, 'path', pan, p, 'sw')) { return 'sw'; }
-	if (isnon(this.segs.nw) && fabric.within(this, 'path', pan, p, 'nw')) { return 'nw'; }
+	if (!fabric.within(this, 'path', view, p, 'outer')) { return null; }
+	if (isnon(this.segs.c ) && fabric.within(this, 'path', view, p, 'c' )) { return 'c';  }
+	if (isnon(this.segs.n ) && fabric.within(this, 'path', view, p, 'n' )) { return 'n';  }
+	if (isnon(this.segs.ne) && fabric.within(this, 'path', view, p, 'ne')) { return 'ne'; }
+	if (isnon(this.segs.se) && fabric.within(this, 'path', view, p, 'se')) { return 'se'; }
+	if (isnon(this.segs.e ) && fabric.within(this, 'path', view, p, 'e' )) { return 's';  }
+	if (isnon(this.segs.sw) && fabric.within(this, 'path', view, p, 'sw')) { return 'sw'; }
+	if (isnon(this.segs.nw) && fabric.within(this, 'path', view, p, 'nw')) { return 'nw'; }
 	return 'gap';
 };
 

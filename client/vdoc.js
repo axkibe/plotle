@@ -122,14 +122,14 @@ VDoc.prototype.update = function(twig) {
 |
 | TODO pan == scrollp double thing?
 */
-VDoc.prototype.draw = function(fabric, pan, width, imargin, scrollp) {
+VDoc.prototype.draw = function(fabric, view, width, imargin, scrollp) {
 	// @@ <pre>
 	var paraSep = this.getParaSep();
 	var select = shell.selection;
 
 	// draws the selection
 	if (select.active && this.path.subPathOf(select.sign1.path)) {
-		fabric.paint(theme.selection.style, this, 'pathSelection', pan, width, imargin, scrollp);
+		fabric.paint(theme.selection.style, this, 'pathSelection', view, width, imargin, scrollp);
 	}
 
 	var y = imargin.n;
@@ -143,7 +143,9 @@ VDoc.prototype.draw = function(fabric, pan, width, imargin, scrollp) {
 
 		// TODO pan on points or not?
 		pnws[twig.ranks[r]] = new Point(imargin.w, ro(y));
-		fabric.drawImage(vpara.getFabric(), imargin.w + pan.x, ro(y - scrollp.y) + pan.y);
+		var p = new Point(imargin.w, ro(y - scrollp.y));
+
+		fabric.drawImage(vpara.getFabric(), view.x(p), view.y(p));
 		y += flow.height + paraSep;
 	}
 	this.pnws = pnws;   // north-west points of paras

@@ -41,13 +41,13 @@ var Path;
 var Peer;
 var Point;
 var Selection;
-var Sign;
-var Tree;
-var VSpace;
-
 var settings;
+var Sign;
 var system;
 var theme;
+var Tree;
+var View;
+var VSpace;
 
 /**
 | Exports
@@ -273,11 +273,11 @@ Shell.prototype.stopAction = function() {
 | Used by async handlers.
 */
 Shell.prototype.poke = function() {
-	if (this.$hoverP) {
-		this.mousehover(this.$hoverP, this.$hoverShift, this.$hoverCtrl);
-	}
+	if (this.$hoverP)
+		{ this.mousehover(this.$hoverP, this.$hoverShift, this.$hoverCtrl); }
 
-	if (this.redraw) { this._draw(); }
+	if (this.redraw)
+		{ this._draw(); }
 };
 
 /**
@@ -348,7 +348,7 @@ Shell.prototype._draw = function() {
 
 	if (this.vspace) { this.vspace.draw(); }
 	this.cockpit.draw();
-	if (this.menu) { this.menu.draw(Point.zero); }
+	if (this.menu) { this.menu.draw(View.proper); }
 
 	this.caret.display();
 
@@ -381,7 +381,7 @@ Shell.prototype.mousehover = function(p, shift, ctrl) {
 
 	// hover menu
 	if (this.menu)
-		{ cursor = this.menu.mousehover(Point.zero, p, shift, ctrl); }
+		{ cursor = this.menu.mousehover(View.proper, p, shift, ctrl); }
 
 
 	// hover cockpit
@@ -425,7 +425,7 @@ Shell.prototype.mousedown = function(p, shift, ctrl) {
 	var mouseState = null;
 
 	if (this.menu)
-		{ mouseState = this.menu.mousedown(Point.zero, p, shift, ctrl); }
+		{ mouseState = this.menu.mousedown(View.proper, p, shift, ctrl); }
 	
 	if (mouseState === null)
 		{ mouseState = this.cockpit.mousedown(p, shift, ctrl); }

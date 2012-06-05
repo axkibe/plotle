@@ -108,12 +108,12 @@ VRelation.prototype.draw = function(fabric, view) {
 
 	if (vitem1) {
 		var l1 = Line.connect(vitem1.getZone(), 'normal', zone, 'normal');
-		fabric.paint(theme.relation.style, l1, 'path', view.pan);
+		fabric.paint(theme.relation.style, l1, 'path', view);
 	}
 
 	if (vitem2) {
 		var l2 = Line.connect(zone,  'normal', vitem2.getZone(), 'arrow');
-		fabric.paint(theme.relation.style, l2, 'path', view.pan);
+		fabric.paint(theme.relation.style, l2, 'path', view);
 	}
 
 	VLabel.prototype.draw.call(this, fabric, view);

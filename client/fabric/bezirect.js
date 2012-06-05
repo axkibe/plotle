@@ -86,13 +86,11 @@ subclass(BeziRect, Rect);
 | border : additional distance.
 | twist  : parameter to beginPath, add +0.5 on everything for lines
 */
-BeziRect.prototype.path = function(fabric, border, twist, pan) {
-	var px = pan.x;
-	var py = pan.y;
-	var wx = this.pnw.x + px + border;
-	var ny = this.pnw.y + py + border;
-	var ex = this.pse.x + px - border - 1;
-	var sy = this.pse.y + py - border - 1;
+BeziRect.prototype.path = function(fabric, border, twist, view) {
+	var wx = view.x(this.pnw) + border;
+	var ny = view.y(this.pnw) + border;
+	var ex = view.x(this.pse) - border - 1;
+	var sy = view.y(this.pse) - border - 1;
 	var a = this.a;
 	var b = this.b;
 	var ma = magic * (a + border);
@@ -113,8 +111,8 @@ BeziRect.prototype.path = function(fabric, border, twist, pan) {
 /**
 | Returns true if Point p is within the BeziRect.
 */
-BeziRect.prototype.within = function(fabric, pan, p) {
-	return fabric.within(this, 'path', pan, p);
+BeziRect.prototype.within = function(fabric, view, p) {
+	return fabric.within(this, 'path', view, p);
 };
 
 })();

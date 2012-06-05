@@ -39,6 +39,7 @@ var Rect;
 var shell;
 var system;
 var theme;
+var View;
 var VNote;
 var VLabel;
 var VRelation;
@@ -79,10 +80,7 @@ VSpace = function(twig, path, access) {
 	this.key         = path.get(-1);
 	this.fabric      = system.fabric;
 
-	this.$view       = {
-		pan   : Point.zero,
-		zoom  : 0.5
-	};
+	this.$view       = new View(Point.zero, 0.5);
 
 	Jools.keyNonGrata(this, '$pan');
 
@@ -420,7 +418,7 @@ VSpace.prototype.dragmove = function(p, shift, ctrl) {
 
 	switch(action.type) {
 	case Action.PAN :
-		$view.pan = p.sub(action.start);
+		this.$view = $view = new View(p.sub(action.start), $view.zoom);
 		shell.redraw = true;
 		return 'pointer';
 

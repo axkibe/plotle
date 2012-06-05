@@ -120,14 +120,14 @@ lazyFixate(OvalSlice.prototype, 'pse', function() {
 /**
 | Draws the hexagon.
 */
-OvalSlice.prototype.path = function(fabric, border, twist, pan) {
+OvalSlice.prototype.path = function(fabric, border, twist, view) {
 	var a   = this.a;
 	var b   = this.b;
 	var am  = magic * this.a;
 	var bm  = magic * this.b;
 	var bo  = border;
-	var pswx = ro(this.psw.x + pan.x); // TODO need ro?
-	var pswy = ro(this.psw.y + pan.y);
+	var pswx = ro(view.x(this.psw)); // TODO need ro?
+	var pswy = ro(view.y(this.psw));
 
 	fabric.beginPath(twist);
 
@@ -147,8 +147,8 @@ OvalSlice.prototype.path = function(fabric, border, twist, pan) {
 /**
 | Returns true if point is within the slice.
 */
-OvalSlice.prototype.within = function(fabric, pan, p) {
-	return fabric.within(this, 'path', pan, p);
+OvalSlice.prototype.within = function(fabric, view, p) {
+	return fabric.within(this, 'path', view, p);
 };
 
 })();

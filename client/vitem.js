@@ -102,7 +102,7 @@ VItem.prototype.getOvalSlice = function() {
 | Returns if point is within the item menu
 */
 VItem.prototype.withinItemMenu = function(view, p) {
-	return this.getOvalSlice().within(system.fabric, view.pan, p);
+	return this.getOvalSlice().within(system.fabric, view, p);
 };
 
 /**
@@ -112,17 +112,21 @@ VItem.prototype.withinItemMenu = function(view, p) {
 VItem.prototype.checkItemCompass = function(view, p) {
 	var ha = this.handles;
 	var zone = this.getZone();
-	p = p.sub(view.pan); // TODO
 
 	if (!ha) return null;
 	var d   =       theme.handle.size; // distance
 	var din = 0.5 * theme.handle.size; // inner distance
 	var dou =       theme.handle.size; // outer distance
 
-	var n = p.y >= zone.pnw.y - dou && p.y <= zone.pnw.y + din;
-	var e = p.x >= zone.pse.x - din && p.x <= zone.pse.x + dou;
-	var s = p.y >= zone.pse.y - din && p.y <= zone.pse.y + dou;
-	var w = p.x >= zone.pnw.x - dou && p.x <= zone.pnw.x + din;
+	var wx = view.x(zone.pnw);
+	var ny = view.y(zone.pnw);
+	var ex = view.x(zone.pse);
+	var sy = view.y(zone.pse);
+
+	var n = p.y >= ny - dou && p.y <= ny + din;
+	var e = p.x >= ex - din && p.x <= ex + dou;
+	var s = p.y >= sy - din && p.y <= sy + dou;
+	var w = p.x >= wx - dou && p.x <= wx + din;
 
 	if (n) {
 		if (w && ha.nw) return 'nw';
@@ -144,7 +148,7 @@ VItem.prototype.checkItemCompass = function(view, p) {
 /**
 | Paths the resize handles.
 */
-VItem.prototype.pathResizeHandles = function(fabric, border, twist, pan) {
+VItem.prototype.pathResizeHandles = function(fabric, border, twist, view) {
 	if (border !== 0) throw new Error('borders unsupported for handles');
 	var ha = this.handles;
 	var zone = this.getZone();
@@ -155,10 +159,10 @@ VItem.prototype.pathResizeHandles = function(fabric, border, twist, pan) {
 	var hs = theme.handle.size;
 	var hs2 = half(hs);
 
-	var x1 = pnw.x + pan.x - ds;
-	var y1 = pnw.y + pan.y - ds;
-	var x2 = pse.x + pan.x + ds;
-	var y2 = pse.y + pan.y + ds;
+	var x1 = view.x(pnw) - ds;
+	var y1 = view.y(pnw) - ds;
+	var x2 = view.x(pse) + ds;
+	var y2 = view.y(pse) + ds;
 	var xm = half(x1 + x2);
 	var ym = half(y1 + y2);
 
@@ -206,10 +210,10 @@ VItem.prototype.pathResizeHandles = function(fabric, border, twist, pan) {
 */
 VItem.prototype.drawHandles = function(fabric, view) {
 	// draws the resize handles
-	fabric.edge(theme.handle.style.edge, this, 'pathResizeHandles', view.pan);
+	fabric.edge(theme.handle.style.edge, this, 'pathResizeHandles', view);
 
 	// draws item menu handler
-	fabric.paint(theme.ovalmenu.slice, this.getOvalSlice(), 'path', view.pan);
+	fabric.paint(theme.ovalmenu.slice, this.getOvalSlice(), 'path', view);
 };
 
 /**
@@ -360,7 +364,7 @@ VItem.prototype.click = function(p) {
 */
 VItem.prototype.highlight = function(fabric, view) {
 	var silhoutte = this.getSilhoutte(this.getZone(), false);
-	fabric.edge(theme.note.style.highlight, silhoutte, 'path', view.pan);
+	fabric.edge(theme.note.style.highlight, silhoutte, 'path', view);
 };
 
 /**

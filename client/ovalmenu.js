@@ -90,11 +90,11 @@ OvalMenu = function(fabric, pc, settings, labels, callback) {
 /**
 | Draws the hexmenu.
 */
-OvalMenu.prototype.draw = function(pan) {
+OvalMenu.prototype.draw = function(view) {
 	var f = this.fabric;
 	if (this.$fade) { f.globalAlpha(this.$fade); }
 
-	f.fill(this._style.fill, this._oflower, 'path', pan, 'outer');
+	f.fill(this._style.fill, this._oflower, 'path', view, 'outer');
 	switch(this.$within) {
 		case 'n'  :
 		case 'ne' :
@@ -102,10 +102,10 @@ OvalMenu.prototype.draw = function(pan) {
 		case 's'  :
 		case 'sw' :
 		case 'nw' :
-			f.paint(this._highlight, this._oflower, 'path', pan, this.$within, pan);
+			f.paint(this._highlight, this._oflower, 'path', view, this.$within);
 			break;
 	}
-	f.edge(this._style.edge, this._oflower, 'path', pan, null);
+	f.edge(this._style.edge, this._oflower, 'path', view, null);
 
 
 	f.setFontStyle('12px ' + theme.defaultFont, 'black', 'center', 'middle');
@@ -133,8 +133,8 @@ OvalMenu.prototype.draw = function(pan) {
 /**
 | Sets this.mousepos and returns it according to p.
 */
-OvalMenu.prototype.within = function(pan, p) {
-	var w = this._oflower.within(this.fabric, pan, p);
+OvalMenu.prototype.within = function(view, p) {
+	var w = this._oflower.within(this.fabric, view, p);
 	if (w === this.$within) return w;
 	shell.redraw = true;
 	return this.$within = w;
@@ -143,8 +143,8 @@ OvalMenu.prototype.within = function(pan, p) {
 /**
 | Mouse button down event.
 */
-OvalMenu.prototype.mousedown = function(pan, p, shift, ctrl) {
-	var w = this.within(pan, p);
+OvalMenu.prototype.mousedown = function(view, p, shift, ctrl) {
+	var w = this.within(view, p);
 	if (!w) return null;
 	
 	this._callback(w, this.p);
@@ -179,10 +179,10 @@ OvalMenu.prototype.fadeout = function() {
 |
 | Returns true if the mouse pointer hovers over anything.
 */
-OvalMenu.prototype.mousehover = function(pan, p, shift, ctrl) {
+OvalMenu.prototype.mousehover = function(view, p, shift, ctrl) {
 	var self = this;
 
-	if (!this.within(pan, p)) {
+	if (!this.within(view, p)) {
 		if (!this.$fade) {
 			this.$fade = 1 - theme.fade.step;
 			this.$fadeTimer = system.setTimer(theme.fade.time, function() { self.fadeout(); });

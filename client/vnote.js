@@ -45,6 +45,7 @@ var settings;
 var shell;
 var system;
 var theme;
+var View;
 var VItem;
 var VPara;
 
@@ -237,20 +238,20 @@ VNote.prototype.draw = function(fabric, view) {
 		// resizes the canvas
 		f.attune(zone);
 		var silhoutte = this.getSilhoutte(zone, true);
-		f.fill(theme.note.style.fill, silhoutte, 'path', Point.zero);
+		f.fill(theme.note.style.fill, silhoutte, 'path', View.proper);
 
 		// draws selection and text
 		sbary.point = Point.renew(0, sbary.getPos(), sbary.point);
-		vdoc.draw(f, Point.zero, zone.width, imargin, sbary.point);
+		vdoc.draw(f, View.proper, zone.width, imargin, sbary.point);
 
 		// draws the scrollbar
-		if (sbary.visible) { sbary.draw(f, Point.zero); }
+		if (sbary.visible) { sbary.draw(f, View.proper); }
 
 		// draws the border
-		f.edge(theme.note.style.edge, silhoutte, 'path', Point.zero);
+		f.edge(theme.note.style.edge, silhoutte, 'path', View.proper);
 	}
 
-	fabric.drawImage(f, zone.pnw.add(view.pan));
+	fabric.drawImage(f, view.x(zone.pnw), view.y(zone.pnw));
 };
 
 /**
