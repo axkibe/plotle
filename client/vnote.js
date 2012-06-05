@@ -126,13 +126,10 @@ VNote.prototype.setScrollbar = function(pos) {
 	var sbary = this.scrollbarY;
 	if (!sbary.visible) return;
 
-	// @@ double call to getHeight, also in VDoc.draw()
-	sbary.max = this.vv.doc.getHeight();
-
 	var zone = this.getZone();
 
 	// @@ make a Rect.renew
-	sbary.zone = new Rect(
+	sbary.setZone(new Rect(
 		Point.renew(
 			zone.width - this.imargin.e - theme.scrollbar.strength,
 			this.imargin.n,
@@ -140,13 +137,11 @@ VNote.prototype.setScrollbar = function(pos) {
 		Point.renew(
 			zone.width - this.imargin.e,
 			zone.height - this.imargin.s - 1,
-			sbary.zone && sbary.zone.pse));
+			sbary.zone && sbary.zone.pse)
+	));
 
-	sbary.aperture = zone.height - this.imargin.y;
-	var smaxy = max(0, sbary.max - sbary.aperture);
-
-	if (typeof(pos) === 'undefined') pos = sbary.getPos();
-	sbary.setPos(limit(0, pos, smaxy));
+	if (typeof(pos) === 'undefined') { pos = sbary.getPos(); }
+	sbary.setPos(pos, zone.height - this.imargin.y, this.vv.doc.getHeight());
 };
 
 /**
@@ -274,7 +269,7 @@ VNote.prototype.mousewheel = function(p, dir) {
 */
 VNote.prototype.getFlowWidth = function() {
 	var sbary = this.scrollbarY;
-	var zone = this.getZone();
+	var zone  = this.getZone();
 	var flowWidth = zone.width - this.imargin.x;
 	if (sbary && sbary.visible) {
 		flowWidth -= theme.scrollbar.strength;

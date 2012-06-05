@@ -36,6 +36,7 @@ var Scrollbar = null;
 var BeziRect;
 var Fabric;
 var Jools;
+var Point;
 var theme;
 
 /**
@@ -64,11 +65,18 @@ var subclass = Jools.subclass;
 | Constructor.
 */
 Scrollbar = function() {
-	this.max      = null;
-	this.visible  = false;
-	this._pos     = 0;
-	this.aperture = null; // the size of the bar
-	this.zone     = null;
+	this.visible    = false;
+
+	// position
+	this._$pos      = 0;
+
+	// maximum position
+	this._$max      = null;
+
+	// the size of the bar
+	this._$aperture = null;
+
+	this._$zone     = null;
 };
 
 /**
@@ -78,12 +86,11 @@ Scrollbar.prototype.draw = function(fabric, pan) {
 	if (!this.visible) throw new Error('Drawing an invisible scrollbar');
 	var ths = theme.scrollbar;
 
-	// TODO caching
-	var z      = this.zone;
+	var z      = this._$zone;
 	var w      = z.width;
-	var size   = ro(this.aperture * z.height / this.max);
+	var size   = ro(this._$aperture * z.height / this._$max);
 	var msize  = max(size, ths.minSize);
-	var sy     = z.pnw.y + pan.y + ro(this._pos * ((z.height - msize + size) / this.max));
+	var sy     = z.pnw.y + pan.y + ro(this._$pos * ((z.height - msize + size) / this._$max));
 	var pwx    = z.pnw.x + pan.x;
 	var pex    = z.pse.x + pan.x;
 
@@ -101,15 +108,25 @@ Scrollbar.prototype.draw = function(fabric, pan) {
 */
 Scrollbar.prototype.getPos = function() {
 	if (!this.visible) return 0;
-	return this._pos;
+	return this._$pos;
 };
 
 /**
 | Sets the scrollbars position.
 */
-Scrollbar.prototype.setPos = function(pos) {
+Scrollbar.prototype.setPos = function(pos, aperture, max) {
+	pos = limit(0, pos, max - aperture);
 	if (pos < 0) throw new Error('Scrollbar.setPos < 0');
-	return this._pos = pos;
+	this._$pos      = pos;
+	this._$aperture = aperture;
+	this._$max      = max;
 };
+
+/**
+| Sets the scrollbars zone.
+*/
+Scrollbar.prototype.setZone = function(zone) {
+	this._$zone = zone;
+}
 
 })();
