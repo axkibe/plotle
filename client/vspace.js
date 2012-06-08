@@ -193,7 +193,7 @@ VSpace.prototype.draw = function() {
 	case Action.RELBIND :
 		var av  = action.vitem;
 		var av2 = action.vitem2;
-		var target = av2 ? av2.getZone() : action.move.sub($view.pan);
+		var target = av2 ? av2.getZone() : $view.depoint(action.move);
 		var arrow = Line.connect(av.getZone(), 'normal', target, 'arrow');
 		if (av2) av2.highlight(this.fabric, $view);
 		arrow.draw(this.fabric, $view, theme.relation.style);
@@ -321,8 +321,8 @@ VSpace.prototype.dragstart = function(p, shift, ctrl) {
 
 	// see if the itemmenu of the focus was targeted
 	if (this.access == 'rw' && focus && focus.withinItemMenu($view, p)) {
-		var vp = $view.depoint(p);
-		shell.startAction(Action.RELBIND, focus, vp);
+		var dp = $view.depoint(p);
+		shell.startAction(Action.RELBIND, focus, dp);
 		shell.redraw = true;
 		return;
 	}
@@ -352,9 +352,11 @@ VSpace.prototype.click = function(p, shift, ctrl) {
 	if (focus && focus.withinItemMenu($view, p)) {
 		var labels = {n : 'Remove'};
 
+		var os = focus.getOvalSlice();
+
 		shell.setMenu(new OvalMenu(
 			system.fabric,
-			$view.point(focus.getOvalSlice().pm),
+			$view.point(os.psw).add(half(os.width), 0),
 			theme.ovalmenu,
 			labels,
 			function(entry, p) {
@@ -436,8 +438,7 @@ VSpace.prototype.dragmove = function(p, shift, ctrl) {
 
 	case Action.RELBIND :
 		action.vitem2 = null;
-		var vp = $view.depoint(p);
-		action.move = vp;
+		action.move  = p;
 		shell.redraw = true;
 
 		for(var r = 0, rZ = this.twig.length; r < rZ; r++) {
@@ -457,20 +458,23 @@ VSpace.prototype.dragmove = function(p, shift, ctrl) {
 | An entry of the float menu has been selected
 */
 VSpace.prototype.floatMenuSelect = function(entry, p) {
-	var pnw, key;
 	var $view = this.$view;
+	var pnw, key;
 
 	switch(entry) {
-	case 'n' : // note
+	case 'n' :
+		// note
 		var nw = theme.note.newWidth;
 		var nh = theme.note.newHeight;
-		pnw = p.sub($view.pan.x + half(nw) , $view.pan.y + half(nh));
+		var dp = $view.depoint(p);
+		pnw = dp.sub(half(nw) , half(nh));
 		key = shell.peer.newNote(this.path, new Rect(pnw, pnw.add(nw, nh)));
 		var vnote = this.vv[key];
 		this.setFocus(vnote);
 		break;
-	case 'ne' : // label
-		pnw = p.sub($view.pan);
+	case 'ne' :
+		// label
+		pnw = $view.depoint(p);
 		pnw = pnw.sub(theme.label.createOffset);
 		key = shell.peer.newLabel(this.path, pnw, 'Label', 20);
 		var vlabel = this.vv[key];
@@ -511,8 +515,8 @@ VSpace.prototype.mousedown = function(p, shift, ctrl) {
 		var com = focus.checkItemCompass($view, p);
 		if (com) {
 			// resizing
-			var vp = $view.depoint(p);
-			action = shell.startAction(Action.ITEMRESIZE, focus, vp);
+			var dp = $view.depoint(p);
+			action = shell.startAction(Action.ITEMRESIZE, focus, dp);
 			action.align = com;
 			action.startZone = focus.getZone();
 			return 'drag';
