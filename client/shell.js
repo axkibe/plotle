@@ -521,7 +521,7 @@ Shell.prototype.specialKey = function(key, shift, ctrl) {
 	case 'space' :
 		if (!this.vspace) break;
 		this. vspace.specialKey(key, shift, ctrl);
-		break; 
+		break;
 	default : throw new Error('invalid visec');
 	}
 

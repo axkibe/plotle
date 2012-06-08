@@ -44,10 +44,9 @@ var c30 = cos(pi / 6);
 
 theme = {
 	defaultFont : 'DejaVuSans,sans-serif',
-	boldFont : 'DejaVuSansBold,sans-serif',
+	boldFont    : 'DejaVuSansBold,sans-serif',
 
 	//defaultFont : 'Verdana,Geneva,Kalimati,sans-serif',
-	//defaultFont : 'Freebooter Script,Zapfino,serif',
 
 	// factor to add to the bottom of font height
 	bottombox : 0.25,
@@ -58,6 +57,13 @@ theme = {
 
 		// alpha reducition by each step
 		step : 0.2
+	},
+
+	// zooming settings
+	zoom : {
+		base : 1.1,
+		min  : -15,
+		max  :  15
 	},
 
 	// standard note in space

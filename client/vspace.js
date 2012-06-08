@@ -63,12 +63,13 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
  `---' ' ' `-' '   `' `-' `-^ `' `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-var debug     = Jools.debug;
-var immute    = Jools.immute;
-var is        = Jools.is;
-var isnon     = Jools.isnon;
-var log       = Jools.log;
-var half      = Jools.half;
+var debug  = Jools.debug;
+var immute = Jools.immute;
+var is     = Jools.is;
+var isnon  = Jools.isnon;
+var half   = Jools.half;
+var log    = Jools.log;
+var ro     = Math.round;
 
 /**
 | Constructor
@@ -80,7 +81,7 @@ VSpace = function(twig, path, access) {
 	this.key         = path.get(-1);
 	this.fabric      = system.fabric;
 
-	this.$view       = new View(Point.zero, 1);
+	this.$view       = new View(Point.zero, 0);
 
 	Jools.keyNonGrata(this, '$pan');
 
@@ -265,9 +266,9 @@ VSpace.prototype.mousewheel = function(p, dir, shift, ctrl) {
 	}*/
 
 	if (dir > 0) {
-		this.$view = new View(this.$view.pan, this.$view.zoom * 1.1);
+		this.$view = this.$view.review( 1, p);
 	} else {
-		this.$view = new View(this.$view.pan, this.$view.zoom / 1.1);
+		this.$view = this.$view.review(-1, p);
 	}
 
 	this.knock();
@@ -399,8 +400,7 @@ VSpace.prototype.dragstop = function(p, shift, ctrl) {
 	switch (action.type) {
 	case Action.ITEMDRAG :
 	case Action.ITEMRESIZE :
-		var vp 
-		action.vitem.dragstop($view, vp);
+		action.vitem.dragstop($view, p);
 		break;
 	case Action.RELBIND:
 		for(var r = 0, rZ = this.twig.length; r < rZ; r++) {
@@ -428,7 +428,7 @@ VSpace.prototype.dragmove = function(p, shift, ctrl) {
 
 		this.$view = $view = new View(
 			action.pan.add(pd.x / $view.zoom, pd.y / $view.zoom),
-			$view.zoom
+			$view.fact
 		);
 
 		shell.redraw = true;
@@ -535,17 +535,26 @@ VSpace.prototype.input = function(text) {
 | User pressed a special key.
 */
 VSpace.prototype.specialKey = function(key, shift, ctrl) {
+	var pm;
+	var $view;
+
 	if (ctrl) {
 		switch(key) {
-		case 'z'      : shell.peer.undo(); return;
-		case 'y'      : shell.peer.redo(); return;
-		case ',' :
-			this.$view = new View(this.$view.pan, this.$view.zoom * 1.1);
-			this.knock();
-			shell.redraw = true;
+		case 'z' :
+			shell.peer.undo();
 			return;
+		case 'y' :
+			shell.peer.redo();
+			return;
+		case ',' :
 		case '.' :
-			this.$view = new View(this.$view.pan, this.$view.zoom / 1.1);
+			$view = this.$view;
+			pm = new Point(half(this.fabric.width), half(this.fabric.height));
+			pm = $view.depoint(pm);
+			switch(key) {
+			case ',' : this.$view = this.$view.review( 1, pm); break;
+			case '.' : this.$view = this.$view.review(-1, pm); break;
+			}
 			this.knock();
 			shell.redraw = true;
 			return;

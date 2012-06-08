@@ -173,36 +173,63 @@ Fabric.prototype.attune = function(a1, a2) {
 /**
 | Moves the path maker.
 |
-| moveTo(point) -or-
-| moveTo(x, y)
+| moveTo(point)       -or-
+| moveTo(x, y)        -or-
+|
+| moveTo(point, view) -or-
+| moveTo(x, y, view)
 */
-Fabric.prototype.moveTo = function(a1, a2) {
-	var tw = this._twist, x, y;
+Fabric.prototype.moveTo = function(a1, a2, a3) {
+	var tw = this._twist, v, x, y;
 	if (typeof(a1) === 'object') {
-		x = a1.x; y = a1.y;
+		x = a1.x;
+		y = a1.y;
+		v = a2;
 	} else {
-		x = a1;   y = a2;
+		x = a1;
+		y = a2;
+		v = a3;
 	}
 	ensureInteger(x, y);
+	if (v) {
+		var x1 = x;
+		x = v.x(x,  y);
+		y = v.y(x1, y);
+	}
 	this._posx = x;
 	this._posy = y;
+	x += tw;
+	y += tw;
+
 	this._cx.moveTo(x + tw, y + tw);
 };
 
 /**
 | Draws a line.
 |
-| lineto(point) -or-
-| lineto(x, y)
+| lineto(point)       -or-
+| lineto(x, y)        -or-
+|
+| lineto(point, view) -or-
+| lineto(x, y, view)
 */
-Fabric.prototype.lineTo = function(a1, a2) {
-	var tw = this._twist, x, y;
+Fabric.prototype.lineTo = function(a1, a2, a3) {
+	var tw = this._twist, v, x, y;
 	if (typeof(a1) === 'object') {
-		x = a1.x; y = a1.y;
+		x = a1.x;
+		y = a1.y;
+		v = a2;
 	} else {
-		x = a1;   y = a2;
+		x = a1;
+		y = a2;
+		v = a3;
 	}
 	ensureInteger(x, y);
+	if (v) {
+		var x1 = x;
+		x = v.x(x,  y);
+		y = v.y(x1, y);
+	}
 	this._posx = x;
 	this._posy = y;
 	this._cx.lineTo(x + tw, y + tw);

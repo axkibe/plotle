@@ -126,7 +126,7 @@ VDoc.prototype.draw = function(fabric, view, width, imargin, scrollp) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
 
 	// @@ <pre>
-	var paraSep = this.getParaSep() * view.zoom;
+	var paraSep = this.getParaSep();
 	var select = shell.selection;
 
 	// draws the selection
@@ -270,8 +270,6 @@ VDoc.prototype.getVParaAtPoint = function(p) {
 | scrollp : scroll position of the doc.
 */
 VDoc.prototype.pathSelection = function(fabric, border, twist, view, width, imargin, scrollp) {
-	// XXX use view!
-
 	var select = shell.selection;
 	select.normalize();
 
@@ -303,42 +301,42 @@ VDoc.prototype.pathSelection = function(fabric, border, twist, view, width, imar
 	var lx = imargin.w;
 	if ((abs(p2.y - p1.y) < 2)) {
 		// ***
-		fabric.moveTo(p1.x, p1.y + descend);
-		fabric.lineTo(p1.x, p1.y -  ascend);
-		fabric.lineTo(p2.x, p2.y -  ascend);
-		fabric.lineTo(p2.x, p2.y + descend);
-		fabric.lineTo(p1.x, p1.y + descend);
+		fabric.moveTo(p1.x, p1.y + descend, view);
+		fabric.lineTo(p1.x, p1.y -  ascend, view);
+		fabric.lineTo(p2.x, p2.y -  ascend, view);
+		fabric.lineTo(p2.x, p2.y + descend, view);
+		fabric.lineTo(p1.x, p1.y + descend, view);
 	} else if (abs(p1.y + fontsize + descend - p2.y) < 2 && (p2.x <= p1.x))  {
 		//      ***
 		// ***
-		fabric.moveTo(rx,   p1.y -  ascend);
-		fabric.lineTo(p1.x, p1.y -  ascend);
-		fabric.lineTo(p1.x, p1.y + descend);
-		fabric.lineTo(rx,   p1.y + descend);
+		fabric.moveTo(rx,   p1.y -  ascend, view);
+		fabric.lineTo(p1.x, p1.y -  ascend, view);
+		fabric.lineTo(p1.x, p1.y + descend, view);
+		fabric.lineTo(rx,   p1.y + descend, view);
 
-		fabric.moveTo(lx,   p2.y -  ascend);
-		fabric.lineTo(p2.x, p2.y -  ascend);
-		fabric.lineTo(p2.x, p2.y + descend);
-		fabric.lineTo(lx,   p2.y + descend);
+		fabric.moveTo(lx,   p2.y -  ascend, view);
+		fabric.lineTo(p2.x, p2.y -  ascend, view);
+		fabric.lineTo(p2.x, p2.y + descend, view);
+		fabric.lineTo(lx,   p2.y + descend, view);
 	} else {
 		//    *****
 		// *****
-		fabric.moveTo(rx,   p2.y -  ascend);
-		fabric.lineTo(p2.x, p2.y -  ascend);
-		fabric.lineTo(p2.x, p2.y + descend);
-		fabric.lineTo(lx,   p2.y + descend);
+		fabric.moveTo(rx,   p2.y -  ascend, view);
+		fabric.lineTo(p2.x, p2.y -  ascend, view);
+		fabric.lineTo(p2.x, p2.y + descend, view);
+		fabric.lineTo(lx,   p2.y + descend, view);
 
 		if (twist) {
-			fabric.moveTo(lx, p1.y + descend);
+			fabric.moveTo(lx, p1.y + descend, view);
 		} else {
-			fabric.lineTo(lx, p1.y + descend);
+			fabric.lineTo(lx, p1.y + descend, view);
 		}
-		fabric.lineTo(p1.x, p1.y + descend);
-		fabric.lineTo(p1.x, p1.y -  ascend);
-		fabric.lineTo(rx,   p1.y -  ascend);
-		if (!twist) {
-			fabric.lineTo(rx, p2.y - ascend);
-		}
+
+		fabric.lineTo(p1.x, p1.y + descend, view);
+		fabric.lineTo(p1.x, p1.y -  ascend, view);
+		fabric.lineTo(rx,   p1.y -  ascend, view);
+		if (!twist)
+			{ fabric.lineTo(rx, p2.y - ascend, view); }
 	}
 };
 

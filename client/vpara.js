@@ -70,7 +70,8 @@ var ro            = Math.round;
 | Constructor.
 */
 VPara = function(twig, path) {
-	if (twig.type !== 'Para') throw new Error('type error');
+	if (twig.type !== 'Para')
+		{ throw new Error('type error'); }
 
 	this.twig = twig;
 	this.path = path;
@@ -182,9 +183,7 @@ VPara.prototype.getFlow = function() {
 |
 | point: the point to look for
 */
-VPara.prototype.getPointOffset = function(point, NOVIEW) {
-	if (NOVIEW instanceof View) { throw new Error('NOVIEW'); }
-
+VPara.prototype.getPointOffset = function(point) {
 	var flow = this.getFlow();
 	var para = this.para;
 	var vdoc = shell.vspace.vget(this.path, -1);
@@ -192,9 +191,8 @@ VPara.prototype.getPointOffset = function(point, NOVIEW) {
 
 	var line;
 	for (line = 0; line < flow.length; line++) {
-		if (point.y <= flow[line].y) {
-			break;
-		}
+		if (point.y <= flow[line].y)
+			{ break; }
 	}
 	if (line >= flow.length) line--;
 
@@ -210,11 +208,12 @@ VPara.prototype.getLineXOffset = function(line, x) {
 	var ftoken = null;
 	for (var token = 0; token < fline.a.length; token++) {
 		ftoken = fline.a[token];
-		if (x <= ftoken.x + ftoken.w) { break; }
+		if (x <= ftoken.x + ftoken.w)
+			{ break; }
 	}
 	if (token >= fline.a.length) ftoken = fline.a[--token];
 
-	if (!ftoken) return 0;
+	if (!ftoken) { return 0; }
 
 	var dx   = x - ftoken.x;
 	var text = ftoken.t;
@@ -224,7 +223,7 @@ VPara.prototype.getLineXOffset = function(line, x) {
 	for(a = 0; a < text.length; a++) {
 		x1 = x2;
 		x2 = Measure.width(text.substr(0, a));
-		if (x2 >= dx) break;
+		if (x2 >= dx) { break; }
 	}
 
 	if (dx - x1 < x2 - dx && a > 0) a--;
@@ -632,9 +631,7 @@ VPara.prototype.getOffsetPoint = function(offset, flowPos$) {
 /**
 | Returns the caret position relative to the vdoc.
 */
-VPara.prototype.getCaretPos = function(NOVIEW) {
-	if (NOVIEW instanceof View) { throw new Error('NOVIEW'); }
-
+VPara.prototype.getCaretPos = function() {
 	var caret   = shell.caret;
 	var vitem   = shell.vspace.vget(this.path, -2);
 	var vdoc    = vitem.vv.doc;
@@ -669,7 +666,7 @@ VPara.prototype.drawCaret = function(view) {
 	var cys = limit(0, cpos.s + pnw.y - sy, zone.height);
 	var cx  = cpos.x + pnw.x;
 
-	var ch  = cys - cyn;
+	var ch  = ro((cys - cyn) * view.zoom);
 	if (ch === 0) return;
 
 	var cp = view.point(cx + zone.pnw.x, cyn + zone.pnw.y);

@@ -214,25 +214,26 @@ VNote.prototype.dragstop = function(view, p) {
 VNote.prototype.draw = function(fabric, view) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
 
-	var zone = view.rect(this.getZone());
+	var zone = this.getZone();
+	var vzone = view.rect(zone);
 	var f = this.$fabric;
 
 	// no buffer hit?
 	if (config.debug.noCache || !f ||
-		zone.width  !== f.width ||
-		zone.height !== f.height)
+		vzone.width  !== f.width ||
+		vzone.height !== f.height)
 	{
-		f = this.$fabric = new Fabric(zone.width, zone.height);
+		f = this.$fabric = new Fabric(vzone.width, vzone.height);
 		var vdoc         = this.vv.doc;
 		var imargin      = this.imargin;
 
 		// calculates if a scrollbar is needed
 		var sbary  = this.scrollbarY;
 		var vheight = vdoc.getHeight() * view.zoom;
-		if (!sbary.visible && vheight > zone.height - imargin.y) {
+		if (!sbary.visible && vheight > vzone.height - imargin.y) {
 			// doesn't use a scrollbar but should
 			sbary.visible = true;
-		} else if (sbary.visible && vheight <= zone.height - imargin.y) {
+		} else if (sbary.visible && vheight <= vzone.height - imargin.y) {
 			// uses a scrollbar but shouldn't
 			sbary.visible = false;
 		}
@@ -240,8 +241,8 @@ VNote.prototype.draw = function(fabric, view) {
 		if (sbary.visible) { this.setScrollbar(); }
 
 		// resizes the canvas
-		f.attune(zone);
-		var silhoutte = this.getSilhoutte(zone, true);
+		f.attune(vzone);
+		var silhoutte = this.getSilhoutte(vzone, true);
 		f.fill(theme.note.style.fill, silhoutte, 'path', View.proper);
 
 		// draws selection and text
@@ -255,7 +256,7 @@ VNote.prototype.draw = function(fabric, view) {
 		f.edge(theme.note.style.edge, silhoutte, 'path', View.proper);
 	}
 
-	fabric.drawImage(f, zone.pnw);
+	fabric.drawImage(f, vzone.pnw);
 };
 
 /**
