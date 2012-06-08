@@ -188,7 +188,7 @@ CInput.prototype.draw = function(fabric, accent) {
 | offset:   the offset to get the point from.
 | @@ rename
 */
-CInput.prototype.getOffsetPoint = function(offset) {
+CInput.prototype.getOffsetPoint = function(offset, view) {
 	// @@ cache position
 	var twig     = this.twig;
 	var font     = twig.fontStyle;
@@ -212,12 +212,11 @@ CInput.prototype.getOffsetPoint = function(offset) {
 /**
 | Returns the caret position relative to the board.
 */
-CInput.prototype.getCaretPos = function() {
+CInput.prototype.getCaretPos = function(view) {
 	var caret   = shell.caret;
 	var fs      = this.twig.fontStyle.size;
 	var descend = fs * theme.bottombox;
-	var p       = this.getOffsetPoint(shell.caret.sign.at1);
-	//var p = { x: 2, y : 2};
+	var p       = this.getOffsetPoint(shell.caret.sign.at1, view);
 
 	var pnw = this.pnw;
 	var s = ro(p.y + pnw.y + descend);
@@ -230,10 +229,12 @@ CInput.prototype.getCaretPos = function() {
 /**
 | Draws the caret.
 */
-CInput.prototype.drawCaret = function() {
+CInput.prototype.drawCaret = function(view) {
+	// TODO use view
+
 	var caret = shell.caret;
 	var board = this.board;
-	var cpos  = caret.$pos = this.getCaretPos();
+	var cpos  = caret.$pos = this.getCaretPos(view);
 
 	var cx  = cpos.x;
 	var ch  = cpos.s - cpos.n;

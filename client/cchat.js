@@ -96,11 +96,11 @@ CChat.prototype.canFocus = function() {
 /**
 | Returns the caret position relative to the board.
 */
-CChat.prototype.getCaretPos = function() {
+CChat.prototype.getCaretPos = function(view) {
 	var caret   = shell.caret;
 	var fs      = this.twig.fontStyle.size;
 	var descend = fs * theme.bottombox;
-	var p       = this.getOffsetPoint(shell.caret.sign.at1);
+	var p       = this.getOffsetPoint(shell.caret.sign.at1, view);
 	//var p = { x: 2, y : 2};
 
 	var pnw = this.pnw;
@@ -179,10 +179,12 @@ CChat.prototype.draw = function(fabric) {
 /**
 | Draws the caret.
 */
-CChat.prototype.drawCaret = function() {
+CChat.prototype.drawCaret = function(view) {
+	// TODO view
+
 	var caret = shell.caret;
 	var board = this.board;
-	var cpos  = caret.$pos = this.getCaretPos();
+	var cpos  = caret.$pos = this.getCaretPos(view);
 
 	var cx  = cpos.x;
 	var ch  = cpos.s - cpos.n;

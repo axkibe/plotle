@@ -183,7 +183,9 @@ VNote.prototype.scrollPage = function(up) {
 /**
 | Sets the items position and size after an action.
 */
-VNote.prototype.dragstop = function(p) {
+VNote.prototype.dragstop = function(view, p) {
+	if (!(view instanceof View)) { throw new Error('view no View'); }
+
 	var action = shell.action;
 	switch (action.type) {
 	case Action.ITEMDRAG :
@@ -200,7 +202,7 @@ VNote.prototype.dragstop = function(p) {
 		shell.redraw = true;
 		return true;
 	default :
-		return VItem.prototype.dragstop.call(this, p);
+		return VItem.prototype.dragstop.call(this, view, p);
 	}
 };
 
@@ -210,7 +212,9 @@ VNote.prototype.dragstop = function(p) {
 | fabric: to draw upon.
 */
 VNote.prototype.draw = function(fabric, view) {
-	var zone = this.getZone();
+	if (!(view instanceof View)) { throw new Error('view no View'); }
+
+	var zone = view.rect(this.getZone());
 	var f = this.$fabric;
 
 	// no buffer hit?
@@ -224,7 +228,7 @@ VNote.prototype.draw = function(fabric, view) {
 
 		// calculates if a scrollbar is needed
 		var sbary  = this.scrollbarY;
-		var vheight = vdoc.getHeight();
+		var vheight = vdoc.getHeight() * view.zoom;
 		if (!sbary.visible && vheight > zone.height - imargin.y) {
 			// doesn't use a scrollbar but should
 			sbary.visible = true;
@@ -242,7 +246,7 @@ VNote.prototype.draw = function(fabric, view) {
 
 		// draws selection and text
 		sbary.point = Point.renew(0, sbary.getPos(), sbary.point);
-		vdoc.draw(f, View.proper, zone.width, imargin, sbary.point);
+		vdoc.draw(f, view.home(), zone.width, imargin, sbary.point);
 
 		// draws the scrollbar
 		if (sbary.visible) { sbary.draw(f, View.proper); }
@@ -251,14 +255,16 @@ VNote.prototype.draw = function(fabric, view) {
 		f.edge(theme.note.style.edge, silhoutte, 'path', View.proper);
 	}
 
-	fabric.drawImage(f, view.x(zone.pnw), view.y(zone.pnw));
+	fabric.drawImage(f, zone.pnw);
 };
 
 /**
 | Mouse wheel turned.
 */
-VNote.prototype.mousewheel = function(p, dir) {
-	if (!this.getZone().within(p)) return false;
+VNote.prototype.mousewheel = function(view, p, dir) {
+	var vp = view.point(p);
+
+	if (!this.getZone().within(vp)) return false;
 	this.setScrollbar(this.scrollbarY.getPos() - dir * settings.textWheelSpeed);
 	this.poke();
 	shell.redraw = true;
@@ -289,7 +295,9 @@ VNote.prototype.getParaSep = function(fontsize) {
 | Returns the zone of the item.
 | An ongoing action can modify this to be different than meshmashine data.
 */
-VNote.prototype.getZone = function() {
+VNote.prototype.getZone = function(NOVIEW) {
+	if ((NOVIEW instanceof View)) { throw new Error('NO VIEW!'); }
+
 	var twig   = this.twig;
 	var action = shell.action;
 
@@ -298,7 +306,9 @@ VNote.prototype.getZone = function() {
 
 	switch (action.type) {
 	case Action.ITEMDRAG:
-		return twig.zone.add(action.move.x - action.start.x, action.move.y - action.start.y);
+		return twig.zone.add(
+			action.move.x - action.start.x,
+			action.move.y - action.start.y);
 
 	case Action.ITEMRESIZE:
 		var szone = action.startZone;

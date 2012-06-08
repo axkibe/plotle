@@ -41,6 +41,7 @@ var shell;
 var system;
 var theme;
 var VDoc;
+var View;
 var VRelation;
 
 /**
@@ -92,7 +93,9 @@ VItem.prototype.update = function(twig) {
 /**
 | Return the handle oval slice.
 */
-VItem.prototype.getOvalSlice = function() {
+VItem.prototype.getOvalSlice = function(NOVIEW) {
+	if (NOVIEW instanceof View) { throw new Error('NOVIEW'); }
+
 	var zone = this.getZone();
 	if (this._$ovalslice && this._$ovalslice.psw.eq(zone.pnw)) return this._$ovalslice;
 	return this._$ovalslice = new OvalSlice(zone.pnw, theme.ovalmenu.dimensions);
@@ -110,18 +113,20 @@ VItem.prototype.withinItemMenu = function(view, p) {
 | @@ rename
 */
 VItem.prototype.checkItemCompass = function(view, p) {
+	if (!(view instanceof View)) { throw new Error('view no View'); }
+
 	var ha = this.handles;
-	var zone = this.getZone();
+	var zone = view.rect(this.getZone());
 
 	if (!ha) return null;
 	var d   =       theme.handle.size; // distance
 	var din = 0.5 * theme.handle.size; // inner distance
 	var dou =       theme.handle.size; // outer distance
 
-	var wx = view.x(zone.pnw);
-	var ny = view.y(zone.pnw);
-	var ex = view.x(zone.pse);
-	var sy = view.y(zone.pse);
+	var wx = zone.pnw.x;
+	var ny = zone.pnw.y;
+	var ex = zone.pse.x;
+	var sy = zone.pse.y;
 
 	var n = p.y >= ny - dou && p.y <= ny + din;
 	var e = p.x >= ex - din && p.x <= ex + dou;
@@ -149,9 +154,11 @@ VItem.prototype.checkItemCompass = function(view, p) {
 | Paths the resize handles.
 */
 VItem.prototype.pathResizeHandles = function(fabric, border, twist, view) {
+	if (!(view instanceof View)) { throw new Error('view no View'); }
 	if (border !== 0) throw new Error('borders unsupported for handles');
+
 	var ha = this.handles;
-	var zone = this.getZone();
+	var zone = view.rect(this.getZone());
 	var pnw = zone.pnw;
 	var pse = zone.pse;
 
@@ -159,10 +166,10 @@ VItem.prototype.pathResizeHandles = function(fabric, border, twist, view) {
 	var hs = theme.handle.size;
 	var hs2 = half(hs);
 
-	var x1 = view.x(pnw) - ds;
-	var y1 = view.y(pnw) - ds;
-	var x2 = view.x(pse) + ds;
-	var y2 = view.y(pse) + ds;
+	var x1 = pnw.x - ds;
+	var y1 = pnw.y - ds;
+	var x2 = pse.x + ds;
+	var y2 = pse.y + ds;
 	var xm = half(x1 + x2);
 	var ym = half(y1 + y2);
 
@@ -209,10 +216,13 @@ VItem.prototype.pathResizeHandles = function(fabric, border, twist, view) {
 | Draws the handles of an item (resize, itemmenu)
 */
 VItem.prototype.drawHandles = function(fabric, view) {
+	if (!(view instanceof View)) { throw new Error('view no View'); }
+
 	// draws the resize handles
 	fabric.edge(theme.handle.style.edge, this, 'pathResizeHandles', view);
 
 	// draws item menu handler
+	// TODO home view
 	fabric.paint(theme.ovalmenu.slice, this.getOvalSlice(), 'path', view);
 };
 
@@ -229,8 +239,11 @@ VItem.prototype.getVParaAtPoint = function(p, action) {
 | Dragstart.
 | Checks if a dragstart targets this item.
 */
-VItem.prototype.dragstart = function(p, shift, ctrl, access) {
-	if (!this.getZone().within(p)) return false;
+VItem.prototype.dragstart = function(view, p, shift, ctrl, access) {
+	if (!(view instanceof View)) { throw new Error('view no View'); }
+
+	var vp = view.depoint(p);
+	if (!this.getZone().within(vp)) return false;
 
 	shell.redraw = true;
 
@@ -243,15 +256,16 @@ VItem.prototype.dragstart = function(p, shift, ctrl, access) {
 	// scrolling or dragging
 	if (access == 'rw')
 		{ shell.vspace.setFocus(this); }
+
 	var sbary = this.scrollbarY;
 	var pnw = this.getZone().pnw;
-	var pr = p.sub(pnw);
+	var pr = vp.sub(pnw);
 	if (sbary && sbary.visible && sbary._$zone.within(pr)) { // TODO EVIL move to sbary
 		var action = shell.startAction(Action.SCROLLY, this, p);
 		action.startPos = sbary.getPos();
 	} else {
 		if (access == 'rw') {
-			shell.startAction(Action.ITEMDRAG, this, p);
+			shell.startAction(Action.ITEMDRAG, this, vp);
 		} else {
 			shell.startAction(Action.PAN, null, p);
 		}
@@ -262,20 +276,22 @@ VItem.prototype.dragstart = function(p, shift, ctrl, access) {
 /**
 | dragmove?
 */
-VItem.prototype.dragmove = function(p) {
+VItem.prototype.dragmove = function(view, p) {
+	if (!(view instanceof View)) { throw new Error('view no View'); }
 	// no general zone test, since while dragmoving the item might be fixed by the action.
 	var action = shell.action;
+	var vp = view.depoint(p);
 
 	switch (action.type) {
 	case Action.RELBIND    :
-		if (!this.getZone().within(p)) return false;
+		if (!this.getZone().within(vp)) return false;
 		action.move = p;
 		action.vitem2 = this;
 		shell.redraw = true;
 		return true;
 	case Action.ITEMDRAG   :
 	case Action.ITEMRESIZE :
-		action.move = p;
+		action.move = vp;
 		shell.redraw = true;
 		return true;
 	case Action.SCROLLY :
@@ -283,7 +299,7 @@ VItem.prototype.dragmove = function(p) {
 		var dy = p.y - start.y;
 		var vitem = action.vitem;
 		var sbary = vitem.scrollbarY;
-		var spos = action.startPos + sbary.max / sbary.zone.height * dy;
+		var spos = action.startPos + sbary._$max / sbary._$zone.height * dy; // TODO _$zone
 		vitem.setScrollbar(spos);
 		vitem.poke();
 		shell.redraw = true;
@@ -297,11 +313,14 @@ VItem.prototype.dragmove = function(p) {
 /**
 | Sets the items position and size after an action.
 */
-VItem.prototype.dragstop = function(p) {
+VItem.prototype.dragstop = function(view, p) {
+	if (!(view instanceof View)) { throw new Error('view no View'); }
+	var vp = view.depoint(p);
+
 	var action = shell.action;
 	switch (action.type) {
 	case Action.RELBIND :
-		if (!this.getZone().within(p)) return false;
+		if (!this.getZone().within(vp)) return false;
 		var vspace = shell.vspace.vget(this.path, -1);
 		VRelation.create(vspace, action.vitem, this);
 		shell.redraw = true;
@@ -316,17 +335,23 @@ VItem.prototype.dragstop = function(p) {
 | Mouse is hovering around.
 | Checks if this item reacts on this.
 */
-VItem.prototype.mousehover = function(p) {
+VItem.prototype.mousehover = function(view, p) {
+	if (!(view instanceof View)) { throw new Error('view no View'); }
+
 	if (p === null) { return null; }
-	if (!this.getZone().within(p)) return null;
+	var vp = view.depoint(p);
+	if (!this.getZone().within(vp)) return null;
 	return 'default';
 };
 
 /**
 | Sees if this item reacts on a click event.
 */
-VItem.prototype.click = function(p) {
-	if (!this.getZone().within(p)) return false;
+VItem.prototype.click = function(view, p) {
+	if (!(view instanceof View)) { throw new Error('view no View'); }
+
+	var vp = view.depoint(p);
+	if (!this.getZone().within(vp)) return false;
 
 	var vspace = shell.vspace;
 	var focus  = vspace.focusedVItem();
@@ -337,7 +362,7 @@ VItem.prototype.click = function(p) {
 	shell.redraw = true;
 
 	var pnw = this.getZone().pnw;
-	var pi = p.sub(pnw.x, pnw.y - (this.scrollbarY ? this.scrollbarY.getPos() : 0 ));
+	var pi = vp.sub(pnw.x, pnw.y - (this.scrollbarY ? this.scrollbarY.getPos() : 0 ));
 
 	var vpara = this.getVParaAtPoint(pi);
 	if (vpara) {
@@ -363,6 +388,8 @@ VItem.prototype.click = function(p) {
 | Highlights the item.
 */
 VItem.prototype.highlight = function(fabric, view) {
+	if (!(view instanceof View)) { throw new Error('view no View'); }
+
 	var silhoutte = this.getSilhoutte(this.getZone(), false);
 	fabric.edge(theme.note.style.highlight, silhoutte, 'path', view);
 };

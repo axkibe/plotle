@@ -27,7 +27,7 @@
 /**
 | Exports
 */
-var VDoc      = null;
+var VDoc = null;
 
 /**
 | Imports
@@ -36,9 +36,10 @@ var Fabric;
 var Jools;
 var Path;
 var Point;
-var VPara;
 var shell;
 var theme;
+var View;
+var VPara;
 
 /**
 | Capsule
@@ -115,21 +116,30 @@ VDoc.prototype.update = function(twig) {
 /**
 | Draws the document on a fabric.
 |
-| fabric:  to draw upon.
+| fabric:  to draw upon
+| view:    current pan/zoom/motion
 | width:   the width to draw the document with.
 | imargin: distance of text to edge
 | scrollp: scroll position
-|
-| TODO pan == scrollp double thing?
 */
 VDoc.prototype.draw = function(fabric, view, width, imargin, scrollp) {
+	if (!(view instanceof View)) { throw new Error('view no View'); }
+
 	// @@ <pre>
-	var paraSep = this.getParaSep();
+	var paraSep = this.getParaSep() * view.zoom;
 	var select = shell.selection;
 
 	// draws the selection
 	if (select.active && this.path.subPathOf(select.sign1.path)) {
-		fabric.paint(theme.selection.style, this, 'pathSelection', view, width, imargin, scrollp);
+		fabric.paint(
+			theme.selection.style,
+			this,
+			'pathSelection',
+			view,
+			width,
+			imargin,
+			scrollp
+		);
 	}
 
 	var y = imargin.n;
@@ -145,7 +155,7 @@ VDoc.prototype.draw = function(fabric, view, width, imargin, scrollp) {
 		pnws[twig.ranks[r]] = new Point(imargin.w, ro(y));
 		var p = new Point(imargin.w, ro(y - scrollp.y));
 
-		fabric.drawImage(vpara.getFabric(), view.x(p), view.y(p));
+		fabric.drawImage(vpara.getFabric(view), view.x(p), view.y(p));
 		y += flow.height + paraSep;
 	}
 	this.pnws = pnws;   // north-west points of paras
@@ -168,7 +178,9 @@ VDoc.prototype.getPNW = function(key) {
 | Returns the height of the document.
 | @@ caching
 */
-VDoc.prototype.getHeight = function() {
+VDoc.prototype.getHeight = function(NOVIEW) {
+	if (NOVIEW instanceof View) { throw new Error('NOVIEW'); }
+
 	var fontsize = this.getFontSize();
 	var paraSep  = this.getParaSep();
 	var twig     = this.twig;
@@ -201,6 +213,8 @@ VDoc.prototype.getSpread = function() {
 | Argument vitem is optional, just to safe double and tripple lookups
 */
 VDoc.prototype.getFontSize = function(vitem) {
+	if (vitem instanceof View) { throw new Error('NOVIEW'); }
+
 	if (!is(vitem)) { vitem = shell.vspace.vget(this.path, -1); }
 	var fontsize = vitem.twig.fontsize;
 	return (!vitem.fontSizeChange) ? fontsize : vitem.fontSizeChange(fontsize);
@@ -211,6 +225,8 @@ VDoc.prototype.getFontSize = function(vitem) {
 | Argument vitem is optional, just to safe double and tripple lookups
 */
 VDoc.prototype.getParaSep = function(vitem) {
+	if (vitem instanceof View) { throw new Error('NOVIEW'); }
+
 	if (!is(vitem)) { vitem = shell.vspace.vget(this.path, -1); }
 	var fontsize = this.getFontSize(vitem);
 	return vitem.getParaSep(fontsize);
@@ -219,8 +235,9 @@ VDoc.prototype.getParaSep = function(vitem) {
 /**
 | Returns the default font for the document.
 */
-VDoc.prototype.getFont = function() {
-	return this.getFontSize() + 'px ' + theme.defaultFont;
+VDoc.prototype.getFont = function(NOVIEW) {
+	if (NOVIEW instanceof View) { throw new Error('NOVIEW'); }
+	return theme.defaultFont;
 };
 
 /**
@@ -252,7 +269,9 @@ VDoc.prototype.getVParaAtPoint = function(p) {
 | imargin : inner margin of the doc
 | scrollp : scroll position of the doc.
 */
-VDoc.prototype.pathSelection = function(fabric, border, twist, pan, width, imargin, scrollp) {
+VDoc.prototype.pathSelection = function(fabric, border, twist, view, width, imargin, scrollp) {
+	// XXX use view!
+
 	var select = shell.selection;
 	select.normalize();
 

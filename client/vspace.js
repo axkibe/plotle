@@ -80,7 +80,7 @@ VSpace = function(twig, path, access) {
 	this.key         = path.get(-1);
 	this.fabric      = system.fabric;
 
-	this.$view       = new View(Point.zero, 0.5);
+	this.$view       = new View(Point.zero, 1);
 
 	Jools.keyNonGrata(this, '$pan');
 
@@ -204,16 +204,15 @@ VSpace.prototype.draw = function() {
 | Force-clears all caches.
 */
 VSpace.prototype.knock = function() {
-	for(var r = this.twig.length - 1; r >= 0; r--) {
-		this.vAtRank(r).knock();
-	}
+	for(var r = this.twig.length - 1; r >= 0; r--)
+		{ this.vAtRank(r).knock(); }
 };
 
 /**
 | Draws the caret.
 */
 VSpace.prototype.drawCaret = function() {
-	this.vget(shell.caret.sign.path, -1).drawCaret();
+	this.vget(shell.caret.sign.path, -1).drawCaret(this.$view);
 };
 
 /**
@@ -256,16 +255,24 @@ VSpace.prototype.vAtRank = function(rank) {
 | Mouse wheel
 */
 VSpace.prototype.mousewheel = function(p, dir, shift, ctrl) {
-	var twig = this.twig;
+	var $view = this.$view;
+	var twig  = this.twig;
 
-	// TODO no pp
-	var pp = p.sub(this.$view.pan);
+	/* XXX
 	for(var r = 0, rZ = twig.length; r < rZ; r++) {
 		var vitem = this.vAtRank(r);
-		if (vitem.mousewheel(pp, dir)) { return true; }
+		if (vitem.mousewheel($view, p, dir)) { return true; }
+	}*/
+
+	if (dir > 0) {
+		this.$view = new View(this.$view.pan, this.$view.zoom * 1.1);
+	} else {
+		this.$view = new View(this.$view.pan, this.$view.zoom / 1.1);
 	}
 
-	// TODO zooming
+	this.knock();
+	shell.redraw = true;
+
 	return true;
 };
 
@@ -278,7 +285,6 @@ VSpace.prototype.mousehover = function(p, shift, ctrl) {
 	if (p === null) { return null; }
 	var $view = this.$view;
 
-	var pp = p.sub($view.pan); // TODO remove
 	var action = shell.action;
 	var cursor = null;
 
@@ -296,9 +302,9 @@ VSpace.prototype.mousehover = function(p, shift, ctrl) {
 	for(var a = 0, aZ = this.twig.length; a < aZ; a++) {
 		var vitem = this.vAtRank(a);
 		if (cursor) {
-			vitem.mousehover(null);
+			vitem.mousehover($view, null);
 		} else {
-			cursor = vitem.mousehover(pp);
+			cursor = vitem.mousehover($view, p);
 		}
 	}
 
@@ -310,12 +316,12 @@ VSpace.prototype.mousehover = function(p, shift, ctrl) {
 */
 VSpace.prototype.dragstart = function(p, shift, ctrl) {
 	var $view = this.$view;
-	var pp = p.sub($view.pan); // TODO
 	var focus = this.focusedVItem();
 
 	// see if the itemmenu of the focus was targeted
 	if (this.access == 'rw' && focus && focus.withinItemMenu($view, p)) {
-		shell.startAction(Action.RELBIND, focus, p);
+		var vp = $view.depoint(p);
+		shell.startAction(Action.RELBIND, focus, vp);
 		shell.redraw = true;
 		return;
 	}
@@ -323,11 +329,12 @@ VSpace.prototype.dragstart = function(p, shift, ctrl) {
 	// see if one item was targeted
 	for(var a = 0, aZ = this.twig.length; a < aZ; a++) {
 		var vitem = this.vAtRank(a);
-		if (vitem.dragstart(pp, shift, ctrl, this.access)) return;
+		if (vitem.dragstart($view, p, shift, ctrl, this.access)) return;
 	}
 
 	// otherwise do panning
-	shell.startAction(Action.PAN, null, pp);
+	var action = shell.startAction(Action.PAN, null, p);
+	action.pan = $view.pan;
 	return;
 };
 
@@ -337,16 +344,16 @@ VSpace.prototype.dragstart = function(p, shift, ctrl) {
 VSpace.prototype.click = function(p, shift, ctrl) {
 	var self  = this;
 	var $view = this.$view;
-	var pp    = p.sub($view.pan); // TODO
 	var action;
 
 	// clicked the tab of the focused item?
 	var focus = this.focusedVItem();
 	if (focus && focus.withinItemMenu($view, p)) {
 		var labels = {n : 'Remove'};
+
 		shell.setMenu(new OvalMenu(
 			system.fabric,
-			focus.getOvalSlice().pm.add($view.pan),
+			$view.point(focus.getOvalSlice().pm),
 			theme.ovalmenu,
 			labels,
 			function(entry, p) {
@@ -360,7 +367,7 @@ VSpace.prototype.click = function(p, shift, ctrl) {
 	// clicked some item?
 	for(var a = 0, aZ = this.twig.length; a < aZ; a++) {
 		var vitem = this.vAtRank(a);
-		if (vitem.click(pp)) return true;
+		if (vitem.click($view, p, shift, ctrl)) return true;
 	}
 
 	// otherwhise pop up the float menu
@@ -386,19 +393,19 @@ VSpace.prototype.dragstop = function(p, shift, ctrl) {
 	var action = shell.action;
 	var $view  = this.$view;
 
-	var pp = p.sub($view.pan); // TODO
 	if (!action)
 		{ throw new Error('Dragstop without action?'); }
 
 	switch (action.type) {
 	case Action.ITEMDRAG :
 	case Action.ITEMRESIZE :
-		action.vitem.dragstop(p);
+		var vp 
+		action.vitem.dragstop($view, vp);
 		break;
 	case Action.RELBIND:
 		for(var r = 0, rZ = this.twig.length; r < rZ; r++) {
 			var vitem = this.vAtRank(r);
-			if (vitem.dragstop(pp))
+			if (vitem.dragstop($view, p))
 				{ break; }
 		}
 		break;
@@ -413,28 +420,35 @@ VSpace.prototype.dragstop = function(p, shift, ctrl) {
 VSpace.prototype.dragmove = function(p, shift, ctrl) {
 	var $view = this.$view;
 
-	var pp = p.sub($view.pan);  // TODO
 	var action = shell.action;
 
 	switch(action.type) {
 	case Action.PAN :
-		this.$view = $view = new View(p.sub(action.start), $view.zoom);
+		var pd = p.sub(action.start);
+
+		this.$view = $view = new View(
+			action.pan.add(pd.x / $view.zoom, pd.y / $view.zoom),
+			$view.zoom
+		);
+
 		shell.redraw = true;
 		return 'pointer';
 
 	case Action.RELBIND :
 		action.vitem2 = null;
-		action.move = p;
+		var vp = $view.depoint(p);
+		action.move = vp;
 		shell.redraw = true;
 
 		for(var r = 0, rZ = this.twig.length; r < rZ; r++) {
 			var vitem = this.vAtRank(r);
-			if (vitem.dragmove(pp)) return 'pointer';
+			if (vitem.dragmove($view, p))
+				{ return 'pointer'; }
 		}
 		return 'pointer';
 
 	default :
-		action.vitem.dragmove(pp);
+		action.vitem.dragmove($view, p);
 		return 'move';
 	}
 };
@@ -483,12 +497,11 @@ VSpace.prototype.itemMenuSelect = function(entry, p, focus) {
 VSpace.prototype.mousedown = function(p, shift, ctrl) {
 	var $view = this.$view;
 
-	var pp = p.sub($view.pan); // TODO
 	var action = shell.action;
 	var pnw, md, key;
 
 	if (this.access == 'ro') {
-		this.dragstart(p, shift, ctrl);
+		this.dragstart($view, p, shift, ctrl);
 		return 'drag';
 	}
 
@@ -498,10 +511,10 @@ VSpace.prototype.mousedown = function(p, shift, ctrl) {
 		var com = focus.checkItemCompass($view, p);
 		if (com) {
 			// resizing
-			action = shell.startAction(Action.ITEMRESIZE, focus, pp);
+			var vp = $view.depoint(p);
+			action = shell.startAction(Action.ITEMRESIZE, focus, vp);
 			action.align = com;
 			action.startZone = focus.getZone();
-
 			return 'drag';
 		}
 	}
@@ -524,11 +537,21 @@ VSpace.prototype.input = function(text) {
 VSpace.prototype.specialKey = function(key, shift, ctrl) {
 	if (ctrl) {
 		switch(key) {
-		case 'z' : shell.peer.undo(); return;
-		case 'y' : shell.peer.redo(); return;
+		case 'z'      : shell.peer.undo(); return;
+		case 'y'      : shell.peer.redo(); return;
+		case ',' :
+			this.$view = new View(this.$view.pan, this.$view.zoom * 1.1);
+			this.knock();
+			shell.redraw = true;
+			return;
+		case '.' :
+			this.$view = new View(this.$view.pan, this.$view.zoom / 1.1);
+			this.knock();
+			shell.redraw = true;
+			return;
 		}
 	}
-
+	
 	var caret = shell.caret;
 	if (!caret.sign) return;
 	this.vget(caret.sign.path, -1).specialKey(key, shift, ctrl);

@@ -628,6 +628,13 @@ Fabric.prototype.globalAlpha = function(a) {
 	this._cx.globalAlpha = a;
 };
 
+/**
+| Sets the canvas scale
+*/
+Fabric.prototype.scale = function(s) {
+	this._cx.scale(s, s);
+};
+
 Fabric.ensureInteger = ensureInteger;
 Fabric.magic         = magic;
 

@@ -43,6 +43,7 @@ var config;
 var shell;
 var system;
 var theme;
+var View;
 
 /**
 | Capsule
@@ -130,7 +131,7 @@ VPara.prototype.getFlow = function() {
 	var x = 0, xw = 0;
 
 	var y = fontsize;
-	Measure.font = vdoc.getFont();
+	Measure.setFont(vdoc.getFontSize(), vdoc.getFont());
 	var space = Measure.width(' ');
 	var line = 0;
 	flow[line] = { a: [], y: y, o: 0 };
@@ -150,7 +151,6 @@ VPara.prototype.getFlow = function() {
 				if (spread < xw) spread = xw;
 				x = 0;
 				xw = x + w + space;
-				//y += ro(vdoc.fontsize * (pre ? 1 : 1 + theme.bottombox)); @@
 				y += ro(vdoc.getFontSize() * (1 + theme.bottombox));
 				line++;
 				flow[line] = {a: [], y: y, o: ca.index};
@@ -182,11 +182,13 @@ VPara.prototype.getFlow = function() {
 |
 | point: the point to look for
 */
-VPara.prototype.getPointOffset = function(point) {
+VPara.prototype.getPointOffset = function(point, NOVIEW) {
+	if (NOVIEW instanceof View) { throw new Error('NOVIEW'); }
+
 	var flow = this.getFlow();
 	var para = this.para;
 	var vdoc = shell.vspace.vget(this.path, -1);
-	Measure.font = vdoc.getFont();
+	Measure.setFont(vdoc.getFontSize(), vdoc.getFont());
 
 	var line;
 	for (line = 0; line < flow.length; line++) {
@@ -523,7 +525,9 @@ VPara.prototype.textPath = function() {
 /**
 | Returns the height of the para
 */
-VPara.prototype.getHeight = function() {
+VPara.prototype.getHeight = function(NOVIEW) {
+	if (NOVIEW instanceof View) { throw new Error('NOVIEW'); }
+
 	var flow = this.getFlow();
 	var vdoc = shell.vspace.vget(this.path, -1);
 	return flow.height + ro(vdoc.getFontSize() * theme.bottombox);
@@ -532,29 +536,40 @@ VPara.prototype.getHeight = function() {
 /**
 | Draws the paragraph in its cache and returns it.
 */
-VPara.prototype.getFabric = function() {
+VPara.prototype.getFabric = function(view) {
+	if (!(view instanceof View)) { throw new Error('view no View'); }
+
 	var flow   = this.getFlow();
-	var width  = flow.spread;
+	var width  = flow.spread * view.zoom;
 	var vdoc   = shell.vspace.vget(this.path, -1);
-	var height = this.getHeight();
+	var height = this.getHeight() * view.zoom;
 	var fabric = this.$fabric;
 
 	// cache hit?
-	if (!config.debug.noCache && fabric &&
+	if (!config.debug.noCache &&
+		fabric &&
 		fabric.width === width &&
-		fabric.height === height)
+		fabric.height === height &&
+		view.zoom === fabric.$zoom
+	)
 	{ return fabric; }
 
 	// @@: work out exact height for text below baseline
 	fabric = this.$fabric = new Fabric(width, height);
-	fabric.setFontStyle(vdoc.getFont(), 'black', 'start', 'alphabetic');
+	fabric.scale(view.zoom);
+	fabric.$zoom = view.zoom;
+	var font = vdoc.getFontSize() + 'px ' + vdoc.getFont();
+	fabric.setFontStyle(font, 'black', 'start', 'alphabetic');
 
 	// draws text into the fabric
 	for(var a = 0, aZ = flow.length; a < aZ; a++) {
 		var line = flow[a];
 		for(var b = 0, bZ = line.a.length; b < bZ; b++) {
 			var chunk = line.a[b];
-			fabric.fillText(chunk.t, chunk.x, line.y);
+			fabric.fillText(
+				chunk.t,
+				chunk.x, line.y
+			);
 		}
 	}
 
@@ -572,10 +587,12 @@ VPara.prototype.getFabric = function() {
 | @@ rename
 */
 VPara.prototype.getOffsetPoint = function(offset, flowPos$) {
+	if (flowPos$ instanceof View) { throw new Error('NOVIEW'); }
+
 	// @@ cache position
 	var twig = this.twig;
 	var vdoc  = shell.vspace.vget(this.path, -1);
-	Measure.font = vdoc.getFont();
+	Measure.setFont(vdoc.getFontSize(), vdoc.getFont());
 	var text = twig.text;
 	var flow = this.getFlow();
 	var a;
@@ -606,15 +623,18 @@ VPara.prototype.getOffsetPoint = function(offset, flowPos$) {
 	}
 
 	// @@ use token. text instead.
-	return new Point(
-		ro(token.x + Measure.width(text.substring(token.o, offset))),
-		line.y);
+	var px = ro(token.x + Measure.width(text.substring(token.o, offset)));
+	var py = line.y;
+
+	return new Point(px, py);
 };
 
 /**
 | Returns the caret position relative to the vdoc.
 */
-VPara.prototype.getCaretPos = function() {
+VPara.prototype.getCaretPos = function(NOVIEW) {
+	if (NOVIEW instanceof View) { throw new Error('NOVIEW'); }
+
 	var caret   = shell.caret;
 	var vitem   = shell.vspace.vget(this.path, -2);
 	var vdoc    = vitem.vv.doc;
@@ -633,9 +653,10 @@ VPara.prototype.getCaretPos = function() {
 /**
 | Draws the caret if its in this paragraph.
 */
-VPara.prototype.drawCaret = function() {
+VPara.prototype.drawCaret = function(view) {
+	if (!(view instanceof View)) { throw new Error('view no View'); }
+
 	var caret = shell.caret;
-	var pan   = shell.vspace.$view.pan; // TODO pass down
 	var vitem = shell.vspace.vget(this.path, -2);
 	var vdoc  = vitem.vv.doc;
 	var zone  = vitem.getZone();
@@ -651,7 +672,7 @@ VPara.prototype.drawCaret = function() {
 	var ch  = cys - cyn;
 	if (ch === 0) return;
 
-	var cp = new Point(cx + zone.pnw.x + pan.x, cyn + zone.pnw.y + pan.y);
+	var cp = view.point(cx + zone.pnw.x, cyn + zone.pnw.y);
 	shell.caret.$screenPos = cp;
 
 	if (Caret.useGetImageData) {

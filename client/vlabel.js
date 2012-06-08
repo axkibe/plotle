@@ -124,14 +124,16 @@ VLabel.prototype.scrollPage = function(up) {
 */
 VLabel.prototype.draw = function(fabric, view) {
 	var f    = this.$fabric;
-	var zone = this.getZone();
+	var zone = view.rect(this.getZone());
 
 	// no buffer hit?
 	if (config.debug.noCache || !f ||
 		zone.width  !== f.width ||
-		zone.height !== f.height)
+		zone.height !== f.height ||
+		view.zoom !== f.$zoom)
 	{
 		f = this.$fabric = new Fabric(zone.width, zone.height);
+		f.$zoom = view.zoom;
 		var vdoc         = this.vv.doc;
 		var imargin      = this.imargin;
 
@@ -140,13 +142,13 @@ VLabel.prototype.draw = function(fabric, view) {
 		var silhoutte = this.getSilhoutte(zone, true);
 
 		// draws selection and text
-		vdoc.draw(f, View.proper, zone.width, imargin, Point.zero);
+		vdoc.draw(f, view.home(), zone.width, imargin, Point.zero);
 
 		// draws the border
 		f.edge(theme.label.style.edge, silhoutte, 'path', View.proper);
 	}
 
-	fabric.drawImage(f, zone.pnw.add(view.pan));
+	fabric.drawImage(f, zone.pnw);
 };
 
 /**
@@ -190,8 +192,10 @@ VLabel.prototype.getParaSep = function(fontsize) {
 /**
 | Mouse wheel turned.
 */
-VLabel.prototype.mousewheel = function(p, dir) {
-	if (!this.getZone().within(p)) { return false; }
+VLabel.prototype.mousewheel = function(view, p, dir) {
+	var vp = view.point(p);
+
+	if (!this.getZone().within(vp)) { return false; }
 	return true;
 };
 
@@ -242,7 +246,7 @@ VLabel.prototype.getZone = function() {
 /**
 | Sets the items position and size aften an action.
 */
-VLabel.prototype.dragstop = function(p) {
+VLabel.prototype.dragstop = function(view, p) {
 	var action = shell.action;
 	switch (action.type) {
 	case Action.ITEMDRAG :
@@ -260,7 +264,7 @@ VLabel.prototype.dragstop = function(p) {
 		shell.redraw = true;
 		break;
 	default :
-		return VItem.prototype.dragstop.call(this, p);
+		return VItem.prototype.dragstop.call(this, view, p);
 	}
 };
 

@@ -57,12 +57,16 @@ Measure = {
 
 	width : function(text) {
 		return Measure._cx.measureText(text).width;
+	},
+
+	setFont : function(size, font) {
+		Measure._cx.font = size + 'px ' + font;
 	}
 };
 
 Object.defineProperty(Measure, 'font', {
-	get: function() { return Measure._cx.font; },
-	set: function(font) { Measure._cx.font = font; }
+	get: function() { throw new Error('TODO REMOVE'); },
+	set: function() { throw new Error('TODO REMOVE'); },
 });
 
 })();

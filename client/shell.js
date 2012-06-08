@@ -101,7 +101,7 @@ Shell = function(fabric) {
 
 	Measure.init();
 
-	Measure.font = '20px ' + theme.defaultFont;
+	Measure.setFont(20, theme.defaultFont);
 	this.$fontWatch = Measure.width('meshcraft$8833');
 
 	this.fabric     = fabric;
@@ -241,7 +241,7 @@ Shell.prototype.systemBlur = function() {
 Shell.prototype.blink = function() {
 	if (this.green) { return; }
 
-	Measure.font = '20px ' + theme.defaultFont;
+	Measure.setFont(20, theme.defaultFont);
 	var w = Measure.width('meshcraft$8833');
 	if (w !== this.$fontWatch) {
 		console.log('fontchange detected');
@@ -514,12 +514,19 @@ Shell.prototype.specialKey = function(key, shift, ctrl) {
 
 	var caret  = this.caret;
 	switch (caret.visec) {
-	case null : break;
-	case 'cockpit' : this.cockpit.specialKey(key, shift, ctrl); break;
-	case 'space'   : this. vspace.specialKey(key, shift, ctrl); break;
+	case 'cockpit' :
+		this.cockpit.specialKey(key, shift, ctrl);
+		break;
+	case null    :
+	case 'space' :
+		if (!this.vspace) break;
+		this. vspace.specialKey(key, shift, ctrl);
+		break; 
 	default : throw new Error('invalid visec');
 	}
-	if (this.redraw) this._draw();
+
+	if (this.redraw)
+		{ this._draw(); }
 };
 
 /**

@@ -151,9 +151,11 @@ var System = function() {
 		var key = null;
 		if (ctrl) {
 			switch(keyCode) {
-			case 65 : key = 'a'; break;
-			case 89 : key = 'y'; break;
-			case 90 : key = 'z'; break;
+			case 65  : key = 'a'; break;
+			case 89  : key = 'y'; break;
+			case 90  : key = 'z'; break;
+			case 188 : key = ','; break;
+			case 190 : key = '.'; break;
 			}
 		} else {
 			switch(keyCode) {
