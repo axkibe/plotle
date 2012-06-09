@@ -314,10 +314,9 @@ Fabric.prototype.arc = function(a1, a2, a3, a4, a5, a6, a7) {
 | rect(rect)     -or-
 | rect(pnw, pse) -or-
 | rect(nwx, nwy, w, h)
-|
-| TODO what is this?
 */
 Fabric.prototype.rect = function(a1, a2, a3, a4) {
+	throw new Error('REMOVE?');
 	var cx = this._cx;
 	/*
 	if (typeof(r) === 'object') {
@@ -343,15 +342,15 @@ Fabric.prototype.rect = function(a1, a2, a3, a4) {
 Fabric.prototype.fillRect = function(style, a1, a2, a3, a4) {
 	var cx = this._cx;
 	cx.fillStyle = style;
-	/* TODO?
+	
 	if (typeof(p) === 'object') {
 		if (a1 instanceof Rect)
-			return this._cx.fillRect(a1.pnw.x, a1.pnw.y, a1.pse.x, a1.pse.y);
+			{ return this._cx.fillRect(a1.pnw.x, a1.pnw.y, a1.pse.x, a1.pse.y); }
 		if (a1 instanceof Point)
-			return this._cx.fillRect(a1.x, a1.y, a2.x, a2.y);
+			{ return this._cx.fillRect(a1.x, a1.y, a2.x, a2.y); }
 		throw new Error('fillRect not a rectangle');
 	}
-	*/
+
 	return this._cx.fillRect(a1, a2, a3, a4);
 };
 

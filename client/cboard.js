@@ -27,7 +27,6 @@
 
 /**
 | Imports
-| TODO this is really all needed?
 */
 var CAccent;
 var CChat;
@@ -347,9 +346,13 @@ CBoard.prototype.setHover = function(cname) {
 
 	this.$fabric = null;
 	shell.redraw = true;
-	// TODO use knowck
-	if (this.$hover) { this.cc[this.$hover].$fabric = null; }
-	if (cname      ) { this.cc[cname      ].$fabric = null; }
+
+	if (this.$hover)
+		{ this.cc[this.$hover].knock(); }
+
+	if (cname)
+		{ this.cc[cname].knock(); }
+
 	this.$hover = cname;
 	return null;
 };

@@ -126,8 +126,8 @@ OvalSlice.prototype.path = function(fabric, border, twist, view) {
 	var am  = magic * this.a;
 	var bm  = magic * this.b;
 	var bo  = border;
-	var pswx = ro(view.x(this.psw)); // TODO need ro?
-	var pswy = ro(view.y(this.psw));
+	var pswx = view.x(this.psw);
+	var pswy = view.y(this.psw);
 
 	fabric.beginPath(twist);
 

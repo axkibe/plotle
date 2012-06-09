@@ -64,9 +64,4 @@ Measure = {
 	}
 };
 
-Object.defineProperty(Measure, 'font', {
-	get: function() { throw new Error('TODO REMOVE'); },
-	set: function() { throw new Error('TODO REMOVE'); }
-});
-
 })();

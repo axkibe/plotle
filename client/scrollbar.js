@@ -129,4 +129,19 @@ Scrollbar.prototype.setZone = function(zone) {
 	this._$zone = zone;
 };
 
+/**
+| Returns true if p is within the scrollbar.
+*/
+Scrollbar.prototype.within = function(p) {
+	if (!this.visible) { return false; }
+	return this._$zone.within(p);
+};
+
+/**
+| Returns the value of pos change for d pixels in the current zone.
+*/
+Scrollbar.prototype.scale = function(d) {
+	return this._$max / this._$zone.height * d;
+};
+
 })();

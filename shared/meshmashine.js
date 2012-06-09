@@ -149,15 +149,13 @@ ChangeOps.set = function(tree, chg) {
 		if (key === null) key = trg.path.get(-1);
 		var orank;
 		if (src.val !== null) {
-			//orank = trg.rank || 0; // TODO dirty fix
 			pivot = tree.grow(pivot,
 				key, src.val,
 				'+', trg.rank, key
 			);
 		} else {
-			// check(trg.rank === null, cm, 'val <- null implies rank <- null'); TODO recheck
 			orank = pivot.rankOf(key);
-			trg = new Sign(trg, 'rank', orank); // TODO proper ranking
+			trg = new Sign(trg, 'rank', orank);
 			pivot = tree.grow(pivot,
 				key, src.val,
 				'-', orank

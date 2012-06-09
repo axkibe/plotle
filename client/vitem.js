@@ -222,7 +222,6 @@ VItem.prototype.drawHandles = function(fabric, view) {
 	fabric.edge(theme.handle.style.edge, this, 'pathResizeHandles', view);
 
 	// draws item menu handler
-	// TODO home view
 	fabric.paint(theme.ovalmenu.slice, this.getOvalSlice(), 'path', view);
 };
 
@@ -260,7 +259,7 @@ VItem.prototype.dragstart = function(view, p, shift, ctrl, access) {
 	var sbary = this.scrollbarY;
 	var pnw = this.getZone().pnw;
 	var pr = vp.sub(pnw);
-	if (sbary && sbary.visible && sbary._$zone.within(pr)) { // TODO EVIL move to sbary
+	if (sbary && sbary.within(pr)) {
 		var action = shell.startAction(Action.SCROLLY, this, p);
 		action.startPos = sbary.getPos();
 	} else {
@@ -299,7 +298,7 @@ VItem.prototype.dragmove = function(view, p) {
 		var dy = p.y - start.y;
 		var vitem = action.vitem;
 		var sbary = vitem.scrollbarY;
-		var spos = action.startPos + sbary._$max / sbary._$zone.height * dy; // TODO _$zone
+		var spos = action.startPos + sbary.scale(dy);
 		vitem.setScrollbar(spos);
 		vitem.poke();
 		shell.redraw = true;

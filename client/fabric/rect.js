@@ -83,25 +83,5 @@ Rect.prototype.path = function(fabric, border, twist, view) {
 	fabric.closePath();
 };
 
-/**
-| Returns a rectangle thats reduced on every side by a margin object
-| TODO move to euclid
-*/
-Rect.prototype.reduce = function(margin) {
-	if (margin.constructor !== Margin) throw new Error('margin of wrong type');
-
-	// allow margins to reduce the rect to zero size without erroring.
-	return new Rect(
-		Point.renew(this.pnw.x + margin.e, this.pnw.y + margin.n, this.pnw, this.pse),
-		Point.renew(this.pse.x - margin.w, this.pse.y - margin.s, this.pnw, this.pse));
-};
-
-/**
-| Point in the center.
-| TODO move to euclid
-*/
-lazyFixate(Rect.prototype, 'pc', function() {
-	return new Point(half(this.pse.x + this.pnw.x), half(this.pse.y + this.pnw.y));
-});
 
 })();

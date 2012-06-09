@@ -106,7 +106,7 @@ lazyFixate(Margin.prototype, 'y', function() { return this.n + this.s; });
 | Node export
 */
 if (typeof(window) === 'undefined') {
-	module.exports = Fabric;
+	module.exports = Margin;
 }
 
 })();

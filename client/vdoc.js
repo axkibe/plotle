@@ -151,7 +151,6 @@ VDoc.prototype.draw = function(fabric, view, width, imargin, scrollp) {
 		var vpara = this.vAtRank(r);
 		var flow = vpara.getFlow();
 
-		// TODO pan on points or not?
 		pnws[twig.ranks[r]] = new Point(imargin.w, ro(y));
 		var p = new Point(imargin.w, ro(y - scrollp.y));
 

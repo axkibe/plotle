@@ -29,6 +29,8 @@
 | Imports
 */
 var Jools;
+var Point;
+var Margin;
 
 /**
 | Exports
@@ -45,13 +47,17 @@ var Rect = null;
 | Node imports
 */
 if (typeof(window) === 'undefined') {
-	Jools = require('../jools');
+	Jools  = require('../jools');
+	Point  = require('./point');
+	Margin = require('./margin');
 }
 
 var debug        = Jools.debug;
 var immute       = Jools.immute;
 var innumerable  = Jools.innumerable;
+var lazyFixate   = Jools.lazyFixate;
 var reject       = Jools.reject;
+var half         = Jools.half;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
@@ -75,6 +81,25 @@ Rect = function(pnw, pse, key) {
 	this.type = 'Rect';
 	immute(this);
 };
+
+/**
+| Returns a rectangle thats reduced on every side by a margin object
+*/
+Rect.prototype.reduce = function(margin) {
+	if (margin.constructor !== Margin) throw new Error('margin of wrong type');
+
+	// allow margins to reduce the rect to zero size without erroring.
+	return new Rect(
+		Point.renew(this.pnw.x + margin.e, this.pnw.y + margin.n, this.pnw, this.pse),
+		Point.renew(this.pse.x - margin.w, this.pse.y - margin.s, this.pnw, this.pse));
+};
+
+/**
+| Point in the center.
+*/
+lazyFixate(Rect.prototype, 'pc', function() {
+	return new Point(half(this.pse.x + this.pnw.x), half(this.pse.y + this.pnw.y));
+});
 
 /**
 | Returns a rect moved by a point or x/y
