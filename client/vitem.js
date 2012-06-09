@@ -93,9 +93,7 @@ VItem.prototype.update = function(twig) {
 /**
 | Return the handle oval slice.
 */
-VItem.prototype.getOvalSlice = function(NOVIEW) {
-	if (NOVIEW instanceof View) { throw new Error('NOVIEW'); }
-
+VItem.prototype.getOvalSlice = function() {
 	var zone = this.getZone();
 	if (this._$ovalslice && this._$ovalslice.psw.eq(zone.pnw)) return this._$ovalslice;
 	return this._$ovalslice = new OvalSlice(zone.pnw, theme.ovalmenu.dimensions);

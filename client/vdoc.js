@@ -177,9 +177,7 @@ VDoc.prototype.getPNW = function(key) {
 | Returns the height of the document.
 | @@ caching
 */
-VDoc.prototype.getHeight = function(NOVIEW) {
-	if (NOVIEW instanceof View) { throw new Error('NOVIEW'); }
-
+VDoc.prototype.getHeight = function() {
 	var fontsize = this.getFontSize();
 	var paraSep  = this.getParaSep();
 	var twig     = this.twig;
@@ -212,8 +210,6 @@ VDoc.prototype.getSpread = function() {
 | Argument vitem is optional, just to safe double and tripple lookups
 */
 VDoc.prototype.getFontSize = function(vitem) {
-	if (vitem instanceof View) { throw new Error('NOVIEW'); }
-
 	if (!is(vitem)) { vitem = shell.vspace.vget(this.path, -1); }
 	var fontsize = vitem.twig.fontsize;
 	return (!vitem.fontSizeChange) ? fontsize : vitem.fontSizeChange(fontsize);
@@ -224,8 +220,6 @@ VDoc.prototype.getFontSize = function(vitem) {
 | Argument vitem is optional, just to safe double and tripple lookups
 */
 VDoc.prototype.getParaSep = function(vitem) {
-	if (vitem instanceof View) { throw new Error('NOVIEW'); }
-
 	if (!is(vitem)) { vitem = shell.vspace.vget(this.path, -1); }
 	var fontsize = this.getFontSize(vitem);
 	return vitem.getParaSep(fontsize);
@@ -234,8 +228,7 @@ VDoc.prototype.getParaSep = function(vitem) {
 /**
 | Returns the default font for the document.
 */
-VDoc.prototype.getFont = function(NOVIEW) {
-	if (NOVIEW instanceof View) { throw new Error('NOVIEW'); }
+VDoc.prototype.getFont = function() {
 	return theme.defaultFont;
 };
 

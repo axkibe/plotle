@@ -524,9 +524,7 @@ VPara.prototype.textPath = function() {
 /**
 | Returns the height of the para
 */
-VPara.prototype.getHeight = function(NOVIEW) {
-	if (NOVIEW instanceof View) { throw new Error('NOVIEW'); }
-
+VPara.prototype.getHeight = function() {
 	var flow = this.getFlow();
 	var vdoc = shell.vspace.vget(this.path, -1);
 	return flow.height + ro(vdoc.getFontSize() * theme.bottombox);
@@ -586,8 +584,6 @@ VPara.prototype.getFabric = function(view) {
 | @@ rename
 */
 VPara.prototype.getOffsetPoint = function(offset, flowPos$) {
-	if (flowPos$ instanceof View) { throw new Error('NOVIEW'); }
-
 	// @@ cache position
 	var twig = this.twig;
 	var vdoc  = shell.vspace.vget(this.path, -1);

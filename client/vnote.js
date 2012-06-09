@@ -296,9 +296,7 @@ VNote.prototype.getParaSep = function(fontsize) {
 | Returns the zone of the item.
 | An ongoing action can modify this to be different than meshmashine data.
 */
-VNote.prototype.getZone = function(NOVIEW) {
-	if ((NOVIEW instanceof View)) { throw new Error('NO VIEW!'); }
-
+VNote.prototype.getZone = function() {
 	var twig   = this.twig;
 	var action = shell.action;
 
