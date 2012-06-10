@@ -239,6 +239,7 @@ VItem.prototype.getVParaAtPoint = function(p, action) {
 VItem.prototype.dragstart = function(view, p, shift, ctrl, access) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
 
+	var action;
 	var vp = view.depoint(p);
 	if (!this.getZone().within(vp)) return false;
 
@@ -258,13 +259,14 @@ VItem.prototype.dragstart = function(view, p, shift, ctrl, access) {
 	var pnw = this.getZone().pnw;
 	var pr = vp.sub(pnw);
 	if (sbary && sbary.within(pr)) {
-		var action = shell.startAction(Action.SCROLLY, this, p);
+		action = shell.startAction(Action.SCROLLY, this, p);
 		action.startPos = sbary.getPos();
 	} else {
 		if (access == 'rw') {
 			shell.startAction(Action.ITEMDRAG, this, vp);
 		} else {
-			shell.startAction(Action.PAN, null, p);
+			action = shell.startAction(Action.PAN, null, p);
+			action.pan = view.pan;
 		}
 	}
 	return true;

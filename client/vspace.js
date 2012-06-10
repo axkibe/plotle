@@ -505,7 +505,7 @@ VSpace.prototype.mousedown = function(p, shift, ctrl) {
 	var pnw, md, key;
 
 	if (this.access == 'ro') {
-		this.dragstart($view, p, shift, ctrl);
+		this.dragstart(p, shift, ctrl);
 		return 'drag';
 	}
 
