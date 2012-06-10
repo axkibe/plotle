@@ -110,7 +110,7 @@ settings = {
        `-'
  Meshcraft Wrapper around the HTML5 browser.
 
- @@ use more prototyping.
+ TODO use more prototyping.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 var System = function() {
@@ -339,7 +339,7 @@ var System = function() {
 	*/
 	function onmousedown(event) {
 		if (event.button !== 0) return;
-		event.preventDefault();  // @@ maybe preventDefault before button test?
+		event.preventDefault();  // TODO maybe preventDefault before button test?
 		hiddenInput.focus();
 		system.setTimer(0, function() { hiddenInput.selectionStart = 0; });
 

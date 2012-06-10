@@ -85,7 +85,7 @@ IFace = function() {
 	this.$postbox = null;
 
 	// if set reports updates to this object.
-	// @@ rename updateRCV
+	// TODO rename updateRCV
 	this.update  = null;
 
 	// if set reports messages to this object.
@@ -215,8 +215,8 @@ IFace.prototype.aquireSpace = function(spaceName, callback) {
 	}
 
 	self.$spaceName = spaceName;
-	self.tree       = null; // @@ $tree
-	self.rtree      = null; // @@ $rtree
+	self.tree       = null; // TODO $tree
+	self.rtree      = null; // TODO $rtree
 	self.$outbox    = [];
 	self.$postbox   = [];
 	self.$mseq      = -1;

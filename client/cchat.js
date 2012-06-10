@@ -152,10 +152,10 @@ CChat.prototype.getFabric = function() {
 | Returns the point of a given offset.
 |
 | offset:   the offset to get the point from.
-| @@ rename
+| TODO rename
 */
 CChat.prototype.getOffsetPoint = function(offset) {
-	// @@ cache position
+	// TODO cache position
 	var twig     = this.twig;
 	var font     = twig.fontStyle;
 	Measure.font = font.style;

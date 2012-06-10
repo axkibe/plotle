@@ -118,7 +118,7 @@ Meshverse = {
 		},
 
 		must : {
-			'x' : 'Number', // @@ Integer
+			'x' : 'Number', // TODO Integer
 			'y' : 'Number'
 		}
 	}
@@ -132,7 +132,7 @@ Meshverse = {
 	for(var k in patterns) {
 		var p = patterns[k];
 
-		// @@ turn on immuting
+		// TODO turn on immuting
 		// immute(p)
 		//if (p.copse) immute(p.copse);
 		//if (p.must) immute(p.must);

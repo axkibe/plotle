@@ -61,7 +61,7 @@ CLabel = function(twig, board, inherit, name) {
 	this.board   = board;
 	this.pos     = computePoint(twig.pos, board.iframe);
 	// if not null, overrides the design text
-	// @@ rename $text
+	// TODO rename $text
 	this.text    = inherit ? inherit.text : null;
 };
 

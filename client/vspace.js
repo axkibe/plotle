@@ -246,7 +246,7 @@ VSpace.prototype.setFocus = function(vitem) {
 /**
 | Returns the vtwig at rank 'rank'.
 |
-| @@: put in a common prototype for all visuals with ranks?
+| TODO: put in a common prototype for all visuals with ranks?
 */
 VSpace.prototype.vAtRank = function(rank) {
 	return this.vv[this.twig.ranks[rank]];
@@ -291,7 +291,7 @@ VSpace.prototype.mousehover = function(p, shift, ctrl) {
 
 	var focus = this.focusedVItem();
 	if (focus) {
-		// @@ move into items
+		// TODO move into items
 		if (focus.withinItemMenu($view, p)) {
 			cursor = 'default';
 		} else {

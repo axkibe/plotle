@@ -138,14 +138,6 @@ Peer.prototype.aquireSpace = function(name, callback) {
 };
 
 /**
-| Sets the time
-| @@ remove
-*/
-Peer.prototype.toTime = function(time) {
-	return this._iface.toTime(time);
-};
-
-/**
 | Gets a twig
 |
 | path: path to twig
@@ -156,7 +148,7 @@ Peer.prototype.get = function(path, len) {
 
 /**
 | Sets the update listener
-| @@ rename setUpdateRCV
+| TODO rename setUpdateRCV
 */
 Peer.prototype.setUpdate = function(update) {
 	this._iface.update = update;

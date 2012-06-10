@@ -199,7 +199,7 @@ SwitchPanel.prototype._paintButton = function(fabric, dir) {
 
 /**
 | Draws the contents.
-| @@ Caching
+| TODO Caching
 */
 SwitchPanel.prototype.getFabric = function() {
 	if (!config.debug.noCache && this.$fabric) { return this.$fabric; }
@@ -268,7 +268,7 @@ SwitchPanel.prototype.within = function(p) {
 	var pnw = this.iframe.pnw;
 	var pse = this.iframe.pse;
 
-	// @@ use iframe.within
+	// TODO use iframe.within
 	if (p.x < pnw.x || p.y < pnw.y || p.x > pse.x || p.y > pse.y) {
 		return false;
 	}

@@ -216,7 +216,7 @@ CBoard.prototype.mousehover = function(p, shift, ctrl) {
 	}
 	var pp = p.sub(pnw);
 
-	// @@ Optimize by reusing the latest path of this.$fabric
+	// TODO Optimize by reusing the latest path of this.$fabric
 	if (!fabric.within(this, 'path', View.proper, pp)) {
 		return this.setHover(null);
 	}
@@ -254,7 +254,7 @@ CBoard.prototype.mousedown = function(p, shift, ctrl) {
 	}
 	var pp = p.sub(pnw);
 
-	// @@ Optimize by reusing the latest path of this.$fabric
+	// TODO Optimize by reusing the latest path of this.$fabric
 	if (!fabric.within(this, 'path', View.proper, pp))  {
 		this.setHover(null);
 		return null;

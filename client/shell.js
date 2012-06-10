@@ -23,8 +23,6 @@
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
 
- @@ are milestones for later releases
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
@@ -324,7 +322,7 @@ Shell.prototype.setMenu = function(menu) {
 */
 Shell.prototype._draw = function() {
 	var fabric = this.fabric;
-	fabric.attune();   // @@ <- bad name for clear();
+	fabric.attune();   // TODO <- bad name for clear();
 
 	if (this.green) {
 		var m = new Point(half(fabric.width), half(fabric.height));
@@ -361,7 +359,7 @@ Shell.prototype._draw = function() {
 Shell.prototype.click = function(p, shift, ctrl) {
 	if (this.green) { return; }
 
-	// @@ cockpit
+	// TODO cockpit
 
 	if (this.vspace) { this.vspace.click(p, shift, ctrl); }
 	if (this.redraw) { this._draw(); }

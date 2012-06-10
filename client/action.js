@@ -23,8 +23,6 @@
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
 
- @@ are milestones for later releases
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**

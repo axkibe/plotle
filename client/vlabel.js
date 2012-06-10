@@ -119,8 +119,6 @@ VLabel.prototype.scrollPage = function(up) {
 
 /**
 | Draws the label.
-|
-| fabric: to draw upon. // @@ remove this parameter.
 */
 VLabel.prototype.draw = function(fabric, view) {
 	var f    = this.$fabric;
@@ -208,14 +206,14 @@ VLabel.prototype.getZone = function() {
 	var action = shell.action;
 	var pnw = this.twig.pnw;
 
-	// @@ Caching!
+	// TODO Caching!
 	var vdoc   = this.vv.doc;
 	var fs     = vdoc.getFontSize();
 	var width  = max(Math.ceil(vdoc.getSpread()), ro(fs * 0.3));
 	var height = max(Math.ceil(vdoc.getHeight()), ro(fs));
 
 	if (!action || action.vitem !== this) return new Rect(pnw, pnw.add(width, height));
-	// @@ cache the last zone
+	// TODO cache the last zone
 
 	switch (action.type) {
 	case Action.ITEMDRAG:

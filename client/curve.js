@@ -80,8 +80,8 @@ Curve.computePoint = function(model, frame) {
 	var pse = frame.pse;
 
 	switch (model.anchor) {
-	// @@ integrate add into switch
-	// @@ make this part of frame logic
+	// TODO integrate add into switch
+	// TODO make this part of frame logic
 	case 'c'  : p = new Point(half(pnw.x + pse.x), half(pnw.y + pse.y)); break;
 	case 'n'  : p = new Point(half(pnw.x + pse.x), pnw.y);               break;
 	case 'ne' : p = new Point(pse.x,               pnw.y);               break;

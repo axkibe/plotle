@@ -109,7 +109,7 @@ VPara.prototype.getFlow = function() {
 	var fontsize = vdoc.getFontSize();
 
 	var flow  = this.$flow;
-	// @@ go into subnodes instead
+	// TODO go into subnodes instead
 	var text = this.twig.text;
 
 	if (!config.debug.noCache && flow &&
@@ -119,7 +119,7 @@ VPara.prototype.getFlow = function() {
 
 	if (shell.caret.path && shell.caret.path.equals(this.path)) {
 		// remove caret cache if its within this flow.
-		// @@ change
+		// TODO change
 		shell.caret.cp$line  = null;
 		shell.caret.cp$token = null;
 	}
@@ -137,7 +137,7 @@ VPara.prototype.getFlow = function() {
 	var line = 0;
 	flow[line] = { a: [], y: y, o: 0 };
 
-	//var reg = !pre ? (/(\s*\S+|\s+$)\s?(\s*)/g) : (/(.+)()$/g); @@
+	//var reg = !pre ? (/(\s*\S+|\s+$)\s?(\s*)/g) : (/(.+)()$/g);
 	var reg = (/(\s*\S+|\s+$)\s?(\s*)/g);
 
 	for(var ca = reg.exec(text); ca !== null; ca = reg.exec(text)) {
@@ -157,7 +157,7 @@ VPara.prototype.getFlow = function() {
 				flow[line] = {a: [], y: y, o: ca.index};
 			} else {
 				// horizontal overflow
-				// console.log('HORIZONTAL OVERFLOW'); // @@
+				// console.log('HORIZONTAL OVERFLOW'); // TODO
 			}
 		}
 		flow[line].a.push({
@@ -255,7 +255,7 @@ VPara.prototype.input = function(text) {
 */
 VPara.prototype.specialKey = function(key, shift, ctrl) {
 	var caret  = shell.caret;
-	// @@ split into smaller functions
+	// TODO split into smaller functions
 	var para = this.para;
 	var select = shell.selection;
 
@@ -509,12 +509,12 @@ VPara.prototype.specialKey = function(key, shift, ctrl) {
 	}
 
 	caret.show();
-	shell.redraw = true; // @@ might be optimized
+	shell.redraw = true; // TODO might be optimized
 };
 
 /**
 | Return the path to the .text attribute if this para.
-| @@ use lazyFixate.
+| TODO use lazyFixate.
 */
 VPara.prototype.textPath = function() {
 	if (this._textPath) return this._textPath;
@@ -551,7 +551,7 @@ VPara.prototype.getFabric = function(view) {
 	)
 	{ return fabric; }
 
-	// @@: work out exact height for text below baseline
+	// TODO: work out exact height for text below baseline
 	fabric = this.$fabric = new Fabric(width, height);
 	fabric.scale(view.zoom);
 	fabric.$zoom = view.zoom;
@@ -580,11 +580,11 @@ VPara.prototype.getFabric = function(view) {
 | flowPos$: if set, writes flow$line and flow$token to
 |           the flow position used.
 |
-| @@ change to multireturn.
-| @@ rename
+| TODO change to multireturn.
+| TODO rename
 */
 VPara.prototype.getOffsetPoint = function(offset, flowPos$) {
-	// @@ cache position
+	// TODO cache position
 	var twig = this.twig;
 	var vdoc  = shell.vspace.vget(this.path, -1);
 	Measure.setFont(vdoc.getFontSize(), vdoc.getFont());
@@ -592,7 +592,7 @@ VPara.prototype.getOffsetPoint = function(offset, flowPos$) {
 	var flow = this.getFlow();
 	var a;
 
-	// @@ improve loops
+	// TODO improve loops
 	var al = flow.length - 1;
 	for (a = 1; a < flow.length; a++) {
 		if (flow[a].o > offset) {
@@ -617,7 +617,7 @@ VPara.prototype.getOffsetPoint = function(offset, flowPos$) {
 		flowPos$.flow$token = at;
 	}
 
-	// @@ use token. text instead.
+	// TODO use token. text instead.
 	var px = ro(token.x + Measure.width(text.substring(token.o, offset)));
 	var py = line.y;
 

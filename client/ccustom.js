@@ -187,7 +187,7 @@ CCustom.prototype.mousedown = function(p, shift, ctrl) {
 	if (!fabric.within(this, 'path', View.proper, pp))
 		{ return false; }
 
-	shell.redraw = true; // @@ needed?
+	shell.redraw = true; // TODO needed?
 	return true;
 };
 

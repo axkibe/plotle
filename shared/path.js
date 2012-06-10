@@ -104,12 +104,12 @@ Path = function(model) {
 	}
 
 	// checks the path arcs
-	// @@ might be needed only for copies
+	// TODO might be needed only for copies
 	for (a = 0, aZ = path.length; a < aZ; a++) {
 		if (!_isValidPathArc(path[a])) throw reject('invalid path arc: '+path[a]);
 	}
 
-	// @@ might change Path to be child of Array.
+	// TODO might change Path to be child of Array.
 	Object.freeze(path);
 	innumerable(this, '_path', path);
 	immute(this);

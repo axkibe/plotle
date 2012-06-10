@@ -520,7 +520,7 @@ Server.prototype.cmdAlter = function(cmd, _) {
 
 	// fits the cmd into data structures
 	try {
-		if (isArray(chgX))  { throw new Error('Array chgX not yet supported'); } // @@
+		if (isArray(chgX))  { throw new Error('Array chgX not yet supported'); } // TODO
 		chgX = new Change(chgX);
 	} catch(e) {
 		throw reject('invalid cmd: '+e.message);
@@ -607,7 +607,7 @@ Server.prototype.cmdAuth = function(cmd, _) {
 | Executes an register command.
 */
 Server.prototype.cmdRegister = function(cmd, _) {
-	if (!is(cmd.user)) { throw reject('user missing'); } // @@ return reject
+	if (!is(cmd.user)) { throw reject('user missing'); } // TODO return reject
 	if (!is(cmd.pass)) { throw reject('pass missing'); }
 	if (!is(cmd.mail)) { throw reject('mail missing'); }
 	if (!is(cmd.code)) { throw reject('code missing'); }
@@ -837,7 +837,7 @@ Server.prototype.wake = function(spaces) {
 	var changes   = this.changes;
 	var cZ  = changes.length;
 
-	// @@ cache change lists to answer the same to multiple clients.
+	// TODO cache change lists to answer the same to multiple clients.
 	for(var a = 0, aZ = sleepKeys.length; a < aZ; a++) {
 		var sKey = sleepKeys[a];
 		var sleep = this.upsleep[sKey];

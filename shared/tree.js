@@ -79,7 +79,7 @@ var Twig = function () { };
 Twig.prototype.rankOf = function(key) {
 	var ranks = this.ranks;
 	if (!isArray(ranks)) throw new Error('twig has no ranks');
-	// @@ caching!
+	// TODO caching!
 	if (!is(this.copse[key])) return -1;
 	return ranks.indexOf(key);
 };
@@ -98,7 +98,7 @@ Twig.prototype.at = function(r) {
 */
 
 Object.defineProperty(Twig.prototype, 'length', {
-	// @@ lazy fixate
+	// TODO lazy fixate
 	get : function() { return this.ranks.length; }
 });
 

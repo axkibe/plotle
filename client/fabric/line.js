@@ -168,7 +168,7 @@ Line.prototype.path = function(fabric, border, twist, view) {
 	var p2y = view.y(this.p2);
 
 	fabric.beginPath(twist);
-	// @@, multiple line end types
+	// TODO, multiple line end types
 	switch(this.p1end) {
 	case 'normal':
 		if (twist)

@@ -204,7 +204,7 @@ ChangeOps.remove = function(tree, chg) {
 		return null;
 	}
 //	check(isString(str), cm, 'src.path signates no string');
-//  @@ removed item
+//  TODO removed item
 
 	if (src.at1 === src.at2) {
 		log('change', 'removed nothing');
@@ -247,7 +247,7 @@ ChangeOps.join = function(tree, chg) {
 
 	var para1 = pivot.copse[key];
 	var para2 = pivot.copse[key2];
-	// @@ check other keys to be equal
+	// TODO check other keys to be equal
 	para1 = tree.grow(para1,
 		'text', para1.text + para2.text
 	);
@@ -330,7 +330,7 @@ ChangeOps.rank = function(tree, chg) {
 	var key = src.path.get(-1);
 	var orank = pivot.rankOf(key);
 	if (orank < 0) throw reject('invalid key :'+key);
-	// @@ if (orank === trg.rank) return null;
+	// TODO if (orank === trg.rank) return null;
 
 	src = src.affix(is, cm, 'src', 'rank', orank);
 	trg = trg.affix(is, cm, 'trg', 'path', src.path);
@@ -364,14 +364,14 @@ var tfxSign1 = function(sign, chg) {
 
 	var op = TFXOps[chg.type()];
 	if (!op) { throw new Error('tfxSign1, no op'); }
-	return op(sign, chg.src, chg.trg);  // @@ give, chg.
+	return op(sign, chg.src, chg.trg);  // TODO give, chg.
 };
 
 /**
 | Transforms a signature on a list of alternations.
 | If the signature is a span, it can return an array of signs.
 |
-| @@ check if t1/t2 params are ever user
+| TODO check if t1/t2 params are ever used
 */
 var tfxSign = function(sign, chgX) {
 	log('tfx', 'tfxSign', sign, chgX);
@@ -504,7 +504,7 @@ TFXOps.split = function(sign, src, trg) {
 	// trg.path -- the new line
 	if (!src.path || !src.path.equals(sign.path)) return sign;
 
-	// @@ form ranks
+	// TODO form ranks
 	// simpler case signature is only one point
 	if (!is(sign.at2)) {
 		log('tfx', 'split (simple)');
@@ -555,7 +555,7 @@ TFXOps.join = function(sign, src, trg) {
 	if (!src.path || !sign.path.equals(src.path)) return sign;
 	if (!trg.path) throw new Error('join missing trg.path');
 
-	// @@ tfx ranks
+	// TODO tfx ranks
 
 	log('tfx', 'join', sign);
 	if (!is(sign.at2)) {
@@ -713,7 +713,7 @@ TFXOps.remove = function(sign, src, trg) {
 
 /**
 | Appends changes of chgX that matter to space to the array chga.
-| @@ Make a proper filter that splits
+| TODO Make a proper filter that splits
 */
 var filter = function(change, space, chga) {
 	var chgX = change.chgX;

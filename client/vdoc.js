@@ -125,7 +125,7 @@ VDoc.prototype.update = function(twig) {
 VDoc.prototype.draw = function(fabric, view, width, imargin, scrollp) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
 
-	// @@ <pre>
+	// TODO <pre>
 	var paraSep = this.getParaSep();
 	var select = shell.selection;
 
@@ -175,7 +175,7 @@ VDoc.prototype.getPNW = function(key) {
 
 /**
 | Returns the height of the document.
-| @@ caching
+| TODO caching
 */
 VDoc.prototype.getHeight = function() {
 	var fontsize = this.getFontSize();
@@ -240,7 +240,7 @@ VDoc.prototype.getVParaAtPoint = function(p) {
 	var vv     = this.vv;
 
 	for(var r = 0, rZ = twig.length; r < rZ; r++) {
-		// @@ beautify
+		// TODO beautify
 		var k = twig.ranks[r];
 		var vpara = vv[k];
 		var flow = vpara.getFlow();

@@ -129,7 +129,7 @@ VNote.prototype.setScrollbar = function(pos) {
 
 	var zone = this.getZone();
 
-	// @@ make a Rect.renew
+	// TODO make a Rect.renew
 	sbary.setZone(new Rect(
 		Point.renew(
 			zone.width - this.imargin.e - theme.scrollbar.strength,
@@ -301,7 +301,7 @@ VNote.prototype.getZone = function() {
 	var action = shell.action;
 
 	if (!action || action.vitem !== this) return twig.zone;
-	// @@ cache the last zone
+	// TODO cache the last zone
 
 	switch (action.type) {
 	case Action.ITEMDRAG:

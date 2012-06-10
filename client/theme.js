@@ -109,7 +109,7 @@ theme = {
 		// inner margin to text
 		imargin  : { n: 1, e: 1, s: 1, w: 1 },
 
-		// offset for creation // @@ calculate dynamically
+		// offset for creation // TODO calculate dynamically
 		createOffset : { x: 27, y: 12 }
 	},
 
@@ -196,7 +196,7 @@ theme = {
 			]
 		},
 
-		// @@ remove?
+		// TODO remove?
 		highlight : {
 			fill : 'rgb(255, 188, 88)',
 			edge : [
@@ -241,7 +241,7 @@ theme = {
 		},
 
 		zero : {
-			edge : [ ]  // @@ allow to be left away
+			edge : [ ]  // TODO allow to be left away
 		},
 
 		zhighlight : {
@@ -431,7 +431,7 @@ theme = {
 		// inner margin to text
 		imargin  : { n: 1, e: 1, s: 1, w: 1 },
 
-		// offset for creation // @@ calculate dynamically
+		// offset for creation // TODO calculate dynamically
 		createOffset : { x: 44, y: 12 }
 	}
 };

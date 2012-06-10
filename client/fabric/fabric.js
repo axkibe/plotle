@@ -68,7 +68,7 @@ var log          = Jools.log;
 | Fabric(width, height)   creates a new fabric and sets its size;
 */
 Fabric = function(a1, a2) {
-	// @@ this is strange, replace with switch(a1.constructor)
+	// TODO this is strange, replace with switch(a1.constructor)
 	switch (typeof(a1)) {
 	case 'undefined' :
 		this._canvas = document.createElement('canvas');
@@ -311,30 +311,6 @@ Fabric.prototype.arc = function(a1, a2, a3, a4, a5, a6, a7) {
 };
 
 /**
-| rect(rect)     -or-
-| rect(pnw, pse) -or-
-| rect(nwx, nwy, w, h)
-*/
-Fabric.prototype.rect = function(a1, a2, a3, a4) {
-	throw new Error('REMOVE?');
-	var cx = this._cx;
-	/*
-	if (typeof(r) === 'object') {
-		if (r instanceof Rect)
-			return this._cx.rect(
-				a1.pnw.x + 0.5, a1.pnw.y + 0.5,
-				a1.width, a1.height);
-		if (r instanceof Point)
-			return this._cx.rect(
-				a1.x + 0.5, a1.y + 0.5,
-				a2.x - a1.x,        a2.y - a1.y);
-		throw new Error('fillRect not a rectangle');
-	}
-	*/
-	return this._cx.rect(a1 + 0.5,  a2 + 0.5, a3, a4);
-};
-
-/**
 | fillRect(style, rect)     -or-
 | fillRect(style, pnw, pse) -or-
 | fillRect(style, nwx, nwy, width, height)
@@ -455,14 +431,14 @@ Fabric.prototype._colorStyle = function(style, shape) {
 	var grad;
 	switch (style.gradient) {
 	case 'askew' :
-		// @@ use gradientPNW
+		// TODO use gradientPNW
 		if (!shape.pnw || !shape.pse) throw new Error(style.gradient+' gradiend misses pnw/pse');
 		grad = this._cx.createLinearGradient(
 			shape.pnw.x, shape.pnw.y,
 			shape.pnw.x + shape.width / 10, shape.pse.y);
 		break;
 	case 'horizontal' :
-		// @@ use gradientPNW
+		// TODO use gradientPNW
 		if (!shape.pnw || !shape.pse) throw new Error(style.gradient+' gradient misses pnw/pse');
 		grad = this._cx.createLinearGradient(
 			0, shape.pnw.y,
@@ -575,8 +551,9 @@ Fabric.prototype.fillText = function(text, a1, a2) {
 | text: text to draw
 | p: center point of rotation
 | phi: rotation angle
-| d: distance from center // @@ rename
+| d: distance from center // TODO rename
 */
+/*
 Fabric.prototype.fillRotateText = function(text, pc, phi, d) {
 	var cx = this._cx;
 	var t1 = cos(phi);
@@ -585,7 +562,7 @@ Fabric.prototype.fillRotateText = function(text, pc, phi, d) {
 	var x = pc.x + d * t2;
 	var y = pc.y - d * t1;
 	if (t1 < 0) {
-		/* turn lower segments so text isn't upside down */
+		// turn lower segments so text isn't upside down
 		t1 = -t1;
 		t2 = -t2;
 	}
@@ -595,6 +572,7 @@ Fabric.prototype.fillRotateText = function(text, pc, phi, d) {
 	cx.fillText(text, x1, y1);
 	cx.setTransform(1, 0, 0, 1, 0, 0);
 };
+*/
 
 
 /**

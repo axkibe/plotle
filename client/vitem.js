@@ -108,7 +108,7 @@ VItem.prototype.withinItemMenu = function(view, p) {
 
 /**
 | Returns the compass direction of the handle if p is on a resizer handle.
-| @@ rename
+| TODO rename
 */
 VItem.prototype.checkItemCompass = function(view, p) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
@@ -224,10 +224,10 @@ VItem.prototype.drawHandles = function(fabric, view) {
 };
 
 /**
-| Returns the para at point. @@, honor scroll here.
+| Returns the para at point. TODO, honor scroll here.
 */
 VItem.prototype.getVParaAtPoint = function(p, action) {
-	// @@ rename imargin to innerMargin
+	// TODO rename imargin to innerMargin
 	if (p.y < this.imargin.n) return null;
 	return this.vv.doc.getVParaAtPoint(p, action);
 };

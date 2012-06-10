@@ -145,7 +145,7 @@ CInput.prototype.maskPath = function(fabric, border, twist, view, length, size) 
 
 /**
 | Returns the fabric for the input field.
-| @@ caching;
+| TODO caching;
 */
 CInput.prototype.getFabric = function(accent) {
 	var fabric = new Fabric(this.bezi.width, this.bezi.height);
@@ -186,16 +186,16 @@ CInput.prototype.draw = function(fabric, accent) {
 | Returns the point of a given offset.
 |
 | offset:   the offset to get the point from.
-| @@ rename
+| TODO rename
 */
 CInput.prototype.getOffsetPoint = function(offset) {
-	// @@ cache position
+	// TODO cache position
 	var twig     = this.twig;
 	var font     = twig.fontStyle;
 	Measure.font = font.style;
 	var val      = this.value;
 
-	// @@ use token. text instead.
+	// TODO use token. text instead.
 	if (this.twig.password) {
 		return new Point(
 			pitch.x + (2 * this.maskWidth(font.size) + this.maskKern(font.size)) * offset - 1,

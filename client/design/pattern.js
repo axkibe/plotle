@@ -23,7 +23,7 @@
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
 
- @@ Rename to DesignPattern
+ TODO Rename to DesignPattern
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -80,7 +80,7 @@ Design.Pattern = {
 			to           : 'Point',
 			bx           : 'Number',
 			by           : 'Number',
-			// @@ Maybe replace with "Tangent"
+			// TODO Maybe replace with "Tangent"
 			c1x          : 'Number',
 			c1y          : 'Number',
 			c2x          : 'Number',
