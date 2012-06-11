@@ -555,8 +555,7 @@ VPara.prototype.getFabric = function(view) {
 	fabric = this.$fabric = new Fabric(width, height);
 	fabric.scale(view.zoom);
 	fabric.$zoom = view.zoom;
-	var font = vdoc.getFontSize() + 'px ' + vdoc.getFont();
-	fabric.setFontStyle(font, 'black', 'start', 'alphabetic');
+	fabric.setFont(vdoc.getFontSize(), vdoc.getFont(), 'black', 'start', 'alphabetic');
 
 	// draws text into the fabric
 	for(var a = 0, aZ = flow.length; a < aZ; a++) {

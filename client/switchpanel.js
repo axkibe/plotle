@@ -211,7 +211,7 @@ SwitchPanel.prototype.getFabric = function() {
 	this._paintButton(fabric, 'n');
 	this._paintButton(fabric, 'ne');
 
-	fabric.setFontStyle('14px ' + theme.defaultFont, 'black', 'center', 'middle');
+	fabric.setFont(14, theme.defaultFont, 'black', 'center', 'middle');
 	var bd = this.buttonDim;
 	var cx = half(iframe.width);
 	var cy = half(bd.height);
@@ -221,7 +221,7 @@ SwitchPanel.prototype.getFabric = function() {
 	fabric.fillText('Sandbox',   bp.ne.x, bp.ne.y);
 	if (!this.amVisitor) { fabric.fillText('Your Home', bp.nw.x, bp.nw.y); }
 	
-	fabric.setFontStyle('12px ' + theme.defaultFont, 'black', 'center', 'middle');
+	fabric.setFont(12, theme.defaultFont, 'black', 'center', 'middle');
 	
 	var text;
 	switch(this.$hover || this.current) {

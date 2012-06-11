@@ -137,7 +137,6 @@ Design.Pattern = {
 		must    : {
 			'size'       : 'Number',
 			'font'       : 'String',
-			'style'      : 'String',
 			'align'      : 'String',
 			'fill'       : 'String',
 			'base'       : 'String'

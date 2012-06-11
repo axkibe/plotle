@@ -122,7 +122,7 @@ CCustom.prototype.getFabric = function(accent) {
 	fabric.paint(style, this, 'path', View.proper);
 
 	var fs = this.twig.caption.fontStyle;
-	fabric.setFontStyle(fs.style, fs.fill, fs.align, fs.base);
+	fabric.setFont(fs.size, fs.font, fs.fill, fs.align, fs.base);
 	fabric.fillText(this.$captionText, this.captionPos);
 
 	if (config.debug.drawBoxes) {

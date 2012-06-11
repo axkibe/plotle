@@ -193,11 +193,13 @@ CBoard.prototype.draw = function(fabric) {
 /**
 | Draws the caret.
 */
-CBoard.prototype.drawCaret = function() {
+CBoard.prototype.drawCaret = function(view) {
+	if (!(view instanceof View)) { throw new Error('view no View'); }
+
 	var cname = shell.caret.sign.path.get(1);
 	var ce = this.cc[cname];
 	if (!ce) { throw new Error('Caret component does not exist!'); }
-	if (ce.drawCaret) { ce.drawCaret(); }
+	if (ce.drawCaret) { ce.drawCaret(view); }
 };
 
 /**

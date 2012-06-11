@@ -225,7 +225,7 @@ Cockpit.prototype.drawCaret = function() {
 		log('fail', 'Caret path(0) !== this.curBoardName');
 		return;
 	}
-	this.curBoard().drawCaret();
+	this.curBoard().drawCaret(View.proper);
 };
 
 /**

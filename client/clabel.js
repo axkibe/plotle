@@ -77,7 +77,7 @@ CLabel.prototype.canFocus = function() {
 */
 CLabel.prototype.draw = function(fabric) {
 	var fs = this.twig.fontStyle;
-	fabric.setFontStyle(fs.style, fs.fill, fs.align, fs.base);
+	fabric.setFont(fs.size, fs.font, fs.fill, fs.align, fs.base);
 	fabric.fillText(this.text || this.twig.text, this.pos);
 };
 

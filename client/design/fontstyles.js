@@ -143,7 +143,12 @@ Design.fontStyle = function(size, code) {
 		c[k] = base[k];
 	}
 	c.size = size;
-	c.style = size + 'px ' + c.font;
+	//c.style = size + 'px ' + c.font;
+	Object.defineProperty(c, 'style', {
+		get: function() { throw new Error('TODO'); },
+		set: function() { throw new Error('TODO'); }
+	});
+
 	return base.$c[size] = c;
 };
 

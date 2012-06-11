@@ -124,7 +124,9 @@ CChat.prototype.getFabric = function() {
 	var x = this.pitch.x;
 	var y = this.pitch.y;
 	var fs = this.twig.fontStyle;
-	fabric.setFontStyle(fs.style, fs.fill, fs.align, fs.base);
+	// TODO allow shortcut, give fs only
+
+	fabric.setFont(fs.size, fs.font, fs.fill, fs.align, fs.base); 
 	var lh = this.lineHeight;
 	fabric.fillText('»', x - 10, y);
 	fabric.fillText('chat', x - 37, y);

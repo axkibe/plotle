@@ -123,6 +123,8 @@ CInput.prototype.path = function(fabric, border, twist) {
 | Draws the mask for password fields
 */
 CInput.prototype.maskPath = function(fabric, border, twist, view, length, size) {
+	if (!(view instanceof View)) { throw new Error('view no View'); }
+
 	var x  = view.x(pitch);
 	var y  = view.y(pitch) + ro(size * 0.7);
 	var h  = ro(size * 0.32);
@@ -163,7 +165,7 @@ CInput.prototype.getFabric = function(accent) {
 
 	fabric.fill(style.fill, this.bezi, 'path', View.proper);
 	var fs = this.twig.fontStyle;
-	fabric.setFontStyle(fs.style, fs.fill, fs.align, fs.base);
+	fabric.setFont(fs.size, fs.font, fs.fill, fs.align, fs.base);
 	if(this.twig.password) {
 		fabric.fill('black', this, 'maskPath', View.proper, this.value.length, fs.size);
 	} else {
@@ -192,7 +194,7 @@ CInput.prototype.getOffsetPoint = function(offset) {
 	// TODO cache position
 	var twig     = this.twig;
 	var font     = twig.fontStyle;
-	Measure.font = font.style;
+	Measure.setFont(font.size, font.font);
 	var val      = this.value;
 
 	// TODO use token. text instead.
@@ -230,15 +232,15 @@ CInput.prototype.getCaretPos = function() {
 | Draws the caret.
 */
 CInput.prototype.drawCaret = function(view) {
-	// TODO use view
+	if (!(view instanceof View)) { throw new Error('view no View'); }
 
 	var caret = shell.caret;
 	var board = this.board;
-	var cpos  = caret.$pos = this.getCaretPos(view);
+	var cpos  = caret.$pos = this.getCaretPos();
 
 	var cx  = cpos.x;
-	var ch  = cpos.s - cpos.n;
-	var cp = new Point(
+	var ch  = ro((cpos.s - cpos.n) * view.zoom);
+	var cp = view.point(
 		this.board.pnw.x + cpos.x,
 		this.board.pnw.y + cpos.n
 	);

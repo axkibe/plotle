@@ -581,9 +581,9 @@ Fabric.prototype.fillRotateText = function(text, pc, phi, d) {
 | fontStyle(font, fill)                      -or-
 | fontStyle(font, fill, align, baseline)
 */
-Fabric.prototype.setFontStyle = function(font, fill, align, baseline) {
+Fabric.prototype.setFont = function(size, font, fill, align, baseline) {
 	var cx = this._cx;
-	cx.font         = font;
+	cx.font         = size + 'px ' + font;
 	cx.fillStyle    = fill;
 	cx.textAlign    = align;
 	cx.textBaseline = baseline;
