@@ -397,7 +397,10 @@ theme = {
 		minSize  : 12,
 
 		// distance from text
-		imarginw :  2
+		imarginw :  2,
+
+		// vertical distance from border of note
+		vdis : 5
 	},
 
 	// size of resize handles

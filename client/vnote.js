@@ -127,17 +127,20 @@ VNote.prototype.setScrollbar = function(pos) {
 	var sbary = this.scrollbarY;
 	if (!sbary.visible) return;
 
-	var zone = this.getZone();
+	var zone  = this.getZone();
+	var str   = theme.scrollbar.strength;
+	var str05 = half(str);
 
-	sbary.setZone(
-			zone.width  - this.imargin.e - theme.scrollbar.strength,
-			this.imargin.n,
-			zone.width  - this.imargin.e,
-			zone.height - this.imargin.s - 1
+	if (typeof(pos) === 'undefined')
+		{ pos = sbary.getPos(); }
+
+	sbary.setPos(
+		pos,
+		zone.height - this.imargin.y,
+		this.vv.doc.getHeight(),
+		Point.renew(zone.pse.x, zone.pnw.y + theme.scrollbar.vdis, sbary.pnw),
+		zone.height - theme.scrollbar.vdis * 2
 	);
-
-	if (typeof(pos) === 'undefined') { pos = sbary.getPos(); }
-	sbary.setPos(pos, zone.height - this.imargin.y, this.vv.doc.getHeight());
 };
 
 /**
@@ -209,9 +212,10 @@ VNote.prototype.dragstop = function(view, p) {
 VNote.prototype.draw = function(fabric, view) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
 
-	var zone = this.getZone();
+	var zone  = this.getZone();
 	var vzone = view.rect(zone);
-	var f = this.$fabric;
+	var f     = this.$fabric;
+	var sbary = this.scrollbarY;
 
 	// no buffer hit?
 	if (config.debug.noCache || !f ||
@@ -223,7 +227,6 @@ VNote.prototype.draw = function(fabric, view) {
 		var imargin      = this.imargin;
 
 		// calculates if a scrollbar is needed
-		var sbary  = this.scrollbarY;
 		var vheight = vdoc.getHeight() * view.zoom;
 		if (!sbary.visible && vheight > vzone.height - imargin.y) {
 			// doesn't use a scrollbar but should
@@ -233,10 +236,9 @@ VNote.prototype.draw = function(fabric, view) {
 			sbary.visible = false;
 		}
 
-		if (sbary.visible) { this.setScrollbar(); }
+		// resizes the canvas (when scrollbars could change the size)
+		//f.attune(vzone);
 
-		// resizes the canvas
-		f.attune(vzone);
 		var silhoutte = this.getSilhoutte(vzone, true);
 		f.fill(theme.note.style.fill, silhoutte, 'path', View.proper);
 
@@ -244,14 +246,17 @@ VNote.prototype.draw = function(fabric, view) {
 		sbary.point = Point.renew(0, sbary.getPos(), sbary.point);
 		vdoc.draw(f, view.home(), zone.width, imargin, sbary.point);
 
-		// draws the scrollbar
-		if (sbary.visible) { sbary.draw(f, View.proper); }
-
 		// draws the border
 		f.edge(theme.note.style.edge, silhoutte, 'path', View.proper);
 	}
+		
 
 	fabric.drawImage(f, vzone.pnw);
+
+	if (sbary.visible) {
+		this.setScrollbar();
+		sbary.draw(fabric, view);
+	}
 };
 
 /**
@@ -274,9 +279,11 @@ VNote.prototype.getFlowWidth = function() {
 	var sbary = this.scrollbarY;
 	var zone  = this.getZone();
 	var flowWidth = zone.width - this.imargin.x;
-	if (sbary && sbary.visible) {
-		flowWidth -= theme.scrollbar.strength;
-	}
+
+	// this used to be made when the scrollbar was within the vnote.
+	// if (sbary && sbary.visible)
+	//	{ flowWidth -= theme.scrollbar.strength; }
+
 	return flowWidth;
 };
 

@@ -238,9 +238,16 @@ VItem.prototype.getVParaAtPoint = function(p, action) {
 */
 VItem.prototype.dragstart = function(view, p, shift, ctrl, access) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
-
 	var action;
-	var vp = view.depoint(p);
+
+	var sbary = this.scrollbarY;
+	if (sbary && sbary.within(view, p)) {
+		action = shell.startAction(Action.SCROLLY, this, p);
+		action.startPos = sbary.getPos();
+		return true;
+	}
+
+	var vp    = view.depoint(p);
 	if (!this.getZone().within(vp)) return false;
 
 	shell.redraw = true;
@@ -255,20 +262,14 @@ VItem.prototype.dragstart = function(view, p, shift, ctrl, access) {
 	if (access == 'rw')
 		{ shell.vspace.setFocus(this); }
 
-	var sbary = this.scrollbarY;
 	var pnw = this.getZone().pnw;
-	var pr = vp.sub(pnw);
-	if (sbary && sbary.within(pr)) {
-		action = shell.startAction(Action.SCROLLY, this, p);
-		action.startPos = sbary.getPos();
+	if (access == 'rw') {
+		shell.startAction(Action.ITEMDRAG, this, vp);
 	} else {
-		if (access == 'rw') {
-			shell.startAction(Action.ITEMDRAG, this, vp);
-		} else {
-			action = shell.startAction(Action.PAN, null, p);
-			action.pan = view.pan;
-		}
+		action = shell.startAction(Action.PAN, null, p);
+		action.pan = view.pan;
 	}
+	
 	return true;
 };
 
@@ -338,8 +339,14 @@ VItem.prototype.mousehover = function(view, p) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
 
 	if (p === null) { return null; }
+
+	var sbary = this.scrollbarY;
+	if (sbary && sbary.within(view, p))
+		{ return 'default'; }
+	
 	var vp = view.depoint(p);
 	if (!this.getZone().within(vp)) return null;
+
 	return 'default';
 };
 

@@ -57,8 +57,6 @@ var is       = Jools.is;
 var isnon    = Jools.isnon;
 var limit    = Jools.limit;
 var log      = Jools.log;
-var max      = Math.max;
-var min      = Math.min;
 var ro       = Math.round;
 var subclass = Jools.subclass;
 
@@ -85,23 +83,25 @@ Scrollbar = function() {
 */
 Scrollbar.prototype.draw = function(fabric, view) {
 	if (!this.visible) throw new Error('Drawing an invisible scrollbar');
-	var ths = theme.scrollbar;
 
-	var z      = this._$zone;
-	var w      = z.width;
-	var size   = ro(this._$aperture * z.height / this._$max);
-	var msize  = max(size, ths.minSize);
-	var sy     = z.pnw.y + ro(this._$pos * ((z.height - msize + size) / this._$max));
-	var pwx    = z.pnw.x;
-	var pex    = z.pse.x;
+	var ths  = theme.scrollbar;
+	var pnw  = this._$pnw;
+	var size = this._$size;
+	var pos  = this._$pos;
+	var max  = this._$max;
+
+	var ap   = ro(this._$aperture * size / max);
+	var map  = Math.max(ap, ths.minSize);
+	var sy   = ro(pos * ((size - map + ap) / max));
+	var s05  = half(ths.strength);
 
 	var bezirect = new BeziRect(
-		new Point(pwx, sy),
-		new Point(pex, sy + msize),
+		view.point(pnw.x, pnw.y + sy)      .add(-s05, 0),
+		view.point(pnw.x, pnw.y + sy + map).add( s05, 0),
 		ths.ovala, ths.ovalb
 	);
 	
-	fabric.paint(theme.scrollbar.style, bezirect, 'path', view);
+	fabric.paint(theme.scrollbar.style, bezirect, 'path', View.proper);
 };
 
 /**
@@ -113,56 +113,42 @@ Scrollbar.prototype.getPos = function() {
 };
 
 /**
-| Sets the scrollbars position.
+| Sets the scrollbars position and location.
 */
-Scrollbar.prototype.setPos = function(pos, aperture, max) {
+Scrollbar.prototype.setPos = function(pos, aperture, max, pnw, size) {
 	pos = limit(0, pos, max - aperture);
 	if (pos < 0) throw new Error('Scrollbar.setPos < 0');
 	this._$pos      = pos;
 	this._$aperture = aperture;
 	this._$max      = max;
-};
-
-/**
-| Sets the scrollbars zone.
-|
-| setZone(rect)           -or-
-| setZone(pnw, pse)       -or-
-| setZone(wx, ny, ex. sy)
-*/
-Scrollbar.prototype.setZone = function(a1, a2, a3, a4) {
-	if (a1 instanceof Rect) {
-		this._$zone = a1;
-		return;
-	}
-
-	var tz = this._$zone;
-
-	if (a1 instanceof Point) {
-		if (tz && tz.pnw.eq(a1) && tz.pse.eq(a2)) { return; }
-		this._$zone = new Rect(a1, a2);
-		return;
-	}
-
-	this._$zone = new Rect(
-		Point.renew(a1, a2, tz && tz.pnw),
-		Point.renew(a3, a3, tz && tz.pse)
-	);
+	this._$pnw      = pnw,
+	this._$size     = size;
 };
 
 /**
 | Returns true if p is within the scrollbar.
 */
-Scrollbar.prototype.within = function(p) {
+Scrollbar.prototype.within = function(view, p) {
+	if (!(view instanceof View)) { throw new Error('view no View'); }
+
 	if (!this.visible) { return false; }
-	return this._$zone.within(p);
+
+	var pnw = this._$pnw;
+	var dp  = view.depoint(p);
+
+	return (
+		dp.x >= pnw.x && 
+		dp.y >= pnw.y &&
+		dp.x <= pnw.x + theme.scrollbar.strength &&
+		dp.y <= pnw.y + this._$size
+	);
 };
 
 /**
 | Returns the value of pos change for d pixels in the current zone.
 */
 Scrollbar.prototype.scale = function(d) {
-	return this._$max / this._$zone.height * d;
+	return d * this._$max / this._$size;
 };
 
 })();
