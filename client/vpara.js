@@ -533,43 +533,43 @@ VPara.prototype.getHeight = function() {
 /**
 | Draws the paragraph in its cache and returns it.
 */
-VPara.prototype.getFabric = function(view) {
+VPara.prototype.draw = function(fabric, view, pnw) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
 
 	var flow   = this.getFlow();
 	var width  = flow.spread * view.zoom;
 	var vdoc   = shell.vspace.vget(this.path, -1);
 	var height = this.getHeight() * view.zoom;
-	var fabric = this.$fabric;
+	var $f     = this.$fabric;
 
 	// cache hit?
-	if (!config.debug.noCache &&
-		fabric &&
-		fabric.width === width &&
-		fabric.height === height &&
-		view.zoom === fabric.$zoom
-	)
-	{ return fabric; }
-
-	// TODO: work out exact height for text below baseline
-	fabric = this.$fabric = new Fabric(width, height);
-	fabric.scale(view.zoom);
-	fabric.$zoom = view.zoom;
-	fabric.setFont(vdoc.getFontSize(), vdoc.getFont(), 'black', 'start', 'alphabetic');
-
-	// draws text into the fabric
-	for(var a = 0, aZ = flow.length; a < aZ; a++) {
-		var line = flow[a];
-		for(var b = 0, bZ = line.a.length; b < bZ; b++) {
-			var chunk = line.a[b];
-			fabric.fillText(
-				chunk.t,
-				chunk.x, line.y
-			);
+	if (config.debug.noCache ||
+		!$f ||
+		$f.width  !== width  ||
+		$f.height !== height ||
+		view.zoom !== $f.$zoom
+	) {
+		// TODO: work out exact height for text below baseline
+		$f = this.$fabric = new Fabric(width, height);
+		$f.scale(view.zoom);
+		$f.$zoom = view.zoom;
+		$f.setFont(vdoc.getFontSize(), vdoc.getFont(), 'black', 'start', 'alphabetic');
+    
+		// draws text into the fabric
+		for(var a = 0, aZ = flow.length; a < aZ; a++) {
+			var line = flow[a];
+			for(var b = 0, bZ = line.a.length; b < bZ; b++) {
+				var chunk = line.a[b];
+				$f.fillText(
+					chunk.t,
+					chunk.x,
+					line.y
+				);
+			}
 		}
 	}
 
-	return fabric;
+	fabric.drawImage($f, pnw);
 };
 
 /**

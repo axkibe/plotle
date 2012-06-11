@@ -111,7 +111,7 @@ CChat.prototype.getCaretPos = function() {
 	return immute({ s: s, n: n, x: x });
 };
 
-CChat.prototype.getFabric = function() {
+CChat.prototype._getFabric = function() {
 	var fabric = this.$fabric;
 	if (fabric && !config.debug.noCache) { return fabric; }
 
@@ -126,7 +126,7 @@ CChat.prototype.getFabric = function() {
 	var fs = this.twig.fontStyle;
 	// TODO allow shortcut, give fs only
 
-	fabric.setFont(fs.size, fs.font, fs.fill, fs.align, fs.base); 
+	fabric.setFont(fs.size, fs.font, fs.fill, fs.align, fs.base);
 	var lh = this.lineHeight;
 	fabric.fillText('»', x - 10, y);
 	fabric.fillText('chat', x - 37, y);
@@ -175,7 +175,7 @@ CChat.prototype.getOffsetPoint = function(offset) {
 | Draws the component on the fabric.
 */
 CChat.prototype.draw = function(fabric) {
-	fabric.drawImage(this.getFabric(), this.pnw, 'source-atop');
+	fabric.drawImage(this._getFabric(), this.pnw, 'source-atop');
 };
 
 /**
@@ -358,7 +358,7 @@ CChat.prototype.addMessage = function(msg) {
 */
 CChat.prototype.mousedown = function(p, shift, ctrl) {
 	var pp = p.sub(this.pnw);
-	var fabric = this.getFabric();
+	var fabric = this._getFabric();
 	if (!fabric.within(this, 'pathILine', View.proper, pp))
 		{ return null; }
 
@@ -383,7 +383,7 @@ CChat.prototype.mousehover = function(p, shift, ctrl) {
 	if (p.x < pnw.x || p.y < pnw.y || p.x > pse.x || p.y > pse.y)
 		{ return null; }
 
-	var fabric = this.getFabric();
+	var fabric = this._getFabric();
 	var pp = p.sub(this.pnw);
 	if (fabric.within(this, 'pathILine', View.proper, pp))
 		{ return "text"; }

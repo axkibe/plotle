@@ -37,6 +37,7 @@ var BeziRect;
 var Fabric;
 var Jools;
 var Point;
+var Rect;
 var theme;
 
 /**
@@ -124,9 +125,29 @@ Scrollbar.prototype.setPos = function(pos, aperture, max) {
 
 /**
 | Sets the scrollbars zone.
+|
+| setZone(rect)           -or-
+| setZone(pnw, pse)       -or-
+| setZone(wx, ny, ex. sy)
 */
-Scrollbar.prototype.setZone = function(zone) {
-	this._$zone = zone;
+Scrollbar.prototype.setZone = function(a1, a2, a3, a4) {
+	if (a1 instanceof Rect) {
+		this._$zone = a1;
+		return;
+	}
+
+	var tz = this._$zone;
+
+	if (a1 instanceof Point) {
+		if (tz && tz.pnw.eq(a1) && tz.pse.eq(a2)) { return; }
+		this._$zone = new Rect(a1, a2);
+		return;
+	}
+
+	this._$zone = new Rect(
+		Point.renew(a1, a2, tz && tz.pnw),
+		Point.renew(a3, a3, tz && tz.pse)
+	);
 };
 
 /**

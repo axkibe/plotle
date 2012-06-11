@@ -259,11 +259,11 @@ VSpace.prototype.mousewheel = function(p, dir, shift, ctrl) {
 	var $view = this.$view;
 	var twig  = this.twig;
 
-	/* XXX
 	for(var r = 0, rZ = twig.length; r < rZ; r++) {
 		var vitem = this.vAtRank(r);
-		if (vitem.mousewheel($view, p, dir)) { return true; }
-	}*/
+		if (vitem.mousewheel($view, p, dir, shift, ctrl))
+			{ return true; }
+	}
 
 	if (dir > 0) {
 		this.$view = this.$view.review( 1, p);

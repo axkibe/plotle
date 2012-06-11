@@ -129,17 +129,12 @@ VNote.prototype.setScrollbar = function(pos) {
 
 	var zone = this.getZone();
 
-	// TODO make a Rect.renew
-	sbary.setZone(new Rect(
-		Point.renew(
-			zone.width - this.imargin.e - theme.scrollbar.strength,
+	sbary.setZone(
+			zone.width  - this.imargin.e - theme.scrollbar.strength,
 			this.imargin.n,
-			sbary.zone && sbary.zone.pnw),
-		Point.renew(
-			zone.width - this.imargin.e,
-			zone.height - this.imargin.s - 1,
-			sbary.zone && sbary.zone.pse)
-	));
+			zone.width  - this.imargin.e,
+			zone.height - this.imargin.s - 1
+	);
 
 	if (typeof(pos) === 'undefined') { pos = sbary.getPos(); }
 	sbary.setPos(pos, zone.height - this.imargin.y, this.vv.doc.getHeight());
@@ -262,10 +257,10 @@ VNote.prototype.draw = function(fabric, view) {
 /**
 | Mouse wheel turned.
 */
-VNote.prototype.mousewheel = function(view, p, dir) {
-	var vp = view.point(p);
+VNote.prototype.mousewheel = function(view, p, dir, shift, ctrl) {
+	var dp = view.depoint(p);
 
-	if (!this.getZone().within(vp)) return false;
+	if (!this.getZone().within(dp)) return false;
 	this.setScrollbar(this.scrollbarY.getPos() - dir * settings.textWheelSpeed);
 	this.poke();
 	shell.redraw = true;

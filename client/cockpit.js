@@ -37,10 +37,11 @@ var Jools;
 var MainBoard;
 var Path;
 var Point;
-var theme;
-var Tree;
 var shell;
 var system;
+var theme;
+var Tree;
+var View;
 
 /**
 | Exports

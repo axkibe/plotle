@@ -191,10 +191,7 @@ VLabel.prototype.getParaSep = function(fontsize) {
 | Mouse wheel turned.
 */
 VLabel.prototype.mousewheel = function(view, p, dir) {
-	var vp = view.point(p);
-
-	if (!this.getZone().within(vp)) { return false; }
-	return true;
+	return false;
 };
 
 /**

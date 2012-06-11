@@ -154,7 +154,7 @@ VDoc.prototype.draw = function(fabric, view, width, imargin, scrollp) {
 		pnws[twig.ranks[r]] = new Point(imargin.w, ro(y));
 		var p = new Point(imargin.w, ro(y - scrollp.y));
 
-		fabric.drawImage(vpara.getFabric(view), view.x(p), view.y(p));
+		vpara.draw(fabric, view, view.point(p));
 		y += flow.height + paraSep;
 	}
 	this.pnws = pnws;   // north-west points of paras
