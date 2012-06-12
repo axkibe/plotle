@@ -39,6 +39,7 @@ var Jools;
 var Point;
 var Rect;
 var theme;
+var View;
 
 /**
 | Capsule
@@ -137,7 +138,7 @@ Scrollbar.prototype.within = function(view, p) {
 	var dp  = view.depoint(p);
 
 	return (
-		dp.x >= pnw.x && 
+		dp.x >= pnw.x &&
 		dp.y >= pnw.y &&
 		dp.x <= pnw.x + theme.scrollbar.strength &&
 		dp.y <= pnw.y + this._$size

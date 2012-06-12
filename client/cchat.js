@@ -82,7 +82,8 @@ CChat = function(twig, board, inherit, name) {
 	this.lineHeight = ro(fs.size * 1.2);
 	this.sideSlopeX = 20;
 	var descend     = ro(fs.size * theme.bottombox);
-	this.pitch      = new Point(this.sideSlopeX + 30, iframe.height - descend);
+	this.pitch      = new Point(this.sideSlopeX - 7, iframe.height - descend);
+	this.coff       = 37;
 	this.itext      = '';
 };
 
@@ -128,9 +129,9 @@ CChat.prototype._getFabric = function() {
 
 	fabric.setFont(fs.size, fs.font, fs.fill, fs.align, fs.base);
 	var lh = this.lineHeight;
-	fabric.fillText('»', x - 10, y);
-	fabric.fillText('chat', x - 37, y);
-	fabric.fillText(this.itext, x, y);
+	fabric.fillText('»', x + 27, y);
+	fabric.fillText('chat', x, y);
+	fabric.fillText(this.itext, x + 37, y);
 	y -= 2;
 
 	for(var a = this.messages.length - 1, aA = max(a - 5, 0); a >= aA; a--) {
@@ -160,16 +161,15 @@ CChat.prototype.getOffsetPoint = function(offset) {
 	// TODO cache position
 	var twig     = this.twig;
 	var font     = twig.fontStyle;
-	Measure.font = font.style;
+	Measure.setFont(font.size, font.font);
 	var itext    = this.itext;
 	var pitch    = this.pitch;
 
 	return new Point(
-		ro(pitch.x + Measure.width(itext.substring(0, offset))),
+		ro(pitch.x + this.coff + Measure.width(itext.substring(0, offset))),
 		ro(pitch.y)
 	);
 };
-
 
 /**
 | Draws the component on the fabric.
@@ -178,19 +178,20 @@ CChat.prototype.draw = function(fabric) {
 	fabric.drawImage(this._getFabric(), this.pnw, 'source-atop');
 };
 
+
 /**
 | Draws the caret.
 */
 CChat.prototype.drawCaret = function(view) {
-	// TODO view
+	if (!(view instanceof View)) { throw new Error('view no View'); }
 
 	var caret = shell.caret;
 	var board = this.board;
 	var cpos  = caret.$pos = this.getCaretPos();
 
 	var cx  = cpos.x;
-	var ch  = cpos.s - cpos.n;
-	var cp = new Point(
+	var ch  = ro((cpos.s - cpos.n) * view.zoom);
+	var cp = view.point(
 		board.pnw.x + cpos.x,
 		board.pnw.y + cpos.n
 	);

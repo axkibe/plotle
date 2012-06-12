@@ -129,6 +129,15 @@ MainBoard.prototype.setUser = function(userName) {
 };
 
 /**
+| Sets current space zoom level
+*/
+MainBoard.prototype.setSpaceZoom = function(zf) {
+	var zoom = this.cc.zoom;
+	zoom.text = '' + zf;
+	zoom.poke();
+};
+
+/**
 | Draws the mainboard
 */
 MainBoard.prototype.draw = function(fabric) {

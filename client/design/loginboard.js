@@ -58,7 +58,7 @@ var loginBXM  = loginBW * magic / 2;
 var loginBYM  = loginBH * magic / 2;
 
 /**
-| CLose control
+| Close control
 */
 var closeBW  = 54;
 var closeBH  = 54;

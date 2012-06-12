@@ -29,6 +29,7 @@
 /**
 | Imports
 */
+var Fabric;
 var Jools;
 var theme;
 
@@ -50,6 +51,9 @@ var innumerable = Jools.innumerable;
 var ro          = Math.round;
 var fontStyle   = Design.fontStyle;
 
+// approximates ellipses with beziers
+var magic     = Fabric.magic;
+
 var sideBW  = 120;
 var sideB2W = 190;
 
@@ -57,13 +61,20 @@ var sideB2W = 190;
 | switch control
 */
 var switchBW  = 170;
-var switchBH  =  32;
+var switchBH  =  28;
 
 /**
 | help control
 */
 var helpBW  = 150;
 var helpBH  =  23;
+
+/**
+| Zooming controls
+*/
+var zoomBW  = 18;
+var zoomBH  = 20;
+var zoomBYM = zoomBH * magic;
 
 var MainBoard = Design.MainBoard = { type : 'Design' };
 
@@ -246,14 +257,14 @@ MainBoard.layout = {
 		hofocStyle : 'highlight',
 		frame      : {
 			type   : 'Frame',
-			pnw    : { type: 'Point', anchor: 'n', x: -half(switchBW), y:         0 },
+			pnw    : { type: 'Point', anchor: 'n', x: -half(switchBW), y:        0 },
 			pse    : { type: 'Point', anchor: 'n', x:  half(switchBW), y: switchBH }
 		},
 		caption       : {
 			type      : 'Label',
 			text      : 'switch',
 			fontStyle : fontStyle(14, 'cm'),
-			pos       : { type: 'Point', anchor: 'c', x:  0, y: -3 }
+			pos       : { type: 'Point', anchor: 'c', x:  0, y: -2 }
 		},
 		curve :  {
 			type  : 'Curve',
@@ -287,8 +298,158 @@ MainBoard.layout = {
 		fontStyle : fontStyle(12, 'lac'),
 		frame      : {
 			type   : 'Frame',
-			pnw    : { type: 'Point', anchor: 'se', x: -485, y: -60 },
+			pnw    : { type: 'Point', anchor: 'se', x: -450, y: -60 },
 			pse    : { type: 'Point', anchor: 'se', x: -125, y:   0 }
+		}
+	},
+	
+	'zoomL'       : {
+		type      : 'Label',
+		text      : 'Zoom: ',
+		fontStyle : fontStyle(12, 'ca'),
+		pos       : { type: 'Point', anchor: 's', x: -45, y: -12 }
+	},
+	
+	'zoom'       : {
+		type      : 'Label',
+		text      : '0',
+		fontStyle : fontStyle(12, 'ca'),
+		pos       : { type: 'Point', anchor: 's', x:  -13, y: -12 }
+	},
+
+	'zoomminusB'       : {
+		type       : 'Custom',
+		code       : 'MBZoomPlusB',
+		normaStyle : 'button',
+		hoverStyle : 'buttonHover',
+		focusStyle : 'buttonFocus',
+		hofocStyle : 'buttonHofoc',
+		frame : {
+			type  : 'Frame',
+			pnw   : { type: 'Point', anchor: 's', x: -9,          y: -8 - zoomBH },
+			pse   : { type: 'Point', anchor: 's', x: -9 + zoomBW, y: -8          }
+		},
+		caption : {
+			type      : 'Label',
+			text      : '-',
+			fontStyle : fontStyle(14, 'cm'),
+			pos       : { type: 'Point', anchor: 'c', x:  1, y: 1 }
+		},
+		curve :  {
+			type  : 'Curve',
+			copse : {
+			'1' : {
+				type : 'MoveTo',
+				to   : { type: 'Point', anchor:  'w', x: 1, y:  0 },
+				bx   :  1, by: 0
+			},
+			'2' : {
+				type : 'BeziTo',
+				to   :  { type: 'Point', anchor: 'e', x: -1, y:  0 },
+				c1x  :  0, c1y : -zoomBYM ,
+				c2x  :  0, c2y : -zoomBYM,
+				bx   : -1, by:  0
+			},
+			'3' : {
+				type : 'BeziTo',
+				to   :  { type: 'Point', anchor: 'w', x: 1, y:  0 },
+				c1x  :  0, c1y :  zoomBYM,
+				c2x  :  0, c2y :  zoomBYM,
+				bx   :  1, by:  0
+			}},
+
+			ranks : [ '1', '2', '3' ]
+		}
+	},
+	
+
+	'zoomnullB'       : {
+		type       : 'Custom',
+		code       : 'MBZoomPlusB',
+		normaStyle : 'button',
+		hoverStyle : 'buttonHover',
+		focusStyle : 'buttonFocus',
+		hofocStyle : 'buttonHofoc',
+		frame : {
+			type  : 'Frame',
+			pnw   : { type: 'Point', anchor: 's', x: -9 + zoomBW     - 2, y: -8 - zoomBH },
+			pse   : { type: 'Point', anchor: 's', x: -9 + zoomBW * 2 - 2, y: -8          }
+		},
+		caption : {
+			type      : 'Label',
+			text      : '0',
+			fontStyle : fontStyle(14, 'cm'),
+			pos       : { type: 'Point', anchor: 'c', x:  1, y: 2 }
+		},
+		curve :  {
+			type  : 'Curve',
+			copse : {
+			'1' : {
+				type : 'MoveTo',
+				to   : { type: 'Point', anchor:  'w', x: 1, y:  0 },
+				bx   :  1, by: 0
+			},
+			'2' : {
+				type : 'BeziTo',
+				to   :  { type: 'Point', anchor: 'e', x: -1, y:  0 },
+				c1x  :  0, c1y : -zoomBYM ,
+				c2x  :  0, c2y : -zoomBYM,
+				bx   : -1, by:  0
+			},
+			'3' : {
+				type : 'BeziTo',
+				to   :  { type: 'Point', anchor: 'w', x: 1, y:  0 },
+				c1x  :  0, c1y :  zoomBYM,
+				c2x  :  0, c2y :  zoomBYM,
+				bx   :  1, by:  0
+			}},
+
+			ranks : [ '1', '2', '3' ]
+		}
+	},
+	
+	'zoomplusB'       : {
+		type       : 'Custom',
+		code       : 'MBZoomPlusB',
+		normaStyle : 'button',
+		hoverStyle : 'buttonHover',
+		focusStyle : 'buttonFocus',
+		hofocStyle : 'buttonHofoc',
+		frame : {
+			type  : 'Frame',
+			pnw   : { type: 'Point', anchor: 's', x: -9 + zoomBW * 2 - 4, y: -8 - zoomBH },
+			pse   : { type: 'Point', anchor: 's', x: -9 + zoomBW * 3 - 4, y: -8          }
+		},
+		caption : {
+			type      : 'Label',
+			text      : '+',
+			fontStyle : fontStyle(14, 'cm'),
+			pos       : { type: 'Point', anchor: 'c', x:  1, y: 1 }
+		},
+		curve :  {
+			type  : 'Curve',
+			copse : {
+			'1' : {
+				type : 'MoveTo',
+				to   : { type: 'Point', anchor:  'w', x: 1, y:  0 },
+				bx   :  1, by: 0
+			},
+			'2' : {
+				type : 'BeziTo',
+				to   :  { type: 'Point', anchor: 'e', x: -1, y:  0 },
+				c1x  :  0, c1y : -zoomBYM ,
+				c2x  :  0, c2y : -zoomBYM,
+				bx   : -1, by:  0
+			},
+			'3' : {
+				type : 'BeziTo',
+				to   :  { type: 'Point', anchor: 'w', x: 1, y:  0 },
+				c1x  :  0, c1y :  zoomBYM,
+				c2x  :  0, c2y :  zoomBYM,
+				bx   :  1, by:  0
+			}},
+
+			ranks : [ '1', '2', '3' ]
 		}
 	},
 	
@@ -296,14 +457,14 @@ MainBoard.layout = {
 		type      : 'Label',
 		text      : 'Hello',
 		fontStyle : fontStyle(12, 'ca'),
-		pos       : { type: 'Point', anchor: 'sw', x:  260, y: -36 }
+		pos       : { type: 'Point', anchor: 'sw', x:  250, y: -36 }
 	},
 
 	'username'    : {
 		type      : 'Label',
 		text      : '',
 		fontStyle : fontStyle(18, 'ca'),
-		pos       : { type: 'Point', anchor: 'sw', x:  260, y: -13 }
+		pos       : { type: 'Point', anchor: 'sw', x:  250, y: -13 }
 	},
 
 
@@ -311,23 +472,21 @@ MainBoard.layout = {
 		type      : 'Label',
 		text      : 'current space',
 		fontStyle : fontStyle(12, 'ca'),
-		pos       : { type: 'Point', anchor:  's', x: -130, y: -42 }
+		pos       : { type: 'Point', anchor:  's', x: -140, y: -42 }
 	},
 
 	'cspace'      : {
 		type      : 'Label',
 		text      : '',
 		fontStyle : fontStyle(22, 'cab'),
-		pos       : { type: 'Point', anchor:  's', x: -130, y: -20 }
+		pos       : { type: 'Point', anchor:  's', x: -140, y: -20 }
 	},
 	
 	'access'      : {
 		type      : 'Label',
-//		text      : '(readonly)',
-//		text      : '(edit)',
 		text      : '',
 		fontStyle : fontStyle(12, 'cadr'),
-		pos       : { type: 'Point', anchor:  's', x: -130, y: -4 }
+		pos       : { type: 'Point', anchor:  's', x: -140, y: -4 }
 	}},
 
 
@@ -337,6 +496,11 @@ MainBoard.layout = {
 		'rightB',
 		'switchB',
 		'chat',
+		'zoomL',
+		'zoom',
+		'zoomminusB',
+		'zoomplusB',
+		'zoomnullB',
 		'greet',
 		'username',
 		'saycurrent',

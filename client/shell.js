@@ -578,6 +578,13 @@ Shell.prototype.setUser = function(user, pass) {
 
 
 /**
+| Sets the space zoom factor.
+*/
+Shell.prototype.setSpaceZoom = function(zf) {
+	this.cockpit.setSpaceZoom(zf);
+};
+
+/**
 | Called when loading the website
 */
 Shell.prototype.onload = function() {

@@ -163,7 +163,7 @@ CBoard.prototype.getFabric = function() {
 	var layout = this.tree.root.layout;
 
 	var focus = this.focusedCC();
-	for(var a = 0, aZ = layout.length; a < aZ; a++) {
+	for(var a = layout.length - 1; a >= 0; a--) {
 		var cname = layout.ranks[a];
 		var c = this.cc[cname];
 		c.draw(fabric, CAccent.state(cname === this.$hover || c.$active, c === focus));

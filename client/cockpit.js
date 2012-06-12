@@ -166,7 +166,7 @@ Cockpit.prototype.setCurBoard = function(boardName) {
 };
 
 /**
-| Sets the space name displayed on the MainBoard.
+| Sets the space name displayed on the mainboard.
 */
 Cockpit.prototype.setCurSpace = function(space, access) {
 	this.$curSpace = space;
@@ -179,7 +179,7 @@ Cockpit.prototype.setCurSpace = function(space, access) {
 };
 
 /**
-| Sets the user greeted on the MainBoard
+| Sets the user greeted on the mainboard.
 */
 Cockpit.prototype.setUser = function(userName) {
 	this.$amVisitor = userName.substring(0,5) === 'visit';
@@ -193,6 +193,13 @@ Cockpit.prototype.setUser = function(userName) {
 	var left2B = mainboard.cc.left2B;
 	left2B.$visible = this.$amVisitor;
 	left2B.poke();
+};
+
+/**
+| Sets the zoom level for the current space shown on the mainboard.
+*/
+Cockpit.prototype.setSpaceZoom = function(zf) {
+	this.getBoard('MainBoard').setSpaceZoom(zf);
 };
 
 /**

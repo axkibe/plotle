@@ -270,6 +270,7 @@ VSpace.prototype.mousewheel = function(p, dir, shift, ctrl) {
 	} else {
 		this.$view = this.$view.review(-1, p);
 	}
+	shell.setSpaceZoom(this.$view.fact);
 
 	this.knock();
 	shell.redraw = true;
@@ -559,6 +560,7 @@ VSpace.prototype.specialKey = function(key, shift, ctrl) {
 			case ',' : this.$view = this.$view.review( 1, pm); break;
 			case '.' : this.$view = this.$view.review(-1, pm); break;
 			}
+			shell.setSpaceZoom(this.$view.fact);
 			this.knock();
 			shell.redraw = true;
 			return;
