@@ -72,9 +72,12 @@ var helpBH  =  23;
 /**
 | Zooming controls
 */
-var zoomBW  = 18;
-var zoomBH  = 20;
-var zoomBYM = zoomBH * magic;
+var zoomX   =   0;
+var zoomY   =  -9;
+var zoomBW  =  20;
+var zoomBH  =  20;
+var zoomBYM = Math.round(zoomBH * magic);
+var zoomBXM = Math.round(zoomBW * magic);
 
 var MainBoard = Design.MainBoard = { type : 'Design' };
 
@@ -326,8 +329,8 @@ MainBoard.layout = {
 		hofocStyle : 'buttonHofoc',
 		frame : {
 			type  : 'Frame',
-			pnw   : { type: 'Point', anchor: 's', x: -9,          y: -8 - zoomBH },
-			pse   : { type: 'Point', anchor: 's', x: -9 + zoomBW, y: -8          }
+			pnw   : { type: 'Point', anchor: 's', x: zoomX,          y: zoomY - zoomBH },
+			pse   : { type: 'Point', anchor: 's', x: zoomX + zoomBW, y: zoomY          }
 		},
 		caption : {
 			type      : 'Label',
@@ -372,8 +375,8 @@ MainBoard.layout = {
 		hofocStyle : 'buttonHofoc',
 		frame : {
 			type  : 'Frame',
-			pnw   : { type: 'Point', anchor: 's', x: -9 + zoomBW     - 2, y: -8 - zoomBH },
-			pse   : { type: 'Point', anchor: 's', x: -9 + zoomBW * 2 - 2, y: -8          }
+			pnw   : { type: 'Point', anchor: 's', x: zoomX + zoomBW     - 2, y: zoomY - zoomBH },
+			pse   : { type: 'Point', anchor: 's', x: zoomX + zoomBW * 2 - 2, y: zoomY          }
 		},
 		caption : {
 			type      : 'Label',
@@ -417,8 +420,8 @@ MainBoard.layout = {
 		hofocStyle : 'buttonHofoc',
 		frame : {
 			type  : 'Frame',
-			pnw   : { type: 'Point', anchor: 's', x: -9 + zoomBW * 2 - 4, y: -8 - zoomBH },
-			pse   : { type: 'Point', anchor: 's', x: -9 + zoomBW * 3 - 4, y: -8          }
+			pnw   : { type: 'Point', anchor: 's', x: zoomX + zoomBW * 2 - 4, y: zoomY - zoomBH },
+			pse   : { type: 'Point', anchor: 's', x: zoomX + zoomBW * 3 - 4, y: zoomY          }
 		},
 		caption : {
 			type      : 'Label',
