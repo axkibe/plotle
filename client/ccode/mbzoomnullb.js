@@ -12,13 +12,14 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--'
 
-               ,-,-,-.   ,-,---. ,-_/              .-,--. .          ,-,---.
-               `,| | |    '|___/   /  ,-. ,-. ,-,-. '|__/ |  . . ,-.  '|___/
-                 | ; | .  ,|   \  /   | | | | | | | ,|    |  | | `-.  ,|   \
-                 '   `-' `-^---' /--, `-' `-' ' ' ' `'    `' `-^ `-' `-^---'
+
+                 ,-,-,-.   ,-,---. ,-_/               ,-,-.       .  .  ,-,---.
+                 `,| | |    '|___/   /  ,-. ,-. ,-,-. ` | |   . . |  |   '|___/
+                   | ; | .  ,|   \  /   | | | | | | |   | |-. | | |  |   ,|   \
+                   '   `-' `-^---' /--, `-' `-' ' ' '  ,' `-' `-^ `' `' `-^---'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- Zoom Plus Button on Mainboard.
+ Zoom Null Button on Mainboard.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -55,20 +56,16 @@ var subclass      = Jools.subclass;
 /**
 | Constructor
 */
-var MBZoomPlusB = CCode.MBZoomPlusB = function(twig, board, inherit, name) {
+var MBZoomNullB = CCode.MBZoomNullB = function(twig, board, inherit, name) {
 	CCustom.call(this, twig, board, inherit, name);
 };
-subclass(MBZoomPlusB, CCustom);
+subclass(MBZoomNullB, CCustom);
 
-MBZoomPlusB.prototype.mousedown = function(p, shift, ctrl) {
+MBZoomNullB.prototype.mousedown = function(p, shift, ctrl) {
 	var r = CCustom.prototype.mousedown.call(this, p, shift, ctrl);
 	if (!r) { return r; }
-	shell.changeSpaceZoom(1);
-	return 'drag';
-};
-
-MBZoomPlusB.prototype.dragstart = function() {
-	debug('DS');
+	shell.changeSpaceZoom(0);
+	return true;
 };
 
 })();

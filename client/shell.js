@@ -110,7 +110,7 @@ Shell = function(fabric) {
 	this.menu       = null;
 
 	this.caret      = new Caret(null, null, null, false);
-	this.action     = null;
+	this.$action    = null;
 	this.selection  = new Selection();
 
 	this.green      = false;
@@ -253,17 +253,17 @@ Shell.prototype.blink = function() {
 /**
 | Creates an action.
 */
-Shell.prototype.startAction = function(type, vitem, start) {
-	if (this.action) throw new Error('double action');
-	return this.action = new Action(type, vitem, start);
+Shell.prototype.startAction = function() {
+	if (this.$action) throw new Error('double action');
+	return this.$action = new Action(arguments);
 };
 
 /**
 | Ends an action.
 */
 Shell.prototype.stopAction = function() {
-	if (!this.action) throw new Error('ending no action');
-	this.action = null;
+	if (!this.$action) throw new Error('ending no action');
+	this.$action = null;
 };
 
 /**
@@ -443,14 +443,16 @@ Shell.prototype.mousedown = function(p, shift, ctrl) {
 Shell.prototype.dragstart = function(p, shift, ctrl) {
 	if (this.green)
 		{ return; }
+	
+	var cursor = this.cockpit.dragstart(p, shift, ctrl);
 
-	// cockpit?
-
-	if (this.vspace)
-		{ this.vspace.dragstart(p, shift, ctrl); }
+	if (cursor === null && this.vspace)
+		{ cursor = this.vspace.dragstart(p, shift, ctrl); }
 
 	if (this.redraw)
 		{ this._draw(); }
+
+	return cursor;
 };
 
 /**
@@ -460,10 +462,22 @@ Shell.prototype.dragmove = function(p, shift, ctrl) {
 	if (this.green)
 		{ return; }
 
+	var $action = this.$action;
+
+	if (!$action)
+		{ throw new Error('no action on dragmove'); }
+
 	var cursor = null;
 
-	if (this.vspace)
-		{ cursor = this.vspace.dragmove(p, shift, ctrl); }
+	switch ($action.visec) {
+	case 'cockpit' :
+		cursor = this.cockpit.dragmove(p, shift, ctrl);
+		break;
+	case 'space' :
+		if (this.vspace)
+			{ cursor = this.vspace.dragmove(p, shift, ctrl); }
+		break;
+	}
 
 	if (this.redraw)
 		{ this._draw(); }
@@ -478,11 +492,21 @@ Shell.prototype.dragstop = function(p, shift, ctrl) {
 	if (this.green)
 		{ return; }
 
-	// cockpit?
+	var $action = this.$action;
+	
+	if (!$action)
+		{ throw new Error('no action on dragstop'); }
 
-	if (this.vspace)
-		{ this.vspace.dragstop(p, shift, ctrl); }
-
+	switch($action.visec) {
+	case 'cockpit' :
+		this.cockpit.dragstop(p, shift, ctrl);
+		break;
+	case 'space' :
+		if (this.vspace)
+			{ this.vspace.dragstop(p, shift, ctrl); }
+		break;
+	}
+	
 	if (this.redraw)
 		{ this._draw(); }
 };
@@ -582,6 +606,14 @@ Shell.prototype.setUser = function(user, pass) {
 */
 Shell.prototype.setSpaceZoom = function(zf) {
 	this.cockpit.setSpaceZoom(zf);
+};
+
+/**
+| Changes the space zoom factor (around center)
+*/
+Shell.prototype.changeSpaceZoom = function(df) {
+	if (!this.vspace) { return; }
+	this.vspace.changeZoom(df);
 };
 
 /**

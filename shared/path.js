@@ -144,8 +144,12 @@ Object.defineProperty(Path.prototype, 'length', {
 | Returns the signature at index i.
 */
 Path.prototype.get = function(i) {
-	if (i < 0) i += this._path.length;
-	if (i < 0 || i >= this._path.length) throw new Error('invalid get');
+	if (i < 0)
+		{ i += this._path.length; }
+
+	if (i < 0 || i >= this._path.length)
+		{ throw new Error('invalid get'); }
+
 	return this._path[i];
 };
 
@@ -153,10 +157,17 @@ Path.prototype.get = function(i) {
 | True if this path is the same as another.
 */
 Path.prototype.equals = function(o) {
-	if (this._path.length !== o._path.length) return false;
+	if (!o)
+		{ return false; }
+
+	if (this._path.length !== o._path.length)
+		{ return false; }
+
 	for(var k in this._path) {
-		if (this._path[k] !== o._path[k]) return false;
+		if (this._path[k] !== o._path[k])
+			{ return false; }
 	}
+
 	return true;
 };
 
@@ -186,7 +197,7 @@ Path.prototype.subPathOf = function(o, len) {
 | Turns the path to a String.
 */
 Path.prototype.toString = function() {
-	return '['+this._path.toString()+']';
+	return '[' + this._path.toString() + ']';
 };
 
 /**
@@ -200,7 +211,8 @@ Path.prototype.toJSON = function() {
 | Jsonfy.
 */
 Path.prototype.ToBSON = function() {
-	return this._path;
+	throw new Error('TODO used?');
+	//return this._path;
 };
 
 

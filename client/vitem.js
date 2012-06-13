@@ -226,10 +226,10 @@ VItem.prototype.drawHandles = function(fabric, view) {
 /**
 | Returns the para at point. TODO, honor scroll here.
 */
-VItem.prototype.getVParaAtPoint = function(p, action) {
+VItem.prototype.getVParaAtPoint = function(p) {
 	// TODO rename imargin to innerMargin
 	if (p.y < this.imargin.n) return null;
-	return this.vv.doc.getVParaAtPoint(p, action);
+	return this.vv.doc.getVParaAtPoint(p);
 };
 
 /**
@@ -238,23 +238,30 @@ VItem.prototype.getVParaAtPoint = function(p, action) {
 */
 VItem.prototype.dragstart = function(view, p, shift, ctrl, access) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
-	var action;
 
 	var sbary = this.scrollbarY;
 	if (sbary && sbary.within(view, p)) {
-		action = shell.startAction(Action.SCROLLY, this, p);
-		action.startPos = sbary.getPos();
+		shell.startAction(
+			Action.SCROLLY, 'space',
+			'itemPath', this.path,
+			'start',    p,
+			'startPos', sbary.getPos()
+		);
 		return true;
 	}
 
-	var vp    = view.depoint(p);
+	var vp = view.depoint(p);
 	if (!this.getZone().within(vp)) return false;
 
 	shell.redraw = true;
 
 	if (ctrl && access == 'rw') {
 		// relation binding
-		shell.startAction(Action.RELBIND, this, p);
+		shell.startAction(
+			Action.RELBIND, 'space',
+			'itemPath', this.path,
+			'start',    p
+		);
 		return;
 	}
 
@@ -264,10 +271,14 @@ VItem.prototype.dragstart = function(view, p, shift, ctrl, access) {
 
 	var pnw = this.getZone().pnw;
 	if (access == 'rw') {
-		shell.startAction(Action.ITEMDRAG, this, vp);
+		shell.startAction(
+			Action.ITEMDRAG, 'space',
+			'itemPath', this.path,
+			'start', vp,
+			'move',  vp
+		);
 	} else {
-		action = shell.startAction(Action.PAN, null, p);
-		action.pan = view.pan;
+		return false;
 	}
 	
 	return true;
@@ -276,30 +287,31 @@ VItem.prototype.dragstart = function(view, p, shift, ctrl, access) {
 /**
 | dragmove?
 */
-VItem.prototype.dragmove = function(view, p) {
+VItem.prototype.dragmove = function(view, p, shift, ctrl) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
-	// no general zone test, since while dragmoving the item might be fixed by the action.
-	var action = shell.action;
-	var vp = view.depoint(p);
+	// no zone test, since dragmove is targeted to this item already.
 
-	switch (action.type) {
+	var $action = shell.$action;
+	var vp      = view.depoint(p);
+
+	switch ($action.type) {
 	case Action.RELBIND    :
 		if (!this.getZone().within(vp)) return false;
-		action.move = p;
-		action.vitem2 = this;
+		$action.move = p;
+		$action.item2Path = this.path;
 		shell.redraw = true;
 		return true;
 	case Action.ITEMDRAG   :
 	case Action.ITEMRESIZE :
-		action.move = vp;
+		$action.move = vp;
 		shell.redraw = true;
 		return true;
 	case Action.SCROLLY :
-		var start = action.start;
-		var dy = p.y - start.y;
-		var vitem = action.vitem;
+		var start = $action.start;
+		var dy    = p.y - start.y;
+		var vitem = shell.vspace.vget($action.itemPath);
 		var sbary = vitem.scrollbarY;
-		var spos = action.startPos + sbary.scale(dy);
+		var spos  = $action.startPos + sbary.scale(dy);
 		vitem.setScrollbar(spos);
 		vitem.poke();
 		shell.redraw = true;
@@ -317,12 +329,12 @@ VItem.prototype.dragstop = function(view, p) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
 	var vp = view.depoint(p);
 
-	var action = shell.action;
-	switch (action.type) {
+	var $action = shell.$action;
+	switch ($action.type) {
 	case Action.RELBIND :
 		if (!this.getZone().within(vp)) return false;
 		var vspace = shell.vspace.vget(this.path, -1);
-		VRelation.create(vspace, action.vitem, this);
+		VRelation.create(vspace, vspace.vget($action.itemPath), this);
 		shell.redraw = true;
 		return true;
 	default :

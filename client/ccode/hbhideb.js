@@ -64,7 +64,7 @@ subclass(HBHideB, CCustom);
 
 HBHideB.prototype.mousedown = function(p, shift, ctrl) {
 	var r = CCustom.prototype.mousedown.call(this, p, shift, ctrl);
-	if (!r) return r;
+	if (!r) { return r; }
 
 	this.board.cockpit.setShowHelp(false);
 	shell.redraw = true;

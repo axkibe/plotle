@@ -184,8 +184,8 @@ VNote.prototype.scrollPage = function(up) {
 VNote.prototype.dragstop = function(view, p) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
 
-	var action = shell.action;
-	switch (action.type) {
+	var $action = shell.$action;
+	switch ($action.type) {
 	case Action.ITEMDRAG :
 	case Action.ITEMRESIZE :
 		var zone = this.getZone();
@@ -300,29 +300,31 @@ VNote.prototype.getParaSep = function(fontsize) {
 */
 VNote.prototype.getZone = function() {
 	var twig   = this.twig;
-	var action = shell.action;
+	var $action = shell.$action;
 
-	if (!action || action.vitem !== this) return twig.zone;
+	if (!$action || !this.path.equals($action.itemPath))
+		{ return twig.zone; }
+
 	// TODO cache the last zone
 
-	switch (action.type) {
+	switch ($action.type) {
 	case Action.ITEMDRAG:
 		return twig.zone.add(
-			action.move.x - action.start.x,
-			action.move.y - action.start.y);
+			$action.move.x - $action.start.x,
+			$action.move.y - $action.start.y);
 
 	case Action.ITEMRESIZE:
-		var szone = action.startZone;
+		var szone = $action.startZone;
 		if (!szone) return twig.zone;
 		var spnw = szone.pnw;
 		var spse = szone.pse;
-		var dx = action.move.x - action.start.x;
-		var dy = action.move.y - action.start.y;
+		var dx = $action.move.x - $action.start.x;
+		var dy = $action.move.y - $action.start.y;
 		var minw = theme.note.minWidth;
 		var minh = theme.note.minHeight;
 		var pnw, pse;
 
-		switch (action.align) {
+		switch ($action.align) {
 		case 'n'  :
 			pnw = Point.renew(spnw.x, min(spnw.y + dy, spse.y - minh), spnw, spse);
 			pse = spse;

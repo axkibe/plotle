@@ -58,9 +58,9 @@ var Util     = CCode.Util;
 | The container.
 */
 CMeth = {
-	LoginBoard : {},
-	MainBoard  : {},
-	RegBoard   : {}
+	LoginBoard : { },
+	MainBoard  : { },
+	RegBoard   : { }
 };
 
 /**

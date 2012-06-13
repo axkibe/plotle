@@ -201,7 +201,12 @@ View.prototype.rect = function(a1, a2) {
 */
 View.prototype.review = function(df, p) {
 	var pan = this.pan;
-	var f1  = limit(theme.zoom.min, this.fact + df, theme.zoom.max);
+	var f1;
+	if (df === 0) {
+		f1 = 0;
+	} else {
+		f1 = limit(theme.zoom.min, this.fact + df, theme.zoom.max);
+	}
 	var z1 = Math.pow(1.1, f1);
 	var f = 1 / z1  - 1 / this.zoom;
 

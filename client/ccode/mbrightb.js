@@ -64,7 +64,7 @@ subclass(MBRightB, CCustom);
 
 MBRightB.prototype.mousedown = function(p, shift, ctrl) {
 	var r = CCustom.prototype.mousedown.call(this, p, shift, ctrl);
-	if (!r) return r;
+	if (!r) { return r; }
 
 	this.board.cockpit.setShowHelp(!this.$active);
 	shell.redraw = true;

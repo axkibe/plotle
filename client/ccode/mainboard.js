@@ -68,14 +68,14 @@ subclass(MainBoard, CBoard);
 
 MainBoard.prototype.getSwitchPanel = function() {
 	var sp = this.$switchPanel;
-	if (sp) return sp;
+	if (sp) { return sp; }
 	
 	var swidim       = theme.switchpanel.dimensions;
 	var current = '';
 	switch (this.$spaceName) {
-	case 'welcome' : current = 'n'; break;
+	case 'welcome' : current = 'n';  break;
 	case 'sandbox' : current = 'ne'; break;
-	default : current = 'nw'; break;
+	default        : current = 'nw'; break;
 	}
 
 	return this.$switchPanel = new SwitchPanel(this, current, this.$userName, new Point(

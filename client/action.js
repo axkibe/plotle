@@ -69,12 +69,24 @@ var subclass      = Jools.subclass;
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /**
 | Constructor.
+|
+| type: Action type
+| recv: object to receive events during action.
+| + key value list for additional params
 */
-Action = function(type, vitem, start) {
-	this.type  = type;
-	this.vitem = vitem;
-	this.start = start;
-	this.move  = start;
+Action = function(args) {
+	this.type  = args[0];
+	this.visec = args[1];
+
+	switch (this.visec) {
+	case 'space'   : break;
+	case 'cockpit' : break;
+	default        : throw new Error('invalid visec');
+	}
+
+	for(var a = 2, aZ = args.length; a < aZ; a += 2) {
+		this[args[a]] = args[a + 1];
+	}
 };
 
 /**

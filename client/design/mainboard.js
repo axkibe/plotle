@@ -322,7 +322,7 @@ MainBoard.layout = {
 
 	'zoomminusB'       : {
 		type       : 'Custom',
-		code       : 'MBZoomPlusB',
+		code       : 'MBZoomMinusB',
 		normaStyle : 'button',
 		hoverStyle : 'buttonHover',
 		focusStyle : 'buttonFocus',
@@ -368,7 +368,7 @@ MainBoard.layout = {
 
 	'zoomnullB'       : {
 		type       : 'Custom',
-		code       : 'MBZoomPlusB',
+		code       : 'MBZoomNullB',
 		normaStyle : 'button',
 		hoverStyle : 'buttonHover',
 		focusStyle : 'buttonFocus',

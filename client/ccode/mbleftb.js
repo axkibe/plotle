@@ -63,7 +63,7 @@ subclass(MBLeftB, CCustom);
 
 MBLeftB.prototype.mousedown = function(p, shift, ctrl) {
 	var r = CCustom.prototype.mousedown.call(this, p, shift, ctrl);
-	if (!r) return r;
+	if (!r) { return r; }
 
 	switch (this.$captionText) {
 	case 'log in'  : this.board.cockpit.setCurBoard('LoginBoard'); break;

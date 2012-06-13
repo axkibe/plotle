@@ -188,12 +188,12 @@ VSpace.prototype.draw = function() {
 	var focus = this.focusedVItem();
 	if (focus) { focus.drawHandles(this.fabric, $view); }
 
-	var action = shell.action;
-	switch (action && action.type) {
+	var $action = shell.$action;
+	switch ($action && $action.type) {
 	case Action.RELBIND :
-		var av  = action.vitem;
-		var av2 = action.vitem2;
-		var target = av2 ? av2.getZone() : $view.depoint(action.move);
+		var av  = this.vget($action.itemPath);
+		var av2 = $action.item2Path ? this.vget($action.item2Path) : null;
+		var target = av2 ? av2.getZone() : $view.depoint($action.move);
 		var arrow = Line.connect(av.getZone(), 'normal', target, 'arrow');
 		if (av2) av2.highlight(this.fabric, $view);
 		arrow.draw(this.fabric, $view, theme.relation.style);
@@ -287,7 +287,7 @@ VSpace.prototype.mousehover = function(p, shift, ctrl) {
 	if (p === null) { return null; }
 	var $view = this.$view;
 
-	var action = shell.action;
+	var $action = shell.$action;
 	var cursor = null;
 
 	var focus = this.focusedVItem();
@@ -323,7 +323,12 @@ VSpace.prototype.dragstart = function(p, shift, ctrl) {
 	// see if the itemmenu of the focus was targeted
 	if (this.access == 'rw' && focus && focus.withinItemMenu($view, p)) {
 		var dp = $view.depoint(p);
-		shell.startAction(Action.RELBIND, focus, dp);
+		shell.startAction(
+			Action.RELBIND, 'space',
+			'itemPath', focus.path,
+			'start',    dp,
+			'move',     dp
+		);
 		shell.redraw = true;
 		return;
 	}
@@ -335,8 +340,11 @@ VSpace.prototype.dragstart = function(p, shift, ctrl) {
 	}
 
 	// otherwise do panning
-	var action = shell.startAction(Action.PAN, null, p);
-	action.pan = $view.pan;
+	shell.startAction(
+		Action.PAN, 'space',
+		'start', p,
+		'pan',   $view.pan
+	);
 	return;
 };
 
@@ -346,12 +354,11 @@ VSpace.prototype.dragstart = function(p, shift, ctrl) {
 VSpace.prototype.click = function(p, shift, ctrl) {
 	var self  = this;
 	var $view = this.$view;
-	var action;
 
 	// clicked the tab of the focused item?
 	var focus = this.focusedVItem();
 	if (focus && focus.withinItemMenu($view, p)) {
-		var labels = {n : 'Remove'};
+		var labels = { n : 'Remove'};
 
 		var os = focus.getOvalSlice();
 
@@ -394,24 +401,30 @@ VSpace.prototype.click = function(p, shift, ctrl) {
 | Stops an operation with the mouse button held down.
 */
 VSpace.prototype.dragstop = function(p, shift, ctrl) {
-	var action = shell.action;
-	var $view  = this.$view;
+	var $action = shell.$action;
+	var $view   = this.$view;
+	var vitem;
 
-	if (!action)
-		{ throw new Error('Dragstop without action?'); }
+	if (!$action) { throw new Error('Dragstop without action?'); }
 
-	switch (action.type) {
-	case Action.ITEMDRAG :
-	case Action.ITEMRESIZE :
-		action.vitem.dragstop($view, p);
+	switch ($action.type) {
+	case Action.PAN :
 		break;
-	case Action.RELBIND:
+	case Action.RELBIND :
 		for(var r = 0, rZ = this.twig.length; r < rZ; r++) {
-			var vitem = this.vAtRank(r);
+			vitem = this.vAtRank(r);
 			if (vitem.dragstop($view, p))
 				{ break; }
 		}
 		break;
+	case Action.ITEMDRAG   :
+	case Action.ITEMRESIZE :
+	case Action.SCROLLY    :
+		vitem = this.vget($action.itemPath);
+		vitem.dragstop($view, p, shift, ctrl);
+		break;
+	default :
+		throw new Error('Do not know how to handle Action.' + $action.type);
 	}
 	shell.stopAction();
 	return true;
@@ -421,16 +434,16 @@ VSpace.prototype.dragstop = function(p, shift, ctrl) {
 | Moving during an operation with the mouse button held down.
 */
 VSpace.prototype.dragmove = function(p, shift, ctrl) {
-	var $view = this.$view;
+	var $view   = this.$view;
+	var $action = shell.$action;
+	var vitem;
 
-	var action = shell.action;
-
-	switch(action.type) {
+	switch($action.type) {
 	case Action.PAN :
-		var pd = p.sub(action.start);
+		var pd = p.sub($action.start);
 
 		this.$view = $view = new View(
-			action.pan.add(pd.x / $view.zoom, pd.y / $view.zoom),
+			$action.pan.add(pd.x / $view.zoom, pd.y / $view.zoom),
 			$view.fact
 		);
 
@@ -438,19 +451,20 @@ VSpace.prototype.dragmove = function(p, shift, ctrl) {
 		return 'pointer';
 
 	case Action.RELBIND :
-		action.vitem2 = null;
-		action.move  = p;
+		$action.vitem2 = null;
+		$action.move  = p;
 		shell.redraw = true;
 
 		for(var r = 0, rZ = this.twig.length; r < rZ; r++) {
-			var vitem = this.vAtRank(r);
+			vitem = this.vAtRank(r);
 			if (vitem.dragmove($view, p))
 				{ return 'pointer'; }
 		}
 		return 'pointer';
 
 	default :
-		action.vitem.dragmove($view, p);
+		vitem = this.vget($action.itemPath);
+		vitem.dragmove($view, p);
 		return 'move';
 	}
 };
@@ -500,9 +514,8 @@ VSpace.prototype.itemMenuSelect = function(entry, p, focus) {
 | Mouse button down event.
 */
 VSpace.prototype.mousedown = function(p, shift, ctrl) {
-	var $view = this.$view;
-
-	var action = shell.action;
+	var $view   = this.$view;
+	var $action = shell.$action;
 	var pnw, md, key;
 
 	if (this.access == 'ro') {
@@ -517,9 +530,14 @@ VSpace.prototype.mousedown = function(p, shift, ctrl) {
 		if (com) {
 			// resizing
 			var dp = $view.depoint(p);
-			action = shell.startAction(Action.ITEMRESIZE, focus, dp);
-			action.align = com;
-			action.startZone = focus.getZone();
+			$action = shell.startAction(
+				Action.ITEMRESIZE, 'space',
+				'itemPath', focus.path,
+				'start',    dp,
+				'move',     dp
+			);
+			$action.align = com;
+			$action.startZone = focus.getZone();
 			return 'drag';
 		}
 	}
@@ -537,33 +555,28 @@ VSpace.prototype.input = function(text) {
 };
 
 /**
+| Changes the zoom factor (around center)
+*/
+VSpace.prototype.changeZoom = function(df) {
+	var $view = this.$view;
+	var pm = new Point(half(this.fabric.width), half(this.fabric.height));
+	pm = $view.depoint(pm);
+	this.$view = this.$view.review(df, pm);
+	shell.setSpaceZoom(this.$view.fact);
+	this.knock();
+	shell.redraw = true;
+};
+
+/**
 | User pressed a special key.
 */
 VSpace.prototype.specialKey = function(key, shift, ctrl) {
-	var pm;
-	var $view;
-
 	if (ctrl) {
 		switch(key) {
-		case 'z' :
-			shell.peer.undo();
-			return;
-		case 'y' :
-			shell.peer.redo();
-			return;
-		case ',' :
-		case '.' :
-			$view = this.$view;
-			pm = new Point(half(this.fabric.width), half(this.fabric.height));
-			pm = $view.depoint(pm);
-			switch(key) {
-			case ',' : this.$view = this.$view.review( 1, pm); break;
-			case '.' : this.$view = this.$view.review(-1, pm); break;
-			}
-			shell.setSpaceZoom(this.$view.fact);
-			this.knock();
-			shell.redraw = true;
-			return;
+		case 'z' : shell.peer.undo();   return;
+		case 'y' : shell.peer.redo();   return;
+		case ',' : this.changeZoom( 1); return;
+		case '.' : this.changeZoom(-1); return;
 		}
 	}
 	

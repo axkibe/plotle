@@ -160,18 +160,21 @@ VLabel.prototype.getFlowWidth = function() {
 | Calculates the change of fontsize due to resizing.
 */
 VLabel.prototype.fontSizeChange = function(fontsize) {
-	var action = shell.action;
-	if (!action || action.vitem !== this) return fontsize;
-	switch (action.type) {
+	var $action = shell.$action;
+
+	if (!$action || !this.path.equals($action.itemPath))
+		{ return fontsize; }
+
+	switch ($action.type) {
 	case Action.ITEMRESIZE:
-		if (!action.startZone) return fontsize;
+		if (!$action.startZone) return fontsize;
 		var vdoc = this.vv.doc;
-		var height = action.startZone.height;
+		var height = $action.startZone.height;
 		var dy;
-		switch (action.align) {
-		case 'ne': case 'nw' : dy = action.start.y - action.move.y;  break;
-		case 'se': case 'sw' : dy = action.move.y  - action.start.y; break;
-		default  : throw new Error('unknown align: '+action.align);
+		switch ($action.align) {
+		case 'ne': case 'nw' : dy = $action.start.y - $action.move.y;  break;
+		case 'se': case 'sw' : dy = $action.move.y  - $action.start.y; break;
+		default  : throw new Error('unknown align: '+ $action.align);
 		}
 		return max(fontsize * (height + dy) / height, 8);
 	default:
@@ -200,7 +203,7 @@ VLabel.prototype.mousewheel = function(view, p, dir) {
 */
 VLabel.prototype.getZone = function() {
 	var twig = this.twig;
-	var action = shell.action;
+	var $action = shell.$action;
 	var pnw = this.twig.pnw;
 
 	// TODO Caching!
@@ -209,21 +212,23 @@ VLabel.prototype.getZone = function() {
 	var width  = max(Math.ceil(vdoc.getSpread()), ro(fs * 0.3));
 	var height = max(Math.ceil(vdoc.getHeight()), ro(fs));
 
-	if (!action || action.vitem !== this) return new Rect(pnw, pnw.add(width, height));
+	if (!$action || !this.path.equals($action.itemPath))
+		{ return new Rect(pnw, pnw.add(width, height)); }
+
 	// TODO cache the last zone
 
-	switch (action.type) {
+	switch ($action.type) {
 	case Action.ITEMDRAG:
-		var mx = action.move.x - action.start.x;
-		var my = action.move.y - action.start.y;
+		var mx = $action.move.x - $action.start.x;
+		var my = $action.move.y - $action.start.y;
 		return new Rect(pnw.add(mx, my), pnw.add(mx + width, my + height));
 
 	case Action.ITEMRESIZE:
 		// resizing is done by fontSizeChange()
-		var szone = action.startZone;
+		var szone = $action.startZone;
 		if (!szone) return new Rect(pnw, pnw.add(width, height));
 
-		switch (action.align) {
+		switch ($action.align) {
 		case 'ne' : pnw = pnw.add(0, szone.height - height); break;
 		case 'se' : break;
 		case 'sw' : pnw = pnw.add(szone.width - width, 0); break;
@@ -242,8 +247,8 @@ VLabel.prototype.getZone = function() {
 | Sets the items position and size aften an action.
 */
 VLabel.prototype.dragstop = function(view, p) {
-	var action = shell.action;
-	switch (action.type) {
+	var $action = shell.$action;
+	switch ($action.type) {
 	case Action.ITEMDRAG :
 	case Action.ITEMRESIZE :
 		var zone = this.getZone();

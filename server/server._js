@@ -354,6 +354,8 @@ Server.prototype.registerFiles = function() {
 	this.registerFile('client/ccode/mbswitchb.js',   true,  false);
 	this.registerFile('client/ccode/mbrightb.js',    true,  false);
 	this.registerFile('client/ccode/mbzoomplusb.js', true,  false);
+	this.registerFile('client/ccode/mbzoomnullb.js', true,  false);
+	this.registerFile('client/ccode/mbzoomminusb.js', true,  false);
 	this.registerFile('client/ccode/lbloginb.js',    true,  false);
 	this.registerFile('client/ccode/lbcloseb.js',    true,  false);
 	this.registerFile('client/ccode/lbpassi.js',     true,  false);

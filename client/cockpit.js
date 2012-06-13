@@ -267,6 +267,14 @@ Cockpit.prototype.mousehover = function(p, shift, ctrl) {
 	return cursor;
 };
 
+
+/**
+| Start of a dragging operation.
+*/
+Cockpit.prototype.dragstart = function(p, shift, ctrl) {
+	return null;
+};
+
 /**
 | Mouse button down event
 */
