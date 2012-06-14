@@ -311,7 +311,7 @@ Server.prototype.registerFile = function(filename, opts) {
 | Registers files to be REST served.
 */
 Server.prototype.registerFiles = function() {
-	this.registerFile('icons/hexicon.ico',           'm' );
+	this.registerFile('icons/favicon.ico',           'm' );
 	this.registerFile('client/testpad.html',         ''  );
 	this.registerFile('client/testpad.js',           ''  );
 	this.registerFile('client/fonts/webfont.js',     'm' );

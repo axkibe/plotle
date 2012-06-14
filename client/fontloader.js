@@ -35,7 +35,7 @@ window.onload = function(){
 	WebFont.load({
 		custom: {
 			families: [ 'DejaVuSans', 'DejaVuSansBold' ],
-			urls: [ '/fonts/dejavu.css' ]
+//			urls: [ '/fonts/dejavu.css' ]
 		},
 
 		active: function() {
