@@ -117,7 +117,11 @@ Scrollbar.prototype.getPos = function() {
 | Sets the scrollbars position and location.
 */
 Scrollbar.prototype.setPos = function(pos, aperture, max, pnw, size) {
-	pos = limit(0, pos, max - aperture);
+	if (max - aperture >= 0) {
+		pos = limit(0, pos, max - aperture);
+	} else {
+		pos = 0;
+	}
 	if (pos < 0) throw new Error('Scrollbar.setPos < 0');
 	this._$pos      = pos;
 	this._$aperture = aperture;
