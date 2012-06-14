@@ -330,7 +330,7 @@ Shell.prototype._draw = function() {
 
 		fabric.edge(
 			[ { border: 0, width: 1, color: 'black' } ],
-			this, 'pathFrowny', m.add(0, -100)
+			this, 'pathFrowny', View.proper, m.add(0, -100)
 		);
 
 		fabric.setFont(40, theme.defaultFont, 'black', 'center', 'middle' );
@@ -676,6 +676,7 @@ Shell.prototype.moveToSpace = function(name) {
 			val.access
 		);
 		self.cockpit.setCurSpace(name, val.access);
+		self.cockpit.setSpaceZoom(0);
 		self._draw();
 	});
 };
