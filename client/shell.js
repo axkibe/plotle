@@ -296,7 +296,7 @@ Shell.prototype.knock = function() {
 /**
 | Paths the greenscreen frowny.
 */
-Shell.prototype.pathFrowny = function(fabric, border, twist, pos) {
+Shell.prototype.pathFrowny = function(fabric, border, twist, view, pos) {
 	fabric.beginPath(twist);
 	fabric.moveTo(pos.x - 100, pos.y);
 	fabric.lineTo(pos.x,       pos.y - 30);
