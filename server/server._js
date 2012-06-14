@@ -991,7 +991,9 @@ Server.prototype.requestListener = function(req, res) {
 			// deliver compressed
 			res.writeHead(200, {
 				'Content-Type'     :  f.mime,
-				'Content-Encoding' : 'gzip'
+				'Content-Encoding' : 'gzip',
+				'Cache-Control'    : 'max-age=' + (60 * 60 * 24 * 365) + ', public',
+				'Expires'          : 'Sun, 17-Jan-2038 19:14:07 GMT'
 			});
 			res.end(f.gzip, 'binary');
 		} else {
@@ -1009,7 +1011,11 @@ Server.prototype.requestListener = function(req, res) {
 			console.log('Missing client file: '+f.filename);
 			return;
 		}
-		res.writeHead(200, {'Content-Type': f.mime});
+		res.writeHead(200, {
+			'Content-Type'  : f.mime,
+			'Cache-Control' : 'max-age=' + (60 * 60 * 24 * 365) + ', public',
+			'Expires'       : 'Sun, 17-Jan-2038 19:14:07 GMT'
+		});
 		res.end(data, f.code);
 	});
 };

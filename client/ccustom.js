@@ -28,6 +28,7 @@
 /**
 | Imports
 */
+var Action;
 var CAccent;
 var Cockpit;
 var config;
@@ -39,6 +40,7 @@ var Point;
 var Rect;
 var shell;
 var system;
+var theme;
 var View;
 
 /**
@@ -185,7 +187,7 @@ CCustom.prototype.mousehover = function(p) {
 */
 CCustom.prototype.push = function(shift, ctrl) {
 	// no default
-}
+};
 
 /**
 | Mouse down.
