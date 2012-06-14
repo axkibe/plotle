@@ -181,7 +181,7 @@ VNote.prototype.scrollPage = function(up) {
 /**
 | Sets the items position and size after an action.
 */
-VNote.prototype.dragstop = function(view, p) {
+VNote.prototype.actionstop = function(view, p) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
 
 	var $action = shell.$action;
@@ -200,7 +200,7 @@ VNote.prototype.dragstop = function(view, p) {
 		shell.redraw = true;
 		return true;
 	default :
-		return VItem.prototype.dragstop.call(this, view, p);
+		return VItem.prototype.actionstop.call(this, view, p);
 	}
 };
 

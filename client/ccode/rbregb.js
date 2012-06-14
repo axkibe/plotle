@@ -59,30 +59,11 @@ var RBRegB = CCode.RBRegB = function(twig, board, inherit, name) {
 };
 subclass(RBRegB, CCustom);
 
-RBRegB.prototype.canFocus = function() {
-	return true;
-};
+RBRegB.prototype.canFocus = function()
+	{ return true; };
 
-RBRegB.prototype.input = function(text) {
+RBRegB.prototype.push = function(shift, ctrl) {
 	Util.register(this.board);
-};
-
-RBRegB.prototype.specialKey = function(key) {
-	switch (key) {
-	case 'enter' : Util.register(this.board); return;
-	case 'down'  : this.board.cycleFocus(+1); return;
-	case 'up'    : this.board.cycleFocus(-1); return;
-	}
-};
-
-RBRegB.prototype.mousedown = function(p, shift, ctrl) {
-	var r = CCustom.prototype.mousedown.call(this, p, shift, ctrl);
-	if (!r) return r;
-
-	Util.register(this.board);
-	
-	shell.redraw = true;
-	return true;
 };
 
 })();

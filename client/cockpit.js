@@ -276,6 +276,23 @@ Cockpit.prototype.dragstart = function(p, shift, ctrl) {
 };
 
 /**
+| Start of a dragging operation.
+*/
+Cockpit.prototype.actionmove = function(p, shift, ctrl) {
+	return null;
+};
+
+/**
+| Start of a dragging operation.
+*/
+Cockpit.prototype.actionstop = function(p, shift, ctrl) {
+	var path = shell.$action.itemPath;
+	var board = this.getBoard(path.get(0));
+	var c = board.cc[path.get(1)];
+	return c.actionstop(p, shift, ctrl);
+};
+
+/**
 | Mouse button down event
 */
 Cockpit.prototype.mousedown = function(p, shift, ctrl) {

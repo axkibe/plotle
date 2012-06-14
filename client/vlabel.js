@@ -246,7 +246,7 @@ VLabel.prototype.getZone = function() {
 /**
 | Sets the items position and size aften an action.
 */
-VLabel.prototype.dragstop = function(view, p) {
+VLabel.prototype.actionstop = function(view, p) {
 	var $action = shell.$action;
 	switch ($action.type) {
 	case Action.ITEMDRAG :
@@ -264,7 +264,7 @@ VLabel.prototype.dragstop = function(view, p) {
 		shell.redraw = true;
 		break;
 	default :
-		return VItem.prototype.dragstop.call(this, view, p);
+		return VItem.prototype.actionstop.call(this, view, p);
 	}
 };
 

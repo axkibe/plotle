@@ -61,9 +61,11 @@ theme = {
 
 	// zooming settings
 	zoom : {
-		base : 1.1,
-		min  : -15,
-		max  :  15
+		base        : 1.1,
+		min         : -15,
+		max         :  15,
+		firstTimer  : 200,
+		repeatTimer :  50,
 	},
 
 	// standard note in space

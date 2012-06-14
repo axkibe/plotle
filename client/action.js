@@ -93,11 +93,12 @@ Action = function(args) {
 | Action enums.
 */
 Action.PAN        = 1; // panning the background
-Action.ITEMDRAG   = 2; // draggine one item
+Action.ITEMDRAG   = 2; // dragging one item
 Action.ITEMRESIZE = 3; // resizing one item
 Action.ITEMMENU   = 4; // clicked one item menu
 Action.SCROLLY    = 5; // scrolling a note
 Action.RELBIND    = 6; // binding a new relation
+Action.REBUTTON   = 7; // holding a button repeating its effect
 immute(Action);
 
 })();

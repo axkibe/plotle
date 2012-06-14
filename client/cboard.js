@@ -266,7 +266,8 @@ CBoard.prototype.mousedown = function(p, shift, ctrl) {
 	for(a = 0, aZ = layout.length; a < aZ; a++) {
 		var cname = layout.ranks[a];
 		var ce = this.cc[cname];
-		if (ce.mousedown(pp, shift, ctrl)) { return false; }
+		var r = ce.mousedown(pp, shift, ctrl);
+		if (r) { return r; }
 	}
 	this.setHover(null);
 	return false;

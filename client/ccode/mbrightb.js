@@ -53,7 +53,6 @@ var isArray       = Jools.isArray;
 var log           = Jools.log;
 var subclass      = Jools.subclass;
 
-
 /**
 | Constructor
 */
@@ -62,13 +61,9 @@ var MBRightB = CCode.MBRightB = function(twig, board, inherit, name) {
 };
 subclass(MBRightB, CCustom);
 
-MBRightB.prototype.mousedown = function(p, shift, ctrl) {
-	var r = CCustom.prototype.mousedown.call(this, p, shift, ctrl);
-	if (!r) { return r; }
-
+MBRightB.prototype.push = function(p, shift, ctrl) {
 	this.board.cockpit.setShowHelp(!this.$active);
 	shell.redraw = true;
-	return true;
 };
 
 })();

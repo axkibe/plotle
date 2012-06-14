@@ -400,7 +400,7 @@ VSpace.prototype.click = function(p, shift, ctrl) {
 /**
 | Stops an operation with the mouse button held down.
 */
-VSpace.prototype.dragstop = function(p, shift, ctrl) {
+VSpace.prototype.actionstop = function(p, shift, ctrl) {
 	var $action = shell.$action;
 	var $view   = this.$view;
 	var vitem;
@@ -413,15 +413,16 @@ VSpace.prototype.dragstop = function(p, shift, ctrl) {
 	case Action.RELBIND :
 		for(var r = 0, rZ = this.twig.length; r < rZ; r++) {
 			vitem = this.vAtRank(r);
-			if (vitem.dragstop($view, p))
+			if (vitem.actionstop($view, p))
 				{ break; }
 		}
+		shell.redraw = true;
 		break;
 	case Action.ITEMDRAG   :
 	case Action.ITEMRESIZE :
 	case Action.SCROLLY    :
 		vitem = this.vget($action.itemPath);
-		vitem.dragstop($view, p, shift, ctrl);
+		vitem.actionstop($view, p, shift, ctrl);
 		break;
 	default :
 		throw new Error('Do not know how to handle Action.' + $action.type);
@@ -433,7 +434,7 @@ VSpace.prototype.dragstop = function(p, shift, ctrl) {
 /**
 | Moving during an operation with the mouse button held down.
 */
-VSpace.prototype.dragmove = function(p, shift, ctrl) {
+VSpace.prototype.actionmove = function(p, shift, ctrl) {
 	var $view   = this.$view;
 	var $action = shell.$action;
 	var vitem;
@@ -451,20 +452,20 @@ VSpace.prototype.dragmove = function(p, shift, ctrl) {
 		return 'pointer';
 
 	case Action.RELBIND :
-		$action.vitem2 = null;
-		$action.move  = p;
-		shell.redraw = true;
+		$action.item2Path = null;
+		$action.move      = p;
+		shell.redraw      = true;
 
 		for(var r = 0, rZ = this.twig.length; r < rZ; r++) {
 			vitem = this.vAtRank(r);
-			if (vitem.dragmove($view, p))
+			if (vitem.actionmove($view, p))
 				{ return 'pointer'; }
 		}
 		return 'pointer';
 
 	default :
 		vitem = this.vget($action.itemPath);
-		vitem.dragmove($view, p);
+		vitem.actionmove($view, p);
 		return 'move';
 	}
 };

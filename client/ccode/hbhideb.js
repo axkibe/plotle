@@ -46,13 +46,8 @@ var CCode;
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
 var debug         = Jools.debug;
-var immute        = Jools.immute;
-var is            = Jools.is;
-var isnon         = Jools.isnon;
-var isArray       = Jools.isArray;
 var log           = Jools.log;
 var subclass      = Jools.subclass;
-
 
 /**
 | Constructor
@@ -62,13 +57,9 @@ var HBHideB = CCode.HBHideB = function(twig, board, inherit, name) {
 };
 subclass(HBHideB, CCustom);
 
-HBHideB.prototype.mousedown = function(p, shift, ctrl) {
-	var r = CCustom.prototype.mousedown.call(this, p, shift, ctrl);
-	if (!r) { return r; }
-
+HBHideB.prototype.push = function(shift, ctrl) {
 	this.board.cockpit.setShowHelp(false);
 	shell.redraw = true;
-	return true;
 };
 
 })();

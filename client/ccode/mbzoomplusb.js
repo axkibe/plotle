@@ -57,18 +57,13 @@ var subclass      = Jools.subclass;
 */
 var MBZoomPlusB = CCode.MBZoomPlusB = function(twig, board, inherit, name) {
 	CCustom.call(this, twig, board, inherit, name);
+	this.repeat = true;
 };
 subclass(MBZoomPlusB, CCustom);
 
-MBZoomPlusB.prototype.mousedown = function(p, shift, ctrl) {
-	var r = CCustom.prototype.mousedown.call(this, p, shift, ctrl);
-	if (!r) { return r; }
+MBZoomPlusB.prototype.push = function(shift, ctrl) {
 	shell.changeSpaceZoom(1);
-	return 'drag';
 };
 
-MBZoomPlusB.prototype.dragstart = function() {
-	debug('DS');
-};
 
 })();

@@ -76,28 +76,9 @@ LBLoginB.prototype.canFocus = function() {
 	return true;
 };
 
-LBLoginB.prototype.specialKey = function(key) {
-	switch (key) {
-	case 'down'  : this.board.cycleFocus(+1);    return;
-	case 'up'    : this.board.cycleFocus(-1);    return;
-	case 'enter' : Util.login(this.board); return;
-	}
-};
-	
-LBLoginB.prototype.input = function(text) {
+LBLoginB.prototype.push = function(shift, ctrl) {
 	Util.login(this.board);
 	shell.redraw = true;
-	return true;
-};
-
-LBLoginB.prototype.mousedown = function(p, shift, ctrl) {
-	var r = CCustom.prototype.mousedown.call(this, p, shift, ctrl);
-	if (!r) return r;
-
-	Util.login(this.board);
-	
-	shell.redraw = true;
-	return true;
 };
 
 })();

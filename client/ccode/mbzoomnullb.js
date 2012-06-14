@@ -61,11 +61,8 @@ var MBZoomNullB = CCode.MBZoomNullB = function(twig, board, inherit, name) {
 };
 subclass(MBZoomNullB, CCustom);
 
-MBZoomNullB.prototype.mousedown = function(p, shift, ctrl) {
-	var r = CCustom.prototype.mousedown.call(this, p, shift, ctrl);
-	if (!r) { return r; }
+MBZoomNullB.prototype.push = function(shift, ctrl) {
 	shell.changeSpaceZoom(0);
-	return true;
 };
 
 })();

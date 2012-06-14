@@ -34,6 +34,7 @@ var config;
 var Curve;
 var Fabric;
 var Jools;
+var Path;
 var Point;
 var Rect;
 var shell;
@@ -77,12 +78,17 @@ CCustom = function(twig, board, inherit, name) {
 	this.curve   = new Curve(twig.curve, iframe);
 
 	this.captionPos = computePoint(twig.caption.pos, iframe);
+	this.path       = new Path([board.name, name]);
 
-	this.$active  = inherit ? inherit.$active : false;
-	this.$fabric  = null;
-	this.$visible = inherit ? inherit.$visible : true;
+	// if true repeats the action on mousedown
+	this.repeat   = false;
+	this.$retimer = null;
+
+	this.$active      = inherit ? inherit.$active : false;
+	this.$fabric      = null;
+	this.$visible     = inherit ? inherit.$visible : true;
 	this.$captionText = inherit ? inherit.$captionText : twig.caption.text;
-	this.$accent  = CAccent.NORMAL;
+	this.$accent      = CAccent.NORMAL;
 };
 
 /**
@@ -95,7 +101,7 @@ CCustom.prototype.canFocus = function() {
 /**
 | Paths the custom control.
 */
-CCustom.prototype.path = function(fabric, border, twist) {
+CCustom.prototype.gpath = function(fabric, border, twist) {
 	this.curve.path(fabric, border, twist);
 };
 
@@ -119,7 +125,7 @@ CCustom.prototype.getFabric = function(accent) {
 
 	var style = Cockpit.styles[sname];
 	if (!isnon(style)) { throw new Error('Invalid style: ' + sname); }
-	fabric.paint(style, this, 'path', View.proper);
+	fabric.paint(style, this, 'gpath', View.proper);
 
 	var fs = this.twig.caption.fontStyle;
 	fabric.setFont(fs.size, fs.font, fs.fill, fs.align, fs.base);
@@ -167,7 +173,7 @@ CCustom.prototype.mousehover = function(p) {
 	var fabric = this.getFabric(CAccent.NORMA);
 	var pp = p.sub(this.pnw);
 
-	if (!fabric.within(this, 'path', View.proper, pp))
+	if (!fabric.within(this, 'gpath', View.proper, pp))
 		{ return null; }
 
 	this.board.setHover(this.name);
@@ -175,21 +181,68 @@ CCustom.prototype.mousehover = function(p) {
 };
 
 /**
+| Button has been pushed
+*/
+CCustom.prototype.push = function(shift, ctrl) {
+	// no default
+}
+
+/**
 | Mouse down.
 */
 CCustom.prototype.mousedown = function(p, shift, ctrl) {
+	var self = this;
+
 	if (!this.$visible) { return; }
 	if (p.x < this.pnw.x || p.y < this.pnw.y || p.x > this.pse.x || p.y > this.pse.y)
-		{ return false; }
+		{ return null; }
 
 	var fabric = this.getFabric(CAccent.NORMA);
 	var pp = p.sub(this.pnw);
-	if (!fabric.within(this, 'path', View.proper, pp))
-		{ return false; }
+	if (!fabric.within(this, 'gpath', View.proper, pp))
+		{ return null; }
+
+	if (this.repeat && !this.retimer) {
+		shell.startAction(
+			Action.REBUTTON,
+			'cockpit',
+			'itemPath', this.path
+		);
+
+		var repeatFunc;
+		repeatFunc = function() {
+			self.push(false, false);
+			self.$retimer = system.setTimer(theme.zoom.repeatTimer, repeatFunc);
+			shell.poke();
+		};
+		this.$retimer = system.setTimer(theme.zoom.firstTimer, repeatFunc);
+	}
+
+	this.push(shift, ctrl);
 
 	shell.redraw = true; // TODO needed?
+	return this.repeat ? 'drag' : false;
+};
+
+/**
+| Special keys for buttons having focus
+*/
+CCustom.prototype.specialKey = function(key) {
+	switch (key) {
+	case 'down'  : this.board.cycleFocus(+1);    return;
+	case 'up'    : this.board.cycleFocus(-1);    return;
+	case 'enter' : this.push(false, false); return;
+	}
+};
+	
+/**
+| Any normal keys for a buttons having focus triggers a push.
+*/
+CCustom.prototype.input = function(text) {
+	this.push(false, false);
 	return true;
 };
+
 
 /**
 | Draws the custom control.
@@ -214,5 +267,15 @@ CCustom.prototype.knock = function() {
 	this.$fabric = null;
 };
 
+
+/**
+| Stops a REBUTTON action.
+*/
+CCustom.prototype.actionstop = function() {
+	system.cancelTimer(this.$retimer);
+	this.$retimer = null;
+
+	shell.stopAction();
+};
 
 })();

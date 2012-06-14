@@ -471,11 +471,11 @@ Shell.prototype.dragmove = function(p, shift, ctrl) {
 
 	switch ($action.visec) {
 	case 'cockpit' :
-		cursor = this.cockpit.dragmove(p, shift, ctrl);
+		cursor = this.cockpit.actionmove(p, shift, ctrl);
 		break;
 	case 'space' :
 		if (this.vspace)
-			{ cursor = this.vspace.dragmove(p, shift, ctrl); }
+			{ cursor = this.vspace.actionmove(p, shift, ctrl); }
 		break;
 	}
 
@@ -499,12 +499,14 @@ Shell.prototype.dragstop = function(p, shift, ctrl) {
 
 	switch($action.visec) {
 	case 'cockpit' :
-		this.cockpit.dragstop(p, shift, ctrl);
+		this.cockpit.actionstop(p, shift, ctrl);
 		break;
 	case 'space' :
 		if (this.vspace)
-			{ this.vspace.dragstop(p, shift, ctrl); }
+			{ this.vspace.actionstop(p, shift, ctrl); }
 		break;
+	default :
+		throw new Error('unknown $action.visec');
 	}
 	
 	if (this.redraw)

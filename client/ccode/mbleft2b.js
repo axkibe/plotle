@@ -46,9 +46,6 @@ var CCode;
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
 var debug         = Jools.debug;
-var immute        = Jools.immute;
-var is            = Jools.is;
-var isnon         = Jools.isnon;
 var log           = Jools.log;
 var subclass      = Jools.subclass;
 
@@ -61,14 +58,9 @@ var MBLeft2B = CCode.MBLeft2B = function(twig, board, inherit, name) {
 
 subclass(MBLeft2B, CCustom);
 
-MBLeft2B.prototype.mousedown = function(p, shift, ctrl) {
-	var r = CCustom.prototype.mousedown.call(this, p, shift, ctrl);
-	if (!r) { return r; }
-
+MBLeft2B.prototype.push = function(shift, ctrl) {
 	this.board.cockpit.setCurBoard('RegBoard');
-
 	shell.redraw = true;
-	return true;
 };
 
 })();

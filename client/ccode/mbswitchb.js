@@ -46,12 +46,8 @@ var CCode;
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
 var debug    = Jools.debug;
-var immute   = Jools.immute;
-var is       = Jools.is;
-var isnon    = Jools.isnon;
 var log      = Jools.log;
 var subclass = Jools.subclass;
-var Util     = CCode.Util;
 
 /**
 | Constructor
@@ -62,14 +58,9 @@ var MBSwitchB = CCode.MBSwitchB = function(twig, board, inherit, name) {
 
 subclass(MBSwitchB, CCustom);
 
-MBSwitchB.prototype.mousedown = function(p, shift, ctrl) {
-	var r = CCustom.prototype.mousedown.call(this, p, shift, ctrl);
-	if (!r) { return r; }
-
+MBSwitchB.prototype.push = function(shift, ctrl) {
 	this.board.toggleSwitch();
-	
 	shell.redraw = true;
-	return true;
 };
 
 })();

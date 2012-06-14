@@ -285,11 +285,10 @@ VItem.prototype.dragstart = function(view, p, shift, ctrl, access) {
 };
 
 /**
-| dragmove?
+| A move during an action.
 */
-VItem.prototype.dragmove = function(view, p, shift, ctrl) {
+VItem.prototype.actionmove = function(view, p, shift, ctrl) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
-	// no zone test, since dragmove is targeted to this item already.
 
 	var $action = shell.$action;
 	var vp      = view.depoint(p);
@@ -317,7 +316,7 @@ VItem.prototype.dragmove = function(view, p, shift, ctrl) {
 		shell.redraw = true;
 		return true;
 	default :
-		throw new Error('invalid dragmove');
+		throw new Error('invalid actionmove');
 	}
 	return true;
 };
@@ -325,7 +324,7 @@ VItem.prototype.dragmove = function(view, p, shift, ctrl) {
 /**
 | Sets the items position and size after an action.
 */
-VItem.prototype.dragstop = function(view, p) {
+VItem.prototype.actionstop = function(view, p) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
 	var vp = view.depoint(p);
 

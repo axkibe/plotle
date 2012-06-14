@@ -46,10 +46,6 @@ var CCode;
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
 var debug         = Jools.debug;
-var immute        = Jools.immute;
-var is            = Jools.is;
-var isnon         = Jools.isnon;
-var isArray       = Jools.isArray;
 var log           = Jools.log;
 var subclass      = Jools.subclass;
 
@@ -61,18 +57,13 @@ var MBLeftB = CCode.MBLeftB = function(twig, board, inherit, name) {
 };
 subclass(MBLeftB, CCustom);
 
-MBLeftB.prototype.mousedown = function(p, shift, ctrl) {
-	var r = CCustom.prototype.mousedown.call(this, p, shift, ctrl);
-	if (!r) { return r; }
-
+MBLeftB.prototype.push = function(shift, ctrl) {
 	switch (this.$captionText) {
 	case 'log in'  : this.board.cockpit.setCurBoard('LoginBoard'); break;
 	case 'log out' : CCode.Util.logout(this.board); break;
 	default : throw new Error('unknown state of leftB');
 	}
-	
 	shell.redraw = true;
-	return true;
 };
 
 })();

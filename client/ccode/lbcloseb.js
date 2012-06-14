@@ -18,8 +18,7 @@
                            `--' `-^---' `--'  `' `-' `-' `-' `-^---'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- loginboard, cancel button
- cancel
+ login board, close button
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -47,9 +46,6 @@ var CMeth = null;
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
 var debug    = Jools.debug;
-var immute   = Jools.immute;
-var is       = Jools.is;
-var isnon    = Jools.isnon;
 var log      = Jools.log;
 var subclass = Jools.subclass;
 var Util     = CCode.Util;
@@ -62,32 +58,13 @@ var LBCloseB = CCode.LBCloseB = function(twig, board, inherit, name) {
 };
 subclass(LBCloseB, CCustom);
 
-LBCloseB.prototype.canFocus = function() {
-	return true;
-};
+LBCloseB.prototype.canFocus = function()
+	{ return true; };
 
-LBCloseB.prototype.input = function(text) {
-	this.board.cockpit.setCurBoard('MainBoard');
-};
-
-LBCloseB.prototype.specialKey = function(key) {
-	switch (key) {
-	case 'down' : this.board.cycleFocus(+1); return;
-	case 'up'   : this.board.cycleFocus(-1); return;
-	}
+LBCloseB.prototype.push = function(shift, ctrl) {
 	Util.clearLogin(this.board);
 	this.board.cockpit.setCurBoard('MainBoard');
-};
-
-LBCloseB.prototype.mousedown = function(p, shift, ctrl) {
-	var r = CCustom.prototype.mousedown.call(this, p, shift, ctrl);
-	if (!r) return r;
-
-	Util.clearLogin(this.board);
-	this.board.cockpit.setCurBoard('MainBoard');
-	
 	shell.redraw = true;
-	return true;
 };
 
 })();

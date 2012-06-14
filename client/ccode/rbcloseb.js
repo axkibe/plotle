@@ -61,32 +61,12 @@ var RBCloseB = CCode.RBCloseB = function(twig, board, inherit, name) {
 };
 subclass(RBCloseB, CCustom);
 
-RBCloseB.prototype.canFocus = function() {
-	return true;
-};
+RBCloseB.prototype.canFocus = function()
+	{ return true; };
 
-RBCloseB.prototype.input = function(text) {
-	this.board.cockpit.setCurBoard('MainBoard');
-};
-
-RBCloseB.prototype.specialKey = function(key) {
-	switch (key) {
-	case 'down' : this.board.cycleFocus(+1); return;
-	case 'up'   : this.board.cycleFocus(-1); return;
-	}
+RBCloseB.prototype.push = function(shift, ctrl) {
 	Util.clearRegister(this.board);
 	this.board.cockpit.setCurBoard('MainBoard');
-};
-
-RBCloseB.prototype.mousedown = function(p, shift, ctrl) {
-	var r = CCustom.prototype.mousedown.call(this, p, shift, ctrl);
-	if (!r) return r;
-
-	Util.clearRegister(this.board);
-	this.board.cockpit.setCurBoard('MainBoard');
-	
-	shell.redraw = true;
-	return true;
 };
 
 })();
