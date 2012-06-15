@@ -144,7 +144,7 @@ MainBoard.prototype.draw = function(fabric) {
 	if (this.switchActive) {
 		this.getSwitchPanel().draw(fabric);
 	}
-	fabric.drawImage(this.getFabric(), this.pnw);
+	fabric.drawImage(this._weave(), this.pnw);
 };
 
 /**

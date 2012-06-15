@@ -227,14 +227,8 @@ VNote.prototype.draw = function(fabric, view) {
 		var imargin      = this.imargin;
 
 		// calculates if a scrollbar is needed
-		var vheight = vdoc.getHeight() * view.zoom;
-		if (!sbary.visible && vheight > vzone.height - view.zoom * imargin.y) {
-			// doesn't use a scrollbar but should
-			sbary.visible = true;
-		} else if (sbary.visible && vheight <= vzone.height - view.zoom * imargin.y) {
-			// uses a scrollbar but shouldn't
-			sbary.visible = false;
-		}
+		var height = vdoc.getHeight();
+		sbary.visible = height > zone.height - imargin.y;
 
 		// resizes the canvas (when scrollbars could change the size)
 		//f.attune(vzone);

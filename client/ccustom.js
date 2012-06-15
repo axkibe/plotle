@@ -110,7 +110,7 @@ CCustom.prototype.gpath = function(fabric, border, twist) {
 /**
 | Returns the fabric for the custom component.
 */
-CCustom.prototype.getFabric = function(accent) {
+CCustom.prototype._weave = function(accent) {
 	var fabric = this.$fabric;
 	if (fabric && this.$accent === accent && !config.debug.noCache) { return fabric; }
 
@@ -172,7 +172,7 @@ CCustom.prototype.mousehover = function(p) {
 	if (p.x < this.pnw.x || p.y < this.pnw.y || p.x > this.pse.x || p.y > this.pse.y)
 		{ return null; }
 
-	var fabric = this.getFabric(CAccent.NORMA);
+	var fabric = this._weave(CAccent.NORMA);
 	var pp = p.sub(this.pnw);
 
 	if (!fabric.within(this, 'gpath', View.proper, pp))
@@ -199,7 +199,7 @@ CCustom.prototype.mousedown = function(p, shift, ctrl) {
 	if (p.x < this.pnw.x || p.y < this.pnw.y || p.x > this.pse.x || p.y > this.pse.y)
 		{ return null; }
 
-	var fabric = this.getFabric(CAccent.NORMA);
+	var fabric = this._weave(CAccent.NORMA);
 	var pp = p.sub(this.pnw);
 	if (!fabric.within(this, 'gpath', View.proper, pp))
 		{ return null; }
@@ -251,7 +251,7 @@ CCustom.prototype.input = function(text) {
 */
 CCustom.prototype.draw = function(fabric, accent) {
 	if (!this.$visible) { return; }
-	fabric.drawImage(this.getFabric(accent), this.pnw);
+	fabric.drawImage(this._weave(accent), this.pnw);
 };
 
 /**

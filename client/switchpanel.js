@@ -112,7 +112,7 @@ SwitchPanel.prototype.cancelFade = function() {
 */
 SwitchPanel.prototype.draw = function(fabric) {
 	if (this.$fade) { fabric.globalAlpha(this.$fade); }
-	fabric.drawImage(this.getFabric(), this.pnw);
+	fabric.drawImage(this._weave(), this.pnw);
 	if (this.$fade) { fabric.globalAlpha(1); }
 };
 
@@ -201,7 +201,7 @@ SwitchPanel.prototype._paintButton = function(fabric, dir) {
 | Draws the contents.
 | TODO Caching
 */
-SwitchPanel.prototype.getFabric = function() {
+SwitchPanel.prototype._weave = function() {
 	if (!config.debug.noCache && this.$fabric) { return this.$fabric; }
 	var iframe = this.iframe;
 	var fabric = this.$fabric = new Fabric(iframe);
@@ -272,7 +272,7 @@ SwitchPanel.prototype.within = function(p) {
 	if (p.x < pnw.x || p.y < pnw.y || p.x > pse.x || p.y > pse.y) {
 		return false;
 	}
-	var fabric = this.getFabric();
+	var fabric = this._weave();
 	return fabric.within(this, 'pathFrame', View.proper, p);
 };
 
@@ -284,7 +284,7 @@ SwitchPanel.prototype.mousedown = function(p) {
 	if (!this.within(p)) { return null; }
 
 	var button = null;
-	var fabric = this.getFabric();
+	var fabric = this._weave();
 	if (fabric.within(this, 'pathButton', View.proper, p, 'n' )) { button = 'n';  } else
 	if (fabric.within(this, 'pathButton', View.proper, p, 'ne')) { button = 'ne'; } else
 	if (!this.amVisitor && fabric.within(this, 'pathButton', View.proper, p, 'nw'))
@@ -319,7 +319,7 @@ SwitchPanel.prototype.mousehover = function(p) {
 		}
 	} else {
 		this.cancelFade();
-		var fabric = this.getFabric();
+		var fabric = this._weave();
 
 		if (fabric.within(this, 'pathButton', View.proper, p, 'n' )) { hd = 'n';  } else
 		if (fabric.within(this, 'pathButton', View.proper, p, 'ne')) { hd = 'ne'; } else

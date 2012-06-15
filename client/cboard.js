@@ -150,7 +150,7 @@ CBoard.prototype.knock = function() {
 /**
 | Draws the boards contents
 */
-CBoard.prototype.getFabric = function() {
+CBoard.prototype._weave = function() {
 	if (this.$fabric && !config.debug.noCache)
 		{ return this.$fabric; }
 
@@ -187,7 +187,7 @@ CBoard.prototype.getFabric = function() {
 | Draws the board
 */
 CBoard.prototype.draw = function(fabric) {
-	fabric.drawImage(this.getFabric(), this.pnw);
+	fabric.drawImage(this._weave(), this.pnw);
 };
 
 /**
@@ -208,7 +208,7 @@ CBoard.prototype.drawCaret = function(view) {
 CBoard.prototype.mousehover = function(p, shift, ctrl) {
 	var pnw = this.pnw;
 	var pse = this.pse;
-	var fabric = this.getFabric();
+	var fabric = this._weave();
 	var a, aZ;
 
 	if(p === null) { return this.setHover(null); }
@@ -248,7 +248,7 @@ CBoard.prototype.mousehover = function(p, shift, ctrl) {
 CBoard.prototype.mousedown = function(p, shift, ctrl) {
 	var pnw = this.pnw;
 	var pse = this.pse;
-	var fabric = this.getFabric();
+	var fabric = this._weave();
 	var a, aZ;
 	if (p.y < pnw.y || p.x < pnw.x || p.x > pse.x) {
 		this.setHover(null);

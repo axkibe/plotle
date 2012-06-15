@@ -149,7 +149,7 @@ CInput.prototype.maskPath = function(fabric, border, twist, view, length, size) 
 | Returns the fabric for the input field.
 | TODO caching;
 */
-CInput.prototype.getFabric = function(accent) {
+CInput.prototype._weave = function(accent) {
 	var fabric = new Fabric(this.bezi.width, this.bezi.height);
 
 	var sname;
@@ -181,7 +181,7 @@ CInput.prototype.getFabric = function(accent) {
 | Draws the input field.
 */
 CInput.prototype.draw = function(fabric, accent) {
-	fabric.drawImage(this.getFabric(accent), this.pnw);
+	fabric.drawImage(this._weave(accent), this.pnw);
 };
 
 /**
@@ -430,7 +430,7 @@ CInput.prototype.mousehover = function(p, shift, ctrl) {
 	if (p.x < this.pnw.x || p.y < this.pnw.y || p.x > this.pse.x || p.y > this.pse.y)
 		{ return null; }
 
-	var fabric = this.getFabric(CAccent.NORMA);
+	var fabric = this._weave(CAccent.NORMA);
 	var pp = p.sub(this.pnw);
 
 	if (!this.bezi.within(fabric, View.proper, pp))
@@ -444,7 +444,7 @@ CInput.prototype.mousehover = function(p, shift, ctrl) {
 */
 CInput.prototype.mousedown = function(p, shift, ctrl) {
 	var pp = p.sub(this.pnw);
-	var fabric = this.getFabric(CAccent.NORMA);
+	var fabric = this._weave(CAccent.NORMA);
 	if (!fabric.within(this.bezi, 'path', View.proper, pp))  { return null; }
 
 	this.board.setFocus(this.name);

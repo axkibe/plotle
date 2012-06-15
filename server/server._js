@@ -951,8 +951,9 @@ Server.prototype.cmdGet = function(cmd, _) {
 */
 Server.prototype.webError = function(res, code, message) {
 	res.writeHead(code, {
-		'Content-Type': 'text/plain',
-		'Date'        : new Date().toUTCString(),
+		'Content-Type'  : 'text/plain',
+		'Cache-Control' : 'no-cache',
+		'Date'          : new Date().toUTCString(),
 	});
 	message = code+' '+message;
 	log('web', 'error', code, message);
@@ -1002,8 +1003,9 @@ Server.prototype.requestListener = function(req, res) {
 	var f = this.$files[red.pathname];
 	if (!f) {
 		res.writeHead(404, {
-			'Content-Type': 'text/plain',
-			'Date'        : new Date().toUTCString()
+			'Content-Type'  : 'text/plain',
+			'Cache-Control' : 'no-cache',
+			'Date'          : new Date().toUTCString()
 		});
 		this.webError(res, '404 Bad Reqeust');
 		return;
@@ -1012,11 +1014,9 @@ Server.prototype.requestListener = function(req, res) {
 	if (f.raw) {
 		var aenc = f.gzip && req.headers['accept-encoding'];
 		var header = {
-			'Content-Type'     :  f.mime,
+			'Content-Type'     : f.mime,
+			'Cache-Control'    : f.cache ? 'max-age=31536000' : 'no-cache',
 			'Date'             : new Date().toUTCString(),
-		}
-		if (f.cache) {
-			header['Cache-Control'] = 'max-age=' + (60 * 60 * 24 * 365) + ', public';
 		}
 		if (aenc && aenc.indexOf('gzip') >= 0) {
 			// deliver compressed
