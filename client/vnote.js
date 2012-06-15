@@ -228,10 +228,10 @@ VNote.prototype.draw = function(fabric, view) {
 
 		// calculates if a scrollbar is needed
 		var vheight = vdoc.getHeight() * view.zoom;
-		if (!sbary.visible && vheight > vzone.height - imargin.y) {
+		if (!sbary.visible && vheight > vzone.height - view.zoom * imargin.y) {
 			// doesn't use a scrollbar but should
 			sbary.visible = true;
-		} else if (sbary.visible && vheight <= vzone.height - imargin.y) {
+		} else if (sbary.visible && vheight <= vzone.height - view.zoom * imargin.y) {
 			// uses a scrollbar but shouldn't
 			sbary.visible = false;
 		}
