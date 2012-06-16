@@ -147,7 +147,6 @@ SwitchPanel.prototype.pathFrame = function(fabric, border, twist) {
 	var bm = magic * swidim.b;
 	var bo = border;
 
-	fabric.beginPath(twist);
 	fabric.moveTo(                        bo,      h);
 	fabric.beziTo(  0, -bm, -am,   0,      x,     bo);
 	fabric.beziTo( am,   0,   0, -bm, w - bo,      h);
@@ -169,8 +168,6 @@ SwitchPanel.prototype.pathButton = function(fabric, border, twist, view, dir) {
 
 	var mx   = bw / 2 * magic;
 	var my   = bh / 2 * magic;
-
-	fabric.beginPath(twist);
 
 	var p = this.buttonPos[dir];
 	var px = view.x(p);

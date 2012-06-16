@@ -90,16 +90,16 @@ VLabel.prototype.handles = immute({
 /**
 | Returns the notes silhoutte.
 */
-VLabel.prototype.getSilhoutte = function(zone$, zAnchor) {
-	var s$ = zAnchor ? this._silhoutte$0 : this._silhoutte$1;
-	var z$ = zone$;
+VLabel.prototype.getSilhoutte = function($zone, zAnchor) {
+	var $s = zAnchor ? this._silhoutte$0 : this._silhoutte$1;
+	var $z = $zone;
 
-	if (s$ && s$.width === z$.width && s$.height === z$.height) return s$;
+	if ($s && $s.width === $z.width && $s.height === $z.height) return $s;
 
 	if (zAnchor) {
-		return this._silhoutte$0 = new Rect(Point.zero, new Point(z$.width - 1, z$.height - 1));
+		return this._silhoutte$0 = new Rect(Point.zero, new Point($z.width - 1, $z.height - 1));
 	} else {
-		return this._silhoutte$1 = new Rect(z$.pnw, z$.pse.sub(1, 1));
+		return this._silhoutte$1 = new Rect($z.pnw, $z.pse.sub(1, 1));
 	}
 };
 

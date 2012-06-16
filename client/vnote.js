@@ -101,22 +101,22 @@ VNote.prototype.handles = {
 /**
 | Returns the notes silhoutte.
 |
-| zone$:  the cache for the items zone
+| $zone :  the cache for the items zone
 | zAnchor: if true anchor the silhoute at zero.
 */
-VNote.prototype.getSilhoutte = function(zone$, zAnchor) {
-	var z$ = zone$;
-	var s$;
+VNote.prototype.getSilhoutte = function($zone, zAnchor) {
+	var $z = $zone;
+	var $s;
 
 	var cr = theme.note.cornerRadius;
 	if (zAnchor) {
-		s$ = this._silhoutte$0;
-		if (s$ && s$.width === z$.width && s$.height === z$.height) return s$;
-		return this._silhoutte$0 = new BeziRect(Point.zero, new Point(z$.width, z$.height), cr, cr);
+		$s = this._silhoutte$0;
+		if ($s && $s.width === $z.width && $s.height === $z.height) return $s;
+		return this._silhoutte$0 = new BeziRect(Point.zero, new Point($z.width, $z.height), cr, cr);
 	} else {
-		s$ = this._silhoutte$1;
-		if (s$ && s$.eq(z$)) return s$;
-		return this._silhoutte$1 = new BeziRect(z$.pnw, z$.pse, cr, cr);
+		$s = this._silhoutte$1;
+		if ($s && $s.eq($z)) return $s;
+		return this._silhoutte$1 = new BeziRect($z.pnw, $z.pse, cr, cr);
 	}
 };
 

@@ -100,7 +100,6 @@ Curve.computePoint = function(model, frame) {
 */
 Curve.prototype.path = function(fabric, border, twist) {
 	var data = this.data;
-	fabric.beginPath(twist);
 	var lbx = 0;
 	var lby = 0;
 	var bo = border;

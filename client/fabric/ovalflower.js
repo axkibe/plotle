@@ -106,7 +106,6 @@ OvalFlower.prototype.path = function(fabric, border, twist, view, segment) {
 	var am2  = m * this.a2;
 	var bm2  = m * this.b2;
 
-	fabric.beginPath(twist);
 	// inner oval
 	if (segment === null || segment === 'c') {
 		fabric.moveTo(                       pcx - a1 + bo, pcy);

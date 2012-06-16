@@ -81,10 +81,6 @@ subclass(BeziRect, Rect);
 
 /**
 | Draws the roundrect.
-|
-| fabric : fabric to draw the path upon.
-| border : additional distance.
-| twist  : parameter to beginPath, add +0.5 on everything for lines
 */
 BeziRect.prototype.path = function(fabric, border, twist, view) {
 	var wx = view.x(this.pnw) + border;
@@ -96,7 +92,6 @@ BeziRect.prototype.path = function(fabric, border, twist, view) {
 	var ma = magic * (a + border);
 	var mb = magic * (b + border);
 
-	fabric.beginPath(twist);
 	fabric.moveTo(                     wx + a, ny    );
 	fabric.lineTo(                     ex - a, ny    );
 	fabric.beziTo(  ma,   0,   0, -mb, ex    , ny + b);

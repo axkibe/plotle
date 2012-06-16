@@ -396,7 +396,6 @@ CChat.prototype.mousehover = function(p, shift, ctrl) {
 | Draws the input line
 */
 CChat.prototype.pathILine = function(fabric, border, twist) {
-	fabric.beginPath(twist);
 	var ox   = 0;
 	var fs   = this.twig.fontStyle;
 	var w    = fabric.width - 1;

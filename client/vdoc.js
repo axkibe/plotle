@@ -255,8 +255,6 @@ VDoc.prototype.getVParaAtPoint = function(p) {
 |
 | fabric  : the fabric to path for
 | border  : width of the path (ignored)
-| twist   : paramter for beginPath()
-|           +0.5 to everything for line pathing
 | width   : width the vdoc is drawn
 | imargin : inner margin of the doc
 | scrollp : scroll position of the doc.
@@ -286,7 +284,6 @@ VDoc.prototype.pathSelection = function(fabric, border, twist, view, width, imar
 	p2 = new Point(ro(p2.x + pnw2.x - sp.x), ro(p2.y + pnw2.y - sp.y));
 
 	var fontsize = this.getFontSize();
-	fabric.beginPath(twist);
 	var descend = ro(fontsize * theme.bottombox);
 	var  ascend = ro(fontsize);
 	var rx = width - imargin.e;

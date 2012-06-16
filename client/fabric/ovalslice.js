@@ -129,8 +129,6 @@ OvalSlice.prototype.path = function(fabric, border, twist, view) {
 	var pswx = view.x(this.psw);
 	var pswy = view.y(this.psw);
 
-	fabric.beginPath(twist);
-
 	var slice  = this.slice;
 
 	fabric.moveTo(pswx, pswy);

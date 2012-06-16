@@ -75,12 +75,11 @@ Rect.prototype.path = function(fabric, border, twist, view) {
 	var ex = view.x(this.pse);
 	var sy = view.y(this.pse);
 
-	fabric.beginPath(twist);
 	fabric.moveTo(wx + border, ny + border);
 	fabric.lineTo(ex - border, ny + border);
 	fabric.lineTo(ex - border, sy - border);
 	fabric.lineTo(wx + border, sy - border);
-	fabric.closePath();
+	fabric.lineTo(wx + border, ny + border);
 };
 
 

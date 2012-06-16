@@ -98,6 +98,7 @@ Fabric = function(a1, a2) {
 
 	// curren positiont (without twist)
 	this._posx = this._posy = null;
+	this.$clip = false;
 };
 
 /**
@@ -333,19 +334,10 @@ Fabric.prototype.fillRect = function(style, a1, a2, a3, a4) {
 /**
 | Begins a path.
 */
-Fabric.prototype.beginPath = function(twist) {
-	if (typeof(twist) !== 'boolean') throw new Error('beginPath() needs twist argument');
+Fabric.prototype._begin = function(twist) {
 	// lines are targed at .5 coords.
 	this._twist = twist ? 0.5 : 0;
 	this._cx.beginPath();
-	this._posx = this.posy = null;
-};
-
-/**
-| Closes a path.
-*/
-Fabric.prototype.closePath = function() {
-	this._cx.closePath();
 	this._posx = this.posy = null;
 };
 
@@ -472,6 +464,7 @@ Fabric.prototype.fill = function(style, shape, path, view, a1, a2, a3, a4) {
 	if (!(view instanceof View)) { throw new Error('view is no View'); }
 
 	var cx = this._cx;
+	this._begin(false);
 	shape[path](this, 0, false, view, a1, a2, a3, a4);
 	cx.fillStyle = this._colorStyle(style, shape);
 	if (this._twist !== 0) throw new Error('wrong twist');
@@ -486,6 +479,7 @@ Fabric.prototype.fill = function(style, shape, path, view, a1, a2, a3, a4) {
 */
 Fabric.prototype._edge = function(style, shape, path, view, a1, a2, a3, a4) {
 	var cx = this._cx;
+	this._begin(true);
 	shape[path](this, style.border, true, view, a1, a2, a3, a4);
 	cx.strokeStyle = this._colorStyle(style.color, shape);
 	cx.lineWidth = style.width;
@@ -512,6 +506,7 @@ Fabric.prototype.edge = function(style, shape, path, view, a1, a2, a3, a4) {
 	}
 };
 
+
 /**
 | Fills an aera and draws its borders
 */
@@ -520,6 +515,7 @@ Fabric.prototype.paint = function(style, shape, path, view, a1, a2, a3, a4) {
 	var fillStyle = style.fill;
 	var edgeStyle = style.edge;
 	var cx = this._cx;
+	this._begin(false);
 	shape[path](this, 0, false, view, a1, a2, a3, a4);
 
 	if (isnon(style.fill)) {
@@ -534,6 +530,35 @@ Fabric.prototype.paint = function(style, shape, path, view, a1, a2, a3, a4) {
 	} else {
 		this._edge(edgeStyle, shape, path, view, a1, a2, a3, a4);
 	}
+};
+
+/**
+| Clips the fabric so that the shape is left out.
+*/
+Fabric.prototype.reverseClip = function(shape, path, view, border, a1, a2, a3, a4) {
+	var cx = this._cx;
+	var c  = this._canvas;
+	var w  = c.width;
+	var h  = c.height;
+
+	if (this.$clip) { throw new Error('already clipping!'); }
+	this.$clip = true;
+	cx.save();
+
+	cx.moveTo(0, 0);
+	cx.lineTo(0, h);
+	cx.lineTo(w, h);
+	cx.lineTo(w, 0);
+	cx.lineTo(0, 0);
+
+	shape[path](this, border, true, view, a1, a2, a3, a4);
+	cx.clip();
+};
+
+Fabric.prototype.deClip = function() {
+	if (!this.$clip) { throw new Error('not clipping!'); }
+	this.$clip = false;
+	this._cx.restore();
 };
 
 /**
@@ -616,6 +641,7 @@ Fabric.prototype.within = function(shape, path, view, a1, a2, a3, a4, a5) {
 	px += tw;
 	py += tw;
 
+	this._begin(true);
 	if (pobj) {
 		shape[path](this, 0, true, view, a2, a3, a4);
 	} else {

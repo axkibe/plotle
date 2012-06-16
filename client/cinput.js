@@ -111,7 +111,6 @@ CInput.prototype.canFocus = function() {
 */
 /*
 CInput.prototype.path = function(fabric, border, twist) {
-	fabric.beginPath(twist);
 	fabric.moveTo(this.pnw);
 	fabric.lineTo(this.pse.x, this.pnw.y);
 	fabric.lineTo(this.pse);
@@ -134,7 +133,6 @@ CInput.prototype.maskPath = function(fabric, border, twist, view, length, size) 
 	var wm = w * magic;
 	var wh = h * magic;
 
-	fabric.beginPath(twist);
 	for (var a = 0; a < length; a++) {
 		fabric.moveTo(                    x + w,  y - h);
 		fabric.beziTo( wm,   0,   0, -wh, x + w2, y);

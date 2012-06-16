@@ -54,12 +54,13 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Shotcuts
 */
-var abs           = Math.abs;
-var debug         = Jools.debug;
-var immute        = Jools.immute;
-var is            = Jools.is;
-var isnon         = Jools.isnon;
-var half          = Jools.half;
+var abs    = Math.abs;
+var debug  = Jools.debug;
+var immute = Jools.immute;
+var is     = Jools.is;
+var isnon  = Jools.isnon;
+var half   = Jools.half;
+var ro     = Math.round;
 
 /**
 | Constructor
@@ -157,9 +158,71 @@ VItem.prototype.pathResizeHandles = function(fabric, border, twist, view) {
 
 	var ha = this.handles;
 	var zone = view.rect(this.getZone());
-	var pnw = zone.pnw;
-	var pse = zone.pse;
+	var wx  = zone.pnw.x;
+	var ny  = zone.pnw.y;
+	var ex  = zone.pse.x;
+	var sy  = zone.pse.y;
+	var mx = half(wx + ex);
+	var my = half(ny + sy);
 
+	var dx = 14;
+	var dy = 14;
+
+	var w  = zone.width  + 2 * dx;
+	var h  = zone.height + 2 * dy;
+	
+	var a  = Math.min(ro(w / 8), 30);
+	var b  = Math.min(ro(h / 8), 30);
+	var bb = ro(b / 0.75);
+
+	if (dx > a) { dx = a; }
+	if (dy > b) { dy = b; }
+
+	if (ha.nw) {
+		fabric.moveTo(                wx - dx,         ny - dy + b);
+		fabric.beziTo(0, -bb, 0, -bb, wx - dx + 2 * a, ny - dy + b);
+		fabric.beziTo(0, +bb, 0, +bb, wx - dx,         ny - dy + b);
+	}
+	
+	if (ha.n) {
+		fabric.moveTo(                mx - a,          ny - dy + b);
+		fabric.beziTo(0, -bb, 0, -bb, mx + a,          ny - dy + b);
+		fabric.beziTo(0, +bb, 0, +bb, mx - a,          ny - dy + b);
+	}
+
+	if (ha.ne) {
+		fabric.moveTo(                ex + dx - 2 * a, ny - dy + b);
+		fabric.beziTo(0, -bb, 0, -bb, ex + dx,         ny - dy + b);
+		fabric.beziTo(0, +bb, 0, +bb, ex + dx - 2 * a, ny - dy + b);
+	}
+
+	if (ha.se) {
+		fabric.moveTo(                ex + dx - 2 * a, sy + dy - b);
+		fabric.beziTo(0, -bb, 0, -bb, ex + dx,         sy + dy - b);
+		fabric.beziTo(0, +bb, 0, +bb, ex + dx - 2 * a, sy + dy - b);
+	}
+	
+	if (ha.s) {
+		fabric.moveTo(                mx - a,          sy + dy - b);
+		fabric.beziTo(0, -bb, 0, -bb, mx + a,          sy + dy - b);
+		fabric.beziTo(0, +bb, 0, +bb, mx - a,          sy + dy - b);
+	}
+	
+	if (ha.sw) {
+		fabric.moveTo(                wx - dx,         sy + dy - b);
+		fabric.beziTo(0, -bb, 0, -bb, wx - dx + 2 * a, sy + dy - b);
+		fabric.beziTo(0, +bb, 0, +bb, wx - dx,         sy + dy - b);
+	}
+
+
+	/*
+	fabric.lineTo(ex + 7, ny - 7);
+	fabric.lineTo(ex + 7, sy + 7);
+	fabric.lineTo(wx - 7, sy + 7);
+	fabric.lineTo(wx - 7, ny - 7);
+	*/
+
+	/*
 	var ds = theme.handle.distance;
 	var hs = theme.handle.size;
 	var hs2 = half(hs);
@@ -171,7 +234,6 @@ VItem.prototype.pathResizeHandles = function(fabric, border, twist, view) {
 	var xm = half(x1 + x2);
 	var ym = half(y1 + y2);
 
-	fabric.beginPath(twist);
 	if (ha.n ) {
 		fabric.moveTo(xm - hs2, y1);
 		fabric.lineTo(xm + hs2, y1);
@@ -207,7 +269,7 @@ VItem.prototype.pathResizeHandles = function(fabric, border, twist, view) {
 		fabric.moveTo(x1, y1 + hs);
 		fabric.lineTo(x1, y1);
 		fabric.lineTo(x1 + hs, y1);
-	}
+	}*/
 };
 
 /**
@@ -216,11 +278,18 @@ VItem.prototype.pathResizeHandles = function(fabric, border, twist, view) {
 VItem.prototype.drawHandles = function(fabric, view) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
 
+
+	fabric.reverseClip(this.getSilhoutte(this.getZone(), false), 'path', view, -1);
+
 	// draws the resize handles
-	fabric.edge(theme.handle.style.edge, this, 'pathResizeHandles', view);
+	fabric.paint(theme.handle.style, this, 'pathResizeHandles', view);
+
+	fabric._cx.beginPath();
 
 	// draws item menu handler
 	fabric.paint(theme.ovalmenu.slice, this.getOvalSlice(), 'path', view);
+
+	fabric.deClip();
 };
 
 /**
