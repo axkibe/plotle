@@ -407,13 +407,13 @@ theme = {
 
 	// size of resize handles
 	handle : {
-		size      :  24,
-		distance  : -10,
+		maxSize   : 13,
+		distance  : 11,
 
 		style : {
-			fill : 'rgba(255, 255, 160, 0.8)',
+			fill : 'rgba(255, 240, 150, 0.8)',
 			edge : [
-				{ border: 0, width: 1, color: 'rgba(255, 220, 120, 0.8)' }
+				{ border: 0, width: 1, color: 'rgba(255, 180, 110, 0.8)' }
 			]
 		}
 	},

@@ -285,7 +285,7 @@ Server.prototype.registerFile = function(filename, opts) {
 		mime     : null,
 		memory   : opts.indexOf('m') >= 0,
 		pack     : opts.indexOf('p') >= 0,
-		raw      : null,
+		raw      : null
 	};
 
 	var type = filename.split('.')[1];
@@ -496,7 +496,7 @@ Server.prototype.prepareFiles = function(_) {
 		filename :  null,
 		cache    :  false,
 		code     : 'utf-8',
-		memory   :  false, // TODO 
+		memory   :  false, // TODO
 		mime     : 'text/html',
 		raw      :  main,
 		gzip     :  null,
@@ -802,7 +802,7 @@ Server.prototype.expireSleep = function(self, sleepID) {
 	res.writeHead(200, {
 		'Content-Type'  : 'application/json',
 		'Cache-Control' : 'no-cache',
-		'Date'          : new Date().toUTCString(),
+		'Date'          : new Date().toUTCString()
 	});
 	res.end(JSON.stringify(asw));
 };
@@ -871,7 +871,7 @@ Server.prototype.wake = function(spaces) {
 		res.writeHead(200, {
 			'Content-Type'  : 'application/json',
 			'Cache-Control' : 'no-cache',
-			'Date'          : new Date().toUTCString(),
+			'Date'          : new Date().toUTCString()
 		});
 		res.end(JSON.stringify(asw));
 	}
@@ -953,7 +953,7 @@ Server.prototype.webError = function(res, code, message) {
 	res.writeHead(code, {
 		'Content-Type'  : 'text/plain',
 		'Cache-Control' : 'no-cache',
-		'Date'          : new Date().toUTCString(),
+		'Date'          : new Date().toUTCString()
 	});
 	message = code+' '+message;
 	log('web', 'error', code, message);
@@ -1016,8 +1016,8 @@ Server.prototype.requestListener = function(req, res) {
 		var header = {
 			'Content-Type'     : f.mime,
 			'Cache-Control'    : f.cache ? 'max-age=31536000' : 'no-cache',
-			'Date'             : new Date().toUTCString(),
-		}
+			'Date'             : new Date().toUTCString()
+		};
 		if (aenc && aenc.indexOf('gzip') >= 0) {
 			// deliver compressed
 			header['Content-Encoding'] = 'gzip';
@@ -1040,7 +1040,7 @@ Server.prototype.requestListener = function(req, res) {
 		}
 		res.writeHead(200, {
 			'Content-Type'  : f.mime,
-			'Date'          : new Date().toUTCString(),
+			'Date'          : new Date().toUTCString()
 		});
 		res.end(data, f.code);
 	});
@@ -1087,7 +1087,7 @@ Server.prototype.webAjax = function(req, red, res) {
 			res.writeHead(200, {
 				'Content-Type'  : 'application/json',
 				'Cache-Control' : 'no-cache',
-				'Date'          : new Date().toUTCString(),
+				'Date'          : new Date().toUTCString()
 			});
 			res.end(JSON.stringify(asw));
 		});

@@ -34,8 +34,8 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 window.onload = function(){
 	WebFont.load({
 		custom: {
-			families: [ 'DejaVuSans', 'DejaVuSansBold' ],
-//			urls: [ '/fonts/dejavu.css' ]
+			families: [ 'DejaVuSans', 'DejaVuSansBold' ]
+			//urls: [ '/fonts/dejavu.css' ], already in CSS
 		},
 
 		active: function() {

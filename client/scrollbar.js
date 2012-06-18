@@ -85,6 +85,15 @@ Scrollbar = function() {
 Scrollbar.prototype.draw = function(fabric, view) {
 	if (!this.visible) throw new Error('Drawing an invisible scrollbar');
 
+	var area = this.getArea(view);
+	fabric.paint(theme.scrollbar.style, area, 'path', View.proper);
+};
+
+
+/**
+| TODO
+*/
+Scrollbar.prototype.getArea = function(view) {
 	var ths  = theme.scrollbar;
 	var pnw  = this._$pnw;
 	var size = this._$size;
@@ -96,13 +105,11 @@ Scrollbar.prototype.draw = function(fabric, view) {
 	var sy   = ro(pos * ((size - map + ap) / max));
 	var s05  = half(ths.strength);
 
-	var bezirect = new BeziRect(
+	return new BeziRect(
 		view.point(pnw.x, pnw.y + sy)      .add(-s05, 0),
 		view.point(pnw.x, pnw.y + sy + map).add( s05, 0),
 		ths.ovala, ths.ovalb
 	);
-	
-	fabric.paint(theme.scrollbar.style, bezirect, 'path', View.proper);
 };
 
 /**

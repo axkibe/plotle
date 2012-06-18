@@ -165,14 +165,12 @@ VItem.prototype.pathResizeHandles = function(fabric, border, twist, view) {
 	var mx = half(wx + ex);
 	var my = half(ny + sy);
 
-	var dx = 14;
-	var dy = 14;
+	var dx = theme.handle.distance;
+	var dy = theme.handle.distance;
 
-	var w  = zone.width  + 2 * dx;
-	var h  = zone.height + 2 * dy;
 	
-	var a  = Math.min(ro(w / 8), 30);
-	var b  = Math.min(ro(h / 8), 30);
+	var a  = Math.min(ro((zone.width  + 2 * dx) / 6), theme.handle.maxSize);
+	var b  = Math.min(ro((zone.height + 2 * dy) / 6), theme.handle.maxSize);
 	var bb = ro(b / 0.75);
 
 	if (dx > a) { dx = a; }
@@ -195,6 +193,12 @@ VItem.prototype.pathResizeHandles = function(fabric, border, twist, view) {
 		fabric.beziTo(0, -bb, 0, -bb, ex + dx,         ny - dy + b);
 		fabric.beziTo(0, +bb, 0, +bb, ex + dx - 2 * a, ny - dy + b);
 	}
+	
+	if (ha.e) {
+		fabric.moveTo(                ex + dx - 2 * a, my);
+		fabric.beziTo(0, -bb, 0, -bb, ex + dx,         my);
+		fabric.beziTo(0, +bb, 0, +bb, ex + dx - 2 * a, my);
+	}
 
 	if (ha.se) {
 		fabric.moveTo(                ex + dx - 2 * a, sy + dy - b);
@@ -214,62 +218,11 @@ VItem.prototype.pathResizeHandles = function(fabric, border, twist, view) {
 		fabric.beziTo(0, +bb, 0, +bb, wx - dx,         sy + dy - b);
 	}
 
-
-	/*
-	fabric.lineTo(ex + 7, ny - 7);
-	fabric.lineTo(ex + 7, sy + 7);
-	fabric.lineTo(wx - 7, sy + 7);
-	fabric.lineTo(wx - 7, ny - 7);
-	*/
-
-	/*
-	var ds = theme.handle.distance;
-	var hs = theme.handle.size;
-	var hs2 = half(hs);
-
-	var x1 = pnw.x - ds;
-	var y1 = pnw.y - ds;
-	var x2 = pse.x + ds;
-	var y2 = pse.y + ds;
-	var xm = half(x1 + x2);
-	var ym = half(y1 + y2);
-
-	if (ha.n ) {
-		fabric.moveTo(xm - hs2, y1);
-		fabric.lineTo(xm + hs2, y1);
+	if (ha.w) {
+		fabric.moveTo(                wx - dx,          my);
+		fabric.beziTo(0, -bb, 0, -bb, wx - dx + 2 * a,  my);
+		fabric.beziTo(0, +bb, 0, +bb, wx - dx,          my);
 	}
-	if (ha.ne) {
-		fabric.moveTo(x2 - hs,  y1);
-		fabric.lineTo(x2, y1);
-		fabric.lineTo(x2, y1 + hs);
-	}
-	if (ha.e ) {
-		fabric.moveTo(x2, ym - hs2);
-		fabric.lineTo(x2, ym + hs2);
-	}
-	if (ha.se) {
-		fabric.moveTo(x2, y2 - hs);
-		fabric.lineTo(x2, y2);
-		fabric.lineTo(x2 - hs, y2);
-	}
-	if (ha.s ) {
-		fabric.moveTo(xm - hs2, y2);
-		fabric.lineTo(xm + hs2, y2);
-	}
-	if (ha.sw) {
-		fabric.moveTo(x1 + hs, y2);
-		fabric.lineTo(x1, y2);
-		fabric.lineTo(x1, y2 - hs);
-	}
-	if (ha.w ) {
-		fabric.moveTo(x1, ym - hs2);
-		fabric.lineTo(x1, ym + hs2);
-	}
-	if (ha.nw) {
-		fabric.moveTo(x1, y1 + hs);
-		fabric.lineTo(x1, y1);
-		fabric.lineTo(x1 + hs, y1);
-	}*/
 };
 
 /**
@@ -279,6 +232,13 @@ VItem.prototype.drawHandles = function(fabric, view) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
 
 
+	
+	if (this.scrollbarY && this.scrollbarY.visible) {
+		var sbary = this.scrollbarY;
+		var area = sbary.getArea(view);
+		fabric.reverseClip(area, 'path', View.proper, -1);
+	}
+	
 	fabric.reverseClip(this.getSilhoutte(this.getZone(), false), 'path', view, -1);
 
 	// draws the resize handles

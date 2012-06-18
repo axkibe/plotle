@@ -541,10 +541,12 @@ Fabric.prototype.reverseClip = function(shape, path, view, border, a1, a2, a3, a
 	var w  = c.width;
 	var h  = c.height;
 
-	if (this.$clip) { throw new Error('already clipping!'); }
-	this.$clip = true;
-	cx.save();
+	if (!this.$clip) {
+		cx.save();
+		this.$clip = true;
+	}
 
+	cx.beginPath();
 	cx.moveTo(0, 0);
 	cx.lineTo(0, h);
 	cx.lineTo(w, h);
