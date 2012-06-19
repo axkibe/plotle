@@ -54,6 +54,20 @@ var immute       = Jools.immute;
 Compass = {};
 
 /**
+| all 8 directions, clock wise, corners first
+*/
+Compass.dir8CWCF = [
+	'nw',
+	'ne',
+	'se',
+	'sw',
+	'n',
+	'e',
+	's',
+	'w'
+];
+
+/**
 | Returns the compass direction opposite of a direction.
 */
 Compass.opposite = function(dir) {

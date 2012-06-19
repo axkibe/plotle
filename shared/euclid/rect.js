@@ -55,6 +55,7 @@ if (typeof(window) === 'undefined') {
 var debug        = Jools.debug;
 var immute       = Jools.immute;
 var innumerable  = Jools.innumerable;
+var isnon        = Jools.isnon;
 var lazyFixate   = Jools.lazyFixate;
 var reject       = Jools.reject;
 var half         = Jools.half;
@@ -102,6 +103,20 @@ lazyFixate(Rect.prototype, 'pc', function() {
 });
 
 /**
+| West.
+*/
+lazyFixate(Rect.prototype, 'w', function() {
+	return new Point(this.pnw.x, half(this.pse.y + this.pnw.y));
+});
+
+/**
+| East.
+*/
+lazyFixate(Rect.prototype, 'e', function() {
+	return new Point(this.pse.x, half(this.pse.y + this.pnw.y));
+});
+
+/**
 | Returns a rect moved by a point or x/y
 |
 | add(point)   -or-
@@ -110,6 +125,48 @@ lazyFixate(Rect.prototype, 'pc', function() {
 Rect.prototype.add = function(a1, a2) {
 	return new this.constructor(this.pnw.add(a1, a2), this.pse.add(a1, a2));
 };
+
+/**
+| Creates a new rect.
+|
+| Looks throw a list of additional rects to look for objects to be reused.
+|
+| Rect.renew(wx, ny, ex, sy, ...[rects]... )
+*/
+Rect.renew = function(wx, ny, ex, sy) {
+	var pnw = null, pse = null;
+
+	for(var a = 4, aZ = arguments.length; a < aZ; a++) {
+		var r = arguments[a];
+		if (!isnon(r)) { continue; }
+
+		if (r.pnw.x === wx && r.pnw.y === ny) {
+			if (r.pse.x === ex && r.pse.y === sy)
+				{ return r; }
+			pnw = r.pnw;
+			break;
+		}
+
+		if (r.pse.x === wx && r.pse.y === ny)
+			{ pnw = r.pse; break; }
+	}
+	
+	for(var a = 4, aZ = arguments.length; a < aZ; a++) {
+		var r = arguments[a];
+		if (!isnon(r)) { continue; }
+
+		if (r.pnw.x === ex && r.pnw.y === sy) { pse = r.pnw; break; }
+		if (r.pse.x === ex && r.pse.y === sy) { pse = r.pse; break; }
+	}
+
+	if (!pnw)
+		{ pnw = new Point(wx, ny); }
+	
+	if (!pse)
+		{ pse = new Point(ex, sy); }
+	
+	return new Rect(pnw, pse);
+}
 
 /**
 | Returns a rect moved by a -point or -x/-y.

@@ -78,14 +78,15 @@ Point.zero = new Point(0, 0);
 
 /**
 | Creates a new point.
-| However it will look through a list of points to see if
-| this point has already this x/y to save creation of yet
+|
+| However, this will look through a list of points to see if
+| this point has already this x/y to save the creation of yet
 | another object
 |
 | Point.renew(x, y, p1, p2, p3, ...)
 */
 Point.renew = function(x, y) {
-	for(var a = 2; a < arguments.length; a++) {
+	for(var a = 2, aZ = arguments.length; a < aZ; a++) {
 		var p = arguments[a];
 		if (p instanceof Point && p.x === x && p.y === y) return p;
 	}

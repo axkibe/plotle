@@ -33,10 +33,12 @@ var VItem     = null;
 | Imports
 */
 var Action;
+var Compass;
 var Fabric;
 var Jools;
 var OvalSlice;
 var Path;
+var Rect;
 var shell;
 var system;
 var theme;
@@ -76,6 +78,7 @@ VItem = function(twig, path) {
 
 	// caching
 	this.$fabric   = null;
+	this.$handles  = {};
 };
 
 /**
@@ -114,50 +117,36 @@ VItem.prototype.withinItemMenu = function(view, p) {
 VItem.prototype.checkItemCompass = function(view, p) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
 
-	var ha = this.handles;
-	var zone = view.rect(this.getZone());
+	var $h     = this.planHandles(view); // TODO use planHandles and cache
+	var f      = shell.fabric;
+	var d8cwcf = Compass.dir8CWCF;
 
-	if (!ha) return null;
-	var d   =       theme.handle.size; // distance
-	var din = 0.5 * theme.handle.size; // inner distance
-	var dou =       theme.handle.size; // outer distance
+	for(var a = 0, aZ = d8cwcf.length; a < aZ; a++) {
+		var d = d8cwcf[a];
+		var z = $h[d];
 
-	var wx = zone.pnw.x;
-	var ny = zone.pnw.y;
-	var ex = zone.pse.x;
-	var sy = zone.pse.y;
+		if (!z)
+			{ continue; }
 
-	var n = p.y >= ny - dou && p.y <= ny + din;
-	var e = p.x >= ex - din && p.x <= ex + dou;
-	var s = p.y >= sy - din && p.y <= sy + dou;
-	var w = p.x >= wx - dou && p.x <= wx + din;
+		if (!z.within(p))
+			{ continue; }
 
-	if (n) {
-		if (w && ha.nw) return 'nw';
-		if (e && ha.ne) return 'ne';
-		if (ha.n && abs(p.x - zone.pc.x) <= d) return 'n';
-		return null;
+		if (f.within(this, 'pathHandle', view, p, z))
+			{ return d; }
 	}
-	if (s) {
-		if (w && ha.sw) return 'sw';
-		if (e && ha.se) return 'se';
-		if (ha.s && abs(p.x - zone.pc.x) <= d) return 's';
-		return null;
-	}
-	if (w && ha.w && abs(p.y - zone.pc.y) <= d) return 'w';
-	if (e && ha.e && abs(p.y - zone.pc.y) <= d) return 'e';
 	return null;
 };
 
 /**
-| Paths the resize handles.
+| TODO
 */
-VItem.prototype.pathResizeHandles = function(fabric, border, twist, view) {
-	if (!(view instanceof View)) { throw new Error('view no View'); }
-	if (border !== 0) throw new Error('borders unsupported for handles');
-
+VItem.prototype.planHandles = function(view) {
 	var ha = this.handles;
 	var zone = view.rect(this.getZone());
+	var $h = this.$handles;
+	if ($h.zone && zone.eq($h.zone) && view.eq($h.view))
+		{ return $h; }
+
 	var wx  = zone.pnw.x;
 	var ny  = zone.pnw.y;
 	var ex  = zone.pse.x;
@@ -165,64 +154,98 @@ VItem.prototype.pathResizeHandles = function(fabric, border, twist, view) {
 	var mx = half(wx + ex);
 	var my = half(ny + sy);
 
-	var dx = theme.handle.distance;
-	var dy = theme.handle.distance;
+	var dcx = theme.handle.cdistance;
+	var dcy = theme.handle.cdistance;
+	var dex = theme.handle.edistance;
+	var dey = theme.handle.edistance;
 
+	var a  = Math.min(ro((zone.width  + 2 * dcx) / 6), theme.handle.maxSize);
+	var b  = Math.min(ro((zone.height + 2 * dcy) / 6), theme.handle.maxSize);
+	var a2 = 2*a;
+	var b2 = 2*b;
+
+	if (dcx > a) { dex -= half(dcx - a); dcx = a; }
+	if (dcy > b) { dey -= half(dcy - b); dcy = b; }
 	
-	var a  = Math.min(ro((zone.width  + 2 * dx) / 6), theme.handle.maxSize);
-	var b  = Math.min(ro((zone.height + 2 * dy) / 6), theme.handle.maxSize);
-	var bb = ro(b / 0.75);
+	return this.$handles = {
+		// ellipse bezier height
+		bb : ro(b / 0.75),
+		zone : zone,
+		view : view,
 
-	if (dx > a) { dx = a; }
-	if (dy > b) { dy = b; }
+		nw : ha.nw && Rect.renew(
+				wx - dcx,      ny - dcy,
+				wx - dcx + a2, ny - dcy + b2,
+				$h.nw
+			),
+		n  : ha.n && Rect.renew(
+				mx - a,        ny - dey,
+				mx + a,        ny - dey + b2,
+				$h.n
+			),
+		ne : ha.ne && Rect.renew(
+				ex + dcx - a2, ny - dcy,
+				ex + dex,      ny - dcy + b2,
+				$h.ne
+			),
+		e  : ha.e && Rect.renew(
+				ex + dex - a2, my - b,
+				ex + dex     , my + b,
+				$h.e
+			),
+		se : ha.se && Rect.renew(
+				ex + dcx - a2, sy + dcy - b2,
+				ex + dcx,      sy + dcx,
+				$h.se
+			),
+		s  : ha.s && Rect.renew(
+				mx - a, sy + dey -b2,
+				mx + a, sy + dey,
+				$h.s
+			),
+		sw : ha.sw && Rect.renew(
+				wx - dcx,      sy + dcy - b2,
+				wx - dcx + a2, sy + dcy,
+				$h.sw
+			),
+		w  : ha.w && Rect.renew(
+				wx - dex,      my - b,
+				wx - dex + a2, my + b,
+				$h.w
+			)
+	};
+};
 
-	if (ha.nw) {
-		fabric.moveTo(                wx - dx,         ny - dy + b);
-		fabric.beziTo(0, -bb, 0, -bb, wx - dx + 2 * a, ny - dy + b);
-		fabric.beziTo(0, +bb, 0, +bb, wx - dx,         ny - dy + b);
-	}
-	
-	if (ha.n) {
-		fabric.moveTo(                mx - a,          ny - dy + b);
-		fabric.beziTo(0, -bb, 0, -bb, mx + a,          ny - dy + b);
-		fabric.beziTo(0, +bb, 0, +bb, mx - a,          ny - dy + b);
-	}
 
-	if (ha.ne) {
-		fabric.moveTo(                ex + dx - 2 * a, ny - dy + b);
-		fabric.beziTo(0, -bb, 0, -bb, ex + dx,         ny - dy + b);
-		fabric.beziTo(0, +bb, 0, +bb, ex + dx - 2 * a, ny - dy + b);
-	}
-	
-	if (ha.e) {
-		fabric.moveTo(                ex + dx - 2 * a, my);
-		fabric.beziTo(0, -bb, 0, -bb, ex + dx,         my);
-		fabric.beziTo(0, +bb, 0, +bb, ex + dx - 2 * a, my);
-	}
+/**
+| Paths all resize handles.
+*/
+VItem.prototype.pathAllHandles = function(fabric, border, twist, view) {
+	if (!(view instanceof View)) { throw new Error('view no View'); }
+	if (border !== 0) throw new Error('borders unsupported for handles');
 
-	if (ha.se) {
-		fabric.moveTo(                ex + dx - 2 * a, sy + dy - b);
-		fabric.beziTo(0, -bb, 0, -bb, ex + dx,         sy + dy - b);
-		fabric.beziTo(0, +bb, 0, +bb, ex + dx - 2 * a, sy + dy - b);
-	}
-	
-	if (ha.s) {
-		fabric.moveTo(                mx - a,          sy + dy - b);
-		fabric.beziTo(0, -bb, 0, -bb, mx + a,          sy + dy - b);
-		fabric.beziTo(0, +bb, 0, +bb, mx - a,          sy + dy - b);
-	}
-	
-	if (ha.sw) {
-		fabric.moveTo(                wx - dx,         sy + dy - b);
-		fabric.beziTo(0, -bb, 0, -bb, wx - dx + 2 * a, sy + dy - b);
-		fabric.beziTo(0, +bb, 0, +bb, wx - dx,         sy + dy - b);
-	}
+	var $h = this.planHandles(view);
+	var d8cwcf = Compass.dir8CWCF;
 
-	if (ha.w) {
-		fabric.moveTo(                wx - dx,          my);
-		fabric.beziTo(0, -bb, 0, -bb, wx - dx + 2 * a,  my);
-		fabric.beziTo(0, +bb, 0, +bb, wx - dx,          my);
+	for(var a = d8cwcf.length - 1; a >= 0; a--) {
+		var d = d8cwcf[a];
+		var z = $h[d];
+
+		if (!z)
+			{ continue; }
+
+		this.pathHandle(fabric, border, twist, view, z);
 	}
+};
+
+/**
+| Paths one or all resize handles.
+*/
+VItem.prototype.pathHandle = function(fabric, border, twist, view, zone) {
+	var bb = this.$handles.bb;
+	fabric.moveTo(zone.w);
+	fabric.beziTo(0, -bb, 0, -bb, zone.e);
+	fabric.beziTo(0, +bb, 0, +bb, zone.w);
 };
 
 /**
@@ -231,10 +254,8 @@ VItem.prototype.pathResizeHandles = function(fabric, border, twist, view) {
 VItem.prototype.drawHandles = function(fabric, view) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
 
-
-	
-	if (this.scrollbarY && this.scrollbarY.visible) {
-		var sbary = this.scrollbarY;
+	var sbary = this.scrollbarY;
+	if (sbary && sbary.visible) {
 		var area = sbary.getArea(view);
 		fabric.reverseClip(area, 'path', View.proper, -1);
 	}
@@ -242,9 +263,7 @@ VItem.prototype.drawHandles = function(fabric, view) {
 	fabric.reverseClip(this.getSilhoutte(this.getZone(), false), 'path', view, -1);
 
 	// draws the resize handles
-	fabric.paint(theme.handle.style, this, 'pathResizeHandles', view);
-
-	fabric._cx.beginPath();
+	fabric.paint(theme.handle.style, this, 'pathAllHandles', view);
 
 	// draws item menu handler
 	fabric.paint(theme.ovalmenu.slice, this.getOvalSlice(), 'path', view);

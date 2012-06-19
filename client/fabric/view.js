@@ -161,6 +161,12 @@ View.prototype.depoint = function(a1, a2) {
 	return new Point(this.dex(a1, a2), this.dey(a1, a2));
 };
 
+/**
+| Returns true if views are equal in terms of zoom and pan.
+*/
+View.prototype.eq = function(a1) {
+	return this.zoom === a1.zoom && this.pan.eq(a1.pan);
+};
 
 /**
 | Returns a rect repositioned and resized to the current view.

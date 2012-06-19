@@ -318,6 +318,7 @@ Server.prototype.registerFiles = function() {
 
 	this.registerFile('shared/jools.js',             'p' );
 	this.registerFile('shared/sha1.js',              'p' );
+	this.registerFile('shared/euclid/compass.js',    'p' );
 	this.registerFile('shared/euclid/point.js',      'p' );
 	this.registerFile('shared/euclid/rect.js',       'p' );
 	this.registerFile('shared/euclid/margin.js',     'p' );
