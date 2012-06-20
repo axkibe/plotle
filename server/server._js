@@ -272,32 +272,28 @@ Server.prototype.buildClientConfig = function() {
 |   m ... keep in memory
 |   c ... serve as cached
 */
-Server.prototype.registerFile = function(filename, opts) {
-	var path = filename.split('/');
-	path.shift();
-	path = '/' + path.join('/');
-	
+Server.prototype.registerFile = function(path, opts) {
 	var f = {
-		filename : filename,
-		cache    : opts.indexOf('c') >= 0,
-		code     : null,
-		gzip     : null,
-		mime     : null,
-		memory   : opts.indexOf('m') >= 0,
-		pack     : opts.indexOf('p') >= 0,
-		raw      : null
+		path   : path,
+		cache  : opts.indexOf('c') >= 0,
+		code   : null,
+		gzip   : null,
+		mime   : null,
+		memory : opts.indexOf('m') >= 0,
+		pack   : opts.indexOf('p') >= 0,
+		raw    : null
 	};
 
-	var type = filename.split('.')[1];
+	var type = path.split('.')[1];
 	switch (type) {
-	case 'html' : f.code = 'utf-8';  f.mime = 'text/html';               break;
-	case 'js'   : f.code = 'utf-8';  f.mime = 'text/javascript';         break;
-	case 'ico'  : f.code = 'binary'; f.mime = 'image/x-icon';            break;
 	case 'css'  : f.code = 'utf-8';  f.mime = 'text/css';                break;
 	case 'eot'  : f.code = 'binary'; f.mime = 'font/eot';                break;
+	case 'html' : f.code = 'utf-8';  f.mime = 'text/html';               break;
+	case 'ico'  : f.code = 'binary'; f.mime = 'image/x-icon';            break;
+	case 'js'   : f.code = 'utf-8';  f.mime = 'text/javascript';         break;
+	case 'otf'  : f.code = 'binary'; f.mime = 'font/otf';                break;
 	case 'svg'  : f.code = 'utf-8';  f.mime = 'image/svg+xml';           break;
 	case 'ttf'  : f.code = 'binary'; f.mime = 'font/ttf';                break;
-	case 'otf'  : f.code = 'binary'; f.mime = 'font/otf';                break;
 	case 'woff' : f.code = 'binary'; f.mime = 'application/x-font-woff'; break;
 	default : throw new Error('unknown file type: '+type);
 	}
@@ -322,15 +318,15 @@ Server.prototype.registerFiles = function() {
 	this.registerFile('shared/euclid/point.js',      'p' );
 	this.registerFile('shared/euclid/rect.js',       'p' );
 	this.registerFile('shared/euclid/margin.js',     'p' );
-	this.registerFile('client/fabric/fabric.js',     'p' );
-	this.registerFile('client/fabric/measure.js',    'p' );
-	this.registerFile('client/fabric/rect.js',       'p' );
-	this.registerFile('client/fabric/bezirect.js',   'p' );
-	this.registerFile('client/fabric/ovalslice.js',  'p' );
-	this.registerFile('client/fabric/ovalflower.js', 'p' );
-	this.registerFile('client/fabric/line.js',       'p' );
+	this.registerFile('client/euclid/fabric.js',     'p' );
+	this.registerFile('client/euclid/measure.js',    'p' );
+	this.registerFile('client/euclid/rect.js',       'p' );
+	this.registerFile('client/euclid/bezirect.js',   'p' );
+	this.registerFile('client/euclid/ovalslice.js',  'p' );
+	this.registerFile('client/euclid/ovalflower.js', 'p' );
+	this.registerFile('client/euclid/line.js',       'p' );
 	this.registerFile('client/theme.js',             'p' );
-	this.registerFile('client/fabric/view.js',       'p' );
+	this.registerFile('client/euclid/view.js',       'p' );
 	this.registerFile('shared/meshverse.js',         'p' );
 	this.registerFile('shared/path.js',              'p' );
 	this.registerFile('shared/tree.js',              'p' );
@@ -373,14 +369,14 @@ Server.prototype.registerFiles = function() {
 	this.registerFile('client/cockpit.js',           'p' );
 	this.registerFile('client/action.js',            'p' );
 	this.registerFile('client/ovalmenu.js',          'p' );
-	this.registerFile('client/vpara.js',             'p' );
+	this.registerFile('client/visual/vpara.js',      'p' );
 	this.registerFile('client/scrollbar.js',         'p' );
-	this.registerFile('client/vdoc.js',              'p' );
-	this.registerFile('client/vitem.js',             'p' );
-	this.registerFile('client/vnote.js',             'p' );
-	this.registerFile('client/vlabel.js',            'p' );
-	this.registerFile('client/vrelation.js',         'p' );
-	this.registerFile('client/vspace.js',            'p' );
+	this.registerFile('client/visual/vdoc.js',       'p' );
+	this.registerFile('client/visual/vitem.js',      'p' );
+	this.registerFile('client/visual/vnote.js',      'p' );
+	this.registerFile('client/visual/vlabel.js',     'p' );
+	this.registerFile('client/visual/vrelation.js',  'p' );
+	this.registerFile('client/visual/vspace.js',     'p' );
 	this.registerFile('client/browser.js',           'p' );
 	this.registerFile('client/caret.js',             'p' );
 	this.registerFile('client/selection.js',         'p' );
@@ -416,21 +412,21 @@ Server.prototype.prepareFiles = function(_) {
 	log('start', 'Preparing files');
 
 	for(f in this.$files) {
-		if (f.filename === null) { continue; }
+		if (f.path === null) { continue; }
 		if (!f.memory && !f.pack) { continue; }
-		f.raw = fs.readFile(f.filename, _);
+		f.raw = fs.readFile(f.path, _);
 	}
 	
 	var cconfig = this.buildClientConfig();
-	this.$files['/config.js'] = {
-		filename : null,
-		cache    : false,
-		code     : 'utf-8',
-		mime     : 'text/javascript',
-		memory   : true,
-		raw      : cconfig,
-		gzip     : null,
-		pack     : false
+	this.$files['config.js'] = {
+		path   : null,
+		cache  : false,
+		code   : 'utf-8',
+		mime   : 'text/javascript',
+		memory : true,
+		raw    : cconfig,
+		gzip   : null,
+		pack   : false
 	};
 
 	var pack = [ cconfig ];
@@ -440,7 +436,7 @@ Server.prototype.prepareFiles = function(_) {
 	for(var a = 0, aZ = this.$packList.length; a < aZ; a++) {
 		f = this.$packList[a];
 		devels.push('<script src="' + f.path + '" type="text/javascript"></script>');
-		pack.push(fs.readFile(f.file.filename, _));
+		pack.push(fs.readFile(f.file.path, _));
 	}
 	pack = pack.join('\n');
 
@@ -455,33 +451,33 @@ Server.prototype.prepareFiles = function(_) {
 	}
 
 	var packsha1 = sha1.sha1hex(pack);
-	var mepacksha1 = '/meshcraft-' + packsha1 + '.js';
+	var mepacksha1 = 'meshcraft-' + packsha1 + '.js';
 	log('start', 'pack:', this.mepacksha1);
 
 	this.$files[mepacksha1] = {
-		filename :  null,
-		cache    :  true,
-		code     : 'utf-8',
-		mime     : 'text/javascript',
-		memory   :  true,
-		raw      :  pack,
-		gzip     :  null,
-		pack     :  false
+		path   :  null,
+		cache  :  true,
+		code   : 'utf-8',
+		mime   : 'text/javascript',
+		memory :  true,
+		raw    :  pack,
+		gzip   :  null,
+		pack   :  false
 	};
 	
 	// the devel file
 	var devel = fs.readFile('client/devel.html', _) + '';
 	devel = devel.replace(/<!--DEVELPACK.*>/, devels.join('\n'));
 	
-	this.$files['/devel.html'] = {
-		filename :  null,
-		cache    :  false,
-		code     : 'utf-8',
-		mime     : 'text/html',
-		memory   :  false,
-		raw      :  devel,
-		gzip     :  null,
-		pack     :  false
+	this.$files['devel.html'] = {
+		path   :  null,
+		cache  :  false,
+		code   : 'utf-8',
+		mime   : 'text/html',
+		memory :  false,
+		raw    :  devel,
+		gzip   :  null,
+		pack   :  false
 	};
 
 	// the main html file
@@ -491,17 +487,17 @@ Server.prototype.prepareFiles = function(_) {
 		'<script src="'+mepacksha1+'" type="text/javascript"></script>'
 	);
 	
-	this.$files['/meshcraft.html'] =
-	this.$files['/index.html'] =
-	this.$files['/'] = {
-		filename :  null,
-		cache    :  false,
-		code     : 'utf-8',
-		memory   :  false, // TODO
-		mime     : 'text/html',
-		raw      :  main,
-		gzip     :  null,
-		pack     :  false
+	this.$files['meshcraft.html'] =
+	this.$files['index.html'] =
+	this.$files[''] = {
+		path   :  null,
+		cache  :  false,
+		code   : 'utf-8',
+		memory :  false, // TODO
+		mime   : 'text/html',
+		raw    :  main,
+		gzip   :  null,
+		pack   :  false
 	};
 
 	for(var path in this.$files) {
@@ -998,10 +994,11 @@ Server.prototype.requestListener = function(req, res) {
 
 	log('web', req.connection.remoteAddress, red.href);
 
-	if (red.pathname === '/mm')
+	var pathname = red.pathname.replace(/^[\/]+/g, '');
+	if (pathname === 'mm')
 		{ return this.webAjax(req, red, res); }
 
-	var f = this.$files[red.pathname];
+	var f = this.$files[pathname];
 	if (!f) {
 		res.writeHead(404, {
 			'Content-Type'  : 'text/plain',
@@ -1033,10 +1030,10 @@ Server.prototype.requestListener = function(req, res) {
 	}
 
 	var self = this;
-	fs.readFile(f.filename, function(err, data) {
+	fs.readFile(f.path, function(err, data) {
 		if (err) {
 			self.webError(res, 500, 'Internal Server Error');
-			console.log('Missing client file: '+f.filename);
+			log('fail', 'Missing client file: '+f.path);
 			return;
 		}
 		res.writeHead(200, {
@@ -1109,27 +1106,6 @@ Server.prototype.ajaxCmd = function(cmd, res, _) {
 	default: return reject('unknown command');
 	}
 };
-
-/**
-| Transmits the uglified js package.
-*/
-/*
-Server.prototype.webPack = function(req, red, res) {
-	var aenc = req.headers['accept-encoding'];
-
-	if (aenc && aenc.indexOf('gzip') >= 0) {
-		// deliver compressed
-		res.writeHead(200, {
-			'Content-Type'     : 'application/json',
-			'Content-Encoding' : 'gzip'
-		});
-		res.end(this.packgz);
-	} else {
-		// deliver uncompressed
-		res.writeHead(200, {'Content-Type': 'application/json'});
-		res.end(this.pack);
-	}
-};*/
 
 var server = new Server();
 
