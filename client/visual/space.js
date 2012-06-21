@@ -192,8 +192,8 @@ Space.prototype.draw = function() {
 	var $action = shell.$action;
 	switch ($action && $action.type) {
 	case Action.RELBIND :
-		var av  = this.vget($action.itemPath);
-		var av2 = $action.item2Path ? this.vget($action.item2Path) : null;
+		var av  = this.get($action.itemPath);
+		var av2 = $action.item2Path ? this.get($action.item2Path) : null;
 		var target = av2 ? av2.getZone() : $view.depoint($action.move);
 		var arrow = Line.connect(av.getZone(), 'normal', target, 'arrow');
 		if (av2) av2.highlight(this.fabric, $view);
@@ -214,7 +214,7 @@ Space.prototype.knock = function() {
 | Draws the caret.
 */
 Space.prototype.drawCaret = function() {
-	this.vget(shell.caret.sign.path, -1).drawCaret(this.$view);
+	this.get(shell.caret.sign.path, -1).drawCaret(this.$view);
 };
 
 /**
@@ -424,7 +424,7 @@ Space.prototype.actionstop = function(p, shift, ctrl) {
 	case Action.ITEMDRAG   :
 	case Action.ITEMRESIZE :
 	case Action.SCROLLY    :
-		item = this.vget($action.itemPath);
+		item = this.get($action.itemPath);
 		item.actionstop($view, p, shift, ctrl);
 		break;
 	default :
@@ -467,7 +467,7 @@ Space.prototype.actionmove = function(p, shift, ctrl) {
 		return 'pointer';
 
 	default :
-		item = this.vget($action.itemPath);
+		item = this.get($action.itemPath);
 		item.actionmove($view, p);
 		return 'move';
 	}
@@ -553,7 +553,7 @@ Space.prototype.mousedown = function(p, shift, ctrl) {
 Space.prototype.input = function(text) {
 	var caret = shell.caret;
 	if (!caret.sign) return;
-	this.vget(caret.sign.path, -1).input(text);
+	this.get(caret.sign.path, -1).input(text);
 };
 
 /**
@@ -584,16 +584,16 @@ Space.prototype.specialKey = function(key, shift, ctrl) {
 	
 	var caret = shell.caret;
 	if (!caret.sign) return;
-	this.vget(caret.sign.path, -1).specialKey(key, shift, ctrl);
+	this.get(caret.sign.path, -1).specialKey(key, shift, ctrl);
 };
 
 /**
 | Returns the visual node the path points to.
 */
-Space.prototype.vget = function(path, plen) { //XXX
+Space.prototype.get = function(path, plen) {
 	/**/ if (!is(plen)) { plen  = path.length; }
 	else if (plen < 0)  { plen += path.length; }
-	/**/ if (plen <= 0) { throw new Error('cannot vget path of length <= 0'); }
+	/**/ if (plen <= 0) { throw new Error('cannot get path of length <= 0'); }
 	if (path.get(0) !== this.key) {
 		throw new Error('cannot get path of not current space',
 			path.get(0), '!=', this.key

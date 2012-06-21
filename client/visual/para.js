@@ -103,7 +103,7 @@ Para.prototype.knock = function() {
 | (re)flows the paragraph, positioning all chunks.
 */
 Para.prototype.getFlow = function() {
-	var item      = shell.$space.vget(this.path, -2);
+	var item      = shell.$space.get(this.path, -2);
 	var doc       = item.$graph.doc;
 	var flowWidth = item.getFlowWidth();
 	var fontsize  = doc.getFontSize();
@@ -186,7 +186,7 @@ Para.prototype.getFlow = function() {
 Para.prototype.getPointOffset = function(point) {
 	var flow = this.getFlow();
 	var para = this.para;
-	var doc = shell.$space.vget(this.path, -1);
+	var doc = shell.$space.get(this.path, -1);
 	Measure.setFont(doc.getFontSize(), doc.getFont());
 
 	var line;
@@ -236,7 +236,7 @@ Para.prototype.getLineXOffset = function(line, x) {
 Para.prototype.input = function(text) {
     var reg   = /([^\n]+)(\n?)/g;
 	var para  = this;
-	var item  = shell.$space.vget(para.path, -2);
+	var item  = shell.$space.get(para.path, -2);
 	var doc   = item.$graph.doc;
 
     for(var rx = reg.exec(text); rx !== null; rx = reg.exec(text)) {
@@ -258,7 +258,7 @@ Para.prototype.specialKey = function(key, shift, ctrl) {
 	var caret  = shell.caret;
 	var para   = this.para;
 	var select = shell.selection;
-	var item   = shell.$space.vget(this.path, -2);
+	var item   = shell.$space.get(this.path, -2);
 	var doc    = item.$graph.doc;
 	var ve, at1, flow;
 	var r, x;
@@ -525,7 +525,7 @@ Para.prototype.textPath = function() {
 */
 Para.prototype.getHeight = function() {
 	var flow = this.getFlow();
-	var doc = shell.$space.vget(this.path, -1);
+	var doc = shell.$space.get(this.path, -1);
 	return flow.height + ro(doc.getFontSize() * theme.bottombox);
 };
 
@@ -537,7 +537,7 @@ Para.prototype.draw = function(fabric, view, pnw) {
 
 	var flow   = this.getFlow();
 	var width  = flow.spread * view.zoom;
-	var doc    = shell.$space.vget(this.path, -1);
+	var doc    = shell.$space.get(this.path, -1);
 	var height = this.getHeight() * view.zoom;
 	var $f     = this.$fabric;
 
@@ -584,7 +584,7 @@ Para.prototype.draw = function(fabric, view, pnw) {
 Para.prototype.getOffsetPoint = function(offset, flowPos$) {
 	// TODO cache position
 	var twig = this.twig;
-	var doc  = shell.$space.vget(this.path, -1);
+	var doc  = shell.$space.get(this.path, -1);
 	Measure.setFont(doc.getFontSize(), doc.getFont());
 	var text = twig.text;
 	var flow = this.getFlow();
@@ -627,7 +627,7 @@ Para.prototype.getOffsetPoint = function(offset, flowPos$) {
 */
 Para.prototype.getCaretPos = function() {
 	var caret   = shell.caret;
-	var item    = shell.$space.vget(this.path, -2);
+	var item    = shell.$space.get(this.path, -2);
 	var doc     = item.$graph.doc;
 	var fs      = doc.getFontSize();
 	var descend = fs * theme.bottombox;
@@ -648,7 +648,7 @@ Para.prototype.drawCaret = function(view) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
 
 	var caret = shell.caret;
-	var item  = shell.$space.vget(this.path, -2);
+	var item  = shell.$space.get(this.path, -2);
 	var doc   = item.$graph.doc;
 	var zone  = item.getZone();
 	var cpos  = caret.$pos  = this.getCaretPos();

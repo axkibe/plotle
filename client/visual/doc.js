@@ -209,7 +209,7 @@ Doc.prototype.getSpread = function() {
 | Argument vitem is optional, just to safe double and tripple lookups
 */
 Doc.prototype.getFontSize = function(vitem) {
-	if (!is(vitem)) { vitem = shell.$space.vget(this.path, -1); }
+	if (!is(vitem)) { vitem = shell.$space.get(this.path, -1); }
 	var fontsize = vitem.twig.fontsize;
 	return (!vitem.fontSizeChange) ? fontsize : vitem.fontSizeChange(fontsize);
 };
@@ -219,7 +219,7 @@ Doc.prototype.getFontSize = function(vitem) {
 | Argument vitem is optional, just to safe double and tripple lookups
 */
 Doc.prototype.getParaSep = function(vitem) {
-	if (!is(vitem)) { vitem = shell.$space.vget(this.path, -1); }
+	if (!is(vitem)) { vitem = shell.$space.get(this.path, -1); }
 	var fontsize = this.getFontSize(vitem);
 	return vitem.getParaSep(fontsize);
 };

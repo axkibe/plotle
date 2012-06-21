@@ -356,7 +356,7 @@ Item.prototype.actionmove = function(view, p, shift, ctrl) {
 	case Action.SCROLLY :
 		var start = $action.start;
 		var dy    = p.y - start.y;
-		var vitem = shell.$space.vget($action.itemPath);
+		var vitem = shell.$space.get($action.itemPath);
 		var sbary = vitem.scrollbarY;
 		var spos  = $action.startPos + sbary.scale(dy);
 		vitem.setScrollbar(spos);
@@ -380,8 +380,8 @@ Item.prototype.actionstop = function(view, p) {
 	switch ($action.type) {
 	case Action.RELBIND :
 		if (!this.getZone().within(vp)) return false;
-		var $space = shell.$space.vget(this.path, -1);
-		Relation.create($space, $space.vget($action.itemPath), this);
+		var $space = shell.$space.get(this.path, -1);
+		Relation.create($space, $space.get($action.itemPath), this);
 		shell.redraw = true;
 		return true;
 	default :
