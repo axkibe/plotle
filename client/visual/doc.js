@@ -40,6 +40,7 @@ var Point;
 var shell;
 var theme;
 var View;
+var Visual;
 
 /**
 | Capsule
@@ -67,24 +68,27 @@ var subclass  = Jools.subclass;
 | Constructor.
 */
 Doc = function(twig, path) {
-	this.twig           = twig;
-	this.path           = path;
-	this.key            = path.get(-1);
-	this.pnws           = null;
+	Visual.call(this, twig, path);
+
+	if (this.$graph !== null) { throw new Error('iFail'); }
 	var g = this.$graph = [];
+
+	this.pnws = null;
 
 	var ranks = twig.ranks;
 	var copse = twig.copse;
 	for (var r = 0, rZ = twig.length; r < rZ; r++) {
 		var k = ranks[r];
+		// TODO reuse path
 		g[k] = new Para(copse[k], new Path(path, '++', k));
 	}
 };
+subclass(Doc, Visual);
 
 /**
 | Returns the vtwig at rank 'rank'.
 */
-Doc.prototype.vAtRank = function(rank) {
+Doc.prototype.atRank = function(rank) {
 	return this.$graph[this.twig.ranks[rank]];
 };
 
@@ -147,7 +151,7 @@ Doc.prototype.draw = function(fabric, view, width, imargin, scrollp) {
 	// draws the paragraphs
 	var twig = this.twig;
 	for (var r = 0, rZ = twig.length; r < rZ; r++) {
-		var vpara = this.vAtRank(r);
+		var vpara = this.atRank(r);
 		var flow = vpara.getFlow();
 
 		pnws[twig.ranks[r]] = new Point(imargin.w, ro(y));
@@ -164,7 +168,7 @@ Doc.prototype.draw = function(fabric, view, width, imargin, scrollp) {
 */
 Doc.prototype.knock = function() {
 	for (var r = 0, rZ = this.twig.length; r < rZ; r++) {
-		this.vAtRank(r).knock();
+		this.atRank(r).knock();
 	}
 };
 
@@ -183,7 +187,7 @@ Doc.prototype.getHeight = function() {
 	var g        = this.$graph;
 	var height   = 0;
 	for (var r = 0, rZ = twig.length; r < rZ; r++) {
-		var vpara = this.vAtRank(r);
+		var vpara = this.atRank(r);
 
 		var flow = vpara.getFlow();
 		if (r > 0) { height += paraSep; }
@@ -199,7 +203,7 @@ Doc.prototype.getHeight = function() {
 Doc.prototype.getSpread = function() {
 	var spread = 0;
 	for (var r = 0, rZ = this.twig.length; r < rZ; r++) {
-		spread = max(spread, this.vAtRank(r).getFlow().spread);
+		spread = max(spread, this.atRank(r).getFlow().spread);
 	}
 	return spread;
 };

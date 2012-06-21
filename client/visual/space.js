@@ -43,6 +43,7 @@ var shell;
 var system;
 var theme;
 var View;
+var Visual;
 
 /**
 | Exports
@@ -63,36 +64,33 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
  `---' ' ' `-' '   `' `-' `-^ `' `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-var debug  = Jools.debug;
-var immute = Jools.immute;
-var is     = Jools.is;
-var isnon  = Jools.isnon;
-var half   = Jools.half;
-var log    = Jools.log;
-var ro     = Math.round;
+var debug    = Jools.debug;
+var is       = Jools.is;
+var isnon    = Jools.isnon;
+var half     = Jools.half;
+var log      = Jools.log;
+var ro       = Math.round;
+var subclass = Jools.subclass;
 
 /**
 | Constructor
 */
 Space = function(twig, path, access) {
-	this.twig        = twig;
-	this.path        = path;
-	this.access      = access;
-	this.key         = path.get(-1);
-	this.fabric      = system.fabric;
+	Visual.call(this, twig, path);
 
-	this.$view       = new View(Point.zero, 0);
-
-	Jools.keyNonGrata(this, '$pan');
-
+	if (this.$graph !== null) { throw new Error('iFail'); }
 	var g = this.$graph = {};
 
-	for (var k in twig.copse) {
-		g[k] = this.createItem(twig.copse[k], k);
-	}
+	this.access      = access;
+	this.fabric      = system.fabric;
+	this.$view       = new View(Point.zero, 0);
+
+	for (var k in twig.copse)
+		{ g[k] = this.createItem(twig.copse[k], k); }
 
 	this._floatMenuLabels = {c: 'new', n: 'Note', ne: 'Label'};
 };
+subclass(Space, Visual);
 
 /**
 | Updates v-vine to match a new twig.
@@ -183,7 +181,7 @@ Space.prototype.draw = function() {
 	var $view  = this.$view;
 
 	for(var r = twig.length - 1; r >= 0; r--) {
-		this.vAtRank(r).draw(this.fabric, $view);
+		this.atRank(r).draw(this.fabric, $view);
 	}
 
 	var focus = this.focusedItem();
@@ -207,7 +205,7 @@ Space.prototype.draw = function() {
 */
 Space.prototype.knock = function() {
 	for(var r = this.twig.length - 1; r >= 0; r--)
-		{ this.vAtRank(r).knock(); }
+		{ this.atRank(r).knock(); }
 };
 
 /**
@@ -233,7 +231,7 @@ Space.prototype.setFocus = function(item) {
 		caret = shell.setCaret(
 			'space',
 			{
-				path : doc.vAtRank(0).textPath(),
+				path : doc.atRank(0).textPath(),
 				at1  : 0
 			}
 		);
@@ -246,16 +244,6 @@ Space.prototype.setFocus = function(item) {
 };
 
 /**
-| Returns the vtwig at rank 'rank'.
-|
-| TODO: put in a common prototype for all visuals with ranks?
-| XXX 
-*/
-Space.prototype.vAtRank = function(rank) {
-	return this.$graph[this.twig.ranks[rank]];
-};
-
-/**
 | Mouse wheel
 */
 Space.prototype.mousewheel = function(p, dir, shift, ctrl) {
@@ -263,7 +251,7 @@ Space.prototype.mousewheel = function(p, dir, shift, ctrl) {
 	var twig  = this.twig;
 
 	for(var r = 0, rZ = twig.length; r < rZ; r++) {
-		var item = this.vAtRank(r);
+		var item = this.atRank(r);
 		if (item.mousewheel($view, p, dir, shift, ctrl))
 			{ return true; }
 	}
@@ -305,7 +293,7 @@ Space.prototype.mousehover = function(p, shift, ctrl) {
 	}
 
 	for(var a = 0, aZ = this.twig.length; a < aZ; a++) {
-		var item = this.vAtRank(a);
+		var item = this.atRank(a);
 		if (cursor) {
 			item.mousehover($view, null);
 		} else {
@@ -338,7 +326,7 @@ Space.prototype.dragstart = function(p, shift, ctrl) {
 
 	// see if one item was targeted
 	for(var a = 0, aZ = this.twig.length; a < aZ; a++) {
-		var item = this.vAtRank(a);
+		var item = this.atRank(a);
 		if (item.dragstart($view, p, shift, ctrl, this.access)) return;
 	}
 
@@ -380,7 +368,7 @@ Space.prototype.click = function(p, shift, ctrl) {
 
 	// clicked some item?
 	for(var a = 0, aZ = this.twig.length; a < aZ; a++) {
-		var item = this.vAtRank(a);
+		var item = this.atRank(a);
 		if (item.click($view, p, shift, ctrl)) return true;
 	}
 
@@ -415,7 +403,7 @@ Space.prototype.actionstop = function(p, shift, ctrl) {
 		break;
 	case Action.RELBIND :
 		for(var r = 0, rZ = this.twig.length; r < rZ; r++) {
-			item = this.vAtRank(r);
+			item = this.atRank(r);
 			if (item.actionstop($view, p))
 				{ break; }
 		}
@@ -460,7 +448,7 @@ Space.prototype.actionmove = function(p, shift, ctrl) {
 		shell.redraw      = true;
 
 		for(var r = 0, rZ = this.twig.length; r < rZ; r++) {
-			item = this.vAtRank(r);
+			item = this.atRank(r);
 			if (item.actionmove($view, p))
 				{ return 'pointer'; }
 		}

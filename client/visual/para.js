@@ -244,7 +244,7 @@ Para.prototype.input = function(text) {
 		shell.peer.insertText(para.textPath(), shell.caret.sign.at1, line);
         if (rx[2]) {
 			shell.peer.split(para.textPath(), shell.caret.sign.at1);
-			para = doc.vAtRank(doc.twig.rankOf(para.key) + 1);
+			para = doc.atRank(doc.twig.rankOf(para.key) + 1);
 		}
     }
 	item.scrollCaretIntoView();
@@ -266,8 +266,8 @@ Para.prototype.specialKey = function(key, shift, ctrl) {
 	if (ctrl) {
 		switch(key) {
 		case 'a' :
-			var v0 = doc.vAtRank(0);
-			var v1 = doc.vAtRank(doc.twig.length - 1);
+			var v0 = doc.atRank(0);
+			var v1 = doc.atRank(doc.twig.length - 1);
 
 			select.sign1 = new Sign({ path: v0.textPath(), at1: 0 });
 			select.sign2 = new Sign({ path: v1.textPath(), at1: v1.twig.text.length });
@@ -327,7 +327,7 @@ Para.prototype.specialKey = function(key, shift, ctrl) {
 		} else {
 			r = doc.twig.rankOf(this.key);
 			if (r > 0) {
-				ve = doc.vAtRank(r - 1);
+				ve = doc.atRank(r - 1);
 				shell.peer.join(ve.textPath(), ve.twig.text.length);
 			}
 		}
@@ -374,7 +374,7 @@ Para.prototype.specialKey = function(key, shift, ctrl) {
 		} else {
 			r = doc.twig.rankOf(this.key);
 			if (r > 0) {
-				ve = doc.vAtRank(r - 1);
+				ve = doc.atRank(r - 1);
 				caret = shell.setCaret(
 					'space',
 					{
@@ -405,7 +405,7 @@ Para.prototype.specialKey = function(key, shift, ctrl) {
 			// goto prev para
 			r = doc.twig.rankOf(this.key);
 			if (r > 0) {
-				ve = doc.vAtRank(r - 1);
+				ve = doc.atRank(r - 1);
 				at1 = ve.getLineXOffset(ve.getFlow().length - 1, x);
 				caret = shell.setCaret(
 					'space',
@@ -431,7 +431,7 @@ Para.prototype.specialKey = function(key, shift, ctrl) {
 		} else {
 			r = doc.twig.rankOf(this.key);
 			if (r < doc.twig.length - 1) {
-				ve = doc.vAtRank(r + 1);
+				ve = doc.atRank(r + 1);
 
 				caret = shell.setCaret(
 					'space',
@@ -463,7 +463,7 @@ Para.prototype.specialKey = function(key, shift, ctrl) {
 			// goto next para
 			r = doc.twig.rankOf(this.key);
 			if (r < doc.twig.length - 1) {
-				ve = doc.vAtRank(r + 1);
+				ve = doc.atRank(r + 1);
 				at1 = ve.getLineXOffset(0, x);
 				caret = shell.setCaret(
 					'space',

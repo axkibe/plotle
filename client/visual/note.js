@@ -66,8 +66,8 @@ var is            = Jools.is;
 var isnon         = Jools.isnon;
 var limit         = Jools.limit;
 var log           = Jools.log;
-var max = Math.max;
-var min = Math.min;
+var max           = Math.max;
+var min           = Math.min;
 var subclass      = Jools.subclass;
 
 /**

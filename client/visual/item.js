@@ -34,7 +34,7 @@ var Item     = null;
 */
 var Action;
 var Compass;
-var Fabric;
+var Doc;
 var Jools;
 var OvalSlice;
 var Path;
@@ -43,8 +43,8 @@ var Relation;
 var shell;
 var system;
 var theme;
-var Doc;
 var View;
+var Visual;
 
 /**
 | Capsule
@@ -56,30 +56,32 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Shotcuts
 */
-var abs    = Math.abs;
-var debug  = Jools.debug;
-var immute = Jools.immute;
-var is     = Jools.is;
-var isnon  = Jools.isnon;
-var half   = Jools.half;
-var ro     = Math.round;
+var abs      = Math.abs;
+var debug    = Jools.debug;
+var immute   = Jools.immute;
+var is       = Jools.is;
+var isnon    = Jools.isnon;
+var half     = Jools.half;
+var subclass = Jools.subclass;
+var ro       = Math.round;
 
 /**
 | Constructor
 */
 Item = function(twig, path) {
-	this._$ovalslice = null;
-	this.twig        = twig;
-	this.path        = path;
-	this.key         = path.get(-1);
-	this.$graph      = immute({
-		doc : new Doc(twig.doc, new Path(path, '++', 'doc'))
-	});
+	Visual.call(this, twig, path);
 
-	// caching
+	if (this.$graph !== null) { throw new Error('iFail'); }
+	this.$graph      = {
+		doc : new Doc(twig.doc, new Path(path, '++', 'doc'))
+	};
+
+	this._$ovalslice = null;
 	this.$fabric   = null;
 	this.$handles  = {};
 };
+subclass(Item, Visual);
+
 
 /**
 | Updates the $graph to match a new twig.

@@ -371,6 +371,7 @@ Server.prototype.registerFiles = function() {
 	this.registerFile('client/ovalmenu.js',          'p' );
 	this.registerFile('client/visual/para.js',       'p' );
 	this.registerFile('client/scrollbar.js',         'p' );
+	this.registerFile('client/visual/visual.js',     'p' );
 	this.registerFile('client/visual/doc.js',        'p' );
 	this.registerFile('client/visual/item.js',       'p' );
 	this.registerFile('client/visual/note.js',       'p' );
