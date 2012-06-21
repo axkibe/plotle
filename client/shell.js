@@ -39,13 +39,13 @@ var Path;
 var Peer;
 var Point;
 var Selection;
+var Space;
 var settings;
 var Sign;
 var system;
 var theme;
 var Tree;
 var View;
-var VSpace;
 
 /**
 | Exports
@@ -104,7 +104,7 @@ Shell = function(fabric) {
 
 	this.fabric     = fabric;
 
-	this.vspace     = null;
+	this.$space     = null;
 
 	this.cockpit    = new Cockpit();
 	this.menu       = null;
@@ -172,7 +172,7 @@ Shell.prototype.setCaret = function(visec, sign, retainx) {
 Shell.prototype.getEntity = function(visec, path) {
 	switch(visec) {
 	case 'cockpit' : return this.cockpit.getEntity(path);
-	case 'space'   : return this.vspace. getEntity(path);
+	case 'space'   : return this.$space. getEntity(path);
 	default : throw new Error('Invalid visec: '+visec);
 	}
 };
@@ -194,7 +194,7 @@ Shell.prototype.messageRCV = function(space, user, message) {
 */
 Shell.prototype.update = function(tree, chgX) {
 	this.tree = tree;
-	this.vspace.update(tree, chgX);
+	this.$space.update(tree, chgX);
 
 	var caret = this.caret;
 	var shown = this.caret.$shown;
@@ -286,7 +286,7 @@ Shell.prototype.knock = function() {
 	this.caret.$save = null;
 	this.caret.$screenPos = null;
 
-	if (this.vspace) { this.vspace.knock(); }
+	if (this.$space) { this.$space.knock(); }
 	this.cockpit.knock();
 	if (this.menu) { this.menu.knock(); }
 
@@ -317,7 +317,7 @@ Shell.prototype.setMenu = function(menu) {
 };
 
 /**
-| Draws the cockpit and the vspace.
+| Draws the cockpit and the space.
 */
 Shell.prototype._draw = function() {
 	var fabric = this.fabric;
@@ -344,7 +344,7 @@ Shell.prototype._draw = function() {
 	this.caret.$save = null;
 	this.caret.$screenPos = null;
 
-	if (this.vspace) { this.vspace.draw(); }
+	if (this.$space) { this.$space.draw(); }
 	this.cockpit.draw();
 	if (this.menu) { this.menu.draw(View.proper); }
 
@@ -361,7 +361,7 @@ Shell.prototype.click = function(p, shift, ctrl) {
 
 	// TODO cockpit
 
-	if (this.vspace) { this.vspace.click(p, shift, ctrl); }
+	if (this.$space) { this.$space.click(p, shift, ctrl); }
 	if (this.redraw) { this._draw(); }
 };
 
@@ -377,23 +377,20 @@ Shell.prototype.mousehover = function(p, shift, ctrl) {
 
 	var cursor = null;
 
-	// hover menu
 	if (this.menu)
 		{ cursor = this.menu.mousehover(View.proper, p, shift, ctrl); }
 
 
-	// hover cockpit
 	if (cursor)
 		{ this.cockpit.mousehover(null, shift, ctrl); }
 	else
 		{ cursor = this.cockpit.mousehover(p, shift, ctrl); }
 
-	// hover vspace
-	if (this.vspace) {
+	if (this.$space) {
 		if (cursor)
-			{ this.vspace.mousehover(null, shift, ctrl); }
+			{ this.$space.mousehover(null, shift, ctrl); }
 		else
-			{ cursor = this.vspace.mousehover(p, shift, ctrl); }
+			{ cursor = this.$space.mousehover(p, shift, ctrl); }
 	}
 
 	if (this.redraw) { this._draw(); }
@@ -428,8 +425,8 @@ Shell.prototype.mousedown = function(p, shift, ctrl) {
 	if (mouseState === null)
 		{ mouseState = this.cockpit.mousedown(p, shift, ctrl); }
 
-	if (mouseState === null && this.vspace)
-		{ mouseState = this.vspace.mousedown(p, shift, ctrl); }
+	if (mouseState === null && this.$space)
+		{ mouseState = this.$space.mousedown(p, shift, ctrl); }
 
 	if (this.redraw) { this._draw(); }
 
@@ -445,8 +442,8 @@ Shell.prototype.dragstart = function(p, shift, ctrl) {
 	
 	var cursor = this.cockpit.dragstart(p, shift, ctrl);
 
-	if (cursor === null && this.vspace)
-		{ cursor = this.vspace.dragstart(p, shift, ctrl); }
+	if (cursor === null && this.$space)
+		{ cursor = this.$space.dragstart(p, shift, ctrl); }
 
 	if (this.redraw)
 		{ this._draw(); }
@@ -473,8 +470,8 @@ Shell.prototype.dragmove = function(p, shift, ctrl) {
 		cursor = this.cockpit.actionmove(p, shift, ctrl);
 		break;
 	case 'space' :
-		if (this.vspace)
-			{ cursor = this.vspace.actionmove(p, shift, ctrl); }
+		if (this.$space)
+			{ cursor = this.$space.actionmove(p, shift, ctrl); }
 		break;
 	}
 
@@ -501,8 +498,8 @@ Shell.prototype.dragstop = function(p, shift, ctrl) {
 		this.cockpit.actionstop(p, shift, ctrl);
 		break;
 	case 'space' :
-		if (this.vspace)
-			{ this.vspace.actionstop(p, shift, ctrl); }
+		if (this.$space)
+			{ this.$space.actionstop(p, shift, ctrl); }
 		break;
 	default :
 		throw new Error('unknown $action.visec');
@@ -521,8 +518,8 @@ Shell.prototype.mousewheel = function(p, dir, shift, ctrl) {
 
 	// cockpit?
 
-	if (this.vspace)
-		{ this.vspace.mousewheel(p, dir, shift, ctrl); }
+	if (this.$space)
+		{ this.$space.mousewheel(p, dir, shift, ctrl); }
 
 	if (this.redraw)
 		{ this._draw(); }
@@ -543,8 +540,8 @@ Shell.prototype.specialKey = function(key, shift, ctrl) {
 		break;
 	case null    :
 	case 'space' :
-		if (!this.vspace) break;
-		this. vspace.specialKey(key, shift, ctrl);
+		if (!this.$space) break;
+		this. $space.specialKey(key, shift, ctrl);
 		break;
 	default : throw new Error('invalid visec');
 	}
@@ -566,7 +563,7 @@ Shell.prototype.input = function(text) {
 	switch (caret.visec) {
 	case null : break;
 	case 'cockpit' : this.cockpit.input(text); break;
-	case 'space'   : this. vspace.input(text); break;
+	case 'space'   : this. $space.input(text); break;
 	default : throw new Error('invalid visec');
 	}
 	if (this.redraw) this._draw();
@@ -591,8 +588,8 @@ Shell.prototype.setUser = function(user, pass) {
 		window.localStorage.setItem('user', user);
 		window.localStorage.setItem('pass', pass);
 	} else {
-		if (this.vspace &&
-			(this.vspace.key !== 'welcome' && this.vspace.key !== 'sandbox')
+		if (this.$space &&
+			(this.$space.key !== 'welcome' && this.$space.key !== 'sandbox')
 		) {
 			this.moveToSpace('welcome');
 		}
@@ -613,8 +610,8 @@ Shell.prototype.setSpaceZoom = function(zf) {
 | Changes the space zoom factor (around center)
 */
 Shell.prototype.changeSpaceZoom = function(df) {
-	if (!this.vspace) { return; }
-	this.vspace.changeZoom(df);
+	if (!this.$space) { return; }
+	this.$space.changeZoom(df);
 };
 
 /**
@@ -650,7 +647,7 @@ Shell.prototype.moveToSpace = function(name) {
 	}
 
 	if (name === null) {
-		name = self.vspace.key;
+		name = self.$space.key;
 		if (this.$user.substr(0, 5) === 'visit' &&
 			(name !== 'welcome' && name !== 'help')
 		) { name = 'welcome'; }
@@ -669,7 +666,7 @@ Shell.prototype.moveToSpace = function(name) {
 			{ throw new Error('server served wrong space!'); }
 
 		var tree = val.tree;
-		self.vspace = new VSpace(
+		self.$space = new Space(
 			tree.root.copse[name],
 			new Path([name]),
 			val.access
@@ -702,7 +699,7 @@ Shell.prototype.onLoadAuth = function(user, res) {
 	}
 
 	self.setUser(res.user, res.pass);
-	if (!this.vspace) { self.moveToSpace('welcome'); }
+	if (!this.$space) { self.moveToSpace('welcome'); }
 };
 
 

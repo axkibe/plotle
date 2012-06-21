@@ -12,13 +12,13 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--'
 
-                                       ,.   ,.,-_/ .
-                                       `|  /  '  | |- ,-. ,-,-.
-                                        | /   .^ | |  |-' | | |
-                                        `'    `--' `' `-' ' ' '
+                                        ,-_/ .
+                                        '  | |- ,-. ,-,-.
+                                        .^ | |  |-' | | |
+                                        `--' `' `-' ' ' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- Common base of VNote, VLabel, VRelation.
+ Common base of Note, Label and Relation.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -27,7 +27,7 @@
 /**
 | Exports
 */
-var VItem     = null;
+var Item     = null;
 
 /**
 | Imports
@@ -39,12 +39,12 @@ var Jools;
 var OvalSlice;
 var Path;
 var Rect;
+var Relation;
 var shell;
 var system;
 var theme;
-var VDoc;
+var Doc;
 var View;
-var VRelation;
 
 /**
 | Capsule
@@ -67,13 +67,13 @@ var ro     = Math.round;
 /**
 | Constructor
 */
-VItem = function(twig, path) {
+Item = function(twig, path) {
 	this._$ovalslice = null;
 	this.twig        = twig;
 	this.path        = path;
 	this.key         = path.get(-1);
 	this.vv          = immute({
-		doc : new VDoc(twig.doc, new Path(path, '++', 'doc'))
+		doc : new Doc(twig.doc, new Path(path, '++', 'doc'))
 	});
 
 	// caching
@@ -84,7 +84,7 @@ VItem = function(twig, path) {
 /**
 | Updates the vvine to match a new twig.
 */
-VItem.prototype.update = function(twig) {
+Item.prototype.update = function(twig) {
 	this.twig    = twig;
 	this.$fabric = null;
 
@@ -97,7 +97,7 @@ VItem.prototype.update = function(twig) {
 /**
 | Return the handle oval slice.
 */
-VItem.prototype.getOvalSlice = function() {
+Item.prototype.getOvalSlice = function() {
 	var zone = this.getZone();
 	if (this._$ovalslice && this._$ovalslice.psw.eq(zone.pnw)) return this._$ovalslice;
 	return this._$ovalslice = new OvalSlice(zone.pnw, theme.ovalmenu.dimensions);
@@ -106,7 +106,7 @@ VItem.prototype.getOvalSlice = function() {
 /**
 | Returns if point is within the item menu
 */
-VItem.prototype.withinItemMenu = function(view, p) {
+Item.prototype.withinItemMenu = function(view, p) {
 	return this.getOvalSlice().within(system.fabric, view, p);
 };
 
@@ -114,7 +114,7 @@ VItem.prototype.withinItemMenu = function(view, p) {
 | Returns the compass direction of the handle if p is on a resizer handle.
 | TODO rename
 */
-VItem.prototype.checkItemCompass = function(view, p) {
+Item.prototype.checkItemCompass = function(view, p) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
 
 	var $h     = this.planHandles(view); // TODO use planHandles and cache
@@ -140,7 +140,7 @@ VItem.prototype.checkItemCompass = function(view, p) {
 /**
 | TODO
 */
-VItem.prototype.planHandles = function(view) {
+Item.prototype.planHandles = function(view) {
 	var ha = this.handles;
 	var zone = view.rect(this.getZone());
 	var $h = this.$handles;
@@ -220,7 +220,7 @@ VItem.prototype.planHandles = function(view) {
 /**
 | Paths all resize handles.
 */
-VItem.prototype.pathAllHandles = function(fabric, border, twist, view) {
+Item.prototype.pathAllHandles = function(fabric, border, twist, view) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
 	if (border !== 0) throw new Error('borders unsupported for handles');
 
@@ -241,7 +241,7 @@ VItem.prototype.pathAllHandles = function(fabric, border, twist, view) {
 /**
 | Paths one or all resize handles.
 */
-VItem.prototype.pathHandle = function(fabric, border, twist, view, zone) {
+Item.prototype.pathHandle = function(fabric, border, twist, view, zone) {
 	var bb = this.$handles.bb;
 	fabric.moveTo(zone.w);
 	fabric.beziTo(0, -bb, 0, -bb, zone.e);
@@ -251,7 +251,7 @@ VItem.prototype.pathHandle = function(fabric, border, twist, view, zone) {
 /**
 | Draws the handles of an item (resize, itemmenu)
 */
-VItem.prototype.drawHandles = function(fabric, view) {
+Item.prototype.drawHandles = function(fabric, view) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
 
 	var sbary = this.scrollbarY;
@@ -274,17 +274,17 @@ VItem.prototype.drawHandles = function(fabric, view) {
 /**
 | Returns the para at point. TODO, honor scroll here.
 */
-VItem.prototype.getVParaAtPoint = function(p) {
+Item.prototype.getParaAtPoint = function(p) {
 	// TODO rename imargin to innerMargin
 	if (p.y < this.imargin.n) return null;
-	return this.vv.doc.getVParaAtPoint(p);
+	return this.vv.doc.getParaAtPoint(p);
 };
 
 /**
 | Dragstart.
 | Checks if a dragstart targets this item.
 */
-VItem.prototype.dragstart = function(view, p, shift, ctrl, access) {
+Item.prototype.dragstart = function(view, p, shift, ctrl, access) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
 
 	var sbary = this.scrollbarY;
@@ -315,7 +315,7 @@ VItem.prototype.dragstart = function(view, p, shift, ctrl, access) {
 
 	// scrolling or dragging
 	if (access == 'rw')
-		{ shell.vspace.setFocus(this); }
+		{ shell.$space.setFocus(this); }
 
 	var pnw = this.getZone().pnw;
 	if (access == 'rw') {
@@ -335,7 +335,7 @@ VItem.prototype.dragstart = function(view, p, shift, ctrl, access) {
 /**
 | A move during an action.
 */
-VItem.prototype.actionmove = function(view, p, shift, ctrl) {
+Item.prototype.actionmove = function(view, p, shift, ctrl) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
 
 	var $action = shell.$action;
@@ -356,7 +356,7 @@ VItem.prototype.actionmove = function(view, p, shift, ctrl) {
 	case Action.SCROLLY :
 		var start = $action.start;
 		var dy    = p.y - start.y;
-		var vitem = shell.vspace.vget($action.itemPath);
+		var vitem = shell.$space.vget($action.itemPath);
 		var sbary = vitem.scrollbarY;
 		var spos  = $action.startPos + sbary.scale(dy);
 		vitem.setScrollbar(spos);
@@ -372,7 +372,7 @@ VItem.prototype.actionmove = function(view, p, shift, ctrl) {
 /**
 | Sets the items position and size after an action.
 */
-VItem.prototype.actionstop = function(view, p) {
+Item.prototype.actionstop = function(view, p) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
 	var vp = view.depoint(p);
 
@@ -380,8 +380,8 @@ VItem.prototype.actionstop = function(view, p) {
 	switch ($action.type) {
 	case Action.RELBIND :
 		if (!this.getZone().within(vp)) return false;
-		var vspace = shell.vspace.vget(this.path, -1);
-		VRelation.create(vspace, vspace.vget($action.itemPath), this);
+		var $space = shell.$space.vget(this.path, -1);
+		Relation.create($space, $space.vget($action.itemPath), this);
 		shell.redraw = true;
 		return true;
 	default :
@@ -394,7 +394,7 @@ VItem.prototype.actionstop = function(view, p) {
 | Mouse is hovering around.
 | Checks if this item reacts on this.
 */
-VItem.prototype.mousehover = function(view, p) {
+Item.prototype.mousehover = function(view, p) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
 
 	if (p === null) { return null; }
@@ -412,16 +412,16 @@ VItem.prototype.mousehover = function(view, p) {
 /**
 | Sees if this item reacts on a click event.
 */
-VItem.prototype.click = function(view, p) {
+Item.prototype.click = function(view, p) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
 
 	var vp = view.depoint(p);
 	if (!this.getZone().within(vp)) return false;
 
-	var vspace = shell.vspace;
-	var focus  = vspace.focusedVItem();
+	var $space = shell.$space;
+	var focus  = $space.focusedItem();
 	if (focus !== this) {
-		vspace.setFocus(this);
+		$space.setFocus(this);
 		shell.selection.deselect();
 	}
 	shell.redraw = true;
@@ -429,7 +429,7 @@ VItem.prototype.click = function(view, p) {
 	var pnw = this.getZone().pnw;
 	var pi = vp.sub(pnw.x, pnw.y - (this.scrollbarY ? this.scrollbarY.getPos() : 0 ));
 
-	var vpara = this.getVParaAtPoint(pi);
+	var vpara = this.getParaAtPoint(pi);
 	if (vpara) {
 		var ppnw   = this.vv.doc.getPNW(vpara.key);
 		var at1    = vpara.getPointOffset(pi.sub(ppnw));
@@ -452,7 +452,7 @@ VItem.prototype.click = function(view, p) {
 /**
 | Highlights the item.
 */
-VItem.prototype.highlight = function(fabric, view) {
+Item.prototype.highlight = function(fabric, view) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
 
 	var silhoutte = this.getSilhoutte(this.getZone(), false);
@@ -462,7 +462,7 @@ VItem.prototype.highlight = function(fabric, view) {
 /**
 | Called by subvisuals when they got changed.
 */
-VItem.prototype.poke = function() {
+Item.prototype.poke = function() {
 	this.$fabric = null;
 	shell.redraw = true;
 };
@@ -470,7 +470,7 @@ VItem.prototype.poke = function() {
 /**
 | Force-clears all caches.
 */
-VItem.prototype.knock = function() {
+Item.prototype.knock = function() {
 	this.$fabric = null;
 	this.vv.doc.knock();
 };

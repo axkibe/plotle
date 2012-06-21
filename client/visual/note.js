@@ -12,10 +12,10 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--'
 
-                                     ,.   ,.,-,-.       .
-                                     `|  /  ` | |   ,-. |- ,-.
-                                      | /     | |-. | | |  |-'
-                                      `'     ,' `-' `-' `' `-'
+                                     .,-,-.       .
+                                      ` | |   ,-. |- ,-.
+                                        | |-. | | |  |-'
+                                       ,' `-' `-' `' `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  An item with text and a scrollbar.
@@ -27,7 +27,7 @@
 /**
 | Exports
 */
-var VNote     = null;
+var Note     = null;
 
 /**
 | Imports
@@ -37,8 +37,10 @@ var BeziRect;
 var config;
 var Fabric;
 var Jools;
+var Item;
 var Margin;
 var Point;
+var Para;
 var Rect;
 var Scrollbar;
 var settings;
@@ -46,8 +48,6 @@ var shell;
 var system;
 var theme;
 var View;
-var VItem;
-var VPara;
 
 /**
 | Capsule
@@ -73,21 +73,21 @@ var subclass      = Jools.subclass;
 /**
 | Constructor.
 */
-VNote = function(twig, path) {
-	VItem.call(this, twig, path);
+Note = function(twig, path) {
+	Item.call(this, twig, path);
 	this.scrollbarY = new Scrollbar();
 };
-subclass(VNote, VItem);
+subclass(Note, Item);
 
 /**
 | Default margin for all notes.
 */
-VNote.prototype.imargin = new Margin(theme.note.imargin);
+Note.prototype.imargin = new Margin(theme.note.imargin);
 
 /**
 | Resize handles to show on notes.
 */
-VNote.prototype.handles = {
+Note.prototype.handles = {
 	n  : true,
 	ne : true,
 	e  : true,
@@ -104,7 +104,7 @@ VNote.prototype.handles = {
 | $zone :  the cache for the items zone
 | zAnchor: if true anchor the silhoute at zero.
 */
-VNote.prototype.getSilhoutte = function($zone, zAnchor) {
+Note.prototype.getSilhoutte = function($zone, zAnchor) {
 	var $z = $zone;
 	var $s;
 
@@ -123,7 +123,7 @@ VNote.prototype.getSilhoutte = function($zone, zAnchor) {
 /**
 | Actualizes the scrollbar.
 */
-VNote.prototype.setScrollbar = function(pos) {
+Note.prototype.setScrollbar = function(pos) {
 	var sbary = this.scrollbarY;
 	if (!sbary.visible) return;
 
@@ -146,12 +146,12 @@ VNote.prototype.setScrollbar = function(pos) {
 /**
 | Scrolls the note so the caret comes into view.
 */
-VNote.prototype.scrollCaretIntoView = function() {
+Note.prototype.scrollCaretIntoView = function() {
 	var caret   = shell.caret;
 	var scrolly = this.scrollbarY;
 	var sy      = scrolly.getPos();
-	var vpara   = shell.vspace.vget(caret.sign.path, -1);
-	if (vpara.constructor !== VPara) { throw new Error('iFail'); }
+	var vpara   = shell.$space.vget(caret.sign.path, -1);
+	if (vpara.constructor !== Para) { throw new Error('iFail'); }
 	var cp      = vpara.getCaretPos();
 	var pnw     = this.vv.doc.getPNW(vpara.key);
 	var zone    = this.getZone();
@@ -170,7 +170,7 @@ VNote.prototype.scrollCaretIntoView = function() {
 /**
 | Scrolls the note so the caret comes into view.
 */
-VNote.prototype.scrollPage = function(up) {
+Note.prototype.scrollPage = function(up) {
 	var zone = this.getZone();
 	var dir  = up ? -1 : 1;
 	var fs   = this.vv.doc.getFontSize();
@@ -181,7 +181,7 @@ VNote.prototype.scrollPage = function(up) {
 /**
 | Sets the items position and size after an action.
 */
-VNote.prototype.actionstop = function(view, p) {
+Note.prototype.actionstop = function(view, p) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
 
 	var $action = shell.$action;
@@ -200,7 +200,7 @@ VNote.prototype.actionstop = function(view, p) {
 		shell.redraw = true;
 		return true;
 	default :
-		return VItem.prototype.actionstop.call(this, view, p);
+		return Item.prototype.actionstop.call(this, view, p);
 	}
 };
 
@@ -209,7 +209,7 @@ VNote.prototype.actionstop = function(view, p) {
 |
 | fabric: to draw upon.
 */
-VNote.prototype.draw = function(fabric, view) {
+Note.prototype.draw = function(fabric, view) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
 
 	var zone  = this.getZone();
@@ -256,7 +256,7 @@ VNote.prototype.draw = function(fabric, view) {
 /**
 | Mouse wheel turned.
 */
-VNote.prototype.mousewheel = function(view, p, dir, shift, ctrl) {
+Note.prototype.mousewheel = function(view, p, dir, shift, ctrl) {
 	var dp = view.depoint(p);
 
 	if (!this.getZone().within(dp)) return false;
@@ -269,7 +269,7 @@ VNote.prototype.mousewheel = function(view, p, dir, shift, ctrl) {
 /**
 | Returns the width for the contents flow.
 */
-VNote.prototype.getFlowWidth = function() {
+Note.prototype.getFlowWidth = function() {
 	var sbary = this.scrollbarY;
 	var zone  = this.getZone();
 	var flowWidth = zone.width - this.imargin.x;
@@ -284,7 +284,7 @@ VNote.prototype.getFlowWidth = function() {
 /**
 | Returns the para seperation height.
 */
-VNote.prototype.getParaSep = function(fontsize) {
+Note.prototype.getParaSep = function(fontsize) {
 	return half(fontsize);
 };
 
@@ -292,7 +292,7 @@ VNote.prototype.getParaSep = function(fontsize) {
 | Returns the zone of the item.
 | An ongoing action can modify this to be different than meshmashine data.
 */
-VNote.prototype.getZone = function() {
+Note.prototype.getZone = function() {
 	var twig   = this.twig;
 	var $action = shell.$action;
 

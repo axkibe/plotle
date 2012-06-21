@@ -12,10 +12,10 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--'
 
-                           ,.   ,. .-,--.     .      .
-                           `|  /    `|__/ ,-. |  ,-. |- . ,-. ,-.
-                            | /     )| \  |-' |  ,-| |  | | | | |
-                            `'      `'  ` `-' `' `-^ `' ' `-' ' '
+                               .-,--.     .      .
+                                `|__/ ,-. |  ,-. |- . ,-. ,-.
+                                )| \  |-' |  ,-| |  | | | | |
+                                `'  ` `-' `' `-^ `' ' `-' ' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  Relates two items (including other relations)
@@ -27,13 +27,15 @@
 /**
 | Exports
 */
-var VRelation = null;
+var Relation = null;
 
 /**
 | Imports
 */
+var Doc;
 var Fabric;
 var Jools;
+var Label;
 var Line;
 var Margin;
 var MeshMashine;
@@ -44,9 +46,7 @@ var shell;
 var system;
 var theme;
 var Tree;
-var VDoc;
-var VItem;
-var VLabel;
+var Item;
 
 /**
 | Capsule
@@ -68,24 +68,24 @@ var subclass      = Jools.subclass;
 /**
 | Constructor.
 */
-VRelation = function(twig, path) {
-	VLabel.call(this, twig, path);
+Relation = function(twig, path) {
+	Label.call(this, twig, path);
 };
-subclass(VRelation, VLabel);
+subclass(Relation, Label);
 
 /**
 | Default margin for all relations.
 */
-VRelation.imargin = new Margin(theme.relation.imargin);
+Relation.imargin = new Margin(theme.relation.imargin);
 
 /**
 | Creates a new Relation by specifing its relates.
 */
-VRelation.create = function(vspace, vitem1, vitem2) {
+Relation.create = function(space, vitem1, vitem2) {
 	var cline = Line.connect(vitem1.getZone(), null, vitem2.getZone(), null);
 	var pnw = cline.pc.sub(theme.relation.createOffset);
 	var key = shell.peer.newRelation(
-		vspace.path,
+		space.path,
 		pnw,
 		'relates to',
 		20,
@@ -93,17 +93,17 @@ VRelation.create = function(vspace, vitem1, vitem2) {
 		vitem2.key
 	);
 	// event listener has created the vrel
-	var vrel = vspace.vv[key];
-	vspace.setFocus(vrel);
+	var vrel = space.vv[key];
+	space.setFocus(vrel);
 };
 
 /**
 | Draws the relation on the fabric.
 */
-VRelation.prototype.draw = function(fabric, view) {
-	var vspace = shell.vspace.vget(this.path, -1);
-	var vitem1 = vspace.vv[this.twig.item1key];
-	var vitem2 = vspace.vv[this.twig.item2key];
+Relation.prototype.draw = function(fabric, view) {
+	var space = shell.$space.vget(this.path, -1);
+	var vitem1 = space.vv[this.twig.item1key];
+	var vitem2 = space.vv[this.twig.item2key];
 	var zone = this.getZone();
 
 	if (vitem1) {
@@ -116,7 +116,7 @@ VRelation.prototype.draw = function(fabric, view) {
 		fabric.paint(theme.relation.style, l2, 'path', view);
 	}
 
-	VLabel.prototype.draw.call(this, fabric, view);
+	Label.prototype.draw.call(this, fabric, view);
 };
 
 

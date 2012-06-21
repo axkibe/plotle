@@ -145,7 +145,7 @@ Caret.prototype.display = function() {
 	// draws new
 	if (this.$shown && !this.$blinked && this.sign) {
 		switch(this.visec) {
-		case 'space'   : shell.vspace.drawCaret();  break;
+		case 'space'   : shell.$space.drawCaret();  break;
 		case 'cockpit' : shell.cockpit.drawCaret(); break;
 		default : throw new Error('invalid visec');
 		}

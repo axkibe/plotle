@@ -12,10 +12,10 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--'
 
-                                    ,.   ,. .-,--.
-                                    `|  /   ' |   \ ,-. ,-.
-                                     | /    , |   / | | |
-                                     `'     `-^--'  `-' `-'
+                                        .-,--.
+                                        ' |   \ ,-. ,-.
+                                        , |   / | | |
+                                        `-^--'  `-' `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  A sequence of visual paragraph.
@@ -27,19 +27,19 @@
 /**
 | Exports
 */
-var VDoc = null;
+var Doc = null;
 
 /**
 | Imports
 */
 var Fabric;
 var Jools;
+var Para;
 var Path;
 var Point;
 var shell;
 var theme;
 var View;
-var VPara;
 
 /**
 | Capsule
@@ -66,7 +66,7 @@ var subclass  = Jools.subclass;
 /**
 | Constructor.
 */
-VDoc = function(twig, path) {
+Doc = function(twig, path) {
 	this.twig  = twig;
 	this.path  = path;
 	this.key   = path.get(-1);
@@ -78,21 +78,21 @@ VDoc = function(twig, path) {
 	var copse = twig.copse;
 	for (var r = 0, rZ = twig.length; r < rZ; r++) {
 		var k = ranks[r];
-		vv[k] = new VPara(copse[k], new Path(path, '++', k));
+		vv[k] = new Para(copse[k], new Path(path, '++', k));
 	}
 };
 
 /**
 | Returns the vtwig at rank 'rank'.
 */
-VDoc.prototype.vAtRank = function(rank) {
+Doc.prototype.vAtRank = function(rank) {
 	return this.vv[this.twig.ranks[rank]];
 };
 
 /**
 | Updates v-vine to match a new twig.
 */
-VDoc.prototype.update = function(twig) {
+Doc.prototype.update = function(twig) {
 	this.twig = twig;
 	var vo = this.vv;
 	var vv = this.vv = {};
@@ -106,7 +106,7 @@ VDoc.prototype.update = function(twig) {
 			}
 			vv[k] = o;
 		} else {
-			o = new VPara(sub, new Path(this.path, '++', k));
+			o = new Para(sub, new Path(this.path, '++', k));
 			o.update(sub);
 			vv[k] = o;
 		}
@@ -122,7 +122,7 @@ VDoc.prototype.update = function(twig) {
 | imargin: distance of text to edge
 | scrollp: scroll position
 */
-VDoc.prototype.draw = function(fabric, view, width, imargin, scrollp) {
+Doc.prototype.draw = function(fabric, view, width, imargin, scrollp) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
 
 	// TODO <pre>
@@ -163,13 +163,13 @@ VDoc.prototype.draw = function(fabric, view, width, imargin, scrollp) {
 /**
 | Force-clears all caches.
 */
-VDoc.prototype.knock = function() {
+Doc.prototype.knock = function() {
 	for (var r = 0, rZ = this.twig.length; r < rZ; r++) {
 		this.vAtRank(r).knock();
 	}
 };
 
-VDoc.prototype.getPNW = function(key) {
+Doc.prototype.getPNW = function(key) {
 	return this.pnws[key];
 };
 
@@ -177,7 +177,7 @@ VDoc.prototype.getPNW = function(key) {
 | Returns the height of the document.
 | TODO caching
 */
-VDoc.prototype.getHeight = function() {
+Doc.prototype.getHeight = function() {
 	var fontsize = this.getFontSize();
 	var paraSep  = this.getParaSep();
 	var twig     = this.twig;
@@ -197,7 +197,7 @@ VDoc.prototype.getHeight = function() {
 /**
 | Returns the width actually used of the document.
 */
-VDoc.prototype.getSpread = function() {
+Doc.prototype.getSpread = function() {
 	var spread = 0;
 	for (var r = 0, rZ = this.twig.length; r < rZ; r++) {
 		spread = max(spread, this.vAtRank(r).getFlow().spread);
@@ -209,8 +209,8 @@ VDoc.prototype.getSpread = function() {
 | Returns the (default) fontsize for this document
 | Argument vitem is optional, just to safe double and tripple lookups
 */
-VDoc.prototype.getFontSize = function(vitem) {
-	if (!is(vitem)) { vitem = shell.vspace.vget(this.path, -1); }
+Doc.prototype.getFontSize = function(vitem) {
+	if (!is(vitem)) { vitem = shell.$space.vget(this.path, -1); }
 	var fontsize = vitem.twig.fontsize;
 	return (!vitem.fontSizeChange) ? fontsize : vitem.fontSizeChange(fontsize);
 };
@@ -219,8 +219,8 @@ VDoc.prototype.getFontSize = function(vitem) {
 | Returns the (default) paraSeperator for this document
 | Argument vitem is optional, just to safe double and tripple lookups
 */
-VDoc.prototype.getParaSep = function(vitem) {
-	if (!is(vitem)) { vitem = shell.vspace.vget(this.path, -1); }
+Doc.prototype.getParaSep = function(vitem) {
+	if (!is(vitem)) { vitem = shell.$space.vget(this.path, -1); }
 	var fontsize = this.getFontSize(vitem);
 	return vitem.getParaSep(fontsize);
 };
@@ -228,14 +228,14 @@ VDoc.prototype.getParaSep = function(vitem) {
 /**
 | Returns the default font for the document.
 */
-VDoc.prototype.getFont = function() {
+Doc.prototype.getFont = function() {
 	return theme.defaultFont;
 };
 
 /**
 | Returns the paragraph at point
 */
-VDoc.prototype.getVParaAtPoint = function(p) {
+Doc.prototype.getParaAtPoint = function(p) {
 	var twig   = this.twig;
 	var vv     = this.vv;
 
@@ -259,7 +259,7 @@ VDoc.prototype.getVParaAtPoint = function(p) {
 | imargin : inner margin of the doc
 | scrollp : scroll position of the doc.
 */
-VDoc.prototype.pathSelection = function(fabric, border, twist, view, width, imargin, scrollp) {
+Doc.prototype.pathSelection = function(fabric, border, twist, view, width, imargin, scrollp) {
 	var select = shell.selection;
 	select.normalize();
 

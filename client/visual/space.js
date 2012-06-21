@@ -12,12 +12,12 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--'
 
-                                   ,.   ,. .---.
-                                   `|  /   \___  ,-. ,-. ,-. ,-.
-                                    | /        \ | | ,-| |   |-'
-                                    `'     `---' |-' `-^ `-' `-'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-                                                 '
+                                       .---.
+                                       \___  ,-. ,-. ,-. ,-.
+                                           \ | | ,-| |   |-'
+                                       `---' |-' `-^ `-' `-'
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                                             '
  The visual of a space.
 
  Authors: Axel Kittenberger
@@ -31,23 +31,23 @@
 var Action;
 var Fabric;
 var Jools;
+var Label;
 var Line;
+var Note;
 var OvalMenu;
 var Path;
 var Point;
 var Rect;
+var Relation;
 var shell;
 var system;
 var theme;
 var View;
-var VNote;
-var VLabel;
-var VRelation;
 
 /**
 | Exports
 */
-var VSpace = null;
+var Space = null;
 
 /**
 | Capsule
@@ -74,7 +74,7 @@ var ro     = Math.round;
 /**
 | Constructor
 */
-VSpace = function(twig, path, access) {
+Space = function(twig, path, access) {
 	this.twig        = twig;
 	this.path        = path;
 	this.access      = access;
@@ -88,7 +88,7 @@ VSpace = function(twig, path, access) {
 	var vv = this.vv = {};
 
 	for (var k in twig.copse) {
-		vv[k] = this.createVItem(twig.copse[k], k);
+		vv[k] = this.createItem(twig.copse[k], k);
 	}
 
 	this._floatMenuLabels = {c: 'new', n: 'Note', ne: 'Label'};
@@ -97,7 +97,7 @@ VSpace = function(twig, path, access) {
 /**
 | Updates v-vine to match a new twig.
 */
-VSpace.prototype.update = function(tree, chgX) {
+Space.prototype.update = function(tree, chgX) {
 	var twig = tree.root.copse[this.key];
 
 	// no change?
@@ -117,7 +117,7 @@ VSpace.prototype.update = function(tree, chgX) {
 			}
 			vv[k] = o;
 		} else {
-			vv[k] = this.createVItem(sub, k);
+			vv[k] = this.createItem(sub, k);
 		}
 	}
 
@@ -143,7 +143,7 @@ VSpace.prototype.update = function(tree, chgX) {
 /**
 | Returns the entity of path
 */
-VSpace.prototype.getEntity = function(path) {
+Space.prototype.getEntity = function(path) {
 	if (path.get(0) !== this.key) {
 		throw new Error('getting entity of not current space',
 			path.get(0), '!=', this.key
@@ -155,7 +155,7 @@ VSpace.prototype.getEntity = function(path) {
 /**
 | Returns the focused item.
 */
-VSpace.prototype.focusedVItem = function() {
+Space.prototype.focusedItem = function() {
 	var caret = shell.caret;
 	if (caret.visec !== 'space') { return null; }
 	return this.getEntity(caret.sign.path);
@@ -164,12 +164,12 @@ VSpace.prototype.focusedVItem = function() {
 /**
 | Creates a new visual representation of an item.
 */
-VSpace.prototype.createVItem = function(twig, k) {
+Space.prototype.createItem = function(twig, k) {
 	var ipath = new Path(this.path, '++', k);
 	switch (twig.type) {
-	case 'Note'     : return new VNote    (twig, ipath, this);
-	case 'Label'    : return new VLabel   (twig, ipath, this);
-	case 'Relation' : return new VRelation(twig, ipath, this);
+	case 'Note'     : return new Note    (twig, ipath, this);
+	case 'Label'    : return new Label   (twig, ipath, this);
+	case 'Relation' : return new Relation(twig, ipath, this);
 	default : throw new Error('unknown type: '+twig.type);
 	}
 };
@@ -177,7 +177,7 @@ VSpace.prototype.createVItem = function(twig, k) {
 /**
 | Redraws the complete space.
 */
-VSpace.prototype.draw = function() {
+Space.prototype.draw = function() {
 	var twig   = this.twig;
 	var $view  = this.$view;
 
@@ -185,7 +185,7 @@ VSpace.prototype.draw = function() {
 		this.vAtRank(r).draw(this.fabric, $view);
 	}
 
-	var focus = this.focusedVItem();
+	var focus = this.focusedItem();
 	if (focus) { focus.drawHandles(this.fabric, $view); }
 
 	var $action = shell.$action;
@@ -204,7 +204,7 @@ VSpace.prototype.draw = function() {
 /**
 | Force-clears all caches.
 */
-VSpace.prototype.knock = function() {
+Space.prototype.knock = function() {
 	for(var r = this.twig.length - 1; r >= 0; r--)
 		{ this.vAtRank(r).knock(); }
 };
@@ -212,15 +212,15 @@ VSpace.prototype.knock = function() {
 /**
 | Draws the caret.
 */
-VSpace.prototype.drawCaret = function() {
+Space.prototype.drawCaret = function() {
 	this.vget(shell.caret.sign.path, -1).drawCaret(this.$view);
 };
 
 /**
 | Sets the focused item or blurs it if vitem is null
 */
-VSpace.prototype.setFocus = function(vitem) {
-	var focus = this.focusedVItem();
+Space.prototype.setFocus = function(vitem) {
+	var focus = this.focusedItem();
 	if (focus && focus === vitem) { return; }
 
 	var caret = shell.caret;
@@ -248,14 +248,14 @@ VSpace.prototype.setFocus = function(vitem) {
 |
 | TODO: put in a common prototype for all visuals with ranks?
 */
-VSpace.prototype.vAtRank = function(rank) {
+Space.prototype.vAtRank = function(rank) {
 	return this.vv[this.twig.ranks[rank]];
 };
 
 /**
 | Mouse wheel
 */
-VSpace.prototype.mousewheel = function(p, dir, shift, ctrl) {
+Space.prototype.mousewheel = function(p, dir, shift, ctrl) {
 	var $view = this.$view;
 	var twig  = this.twig;
 
@@ -283,14 +283,14 @@ VSpace.prototype.mousewheel = function(p, dir, shift, ctrl) {
 |
 | Returns true if the mouse pointer hovers over anything.
 */
-VSpace.prototype.mousehover = function(p, shift, ctrl) {
+Space.prototype.mousehover = function(p, shift, ctrl) {
 	if (p === null) { return null; }
 	var $view = this.$view;
 
 	var $action = shell.$action;
 	var cursor = null;
 
-	var focus = this.focusedVItem();
+	var focus = this.focusedItem();
 	if (focus) {
 		// TODO move into items
 		if (focus.withinItemMenu($view, p)) {
@@ -316,9 +316,9 @@ VSpace.prototype.mousehover = function(p, shift, ctrl) {
 /**
 | Starts an operation with the mouse button held down.
 */
-VSpace.prototype.dragstart = function(p, shift, ctrl) {
+Space.prototype.dragstart = function(p, shift, ctrl) {
 	var $view = this.$view;
-	var focus = this.focusedVItem();
+	var focus = this.focusedItem();
 
 	// see if the itemmenu of the focus was targeted
 	if (this.access == 'rw' && focus && focus.withinItemMenu($view, p)) {
@@ -351,12 +351,12 @@ VSpace.prototype.dragstart = function(p, shift, ctrl) {
 /**
 | A mouse click.
 */
-VSpace.prototype.click = function(p, shift, ctrl) {
+Space.prototype.click = function(p, shift, ctrl) {
 	var self  = this;
 	var $view = this.$view;
 
 	// clicked the tab of the focused item?
-	var focus = this.focusedVItem();
+	var focus = this.focusedItem();
 	if (focus && focus.withinItemMenu($view, p)) {
 		var labels = { n : 'Remove'};
 
@@ -400,7 +400,7 @@ VSpace.prototype.click = function(p, shift, ctrl) {
 /**
 | Stops an operation with the mouse button held down.
 */
-VSpace.prototype.actionstop = function(p, shift, ctrl) {
+Space.prototype.actionstop = function(p, shift, ctrl) {
 	var $action = shell.$action;
 	var $view   = this.$view;
 	var vitem;
@@ -434,7 +434,7 @@ VSpace.prototype.actionstop = function(p, shift, ctrl) {
 /**
 | Moving during an operation with the mouse button held down.
 */
-VSpace.prototype.actionmove = function(p, shift, ctrl) {
+Space.prototype.actionmove = function(p, shift, ctrl) {
 	var $view   = this.$view;
 	var $action = shell.$action;
 	var vitem;
@@ -473,7 +473,7 @@ VSpace.prototype.actionmove = function(p, shift, ctrl) {
 /**
 | An entry of the float menu has been selected
 */
-VSpace.prototype.floatMenuSelect = function(entry, p) {
+Space.prototype.floatMenuSelect = function(entry, p) {
 	var $view = this.$view;
 	var pnw, key;
 
@@ -502,7 +502,7 @@ VSpace.prototype.floatMenuSelect = function(entry, p) {
 /**
 | An entry of the item menu has been selected
 */
-VSpace.prototype.itemMenuSelect = function(entry, p, focus) {
+Space.prototype.itemMenuSelect = function(entry, p, focus) {
 	switch(entry) {
 	case 'n': // remove
 		this.setFocus(null);
@@ -514,7 +514,7 @@ VSpace.prototype.itemMenuSelect = function(entry, p, focus) {
 /**
 | Mouse button down event.
 */
-VSpace.prototype.mousedown = function(p, shift, ctrl) {
+Space.prototype.mousedown = function(p, shift, ctrl) {
 	var $view   = this.$view;
 	var $action = shell.$action;
 	var pnw, md, key;
@@ -524,7 +524,7 @@ VSpace.prototype.mousedown = function(p, shift, ctrl) {
 		return 'drag';
 	}
 
-	var focus = this.focusedVItem();
+	var focus = this.focusedItem();
 	if (focus) {
 		if (focus.withinItemMenu($view, p)) return 'atween';
 		var com = focus.checkItemCompass($view, p);
@@ -549,7 +549,7 @@ VSpace.prototype.mousedown = function(p, shift, ctrl) {
 /**
 | Text input
 */
-VSpace.prototype.input = function(text) {
+Space.prototype.input = function(text) {
 	var caret = shell.caret;
 	if (!caret.sign) return;
 	this.vget(caret.sign.path, -1).input(text);
@@ -558,7 +558,7 @@ VSpace.prototype.input = function(text) {
 /**
 | Changes the zoom factor (around center)
 */
-VSpace.prototype.changeZoom = function(df) {
+Space.prototype.changeZoom = function(df) {
 	var $view = this.$view;
 	var pm = new Point(half(this.fabric.width), half(this.fabric.height));
 	pm = $view.depoint(pm);
@@ -571,7 +571,7 @@ VSpace.prototype.changeZoom = function(df) {
 /**
 | User pressed a special key.
 */
-VSpace.prototype.specialKey = function(key, shift, ctrl) {
+Space.prototype.specialKey = function(key, shift, ctrl) {
 	if (ctrl) {
 		switch(key) {
 		case 'z' : shell.peer.undo();   return;
@@ -589,7 +589,7 @@ VSpace.prototype.specialKey = function(key, shift, ctrl) {
 /**
 | Returns the visual node the path points to.
 */
-VSpace.prototype.vget = function(path, plen) {
+Space.prototype.vget = function(path, plen) {
 	/**/ if (!is(plen)) { plen  = path.length; }
 	else if (plen < 0)  { plen += path.length; }
 	/**/ if (plen <= 0) { throw new Error('cannot vget path of length <= 0'); }

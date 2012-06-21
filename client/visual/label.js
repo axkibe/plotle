@@ -12,10 +12,10 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--'
 
-                                      ,.   ,.,       .       .
-                                      `|  /  )   ,-. |-. ,-. |
-                                       | /  /    ,-| | | |-' |
-                                       `'   `--' `-^ ^-' `-' `'
+                                      .,       .       .
+                                       )   ,-. |-. ,-. |
+                                      /    ,-| | | |-' |
+                                      `--' `-^ ^-' `-' `'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  A sizeable item with sizing text.
@@ -27,7 +27,7 @@
 /**
 | Exports
 */
-var VLabel    = null;
+var Label    = null;
 
 /**
 | Imports
@@ -43,7 +43,7 @@ var shell;
 var system;
 var theme;
 var View;
-var VItem;
+var Item;
 
 /**
 | Capsule
@@ -67,20 +67,20 @@ var subclass = Jools.subclass;
 /**
 | Constructor.
 */
-VLabel = function(twig, path) {
-	VItem.call(this, twig, path);
+Label = function(twig, path) {
+	Item.call(this, twig, path);
 };
-subclass(VLabel, VItem);
+subclass(Label, Item);
 
 /**
 | Default margin for all notes.
 */
-VLabel.prototype.imargin = new Margin(theme.label.imargin);
+Label.prototype.imargin = new Margin(theme.label.imargin);
 
 /**
 | Resize handles to show on notes.
 */
-VLabel.prototype.handles = immute({
+Label.prototype.handles = immute({
 	ne : true,
 	se : true,
 	sw : true,
@@ -90,7 +90,7 @@ VLabel.prototype.handles = immute({
 /**
 | Returns the notes silhoutte.
 */
-VLabel.prototype.getSilhoutte = function($zone, zAnchor) {
+Label.prototype.getSilhoutte = function($zone, zAnchor) {
 	var $s = zAnchor ? this._silhoutte$0 : this._silhoutte$1;
 	var $z = $zone;
 
@@ -106,21 +106,21 @@ VLabel.prototype.getSilhoutte = function($zone, zAnchor) {
 /**
 | Dummy since a label does not scroll.
 */
-VLabel.prototype.scrollCaretIntoView = function() {
+Label.prototype.scrollCaretIntoView = function() {
 	// nada
 };
 
 /**
 | Dummy since a label does not scroll.
 */
-VLabel.prototype.scrollPage = function(up) {
+Label.prototype.scrollPage = function(up) {
 	// nada
 };
 
 /**
 | Draws the label.
 */
-VLabel.prototype.draw = function(fabric, view) {
+Label.prototype.draw = function(fabric, view) {
 	var f    = this.$fabric;
 	var zone = view.rect(this.getZone());
 
@@ -152,14 +152,14 @@ VLabel.prototype.draw = function(fabric, view) {
 /**
 | Returns the width for the contents flow.
 */
-VLabel.prototype.getFlowWidth = function() {
+Label.prototype.getFlowWidth = function() {
 	return 0;
 };
 
 /**
 | Calculates the change of fontsize due to resizing.
 */
-VLabel.prototype.fontSizeChange = function(fontsize) {
+Label.prototype.fontSizeChange = function(fontsize) {
 	var $action = shell.$action;
 
 	if (!$action || !this.path.equals($action.itemPath))
@@ -186,14 +186,14 @@ VLabel.prototype.fontSizeChange = function(fontsize) {
 /**
 | Returns the para seperation height.
 */
-VLabel.prototype.getParaSep = function(fontsize) {
+Label.prototype.getParaSep = function(fontsize) {
 	return 0;
 };
 
 /**
 | Mouse wheel turned.
 */
-VLabel.prototype.mousewheel = function(view, p, dir) {
+Label.prototype.mousewheel = function(view, p, dir) {
 	return false;
 };
 
@@ -201,7 +201,7 @@ VLabel.prototype.mousewheel = function(view, p, dir) {
 | Returns the zone of the item.
 | An ongoing action can modify this to be different than meshmashine data.
 */
-VLabel.prototype.getZone = function() {
+Label.prototype.getZone = function() {
 	var twig = this.twig;
 	var $action = shell.$action;
 	var pnw = this.twig.pnw;
@@ -246,7 +246,7 @@ VLabel.prototype.getZone = function() {
 /**
 | Sets the items position and size aften an action.
 */
-VLabel.prototype.actionstop = function(view, p) {
+Label.prototype.actionstop = function(view, p) {
 	var $action = shell.$action;
 	switch ($action.type) {
 	case Action.ITEMDRAG :
@@ -264,7 +264,7 @@ VLabel.prototype.actionstop = function(view, p) {
 		shell.redraw = true;
 		break;
 	default :
-		return VItem.prototype.actionstop.call(this, view, p);
+		return Item.prototype.actionstop.call(this, view, p);
 	}
 };
 

@@ -12,10 +12,10 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--'
 
-                                  ,.   ,..-,--.
-                                  `|  /   '|__/ ,-. ,-. ,-.
-                                   | /    ,|    ,-| |   ,-|
-                                   `'     `'    `-^ '   `-^
+                                   .-,--.
+                                    '|__/ ,-. ,-. ,-.
+                                    ,|    ,-| |   ,-|
+                                    `'    `-^ '   `-^
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  A visual paragraph representation
@@ -27,7 +27,7 @@
 /**
 | Exports
 */
-var VPara     = null;
+var Para     = null;
 
 /**
 | Imports
@@ -69,7 +69,7 @@ var ro            = Math.round;
 /**
 | Constructor.
 */
-VPara = function(twig, path) {
+Para = function(twig, path) {
 	if (twig.type !== 'Para')
 		{ throw new Error('type error'); }
 
@@ -85,7 +85,7 @@ VPara = function(twig, path) {
 /**
 | Updates v-vine to match a new twig.
 */
-VPara.prototype.update = function(twig) {
+Para.prototype.update = function(twig) {
 	this.twig    = twig;
 	this.$flow   = null;
 	this.$fabric = null;
@@ -94,7 +94,7 @@ VPara.prototype.update = function(twig) {
 /**
 | Force clears all caches.
 */
-VPara.prototype.knock = function() {
+Para.prototype.knock = function() {
 	this.$fabric = null;
 	this.$flow   = null;
 };
@@ -102,8 +102,8 @@ VPara.prototype.knock = function() {
 /**
 | (re)flows the paragraph, positioning all chunks.
 */
-VPara.prototype.getFlow = function() {
-	var vitem = shell.vspace.vget(this.path, -2);
+Para.prototype.getFlow = function() {
+	var vitem = shell.$space.vget(this.path, -2);
 	var vdoc  = vitem.vv.doc;
 	var flowWidth = vitem.getFlowWidth();
 	var fontsize = vdoc.getFontSize();
@@ -183,10 +183,10 @@ VPara.prototype.getFlow = function() {
 |
 | point: the point to look for
 */
-VPara.prototype.getPointOffset = function(point) {
+Para.prototype.getPointOffset = function(point) {
 	var flow = this.getFlow();
 	var para = this.para;
-	var vdoc = shell.vspace.vget(this.path, -1);
+	var vdoc = shell.$space.vget(this.path, -1);
 	Measure.setFont(vdoc.getFontSize(), vdoc.getFont());
 
 	var line;
@@ -202,7 +202,7 @@ VPara.prototype.getPointOffset = function(point) {
 /**
 | Returns the offset in flowed line number and x coordinate.
 */
-VPara.prototype.getLineXOffset = function(line, x) {
+Para.prototype.getLineXOffset = function(line, x) {
 	var flow = this.getFlow();
 	var fline = flow[line];
 	var ftoken = null;
@@ -233,10 +233,10 @@ VPara.prototype.getLineXOffset = function(line, x) {
 /**
 | Text has been inputted.
 */
-VPara.prototype.input = function(text) {
+Para.prototype.input = function(text) {
     var reg   = /([^\n]+)(\n?)/g;
 	var para  = this;
-	var vitem = shell.vspace.vget(para.path, -2);
+	var vitem = shell.$space.vget(para.path, -2);
 	var vdoc  = vitem.vv.doc;
 
     for(var rx = reg.exec(text); rx !== null; rx = reg.exec(text)) {
@@ -253,13 +253,13 @@ VPara.prototype.input = function(text) {
 /**
 | Handles a special key
 */
-VPara.prototype.specialKey = function(key, shift, ctrl) {
+Para.prototype.specialKey = function(key, shift, ctrl) {
 	var caret  = shell.caret;
 	// TODO split into smaller functions
 	var para = this.para;
 	var select = shell.selection;
 
-	var vitem = shell.vspace.vget(this.path, -2);
+	var vitem = shell.$space.vget(this.path, -2);
 	var vdoc  = vitem.vv.doc;
 	var ve, at1, flow;
 	var r, x;
@@ -516,7 +516,7 @@ VPara.prototype.specialKey = function(key, shift, ctrl) {
 | Return the path to the .text attribute if this para.
 | TODO use lazyFixate.
 */
-VPara.prototype.textPath = function() {
+Para.prototype.textPath = function() {
 	if (this._textPath) return this._textPath;
 	return (this._textPath = new Path(this.path, '++', 'text'));
 };
@@ -524,21 +524,21 @@ VPara.prototype.textPath = function() {
 /**
 | Returns the height of the para
 */
-VPara.prototype.getHeight = function() {
+Para.prototype.getHeight = function() {
 	var flow = this.getFlow();
-	var vdoc = shell.vspace.vget(this.path, -1);
+	var vdoc = shell.$space.vget(this.path, -1);
 	return flow.height + ro(vdoc.getFontSize() * theme.bottombox);
 };
 
 /**
 | Draws the paragraph in its cache and returns it.
 */
-VPara.prototype.draw = function(fabric, view, pnw) {
+Para.prototype.draw = function(fabric, view, pnw) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
 
 	var flow   = this.getFlow();
 	var width  = flow.spread * view.zoom;
-	var vdoc   = shell.vspace.vget(this.path, -1);
+	var vdoc   = shell.$space.vget(this.path, -1);
 	var height = this.getHeight() * view.zoom;
 	var $f     = this.$fabric;
 
@@ -582,10 +582,10 @@ VPara.prototype.draw = function(fabric, view, pnw) {
 | TODO change to multireturn.
 | TODO rename
 */
-VPara.prototype.getOffsetPoint = function(offset, flowPos$) {
+Para.prototype.getOffsetPoint = function(offset, flowPos$) {
 	// TODO cache position
 	var twig = this.twig;
-	var vdoc  = shell.vspace.vget(this.path, -1);
+	var vdoc  = shell.$space.vget(this.path, -1);
 	Measure.setFont(vdoc.getFontSize(), vdoc.getFont());
 	var text = twig.text;
 	var flow = this.getFlow();
@@ -626,9 +626,9 @@ VPara.prototype.getOffsetPoint = function(offset, flowPos$) {
 /**
 | Returns the caret position relative to the vdoc.
 */
-VPara.prototype.getCaretPos = function() {
+Para.prototype.getCaretPos = function() {
 	var caret   = shell.caret;
-	var vitem   = shell.vspace.vget(this.path, -2);
+	var vitem   = shell.$space.vget(this.path, -2);
 	var vdoc    = vitem.vv.doc;
 	var fs      = vdoc.getFontSize();
 	var descend = fs * theme.bottombox;
@@ -645,11 +645,11 @@ VPara.prototype.getCaretPos = function() {
 /**
 | Draws the caret if its in this paragraph.
 */
-VPara.prototype.drawCaret = function(view) {
+Para.prototype.drawCaret = function(view) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
 
 	var caret = shell.caret;
-	var vitem = shell.vspace.vget(this.path, -2);
+	var vitem = shell.$space.vget(this.path, -2);
 	var vdoc  = vitem.vv.doc;
 	var zone  = vitem.getZone();
 	var cpos  = caret.$pos  = this.getCaretPos();
