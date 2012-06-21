@@ -67,18 +67,17 @@ var subclass  = Jools.subclass;
 | Constructor.
 */
 Doc = function(twig, path) {
-	this.twig  = twig;
-	this.path  = path;
-	this.key   = path.get(-1);
-
-	this.pnws  = null;
-	var vv = this.vv = [];
+	this.twig           = twig;
+	this.path           = path;
+	this.key            = path.get(-1);
+	this.pnws           = null;
+	var g = this.$graph = [];
 
 	var ranks = twig.ranks;
 	var copse = twig.copse;
 	for (var r = 0, rZ = twig.length; r < rZ; r++) {
 		var k = ranks[r];
-		vv[k] = new Para(copse[k], new Path(path, '++', k));
+		g[k] = new Para(copse[k], new Path(path, '++', k));
 	}
 };
 
@@ -86,7 +85,7 @@ Doc = function(twig, path) {
 | Returns the vtwig at rank 'rank'.
 */
 Doc.prototype.vAtRank = function(rank) {
-	return this.vv[this.twig.ranks[rank]];
+	return this.$graph[this.twig.ranks[rank]];
 };
 
 /**
@@ -94,21 +93,21 @@ Doc.prototype.vAtRank = function(rank) {
 */
 Doc.prototype.update = function(twig) {
 	this.twig = twig;
-	var vo = this.vv;
-	var vv = this.vv = {};
+	var gold = this.$graph;
+	var g    = this.$graph = {};
 	var copse = twig.copse;
 	for(var k in copse) {
 		var sub = twig.copse[k];
-		var o = vo[k];
+		var o = gold[k];
 		if (is(o)) {
 			if (o.twig !== sub) {
 				o.update(sub);
 			}
-			vv[k] = o;
+			g[k] = o;
 		} else {
 			o = new Para(sub, new Path(this.path, '++', k));
 			o.update(sub);
-			vv[k] = o;
+			g[k] = o;
 		}
 	}
 };
@@ -181,7 +180,7 @@ Doc.prototype.getHeight = function() {
 	var fontsize = this.getFontSize();
 	var paraSep  = this.getParaSep();
 	var twig     = this.twig;
-	var vv       = this.vv;
+	var g        = this.$graph;
 	var height   = 0;
 	for (var r = 0, rZ = twig.length; r < rZ; r++) {
 		var vpara = this.vAtRank(r);
@@ -237,12 +236,12 @@ Doc.prototype.getFont = function() {
 */
 Doc.prototype.getParaAtPoint = function(p) {
 	var twig   = this.twig;
-	var vv     = this.vv;
+	var g      = this.$graph;
 
 	for(var r = 0, rZ = twig.length; r < rZ; r++) {
 		// TODO beautify
 		var k = twig.ranks[r];
-		var vpara = vv[k];
+		var vpara = g[k];
 		var flow = vpara.getFlow();
 		var pnw = this.pnws[k];
 		if (p.y < pnw.y + flow.height) return vpara;
@@ -274,8 +273,8 @@ Doc.prototype.pathSelection = function(fabric, border, twist, view, width, imarg
 	var pnw1 = this.getPNW(key1);
 	var pnw2 = this.getPNW(key2);
 
-	var vpara1 = this.vv[key1];
-	var vpara2 = this.vv[key2];
+	var vpara1 = this.$graph[key1];
+	var vpara2 = this.$graph[key2];
 
 	var p1 = vpara1.getOffsetPoint(s1.at1);
 	var p2 = vpara2.getOffsetPoint(s2.at1);

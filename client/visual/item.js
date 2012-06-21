@@ -72,7 +72,7 @@ Item = function(twig, path) {
 	this.twig        = twig;
 	this.path        = path;
 	this.key         = path.get(-1);
-	this.vv          = immute({
+	this.$graph      = immute({
 		doc : new Doc(twig.doc, new Path(path, '++', 'doc'))
 	});
 
@@ -82,15 +82,15 @@ Item = function(twig, path) {
 };
 
 /**
-| Updates the vvine to match a new twig.
+| Updates the $graph to match a new twig.
 */
 Item.prototype.update = function(twig) {
 	this.twig    = twig;
 	this.$fabric = null;
 
-	var vdoc = this.vv.doc;
-	if (vdoc.twig !== twig.doc) {
-		vdoc.update(twig.doc);
+	var doc = this.$graph.doc;
+	if (doc.twig !== twig.doc) {
+		doc.update(twig.doc);
 	}
 };
 
@@ -277,7 +277,7 @@ Item.prototype.drawHandles = function(fabric, view) {
 Item.prototype.getParaAtPoint = function(p) {
 	// TODO rename imargin to innerMargin
 	if (p.y < this.imargin.n) return null;
-	return this.vv.doc.getParaAtPoint(p);
+	return this.$graph.doc.getParaAtPoint(p);
 };
 
 /**
@@ -429,16 +429,16 @@ Item.prototype.click = function(view, p) {
 	var pnw = this.getZone().pnw;
 	var pi = vp.sub(pnw.x, pnw.y - (this.scrollbarY ? this.scrollbarY.getPos() : 0 ));
 
-	var vpara = this.getParaAtPoint(pi);
-	if (vpara) {
-		var ppnw   = this.vv.doc.getPNW(vpara.key);
-		var at1    = vpara.getPointOffset(pi.sub(ppnw));
+	var para = this.getParaAtPoint(pi);
+	if (para) {
+		var ppnw   = this.$graph.doc.getPNW(para.key);
+		var at1    = para.getPointOffset(pi.sub(ppnw));
 		var caret  = shell.caret;
 
 		caret = shell.setCaret(
 			'space',
 			{
-				path : vpara.textPath(),
+				path : para.textPath(),
 				at1  : at1
 			}
 		);
@@ -472,7 +472,7 @@ Item.prototype.poke = function() {
 */
 Item.prototype.knock = function() {
 	this.$fabric = null;
-	this.vv.doc.knock();
+	this.$graph.doc.knock();
 };
 
 })();

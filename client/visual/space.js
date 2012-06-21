@@ -85,10 +85,10 @@ Space = function(twig, path, access) {
 
 	Jools.keyNonGrata(this, '$pan');
 
-	var vv = this.vv = {};
+	var g = this.$graph = {};
 
 	for (var k in twig.copse) {
-		vv[k] = this.createItem(twig.copse[k], k);
+		g[k] = this.createItem(twig.copse[k], k);
 	}
 
 	this._floatMenuLabels = {c: 'new', n: 'Note', ne: 'Label'};
@@ -105,30 +105,30 @@ Space.prototype.update = function(tree, chgX) {
 
 	this.twig = twig;
 
-	var vo = this.vv;
-	var vv = this.vv = {};
+	var gold = this.$graph;
+	var g    = this.$graph = {};
 	var copse = twig.copse;
 	for(var k in copse) {
 		var sub = twig.copse[k];
-		var o = vo[k];
+		var o = gold[k];
 		if (is(o)) {
 			if (o.twig !== sub) {
 				o.update(sub);
 			}
-			vv[k] = o;
+			g[k] = o;
 		} else {
-			vv[k] = this.createItem(sub, k);
+			g[k] = this.createItem(sub, k);
 		}
 	}
 
-	// removeis the focus if the focussed item is removed.
+	// removes the focus if the focused item is removed.
 	var caret = shell.caret;
 	var csign = caret.sign;
 	
 	if (caret.visec === 'space' &&
 		csign && csign.path &&
 		csign.path.get(0) === this.key &&
-		!isnon(vv[csign.path.get(1)])
+		!isnon(g[csign.path.get(1)])
 	) {
 		if (shell.selection.active &&
 			shell.selection.sign1.path.get(-4) === csign.path.get(1))
@@ -142,6 +142,7 @@ Space.prototype.update = function(tree, chgX) {
 
 /**
 | Returns the entity of path
+| TODO what is this really for???
 */
 Space.prototype.getEntity = function(path) {
 	if (path.get(0) !== this.key) {
@@ -149,7 +150,7 @@ Space.prototype.getEntity = function(path) {
 			path.get(0), '!=', this.key
 		);
 	}
-	return this.vv[path.get(1)] || null;
+	return this.$graph[path.get(1)] || null;
 };
 
 /**
@@ -217,27 +218,28 @@ Space.prototype.drawCaret = function() {
 };
 
 /**
-| Sets the focused item or blurs it if vitem is null
+| Sets the focused item.
+| item === null blurs.
 */
-Space.prototype.setFocus = function(vitem) {
+Space.prototype.setFocus = function(item) {
 	var focus = this.focusedItem();
-	if (focus && focus === vitem) { return; }
+	if (focus && focus === item) { return; }
 
 	var caret = shell.caret;
 
-	if (vitem) {
-		var vdoc = vitem.vv.doc;
+	if (item) {
+		var doc = item.$graph.doc;
 
 		caret = shell.setCaret(
 			'space',
 			{
-				path : vdoc.vAtRank(0).textPath(),
+				path : doc.vAtRank(0).textPath(),
 				at1  : 0
 			}
 		);
 
 		caret.show();
-		shell.peer.moveToTop(vitem.path);
+		shell.peer.moveToTop(item.path);
 	} else {
 		shell.setCaret(null, null);
 	}
@@ -247,9 +249,10 @@ Space.prototype.setFocus = function(vitem) {
 | Returns the vtwig at rank 'rank'.
 |
 | TODO: put in a common prototype for all visuals with ranks?
+| XXX 
 */
 Space.prototype.vAtRank = function(rank) {
-	return this.vv[this.twig.ranks[rank]];
+	return this.$graph[this.twig.ranks[rank]];
 };
 
 /**
@@ -260,8 +263,8 @@ Space.prototype.mousewheel = function(p, dir, shift, ctrl) {
 	var twig  = this.twig;
 
 	for(var r = 0, rZ = twig.length; r < rZ; r++) {
-		var vitem = this.vAtRank(r);
-		if (vitem.mousewheel($view, p, dir, shift, ctrl))
+		var item = this.vAtRank(r);
+		if (item.mousewheel($view, p, dir, shift, ctrl))
 			{ return true; }
 	}
 
@@ -302,11 +305,11 @@ Space.prototype.mousehover = function(p, shift, ctrl) {
 	}
 
 	for(var a = 0, aZ = this.twig.length; a < aZ; a++) {
-		var vitem = this.vAtRank(a);
+		var item = this.vAtRank(a);
 		if (cursor) {
-			vitem.mousehover($view, null);
+			item.mousehover($view, null);
 		} else {
-			cursor = vitem.mousehover($view, p);
+			cursor = item.mousehover($view, p);
 		}
 	}
 
@@ -335,8 +338,8 @@ Space.prototype.dragstart = function(p, shift, ctrl) {
 
 	// see if one item was targeted
 	for(var a = 0, aZ = this.twig.length; a < aZ; a++) {
-		var vitem = this.vAtRank(a);
-		if (vitem.dragstart($view, p, shift, ctrl, this.access)) return;
+		var item = this.vAtRank(a);
+		if (item.dragstart($view, p, shift, ctrl, this.access)) return;
 	}
 
 	// otherwise do panning
@@ -377,8 +380,8 @@ Space.prototype.click = function(p, shift, ctrl) {
 
 	// clicked some item?
 	for(var a = 0, aZ = this.twig.length; a < aZ; a++) {
-		var vitem = this.vAtRank(a);
-		if (vitem.click($view, p, shift, ctrl)) return true;
+		var item = this.vAtRank(a);
+		if (item.click($view, p, shift, ctrl)) return true;
 	}
 
 	// otherwhise pop up the float menu
@@ -403,7 +406,7 @@ Space.prototype.click = function(p, shift, ctrl) {
 Space.prototype.actionstop = function(p, shift, ctrl) {
 	var $action = shell.$action;
 	var $view   = this.$view;
-	var vitem;
+	var item;
 
 	if (!$action) { throw new Error('Dragstop without action?'); }
 
@@ -412,8 +415,8 @@ Space.prototype.actionstop = function(p, shift, ctrl) {
 		break;
 	case Action.RELBIND :
 		for(var r = 0, rZ = this.twig.length; r < rZ; r++) {
-			vitem = this.vAtRank(r);
-			if (vitem.actionstop($view, p))
+			item = this.vAtRank(r);
+			if (item.actionstop($view, p))
 				{ break; }
 		}
 		shell.redraw = true;
@@ -421,8 +424,8 @@ Space.prototype.actionstop = function(p, shift, ctrl) {
 	case Action.ITEMDRAG   :
 	case Action.ITEMRESIZE :
 	case Action.SCROLLY    :
-		vitem = this.vget($action.itemPath);
-		vitem.actionstop($view, p, shift, ctrl);
+		item = this.vget($action.itemPath);
+		item.actionstop($view, p, shift, ctrl);
 		break;
 	default :
 		throw new Error('Do not know how to handle Action.' + $action.type);
@@ -437,7 +440,7 @@ Space.prototype.actionstop = function(p, shift, ctrl) {
 Space.prototype.actionmove = function(p, shift, ctrl) {
 	var $view   = this.$view;
 	var $action = shell.$action;
-	var vitem;
+	var item;
 
 	switch($action.type) {
 	case Action.PAN :
@@ -457,15 +460,15 @@ Space.prototype.actionmove = function(p, shift, ctrl) {
 		shell.redraw      = true;
 
 		for(var r = 0, rZ = this.twig.length; r < rZ; r++) {
-			vitem = this.vAtRank(r);
-			if (vitem.actionmove($view, p))
+			item = this.vAtRank(r);
+			if (item.actionmove($view, p))
 				{ return 'pointer'; }
 		}
 		return 'pointer';
 
 	default :
-		vitem = this.vget($action.itemPath);
-		vitem.actionmove($view, p);
+		item = this.vget($action.itemPath);
+		item.actionmove($view, p);
 		return 'move';
 	}
 };
@@ -485,16 +488,14 @@ Space.prototype.floatMenuSelect = function(entry, p) {
 		var dp = $view.depoint(p);
 		pnw = dp.sub(half(nw) , half(nh));
 		key = shell.peer.newNote(this.path, new Rect(pnw, pnw.add(nw, nh)));
-		var vnote = this.vv[key];
-		this.setFocus(vnote);
+		this.setFocus(this.$graph[key]);
 		break;
 	case 'ne' :
 		// label
 		pnw = $view.depoint(p);
 		pnw = pnw.sub(theme.label.createOffset);
 		key = shell.peer.newLabel(this.path, pnw, 'Label', 20);
-		var vlabel = this.vv[key];
-		this.setFocus(vlabel);
+		this.setFocus(this.$graph[key]);
 		break;
 	}
 };
@@ -589,7 +590,7 @@ Space.prototype.specialKey = function(key, shift, ctrl) {
 /**
 | Returns the visual node the path points to.
 */
-Space.prototype.vget = function(path, plen) {
+Space.prototype.vget = function(path, plen) { //XXX
 	/**/ if (!is(plen)) { plen  = path.length; }
 	else if (plen < 0)  { plen += path.length; }
 	/**/ if (plen <= 0) { throw new Error('cannot vget path of length <= 0'); }
@@ -599,11 +600,11 @@ Space.prototype.vget = function(path, plen) {
 		);
 	}
 
-	var vnode = this;
+	var node = this;
 	for (var a = 1; a < plen; a++) {
-		vnode = vnode.vv[path.get(a)];
+		node = node.$graph[path.get(a)];
 	}
-	return vnode;
+	return node;
 };
 
 })();

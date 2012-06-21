@@ -131,16 +131,16 @@ Label.prototype.draw = function(fabric, view) {
 		view.zoom !== f.$zoom)
 	{
 		f = this.$fabric = new Fabric(zone.width, zone.height);
-		f.$zoom = view.zoom;
-		var vdoc         = this.vv.doc;
-		var imargin      = this.imargin;
+		f.$zoom     = view.zoom;
+		var doc     = this.$graph.doc;
+		var imargin = this.imargin;
 
 		// resizes the canvas
 		f.attune(zone);
 		var silhoutte = this.getSilhoutte(zone, true);
 
 		// draws selection and text
-		vdoc.draw(f, view.home(), zone.width, imargin, Point.zero);
+		doc.draw(f, view.home(), zone.width, imargin, Point.zero);
 
 		// draws the border
 		f.edge(theme.label.style.edge, silhoutte, 'path', View.proper);
@@ -168,7 +168,6 @@ Label.prototype.fontSizeChange = function(fontsize) {
 	switch ($action.type) {
 	case Action.ITEMRESIZE:
 		if (!$action.startZone) return fontsize;
-		var vdoc = this.vv.doc;
 		var height = $action.startZone.height;
 		var dy;
 		switch ($action.align) {
@@ -207,10 +206,10 @@ Label.prototype.getZone = function() {
 	var pnw = this.twig.pnw;
 
 	// TODO Caching!
-	var vdoc   = this.vv.doc;
-	var fs     = vdoc.getFontSize();
-	var width  = max(Math.ceil(vdoc.getSpread()), ro(fs * 0.3));
-	var height = max(Math.ceil(vdoc.getHeight()), ro(fs));
+	var doc    = this.$graph.doc;
+	var fs     = doc.getFontSize();
+	var width  = max(Math.ceil(doc.getSpread()), ro(fs * 0.3));
+	var height = max(Math.ceil(doc.getHeight()), ro(fs));
 
 	if (!$action || !this.path.equals($action.itemPath))
 		{ return new Rect(pnw, pnw.add(width, height)); }
@@ -252,7 +251,7 @@ Label.prototype.actionstop = function(view, p) {
 	case Action.ITEMDRAG :
 	case Action.ITEMRESIZE :
 		var zone = this.getZone();
-		var fontsize = this.vv.doc.getFontSize();
+		var fontsize = this.$graph.doc.getFontSize();
 
 		if (!this.twig.pnw.eq(zone.pnw)) {
 			shell.peer.setPNW(this.path, zone.pnw);

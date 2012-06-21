@@ -103,10 +103,10 @@ Para.prototype.knock = function() {
 | (re)flows the paragraph, positioning all chunks.
 */
 Para.prototype.getFlow = function() {
-	var vitem = shell.$space.vget(this.path, -2);
-	var vdoc  = vitem.vv.doc;
-	var flowWidth = vitem.getFlowWidth();
-	var fontsize = vdoc.getFontSize();
+	var item      = shell.$space.vget(this.path, -2);
+	var doc       = item.$graph.doc;
+	var flowWidth = item.getFlowWidth();
+	var fontsize  = doc.getFontSize();
 
 	var flow  = this.$flow;
 	// TODO go into subnodes instead
@@ -132,7 +132,7 @@ Para.prototype.getFlow = function() {
 	var x = 0, xw = 0;
 
 	var y = fontsize;
-	Measure.setFont(vdoc.getFontSize(), vdoc.getFont());
+	Measure.setFont(doc.getFontSize(), doc.getFont());
 	var space = Measure.width(' ');
 	var line = 0;
 	flow[line] = { a: [], y: y, o: 0 };
@@ -152,7 +152,7 @@ Para.prototype.getFlow = function() {
 				if (spread < xw) spread = xw;
 				x = 0;
 				xw = x + w + space;
-				y += ro(vdoc.getFontSize() * (1 + theme.bottombox));
+				y += ro(doc.getFontSize() * (1 + theme.bottombox));
 				line++;
 				flow[line] = {a: [], y: y, o: ca.index};
 			} else {
@@ -186,8 +186,8 @@ Para.prototype.getFlow = function() {
 Para.prototype.getPointOffset = function(point) {
 	var flow = this.getFlow();
 	var para = this.para;
-	var vdoc = shell.$space.vget(this.path, -1);
-	Measure.setFont(vdoc.getFontSize(), vdoc.getFont());
+	var doc = shell.$space.vget(this.path, -1);
+	Measure.setFont(doc.getFontSize(), doc.getFont());
 
 	var line;
 	for (line = 0; line < flow.length; line++) {
@@ -236,39 +236,38 @@ Para.prototype.getLineXOffset = function(line, x) {
 Para.prototype.input = function(text) {
     var reg   = /([^\n]+)(\n?)/g;
 	var para  = this;
-	var vitem = shell.$space.vget(para.path, -2);
-	var vdoc  = vitem.vv.doc;
+	var item  = shell.$space.vget(para.path, -2);
+	var doc   = item.$graph.doc;
 
     for(var rx = reg.exec(text); rx !== null; rx = reg.exec(text)) {
 		var line = rx[1];
 		shell.peer.insertText(para.textPath(), shell.caret.sign.at1, line);
         if (rx[2]) {
 			shell.peer.split(para.textPath(), shell.caret.sign.at1);
-			para = vdoc.vAtRank(vdoc.twig.rankOf(para.key) + 1);
+			para = doc.vAtRank(doc.twig.rankOf(para.key) + 1);
 		}
     }
-	vitem.scrollCaretIntoView();
+	item.scrollCaretIntoView();
 };
 
 /**
 | Handles a special key
+| TODO split into smaller functions
 */
 Para.prototype.specialKey = function(key, shift, ctrl) {
 	var caret  = shell.caret;
-	// TODO split into smaller functions
-	var para = this.para;
+	var para   = this.para;
 	var select = shell.selection;
-
-	var vitem = shell.$space.vget(this.path, -2);
-	var vdoc  = vitem.vv.doc;
+	var item   = shell.$space.vget(this.path, -2);
+	var doc    = item.$graph.doc;
 	var ve, at1, flow;
 	var r, x;
 
 	if (ctrl) {
 		switch(key) {
 		case 'a' :
-			var v0 = vdoc.vAtRank(0);
-			var v1 = vdoc.vAtRank(vdoc.twig.length - 1);
+			var v0 = doc.vAtRank(0);
+			var v1 = doc.vAtRank(doc.twig.length - 1);
 
 			select.sign1 = new Sign({ path: v0.textPath(), at1: 0 });
 			select.sign2 = new Sign({ path: v1.textPath(), at1: v1.twig.text.length });
@@ -276,7 +275,7 @@ Para.prototype.specialKey = function(key, shift, ctrl) {
 			shell.setCaret('space', select.sign2);
 			system.setInput(select.innerText());
 			caret.show();
-			vitem.poke();
+			item.poke();
 			shell.redraw = true;
 			return true;
 		}
@@ -317,7 +316,7 @@ Para.prototype.specialKey = function(key, shift, ctrl) {
 		case 'right'    :
 		case 'up'       :
 			select.sign1 = caret.sign;
-			vitem.poke();
+			item.poke();
 		}
 	}
 
@@ -326,23 +325,23 @@ Para.prototype.specialKey = function(key, shift, ctrl) {
 		if (caret.sign.at1 > 0) {
 			shell.peer.removeText(this.textPath(), caret.sign.at1 - 1, 1);
 		} else {
-			r = vdoc.twig.rankOf(this.key);
+			r = doc.twig.rankOf(this.key);
 			if (r > 0) {
-				ve = vdoc.vAtRank(r - 1);
+				ve = doc.vAtRank(r - 1);
 				shell.peer.join(ve.textPath(), ve.twig.text.length);
 			}
 		}
-		vitem.scrollCaretIntoView();
+		item.scrollCaretIntoView();
 		break;
 	case 'enter' :
 		shell.peer.split(this.textPath(), caret.sign.at1);
-		vitem.scrollCaretIntoView();
+		item.scrollCaretIntoView();
 		break;
 	case 'pageup' :
-		vitem.scrollPage(true);
+		item.scrollPage(true);
 		break;
 	case 'pagedown' :
-		vitem.scrollPage(false);
+		item.scrollPage(false);
 		break;
 	case 'end' :
 		caret = shell.setCaret(
@@ -361,7 +360,7 @@ Para.prototype.specialKey = function(key, shift, ctrl) {
 				at1  : 0
 			}
 		);
-		vitem.scrollCaretIntoView();
+		item.scrollCaretIntoView();
 		break;
 	case 'left' :
 		if (caret.sign.at1 > 0) {
@@ -373,9 +372,9 @@ Para.prototype.specialKey = function(key, shift, ctrl) {
 				}
 			);
 		} else {
-			r = vdoc.twig.rankOf(this.key);
+			r = doc.twig.rankOf(this.key);
 			if (r > 0) {
-				ve = vdoc.vAtRank(r - 1);
+				ve = doc.vAtRank(r - 1);
 				caret = shell.setCaret(
 					'space',
 					{
@@ -385,7 +384,7 @@ Para.prototype.specialKey = function(key, shift, ctrl) {
 				);
 			}
 		}
-		vitem.scrollCaretIntoView();
+		item.scrollCaretIntoView();
 		break;
 	case 'up' :
 		flow = this.getFlow();
@@ -404,9 +403,9 @@ Para.prototype.specialKey = function(key, shift, ctrl) {
 			);
 		} else {
 			// goto prev para
-			r = vdoc.twig.rankOf(this.key);
+			r = doc.twig.rankOf(this.key);
 			if (r > 0) {
-				ve = vdoc.vAtRank(r - 1);
+				ve = doc.vAtRank(r - 1);
 				at1 = ve.getLineXOffset(ve.getFlow().length - 1, x);
 				caret = shell.setCaret(
 					'space',
@@ -418,7 +417,7 @@ Para.prototype.specialKey = function(key, shift, ctrl) {
 				);
 			}
 		}
-		vitem.scrollCaretIntoView();
+		item.scrollCaretIntoView();
 		break;
 	case 'right' :
 		if (caret.sign.at1 < this.twig.text.length) {
@@ -430,9 +429,9 @@ Para.prototype.specialKey = function(key, shift, ctrl) {
 				}
 			);
 		} else {
-			r = vdoc.twig.rankOf(this.key);
-			if (r < vdoc.twig.length - 1) {
-				ve = vdoc.vAtRank(r + 1);
+			r = doc.twig.rankOf(this.key);
+			if (r < doc.twig.length - 1) {
+				ve = doc.vAtRank(r + 1);
 
 				caret = shell.setCaret(
 					'space',
@@ -443,7 +442,7 @@ Para.prototype.specialKey = function(key, shift, ctrl) {
 				);
 			}
 		}
-		vitem.scrollCaretIntoView();
+		item.scrollCaretIntoView();
 		break;
 	case 'down' :
 		flow = this.getFlow();
@@ -462,9 +461,9 @@ Para.prototype.specialKey = function(key, shift, ctrl) {
 			);
 		} else {
 			// goto next para
-			r = vdoc.twig.rankOf(this.key);
-			if (r < vdoc.twig.length - 1) {
-				ve = vdoc.vAtRank(r + 1);
+			r = doc.twig.rankOf(this.key);
+			if (r < doc.twig.length - 1) {
+				ve = doc.vAtRank(r + 1);
 				at1 = ve.getLineXOffset(0, x);
 				caret = shell.setCaret(
 					'space',
@@ -476,14 +475,14 @@ Para.prototype.specialKey = function(key, shift, ctrl) {
 				);
 			}
 		}
-		vitem.scrollCaretIntoView();
+		item.scrollCaretIntoView();
 		break;
 	case 'del' :
 		if (caret.sign.at1 < this.twig.text.length) {
 			shell.peer.removeText(this.textPath(), caret.sign.at1, 1);
 		} else {
-			r = vdoc.twig.rankOf(this.key);
-			if (r < vdoc.twig.length - 1) {
+			r = doc.twig.rankOf(this.key);
+			if (r < doc.twig.length - 1) {
 				shell.peer.join(this.textPath(), this.twig.text.length);
 			}
 		}
@@ -502,7 +501,7 @@ Para.prototype.specialKey = function(key, shift, ctrl) {
 			select.active = true;
 			select.sign2 = caret.sign;
 			system.setInput(select.innerText());
-			vitem.poke();
+			item.poke();
 			shell.redraw = true;
 			break;
 		}
@@ -526,8 +525,8 @@ Para.prototype.textPath = function() {
 */
 Para.prototype.getHeight = function() {
 	var flow = this.getFlow();
-	var vdoc = shell.$space.vget(this.path, -1);
-	return flow.height + ro(vdoc.getFontSize() * theme.bottombox);
+	var doc = shell.$space.vget(this.path, -1);
+	return flow.height + ro(doc.getFontSize() * theme.bottombox);
 };
 
 /**
@@ -538,7 +537,7 @@ Para.prototype.draw = function(fabric, view, pnw) {
 
 	var flow   = this.getFlow();
 	var width  = flow.spread * view.zoom;
-	var vdoc   = shell.$space.vget(this.path, -1);
+	var doc    = shell.$space.vget(this.path, -1);
 	var height = this.getHeight() * view.zoom;
 	var $f     = this.$fabric;
 
@@ -553,7 +552,7 @@ Para.prototype.draw = function(fabric, view, pnw) {
 		$f = this.$fabric = new Fabric(width, height);
 		$f.scale(view.zoom);
 		$f.$zoom = view.zoom;
-		$f.setFont(vdoc.getFontSize(), vdoc.getFont(), 'black', 'start', 'alphabetic');
+		$f.setFont(doc.getFontSize(), doc.getFont(), 'black', 'start', 'alphabetic');
     
 		// draws text into the fabric
 		for(var a = 0, aZ = flow.length; a < aZ; a++) {
@@ -585,8 +584,8 @@ Para.prototype.draw = function(fabric, view, pnw) {
 Para.prototype.getOffsetPoint = function(offset, flowPos$) {
 	// TODO cache position
 	var twig = this.twig;
-	var vdoc  = shell.$space.vget(this.path, -1);
-	Measure.setFont(vdoc.getFontSize(), vdoc.getFont());
+	var doc  = shell.$space.vget(this.path, -1);
+	Measure.setFont(doc.getFontSize(), doc.getFont());
 	var text = twig.text;
 	var flow = this.getFlow();
 	var a;
@@ -624,13 +623,13 @@ Para.prototype.getOffsetPoint = function(offset, flowPos$) {
 };
 
 /**
-| Returns the caret position relative to the vdoc.
+| Returns the caret position relative to the doc.
 */
 Para.prototype.getCaretPos = function() {
 	var caret   = shell.caret;
-	var vitem   = shell.$space.vget(this.path, -2);
-	var vdoc    = vitem.vv.doc;
-	var fs      = vdoc.getFontSize();
+	var item    = shell.$space.vget(this.path, -2);
+	var doc     = item.$graph.doc;
+	var fs      = doc.getFontSize();
 	var descend = fs * theme.bottombox;
 	var p       = this.getOffsetPoint(shell.caret.sign.at1, shell.caret);
 
@@ -649,12 +648,12 @@ Para.prototype.drawCaret = function(view) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
 
 	var caret = shell.caret;
-	var vitem = shell.$space.vget(this.path, -2);
-	var vdoc  = vitem.vv.doc;
-	var zone  = vitem.getZone();
+	var item  = shell.$space.vget(this.path, -2);
+	var doc   = item.$graph.doc;
+	var zone  = item.getZone();
 	var cpos  = caret.$pos  = this.getCaretPos();
-	var pnw   = vdoc.getPNW(this.key);
-	var sbary = vitem.scrollbarY;
+	var pnw   = doc.getPNW(this.key);
+	var sbary = item.scrollbarY;
 	var sy    = sbary ? ro(sbary.getPos()) : 0;
 
 	var cyn = limit(0, cpos.n + pnw.y - sy, zone.height);
@@ -662,7 +661,7 @@ Para.prototype.drawCaret = function(view) {
 	var cx  = cpos.x + pnw.x;
 
 	var ch  = ro((cys - cyn) * view.zoom);
-	if (ch === 0) return;
+	if (ch === 0) { return; }
 
 	var cp = view.point(cx + zone.pnw.x, cyn + zone.pnw.y);
 	shell.caret.$screenPos = cp;

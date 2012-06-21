@@ -137,7 +137,7 @@ Note.prototype.setScrollbar = function(pos) {
 	sbary.setPos(
 		pos,
 		zone.height - this.imargin.y,
-		this.vv.doc.getHeight(),
+		this.$graph.doc.getHeight(),
 		Point.renew(zone.pse.x, zone.pnw.y + theme.scrollbar.vdis, sbary.pnw),
 		zone.height - theme.scrollbar.vdis * 2
 	);
@@ -150,10 +150,10 @@ Note.prototype.scrollCaretIntoView = function() {
 	var caret   = shell.caret;
 	var scrolly = this.scrollbarY;
 	var sy      = scrolly.getPos();
-	var vpara   = shell.$space.vget(caret.sign.path, -1);
-	if (vpara.constructor !== Para) { throw new Error('iFail'); }
-	var cp      = vpara.getCaretPos();
-	var pnw     = this.vv.doc.getPNW(vpara.key);
+	var para   = shell.$space.vget(caret.sign.path, -1);
+	if (para.constructor !== Para) { throw new Error('iFail'); }
+	var cp      = para.getCaretPos();
+	var pnw     = this.$graph.doc.getPNW(para.key);
 	var zone    = this.getZone();
 	var imargin = this.imargin;
 
@@ -173,7 +173,7 @@ Note.prototype.scrollCaretIntoView = function() {
 Note.prototype.scrollPage = function(up) {
 	var zone = this.getZone();
 	var dir  = up ? -1 : 1;
-	var fs   = this.vv.doc.getFontSize();
+	var fs   = this.$graph.doc.getFontSize();
 	this.setScrollbar(this.scrollbarY.getPos() + dir * zone.height - fs * 2);
 	this.poke();
 };
@@ -223,11 +223,11 @@ Note.prototype.draw = function(fabric, view) {
 		vzone.height !== f.height)
 	{
 		f = this.$fabric = new Fabric(vzone.width, vzone.height);
-		var vdoc         = this.vv.doc;
-		var imargin      = this.imargin;
+		var doc     = this.$graph.doc;
+		var imargin = this.imargin;
 
 		// calculates if a scrollbar is needed
-		var height = vdoc.getHeight();
+		var height = doc.getHeight();
 		sbary.visible = height > zone.height - imargin.y;
 
 		// resizes the canvas (when scrollbars could change the size)
@@ -238,7 +238,7 @@ Note.prototype.draw = function(fabric, view) {
 
 		// draws selection and text
 		sbary.point = Point.renew(0, sbary.getPos(), sbary.point);
-		vdoc.draw(f, view.home(), zone.width, imargin, sbary.point);
+		doc.draw(f, view.home(), zone.width, imargin, sbary.point);
 
 		// draws the border
 		f.edge(theme.note.style.edge, silhoutte, 'path', View.proper);
