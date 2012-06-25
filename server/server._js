@@ -30,7 +30,7 @@
 */
 (function(){
 "use strict";
-if (typeof(window) !== 'undefined') { throw new Error('server.js needs node!'); }
+if (typeof(require) === 'undefined') { throw new Error('this file needs node!'); }
 
 /**
 | Imports
@@ -39,6 +39,7 @@ var Jools       = require('../shared/jools');
 var MeshMashine = require('../shared/meshmashine');
 var Meshverse   = require('../shared/meshverse');
 var Path        = require('../shared/path');
+var Resource    = require('./resource');
 var Tree        = require('../shared/tree');
 var config      = require('../config');
 var fs          = require('fs');
@@ -49,11 +50,6 @@ var uglify      = config.uglify && require('uglify-js');
 var url         = require('url');
 var util        = require('util');
 var zlib        = require('zlib');
-
-/*if (config.proxy) {
-	var httpProxy = require('http-proxy');
-	var proxy = new httpProxy.RoutingProxy();
-}*/
 
 /**
 | Shortcuts
@@ -73,10 +69,10 @@ var uid          = Jools.uid;
 var Server = function() {
 
 	// files served
-	this.$files = {};
-	this.$packList = [];
+	this.$resources = {};
+	this.$bundle = [];
 
-	this.registerFiles();
+	this.addResources();
 
 	// init database
 	this.db = {};
@@ -128,7 +124,7 @@ var Server = function() {
 | Connects to the database.
 */
 Server.prototype.startup = function(_) {
-	this.prepareFiles(_);
+	this.prepareResources(_);
 
 	var db = this.db;
 	db.connection = db.connector.open(_);
@@ -265,250 +261,184 @@ Server.prototype.buildClientConfig = function() {
 };
 	
 /**
-| Register a files to be REST served.
-|
-| opts :
-'   p ... include in pack
-|   m ... keep in memory
-|   c ... serve as cached
+| Defines the resource to be REST served.
 */
-Server.prototype.registerFile = function(path, opts) {
-	var f = {
-		path   : path,
-		cache  : opts.indexOf('c') >= 0,
-		code   : null,
-		gzip   : null,
-		mime   : null,
-		memory : opts.indexOf('m') >= 0,
-		pack   : opts.indexOf('p') >= 0,
-		raw    : null
-	};
+Server.prototype.addResources = function() {
+	var rlist = [
+		'icons/favicon.ico',                                'mc',
+		'client/testpad.html',                              'f',
+		'client/testpad.js',                                'f',
+		'client/fonts/webfont.js',                          'mc',
 
-	var type = path.split('.')[1];
-	switch (type) {
-	case 'css'  : f.code = 'utf-8';  f.mime = 'text/css';                break;
-	case 'eot'  : f.code = 'binary'; f.mime = 'font/eot';                break;
-	case 'html' : f.code = 'utf-8';  f.mime = 'text/html';               break;
-	case 'ico'  : f.code = 'binary'; f.mime = 'image/x-icon';            break;
-	case 'js'   : f.code = 'utf-8';  f.mime = 'text/javascript';         break;
-	case 'otf'  : f.code = 'binary'; f.mime = 'font/otf';                break;
-	case 'svg'  : f.code = 'utf-8';  f.mime = 'image/svg+xml';           break;
-	case 'ttf'  : f.code = 'binary'; f.mime = 'font/ttf';                break;
-	case 'woff' : f.code = 'binary'; f.mime = 'application/x-font-woff'; break;
-	default : throw new Error('unknown file type: '+type);
+		'shared/jools.js',                                  'fb',
+		'shared/sha1.js',                                   'fb',
+		'shared/euclid/compass.js',                         'fb',
+		'shared/euclid/point.js',                           'fb',
+		'shared/euclid/rect.js',                            'fb',
+		'shared/euclid/margin.js',                          'fb',
+		'client/euclid/fabric.js',                          'fb',
+		'client/euclid/measure.js',                         'fb',
+		'client/euclid/rect.js',                            'fb',
+		'client/euclid/bezirect.js',                        'fb',
+		'client/euclid/ovalslice.js',                       'fb',
+		'client/euclid/ovalflower.js',                      'fb',
+		'client/euclid/line.js',                            'fb',
+		'client/theme.js',                                  'fb',
+		'client/euclid/view.js',                            'fb',
+		'shared/meshverse.js',                              'fb',
+		'shared/path.js',                                   'fb',
+		'shared/tree.js',                                   'fb',
+		'shared/sign.js',                                   'fb',
+		'shared/change.js',                                 'fb',
+		'shared/changex.js',                                'fb',
+		'shared/meshmashine.js',                            'fb',
+		'client/iface.js',                                  'fb',
+		'client/peer.js',                                   'fb',
+		'client/design/pattern.js',                         'fb',
+		'client/design/fontstyles.js',                      'fb',
+		'client/design/mainboard.js',                       'fb',
+		'client/design/loginboard.js',                      'fb',
+		'client/design/regboard.js',                        'fb',
+		'client/design/helpboard.js',                       'fb',
+		'client/caccent.js',                                'fb',
+		'client/curve.js',                                  'fb',
+		'client/ccustom.js',                                'fb',
+		'client/cinput.js',                                 'fb',
+		'client/clabel.js',                                 'fb',
+		'client/cchat.js',                                  'fb',
+		'client/cboard.js',                                 'fb',
+		'client/ccode/util.js',                             'fb',
+		'client/ccode/mainboard.js',                        'fb',
+		'client/ccode/helpboard.js',                        'fb',
+		'client/ccode/mbleftb.js',                          'fb',
+		'client/ccode/mbleft2b.js',                         'fb',
+		'client/ccode/mbswitchb.js',                        'fb',
+		'client/ccode/mbrightb.js',                         'fb',
+		'client/ccode/mbzoomplusb.js',                      'fb',
+		'client/ccode/mbzoomnullb.js',                      'fb',
+		'client/ccode/mbzoomminusb.js',                     'fb',
+		'client/ccode/lbloginb.js',                         'fb',
+		'client/ccode/lbcloseb.js',                         'fb',
+		'client/ccode/lbpassi.js',                          'fb',
+		'client/ccode/rbcloseb.js',                         'fb',
+		'client/ccode/rbregb.js',                           'fb',
+		'client/ccode/hbhideb.js',                          'fb',
+		'client/switchpanel.js',                            'fb',
+		'client/cockpit.js',                                'fb',
+		'client/action.js',                                 'fb',
+		'client/ovalmenu.js',                               'fb',
+		'client/visual/para.js',                            'fb',
+		'client/scrollbar.js',                              'fb',
+		'client/visual/visual.js',                          'fb',
+		'client/visual/doc.js',                             'fb',
+		'client/visual/item.js',                            'fb',
+		'client/visual/note.js',                            'fb',
+		'client/visual/label.js',                           'fb',
+		'client/visual/relation.js',                        'fb',
+		'client/visual/space.js',                           'fb',
+		'client/browser.js',                                'fb',
+		'client/caret.js',                                  'fb',
+		'client/selection.js',                              'fb',
+		'client/shell.js',                                  'fb',
+		'client/fontloader.js',                             'fb',
+
+		'client/fonts/dejavu.css',                          'mc',
+		'client/fonts/dejavusans-boldoblique-webfont.eot',  'mc',
+		'client/fonts/dejavusans-boldoblique-webfont.svg',  'mc',
+		'client/fonts/dejavusans-boldoblique-webfont.ttf',  'mc',
+		'client/fonts/dejavusans-boldoblique-webfont.woff', 'mc',
+		'client/fonts/dejavusans-bold-webfont.eot',         'mc',
+		'client/fonts/dejavusans-bold-webfont.svg',         'mc',
+		'client/fonts/dejavusans-bold-webfont.ttf',         'mc',
+		'client/fonts/dejavusans-bold-webfont.woff',        'mc',
+		'client/fonts/dejavusans-oblique-webfont.eot',      'mc',
+		'client/fonts/dejavusans-oblique-webfont.svg',      'mc',
+		'client/fonts/dejavusans-oblique-webfont.ttf',      'mc',
+		'client/fonts/dejavusans-oblique-webfont.woff',     'mc',
+		'client/fonts/dejavusans-webfont.eot',              'mc',
+		'client/fonts/dejavusans-webfont.svg',              'mc',
+		'client/fonts/dejavusans-webfont.ttf',              'mc',
+		'client/fonts/dejavusans-webfont.woff',             'mc'
+	];
+
+	for (var a = 0, aZ = rlist.length; a < aZ; a += 2) {
+		var r = new Resource(rlist[a], rlist[a + 1]);
+		if (r.opts.bundle) { this.$bundle.push(r); }
+		this.$resources[r.path] = r;
 	}
-
-	if (f.pack) { this.$packList.push({file: f, path: path}); }
-
-	this.$files[path] = f;
 };
 
 /**
-| Registers files to be REST served.
+| Prepares the resource, also build the bundle for fast-loading.
 */
-Server.prototype.registerFiles = function() {
-	this.registerFile('icons/favicon.ico',           'm' );
-	this.registerFile('client/testpad.html',         ''  );
-	this.registerFile('client/testpad.js',           ''  );
-	this.registerFile('client/fonts/webfont.js',     'm' );
+Server.prototype.prepareResources = function(_) {
+	log('start', 'Preparing resources');
 
-	this.registerFile('shared/jools.js',             'p' );
-	this.registerFile('shared/sha1.js',              'p' );
-	this.registerFile('shared/euclid/compass.js',    'p' );
-	this.registerFile('shared/euclid/point.js',      'p' );
-	this.registerFile('shared/euclid/rect.js',       'p' );
-	this.registerFile('shared/euclid/margin.js',     'p' );
-	this.registerFile('client/euclid/fabric.js',     'p' );
-	this.registerFile('client/euclid/measure.js',    'p' );
-	this.registerFile('client/euclid/rect.js',       'p' );
-	this.registerFile('client/euclid/bezirect.js',   'p' );
-	this.registerFile('client/euclid/ovalslice.js',  'p' );
-	this.registerFile('client/euclid/ovalflower.js', 'p' );
-	this.registerFile('client/euclid/line.js',       'p' );
-	this.registerFile('client/theme.js',             'p' );
-	this.registerFile('client/euclid/view.js',       'p' );
-	this.registerFile('shared/meshverse.js',         'p' );
-	this.registerFile('shared/path.js',              'p' );
-	this.registerFile('shared/tree.js',              'p' );
-	this.registerFile('shared/sign.js',              'p' );
-	this.registerFile('shared/change.js',            'p' );
-	this.registerFile('shared/changex.js',           'p' );
-	this.registerFile('shared/meshmashine.js',       'p' );
-	this.registerFile('client/iface.js',             'p' );
-	this.registerFile('client/peer.js',              'p' );
-	this.registerFile('client/design/pattern.js',    'p' );
-	this.registerFile('client/design/fontstyles.js', 'p' );
-	this.registerFile('client/design/mainboard.js',  'p' );
-	this.registerFile('client/design/loginboard.js', 'p' );
-	this.registerFile('client/design/regboard.js',   'p' );
-	this.registerFile('client/design/helpboard.js',  'p' );
-	this.registerFile('client/caccent.js',           'p' );
-	this.registerFile('client/curve.js',             'p' );
-	this.registerFile('client/ccustom.js',           'p' );
-	this.registerFile('client/cinput.js',            'p' );
-	this.registerFile('client/clabel.js',            'p' );
-	this.registerFile('client/cchat.js',             'p' );
-	this.registerFile('client/cboard.js',            'p' );
-	this.registerFile('client/ccode/util.js',        'p' );
-	this.registerFile('client/ccode/mainboard.js',   'p' );
-	this.registerFile('client/ccode/helpboard.js',   'p' );
-	this.registerFile('client/ccode/mbleftb.js',     'p' );
-	this.registerFile('client/ccode/mbleft2b.js',    'p' );
-	this.registerFile('client/ccode/mbswitchb.js',   'p' );
-	this.registerFile('client/ccode/mbrightb.js',    'p' );
-	this.registerFile('client/ccode/mbzoomplusb.js', 'p' );
-	this.registerFile('client/ccode/mbzoomnullb.js', 'p' );
-	this.registerFile('client/ccode/mbzoomminusb.js','p' );
-	this.registerFile('client/ccode/lbloginb.js',    'p' );
-	this.registerFile('client/ccode/lbcloseb.js',    'p' );
-	this.registerFile('client/ccode/lbpassi.js',     'p' );
-	this.registerFile('client/ccode/rbcloseb.js',    'p' );
-	this.registerFile('client/ccode/rbregb.js',      'p' );
-	this.registerFile('client/ccode/hbhideb.js',     'p' );
-	this.registerFile('client/switchpanel.js',       'p' );
-	this.registerFile('client/cockpit.js',           'p' );
-	this.registerFile('client/action.js',            'p' );
-	this.registerFile('client/ovalmenu.js',          'p' );
-	this.registerFile('client/visual/para.js',       'p' );
-	this.registerFile('client/scrollbar.js',         'p' );
-	this.registerFile('client/visual/visual.js',     'p' );
-	this.registerFile('client/visual/doc.js',        'p' );
-	this.registerFile('client/visual/item.js',       'p' );
-	this.registerFile('client/visual/note.js',       'p' );
-	this.registerFile('client/visual/label.js',      'p' );
-	this.registerFile('client/visual/relation.js',   'p' );
-	this.registerFile('client/visual/space.js',      'p' );
-	this.registerFile('client/browser.js',           'p' );
-	this.registerFile('client/caret.js',             'p' );
-	this.registerFile('client/selection.js',         'p' );
-	this.registerFile('client/shell.js',             'p' );
-	this.registerFile('client/fontloader.js',        'p' );
-
-	this.registerFile('client/fonts/dejavu.css',                          'm' );
-	this.registerFile('client/fonts/dejavusans-boldoblique-webfont.eot',  'm' );
-	this.registerFile('client/fonts/dejavusans-boldoblique-webfont.svg',  'm' );
-	this.registerFile('client/fonts/dejavusans-boldoblique-webfont.ttf',  'm' );
-	this.registerFile('client/fonts/dejavusans-boldoblique-webfont.woff', 'm' );
-	this.registerFile('client/fonts/dejavusans-bold-webfont.eot',         'm' );
-	this.registerFile('client/fonts/dejavusans-bold-webfont.svg',         'm' );
-	this.registerFile('client/fonts/dejavusans-bold-webfont.ttf',         'm' );
-	this.registerFile('client/fonts/dejavusans-bold-webfont.woff',        'm' );
-	this.registerFile('client/fonts/dejavusans-oblique-webfont.eot',      'm' );
-	this.registerFile('client/fonts/dejavusans-oblique-webfont.svg',      'm' );
-	this.registerFile('client/fonts/dejavusans-oblique-webfont.ttf',      'm' );
-	this.registerFile('client/fonts/dejavusans-oblique-webfont.woff',     'm' );
-	this.registerFile('client/fonts/dejavusans-webfont.eot',              'm' );
-	this.registerFile('client/fonts/dejavusans-webfont.svg',              'm' );
-	this.registerFile('client/fonts/dejavusans-webfont.ttf',              'm' );
-	this.registerFile('client/fonts/dejavusans-webfont.woff',             'm' );
-};
-
-/**
-| Builds the file memory
-| Also builds the javascript pack,
-| so the client loads way faster in release mode.
-*/
-Server.prototype.prepareFiles = function(_) {
-	var f;
-	log('start', 'Preparing files');
-
-	for(f in this.$files) {
-		if (f.path === null) { continue; }
-		if (!f.memory && !f.pack) { continue; }
-		f.raw = fs.readFile(f.path, _);
+	for(var path in this.$resources) {
+		var r = this.$resources[path];
+		if (r.data !== null) { continue; }
+		r.data = fs.readFile(r.path, _);
 	}
 	
-	var cconfig = this.buildClientConfig();
-	this.$files['config.js'] = {
-		path   : null,
-		cache  : false,
-		code   : 'utf-8',
-		mime   : 'text/javascript',
-		memory : true,
-		raw    : cconfig,
-		gzip   : null,
-		pack   : false
-	};
+	var cconfig = new Resource('client/config.js', 'mb');
+	this.$bundle.unshift(cconfig);
+	this.$resources[cconfig.path] = cconfig;
+	cconfig.data = this.buildClientConfig();
 
-	var pack = [ cconfig ];
-	var packgz = null;
-	var devels = [ '<script src="/config.js" type="text/javascript"></script>' ];
+	var bundle = [];
+	var devels = [];
 
-	for(var a = 0, aZ = this.$packList.length; a < aZ; a++) {
-		f = this.$packList[a];
-		devels.push('<script src="' + f.path + '" type="text/javascript"></script>');
-		pack.push(fs.readFile(f.file.path, _));
+	for(var a = 0, aZ = this.$bundle.length; a < aZ; a++) {
+		r = this.$bundle[a];
+		devels.push('<script src="' + r.path + '" type="text/javascript"></script>');
+		if (r.data === null) {
+			bundle.push(fs.readFile(r.path, _));
+		} else {
+			bundle.push(r.data);
+		}
 	}
-	pack = pack.join('\n');
+	bundle = bundle.join('\n');
 
-	// uglify pack
+	// uglify the bundle
 	if (config.uglify) {
 		var ast;
-		ast = uglify.parser.parse(pack);
-		ast = uglify.uglify.ast_mangle(ast, {toplevel: true});
-		ast = uglify.uglify.ast_lift_variables(ast);
-		ast = uglify.uglify.ast_squeeze(ast);
-		pack = uglify.uglify.gen_code(ast);
+		ast    = uglify.parser.parse(bundle);
+		ast    = uglify.uglify.ast_mangle(ast, {toplevel: true});
+		ast    = uglify.uglify.ast_lift_variables(ast);
+		ast    = uglify.uglify.ast_squeeze(ast);
+		bundle = uglify.uglify.gen_code(ast);
 	}
 
-	var packsha1 = sha1.sha1hex(pack);
-	var mepacksha1 = 'meshcraft-' + packsha1 + '.js';
-	log('start', 'pack:', this.mepacksha1);
-
-	this.$files[mepacksha1] = {
-		path   :  null,
-		cache  :  true,
-		code   : 'utf-8',
-		mime   : 'text/javascript',
-		memory :  true,
-		raw    :  pack,
-		gzip   :  null,
-		pack   :  false
-	};
+	var bsha1 = sha1.sha1hex(bundle);
+	var br = new Resource('meshcraft-' + bsha1 + '.js', 'mc');
+	br.data = bundle;
+	this.$resources[br.path] = br;
+	log('start', 'bundle:', bsha1);
 	
 	// the devel file
-	var devel = fs.readFile('client/devel.html', _) + '';
-	devel = devel.replace(/<!--DEVELPACK.*>/, devels.join('\n'));
-	
-	this.$files['devel.html'] = {
-		path   :  null,
-		cache  :  false,
-		code   : 'utf-8',
-		mime   : 'text/html',
-		memory :  false,
-		raw    :  devel,
-		gzip   :  null,
-		pack   :  false
-	};
+	var devel = new Resource('client/devel.html', 'm');
+	devel.data = fs.readFile('client/devel.html', _) + '';
+	devel.data = devel.data.replace(/<!--DEVELPACK.*>/, devels.join('\n'));
+	this.$resources['devel.html'] = devel;
 
-	// the main html file
-	var main = fs.readFile('client/meshcraft.html', _) + '';
-	main = main.replace(
+	var main = new Resource('client/meshcraft.html', 'm');
+	main.data = fs.readFile('client/meshcraft.html', _) + '';
+	main.data = main.data.replace(
 		/<!--COPACK.*>/,
-		'<script src="'+mepacksha1+'" type="text/javascript"></script>'
+		'<script src="' + br.path + '" type="text/javascript"></script>'
 	);
-	
-	this.$files['meshcraft.html'] =
-	this.$files['index.html'] =
-	this.$files[''] = {
-		path   :  null,
-		cache  :  false,
-		code   : 'utf-8',
-		memory :  false, // TODO
-		mime   : 'text/html',
-		raw    :  main,
-		gzip   :  null,
-		pack   :  false
-	};
+	this.$resources['meshcraft.html'] =
+	this.$resources['index.html'] =
+	this.$resources[''] = main;
 
-	for(var path in this.$files) {
-		f = this.$files[path];
-		if (!f.memory) { continue; }
-		f.gzip = zlib.gzip(f.raw, _);
+	for(var path in this.$resources) {
+		r = this.$resources[path];
+		if (!r.opts.memory) { continue; }
+		r.gzip = zlib.gzip(r.data, _);
 	}
 	
-	log('start', 'Uncompressed pack length is ', this.$files[mepacksha1].raw.length);
-	log('start', 'Compressed pack length is ', this.$files[mepacksha1].gzip.length);
+	log('start', 'uncompressed bundle size is ', br.data.length);
+	log('start', '  compressed bundle size is ', br.gzip.length);
 };
 	
 /**
@@ -999,8 +929,8 @@ Server.prototype.requestListener = function(req, res) {
 	if (pathname === 'mm')
 		{ return this.webAjax(req, red, res); }
 
-	var f = this.$files[pathname];
-	if (!f) {
+	var r = this.$resources[pathname];
+	if (!r) {
 		res.writeHead(404, {
 			'Content-Type'  : 'text/plain',
 			'Cache-Control' : 'no-cache',
@@ -1010,38 +940,39 @@ Server.prototype.requestListener = function(req, res) {
 		return;
 	}
 
-	if (f.raw) {
-		var aenc = f.gzip && req.headers['accept-encoding'];
+	if (r.data) {
+		var aenc = r.gzip && req.headers['accept-encoding'];
 		var header = {
-			'Content-Type'     : f.mime,
-			'Cache-Control'    : f.cache ? 'max-age=31536000' : 'no-cache',
+			'Content-Type'     : r.mime,
+			'Cache-Control'    : r.opts.cache ? 'max-age=7884000' : 'no-cache',
 			'Date'             : new Date().toUTCString()
 		};
 		if (aenc && aenc.indexOf('gzip') >= 0) {
-			// deliver compressed
+			// delivers compressed
 			header['Content-Encoding'] = 'gzip';
 			res.writeHead(200, header);
-			res.end(f.gzip, 'binary');
+			res.end(r.gzip, 'binary');
 		} else {
-			// deliver uncompressed
+			// delivers uncompressed
 			res.writeHead(200, header);
-			res.end(f.raw, f.code);
+			res.end(r.data, r.code);
 		}
 		return;
 	}
 
 	var self = this;
-	fs.readFile(f.path, function(err, data) {
+	fs.readFile(r.path, function(err, data) {
 		if (err) {
 			self.webError(res, 500, 'Internal Server Error');
-			log('fail', 'Missing client file: '+f.path);
+			log('fail', 'Missing client file: '+r.path);
 			return;
 		}
 		res.writeHead(200, {
-			'Content-Type'  : f.mime,
+			'Content-Type'  : r.mime,
+			'Cache-Control' : r.opts.cache ? 'max-age=7884000' : 'no-cache',
 			'Date'          : new Date().toUTCString()
 		});
-		res.end(data, f.code);
+		res.end(data, r.code);
 	});
 };
 
