@@ -243,40 +243,61 @@ Tree.prototype.grow = function(model /*, ... */) {
 
 	if (pattern.copse) {
 		for (k in twig.copse) {
-			if (!Object.hasOwnProperty.call(twig.copse, k)) continue;
+			if (!Object.hasOwnProperty.call(twig.copse, k))
+				{ continue; }
+
 			if (!isString(k)) throw reject('key of copse no String: '+k);
 
 			val = twig.copse[k];
-			if (val === null) { delete twig.copse[k]; continue; }
-			klen++;
-			vtype = twigtype(val);
-			if (!pattern.copse[vtype]) throw reject(ttype+'.copse does not allow '+val.type);
-			switch(val.constructor) {
-			case Boolean :
-			case Number  :
-			case String  :
-				break;
-			default     :
-				if (!val._$grown) twig.copse[k] = this.grow(twig.copse[k]);
+
+			if (val === null) {
+				delete twig.copse[k];
+				continue;
 			}
+
+			klen++;
+			if (!pattern.copse[twigtype(val)])
+				{ throw reject(ttype+'.copse does not allow '+val.type); }
+
+			switch(val.constructor) {
+			case Boolean : throw new Error('.copse does not allow native Boolean');
+			case Number  : throw new Error('.copse does not allow native Number');
+			case String  : throw new Error('.copse does not allow native String');
+			}
+
+			if (!val._$grown)
+				{ twig.copse[k] = this.grow(twig.copse[k]); }
 		}
 	} else {
 		for (k in twig) {
-			if (!Object.hasOwnProperty.call(twig, k)) continue;
-			if (!isString(k)) throw reject('key of twig is no String: '+k);
-			if (k === 'type') { continue; }
+			if (!Object.hasOwnProperty.call(twig, k))
+				{ continue; }
+
+			if (!isString(k))
+				{ throw reject('key of twig is no String: ' + k); }
+
+			if (k === 'type')
+				{ continue; }
 
 			val = twig[k];
-			if (val === null) { delete twig[k]; continue; }
+
+			if (val === null) {
+				delete twig[k];
+				continue;
+			}
+
 			klen++;
 			vtype = twigtype(val);
-			if (!pattern.must[k]) throw reject(ttype+' does not allow key: '+k);
+			if (!pattern.must[k])
+				{ throw reject(ttype+' does not allow key: ' + k); }
+
+			// TODO really check if matches the vtype
 			switch(val.constructor) {
 			case Boolean :
-			case Number  :
-			case String  :
+			case Number :
+			case String :
 				break;
-			default     :
+			default :
 				if (!val._$grown) twig[k] = this.grow(twig[k]);
 			}
 		}
@@ -285,34 +306,34 @@ Tree.prototype.grow = function(model /*, ... */) {
 	// makes some additional checks
 	if (pattern.must) {
 		for (k in pattern.must) {
-			if (!isnon(twig[k])) throw reject(ttype+' requires "'+k+'"');
+			if (!isnon(twig[k]))
+				{ throw reject(ttype+' requires "'+k+'"'); }
 		}
 	}
 
 	if (pattern.ranks) {
 		aZ = twig.ranks.length;
-		if (aZ !== Object.keys(twig.ranks).length) {
-			throw reject('ranks not a sequence');
-		}
-		if (aZ !== klen) {
-			throw reject('ranks length does not match to copse');
-		}
+		if (aZ !== Object.keys(twig.ranks).length)
+			{ throw reject('ranks not a sequence'); }
+
+		if (aZ !== klen)
+			{ throw reject('ranks length does not match to copse'); }
+
 		for (a = 0; a < aZ; a++) {
 			k = twig.ranks[a];
-			if (!is(twig.copse[k])) {
-				throw new Error('copse misses ranks value: '+k);
-			}
+			if (!is(twig.copse[k]))
+				{ throw new Error('copse misses ranks value: '+k); }
 		}
 	}
 
-	// if there is a custom construcgtor, calls it to replace the new twig
-	if (pattern.creator) twig = pattern.creator(twig);
+	// if there is a custom constructor, it is called to replace the new twig.
+	if (pattern.creator)
+		{ twig = pattern.creator(twig); }
 
-	// mark the object to be fine
+	// marks the object to be fine
 	Object.defineProperty(twig, '_$grown', { value : true });
 
-	immute(twig);
-	return twig;
+	return immute(twig);
 };
 
 /**
