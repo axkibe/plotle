@@ -101,9 +101,8 @@ function jsonRequest(cmd, callback) {
 			return;
 		}
 		try {
-			if (asw) {
-				asw = Jools.inspect(JSON.parse(asw));
-			}
+			if (asw)
+				{ asw = Jools.inspect(JSON.parse(asw)); }
 		} catch (err) {
 			console.log('# ('+code+') answer not JSON: '+asw);
 			callback();

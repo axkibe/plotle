@@ -372,10 +372,11 @@ Server.prototype.addResources = function() {
 | Prepares the resource, also build the bundle for fast-loading.
 */
 Server.prototype.prepareResources = function(_) {
+	var path, r;
 	log('start', 'Preparing resources');
 
-	for(var path in this.$resources) {
-		var r = this.$resources[path];
+	for(path in this.$resources) {
+		r = this.$resources[path];
 		if (r.data !== null) { continue; }
 		r.data = fs.readFile(r.path, _);
 	}
@@ -431,7 +432,7 @@ Server.prototype.prepareResources = function(_) {
 	this.$resources['index.html'] =
 	this.$resources[''] = main;
 
-	for(var path in this.$resources) {
+	for(path in this.$resources) {
 		r = this.$resources[path];
 		if (!r.opts.memory) { continue; }
 		r.gzip = zlib.gzip(r.data, _);
@@ -548,17 +549,16 @@ Server.prototype.cmdAuth = function(cmd, _) {
 | Executes an register command.
 */
 Server.prototype.cmdRegister = function(cmd, _) {
-	if (!is(cmd.user)) { throw reject('user missing'); } // TODO return reject
-	if (!is(cmd.pass)) { throw reject('pass missing'); }
-	if (!is(cmd.mail)) { throw reject('mail missing'); }
-	if (!is(cmd.code)) { throw reject('code missing'); }
+	if (!is(cmd.user)) { return reject('user missing'); }
+	if (!is(cmd.pass)) { return reject('pass missing'); }
+	if (!is(cmd.mail)) { return reject('mail missing'); }
+	if (!is(cmd.code)) { return reject('code missing'); }
 
-	if (cmd.user.substr(0, 7) === 'visitor') {
-		throw reject('Username must not start with "visitor"');
-	}
-	if (cmd.user.length < 4) {
-		throw reject('Username too short, min. 4 characters');
-	}
+	if (cmd.user.substr(0, 7) === 'visitor')
+		{ return reject('Username must not start with "visitor"'); }
+
+	if (cmd.user.length < 4)
+		{ throw reject('Username too short, min. 4 characters'); }
 
 	var user = this.db.users.findOne({ _id : cmd.user}, _);
 	if (user !== null) { return reject('Username already taken'); }
@@ -1010,7 +1010,14 @@ Server.prototype.webAjax = function(req, red, res) {
 	
 		asw = self.ajaxCmd(cmd, res, function(e, asw) {
 			if (e) {
-				if (e.ok !== false) throw e; else asw = e;
+				if (e.ok !== false) {
+					throw e;
+				} else {
+					asw = {
+						ok : false,
+						message : e.message
+					};
+				}
 			}
 			if (asw === null) { return; }
 			log('ajax', '->', asw);

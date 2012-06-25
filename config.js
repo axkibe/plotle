@@ -124,7 +124,7 @@ config.log  = {
 	start:  true,
 	shell:  true,
 	tfx:    false,
-	web:    false,
+	web:    true,
 	warn:   true
 };
 

@@ -149,6 +149,6 @@ var Resource = function(path, opts) {
 	}
 };
 
-module.exports = Resource; 
+module.exports = Resource;
 
 })();
