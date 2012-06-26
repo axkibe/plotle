@@ -55,6 +55,7 @@ var	isnon        = Jools.isnon;
 var isArray      = Jools.isArray;
 var	isInteger    = Jools.isInteger;
 var	isString     = Jools.isString;
+var lazyFixate   = Jools.lazyFixate;
 var	log          = Jools.log;
 var	reject       = Jools.reject;
 var uid          = Jools.uid;
@@ -86,34 +87,19 @@ Twig.prototype.rankOf = function(key) {
 	if (!rof)
 		{ Object.defineProperty(this, '_rof', rof = {}); }
 	
-	/*
 	var r = rof[key];
 	if (is(r))
 		{ return r; }
-	*/
 
 	var x = is(this.copse[key]) ? ranks.indexOf(key) : -1;
-	//ranks[key] = x;
-
-	return x;
+	return rof[key] = x;
 };
 
 /**
-| Returns the twig that has rank r
+| Returns length of a copse
 */
-/*
-Twig.prototype.at = function(r) {
-	var ranks = this.ranks;
-	if (!isArray(ranks)) throw new Error('twig has no ranks');
-	var k = ranks[r];
-	if (!is(k)) throw new Error('at, invalid index');
-	return this.copse[k];
-};
-*/
-
-Object.defineProperty(Twig.prototype, 'length', {
-	// TODO lazy fixate
-	get : function() { return this.ranks.length; }
+lazyFixate(Twig.prototype, 'length', function() {
+	return this.ranks.length;
 });
 
 /**

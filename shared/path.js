@@ -72,17 +72,26 @@ var	subclass     = Jools.subclass;
 */
 Path = function(model) {
 	var path;
+
 	// if true the path needs to be copied
-	var slice = arguments.length > 1;
+	var copy = arguments.length > 1;
+
 	switch(model.constructor) {
-	case Path  : path = model._path; break;
-	case Array : path = model; break;
-	case null  : path = []; slice = false; break;
-	default    : throw new Error('invalid path-model');
+	case Path  :
+		path = (copy) ? (model._path.slice()) : (model._path);
+		break;
+	case Array :
+		path = (copy) ? (model.slice()) : (model);
+		break;
+	case null  :
+		path = [];
+		break;
+	default :
+		throw new Error('invalid path-model');
 	}
 
-	var mlen = path.length; // length of model
-	if (slice) path = path.slice();
+	// length of model
+	var mlen = path.length;
 
 	// appends additional arguments
 	var a = 1, aZ = arguments.length;
@@ -90,23 +99,24 @@ Path = function(model) {
 		var k = arguments[a];
 		if (k < 0) k += mlen;
 		if (k < 0) throw new Error('invalid path key');
+
+		_checkValidPathArc(arguments[a + 1]);
+
 		path[k] = arguments[a + 1];
 		a += 2;
 	}
+
 	if (arguments[a] === '--') {
-		var short = arguments[a + 1];
-		path.splice(path.length - short, short);
+		var s = arguments[a + 1];
+		path.splice(path.length - s, s);
 		a += 2;
 	}
-	if (arguments[a] === '++') {
-		a++;
-		while (a < aZ) path[path.length] = arguments[a++];
-	}
 
-	// checks the path arcs
-	// TODO might be needed only for copies
-	for (a = 0, aZ = path.length; a < aZ; a++) {
-		if (!_isValidPathArc(path[a])) throw reject('invalid path arc: '+path[a]);
+	if (arguments[a] === '++') {
+		for(a++; a < aZ; a++) {
+			_checkValidPathArc(arguments[a]);
+			path[path.length] = arguments[a++];
+		}
 	}
 
 	// TODO might change Path to be child of Array.
@@ -125,16 +135,17 @@ Path.isPath = function(o) {
 /**
 | Returns true is arc is a valid path arc.
 */
-var _isValidPathArc = function(arc) {
-	if (isInteger(arc)) return true;
-	if (!isString(arc)) return false;
-	if (arc[0] === '_') return false;
-	return true;
-};
+var _checkValidPathArc = function(arc) {
+	if (!isString(arc))
+		{ throw new Error('Path arc not a string'); }
 
+	if (arc[0] === '_')
+		{ throw new Error('Path arc begins with "_"'); }
+};
 
 /**
 | Length of the signature.
+| TODO lazy fixate
 */
 Object.defineProperty(Path.prototype, 'length', {
 	get: function() { return this._path.length; }
@@ -208,15 +219,10 @@ Path.prototype.toJSON = function() {
 };
 
 /**
-| Jsonfy.
+| Node export
 */
-Path.prototype.ToBSON = function() {
-	throw new Error('TODO used?');
-	//return this._path;
-};
-
-
-if (typeof(window) === 'undefined') { module.exports = Path; }
+if (typeof(window) === 'undefined')
+	{ module.exports = Path; }
 
 })();
 
