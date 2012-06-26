@@ -289,16 +289,35 @@ Tree.prototype.grow = function(model /*, ... */) {
 			klen++;
 			vtype = twigtype(val);
 			if (!pattern.must[k])
-				{ throw reject(ttype+' does not allow key: ' + k); }
+				{ throw reject(ttype + ' does not allow key: ' + k); }
 
 			// TODO really check if matches the vtype
 			switch(val.constructor) {
+
 			case Boolean :
-			case Number :
-			case String :
+				if (vtype !== 'Boolean')
+					{ throw reject(ttype + '[' + k + '] must be Boolean'); }
 				break;
+
+			case Number :
+				if (vtype === 'Integer') {
+					if (!isInteger(val))
+						{ throw reject(ttype + '[' + k + '] must be Integer'); }
+					break;
+				}
+
+				if (vtype !== 'Number')
+					{ throw reject(ttype + '[' + k + '] must be Number'); }
+				break;
+
+			case String :
+				if (vtype !== 'String')
+					{ throw reject(ttype + '[' + k + '] must be String'); }
+				break;
+
 			default :
-				if (!val._$grown) twig[k] = this.grow(twig[k]);
+				if (!val._$grown)
+					{ twig[k] = this.grow(twig[k]); }
 			}
 		}
 	}
@@ -307,7 +326,7 @@ Tree.prototype.grow = function(model /*, ... */) {
 	if (pattern.must) {
 		for (k in pattern.must) {
 			if (!isnon(twig[k]))
-				{ throw reject(ttype+' requires "'+k+'"'); }
+				{ throw reject(ttype + ' requires "' + k + '"'); }
 		}
 	}
 

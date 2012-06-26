@@ -29,6 +29,7 @@
 | Imports
 */
 var Fabric;
+var Jools;
 var Point;
 var Rect;
 
@@ -43,11 +44,14 @@ var Meshverse;
 (function () {
 "use strict";
 
+// node imports
 if (typeof (window) === 'undefined') {
-	// node imports
 	Point  = require('./euclid/point');
 	Rect   = require('./euclid/rect');
+	Jools  = require('./jools');
 }
+
+var immute = Jools.immute;
 
 /**
 | The meshcraft universe
@@ -118,8 +122,8 @@ Meshverse = {
 		},
 
 		must : {
-			'x' : 'Number', // TODO Integer
-			'y' : 'Number'
+			'x' : 'Integer',
+			'y' : 'Integer'
 		}
 	}
 };
@@ -127,24 +131,28 @@ Meshverse = {
 /**
 | Some sanity tests on the patterns.
 */
-/*
 (function(patterns) {
 	for(var k in patterns) {
 		var p = patterns[k];
 
-		// TODO turn on immuting
-		// immute(p)
-		//if (p.copse) immute(p.copse);
-		//if (p.must) immute(p.must);
+		immute(p);
+
+		if (p.copse)
+			{ immute(p.copse); }
+
+		if (p.must)
+			{ immute(p.must); }
 
 		if (p.must) {
-			if (p.copse) throw new Error('Patterns must not have .must and .copse');
-			if (p.must.index) throw new Error('indexOf must not be a must');
+			if (p.copse)
+				{ throw new Error('Patterns must not have .must and .copse'); }
+
+			if (p.must.index)
+				{ throw new Error('indexOf must not be a must'); }
 		}
 		if (p.ranks && !p.copse) throw new Error('Patterns must not have .ranks without .copse');
 	}
-})(Patterns.mUniverse);
-*/
+})(Meshverse);
 
 if (typeof(window) === 'undefined') {
 	module.exports = Meshverse;
