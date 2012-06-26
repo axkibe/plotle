@@ -51,7 +51,8 @@ var	is           = Jools.is;
 var	isnon        = Jools.isnon;
 var	isInteger    = Jools.isInteger;
 var	isString     = Jools.isString;
-var	log          = Jools.log;
+var lazyFixate   = Jools.lazyFixate;
+var log          = Jools.log;
 var	reject       = Jools.reject;
 var	subclass     = Jools.subclass;
 
@@ -100,7 +101,7 @@ Path = function(model) {
 		if (k < 0) k += mlen;
 		if (k < 0) throw new Error('invalid path key');
 
-		_checkValidPathArc(arguments[a + 1]);
+		checkValidPathArc(arguments[a + 1]);
 
 		path[k] = arguments[a + 1];
 		a += 2;
@@ -114,12 +115,11 @@ Path = function(model) {
 
 	if (arguments[a] === '++') {
 		for(a++; a < aZ; a++) {
-			_checkValidPathArc(arguments[a]);
+			checkValidPathArc(arguments[a]);
 			path[path.length] = arguments[a++];
 		}
 	}
 
-	// TODO might change Path to be child of Array.
 	Object.freeze(path);
 	innumerable(this, '_path', path);
 	immute(this);
@@ -135,7 +135,7 @@ Path.isPath = function(o) {
 /**
 | Returns true is arc is a valid path arc.
 */
-var _checkValidPathArc = function(arc) {
+var checkValidPathArc = function(arc) {
 	if (!isString(arc))
 		{ throw new Error('Path arc not a string'); }
 
@@ -145,7 +145,6 @@ var _checkValidPathArc = function(arc) {
 
 /**
 | Length of the signature.
-| TODO lazy fixate
 */
 Object.defineProperty(Path.prototype, 'length', {
 	get: function() { return this._path.length; }
