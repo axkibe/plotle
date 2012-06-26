@@ -116,7 +116,10 @@ var Server = function() {
 	// async waterfall model from here.
 
 	this.startup(function(err, asw) {
-		if (err) { debug(err); throw err; }
+		if (err) {
+			console.log('Error: ' + err.message);
+			process.exit(1);
+		}
 	});
 };
 

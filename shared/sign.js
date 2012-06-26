@@ -104,9 +104,9 @@ Sign.prototype.affix = function(test, cm, base, key, val) {
 	if (test(this[key])) {
 		check(matches(val, this[key]), cm, base,'.',key,' faulty preset', val, '!==', this[key]);
 		return this;
-	} else {
-		return new Sign(this, key, val);
 	}
+
+	return new Sign(this, key, val);
 };
 
 /**

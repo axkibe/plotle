@@ -78,10 +78,24 @@ var Twig = function () { };
 */
 Twig.prototype.rankOf = function(key) {
 	var ranks = this.ranks;
-	if (!isArray(ranks)) throw new Error('twig has no ranks');
-	// TODO caching!
-	if (!is(this.copse[key])) return -1;
-	return ranks.indexOf(key);
+	if (!isArray(ranks)) { throw new Error('twig has no ranks'); }
+	if (!isString(key))  { throw new Error('key no string'); }
+
+	// check rank of cache
+	var rof = this._rof;
+	if (!rof)
+		{ Object.defineProperty(this, '_rof', rof = {}); }
+	
+	/*
+	var r = rof[key];
+	if (is(r))
+		{ return r; }
+	*/
+
+	var x = is(this.copse[key]) ? ranks.indexOf(key) : -1;
+	//ranks[key] = x;
+
+	return x;
 };
 
 /**
