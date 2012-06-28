@@ -288,17 +288,16 @@ Tree.prototype.grow = function(model /*, ... */) {
 
 			klen++;
 			vtype = twigtype(val);
+
 			if (!pattern.must[k])
 				{ throw reject(ttype + ' does not allow key: ' + k); }
 
-			// TODO really check if matches the vtype
 			switch(val.constructor) {
-
 			case Boolean :
 				if (vtype !== 'Boolean')
 					{ throw reject(ttype + '[' + k + '] must be Boolean'); }
-				break;
 
+				break;
 			case Number :
 				if (vtype === 'Integer') {
 					if (!isInteger(val))
@@ -308,13 +307,13 @@ Tree.prototype.grow = function(model /*, ... */) {
 
 				if (vtype !== 'Number')
 					{ throw reject(ttype + '[' + k + '] must be Number'); }
-				break;
 
+				break;
 			case String :
 				if (vtype !== 'String')
 					{ throw reject(ttype + '[' + k + '] must be String'); }
-				break;
 
+				break;
 			default :
 				if (!val._$grown)
 					{ twig[k] = this.grow(twig[k]); }
