@@ -331,7 +331,7 @@ Server.prototype.addResources = function() {
 		'client/action.js',                                 'fb',
 		'client/ovalmenu.js',                               'fb',
 		'client/visual/para.js',                            'fb',
-		'client/scrollbar.js',                              'fb',
+		'client/visual/scrollbar.js',                       'fb',
 		'client/visual/visual.js',                          'fb',
 		'client/visual/doc.js',                             'fb',
 		'client/visual/item.js',                            'fb',
