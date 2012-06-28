@@ -4,8 +4,6 @@ With Meshcraft you can organize your notes/presentations/texts in a mesh using y
 
 See the live site at http://meshcraft.net/.
 
-Meshcraft tries to be compatible with all major browsers, but Chrome/Chromium performs best.
-
 New
 ===
  (reverse chronological)
