@@ -13,7 +13,7 @@
                                        '___)   '___)                      `~~'  `"   |_|      `--'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- Loads the web fonts MeshCraft uses.
+ Loads the web fonts Meshcraft uses.
  Starts the browser system when finished.
 
  Authors: Axel Kittenberger

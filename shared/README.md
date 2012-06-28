@@ -1,6 +1,6 @@
 Meshcraft
 =========
-This code is shared between the MeshCraft server and shell.
+This code is shared between the Meshcraft server and shell.
 
 Subdirs
 =======
@@ -33,7 +33,7 @@ Files
 </td></tr>
 
  <tr><td>   meshverse.js
-</td><td>   rules MeshCraft data trees must abide to
+</td><td>   rules Meshcraft data trees must abide to
 </td></tr>
  
  <tr><td>   path.js
@@ -49,7 +49,7 @@ Files
 </td></tr>
 
  <tr><td>   tree.js
-</td><td>   MeshCraft's data trees
+</td><td>   Meshcraft's data trees
 </td></tr>
 
 </table>

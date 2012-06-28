@@ -268,7 +268,7 @@ Server.prototype.buildClientConfig = function() {
 */
 Server.prototype.addResources = function() {
 	var rlist = [
-		'icons/favicon.ico',                                'mc',
+		'media/favicon.ico',                                'mc',
 		'client/testpad.html',                              'f',
 		'client/testpad.js',                                'f',
 		'client/fonts/webfont.js',                          'mc',
@@ -383,7 +383,9 @@ Server.prototype.prepareResources = function(_) {
 		if (r.data !== null) { continue; }
 		r.data = fs.readFile(r.path, _);
 	}
-	
+
+	this.$resources['favicon.ico'] = this.$resources['media/favicon.ico'];
+
 	var cconfig = new Resource('client/config.js', 'mb');
 	this.$bundle.unshift(cconfig);
 	this.$resources[cconfig.path] = cconfig;
