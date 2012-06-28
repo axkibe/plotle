@@ -1,14 +1,27 @@
-Meshcraft-Shell
-===============
+Meshcraft
+=========
 This code is shared between the MeshCraft server and shell.
+
+Subdirs
+=======
+<table>
+ 
+ <tr><td>   euclid
+</td><td>   logic for and figures in a 2d euclidean space
+</td></tr>
+
+</table>
 
 Files
 =====
 <table>
+ 
+ <tr><td>   change.js
+</td><td>   a change to a tree
+</td></tr>
 
- <tr><td>   fabric.js
-</td><td>   a graphic 2D-Object library for HTML Canvas 5
-     <br/>  shared, because the server uses Point and Rect definitions
+ <tr><td>   changex.js
+</td><td>   an array of changes to a tree
 </td></tr>
 
  <tr><td>   jools.js
@@ -19,12 +32,20 @@ Files
 </td><td>   the causal consistency / operation transformation engine
 </td></tr>
 
- <tr><td>   paths.js
-</td><td>   paths through a tree
-</td></tr>
-
  <tr><td>   meshverse.js
 </td><td>   rules MeshCraft data trees must abide to
+</td></tr>
+ 
+ <tr><td>   path.js
+</td><td>   a path through a tree
+</td></tr>
+ 
+ <tr><td>   sha1.js
+</td><td>   calculates a sha1-hash values 
+</td></tr>
+ 
+ <tr><td>   sign.js
+</td><td>   signates an entry, string index or string span
 </td></tr>
 
  <tr><td>   tree.js

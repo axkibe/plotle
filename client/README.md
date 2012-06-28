@@ -1,25 +1,55 @@
-Meshcraft-Shell
-===============
+Meshcraft
+=========
 This is the client (browser) code of MeshCraft.
+
+Subdirs
+=======
+<table>
+ 
+ <tr><td>   ccode
+</td><td>   behavior code of cockpit components
+</td></tr>
+ 
+ <tr><td>   design
+</td><td>   design of the cockpits
+</td></tr>
+
+ <tr><td>   euclid
+</td><td>   extends shared/euclid by utilities to draw in a HTML5 canvas 
+</td></tr>
+ 
+ <tr><td>   fonts
+</td><td>   embedded fonts 
+</td></tr>
+
+ <tr><td>   visual
+</td><td>   item and space visualisations (everything that lives within a space)
+</td></tr>
+
+</table>
 
 Files
 =====
 <table>
 
  <tr><td>   action.js
-</td><td>   an action in the making by the user.
+</td><td>   an action in the making by the user
 </td></tr>
 
  <tr><td>   browser.js
-</td><td>   wrapper around HTML5 browsers.
+</td><td>   wrapper around HTML5 browsers
 </td></tr>
  
  <tr><td>   caccent.js
-</td><td>   accent for cockpit components.
+</td><td>   accent for cockpit components
 </td></tr>
  
  <tr><td>   caret.js
-</td><td>   the virtual caret.
+</td><td>   the virtual caret
+</td></tr>
+ 
+ <tr><td>   cchat.js
+</td><td>   the chat component on the cockpit.
 </td></tr>
 
  <tr><td>   ccustom.js
@@ -34,10 +64,6 @@ Files
 </td><td>   a label on the cockpit.
 </td></tr>
  
- <tr><td>   cmeth.js
-</td><td>   component methods, behavior definitions.
-</td></tr>
-
  <tr><td>   cockpit.js
 </td><td>   the unmoveable part of the user interface
 </td></tr>
@@ -46,36 +72,40 @@ Files
 </td><td>   a bezier curve.
 </td></tr>
 
- <tr><td>   design.js
-</td><td>   component placements on the cockpit
-</td></tr>
- 
  <tr><td>   devel.html
 </td><td>   development version of the shells html file
 </td></tr>
 
- <tr><td>   deverse.js
-</td><td>   pattern rules for (cockpit) design
+ <tr><td>   fontloader.js
+</td><td>   wrapper around webfont loader
 </td></tr>
  
- <tr><td>   fabric.js
-</td><td>   a graphic 2D-Object library for HTML Canvas 5
-</td></tr>
-
  <tr><td>   iface.js
 </td><td>   communications with the server
 </td></tr>
 
  <tr><td>   meshcraft.html
-</td><td>   the shells html file
+</td><td>   the MeshCraft shell's html file
+</td></tr>
+
+ <tr><td>   ovalmenu.js
+</td><td>   an oval styled menu
 </td></tr>
 
  <tr><td>   peer.js
 </td><td>   routines for abstracting the communicating with the server
 </td></tr>
+ 
+ <tr><td>   selection.js
+</td><td>   a text selection
+</td></tr>
 
  <tr><td>   shell.js
 </td><td>   the main shell (caret/selection + links cockpit with visual)
+</td></tr>
+
+ <tr><td>   switchpanel.js
+</td><td>   the panel to switch spaces
 </td></tr>
 
  <tr><td>   testpad.html
@@ -87,11 +117,7 @@ Files
 </td></tr>
 
  <tr><td>   theme.js
-</td><td>   the look & feel settings (colors and the such)
-</td></tr>
-
- <tr><td>   visual.js
-</td><td>   the space visualisation and its visual contents.
+</td><td>   the look&feel settings (colors and the such)
 </td></tr>
 
 </table>

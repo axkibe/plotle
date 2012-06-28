@@ -1,36 +1,29 @@
 Meshcraft
 =========
-With Meshcraft you can organize your notes/presentations/texts in a mesh using your browser.
 
-See the live site at http://meshcraft.net/.
+Logic for and figures in a two dimensional euclidean space.
 
-Meshcraft tries to be compatible with all major browsers, but Chrome/Chromium performs best.
-
-New
-===
- (reverse chronological)
+Files
+=====
+<table>
  
- * Redesigned Item Handles
- * Zooming
- * Live communication with the server using a multi-user editing protocol (causal consistency / action transformation)
- * New Oval Design
- * Undo/Redo
- * Multiple Spaces (for now "welcome", "sandbox" and one personal per user)
+ <tr><td>   compass.js
+</td><td>   directions on a compass
+</td></tr>
 
-Roadmap
--------
-(in no particular order)
+ <tr><td>   margin.js
+</td><td>   inner and outer margins
+</td></tr>
 
- * Bold / Italic texts 
- * Images
- * Zooming Presentations
- * Spell checking
- * Create TeX-documents from a Path through Notes.
- * QDA: Use the Meshcraft infrastructure to offer QDA-abilities
- * ease usage as Concept Maps ("mindmaps" (TM))
- * Item grouping
- * Accessibility
- * Literature administriation nodes
+ <tr><td>   point.js
+</td><td>   a point
+</td></tr>
+
+ <tr><td>   rect.js
+</td><td>   a rectangle
+</td></tr>
+
+</table>
 
 License (MIT/Expat)
 ===================
