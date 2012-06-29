@@ -18,7 +18,7 @@
                                         `-^--'  `-' `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- A sequence of visual paragraph.
+ A sequence of visual paragraphs.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file

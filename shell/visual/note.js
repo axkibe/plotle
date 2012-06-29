@@ -18,7 +18,8 @@
                                        ,' `-' `-' `' `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- An item with text and a scrollbar.
+ A fix sized text item.
+ Possibly has a scrollbar.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file

@@ -18,7 +18,7 @@
                                       `--' `-^ ^-' `-' `'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- A sizeable item with sizing text.
+ An item with resizing text.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
