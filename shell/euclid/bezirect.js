@@ -17,8 +17,9 @@
                               ,|   \ |-'  /  | )| \  |-' |   |
                              `-^---' `-' '"' ' `'  ` `-' `-' `'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- 
- A rectangle with rounded (beziers) corners
+
+ A rectangle with rounded (beziers) corners.
+
  BeziRects are immutable objects.
 
       <-> a

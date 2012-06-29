@@ -1,26 +1,42 @@
 Meshcraft
 =========
 
-Logic for and figures in a two dimensional euclidean space.
+Extends shared/euclid by utilities to draw in a HTML5 canvas.
 
 Files
 =====
 <table>
 
- <tr><td>   compass.js
-</td><td>   directions on a compass
+ <tr><td>   bezirect.js
+</td><td>   a rectangle with rounded (beziers) corners
 </td></tr>
 
- <tr><td>   margin.js
-</td><td>   inner and outer margins
+ <tr><td>   fabric.js
+</td><td>   canvas wrapper
 </td></tr>
 
- <tr><td>   point.js
-</td><td>   a point
+ <tr><td>   line.js
+</td><td>   a line
+</td></tr>
+
+ <tr><td>   measure.js
+</td><td>   measures text widths
+</td></tr>
+
+ <tr><td>   ovalflower.js
+</td><td>   a double oval with 6 segments
+</td></tr>
+
+ <tr><td>   ovalslice.js
+</td><td>   an oval slice
 </td></tr>
 
  <tr><td>   rect.js
 </td><td>   a rectangle
+</td></tr>
+
+ <tr><td>   view.js
+</td><td>   pan, zoom and motion
 </td></tr>
 
 </table>

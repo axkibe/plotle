@@ -1,26 +1,33 @@
 Meshcraft
 =========
-
-Logic for and figures in a two dimensional euclidean space.
+Design of the cockpits
 
 Files
 =====
 <table>
 
- <tr><td>   compass.js
-</td><td>   directions on a compass
+ <tr><td>   fontstyles.js
+</td><td>   shortcuts for all used fontstyles
 </td></tr>
 
- <tr><td>   margin.js
-</td><td>   inner and outer margins
+ <tr><td>   helpboard.js
+</td><td>   the help board (upper right)
 </td></tr>
 
- <tr><td>   point.js
-</td><td>   a point
+ <tr><td>   loginboard.js
+</td><td>   the login board (bottom middle)
 </td></tr>
 
- <tr><td>   rect.js
-</td><td>   a rectangle
+ <tr><td>   mainboard.js
+</td><td>   the default main board (bottom middle)
+</td></tr>
+
+ <tr><td>   pattern.js
+</td><td>   pattern rules for all designs
+</td></tr>
+
+ <tr><td>   regboard.js
+</td><td>   the register board
 </td></tr>
 
 </table>
