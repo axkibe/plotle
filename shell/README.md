@@ -1,25 +1,25 @@
 Meshcraft
 =========
-This is the client (browser) code of MeshCraft.
+This is the shell (browser client) for Meshcraft.
 
 Subdirs
 =======
 <table>
- 
+
  <tr><td>   ccode
 </td><td>   behavior code of cockpit components
 </td></tr>
- 
+
  <tr><td>   design
 </td><td>   design of the cockpits
 </td></tr>
 
  <tr><td>   euclid
-</td><td>   extends shared/euclid by utilities to draw in a HTML5 canvas 
+</td><td>   extends shared/euclid by utilities to draw in a HTML5 canvas
 </td></tr>
- 
+
  <tr><td>   fonts
-</td><td>   embedded fonts 
+</td><td>   embedded fonts
 </td></tr>
 
  <tr><td>   visual
@@ -39,15 +39,15 @@ Files
  <tr><td>   browser.js
 </td><td>   wrapper around HTML5 browsers
 </td></tr>
- 
+
  <tr><td>   caccent.js
 </td><td>   accent for cockpit components
 </td></tr>
- 
+
  <tr><td>   caret.js
 </td><td>   the virtual caret
 </td></tr>
- 
+
  <tr><td>   cchat.js
 </td><td>   the chat component on the cockpit.
 </td></tr>
@@ -55,7 +55,7 @@ Files
  <tr><td>   ccustom.js
 </td><td>   a custom component on the cockpit.
 </td></tr>
- 
+
  <tr><td>   cinput.js
 </td><td>   an input field on the cockpit.
 </td></tr>
@@ -63,11 +63,11 @@ Files
  <tr><td>   clabel.js
 </td><td>   a label on the cockpit.
 </td></tr>
- 
+
  <tr><td>   cockpit.js
 </td><td>   the unmoveable part of the user interface
 </td></tr>
- 
+
  <tr><td>   curve.js
 </td><td>   a bezier curve.
 </td></tr>
@@ -79,13 +79,13 @@ Files
  <tr><td>   fontloader.js
 </td><td>   wrapper around webfont loader
 </td></tr>
- 
+
  <tr><td>   iface.js
 </td><td>   communications with the server
 </td></tr>
 
  <tr><td>   meshcraft.html
-</td><td>   the MeshCraft shell's html file
+</td><td>   the Meshcraft shell's html file
 </td></tr>
 
  <tr><td>   ovalmenu.js
@@ -95,7 +95,7 @@ Files
  <tr><td>   peer.js
 </td><td>   routines for abstracting the communicating with the server
 </td></tr>
- 
+
  <tr><td>   selection.js
 </td><td>   a text selection
 </td></tr>

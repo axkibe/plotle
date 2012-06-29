@@ -13,15 +13,15 @@ Files
  <tr><td>   helpboard.js
 </td><td>   the helpboard
 </td></tr>
- 
+
  <tr><td>   lbcloseb.js
 </td><td>   login board: close button
 </td></tr>
- 
+
  <tr><td>   lbloginb.js
 </td><td>   login board: login button
 </td></tr>
- 
+
  <tr><td>   lbpassi.js
 </td><td>   login board: password input
 </td></tr>
@@ -29,7 +29,7 @@ Files
  <tr><td>   mainboard.js
 </td><td>   the mainboard
 </td></tr>
- 
+
  <tr><td>   mbleft2b.js
 </td><td>   mainboard: second left button
 </td></tr>
@@ -37,11 +37,11 @@ Files
  <tr><td>   mbleft.js
 </td><td>   mainboard: left button
 </td></tr>
- 
+
  <tr><td>   mbright.js
 </td><td>   mainboard: right button
 </td></tr>
- 
+
  <tr><td>   mbswitchb.js
 </td><td>   mainboard: switch button
 </td></tr>
@@ -53,7 +53,7 @@ Files
  <tr><td>   mbzoomnullb.js
 </td><td>   mainboard: zoom to null button
 </td></tr>
- 
+
  <tr><td>   mbzoomplusb.js
 </td><td>   mainboard: zoom in button
 </td></tr>

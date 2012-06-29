@@ -7,7 +7,7 @@ See the live site at http://meshcraft.net/.
 New
 ===
  (reverse chronological)
- 
+
  * Redesigned Item Handles
  * Zooming
  * Live communication with the server using a multi-user editing protocol (causal consistency / action transformation)
@@ -16,10 +16,10 @@ New
  * Multiple Spaces (for now "welcome", "sandbox" and one personal per user)
 
 Roadmap
--------
+=======
 (in no particular order)
 
- * Bold / Italic texts 
+ * Bold / Italic texts
  * Images
  * Zooming Presentations
  * Spell checking
@@ -29,6 +29,32 @@ Roadmap
  * Item grouping
  * Accessibility
  * Literature administriation nodes
+
+Subdirs
+=======
+<table>
+
+ <tr><td>   media
+</td><td>   Meshcraft projects media files (images, icons, ...)
+</td></tr>
+
+ <tr><td>   shared
+</td><td>   code shared between shell and server
+</td></tr>
+
+ <tr><td>   shell
+</td><td>   the Meshcraft shell (client)
+</td></tr>
+
+ <tr><td>   server
+</td><td>   the Meshcraft server
+</td></tr>
+
+ <tr><td>   tools
+</td><td>   various server management tools.
+</td></tr>
+
+</table>
 
 License (MIT/Expat)
 ===================

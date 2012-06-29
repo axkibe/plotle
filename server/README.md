@@ -11,7 +11,7 @@ Files
  <tr><td>   server.js
 </td><td>   the server
 </td></tr>
- 
+
  <tr><td>   resource.js
 </td><td>   resources to be served
 </td></tr>

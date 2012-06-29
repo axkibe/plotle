@@ -236,14 +236,14 @@ Server.prototype.cmdMessage = function(cmd, _) {
 };
 
 /**
-| Builds the clients config.js file.
+| Builds the shells config.js file.
 */
-Server.prototype.buildClientConfig = function() {
+Server.prototype.buildShellConfig = function() {
 	var k;
 
 	var cconfig = [];
 	cconfig.push('var config = {\n');
-	cconfig.push('\tdevel   : '  + configSwitch(config.devel, 'client') + ',\n');
+	cconfig.push('\tdevel   : '  + configSwitch(config.devel, 'shell') + ',\n');
 	cconfig.push('\tmaxUndo : '  + config.maxUndo + ',\n');
 	cconfig.push('\tdebug   : {\n');
 	var first = true;
@@ -256,7 +256,7 @@ Server.prototype.buildClientConfig = function() {
 	first = true;
 	for(k in config.log) {
 		if (!first) { cconfig.push(',\n'); } else { first = false; }
-		cconfig.push('\t\t' + k + ' : ' + configSwitch(config.log[k], 'client'));
+		cconfig.push('\t\t' + k + ' : ' + configSwitch(config.log[k], 'shell'));
 	}
 	cconfig.push('\n\t}\n');
 	cconfig.push('};\n');
@@ -269,9 +269,9 @@ Server.prototype.buildClientConfig = function() {
 Server.prototype.addResources = function() {
 	var rlist = [
 		'media/favicon.ico',                                'mc',
-		'client/testpad.html',                              'f',
-		'client/testpad.js',                                'f',
-		'client/fonts/webfont.js',                          'mc',
+		'shell/testpad.html',                               'f',
+		'shell/testpad.js',                                 'f',
+		'shell/fonts/webfont.js',                           'mc',
 
 		'shared/jools.js',                                  'fb',
 		'shared/sha1.js',                                   'fb',
@@ -279,15 +279,15 @@ Server.prototype.addResources = function() {
 		'shared/euclid/point.js',                           'fb',
 		'shared/euclid/rect.js',                            'fb',
 		'shared/euclid/margin.js',                          'fb',
-		'client/euclid/fabric.js',                          'fb',
-		'client/euclid/measure.js',                         'fb',
-		'client/euclid/rect.js',                            'fb',
-		'client/euclid/bezirect.js',                        'fb',
-		'client/euclid/ovalslice.js',                       'fb',
-		'client/euclid/ovalflower.js',                      'fb',
-		'client/euclid/line.js',                            'fb',
-		'client/theme.js',                                  'fb',
-		'client/euclid/view.js',                            'fb',
+		'shell/euclid/fabric.js',                           'fb',
+		'shell/euclid/measure.js',                          'fb',
+		'shell/euclid/rect.js',                             'fb',
+		'shell/euclid/bezirect.js',                         'fb',
+		'shell/euclid/ovalslice.js',                        'fb',
+		'shell/euclid/ovalflower.js',                       'fb',
+		'shell/euclid/line.js',                             'fb',
+		'shell/theme.js',                                   'fb',
+		'shell/euclid/view.js',                             'fb',
 		'shared/meshverse.js',                              'fb',
 		'shared/path.js',                                   'fb',
 		'shared/tree.js',                                   'fb',
@@ -295,73 +295,73 @@ Server.prototype.addResources = function() {
 		'shared/change.js',                                 'fb',
 		'shared/changex.js',                                'fb',
 		'shared/meshmashine.js',                            'fb',
-		'client/iface.js',                                  'fb',
-		'client/peer.js',                                   'fb',
-		'client/design/pattern.js',                         'fb',
-		'client/design/fontstyles.js',                      'fb',
-		'client/design/mainboard.js',                       'fb',
-		'client/design/loginboard.js',                      'fb',
-		'client/design/regboard.js',                        'fb',
-		'client/design/helpboard.js',                       'fb',
-		'client/caccent.js',                                'fb',
-		'client/curve.js',                                  'fb',
-		'client/ccustom.js',                                'fb',
-		'client/cinput.js',                                 'fb',
-		'client/clabel.js',                                 'fb',
-		'client/cchat.js',                                  'fb',
-		'client/cboard.js',                                 'fb',
-		'client/ccode/util.js',                             'fb',
-		'client/ccode/mainboard.js',                        'fb',
-		'client/ccode/helpboard.js',                        'fb',
-		'client/ccode/mbleftb.js',                          'fb',
-		'client/ccode/mbleft2b.js',                         'fb',
-		'client/ccode/mbswitchb.js',                        'fb',
-		'client/ccode/mbrightb.js',                         'fb',
-		'client/ccode/mbzoomplusb.js',                      'fb',
-		'client/ccode/mbzoomnullb.js',                      'fb',
-		'client/ccode/mbzoomminusb.js',                     'fb',
-		'client/ccode/lbloginb.js',                         'fb',
-		'client/ccode/lbcloseb.js',                         'fb',
-		'client/ccode/lbpassi.js',                          'fb',
-		'client/ccode/rbcloseb.js',                         'fb',
-		'client/ccode/rbregb.js',                           'fb',
-		'client/ccode/hbhideb.js',                          'fb',
-		'client/switchpanel.js',                            'fb',
-		'client/cockpit.js',                                'fb',
-		'client/action.js',                                 'fb',
-		'client/ovalmenu.js',                               'fb',
-		'client/visual/para.js',                            'fb',
-		'client/visual/scrollbar.js',                       'fb',
-		'client/visual/visual.js',                          'fb',
-		'client/visual/doc.js',                             'fb',
-		'client/visual/item.js',                            'fb',
-		'client/visual/note.js',                            'fb',
-		'client/visual/label.js',                           'fb',
-		'client/visual/relation.js',                        'fb',
-		'client/visual/space.js',                           'fb',
-		'client/browser.js',                                'fb',
-		'client/caret.js',                                  'fb',
-		'client/selection.js',                              'fb',
-		'client/shell.js',                                  'fb',
-		'client/fontloader.js',                             'fb',
+		'shell/iface.js',                                   'fb',
+		'shell/peer.js',                                    'fb',
+		'shell/design/pattern.js',                          'fb',
+		'shell/design/fontstyles.js',                       'fb',
+		'shell/design/mainboard.js',                        'fb',
+		'shell/design/loginboard.js',                       'fb',
+		'shell/design/regboard.js',                         'fb',
+		'shell/design/helpboard.js',                        'fb',
+		'shell/caccent.js',                                 'fb',
+		'shell/curve.js',                                   'fb',
+		'shell/ccustom.js',                                 'fb',
+		'shell/cinput.js',                                  'fb',
+		'shell/clabel.js',                                  'fb',
+		'shell/cchat.js',                                   'fb',
+		'shell/cboard.js',                                  'fb',
+		'shell/ccode/util.js',                              'fb',
+		'shell/ccode/mainboard.js',                         'fb',
+		'shell/ccode/helpboard.js',                         'fb',
+		'shell/ccode/mbleftb.js',                           'fb',
+		'shell/ccode/mbleft2b.js',                          'fb',
+		'shell/ccode/mbswitchb.js',                         'fb',
+		'shell/ccode/mbrightb.js',                          'fb',
+		'shell/ccode/mbzoomplusb.js',                       'fb',
+		'shell/ccode/mbzoomnullb.js',                       'fb',
+		'shell/ccode/mbzoomminusb.js',                      'fb',
+		'shell/ccode/lbloginb.js',                          'fb',
+		'shell/ccode/lbcloseb.js',                          'fb',
+		'shell/ccode/lbpassi.js',                           'fb',
+		'shell/ccode/rbcloseb.js',                          'fb',
+		'shell/ccode/rbregb.js',                            'fb',
+		'shell/ccode/hbhideb.js',                           'fb',
+		'shell/switchpanel.js',                             'fb',
+		'shell/cockpit.js',                                 'fb',
+		'shell/action.js',                                  'fb',
+		'shell/ovalmenu.js',                                'fb',
+		'shell/visual/para.js',                             'fb',
+		'shell/visual/scrollbar.js',                        'fb',
+		'shell/visual/visual.js',                           'fb',
+		'shell/visual/doc.js',                              'fb',
+		'shell/visual/item.js',                             'fb',
+		'shell/visual/note.js',                             'fb',
+		'shell/visual/label.js',                            'fb',
+		'shell/visual/relation.js',                         'fb',
+		'shell/visual/space.js',                            'fb',
+		'shell/browser.js',                                 'fb',
+		'shell/caret.js',                                   'fb',
+		'shell/selection.js',                               'fb',
+		'shell/shell.js',                                   'fb',
+		'shell/fontloader.js',                              'fb',
 
-		'client/fonts/dejavu.css',                          'mc',
-		'client/fonts/dejavusans-boldoblique-webfont.eot',  'mc',
-		'client/fonts/dejavusans-boldoblique-webfont.svg',  'mc',
-		'client/fonts/dejavusans-boldoblique-webfont.ttf',  'mc',
-		'client/fonts/dejavusans-boldoblique-webfont.woff', 'mc',
-		'client/fonts/dejavusans-bold-webfont.eot',         'mc',
-		'client/fonts/dejavusans-bold-webfont.svg',         'mc',
-		'client/fonts/dejavusans-bold-webfont.ttf',         'mc',
-		'client/fonts/dejavusans-bold-webfont.woff',        'mc',
-		'client/fonts/dejavusans-oblique-webfont.eot',      'mc',
-		'client/fonts/dejavusans-oblique-webfont.svg',      'mc',
-		'client/fonts/dejavusans-oblique-webfont.ttf',      'mc',
-		'client/fonts/dejavusans-oblique-webfont.woff',     'mc',
-		'client/fonts/dejavusans-webfont.eot',              'mc',
-		'client/fonts/dejavusans-webfont.svg',              'mc',
-		'client/fonts/dejavusans-webfont.ttf',              'mc',
-		'client/fonts/dejavusans-webfont.woff',             'mc'
+		'shell/fonts/dejavu.css',                           'mc',
+		'shell/fonts/dejavusans-boldoblique-webfont.eot',   'mc',
+		'shell/fonts/dejavusans-boldoblique-webfont.svg',   'mc',
+		'shell/fonts/dejavusans-boldoblique-webfont.ttf',   'mc',
+		'shell/fonts/dejavusans-boldoblique-webfont.woff',  'mc',
+		'shell/fonts/dejavusans-bold-webfont.eot',          'mc',
+		'shell/fonts/dejavusans-bold-webfont.svg',          'mc',
+		'shell/fonts/dejavusans-bold-webfont.ttf',          'mc',
+		'shell/fonts/dejavusans-bold-webfont.woff',         'mc',
+		'shell/fonts/dejavusans-oblique-webfont.eot',       'mc',
+		'shell/fonts/dejavusans-oblique-webfont.svg',       'mc',
+		'shell/fonts/dejavusans-oblique-webfont.ttf',       'mc',
+		'shell/fonts/dejavusans-oblique-webfont.woff',      'mc',
+		'shell/fonts/dejavusans-webfont.eot',               'mc',
+		'shell/fonts/dejavusans-webfont.svg',               'mc',
+		'shell/fonts/dejavusans-webfont.ttf',               'mc',
+		'shell/fonts/dejavusans-webfont.woff',              'mc'
 	];
 
 	for (var a = 0, aZ = rlist.length; a < aZ; a += 2) {
@@ -386,10 +386,10 @@ Server.prototype.prepareResources = function(_) {
 
 	this.$resources['favicon.ico'] = this.$resources['media/favicon.ico'];
 
-	var cconfig = new Resource('client/config.js', 'mb');
+	var cconfig = new Resource('shell/config.js', 'mb');
 	this.$bundle.unshift(cconfig);
 	this.$resources[cconfig.path] = cconfig;
-	cconfig.data = this.buildClientConfig();
+	cconfig.data = this.buildShellConfig();
 
 	var bundle = [];
 	var devels = [];
@@ -422,13 +422,13 @@ Server.prototype.prepareResources = function(_) {
 	log('start', 'bundle:', bsha1);
 	
 	// the devel file
-	var devel = new Resource('client/devel.html', 'm');
-	devel.data = fs.readFile('client/devel.html', _) + '';
+	var devel = new Resource('shell/devel.html', 'm');
+	devel.data = fs.readFile('shell/devel.html', _) + '';
 	devel.data = devel.data.replace(/<!--DEVELPACK.*>/, devels.join('\n'));
 	this.$resources['devel.html'] = devel;
 
-	var main = new Resource('client/meshcraft.html', 'm');
-	main.data = fs.readFile('client/meshcraft.html', _) + '';
+	var main = new Resource('shell/meshcraft.html', 'm');
+	main.data = fs.readFile('shell/meshcraft.html', _) + '';
 	main.data = main.data.replace(
 		/<!--COPACK.*>/,
 		'<script src="' + br.path + '" type="text/javascript"></script>'
@@ -969,7 +969,7 @@ Server.prototype.requestListener = function(req, res) {
 	fs.readFile(r.path, function(err, data) {
 		if (err) {
 			self.webError(res, 500, 'Internal Server Error');
-			log('fail', 'Missing client file: '+r.path);
+			log('fail', 'Missing file: ' + r.path);
 			return;
 		}
 		res.writeHead(200, {

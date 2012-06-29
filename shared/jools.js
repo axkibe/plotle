@@ -48,13 +48,14 @@ var Jools;
 var devel;
 
 /**
-| returns true if param is true for the client or server.
+| returns true if param is true for the shell or server.
+| TODO ... remove
 | param: the param
-| side:  'client' or 'server'
+| side:  'shell' or 'server'
 */
 var configSwitch = function(param, side) {
-	if (side !== 'client' && side !== 'server') {
-		throw new Error('configSwitch side must be client or server');
+	if (side !== 'shell' && side !== 'server') {
+		throw new Error('configSwitch side must be shell or server');
 	}
 	return param === true || param === 'both' || param === side;
 };
@@ -68,7 +69,7 @@ if (typeof(window) === 'undefined') {
 	devel  = configSwitch(config.devel, 'server');
 } else {
 	// ini browser
-	devel  = configSwitch(config.devel, 'client');
+	devel  = configSwitch(config.devel, 'shell');
 }
 
 var puffed = config.debug.puffed;
