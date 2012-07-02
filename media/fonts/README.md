@@ -1,7 +1,7 @@
 Meshcraft
 =========
-free embedded fonts used.
+Free fonts for embedding
 
-License (MIT/Expat)
-===================
+License
+=======
 See http://dejavu-fonts.org/wiki/License
