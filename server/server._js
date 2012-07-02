@@ -101,7 +101,7 @@ var Server = function() {
 
 	// next upsleepID
 	this.nextSleep = 1;
-	
+
 	// next visitors ID
 	this.nextVisitor = 1000;
 
@@ -141,14 +141,14 @@ Server.prototype.startup = function(_) {
 	for(var o = cursor.nextObject(_); o !== null; o = cursor.nextObject(_)) {
 		this.playbackOne(o);
 	}
-	
+
 	log('start', 'Starting server @ http://' + (config.ip || '*') + '/:' + config.port);
 
 	var self = this;
 	http.createServer(function(req, res) {
 		self.requestListener(req, res);
 	}).listen(config.port, config.ip, _);
-	
+
 	log('start', 'Server running');
 };
 
@@ -186,7 +186,7 @@ Server.prototype.playbackOne = function(o) {
 		cid  : o.cid,
 		chgX : null
 	};
-	
+
 	if (!isArray(o.chgX)) {
 		c.chgX = new Change(o.chgX);
 	} else {
@@ -220,7 +220,7 @@ Server.prototype.cmdMessage = function(cmd, _) {
 	var message = cmd.message;
 	var user    = cmd.user;
 	var pass    = cmd.pass;
-	
+
 	if (!is(user))    { throw reject('user missing');    }
 	if (!is(pass))    { throw reject('pass missing');    }
 	if (!is(space))   { throw reject('space missing');   }
@@ -262,7 +262,7 @@ Server.prototype.buildShellConfig = function() {
 	cconfig.push('};\n');
 	return cconfig.join('');
 };
-	
+
 /**
 | Defines the resource to be REST served.
 */
@@ -380,7 +380,10 @@ Server.prototype.prepareResources = function(_) {
 
 	for(path in this.$resources) {
 		r = this.$resources[path];
-		if (r.data !== null) { continue; }
+
+		if (r.data !== null || !r.opts.memory)
+			{ continue; }
+
 		r.data = fs.readFile(r.path, _);
 	}
 
