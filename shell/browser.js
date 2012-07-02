@@ -52,6 +52,7 @@ if (typeof(window) === 'undefined') { throw new Error('browser.js needs a browse
 
 var abs       = Math.abs;
 var debug     = Jools.debug;
+var is        = Jools.is;
 var log       = Jools.log;
 var subclass  = Jools.subclass;
 
@@ -399,9 +400,9 @@ var System = function() {
 		default :
 			throw new Error('invalid mouseState');
 		}
-		
+
 		if (cursor !== null) { canvas.style.cursor = cursor; }
-		
+
 		return false;
 	}
 
@@ -410,7 +411,17 @@ var System = function() {
 	*/
 	function onmousewheel(event) {
 		var p = new Point(event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop);
-		var dir   = (event.wheelDelta || event.detail) > 0 ? 1 : -1;
+
+		var dir;
+		if (is(event.wheelDelta)) {
+			dir = (event.wheelDelta) > 0 ? 1 : -1;
+		} else if (is(event.detail)) {
+			dir = (event.detail) > 0 ? -1 : 1;
+		} else {
+			log('warn', 'invalid wheel event');
+			return;
+		}
+
 		var shift = event.shiftKey;
 		var ctrl  = event.ctrlKey || event.metaKey;
 
@@ -422,7 +433,7 @@ var System = function() {
 	*/
 	function onatweentime() {
 		if (mouseState !== 'atween') {
-			console.log('dragTime() in wrong action mode');
+			log('warn', 'dragTime() in wrong action mode');
 			return;
 		}
 		mouseState = 'drag';
@@ -461,7 +472,7 @@ var System = function() {
 	system.setTimer = function(time, callback) {
 		return window.setTimeout(makeCatcher(callback), time);
 	};
-	
+
 	/**
 	| Cancels a timer
 	*/
