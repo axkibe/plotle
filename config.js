@@ -69,7 +69,7 @@ config.database.name = 'meshcraft02';
 | For example, if the server is in devel mode,
 | it will die on a command it considers unacceptable.
 */
-config.devel = 'none';
+config.devel = 'shell';
 
 /**
 | If true uglifies the javascript pack, that is minizing its size.

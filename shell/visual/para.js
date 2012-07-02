@@ -65,7 +65,6 @@ var max           = Math.max;
 var min           = Math.min;
 var ro            = Math.round;
 
-
 /**
 | Constructor.
 */
@@ -82,22 +81,104 @@ Para = function(twig, path) {
 	this.$flow   = null;
 };
 
+
 /**
-| Updates v-vine to match a new twig.
+| Draws the paragraph in its cache and returns it.
 */
-Para.prototype.update = function(twig) {
-	this.twig    = twig;
-	this.$flow   = null;
-	this.$fabric = null;
+Para.prototype.draw = function(fabric, view, pnw) {
+	if (!(view instanceof View)) { throw new Error('view no View'); }
+
+	var flow   = this.getFlow();
+	var width  = flow.spread * view.zoom;
+	var doc    = shell.$space.get(this.path, -1);
+	var height = this.getHeight() * view.zoom;
+	var $f     = this.$fabric;
+
+	// cache hit?
+	if (config.debug.noCache ||
+		!$f ||
+		$f.width  !== width  ||
+		$f.height !== height ||
+		view.zoom !== $f.$zoom
+	) {
+		// TODO: work out exact height for text below baseline
+		$f = this.$fabric = new Fabric(width, height);
+		$f.scale(view.zoom);
+		$f.$zoom = view.zoom;
+		$f.setFont(doc.getFontSize(), doc.getFont(), 'black', 'start', 'alphabetic');
+
+		// draws text into the fabric
+		for(var a = 0, aZ = flow.length; a < aZ; a++) {
+			var line = flow[a];
+			for(var b = 0, bZ = line.a.length; b < bZ; b++) {
+				var chunk = line.a[b];
+				$f.fillText(
+					chunk.t,
+					chunk.x,
+					line.y
+				);
+			}
+		}
+	}
+
+	fabric.drawImage($f, pnw);
 };
 
 /**
-| Force clears all caches.
+| Draws the caret if its in this paragraph.
 */
-Para.prototype.knock = function() {
-	this.$fabric = null;
-	this.$flow   = null;
+Para.prototype.drawCaret = function(view) {
+	if (!(view instanceof View)) { throw new Error('view no View'); }
+
+	var caret = shell.caret;
+	var item  = shell.$space.get(this.path, -2);
+	var doc   = item.$graph.doc;
+	var zone  = item.getZone();
+	var cpos  = caret.$pos  = this.getCaretPos();
+	var pnw   = doc.getPNW(this.key);
+	var sbary = item.scrollbarY;
+	var sy    = sbary ? ro(sbary.getPos()) : 0;
+
+	var cyn = limit(0, cpos.n + pnw.y - sy, zone.height);
+	var cys = limit(0, cpos.s + pnw.y - sy, zone.height);
+	var cx  = cpos.x + pnw.x;
+
+	var ch  = ro((cys - cyn) * view.zoom);
+	if (ch === 0) { return; }
+
+	var cp = view.point(cx + zone.pnw.x, cyn + zone.pnw.y);
+	shell.caret.$screenPos = cp;
+
+	if (Caret.useGetImageData) {
+		shell.caret.$save = shell.fabric.getImageData(cp.x, cp.y, 3, ch + 2);
+	} else {
+		// paradoxically this is often way faster, especially on firefox
+		shell.caret.$save = new Fabric(shell.fabric.width, shell.fabric.height);
+		shell.caret.$save.drawImage(shell.fabric, 0, 0);
+	}
+
+	shell.fabric.fillRect('black', cp.x + 1, cp.y + 1, 1, ch);
 };
+
+
+/**
+| Returns the caret position relative to the doc.
+*/
+Para.prototype.getCaretPos = function() {
+	var caret   = shell.caret;
+	var item    = shell.$space.get(this.path, -2);
+	var doc     = item.$graph.doc;
+	var fs      = doc.getFontSize();
+	var descend = fs * theme.bottombox;
+	var p       = this.getOffsetPoint(shell.caret.sign.at1, shell.caret);
+
+	var s = ro(p.y + descend);
+	var n = s - ro(fs + descend);
+	var	x = p.x - 1;
+
+	return immute({ s: s, n: n, x: x });
+};
+
 
 /**
 | (re)flows the paragraph, positioning all chunks.
@@ -179,24 +260,12 @@ Para.prototype.getFlow = function() {
 };
 
 /**
-| Returns the offset closest to a point.
-|
-| point: the point to look for
+| Returns the height of the para
 */
-Para.prototype.getPointOffset = function(point) {
+Para.prototype.getHeight = function() {
 	var flow = this.getFlow();
-	var para = this.para;
 	var doc = shell.$space.get(this.path, -1);
-	Measure.setFont(doc.getFontSize(), doc.getFont());
-
-	var line;
-	for (line = 0; line < flow.length; line++) {
-		if (point.y <= flow[line].y)
-			{ break; }
-	}
-	if (line >= flow.length) line--;
-
-	return this.getLineXOffset(line, point.x);
+	return flow.height + ro(doc.getFontSize() * theme.bottombox);
 };
 
 /**
@@ -230,380 +299,6 @@ Para.prototype.getLineXOffset = function(line, x) {
 	return ftoken.o + a;
 };
 
-/**
-| Text has been inputted.
-*/
-Para.prototype.input = function(text) {
-    var reg   = /([^\n]+)(\n?)/g;
-	var para  = this;
-	var item  = shell.$space.get(para.path, -2);
-	var doc   = item.$graph.doc;
-
-    for(var rx = reg.exec(text); rx !== null; rx = reg.exec(text)) {
-		var line = rx[1];
-		shell.peer.insertText(para.textPath(), shell.caret.sign.at1, line);
-        if (rx[2]) {
-			shell.peer.split(para.textPath(), shell.caret.sign.at1);
-			para = doc.atRank(doc.twig.rankOf(para.key) + 1);
-		}
-    }
-	item.scrollCaretIntoView();
-};
-
-/**
-| Down arrow pressed.
-*/
-Para.prototype.keyDown = function(item, doc, caret) {
-	var flow = this.getFlow();
-	var x = caret.retainx !== null ? caret.retainx : caret.$pos.x;
-
-	if (caret.flow$line < flow.length - 1) {
-		// stays within this para
-		var at1 = this.getLineXOffset(caret.flow$line + 1, x);
-		caret = shell.setCaret(
-			'space',
-			{
-				path: this.textPath(),
-				at1: at1
-			},
-			x
-		);
-	} else {
-		// goto next para
-		r = doc.twig.rankOf(this.key);
-		if (r < doc.twig.length - 1) {
-			ve = doc.atRank(r + 1);
-			at1 = ve.getLineXOffset(0, x);
-			caret = shell.setCaret(
-				'space',
-				{
-					path : ve.textPath(),
-					at1  : at1
-				},
-				x
-			);
-		}
-	}
-	item.scrollCaretIntoView();
-	return caret;
-}
-
-/**
-| End-key pressed.
-*/
-Para.prototype.keyEnd = function(item, doc, caret) {
-	caret = shell.setCaret(
-		'space',
-		{
-			path : this.textPath(),
-			at1  : this.twig.text.length
-		}
-	);
-	return caret;
-}
-
-
-/**
-| Left arrow pressed.
-*/
-Para.prototype.keyLeft = function(item, doc, caret) {
-	if (caret.sign.at1 > 0) {
-		caret = shell.setCaret(
-			'space',
-			{
-				path : this.textPath(),
-				at1  : caret.sign.at1 - 1
-			}
-		);
-	} else {
-		var r = doc.twig.rankOf(this.key);
-		if (r > 0) {
-			var ve = doc.atRank(r - 1);
-			caret = shell.setCaret(
-				'space',
-				{
-					path : ve.textPath(),
-					at1  : ve.twig.text.length
-				}
-			);
-		}
-	}
-	item.scrollCaretIntoView();
-	return caret;
-}
-
-/**
-| Pos1-key pressed.
-*/
-Para.prototype.keyPos1 = function(item, doc, caret) {
-	caret = shell.setCaret(
-		'space',
-		{
-			path : this.textPath(),
-			at1  : 0
-		}
-	);
-	item.scrollCaretIntoView();
-	return caret;
-}
-
-/**
-| Right arrow pressed.
-*/
-Para.prototype.keyRight = function(item, doc, caret) {
-	if (caret.sign.at1 < this.twig.text.length) {
-		caret = shell.setCaret(
-			'space',
-			{
-				path : this.textPath(),
-				at1  : caret.sign.at1 + 1
-			}
-		);
-	} else {
-		var r = doc.twig.rankOf(this.key);
-		if (r < doc.twig.length - 1) {
-			var ve = doc.atRank(r + 1);
-
-			caret = shell.setCaret(
-				'space',
-				{
-					path : ve.textPath(),
-					at1  : 0
-				}
-			);
-		}
-	}
-	item.scrollCaretIntoView();
-	return caret;
-}
-
-/**
-| Up arrow pressed.
-*/
-Para.prototype.keyUp = function(item, doc, caret) {
-	var flow = this.getFlow();
-	var x = caret.retainx !== null ? caret.retainx : caret.$pos.x;
-
-	if (caret.flow$line > 0) {
-		// stay within this para
-		at1 = this.getLineXOffset(caret.flow$line - 1, x);
-		caret = shell.setCaret(
-			'space',
-			{
-				path : this.textPath(),
-				at1  : at1
-			},
-			x
-		);
-	} else {
-		// goto prev para
-		var r = doc.twig.rankOf(this.key);
-		if (r > 0) {
-			var ve = doc.atRank(r - 1);
-			at1 = ve.getLineXOffset(ve.getFlow().length - 1, x);
-			caret = shell.setCaret(
-				'space',
-				{
-					path : ve.textPath(),
-					at1  : at1
-				},
-				x
-			);
-		}
-	}
-	item.scrollCaretIntoView();
-	return caret;
-}
-
-
-/**
-| Handles a special key
-| TODO split into smaller functions
-*/
-Para.prototype.specialKey = function(key, shift, ctrl) {
-	var caret  = shell.caret;
-	var para   = this.para;
-	var select = shell.selection;
-	var item   = shell.$space.get(this.path, -2);
-	var doc    = item.$graph.doc;
-	var ve, at1, flow;
-	var r, x;
-
-	if (ctrl) {
-		switch(key) {
-		case 'a' :
-			var v0 = doc.atRank(0);
-			var v1 = doc.atRank(doc.twig.length - 1);
-
-			select.sign1 = new Sign({ path: v0.textPath(), at1: 0 });
-			select.sign2 = new Sign({ path: v1.textPath(), at1: v1.twig.text.length });
-			select.active = true;
-			shell.setCaret('space', select.sign2);
-			system.setInput(select.innerText());
-			caret.show();
-			item.poke();
-			shell.redraw = true;
-			return true;
-		}
-	}
-
-	if (!shift && select.active) {
-		switch(key) {
-		case 'down'      :
-		case 'end'       :
-		case 'left'      :
-		case 'pageup'    :
-		case 'pagedown'  :
-		case 'pos1'      :
-		case 'right'     :
-		case 'up'        :
-			select.deselect();
-			shell.redraw = true;
-			break;
-		case 'backspace' :
-		case 'del'       :
-			select.remove();
-			shell.redraw = true;
-			key = null;
-			break;
-		case 'enter'     :
-			select.remove();
-			shell.redraw = true;
-			break;
-		}
-	} else if (shift && !select.active) {
-		switch(key) {
-		case 'backup'   :
-		case 'down'     :
-		case 'end'      :
-		case 'left'     :
-		case 'pagedown' :
-		case 'pos1'     :
-		case 'right'    :
-		case 'up'       :
-			select.sign1 = caret.sign;
-			item.poke();
-		}
-	}
-
-	switch(key) {
-	case  'backspace' :
-		if (caret.sign.at1 > 0) {
-			shell.peer.removeText(this.textPath(), caret.sign.at1 - 1, 1);
-		} else {
-			r = doc.twig.rankOf(this.key);
-			if (r > 0) {
-				ve = doc.atRank(r - 1);
-				shell.peer.join(ve.textPath(), ve.twig.text.length);
-			}
-		}
-		item.scrollCaretIntoView();
-		break;
-	case 'enter' :
-		shell.peer.split(this.textPath(), caret.sign.at1);
-		item.scrollCaretIntoView();
-		break;
-	case 'pageup'   : item.scrollPage(true);                   break;
-	case 'pagedown' : item.scrollPage(false);                  break;
-	case 'down'     : caret = this.keyDown (item, doc, caret); break;
-	case 'end'      : caret = this.keyEnd  (item, doc, caret); break;
-	case 'left'     : caret = this.keyLeft (item, doc, caret); break;
-	case 'pos1'     : caret = this.keyPos1 (item, doc, caret); break;
-	case 'right'    : caret = this.keyRight(item, doc, caret); break;
-	case 'up'       : caret = this.keyUp   (item, doc, caret); break;
-	case 'del' :
-		if (caret.sign.at1 < this.twig.text.length) {
-			shell.peer.removeText(this.textPath(), caret.sign.at1, 1);
-		} else {
-			r = doc.twig.rankOf(this.key);
-			if (r < doc.twig.length - 1) {
-				shell.peer.join(this.textPath(), this.twig.text.length);
-			}
-		}
-		break;
-	}
-
-
-	if (shift) {
-		switch(key) {
-		case 'end'   :
-		case 'pos1'  :
-		case 'left'  :
-		case 'up'    :
-		case 'right' :
-		case 'down'  :
-			select.active = true;
-			select.sign2 = caret.sign;
-			system.setInput(select.innerText());
-			item.poke();
-			shell.redraw = true;
-			break;
-		}
-	}
-
-	caret.show();
-	shell.redraw = true; // TODO might be optimized
-};
-
-/**
-| Return the path to the .text attribute if this para.
-| TODO use lazyFixate.
-*/
-Para.prototype.textPath = function() {
-	if (this._textPath) return this._textPath;
-	return (this._textPath = new Path(this.path, '++', 'text'));
-};
-
-/**
-| Returns the height of the para
-*/
-Para.prototype.getHeight = function() {
-	var flow = this.getFlow();
-	var doc = shell.$space.get(this.path, -1);
-	return flow.height + ro(doc.getFontSize() * theme.bottombox);
-};
-
-/**
-| Draws the paragraph in its cache and returns it.
-*/
-Para.prototype.draw = function(fabric, view, pnw) {
-	if (!(view instanceof View)) { throw new Error('view no View'); }
-
-	var flow   = this.getFlow();
-	var width  = flow.spread * view.zoom;
-	var doc    = shell.$space.get(this.path, -1);
-	var height = this.getHeight() * view.zoom;
-	var $f     = this.$fabric;
-
-	// cache hit?
-	if (config.debug.noCache ||
-		!$f ||
-		$f.width  !== width  ||
-		$f.height !== height ||
-		view.zoom !== $f.$zoom
-	) {
-		// TODO: work out exact height for text below baseline
-		$f = this.$fabric = new Fabric(width, height);
-		$f.scale(view.zoom);
-		$f.$zoom = view.zoom;
-		$f.setFont(doc.getFontSize(), doc.getFont(), 'black', 'start', 'alphabetic');
-    
-		// draws text into the fabric
-		for(var a = 0, aZ = flow.length; a < aZ; a++) {
-			var line = flow[a];
-			for(var b = 0, bZ = line.a.length; b < bZ; b++) {
-				var chunk = line.a[b];
-				$f.fillText(
-					chunk.t,
-					chunk.x,
-					line.y
-				);
-			}
-		}
-	}
-
-	fabric.drawImage($f, pnw);
-};
 
 /**
 | Returns the point of a given offset.
@@ -657,58 +352,398 @@ Para.prototype.getOffsetPoint = function(offset, flowPos$) {
 };
 
 /**
-| Returns the caret position relative to the doc.
+| Returns the offset closest to a point.
+|
+| point: the point to look for
 */
-Para.prototype.getCaretPos = function() {
-	var caret   = shell.caret;
-	var item    = shell.$space.get(this.path, -2);
-	var doc     = item.$graph.doc;
-	var fs      = doc.getFontSize();
-	var descend = fs * theme.bottombox;
-	var p       = this.getOffsetPoint(shell.caret.sign.at1, shell.caret);
+Para.prototype.getPointOffset = function(point) {
+	var flow = this.getFlow();
+	var para = this.para;
+	var doc = shell.$space.get(this.path, -1);
+	Measure.setFont(doc.getFontSize(), doc.getFont());
 
-	var s = ro(p.y + descend);
-	var n = s - ro(fs + descend);
-	var	x = p.x - 1;
+	var line;
+	for (line = 0; line < flow.length; line++) {
+		if (point.y <= flow[line].y)
+			{ break; }
+	}
+	if (line >= flow.length) line--;
 
-	return immute({ s: s, n: n, x: x });
+	return this.getLineXOffset(line, point.x);
+};
+
+/**
+| Text has been inputted.
+*/
+Para.prototype.input = function(text) {
+    var reg   = /([^\n]+)(\n?)/g;
+	var para  = this;
+	var item  = shell.$space.get(para.path, -2);
+	var doc   = item.$graph.doc;
+
+    for(var rx = reg.exec(text); rx !== null; rx = reg.exec(text)) {
+		var line = rx[1];
+		shell.peer.insertText(para.textPath(), shell.caret.sign.at1, line);
+        if (rx[2]) {
+			shell.peer.split(para.textPath(), shell.caret.sign.at1);
+			para = doc.atRank(doc.twig.rankOf(para.key) + 1);
+		}
+    }
+	item.scrollCaretIntoView();
+};
+
+/**
+| Backspace pressed.
+*/
+Para.prototype.keyBackspace = function(item, doc, caret) {
+	if (caret.sign.at1 > 0) {
+		shell.peer.removeText(this.textPath(), caret.sign.at1 - 1, 1);
+		return true;
+	}
+	var r = doc.twig.rankOf(this.key);
+	if (r > 0) {
+		var ve = doc.atRank(r - 1);
+		shell.peer.join(ve.textPath(), ve.twig.text.length);
+		return true;
+	}
+
+	return false;
+};
+
+/**
+| Del-key pressed.
+*/
+Para.prototype.keyDel = function(item, doc, caret) {
+	if (caret.sign.at1 < this.twig.text.length) {
+		shell.peer.removeText(this.textPath(), caret.sign.at1, 1);
+		return true;
+	}
+
+	var r = doc.twig.rankOf(this.key);
+	if (r < doc.twig.length - 1) {
+		shell.peer.join(this.textPath(), this.twig.text.length);
+		return true;
+	}
+
+	return false;
+};
+
+/**
+| Down arrow pressed.
+*/
+Para.prototype.keyDown = function(item, doc, caret) {
+	var flow = this.getFlow();
+	var x = caret.retainx !== null ? caret.retainx : caret.$pos.x;
+	var at1;
+
+	if (caret.flow$line < flow.length - 1) {
+		// stays within this para
+		at1 = this.getLineXOffset(caret.flow$line + 1, x);
+		shell.setCaret(
+			'space',
+			{
+				path: this.textPath(),
+				at1: at1
+			},
+			x
+		);
+		return true;
+	}
+
+	// goto next para
+	var r = doc.twig.rankOf(this.key);
+	if (r < doc.twig.length - 1) {
+		var ve = doc.atRank(r + 1);
+		at1 = ve.getLineXOffset(0, x);
+		shell.setCaret(
+			'space',
+			{
+				path : ve.textPath(),
+				at1  : at1
+			},
+			x
+		);
+	}
+
+	return true;
+};
+
+/**
+| End-key pressed.
+*/
+Para.prototype.keyEnd = function(item, doc, caret) {
+	shell.setCaret(
+		'space',
+		{
+			path : this.textPath(),
+			at1  : this.twig.text.length
+		}
+	);
+	// TODO check if already at end.
+	return true;
+};
+
+/**
+| Enter-key pressed
+*/
+Para.prototype.keyEnter = function(item, doc, caret) {
+	shell.peer.split(this.textPath(), caret.sign.at1);
+	return true;
 };
 
 
 /**
-| Draws the caret if its in this paragraph.
+| Left arrow pressed.
 */
-Para.prototype.drawCaret = function(view) {
-	if (!(view instanceof View)) { throw new Error('view no View'); }
-
-	var caret = shell.caret;
-	var item  = shell.$space.get(this.path, -2);
-	var doc   = item.$graph.doc;
-	var zone  = item.getZone();
-	var cpos  = caret.$pos  = this.getCaretPos();
-	var pnw   = doc.getPNW(this.key);
-	var sbary = item.scrollbarY;
-	var sy    = sbary ? ro(sbary.getPos()) : 0;
-
-	var cyn = limit(0, cpos.n + pnw.y - sy, zone.height);
-	var cys = limit(0, cpos.s + pnw.y - sy, zone.height);
-	var cx  = cpos.x + pnw.x;
-
-	var ch  = ro((cys - cyn) * view.zoom);
-	if (ch === 0) { return; }
-
-	var cp = view.point(cx + zone.pnw.x, cyn + zone.pnw.y);
-	shell.caret.$screenPos = cp;
-
-	if (Caret.useGetImageData) {
-		shell.caret.$save = shell.fabric.getImageData(cp.x, cp.y, 3, ch + 2);
-	} else {
-		// paradoxically this is often way faster, especially on firefox
-		shell.caret.$save = new Fabric(shell.fabric.width, shell.fabric.height);
-		shell.caret.$save.drawImage(shell.fabric, 0, 0);
+Para.prototype.keyLeft = function(item, doc, caret) {
+	if (caret.sign.at1 > 0) {
+		shell.setCaret(
+			'space',
+			{
+				path : this.textPath(),
+				at1  : caret.sign.at1 - 1
+			}
+		);
+		return true;
 	}
 
-	shell.fabric.fillRect('black', cp.x + 1, cp.y + 1, 1, ch);
+	var r = doc.twig.rankOf(this.key);
+	if (r > 0) {
+		var ve = doc.atRank(r - 1);
+		shell.setCaret(
+			'space',
+			{
+				path : ve.textPath(),
+				at1  : ve.twig.text.length
+			}
+		);
+		return true;
+	}
+	return false;
+};
+
+/**
+| Pos1-key pressed.
+*/
+Para.prototype.keyPos1 = function(item, doc, caret) {
+	shell.setCaret(
+		'space',
+		{
+			path : this.textPath(),
+			at1  : 0
+		}
+	);
+	// TODO check if already at pos1
+	return true;
+};
+
+/**
+| Right arrow pressed.
+*/
+Para.prototype.keyRight = function(item, doc, caret) {
+	if (caret.sign.at1 < this.twig.text.length) {
+		shell.setCaret(
+			'space',
+			{
+				path : this.textPath(),
+				at1  : caret.sign.at1 + 1
+			}
+		);
+		return true;
+	}
+
+	var r = doc.twig.rankOf(this.key);
+	if (r < doc.twig.length - 1) {
+		var ve = doc.atRank(r + 1);
+
+		shell.setCaret(
+			'space',
+			{
+				path : ve.textPath(),
+				at1  : 0
+			}
+		);
+		return true;
+	}
+
+	return false;
+};
+
+/**
+| Up arrow pressed.
+*/
+Para.prototype.keyUp = function(item, doc, caret) {
+	var flow = this.getFlow();
+	var x = (caret.retainx !== null ? caret.retainx : caret.$pos.x);
+	var at1;
+
+	if (caret.flow$line > 0) {
+		// stay within this para
+		at1 = this.getLineXOffset(caret.flow$line - 1, x);
+		shell.setCaret(
+			'space',
+			{
+				path : this.textPath(),
+				at1  : at1
+			},
+			x
+		);
+		return true;
+	}
+	// goto prev para
+	var r = doc.twig.rankOf(this.key);
+	if (r > 0) {
+		var ve = doc.atRank(r - 1);
+		at1 = ve.getLineXOffset(ve.getFlow().length - 1, x);
+		shell.setCaret(
+			'space',
+			{
+				path : ve.textPath(),
+				at1  : at1
+			},
+			x
+		);
+		return true;
+	}
+
+	return false;
+};
+
+/**
+| Force clears all caches.
+*/
+Para.prototype.knock = function() {
+	this.$fabric = null;
+	this.$flow   = null;
+};
+
+/**
+| Handles a special key
+| TODO split into smaller functions
+*/
+Para.prototype.specialKey = function(key, shift, ctrl) {
+	var caret  = shell.caret;
+	var para   = this.para;
+	var select = shell.selection;
+	var item   = shell.$space.get(this.path, -2);
+	var doc    = item.$graph.doc;
+
+	// if true the caret moved or the selection changed
+	var show   = false;
+
+	if (ctrl) {
+		switch(key) {
+		case 'a' :
+			var v0 = doc.atRank(0);
+			var v1 = doc.atRank(doc.twig.length - 1);
+
+			select.sign1 = new Sign({ path: v0.textPath(), at1: 0 });
+			select.sign2 = new Sign({ path: v1.textPath(), at1: v1.twig.text.length });
+			select.active = true;
+			shell.setCaret('space', select.sign2);
+			system.setInput(select.innerText());
+			caret.show();
+			item.poke();
+			shell.redraw = true;
+			return true;
+		}
+	}
+
+	if (!shift && select.active) {
+		switch(key) {
+		case 'down'      :
+		case 'end'       :
+		case 'left'      :
+		case 'pageup'    :
+		case 'pagedown'  :
+		case 'pos1'      :
+		case 'right'     :
+		case 'up'        :
+			select.deselect();
+			show = true;
+			break;
+		case 'backspace' :
+		case 'del'       :
+			select.remove();
+			show = true;
+			key = null;
+			break;
+		case 'enter'     :
+			select.remove();
+			show = true;
+			break;
+		}
+	} else if (shift && !select.active) {
+		switch(key) {
+		case 'backup'   :
+		case 'down'     :
+		case 'end'      :
+		case 'left'     :
+		case 'pagedown' :
+		case 'pos1'     :
+		case 'right'    :
+		case 'up'       :
+			select.sign1 = caret.sign;
+			show = true;
+			item.poke();
+		}
+	}
+
+
+	switch(key) {
+	case 'backspace' : show = this.keyBackspace(item, doc, caret) || show; break;
+	case 'enter'     : show = this.keyEnter    (item, doc, caret) || show; break;
+	case 'pageup'    : item.scrollPage(true);                              break;
+	case 'pagedown'  : item.scrollPage(false);                             break;
+	case 'down'      : show = this.keyDown     (item, doc, caret) || show; break;
+	case 'end'       : show = this.keyEnd      (item, doc, caret) || show; break;
+	case 'left'      : show = this.keyLeft     (item, doc, caret) || show; break;
+	case 'pos1'      : show = this.keyPos1     (item, doc, caret) || show; break;
+	case 'right'     : show = this.keyRight    (item, doc, caret) || show; break;
+	case 'up'        : show = this.keyUp       (item, doc, caret) || show; break;
+	case 'del'       : show = this.keyDel      (item, doc, caret) || show; break;
+	}
+
+	if (shift) {
+		switch(key) {
+		case 'end'   :
+		case 'pos1'  :
+		case 'left'  :
+		case 'up'    :
+		case 'right' :
+		case 'down'  :
+			select.active = true;
+			select.sign2 = shell.caret.sign;
+			system.setInput(select.innerText());
+			item.poke();
+			shell.redraw = true;
+			break;
+		}
+	}
+
+	if (show) {
+		item.scrollCaretIntoView();
+		shell.caret.show();
+		shell.redraw = true;
+	}
+};
+
+/**
+| Return the path to the .text attribute if this para.
+| TODO use lazyFixate.
+*/
+Para.prototype.textPath = function() {
+	if (this._textPath) return this._textPath;
+	return (this._textPath = new Path(this.path, '++', 'text'));
+};
+
+/**
+| Updates v-vine to match a new twig.
+*/
+Para.prototype.update = function(twig) {
+	this.twig    = twig;
+	this.$flow   = null;
+	this.$fabric = null;
 };
 
 })();
