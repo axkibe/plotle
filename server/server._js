@@ -423,7 +423,7 @@ Server.prototype.prepareResources = function(_) {
 	br.data = bundle;
 	this.$resources[br.path] = br;
 	log('start', 'bundle:', bsha1);
-	
+
 	// the devel file
 	var devel = new Resource('shell/devel.html', 'm');
 	devel.data = fs.readFile('shell/devel.html', _) + '';
@@ -445,11 +445,11 @@ Server.prototype.prepareResources = function(_) {
 		if (!r.opts.memory) { continue; }
 		r.gzip = zlib.gzip(r.data, _);
 	}
-	
+
 	log('start', 'uncompressed bundle size is ', br.data.length);
 	log('start', '  compressed bundle size is ', br.gzip.length);
 };
-	
+
 /**
 | Executes an alter command.
 */
@@ -475,7 +475,7 @@ Server.prototype.cmdAlter = function(cmd, _) {
 	} catch(e) {
 		throw reject('invalid cmd: '+e.message);
 	}
-	
+
 	var spaces = {};
 	MeshMashine.listSpaces(chgX, spaces);
 	for (var s in spaces) {
@@ -578,7 +578,7 @@ Server.prototype.cmdRegister = function(cmd, _) {
 		null,
 		{ remove: true },
 	_);
-	
+
 	if (code === null) {
 		return reject('Unknown invitation code');
 	}
@@ -697,7 +697,7 @@ Server.prototype.cmdUpdate = function(cmd, res, _) {
 
 	if (!(cmd.mseq <= this.messages.length))
 		{ throw reject('invalid mseq: ' + cmd.mseq); }
-		
+
 	this.refreshPresence(cmd.user, cmd.space);
 	var asw = this.conveyUpdate(cmd.time, cmd.mseq, cmd.space);
 
@@ -770,7 +770,7 @@ Server.prototype.conveyUpdate = function(time, mseq, space) {
 		if (messages[m].space !== space) { continue; }
 		msga.push(messages[m]);
 	}
-		
+
 	return {
 		ok    : true,
 		time  : time,
@@ -837,7 +837,7 @@ Server.prototype.cmdGet = function(cmd, _) {
 	var user    = cmd.user;
 	var changes = this.changes;
 	var cZ      = changes.length;
-	
+
 	// checks
 	if (!is(this.$users[user]) || this.$users[user].pass !== cmd.pass)
 		{ throw reject('wrong user/password'); }
@@ -853,7 +853,7 @@ Server.prototype.cmdGet = function(cmd, _) {
 
 	if (!(time >= 0 && time <= cZ))
 		{ throw reject('invalid time'); }
-	
+
 	var path = new Path(cmd.path);
 
 	var access = this.testAccess(cmd.user, path.get(0));
@@ -896,7 +896,7 @@ Server.prototype.webError = function(res, code, message) {
 	res.end(message);
 };
 
-	
+
 /**
 | Checks if the request should be proxied
 | Returns true if the proxy applies, false otherwise.
