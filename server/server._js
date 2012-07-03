@@ -339,7 +339,7 @@ Server.prototype.addResources = function() {
 		'shell/visual/label.js',                            'fb',
 		'shell/visual/relation.js',                         'fb',
 		'shell/visual/space.js',                            'fb',
-		'shell/browser.js',                                 'fb',
+		'shell/system.js',                                  'fb',
 		'shell/caret.js',                                   'fb',
 		'shell/selection.js',                               'fb',
 		'shell/shell.js',                                   'fb',

@@ -11,14 +11,13 @@
                    `'-.....-.'.'.-'  / | |     | |    `-._____ / | |     / /   | |_  | |      |  '.'
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--'
-
-                                  ,-,---.
-                                   '|___/ ,-. ,-. . , , ,-. ,-. ,-.
-                                   ,|   \ |   | | |/|/  `-. |-' |
-                                  `-^---' '   `-' ' '   `-' `-' '
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
- This is a wrapper around HTML5 browsers, creating a more comfortable interface for a pure
+                                   .---.         .
+                                   \___  . . ,-. |- ,-. ,-,-.
+                                       \ | | `-. |  |-' | | |
+                                   `---' `-| `-' `' `-' ' ' '
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ /|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                                         `-'
+ This is a wrapper around HTML5 browsers, creating a more comfortable interface for
  graphical systems like the meshcraft shell.
 
  Authors: Axel Kittenberger
@@ -78,16 +77,9 @@ function makeCatcher(fun) {
 }
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- .---.     .  .
- \___  ,-. |- |- . ,-. ,-. ,-.
-     \ |-' |  |  | | | | | `-.
- `---' `-' `' `' ' ' ' `-| `-'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ,|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-                        `'
- Default behavior settings.
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/**
+| Default behavior settings.
+*/
 settings = {
 	// pixels to scroll for a wheel event
 	textWheelSpeed : 12 * 5,
@@ -103,21 +95,18 @@ settings = {
 };
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- .---.         .
- \___  . . ,-. |- ,-. ,-,-.
-     \ | | `-. |  |-' | | |
- `---' `-| `-' `' `-' ' ' '
-~ ~ ~ ~ /|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-       `-'
  Meshcraft Wrapper around the HTML5 browser.
 
  TODO use more prototyping.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 var System = function() {
-	if (system) throw new Error('System not a singleton');
+	if (system)
+		{ throw new Error('System not a singleton'); }
+
 	system = this;
-	var canvas = document.getElementById('canvas');
+
+	var canvas  = document.getElementById('canvas');
 	canvas.width  = window.innerWidth - 1;
 	canvas.height = window.innerHeight - 1;
 	system.fabric = new Fabric(canvas);
@@ -132,11 +121,22 @@ var System = function() {
 	// if the mouse moves out of the atweenBox or the atweenTimer ticks its
 	// a drag, if it goes up before either happens, its a click
 
-	var atweenTimer = null;    // timer for atween state
-	var atweenPos   = null;    // position mouse button went down
-	var atweenMove  = null;    // latest mouse position seen in atween state
-	var atweenShift = null;    // shift key in atween state
-	var atweenCtrl  = null;    // ctrl  key in atween state
+	var atween = {
+	    // timer for atween state
+		timer : null,
+
+	   // position mouse button went down
+   		pos   : null,
+
+	    // latest mouse position seen in atween state
+		move  : null,
+
+	    // shift key in atween state
+		shift : null,
+
+	    // ctrl  key in atween state
+		ctrl  : null
+	};
 
 	// hidden input that forwards all events
 	var hiddenInput = document.getElementById('input');
@@ -308,19 +308,19 @@ var System = function() {
 			break;
 		case 'atween':
 			var dragbox = settings.dragbox;
-			if ((abs(p.x - atweenPos.x) > dragbox) || (abs(p.y - atweenPos.y) > dragbox)) {
+			if ((abs(p.x - atween.pos.x) > dragbox) || (abs(p.y - atween.pos.y) > dragbox)) {
 				// moved out of dragbox -> start dragging
-				clearTimeout(atweenTimer);
-				atweenTimer = null;
+				clearTimeout(atween.timer);
+				atween.timer = null;
 				mouseState = 'drag';
-				system.shell.dragstart(atweenPos, shift, ctrl);
+				system.shell.dragstart(atween.pos, shift, ctrl);
 				cursor = system.shell.dragmove(p, shift, ctrl);
 				captureEvents();
 			} else {
 				// saves position for possible atween timeout
-				atweenMove  = p;
-				atweenShift = shift;
-				atweenCtrl  = ctrl;
+				atween.move  = p;
+				atween.shift = shift;
+				atween.ctrl  = ctrl;
 			}
 			break;
 		case 'drag':
@@ -352,10 +352,10 @@ var System = function() {
 		mouseState = system.shell.mousedown(p, shift, ctrl);
 		switch(mouseState) {
 		case 'atween' :
-			atweenPos   = atweenMove = p;
-			atweenShift = shift;
-			atweenCtrl  = ctrl;
-			atweenTimer = system.setTimer(settings.dragtime, system.onatweentime);
+			atween.pos   = atween.move = p;
+			atween.shift = shift;
+			atween.ctrl  = ctrl;
+			atween.timer = system.setTimer(settings.dragtime, system.onatweentime);
 			break;
 		case 'drag' :
 			captureEvents();
@@ -386,8 +386,8 @@ var System = function() {
 		case 'atween' :
 			// A click is a mouse down followed within dragtime by 'mouseup' and
 			// not having moved out of 'dragbox'.
-			clearTimeout(atweenTimer);
-			atweenTimer = null;
+			clearTimeout(atween.timer);
+			atween.timer = null;
 			system.shell.click(p, shift, ctrl);
 			cursor = system.shell.mousehover(p, shift, ctrl);
 			mouseState = false;
@@ -440,8 +440,8 @@ var System = function() {
 		atweenTimer = null;
 
 		var cursor = null;
-		system.shell.dragstart(atweenPos, atweenShift, atweenCtrl);
-		cursor = system.shell.dragmove(atweenMove, atweenShift, atweenCtrl);
+		system.shell.dragstart(atween.pos, atween.shift, atween.ctrl);
+		cursor = system.shell.dragmove(atween.move, atween.shift, atween.ctrl);
 
 		if (cursor !== null) { canvas.style.cursor = cursor; }
 	}
@@ -522,5 +522,3 @@ startup = function() {
 };
 
 })();
-
-
