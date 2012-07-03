@@ -37,7 +37,6 @@ var Path;
 var Tree;
 var VSpace;
 
-var settings;
 var shell;
 var system;
 var theme;

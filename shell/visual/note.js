@@ -44,7 +44,6 @@ var Point;
 var Para;
 var Rect;
 var Scrollbar;
-var settings;
 var shell;
 var system;
 var theme;
@@ -261,7 +260,7 @@ Note.prototype.mousewheel = function(view, p, dir, shift, ctrl) {
 	var dp = view.depoint(p);
 
 	if (!this.getZone().within(dp)) return false;
-	this.setScrollbar(this.scrollbarY.getPos() - dir * settings.textWheelSpeed);
+	this.setScrollbar(this.scrollbarY.getPos() - dir * system.settings.textWheelSpeed);
 	this.poke();
 	shell.redraw = true;
 	return true;

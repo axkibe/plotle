@@ -40,7 +40,6 @@ var Peer;
 var Point;
 var Selection;
 var Space;
-var settings;
 var Sign;
 var system;
 var theme;

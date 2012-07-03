@@ -41,7 +41,6 @@ var Margin;
 var MeshMashine;
 var Path;
 var Scrollbar;
-var settings;
 var shell;
 var system;
 var theme;
