@@ -400,6 +400,7 @@ Para.prototype.keyBackspace = function(item, doc, caret) {
 		shell.peer.removeText(this.textPath(), caret.sign.at1 - 1, 1);
 		return true;
 	}
+
 	var r = doc.twig.rankOf(this.key);
 	if (r > 0) {
 		var ve = doc.atRank(r - 1);
@@ -722,6 +723,7 @@ Para.prototype.specialKey = function(key, shift, ctrl) {
 	}
 
 	if (show) {
+		item.poke();
 		item.scrollCaretIntoView();
 		shell.caret.show();
 		shell.redraw = true;
