@@ -130,6 +130,9 @@ config.log  = {
 	warn:   true
 };
 
-config.proxy = {
-	'localhost:8833' : { cmd: 'proxy', host: 'twitterpolitik.net', port: 80}
+/**
+| redirects for VHOSTS
+*/
+config.redirect = {
+	'twitterpolitik.net' : 'http://www.univie.ac.at/twitterpolitik'
 };

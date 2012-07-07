@@ -901,27 +901,29 @@ Server.prototype.webError = function(res, code, message) {
 | Checks if the request should be proxied
 | Returns true if the proxy applies, false otherwise.
 */
-/*
-Server.prototype.webProxy = function(req, res) {
-	var host    = req.headers.host;
-	if (!config.proxy)
+Server.prototype.webRedirect = function(req, res) {
+	if (!config.redirect)
 		{ return false; }
 
-	var p = config.proxy[host];
-	debug(p);
-	if (!p)
+	var host = req.headers.host;
+	var loc  = config.redirect[host];
+
+	if (!loc)
 		{ return false; }
 
-	log('web', 'proxy', p.host, '.', p.port, req.url);
+	var locp = loc + req.url;
+	log('web', 'redirect', '->', locp);
 
-	proxy.proxyRequest(req, res, {
-		host: p.host,
-		port: p.port
+	res.writeHead(307, {
+		'Content-Type'  : 'text/plain',
+		'Cache-Control' : 'max-age=86400',
+		'Date'          : new Date().toUTCString(),
+		'Location'      : locp
 	});
+	res.end();
 
 	return true;
 };
-*/
 
 /**
 | Listens to http requests
@@ -929,7 +931,8 @@ Server.prototype.webProxy = function(req, res) {
 Server.prototype.requestListener = function(req, res) {
 	var red = url.parse(req.url);
 
-	//if (this.webProxy(req, res)) { return; }
+	if (this.webRedirect(req, res))
+		{ return; }
 
 	log('web', req.connection.remoteAddress, red.href);
 
@@ -939,6 +942,7 @@ Server.prototype.requestListener = function(req, res) {
 
 	var r = this.$resources[pathname];
 	if (!r) {
+		// TODO write two heads? this looks.wrong
 		res.writeHead(404, {
 			'Content-Type'  : 'text/plain',
 			'Cache-Control' : 'no-cache',
@@ -1015,7 +1019,7 @@ Server.prototype.webAjax = function(req, red, res) {
 			self.webError(res, 400, 'Not valid JSON');
 			return;
 		}
-	
+
 		asw = self.ajaxCmd(cmd, res, function(e, asw) {
 			if (e) {
 				if (e.ok !== false) {
