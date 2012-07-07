@@ -302,7 +302,7 @@ Shell.prototype.pathFrowny = function(fabric, border, twist, view, pos) {
 
 	fabric.moveTo(pos.x - 100, pos.y - 130);
 	fabric.lineTo(pos.x -  50, pos.y - 140);
-	
+
 	fabric.moveTo(pos.x + 100, pos.y - 130);
 	fabric.lineTo(pos.x +  50, pos.y - 140);
 };
@@ -332,20 +332,20 @@ Shell.prototype._draw = function() {
 		);
 
 		fabric.setFont({
-			size    :  40,
-			familiy :  theme.defaultFont,
-			fill    : 'black',
-			align   : 'center',
-			base    : 'middle'
+			size   :  40,
+			family :  theme.defaultFont,
+			fill   : 'black',
+			align  : 'center',
+			base   : 'middle'
 		});
 		fabric.fillText(this.green, m);
 
 		fabric.setFont({
-			size    :  24,
-			familiy :  theme.defaultFont,
-			fill    : 'black',
-			align   : 'center',
-			base    : 'middle'
+			size   :  24,
+			family :  theme.defaultFont,
+			fill   : 'black',
+			align  : 'center',
+			base   : 'middle'
 		});
 
 		fabric.fillText('Please refresh the page to reconnect.', m.x, m.y + 100);
