@@ -596,17 +596,17 @@ Fabric.prototype.fillRotateText = function(text, pc, phi, d) {
 
 
 /**
-| Sets the fontStyle, fillStyle, textAlign, textBaseline.
-|
-| fontStyle(font, fill)                      -or-
-| fontStyle(font, fill, align, baseline)
+| Sets the font.
 */
-Fabric.prototype.setFont = function(size, font, fill, align, baseline) {
+Fabric.prototype.setFont = function(f) {
+	if (!is(f.align)) { throw new Error('fontstyle misses align');    }
+	if (!is(f.base))  { throw new Error('fontstyle misses base'); }
+
 	var cx = this._cx;
-	cx.font         = size + 'px ' + font;
-	cx.fillStyle    = fill;
-	cx.textAlign    = align;
-	cx.textBaseline = baseline;
+	cx.font         = f.size + 'px ' + f.family;
+	cx.fillStyle    = f.fill;
+	cx.textAlign    = f.align;
+	cx.textBaseline = f.base;
 };
 
 /**

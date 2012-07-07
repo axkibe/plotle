@@ -129,8 +129,7 @@ CCustom.prototype._weave = function(accent) {
 	if (!isnon(style)) { throw new Error('Invalid style: ' + sname); }
 	fabric.paint(style, this, 'gpath', View.proper);
 
-	var fs = this.twig.caption.fontStyle;
-	fabric.setFont(fs.size, fs.font, fs.fill, fs.align, fs.base);
+	fabric.setFont(this.twig.caption.fontStyle);
 	fabric.fillText(this.$captionText, this.captionPos);
 
 	if (config.debug.drawBoxes) {

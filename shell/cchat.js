@@ -16,7 +16,6 @@
                                       | `-' | `-' |-. ,-. |-
                                       |   . |   . | | ,-| |
                                       `--'  `--'  ' ' `-^ `'
-                      
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  A chat interface.
@@ -121,13 +120,11 @@ CChat.prototype._weave = function() {
 	var h = this.iframe.height;
 
 	fabric.paint(Cockpit.styles.chat, this, 'pathILine', View.proper);
-	
+
 	var x = this.pitch.x;
 	var y = this.pitch.y;
-	var fs = this.twig.fontStyle;
-	// TODO allow shortcut, give fs only
 
-	fabric.setFont(fs.size, fs.font, fs.fill, fs.align, fs.base);
+	fabric.setFont(this.twig.fontStyle);
 	var lh = this.lineHeight;
 	fabric.fillText('»', x + 27, y);
 	fabric.fillText('chat', x, y);

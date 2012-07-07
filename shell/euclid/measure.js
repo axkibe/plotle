@@ -59,6 +59,7 @@ Measure = {
 		return Measure._cx.measureText(text).width;
 	},
 
+	// TODO remote give with every width
 	setFont : function(size, font) {
 		Measure._cx.font = size + 'px ' + font;
 	}

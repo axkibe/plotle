@@ -208,7 +208,15 @@ SwitchPanel.prototype._weave = function() {
 	this._paintButton(fabric, 'n');
 	this._paintButton(fabric, 'ne');
 
-	fabric.setFont(14, theme.defaultFont, 'black', 'center', 'middle');
+	// TODO XXX this should be in a design.
+	fabric.setFont({
+		size   :  14,
+		family :  theme.defaultFont,
+		fill   : 'black',
+		align  : 'center',
+		base   : 'middle'
+	});
+
 	var bd = this.buttonDim;
 	var cx = half(iframe.width);
 	var cy = half(bd.height);
@@ -216,10 +224,17 @@ SwitchPanel.prototype._weave = function() {
 	var bp = this.buttonPos;
 	fabric.fillText('Welcome',   bp.n .x, bp.n. y);
 	fabric.fillText('Sandbox',   bp.ne.x, bp.ne.y);
-	if (!this.amVisitor) { fabric.fillText('Your Home', bp.nw.x, bp.nw.y); }
-	
-	fabric.setFont(12, theme.defaultFont, 'black', 'center', 'middle');
-	
+	if (!this.amVisitor)
+		{ fabric.fillText('Your Home', bp.nw.x, bp.nw.y); }
+
+	fabric.setFont({
+		size   :  12,
+		family :  theme.defaultFont,
+		fill   : 'black',
+		align  : 'center',
+		base   : 'middle'
+	});
+
 	var text;
 	switch(this.$hover || this.current) {
 	case 'n'  : text = 'Welcome, public read-only'; break;
@@ -228,7 +243,7 @@ SwitchPanel.prototype._weave = function() {
 	default: throw new Error('no valid space text');
 	}
 	fabric.fillText(text, cx, iframe.height - 12);
-	
+
 	fabric.edge(theme.switchpanel.style.edge, this, 'pathFrame', View.proper);
 
 	if (config.debug.drawBoxes) {

@@ -331,10 +331,23 @@ Shell.prototype._draw = function() {
 			this, 'pathFrowny', View.proper, m.add(0, -100)
 		);
 
-		fabric.setFont(40, theme.defaultFont, 'black', 'center', 'middle' );
+		fabric.setFont({
+			size    :  40,
+			familiy :  theme.defaultFont,
+			fill    : 'black',
+			align   : 'center',
+			base    : 'middle'
+		});
 		fabric.fillText(this.green, m);
 
-		fabric.setFont(24, theme.defaultFont, 'black', 'center', 'middle' );
+		fabric.setFont({
+			size    :  24,
+			familiy :  theme.defaultFont,
+			fill    : 'black',
+			align   : 'center',
+			base    : 'middle'
+		});
+
 		fabric.fillText('Please refresh the page to reconnect.', m.x, m.y + 100);
 		return;
 	}

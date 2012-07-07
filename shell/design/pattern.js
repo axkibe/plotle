@@ -136,13 +136,13 @@ Design.Pattern = {
 	'FontStyle' : {
 		must    : {
 			'size'       : 'Number',
-			'font'       : 'String',
+			'family'     : 'String',
 			'align'      : 'String',
 			'fill'       : 'String',
 			'base'       : 'String'
 		}
 	},
-	
+
 	'Chat'  : {
 		must : {
 			'frame'      : 'Frame',

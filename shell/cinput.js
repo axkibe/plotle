@@ -163,9 +163,11 @@ CInput.prototype._weave = function(accent) {
 
 	fabric.fill(style.fill, this.bezi, 'path', View.proper);
 	var fs = this.twig.fontStyle;
-	fabric.setFont(fs.size, fs.font, fs.fill, fs.align, fs.base);
+	fabric.setFont(fs);
+
 	if(this.twig.password) {
-		fabric.fill('black', this, 'maskPath', View.proper, this.value.length, fs.size);
+		fabric.fill('black', this, 'maskPath', View.proper,
+			this.value.length, fs.size);
 	} else {
 		fabric.fillText(this.value, pitch.x, fs.size + pitch.y);
 	}

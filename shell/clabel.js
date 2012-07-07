@@ -76,8 +76,7 @@ CLabel.prototype.canFocus = function() {
 | Draws the label on the fabric.
 */
 CLabel.prototype.draw = function(fabric) {
-	var fs = this.twig.fontStyle;
-	fabric.setFont(fs.size, fs.font, fs.fill, fs.align, fs.base);
+	fabric.setFont(this.twig.fontStyle);
 	fabric.fillText(this.text || this.twig.text, this.pos);
 };
 

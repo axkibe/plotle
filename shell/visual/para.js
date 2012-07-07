@@ -105,7 +105,15 @@ Para.prototype.draw = function(fabric, view, pnw) {
 		$f = this.$fabric = new Fabric(width, height);
 		$f.scale(view.zoom);
 		$f.$zoom = view.zoom;
-		$f.setFont(doc.getFontSize(), doc.getFont(), 'black', 'start', 'alphabetic');
+
+		// TODO cache this somewhere
+		$f.setFont({
+			size   :  doc.getFontSize(),
+			family :  doc.getFont(),
+			fill   : 'black',
+			align  : 'start',
+			base   : 'alphabetic'
+		});
 
 		// draws text into the fabric
 		for(var a = 0, aZ = flow.length; a < aZ; a++) {

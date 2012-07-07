@@ -107,7 +107,13 @@ OvalMenu.prototype.draw = function(view) {
 	f.edge(this._style.edge, this._oflower, 'path', view, null);
 
 
-	f.setFont(12, theme.defaultFont, 'black', 'center', 'middle');
+	f.setFont({
+		size   :  12,
+		family :  theme.defaultFont,
+		fill   : 'black',
+		align  : 'center',
+		base   : 'middle'
+	});
 	var labels = this.labels;
 
 	var b1  = this._dimensions.b1;
@@ -125,7 +131,7 @@ OvalMenu.prototype.draw = function(view) {
 	if (labels.sw) f.fillText(labels.sw, pc.x - a2h, pc.y + bs );
 	if (labels.nw) f.fillText(labels.nw, pc.x - a2h, pc.y - bs );
 	if (labels.c)  f.fillText(labels.c,  pc);
-	
+
 	if (this.$fade) { f.globalAlpha(1); }
 };
 

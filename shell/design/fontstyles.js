@@ -43,96 +43,101 @@ Design = Design || { };
 'use strict';
 
 var styles = {
-	ca        : {
-		type  : 'FontStyle',
-		font  : theme.defaultFont,
-		fill  : 'black',
-		align : 'center',
-		base  : 'alphabetic',
-		$c    : {}
+	ca         : {
+		type   : 'FontStyle',
+		family : theme.defaultFont,
+		fill   : 'black',
+		align  : 'center',
+		base   : 'alphabetic',
+		$c     : {}
 	},
-	cab       : {
-		type  : 'FontStyle',
-		font  :  theme.defaultFont,
-		fill  : 'black',
-		align : 'center',
-		base  : 'alphabetic',
-		$c    : {}
+	cab        : {
+		type   : 'FontStyle',
+		family :  theme.defaultFont,
+		fill   : 'black',
+		align  : 'center',
+		base   : 'alphabetic',
+		$c     : {}
 	},
-	cm        : {
-		type  : 'FontStyle',
-		font  :  theme.defaultFont,
-		fill  : 'black',
-		align : 'center',
-		base  : 'middle',
-		$c    : {}
+	cm         : {
+		type   : 'FontStyle',
+		family :  theme.defaultFont,
+		fill   : 'black',
+		align  : 'center',
+		base   : 'middle',
+		$c     : {}
 	},
-	la        : {
-		type  : 'FontStyle',
-		font  :  theme.defaultFont,
-		fill  : 'black',
-		align : 'start',
-		base  : 'alphabetic',
-		$c    : {}
+	la         : {
+		type   : 'FontStyle',
+		family :  theme.defaultFont,
+		fill   : 'black',
+		align  : 'start',
+		base   : 'alphabetic',
+		$c     : {}
 	},
-	lac       : {
-		type  : 'FontStyle',
-		font  :  theme.defaultFont,
-		fill  : 'rgb(128, 44, 0)',
-		align : 'start',
-		base  : 'alphabetic',
-		$c    : {}
+	lac        : {
+		type   : 'FontStyle',
+		family :  theme.defaultFont,
+		fill   : 'rgb(128, 44, 0)',
+		align  : 'start',
+		base   : 'alphabetic',
+		$c     : {}
 	},
-	lah       : {
-		type  : 'FontStyle',
-		font  :  theme.defaultFont,
-		fill  : 'rgb(128, 44, 0)',
-		align : 'start',
-		base  : 'alphabetic',
-		$c    : {}
+	lah        : {
+		type   : 'FontStyle',
+		family :  theme.defaultFont,
+		fill   : 'rgb(128, 44, 0)',
+		align  : 'start',
+		base   : 'alphabetic',
+		$c     : {}
 	},
-	lahb      : {
-		type  : 'FontStyle',
-		font  : theme.boldFont,
-		fill  : 'rgb(128, 44, 0)',
-		align : 'start',
-		base  : 'alphabetic',
-		$c    : {}
+	lahb       : {
+		type   : 'FontStyle',
+		family : theme.boldFont,
+		fill   : 'rgb(128, 44, 0)',
+		align  : 'start',
+		base   : 'alphabetic',
+		$c     : {}
 	},
-	lahr      : {
-		type  : 'FontStyle',
-		font  :  theme.defaultFont,
-		fill  : 'red',
-		align : 'start',
-		base  : 'alphabetic',
-		$c    : {}
+	lahr       : {
+		type   : 'FontStyle',
+		family :  theme.defaultFont,
+		fill   : 'red',
+		align  : 'start',
+		base   : 'alphabetic',
+		$c     : {}
 	},
-	lar       : {
-		type  : 'FontStyle',
-		font  :  theme.defaultFont,
-		fill  : 'red',
-		align : 'left',
-		base  : 'alphabetic',
-		$c    : {}
+	lar        : {
+		type   : 'FontStyle',
+		family :  theme.defaultFont,
+		fill   : 'red',
+		align  : 'left',
+		base   : 'alphabetic',
+		$c     : {}
 	},
-	cadr      : {
-		type  : 'FontStyle',
-		font  : theme.defaultFont,
-		fill  : 'rgb(160, 0, 0)',
-		align : 'center',
-		base  : 'alphabetic',
-		$c    : {}
+	cadr       : {
+		type   : 'FontStyle',
+		family : theme.defaultFont,
+		fill   : 'rgb(160, 0, 0)',
+		align  : 'center',
+		base   : 'alphabetic',
+		$c     : {}
 	},
-	ra        : {
-		type  : 'FontStyle',
-		font  :  theme.defaultFont,
-		fill  : 'black',
-		align : 'end',
-		base  : 'alphabetic',
-		$c    : {}
+	ra         : {
+		type   : 'FontStyle',
+		family :  theme.defaultFont,
+		fill   : 'black',
+		align  : 'end',
+		base   : 'alphabetic',
+		$c     : {}
 	}
 };
 
+/**
+| TODO
+|
+| TODO whats this $c business?
+*/
 Design.fontStyle = function(size, code) {
 	var base = styles[code];
 	if (!base) { throw new Error('Invalid font style'); }
@@ -143,11 +148,6 @@ Design.fontStyle = function(size, code) {
 		c[k] = base[k];
 	}
 	c.size = size;
-	//c.style = size + 'px ' + c.font;
-	Object.defineProperty(c, 'style', {
-		get: function() { throw new Error('TODO'); },
-		set: function() { throw new Error('TODO'); }
-	});
 
 	return base.$c[size] = c;
 };
