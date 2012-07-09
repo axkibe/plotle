@@ -135,8 +135,8 @@ MainBoard.layout = {
 		code       : 'MBLeftB',
 
 		normaStyle : 'button',
-		hoverStyle : 'buttonFocus',
-		focusStyle : 'buttonHover',
+		hoverStyle : 'buttonHover',
+		focusStyle : 'buttonFocus',
 		hofocStyle : 'buttonHofoc',
 
 		frame : {
@@ -175,8 +175,8 @@ MainBoard.layout = {
 		code       : 'MBLeft2B',
 
 		normaStyle : 'button',
-		hoverStyle : 'buttonFocus',
-		focusStyle : 'buttonHover',
+		hoverStyle : 'buttonHover',
+		focusStyle : 'buttonFocus',
 		hofocStyle : 'buttonHofoc',
 
 		frame : {
@@ -222,8 +222,8 @@ MainBoard.layout = {
 		code       : 'MBRightB',
 
 		normaStyle : 'button',
-		hoverStyle : 'buttonFocus',
-		focusStyle : 'buttonHover',
+		hoverStyle : 'buttonHover',
+		focusStyle : 'buttonFocus',
 		hofocStyle : 'buttonHofoc',
 
 		frame : {
@@ -262,8 +262,8 @@ MainBoard.layout = {
 		code       : 'MBSwitchB',
 
 		normaStyle : 'button',
-		hoverStyle : 'buttonFocus',
-		focusStyle : 'buttonHover',
+		hoverStyle : 'buttonHover',
+		focusStyle : 'buttonFocus',
 		hofocStyle : 'buttonHofoc',
 
 		frame      : {
