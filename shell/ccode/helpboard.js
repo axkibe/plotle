@@ -28,7 +28,7 @@
 /**
 | Imports
 */
-var CBoard;
+var Dash;
 var config;
 var Fabric;
 var Jools;
@@ -46,6 +46,7 @@ var HelpBoard = null;
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
+var Panel    = Dash.Panel;
 var debug    = Jools.debug;
 var immute   = Jools.immute;
 var is       = Jools.is;
@@ -56,10 +57,10 @@ var subclass = Jools.subclass;
 | Constructor
 */
 HelpBoard = function(name, inherit, cockpit, screensize) {
-	CBoard.call(this, name, inherit, cockpit, screensize);
+	Panel.call(this, name, inherit, cockpit, screensize);
 	this.$access = inherit ? inherit.$access : 'rw';
 };
-subclass(HelpBoard, CBoard);
+subclass(HelpBoard, Panel);
 
 HelpBoard.prototype.setAccess = function(access) {
 	if (this.$access === access) { return; }

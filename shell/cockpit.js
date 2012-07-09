@@ -28,8 +28,8 @@
 /**
 | Imports
 */
-var CBoard;
 var Curve;
+var Dash;
 var Design;
 var Fabric;
 var HelpBoard;
@@ -55,23 +55,20 @@ var Cockpit = null;
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
+/**
+| Shortcuts.
+*/
 var debug         = Jools.debug;
 var immute        = Jools.immute;
 var is            = Jools.is;
 var isnon         = Jools.isnon;
 var log           = Jools.log;
+var Panel         = Dash.Panel;
 var subclass      = Jools.subclass;
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ,--.         .         .
- | `-' ,-. ,-. | , ,-. . |-
- |   . | | |   |<  | | | |
- `--'  `-' `-' ' ` |-' ' `'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-                   '
- The unmoving interface.
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/**
+| Constructor
+*/
 Cockpit = function() {
 	this.fabric       = system.fabric;
 	this.curBoardName = 'MainBoard';
@@ -124,12 +121,12 @@ Cockpit.prototype.getBoard = function(name) {
 		cboard.screensize.x === fabric.width &&
 		cboard.screensize.y === fabric.height)
 	{ return cboard; }
-	
+
 	var Proto;
 	switch(name) {
 	case 'MainBoard' : Proto = MainBoard; break;
 	case 'HelpBoard' : Proto = HelpBoard; break;
-	default          : Proto = CBoard;    break;
+	default          : Proto = Panel;     break;
 	}
 
 	var board = new Proto(

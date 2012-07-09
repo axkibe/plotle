@@ -309,7 +309,7 @@ Server.prototype.addResources = function() {
 		'shell/cinput.js',                                  'fb',
 		'shell/clabel.js',                                  'fb',
 		'shell/cchat.js',                                   'fb',
-		'shell/cboard.js',                                  'fb',
+		'shell/dash/panel.js',                              'fb',
 		'shell/ccode/util.js',                              'fb',
 		'shell/ccode/mainboard.js',                         'fb',
 		'shell/ccode/helpboard.js',                         'fb',

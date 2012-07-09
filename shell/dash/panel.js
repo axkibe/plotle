@@ -1,29 +1,33 @@
-/**                                                      _.._
-                                                      .-'_.._''.
- __  __   ___       _....._              .          .' .'     '.\
-|  |/  `.'   `.   .'       '.          .'|         / .'                                _.._
-|   .-.  .-.   ' /   .-'"'.  \        (  |        . '            .-,.-~.             .' .._|    .|
-|  |  |  |  |  |/   /______\  |        | |        | |            |  .-. |    __      | '      .' |_
-|  |  |  |  |  ||   __________|    _   | | .'''-. | |            | |  | | .:-`.'.  __| |__  .'     |
-|  |  |  |  |  |\  (          '  .' |  | |/.'''. \. '            | |  | |/ |   \ ||__   __|'-..  .-'
-|  |  |  |  |  | \  '-.___..-~. .   | /|  /    | | \ '.         .| |  '- `" __ | |   | |      |  |
-|__|  |__|  |__|  `         .'.'.'| |//| |     | |  '. `.____.-'/| |      .'.''| |   | |      |  |
-                   `'-.....-.'.'.-'  / | |     | |    `-._____ / | |     / /   | |_  | |      |  '.'
-                                 \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
-                                       '___)   '___)                      `~~'  `"   |_|      `--'
-
-                                ,--. ,-,---.               .
-                               | `-'  '|___/ ,-. ,-. ,-. ,-|
-                               |   .  ,|   \ | | ,-| |   | |
-                               `--'  `-^---' `-' `-^ '   `-^
+/**____
+\  ___ `'.                          .
+ ' |--.\  \                       .'|
+ | |    \  '                     <  |
+ | |     |  '    __               | |
+ | |     |  | .:--.'.         _   | | .'''-.
+ | |     ' .'/ |   \ |      .' |  | |/.'''. \
+ | |___.' /' `" __ | |     .   | /|  /    | |
+/_______.'/   .'.''| |   .'.'| |//| |     | |
+\_______|/   / /   | |_.'.'.-'  / | |     | |
+             \ \._,\ '/.'   \_.'  | '.    | '.
+              `--'  `"            '---'   '---'
+             .-,--.             .
+              '|__/ ,-. ,-. ,-. |
+              ,|    ,-| | | |-' |
+              `'    `-^ ' ' `-' `'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- A cockpit board.
+ A panel of the dashboard.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+/**
+| Export
+*/
+var Dash;
+Dash = Dash || {};
 
 /**
 | Imports
@@ -48,11 +52,6 @@ var Tree;
 var View;
 
 /**
-| Exports
-*/
-var CBoard = null;
-
-/**
 | Capsule
 */
 (function(){
@@ -69,7 +68,7 @@ var half          = Jools.half;
 /**
 | Constructor
 */
-CBoard = function(name, inherit, cockpit, screensize) {
+var Panel = Dash.Panel = function(name, inherit, cockpit, screensize) {
 	this.name    = name;
 	this.cockpit = cockpit;
 	var tree     = this.tree  = new Tree(Design[name], Design.Pattern);
@@ -99,7 +98,7 @@ CBoard = function(name, inherit, cockpit, screensize) {
 /**
 | Creates a new cockpit component.
 */
-CBoard.prototype.newCC = function(twig, inherit, name) {
+Panel.prototype.newCC = function(twig, inherit, name) {
 	if (twig.code && twig.code !== '') {
 		var Proto = CCode[twig.code];
 		if (Proto) {
@@ -121,7 +120,7 @@ CBoard.prototype.newCC = function(twig, inherit, name) {
 /**
 | Returns the focused item.
 */
-CBoard.prototype.focusedCC = function() {
+Panel.prototype.focusedCC = function() {
 	var caret = shell.caret;
 	if (caret.visec !== 'cockpit') { return null; }
 	var sign = caret.sign;
@@ -133,14 +132,14 @@ CBoard.prototype.focusedCC = function() {
 /**
 | Paths the boards frame
 */
-CBoard.prototype.path = function(fabric, border, twist) {
+Panel.prototype.path = function(fabric, border, twist) {
 	this.curve.path(fabric, border, twist);
 };
 
 /**
 | Force clears all caches.
 */
-CBoard.prototype.knock = function() {
+Panel.prototype.knock = function() {
 	this.$fabric = null;
 	for(var c in this.cc) {
 		this.cc[c].knock();
@@ -150,7 +149,7 @@ CBoard.prototype.knock = function() {
 /**
 | Draws the boards contents
 */
-CBoard.prototype._weave = function() {
+Panel.prototype._weave = function() {
 	if (this.$fabric && !config.debug.noCache)
 		{ return this.$fabric; }
 
@@ -186,14 +185,14 @@ CBoard.prototype._weave = function() {
 /**
 | Draws the board
 */
-CBoard.prototype.draw = function(fabric) {
+Panel.prototype.draw = function(fabric) {
 	fabric.drawImage(this._weave(), this.pnw);
 };
 
 /**
 | Draws the caret.
 */
-CBoard.prototype.drawCaret = function(view) {
+Panel.prototype.drawCaret = function(view) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
 
 	var cname = shell.caret.sign.path.get(1);
@@ -205,7 +204,7 @@ CBoard.prototype.drawCaret = function(view) {
 /**
 | Returns true if point is on this board
 */
-CBoard.prototype.mousehover = function(p, shift, ctrl) {
+Panel.prototype.mousehover = function(p, shift, ctrl) {
 	var pnw = this.pnw;
 	var pse = this.pse;
 	var fabric = this._weave();
@@ -245,7 +244,7 @@ CBoard.prototype.mousehover = function(p, shift, ctrl) {
 /**
 | Returns true if point is on this board
 */
-CBoard.prototype.mousedown = function(p, shift, ctrl) {
+Panel.prototype.mousedown = function(p, shift, ctrl) {
 	var pnw = this.pnw;
 	var pse = this.pse;
 	var fabric = this._weave();
@@ -276,7 +275,7 @@ CBoard.prototype.mousedown = function(p, shift, ctrl) {
 /**
 | Text input.
 */
-CBoard.prototype.input = function(text) {
+Panel.prototype.input = function(text) {
 	var focus = this.focusedCC();
 	if (!focus) { return; }
 	focus.input(text);
@@ -285,7 +284,7 @@ CBoard.prototype.input = function(text) {
 /**
 | Cycles the focus
 */
-CBoard.prototype.cycleFocus = function(dir) {
+Panel.prototype.cycleFocus = function(dir) {
 	var layout = this.tree.root.layout;
 	var focus = this.focusedCC();
 	if (!focus) { return; }
@@ -308,7 +307,7 @@ CBoard.prototype.cycleFocus = function(dir) {
 /**
 | User pressed a special key.
 */
-CBoard.prototype.specialKey = function(key, shift, ctrl) {
+Panel.prototype.specialKey = function(key, shift, ctrl) {
 	var focus = this.focusedCC();
 	if (!focus) return;
 	if (key === 'tab') {
@@ -321,7 +320,7 @@ CBoard.prototype.specialKey = function(key, shift, ctrl) {
 /**
 | Clears caches.
 */
-CBoard.prototype.poke = function() {
+Panel.prototype.poke = function() {
 	this.$fabric = null;
 	shell.redraw = true;
 };
@@ -330,7 +329,7 @@ CBoard.prototype.poke = function() {
 /**
 | Sets the focused component.
 */
-CBoard.prototype.setFocus = function(cname) {
+Panel.prototype.setFocus = function(cname) {
 	var com = this.cc[cname];
 	var focus = this.focusedCC();
 	if (focus === com) { return; }
@@ -344,7 +343,7 @@ CBoard.prototype.setFocus = function(cname) {
 /**
 | Sets the hovered component.
 */
-CBoard.prototype.setHover = function(cname) {
+Panel.prototype.setHover = function(cname) {
 	if (this.$hover === cname) { return null; }
 
 	this.$fabric = null;

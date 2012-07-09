@@ -28,8 +28,8 @@
 /**
 | Imports
 */
-var CBoard;
 var config;
+var Dash;
 var Fabric;
 var Jools;
 var Point;
@@ -53,17 +53,18 @@ var half     = Jools.half;
 var immute   = Jools.immute;
 var is       = Jools.is;
 var isnon    = Jools.isnon;
+var Panel    = Dash.Panel;
 var subclass = Jools.subclass;
 
 /**
 | Constructor
 */
 MainBoard = function(name, inherit, cockpit, screensize) {
-	CBoard.call(this, name, inherit, cockpit, screensize);
+	Panel.call(this, name, inherit, cockpit, screensize);
 	this.$spaceName = inherit ? inherit.$spaceName : null;
 	this.$userName  = inherit ? inherit.$userName  : null;
 };
-subclass(MainBoard, CBoard);
+subclass(MainBoard, Panel);
 
 
 MainBoard.prototype.getSwitchPanel = function() {
@@ -155,8 +156,8 @@ MainBoard.prototype.mousedown = function(p, shift, ctrl) {
 		var res = this.getSwitchPanel().mousedown(p);
 		if (res !== null) { return res; }
 	}
-	
-	return CBoard.prototype.mousedown.call(this, p, shift, ctrl);
+
+	return Panel.prototype.mousedown.call(this, p, shift, ctrl);
 };
 
 /**
@@ -164,7 +165,7 @@ MainBoard.prototype.mousedown = function(p, shift, ctrl) {
 */
 MainBoard.prototype.knock = function() {
 	this.getSwitchPanel().knock();
-	CBoard.prototype.poke.call(this);
+	Panel.prototype.poke.call(this);
 };
 
 /**
@@ -182,8 +183,8 @@ MainBoard.prototype.mousehover = function(p, shift, ctrl) {
 			if (over) { return over; }
 		}
 	}
-	
-	return CBoard.prototype.mousehover.call(this, p, shift, ctrl);
+
+	return Panel.prototype.mousehover.call(this, p, shift, ctrl);
 };
 
 /**
