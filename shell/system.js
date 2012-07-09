@@ -332,11 +332,11 @@ System.prototype._onKeyUp = function(event) {
 */
 System.prototype._onMouseDown = function(event) {
 	var self = this;
+	event.preventDefault();
 
 	if (event.button !== 0)
 		{ return; }
 
-	event.preventDefault();  // TODO maybe preventDefault before button test?
 	this._hiddenInput.focus();
 
 	// worksaround a bug in safari/OSX

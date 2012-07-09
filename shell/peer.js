@@ -65,9 +65,9 @@ var uid       = Jools.uid;
 /**
 | Constructor
 */
-Peer = function() {
+Peer = function(updateRCV, messageRCV) {
 	this.spaceName = null;
-	this._iface = new IFace();
+	this._iface = new IFace(updateRCV, messageRCV);
 	this.$visitUser = null;
 	this.$visitPass = null;
 };
@@ -144,21 +144,6 @@ Peer.prototype.aquireSpace = function(name, callback) {
 */
 Peer.prototype.get = function(path, len) {
 	return this._iface.get(path, len);
-};
-
-/**
-| Sets the update listener
-| TODO rename setUpdateRCV
-*/
-Peer.prototype.setUpdate = function(update) {
-	this._iface.update = update;
-};
-
-/**
-| Sets the message receiver
-*/
-Peer.prototype.setMessageRCV = function(messageRCV) {
-	this._iface.messageRCV = messageRCV;
 };
 
 /**

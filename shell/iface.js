@@ -64,7 +64,7 @@ var uid        = Jools.uid;
 /**
 | Constructor.
 */
-IFace = function() {
+IFace = function(updateRCV, messageRCV) {
 	// the current tree;
 	this.tree    = null;
 
@@ -84,12 +84,11 @@ IFace = function() {
 	// changes that are currently on the way to the server
 	this.$postbox = null;
 
-	// if set reports updates to this object.
-	// TODO rename updateRCV
-	this.update  = null;
+	// reports updates to this object.
+	this._updateRCV  = updateRCV;
 
-	// if set reports messages to this object.
-	this.messageRCV = null;
+	// reports messages to this object.
+	this._messageRCV = messageRCV;
 
 	// current update request
 	this.$updateAjax = null;
@@ -398,10 +397,10 @@ IFace.prototype._update = function() {
 		}
 
 		var msgs = asw.msgs;
-		if (msgs && self.messageRCV) {
+		if (msgs && self._messageRCV) {
 			for(a = 0, aZ = msgs.length; a < aZ; a++) {
 				var m = msgs[a];
-				self.messageRCV.messageRCV(m.space, m.user, m.message);
+				self._messageRCV.messageRCV(m.space, m.user, m.message);
 			}
 		}
 
@@ -409,8 +408,8 @@ IFace.prototype._update = function() {
 		var mseqZ        = asw.mseqZ;
 		if (is(mseqZ)) { self.$mseq = mseqZ; }
 
-		if (report.length > 0 && self.update) {
-			self.update.update(self.tree, report);
+		if (report.length > 0 && self._updateRCV) {
+			self._updateRCV.update(self.tree, report);
 		}
 
 		if (gotOwnChgs) { self.sendChanges(); }
@@ -456,7 +455,7 @@ IFace.prototype.alter = function(src, trg) {
 
 	this.sendChanges();
 
-    if (this.update) { this.update.update(r.tree, chgX); }
+    if (this._updateRCV) { this._updateRCV.update(r.tree, chgX); }
     return chgX;
 };
 
@@ -467,7 +466,7 @@ IFace.prototype.sendChanges = function() {
 
 	// already sending?
 	if (this.$postbox.length > 0)  { return; }
-		
+
 	// nothing to send?
 	if (this.$outbox.length === 0) { return; }
 
@@ -539,7 +538,8 @@ IFace.prototype.undo = function() {
 	this.$redo.push(c);
 	this.sendChanges();
 
-    if (this.update) { this.update.update(r.tree, chgX); }
+    if (this._updateRCV) { this._updateRCV.update(r.tree, chgX); }
+
     return chgX;
 };
 
@@ -552,7 +552,7 @@ IFace.prototype.redo = function() {
     var r     = changeTree(this.tree, chgX);
     this.tree = r.tree;
 	chgX      = r.chgX;
-	
+
 	if (chgX === null) { return; }
 
 	var c = immute({
@@ -565,7 +565,7 @@ IFace.prototype.redo = function() {
 	this.$undo.push(c);
 	this.sendChanges();
 
-    if (this.update) { this.update.update(r.tree, chgX); }
+    if (this._updateRCV) { this._updateRCV.update(r.tree, chgX); }
     return chgX;
 };
 

@@ -630,9 +630,7 @@ Shell.prototype.changeSpaceZoom = function(df) {
 | Called when loading the website
 */
 Shell.prototype.onload = function() {
-	this.peer = new Peer();
-	this.peer.setUpdate(this);
-	this.peer.setMessageRCV(this);
+	this.peer = new Peer(this, this);
 	var self = this;
 
 	var user = window.localStorage.getItem('user');
