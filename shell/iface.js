@@ -66,11 +66,11 @@ var uid        = Jools.uid;
 */
 IFace = function(updateRCV, messageRCV) {
 	// the current tree;
-	this.tree    = null;
+	this.$tree   = null;
 
 	// the remote tree.
 	// what the client thinks the server has.
-	this.rtree   = null;
+	this.$rtree  = null;
 
 	// the remote time sequence
 	this.$remoteTime = null;
@@ -214,8 +214,8 @@ IFace.prototype.aquireSpace = function(spaceName, callback) {
 	}
 
 	self.$spaceName = spaceName;
-	self.tree       = null; // TODO $tree
-	self.rtree      = null; // TODO $rtree
+	self.$tree      = null;
+	self.$rtree     = null;
 	self.$outbox    = [];
 	self.$postbox   = [];
 	self.$mseq      = -1;
@@ -261,10 +261,10 @@ IFace.prototype.aquireSpace = function(spaceName, callback) {
 
 		var troot = { type : 'Nexus', copse : {} };
 		troot.copse[spaceName] = asw.node;
-		self.tree = self.rtree = new Tree(troot, Meshverse);
+		self.$tree = self.$rtree = new Tree(troot, Meshverse);
 
 		callback(null, immute({
-			tree   : self.tree,
+			tree   : self.$tree,
 			name   : spaceName,
 			access : asw.access
 		}));
@@ -295,7 +295,7 @@ IFace.prototype.aquireSpace = function(spaceName, callback) {
 | Gets a twig.
 */
 IFace.prototype.get = function(path, len) {
-    return this.tree.getPath(path, len);
+    return this.$tree.getPath(path, len);
 };
 
 
@@ -347,14 +347,14 @@ IFace.prototype._update = function() {
 				var cid = chgs[a].cid;
 
 				// changes the clients understanding of the server tree
-				self.rtree = changeTree(self.rtree, chgX).tree;
+				self.$rtree = changeTree(self.$rtree, chgX).tree;
 
 				if (postbox.length > 0 && postbox[0].cid === cid) {
 					self.$postbox.splice(0, 1);
 					gotOwnChgs = true;
 					continue;
 				}
-				
+
 				// alters undo and redo queues.
 				var $undo = self.$undo;
 				var u;
@@ -379,7 +379,7 @@ IFace.prototype._update = function() {
 			// adapts all queued changes
 			// and rebuilds the clients understanding of its own tree
 			var outbox = self.$outbox;
-			var tree = self.rtree;
+			var tree   = self.$rtree;
 
 			for(a = 0, aZ = postbox.length; a < aZ; a++) {
 				tree = changeTree(tree, postbox[a].chgX).tree;
@@ -393,7 +393,7 @@ IFace.prototype._update = function() {
 				outbox[a].chgX = chgX;
 				tree = changeTree(tree, chgX).tree;
 			}
-			self.tree = tree;
+			self.$tree = tree;
 		}
 
 		var msgs = asw.msgs;
@@ -409,7 +409,7 @@ IFace.prototype._update = function() {
 		if (is(mseqZ)) { self.$mseq = mseqZ; }
 
 		if (report.length > 0 && self._updateRCV) {
-			self._updateRCV.update(self.tree, report);
+			self._updateRCV.update(self.$tree, report);
 		}
 
 		if (gotOwnChgs) { self.sendChanges(); }
@@ -436,8 +436,8 @@ IFace.prototype._update = function() {
 */
 IFace.prototype.alter = function(src, trg) {
     var chg = new Change(new Sign(src), new Sign(trg));
-    var r = changeTree(this.tree, chg);
-    this.tree = r.tree;
+    var r = changeTree(this.$tree, chg);
+    this.$tree = r.tree;
 	var chgX  = r.chgX;
 
 	var c = {
@@ -521,10 +521,11 @@ IFace.prototype.sendChanges = function() {
 */
 IFace.prototype.undo = function() {
 	if (this.$undo.length === 0) { return; }
-	var chgX  = this.$undo.pop().chgX.invert();
-    var r     = changeTree(this.tree, chgX);
-    this.tree = r.tree;
-	chgX      = r.chgX;
+
+	var chgX   = this.$undo.pop().chgX.invert();
+    var r      = changeTree(this.tree, chgX);
+    this.$tree = r.tree;
+	chgX       = r.chgX;
 
 	if (chgX === null) { return; }
 
@@ -548,10 +549,10 @@ IFace.prototype.undo = function() {
 */
 IFace.prototype.redo = function() {
 	if (this.$redo.length === 0) { return; }
-	var chgX  = this.$redo.pop().chgX.invert();
-    var r     = changeTree(this.tree, chgX);
-    this.tree = r.tree;
-	chgX      = r.chgX;
+	var chgX   = this.$redo.pop().chgX.invert();
+    var r      = changeTree(this.$tree, chgX);
+    this.$tree = r.tree;
+	chgX       = r.chgX;
 
 	if (chgX === null) { return; }
 
@@ -566,6 +567,7 @@ IFace.prototype.redo = function() {
 	this.sendChanges();
 
     if (this._updateRCV) { this._updateRCV.update(r.tree, chgX); }
+
     return chgX;
 };
 
