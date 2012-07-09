@@ -1,21 +1,19 @@
-/**                                                      _.._
-                                                      .-'_.._''.
- __  __   ___       _....._              .          .' .'     '.\
-|  |/  `.'   `.   .'       '.          .'|         / .'                                _.._
-|   .-.  .-.   ' /   .-'"'.  \        (  |        . '            .-,.-~.             .' .._|    .|
-|  |  |  |  |  |/   /______\  |        | |        | |            |  .-. |    __      | '      .' |_
-|  |  |  |  |  ||   __________|    _   | | .'''-. | |            | |  | | .:-`.'.  __| |__  .'     |
-|  |  |  |  |  |\  (          '  .' |  | |/.'''. \. '            | |  | |/ |   \ ||__   __|'-..  .-'
-|  |  |  |  |  | \  '-.___..-~. .   | /|  /    | | \ '.         .| |  '- `" __ | |   | |      |  |
-|__|  |__|  |__|  `         .'.'.'| |//| |     | |  '. `.____.-'/| |      .'.''| |   | |      |  |
-                   `'-.....-.'.'.-'  / | |     | |    `-._____ / | |     / /   | |_  | |      |  '.'
-                                 \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
-                                       '___)   '___)                      `~~'  `"   |_|      `--'
-
-                                     .,-,-.       .
-                                      ` | |   ,-. |- ,-.
-                                        | |-. | | |  |-'
-                                       ,' `-' `-' `' `-'
+/**                                               .---.
+.----.     .----..--.                             |   |
+ \    \   /    / |__|                             |   |
+  '   '. /'   /  .--.                             |   |
+  |    |'    /   |  |                       __    |   |
+  |    ||    |   |  |     _     _    _   .:--.'.  |   |
+  '.   `'   .'   |  |   .' |   | '  / | / |   \ | |   |
+   \        /    |  |  .   | /.' | .' | `" __ | | |   |
+    \      /     |__|.'.'| |///  | /  |  .'.''| | |   |
+     '----'        .'.'.-'  /|   `'.  | / /   | |_'---'
+                   .'   \_.' '   .'|  '/\ \._,\ '/
+                              `-'  `--'  `--'  `"
+                    .,-,-.       .
+                     ` | |   ,-. |- ,-.
+                       | |-. | | |  |-'
+                      ,' `-' `-' `' `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  A fix sized text item.
@@ -28,7 +26,8 @@
 /**
 | Exports
 */
-var Note     = null;
+var Visual;
+Visual = Visual || {};
 
 /**
 | Imports
@@ -38,12 +37,9 @@ var BeziRect;
 var config;
 var Fabric;
 var Jools;
-var Item;
 var Margin;
 var Point;
-var Para;
 var Rect;
-var Scrollbar;
 var shell;
 var system;
 var theme;
@@ -64,16 +60,19 @@ var half          = Jools.half;
 var immute        = Jools.immute;
 var is            = Jools.is;
 var isnon         = Jools.isnon;
+var Item          = Visual.Item;
 var limit         = Jools.limit;
 var log           = Jools.log;
 var max           = Math.max;
 var min           = Math.min;
+var Para          = Visual.Para;
+var Scrollbar     = Visual.Scrollbar;
 var subclass      = Jools.subclass;
 
 /**
 | Constructor.
 */
-Note = function(twig, path) {
+var Note = Visual.Note = function(twig, path) {
 	Item.call(this, twig, path);
 	this.scrollbarY = new Scrollbar();
 };

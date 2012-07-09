@@ -1,21 +1,19 @@
-/**                                                      _.._
-                                                      .-'_.._''.
- __  __   ___       _....._              .          .' .'     '.\
-|  |/  `.'   `.   .'       '.          .'|         / .'                                _.._
-|   .-.  .-.   ' /   .-'"'.  \        (  |        . '            .-,.-~.             .' .._|    .|
-|  |  |  |  |  |/   /______\  |        | |        | |            |  .-. |    __      | '      .' |_
-|  |  |  |  |  ||   __________|    _   | | .'''-. | |            | |  | | .:-`.'.  __| |__  .'     |
-|  |  |  |  |  |\  (          '  .' |  | |/.'''. \. '            | |  | |/ |   \ ||__   __|'-..  .-'
-|  |  |  |  |  | \  '-.___..-~. .   | /|  /    | | \ '.         .| |  '- `" __ | |   | |      |  |
-|__|  |__|  |__|  `         .'.'.'| |//| |     | |  '. `.____.-'/| |      .'.''| |   | |      |  |
-                   `'-.....-.'.'.-'  / | |     | |    `-._____ / | |     / /   | |_  | |      |  '.'
-                                 \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
-                                       '___)   '___)                      `~~'  `"   |_|      `--'
-
-                                        ,-_/ .
-                                        '  | |- ,-. ,-,-.
-                                        .^ | |  |-' | | |
-                                        `--' `' `-' ' ' '
+/**                                               .---.
+.----.     .----..--.                             |   |
+ \    \   /    / |__|                             |   |
+  '   '. /'   /  .--.                             |   |
+  |    |'    /   |  |                       __    |   |
+  |    ||    |   |  |     _     _    _   .:--.'.  |   |
+  '.   `'   .'   |  |   .' |   | '  / | / |   \ | |   |
+   \        /    |  |  .   | /.' | .' | `" __ | | |   |
+    \      /     |__|.'.'| |///  | /  |  .'.''| | |   |
+     '----'        .'.'.-'  /|   `'.  | / /   | |_'---'
+                   .'   \_.' '   .'|  '/\ \._,\ '/
+                              `-'  `--'  `--'  `"
+                    ,-_/ .
+                    '  | |- ,-. ,-,-.
+                    .^ | |  |-' | | |
+                    `--' `' `-' ' ' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  Common base of Note, Label and Relation.
@@ -27,14 +25,14 @@
 /**
 | Exports
 */
-var Item     = null;
+var Visual;
+Visual = Visual || {};
 
 /**
 | Imports
 */
 var Action;
 var Compass;
-var Doc;
 var Jools;
 var OvalSlice;
 var Path;
@@ -57,7 +55,9 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 | Shotcuts
 */
 var abs      = Math.abs;
+var Base     = Visual.Base;
 var debug    = Jools.debug;
+var Doc      = Visual.Doc;
 var immute   = Jools.immute;
 var is       = Jools.is;
 var isnon    = Jools.isnon;
@@ -68,8 +68,8 @@ var ro       = Math.round;
 /**
 | Constructor
 */
-Item = function(twig, path) {
-	Visual.call(this, twig, path);
+var Item = Visual.Item = function(twig, path) {
+	Base.call(this, twig, path);
 
 	if (this.$graph !== null) { throw new Error('iFail'); }
 	this.$graph      = {
@@ -80,7 +80,7 @@ Item = function(twig, path) {
 	this.$fabric   = null;
 	this.$handles  = {};
 };
-subclass(Item, Visual);
+subclass(Item, Base);
 
 
 /**
@@ -261,7 +261,7 @@ Item.prototype.drawHandles = function(fabric, view) {
 		var area = sbary.getArea(view);
 		fabric.reverseClip(area, 'path', View.proper, -1);
 	}
-	
+
 	fabric.reverseClip(this.getSilhoutte(this.getZone(), false), 'path', view, -1);
 
 	// draws the resize handles

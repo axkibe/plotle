@@ -1,21 +1,19 @@
-/**                                                      _.._
-                                                      .-'_.._''.
- __  __   ___       _....._              .          .' .'     '.\
-|  |/  `.'   `.   .'       '.          .'|         / .'                                _.._
-|   .-.  .-.   ' /   .-'"'.  \        (  |        . '            .-,.-~.             .' .._|    .|
-|  |  |  |  |  |/   /______\  |        | |        | |            |  .-. |    __      | '      .' |_
-|  |  |  |  |  ||   __________|    _   | | .'''-. | |            | |  | | .:-`.'.  __| |__  .'     |
-|  |  |  |  |  |\  (          '  .' |  | |/.'''. \. '            | |  | |/ |   \ ||__   __|'-..  .-'
-|  |  |  |  |  | \  '-.___..-~. .   | /|  /    | | \ '.         .| |  '- `" __ | |   | |      |  |
-|__|  |__|  |__|  `         .'.'.'| |//| |     | |  '. `.____.-'/| |      .'.''| |   | |      |  |
-                   `'-.....-.'.'.-'  / | |     | |    `-._____ / | |     / /   | |_  | |      |  '.'
-                                 \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
-                                       '___)   '___)                      `~~'  `"   |_|      `--'
-
-                                    ,.   ,.             .
-                                    `|  / . ,-. . . ,-. |
-                                     | /  | `-. | | ,-| |
-                                     `'   ' `-' `-^ `-^ `
+/**                                               .---.
+.----.     .----..--.                             |   |
+ \    \   /    / |__|                             |   |
+  '   '. /'   /  .--.                             |   |
+  |    |'    /   |  |                       __    |   |
+  |    ||    |   |  |     _     _    _   .:--.'.  |   |
+  '.   `'   .'   |  |   .' |   | '  / | / |   \ | |   |
+   \        /    |  |  .   | /.' | .' | `" __ | | |   |
+    \      /     |__|.'.'| |///  | /  |  .'.''| | |   |
+     '----'        .'.'.-'  /|   `'.  | / /   | |_'---'
+                   .'   \_.' '   .'|  '/\ \._,\ '/
+                              `-'  `--'  `--'  `"
+                     ,-,---.
+                      '|___/ ,-. ,-. ,-.
+                      ,|   \ ,-| `-. |-'
+                     `-^---' `-^ `-' `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  Common base of all visual objects
@@ -24,27 +22,17 @@
  License: MIT(Expat), see accompanying 'License'-file
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 /**
 | Exports
 */
-var Visual = null;
+var Visual;
+Visual = Visual || {};
 
 /**
 | Imports
 */
-var Action;
-var Compass;
-var Doc;
-var Fabric;
 var Jools;
-var OvalSlice;
-var Path;
-var Rect;
-var Relation;
-var shell;
-var system;
-var theme;
-var View;
 
 /**
 | Capsule
@@ -67,7 +55,7 @@ var ro     = Math.round;
 /**
 | Constructor
 */
-Visual = function(twig, path) {
+Visual.Base = function(twig, path) {
 	this.twig        = twig;
 	this.path        = path;         // TODO
 	this.key         = path.get(-1); // TODO
@@ -77,7 +65,7 @@ Visual = function(twig, path) {
 /**
 | Returns the visual with a given twig-rank.
 */
-Visual.prototype.atRank = function(rank) {
+Visual.Base.prototype.atRank = function(rank) {
 	return this.$graph[this.twig.ranks[rank]];
 };
 
@@ -86,7 +74,7 @@ Visual.prototype.atRank = function(rank) {
 | Updates the $graph to match a new twig.
 */
 /* TODO
-Visual.prototype.update = function(twig) {
+Base.prototype.update = function(twig) {
 	this.twig    = twig;
 	this.$fabric = null;
 

@@ -39,12 +39,12 @@ var Path;
 var Peer;
 var Point;
 var Selection;
-var Space;
 var Sign;
 var system;
 var theme;
 var Tree;
 var View;
+var Visual;
 
 /**
 | Exports
@@ -62,18 +62,15 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Shortcuts.
 */
-var abs           = Math.abs;
-var debug         = Jools.debug;
-var half          = Jools.half;
-var immute        = Jools.immute;
-var is            = Jools.is;
-var isnon         = Jools.isnon;
-var limit         = Jools.limit;
-var log           = Jools.log;
-var max           = Math.max;
-var min           = Math.min;
-var subclass      = Jools.subclass;
-var tfxSign       = MeshMashine.tfxSign;
+var debug    = Jools.debug;
+var half     = Jools.half;
+var immute   = Jools.immute;
+var is       = Jools.is;
+var isnon    = Jools.isnon;
+var log      = Jools.log;
+var Space    = Visual.Space;
+var subclass = Jools.subclass;
+var tfxSign  = MeshMashine.tfxSign;
 
 // configures tree.
 Tree.cogging = true;

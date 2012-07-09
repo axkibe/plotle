@@ -332,7 +332,7 @@ Server.prototype.addResources = function() {
 		'shell/ovalmenu.js',                                'fb',
 		'shell/visual/para.js',                             'fb',
 		'shell/visual/scrollbar.js',                        'fb',
-		'shell/visual/visual.js',                           'fb',
+		'shell/visual/base.js',                             'fb',
 		'shell/visual/doc.js',                              'fb',
 		'shell/visual/item.js',                             'fb',
 		'shell/visual/note.js',                             'fb',

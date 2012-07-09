@@ -1,21 +1,19 @@
-/**                                                      _.._
-                                                      .-'_.._''.
- __  __   ___       _....._              .          .' .'     '.\
-|  |/  `.'   `.   .'       '.          .'|         / .'                                _.._
-|   .-.  .-.   ' /   .-'"'.  \        (  |        . '            .-,.-~.             .' .._|    .|
-|  |  |  |  |  |/   /______\  |        | |        | |            |  .-. |    __      | '      .' |_
-|  |  |  |  |  ||   __________|    _   | | .'''-. | |            | |  | | .:-`.'.  __| |__  .'     |
-|  |  |  |  |  |\  (          '  .' |  | |/.'''. \. '            | |  | |/ |   \ ||__   __|'-..  .-'
-|  |  |  |  |  | \  '-.___..-~. .   | /|  /    | | \ '.         .| |  '- `" __ | |   | |      |  |
-|__|  |__|  |__|  `         .'.'.'| |//| |     | |  '. `.____.-'/| |      .'.''| |   | |      |  |
-                   `'-.....-.'.'.-'  / | |     | |    `-._____ / | |     / /   | |_  | |      |  '.'
-                                 \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
-                                       '___)   '___)                      `~~'  `"   |_|      `--'
-
-                               .-,--.     .      .
-                                `|__/ ,-. |  ,-. |- . ,-. ,-.
-                                )| \  |-' |  ,-| |  | | | | |
-                                `'  ` `-' `' `-^ `' ' `-' ' '
+/**                                               .---.
+.----.     .----..--.                             |   |
+ \    \   /    / |__|                             |   |
+  '   '. /'   /  .--.                             |   |
+  |    |'    /   |  |                       __    |   |
+  |    ||    |   |  |     _     _    _   .:--.'.  |   |
+  '.   `'   .'   |  |   .' |   | '  / | / |   \ | |   |
+   \        /    |  |  .   | /.' | .' | `" __ | | |   |
+    \      /     |__|.'.'| |///  | /  |  .'.''| | |   |
+     '----'        .'.'.-'  /|   `'.  | / /   | |_'---'
+                   .'   \_.' '   .'|  '/\ \._,\ '/
+                              `-'  `--'  `--'  `"
+              .-,--.     .      .
+               `|__/ ,-. |  ,-. |- . ,-. ,-.
+               )| \  |-' |  ,-| |  | | | | |
+               `'  ` `-' `' `-^ `' ' `-' ' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  Relates two items (including other relations)
@@ -27,12 +25,12 @@
 /**
 | Exports
 */
-var Relation = null;
+var Visual;
+Visual = Visual || {};
 
 /**
 | Imports
 */
-var Doc;
 var Fabric;
 var Jools;
 var Label;
@@ -40,7 +38,6 @@ var Line;
 var Margin;
 var MeshMashine;
 var Path;
-var Scrollbar;
 var shell;
 var system;
 var theme;
@@ -61,13 +58,14 @@ var debug         = Jools.debug;
 var immute        = Jools.immute;
 var is            = Jools.is;
 var isnon         = Jools.isnon;
+var Label         = Visual.Label;
 var log           = Jools.log;
 var subclass      = Jools.subclass;
 
 /**
 | Constructor.
 */
-Relation = function(twig, path) {
+var Relation = Visual.Relation = function(twig, path) {
 	Label.call(this, twig, path);
 };
 subclass(Relation, Label);

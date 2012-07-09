@@ -1,21 +1,19 @@
-/**                                                      _.._
-                                                      .-'_.._''.
- __  __   ___       _....._              .          .' .'     '.\
-|  |/  `.'   `.   .'       '.          .'|         / .'                                _.._
-|   .-.  .-.   ' /   .-'"'.  \        (  |        . '            .-,.-~.             .' .._|    .|
-|  |  |  |  |  |/   /______\  |        | |        | |            |  .-. |    __      | '      .' |_
-|  |  |  |  |  ||   __________|    _   | | .'''-. | |            | |  | | .:-`.'.  __| |__  .'     |
-|  |  |  |  |  |\  (          '  .' |  | |/.'''. \. '            | |  | |/ |   \ ||__   __|'-..  .-'
-|  |  |  |  |  | \  '-.___..-~. .   | /|  /    | | \ '.         .| |  '- `" __ | |   | |      |  |
-|__|  |__|  |__|  `         .'.'.'| |//| |     | |  '. `.____.-'/| |      .'.''| |   | |      |  |
-                   `'-.....-.'.'.-'  / | |     | |    `-._____ / | |     / /   | |_  | |      |  '.'
-                                 \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
-                                       '___)   '___)                      `~~'  `"   |_|      `--'
-
-                                        .-,--.
-                                        ' |   \ ,-. ,-.
-                                        , |   / | | |
-                                        `-^--'  `-' `-'
+/**                                               .---.
+.----.     .----..--.                             |   |
+ \    \   /    / |__|                             |   |
+  '   '. /'   /  .--.                             |   |
+  |    |'    /   |  |                       __    |   |
+  |    ||    |   |  |     _     _    _   .:--.'.  |   |
+  '.   `'   .'   |  |   .' |   | '  / | / |   \ | |   |
+   \        /    |  |  .   | /.' | .' | `" __ | | |   |
+    \      /     |__|.'.'| |///  | /  |  .'.''| | |   |
+     '----'        .'.'.-'  /|   `'.  | / /   | |_'---'
+                   .'   \_.' '   .'|  '/\ \._,\ '/
+                              `-'  `--'  `--'  `"
+                        .-,--.
+                        ' |   \ ,-. ,-.
+                        , |   / | | |
+                        `-^--'  `-' `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  A sequence of visual paragraphs.
@@ -27,20 +25,19 @@
 /**
 | Exports
 */
-var Doc = null;
+var Visual;
+Visual = Visual || {};
 
 /**
 | Imports
 */
 var Fabric;
 var Jools;
-var Para;
 var Path;
 var Point;
 var shell;
 var theme;
 var View;
-var Visual;
 
 /**
 | Capsule
@@ -61,14 +58,15 @@ var limit     = Jools.limit;
 var log       = Jools.log;
 var max       = Math.max;
 var min       = Math.min;
+var Para      = Visual.Para;
 var ro        = Math.round;
 var subclass  = Jools.subclass;
 
 /**
 | Constructor.
 */
-Doc = function(twig, path) {
-	Visual.call(this, twig, path);
+var Doc = Visual.Doc = function(twig, path) {
+	Visual.Base.call(this, twig, path);
 
 	if (this.$graph !== null) { throw new Error('iFail'); }
 	var g = this.$graph = [];
@@ -83,7 +81,7 @@ Doc = function(twig, path) {
 		g[k] = new Para(copse[k], new Path(path, '++', k));
 	}
 };
-subclass(Doc, Visual);
+subclass(Doc, Visual.Base);
 
 /**
 | Returns the vtwig at rank 'rank'.

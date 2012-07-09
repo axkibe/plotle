@@ -1,23 +1,21 @@
-/**                                                      _.._
-                                                      .-'_.._''.
- __  __   ___       _....._              .          .' .'     '.\
-|  |/  `.'   `.   .'       '.          .'|         / .'                                _.._
-|   .-.  .-.   ' /   .-'"'.  \        (  |        . '            .-,.-~.             .' .._|    .|
-|  |  |  |  |  |/   /______\  |        | |        | |            |  .-. |    __      | '      .' |_
-|  |  |  |  |  ||   __________|    _   | | .'''-. | |            | |  | | .:-`.'.  __| |__  .'     |
-|  |  |  |  |  |\  (          '  .' |  | |/.'''. \. '            | |  | |/ |   \ ||__   __|'-..  .-'
-|  |  |  |  |  | \  '-.___..-~. .   | /|  /    | | \ '.         .| |  '- `" __ | |   | |      |  |
-|__|  |__|  |__|  `         .'.'.'| |//| |     | |  '. `.____.-'/| |      .'.''| |   | |      |  |
-                   `'-.....-.'.'.-'  / | |     | |    `-._____ / | |     / /   | |_  | |      |  '.'
-                                 \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
-                                       '___)   '___)                      `~~'  `"   |_|      `--'
-
-                                       .---.
-                                       \___  ,-. ,-. ,-. ,-.
-                                           \ | | ,-| |   |-'
-                                       `---' |-' `-^ `-' `-'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-                                             '
+/**                                               .---.
+.----.     .----..--.                             |   |
+ \    \   /    / |__|                             |   |
+  '   '. /'   /  .--.                             |   |
+  |    |'    /   |  |                       __    |   |
+  |    ||    |   |  |     _     _    _   .:--.'.  |   |
+  '.   `'   .'   |  |   .' |   | '  / | / |   \ | |   |
+   \        /    |  |  .   | /.' | .' | `" __ | | |   |
+    \      /     |__|.'.'| |///  | /  |  .'.''| | |   |
+     '----'        .'.'.-'  /|   `'.  | / /   | |_'---'
+                   .'   \_.' '   .'|  '/\ \._,\ '/
+                              `-'  `--'  `--'  `"
+                     .---.
+                     \___  ,-. ,-. ,-. ,-.
+                         \ | | ,-| |   |-'
+                     `---' |-' `-^ `-' `-'
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                           '
  The visual of a space.
 
  Authors: Axel Kittenberger
@@ -26,29 +24,26 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
+| Exports
+*/
+var Visual;
+Visual = Visual || {};
+
+/**
 | Imports
 */
 var Action;
 var Fabric;
 var Jools;
-var Label;
 var Line;
-var Note;
 var OvalMenu;
 var Path;
 var Point;
 var Rect;
-var Relation;
 var shell;
 var system;
 var theme;
 var View;
-var Visual;
-
-/**
-| Exports
-*/
-var Space = null;
 
 /**
 | Capsule
@@ -57,26 +52,26 @@ var Space = null;
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- .---. .           .          .
- \___  |-. ,-. ,-. |- ,-. . . |- ,-.
-     \ | | | | |   |  |   | | |  `-.
- `---' ' ' `-' '   `' `-' `-^ `' `-'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/**
+| Shortcuts
+*/
+var Base     = Visual.Base;
 var debug    = Jools.debug;
 var is       = Jools.is;
 var isnon    = Jools.isnon;
 var half     = Jools.half;
 var log      = Jools.log;
+var Label    = Visual.Label;
+var Note     = Visual.Note;
+var Relation = Visual.Relation;
 var ro       = Math.round;
 var subclass = Jools.subclass;
 
 /**
 | Constructor
 */
-Space = function(twig, path, access) {
-	Visual.call(this, twig, path);
+var Space = Visual.Space = function(twig, path, access) {
+	Base.call(this, twig, path);
 
 	if (this.$graph !== null) { throw new Error('iFail'); }
 	var g = this.$graph = {};
@@ -90,7 +85,7 @@ Space = function(twig, path, access) {
 
 	this._floatMenuLabels = {c: 'new', n: 'Note', ne: 'Label'};
 };
-subclass(Space, Visual);
+subclass(Space, Base);
 
 /**
 | Updates v-vine to match a new twig.
@@ -122,7 +117,7 @@ Space.prototype.update = function(tree, chgX) {
 	// removes the focus if the focused item is removed.
 	var caret = shell.caret;
 	var csign = caret.sign;
-	
+
 	if (caret.visec === 'space' &&
 		csign && csign.path &&
 		csign.path.get(0) === this.key &&

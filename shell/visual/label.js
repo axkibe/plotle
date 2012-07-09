@@ -1,21 +1,19 @@
-/**                                                      _.._
-                                                      .-'_.._''.
- __  __   ___       _....._              .          .' .'     '.\
-|  |/  `.'   `.   .'       '.          .'|         / .'                                _.._
-|   .-.  .-.   ' /   .-'"'.  \        (  |        . '            .-,.-~.             .' .._|    .|
-|  |  |  |  |  |/   /______\  |        | |        | |            |  .-. |    __      | '      .' |_
-|  |  |  |  |  ||   __________|    _   | | .'''-. | |            | |  | | .:-`.'.  __| |__  .'     |
-|  |  |  |  |  |\  (          '  .' |  | |/.'''. \. '            | |  | |/ |   \ ||__   __|'-..  .-'
-|  |  |  |  |  | \  '-.___..-~. .   | /|  /    | | \ '.         .| |  '- `" __ | |   | |      |  |
-|__|  |__|  |__|  `         .'.'.'| |//| |     | |  '. `.____.-'/| |      .'.''| |   | |      |  |
-                   `'-.....-.'.'.-'  / | |     | |    `-._____ / | |     / /   | |_  | |      |  '.'
-                                 \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
-                                       '___)   '___)                      `~~'  `"   |_|      `--'
-
-                                      .,       .       .
-                                       )   ,-. |-. ,-. |
-                                      /    ,-| | | |-' |
-                                      `--' `-^ ^-' `-' `'
+/**                                               .---.
+.----.     .----..--.                             |   |
+ \    \   /    / |__|                             |   |
+  '   '. /'   /  .--.                             |   |
+  |    |'    /   |  |                       __    |   |
+  |    ||    |   |  |     _     _    _   .:--.'.  |   |
+  '.   `'   .'   |  |   .' |   | '  / | / |   \ | |   |
+   \        /    |  |  .   | /.' | .' | `" __ | | |   |
+    \      /     |__|.'.'| |///  | /  |  .'.''| | |   |
+     '----'        .'.'.-'  /|   `'.  | / /   | |_'---'
+                   .'   \_.' '   .'|  '/\ \._,\ '/
+                              `-'  `--'  `--'  `"
+                   .,       .       .
+                    )   ,-. |-. ,-. |
+                   /    ,-| | | |-' |
+                   `--' `-^ ^-' `-' `'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  An item with resizing text.
@@ -27,7 +25,8 @@
 /**
 | Exports
 */
-var Label    = null;
+var Visual;
+Visual = Visual || {};
 
 /**
 | Imports
@@ -43,7 +42,7 @@ var shell;
 var system;
 var theme;
 var View;
-var Item;
+var Visual;
 
 /**
 | Capsule
@@ -58,6 +57,7 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 var debug    = Jools.debug;
 var immute   = Jools.immute;
 var is       = Jools.is;
+var Item     = Visual.Item;
 var limit    = Jools.limit;
 var log      = Jools.log;
 var max      = Math.max;
@@ -67,7 +67,7 @@ var subclass = Jools.subclass;
 /**
 | Constructor.
 */
-Label = function(twig, path) {
+var Label = Visual.Label = function(twig, path) {
 	Item.call(this, twig, path);
 };
 subclass(Label, Item);

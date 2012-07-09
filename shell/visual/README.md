@@ -1,10 +1,15 @@
 Meshcraft
 =========
 Item and space visualisations (everything that lives within a space).
+All these classes are collectet in the 'Visual' Table.
 
 Files
 =====
 <table>
+
+ <tr><td>   base.js
+</td><td>   common base of all visualisations
+</td></tr>
 
  <tr><td>   doc.js
 </td><td>   a sequence of paragraphs
@@ -40,10 +45,6 @@ Files
 
  <tr><td>   space.js
 </td><td>   space visualisation
-</td></tr>
-
- <tr><td>   visual.js
-</td><td>   common base of all visualisations
 </td></tr>
 
 </table>
