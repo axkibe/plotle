@@ -49,7 +49,6 @@ var styles = {
 		fill   : 'black',
 		align  : 'center',
 		base   : 'alphabetic',
-		$c     : {}
 	},
 	cab        : {
 		type   : 'FontStyle',
@@ -57,7 +56,6 @@ var styles = {
 		fill   : 'black',
 		align  : 'center',
 		base   : 'alphabetic',
-		$c     : {}
 	},
 	cm         : {
 		type   : 'FontStyle',
@@ -65,7 +63,6 @@ var styles = {
 		fill   : 'black',
 		align  : 'center',
 		base   : 'middle',
-		$c     : {}
 	},
 	la         : {
 		type   : 'FontStyle',
@@ -73,7 +70,6 @@ var styles = {
 		fill   : 'black',
 		align  : 'start',
 		base   : 'alphabetic',
-		$c     : {}
 	},
 	lac        : {
 		type   : 'FontStyle',
@@ -81,7 +77,6 @@ var styles = {
 		fill   : 'rgb(128, 44, 0)',
 		align  : 'start',
 		base   : 'alphabetic',
-		$c     : {}
 	},
 	lah        : {
 		type   : 'FontStyle',
@@ -89,7 +84,6 @@ var styles = {
 		fill   : 'rgb(128, 44, 0)',
 		align  : 'start',
 		base   : 'alphabetic',
-		$c     : {}
 	},
 	lahb       : {
 		type   : 'FontStyle',
@@ -97,7 +91,6 @@ var styles = {
 		fill   : 'rgb(128, 44, 0)',
 		align  : 'start',
 		base   : 'alphabetic',
-		$c     : {}
 	},
 	lahr       : {
 		type   : 'FontStyle',
@@ -105,7 +98,6 @@ var styles = {
 		fill   : 'red',
 		align  : 'start',
 		base   : 'alphabetic',
-		$c     : {}
 	},
 	lar        : {
 		type   : 'FontStyle',
@@ -113,7 +105,6 @@ var styles = {
 		fill   : 'red',
 		align  : 'left',
 		base   : 'alphabetic',
-		$c     : {}
 	},
 	cadr       : {
 		type   : 'FontStyle',
@@ -121,7 +112,6 @@ var styles = {
 		fill   : 'rgb(160, 0, 0)',
 		align  : 'center',
 		base   : 'alphabetic',
-		$c     : {}
 	},
 	ra         : {
 		type   : 'FontStyle',
@@ -129,27 +119,30 @@ var styles = {
 		fill   : 'black',
 		align  : 'end',
 		base   : 'alphabetic',
-		$c     : {}
 	}
 };
 
 /**
-| TODO
-|
-| TODO whats this $c business?
+| Gets a fontstlye by size and its code
 */
 Design.fontStyle = function(size, code) {
 	var base = styles[code];
 	if (!base) { throw new Error('Invalid font style'); }
-	if (base.$c[size]) { return base.$c[size]; }
-	var c = {};
+
+	var $c = base.$c;
+	if (!$c) { $c = base.$c = {}; }
+
+	var c = $c[size];
+	if (c) { return c; }
+
+	c = {};
 	for (var k in base) {
-		if (k === '$c') continue;
-		c[k] = base[k];
+        if (k === '$c') { continue; }
+        c[k] = base[k];
 	}
 	c.size = size;
 
-	return base.$c[size] = c;
+	return $c[size] = c;
 };
 
 })();
