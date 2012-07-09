@@ -523,7 +523,7 @@ IFace.prototype.undo = function() {
 	if (this.$undo.length === 0) { return; }
 
 	var chgX   = this.$undo.pop().chgX.invert();
-    var r      = changeTree(this.tree, chgX);
+    var r      = changeTree(this.$tree, chgX);
     this.$tree = r.tree;
 	chgX       = r.chgX;
 
