@@ -198,16 +198,6 @@ theme = {
 			]
 		},
 
-		// TODO remove?
-		highlight : {
-			fill : 'rgb(255, 188, 88)',
-			edge : [
-				{ border: 1, width : 2, color : 'rgb(255, 188, 87)' },
-				{ border: 0, width : 1, color : 'rgb(128, 128, 0)' }
-			]
-		},
-		
-
 		input : {
 			fill : 'white',
 			edge : [
@@ -223,7 +213,7 @@ theme = {
 				{ border: 0, width :   1, color : 'black' }
 			]
 		},
-		
+
 		sides : {
 			//edge : [
 			//	{ border:  1, width :  1, color : 'rgb(255, 94, 44)' },
@@ -285,14 +275,14 @@ theme = {
 				{ border: 0, width : 0.5, color : 'black' }
 			]
 		},
-		
+
 		current  : {
 			fill : 'rgba(255, 255, 255, 0.15)',
 			edge : [
 				{ border: 0, width : 0.5, color : 'black' }
 			]
 		},
-		
+
 		curhov  : {
 			fill : 'rgba(255, 188, 88, 0.3)',
 			edge : [
@@ -394,7 +384,7 @@ theme = {
 		// oval cap
 		ovala    :  4,
 		ovalb    :  3,
-		
+
 		// minimum height
 		minSize  : 12,
 
