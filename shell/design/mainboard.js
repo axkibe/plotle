@@ -133,10 +133,12 @@ MainBoard.layout = {
 	'leftB' : {
 		type       : 'Custom',
 		code       : 'MBLeftB',
-		normaStyle : 'sides',
-		hoverStyle : 'highlight',
-		focusStyle : 'sides',
-		hofocStyle : 'highlight',
+
+		normaStyle : 'button',
+		hoverStyle : 'buttonFocus',
+		focusStyle : 'buttonHover',
+		hofocStyle : 'buttonHofoc',
+
 		frame : {
 			type  : 'Frame',
 			pnw   : { type: 'Point', anchor: 'sw', x:      0, y: -36 },
@@ -167,14 +169,16 @@ MainBoard.layout = {
 			ranks : [ '1', '2' ]
 		}
 	},
-	
+
 	'left2B' : {
 		type       : 'Custom',
 		code       : 'MBLeft2B',
-		normaStyle : 'sides',
-		hoverStyle : 'highlight',
-		focusStyle : 'sides',
-		hofocStyle : 'highlight',
+
+		normaStyle : 'button',
+		hoverStyle : 'buttonFocus',
+		focusStyle : 'buttonHover',
+		hofocStyle : 'buttonHofoc',
+
 		frame : {
 			type  : 'Frame',
 			pnw   : { type: 'Point', anchor: 'sw', x:       0, y: -45 },
@@ -216,10 +220,12 @@ MainBoard.layout = {
 	'rightB' : {
 		type       : 'Custom',
 		code       : 'MBRightB',
-		normaStyle : 'sides',
-		hoverStyle : 'highlight',
-		focusStyle : 'sides',
-		hofocStyle : 'highlight',
+
+		normaStyle : 'button',
+		hoverStyle : 'buttonFocus',
+		focusStyle : 'buttonHover',
+		hofocStyle : 'buttonHofoc',
+
 		frame : {
 			type  : 'Frame',
 			pnw   : { type: 'Point', anchor: 'se', x: -sideBW, y: -36 },
@@ -250,14 +256,16 @@ MainBoard.layout = {
 			ranks : [ '1', '2' ]
 		}
 	},
-	
+
 	'switchB'     : {
 		type       : 'Custom',
 		code       : 'MBSwitchB',
-		normaStyle : 'sides',
-		hoverStyle : 'highlight',
-		focusStyle : 'sides',
-		hofocStyle : 'highlight',
+
+		normaStyle : 'button',
+		hoverStyle : 'buttonFocus',
+		focusStyle : 'buttonHover',
+		hofocStyle : 'buttonHofoc',
+
 		frame      : {
 			type   : 'Frame',
 			pnw    : { type: 'Point', anchor: 'n', x: -half(switchBW), y:        0 },
@@ -305,14 +313,14 @@ MainBoard.layout = {
 			pse    : { type: 'Point', anchor: 'se', x: -125, y:   0 }
 		}
 	},
-	
+
 	'zoomL'       : {
 		type      : 'Label',
 		text      : 'Zoom: ',
 		fontStyle : fontStyle(12, 'ca'),
 		pos       : { type: 'Point', anchor: 's', x: -45, y: -12 }
 	},
-	
+
 	'zoom'       : {
 		type      : 'Label',
 		text      : '0',
@@ -323,10 +331,12 @@ MainBoard.layout = {
 	'zoomminusB'       : {
 		type       : 'Custom',
 		code       : 'MBZoomMinusB',
+
 		normaStyle : 'button',
 		hoverStyle : 'buttonHover',
 		focusStyle : 'buttonFocus',
 		hofocStyle : 'buttonHofoc',
+
 		frame : {
 			type  : 'Frame',
 			pnw   : { type: 'Point', anchor: 's', x: zoomX,          y: zoomY - zoomBH },
@@ -364,15 +374,16 @@ MainBoard.layout = {
 			ranks : [ '1', '2', '3' ]
 		}
 	},
-	
 
 	'zoomnullB'       : {
 		type       : 'Custom',
 		code       : 'MBZoomNullB',
+
 		normaStyle : 'button',
 		hoverStyle : 'buttonHover',
 		focusStyle : 'buttonFocus',
 		hofocStyle : 'buttonHofoc',
+
 		frame : {
 			type  : 'Frame',
 			pnw   : { type: 'Point', anchor: 's', x: zoomX + zoomBW     - 2, y: zoomY - zoomBH },
@@ -410,14 +421,16 @@ MainBoard.layout = {
 			ranks : [ '1', '2', '3' ]
 		}
 	},
-	
+
 	'zoomplusB'       : {
 		type       : 'Custom',
 		code       : 'MBZoomPlusB',
+
 		normaStyle : 'button',
 		hoverStyle : 'buttonHover',
 		focusStyle : 'buttonFocus',
 		hofocStyle : 'buttonHofoc',
+
 		frame : {
 			type  : 'Frame',
 			pnw   : { type: 'Point', anchor: 's', x: zoomX + zoomBW * 2 - 4, y: zoomY - zoomBH },

@@ -214,24 +214,6 @@ theme = {
 			]
 		},
 
-		sides : {
-			//edge : [
-			//	{ border:  1, width :  1, color : 'rgb(255, 94, 44)' },
-			//	{ border:  0, width :  1, color : 'rgb( 94, 94,  0)' }
-			//]
-			fill : {
-				gradient : 'horizontal',
-				steps : [
-					[0, 'rgba(255, 237, 210, 0.5)' ],
-					[1, 'rgba(255, 185, 81,  0.5)' ]
-				]
-			},
-			edge : [
-				{ border:  1, width : 1.5, color : 'rgb(255, 141, 66)' },
-				{ border:  0, width :   1, color : 'rgb( 94,  94,  0)' }
-			]
-		},
-
 		zero : {
 			edge : [ ]  // TODO allow to be left away
 		},
