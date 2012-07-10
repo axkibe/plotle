@@ -141,7 +141,7 @@ var System = function() {
 	this._hiddenInput.onkeypress = makeCatcher(this, this._onKeyPress);
 	this._hiddenInput.onkeyup    = makeCatcher(this, this._onKeyUp);
 	this._testInputCatcher       = makeCatcher(this, this._testInput);
-	this._onAtweenTimeCather     = makeCatcher(this, this._onAtweenTime);
+	this._onAtweenTimeCatcher    = makeCatcher(this, this._onAtweenTime);
 	this._blinkCatcher           = makeCatcher(this, this._blink);
 
 	document.oncontextmenu = function(e) {
