@@ -192,7 +192,7 @@ Input.prototype.getOffsetPoint = function(offset) {
 	// TODO cache position
 	var twig     = this.twig;
 	var font     = twig.fontStyle;
-	Measure.setFont(font.size, font.font);
+	Measure.setFont(font.size, font.family);
 	var val      = this.value;
 
 	// TODO use token. text instead.
