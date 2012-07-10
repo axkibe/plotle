@@ -37,12 +37,10 @@ var Jools;
 var OvalSlice;
 var Path;
 var Rect;
-var Relation;
 var shell;
 var system;
 var theme;
 var View;
-var Visual;
 
 /**
 | Capsule
@@ -168,7 +166,7 @@ Item.prototype.planHandles = function(view) {
 
 	if (dcx > a) { dex -= half(dcx - a); dcx = a; }
 	if (dcy > b) { dey -= half(dcy - b); dcy = b; }
-	
+
 	return this.$handles = {
 		// ellipse bezier height
 		bb : ro(b / 0.75),
@@ -330,7 +328,7 @@ Item.prototype.dragstart = function(view, p, shift, ctrl, access) {
 	} else {
 		return false;
 	}
-	
+
 	return true;
 };
 
@@ -383,7 +381,7 @@ Item.prototype.actionstop = function(view, p) {
 	case Action.RELBIND :
 		if (!this.getZone().within(vp)) return false;
 		var $space = shell.$space.get(this.path, -1);
-		Relation.create($space, $space.get($action.itemPath), this);
+		Visual.Relation.create($space, $space.get($action.itemPath), this);
 		shell.redraw = true;
 		return true;
 	default :
@@ -404,7 +402,7 @@ Item.prototype.mousehover = function(view, p) {
 	var sbary = this.scrollbarY;
 	if (sbary && sbary.within(view, p))
 		{ return 'default'; }
-	
+
 	var vp = view.depoint(p);
 	if (!this.getZone().within(vp)) return null;
 
