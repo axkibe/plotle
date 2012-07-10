@@ -10,8 +10,12 @@ Subdirs
 </td><td>   behavior code of cockpit components
 </td></tr>
 
+ <tr><td>   dash
+</td><td>   the dashboard
+</td></tr>
+
  <tr><td>   design
-</td><td>   design of the cockpits
+</td><td>   design of the dashboard panels
 </td></tr>
 
  <tr><td>   euclid
@@ -50,10 +54,6 @@ Files
 
  <tr><td>   cchat.js
 </td><td>   the chat component on the cockpit.
-</td></tr>
-
- <tr><td>   cinput.js
-</td><td>   an input field on the cockpit.
 </td></tr>
 
  <tr><td>   clabel.js

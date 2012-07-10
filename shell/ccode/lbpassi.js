@@ -35,7 +35,6 @@ var CCode;
 /**
 | Imports
 */
-var CInput;
 var Dash;
 var Jools;
 
@@ -50,6 +49,7 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 | Shortcuts
 */
 var immute   = Jools.immute;
+var Input    = Dash.Input;
 var log      = Jools.log;
 var subclass = Jools.subclass;
 var Util     = CCode.Util;
@@ -58,10 +58,10 @@ var Util     = CCode.Util;
 | Constructor
 */
 var LBPassI = CCode.LBPassI = function(twig, panel, inherit, name) {
-	CInput.call(this, twig, panel, inherit, name);
+	Input.call(this, twig, panel, inherit, name);
 };
 
-subclass(LBPassI, CInput);
+subclass(LBPassI, Input);
 
 /**
 | Password input field

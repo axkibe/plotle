@@ -1,30 +1,33 @@
-/**                                                      _.._
-                                                      .-'_.._''.
- __  __   ___       _....._              .          .' .'     '.\
-|  |/  `.'   `.   .'       '.          .'|         / .'                                _.._
-|   .-.  .-.   ' /   .-'"'.  \        (  |        . '            .-,.-~.             .' .._|    .|
-|  |  |  |  |  |/   /______\  |        | |        | |            |  .-. |    __      | '      .' |_
-|  |  |  |  |  ||   __________|    _   | | .'''-. | |            | |  | | .:-`.'.  __| |__  .'     |
-|  |  |  |  |  |\  (          '  .' |  | |/.'''. \. '            | |  | |/ |   \ ||__   __|'-..  .-'
-|  |  |  |  |  | \  '-.___..-~. .   | /|  /    | | \ '.         .| |  '- `" __ | |   | |      |  |
-|__|  |__|  |__|  `         .'.'.'| |//| |     | |  '. `.____.-'/| |      .'.''| |   | |      |  |
-                   `'-.....-.'.'.-'  / | |     | |    `-._____ / | |     / /   | |_  | |      |  '.'
-                                 \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
-                                       '___)   '___)                      `~~'  `"   |_|      `--'
+ /**____
+ \  ___ `'.                          .
+  ' |--.\  \                       .'|
+  | |    \  '                     <  |
+  | |     |  '    __               | |
+  | |     |  | .:--.'.         _   | | .'''-.
+  | |     ' .'/ |   \ |      .' |  | |/.'''. \
+  | |___.' /' `" __ | |     .   | /|  /    | |
+ /_______.'/   .'.''| |   .'.'| |//| |     | |
+ \_______|/   / /   | |_.'.'.-'  / | |     | |
+              \ \._,\ '/.'   \_.'  | '.    | '.
+               `--'  `"            '---'   '---'
+            ,--. ,-_/             .
+           | `-' '  | ,-. ,-. . . |-
+           |   . .^ | | | | | | | |
+           `--'  `--' ' ' |-' `-^ `'
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ | ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-
-                                    ,--. ,-_/             .
-                                   | `-' '  | ,-. ,-. . . |-
-                                   |   . .^ | | | | | | | |
-                                   `--'  `--' ' ' |-' `-^ `'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ | ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-                                                  '
- An input field on the cockpit.
+ An input field on a dashboard panel.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+/**
+| Export
+*/
+var Dash;
+Dash = Dash || {};
 
 /**
 | Imports
@@ -42,11 +45,6 @@ var Rect;
 var shell;
 var theme;
 var View;
-
-/**
-| Exports
-*/
-var CInput = null;
 
 /**
 | Capsule
@@ -71,7 +69,7 @@ var pitch         = new Point(8, 3);
 /**
 | Constructor.
 */
-CInput = function(twig, panel, inherit, name) {
+var Input = Dash.Input = function(twig, panel, inherit, name) {
 	this.twig    = twig;
 	this.panel   = panel;
 	this.name    = name;
@@ -88,21 +86,21 @@ CInput = function(twig, panel, inherit, name) {
 /**
 | Returns the width of a character for password masks.
 */
-CInput.prototype.maskWidth = function(size) {
+Input.prototype.maskWidth = function(size) {
 	return ro(size * 0.2);
 };
 
 /**
 | Returns the kerning of characters for password masks.
 */
-CInput.prototype.maskKern = function(size) {
+Input.prototype.maskKern = function(size) {
 	return ro(size * 0.15);
 };
 
 /**
 | The input field is focusable.
 */
-CInput.prototype.canFocus = function() {
+Input.prototype.canFocus = function() {
 	return true;
 };
 
@@ -110,7 +108,7 @@ CInput.prototype.canFocus = function() {
 | Paths the input field.
 */
 /*
-CInput.prototype.path = function(fabric, border, twist) {
+Input.prototype.path = function(fabric, border, twist) {
 	fabric.moveTo(this.pnw);
 	fabric.lineTo(this.pse.x, this.pnw.y);
 	fabric.lineTo(this.pse);
@@ -121,7 +119,7 @@ CInput.prototype.path = function(fabric, border, twist) {
 /**
 | Draws the mask for password fields
 */
-CInput.prototype.maskPath = function(fabric, border, twist, view, length, size) {
+Input.prototype.maskPath = function(fabric, border, twist, view, length, size) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
 
 	var x  = view.x(pitch);
@@ -147,7 +145,7 @@ CInput.prototype.maskPath = function(fabric, border, twist, view, length, size) 
 | Returns the fabric for the input field.
 | TODO caching;
 */
-CInput.prototype._weave = function(accent) {
+Input.prototype._weave = function(accent) {
 	var fabric = new Fabric(this.bezi.width, this.bezi.height);
 
 	var sname;
@@ -180,7 +178,7 @@ CInput.prototype._weave = function(accent) {
 /**
 | Draws the input field.
 */
-CInput.prototype.draw = function(fabric, accent) {
+Input.prototype.draw = function(fabric, accent) {
 	fabric.drawImage(this._weave(accent), this.pnw);
 };
 
@@ -190,7 +188,7 @@ CInput.prototype.draw = function(fabric, accent) {
 | offset:   the offset to get the point from.
 | TODO rename
 */
-CInput.prototype.getOffsetPoint = function(offset) {
+Input.prototype.getOffsetPoint = function(offset) {
 	// TODO cache position
 	var twig     = this.twig;
 	var font     = twig.fontStyle;
@@ -214,7 +212,7 @@ CInput.prototype.getOffsetPoint = function(offset) {
 /**
 | Returns the caret position relative to the panel.
 */
-CInput.prototype.getCaretPos = function() {
+Input.prototype.getCaretPos = function() {
 	var caret   = shell.caret;
 	var fs      = this.twig.fontStyle.size;
 	var descend = fs * theme.bottombox;
@@ -231,7 +229,7 @@ CInput.prototype.getCaretPos = function() {
 /**
 | Draws the caret.
 */
-CInput.prototype.drawCaret = function(view) {
+Input.prototype.drawCaret = function(view) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
 
 	var caret = shell.caret;
@@ -260,7 +258,7 @@ CInput.prototype.drawCaret = function(view) {
 /**
 | User input.
 */
-CInput.prototype.input = function(text) {
+Input.prototype.input = function(text) {
 	var caret = shell.caret;
 	var csign = caret.sign;
 	var v = this.value;
@@ -282,7 +280,7 @@ CInput.prototype.input = function(text) {
 /**
 | User pressed backspace.
 */
-CInput.prototype.keyBackspace = function() {
+Input.prototype.keyBackspace = function() {
 	var caret = shell.caret;
 	var csign = caret.sign;
 	var at1   = csign.at1;
@@ -298,7 +296,7 @@ CInput.prototype.keyBackspace = function() {
 /**
 | User pressed del.
 */
-CInput.prototype.keyDel = function() {
+Input.prototype.keyDel = function() {
 	var caret = shell.caret;
 	var csign = caret.sign;
 	var at1   = csign.at1;
@@ -310,7 +308,7 @@ CInput.prototype.keyDel = function() {
 /**
 | User pressed return key.
 */
-CInput.prototype.keyEnter = function() {
+Input.prototype.keyEnter = function() {
 	this.panel.cycleFocus(1);
 	return true;
 };
@@ -318,7 +316,7 @@ CInput.prototype.keyEnter = function() {
 /**
 | User pressed down key.
 */
-CInput.prototype.keyDown = function() {
+Input.prototype.keyDown = function() {
 	this.panel.cycleFocus(1);
 	return true;
 };
@@ -326,7 +324,7 @@ CInput.prototype.keyDown = function() {
 /**
 | User pressed end key.
 */
-CInput.prototype.keyEnd = function() {
+Input.prototype.keyEnd = function() {
 	var caret = shell.caret;
 	var csign = caret.sign;
 	var at1   = csign.at1;
@@ -341,7 +339,7 @@ CInput.prototype.keyEnd = function() {
 /**
 | User pressed left key.
 */
-CInput.prototype.keyLeft = function() {
+Input.prototype.keyLeft = function() {
 	var caret = shell.caret;
 	var csign = caret.sign;
 	if (csign.at1 <= 0) return false;
@@ -355,7 +353,7 @@ CInput.prototype.keyLeft = function() {
 /**
 | User pressed pos1 key
 */
-CInput.prototype.keyPos1 = function() {
+Input.prototype.keyPos1 = function() {
 	var caret = shell.caret;
 	var csign = caret.sign;
 	if (csign.at1 <= 0) return false;
@@ -369,7 +367,7 @@ CInput.prototype.keyPos1 = function() {
 /**
 | User pressed right key
 */
-CInput.prototype.keyRight = function() {
+Input.prototype.keyRight = function() {
 	var caret = shell.caret;
 	var csign = caret.sign;
 	if (csign.at1 >= this.value.length) return false;
@@ -383,7 +381,7 @@ CInput.prototype.keyRight = function() {
 /**
 | User pressed up key.
 */
-CInput.prototype.keyUp = function() {
+Input.prototype.keyUp = function() {
 	this.panel.cycleFocus(-1);
 	return true;
 };
@@ -391,7 +389,7 @@ CInput.prototype.keyUp = function() {
 /**
 | User pressed a special key
 */
-CInput.prototype.specialKey = function(key) {
+Input.prototype.specialKey = function(key) {
 	var poke = false;
 	switch(key) {
 	case 'backspace' : poke = this.keyBackspace(); break;
@@ -407,7 +405,10 @@ CInput.prototype.specialKey = function(key) {
 	if (poke) { this.panel.poke(); }
 };
 
-CInput.prototype.poke = function() {
+/**
+| TODO
+*/
+Input.prototype.poke = function() {
 	this.$fabric = null;
 	this.panel.poke();
 };
@@ -415,7 +416,7 @@ CInput.prototype.poke = function() {
 /**
 | Force clears all caches.
 */
-CInput.prototype.knock = function() {
+Input.prototype.knock = function() {
 	this.$fabric = null;
 };
 
@@ -423,7 +424,7 @@ CInput.prototype.knock = function() {
 /**
 | Mouse hover
 */
-CInput.prototype.mousehover = function(p, shift, ctrl) {
+Input.prototype.mousehover = function(p, shift, ctrl) {
 	if (p === null)
 		{ return null; }
 
@@ -442,7 +443,7 @@ CInput.prototype.mousehover = function(p, shift, ctrl) {
 /**
 | Mouse down
 */
-CInput.prototype.mousedown = function(p, shift, ctrl) {
+Input.prototype.mousedown = function(p, shift, ctrl) {
 	var pp = p.sub(this.pnw);
 	var fabric = this._weave(CAccent.NORMA);
 	if (!fabric.within(this.bezi, 'path', View.proper, pp))  { return null; }

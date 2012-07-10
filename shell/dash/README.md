@@ -8,11 +8,15 @@ Files
 <table>
 
  <tr><td>   button.js
-</td><td>   a button on a dashboard panel.
+</td><td>   a button on a dashboard panel
+</td></tr>
+
+ <tr><td>   input.js
+</td><td>   an input field on a dashboard panel
 </td></tr>
 
  <tr><td>   panel.js
-</td><td>   a panel of the dashboard.
+</td><td>   a panel of the dashboard
 </td></tr>
 
 </table>
