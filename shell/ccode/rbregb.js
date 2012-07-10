@@ -18,7 +18,7 @@
                              `'  ` `-^---'  `'  ` `-' `-| `-^---'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
                                                        `'
- register board, register button
+ register panel, register button
  register/sign up
 
  Authors: Axel Kittenberger
@@ -54,8 +54,8 @@ var log      = Jools.log;
 var subclass = Jools.subclass;
 var Util     = CCode.Util;
 
-var RBRegB = CCode.RBRegB = function(twig, board, inherit, name) {
-	CCustom.call(this, twig, board, inherit, name);
+var RBRegB = CCode.RBRegB = function(twig, panel, inherit, name) {
+	CCustom.call(this, twig, panel, inherit, name);
 };
 subclass(RBRegB, CCustom);
 
@@ -63,7 +63,7 @@ RBRegB.prototype.canFocus = function()
 	{ return true; };
 
 RBRegB.prototype.push = function(shift, ctrl) {
-	Util.register(this.board);
+	Util.register(this.panel);
 };
 
 })();

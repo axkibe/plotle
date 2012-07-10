@@ -66,12 +66,12 @@ var ro            = Math.round;
 /**
 | Constructor.
 */
-CChat = function(twig, board, inherit, name) {
+CChat = function(twig, panel, inherit, name) {
 	this.name    = name;
 	this.twig    = twig;
-	this.board   = board;
-	var pnw      = this.pnw    = computePoint(twig.frame.pnw, board.iframe);
-	var pse      = this.pse    = computePoint(twig.frame.pse, board.iframe);
+	this.panel   = panel;
+	var pnw      = this.pnw    = computePoint(twig.frame.pnw, panel.iframe);
+	var pse      = this.pse    = computePoint(twig.frame.pse, panel.iframe);
 	var iframe   = this.iframe = new Rect(Point.zero, pse.sub(pnw));
 
 	var fs = this.twig.fontStyle;
@@ -94,7 +94,7 @@ CChat.prototype.canFocus = function() {
 };
 
 /**
-| Returns the caret position relative to the board.
+| Returns the caret position relative to the panel.
 */
 CChat.prototype.getCaretPos = function() {
 	var caret   = shell.caret;
@@ -183,14 +183,14 @@ CChat.prototype.drawCaret = function(view) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
 
 	var caret = shell.caret;
-	var board = this.board;
+	var panel = this.panel;
 	var cpos  = caret.$pos = this.getCaretPos();
 
 	var cx  = cpos.x;
 	var ch  = ro((cpos.s - cpos.n) * view.zoom);
 	var cp = view.point(
-		board.pnw.x + cpos.x,
-		board.pnw.y + cpos.n
+		panel.pnw.x + cpos.x,
+		panel.pnw.y + cpos.n
 	);
 	shell.caret.$screenPos = cp;
 
@@ -361,7 +361,7 @@ CChat.prototype.mousedown = function(p, shift, ctrl) {
 		{ return null; }
 
 	shell.setCaret('cockpit', {
-		path : new Path([this.board.name, this.name]),
+		path : new Path([this.panel.name, this.name]),
 		at1  : this.itext.length
 	});
 
@@ -374,7 +374,7 @@ CChat.prototype.mousedown = function(p, shift, ctrl) {
 CChat.prototype.mousehover = function(p, shift, ctrl) {
 	if (p === null)
 		{ return null; }
-	
+
 	var pnw = this.pnw;
 	var pse = this.pse;
 
@@ -413,7 +413,7 @@ CChat.prototype.pathILine = function(fabric, border, twist) {
 */
 CChat.prototype.poke = function() {
 	this.$fabric = null;
-	this.board.poke();
+	this.panel.poke();
 };
 
 /**

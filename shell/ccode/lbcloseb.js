@@ -18,7 +18,7 @@
                            `--' `-^---' `--'  `' `-' `-' `-' `-^---'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- login board, close button
+ login panel, close button
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -53,8 +53,8 @@ var Util     = CCode.Util;
 /**
 | Constructor
 */
-var LBCloseB = CCode.LBCloseB = function(twig, board, inherit, name) {
-	CCustom.call(this, twig, board, inherit, name);
+var LBCloseB = CCode.LBCloseB = function(twig, panel, inherit, name) {
+	CCustom.call(this, twig, panel, inherit, name);
 };
 subclass(LBCloseB, CCustom);
 
@@ -62,8 +62,8 @@ LBCloseB.prototype.canFocus = function()
 	{ return true; };
 
 LBCloseB.prototype.push = function(shift, ctrl) {
-	Util.clearLogin(this.board);
-	this.board.cockpit.setCurBoard('MainBoard');
+	Util.clearLogin(this.panel);
+	this.panel.cockpit.setCurPanel('MainPanel');
 	shell.redraw = true;
 };
 

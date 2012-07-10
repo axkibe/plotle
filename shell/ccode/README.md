@@ -1,69 +1,69 @@
 Meshcraft
 =========
-Behavior code of cockpit components.
+Behavior code of the dashboard components.
 
 Files
 =====
 <table>
 
  <tr><td>   hbhideb.js
-</td><td>   help board: hide button
+</td><td>   help panel: hide button
 </td></tr>
 
- <tr><td>   helpboard.js
-</td><td>   the helpboard
+ <tr><td>   helppanel.js
+</td><td>   the help panel
 </td></tr>
 
  <tr><td>   lbcloseb.js
-</td><td>   login board: close button
+</td><td>   login panel: close button
 </td></tr>
 
  <tr><td>   lbloginb.js
-</td><td>   login board: login button
+</td><td>   login panel: login button
 </td></tr>
 
  <tr><td>   lbpassi.js
-</td><td>   login board: password input
+</td><td>   login panel: password input
 </td></tr>
 
- <tr><td>   mainboard.js
-</td><td>   the mainboard
+ <tr><td>   mainpanel.js
+</td><td>   the main panel
 </td></tr>
 
  <tr><td>   mbleft2b.js
-</td><td>   mainboard: second left button
+</td><td>   main panel: second left button
 </td></tr>
 
  <tr><td>   mbleft.js
-</td><td>   mainboard: left button
+</td><td>   main panel: left button
 </td></tr>
 
  <tr><td>   mbright.js
-</td><td>   mainboard: right button
+</td><td>   main panel: right button
 </td></tr>
 
  <tr><td>   mbswitchb.js
-</td><td>   mainboard: switch button
+</td><td>   main panel: switch button
 </td></tr>
 
  <tr><td>   mbzoomminusb.js
-</td><td>   mainboard: zoom out button
+</td><td>   main panel: zoom out button
 </td></tr>
 
  <tr><td>   mbzoomnullb.js
-</td><td>   mainboard: zoom to null button
+</td><td>   main panel: zoom to null button
 </td></tr>
 
  <tr><td>   mbzoomplusb.js
-</td><td>   mainboard: zoom in button
+</td><td>   main panel: zoom in button
 </td></tr>
 
  <tr><td>   rbcloseb.js
-</td><td>   register board: close button
+</td><td>   register panel: close button
 </td></tr>
 
  <tr><td>   rbregb.js
-</td><td>   register board: register button
+</td><td>   register panel: register button
 </td></tr>
 
  <tr><td>   util.js

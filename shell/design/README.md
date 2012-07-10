@@ -1,6 +1,6 @@
 Meshcraft
 =========
-Design of the cockpits
+Design of the dashboard.
 
 Files
 =====
@@ -10,24 +10,24 @@ Files
 </td><td>   shortcuts for all used fontstyles
 </td></tr>
 
- <tr><td>   helpboard.js
-</td><td>   the help board (upper right)
+ <tr><td>   helppanel.js
+</td><td>   the help panel (upper right)
 </td></tr>
 
- <tr><td>   loginboard.js
-</td><td>   the login board (bottom middle)
+ <tr><td>   loginpanel.js
+</td><td>   the login panel (bottom middle)
 </td></tr>
 
- <tr><td>   mainboard.js
-</td><td>   the default main board (bottom middle)
+ <tr><td>   mainpanel.js
+</td><td>   the default main panel (bottom middle)
 </td></tr>
 
  <tr><td>   pattern.js
 </td><td>   pattern rules for all designs
 </td></tr>
 
- <tr><td>   regboard.js
-</td><td>   the register board
+ <tr><td>   regpanel.js
+</td><td>   the register panel
 </td></tr>
 
 </table>

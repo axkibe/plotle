@@ -18,7 +18,7 @@
                          '   `-' `-^---' `--' `-' |  `' `-^---'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ' ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- Left Button on Mainboard.
+ Left Button on the main panel.
  Log in / Log out
 
  Authors: Axel Kittenberger
@@ -52,15 +52,15 @@ var subclass      = Jools.subclass;
 /**
 | Constructor
 */
-var MBLeftB = CCode.MBLeftB = function(twig, board, inherit, name) {
-	CCustom.call(this, twig, board, inherit, name);
+var MBLeftB = CCode.MBLeftB = function(twig, panel, inherit, name) {
+	CCustom.call(this, twig, panel, inherit, name);
 };
 subclass(MBLeftB, CCustom);
 
 MBLeftB.prototype.push = function(shift, ctrl) {
 	switch (this.$captionText) {
-	case 'log in'  : this.board.cockpit.setCurBoard('LoginBoard'); break;
-	case 'log out' : CCode.Util.logout(this.board); break;
+	case 'log in'  : this.panel.cockpit.setCurPanel('LoginPanel'); break;
+	case 'log out' : CCode.Util.logout(this.panel); break;
 	default : throw new Error('unknown state of leftB');
 	}
 	shell.redraw = true;

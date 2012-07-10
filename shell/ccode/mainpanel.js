@@ -12,13 +12,13 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--'
 
-                        ,-,-,-.             ,-,---.               .
-                        `,| | |   ,-. . ,-.  '|___/ ,-. ,-. ,-. ,-|
-                          | ; | . ,-| | | |  ,|   \ | | ,-| |   | |
-                          '   `-' `-^ ' ' ' `-^---' `-' `-^ '   `-^
+                          ,-,-,-.            .-,--.             .
+                          `,| | |   ,-. . ,-. '|__/ ,-. ,-. ,-. |
+                            | ; | . ,-| | | | ,|    ,-| | | |-' |
+                            '   `-' `-^ ' ' ' `'    `-^ ' ' `-' `'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- the cockpits mainboard
+ the dashboard's mainboard.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -39,7 +39,7 @@ var theme;
 /**
 | Exports
 */
-var MainBoard = null;
+var MainPanel = null;
 
 /**
 | Capsule
@@ -59,18 +59,18 @@ var subclass = Jools.subclass;
 /**
 | Constructor
 */
-MainBoard = function(name, inherit, cockpit, screensize) {
+MainPanel = function(name, inherit, cockpit, screensize) {
 	Panel.call(this, name, inherit, cockpit, screensize);
 	this.$spaceName = inherit ? inherit.$spaceName : null;
 	this.$userName  = inherit ? inherit.$userName  : null;
 };
-subclass(MainBoard, Panel);
+subclass(MainPanel, Panel);
 
 
-MainBoard.prototype.getSwitchPanel = function() {
+MainPanel.prototype.getSwitchPanel = function() {
 	var sp = this.$switchPanel;
 	if (sp) { return sp; }
-	
+
 	var swidim       = theme.switchpanel.dimensions;
 	var current = '';
 	switch (this.$spaceName) {
@@ -86,9 +86,9 @@ MainBoard.prototype.getSwitchPanel = function() {
 };
 
 /*
-| Toggles the switch board
+| Toggles the switch panel.
 */
-MainBoard.prototype.toggleSwitch = function() {
+MainPanel.prototype.toggleSwitch = function() {
 	this.switchActive = !this.switchActive;
 	var swb = this.cc.switchB;
 	swb.$active = this.switchActive;
@@ -98,7 +98,7 @@ MainBoard.prototype.toggleSwitch = function() {
 /**
 | Sets current space.
 */
-MainBoard.prototype.setCurSpace = function(space, access) {
+MainPanel.prototype.setCurSpace = function(space, access) {
 	this.$spaceName   = space;
 	this.$spaceAccess = access;
 
@@ -120,7 +120,7 @@ MainBoard.prototype.setCurSpace = function(space, access) {
 /**
 | Sets current user
 */
-MainBoard.prototype.setUser = function(userName) {
+MainPanel.prototype.setUser = function(userName) {
 	this.$userName = userName;
 	this.$switchPanel = null;
 
@@ -132,16 +132,16 @@ MainBoard.prototype.setUser = function(userName) {
 /**
 | Sets current space zoom level
 */
-MainBoard.prototype.setSpaceZoom = function(zf) {
+MainPanel.prototype.setSpaceZoom = function(zf) {
 	var zoom = this.cc.zoom;
 	zoom.text = '' + zf;
 	zoom.poke();
 };
 
 /**
-| Draws the mainboard
+| Draws the main panel.
 */
-MainBoard.prototype.draw = function(fabric) {
+MainPanel.prototype.draw = function(fabric) {
 	if (this.switchActive) {
 		this.getSwitchPanel().draw(fabric);
 	}
@@ -151,7 +151,7 @@ MainBoard.prototype.draw = function(fabric) {
 /**
 | Mouse down.
 */
-MainBoard.prototype.mousedown = function(p, shift, ctrl) {
+MainPanel.prototype.mousedown = function(p, shift, ctrl) {
 	if (this.switchActive) {
 		var res = this.getSwitchPanel().mousedown(p);
 		if (res !== null) { return res; }
@@ -163,15 +163,15 @@ MainBoard.prototype.mousedown = function(p, shift, ctrl) {
 /**
 | Force clears all caches.
 */
-MainBoard.prototype.knock = function() {
+MainPanel.prototype.knock = function() {
 	this.getSwitchPanel().knock();
 	Panel.prototype.poke.call(this);
 };
 
 /**
-| Returns true if point is on this board
+| Returns true if point is on this panel
 */
-MainBoard.prototype.mousehover = function(p, shift, ctrl) {
+MainPanel.prototype.mousehover = function(p, shift, ctrl) {
 	if (this.switchActive) {
 		var pp = p.sub(this.pnw);
 		var swb = this.cc.switchB;
@@ -188,9 +188,9 @@ MainBoard.prototype.mousehover = function(p, shift, ctrl) {
 };
 
 /**
-| Help Board visible or not.
+| Sets Help Panel visible/invisible.
 */
-MainBoard.prototype.setShowHelp = function(showHelp) {
+MainPanel.prototype.setShowHelp = function(showHelp) {
 	var rb = this.cc.rightB;
 	rb.$active = showHelp;
 	rb.poke();

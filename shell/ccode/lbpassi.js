@@ -20,7 +20,7 @@
 
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- login board, password input
+ login panel, password input.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -57,8 +57,8 @@ var Util     = CCode.Util;
 /**
 | Constructor
 */
-var LBPassI = CCode.LBPassI = function(twig, board, inherit, name) {
-	CInput.call(this, twig, board, inherit, name);
+var LBPassI = CCode.LBPassI = function(twig, panel, inherit, name) {
+	CInput.call(this, twig, panel, inherit, name);
 };
 
 subclass(LBPassI, CInput);
@@ -67,7 +67,7 @@ subclass(LBPassI, CInput);
 | Password input field
 */
 LBPassI.prototype.keyEnter = function() {
-	Util.login(this.board);
+	Util.login(this.panel);
 };
 
 })();

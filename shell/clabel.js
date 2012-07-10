@@ -55,11 +55,11 @@ var computePoint  = Curve.computePoint;
 /**
 | Constructor.
 */
-CLabel = function(twig, board, inherit, name) {
+CLabel = function(twig, panel, inherit, name) {
 	this.name    = name;
 	this.twig    = twig;
-	this.board   = board;
-	this.pos     = computePoint(twig.pos, board.iframe);
+	this.panel   = panel;
+	this.pos     = computePoint(twig.pos, panel.iframe);
 	// if not null, overrides the design text
 	// TODO rename $text
 	this.text    = inherit ? inherit.text : null;
@@ -84,7 +84,7 @@ CLabel.prototype.draw = function(fabric) {
 | Clears cache.
 */
 CLabel.prototype.poke = function() {
-	this.board.poke();
+	this.panel.poke();
 };
 
 /**

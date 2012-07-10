@@ -52,14 +52,14 @@ var subclass = Jools.subclass;
 /**
 | Constructor
 */
-var MBSwitchB = CCode.MBSwitchB = function(twig, board, inherit, name) {
-	CCustom.call(this, twig, board, inherit, name);
+var MBSwitchB = CCode.MBSwitchB = function(twig, panel, inherit, name) {
+	CCustom.call(this, twig, panel, inherit, name);
 };
 
 subclass(MBSwitchB, CCustom);
 
 MBSwitchB.prototype.push = function(shift, ctrl) {
-	this.board.toggleSwitch();
+	this.panel.toggleSwitch();
 	shell.redraw = true;
 };
 

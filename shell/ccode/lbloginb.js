@@ -18,7 +18,7 @@
                         `--' `-^---' `--' `-' `-| ' ' ' `-^---'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
                                                `'
- Login Button on login board.
+ Login Button on login panel.
  log in
 
  Authors: Axel Kittenberger
@@ -58,16 +58,16 @@ var Util     = CCode.Util;
 | The container.
 */
 CMeth = {
-	LoginBoard : { },
-	MainBoard  : { },
-	RegBoard   : { }
+	LoginPanel : { },
+	MainPanel  : { },
+	RegPanel   : { }
 };
 
 /**
 | Constructor
 */
-var LBLoginB = CCode.LBLoginB = function(twig, board, inherit, name) {
-	CCustom.call(this, twig, board, inherit, name);
+var LBLoginB = CCode.LBLoginB = function(twig, panel, inherit, name) {
+	CCustom.call(this, twig, panel, inherit, name);
 };
 
 subclass(LBLoginB, CCustom);
@@ -77,7 +77,7 @@ LBLoginB.prototype.canFocus = function() {
 };
 
 LBLoginB.prototype.push = function(shift, ctrl) {
-	Util.login(this.board);
+	Util.login(this.panel);
 	shell.redraw = true;
 };
 

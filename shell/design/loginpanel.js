@@ -12,18 +12,23 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--'
 
-                            ,                 ,-,---.               .
-                            )   ,-. ,-. . ,-.  '|___/ ,-. ,-. ,-. ,-|
-                           /    | | | | | | |  ,|   \ | | ,-| |   | |
-                           `--' `-' `-| ' ' ' `-^---' `-' `-^ '   `-^
+                            ,                .-,--.             .
+                            )   ,-. ,-. . ,-. '|__/ ,-. ,-. ,-. |
+                           /    | | | | | | | ,|    ,-| | | |-' |
+                           `--' `-' `-| ' ' ' `'    `-^ ' ' `-' `'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
                                      `'
- Design of the loginboard.
+ Design of the login panel.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/**
+| Export
+*/
+var Design;
+Design = Design || {};
 
 /**
 | Imports
@@ -32,22 +37,18 @@ var Fabric;
 var theme;
 
 /**
-| Exports
-*/
-var Design;
-Design = Design || {};
-
-/**
 | Capsule
 */
 (function(){
 'use strict';
 
+/**
+| Shortcuts
+*/
 var fontStyle = Design.fontStyle;
-
 // 'magic' number to approximate ellipses with beziers
 var magic     = Fabric.magic;
-var mbConsts   = Design.MainBoard.consts;
+var mbConsts   = Design.MainPanel.consts;
 
 /**
 | Login control
@@ -74,19 +75,19 @@ var forgotBXM       = forgotBW * magic;
 var forgotBYM       = forgotBH * magic;
 
 /**
-| Login Board
+| Login Panel
 */
-var LoginBoard = Design.LoginBoard = { type   : 'Design' };
+var LoginPanel = Design.LoginPanel = { type   : 'Design' };
 
-LoginBoard.style = 'cockpit';
+LoginPanel.style = 'cockpit';
 
-LoginBoard.frame = {
+LoginPanel.frame = {
 	type  : 'Frame',
 	pnw   : { type   : 'Point', anchor : 's', x : -512, y : -110 },
 	pse   : { type   : 'Point', anchor : 's', x :  512, y :    0 }
 };
 
-LoginBoard.curve = {
+LoginPanel.curve = {
 	type  : 'Curve',
 	copse : {
 	'1' : {
@@ -118,7 +119,7 @@ LoginBoard.curve = {
 	ranks : [ '1', '2', '3' ]
 };
 
-LoginBoard.layout = {
+LoginPanel.layout = {
 	type  : 'Layout',
 	copse : {
 	'loginL'      : {
@@ -352,7 +353,7 @@ LoginBoard.layout = {
 	}*/
 
 	}},
-	
+
 	ranks : [
 		'userI',
 		'passI',

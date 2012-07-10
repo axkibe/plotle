@@ -71,13 +71,13 @@ var pitch         = new Point(8, 3);
 /**
 | Constructor.
 */
-CInput = function(twig, board, inherit, name) {
+CInput = function(twig, panel, inherit, name) {
 	this.twig    = twig;
-	this.board   = board;
+	this.panel   = panel;
 	this.name    = name;
 
-	var pnw  = this.pnw  = computePoint(twig.frame.pnw, board.iframe);
-	var pse  = this.pse  = computePoint(twig.frame.pse, board.iframe);
+	var pnw  = this.pnw  = computePoint(twig.frame.pnw, panel.iframe);
+	var pse  = this.pse  = computePoint(twig.frame.pse, panel.iframe);
 	var bezi = this.bezi = new BeziRect(Point.zero, pse.sub(pnw), 7, 3);
 
 	this.value   = inherit ? inherit.value : '';
@@ -212,7 +212,7 @@ CInput.prototype.getOffsetPoint = function(offset) {
 };
 
 /**
-| Returns the caret position relative to the board.
+| Returns the caret position relative to the panel.
 */
 CInput.prototype.getCaretPos = function() {
 	var caret   = shell.caret;
@@ -235,14 +235,14 @@ CInput.prototype.drawCaret = function(view) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
 
 	var caret = shell.caret;
-	var board = this.board;
+	var panel = this.panel;
 	var cpos  = caret.$pos = this.getCaretPos();
 
 	var cx  = cpos.x;
 	var ch  = ro((cpos.s - cpos.n) * view.zoom);
 	var cp = view.point(
-		this.board.pnw.x + cpos.x,
-		this.board.pnw.y + cpos.n
+		this.panel.pnw.x + cpos.x,
+		this.panel.pnw.y + cpos.n
 	);
 	shell.caret.$screenPos = cp;
 
@@ -276,7 +276,7 @@ CInput.prototype.input = function(text) {
 		path : csign.path,
 		at1  : at1 + text.length
 	});
-	this.board.poke();
+	this.panel.poke();
 };
 
 /**
@@ -311,7 +311,7 @@ CInput.prototype.keyDel = function() {
 | User pressed return key.
 */
 CInput.prototype.keyEnter = function() {
-	this.board.cycleFocus(1);
+	this.panel.cycleFocus(1);
 	return true;
 };
 
@@ -319,7 +319,7 @@ CInput.prototype.keyEnter = function() {
 | User pressed down key.
 */
 CInput.prototype.keyDown = function() {
-	this.board.cycleFocus(1);
+	this.panel.cycleFocus(1);
 	return true;
 };
 
@@ -384,7 +384,7 @@ CInput.prototype.keyRight = function() {
 | User pressed up key.
 */
 CInput.prototype.keyUp = function() {
-	this.board.cycleFocus(-1);
+	this.panel.cycleFocus(-1);
 	return true;
 };
 
@@ -404,12 +404,12 @@ CInput.prototype.specialKey = function(key) {
 	case 'right'     : poke = this.keyRight();     break;
 	case 'up'        : poke = this.keyUp();        break;
 	}
-	if (poke) { this.board.poke(); }
+	if (poke) { this.panel.poke(); }
 };
 
 CInput.prototype.poke = function() {
 	this.$fabric = null;
-	this.board.poke();
+	this.panel.poke();
 };
 
 /**
@@ -447,7 +447,7 @@ CInput.prototype.mousedown = function(p, shift, ctrl) {
 	var fabric = this._weave(CAccent.NORMA);
 	if (!fabric.within(this.bezi, 'path', View.proper, pp))  { return null; }
 
-	this.board.setFocus(this.name);
+	this.panel.setFocus(this.name);
 	return false;
 };
 

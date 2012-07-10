@@ -83,7 +83,7 @@ Caret = function(visec, sign, retainx, shown) {
 	// a signature pointing to the item the caret is in
 	// when visec === space
 	//
-	// the board and cockpit component when visec === cockpit
+	// the panel and cockpit component when visec === cockpit
 	this.sign = sign;
 
 	// x position to retain when using up/down keys.

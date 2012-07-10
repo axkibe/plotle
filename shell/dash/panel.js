@@ -1,15 +1,15 @@
-/**____
-\  ___ `'.                          .
- ' |--.\  \                       .'|
- | |    \  '                     <  |
- | |     |  '    __               | |
- | |     |  | .:--.'.         _   | | .'''-.
- | |     ' .'/ |   \ |      .' |  | |/.'''. \
- | |___.' /' `" __ | |     .   | /|  /    | |
-/_______.'/   .'.''| |   .'.'| |//| |     | |
-\_______|/   / /   | |_.'.'.-'  / | |     | |
-             \ \._,\ '/.'   \_.'  | '.    | '.
-              `--'  `"            '---'   '---'
+ /**____
+ \  ___ `'.                          .
+  ' |--.\  \                       .'|
+  | |    \  '                     <  |
+  | |     |  '    __               | |
+  | |     |  | .:--.'.         _   | | .'''-.
+  | |     ' .'/ |   \ |      .' |  | |/.'''. \
+  | |___.' /' `" __ | |     .   | /|  /    | |
+ /_______.'/   .'.''| |   .'.'| |//| |     | |
+ \_______|/   / /   | |_.'.'.-'  / | |     | |
+              \ \._,\ '/.'   \_.'  | '.    | '.
+               `--'  `"            '---'   '---'
              .-,--.             .
               '|__/ ,-. ,-. ,-. |
               ,|    ,-| | | |-' |
@@ -130,7 +130,7 @@ Panel.prototype.focusedCC = function() {
 };
 
 /**
-| Paths the boards frame
+| Paths the panels frame.
 */
 Panel.prototype.path = function(fabric, border, twist) {
 	this.curve.path(fabric, border, twist);
@@ -147,7 +147,7 @@ Panel.prototype.knock = function() {
 };
 
 /**
-| Draws the boards contents
+| Draws the panels contents.
 */
 Panel.prototype._weave = function() {
 	if (this.$fabric && !config.debug.noCache)
@@ -183,7 +183,7 @@ Panel.prototype._weave = function() {
 };
 
 /**
-| Draws the board
+| Draws the panel.
 */
 Panel.prototype.draw = function(fabric) {
 	fabric.drawImage(this._weave(), this.pnw);
@@ -202,7 +202,7 @@ Panel.prototype.drawCaret = function(view) {
 };
 
 /**
-| Returns true if point is on this board
+| Returns true if point is on this panel.
 */
 Panel.prototype.mousehover = function(p, shift, ctrl) {
 	var pnw = this.pnw;
@@ -242,7 +242,7 @@ Panel.prototype.mousehover = function(p, shift, ctrl) {
 };
 
 /**
-| Returns true if point is on this board
+| Returns true if point is on this panel.
 */
 Panel.prototype.mousedown = function(p, shift, ctrl) {
 	var pnw = this.pnw;

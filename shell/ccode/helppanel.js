@@ -12,13 +12,14 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--'
 
-                             ,-_/,.     .      ,-,---.               .
-                             ' |_|/ ,-. |  ,-.  '|___/ ,-. ,-. ,-. ,-|
-                              /| |  |-' |  | |  ,|   \ | | ,-| |   | |
-                              `' `' `-' `' |-' `-^---' `-' `-^ '   `-^
+
+                             ,-_/,.     .     .-,--.             .
+                             ' |_|/ ,-. |  ,-. '|__/ ,-. ,-. ,-. |
+                              /| |  |-' |  | | ,|    ,-| | | |-' |
+                              `' `' `-' `' |-' `'    `-^ ' ' `-' `'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
                                            '
- the helpboard
+ the help panel.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -37,7 +38,7 @@ var theme;
 /**
 | Exports
 */
-var HelpBoard = null;
+var HelpPanel = null;
 
 /**
 | Capsule
@@ -46,6 +47,9 @@ var HelpBoard = null;
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
+/**
+| Shortcuts
+*/
 var Panel    = Dash.Panel;
 var debug    = Jools.debug;
 var immute   = Jools.immute;
@@ -56,13 +60,13 @@ var subclass = Jools.subclass;
 /**
 | Constructor
 */
-HelpBoard = function(name, inherit, cockpit, screensize) {
+HelpPanel = function(name, inherit, cockpit, screensize) {
 	Panel.call(this, name, inherit, cockpit, screensize);
 	this.$access = inherit ? inherit.$access : 'rw';
 };
-subclass(HelpBoard, Panel);
+subclass(HelpPanel, Panel);
 
-HelpBoard.prototype.setAccess = function(access) {
+HelpPanel.prototype.setAccess = function(access) {
 	if (this.$access === access) { return; }
 	this.$access = access;
 	if (access === 'ro') {

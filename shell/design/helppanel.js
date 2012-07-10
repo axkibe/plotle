@@ -11,14 +11,13 @@
                    `'-.....-.'.'.-'  / | |     | |    `-._____ / | |     / /   | |_  | |      |  '.'
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--'
-
-                          ,-_/,.     .      ,-,---.               .
-                          ' |_|/ ,-. |  ,-.  '|___/ ,-. ,-. ,-. ,-|
-                           /| |  |-' |  | |  ,|   \ | | ,-| |   | |
-                           `' `' `-' `' |-' `-^---' `-' `-^ '   `-^
+                          ,-_/,.     .     .-,--.             .
+                          ' |_|/ ,-. |  ,-. '|__/ ,-. ,-. ,-. |
+                           /| |  |-' |  | | ,|    ,-| | | |-' |
+                           `' `' `-' `' |-' `'    `-^ ' ' `-' `'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ | ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
                                         '
- Helpboard for readonly spaces.
+ the help panel.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -47,17 +46,17 @@ var immute      = Jools.immute;
 var innumerable = Jools.innumerable;
 var ro          = Math.round;
 var fontStyle   = Design.fontStyle;
-var HelpBoard   = Design.HelpBoard = { type : 'Design' };
+var HelpPanel   = Design.HelpPanel = { type : 'Design' };
 
-HelpBoard.style = 'help';
+HelpPanel.style = 'help';
 
-HelpBoard.frame = {
+HelpPanel.frame = {
 	type  : 'Frame',
 	pnw   : { type: 'Point', anchor: 'ne',  x: -200, y:    0 },
 	pse   : { type: 'Point', anchor: 'ne',  x:    0, y:  400 }
 };
 
-HelpBoard.curve = {
+HelpPanel.curve = {
 	type  : 'Curve',
 	copse : {
 	'1' : {
@@ -81,7 +80,7 @@ HelpBoard.curve = {
 	ranks : [ '1', '2', '3' ]
 };
 
-HelpBoard.layout = {
+HelpPanel.layout = {
 	type  : 'Layout',
 	copse : {
 	'help'  : {

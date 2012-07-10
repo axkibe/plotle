@@ -60,38 +60,38 @@ var Util = CCode.Util = {};
 /**
 | Logins the user
 */
-Util.login = function(board) {
-	board.cc.errL.text = '';
-	board.cc.errL.poke();
+Util.login = function(panel) {
+	panel.cc.errL.text = '';
+	panel.cc.errL.poke();
 
-	var user   = board.cc.userI.value;
-	var pass   = board.cc.passI.value;
+	var user   = panel.cc.userI.value;
+	var pass   = panel.cc.passI.value;
 
 	if (user.length < 4) {
-		board.cc.errL.text = 'Username too short, min. 4 characters';
-		board.cc.errL.poke();
+		panel.cc.errL.text = 'Username too short, min. 4 characters';
+		panel.cc.errL.poke();
 		shell.setCaret('cockpit', {
-			path : new Path(['LoginBoard', 'userI']),
+			path : new Path(['LoginPanel', 'userI']),
 			at1  : user.length
 		});
 		return;
 	}
 
 	if (user.substr(0, 5) === 'visit') {
-		board.cc.errL.text = 'Username must not start with "visit"';
-		board.cc.errL.poke();
+		panel.cc.errL.text = 'Username must not start with "visit"';
+		panel.cc.errL.poke();
 		shell.setCaret('cockpit', {
-			path : new Path(['LoginBoard', 'userI']),
+			path : new Path(['LoginPanel', 'userI']),
 			at1  : 0
 		});
 		return;
 	}
-	
+
 	if (pass.length < 5) {
-		board.cc.errL.text = 'Password too short, min. 5 characters';
-		board.cc.errL.poke();
+		panel.cc.errL.text = 'Password too short, min. 5 characters';
+		panel.cc.errL.poke();
 		shell.setCaret('cockpit', {
-			path : new Path(['LoginBoard', 'passI']),
+			path : new Path(['LoginPanel', 'passI']),
 			at1  : pass.length
 		});
 		return;
@@ -101,17 +101,17 @@ Util.login = function(board) {
 
 	shell.peer.auth(user, passhash, function(res) {
 		if (!res.ok) {
-			board.cc.errL.text = res.message;
-			board.cc.errL.poke();
+			panel.cc.errL.text = res.message;
+			panel.cc.errL.poke();
 
 			if (res.message.search(/Username/) >= 0) {
 				shell.setCaret('cockpit', {
-					path : new Path(['LoginBoard', 'userI']),
+					path : new Path(['LoginPanel', 'userI']),
 					at1  : user.length
 				});
 			} else {
 				shell.setCaret('cockpit', {
-					path : new Path(['LoginBoard', 'passI']),
+					path : new Path(['LoginPanel', 'passI']),
 					at1  : pass.length
 				});
 			}
@@ -121,8 +121,8 @@ Util.login = function(board) {
 		}
 
 		shell.setUser(user, passhash);
-		board.cockpit.setCurBoard('MainBoard');
-		Util.clearLogin(board);
+		panel.cockpit.setCurPanel('MainPanel');
+		Util.clearLogin(panel);
 		shell.moveToSpace(null);
 		shell.poke();
 	});
@@ -131,7 +131,7 @@ Util.login = function(board) {
 /**
 | Logouts the user
 */
-Util.logout = function(board) {
+Util.logout = function(panel) {
 	shell.peer.logout(function(res) {
 		if (!res.ok) {
 			shell.greenscreen('Cannot logout: ' + res.message);
@@ -139,7 +139,7 @@ Util.logout = function(board) {
 		}
 
 		shell.setUser(res.user, res.pass);
-		board.cockpit.setCurBoard('MainBoard');
+		panel.cockpit.setCurPanel('MainPanel');
 		shell.moveToSpace(null);
 		shell.poke();
 	});
@@ -148,61 +148,61 @@ Util.logout = function(board) {
 /**
 | Registers the user
 */
-Util.register = function(board) {
-	board.cc.errL.text = '';
-	board.cc.errL.poke();
+Util.register = function(panel) {
+	panel.cc.errL.text = '';
+	panel.cc.errL.poke();
 
-	var user   = board.cc.userI.value;
-	var email  = board.cc.emailI.value;
-	var pass   = board.cc.passI.value;
-	var pass2  = board.cc.pass2I.value;
-	var code   = board.cc.codeI.value;
+	var user   = panel.cc.userI.value;
+	var email  = panel.cc.emailI.value;
+	var pass   = panel.cc.passI.value;
+	var pass2  = panel.cc.pass2I.value;
+	var code   = panel.cc.codeI.value;
 
 	if (user.length < 4) {
-		board.cc.errL.text = 'Username too short, min. 4 characters';
-		board.cc.errL.poke();
+		panel.cc.errL.text = 'Username too short, min. 4 characters';
+		panel.cc.errL.poke();
 		shell.setCaret('cockpit', {
-			path : new Path(['RegBoard', 'userI']),
+			path : new Path(['RegPanel', 'userI']),
 			at1  : user.length
 		});
 		return;
 	}
 
 	if (user.substr(0, 5) === 'visit') {
-		board.cc.errL.text = 'Username must not start with "visit"';
-		board.cc.errL.poke();
+		panel.cc.errL.text = 'Username must not start with "visit"';
+		panel.cc.errL.poke();
 		shell.setCaret('cockpit', {
-			path : new Path(['RegBoard', 'userI']),
+			path : new Path(['RegPanel', 'userI']),
 			at1  : 0
 		});
 		return;
 	}
-	
+
 	if (pass.length < 5) {
-		board.cc.errL.text = 'Password too short, min. 5 characters';
-		board.cc.errL.poke();
+		panel.cc.errL.text = 'Password too short, min. 5 characters';
+		panel.cc.errL.poke();
 		shell.setCaret('cockpit', {
-			path : new Path(['RegBoard', 'passI']),
+			path : new Path(['RegPanel', 'passI']),
 			at1  : pass.length
 		});
 		return;
 	}
 
 	if (pass !== pass2) {
-		board.cc.errL.text = 'Passwords to not match';
-		board.cc.errL.poke();
+		panel.cc.errL.text = 'Passwords to not match';
+		panel.cc.errL.poke();
 		shell.setCaret('cockpit', {
-			path : new Path(['RegBoard', 'pass2I']),
+			path : new Path(['RegPanel', 'pass2I']),
 			at1  : pass2.length
 		});
 		return;
 	}
 
 	if (code.length === 0) {
-		board.cc.errL.text = 'Invitation code missing';
-		board.cc.errL.poke();
+		panel.cc.errL.text = 'Invitation code missing';
+		panel.cc.errL.poke();
 		shell.setCaret('cockpit', {
-			path : new Path(['RegBoard', 'codeI']),
+			path : new Path(['RegPanel', 'codeI']),
 			at1  : pass2.length
 		});
 		return;
@@ -212,17 +212,17 @@ Util.register = function(board) {
 
 	shell.peer.register(user, email, pass, code, function(res) {
 		if (!res.ok) {
-			board.cc.errL.text = res.message;
-			board.cc.errL.poke();
+			panel.cc.errL.text = res.message;
+			panel.cc.errL.poke();
 
 			if (res.message.search(/Username/) >= 0) {
 				shell.setCaret('cockpit', {
-					path : new Path(['RegBoard', 'userI']),
+					path : new Path(['RegPanel', 'userI']),
 					at1  : pass2.length
 				});
 			} else if (res.message.search(/code/) >= 0) {
 				shell.setCaret('cockpit', {
-					path : new Path(['RegBoard', 'codeI']),
+					path : new Path(['RegPanel', 'codeI']),
 					at1  : pass2.length
 				});
 			}
@@ -231,37 +231,37 @@ Util.register = function(board) {
 		}
 
 		shell.setUser(user, pass);
-		board.cockpit.setCurBoard('MainBoard');
-		Util.clearRegister(board);
+		panel.cockpit.setCurPanel('MainPanel');
+		Util.clearRegister(panel);
 		shell.moveToSpace(null);
 		shell.poke();
 	});
 };
 
 /**
-| Clears all fields on the login board
+| Clears all fields on the login panel.
 */
-Util.clearLogin = function(board) {
-	board.cc.userI.value  = '';
-	board.cc.passI.value  = '';
-	board.cc.userI.poke();
-	board.cc.passI.poke();
+Util.clearLogin = function(panel) {
+	panel.cc.userI.value  = '';
+	panel.cc.passI.value  = '';
+	panel.cc.userI.poke();
+	panel.cc.passI.poke();
 };
 
 /**
-| Clears all fields on the register board
+| Clears all fields on the register panel.
 */
-Util.clearRegister = function(board) {
-	board.cc.userI. value = '';
-	board.cc.emailI.value = '';
-	board.cc.passI. value = '';
-	board.cc.pass2I.value = '';
-	board.cc.codeI. value = '';
-	board.cc.userI. poke();
-	board.cc.emailI.poke();
-	board.cc.passI. poke();
-	board.cc.pass2I.poke();
-	board.cc.codeI. poke();
+Util.clearRegister = function(panel) {
+	panel.cc.userI. value = '';
+	panel.cc.emailI.value = '';
+	panel.cc.passI. value = '';
+	panel.cc.pass2I.value = '';
+	panel.cc.codeI. value = '';
+	panel.cc.userI. poke();
+	panel.cc.emailI.poke();
+	panel.cc.passI. poke();
+	panel.cc.pass2I.poke();
+	panel.cc.codeI. poke();
 };
 
 })();

@@ -18,7 +18,7 @@
                  '   `-' `-^---' /--, `-' `-' ' ' ' `'    `' `-^ `-' `-^---'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- Zoom Plus Button on Mainboard.
+ Zoom Plus Button on the main panel.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -55,8 +55,8 @@ var subclass      = Jools.subclass;
 /**
 | Constructor
 */
-var MBZoomPlusB = CCode.MBZoomPlusB = function(twig, board, inherit, name) {
-	CCustom.call(this, twig, board, inherit, name);
+var MBZoomPlusB = CCode.MBZoomPlusB = function(twig, panel, inherit, name) {
+	CCustom.call(this, twig, panel, inherit, name);
 	this.repeat = true;
 };
 subclass(MBZoomPlusB, CCustom);

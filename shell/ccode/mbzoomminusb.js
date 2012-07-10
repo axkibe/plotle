@@ -18,7 +18,7 @@
                   '   `-' `-^---' /--, `-' `-' ' ' '   '   `-' ' ' ' `-^ `-' `-^---'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- Zoom Minus Button on Mainboard.
+ Zoom Minus Button on the main panel.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -51,8 +51,8 @@ var subclass      = Jools.subclass;
 /**
 | Constructor
 */
-var MBZoomMinusB = CCode.MBZoomMinusB = function(twig, board, inherit, name) {
-	CCustom.call(this, twig, board, inherit, name);
+var MBZoomMinusB = CCode.MBZoomMinusB = function(twig, panel, inherit, name) {
+	CCustom.call(this, twig, panel, inherit, name);
 	this.repeat = true;
 };
 subclass(MBZoomMinusB, CCustom);

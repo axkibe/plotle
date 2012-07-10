@@ -12,14 +12,13 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--'
 
-                         ,-,-,-.             ,-,---.               .
-                         `,| | |   ,-. . ,-.  '|___/ ,-. ,-. ,-. ,-|
-                           | ; | . ,-| | | |  ,|   \ | | ,-| |   | |
-                           '   `-' `-^ ' ' ' `-^---' `-' `-^ '   `-^
-
+                          ,-,-,-.            .-,--.             .
+                          `,| | |   ,-. . ,-. '|__/ ,-. ,-. ,-. |
+                            | ; | . ,-| | | | ,|    ,-| | | |-' |
+                            '   `-' `-^ ' ' ' `'    `-^ ' ' `-' `'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- Design of the mainboard
+ Design of the main panel.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -79,9 +78,9 @@ var zoomBH  =  20;
 var zoomBYM = Math.round(zoomBH * magic);
 var zoomBXM = Math.round(zoomBW * magic);
 
-var MainBoard = Design.MainBoard = { type : 'Design' };
+var MainPanel = Design.MainPanel = { type : 'Design' };
 
-var consts = innumerable(MainBoard, 'consts', immute({
+var consts = innumerable(MainPanel, 'consts', immute({
 	C1X : 200,
 	C1Y : -60,
 	C2X : 300,
@@ -93,15 +92,15 @@ var sideButtonC1Y   = ro(consts.C1Y / 2);
 var sideButtonC2X   =  12;
 var sideButtonC2Y   =  40;
 
-MainBoard.style = 'cockpit';
+MainPanel.style = 'cockpit';
 
-MainBoard.frame = {
+MainPanel.frame = {
 	type  : 'Frame',
 	pnw   : { type: 'Point', anchor: 's', x: -512, y: -60 },
 	pse   : { type: 'Point', anchor: 's', x:  512, y:   0 }
 };
 
-MainBoard.curve = {
+MainPanel.curve = {
 	type  : 'Curve',
 	copse : {
 	'1' : {
@@ -127,12 +126,12 @@ MainBoard.curve = {
 	ranks : [ '1', '2', '3' ]
 };
 
-MainBoard.layout = {
+MainPanel.layout = {
 	type  : 'Layout',
 	copse : {
 	'leftB' : {
 		type       : 'Custom',
-		code       : 'MBLeftB',
+		code       : 'MBLeftB', // TODO rename MP
 
 		normaStyle : 'button',
 		hoverStyle : 'buttonHover',

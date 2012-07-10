@@ -61,8 +61,8 @@ var magic        = Fabric.magic;
 /**
 | Constructor
 */
-SwitchPanel = function(board, current, userName, psw) {
-	this.board      = board;
+SwitchPanel = function(panel, current, userName, psw) {
+	this.panel      = panel;
 	this.current    = current;
 	var swidim      = theme.switchpanel.dimensions;
 	var iframe      = this.iframe = new Rect(Point.zero, new Point(swidim.a * 2, swidim.b));
@@ -125,18 +125,18 @@ SwitchPanel.prototype.fadeout = function() {
 	self.$fade -= theme.fade.step;
 
 	if (self.$fade <= 0) {
-		this.board.toggleSwitch();
+		this.panel.toggleSwitch();
 	} else {
 		this.$fadeTimer = system.setTimer(theme.fade.time, function() { self.fadeout(); });
 	}
-	
+
 	shell.redraw = true;
 	shell.poke();
 };
 
 
 /**
-| Paths the boards frame
+| Paths the panel frame.
 */
 SwitchPanel.prototype.pathFrame = function(fabric, border, twist) {
 	var w = this.iframe.width  - 1;
@@ -308,8 +308,8 @@ SwitchPanel.prototype.mousedown = function(p) {
 		case 'ne' : shell.moveToSpace('sandbox'); break;
 		case 'nw' : shell.moveToSpace(this.userName+':home'); break;
 		}
-		this.board.toggleSwitch();
-		this.board.poke();
+		this.panel.toggleSwitch();
+		this.panel.poke();
 	}
 
 	return false;

@@ -18,7 +18,7 @@
                             `' `' `-^---'  `' `' ' `-^ `-' `-^---'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- Right Button on Mainboard.
+ Right Button on main panel.
  Help.
 
  Authors: Axel Kittenberger
@@ -52,13 +52,13 @@ var subclass      = Jools.subclass;
 /**
 | Constructor
 */
-var HBHideB = CCode.HBHideB = function(twig, board, inherit, name) {
-	CCustom.call(this, twig, board, inherit, name);
+var HBHideB = CCode.HBHideB = function(twig, panel, inherit, name) {
+	CCustom.call(this, twig, panel, inherit, name);
 };
 subclass(HBHideB, CCustom);
 
 HBHideB.prototype.push = function(shift, ctrl) {
-	this.board.cockpit.setShowHelp(false);
+	this.panel.cockpit.setShowHelp(false);
 	shell.redraw = true;
 };
 

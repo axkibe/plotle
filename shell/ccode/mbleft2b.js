@@ -18,8 +18,8 @@
                          '   `-' `-^---' `--' `-' |  `' '-` `-^---'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ' ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- Second to left Button on Mainboard.
- Register
+ Second to left Button on the main panel..
+ Registers.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -52,14 +52,14 @@ var subclass      = Jools.subclass;
 /**
 | Constructor
 */
-var MBLeft2B = CCode.MBLeft2B = function(twig, board, inherit, name) {
-	CCustom.call(this, twig, board, inherit, name);
+var MBLeft2B = CCode.MBLeft2B = function(twig, panel, inherit, name) {
+	CCustom.call(this, twig, panel, inherit, name);
 };
 
 subclass(MBLeft2B, CCustom);
 
 MBLeft2B.prototype.push = function(shift, ctrl) {
-	this.board.cockpit.setCurBoard('RegBoard');
+	this.panel.cockpit.setCurPanel('RegPanel');
 	shell.redraw = true;
 };
 

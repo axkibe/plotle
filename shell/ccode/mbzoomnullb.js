@@ -19,7 +19,7 @@
                    '   `-' `-^---' /--, `-' `-' ' ' '  ,' `-' `-^ `' `' `-^---'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- Zoom Null Button on Mainboard.
+ Zoom Null Button on the main panel.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -56,8 +56,8 @@ var subclass      = Jools.subclass;
 /**
 | Constructor
 */
-var MBZoomNullB = CCode.MBZoomNullB = function(twig, board, inherit, name) {
-	CCustom.call(this, twig, board, inherit, name);
+var MBZoomNullB = CCode.MBZoomNullB = function(twig, panel, inherit, name) {
+	CCustom.call(this, twig, panel, inherit, name);
 };
 subclass(MBZoomNullB, CCustom);
 

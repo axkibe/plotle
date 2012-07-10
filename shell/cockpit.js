@@ -32,9 +32,9 @@ var Curve;
 var Dash;
 var Design;
 var Fabric;
-var HelpBoard;
+var HelpPanel;
 var Jools;
-var MainBoard;
+var MainPanel;
 var Path;
 var Point;
 var shell;
@@ -71,12 +71,12 @@ var subclass      = Jools.subclass;
 */
 Cockpit = function() {
 	this.fabric       = system.fabric;
-	this.curBoardName = 'MainBoard';
-	this.boards = {
-		MainBoard  : null,
-		LoginBoard : null,
-		RegBoard   : null,
-		HelpBoard  : null
+	this.curPanelName = 'MainPanel';
+	this.panels = {
+		MainPanel  : null,
+		LoginPanel : null,
+		RegPanel   : null,
+		HelpPanel  : null
 	};
 
 	this.$curSpace = null;
@@ -102,73 +102,73 @@ Cockpit.styles = {
 };
 
 /**
-| Sends a message over the MainBoard.
+| Sends a message to the chat component.
 */
 Cockpit.prototype.message = function(message) {
-	this.getBoard('MainBoard').cc.chat.addMessage(message);
+	this.getPanel('MainPanel').cc.chat.addMessage(message);
 };
 
 
 /**
-| Returns the board by its name
+| Returns the panel by its name.
 */
-Cockpit.prototype.getBoard = function(name) {
+Cockpit.prototype.getPanel = function(name) {
 	var fabric = this.fabric;
-	var cboard = this.boards[name];
-	if (!is(cboard)) { throw new Error('invalid curBoardName: ' + this.curBoardName); }
+	var cpanel = this.panels[name];
+	if (!is(cpanel)) { throw new Error('invalid curPanelName: ' + this.curPanelName); }
 
-	if (cboard &&
-		cboard.screensize.x === fabric.width &&
-		cboard.screensize.y === fabric.height)
-	{ return cboard; }
+	if (cpanel &&
+		cpanel.screensize.x === fabric.width &&
+		cpanel.screensize.y === fabric.height)
+	{ return cpanel; }
 
 	var Proto;
 	switch(name) {
-	case 'MainBoard' : Proto = MainBoard; break;
-	case 'HelpBoard' : Proto = HelpBoard; break;
+	case 'MainPanel' : Proto = MainPanel; break;
+	case 'HelpPanel' : Proto = HelpPanel; break;
 	default          : Proto = Panel;     break;
 	}
 
-	var board = new Proto(
+	var panel = new Proto(
 		name,
-		cboard,
+		cpanel,
 		this,
 		new Point(fabric.width, fabric.height)
 	);
 
-	return this.boards[name] = board;
+	return this.panels[name] = panel;
 };
 
 /**
-| Returns the current cockpit board
+| Returns the current dashboard panel.
 */
-Cockpit.prototype.curBoard = function() {
-	return this.getBoard(this.curBoardName);
+Cockpit.prototype.curPanel = function() {
+	return this.getPanel(this.curPanelName);
 };
 
 /**
-| sets the current board
+| Sets the current panel.
 */
-Cockpit.prototype.setCurBoard = function(boardName) {
+Cockpit.prototype.setCurPanel = function(panelName) {
 	var caret = shell.caret;
 	if (caret.visec === 'cockpit' &&
 		caret.sign &&
-		caret.sign.path.get(0) === this.curBoardName)
+		caret.sign.path.get(0) === this.curPanelName)
 	{
 		caret = shell.setCaret(null, null);
 	}
 
-	this.curBoardName = boardName;
+	this.curPanelName = panelName;
 	shell.redraw = true;
 };
 
 /**
-| Sets the space name displayed on the mainboard.
+| Sets the space name displayed on the main panel.
 */
 Cockpit.prototype.setCurSpace = function(space, access) {
 	this.$curSpace = space;
 	this.$access   = access;
-	this.getBoard('MainBoard').setCurSpace(space, access);
+	this.getPanel('MainPanel').setCurSpace(space, access);
 	if (space === 'sandbox' && this.$autoHelp) {
 		this.$autoHelp = false;
 		this.setShowHelp(true);
@@ -176,27 +176,27 @@ Cockpit.prototype.setCurSpace = function(space, access) {
 };
 
 /**
-| Sets the user greeted on the mainboard.
+| Sets the user greeted on the main panel.
 */
 Cockpit.prototype.setUser = function(userName) {
 	this.$amVisitor = userName.substring(0,5) === 'visit';
-	var mainboard = this.getBoard('MainBoard');
-	mainboard.setUser(userName);
+	var mainPanel = this.getPanel('MainPanel');
+	mainPanel.setUser(userName);
 
-	var leftB = mainboard.cc.leftB;
+	var leftB = mainPanel.cc.leftB;
 	leftB.$captionText = this.$amVisitor ? 'log in' : 'log out';
 	leftB.poke();
 
-	var left2B = mainboard.cc.left2B;
+	var left2B = mainPanel.cc.left2B;
 	left2B.$visible = this.$amVisitor;
 	left2B.poke();
 };
 
 /**
-| Sets the zoom level for the current space shown on the mainboard.
+| Sets the zoom level for the current space shown on the mainPanel.
 */
 Cockpit.prototype.setSpaceZoom = function(zf) {
-	this.getBoard('MainBoard').setSpaceZoom(zf);
+	this.getPanel('MainPanel').setSpaceZoom(zf);
 };
 
 /**
@@ -204,19 +204,19 @@ Cockpit.prototype.setSpaceZoom = function(zf) {
 */
 Cockpit.prototype.draw = function() {
 	if (this.$showHelp) {
-		var helpboard = this.getBoard('HelpBoard');
-		helpboard.setAccess(this.$access);
-		helpboard.draw(this.fabric);
+		var helpPanel = this.getPanel('HelpPanel');
+		helpPanel.setAccess(this.$access);
+		helpPanel.draw(this.fabric);
 	}
-	this.curBoard().draw(this.fabric);
+	this.curPanel().draw(this.fabric);
 };
 
 /**
 | Force clears all caches.
 */
 Cockpit.prototype.knock = function() {
-	for (var b in this.boards) {
-		var bo = this.boards[b];
+	for (var b in this.panels) {
+		var bo = this.panels[b];
 		if (bo) { bo.knock(); }
 	}
 };
@@ -226,38 +226,38 @@ Cockpit.prototype.knock = function() {
 */
 Cockpit.prototype.drawCaret = function() {
 	var caret = shell.caret;
-	if (caret.sign.path.get(0) !== this.curBoardName) {
-		log('fail', 'Caret path(0) !== this.curBoardName');
+	if (caret.sign.path.get(0) !== this.curPanelName) {
+		log('fail', 'Caret path(0) !== this.curPanelName');
 		return;
 	}
-	this.curBoard().drawCaret(View.proper);
+	this.curPanel().drawCaret(View.proper);
 };
 
 /**
 | Text input
 */
 Cockpit.prototype.input = function(text) {
-	this.curBoard().input(text);
+	this.curPanel().input(text);
 };
 
 /**
 | User pressed a special key.
 */
 Cockpit.prototype.specialKey = function(key, shift, ctrl) {
-	this.curBoard().specialKey(key, shift, ctrl);
+	this.curPanel().specialKey(key, shift, ctrl);
 };
 
 /**
 | Mouse hover.
 */
 Cockpit.prototype.mousehover = function(p, shift, ctrl) {
-	var cursor = this.curBoard().mousehover(p, shift, ctrl);
-	
+	var cursor = this.curPanel().mousehover(p, shift, ctrl);
+
 	if (this.$showHelp) {
 		if (cursor) {
-			this.getBoard('HelpBoard').mousehover(null, shift, ctrl);
+			this.getPanel('HelpPanel').mousehover(null, shift, ctrl);
 		} else {
-			cursor = this.getBoard('HelpBoard').mousehover(p, shift, ctrl);
+			cursor = this.getPanel('HelpPanel').mousehover(p, shift, ctrl);
 		}
 	}
 
@@ -283,44 +283,44 @@ Cockpit.prototype.actionmove = function(p, shift, ctrl) {
 | Start of a dragging operation.
 */
 Cockpit.prototype.actionstop = function(p, shift, ctrl) {
-	var path = shell.$action.itemPath;
-	var board = this.getBoard(path.get(0));
-	var c = board.cc[path.get(1)];
+	var path  = shell.$action.itemPath;
+	var panel = this.getPanel(path.get(0));
+	var c     = panel.cc[path.get(1)];
 	return c.actionstop(p, shift, ctrl);
 };
 
 /**
-| Mouse button down event
+| Mouse button down event.
 */
 Cockpit.prototype.mousedown = function(p, shift, ctrl) {
 	var r;
 	if (this.$showHelp) {
-		r = this.getBoard('HelpBoard').mousedown(p, shift. ctrl);
+		r = this.getPanel('HelpPanel').mousedown(p, shift. ctrl);
 		if (r !== null) return r;
 	}
 
-	r = this.curBoard().mousedown(p, shift. ctrl);
+	r = this.curPanel().mousedown(p, shift. ctrl);
 	if (r === null) { return null; }
-	this.curBoard().mousehover(p, shift, ctrl);
+	this.curPanel().mousehover(p, shift, ctrl);
 	return r;
 };
 
 /**
-| Returns an entity by its path
+| Returns an entity by its path.
 */
 Cockpit.prototype.getEntity = function(path) {
-	var board = this.getBoard(path.get(0));
-	return board.cc[path.get(1)];
+	var panel = this.getPanel(path.get(0));
+	return panel.cc[path.get(1)];
 };
 
 /**
-| Shows or hides the help board
+| Shows or hides the help panel.
 */
 Cockpit.prototype.setShowHelp = function(showHelp) {
 	if (this.$showHelp === showHelp) { return; }
 	this.$showHelp = showHelp;
 
-	this.getBoard('MainBoard').setShowHelp(showHelp);
+	this.getPanel('MainPanel').setShowHelp(showHelp);
 	shell.redraw = true;
 };
 

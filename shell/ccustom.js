@@ -68,19 +68,19 @@ var log           = Jools.log;
 /**
 | Constructor.
 */
-CCustom = function(twig, board, inherit, name) {
+CCustom = function(twig, panel, inherit, name) {
 	if (twig.type !== 'Custom') { throw new Error('invalid twig type'); }
 	this.name    = name;
 	this.twig    = twig;
-	this.board   = board;
+	this.panel   = panel;
 
-	var pnw      = this.pnw    = computePoint(twig.frame.pnw, board.iframe);
-	var pse      = this.pse    = computePoint(twig.frame.pse, board.iframe);
+	var pnw      = this.pnw    = computePoint(twig.frame.pnw, panel.iframe);
+	var pse      = this.pse    = computePoint(twig.frame.pse, panel.iframe);
 	var iframe   = this.iframe = new Rect(Point.zero, pse.sub(pnw));
 	this.curve   = new Curve(twig.curve, iframe);
 
 	this.captionPos = computePoint(twig.caption.pos, iframe);
-	this.path       = new Path([board.name, name]);
+	this.path       = new Path([panel.name, name]);
 
 	// if true repeats the action on mousedown
 	this.repeat   = false;
@@ -164,7 +164,7 @@ CCustom.prototype.specialKey = function(key, shift, ctrl) {
 CCustom.prototype.mousehover = function(p) {
 	if (!this.$visible)
 		{ return null; }
-	
+
 	if (p === null)
 		{ return null; }
 
@@ -177,7 +177,7 @@ CCustom.prototype.mousehover = function(p) {
 	if (!fabric.within(this, 'gpath', View.proper, pp))
 		{ return null; }
 
-	this.board.setHover(this.name);
+	this.panel.setHover(this.name);
 	return 'default';
 };
 
@@ -230,12 +230,12 @@ CCustom.prototype.mousedown = function(p, shift, ctrl) {
 */
 CCustom.prototype.specialKey = function(key) {
 	switch (key) {
-	case 'down'  : this.board.cycleFocus(+1);    return;
-	case 'up'    : this.board.cycleFocus(-1);    return;
+	case 'down'  : this.panel.cycleFocus(+1);    return;
+	case 'up'    : this.panel.cycleFocus(-1);    return;
 	case 'enter' : this.push(false, false); return;
 	}
 };
-	
+
 /**
 | Any normal keys for a buttons having focus triggers a push.
 */
@@ -258,7 +258,7 @@ CCustom.prototype.draw = function(fabric, accent) {
 */
 CCustom.prototype.poke = function() {
 	this.$fabric = null;
-	this.board.poke();
+	this.panel.poke();
 };
 
 /**

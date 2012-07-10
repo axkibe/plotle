@@ -12,13 +12,13 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--'
 
-                             .-,--.         ,-,---.               .
-                              `|__/ ,-. ,-.  '|___/ ,-. ,-. ,-. ,-|
-                              )| \  |-' | |  ,|   \ | | ,-| |   | |
-                              `'  ` `-' `-| `-^---' `-' `-^ '   `-^
+                             .-,--.        .-,--.             .
+                              `|__/ ,-. ,-. '|__/ ,-. ,-. ,-. |
+                              )| \  |-' | | ,|    ,-| | | |-' |
+                              `'  ` `-' `-| `'    `-^ ' ' `-' `'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
                                          `'
- Design of the register board.
+ Design of the register panel.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -47,7 +47,7 @@ var fontStyle = Design.fontStyle;
 
 // 'magic' number to approximate ellipses with beziers
 var magic     = Fabric.magic;
-var mbConsts   = Design.MainBoard.consts;
+var mbConsts   = Design.MainPanel.consts;
 
 /**
 | Register control
@@ -65,17 +65,17 @@ var canrBH        = 70;
 var canrBXM       = canrBW * magic / 2;
 var canrBYM       = canrBH * magic / 2;
 
-var RegBoard = Design.RegBoard = { type   : 'Design' };
+var RegPanel = Design.RegPanel = { type   : 'Design' };
 
-RegBoard.style = 'cockpit';
+RegPanel.style = 'cockpit';
 
-RegBoard.frame = {
+RegPanel.frame = {
 	type  : 'Frame',
 	pnw   : { type   : 'Point', anchor : 's', x : -512, y : -300 },
 	pse   : { type   : 'Point', anchor : 's', x :  512, y :    0 }
 };
 
-RegBoard.curve = {
+RegPanel.curve = {
 	type  : 'Curve',
 	copse : {
 	'1' : {
@@ -107,7 +107,7 @@ RegBoard.curve = {
 	ranks : [ '1', '2', '3' ]
 };
 
-RegBoard.layout = {
+RegPanel.layout = {
 	type  : 'Layout',
 	copse : {
 	'regL'      : {

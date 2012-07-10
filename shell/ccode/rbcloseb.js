@@ -18,7 +18,7 @@
                          `'  ` `-^---' `--'  `' `-' `-' `-' `-^---'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- register board, close button
+ register panel, the close button
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -56,8 +56,8 @@ var Util     = CCode.Util;
 /**
 | Constructor
 */
-var RBCloseB = CCode.RBCloseB = function(twig, board, inherit, name) {
-	CCustom.call(this, twig, board, inherit, name);
+var RBCloseB = CCode.RBCloseB = function(twig, panel, inherit, name) {
+	CCustom.call(this, twig, panel, inherit, name);
 };
 subclass(RBCloseB, CCustom);
 
@@ -65,8 +65,8 @@ RBCloseB.prototype.canFocus = function()
 	{ return true; };
 
 RBCloseB.prototype.push = function(shift, ctrl) {
-	Util.clearRegister(this.board);
-	this.board.cockpit.setCurBoard('MainBoard');
+	Util.clearRegister(this.panel);
+	this.panel.cockpit.setCurPanel('MainPanel');
 };
 
 })();
