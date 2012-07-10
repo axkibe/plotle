@@ -33,7 +33,6 @@ Dash = Dash || {};
 | Imports
 */
 var CAccent;
-var CChat;
 var CCode;
 var CLabel;
 var Cockpit;
@@ -60,6 +59,7 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 | Shortcuts
 */
 var Button        = Dash.Button;
+var Chat          = Dash.Chat;
 var debug         = Jools.debug;
 var immute        = Jools.immute;
 var Input         = Dash.Input;
@@ -112,7 +112,7 @@ Panel.prototype.newCC = function(twig, inherit, name) {
 	}
 
 	switch(twig.type) {
-	case 'Chat'   : return new CChat  (twig, this, inherit, name);
+	case 'Chat'   : return new Chat   (twig, this, inherit, name);
 	case 'Button' : return new Button (twig, this, inherit, name);
 	case 'Input'  : return new Input  (twig, this, inherit, name);
 	case 'Label'  : return new CLabel (twig, this, inherit, name);

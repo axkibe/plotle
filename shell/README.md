@@ -52,10 +52,6 @@ Files
 </td><td>   the virtual caret
 </td></tr>
 
- <tr><td>   cchat.js
-</td><td>   the chat component on the cockpit.
-</td></tr>
-
  <tr><td>   clabel.js
 </td><td>   a label on the cockpit.
 </td></tr>

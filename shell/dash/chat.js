@@ -1,21 +1,19 @@
-/**                                                      _.._
-                                                      .-'_.._''.
- __  __   ___       _....._              .          .' .'     '.\
-|  |/  `.'   `.   .'       '.          .'|         / .'                                _.._
-|   .-.  .-.   ' /   .-'"'.  \        (  |        . '            .-,.-~.             .' .._|    .|
-|  |  |  |  |  |/   /______\  |        | |        | |            |  .-. |    __      | '      .' |_
-|  |  |  |  |  ||   __________|    _   | | .'''-. | |            | |  | | .:-`.'.  __| |__  .'     |
-|  |  |  |  |  |\  (          '  .' |  | |/.'''. \. '            | |  | |/ |   \ ||__   __|'-..  .-'
-|  |  |  |  |  | \  '-.___..-~. .   | /|  /    | | \ '.         .| |  '- `" __ | |   | |      |  |
-|__|  |__|  |__|  `         .'.'.'| |//| |     | |  '. `.____.-'/| |      .'.''| |   | |      |  |
-                   `'-.....-.'.'.-'  / | |     | |    `-._____ / | |     / /   | |_  | |      |  '.'
-                                 \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
-                                       '___)   '___)                      `~~'  `"   |_|      `--'
-
-                                       ,--.  ,--. .       .
-                                      | `-' | `-' |-. ,-. |-
-                                      |   . |   . | | ,-| |
-                                      `--'  `--'  ' ' `-^ `'
+ /**____
+ \  ___ `'.                          .
+  ' |--.\  \                       .'|
+  | |    \  '                     <  |
+  | |     |  '    __               | |
+  | |     |  | .:--.'.         _   | | .'''-.
+  | |     ' .'/ |   \ |      .' |  | |/.'''. \
+  | |___.' /' `" __ | |     .   | /|  /    | |
+ /_______.'/   .'.''| |   .'.'| |//| |     | |
+ \_______|/   / /   | |_.'.'.-'  / | |     | |
+              \ \._,\ '/.'   \_.'  | '.    | '.
+               `--'  `"            '---'   '---'
+                 ,--. .       .
+                | `-' |-. ,-. |-
+                |   . | | ,-| |
+                `--'  ' ' `-^ `'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  A chat interface.
@@ -24,6 +22,12 @@
  License: MIT(Expat), see accompanying 'License'-file
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+/**
+| Exports
+*/
+var Dash;
+Dash = Dash || {};
 
 /**
 | Imports
@@ -41,11 +45,6 @@ var Rect;
 var shell;
 var theme;
 var View;
-
-/**
-| Exports
-*/
-var CChat = null;
 
 /**
 | Capsule
@@ -66,7 +65,7 @@ var ro            = Math.round;
 /**
 | Constructor.
 */
-CChat = function(twig, panel, inherit, name) {
+var Chat = Dash.Chat = function(twig, panel, inherit, name) {
 	this.name    = name;
 	this.twig    = twig;
 	this.panel   = panel;
@@ -89,14 +88,14 @@ CChat = function(twig, panel, inherit, name) {
 /**
 | Chat components can focus.
 */
-CChat.prototype.canFocus = function() {
+Chat.prototype.canFocus = function() {
 	return true;
 };
 
 /**
 | Returns the caret position relative to the panel.
 */
-CChat.prototype.getCaretPos = function() {
+Chat.prototype.getCaretPos = function() {
 	var caret   = shell.caret;
 	var fs      = this.twig.fontStyle.size;
 	var descend = fs * theme.bottombox;
@@ -111,7 +110,7 @@ CChat.prototype.getCaretPos = function() {
 	return immute({ s: s, n: n, x: x });
 };
 
-CChat.prototype._weave = function() {
+Chat.prototype._weave = function() {
 	var fabric = this.$fabric;
 	if (fabric && !config.debug.noCache) { return fabric; }
 
@@ -154,7 +153,7 @@ CChat.prototype._weave = function() {
 | offset:   the offset to get the point from.
 | TODO rename
 */
-CChat.prototype.getOffsetPoint = function(offset) {
+Chat.prototype.getOffsetPoint = function(offset) {
 	// TODO cache position
 	var twig     = this.twig;
 	var font     = twig.fontStyle;
@@ -171,7 +170,7 @@ CChat.prototype.getOffsetPoint = function(offset) {
 /**
 | Draws the component on the fabric.
 */
-CChat.prototype.draw = function(fabric) {
+Chat.prototype.draw = function(fabric) {
 	fabric.drawImage(this._weave(), this.pnw, 'source-atop');
 };
 
@@ -179,7 +178,7 @@ CChat.prototype.draw = function(fabric) {
 /**
 | Draws the caret.
 */
-CChat.prototype.drawCaret = function(view) {
+Chat.prototype.drawCaret = function(view) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
 
 	var caret = shell.caret;
@@ -208,7 +207,7 @@ CChat.prototype.drawCaret = function(view) {
 /**
 | User input.
 */
-CChat.prototype.input = function(text) {
+Chat.prototype.input = function(text) {
 	var caret = shell.caret;
 	var csign = caret.sign;
 	var itext = this.itext;
@@ -226,7 +225,7 @@ CChat.prototype.input = function(text) {
 /**
 | User pressed backspace.
 */
-CChat.prototype.keyBackspace = function() {
+Chat.prototype.keyBackspace = function() {
 	var caret = shell.caret;
 	var csign = caret.sign;
 	var at1   = csign.at1;
@@ -243,7 +242,7 @@ CChat.prototype.keyBackspace = function() {
 /**
 | User pressed del.
 */
-CChat.prototype.keyDel = function() {
+Chat.prototype.keyDel = function() {
 	var caret = shell.caret;
 	var csign = caret.sign;
 	var at1   = csign.at1;
@@ -255,14 +254,14 @@ CChat.prototype.keyDel = function() {
 /**
 | User pressed up key.
 */
-CChat.prototype.keyDown = function() {
+Chat.prototype.keyDown = function() {
 	return true;
 };
 
 /**
 | User pressed end key.
 */
-CChat.prototype.keyEnd = function() {
+Chat.prototype.keyEnd = function() {
 	var caret = shell.caret;
 	var csign = caret.sign;
 	var at1   = csign.at1;
@@ -277,7 +276,7 @@ CChat.prototype.keyEnd = function() {
 /**
 | User pressed return key.
 */
-CChat.prototype.keyEnter = function() {
+Chat.prototype.keyEnter = function() {
 	if (this.itext === '') { return false; }
 
 	var caret = shell.caret;
@@ -296,7 +295,7 @@ CChat.prototype.keyEnter = function() {
 /**
 | User pressed left key.
 */
-CChat.prototype.keyLeft = function() {
+Chat.prototype.keyLeft = function() {
 	var caret = shell.caret;
 	var csign = caret.sign;
 	if (csign.at1 <= 0) return false;
@@ -310,7 +309,7 @@ CChat.prototype.keyLeft = function() {
 /**
 | User pressed pos1 key
 */
-CChat.prototype.keyPos1 = function() {
+Chat.prototype.keyPos1 = function() {
 	var caret = shell.caret;
 	var csign = caret.sign;
 	if (csign.at1 <= 0) return false;
@@ -324,7 +323,7 @@ CChat.prototype.keyPos1 = function() {
 /**
 | User pressed right key
 */
-CChat.prototype.keyRight = function() {
+Chat.prototype.keyRight = function() {
 	var caret = shell.caret;
 	var csign = caret.sign;
 	if (csign.at1 >= this.itext.length) return false;
@@ -338,14 +337,14 @@ CChat.prototype.keyRight = function() {
 /**
 | User pressed up key.
 */
-CChat.prototype.keyUp = function() {
+Chat.prototype.keyUp = function() {
 	return true;
 };
 
 /**
 | Adds a message.
 */
-CChat.prototype.addMessage = function(msg) {
+Chat.prototype.addMessage = function(msg) {
 	this.messages.push(msg);
 	if (this.messages.length > 10) { this.messages.unshift(); }
 	this.poke();
@@ -354,7 +353,7 @@ CChat.prototype.addMessage = function(msg) {
 /**
 | Mouse down.
 */
-CChat.prototype.mousedown = function(p, shift, ctrl) {
+Chat.prototype.mousedown = function(p, shift, ctrl) {
 	var pp = p.sub(this.pnw);
 	var fabric = this._weave();
 	if (!fabric.within(this, 'pathILine', View.proper, pp))
@@ -371,7 +370,7 @@ CChat.prototype.mousedown = function(p, shift, ctrl) {
 /**
 | Mouse hover
 */
-CChat.prototype.mousehover = function(p, shift, ctrl) {
+Chat.prototype.mousehover = function(p, shift, ctrl) {
 	if (p === null)
 		{ return null; }
 
@@ -392,7 +391,7 @@ CChat.prototype.mousehover = function(p, shift, ctrl) {
 /**
 | Draws the input line
 */
-CChat.prototype.pathILine = function(fabric, border, twist) {
+Chat.prototype.pathILine = function(fabric, border, twist) {
 	var ox   = 0;
 	var fs   = this.twig.fontStyle;
 	var w    = fabric.width - 1;
@@ -411,7 +410,7 @@ CChat.prototype.pathILine = function(fabric, border, twist) {
 /**
 | Pokes the component
 */
-CChat.prototype.poke = function() {
+Chat.prototype.poke = function() {
 	this.$fabric = null;
 	this.panel.poke();
 };
@@ -419,14 +418,14 @@ CChat.prototype.poke = function() {
 /**
 | Force clears all caches.
 */
-CChat.prototype.knock = function() {
+Chat.prototype.knock = function() {
 	this.$fabric = null;
 };
 
 /**
 | User pressed a special key
 */
-CChat.prototype.specialKey = function(key) {
+Chat.prototype.specialKey = function(key) {
 	switch(key) {
 	case 'backspace' : this.keyBackspace(); break;
 	case 'del'       : this.keyDel();       break;
