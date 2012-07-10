@@ -28,16 +28,16 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
-| Imports
-*/
-var CCode;
-var CInput;
-var Jools;
-
-/**
 | Exports
 */
-var CMeth = null;
+var CCode;
+
+/**
+| Imports
+*/
+var CInput;
+var Dash;
+var Jools;
 
 /**
 | Capsule
@@ -46,10 +46,10 @@ var CMeth = null;
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
-var debug    = Jools.debug;
+/**
+| Shortcuts
+*/
 var immute   = Jools.immute;
-var is       = Jools.is;
-var isnon    = Jools.isnon;
 var log      = Jools.log;
 var subclass = Jools.subclass;
 var Util     = CCode.Util;

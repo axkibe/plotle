@@ -96,7 +96,7 @@ Design.Pattern = {
 		}
 	},
 
-	'Custom' : {
+	'Button' : {
 		must : {
 			'caption'    : 'Label',
 			'code'       : 'String',
@@ -126,7 +126,7 @@ Design.Pattern = {
 	'Layout'  : {
 		copse : {
 			'Chat'       : true,
-			'Custom'     : true,
+			'Button'     : true,
 			'Input'      : true,
 			'Label'      : true
 		},

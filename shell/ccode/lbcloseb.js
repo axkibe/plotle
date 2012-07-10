@@ -24,19 +24,17 @@
  License: MIT(Expat), see accompanying 'License'-file
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/**
+| Exports
+*/
+var CCode;
 
 /**
 | Imports
 */
-var CCode;
-var CCustom;
+var Dash;
 var Jools;
 var shell;
-
-/**
-| Exports
-*/
-var CMeth = null;
 
 /**
 | Capsule
@@ -45,6 +43,10 @@ var CMeth = null;
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
+/**
+| Shortcuts
+*/
+var Button   = Dash.Button;
 var debug    = Jools.debug;
 var log      = Jools.log;
 var subclass = Jools.subclass;
@@ -54,9 +56,9 @@ var Util     = CCode.Util;
 | Constructor
 */
 var LBCloseB = CCode.LBCloseB = function(twig, panel, inherit, name) {
-	CCustom.call(this, twig, panel, inherit, name);
+	Button.call(this, twig, panel, inherit, name);
 };
-subclass(LBCloseB, CCustom);
+subclass(LBCloseB, Button);
 
 LBCloseB.prototype.canFocus = function()
 	{ return true; };

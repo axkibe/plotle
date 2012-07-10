@@ -27,16 +27,16 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
-| Imports
-*/
-var CCustom;
-var Jools;
-var shell;
-
-/**
-| Exports
+| Export
 */
 var CCode;
+
+/**
+| Imports
+*/
+var Dash;
+var Jools;
+var shell;
 
 /**
 | Capsule
@@ -45,22 +45,26 @@ var CCode;
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
-var debug         = Jools.debug;
-var immute        = Jools.immute;
-var is            = Jools.is;
-var isnon         = Jools.isnon;
-var isArray       = Jools.isArray;
-var log           = Jools.log;
-var subclass      = Jools.subclass;
+/**
+| Shortcuts
+*/
+var Button   = Dash.Button;
+var debug    = Jools.debug;
+var immute   = Jools.immute;
+var log      = Jools.log;
+var subclass = Jools.subclass;
 
 /**
 | Constructor
 */
 var MBRightB = CCode.MBRightB = function(twig, panel, inherit, name) {
-	CCustom.call(this, twig, panel, inherit, name);
+	Button.call(this, twig, panel, inherit, name);
 };
-subclass(MBRightB, CCustom);
+subclass(MBRightB, Button);
 
+/**
+| TODO
+*/
 MBRightB.prototype.push = function(p, shift, ctrl) {
 	this.panel.cockpit.setShowHelp(!this.$active);
 	shell.redraw = true;

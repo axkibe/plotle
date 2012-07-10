@@ -27,16 +27,16 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
-| Imports
-*/
-var CCustom;
-var Jools;
-var shell;
-
-/**
 | Exports
 */
 var CCode;
+
+/**
+| Imports
+*/
+var Dash;
+var Jools;
+var shell;
 
 /**
 | Capsule
@@ -45,17 +45,21 @@ var CCode;
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
-var debug         = Jools.debug;
-var log           = Jools.log;
-var subclass      = Jools.subclass;
+/**
+| Shortcuts
+*/
+var Button   = Dash.Button;
+var debug    = Jools.debug;
+var log      = Jools.log;
+var subclass = Jools.subclass;
 
 /**
 | Constructor
 */
 var HBHideB = CCode.HBHideB = function(twig, panel, inherit, name) {
-	CCustom.call(this, twig, panel, inherit, name);
+	Button.call(this, twig, panel, inherit, name);
 };
-subclass(HBHideB, CCustom);
+subclass(HBHideB, Button);
 
 HBHideB.prototype.push = function(shift, ctrl) {
 	this.panel.cockpit.setShowHelp(false);

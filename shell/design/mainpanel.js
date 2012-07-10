@@ -130,7 +130,7 @@ MainPanel.layout = {
 	type  : 'Layout',
 	copse : {
 	'leftB' : {
-		type       : 'Custom',
+		type       : 'Button',
 		code       : 'MBLeftB', // TODO rename MP
 
 		normaStyle : 'button',
@@ -170,7 +170,7 @@ MainPanel.layout = {
 	},
 
 	'left2B' : {
-		type       : 'Custom',
+		type       : 'Button',
 		code       : 'MBLeft2B',
 
 		normaStyle : 'button',
@@ -217,7 +217,7 @@ MainPanel.layout = {
 	},
 
 	'rightB' : {
-		type       : 'Custom',
+		type       : 'Button',
 		code       : 'MBRightB',
 
 		normaStyle : 'button',
@@ -257,7 +257,7 @@ MainPanel.layout = {
 	},
 
 	'switchB'     : {
-		type       : 'Custom',
+		type       : 'Button',
 		code       : 'MBSwitchB',
 
 		normaStyle : 'button',
@@ -328,7 +328,7 @@ MainPanel.layout = {
 	},
 
 	'zoomminusB'       : {
-		type       : 'Custom',
+		type       : 'Button',
 		code       : 'MBZoomMinusB',
 
 		normaStyle : 'button',
@@ -375,7 +375,7 @@ MainPanel.layout = {
 	},
 
 	'zoomnullB'       : {
-		type       : 'Custom',
+		type       : 'Button',
 		code       : 'MBZoomNullB',
 
 		normaStyle : 'button',
@@ -422,7 +422,7 @@ MainPanel.layout = {
 	},
 
 	'zoomplusB'       : {
-		type       : 'Custom',
+		type       : 'Button',
 		code       : 'MBZoomPlusB',
 
 		normaStyle : 'button',

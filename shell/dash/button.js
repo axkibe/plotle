@@ -1,29 +1,33 @@
-/**                                                      _.._
-                                                      .-'_.._''.
- __  __   ___       _....._              .          .' .'     '.\
-|  |/  `.'   `.   .'       '.          .'|         / .'                                _.._
-|   .-.  .-.   ' /   .-'"'.  \        (  |        . '            .-,.-~.             .' .._|    .|
-|  |  |  |  |  |/   /______\  |        | |        | |            |  .-. |    __      | '      .' |_
-|  |  |  |  |  ||   __________|    _   | | .'''-. | |            | |  | | .:-`.'.  __| |__  .'     |
-|  |  |  |  |  |\  (          '  .' |  | |/.'''. \. '            | |  | |/ |   \ ||__   __|'-..  .-'
-|  |  |  |  |  | \  '-.___..-~. .   | /|  /    | | \ '.         .| |  '- `" __ | |   | |      |  |
-|__|  |__|  |__|  `         .'.'.'| |//| |     | |  '. `.____.-'/| |      .'.''| |   | |      |  |
-                   `'-.....-.'.'.-'  / | |     | |    `-._____ / | |     / /   | |_  | |      |  '.'
-                                 \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
-                                       '___)   '___)                      `~~'  `"   |_|      `--'
-
-                                ,--.  ,--.         .
-                               | `-' | `-' . . ,-. |- ,-. ,-,-.
-                               |   . |   . | | `-. |  | | | | |
-                               `--'  `--'  `-^ `-' `' `-' ' ' '
+ /**____
+ \  ___ `'.                          .
+  ' |--.\  \                       .'|
+  | |    \  '                     <  |
+  | |     |  '    __               | |
+  | |     |  | .:--.'.         _   | | .'''-.
+  | |     ' .'/ |   \ |      .' |  | |/.'''. \
+  | |___.' /' `" __ | |     .   | /|  /    | |
+ /_______.'/   .'.''| |   .'.'| |//| |     | |
+ \_______|/   / /   | |_.'.'.-'  / | |     | |
+              \ \._,\ '/.'   \_.'  | '.    | '.
+               `--'  `"            '---'   '---'
+           ,-,---.     .  .
+            '|___/ . . |- |- ,-. ,-.
+            ,|   \ | | |  |  | | | |
+           `-^---' `-^ `' `' `-' ' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- A custom component on the cockpit.
+ A button on a dashboard panel.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+/**
+| Export
+*/
+var Dash;
+Dash = Dash || {};
 
 /**
 | Imports
@@ -42,11 +46,6 @@ var shell;
 var system;
 var theme;
 var View;
-
-/**
-| Exports
-*/
-var CCustom = null;
 
 /**
 | Capsule
@@ -68,8 +67,9 @@ var log           = Jools.log;
 /**
 | Constructor.
 */
-CCustom = function(twig, panel, inherit, name) {
-	if (twig.type !== 'Custom') { throw new Error('invalid twig type'); }
+var Button = Dash.Button = function(twig, panel, inherit, name) {
+	if (twig.type !== 'Button') { throw new Error('invalid twig type'); }
+
 	this.name    = name;
 	this.twig    = twig;
 	this.panel   = panel;
@@ -94,23 +94,23 @@ CCustom = function(twig, panel, inherit, name) {
 };
 
 /**
-| CCustoms can focus or not depending on their methods
+| Returns true if this dashcomponent can focus.
 */
-CCustom.prototype.canFocus = function() {
+Button.prototype.canFocus = function() {
 	return this.$visible;
 };
 
 /**
-| Paths the custom control.
+| Paths the button.
 */
-CCustom.prototype.gpath = function(fabric, border, twist) {
+Button.prototype.gpath = function(fabric, border, twist) {
 	this.curve.path(fabric, border, twist);
 };
 
 /**
-| Returns the fabric for the custom component.
+| Returns the fabric for the button.
 */
-CCustom.prototype._weave = function(accent) {
+Button.prototype._weave = function(accent) {
 	var fabric = this.$fabric;
 	if (fabric && this.$accent === accent && !config.debug.noCache) { return fabric; }
 
@@ -147,21 +147,21 @@ CCustom.prototype._weave = function(accent) {
 /**
 | Input
 */
-CCustom.prototype.input = function(text) {
+Button.prototype.input = function(text) {
 	return true;
 };
 
 /**
 | Input
 */
-CCustom.prototype.specialKey = function(key, shift, ctrl) {
+Button.prototype.specialKey = function(key, shift, ctrl) {
 	return true;
 };
 
 /**
 | Mouse hover.
 */
-CCustom.prototype.mousehover = function(p) {
+Button.prototype.mousehover = function(p) {
 	if (!this.$visible)
 		{ return null; }
 
@@ -184,14 +184,14 @@ CCustom.prototype.mousehover = function(p) {
 /**
 | Button has been pushed
 */
-CCustom.prototype.push = function(shift, ctrl) {
+Button.prototype.push = function(shift, ctrl) {
 	// no default
 };
 
 /**
 | Mouse down.
 */
-CCustom.prototype.mousedown = function(p, shift, ctrl) {
+Button.prototype.mousedown = function(p, shift, ctrl) {
 	var self = this;
 
 	if (!this.$visible) { return; }
@@ -228,7 +228,7 @@ CCustom.prototype.mousedown = function(p, shift, ctrl) {
 /**
 | Special keys for buttons having focus
 */
-CCustom.prototype.specialKey = function(key) {
+Button.prototype.specialKey = function(key) {
 	switch (key) {
 	case 'down'  : this.panel.cycleFocus(+1);    return;
 	case 'up'    : this.panel.cycleFocus(-1);    return;
@@ -239,16 +239,16 @@ CCustom.prototype.specialKey = function(key) {
 /**
 | Any normal keys for a buttons having focus triggers a push.
 */
-CCustom.prototype.input = function(text) {
+Button.prototype.input = function(text) {
 	this.push(false, false);
 	return true;
 };
 
 
 /**
-| Draws the custom control.
+| Draws the button.
 */
-CCustom.prototype.draw = function(fabric, accent) {
+Button.prototype.draw = function(fabric, accent) {
 	if (!this.$visible) { return; }
 	fabric.drawImage(this._weave(accent), this.pnw);
 };
@@ -256,7 +256,7 @@ CCustom.prototype.draw = function(fabric, accent) {
 /**
 | Clears all caches
 */
-CCustom.prototype.poke = function() {
+Button.prototype.poke = function() {
 	this.$fabric = null;
 	this.panel.poke();
 };
@@ -264,7 +264,7 @@ CCustom.prototype.poke = function() {
 /**
 | Force clears all caches.
 */
-CCustom.prototype.knock = function() {
+Button.prototype.knock = function() {
 	this.$fabric = null;
 };
 
@@ -272,7 +272,7 @@ CCustom.prototype.knock = function() {
 /**
 | Stops a REBUTTON action.
 */
-CCustom.prototype.actionstop = function() {
+Button.prototype.actionstop = function() {
 	system.cancelTimer(this.$retimer);
 	this.$retimer = null;
 

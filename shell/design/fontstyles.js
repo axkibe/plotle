@@ -48,77 +48,77 @@ var styles = {
 		family : theme.defaultFont,
 		fill   : 'black',
 		align  : 'center',
-		base   : 'alphabetic',
+		base   : 'alphabetic'
 	},
 	cab        : {
 		type   : 'FontStyle',
 		family :  theme.defaultFont,
 		fill   : 'black',
 		align  : 'center',
-		base   : 'alphabetic',
+		base   : 'alphabetic'
 	},
 	cm         : {
 		type   : 'FontStyle',
 		family :  theme.defaultFont,
 		fill   : 'black',
 		align  : 'center',
-		base   : 'middle',
+		base   : 'middle'
 	},
 	la         : {
 		type   : 'FontStyle',
 		family :  theme.defaultFont,
 		fill   : 'black',
 		align  : 'start',
-		base   : 'alphabetic',
+		base   : 'alphabetic'
 	},
 	lac        : {
 		type   : 'FontStyle',
 		family :  theme.defaultFont,
 		fill   : 'rgb(128, 44, 0)',
 		align  : 'start',
-		base   : 'alphabetic',
+		base   : 'alphabetic'
 	},
 	lah        : {
 		type   : 'FontStyle',
 		family :  theme.defaultFont,
 		fill   : 'rgb(128, 44, 0)',
 		align  : 'start',
-		base   : 'alphabetic',
+		base   : 'alphabetic'
 	},
 	lahb       : {
 		type   : 'FontStyle',
 		family : theme.boldFont,
 		fill   : 'rgb(128, 44, 0)',
 		align  : 'start',
-		base   : 'alphabetic',
+		base   : 'alphabetic'
 	},
 	lahr       : {
 		type   : 'FontStyle',
 		family :  theme.defaultFont,
 		fill   : 'red',
 		align  : 'start',
-		base   : 'alphabetic',
+		base   : 'alphabetic'
 	},
 	lar        : {
 		type   : 'FontStyle',
 		family :  theme.defaultFont,
 		fill   : 'red',
 		align  : 'left',
-		base   : 'alphabetic',
+		base   : 'alphabetic'
 	},
 	cadr       : {
 		type   : 'FontStyle',
 		family : theme.defaultFont,
 		fill   : 'rgb(160, 0, 0)',
 		align  : 'center',
-		base   : 'alphabetic',
+		base   : 'alphabetic'
 	},
 	ra         : {
 		type   : 'FontStyle',
 		family :  theme.defaultFont,
 		fill   : 'black',
 		align  : 'end',
-		base   : 'alphabetic',
+		base   : 'alphabetic'
 	}
 };
 

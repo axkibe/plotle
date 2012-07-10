@@ -35,7 +35,6 @@ Dash = Dash || {};
 var CAccent;
 var CChat;
 var CCode;
-var CCustom;
 var CLabel;
 var CInput;
 var Cockpit;
@@ -58,6 +57,10 @@ var View;
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
+/**
+| Shortcuts
+*/
+var Button        = Dash.Button;
 var debug         = Jools.debug;
 var immute        = Jools.immute;
 var is            = Jools.is;
@@ -110,7 +113,7 @@ Panel.prototype.newCC = function(twig, inherit, name) {
 
 	switch(twig.type) {
 	case 'Chat'   : return new CChat  (twig, this, inherit, name);
-	case 'Custom' : return new CCustom(twig, this, inherit, name);
+	case 'Button' : return new Button (twig, this, inherit, name);
 	case 'Input'  : return new CInput (twig, this, inherit, name);
 	case 'Label'  : return new CLabel (twig, this, inherit, name);
 	default       : throw new Error('Invalid component type: ' + twig.type);

@@ -181,7 +181,7 @@ LoginPanel.layout = {
 		}
 	},
 	'loginB'       : {
-		type       : 'Custom',
+		type       : 'Button',
 		code       : 'LBLoginB',
 		normaStyle : 'button',
 		hoverStyle : 'buttonHover',
@@ -239,7 +239,7 @@ LoginPanel.layout = {
 		}
 	},
 	'closeB'       : {
-		type       : 'Custom',
+		type       : 'Button',
 		code       : 'LBCloseB',
 		normaStyle : 'button',
 		hoverStyle : 'buttonHover',
@@ -297,7 +297,7 @@ LoginPanel.layout = {
 		}
 	/* TODO
 	'forgotB'     : {
-		type       : 'Custom',
+		type       : 'Button',
 		style      : 'zero',
 		hoverStyle : 'zhighlight',
 		frame : {

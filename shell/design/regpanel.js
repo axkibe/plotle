@@ -246,7 +246,7 @@ RegPanel.layout = {
 		}
 	},
 	'regB'      : {
-		type       : 'Custom',
+		type       : 'Button',
 		code       : 'RBRegB',
 		normaStyle : 'button',
 		hoverStyle : 'buttonHover',
@@ -304,7 +304,7 @@ RegPanel.layout = {
 		}
 	},
 	'closeB'      : {
-		type       : 'Custom',
+		type       : 'Button',
 		code       : 'RBCloseB',
 		normaStyle : 'button',
 		hoverStyle : 'buttonHover',

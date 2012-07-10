@@ -26,16 +26,16 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
-| Imports
-*/
-var CCustom;
-var Jools;
-var shell;
-
-/**
 | Exports
 */
 var CCode;
+
+/**
+| Imports
+*/
+var Dash;
+var Jools;
+var shell;
 
 /**
 | Capsule
@@ -44,26 +44,26 @@ var CCode;
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
-var debug         = Jools.debug;
-var immute        = Jools.immute;
-var is            = Jools.is;
-var isnon         = Jools.isnon;
-var isArray       = Jools.isArray;
-var log           = Jools.log;
-var subclass      = Jools.subclass;
+/**
+| Shortcuts
+*/
+var Button   = Dash.Button;
+var subclass = Jools.subclass;
 
 /**
 | Constructor
 */
 var MBZoomPlusB = CCode.MBZoomPlusB = function(twig, panel, inherit, name) {
-	CCustom.call(this, twig, panel, inherit, name);
+	Button.call(this, twig, panel, inherit, name);
 	this.repeat = true;
 };
-subclass(MBZoomPlusB, CCustom);
+subclass(MBZoomPlusB, Button);
 
+/**
+| TODO
+*/
 MBZoomPlusB.prototype.push = function(shift, ctrl) {
 	shell.changeSpaceZoom(1);
 };
-
 
 })();

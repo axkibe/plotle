@@ -18,26 +18,24 @@
                         `--' `-^---' `--' `-' `-| ' ' ' `-^---'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
                                                `'
- Login Button on login panel.
+ Login button on the login panel.
  log in
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/**
+| Exports
+*/
+var CCode;
 
 /**
 | Imports
 */
-var CCode;
-var CCustom;
+var Dash;
 var Jools;
 var shell;
-
-/**
-| Exports
-*/
-var CMeth = null;
 
 /**
 | Capsule
@@ -46,36 +44,34 @@ var CMeth = null;
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
-var debug    = Jools.debug;
+/**
+| Shortcuts
+*/
+var Button   = Dash.Button;
 var immute   = Jools.immute;
-var is       = Jools.is;
-var isnon    = Jools.isnon;
 var log      = Jools.log;
 var subclass = Jools.subclass;
 var Util     = CCode.Util;
 
 /**
-| The container.
-*/
-CMeth = {
-	LoginPanel : { },
-	MainPanel  : { },
-	RegPanel   : { }
-};
-
-/**
 | Constructor
 */
 var LBLoginB = CCode.LBLoginB = function(twig, panel, inherit, name) {
-	CCustom.call(this, twig, panel, inherit, name);
+	Button.call(this, twig, panel, inherit, name);
 };
 
-subclass(LBLoginB, CCustom);
+subclass(LBLoginB, Button);
 
+/**
+| TODO
+*/
 LBLoginB.prototype.canFocus = function() {
 	return true;
 };
 
+/**
+| TODO
+*/
 LBLoginB.prototype.push = function(shift, ctrl) {
 	Util.login(this.panel);
 	shell.redraw = true;

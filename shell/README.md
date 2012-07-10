@@ -52,10 +52,6 @@ Files
 </td><td>   the chat component on the cockpit.
 </td></tr>
 
- <tr><td>   ccustom.js
-</td><td>   a custom component on the cockpit.
-</td></tr>
-
  <tr><td>   cinput.js
 </td><td>   an input field on the cockpit.
 </td></tr>

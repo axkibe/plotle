@@ -192,7 +192,7 @@ HelpPanel.layout = {
 	},
 
 	'hideB' : {
-		type       : 'Custom',
+		type       : 'Button',
 		code       : 'HBHideB',
 
 		normaStyle : 'button',
