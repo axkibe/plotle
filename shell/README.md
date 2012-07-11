@@ -44,10 +44,6 @@ Files
 </td><td>   wrapper around HTML5 browsers
 </td></tr>
 
- <tr><td>   caccent.js
-</td><td>   accent for cockpit components
-</td></tr>
-
  <tr><td>   caret.js
 </td><td>   the virtual caret
 </td></tr>

@@ -7,6 +7,10 @@ Files
 =====
 <table>
 
+ <tr><td>   accent.js
+</td><td>   accent (state) for dashpanel components
+</td></tr>
+
  <tr><td>   button.js
 </td><td>   a button
 </td></tr>

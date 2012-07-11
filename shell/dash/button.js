@@ -33,7 +33,6 @@ Dash = Dash || {};
 | Imports
 */
 var Action;
-var CAccent;
 var Cockpit;
 var config;
 var Curve;
@@ -90,7 +89,7 @@ var Button = Dash.Button = function(twig, panel, inherit, name) {
 	this.$fabric      = null;
 	this.$visible     = inherit ? inherit.$visible : true;
 	this.$captionText = inherit ? inherit.$captionText : twig.caption.text;
-	this.$accent      = CAccent.NORMAL;
+	this.$accent      = Dash.Accent.NORMAL;
 };
 
 /**
@@ -118,10 +117,10 @@ Button.prototype._weave = function(accent) {
 
 	var sname;
 	switch (accent) {
-	case CAccent.NORMA : sname = this.twig.normaStyle; break;
-	case CAccent.HOVER : sname = this.twig.hoverStyle; break;
-	case CAccent.FOCUS : sname = this.twig.focusStyle; break;
-	case CAccent.HOFOC : sname = this.twig.hofocStyle; break;
+	case Dash.Accent.NORMA : sname = this.twig.normaStyle; break;
+	case Dash.Accent.HOVER : sname = this.twig.hoverStyle; break;
+	case Dash.Accent.FOCUS : sname = this.twig.focusStyle; break;
+	case Dash.Accent.HOFOC : sname = this.twig.hofocStyle; break;
 	default : throw new Error('Invalid accent: ' + accent);
 	}
 
@@ -171,7 +170,7 @@ Button.prototype.mousehover = function(p) {
 	if (p.x < this.pnw.x || p.y < this.pnw.y || p.x > this.pse.x || p.y > this.pse.y)
 		{ return null; }
 
-	var fabric = this._weave(CAccent.NORMA);
+	var fabric = this._weave(Dash.Accent.NORMA);
 	var pp = p.sub(this.pnw);
 
 	if (!fabric.within(this, 'gpath', View.proper, pp))
@@ -198,7 +197,7 @@ Button.prototype.mousedown = function(p, shift, ctrl) {
 	if (p.x < this.pnw.x || p.y < this.pnw.y || p.x > this.pse.x || p.y > this.pse.y)
 		{ return null; }
 
-	var fabric = this._weave(CAccent.NORMA);
+	var fabric = this._weave(Dash.Accent.NORMA);
 	var pp = p.sub(this.pnw);
 	if (!fabric.within(this, 'gpath', View.proper, pp))
 		{ return null; }

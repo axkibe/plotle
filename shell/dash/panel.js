@@ -32,7 +32,6 @@ Dash = Dash || {};
 /**
 | Imports
 */
-var CAccent;
 var CCode;
 var Cockpit;
 var config;
@@ -164,7 +163,7 @@ Panel.prototype._weave = function() {
 	for(var a = layout.length - 1; a >= 0; a--) {
 		var cname = layout.ranks[a];
 		var c = this.cc[cname];
-		c.draw(fabric, CAccent.state(cname === this.$hover || c.$active, c === focus));
+		c.draw(fabric, Dash.Accent.state(cname === this.$hover || c.$active, c === focus));
 	}
 	fabric.edge(style.edge, this, 'path', View.proper);
 
