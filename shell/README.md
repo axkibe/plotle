@@ -52,10 +52,6 @@ Files
 </td><td>   the virtual caret
 </td></tr>
 
- <tr><td>   clabel.js
-</td><td>   a label on the cockpit.
-</td></tr>
-
  <tr><td>   cockpit.js
 </td><td>   the unmoveable part of the user interface
 </td></tr>

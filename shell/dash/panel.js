@@ -34,7 +34,6 @@ Dash = Dash || {};
 */
 var CAccent;
 var CCode;
-var CLabel;
 var Cockpit;
 var config;
 var Curve;
@@ -58,11 +57,8 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Shortcuts
 */
-var Button        = Dash.Button;
-var Chat          = Dash.Chat;
 var debug         = Jools.debug;
 var immute        = Jools.immute;
-var Input         = Dash.Input;
 var is            = Jools.is;
 var isnon         = Jools.isnon;
 var computePoint  = Curve.computePoint;
@@ -112,10 +108,10 @@ Panel.prototype.newCC = function(twig, inherit, name) {
 	}
 
 	switch(twig.type) {
-	case 'Chat'   : return new Chat   (twig, this, inherit, name);
-	case 'Button' : return new Button (twig, this, inherit, name);
-	case 'Input'  : return new Input  (twig, this, inherit, name);
-	case 'Label'  : return new CLabel (twig, this, inherit, name);
+	case 'Chat'   : return new Dash.Chat   (twig, this, inherit, name);
+	case 'Button' : return new Dash.Button (twig, this, inherit, name);
+	case 'Input'  : return new Dash.Input  (twig, this, inherit, name);
+	case 'Label'  : return new Dash.Label  (twig, this, inherit, name);
 	default       : throw new Error('Invalid component type: ' + twig.type);
 	}
 };

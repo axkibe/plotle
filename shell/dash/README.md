@@ -19,6 +19,10 @@ Files
 </td><td>   an input field
 </td></tr>
 
+ <tr><td>   label.js
+</td><td>   a label
+</td></tr>
+
  <tr><td>   panel.js
 </td><td>   a panel
 </td></tr>
