@@ -121,7 +121,7 @@ Util.login = function(panel) {
 		}
 
 		shell.setUser(user, passhash);
-		panel.dash.setCurPanel('MainPanel');
+		panel.board.setCurPanel('MainPanel');
 		Util.clearLogin(panel);
 		shell.moveToSpace(null);
 		shell.poke();
