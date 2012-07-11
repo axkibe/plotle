@@ -33,7 +33,6 @@ Dash = Dash || {};
 | Imports
 */
 var CCode;
-var Cockpit;
 var config;
 var Curve;
 var Design;
@@ -66,16 +65,16 @@ var half          = Jools.half;
 /**
 | Constructor
 */
-var Panel = Dash.Panel = function(name, inherit, cockpit, screensize) {
-	this.name    = name;
-	this.cockpit = cockpit;
-	var tree     = this.tree  = new Tree(Design[name], Design.Pattern);
-	var frameD   = tree.root.frame;
-	var oframe   = new Rect(Point.zero, screensize);
-	var pnw      = this.pnw    = computePoint(frameD.pnw, oframe);
-	var pse      = this.pse    = computePoint(frameD.pse, oframe);
-	var iframe   = this.iframe = new Rect(Point.zero, pse.sub(pnw));
-	this.curve   = new Curve(tree.root.curve, iframe);
+var Panel = Dash.Panel = function(name, inherit, board, screensize) {
+	this.name  = name;
+	this.board = board;
+	var tree   = this.tree  = new Tree(Design[name], Design.Pattern);
+	var frameD = tree.root.frame;
+	var oframe = new Rect(Point.zero, screensize);
+	var pnw    = this.pnw    = computePoint(frameD.pnw, oframe);
+	var pse    = this.pse    = computePoint(frameD.pse, oframe);
+	var iframe = this.iframe = new Rect(Point.zero, pse.sub(pnw));
+	this.curve = new Curve(tree.root.curve, iframe);
 
 	this.gradientPC = new Point(half(iframe.width), iframe.height + 450);
 	this.gradientR0 = 0;
@@ -94,7 +93,7 @@ var Panel = Dash.Panel = function(name, inherit, cockpit, screensize) {
 };
 
 /**
-| Creates a new cockpit component.
+| Creates a new component.
 */
 Panel.prototype.newCC = function(twig, inherit, name) {
 	if (twig.code && twig.code !== '') {
@@ -120,7 +119,10 @@ Panel.prototype.newCC = function(twig, inherit, name) {
 */
 Panel.prototype.focusedCC = function() {
 	var caret = shell.caret;
-	if (caret.visec !== 'cockpit') { return null; }
+
+	if (caret.visec !== 'dash')
+		{ return null; }
+
 	var sign = caret.sign;
 	var path = sign.path;
 	if (path.get(0) !== this.name) { return null; }
@@ -153,7 +155,7 @@ Panel.prototype._weave = function() {
 
 	var iframe = this.iframe;
 	var fabric = this.$fabric = new Fabric(iframe);
-	var style = Cockpit.styles[this.tree.root.style];
+	var style = Dash.Board.styles[this.tree.root.style];
 	if (!style) { throw new Error('no style!'); }
 
 	fabric.fill(style.fill, this, 'path', View.proper);
@@ -169,7 +171,7 @@ Panel.prototype._weave = function() {
 
 	if (config.debug.drawBoxes) {
 		fabric.paint(
-			Cockpit.styles.boxes,
+			Dash.Board.styles.boxes,
 			new Rect(iframe.pnw,
 			iframe.pse.sub(1, 1)),
 			'path',
@@ -332,7 +334,7 @@ Panel.prototype.setFocus = function(cname) {
 	var focus = this.focusedCC();
 	if (focus === com) { return; }
 
-	shell.setCaret('cockpit', {
+	shell.setCaret('dash', {
 		path : new Path([this.name, cname]),
 		at1  : 0
 	});

@@ -29,7 +29,6 @@
 | Imports
 */
 var Action;
-var Cockpit;
 var Fabric;
 var Jools;
 var MeshMashine;
@@ -77,13 +76,13 @@ var log           = Jools.log;
 */
 Caret = function(visec, sign, retainx, shown) {
 	// the section the caret is in
-	//   space or cockpit.
+	//   space or dash(board).
 	this.visec = visec;
 
-	// a signature pointing to the item the caret is in
-	// when visec === space
-	//
-	// the panel and cockpit component when visec === cockpit
+	// if visec === 'space':
+	//     a signature pointing to the item the caret is in
+	// if visec === 'dash':
+	//     the panel and the component
 	this.sign = sign;
 
 	// x position to retain when using up/down keys.
@@ -144,8 +143,8 @@ Caret.prototype.display = function() {
 	// draws new
 	if (this.$shown && !this.$blinked && this.sign) {
 		switch(this.visec) {
-		case 'space'   : shell.$space.drawCaret();  break;
-		case 'cockpit' : shell.cockpit.drawCaret(); break;
+		case 'space' : shell.$space.drawCaret();  break;
+		case 'dash'  : shell.dash.drawCaret(); break;
 		default : throw new Error('invalid visec');
 		}
 	}

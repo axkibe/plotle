@@ -18,7 +18,7 @@
                                         `---' ' ' `-' `' `'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- The main shell links cockpit and the visuals.
+ The shell consists of the dashboard and the visual space.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -30,7 +30,7 @@
 */
 var Action;
 var Caret;
-var Cockpit;
+var Dash;
 var Fabric;
 var Jools;
 var Measure;
@@ -83,7 +83,7 @@ Tree.cogging = true;
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  The users shell.
- Consists of the Cockpit and the Space the user is viewing.
+ Consists of the dashboard and the space the user is viewing.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /**
@@ -102,7 +102,7 @@ Shell = function(fabric) {
 
 	this.$space     = null;
 
-	this.cockpit    = new Cockpit();
+	this.dash       = new Dash.Board();
 	this.menu       = null;
 
 	this.caret      = new Caret(null, null, null, false);
@@ -124,7 +124,7 @@ Shell.prototype.setCaret = function(visec, sign, retainx) {
 	case null :
 		if (sign !== null) { throw new Error('setCaret visec=null, invalid sign'); }
 		break;
-	case 'cockpit' :
+	case 'dash'  :
 	case 'space' :
 		switch(sign && sign.constructor) {
 		case null   : break;
@@ -162,13 +162,13 @@ Shell.prototype.setCaret = function(visec, sign, retainx) {
 };
 
 /**
-| Returns the entity in the visual section (cockpit or space) marked by path
-| This is either an item, or an cockpit component.
+| Returns the entity in the visual section (dashboard or space) marked by path
+| This is either an item, or a dashboard component.
 */
 Shell.prototype.getEntity = function(visec, path) {
 	switch(visec) {
-	case 'cockpit' : return this.cockpit.getEntity(path);
-	case 'space'   : return this.$space. getEntity(path);
+	case 'dash'  : return this.dash.  getEntity(path);
+	case 'space' : return this.$space.getEntity(path);
 	default : throw new Error('Invalid visec: '+visec);
 	}
 };
@@ -178,9 +178,9 @@ Shell.prototype.getEntity = function(visec, path) {
 */
 Shell.prototype.messageRCV = function(space, user, message) {
 	if (user) {
-		this.cockpit.message(user + ': ' + message);
+		this.dash.message(user + ': ' + message);
 	} else {
-		this.cockpit.message(message);
+		this.dash.message(message);
 	}
 	this.poke();
 };
@@ -283,7 +283,7 @@ Shell.prototype.knock = function() {
 	this.caret.$screenPos = null;
 
 	if (this.$space) { this.$space.knock(); }
-	this.cockpit.knock();
+	this.dash.knock();
 	if (this.menu) { this.menu.knock(); }
 
 	this._draw();
@@ -313,7 +313,7 @@ Shell.prototype.setMenu = function(menu) {
 };
 
 /**
-| Draws the cockpit and the space.
+| Draws the dashboard and the space.
 */
 Shell.prototype._draw = function() {
 	var fabric = this.fabric;
@@ -354,7 +354,7 @@ Shell.prototype._draw = function() {
 	this.caret.$screenPos = null;
 
 	if (this.$space) { this.$space.draw(); }
-	this.cockpit.draw();
+	this.dash.draw();
 	if (this.menu) { this.menu.draw(View.proper); }
 
 	this.caret.display();
@@ -368,7 +368,7 @@ Shell.prototype._draw = function() {
 Shell.prototype.click = function(p, shift, ctrl) {
 	if (this.green) { return; }
 
-	// TODO cockpit
+	// TODO dashboard
 
 	if (this.$space) { this.$space.click(p, shift, ctrl); }
 	if (this.redraw) { this._draw(); }
@@ -391,9 +391,9 @@ Shell.prototype.mousehover = function(p, shift, ctrl) {
 
 
 	if (cursor)
-		{ this.cockpit.mousehover(null, shift, ctrl); }
+		{ this.dash.mousehover(null, shift, ctrl); }
 	else
-		{ cursor = this.cockpit.mousehover(p, shift, ctrl); }
+		{ cursor = this.dash.mousehover(p, shift, ctrl); }
 
 	if (this.$space) {
 		if (cursor)
@@ -430,9 +430,9 @@ Shell.prototype.mousedown = function(p, shift, ctrl) {
 
 	if (this.menu)
 		{ mouseState = this.menu.mousedown(View.proper, p, shift, ctrl); }
-	
+
 	if (mouseState === null)
-		{ mouseState = this.cockpit.mousedown(p, shift, ctrl); }
+		{ mouseState = this.dash.mousedown(p, shift, ctrl); }
 
 	if (mouseState === null && this.$space)
 		{ mouseState = this.$space.mousedown(p, shift, ctrl); }
@@ -448,8 +448,8 @@ Shell.prototype.mousedown = function(p, shift, ctrl) {
 Shell.prototype.dragstart = function(p, shift, ctrl) {
 	if (this.green)
 		{ return; }
-	
-	var cursor = this.cockpit.dragstart(p, shift, ctrl);
+
+	var cursor = this.dash.dragstart(p, shift, ctrl);
 
 	if (cursor === null && this.$space)
 		{ cursor = this.$space.dragstart(p, shift, ctrl); }
@@ -475,8 +475,8 @@ Shell.prototype.dragmove = function(p, shift, ctrl) {
 	var cursor = null;
 
 	switch ($action.visec) {
-	case 'cockpit' :
-		cursor = this.cockpit.actionmove(p, shift, ctrl);
+	case 'dash' :
+		cursor = this.dash.actionmove(p, shift, ctrl);
 		break;
 	case 'space' :
 		if (this.$space)
@@ -498,13 +498,13 @@ Shell.prototype.dragstop = function(p, shift, ctrl) {
 		{ return; }
 
 	var $action = this.$action;
-	
+
 	if (!$action)
 		{ throw new Error('no action on dragstop'); }
 
 	switch($action.visec) {
-	case 'cockpit' :
-		this.cockpit.actionstop(p, shift, ctrl);
+	case 'dash' :
+		this.dash.actionstop(p, shift, ctrl);
 		break;
 	case 'space' :
 		if (this.$space)
@@ -513,7 +513,7 @@ Shell.prototype.dragstop = function(p, shift, ctrl) {
 	default :
 		throw new Error('unknown $action.visec');
 	}
-	
+
 	if (this.redraw)
 		{ this._draw(); }
 };
@@ -525,7 +525,7 @@ Shell.prototype.mousewheel = function(p, dir, shift, ctrl) {
 	if (this.green)
 		{ return; }
 
-	// cockpit?
+	// dashboard?
 
 	if (this.$space)
 		{ this.$space.mousewheel(p, dir, shift, ctrl); }
@@ -544,8 +544,8 @@ Shell.prototype.specialKey = function(key, shift, ctrl) {
 
 	var caret  = this.caret;
 	switch (caret.visec) {
-	case 'cockpit' :
-		this.cockpit.specialKey(key, shift, ctrl);
+	case 'dash' :
+		this.dash.specialKey(key, shift, ctrl);
 		break;
 	case null    :
 	case 'space' :
@@ -571,8 +571,8 @@ Shell.prototype.input = function(text) {
 	var caret  = this.caret;
 	switch (caret.visec) {
 	case null : break;
-	case 'cockpit' : this.cockpit.input(text); break;
-	case 'space'   : this. $space.input(text); break;
+	case 'dash'  : this.dash.input(text);    break;
+	case 'space' : this. $space.input(text); break;
 	default : throw new Error('invalid visec');
 	}
 	if (this.redraw) this._draw();
@@ -590,7 +590,7 @@ Shell.prototype.resize = function(width, height) {
 */
 Shell.prototype.setUser = function(user, pass) {
 	this.$user = user;
-	this.cockpit.setUser(user);
+	this.dash.setUser(user);
 	this.peer.setUser(user, pass);
 
 	if (user.substr(0, 5) !== 'visit') {
@@ -612,7 +612,7 @@ Shell.prototype.setUser = function(user, pass) {
 | Sets the space zoom factor.
 */
 Shell.prototype.setSpaceZoom = function(zf) {
-	this.cockpit.setSpaceZoom(zf);
+	this.dash.setSpaceZoom(zf);
 };
 
 /**
@@ -659,10 +659,10 @@ Shell.prototype.moveToSpace = function(name) {
 			(name !== 'welcome' && name !== 'help')
 		) { name = 'welcome'; }
 	} else {
-		self.cockpit.message('Moving to "' + name + '" ...');
+		self.dash.message('Moving to "' + name + '" ...');
 	}
 
-	self.cockpit.setCurSpace('', '');
+	self.dash.setCurSpace('', '');
 	this.peer.aquireSpace(name, function(err, val) {
 		if (err !== null) {
 			self.greenscreen('Cannot aquire space: ' + err.message);
@@ -678,8 +678,8 @@ Shell.prototype.moveToSpace = function(name) {
 			new Path([name]),
 			val.access
 		);
-		self.cockpit.setCurSpace(name, val.access);
-		self.cockpit.setSpaceZoom(0);
+		self.dash.setCurSpace(name, val.access);
+		self.dash.setSpaceZoom(0);
 		self._draw();
 	});
 };

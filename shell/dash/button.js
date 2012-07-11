@@ -33,7 +33,6 @@ Dash = Dash || {};
 | Imports
 */
 var Action;
-var Cockpit;
 var config;
 var Curve;
 var Fabric;
@@ -124,7 +123,7 @@ Button.prototype._weave = function(accent) {
 	default : throw new Error('Invalid accent: ' + accent);
 	}
 
-	var style = Cockpit.styles[sname];
+	var style = Dash.Board.styles[sname];
 	if (!isnon(style)) { throw new Error('Invalid style: ' + sname); }
 	fabric.paint(style, this, 'gpath', View.proper);
 
@@ -133,7 +132,7 @@ Button.prototype._weave = function(accent) {
 
 	if (config.debug.drawBoxes) {
 		fabric.paint(
-			Cockpit.styles.boxes,
+			Dash.Board.styles.boxes,
 			new Rect(this.iframe.pnw, this.iframe.pse.sub(1, 1)),
 			'path',
 			View.proper
@@ -205,7 +204,7 @@ Button.prototype.mousedown = function(p, shift, ctrl) {
 	if (this.repeat && !this.retimer) {
 		shell.startAction(
 			Action.REBUTTON,
-			'cockpit',
+			'dash',
 			'itemPath', this.path
 		);
 

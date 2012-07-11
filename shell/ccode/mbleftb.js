@@ -63,7 +63,7 @@ subclass(MBLeftB, Button);
 
 MBLeftB.prototype.push = function(shift, ctrl) {
 	switch (this.$captionText) {
-	case 'log in'  : this.panel.cockpit.setCurPanel('LoginPanel'); break;
+	case 'log in'  : this.panel.board.setCurPanel('LoginPanel'); break;
 	case 'log out' : CCode.Util.logout(this.panel); break;
 	default : throw new Error('unknown state of leftB');
 	}

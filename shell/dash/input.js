@@ -34,7 +34,6 @@ Dash = Dash || {};
 */
 var BeziRect;
 var Caret;
-var Cockpit;
 var Curve;
 var Fabric;
 var Jools;
@@ -155,7 +154,7 @@ Input.prototype._weave = function(accent) {
 	case Dash.Accent.HOFOC : sname = this.twig.hofocStyle; break;
 	default : throw new Error('Invalid accent');
 	}
-	var style  = Cockpit.styles[sname];
+	var style  = Dash.Board.styles[sname];
 	if (!isnon(style)) { throw new Error('Invalid style: ' + sname); }
 
 	fabric.fill(style.fill, this.bezi, 'path', View.proper);
@@ -269,7 +268,7 @@ Input.prototype.input = function(text) {
 	}
 
 	this.value = v.substring(0, at1) + text + v.substring(at1);
-	shell.setCaret('cockpit', {
+	shell.setCaret('dash', {
 		path : csign.path,
 		at1  : at1 + text.length
 	});
@@ -285,7 +284,7 @@ Input.prototype.keyBackspace = function() {
 	var at1   = csign.at1;
 	if (at1 <= 0) return false;
 	this.value = this.value.substring(0, at1 - 1) + this.value.substring(at1);
-	shell.setCaret('cockpit', {
+	shell.setCaret('dash', {
 		path : csign.path,
 		at1  : csign.at1 - 1
 	});
@@ -328,7 +327,7 @@ Input.prototype.keyEnd = function() {
 	var csign = caret.sign;
 	var at1   = csign.at1;
 	if (at1 >= this.value.length) return false;
-	shell.setCaret('cockpit', {
+	shell.setCaret('dash', {
 		path : csign.path,
 		at1  : this.value.length
 	});
@@ -342,7 +341,7 @@ Input.prototype.keyLeft = function() {
 	var caret = shell.caret;
 	var csign = caret.sign;
 	if (csign.at1 <= 0) return false;
-	shell.setCaret('cockpit', {
+	shell.setCaret('dash', {
 		path : csign.path,
 		at1  : csign.at1 - 1
 	});
@@ -356,7 +355,7 @@ Input.prototype.keyPos1 = function() {
 	var caret = shell.caret;
 	var csign = caret.sign;
 	if (csign.at1 <= 0) return false;
-	shell.setCaret('cockpit', {
+	shell.setCaret('dash', {
 		path : csign.path,
 		at1  : 0
 	});
@@ -370,7 +369,7 @@ Input.prototype.keyRight = function() {
 	var caret = shell.caret;
 	var csign = caret.sign;
 	if (csign.at1 >= this.value.length) return false;
-	shell.setCaret('cockpit', {
+	shell.setCaret('dash', {
 		path : csign.path,
 		at1  : csign.at1 + 1
 	});

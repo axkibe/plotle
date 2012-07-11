@@ -67,7 +67,7 @@ var canrBYM       = canrBH * magic / 2;
 
 var RegPanel = Design.RegPanel = { type   : 'Design' };
 
-RegPanel.style = 'cockpit';
+RegPanel.style = 'panel';
 
 RegPanel.frame = {
 	type  : 'Frame',

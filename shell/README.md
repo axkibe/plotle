@@ -7,7 +7,7 @@ Subdirs
 <table>
 
  <tr><td>   ccode
-</td><td>   behavior code of cockpit components
+</td><td>   behavior code of dashboard components
 </td></tr>
 
  <tr><td>   dash
@@ -48,10 +48,6 @@ Files
 </td><td>   the virtual caret
 </td></tr>
 
- <tr><td>   cockpit.js
-</td><td>   the unmoveable part of the user interface
-</td></tr>
-
  <tr><td>   curve.js
 </td><td>   a bezier curve.
 </td></tr>
@@ -85,7 +81,7 @@ Files
 </td></tr>
 
  <tr><td>   shell.js
-</td><td>   the main shell (caret/selection + links cockpit with visual)
+</td><td>   the main shell (visual space, dashboard, caret/selection)
 </td></tr>
 
  <tr><td>   switchpanel.js

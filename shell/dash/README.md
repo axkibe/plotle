@@ -11,6 +11,10 @@ Files
 </td><td>   accent (state) for dashpanel components
 </td></tr>
 
+ <tr><td>   board.js
+</td><td>   parent of all dashpanels
+</td></tr>
+
  <tr><td>   button.js
 </td><td>   a button
 </td></tr>

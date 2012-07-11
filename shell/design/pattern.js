@@ -18,12 +18,12 @@
                               `-^ `-' `'   `-' '   `-' `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- (cockpit) design patterns.
+ dashboard design patterns.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
 
- TODO Rename to DesignPattern
+ TODO Remove "deverse"
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -40,7 +40,7 @@ Design = Design || { };
 "use strict";
 
 /**
-| Designs (for the cockpit)
+| Designs (for the dashboard)
 */
 Design.Pattern = {
 	'Design' : {

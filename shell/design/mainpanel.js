@@ -92,7 +92,7 @@ var sideButtonC1Y   = ro(consts.C1Y / 2);
 var sideButtonC2X   =  12;
 var sideButtonC2Y   =  40;
 
-MainPanel.style = 'cockpit';
+MainPanel.style = 'panel';
 
 MainPanel.frame = {
 	type  : 'Frame',

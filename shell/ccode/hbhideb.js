@@ -62,7 +62,7 @@ var HBHideB = CCode.HBHideB = function(twig, panel, inherit, name) {
 subclass(HBHideB, Button);
 
 HBHideB.prototype.push = function(shift, ctrl) {
-	this.panel.cockpit.setShowHelp(false);
+	this.panel.board.setShowHelp(false);
 	shell.redraw = true;
 };
 

@@ -65,7 +65,7 @@ LBCloseB.prototype.canFocus = function()
 
 LBCloseB.prototype.push = function(shift, ctrl) {
 	Util.clearLogin(this.panel);
-	this.panel.cockpit.setCurPanel('MainPanel');
+	this.panel.board.setCurPanel('MainPanel');
 	shell.redraw = true;
 };
 

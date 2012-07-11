@@ -63,7 +63,7 @@ var MBLeft2B = CCode.MBLeft2B = function(twig, panel, inherit, name) {
 subclass(MBLeft2B, Button);
 
 MBLeft2B.prototype.push = function(shift, ctrl) {
-	this.panel.cockpit.setCurPanel('RegPanel');
+	this.panel.board.setCurPanel('RegPanel');
 	shell.redraw = true;
 };
 

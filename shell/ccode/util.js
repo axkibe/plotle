@@ -70,7 +70,7 @@ Util.login = function(panel) {
 	if (user.length < 4) {
 		panel.cc.errL.text = 'Username too short, min. 4 characters';
 		panel.cc.errL.poke();
-		shell.setCaret('cockpit', {
+		shell.setCaret('dash', {
 			path : new Path(['LoginPanel', 'userI']),
 			at1  : user.length
 		});
@@ -80,7 +80,7 @@ Util.login = function(panel) {
 	if (user.substr(0, 5) === 'visit') {
 		panel.cc.errL.text = 'Username must not start with "visit"';
 		panel.cc.errL.poke();
-		shell.setCaret('cockpit', {
+		shell.setCaret('dash', {
 			path : new Path(['LoginPanel', 'userI']),
 			at1  : 0
 		});
@@ -90,7 +90,7 @@ Util.login = function(panel) {
 	if (pass.length < 5) {
 		panel.cc.errL.text = 'Password too short, min. 5 characters';
 		panel.cc.errL.poke();
-		shell.setCaret('cockpit', {
+		shell.setCaret('dash', {
 			path : new Path(['LoginPanel', 'passI']),
 			at1  : pass.length
 		});
@@ -105,12 +105,12 @@ Util.login = function(panel) {
 			panel.cc.errL.poke();
 
 			if (res.message.search(/Username/) >= 0) {
-				shell.setCaret('cockpit', {
+				shell.setCaret('dash', {
 					path : new Path(['LoginPanel', 'userI']),
 					at1  : user.length
 				});
 			} else {
-				shell.setCaret('cockpit', {
+				shell.setCaret('dash', {
 					path : new Path(['LoginPanel', 'passI']),
 					at1  : pass.length
 				});
@@ -121,7 +121,7 @@ Util.login = function(panel) {
 		}
 
 		shell.setUser(user, passhash);
-		panel.cockpit.setCurPanel('MainPanel');
+		panel.dash.setCurPanel('MainPanel');
 		Util.clearLogin(panel);
 		shell.moveToSpace(null);
 		shell.poke();
@@ -139,7 +139,7 @@ Util.logout = function(panel) {
 		}
 
 		shell.setUser(res.user, res.pass);
-		panel.cockpit.setCurPanel('MainPanel');
+		panel.board.setCurPanel('MainPanel');
 		shell.moveToSpace(null);
 		shell.poke();
 	});
@@ -161,7 +161,7 @@ Util.register = function(panel) {
 	if (user.length < 4) {
 		panel.cc.errL.text = 'Username too short, min. 4 characters';
 		panel.cc.errL.poke();
-		shell.setCaret('cockpit', {
+		shell.setCaret('dash', {
 			path : new Path(['RegPanel', 'userI']),
 			at1  : user.length
 		});
@@ -171,7 +171,7 @@ Util.register = function(panel) {
 	if (user.substr(0, 5) === 'visit') {
 		panel.cc.errL.text = 'Username must not start with "visit"';
 		panel.cc.errL.poke();
-		shell.setCaret('cockpit', {
+		shell.setCaret('dash', {
 			path : new Path(['RegPanel', 'userI']),
 			at1  : 0
 		});
@@ -181,7 +181,7 @@ Util.register = function(panel) {
 	if (pass.length < 5) {
 		panel.cc.errL.text = 'Password too short, min. 5 characters';
 		panel.cc.errL.poke();
-		shell.setCaret('cockpit', {
+		shell.setCaret('dash', {
 			path : new Path(['RegPanel', 'passI']),
 			at1  : pass.length
 		});
@@ -191,7 +191,7 @@ Util.register = function(panel) {
 	if (pass !== pass2) {
 		panel.cc.errL.text = 'Passwords to not match';
 		panel.cc.errL.poke();
-		shell.setCaret('cockpit', {
+		shell.setCaret('dash', {
 			path : new Path(['RegPanel', 'pass2I']),
 			at1  : pass2.length
 		});
@@ -201,7 +201,7 @@ Util.register = function(panel) {
 	if (code.length === 0) {
 		panel.cc.errL.text = 'Invitation code missing';
 		panel.cc.errL.poke();
-		shell.setCaret('cockpit', {
+		shell.setCaret('dash', {
 			path : new Path(['RegPanel', 'codeI']),
 			at1  : pass2.length
 		});
@@ -216,12 +216,12 @@ Util.register = function(panel) {
 			panel.cc.errL.poke();
 
 			if (res.message.search(/Username/) >= 0) {
-				shell.setCaret('cockpit', {
+				shell.setCaret('dash', {
 					path : new Path(['RegPanel', 'userI']),
 					at1  : pass2.length
 				});
 			} else if (res.message.search(/code/) >= 0) {
-				shell.setCaret('cockpit', {
+				shell.setCaret('dash', {
 					path : new Path(['RegPanel', 'codeI']),
 					at1  : pass2.length
 				});
@@ -231,7 +231,7 @@ Util.register = function(panel) {
 		}
 
 		shell.setUser(user, pass);
-		panel.cockpit.setCurPanel('MainPanel');
+		panel.board.setCurPanel('MainPanel');
 		Util.clearRegister(panel);
 		shell.moveToSpace(null);
 		shell.poke();

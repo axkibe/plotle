@@ -65,7 +65,7 @@ RBCloseB.prototype.canFocus = function()
 
 RBCloseB.prototype.push = function(shift, ctrl) {
 	Util.clearRegister(this.panel);
-	this.panel.cockpit.setCurPanel('MainPanel');
+	this.panel.board.setCurPanel('MainPanel');
 };
 
 })();

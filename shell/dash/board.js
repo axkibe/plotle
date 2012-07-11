@@ -1,24 +1,22 @@
-/**                                                      _.._
-                                                      .-'_.._''.
- __  __   ___       _....._              .          .' .'     '.\
-|  |/  `.'   `.   .'       '.          .'|         / .'                                _.._
-|   .-.  .-.   ' /   .-'"'.  \        (  |        . '            .-,.-~.             .' .._|    .|
-|  |  |  |  |  |/   /______\  |        | |        | |            |  .-. |    __      | '      .' |_
-|  |  |  |  |  ||   __________|    _   | | .'''-. | |            | |  | | .:-`.'.  __| |__  .'     |
-|  |  |  |  |  |\  (          '  .' |  | |/.'''. \. '            | |  | |/ |   \ ||__   __|'-..  .-'
-|  |  |  |  |  | \  '-.___..-~. .   | /|  /    | | \ '.         .| |  '- `" __ | |   | |      |  |
-|__|  |__|  |__|  `         .'.'.'| |//| |     | |  '. `.____.-'/| |      .'.''| |   | |      |  |
-                   `'-.....-.'.'.-'  / | |     | |    `-._____ / | |     / /   | |_  | |      |  '.'
-                                 \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
-                                       '___)   '___)                      `~~'  `"   |_|      `--'
+ /**____
+ \  ___ `'.                          .
+  ' |--.\  \                       .'|
+  | |    \  '                     <  |
+  | |     |  '    __               | |
+  | |     |  | .:--.'.         _   | | .'''-.
+  | |     ' .'/ |   \ |      .' |  | |/.'''. \
+  | |___.' /' `" __ | |     .   | /|  /    | |
+ /_______.'/   .'.''| |   .'.'| |//| |     | |
+ \_______|/   / /   | |_.'.'.-'  / | |     | |
+              \ \._,\ '/.'   \_.'  | '.    | '.
+               `--'  `"            '---'   '---'
+             ,-,---.               .
+              '|___/ ,-. ,-. ,-. ,-|
+              ,|   \ | | ,-| |   | |
+             `-^---' `-' `-^ '   `-^
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-                                  ,--.         .         .
-                                 | `-' ,-. ,-. | , ,-. . |-
-                                 |   . | | |   |<  | | | |
-                                 `--'  `-' `-' ' ` |-' ' `'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-                                                   '
- The unmoving interface.
+ Parent of all dashpanels.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -26,10 +24,15 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
+| Export
+*/
+var Dash;
+Dash = Dash || {};
+
+/**
 | Imports
 */
 var Curve;
-var Dash;
 var Design;
 var Fabric;
 var HelpPanel;
@@ -42,11 +45,6 @@ var system;
 var theme;
 var Tree;
 var View;
-
-/**
-| Exports
-*/
-var Cockpit = null;
 
 /**
 | Capsule
@@ -69,7 +67,7 @@ var subclass      = Jools.subclass;
 /**
 | Constructor
 */
-Cockpit = function() {
+var Board = Dash.Board = function() {
 	this.fabric       = system.fabric;
 	this.curPanelName = 'MainPanel';
 	this.panels = {
@@ -84,27 +82,31 @@ Cockpit = function() {
 	this.$autoHelp = true;
 };
 
-Cockpit.styles = {
+/**
+| TODO
+|  make an own class.
+*/
+Board.styles = {
 	boxes       : { edge : [ { border: 0, width : 1, color : 'black' } ] },
-	cockpit     : theme.cockpit.style,
-	help        : theme.cockpit.help,
-	button      : theme.cockpit.button,
-	buttonHover : theme.cockpit.buttonHover,
-	buttonFocus : theme.cockpit.buttonFocus,
-	buttonHofoc : theme.cockpit.buttonHofoc,
-	chat        : theme.cockpit.chat,
-	highlight   : theme.cockpit.highlight,
-	input       : theme.cockpit.input,
-	inputFocus  : theme.cockpit.inputFocus,
-	sides       : theme.cockpit.sides,
-	zero        : theme.cockpit.zero,
-	zhighlight  : theme.cockpit.zhighlight
+	panel       : theme.dash.style, // TODO
+	help        : theme.dash.help,
+	button      : theme.dash.button,
+	buttonHover : theme.dash.buttonHover,
+	buttonFocus : theme.dash.buttonFocus,
+	buttonHofoc : theme.dash.buttonHofoc,
+	chat        : theme.dash.chat,
+	highlight   : theme.dash.highlight,
+	input       : theme.dash.input,
+	inputFocus  : theme.dash.inputFocus,
+	sides       : theme.dash.sides,
+	zero        : theme.dash.zero,
+	zhighlight  : theme.dash.zhighlight
 };
 
 /**
 | Sends a message to the chat component.
 */
-Cockpit.prototype.message = function(message) {
+Board.prototype.message = function(message) {
 	this.getPanel('MainPanel').cc.chat.addMessage(message);
 };
 
@@ -112,7 +114,7 @@ Cockpit.prototype.message = function(message) {
 /**
 | Returns the panel by its name.
 */
-Cockpit.prototype.getPanel = function(name) {
+Board.prototype.getPanel = function(name) {
 	var fabric = this.fabric;
 	var cpanel = this.panels[name];
 	if (!is(cpanel)) { throw new Error('invalid curPanelName: ' + this.curPanelName); }
@@ -142,16 +144,16 @@ Cockpit.prototype.getPanel = function(name) {
 /**
 | Returns the current dashboard panel.
 */
-Cockpit.prototype.curPanel = function() {
+Board.prototype.curPanel = function() {
 	return this.getPanel(this.curPanelName);
 };
 
 /**
 | Sets the current panel.
 */
-Cockpit.prototype.setCurPanel = function(panelName) {
+Board.prototype.setCurPanel = function(panelName) {
 	var caret = shell.caret;
-	if (caret.visec === 'cockpit' &&
+	if (caret.visec === 'dash' &&
 		caret.sign &&
 		caret.sign.path.get(0) === this.curPanelName)
 	{
@@ -165,7 +167,7 @@ Cockpit.prototype.setCurPanel = function(panelName) {
 /**
 | Sets the space name displayed on the main panel.
 */
-Cockpit.prototype.setCurSpace = function(space, access) {
+Board.prototype.setCurSpace = function(space, access) {
 	this.$curSpace = space;
 	this.$access   = access;
 	this.getPanel('MainPanel').setCurSpace(space, access);
@@ -178,7 +180,7 @@ Cockpit.prototype.setCurSpace = function(space, access) {
 /**
 | Sets the user greeted on the main panel.
 */
-Cockpit.prototype.setUser = function(userName) {
+Board.prototype.setUser = function(userName) {
 	this.$amVisitor = userName.substring(0,5) === 'visit';
 	var mainPanel = this.getPanel('MainPanel');
 	mainPanel.setUser(userName);
@@ -195,14 +197,14 @@ Cockpit.prototype.setUser = function(userName) {
 /**
 | Sets the zoom level for the current space shown on the mainPanel.
 */
-Cockpit.prototype.setSpaceZoom = function(zf) {
+Board.prototype.setSpaceZoom = function(zf) {
 	this.getPanel('MainPanel').setSpaceZoom(zf);
 };
 
 /**
-| Redraws the cockpit.
+| Redraws the dashboard.
 */
-Cockpit.prototype.draw = function() {
+Board.prototype.draw = function() {
 	if (this.$showHelp) {
 		var helpPanel = this.getPanel('HelpPanel');
 		helpPanel.setAccess(this.$access);
@@ -214,7 +216,7 @@ Cockpit.prototype.draw = function() {
 /**
 | Force clears all caches.
 */
-Cockpit.prototype.knock = function() {
+Board.prototype.knock = function() {
 	for (var b in this.panels) {
 		var bo = this.panels[b];
 		if (bo) { bo.knock(); }
@@ -224,7 +226,7 @@ Cockpit.prototype.knock = function() {
 /**
 | Draws the caret.
 */
-Cockpit.prototype.drawCaret = function() {
+Board.prototype.drawCaret = function() {
 	var caret = shell.caret;
 	if (caret.sign.path.get(0) !== this.curPanelName) {
 		log('fail', 'Caret path(0) !== this.curPanelName');
@@ -236,21 +238,21 @@ Cockpit.prototype.drawCaret = function() {
 /**
 | Text input
 */
-Cockpit.prototype.input = function(text) {
+Board.prototype.input = function(text) {
 	this.curPanel().input(text);
 };
 
 /**
 | User pressed a special key.
 */
-Cockpit.prototype.specialKey = function(key, shift, ctrl) {
+Board.prototype.specialKey = function(key, shift, ctrl) {
 	this.curPanel().specialKey(key, shift, ctrl);
 };
 
 /**
 | Mouse hover.
 */
-Cockpit.prototype.mousehover = function(p, shift, ctrl) {
+Board.prototype.mousehover = function(p, shift, ctrl) {
 	var cursor = this.curPanel().mousehover(p, shift, ctrl);
 
 	if (this.$showHelp) {
@@ -268,21 +270,21 @@ Cockpit.prototype.mousehover = function(p, shift, ctrl) {
 /**
 | Start of a dragging operation.
 */
-Cockpit.prototype.dragstart = function(p, shift, ctrl) {
+Board.prototype.dragstart = function(p, shift, ctrl) {
 	return null;
 };
 
 /**
 | Start of a dragging operation.
 */
-Cockpit.prototype.actionmove = function(p, shift, ctrl) {
+Board.prototype.actionmove = function(p, shift, ctrl) {
 	return null;
 };
 
 /**
 | Start of a dragging operation.
 */
-Cockpit.prototype.actionstop = function(p, shift, ctrl) {
+Board.prototype.actionstop = function(p, shift, ctrl) {
 	var path  = shell.$action.itemPath;
 	var panel = this.getPanel(path.get(0));
 	var c     = panel.cc[path.get(1)];
@@ -292,7 +294,7 @@ Cockpit.prototype.actionstop = function(p, shift, ctrl) {
 /**
 | Mouse button down event.
 */
-Cockpit.prototype.mousedown = function(p, shift, ctrl) {
+Board.prototype.mousedown = function(p, shift, ctrl) {
 	var r;
 	if (this.$showHelp) {
 		r = this.getPanel('HelpPanel').mousedown(p, shift. ctrl);
@@ -308,7 +310,7 @@ Cockpit.prototype.mousedown = function(p, shift, ctrl) {
 /**
 | Returns an entity by its path.
 */
-Cockpit.prototype.getEntity = function(path) {
+Board.prototype.getEntity = function(path) {
 	var panel = this.getPanel(path.get(0));
 	return panel.cc[path.get(1)];
 };
@@ -316,7 +318,7 @@ Cockpit.prototype.getEntity = function(path) {
 /**
 | Shows or hides the help panel.
 */
-Cockpit.prototype.setShowHelp = function(showHelp) {
+Board.prototype.setShowHelp = function(showHelp) {
 	if (this.$showHelp === showHelp) { return; }
 	this.$showHelp = showHelp;
 

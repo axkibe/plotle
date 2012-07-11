@@ -66,7 +66,7 @@ subclass(MBRightB, Button);
 | TODO
 */
 MBRightB.prototype.push = function(p, shift, ctrl) {
-	this.panel.cockpit.setShowHelp(!this.$active);
+	this.panel.board.setShowHelp(!this.$active);
 	shell.redraw = true;
 };
 

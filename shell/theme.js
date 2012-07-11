@@ -115,8 +115,8 @@ theme = {
 		createOffset : { x: 27, y: 12 }
 	},
 
-	// menu at the bottom of cockpit
-	cockpit : {
+	// menu at the bottom of dash(board)
+	dash : {
 		style : {
 			fill : {
 				gradient : 'radial',

@@ -28,8 +28,8 @@
 /**
 | Imports
 */
-var Cockpit;
 var config;
+var Dash;
 var Fabric;
 var Jools;
 var Point;
@@ -248,7 +248,7 @@ SwitchPanel.prototype._weave = function() {
 
 	if (config.debug.drawBoxes) {
 		fabric.paint(
-			Cockpit.styles.boxes,
+			Dash.Board.styles.boxes,
 			new Rect(iframe.pnw, iframe.pse.sub(1, 1)),
 			'path',
 			View.proper

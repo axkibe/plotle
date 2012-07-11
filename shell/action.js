@@ -79,9 +79,9 @@ Action = function(args) {
 	this.visec = args[1];
 
 	switch (this.visec) {
-	case 'space'   : break;
-	case 'cockpit' : break;
-	default        : throw new Error('invalid visec');
+	case 'space' : break;
+	case 'dash'  : break;
+	default      : throw new Error('invalid visec');
 	}
 
 	for(var a = 2, aZ = args.length; a < aZ; a += 2) {

@@ -327,7 +327,7 @@ Server.prototype.addResources = function() {
 		'shell/ccode/rbregb.js',                            'fb',
 		'shell/ccode/hbhideb.js',                           'fb',
 		'shell/switchpanel.js',                             'fb',
-		'shell/cockpit.js',                                 'fb',
+		'shell/dash/board.js',                              'fb',
 		'shell/action.js',                                  'fb',
 		'shell/ovalmenu.js',                                'fb',
 		'shell/visual/para.js',                             'fb',

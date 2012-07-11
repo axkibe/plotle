@@ -79,7 +79,7 @@ var forgotBYM       = forgotBH * magic;
 */
 var LoginPanel = Design.LoginPanel = { type   : 'Design' };
 
-LoginPanel.style = 'cockpit';
+LoginPanel.style = 'panel';
 
 LoginPanel.frame = {
 	type  : 'Frame',

@@ -60,8 +60,8 @@ var subclass = Jools.subclass;
 /**
 | Constructor
 */
-HelpPanel = function(name, inherit, cockpit, screensize) {
-	Panel.call(this, name, inherit, cockpit, screensize);
+HelpPanel = function(name, inherit, board, screensize) {
+	Panel.call(this, name, inherit, board, screensize);
 	this.$access = inherit ? inherit.$access : 'rw';
 };
 subclass(HelpPanel, Panel);

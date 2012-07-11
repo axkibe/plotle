@@ -59,8 +59,8 @@ var subclass = Jools.subclass;
 /**
 | Constructor
 */
-MainPanel = function(name, inherit, cockpit, screensize) {
-	Panel.call(this, name, inherit, cockpit, screensize);
+MainPanel = function(name, inherit, board, screensize) {
+	Panel.call(this, name, inherit, board, screensize);
 	this.$spaceName = inherit ? inherit.$spaceName : null;
 	this.$userName  = inherit ? inherit.$userName  : null;
 };
