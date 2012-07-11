@@ -505,6 +505,7 @@ System.prototype._releaseEvents = function() {
 */
 System.prototype._specialKey = function(keyCode, shift, ctrl) {
 	var key = null;
+	console.log(keyCode);
 	if (ctrl) {
 		switch(keyCode) {
 		case 65  : key = 'a'; break;
@@ -518,6 +519,7 @@ System.prototype._specialKey = function(keyCode, shift, ctrl) {
 		case  8 : key = 'backspace'; break;
 		case  9 : key = 'tab';       break;
 		case 13 : key = 'enter';     break;
+		case 27 : key = 'esc';       break;
 		case 33 : key = 'pageup';    break;
 		case 34 : key = 'pagedown';  break;
 		case 35 : key = 'end';       break;
