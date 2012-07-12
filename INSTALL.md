@@ -47,10 +47,10 @@ screen
 ./run
 ```
 
-* If not skipped the screen, you can detach the screen with CTRL+A D
+* If you did not skip ```screen```, you can detach the screen with CTRL+A D
 
-* Take your browser and surf to it, assuming you left the default settings this will be: ```http://localhost:8833/```
+* Take your browser and surf to ```http://localhost:8833/``` (assuming default settings)
 
-* Register your admin user using your own invite code. The admin user is the only one who can edit the "welcome" space.
+* Register your admin user with your invite code. The admin user is the only one who can edit the "welcome" space.
 
 * Done!

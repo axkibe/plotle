@@ -63,8 +63,7 @@ config.database.name = 'meshcraft02';
 | development mode
 |    none, shell, server or both.
 |
-| thismeans how much checking and complaining is going to happen
-| if things do not match.
+| determines the amound of checking and complaining if things go wrong.
 |
 | For example, if the server is in devel mode,
 | it will die on a command it considers unacceptable.
