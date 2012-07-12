@@ -54,3 +54,5 @@ screen
 * Register your admin user with your invite code. The admin user is the only one who can edit the "welcome" space.
 
 * Done!
+
+Note that http://localhost:8833/devel.html serves a non-compressed version of the shell, useful for debugging. This one is also not cached so that always the newest version on disc will be delivered.
