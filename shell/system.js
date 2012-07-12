@@ -505,7 +505,6 @@ System.prototype._releaseEvents = function() {
 */
 System.prototype._specialKey = function(keyCode, shift, ctrl) {
 	var key = null;
-	console.log(keyCode);
 	if (ctrl) {
 		switch(keyCode) {
 		case 65  : key = 'a'; break;
