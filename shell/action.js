@@ -80,7 +80,7 @@ Action = function(args) {
 
 	switch (this.visec) {
 	case 'space' : break;
-	case 'dash'  : break;
+	case 'board' : break;
 	default      : throw new Error('invalid visec');
 	}
 

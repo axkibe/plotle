@@ -76,12 +76,12 @@ var log           = Jools.log;
 */
 Caret = function(visec, sign, retainx, shown) {
 	// the section the caret is in
-	//   space or dash(board).
+	//   space or board.
 	this.visec = visec;
 
-	// if visec === 'space':
+	// if visec === space:
 	//     a signature pointing to the item the caret is in
-	// if visec === 'dash':
+	// if visec === board:
 	//     the panel and the component
 	this.sign = sign;
 
@@ -144,7 +144,7 @@ Caret.prototype.display = function() {
 	if (this.$shown && !this.$blinked && this.sign) {
 		switch(this.visec) {
 		case 'space' : shell.$space.drawCaret();  break;
-		case 'dash'  : shell.dash.drawCaret(); break;
+		case 'board' : shell.$board.drawCaret(); break;
 		default : throw new Error('invalid visec');
 		}
 	}

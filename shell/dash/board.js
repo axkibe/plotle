@@ -16,7 +16,7 @@
              `-^---' `-' `-^ '   `-^
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- Parent of all dashpanels.
+ Parent of all panels.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -142,7 +142,7 @@ Board.prototype.getPanel = function(name) {
 };
 
 /**
-| Returns the current dashboard panel.
+| Returns the current panel.
 */
 Board.prototype.curPanel = function() {
 	return this.getPanel(this.curPanelName);
@@ -153,7 +153,7 @@ Board.prototype.curPanel = function() {
 */
 Board.prototype.setCurPanel = function(panelName) {
 	var caret = shell.caret;
-	if (caret.visec === 'dash' &&
+	if (caret.visec === 'board' &&
 		caret.sign &&
 		caret.sign.path.get(0) === this.curPanelName)
 	{

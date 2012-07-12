@@ -120,7 +120,7 @@ Panel.prototype.newCC = function(twig, inherit, name) {
 Panel.prototype.focusedCC = function() {
 	var caret = shell.caret;
 
-	if (caret.visec !== 'dash')
+	if (caret.visec !== 'board')
 		{ return null; }
 
 	var sign = caret.sign;
@@ -334,7 +334,7 @@ Panel.prototype.setFocus = function(cname) {
 	var focus = this.focusedCC();
 	if (focus === com) { return; }
 
-	shell.setCaret('dash', {
+	shell.setCaret('board', {
 		path : new Path([this.name, cname]),
 		at1  : 0
 	});

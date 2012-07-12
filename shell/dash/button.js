@@ -16,7 +16,7 @@
            `-^---' `-^ `' `' `-' ' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- A button on a dashboard panel.
+ A button on a panel.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -92,7 +92,7 @@ var Button = Dash.Button = function(twig, panel, inherit, name) {
 };
 
 /**
-| Returns true if this dashcomponent can focus.
+| Returns true if this component can focus.
 */
 Button.prototype.canFocus = function() {
 	return this.$visible;
@@ -204,7 +204,7 @@ Button.prototype.mousedown = function(p, shift, ctrl) {
 	if (this.repeat && !this.retimer) {
 		shell.startAction(
 			Action.REBUTTON,
-			'dash',
+			'board',
 			'itemPath', this.path
 		);
 

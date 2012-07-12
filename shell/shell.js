@@ -98,18 +98,18 @@ Shell = function(fabric) {
 	Measure.setFont(20, theme.defaultFont);
 	this.$fontWatch = Measure.width('meshcraft$8833');
 
-	this.fabric     = fabric;
+	this.fabric    = fabric;
 
-	this.$space     = null;
+	this.$space    = null;
+	this.$board    = new Dash.Board();
 
-	this.dash       = new Dash.Board();
-	this.menu       = null;
+	this.menu      = null;
 
-	this.caret      = new Caret(null, null, null, false);
-	this.$action    = null;
-	this.selection  = new Selection();
+	this.caret     = new Caret(null, null, null, false);
+	this.$action   = null;
+	this.selection = new Selection();
 
-	this.green      = false;
+	this.green     = false;
 
 	// a flag set to true if anything requests a redraw.
 	this.redraw = false;
@@ -124,7 +124,7 @@ Shell.prototype.setCaret = function(visec, sign, retainx) {
 	case null :
 		if (sign !== null) { throw new Error('setCaret visec=null, invalid sign'); }
 		break;
-	case 'dash'  :
+	case 'board'  :
 	case 'space' :
 		switch(sign && sign.constructor) {
 		case null   : break;
@@ -167,7 +167,7 @@ Shell.prototype.setCaret = function(visec, sign, retainx) {
 */
 Shell.prototype.getEntity = function(visec, path) {
 	switch(visec) {
-	case 'dash'  : return this.dash.  getEntity(path);
+	case 'board' : return this.$board.getEntity(path);
 	case 'space' : return this.$space.getEntity(path);
 	default : throw new Error('Invalid visec: '+visec);
 	}
@@ -178,9 +178,9 @@ Shell.prototype.getEntity = function(visec, path) {
 */
 Shell.prototype.messageRCV = function(space, user, message) {
 	if (user) {
-		this.dash.message(user + ': ' + message);
+		this.$board.message(user + ': ' + message);
 	} else {
-		this.dash.message(message);
+		this.$board.message(message);
 	}
 	this.poke();
 };
@@ -283,7 +283,7 @@ Shell.prototype.knock = function() {
 	this.caret.$screenPos = null;
 
 	if (this.$space) { this.$space.knock(); }
-	this.dash.knock();
+	this.$board.knock();
 	if (this.menu) { this.menu.knock(); }
 
 	this._draw();
@@ -354,7 +354,7 @@ Shell.prototype._draw = function() {
 	this.caret.$screenPos = null;
 
 	if (this.$space) { this.$space.draw(); }
-	this.dash.draw();
+	this.$board.draw();
 	if (this.menu) { this.menu.draw(View.proper); }
 
 	this.caret.display();
@@ -367,9 +367,7 @@ Shell.prototype._draw = function() {
 */
 Shell.prototype.click = function(p, shift, ctrl) {
 	if (this.green) { return; }
-
-	// TODO dashboard
-
+	// TODO board
 	if (this.$space) { this.$space.click(p, shift, ctrl); }
 	if (this.redraw) { this._draw(); }
 };
@@ -391,9 +389,9 @@ Shell.prototype.mousehover = function(p, shift, ctrl) {
 
 
 	if (cursor)
-		{ this.dash.mousehover(null, shift, ctrl); }
+		{ this.$board.mousehover(null, shift, ctrl); }
 	else
-		{ cursor = this.dash.mousehover(p, shift, ctrl); }
+		{ cursor = this.$board.mousehover(p, shift, ctrl); }
 
 	if (this.$space) {
 		if (cursor)
@@ -403,7 +401,7 @@ Shell.prototype.mousehover = function(p, shift, ctrl) {
 	}
 
 	if (this.redraw) { this._draw(); }
-	
+
 	return cursor;
 };
 
@@ -432,7 +430,7 @@ Shell.prototype.mousedown = function(p, shift, ctrl) {
 		{ mouseState = this.menu.mousedown(View.proper, p, shift, ctrl); }
 
 	if (mouseState === null)
-		{ mouseState = this.dash.mousedown(p, shift, ctrl); }
+		{ mouseState = this.$board.mousedown(p, shift, ctrl); }
 
 	if (mouseState === null && this.$space)
 		{ mouseState = this.$space.mousedown(p, shift, ctrl); }
@@ -449,7 +447,7 @@ Shell.prototype.dragstart = function(p, shift, ctrl) {
 	if (this.green)
 		{ return; }
 
-	var cursor = this.dash.dragstart(p, shift, ctrl);
+	var cursor = this.$board.dragstart(p, shift, ctrl);
 
 	if (cursor === null && this.$space)
 		{ cursor = this.$space.dragstart(p, shift, ctrl); }
@@ -475,8 +473,8 @@ Shell.prototype.dragmove = function(p, shift, ctrl) {
 	var cursor = null;
 
 	switch ($action.visec) {
-	case 'dash' :
-		cursor = this.dash.actionmove(p, shift, ctrl);
+	case 'board' :
+		cursor = this.$board.actionmove(p, shift, ctrl);
 		break;
 	case 'space' :
 		if (this.$space)
@@ -503,8 +501,8 @@ Shell.prototype.dragstop = function(p, shift, ctrl) {
 		{ throw new Error('no action on dragstop'); }
 
 	switch($action.visec) {
-	case 'dash' :
-		this.dash.actionstop(p, shift, ctrl);
+	case 'board' :
+		this.$board.actionstop(p, shift, ctrl);
 		break;
 	case 'space' :
 		if (this.$space)
@@ -525,7 +523,7 @@ Shell.prototype.mousewheel = function(p, dir, shift, ctrl) {
 	if (this.green)
 		{ return; }
 
-	// dashboard?
+	// board?
 
 	if (this.$space)
 		{ this.$space.mousewheel(p, dir, shift, ctrl); }
@@ -544,8 +542,8 @@ Shell.prototype.specialKey = function(key, shift, ctrl) {
 
 	var caret  = this.caret;
 	switch (caret.visec) {
-	case 'dash' :
-		this.dash.specialKey(key, shift, ctrl);
+	case 'board' :
+		this.$board.specialKey(key, shift, ctrl);
 		break;
 	case null    :
 	case 'space' :
@@ -571,8 +569,8 @@ Shell.prototype.input = function(text) {
 	var caret  = this.caret;
 	switch (caret.visec) {
 	case null : break;
-	case 'dash'  : this.dash.input(text);    break;
-	case 'space' : this. $space.input(text); break;
+	case 'board' : this.$board.input(text); break;
+	case 'space' : this.$space.input(text); break;
 	default : throw new Error('invalid visec');
 	}
 	if (this.redraw) this._draw();
@@ -590,7 +588,7 @@ Shell.prototype.resize = function(width, height) {
 */
 Shell.prototype.setUser = function(user, pass) {
 	this.$user = user;
-	this.dash.setUser(user);
+	this.$board.setUser(user);
 	this.peer.setUser(user, pass);
 
 	if (user.substr(0, 5) !== 'visit') {
@@ -612,7 +610,7 @@ Shell.prototype.setUser = function(user, pass) {
 | Sets the space zoom factor.
 */
 Shell.prototype.setSpaceZoom = function(zf) {
-	this.dash.setSpaceZoom(zf);
+	this.$board.setSpaceZoom(zf);
 };
 
 /**
@@ -659,10 +657,10 @@ Shell.prototype.moveToSpace = function(name) {
 			(name !== 'welcome' && name !== 'help')
 		) { name = 'welcome'; }
 	} else {
-		self.dash.message('Moving to "' + name + '" ...');
+		self.$board.message('Moving to "' + name + '" ...');
 	}
 
-	self.dash.setCurSpace('', '');
+	self.$board.setCurSpace('', '');
 	this.peer.aquireSpace(name, function(err, val) {
 		if (err !== null) {
 			self.greenscreen('Cannot aquire space: ' + err.message);
@@ -678,8 +676,8 @@ Shell.prototype.moveToSpace = function(name) {
 			new Path([name]),
 			val.access
 		);
-		self.dash.setCurSpace(name, val.access);
-		self.dash.setSpaceZoom(0);
+		self.$board.setCurSpace(name, val.access);
+		self.$board.setSpaceZoom(0);
 		self._draw();
 	});
 };

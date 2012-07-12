@@ -213,7 +213,7 @@ Chat.prototype.input = function(text) {
 	var at1   = csign.at1;
 
 	this.itext = itext.substring(0, at1) + text + itext.substring(at1);
-	shell.setCaret('dash', {
+	shell.setCaret('board', {
 		path : csign.path,
 		at1  : at1 + text.length
 	});
@@ -230,7 +230,7 @@ Chat.prototype.keyBackspace = function() {
 	var at1   = csign.at1;
 	if (at1 <= 0) return false;
 	this.itext = this.itext.substring(0, at1 - 1) + this.itext.substring(at1);
-	shell.setCaret('dash', {
+	shell.setCaret('board', {
 		path : csign.path,
 		at1  : csign.at1 - 1
 	});
@@ -265,7 +265,7 @@ Chat.prototype.keyEnd = function() {
 	var csign = caret.sign;
 	var at1   = csign.at1;
 	if (at1 >= this.itext.length) return false;
-	shell.setCaret('dash', {
+	shell.setCaret('board', {
 		path : csign.path,
 		at1  : this.itext.length
 	});
@@ -283,7 +283,7 @@ Chat.prototype.keyEnter = function() {
 	shell.peer.sendMessage(this.itext);
 //	this.addMessage(this.itext);
 	this.itext = '';
-	shell.setCaret('dash', {
+	shell.setCaret('board', {
 		path : csign.path,
 		at1  : 0
 	});
@@ -298,7 +298,7 @@ Chat.prototype.keyLeft = function() {
 	var caret = shell.caret;
 	var csign = caret.sign;
 	if (csign.at1 <= 0) return false;
-	shell.setCaret('dash', {
+	shell.setCaret('board', {
 		path : csign.path,
 		at1  : csign.at1 - 1
 	});
@@ -312,7 +312,7 @@ Chat.prototype.keyPos1 = function() {
 	var caret = shell.caret;
 	var csign = caret.sign;
 	if (csign.at1 <= 0) return false;
-	shell.setCaret('dash', {
+	shell.setCaret('board', {
 		path : csign.path,
 		at1  : 0
 	});
@@ -326,7 +326,7 @@ Chat.prototype.keyRight = function() {
 	var caret = shell.caret;
 	var csign = caret.sign;
 	if (csign.at1 >= this.itext.length) return false;
-	shell.setCaret('dash', {
+	shell.setCaret('board', {
 		path : csign.path,
 		at1  : csign.at1 + 1
 	});
@@ -358,7 +358,7 @@ Chat.prototype.mousedown = function(p, shift, ctrl) {
 	if (!fabric.within(this, 'pathILine', View.proper, pp))
 		{ return null; }
 
-	shell.setCaret('dash', {
+	shell.setCaret('board', {
 		path : new Path([this.panel.name, this.name]),
 		at1  : this.itext.length
 	});
