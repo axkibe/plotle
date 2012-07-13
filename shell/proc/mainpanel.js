@@ -1,29 +1,34 @@
-/**                                                      _.._
-                                                      .-'_.._''.
- __  __   ___       _....._              .          .' .'     '.\
-|  |/  `.'   `.   .'       '.          .'|         / .'                                _.._
-|   .-.  .-.   ' /   .-'"'.  \        (  |        . '            .-,.-~.             .' .._|    .|
-|  |  |  |  |  |/   /______\  |        | |        | |            |  .-. |    __      | '      .' |_
-|  |  |  |  |  ||   __________|    _   | | .'''-. | |            | |  | | .:-`.'.  __| |__  .'     |
-|  |  |  |  |  |\  (          '  .' |  | |/.'''. \. '            | |  | |/ |   \ ||__   __|'-..  .-'
-|  |  |  |  |  | \  '-.___..-~. .   | /|  /    | | \ '.         .| |  '- `" __ | |   | |      |  |
-|__|  |__|  |__|  `         .'.'.'| |//| |     | |  '. `.____.-'/| |      .'.''| |   | |      |  |
-                   `'-.....-.'.'.-'  / | |     | |    `-._____ / | |     / /   | |_  | |      |  '.'
-                                 \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
-                                       '___)   '___)                      `~~'  `"   |_|      `--'
+/**                            .----.          _..._
+                              .  _   \      .-'_..._''.
+ _____   _..._               /  ' '.  \   .' .'      '.\
+\     |.'     '-.           .  '    \  ' / .'
+ \     .'```'.   '. .-,.--. |  '     | '' '
+  \   |       \   ||  .-. |\   \     ' /| |
+   |  |        |  || |  | | `.  ` ..' / | |
+   |   \      /  . | |  | |   '-...-'`  . '
+   |  |\`'-.-'  .' | |  '-               \ '.          .
+   |  | '-....-'   | |                    '. `._____.-'/
+  .'  '.           | |                      `-.______./
+  '----'           '-'
 
-                          ,-,-,-.            .-,--.             .
-                          `,| | |   ,-. . ,-. '|__/ ,-. ,-. ,-. |
-                            | ; | . ,-| | | | ,|    ,-| | | |-' |
-                            '   `-' `-^ ' ' ' `'    `-^ ' ' `-' `'
+        ,-,-,-.            .-,--.             .
+        `,| | |   ,-. . ,-. '|__/ ,-. ,-. ,-. |
+          | ; | . ,-| | | | ,|    ,-| | | |-' |
+          '   `-' `-^ ' ' ' `'    `-^ ' ' `-' `'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- the dashboard's mainboard.
+ the dashboard's main panel.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+/**
+| Export
+*/
+var Proc;
+Proc = Proc || {};
 
 /**
 | Imports
@@ -37,34 +42,21 @@ var SwitchPanel;
 var theme;
 
 /**
-| Exports
-*/
-var MainPanel = null;
-
-/**
 | Capsule
 */
 (function(){
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
-var debug    = Jools.debug;
-var half     = Jools.half;
-var immute   = Jools.immute;
-var is       = Jools.is;
-var isnon    = Jools.isnon;
-var Panel    = Dash.Panel;
-var subclass = Jools.subclass;
-
 /**
 | Constructor
 */
-MainPanel = function(name, inherit, board, screensize) {
-	Panel.call(this, name, inherit, board, screensize);
+var MainPanel = Proc.MainPanel = function(name, inherit, board, screensize) {
+	Dash.Panel.call(this, name, inherit, board, screensize);
 	this.$spaceName = inherit ? inherit.$spaceName : null;
 	this.$userName  = inherit ? inherit.$userName  : null;
 };
-subclass(MainPanel, Panel);
+Jools.subclass(MainPanel, Dash.Panel);
 
 
 MainPanel.prototype.getSwitchPanel = function() {
@@ -80,7 +72,7 @@ MainPanel.prototype.getSwitchPanel = function() {
 	}
 
 	return this.$switchPanel = new SwitchPanel(this, current, this.$userName, new Point(
-		half(this.screensize.x) - swidim.a,
+		Jools.half(this.screensize.x) - swidim.a,
 		this.screensize.y- 59
 	));
 };
@@ -157,7 +149,7 @@ MainPanel.prototype.mousedown = function(p, shift, ctrl) {
 		if (res !== null) { return res; }
 	}
 
-	return Panel.prototype.mousedown.call(this, p, shift, ctrl);
+	return Dash.Panel.prototype.mousedown.call(this, p, shift, ctrl);
 };
 
 /**
@@ -165,7 +157,7 @@ MainPanel.prototype.mousedown = function(p, shift, ctrl) {
 */
 MainPanel.prototype.knock = function() {
 	this.getSwitchPanel().knock();
-	Panel.prototype.poke.call(this);
+	Dash.Panel.prototype.poke.call(this);
 };
 
 /**
@@ -184,7 +176,7 @@ MainPanel.prototype.mousehover = function(p, shift, ctrl) {
 		}
 	}
 
-	return Panel.prototype.mousehover.call(this, p, shift, ctrl);
+	return Dash.Panel.prototype.mousehover.call(this, p, shift, ctrl);
 };
 
 /**

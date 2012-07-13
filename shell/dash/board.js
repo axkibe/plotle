@@ -35,9 +35,7 @@ Dash = Dash || {};
 var Curve;
 var Design;
 var Fabric;
-var HelpPanel;
 var Jools;
-var MainPanel;
 var Path;
 var Point;
 var shell;
@@ -56,13 +54,7 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Shortcuts.
 */
-var debug         = Jools.debug;
-var immute        = Jools.immute;
-var is            = Jools.is;
-var isnon         = Jools.isnon;
-var log           = Jools.log;
-var Panel         = Dash.Panel;
-var subclass      = Jools.subclass;
+var is = Jools.is;
 
 /**
 | Constructor
@@ -126,9 +118,9 @@ Board.prototype.getPanel = function(name) {
 
 	var Proto;
 	switch(name) {
-	case 'MainPanel' : Proto = MainPanel; break;
-	case 'HelpPanel' : Proto = HelpPanel; break;
-	default          : Proto = Panel;     break;
+	case 'MainPanel' : Proto = Proc.MainPanel; break;
+	case 'HelpPanel' : Proto = Proc.HelpPanel; break;
+	default          : Proto = Dash.Panel;     break;
 	}
 
 	var panel = new Proto(
@@ -229,7 +221,7 @@ Board.prototype.knock = function() {
 Board.prototype.drawCaret = function() {
 	var caret = shell.caret;
 	if (caret.sign.path.get(0) !== this.curPanelName) {
-		log('fail', 'Caret path(0) !== this.curPanelName');
+		Jools.log('fail', 'Caret path(0) !== this.curPanelName');
 		return;
 	}
 	this.curPanel().drawCaret(View.proper);

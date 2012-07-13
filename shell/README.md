@@ -6,10 +6,6 @@ Subdirs
 =======
 <table>
 
- <tr><td>   ccode
-</td><td>   behavior code of dashboard components
-</td></tr>
-
  <tr><td>   dash
 </td><td>   the dashboard
 </td></tr>
@@ -24,6 +20,10 @@ Subdirs
 
  <tr><td>   fonts
 </td><td>   embedded fonts
+</td></tr>
+
+ <tr><td>   proc
+</td><td>   special procedures for dashboard components
 </td></tr>
 
  <tr><td>   visual

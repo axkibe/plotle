@@ -32,13 +32,13 @@ Dash = Dash || {};
 /**
 | Imports
 */
-var CCode;
 var config;
 var Curve;
 var Design;
 var Fabric;
 var Jools;
 var Path;
+var Proc;
 var Point;
 var Rect;
 var shell;
@@ -97,7 +97,7 @@ var Panel = Dash.Panel = function(name, inherit, board, screensize) {
 */
 Panel.prototype.newCC = function(twig, inherit, name) {
 	if (twig.code && twig.code !== '') {
-		var Proto = CCode[twig.code];
+		var Proto = Proc[twig.code];
 		if (Proto) {
 			return new Proto(twig, this, inherit, name);
 		} else {
