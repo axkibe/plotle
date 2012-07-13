@@ -12,7 +12,6 @@ Meshcraft
 	   |  | '-....-'   | |                    '. `._____.-'/
 	  .'  '.           | |                      `-.______./
 	  '----'           '-'
-```
 
 Behavior code of the dashboard components.
 
