@@ -90,7 +90,7 @@ Relation.create = function(space, vitem1, vitem2) {
 		vitem2.key
 	);
 	// event listener has created the vrel
-	var vrel = space.$graph[key];
+	var vrel = space.$sub[key];
 	space.setFocus(vrel);
 };
 
@@ -99,8 +99,8 @@ Relation.create = function(space, vitem1, vitem2) {
 */
 Relation.prototype.draw = function(fabric, view) {
 	var space = shell.$space.get(this.path, -1);
-	var vitem1 = space.$graph[this.twig.item1key];
-	var vitem2 = space.$graph[this.twig.item2key];
+	var vitem1 = space.$sub[this.twig.item1key];
+	var vitem2 = space.$sub[this.twig.item2key];
 	var zone = this.getZone();
 
 	if (vitem1) {

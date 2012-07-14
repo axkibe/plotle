@@ -68,8 +68,8 @@ var subclass  = Jools.subclass;
 var Doc = Visual.Doc = function(twig, path) {
 	Visual.Base.call(this, twig, path);
 
-	if (this.$graph !== null) { throw new Error('iFail'); }
-	var g = this.$graph = [];
+	if (this.$sub !== null) { throw new Error('iFail'); }
+	var $sub = this.$sub = [];
 
 	this.pnws = null;
 
@@ -78,7 +78,7 @@ var Doc = Visual.Doc = function(twig, path) {
 	for (var r = 0, rZ = twig.length; r < rZ; r++) {
 		var k = ranks[r];
 		// TODO reuse path
-		g[k] = new Para(copse[k], new Path(path, '++', k));
+		$sub[k] = new Para(copse[k], new Path(path, '++', k));
 	}
 };
 subclass(Doc, Visual.Base);
@@ -87,7 +87,7 @@ subclass(Doc, Visual.Base);
 | Returns the vtwig at rank 'rank'.
 */
 Doc.prototype.atRank = function(rank) {
-	return this.$graph[this.twig.ranks[rank]];
+	return this.$sub[this.twig.ranks[rank]];
 };
 
 /**
@@ -95,21 +95,21 @@ Doc.prototype.atRank = function(rank) {
 */
 Doc.prototype.update = function(twig) {
 	this.twig = twig;
-	var gold = this.$graph;
-	var g    = this.$graph = {};
+	var $old  = this.$sub;
+	var $sub  = this.$sub = {};
 	var copse = twig.copse;
 	for(var k in copse) {
-		var sub = twig.copse[k];
-		var o = gold[k];
+		var s = twig.copse[k];
+		var o = $old[k];
 		if (is(o)) {
-			if (o.twig !== sub) {
-				o.update(sub);
+			if (o.twig !== s) {
+				o.update(s);
 			}
-			g[k] = o;
+			$sub[k] = o;
 		} else {
-			o = new Para(sub, new Path(this.path, '++', k));
-			o.update(sub);
-			g[k] = o;
+			o = new Para(s, new Path(this.path, '++', k));
+			o.update(s);
+			$sub[k] = o;
 		}
 	}
 };
@@ -182,7 +182,7 @@ Doc.prototype.getHeight = function() {
 	var fontsize = this.getFontSize();
 	var paraSep  = this.getParaSep();
 	var twig     = this.twig;
-	var g        = this.$graph;
+
 	var height   = 0;
 	for (var r = 0, rZ = twig.length; r < rZ; r++) {
 		var vpara = this.atRank(r);
@@ -237,13 +237,13 @@ Doc.prototype.getFont = function() {
 | Returns the paragraph at point
 */
 Doc.prototype.getParaAtPoint = function(p) {
-	var twig   = this.twig;
-	var g      = this.$graph;
+	var twig = this.twig;
+	var $sub = this.$sub;
 
 	for(var r = 0, rZ = twig.length; r < rZ; r++) {
 		// TODO beautify
 		var k = twig.ranks[r];
-		var vpara = g[k];
+		var vpara = $sub[k];
 		var flow = vpara.getFlow();
 		var pnw = this.pnws[k];
 		if (p.y < pnw.y + flow.height) return vpara;
@@ -275,8 +275,8 @@ Doc.prototype.pathSelection = function(fabric, border, twist, view, width, imarg
 	var pnw1 = this.getPNW(key1);
 	var pnw2 = this.getPNW(key2);
 
-	var vpara1 = this.$graph[key1];
-	var vpara2 = this.$graph[key2];
+	var vpara1 = this.$sub[key1];
+	var vpara2 = this.$sub[key2];
 
 	var p1 = vpara1.getOffsetPoint(s1.at1);
 	var p2 = vpara2.getOffsetPoint(s2.at1);

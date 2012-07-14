@@ -73,8 +73,8 @@ var subclass = Jools.subclass;
 var Space = Visual.Space = function(twig, path, access) {
 	Base.call(this, twig, path);
 
-	if (this.$graph !== null) { throw new Error('iFail'); }
-	var g = this.$graph = {};
+	if (this.$sub !== null) { throw new Error('iFail'); }
+	var g = this.$sub = {};
 
 	this.access      = access;
 	this.fabric      = system.fabric;
@@ -98,8 +98,8 @@ Space.prototype.update = function(tree, chgX) {
 
 	this.twig = twig;
 
-	var gold = this.$graph;
-	var g    = this.$graph = {};
+	var gold = this.$sub;
+	var g    = this.$sub = {};
 	var copse = twig.copse;
 	for(var k in copse) {
 		var sub = twig.copse[k];
@@ -143,7 +143,7 @@ Space.prototype.getEntity = function(path) {
 			path.get(0), '!=', this.key
 		);
 	}
-	return this.$graph[path.get(1)] || null;
+	return this.$sub[path.get(1)] || null;
 };
 
 /**
@@ -221,7 +221,7 @@ Space.prototype.setFocus = function(item) {
 	var caret = shell.caret;
 
 	if (item) {
-		var doc = item.$graph.doc;
+		var doc = item.$sub.doc;
 
 		caret = shell.setCaret(
 			'space',
@@ -471,18 +471,18 @@ Space.prototype.floatMenuSelect = function(entry, p) {
 		var dp = $view.depoint(p);
 		pnw = dp.sub(half(nw) , half(nh));
 		key = shell.peer.newNote(this.path, new Rect(pnw, pnw.add(nw, nh)));
-		this.setFocus(this.$graph[key]);
+		this.setFocus(this.$sub[key]);
 		break;
 	case 'ne' :
 		// label
 		pnw = $view.depoint(p);
 		pnw = pnw.sub(theme.label.createOffset);
 		key = shell.peer.newLabel(this.path, pnw, 'Label', 20);
-		this.setFocus(this.$graph[key]);
+		this.setFocus(this.$sub[key]);
 		break;
 	}
 };
-		
+
 /**
 | An entry of the item menu has been selected
 */
@@ -564,7 +564,7 @@ Space.prototype.specialKey = function(key, shift, ctrl) {
 		case '.' : this.changeZoom(-1); return;
 		}
 	}
-	
+
 	var caret = shell.caret;
 	if (!caret.sign) return;
 	this.get(caret.sign.path, -1).specialKey(key, shift, ctrl);
@@ -585,7 +585,7 @@ Space.prototype.get = function(path, plen) {
 
 	var node = this;
 	for (var a = 1; a < plen; a++) {
-		node = node.$graph[path.get(a)];
+		node = node.$sub[path.get(a)];
 	}
 	return node;
 };

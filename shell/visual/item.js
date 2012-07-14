@@ -69,8 +69,8 @@ var ro       = Math.round;
 var Item = Visual.Item = function(twig, path) {
 	Base.call(this, twig, path);
 
-	if (this.$graph !== null) { throw new Error('iFail'); }
-	this.$graph      = {
+	if (this.$sub !== null) { throw new Error('iFail'); }
+	this.$sub = {
 		doc : new Doc(twig.doc, new Path(path, '++', 'doc'))
 	};
 
@@ -82,13 +82,13 @@ subclass(Item, Base);
 
 
 /**
-| Updates the $graph to match a new twig.
+| Updates the $sub to match a new twig.
 */
 Item.prototype.update = function(twig) {
 	this.twig    = twig;
 	this.$fabric = null;
 
-	var doc = this.$graph.doc;
+	var doc = this.$sub.doc;
 	if (doc.twig !== twig.doc) {
 		doc.update(twig.doc);
 	}
@@ -277,7 +277,7 @@ Item.prototype.drawHandles = function(fabric, view) {
 Item.prototype.getParaAtPoint = function(p) {
 	// TODO rename imargin to innerMargin
 	if (p.y < this.imargin.n) return null;
-	return this.$graph.doc.getParaAtPoint(p);
+	return this.$sub.doc.getParaAtPoint(p);
 };
 
 /**
@@ -431,7 +431,7 @@ Item.prototype.click = function(view, p) {
 
 	var para = this.getParaAtPoint(pi);
 	if (para) {
-		var ppnw   = this.$graph.doc.getPNW(para.key);
+		var ppnw   = this.$sub.doc.getPNW(para.key);
 		var at1    = para.getPointOffset(pi.sub(ppnw));
 		var caret  = shell.caret;
 
@@ -472,7 +472,7 @@ Item.prototype.poke = function() {
 */
 Item.prototype.knock = function() {
 	this.$fabric = null;
-	this.$graph.doc.knock();
+	this.$sub.doc.knock();
 };
 
 })();

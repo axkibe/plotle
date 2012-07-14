@@ -132,7 +132,7 @@ Label.prototype.draw = function(fabric, view) {
 	{
 		f = this.$fabric = new Fabric(zone.width, zone.height);
 		f.$zoom     = view.zoom;
-		var doc     = this.$graph.doc;
+		var doc     = this.$sub.doc;
 		var imargin = this.imargin;
 
 		// resizes the canvas
@@ -206,7 +206,7 @@ Label.prototype.getZone = function() {
 	var pnw = this.twig.pnw;
 
 	// TODO Caching!
-	var doc    = this.$graph.doc;
+	var doc    = this.$sub.doc;
 	var fs     = doc.getFontSize();
 	var width  = max(Math.ceil(doc.getSpread()), ro(fs * 0.3));
 	var height = max(Math.ceil(doc.getHeight()), ro(fs));
@@ -251,7 +251,7 @@ Label.prototype.actionstop = function(view, p) {
 	case Action.ITEMDRAG :
 	case Action.ITEMRESIZE :
 		var zone = this.getZone();
-		var fontsize = this.$graph.doc.getFontSize();
+		var fontsize = this.$sub.doc.getFontSize();
 
 		if (!this.twig.pnw.eq(zone.pnw)) {
 			shell.peer.setPNW(this.path, zone.pnw);

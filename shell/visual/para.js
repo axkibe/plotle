@@ -139,7 +139,7 @@ Para.prototype.drawCaret = function(view) {
 
 	var caret = shell.caret;
 	var item  = shell.$space.get(this.path, -2);
-	var doc   = item.$graph.doc;
+	var doc   = item.$sub.doc;
 	var zone  = item.getZone();
 	var cpos  = caret.$pos  = this.getCaretPos();
 	var pnw   = doc.getPNW(this.key);
@@ -174,7 +174,7 @@ Para.prototype.drawCaret = function(view) {
 Para.prototype.getCaretPos = function() {
 	var caret   = shell.caret;
 	var item    = shell.$space.get(this.path, -2);
-	var doc     = item.$graph.doc;
+	var doc     = item.$sub.doc;
 	var fs      = doc.getFontSize();
 	var descend = fs * theme.bottombox;
 	var p       = this.getOffsetPoint(shell.caret.sign.at1, shell.caret);
@@ -192,7 +192,7 @@ Para.prototype.getCaretPos = function() {
 */
 Para.prototype.getFlow = function() {
 	var item      = shell.$space.get(this.path, -2);
-	var doc       = item.$graph.doc;
+	var doc       = item.$sub.doc;
 	var flowWidth = item.getFlowWidth();
 	var fontsize  = doc.getFontSize();
 
@@ -386,7 +386,7 @@ Para.prototype.input = function(text) {
     var reg   = /([^\n]+)(\n?)/g;
 	var para  = this;
 	var item  = shell.$space.get(para.path, -2);
-	var doc   = item.$graph.doc;
+	var doc   = item.$sub.doc;
 
     for(var rx = reg.exec(text); rx !== null; rx = reg.exec(text)) {
 		var line = rx[1];
@@ -634,7 +634,7 @@ Para.prototype.specialKey = function(key, shift, ctrl) {
 	var para   = this.para;
 	var select = shell.selection;
 	var item   = shell.$space.get(this.path, -2);
-	var doc    = item.$graph.doc;
+	var doc    = item.$sub.doc;
 
 	// if true the caret moved or the selection changed
 	var show   = false;

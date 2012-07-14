@@ -136,7 +136,7 @@ Note.prototype.setScrollbar = function(pos) {
 	sbary.setPos(
 		pos,
 		zone.height - this.imargin.y,
-		this.$graph.doc.getHeight(),
+		this.$sub.doc.getHeight(),
 		Point.renew(zone.pse.x, zone.pnw.y + theme.scrollbar.vdis, sbary.pnw),
 		zone.height - theme.scrollbar.vdis * 2
 	);
@@ -152,7 +152,7 @@ Note.prototype.scrollCaretIntoView = function() {
 	var para   = shell.$space.get(caret.sign.path, -1);
 	if (para.constructor !== Para) { throw new Error('iFail'); }
 	var cp      = para.getCaretPos();
-	var pnw     = this.$graph.doc.getPNW(para.key);
+	var pnw     = this.$sub.doc.getPNW(para.key);
 	var zone    = this.getZone();
 	var imargin = this.imargin;
 
@@ -172,7 +172,7 @@ Note.prototype.scrollCaretIntoView = function() {
 Note.prototype.scrollPage = function(up) {
 	var zone = this.getZone();
 	var dir  = up ? -1 : 1;
-	var fs   = this.$graph.doc.getFontSize();
+	var fs   = this.$sub.doc.getFontSize();
 	this.setScrollbar(this.scrollbarY.getPos() + dir * zone.height - fs * 2);
 	this.poke();
 };
@@ -222,7 +222,7 @@ Note.prototype.draw = function(fabric, view) {
 		vzone.height !== f.height)
 	{
 		f = this.$fabric = new Fabric(vzone.width, vzone.height);
-		var doc     = this.$graph.doc;
+		var doc     = this.$sub.doc;
 		var imargin = this.imargin;
 
 		// calculates if a scrollbar is needed
@@ -242,7 +242,6 @@ Note.prototype.draw = function(fabric, view) {
 		// draws the border
 		f.edge(theme.note.style.edge, silhoutte, 'path', View.proper);
 	}
-		
 
 	fabric.drawImage(f, vzone.pnw);
 

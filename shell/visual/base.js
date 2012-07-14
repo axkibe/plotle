@@ -56,29 +56,29 @@ var ro     = Math.round;
 | Constructor
 */
 Visual.Base = function(twig, path) {
-	this.twig        = twig;
-	this.path        = path;         // TODO
-	this.key         = path.get(-1); // TODO
-	this.$graph      = null;
+	this.twig = twig;
+	this.path = path;         // TODO
+	this.key  = path.get(-1); // TODO
+	this.$sub = null;
 };
 
 /**
 | Returns the visual with a given twig-rank.
 */
 Visual.Base.prototype.atRank = function(rank) {
-	return this.$graph[this.twig.ranks[rank]];
+	return this.$sub[this.twig.ranks[rank]];
 };
 
 
 /**
-| Updates the $graph to match a new twig.
+| Updates the $sub to match a new twig.
 */
 /* TODO
 Base.prototype.update = function(twig) {
 	this.twig    = twig;
 	this.$fabric = null;
 
-	var doc = this.$graph.doc;
+	var doc = this.$sub.doc;
 	if (doc.twig !== twig.doc) {
 		doc.update(twig.doc);
 	}
