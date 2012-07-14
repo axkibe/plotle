@@ -58,17 +58,17 @@ HelpPanel.prototype.setAccess = function(access) {
 	if (this.$access === access) { return; }
 	this.$access = access;
 	if (access === 'ro') {
-		this.cc.readonly. text = 'This page is read-only!';
-		this.cc.readonly2.text = 'Click "switch" and select';
-		this.cc.readonly3.text = '"Sandbox" to play around';
+		this.$sub.readonly. text = 'This page is read-only!';
+		this.$sub.readonly2.text = 'Click "switch" and select';
+		this.$sub.readonly3.text = '"Sandbox" to play around';
 	} else {
-		this.cc.readonly. text = '';
-		this.cc.readonly2.text = '';
-		this.cc.readonly3.text = '';
+		this.$sub.readonly. text = '';
+		this.$sub.readonly2.text = '';
+		this.$sub.readonly3.text = '';
 	}
-	this.cc.readonly. poke();
-	this.cc.readonly2.poke();
-	this.cc.readonly3.poke();
+	this.$sub.readonly. poke();
+	this.$sub.readonly2.poke();
+	this.$sub.readonly3.poke();
 };
 
 

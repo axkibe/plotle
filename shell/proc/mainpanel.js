@@ -82,7 +82,7 @@ MainPanel.prototype.getSwitchPanel = function() {
 */
 MainPanel.prototype.toggleSwitch = function() {
 	this.switchActive = !this.switchActive;
-	var swb = this.cc.switchB;
+	var swb = this.$sub.switchB;
 	swb.$active = this.switchActive;
 	swb.poke();
 };
@@ -94,17 +94,17 @@ MainPanel.prototype.setCurSpace = function(space, access) {
 	this.$spaceName   = space;
 	this.$spaceAccess = access;
 
-	var cspace = this.cc.cspace;
+	var cspace = this.$sub.cspace;
 	cspace.text = space;
 	cspace.poke();
 
 	switch(access) {
-	case 'ro' : this.cc.access.text = '(readonly)'; break;
-	case 'rw' : this.cc.access.text = '(editable)'; break;
-	case ''   : this.cc.access.text = '';           break;
+	case 'ro' : this.$sub.access.text = '(readonly)'; break;
+	case 'rw' : this.$sub.access.text = '(editable)'; break;
+	case ''   : this.$sub.access.text = '';           break;
 	default   : throw new Error('unknown access: ' + access);
 	}
-	this.cc.access.poke();
+	this.$sub.access.poke();
 
 	this.$switchPanel = null;
 };
@@ -116,7 +116,7 @@ MainPanel.prototype.setUser = function(userName) {
 	this.$userName = userName;
 	this.$switchPanel = null;
 
-	var ulabel = this.cc.username;
+	var ulabel = this.$sub.username;
 	ulabel.text = userName;
 	ulabel.poke();
 };
@@ -125,7 +125,7 @@ MainPanel.prototype.setUser = function(userName) {
 | Sets current space zoom level
 */
 MainPanel.prototype.setSpaceZoom = function(zf) {
-	var zoom = this.cc.zoom;
+	var zoom = this.$sub.zoom;
 	zoom.text = '' + zf;
 	zoom.poke();
 };
@@ -166,7 +166,7 @@ MainPanel.prototype.knock = function() {
 MainPanel.prototype.mousehover = function(p, shift, ctrl) {
 	if (this.switchActive) {
 		var pp = p.sub(this.pnw);
-		var swb = this.cc.switchB;
+		var swb = this.$sub.switchB;
 		var over = swb.mousehover(pp);
 		if (over) {
 			this.getSwitchPanel().cancelFade();
@@ -183,7 +183,7 @@ MainPanel.prototype.mousehover = function(p, shift, ctrl) {
 | Sets Help Panel visible/invisible.
 */
 MainPanel.prototype.setShowHelp = function(showHelp) {
-	var rb = this.cc.rightB;
+	var rb = this.$sub.rightB;
 	rb.$active = showHelp;
 	rb.poke();
 };

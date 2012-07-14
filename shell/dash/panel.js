@@ -83,12 +83,12 @@ var Panel = Dash.Panel = function(name, inherit, board, screensize) {
 
 	this.$hover = inherit ? inherit.$hover : null;
 
-	this.cc = {};
+	this.$sub = {};
 	var layout = tree.root.layout;
 	for(var a = 0, aZ = layout.length; a < aZ; a++) {
 		var cname = layout.ranks[a];
 		var twig  = layout.copse[cname];
-		this.cc[cname] = this.newCC(twig, inherit && inherit.cc[cname], cname);
+		this.$sub[cname] = this.newCC(twig, inherit && inherit.$sub[cname], cname);
 	}
 };
 
@@ -126,7 +126,7 @@ Panel.prototype.focusedCC = function() {
 	var sign = caret.sign;
 	var path = sign.path;
 	if (path.get(0) !== this.name) { return null; }
-	return this.cc[path.get(1)] || null;
+	return this.$sub[path.get(1)] || null;
 };
 
 /**
@@ -141,8 +141,8 @@ Panel.prototype.path = function(fabric, border, twist) {
 */
 Panel.prototype.knock = function() {
 	this.$fabric = null;
-	for(var c in this.cc) {
-		this.cc[c].knock();
+	for(var c in this.$sub) {
+		this.$sub[c].knock();
 	}
 };
 
@@ -164,7 +164,7 @@ Panel.prototype._weave = function() {
 	var focus = this.focusedCC();
 	for(var a = layout.length - 1; a >= 0; a--) {
 		var cname = layout.ranks[a];
-		var c = this.cc[cname];
+		var c = this.$sub[cname];
 		c.draw(fabric, Dash.Accent.state(cname === this.$hover || c.$active, c === focus));
 	}
 	fabric.edge(style.edge, this, 'path', View.proper);
@@ -196,7 +196,7 @@ Panel.prototype.drawCaret = function(view) {
 	if (!(view instanceof View)) { throw new Error('view no View'); }
 
 	var cname = shell.caret.sign.path.get(1);
-	var ce = this.cc[cname];
+	var ce = this.$sub[cname];
 	if (!ce) { throw new Error('Caret component does not exist!'); }
 	if (ce.drawCaret) { ce.drawCaret(view); }
 };
@@ -227,7 +227,7 @@ Panel.prototype.mousehover = function(p, shift, ctrl) {
 	var layout = this.tree.root.layout;
 	for(a = 0, aZ = layout.length; a < aZ; a++) {
 		var cname = layout.ranks[a];
-		var ce = this.cc[cname];
+		var ce = this.$sub[cname];
 
 		if (cursor) {
 			ce.mousehover(null, shift, ctrl);
@@ -264,7 +264,7 @@ Panel.prototype.mousedown = function(p, shift, ctrl) {
 	var layout = this.tree.root.layout;
 	for(a = 0, aZ = layout.length; a < aZ; a++) {
 		var cname = layout.ranks[a];
-		var ce = this.cc[cname];
+		var ce = this.$sub[cname];
 		var r = ce.mousedown(pp, shift, ctrl);
 		if (r) { return r; }
 	}
@@ -296,7 +296,7 @@ Panel.prototype.cycleFocus = function(dir) {
 		rank = (rank + dir + layout.length) % layout.length;
 		if (rank === rs) { this.setFocus(null); }
 		cname = layout.ranks[rank];
-		ve    = this.cc[cname];
+		ve    = this.$sub[cname];
 	} while (!ve.canFocus());
 
 	this.setFocus(cname);
@@ -330,7 +330,7 @@ Panel.prototype.poke = function() {
 | Sets the focused component.
 */
 Panel.prototype.setFocus = function(cname) {
-	var com = this.cc[cname];
+	var com = this.$sub[cname];
 	var focus = this.focusedCC();
 	if (focus === com) { return; }
 
@@ -350,10 +350,10 @@ Panel.prototype.setHover = function(cname) {
 	shell.redraw = true;
 
 	if (this.$hover)
-		{ this.cc[this.$hover].knock(); }
+		{ this.$sub[this.$hover].knock(); }
 
 	if (cname)
-		{ this.cc[cname].knock(); }
+		{ this.$sub[cname].knock(); }
 
 	this.$hover = cname;
 	return null;

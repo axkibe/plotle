@@ -99,7 +99,7 @@ Board.styles = {
 | Sends a message to the chat component.
 */
 Board.prototype.message = function(message) {
-	this.getPanel('MainPanel').cc.chat.addMessage(message);
+	this.getPanel('MainPanel').$sub.chat.addMessage(message);
 };
 
 
@@ -177,11 +177,11 @@ Board.prototype.setUser = function(userName) {
 	var mainPanel = this.getPanel('MainPanel');
 	mainPanel.setUser(userName);
 
-	var leftB = mainPanel.cc.leftB;
+	var leftB = mainPanel.$sub.leftB;
 	leftB.$captionText = this.$amVisitor ? 'log in' : 'log out';
 	leftB.poke();
 
-	var left2B = mainPanel.cc.left2B;
+	var left2B = mainPanel.$sub.left2B;
 	left2B.$visible = this.$amVisitor;
 	left2B.poke();
 };
@@ -279,7 +279,7 @@ Board.prototype.actionmove = function(p, shift, ctrl) {
 Board.prototype.actionstop = function(p, shift, ctrl) {
 	var path  = shell.$action.itemPath;
 	var panel = this.getPanel(path.get(0));
-	var c     = panel.cc[path.get(1)];
+	var c     = panel.$sub[path.get(1)];
 	return c.actionstop(p, shift, ctrl);
 };
 
@@ -304,7 +304,7 @@ Board.prototype.mousedown = function(p, shift, ctrl) {
 */
 Board.prototype.getEntity = function(path) {
 	var panel = this.getPanel(path.get(0));
-	return panel.cc[path.get(1)];
+	return panel.$sub[path.get(1)];
 };
 
 /**
