@@ -149,7 +149,7 @@ Note.prototype.scrollCaretIntoView = function() {
 	var caret   = shell.caret;
 	var scrolly = this.scrollbarY;
 	var sy      = scrolly.getPos();
-	var para   = shell.$space.get(caret.sign.path, -1);
+	var para   = shell.getSub('space', caret.sign.path, -1);
 	if (para.constructor !== Para) { throw new Error('iFail'); }
 	var cp      = para.getCaretPos();
 	var pnw     = this.$sub.doc.getPNW(para.key);

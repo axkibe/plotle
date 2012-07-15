@@ -302,7 +302,13 @@ Board.prototype.mousedown = function(p, shift, ctrl) {
 /**
 | Returns an entity by its path.
 */
-Board.prototype.getEntity = function(path) {
+Board.prototype.getSub = function(path, len) {
+	if (!is(len))
+		{ len = 2; }
+
+	if (len !== 2)
+		{ throw new Error('Dash.Board.getSub len must be 2'); }
+
 	var panel = this.getPanel(path.get(0));
 	return panel.$sub[path.get(1)];
 };

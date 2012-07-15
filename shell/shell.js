@@ -141,8 +141,9 @@ Shell.prototype.setCaret = function(visec, sign, retainx) {
 	if (this.caret.sign &&
 		(this.caret.visec !== visec || this.caret.sign.path !== sign.path)
 	) {
-		entity = this.getEntity(this.caret.visec, this.caret.sign.path);
-		if (entity) { entity.poke(); }
+		entity = this.getSub(this.caret.visec, this.caret.sign.path, 2);
+		if (entity)
+			{ entity.poke(); }
 	}
 
 	this.caret = new Caret(
@@ -153,8 +154,10 @@ Shell.prototype.setCaret = function(visec, sign, retainx) {
 	);
 
 	if (sign) {
-		entity = this.getEntity(visec, sign.path);
-		if (entity) { entity.poke(); }
+		entity = this.getSub(visec, sign.path, 2);
+		if (entity)
+			{ entity.poke(); }
+
 		shell.redraw = true;
 	}
 
@@ -162,14 +165,14 @@ Shell.prototype.setCaret = function(visec, sign, retainx) {
 };
 
 /**
-| Returns the entity in the visual section (dashboard or space) marked by path
+| Returns the subnode in the section (dashboard or space) marked by path
 | This is either an item, or a dashboard component.
 */
-Shell.prototype.getEntity = function(visec, path) {
-	switch(visec) {
-	case 'board' : return this.$board.getEntity(path);
-	case 'space' : return this.$space.getEntity(path);
-	default : throw new Error('Invalid visec: '+visec);
+Shell.prototype.getSub = function(sec, path, len) {
+	switch(sec) {
+	case 'board' : return this.$board.getSub(path, len);
+	case 'space' : return this.$space.getSub(path, len);
+	default : throw new Error('Invalid sec: ' + sec);
 	}
 };
 
