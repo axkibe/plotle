@@ -132,20 +132,6 @@ Space.prototype.update = function(tree, chgX) {
 	shell.redraw = true;
 };
 
-
-/**
-| Returns the entity of path
-| TODO what is this really for???
-*/
-Space.prototype.getEntity = function(path) {
-	if (path.get(0) !== this.key) {
-		throw new Error('getting entity of not current space',
-			path.get(0), '!=', this.key
-		);
-	}
-	return this.$sub[path.get(1)] || null;
-};
-
 /**
 | Returns the focused item.
 */
@@ -572,6 +558,7 @@ Space.prototype.specialKey = function(key, shift, ctrl) {
 
 /**
 | Returns the visual node the path points to.
+| TODO remove
 */
 Space.prototype.get = function(path, plen) {
 	/**/ if (!is(plen)) { plen  = path.length; }
@@ -589,5 +576,20 @@ Space.prototype.get = function(path, plen) {
 	}
 	return node;
 };
+
+/**
+| Returns the entity of path
+| TODO remove
+*/
+Space.prototype.getEntity = function(path) {
+	if (path.get(0) !== this.key) {
+		throw new Error('getting entity of not current space',
+			path.get(0), '!=', this.key
+		);
+	}
+	return this.$sub[path.get(1)] || null;
+};
+
+
 
 })();

@@ -44,18 +44,12 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Shotcuts
 */
-var abs    = Math.abs;
-var debug  = Jools.debug;
-var immute = Jools.immute;
-var is     = Jools.is;
-var isnon  = Jools.isnon;
-var half   = Jools.half;
-var ro     = Math.round;
+var is = Jools.is;
 
 /**
 | Constructor
 */
-Visual.Base = function(twig, path) {
+var Base = Visual.Base = function(twig, path) {
 	this.twig = twig;
 	this.path = path;         // TODO
 	this.key  = path.get(-1); // TODO
@@ -65,9 +59,10 @@ Visual.Base = function(twig, path) {
 /**
 | Returns the visual with a given twig-rank.
 */
-Visual.Base.prototype.atRank = function(rank) {
+Base.prototype.atRank = function(rank) {
 	return this.$sub[this.twig.ranks[rank]];
 };
+
 
 
 /**

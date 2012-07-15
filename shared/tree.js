@@ -86,7 +86,7 @@ Twig.prototype.rankOf = function(key) {
 	var rof = this._rof;
 	if (!rof)
 		{ Object.defineProperty(this, '_rof', rof = {}); }
-	
+
 	var r = rof[key];
 	if (is(r))
 		{ return r; }
