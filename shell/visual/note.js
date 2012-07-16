@@ -38,7 +38,6 @@ var config;
 var Euclid;
 var Fabric;
 var Jools;
-var Margin;
 var shell;
 var system;
 var theme;
@@ -52,35 +51,19 @@ var View;
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
 /**
-| Shortcuts.
-*/
-var debug         = Jools.debug;
-var half          = Jools.half;
-var immute        = Jools.immute;
-var is            = Jools.is;
-var isnon         = Jools.isnon;
-var Item          = Visual.Item;
-var limit         = Jools.limit;
-var log           = Jools.log;
-var max           = Math.max;
-var min           = Math.min;
-var Para          = Visual.Para;
-var Scrollbar     = Visual.Scrollbar;
-var subclass      = Jools.subclass;
-
-/**
 | Constructor.
 */
 var Note = Visual.Note = function(twig, path) {
-	Item.call(this, twig, path);
-	this.scrollbarY = new Scrollbar();
+	Visual.Item.call(this, twig, path);
+	this.scrollbarY = new Visual.Scrollbar();
 };
-subclass(Note, Item);
+Jools.subclass(Note, Visual.Item);
 
 /**
 | Default margin for all notes.
+| TODO: rename
 */
-Note.prototype.imargin = new Margin(theme.note.imargin);
+Note.prototype.imargin = new Euclid.Margin(theme.note.imargin);
 
 /**
 | Resize handles to show on notes.
@@ -130,7 +113,7 @@ Note.prototype.setScrollbar = function(pos) {
 
 	var zone  = this.getZone();
 	var str   = theme.scrollbar.strength;
-	var str05 = half(str);
+	var str05 = Jools.half(str);
 
 	if (typeof(pos) === 'undefined')
 		{ pos = sbary.getPos(); }
@@ -152,7 +135,7 @@ Note.prototype.scrollCaretIntoView = function() {
 	var scrolly = this.scrollbarY;
 	var sy      = scrolly.getPos();
 	var para   = shell.getSub('space', caret.sign.path, -1);
-	if (para.constructor !== Para) { throw new Error('iFail'); }
+	if (para.constructor !== Visual.Para) { throw new Error('iFail'); }
 	var cp      = para.getCaretPos();
 	var pnw     = this.$sub.doc.getPNW(para.key);
 	var zone    = this.getZone();
@@ -201,7 +184,7 @@ Note.prototype.actionstop = function(view, p) {
 		shell.redraw = true;
 		return true;
 	default :
-		return Item.prototype.actionstop.call(this, view, p);
+		return Visual.Item.prototype.actionstop.call(this, view, p);
 	}
 };
 
@@ -285,7 +268,7 @@ Note.prototype.getFlowWidth = function() {
 | Returns the para seperation height.
 */
 Note.prototype.getParaSep = function(fontsize) {
-	return half(fontsize);
+	return Jools.half(fontsize);
 };
 
 /**
@@ -293,8 +276,10 @@ Note.prototype.getParaSep = function(fontsize) {
 | An ongoing action can modify this to be different than meshmashine data.
 */
 Note.prototype.getZone = function() {
-	var twig   = this.twig;
+	var twig    = this.twig;
 	var $action = shell.$action;
+	var max     = Math.max;
+	var min     = Math.min;
 
 	if (!$action || !this.path.equals($action.itemPath))
 		{ return twig.zone; }

@@ -35,7 +35,6 @@ Euclid = Euclid || {};
 */
 var Jools;
 var Euclid;
-var Margin;
 
 /**
 | Capsule
@@ -48,10 +47,10 @@ var Margin;
 */
 if (typeof(window) === 'undefined') {
 	Euclid = {
-		Point : require('./point')
+		Point  : require('./point'),
+		Margin : require('./margin')
 	}
 	Jools  = require('../jools');
-	Margin = require('./margin');
 }
 
 /**
@@ -76,7 +75,7 @@ var Rect = Euclid.Rect = function(pnw, pse, key) {
 | Returns a rectangle thats reduced on every side by a margin object
 */
 Rect.prototype.reduce = function(margin) {
-	if (margin.constructor !== Margin) throw new Error('margin of wrong type');
+	if (margin.constructor !== Euclid.Margin) { throw new Error('margin of wrong type'); }
 
 	// allow margins to reduce the rect to zero size without erroring.
 	return new Rect(

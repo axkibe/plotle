@@ -33,9 +33,7 @@ Visual = Visual || {};
 */
 var Fabric;
 var Jools;
-var Label;
 var Line;
-var Margin;
 var MeshMashine;
 var Path;
 var shell;
@@ -52,28 +50,17 @@ var Item;
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
 /**
-| Shortcuts.
-*/
-var debug         = Jools.debug;
-var immute        = Jools.immute;
-var is            = Jools.is;
-var isnon         = Jools.isnon;
-var Label         = Visual.Label;
-var log           = Jools.log;
-var subclass      = Jools.subclass;
-
-/**
 | Constructor.
 */
 var Relation = Visual.Relation = function(twig, path) {
-	Label.call(this, twig, path);
+	Visual.Label.call(this, twig, path);
 };
-subclass(Relation, Label);
+Jools.subclass(Relation, Visual.Label);
 
 /**
 | Default margin for all relations.
 */
-Relation.imargin = new Margin(theme.relation.imargin);
+Relation.imargin = new Euclid.Margin(theme.relation.imargin);
 
 /**
 | Creates a new Relation by specifing its relates.
@@ -113,7 +100,7 @@ Relation.prototype.draw = function(fabric, view) {
 		fabric.paint(theme.relation.style, l2, 'path', view);
 	}
 
-	Label.prototype.draw.call(this, fabric, view);
+	Visual.Label.prototype.draw.call(this, fabric, view);
 };
 
 

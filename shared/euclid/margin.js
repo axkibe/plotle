@@ -1,37 +1,38 @@
-/**                                                      _.._
-                                                      .-'_.._''.
- __  __   ___       _....._              .          .' .'     '.\
-|  |/  `.'   `.   .'       '.          .'|         / .'                                _.._
-|   .-.  .-.   ' /   .-'"'.  \        (  |        . '            .-,.-~.             .' .._|    .|
-|  |  |  |  |  |/   /______\  |        | |        | |            |  .-. |    __      | '      .' |_
-|  |  |  |  |  ||   __________|    _   | | .'''-. | |            | |  | | .:-`.'.  __| |__  .'     |
-|  |  |  |  |  |\  (          '  .' |  | |/.'''. \. '            | |  | |/ |   \ ||__   __|'-..  .-'
-|  |  |  |  |  | \  '-.___..-~. .   | /|  /    | | \ '.         .| |  '- `" __ | |   | |      |  |
-|__|  |__|  |__|  `         .'.'.'| |//| |     | |  '. `.____.-'/| |      .'.''| |   | |      |  |
-                   `'-.....-.'.'.-'  / | |     | |    `-._____ / | |     / /   | |_  | |      |  '.'
-                                 \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
-                                       '___)   '___)                      `~~'  `"   |_|      `--'
-
-                                  ,-,-,-.
-                                  `,| | |   ,-. ,-. ,-. . ,-.
-                                    | ; | . ,-| |   | | | | |
-                                    '   `-' `-^ '   `-| ' ' '
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-                                                     `'
+/**                            _..._
+    _....._                 .-'_..._''. .---.    _______
+  .'       '.             .' .'      '.\|   |.--.\  ___ `'.
+ /   .-'"'.  \           / .'           |   ||__| ' |--.\  \
+/   /______\  |         . '             |   |.--. | |    \  '
+|   __________|         | |             |   ||  | | |     |  '
+\  (          '  _    _ | |             |   ||  | | |     |  |
+ \  '-.___..-~. | '  / |. '             |   ||  | | |     ' .'
+  `         .'..' | .' | \ '.          .|   ||  | | |___.' /'
+   `'-.....-.'./  | /  |  '. `._____.-'/|   ||__|/_______.'/
+              |   `'.  |    `-.______ / '---'    \_______|/
+              '   .'|  '/            `
+               `-'  `--'
+              ,-,-,-.
+              `,| | |   ,-. ,-. ,-. . ,-.
+                | ; | . ,-| |   | | | | |
+                '   `-' `-^ '   `-| ' ' '
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                                 `'
  Holds information of inner or outer distances.
+
  Margins are immutable objects.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
+| Exports
+*/
+var Euclid;
+Euclid = Euclid || {};
+
+/**
 | Imports
 */
 var Jools;
-
-/**
-| Exports
-*/
-var Margin  = null;
 
 /**
 | Capsule
@@ -46,15 +47,6 @@ if (typeof(window) === 'undefined') {
 	Jools = require('../jools');
 }
 
-
-var debug        = Jools.debug;
-var immute       = Jools.immute;
-var is           = Jools.is;
-var isnon        = Jools.isnon;
-var log          = Jools.log;
-var fixate       = Jools.fixate;
-var lazyFixate   = Jools.lazyFixate;
-
 /**
 | Constructor.
 |
@@ -65,7 +57,7 @@ var lazyFixate   = Jools.lazyFixate;
 | s: south margin
 | w: west margin
 */
-Margin = function(m, e, s, w) {
+var Margin = Euclid.Margin = function(m, e, s, w) {
 	if (typeof(m) === 'object') {
 		this.n = m.n;
 		this.e = m.e;
@@ -77,7 +69,7 @@ Margin = function(m, e, s, w) {
 		this.s = s;
 		this.w = w;
 	}
-	immute(this);
+	Jools.immute(this);
 };
 
 /**
@@ -95,12 +87,12 @@ Margin.prototype.toJSON = function() {
 /**
 | East + west margin = x
 */
-lazyFixate(Margin.prototype, 'x', function() { return this.e + this.w; });
+Jools.lazyFixate(Margin.prototype, 'x', function() { return this.e + this.w; });
 
 /**
 | North + south margin = y
 */
-lazyFixate(Margin.prototype, 'y', function() { return this.n + this.s; });
+Jools.lazyFixate(Margin.prototype, 'y', function() { return this.n + this.s; });
 
 /**
 | Node export

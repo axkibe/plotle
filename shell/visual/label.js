@@ -36,7 +36,6 @@ var Euclid;
 var config;
 var Fabric;
 var Jools;
-var Margin;
 var shell;
 var system;
 var theme;
@@ -51,35 +50,23 @@ var Visual;
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
 /**
-| Shortcuts.
-*/
-var debug    = Jools.debug;
-var immute   = Jools.immute;
-var is       = Jools.is;
-var Item     = Visual.Item;
-var limit    = Jools.limit;
-var log      = Jools.log;
-var max      = Math.max;
-var ro       = Math.round;
-var subclass = Jools.subclass;
-
-/**
 | Constructor.
 */
 var Label = Visual.Label = function(twig, path) {
-	Item.call(this, twig, path);
+	Visual.Item.call(this, twig, path);
 };
-subclass(Label, Item);
+Jools.subclass(Label, Visual.Item);
 
 /**
 | Default margin for all notes.
+| TODO rename
 */
-Label.prototype.imargin = new Margin(theme.label.imargin);
+Label.prototype.imargin = new Euclid.Margin(theme.label.imargin);
 
 /**
 | Resize handles to show on notes.
 */
-Label.prototype.handles = immute({
+Label.prototype.handles = Jools.immute({
 	ne : true,
 	se : true,
 	sw : true,
@@ -177,11 +164,11 @@ Label.prototype.fontSizeChange = function(fontsize) {
 		case 'se': case 'sw' : dy = $action.move.y  - $action.start.y; break;
 		default  : throw new Error('unknown align: '+ $action.align);
 		}
-		return max(fontsize * (height + dy) / height, 8);
+		return Math.max(fontsize * (height + dy) / height, 8);
 	default:
 		return fontsize;
 	}
-	return max(fontsize, 4);
+	return Math.max(fontsize, 4);
 };
 
 /**
@@ -210,8 +197,8 @@ Label.prototype.getZone = function() {
 	// TODO Caching!
 	var doc    = this.$sub.doc;
 	var fs     = doc.getFontSize();
-	var width  = max(Math.ceil(doc.getSpread()), ro(fs * 0.3));
-	var height = max(Math.ceil(doc.getHeight()), ro(fs));
+	var width  = Math.max(Math.ceil(doc.getSpread()), Math.round(fs * 0.3));
+	var height = Math.max(Math.ceil(doc.getHeight()), Math.round(fs));
 
 	if (!$action || !this.path.equals($action.itemPath))
 		{ return new Euclid.Rect(pnw, pnw.add(width, height)); }
@@ -265,7 +252,7 @@ Label.prototype.actionstop = function(view, p) {
 		shell.redraw = true;
 		break;
 	default :
-		return Item.prototype.actionstop.call(this, view, p);
+		return Visual.Item.prototype.actionstop.call(this, view, p);
 	}
 };
 
