@@ -33,7 +33,6 @@ Visual = Visual || {};
 | Imports
 */
 var Action;
-var BeziRect;
 var config;
 var Euclid;
 var Fabric;
@@ -92,14 +91,14 @@ Note.prototype.getSilhoutte = function($zone, zAnchor) {
 	if (zAnchor) {
 		$s = this._silhoutte$0;
 		if ($s && $s.width === $z.width && $s.height === $z.height) return $s;
-		return this._silhoutte$0 = new BeziRect(
+		return this._silhoutte$0 = new Euclid.BeziRect(
 			Euclid.Point.zero,
 			new Euclid.Point($z.width, $z.height), cr, cr
 		);
 	} else {
 		$s = this._silhoutte$1;
 		if ($s && $s.eq($z)) return $s;
-		return this._silhoutte$1 = new BeziRect($z.pnw, $z.pse, cr, cr);
+		return this._silhoutte$1 = new Euclid.BeziRect($z.pnw, $z.pse, cr, cr);
 	}
 };
 

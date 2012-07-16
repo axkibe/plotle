@@ -32,7 +32,6 @@ var Visual;
 /**
 | Imports
 */
-var BeziRect;
 var Euclid;
 var Fabric;
 var Jools;
@@ -88,7 +87,7 @@ Scrollbar.prototype.getArea = function(view) {
 	var sy   = Math.round(pos * ((size - map + ap) / max));
 	var s05  = Jools.half(ths.strength);
 
-	return new BeziRect(
+	return new Euclid.BeziRect(
 		view.point(pnw.x, pnw.y + sy)      .add(-s05, 0),
 		view.point(pnw.x, pnw.y + sy + map).add( s05, 0),
 		ths.ovala, ths.ovalb

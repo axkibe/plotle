@@ -32,7 +32,6 @@ Dash = Dash || {};
 /**
 | Imports
 */
-var BeziRect;
 var Caret;
 var Curve;
 var Euclid;
@@ -66,7 +65,7 @@ var Input = Dash.Input = function(twig, panel, inherit, name) {
 
 	var pnw  = this.pnw  = Curve.computePoint(twig.frame.pnw, panel.iframe);
 	var pse  = this.pse  = Curve.computePoint(twig.frame.pse, panel.iframe);
-	var bezi = this.bezi = new BeziRect(Euclid.Point.zero, pse.sub(pnw), 7, 3);
+	var bezi = this.bezi = new Euclid.BeziRect(Euclid.Point.zero, pse.sub(pnw), 7, 3);
 
 	this.value   = inherit ? inherit.value : '';
 	this.$fabric = null;
