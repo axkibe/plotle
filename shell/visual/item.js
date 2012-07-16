@@ -32,7 +32,7 @@ Visual = Visual || {};
 | Imports
 */
 var Action;
-var Compass;
+var Euclid;
 var Jools;
 var OvalSlice;
 var Path;
@@ -104,7 +104,7 @@ Item.prototype.checkItemCompass = function(view, p) {
 
 	var $h     = this.planHandles(view); // TODO use planHandles and cache
 	var f      = shell.fabric;
-	var d8cwcf = Compass.dir8CWCF;
+	var d8cwcf = Euclid.Compass.dir8CWCF;
 
 	for(var a = 0, aZ = d8cwcf.length; a < aZ; a++) {
 		var d = d8cwcf[a];
@@ -210,7 +210,7 @@ Item.prototype.pathAllHandles = function(fabric, border, twist, view) {
 	if (border !== 0) throw new Error('borders unsupported for handles');
 
 	var $h = this.planHandles(view);
-	var d8cwcf = Compass.dir8CWCF;
+	var d8cwcf = Euclid.Compass.dir8CWCF;
 
 	for(var a = d8cwcf.length - 1; a >= 0; a--) {
 		var d = d8cwcf[a];

@@ -31,7 +31,9 @@ Visual = Visual || {};
 /**
 | Imports
 */
+var Euclid;
 var Fabric;
+var Item;
 var Jools;
 var Line;
 var MeshMashine;
@@ -40,7 +42,6 @@ var shell;
 var system;
 var theme;
 var Tree;
-var Item;
 
 /**
 | Capsule
