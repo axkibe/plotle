@@ -59,19 +59,17 @@ var OvalFlower = null;
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser'); }
 
-var debug        = Jools.debug;
-var fixate       = Jools.fixate;
+/**
+| Shortcuts
+*/
 var half         = Jools.half;
 var immute       = Jools.immute;
-var is           = Jools.is;
 var isnon        = Jools.isnon;
-var lazyFixate   = Jools.lazyFixate;
-var log          = Jools.log;
-var magic        = Fabric.magic;
-var max          = Math.max;
-var min          = Math.min;
 var ro           = Math.round;
 
+/**
+| Constructor
+*/
 OvalFlower = function(pc, dimensions, segs) {
 	this.pc = pc;
 	this.a1 = dimensions.a1;
@@ -81,7 +79,7 @@ OvalFlower = function(pc, dimensions, segs) {
 
 	this.gradientPC = pc;
 	this.gradientR0 = 0;
-	this.gradientR1 = max(this.a2, this.b2);
+	this.gradientR1 = Math.max(this.a2, this.b2);
 	this.segs = segs;
 	immute(this);
 };
@@ -100,7 +98,7 @@ OvalFlower.prototype.path = function(fabric, border, twist, view, segment) {
 	var b2   = this.b2;
 	var bo   = border;
 
-	var m    = magic;
+	var m    = Fabric.magic;
 	var am1  = m * this.a1;
 	var bm1  = m * this.b1;
 	var am2  = m * this.a2;
@@ -191,8 +189,15 @@ OvalFlower.prototype.path = function(fabric, border, twist, view, segment) {
 | Returns the segment the point is within.
 */
 OvalFlower.prototype.within = function(fabric, view, p) {
-	// TODO quick null if out of box.
-	if (!fabric.within(this, 'path', view, p, 'outer')) { return null; }
+	var a2 = this.a2;
+	var b2 = this.b2;
+	var pc = this.pc;
+	if (p.x < pc.x - a2 || p.x > pc.x + a2 || p.y < pc.y - b2 || p.y > pc.y + b2)
+		{ return null; }
+
+	if (!fabric.within(this, 'path', view, p, 'outer'))
+		{ return null; }
+
 	if (isnon(this.segs.c ) && fabric.within(this, 'path', view, p, 'c' )) { return 'c';  }
 	if (isnon(this.segs.n ) && fabric.within(this, 'path', view, p, 'n' )) { return 'n';  }
 	if (isnon(this.segs.ne) && fabric.within(this, 'path', view, p, 'ne')) { return 'ne'; }

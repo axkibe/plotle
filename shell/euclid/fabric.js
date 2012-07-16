@@ -312,7 +312,7 @@ Fabric.prototype.arc = function(a1, a2, a3, a4, a5, a6, a7) {
 Fabric.prototype.fillRect = function(style, a1, a2, a3, a4) {
 	var cx = this._cx;
 	cx.fillStyle = style;
-	
+
 	if (typeof(p) === 'object') {
 		if (a1 instanceof Rect)
 			{ return this._cx.fillRect(a1.pnw.x, a1.pnw.y, a1.pse.x, a1.pse.y); }
@@ -618,7 +618,6 @@ Fabric.prototype.within = function(shape, path, view, a1, a2, a3, a4, a5) {
 	if (!(view instanceof View)) { throw new Error('view is no View'); }
 
 	var px, py;
-	var tw = this._twist;
 	var pobj;
 	if (typeof(a1) === 'object') {
 		px   = a1.x;
@@ -633,6 +632,7 @@ Fabric.prototype.within = function(shape, path, view, a1, a2, a3, a4, a5) {
 	if (typeof(px) !== 'number' || typeof(py) !== 'number')
 		{ throw new Error('px|py not a number ' + px + ' ' + py); }
 
+	var tw = this._twist;
 	px += tw;
 	py += tw;
 
