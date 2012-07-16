@@ -50,35 +50,21 @@ var View;
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
 /**
-| Shotcuts
-*/
-var abs      = Math.abs;
-var Base     = Visual.Base;
-var debug    = Jools.debug;
-var Doc      = Visual.Doc;
-var immute   = Jools.immute;
-var is       = Jools.is;
-var isnon    = Jools.isnon;
-var half     = Jools.half;
-var subclass = Jools.subclass;
-var ro       = Math.round;
-
-/**
 | Constructor
 */
 var Item = Visual.Item = function(twig, path) {
-	Base.call(this, twig, path);
+	Visual.Base.call(this, twig, path);
 
 	if (this.$sub !== null) { throw new Error('iFail'); }
 	this.$sub = {
-		doc : new Doc(twig.doc, new Path(path, '++', 'doc'))
+		doc : new Visual.Doc(twig.doc, new Path(path, '++', 'doc'))
 	};
 
 	this._$ovalslice = null;
 	this.$fabric   = null;
 	this.$handles  = {};
 };
-subclass(Item, Base);
+Jools.subclass(Item, Visual.Base);
 
 
 /**
@@ -151,25 +137,25 @@ Item.prototype.planHandles = function(view) {
 	var ny  = zone.pnw.y;
 	var ex  = zone.pse.x;
 	var sy  = zone.pse.y;
-	var mx = half(wx + ex);
-	var my = half(ny + sy);
+	var mx = Jools.half(wx + ex);
+	var my = Jools.half(ny + sy);
 
 	var dcx = theme.handle.cdistance;
 	var dcy = theme.handle.cdistance;
 	var dex = theme.handle.edistance;
 	var dey = theme.handle.edistance;
 
-	var a  = Math.min(ro((zone.width  + 2 * dcx) / 6), theme.handle.maxSize);
-	var b  = Math.min(ro((zone.height + 2 * dcy) / 6), theme.handle.maxSize);
+	var a  = Math.min(Math.round((zone.width  + 2 * dcx) / 6), theme.handle.maxSize);
+	var b  = Math.min(Math.round((zone.height + 2 * dcy) / 6), theme.handle.maxSize);
 	var a2 = 2*a;
 	var b2 = 2*b;
 
-	if (dcx > a) { dex -= half(dcx - a); dcx = a; }
-	if (dcy > b) { dey -= half(dcy - b); dcy = b; }
+	if (dcx > a) { dex -= Jools.half(dcx - a); dcx = a; }
+	if (dcy > b) { dey -= Jools.half(dcy - b); dcy = b; }
 
 	return this.$handles = {
 		// ellipse bezier height
-		bb : ro(b / 0.75),
+		bb   : Math.round(b / 0.75),
 		zone : zone,
 		view : view,
 
@@ -282,11 +268,10 @@ Item.prototype.getParaAtPoint = function(p) {
 
 /**
 | Dragstart.
+|
 | Checks if a dragstart targets this item.
 */
 Item.prototype.dragstart = function(view, p, shift, ctrl, access) {
-	if (!(view instanceof View)) { throw new Error('view no View'); }
-
 	var sbary = this.scrollbarY;
 	if (sbary && sbary.within(view, p)) {
 		shell.startAction(
@@ -308,8 +293,10 @@ Item.prototype.dragstart = function(view, p, shift, ctrl, access) {
 		shell.startAction(
 			Action.RELBIND, 'space',
 			'itemPath', this.path,
-			'start',    p
+			'start',    p,
+			'move',     p
 		);
+
 		return true;
 	}
 
