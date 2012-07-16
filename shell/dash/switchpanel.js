@@ -33,9 +33,9 @@ Dash = Dash || {};
 | Imports
 */
 var config;
+var Euclid;
 var Fabric;
 var Jools;
-var Point;
 var Rect;
 var shell;
 var system;
@@ -63,9 +63,12 @@ var SwitchPanel = Dash.SwitchPanel = function(panel, current, userName, psw) {
 	this.panel      = panel;
 	this.current    = current;
 	var swidim      = theme.switchpanel.dimensions;
-	var iframe      = this.iframe = new Rect(Point.zero, new Point(swidim.a * 2, swidim.b));
+	var iframe      = this.iframe = new Rect(
+		Euclid.Point.zero,
+		new Euclid.Point(swidim.a * 2, swidim.b)
+	);
 	this.pnw        = psw.sub(0, this.iframe.height);
-	this.gradientPC = new Point(half(iframe.width), half(iframe.height) + 600);
+	this.gradientPC = new Euclid.Point(half(iframe.width), half(iframe.height) + 600);
 	this.gradientR0 = 0;
 	this.gradientR1 = 650;
 
@@ -83,9 +86,9 @@ var SwitchPanel = Dash.SwitchPanel = function(panel, current, userName, psw) {
 	var hh = half(this.buttonDim.height);
 
 	this.buttonPos    = {
-		n  : new Point(mx,      hh + y1),
-		ne : new Point(mx + x2, hh + y2),
-		nw : new Point(mx - x2, hh + y2)
+		n  : new Euclid.Point(mx,      hh + y1),
+		ne : new Euclid.Point(mx + x2, hh + y2),
+		nw : new Euclid.Point(mx - x2, hh + y2)
 	};
 	this.$fabric    = null;
 	this.$fadeTimer = null;

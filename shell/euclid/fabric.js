@@ -30,7 +30,6 @@
 */
 var Euclid;
 var Jools;
-var Point;
 var Rect;
 var View;
 
@@ -316,7 +315,7 @@ Fabric.prototype.fillRect = function(style, a1, a2, a3, a4) {
 	if (typeof(p) === 'object') {
 		if (a1 instanceof Rect)
 			{ return this._cx.fillRect(a1.pnw.x, a1.pnw.y, a1.pse.x, a1.pse.y); }
-		if (a1 instanceof Point)
+		if (a1 instanceof Euclid.Point)
 			{ return this._cx.fillRect(a1.x, a1.y, a2.x, a2.y); }
 		throw new Error('fillRect not a rectangle');
 	}
@@ -388,7 +387,7 @@ Fabric.prototype.getImageData = function(a1, a2, a3, a4) {
 		if (a1 instanceof Rect) {
 			x1 = a1.pnw.x; y1 = a1.pnw.y;
 			x2 = a1.pse.x; y2 = a1.pse.y;
-		} else if (a1 instanceof Point) {
+		} else if (a1 instanceof Euclid.Point) {
 			x1 = a1.x; y1 = a1.y;
 			x2 = a2.x; y2 = a2.y;
 		} else {
@@ -611,8 +610,10 @@ Fabric.prototype.setFont = function(f) {
 
 /**
 | Returns true is a point is in a path.
-| Point is either of type point -or-
-|    x / y
+| Point is either.
+|
+| Euclid.Point -or-
+| x / y
 */
 Fabric.prototype.within = function(shape, path, view, a1, a2, a3, a4, a5) {
 	if (!(view instanceof View)) { throw new Error('view is no View'); }

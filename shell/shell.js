@@ -31,13 +31,13 @@
 var Action;
 var Caret;
 var Dash;
+var Euclid;
 var Fabric;
 var Jools;
 var Measure;
 var MeshMashine;
 var Path;
 var Peer;
-var Point;
 var Selection;
 var Sign;
 var system;
@@ -323,7 +323,7 @@ Shell.prototype._draw = function() {
 	fabric.attune();   // TODO <- bad name for clear();
 
 	if (this.green) {
-		var m = new Point(half(fabric.width), half(fabric.height));
+		var m = new Euclid.Point(half(fabric.width), half(fabric.height));
 		fabric.fillRect('rgb(170, 255, 170)', 0, 0, fabric.width, fabric.height);
 
 		fabric.edge(

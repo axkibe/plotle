@@ -44,7 +44,6 @@
 */
 var Fabric;
 var Jools;
-var Point;
 var Rect;
 
 /**
@@ -60,14 +59,6 @@ var OvalFlower = null;
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser'); }
 
 /**
-| Shortcuts
-*/
-var half         = Jools.half;
-var immute       = Jools.immute;
-var isnon        = Jools.isnon;
-var ro           = Math.round;
-
-/**
 | Constructor
 */
 OvalFlower = function(pc, dimensions, segs) {
@@ -81,13 +72,15 @@ OvalFlower = function(pc, dimensions, segs) {
 	this.gradientR0 = 0;
 	this.gradientR1 = Math.max(this.a2, this.b2);
 	this.segs = segs;
-	immute(this);
+	Jools.immute(this);
 };
 
 /**
 | Makes the OvalFlower path.
 */
 OvalFlower.prototype.path = function(fabric, border, twist, view, segment) {
+	var ro   = Math.round;
+
 	var pc   = this.pc;
 	var pcx  = view.x(pc);
 	var pcy  = view.y(pc);
@@ -126,8 +119,8 @@ OvalFlower.prototype.path = function(fabric, border, twist, view, segment) {
 		fabric.beziTo(-am2,   0,    0,  bm2, pcx - a2 + bo, pcy);
 	}
 
-	var bs  = half(b2 - b1 - 0.5);
-	var bss = half(b2 - b1) - 2;
+	var bs  = Jools.half(b2 - b1 - 0.5);
+	var bss = Jools.half(b2 - b1) - 2;
 	var bms =  ro((b2 - b1) / 2 * m);
 	var odbg = segment === null && false; // <- to see all remove && false
 
@@ -198,6 +191,7 @@ OvalFlower.prototype.within = function(fabric, view, p) {
 	if (!fabric.within(this, 'path', view, p, 'outer'))
 		{ return null; }
 
+	var isnon = Jools.isnon;
 	if (isnon(this.segs.c ) && fabric.within(this, 'path', view, p, 'c' )) { return 'c';  }
 	if (isnon(this.segs.n ) && fabric.within(this, 'path', view, p, 'n' )) { return 'n';  }
 	if (isnon(this.segs.ne) && fabric.within(this, 'path', view, p, 'ne')) { return 'ne'; }

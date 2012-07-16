@@ -35,10 +35,10 @@ Dash = Dash || {};
 var BeziRect;
 var Caret;
 var Curve;
+var Euclid;
 var Fabric;
 var Jools;
 var Measure;
-var Point;
 var Rect;
 var shell;
 var theme;
@@ -54,15 +54,9 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Shortcuts
 */
-var ro            = Math.round;
-var computePoint  = Curve.computePoint;
-var debug         = Jools.debug;
-var immute        = Jools.immute;
-var is            = Jools.is;
-var isnon         = Jools.isnon;
-var log           = Jools.log;
-var magic         = Fabric.magic;
-var pitch         = new Point(8, 3);
+var ro    = Math.round;
+var isnon = Jools.isnon;
+var pitch = new Euclid.Point(8, 3);
 
 /**
 | Constructor.
@@ -72,9 +66,9 @@ var Input = Dash.Input = function(twig, panel, inherit, name) {
 	this.panel   = panel;
 	this.name    = name;
 
-	var pnw  = this.pnw  = computePoint(twig.frame.pnw, panel.iframe);
-	var pse  = this.pse  = computePoint(twig.frame.pse, panel.iframe);
-	var bezi = this.bezi = new BeziRect(Point.zero, pse.sub(pnw), 7, 3);
+	var pnw  = this.pnw  = Curve.computePoint(twig.frame.pnw, panel.iframe);
+	var pse  = this.pse  = Curve.computePoint(twig.frame.pse, panel.iframe);
+	var bezi = this.bezi = new BeziRect(Euclid.Point.zero, pse.sub(pnw), 7, 3);
 
 	this.value   = inherit ? inherit.value : '';
 	this.$fabric = null;
@@ -126,8 +120,8 @@ Input.prototype.maskPath = function(fabric, border, twist, view, length, size) {
 	var w  = this.maskWidth(size);
 	var w2 = w * 2;
 	var k  = this.maskKern(size);
-	var wm = w * magic;
-	var wh = h * magic;
+	var wm = w * Fabric.magic;
+	var wh = h * Farbic.magic;
 
 	for (var a = 0; a < length; a++) {
 		fabric.moveTo(                    x + w,  y - h);
@@ -195,12 +189,12 @@ Input.prototype.getOffsetPoint = function(offset) {
 
 	// TODO use token. text instead.
 	if (this.twig.password) {
-		return new Point(
+		return new Euclid.Point(
 			pitch.x + (2 * this.maskWidth(font.size) + this.maskKern(font.size)) * offset - 1,
 			ro(pitch.y + font.size)
 		);
 	} else {
-		return new Point(
+		return new Euclid.Point(
 			ro(pitch.x + Measure.width(val.substring(0, offset))),
 			ro(pitch.y + font.size)
 		);
@@ -221,7 +215,7 @@ Input.prototype.getCaretPos = function() {
 	var n = s - ro(fs + descend);
 	var	x = p.x + this.pnw.x - 1;
 
-	return immute({ s: s, n: n, x: x });
+	return Jools.immute({ s: s, n: n, x: x });
 };
 
 /**

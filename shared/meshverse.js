@@ -28,9 +28,9 @@
 /**
 | Imports
 */
+var Euclid;
 var Fabric;
 var Jools;
-var Point;
 var Rect;
 
 /**
@@ -46,7 +46,9 @@ var Meshverse;
 
 // node imports
 if (typeof (window) === 'undefined') {
-	Point  = require('./euclid/point');
+	Euclid = {
+		Point  : require('./euclid/point')
+	};
 	Rect   = require('./euclid/rect');
 	Jools  = require('./jools');
 }
@@ -118,7 +120,7 @@ Meshverse = {
 
 	'Point' : {
 		creator : function(t) {
-			return new Point(t.x, t.y);
+			return new Euclid.Point(t.x, t.y);
 		},
 
 		must : {

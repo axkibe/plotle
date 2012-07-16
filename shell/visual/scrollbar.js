@@ -33,9 +33,9 @@ var Visual;
 | Imports
 */
 var BeziRect;
+var Euclid;
 var Fabric;
 var Jools;
-var Point;
 var Rect;
 var theme;
 var View;

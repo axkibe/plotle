@@ -31,7 +31,6 @@
 */
 var Jools;
 var Margin;
-var Point;
 
 /**
 | Import/Exports
@@ -44,27 +43,6 @@ var Rect;
 (function(){
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser'); }
-
-var debug        = Jools.debug;
-var immute       = Jools.immute;
-var half         = Jools.half;
-var log          = Jools.log;
-var fixate       = Jools.fixate;
-var lazyFixate   = Jools.lazyFixate;
-var subclass     = Jools.subclass;
-
-/**
-| Constructor.
-|
-| pnw: point to north west.
-| pse: point to south east.
-*/
-/*var eRect = Rect;
-Rect = function(pnw, pse, key) {
-	eRect.call(this, pnw, pse, key);
-};
-subclass(Rect, eRect);
-*/
 
 /**
 | Draws the rectangle.

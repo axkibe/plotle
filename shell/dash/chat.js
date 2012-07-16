@@ -39,7 +39,6 @@ var Fabric;
 var Jools;
 var Measure;
 var Path;
-var Point;
 var Rect;
 var shell;
 var theme;
@@ -52,15 +51,6 @@ var View;
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
-var debug         = Jools.debug;
-var computePoint  = Curve.computePoint;
-var immute        = Jools.immute;
-var is            = Jools.is;
-var isnon         = Jools.isnon;
-var log           = Jools.log;
-var max           = Math.max;
-var ro            = Math.round;
-
 /**
 | Constructor.
 */
@@ -68,18 +58,18 @@ var Chat = Dash.Chat = function(twig, panel, inherit, name) {
 	this.name    = name;
 	this.twig    = twig;
 	this.panel   = panel;
-	var pnw      = this.pnw    = computePoint(twig.frame.pnw, panel.iframe);
-	var pse      = this.pse    = computePoint(twig.frame.pse, panel.iframe);
-	var iframe   = this.iframe = new Rect(Point.zero, pse.sub(pnw));
+	var pnw      = this.pnw    = Curve.computePoint(twig.frame.pnw, panel.iframe);
+	var pse      = this.pse    = Curve.computePoint(twig.frame.pse, panel.iframe);
+	var iframe   = this.iframe = new Rect(Euclid.Point.zero, pse.sub(pnw));
 
 	var fs = this.twig.fontStyle;
 
 	this.messages   = inherit ? inherit.messages : [ ];
 
-	this.lineHeight = ro(fs.size * 1.2);
+	this.lineHeight = Math.round(fs.size * 1.2);
 	this.sideSlopeX = 20;
-	var descend     = ro(fs.size * theme.bottombox);
-	this.pitch      = new Point(this.sideSlopeX - 7, iframe.height - descend);
+	var descend     = Math.round(fs.size * theme.bottombox);
+	this.pitch      = new Euclid.Point(this.sideSlopeX - 7, iframe.height - descend);
 	this.coff       = 37;
 	this.itext      = '';
 };
@@ -102,11 +92,11 @@ Chat.prototype.getCaretPos = function() {
 	//var p = { x: 2, y : 2};
 
 	var pnw = this.pnw;
-	var s = ro(p.y + pnw.y + descend);
-	var n = s - ro(fs + descend);
+	var s = Math.round(p.y + pnw.y + descend);
+	var n = s - Math.round(fs + descend);
 	var	x = p.x + this.pnw.x - 1;
 
-	return immute({ s: s, n: n, x: x });
+	return Jools.immute({ s: s, n: n, x: x });
 };
 
 Chat.prototype._weave = function() {
@@ -129,7 +119,7 @@ Chat.prototype._weave = function() {
 	fabric.fillText(this.itext, x + 37, y);
 	y -= 2;
 
-	for(var a = this.messages.length - 1, aA = max(a - 5, 0); a >= aA; a--) {
+	for(var a = this.messages.length - 1, aA = Math.max(a - 5, 0); a >= aA; a--) {
 		y -= lh;
 		fabric.fillText(this.messages[a], x, y);
 	}
@@ -160,9 +150,9 @@ Chat.prototype.getOffsetPoint = function(offset) {
 	var itext    = this.itext;
 	var pitch    = this.pitch;
 
-	return new Point(
-		ro(pitch.x + this.coff + Measure.width(itext.substring(0, offset))),
-		ro(pitch.y)
+	return new Euclid.Point(
+		Math.round(pitch.x + this.coff + Measure.width(itext.substring(0, offset))),
+		Math.round(pitch.y)
 	);
 };
 
@@ -185,7 +175,7 @@ Chat.prototype.drawCaret = function(view) {
 	var cpos  = caret.$pos = this.getCaretPos();
 
 	var cx  = cpos.x;
-	var ch  = ro((cpos.s - cpos.n) * view.zoom);
+	var ch  = Math.round((cpos.s - cpos.n) * view.zoom);
 	var cp = view.point(
 		panel.pnw.x + cpos.x,
 		panel.pnw.y + cpos.n

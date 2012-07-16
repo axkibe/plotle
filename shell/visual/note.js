@@ -35,10 +35,10 @@ Visual = Visual || {};
 var Action;
 var BeziRect;
 var config;
+var Euclid;
 var Fabric;
 var Jools;
 var Margin;
-var Point;
 var Rect;
 var shell;
 var system;
@@ -111,7 +111,10 @@ Note.prototype.getSilhoutte = function($zone, zAnchor) {
 	if (zAnchor) {
 		$s = this._silhoutte$0;
 		if ($s && $s.width === $z.width && $s.height === $z.height) return $s;
-		return this._silhoutte$0 = new BeziRect(Point.zero, new Point($z.width, $z.height), cr, cr);
+		return this._silhoutte$0 = new BeziRect(
+			Euclid.Point.zero,
+			new Euclid.Point($z.width, $z.height), cr, cr
+		);
 	} else {
 		$s = this._silhoutte$1;
 		if ($s && $s.eq($z)) return $s;
@@ -137,7 +140,7 @@ Note.prototype.setScrollbar = function(pos) {
 		pos,
 		zone.height - this.imargin.y,
 		this.$sub.doc.getHeight(),
-		Point.renew(zone.pse.x, zone.pnw.y + theme.scrollbar.vdis, sbary.pnw),
+		Euclid.Point.renew(zone.pse.x, zone.pnw.y + theme.scrollbar.vdis, sbary.pnw),
 		zone.height - theme.scrollbar.vdis * 2
 	);
 };
@@ -236,7 +239,7 @@ Note.prototype.draw = function(fabric, view) {
 		f.fill(theme.note.style.fill, silhoutte, 'path', View.proper);
 
 		// draws selection and text
-		sbary.point = Point.renew(0, sbary.getPos(), sbary.point);
+		sbary.point = Euclid.Point.renew(0, sbary.getPos(), sbary.point);
 		doc.draw(f, view.home(), zone.width, imargin, sbary.point);
 
 		// draws the border
@@ -318,39 +321,39 @@ Note.prototype.getZone = function() {
 
 		switch ($action.align) {
 		case 'n'  :
-			pnw = Point.renew(spnw.x, min(spnw.y + dy, spse.y - minh), spnw, spse);
+			pnw = Euclid.Point.renew(spnw.x, min(spnw.y + dy, spse.y - minh), spnw, spse);
 			pse = spse;
 			break;
 		case 'ne' :
-			pnw = Point.renew(
+			pnw = Euclid.Point.renew(
 				spnw.x, min(spnw.y + dy, spse.y - minh), spnw, spse);
-			pse = Point.renew(
+			pse = Euclid.Point.renew(
 				max(spse.x + dx, spnw.x + minw), spse.y, spnw, spse);
 			break;
 		case 'e'  :
 			pnw = spnw;
-			pse = Point.renew(max(spse.x + dx, spnw.x + minw), spse.y, spnw, spse);
+			pse = Euclid.Point.renew(max(spse.x + dx, spnw.x + minw), spse.y, spnw, spse);
 			break;
 		case 'se' :
 			pnw = spnw;
-			pse = Point.renew(
+			pse = Euclid.Point.renew(
 				max(spse.x + dx, spnw.x + minw),
 				max(spse.y + dy, spnw.y + minh), spnw, spse);
 			break;
 		case 's' :
 			pnw = spnw;
-			pse = Point.renew(spse.x, max(spse.y + dy, spnw.y + minh), spnw, spse);
+			pse = Euclid.Point.renew(spse.x, max(spse.y + dy, spnw.y + minh), spnw, spse);
 			break;
 		case 'sw'  :
-			pnw = Point.renew(min(spnw.x + dx, spse.x - minw), spnw.y, spnw, spse);
-			pse = Point.renew(spse.x, max(spse.y + dy, spnw.y + minh), spnw, spse);
+			pnw = Euclid.Point.renew(min(spnw.x + dx, spse.x - minw), spnw.y, spnw, spse);
+			pse = Euclid.Point.renew(spse.x, max(spse.y + dy, spnw.y + minh), spnw, spse);
 			break;
 		case 'w'   :
-			pnw = Point.renew(min(spnw.x + dx, spse.x - minw), spnw.y, spnw, spse);
+			pnw = Euclid.Point.renew(min(spnw.x + dx, spse.x - minw), spnw.y, spnw, spse);
 			pse = spse;
 			break;
 		case 'nw' :
-			pnw = Point.renew(
+			pnw = Euclid.Point.renew(
 				min(spnw.x + dx, spse.x - minw),
 				min(spnw.y + dy, spse.y - minh), spnw, spse);
 			pse = spse;

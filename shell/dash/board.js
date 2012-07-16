@@ -34,10 +34,10 @@ Dash = Dash || {};
 */
 var Curve;
 var Design;
+var Euclid;
 var Fabric;
 var Jools;
 var Path;
-var Point;
 var shell;
 var system;
 var theme;
@@ -127,7 +127,7 @@ Board.prototype.getPanel = function(name) {
 		name,
 		cpanel,
 		this,
-		new Point(fabric.width, fabric.height)
+		new Euclid.Point(fabric.width, fabric.height)
 	);
 
 	return this.panels[name] = panel;

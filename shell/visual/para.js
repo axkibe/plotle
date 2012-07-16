@@ -32,12 +32,12 @@ Visual = Visual || {};
 | Imports
 */
 var Caret;
+var Euclid;
 var Fabric;
 var Jools;
 var Measure;
 var Sign;
 var Path;
-var Point;
 var config;
 var shell;
 var system;
@@ -355,7 +355,7 @@ Para.prototype.getOffsetPoint = function(offset, flowPos$) {
 	var px = ro(token.x + Measure.width(text.substring(token.o, offset)));
 	var py = line.y;
 
-	return new Point(px, py);
+	return new Euclid.Point(px, py);
 };
 
 /**

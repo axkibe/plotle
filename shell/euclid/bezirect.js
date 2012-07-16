@@ -37,9 +37,9 @@
 /**
 | Imports
 */
+var Euclid;
 var Fabric;
 var Jools;
-var Point;
 var Rect;
 
 /**
@@ -54,13 +54,6 @@ var BeziRect = null;
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser'); }
 
-var debug        = Jools.debug;
-var immute       = Jools.immute;
-var innumerable  = Jools.innumerable;
-var log          = Jools.log;
-var magic        = Fabric.magic;
-var subclass     = Jools.subclass;
-
 /**
 | Constructor.
 |
@@ -68,7 +61,7 @@ var subclass     = Jools.subclass;
 | BeziRect(pnw, pse, a, b)
 */
 BeziRect = function(a1, a2, a3, a4) {
-	if (a1.constructor === Point) {
+	if (a1.constructor === Euclid.Point) {
 		Rect.call(this, a1, a2);
 		this.a = a3;
 		this.b = a4;
@@ -78,7 +71,7 @@ BeziRect = function(a1, a2, a3, a4) {
 		this.b = a3;
 	}
 };
-subclass(BeziRect, Rect);
+Jools.subclass(BeziRect, Rect);
 
 /**
 | Draws the roundrect.
@@ -90,8 +83,8 @@ BeziRect.prototype.path = function(fabric, border, twist, view) {
 	var sy = view.y(this.pse) - border - 1;
 	var a = this.a;
 	var b = this.b;
-	var ma = magic * (a + border);
-	var mb = magic * (b + border);
+	var ma = Fabric.magic * (a + border);
+	var mb = Fabric.magic * (b + border);
 
 	fabric.moveTo(                     wx + a, ny    );
 	fabric.lineTo(                     ex - a, ny    );

@@ -29,8 +29,8 @@
 /**
 | Imports
 */
+var Euclid;
 var Jools;
-var Point;
 var Rect;
 
 /**
@@ -86,14 +86,14 @@ Line.connect = function(shape1, end1, shape2, end2) {
 	if (!shape1 || !shape2) throw new Error('error');
 	var z1, z2;
 
-	if (shape1 instanceof Rect && shape2 instanceof Point) {
+	if (shape1 instanceof Rect && shape2 instanceof Euclid.Point) {
 		var p2 = shape2;
 		z1 = shape1; // REMOVE "z1"
 		var p1;
-		if (z1.within(p2, Point.zero)) {
+		if (z1.within(p2, Euclid.Point.zero)) {
 			p1 = z1.pc;
 		} else {
-			p1 = new Point(
+			p1 = new Euclid.Point(
 				limit(z1.pnw.x, p2.x, z1.pse.x),
 				limit(z1.pnw.y, p2.y, z1.pse.y)
 			);
@@ -128,7 +128,7 @@ Line.connect = function(shape1, end1, shape2, end2) {
 			// an intersection
 			y1 = y2 = half(max(z1.pnw.y, z2.pnw.y) + min(z1.pse.y, z2.pse.y));
 		}
-		return new Line(new Point(x1, y1), end1, new Point(x2, y2), end2);
+		return new Line(new Euclid.Point(x1, y1), end1, new Euclid.Point(x2, y2), end2);
 	}
 	throw new Error('do not know how to create connection.');
 };
@@ -140,8 +140,8 @@ lazyFixate(Line.prototype, 'zone', function() {
 	var p1 = this.p1;
 	var p2 = this.p2;
 	return new Rect(
-		Point.renew(min(p1.x, p2.x), min(p1.y, p2.y), p1, p2),
-		Point.renew(max(p1.x, p2.x), max(p1.y, p2.y), p1, p2));
+		Euclid.Point.renew(min(p1.x, p2.x), min(p1.y, p2.y), p1, p2),
+		Euclid.Point.renew(max(p1.x, p2.x), max(p1.y, p2.y), p1, p2));
 });
 
 
@@ -151,7 +151,7 @@ lazyFixate(Line.prototype, 'zone', function() {
 lazyFixate(Line.prototype, 'pc', function() {
 	var p1 = this.p1;
 	var p2 = this.p2;
-	return new Point(half(p1.x + p2.x), half(p1.y + p2.y));
+	return new Euclid.Point(half(p1.x + p2.x), half(p1.y + p2.y));
 });
 
 /**

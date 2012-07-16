@@ -33,12 +33,12 @@ Visual = Visual || {};
 | Imports
 */
 var Action;
+var Euclid;
 var Fabric;
 var Jools;
 var Line;
 var OvalMenu;
 var Path;
-var Point;
 var Rect;
 var shell;
 var system;
@@ -78,7 +78,7 @@ var Space = Visual.Space = function(twig, path, access) {
 
 	this.access      = access;
 	this.fabric      = system.fabric;
-	this.$view       = new View(Point.zero, 0);
+	this.$view       = new View(Euclid.Point.zero, 0);
 
 	for (var k in twig.copse)
 		{ g[k] = this.createItem(twig.copse[k], k); }
@@ -530,7 +530,7 @@ Space.prototype.input = function(text) {
 */
 Space.prototype.changeZoom = function(df) {
 	var $view = this.$view;
-	var pm = new Point(half(this.fabric.width), half(this.fabric.height));
+	var pm = new Euclid.Point(half(this.fabric.width), half(this.fabric.height));
 	pm = $view.depoint(pm);
 	this.$view = this.$view.review(df, pm);
 	shell.setSpaceZoom(this.$view.fact);

@@ -39,7 +39,6 @@ var Fabric;
 var Jools;
 var Path;
 var Proc;
-var Point;
 var Rect;
 var shell;
 var Tree;
@@ -53,16 +52,6 @@ var View;
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
 /**
-| Shortcuts
-*/
-var debug         = Jools.debug;
-var immute        = Jools.immute;
-var is            = Jools.is;
-var isnon         = Jools.isnon;
-var computePoint  = Curve.computePoint;
-var half          = Jools.half;
-
-/**
 | Constructor
 */
 var Panel = Dash.Panel = function(name, inherit, board, screensize) {
@@ -70,13 +59,13 @@ var Panel = Dash.Panel = function(name, inherit, board, screensize) {
 	this.board = board;
 	var tree   = this.tree  = new Tree(Design[name], Design.Pattern);
 	var frameD = tree.root.frame;
-	var oframe = new Rect(Point.zero, screensize);
-	var pnw    = this.pnw    = computePoint(frameD.pnw, oframe);
-	var pse    = this.pse    = computePoint(frameD.pse, oframe);
-	var iframe = this.iframe = new Rect(Point.zero, pse.sub(pnw));
+	var oframe = new Rect(Euclid.Point.zero, screensize);
+	var pnw    = this.pnw    = Curve.computePoint(frameD.pnw, oframe);
+	var pse    = this.pse    = Curve.computePoint(frameD.pse, oframe);
+	var iframe = this.iframe = new Rect(Euclid.Point.zero, pse.sub(pnw));
 	this.curve = new Curve(tree.root.curve, iframe);
 
-	this.gradientPC = new Point(half(iframe.width), iframe.height + 450);
+	this.gradientPC = new Euclid.Point(Jools.half(iframe.width), iframe.height + 450);
 	this.gradientR0 = 0;
 	this.gradientR1 = 650;
 	this.screensize = screensize;

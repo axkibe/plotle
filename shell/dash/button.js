@@ -35,10 +35,10 @@ Dash = Dash || {};
 var Action;
 var config;
 var Curve;
+var Euclid;
 var Fabric;
 var Jools;
 var Path;
-var Point;
 var Rect;
 var shell;
 var system;
@@ -74,7 +74,7 @@ var Button = Dash.Button = function(twig, panel, inherit, name) {
 
 	var pnw      = this.pnw    = computePoint(twig.frame.pnw, panel.iframe);
 	var pse      = this.pse    = computePoint(twig.frame.pse, panel.iframe);
-	var iframe   = this.iframe = new Rect(Point.zero, pse.sub(pnw));
+	var iframe   = this.iframe = new Rect(Euclid.Point.zero, pse.sub(pnw));
 	this.curve   = new Curve(twig.curve, iframe);
 
 	this.captionPos = computePoint(twig.caption.pos, iframe);

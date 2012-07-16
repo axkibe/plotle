@@ -28,10 +28,10 @@
 /**
 | Imports
 */
+var Euclid;
 var Jools;
 var Fabric;
 var Peer;
-var Point;
 var Shell;
 var config;
 
@@ -345,7 +345,10 @@ System.prototype._onMouseDown = function(event) {
 	});
 
 	var canvas = this._canvas;
-	var p      = new Point (event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop);
+	var p      = new Euclid.Point(
+		event.pageX - canvas.offsetLeft,
+		event.pageY - canvas.offsetTop
+	);
 	var shift  = event.shiftKey;
 	var ctrl   = event.ctrlKey || event.metaKey;
 
@@ -378,7 +381,10 @@ System.prototype._onMouseDown = function(event) {
 */
 System.prototype._onMouseMove = function(event) {
 	var canvas = this._canvas;
-	var p      = new Point(event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop);
+	var p      = new Euclid.Point(
+		event.pageX - canvas.offsetLeft,
+		event.pageY - canvas.offsetTop
+	);
 	var shift  = event.shiftKey;
 	var ctrl   = event.ctrlKey || event.metaKey;
 	var cursor = null;
@@ -428,7 +434,10 @@ System.prototype._onMouseUp = function(event) {
 	this._releaseEvents();
 
 	var canvas = this._canvas;
-	var p      = new Point(event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop);
+	var p      = new Euclid.Point(
+		event.pageX - canvas.offsetLeft,
+		event.pageY - canvas.offsetTop
+	);
 	var shift  = event.shiftKey;
 	var ctrl   = event.ctrlKey || event.metaKey;
 	var cursor = null;
@@ -469,7 +478,10 @@ System.prototype._onMouseUp = function(event) {
 */
 System.prototype._onMouseWheel = function(event) {
 	var canvas = this._canvas;
-	var p = new Point(event.pageX - canvas.offsetLeft, event.pageY - canvas.offsetTop);
+	var p = new Euclid.Point(
+		event.pageX - canvas.offsetLeft,
+		event.pageY - canvas.offsetTop
+	);
 
 	var dir;
 	if (is(event.wheelDelta)) {

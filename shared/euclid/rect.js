@@ -29,7 +29,7 @@
 | Imports
 */
 var Jools;
-var Point;
+var Euclid;
 var Margin;
 
 /**
@@ -47,8 +47,10 @@ var Rect = null;
 | Node imports
 */
 if (typeof(window) === 'undefined') {
+	Euclid = {
+		Point : require('./point')
+	}
 	Jools  = require('../jools');
-	Point  = require('./point');
 	Margin = require('./margin');
 }
 
@@ -91,29 +93,29 @@ Rect.prototype.reduce = function(margin) {
 
 	// allow margins to reduce the rect to zero size without erroring.
 	return new Rect(
-		Point.renew(this.pnw.x + margin.e, this.pnw.y + margin.n, this.pnw, this.pse),
-		Point.renew(this.pse.x - margin.w, this.pse.y - margin.s, this.pnw, this.pse));
+		Euclid.Point.renew(this.pnw.x + margin.e, this.pnw.y + margin.n, this.pnw, this.pse),
+		Euclid.Point.renew(this.pse.x - margin.w, this.pse.y - margin.s, this.pnw, this.pse));
 };
 
 /**
 | Point in the center.
 */
 lazyFixate(Rect.prototype, 'pc', function() {
-	return new Point(half(this.pse.x + this.pnw.x), half(this.pse.y + this.pnw.y));
+	return new Euclid.Point(half(this.pse.x + this.pnw.x), half(this.pse.y + this.pnw.y));
 });
 
 /**
 | West.
 */
 lazyFixate(Rect.prototype, 'w', function() {
-	return new Point(this.pnw.x, half(this.pse.y + this.pnw.y));
+	return new Euclid.Point(this.pnw.x, half(this.pse.y + this.pnw.y));
 });
 
 /**
 | East.
 */
 lazyFixate(Rect.prototype, 'e', function() {
-	return new Point(this.pse.x, half(this.pse.y + this.pnw.y));
+	return new Euclid.Point(this.pse.x, half(this.pse.y + this.pnw.y));
 });
 
 /**
@@ -150,7 +152,7 @@ Rect.renew = function(wx, ny, ex, sy) {
 		if (r.pse.x === wx && r.pse.y === ny)
 			{ pnw = r.pse; break; }
 	}
-	
+
 	for(var a = 4, aZ = arguments.length; a < aZ; a++) {
 		var r = arguments[a];
 		if (!isnon(r)) { continue; }
@@ -160,11 +162,11 @@ Rect.renew = function(wx, ny, ex, sy) {
 	}
 
 	if (!pnw)
-		{ pnw = new Point(wx, ny); }
-	
+		{ pnw = new Euclid.Point(wx, ny); }
+
 	if (!pse)
-		{ pse = new Point(ex, sy); }
-	
+		{ pse = new Euclid.Point(ex, sy); }
+
 	return new Rect(pnw, pse);
 }
 

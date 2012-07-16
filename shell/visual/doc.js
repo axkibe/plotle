@@ -31,10 +31,10 @@ Visual = Visual || {};
 /**
 | Imports
 */
+var Euclid;
 var Fabric;
 var Jools;
 var Path;
-var Point;
 var shell;
 var theme;
 var View;
@@ -152,8 +152,8 @@ Doc.prototype.draw = function(fabric, view, width, imargin, scrollp) {
 		var vpara = this.atRank(r);
 		var flow = vpara.getFlow();
 
-		pnws[twig.ranks[r]] = new Point(imargin.w, ro(y));
-		var p = new Point(imargin.w, ro(y - scrollp.y));
+		pnws[twig.ranks[r]] = new Euclid.Point(imargin.w, ro(y));
+		var p = new Euclid.Point(imargin.w, ro(y - scrollp.y));
 
 		vpara.draw(fabric, view, view.point(p));
 		y += flow.height + paraSep;
@@ -281,8 +281,8 @@ Doc.prototype.pathSelection = function(fabric, border, twist, view, width, imarg
 	var p1 = vpara1.getOffsetPoint(s1.at1);
 	var p2 = vpara2.getOffsetPoint(s2.at1);
 
-	p1 = new Point(ro(p1.x + pnw1.x - sp.x), ro(p1.y + pnw1.y - sp.y));
-	p2 = new Point(ro(p2.x + pnw2.x - sp.x), ro(p2.y + pnw2.y - sp.y));
+	p1 = new Euclid.Point(ro(p1.x + pnw1.x - sp.x), ro(p1.y + pnw1.y - sp.y));
+	p2 = new Euclid.Point(ro(p2.x + pnw2.x - sp.x), ro(p2.y + pnw2.y - sp.y));
 
 	var fontsize = this.getFontSize();
 	var descend = ro(fontsize * theme.bottombox);

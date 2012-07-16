@@ -32,11 +32,11 @@ Visual = Visual || {};
 | Imports
 */
 var Action;
+var Euclid;
 var config;
 var Fabric;
 var Jools;
 var Margin;
-var Point;
 var Rect;
 var shell;
 var system;
@@ -97,7 +97,10 @@ Label.prototype.getSilhoutte = function($zone, zAnchor) {
 	if ($s && $s.width === $z.width && $s.height === $z.height) return $s;
 
 	if (zAnchor) {
-		return this._silhoutte$0 = new Rect(Point.zero, new Point($z.width - 1, $z.height - 1));
+		return this._silhoutte$0 = new Rect(
+			Euclid.Point.zero,
+			new Euclid.Point($z.width - 1, $z.height - 1)
+		);
 	} else {
 		return this._silhoutte$1 = new Rect($z.pnw, $z.pse.sub(1, 1));
 	}
@@ -140,7 +143,7 @@ Label.prototype.draw = function(fabric, view) {
 		var silhoutte = this.getSilhoutte(zone, true);
 
 		// draws selection and text
-		doc.draw(f, view.home(), zone.width, imargin, Point.zero);
+		doc.draw(f, view.home(), zone.width, imargin, Euclid.Point.zero);
 
 		// draws the border
 		f.edge(theme.label.style.edge, silhoutte, 'path', View.proper);

@@ -29,8 +29,8 @@
 | Imports
 */
 var Jools;
+var Euclid;
 var Fabric;
-var Point;
 
 /**
 | Exports
@@ -82,15 +82,15 @@ Curve.computePoint = function(model, frame) {
 	switch (model.anchor) {
 	// TODO integrate add into switch
 	// TODO make this part of frame logic
-	case 'c'  : p = new Point(half(pnw.x + pse.x), half(pnw.y + pse.y)); break;
-	case 'n'  : p = new Point(half(pnw.x + pse.x), pnw.y);               break;
-	case 'ne' : p = new Point(pse.x,               pnw.y);               break;
-	case 'e'  : p = new Point(pse.x,               half(pnw.y + pse.y)); break;
-	case 'se' : p = pse;                                                 break;
-	case 's'  : p = new Point(half(pnw.x + pse.x), pse.y);               break;
-	case 'sw' : p = new Point(pnw.x,               pse.y);               break;
-	case 'w'  : p = new Point(pnw.x,               half(pnw.y + pse.y)); break;
-	case 'nw' : p = pnw;                                                 break;
+	case 'c'  : p = new Euclid.Point(half(pnw.x + pse.x), half(pnw.y + pse.y)); break;
+	case 'n'  : p = new Euclid.Point(half(pnw.x + pse.x), pnw.y);               break;
+	case 'ne' : p = new Euclid.Point(pse.x,               pnw.y);               break;
+	case 'e'  : p = new Euclid.Point(pse.x,               half(pnw.y + pse.y)); break;
+	case 'se' : p = pse;                                                        break;
+	case 's'  : p = new Euclid.Point(half(pnw.x + pse.x), pse.y);               break;
+	case 'sw' : p = new Euclid.Point(pnw.x,               pse.y);               break;
+	case 'w'  : p = new Euclid.Point(pnw.x,               half(pnw.y + pse.y)); break;
+	case 'nw' : p = pnw;                                                        break;
 	}
 	return p.add(model.x, model.y);
 };

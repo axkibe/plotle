@@ -26,17 +26,17 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
-| Imports
-*/
-var Jools;
-var Point;
-var Rect;
-var theme;
-
-/**
-| Import/Exports
+| Export
 */
 var View = null;
+
+/**
+| Imports
+*/
+var Euclid;
+var Jools;
+var Rect;
+var theme;
 
 /**
 | Capsule
@@ -45,23 +45,17 @@ var View = null;
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser'); }
 
-var debug  = Jools.debug;
-var immute = Jools.immute;
-var limit  = Jools.limit;
-var log    = Jools.log;
-var ro     = Math.round;
-
 /**
 | Constructor.
 */
 View = function(pan, fact) {
 	this.pan  = pan;
-	this.fact = limit(theme.zoom.min, fact, theme.zoom.max);
+	this.fact = Jools.limit(theme.zoom.min, fact, theme.zoom.max);
 	this.zoom = Math.pow(theme.zoom.base, this.fact);
-	immute(this);
+	Jools.immute(this);
 };
 
-View.proper = new View(Point.zero, 0);
+View.proper = new View(Euclid.Point.zero, 0);
 
 /**
 | Returns the x value for a point for this view.
@@ -69,7 +63,7 @@ View.proper = new View(Point.zero, 0);
 View.prototype.x = function(a1, a2) {
 	var x, y;
 
-	if (a1 instanceof Point) {
+	if (a1 instanceof Euclid.Point) {
 		x = a1.x;
 		y = a1.y;
 	} else {
@@ -78,8 +72,8 @@ View.prototype.x = function(a1, a2) {
 		x = a1;
 		y = a2;
 	}
-	
-	return ro((x + this.pan.x) * this.zoom);
+
+	return Math.round((x + this.pan.x) * this.zoom);
 };
 
 /**
@@ -88,7 +82,7 @@ View.prototype.x = function(a1, a2) {
 View.prototype.dex = function(a1, a2) {
 	var x, y;
 
-	if (a1 instanceof Point) {
+	if (a1 instanceof Euclid.Point) {
 		x = a1.x;
 		y = a1.y;
 	} else {
@@ -97,8 +91,8 @@ View.prototype.dex = function(a1, a2) {
 		x = a1;
 		y = a2;
 	}
-	
-	return ro(x / this.zoom - this.pan.x);
+
+	return Math.round(x / this.zoom - this.pan.x);
 };
 
 /**
@@ -106,8 +100,8 @@ View.prototype.dex = function(a1, a2) {
 */
 View.prototype.y = function(a1, a2) {
 	var x, y;
-	
-	if (a1 instanceof Point) {
+
+	if (a1 instanceof Euclid.Point) {
 		x = a1.x;
 		y = a1.y;
 	} else {
@@ -116,8 +110,8 @@ View.prototype.y = function(a1, a2) {
 		x = a1;
 		y = a2;
 	}
-	
-	return ro((y + this.pan.y) * this.zoom);
+
+	return Math.round((y + this.pan.y) * this.zoom);
 };
 
 /**
@@ -125,8 +119,8 @@ View.prototype.y = function(a1, a2) {
 */
 View.prototype.dey = function(a1, a2) {
 	var x, y;
-	
-	if (a1 instanceof Point) {
+
+	if (a1 instanceof Euclid.Point) {
 		x = a1.x;
 		y = a1.y;
 	} else {
@@ -135,30 +129,30 @@ View.prototype.dey = function(a1, a2) {
 		x = a1;
 		y = a2;
 	}
-	
-	return ro(y / this.zoom - this.pan.y);
+
+	return Math.round(y / this.zoom - this.pan.y);
 };
 
 /**
-| Returns a view with pan == Point.zero, but same zero level
+| Returns a view with pan zero, but same zero level
 */
 View.prototype.home = function() {
 	if (this._$home) return this._$home;
-	return this._$home = new View(Point.zero, this.fact);
+	return this._$home = new View(Euclid.Point.zero, this.fact);
 };
 
 /**
 | Returns a point repositioned to the current view.
 */
 View.prototype.point = function(a1, a2) {
-	return new Point(this.x(a1, a2), this.y(a1, a2));
+	return new Euclid.Point(this.x(a1, a2), this.y(a1, a2));
 };
 
 /**
 | Returns the original position of repositioned point.
 */
 View.prototype.depoint = function(a1, a2) {
-	return new Point(this.dex(a1, a2), this.dey(a1, a2));
+	return new Euclid.Point(this.dex(a1, a2), this.dey(a1, a2));
 };
 
 /**
@@ -211,15 +205,15 @@ View.prototype.review = function(df, p) {
 	if (df === 0) {
 		f1 = 0;
 	} else {
-		f1 = limit(theme.zoom.min, this.fact + df, theme.zoom.max);
+		f1 = Jools.limit(theme.zoom.min, this.fact + df, theme.zoom.max);
 	}
 	var z1 = Math.pow(1.1, f1);
 	var f = 1 / z1  - 1 / this.zoom;
 
 	return new View(
-		new Point(
-			ro(pan.x + p.x * f),
-			ro(pan.y + p.y * f)
+		new Euclid.Point(
+			Math.round(pan.x + p.x * f),
+			Math.round(pan.y + p.y * f)
 		),
 		f1
 	);

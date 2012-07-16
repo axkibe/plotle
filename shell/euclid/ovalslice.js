@@ -30,7 +30,6 @@
 */
 var Fabric;
 var Jools;
-var Point;
 
 /**
 | Exports
