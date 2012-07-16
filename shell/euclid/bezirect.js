@@ -35,17 +35,16 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
+| Export
+*/
+var BeziRect = null;
+
+/**
 | Imports
 */
 var Euclid;
 var Fabric;
 var Jools;
-var Rect;
-
-/**
-| Exports
-*/
-var BeziRect = null;
 
 /**
 | Capsule
@@ -62,16 +61,16 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 */
 BeziRect = function(a1, a2, a3, a4) {
 	if (a1.constructor === Euclid.Point) {
-		Rect.call(this, a1, a2);
+		Euclid.Rect.call(this, a1, a2);
 		this.a = a3;
 		this.b = a4;
 	} else {
-		Rect.call(this, a1.pnw, a1.pse);
+		Euclid.Rect.call(this, a1.pnw, a1.pse);
 		this.a = a2;
 		this.b = a3;
 	}
 };
-Jools.subclass(BeziRect, Rect);
+Jools.subclass(BeziRect, Euclid.Rect);
 
 /**
 | Draws the roundrect.

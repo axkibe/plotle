@@ -36,7 +36,6 @@ var config;
 var Euclid;
 var Fabric;
 var Jools;
-var Rect;
 var shell;
 var system;
 var theme;
@@ -63,7 +62,7 @@ var SwitchPanel = Dash.SwitchPanel = function(panel, current, userName, psw) {
 	this.panel      = panel;
 	this.current    = current;
 	var swidim      = theme.switchpanel.dimensions;
-	var iframe      = this.iframe = new Rect(
+	var iframe      = this.iframe = new Euclid.Rect(
 		Euclid.Point.zero,
 		new Euclid.Point(swidim.a * 2, swidim.b)
 	);
@@ -250,7 +249,7 @@ SwitchPanel.prototype._weave = function() {
 	if (config.debug.drawBoxes) {
 		fabric.paint(
 			Dash.Board.styles.boxes,
-			new Rect(iframe.pnw, iframe.pse.sub(1, 1)),
+			new Euclid.Rect(iframe.pnw, iframe.pse.sub(1, 1)),
 			'path',
 			View.proper
 		);

@@ -39,7 +39,6 @@ var Jools;
 var Line;
 var OvalMenu;
 var Path;
-var Rect;
 var shell;
 var system;
 var theme;
@@ -458,7 +457,7 @@ Space.prototype.floatMenuSelect = function(entry, p) {
 		var nh = theme.note.newHeight;
 		var dp = $view.depoint(p);
 		pnw = dp.sub(half(nw) , half(nh));
-		key = shell.peer.newNote(this.path, new Rect(pnw, pnw.add(nw, nh)));
+		key = shell.peer.newNote(this.path, new Euclid.Rect(pnw, pnw.add(nw, nh)));
 		this.setFocus(this.$sub[key]);
 		break;
 	case 'ne' :

@@ -29,9 +29,7 @@
 | Imports
 */
 var Euclid;
-var Fabric;
 var Jools;
-var Rect;
 
 /**
 | Exports
@@ -47,13 +45,12 @@ var Meshverse;
 // node imports
 if (typeof (window) === 'undefined') {
 	Euclid = {
-		Point  : require('./euclid/point')
+		Point  : require('./euclid/point'),
+		Rect   : require('./euclid/rect')
 	};
-	Rect   = require('./euclid/rect');
+
 	Jools  = require('./jools');
 }
-
-var immute = Jools.immute;
 
 /**
 | The meshcraft universe
@@ -109,7 +106,7 @@ Meshverse = {
 
 	'Rect' : {
 		creator : function(t) {
-			return new Rect(t.pnw, t.pse);
+			return new Euclid.Rect(t.pnw, t.pse);
 		},
 
 		must : {
@@ -137,13 +134,13 @@ Meshverse = {
 	for(var k in patterns) {
 		var p = patterns[k];
 
-		immute(p);
+		Jools.immute(p);
 
 		if (p.copse)
-			{ immute(p.copse); }
+			{ Jools.immute(p.copse); }
 
 		if (p.must)
-			{ immute(p.must); }
+			{ Jools.immute(p.must); }
 
 		if (p.must) {
 			if (p.copse)

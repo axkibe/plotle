@@ -39,7 +39,6 @@ var Euclid;
 var Fabric;
 var Jools;
 var Margin;
-var Rect;
 var shell;
 var system;
 var theme;
@@ -362,7 +361,7 @@ Note.prototype.getZone = function() {
 		default  :
 			throw new Error('unknown align');
 		}
-		return new Rect(pnw, pse);
+		return new Euclid.Rect(pnw, pse);
 	default :
 		return twig.zone;
 	}

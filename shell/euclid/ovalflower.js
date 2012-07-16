@@ -44,7 +44,6 @@
 */
 var Fabric;
 var Jools;
-var Rect;
 
 /**
 | Exports

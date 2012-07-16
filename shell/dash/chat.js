@@ -35,11 +35,11 @@ Dash = Dash || {};
 var Caret;
 var config;
 var Curve;
+var Euclid;
 var Fabric;
 var Jools;
 var Measure;
 var Path;
-var Rect;
 var shell;
 var theme;
 var View;
@@ -60,7 +60,7 @@ var Chat = Dash.Chat = function(twig, panel, inherit, name) {
 	this.panel   = panel;
 	var pnw      = this.pnw    = Curve.computePoint(twig.frame.pnw, panel.iframe);
 	var pse      = this.pse    = Curve.computePoint(twig.frame.pse, panel.iframe);
-	var iframe   = this.iframe = new Rect(Euclid.Point.zero, pse.sub(pnw));
+	var iframe   = this.iframe = new Euclid.Rect(Euclid.Point.zero, pse.sub(pnw));
 
 	var fs = this.twig.fontStyle;
 
@@ -127,7 +127,7 @@ Chat.prototype._weave = function() {
 	if (config.debug.drawBoxes) {
 		fabric.paint(
 			Dash.Board.styles.boxes,
-			new Rect(this.iframe.pnw, this.iframe.pse.sub(1, 1)),
+			new Euclid.Rect(this.iframe.pnw, this.iframe.pse.sub(1, 1)),
 			'path',
 			View.proper
 		);

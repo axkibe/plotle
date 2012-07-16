@@ -27,15 +27,9 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
-| Imports
+| Export
 */
-var Jools;
-var Margin;
-
-/**
-| Import/Exports
-*/
-var Rect;
+var Euclid;
 
 /**
 | Capsule
@@ -47,7 +41,7 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Draws the rectangle.
 */
-Rect.prototype.path = function(fabric, border, twist, view) {
+Euclid.Rect.prototype.path = function(fabric, border, twist, view) {
 	var wx = view.x(this.pnw);
 	var ny = view.y(this.pnw);
 	var ex = view.x(this.pse);

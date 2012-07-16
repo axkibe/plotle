@@ -39,7 +39,6 @@ var Fabric;
 var Jools;
 var Path;
 var Proc;
-var Rect;
 var shell;
 var Tree;
 var View;
@@ -59,10 +58,10 @@ var Panel = Dash.Panel = function(name, inherit, board, screensize) {
 	this.board = board;
 	var tree   = this.tree  = new Tree(Design[name], Design.Pattern);
 	var frameD = tree.root.frame;
-	var oframe = new Rect(Euclid.Point.zero, screensize);
+	var oframe = new Euclid.Rect(Euclid.Point.zero, screensize);
 	var pnw    = this.pnw    = Curve.computePoint(frameD.pnw, oframe);
 	var pse    = this.pse    = Curve.computePoint(frameD.pse, oframe);
-	var iframe = this.iframe = new Rect(Euclid.Point.zero, pse.sub(pnw));
+	var iframe = this.iframe = new Euclid.Rect(Euclid.Point.zero, pse.sub(pnw));
 	this.curve = new Curve(tree.root.curve, iframe);
 
 	this.gradientPC = new Euclid.Point(Jools.half(iframe.width), iframe.height + 450);
@@ -161,7 +160,7 @@ Panel.prototype._weave = function() {
 	if (config.debug.drawBoxes) {
 		fabric.paint(
 			Dash.Board.styles.boxes,
-			new Rect(iframe.pnw,
+			new Euclid.Rect(iframe.pnw,
 			iframe.pse.sub(1, 1)),
 			'path',
 			View.proper

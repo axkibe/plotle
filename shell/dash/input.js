@@ -39,7 +39,6 @@ var Euclid;
 var Fabric;
 var Jools;
 var Measure;
-var Rect;
 var shell;
 var theme;
 var View;

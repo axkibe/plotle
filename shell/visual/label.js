@@ -37,7 +37,6 @@ var config;
 var Fabric;
 var Jools;
 var Margin;
-var Rect;
 var shell;
 var system;
 var theme;
@@ -97,12 +96,12 @@ Label.prototype.getSilhoutte = function($zone, zAnchor) {
 	if ($s && $s.width === $z.width && $s.height === $z.height) return $s;
 
 	if (zAnchor) {
-		return this._silhoutte$0 = new Rect(
+		return this._silhoutte$0 = new Euclid.Rect(
 			Euclid.Point.zero,
 			new Euclid.Point($z.width - 1, $z.height - 1)
 		);
 	} else {
-		return this._silhoutte$1 = new Rect($z.pnw, $z.pse.sub(1, 1));
+		return this._silhoutte$1 = new Euclid.Rect($z.pnw, $z.pse.sub(1, 1));
 	}
 };
 
@@ -215,7 +214,7 @@ Label.prototype.getZone = function() {
 	var height = max(Math.ceil(doc.getHeight()), ro(fs));
 
 	if (!$action || !this.path.equals($action.itemPath))
-		{ return new Rect(pnw, pnw.add(width, height)); }
+		{ return new Euclid.Rect(pnw, pnw.add(width, height)); }
 
 	// TODO cache the last zone
 
@@ -223,12 +222,12 @@ Label.prototype.getZone = function() {
 	case Action.ITEMDRAG:
 		var mx = $action.move.x - $action.start.x;
 		var my = $action.move.y - $action.start.y;
-		return new Rect(pnw.add(mx, my), pnw.add(mx + width, my + height));
+		return new Euclid.Rect(pnw.add(mx, my), pnw.add(mx + width, my + height));
 
 	case Action.ITEMRESIZE:
 		// resizing is done by fontSizeChange()
 		var szone = $action.startZone;
-		if (!szone) return new Rect(pnw, pnw.add(width, height));
+		if (!szone) return new Euclid.Rect(pnw, pnw.add(width, height));
 
 		switch ($action.align) {
 		case 'ne' : pnw = pnw.add(0, szone.height - height); break;
@@ -237,10 +236,10 @@ Label.prototype.getZone = function() {
 		case 'nw' : pnw = pnw.add(szone.width - width, szone.height - height); break;
 		default   : throw new Error('unknown align');
 		}
-		return new Rect(pnw, pnw.add(width, height));
+		return new Euclid.Rect(pnw, pnw.add(width, height));
 
 	default :
-		return new Rect(pnw, pnw.add(width, height));
+		return new Euclid.Rect(pnw, pnw.add(width, height));
 	}
 };
 

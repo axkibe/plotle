@@ -36,7 +36,6 @@ var Compass;
 var Jools;
 var OvalSlice;
 var Path;
-var Rect;
 var shell;
 var system;
 var theme;
@@ -159,42 +158,42 @@ Item.prototype.planHandles = function(view) {
 		zone : zone,
 		view : view,
 
-		nw : ha.nw && Rect.renew(
+		nw : ha.nw && Euclid.Rect.renew(
 				wx - dcx,      ny - dcy,
 				wx - dcx + a2, ny - dcy + b2,
 				$h.nw
 			),
-		n  : ha.n && Rect.renew(
+		n  : ha.n && Euclid.Rect.renew(
 				mx - a,        ny - dey,
 				mx + a,        ny - dey + b2,
 				$h.n
 			),
-		ne : ha.ne && Rect.renew(
+		ne : ha.ne && Euclid.Rect.renew(
 				ex + dcx - a2, ny - dcy,
 				ex + dex,      ny - dcy + b2,
 				$h.ne
 			),
-		e  : ha.e && Rect.renew(
+		e  : ha.e && Euclid.Rect.renew(
 				ex + dex - a2, my - b,
 				ex + dex     , my + b,
 				$h.e
 			),
-		se : ha.se && Rect.renew(
+		se : ha.se && Euclid.Rect.renew(
 				ex + dcx - a2, sy + dcy - b2,
 				ex + dcx,      sy + dcx,
 				$h.se
 			),
-		s  : ha.s && Rect.renew(
+		s  : ha.s && Euclid.Rect.renew(
 				mx - a, sy + dey -b2,
 				mx + a, sy + dey,
 				$h.s
 			),
-		sw : ha.sw && Rect.renew(
+		sw : ha.sw && Euclid.Rect.renew(
 				wx - dcx,      sy + dcy - b2,
 				wx - dcx + a2, sy + dcy,
 				$h.sw
 			),
-		w  : ha.w && Rect.renew(
+		w  : ha.w && Euclid.Rect.renew(
 				wx - dex,      my - b,
 				wx - dex + a2, my + b,
 				$h.w

@@ -36,7 +36,6 @@ var BeziRect;
 var Euclid;
 var Fabric;
 var Jools;
-var Rect;
 var theme;
 var View;
 

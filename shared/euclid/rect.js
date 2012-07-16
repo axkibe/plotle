@@ -1,21 +1,20 @@
-/**                                                      _.._
-                                                      .-'_.._''.
- __  __   ___       _....._              .          .' .'     '.\
-|  |/  `.'   `.   .'       '.          .'|         / .'                                _.._
-|   .-.  .-.   ' /   .-'"'.  \        (  |        . '            .-,.-~.             .' .._|    .|
-|  |  |  |  |  |/   /______\  |        | |        | |            |  .-. |    __      | '      .' |_
-|  |  |  |  |  ||   __________|    _   | | .'''-. | |            | |  | | .:-`.'.  __| |__  .'     |
-|  |  |  |  |  |\  (          '  .' |  | |/.'''. \. '            | |  | |/ |   \ ||__   __|'-..  .-'
-|  |  |  |  |  | \  '-.___..-~. .   | /|  /    | | \ '.         .| |  '- `" __ | |   | |      |  |
-|__|  |__|  |__|  `         .'.'.'| |//| |     | |  '. `.____.-'/| |      .'.''| |   | |      |  |
-                   `'-.....-.'.'.-'  / | |     | |    `-._____ / | |     / /   | |_  | |      |  '.'
-                                 \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
-                                       '___)   '___)                      `~~'  `"   |_|      `--'
-
-                                      .-,--.         .
-                                       `|__/ ,-. ,-. |-
-                                       )| \  |-' |   |
-                                       `'  ` `-' `-' `'
+/**                            _..._
+    _....._                 .-'_..._''. .---.    _______
+  .'       '.             .' .'      '.\|   |.--.\  ___ `'.
+ /   .-'"'.  \           / .'           |   ||__| ' |--.\  \
+/   /______\  |         . '             |   |.--. | |    \  '
+|   __________|         | |             |   ||  | | |     |  '
+\  (          '  _    _ | |             |   ||  | | |     |  |
+ \  '-.___..-~. | '  / |. '             |   ||  | | |     ' .'
+  `         .'..' | .' | \ '.          .|   ||  | | |___.' /'
+   `'-.....-.'./  | /  |  '. `._____.-'/|   ||__|/_______.'/
+              |   `'.  |    `-.______ / '---'    \_______|/
+              '   .'|  '/            `
+               `-'  `--'
+                       .-,--.         .
+                        `|__/ ,-. ,-. |-
+                        )| \  |-' |   |
+                        `'  ` `-' `-' `'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  Objects and operations on an euclidian plane.
@@ -26,16 +25,17 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
+| Expors
+*/
+var Euclid;
+Euclid = Euclid || {};
+
+/**
 | Imports
 */
 var Jools;
 var Euclid;
 var Margin;
-
-/**
-| Exports
-*/
-var Rect = null;
 
 /**
 | Capsule
@@ -54,35 +54,22 @@ if (typeof(window) === 'undefined') {
 	Margin = require('./margin');
 }
 
-var debug        = Jools.debug;
-var immute       = Jools.immute;
-var innumerable  = Jools.innumerable;
-var isnon        = Jools.isnon;
-var lazyFixate   = Jools.lazyFixate;
-var reject       = Jools.reject;
-var half         = Jools.half;
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
- A rectangle in a 2D plane.
- Rectangles are immutable objects.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /**
 | Constructor.
 |
 | pnw: point to north west.
 | pse: point to south east.
 */
-Rect = function(pnw, pse, key) {
+var Rect = Euclid.Rect = function(pnw, pse, key) {
 	if (!pnw || !pse || pnw.x > pse.x || pnw.y > pse.y)
-		{ throw reject('not a rectangle.'); }
+		{ throw Jools.reject('not a rectangle.'); }
 
 	this.pnw = pnw;
 	this.pse = pse;
-	innumerable(this, 'width',  pse.x - pnw.x);
-	innumerable(this, 'height', pse.y - pnw.y);
+	Jools.innumerable(this, 'width',  pse.x - pnw.x);
+	Jools.innumerable(this, 'height', pse.y - pnw.y);
 	this.type = 'Rect';
-	immute(this);
+	Jools.immute(this);
 };
 
 /**
@@ -100,26 +87,29 @@ Rect.prototype.reduce = function(margin) {
 /**
 | Point in the center.
 */
-lazyFixate(Rect.prototype, 'pc', function() {
-	return new Euclid.Point(half(this.pse.x + this.pnw.x), half(this.pse.y + this.pnw.y));
+Jools.lazyFixate(Rect.prototype, 'pc', function() {
+	return new Euclid.Point(
+		Jools.half(this.pse.x + this.pnw.x),
+		Jools.half(this.pse.y + this.pnw.y)
+	);
 });
 
 /**
 | West.
 */
-lazyFixate(Rect.prototype, 'w', function() {
-	return new Euclid.Point(this.pnw.x, half(this.pse.y + this.pnw.y));
+Jools.lazyFixate(Rect.prototype, 'w', function() {
+	return new Euclid.Point(this.pnw.x, Jools.half(this.pse.y + this.pnw.y));
 });
 
 /**
 | East.
 */
-lazyFixate(Rect.prototype, 'e', function() {
-	return new Euclid.Point(this.pse.x, half(this.pse.y + this.pnw.y));
+Jools.lazyFixate(Rect.prototype, 'e', function() {
+	return new Euclid.Point(this.pse.x, Jools.half(this.pse.y + this.pnw.y));
 });
 
 /**
-| Returns a rect moved by a point or x/y
+| Returns a rect moved by a point or x/y.
 |
 | add(point)   -or-
 | add(x, y)
@@ -136,7 +126,9 @@ Rect.prototype.add = function(a1, a2) {
 | Rect.renew(wx, ny, ex, sy, ...[rects]... )
 */
 Rect.renew = function(wx, ny, ex, sy) {
-	var pnw = null, pse = null;
+	var pnw   = null;
+	var pse   = null;
+	var isnon = Jools.isnon;
 
 	for(var a = 4, aZ = arguments.length; a < aZ; a++) {
 		var r = arguments[a];

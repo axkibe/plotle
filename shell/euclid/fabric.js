@@ -30,7 +30,6 @@
 */
 var Euclid;
 var Jools;
-var Rect;
 var View;
 
 /**
@@ -70,7 +69,7 @@ Fabric = function(a1, a2) {
 		case Fabric:
 			this._canvas = a1._canvas;
 			break;
-		case Rect :
+		case Euclid.Rect :
 			this._canvas = document.createElement('canvas');
 			this._canvas.width  = a1.width;
 			this._canvas.height = a1.height;
@@ -313,7 +312,7 @@ Fabric.prototype.fillRect = function(style, a1, a2, a3, a4) {
 	cx.fillStyle = style;
 
 	if (typeof(p) === 'object') {
-		if (a1 instanceof Rect)
+		if (a1 instanceof Euclid.Rect)
 			{ return this._cx.fillRect(a1.pnw.x, a1.pnw.y, a1.pse.x, a1.pse.y); }
 		if (a1 instanceof Euclid.Point)
 			{ return this._cx.fillRect(a1.x, a1.y, a2.x, a2.y); }
@@ -384,7 +383,7 @@ Fabric.prototype.putImageData = function(imagedata, a1, a2) {
 Fabric.prototype.getImageData = function(a1, a2, a3, a4) {
 	var x1, y1, x2, y2;
 	if (typeof(p) === 'object') {
-		if (a1 instanceof Rect) {
+		if (a1 instanceof Euclid.Rect) {
 			x1 = a1.pnw.x; y1 = a1.pnw.y;
 			x2 = a1.pse.x; y2 = a1.pse.y;
 		} else if (a1 instanceof Euclid.Point) {

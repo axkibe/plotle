@@ -35,7 +35,6 @@ var View = null;
 */
 var Euclid;
 var Jools;
-var Rect;
 var theme;
 
 /**
@@ -167,13 +166,13 @@ View.prototype.eq = function(a1) {
 */
 View.prototype.rect = function(a1, a2) {
 	if (this.zoom === 1) {
-		var r = (a1 instanceof Rect) ? a1 : new Rect(a1, a2);
+		var r = (a1 instanceof Euclid.Rect) ? a1 : new Euclid.Rect(a1, a2);
 
 		return (this.pan.x === 0 && this.pan.y === 0)  ? r : r.add(this.pan);
 	}
 
 	var pnw, pse;
-	if (a1 instanceof Rect) {
+	if (a1 instanceof Euclid.Rect) {
 		pnw = a1.pnw;
 		pse = a1.pse;
 	} else {
@@ -181,7 +180,7 @@ View.prototype.rect = function(a1, a2) {
 		pse = a2;
 	}
 
-	return new Rect(this.point(pnw), this.point(pse));
+	return new Euclid.Rect(this.point(pnw), this.point(pse));
 };
 
 /**
