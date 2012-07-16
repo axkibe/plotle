@@ -35,7 +35,6 @@ var Euclid;
 var Fabric;
 var Item;
 var Jools;
-var Line;
 var MeshMashine;
 var Path;
 var shell;
@@ -67,7 +66,7 @@ Relation.imargin = new Euclid.Margin(theme.relation.imargin);
 | Creates a new Relation by specifing its relates.
 */
 Relation.create = function(space, vitem1, vitem2) {
-	var cline = Line.connect(vitem1.getZone(), null, vitem2.getZone(), null);
+	var cline = Euclid.Line.connect(vitem1.getZone(), null, vitem2.getZone(), null);
 	var pnw = cline.pc.sub(theme.relation.createOffset);
 	var key = shell.peer.newRelation(
 		space.path,
@@ -92,12 +91,12 @@ Relation.prototype.draw = function(fabric, view) {
 	var zone = this.getZone();
 
 	if (vitem1) {
-		var l1 = Line.connect(vitem1.getZone(), 'normal', zone, 'normal');
+		var l1 = Euclid.Line.connect(vitem1.getZone(), 'normal', zone, 'normal');
 		fabric.paint(theme.relation.style, l1, 'path', view);
 	}
 
 	if (vitem2) {
-		var l2 = Line.connect(zone,  'normal', vitem2.getZone(), 'arrow');
+		var l2 = Euclid.Line.connect(zone,  'normal', vitem2.getZone(), 'arrow');
 		fabric.paint(theme.relation.style, l2, 'path', view);
 	}
 

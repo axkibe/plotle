@@ -36,7 +36,6 @@ var Action;
 var Euclid;
 var Fabric;
 var Jools;
-var Line;
 var OvalMenu;
 var Path;
 var shell;
@@ -172,7 +171,7 @@ Space.prototype.draw = function() {
 		var av  = this.getSub($action.itemPath);
 		var av2 = $action.item2Path ? this.getSub($action.item2Path) : null;
 		var target = av2 ? av2.getZone() : $view.depoint($action.move);
-		var arrow = Line.connect(av.getZone(), 'normal', target, 'arrow');
+		var arrow = Euclid.Line.connect(av.getZone(), 'normal', target, 'arrow');
 		if (av2) av2.highlight(this.fabric, $view);
 		arrow.draw(this.fabric, $view, theme.relation.style);
 		break;
