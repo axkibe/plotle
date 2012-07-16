@@ -308,7 +308,8 @@ Space.prototype.dragstart = function(p, shift, ctrl) {
 	// see if one item was targeted
 	for(var a = 0, aZ = this.twig.length; a < aZ; a++) {
 		var item = this.atRank(a);
-		if (item.dragstart($view, p, shift, ctrl, this.access)) return;
+		if (item.dragstart($view, p, shift, ctrl, this.access))
+			{ return; }
 	}
 
 	// otherwise do panning
@@ -317,6 +318,7 @@ Space.prototype.dragstart = function(p, shift, ctrl) {
 		'start', p,
 		'pan',   $view.pan
 	);
+
 	return;
 };
 

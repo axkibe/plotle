@@ -310,7 +310,7 @@ Item.prototype.dragstart = function(view, p, shift, ctrl, access) {
 			'itemPath', this.path,
 			'start',    p
 		);
-		return;
+		return true;
 	}
 
 	// scrolling or dragging
