@@ -38,7 +38,6 @@ var Dash;
 var Fabric;
 var Jools;
 var Point;
-var SwitchPanel;
 var theme;
 
 /**
@@ -71,7 +70,7 @@ MainPanel.prototype.getSwitchPanel = function() {
 	default        : current = 'nw'; break;
 	}
 
-	return this.$switchPanel = new SwitchPanel(this, current, this.$userName, new Point(
+	return this.$switchPanel = new Dash.SwitchPanel(this, current, this.$userName, new Point(
 		Jools.half(this.screensize.x) - swidim.a,
 		this.screensize.y- 59
 	));
