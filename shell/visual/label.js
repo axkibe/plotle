@@ -39,7 +39,6 @@ var Jools;
 var shell;
 var system;
 var theme;
-var View;
 var Visual;
 
 /**
@@ -132,7 +131,7 @@ Label.prototype.draw = function(fabric, view) {
 		doc.draw(f, view.home(), zone.width, imargin, Euclid.Point.zero);
 
 		// draws the border
-		f.edge(theme.label.style.edge, silhoutte, 'path', View.proper);
+		f.edge(theme.label.style.edge, silhoutte, 'path', Euclid.View.proper);
 	}
 
 	fabric.drawImage(f, zone.pnw);

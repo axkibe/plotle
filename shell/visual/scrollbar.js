@@ -37,7 +37,6 @@ var Euclid;
 var Fabric;
 var Jools;
 var theme;
-var View;
 
 /**
 | Capsule
@@ -45,19 +44,6 @@ var View;
 (function(){
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
-
-/**
-| Shotcuts
-*/
-var debug    = Jools.debug;
-var half     = Jools.half;
-var immute   = Jools.immute;
-var is       = Jools.is;
-var isnon    = Jools.isnon;
-var limit    = Jools.limit;
-var log      = Jools.log;
-var ro       = Math.round;
-var subclass = Jools.subclass;
 
 /**
 | Constructor.
@@ -84,9 +70,8 @@ Scrollbar.prototype.draw = function(fabric, view) {
 	if (!this.visible) throw new Error('Drawing an invisible scrollbar');
 
 	var area = this.getArea(view);
-	fabric.paint(theme.scrollbar.style, area, 'path', View.proper);
+	fabric.paint(theme.scrollbar.style, area, 'path', Euclid.View.proper);
 };
-
 
 /**
 | TODO
@@ -98,10 +83,10 @@ Scrollbar.prototype.getArea = function(view) {
 	var pos  = this._$pos;
 	var max  = this._$max;
 
-	var ap   = ro(this._$aperture * size / max);
+	var ap   = Math.round(this._$aperture * size / max);
 	var map  = Math.max(ap, ths.minSize);
-	var sy   = ro(pos * ((size - map + ap) / max));
-	var s05  = half(ths.strength);
+	var sy   = Math.round(pos * ((size - map + ap) / max));
+	var s05  = Jools.half(ths.strength);
 
 	return new BeziRect(
 		view.point(pnw.x, pnw.y + sy)      .add(-s05, 0),
@@ -123,7 +108,7 @@ Scrollbar.prototype.getPos = function() {
 */
 Scrollbar.prototype.setPos = function(pos, aperture, max, pnw, size) {
 	if (max - aperture >= 0) {
-		pos = limit(0, pos, max - aperture);
+		pos = Jools.limit(0, pos, max - aperture);
 	} else {
 		pos = 0;
 	}
@@ -139,8 +124,6 @@ Scrollbar.prototype.setPos = function(pos, aperture, max, pnw, size) {
 | Returns true if p is within the scrollbar.
 */
 Scrollbar.prototype.within = function(view, p) {
-	if (!(view instanceof View)) { throw new Error('view no View'); }
-
 	if (!this.visible) { return false; }
 
 	var pnw = this._$pnw;

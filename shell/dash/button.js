@@ -42,7 +42,6 @@ var Path;
 var shell;
 var system;
 var theme;
-var View;
 
 /**
 | Capsule
@@ -124,7 +123,7 @@ Button.prototype._weave = function(accent) {
 
 	var style = Dash.Board.styles[sname];
 	if (!isnon(style)) { throw new Error('Invalid style: ' + sname); }
-	fabric.paint(style, this, 'gpath', View.proper);
+	fabric.paint(style, this, 'gpath', Euclid.View.proper);
 
 	fabric.setFont(this.twig.caption.fontStyle);
 	fabric.fillText(this.$captionText, this.captionPos);
@@ -134,7 +133,7 @@ Button.prototype._weave = function(accent) {
 			Dash.Board.styles.boxes,
 			new Euclid.Rect(this.iframe.pnw, this.iframe.pse.sub(1, 1)),
 			'path',
-			View.proper
+			Euclid.View.proper
 		);
 	}
 
@@ -171,7 +170,7 @@ Button.prototype.mousehover = function(p) {
 	var fabric = this._weave(Dash.Accent.NORMA);
 	var pp = p.sub(this.pnw);
 
-	if (!fabric.within(this, 'gpath', View.proper, pp))
+	if (!fabric.within(this, 'gpath', Euclid.View.proper, pp))
 		{ return null; }
 
 	this.panel.setHover(this.name);
@@ -197,7 +196,7 @@ Button.prototype.mousedown = function(p, shift, ctrl) {
 
 	var fabric = this._weave(Dash.Accent.NORMA);
 	var pp = p.sub(this.pnw);
-	if (!fabric.within(this, 'gpath', View.proper, pp))
+	if (!fabric.within(this, 'gpath', Euclid.View.proper, pp))
 		{ return null; }
 
 	if (this.repeat && !this.retimer) {

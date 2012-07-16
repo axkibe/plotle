@@ -42,7 +42,6 @@ var shell;
 var system;
 var theme;
 var Tree;
-var View;
 
 /**
 | Capsule
@@ -224,7 +223,7 @@ Board.prototype.drawCaret = function() {
 		Jools.log('fail', 'Caret path(0) !== this.curPanelName');
 		return;
 	}
-	this.curPanel().drawCaret(View.proper);
+	this.curPanel().drawCaret(Euclid.View.proper);
 };
 
 /**

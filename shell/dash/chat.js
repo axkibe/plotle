@@ -42,7 +42,6 @@ var Measure;
 var Path;
 var shell;
 var theme;
-var View;
 
 /**
 | Capsule
@@ -107,7 +106,7 @@ Chat.prototype._weave = function() {
 	var w = this.iframe.width;
 	var h = this.iframe.height;
 
-	fabric.paint(Dash.Board.styles.chat, this, 'pathILine', View.proper);
+	fabric.paint(Dash.Board.styles.chat, this, 'pathILine', Euclid.View.proper);
 
 	var x = this.pitch.x;
 	var y = this.pitch.y;
@@ -129,7 +128,7 @@ Chat.prototype._weave = function() {
 			Dash.Board.styles.boxes,
 			new Euclid.Rect(this.iframe.pnw, this.iframe.pse.sub(1, 1)),
 			'path',
-			View.proper
+			Euclid.View.proper
 		);
 	}
 
@@ -168,8 +167,6 @@ Chat.prototype.draw = function(fabric) {
 | Draws the caret.
 */
 Chat.prototype.drawCaret = function(view) {
-	if (!(view instanceof View)) { throw new Error('view no View'); }
-
 	var caret = shell.caret;
 	var panel = this.panel;
 	var cpos  = caret.$pos = this.getCaretPos();
@@ -345,7 +342,7 @@ Chat.prototype.addMessage = function(msg) {
 Chat.prototype.mousedown = function(p, shift, ctrl) {
 	var pp = p.sub(this.pnw);
 	var fabric = this._weave();
-	if (!fabric.within(this, 'pathILine', View.proper, pp))
+	if (!fabric.within(this, 'pathILine', Euclid.View.proper, pp))
 		{ return null; }
 
 	shell.setCaret('board', {
@@ -371,7 +368,7 @@ Chat.prototype.mousehover = function(p, shift, ctrl) {
 
 	var fabric = this._weave();
 	var pp = p.sub(this.pnw);
-	if (fabric.within(this, 'pathILine', View.proper, pp))
+	if (fabric.within(this, 'pathILine', Euclid.View.proper, pp))
 		{ return "text"; }
 	else
 		{ return "default"; }

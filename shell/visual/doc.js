@@ -37,7 +37,6 @@ var Jools;
 var Path;
 var shell;
 var theme;
-var View;
 
 /**
 | Capsule
@@ -124,8 +123,6 @@ Doc.prototype.update = function(twig) {
 | scrollp: scroll position
 */
 Doc.prototype.draw = function(fabric, view, width, imargin, scrollp) {
-	if (!(view instanceof View)) { throw new Error('view no View'); }
-
 	// TODO <pre>
 	var paraSep = this.getParaSep();
 	var select = shell.selection;

@@ -41,7 +41,6 @@ var Jools;
 var shell;
 var system;
 var theme;
-var View;
 
 /**
 | Capsule
@@ -166,8 +165,6 @@ Note.prototype.scrollPage = function(up) {
 | Sets the items position and size after an action.
 */
 Note.prototype.actionstop = function(view, p) {
-	if (!(view instanceof View)) { throw new Error('view no View'); }
-
 	var $action = shell.$action;
 	switch ($action.type) {
 	case Action.ITEMDRAG :
@@ -194,8 +191,6 @@ Note.prototype.actionstop = function(view, p) {
 | fabric: to draw upon.
 */
 Note.prototype.draw = function(fabric, view) {
-	if (!(view instanceof View)) { throw new Error('view no View'); }
-
 	var zone  = this.getZone();
 	var vzone = view.rect(zone);
 	var f     = this.$fabric;
@@ -218,14 +213,14 @@ Note.prototype.draw = function(fabric, view) {
 		//f.attune(vzone);
 
 		var silhoutte = this.getSilhoutte(vzone, true);
-		f.fill(theme.note.style.fill, silhoutte, 'path', View.proper);
+		f.fill(theme.note.style.fill, silhoutte, 'path', Euclid.View.proper);
 
 		// draws selection and text
 		sbary.point = Euclid.Point.renew(0, sbary.getPos(), sbary.point);
 		doc.draw(f, view.home(), zone.width, imargin, sbary.point);
 
 		// draws the border
-		f.edge(theme.note.style.edge, silhoutte, 'path', View.proper);
+		f.edge(theme.note.style.edge, silhoutte, 'path', Euclid.View.proper);
 	}
 
 	fabric.drawImage(f, vzone.pnw);

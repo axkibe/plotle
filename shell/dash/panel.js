@@ -35,13 +35,13 @@ Dash = Dash || {};
 var config;
 var Curve;
 var Design;
+var Euclid;
 var Fabric;
 var Jools;
 var Path;
 var Proc;
 var shell;
 var Tree;
-var View;
 
 /**
 | Capsule
@@ -146,7 +146,7 @@ Panel.prototype._weave = function() {
 	var style = Dash.Board.styles[this.tree.root.style];
 	if (!style) { throw new Error('no style!'); }
 
-	fabric.fill(style.fill, this, 'path', View.proper);
+	fabric.fill(style.fill, this, 'path', Euclid.View.proper);
 	var layout = this.tree.root.layout;
 
 	var focus = this.focusedCC();
@@ -155,7 +155,7 @@ Panel.prototype._weave = function() {
 		var c = this.$sub[cname];
 		c.draw(fabric, Dash.Accent.state(cname === this.$hover || c.$active, c === focus));
 	}
-	fabric.edge(style.edge, this, 'path', View.proper);
+	fabric.edge(style.edge, this, 'path', Euclid.View.proper);
 
 	if (config.debug.drawBoxes) {
 		fabric.paint(
@@ -163,7 +163,7 @@ Panel.prototype._weave = function() {
 			new Euclid.Rect(iframe.pnw,
 			iframe.pse.sub(1, 1)),
 			'path',
-			View.proper
+			Euclid.View.proper
 		);
 	}
 
@@ -181,8 +181,6 @@ Panel.prototype.draw = function(fabric) {
 | Draws the caret.
 */
 Panel.prototype.drawCaret = function(view) {
-	if (!(view instanceof View)) { throw new Error('view no View'); }
-
 	var cname = shell.caret.sign.path.get(1);
 	var ce = this.$sub[cname];
 	if (!ce) { throw new Error('Caret component does not exist!'); }
@@ -206,9 +204,8 @@ Panel.prototype.mousehover = function(p, shift, ctrl) {
 	var pp = p.sub(pnw);
 
 	// TODO Optimize by reusing the latest path of this.$fabric
-	if (!fabric.within(this, 'path', View.proper, pp)) {
-		return this.setHover(null);
-	}
+	if (!fabric.within(this, 'path', Euclid.View.proper, pp))
+		{ return this.setHover(null); }
 
 	var cursor = null;
 
@@ -244,7 +241,7 @@ Panel.prototype.mousedown = function(p, shift, ctrl) {
 	var pp = p.sub(pnw);
 
 	// TODO Optimize by reusing the latest path of this.$fabric
-	if (!fabric.within(this, 'path', View.proper, pp))  {
+	if (!fabric.within(this, 'path', Euclid.View.proper, pp))  {
 		this.setHover(null);
 		return null;
 	}

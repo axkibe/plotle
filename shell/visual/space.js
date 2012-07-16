@@ -42,7 +42,6 @@ var Path;
 var shell;
 var system;
 var theme;
-var View;
 
 /**
 | Capsule
@@ -77,7 +76,7 @@ var Space = Visual.Space = function(twig, path, access) {
 
 	this.access      = access;
 	this.fabric      = system.fabric;
-	this.$view       = new View(Euclid.Point.zero, 0);
+	this.$view       = new Euclid.View(Euclid.Point.zero, 0);
 
 	for (var k in twig.copse)
 		{ g[k] = this.createItem(twig.copse[k], k); }
@@ -416,7 +415,7 @@ Space.prototype.actionmove = function(p, shift, ctrl) {
 	case Action.PAN :
 		var pd = p.sub($action.start);
 
-		this.$view = $view = new View(
+		this.$view = $view = new Euclid.View(
 			$action.pan.add(pd.x / $view.zoom, pd.y / $view.zoom),
 			$view.fact
 		);

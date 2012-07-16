@@ -41,7 +41,6 @@ var Jools;
 var Measure;
 var shell;
 var theme;
-var View;
 
 /**
 | Capsule
@@ -111,8 +110,6 @@ Input.prototype.path = function(fabric, border, twist) {
 | Draws the mask for password fields
 */
 Input.prototype.maskPath = function(fabric, border, twist, view, length, size) {
-	if (!(view instanceof View)) { throw new Error('view no View'); }
-
 	var x  = view.x(pitch);
 	var y  = view.y(pitch) + ro(size * 0.7);
 	var h  = ro(size * 0.32);
@@ -150,17 +147,17 @@ Input.prototype._weave = function(accent) {
 	var style  = Dash.Board.styles[sname];
 	if (!isnon(style)) { throw new Error('Invalid style: ' + sname); }
 
-	fabric.fill(style.fill, this.bezi, 'path', View.proper);
+	fabric.fill(style.fill, this.bezi, 'path', Euclid.View.proper);
 	var fs = this.twig.fontStyle;
 	fabric.setFont(fs);
 
 	if(this.twig.password) {
-		fabric.fill('black', this, 'maskPath', View.proper,
+		fabric.fill('black', this, 'maskPath', Euclid.View.proper,
 			this.value.length, fs.size);
 	} else {
 		fabric.fillText(this.value, pitch.x, fs.size + pitch.y);
 	}
-	fabric.edge(style.edge, this.bezi, 'path', View.proper);
+	fabric.edge(style.edge, this.bezi, 'path', Euclid.View.proper);
 
 	return fabric;
 };
@@ -221,8 +218,6 @@ Input.prototype.getCaretPos = function() {
 | Draws the caret.
 */
 Input.prototype.drawCaret = function(view) {
-	if (!(view instanceof View)) { throw new Error('view no View'); }
-
 	var caret = shell.caret;
 	var panel = this.panel;
 	var cpos  = caret.$pos = this.getCaretPos();
@@ -425,7 +420,7 @@ Input.prototype.mousehover = function(p, shift, ctrl) {
 	var fabric = this._weave(Dash.Accent.NORMA);
 	var pp = p.sub(this.pnw);
 
-	if (!this.bezi.within(fabric, View.proper, pp))
+	if (!this.bezi.within(fabric, Euclid.View.proper, pp))
 		{ return null; }
 
 	return 'text';
@@ -437,7 +432,7 @@ Input.prototype.mousehover = function(p, shift, ctrl) {
 Input.prototype.mousedown = function(p, shift, ctrl) {
 	var pp = p.sub(this.pnw);
 	var fabric = this._weave(Dash.Accent.NORMA);
-	if (!fabric.within(this.bezi, 'path', View.proper, pp))  { return null; }
+	if (!fabric.within(this.bezi, 'path', Euclid.View.proper, pp))  { return null; }
 
 	this.panel.setFocus(this.name);
 	return false;

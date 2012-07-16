@@ -1,21 +1,20 @@
-/**                                                      _.._
-                                                      .-'_.._''.
- __  __   ___       _....._              .          .' .'     '.\
-|  |/  `.'   `.   .'       '.          .'|         / .'                                _.._
-|   .-.  .-.   ' /   .-'"'.  \        (  |        . '            .-,.-~.             .' .._|    .|
-|  |  |  |  |  |/   /______\  |        | |        | |            |  .-. |    __      | '      .' |_
-|  |  |  |  |  ||   __________|    _   | | .'''-. | |            | |  | | .:-`.'.  __| |__  .'     |
-|  |  |  |  |  |\  (          '  .' |  | |/.'''. \. '            | |  | |/ |   \ ||__   __|'-..  .-'
-|  |  |  |  |  | \  '-.___..-~. .   | /|  /    | | \ '.         .| |  '- `" __ | |   | |      |  |
-|__|  |__|  |__|  `         .'.'.'| |//| |     | |  '. `.____.-'/| |      .'.''| |   | |      |  |
-                   `'-.....-.'.'.-'  / | |     | |    `-._____ / | |     / /   | |_  | |      |  '.'
-                                 \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
-                                       '___)   '___)                      `~~'  `"   |_|      `--'
-
-                                         ,.   ,.
-                                         `|  / . ,-. . , ,
-                                          | /  | |-' |/|/
-                                          `'   ' `-' ' '
+/**                            _..._
+    _....._                 .-'_..._''. .---.    _______
+  .'       '.             .' .'      '.\|   |.--.\  ___ `'.
+ /   .-'"'.  \           / .'           |   ||__| ' |--.\  \
+/   /______\  |         . '             |   |.--. | |    \  '
+|   __________|         | |             |   ||  | | |     |  '
+\  (          '  _    _ | |             |   ||  | | |     |  |
+ \  '-.___..-~. | '  / |. '             |   ||  | | |     ' .'
+  `         .'..' | .' | \ '.          .|   ||  | | |___.' /'
+   `'-.....-.'./  | /  |  '. `._____.-'/|   ||__|/_______.'/
+              |   `'.  |    `-.______ / '---'    \_______|/
+              '   .'|  '/            `
+               `-'  `--'
+                      ,.   ,.
+                      `|  / . ,-. . , ,
+                       | /  | |-' |/|/
+                       `'   ' `-' ' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  A view on a space determines the current pan, zooming and a possible ongoing pan/zooming motion.
@@ -28,12 +27,12 @@
 /**
 | Export
 */
-var View = null;
+var Euclid;
+Euclid = Euclid || {};
 
 /**
 | Imports
 */
-var Euclid;
 var Jools;
 var theme;
 
@@ -47,14 +46,13 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Constructor.
 */
-View = function(pan, fact) {
+var View = Euclid.View = function(pan, fact) {
 	this.pan  = pan;
 	this.fact = Jools.limit(theme.zoom.min, fact, theme.zoom.max);
 	this.zoom = Math.pow(theme.zoom.base, this.fact);
 	Jools.immute(this);
 };
 
-View.proper = new View(Euclid.Point.zero, 0);
 
 /**
 | Returns the x value for a point for this view.
@@ -217,5 +215,10 @@ View.prototype.review = function(df, p) {
 		f1
 	);
 };
+
+/**
+| Proper is the view at point zero with zero zoom.
+*/
+View.proper = new View(Euclid.Point.zero, 0);
 
 })();

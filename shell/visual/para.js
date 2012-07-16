@@ -42,7 +42,6 @@ var config;
 var shell;
 var system;
 var theme;
-var View;
 
 /**
 | Capsule
@@ -85,8 +84,6 @@ var Para = Visual.Para = function(twig, path) {
 | Draws the paragraph in its cache and returns it.
 */
 Para.prototype.draw = function(fabric, view, pnw) {
-	if (!(view instanceof View)) { throw new Error('view no View'); }
-
 	var flow   = this.getFlow();
 	var width  = flow.spread * view.zoom;
 	var doc    = shell.getSub('space', this.path, -1);
@@ -135,8 +132,6 @@ Para.prototype.draw = function(fabric, view, pnw) {
 | Draws the caret if its in this paragraph.
 */
 Para.prototype.drawCaret = function(view) {
-	if (!(view instanceof View)) { throw new Error('view no View'); }
-
 	var caret = shell.caret;
 	var item  = shell.getSub('space', this.path, -2);
 	var doc   = item.$sub.doc;

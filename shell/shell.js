@@ -43,7 +43,6 @@ var Sign;
 var system;
 var theme;
 var Tree;
-var View;
 var Visual;
 
 /**
@@ -328,7 +327,7 @@ Shell.prototype._draw = function() {
 
 		fabric.edge(
 			[ { border: 0, width: 1, color: 'black' } ],
-			this, 'pathFrowny', View.proper, m.add(0, -100)
+			this, 'pathFrowny', Euclid.View.proper, m.add(0, -100)
 		);
 
 		fabric.setFont({
@@ -358,7 +357,7 @@ Shell.prototype._draw = function() {
 
 	if (this.$space) { this.$space.draw(); }
 	this.$board.draw();
-	if (this.menu) { this.menu.draw(View.proper); }
+	if (this.menu) { this.menu.draw(Euclid.View.proper); }
 
 	this.caret.display();
 
@@ -388,7 +387,7 @@ Shell.prototype.mousehover = function(p, shift, ctrl) {
 	var cursor = null;
 
 	if (this.menu)
-		{ cursor = this.menu.mousehover(View.proper, p, shift, ctrl); }
+		{ cursor = this.menu.mousehover(Euclid.View.proper, p, shift, ctrl); }
 
 
 	if (cursor)
@@ -430,7 +429,7 @@ Shell.prototype.mousedown = function(p, shift, ctrl) {
 	var mouseState = null;
 
 	if (this.menu)
-		{ mouseState = this.menu.mousedown(View.proper, p, shift, ctrl); }
+		{ mouseState = this.menu.mousedown(Euclid.View.proper, p, shift, ctrl); }
 
 	if (mouseState === null)
 		{ mouseState = this.$board.mousedown(p, shift, ctrl); }

@@ -30,7 +30,6 @@
 */
 var Euclid;
 var Jools;
-var View;
 
 /**
 | Exports
@@ -452,8 +451,6 @@ Fabric.prototype._colorStyle = function(style, shape) {
 | shape: an object which has path() defined
 */
 Fabric.prototype.fill = function(style, shape, path, view, a1, a2, a3, a4) {
-	if (!(view instanceof View)) { throw new Error('view is no View'); }
-
 	var cx = this._cx;
 	this._begin(false);
 	shape[path](this, 0, false, view, a1, a2, a3, a4);
@@ -485,8 +482,6 @@ Fabric.prototype._edge = function(style, shape, path, view, a1, a2, a3, a4) {
 | shape: an object which has path() defined
 */
 Fabric.prototype.edge = function(style, shape, path, view, a1, a2, a3, a4) {
-	if (!(view instanceof View)) { throw new Error('view is no View'); }
-
 	var cx = this._cx;
 	if (style instanceof Array) {
 		for(var i = 0; i < style.length; i++) {
@@ -502,7 +497,6 @@ Fabric.prototype.edge = function(style, shape, path, view, a1, a2, a3, a4) {
 | Fills an aera and draws its borders
 */
 Fabric.prototype.paint = function(style, shape, path, view, a1, a2, a3, a4) {
-	if (!(view instanceof View)) { throw new Error('view is no View'); }
 	var fillStyle = style.fill;
 	var edgeStyle = style.edge;
 	var cx = this._cx;
@@ -615,8 +609,6 @@ Fabric.prototype.setFont = function(f) {
 | x / y
 */
 Fabric.prototype.within = function(shape, path, view, a1, a2, a3, a4, a5) {
-	if (!(view instanceof View)) { throw new Error('view is no View'); }
-
 	var px, py;
 	var pobj;
 	if (typeof(a1) === 'object') {

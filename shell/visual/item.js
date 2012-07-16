@@ -39,7 +39,6 @@ var Path;
 var shell;
 var system;
 var theme;
-var View;
 
 /**
 | Capsule
@@ -100,8 +99,6 @@ Item.prototype.withinItemMenu = function(view, p) {
 | TODO rename
 */
 Item.prototype.checkItemCompass = function(view, p) {
-	if (!(view instanceof View)) { throw new Error('view no View'); }
-
 	var $h     = this.planHandles(view); // TODO use planHandles and cache
 	var f      = shell.fabric;
 	var d8cwcf = Euclid.Compass.dir8CWCF;
@@ -206,7 +203,6 @@ Item.prototype.planHandles = function(view) {
 | Paths all resize handles.
 */
 Item.prototype.pathAllHandles = function(fabric, border, twist, view) {
-	if (!(view instanceof View)) { throw new Error('view no View'); }
 	if (border !== 0) throw new Error('borders unsupported for handles');
 
 	var $h = this.planHandles(view);
@@ -237,12 +233,10 @@ Item.prototype.pathHandle = function(fabric, border, twist, view, zone) {
 | Draws the handles of an item (resize, itemmenu)
 */
 Item.prototype.drawHandles = function(fabric, view) {
-	if (!(view instanceof View)) { throw new Error('view no View'); }
-
 	var sbary = this.scrollbarY;
 	if (sbary && sbary.visible) {
 		var area = sbary.getArea(view);
-		fabric.reverseClip(area, 'path', View.proper, -1);
+		fabric.reverseClip(area, 'path', Euclid.View.proper, -1);
 	}
 
 	fabric.reverseClip(this.getSilhoutte(this.getZone(), false), 'path', view, -1);
@@ -322,8 +316,6 @@ Item.prototype.dragstart = function(view, p, shift, ctrl, access) {
 | A move during an action.
 */
 Item.prototype.actionmove = function(view, p, shift, ctrl) {
-	if (!(view instanceof View)) { throw new Error('view no View'); }
-
 	var $action = shell.$action;
 	var vp      = view.depoint(p);
 
@@ -359,7 +351,6 @@ Item.prototype.actionmove = function(view, p, shift, ctrl) {
 | Sets the items position and size after an action.
 */
 Item.prototype.actionstop = function(view, p) {
-	if (!(view instanceof View)) { throw new Error('view no View'); }
 	var vp = view.depoint(p);
 
 	var $action = shell.$action;
@@ -381,8 +372,6 @@ Item.prototype.actionstop = function(view, p) {
 | Checks if this item reacts on this.
 */
 Item.prototype.mousehover = function(view, p) {
-	if (!(view instanceof View)) { throw new Error('view no View'); }
-
 	if (p === null) { return null; }
 
 	var sbary = this.scrollbarY;
@@ -399,8 +388,6 @@ Item.prototype.mousehover = function(view, p) {
 | Sees if this item reacts on a click event.
 */
 Item.prototype.click = function(view, p) {
-	if (!(view instanceof View)) { throw new Error('view no View'); }
-
 	var vp = view.depoint(p);
 	if (!this.getZone().within(vp)) return false;
 
@@ -439,8 +426,6 @@ Item.prototype.click = function(view, p) {
 | Highlights the item.
 */
 Item.prototype.highlight = function(fabric, view) {
-	if (!(view instanceof View)) { throw new Error('view no View'); }
-
 	var silhoutte = this.getSilhoutte(this.getZone(), false);
 	fabric.edge(theme.note.style.highlight, silhoutte, 'path', view);
 };
