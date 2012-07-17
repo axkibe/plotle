@@ -60,4 +60,14 @@ Font = function(size, family, fill, align, base) {
 	Jools.immute(this);
 };
 
+/**
+| Returns the CSS-string for this font.
+*/
+Font.prototype.getCSS = function() {
+	if (this._$css)
+		{ return this._$css; }
+
+	return this._$css = font.size + 'px ' + font.family;
+}
+
 })();

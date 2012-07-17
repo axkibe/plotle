@@ -69,7 +69,7 @@ var Measure = Euclid.Measure = {
 		) {
 			Measure._$size   = font.size;
 			Measure._$family = font.family;
-			cx.font = font.size + 'px ' + font.family; // TODO move into the font object
+			cx.font = font.getCSS();
 		}
 
 		return cx.measureText(text).width;

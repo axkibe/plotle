@@ -591,7 +591,7 @@ Fabric.prototype.setFont = function(f) {
 	if (!Jools.is(f.base))  { throw new Error('fontstyle misses base'); }
 
 	var cx = this._cx;
-	cx.font         = f.size + 'px ' + f.family;
+	cx.font         = f.getCSS();
 	cx.fillStyle    = f.fill;
 	cx.textAlign    = f.align;
 	cx.textBaseline = f.base;
