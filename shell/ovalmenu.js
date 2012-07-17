@@ -39,8 +39,8 @@
 /**
 | Imports
 */
+var Euclid;
 var Jools;
-var OvalFlower;
 var shell;
 var system;
 var theme;
@@ -80,7 +80,7 @@ OvalMenu = function(fabric, pc, settings, labels, callback) {
 	this._style      = settings.style;
 	this._highlight  = settings.highlight;
 	this._dimensions = settings.dimensions;
-	this._oflower    = new OvalFlower(pc, settings.dimensions, labels);
+	this._oflower    = new Euclid.OvalFlower(pc, settings.dimensions, labels);
 	this.$within     = null;
 	this.$fadeTimer  = null;
 	this.$fade       = false;
