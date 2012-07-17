@@ -20,6 +20,9 @@
 
  An users action in the making.
 
+ This overlays repository data, so for example a move is not transmitted
+ with every pixel changed but when the the object is released.
+
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
 
@@ -36,37 +39,8 @@ var Action;
 */
 (function(){
 'use strict';
-if (typeof(window) === 'undefined') { throw new Error('shell.js needs a browser!'); }
+if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- .---. .           .          .
- \___  |-. ,-. ,-. |- ,-. . . |- ,-.
-     \ | | | | |   |  |   | | |  `-.
- `---' ' ' `-' '   `' `-' `-^ `' `-'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-var debug         = Jools.debug;
-var immute        = Jools.immute;
-var is            = Jools.is;
-var isnon         = Jools.isnon;
-var isArray       = Jools.isArray;
-var limit         = Jools.limit;
-var log           = Jools.log;
-var subclass      = Jools.subclass;
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     ,.       .
-    / |   ,-. |- . ,-. ,-.
-   /~~|-. |   |  | | | | |
- ,'   `-' `-' `' ' `-' ' '
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
- An action in the making.
-
- This overlays repository data, so for example a move is not transmitted
- with every pixel changed but when the the object is released.
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /**
 | Constructor.
 |
@@ -99,6 +73,6 @@ Action.ITEMMENU   = 4; // clicked one item menu
 Action.SCROLLY    = 5; // scrolling a note
 Action.RELBIND    = 6; // binding a new relation
 Action.REBUTTON   = 7; // holding a button repeating its effect
-immute(Action);
+Jools.immute(Action);
 
 })();
