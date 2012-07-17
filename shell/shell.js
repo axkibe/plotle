@@ -33,7 +33,6 @@ var Caret;
 var Dash;
 var Euclid;
 var Jools;
-var Measure;
 var MeshMashine;
 var Path;
 var Peer;
@@ -91,10 +90,10 @@ Shell = function(fabric) {
 	if (shell !== null) throw new Error('Singleton not single');
 	shell = this;
 
-	Measure.init();
+	Euclid.Measure.init();
 
-	Measure.setFont(20, theme.defaultFont);
-	this.$fontWatch = Measure.width('meshcraft$8833');
+	Euclid.Measure.setFont(20, theme.defaultFont);
+	this.$fontWatch = Euclid.Measure.width('meshcraft$8833');
 
 	this.fabric    = fabric;
 
@@ -236,8 +235,8 @@ Shell.prototype.systemBlur = function() {
 Shell.prototype.blink = function() {
 	if (this.green) { return; }
 
-	Measure.setFont(20, theme.defaultFont);
-	var w = Measure.width('meshcraft$8833');
+	Euclid.Measure.setFont(20, theme.defaultFont);
+	var w = Euclid.Measure.width('meshcraft$8833');
 	if (w !== this.$fontWatch) {
 		console.log('fontchange detected');
 		this.$fontWatch = w;

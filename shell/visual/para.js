@@ -34,7 +34,6 @@ Visual = Visual || {};
 var Caret;
 var Euclid;
 var Jools;
-var Measure;
 var Sign;
 var Path;
 var config;
@@ -214,8 +213,8 @@ Para.prototype.getFlow = function() {
 	var x = 0, xw = 0;
 
 	var y = fontsize;
-	Measure.setFont(doc.getFontSize(), doc.getFont());
-	var space = Measure.width(' ');
+	Euclid.Measure.setFont(doc.getFontSize(), doc.getFont());
+	var space = Euclid.Measure.width(' ');
 	var line = 0;
 	flow[line] = { a: [], y: y, o: 0 };
 
@@ -225,7 +224,7 @@ Para.prototype.getFlow = function() {
 	for(var ca = reg.exec(text); ca !== null; ca = reg.exec(text)) {
 		// a token is a word plus following hard spaces
 		var token = ca[1] + ca[2];
-		var w = Measure.width(token);
+		var w = Euclid.Measure.width(token);
 		xw = x + w + space;
 
 		if (flowWidth > 0 && xw > flowWidth) {
@@ -292,7 +291,7 @@ Para.prototype.getLineXOffset = function(line, x) {
 	var a;
 	for(a = 0; a < text.length; a++) {
 		x1 = x2;
-		x2 = Measure.width(text.substr(0, a));
+		x2 = Euclid.Measure.width(text.substr(0, a));
 		if (x2 >= dx) { break; }
 	}
 
@@ -315,7 +314,7 @@ Para.prototype.getOffsetPoint = function(offset, flowPos$) {
 	// TODO cache position
 	var twig = this.twig;
 	var doc  = shell.getSub('space', this.path, -1);
-	Measure.setFont(doc.getFontSize(), doc.getFont());
+	Euclid.Measure.setFont(doc.getFontSize(), doc.getFont());
 	var text = twig.text;
 	var flow = this.getFlow();
 	var a;
@@ -346,7 +345,7 @@ Para.prototype.getOffsetPoint = function(offset, flowPos$) {
 	}
 
 	// TODO use token. text instead.
-	var px = ro(token.x + Measure.width(text.substring(token.o, offset)));
+	var px = ro(token.x + Euclid.Measure.width(text.substring(token.o, offset)));
 	var py = line.y;
 
 	return new Euclid.Point(px, py);
@@ -361,7 +360,7 @@ Para.prototype.getPointOffset = function(point) {
 	var flow = this.getFlow();
 	var para = this.para;
 	var doc = shell.getSub('space', this.path, -1);
-	Measure.setFont(doc.getFontSize(), doc.getFont());
+	Euclid.Measure.setFont(doc.getFontSize(), doc.getFont());
 
 	var line;
 	for (line = 0; line < flow.length; line++) {

@@ -36,7 +36,6 @@ var Caret;
 var Curve;
 var Euclid;
 var Jools;
-var Measure;
 var shell;
 var theme;
 
@@ -178,7 +177,7 @@ Input.prototype.getOffsetPoint = function(offset) {
 	// TODO cache position
 	var twig     = this.twig;
 	var font     = twig.fontStyle;
-	Measure.setFont(font.size, font.family);
+	Euclid.Measure.setFont(font.size, font.family);
 	var val      = this.value;
 
 	// TODO use token. text instead.
@@ -189,7 +188,7 @@ Input.prototype.getOffsetPoint = function(offset) {
 		);
 	} else {
 		return new Euclid.Point(
-			ro(pitch.x + Measure.width(val.substring(0, offset))),
+			ro(pitch.x + Euclid.Measure.width(val.substring(0, offset))),
 			ro(pitch.y + font.size)
 		);
 	}

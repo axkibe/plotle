@@ -37,7 +37,6 @@ var config;
 var Curve;
 var Euclid;
 var Jools;
-var Measure;
 var Path;
 var shell;
 var theme;
@@ -147,12 +146,12 @@ Chat.prototype.getOffsetPoint = function(offset) {
 	// TODO cache position
 	var twig     = this.twig;
 	var font     = twig.fontStyle;
-	Measure.setFont(font.size, font.family);
+	Euclid.Measure.setFont(font.size, font.family);
 	var itext    = this.itext;
 	var pitch    = this.pitch;
 
 	return new Euclid.Point(
-		Math.round(pitch.x + this.coff + Measure.width(itext.substring(0, offset))),
+		Math.round(pitch.x + this.coff + Euclid.Measure.width(itext.substring(0, offset))),
 		Math.round(pitch.y)
 	);
 };

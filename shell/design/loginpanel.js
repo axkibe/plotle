@@ -33,6 +33,7 @@ Design = Design || {};
 /**
 | Imports
 */
+var Euclid;
 var theme;
 
 /**
@@ -45,6 +46,7 @@ var theme;
 | Shortcuts
 */
 var fontStyle = Design.fontStyle;
+
 // 'magic' number to approximate ellipses with beziers
 var magic     = Euclid.magic;
 var mbConsts  = Design.MainPanel.consts;
