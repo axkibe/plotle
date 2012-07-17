@@ -146,7 +146,7 @@ Chat.prototype.getOffsetPoint = function(offset) {
 	// TODO cache position
 	var twig     = this.twig;
 	var font     = twig.fontStyle;
-	Euclid.Measure.setFont(font.size, font.family);
+	Euclid.Measure.setFont(font);
 	var itext    = this.itext;
 	var pitch    = this.pitch;
 

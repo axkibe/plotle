@@ -281,6 +281,7 @@ Server.prototype.addResources = function() {
 		'shell/euclid/ovalslice.js',                        'fb',
 		'shell/euclid/ovalflower.js',                       'fb',
 		'shell/euclid/line.js',                             'fb',
+		'shell/font.js',                                    'fb',
 		'shell/theme.js',                                   'fb',
 		'shell/euclid/view.js',                             'fb',
 		'shared/meshverse.js',                              'fb',

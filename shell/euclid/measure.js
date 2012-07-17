@@ -52,8 +52,9 @@ var Measure = Euclid.Measure = {
 	},
 
 	// TODO remote give with every width
-	setFont : function(size, font) {
-		Measure._cx.font = size + 'px ' + font;
+	setFont : function(font) {
+		// move into the font class
+		Measure._cx.font = font.size + 'px ' + font.family;
 	}
 };
 

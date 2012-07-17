@@ -100,14 +100,7 @@ Para.prototype.draw = function(fabric, view, pnw) {
 		$f.scale(view.zoom);
 		$f.$zoom = view.zoom;
 
-		// TODO cache this somewhere
-		$f.setFont({
-			size   :  doc.getFontSize(),
-			family :  doc.getFont(),
-			fill   : 'black',
-			align  : 'start',
-			base   : 'alphabetic'
-		});
+		$f.setFont(doc.getFont());
 
 		// draws text into the fabric
 		for(var a = 0, aZ = flow.length; a < aZ; a++) {
@@ -168,7 +161,7 @@ Para.prototype.getCaretPos = function() {
 	var caret   = shell.caret;
 	var item    = shell.getSub('space', this.path, -2);
 	var doc     = item.$sub.doc;
-	var fs      = doc.getFontSize();
+	var fs      = doc.getFont().size; // TODO use item
 	var descend = fs * theme.bottombox;
 	var p       = this.getOffsetPoint(shell.caret.sign.at1, shell.caret);
 
@@ -176,7 +169,11 @@ Para.prototype.getCaretPos = function() {
 	var n = s - ro(fs + descend);
 	var	x = p.x - 1;
 
-	return immute({ s: s, n: n, x: x });
+	return immute({
+		s: s,
+		n: n,
+		x: x
+	});
 };
 
 
@@ -187,7 +184,7 @@ Para.prototype.getFlow = function() {
 	var item      = shell.getSub('space', this.path, -2);
 	var doc       = item.$sub.doc;
 	var flowWidth = item.getFlowWidth();
-	var fontsize  = doc.getFontSize();
+	var font      = doc.getFont(); // TODO use item
 
 	var flow  = this.$flow;
 	// @@ go into subnodes instead
@@ -195,7 +192,7 @@ Para.prototype.getFlow = function() {
 
 	if (!config.debug.noCache && flow &&
 		flow.flowWidth === flowWidth &&
-		flow.fontsize  === fontsize
+		flow.fontsize  === font.size
 	) return flow;
 
 	if (shell.caret.path && shell.caret.path.equals(this.path)) {
@@ -212,8 +209,8 @@ Para.prototype.getFlow = function() {
 	// current x positon, and current x including last tokens width
 	var x = 0, xw = 0;
 
-	var y = fontsize;
-	Euclid.Measure.setFont(doc.getFontSize(), doc.getFont());
+	var y = font.size;
+	Euclid.Measure.setFont(font);
 	var space = Euclid.Measure.width(' ');
 	var line = 0;
 	flow[line] = { a: [], y: y, o: 0 };
@@ -233,7 +230,7 @@ Para.prototype.getFlow = function() {
 				if (spread < xw) spread = xw;
 				x = 0;
 				xw = x + w + space;
-				y += ro(doc.getFontSize() * (1 + theme.bottombox));
+				y += ro(font.size * (1 + theme.bottombox));
 				line++;
 				flow[line] = {a: [], y: y, o: ca.index};
 			} else {
@@ -252,10 +249,10 @@ Para.prototype.getFlow = function() {
 	}
 	if (spread < xw) spread = xw;
 
-	flow.height = y;
+	flow.height    = y;
 	flow.flowWidth = flowWidth;
-	flow.spread = spread;
-	flow.fontsize = fontsize;
+	flow.spread    = spread;
+	flow.fontsize  = font.size;
 	return flow;
 };
 
@@ -265,7 +262,8 @@ Para.prototype.getFlow = function() {
 Para.prototype.getHeight = function() {
 	var flow = this.getFlow();
 	var doc = shell.getSub('space', this.path, -1);
-	return flow.height + ro(doc.getFontSize() * theme.bottombox);
+
+	return flow.height + ro(doc.getFont().size * theme.bottombox);
 };
 
 /**
@@ -314,7 +312,7 @@ Para.prototype.getOffsetPoint = function(offset, flowPos$) {
 	// TODO cache position
 	var twig = this.twig;
 	var doc  = shell.getSub('space', this.path, -1);
-	Euclid.Measure.setFont(doc.getFontSize(), doc.getFont());
+	Euclid.Measure.setFont(doc.getFont());
 	var text = twig.text;
 	var flow = this.getFlow();
 	var a;
@@ -360,7 +358,7 @@ Para.prototype.getPointOffset = function(point) {
 	var flow = this.getFlow();
 	var para = this.para;
 	var doc = shell.getSub('space', this.path, -1);
-	Euclid.Measure.setFont(doc.getFontSize(), doc.getFont());
+	Euclid.Measure.setFont(doc.getFont());
 
 	var line;
 	for (line = 0; line < flow.length; line++) {

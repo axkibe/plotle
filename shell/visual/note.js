@@ -154,7 +154,8 @@ Note.prototype.scrollCaretIntoView = function() {
 Note.prototype.scrollPage = function(up) {
 	var zone = this.getZone();
 	var dir  = up ? -1 : 1;
-	var fs   = this.$sub.doc.getFontSize();
+	var fs   = this.$sub.doc.getFont().size;
+
 	this.setScrollbar(this.scrollbarY.getPos() + dir * zone.height - fs * 2);
 	this.poke();
 };

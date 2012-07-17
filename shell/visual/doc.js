@@ -32,6 +32,7 @@ Visual = Visual || {};
 | Imports
 */
 var Euclid;
+var Font;
 var Jools;
 var Path;
 var shell;
@@ -175,9 +176,9 @@ Doc.prototype.getPNW = function(key) {
 | TODO caching
 */
 Doc.prototype.getHeight = function() {
-	var fontsize = this.getFontSize();
-	var paraSep  = this.getParaSep();
-	var twig     = this.twig;
+	var fs      = this.getFont().size;
+	var paraSep = this.getParaSep();
+	var twig    = this.twig;
 
 	var height   = 0;
 	for (var r = 0, rZ = twig.length; r < rZ; r++) {
@@ -187,7 +188,7 @@ Doc.prototype.getHeight = function() {
 		if (r > 0) { height += paraSep; }
 		height += flow.height;
 	}
-	height += ro(fontsize * theme.bottombox);
+	height += ro(fs * theme.bottombox);
 	return height;
 };
 
@@ -203,30 +204,44 @@ Doc.prototype.getSpread = function() {
 };
 
 /**
-| Returns the (default) fontsize for this document
-| Argument vitem is optional, just to safe double and tripple lookups
-*/
-Doc.prototype.getFontSize = function(vitem) {
-	if (!is(vitem)) { vitem = shell.$space.getSub(this.path, -1); }
-	var fontsize = vitem.twig.fontsize;
-	return (!vitem.fontSizeChange) ? fontsize : vitem.fontSizeChange(fontsize);
-};
-
-/**
-| Returns the (default) paraSeperator for this document
-| Argument vitem is optional, just to safe double and tripple lookups
+| Returns the (default) paraSeperator for this document.
+| Parameter vitem is optional, just to safe double and tripple lookups.
 */
 Doc.prototype.getParaSep = function(vitem) {
-	if (!is(vitem)) { vitem = shell.$space.getSub(this.path, -1); }
-	var fontsize = this.getFontSize(vitem);
-	return vitem.getParaSep(fontsize);
+
+	if (!is(vitem))
+		{ vitem = shell.$space.getSub(this.path, -1); }
+
+	var fs = this.getFont().size;
+	return vitem.getParaSep(fs);
 };
 
 /**
 | Returns the default font for the document.
+| Parameter vitem is optional, just to safe double and tripple lookups.
 */
-Doc.prototype.getFont = function() {
-	return theme.defaultFont;
+Doc.prototype.getFont = function(vitem) {
+
+	// caller can provide vitem for performance optimization
+	if (!is(vitem))
+		{ vitem = shell.$space.getSub(this.path, -1); }
+
+	var fs = vitem.twig.fontsize;
+	if (vitem.fontSizeChange)
+		{ fs = vitem.fontSizeChange(fs); }
+
+	var $f = this._$font;
+
+	if ($f && $f.size === fs)
+		{ return $f; }
+
+	return this._$font = new Font(
+		fs,
+		theme.defaultFont,
+		'black',
+		'start',
+		'alphabetic'
+	);
 };
 
 /**
@@ -280,7 +295,7 @@ Doc.prototype.pathSelection = function(fabric, border, twist, view, width, imarg
 	p1 = new Euclid.Point(ro(p1.x + pnw1.x - sp.x), ro(p1.y + pnw1.y - sp.y));
 	p2 = new Euclid.Point(ro(p2.x + pnw2.x - sp.x), ro(p2.y + pnw2.y - sp.y));
 
-	var fontsize = this.getFontSize();
+	var fontsize = this.getFont().size();
 	var descend = ro(fontsize * theme.bottombox);
 	var  ascend = ro(fontsize);
 	var rx = width - imargin.e;

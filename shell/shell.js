@@ -32,6 +32,7 @@ var Action;
 var Caret;
 var Dash;
 var Euclid;
+var Font;
 var Jools;
 var MeshMashine;
 var Path;
@@ -92,7 +93,8 @@ Shell = function(fabric) {
 
 	Euclid.Measure.init();
 
-	Euclid.Measure.setFont(20, theme.defaultFont);
+	this.$fontWFont = new Font(20, theme.defaultFont, null, null, null);
+	Euclid.Measure.setFont(this.$fontWFont);
 	this.$fontWatch = Euclid.Measure.width('meshcraft$8833');
 
 	this.fabric    = fabric;
@@ -235,7 +237,7 @@ Shell.prototype.systemBlur = function() {
 Shell.prototype.blink = function() {
 	if (this.green) { return; }
 
-	Euclid.Measure.setFont(20, theme.defaultFont);
+	Euclid.Measure.setFont(this.$fontWFont);
 	var w = Euclid.Measure.width('meshcraft$8833');
 	if (w !== this.$fontWatch) {
 		console.log('fontchange detected');
@@ -328,23 +330,18 @@ Shell.prototype._draw = function() {
 			this, 'pathFrowny', Euclid.View.proper, m.add(0, -100)
 		);
 
-		fabric.setFont({
-			size   :  40,
-			family :  theme.defaultFont,
-			fill   : 'black',
-			align  : 'center',
-			base   : 'middle'
-		});
+		if (!this._$greenFont1) {
+			this._$greenFont1 = new Font(40, theme.defaultFont, 'black', 'center', 'middle');
+		}
+
+		if (!this._$greenFont2) {
+			this._$greenFont2 = new Font(24, theme.defaultFont, 'black', 'center', 'middle');
+		}
+
+		fabric.setFont(this._$greenFont1);
 		fabric.fillText(this.green, m);
 
-		fabric.setFont({
-			size   :  24,
-			family :  theme.defaultFont,
-			fill   : 'black',
-			align  : 'center',
-			base   : 'middle'
-		});
-
+		fabric.setFont(this._$greenFont2);
 		fabric.fillText('Please refresh the page to reconnect.', m.x, m.y + 100);
 		return;
 	}

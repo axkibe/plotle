@@ -145,14 +145,14 @@ Input.prototype._weave = function(accent) {
 	if (!isnon(style)) { throw new Error('Invalid style: ' + sname); }
 
 	fabric.fill(style.fill, this.bezi, 'path', Euclid.View.proper);
-	var fs = this.twig.fontStyle;
-	fabric.setFont(fs);
+	var font = this.twig.fontStyle;
+	fabric.setFont(font);
 
 	if(this.twig.password) {
 		fabric.fill('black', this, 'maskPath', Euclid.View.proper,
-			this.value.length, fs.size);
+			this.value.length, font.size);
 	} else {
-		fabric.fillText(this.value, pitch.x, fs.size + pitch.y);
+		fabric.fillText(this.value, pitch.x, font.size + pitch.y);
 	}
 	fabric.edge(style.edge, this.bezi, 'path', Euclid.View.proper);
 
@@ -177,7 +177,7 @@ Input.prototype.getOffsetPoint = function(offset) {
 	// TODO cache position
 	var twig     = this.twig;
 	var font     = twig.fontStyle;
-	Euclid.Measure.setFont(font.size, font.family);
+	Euclid.Measure.setFont(font);
 	var val      = this.value;
 
 	// TODO use token. text instead.

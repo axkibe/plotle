@@ -194,7 +194,7 @@ Label.prototype.getZone = function() {
 
 	// TODO Caching!
 	var doc    = this.$sub.doc;
-	var fs     = doc.getFontSize();
+	var fs     = doc.getFont().size;
 	var width  = Math.max(Math.ceil(doc.getSpread()), Math.round(fs * 0.3));
 	var height = Math.max(Math.ceil(doc.getHeight()), Math.round(fs));
 
@@ -238,7 +238,7 @@ Label.prototype.actionstop = function(view, p) {
 	case Action.ITEMDRAG :
 	case Action.ITEMRESIZE :
 		var zone = this.getZone();
-		var fontsize = this.$sub.doc.getFontSize();
+		var fontsize = this.$sub.doc.getFont().size;
 
 		if (!this.twig.pnw.eq(zone.pnw)) {
 			shell.peer.setPNW(this.path, zone.pnw);
