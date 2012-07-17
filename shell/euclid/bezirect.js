@@ -80,8 +80,8 @@ BeziRect.prototype.path = function(fabric, border, twist, view) {
 	var sy = view.y(this.pse) - border - 1;
 	var a = this.a;
 	var b = this.b;
-	var ma = Euclid.Fabric.magic * (a + border);
-	var mb = Euclid.Fabric.magic * (b + border);
+	var ma = Euclid.magic * (a + border);
+	var mb = Euclid.magic * (b + border);
 
 	fabric.moveTo(                     wx + a, ny    );
 	fabric.lineTo(                     ex - a, ny    );

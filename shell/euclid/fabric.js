@@ -43,6 +43,11 @@ var Jools;
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser'); }
 
 /**
+|'magic' number to approximate ellipses with beziers.
+*/
+Euclid.magic = 0.551784;
+
+/**
 | Constructor.
 |
 | Fabric()        -or-    creates a new fabric
@@ -90,7 +95,6 @@ var ro    = Math.round;
 var cos   = Math.cos;
 var sin   = Math.sin;
 var tan   = Math.tan;
-var magic = 0.551784;      // 'magic' number to approximate ellipses with beziers.
 
 /**
 | Throws an error if any argument is not an integer.
@@ -644,7 +648,6 @@ Fabric.prototype.scale = function(s) {
 	this._cx.scale(s, s);
 };
 
-Fabric.ensureInteger = ensureInteger;
-Fabric.magic         = magic;
+Fabric.ensureInteger = ensureInteger; // TODO this belongs to Jools
 
 })();

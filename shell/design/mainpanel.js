@@ -45,13 +45,8 @@ Design = Design || {};
 'use strict';
 
 var half        = Jools.half;
-var immute      = Jools.immute;
-var innumerable = Jools.innumerable;
 var ro          = Math.round;
 var fontStyle   = Design.fontStyle;
-
-// approximates ellipses with beziers
-var magic       = Euclid.Fabric.magic;
 
 var sideBW  = 120;
 var sideB2W = 190;
@@ -75,12 +70,12 @@ var zoomX   =   0;
 var zoomY   =  -9;
 var zoomBW  =  20;
 var zoomBH  =  20;
-var zoomBYM = Math.round(zoomBH * magic);
-var zoomBXM = Math.round(zoomBW * magic);
+var zoomBYM = Math.round(zoomBH * Euclid.magic);
+var zoomBXM = Math.round(zoomBW * Euclid.magic);
 
 var MainPanel = Design.MainPanel = { type : 'Design' };
 
-var consts = innumerable(MainPanel, 'consts', immute({
+var consts = Jools.innumerable(MainPanel, 'consts', Jools.immute({
 	C1X : 200,
 	C1Y : -60,
 	C2X : 300,
@@ -302,7 +297,7 @@ MainPanel.layout = {
 			ranks : [ '1', '2', '3' ]
 		}
 	},
-	
+
 	'chat'        : {
 		type      : 'Chat',
 		fontStyle : fontStyle(12, 'lac'),

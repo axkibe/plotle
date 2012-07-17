@@ -114,8 +114,8 @@ Input.prototype.maskPath = function(fabric, border, twist, view, length, size) {
 	var w  = this.maskWidth(size);
 	var w2 = w * 2;
 	var k  = this.maskKern(size);
-	var wm = w * Euclid.Fabric.magic;
-	var wh = h * Euclid.Fabric.magic;
+	var wm = w * Euclid.magic;
+	var wh = h * Euclid.magic;
 
 	for (var a = 0; a < length; a++) {
 		fabric.moveTo(                    x + w,  y - h);

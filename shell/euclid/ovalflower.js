@@ -89,7 +89,7 @@ OvalFlower.prototype.path = function(fabric, border, twist, view, segment) {
 	var b2   = this.b2;
 	var bo   = border;
 
-	var m    = Euclid.Fabric.magic;
+	var m    = Euclid.magic;
 	var am1  = m * this.a1;
 	var bm1  = m * this.b1;
 	var am2  = m * this.a2;

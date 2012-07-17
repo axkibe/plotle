@@ -46,7 +46,7 @@ Design = Design || {};
 var fontStyle = Design.fontStyle;
 
 // 'magic' number to approximate ellipses with beziers
-var magic      = Euclid.Fabric.magic;
+var magic      = Euclid.magic;
 var mbConsts   = Design.MainPanel.consts;
 
 /**

@@ -46,13 +46,6 @@ var theme;
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
-var debug        = Jools.debug;
-var immute       = Jools.immute;
-var is           = Jools.is;
-var isnon        = Jools.isnon;
-var half         = Jools.half;
-var magic        = Euclid.Fabric.magic; // TODO move magic to Euclid
-
 /**
 | Constructor
 */
@@ -65,11 +58,15 @@ var SwitchPanel = Dash.SwitchPanel = function(panel, current, userName, psw) {
 		new Euclid.Point(swidim.a * 2, swidim.b)
 	);
 	this.pnw        = psw.sub(0, this.iframe.height);
-	this.gradientPC = new Euclid.Point(half(iframe.width), half(iframe.height) + 600);
+
+	this.gradientPC = new Euclid.Point(
+		Jools.half(iframe.width),
+		Jools.half(iframe.height) + 600
+	);
 	this.gradientR0 = 0;
 	this.gradientR1 = 650;
 
-	this.buttonDim = immute({
+	this.buttonDim = Jools.immute({
 		width  : 80,
 		height : 36
 	});
@@ -79,8 +76,8 @@ var SwitchPanel = Dash.SwitchPanel = function(panel, current, userName, psw) {
 	var x2 = 55;
 	var y1 =  5;
 	var y2 = 36;
-	var mx = half(iframe.width);
-	var hh = half(this.buttonDim.height);
+	var mx = Jools.half(iframe.width);
+	var hh = Jools.half(this.buttonDim.height);
 
 	this.buttonPos    = {
 		n  : new Euclid.Point(mx,      hh + y1),
@@ -139,10 +136,10 @@ SwitchPanel.prototype.fadeout = function() {
 SwitchPanel.prototype.pathFrame = function(fabric, border, twist) {
 	var w = this.iframe.width  - 1;
 	var h = this.iframe.height - 1;
-	var x = half(w);
+	var x = Jools.half(w);
 	var swidim = theme.switchpanel.dimensions;
-	var am = magic * swidim.a;
-	var bm = magic * swidim.b;
+	var am = Euclid.magic * swidim.a;
+	var bm = Euclid.magic * swidim.b;
 	var bo = border;
 
 	fabric.moveTo(                        bo,      h);
@@ -161,11 +158,11 @@ SwitchPanel.prototype.pathButton = function(fabric, border, twist, view, dir) {
 	var h = this.iframe.height - 1;
 	var bo = border;
 
-	var bw05 = half(bw);
-	var bh05 = half(bh);
+	var bw05 = Jools.half(bw);
+	var bh05 = Jools.half(bh);
 
-	var mx   = bw / 2 * magic;
-	var my   = bh / 2 * magic;
+	var mx   = bw / 2 * Euclid.magic;
+	var my   = bh / 2 * Euclid.magic;
 
 	var p = this.buttonPos[dir];
 	var px = view.x(p);
@@ -216,8 +213,8 @@ SwitchPanel.prototype._weave = function() {
 	});
 
 	var bd = this.buttonDim;
-	var cx = half(iframe.width);
-	var cy = half(bd.height);
+	var cx = Jools.half(iframe.width);
+	var cy = Jools.half(bd.height);
 
 	var bp = this.buttonPos;
 	fabric.fillText('Welcome',   bp.n .x, bp.n. y);

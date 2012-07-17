@@ -43,8 +43,6 @@ var OvalSlice  = null;
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser'); }
 
-var magic        = Euclid.Fabric.magic;
-
 /**
 | Constructor.
 |
@@ -56,8 +54,8 @@ OvalSlice = function(psw, dimensions) {
 	this.psw       = psw;
 	var a = this.a = dimensions.a1;
 	var b = this.b = dimensions.b1;
-	var am         = magic * a;
-	var bm         = magic * b;
+	var am         = Euclid.magic * a;
+	var bm         = Euclid.magic * b;
 	this.slice = sliceBezier(
 		-am, 0,
 		0, -bm,
@@ -119,8 +117,8 @@ Jools.lazyFixate(OvalSlice.prototype, 'pse', function() {
 OvalSlice.prototype.path = function(fabric, border, twist, view) {
 	var a   = this.a;
 	var b   = this.b;
-	var am  = magic * this.a;
-	var bm  = magic * this.b;
+	var am  = Euclid.magic * this.a;
+	var bm  = Euclid.magic * this.b;
 	var bo  = border;
 	var pswx = view.x(this.psw);
 	var pswy = view.y(this.psw);
