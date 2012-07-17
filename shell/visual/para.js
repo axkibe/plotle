@@ -210,8 +210,7 @@ Para.prototype.getFlow = function() {
 	var x = 0, xw = 0;
 
 	var y = font.size;
-	Euclid.Measure.setFont(font);
-	var space = Euclid.Measure.width(' ');
+	var space = Euclid.Measure.width(font, ' ');
 	var line = 0;
 	flow[line] = { a: [], y: y, o: 0 };
 
@@ -221,7 +220,7 @@ Para.prototype.getFlow = function() {
 	for(var ca = reg.exec(text); ca !== null; ca = reg.exec(text)) {
 		// a token is a word plus following hard spaces
 		var token = ca[1] + ca[2];
-		var w = Euclid.Measure.width(token);
+		var w = Euclid.Measure.width(font, token);
 		xw = x + w + space;
 
 		if (flowWidth > 0 && xw > flowWidth) {
@@ -267,20 +266,28 @@ Para.prototype.getHeight = function() {
 };
 
 /**
-| Returns the offset in flowed line number and x coordinate.
+| Returns the offset by an x coordination in a flow.
 */
 Para.prototype.getLineXOffset = function(line, x) {
-	var flow = this.getFlow();
-	var fline = flow[line];
+	var item   = shell.getSub('space', this.path, -2);
+	var doc    = item.$sub.doc;
+	var font   = doc.getFont();
+
+	var flow   = this.getFlow();
+	var fline  = flow[line];
 	var ftoken = null;
+
 	for (var token = 0; token < fline.a.length; token++) {
 		ftoken = fline.a[token];
 		if (x <= ftoken.x + ftoken.w)
 			{ break; }
 	}
-	if (token >= fline.a.length) ftoken = fline.a[--token];
 
-	if (!ftoken) { return 0; }
+	if (token >= fline.a.length)
+		{ ftoken = fline.a[--token]; }
+
+	if (!ftoken)
+		{ return 0; }
 
 	var dx   = x - ftoken.x;
 	var text = ftoken.t;
@@ -289,8 +296,9 @@ Para.prototype.getLineXOffset = function(line, x) {
 	var a;
 	for(a = 0; a < text.length; a++) {
 		x1 = x2;
-		x2 = Euclid.Measure.width(text.substr(0, a));
-		if (x2 >= dx) { break; }
+		x2 = Euclid.Measure.width(font, text.substr(0, a));
+		if (x2 >= dx)
+			{ break; }
 	}
 
 	if (dx - x1 < x2 - dx && a > 0) a--;
@@ -312,7 +320,7 @@ Para.prototype.getOffsetPoint = function(offset, flowPos$) {
 	// TODO cache position
 	var twig = this.twig;
 	var doc  = shell.getSub('space', this.path, -1);
-	Euclid.Measure.setFont(doc.getFont());
+	var font = doc.getFont();
 	var text = twig.text;
 	var flow = this.getFlow();
 	var a;
@@ -343,7 +351,7 @@ Para.prototype.getOffsetPoint = function(offset, flowPos$) {
 	}
 
 	// TODO use token. text instead.
-	var px = ro(token.x + Euclid.Measure.width(text.substring(token.o, offset)));
+	var px = ro(token.x + Euclid.Measure.width(font, text.substring(token.o, offset)));
 	var py = line.y;
 
 	return new Euclid.Point(px, py);
@@ -357,15 +365,17 @@ Para.prototype.getOffsetPoint = function(offset, flowPos$) {
 Para.prototype.getPointOffset = function(point) {
 	var flow = this.getFlow();
 	var para = this.para;
-	var doc = shell.getSub('space', this.path, -1);
-	Euclid.Measure.setFont(doc.getFont());
+	var doc  = shell.getSub('space', this.path, -1);
+	var font = doc.getFont();
 
 	var line;
 	for (line = 0; line < flow.length; line++) {
 		if (point.y <= flow[line].y)
 			{ break; }
 	}
-	if (line >= flow.length) line--;
+
+	if (line >= flow.length)
+		{ line--; }
 
 	return this.getLineXOffset(line, point.x);
 };

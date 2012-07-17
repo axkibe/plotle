@@ -93,9 +93,8 @@ Shell = function(fabric) {
 
 	Euclid.Measure.init();
 
-	this.$fontWFont = new Font(20, theme.defaultFont, null, null, null);
-	Euclid.Measure.setFont(this.$fontWFont);
-	this.$fontWatch = Euclid.Measure.width('meshcraft$8833');
+	this._$fontWFont = new Font(20, theme.defaultFont, null, null, null);
+	this._$fontWatch = Euclid.Measure.width(this._$fontWFont, 'meshcraft$8833');
 
 	this.fabric    = fabric;
 
@@ -237,11 +236,10 @@ Shell.prototype.systemBlur = function() {
 Shell.prototype.blink = function() {
 	if (this.green) { return; }
 
-	Euclid.Measure.setFont(this.$fontWFont);
-	var w = Euclid.Measure.width('meshcraft$8833');
-	if (w !== this.$fontWatch) {
+	var w = Euclid.Measure.width(this._$fontWFont, 'meshcraft$8833');
+	if (w !== this._$fontWatch) {
 		console.log('fontchange detected');
-		this.$fontWatch = w;
+		this._$fontWatch = w;
 		this.knock();
 	}
 

@@ -177,7 +177,6 @@ Input.prototype.getOffsetPoint = function(offset) {
 	// TODO cache position
 	var twig     = this.twig;
 	var font     = twig.fontStyle;
-	Euclid.Measure.setFont(font);
 	var val      = this.value;
 
 	// TODO use token. text instead.
@@ -188,7 +187,7 @@ Input.prototype.getOffsetPoint = function(offset) {
 		);
 	} else {
 		return new Euclid.Point(
-			ro(pitch.x + Euclid.Measure.width(val.substring(0, offset))),
+			ro(pitch.x + Euclid.Measure.width(font, val.substring(0, offset))),
 			ro(pitch.y + font.size)
 		);
 	}

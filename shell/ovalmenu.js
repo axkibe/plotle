@@ -40,6 +40,7 @@
 | Imports
 */
 var Euclid;
+var Font;
 var Jools;
 var shell;
 var system;
@@ -84,6 +85,8 @@ OvalMenu = function(fabric, pc, settings, labels, callback) {
 	this.$within     = null;
 	this.$fadeTimer  = null;
 	this.$fade       = false;
+
+	this.$font       = new Font(12, theme.defaultFont, 'black', 'center', 'middle');
 };
 
 /**
@@ -106,14 +109,7 @@ OvalMenu.prototype.draw = function(view) {
 	}
 	f.edge(this._style.edge, this._oflower, 'path', view, null);
 
-
-	f.setFont({
-		size   :  12,
-		family :  theme.defaultFont,
-		fill   : 'black',
-		align  : 'center',
-		base   : 'middle'
-	});
+	f.setFont(this.$font);
 	var labels = this.labels;
 
 	var b1  = this._dimensions.b1;

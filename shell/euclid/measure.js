@@ -41,20 +41,38 @@ var Jools;
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser'); }
 
+/**
+| Singleton
+*/
 var Measure = Euclid.Measure = {
+
+	/**
+	| Initialize is called once by shell
+	*/
 	init : function() {
-		Measure._canvas = document.createElement('canvas');
-		Measure._cx = this._canvas.getContext('2d');
+		if (Measure._$cs) { throw new Error('Measure already initialized'); }
+
+		var canvas = document.createElement('canvas');
+		Measure._$cx     = canvas.getContext('2d');
+		Measure._$size   = null;
+		Measure._$family = null;
 	},
 
-	width : function(text) {
-		return Measure._cx.measureText(text).width;
-	},
+	/**
+	| Returns the width of text with the specified font.
+	*/
+	width : function(font, text) {
+		var cx   = Measure._$cx;
 
-	// TODO remote give with every width
-	setFont : function(font) {
-		// move into the font class
-		Measure._cx.font = font.size + 'px ' + font.family;
+		if (Measure._$size   !== font.size ||
+			Measure._$family !== font.family
+		) {
+			Measure._$size   = font.size;
+			Measure._$family = font.family;
+			cx.font = font.size + 'px ' + font.family; // TODO move into the font object
+		}
+
+		return cx.measureText(text).width;
 	}
 };
 
