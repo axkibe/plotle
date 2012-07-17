@@ -30,7 +30,6 @@
 */
 var Euclid;
 var Jools;
-var Fabric;
 var Peer;
 var Shell;
 var config;
@@ -47,12 +46,6 @@ var startup;
 (function(){
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('browser.js needs a browser!'); }
-
-var abs       = Math.abs;
-var debug     = Jools.debug;
-var is        = Jools.is;
-var log       = Jools.log;
-var subclass  = Jools.subclass;
 
 /**
 | Catches all errors a function throws if config.devel is set.
@@ -86,7 +79,7 @@ var System = function() {
 	var canvas    = this._canvas = document.getElementById('canvas');
 	canvas.width  = window.innerWidth - 1;
 	canvas.height = window.innerHeight - 1;
-	this.fabric   = new Fabric(canvas);
+	this.fabric   = new Euclid.Fabric(canvas);
 
 	// if true browser supports the setCapture() call
 	// if false needs work around
@@ -230,7 +223,7 @@ System.prototype._blink = function() {
 */
 System.prototype._onAtweenTime = function() {
 	if (this._$mouseState !== 'atween') {
-		log('warn', 'dragTime() in wrong action mode');
+		Jools.log('warn', 'dragTime() in wrong action mode');
 		return;
 	}
 
@@ -397,7 +390,9 @@ System.prototype._onMouseMove = function(event) {
 		var dragbox = this.settings.dragbox;
 		var atween  = this._$atween;
 
-		if ((abs(p.x - atween.pos.x) > dragbox) || (abs(p.y - atween.pos.y) > dragbox)) {
+		if ((Math.abs(p.x - atween.pos.x) > dragbox) ||
+			(Math.abs(p.y - atween.pos.y) > dragbox)
+		) {
 			// moved out of dragbox -> start dragging
 			clearTimeout(atween.timer);
 			atween.timer = null;
@@ -484,12 +479,12 @@ System.prototype._onMouseWheel = function(event) {
 	);
 
 	var dir;
-	if (is(event.wheelDelta)) {
+	if (Jools.is(event.wheelDelta)) {
 		dir = (event.wheelDelta) > 0 ? 1 : -1;
-	} else if (is(event.detail)) {
+	} else if (Jools.is(event.detail)) {
 		dir = (event.detail) > 0 ? -1 : 1;
 	} else {
-		log('warn', 'invalid wheel event');
+		Jools.log('warn', 'invalid wheel event');
 		return;
 	}
 

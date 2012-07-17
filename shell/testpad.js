@@ -9,7 +9,6 @@
 | Imports
 */
 var Jools;
-var Fabric;
 var Path;
 var Peer;
 var Tree;
@@ -21,14 +20,6 @@ var Tree;
 'use strict';
 
 if (typeof(window) === 'undefined') throw new Error('testpad needs a browser!');
-
-var debug     = Jools.debug;
-var floor     = Math.floor;
-var limit     = Jools.limit;
-var log       = Jools.log;
-var max       = Math.max;
-var min       = Math.min;
-var subclass  = Jools.subclass;
 
 /**
 | Current action
@@ -138,9 +129,9 @@ var onmousedown = function(event) {
 	var y = event.pageY - element.pad.offsetTop;
 
 	if (!ranks) { beep(); return; }
-	cursor.line   = limit(0, floor(y / element.measure.offsetHeight), ranks.length - 1);
+	cursor.line   = Jools.limit(0, Math.floor(y / element.measure.offsetHeight), ranks.length - 1);
 	var text = copse[ranks[cursor.line]].text;
-	cursor.offset = limit(0, floor(x / element.measure.offsetWidth), text.length);
+	cursor.offset = Jools.limit(0, Math.floor(x / element.measure.offsetWidth), text.length);
 	resetBlink();
 	updatePad();
 };
@@ -451,7 +442,7 @@ var update = function(totime) {
 	time  = res.time;
 	space = res.node;
 
-	maxtime = max(time, maxtime);
+	maxtime = Math.max(time, maxtime);
 
 	element.now.innerHTML = '' + time;
 	if (space) {
@@ -480,7 +471,7 @@ var onupnow = function() {
 | Button one-up-the-timeline has been clicked.
 */
 var onup = function() {
-	update(min(time + 1, maxtime));
+	update(Math.min(time + 1, maxtime));
 	resetBlink();
 	updatePad();
 	element.input.focus();
@@ -490,7 +481,7 @@ var onup = function() {
 | Button one-down-the-timeline has been clicked.
 */
 var ondown = function() {
-	update(max(time - 1, 0));
+	update(Math.max(time - 1, 0));
 	resetBlink();
 	updatePad();
 	element.input.focus();

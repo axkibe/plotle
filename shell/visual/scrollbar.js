@@ -33,7 +33,6 @@ var Visual;
 | Imports
 */
 var Euclid;
-var Fabric;
 var Jools;
 var theme;
 

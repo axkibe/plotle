@@ -34,7 +34,6 @@ Dash = Dash || {};
 */
 var config;
 var Euclid;
-var Fabric;
 var Jools;
 var shell;
 var system;
@@ -52,7 +51,7 @@ var immute       = Jools.immute;
 var is           = Jools.is;
 var isnon        = Jools.isnon;
 var half         = Jools.half;
-var magic        = Fabric.magic;
+var magic        = Euclid.Fabric.magic; // TODO move magic to Euclid
 
 /**
 | Constructor
@@ -200,7 +199,7 @@ SwitchPanel.prototype._paintButton = function(fabric, dir) {
 SwitchPanel.prototype._weave = function() {
 	if (!config.debug.noCache && this.$fabric) { return this.$fabric; }
 	var iframe = this.iframe;
-	var fabric = this.$fabric = new Fabric(iframe);
+	var fabric = this.$fabric = new Euclid.Fabric(iframe);
 
 	fabric.fill(theme.switchpanel.style.fill, this, 'pathFrame', Euclid.View.proper);
 	if (!this.amVisitor) { this._paintButton(fabric, 'nw'); }

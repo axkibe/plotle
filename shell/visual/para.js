@@ -33,7 +33,6 @@ Visual = Visual || {};
 */
 var Caret;
 var Euclid;
-var Fabric;
 var Jools;
 var Measure;
 var Sign;
@@ -98,7 +97,7 @@ Para.prototype.draw = function(fabric, view, pnw) {
 		view.zoom !== $f.$zoom
 	) {
 		// TODO: work out exact height for text below baseline
-		$f = this.$fabric = new Fabric(width, height);
+		$f = this.$fabric = new Euclid.Fabric(width, height);
 		$f.scale(view.zoom);
 		$f.$zoom = view.zoom;
 
@@ -155,7 +154,7 @@ Para.prototype.drawCaret = function(view) {
 		shell.caret.$save = shell.fabric.getImageData(cp.x, cp.y, 3, ch + 2);
 	} else {
 		// paradoxically this is often way faster, especially on firefox
-		shell.caret.$save = new Fabric(shell.fabric.width, shell.fabric.height);
+		shell.caret.$save = new Euclid.Fabric(shell.fabric.width, shell.fabric.height);
 		shell.caret.$save.drawImage(shell.fabric, 0, 0);
 	}
 

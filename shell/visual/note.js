@@ -35,7 +35,6 @@ Visual = Visual || {};
 var Action;
 var config;
 var Euclid;
-var Fabric;
 var Jools;
 var shell;
 var system;
@@ -200,7 +199,7 @@ Note.prototype.draw = function(fabric, view) {
 		vzone.width  !== f.width ||
 		vzone.height !== f.height)
 	{
-		f = this.$fabric = new Fabric(vzone.width, vzone.height);
+		f = this.$fabric = new Euclid.Fabric(vzone.width, vzone.height);
 		var doc     = this.$sub.doc;
 		var imargin = this.imargin;
 

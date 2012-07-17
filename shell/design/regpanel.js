@@ -28,7 +28,7 @@
 /**
 | Imports
 */
-var Fabric;
+var Euclid;
 var theme;
 
 /**
@@ -46,7 +46,7 @@ Design = Design || {};
 var fontStyle = Design.fontStyle;
 
 // 'magic' number to approximate ellipses with beziers
-var magic     = Fabric.magic;
+var magic      = Euclid.Fabric.magic;
 var mbConsts   = Design.MainPanel.consts;
 
 /**

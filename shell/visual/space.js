@@ -34,7 +34,6 @@ Visual = Visual || {};
 */
 var Action;
 var Euclid;
-var Fabric;
 var Jools;
 var OvalMenu;
 var Path;

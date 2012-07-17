@@ -22,8 +22,9 @@
  License: MIT(Expat), see accompanying 'License'-file
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 /**
-| Exports
+| Export
 */
 var Dash;
 Dash = Dash || {};
@@ -33,7 +34,6 @@ Dash = Dash || {};
 */
 var Curve;
 var Jools;
-var Fabric;
 
 /**
 | Capsule

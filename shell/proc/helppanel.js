@@ -34,7 +34,6 @@ Proc = Proc || {};
 */
 var Dash;
 var config;
-var Fabric;
 var Jools;
 var theme;
 

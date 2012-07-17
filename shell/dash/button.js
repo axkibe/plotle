@@ -36,7 +36,6 @@ var Action;
 var config;
 var Curve;
 var Euclid;
-var Fabric;
 var Jools;
 var Path;
 var shell;
@@ -110,7 +109,7 @@ Button.prototype._weave = function(accent) {
 	var fabric = this.$fabric;
 	if (fabric && this.$accent === accent && !config.debug.noCache) { return fabric; }
 
-	fabric = this.$fabric = new Fabric(this.iframe);
+	fabric = this.$fabric = new Euclid.Fabric(this.iframe);
 
 	var sname;
 	switch (accent) {

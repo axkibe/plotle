@@ -36,7 +36,6 @@ Proc = Proc || {};
 var config;
 var Dash;
 var Euclid;
-var Fabric;
 var Jools;
 var theme;
 

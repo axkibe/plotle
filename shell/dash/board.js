@@ -35,7 +35,6 @@ Dash = Dash || {};
 var Curve;
 var Design;
 var Euclid;
-var Fabric;
 var Jools;
 var Path;
 var shell;

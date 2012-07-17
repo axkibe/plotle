@@ -34,7 +34,6 @@ Visual = Visual || {};
 var Action;
 var Euclid;
 var config;
-var Fabric;
 var Jools;
 var shell;
 var system;
@@ -118,7 +117,7 @@ Label.prototype.draw = function(fabric, view) {
 		zone.height !== f.height ||
 		view.zoom !== f.$zoom)
 	{
-		f = this.$fabric = new Fabric(zone.width, zone.height);
+		f = this.$fabric = new Euclid.Fabric(zone.width, zone.height);
 		f.$zoom     = view.zoom;
 		var doc     = this.$sub.doc;
 		var imargin = this.imargin;

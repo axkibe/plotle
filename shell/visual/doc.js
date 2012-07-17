@@ -32,7 +32,6 @@ Visual = Visual || {};
 | Imports
 */
 var Euclid;
-var Fabric;
 var Jools;
 var Path;
 var shell;

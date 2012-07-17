@@ -35,7 +35,6 @@ Dash = Dash || {};
 var Caret;
 var Curve;
 var Euclid;
-var Fabric;
 var Jools;
 var Measure;
 var shell;
@@ -115,8 +114,8 @@ Input.prototype.maskPath = function(fabric, border, twist, view, length, size) {
 	var w  = this.maskWidth(size);
 	var w2 = w * 2;
 	var k  = this.maskKern(size);
-	var wm = w * Fabric.magic;
-	var wh = h * Farbic.magic;
+	var wm = w * Euclid.Fabric.magic;
+	var wh = h * Euclid.Fabric.magic;
 
 	for (var a = 0; a < length; a++) {
 		fabric.moveTo(                    x + w,  y - h);
@@ -133,7 +132,7 @@ Input.prototype.maskPath = function(fabric, border, twist, view, length, size) {
 | TODO caching;
 */
 Input.prototype._weave = function(accent) {
-	var fabric = new Fabric(this.bezi.width, this.bezi.height);
+	var fabric = new Euclid.Fabric(this.bezi.width, this.bezi.height);
 
 	var sname;
 	switch (accent) {
@@ -233,7 +232,7 @@ Input.prototype.drawCaret = function(view) {
 		shell.caret.$save = shell.fabric.getImageData(cp.x, cp.y, 3, ch + 2);
 	} else {
 		// paradoxically this is often way faster, especially on firefox
-		shell.caret.$save = new Fabric(shell.fabric.width, shell.fabric.height);
+		shell.caret.$save = new Euclid.Fabric(shell.fabric.width, shell.fabric.height);
 		shell.caret.$save.drawImage(shell.fabric, 0, 0);
 	}
 

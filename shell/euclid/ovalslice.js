@@ -28,7 +28,7 @@
 /**
 | Imports
 */
-var Fabric;
+var Euclid;
 var Jools;
 
 /**
@@ -43,13 +43,7 @@ var OvalSlice  = null;
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser'); }
 
-var debug        = Jools.debug;
-var immute       = Jools.immute;
-var log          = Jools.log;
-var fixate       = Jools.fixate;
-var lazyFixate   = Jools.lazyFixate;
-var magic        = Fabric.magic;
-var ro           = Math.round;
+var magic        = Euclid.Fabric.magic;
 
 /**
 | Constructor.
@@ -70,7 +64,7 @@ OvalSlice = function(psw, dimensions) {
 		-a, b,
 		dimensions.slice);
 
-	immute(this);
+	Jools.immute(this);
 };
 
 var sliceBezier = function(x2, y2, x3, y3, x4, y4, f) {
@@ -84,35 +78,38 @@ var sliceBezier = function(x2, y2, x3, y3, x4, y4, f) {
 	var rx4 = (-2*x2 + x3 + x4)*ff + 2*rx2 - rx3;
 	var ry4 = (-2*y2 + y3 + y4)*ff + 2*ry2 - ry3;
 
-	return immute({x2 : rx2, y2 : ry2, x3 : rx3, y3 : ry3, x4 : rx4, y4 : ry4});
+	return Jools.immute({x2 : rx2, y2 : ry2, x3 : rx3, y3 : ry3, x4 : rx4, y4 : ry4});
 };
 
 
 /**
 | Middle(center) point an Oval.
 */
-lazyFixate(OvalSlice.prototype, 'pm', function() {
-	return this.psw.add(ro(-this.slice.x4), ro(this.b - this.slice.y4));
+Jools.lazyFixate(OvalSlice.prototype, 'pm', function() {
+	return this.psw.add(
+		Math.round(-this.slice.x4),
+		Math.round(this.b - this.slice.y4)
+	);
 });
 
 /**
 | pnw (used by gradients)
 */
-lazyFixate(OvalSlice.prototype, 'pnw', function() {
-	return this.psw.add(0, ro(-this.slice.y4));
+Jools.lazyFixate(OvalSlice.prototype, 'pnw', function() {
+	return this.psw.add(0, Math.round(-this.slice.y4));
 });
 
 /**
 | pnw (used by gradients)
 */
-lazyFixate(OvalSlice.prototype, 'width', function() {
-	return ro(-2 * this.slice.x4);
+Jools.lazyFixate(OvalSlice.prototype, 'width', function() {
+	return Math.round(-2 * this.slice.x4);
 });
 
 /**
 | pse (used by gradients)
 */
-lazyFixate(OvalSlice.prototype, 'pse', function() {
+Jools.lazyFixate(OvalSlice.prototype, 'pse', function() {
 	return this.psw.add(2 * this.a, 0);
 });
 

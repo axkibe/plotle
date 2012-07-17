@@ -29,7 +29,6 @@
 | Imports
 */
 var Action;
-var Fabric;
 var Jools;
 var MeshMashine;
 var Path;

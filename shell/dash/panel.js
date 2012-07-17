@@ -36,7 +36,6 @@ var config;
 var Curve;
 var Design;
 var Euclid;
-var Fabric;
 var Jools;
 var Path;
 var Proc;
@@ -142,7 +141,7 @@ Panel.prototype._weave = function() {
 		{ return this.$fabric; }
 
 	var iframe = this.iframe;
-	var fabric = this.$fabric = new Fabric(iframe);
+	var fabric = this.$fabric = new Euclid.Fabric(iframe);
 	var style = Dash.Board.styles[this.tree.root.style];
 	if (!style) { throw new Error('no style!'); }
 

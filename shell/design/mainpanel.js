@@ -28,7 +28,7 @@
 /**
 | Imports
 */
-var Fabric;
+var Euclid;
 var Jools;
 var theme;
 
@@ -51,7 +51,7 @@ var ro          = Math.round;
 var fontStyle   = Design.fontStyle;
 
 // approximates ellipses with beziers
-var magic     = Fabric.magic;
+var magic       = Euclid.Fabric.magic;
 
 var sideBW  = 120;
 var sideB2W = 190;

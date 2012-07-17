@@ -32,7 +32,6 @@ var Action;
 var Caret;
 var Dash;
 var Euclid;
-var Fabric;
 var Jools;
 var Measure;
 var MeshMashine;

@@ -1,24 +1,23 @@
-/**                                                      _.._
-                                                      .-'_.._''.
- __  __   ___       _....._              .          .' .'     '.\
-|  |/  `.'   `.   .'       '.          .'|         / .'                                _.._
-|   .-.  .-.   ' /   .-'"'.  \        (  |        . '            .-,.-~.             .' .._|    .|
-|  |  |  |  |  |/   /______\  |        | |        | |            |  .-. |    __      | '      .' |_
-|  |  |  |  |  ||   __________|    _   | | .'''-. | |            | |  | | .:-`.'.  __| |__  .'     |
-|  |  |  |  |  |\  (          '  .' |  | |/.'''. \. '            | |  | |/ |   \ ||__   __|'-..  .-'
-|  |  |  |  |  | \  '-.___..-~. .   | /|  /    | | \ '.         .| |  '- `" __ | |   | |      |  |
-|__|  |__|  |__|  `         .'.'.'| |//| |     | |  '. `.____.-'/| |      .'.''| |   | |      |  |
-                   `'-.....-.'.'.-'  / | |     | |    `-._____ / | |     / /   | |_  | |      |  '.'
-                                 \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
-                                       '___)   '___)                      `~~'  `"   |_|      `--'
-
-                                   .-,--'    .
-                                    \|__ ,-. |-. ,-. . ,-.
-                                     |   ,-| | | |   | |
-                                    `'   `-^ ^-' '   ' `-'
+/**                            _..._
+    _....._                 .-'_..._''. .---.    _______
+  .'       '.             .' .'      '.\|   |.--.\  ___ `'.
+ /   .-'"'.  \           / .'           |   ||__| ' |--.\  \
+/   /______\  |         . '             |   |.--. | |    \  '
+|   __________|         | |             |   ||  | | |     |  '
+\  (          '  _    _ | |             |   ||  | | |     |  |
+ \  '-.___..-~. | '  / |. '             |   ||  | | |     ' .'
+  `         .'..' | .' | \ '.          .|   ||  | | |___.' /'
+   `'-.....-.'./  | /  |  '. `._____.-'/|   ||__|/_______.'/
+              |   `'.  |    `-.______ / '---'    \_______|/
+              '   .'|  '/            `
+               `-'  `--'
+                    .-,--'    .
+                     \|__ ,-. |-. ,-. . ,-.
+                      |   ,-| | | |   | |
+                     `'   `-^ ^-' '   ' `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- This canvas wrapper enhances the HTML5 Canvas with using immutable euclidean objects.
+ This wrapper enhances the HTML5 canvas by using immutable euclidean objects.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -26,15 +25,15 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
-| Imports
-*/
-var Euclid;
-var Jools;
-
-/**
 | Exports
 */
-var Fabric  = null;
+var Euclid;
+Euclid = Euclid || {};
+
+/**
+| Imports
+*/
+var Jools;
 
 /**
 | Capsule
@@ -43,21 +42,14 @@ var Fabric  = null;
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser'); }
 
-var debug        = Jools.debug;
-var immute       = Jools.immute;
-var is           = Jools.is;
-var isnon        = Jools.isnon;
-var log          = Jools.log;
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /**
+| Constructor.
+|
 | Fabric()        -or-    creates a new fabric
 | Fabric(canvas)  -or-    encloses an existing HTML5 canvas
 | Fabric(width, height)   creates a new fabric and sets its size;
 */
-Fabric = function(a1, a2) {
+var Fabric = Euclid.Fabric = function(a1, a2) {
 	// TODO this is strange, replace with switch(a1.constructor)
 	switch (typeof(a1)) {
 	case 'undefined' :
@@ -353,9 +345,9 @@ Fabric.prototype.drawImage = function(image, a1, a2, a3) {
 		c = a3;
 	}
 	ensureInteger(x, y);
-	if (is(c)) { this._cx.globalCompositeOperation = c; }
+	if (Jools.is(c)) { this._cx.globalCompositeOperation = c; }
 	this._cx.drawImage(image, x, y);
-	if (is(c)) { this._cx.globalCompositeOperation = 'source-over'; }
+	if (Jools.is(c)) { this._cx.globalCompositeOperation = 'source-over'; }
 };
 
 
@@ -503,7 +495,7 @@ Fabric.prototype.paint = function(style, shape, path, view, a1, a2, a3, a4) {
 	this._begin(false);
 	shape[path](this, 0, false, view, a1, a2, a3, a4);
 
-	if (isnon(style.fill)) {
+	if (Jools.isnon(style.fill)) {
 		cx.fillStyle = this._colorStyle(fillStyle, shape);
 		cx.fill();
 	}
@@ -591,8 +583,8 @@ Fabric.prototype.fillRotateText = function(text, pc, phi, d) {
 | Sets the font.
 */
 Fabric.prototype.setFont = function(f) {
-	if (!is(f.align)) { throw new Error('fontstyle misses align');    }
-	if (!is(f.base))  { throw new Error('fontstyle misses base'); }
+	if (!Jools.is(f.align)) { throw new Error('fontstyle misses align');    }
+	if (!Jools.is(f.base))  { throw new Error('fontstyle misses base'); }
 
 	var cx = this._cx;
 	cx.font         = f.size + 'px ' + f.family;

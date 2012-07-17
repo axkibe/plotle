@@ -30,7 +30,6 @@
 */
 var Jools;
 var Euclid;
-var Fabric;
 
 /**
 | Exports

@@ -33,7 +33,6 @@ Design = Design || {};
 /**
 | Imports
 */
-var Fabric;
 var theme;
 
 /**
@@ -47,8 +46,8 @@ var theme;
 */
 var fontStyle = Design.fontStyle;
 // 'magic' number to approximate ellipses with beziers
-var magic     = Fabric.magic;
-var mbConsts   = Design.MainPanel.consts;
+var magic     = Euclid.Fabric.magic;
+var mbConsts  = Design.MainPanel.consts;
 
 /**
 | Login control
