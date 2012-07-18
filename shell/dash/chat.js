@@ -69,6 +69,8 @@ var Chat = Dash.Chat = function(twig, panel, inherit, name) {
 	this.pitch      = new Euclid.Point(this.sideSlopeX - 7, iframe.height - descend);
 	this.coff       = 37;
 	this.itext      = '';
+
+	this._font      = new Euclid.Font(twig.fontStyle);
 };
 
 /**
@@ -112,7 +114,7 @@ Chat.prototype._weave = function() {
 	var x = this.pitch.x;
 	var y = this.pitch.y;
 
-	fabric.setFont(this.twig.fontStyle);
+	fabric.setFont(this._font);
 	var lh = this.lineHeight;
 	fabric.fillText('»', x + 27, y);
 	fabric.fillText('chat', x, y);

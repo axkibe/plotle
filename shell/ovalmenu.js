@@ -40,7 +40,6 @@
 | Imports
 */
 var Euclid;
-var Font;
 var Jools;
 var shell;
 var system;
@@ -86,7 +85,7 @@ OvalMenu = function(fabric, pc, settings, labels, callback) {
 	this.$fadeTimer  = null;
 	this.$fade       = false;
 
-	this.$font       = new Font(12, theme.defaultFont, 'black', 'center', 'middle');
+	this.$font       = new Euclid.Font(12, theme.defaultFont, 'black', 'center', 'middle');
 };
 
 /**

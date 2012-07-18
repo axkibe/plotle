@@ -32,7 +32,6 @@ Visual = Visual || {};
 | Imports
 */
 var Euclid;
-var Font;
 var Jools;
 var Path;
 var shell;
@@ -235,7 +234,7 @@ Doc.prototype.getFont = function(vitem) {
 	if ($f && $f.size === fs)
 		{ return $f; }
 
-	return this._$font = new Font(
+	return this._$font = new Euclid.Font(
 		fs,
 		theme.defaultFont,
 		'black',

@@ -86,7 +86,11 @@ var Button = Dash.Button = function(twig, panel, inherit, name) {
 	this.$visible     = inherit ? inherit.$visible : true;
 	this.$captionText = inherit ? inherit.$captionText : twig.caption.text;
 	this.$accent      = Dash.Accent.NORMAL;
-};
+
+	// TODO may change the design patterns to create font objects
+	//      right away.
+	this._captionFont = new Euclid.Font(twig.caption.fontStyle);}
+;
 
 /**
 | Returns true if this component can focus.
@@ -124,7 +128,7 @@ Button.prototype._weave = function(accent) {
 	if (!isnon(style)) { throw new Error('Invalid style: ' + sname); }
 	fabric.paint(style, this, 'gpath', Euclid.View.proper);
 
-	fabric.setFont(this.twig.caption.fontStyle);
+	fabric.setFont(this._captionFont);
 	fabric.fillText(this.$captionText, this.captionPos);
 
 	if (config.debug.drawBoxes) {

@@ -27,7 +27,8 @@
 /**
 | Export
 */
-var Font = null;
+var Euclid;
+Euclid = Euclid || {};
 
 /**
 | Imports
@@ -49,13 +50,25 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 | fill   : font color
 | align  : horizontal align
 | base   : vertical base position
+|
+| or
+|
+| o : one object that contains it all
 */
-Font = function(size, family, fill, align, base) {
-	this.size    = size;
-	this.family  = family;
-	this.fill    = fill;
-	this.align   = align;
-	this.base    = base;
+var Font = Euclid.Font = function(size_o, family, fill, align, base) {
+	if (typeof(size_o) === 'object' && !(size_o instanceof Number)) {
+		this.size    = size_o.size;
+		this.family  = size_o.family;
+		this.fill    = size_o.fill;
+		this.align   = size_o.align;
+		this.base    = size_o.base;
+	} else {
+		this.size    = size_o;
+		this.family  = family;
+		this.fill    = fill;
+		this.align   = align;
+		this.base    = base;
+	}
 
 	Jools.immute(this);
 };
@@ -67,7 +80,7 @@ Font.prototype.getCSS = function() {
 	if (this._$css)
 		{ return this._$css; }
 
-	return this._$css = font.size + 'px ' + font.family;
-}
+	return this._$css = this.size + 'px ' + this.family;
+};
 
 })();

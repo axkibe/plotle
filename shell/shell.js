@@ -32,7 +32,6 @@ var Action;
 var Caret;
 var Dash;
 var Euclid;
-var Font;
 var Jools;
 var MeshMashine;
 var Path;
@@ -93,7 +92,7 @@ Shell = function(fabric) {
 
 	Euclid.Measure.init();
 
-	this._$fontWFont = new Font(20, theme.defaultFont, null, null, null);
+	this._$fontWFont = new Euclid.Font(20, theme.defaultFont, null, null, null);
 	this._$fontWatch = Euclid.Measure.width(this._$fontWFont, 'meshcraft$8833');
 
 	this.fabric    = fabric;
@@ -329,11 +328,23 @@ Shell.prototype._draw = function() {
 		);
 
 		if (!this._$greenFont1) {
-			this._$greenFont1 = new Font(40, theme.defaultFont, 'black', 'center', 'middle');
+			this._$greenFont1 = new Euclid.Font(
+				40,
+				theme.defaultFont,
+				'black',
+				'center',
+				'middle'
+			);
 		}
 
 		if (!this._$greenFont2) {
-			this._$greenFont2 = new Font(24, theme.defaultFont, 'black', 'center', 'middle');
+			this._$greenFont2 = new Euclid.Font(
+				24,
+				theme.defaultFont,
+				'black',
+				'center',
+				'middle'
+			);
 		}
 
 		fabric.setFont(this._$greenFont1);
