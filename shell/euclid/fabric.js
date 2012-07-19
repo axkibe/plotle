@@ -125,11 +125,11 @@ Object.defineProperty(Fabric.prototype, "height", {
 /**
 | The canvas is cleared and resized to width/height (of rect).
 |
-| attune()               -or-
-| attune(rect)           -or-
-| attune(width, height)
+| reset()               -or-
+| reset(rect)           -or-
+| reset(width, height)
 */
-Fabric.prototype.attune = function(a1, a2) {
+Fabric.prototype.reset = function(a1, a2) {
 	var ta1 = typeof(a1);
 	var c = this._canvas;
 	var w, h;

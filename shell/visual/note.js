@@ -208,9 +208,6 @@ Note.prototype.draw = function(fabric, view) {
 		var height = doc.getHeight();
 		sbary.visible = height > zone.height - imargin.y;
 
-		// resizes the canvas (when scrollbars could change the size)
-		//f.attune(vzone);
-
 		var silhoutte = this.getSilhoutte(vzone, true);
 		f.fill(theme.note.style.fill, silhoutte, 'path', Euclid.View.proper);
 

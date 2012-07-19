@@ -316,7 +316,7 @@ Shell.prototype.setMenu = function(menu) {
 */
 Shell.prototype._draw = function() {
 	var fabric = this.fabric;
-	fabric.attune();   // TODO <- bad name for clear();
+	fabric.reset();
 
 	if (this.green) {
 		var m = new Euclid.Point(half(fabric.width), half(fabric.height));

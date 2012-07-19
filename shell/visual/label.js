@@ -122,8 +122,8 @@ Label.prototype.draw = function(fabric, view) {
 		var doc     = this.$sub.doc;
 		var imargin = this.imargin;
 
-		// resizes the canvas
-		f.attune(zone);
+		// resizes the canvas, TODO needed?
+		f.reset(zone);
 		var silhoutte = this.getSilhoutte(zone, true);
 
 		// draws selection and text
