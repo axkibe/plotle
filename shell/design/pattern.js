@@ -134,6 +134,10 @@ Design.Pattern = {
 	},
 
 	'Font' : {
+		creator : function(t) {
+			return new Euclid.Font(t);
+		},
+
 		must    : {
 			'size'       : 'Number',
 			'family'     : 'String',

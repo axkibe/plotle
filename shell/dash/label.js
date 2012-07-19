@@ -54,8 +54,6 @@ var Label = Dash.Label = function(twig, panel, inherit, name) {
 	// if not null, overrides the design text
 	// TODO rename $text
 	this.text    = inherit ? inherit.text : null;
-
-	this._font    = new Euclid.Font(twig.font);
 };
 
 /**
@@ -69,7 +67,7 @@ Label.prototype.canFocus = function() {
 | Draws the label on the fabric.
 */
 Label.prototype.draw = function(fabric) {
-	fabric.setFont(this._font);
+	fabric.setFont(this.twig.font);
 	fabric.fillText(this.text || this.twig.text, this.pos);
 };
 

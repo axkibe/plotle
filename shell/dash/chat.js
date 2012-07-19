@@ -52,15 +52,13 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 | Constructor.
 */
 var Chat = Dash.Chat = function(twig, panel, inherit, name) {
-	this.name    = name;
-	this.twig    = twig;
-	this.panel   = panel;
-	var pnw      = this.pnw    = Curve.computePoint(twig.frame.pnw, panel.iframe);
-	var pse      = this.pse    = Curve.computePoint(twig.frame.pse, panel.iframe);
-	var iframe   = this.iframe = new Euclid.Rect(Euclid.Point.zero, pse.sub(pnw));
-
-	this._font      = new Euclid.Font(twig.font);
-	var fs          = this._font.size;
+	this.name       = name;
+	this.twig       = twig;
+	this.panel      = panel;
+	var pnw         = this.pnw    = Curve.computePoint(twig.frame.pnw, panel.iframe);
+	var pse         = this.pse    = Curve.computePoint(twig.frame.pse, panel.iframe);
+	var iframe      = this.iframe = new Euclid.Rect(Euclid.Point.zero, pse.sub(pnw));
+	var fs          = twig.font.size;
 
 	this.messages   = inherit ? inherit.messages : [ ];
 
@@ -84,7 +82,7 @@ Chat.prototype.canFocus = function() {
 */
 Chat.prototype.getCaretPos = function() {
 	var caret   = shell.caret;
-	var fs      = this._font.size;
+	var fs      = this.twig.font.size;
 	var descend = fs * theme.bottombox;
 	var p       = this.getOffsetPoint(shell.caret.sign.at1);
 	//var p = { x: 2, y : 2};
@@ -113,7 +111,7 @@ Chat.prototype._weave = function() {
 	var x = this.pitch.x;
 	var y = this.pitch.y;
 
-	fabric.setFont(this._font);
+	fabric.setFont(this.twig.font);
 	var lh = this.lineHeight;
 	fabric.fillText('»', x + 27, y);
 	fabric.fillText('chat', x, y);
@@ -146,7 +144,7 @@ Chat.prototype._weave = function() {
 Chat.prototype.getOffsetPoint = function(offset) {
 	// TODO cache position
 	var twig     = this.twig;
-	var font     = this._font;
+	var font     = twig.font;
 	var itext    = this.itext;
 	var pitch    = this.pitch;
 

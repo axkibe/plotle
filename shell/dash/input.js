@@ -68,8 +68,6 @@ var Input = Dash.Input = function(twig, panel, inherit, name) {
 	this.value   = inherit ? inherit.value : '';
 	this.$fabric = null;
 	this.$accent = Dash.Accent.NORMA;
-
-	this._font = new Euclid.Font(twig.font);
 };
 
 /**
@@ -147,7 +145,7 @@ Input.prototype._weave = function(accent) {
 	if (!isnon(style)) { throw new Error('Invalid style: ' + sname); }
 
 	fabric.fill(style.fill, this.bezi, 'path', Euclid.View.proper);
-	var font = this._font;
+	var font = this.twig.font;
 	fabric.setFont(font);
 
 	if(this.twig.password) {
@@ -177,9 +175,9 @@ Input.prototype.draw = function(fabric, accent) {
 */
 Input.prototype.getOffsetPoint = function(offset) {
 	// TODO cache position
-	var twig     = this.twig;
-	var font     = this._font;
-	var val      = this.value;
+	var twig = this.twig;
+	var font = twig.font;
+	var val  = this.value;
 
 	// TODO use token. text instead.
 	if (this.twig.password) {
@@ -200,7 +198,7 @@ Input.prototype.getOffsetPoint = function(offset) {
 */
 Input.prototype.getCaretPos = function() {
 	var caret   = shell.caret;
-	var fs      = this._font.size;
+	var fs      = this.twig.font.size;
 	var descend = fs * theme.bottombox;
 	var p       = this.getOffsetPoint(shell.caret.sign.at1);
 

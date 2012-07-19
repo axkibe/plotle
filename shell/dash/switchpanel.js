@@ -204,13 +204,7 @@ SwitchPanel.prototype._weave = function() {
 	this._paintButton(fabric, 'ne');
 
 	// TODO XXX this should be in a design.
-	fabric.setFont({
-		size   :  14,
-		family :  theme.defaultFont,
-		fill   : 'black',
-		align  : 'center',
-		base   : 'middle'
-	});
+	fabric.setFont(new Euclid.Font(14, theme.defaultFont, 'black', 'center', 'middle'));
 
 	var bd = this.buttonDim;
 	var cx = Jools.half(iframe.width);
@@ -222,13 +216,7 @@ SwitchPanel.prototype._weave = function() {
 	if (!this.amVisitor)
 		{ fabric.fillText('Your Home', bp.nw.x, bp.nw.y); }
 
-	fabric.setFont({
-		size   :  12,
-		family :  theme.defaultFont,
-		fill   : 'black',
-		align  : 'center',
-		base   : 'middle'
-	});
+	fabric.setFont(new Euclid.Font(12, theme.defaultFont, 'black', 'center', 'middle'));
 
 	var text;
 	switch(this.$hover || this.current) {
