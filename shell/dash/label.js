@@ -51,9 +51,9 @@ var Label = Dash.Label = function(twig, panel, inherit, name) {
 	this.twig    = twig;
 	this.panel   = panel;
 	this.pos     = Curve.computePoint(twig.pos, panel.iframe);
+
 	// if not null, overrides the design text
-	// TODO rename $text
-	this.text    = inherit ? inherit.text : null;
+	this.$text    = inherit ? inherit.$text : null;
 };
 
 /**
@@ -68,7 +68,7 @@ Label.prototype.canFocus = function() {
 */
 Label.prototype.draw = function(fabric) {
 	fabric.setFont(this.twig.font);
-	fabric.fillText(this.text || this.twig.text, this.pos);
+	fabric.fillText(this.$text || this.twig.text, this.pos);
 };
 
 /**
