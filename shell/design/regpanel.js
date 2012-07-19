@@ -43,7 +43,7 @@ Design = Design || {};
 (function(){
 'use strict';
 
-var fontStyle = Design.fontStyle;
+var getFont    = Design.getFont;
 
 // 'magic' number to approximate ellipses with beziers
 var magic      = Euclid.magic;
@@ -111,59 +111,59 @@ RegPanel.layout = {
 	type  : 'Layout',
 	copse : {
 	'regL'      : {
-		type      : 'Label',
-		text      : 'Register',
-		fontStyle : fontStyle(22, 'ca'),
-		pos       : { type: 'Point', anchor: 'sw', x: 120, y: -14 }
+		type    : 'Label',
+		text    : 'Register',
+		font    : getFont(22, 'ca'),
+		pos     : { type: 'Point', anchor: 'sw', x: 120, y: -14 }
 	},
-	'userL' : {
-		type      : 'Label',
-		text      : 'username',
-		fontStyle : fontStyle(16, 'ra'),
-		pos       : { type: 'Point', anchor: 's', x: -155, y:  -220 }
+	'userL'     : {
+		type    : 'Label',
+		text    : 'username',
+		font    : getFont(16, 'ra'),
+		pos     : { type: 'Point', anchor: 's', x: -155, y:  -220 }
 	},
-	'emailL'       : {
-		type      : 'Label',
-		text      : 'email',
-		fontStyle : fontStyle(16, 'ra'),
-		pos       : { type: 'Point', anchor: 's', x: -155, y:  -180 }
+	'emailL'    : {
+		type    : 'Label',
+		text    : 'email',
+		font    : getFont(16, 'ra'),
+		pos     : { type: 'Point', anchor: 's', x: -155, y:  -180 }
 	},
-	'passL'       : {
-		type      : 'Label',
-		text      : 'password',
-		fontStyle : fontStyle(16, 'ra'),
-		pos       : { type: 'Point', anchor: 's', x: -155, y:  -140 }
+	'passL'     : {
+		type    : 'Label',
+		text    : 'password',
+		font    : getFont(16, 'ra'),
+		pos     : { type: 'Point', anchor: 's', x: -155, y:  -140 }
 	},
-	'pass2L'       : {
-		type      : 'Label',
-		text      : 'repeat password',
-		fontStyle : fontStyle(16, 'ra'),
-		pos       : { type: 'Point', anchor: 's', x: -155, y:  -100 }
+	'pass2L'    : {
+		type    : 'Label',
+		text    : 'repeat password',
+		font    : getFont(16, 'ra'),
+		pos     : { type: 'Point', anchor: 's', x: -155, y:  -100 }
 	},
-	'codeL'       : {
-		type      : 'Label',
-		text      : 'invitation code',
-		fontStyle : fontStyle(16, 'ra'),
-		pos       : { type: 'Point', anchor: 's', x: -155, y:   -60 }
+	'codeL'     : {
+		type    : 'Label',
+		text    : 'invitation code',
+		font    : getFont(16, 'ra'),
+		pos     : { type: 'Point', anchor: 's', x: -155, y:   -60 }
 	},
-	'errL'        : {
-		type      : 'Label',
-		text      : '',
-		fontStyle : fontStyle(14, 'lar'),
-		pos       : { type: 'Point', anchor: 's', x: -135, y:  -255 }
+	'errL'      : {
+		type    : 'Label',
+		text    : '',
+		font    : getFont(14, 'lar'),
+		pos     : { type: 'Point', anchor: 's', x: -135, y:  -255 }
 
 	},
 	'expL1' : {
-		type      : 'Label',
-		text      : 'meshcraft.net is still testing & developing its scalebility, ',
-		fontStyle : fontStyle(12, 'la'),
-		pos       : { type: 'Point', anchor: 'sw', x: 380, y:   -26 }
+		type    : 'Label',
+		text    : 'meshcraft.net is still testing & developing its scalebility, ',
+		font    : getFont(12, 'la'),
+		pos     : { type: 'Point', anchor: 'sw', x: 380, y:   -26 }
 	},
 	'expL2' : {
-		type      : 'Label',
-		text      : 'please email axkibe@gmail.com to request a code.',
-		fontStyle : fontStyle(12, 'la'),
-		pos       : { type: 'Point', anchor: 'sw', x: 380, y:   -10 }
+		type    : 'Label',
+		text    : 'please email axkibe@gmail.com to request a code.',
+		font    : getFont(12, 'la'),
+		pos     : { type: 'Point', anchor: 'sw', x: 380, y:   -10 }
 	},
 	'userI' : {
 		type       : 'Input',
@@ -173,7 +173,7 @@ RegPanel.layout = {
 		focusStyle : 'inputFocus',
 		hoverStyle : 'input',
 		hofocStyle : 'inputFocus',
-		fontStyle  : fontStyle(14, 'la'),
+		font       : getFont(14, 'la'),
 		maxlen     : 100,
 		frame      : {
 			type   : 'Frame',
@@ -189,7 +189,7 @@ RegPanel.layout = {
 		focusStyle : 'inputFocus',
 		hoverStyle : 'input',
 		hofocStyle : 'inputFocus',
-		fontStyle  : fontStyle(14, 'la'),
+		font       : getFont(14, 'la'),
 		maxlen     : 0,
 		frame      : {
 			type   : 'Frame',
@@ -205,7 +205,7 @@ RegPanel.layout = {
 		focusStyle : 'inputFocus',
 		hoverStyle : 'input',
 		hofocStyle : 'inputFocus',
-		fontStyle  : fontStyle(14, 'la'),
+		font       : getFont(14, 'la'),
 		maxlen     : 0,
 		frame      : {
 			type   : 'Frame',
@@ -221,7 +221,7 @@ RegPanel.layout = {
 		focusStyle : 'inputFocus',
 		hoverStyle : 'input',
 		hofocStyle : 'inputFocus',
-		fontStyle  : fontStyle(14, 'la'),
+		font       : getFont(14, 'la'),
 		maxlen     : 0,
 		frame      : {
 			type   : 'Frame',
@@ -237,7 +237,7 @@ RegPanel.layout = {
 		focusStyle : 'inputFocus',
 		hoverStyle : 'input',
 		hofocStyle : 'inputFocus',
-		fontStyle  : fontStyle(14, 'la'),
+		font       : getFont(14, 'la'),
 		maxlen     : 8,
 		frame      : {
 			type   : 'Frame',
@@ -260,7 +260,7 @@ RegPanel.layout = {
 		caption       : {
 			type      : 'Label',
 			text      : 'register',
-			fontStyle : fontStyle(14, 'cm'),
+			font      : getFont(14, 'cm'),
 			pos       : { type: 'Point', anchor: 'c', x:  0, y: 0 }
 		},
 		curve :  {
@@ -316,10 +316,10 @@ RegPanel.layout = {
 			pse   : { type: 'Point', anchor: 'se', x: -230 + canrBW, y: -60 }
 		},
 		caption : {
-			type      : 'Label',
-			text      : 'close',
-			fontStyle : fontStyle(14, 'cm'),
-			pos       : { type: 'Point', anchor: 'c', x:  0, y: 0 }
+			type  : 'Label',
+			text  : 'close',
+			font  : getFont(14, 'cm'),
+			pos   : { type: 'Point', anchor: 'c', x:  0, y: 0 }
 		},
 		curve :  {
 			type  : 'Curve',

@@ -59,18 +59,17 @@ var Chat = Dash.Chat = function(twig, panel, inherit, name) {
 	var pse      = this.pse    = Curve.computePoint(twig.frame.pse, panel.iframe);
 	var iframe   = this.iframe = new Euclid.Rect(Euclid.Point.zero, pse.sub(pnw));
 
-	var fs = this.twig.fontStyle;
+	this._font      = new Euclid.Font(twig.font);
+	var fs          = this._font.size;
 
 	this.messages   = inherit ? inherit.messages : [ ];
 
-	this.lineHeight = Math.round(fs.size * 1.2);
+	this.lineHeight = Math.round(fs * 1.2);
 	this.sideSlopeX = 20;
-	var descend     = Math.round(fs.size * theme.bottombox);
+	var descend     = Math.round(fs * theme.bottombox);
 	this.pitch      = new Euclid.Point(this.sideSlopeX - 7, iframe.height - descend);
 	this.coff       = 37;
 	this.itext      = '';
-
-	this._font      = new Euclid.Font(twig.fontStyle);
 };
 
 /**
@@ -85,7 +84,7 @@ Chat.prototype.canFocus = function() {
 */
 Chat.prototype.getCaretPos = function() {
 	var caret   = shell.caret;
-	var fs      = this.twig.fontStyle.size;
+	var fs      = this._font.size;
 	var descend = fs * theme.bottombox;
 	var p       = this.getOffsetPoint(shell.caret.sign.at1);
 	//var p = { x: 2, y : 2};
@@ -147,7 +146,7 @@ Chat.prototype._weave = function() {
 Chat.prototype.getOffsetPoint = function(offset) {
 	// TODO cache position
 	var twig     = this.twig;
-	var font     = twig.fontStyle;
+	var font     = this._font;
 	var itext    = this.itext;
 	var pitch    = this.pitch;
 
@@ -381,7 +380,6 @@ Chat.prototype.mousehover = function(p, shift, ctrl) {
 */
 Chat.prototype.pathILine = function(fabric, border, twist) {
 	var ox   = 0;
-	var fs   = this.twig.fontStyle;
 	var w    = fabric.width - 1;
 	var psex = w  - this.sideSlopeX;
 	var psey = fabric.height;

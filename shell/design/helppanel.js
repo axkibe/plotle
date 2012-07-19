@@ -45,7 +45,7 @@ Design = Design || {};
 var immute      = Jools.immute;
 var innumerable = Jools.innumerable;
 var ro          = Math.round;
-var fontStyle   = Design.fontStyle;
+var getFont     = Design.getFont;
 var HelpPanel   = Design.HelpPanel = { type : 'Design' };
 
 HelpPanel.style = 'help';
@@ -86,84 +86,84 @@ HelpPanel.layout = {
 	'help'  : {
 		type      : 'Label',
 		text      : 'Help',
-		fontStyle : fontStyle(16, 'lahb'),
+		font      : getFont(16, 'lahb'),
 		pos       : { type: 'Point', anchor: 'nw', x: 10 , y:  20 }
 	},
 
 	'getstarted'  : {
 		type      : 'Label',
 		text      : 'getting started',
-		fontStyle : fontStyle(16, 'lahb'),
+		font      : getFont(16, 'lahb'),
 		pos       : { type: 'Point', anchor: 'nw', x: 18 , y:  40 }
 	},
 
 	'pan'  : {
 		type      : 'Label',
 		text      : 'to pan, drag the background',
-		fontStyle : fontStyle(13, 'lah'),
+		font      : getFont(13, 'lah'),
 		pos       : { type: 'Point', anchor: 'nw', x: 18 , y:  65 }
 	},
 
 	'move'  : {
 		type      : 'Label',
 		text      : 'to move items, drag them',
-		fontStyle : fontStyle(13, 'lah'),
+		font      : getFont(13, 'lah'),
 		pos       : { type: 'Point', anchor: 'nw', x: 18 , y:  85 }
 	},
 
 	'new'  : {
 		type      : 'Label',
 		text      : 'to create new items,',
-		fontStyle : fontStyle(13, 'lah'),
+		font      : getFont(13, 'lah'),
 		pos       : { type: 'Point', anchor: 'nw', x: 18 , y: 105 }
 	},
 
 	'new2'  : {
 		type      : 'Label',
 		text      : 'click the background',
-		fontStyle : fontStyle(13, 'lah'),
+		font      : getFont(13, 'lah'),
 		pos       : { type: 'Point', anchor: 'nw', x: 25 , y: 120 }
 	},
 
 	'edit'  : {
 		type      : 'Label',
 		text      : 'to edit an item, click it',
-		fontStyle : fontStyle(13, 'lah'),
+		font      : getFont(13, 'lah'),
 		pos       : { type: 'Point', anchor: 'nw', x: 18 , y: 140 }
 	},
 
 	'delete1'  : {
 		type      : 'Label',
 		text      : 'to remove an item',
-		fontStyle : fontStyle(13, 'lah'),
+		font      : getFont(13, 'lah'),
 		pos       : { type: 'Point', anchor: 'nw', x: 18 , y: 160 }
 	},
 
 	'delete2'  : {
 		type      : 'Label',
 		text      : 'click it\'s oval',
-		fontStyle : fontStyle(13, 'lah'),
+		font      : getFont(13, 'lah'),
 		pos       : { type: 'Point', anchor: 'nw', x: 25 , y: 175 }
 	},
 
 	'relate1'  : {
 		type      : 'Label',
 		text      : 'to create a relation',
-		fontStyle : fontStyle(13, 'lah'),
+		font      : getFont(13, 'lah'),
 		pos       : { type: 'Point', anchor: 'nw', x: 18 , y: 195 }
 	},
 
 	'relate2'  : {
 		type      : 'Label',
 		text      : 'drag an items oval',
-		fontStyle : fontStyle(13, 'lah'),
+		font      : getFont(13, 'lah'),
 		pos       : { type: 'Point', anchor: 'nw', x: 25 , y: 210 }
 	},
 
 	'relate3'  : {
 		type      : 'Label',
 		text      : 'or hold ctrl and drag it',
-		fontStyle : fontStyle(13, 'lah'),
+		font      : getFont(13, 'lah'),
 		pos       : { type: 'Point', anchor: 'nw', x: 25 , y: 225 }
 	},
 
@@ -171,7 +171,7 @@ HelpPanel.layout = {
 		type      : 'Label',
 		//text      : 'This page is read-only!',
 		text      : '',
-		fontStyle : fontStyle(13, 'lahr'),
+		font      : getFont(13, 'lahr'),
 		pos       : { type: 'Point', anchor: 'nw', x: 28 , y: 255 }
 	},
 
@@ -179,7 +179,7 @@ HelpPanel.layout = {
 		type      : 'Label',
 		//text      : 'Click "switch" and select',
 		text      : '',
-		fontStyle : fontStyle(13, 'lahr'),
+		font      : getFont(13, 'lahr'),
 		pos       : { type: 'Point', anchor: 'nw', x: 28 , y: 275 }
 	},
 
@@ -187,7 +187,7 @@ HelpPanel.layout = {
 		type      : 'Label',
 		//text      : '"Sandbox" to play around',
 		text      : '',
-		fontStyle : fontStyle(13, 'lahr'),
+		font      : getFont(13, 'lahr'),
 		pos       : { type: 'Point', anchor: 'nw', x: 28 , y: 295 }
 	},
 
@@ -208,7 +208,7 @@ HelpPanel.layout = {
 		caption : {
 			type      : 'Label',
 			text      : 'hide',
-			fontStyle : fontStyle(13, 'cm'),
+			font      : getFont(13, 'cm'),
 			pos       : { type: 'Point', anchor: 'e', x: -25, y: -3 }
 		},
 		curve :  {

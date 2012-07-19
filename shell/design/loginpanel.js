@@ -45,7 +45,7 @@ var theme;
 /**
 | Shortcuts
 */
-var fontStyle = Design.fontStyle;
+var getFont = Design.getFont;
 
 // 'magic' number to approximate ellipses with beziers
 var magic     = Euclid.magic;
@@ -126,26 +126,26 @@ LoginPanel.layout = {
 	'loginL'      : {
 		type      : 'Label',
 		text      : 'Log In',
-		fontStyle : fontStyle(22, 'ca'),
+		font      : getFont(22, 'ca'),
 		pos       : { type: 'Point', anchor: 'sw', x: 160, y: -14 }
 	},
 	'userL' : {
 		type      : 'Label',
 		text      : 'username',
-		fontStyle : fontStyle(16, 'la'),
+		font      : getFont(16, 'la'),
 		pos       : { type: 'Point', anchor: 's', x: -230, y:  -56 }
 	},
 	'passL'       : {
 		type      : 'Label',
 		text      : 'password',
-		fontStyle : fontStyle(16, 'la'),
+		font      : getFont(16, 'la'),
 		pos       : { type: 'Point', anchor: 's', x: -230, y:  -21 }
 	},
 	'errL'        : {
 		type      : 'Label',
 		//text      : 'username/password not accepted',
 		text      : '',
-		fontStyle : fontStyle(14, 'lar'),
+		font      : getFont(14, 'lar'),
 		pos       : { type: 'Point', anchor: 's', x: -135, y:  -81 }
 
 	},
@@ -157,7 +157,7 @@ LoginPanel.layout = {
 		focusStyle : 'inputFocus',
 		hoverStyle : 'input',
 		hofocStyle : 'inputFocus',
-		fontStyle  : fontStyle(14, 'la'),
+		font       : getFont(14, 'la'),
 		maxlen     : 100,
 		frame      : {
 			type   : 'Frame',
@@ -173,7 +173,7 @@ LoginPanel.layout = {
 		focusStyle : 'inputFocus',
 		hoverStyle : 'input',
 		hofocStyle : 'inputFocus',
-		fontStyle  : fontStyle(14, 'la'),
+		font       : getFont(14, 'la'),
 		maxlen     : 0,
 		frame      : {
 			type   : 'Frame',
@@ -196,7 +196,7 @@ LoginPanel.layout = {
 		caption       : {
 			type      : 'Label',
 			text      : 'login',
-			fontStyle : fontStyle(14, 'cm'),
+			font      : getFont(14, 'cm'),
 			pos       : { type: 'Point', anchor: 'c', x:  0, y: 0 }
 		},
 		curve :  {
@@ -254,7 +254,7 @@ LoginPanel.layout = {
 		caption : {
 			type      : 'Label',
 			text      : 'close',
-			fontStyle : fontStyle(14, 'cm'),
+			font      : getFont(14, 'cm'),
 			pos       : { type: 'Point', anchor: 'c', x:  0, y: 0 }
 		},
 		curve :  {
@@ -309,7 +309,7 @@ LoginPanel.layout = {
 		caption : {
 			type      : 'Label',
 			text      : 'forgot password?',
-			fontStyle : fontStyle(12, 'cm'),
+			font      : getFont(12, 'cm'),
 			pos       : { type: 'Point', anchor: 'c', x:  0, y: 0 }
 		},
 		curve :  {

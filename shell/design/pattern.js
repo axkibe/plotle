@@ -118,7 +118,7 @@ Design.Pattern = {
 			'hoverStyle' : 'String',
 			'focusStyle' : 'String',
 			'hofocStyle' : 'String',
-			'fontStyle'  : 'FontStyle',
+			'font'       : 'Font',
 			'maxlen'     : 'Number'
 		}
 	},
@@ -133,7 +133,7 @@ Design.Pattern = {
 		ranks : true
 	},
 
-	'FontStyle' : {
+	'Font' : {
 		must    : {
 			'size'       : 'Number',
 			'family'     : 'String',
@@ -146,7 +146,7 @@ Design.Pattern = {
 	'Chat'  : {
 		must : {
 			'frame'      : 'Frame',
-			'fontStyle'  : 'FontStyle'
+			'font'       : 'Font'
 		}
 	},
 
@@ -154,7 +154,7 @@ Design.Pattern = {
 		must : {
 			'text'       : 'String',
 			'pos'        : 'Point',
-			'fontStyle'  : 'FontStyle'
+			'font'       : 'Font'
 		}
 	},
 

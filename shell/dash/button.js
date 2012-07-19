@@ -89,7 +89,7 @@ var Button = Dash.Button = function(twig, panel, inherit, name) {
 
 	// TODO may change the design patterns to create font objects
 	//      right away.
-	this._captionFont = new Euclid.Font(twig.caption.fontStyle);}
+	this._captionFont = new Euclid.Font(twig.caption.font);}
 ;
 
 /**

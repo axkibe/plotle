@@ -12,13 +12,13 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--'
 
-                            .-,--'        .  .---. .      .
-                             \|__ ,-. ,-. |- \___  |- . . |  ,-. ,-.
-                              |   | | | | |      \ |  | | |  |-' `-.
-                             `'   `-' ' ' `' `---' `' `-| `' `-' `-'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~/| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-                                                      `-'
- Shortcuts for fontstyles
+                                           . .-,--'        .
+                                   ,-. ,-. |- \|__ ,-. ,-. |-
+                                   | | |-' |   |   | | | | |
+                                   `-| `-' `' `'   `-' ' ' `'
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ,|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                                    `'
+ creates font objects by size and code
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -34,7 +34,7 @@ var theme;
 | Exports
 */
 var Design;
-Design = Design || { };
+Design = Design || {};
 
 /**
 | Capsule
@@ -44,77 +44,77 @@ Design = Design || { };
 
 var styles = {
 	ca         : {
-		type   : 'FontStyle',
+		type   : 'Font',
 		family : theme.defaultFont,
 		fill   : 'black',
 		align  : 'center',
 		base   : 'alphabetic'
 	},
 	cab        : {
-		type   : 'FontStyle',
+		type   : 'Font',
 		family :  theme.defaultFont,
 		fill   : 'black',
 		align  : 'center',
 		base   : 'alphabetic'
 	},
 	cm         : {
-		type   : 'FontStyle',
+		type   : 'Font',
 		family :  theme.defaultFont,
 		fill   : 'black',
 		align  : 'center',
 		base   : 'middle'
 	},
 	la         : {
-		type   : 'FontStyle',
+		type   : 'Font',
 		family :  theme.defaultFont,
 		fill   : 'black',
 		align  : 'start',
 		base   : 'alphabetic'
 	},
 	lac        : {
-		type   : 'FontStyle',
+		type   : 'Font',
 		family :  theme.defaultFont,
 		fill   : 'rgb(128, 44, 0)',
 		align  : 'start',
 		base   : 'alphabetic'
 	},
 	lah        : {
-		type   : 'FontStyle',
+		type   : 'Font',
 		family :  theme.defaultFont,
 		fill   : 'rgb(128, 44, 0)',
 		align  : 'start',
 		base   : 'alphabetic'
 	},
 	lahb       : {
-		type   : 'FontStyle',
+		type   : 'Font',
 		family : theme.boldFont,
 		fill   : 'rgb(128, 44, 0)',
 		align  : 'start',
 		base   : 'alphabetic'
 	},
 	lahr       : {
-		type   : 'FontStyle',
+		type   : 'Font',
 		family :  theme.defaultFont,
 		fill   : 'red',
 		align  : 'start',
 		base   : 'alphabetic'
 	},
 	lar        : {
-		type   : 'FontStyle',
+		type   : 'Font',
 		family :  theme.defaultFont,
 		fill   : 'red',
 		align  : 'left',
 		base   : 'alphabetic'
 	},
 	cadr       : {
-		type   : 'FontStyle',
+		type   : 'Font',
 		family : theme.defaultFont,
 		fill   : 'rgb(160, 0, 0)',
 		align  : 'center',
 		base   : 'alphabetic'
 	},
 	ra         : {
-		type   : 'FontStyle',
+		type   : 'Font',
 		family :  theme.defaultFont,
 		fill   : 'black',
 		align  : 'end',
@@ -125,7 +125,7 @@ var styles = {
 /**
 | Gets a fontstlye by size and its code
 */
-Design.fontStyle = function(size, code) {
+Design.getFont = function(size, code) {
 	var base = styles[code];
 	if (!base) { throw new Error('Invalid font style'); }
 

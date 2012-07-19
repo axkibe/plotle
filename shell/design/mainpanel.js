@@ -44,9 +44,9 @@ Design = Design || {};
 (function(){
 'use strict';
 
-var half        = Jools.half;
-var ro          = Math.round;
-var fontStyle   = Design.fontStyle;
+var half    = Jools.half;
+var ro      = Math.round;
+var getFont = Design.getFont;
 
 var sideBW  = 120;
 var sideB2W = 190;
@@ -139,10 +139,10 @@ MainPanel.layout = {
 			pse   : { type: 'Point', anchor: 'sw', x: sideBW, y:   0 }
 		},
 		caption : {
-			type      : 'Label',
-			text      : 'log in',
-			fontStyle : fontStyle(13, 'ca'),
-			pos       : { type: 'Point', anchor: 'sw', x: 90, y:  -7 }
+			type  : 'Label',
+			text  : 'log in',
+			font  : getFont(13, 'ca'),
+			pos   : { type: 'Point', anchor: 'sw', x: 90, y:  -7 }
 		},
 		curve     :  {
 			type  : 'Curve',
@@ -179,10 +179,10 @@ MainPanel.layout = {
 			pse   : { type: 'Point', anchor: 'sw', x: sideB2W, y:   0 }
 		},
 		caption : {
-			type      : 'Label',
-			text      : 'register',
-			fontStyle : fontStyle(14, 'ca'),
-			pos       : { type: 'Point', anchor: 'sw', x: half(sideBW + sideB2W) - 5, y: -14 }
+			type  : 'Label',
+			text  : 'register',
+			font  : getFont(14, 'ca'),
+			pos   : { type: 'Point', anchor: 'sw', x: half(sideBW + sideB2W) - 5, y: -14 }
 		},
 		curve     :  {
 			type  : 'Curve',
@@ -226,10 +226,10 @@ MainPanel.layout = {
 			pse   : { type: 'Point', anchor: 'se', x: 0,           y:   0 }
 		},
 		caption : {
-			type      : 'Label',
-			text      : 'help',
-			fontStyle : fontStyle(13, 'ca'),
-			pos       : { type: 'Point', anchor: 'se', x: -90, y:  -7 }
+			type  : 'Label',
+			text  : 'help',
+			font  : getFont(13, 'ca'),
+			pos   : { type: 'Point', anchor: 'se', x: -90, y:  -7 }
 		},
 		curve :  {
 			type : 'Curve',
@@ -265,11 +265,11 @@ MainPanel.layout = {
 			pnw    : { type: 'Point', anchor: 'n', x: -half(switchBW), y:        0 },
 			pse    : { type: 'Point', anchor: 'n', x:  half(switchBW), y: switchBH }
 		},
-		caption       : {
-			type      : 'Label',
-			text      : 'switch',
-			fontStyle : fontStyle(14, 'cm'),
-			pos       : { type: 'Point', anchor: 'c', x:  0, y: -2 }
+		caption    : {
+			type   : 'Label',
+			text   : 'switch',
+			font   : getFont(14, 'cm'),
+			pos    : { type: 'Point', anchor: 'c', x:  0, y: -2 }
 		},
 		curve :  {
 			type  : 'Curve',
@@ -298,28 +298,28 @@ MainPanel.layout = {
 		}
 	},
 
-	'chat'        : {
-		type      : 'Chat',
-		fontStyle : fontStyle(12, 'lac'),
-		frame      : {
-			type   : 'Frame',
-			pnw    : { type: 'Point', anchor: 'se', x: -450, y: -60 },
-			pse    : { type: 'Point', anchor: 'se', x: -125, y:   0 }
+	'chat'       : {
+		type     : 'Chat',
+		font     : getFont(12, 'lac'),
+		frame    : {
+			type : 'Frame',
+			pnw  : { type: 'Point', anchor: 'se', x: -450, y: -60 },
+			pse  : { type: 'Point', anchor: 'se', x: -125, y:   0 }
 		}
 	},
 
-	'zoomL'       : {
-		type      : 'Label',
-		text      : 'Zoom: ',
-		fontStyle : fontStyle(12, 'ca'),
-		pos       : { type: 'Point', anchor: 's', x: -45, y: -12 }
+	'zoomL'      : {
+		type     : 'Label',
+		text     : 'Zoom: ',
+		font     : getFont(12, 'ca'),
+		pos      : { type: 'Point', anchor: 's', x: -45, y: -12 }
 	},
 
 	'zoom'       : {
-		type      : 'Label',
-		text      : '0',
-		fontStyle : fontStyle(12, 'ca'),
-		pos       : { type: 'Point', anchor: 's', x:  -13, y: -12 }
+		type     : 'Label',
+		text     : '0',
+		font     : getFont(12, 'ca'),
+		pos      : { type: 'Point', anchor: 's', x:  -13, y: -12 }
 	},
 
 	'zoomminusB'       : {
@@ -337,10 +337,10 @@ MainPanel.layout = {
 			pse   : { type: 'Point', anchor: 's', x: zoomX + zoomBW, y: zoomY          }
 		},
 		caption : {
-			type      : 'Label',
-			text      : '-',
-			fontStyle : fontStyle(14, 'cm'),
-			pos       : { type: 'Point', anchor: 'c', x:  1, y: 1 }
+			type  : 'Label',
+			text  : '-',
+			font  : getFont(14, 'cm'),
+			pos   : { type: 'Point', anchor: 'c', x:  1, y: 1 }
 		},
 		curve :  {
 			type  : 'Curve',
@@ -384,10 +384,10 @@ MainPanel.layout = {
 			pse   : { type: 'Point', anchor: 's', x: zoomX + zoomBW * 2 - 2, y: zoomY          }
 		},
 		caption : {
-			type      : 'Label',
-			text      : '0',
-			fontStyle : fontStyle(14, 'cm'),
-			pos       : { type: 'Point', anchor: 'c', x:  1, y: 2 }
+			type  : 'Label',
+			text  : '0',
+			font  : getFont(14, 'cm'),
+			pos   : { type: 'Point', anchor: 'c', x:  1, y: 2 }
 		},
 		curve :  {
 			type  : 'Curve',
@@ -431,10 +431,10 @@ MainPanel.layout = {
 			pse   : { type: 'Point', anchor: 's', x: zoomX + zoomBW * 3 - 4, y: zoomY          }
 		},
 		caption : {
-			type      : 'Label',
-			text      : '+',
-			fontStyle : fontStyle(14, 'cm'),
-			pos       : { type: 'Point', anchor: 'c', x:  1, y: 1 }
+			type  : 'Label',
+			text  : '+',
+			font  : getFont(14, 'cm'),
+			pos   : { type: 'Point', anchor: 'c', x:  1, y: 1 }
 		},
 		curve :  {
 			type  : 'Curve',
@@ -462,41 +462,41 @@ MainPanel.layout = {
 			ranks : [ '1', '2', '3' ]
 		}
 	},
-	
-	'greet'       : {
-		type      : 'Label',
-		text      : 'Hello',
-		fontStyle : fontStyle(12, 'ca'),
-		pos       : { type: 'Point', anchor: 'sw', x:  250, y: -36 }
+
+	'greet'  : {
+		type : 'Label',
+		text : 'Hello',
+		font : getFont(12, 'ca'),
+		pos  : { type: 'Point', anchor: 'sw', x:  250, y: -36 }
 	},
 
-	'username'    : {
-		type      : 'Label',
-		text      : '',
-		fontStyle : fontStyle(18, 'ca'),
-		pos       : { type: 'Point', anchor: 'sw', x:  250, y: -13 }
+	'username' : {
+		type   : 'Label',
+		text   : '',
+		font   : getFont(18, 'ca'),
+		pos    : { type: 'Point', anchor: 'sw', x:  250, y: -13 }
 	},
 
 
-	'saycurrent'  : {
-		type      : 'Label',
-		text      : 'current space',
-		fontStyle : fontStyle(12, 'ca'),
-		pos       : { type: 'Point', anchor:  's', x: -140, y: -42 }
+	'saycurrent' : {
+		type     : 'Label',
+		text     : 'current space',
+		font     : getFont(12, 'ca'),
+		pos      : { type: 'Point', anchor:  's', x: -140, y: -42 }
 	},
 
-	'cspace'      : {
-		type      : 'Label',
-		text      : '',
-		fontStyle : fontStyle(22, 'cab'),
-		pos       : { type: 'Point', anchor:  's', x: -140, y: -20 }
+	'cspace'     : {
+		type     : 'Label',
+		text     : '',
+		font     : getFont(22, 'cab'),
+		pos      : { type: 'Point', anchor:  's', x: -140, y: -20 }
 	},
-	
-	'access'      : {
-		type      : 'Label',
-		text      : '',
-		fontStyle : fontStyle(12, 'cadr'),
-		pos       : { type: 'Point', anchor:  's', x: -140, y: -4 }
+
+	'access'     : {
+		type     : 'Label',
+		text     : '',
+		font     : getFont(12, 'cadr'),
+		pos      : { type: 'Point', anchor:  's', x: -140, y: -4 }
 	}},
 
 

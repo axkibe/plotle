@@ -55,7 +55,7 @@ var Label = Dash.Label = function(twig, panel, inherit, name) {
 	// TODO rename $text
 	this.text    = inherit ? inherit.text : null;
 
-	this._font    = new Euclid.Font(twig.fontStyle);
+	this._font    = new Euclid.Font(twig.font);
 };
 
 /**
