@@ -141,8 +141,7 @@ Input.prototype._weave = function(accent) {
 	case Dash.Accent.HOFOC : sname = this.twig.hofocStyle; break;
 	default : throw new Error('Invalid accent');
 	}
-	var style  = Dash.Board.styles[sname];
-	if (!isnon(style)) { throw new Error('Invalid style: ' + sname); }
+	var style  = Dash.getStyle(sname);
 
 	fabric.fill(style.fill, this.bezi, 'path', Euclid.View.proper);
 	var font = this.twig.font;

@@ -373,7 +373,7 @@ Shell.prototype._draw = function() {
 */
 Shell.prototype.click = function(p, shift, ctrl) {
 	if (this.green) { return; }
-	// TODO board
+	// @@ board
 	if (this.$space) { this.$space.click(p, shift, ctrl); }
 	if (this.redraw) { this._draw(); }
 };

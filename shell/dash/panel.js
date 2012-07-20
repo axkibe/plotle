@@ -142,7 +142,7 @@ Panel.prototype._weave = function() {
 
 	var iframe = this.iframe;
 	var fabric = this.$fabric = new Euclid.Fabric(iframe);
-	var style = Dash.Board.styles[this.tree.root.style];
+	var style = Dash.getStyle(this.tree.root.style);
 	if (!style) { throw new Error('no style!'); }
 
 	fabric.fill(style.fill, this, 'path', Euclid.View.proper);
@@ -158,7 +158,7 @@ Panel.prototype._weave = function() {
 
 	if (config.debug.drawBoxes) {
 		fabric.paint(
-			Dash.Board.styles.boxes,
+			Dash.getStyles('boxes'),
 			new Euclid.Rect(iframe.pnw,
 			iframe.pse.sub(1, 1)),
 			'path',

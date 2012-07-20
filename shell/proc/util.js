@@ -52,14 +52,14 @@ var Util = Proc.Util = {};
 | Logins the user
 */
 Util.login = function(panel) {
-	panel.$sub.errL.text = '';
+	panel.$sub.errL.$text = '';
 	panel.$sub.errL.poke();
 
 	var user   = panel.$sub.userI.value;
 	var pass   = panel.$sub.passI.value;
 
 	if (user.length < 4) {
-		panel.$sub.errL.text = 'Username too short, min. 4 characters';
+		panel.$sub.errL.$text = 'Username too short, min. 4 characters';
 		panel.$sub.errL.poke();
 		shell.setCaret('board', {
 			path : new Path(['LoginPanel', 'userI']),
@@ -69,7 +69,7 @@ Util.login = function(panel) {
 	}
 
 	if (user.substr(0, 5) === 'visit') {
-		panel.$sub.errL.text = 'Username must not start with "visit"';
+		panel.$sub.errL.$text = 'Username must not start with "visit"';
 		panel.$sub.errL.poke();
 		shell.setCaret('board', {
 			path : new Path(['LoginPanel', 'userI']),
@@ -79,7 +79,7 @@ Util.login = function(panel) {
 	}
 
 	if (pass.length < 5) {
-		panel.$sub.errL.text = 'Password too short, min. 5 characters';
+		panel.$sub.errL.$text = 'Password too short, min. 5 characters';
 		panel.$sub.errL.poke();
 		shell.setCaret('board', {
 			path : new Path(['LoginPanel', 'passI']),
@@ -92,7 +92,7 @@ Util.login = function(panel) {
 
 	shell.peer.auth(user, passhash, function(res) {
 		if (!res.ok) {
-			panel.$sub.errL.text = res.message;
+			panel.$sub.errL.$text = res.message;
 			panel.$sub.errL.poke();
 
 			if (res.message.search(/Username/) >= 0) {
@@ -140,7 +140,7 @@ Util.logout = function(panel) {
 | Registers the user
 */
 Util.register = function(panel) {
-	panel.$sub.errL.text = '';
+	panel.$sub.errL.$text = '';
 	panel.$sub.errL.poke();
 
 	var user   = panel.$sub.userI.value;
@@ -150,7 +150,7 @@ Util.register = function(panel) {
 	var code   = panel.$sub.codeI.value;
 
 	if (user.length < 4) {
-		panel.$sub.errL.text = 'Username too short, min. 4 characters';
+		panel.$sub.errL.$text = 'Username too short, min. 4 characters';
 		panel.$sub.errL.poke();
 		shell.setCaret('board', {
 			path : new Path(['RegPanel', 'userI']),
@@ -160,7 +160,7 @@ Util.register = function(panel) {
 	}
 
 	if (user.substr(0, 5) === 'visit') {
-		panel.$sub.errL.text = 'Username must not start with "visit"';
+		panel.$sub.errL.$text = 'Username must not start with "visit"';
 		panel.$sub.errL.poke();
 		shell.setCaret('board', {
 			path : new Path(['RegPanel', 'userI']),
@@ -170,7 +170,7 @@ Util.register = function(panel) {
 	}
 
 	if (pass.length < 5) {
-		panel.$sub.errL.text = 'Password too short, min. 5 characters';
+		panel.$sub.errL.$text = 'Password too short, min. 5 characters';
 		panel.$sub.errL.poke();
 		shell.setCaret('board', {
 			path : new Path(['RegPanel', 'passI']),
@@ -180,7 +180,7 @@ Util.register = function(panel) {
 	}
 
 	if (pass !== pass2) {
-		panel.$sub.errL.text = 'Passwords to not match';
+		panel.$sub.errL.$text = 'Passwords to not match';
 		panel.$sub.errL.poke();
 		shell.setCaret('board', {
 			path : new Path(['RegPanel', 'pass2I']),
@@ -190,7 +190,7 @@ Util.register = function(panel) {
 	}
 
 	if (code.length === 0) {
-		panel.$sub.errL.text = 'Invitation code missing';
+		panel.$sub.errL.$text = 'Invitation code missing';
 		panel.$sub.errL.poke();
 		shell.setCaret('board', {
 			path : new Path(['RegPanel', 'codeI']),
@@ -203,7 +203,7 @@ Util.register = function(panel) {
 
 	shell.peer.register(user, email, pass, code, function(res) {
 		if (!res.ok) {
-			panel.$sub.errL.text = res.message;
+			panel.$sub.errL.$text = res.message;
 			panel.$sub.errL.poke();
 
 			if (res.message.search(/Username/) >= 0) {

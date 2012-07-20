@@ -98,13 +98,13 @@ MainPanel.prototype.setCurSpace = function(space, access) {
 	this.$spaceAccess = access;
 
 	var cspace = this.$sub.cspace;
-	cspace.text = space;
+	cspace.$text = space; // TODO use a function for all these cases!
 	cspace.poke();
 
 	switch(access) {
-	case 'ro' : this.$sub.access.text = '(readonly)'; break;
-	case 'rw' : this.$sub.access.text = '(editable)'; break;
-	case ''   : this.$sub.access.text = '';           break;
+	case 'ro' : this.$sub.access.$text = '(readonly)'; break;
+	case 'rw' : this.$sub.access.$text = '(editable)'; break;
+	case ''   : this.$sub.access.$text = '';           break;
 	default   : throw new Error('unknown access: ' + access);
 	}
 	this.$sub.access.poke();
@@ -120,7 +120,7 @@ MainPanel.prototype.setUser = function(userName) {
 	this.$switchPanel = null;
 
 	var ulabel = this.$sub.username;
-	ulabel.text = userName;
+	ulabel.$text = userName;
 	ulabel.poke();
 };
 
@@ -129,7 +129,7 @@ MainPanel.prototype.setUser = function(userName) {
 */
 MainPanel.prototype.setSpaceZoom = function(zf) {
 	var zoom = this.$sub.zoom;
-	zoom.text = '' + zf;
+	zoom.$text = '' + zf;
 	zoom.poke();
 };
 

@@ -301,6 +301,7 @@ Server.prototype.addResources = function() {
 		'shell/design/helppanel.js',                        'fb',
 		'shell/dash/accent.js',                             'fb',
 		'shell/curve.js',                                   'fb',
+		'shell/dash/getstyle.js',                           'fb',
 		'shell/dash/button.js',                             'fb',
 		'shell/dash/input.js',                              'fb',
 		'shell/dash/label.js',                              'fb',

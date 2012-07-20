@@ -73,27 +73,6 @@ var Board = Dash.Board = function() {
 };
 
 /**
-| TODO
-|  make an own class.
-*/
-Board.styles = {
-	boxes       : { edge : [ { border: 0, width : 1, color : 'black' } ] },
-	panel       : theme.dash.style, // TODO
-	help        : theme.dash.help,
-	button      : theme.dash.button,
-	buttonHover : theme.dash.buttonHover,
-	buttonFocus : theme.dash.buttonFocus,
-	buttonHofoc : theme.dash.buttonHofoc,
-	chat        : theme.dash.chat,
-	highlight   : theme.dash.highlight,
-	input       : theme.dash.input,
-	inputFocus  : theme.dash.inputFocus,
-	sides       : theme.dash.sides,
-	zero        : theme.dash.zero,
-	zhighlight  : theme.dash.zhighlight
-};
-
-/**
 | Sends a message to the chat component.
 */
 Board.prototype.message = function(message) {

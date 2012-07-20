@@ -124,7 +124,7 @@ Button.prototype._weave = function(accent) {
 	default : throw new Error('Invalid accent: ' + accent);
 	}
 
-	var style = Dash.Board.styles[sname];
+	var style = Dash.getStyle(sname);
 	if (!isnon(style)) { throw new Error('Invalid style: ' + sname); }
 	fabric.paint(style, this, 'gpath', Euclid.View.proper);
 
@@ -133,7 +133,7 @@ Button.prototype._weave = function(accent) {
 
 	if (config.debug.drawBoxes) {
 		fabric.paint(
-			Dash.Board.styles.boxes,
+			Dash.getStyle('boxes'),
 			new Euclid.Rect(this.iframe.pnw, this.iframe.pse.sub(1, 1)),
 			'path',
 			Euclid.View.proper

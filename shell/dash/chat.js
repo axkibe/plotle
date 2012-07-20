@@ -106,7 +106,7 @@ Chat.prototype._weave = function() {
 	var w = this.iframe.width;
 	var h = this.iframe.height;
 
-	fabric.paint(Dash.Board.styles.chat, this, 'pathILine', Euclid.View.proper);
+	fabric.paint(Dash.getStyle('chat'), this, 'pathILine', Euclid.View.proper);
 
 	var x = this.pitch.x;
 	var y = this.pitch.y;
@@ -125,7 +125,7 @@ Chat.prototype._weave = function() {
 
 	if (config.debug.drawBoxes) {
 		fabric.paint(
-			Dash.Board.styles.boxes,
+			Dash.getStyle('boxes'),
 			new Euclid.Rect(this.iframe.pnw, this.iframe.pse.sub(1, 1)),
 			'path',
 			Euclid.View.proper
