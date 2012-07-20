@@ -481,6 +481,9 @@ Para.prototype.keyDown = function(item, doc, caret) {
 | End-key pressed.
 */
 Para.prototype.keyEnd = function(item, doc, caret) {
+	if (caret.sign.at1 === this.twig.text.length)
+		{ return false; }
+
 	shell.setCaret(
 		'space',
 		{
@@ -488,7 +491,7 @@ Para.prototype.keyEnd = function(item, doc, caret) {
 			at1  : this.twig.text.length
 		}
 	);
-	// TODO check if already at end.
+
 	return true;
 };
 
@@ -535,6 +538,10 @@ Para.prototype.keyLeft = function(item, doc, caret) {
 | Pos1-key pressed.
 */
 Para.prototype.keyPos1 = function(item, doc, caret) {
+	if (caret.at1 === 0)
+		{ return false; }
+
+	var r = doc.twig.rankOf(this.key);
 	shell.setCaret(
 		'space',
 		{
