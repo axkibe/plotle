@@ -72,7 +72,7 @@ Scrollbar.prototype.draw = function(fabric, view) {
 };
 
 /**
-| TODO
+| Returns the (2d) area of the scrollbar.
 */
 Scrollbar.prototype.getArea = function(view) {
 	var ths  = theme.scrollbar;

@@ -79,19 +79,47 @@ Curve.computePoint = function(model, frame) {
 	var pse = frame.pse;
 
 	switch (model.anchor) {
-	// TODO integrate add into switch
-	// TODO make this part of frame logic
-	case 'c'  : p = new Euclid.Point(half(pnw.x + pse.x), half(pnw.y + pse.y)); break;
-	case 'n'  : p = new Euclid.Point(half(pnw.x + pse.x), pnw.y);               break;
-	case 'ne' : p = new Euclid.Point(pse.x,               pnw.y);               break;
-	case 'e'  : p = new Euclid.Point(pse.x,               half(pnw.y + pse.y)); break;
-	case 'se' : p = pse;                                                        break;
-	case 's'  : p = new Euclid.Point(half(pnw.x + pse.x), pse.y);               break;
-	case 'sw' : p = new Euclid.Point(pnw.x,               pse.y);               break;
-	case 'w'  : p = new Euclid.Point(pnw.x,               half(pnw.y + pse.y)); break;
-	case 'nw' : p = pnw;                                                        break;
+	// @@ make this part of frame logic
+	case 'c'  :
+		return new Euclid.Point(
+			half(pnw.x + pse.x) + model.x,
+			half(pnw.y + pse.y) + model.y
+		);
+	case 'n'  :
+		return new Euclid.Point(
+			half(pnw.x + pse.x) + model.x,
+			pnw.y + model.y
+		);
+	case 'ne' :
+		return new Euclid.Point(
+			pse.x + model.x,
+			pnw.y + model.y
+		);
+	case 'e'  :
+		return new Euclid.Point(
+			pse.x + model.x,
+			half(pnw.y + pse.y) + model.y
+		);
+	case 'se' :
+		return pse.add(model.x, model.y);
+	case 's'  :
+		return new Euclid.Point(
+			half(pnw.x + pse.x) + model.x,
+			pse.y + model.y
+		);
+	case 'sw' :
+		return new Euclid.Point(
+			pnw.x + model.x,
+			pse.y + model.y
+		);
+	case 'w'  :
+		return new Euclid.Point(
+			pnw.x + model.y,
+			half(pnw.y + pse.y) + model.y
+		);
+	case 'nw' :
+		return pnw.add(model.x, model.y);
 	}
-	return p.add(model.x, model.y);
 };
 
 /**
