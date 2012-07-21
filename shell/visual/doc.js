@@ -288,8 +288,8 @@ Doc.prototype.pathSelection = function(fabric, border, twist, view, width, imarg
 	var vpara1 = this.$sub[key1];
 	var vpara2 = this.$sub[key2];
 
-	var p1 = vpara1.getOffsetPoint(s1.at1);
-	var p2 = vpara2.getOffsetPoint(s2.at1);
+	var p1 = vpara1.locateOffset(s1.at1);
+	var p2 = vpara2.locateOffset(s2.at1);
 
 	p1 = new Euclid.Point(ro(p1.x + pnw1.x - sp.x), ro(p1.y + pnw1.y - sp.y));
 	p2 = new Euclid.Point(ro(p2.x + pnw2.x - sp.x), ro(p2.y + pnw2.y - sp.y));

@@ -163,7 +163,7 @@ Para.prototype.getCaretPos = function() {
 	var doc     = item.$sub.doc;
 	var fs      = doc.getFont().size; // TODO use item
 	var descend = fs * theme.bottombox;
-	var p       = this.getOffsetPoint(shell.caret.sign.at1, shell.caret);
+	var p       = this.locateOffset(shell.caret.sign.at1, shell.caret);
 
 	var s = ro(p.y + descend);
 	var n = s - ro(fs + descend);
@@ -314,9 +314,8 @@ Para.prototype.getLineXOffset = function(line, x) {
 |           the flow position used.
 |
 | TODO change to multireturn.
-| TODO rename
 */
-Para.prototype.getOffsetPoint = function(offset, flowPos$) {
+Para.prototype.locateOffset = function(offset, flowPos$) {
 	// TODO cache position
 	var twig = this.twig;
 	var doc  = shell.getSub('space', this.path, -1);

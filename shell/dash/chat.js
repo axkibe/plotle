@@ -84,7 +84,7 @@ Chat.prototype.getCaretPos = function() {
 	var caret   = shell.caret;
 	var fs      = this.twig.font.size;
 	var descend = fs * theme.bottombox;
-	var p       = this.getOffsetPoint(shell.caret.sign.at1);
+	var p       = this.locateOffset(shell.caret.sign.at1);
 	//var p = { x: 2, y : 2};
 
 	var pnw = this.pnw;
@@ -96,7 +96,7 @@ Chat.prototype.getCaretPos = function() {
 };
 
 /**
-| TODO
+| Creates a new fabric for this component.
 */
 Chat.prototype._weave = function() {
 	var fabric = this.$fabric;
@@ -139,9 +139,8 @@ Chat.prototype._weave = function() {
 | Returns the point of a given offset.
 |
 | offset:   the offset to get the point from.
-| TODO rename
 */
-Chat.prototype.getOffsetPoint = function(offset) {
+Chat.prototype.locateOffset = function(offset) {
 	// TODO cache position
 	var twig     = this.twig;
 	var font     = twig.font;

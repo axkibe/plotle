@@ -172,7 +172,7 @@ Input.prototype.draw = function(fabric, accent) {
 | offset:   the offset to get the point from.
 | TODO rename
 */
-Input.prototype.getOffsetPoint = function(offset) {
+Input.prototype.locateOffset = function(offset) {
 	// TODO cache position
 	var twig = this.twig;
 	var font = twig.font;
@@ -199,7 +199,7 @@ Input.prototype.getCaretPos = function() {
 	var caret   = shell.caret;
 	var fs      = this.twig.font.size;
 	var descend = fs * theme.bottombox;
-	var p       = this.getOffsetPoint(shell.caret.sign.at1);
+	var p       = this.locateOffset(shell.caret.sign.at1);
 
 	var pnw = this.pnw;
 	var s = ro(p.y + pnw.y + descend);
