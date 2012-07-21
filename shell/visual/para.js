@@ -95,7 +95,7 @@ Para.prototype.draw = function(fabric, view, pnw) {
 		$f.height !== height ||
 		view.zoom !== $f.$zoom
 	) {
-		// TODO: work out exact height for text below baseline
+		// FIXME work out exact height for text below baseline
 		$f = this.$fabric = new Euclid.Fabric(width, height);
 		$f.scale(view.zoom);
 		$f.$zoom = view.zoom;
@@ -184,7 +184,7 @@ Para.prototype.getFlow = function() {
 	var item      = shell.getSub('space', this.path, -2);
 	var doc       = item.$sub.doc;
 	var flowWidth = item.getFlowWidth();
-	var font      = doc.getFont(); // TODO use item
+	var font      = doc.getFont(item);
 
 	var flow  = this.$flow;
 	// @@ go into subnodes instead
@@ -271,7 +271,7 @@ Para.prototype.getHeight = function() {
 Para.prototype.getLineXOffset = function(line, x) {
 	var item   = shell.getSub('space', this.path, -2);
 	var doc    = item.$sub.doc;
-	var font   = doc.getFont();
+	var font   = doc.getFont(item);
 
 	var flow   = this.getFlow();
 	var fline  = flow[line];
