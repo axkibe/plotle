@@ -64,16 +64,16 @@ Relation.imargin = new Euclid.Margin(theme.relation.imargin);
 /**
 | Creates a new Relation by specifing its relates.
 */
-Relation.create = function(space, vitem1, vitem2) {
-	var cline = Euclid.Line.connect(vitem1.getZone(), null, vitem2.getZone(), null);
+Relation.create = function(space, item1, item2) {
+	var cline = Euclid.Line.connect(item1.getZone(), null, item2.getZone(), null);
 	var pnw = cline.pc.sub(theme.relation.createOffset);
 	var key = shell.peer.newRelation(
 		space.path,
 		pnw,
 		'relates to',
 		20,
-		vitem1.key,
-		vitem2.key
+		item1.key,
+		item2.key
 	);
 	// event listener has created the vrel
 	var vrel = space.$sub[key];
@@ -85,17 +85,17 @@ Relation.create = function(space, vitem1, vitem2) {
 */
 Relation.prototype.draw = function(fabric, view) {
 	var space = shell.getSub('space', this.path, -1);
-	var vitem1 = space.$sub[this.twig.item1key];
-	var vitem2 = space.$sub[this.twig.item2key];
+	var item1 = space.$sub[this.twig.item1key];
+	var item2 = space.$sub[this.twig.item2key];
 	var zone = this.getZone();
 
-	if (vitem1) {
-		var l1 = Euclid.Line.connect(vitem1.getZone(), 'normal', zone, 'normal');
+	if (item1) {
+		var l1 = Euclid.Line.connect(item1.getZone(), 'normal', zone, 'normal');
 		fabric.paint(theme.relation.style, l1, 'path', view);
 	}
 
-	if (vitem2) {
-		var l2 = Euclid.Line.connect(zone,  'normal', vitem2.getZone(), 'arrow');
+	if (item2) {
+		var l2 = Euclid.Line.connect(zone,  'normal', item2.getZone(), 'arrow');
 		fabric.paint(theme.relation.style, l2, 'path', view);
 	}
 

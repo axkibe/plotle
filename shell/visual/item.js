@@ -334,11 +334,11 @@ Item.prototype.actionmove = function(view, p, shift, ctrl) {
 	case Action.SCROLLY :
 		var start = $action.start;
 		var dy    = p.y - start.y;
-		var vitem = shell.$space.getSub($action.itemPath);
-		var sbary = vitem.scrollbarY;
+		var item  = shell.$space.getSub($action.itemPath);
+		var sbary = item.scrollbarY;
 		var spos  = $action.startPos + sbary.scale(dy);
-		vitem.setScrollbar(spos);
-		vitem.poke();
+		item.setScrollbar(spos);
+		item.poke();
 		shell.redraw = true;
 		return true;
 	default :

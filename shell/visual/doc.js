@@ -204,30 +204,30 @@ Doc.prototype.getSpread = function() {
 
 /**
 | Returns the (default) paraSeperator for this document.
-| Parameter vitem is optional, just to safe double and tripple lookups.
+| Parameter item is optional, just to safe double and tripple lookups.
 */
-Doc.prototype.getParaSep = function(vitem) {
+Doc.prototype.getParaSep = function(item) {
 
-	if (!is(vitem))
-		{ vitem = shell.$space.getSub(this.path, -1); }
+	if (!is(item))
+		{ item = shell.$space.getSub(this.path, -1); }
 
 	var fs = this.getFont().size;
-	return vitem.getParaSep(fs);
+	return item.getParaSep(fs);
 };
 
 /**
 | Returns the default font for the document.
-| Parameter vitem is optional, just to safe double and tripple lookups.
+| Parameter item is optional, just to safe double and tripple lookups.
 */
-Doc.prototype.getFont = function(vitem) {
+Doc.prototype.getFont = function(item) {
 
-	// caller can provide vitem for performance optimization
-	if (!is(vitem))
-		{ vitem = shell.$space.getSub(this.path, -1); }
+	// caller can provide item for performance optimization
+	if (!is(item))
+		{ item = shell.$space.getSub(this.path, -1); }
 
-	var fs = vitem.twig.fontsize;
-	if (vitem.fontSizeChange)
-		{ fs = vitem.fontSizeChange(fs); }
+	var fs = item.twig.fontsize;
+	if (item.fontSizeChange)
+		{ fs = item.fontSizeChange(fs); }
 
 	var $f = this._$font;
 
