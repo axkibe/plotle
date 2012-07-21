@@ -187,7 +187,7 @@ Para.prototype.getFlow = function() {
 	var font      = doc.getFont(item);
 
 	var flow  = this.$flow;
-	// @@ go into subnodes instead
+	// FIXME go into subnodes instead
 	var text = this.twig.text;
 
 	if (!config.debug.noCache && flow &&

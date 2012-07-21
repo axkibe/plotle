@@ -79,7 +79,7 @@ Curve.computePoint = function(model, frame) {
 	var pse = frame.pse;
 
 	switch (model.anchor) {
-	// @@ make this part of frame logic
+	// FIXME make this part of frame logic
 	case 'c'  :
 		return new Euclid.Point(
 			half(pnw.x + pse.x) + model.x,
