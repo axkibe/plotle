@@ -52,10 +52,11 @@ var Util = Proc.Util = {};
 | Logins the user
 */
 Util.login = function(panel) {
-	panel.$sub.errL.setText('');
+	var panSub = panel.$sub;
 
-	var user   = panel.$sub.userI.value;
-	var pass   = panel.$sub.passI.value;
+	panSub.errL.setText('');
+	var user   = panSub.userI.getValue();
+	var pass   = panSub.passI.getValue();
 
 	if (user.length < 4) {
 		panel.$sub.errL.setText('Username too short, min. 4 characters');
@@ -135,13 +136,14 @@ Util.logout = function(panel) {
 | Registers the user
 */
 Util.register = function(panel) {
-	panel.$sub.errL.setText('');
+	var panSub = panel.$sub;
 
-	var user   = panel.$sub.userI.value;
-	var email  = panel.$sub.emailI.value;
-	var pass   = panel.$sub.passI.value;
-	var pass2  = panel.$sub.pass2I.value;
-	var code   = panel.$sub.codeI.value;
+	panSub.errL.setText('');
+	var user   = panSub.userI. getValue();
+	var email  = panSub.emailI.getValue();
+	var pass   = panSub.passI. getValue();
+	var pass2  = panSub.pass2I.getValue();
+	var code   = panSub.codeI. getValue();
 
 	if (user.length < 4) {
 		panel.$sub.errL.setText('Username too short, min. 4 characters');
@@ -221,26 +223,21 @@ Util.register = function(panel) {
 | Clears all fields on the login panel.
 */
 Util.clearLogin = function(panel) {
-	panel.$sub.userI.value  = '';
-	panel.$sub.passI.value  = '';
-	panel.$sub.userI.poke();
-	panel.$sub.passI.poke();
+	var panSub = panel.$sub;
+	panSub.userI.setValue('');
+	panSub.passI.setValue('');
 };
 
 /**
 | Clears all fields on the register panel.
 */
 Util.clearRegister = function(panel) {
-	panel.$sub.userI. value = '';
-	panel.$sub.emailI.value = '';
-	panel.$sub.passI. value = '';
-	panel.$sub.pass2I.value = '';
-	panel.$sub.codeI. value = '';
-	panel.$sub.userI. poke();
-	panel.$sub.emailI.poke();
-	panel.$sub.passI. poke();
-	panel.$sub.pass2I.poke();
-	panel.$sub.codeI. poke();
+	var panSub = panel.$sub;
+	panSub.userI. setValue('');
+	panSub.emailI.setValue('');
+	panSub.passI. setValue('');
+	panSub.pass2I.setValue('');
+	panSub.codeI. setValue('');
 };
 
 })();

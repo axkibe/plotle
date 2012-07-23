@@ -449,7 +449,7 @@ var inspect = function(o) {
 */
 var immute = function(obj) {
 	if (!config.debug.immute) { return obj; }
-	
+
 	var names = Object.getOwnPropertyNames(obj);
 	for (var a = 0, aZ = names.length; a < aZ; a++) {
 		var desc = Object.getOwnPropertyDescriptor(obj, names[a]);

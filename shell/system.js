@@ -190,7 +190,7 @@ System.prototype.restartBlinker = function() {
 | Sets the hidden input field (text selection).
 */
 System.prototype.setInput = function(text) {
-	var hi = this._hiddenInput;
+	var hi   = this._hiddenInput;
 	hi.value = this._inputVal = text;
 	if (text !== '') {
 		hi.selectionStart = 0;

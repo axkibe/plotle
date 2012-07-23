@@ -47,13 +47,6 @@ var theme;
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
 /**
-| Shortcuts
-*/
-var ro    = Math.round;
-var isnon = Jools.isnon;
-var pitch = new Euclid.Point(8, 3);
-
-/**
 | Constructor.
 */
 var Input = Dash.Input = function(twig, panel, inherit, name) {
@@ -65,7 +58,10 @@ var Input = Dash.Input = function(twig, panel, inherit, name) {
 	var pse  = this.pse  = Curve.computePoint(twig.frame.pse, panel.iframe);
 	var bezi = this.bezi = new Euclid.BeziRect(Euclid.Point.zero, pse.sub(pnw), 7, 3);
 
-	this.value   = inherit ? inherit.value : '';
+	this._pitch  = new Euclid.Point(8, 3);
+	Jools.keyNonGrata(this, 'value'); // TODO remove
+
+	this._$value   = inherit ? inherit._$value : '';
 	this.$fabric = null;
 	this.$accent = Dash.Accent.NORMA;
 };
@@ -74,14 +70,14 @@ var Input = Dash.Input = function(twig, panel, inherit, name) {
 | Returns the width of a character for password masks.
 */
 Input.prototype.maskWidth = function(size) {
-	return ro(size * 0.2);
+	return Math.round(size * 0.2);
 };
 
 /**
 | Returns the kerning of characters for password masks.
 */
 Input.prototype.maskKern = function(size) {
-	return ro(size * 0.15);
+	return Math.round(size * 0.15);
 };
 
 /**
@@ -92,29 +88,18 @@ Input.prototype.canFocus = function() {
 };
 
 /**
-| Paths the input field.
-*/
-/*
-Input.prototype.path = function(fabric, border, twist) {
-	fabric.moveTo(this.pnw);
-	fabric.lineTo(this.pse.x, this.pnw.y);
-	fabric.lineTo(this.pse);
-	fabric.lineTo(this.pnw.x, this.pse.y);
-	fabric.lineTo(this.pnw);
-};*/
-
-/**
 | Draws the mask for password fields
 */
 Input.prototype.maskPath = function(fabric, border, twist, view, length, size) {
-	var x  = view.x(pitch);
-	var y  = view.y(pitch) + ro(size * 0.7);
-	var h  = ro(size * 0.32);
-	var w  = this.maskWidth(size);
-	var w2 = w * 2;
-	var k  = this.maskKern(size);
-	var wm = w * Euclid.magic;
-	var wh = h * Euclid.magic;
+	var pitch = this._pitch;
+	var x     = view.x(pitch);
+	var y     = view.y(pitch) + Math.round(size * 0.7);
+	var h     = Math.round(size * 0.32);
+	var w     = this.maskWidth(size);
+	var w2    = w * 2;
+	var k     = this.maskKern(size);
+	var wm    = w * Euclid.magic;
+	var wh    = h * Euclid.magic;
 
 	for (var a = 0; a < length; a++) {
 		fabric.moveTo(                    x + w,  y - h);
@@ -132,6 +117,7 @@ Input.prototype.maskPath = function(fabric, border, twist, view, length, size) {
 */
 Input.prototype._weave = function(accent) {
 	var fabric = new Euclid.Fabric(this.bezi.width, this.bezi.height);
+	var pitch  = this._pitch;
 
 	var sname;
 	switch (accent) {
@@ -149,9 +135,9 @@ Input.prototype._weave = function(accent) {
 
 	if(this.twig.password) {
 		fabric.fill('black', this, 'maskPath', Euclid.View.proper,
-			this.value.length, font.size);
+			this._$value.length, font.size);
 	} else {
-		fabric.fillText(this.value, pitch.x, font.size + pitch.y);
+		fabric.fillText(this._$value, pitch.x, font.size + pitch.y);
 	}
 	fabric.edge(style.edge, this.bezi, 'path', Euclid.View.proper);
 
@@ -174,20 +160,20 @@ Input.prototype.draw = function(fabric, accent) {
 */
 Input.prototype.locateOffset = function(offset) {
 	// TODO cache position
-	var twig = this.twig;
-	var font = twig.font;
-	var val  = this.value;
+	var twig  = this.twig;
+	var font  = twig.font;
+	var pitch = this._pitch;
+	var val   = this._$value;
 
-	// TODO use token. text instead.
 	if (this.twig.password) {
 		return new Euclid.Point(
 			pitch.x + (2 * this.maskWidth(font.size) + this.maskKern(font.size)) * offset - 1,
-			ro(pitch.y + font.size)
+			Math.round(pitch.y + font.size)
 		);
 	} else {
 		return new Euclid.Point(
-			ro(pitch.x + Euclid.Measure.width(font, val.substring(0, offset))),
-			ro(pitch.y + font.size)
+			Math.round(pitch.x + Euclid.Measure.width(font, val.substring(0, offset))),
+			Math.round(pitch.y + font.size)
 		);
 	}
 };
@@ -202,8 +188,8 @@ Input.prototype.getCaretPos = function() {
 	var p       = this.locateOffset(shell.caret.sign.at1);
 
 	var pnw = this.pnw;
-	var s = ro(p.y + pnw.y + descend);
-	var n = s - ro(fs + descend);
+	var s = Math.round(p.y + pnw.y + descend);
+	var n = s - Math.round(fs + descend);
 	var	x = p.x + this.pnw.x - 1;
 
 	return Jools.immute({ s: s, n: n, x: x });
@@ -218,7 +204,7 @@ Input.prototype.drawCaret = function(view) {
 	var cpos  = caret.$pos = this.getCaretPos();
 
 	var cx  = cpos.x;
-	var ch  = ro((cpos.s - cpos.n) * view.zoom);
+	var ch  = Math.round((cpos.s - cpos.n) * view.zoom);
 	var cp = view.point(
 		this.panel.pnw.x + cpos.x,
 		this.panel.pnw.y + cpos.n
@@ -237,12 +223,27 @@ Input.prototype.drawCaret = function(view) {
 };
 
 /**
+| Returns the current value (text in the box)
+*/
+Input.prototype.getValue = function() {
+	return this._$value;
+};
+
+/**
+| Sets the current value (text in the box)
+*/
+Input.prototype.setValue = function(v) {
+	this._$value = v;
+	this.poke();
+};
+
+/**
 | User input.
 */
 Input.prototype.input = function(text) {
 	var caret = shell.caret;
 	var csign = caret.sign;
-	var v = this.value;
+	var v = this._$value;
 	var at1 = csign.at1;
 
 	var mlen = this.twig.maxlen;
@@ -250,7 +251,7 @@ Input.prototype.input = function(text) {
 		text = text.substring(0, mlen - v.length);
 	}
 
-	this.value = v.substring(0, at1) + text + v.substring(at1);
+	this._$value = v.substring(0, at1) + text + v.substring(at1);
 	shell.setCaret('board', {
 		path : csign.path,
 		at1  : at1 + text.length
@@ -266,7 +267,7 @@ Input.prototype.keyBackspace = function() {
 	var csign = caret.sign;
 	var at1   = csign.at1;
 	if (at1 <= 0) return false;
-	this.value = this.value.substring(0, at1 - 1) + this.value.substring(at1);
+	this._$value = this._$value.substring(0, at1 - 1) + this._$value.substring(at1);
 	shell.setCaret('board', {
 		path : csign.path,
 		at1  : csign.at1 - 1
@@ -281,8 +282,8 @@ Input.prototype.keyDel = function() {
 	var caret = shell.caret;
 	var csign = caret.sign;
 	var at1   = csign.at1;
-	if (at1 >= this.value.length) return false;
-	this.value = this.value.substring(0, at1) + this.value.substring(at1 + 1);
+	if (at1 >= this._$value.length) return false;
+	this._$value = this._$value.substring(0, at1) + this._$value.substring(at1 + 1);
 	return true;
 };
 
@@ -309,10 +310,10 @@ Input.prototype.keyEnd = function() {
 	var caret = shell.caret;
 	var csign = caret.sign;
 	var at1   = csign.at1;
-	if (at1 >= this.value.length) return false;
+	if (at1 >= this._$value.length) return false;
 	shell.setCaret('board', {
 		path : csign.path,
-		at1  : this.value.length
+		at1  : this._$value.length
 	});
 	return true;
 };
@@ -351,7 +352,7 @@ Input.prototype.keyPos1 = function() {
 Input.prototype.keyRight = function() {
 	var caret = shell.caret;
 	var csign = caret.sign;
-	if (csign.at1 >= this.value.length) return false;
+	if (csign.at1 >= this._$value.length) return false;
 	shell.setCaret('board', {
 		path : csign.path,
 		at1  : csign.at1 + 1

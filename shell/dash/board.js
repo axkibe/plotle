@@ -32,15 +32,11 @@ Dash = Dash || {};
 /**
 | Imports
 */
-var Curve;
-var Design;
 var Euclid;
 var Jools;
-var Path;
+var Proc;
 var shell;
 var system;
-var theme;
-var Tree;
 
 /**
 | Capsule
@@ -48,11 +44,6 @@ var Tree;
 (function(){
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
-
-/**
-| Shortcuts.
-*/
-var is = Jools.is;
 
 /**
 | Constructor
@@ -86,7 +77,7 @@ Board.prototype.message = function(message) {
 Board.prototype.getPanel = function(name) {
 	var fabric = this.fabric;
 	var cpanel = this.panels[name];
-	if (!is(cpanel)) { throw new Error('invalid curPanelName: ' + this.curPanelName); }
+	if (!Jools.is(cpanel)) { throw new Error('invalid curPanelName: ' + this.curPanelName); }
 
 	if (cpanel &&
 		cpanel.screensize.x === fabric.width &&
@@ -280,7 +271,7 @@ Board.prototype.mousedown = function(p, shift, ctrl) {
 | Returns an entity by its path.
 */
 Board.prototype.getSub = function(path, len) {
-	if (!is(len))
+	if (!Jools.is(len))
 		{ len = 2; }
 
 	if (len !== 2)

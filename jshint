@@ -1,2 +1,2 @@
 #!/bin/bash
-/usr/local/bin/jshint *.js shell/*.js shell/design/*.js shell/proc/*.js shell/euclid/*.js shell/visual/*.js server/*.js shared/*.js tools/*.js --config jshint.json | head -n 15
+/usr/local/bin/jshint *.js shell/*.js shell/dash/*.js shell/design/*.js shell/euclid/*.js shell/proc/*.js shell/visual/*.js server/*.js shared/*.js tools/*.js --config jshint.json | head -n 15
