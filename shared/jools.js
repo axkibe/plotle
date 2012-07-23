@@ -205,6 +205,18 @@ var subclass = function(sub, base) {
 };
 
 /**
+| Throws an error if any argument is not an integer.
+*/
+var ensureInt = function() {
+	for(var a in arguments) {
+		var arg = arguments[a];
+		if (Math.floor(arg) - arg !== 0)
+			{ throw new Error(arg + ' not an integer'); }
+	}
+};
+
+
+/**
 | Fixates a value to an object (not changeable)
 */
 var fixate = function(obj, key, value) {
@@ -487,6 +499,7 @@ Jools = {
 	copy         : copy,
 	debug        : debug,
 	devel        : devel,
+	ensureInt    : ensureInt,
 	fixate       : fixate,
 	half         : half,
 	inspect      : inspect,

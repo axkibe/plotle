@@ -294,7 +294,7 @@ Doc.prototype.pathSelection = function(fabric, border, twist, view, width, imarg
 	p1 = new Euclid.Point(ro(p1.x + pnw1.x - sp.x), ro(p1.y + pnw1.y - sp.y));
 	p2 = new Euclid.Point(ro(p2.x + pnw2.x - sp.x), ro(p2.y + pnw2.y - sp.y));
 
-	var fontsize = this.getFont().size();
+	var fontsize = this.getFont().size;
 	var descend = ro(fontsize * theme.bottombox);
 	var  ascend = ro(fontsize);
 	var rx = width - imargin.e;

@@ -55,7 +55,6 @@ Euclid.magic = 0.551784;
 | Fabric(width, height)   creates a new fabric and sets its size;
 */
 var Fabric = Euclid.Fabric = function(a1, a2) {
-	// TODO this is strange, replace with switch(a1.constructor)
 	switch (typeof(a1)) {
 	case 'undefined' :
 		this._canvas = document.createElement('canvas');
@@ -71,41 +70,25 @@ var Fabric = Euclid.Fabric = function(a1, a2) {
 			this._canvas.height = a1.height;
 			break;
 		default :
-			if (!a1.getContext) throw new Error('Invalid parameter to new Farbic: ' + a1);
+			if (!a1.getContext)
+				{ throw new Error('Invalid parameter to new Fabric: ' + a1); }
 			this._canvas = a1;
 			break;
 		}
 		break;
-	default :
+	case 'number' :
 		this._canvas = document.createElement('canvas');
 		this._canvas.width  = a1;
 		this._canvas.height = a2;
+		break;
+	default :
+		throw new Error('Invalid parameter to new Fabric: ' + a1);
 	}
 	this._cx = this._canvas.getContext('2d');
 
 	// curren positiont (without twist)
 	this._posx = this._posy = null;
 	this.$clip = false;
-};
-
-/**
-| Shortcuts
-*/
-var ro    = Math.round;
-var cos   = Math.cos;
-var sin   = Math.sin;
-var tan   = Math.tan;
-
-/**
-| Throws an error if any argument is not an integer.
-*/
-var ensureInteger = function() {
-	for(var a in arguments) {
-		var arg = arguments[a];
-		if (Math.floor(arg) - arg !== 0) {
-			throw new Error(arg + ' not an integer');
-		}
-	}
 };
 
 /**
@@ -149,11 +132,11 @@ Fabric.prototype.reset = function(a1, a2) {
 	if (c.width === w && c.height === h) {
 		// no size change, clearRect() is faster
 		this._cx.clearRect(0, 0, c.width, c.height);
-		return;
+	} else {
+		// setting width or height clears the contents
+		if (c.width  !== w) { c.width  = w; }
+		if (c.height !== h) { c.height = h; }
 	}
-	/* setting width or height clears the contents */
-	if (c.width  !== w) c.width  = w;
-	if (c.height !== h) c.height = h;
 };
 
 
@@ -177,7 +160,7 @@ Fabric.prototype.moveTo = function(a1, a2, a3) {
 		y = a2;
 		v = a3;
 	}
-	ensureInteger(x, y);
+	Jools.ensureInt(x, y);
 	if (v) {
 		var x1 = x;
 		x = v.x(x,  y);
@@ -211,7 +194,7 @@ Fabric.prototype.lineTo = function(a1, a2, a3) {
 		y = a2;
 		v = a3;
 	}
-	ensureInteger(x, y);
+	Jools.ensureInt(x, y);
 	if (v) {
 		var x1 = x;
 		x = v.x(x,  y);
@@ -348,7 +331,7 @@ Fabric.prototype.drawImage = function(image, a1, a2, a3) {
 		y = a2;
 		c = a3;
 	}
-	ensureInteger(x, y);
+	Jools.ensureInt(x, y);
 	if (Jools.is(c)) { this._cx.globalCompositeOperation = c; }
 	this._cx.drawImage(image, x, y);
 	if (Jools.is(c)) { this._cx.globalCompositeOperation = 'source-over'; }
@@ -366,7 +349,7 @@ Fabric.prototype.putImageData = function(imagedata, a1, a2) {
 	} else {
 		x = a1;   y = a2;
 	}
-	ensureInteger(x, y);
+	Jools.ensureInt(x, y);
 	this._cx.putImageData(imagedata, x, y);
 };
 
@@ -392,7 +375,7 @@ Fabric.prototype.getImageData = function(a1, a2, a3, a4) {
 		x2 = a3; y2 = a4;
 	}
 
-	ensureInteger(x1, y2, x1, y2);
+	Jools.ensureInt(x1, y2, x1, y2);
 	return this._cx.getImageData(a1, a2, a3, a4);
 };
 
@@ -409,14 +392,14 @@ Fabric.prototype._colorStyle = function(style, shape) {
 	var grad;
 	switch (style.gradient) {
 	case 'askew' :
-		// TODO use gradientPNW
+		// FIXME use gradientPNW
 		if (!shape.pnw || !shape.pse) throw new Error(style.gradient+' gradiend misses pnw/pse');
 		grad = this._cx.createLinearGradient(
 			shape.pnw.x, shape.pnw.y,
 			shape.pnw.x + shape.width / 10, shape.pse.y);
 		break;
 	case 'horizontal' :
-		// TODO use gradientPNW
+		// FIXME use gradientPNW
 		if (!shape.pnw || !shape.pse) throw new Error(style.gradient+' gradient misses pnw/pse');
 		grad = this._cx.createLinearGradient(
 			0, shape.pnw.y,
@@ -555,35 +538,6 @@ Fabric.prototype.fillText = function(text, a1, a2) {
 };
 
 /**
-| Draws some text rotated by phi
-| text: text to draw
-| p: center point of rotation
-| phi: rotation angle
-| d: distance from center // TODO rename
-*/
-/*
-Fabric.prototype.fillRotateText = function(text, pc, phi, d) {
-	var cx = this._cx;
-	var t1 = cos(phi);
-	var t2 = sin(phi);
-	var det = t1 * t1 + t2 * t2;
-	var x = pc.x + d * t2;
-	var y = pc.y - d * t1;
-	if (t1 < 0) {
-		// turn lower segments so text isn't upside down
-		t1 = -t1;
-		t2 = -t2;
-	}
-	cx.setTransform(t1, t2, -t2, t1, 0, 0);
-	var x1 = (x * t1 + y * t2) / det;
-	var y1 = (y * t1 - x * t2) / det;
-	cx.fillText(text, x1, y1);
-	cx.setTransform(1, 0, 0, 1, 0, 0);
-};
-*/
-
-
-/**
 | Sets the font.
 */
 Fabric.prototype.setFont = function(f) {
@@ -647,7 +601,5 @@ Fabric.prototype.globalAlpha = function(a) {
 Fabric.prototype.scale = function(s) {
 	this._cx.scale(s, s);
 };
-
-Fabric.ensureInteger = ensureInteger; // TODO this belongs to Jools
 
 })();
