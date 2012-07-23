@@ -11,13 +11,9 @@
   .'  '.           | |                      `-.______./
   '----'           '-'
 
-         ,   ,-,---. .-,--.             ,-_/
-         )    '|___/  '|__/ ,-. ,-. ,-. '  |
-        /     ,|   \  ,|    ,-| `-. `-. .^ |
-        `--' `-^---'  `'    `-^ `-' `-' `--'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- login panel, password input.
+ close button, closes the register panel.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -35,6 +31,7 @@ Proc = Proc || {};
 */
 var Dash;
 var Jools;
+var shell;
 
 /**
 | Capsule
@@ -46,17 +43,17 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Constructor
 */
-var LBPassI = Proc.LBPassI = function(twig, panel, inherit, name) {
-	Dash.Input.call(this, twig, panel, inherit, name);
+var RegCloseButton = Proc.RegCloseButton = function(twig, panel, inherit, name) {
+	Dash.Button.call(this, twig, panel, inherit, name);
 };
+Jools.subclass(RegCloseButton, Dash.Button);
 
-Jools.subclass(LBPassI, Dash.Input);
+RegCloseButton.prototype.canFocus = function()
+	{ return true; };
 
-/**
-| Password input field
-*/
-LBPassI.prototype.keyEnter = function() {
-	Proc.Util.login(this.panel);
+RegCloseButton.prototype.push = function(shift, ctrl) {
+	Proc.Util.clearRegister(this.panel);
+	this.panel.board.setCurPanel('MainPanel');
 };
 
 })();

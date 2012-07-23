@@ -126,7 +126,7 @@ MainPanel.layout = {
 	copse : {
 	'leftB' : {
 		type       : 'Button',
-		code       : 'MBLeftB', // TODO rename MP
+		code       : 'MainLeftButton',
 
 		normaStyle : 'button',
 		hoverStyle : 'buttonHover',
@@ -166,7 +166,7 @@ MainPanel.layout = {
 
 	'left2B' : {
 		type       : 'Button',
-		code       : 'MBLeft2B',
+		code       : 'MainLeft2Button',
 
 		normaStyle : 'button',
 		hoverStyle : 'buttonHover',
@@ -213,7 +213,7 @@ MainPanel.layout = {
 
 	'rightB' : {
 		type       : 'Button',
-		code       : 'MBRightB',
+		code       : 'MainRightButton',
 
 		normaStyle : 'button',
 		hoverStyle : 'buttonHover',
@@ -253,7 +253,7 @@ MainPanel.layout = {
 
 	'switchB'     : {
 		type       : 'Button',
-		code       : 'MBSwitchB',
+		code       : 'MainSwitchButton',
 
 		normaStyle : 'button',
 		hoverStyle : 'buttonHover',
@@ -324,7 +324,7 @@ MainPanel.layout = {
 
 	'zoomminusB'       : {
 		type       : 'Button',
-		code       : 'MBZoomMinusB',
+		code       : 'MainZoomMinusButton',
 
 		normaStyle : 'button',
 		hoverStyle : 'buttonHover',
@@ -371,7 +371,7 @@ MainPanel.layout = {
 
 	'zoomnullB'       : {
 		type       : 'Button',
-		code       : 'MBZoomNullB',
+		code       : 'MainZoomNullButton',
 
 		normaStyle : 'button',
 		hoverStyle : 'buttonHover',
@@ -418,7 +418,7 @@ MainPanel.layout = {
 
 	'zoomplusB'       : {
 		type       : 'Button',
-		code       : 'MBZoomPlusB',
+		code       : 'MainZoomPlusButton',
 
 		normaStyle : 'button',
 		hoverStyle : 'buttonHover',

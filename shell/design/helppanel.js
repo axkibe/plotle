@@ -193,7 +193,7 @@ HelpPanel.layout = {
 
 	'hideB' : {
 		type       : 'Button',
-		code       : 'HBHideB',
+		code       : 'HelpHideButton',
 
 		normaStyle : 'button',
 		hoverStyle : 'buttonHover',

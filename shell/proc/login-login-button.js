@@ -10,15 +10,9 @@
    |  | '-....-'   | |                    '. `._____.-'/
   .'  '.           | |                      `-.______./
   '----'           '-'
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
-           ,-_/,. ,-,---. ,-_/,.     .     ,-,---.
-           ' |_|/  '|___/ ' |_|/ . ,-| ,-.  '|___/
-            /| |   ,|   \  /| |  | | | |-'  ,|   \
-            `' `' `-^---'  `' `' ' `-^ `-' `-^---'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
- Right Button on main panel.
- Help.
+ Login button on the login panel.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -48,14 +42,24 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Constructor
 */
-var HBHideB = Proc.HBHideB = function(twig, panel, inherit, name) {
+var LoginLoginButton = Proc.LoginLoginButton = function(twig, panel, inherit, name) {
 	Dash.Button.call(this, twig, panel, inherit, name);
 };
-Jools.subclass(HBHideB, Dash.Button);
+Jools.subclass(LoginLoginButton, Dash.Button);
 
-HBHideB.prototype.push = function(shift, ctrl) {
-	this.panel.board.setShowHelp(false);
-	shell.redraw = true;
+/**
+| This button is focusable.
+*/
+LoginLoginButton.prototype.canFocus = function() {
+	return true;
+};
+
+/**
+| Button has been pushed.
+*/
+LoginLoginButton.prototype.push = function(shift, ctrl) {
+	Proc.Util.login(this.panel);
+	shell.redraw = true; // TODO this should be handled by login()
 };
 
 })();

@@ -10,14 +10,9 @@
    |  | '-....-'   | |                    '. `._____.-'/
   .'  '.           | |                      `-.______./
   '----'           '-'
-
-        ,   ,-,---.  ,--. .              ,-,---.
-        )    '|___/ | `-' |  ,-. ,-. ,-.  '|___/
-       /     ,|   \ |   . |  | | `-. |-'  ,|   \
-       `--' `-^---' `--'  `' `-' `-' `-' `-^---'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- login panel, close button
+ zoom null button, sets zoom factor to default.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -47,18 +42,13 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Constructor
 */
-var LBCloseB = Proc.LBCloseB = function(twig, panel, inherit, name) {
+var MainZoomNullButton = Proc.MainZoomNullButton = function(twig, panel, inherit, name) {
 	Dash.Button.call(this, twig, panel, inherit, name);
 };
-Jools.subclass(LBCloseB, Dash.Button);
+Jools.subclass(MainZoomNullButton, Dash.Button);
 
-LBCloseB.prototype.canFocus = function()
-	{ return true; };
-
-LBCloseB.prototype.push = function(shift, ctrl) {
-	Proc.Util.clearLogin(this.panel);
-	this.panel.board.setCurPanel('MainPanel');
-	shell.redraw = true;
+MainZoomNullButton.prototype.push = function(shift, ctrl) {
+	shell.changeSpaceZoom(0);
 };
 
 })();

@@ -10,14 +10,10 @@
    |  | '-....-'   | |                    '. `._____.-'/
   .'  '.           | |                      `-.______./
   '----'           '-'
-
-   ,-,-,-.   ,-,---. .---.         .      .   ,-,---.
-   `,| | |    '|___/ \___  . , , . |- ,-. |-.  '|___/
-     | ; | .  ,|   \     \ |/|/  | |  |   | |  ,|   \
-     '   `-' `-^---' `---' ' '   ' `' `-' ' ' `-^---'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- Switch Button, shows the switch Panel
+ Right Button on main panel.
+ Help.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -28,7 +24,6 @@
 | Export
 */
 var Proc;
-Proc = Proc || {};
 
 /**
 | Imports
@@ -47,13 +42,16 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Constructor
 */
-var MBSwitchB = Proc.MBSwitchB = function(twig, panel, inherit, name) {
+var MainRightButton = Proc.MainRightButton = function(twig, panel, inherit, name) {
 	Dash.Button.call(this, twig, panel, inherit, name);
 };
-Jools.subclass(MBSwitchB, Dash.Button);
+Jools.subclass(MainRightButton, Dash.Button);
 
-MBSwitchB.prototype.push = function(shift, ctrl) {
-	this.panel.toggleSwitch();
+/**
+| Button has been pressed
+*/
+MainRightButton.prototype.push = function(p, shift, ctrl) {
+	this.panel.board.setShowHelp(!this.$active);
 	shell.redraw = true;
 };
 

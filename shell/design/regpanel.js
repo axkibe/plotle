@@ -247,7 +247,7 @@ RegPanel.layout = {
 	},
 	'regB'      : {
 		type       : 'Button',
-		code       : 'RBRegB',
+		code       : 'RegRegisterButton',
 		normaStyle : 'button',
 		hoverStyle : 'buttonHover',
 		focusStyle : 'buttonFocus',
@@ -305,7 +305,7 @@ RegPanel.layout = {
 	},
 	'closeB'      : {
 		type       : 'Button',
-		code       : 'RBCloseB',
+		code       : 'RegCloseButton',
 		normaStyle : 'button',
 		hoverStyle : 'buttonHover',
 		focusStyle : 'buttonFocus',

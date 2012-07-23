@@ -10,14 +10,10 @@
    |  | '-....-'   | |                    '. `._____.-'/
   .'  '.           | |                      `-.______./
   '----'           '-'
-
- ,-,-,-.   ,-,---. ,-_/              .-,--. .          ,-,---.
- `,| | |    '|___/   /  ,-. ,-. ,-,-. '|__/ |  . . ,-.  '|___/
-   | ; | .  ,|   \  /   | | | | | | | ,|    |  | | `-.  ,|   \
-   '   `-' `-^---' /--, `-' `-' ' ' ' `'    `' `-^ `-' `-^---'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- Zoom Plus Button on the main panel.
+ Left Button on the main panel.
+ Log in / Log out
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -47,17 +43,26 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Constructor
 */
-var MBZoomPlusB = Proc.MBZoomPlusB = function(twig, panel, inherit, name) {
+var MainLeftButton = Proc.MainLeftButton = function(twig, panel, inherit, name) {
 	Dash.Button.call(this, twig, panel, inherit, name);
-	this.repeat = true;
 };
-Jools.subclass(MBZoomPlusB, Dash.Button);
+Jools.subclass(MainLeftButton, Dash.Button);
 
 /**
-| TODO
+| Button has been pushed.
 */
-MBZoomPlusB.prototype.push = function(shift, ctrl) {
-	shell.changeSpaceZoom(1);
+MainLeftButton.prototype.push = function(shift, ctrl) {
+	switch (this.$captionText) {
+	case 'log in'  :
+		this.panel.board.setCurPanel('LoginPanel');
+		break;
+	case 'log out' :
+		Proc.Util.logout(this.panel);
+		break;
+	default :
+		throw new Error('unknown state of leftB');
+	}
+	shell.redraw = true; // TODO in case ob logout this should be done already
 };
 
 })();

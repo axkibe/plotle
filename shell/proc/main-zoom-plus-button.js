@@ -10,14 +10,9 @@
    |  | '-....-'   | |                    '. `._____.-'/
   .'  '.           | |                      `-.______./
   '----'           '-'
-
- .-,--. ,-,---.  ,--. .              ,-,---.
-  `|__/  '|___/ | `-' |  ,-. ,-. ,-.  '|___/
-  )| \   ,|   \ |   . |  | | `-. |-'  ,|   \
-  `'  ` `-^---' `--'  `' `-' `-' `-' `-^---'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- register panel, the close button
+ zoom plus button, zooms in.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -47,17 +42,17 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Constructor
 */
-var RBCloseB = Proc.RBCloseB = function(twig, panel, inherit, name) {
+var MainZoomPlusButton = Proc.MainZoomPlusButton = function(twig, panel, inherit, name) {
 	Dash.Button.call(this, twig, panel, inherit, name);
+	this.repeat = true;
 };
-Jools.subclass(RBCloseB, Dash.Button);
+Jools.subclass(MainZoomPlusButton, Dash.Button);
 
-RBCloseB.prototype.canFocus = function()
-	{ return true; };
-
-RBCloseB.prototype.push = function(shift, ctrl) {
-	Proc.Util.clearRegister(this.panel);
-	this.panel.board.setCurPanel('MainPanel');
+/**
+| Button has been been pushed.
+*/
+MainZoomPlusButton.prototype.push = function(shift, ctrl) {
+	shell.changeSpaceZoom(1);
 };
 
 })();

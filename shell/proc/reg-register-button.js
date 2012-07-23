@@ -10,14 +10,9 @@
    |  | '-....-'   | |                    '. `._____.-'/
   .'  '.           | |                      `-.______./
   '----'           '-'
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- ,-,-,-.   ,-,---. ,-_/               ,-,-,-.                 ,-,---.
- `,| | |    '|___/   /  ,-. ,-. ,-,-. `,| | |   . ,-. . . ,-.  '|___/
-   | ; | .  ,|   \  /   | | | | | | |   | ; | . | | | | | `-.  ,|   \
-   '   `-' `-^---' /--, `-' `-' ' ' '   '   `-' ' ' ' `-^ `-' `-^---'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
- Zoom Minus Button on the main panel.
+ register button, register/sign up
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -47,15 +42,16 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Constructor
 */
-var MBZoomMinusB = Proc.MBZoomMinusB = function(twig, panel, inherit, name) {
+var RegRegisterButton = Proc.RegRegisterButton = function(twig, panel, inherit, name) {
 	Dash.Button.call(this, twig, panel, inherit, name);
-	this.repeat = true;
 };
-Jools.subclass(MBZoomMinusB, Dash.Button);
+Jools.subclass(RegRegisterButton, Dash.Button);
 
-MBZoomMinusB.prototype.push = function(shift, ctrl) {
-	shell.changeSpaceZoom(-1);
-	return true;
+RegRegisterButton.prototype.canFocus = function()
+	{ return true; };
+
+RegRegisterButton.prototype.push = function(shift, ctrl) {
+	Proc.Util.register(this.panel);
 };
 
 })();

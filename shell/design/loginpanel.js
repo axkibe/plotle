@@ -167,7 +167,7 @@ LoginPanel.layout = {
 	},
 	'passI' : {
 		type       : 'Input',
-		code       : 'LBPassI',
+		code       : 'LoginPassInput',
 		password   :  true,
 		normaStyle : 'input',
 		focusStyle : 'inputFocus',
@@ -183,7 +183,7 @@ LoginPanel.layout = {
 	},
 	'loginB'       : {
 		type       : 'Button',
-		code       : 'LBLoginB',
+		code       : 'LoginLoginButton',
 		normaStyle : 'button',
 		hoverStyle : 'buttonHover',
 		focusStyle : 'buttonFocus',
@@ -241,7 +241,7 @@ LoginPanel.layout = {
 	},
 	'closeB'       : {
 		type       : 'Button',
-		code       : 'LBCloseB',
+		code       : 'LoginCloseButton',
 		normaStyle : 'button',
 		hoverStyle : 'buttonHover',
 		focusStyle : 'buttonFocus',

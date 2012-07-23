@@ -11,14 +11,9 @@
   .'  '.           | |                      `-.______./
   '----'           '-'
 
-       ,-,-,-.   ,-,---.  ,          .  ,-,---.
-       `,| | |    '|___/  )   ,-. ," |-  '|___/
-         | ; | .  ,|   \ /    |-' |- |   ,|   \
-         '   `-' `-^---' `--' `-' |  `' `-^---'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ' ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- Left Button on the main panel.
- Log in / Log out
+ login panel, password input.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -36,7 +31,6 @@ Proc = Proc || {};
 */
 var Dash;
 var Jools;
-var shell;
 
 /**
 | Capsule
@@ -48,18 +42,17 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Constructor
 */
-var MBLeftB = Proc.MBLeftB = function(twig, panel, inherit, name) {
-	Dash.Button.call(this, twig, panel, inherit, name);
+var LoginPassInput = Proc.LoginPassInput = function(twig, panel, inherit, name) {
+	Dash.Input.call(this, twig, panel, inherit, name);
 };
-Jools.subclass(MBLeftB, Dash.Button);
 
-MBLeftB.prototype.push = function(shift, ctrl) {
-	switch (this.$captionText) {
-	case 'log in'  : this.panel.board.setCurPanel('LoginPanel'); break;
-	case 'log out' : Proc.Util.logout(this.panel); break;
-	default : throw new Error('unknown state of leftB');
-	}
-	shell.redraw = true;
+Jools.subclass(LoginPassInput, Dash.Input);
+
+/**
+| Password input field
+*/
+LoginPassInputL.prototype.keyEnter = function() {
+	Proc.Util.login(this.panel);
 };
 
 })();

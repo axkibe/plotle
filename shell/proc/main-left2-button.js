@@ -10,14 +10,10 @@
    |  | '-....-'   | |                    '. `._____.-'/
   .'  '.           | |                      `-.______./
   '----'           '-'
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~'~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- ,-,-,-.   ,-,---. ,-_/               ,-,-.       .  .  ,-,---.
- `,| | |    '|___/   /  ,-. ,-. ,-,-. ` | |   . . |  |   '|___/
-   | ; | .  ,|   \  /   | | | | | | |   | |-. | | |  |   ,|   \
-   '   `-' `-^---' /--, `-' `-' ' ' '  ,' `-' `-^ `' `' `-^---'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
- Zoom Null Button on the main panel.
+ Second to left Button on the main panel..
+ Registers.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -47,13 +43,17 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Constructor
 */
-var MBZoomNullB = Proc.MBZoomNullB = function(twig, panel, inherit, name) {
+var MainLeft2Button = Proc.MainLeft2Button = function(twig, panel, inherit, name) {
 	Dash.Button.call(this, twig, panel, inherit, name);
 };
-Jools.subclass(MBZoomNullB, Dash.Button);
+Jools.subclass(MainLeft2Button, Dash.Button);
 
-MBZoomNullB.prototype.push = function(shift, ctrl) {
-	shell.changeSpaceZoom(0);
+/**
+| Button has been pressed.
+*/
+MainLeft2Button.prototype.push = function(shift, ctrl) {
+	this.panel.board.setCurPanel('RegPanel');
+	shell.redraw = true;
 };
 
 })();
