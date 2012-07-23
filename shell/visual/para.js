@@ -161,7 +161,7 @@ Para.prototype.getCaretPos = function() {
 	var caret   = shell.caret;
 	var item    = shell.getSub('space', this.path, -2);
 	var doc     = item.$sub.doc;
-	var fs      = doc.getFont().size; // TODO use item
+	var fs      = doc.getFont(item).size;
 	var descend = fs * theme.bottombox;
 	var p       = this.locateOffset(shell.caret.sign.at1, shell.caret);
 
@@ -234,7 +234,7 @@ Para.prototype.getFlow = function() {
 				flow[line] = {a: [], y: y, o: ca.index};
 			} else {
 				// horizontal overflow
-				// console.log('HORIZONTAL OVERFLOW'); // TODO
+				// console.log('HORIZONTAL OVERFLOW'); // FIXME
 			}
 		}
 		flow[line].a.push({
@@ -316,44 +316,41 @@ Para.prototype.getLineXOffset = function(line, x) {
 | TODO change to multireturn.
 */
 Para.prototype.locateOffset = function(offset, flowPos$) {
-	// TODO cache position
+	// FIXME cache position
 	var twig = this.twig;
 	var doc  = shell.getSub('space', this.path, -1);
 	var font = doc.getFont();
 	var text = twig.text;
 	var flow = this.getFlow();
-	var a;
+	var a, aZ, lineN, tokenN;
 
-	// TODO improve loops
-	var al = flow.length - 1;
-	for (a = 1; a < flow.length; a++) {
-		if (flow[a].o > offset) {
-			al = a - 1;
-			break;
-		}
+	for (a = 1, aZ = flow.length, lineN = aZ - 1; a < aZ; a++) {
+		if (flow[a].o > offset)
+			{ lineN = a - 1; break; }
 	}
-	var line = flow[al];
+	var line = flow[lineN];
 
-	var at = line.a.length - 1;
-	for (a = 1; a < line.a.length; a++) {
-		if (line.a[a].o > offset) {
-			at = a - 1;
-			break;
-		}
+	for (a = 1, aZ = line.a.length, tokenN = aZ - 1; a < aZ; a++) {
+		if (line.a[a].o > offset)
+			{ tokenN = a - 1; break; }
 	}
-	var token = line.a[at];
-	if (!token) { token = { x: 0, o : 0 }; }
-
+	var token = line.a[tokenN];
 	if (flowPos$) {
-		flowPos$.flow$line  = al;
-		flowPos$.flow$token = at;
+		flowPos$.flow$line  = lineN;
+		flowPos$.flow$token = tokenN;
 	}
 
-	// TODO use token. text instead.
-	var px = ro(token.x + Euclid.Measure.width(font, text.substring(token.o, offset)));
-	var py = line.y;
-
-	return new Euclid.Point(px, py);
+	if (token) {
+		return new Euclid.Point(
+			ro(token.x + Euclid.Measure.width(font, text.substring(token.o, offset))),
+			line.y
+		);
+	} else {
+		return new Euclid.Point(
+			ro(Euclid.Measure.width(font, text)),
+			line.y
+		);
+	}
 };
 
 /**
