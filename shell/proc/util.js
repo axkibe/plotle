@@ -64,6 +64,7 @@ Util.login = function(panel) {
 			path : new Path(['LoginPanel', 'userI']),
 			at1  : user.length
 		});
+
 		return;
 	}
 
@@ -73,6 +74,7 @@ Util.login = function(panel) {
 			path : new Path(['LoginPanel', 'userI']),
 			at1  : 0
 		});
+
 		return;
 	}
 
@@ -82,6 +84,7 @@ Util.login = function(panel) {
 			path : new Path(['LoginPanel', 'passI']),
 			at1  : pass.length
 		});
+
 		return;
 	}
 

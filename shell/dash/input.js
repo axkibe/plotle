@@ -59,9 +59,7 @@ var Input = Dash.Input = function(twig, panel, inherit, name) {
 	var bezi = this.bezi = new Euclid.BeziRect(Euclid.Point.zero, pse.sub(pnw), 7, 3);
 
 	this._pitch  = new Euclid.Point(8, 3);
-	Jools.keyNonGrata(this, 'value'); // TODO remove
-
-	this._$value   = inherit ? inherit._$value : '';
+	this._$value = inherit ? inherit._$value : '';
 	this.$fabric = null;
 	this.$accent = Dash.Accent.NORMA;
 };
@@ -156,7 +154,6 @@ Input.prototype.draw = function(fabric, accent) {
 | Returns the point of a given offset.
 |
 | offset:   the offset to get the point from.
-| TODO rename
 */
 Input.prototype.locateOffset = function(offset) {
 	// TODO cache position
@@ -388,7 +385,7 @@ Input.prototype.specialKey = function(key) {
 };
 
 /**
-| TODO
+| Clears all caches
 */
 Input.prototype.poke = function() {
 	this.$fabric = null;
@@ -401,7 +398,6 @@ Input.prototype.poke = function() {
 Input.prototype.knock = function() {
 	this.$fabric = null;
 };
-
 
 /**
 | Mouse hover

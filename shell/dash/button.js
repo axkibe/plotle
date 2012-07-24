@@ -86,11 +86,7 @@ var Button = Dash.Button = function(twig, panel, inherit, name) {
 	this.$visible     = inherit ? inherit.$visible : true;
 	this.$captionText = inherit ? inherit.$captionText : twig.caption.text;
 	this.$accent      = Dash.Accent.NORMAL;
-
-	// TODO may change the design patterns to create font objects
-	//      right away.
-	this._captionFont = new Euclid.Font(twig.caption.font);}
-;
+};
 
 /**
 | Returns true if this component can focus.
@@ -113,14 +109,15 @@ Button.prototype._weave = function(accent) {
 	var fabric = this.$fabric;
 	if (fabric && this.$accent === accent && !config.debug.noCache) { return fabric; }
 
-	fabric = this.$fabric = new Euclid.Fabric(this.iframe);
+	fabric   = this.$fabric = new Euclid.Fabric(this.iframe);
+	var twig = this.twig;
 
 	var sname;
 	switch (accent) {
-	case Dash.Accent.NORMA : sname = this.twig.normaStyle; break;
-	case Dash.Accent.HOVER : sname = this.twig.hoverStyle; break;
-	case Dash.Accent.FOCUS : sname = this.twig.focusStyle; break;
-	case Dash.Accent.HOFOC : sname = this.twig.hofocStyle; break;
+	case Dash.Accent.NORMA : sname = twig.normaStyle; break;
+	case Dash.Accent.HOVER : sname = twig.hoverStyle; break;
+	case Dash.Accent.FOCUS : sname = twig.focusStyle; break;
+	case Dash.Accent.HOFOC : sname = twig.hofocStyle; break;
 	default : throw new Error('Invalid accent: ' + accent);
 	}
 
@@ -128,7 +125,7 @@ Button.prototype._weave = function(accent) {
 	if (!isnon(style)) { throw new Error('Invalid style: ' + sname); }
 	fabric.paint(style, this, 'gpath', Euclid.View.proper);
 
-	fabric.setFont(this._captionFont);
+	fabric.setFont(twig.caption.font);
 	fabric.fillText(this.$captionText, this.captionPos);
 
 	if (config.debug.drawBoxes) {
