@@ -66,14 +66,6 @@ var closeBXM = closeBW * magic / 2;
 var closeBYM = closeBH * magic / 2;
 
 /**
-| Forgot password control
-*/
-var forgotBW        = 110;
-var forgotBH        = 22;
-var forgotBXM       = forgotBW * magic;
-var forgotBYM       = forgotBH * magic;
-
-/**
 | Login Panel
 */
 var LoginPanel = Design.LoginPanel = { type   : 'Design' };
@@ -294,63 +286,6 @@ LoginPanel.layout = {
 
 			ranks : [ '1', '2', '3', '4', '5' ]
 		}
-	/* TODO
-	'forgotB'     : {
-		type       : 'Button',
-		style      : 'zero',
-		hoverStyle : 'zhighlight',
-		frame : {
-			type  : 'Frame',
-			pnw   : { type: 'Point', anchor: 'se', x: -240,            y: -10 - forgotBH },
-			pse   : { type: 'Point', anchor: 'se', x: -240 + forgotBW, y: -10 }
-		},
-		caption : {
-			type      : 'Label',
-			text      : 'forgot password?',
-			font      : getFont(12, 'cm'),
-			pos       : { type: 'Point', anchor: 'c', x:  0, y: 0 }
-		},
-		curve :  {
-			type : 'Curve',
-			copse : {
-			'1' : {
-				type : 'MoveTo',
-				to   : { type: 'Point', anchor:  'n', x:  0, y:  1 },
-				bx   :  0, by : 1
-			},
-			'2' : {
-				type : 'BeziTo',
-				to   :  { type: 'Point', anchor: 'e', x: -1, y:  0 },
-				c1x  :  forgotBXM, c1y :          0,
-				c2x  :          0, c2y : -forgotBYM,
-				bx   : -1, by:  0
-			},
-			'3' : {
-				type : 'BeziTo',
-				to   :  { type: 'Point', anchor: 's', x:  0, y: -1 },
-				c1x  :          0, c1y :  forgotBYM,
-				c2x  :  forgotBXM, c2y :          0,
-				bx   :  0, by: -1
-			},
-			'4' : {
-				type : 'BeziTo',
-				to   :  { type: 'Point', anchor: 'w', x:  1, y:  0 },
-				c1x  : -forgotBXM, c1y :         0,
-				c2x  :          0, c2y : forgotBYM,
-				bx   :  1, by:  0
-			},
-			'5' : {
-				type : 'BeziTo',
-				to   :  { type: 'Point', anchor: 'n', x:  0, y:  1 },
-				c1x  :          0, c1y : -forgotBYM,
-				c2x  : -forgotBXM, c2y :          0,
-				bx   :  0, by:  1
-			}},
-
-			ranks : [ '1', '2', '3', '4', '5' ]
-		}
-	}*/
-
 	}},
 
 	ranks : [

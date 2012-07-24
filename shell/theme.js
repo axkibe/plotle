@@ -111,7 +111,7 @@ theme = {
 		// inner margin to text
 		imargin  : { n: 1, e: 1, s: 1, w: 1 },
 
-		// offset for creation // TODO calculate dynamically
+		// offset for creation // FIXME calculate dynamically
 		createOffset : { x: 27, y: 12 }
 	},
 
@@ -213,21 +213,6 @@ theme = {
 				{ border: 0, width :   1, color : 'black' }
 			]
 		},
-
-		zero : {
-			edge : [ ]  // TODO allow to be left away
-		},
-
-		zhighlight : {
-			edge : [ ],
-			fill : {
-				gradient : 'horizontal',
-				steps : [
-					[0, 'rgb(255, 188, 88)' ],
-					[1, 'rgb(255,  99, 44)' ]
-				]
-			}
-		}
 	},
 
 	// switchpanel
@@ -409,7 +394,7 @@ theme = {
 		// inner margin to text
 		imargin  : { n: 1, e: 1, s: 1, w: 1 },
 
-		// offset for creation // TODO calculate dynamically
+		// offset for creation // FIXME calculate dynamically
 		createOffset : { x: 44, y: 12 }
 	}
 };
