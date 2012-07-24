@@ -573,13 +573,4 @@ Space.prototype.getSub = function(path, plen) {
 	return n;
 };
 
-/**
-| Returns the visual node the path points to.
-| TODO remove
-*/
-Space.prototype.get = function(path, plen) {
-	throw new Error('OOPS! Use getSub!');
-};
-
-
 })();
