@@ -116,10 +116,10 @@ Shell = function(fabric) {
 /**
 | Sets the caret position.
 */
-Shell.prototype.setCaret = function(visec, sign, retainx) {
-	switch (visec) {
+Shell.prototype.setCaret = function(section, sign, retainx) {
+	switch (section) {
 	case null :
-		if (sign !== null) { throw new Error('setCaret visec=null, invalid sign'); }
+		if (sign !== null) { throw new Error('setCaret section=null, invalid sign'); }
 		break;
 	case 'board'  :
 	case 'space' :
@@ -127,31 +127,31 @@ Shell.prototype.setCaret = function(visec, sign, retainx) {
 		case null   : break;
 		case Sign   : break;
 		case Object : sign = new Sign(sign); break;
-		default     : throw new Error('setCaret visec=' + visec + ', invalid sign');
+		default     : throw new Error('setCaret section=' + section + ', invalid sign');
 		}
 		break;
 	default :
-		throw new Error('invalid visec');
+		throw new Error('invalid section');
 	}
 
 	var entity;
 	if (this.caret.sign &&
-		(this.caret.visec !== visec || this.caret.sign.path !== sign.path)
+		(this.caret.section !== section || this.caret.sign.path !== sign.path)
 	) {
-		entity = this.getSub(this.caret.visec, this.caret.sign.path, 2);
+		entity = this.getSub(this.caret.section, this.caret.sign.path, 2);
 		if (entity)
 			{ entity.poke(); }
 	}
 
 	this.caret = new Caret(
-		visec,
+		section,
 		sign,
 		is(retainx) ? retainx : null,
 		this.caret.$shown
 	);
 
 	if (sign) {
-		entity = this.getSub(visec, sign.path, 2);
+		entity = this.getSub(section, sign.path, 2);
 		if (entity)
 			{ entity.poke(); }
 
@@ -196,7 +196,7 @@ Shell.prototype.update = function(tree, chgX) {
 	var shown = this.caret.$shown;
 	if (caret.sign !== null) {
 		this.setCaret(
-			caret.visec,
+			caret.section,
 			tfxSign(caret.sign, chgX),
 			caret.retainx
 		);
@@ -478,7 +478,7 @@ Shell.prototype.dragmove = function(p, shift, ctrl) {
 
 	var cursor = null;
 
-	switch ($action.visec) {
+	switch ($action.section) {
 	case 'board' :
 		cursor = this.$board.actionmove(p, shift, ctrl);
 		break;
@@ -506,7 +506,7 @@ Shell.prototype.dragstop = function(p, shift, ctrl) {
 	if (!$action)
 		{ throw new Error('no action on dragstop'); }
 
-	switch($action.visec) {
+	switch($action.section) {
 	case 'board' :
 		this.$board.actionstop(p, shift, ctrl);
 		break;
@@ -515,7 +515,7 @@ Shell.prototype.dragstop = function(p, shift, ctrl) {
 			{ this.$space.actionstop(p, shift, ctrl); }
 		break;
 	default :
-		throw new Error('unknown $action.visec');
+		throw new Error('unknown $action.section');
 	}
 
 	if (this.redraw)
@@ -547,7 +547,7 @@ Shell.prototype.specialKey = function(key, shift, ctrl) {
 		{ return; }
 
 	var caret  = this.caret;
-	switch (caret.visec) {
+	switch (caret.section) {
 	case 'board' :
 		this.$board.specialKey(key, shift, ctrl);
 		break;
@@ -556,7 +556,7 @@ Shell.prototype.specialKey = function(key, shift, ctrl) {
 		if (!this.$space) break;
 		this. $space.specialKey(key, shift, ctrl);
 		break;
-	default : throw new Error('invalid visec');
+	default : throw new Error('invalid section');
 	}
 
 	if (this.redraw)
@@ -573,11 +573,11 @@ Shell.prototype.input = function(text) {
 	if (this.selection.active) { this.selection.remove(); }
 
 	var caret  = this.caret;
-	switch (caret.visec) {
+	switch (caret.section) {
 	case null : break;
 	case 'board' : this.$board.input(text); break;
 	case 'space' : this.$space.input(text); break;
-	default : throw new Error('invalid visec');
+	default : throw new Error('invalid section');
 	}
 	if (this.redraw) this._draw();
 };
@@ -653,7 +653,7 @@ Shell.prototype.onload = function() {
 */
 Shell.prototype.moveToSpace = function(name) {
 	var self = this;
-	if (this.caret.visec === 'space') {
+	if (this.caret.section === 'space') {
 		this.setCaret(null, null);
 	}
 

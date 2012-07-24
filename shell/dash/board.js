@@ -113,7 +113,7 @@ Board.prototype.curPanel = function() {
 */
 Board.prototype.setCurPanel = function(panelName) {
 	var caret = shell.caret;
-	if (caret.visec === 'board' &&
+	if (caret.section === 'board' &&
 		caret.sign &&
 		caret.sign.path.get(0) === this.curPanelName)
 	{

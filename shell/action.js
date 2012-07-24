@@ -49,13 +49,13 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 | + key value list for additional params
 */
 Action = function(args) {
-	this.type  = args[0];
-	this.visec = args[1];
+	this.type    = args[0];
+	this.section = args[1];
 
-	switch (this.visec) {
+	switch (this.section) {
 	case 'space' : break;
 	case 'board' : break;
-	default      : throw new Error('invalid visec');
+	default      : throw new Error('invalid section');
 	}
 
 	for(var a = 2, aZ = args.length; a < aZ; a += 2) {

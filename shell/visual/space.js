@@ -114,7 +114,7 @@ Space.prototype.update = function(tree, chgX) {
 	var caret = shell.caret;
 	var csign = caret.sign;
 
-	if (caret.visec === 'space' &&
+	if (caret.section === 'space' &&
 		csign && csign.path &&
 		csign.path.get(0) === this.$key &&
 		!isnon(g[csign.path.get(1)])
@@ -133,7 +133,7 @@ Space.prototype.update = function(tree, chgX) {
 */
 Space.prototype.focusedItem = function() {
 	var caret = shell.caret;
-	if (caret.visec !== 'space') { return null; }
+	if (caret.section !== 'space') { return null; }
 	return this.getSub(caret.sign.path, 2);
 };
 

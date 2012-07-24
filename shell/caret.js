@@ -73,16 +73,14 @@ var log           = Jools.log;
 /**
 | Constructor.
 */
-Caret = function(visec, sign, retainx, shown) {
+Caret = function(section, sign, retainx, shown) {
 	// the section the caret is in
 	//   space or board.
-	this.visec = visec;
+	this.section = section;
 
-	// if visec === space:
-	//     a signature pointing to the item the caret is in
-	//
-	// if visec === board:
-	//     the panel and the component
+	// when section is
+	// space: a signature pointing to the item the caret is in
+	// board: the panel and the component
 	this.sign = sign;
 
 	// x position to retain when using up/down keys.
@@ -142,10 +140,10 @@ Caret.prototype.display = function() {
 
 	// draws new
 	if (this.$shown && !this.$blinked && this.sign) {
-		switch(this.visec) {
+		switch(this.section) {
 		case 'space' : shell.$space.drawCaret();  break;
 		case 'board' : shell.$board.drawCaret(); break;
-		default : throw new Error('invalid visec');
+		default : throw new Error('invalid section');
 		}
 	}
 };

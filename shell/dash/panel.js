@@ -81,6 +81,7 @@ var Panel = Dash.Panel = function(name, inherit, board, screensize) {
 
 /**
 | Creates a new component.
+| TODO RENAME
 */
 Panel.prototype.newCC = function(twig, inherit, name) {
 	if (twig.code && twig.code !== '') {
@@ -103,11 +104,12 @@ Panel.prototype.newCC = function(twig, inherit, name) {
 
 /**
 | Returns the focused item.
+| TODO RENAME
 */
 Panel.prototype.focusedCC = function() {
 	var caret = shell.caret;
 
-	if (caret.visec !== 'board')
+	if (caret.section !== 'board')
 		{ return null; }
 
 	var sign = caret.sign;
