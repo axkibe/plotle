@@ -286,6 +286,7 @@ Server.prototype.addResources = function() {
 		'shell/euclid/view.js',                             'fb',
 		'shared/meshverse.js',                              'fb',
 		'shared/path.js',                                   'fb',
+		'shared/twig.js',                                   'fb',
 		'shared/tree.js',                                   'fb',
 		'shared/sign.js',                                   'fb',
 		'shared/change.js',                                 'fb',
