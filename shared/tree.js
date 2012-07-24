@@ -47,19 +47,12 @@ if (typeof (window) === 'undefined') {
 	Path   = require('./path');
 }
 
-var copy         = Jools.copy;
-var	debug        = Jools.debug;
-var immute       = Jools.immute;
 var	is           = Jools.is;
 var	isnon        = Jools.isnon;
-var isArray      = Jools.isArray;
 var	isInteger    = Jools.isInteger;
 var	isString     = Jools.isString;
 var lazyFixate   = Jools.lazyFixate;
-var	log          = Jools.log;
 var	reject       = Jools.reject;
-var uid          = Jools.uid;
-var isPath       = Path.isPath;
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,--,--'
@@ -69,7 +62,7 @@ var isPath       = Path.isPath;
 ~ ~ ~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
                `'
  The base of all meshcraft-nodes.
-
+ TODO make seperate file
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 var Twig = function () { };
@@ -79,7 +72,7 @@ var Twig = function () { };
 */
 Twig.prototype.rankOf = function(key) {
 	var ranks = this.ranks;
-	if (!isArray(ranks)) { throw new Error('twig has no ranks'); }
+	if (!Jools.isArray(ranks)) { throw new Error('twig has no ranks'); }
 	if (!isString(key))  { throw new Error('key no string'); }
 
 	// check rank of cache
@@ -106,7 +99,7 @@ lazyFixate(Twig.prototype, 'length', function() {
 | Creates a new unique identifier
 */
 Twig.prototype.newUID = function() {
-	var u = uid();
+	var u = Jools.uid();
 	return (!is(this.copse[u])) ? u : this.newUID();
 };
 
@@ -170,15 +163,15 @@ Tree.prototype.grow = function(model /*, ... */) {
 	var twig, k, k1, k2, val, vtype;
 	var ttype = twigtype(model);
 
-	log('grow', ttype, arguments);
+	Jools.log('grow', ttype, arguments);
 
 	var pattern = this.pattern[ttype];
 	if (!pattern) throw reject('cannot grow type: '+ttype);
 
 	// copies the model
-	twig = copy(model, new Twig());
+	twig = Jools.copy(model, new Twig());
 
-	if (pattern.copse) twig.copse = model.copse ? copy(model.copse, {}) : {};
+	if (pattern.copse) twig.copse = model.copse ? Jools.copy(model.copse, {}) : {};
 	if (pattern.ranks) twig.ranks = model.ranks ? model.ranks.slice()   : [];
 
 	// applies changes specified by the arguments
@@ -351,14 +344,14 @@ Tree.prototype.grow = function(model /*, ... */) {
 	// marks the object to be fine
 	Object.defineProperty(twig, '_$grown', { value : true });
 
-	return immute(twig);
+	return Jools.immute(twig);
 };
 
 /**
 | Gets the node a path leads to.
 */
 Tree.prototype.getPath = function(path, shorten) {
-	if (!isPath(path)) throw new Error('getPath not a path.');
+	if (!Path.isPath(path)) throw new Error('getPath not a path.');
 
 	if (shorten < 0) shorten += path.length;
 	if (shorten < 0) throw new Error('getPath invalid shorten');
@@ -381,7 +374,7 @@ Tree.prototype.getPath = function(path, shorten) {
 | Returns a tree where the node pointed by path is replaced by val.
 */
 Tree.prototype.setPath = function(path, val, shorten) {
-	if (!isPath(path)) throw new Error('Tree.get no path');
+	if (!Path.isPath(path)) throw new Error('Tree.get no path');
 
 	if (shorten < 0) shorten += path.length;
 	if (shorten < 0) throw new Error('getPath invalid shorten');

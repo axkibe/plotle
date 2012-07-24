@@ -122,7 +122,7 @@ Doc.prototype.update = function(twig) {
 | scrollp: scroll position
 */
 Doc.prototype.draw = function(fabric, view, width, imargin, scrollp) {
-	// TODO <pre>
+	// FIXME <pre>
 	var paraSep = this.getParaSep();
 	var select = shell.selection;
 
@@ -249,14 +249,14 @@ Doc.prototype.getFont = function(item) {
 Doc.prototype.getParaAtPoint = function(p) {
 	var twig = this.twig;
 	var $sub = this.$sub;
+	var pnws = this.pnws;
 
 	for(var r = 0, rZ = twig.length; r < rZ; r++) {
-		// TODO beautify
-		var k = twig.ranks[r];
+		var k     = twig.ranks[r];
 		var vpara = $sub[k];
-		var flow = vpara.getFlow();
-		var pnw = this.pnws[k];
-		if (p.y < pnw.y + flow.height) return vpara;
+		var pnw   = pnws[k];
+		if (p.y < pnws[k].y + vpara.getFlow().height)
+			{ return vpara; }
 	}
 	return null;
 };

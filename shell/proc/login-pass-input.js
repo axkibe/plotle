@@ -51,7 +51,7 @@ Jools.subclass(LoginPassInput, Dash.Input);
 /**
 | Password input field
 */
-LoginPassInputL.prototype.keyEnter = function() {
+LoginPassInput.prototype.keyEnter = function() {
 	Proc.Util.login(this.panel);
 };
 

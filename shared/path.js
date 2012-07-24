@@ -40,21 +40,13 @@ var Path;
 */
 (function () {
 "use strict";
-if (typeof (window) === 'undefined') { Jools  = require('./jools'); }
 
-var copy         = Jools.copy;
-var	debug        = Jools.debug;
-var fixate       = Jools.fixate;
-var immute       = Jools.immute;
-var innumerable  = Jools.innumerable;
-var	is           = Jools.is;
-var	isnon        = Jools.isnon;
-var	isInteger    = Jools.isInteger;
-var	isString     = Jools.isString;
-var lazyFixate   = Jools.lazyFixate;
-var log          = Jools.log;
-var	reject       = Jools.reject;
-var	subclass     = Jools.subclass;
+/**
+| Node imports.
+*/
+if (typeof (window) === 'undefined') {
+	Jools  = require('./jools');
+}
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  .-,--.     .  .
@@ -121,8 +113,8 @@ Path = function(model) {
 	}
 
 	Object.freeze(path);
-	innumerable(this, '_path', path);
-	immute(this);
+	Jools.innumerable(this, '_path', path);
+	Jools.immute(this);
 };
 
 /**
@@ -136,7 +128,7 @@ Path.isPath = function(o) {
 | Returns true is arc is a valid path arc.
 */
 var checkValidPathArc = function(arc) {
-	if (!isString(arc))
+	if (!Jools.isString(arc))
 		{ throw new Error('Path arc not a string'); }
 
 	if (arc[0] === '_')
@@ -188,7 +180,7 @@ Path.prototype.equals = function(o) {
 | [len]: the length of this path to consider.
 */
 Path.prototype.subPathOf = function(o, len) {
-	if (!is(len)) {
+	if (!Jools.is(len)) {
 		len  = this._path.length;
 	} else {
 		if (len < 0) len += this._path.length;
