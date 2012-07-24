@@ -270,7 +270,7 @@ Item.prototype.dragstart = function(view, p, shift, ctrl, access) {
 	if (sbary && sbary.within(view, p)) {
 		shell.startAction(
 			Action.SCROLLY, 'space',
-			'itemPath', this.path,
+			'itemPath', this.$path,
 			'start',    p,
 			'startPos', sbary.getPos()
 		);
@@ -286,7 +286,7 @@ Item.prototype.dragstart = function(view, p, shift, ctrl, access) {
 		// relation binding
 		shell.startAction(
 			Action.RELBIND, 'space',
-			'itemPath', this.path,
+			'itemPath', this.$path,
 			'start',    p,
 			'move',     p
 		);
@@ -302,7 +302,7 @@ Item.prototype.dragstart = function(view, p, shift, ctrl, access) {
 	if (access == 'rw') {
 		shell.startAction(
 			Action.ITEMDRAG, 'space',
-			'itemPath', this.path,
+			'itemPath', this.$path,
 			'start', vp,
 			'move',  vp
 		);
@@ -324,7 +324,7 @@ Item.prototype.actionmove = function(view, p, shift, ctrl) {
 	case Action.RELBIND    :
 		if (!this.getZone().within(vp)) return false;
 		$action.move = p;
-		$action.item2Path = this.path;
+		$action.item2Path = this.$path;
 		shell.redraw = true;
 		return true;
 	case Action.ITEMDRAG   :
@@ -358,7 +358,7 @@ Item.prototype.actionstop = function(view, p) {
 	switch ($action.type) {
 	case Action.RELBIND :
 		if (!this.getZone().within(vp)) return false;
-		var $space = shell.getSub('space', this.path, -1);
+		var $space = shell.getSub('space', this.$path, -1);
 		Visual.Relation.create($space, $space.getSub($action.itemPath), this);
 		shell.redraw = true;
 		return true;
@@ -405,7 +405,7 @@ Item.prototype.click = function(view, p) {
 
 	var para = this.getParaAtPoint(pi);
 	if (para) {
-		var ppnw   = this.$sub.doc.getPNW(para.key);
+		var ppnw   = this.$sub.doc.getPNW(para.$key);
 		var at1    = para.getPointOffset(pi.sub(ppnw));
 		var caret  = shell.caret;
 

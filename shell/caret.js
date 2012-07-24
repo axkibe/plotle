@@ -80,6 +80,7 @@ Caret = function(visec, sign, retainx, shown) {
 
 	// if visec === space:
 	//     a signature pointing to the item the caret is in
+	//
 	// if visec === board:
 	//     the panel and the component
 	this.sign = sign;

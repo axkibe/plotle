@@ -51,8 +51,9 @@ var is = Jools.is;
 */
 var Base = Visual.Base = function(twig, path) {
 	this.twig = twig;
-	this.path = path;         // TODO
-	this.key  = path.get(-1); // TODO
+
+	this.$path = path;
+	this.$key  = path.get(-1);
 	this.$sub = null;
 };
 

@@ -69,13 +69,12 @@ var Doc = Visual.Doc = function(twig, path) {
 	if (this.$sub !== null) { throw new Error('iFail'); }
 	var $sub = this.$sub = [];
 
-	this.pnws = null;
+	this._$pnws = null;
 
 	var ranks = twig.ranks;
 	var copse = twig.copse;
 	for (var r = 0, rZ = twig.length; r < rZ; r++) {
 		var k = ranks[r];
-		// TODO reuse path
 		$sub[k] = new Para(copse[k], new Path(path, '++', k));
 	}
 };
@@ -105,7 +104,7 @@ Doc.prototype.update = function(twig) {
 			}
 			$sub[k] = o;
 		} else {
-			o = new Para(s, new Path(this.path, '++', k));
+			o = new Para(s, new Path(this.$path, '++', k));
 			o.update(s);
 			$sub[k] = o;
 		}
@@ -127,7 +126,7 @@ Doc.prototype.draw = function(fabric, view, width, innerMargin, scrollp) {
 	var select = shell.selection;
 
 	// draws the selection
-	if (select.active && this.path.subPathOf(select.sign1.path)) {
+	if (select.active && this.$path.subPathOf(select.sign1.path)) {
 		fabric.paint(
 			theme.selection.style,
 			this,
@@ -154,7 +153,7 @@ Doc.prototype.draw = function(fabric, view, width, innerMargin, scrollp) {
 		vpara.draw(fabric, view, view.point(p));
 		y += flow.height + paraSep;
 	}
-	this.pnws = pnws;   // north-west points of paras
+	this._$pnws = pnws;   // north-west points of paras
 };
 
 /**
@@ -167,7 +166,7 @@ Doc.prototype.knock = function() {
 };
 
 Doc.prototype.getPNW = function(key) {
-	return this.pnws[key];
+	return this._$pnws[key];
 };
 
 /**
@@ -209,7 +208,7 @@ Doc.prototype.getSpread = function() {
 Doc.prototype.getParaSep = function(item) {
 
 	if (!is(item))
-		{ item = shell.$space.getSub(this.path, -1); }
+		{ item = shell.$space.getSub(this.$path, -1); }
 
 	var fs = this.getFont().size;
 	return item.getParaSep(fs);
@@ -223,7 +222,7 @@ Doc.prototype.getFont = function(item) {
 
 	// caller can provide item for performance optimization
 	if (!is(item))
-		{ item = shell.$space.getSub(this.path, -1); }
+		{ item = shell.$space.getSub(this.$path, -1); }
 
 	var fs = item.twig.fontsize;
 	if (item.fontSizeChange)
@@ -247,15 +246,15 @@ Doc.prototype.getFont = function(item) {
 | Returns the paragraph at point
 */
 Doc.prototype.getParaAtPoint = function(p) {
-	var twig = this.twig;
-	var $sub = this.$sub;
-	var pnws = this.pnws;
+	var twig  = this.twig;
+	var $sub  = this.$sub;
+	var $pnws = this._$pnws;
 
 	for(var r = 0, rZ = twig.length; r < rZ; r++) {
 		var k     = twig.ranks[r];
 		var vpara = $sub[k];
-		var pnw   = pnws[k];
-		if (p.y < pnws[k].y + vpara.getFlow().height)
+		var pnw   = $pnws[k];
+		if (p.y < $pnws[k].y + vpara.getFlow().height)
 			{ return vpara; }
 	}
 	return null;

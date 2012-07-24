@@ -69,8 +69,10 @@ var Para = Visual.Para = function(twig, path) {
 		{ throw new Error('type error'); }
 
 	this.twig = twig;
-	this.path = path;
-	this.key  = path.get(-1);
+
+	// TODO make this child of Base
+	this.$path = path;
+	this.$key  = path.get(-1);
 
 	// caching
 	this.$fabric = null;
@@ -84,7 +86,7 @@ var Para = Visual.Para = function(twig, path) {
 Para.prototype.draw = function(fabric, view, pnw) {
 	var flow   = this.getFlow();
 	var width  = flow.spread * view.zoom;
-	var doc    = shell.getSub('space', this.path, -1);
+	var doc    = shell.getSub('space', this.$path, -1);
 	var height = this.getHeight() * view.zoom;
 	var $f     = this.$fabric;
 
@@ -124,11 +126,11 @@ Para.prototype.draw = function(fabric, view, pnw) {
 */
 Para.prototype.drawCaret = function(view) {
 	var caret = shell.caret;
-	var item  = shell.getSub('space', this.path, -2);
+	var item  = shell.getSub('space', this.$path, -2);
 	var doc   = item.$sub.doc;
 	var zone  = item.getZone();
 	var cpos  = caret.$pos  = this.getCaretPos();
-	var pnw   = doc.getPNW(this.key);
+	var pnw   = doc.getPNW(this.$key);
 	var sbary = item.scrollbarY;
 	var sy    = sbary ? ro(sbary.getPos()) : 0;
 
@@ -159,7 +161,7 @@ Para.prototype.drawCaret = function(view) {
 */
 Para.prototype.getCaretPos = function() {
 	var caret   = shell.caret;
-	var item    = shell.getSub('space', this.path, -2);
+	var item    = shell.getSub('space', this.$path, -2);
 	var doc     = item.$sub.doc;
 	var fs      = doc.getFont(item).size;
 	var descend = fs * theme.bottombox;
@@ -181,7 +183,7 @@ Para.prototype.getCaretPos = function() {
 | (re)flows the paragraph, positioning all chunks.
 */
 Para.prototype.getFlow = function() {
-	var item      = shell.getSub('space', this.path, -2);
+	var item      = shell.getSub('space', this.$path, -2);
 	var doc       = item.$sub.doc;
 	var flowWidth = item.getFlowWidth();
 	var font      = doc.getFont(item);
@@ -195,12 +197,12 @@ Para.prototype.getFlow = function() {
 		flow.fontsize  === font.size
 	) return flow;
 
+	/* TODO FIX!
 	if (shell.caret.path && shell.caret.path.equals(this.path)) {
 		// remove caret cache if its within this flow.
-		// TODO change
 		shell.caret.cp$line  = null;
 		shell.caret.cp$token = null;
-	}
+	}*/
 
 	// builds position informations.
 	flow  = this.$flow = [];
@@ -260,7 +262,7 @@ Para.prototype.getFlow = function() {
 */
 Para.prototype.getHeight = function() {
 	var flow = this.getFlow();
-	var doc = shell.getSub('space', this.path, -1);
+	var doc = shell.getSub('space', this.$path, -1);
 
 	return flow.height + ro(doc.getFont().size * theme.bottombox);
 };
@@ -269,7 +271,7 @@ Para.prototype.getHeight = function() {
 | Returns the offset by an x coordination in a flow.
 */
 Para.prototype.getLineXOffset = function(line, x) {
-	var item   = shell.getSub('space', this.path, -2);
+	var item   = shell.getSub('space', this.$path, -2);
 	var doc    = item.$sub.doc;
 	var font   = doc.getFont(item);
 
@@ -318,7 +320,7 @@ Para.prototype.getLineXOffset = function(line, x) {
 Para.prototype.locateOffset = function(offset, flowPos$) {
 	// FIXME cache position
 	var twig = this.twig;
-	var doc  = shell.getSub('space', this.path, -1);
+	var doc  = shell.getSub('space', this.$path, -1);
 	var font = doc.getFont();
 	var text = twig.text;
 	var flow = this.getFlow();
@@ -361,7 +363,7 @@ Para.prototype.locateOffset = function(offset, flowPos$) {
 Para.prototype.getPointOffset = function(point) {
 	var flow = this.getFlow();
 	var para = this.para;
-	var doc  = shell.getSub('space', this.path, -1);
+	var doc  = shell.getSub('space', this.$path, -1);
 	var font = doc.getFont();
 
 	var line;
@@ -382,7 +384,7 @@ Para.prototype.getPointOffset = function(point) {
 Para.prototype.input = function(text) {
     var reg   = /([^\n]+)(\n?)/g;
 	var para  = this;
-	var item  = shell.getSub('space', para.path, -2);
+	var item  = shell.getSub('space', para.$path, -2);
 	var doc   = item.$sub.doc;
 
     for(var rx = reg.exec(text); rx !== null; rx = reg.exec(text)) {
@@ -390,7 +392,7 @@ Para.prototype.input = function(text) {
 		shell.peer.insertText(para.textPath(), shell.caret.sign.at1, line);
         if (rx[2]) {
 			shell.peer.split(para.textPath(), shell.caret.sign.at1);
-			para = doc.atRank(doc.twig.rankOf(para.key) + 1);
+			para = doc.atRank(doc.twig.rankOf(para.$key) + 1);
 		}
     }
 	item.scrollCaretIntoView();
@@ -405,7 +407,7 @@ Para.prototype.keyBackspace = function(item, doc, caret) {
 		return true;
 	}
 
-	var r = doc.twig.rankOf(this.key);
+	var r = doc.twig.rankOf(this.$key);
 	if (r > 0) {
 		var ve = doc.atRank(r - 1);
 		shell.peer.join(ve.textPath(), ve.twig.text.length);
@@ -424,7 +426,7 @@ Para.prototype.keyDel = function(item, doc, caret) {
 		return true;
 	}
 
-	var r = doc.twig.rankOf(this.key);
+	var r = doc.twig.rankOf(this.$key);
 	if (r < doc.twig.length - 1) {
 		shell.peer.join(this.textPath(), this.twig.text.length);
 		return true;
@@ -456,7 +458,7 @@ Para.prototype.keyDown = function(item, doc, caret) {
 	}
 
 	// goto next para
-	var r = doc.twig.rankOf(this.key);
+	var r = doc.twig.rankOf(this.$key);
 	if (r < doc.twig.length - 1) {
 		var ve = doc.atRank(r + 1);
 		at1 = ve.getLineXOffset(0, x);
@@ -515,7 +517,7 @@ Para.prototype.keyLeft = function(item, doc, caret) {
 		return true;
 	}
 
-	var r = doc.twig.rankOf(this.key);
+	var r = doc.twig.rankOf(this.$key);
 	if (r > 0) {
 		var ve = doc.atRank(r - 1);
 		shell.setCaret(
@@ -537,7 +539,7 @@ Para.prototype.keyPos1 = function(item, doc, caret) {
 	if (caret.at1 === 0)
 		{ return false; }
 
-	var r = doc.twig.rankOf(this.key);
+	var r = doc.twig.rankOf(this.$key);
 	shell.setCaret(
 		'space',
 		{
@@ -564,7 +566,7 @@ Para.prototype.keyRight = function(item, doc, caret) {
 		return true;
 	}
 
-	var r = doc.twig.rankOf(this.key);
+	var r = doc.twig.rankOf(this.$key);
 	if (r < doc.twig.length - 1) {
 		var ve = doc.atRank(r + 1);
 
@@ -603,7 +605,7 @@ Para.prototype.keyUp = function(item, doc, caret) {
 		return true;
 	}
 	// goto prev para
-	var r = doc.twig.rankOf(this.key);
+	var r = doc.twig.rankOf(this.$key);
 	if (r > 0) {
 		var ve = doc.atRank(r - 1);
 		at1 = ve.getLineXOffset(ve.getFlow().length - 1, x);
@@ -637,7 +639,7 @@ Para.prototype.specialKey = function(key, shift, ctrl) {
 	var caret  = shell.caret;
 	var para   = this.para;
 	var select = shell.selection;
-	var item   = shell.getSub('space', this.path, -2);
+	var item   = shell.getSub('space', this.$path, -2);
 	var doc    = item.$sub.doc;
 
 	// if true the caret moved or the selection changed
@@ -747,7 +749,7 @@ Para.prototype.specialKey = function(key, shift, ctrl) {
 */
 Para.prototype.textPath = function() {
 	if (this._textPath) return this._textPath;
-	return (this._textPath = new Path(this.path, '++', 'text'));
+	return (this._textPath = new Path(this.$path, '++', 'text'));
 };
 
 /**

@@ -117,12 +117,9 @@ Label.prototype.draw = function(fabric, view) {
 		view.zoom !== f.$zoom)
 	{
 		f = this.$fabric = new Euclid.Fabric(zone.width, zone.height);
-		f.$zoom     = view.zoom;
-		var doc     = this.$sub.doc;
-		var imargin = this.innerMargin;
-
-		// resizes the canvas, TODO needed?
-		f.reset(zone);
+		f.$zoom       = view.zoom;
+		var doc       = this.$sub.doc;
+		var imargin   = this.innerMargin;
 		var silhoutte = this.getSilhoutte(zone, true);
 
 		// draws selection and text
@@ -148,7 +145,7 @@ Label.prototype.getFlowWidth = function() {
 Label.prototype.fontSizeChange = function(fontsize) {
 	var $action = shell.$action;
 
-	if (!$action || !this.path.equals($action.itemPath))
+	if (!$action || !this.$path.equals($action.itemPath))
 		{ return fontsize; }
 
 	switch ($action.type) {
@@ -191,16 +188,16 @@ Label.prototype.getZone = function() {
 	var $action = shell.$action;
 	var pnw = this.twig.pnw;
 
-	// TODO Caching!
+	// FIXME Caching!
 	var doc    = this.$sub.doc;
 	var fs     = doc.getFont().size;
 	var width  = Math.max(Math.ceil(doc.getSpread()), Math.round(fs * 0.3));
 	var height = Math.max(Math.ceil(doc.getHeight()), Math.round(fs));
 
-	if (!$action || !this.path.equals($action.itemPath))
+	if (!$action || !this.$path.equals($action.itemPath))
 		{ return new Euclid.Rect(pnw, pnw.add(width, height)); }
 
-	// TODO cache the last zone
+	// FIXME cache the last zone
 
 	switch ($action.type) {
 	case Action.ITEMDRAG:
@@ -240,10 +237,10 @@ Label.prototype.actionstop = function(view, p) {
 		var fontsize = this.$sub.doc.getFont().size;
 
 		if (!this.twig.pnw.eq(zone.pnw)) {
-			shell.peer.setPNW(this.path, zone.pnw);
+			shell.peer.setPNW(this.$path, zone.pnw);
 		}
 		if (fontsize !== this.twig.fontsize) {
-			shell.peer.setFontSize(this.path, fontsize);
+			shell.peer.setFontSize(this.$path, fontsize);
 		}
 
 		shell.redraw = true;

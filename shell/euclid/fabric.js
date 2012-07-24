@@ -472,6 +472,8 @@ Fabric.prototype.edge = function(style, shape, path, view, a1, a2, a3, a4) {
 };
 
 
+// TODO rename path to sketch so it isnt confused
+
 /**
 | Fills an aera and draws its borders
 */

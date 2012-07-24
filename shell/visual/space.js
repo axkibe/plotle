@@ -87,7 +87,7 @@ subclass(Space, Base);
 | Updates v-vine to match a new twig.
 */
 Space.prototype.update = function(tree, chgX) {
-	var twig = tree.root.copse[this.key];
+	var twig = tree.root.copse[this.$key];
 
 	// no change?
 	if (this.twig === twig) { return; }
@@ -116,7 +116,7 @@ Space.prototype.update = function(tree, chgX) {
 
 	if (caret.visec === 'space' &&
 		csign && csign.path &&
-		csign.path.get(0) === this.key &&
+		csign.path.get(0) === this.$key &&
 		!isnon(g[csign.path.get(1)])
 	) {
 		if (shell.selection.active &&
@@ -141,12 +141,12 @@ Space.prototype.focusedItem = function() {
 | Creates a new visual representation of an item.
 */
 Space.prototype.createItem = function(twig, k) {
-	var ipath = new Path(this.path, '++', k);
+	var $path = new Path(this.$path, '++', k);
 	switch (twig.type) {
-	case 'Note'     : return new Note    (twig, ipath, this);
-	case 'Label'    : return new Label   (twig, ipath, this);
-	case 'Relation' : return new Relation(twig, ipath, this);
-	default : throw new Error('unknown type: '+twig.type);
+	case 'Note'     : return new Note    (twig, $path, this);
+	case 'Label'    : return new Label   (twig, $path, this);
+	case 'Relation' : return new Relation(twig, $path, this);
+	default : throw new Error('unknown type: ' + twig.type);
 	}
 };
 
@@ -214,7 +214,7 @@ Space.prototype.setFocus = function(item) {
 		);
 
 		caret.show();
-		shell.peer.moveToTop(item.path);
+		shell.peer.moveToTop(item.$path);
 	} else {
 		shell.setCaret(null, null);
 	}
@@ -293,7 +293,7 @@ Space.prototype.dragstart = function(p, shift, ctrl) {
 		var dp = $view.depoint(p);
 		shell.startAction(
 			Action.RELBIND, 'space',
-			'itemPath', focus.path,
+			'itemPath', focus.$path,
 			'start',    dp,
 			'move',     dp
 		);
@@ -454,14 +454,14 @@ Space.prototype.floatMenuSelect = function(entry, p) {
 		var nh = theme.note.newHeight;
 		var dp = $view.depoint(p);
 		pnw = dp.sub(half(nw) , half(nh));
-		key = shell.peer.newNote(this.path, new Euclid.Rect(pnw, pnw.add(nw, nh)));
+		key = shell.peer.newNote(this.$path, new Euclid.Rect(pnw, pnw.add(nw, nh)));
 		this.setFocus(this.$sub[key]);
 		break;
 	case 'ne' :
 		// label
 		pnw = $view.depoint(p);
 		pnw = pnw.sub(theme.label.createOffset);
-		key = shell.peer.newLabel(this.path, pnw, 'Label', 20);
+		key = shell.peer.newLabel(this.$path, pnw, 'Label', 20);
 		this.setFocus(this.$sub[key]);
 		break;
 	}
@@ -474,7 +474,7 @@ Space.prototype.itemMenuSelect = function(entry, p, focus) {
 	switch(entry) {
 	case 'n': // remove
 		this.setFocus(null);
-		shell.peer.removeItem(focus.path);
+		shell.peer.removeItem(focus.$path);
 		break;
 	}
 };
@@ -501,7 +501,7 @@ Space.prototype.mousedown = function(p, shift, ctrl) {
 			var dp = $view.depoint(p);
 			$action = shell.startAction(
 				Action.ITEMRESIZE, 'space',
-				'itemPath', focus.path,
+				'itemPath', focus.$path,
 				'start',    dp,
 				'move',     dp
 			);
@@ -563,8 +563,8 @@ Space.prototype.getSub = function(path, plen) {
 	else if (plen < 0)
 		{ plen += path.length; }
 
-	if (path.get(0) !== this.key)
-		{ throw new Error('path not in this space', path.get(0), '!=', this.key); }
+	if (path.get(0) !== this.$key)
+		{ throw new Error('path not in this space', path.get(0), '!=', this.$key); }
 
 	var n = this;
 	for (var a = 1; a < plen; a++)
