@@ -115,13 +115,13 @@ Doc.prototype.update = function(twig) {
 /**
 | Draws the document on a fabric.
 |
-| fabric:  to draw upon
-| view:    current pan/zoom/motion
-| width:   the width to draw the document with.
-| imargin: distance of text to edge
-| scrollp: scroll position
+| fabric:      to draw upon
+| view:        current pan/zoom/motion
+| width:       the width to draw the document with.
+| innerMargin: distance of text to edge
+| scrollp:     scroll position
 */
-Doc.prototype.draw = function(fabric, view, width, imargin, scrollp) {
+Doc.prototype.draw = function(fabric, view, width, innerMargin, scrollp) {
 	// FIXME <pre>
 	var paraSep = this.getParaSep();
 	var select = shell.selection;
@@ -134,12 +134,12 @@ Doc.prototype.draw = function(fabric, view, width, imargin, scrollp) {
 			'pathSelection',
 			view,
 			width,
-			imargin,
+			innerMargin,
 			scrollp
 		);
 	}
 
-	var y = imargin.n;
+	var y = innerMargin.n;
 	var pnws = {};   // north-west points of paras
 
 	// draws the paragraphs
@@ -148,8 +148,8 @@ Doc.prototype.draw = function(fabric, view, width, imargin, scrollp) {
 		var vpara = this.atRank(r);
 		var flow = vpara.getFlow();
 
-		pnws[twig.ranks[r]] = new Euclid.Point(imargin.w, ro(y));
-		var p = new Euclid.Point(imargin.w, ro(y - scrollp.y));
+		pnws[twig.ranks[r]] = new Euclid.Point(innerMargin.w, ro(y));
+		var p = new Euclid.Point(innerMargin.w, ro(y - scrollp.y));
 
 		vpara.draw(fabric, view, view.point(p));
 		y += flow.height + paraSep;
@@ -264,13 +264,13 @@ Doc.prototype.getParaAtPoint = function(p) {
 /**
 | Paths a selection
 |
-| fabric  : the fabric to path for
-| border  : width of the path (ignored)
-| width   : width the vdoc is drawn
-| imargin : inner margin of the doc
-| scrollp : scroll position of the doc.
+| fabric      : the fabric to path for
+| border      : width of the path (ignored)
+| width       : width the vdoc is drawn
+| innerMargin : inner margin of the doc
+| scrollp     : scroll position of the doc.
 */
-Doc.prototype.pathSelection = function(fabric, border, twist, view, width, imargin, scrollp) {
+Doc.prototype.pathSelection = function(fabric, border, twist, view, width, innerMargin, scrollp) {
 	var select = shell.selection;
 	select.normalize();
 
@@ -297,8 +297,8 @@ Doc.prototype.pathSelection = function(fabric, border, twist, view, width, imarg
 	var fontsize = this.getFont().size;
 	var descend = ro(fontsize * theme.bottombox);
 	var  ascend = ro(fontsize);
-	var rx = width - imargin.e;
-	var lx = imargin.w;
+	var rx = width - innerMargin.e;
+	var lx = innerMargin.w;
 	if ((abs(p2.y - p1.y) < 2)) {
 		// ***
 		fabric.moveTo(p1.x, p1.y + descend, view);

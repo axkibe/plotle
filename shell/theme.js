@@ -75,8 +75,7 @@ theme = {
 		newWidth  : 300,
 		newHeight : 150,
 
-		// inner margin to text
-		imargin  : { n: 4, e: 5, s: 4, w: 5 },
+		innerMargin  : { n: 4, e: 5, s: 4, w: 5 },
 
 		style : {
 			fill : {
@@ -108,8 +107,7 @@ theme = {
 			highlight : [ { border: 0, width: 3, color: 'rgba(255, 183, 15, 0.5)' } ]
 		},
 
-		// inner margin to text
-		imargin  : { n: 1, e: 1, s: 1, w: 1 },
+		innerMargin  : { n: 1, e: 1, s: 1, w: 1 },
 
 		// offset for creation // FIXME calculate dynamically
 		createOffset : { x: 27, y: 12 }
@@ -355,9 +353,6 @@ theme = {
 		// minimum height
 		minSize  : 12,
 
-		// distance from text
-		imarginw :  2,
-
 		// vertical distance from border of note
 		vdis : 5
 	},
@@ -391,8 +386,7 @@ theme = {
 			]
 		},
 
-		// inner margin to text
-		imargin  : { n: 1, e: 1, s: 1, w: 1 },
+		innerMargin  : { n: 1, e: 1, s: 1, w: 1 },
 
 		// offset for creation // FIXME calculate dynamically
 		createOffset : { x: 44, y: 12 }

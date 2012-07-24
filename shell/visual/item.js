@@ -254,8 +254,9 @@ Item.prototype.drawHandles = function(fabric, view) {
 | Returns the para at point. TODO, honor scroll here.
 */
 Item.prototype.getParaAtPoint = function(p) {
-	// TODO rename imargin to innerMargin
-	if (p.y < this.imargin.n) return null;
+	if (p.y < this.innerMargin.n)
+		{ return null; }
+
 	return this.$sub.doc.getParaAtPoint(p);
 };
 

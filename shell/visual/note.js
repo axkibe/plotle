@@ -58,9 +58,8 @@ Jools.subclass(Note, Visual.Item);
 
 /**
 | Default margin for all notes.
-| TODO: rename
 */
-Note.prototype.imargin = new Euclid.Margin(theme.note.imargin);
+Note.prototype.innerMargin = new Euclid.Margin(theme.note.innerMargin);
 
 /**
 | Resize handles to show on notes.
@@ -117,7 +116,7 @@ Note.prototype.setScrollbar = function(pos) {
 
 	sbary.setPos(
 		pos,
-		zone.height - this.imargin.y,
+		zone.height - this.innerMargin.y,
 		this.$sub.doc.getHeight(),
 		Euclid.Point.renew(zone.pse.x, zone.pnw.y + theme.scrollbar.vdis, sbary.pnw),
 		zone.height - theme.scrollbar.vdis * 2
@@ -136,7 +135,7 @@ Note.prototype.scrollCaretIntoView = function() {
 	var cp      = para.getCaretPos();
 	var pnw     = this.$sub.doc.getPNW(para.key);
 	var zone    = this.getZone();
-	var imargin = this.imargin;
+	var imargin = this.innerMargin;
 
 	if (cp.n + pnw.y - imargin.n < sy) {
 		this.setScrollbar(cp.n + pnw.y - imargin.n);
@@ -202,7 +201,7 @@ Note.prototype.draw = function(fabric, view) {
 	{
 		f = this.$fabric = new Euclid.Fabric(vzone.width, vzone.height);
 		var doc     = this.$sub.doc;
-		var imargin = this.imargin;
+		var imargin = this.innerMargin;
 
 		// calculates if a scrollbar is needed
 		var height = doc.getHeight();
@@ -246,7 +245,7 @@ Note.prototype.mousewheel = function(view, p, dir, shift, ctrl) {
 Note.prototype.getFlowWidth = function() {
 	var sbary = this.scrollbarY;
 	var zone  = this.getZone();
-	var flowWidth = zone.width - this.imargin.x;
+	var flowWidth = zone.width - this.innerMargin.x;
 
 	// this used to be made when the scrollbar was within the vnote.
 	// if (sbary && sbary.visible)

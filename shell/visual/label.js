@@ -57,9 +57,8 @@ Jools.subclass(Label, Visual.Item);
 
 /**
 | Default margin for all notes.
-| TODO rename
 */
-Label.prototype.imargin = new Euclid.Margin(theme.label.imargin);
+Label.prototype.innerMargin = new Euclid.Margin(theme.label.innerMargin);
 
 /**
 | Resize handles to show on notes.
@@ -120,7 +119,7 @@ Label.prototype.draw = function(fabric, view) {
 		f = this.$fabric = new Euclid.Fabric(zone.width, zone.height);
 		f.$zoom     = view.zoom;
 		var doc     = this.$sub.doc;
-		var imargin = this.imargin;
+		var imargin = this.innerMargin;
 
 		// resizes the canvas, TODO needed?
 		f.reset(zone);
