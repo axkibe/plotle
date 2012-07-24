@@ -95,7 +95,7 @@ OvalMenu.prototype.draw = function(view) {
 	var f = this.fabric;
 	if (this.$fade) { f.globalAlpha(this.$fade); }
 
-	f.fill(this._style.fill, this._oflower, 'path', view, 'outer');
+	f.fill(this._style.fill, this._oflower, 'sketch', view, 'outer');
 	switch(this.$within) {
 		case 'n'  :
 		case 'ne' :
@@ -103,10 +103,10 @@ OvalMenu.prototype.draw = function(view) {
 		case 's'  :
 		case 'sw' :
 		case 'nw' :
-			f.paint(this._highlight, this._oflower, 'path', view, this.$within);
+			f.paint(this._highlight, this._oflower, 'sketch', view, this.$within);
 			break;
 	}
-	f.edge(this._style.edge, this._oflower, 'path', view, null);
+	f.edge(this._style.edge, this._oflower, 'sketch', view, null);
 
 	f.setFont(this.$font);
 	var labels = this.labels;

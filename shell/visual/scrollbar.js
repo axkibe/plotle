@@ -68,7 +68,7 @@ Scrollbar.prototype.draw = function(fabric, view) {
 	if (!this.visible) throw new Error('Drawing an invisible scrollbar');
 
 	var area = this.getArea(view);
-	fabric.paint(theme.scrollbar.style, area, 'path', Euclid.View.proper);
+	fabric.paint(theme.scrollbar.style, area, 'sketch', Euclid.View.proper);
 };
 
 /**

@@ -289,9 +289,9 @@ Shell.prototype.knock = function() {
 };
 
 /**
-| Paths the greenscreen frowny.
+| Sketches the greenscreen frowny.
 */
-Shell.prototype.pathFrowny = function(fabric, border, twist, view, pos) {
+Shell.prototype.sketchFrowny = function(fabric, border, twist, view, pos) {
 	fabric.moveTo(pos.x - 100, pos.y);
 	fabric.lineTo(pos.x,       pos.y - 30);
 	fabric.lineTo(pos.x + 100, pos.y);
@@ -324,7 +324,7 @@ Shell.prototype._draw = function() {
 
 		fabric.edge(
 			[ { border: 0, width: 1, color: 'black' } ],
-			this, 'pathFrowny', Euclid.View.proper, m.add(0, -100)
+			this, 'sketchFrowny', Euclid.View.proper, m.add(0, -100)
 		);
 
 		if (!this._$greenFont1) {
@@ -602,7 +602,8 @@ Shell.prototype.setUser = function(user, pass) {
 		window.localStorage.setItem('pass', pass);
 	} else {
 		if (this.$space &&
-			(this.$space.key !== 'welcome' && this.$space.key !== 'sandbox')
+			this.$space.$key !== 'welcome' &&
+			this.$space.$key !== 'sandbox'
 		) {
 			this.moveToSpace('welcome');
 		}
@@ -658,7 +659,7 @@ Shell.prototype.moveToSpace = function(name) {
 	}
 
 	if (name === null) {
-		name = self.$space.key;
+		name = self.$space.$key;
 		if (this.$user.substr(0, 5) === 'visit' &&
 			(name !== 'welcome' && name !== 'help')
 		) { name = 'welcome'; }
@@ -667,6 +668,9 @@ Shell.prototype.moveToSpace = function(name) {
 	}
 
 	self.$board.setCurSpace('', '');
+
+	if (!Jools.isString(name)) { throw new Error('XXXX'); }
+
 	this.peer.aquireSpace(name, function(err, val) {
 		if (err !== null) {
 			self.greenscreen('Cannot aquire space: ' + err.message);

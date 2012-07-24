@@ -208,14 +208,14 @@ Note.prototype.draw = function(fabric, view) {
 		sbary.visible = height > zone.height - imargin.y;
 
 		var silhoutte = this.getSilhoutte(vzone, true);
-		f.fill(theme.note.style.fill, silhoutte, 'path', Euclid.View.proper);
+		f.fill(theme.note.style.fill, silhoutte, 'sketch', Euclid.View.proper);
 
 		// draws selection and text
 		sbary.point = Euclid.Point.renew(0, sbary.getPos(), sbary.point);
 		doc.draw(f, view.home(), zone.width, imargin, sbary.point);
 
 		// draws the border
-		f.edge(theme.note.style.edge, silhoutte, 'path', Euclid.View.proper);
+		f.edge(theme.note.style.edge, silhoutte, 'sketch', Euclid.View.proper);
 	}
 
 	fabric.drawImage(f, vzone.pnw);

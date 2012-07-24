@@ -815,13 +815,19 @@ Server.prototype.wake = function(spaces) {
 | Tests if the user has access to 'space'.
 */
 Server.prototype.testAccess = function(user, space) {
-	if (user === 'root') { return 'rw'; }
+	if (user === 'root')
+		{ return 'rw'; }
+
+	if (!Jools.isString(space))
+		{ return 'no'; }
+
 	switch (space) {
 	case 'sandbox' : return 'rw';
 	case 'welcome' : return user === config.admin ? 'rw' : 'ro';
 	}
+
 	var sp = space.split(':', 2);
-	if (sp.length < 2)  { return 'no'; }
+	if (sp.length < 2) { return 'no'; }
 	if (user == sp[0]) { return 'rw'; }
 	return 'no';
 };
@@ -853,6 +859,7 @@ Server.prototype.cmdGet = function(cmd, _) {
 		{ throw reject('invalid time'); }
 
 	var path = new Path(cmd.path);
+	console.log('XXXXX', path.get(0));
 
 	var access = this.testAccess(cmd.user, path.get(0));
 	if (access == "no")

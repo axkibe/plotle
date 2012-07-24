@@ -130,7 +130,7 @@ Doc.prototype.draw = function(fabric, view, width, innerMargin, scrollp) {
 		fabric.paint(
 			theme.selection.style,
 			this,
-			'pathSelection',
+			'sketchSelection',
 			view,
 			width,
 			innerMargin,
@@ -261,15 +261,17 @@ Doc.prototype.getParaAtPoint = function(p) {
 };
 
 /**
-| Paths a selection
-|
-| fabric      : the fabric to path for
-| border      : width of the path (ignored)
-| width       : width the vdoc is drawn
-| innerMargin : inner margin of the doc
-| scrollp     : scroll position of the doc.
+| Sketches a selection.
 */
-Doc.prototype.pathSelection = function(fabric, border, twist, view, width, innerMargin, scrollp) {
+Doc.prototype.sketchSelection = function(
+	fabric,      // the fabric to path for
+	border,      // width of the path (ignored)
+	twist,       // true -> drawing a border, false -> fill
+	view,        // current view
+	width,       // width the vdoc is drawn
+	innerMargin, // inner margin of the doc
+	scrollp      // scroll position of the doc
+) {
 	var select = shell.selection;
 	select.normalize();
 

@@ -131,9 +131,9 @@ SwitchPanel.prototype.fadeout = function() {
 
 
 /**
-| Paths the panel frame.
+| Sketches the panel frame.
 */
-SwitchPanel.prototype.pathFrame = function(fabric, border, twist) {
+SwitchPanel.prototype.sketchFrame = function(fabric, border, twist) {
 	var w = this.iframe.width  - 1;
 	var h = this.iframe.height - 1;
 	var x = Jools.half(w);
@@ -148,9 +148,9 @@ SwitchPanel.prototype.pathFrame = function(fabric, border, twist) {
 };
 
 /**
-| Paths the  buttons
+| Sketches the buttons.
 */
-SwitchPanel.prototype.pathButton = function(fabric, border, twist, view, dir) {
+SwitchPanel.prototype.sketchButton = function(fabric, border, twist, view, dir) {
 	var bh = this.buttonDim.height;
 	var bw = this.buttonDim.width;
 
@@ -186,7 +186,7 @@ SwitchPanel.prototype._paintButton = function(fabric, dir) {
 		style = dir === this.current ? theme.switchpanel.current : theme.switchpanel.space;
 	}
 
-	fabric.paint(style, this, 'pathButton', Euclid.View.proper, dir);
+	fabric.paint(style, this, 'sketchButton', Euclid.View.proper, dir);
 };
 
 /**
@@ -198,7 +198,7 @@ SwitchPanel.prototype._weave = function() {
 	var iframe = this.iframe;
 	var fabric = this.$fabric = new Euclid.Fabric(iframe);
 
-	fabric.fill(theme.switchpanel.style.fill, this, 'pathFrame', Euclid.View.proper);
+	fabric.fill(theme.switchpanel.style.fill, this, 'sketchFrame', Euclid.View.proper);
 	if (!this.amVisitor) { this._paintButton(fabric, 'nw'); }
 	this._paintButton(fabric, 'n');
 	this._paintButton(fabric, 'ne');
@@ -227,13 +227,13 @@ SwitchPanel.prototype._weave = function() {
 	}
 	fabric.fillText(text, cx, iframe.height - 12);
 
-	fabric.edge(theme.switchpanel.style.edge, this, 'pathFrame', Euclid.View.proper);
+	fabric.edge(theme.switchpanel.style.edge, this, 'sketchFrame', Euclid.View.proper);
 
 	if (config.debug.drawBoxes) {
 		fabric.paint(
 			Dash.getStyle('boxes'),
 			new Euclid.Rect(iframe.pnw, iframe.pse.sub(1, 1)),
-			'path',
+			'sketch',
 			Euclid.View.proper
 		);
 	}
@@ -268,7 +268,7 @@ SwitchPanel.prototype.within = function(p) {
 		return false;
 	}
 	var fabric = this._weave();
-	return fabric.within(this, 'pathFrame', Euclid.View.proper, p);
+	return fabric.within(this, 'sketchFrame', Euclid.View.proper, p);
 };
 
 /**
@@ -281,9 +281,9 @@ SwitchPanel.prototype.mousedown = function(p) {
 	var button = null;
 	var fabric = this._weave();
 	var proper = Euclid.View.proper;
-	if (fabric.within(this, 'pathButton', proper, p, 'n' )) { button = 'n';  } else
-	if (fabric.within(this, 'pathButton', proper, p, 'ne')) { button = 'ne'; } else
-	if (!this.amVisitor && fabric.within(this, 'pathButton', proper, p, 'nw'))
+	if (fabric.within(this, 'sketchButton', proper, p, 'n' )) { button = 'n';  } else
+	if (fabric.within(this, 'sketchButton', proper, p, 'ne')) { button = 'ne'; } else
+	if (!this.amVisitor && fabric.within(this, 'sketchButton', proper, p, 'nw'))
 		{ button = 'nw'; }
 
 	if (button && button !== this.current) {
@@ -318,9 +318,9 @@ SwitchPanel.prototype.mousehover = function(p) {
 		var fabric = this._weave();
 
 		var proper = Euclid.View.proper;
-		if (fabric.within(this, 'pathButton', proper, p, 'n' )) { hd = 'n';  } else
-		if (fabric.within(this, 'pathButton', proper, p, 'ne')) { hd = 'ne'; } else
-		if (!this.amVisitor && fabric.within(this, 'pathButton', proper, p, 'nw'))
+		if (fabric.within(this, 'sketchButton', proper, p, 'n' )) { hd = 'n';  } else
+		if (fabric.within(this, 'sketchButton', proper, p, 'ne')) { hd = 'ne'; } else
+		if (!this.amVisitor && fabric.within(this, 'sketchButton', proper, p, 'nw'))
 			{ hd = 'nw'; }
 		cursor = 'default';
 	}

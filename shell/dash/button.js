@@ -96,10 +96,10 @@ Button.prototype.canFocus = function() {
 };
 
 /**
-| Paths the button.
+| Sketches the button.
 */
-Button.prototype.gpath = function(fabric, border, twist) {
-	this.curve.path(fabric, border, twist);
+Button.prototype.sketch = function(fabric, border, twist) {
+	this.curve.sketch(fabric, border, twist);
 };
 
 /**
@@ -123,7 +123,7 @@ Button.prototype._weave = function(accent) {
 
 	var style = Dash.getStyle(sname);
 	if (!isnon(style)) { throw new Error('Invalid style: ' + sname); }
-	fabric.paint(style, this, 'gpath', Euclid.View.proper);
+	fabric.paint(style, this, 'sketch', Euclid.View.proper);
 
 	fabric.setFont(twig.caption.font);
 	fabric.fillText(this.$captionText, this.captionPos);
@@ -132,7 +132,7 @@ Button.prototype._weave = function(accent) {
 		fabric.paint(
 			Dash.getStyle('boxes'),
 			new Euclid.Rect(this.iframe.pnw, this.iframe.pse.sub(1, 1)),
-			'path',
+			'sketch',
 			Euclid.View.proper
 		);
 	}
@@ -170,7 +170,7 @@ Button.prototype.mousehover = function(p) {
 	var fabric = this._weave(Dash.Accent.NORMA);
 	var pp = p.sub(this.pnw);
 
-	if (!fabric.within(this, 'gpath', Euclid.View.proper, pp))
+	if (!fabric.within(this, 'sketch', Euclid.View.proper, pp))
 		{ return null; }
 
 	this.panel.setHover(this.name);
@@ -196,14 +196,14 @@ Button.prototype.mousedown = function(p, shift, ctrl) {
 
 	var fabric = this._weave(Dash.Accent.NORMA);
 	var pp = p.sub(this.pnw);
-	if (!fabric.within(this, 'gpath', Euclid.View.proper, pp))
+	if (!fabric.within(this, 'sketch', Euclid.View.proper, pp))
 		{ return null; }
 
 	if (this.repeat && !this.retimer) {
 		shell.startAction(
 			Action.REBUTTON,
 			'board',
-			'itemPath', this.path
+			'itemPath', this.$path
 		);
 
 		var repeatFunc;

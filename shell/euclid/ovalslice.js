@@ -113,7 +113,7 @@ Jools.lazyFixate(OvalSlice.prototype, 'pse', function() {
 /**
 | Draws the hexagon.
 */
-OvalSlice.prototype.path = function(fabric, border, twist, view) {
+OvalSlice.prototype.sketch = function(fabric, border, twist, view) {
 	var a   = this.a;
 	var b   = this.b;
 	var am  = Euclid.magic * this.a;
@@ -139,7 +139,7 @@ OvalSlice.prototype.path = function(fabric, border, twist, view) {
 | Returns true if point is within the slice.
 */
 OvalSlice.prototype.within = function(fabric, view, p) {
-	return fabric.within(this, 'path', view, p);
+	return fabric.within(this, 'sketch', view, p);
 };
 
 })();

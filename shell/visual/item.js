@@ -53,7 +53,9 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 var Item = Visual.Item = function(twig, path) {
 	Visual.Base.call(this, twig, path);
 
-	if (this.$sub !== null) { throw new Error('iFail'); }
+	if (this.$sub !== null)
+		{ throw new Error('iFail'); }
+
 	this.$sub = {
 		doc : new Visual.Doc(twig.doc, new Path(path, '++', 'doc'))
 	};
@@ -113,14 +115,14 @@ Item.prototype.checkItemCompass = function(view, p) {
 		if (!z.within(p))
 			{ continue; }
 
-		if (f.within(this, 'pathHandle', view, p, z))
+		if (f.within(this, 'sketchHandle', view, p, z))
 			{ return d; }
 	}
 	return null;
 };
 
 /**
-| TODO
+| Creates the $handle object to plan where to sketch the handles to
 */
 Item.prototype.planHandles = function(view) {
 	var ha = this.handles;
@@ -200,9 +202,9 @@ Item.prototype.planHandles = function(view) {
 
 
 /**
-| Paths all resize handles.
+| Sketches all resize handles.
 */
-Item.prototype.pathAllHandles = function(fabric, border, twist, view) {
+Item.prototype.sketchAllHandles = function(fabric, border, twist, view) {
 	if (border !== 0) throw new Error('borders unsupported for handles');
 
 	var $h = this.planHandles(view);
@@ -215,14 +217,14 @@ Item.prototype.pathAllHandles = function(fabric, border, twist, view) {
 		if (!z)
 			{ continue; }
 
-		this.pathHandle(fabric, border, twist, view, z);
+		this.sketchHandle(fabric, border, twist, view, z);
 	}
 };
 
 /**
-| Paths one or all resize handles.
+| Sketches one or all resize handles.
 */
-Item.prototype.pathHandle = function(fabric, border, twist, view, zone) {
+Item.prototype.sketchHandle = function(fabric, border, twist, view, zone) {
 	var bb = this.$handles.bb;
 	fabric.moveTo(zone.w);
 	fabric.beziTo(0, -bb, 0, -bb, zone.e);
@@ -236,16 +238,16 @@ Item.prototype.drawHandles = function(fabric, view) {
 	var sbary = this.scrollbarY;
 	if (sbary && sbary.visible) {
 		var area = sbary.getArea(view);
-		fabric.reverseClip(area, 'path', Euclid.View.proper, -1);
+		fabric.reverseClip(area, 'sketch', Euclid.View.proper, -1);
 	}
 
-	fabric.reverseClip(this.getSilhoutte(this.getZone(), false), 'path', view, -1);
+	fabric.reverseClip(this.getSilhoutte(this.getZone(), false), 'sketch', view, -1);
 
 	// draws the resize handles
-	fabric.paint(theme.handle.style, this, 'pathAllHandles', view);
+	fabric.paint(theme.handle.style, this, 'sketchAllHandles', view);
 
 	// draws item menu handler
-	fabric.paint(theme.ovalmenu.slice, this.getOvalSlice(), 'path', view);
+	fabric.paint(theme.ovalmenu.slice, this.getOvalSlice(), 'sketch', view);
 
 	fabric.deClip();
 };
@@ -428,7 +430,7 @@ Item.prototype.click = function(view, p) {
 */
 Item.prototype.highlight = function(fabric, view) {
 	var silhoutte = this.getSilhoutte(this.getZone(), false);
-	fabric.edge(theme.note.style.highlight, silhoutte, 'path', view);
+	fabric.edge(theme.note.style.highlight, silhoutte, 'sketch', view);
 };
 
 /**

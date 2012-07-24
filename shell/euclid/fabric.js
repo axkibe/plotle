@@ -141,7 +141,7 @@ Fabric.prototype.reset = function(a1, a2) {
 
 
 /**
-| Moves the path maker.
+| Moves the sketch maker.
 |
 | moveTo(point)       -or-
 | moveTo(x, y)        -or-
@@ -301,7 +301,7 @@ Fabric.prototype.fillRect = function(style, a1, a2, a3, a4) {
 };
 
 /**
-| Begins a path.
+| Begins a sketch
 */
 Fabric.prototype._begin = function(twist) {
 	// lines are targed at .5 coords.
@@ -427,14 +427,18 @@ Fabric.prototype._colorStyle = function(style, shape) {
 | Draws a filled area.
 |
 | style: the style formated in meshcraft style notation.
-| shape: an object which has path() defined
+| shape: an object which has 'sketch'() defined
 */
-Fabric.prototype.fill = function(style, shape, path, view, a1, a2, a3, a4) {
+Fabric.prototype.fill = function(style, shape, sketch, view, a1, a2, a3, a4) {
 	var cx = this._cx;
 	this._begin(false);
-	shape[path](this, 0, false, view, a1, a2, a3, a4);
+
+	shape[sketch](this, 0, false, view, a1, a2, a3, a4);
 	cx.fillStyle = this._colorStyle(style, shape);
-	if (this._twist !== 0) throw new Error('wrong twist');
+
+	if (this._twist !== 0)
+		{ throw new Error('wrong twist'); }
+
 	cx.fill();
 };
 
@@ -442,15 +446,19 @@ Fabric.prototype.fill = function(style, shape, path, view, a1, a2, a3, a4) {
 | Draws a single edge.
 |
 | style: the style formated in meshcraft style notation.
-| shape: an object which has path() defined
+| shape: an object which has 'sketch'() defined
 */
-Fabric.prototype._edge = function(style, shape, path, view, a1, a2, a3, a4) {
+Fabric.prototype._edge = function(style, shape, sketch, view, a1, a2, a3, a4) {
 	var cx = this._cx;
 	this._begin(true);
-	shape[path](this, style.border, true, view, a1, a2, a3, a4);
+
+	shape[sketch](this, style.border, true, view, a1, a2, a3, a4);
 	cx.strokeStyle = this._colorStyle(style.color, shape);
 	cx.lineWidth = style.width;
-	if (this._twist !== 0.5) throw new Error('wrong twist');
+
+	if (this._twist !== 0.5)
+		{ throw new Error('wrong twist'); }
+
 	cx.stroke();
 };
 
@@ -458,31 +466,28 @@ Fabric.prototype._edge = function(style, shape, path, view, a1, a2, a3, a4) {
 | Draws an edge.
 |
 | style: the style formated in meshcraft style notation.
-| shape: an object which has path() defined
+| shape: an object which has 'sketch'() defined
 */
-Fabric.prototype.edge = function(style, shape, path, view, a1, a2, a3, a4) {
+Fabric.prototype.edge = function(style, shape, sketch, view, a1, a2, a3, a4) {
 	var cx = this._cx;
 	if (style instanceof Array) {
 		for(var i = 0; i < style.length; i++) {
-			this._edge(style[i], shape, path, view, a1, a2, a3, a4);
+			this._edge(style[i], shape, sketch, view, a1, a2, a3, a4);
 		}
 	} else {
-		this._edge(style, shape, path, view, a1, a2, a3, a4);
+		this._edge(style, shape, sketch, view, a1, a2, a3, a4);
 	}
 };
-
-
-// TODO rename path to sketch so it isnt confused
 
 /**
 | Fills an aera and draws its borders
 */
-Fabric.prototype.paint = function(style, shape, path, view, a1, a2, a3, a4) {
+Fabric.prototype.paint = function(style, shape, sketch, view, a1, a2, a3, a4) {
 	var fillStyle = style.fill;
 	var edgeStyle = style.edge;
 	var cx = this._cx;
 	this._begin(false);
-	shape[path](this, 0, false, view, a1, a2, a3, a4);
+	shape[sketch](this, 0, false, view, a1, a2, a3, a4);
 
 	if (Jools.isnon(style.fill)) {
 		cx.fillStyle = this._colorStyle(fillStyle, shape);
@@ -491,17 +496,17 @@ Fabric.prototype.paint = function(style, shape, path, view, a1, a2, a3, a4) {
 
 	if (edgeStyle instanceof Array) {
 		for(var i = 0; i < edgeStyle.length; i++) {
-			this._edge(edgeStyle[i], shape, path, view, a1, a2, a3, a4);
+			this._edge(edgeStyle[i], shape, sketch, view, a1, a2, a3, a4);
 		}
 	} else {
-		this._edge(edgeStyle, shape, path, view, a1, a2, a3, a4);
+		this._edge(edgeStyle, shape, sketch, view, a1, a2, a3, a4);
 	}
 };
 
 /**
 | Clips the fabric so that the shape is left out.
 */
-Fabric.prototype.reverseClip = function(shape, path, view, border, a1, a2, a3, a4) {
+Fabric.prototype.reverseClip = function(shape, sketch, view, border, a1, a2, a3, a4) {
 	var cx = this._cx;
 	var c  = this._canvas;
 	var w  = c.width;
@@ -519,7 +524,7 @@ Fabric.prototype.reverseClip = function(shape, path, view, border, a1, a2, a3, a
 	cx.lineTo(w, 0);
 	cx.lineTo(0, 0);
 
-	shape[path](this, border, true, view, a1, a2, a3, a4);
+	shape[sketch](this, border, true, view, a1, a2, a3, a4);
 	cx.clip();
 };
 
@@ -554,13 +559,13 @@ Fabric.prototype.setFont = function(f) {
 };
 
 /**
-| Returns true is a point is in a path.
-| Point is either.
+| Returns true is a point is in a sketch.
 |
+| Point is either:
 | Euclid.Point -or-
 | x / y
 */
-Fabric.prototype.within = function(shape, path, view, a1, a2, a3, a4, a5) {
+Fabric.prototype.within = function(shape, sketch, view, a1, a2, a3, a4, a5) {
 	var px, py;
 	var pobj;
 	if (typeof(a1) === 'object') {
@@ -582,9 +587,9 @@ Fabric.prototype.within = function(shape, path, view, a1, a2, a3, a4, a5) {
 
 	this._begin(true);
 	if (pobj) {
-		shape[path](this, 0, true, view, a2, a3, a4);
+		shape[sketch](this, 0, true, view, a2, a3, a4);
 	} else {
-		shape[path](this, 0, true, view, a3, a4, a5);
+		shape[sketch](this, 0, true, view, a3, a4, a5);
 	}
 
 	return this._cx.isPointInPath(px, py);

@@ -106,7 +106,7 @@ Chat.prototype._weave = function() {
 	var w = this.iframe.width;
 	var h = this.iframe.height;
 
-	fabric.paint(Dash.getStyle('chat'), this, 'pathILine', Euclid.View.proper);
+	fabric.paint(Dash.getStyle('chat'), this, 'sketchILine', Euclid.View.proper);
 
 	var x = this.pitch.x;
 	var y = this.pitch.y;
@@ -127,7 +127,7 @@ Chat.prototype._weave = function() {
 		fabric.paint(
 			Dash.getStyle('boxes'),
 			new Euclid.Rect(this.iframe.pnw, this.iframe.pse.sub(1, 1)),
-			'path',
+			'sketch',
 			Euclid.View.proper
 		);
 	}
@@ -340,7 +340,7 @@ Chat.prototype.addMessage = function(msg) {
 Chat.prototype.mousedown = function(p, shift, ctrl) {
 	var pp = p.sub(this.pnw);
 	var fabric = this._weave();
-	if (!fabric.within(this, 'pathILine', Euclid.View.proper, pp))
+	if (!fabric.within(this, 'sketchILine', Euclid.View.proper, pp))
 		{ return null; }
 
 	shell.setCaret('board', {
@@ -366,7 +366,7 @@ Chat.prototype.mousehover = function(p, shift, ctrl) {
 
 	var fabric = this._weave();
 	var pp = p.sub(this.pnw);
-	if (fabric.within(this, 'pathILine', Euclid.View.proper, pp))
+	if (fabric.within(this, 'sketchILine', Euclid.View.proper, pp))
 		{ return "text"; }
 	else
 		{ return "default"; }
@@ -375,7 +375,7 @@ Chat.prototype.mousehover = function(p, shift, ctrl) {
 /**
 | Draws the input line
 */
-Chat.prototype.pathILine = function(fabric, border, twist) {
+Chat.prototype.sketchILine = function(fabric, border, twist) {
 	var ox   = 0;
 	var w    = fabric.width - 1;
 	var psex = w  - this.sideSlopeX;

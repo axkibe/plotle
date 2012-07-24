@@ -40,7 +40,7 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Draws the rectangle.
 */
-Euclid.Rect.prototype.path = function(fabric, border, twist, view) {
+Euclid.Rect.prototype.sketch = function(fabric, border, twist, view) {
 	var wx = view.x(this.pnw);
 	var ny = view.y(this.pnw);
 	var ex = view.x(this.pse);

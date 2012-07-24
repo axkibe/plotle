@@ -73,7 +73,7 @@ Jools.subclass(BeziRect, Euclid.Rect);
 /**
 | Draws the roundrect.
 */
-BeziRect.prototype.path = function(fabric, border, twist, view) {
+BeziRect.prototype.sketch = function(fabric, border, twist, view) {
 	var wx = view.x(this.pnw) + border;
 	var ny = view.y(this.pnw) + border;
 	var ex = view.x(this.pse) - border - 1;
@@ -98,7 +98,7 @@ BeziRect.prototype.path = function(fabric, border, twist, view) {
 | Returns true if Point p is within the BeziRect.
 */
 BeziRect.prototype.within = function(fabric, view, p) {
-	return fabric.within(this, 'path', view, p);
+	return fabric.within(this, 'sketch', view, p);
 };
 
 })();

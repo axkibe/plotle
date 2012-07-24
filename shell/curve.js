@@ -123,9 +123,9 @@ Curve.computePoint = function(model, frame) {
 };
 
 /**
-| Paths a curve in a fabric
+| Sketches a curve in a fabric
 */
-Curve.prototype.path = function(fabric, border, twist) {
+Curve.prototype.sketch = function(fabric, border, twist) {
 	var data = this.data;
 	var lbx = 0;
 	var lby = 0;

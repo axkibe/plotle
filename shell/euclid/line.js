@@ -150,13 +150,13 @@ Jools.lazyFixate(Line.prototype, 'pc', function() {
 });
 
 /**
-| Draws the path of the line.
+| Draws the sketch of the line.
 |
 | fabric: Fabric to draw upon.
 | border: pixel offset for fancy borders (unused)
 | twist:  0.5 if drawing lines
 */
-Line.prototype.path = function(fabric, border, twist, view) {
+Line.prototype.sketch = function(fabric, border, twist, view) {
 	var p1x = view.x(this.p1);
 	var p1y = view.y(this.p1);
 	var p2x = view.x(this.p2);
@@ -215,8 +215,10 @@ Line.prototype.path = function(fabric, border, twist, view) {
 | Draws the line.
 */
 Line.prototype.draw = function(fabric, view, style) {
-	if (!style) throw new Error('Line.draw misses style');
-	fabric.paint(style, this, 'path', view);
+	if (!style)
+		{ throw new Error('Line.draw misses style'); }
+
+	fabric.paint(style, this, 'sketch', view);
 };
 
 })();

@@ -74,9 +74,9 @@ var OvalFlower = Euclid.OvalFlower = function(pc, dimensions, segs) {
 };
 
 /**
-| Makes the OvalFlower path.
+| Makes the OvalFlower sketch.
 */
-OvalFlower.prototype.path = function(fabric, border, twist, view, segment) {
+OvalFlower.prototype.sketch = function(fabric, border, twist, view, segment) {
 	var ro   = Math.round;
 
 	var pc   = this.pc;
@@ -186,17 +186,17 @@ OvalFlower.prototype.within = function(fabric, view, p) {
 	if (p.x < pc.x - a2 || p.x > pc.x + a2 || p.y < pc.y - b2 || p.y > pc.y + b2)
 		{ return null; }
 
-	if (!fabric.within(this, 'path', view, p, 'outer'))
+	if (!fabric.within(this, 'sketch', view, p, 'outer'))
 		{ return null; }
 
 	var isnon = Jools.isnon;
-	if (isnon(this.segs.c ) && fabric.within(this, 'path', view, p, 'c' )) { return 'c';  }
-	if (isnon(this.segs.n ) && fabric.within(this, 'path', view, p, 'n' )) { return 'n';  }
-	if (isnon(this.segs.ne) && fabric.within(this, 'path', view, p, 'ne')) { return 'ne'; }
-	if (isnon(this.segs.se) && fabric.within(this, 'path', view, p, 'se')) { return 'se'; }
-	if (isnon(this.segs.e ) && fabric.within(this, 'path', view, p, 'e' )) { return 's';  }
-	if (isnon(this.segs.sw) && fabric.within(this, 'path', view, p, 'sw')) { return 'sw'; }
-	if (isnon(this.segs.nw) && fabric.within(this, 'path', view, p, 'nw')) { return 'nw'; }
+	if (isnon(this.segs.c ) && fabric.within(this, 'sketch', view, p, 'c' )) { return 'c';  }
+	if (isnon(this.segs.n ) && fabric.within(this, 'sketch', view, p, 'n' )) { return 'n';  }
+	if (isnon(this.segs.ne) && fabric.within(this, 'sketch', view, p, 'ne')) { return 'ne'; }
+	if (isnon(this.segs.se) && fabric.within(this, 'sketch', view, p, 'se')) { return 'se'; }
+	if (isnon(this.segs.e ) && fabric.within(this, 'sketch', view, p, 'e' )) { return 's';  }
+	if (isnon(this.segs.sw) && fabric.within(this, 'sketch', view, p, 'sw')) { return 'sw'; }
+	if (isnon(this.segs.nw) && fabric.within(this, 'sketch', view, p, 'nw')) { return 'nw'; }
 	return 'gap';
 };
 

@@ -127,7 +127,7 @@ Input.prototype._weave = function(accent) {
 	}
 	var style  = Dash.getStyle(sname);
 
-	fabric.fill(style.fill, this.bezi, 'path', Euclid.View.proper);
+	fabric.fill(style.fill, this.bezi, 'sketch', Euclid.View.proper);
 	var font = this.twig.font;
 	fabric.setFont(font);
 
@@ -137,7 +137,7 @@ Input.prototype._weave = function(accent) {
 	} else {
 		fabric.fillText(this._$value, pitch.x, font.size + pitch.y);
 	}
-	fabric.edge(style.edge, this.bezi, 'path', Euclid.View.proper);
+	fabric.edge(style.edge, this.bezi, 'sketch', Euclid.View.proper);
 
 	return fabric;
 };
@@ -424,7 +424,7 @@ Input.prototype.mousehover = function(p, shift, ctrl) {
 Input.prototype.mousedown = function(p, shift, ctrl) {
 	var pp = p.sub(this.pnw);
 	var fabric = this._weave(Dash.Accent.NORMA);
-	if (!fabric.within(this.bezi, 'path', Euclid.View.proper, pp))  { return null; }
+	if (!fabric.within(this.bezi, 'sketch', Euclid.View.proper, pp))  { return null; }
 
 	this.panel.setFocus(this.name);
 	return false;

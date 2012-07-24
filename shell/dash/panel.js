@@ -114,15 +114,18 @@ Panel.prototype.focusedCC = function() {
 
 	var sign = caret.sign;
 	var path = sign.path;
-	if (path.get(0) !== this.name) { return null; }
+
+	if (path.get(0) !== this.name)
+		{ return null; }
+
 	return this.$sub[path.get(1)] || null;
 };
 
 /**
-| Paths the panels frame.
+| Sketches the panels frame.
 */
-Panel.prototype.path = function(fabric, border, twist) {
-	this.curve.path(fabric, border, twist);
+Panel.prototype.sketch = function(fabric, border, twist) {
+	this.curve.sketch(fabric, border, twist);
 };
 
 /**
@@ -147,7 +150,7 @@ Panel.prototype._weave = function() {
 	var style = Dash.getStyle(this.tree.root.style);
 	if (!style) { throw new Error('no style!'); }
 
-	fabric.fill(style.fill, this, 'path', Euclid.View.proper);
+	fabric.fill(style.fill, this, 'sketch', Euclid.View.proper);
 	var layout = this.tree.root.layout;
 
 	var focus = this.focusedCC();
@@ -156,14 +159,14 @@ Panel.prototype._weave = function() {
 		var c = this.$sub[cname];
 		c.draw(fabric, Dash.Accent.state(cname === this.$hover || c.$active, c === focus));
 	}
-	fabric.edge(style.edge, this, 'path', Euclid.View.proper);
+	fabric.edge(style.edge, this, 'sketch', Euclid.View.proper);
 
 	if (config.debug.drawBoxes) {
 		fabric.paint(
 			Dash.getStyles('boxes'),
 			new Euclid.Rect(iframe.pnw,
 			iframe.pse.sub(1, 1)),
-			'path',
+			'sketch',
 			Euclid.View.proper
 		);
 	}
@@ -205,7 +208,7 @@ Panel.prototype.mousehover = function(p, shift, ctrl) {
 	var pp = p.sub(pnw);
 
 	// TODO Optimize by reusing the latest path of this.$fabric
-	if (!fabric.within(this, 'path', Euclid.View.proper, pp))
+	if (!fabric.within(this, 'sketch', Euclid.View.proper, pp))
 		{ return this.setHover(null); }
 
 	var cursor = null;
@@ -242,7 +245,7 @@ Panel.prototype.mousedown = function(p, shift, ctrl) {
 	var pp = p.sub(pnw);
 
 	// TODO Optimize by reusing the latest path of this.$fabric
-	if (!fabric.within(this, 'path', Euclid.View.proper, pp))  {
+	if (!fabric.within(this, 'sketch', Euclid.View.proper, pp))  {
 		this.setHover(null);
 		return null;
 	}

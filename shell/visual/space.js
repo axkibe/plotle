@@ -260,7 +260,7 @@ Space.prototype.mousehover = function(p, shift, ctrl) {
 
 	var focus = this.focusedItem();
 	if (focus) {
-		// TODO move into items
+		// FIXME move into items
 		if (focus.withinItemMenu($view, p)) {
 			cursor = 'default';
 		} else {

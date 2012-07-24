@@ -86,12 +86,12 @@ Relation.prototype.draw = function(fabric, view) {
 
 	if (item1) {
 		var l1 = Euclid.Line.connect(item1.getZone(), 'normal', zone, 'normal');
-		fabric.paint(theme.relation.style, l1, 'path', view);
+		fabric.paint(theme.relation.style, l1, 'sketch', view);
 	}
 
 	if (item2) {
 		var l2 = Euclid.Line.connect(zone,  'normal', item2.getZone(), 'arrow');
-		fabric.paint(theme.relation.style, l2, 'path', view);
+		fabric.paint(theme.relation.style, l2, 'sketch', view);
 	}
 
 	Visual.Label.prototype.draw.call(this, fabric, view);
