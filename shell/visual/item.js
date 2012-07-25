@@ -98,10 +98,9 @@ Item.prototype.withinItemMenu = function(view, p) {
 
 /**
 | Returns the compass direction of the handle if p is on a resizer handle.
-| TODO rename
 */
-Item.prototype.checkItemCompass = function(view, p) {
-	var $h     = this.planHandles(view); // TODO use planHandles and cache
+Item.prototype.checkHandles = function(view, p) {
+	var $h     = this.planHandles(view);
 	var f      = shell.fabric;
 	var d8cwcf = Euclid.Compass.dir8CWCF;
 

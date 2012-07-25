@@ -264,7 +264,7 @@ Space.prototype.mousehover = function(p, shift, ctrl) {
 		if (focus.withinItemMenu($view, p)) {
 			cursor = 'default';
 		} else {
-			var com = focus.checkItemCompass($view, p);
+			var com = focus.checkHandles($view, p);
 			if (com) { cursor = com + '-resize'; }
 		}
 	}
@@ -495,7 +495,7 @@ Space.prototype.mousedown = function(p, shift, ctrl) {
 	var focus = this.focusedItem();
 	if (focus) {
 		if (focus.withinItemMenu($view, p)) return 'atween';
-		var com = focus.checkItemCompass($view, p);
+		var com = focus.checkHandles($view, p);
 		if (com) {
 			// resizing
 			var dp = $view.depoint(p);
