@@ -293,13 +293,13 @@ Shell.prototype._draw = function() {
 	fabric.reset();
 
 	if (this.green) {
-		// FIXME make get center point part of Fabric
-		var m = new Euclid.Point(half(fabric.width), half(fabric.height));
+		var ce = fabric.getCenter();
+
 		fabric.fillRect('rgb(170, 255, 170)', 0, 0, fabric.width, fabric.height);
 
 		fabric.edge(
 			[ { border: 0, width: 1, color: 'black' } ],
-			this, 'sketchFrowny', Euclid.View.proper, m.add(0, -100)
+			this, 'sketchFrowny', Euclid.View.proper, ce.add(0, -100)
 		);
 
 		if (!this._$greenFont1) {
@@ -323,10 +323,10 @@ Shell.prototype._draw = function() {
 		}
 
 		fabric.setFont(this._$greenFont1);
-		fabric.fillText(this.green, m);
+		fabric.fillText(this.green, ce);
 
 		fabric.setFont(this._$greenFont2);
-		fabric.fillText('Please refresh the page to reconnect.', m.x, m.y + 100);
+		fabric.fillText('Please refresh the page to reconnect.', ce.x, ce.y + 100);
 		return;
 	}
 

@@ -297,6 +297,20 @@ Fabric.prototype.fillRect = function(style, a1, a2, a3, a4) {
 };
 
 /**
+| return the center point of the Fabric
+*/
+Fabric.prototype.getCenter = function() {
+	var x = Jools.half(this.width);
+	var y = Jools.half(this.height);
+	var c = this._$center;
+
+	if (c && c.x === x && c.y === y)
+		{ return c; }
+	else
+		{ return this._$center = new Euclid.Point(x, y); }
+};
+
+/**
 | getImageData(rect)     -or-
 | getImageData(pnw, pse) -or-
 | getImageData(x1, y1, x2, y2)

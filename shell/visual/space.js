@@ -509,14 +509,7 @@ Space.prototype.input = function(text) {
 | Changes the zoom factor (around center)
 */
 Space.prototype.changeZoom = function(df) {
-	var $view = this.$view;
-
-	// TODO replace by this.fabric.getCenter()
-	var pm = new Euclid.Point(
-		Jools.half(this.fabric.width),
-		Jools.half(this.fabric.height)
-	);
-	pm = $view.depoint(pm);
+	var pm     = this.$view.depoint(this.fabric.getCenter());
 	this.$view = this.$view.review(df, pm);
 	shell.setSpaceZoom(this.$view.fact);
 	this.knock();
