@@ -45,11 +45,11 @@ if (typeof(window) === 'undefined') { throw new Error('this code requires a brow
 | Constructor
 */
 var Base = Visual.Base = function(twig, path) {
-	this.twig = twig;
+	this.twig  = twig;
 
 	this.$path = path;
 	this.$key  = path.get(-1);
-	this.$sub = null;
+	this.$sub  = null;
 };
 
 /**

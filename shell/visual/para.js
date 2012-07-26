@@ -22,8 +22,9 @@
  License: MIT(Expat), see accompanying 'License'-file
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 /**
-| Exports
+| Export
 */
 var Visual;
 Visual = Visual || {};
@@ -31,6 +32,7 @@ Visual = Visual || {};
 /**
 | Imports
 */
+var Base;
 var Caret;
 var Euclid;
 var Jools;
@@ -46,7 +48,7 @@ var theme;
 */
 (function(){
 'use strict';
-if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
+if (typeof(window) === 'undefined') { throw new Error('this code requires a browser!'); }
 
 /**
 | Constructor.
@@ -55,17 +57,13 @@ var Para = Visual.Para = function(twig, path) {
 	if (twig.type !== 'Para')
 		{ throw new Error('type error'); }
 
-	this.twig = twig;
-
-	// TODO make this child of Base
-	this.$path = path;
-	this.$key  = path.get(-1);
+	Visual.Base.call(this, twig, path);
 
 	// caching
 	this.$fabric = null;
 	this.$flow   = null;
 };
-
+Jools.subclass(Para, Visual.Base);
 
 /**
 | Draws the paragraph in its cache and returns it.

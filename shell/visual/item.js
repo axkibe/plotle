@@ -252,7 +252,7 @@ Item.prototype.drawHandles = function(fabric, view) {
 };
 
 /**
-| Returns the para at point. TODO, honor scroll here.
+| Returns the para at point. FIXME, honor scroll here.
 */
 Item.prototype.getParaAtPoint = function(p) {
 	if (p.y < this.innerMargin.n)
