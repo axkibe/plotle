@@ -81,7 +81,7 @@ Design.Pattern = {
 			to           : 'Point',
 			bx           : 'Number',
 			by           : 'Number',
-			// TODO Maybe replace with "Tangent"
+			// FIXME Maybe replace with "Tangent"
 			c1x          : 'Number',
 			c1y          : 'Number',
 			c2x          : 'Number',

@@ -193,7 +193,7 @@ Space.prototype.setFocus = function(item) {
 		caret = shell.setCaret(
 			'space',
 			{
-				path : doc.atRank(0).textPath(),
+				path : doc.atRank(0).textPath,
 				at1  : 0
 			}
 		);

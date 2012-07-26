@@ -412,7 +412,7 @@ Item.prototype.click = function(view, p) {
 		caret = shell.setCaret(
 			'space',
 			{
-				path : para.textPath(),
+				path : para.textPath,
 				at1  : at1
 			}
 		);

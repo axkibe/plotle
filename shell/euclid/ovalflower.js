@@ -99,7 +99,7 @@ OvalFlower.prototype.sketch = function(fabric, border, twist, view, segment) {
 		fabric.moveTo(                       pcx - a1 + bo, pcy);
 		fabric.beziTo(  0, -bm1, -am1,    0, pcx,           pcy - b1 + bo);
 		fabric.beziTo( am1,   0,    0, -bm1, pcx + a1 - bo, pcy);
-		// TODO workaround chrome pixel error
+		// FIXME workaround chrome pixel error
 		fabric.lineTo(                       pcx + a1 - bo, pcy - 1);
 		fabric.beziTo(  0,  bm1,  am1,    0, pcx,           pcy + b1 - bo);
 		fabric.beziTo(-am1,   0,    0,  bm1, pcx - a1 + bo, pcy);
@@ -110,7 +110,7 @@ OvalFlower.prototype.sketch = function(fabric, border, twist, view, segment) {
 		fabric.moveTo(                       pcx - a2 + bo, pcy);
 		fabric.beziTo(  0, -bm2, -am2,    0, pcx,           pcy - b2 + bo);
 		fabric.beziTo( am2,   0,    0, -bm2, pcx + a2 - bo, pcy);
-		// TODO workaround chrome pixel error
+		// FIXME workaround chrome pixel error
 		fabric.lineTo(                       pcx + a2 - bo, pcy - 1);
 		fabric.beziTo(  0,  bm2,  am2,    0, pcx,           pcy + b2 - bo);
 		fabric.beziTo(-am2,   0,    0,  bm2, pcx - a2 + bo, pcy);

@@ -287,7 +287,6 @@ Shell.prototype.setMenu = function(menu) {
 | Draws the dashboard and the space.
 */
 Shell.prototype._draw = function() {
-	var half   = Jools.half;
 	var fabric = this.fabric;
 
 	fabric.reset();

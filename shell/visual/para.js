@@ -298,7 +298,7 @@ Para.prototype.getLineXOffset = function(line, x) {
 | flowPos$: if set, writes flow$line and flow$token to
 |           the flow position used.
 |
-| TODO change to multireturn.
+| FIXME change to multireturn.
 */
 Para.prototype.locateOffset = function(offset, flowPos$) {
 	// FIXME cache position
@@ -369,9 +369,9 @@ Para.prototype.input = function(text) {
 
     for(var rx = reg.exec(text); rx !== null; rx = reg.exec(text)) {
 		var line = rx[1];
-		shell.peer.insertText(para.textPath(), shell.caret.sign.at1, line);
+		shell.peer.insertText(para.textPath, shell.caret.sign.at1, line);
         if (rx[2]) {
-			shell.peer.split(para.textPath(), shell.caret.sign.at1);
+			shell.peer.split(para.textPath, shell.caret.sign.at1);
 			para = doc.atRank(doc.twig.rankOf(para.$key) + 1);
 		}
     }
@@ -383,14 +383,14 @@ Para.prototype.input = function(text) {
 */
 Para.prototype.keyBackspace = function(item, doc, caret) {
 	if (caret.sign.at1 > 0) {
-		shell.peer.removeText(this.textPath(), caret.sign.at1 - 1, 1);
+		shell.peer.removeText(this.textPath, caret.sign.at1 - 1, 1);
 		return true;
 	}
 
 	var r = doc.twig.rankOf(this.$key);
 	if (r > 0) {
 		var ve = doc.atRank(r - 1);
-		shell.peer.join(ve.textPath(), ve.twig.text.length);
+		shell.peer.join(ve.textPath, ve.twig.text.length);
 		return true;
 	}
 
@@ -402,13 +402,13 @@ Para.prototype.keyBackspace = function(item, doc, caret) {
 */
 Para.prototype.keyDel = function(item, doc, caret) {
 	if (caret.sign.at1 < this.twig.text.length) {
-		shell.peer.removeText(this.textPath(), caret.sign.at1, 1);
+		shell.peer.removeText(this.textPath, caret.sign.at1, 1);
 		return true;
 	}
 
 	var r = doc.twig.rankOf(this.$key);
 	if (r < doc.twig.length - 1) {
-		shell.peer.join(this.textPath(), this.twig.text.length);
+		shell.peer.join(this.textPath, this.twig.text.length);
 		return true;
 	}
 
@@ -429,7 +429,7 @@ Para.prototype.keyDown = function(item, doc, caret) {
 		shell.setCaret(
 			'space',
 			{
-				path: this.textPath(),
+				path: this.textPath,
 				at1: at1
 			},
 			x
@@ -445,7 +445,7 @@ Para.prototype.keyDown = function(item, doc, caret) {
 		shell.setCaret(
 			'space',
 			{
-				path : ve.textPath(),
+				path : ve.textPath,
 				at1  : at1
 			},
 			x
@@ -465,7 +465,7 @@ Para.prototype.keyEnd = function(item, doc, caret) {
 	shell.setCaret(
 		'space',
 		{
-			path : this.textPath(),
+			path : this.textPath,
 			at1  : this.twig.text.length
 		}
 	);
@@ -477,7 +477,7 @@ Para.prototype.keyEnd = function(item, doc, caret) {
 | Enter-key pressed
 */
 Para.prototype.keyEnter = function(item, doc, caret) {
-	shell.peer.split(this.textPath(), caret.sign.at1);
+	shell.peer.split(this.textPath, caret.sign.at1);
 	return true;
 };
 
@@ -490,7 +490,7 @@ Para.prototype.keyLeft = function(item, doc, caret) {
 		shell.setCaret(
 			'space',
 			{
-				path : this.textPath(),
+				path : this.textPath,
 				at1  : caret.sign.at1 - 1
 			}
 		);
@@ -503,7 +503,7 @@ Para.prototype.keyLeft = function(item, doc, caret) {
 		shell.setCaret(
 			'space',
 			{
-				path : ve.textPath(),
+				path : ve.textPath,
 				at1  : ve.twig.text.length
 			}
 		);
@@ -522,11 +522,11 @@ Para.prototype.keyPos1 = function(item, doc, caret) {
 	shell.setCaret(
 		'space',
 		{
-			path : this.textPath(),
+			path : this.textPath,
 			at1  : 0
 		}
 	);
-	// TODO check if already at pos1
+
 	return true;
 };
 
@@ -538,7 +538,7 @@ Para.prototype.keyRight = function(item, doc, caret) {
 		shell.setCaret(
 			'space',
 			{
-				path : this.textPath(),
+				path : this.textPath,
 				at1  : caret.sign.at1 + 1
 			}
 		);
@@ -552,7 +552,7 @@ Para.prototype.keyRight = function(item, doc, caret) {
 		shell.setCaret(
 			'space',
 			{
-				path : ve.textPath(),
+				path : ve.textPath,
 				at1  : 0
 			}
 		);
@@ -576,7 +576,7 @@ Para.prototype.keyUp = function(item, doc, caret) {
 		shell.setCaret(
 			'space',
 			{
-				path : this.textPath(),
+				path : this.textPath,
 				at1  : at1
 			},
 			x
@@ -591,7 +591,7 @@ Para.prototype.keyUp = function(item, doc, caret) {
 		shell.setCaret(
 			'space',
 			{
-				path : ve.textPath(),
+				path : ve.textPath,
 				at1  : at1
 			},
 			x
@@ -628,8 +628,8 @@ Para.prototype.specialKey = function(key, shift, ctrl) {
 			var v0 = doc.atRank(0);
 			var v1 = doc.atRank(doc.twig.length - 1);
 
-			select.sign1 = new Sign({ path: v0.textPath(), at1: 0 });
-			select.sign2 = new Sign({ path: v1.textPath(), at1: v1.twig.text.length });
+			select.sign1 = new Sign({ path: v0.textPath, at1: 0 });
+			select.sign2 = new Sign({ path: v1.textPath, at1: v1.twig.text.length });
 			select.active = true;
 			shell.setCaret('space', select.sign2);
 			system.setInput(select.innerText());
@@ -721,12 +721,10 @@ Para.prototype.specialKey = function(key, shift, ctrl) {
 
 /**
 | Return the path to the .text attribute if this para.
-| TODO use lazyFixate.
 */
-Para.prototype.textPath = function() {
-	if (this._textPath) return this._textPath;
-	return (this._textPath = new Path(this.$path, '++', 'text'));
-};
+Jools.lazyFixate(Para.prototype, 'textPath', function() {
+	return new Path(this.$path, '++', 'text');
+});
 
 /**
 | Updates v-vine to match a new twig.

@@ -852,7 +852,6 @@ Server.prototype.cmdGet = function(cmd, _) {
 		{ throw reject('invalid time'); }
 
 	var path = new Path(cmd.path);
-	console.log('XXXXX', path.get(0));
 
 	var access = this.testAccess(cmd.user, path.get(0));
 	if (access == "no")
