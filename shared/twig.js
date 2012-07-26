@@ -62,10 +62,9 @@ Twig.prototype.rankOf = function(key) {
 	if (!Jools.isString(key))  { throw new Error('key no string'); }
 
 	// check rank of cache
-	// TODO name _$rof
-	var rof = this._rof;
+	var rof = this._$rof;
 	if (!rof)
-		{ Object.defineProperty(this, '_rof', rof = {}); }
+		{ Object.defineProperty(this, '_$rof', rof = {}); }
 
 	var r = rof[key];
 
