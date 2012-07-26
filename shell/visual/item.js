@@ -299,7 +299,6 @@ Item.prototype.dragstart = function(view, p, shift, ctrl, access) {
 	if (access == 'rw')
 		{ shell.$space.setFocus(this); }
 
-	var pnw = this.getZone().pnw;
 	if (access == 'rw') {
 		shell.startAction(
 			Action.ITEMDRAG, 'space',

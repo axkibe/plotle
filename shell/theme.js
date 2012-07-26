@@ -210,7 +210,7 @@ theme = {
 				{ border: 1, width :   2, color : 'rgb(255, 99, 188)' },
 				{ border: 0, width :   1, color : 'black' }
 			]
-		},
+		}
 	},
 
 	// switchpanel

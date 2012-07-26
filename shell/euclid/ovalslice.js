@@ -55,6 +55,7 @@ OvalSlice = function(psw, dimensions) {
 	var b = this.b = dimensions.b1;
 	var am         = Euclid.magic * a;
 	var bm         = Euclid.magic * b;
+
 	this.slice = sliceBezier(
 		-am, 0,
 		0, -bm,
@@ -114,11 +115,6 @@ Jools.lazyFixate(OvalSlice.prototype, 'pse', function() {
 | Draws the hexagon.
 */
 OvalSlice.prototype.sketch = function(fabric, border, twist, view) {
-	var a   = this.a;
-	var b   = this.b;
-	var am  = Euclid.magic * this.a;
-	var bm  = Euclid.magic * this.b;
-	var bo  = border;
 	var pswx = view.x(this.psw);
 	var pswy = view.y(this.psw);
 

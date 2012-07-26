@@ -37,6 +37,11 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
+| Export
+*/
+var OvalMenu;
+
+/**
 | Imports
 */
 var Euclid;
@@ -46,27 +51,11 @@ var system;
 var theme;
 
 /**
-| Exports
-*/
-var OvalMenu;
-
-/**
 | Capsule
 */
 (function(){
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('this code requires a browser!'); }
-
-/**
-| Shortcuts
-*/
-var debug      = Jools.debug;
-var immute     = Jools.immute;
-var is         = Jools.is;
-var isnon      = Jools.isnon;
-var log        = Jools.log;
-var half       = Jools.half;
-var ro         = Math.round;
 
 /**
 | Constructor.
@@ -113,10 +102,10 @@ OvalMenu.prototype.draw = function(view) {
 
 	var b1  = this._dimensions.b1;
 	var b2  = this._dimensions.b2;
-	var bs  = half(b2 - b1);
+	var bs  = Jools.half(b2 - b1);
 	var b2t = b1 + bs;
 	var m   = 0.551784;
-	var a2h = ro(this._dimensions.a2 * m);
+	var a2h = Math.round(this._dimensions.a2 * m);
 	var pc  = this.p;
 
 	if (labels.n)  f.fillText(labels.n,  pc.x,       pc.y - b2t);
@@ -145,8 +134,9 @@ OvalMenu.prototype.within = function(view, p) {
 */
 OvalMenu.prototype.mousedown = function(view, p, shift, ctrl) {
 	var w = this.within(view, p);
-	if (!w) return null;
-	
+	if (!w)
+		{ return null; }
+
 	this._callback(w, this.p);
 	shell.setMenu(null);
 	return false;
@@ -169,7 +159,7 @@ OvalMenu.prototype.fadeout = function() {
 	} else {
 		this.$fadeTimer = system.setTimer(theme.fade.time, function() { self.fadeout(); });
 	}
-	
+
 	shell.redraw = true;
 	shell.poke();
 };

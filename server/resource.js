@@ -33,17 +33,6 @@
 if (typeof(require) === 'undefined') { throw new Error('this file needs node!'); }
 
 /**
-| Imports
-*/
-var Jools = require('../shared/jools');
-
-/**
-| Shortcuts
-*/
-var debug = Jools.debug;
-var log   = Jools.log;
-
-/**
 | Constructor.
 |
 | opts ... a string, a letter including says:

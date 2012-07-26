@@ -49,19 +49,6 @@ var theme;
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
 /**
-| Shortcuts
-*/
-var debug         = Jools.debug;
-var immute        = Jools.immute;
-var is            = Jools.is;
-var isnon         = Jools.isnon;
-var limit         = Jools.limit;
-var log           = Jools.log;
-var max           = Math.max;
-var min           = Math.min;
-var ro            = Math.round;
-
-/**
 | Constructor.
 */
 var Para = Visual.Para = function(twig, path) {
@@ -132,13 +119,13 @@ Para.prototype.drawCaret = function(view) {
 	var cpos  = caret.$pos  = this.getCaretPos();
 	var pnw   = doc.getPNW(this.$key);
 	var sbary = item.scrollbarY;
-	var sy    = sbary ? ro(sbary.getPos()) : 0;
+	var sy    = sbary ? Math.round(sbary.getPos()) : 0;
 
-	var cyn = limit(0, cpos.n + pnw.y - sy, zone.height);
-	var cys = limit(0, cpos.s + pnw.y - sy, zone.height);
+	var cyn = Jools.limit(0, cpos.n + pnw.y - sy, zone.height);
+	var cys = Jools.limit(0, cpos.s + pnw.y - sy, zone.height);
 	var cx  = cpos.x + pnw.x;
 
-	var ch  = ro((cys - cyn) * view.zoom);
+	var ch  = Math.round((cys - cyn) * view.zoom);
 	if (ch === 0) { return; }
 
 	var cp = view.point(cx + zone.pnw.x, cyn + zone.pnw.y);
@@ -160,18 +147,17 @@ Para.prototype.drawCaret = function(view) {
 | Returns the caret position relative to the doc.
 */
 Para.prototype.getCaretPos = function() {
-	var caret   = shell.caret;
 	var item    = shell.getSub('space', this.$path, -2);
 	var doc     = item.$sub.doc;
 	var fs      = doc.getFont(item).size;
 	var descend = fs * theme.bottombox;
 	var p       = this.locateOffset(shell.caret.sign.at1, shell.caret);
 
-	var s = ro(p.y + descend);
-	var n = s - ro(fs + descend);
+	var s = Math.round(p.y + descend);
+	var n = s - Math.round(fs + descend);
 	var	x = p.x - 1;
 
-	return immute({
+	return Jools.immute({
 		s: s,
 		n: n,
 		x: x
@@ -231,7 +217,7 @@ Para.prototype.getFlow = function() {
 				if (spread < xw) spread = xw;
 				x = 0;
 				xw = x + w + space;
-				y += ro(font.size * (1 + theme.bottombox));
+				y += Math.round(font.size * (1 + theme.bottombox));
 				line++;
 				flow[line] = {a: [], y: y, o: ca.index};
 			} else {
@@ -264,7 +250,7 @@ Para.prototype.getHeight = function() {
 	var flow = this.getFlow();
 	var doc = shell.getSub('space', this.$path, -1);
 
-	return flow.height + ro(doc.getFont().size * theme.bottombox);
+	return flow.height + Math.round(doc.getFont().size * theme.bottombox);
 };
 
 /**
@@ -344,12 +330,12 @@ Para.prototype.locateOffset = function(offset, flowPos$) {
 
 	if (token) {
 		return new Euclid.Point(
-			ro(token.x + Euclid.Measure.width(font, text.substring(token.o, offset))),
+			Math.round(token.x + Euclid.Measure.width(font, text.substring(token.o, offset))),
 			line.y
 		);
 	} else {
 		return new Euclid.Point(
-			ro(Euclid.Measure.width(font, text)),
+			Math.round(Euclid.Measure.width(font, text)),
 			line.y
 		);
 	}
@@ -362,9 +348,6 @@ Para.prototype.locateOffset = function(offset, flowPos$) {
 */
 Para.prototype.getPointOffset = function(point) {
 	var flow = this.getFlow();
-	var para = this.para;
-	var doc  = shell.getSub('space', this.$path, -1);
-	var font = doc.getFont();
 
 	var line;
 	for (line = 0; line < flow.length; line++) {
@@ -539,7 +522,6 @@ Para.prototype.keyPos1 = function(item, doc, caret) {
 	if (caret.at1 === 0)
 		{ return false; }
 
-	var r = doc.twig.rankOf(this.$key);
 	shell.setCaret(
 		'space',
 		{
@@ -587,7 +569,7 @@ Para.prototype.keyRight = function(item, doc, caret) {
 | Up arrow pressed.
 */
 Para.prototype.keyUp = function(item, doc, caret) {
-	var flow = this.getFlow();
+	this.getFlow(); // FIXME, needed?
 	var x = (caret.retainx !== null ? caret.retainx : caret.$pos.x);
 	var at1;
 
@@ -633,11 +615,9 @@ Para.prototype.knock = function() {
 
 /**
 | Handles a special key
-| TODO split into smaller functions
 */
 Para.prototype.specialKey = function(key, shift, ctrl) {
 	var caret  = shell.caret;
-	var para   = this.para;
 	var select = shell.selection;
 	var item   = shell.getSub('space', this.$path, -2);
 	var doc    = item.$sub.doc;
@@ -702,7 +682,6 @@ Para.prototype.specialKey = function(key, shift, ctrl) {
 			item.poke();
 		}
 	}
-
 
 	switch(key) {
 	case 'backspace' : show = this.keyBackspace(item, doc, caret) || show; break;

@@ -24,10 +24,11 @@
  License: MIT(Expat), see accompanying 'License'-file
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 /**
-| Exports
+| Export
 */
-var Selection = null;
+var Selection = null; // TODO rename since this clashes with a default class
 
 /**
 | Imports
@@ -42,15 +43,6 @@ var system;
 (function(){
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('this code requires a browser!'); }
-
-/**
-| Shortcuts.
-*/
-var debug         = Jools.debug;
-var immute        = Jools.immute;
-var is            = Jools.is;
-var isnon         = Jools.isnon;
-var log           = Jools.log;
 
 /**
 | Constructor.

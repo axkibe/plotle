@@ -94,15 +94,6 @@ var limit = function(min, val, max) {
 };
 
 /**
-| Returns true if min <= val <= max
-*/
-var within = function(min, val, max) {
-	if (val < min) return false;
-	if (val > max) return false;
-	return true;
-};
-
-/**
 | buils a fail message
 */
 var fail = function(args, aoffset) {

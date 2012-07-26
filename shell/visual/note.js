@@ -23,8 +23,9 @@
  License: MIT(Expat), see accompanying 'License'-file
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
 /**
-| Exports
+| Export
 */
 var Visual;
 Visual = Visual || {};
@@ -105,13 +106,12 @@ Note.prototype.getSilhoutte = function($zone, zAnchor) {
 */
 Note.prototype.setScrollbar = function(pos) {
 	var sbary = this.scrollbarY;
-	if (!sbary.visible) return;
+	if (!sbary.visible)
+		{ return; }
 
-	var zone  = this.getZone();
-	var str   = theme.scrollbar.strength;
-	var str05 = Jools.half(str);
+	var zone = this.getZone();
 
-	if (typeof(pos) === 'undefined')
+	if (!Jools.is(pos))
 		{ pos = sbary.getPos(); }
 
 	sbary.setPos(
@@ -243,13 +243,8 @@ Note.prototype.mousewheel = function(view, p, dir, shift, ctrl) {
 | Returns the width for the contents flow.
 */
 Note.prototype.getFlowWidth = function() {
-	var sbary = this.scrollbarY;
 	var zone  = this.getZone();
 	var flowWidth = zone.width - this.innerMargin.x;
-
-	// this used to be made when the scrollbar was within the vnote.
-	// if (sbary && sbary.visible)
-	//	{ flowWidth -= theme.scrollbar.strength; }
 
 	return flowWidth;
 };

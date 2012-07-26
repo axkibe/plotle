@@ -19,13 +19,18 @@
                                           `'    `-' `-' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- A networked node item editor.
- A peer to a meshcraft repository. Utilizes its own meshmashine.
+ A peer to a meshcraft repository.
+ Utilizes its own meshmashine.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+/**
+| Export
+*/
+var Peer;
 
 /**
 | Imports
@@ -36,32 +41,12 @@ var Path;
 var sha1hex;
 
 /**
-| Exports
-*/
-var Peer;
-
-/**
 | Capsule
 */
 (function () {
 "use strict";
-if (typeof (window) === 'undefined') throw new Error('Peer nees a browser!');
+if (typeof (window) === 'undefined') throw new Error('this code nees a browser!');
 
-var debug     = Jools.debug;
-var log       = Jools.log;
-var is        = Jools.is;
-var uid       = Jools.uid;
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- .-,--.
-  '|__/ ,-. ,-. ,-.
-  ,|    |-' |-' |
-  `'    `-' `-' '
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
- Communicates with the server, holds caches.
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /**
 | Constructor
 */
@@ -102,9 +87,8 @@ Peer.prototype.logout = function(callback) {
 */
 Peer.prototype.auth = function(user, pass, callback) {
 	var self = this;
-	if (user === 'visitor' && pass === null) {
-		pass = uid();
-	}
+	if (user === 'visitor' && pass === null)
+		{ pass = Jools.uid(); }
 
 	self._iface.auth(user, pass, function(asw) {
 		if (asw.ok && user.substring(0, 5) === 'visit') {

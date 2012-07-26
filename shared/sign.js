@@ -48,11 +48,6 @@ if (typeof(window) === 'undefined') {
 }
 
 var check        = Jools.check;
-var debug        = Jools.debug;
-var log          = Jools.log;
-var immute       = Jools.immute;
-var is           = Jools.is;
-var isnon        = Jools.isnon;
 var matches      = Jools.matches;
 var reject       = Jools.reject;
 
@@ -63,24 +58,30 @@ var reject       = Jools.reject;
 Sign = function(model /*, ...*/) {
 	var k;
 	for(k in model) {
-		if (!Object.hasOwnProperty.call(model, k)) continue;
-		if (!Sign.field[k]) throw reject('invalid Sign property: '+k);
+		if (!Object.hasOwnProperty.call(model, k))
+			{ continue; }
+
+		if (!Sign.field[k])
+			{ throw reject('invalid Sign property: '+k); }
+
 		this[k] = model[k];
 	}
 
 	for (var a = 1, aZ = arguments.length; a < aZ; a+=2) {
 		k = arguments[a];
-		if (!Sign.field[k]) throw reject('invalid Sign property: '+k);
+		if (!Sign.field[k])
+			{ throw reject('invalid Sign property: '+k); }
+
 		this[k] = arguments[a + 1];
 	}
 
-	immute(this);
+	Jools.immute(this);
 };
 
 /**
 | List of keys allowed in a signature
 */
-Sign.field = immute({
+Sign.field = Jools.immute({
 	'at1'   : true,
 	'at2'   : true,
 	'path'  : true,

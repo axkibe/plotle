@@ -82,7 +82,6 @@ OvalFlower.prototype.sketch = function(fabric, border, twist, view, segment) {
 	var pc   = this.pc;
 	var pcx  = view.x(pc);
 	var pcy  = view.y(pc);
-	var segs = this.segs;
 	var a1   = this.a1;
 	var b1   = this.b1;
 	var a2   = this.a2;

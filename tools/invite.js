@@ -8,10 +8,8 @@
 (function() {
 "use strict";
 
-var Jools    = require('../shared/jools');
 var config   = require('../config');
 var mongodb  = require('mongodb');
-var debug    = Jools.debug;
 
 var args = process.argv;
 if (args.length < 3) {

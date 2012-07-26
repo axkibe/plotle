@@ -43,14 +43,6 @@ var Curve = null;
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
-var debug         = Jools.debug;
-var half          = Jools.half;
-var immute        = Jools.immute;
-var is            = Jools.is;
-var isnon         = Jools.isnon;
-var log           = Jools.log;
-
-
 /**
 | Constructor.
 */
@@ -74,7 +66,7 @@ Curve = function(twig, frame) {
 | Computes a point by its anchor
 */
 Curve.computePoint = function(model, frame) {
-	var p;
+	var half = Jools.half;
 	var pnw = frame.pnw;
 	var pse = frame.pse;
 

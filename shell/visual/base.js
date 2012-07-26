@@ -24,7 +24,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
-| Exports
+| Export
 */
 var Visual;
 Visual = Visual || {};
@@ -39,12 +39,7 @@ var Jools;
 */
 (function(){
 'use strict';
-if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
-
-/**
-| Shotcuts
-*/
-var is = Jools.is;
+if (typeof(window) === 'undefined') { throw new Error('this code requires a browser!'); }
 
 /**
 | Constructor

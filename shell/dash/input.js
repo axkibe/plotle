@@ -56,7 +56,9 @@ var Input = Dash.Input = function(twig, panel, inherit, name) {
 
 	var pnw  = this.pnw  = Curve.computePoint(twig.frame.pnw, panel.iframe);
 	var pse  = this.pse  = Curve.computePoint(twig.frame.pse, panel.iframe);
-	var bezi = this.bezi = new Euclid.BeziRect(Euclid.Point.zero, pse.sub(pnw), 7, 3);
+
+	// TODO make private
+	this.bezi = new Euclid.BeziRect(Euclid.Point.zero, pse.sub(pnw), 7, 3);
 
 	this._pitch  = new Euclid.Point(8, 3);
 	this._$value = inherit ? inherit._$value : '';
@@ -179,7 +181,6 @@ Input.prototype.locateOffset = function(offset) {
 | Returns the caret position relative to the panel.
 */
 Input.prototype.getCaretPos = function() {
-	var caret   = shell.caret;
 	var fs      = this.twig.font.size;
 	var descend = fs * theme.bottombox;
 	var p       = this.locateOffset(shell.caret.sign.at1);
@@ -197,10 +198,8 @@ Input.prototype.getCaretPos = function() {
 */
 Input.prototype.drawCaret = function(view) {
 	var caret = shell.caret;
-	var panel = this.panel;
 	var cpos  = caret.$pos = this.getCaretPos();
 
-	var cx  = cpos.x;
 	var ch  = Math.round((cpos.s - cpos.n) * view.zoom);
 	var cp = view.point(
 		this.panel.pnw.x + cpos.x,

@@ -24,16 +24,16 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
+| Export
+*/
+var Design;
+Design = Design || {};
+
+/**
 | Imports
 */
 var Jools;
 var theme;
-
-/**
-| Exports
-*/
-var Design;
-Design = Design || {};
 
 /**
 | Capsule
@@ -41,10 +41,8 @@ Design = Design || {};
 (function(){
 'use strict';
 
-var immute      = Jools.immute;
-var innumerable = Jools.innumerable;
-var ro          = Math.round;
 var getFont     = Design.getFont;
+
 var HelpPanel   = Design.HelpPanel = { type : 'Design' };
 
 HelpPanel.style = 'help';

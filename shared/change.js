@@ -52,12 +52,7 @@ if (typeof(window) === 'undefined') {
 	Sign  = require('./sign');
 }
 
-var debug        = Jools.debug;
-var log          = Jools.log;
-var immute       = Jools.immute;
-var innumerable  = Jools.innumerable;
 var is           = Jools.is;
-var isnon        = Jools.isnon;
 var isPath       = Path.isPath;
 
 /**
@@ -84,18 +79,22 @@ Change = function(a1, a2) {
 	if (src.constructor === Sign) {
 		this.src = src;
 	} else {
-		if (src.path && !isPath(src.path)) src.path = new Path(src.path);
+		if (src.path && !isPath(src.path))
+			{ src.path = new Path(src.path); }
+
 		this.src = new Sign(src);
 	}
 
 	if (trg.constructor === Sign) {
 		this.trg = trg;
 	} else {
-		if (trg.path && !isPath(trg.path)) trg.path = new Path(trg.path);
+		if (trg.path && !isPath(trg.path))
+			{ trg.path = new Path(trg.path); }
+
 		this.trg = new Sign(trg);
 	}
 
-	immute(this);
+	Jools.immute(this);
 };
 
 /**
@@ -108,18 +107,27 @@ Change.prototype.type = function() {
 	var trg = this.trg;
 	var type;
 
-	/**/ if (trg.proc === 'splice')                       { type = 'split';  }
-	else if (src.proc === 'splice')                       { type = 'join';   }
-	else if (is(src.val) && !is(trg.at1))                 { type = 'set';    }
-	else if (is(src.val) &&  is(trg.at1))                 { type = 'insert'; }
-	else if (is(src.at1) &&  is(src.at2) && !is(trg.at1)) { type = 'remove'; }
-	else if (is(trg.rank))                                { type = 'rank';   }
+	if (trg.proc === 'splice')
+		{ type = 'split';  }
+	else if (src.proc === 'splice')
+		{ type = 'join';   }
+	else if (is(src.val) && !is(trg.at1))
+		{ type = 'set';    }
+	else if (is(src.val) &&  is(trg.at1))
+		{ type = 'insert'; }
+	else if (is(src.at1) &&  is(src.at2) && !is(trg.at1))
+		{ type = 'remove'; }
+	else if (is(trg.rank))
+		{ type = 'rank';   }
 	else {
 		type = null;
-		if (Jools.prissy) { log('fail', this); throw new Error('invalid type'); }
+		if (Jools.prissy) {
+			Jools.log('fail', this);
+			throw new Error('invalid type');
+		}
 	}
 
-	innumerable(this, '_type', type);
+	Jools.innumerable(this, '_type', type);
 	return type;
 };
 
@@ -129,8 +137,8 @@ Change.prototype.type = function() {
 Change.prototype.invert = function() {
 	if (is(this._invert)) { return this._invert; }
 	var r = new Change(this.trg, this.src);
-	innumerable(this, '_invert', r);
-	innumerable(r, '_invert', this);
+	Jools.innumerable(this, '_invert', r);
+	Jools.innumerable(r, '_invert', this);
 	return r;
 };
 

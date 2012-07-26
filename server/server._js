@@ -43,20 +43,16 @@ var sha1        = require('../shared/sha1');
 var mongodb     = require('mongodb');
 var uglify      = config.uglify && require('uglify-js');
 var url         = require('url');
-var util        = require('util');
 var zlib        = require('zlib');
 
 /**
 | Shortcuts
 */
-var Change       = MeshMashine.Change;
 var configSwitch = Jools.configSwitch;
-var debug        = Jools.debug;
 var is           = Jools.is;
 var isArray      = Jools.isArray;
 var log          = Jools.log;
 var reject       = Jools.reject;
-var uid          = Jools.uid;
 
 /**
 | Server
@@ -151,7 +147,6 @@ Server.prototype.startup = function(_) {
 | Ensures there is a root user
 */
 Server.prototype.ensureRootUser = function(_) {
-	var db = this.db;
 	var root = this.db.users.findOne({ _id : 'root'}, _);
 
 	if (root) {
@@ -160,7 +155,7 @@ Server.prototype.ensureRootUser = function(_) {
 		// if not create one
 		root = {
 			_id  : 'root',
-			pass : uid(),
+			pass : Jools.uid(),
 			mail : '',
 			code : '',
 			icom : 'root'
@@ -183,11 +178,11 @@ Server.prototype.playbackOne = function(o) {
 	};
 
 	if (!isArray(o.chgX)) {
-		c.chgX = new Change(o.chgX);
+		c.chgX = new MeshMashine.Change(o.chgX);
 	} else {
 		c.chgX = [];
 		for(var a = 0, aZ = o.chgX.length; a < aZ; a++) {
-			c.chgX.push(new Change(o.chgX[a]));
+			c.chgX.push(new MeshMashine.Change(o.chgX[a]));
 		}
 	}
 
@@ -469,7 +464,7 @@ Server.prototype.cmdAlter = function(cmd, _) {
 	// fits the cmd into data structures
 	try {
 		if (isArray(chgX))  { throw new Error('Array chgX not yet supported'); } // TODO
-		chgX = new Change(chgX);
+		chgX = new MeshMashine.Change(chgX);
 	} catch(e) {
 		throw reject('invalid cmd: '+e.message);
 	}
@@ -597,11 +592,11 @@ Server.prototype.cmdRegister = function(cmd, _) {
 		time : 0,
 		user : 'root',
 		pass : this.$users.root.pass,
-		chgX : new Change(
+		chgX : new MeshMashine.Change(
 			{ val: { type: 'Space', cope: {}, ranks: [] } },
 			{ path : [cmd.user + ':home'] }
 		),
-		cid  : uid()
+		cid  : Jools.uid()
 	}, _);
 
 	if (asw.ok !== true) { throw new Error('Cannot create users home space'); }
@@ -785,8 +780,6 @@ Server.prototype.conveyUpdate = function(time, mseq, space) {
 */
 Server.prototype.wake = function(spaces) {
 	var sleepKeys = Object.keys(this.upsleep);
-	var changes   = this.changes;
-	var cZ  = changes.length;
 
 	// TODO cache change lists to answer the same to multiple clients.
 	for(var a = 0, aZ = sleepKeys.length; a < aZ; a++) {
@@ -836,7 +829,6 @@ Server.prototype.testAccess = function(user, space) {
 | Executes a get command.
 */
 Server.prototype.cmdGet = function(cmd, _) {
-	var pass    = cmd.pass;
 	var time    = cmd.time;
 	var user    = cmd.user;
 	var changes = this.changes;
@@ -1063,6 +1055,6 @@ Server.prototype.ajaxCmd = function(cmd, res, _) {
 	}
 };
 
-var server = new Server();
+new Server();
 
 })();

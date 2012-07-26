@@ -56,10 +56,7 @@ if (typeof(window) === 'undefined') {
 	Sign    = require('./sign');
 }
 
-var debug        = Jools.debug;
-var log          = Jools.log;
 var check        = Jools.check;
-var immute       = Jools.immute;
 var is           = Jools.is;
 var isnon        = Jools.isnon;
 var isArray      = Jools.isArray;
@@ -67,19 +64,8 @@ var isString     = Jools.isString;
 var reject       = Jools.reject;
 var isPath       = Path.isPath;
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ,--. .                   ,,--.                 .
- | `-' |-. ,-. ,-. ,-. ,-. |`, | ,-. ,-. ,-. ,-. |- . ,-. ,-.
- |   . | | ,-| | | | | |-' |   | | | |-' |   ,-| |  | | | | |
- `--'  ' ' `-^ ' ' `-| `-' `---' |-' `-' '   `-^ `' ' `-' ' '
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ,|~ ~ ~ ~ ~ ~|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-                    `'           '
- Changes a tree according to a change.
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
 /**
-| Performes one or many changes on a tree
+| Performes one or several changes on a tree
 */
 var changeTree = function(tree, chgX) {
 	if (arguments.length !== 2) { throw new Error('changeTree arguments fail'); }
@@ -89,7 +75,7 @@ var changeTree = function(tree, chgX) {
 		var chg = chgX[a];
 
 		var ctype = chg.type();
-		log('change', 'src:', chg.src, 'trg:', chg.trg, 'type:', ctype);
+		Jools.log('change', 'src:', chg.src, 'trg:', chg.trg, 'type:', ctype);
 
 		var op = ChangeOps[ctype];
 		if (!op) throw reject('invalid change: '+ctype);
@@ -200,14 +186,14 @@ ChangeOps.remove = function(tree, chg) {
 	check(isPath(src.path), cm, 'src.path missing');
 	var str = tree.getPath(src.path);
 	if (!isString(str)) {
-		log('change', 'src.path signates no string');
+		Jools.log('change', 'src.path signates no string');
 		return null;
 	}
 //	check(isString(str), cm, 'src.path signates no string');
 //  TODO removed item
 
 	if (src.at1 === src.at2) {
-		log('change', 'removed nothing');
+		Jools.log('change', 'removed nothing');
 		return null;
 	}
 
@@ -374,7 +360,7 @@ var tfxSign1 = function(sign, chg) {
 | TODO check if t1/t2 params are ever used
 */
 var tfxSign = function(sign, chgX) {
-	log('tfx', 'tfxSign', sign, chgX);
+	Jools.log('tfx', 'tfxSign', sign, chgX);
 
 	switch(chgX.constructor) {
 	case Change  :
@@ -388,7 +374,7 @@ var tfxSign = function(sign, chgX) {
 	if (sign.constructor !== Sign) { throw new Error('tfxSign argument faili (1)'); }
 
 	if (!is(sign.path) || sign.path.length === 0) {
-		log('tfx', 'out', sign);
+		Jools.log('tfx', 'out', sign);
 		return sign;
 	}
 
@@ -430,7 +416,7 @@ var tfxSign = function(sign, chgX) {
 		}
 	}
 
-	log('tfx', 'out', signX);
+	Jools.log('tfx', 'out', signX);
 	return signX;
 };
 
@@ -438,7 +424,7 @@ var tfxSign = function(sign, chgX) {
 | Transforms a change on an a change/x/.
 */
 var tfxChg = function(chg, chgX) {
-	log('tfx', 'tfxChg', chg, chgX);
+	Jools.log('tfx', 'tfxChg', chg, chgX);
 
 	if (chg.constructor !== Change)
 		{ throw new Error('tfxChg param error'); }
@@ -447,7 +433,7 @@ var tfxChg = function(chg, chgX) {
 	var trgX = tfxSign(chg.trg, chgX);
 
 	if (srcX === null || trgX === null) {
-		log('tfx', 'transformed to null');
+		Jools.log('tfx', 'transformed to null');
 		return null;
 	}
 
@@ -507,7 +493,7 @@ TFXOps.split = function(sign, src, trg) {
 	// TODO form ranks
 	// simpler case signature is only one point
 	if (!is(sign.at2)) {
-		log('tfx', 'split (simple)');
+		Jools.log('tfx', 'split (simple)');
 		if (sign.at1 < src.at1) return sign;
 		return new Sign(sign, 'path', trg.path, 'at1', sign.at1 - src.at1);
 	}
@@ -518,12 +504,12 @@ TFXOps.split = function(sign, src, trg) {
 	// Splits cases:      1    2    3
 
 	if (sign.at2 <= src.at1) {
-		log('tfx', 'split (span, case 1)');
+		Jools.log('tfx', 'split (span, case 1)');
 		return sign;
 	}
 
 	if (sign.at1 >= src.at1) {
-		log('tfx', 'split (span, case 2)');
+		Jools.log('tfx', 'split (span, case 2)');
 		// signature goes into splitted line instead
 		return new Sign(sign,
 			'path', trg.path,
@@ -531,7 +517,7 @@ TFXOps.split = function(sign, src, trg) {
 			'at2', sign.at2 - src.at1
 		);
 	}
-	log('tfx', 'split (span, case 3');
+	Jools.log('tfx', 'split (span, case 3');
 	// the signature is splited into a part that stays and one that goes to next line.
 
 	return [
@@ -557,7 +543,7 @@ TFXOps.join = function(sign, src, trg) {
 
 	// TODO tfx ranks
 
-	log('tfx', 'join', sign);
+	Jools.log('tfx', 'join', sign);
 	if (!is(sign.at2)) {
 		return new Sign(sign,
 			'path', trg.path,
@@ -579,7 +565,7 @@ TFXOps.rank = function(sign, src, trg) {
 	if (!src.path || !src.path.equals(sign.path)) return sign;
 	if (!is(sign.rank)) { return sign; }
 
-	log('tfx', 'rank');
+	Jools.log('tfx', 'rank');
 
 	if (src.rank <= sign.rank && trg.rank > sign.rank)
 		{ sign = new Sign(sign, 'rank', sign.rank - 1); }
@@ -599,8 +585,8 @@ TFXOps.set = function(sign, src, trg) {
 	if (!is(trg.rank))  { return sign; }
 	if (!trg.path || !trg.path.subPathOf(sign.path, - 1)) return sign;
 
-	log('tfx', 'set');
-	
+	Jools.log('tfx', 'set');
+
 	if (trg.rank === null) {
 		if (sign.rank >= trg.rank)
 			{ sign = new Sign(sign, 'rank', sign.rank - 1); }
@@ -625,7 +611,7 @@ TFXOps.set = function(sign, src, trg) {
 */
 TFXOps.insert = function(sign, src, trg) {
 	if (!trg.path || !trg.path.equals(sign.path)) return sign;
-	log('tfx', 'insert');
+	Jools.log('tfx', 'insert');
 	if (!is(trg.at1) || !is(trg.at2)) throw new Error('history mangled');
 
 	if (sign.at1 < trg.at1) return sign;
@@ -658,16 +644,16 @@ TFXOps.remove = function(sign, src, trg) {
 		// sign, case2:            '    ' +    (sign to right, substract)
 
 		if (sign.at1 <= src.at1) {
-			log('tfx', 'remove (case s0)');
+			Jools.log('tfx', 'remove (case s0)');
 			return sign;
 		}
 
 		if (sign.at1 <= src.at2) {
-			log('tfx', 'remove (case s1)');
+			Jools.log('tfx', 'remove (case s1)');
 			return new Sign(sign, 'at1', src.at1);
 		}
 
-		log('tfx', 'remove (case s2)');
+		Jools.log('tfx', 'remove (case s2)');
 		return new Sign(sign, 'at1', sign.at1 - len);
 	}
 
@@ -684,27 +670,27 @@ TFXOps.remove = function(sign, src, trg) {
 	// sign, case5:            '   ++++    (part of sign removed)
 
 	if (sign.at2 <= src.at1) {
-		log('tfx', 'remove (case 0)');
+		Jools.log('tfx', 'remove (case 0)');
 		return sign;
 	}
 	if (sign.at1 >= src.at2) {
-		log('tfx', 'remove (case 1)');
+		Jools.log('tfx', 'remove (case 1)');
 		return new Sign(sign, 'at1', sign.at1 - len, 'at2', sign.at2 - len);
 	}
 	if (sign.at1 < src.at1 && sign.at2 > src.at2) {
-		log('tfx', 'remove (case 2)');
+		Jools.log('tfx', 'remove (case 2)');
 		return new Sign(sign, 'at2', sign.at2 - len);
 	}
 	if (sign.at1 >= src.at1 && sign.at2 <= src.at2) {
-		log('tfx', 'remove (case 3)');
+		Jools.log('tfx', 'remove (case 3)');
 		return null;
 	}
 	if (sign.at1 < src.at1 && sign.at2 <= src.at2) {
-		log('tfx', 'remove (case 4)');
+		Jools.log('tfx', 'remove (case 4)');
 		return new Sign(sign, 'at2', src.at1);
 	}
 	if (sign.at1 <= src.at2 && sign.at2 > src.at2) {
-		log('tfx', 'remove (case 5)');
+		Jools.log('tfx', 'remove (case 5)');
 		return new Sign(sign, 'at2', src.at2);
 	}
 	// should never happen

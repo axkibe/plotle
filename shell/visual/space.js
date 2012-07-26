@@ -24,7 +24,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
-| Exports
+| Export
 */
 var Visual;
 Visual = Visual || {};
@@ -49,25 +49,10 @@ var theme;
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
 /**
-| Shortcuts
-*/
-var Base     = Visual.Base;
-var debug    = Jools.debug;
-var is       = Jools.is;
-var isnon    = Jools.isnon;
-var half     = Jools.half;
-var log      = Jools.log;
-var Label    = Visual.Label;
-var Note     = Visual.Note;
-var Relation = Visual.Relation;
-var ro       = Math.round;
-var subclass = Jools.subclass;
-
-/**
 | Constructor
 */
 var Space = Visual.Space = function(twig, path, access) {
-	Base.call(this, twig, path);
+	Visual.Base.call(this, twig, path);
 
 	if (this.$sub !== null) { throw new Error('iFail'); }
 	var g = this.$sub = {};
@@ -81,7 +66,7 @@ var Space = Visual.Space = function(twig, path, access) {
 
 	this._floatMenuLabels = {c: 'new', n: 'Note', ne: 'Label'};
 };
-subclass(Space, Base);
+Jools.subclass(Space, Visual.Base);
 
 /**
 | Updates v-vine to match a new twig.
@@ -100,7 +85,7 @@ Space.prototype.update = function(tree, chgX) {
 	for(var k in copse) {
 		var sub = twig.copse[k];
 		var o = gold[k];
-		if (is(o)) {
+		if (Jools.is(o)) {
 			if (o.twig !== sub) {
 				o.update(sub);
 			}
@@ -117,7 +102,7 @@ Space.prototype.update = function(tree, chgX) {
 	if (caret.section === 'space' &&
 		csign && csign.path &&
 		csign.path.get(0) === this.$key &&
-		!isnon(g[csign.path.get(1)])
+		!Jools.isnon(g[csign.path.get(1)])
 	) {
 		if (shell.selection.active &&
 			shell.selection.sign1.path.get(-4) === csign.path.get(1))
@@ -143,9 +128,9 @@ Space.prototype.focusedItem = function() {
 Space.prototype.createItem = function(twig, k) {
 	var $path = new Path(this.$path, '++', k);
 	switch (twig.type) {
-	case 'Note'     : return new Note    (twig, $path, this);
-	case 'Label'    : return new Label   (twig, $path, this);
-	case 'Relation' : return new Relation(twig, $path, this);
+	case 'Note'     : return new Visual.Note    (twig, $path, this);
+	case 'Label'    : return new Visual.Label   (twig, $path, this);
+	case 'Relation' : return new Visual.Relation(twig, $path, this);
 	default : throw new Error('unknown type: ' + twig.type);
 	}
 };
@@ -253,9 +238,7 @@ Space.prototype.mousewheel = function(p, dir, shift, ctrl) {
 */
 Space.prototype.mousehover = function(p, shift, ctrl) {
 	if (p === null) { return null; }
-	var $view = this.$view;
-
-	var $action = shell.$action;
+	var $view  = this.$view;
 	var cursor = null;
 
 	var focus = this.focusedItem();
@@ -334,7 +317,7 @@ Space.prototype.click = function(p, shift, ctrl) {
 
 		shell.setMenu(new OvalMenu(
 			system.fabric,
-			$view.point(os.psw).add(half(os.width), 0),
+			$view.point(os.psw).add(Jools.half(os.width), 0),
 			theme.ovalmenu,
 			labels,
 			function(entry, p) {
@@ -453,7 +436,7 @@ Space.prototype.floatMenuSelect = function(entry, p) {
 		var nw = theme.note.newWidth;
 		var nh = theme.note.newHeight;
 		var dp = $view.depoint(p);
-		pnw = dp.sub(half(nw) , half(nh));
+		pnw = dp.sub(Jools.half(nw) , Jools.half(nh));
 		key = shell.peer.newNote(this.$path, new Euclid.Rect(pnw, pnw.add(nw, nh)));
 		this.setFocus(this.$sub[key]);
 		break;
@@ -485,7 +468,6 @@ Space.prototype.itemMenuSelect = function(entry, p, focus) {
 Space.prototype.mousedown = function(p, shift, ctrl) {
 	var $view   = this.$view;
 	var $action = shell.$action;
-	var pnw, md, key;
 
 	if (this.access == 'ro') {
 		this.dragstart(p, shift, ctrl);
@@ -528,7 +510,12 @@ Space.prototype.input = function(text) {
 */
 Space.prototype.changeZoom = function(df) {
 	var $view = this.$view;
-	var pm = new Euclid.Point(half(this.fabric.width), half(this.fabric.height));
+
+	// TODO replace by this.fabric.getCenter()
+	var pm = new Euclid.Point(
+		Jools.half(this.fabric.width),
+		Jools.half(this.fabric.height)
+	);
 	pm = $view.depoint(pm);
 	this.$view = this.$view.review(df, pm);
 	shell.setSpaceZoom(this.$view.fact);
@@ -558,7 +545,7 @@ Space.prototype.specialKey = function(key, shift, ctrl) {
 | Returns the visual node the path points to.
 */
 Space.prototype.getSub = function(path, plen) {
-	if (!is(plen))
+	if (!Jools.is(plen))
 		{ plen  = path.length; }
 	else if (plen < 0)
 		{ plen += path.length; }

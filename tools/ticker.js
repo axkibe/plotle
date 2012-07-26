@@ -87,7 +87,6 @@ function jsonRequest(cmd, callback) {
 console.log('Talking to '+ops.host+':'+ops.port+ops.path);
 
 var p      =  -1;
-var alpha  = 'abcdefghijklmnopqrstuvwxyz';
 var ralpha = 'zyxwvutsrpqonmlkjihgfedcba';
 var rtime  = -1;
 

@@ -18,6 +18,7 @@
                                         `---' ' ' `-' `' `'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
+ The users shell.
  The shell consists of the dashboard and the visual space.
 
  Authors: Axel Kittenberger
@@ -38,9 +39,7 @@ var Path;
 var Peer;
 var Selection;
 var Sign;
-var system;
 var theme;
-var Tree;
 var Visual;
 
 /**
@@ -56,33 +55,6 @@ var Shell = null;
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
-/**
-| Shortcuts.
-*/
-var debug    = Jools.debug;
-var half     = Jools.half;
-var immute   = Jools.immute;
-var is       = Jools.is;
-var isnon    = Jools.isnon;
-var log      = Jools.log;
-var Space    = Visual.Space;
-var subclass = Jools.subclass;
-var tfxSign  = MeshMashine.tfxSign;
-
-// configures tree.
-Tree.cogging = true;
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- .---. .       .  .
- \___  |-. ,-. |  |
-     \ | | |-' |  |
- `---' ' ' `-' `' `'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
- The users shell.
- Consists of the dashboard and the space the user is viewing.
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /**
 | Constructor.
 */
@@ -146,7 +118,7 @@ Shell.prototype.setCaret = function(section, sign, retainx) {
 	this.caret = new Caret(
 		section,
 		sign,
-		is(retainx) ? retainx : null,
+		Jools.is(retainx) ? retainx : null,
 		this.caret.$shown
 	);
 
@@ -197,7 +169,7 @@ Shell.prototype.update = function(tree, chgX) {
 	if (caret.sign !== null) {
 		this.setCaret(
 			caret.section,
-			tfxSign(caret.sign, chgX),
+			MeshMashine.tfxSign(caret.sign, chgX),
 			caret.retainx
 		);
 		if (shown) { this.caret.show(); }
@@ -205,8 +177,8 @@ Shell.prototype.update = function(tree, chgX) {
 
 	var selection = this.selection;
 	if (selection.active) {
-		selection.sign1 = tfxSign(selection.sign1, chgX);
-		selection.sign2 = tfxSign(selection.sign2, chgX);
+		selection.sign1 = MeshMashine.tfxSign(selection.sign1, chgX);
+		selection.sign2 = MeshMashine.tfxSign(selection.sign2, chgX);
 	}
 	this._draw();
 };
@@ -315,10 +287,13 @@ Shell.prototype.setMenu = function(menu) {
 | Draws the dashboard and the space.
 */
 Shell.prototype._draw = function() {
+	var half   = Jools.half;
 	var fabric = this.fabric;
+
 	fabric.reset();
 
 	if (this.green) {
+		// FIXME make get center point part of Fabric
 		var m = new Euclid.Point(half(fabric.width), half(fabric.height));
 		fabric.fillRect('rgb(170, 255, 170)', 0, 0, fabric.width, fabric.height);
 
@@ -681,7 +656,7 @@ Shell.prototype.moveToSpace = function(name) {
 			{ throw new Error('server served wrong space!'); }
 
 		var tree = val.tree;
-		self.$space = new Space(
+		self.$space = new Visual.Space(
 			tree.root.copse[name],
 			new Path([name]),
 			val.access
@@ -708,7 +683,7 @@ Shell.prototype.onLoadAuth = function(user, res) {
 			return;
 		}
 		// if even that failed, bails to greenscreen
-		log('fail', res.message);
+		Jools.log('fail', res.message);
 		self.greenscreen(res.message);
 		return;
 	}

@@ -184,7 +184,6 @@ Label.prototype.mousewheel = function(view, p, dir) {
 | An ongoing action can modify this to be different than meshmashine data.
 */
 Label.prototype.getZone = function() {
-	var twig = this.twig;
 	var $action = shell.$action;
 	var pnw = this.twig.pnw;
 

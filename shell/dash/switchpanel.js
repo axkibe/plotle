@@ -153,9 +153,6 @@ SwitchPanel.prototype.sketchFrame = function(fabric, border, twist) {
 SwitchPanel.prototype.sketchButton = function(fabric, border, twist, view, dir) {
 	var bh = this.buttonDim.height;
 	var bw = this.buttonDim.width;
-
-	var w = this.iframe.width  - 1;
-	var h = this.iframe.height - 1;
 	var bo = border;
 
 	var bw05 = Jools.half(bw);
@@ -206,10 +203,6 @@ SwitchPanel.prototype._weave = function() {
 	// TODO XXX this should be in a design.
 	fabric.setFont(new Euclid.Font(14, theme.defaultFont, 'black', 'center', 'middle'));
 
-	var bd = this.buttonDim;
-	var cx = Jools.half(iframe.width);
-	var cy = Jools.half(bd.height);
-
 	var bp = this.buttonPos;
 	fabric.fillText('Welcome',   bp.n .x, bp.n. y);
 	fabric.fillText('Sandbox',   bp.ne.x, bp.ne.y);
@@ -225,7 +218,7 @@ SwitchPanel.prototype._weave = function() {
 	case 'nw' : text = 'Your Home, private to you'; break;
 	default: throw new Error('no valid space text');
 	}
-	fabric.fillText(text, cx, iframe.height - 12);
+	fabric.fillText(text, Jools.half(iframe.width), iframe.height - 12);
 
 	fabric.edge(theme.switchpanel.style.edge, this, 'sketchFrame', Euclid.View.proper);
 

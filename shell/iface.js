@@ -27,6 +27,11 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
+| Export
+*/
+var IFace;
+
+/**
 | Imports
 */
 var Change;
@@ -42,24 +47,11 @@ var shell;
 var system;
 
 /**
-| Exports
-*/
-var IFace;
-
-/**
 | Capsule
 */
 (function () {
 "use strict";
-if (typeof (window) === 'undefined') throw new Error('Peer nees a browser!');
-
-var changeTree = MeshMashine.changeTree;
-var tfxChgX    = MeshMashine.tfxChgX;
-var debug      = Jools.debug;
-var immute     = Jools.immute;
-var is         = Jools.is;
-var log        = Jools.log;
-var uid        = Jools.uid;
+if (typeof (window) === 'undefined') throw new Error('this code nees a browser!');
 
 /**
 | Constructor.
@@ -96,21 +88,21 @@ IFace = function(updateRCV, messageRCV) {
 
 
 /**
-| General ajax.
+| General purpose AJAX.
 */
 IFace.prototype._ajax = function(request, callback) {
-	if (!request.cmd) { throw new Error('ajax request.cmd missing'); }
+	if (!request.cmd)
+		{ throw new Error('ajax request.cmd missing'); }
 
     var ajax = new XMLHttpRequest();
     ajax.open('POST', '/mm', true);
     ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	var self = this;
 
     ajax.onreadystatechange = function() {
 		if (ajax.readyState !== 4) { return; }
 
 		if (ajax.status !== 200) {
-			log('iface', request.cmd, 'status: ', ajax.status);
+			Jools.log('iface', request.cmd, 'status: ', ajax.status);
 			if (callback) {
 				callback( { ok: false, message: 'connection' , status: ajax.status } );
 			}
@@ -124,9 +116,9 @@ IFace.prototype._ajax = function(request, callback) {
 			if (callback) { callback( { ok: false, message: 'nojson' } ); }
 		}
 
-		log('iface', '<-', asw);
+		Jools.log('iface', '<-', asw);
 		if (!asw.ok) {
-			log('iface', request.cmd, 'server not ok');
+			Jools.log('iface', request.cmd, 'server not ok');
 			if (callback) { callback( asw, null); }
 			return;
 		}
@@ -135,7 +127,7 @@ IFace.prototype._ajax = function(request, callback) {
 	};
 
     var rs = JSON.stringify(request);
-    log('iface', '->', rs);
+    Jools.log('iface', '->', rs);
     ajax.send(rs);
 };
 
@@ -234,7 +226,7 @@ IFace.prototype.aquireSpace = function(spaceName, callback) {
 
 		if (ajax.status !== 200) {
 			self.$aquireAjax = null;
-			log('iface', 'aquireSpace.status == ' + ajax.status);
+			Jools.log('iface', 'aquireSpace.status == ' + ajax.status);
 			callback( { error: 'connection' , status: ajax.status }, null);
 			return;
 		}
@@ -247,10 +239,10 @@ IFace.prototype.aquireSpace = function(spaceName, callback) {
 			return;
 		}
 
-		log('iface', '<-sg', asw);
+		Jools.log('iface', '<-sg', asw);
 		if (!asw.ok) {
 			self.$aquireAjax = null;
-			log('iface', 'aquireSpace, server not ok');
+			Jools.log('iface', 'aquireSpace, server not ok');
 			callback( asw, null);
 			return;
 		}
@@ -263,7 +255,7 @@ IFace.prototype.aquireSpace = function(spaceName, callback) {
 		troot.copse[spaceName] = asw.node;
 		self.$tree = self.$rtree = new Tree(troot, Meshverse);
 
-		callback(null, immute({
+		callback(null, Jools.immute({
 			tree   : self.$tree,
 			name   : spaceName,
 			access : asw.access
@@ -287,7 +279,7 @@ IFace.prototype.aquireSpace = function(spaceName, callback) {
 		user : self.$user
     });
 
-    log('iface', 'sg->', request);
+    Jools.log('iface', 'sg->', request);
     ajax.send(request);
 };
 
@@ -319,7 +311,7 @@ IFace.prototype._update = function() {
 		self.$updateAjax = null;
 
 		if (ajax.status !== 200) {
-			log('iface', 'update.status == ' + ajax.status);
+			Jools.log('iface', 'update.status == ' + ajax.status);
 			shell.greenscreen('Connection with server failed.', false);
 			return;
 		}
@@ -330,7 +322,7 @@ IFace.prototype._update = function() {
 			throw new Error('Server answered no JSON!');
 		}
 
-		log('iface', '<-u', asw);
+		Jools.log('iface', '<-u', asw);
 		if (!asw.ok) { throw new Error('update, server not OK!'); }
 		var chgs = asw.chgs;
 
@@ -347,7 +339,7 @@ IFace.prototype._update = function() {
 				var cid = chgs[a].cid;
 
 				// changes the clients understanding of the server tree
-				self.$rtree = changeTree(self.$rtree, chgX).tree;
+				self.$rtree = MeshMashine.changeTree(self.$rtree, chgX).tree;
 
 				if (postbox.length > 0 && postbox[0].cid === cid) {
 					self.$postbox.splice(0, 1);
@@ -361,7 +353,7 @@ IFace.prototype._update = function() {
 				for(b = 0, bZ = $undo.length; b < bZ; b++) {
 					u = $undo[b];
 					if (u.time < time + a) {
-						u.chgX = tfxChgX(u.chgX, chgX);
+						u.chgX = MeshMashine.tfxChgX(u.chgX, chgX);
 					}
 				}
 
@@ -369,7 +361,7 @@ IFace.prototype._update = function() {
 				for(b = 0, bZ = $redo.length; b < bZ; b++) {
 					u = $redo[b];
 					if (u.time < time + a) {
-						u.chgX = tfxChgX(u.chgX, chgX);
+						u.chgX = MeshMashine.tfxChgX(u.chgX, chgX);
 					}
 				}
 
@@ -382,16 +374,16 @@ IFace.prototype._update = function() {
 			var tree   = self.$rtree;
 
 			for(a = 0, aZ = postbox.length; a < aZ; a++) {
-				tree = changeTree(tree, postbox[a].chgX).tree;
+				tree = MeshMashine.changeTree(tree, postbox[a].chgX).tree;
 			}
 
 			for(a = 0, aZ = outbox.length; a < aZ; a++) {
 				chgX = outbox[a].chgX;
 				for(b = 0, bZ = report.length; b < bZ; b++) {
-					chgX = tfxChgX(chgX, report[b]);
+					chgX = MeshMashine.tfxChgX(chgX, report[b]);
 				}
 				outbox[a].chgX = chgX;
-				tree = changeTree(tree, chgX).tree;
+				tree = MeshMashine.changeTree(tree, chgX).tree;
 			}
 			self.$tree = tree;
 		}
@@ -406,7 +398,8 @@ IFace.prototype._update = function() {
 
 		self.$remoteTime = asw.timeZ;
 		var mseqZ        = asw.mseqZ;
-		if (is(mseqZ)) { self.$mseq = mseqZ; }
+		if (Jools.is(mseqZ))
+			{ self.$mseq = mseqZ; }
 
 		if (report.length > 0 && self._updateRCV) {
 			self._updateRCV.update(self.$tree, report);
@@ -427,7 +420,7 @@ IFace.prototype._update = function() {
 		user  : self.$user
 	});
 
-	log('iface', 'u->', request);
+	Jools.log('iface', 'u->', request);
 	ajax.send(request);
 };
 
@@ -436,14 +429,14 @@ IFace.prototype._update = function() {
 */
 IFace.prototype.alter = function(src, trg) {
     var chg = new Change(new Sign(src), new Sign(trg));
-    var r = changeTree(this.$tree, chg);
+    var r = MeshMashine.changeTree(this.$tree, chg);
     this.$tree = r.tree;
 	var chgX  = r.chgX;
 
 	var c = {
-		cid: uid(),
-		chgX: chgX,
-		time: this.$remoteTime
+		cid  : Jools.uid(),
+		chgX : chgX,
+		time : this.$remoteTime
 	};
 
 	this.$outbox.push(c);
@@ -474,7 +467,6 @@ IFace.prototype.sendChanges = function() {
 	ajax.open('POST', '/mm', true);
 	ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
-	var self = this;
 	ajax.onreadystatechange = function() {
 		var asw;
 		if (ajax.readyState !== 4) { return; }
@@ -491,7 +483,7 @@ IFace.prototype.sendChanges = function() {
 			return;
 		}
 
-		log('iface', '<-sc', asw);
+		Jools.log('iface', '<-sc', asw);
 		if (!asw.ok) {
 			shell.greenscreen('Server not OK: ' + asw.message);
 			return;
@@ -511,7 +503,7 @@ IFace.prototype.sendChanges = function() {
 		user : this.$user
 	});
 
-	log('iface', 'sc->', request);
+	Jools.log('iface', 'sc->', request);
 	ajax.send(request);
 };
 
@@ -523,16 +515,16 @@ IFace.prototype.undo = function() {
 	if (this.$undo.length === 0) { return; }
 
 	var chgX   = this.$undo.pop().chgX.invert();
-    var r      = changeTree(this.$tree, chgX);
+    var r      = MeshMashine.changeTree(this.$tree, chgX);
     this.$tree = r.tree;
 	chgX       = r.chgX;
 
 	if (chgX === null) { return; }
 
-	var c = immute({
-		cid: uid(),
-		chgX: chgX,
-		time: this.$remoteTime
+	var c = Jools.immute({
+		cid  : Jools.uid(),
+		chgX : chgX,
+		time : this.$remoteTime
 	});
 
 	this.$outbox.push(c);
@@ -550,16 +542,16 @@ IFace.prototype.undo = function() {
 IFace.prototype.redo = function() {
 	if (this.$redo.length === 0) { return; }
 	var chgX   = this.$redo.pop().chgX.invert();
-    var r      = changeTree(this.$tree, chgX);
+    var r      = MeshMashine.changeTree(this.$tree, chgX);
     this.$tree = r.tree;
 	chgX       = r.chgX;
 
 	if (chgX === null) { return; }
 
-	var c = immute({
-		cid: uid(),
-		chgX: chgX,
-		time: this.$remoteTime
+	var c = Jools.immute({
+		cid  : Jools.uid(),
+		chgX : chgX,
+		time : this.$remoteTime
 	});
 
 	this.$outbox.push(c);

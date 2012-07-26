@@ -43,7 +43,6 @@ Design = Design || {};
 'use strict';
 
 var half    = Jools.half;
-var ro      = Math.round;
 var getFont = Design.getFont;
 
 var sideBW  = 120;
@@ -56,20 +55,13 @@ var switchBW  = 170;
 var switchBH  =  28;
 
 /**
-| help control
-*/
-var helpBW  = 150;
-var helpBH  =  23;
-
-/**
-| Zooming controls
+| zooming controls
 */
 var zoomX   =   0;
 var zoomY   =  -9;
 var zoomBW  =  20;
 var zoomBH  =  20;
 var zoomBYM = Math.round(zoomBH * Euclid.magic);
-var zoomBXM = Math.round(zoomBW * Euclid.magic);
 
 var MainPanel = Design.MainPanel = { type : 'Design' };
 
@@ -80,8 +72,8 @@ var consts = Jools.innumerable(MainPanel, 'consts', Jools.immute({
 	C2Y :   0
 }));
 
-var sideButtonC1X   = ro(consts.C1X / 2);
-var sideButtonC1Y   = ro(consts.C1Y / 2);
+var sideButtonC1X   = Math.round(consts.C1X / 2);
+var sideButtonC1Y   = Math.round(consts.C1Y / 2);
 var sideButtonC2X   =  12;
 var sideButtonC2Y   =  40;
 

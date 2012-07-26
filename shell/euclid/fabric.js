@@ -113,7 +113,6 @@ Object.defineProperty(Fabric.prototype, "height", {
 | reset(width, height)
 */
 Fabric.prototype.reset = function(a1, a2) {
-	var ta1 = typeof(a1);
 	var c = this._canvas;
 	var w, h;
 	switch(typeof(a1)) {
@@ -289,11 +288,13 @@ Fabric.prototype.fillRect = function(style, a1, a2, a3, a4) {
 	var cx = this._cx;
 	cx.fillStyle = style;
 
-	if (typeof(p) === 'object') {
+	if (typeof(a1) === 'object') {
 		if (a1 instanceof Euclid.Rect)
 			{ return this._cx.fillRect(a1.pnw.x, a1.pnw.y, a1.pse.x, a1.pse.y); }
+
 		if (a1 instanceof Euclid.Point)
 			{ return this._cx.fillRect(a1.x, a1.y, a2.x, a2.y); }
+
 		throw new Error('fillRect not a rectangle');
 	}
 
@@ -360,7 +361,8 @@ Fabric.prototype.putImageData = function(imagedata, a1, a2) {
 */
 Fabric.prototype.getImageData = function(a1, a2, a3, a4) {
 	var x1, y1, x2, y2;
-	if (typeof(p) === 'object') {
+
+	if (typeof(a1) === 'object') {
 		if (a1 instanceof Euclid.Rect) {
 			x1 = a1.pnw.x; y1 = a1.pnw.y;
 			x2 = a1.pse.x; y2 = a1.pse.y;
@@ -371,8 +373,10 @@ Fabric.prototype.getImageData = function(a1, a2, a3, a4) {
 			throw new Error('getImageData not a rectangle');
 		}
 	} else {
-		x1 = a1; y1 = a2;
-		x2 = a3; y2 = a4;
+		x1 = a1;
+		y1 = a2;
+		x2 = a3;
+		y2 = a4;
 	}
 
 	Jools.ensureInt(x1, y2, x1, y2);
@@ -469,7 +473,6 @@ Fabric.prototype._edge = function(style, shape, sketch, view, a1, a2, a3, a4) {
 | shape: an object which has 'sketch'() defined
 */
 Fabric.prototype.edge = function(style, shape, sketch, view, a1, a2, a3, a4) {
-	var cx = this._cx;
 	if (style instanceof Array) {
 		for(var i = 0; i < style.length; i++) {
 			this._edge(style[i], shape, sketch, view, a1, a2, a3, a4);
@@ -494,7 +497,7 @@ Fabric.prototype.paint = function(style, shape, sketch, view, a1, a2, a3, a4) {
 		cx.fill();
 	}
 
-	if (edgeStyle instanceof Array) {
+	if (Jools.isArray(edgeStyle)) {
 		for(var i = 0; i < edgeStyle.length; i++) {
 			this._edge(edgeStyle[i], shape, sketch, view, a1, a2, a3, a4);
 		}

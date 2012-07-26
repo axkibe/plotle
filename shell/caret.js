@@ -49,27 +49,8 @@ var Caret = null;
 */
 (function(){
 'use strict';
-if (typeof(window) === 'undefined') { throw new Error('shell.js needs a browser!'); }
+if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
-/**
-| Shortcuts
-*/
-var debug         = Jools.debug;
-var immute        = Jools.immute;
-var is            = Jools.is;
-var isnon         = Jools.isnon;
-var log           = Jools.log;
-
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ,--.             .
- | `-' ,-. ,-. ,-. |-
- |   . ,-| |   |-' |
- `--'  `-^ '   `-' `'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
- The Caret.
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 /**
 | Constructor.
 */
@@ -86,7 +67,7 @@ Caret = function(section, sign, retainx, shown) {
 	// x position to retain when using up/down keys.
 	this.retainx = retainx;
 
-	immute(this);
+	Jools.immute(this);
 
 	// position cache
 	this.$pos = null;
@@ -126,8 +107,6 @@ Caret.prototype.hide = function() {
 | Draws or erases the caret.
 */
 Caret.prototype.display = function() {
-	var fabric = shell.fabric;
-
 	// erases the old caret
 	if (shell.caret.$save) {
 		if (Caret.useGetImageData) {

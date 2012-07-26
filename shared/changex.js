@@ -50,15 +50,9 @@ if (typeof(window) === 'undefined') {
 	Change = require('./change');
 }
 
-var debug        = Jools.debug;
-var log          = Jools.log;
-var immute       = Jools.immute;
-var innumerable  = Jools.innumerable;
-var is           = Jools.is;
-var isnon        = Jools.isnon;
-var subclass     = Jools.subclass;
-
 /**
+| FIXME subclassing Array is not a good idea.
+|
 | Constructor:
 |
 |   Change(src, trg)  -or-
@@ -66,20 +60,22 @@ var subclass     = Jools.subclass;
 */
 ChangeX = function() {
 };
-subclass(ChangeX, Array);
+Jools.subclass(ChangeX, Array);
 
 /**
 | Returns an array with inverted changes.
 */
 ChangeX.prototype.invert = function() {
-	if (is(this._invert)) { return this._invert; }
+	if (Jools.is(this._invert))
+		{ return this._invert; }
+
 	var r = new ChangeX();
 	for(var a = 0, aZ = this.length; a < aZ; a++) {
 		r[a] = this[a].invert();
 	}
 
-	innumerable(this, '_invert', r);
-	innumerable(r, '_invert', this);
+	Jools.innumerable(this, '_invert', r);
+	Jools.innumerable(r, '_invert', this);
 	return r;
 };
 

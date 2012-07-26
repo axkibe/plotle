@@ -50,30 +50,22 @@ var theme;
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
 /**
-| Shortcuts
-*/
-var computePoint  = Curve.computePoint;
-var debug         = Jools.debug;
-var immute        = Jools.immute;
-var is            = Jools.is;
-var isnon         = Jools.isnon;
-var log           = Jools.log;
-
-/**
 | Constructor.
 */
 var Button = Dash.Button = function(twig, panel, inherit, name) {
-	if (twig.type !== 'Button') { throw new Error('invalid twig type'); }
+	if (twig.type !== 'Button')
+		{ throw new Error('invalid twig type'); }
 
 	this.name    = name;
 	this.twig    = twig;
 	this.panel   = panel;
 
-	var pnw      = this.pnw    = computePoint(twig.frame.pnw, panel.iframe);
-	var pse      = this.pse    = computePoint(twig.frame.pse, panel.iframe);
-	var iframe   = this.iframe = new Euclid.Rect(Euclid.Point.zero, pse.sub(pnw));
-	this.curve   = new Curve(twig.curve, iframe);
+	var computePoint  = Curve.computePoint;
+	var pnw           = this.pnw    = computePoint(twig.frame.pnw, panel.iframe);
+	var pse           = this.pse    = computePoint(twig.frame.pse, panel.iframe);
+	var iframe        = this.iframe = new Euclid.Rect(Euclid.Point.zero, pse.sub(pnw));
 
+	this.curve      = new Curve(twig.curve, iframe);
 	this.captionPos = computePoint(twig.caption.pos, iframe);
 	this.$path      = new Path([panel.name, name]);
 
@@ -122,7 +114,10 @@ Button.prototype._weave = function(accent) {
 	}
 
 	var style = Dash.getStyle(sname);
-	if (!isnon(style)) { throw new Error('Invalid style: ' + sname); }
+
+	if (!Jools.isnon(style))
+		{ throw new Error('Invalid style: ' + sname); }
+
 	fabric.paint(style, this, 'sketch', Euclid.View.proper);
 
 	fabric.setFont(twig.caption.font);

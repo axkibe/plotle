@@ -81,18 +81,19 @@ Chat.prototype.canFocus = function() {
 | Returns the caret position relative to the panel.
 */
 Chat.prototype.getCaretPos = function() {
-	var caret   = shell.caret;
 	var fs      = this.twig.font.size;
 	var descend = fs * theme.bottombox;
 	var p       = this.locateOffset(shell.caret.sign.at1);
-	//var p = { x: 2, y : 2};
+	var pnw     = this.pnw;
+	var s       = Math.round(p.y + pnw.y + descend);
+	var n       = s - Math.round(fs + descend);
+	var	x       = p.x + this.pnw.x - 1;
 
-	var pnw = this.pnw;
-	var s = Math.round(p.y + pnw.y + descend);
-	var n = s - Math.round(fs + descend);
-	var	x = p.x + this.pnw.x - 1;
-
-	return Jools.immute({ s: s, n: n, x: x });
+	return Jools.immute({
+		s: s,
+		n: n,
+		x: x
+	});
 };
 
 /**
@@ -103,8 +104,6 @@ Chat.prototype._weave = function() {
 	if (fabric && !config.debug.noCache) { return fabric; }
 
 	fabric = this.$fabric = new Euclid.Fabric(this.iframe);
-	var w = this.iframe.width;
-	var h = this.iframe.height;
 
 	fabric.paint(Dash.getStyle('chat'), this, 'sketchILine', Euclid.View.proper);
 
@@ -169,7 +168,6 @@ Chat.prototype.drawCaret = function(view) {
 	var panel = this.panel;
 	var cpos  = caret.$pos = this.getCaretPos();
 
-	var cx  = cpos.x;
 	var ch  = Math.round((cpos.s - cpos.n) * view.zoom);
 	var cp = view.point(
 		panel.pnw.x + cpos.x,
@@ -192,8 +190,7 @@ Chat.prototype.drawCaret = function(view) {
 | User input.
 */
 Chat.prototype.input = function(text) {
-	var caret = shell.caret;
-	var csign = caret.sign;
+	var csign = shell.caret.sign;
 	var itext = this.itext;
 	var at1   = csign.at1;
 
