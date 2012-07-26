@@ -181,12 +181,11 @@ Para.prototype.getFlow = function() {
 		flow.fontsize  === font.size
 	) return flow;
 
-	/* TODO FIX!
+	// claers the caret flow cache if its within this flow
 	if (shell.caret.path && shell.caret.path.equals(this.path)) {
-		// remove caret cache if its within this flow.
-		shell.caret.cp$line  = null;
-		shell.caret.cp$token = null;
-	}*/
+		shell.caret.flow$line  = null;
+		shell.caret.flow$token = null;
+	}
 
 	// builds position informations.
 	flow  = this.$flow = [];

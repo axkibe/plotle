@@ -115,8 +115,6 @@ Input.prototype.maskPath = function(fabric, border, twist, view, length, size) {
 */
 Input.prototype._weave = function(accent) {
 	var bezi   = this._bezi;
-	// TODO new Euclid.Fabric(this._bezi);
-	//var fabric = new Euclid.Fabric(this._bezi.width, this._bezi.height);
 	var fabric = new Euclid.Fabric(this._bezi);
 	var pitch  = this._pitch;
 
@@ -159,7 +157,7 @@ Input.prototype.draw = function(fabric, accent) {
 | offset:   the offset to get the point from.
 */
 Input.prototype.locateOffset = function(offset) {
-	// TODO cache position
+	// FIXME cache position
 	var twig  = this.twig;
 	var font  = twig.font;
 	var pitch = this._pitch;

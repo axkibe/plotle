@@ -75,15 +75,14 @@ var Panel = Dash.Panel = function(name, inherit, board, screensize) {
 	for(var a = 0, aZ = layout.length; a < aZ; a++) {
 		var cname = layout.ranks[a];
 		var twig  = layout.copse[cname];
-		this.$sub[cname] = this.newCC(twig, inherit && inherit.$sub[cname], cname);
+		this.$sub[cname] = this.newControl(twig, inherit && inherit.$sub[cname], cname);
 	}
 };
 
 /**
 | Creates a new component.
-| TODO RENAME
 */
-Panel.prototype.newCC = function(twig, inherit, name) {
+Panel.prototype.newControl = function(twig, inherit, name) {
 	if (twig.code && twig.code !== '') {
 		var Proto = Proc[twig.code];
 		if (Proto) {
@@ -104,9 +103,8 @@ Panel.prototype.newCC = function(twig, inherit, name) {
 
 /**
 | Returns the focused item.
-| TODO RENAME
 */
-Panel.prototype.focusedCC = function() {
+Panel.prototype.focusedControl = function() {
 	var caret = shell.caret;
 
 	if (caret.section !== 'board')
@@ -153,7 +151,7 @@ Panel.prototype._weave = function() {
 	fabric.fill(style.fill, this, 'sketch', Euclid.View.proper);
 	var layout = this.tree.root.layout;
 
-	var focus = this.focusedCC();
+	var focus = this.focusedControl();
 	for(var a = layout.length - 1; a >= 0; a--) {
 		var cname = layout.ranks[a];
 		var c = this.$sub[cname];
@@ -265,7 +263,7 @@ Panel.prototype.mousedown = function(p, shift, ctrl) {
 | Text input.
 */
 Panel.prototype.input = function(text) {
-	var focus = this.focusedCC();
+	var focus = this.focusedControl();
 	if (!focus) { return; }
 	focus.input(text);
 };
@@ -275,7 +273,7 @@ Panel.prototype.input = function(text) {
 */
 Panel.prototype.cycleFocus = function(dir) {
 	var layout = this.tree.root.layout;
-	var focus = this.focusedCC();
+	var focus = this.focusedControl();
 	if (!focus) { return; }
 	var rank = layout.rankOf(focus.name);
 	var rs = rank;
@@ -297,7 +295,7 @@ Panel.prototype.cycleFocus = function(dir) {
 | User pressed a special key.
 */
 Panel.prototype.specialKey = function(key, shift, ctrl) {
-	var focus = this.focusedCC();
+	var focus = this.focusedControl();
 	if (!focus) return;
 	if (key === 'tab') {
 		this.cycleFocus(shift ? -1 : 1);
@@ -320,7 +318,7 @@ Panel.prototype.poke = function() {
 */
 Panel.prototype.setFocus = function(cname) {
 	var com = this.$sub[cname];
-	var focus = this.focusedCC();
+	var focus = this.focusedControl();
 	if (focus === com) { return; }
 
 	shell.setCaret('board', {
