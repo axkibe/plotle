@@ -57,9 +57,7 @@ var Input = Dash.Input = function(twig, panel, inherit, name) {
 	var pnw  = this.pnw  = Curve.computePoint(twig.frame.pnw, panel.iframe);
 	var pse  = this.pse  = Curve.computePoint(twig.frame.pse, panel.iframe);
 
-	// TODO make private
-	this.bezi = new Euclid.BeziRect(Euclid.Point.zero, pse.sub(pnw), 7, 3);
-
+	this._bezi   = new Euclid.BeziRect(Euclid.Point.zero, pse.sub(pnw), 7, 3);
 	this._pitch  = new Euclid.Point(8, 3);
 	this._$value = inherit ? inherit._$value : '';
 	this.$fabric = null;
@@ -116,7 +114,9 @@ Input.prototype.maskPath = function(fabric, border, twist, view, length, size) {
 | TODO caching;
 */
 Input.prototype._weave = function(accent) {
-	var fabric = new Euclid.Fabric(this.bezi.width, this.bezi.height);
+	var bezi   = this._bezi;
+	// TODO new Euclid.Fabric(this._bezi);
+	var fabric = new Euclid.Fabric(this._bezi.width, this._bezi.height);
 	var pitch  = this._pitch;
 
 	var sname;
@@ -129,7 +129,7 @@ Input.prototype._weave = function(accent) {
 	}
 	var style  = Dash.getStyle(sname);
 
-	fabric.fill(style.fill, this.bezi, 'sketch', Euclid.View.proper);
+	fabric.fill(style.fill, bezi, 'sketch', Euclid.View.proper);
 	var font = this.twig.font;
 	fabric.setFont(font);
 
@@ -139,7 +139,7 @@ Input.prototype._weave = function(accent) {
 	} else {
 		fabric.fillText(this._$value, pitch.x, font.size + pitch.y);
 	}
-	fabric.edge(style.edge, this.bezi, 'sketch', Euclid.View.proper);
+	fabric.edge(style.edge, bezi, 'sketch', Euclid.View.proper);
 
 	return fabric;
 };
@@ -411,7 +411,7 @@ Input.prototype.mousehover = function(p, shift, ctrl) {
 	var fabric = this._weave(Dash.Accent.NORMA);
 	var pp = p.sub(this.pnw);
 
-	if (!this.bezi.within(fabric, Euclid.View.proper, pp))
+	if (!this._bezi.within(fabric, Euclid.View.proper, pp))
 		{ return null; }
 
 	return 'text';
@@ -423,7 +423,7 @@ Input.prototype.mousehover = function(p, shift, ctrl) {
 Input.prototype.mousedown = function(p, shift, ctrl) {
 	var pp = p.sub(this.pnw);
 	var fabric = this._weave(Dash.Accent.NORMA);
-	if (!fabric.within(this.bezi, 'sketch', Euclid.View.proper, pp))  { return null; }
+	if (!fabric.within(this._bezi, 'sketch', Euclid.View.proper, pp))  { return null; }
 
 	this.panel.setFocus(this.name);
 	return false;
