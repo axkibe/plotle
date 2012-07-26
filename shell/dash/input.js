@@ -116,7 +116,8 @@ Input.prototype.maskPath = function(fabric, border, twist, view, length, size) {
 Input.prototype._weave = function(accent) {
 	var bezi   = this._bezi;
 	// TODO new Euclid.Fabric(this._bezi);
-	var fabric = new Euclid.Fabric(this._bezi.width, this._bezi.height);
+	//var fabric = new Euclid.Fabric(this._bezi.width, this._bezi.height);
+	var fabric = new Euclid.Fabric(this._bezi);
 	var pitch  = this._pitch;
 
 	var sname;

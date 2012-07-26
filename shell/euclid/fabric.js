@@ -64,7 +64,8 @@ var Fabric = Euclid.Fabric = function(a1, a2) {
 		case Fabric:
 			this._canvas = a1._canvas;
 			break;
-		case Euclid.Rect :
+		case Euclid.BeziRect :
+		case Euclid.Rect     :
 			this._canvas = document.createElement('canvas');
 			this._canvas.width  = a1.width;
 			this._canvas.height = a1.height;
