@@ -189,8 +189,6 @@ ChangeOps.remove = function(tree, chg) {
 		Jools.log('change', 'src.path signates no string');
 		return null;
 	}
-//	check(isString(str), cm, 'src.path signates no string');
-//  TODO removed item
 
 	if (src.at1 === src.at2) {
 		Jools.log('change', 'removed nothing');
@@ -233,7 +231,8 @@ ChangeOps.join = function(tree, chg) {
 
 	var para1 = pivot.copse[key];
 	var para2 = pivot.copse[key2];
-	// TODO check other keys to be equal
+
+	// FIXME check other keys to be equal
 	para1 = tree.grow(para1,
 		'text', para1.text + para2.text
 	);
@@ -316,7 +315,7 @@ ChangeOps.rank = function(tree, chg) {
 	var key = src.path.get(-1);
 	var orank = pivot.rankOf(key);
 	if (orank < 0) throw reject('invalid key :'+key);
-	// TODO if (orank === trg.rank) return null;
+	// FIXME if (orank === trg.rank) return null;
 
 	src = src.affix(is, cm, 'src', 'rank', orank);
 	trg = trg.affix(is, cm, 'trg', 'path', src.path);
@@ -350,14 +349,12 @@ var tfxSign1 = function(sign, chg) {
 
 	var op = TFXOps[chg.type()];
 	if (!op) { throw new Error('tfxSign1, no op'); }
-	return op(sign, chg.src, chg.trg);  // TODO give, chg.
+	return op(sign, chg.src, chg.trg);  // FIXME give, chg.
 };
 
 /**
 | Transforms a signature on a list of alternations.
 | If the signature is a span, it can return an array of signs.
-|
-| TODO check if t1/t2 params are ever used
 */
 var tfxSign = function(sign, chgX) {
 	Jools.log('tfx', 'tfxSign', sign, chgX);
@@ -490,7 +487,7 @@ TFXOps.split = function(sign, src, trg) {
 	// trg.path -- the new line
 	if (!src.path || !src.path.equals(sign.path)) return sign;
 
-	// TODO form ranks
+	// FIXME form ranks
 	// simpler case signature is only one point
 	if (!is(sign.at2)) {
 		Jools.log('tfx', 'split (simple)');
@@ -541,7 +538,7 @@ TFXOps.join = function(sign, src, trg) {
 	if (!src.path || !sign.path.equals(src.path)) return sign;
 	if (!trg.path) throw new Error('join missing trg.path');
 
-	// TODO tfx ranks
+	// FIXME tfx ranks
 
 	Jools.log('tfx', 'join', sign);
 	if (!is(sign.at2)) {
@@ -699,7 +696,8 @@ TFXOps.remove = function(sign, src, trg) {
 
 /**
 | Appends changes of chgX that matter to space to the array chga.
-| TODO Make a proper filter that splits
+|
+| FIXME Make a proper filter that splits
 */
 var filter = function(change, space, chga) {
 	var chgX = change.chgX;
@@ -711,7 +709,8 @@ var filter = function(change, space, chga) {
 			(chg.trg.path && chg.trg.path.get(0) === space)
 		) { f = true; }
 	}
-	if (f) { chga.push(change); }
+	if (f)
+		{ chga.push(change); }
 };
 
 /**

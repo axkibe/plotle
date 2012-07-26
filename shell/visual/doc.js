@@ -156,7 +156,7 @@ Doc.prototype.getPNW = function(key) {
 
 /**
 | Returns the height of the document.
-| TODO caching
+| FIXME caching
 */
 Doc.prototype.getHeight = function() {
 	var fs      = this.getFont().size;
@@ -171,6 +171,7 @@ Doc.prototype.getHeight = function() {
 		if (r > 0) { height += paraSep; }
 		height += flow.height;
 	}
+
 	height += Math.round(fs * theme.bottombox);
 	return height;
 };

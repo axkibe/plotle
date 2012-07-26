@@ -26,14 +26,14 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
+| Export
+*/
+var Jools;
+
+/**
 | Imports
 */
 var config;
-
-/**
-| Exports
-*/
-var Jools;
 
 /**
 | Capsule
@@ -48,15 +48,15 @@ var Jools;
 var devel;
 
 /**
-| returns true if param is true for the shell or server.
-| TODO ... remove
-| param: the param
+| returns boolean parameter for shell or server.
+|
+| param: the parameter
 | side:  'shell' or 'server'
 */
 var configSwitch = function(param, side) {
-	if (side !== 'shell' && side !== 'server') {
-		throw new Error('configSwitch side must be shell or server');
-	}
+	if (side !== 'shell' && side !== 'server')
+		{ throw new Error('configSwitch side must be shell or server'); }
+
 	return param === true || param === 'both' || param === side;
 };
 
@@ -68,7 +68,7 @@ if (typeof(window) === 'undefined') {
 	config = require('../config');
 	devel  = configSwitch(config.devel, 'server');
 } else {
-	// ini browser
+	// in browser
 	devel  = configSwitch(config.devel, 'shell');
 }
 
