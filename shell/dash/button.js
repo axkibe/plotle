@@ -185,12 +185,18 @@ Button.prototype.push = function(shift, ctrl) {
 Button.prototype.mousedown = function(p, shift, ctrl) {
 	var self = this;
 
-	if (!this.$visible) { return; }
-	if (p.x < this.pnw.x || p.y < this.pnw.y || p.x > this.pse.x || p.y > this.pse.y)
-		{ return null; }
+	if (!this.$visible)
+		{ return; }
+
+	if (p.x < this.pnw.x ||
+		p.y < this.pnw.y ||
+		p.x > this.pse.x ||
+		p.y > this.pse.y
+	) { return null; }
 
 	var fabric = this._weave(Dash.Accent.NORMA);
 	var pp = p.sub(this.pnw);
+
 	if (!fabric.within(this, 'sketch', Euclid.View.proper, pp))
 		{ return null; }
 
@@ -212,7 +218,6 @@ Button.prototype.mousedown = function(p, shift, ctrl) {
 
 	this.push(shift, ctrl);
 
-	shell.redraw = true; // TODO needed?
 	return this.repeat ? 'drag' : false;
 };
 
