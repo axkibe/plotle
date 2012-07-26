@@ -45,8 +45,8 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 | List of tagnames.
 */
 var styles = {
-	boxes       : { edge : [ { border: 0, width : 1, color : 'black' } ] },
-	panel       : theme.dash.style, // TODO
+	boxes       : theme.dash.boxes,
+	panel       : theme.dash.panel,
 	help        : theme.dash.help,
 	button      : theme.dash.button,
 	buttonHover : theme.dash.buttonHover,

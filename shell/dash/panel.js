@@ -205,7 +205,7 @@ Panel.prototype.mousehover = function(p, shift, ctrl) {
 	}
 	var pp = p.sub(pnw);
 
-	// TODO Optimize by reusing the latest path of this.$fabric
+	// FIXME Optimize by reusing the latest path of this.$fabric
 	if (!fabric.within(this, 'sketch', Euclid.View.proper, pp))
 		{ return this.setHover(null); }
 
@@ -242,7 +242,7 @@ Panel.prototype.mousedown = function(p, shift, ctrl) {
 	}
 	var pp = p.sub(pnw);
 
-	// TODO Optimize by reusing the latest path of this.$fabric
+	// FIXME Optimize by reusing the latest path of this.$fabric
 	if (!fabric.within(this, 'sketch', Euclid.View.proper, pp))  {
 		this.setHover(null);
 		return null;

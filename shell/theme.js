@@ -113,9 +113,9 @@ theme = {
 		createOffset : { x: 27, y: 12 }
 	},
 
-	// menu at the bottom of dash(board)
+	// dash(board)
 	dash : {
-		style : {
+		panel : {
 			fill : {
 				gradient : 'radial',
 				steps : [
@@ -210,10 +210,15 @@ theme = {
 				{ border: 1, width :   2, color : 'rgb(255, 99, 188)' },
 				{ border: 0, width :   1, color : 'black' }
 			]
+		},
+
+		boxes : {
+			edge : [
+				{ border: 0, width : 1, color : 'black' }
+			]
 		}
 	},
 
-	// switchpanel
 	switchpanel : {
 		dimensions : {
 			a    : 120,

@@ -140,9 +140,9 @@ Chat.prototype._weave = function() {
 | offset:   the offset to get the point from.
 */
 Chat.prototype.locateOffset = function(offset) {
-	// TODO cache position
-	var twig     = this.twig;
-	var font     = twig.font;
+	// FIXME cache position
+
+	var font     = this.twig.font;
 	var itext    = this.itext;
 	var pitch    = this.pitch;
 
