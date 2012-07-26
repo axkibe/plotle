@@ -463,7 +463,8 @@ Server.prototype.cmdAlter = function(cmd, _) {
 
 	// fits the cmd into data structures
 	try {
-		if (isArray(chgX))  { throw new Error('Array chgX not yet supported'); } // TODO
+		// FIXME
+		if (isArray(chgX))  { throw new Error('Array chgX not yet supported'); }
 		chgX = new MeshMashine.Change(chgX);
 	} catch(e) {
 		throw reject('invalid cmd: '+e.message);
@@ -781,7 +782,7 @@ Server.prototype.conveyUpdate = function(time, mseq, space) {
 Server.prototype.wake = function(spaces) {
 	var sleepKeys = Object.keys(this.upsleep);
 
-	// TODO cache change lists to answer the same to multiple clients.
+	// FIXME cache change lists to answer the same to multiple clients.
 	for(var a = 0, aZ = sleepKeys.length; a < aZ; a++) {
 		var sKey = sleepKeys[a];
 		var sleep = this.upsleep[sKey];
@@ -939,12 +940,6 @@ Server.prototype.requestListener = function(req, res) {
 
 	var r = this.$resources[pathname];
 	if (!r) {
-		// TODO write two heads? this looks.wrong
-		res.writeHead(404, {
-			'Content-Type'  : 'text/plain',
-			'Cache-Control' : 'no-cache',
-			'Date'          : new Date().toUTCString()
-		});
 		this.webError(res, '404 Bad Reqeust');
 		return;
 	}
