@@ -11,7 +11,7 @@ var fs       = require('fs');
 var http     = require('http');
 var readline = require('readline');
 var util     = require('util');
-
+var sha1     = require('../shared/sha1');
 var Jools    = require('../shared/jools');
 var config   = require('../config');
 
@@ -21,7 +21,16 @@ var config   = require('../config');
 (function() {
 "use strict";
 
-var uid = Jools.uid;
+var args   = process.argv;
+var user   = args[2];
+var pass   = args[3];
+var itemid = args[4];
+if (!Jools.is(user) || !Jools.is(pass) || !Jools.is(itemid)) {
+	console.log('Usage: ' + args[1] + ' USER PASSWORD ITEMID');
+	process.exit(1);
+}
+pass = sha1.sha1hex(pass + '-meshcraft-8833');
+
 
 /**
 | Options to connect.
@@ -65,10 +74,10 @@ function request(cmd, callback) {
 | Parses and runs one json request, parses and pretty-prints the json answer.
 */
 function jsonRequest(cmd, callback) {
+	console.log('> ', util.inspect(cmd, false, null));
 	var s = JSON.stringify(cmd);
-	console.log('> '+s);
 	request(s, function(err, code, asw) {
-		if (err) { throw new Error('# '+Jools.inspect(err)); }
+		if (err) { throw new Error('# '+ util.inspect(err, false, null)); }
 		try {
 			if (asw) {
 				asw = JSON.parse(asw);
@@ -76,7 +85,7 @@ function jsonRequest(cmd, callback) {
 		} catch (err) {
 			throw new Error('# ('+code+') answer not JSON: '+asw);
 		}
-		console.log('< ', asw);
+		console.log('< ', util.inspect(asw, false, null));
 		callback(asw);
 	});
 }
@@ -94,12 +103,14 @@ var fget = function() {
 	jsonRequest(
 		{
 			cmd: 'get',
+			user: user,
+			pass: pass,
 			path: ['welcome'],
 			time: -1
 		},
 		function(asw) {
 			rtime = parseInt(asw.time, 10);
-			var text = asw.node.copse['1'].doc.copse['1'].text;
+			var text = asw.node.copse[itemid].doc.copse['1'].text;
 			console.log('text:', text);
 			flet(text);
 		}
@@ -118,12 +129,14 @@ var flet = function(text) {
 		// delete line
 		jsonRequest(
 			{
-				cmd:   'alter',
-				time: rtime,
-				cid:  uid(),
+				cmd:  'alter',
+				user:  user,
+				pass:  pass,
+				time:  rtime,
+				cid:   Jools.uid(),
 				chgX: {
 					src : {
-						path: ['welcome', '1', 'doc', '1', 'text'],
+						path: ['welcome', itemid, 'doc', '1', 'text'],
 						at1:   0,
 						at2:   text.length
 					},
@@ -137,15 +150,17 @@ var flet = function(text) {
 	} else {
 		jsonRequest(
 			{
-				cmd:   'alter',
-				time: rtime,
-				cid:  uid(),
+				cmd:  'alter',
+				user:  user,
+				pass:  pass,
+				time:  rtime,
+				cid:   Jools.uid(),
 				chgX: {
 					src : {
 						val: ralpha[p]
 					},
 					trg : {
-						path: ['welcome', '1', 'doc', '1', 'text'],
+						path: ['welcome', itemid, 'doc', '1', 'text'],
 						at1:   0
 					}
 				}
