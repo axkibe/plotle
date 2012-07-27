@@ -88,7 +88,7 @@ Input.prototype.canFocus = function() {
 /**
 | Draws the mask for password fields
 */
-Input.prototype.maskPath = function(fabric, border, twist, view, length, size) {
+Input.prototype.sketchMask = function(fabric, border, twist, view, length, size) {
 	var pitch = this._pitch;
 	var x     = view.x(pitch);
 	var y     = view.y(pitch) + Math.round(size * 0.7);
@@ -141,7 +141,7 @@ Input.prototype._weave = function(accent) {
 	$fabric.setFont(font);
 
 	if(this.twig.password) {
-		$fabric.fill('black', this, 'maskPath', Euclid.View.proper, $value.length, font.size);
+		$fabric.fill('black', this, 'sketchMask', Euclid.View.proper, $value.length, font.size);
 	} else {
 		$fabric.fillText($value, pitch.x, font.size + pitch.y);
 	}
