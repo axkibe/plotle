@@ -80,6 +80,7 @@ Doc.prototype.update = function(twig) {
 	var $old  = this.$sub;
 	var $sub  = this.$sub = {};
 	var copse = twig.copse;
+
 	for(var k in copse) {
 		var s = twig.copse[k];
 		var o = $old[k];

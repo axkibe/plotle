@@ -162,17 +162,17 @@ Shell.prototype.messageRCV = function(space, user, message) {
 */
 Shell.prototype.update = function(tree, chgX) {
 	this.tree = tree;
-	this.$space.update(tree, chgX);
+	var  $space = this.$space;
+	$space.update(tree.root.copse[$space.$key]);
+
 
 	var caret = this.caret;
-	var shown = this.caret.$shown;
 	if (caret.sign !== null) {
 		this.setCaret(
 			caret.section,
 			MeshMashine.tfxSign(caret.sign, chgX),
 			caret.retainx
 		);
-		if (shown) { this.caret.show(); }
 	}
 
 	var selection = this.selection;

@@ -71,11 +71,10 @@ Jools.subclass(Space, Visual.Base);
 /**
 | Updates v-vine to match a new twig.
 */
-Space.prototype.update = function(tree, chgX) {
-	var twig = tree.root.copse[this.$key];
-
+Space.prototype.update = function(twig) {
 	// no change?
-	if (this.twig === twig) { return; }
+	if (this.twig === twig)
+		{ return; }
 
 	this.twig = twig;
 
