@@ -188,10 +188,11 @@ SwitchPanel.prototype._paintButton = function(fabric, dir) {
 
 /**
 | Draws the contents.
-| TODO Caching
 */
 SwitchPanel.prototype._weave = function() {
-	if (!config.debug.noCache && this.$fabric) { return this.$fabric; }
+	if (!config.debug.noCache && this.$fabric)
+		{ return this.$fabric; }
+
 	var iframe = this.iframe;
 	var fabric = this.$fabric = new Euclid.Fabric(iframe);
 
@@ -200,7 +201,7 @@ SwitchPanel.prototype._weave = function() {
 	this._paintButton(fabric, 'n');
 	this._paintButton(fabric, 'ne');
 
-	// TODO XXX this should be in a design.
+	// FIXME this should be in a design.
 	fabric.setFont(new Euclid.Font(14, theme.defaultFont, 'black', 'center', 'middle'));
 
 	var bp = this.buttonPos;
@@ -253,13 +254,13 @@ SwitchPanel.prototype.knock = function() {
 | Returns true if p is within the panel
 */
 SwitchPanel.prototype.within = function(p) {
-	var pnw = this.iframe.pnw;
-	var pse = this.iframe.pse;
+	var iframe = this.iframe;
+	var pnw    = iframe.pnw;
+	var pse    = iframe.pse;
 
-	// TODO use iframe.within
-	if (p.x < pnw.x || p.y < pnw.y || p.x > pse.x || p.y > pse.y) {
-		return false;
-	}
+	if (!iframe.within(p))
+		{ return false; }
+
 	var fabric = this._weave();
 	return fabric.within(this, 'sketchFrame', Euclid.View.proper, p);
 };
