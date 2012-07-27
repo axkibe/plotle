@@ -111,12 +111,20 @@ Input.prototype.maskPath = function(fabric, border, twist, view, length, size) {
 
 /**
 | Returns the fabric for the input field.
-| TODO caching;
 */
 Input.prototype._weave = function(accent) {
-	var bezi   = this._bezi;
-	var fabric = new Euclid.Fabric(this._bezi);
-	var pitch  = this._pitch;
+	var $fabric = this._$fabric;
+	var $value  = this._$value;
+
+	if ($fabric &&
+		$fabric.$accent === accent &&
+		$fabric.$value  === $value
+	) { return $fabric; }
+
+	var bezi    = this._bezi;
+	var pitch   = this._pitch;
+
+	$fabric = this._$fabric = new Euclid.Fabric(bezi);
 
 	var sname;
 	switch (accent) {
@@ -128,19 +136,21 @@ Input.prototype._weave = function(accent) {
 	}
 	var style  = Dash.getStyle(sname);
 
-	fabric.fill(style.fill, bezi, 'sketch', Euclid.View.proper);
+	$fabric.fill(style.fill, bezi, 'sketch', Euclid.View.proper);
 	var font = this.twig.font;
-	fabric.setFont(font);
+	$fabric.setFont(font);
 
 	if(this.twig.password) {
-		fabric.fill('black', this, 'maskPath', Euclid.View.proper,
-			this._$value.length, font.size);
+		$fabric.fill('black', this, 'maskPath', Euclid.View.proper, $value.length, font.size);
 	} else {
-		fabric.fillText(this._$value, pitch.x, font.size + pitch.y);
+		$fabric.fillText($value, pitch.x, font.size + pitch.y);
 	}
-	fabric.edge(style.edge, bezi, 'sketch', Euclid.View.proper);
+	$fabric.edge(style.edge, bezi, 'sketch', Euclid.View.proper);
 
-	return fabric;
+	$fabric.$accent = accent;
+	$fabric.$value  = $value;
+
+	return $fabric;
 };
 
 
