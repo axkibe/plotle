@@ -64,7 +64,7 @@ Base.prototype.atRank = function(rank) {
 /**
 | Updates the $sub to match a new twig.
 */
-/* TODO
+/* FIXME one common for all visual notes
 Base.prototype.update = function(twig) {
 	this.twig    = twig;
 	this.$fabric = null;

@@ -269,7 +269,7 @@ Note.prototype.getZone = function() {
 	if (!$action || !this.$path.equals($action.itemPath))
 		{ return twig.zone; }
 
-	// TODO cache the last zone
+	// FIXME cache the last zone
 
 	switch ($action.type) {
 	case Action.ITEMDRAG:
