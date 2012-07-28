@@ -11,14 +11,13 @@
                    `'-.....-.'.'.-'  / | |     | |    `-._____ / | |     / /   | |_  | |      |  '.'
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--'
-
-                                .---.     .          .
-                                \___  ,-. |  ,-. ,-. |- . ,-. ,-.
-                                    \ |-' |  |-' |   |  | | | | |
-                                `---' `-' `' `-' `-' `' ' `-' ' '
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
- Text Selection.
+                                    .-,--.
+                                     `|__/ ,-. ,-. ,-. ,-.
+                                     )| \  ,-| | | | | |-'
+                                     `'  ` `-^ ' ' `-| `-'
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ,|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                                                    `'
+ text range.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -28,7 +27,7 @@
 /**
 | Export
 */
-var Selection = null; // TODO rename since this clashes with a default class
+var Range = null;
 
 /**
 | Imports
@@ -47,7 +46,7 @@ if (typeof(window) === 'undefined') { throw new Error('this code requires a brow
 /**
 | Constructor.
 */
-Selection = function() {
+Range = function() {
 	this.active = false;
 	this.sign1 = null;
 	this.sign2 = null;
@@ -58,7 +57,7 @@ Selection = function() {
 /**
 | Sets begin/end so begin is before end.
 */
-Selection.prototype.normalize = function(tree) {
+Range.prototype.normalize = function(tree) {
 	var s1 = this.sign1;
 	var s2 = this.sign2;
 
@@ -98,7 +97,7 @@ Selection.prototype.normalize = function(tree) {
 /**
 | The text the selection selects.
 */
-Selection.prototype.innerText = function() {
+Range.prototype.innerText = function() {
 	if (!this.active) return '';
 
 	this.normalize();
@@ -130,7 +129,7 @@ Selection.prototype.innerText = function() {
 /**
 | Removes the selection including its contents.
 */
-Selection.prototype.remove = function() {
+Range.prototype.remove = function() {
 	this.normalize();
 	this.deselect();
 	shell.redraw = true;
@@ -143,7 +142,7 @@ Selection.prototype.remove = function() {
 /**
 | Deselects the selection.
 */
-Selection.prototype.deselect = function(nopoke) {
+Range.prototype.deselect = function(nopoke) {
 	if (!this.active) return;
 	if (!nopoke) {
 		shell.getSub('space', this.sign1.path, -3).poke();

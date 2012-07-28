@@ -37,7 +37,7 @@ var Jools;
 var MeshMashine;
 var Path;
 var Peer;
-var Selection;
+var Range;
 var Sign;
 var theme;
 var Visual;
@@ -76,7 +76,7 @@ Shell = function(fabric) {
 
 	this.caret     = new Caret(null, null, null, false);
 	this.$action   = null;
-	this.selection = new Selection();
+	this.selection = new Range();
 
 	this.green     = false;
 
