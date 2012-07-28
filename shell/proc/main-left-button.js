@@ -62,7 +62,6 @@ MainLeftButton.prototype.push = function(shift, ctrl) {
 	default :
 		throw new Error('unknown state of leftB');
 	}
-	shell.redraw = true; // TODO in case ob logout this should be done already
 };
 
 })();

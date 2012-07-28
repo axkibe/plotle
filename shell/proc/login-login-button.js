@@ -59,7 +59,6 @@ LoginLoginButton.prototype.canFocus = function() {
 */
 LoginLoginButton.prototype.push = function(shift, ctrl) {
 	Proc.Util.login(this.panel);
-	shell.redraw = true; // TODO this should be handled by login()
 };
 
 })();
