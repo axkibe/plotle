@@ -255,8 +255,6 @@ SwitchPanel.prototype.knock = function() {
 */
 SwitchPanel.prototype.within = function(p) {
 	var iframe = this.iframe;
-	var pnw    = iframe.pnw;
-	var pse    = iframe.pse;
 
 	if (!iframe.within(p))
 		{ return false; }
