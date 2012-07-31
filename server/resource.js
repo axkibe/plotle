@@ -30,7 +30,7 @@
 */
 (function(){
 "use strict";
-if (typeof(require) === 'undefined') { throw new Error('this file needs node!'); }
+if (typeof(require) === 'undefined') { throw new Error('this code requires node!'); }
 
 /**
 | Constructor.
