@@ -21,7 +21,7 @@
 
 /**
 | Capsule
-| (just to make jshint happy)
+| (to make jshint happy)
 */
 (function(){
 "use strict";
@@ -48,7 +48,6 @@ var zlib        = require('zlib');
 /**
 | Shortcuts
 */
-var configSwitch = Jools.configSwitch;
 var is           = Jools.is;
 var isArray      = Jools.isArray;
 var log          = Jools.log;
@@ -66,35 +65,35 @@ var Server = function() {
 	this.addResources();
 
 	// init database
-	this.db = {};
-	this.db.server    = new mongodb.Server(
+	this.$db = {};
+	this.$db.server    = new mongodb.Server(
 		config.database.host,
 		config.database.port,
 		{}
 	);
-	this.db.connector = new mongodb.Db(
+	this.$db.connector = new mongodb.Db(
 		config.database.name,
-		this.db.server,
+		this.$db.server,
 		{}
 	);
 
 	// all messages
-	this.messages = [];
+	this.$messages = [];
 
 	// the whole tree
 	this.tree      = new Tree({ type : 'Nexus' }, Meshverse);
 
 	// all changes
-	this.changes   = [];
+	this.$changes   = [];
 
 	// a table of all clients waiting for an update
-	this.upsleep   = {};
+	this.$upsleep   = {};
 
 	// next upsleepID
-	this.nextSleep = 1;
+	this.$nextSleep = 1;
 
 	// next visitors ID
-	this.nextVisitor = 1000;
+	this.$nextVisitor = 1000;
 
 	// table of all cached user credentials
 	this.$users = {};
@@ -118,14 +117,14 @@ var Server = function() {
 Server.prototype.startup = function(_) {
 	this.prepareResources(_);
 
-	var db = this.db;
-	db.connection = db.connector.open(_);
+	var $db = this.$db;
+	$db.connection = $db.connector.open(_);
 	log('start', 'Connected to database');
-	db.changes = db.connection.collection('changes', _);
-	db.users   = db.connection.collection('users', _);
+	$db.changes = $db.connection.collection('changes', _);
+	$db.users   = $db.connection.collection('users', _);
 	this.ensureRootUser(_);
 
-	var cursor = db.changes.find(_);
+	var cursor = $db.changes.find(_);
 	for(var o = cursor.nextObject(_); o !== null; o = cursor.nextObject(_)) {
 		this.playbackOne(o);
 	}
@@ -144,7 +143,7 @@ Server.prototype.startup = function(_) {
 | Ensures there is a root user
 */
 Server.prototype.ensureRootUser = function(_) {
-	var root = this.db.users.findOne({ _id : 'root'}, _);
+	var root = this.$db.users.findOne({ _id : 'root'}, _);
 
 	if (root) {
 		log('start', 'root pass:', root.pass);
@@ -156,7 +155,7 @@ Server.prototype.ensureRootUser = function(_) {
 			mail : '',
 		};
 
-		this.db.users.insert(root, _);
+		this.$db.users.insert(root, _);
 		log('start', 'created root pass:', root.pass);
 	}
 
@@ -181,7 +180,7 @@ Server.prototype.playbackOne = function(o) {
 		}
 	}
 
-	this.changes.push(c);
+	this.$changes.push(c);
 	var r = MeshMashine.changeTree(this.tree, c.chgX);
 	this.tree = r.tree;
 };
@@ -190,7 +189,7 @@ Server.prototype.playbackOne = function(o) {
 | sends a message
 */
 Server.prototype.sendMessage = function(space, user, message) {
-	this.messages.push({ space: space, user: user, message: message });
+	this.$messages.push({ space: space, user: user, message: message });
 	var spaces = [];
 	spaces[space] = true;
 	var self = this;
@@ -228,7 +227,7 @@ Server.prototype.buildShellConfig = function() {
 
 	var cconfig = [];
 	cconfig.push('var config = {\n');
-	cconfig.push('\tdevel   : '  + configSwitch(config.devel, 'shell') + ',\n');
+	cconfig.push('\tdevel   : '  + Jools.configSwitch(config.devel, 'shell') + ',\n');
 	cconfig.push('\tmaxUndo : '  + config.maxUndo + ',\n');
 	cconfig.push('\tdebug   : {\n');
 	var first = true;
@@ -241,7 +240,7 @@ Server.prototype.buildShellConfig = function() {
 	first = true;
 	for(k in config.log) {
 		if (!first) { cconfig.push(',\n'); } else { first = false; }
-		cconfig.push('\t\t' + k + ' : ' + configSwitch(config.log[k], 'shell'));
+		cconfig.push('\t\t' + k + ' : ' + Jools.configSwitch(config.log[k], 'shell'));
 	}
 	cconfig.push('\n\t}\n');
 	cconfig.push('};\n');
@@ -446,8 +445,8 @@ Server.prototype.cmdAlter = function(cmd, _) {
 	var chgX = cmd.chgX;
 	var cid  = cmd.cid;
 
-	var changes = this.changes;
-	var cZ      = changes.length;
+	var $changes = this.$changes;
+	var cZ      = $changes.length;
 
 	// some tests
 	if (!is(time)) { throw reject('time missing'); }
@@ -475,7 +474,7 @@ Server.prototype.cmdAlter = function(cmd, _) {
 
 	// translates the changes if not most recent
 	for (var a = time; a < cZ; a++) {
-		chgX = MeshMashine.tfxChgX(chgX, changes[a].chgX);
+		chgX = MeshMashine.tfxChgX(chgX, $changes[a].chgX);
 	}
 
 	if (chgX === null || chgX.length === 0) {
@@ -490,11 +489,11 @@ Server.prototype.cmdAlter = function(cmd, _) {
 		return { ok: true, chgX: chgX };
 	}
 
-	changes.push({ cid : cmd.cid, chgX : chgX });
+	$changes.push({ cid : cmd.cid, chgX : chgX });
 
 	// saves the change in the database
-	this.db.changes.insert({
-		_id  : changes.length,
+	this.$db.changes.insert({
+		_id  : $changes.length,
 		cid  : cmd.cid,
 		chgX : JSON.parse(JSON.stringify(chgX)),
 		user : cmd.user,
@@ -519,8 +518,8 @@ Server.prototype.cmdAuth = function(cmd, _) {
 	if (cmd.user === 'visitor') {
 		var uid;
 		do {
-			this.nextVisitor++;
-			uid = 'visitor-' + this.nextVisitor;
+			this.$nextVisitor++;
+			uid = 'visitor-' + this.$nextVisitor;
 		}
 		while ($users[uid]);
 		$users[uid] = {
@@ -533,7 +532,7 @@ Server.prototype.cmdAuth = function(cmd, _) {
 	}
 
 	if (!$users[cmd.user]) {
-		var val = this.db.users.findOne({ _id : cmd.user}, _);
+		var val = this.$db.users.findOne({ _id : cmd.user}, _);
 		if (val === null) { return reject('Username unknown'); }
 		$users[cmd.user] = val;
 	}
@@ -556,7 +555,7 @@ Server.prototype.cmdRegister = function(cmd, _) {
 	if (cmd.user.length < 4)
 		{ throw reject('Username too short, min. 4 characters'); }
 
-	var user = this.db.users.findOne({ _id : cmd.user}, _);
+	var user = this.$db.users.findOne({ _id : cmd.user}, _);
 	if (user !== null) { return reject('Username already taken'); }
 
 	user = {
@@ -565,7 +564,7 @@ Server.prototype.cmdRegister = function(cmd, _) {
 		mail : cmd.mail,
 	};
 
-	this.db.users.insert(user, _);
+	this.$db.users.insert(user, _);
 	this.$users[cmd.user] = user;
 
 	// everything OK so far, creates the user home space
@@ -663,13 +662,13 @@ Server.prototype.cmdUpdate = function(cmd, res, _) {
 	if (!is(cmd.time))
 		{ throw reject('time missing'); }
 
-	if (!(cmd.time >= 0 && cmd.time <= this.changes.length))
+	if (!(cmd.time >= 0 && cmd.time <= this.$changes.length))
 		{ throw reject('invalid time'); }
 
 	if (cmd.mseq < 0)
-		{ cmd.mseq = this.messages.length; }
+		{ cmd.mseq = this.$messages.length; }
 
-	if (!(cmd.mseq <= this.messages.length))
+	if (!(cmd.mseq <= this.$messages.length))
 		{ throw reject('invalid mseq: ' + cmd.mseq); }
 
 	this.refreshPresence(cmd.user, cmd.space);
@@ -680,9 +679,9 @@ Server.prototype.cmdUpdate = function(cmd, res, _) {
 		{ return asw; }
 
 	// if not immediate puts the request to sleep
-	var sleepID = '' + this.nextSleep++;
+	var sleepID = '' + this.$nextSleep++;
 	var timerID = setTimeout(this.expireSleep, 60000, this, sleepID);
-	this.upsleep[sleepID] = {
+	this.$upsleep[sleepID] = {
 		user     : cmd.user,
 		time     : cmd.time,
 		mseq     : cmd.mseq,
@@ -700,8 +699,8 @@ Server.prototype.cmdUpdate = function(cmd, res, _) {
 | A sleeping update expired.
 */
 Server.prototype.expireSleep = function(self, sleepID) {
-	var cZ = self.changes.length;
-	var sleep = self.upsleep[sleepID];
+	var cZ    = self.$changes.length;
+	var sleep = self.$upsleep[sleepID];
 	delete self.upsleep[sleepID];
 
 	self.destablishPresence(sleep.user, sleep.space);
@@ -721,9 +720,9 @@ Server.prototype.expireSleep = function(self, sleepID) {
 | A sleeping update closed prematurely.
 */
 Server.prototype.closeSleep = function(sleepID) {
-	var sleep = this.upsleep[sleepID];
+	var sleep = this.$upsleep[sleepID];
 	clearTimeout(sleep.timerID);
-	delete this.upsleep[sleepID];
+	delete this.$upsleep[sleepID];
 	this.destablishPresence(sleep.user, sleep.space);
 };
 
@@ -731,18 +730,18 @@ Server.prototype.closeSleep = function(sleepID) {
 | Returns a result for an update operation.
 */
 Server.prototype.conveyUpdate = function(time, mseq, space) {
-	var changes  = this.changes;
-	var messages = this.messages;
-	var cZ       = changes.length;
-	var mZ       = messages.length;
+	var $changes  = this.$changes;
+	var $messages = this.$messages;
+	var cZ        = $changes.length;
+	var mZ       = $messages.length;
 	var chga     = [];
 	var msga     = [];
 	for (var c = time; c < cZ; c++) {
-		MeshMashine.filter(changes[c], space, chga);
+		MeshMashine.filter($changes[c], space, chga);
 	}
 	for (var m = mseq; m < mZ; m++) {
-		if (messages[m].space !== space) { continue; }
-		msga.push(messages[m]);
+		if ($messages[m].space !== space) { continue; }
+		msga.push($messages[m]);
 	}
 
 	return {
@@ -760,16 +759,16 @@ Server.prototype.conveyUpdate = function(time, mseq, space) {
 | Wakes up any sleeping updates and gives them data if applicatable.
 */
 Server.prototype.wake = function(spaces) {
-	var sleepKeys = Object.keys(this.upsleep);
+	var sleepKeys = Object.keys(this.$upsleep);
 
 	// FIXME cache change lists to answer the same to multiple clients.
 	for(var a = 0, aZ = sleepKeys.length; a < aZ; a++) {
 		var sKey = sleepKeys[a];
-		var sleep = this.upsleep[sKey];
+		var sleep = this.$upsleep[sKey];
 		if (!spaces[sleep.space]) { continue; }
 
 		clearTimeout(sleep.timerID);
-		delete this.upsleep[sKey];
+		delete this.$upsleep[sKey];
 		this.destablishPresence(sleep.user, sleep.space);
 
 		var asw = this.conveyUpdate(sleep.time, sleep.mseq, sleep.space);
@@ -810,10 +809,10 @@ Server.prototype.testAccess = function(user, space) {
 | Executes a get command.
 */
 Server.prototype.cmdGet = function(cmd, _) {
-	var time    = cmd.time;
-	var user    = cmd.user;
-	var changes = this.changes;
-	var cZ      = changes.length;
+	var time     = cmd.time;
+	var user     = cmd.user;
+	var $changes = this.$changes;
+	var cZ       = $changes.length;
 
 	// checks
 	if (!is(this.$users[user]) || this.$users[user].pass !== cmd.pass)
@@ -840,7 +839,7 @@ Server.prototype.cmdGet = function(cmd, _) {
 	// if the requested data is in the past go back in time
 	var tree = this.tree;
 	for (var a = cZ - 1; a >= time; a--) {
-		var chgX = changes[a].chgX;
+		var chgX = $changes[a].chgX;
 		for (var b = 0; b < chgX.length; b++) {
 			var r = MeshMashine.changeTree(tree, chgX[b].reverse());
 			tree = r.tree;
