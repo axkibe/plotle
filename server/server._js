@@ -25,7 +25,7 @@
 */
 (function(){
 "use strict";
-if (typeof(require) === 'undefined') { throw new Error('this file needs node!'); }
+if (typeof(require) === 'undefined') { throw new Error('this code requires node!'); }
 
 /**
 | Imports
@@ -103,9 +103,7 @@ var Server = function() {
 	// user for 'entered' and 'left' messages
 	this.$presences = {};
 
-	// all other steps of the startup sequence are done in
-	// async waterfall model from here.
-
+	// starts the streamlined part
 	this.startup(function(err, asw) {
 		if (err) {
 			console.log('Error: ' + err.message);
