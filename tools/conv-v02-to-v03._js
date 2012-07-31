@@ -37,7 +37,6 @@ var config = {
 		port    : 27017,
 		name    : 'meshcraft03'
 	}
-
 };
 
 /**
@@ -96,12 +95,15 @@ var tree      = new Tree({ type : 'Nexus' }, Meshverse);
 
 // all changes
 var changes   = [];
-var cursor;
+var o, cursor;
 
 console.log('* connecting to src');
 src.connection = src.connector.open(_);
 console.log('* connecting to trg');
 trg.connection = trg.connector.open(_);
+
+console.log('* dropping trg');
+trg.connection.dropDatabase(_);
 
 src.global   = src.connection.collection('global', _);
 src.changes  = src.connection.collection('changes', _);
@@ -117,26 +119,16 @@ if (src.global.count(_) > 0) {
 }
 
 
-if (trg.global.count(_) > 0) {
-	console.log('* dropping trg.global');
-	trg.global.drop(_);
-}
-
 console.log('* creating trg.global');
 trg.global.insert({
 	_id     : 'version',
 	version : 3
 });
 
-if (trg.users.count(_) > 0) {
-	console.log('* dropping trg.users');
-	trg.users.drop(_);
-}
-
 console.log('* copying src.users -> trg.users');
 cursor = src.users.find(_);
 var haveMeshcraftUser = false;
-for(var o = cursor.nextObject(_); o !== null; o = cursor.nextObject(_)) {
+for(o = cursor.nextObject(_); o !== null; o = cursor.nextObject(_)) {
 	if (o._id === 'meshcraft')
 		{ haveMeshcraftUser = true; }
 	trg.users.insert(o, _);
@@ -158,15 +150,54 @@ if (!haveMeshcraftUser) {
 	});
 }
 
-// all spaces
+// counts for all spaces
 var spaces = {};
 
-console.log('* loading src.changes and sorting them into their spaces');
+console.log('* converting src.changes to trg.space:*');
 cursor = src.changes.find(_);
-for (var o = cursor.nextObject(_); o !== null; o = cursor.nextObject(_)) {
-	console.log(util.inspect(o));
-}
+for (o = cursor.nextObject(_); o !== null; o = cursor.nextObject(_)) {
+	var sp = o.chgX.src.path;
+	var tp = o.chgX.trg.path;
+	var space;
 
+	if (sp && tp) {
+		if (sp[0] !== tp[0]) {
+			console.log('ERROR: paths mismatch at change._id ===' + o._id);
+			process.exit(1);
+		}
+		space = sp[0];
+	} else if (sp)
+		{ space = sp[0]; }
+	else if (tp)
+		{ space = tp[0]; }
+	else {
+		console.log('ERROR: paths mismatch at change._id ===' + o._id);
+		process.exit(1);
+	}
+
+	var tspace = null;
+	switch(space) {
+	case 'welcome' : tspace = 'meshcraft:home';    break;
+	case 'sandbox' : tspace = 'meshcraft:sandbox'; break;
+	}
+
+	if (tspace) {
+		space = tspace;
+		if (sp) { sp[0] = space; }
+		if (tp) { tp[0] = space; }
+	}
+
+	if (!is(spaces[space]))
+		{ spaces[space] = 0; }
+
+	o._id = ++spaces[space];
+
+	var sname = 'space:' + space;
+	if (!trg[sname])
+		{ trg[sname] = trg.connection.collection(sname, _); }
+
+	trg[sname].insert(o, _)
+}
 
 
 console.log('* closing connections');
