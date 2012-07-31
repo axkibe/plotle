@@ -130,9 +130,7 @@ if (!users.meshcraft) {
 		_id       : 'meshcraft',
 		pass      : Jools.passhash(meshcraftUserPass),
 		clearPass : meshcraftUserPass,
-		mail      : '',
-		code      : '',
-		icom      : 'meshcraft'
+		mail      : ''
 	});
 }
 
@@ -200,73 +198,6 @@ src.connection.close();
 trg.connection.close();
 
 console.log('* done');
-
-/**
-| Ensures there is a root user
-*/
-/*
-Server.prototype.ensureRootUser = function(_) {
-	var root = this.db.users.findOne({ _id : 'root'}, _);
-
-	if (root) {
-		log('start', 'root pass:', root.pass);
-	} else {
-		// if not create one
-		root = {
-			_id  : 'root',
-			pass : Jools.uid(),
-			mail : '',
-			code : '',
-			icom : 'root'
-		};
-
-		this.db.users.insert(root, _);
-		log('start', 'created root pass:', root.pass);
-	}
-
-	this.$users.root = root;
-};
-*/
-
-/**
-| Playbacks one change.
-*/
-/*
-Server.prototype.playbackOne = function(o) {
-	var c = {
-		cid  : o.cid,
-		chgX : null
-	};
-
-	if (!isArray(o.chgX)) {
-		c.chgX = new MeshMashine.Change(o.chgX);
-	} else {
-		c.chgX = [];
-		for(var a = 0, aZ = o.chgX.length; a < aZ; a++) {
-			c.chgX.push(new MeshMashine.Change(o.chgX[a]));
-		}
-	}
-
-	this.changes.push(c);
-	var r = MeshMashine.changeTree(this.tree, c.chgX);
-	this.tree = r.tree;
-};
-*/
-
-
-/**
-| sends a message
-*/
-/*
-Server.prototype.sendMessage = function(space, user, message) {
-	this.messages.push({ space: space, user: user, message: message });
-	var spaces = [];
-	spaces[space] = true;
-	var self = this;
-	process.nextTick(function() { self.wake(spaces); });
-};
-*/
-
 
 })(function(err, asw) {
 	'use strict';
