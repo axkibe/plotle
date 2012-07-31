@@ -127,18 +127,16 @@ trg.global.insert({
 
 console.log('* copying src.users -> trg.users');
 cursor = src.users.find(_);
-var haveMeshcraftUser = false;
+var users = {};
 for(o = cursor.nextObject(_); o !== null; o = cursor.nextObject(_)) {
-	if (o._id === 'meshcraft')
-		{ haveMeshcraftUser = true; }
+	users[o._id] = o;
 	trg.users.insert(o, _);
 }
 
-if (!haveMeshcraftUser) {
+if (!users.meshcraft) {
 	console.log('* adding the "meshcraft" user');
 	var meshcraftUserPass = Jools.randomPassword(12);
 	console.log('* meshcraft user\'s password: ' + meshcraftUserPass);
-
 
 	trg.users.insert({
 		_id       : 'meshcraft',
@@ -159,6 +157,11 @@ for (o = cursor.nextObject(_); o !== null; o = cursor.nextObject(_)) {
 	var sp = o.chgX.src.path;
 	var tp = o.chgX.trg.path;
 	var space;
+
+	if (!users[o.user]) {
+		console.log('ERROR: user: '+o.user+' not in users table');
+		process.exit(1);
+	}
 
 	if (sp && tp) {
 		if (sp[0] !== tp[0]) {
@@ -192,13 +195,17 @@ for (o = cursor.nextObject(_); o !== null; o = cursor.nextObject(_)) {
 
 	o._id = ++spaces[space];
 
-	var sname = 'space:' + space;
-	if (!trg[sname])
-		{ trg[sname] = trg.connection.collection(sname, _); }
+	var cname = 'changes:' + space;
+	if (!trg[cname])
+		{ trg[cname] = trg.connection.collection(cname, _); }
 
-	trg[sname].insert(o, _)
+	trg[cname].insert(o, _)
 }
 
+console.log('* created:');
+for(var a in spaces) {
+	console.log('  changes:'+a+'  '+spaces[a]);
+}
 
 console.log('* closing connections');
 src.connection.close();
