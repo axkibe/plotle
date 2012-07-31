@@ -50,17 +50,10 @@ if (typeof(require) === 'undefined') { throw new Error('this code needs node!');
 | Imports
 */
 var Jools       = require('../shared/jools');
-var MeshMashine = require('../shared/meshmashine');
-var Meshverse   = require('../shared/meshverse');
-var Path        = require('../shared/path');
-var Tree        = require('../shared/tree');
 var mongodb     = require('mongodb');
-var util        = require('util');
 
 // Shortcuts
 var is           = Jools.is;
-var isArray      = Jools.isArray;
-var log          = Jools.log;
 
 // initializes the mongodb databases access
 var src = {};
@@ -90,11 +83,6 @@ trg.connector = new mongodb.Db(
 	{}
 );
 
-// the whole tree
-var tree      = new Tree({ type : 'Nexus' }, Meshverse);
-
-// all changes
-var changes   = [];
 var o, cursor;
 
 console.log('* connecting to src');
@@ -199,7 +187,7 @@ for (o = cursor.nextObject(_); o !== null; o = cursor.nextObject(_)) {
 	if (!trg[cname])
 		{ trg[cname] = trg.connection.collection(cname, _); }
 
-	trg[cname].insert(o, _)
+	trg[cname].insert(o, _);
 }
 
 console.log('* created:');
