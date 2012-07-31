@@ -155,6 +155,17 @@ var uid = function() {
 };
 
 /**
+| Creates a random password with only numbers and lower case alphas.
+*/
+var randomPassword = function(length) {
+	var ch ='abcdefghijklmnopqrstuvwxyz0123456789';
+	var ua   = [];
+	for(var a = 0; a < length; a++)
+		{ ua.push(ch[Math.floor(36 * Math.random())]); }
+	return ua.join('');
+};
+
+/**
 | Legacy (for opera browser)
 */
 if (!Object.defineProperty) {
@@ -493,32 +504,33 @@ var half = function(v) { return Math.round(v / 2); };
 | Exports
 */
 Jools = {
-	check        : check,
-	checkLimits  : checkLimits,
-	configSwitch : configSwitch,
-	copy         : copy,
-	debug        : debug,
-	devel        : devel,
-	ensureInt    : ensureInt,
-	fixate       : fixate,
-	half         : half,
-	inspect      : inspect,
-	innumerable  : innumerable,
-	is           : is,
-	isnon        : isnon,
-	isArray      : isArray,
-	isInteger    : isInteger,
-	isString     : isString,
-	immute       : immute,
-	keyNonGrata  : keyNonGrata,
-	lazyFixate   : lazyFixate,
-	limit        : limit,
-	log          : log,
-	matches      : matches,
-	passhash     : passhash,
-	reject       : reject,
-	subclass     : subclass,
-	uid          : uid
+	check          : check,
+	checkLimits    : checkLimits,
+	configSwitch   : configSwitch,
+	copy           : copy,
+	debug          : debug,
+	devel          : devel,
+	ensureInt      : ensureInt,
+	fixate         : fixate,
+	half           : half,
+	inspect        : inspect,
+	innumerable    : innumerable,
+	is             : is,
+	isnon          : isnon,
+	isArray        : isArray,
+	isInteger      : isInteger,
+	isString       : isString,
+	immute         : immute,
+	keyNonGrata    : keyNonGrata,
+	lazyFixate     : lazyFixate,
+	limit          : limit,
+	log            : log,
+	matches        : matches,
+	passhash       : passhash,
+	randomPassword : randomPassword,
+	reject         : reject,
+	subclass       : subclass,
+	uid            : uid
 };
 
 if (typeof(window) === 'undefined') {
