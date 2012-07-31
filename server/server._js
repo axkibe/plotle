@@ -122,7 +122,6 @@ Server.prototype.startup = function(_) {
 	db.connection = db.connector.open(_);
 	log('start', 'Connected to database');
 	db.changes = db.connection.collection('changes', _);
-	db.invites = db.connection.collection('invites', _);
 	db.users   = db.connection.collection('users', _);
 	this.ensureRootUser(_);
 
@@ -155,8 +154,6 @@ Server.prototype.ensureRootUser = function(_) {
 			_id  : 'root',
 			pass : Jools.uid(),
 			mail : '',
-			code : '',
-			icom : 'root'
 		};
 
 		this.db.users.insert(root, _);
@@ -552,7 +549,6 @@ Server.prototype.cmdRegister = function(cmd, _) {
 	if (!is(cmd.user)) { return reject('user missing'); }
 	if (!is(cmd.pass)) { return reject('pass missing'); }
 	if (!is(cmd.mail)) { return reject('mail missing'); }
-	if (!is(cmd.code)) { return reject('code missing'); }
 
 	if (cmd.user.substr(0, 7) === 'visitor')
 		{ return reject('Username must not start with "visitor"'); }
@@ -563,24 +559,10 @@ Server.prototype.cmdRegister = function(cmd, _) {
 	var user = this.db.users.findOne({ _id : cmd.user}, _);
 	if (user !== null) { return reject('Username already taken'); }
 
-	// aquires an inivitation code and invalidates it if found.
-	var code = this.db.invites.findAndModify(
-		{ _id : cmd.code },
-		{  },
-		null,
-		{ remove: true },
-	_);
-
-	if (code === null) {
-		return reject('Unknown invitation code');
-	}
-
 	user = {
 		_id  : cmd.user,
 		pass : cmd.pass,
 		mail : cmd.mail,
-		code : cmd.code,
-		icom : code.comment
 	};
 
 	this.db.users.insert(user, _);
