@@ -34,6 +34,7 @@ var Jools;
 | Imports
 */
 var config;
+var sha1hex;
 
 /**
 | Capsule
@@ -65,8 +66,9 @@ var configSwitch = function(param, side) {
 */
 if (typeof(window) === 'undefined') {
 	// in node
-	config = require('../config');
-	devel  = configSwitch(config.devel, 'server');
+	config =  require('../config');
+	sha1hex = require('./sha1').sha1hex;
+	devel   = configSwitch(config.devel, 'server');
 } else {
 	// in browser
 	devel  = configSwitch(config.devel, 'shell');
@@ -117,6 +119,13 @@ var check = function(condition) {
 */
 var checkLimits = function(v, low, high) {
 	if (v < low || v > high) fail(arguments, 3, low, '<=', v, '<=', high);
+};
+
+/**
+| hashes the password
+*/
+var passhash = function(pass) {
+	return sha1hex(pass + '-meshcraft-8833');
 };
 
 /**
@@ -506,6 +515,7 @@ Jools = {
 	limit        : limit,
 	log          : log,
 	matches      : matches,
+	passhash     : passhash,
 	reject       : reject,
 	subclass     : subclass,
 	uid          : uid

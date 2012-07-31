@@ -38,7 +38,6 @@ var Peer;
 var IFace;
 var Jools;
 var Path;
-var sha1hex;
 
 /**
 | Capsule
@@ -55,13 +54,6 @@ Peer = function(updateRCV, messageRCV) {
 	this._iface = new IFace(updateRCV, messageRCV);
 	this.$visitUser = null;
 	this.$visitPass = null;
-};
-
-/**
-| hashes the password
-*/
-Peer.prototype.passhash = function(pass) {
-	return sha1hex(pass + '-meshcraft-8833');
 };
 
 /**

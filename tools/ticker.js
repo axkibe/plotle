@@ -11,7 +11,6 @@ var fs       = require('fs');
 var http     = require('http');
 var readline = require('readline');
 var util     = require('util');
-var sha1     = require('../shared/sha1');
 var Jools    = require('../shared/jools');
 var config   = require('../config');
 
@@ -29,8 +28,7 @@ if (!Jools.is(user) || !Jools.is(pass) || !Jools.is(itemid)) {
 	console.log('Usage: ' + args[1] + ' USER PASSWORD ITEMID');
 	process.exit(1);
 }
-pass = sha1.sha1hex(pass + '-meshcraft-8833');
-
+pass = Jools.passhash('-meshcraft-8833');
 
 /**
 | Options to connect.

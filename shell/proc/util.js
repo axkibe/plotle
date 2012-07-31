@@ -88,7 +88,7 @@ Util.login = function(panel) {
 		return;
 	}
 
-	var passhash = shell.peer.passhash(pass);
+	var passhash = Jools.passhash(pass);
 
 	shell.peer.auth(user, passhash, function(res) {
 		if (!res.ok) {
@@ -193,7 +193,7 @@ Util.register = function(panel) {
 		return;
 	}
 
-	pass = shell.peer.passhash(pass);
+	pass = Jools.passhash(pass);
 
 	shell.peer.register(user, email, pass, code, function(res) {
 		if (!res.ok) {
