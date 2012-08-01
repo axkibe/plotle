@@ -106,48 +106,76 @@ var Server = function(_) {
 
 	this.prepareResources(_);
 
-	log('start', 'Connecting to database');
+	log('start',
+		'connecting to database',
+		config.database.host + ':' + config.database.port,
+		config.database.name
+	);
+
 	$db.connection = $db.connector.open(_);
 	$db.changes = $db.connection.collection('changes', _);
 	$db.users   = $db.connection.collection('users', _);
-	this.ensureRootUser(_);
+
+	this.checkRepositorySchemaVersion(_);
+
+	this.ensureMeshcraftUser(_);
 
 	var cursor = $db.changes.find(_);
 	for(var o = cursor.nextObject(_); o !== null; o = cursor.nextObject(_)) {
 		this.playbackOne(o);
 	}
 
-	log('start', 'Starting server @ http://' + (config.ip || '*') + '/:' + config.port);
+	log('start',
+		'starting server @ http://' +
+		(config.ip || '*') + '/:' + config.port
+	);
 
 	var self = this;
 	http.createServer(function(req, res) {
 		self.requestListener(req, res);
 	}).listen(config.port, config.ip, _);
 
-	log('start', 'Server running');
+	log('start', 'server running');
 };
 
 /**
-| Ensures there is a root user
+| Ensures the repository schema version fits this server.
 */
-Server.prototype.ensureRootUser = function(_) {
-	var root = this.$db.users.findOne({ _id : 'root'}, _);
+Server.prototype.checkRepositorySchemaVersion = function(_) {
+	log('start', 'checking repository schema version');
+	var global = this.$db.connection.collection('global', _);
+	var version = global.findOne({ _id : 'version' }, _);
 
-	if (root) {
-		log('start', 'root pass:', root.pass);
-	} else {
-		// if not create one
-		root = {
-			_id  : 'root',
-			pass : Jools.uid(),
-			mail : '',
+	if (version.version !== 3) {
+		throw new Error(
+			'Wrong repository schema version, expected 3, got '+
+			version.version
+		);
+	}
+};
+
+/**
+| Ensures there is the meshcraft (root) user
+*/
+Server.prototype.ensureMeshcraftUser = function(_) {
+	log('start', 'ensuring existence of the "meshcraft" user');
+	var mUser = this.$db.users.findOne({ _id : 'meshcraft'}, _);
+
+	if (!mUser) {
+		log('start', 'not found! (re)creating the "meshcraft" user');
+		var pass = Jools.randomPassword(12);
+		mUser = {
+			_id       : 'meshcraft',
+			pass      : Jools.passhash(pass),
+			clearPass : pass,
+			mail      : '',
 		};
 
-		this.$db.users.insert(root, _);
-		log('start', 'created root pass:', root.pass);
+		this.$db.users.insert(mUser, _);
 	}
 
 	this.$users.root = root;
+	log('start', '"meshcraft" user\'s clear password is: ', mUser.clearPass);
 };
 
 /**
@@ -351,7 +379,7 @@ Server.prototype.addResources = function() {
 */
 Server.prototype.prepareResources = function(_) {
 	var path, r;
-	log('start', 'Preparing resources');
+	log('start', 'preparing resources');
 
 	for(path in this.$resources) {
 		r = this.$resources[path];

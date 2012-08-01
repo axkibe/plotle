@@ -57,7 +57,7 @@ config.database.port = 27017;
 /**
 | Name of the database
 */
-config.database.name = 'meshcraft02';
+config.database.name = 'meshcraft03';
 
 /**
 | development mode
