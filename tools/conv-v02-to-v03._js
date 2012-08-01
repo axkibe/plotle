@@ -138,6 +138,18 @@ if (!users.meshcraft) {
 // counts for all spaces
 var spaces = {};
 
+/**
+| translates some spacenames to their new names
+*/
+var translateSpaceName = function(space) {
+	switch(space) {
+	case 'welcome' : return 'meshcraft:home';
+	case 'sandbox' : return 'meshcraft:sandbox';
+	default        : return space;
+	}
+};
+
+
 console.log('* converting src.changes to trg.space:*');
 cursor = src.changes.find(_);
 for (o = cursor.nextObject(_); o !== null; o = cursor.nextObject(_)) {
@@ -147,52 +159,48 @@ for (o = cursor.nextObject(_); o !== null; o = cursor.nextObject(_)) {
 		process.exit(1);
 	}
 
-	var sp = o.chgX.src.path;
-	var tp = o.chgX.trg.path;
-	var spacename;
+	var chgSrc = o.chgX.src;
+	var chgTrg = o.chgX.trg;
 
-	if (sp && tp) {
-		if (sp[0] !== tp[0]) {
+	if (chgSrc.path) {
+		chgSrc.space = chgSrc.path[0];
+		chgSrc.path.unshift();
+	}
+
+	if (chgTrg.path) {
+		chgTrg.space = chgTrg.path[0];
+		chgTrg.path.unshift();
+	}
+
+	var space;
+	if (chgSrc.space && chgTrg.space) {
+		if (chgSrc.space !== chgTrg.space) {
 			console.log('ERROR: paths mismatch at change._id ===' + o._id);
 			process.exit(1);
 		}
-		spacename = sp[0];
-	} else if (sp)
-		{ spacename = sp[0]; }
-	else if (tp)
-		{ spacename = tp[0]; }
+		space = chgSrc.space;
+	} else if (chgSrc.space)
+		{ space = chgSrc.space; }
+	else if (chgTrg.space)
+		{ space = chgTrg.space; }
 	else {
 		console.log('ERROR: paths mismatch at change._id ===' + o._id);
 		process.exit(1);
 	}
 
-	if (!Jools.isString(spacename)) {
-		console.log('ERROR: spacename not a string');
-		process.exit(1);
-	}
+	space = translateSpaceName(space);
 
-	var tspace = null;
-	switch(spacename) {
-	case 'welcome' : tspace = 'meshcraft:home';    break;
-	case 'sandbox' : tspace = 'meshcraft:sandbox'; break;
-	}
-
-	if (tspace) {
-		spacename = tspace;
-		if (sp) { sp[0] = spacename; }
-		if (tp) { tp[0] = spacename; }
-	}
-
-	if (!is(spaces[spacename])) {
+	if (!is(spaces[space])) {
 		trg.spaces.insert({
-			_id : spacename
+			_id : space
 		}, _);
-		spaces[spacename] = 0;
+
+		spaces[space] = 0;
 	}
 
-	o._id = ++spaces[spacename];
+	o._id = ++spaces[space];
 
-	var cname = 'changes:' + spacename;
+	var cname = 'changes:' + space;
 	if (!trg[cname])
 		{ trg[cname] = trg.connection.collection(cname, _); }
 
@@ -212,8 +220,5 @@ console.log('* done');
 
 })(function(err, asw) {
 	'use strict';
-	if (err) {
-		console.log('Error: ' + err.message);
-		process.exit(1);
-	}
+	if (err) { throw err; }
 });
