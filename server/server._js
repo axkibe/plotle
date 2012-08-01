@@ -56,7 +56,7 @@ var reject       = Jools.reject;
 /**
 | Server
 */
-var Server = function() {
+var Server = function(_) {
 
 	// files served
 	this.$resources = {};
@@ -64,14 +64,16 @@ var Server = function() {
 
 	this.addResources();
 
-	// init database
-	this.$db = {};
-	this.$db.server    = new mongodb.Server(
+	// initializes the database
+	var $db = this.$db = {};
+
+	$db.server    = new mongodb.Server(
 		config.database.host,
 		config.database.port,
 		{}
 	);
-	this.$db.connector = new mongodb.Db(
+
+	$db.connector = new mongodb.Db(
 		config.database.name,
 		this.$db.server,
 		{}
@@ -102,24 +104,10 @@ var Server = function() {
 	// user for 'entered' and 'left' messages
 	this.$presences = {};
 
-	// starts the streamlined part
-	this.startup(function(err, asw) {
-		if (err) {
-			console.log('Error: ' + err.message);
-			process.exit(1);
-		}
-	});
-};
-
-/**
-| Connects to the database.
-*/
-Server.prototype.startup = function(_) {
 	this.prepareResources(_);
 
-	var $db = this.$db;
+	log('start', 'Connecting to database');
 	$db.connection = $db.connector.open(_);
-	log('start', 'Connected to database');
 	$db.changes = $db.connection.collection('changes', _);
 	$db.users   = $db.connection.collection('users', _);
 	this.ensureRootUser(_);
@@ -1028,6 +1016,11 @@ Server.prototype.ajaxCmd = function(cmd, res, _) {
 	}
 };
 
-new Server();
+new Server(function(err) {
+	if (err) {
+		console.log('Error: ' + err.message);
+		process.exit(1);
+	}
+});
 
 })();

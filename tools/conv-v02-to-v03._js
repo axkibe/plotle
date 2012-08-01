@@ -93,13 +93,14 @@ trg.connection = trg.connector.open(_);
 console.log('* dropping trg');
 trg.connection.dropDatabase(_);
 
-src.global   = src.connection.collection('global', _);
+src.global   = src.connection.collection('global',  _);
 src.changes  = src.connection.collection('changes', _);
 src.invites  = src.connection.collection('invites', _);
-src.users    = src.connection.collection('users', _);
+src.users    = src.connection.collection('users',   _);
 
-trg.global   = trg.connection.collection('global', _);
-trg.users    = trg.connection.collection('users', _);
+trg.global   = trg.connection.collection('global',  _);
+trg.users    = trg.connection.collection('users',   _);
+trg.spaces   = trg.connection.collection('spaces',  _);
 
 if (src.global.count(_) > 0) {
 	console.log('ERROR: src has a "global" collection, but v02 had not!');
@@ -176,8 +177,12 @@ for (o = cursor.nextObject(_); o !== null; o = cursor.nextObject(_)) {
 		if (tp) { tp[0] = space; }
 	}
 
-	if (!is(spaces[space]))
-		{ spaces[space] = 0; }
+	if (!is(spaces[space])) {
+		trg.spaces.insert({
+			_id : space
+		}, _);
+		spaces[space] = 0;
+	}
 
 	o._id = ++spaces[space];
 
