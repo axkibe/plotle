@@ -56,23 +56,25 @@ var reject       = Jools.reject;
 | Constructor
 */
 Sign = function(model /*, ...*/) {
-	var k;
-	for(k in model) {
-		if (!Object.hasOwnProperty.call(model, k))
+	var $k;
+
+	for($k in model) {
+		if (!Object.hasOwnProperty.call(model, $k))
 			{ continue; }
 
-		if (!Sign.field[k])
-			{ throw reject('invalid Sign property: '+k); }
+		if (!Sign.field[$k])
+			{ throw reject('invalid Sign property: ' + $k); }
 
-		this[k] = model[k];
+		this[$k] = model[$k];
 	}
 
-	for (var a = 1, aZ = arguments.length; a < aZ; a+=2) {
-		k = arguments[a];
-		if (!Sign.field[k])
-			{ throw reject('invalid Sign property: '+k); }
+	for (var $a = 1, aZ = arguments.length; $a < aZ; $a += 2) {
+		$k = arguments[$a];
 
-		this[k] = arguments[a + 1];
+		if (!Sign.field[$k])
+			{ throw reject('invalid Sign property: ' + $k); }
+
+		this[$k] = arguments[$a + 1];
 	}
 
 	Jools.immute(this);
@@ -87,6 +89,7 @@ Sign.field = Jools.immute({
 	'path'  : true,
 	'proc'  : true,
 	'rank'  : true,
+	'space' : true,
 	'val'   : true
 });
 
@@ -102,8 +105,15 @@ Sign.field = Jools.immute({
 | val  : value to affix
 */
 Sign.prototype.affix = function(test, cm, base, key, val) {
+
 	if (test(this[key])) {
-		check(matches(val, this[key]), cm, base,'.',key,' faulty preset', val, '!==', this[key]);
+		check(
+			matches(val, this[key]),
+			cm, base, '.', key,
+			' faulty preset',
+			val, '!==', this[key]
+		);
+
 		return this;
 	}
 

@@ -159,36 +159,34 @@ for (o = cursor.nextObject(_); o !== null; o = cursor.nextObject(_)) {
 		process.exit(1);
 	}
 
-	var chgSrc = o.chgX.src;
-	var chgTrg = o.chgX.trg;
+	var cSrc = o.chgX.src;
+	var cTrg = o.chgX.trg;
 
-	if (chgSrc.path) {
-		chgSrc.space = chgSrc.path[0];
-		chgSrc.path.unshift();
+	if (cSrc.path) {
+		cSrc.space = translateSpaceName(cSrc.path[0]);
+		cSrc.path.shift();
 	}
 
-	if (chgTrg.path) {
-		chgTrg.space = chgTrg.path[0];
-		chgTrg.path.unshift();
+	if (cTrg.path) {
+		cTrg.space = translateSpaceName(cTrg.path[0]);
+		cTrg.path.shift();
 	}
 
 	var space;
-	if (chgSrc.space && chgTrg.space) {
-		if (chgSrc.space !== chgTrg.space) {
-			console.log('ERROR: paths mismatch at change._id ===' + o._id);
+	if (cSrc.space && cTrg.space) {
+		if (cSrc.space !== cTrg.space) {
+			console.log('ERROR: paths mismatch at change._id ' + o._id);
 			process.exit(1);
 		}
-		space = chgSrc.space;
-	} else if (chgSrc.space)
-		{ space = chgSrc.space; }
-	else if (chgTrg.space)
-		{ space = chgTrg.space; }
+		space = cSrc.space;
+	} else if (cSrc.space)
+		{ space = cSrc.space; }
+	else if (cTrg.space)
+		{ space = cTrg.space; }
 	else {
-		console.log('ERROR: paths mismatch at change._id ===' + o._id);
+		console.log('ERROR: paths mising at change._id ' + o._id);
 		process.exit(1);
 	}
-
-	space = translateSpaceName(space);
 
 	if (!is(spaces[space])) {
 		trg.spaces.insert({
