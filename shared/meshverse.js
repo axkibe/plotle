@@ -56,6 +56,7 @@ if (typeof (window) === 'undefined') {
 | The meshcraft universe
 */
 Meshverse = {
+	// TODO remove
 	'Nexus' : {
 		copse : { 'Space' : true }
 	},

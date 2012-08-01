@@ -115,7 +115,7 @@ config.debug = {
 config.log  = {
 	//all:   true,
 	ajax:   false,
-	change: false,
+	change: true,
 	debug:  true,
 	fail:   true,
 	grow:   false,

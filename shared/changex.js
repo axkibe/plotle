@@ -79,6 +79,7 @@ ChangeX.prototype.invert = function() {
 	return r;
 };
 
+
 /**
 | Exports
 */

@@ -60,9 +60,11 @@ var Server = function(_) {
 
 	// files served
 	this.$resources = {};
+
+	// resource bundle
 	this.$bundle = [];
 
-	this.addResources();
+	this.registerResources();
 
 	// initializes the database
 	var $db = this.$db = {};
@@ -82,11 +84,8 @@ var Server = function(_) {
 	// all messages
 	this.$messages = [];
 
-	// the whole tree
-	this.tree      = new Tree({ type : 'Nexus' }, Meshverse);
-
-	// all changes
-	this.$changes   = [];
+	// all spaces
+	this.$spaces  = {};
 
 	// a table of all clients waiting for an update
 	this.$upsleep   = {};
@@ -113,17 +112,14 @@ var Server = function(_) {
 	);
 
 	$db.connection = $db.connector.open(_);
-	$db.changes = $db.connection.collection('changes', _);
-	$db.users   = $db.connection.collection('users', _);
+	$db.users      = $db.connection.collection('users',   _);
+	$db.spaces     = $db.connection.collection('spaces',  _);
 
 	this.checkRepositorySchemaVersion(_);
 
 	this.ensureMeshcraftUser(_);
 
-	var cursor = $db.changes.find(_);
-	for(var o = cursor.nextObject(_); o !== null; o = cursor.nextObject(_)) {
-		this.playbackOne(o);
-	}
+	this.loadSpaces(_);
 
 	log('start',
 		'starting server @ http://' +
@@ -168,37 +164,58 @@ Server.prototype.ensureMeshcraftUser = function(_) {
 			_id       : 'meshcraft',
 			pass      : Jools.passhash(pass),
 			clearPass : pass,
-			mail      : '',
+			mail      : ''
 		};
 
 		this.$db.users.insert(mUser, _);
 	}
 
-	this.$users.root = root;
+	this.$users.meshcraft = mUser;
 	log('start', '"meshcraft" user\'s clear password is: ', mUser.clearPass);
 };
 
 /**
-| Playbacks one change.
+| loads all spaces and playbacks all changes from the database
 */
-Server.prototype.playbackOne = function(o) {
-	var c = {
-		cid  : o.cid,
-		chgX : null
+Server.prototype.loadSpaces = function(_) {
+	var cursor = this.$db.spaces.find(_);
+	for(var $o = cursor.nextObject(_); $o !== null; $o = cursor.nextObject(_)) {
+		this.loadSpace($o._id, _);
+	}
+};
+
+
+/**
+| load a spaces and playbacks its changes from the database
+*/
+Server.prototype.loadSpace = function(spacename, _) {
+	var $space = this.$spaces[spacename] = {
+		$changesDB : this.$db.connection.collection('changes:' + spacename, _),
+		$changes   : [],
+		$tree      : new Tree({ type : 'Space' }, Meshverse)
 	};
 
-	if (!isArray(o.chgX)) {
-		c.chgX = new MeshMashine.Change(o.chgX);
-	} else {
-		c.chgX = [];
-		for(var a = 0, aZ = o.chgX.length; a < aZ; a++) {
-			c.chgX.push(new MeshMashine.Change(o.chgX[a]));
-		}
-	}
+	var cursor = $space.$changesDB.find(_);
+	for(var $o = cursor.nextObject(_); $o !== null; $o = cursor.nextObject(_)) {
 
-	this.$changes.push(c);
-	var r = MeshMashine.changeTree(this.tree, c.chgX);
-	this.tree = r.tree;
+		// TODO there is something quirky, why isn't *this* a "Change"?
+		var $change = {
+			cid  : $o.cid,
+			chgX : null
+		};
+
+		if (!isArray($o.chgX)) {
+			$change.chgX = new MeshMashine.Change($o.chgX);
+		} else {
+			$change.chgX = [];
+			for(var a = 0, aZ = $o.chgX.length; a < aZ; a++) {
+				$change.chgX.push(new MeshMashine.Change($o.chgX[a]));
+			}
+		}
+
+		$space.$changes.push($change);
+		$space.$tree = MeshMashine.changeTree($space.$tree, $change.chgX).tree;
+	}
 };
 
 /**
@@ -264,9 +281,11 @@ Server.prototype.buildShellConfig = function() {
 };
 
 /**
-| Defines the resource to be REST served.
+| registers the resource to be REST served.
+|
+| TODO use Array.each
 */
-Server.prototype.addResources = function() {
+Server.prototype.registerResources = function() {
 	var rlist = [
 		'media/favicon.ico',                                'mc',
 		'shell/testpad.html',                               'f',
@@ -577,7 +596,7 @@ Server.prototype.cmdRegister = function(cmd, _) {
 	user = {
 		_id  : cmd.user,
 		pass : cmd.pass,
-		mail : cmd.mail,
+		mail : cmd.mail
 	};
 
 	this.$db.users.insert(user, _);
@@ -827,50 +846,60 @@ Server.prototype.testAccess = function(user, space) {
 Server.prototype.cmdGet = function(cmd, _) {
 	var time     = cmd.time;
 	var user     = cmd.user;
-	var $changes = this.$changes;
-	var cZ       = $changes.length;
 
-	// checks
 	if (!is(this.$users[user]) || this.$users[user].pass !== cmd.pass)
 		{ throw reject('wrong user/password'); }
 
+	// TODO dont call it "time"
 	if (!is(cmd.time))
 		{ throw reject('time missing'); }
 
 	if (!is(cmd.path))
 		{ throw reject('path missing'); }
 
-	if (time === -1)
-		{ time = cZ; }
+	var path = new Path(cmd.path);
+	var spacename = path.get(0);
 
-	if (!(time >= 0 && time <= cZ))
+	var access = this.testAccess(cmd.user, spacename);
+	if (access == 'no')
+		{ throw reject('no access'); }
+
+	var $space = this.$spaces[spacename];
+	if (!$space)
+		{ throw reject('unknown space'); }
+
+	var $changes = $space.$changes;
+	var changesZ = $changes.length;
+
+	if (time === -1)
+		{ time = changesZ; }
+	else if (!(time >= 0 && time <= changesZ))
 		{ throw reject('invalid time'); }
 
-	var path = new Path(cmd.path);
+	var $tree = $space.$tree;
 
-	var access = this.testAccess(cmd.user, path.get(0));
-	if (access == "no")
-		{ throw reject("no access"); }
+	// if the requested tree is not the latest, replay it backwards
+	for (var $a = changesZ - 1; $a >= time; $a--) {
+		var chgX = $changes[$a].chgX;
 
-	// if the requested data is in the past go back in time
-	var tree = this.tree;
-	for (var a = cZ - 1; a >= time; a--) {
-		var chgX = $changes[a].chgX;
-		for (var b = 0; b < chgX.length; b++) {
-			var r = MeshMashine.changeTree(tree, chgX[b].reverse());
-			tree = r.tree;
-		}
+		for (var b = 0; b < chgX.length; b++)
+			{ $tree = MeshMashine.changeTree($tree, chgX[b].reverse()).tree; }
 	}
 
 	// returns the path requested
 	var node;
 	try {
-		node = tree.getPath(path);
+		node = $tree.getPath(path);
 	} catch(e) {
 		throw reject('cannot get path: '+e.message);
 	}
 
-	return { ok: true, access : access, time : time, node: node };
+	return {
+		ok: true,
+		access : access,
+		time : time,
+		node: node
+	};
 };
 
 

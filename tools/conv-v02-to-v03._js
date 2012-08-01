@@ -49,8 +49,8 @@ if (typeof(require) === 'undefined') { throw new Error('this code needs node!');
 /**
 | Imports
 */
-var Jools       = require('../shared/jools');
-var mongodb     = require('mongodb');
+var Jools    = require('../shared/jools');
+var mongodb  = require('mongodb');
 
 // Shortcuts
 var is           = Jools.is;
@@ -141,52 +141,58 @@ var spaces = {};
 console.log('* converting src.changes to trg.space:*');
 cursor = src.changes.find(_);
 for (o = cursor.nextObject(_); o !== null; o = cursor.nextObject(_)) {
-	var sp = o.chgX.src.path;
-	var tp = o.chgX.trg.path;
-	var space;
 
-	if (!users[o.user]) {
+	if (!users[o.user] && o.user.substr(0,5) !== 'visit' ) {
 		console.log('ERROR: user: '+o.user+' not in users table');
 		process.exit(1);
 	}
+
+	var sp = o.chgX.src.path;
+	var tp = o.chgX.trg.path;
+	var spacename;
 
 	if (sp && tp) {
 		if (sp[0] !== tp[0]) {
 			console.log('ERROR: paths mismatch at change._id ===' + o._id);
 			process.exit(1);
 		}
-		space = sp[0];
+		spacename = sp[0];
 	} else if (sp)
-		{ space = sp[0]; }
+		{ spacename = sp[0]; }
 	else if (tp)
-		{ space = tp[0]; }
+		{ spacename = tp[0]; }
 	else {
 		console.log('ERROR: paths mismatch at change._id ===' + o._id);
 		process.exit(1);
 	}
 
+	if (!Jools.isString(spacename)) {
+		console.log('ERROR: spacename not a string');
+		process.exit(1);
+	}
+
 	var tspace = null;
-	switch(space) {
+	switch(spacename) {
 	case 'welcome' : tspace = 'meshcraft:home';    break;
 	case 'sandbox' : tspace = 'meshcraft:sandbox'; break;
 	}
 
 	if (tspace) {
-		space = tspace;
-		if (sp) { sp[0] = space; }
-		if (tp) { tp[0] = space; }
+		spacename = tspace;
+		if (sp) { sp[0] = spacename; }
+		if (tp) { tp[0] = spacename; }
 	}
 
-	if (!is(spaces[space])) {
+	if (!is(spaces[spacename])) {
 		trg.spaces.insert({
-			_id : space
+			_id : spacename
 		}, _);
-		spaces[space] = 0;
+		spaces[spacename] = 0;
 	}
 
-	o._id = ++spaces[space];
+	o._id = ++spaces[spacename];
 
-	var cname = 'changes:' + space;
+	var cname = 'changes:' + spacename;
 	if (!trg[cname])
 		{ trg[cname] = trg.connection.collection(cname, _); }
 

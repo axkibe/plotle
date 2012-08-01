@@ -26,6 +26,11 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /**
+| Exports
+*/
+var MeshMashine;
+
+/**
 | Imports
 */
 var Change;
@@ -33,11 +38,6 @@ var ChangeX;
 var Jools;
 var Path;
 var Sign;
-
-/**
-| Exports
-*/
-var MeshMashine;
 
 /**
 | Capsule
@@ -713,21 +713,9 @@ var filter = function(change, space, chga) {
 		{ chga.push(change); }
 };
 
-/**
-| Sets the names of all spaces that are affected by chgX.
-*/
-var listSpaces = function(chgX, spaces) {
-	for(var a = 0, aZ = chgX.length; a < aZ; a++) {
-		var chg = chgX[a];
-		if (chg.src.path) { spaces[chg.src.path.get(0)] = true; }
-		if (chg.trg.path) { spaces[chg.trg.path.get(0)] = true; }
-	}
-};
-
 MeshMashine = {
 	filter     : filter,
 	Change     : Change,
-	listSpaces : listSpaces,
 	tfxChg     : tfxChg,
 	tfxChgX    : tfxChgX,
 	tfxSign    : tfxSign,
