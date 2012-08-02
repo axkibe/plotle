@@ -1,4 +1,5 @@
-/**           _....._          .----.     .----  _....._    .
+/**
+              _....._          .----.     .----  _....._    .
             .´       '.         \    \   /    /.´       '.  .
            /   .-'"'.  \ .-,.--. '   '. /'   //   .-'"'.  \  .-,.--.
           /   /______\  ||  .-. ||    |'    //   /______\  | |  .-. |
@@ -21,11 +22,15 @@
 
 /**
 | Capsule
+|
 | (to make jshint happy)
 */
 (function(){
+
 "use strict";
-if (typeof(require) === 'undefined') { throw new Error('this code requires node!'); }
+
+if (typeof(require) === 'undefined')
+	{ throw new Error('this code requires node!'); }
 
 /**
 | Imports
@@ -154,12 +159,14 @@ Server.prototype.checkRepositorySchemaVersion = function(_) {
 | Ensures there is the meshcraft (root) user
 */
 Server.prototype.ensureMeshcraftUser = function(_) {
+
 	log('start', 'ensuring existence of the "meshcraft" user');
 	var mUser = this.$db.users.findOne({ _id : 'meshcraft'}, _);
 
 	if (!mUser) {
 		log('start', 'not found! (re)creating the "meshcraft" user');
 		var pass = Jools.randomPassword(12);
+
 		mUser = {
 			_id       : 'meshcraft',
 			pass      : Jools.passhash(pass),
@@ -171,19 +178,23 @@ Server.prototype.ensureMeshcraftUser = function(_) {
 	}
 
 	this.$users.meshcraft = mUser;
+
 	log('start', '"meshcraft" user\'s clear password is: ', mUser.clearPass);
+
 };
 
 /**
 | loads all spaces and playbacks all changes from the database
 */
 Server.prototype.loadSpaces = function(_) {
+
 	log('start', 'loading and replaying all spaces');
 
 	var cursor = this.$db.spaces.find({}, { sort: '_id'}, _);
-	for(var $o = cursor.nextObject(_); $o !== null; $o = cursor.nextObject(_)) {
-		this.loadSpace($o._id, _);
-	}
+
+	for(var $o = cursor.nextObject(_); $o !== null; $o = cursor.nextObject(_))
+		{ this.loadSpace($o._id, _); }
+
 };
 
 
@@ -218,8 +229,11 @@ Server.prototype.loadSpace = function(spacename, _) {
 		}
 
 		$space.$changes.push($change);
+
 		$space.$tree = MeshMashine.changeTree($space.$tree, $change.chgX).tree;
+
 	}
+
 };
 
 /**
@@ -485,7 +499,7 @@ Server.prototype.cmdAlter = function(cmd, _) {
 	var cid  = cmd.cid;
 
 	var $changes = this.$changes;
-	var cZ      = $changes.length;
+	var cZ       = $changes.length;
 
 	// some tests
 	if (!is(time)) { throw reject('time missing'); }
@@ -512,9 +526,8 @@ Server.prototype.cmdAlter = function(cmd, _) {
 	}
 
 	// translates the changes if not most recent
-	for (var a = time; a < cZ; a++) {
-		chgX = MeshMashine.tfxChgX(chgX, $changes[a].chgX);
-	}
+	for (var a = time; a < cZ; a++)
+		{ chgX = MeshMashine.tfxChgX(chgX, $changes[a].chgX); }
 
 	if (chgX === null || chgX.length === 0) {
 		return { ok: true, chgX: chgX };
@@ -626,38 +639,48 @@ Server.prototype.cmdRegister = function(cmd, _) {
 /**
 | Refreshes a users presence timeout.
 */
-Server.prototype.refreshPresence = function(user, space) {
+Server.prototype.refreshPresence = function(user, spacename) {
+
 	var pres = this.$presences;
 	var pu = pres[user];
 
-	if (!pu) { pu = pres[user] = { spaces : { } }; }
+	if (!pu)
+		{ pu = pres[user] = { spaces : { } }; }
 
-	var pus = pu.spaces[space];
+	var pus = pu.spaces[spacename];
+
 	if (!pus) {
-		pus = pu.spaces[space] = { establish : 0, timerID : null  };
-		pus.timerID = setTimeout(this.expirePresence, 5000, this, user, space);
-		this.sendMessage(space, null, user + ' entered "' + space + '"');
+		pus = pu.spaces[spacename] = { establish : 0, timerID : null  };
+		pus.timerID = setTimeout(this.expirePresence, 5000, this, user, spacename);
+		this.sendMessage(spacename, null, user + ' entered "' + spacename + '"');
 	} else {
-		if (pus.timerID !== null) { clearTimeout(pus.timerID); pus.timerID = null; }
-		pus.timerID = setTimeout(this.expirePresence, 5000, this, user, space);
+		if (pus.timerID !== null)
+			{ clearTimeout(pus.timerID); pus.timerID = null; }
+
+		pus.timerID = setTimeout(this.expirePresence, 5000, this, user, spacename);
 	}
+
 };
 
 /**
 | Establishes a longer user presence for an update that goes into sleep
 */
-Server.prototype.establishPresence = function(user, space, sleepID) {
+Server.prototype.establishPresence = function(user, spacename, sleepID) {
+
 	var pres = this.$presences;
 	var pu = pres[user];
 
 	if (!pu) { pu = pres[user] = { spaces : { } }; }
 
-	var pus = pu.spaces[space];
+	var pus = pu.spaces[spacename];
+
 	if (!pus) {
-		pus = pu.spaces[space] = { establish : 1, timerID : null  };
-		this.sendMessage(space, null, user + ' entered "' + space + '"');
+		pus = pu.spaces[spacename] = { establish : 1, timerID : null  };
+		this.sendMessage(spacename, null, user + ' entered "' + spacename + '"');
 	} else {
-		if (pus.timerID !== null) { clearTimeout(pus.timerID); pus.timerID = null; }
+		if (pus.timerID !== null)
+			{ clearTimeout(pus.timerID); pus.timerID = null; }
+
 		pus.establish++;
 	}
 };
@@ -665,53 +688,79 @@ Server.prototype.establishPresence = function(user, space, sleepID) {
 /**
 | Destablishes a longer user presence for an update that went out of sleep.
 */
-Server.prototype.destablishPresence = function(user, space) {
+Server.prototype.destablishPresence = function(user, spacename) {
+
 	var pres = this.$presences;
 	var pu   = pres[user];
-	var pus  = pu.spaces[space];
+	var pus  = pu.spaces[spacename];
+
 	pus.establish--;
+
 	if (pus.establish <= 0) {
-		if (pus.timerID !== null) { throw new Error("Presence timers mixed up."); }
-		pus.timerID = setTimeout(this.expirePresence, 5000, this, user, space);
+		if (pus.timerID !== null)
+			{ throw new Error("Presence timers mixed up."); }
+
+		pus.timerID = setTimeout(this.expirePresence, 5000, this, user, spacename);
 	}
+
 };
 
 /**
 | Expires a user presence with zero establishments after timeout
 */
-Server.prototype.expirePresence = function(self, user, space) {
-	self.sendMessage(space, null, user + ' left "' + space + '"');
+Server.prototype.expirePresence = function(self, user, spacename) {
+
+	self.sendMessage(spacename, null, user + ' left "' + spacename + '"');
+
 	var pres = self.$presences;
 	var pu = pres[user];
-	if (pu.spaces[space].establish !== 0) { throw new Error('Something wrong with presences.'); }
-	delete pu.spaces[space];
+
+	if (pu.spaces[spacename].establish !== 0)
+		{ throw new Error('Something wrong with presences.'); }
+
+	delete pu.spaces[spacename];
+
 };
 
 /**
 | Gets new changes or waits for them.
 */
 Server.prototype.cmdUpdate = function(cmd, res, _) {
-	if (this.$users[cmd.user].pass !== cmd.pass)
+
+	var user      = cmd.user;
+	var pass      = cmd.pass;
+	var spacename = cmd.space;
+	var time      = cmd.time;
+	var mseq      = cmd.mseq;
+
+	if (!is(user))
+		{ throw reject('user missing'); }
+
+	if (!is(pass))
+		{ throw reject('pass missing'); }
+
+	if (this.$users[user].pass !== pass)
 		{ throw reject('invalid password'); }
 
-	if (this.testAccess(cmd.user, cmd.space) === 'no')
-		{ throw reject('no access'); }
+	if (!is(spacename))
+		{ throw reject('space missing'); }
 
-	// some tests
-	if (!is(cmd.time))
-		{ throw reject('time missing'); }
+	var $space = this.$spaces[spacename];
+	if (!$space)
+		{ throw reject('unknown space'); }
 
-	if (!(cmd.time >= 0 && cmd.time <= this.$changes.length))
-		{ throw reject('invalid time'); }
+	if (!(time >= 0 && time <= $space.$changes.length))
+		{ throw reject('invalid or missing time'); }
 
-	if (cmd.mseq < 0)
-		{ cmd.mseq = this.$messages.length; }
+	if (mseq < 0)
+		{ mseq = this.$messages.length; }
 
-	if (!(cmd.mseq <= this.$messages.length))
-		{ throw reject('invalid mseq: ' + cmd.mseq); }
+	if (!(mseq <= this.$messages.length))
+		{ throw reject('invalid or missing mseq: ' + mseq); }
 
-	this.refreshPresence(cmd.user, cmd.space);
-	var asw = this.conveyUpdate(cmd.time, cmd.mseq, cmd.space);
+	this.refreshPresence(user, spacename);
+
+	var asw = this.conveyUpdate(time, mseq, spacename);
 
 	// immediate answer?
 	if (asw.chgs.length > 0 || asw.msgs.length > 0)
@@ -719,19 +768,24 @@ Server.prototype.cmdUpdate = function(cmd, res, _) {
 
 	// if not immediate puts the request to sleep
 	var sleepID = '' + this.$nextSleep++;
+
 	var timerID = setTimeout(this.expireSleep, 60000, this, sleepID);
+
 	this.$upsleep[sleepID] = {
-		user     : cmd.user,
-		time     : cmd.time,
-		mseq     : cmd.mseq,
-		timerID  : timerID,
-		res      : res,
-		space    : cmd.space
+		user      : user,
+		time      : time,
+		mseq      : mseq,
+		timerID   : timerID,
+		res       : res,
+		spacename : spacename
 	};
+
 	res.sleepID = sleepID;
 
-	this.establishPresence(cmd.user, cmd.space, sleepID);
+	this.establishPresence(user, spacename, sleepID);
+
 	return null;
+
 };
 
 /**
@@ -742,7 +796,7 @@ Server.prototype.expireSleep = function(self, sleepID) {
 	var sleep = self.$upsleep[sleepID];
 	delete self.upsleep[sleepID];
 
-	self.destablishPresence(sleep.user, sleep.space);
+	self.destablishPresence(sleep.user, sleep.spacename);
 
 	var asw = { ok : true, time: sleep.time, timeZ : cZ, chgs : null};
 	var res = sleep.res;
@@ -762,35 +816,41 @@ Server.prototype.closeSleep = function(sleepID) {
 	var sleep = this.$upsleep[sleepID];
 	clearTimeout(sleep.timerID);
 	delete this.$upsleep[sleepID];
-	this.destablishPresence(sleep.user, sleep.space);
+	this.destablishPresence(sleep.user, sleep.spacename);
 };
 
 /**
 | Returns a result for an update operation.
 */
-Server.prototype.conveyUpdate = function(time, mseq, space) {
-	var $changes  = this.$changes;
+Server.prototype.conveyUpdate = function(time, mseq, spacename) {
+	var $space    = this.$spaces[spacename];
+	var $changes  = $space.$changes;
+
 	var $messages = this.$messages;
-	var cZ        = $changes.length;
-	var mZ       = $messages.length;
-	var chga     = [];
-	var msga     = [];
-	for (var c = time; c < cZ; c++) {
-		MeshMashine.filter($changes[c], space, chga);
-	}
-	for (var m = mseq; m < mZ; m++) {
-		if ($messages[m].space !== space) { continue; }
-		msga.push($messages[m]);
+	var chgZ      = $space.$changes.length;
+	var msgZ      = $messages.length;
+	var chgA      = [];
+	var msgA      = [];
+
+	for (var c = time; c < chgZ; c++)
+		{ chgA.push( $changes[c] ); }
+
+	for (var m = mseq; m < msgZ; m++) {
+
+		if ($messages[m].space !== spacename)
+			{ continue; }
+
+		msgA.push( $messages[m] );
 	}
 
 	return {
 		ok    : true,
 		time  : time,
-		timeZ : cZ,
-		chgs  : chga,
-		msgs  : msga,
+		timeZ : chgZ,
+		chgs  : chgA,
+		msgs  : msgA,
 		mseq  : mseq,
-		mseqZ : mZ
+		mseqZ : msgZ
 	};
 };
 
@@ -798,42 +858,46 @@ Server.prototype.conveyUpdate = function(time, mseq, space) {
 | Wakes up any sleeping updates and gives them data if applicatable.
 */
 Server.prototype.wake = function(spaces) {
+
 	var sleepKeys = Object.keys(this.$upsleep);
 
 	// FIXME cache change lists to answer the same to multiple clients.
+
 	for(var a = 0, aZ = sleepKeys.length; a < aZ; a++) {
 		var sKey = sleepKeys[a];
 		var sleep = this.$upsleep[sKey];
-		if (!spaces[sleep.space]) { continue; }
+		if (!spaces[sleep.spacename])
+			{ continue; }
 
 		clearTimeout(sleep.timerID);
 		delete this.$upsleep[sKey];
-		this.destablishPresence(sleep.user, sleep.space);
+		this.destablishPresence(sleep.user, sleep.spacename);
 
-		var asw = this.conveyUpdate(sleep.time, sleep.mseq, sleep.space);
-
+		var asw = this.conveyUpdate(sleep.time, sleep.mseq, sleep.spacename);
 		var res = sleep.res;
+
 		log('ajax', '->', asw);
 		res.writeHead(200, {
 			'Content-Type'  : 'application/json',
 			'Cache-Control' : 'no-cache',
 			'Date'          : new Date().toUTCString()
 		});
+
 		res.end(JSON.stringify(asw));
 	}
 };
 
 /**
-| Tests if the user has access to 'space'.
+| Tests if the user has access to a space.
 */
-Server.prototype.testAccess = function(user, space) {
+Server.prototype.testAccess = function(user, spacename) {
 	if (user === 'root')
 		{ return 'rw'; }
 
-	if (!Jools.isString(space))
+	if (!Jools.isString(spacename))
 		{ return 'no'; }
 
-	switch (space) {
+	switch (spacename) {
 	case 'meshcraft:sandbox' :
 		return 'rw';
 
@@ -841,7 +905,7 @@ Server.prototype.testAccess = function(user, space) {
 		return user === config.admin ? 'rw' : 'ro';
 
 	default :
-		var sp = space.split(':', 2);
+		var sp = spacename.split(':', 2);
 
 		if (sp.length < 2)
 			{ return 'no'; }
@@ -1030,7 +1094,8 @@ Server.prototype.webAjax = function(req, red, res) {
 	}
 
 	req.on('close', function() {
-		if (res.sleepID) { self.closeSleep(res.sleepID); }
+		if (res.sleepID)
+			{ self.closeSleep(res.sleepID); }
 	});
 
 	req.on('data', function(chunk) {

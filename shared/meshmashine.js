@@ -694,27 +694,7 @@ TFXOps.remove = function(sign, src, trg) {
 	throw new Error('remove no case fitted? '+sign.at1+'-'+sign.at2+' '+src.at1+'-'+src.at2);
 };
 
-/**
-| Appends changes of chgX that matter to space to the array chga.
-|
-| FIXME Make a proper filter that splits
-*/
-var filter = function(change, space, chga) {
-	var chgX = change.chgX;
-	var f = false;
-	for(var a = 0, aZ = chgX.length; a < aZ; a++) {
-		var chg = chgX[a];
-
-		if ((chg.src.path && chg.src.path.get(0) === space) ||
-			(chg.trg.path && chg.trg.path.get(0) === space)
-		) { f = true; }
-	}
-	if (f)
-		{ chga.push(change); }
-};
-
 MeshMashine = {
-	filter     : filter,
 	Change     : Change,
 	tfxChg     : tfxChg,
 	tfxChgX    : tfxChgX,
