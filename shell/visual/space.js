@@ -51,33 +51,41 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Constructor
 */
-var Space = Visual.Space = function(twig, path, access) {
-	Visual.Base.call(this, twig, path);
+var Space = Visual.Space = function(twig, name, access) {
+	Visual.Base.call(this, twig, null);
 
-	if (this.$sub !== null) { throw new Error('iFail'); }
-	var g = this.$sub = {};
+	var $sub = this.$sub = { };
 
-	this.access      = access;
-	this.fabric      = system.fabric;
-	this.$view       = new Euclid.View(Euclid.Point.zero, 0);
+	this.name   = name;
+	this.access = access;
+	this.fabric = system.fabric;
+
+	this.$view  = new Euclid.View(Euclid.Point.zero, 0);
 
 	for (var k in twig.copse)
-		{ g[k] = this.createItem(twig.copse[k], k); }
+		{ $sub[k] = this.createItem(twig.copse[k], k); }
 
-	this._floatMenuLabels = {c: 'new', n: 'Note', ne: 'Label'};
+	this._floatMenuLabels = {
+		c  : 'new',
+		n  : 'Note',
+		ne : 'Label'
+	};
 };
+
 Jools.subclass(Space, Visual.Base);
 
 /**
-| Updates v-vine to match a new twig.
+| Updates $sub to match a new twig.
 */
 Space.prototype.update = function(twig) {
+
 	// no change?
 	if (this.twig === twig)
 		{ return; }
 
 	this.twig = twig;
 
+	// TODO rename vars
 	var gold = this.$sub;
 	var g    = this.$sub = {};
 	var copse = twig.copse;
@@ -125,12 +133,21 @@ Space.prototype.focusedItem = function() {
 | Creates a new visual representation of an item.
 */
 Space.prototype.createItem = function(twig, k) {
-	var $path = new Path(this.$path, '++', k);
+	var $path = new Path( [ k ] );
+
 	switch (twig.type) {
-	case 'Note'     : return new Visual.Note    (twig, $path, this);
-	case 'Label'    : return new Visual.Label   (twig, $path, this);
-	case 'Relation' : return new Visual.Relation(twig, $path, this);
-	default : throw new Error('unknown type: ' + twig.type);
+
+	case 'Note'     :
+		return new Visual.Note    (twig, $path, this);
+
+	case 'Label'    :
+		return new Visual.Label   (twig, $path, this);
+
+	case 'Relation' :
+		return new Visual.Relation(twig, $path, this);
+
+	default :
+		throw new Error('unknown type: ' + twig.type);
 	}
 };
 
@@ -138,6 +155,7 @@ Space.prototype.createItem = function(twig, k) {
 | Redraws the complete space.
 */
 Space.prototype.draw = function() {
+
 	var twig   = this.twig;
 	var $view  = this.$view;
 
@@ -159,21 +177,26 @@ Space.prototype.draw = function() {
 		arrow.draw(this.fabric, $view, theme.relation.style);
 		break;
 	}
+
 };
 
 /**
 | Force-clears all caches.
 */
 Space.prototype.knock = function() {
+
 	for(var r = this.twig.length - 1; r >= 0; r--)
 		{ this.atRank(r).knock(); }
+
 };
 
 /**
 | Draws the caret.
 */
 Space.prototype.drawCaret = function() {
+
 	this.getSub(shell.caret.sign.path, -1).drawCaret(this.$view);
+
 };
 
 /**
@@ -181,6 +204,7 @@ Space.prototype.drawCaret = function() {
 | item === null blurs.
 */
 Space.prototype.setFocus = function(item) {
+
 	var focus = this.focusedItem();
 	if (focus && focus === item) { return; }
 
@@ -199,9 +223,9 @@ Space.prototype.setFocus = function(item) {
 
 		caret.show();
 		shell.peer.moveToTop(item.$path);
-	} else {
-		shell.setCaret(null, null);
-	}
+	} else
+		{ shell.setCaret(null, null); }
+
 };
 
 /**
@@ -217,14 +241,15 @@ Space.prototype.mousewheel = function(p, dir, shift, ctrl) {
 			{ return true; }
 	}
 
-	if (dir > 0) {
-		this.$view = this.$view.review( 1, p);
-	} else {
-		this.$view = this.$view.review(-1, p);
-	}
+	if (dir > 0)
+		{ this.$view = this.$view.review( 1, p); }
+	else
+		{ this.$view = this.$view.review(-1, p); }
+
 	shell.setSpaceZoom(this.$view.fact);
 
 	this.knock();
+
 	shell.redraw = true;
 
 	return true;
@@ -236,7 +261,10 @@ Space.prototype.mousewheel = function(p, dir, shift, ctrl) {
 | Returns true if the mouse pointer hovers over anything.
 */
 Space.prototype.mousehover = function(p, shift, ctrl) {
-	if (p === null) { return null; }
+
+	if (p === null)
+		{ return null; }
+
 	var $view  = this.$view;
 	var cursor = null;
 
@@ -261,6 +289,7 @@ Space.prototype.mousehover = function(p, shift, ctrl) {
 	}
 
 	return cursor || 'pointer';
+
 };
 
 /**
@@ -537,19 +566,17 @@ Space.prototype.specialKey = function(key, shift, ctrl) {
 | Returns the visual node the path points to.
 */
 Space.prototype.getSub = function(path, plen) {
+
 	if (!Jools.is(plen))
 		{ plen  = path.length; }
 	else if (plen < 0)
 		{ plen += path.length; }
 
-	if (path.get(0) !== this.$key)
-		{ throw new Error('path not in this space', path.get(0), '!=', this.$key); }
+	var $n = this;
+	for (var $a = 0; $a < plen; $a++)
+		{ $n = $n.$sub[path.get($a)]; }
 
-	var n = this;
-	for (var a = 1; a < plen; a++)
-		{ n = n.$sub[path.get(a)]; }
-
-	return n;
+	return $n;
 };
 
 })();

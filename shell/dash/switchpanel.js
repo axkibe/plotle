@@ -267,23 +267,28 @@ SwitchPanel.prototype.within = function(p) {
 | Mouse down.
 */
 SwitchPanel.prototype.mousedown = function(p) {
+
 	p = p.sub(this.pnw);
-	if (!this.within(p)) { return null; }
+	if (!this.within(p))
+		{ return null; }
 
 	var button = null;
 	var fabric = this._weave();
 	var proper = Euclid.View.proper;
-	if (fabric.within(this, 'sketchButton', proper, p, 'n' )) { button = 'n';  } else
-	if (fabric.within(this, 'sketchButton', proper, p, 'ne')) { button = 'ne'; } else
-	if (!this.amVisitor && fabric.within(this, 'sketchButton', proper, p, 'nw'))
+	if (fabric.within(this, 'sketchButton', proper, p, 'n' ))
+		{ button = 'n';  }
+	else if (fabric.within(this, 'sketchButton', proper, p, 'ne'))
+		{ button = 'ne'; }
+	else if (!this.amVisitor && fabric.within(this, 'sketchButton', proper, p, 'nw'))
 		{ button = 'nw'; }
 
 	if (button && button !== this.current) {
 		switch(button) {
-		case 'n'  : shell.moveToSpace('welcome'); break;
-		case 'ne' : shell.moveToSpace('sandbox'); break;
+		case 'n'  : shell.moveToSpace('meshcraft:home'); break;
+		case 'ne' : shell.moveToSpace('meshcraft:sandbox'); break;
 		case 'nw' : shell.moveToSpace(this.userName+':home'); break;
 		}
+
 		this.panel.toggleSwitch();
 		this.panel.poke();
 	}

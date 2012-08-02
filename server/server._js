@@ -834,20 +834,30 @@ Server.prototype.testAccess = function(user, space) {
 		{ return 'no'; }
 
 	switch (space) {
-	case 'sandbox' : return 'rw';
-	case 'welcome' : return user === config.admin ? 'rw' : 'ro';
-	}
+	case 'meshcraft:sandbox' :
+		return 'rw';
 
-	var sp = space.split(':', 2);
-	if (sp.length < 2) { return 'no'; }
-	if (user == sp[0]) { return 'rw'; }
-	return 'no';
+	case 'meshcraft:home' :
+		return user === config.admin ? 'rw' : 'ro';
+
+	default :
+		var sp = space.split(':', 2);
+
+		if (sp.length < 2)
+			{ return 'no'; }
+
+		if (user == sp[0])
+			{ return 'rw'; }
+
+		return 'no';
+	}
 };
 
 /**
 | Executes a get command.
 */
 Server.prototype.cmdGet = function(cmd, _) {
+
 	var time     = cmd.time;
 	var user     = cmd.user;
 
@@ -861,8 +871,7 @@ Server.prototype.cmdGet = function(cmd, _) {
 	if (!is(cmd.path))
 		{ throw reject('path missing'); }
 
-	var path = new Path(cmd.path);
-	var spacename = path.get(0);
+	var spacename = cmd.space;
 
 	var access = this.testAccess(cmd.user, spacename);
 	if (access == 'no')
@@ -893,7 +902,7 @@ Server.prototype.cmdGet = function(cmd, _) {
 	// returns the path requested
 	var node;
 	try {
-		node = $tree.getPath(path);
+		node = $tree.getPath(new Path(cmd.path));
 	} catch(e) {
 		throw reject('cannot get path: '+e.message);
 	}

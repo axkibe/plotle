@@ -61,12 +61,13 @@ MainPanel.prototype.getSwitchPanel = function() {
 	var sp = this.$switchPanel;
 	if (sp) { return sp; }
 
-	var swidim       = theme.switchpanel.dimensions;
+	var swidim  = theme.switchpanel.dimensions;
 	var current = '';
+
 	switch (this.$spaceName) {
-	case 'welcome' : current = 'n';  break;
-	case 'sandbox' : current = 'ne'; break;
-	default        : current = 'nw'; break;
+	case 'meshcraft:home'    : current = 'n';  break;
+	case 'meshcraft:sandbox' : current = 'ne'; break;
+	default                  : current = 'nw'; break;
 	}
 
 	return this.$switchPanel = new Dash.SwitchPanel(

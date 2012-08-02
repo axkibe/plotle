@@ -56,7 +56,7 @@ var ranks;
 var copse;
 var time = -1;
 var maxtime = -1;
-var notepath = new Path(['welcome', '1' ]);
+var notepath = new Path(['meshcraft:home', '1' ]);
 
 /**
 | The current cursor position and blink state
@@ -438,7 +438,7 @@ var update = function(totime) {
 
 	peer.toTime(totime);
 
-	res   = peer.get(new Path(['welcome']));
+	res   = peer.get(new Path(['meshcraft:home']));
 	time  = res.time;
 	space = res.node;
 

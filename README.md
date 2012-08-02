@@ -6,14 +6,14 @@ See the live site at http://meshcraft.net/.
 
 New
 ===
- (reverse chronological)
+(reverse chronological)
 
- * Redesigned Item Handles
- * Zooming
- * Live communication with the server using a multi-user editing protocol (causal consistency / action transformation)
- * New Oval Design
- * Undo/Redo
- * Multiple Spaces (for now "welcome", "sandbox" and one personal per user)
+ * redesigned item handles
+ * zooming
+ * live communication with the server using a multi-user editing protocol (causal consistency / action transformation)
+ * new oval design
+ * undo/redo
+ * multiple spaces (for now "meshcraft:home", "meshcraft:sandbox" and one personal home per user)
 
 Roadmap
 =======

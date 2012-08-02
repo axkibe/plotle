@@ -111,6 +111,7 @@ Shell.prototype.setCaret = function(section, sign, retainx) {
 		(this.caret.section !== section || this.caret.sign.path !== sign.path)
 	) {
 		entity = this.getSub(this.caret.section, this.caret.sign.path, 2);
+
 		if (entity)
 			{ entity.poke(); }
 	}
@@ -141,7 +142,7 @@ Shell.prototype.getSub = function(sec, path, len) {
 	switch(sec) {
 	case 'board' : return this.$board.getSub(path, len);
 	case 'space' : return this.$space.getSub(path, len);
-	default : throw new Error('Invalid sec: ' + sec);
+	default      : throw new Error('Invalid sec: ' + sec);
 	}
 };
 
@@ -161,10 +162,7 @@ Shell.prototype.messageRCV = function(space, user, message) {
 | MeshMashine reports updates.
 */
 Shell.prototype.update = function(tree, chgX) {
-	this.tree = tree;
-	var  $space = this.$space;
-	$space.update(tree.root.copse[$space.$key]);
-
+	this.$space.update(tree.root);
 
 	var caret = this.caret;
 	if (caret.sign !== null) {
@@ -572,15 +570,16 @@ Shell.prototype.setUser = function(user, pass) {
 	this.peer.setUser(user, pass);
 
 	if (user.substr(0, 5) !== 'visit') {
+
 		window.localStorage.setItem('user', user);
 		window.localStorage.setItem('pass', pass);
+
 	} else {
+
 		if (this.$space &&
-			this.$space.$key !== 'welcome' &&
-			this.$space.$key !== 'sandbox'
-		) {
-			this.moveToSpace('welcome');
-		}
+			this.$space.$key.substr(0, 9) !== 'meshcraft'
+		) { this.moveToSpace('meshcraft:home'); }
+
 		window.localStorage.setItem('user', null);
 		window.localStorage.setItem('pass', null);
 	}
@@ -633,19 +632,23 @@ Shell.prototype.moveToSpace = function(name) {
 	}
 
 	if (name === null) {
+
 		name = self.$space.$key;
+
+		// TODO what does 'help' do here?
 		if (this.$user.substr(0, 5) === 'visit' &&
-			(name !== 'welcome' && name !== 'help')
-		) { name = 'welcome'; }
-	} else {
-		self.$board.message('Moving to "' + name + '" ...');
-	}
+			(name !== 'meshcraft:home' && name !== 'help')
+		) { name = 'meshcraft:home'; }
+
+	} else
+		{ self.$board.message('Moving to "' + name + '" ...'); }
 
 	self.$board.setCurSpace('', '');
 
 	if (!Jools.isString(name)) { throw new Error('XXXX'); }
 
 	this.peer.aquireSpace(name, function(err, val) {
+
 		if (err !== null) {
 			self.greenscreen('Cannot aquire space: ' + err.message);
 			return;
@@ -655,15 +658,21 @@ Shell.prototype.moveToSpace = function(name) {
 			{ throw new Error('server served wrong space!'); }
 
 		var tree = val.tree;
+
 		self.$space = new Visual.Space(
-			tree.root.copse[name],
-			new Path([name]),
+			tree.root,
+			name,
 			val.access
 		);
+
 		self.$board.setCurSpace(name, val.access);
+
 		self.$board.setSpaceZoom(0);
+
 		self._draw();
+
 	});
+
 };
 
 /**
@@ -688,7 +697,8 @@ Shell.prototype.onLoadAuth = function(user, res) {
 	}
 
 	self.setUser(res.user, res.pass);
-	if (!this.$space) { self.moveToSpace('welcome'); }
+	if (!this.$space)
+		{ self.moveToSpace('meshcraft:home'); }
 };
 
 

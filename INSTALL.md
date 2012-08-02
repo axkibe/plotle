@@ -26,17 +26,6 @@ npm install uglify-js
 * Edit config.js with your favorite editor.
 You likely want to rename the admin user. By default MeshCraft uses port 8833, if you want to run on the standard web port, change it to 80. In that case it needs to run with root priviledges.
 
-* If you have not done so far, you need to initialize the default spaces. If they got content already, this will reset them to a blank state.
-```shell
-./tools/init.js welcome
-./tools/init.js sandbox
-```
-
-* Give yourself an invite code and note it down.
-```shell
-./tools/invite.js "for myself"
-```
-
 * Start a screen to be keep the Node.js process running if you close the terminal. Can be skipped for development/shorttermed use
 ```shell
 screen
@@ -51,7 +40,7 @@ screen
 
 * Take your browser and surf to ```http://localhost:8833/``` (assuming default settings)
 
-* Register your admin user with your invite code. The admin user is the only one who can edit the "welcome" space.
+* Register your admin user. The admin user is the only one who can edit the "meshcraft:home" space.
 
 * Done!
 

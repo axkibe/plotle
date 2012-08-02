@@ -103,7 +103,7 @@ var fget = function() {
 			cmd: 'get',
 			user: user,
 			pass: pass,
-			path: ['welcome'],
+			path: ['meshcraft:home'],
 			time: -1
 		},
 		function(asw) {
@@ -134,7 +134,7 @@ var flet = function(text) {
 				cid:   Jools.uid(),
 				chgX: {
 					src : {
-						path: ['welcome', itemid, 'doc', '1', 'text'],
+						path: ['meshcraft:home', itemid, 'doc', '1', 'text'],
 						at1:   0,
 						at2:   text.length
 					},
@@ -158,7 +158,7 @@ var flet = function(text) {
 						val: ralpha[p]
 					},
 					trg : {
-						path: ['welcome', itemid, 'doc', '1', 'text'],
+						path: ['meshcraft:home', itemid, 'doc', '1', 'text'],
 						at1:   0
 					}
 				}

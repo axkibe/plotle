@@ -48,7 +48,7 @@ var Base = Visual.Base = function(twig, path) {
 	this.twig  = twig;
 
 	this.$path = path;
-	this.$key  = path.get(-1);
+	this.$key  = path ? path.get(-1) : null;
 	this.$sub  = null;
 };
 

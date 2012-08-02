@@ -57,12 +57,12 @@ if (typeof (window) === 'undefined') throw new Error('this code nees a browser!'
 | Constructor.
 */
 IFace = function(updateRCV, messageRCV) {
-	// the current tree;
-	this.$tree   = null;
+	// the current space;
+	this.$cSpace  = null;
 
 	// the remote tree.
-	// what the client thinks the server has.
-	this.$rtree  = null;
+	// what the client thinks the server thinks.
+	this.$rSpace  = null;
 
 	// the remote time sequence
 	this.$remoteTime = null;
@@ -95,7 +95,9 @@ IFace.prototype._ajax = function(request, callback) {
 		{ throw new Error('ajax request.cmd missing'); }
 
     var ajax = new XMLHttpRequest();
+
     ajax.open('POST', '/mm', true);
+
     ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
     ajax.onreadystatechange = function() {
@@ -127,8 +129,10 @@ IFace.prototype._ajax = function(request, callback) {
 	};
 
     var rs = JSON.stringify(request);
+
     Jools.log('iface', '->', rs);
-    ajax.send(rs);
+
+	ajax.send(rs);
 };
 
 /**
@@ -188,7 +192,7 @@ IFace.prototype.sendMessage = function(message) {
         cmd     : 'message',
 		user    : self.$user,
 		pass    : self.$pass,
-		space   : self.$spaceName,
+		space   : self.$spacename,
 		message : message
 	}, null);
 };
@@ -196,8 +200,10 @@ IFace.prototype.sendMessage = function(message) {
 /**
 | Aquires a space.
 */
-IFace.prototype.aquireSpace = function(spaceName, callback) {
+IFace.prototype.aquireSpace = function(spacename, callback) {
+
 	var self = this;
+
 	// aborts the current running update.
 	if (self.$updateAjax) {
 		self.$updateAjax.$abort = true;
@@ -205,19 +211,21 @@ IFace.prototype.aquireSpace = function(spaceName, callback) {
 		self.$updateAjax = null;
 	}
 
-	self.$spaceName = spaceName;
-	self.$tree      = null;
-	self.$rtree     = null;
+	self.$spacename = spacename;
+	self.$cSpace    = null;
+	self.$rSpace    = null;
 	self.$outbox    = [];
 	self.$postbox   = [];
 	self.$mseq      = -1;
 	self.$undo      = [];
 	self.$redo      = [];
 
-	var path = new Path([spaceName]);
+	var path = new Path([spacename]);
 
     var ajax = self.$aquireAjax = new XMLHttpRequest();
+
     ajax.open('POST', '/mm', true);
+
     ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
     ajax.onreadystatechange = function() {
@@ -227,7 +235,13 @@ IFace.prototype.aquireSpace = function(spaceName, callback) {
 		if (ajax.status !== 200) {
 			self.$aquireAjax = null;
 			Jools.log('iface', 'aquireSpace.status == ' + ajax.status);
-			callback( { error: 'connection' , status: ajax.status }, null);
+			callback(
+				{
+					error  : 'connection' ,
+					status : ajax.status
+				},
+				null
+			);
 			return;
 		}
 
@@ -235,7 +249,10 @@ IFace.prototype.aquireSpace = function(spaceName, callback) {
 			asw = JSON.parse(ajax.responseText);
 		} catch (e) {
 			self.$aquireAjax = null;
-			callback( { error: 'nojson' }, null);
+			callback(
+				{ error: 'nojson' },
+				null
+			);
 			return;
 		}
 
@@ -251,13 +268,19 @@ IFace.prototype.aquireSpace = function(spaceName, callback) {
 
 		self.$remoteTime = asw.time;
 
-		var troot = { type : 'Nexus', copse : {} };
-		troot.copse[spaceName] = asw.node;
-		self.$tree = self.$rtree = new Tree(troot, Meshverse);
+		if (asw.node.type !== 'Space') {
+			callback(
+				{ error : 'nospace' },
+				null
+			);
+			return;
+		}
+
+		self.$cSpace = self.$rSpace = new Tree(asw.node, Meshverse);
 
 		callback(null, Jools.immute({
-			tree   : self.$tree,
-			name   : spaceName,
+			tree   : self.$cSpace,
+			name   : spacename,
 			access : asw.access
 		}));
 
@@ -272,11 +295,12 @@ IFace.prototype.aquireSpace = function(spaceName, callback) {
 	};
 
     var request = JSON.stringify({
-        cmd  : 'get',
-		path : path,
-		pass : self.$pass,
-        time : -1,
-		user : self.$user
+        cmd   : 'get',
+		space : spacename,
+		path  : new Path([]),
+		pass  : self.$pass,
+        time  : -1,
+		user  : self.$user
     });
 
     Jools.log('iface', 'sg->', request);
@@ -287,7 +311,7 @@ IFace.prototype.aquireSpace = function(spaceName, callback) {
 | Gets a twig.
 */
 IFace.prototype.get = function(path, len) {
-    return this.$tree.getPath(path, len);
+    return this.$cSpace.getPath(path, len);
 };
 
 
@@ -339,7 +363,7 @@ IFace.prototype._update = function() {
 				var cid = chgs[a].cid;
 
 				// changes the clients understanding of the server tree
-				self.$rtree = MeshMashine.changeTree(self.$rtree, chgX).tree;
+				self.$rSpace = MeshMashine.changeTree(self.$rSpace, chgX).tree;
 
 				if (postbox.length > 0 && postbox[0].cid === cid) {
 					self.$postbox.splice(0, 1);
@@ -371,11 +395,9 @@ IFace.prototype._update = function() {
 			// adapts all queued changes
 			// and rebuilds the clients understanding of its own tree
 			var outbox = self.$outbox;
-			var tree   = self.$rtree;
 
-			for(a = 0, aZ = postbox.length; a < aZ; a++) {
-				tree = MeshMashine.changeTree(tree, postbox[a].chgX).tree;
-			}
+			for(a = 0, aZ = postbox.length; a < aZ; a++)
+				{ self.cSpace = MeshMashine.changeTree(self.cSpace, postbox[a].chgX).tree; }
 
 			for(a = 0, aZ = outbox.length; a < aZ; a++) {
 				chgX = outbox[a].chgX;
@@ -383,9 +405,8 @@ IFace.prototype._update = function() {
 					chgX = MeshMashine.tfxChgX(chgX, report[b]);
 				}
 				outbox[a].chgX = chgX;
-				tree = MeshMashine.changeTree(tree, chgX).tree;
+				self.cSpace = MeshMashine.changeTree(self.cSpace, chgX).tree;
 			}
-			self.$tree = tree;
 		}
 
 		var msgs = asw.msgs;
@@ -401,9 +422,8 @@ IFace.prototype._update = function() {
 		if (Jools.is(mseqZ))
 			{ self.$mseq = mseqZ; }
 
-		if (report.length > 0 && self._updateRCV) {
-			self._updateRCV.update(self.$tree, report);
-		}
+		if (report.length > 0 && self._updateRCV)
+			{ self._updateRCV.update(self.$cSpace, report); }
 
 		if (gotOwnChgs) { self.sendChanges(); }
 
@@ -414,7 +434,7 @@ IFace.prototype._update = function() {
 	var request = JSON.stringify({
 		cmd   : 'update',
 		pass  : self.$pass,
-		space : self.$spaceName,
+		space : self.$spacename,
 		time  : self.$remoteTime,
 		mseq  : self.$mseq,
 		user  : self.$user
@@ -429,9 +449,9 @@ IFace.prototype._update = function() {
 */
 IFace.prototype.alter = function(src, trg) {
     var chg = new Change(new Sign(src), new Sign(trg));
-    var r = MeshMashine.changeTree(this.$tree, chg);
-    this.$tree = r.tree;
-	var chgX  = r.chgX;
+    var r = MeshMashine.changeTree(this.$cSpace, chg);
+    this.$cSpace = r.tree;
+	var chgX     = r.chgX;
 
 	var c = {
 		cid  : Jools.uid(),
@@ -448,7 +468,9 @@ IFace.prototype.alter = function(src, trg) {
 
 	this.sendChanges();
 
-    if (this._updateRCV) { this._updateRCV.update(r.tree, chgX); }
+    if (this._updateRCV)
+		{ this._updateRCV.update(r.tree, chgX); }
+
     return chgX;
 };
 
@@ -514,10 +536,10 @@ IFace.prototype.sendChanges = function() {
 IFace.prototype.undo = function() {
 	if (this.$undo.length === 0) { return; }
 
-	var chgX   = this.$undo.pop().chgX.invert();
-    var r      = MeshMashine.changeTree(this.$tree, chgX);
-    this.$tree = r.tree;
-	chgX       = r.chgX;
+	var chgX      = this.$undo.pop().chgX.invert();
+    var r         = MeshMashine.changeTree(this.$cSpace, chgX);
+    this.$cSpacec = r.tree;
+	chgX          = r.chgX;
 
 	if (chgX === null) { return; }
 
@@ -540,9 +562,11 @@ IFace.prototype.undo = function() {
 | Sends the stored changes to remote meshmashine
 */
 IFace.prototype.redo = function() {
-	if (this.$redo.length === 0) { return; }
+	if (this.$redo.length === 0)
+		{ return; }
+
 	var chgX   = this.$redo.pop().chgX.invert();
-    var r      = MeshMashine.changeTree(this.$tree, chgX);
+    var r      = MeshMashine.changeTree(this.$cSpace, chgX);
     this.$tree = r.tree;
 	chgX       = r.chgX;
 
@@ -558,7 +582,7 @@ IFace.prototype.redo = function() {
 	this.$undo.push(c);
 	this.sendChanges();
 
-    if (this._updateRCV) { this._updateRCV.update(r.tree, chgX); }
+    if (this._updateRCV) { this._updateRCV.update(this.$cSpace, chgX); }
 
     return chgX;
 };
