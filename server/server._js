@@ -239,12 +239,19 @@ Server.prototype.loadSpace = function(spacename, _) {
 /**
 | sends a message
 */
-Server.prototype.sendMessage = function(space, user, message) {
-	this.$messages.push({ space: space, user: user, message: message });
-	var spaces = [];
-	spaces[space] = true;
+Server.prototype.sendMessage = function(spacename, user, message) {
+
+	this.$messages.push({
+		space   : spacename,
+		user    : user,
+		message : message
+	});
+
 	var self = this;
-	process.nextTick(function() { self.wake(spaces); });
+	process.nextTick(
+		function()
+			{ self.wake( spacename ); }
+	);
 };
 
 /**
@@ -510,16 +517,16 @@ Server.prototype.cmdAlter = function(cmd, _) {
 	var pass      = cmd.pass;
 
 	if (!is(username))
-		{ throw reject('user missing'); }
+		{ throw reject('user missing');  }
 
 	if (this.$users[username].pass !== pass)
-		{ throw reject('invalid pass'); }
+		{ throw reject('invalid pass');  }
 
 	if (!is(spacename))
 		{ throw reject('space missing'); }
 
 	if (this.testAccess(username, spacename) !== 'rw')
-		{ throw reject('no access'); }
+		{ throw reject('no access');     }
 
 	if (!is(time))
 		{ throw reject('time missing');  }
@@ -548,11 +555,13 @@ Server.prototype.cmdAlter = function(cmd, _) {
 	// fits the cmd into data structures
 	try {
 		// FIXME
-		if (isArray(chgX))  { throw new Error('Array chgX not yet supported'); }
+		if (isArray(chgX))
+			{ throw new Error('Array chgX not yet supported'); }
+
 		chgX = new MeshMashine.Change(chgX);
-	} catch(e) {
-		throw reject('invalid cmd: '+e.message);
-	}
+
+	} catch(e)
+		{ throw reject( 'invalid cmd: ' + e.message ); }
 
 	// translates the changes if not most recent
 	for (var a = time; a < cZ; a++)
@@ -566,30 +575,38 @@ Server.prototype.cmdAlter = function(cmd, _) {
 	}
 
 	// applies the changes
-	var r = MeshMashine.changeTree(this.tree, chgX);
-	this.tree = r.tree;
-	chgX      = r.chgX;
+	var r         = MeshMashine.changeTree($space.$tree, chgX);
+	$space.$tree  = r.tree;
+	chgX          = r.chgX;
+
 	if (chgX === null || chgX.length === 0) {
-		return { ok: true, chgX: chgX };
+		return {
+			ok: true,
+			chgX: chgX
+		};
 	}
 
-	$changes.push({ cid : cmd.cid, chgX : chgX });
+	$changes.push({
+		cid  : cmd.cid,
+		chgX : chgX
+	});
 
 	// saves the change in the database
-	this.$db.changes.insert({
+	$space.$changesDB.insert({
 		_id  : $changes.length,
 		cid  : cmd.cid,
-		chgX : JSON.parse(JSON.stringify(chgX)),
+		chgX : JSON.parse(JSON.stringify(chgX)), // FIXME why copy?
 		user : cmd.user,
 		date : Date.now()
 	}, function(error, count) {
-		if (error !== null) { throw new Error('Database fail!'); }
+		if (error !== null)
+			{ throw new Error('Database fail!'); }
 	});
 
 	var self = this;
 	process.nextTick(
 		function()
-			{ self.wake(spacename); }
+			{ self.wake( spacename ); }
 	);
 
 	return {
@@ -707,10 +724,18 @@ Server.prototype.refreshPresence = function(user, spacename) {
 	var pus = pu.spaces[spacename];
 
 	if (!pus) {
-		pus = pu.spaces[spacename] = { establish : 0, timerID : null  };
+
+		pus = pu.spaces[spacename] = {
+			establish : 0,
+			timerID : null
+		};
+
 		pus.timerID = setTimeout(this.expirePresence, 5000, this, user, spacename);
+
 		this.sendMessage(spacename, null, user + ' entered "' + spacename + '"');
+
 	} else {
+
 		if (pus.timerID !== null)
 			{ clearTimeout(pus.timerID); pus.timerID = null; }
 
@@ -851,7 +876,7 @@ Server.prototype.cmdUpdate = function(cmd, res, _) {
 Server.prototype.expireSleep = function(self, sleepID) {
 
 	var $sleep = self.$upsleep[sleepID];
-	var $space = $spaces[$sleep.spacename];
+	var $space = this.$spaces[$sleep.spacename];
 
 	var cZ = $space.$changes.length;
 	delete self.upsleep[sleepID];
@@ -932,16 +957,17 @@ Server.prototype.conveyUpdate = function(time, mseq, spacename) {
 /**
 | Wakes up any sleeping updates and gives them data if applicatable.
 */
-Server.prototype.wake = function(spaces) {
+Server.prototype.wake = function(spacename) {
 
-	var sleepKeys = Object.keys(this.$upsleep);
+	var sleepKeys = Object.keys( this.$upsleep );
 
 	// FIXME cache change lists to answer the same to multiple clients.
 
 	for(var a = 0, aZ = sleepKeys.length; a < aZ; a++) {
-		var sKey = sleepKeys[a];
+		var sKey  = sleepKeys[a];
 		var sleep = this.$upsleep[sKey];
-		if (!spaces[sleep.spacename])
+
+		if (spacename !== sleep.spacename)
 			{ continue; }
 
 		clearTimeout(sleep.timerID);

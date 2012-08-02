@@ -68,19 +68,27 @@ var isPath       = Path.isPath;
 | Performes one or several changes on a tree
 */
 var changeTree = function(tree, chgX) {
-	if (arguments.length !== 2) { throw new Error('changeTree arguments fail'); }
+
+	if (arguments.length !== 2)
+		{ throw new Error('changeTree arguments fail'); }
+
 	var aChgX = null;
 
-	for(var a = 0, aZ = chgX.length; a < aZ; a++) {
-		var chg = chgX[a];
+	for(var $a = 0, aZ = chgX.length; $a < aZ; $a++) {
+
+		var chg = chgX[$a];
 
 		var ctype = chg.type();
+
 		Jools.log('change', 'src:', chg.src, 'trg:', chg.trg, 'type:', ctype);
 
 		var op = ChangeOps[ctype];
-		if (!op) throw reject('invalid change: '+ctype);
+		if (!op)
+			{ throw reject('invalid change: '+ctype); }
+
 		var r = op(tree, chg);
-		if (r === null) { continue; }
+		if (r === null)
+			{ continue; }
 
 		var rChg = new Change(r.src, r.trg);
 		tree = r.tree;
@@ -88,12 +96,15 @@ var changeTree = function(tree, chgX) {
 		if (aZ > 1) {
 			if (aChgX === null) { aChgX = new ChangeX(); }
 			aChgX.push(rChg);
-		} else {
-			aChgX = rChg;
-		}
+		} else
+			{ aChgX = rChg; }
+
 	}
 
-	return { tree: tree, chgX : aChgX };
+	return {
+		tree : tree,
+		chgX : aChgX
+	};
 };
 
 /**

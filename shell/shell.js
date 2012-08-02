@@ -139,32 +139,43 @@ Shell.prototype.setCaret = function(section, sign, retainx) {
 | This is either an item, or a dashboard component.
 */
 Shell.prototype.getSub = function(sec, path, len) {
+
 	switch(sec) {
-	case 'board' : return this.$board.getSub(path, len);
-	case 'space' : return this.$space.getSub(path, len);
-	default      : throw new Error('Invalid sec: ' + sec);
+
+	case 'board' :
+		return this.$board.getSub(path, len);
+
+	case 'space' :
+		return this.$space.getSub(path, len);
+
+	default :
+		throw new Error('Invalid sec: ' + sec);
+
 	}
+
 };
 
 /**
 | Peer received a message.
 */
-Shell.prototype.messageRCV = function(space, user, message) {
-	if (user) {
-		this.$board.message(user + ': ' + message);
-	} else {
-		this.$board.message(message);
-	}
+Shell.prototype.messageRCV = function( space, user, message ) {
+	if (user)
+		{ this.$board.message( user + ': ' + message ); }
+	else
+		{ this.$board.message( message ); }
+
 	this.poke();
 };
 
 /**
 | MeshMashine reports updates.
 */
-Shell.prototype.update = function(tree, chgX) {
+Shell.prototype.update = function( tree, chgX ) {
+
 	this.$space.update(tree.root);
 
 	var caret = this.caret;
+
 	if (caret.sign !== null) {
 		this.setCaret(
 			caret.section,
@@ -182,29 +193,36 @@ Shell.prototype.update = function(tree, chgX) {
 };
 
 /**
-| Meshcraft got the systems focus.
+| The shell got the systems focus.
 */
 Shell.prototype.systemFocus = function() {
-	if (this.green) { return; }
+
+	if (this.green)
+		{ return; }
+
 	this.caret.show();
 	this.caret.display();
 };
 
 /**
-| Meshraft lost the systems focus.
+| The shell lost the systems focus.
 */
 Shell.prototype.systemBlur = function() {
-	if (this.green) { return; }
+	if (this.green)
+		{ return; }
+
 	this.caret.hide();
 	this.caret.display();
 };
 
 /**
-| Blink the caret (if shown)
+| Blinks the caret (if shown)
 */
 Shell.prototype.blink = function() {
-	if (this.green) { return; }
+	if (this.green)
+		{ return; }
 
+	// tests for font size changes
 	var w = Euclid.Measure.width(this._$fontWFont, 'meshcraft$8833');
 	if (w !== this._$fontWatch) {
 		console.log('fontchange detected');
@@ -219,16 +237,24 @@ Shell.prototype.blink = function() {
 | Creates an action.
 */
 Shell.prototype.startAction = function() {
-	if (this.$action) throw new Error('double action');
+
+	if (this.$action)
+		{ throw new Error('double action'); }
+
 	return this.$action = new Action(arguments);
+
 };
 
 /**
 | Ends an action.
 */
 Shell.prototype.stopAction = function() {
-	if (!this.$action) throw new Error('ending no action');
+
+	if (!this.$action)
+		{ throw new Error('ending no action'); }
+
 	this.$action = null;
+
 };
 
 /**
@@ -236,6 +262,7 @@ Shell.prototype.stopAction = function() {
 | Used by async handlers.
 */
 Shell.prototype.poke = function() {
+
 	if (this.$hoverP)
 		{ this.mousehover(this.$hoverP, this.$hoverShift, this.$hoverCtrl); }
 
@@ -247,13 +274,20 @@ Shell.prototype.poke = function() {
 | Force-clears all caches.
 */
 Shell.prototype.knock = function() {
-	if (this.green) return;
+
+	if (this.green)
+		{ return; }
+
 	this.caret.$save = null;
 	this.caret.$screenPos = null;
 
-	if (this.$space) { this.$space.knock(); }
+	if (this.$space)
+		{ this.$space.knock(); }
+
 	this.$board.knock();
-	if (this.menu) { this.menu.knock(); }
+
+	if (this.menu)
+		{ this.menu.knock(); }
 
 	this._draw();
 };
