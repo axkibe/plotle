@@ -139,7 +139,8 @@ var checkValidPathArc = function(arc) {
 | Length of the signature.
 */
 Object.defineProperty(Path.prototype, 'length', {
-	get: function() { return this._path.length; }
+	get: function()
+		{ return this._path.length; }
 });
 
 /**
@@ -183,13 +184,19 @@ Path.prototype.subPathOf = function(o, len) {
 	if (!Jools.is(len)) {
 		len  = this._path.length;
 	} else {
-		if (len < 0) len += this._path.length;
-		if (len < 0) throw new Error('subPathOf out of range');
+		if (len < 0)
+			{ len += this._path.length; }
+
+		if (len < 0)
+			{ throw new Error('subPathOf out of range'); }
 	}
 
-	if (len > o._path.length) return false;
+	if (len > o._path.length)
+		{ return false; }
+
 	for(var a = 0; a < len; a++) {
-		if (this._path[a] !== o._path[a]) return false;
+		if (this._path[a] !== o._path[a])
+			{ return false; }
 	}
 
 	return true;

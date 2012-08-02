@@ -220,8 +220,6 @@ IFace.prototype.aquireSpace = function(spacename, callback) {
 	self.$undo      = [];
 	self.$redo      = [];
 
-	var path = new Path([spacename]);
-
     var ajax = self.$aquireAjax = new XMLHttpRequest();
 
     ajax.open('POST', '/mm', true);
@@ -294,17 +292,21 @@ IFace.prototype.aquireSpace = function(spacename, callback) {
 		});
 	};
 
-    var request = JSON.stringify({
+    var request = {
         cmd   : 'get',
 		space : spacename,
 		path  : new Path([]),
 		pass  : self.$pass,
         time  : -1,
 		user  : self.$user
-    });
+    };
 
     Jools.log('iface', 'sg->', request);
+
+	request = JSON.stringify(request);
+
     ajax.send(request);
+
 };
 
 /**
@@ -320,23 +322,32 @@ IFace.prototype.get = function(path, len) {
 */
 IFace.prototype._update = function() {
 	var self = this;
-	if (self.$updateAjax) { throw new Error('double update?'); }
+
+	if (self.$updateAjax)
+		{ throw new Error('double update?'); }
 
 	var ajax = self.$updateAjax = new XMLHttpRequest();
+
 	ajax.open('POST', '/mm', true);
+
 	ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
 	ajax.onreadystatechange = function() {
-		if (ajax.readyState !== 4) { return; }
+
+		if (ajax.readyState !== 4)
+			{ return; }
+
 		var a, aZ, asw, b, bZ, chgX;
+
 		// call was willingfull aborted
-		if (ajax.$abort) { return; }
+		if (ajax.$abort)
+			{ return; }
 
 		self.$updateAjax = null;
 
 		if (ajax.status !== 200) {
-			Jools.log('iface', 'update.status == ' + ajax.status);
-			shell.greenscreen('Connection with server failed.', false);
+			Jools.log( 'iface', 'update.status == ' + ajax.status );
+			shell.greenscreen( 'Connection with server failed.', false );
 			return;
 		}
 
@@ -347,17 +358,20 @@ IFace.prototype._update = function() {
 		}
 
 		Jools.log('iface', '<-u', asw);
-		if (!asw.ok) { throw new Error('update, server not OK!'); }
-		var chgs = asw.chgs;
 
-		var report  = new ChangeX();
+		if (!asw.ok)
+			{ throw new Error('update, server not OK!'); }
+
+		var chgs       = asw.chgs;
+		var report     = new ChangeX();
 		var gotOwnChgs = false;
-		var time = asw.time;
+		var time       = asw.time;
 
 		if (chgs && chgs.length > 0) {
 
 			// this wasn't an empty timeout?
 			var postbox = self.$postbox;
+
 			for(a = 0, aZ = chgs.length; a < aZ; a++) {
 				chgX = new Change(chgs[a].chgX);
 				var cid = chgs[a].cid;
@@ -418,29 +432,35 @@ IFace.prototype._update = function() {
 		}
 
 		self.$remoteTime = asw.timeZ;
+
 		var mseqZ        = asw.mseqZ;
+
 		if (Jools.is(mseqZ))
 			{ self.$mseq = mseqZ; }
 
 		if (report.length > 0 && self._updateRCV)
 			{ self._updateRCV.update(self.$cSpace, report); }
 
-		if (gotOwnChgs) { self.sendChanges(); }
+		if (gotOwnChgs)
+			{ self.sendChanges(); }
 
 		// issue the following update
 		self._update();
 	};
 
-	var request = JSON.stringify({
+	var request = {
 		cmd   : 'update',
 		pass  : self.$pass,
 		space : self.$spacename,
 		time  : self.$remoteTime,
 		mseq  : self.$mseq,
 		user  : self.$user
-	});
+	};
 
 	Jools.log('iface', 'u->', request);
+
+	request = JSON.stringify(request);
+
 	ajax.send(request);
 };
 
@@ -516,16 +536,20 @@ IFace.prototype.sendChanges = function() {
 	this.$outbox.splice(0, 1);
 	this.$postbox.push(c);
 
-	var request = JSON.stringify({
-		cmd  : 'alter',
-		chgX : c.chgX,
-		cid  : c.cid,
-		pass : this.$pass,
-		time : this.$remoteTime,
-		user : this.$user
-	});
+	var request = {
+		cmd   : 'alter',
+		space : this.$spacename,
+		chgX  : c.chgX,
+		cid   : c.cid,
+		pass  : this.$pass,
+		time  : this.$remoteTime,
+		user  : this.$user
+	};
 
 	Jools.log('iface', 'sc->', request);
+
+	request = JSON.stringify(request);
+
 	ajax.send(request);
 };
 

@@ -133,6 +133,7 @@ Space.prototype.focusedItem = function() {
 | Creates a new visual representation of an item.
 */
 Space.prototype.createItem = function(twig, k) {
+
 	var $path = new Path( [ k ] );
 
 	switch (twig.type) {
@@ -148,7 +149,9 @@ Space.prototype.createItem = function(twig, k) {
 
 	default :
 		throw new Error('unknown type: ' + twig.type);
+
 	}
+
 };
 
 /**
@@ -206,7 +209,9 @@ Space.prototype.drawCaret = function() {
 Space.prototype.setFocus = function(item) {
 
 	var focus = this.focusedItem();
-	if (focus && focus === item) { return; }
+
+	if (focus && focus === item)
+		{ return; }
 
 	var caret = shell.caret;
 
@@ -223,6 +228,7 @@ Space.prototype.setFocus = function(item) {
 
 		caret.show();
 		shell.peer.moveToTop(item.$path);
+
 	} else
 		{ shell.setCaret(null, null); }
 
@@ -459,23 +465,30 @@ Space.prototype.floatMenuSelect = function(entry, p) {
 	var pnw, key;
 
 	switch(entry) {
+
 	case 'n' :
 		// note
+
 		var nw = theme.note.newWidth;
 		var nh = theme.note.newHeight;
 		var dp = $view.depoint(p);
+
 		pnw = dp.sub(Jools.half(nw) , Jools.half(nh));
-		key = shell.peer.newNote(this.$path, new Euclid.Rect(pnw, pnw.add(nw, nh)));
+		key = shell.peer.newNote(this.name, new Euclid.Rect(pnw, pnw.add(nw, nh)));
+
 		this.setFocus(this.$sub[key]);
 		break;
+
 	case 'ne' :
 		// label
-		pnw = $view.depoint(p);
-		pnw = pnw.sub(theme.label.createOffset);
-		key = shell.peer.newLabel(this.$path, pnw, 'Label', 20);
+
+		pnw = $view.depoint(p).sub(theme.label.createOffset);
+		key = shell.peer.newLabel(this.name, pnw, 'Label', 20);
 		this.setFocus(this.$sub[key]);
 		break;
+
 	}
+
 };
 
 /**

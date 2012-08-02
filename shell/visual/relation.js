@@ -60,25 +60,31 @@ Relation.imargin = new Euclid.Margin(theme.relation.imargin);
 | Creates a new Relation by specifing its relates.
 */
 Relation.create = function(space, item1, item2) {
+
 	var cline = Euclid.Line.connect(item1.getZone(), null, item2.getZone(), null);
-	var pnw = cline.pc.sub(theme.relation.createOffset);
-	var key = shell.peer.newRelation(
-		space.$path,
+
+	var pnw   = cline.pc.sub(theme.relation.createOffset);
+
+	var key   = shell.peer.newRelation(
+		space.name,
 		pnw,
 		'relates to',
 		20,
 		item1.$key,
 		item2.$key
 	);
+
 	// event listener has created the vrel
 	var vrel = space.$sub[key];
 	space.setFocus(vrel);
+
 };
 
 /**
 | Draws the relation on the fabric.
 */
 Relation.prototype.draw = function(fabric, view) {
+
 	var space = shell.getSub('space', this.$path, -1);
 	var item1 = space.$sub[this.twig.item1key];
 	var item2 = space.$sub[this.twig.item2key];

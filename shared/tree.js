@@ -305,21 +305,28 @@ Tree.prototype.grow = function(model /*, ... */) {
 | Gets the node a path leads to.
 */
 Tree.prototype.getPath = function(path, shorten) {
-	if (!Path.isPath(path)) throw new Error('getPath not a path.');
 
-	if (shorten < 0) shorten += path.length;
-	if (shorten < 0) throw new Error('getPath invalid shorten');
-	var aZ = Jools.is(shorten) ? shorten : path.length;
+	if (!Path.isPath(path))
+		{ throw new Error('getPath not a path.'); }
 
+	if (shorten < 0)
+		{ shorten += path.length; }
+
+	if (shorten < 0)
+		{ throw new Error('getPath invalid shorten'); }
+
+	var aZ   = Jools.is(shorten) ? shorten : path.length;
 	var twig = this.root;
-	for (var a = 0; a < aZ; a++) {
+
+	for (var $a = 0; $a < aZ; $a++) {
+
 		if (!Jools.isnon(twig))
 			{ return null; }
 
-		if (this.pattern[Twig.getType(twig)].copse)
-			{ twig = twig.copse[path.get(a)]; }
+		if ( this.pattern[ Twig.getType( twig ) ].copse )
+			{ twig = twig.copse [ path.get( $a ) ]; }
 		else
-			{ twig = twig[path.get(a)]; }
+			{ twig = twig [ path.get( $a ) ]; }
 	}
 
 	return twig;
@@ -329,23 +336,31 @@ Tree.prototype.getPath = function(path, shorten) {
 | Returns a tree where the node pointed by path is replaced by val.
 */
 Tree.prototype.setPath = function(path, val, shorten) {
-	if (!Path.isPath(path)) throw new Error('Tree.get no path');
 
-	if (shorten < 0) shorten += path.length;
-	if (shorten < 0) throw new Error('getPath invalid shorten');
+	if (!Path.isPath(path))
+		{ throw new Error('Tree.get no path'); }
+
+	if (shorten < 0)
+		{ shorten += path.length; }
+
+	if (shorten < 0)
+		{ throw new Error('getPath invalid shorten'); }
+
 	var aZ = Jools.is(shorten) ? shorten : path.length;
 
-	for(var a = aZ - 1; a >= 0; a--) {
-		var twig = this.getPath(path, a);
-		val = this.grow(twig, path.get(a), val);
+	for(var $a = aZ - 1; $a >= 0; $a--) {
+		var twig = this.getPath( path, $a );
+		val      = this.grow( twig, path.get( $a ), val );
 	}
 
 	return new Tree(val, this.pattern);
 };
 
-if (typeof(window) === 'undefined') {
-	module.exports = Tree;
-}
+/**
+| Node export
+*/
+if (typeof(window) === 'undefined')
+	{ module.exports = Tree; }
 
 })();
 

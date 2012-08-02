@@ -125,7 +125,8 @@ Peer.prototype.get = function(path, len) {
 /**
 | Creates a new note.
 */
-Peer.prototype.newNote = function(spacePath, zone) {
+Peer.prototype.newNote = function(zone) {
+
 	var chgX = this._iface.alter(
 		{
 			val : {
@@ -140,8 +141,12 @@ Peer.prototype.newNote = function(spacePath, zone) {
 			},
 			rank : null
 		},
-		{ path: new Path(spacePath, '++', '$new'), rank: 0 }
+		{
+			path: new Path( [ '$new' ] ),
+			rank: 0
+		}
 	);
+
 	return chgX.trg.path.get(-1);
 };
 
@@ -178,7 +183,8 @@ Peer.prototype.setPNW = function(itemPath, pnw) {
 /**
 | Creates a new label.
 */
-Peer.prototype.newLabel = function(spacePath, pnw, text, fontsize) {
+Peer.prototype.newLabel = function(pnw, text, fontsize) {
+
 	var chgX = this._iface.alter(
 		{
 			val           : {
@@ -187,13 +193,22 @@ Peer.prototype.newLabel = function(spacePath, pnw, text, fontsize) {
 				pnw       : pnw,
 				doc       : {
 					type  : 'Doc',
-					copse : { '1' : { type: 'Para', text: text } },
+					copse : {
+						'1' : {
+							type: 'Para',
+							text: text
+						}
+					},
 					ranks : [ '1' ]
 				}
 			},
 			rank : null
 		},
-		{ path: new Path(spacePath, '++', '$new'), rank: 0 }
+
+		{
+			path: new Path( [ '$new' ] ),
+			rank: 0
+		}
 	);
 
 	return chgX.trg.path.get(-1);
@@ -216,7 +231,7 @@ Peer.prototype.redo = function() {
 /**
 | Creates a new relation.
 */
-Peer.prototype.newRelation = function(spacePath, pnw, text, fontsize, item1key, item2key) {
+Peer.prototype.newRelation = function(pnw, text, fontsize, item1key, item2key) {
 	var chgX = this._iface.alter(
 		{
 			val           : {
@@ -227,13 +242,21 @@ Peer.prototype.newRelation = function(spacePath, pnw, text, fontsize, item1key, 
 				fontsize  : fontsize,
 				doc       : {
 					type  : 'Doc',
-					copse : { '1' : { type: 'Para', text: text } },
+					copse : {
+						'1' : {
+							type : 'Para',
+							text : text
+						}
+					},
 					ranks : [ '1' ]
 				}
 			},
 			rank : null
 		},
-		{ path: new Path(spacePath, '++', '$new'), rank: 0 }
+		{
+			path : new Path( [ '$new' ] ),
+			rank : 0
+		}
 	);
 
 	return chgX.trg.path.get(-1);

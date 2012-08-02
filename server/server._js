@@ -251,21 +251,28 @@ Server.prototype.sendMessage = function(space, user, message) {
 | Creates a message for a space
 */
 Server.prototype.cmdMessage = function(cmd, _) {
-	var space   = cmd.space;
-	var message = cmd.message;
-	var user    = cmd.user;
-	var pass    = cmd.pass;
 
-	if (!is(user))    { throw reject('user missing');    }
-	if (!is(pass))    { throw reject('pass missing');    }
-	if (!is(space))   { throw reject('space missing');   }
-	if (!is(message)) { throw reject('message missing'); }
+	var space    = cmd.space;
+	var message  = cmd.message;
+	var username = cmd.user;
+	var pass     = cmd.pass;
 
+	if (!is(username))
+		{ throw reject('user missing'); }
 
-	if (this.$users[user].pass !== pass)
+	if (!is(pass))
+		{ throw reject('pass missing'); }
+
+	if (!is(space))
+		{ throw reject('space missing'); }
+
+	if (!is(message))
+		{ throw reject('message missing'); }
+
+	if (this.$users[username].pass !== pass)
 		{ throw reject('invalid pass'); }
 
-	this.sendMessage(space, user, message);
+	this.sendMessage(space, username, message);
 
 	return { ok : true };
 };
@@ -494,19 +501,49 @@ Server.prototype.prepareResources = function(_) {
 | Executes an alter command.
 */
 Server.prototype.cmdAlter = function(cmd, _) {
-	var time = cmd.time;
-	var chgX = cmd.chgX;
-	var cid  = cmd.cid;
 
-	var $changes = this.$changes;
+	var time      = cmd.time;
+	var chgX      = cmd.chgX;
+	var cid       = cmd.cid;
+	var spacename = cmd.space;
+	var username  = cmd.user;
+	var pass      = cmd.pass;
+
+	if (!is(username))
+		{ throw reject('user missing'); }
+
+	if (this.$users[username].pass !== pass)
+		{ throw reject('invalid pass'); }
+
+	if (!is(spacename))
+		{ throw reject('space missing'); }
+
+	if (this.testAccess(username, spacename) !== 'rw')
+		{ throw reject('no access'); }
+
+	if (!is(time))
+		{ throw reject('time missing');  }
+
+	if (!is(chgX))
+		{ throw reject('chgX missing');  }
+
+	if (!is(cid))
+		{ throw reject('cid missing');   }
+
+
+	var $space = this.$spaces[spacename];
+
+	if (!is($space))
+		{ throw reject('unknown space'); }
+
+	var $changes = $space.$changes;
 	var cZ       = $changes.length;
 
-	// some tests
-	if (!is(time)) { throw reject('time missing'); }
-	if (!is(chgX)) { throw reject('chgX missing');  }
-	if (!is(cid))  { throw reject('cid missing');  }
-	if (time === -1)  { time = cZ; }
-	if (!(time >= 0 && time <= cZ)) { throw reject('invalid time'); }
+	if (time === -1)
+		{ time = cZ; }
+
+	if (!(time >= 0 && time <= cZ))
+		{ throw reject('invalid time'); }
 
 	// fits the cmd into data structures
 	try {
@@ -517,20 +554,15 @@ Server.prototype.cmdAlter = function(cmd, _) {
 		throw reject('invalid cmd: '+e.message);
 	}
 
-	var spaces = {};
-	MeshMashine.listSpaces(chgX, spaces);
-	for (var s in spaces) {
-		if (this.testAccess(cmd.user, s) !== 'rw') {
-			throw reject('no access');
-		}
-	}
-
 	// translates the changes if not most recent
 	for (var a = time; a < cZ; a++)
 		{ chgX = MeshMashine.tfxChgX(chgX, $changes[a].chgX); }
 
 	if (chgX === null || chgX.length === 0) {
-		return { ok: true, chgX: chgX };
+		return {
+			ok   : true,
+			chgX : chgX
+		};
 	}
 
 	// applies the changes
@@ -555,16 +587,28 @@ Server.prototype.cmdAlter = function(cmd, _) {
 	});
 
 	var self = this;
-	process.nextTick(function() { self.wake(spaces); });
-	return { ok: true, chgX: chgX };
+	process.nextTick(
+		function()
+			{ self.wake(spacename); }
+	);
+
+	return {
+		ok   : true,
+		chgX : chgX
+	};
 };
 
 /**
 | Executes an auth command.
 */
 Server.prototype.cmdAuth = function(cmd, _) {
-	if (!is(cmd.user)) { throw reject('user missing'); }
-	if (!is(cmd.pass)) { throw reject('pass missing');  }
+
+	if (!is(cmd.user))
+		{ throw reject('user missing'); }
+
+	if (!is(cmd.pass))
+		{ throw reject('pass missing');  }
+
 	var $users = this.$users;
 
 	if (cmd.user === 'visitor') {
@@ -572,15 +616,19 @@ Server.prototype.cmdAuth = function(cmd, _) {
 		do {
 			this.$nextVisitor++;
 			uid = 'visitor-' + this.$nextVisitor;
-		}
-		while ($users[uid]);
+		} while ($users[uid]);
+
 		$users[uid] = {
 			user    : uid,
 			pass    : cmd.pass,
 			created : Date.now(),
 			use     : Date.now()
 		};
-		return { ok: true, user: uid };
+
+		return {
+			ok: true,
+			user: uid
+		};
 	}
 
 	if (!$users[cmd.user]) {
@@ -589,17 +637,28 @@ Server.prototype.cmdAuth = function(cmd, _) {
 		$users[cmd.user] = val;
 	}
 
-	if ($users[cmd.user].pass !== cmd.pass) { return reject('Invalid password'); }
-	return { ok : true, user: cmd.user };
+	if ($users[cmd.user].pass !== cmd.pass)
+		{ return reject('invalid password'); }
+
+	return {
+		ok   : true,
+		user : cmd.user
+	};
 };
 
 /**
 | Executes an register command.
 */
 Server.prototype.cmdRegister = function(cmd, _) {
-	if (!is(cmd.user)) { return reject('user missing'); }
-	if (!is(cmd.pass)) { return reject('pass missing'); }
-	if (!is(cmd.mail)) { return reject('mail missing'); }
+
+	if (!is(cmd.user))
+		{ return reject('user missing'); }
+
+	if (!is(cmd.pass))
+		{ return reject('pass missing'); }
+
+	if (!is(cmd.mail))
+		{ return reject('mail missing'); }
 
 	if (cmd.user.substr(0, 7) === 'visitor')
 		{ return reject('Username must not start with "visitor"'); }
@@ -620,20 +679,15 @@ Server.prototype.cmdRegister = function(cmd, _) {
 	this.$users[cmd.user] = user;
 
 	// everything OK so far, creates the user home space
-	var asw = this.cmdAlter({
-		time : 0,
-		user : 'root',
-		pass : this.$users.root.pass,
-		chgX : new MeshMashine.Change(
-			{ val: { type: 'Space', cope: {}, ranks: [] } },
-			{ path : [cmd.user + ':home'] }
-		),
-		cid  : Jools.uid()
-	}, _);
+	// TODO XXX
 
-	if (asw.ok !== true) { throw new Error('Cannot create users home space'); }
+	//if (asw.ok !== true)
+	//	{ throw new Error('Cannot create users home space'); }
 
-	return { ok: true, user: cmd.user };
+	return {
+		ok   : true,
+		user : cmd.user
+	};
 };
 
 /**
@@ -644,8 +698,11 @@ Server.prototype.refreshPresence = function(user, spacename) {
 	var pres = this.$presences;
 	var pu = pres[user];
 
-	if (!pu)
-		{ pu = pres[user] = { spaces : { } }; }
+	if (!pu) {
+		pu = pres[user] = {
+			spaces : { }
+		};
+	}
 
 	var pus = pu.spaces[spacename];
 
@@ -713,7 +770,7 @@ Server.prototype.expirePresence = function(self, user, spacename) {
 	self.sendMessage(spacename, null, user + ' left "' + spacename + '"');
 
 	var pres = self.$presences;
-	var pu = pres[user];
+	var pu   = pres[user];
 
 	if (pu.spaces[spacename].establish !== 0)
 		{ throw new Error('Something wrong with presences.'); }
@@ -792,31 +849,49 @@ Server.prototype.cmdUpdate = function(cmd, res, _) {
 | A sleeping update expired.
 */
 Server.prototype.expireSleep = function(self, sleepID) {
-	var cZ    = self.$changes.length;
-	var sleep = self.$upsleep[sleepID];
+
+	var $sleep = self.$upsleep[sleepID];
+	var $space = $spaces[$sleep.spacename];
+
+	var cZ = $space.$changes.length;
 	delete self.upsleep[sleepID];
 
-	self.destablishPresence(sleep.user, sleep.spacename);
+	//TODO call it sleep.username
+	self.destablishPresence($sleep.user, $sleep.spacename);
 
-	var asw = { ok : true, time: sleep.time, timeZ : cZ, chgs : null};
-	var res = sleep.res;
+	var asw = {
+		ok    : true,
+		time  : $sleep.time,
+		timeZ : cZ,
+		chgs  : null
+	};
 	log('ajax', '->', asw);
+
+	var res = $sleep.res;
+
 	res.writeHead(200, {
 		'Content-Type'  : 'application/json',
 		'Cache-Control' : 'no-cache',
 		'Date'          : new Date().toUTCString()
 	});
+
 	res.end(JSON.stringify(asw));
+
 };
 
 /**
 | A sleeping update closed prematurely.
 */
 Server.prototype.closeSleep = function(sleepID) {
-	var sleep = this.$upsleep[sleepID];
-	clearTimeout(sleep.timerID);
+
+	var $sleep = this.$upsleep[sleepID];
+
+	clearTimeout($sleep.timerID);
+
 	delete this.$upsleep[sleepID];
-	this.destablishPresence(sleep.user, sleep.spacename);
+
+	this.destablishPresence($sleep.user, $sleep.spacename);
+
 };
 
 /**
@@ -1085,6 +1160,7 @@ Server.prototype.requestListener = function(req, res) {
 | Handles ajax requests to the MeshMashine.
 */
 Server.prototype.webAjax = function(req, red, res) {
+
 	var self = this;
 	var data = [];
 
@@ -1104,8 +1180,10 @@ Server.prototype.webAjax = function(req, red, res) {
 
 	req.on('end', function() {
 		var query = data.join('');
-		log('ajax', '<-', query);
 		var asw, cmd;
+
+		log('ajax', '<-', query);
+
 		try {
 			cmd = JSON.parse(query);
 		} catch (err) {
@@ -1140,15 +1218,32 @@ Server.prototype.webAjax = function(req, red, res) {
 | Executes an ajaxCmd
 */
 Server.prototype.ajaxCmd = function(cmd, res, _) {
-	switch (cmd.cmd) {
-	case 'alter'    : return this.cmdAlter   (cmd, _);
-	case 'auth'     : return this.cmdAuth    (cmd, _);
-	case 'get'      : return this.cmdGet     (cmd, _);
-	case 'message'  : return this.cmdMessage (cmd, _);
-	case 'register' : return this.cmdRegister(cmd, _);
-	case 'update'   : return this.cmdUpdate  (cmd, res, _);
-	default: return reject('unknown command');
+
+	switch ( cmd.cmd ) {
+
+	case 'alter'    :
+		return this.cmdAlter (cmd, _);
+
+	case 'auth'     :
+		return this.cmdAuth (cmd, _);
+
+	case 'get'      :
+		return this.cmdGet (cmd, _);
+
+	case 'message'  :
+		return this.cmdMessage (cmd, _);
+
+	case 'register' :
+		return this.cmdRegister (cmd, _);
+
+	case 'update'   :
+		return this.cmdUpdate (cmd, res, _);
+
+	default:
+		return reject('unknown command');
+
 	}
+
 };
 
 new Server(function(err) {
