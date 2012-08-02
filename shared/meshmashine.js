@@ -122,15 +122,15 @@ ChangeOps.set = function(tree, chg) {
 
 	// stores the old value to be able restore the history
 	var save = tree.getPath(trg.path);
-	if (!is(save)) save = null;
-	trg = trg.affix(is, cm, 'trg', 'val', save);
+	if (!is(save))
+		{ save = null; }
+
+	trg = trg.affix(is, cm, 'trg', 'val',  save);
 	src = src.affix(is, cm, 'src', 'path', trg.path);
 
 	if (!is(trg.rank)) {
 		tree = tree.setPath(trg.path, src.val);
 	} else {
-		//src = src.affix(is, cm, 'src', 'rank', trg.rank);
-
 		pivot = pivot || tree.getPath(trg.path, -1);
 		if (key === null) key = trg.path.get(-1);
 		var orank;

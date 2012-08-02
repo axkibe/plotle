@@ -23,7 +23,7 @@
 var config = module.exports = {};
 
 /**
-| the admin user can change 'welcome'
+| an additional admin user
 */
 config.admin = 'axel';
 
@@ -99,7 +99,7 @@ config.debug = {
 	/**
 	| If true does messages and JSON with whitespace/newlines
 	*/
-	puffed : false,
+	puffed : true,
 
 	/**
 	| If true ensures that objects that should not be immutable
@@ -115,7 +115,7 @@ config.debug = {
 config.log  = {
 	//all:   true,
 	ajax:   false,
-	change: true,
+	change: false,
 	debug:  true,
 	fail:   true,
 	grow:   false,

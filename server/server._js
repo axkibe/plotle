@@ -178,7 +178,9 @@ Server.prototype.ensureMeshcraftUser = function(_) {
 | loads all spaces and playbacks all changes from the database
 */
 Server.prototype.loadSpaces = function(_) {
-	var cursor = this.$db.spaces.find(_);
+	log('start', 'loading and replaying all spaces');
+
+	var cursor = this.$db.spaces.find({}, { sort: '_id'}, _);
 	for(var $o = cursor.nextObject(_); $o !== null; $o = cursor.nextObject(_)) {
 		this.loadSpace($o._id, _);
 	}
@@ -189,13 +191,15 @@ Server.prototype.loadSpaces = function(_) {
 | load a spaces and playbacks its changes from the database
 */
 Server.prototype.loadSpace = function(spacename, _) {
+	log('start', 'loading and replaying all "' + spacename + '"');
+
 	var $space = this.$spaces[spacename] = {
 		$changesDB : this.$db.connection.collection('changes:' + spacename, _),
 		$changes   : [],
 		$tree      : new Tree({ type : 'Space' }, Meshverse)
 	};
 
-	var cursor = $space.$changesDB.find(_);
+	var cursor = $space.$changesDB.find({}, { sort : '_id'}, _);
 	for(var $o = cursor.nextObject(_); $o !== null; $o = cursor.nextObject(_)) {
 
 		// TODO there is something quirky, why isn't *this* a "Change"?
@@ -1074,10 +1078,8 @@ Server.prototype.ajaxCmd = function(cmd, res, _) {
 };
 
 new Server(function(err) {
-	if (err) {
-		console.log('Error: ' + err.message);
-		process.exit(1);
-	}
+	if (err)
+		{ throw err; }
 });
 
 })();

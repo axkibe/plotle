@@ -287,7 +287,9 @@ var copy = function(o, c) {
 | Returns true if this node matches a master or a node of equal class
 */
 var matches = function(twig1, twig2) {
-	if (twig1 === twig2) return true;
+	if (twig1 === twig2)
+		{ return true; }
+
 	switch(twig1.constructor) {
 	case String : return false;
 	case Number : return false;
@@ -300,6 +302,7 @@ var matches = function(twig1, twig2) {
 		var k = k1[a];
 		if (!matches(twig1[k], twig2[k])) return false;
 	}
+
 	return true;
 };
 

@@ -196,6 +196,10 @@ for (o = cursor.nextObject(_); o !== null; o = cursor.nextObject(_)) {
 		spaces[space] = 0;
 	}
 
+	// skips old style space creations
+	if (cSrc.val && cSrc.val.type === 'Space')
+		{ continue; }
+
 	o._id = ++spaces[space];
 
 	var cname = 'changes:' + space;
