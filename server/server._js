@@ -876,7 +876,7 @@ Server.prototype.cmdUpdate = function(cmd, res, _) {
 Server.prototype.expireSleep = function(self, sleepID) {
 
 	var $sleep = self.$upsleep[sleepID];
-	var $space = this.$spaces[$sleep.spacename];
+	var $space = self.$spaces[$sleep.spacename];
 
 	var cZ = $space.$changes.length;
 	delete self.upsleep[sleepID];

@@ -124,9 +124,12 @@ Space.prototype.update = function(twig) {
 | Returns the focused item.
 */
 Space.prototype.focusedItem = function() {
+
 	var caret = shell.caret;
-	if (caret.section !== 'space') { return null; }
-	return this.getSub(caret.sign.path, 2);
+	if (caret.section !== 'space')
+		{ return null; }
+
+	return this.getSub(caret.sign.path, 1);
 };
 
 /**

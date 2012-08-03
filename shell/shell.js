@@ -110,7 +110,7 @@ Shell.prototype.setCaret = function(section, sign, retainx) {
 	if (this.caret.sign &&
 		(this.caret.section !== section || this.caret.sign.path !== sign.path)
 	) {
-		entity = this.getSub(this.caret.section, this.caret.sign.path, 2);
+		entity = this.getSub(this.caret.section, this.caret.sign.path, 1);
 
 		if (entity)
 			{ entity.poke(); }
@@ -124,7 +124,7 @@ Shell.prototype.setCaret = function(section, sign, retainx) {
 	);
 
 	if (sign) {
-		entity = this.getSub(section, sign.path, 2);
+		entity = this.getSub(section, sign.path, 1);
 		if (entity)
 			{ entity.poke(); }
 
