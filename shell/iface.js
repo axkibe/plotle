@@ -185,7 +185,7 @@ IFace.prototype.register = function(user, mail, pass, callback)
             cmd   : 'register',
             user  : user,
 			mail  : mail,
-			pass  : pass,
+			pass  : pass
 		},
 		function(asw)
 		{

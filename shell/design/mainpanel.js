@@ -463,30 +463,22 @@ MainPanel.layout = {
 	'username' : {
 		type   : 'Label',
 		text   : '',
-		font   : getFont(18, 'ca'),
+		font   : getFont(16, 'ca'),
 		pos    : { type: 'Point', anchor: 'sw', x:  250, y: -13 }
-	},
-
-
-	'saycurrent' : {
-		type     : 'Label',
-		text     : 'current space',
-		font     : getFont(12, 'ca'),
-		pos      : { type: 'Point', anchor:  's', x: -140, y: -42 }
 	},
 
 	'cspace'     : {
 		type     : 'Label',
 		text     : '',
-		font     : getFont(22, 'cab'),
-		pos      : { type: 'Point', anchor:  's', x: -140, y: -20 }
+		font     : getFont(16, 'cab'),
+		pos      : { type: 'Point', anchor:  's', x: -140, y: -36 }
 	},
 
 	'access'     : {
 		type     : 'Label',
 		text     : '',
 		font     : getFont(12, 'cadr'),
-		pos      : { type: 'Point', anchor:  's', x: -140, y: -4 }
+		pos      : { type: 'Point', anchor:  's', x: -140, y: -14 }
 	}},
 
 
@@ -503,7 +495,6 @@ MainPanel.layout = {
 		'zoomnullB',
 		'greet',
 		'username',
-		'saycurrent',
 		'cspace',
 		'access'
 	]

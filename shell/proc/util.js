@@ -227,7 +227,6 @@ Util.clearRegister = function(panel) {
 	panSub.emailI.setValue('');
 	panSub.passI. setValue('');
 	panSub.pass2I.setValue('');
-	panSub.codeI. setValue('');
 };
 
 })();

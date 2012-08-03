@@ -107,7 +107,6 @@ Space.prototype.update = function(twig) {
 
 	if (caret.section === 'space' &&
 		csign && csign.path &&
-		csign.path.get(0) === this.$key &&
 		!Jools.isnon(g[csign.path.get(0)])
 	) {
 		if (shell.selection.active &&
@@ -585,8 +584,8 @@ Space.prototype.specialKey = function(key, shift, ctrl) {
 /**
 | Returns the visual node the path points to.
 */
-Space.prototype.getSub = function(path, plen) {
-
+Space.prototype.getSub = function(path, plen)
+{
 	if (!Jools.is(plen))
 		{ plen  = path.length; }
 	else if (plen < 0)

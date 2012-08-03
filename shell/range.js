@@ -46,7 +46,8 @@ if (typeof(window) === 'undefined') { throw new Error('this code requires a brow
 /**
 | Constructor.
 */
-Range = function() {
+Range = function()
+{
 	this.active = false;
 	this.sign1 = null;
 	this.sign2 = null;
@@ -57,18 +58,25 @@ Range = function() {
 /**
 | Sets begin/end so begin is before end.
 */
-Range.prototype.normalize = function(tree) {
+Range.prototype.normalize = function()
+{
 	var s1 = this.sign1;
 	var s2 = this.sign2;
 
-	if (s1.path.get(-1) !== 'text') throw new Error('s1.path.get(-1) !== "text"');
-	if (s2.path.get(-1) !== 'text') throw new Error('s2.path.get(-1) !== "text"');
+	if (s1.path.get(-1) !== 'text')
+		{ throw new Error('s1.path.get(-1) !== "text"'); }
 
-	if (s1.path.equals(s2.path)) {
-		if (s1.at1 <= s2.at1) {
+	if (s2.path.get(-1) !== 'text')
+		{ throw new Error('s2.path.get(-1) !== "text"'); }
+
+	if (s1.path.equals(s2.path))
+	{
+		if (s1.at1 <= s2.at1)
+		{
 			this.begin = this.sign1;
 			this.end   = this.sign2;
-		} else {
+		} else
+		{
 			this.begin = this.sign2;
 			this.end   = this.sign1;
 		}
@@ -79,16 +87,20 @@ Range.prototype.normalize = function(tree) {
 	var k2 = s2.path.get(-2);
 	if (k1 === k2) throw new Error('k1 === k2');
 
-	var pivot = shell.tree.getPath(s1.path, -2);
-	if (pivot !== shell.tree.getPath(s2.path, -2)) throw new Error('pivot(s1) !== pivot(s2)');
+	var pivot = shell.$tree.getPath(s1.path, -2);
+	if (pivot !== shell.$tree.getPath(s2.path, -2))
+		{ throw new Error('pivot(s1) !== pivot(s2)'); }
 
 	var r1 = pivot.rankOf(k1);
 	var r2 = pivot.rankOf(k2);
 
-	if (r1 < r2) {
+	if (r1 < r2)
+	{
 		this.begin = s1;
 		this.end   = s2;
-	} else {
+	}
+	else
+	{
 		this.begin = s2;
 		this.end   = s1;
 	}
@@ -97,19 +109,23 @@ Range.prototype.normalize = function(tree) {
 /**
 | The text the selection selects.
 */
-Range.prototype.innerText = function() {
-	if (!this.active) return '';
+Range.prototype.innerText = function()
+{
+	if (!this.active)
+		{ return '' };
 
 	this.normalize();
 	var s1 = this.begin;
 	var s2 = this.end;
 
-	if (s1.path.equals(s2.path)) {
-		var text = shell.tree.getPath(s1.path);
+	if (s1.path.equals(s2.path))
+	{
+		var text = shell.$tree.getPath(s1.path);
+
 		return text.substring(s1.at1, s2.at1);
 	}
 
-	var pivot = shell.tree.getPath(s1.path, -2);
+	var pivot = shell.$tree.getPath(s1.path, -2);
 	var key1  = s1.path.get(-2);
 	var key2  = s2.path.get(-2);
 
@@ -129,7 +145,8 @@ Range.prototype.innerText = function() {
 /**
 | Removes the selection including its contents.
 */
-Range.prototype.remove = function() {
+Range.prototype.remove = function()
+{
 	this.normalize();
 	this.deselect();
 	shell.redraw = true;
@@ -142,11 +159,13 @@ Range.prototype.remove = function() {
 /**
 | Deselects the selection.
 */
-Range.prototype.deselect = function(nopoke) {
-	if (!this.active) return;
-	if (!nopoke) {
-		shell.getSub('space', this.sign1.path, -3).poke();
-	}
+Range.prototype.deselect = function(nopoke)
+{
+	if (!this.active)
+		{ return; }
+
+	if (!nopoke)
+		{ shell.getSub('space', this.sign1.path, -3).poke(); }
 
 	this.active = false;
 	system.setInput('');

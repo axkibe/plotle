@@ -138,48 +138,48 @@ Shell.prototype.setCaret = function(section, sign, retainx) {
 /**
 | Returns the first entity a caret can be in
 */
-Shell.prototype.getCaretEntity = function(sec, path) {
+Shell.prototype.getCaretEntity = function(sec, path)
+{
 
-	switch(sec) {
+	switch(sec)
+	{
+		case 'board' :
+			return this.$board.getSub(path, 2);
 
-	case 'board' :
-		return this.$board.getSub(path, 2);
+		case 'space' :
+			return this.$space.getSub(path, 1);
 
-	case 'space' :
-		return this.$space.getSub(path, 1);
-
-	default :
-		throw new Error('Invalid sec: ' + sec);
-
+		default :
+			throw new Error('Invalid sec: ' + sec);
 	}
+};
 
-}
 
 /**
 | Returns the subnode in the section (dashboard or space) marked by path
 | This is either an item, or a dashboard component.
 */
-Shell.prototype.getSub = function(sec, path, len) {
+Shell.prototype.getSub = function(sec, path, len)
+{
+	switch(sec)
+	{
+		case 'board' :
+			return this.$board.getSub(path, len);
 
-	switch(sec) {
+		case 'space' :
+			return this.$space.getSub(path, len);
 
-	case 'board' :
-		return this.$board.getSub(path, len);
-
-	case 'space' :
-		return this.$space.getSub(path, len);
-
-	default :
-		throw new Error('Invalid sec: ' + sec);
-
+		default :
+			throw new Error('Invalid sec: ' + sec);
 	}
-
 };
+
 
 /**
 | Peer received a message.
 */
-Shell.prototype.messageRCV = function( space, user, message ) {
+Shell.prototype.messageRCV = function( space, user, message )
+{
 	if (user)
 		{ this.$board.message( user + ': ' + message ); }
 	else
@@ -191,13 +191,16 @@ Shell.prototype.messageRCV = function( space, user, message ) {
 /**
 | MeshMashine reports updates.
 */
-Shell.prototype.update = function( tree, chgX ) {
-
+Shell.prototype.update = function( tree, chgX )
+{
 	this.$space.update(tree.root);
+
+	this.$tree = tree; // TODO remove
 
 	var caret = this.caret;
 
-	if (caret.sign !== null) {
+	if (caret.sign !== null)
+	{
 		this.setCaret(
 			caret.section,
 			MeshMashine.tfxSign(caret.sign, chgX),
@@ -206,18 +209,20 @@ Shell.prototype.update = function( tree, chgX ) {
 	}
 
 	var selection = this.selection;
-	if (selection.active) {
+	if (selection.active)
+	{
 		selection.sign1 = MeshMashine.tfxSign(selection.sign1, chgX);
 		selection.sign2 = MeshMashine.tfxSign(selection.sign2, chgX);
 	}
+
 	this._draw();
 };
 
 /**
 | The shell got the systems focus.
 */
-Shell.prototype.systemFocus = function() {
-
+Shell.prototype.systemFocus = function()
+{
 	if (this.green)
 		{ return; }
 
@@ -228,7 +233,8 @@ Shell.prototype.systemFocus = function() {
 /**
 | The shell lost the systems focus.
 */
-Shell.prototype.systemBlur = function() {
+Shell.prototype.systemBlur = function()
+{
 	if (this.green)
 		{ return; }
 
@@ -239,7 +245,8 @@ Shell.prototype.systemBlur = function() {
 /**
 | Blinks the caret (if shown)
 */
-Shell.prototype.blink = function() {
+Shell.prototype.blink = function()
+{
 	if (this.green)
 		{ return; }
 
@@ -257,8 +264,8 @@ Shell.prototype.blink = function() {
 /**
 | Creates an action.
 */
-Shell.prototype.startAction = function() {
-
+Shell.prototype.startAction = function()
+{
 	if (this.$action)
 		{ throw new Error('double action'); }
 
@@ -269,8 +276,8 @@ Shell.prototype.startAction = function() {
 /**
 | Ends an action.
 */
-Shell.prototype.stopAction = function() {
-
+Shell.prototype.stopAction = function()
+{
 	if (!this.$action)
 		{ throw new Error('ending no action'); }
 
@@ -282,8 +289,8 @@ Shell.prototype.stopAction = function() {
 | Lets the shell check if it should redraw.
 | Used by async handlers.
 */
-Shell.prototype.poke = function() {
-
+Shell.prototype.poke = function()
+{
 	if (this.$hoverP)
 		{ this.mousehover(this.$hoverP, this.$hoverShift, this.$hoverCtrl); }
 
@@ -294,8 +301,8 @@ Shell.prototype.poke = function() {
 /**
 | Force-clears all caches.
 */
-Shell.prototype.knock = function() {
-
+Shell.prototype.knock = function()
+{
 	if (this.green)
 		{ return; }
 
@@ -316,7 +323,8 @@ Shell.prototype.knock = function() {
 /**
 | Sketches the greenscreen frowny.
 */
-Shell.prototype.sketchFrowny = function(fabric, border, twist, view, pos) {
+Shell.prototype.sketchFrowny = function(fabric, border, twist, view, pos)
+{
 	fabric.moveTo(pos.x - 100, pos.y);
 	fabric.lineTo(pos.x,       pos.y - 30);
 	fabric.lineTo(pos.x + 100, pos.y);
@@ -331,7 +339,8 @@ Shell.prototype.sketchFrowny = function(fabric, border, twist, view, pos) {
 /**
 | Sets the current popup menu.
 */
-Shell.prototype.setMenu = function(menu) {
+Shell.prototype.setMenu = function(menu)
+{
 	this.menu   = menu;
 	this.redraw = this;
 };
@@ -339,7 +348,8 @@ Shell.prototype.setMenu = function(menu) {
 /**
 | Draws the dashboard and the space.
 */
-Shell.prototype._draw = function() {
+Shell.prototype._draw = function()
+{
 	var fabric = this.fabric;
 
 	fabric.reset();

@@ -207,11 +207,15 @@ Server.prototype.loadSpace = function(spacename, _) {
 	var $space = this.$spaces[spacename] = {
 		$changesDB : this.$db.connection.collection('changes:' + spacename, _),
 		$changes   : [],
-		$tree      : new Tree({ type : 'Space' }, Meshverse)
+		$tree      : new Tree({ type : 'Space' }, Meshverse),
+		$seqZ      : 1
 	};
 
 	var cursor = $space.$changesDB.find({}, { sort : '_id'}, _);
 	for(var $o = cursor.nextObject(_); $o !== null; $o = cursor.nextObject(_)) {
+
+		if ($o._id !== $space.$seqZ)
+			{ throw new Error('sequence mismatch'); }
 
 		// TODO there is something quirky, why isn't *this* a "Change"?
 		var $change = {
@@ -228,7 +232,7 @@ Server.prototype.loadSpace = function(spacename, _) {
 			}
 		}
 
-		$space.$changes.push($change);
+		++$space.$seqZ;
 
 		$space.$tree = MeshMashine.changeTree($space.$tree, $change.chgX).tree;
 
@@ -317,7 +321,8 @@ Server.prototype.buildShellConfig = function() {
 |
 | TODO use Array.each
 */
-Server.prototype.registerResources = function() {
+Server.prototype.registerResources = function()
+{
 	var rlist = [
 		'media/favicon.ico',                                'mc',
 		'shell/testpad.html',                               'f',
@@ -544,12 +549,12 @@ Server.prototype.cmdAlter = function(cmd, _) {
 		{ throw reject('unknown space'); }
 
 	var $changes = $space.$changes;
-	var cZ       = $changes.length;
+	var $seqZ    = $space.$seqZ;
 
 	if (time === -1)
-		{ time = cZ; }
+		{ time = $seqZ; }
 
-	if (!(time >= 0 && time <= cZ))
+	if (!(time >= 0 && time <= $seqZ))
 		{ throw reject('invalid time'); }
 
 	// fits the cmd into data structures
@@ -564,7 +569,7 @@ Server.prototype.cmdAlter = function(cmd, _) {
 		{ throw reject( 'invalid cmd: ' + e.message ); }
 
 	// translates the changes if not most recent
-	for (var a = time; a < cZ; a++)
+	for (var a = time; a < $seqZ; a++)
 		{ chgX = MeshMashine.tfxChgX(chgX, $changes[a].chgX); }
 
 	if (chgX === null || chgX.length === 0) {
@@ -586,22 +591,29 @@ Server.prototype.cmdAlter = function(cmd, _) {
 		};
 	}
 
-	$changes.push({
+	$changes[$space.$seqZ] =
+	{
 		cid  : cmd.cid,
 		chgX : chgX
-	});
+	};
 
 	// saves the change in the database
-	$space.$changesDB.insert({
-		_id  : $changes.length,
-		cid  : cmd.cid,
-		chgX : JSON.parse(JSON.stringify(chgX)), // FIXME why copy?
-		user : cmd.user,
-		date : Date.now()
-	}, function(error, count) {
-		if (error !== null)
-			{ throw new Error('Database fail!'); }
-	});
+	$space.$changesDB.insert(
+		{
+			_id  : $seqZ,
+			cid  : cmd.cid,
+			chgX : JSON.parse(JSON.stringify(chgX)), // FIXME why copy?
+			user : cmd.user,
+			date : Date.now()
+		},
+		function(error, count)
+		{
+			if (error !== null)
+				{ throw new Error('Database fail!'); }
+		}
+	);
+
+	$space.$seqZ++;
 
 	var self = this;
 	process.nextTick(
@@ -666,44 +678,59 @@ Server.prototype.cmdAuth = function(cmd, _) {
 /**
 | Executes an register command.
 */
-Server.prototype.cmdRegister = function(cmd, _) {
+Server.prototype.cmdRegister = function(cmd, _)
+{
+	var username = cmd.user;
+	var pass     = cmd.pass;
+	var mail     = cmd.mail;
 
-	if (!is(cmd.user))
+	if (!is(username))
 		{ return reject('user missing'); }
 
-	if (!is(cmd.pass))
+	if (!is(pass))
 		{ return reject('pass missing'); }
 
-	if (!is(cmd.mail))
+	if (!is(mail))
 		{ return reject('mail missing'); }
 
-	if (cmd.user.substr(0, 7) === 'visitor')
+	if (username.substr(0, 7) === 'visitor')
 		{ return reject('Username must not start with "visitor"'); }
 
-	if (cmd.user.length < 4)
+	if (username.length < 4)
 		{ throw reject('Username too short, min. 4 characters'); }
 
-	var user = this.$db.users.findOne({ _id : cmd.user}, _);
+	var user = this.$db.users.findOne({ _id : username}, _);
+
 	if (user !== null) { return reject('Username already taken'); }
 
 	user = {
-		_id  : cmd.user,
-		pass : cmd.pass,
-		mail : cmd.mail
+		_id  : username,
+		pass : pass,
+		mail : mail
 	};
 
 	this.$db.users.insert(user, _);
-	this.$users[cmd.user] = user;
+	this.$users[username] = user;
 
-	// everything OK so far, creates the user home space
-	// TODO XXX
+	// creates the user's home space
+	var spacename = username + ':home';
 
-	//if (asw.ok !== true)
-	//	{ throw new Error('Cannot create users home space'); }
+	this.$spaces[spacename] = {
+		$changesDB : this.$db.connection.collection('changes:' + spacename, _),
+		$changes   : [],
+		$tree      : new Tree({ type : 'Space' }, Meshverse)
+	};
+
+
+	this.$db.spaces.insert(
+		{
+			_id : spacename
+		},
+	_);
 
 	return {
 		ok   : true,
-		user : cmd.user
+		user : username
 	};
 };
 
@@ -831,7 +858,7 @@ Server.prototype.cmdUpdate = function(cmd, res, _) {
 	if (!$space)
 		{ throw reject('unknown space'); }
 
-	if (!(time >= 0 && time <= $space.$changes.length))
+	if (!(time >= 0 && time <= $space.$seqZ))
 		{ throw reject('invalid or missing time'); }
 
 	if (mseq < 0)
@@ -878,7 +905,7 @@ Server.prototype.expireSleep = function(self, sleepID) {
 	var $sleep = self.$upsleep[sleepID];
 	var $space = self.$spaces[$sleep.spacename];
 
-	var cZ = $space.$changes.length;
+	var $seqZ  = $space.$seqZ;
 	delete self.$upsleep[sleepID];
 
 	//TODO call it sleep.username
@@ -887,7 +914,7 @@ Server.prototype.expireSleep = function(self, sleepID) {
 	var asw = {
 		ok    : true,
 		time  : $sleep.time,
-		timeZ : cZ,
+		timeZ : $seqZ,
 		chgs  : null
 	};
 	log('ajax', '->', asw);
@@ -927,12 +954,12 @@ Server.prototype.conveyUpdate = function(time, mseq, spacename) {
 	var $changes  = $space.$changes;
 
 	var $messages = this.$messages;
-	var chgZ      = $space.$changes.length;
+	var $seqZ     = $space.$seqZ;
 	var msgZ      = $messages.length;
 	var chgA      = [];
 	var msgA      = [];
 
-	for (var c = time; c < chgZ; c++)
+	for (var c = time; c < $seqZ; c++)
 		{ chgA.push( $changes[c] ); }
 
 	for (var m = mseq; m < msgZ; m++) {
@@ -946,7 +973,7 @@ Server.prototype.conveyUpdate = function(time, mseq, spacename) {
 	return {
 		ok    : true,
 		time  : time,
-		timeZ : chgZ,
+		timeZ : $seqZ,
 		chgs  : chgA,
 		msgs  : msgA,
 		mseq  : mseq,
@@ -1047,17 +1074,18 @@ Server.prototype.cmdGet = function(cmd, _) {
 		{ throw reject('unknown space'); }
 
 	var $changes = $space.$changes;
-	var changesZ = $changes.length;
+	var $seqZ    = $space.$seqZ;
 
 	if (time === -1)
-		{ time = changesZ; }
-	else if (!(time >= 0 && time <= changesZ))
+		{ time = $seqZ; }
+	else if (!(time >= 0 && time <= $seqZ))
 		{ throw reject('invalid time'); }
 
 	var $tree = $space.$tree;
 
 	// if the requested tree is not the latest, replay it backwards
-	for (var $a = changesZ - 1; $a >= time; $a--) {
+	for (var $a = $seqZ - 1; $a >= time; $a--)
+	{
 		var chgX = $changes[$a].chgX;
 
 		for (var b = 0; b < chgX.length; b++)
@@ -1084,7 +1112,8 @@ Server.prototype.cmdGet = function(cmd, _) {
 /**
 | Logs and returns a web error
 */
-Server.prototype.webError = function(res, code, message) {
+Server.prototype.webError = function(res, code, message)
+{
 	res.writeHead(code, {
 		'Content-Type'  : 'text/plain',
 		'Cache-Control' : 'no-cache',
