@@ -22,6 +22,9 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+console.log('disabled so not to delete a v3 repository by accident')
+process.exit(-1);
+
 /**
 | This tool is configered directly here
 */
