@@ -56,13 +56,13 @@ if (typeof (window) === 'undefined') throw new Error('this code nees a browser!'
 /**
 | Constructor.
 */
-IFace = function(updateRCV, messageRCV) {
+IFace = function(updateRCV, messageRCV)
+{
 	// the current space;
 	this.$cSpace  = null;
 
 	// the remote tree.
 	// what the client thinks the server thinks.
-	// FIXME, the client does not need to know!
 	this.$rSpace  = null;
 
 	// the remote time sequence
@@ -91,7 +91,8 @@ IFace = function(updateRCV, messageRCV) {
 /**
 | General purpose AJAX.
 */
-IFace.prototype._ajax = function(request, callback) {
+IFace.prototype._ajax = function(request, callback)
+{
 	if (!request.cmd)
 		{ throw new Error('ajax request.cmd missing'); }
 
@@ -139,7 +140,8 @@ IFace.prototype._ajax = function(request, callback) {
 /**
 | Sets the current user
 */
-IFace.prototype.setUser = function(user, pass) {
+IFace.prototype.setUser = function(user, pass)
+{
 	this.$user = user;
 	this.$pass = pass;
 };
@@ -147,7 +149,8 @@ IFace.prototype.setUser = function(user, pass) {
 /**
 | Authentication
 */
-IFace.prototype.auth = function(user, pass, callback) {
+IFace.prototype.auth = function(user, pass, callback)
+{
 	var self = this;
     if (self.$authActive) { throw new Error('Auth already active'); }
 	self.$authActive = true;
@@ -168,9 +171,13 @@ IFace.prototype.auth = function(user, pass, callback) {
 /**
 | Registers a user.
 */
-IFace.prototype.register = function(user, mail, pass, code, callback) {
+IFace.prototype.register = function(user, mail, pass, callback)
+{
 	var self = this;
-    if (self.$regActive) { throw new Error('Auth already active'); }
+
+    if (self.$regActive)
+		{ throw new Error('Auth already active'); }
+
 	self.$regActive = true;
 	self._ajax({
         cmd   : 'register',
@@ -187,8 +194,10 @@ IFace.prototype.register = function(user, mail, pass, code, callback) {
 /**
 | Sends a message.
 */
-IFace.prototype.sendMessage = function(message) {
+IFace.prototype.sendMessage = function(message)
+{
 	var self = this;
+
 	self._ajax({
         cmd     : 'message',
 		user    : self.$user,
@@ -201,8 +210,8 @@ IFace.prototype.sendMessage = function(message) {
 /**
 | Aquires a space.
 */
-IFace.prototype.aquireSpace = function(spacename, callback) {
-
+IFace.prototype.aquireSpace = function(spacename, callback)
+{
 	var self = this;
 
 	// aborts the current running update.
@@ -320,7 +329,8 @@ IFace.prototype.get = function(path, len)
 /**
 | Sends an update request to the server and computes its answer.
 */
-IFace.prototype._update = function() {
+IFace.prototype._update = function()
+{
 	var self = this;
 
 	if (self.$updateAjax)
@@ -473,9 +483,13 @@ IFace.prototype._update = function() {
 /**
 | Alters the tree
 */
-IFace.prototype.alter = function(src, trg) {
-    var chg = new Change(new Sign(src), new Sign(trg));
-    var r = MeshMashine.changeTree(this.$cSpace, chg);
+IFace.prototype.alter = function(src, trg)
+{
+    var r   = MeshMashine.changeTree(
+		this.$cSpace,
+		new Change(new Sign(src), new Sign(trg));
+	);
+
     this.$cSpace = r.tree;
 	var chgX     = r.chgX;
 
@@ -488,9 +502,11 @@ IFace.prototype.alter = function(src, trg) {
 	this.$outbox.push(c);
 
 	this.$redo = [];
-	var $undo = this.$undo;
+	var $undo  = this.$undo;
 	$undo.push(c);
-	if ($undo.length > config.maxUndo) { $undo.shift(); }
+
+	if ($undo.length > config.maxUndo)
+		{ $undo.shift(); }
 
 	this.sendChanges();
 
@@ -503,13 +519,15 @@ IFace.prototype.alter = function(src, trg) {
 /**
 | Sends the stored changes to remote meshmashine
 */
-IFace.prototype.sendChanges = function() {
-
+IFace.prototype.sendChanges = function()
+{
 	// already sending?
-	if (this.$postbox.length > 0)  { return; }
+	if (this.$postbox.length > 0)
+		{ return; }
 
 	// nothing to send?
-	if (this.$outbox.length === 0) { return; }
+	if (this.$outbox.length === 0)
+		{ return; }
 
 	var ajax = new XMLHttpRequest();
 	ajax.open('POST', '/mm', true);
@@ -517,7 +535,8 @@ IFace.prototype.sendChanges = function() {
 
 	ajax.onreadystatechange = function() {
 		var asw;
-		if (ajax.readyState !== 4) { return; }
+		if (ajax.readyState !== 4)
+			{ return; }
 
 		if (ajax.status !== 200) {
 			shell.greenscreen('Cannot send changes, error code ' + ajax.status);
@@ -563,8 +582,10 @@ IFace.prototype.sendChanges = function() {
 /**
 | Sends the stored changes to remote meshmashine
 */
-IFace.prototype.undo = function() {
-	if (this.$undo.length === 0) { return; }
+IFace.prototype.undo = function()
+{
+	if (this.$undo.length === 0)
+		{ return; }
 
 	var chgX     = this.$undo.pop().chgX.invert();
     var r        = MeshMashine.changeTree(this.$cSpace, chgX);
@@ -583,7 +604,8 @@ IFace.prototype.undo = function() {
 	this.$redo.push(c);
 	this.sendChanges();
 
-    if (this._updateRCV) { this._updateRCV.update(r.tree, chgX); }
+    if (this._updateRCV)
+		{ this._updateRCV.update(r.tree, chgX); }
 
     return chgX;
 };
@@ -591,7 +613,8 @@ IFace.prototype.undo = function() {
 /**
 | Sends the stored changes to remote meshmashine
 */
-IFace.prototype.redo = function() {
+IFace.prototype.redo = function()
+{
 	if (this.$redo.length === 0)
 		{ return; }
 
@@ -600,7 +623,8 @@ IFace.prototype.redo = function() {
     this.$tree = r.tree;
 	chgX       = r.chgX;
 
-	if (chgX === null) { return; }
+	if (chgX === null)
+		{ return; }
 
 	var c = Jools.immute({
 		cid  : Jools.uid(),
@@ -612,7 +636,8 @@ IFace.prototype.redo = function() {
 	this.$undo.push(c);
 	this.sendChanges();
 
-    if (this._updateRCV) { this._updateRCV.update(this.$cSpace, chgX); }
+    if (this._updateRCV)
+		{ this._updateRCV.update(this.$cSpace, chgX); }
 
     return chgX;
 };
