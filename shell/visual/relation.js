@@ -46,9 +46,10 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Constructor.
 */
-var Relation = Visual.Relation = function(twig, path) {
-	Visual.Label.call(this, twig, path);
+var Relation = Visual.Relation = function(spacename, twig, path) {
+	Visual.Label.call(this, spacename, twig, path);
 };
+
 Jools.subclass(Relation, Visual.Label);
 
 /**
@@ -66,7 +67,7 @@ Relation.create = function(space, item1, item2) {
 	var pnw   = cline.pc.sub(theme.relation.createOffset);
 
 	var key   = shell.peer.newRelation(
-		space.name,
+		space.$spacename,
 		pnw,
 		'relates to',
 		20,

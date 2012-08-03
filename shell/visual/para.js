@@ -53,16 +53,19 @@ if (typeof(window) === 'undefined') { throw new Error('this code requires a brow
 /**
 | Constructor.
 */
-var Para = Visual.Para = function(twig, path) {
+var Para = Visual.Para = function(spacename, twig, path) {
+
 	if (twig.type !== 'Para')
 		{ throw new Error('type error'); }
 
-	Visual.Base.call(this, twig, path);
+	Visual.Base.call(this, spacename, twig, path);
 
 	// caching
 	this.$fabric = null;
 	this.$flow   = null;
+
 };
+
 Jools.subclass(Para, Visual.Base);
 
 /**

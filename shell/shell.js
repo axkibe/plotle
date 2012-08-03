@@ -110,7 +110,7 @@ Shell.prototype.setCaret = function(section, sign, retainx) {
 	if (this.caret.sign &&
 		(this.caret.section !== section || this.caret.sign.path !== sign.path)
 	) {
-		entity = this.getSub(this.caret.section, this.caret.sign.path, 1);
+		entity = this.getCaretEntity(this.caret.section, this.caret.sign.path);
 
 		if (entity)
 			{ entity.poke(); }
@@ -124,7 +124,8 @@ Shell.prototype.setCaret = function(section, sign, retainx) {
 	);
 
 	if (sign) {
-		entity = this.getSub(section, sign.path, 1);
+
+		entity = this.getCaretEntity(section, sign.path);
 		if (entity)
 			{ entity.poke(); }
 
@@ -133,6 +134,26 @@ Shell.prototype.setCaret = function(section, sign, retainx) {
 
 	return this.caret;
 };
+
+/**
+| Returns the first entity a caret can be in
+*/
+Shell.prototype.getCaretEntity = function(sec, path) {
+
+	switch(sec) {
+
+	case 'board' :
+		return this.$board.getSub(path, 2);
+
+	case 'space' :
+		return this.$space.getSub(path, 1);
+
+	default :
+		throw new Error('Invalid sec: ' + sec);
+
+	}
+
+}
 
 /**
 | Returns the subnode in the section (dashboard or space) marked by path
@@ -611,7 +632,7 @@ Shell.prototype.setUser = function(user, pass) {
 	} else {
 
 		if (this.$space &&
-			this.$space.$key.substr(0, 9) !== 'meshcraft'
+			this.$space.$spacename.substr(0, 9) !== 'meshcraft'
 		) { this.moveToSpace('meshcraft:home'); }
 
 		window.localStorage.setItem('user', null);
@@ -667,7 +688,7 @@ Shell.prototype.moveToSpace = function(name) {
 
 	if (name === null) {
 
-		name = self.$space.$key;
+		name = self.$space.$spacename;
 
 		// TODO what does 'help' do here?
 		if (this.$user.substr(0, 5) === 'visit' &&

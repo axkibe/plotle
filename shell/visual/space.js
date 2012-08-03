@@ -51,12 +51,11 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Constructor
 */
-var Space = Visual.Space = function(twig, name, access) {
-	Visual.Base.call(this, twig, null);
+var Space = Visual.Space = function(twig, spacename, access) {
+	Visual.Base.call(this, spacename, twig, null);
 
 	var $sub = this.$sub = { };
 
-	this.name   = name;
 	this.access = access;
 	this.fabric = system.fabric;
 
@@ -109,7 +108,7 @@ Space.prototype.update = function(twig) {
 	if (caret.section === 'space' &&
 		csign && csign.path &&
 		csign.path.get(0) === this.$key &&
-		!Jools.isnon(g[csign.path.get(1)])
+		!Jools.isnon(g[csign.path.get(0)])
 	) {
 		if (shell.selection.active &&
 			shell.selection.sign1.path.get(-4) === csign.path.get(1))
@@ -142,13 +141,13 @@ Space.prototype.createItem = function(twig, k) {
 	switch (twig.type) {
 
 	case 'Note'     :
-		return new Visual.Note    (twig, $path, this);
+		return new Visual.Note     (this.$spacename, twig, $path, this);
 
 	case 'Label'    :
-		return new Visual.Label   (twig, $path, this);
+		return new Visual.Label    (this.$spacename, twig, $path, this);
 
 	case 'Relation' :
-		return new Visual.Relation(twig, $path, this);
+		return new Visual.Relation (this.$spacename, twig, $path, this);
 
 	default :
 		throw new Error('unknown type: ' + twig.type);
@@ -477,7 +476,7 @@ Space.prototype.floatMenuSelect = function(entry, p) {
 		var dp = $view.depoint(p);
 
 		pnw = dp.sub(Jools.half(nw) , Jools.half(nh));
-		key = shell.peer.newNote(this.name, new Euclid.Rect(pnw, pnw.add(nw, nh)));
+		key = shell.peer.newNote(this.$spacename, new Euclid.Rect(pnw, pnw.add(nw, nh)));
 
 		this.setFocus(this.$sub[key]);
 		break;
@@ -486,7 +485,7 @@ Space.prototype.floatMenuSelect = function(entry, p) {
 		// label
 
 		pnw = $view.depoint(p).sub(theme.label.createOffset);
-		key = shell.peer.newLabel(this.name, pnw, 'Label', 20);
+		key = shell.peer.newLabel(this.$spacename, pnw, 'Label', 20);
 		this.setFocus(this.$sub[key]);
 		break;
 
@@ -498,18 +497,23 @@ Space.prototype.floatMenuSelect = function(entry, p) {
 | An entry of the item menu has been selected
 */
 Space.prototype.itemMenuSelect = function(entry, p, focus) {
+
 	switch(entry) {
+
 	case 'n': // remove
 		this.setFocus(null);
 		shell.peer.removeItem(focus.$path);
 		break;
+
 	}
+
 };
 
 /**
 | Mouse button down event.
 */
 Space.prototype.mousedown = function(p, shift, ctrl) {
+
 	var $view   = this.$view;
 	var $action = shell.$action;
 

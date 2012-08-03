@@ -51,10 +51,13 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Constructor.
 */
-var Note = Visual.Note = function(twig, path) {
-	Visual.Item.call(this, twig, path);
+var Note = Visual.Note = function(spacename, twig, path) {
+
+	Visual.Item.call(this, spacename, twig, path);
 	this.scrollbarY = new Visual.Scrollbar();
+
 };
+
 Jools.subclass(Note, Visual.Item);
 
 /**

@@ -62,6 +62,7 @@ IFace = function(updateRCV, messageRCV) {
 
 	// the remote tree.
 	// what the client thinks the server thinks.
+	// FIXME, the client does not need to know!
 	this.$rSpace  = null;
 
 	// the remote time sequence
@@ -312,9 +313,8 @@ IFace.prototype.aquireSpace = function(spacename, callback) {
 /**
 | Gets a twig.
 */
-IFace.prototype.get = function(path, len) {
-    return this.$cSpace.getPath(path, len);
-};
+IFace.prototype.get = function(path, len)
+	{ return this.$cSpace.getPath(path, len);};
 
 
 /**
@@ -409,18 +409,24 @@ IFace.prototype._update = function() {
 			// adapts all queued changes
 			// and rebuilds the clients understanding of its own tree
 			var outbox = self.$outbox;
+			var space  = self.$rSpace;
 
 			for(a = 0, aZ = postbox.length; a < aZ; a++)
-				{ self.cSpace = MeshMashine.changeTree(self.cSpace, postbox[a].chgX).tree; }
+				{ space = MeshMashine.changeTree(space, postbox[a].chgX).tree; }
 
 			for(a = 0, aZ = outbox.length; a < aZ; a++) {
+
 				chgX = outbox[a].chgX;
-				for(b = 0, bZ = report.length; b < bZ; b++) {
-					chgX = MeshMashine.tfxChgX(chgX, report[b]);
-				}
+
+				for(b = 0, bZ = report.length; b < bZ; b++)
+					{ chgX = MeshMashine.tfxChgX(chgX, report[b]); }
+
 				outbox[a].chgX = chgX;
-				self.cSpace = MeshMashine.changeTree(self.cSpace, chgX).tree;
+
+				space = MeshMashine.changeTree(space, chgX).tree;
 			}
+
+			self.$cSpace = space;
 		}
 
 		var msgs = asw.msgs;
@@ -560,10 +566,10 @@ IFace.prototype.sendChanges = function() {
 IFace.prototype.undo = function() {
 	if (this.$undo.length === 0) { return; }
 
-	var chgX      = this.$undo.pop().chgX.invert();
-    var r         = MeshMashine.changeTree(this.$cSpace, chgX);
-    this.$cSpacec = r.tree;
-	chgX          = r.chgX;
+	var chgX     = this.$undo.pop().chgX.invert();
+    var r        = MeshMashine.changeTree(this.$cSpace, chgX);
+    this.$cSpace = r.tree;
+	chgX         = r.chgX;
 
 	if (chgX === null) { return; }
 

@@ -48,8 +48,8 @@ if (typeof(window) === 'undefined') { throw new Error('this code requires a brow
 /**
 | Constructor.
 */
-var Doc = Visual.Doc = function(twig, path) {
-	Visual.Base.call(this, twig, path);
+var Doc = Visual.Doc = function(spacename, twig, path) {
+	Visual.Base.call(this, spacename, twig, path);
 
 	if (this.$sub !== null) { throw new Error('iFail'); }
 	var $sub = this.$sub = [];
@@ -60,7 +60,7 @@ var Doc = Visual.Doc = function(twig, path) {
 	var copse = twig.copse;
 	for (var r = 0, rZ = twig.length; r < rZ; r++) {
 		var k = ranks[r];
-		$sub[k] = new Visual.Para(copse[k], new Path(path, '++', k));
+		$sub[k] = new Visual.Para( spacename, copse[k], new Path( path, '++', k ) );
 	}
 };
 Jools.subclass(Doc, Visual.Base);
@@ -76,10 +76,12 @@ Doc.prototype.atRank = function(rank) {
 | Updates v-vine to match a new twig.
 */
 Doc.prototype.update = function(twig) {
-	this.twig = twig;
-	var $old  = this.$sub;
-	var $sub  = this.$sub = {};
-	var copse = twig.copse;
+
+	this.twig      = twig;
+	var $old       = this.$sub;
+	var $sub       = this.$sub = {};
+	var $spacename = this.$spacename;
+	var copse      = twig.copse;
 
 	for(var k in copse) {
 		var s = twig.copse[k];
@@ -90,11 +92,12 @@ Doc.prototype.update = function(twig) {
 			}
 			$sub[k] = o;
 		} else {
-			o = new Visual.Para(s, new Path(this.$path, '++', k));
+			o = new Visual.Para( $spacename, s, new Path( this.$path, '++', k ) );
 			o.update(s);
 			$sub[k] = o;
 		}
 	}
+
 };
 
 /**

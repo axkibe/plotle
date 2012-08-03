@@ -879,7 +879,7 @@ Server.prototype.expireSleep = function(self, sleepID) {
 	var $space = self.$spaces[$sleep.spacename];
 
 	var cZ = $space.$changes.length;
-	delete self.upsleep[sleepID];
+	delete self.$upsleep[sleepID];
 
 	//TODO call it sleep.username
 	self.destablishPresence($sleep.user, $sleep.spacename);

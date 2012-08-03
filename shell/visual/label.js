@@ -50,8 +50,8 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Constructor.
 */
-var Label = Visual.Label = function(twig, path) {
-	Visual.Item.call(this, twig, path);
+var Label = Visual.Label = function(spacename, twig, path) {
+	Visual.Item.call(this, spacename, twig, path);
 };
 Jools.subclass(Label, Visual.Item);
 
@@ -228,25 +228,30 @@ Label.prototype.getZone = function() {
 | Sets the items position and size aften an action.
 */
 Label.prototype.actionstop = function(view, p) {
+
 	var $action = shell.$action;
+
 	switch ($action.type) {
+
 	case Action.ITEMDRAG :
 	case Action.ITEMRESIZE :
 		var zone = this.getZone();
 		var fontsize = this.$sub.doc.getFont().size;
 
-		if (!this.twig.pnw.eq(zone.pnw)) {
-			shell.peer.setPNW(this.$path, zone.pnw);
-		}
-		if (fontsize !== this.twig.fontsize) {
-			shell.peer.setFontSize(this.$path, fontsize);
-		}
+		if (!this.twig.pnw.eq(zone.pnw))
+			{ shell.peer.setPNW(this.$path, zone.pnw); }
+
+		if (fontsize !== this.twig.fontsize)
+			{ shell.peer.setFontSize(this.$path, fontsize); }
 
 		shell.redraw = true;
 		break;
+
 	default :
 		return Visual.Item.prototype.actionstop.call(this, view, p);
+
 	}
+
 };
 
 })();

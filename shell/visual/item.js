@@ -50,19 +50,19 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 /**
 | Constructor
 */
-var Item = Visual.Item = function(twig, path) {
-	Visual.Base.call(this, twig, path);
+var Item = Visual.Item = function(spacename, twig, path) {
+	Visual.Base.call(this, spacename, twig, path);
 
 	if (this.$sub !== null)
 		{ throw new Error('iFail'); }
 
 	this.$sub = {
-		doc : new Visual.Doc(twig.doc, new Path(path, '++', 'doc'))
+		doc : new Visual.Doc(spacename, twig.doc, new Path(path, '++', 'doc'))
 	};
 
 	this._$ovalslice = null;
-	this.$fabric   = null;
-	this.$handles  = {};
+	this.$fabric     = null;
+	this.$handles    = {};
 };
 Jools.subclass(Item, Visual.Base);
 
