@@ -138,30 +138,12 @@ RegPanel.layout = {
 		font    : getFont(16, 'ra'),
 		pos     : { type: 'Point', anchor: 's', x: -155, y:  -100 }
 	},
-	'codeL'     : {
-		type    : 'Label',
-		text    : 'invitation code',
-		font    : getFont(16, 'ra'),
-		pos     : { type: 'Point', anchor: 's', x: -155, y:   -60 }
-	},
 	'errL'      : {
 		type    : 'Label',
 		text    : '',
 		font    : getFont(14, 'lar'),
 		pos     : { type: 'Point', anchor: 's', x: -135, y:  -255 }
 
-	},
-	'expL1' : {
-		type    : 'Label',
-		text    : 'meshcraft.net is still testing & developing its scalebility, ',
-		font    : getFont(12, 'la'),
-		pos     : { type: 'Point', anchor: 'sw', x: 380, y:   -26 }
-	},
-	'expL2' : {
-		type    : 'Label',
-		text    : 'please email axkibe@gmail.com to request a code.',
-		font    : getFont(12, 'la'),
-		pos     : { type: 'Point', anchor: 'sw', x: 380, y:   -10 }
 	},
 	'userI' : {
 		type       : 'Input',
@@ -225,22 +207,6 @@ RegPanel.layout = {
 			type   : 'Frame',
 			pnw    : { type: 'Point', anchor: 's', x: -135, y:  -118 },
 			pse    : { type: 'Point', anchor: 's', x:   95, y:   -92 }
-		}
-	},
-	'codeI' : {
-		type       : 'Input',
-		code       : '',
-		password   :  false,
-		normaStyle : 'input',
-		focusStyle : 'inputFocus',
-		hoverStyle : 'input',
-		hofocStyle : 'inputFocus',
-		font       : getFont(14, 'la'),
-		maxlen     : 8,
-		frame      : {
-			type   : 'Frame',
-			pnw    : { type: 'Point', anchor: 's', x: -135, y:   -78 },
-			pse    : { type: 'Point', anchor: 's', x:   95, y:   -52 }
 		}
 	},
 	'regB'      : {
@@ -365,7 +331,6 @@ RegPanel.layout = {
 		'emailI',
 		'passI',
 		'pass2I',
-		'codeI',
 		'regB',
 		'closeB',
 		//'forgotB',
@@ -374,9 +339,6 @@ RegPanel.layout = {
 		'emailL',
 		'passL',
 		'pass2L',
-		'codeL',
-		'expL1',
-		'expL2',
 		'errL'
 	]
 };

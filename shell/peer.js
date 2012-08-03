@@ -49,7 +49,8 @@ if (typeof (window) === 'undefined') throw new Error('this code nees a browser!'
 /**
 | Constructor
 */
-Peer = function(updateRCV, messageRCV) {
+Peer = function(updateRCV, messageRCV)
+{
 	this.$spacename = null;
 	this._iface     = new IFace(updateRCV, messageRCV);
 	this.$visitUser = null;
@@ -59,14 +60,14 @@ Peer = function(updateRCV, messageRCV) {
 /**
 | sets the current user
 */
-Peer.prototype.setUser = function(user, pass) {
-	this._iface.setUser(user, pass);
-};
+Peer.prototype.setUser = function(user, pass)
+	{ this._iface.setUser(user, pass); };
 
 /**
 | Logs out a registered users, switches to visitor
 */
-Peer.prototype.logout = function(callback) {
+Peer.prototype.logout = function(callback)
+{
 	if (this.$visitUser) {
 		callback({ ok : true, user : this.$visitUser, pass : this.$visitPass });
 	} else {
@@ -77,7 +78,8 @@ Peer.prototype.logout = function(callback) {
 /**
 | auth
 */
-Peer.prototype.auth = function(user, pass, callback) {
+Peer.prototype.auth = function(user, pass, callback)
+{
 	var self = this;
 	if (user === 'visitor' && pass === null)
 		{ pass = Jools.uid(); }
@@ -94,21 +96,22 @@ Peer.prototype.auth = function(user, pass, callback) {
 /**
 | Sends a message.
 */
-Peer.prototype.sendMessage = function(message) {
-	this._iface.sendMessage(message);
-};
+Peer.prototype.sendMessage = function(message)
+	{ this._iface.sendMessage(message); };
 
 /**
 | Registers a new user.
 */
-Peer.prototype.register = function(user, mail, pass, code, callback) {
-	this._iface.register(user, mail, pass, code, callback);
+Peer.prototype.register = function(user, mail, pass, callback)
+{
+	this._iface.register(user, mail, pass, callback);
 };
 
 /**
 | Aquires a space.
 */
-Peer.prototype.aquireSpace = function(name, callback) {
+Peer.prototype.aquireSpace = function(name, callback)
+{
 	this.$spacename = name;
 	this._iface.aquireSpace(name, callback);
 };
@@ -118,15 +121,14 @@ Peer.prototype.aquireSpace = function(name, callback) {
 |
 | path: path to twig
 */
-Peer.prototype.get = function(path, len) {
-	return this._iface.get(path, len);
-};
+Peer.prototype.get = function(path, len)
+	{ return this._iface.get(path, len); };
 
 /**
 | Creates a new note.
 */
-Peer.prototype.newNote = function(spacename, zone) {
-
+Peer.prototype.newNote = function(spacename, zone)
+{
 	if (spacename !== this.$spacename)
 		{ throw new Error('newNote() wrong spacename'); }
 
@@ -156,44 +158,41 @@ Peer.prototype.newNote = function(spacename, zone) {
 /**
 | Sets the zone for item.
 */
-Peer.prototype.setZone = function(itemPath, zone) {
-
+Peer.prototype.setZone = function(itemPath, zone)
+{
 	this._iface.alter(
 		{ val  : zone },
 		{ path : new Path(itemPath, '++', 'zone') }
 	);
-
 };
 
 /**
 | Sets an items fontsize
 */
-Peer.prototype.setFontSize = function(itemPath, fontsize) {
-
+Peer.prototype.setFontSize = function(itemPath, fontsize)
+{
 	this._iface.alter(
 		{ val  : fontsize },
 		{ path : new Path(itemPath, '++', 'fontsize') }
 	);
-
 };
 
 /**
 | Sets an items PNW. (point in north-west)
 */
-Peer.prototype.setPNW = function(itemPath, pnw) {
-
+Peer.prototype.setPNW = function(itemPath, pnw)
+{
 	this._iface.alter(
 		{ val  : pnw },
 		{ path : new Path(itemPath, '++', 'pnw') }
 	);
-
 };
 
 /**
 | Creates a new label.
 */
-Peer.prototype.newLabel = function(spacename, pnw, text, fontsize) {
-
+Peer.prototype.newLabel = function(spacename, pnw, text, fontsize)
+{
 	if (spacename !== this.$spacename)
 		{ throw new Error('newLabel() wrong spacename'); }
 
@@ -229,22 +228,24 @@ Peer.prototype.newLabel = function(spacename, pnw, text, fontsize) {
 /**
 | Undoes a change..
 */
-Peer.prototype.undo = function() {
+Peer.prototype.undo = function()
+{
 	this._iface.undo();
 };
 
 /**
 | Redoes a change.
 */
-Peer.prototype.redo = function() {
+Peer.prototype.redo = function()
+{
 	this._iface.redo();
 };
 
 /**
 | Creates a new relation.
 */
-Peer.prototype.newRelation = function(spacename, pnw, text, fontsize, item1key, item2key) {
-
+Peer.prototype.newRelation = function(spacename, pnw, text, fontsize, item1key, item2key)
+{
 	if (spacename !== this.$spacename)
 		{ throw new Error('newRelation() wrong spacename'); }
 
@@ -281,7 +282,8 @@ Peer.prototype.newRelation = function(spacename, pnw, text, fontsize, item1key, 
 /**
 | Moves an item up to the z-index
 */
-Peer.prototype.moveToTop = function(path) {
+Peer.prototype.moveToTop = function(path)
+{
 	this._iface.alter(
 		{ path: path },
 		{ rank: 0    }
@@ -291,7 +293,8 @@ Peer.prototype.moveToTop = function(path) {
 /**
 | Inserts some text.
 */
-Peer.prototype.insertText = function(path, offset, text) {
+Peer.prototype.insertText = function(path, offset, text)
+{
 	this._iface.alter(
 		{ val  : text },
 		{ path : path, at1  : offset }
@@ -301,9 +304,13 @@ Peer.prototype.insertText = function(path, offset, text) {
 /**
 | Removes some text within one node
 */
-Peer.prototype.removeText = function(path, at1, len) {
-	if (len === 0) return;
-	if (len < 0) throw new Error('malformed removeText');
+Peer.prototype.removeText = function(path, at1, len)
+{
+	if (len === 0)
+		{ return; }
+
+	if (len < 0)
+		{ throw new Error('malformed removeText'); }
 
 	this._iface.alter(
 		{ path: path, at1: at1, at2: at1 + len },
@@ -314,13 +321,16 @@ Peer.prototype.removeText = function(path, at1, len) {
 /**
 | Removes a text spawning over severa entities
 */
-Peer.prototype.removeSpan = function(path1, at1, path2, at2) {
-	if (path1.get(-1) !== 'text') { throw new Error('removeSpan invalid path'); }
-	if (path2.get(-1) !== 'text') { throw new Error('removeSpan invalid path'); }
+Peer.prototype.removeSpan = function(path1, at1, path2, at2)
+{
+	if (path1.get(-1) !== 'text')
+		{ throw new Error('removeSpan invalid path'); }
 
-	if (path1.equals(path2)) {
-		return this.removeText(path1, at1, at2 - at1);
-	}
+	if (path2.get(-1) !== 'text')
+		{ throw new Error('removeSpan invalid path'); }
+
+	if (path1.equals(path2))
+		{ return this.removeText(path1, at1, at2 - at1); }
 
 	var k1 = path1.get(-2);
 	var k2 = path2.get(-2);
@@ -341,7 +351,8 @@ Peer.prototype.removeSpan = function(path1, at1, path2, at2) {
 /**
 | Splits a text node.
 */
-Peer.prototype.split = function(path, offset) {
+Peer.prototype.split = function(path, offset)
+{
 	this._iface.alter(
 		{ path: path, at1: offset },
 		{ proc: 'splice' }
@@ -351,7 +362,8 @@ Peer.prototype.split = function(path, offset) {
 /**
 | Joins a text node with its next one
 */
-Peer.prototype.join = function(path, at1) {
+Peer.prototype.join = function(path, at1)
+{
 	this._iface.alter(
 		{ proc: 'splice' },
 		{ path: path, at1 : at1 }
@@ -361,8 +373,8 @@ Peer.prototype.join = function(path, at1) {
 /**
 | Removes an item.
 */
-Peer.prototype.removeItem = function(path) {
-
+Peer.prototype.removeItem = function(path)
+{
 	var key = path.get(-1);
 	var pivot = this._iface.get(path, -1);
 	var r1 = pivot.rankOf(key);

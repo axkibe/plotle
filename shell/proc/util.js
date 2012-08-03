@@ -139,6 +139,7 @@ Util.logout = function(panel) {
 | Registers the user
 */
 Util.register = function(panel) {
+
 	var panSub = panel.$sub;
 
 	panSub.errL.setText('');
@@ -146,7 +147,6 @@ Util.register = function(panel) {
 	var email  = panSub.emailI.getValue();
 	var pass   = panSub.passI. getValue();
 	var pass2  = panSub.pass2I.getValue();
-	var code   = panSub.codeI. getValue();
 
 	if (user.length < 4) {
 		panel.$sub.errL.setText('Username too short, min. 4 characters');
@@ -184,18 +184,9 @@ Util.register = function(panel) {
 		return;
 	}
 
-	if (code.length === 0) {
-		panel.$sub.errL.setText('Invitation code missing');
-		shell.setCaret('board', {
-			path : new Path(['RegPanel', 'codeI']),
-			at1  : pass2.length
-		});
-		return;
-	}
-
 	pass = Jools.passhash(pass);
 
-	shell.peer.register(user, email, pass, code, function(res) {
+	shell.peer.register(user, email, pass, function(res) {
 		if (!res.ok) {
 			panel.$sub.errL.setText(res.message);
 
@@ -204,12 +195,8 @@ Util.register = function(panel) {
 					path : new Path(['RegPanel', 'userI']),
 					at1  : pass2.length
 				});
-			} else if (res.message.search(/code/) >= 0) {
-				shell.setCaret('board', {
-					path : new Path(['RegPanel', 'codeI']),
-					at1  : pass2.length
-				});
 			}
+
 			shell.poke();
 			return;
 		}
