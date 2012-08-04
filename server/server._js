@@ -463,9 +463,9 @@ Server.prototype.prepareResources = function(_) {
 	var devels = [];
 
 	// loads the to be bundled files
-	for(a = 0, aZ = bundle.length; a < aZ; a++)
+	for(a = 0, aZ = bundleRessources.length; a < aZ; a++)
 	{
-		r = this.$bundle[a];
+		r = bundleRessources[a];
 
 		devels.push('<script src="' + r.path + '" type="text/javascript"></script>');
 
