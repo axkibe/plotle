@@ -87,6 +87,7 @@ var changeTree = function(tree, chgX) {
 			{ throw reject('invalid change: '+ctype); }
 
 		var r = op(tree, chg);
+
 		if (r === null)
 			{ continue; }
 

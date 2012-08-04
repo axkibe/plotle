@@ -35,7 +35,6 @@ if (typeof(require) === 'undefined')
 /**
 | Imports
 */
-var agent       = require('webkit-devtools-agent');
 var util        = require('util');
 var Jools       = require('../shared/jools');
 var MeshMashine = require('../shared/meshmashine');
@@ -129,9 +128,11 @@ var Server = function(_) {
 	);
 
 	var self = this;
-	http.createServer(function(req, res) {
-		self.requestListener(req, res);
-	}).listen(config.port, config.ip, _);
+
+	http.createServer(
+		function(req, res)
+			{ self.requestListener(req, res); }
+	).listen(config.port, config.ip, _);
 
 	log('start', 'server running');
 };
@@ -232,9 +233,7 @@ Server.prototype.loadSpace = function(spacename, _) {
 		++$space.$seqZ;
 
 		$space.$tree = MeshMashine.changeTree($space.$tree, $change.chgX).tree;
-
 	}
-
 };
 
 /**
