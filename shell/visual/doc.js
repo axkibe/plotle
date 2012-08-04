@@ -48,18 +48,21 @@ if (typeof(window) === 'undefined') { throw new Error('this code requires a brow
 /**
 | Constructor.
 */
-var Doc = Visual.Doc = function(spacename, twig, path) {
+var Doc = Visual.Doc = function(spacename, twig, path)
+{
 	Visual.Base.call(this, spacename, twig, path);
 
-	if (this.$sub !== null) { throw new Error('iFail'); }
-	var $sub = this.$sub = [];
+	if (this.$sub !== null)
+		{ throw new Error('iFail'); }
 
+	var $sub    = this.$sub = [];
 	this._$pnws = null;
 
 	var ranks = twig.ranks;
 	var copse = twig.copse;
-	for (var r = 0, rZ = twig.length; r < rZ; r++) {
-		var k = ranks[r];
+	for (var $r = 0, rZ = twig.length; $r < rZ; $r++)
+	{
+		var k = ranks[$r];
 		$sub[k] = new Visual.Para( spacename, copse[k], new Path( path, '++', k ) );
 	}
 };
@@ -68,30 +71,34 @@ Jools.subclass(Doc, Visual.Base);
 /**
 | Returns the vtwig at rank 'rank'.
 */
-Doc.prototype.atRank = function(rank) {
+Doc.prototype.atRank = function(rank)
+{
 	return this.$sub[this.twig.ranks[rank]];
 };
 
 /**
 | Updates v-vine to match a new twig.
 */
-Doc.prototype.update = function(twig) {
-
+Doc.prototype.update = function(twig)
+{
 	this.twig      = twig;
 	var $old       = this.$sub;
 	var $sub       = this.$sub = {};
 	var $spacename = this.$spacename;
 	var copse      = twig.copse;
 
-	for(var k in copse) {
+	for(var k in copse)
+	{
 		var s = twig.copse[k];
 		var o = $old[k];
-		if (Jools.is(o)) {
-			if (o.twig !== s) {
-				o.update(s);
-			}
+		if (Jools.is(o))
+		{
+			if (o.twig !== s)
+				{ o.update(s); }
 			$sub[k] = o;
-		} else {
+		}
+		else
+		{
 			o = new Visual.Para( $spacename, s, new Path( this.$path, '++', k ) );
 			o.update(s);
 			$sub[k] = o;
@@ -109,7 +116,8 @@ Doc.prototype.update = function(twig) {
 | innerMargin: distance of text to edge
 | scrollp:     scroll position
 */
-Doc.prototype.draw = function(fabric, view, width, innerMargin, scrollp) {
+Doc.prototype.draw = function(fabric, view, width, innerMargin, scrollp)
+{
 	// FIXME <pre>
 	var paraSep = this.getParaSep();
 	var select = shell.selection;
@@ -132,11 +140,12 @@ Doc.prototype.draw = function(fabric, view, width, innerMargin, scrollp) {
 
 	// draws the paragraphs
 	var twig = this.twig;
-	for (var r = 0, rZ = twig.length; r < rZ; r++) {
-		var vpara = this.atRank(r);
+	for (var $r = 0, rZ = twig.length; $r < rZ; $r++)
+	{
+		var vpara = this.atRank($r);
 		var flow = vpara.getFlow();
 
-		pnws[twig.ranks[r]] = new Euclid.Point(innerMargin.w, Math.round(y));
+		pnws[twig.ranks[$r]] = new Euclid.Point(innerMargin.w, Math.round(y));
 		var p = new Euclid.Point(innerMargin.w, Math.round(y - scrollp.y));
 
 		vpara.draw(fabric, view, view.point(p));
@@ -148,13 +157,14 @@ Doc.prototype.draw = function(fabric, view, width, innerMargin, scrollp) {
 /**
 | Force-clears all caches.
 */
-Doc.prototype.knock = function() {
-	for (var r = 0, rZ = this.twig.length; r < rZ; r++) {
-		this.atRank(r).knock();
-	}
+Doc.prototype.knock = function()
+{
+	for (var $r = 0, rZ = this.twig.length; $r < rZ; $r++)
+		{ this.atRank($r).knock(); }
 };
 
-Doc.prototype.getPNW = function(key) {
+Doc.prototype.getPNW = function(key)
+{
 	return this._$pnws[key];
 };
 
@@ -162,17 +172,21 @@ Doc.prototype.getPNW = function(key) {
 | Returns the height of the document.
 | FIXME caching
 */
-Doc.prototype.getHeight = function() {
+Doc.prototype.getHeight = function()
+{
 	var fs      = this.getFont().size;
 	var paraSep = this.getParaSep();
 	var twig    = this.twig;
 
 	var height   = 0;
-	for (var r = 0, rZ = twig.length; r < rZ; r++) {
-		var vpara = this.atRank(r);
+	for (var $r = 0, rZ = twig.length; $r < rZ; $r++)
+	{
+		var vpara = this.atRank($r);
 
 		var flow = vpara.getFlow();
-		if (r > 0) { height += paraSep; }
+		if ($r > 0)
+			{ height += paraSep; }
+
 		height += flow.height;
 	}
 
@@ -183,11 +197,12 @@ Doc.prototype.getHeight = function() {
 /**
 | Returns the width actually used of the document.
 */
-Doc.prototype.getSpread = function() {
+Doc.prototype.getSpread = function()
+{
 	var spread = 0;
-	for (var r = 0, rZ = this.twig.length; r < rZ; r++) {
-		spread = Math.max(spread, this.atRank(r).getFlow().spread);
-	}
+	for (var $r = 0, rZ = this.twig.length; $r < rZ; $r++)
+		{ spread = Math.max(spread, this.atRank($r).getFlow().spread); }
+
 	return spread;
 };
 
@@ -195,8 +210,8 @@ Doc.prototype.getSpread = function() {
 | Returns the (default) paraSeperator for this document.
 | Parameter item is optional, just to safe double and tripple lookups.
 */
-Doc.prototype.getParaSep = function(item) {
-
+Doc.prototype.getParaSep = function(item)
+{
 	if (!Jools.is(item))
 		{ item = shell.$space.getSub(this.$path, -1); }
 
@@ -208,8 +223,8 @@ Doc.prototype.getParaSep = function(item) {
 | Returns the default font for the document.
 | Parameter item is optional, just to safe double and tripple lookups.
 */
-Doc.prototype.getFont = function(item) {
-
+Doc.prototype.getFont = function(item)
+{
 	// caller can provide item for performance optimization
 	if (!Jools.is(item))
 		{ item = shell.$space.getSub(this.$path, -1); }
@@ -235,18 +250,21 @@ Doc.prototype.getFont = function(item) {
 /**
 | Returns the paragraph at point
 */
-Doc.prototype.getParaAtPoint = function(p) {
+Doc.prototype.getParaAtPoint = function(p)
+{
 	var twig  = this.twig;
 	var $sub  = this.$sub;
 	var $pnws = this._$pnws;
 
-	for(var r = 0, rZ = twig.length; r < rZ; r++) {
-		var k     = twig.ranks[r];
+	for(var $r = 0, rZ = twig.length; $r < rZ; $r++)
+	{
+		var k     = twig.ranks[$r];
 		var vpara = $sub[k];
 
 		if (p.y < $pnws[k].y + vpara.getFlow().height)
 			{ return vpara; }
 	}
+
 	return null;
 };
 
@@ -260,8 +278,8 @@ Doc.prototype.sketchSelection = function(
 	view,        // current view
 	width,       // width the vdoc is drawn
 	innerMargin, // inner margin of the doc
-	scrollp      // scroll position of the doc
-) {
+	scrollp)     // scroll position of the doc
+{
 	var select = shell.selection;
 	select.normalize();
 
@@ -297,14 +315,16 @@ Doc.prototype.sketchSelection = function(
 	var  ascend = Math.round(fontsize);
 	var rx = width - innerMargin.e;
 	var lx = innerMargin.w;
-	if ((Math.abs(p2.y - p1.y) < 2)) {
+	if ((Math.abs(p2.y - p1.y) < 2))
+	{
 		// ***
 		fabric.moveTo(p1.x, p1.y + descend, view);
 		fabric.lineTo(p1.x, p1.y -  ascend, view);
 		fabric.lineTo(p2.x, p2.y -  ascend, view);
 		fabric.lineTo(p2.x, p2.y + descend, view);
 		fabric.lineTo(p1.x, p1.y + descend, view);
-	} else if (Math.abs(p1.y + fontsize + descend - p2.y) < 2 && (p2.x <= p1.x))  {
+	} else if (Math.abs(p1.y + fontsize + descend - p2.y) < 2 && (p2.x <= p1.x))
+	{
 		//      ***
 		// ***
 		fabric.moveTo(rx,   p1.y -  ascend, view);
@@ -316,7 +336,8 @@ Doc.prototype.sketchSelection = function(
 		fabric.lineTo(p2.x, p2.y -  ascend, view);
 		fabric.lineTo(p2.x, p2.y + descend, view);
 		fabric.lineTo(lx,   p2.y + descend, view);
-	} else {
+	} else
+	{
 		//    *****
 		// *****
 		fabric.moveTo(rx,   p2.y -  ascend, view);

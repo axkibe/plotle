@@ -37,11 +37,13 @@ if (typeof(require) === 'undefined') { throw new Error('this code requires node!
 |
 | opts ... a string, a letter including says:
 |
-|   p ... include in pack
-|   m ... keep in memory
+|   b ... included in the bundle
 |   c ... serve as cached
+|   f ... serve from file
+|   m ... keep in memory
 */
-var Resource = function(path, opts) {
+var Resource = function(path, opts)
+{
 	// the resource's path
 	this.path = path;
 
@@ -58,7 +60,8 @@ var Resource = function(path, opts) {
 	this.data  = null;
 
 	// the options for this resource
-	this.opts   = {
+	this.opts   =
+	{
 		// tells the client to cache the resource
 		cache  : opts.indexOf('c') >= 0,
 
@@ -78,7 +81,8 @@ var Resource = function(path, opts) {
 
 	var type = path.split('.')[1];
 
-	switch (type) {
+	switch (type)
+	{
 	case 'css' :
 		// cascading style sheet
 		this.code = 'utf-8';
@@ -138,6 +142,9 @@ var Resource = function(path, opts) {
 	}
 };
 
+/**
+| Node export
+*/
 module.exports = Resource;
 
 })();

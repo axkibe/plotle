@@ -76,28 +76,27 @@ Jools.subclass(Space, Visual.Base);
 /**
 | Updates $sub to match a new twig.
 */
-Space.prototype.update = function(twig) {
-
+Space.prototype.update = function(twig)
+{
 	// no change?
 	if (this.twig === twig)
 		{ return; }
 
 	this.twig = twig;
 
-	// TODO rename vars
-	var gold = this.$sub;
-	var g    = this.$sub = {};
+	var $old = this.$sub;
+	var $sub = this.$sub = {};
 	var copse = twig.copse;
 	for(var k in copse) {
 		var sub = twig.copse[k];
-		var o = gold[k];
+		var o = $old[k];
 		if (Jools.is(o)) {
 			if (o.twig !== sub) {
 				o.update(sub);
 			}
-			g[k] = o;
+			$sub[k] = o;
 		} else {
-			g[k] = this.createItem(sub, k);
+			$sub[k] = this.createItem(sub, k);
 		}
 	}
 
@@ -107,8 +106,8 @@ Space.prototype.update = function(twig) {
 
 	if (caret.section === 'space' &&
 		csign && csign.path &&
-		!Jools.isnon(g[csign.path.get(0)])
-	) {
+		!Jools.isnon($sub[csign.path.get(0)]))
+	{
 		if (shell.selection.active &&
 			shell.selection.sign1.path.get(-4) === csign.path.get(1))
 		{ shell.selection.deselect(true); }

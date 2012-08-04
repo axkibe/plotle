@@ -35,7 +35,7 @@ if (typeof(require) === 'undefined')
 /**
 | Imports
 */
-var profiler    = require('v8-profiler');
+var agent       = require('webkit-devtools-agent');
 var util        = require('util');
 var Jools       = require('../shared/jools');
 var MeshMashine = require('../shared/meshmashine');
@@ -67,11 +67,6 @@ var Server = function(_) {
 
 	// files served
 	this.$resources = {};
-
-	// resource bundle
-	this.$bundle = [];
-
-	this.registerResources();
 
 	// initializes the database
 	var $db = this.$db = {};
@@ -319,12 +314,12 @@ Server.prototype.buildShellConfig = function() {
 };
 
 /**
-| registers the resource to be REST served.
-|
-| TODO use Array.each
+| Registers and prepares the resource.
+| also builds the bundle for fast-loading.
 */
-Server.prototype.registerResources = function()
-{
+Server.prototype.prepareResources = function(_) {
+	var r;
+
 	var rlist = [
 		'media/favicon.ico',                                'mc',
 		'shell/testpad.html',                               'f',
@@ -425,21 +420,26 @@ Server.prototype.registerResources = function()
 		'shell/fonts/dejavusans-webfont.woff',              'mc'
 	];
 
-	for (var a = 0, aZ = rlist.length; a < aZ; a += 2) {
-		var r = new Resource(rlist[a], rlist[a + 1]);
-		if (r.opts.bundle) { this.$bundle.push(r); }
+	// ressources served in the bundle
+	var bundleRessources = [];
+
+	// creates the Ressources
+	for (var a = 0, aZ = rlist.length; a < aZ; a += 2)
+	{
+		r = new Resource(rlist[a], rlist[a + 1]);
+
+		if (r.opts.bundle)
+			{ bundleRessources.push(r); }
+
 		this.$resources[r.path] = r;
 	}
-};
 
-/**
-| Prepares the resource, also build the bundle for fast-loading.
-*/
-Server.prototype.prepareResources = function(_) {
-	var path, r;
+	var path;
+
 	log('start', 'preparing resources');
 
-	for(path in this.$resources) {
+	for(path in this.$resources)
+	{
 		r = this.$resources[path];
 
 		if (r.data !== null || !r.opts.memory)
@@ -451,26 +451,35 @@ Server.prototype.prepareResources = function(_) {
 	this.$resources['favicon.ico'] = this.$resources['media/favicon.ico'];
 
 	var cconfig = new Resource('shell/config.js', 'mb');
-	this.$bundle.unshift(cconfig);
+	bundleRessources.unshift(cconfig);
+
 	this.$resources[cconfig.path] = cconfig;
 	cconfig.data = this.buildShellConfig();
 
+	// the bundle itself
 	var bundle = [];
+
+	// file listing for devel.html
 	var devels = [];
 
-	for(var a = 0, aZ = this.$bundle.length; a < aZ; a++) {
+	// loads the to be bundled files
+	for(a = 0, aZ = bundle.length; a < aZ; a++)
+	{
 		r = this.$bundle[a];
+
 		devels.push('<script src="' + r.path + '" type="text/javascript"></script>');
-		if (r.data === null) {
-			bundle.push(fs.readFile(r.path, _));
-		} else {
-			bundle.push(r.data);
-		}
+
+		if (r.data === null)
+			{ bundle.push(fs.readFile(r.path, _)); }
+		else
+			{ bundle.push(r.data); }
 	}
+
 	bundle = bundle.join('\n');
 
-	// uglify the bundle
-	if (config.uglify) {
+	// uglifies the bundle if configured so
+	if (config.uglify)
+	{
 		var ast;
 		ast    = uglify.parser.parse(bundle);
 		ast    = uglify.uglify.ast_mangle(ast, {toplevel: true});
@@ -479,18 +488,22 @@ Server.prototype.prepareResources = function(_) {
 		bundle = uglify.uglify.gen_code(ast);
 	}
 
+	// calculates the hash for the bundle
 	var bsha1 = sha1.sha1hex(bundle);
+
+	// registers the bundle as ressource
 	var br = new Resource('meshcraft-' + bsha1 + '.js', 'mc');
 	br.data = bundle;
 	this.$resources[br.path] = br;
 	log('start', 'bundle:', bsha1);
 
-	// the devel file
+	// the devel.html file
 	var devel = new Resource('shell/devel.html', 'm');
 	devel.data = fs.readFile('shell/devel.html', _) + '';
 	devel.data = devel.data.replace(/<!--DEVELPACK.*>/, devels.join('\n'));
 	this.$resources['devel.html'] = devel;
 
+	// the index.html file
 	var main = new Resource('shell/meshcraft.html', 'm');
 	main.data = fs.readFile('shell/meshcraft.html', _) + '';
 	main.data = main.data.replace(
@@ -501,9 +514,11 @@ Server.prototype.prepareResources = function(_) {
 	this.$resources['index.html'] =
 	this.$resources[''] = main;
 
+	// prepares the zipped versions
 	for(path in this.$resources) {
 		r = this.$resources[path];
-		if (!r.opts.memory) { continue; }
+		if (!r.opts.memory)
+			{ continue; }
 		r.gzip = zlib.gzip(r.data, _);
 	}
 

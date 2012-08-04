@@ -22,7 +22,7 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-console.log('disabled so not to delete a v3 repository by accident')
+console.log('this tool has been disabled so not to delete a v3 repository by accident!');
 process.exit(-1);
 
 /**

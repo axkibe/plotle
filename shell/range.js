@@ -112,7 +112,7 @@ Range.prototype.normalize = function()
 Range.prototype.innerText = function()
 {
 	if (!this.active)
-		{ return '' };
+		{ return ''; }
 
 	this.normalize();
 	var s1 = this.begin;
