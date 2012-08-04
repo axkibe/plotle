@@ -35,6 +35,8 @@ if (typeof(require) === 'undefined')
 /**
 | Imports
 */
+var profiler    = require('v8-profiler');
+var util        = require('util');
 var Jools       = require('../shared/jools');
 var MeshMashine = require('../shared/meshmashine');
 var Meshverse   = require('../shared/meshverse');
