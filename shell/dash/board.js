@@ -131,7 +131,7 @@ Board.prototype.setCurSpace = function(space, access) {
 	this.$curSpace = space;
 	this.$access   = access;
 	this.getPanel('MainPanel').setCurSpace(space, access);
-	if (space === 'sandbox' && this.$autoHelp) {
+	if (space === 'meshcraft:sandbox' && this.$autoHelp) {
 		this.$autoHelp = false;
 		this.setShowHelp(true);
 	}
