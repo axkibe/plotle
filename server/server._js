@@ -35,7 +35,6 @@ if (typeof(require) === 'undefined')
 /**
 | Imports
 */
-var util        = require('util');
 var Jools       = require('../shared/jools');
 var MeshMashine = require('../shared/meshmashine');
 var Meshverse   = require('../shared/meshverse');
@@ -347,7 +346,7 @@ Server.prototype.prepareResources = function(_) {
 		'shared/tree.js',                                   'fb',
 		'shared/sign.js',                                   'fb',
 		'shared/change.js',                                 'fb',
-		'shared/changex.js',                                'fb',
+		'shared/changeray.js',                              'fb',
 		'shared/meshmashine.js',                            'fb',
 		'shell/iface.js',                                   'fb',
 		'shell/peer.js',                                    'fb',

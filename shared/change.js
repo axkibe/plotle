@@ -61,9 +61,11 @@ var isPath       = Path.isPath;
 |   Change(src, trg)  -or-
 |   Change(o)  where o contains o.src and o.trg
 */
-Change = function(a1, a2) {
+Change = function(a1, a2)
+{
 	var src, trg;
-	switch (arguments.length) {
+	switch (arguments.length)
+	{
 	case 2:
 		src = a1;
 		trg = a2;
@@ -76,18 +78,24 @@ Change = function(a1, a2) {
 		throw new Error('#argument fail');
 	}
 
-	if (src.constructor === Sign) {
+	if (src.constructor === Sign)
+	{
 		this.src = src;
-	} else {
+	}
+	else
+	{
 		if (src.path && !isPath(src.path))
 			{ src.path = new Path(src.path); }
 
 		this.src = new Sign(src);
 	}
 
-	if (trg.constructor === Sign) {
+	if (trg.constructor === Sign)
+	{
 		this.trg = trg;
-	} else {
+	}
+	else
+	{
 		if (trg.path && !isPath(trg.path))
 			{ trg.path = new Path(trg.path); }
 
@@ -98,10 +106,12 @@ Change = function(a1, a2) {
 };
 
 /**
-| Returns the type of an Alternation.
+| Returns the change's type.
 */
-Change.prototype.type = function() {
-	if (is(this._type)) { return this._type; }
+Change.prototype.type = function()
+{
+	if (is(this._type))
+		{ return this._type; }
 
 	var src = this.src;
 	var trg = this.trg;
@@ -119,9 +129,11 @@ Change.prototype.type = function() {
 		{ type = 'remove'; }
 	else if (is(trg.rank))
 		{ type = 'rank';   }
-	else {
+	else
+	{
 		type = null;
-		if (Jools.prissy) {
+		if (Jools.prissy)
+		{
 			Jools.log('fail', this);
 			throw new Error('invalid type');
 		}
@@ -134,11 +146,15 @@ Change.prototype.type = function() {
 /**
 | Returns a inverted change.
 */
-Change.prototype.invert = function() {
-	if (is(this._invert)) { return this._invert; }
+Change.prototype.invert = function()
+{
+	if (is(this._invert))
+		{ return this._invert; }
+
 	var r = new Change(this.trg, this.src);
 	Jools.innumerable(this, '_invert', r);
 	Jools.innumerable(r, '_invert', this);
+
 	return r;
 };
 
@@ -146,15 +162,19 @@ Change.prototype.invert = function() {
 | Change emulates an Array with the length of 1
 */
 Change.prototype.length = 1;
-Object.defineProperty(Change.prototype, 0, {
-	get: function() { return this; }
-});
+
+Change.prototype.get = function(idx)
+{
+	if (idx !== 0)
+		{ throw new Error('Change.get: out of bonds'); }
+
+	return this;
+};
 
 /**
 | Exports
 */
-if (typeof(window) === 'undefined') {
-	module.exports = Change;
-}
+if (typeof(window) === 'undefined')
+	{ module.exports = Change; }
 
 }());

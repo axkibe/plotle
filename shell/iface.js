@@ -35,7 +35,7 @@ var IFace;
 | Imports
 */
 var Change;
-var ChangeX;
+var ChangeRay;
 var MeshMashine;
 var Meshverse;
 var Path;
@@ -389,7 +389,7 @@ IFace.prototype._update = function()
 			{ throw new Error('update, server not OK!'); }
 
 		var chgs       = asw.chgs;
-		var report     = new ChangeX();
+		var report     = new ChangeRay();
 		var gotOwnChgs = false;
 		var time       = asw.time;
 
@@ -446,7 +446,7 @@ IFace.prototype._update = function()
 				chgX = outbox[a].chgX;
 
 				for(b = 0, bZ = report.length; b < bZ; b++)
-					{ chgX = MeshMashine.tfxChgX(chgX, report[b]); }
+					{ chgX = MeshMashine.tfxChgX(chgX, report.get(b)); }
 
 				outbox[a].chgX = chgX;
 
