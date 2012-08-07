@@ -146,14 +146,65 @@ Server.prototype.checkRepositorySchemaVersion = function (_)
 	var global  = this.$db.connection.collection('global', _);
 	var version = global.findOne({ _id : 'version' }, _);
 
-	if (version.version !== 3)
+	if (version)
 	{
-		throw new Error(
-			'Wrong repository schema version, expected 3, got '+
-			version.version
-		);
+		if (version.version !== 3)
+		{
+			throw new Error(
+				'Wrong repository schema version, expected 3, got '+
+				version.version
+			);
+		}
+
+		return;
 	}
+
+	// if there is no global.version variable the database is either
+	// empty or a version 2 schema. So check for version 2
+	var changes = this.$db.connection.collection('changes', _);
+	if (changes.find(_).nextObject(_) !== null)
+		{ throw new Error('Found a version 2 schema, expected 3'); }
+
+	// if not, initializes the database repository
+	this.initRepository (_);
 };
+
+/**
+| Initializes a new repository.
+*/
+Server.prototype.initRepository = function (_)
+{
+	log('start', 'found no repository, initializing a new one');
+
+	var initSpaces = [
+		'meshcraft:home',
+		'meshcraft:sandbox'
+	];
+
+	for (var $s = 0, sZ = initSpaces.length; $s < sZ; $s++)
+	{
+		var $space = initSpaces[$s];
+
+		log('start', '  initializing space ' + $space);
+
+		this.$db.spaces.insert(
+			{
+				_id : $space
+			},
+		_);
+	}
+
+	log('start', '  initializing global.version');
+
+	var $global = this.$db.connection.collection('global', _);
+	$global.insert(
+		{
+			_id     : 'version',
+			version : 3
+		},
+	_);
+};
+
 
 /**
 | Ensures there is the meshcraft (root) user
@@ -161,7 +212,10 @@ Server.prototype.checkRepositorySchemaVersion = function (_)
 Server.prototype.ensureMeshcraftUser = function (_)
 {
 	log('start', 'ensuring existence of the "meshcraft" user');
-	var mUser = this.$db.users.findOne({ _id : 'meshcraft'}, _);
+
+	var mUser = this.$db.users.findOne(
+		{ _id : 'meshcraft'},
+	_);
 
 	if (!mUser)
 	{
@@ -191,7 +245,7 @@ Server.prototype.loadSpaces = function (_)
 {
 	log('start', 'loading and replaying all spaces');
 
-	var cursor = this.$db.spaces.find({}, { sort: '_id'}, _);
+	var cursor = this.$db.spaces.find({ }, { sort: '_id'}, _);
 
 	for(var $o = cursor.nextObject(_); $o !== null; $o = cursor.nextObject(_))
 		{ this.loadSpace($o._id, _); }
@@ -237,8 +291,7 @@ Server.prototype.loadSpace = function ( spacename, _)
 			}
 		}
 
-		++$space.$seqZ;
-
+		$space.$seqZ++;
 		$space.$tree = MeshMashine.changeTree($space.$tree, $change.chgX).tree;
 	}
 };
@@ -320,6 +373,7 @@ Server.prototype.buildShellConfig = function()
 	cconfig.push('\n\t},\n');
 	cconfig.push('\tlog : {\n');
 	first = true;
+
 	for(k in config.log)
 	{
 		if (!first)
@@ -329,6 +383,7 @@ Server.prototype.buildShellConfig = function()
 
 		cconfig.push('\t\t' + k + ' : ' + Jools.configSwitch(config.log[k], 'shell'));
 	}
+
 	cconfig.push('\n\t}\n');
 	cconfig.push('};\n');
 	return cconfig.join('');
@@ -758,7 +813,8 @@ Server.prototype.cmdRegister = function(cmd, _)
 	this.$spaces[spacename] = {
 		$changesDB : this.$db.connection.collection('changes:' + spacename, _),
 		$changes   : [],
-		$tree      : new Tree({ type : 'Space' }, Meshverse)
+		$tree      : new Tree({ type : 'Space' }, Meshverse),
+		$seqZ      : 1
 	};
 
 
@@ -948,8 +1004,8 @@ Server.prototype.cmdUpdate = function(cmd, res, _)
 /**
 | A sleeping update expired.
 */
-Server.prototype.expireSleep = function(self, sleepID) {
-
+Server.prototype.expireSleep = function(self, sleepID)
+{
 	var $sleep = self.$upsleep[sleepID];
 	var $space = self.$spaces[$sleep.spacename];
 
@@ -1157,10 +1213,10 @@ Server.prototype.cmdGet = function(cmd, _)
 	}
 
 	return {
-		ok: true,
+		ok     : true,
 		access : access,
-		time : time,
-		node: node
+		time   : time,
+		node   : node
 	};
 };
 

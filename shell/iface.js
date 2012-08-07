@@ -107,27 +107,35 @@ IFace.prototype._ajax = function(request, callback)
 
 		if (ajax.status !== 200) {
 			Jools.log('iface', request.cmd, 'status: ', ajax.status);
-			if (callback) {
-				callback( { ok: false, message: 'connection' , status: ajax.status } );
-			}
+			if (callback)
+				{ callback( { ok: false, message: 'connection' , status: ajax.status } ); }
+
 			return;
 		}
 
 		var asw;
-		try {
-			asw = JSON.parse(ajax.responseText);
-		} catch (e) {
-			if (callback) { callback( { ok: false, message: 'nojson' } ); }
+		try
+			{ asw = JSON.parse(ajax.responseText); }
+		catch (e)
+		{
+			if (callback)
+			{
+				callback({ ok: false, message: 'nojson' } );
+			}
 		}
 
 		Jools.log('iface', '<-', asw);
-		if (!asw.ok) {
+		if (!asw.ok)
+		{
 			Jools.log('iface', request.cmd, 'server not ok');
-			if (callback) { callback( asw, null); }
+			if (callback)
+				{ callback( asw, null); }
+
 			return;
 		}
 
-		if (callback) { callback(asw); }
+		if (callback)
+			{ callback(asw); }
 	};
 
     var rs = JSON.stringify(request);
@@ -269,19 +277,16 @@ IFace.prototype.aquireSpace = function(spacename, callback)
 		catch (e)
 		{
 			self.$aquireAjax = null;
-
-			callback(
-				{ error: 'nojson' },
-				null
-			);
+			shell.greenscreen('Server delivered no JSON.');
 			return;
 		}
 
 		Jools.log('iface', '<-sg', asw);
-		if (!asw.ok) {
+
+		if (!asw.ok)
+		{
 			self.$aquireAjax = null;
-			Jools.log('iface', 'aquireSpace, server not ok');
-			callback( asw, null);
+			shell.greenscreen('Server not OK: ' + asw.message);
 			return;
 		}
 
@@ -314,6 +319,7 @@ IFace.prototype.aquireSpace = function(spacename, callback)
 			{
 				self._update();
 			}
+
 			self.$aquireAjax = null;
 		});
 	};
@@ -386,7 +392,10 @@ IFace.prototype._update = function()
 		Jools.log('iface', '<-u', asw);
 
 		if (!asw.ok)
-			{ throw new Error('update, server not OK!'); }
+		{
+			shell.greenscreen('Server not OK: ' + asw.message);
+			return;
+		}
 
 		var chgs       = asw.chgs;
 		var report     = new ChangeRay();
@@ -424,7 +433,8 @@ IFace.prototype._update = function()
 				}
 
 				var $redo = self.$redo;
-				for(b = 0, bZ = $redo.length; b < bZ; b++) {
+				for(b = 0, bZ = $redo.length; b < bZ; b++)
+				{
 					u = $redo[b];
 					if (u.time < time + a)
 						{ u.chgX = MeshMashine.tfxChgX(u.chgX, chgX); }
@@ -441,8 +451,8 @@ IFace.prototype._update = function()
 			for(a = 0, aZ = postbox.length; a < aZ; a++)
 				{ space = MeshMashine.changeTree(space, postbox[a].chgX).tree; }
 
-			for(a = 0, aZ = outbox.length; a < aZ; a++) {
-
+			for(a = 0, aZ = outbox.length; a < aZ; a++)
+			{
 				chgX = outbox[a].chgX;
 
 				for(b = 0, bZ = report.length; b < bZ; b++)
@@ -457,8 +467,10 @@ IFace.prototype._update = function()
 		}
 
 		var msgs = asw.msgs;
-		if (msgs && self._messageRCV) {
-			for(a = 0, aZ = msgs.length; a < aZ; a++) {
+		if (msgs && self._messageRCV)
+		{
+			for(a = 0, aZ = msgs.length; a < aZ; a++)
+			{
 				var m = msgs[a];
 				self._messageRCV.messageRCV(m.space, m.user, m.message);
 			}
@@ -502,7 +514,7 @@ IFace.prototype._update = function()
 */
 IFace.prototype.alter = function(src, trg)
 {
-    var r   = MeshMashine.changeTree(
+    var r = MeshMashine.changeTree(
 		this.$cSpace,
 		new Change(new Sign(src), new Sign(trg))
 	);
@@ -555,20 +567,24 @@ IFace.prototype.sendChanges = function()
 		if (ajax.readyState !== 4)
 			{ return; }
 
-		if (ajax.status !== 200) {
+		if (ajax.status !== 200)
+		{
 			shell.greenscreen('Cannot send changes, error code ' + ajax.status);
 			return;
 		}
 
-		try {
-			asw = JSON.parse(ajax.responseText);
-		} catch (e) {
+		try
+			{ asw = JSON.parse(ajax.responseText); }
+		catch (e)
+		{
 			shell.greenscreen('Server answered no JSON!');
 			return;
 		}
 
 		Jools.log('iface', '<-sc', asw);
-		if (!asw.ok) {
+
+		if (!asw.ok)
+		{
 			shell.greenscreen('Server not OK: ' + asw.message);
 			return;
 		}
@@ -609,7 +625,8 @@ IFace.prototype.undo = function()
     this.$cSpace = r.tree;
 	chgX         = r.chgX;
 
-	if (chgX === null) { return; }
+	if (chgX === null)
+		{ return; }
 
 	var c = Jools.immute({
 		cid  : Jools.uid(),
