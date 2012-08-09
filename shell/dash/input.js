@@ -36,6 +36,7 @@ var Caret;
 var Curve;
 var Euclid;
 var Jools;
+var Path;
 var shell;
 var theme;
 
@@ -505,6 +506,22 @@ Input.prototype.specialKey = function(key)
 
 	if (poke)
 		{ this.panel.poke(); }
+};
+
+/**
+| Control takes focus.
+*/
+Input.prototype.setFocus = function()
+{
+	shell.setCaret(
+		'board',
+		{
+			path : new Path ( [this.panel.name, this.name ] ),
+			at1  : this._$value.length
+		}
+	);
+
+	this.poke();
 };
 
 

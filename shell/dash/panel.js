@@ -382,19 +382,13 @@ Panel.prototype.poke = function()
 */
 Panel.prototype.setFocus = function(cname)
 {
-	var com = this.$sub[cname];
+	var com   = this.$sub[cname];
 	var focus = this.focusedControl();
+
 	if (focus === com)
 		{ return; }
 
-	// XXX
-	shell.setCaret(
-		'board',
-		{
-			path : new Path([this.name, cname]),
-			at1  : 0
-		}
-	);
+	com.setFocus();
 };
 
 /**

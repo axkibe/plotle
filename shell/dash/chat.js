@@ -23,11 +23,13 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/**
-| Exports
+
+/*
+| Export
 */
 var Dash;
 Dash = Dash || {};
+
 
 /**
 | Imports
@@ -41,17 +43,20 @@ var Path;
 var shell;
 var theme;
 
-/**
+
+/*
 | Capsule
 */
 (function(){
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
-/**
+
+/*
 | Constructor.
 */
-var Chat = Dash.Chat = function(twig, panel, inherit, name) {
+var Chat = Dash.Chat = function(twig, panel, inherit, name)
+{
 	this.name       = name;
 	this.twig       = twig;
 	this.panel      = panel;
@@ -70,17 +75,19 @@ var Chat = Dash.Chat = function(twig, panel, inherit, name) {
 	this.itext      = '';
 };
 
-/**
+
+/*
 | Chat components can focus.
 */
-Chat.prototype.canFocus = function() {
-	return true;
-};
+Chat.prototype.canFocus = function()
+	{ return true; };
 
-/**
+
+/*
 | Returns the caret position relative to the panel.
 */
-Chat.prototype.getCaretPos = function() {
+Chat.prototype.getCaretPos = function()
+{
 	var fs      = this.twig.font.size;
 	var descend = fs * theme.bottombox;
 	var p       = this.locateOffset(shell.caret.sign.at1);
@@ -96,12 +103,14 @@ Chat.prototype.getCaretPos = function() {
 	});
 };
 
-/**
+/*
 | Creates a new fabric for this component.
 */
-Chat.prototype._weave = function() {
+Chat.prototype._weave = function()
+{
 	var fabric = this.$fabric;
-	if (fabric && !config.debug.noCache) { return fabric; }
+	if (fabric && !config.debug.noCache)
+		{ return fabric; }
 
 	fabric = this.$fabric = new Euclid.Fabric(this.iframe);
 
@@ -117,12 +126,14 @@ Chat.prototype._weave = function() {
 	fabric.fillText(this.itext, x + 37, y);
 	y -= 2;
 
-	for(var a = this.messages.length - 1, aA = Math.max(a - 5, 0); a >= aA; a--) {
+	for(var a = this.messages.length - 1, aA = Math.max(a - 5, 0); a >= aA; a--)
+	{
 		y -= lh;
 		fabric.fillText(this.messages[a], x, y);
 	}
 
-	if (config.debug.drawBoxes) {
+	if (config.debug.drawBoxes)
+	{
 		fabric.paint(
 			Dash.getStyle('boxes'),
 			new Euclid.Rect(this.iframe.pnw, this.iframe.pse.sub(1, 1)),
@@ -131,15 +142,18 @@ Chat.prototype._weave = function() {
 		);
 	}
 
+
 	return this.$fabric = fabric;
 };
 
-/**
+
+/*
 | Returns the point of a given offset.
 |
 | offset:   the offset to get the point from.
 */
-Chat.prototype.locateOffset = function(offset) {
+Chat.prototype.locateOffset = function(offset)
+{
 	// FIXME cache position
 
 	var font     = this.twig.font;
@@ -152,18 +166,19 @@ Chat.prototype.locateOffset = function(offset) {
 	);
 };
 
-/**
+
+/*
 | Draws the component on the fabric.
 */
-Chat.prototype.draw = function(fabric) {
-	fabric.drawImage(this._weave(), this.pnw, 'source-atop');
-};
+Chat.prototype.draw = function(fabric)
+	{ fabric.drawImage(this._weave(), this.pnw, 'source-atop'); };
 
 
-/**
+/*
 | Draws the caret.
 */
-Chat.prototype.drawCaret = function(view) {
+Chat.prototype.drawCaret = function(view)
+{
 	var caret = shell.caret;
 	var panel = this.panel;
 	var cpos  = caret.$pos = this.getCaretPos();
@@ -175,9 +190,10 @@ Chat.prototype.drawCaret = function(view) {
 	);
 	shell.caret.$screenPos = cp;
 
-	if (Caret.useGetImageData) {
-		shell.caret.$save = shell.fabric.getImageData(cp.x, cp.y, 3, ch + 2);
-	} else {
+	if (Caret.useGetImageData)
+		{ shell.caret.$save = shell.fabric.getImageData(cp.x, cp.y, 3, ch + 2); }
+	else
+	{
 		// paradoxically this is often way faster, especially on firefox
 		shell.caret.$save = new Euclid.Fabric(shell.fabric.width, shell.fabric.height);
 		shell.caret.$save.drawImage(shell.fabric, 0, 0);
@@ -186,172 +202,260 @@ Chat.prototype.drawCaret = function(view) {
 	shell.fabric.fillRect('black', cp.x + 1, cp.y + 1, 1, ch);
 };
 
-/**
+
+/*
 | User input.
 */
-Chat.prototype.input = function(text) {
+Chat.prototype.input = function(text)
+{
 	var csign = shell.caret.sign;
 	var itext = this.itext;
 	var at1   = csign.at1;
 
 	this.itext = itext.substring(0, at1) + text + itext.substring(at1);
-	shell.setCaret('board', {
-		path : csign.path,
-		at1  : at1 + text.length
-	});
+
+	shell.setCaret(
+		'board',
+		{
+			path : csign.path,
+			at1  : at1 + text.length
+		}
+	);
+
 	this.poke();
 };
 
 
-/**
+/*
 | User pressed backspace.
 */
-Chat.prototype.keyBackspace = function() {
+Chat.prototype.keyBackspace = function()
+{
 	var caret = shell.caret;
 	var csign = caret.sign;
 	var at1   = csign.at1;
-	if (at1 <= 0) return false;
+
+	if (at1 <= 0)
+		{ return false; }
+
 	this.itext = this.itext.substring(0, at1 - 1) + this.itext.substring(at1);
-	shell.setCaret('board', {
-		path : csign.path,
-		at1  : csign.at1 - 1
-	});
+
+	shell.setCaret(
+		'board',
+		{
+			path : csign.path,
+			at1  : csign.at1 - 1
+		}
+	);
+
 	this.poke();
 	return true;
 };
 
-/**
+
+/*
 | User pressed del.
 */
-Chat.prototype.keyDel = function() {
+Chat.prototype.keyDel = function()
+{
 	var caret = shell.caret;
 	var csign = caret.sign;
 	var at1   = csign.at1;
-	if (at1 >= this.itext.length) return false;
+
+	if (at1 >= this.itext.length)
+		{ return false; }
+
 	this.itext = this.itext.substring(0, at1) + this.itext.substring(at1 + 1);
 	return true;
 };
 
-/**
-| User pressed up key.
+/*
+| User pressed down key.
 */
-Chat.prototype.keyDown = function() {
-	return true;
-};
+Chat.prototype.keyDown = function()
+	{ return true; };
 
-/**
+
+/*
 | User pressed end key.
 */
-Chat.prototype.keyEnd = function() {
+Chat.prototype.keyEnd = function()
+{
 	var caret = shell.caret;
 	var csign = caret.sign;
 	var at1   = csign.at1;
-	if (at1 >= this.itext.length) return false;
-	shell.setCaret('board', {
-		path : csign.path,
-		at1  : this.itext.length
-	});
+
+	if (at1 >= this.itext.length)
+		{ return false; }
+
+	shell.setCaret(
+		'board',
+		{
+			path : csign.path,
+			at1  : this.itext.length
+		}
+	);
+
 	return true;
 };
 
-/**
-| User pressed return key.
+
+/*
+| User pressed enter (return) key.
 */
-Chat.prototype.keyEnter = function() {
-	if (this.itext === '') { return false; }
+Chat.prototype.keyEnter = function()
+{
+	if (this.itext === '')
+		{ return false; }
 
 	var caret = shell.caret;
 	var csign = caret.sign;
 	shell.peer.sendMessage(this.itext);
-//	this.addMessage(this.itext);
 	this.itext = '';
-	shell.setCaret('board', {
-		path : csign.path,
-		at1  : 0
-	});
+
+	shell.setCaret(
+		'board',
+		{
+			path : csign.path,
+			at1  : 0
+		}
+	);
 
 	return true;
 };
 
-/**
+
+/*
 | User pressed left key.
 */
-Chat.prototype.keyLeft = function() {
+Chat.prototype.keyLeft = function()
+{
 	var caret = shell.caret;
 	var csign = caret.sign;
-	if (csign.at1 <= 0) return false;
-	shell.setCaret('board', {
-		path : csign.path,
-		at1  : csign.at1 - 1
-	});
+	if (csign.at1 <= 0)
+		{ return false; }
+
+	shell.setCaret(
+		'board',
+		{
+			path : csign.path,
+			at1  : csign.at1 - 1
+		}
+	);
+
 	return true;
 };
 
-/**
+
+/*
 | User pressed pos1 key
 */
-Chat.prototype.keyPos1 = function() {
+Chat.prototype.keyPos1 = function()
+{
 	var caret = shell.caret;
 	var csign = caret.sign;
-	if (csign.at1 <= 0) return false;
-	shell.setCaret('board', {
-		path : csign.path,
-		at1  : 0
-	});
+	if (csign.at1 <= 0)
+		{ return false; }
+
+	shell.setCaret(
+		'board',
+		{
+			path : csign.path,
+			at1  : 0
+		}
+	);
+
 	return true;
 };
 
-/**
+
+/*
 | User pressed right key
 */
 Chat.prototype.keyRight = function() {
 	var caret = shell.caret;
 	var csign = caret.sign;
-	if (csign.at1 >= this.itext.length) return false;
-	shell.setCaret('board', {
-		path : csign.path,
-		at1  : csign.at1 + 1
-	});
+
+	if (csign.at1 >= this.itext.length)
+		{ return false; }
+
+	shell.setCaret(
+		'board',
+		{
+			path : csign.path,
+			at1  : csign.at1 + 1
+		}
+	);
+
 	return true;
 };
 
-/**
+
+/*
 | User pressed up key.
 */
-Chat.prototype.keyUp = function() {
-	return true;
-};
+Chat.prototype.keyUp = function()
+	{ return true; };
 
-/**
+
+/*
 | Adds a message.
 */
-Chat.prototype.addMessage = function(msg) {
+Chat.prototype.addMessage = function(msg)
+{
 	this.messages.push(msg);
-	if (this.messages.length > 10) { this.messages.unshift(); }
+
+	if (this.messages.length > 10)
+		{ this.messages.unshift(); }
+
 	this.poke();
 };
 
-/**
+
+/*
+| Control takes focus.
+*/
+Chat.prototype.setFocus = function()
+{
+	shell.setCaret(
+		'board',
+		{
+			path : new Path([this.panel.name, this.name]),
+			at1  : this.itext.length
+		}
+	);
+
+	this.poke();
+};
+
+
+/*
 | Mouse down.
 */
-Chat.prototype.mousedown = function(p, shift, ctrl) {
+Chat.prototype.mousedown = function(p, shift, ctrl)
+{
 	var pp = p.sub(this.pnw);
 	var fabric = this._weave();
 	if (!fabric.within(this, 'sketchILine', Euclid.View.proper, pp))
 		{ return null; }
 
-	shell.setCaret('board', {
-		path : new Path([this.panel.name, this.name]),
-		at1  : this.itext.length
-	});
+	shell.setCaret(
+		'board',
+		{
+			path : new Path([this.panel.name, this.name]),
+			at1  : this.itext.length
+		}
+	);
 
 	return false;
 };
 
-/**
+
+/*
 | Mouse hover
 */
-Chat.prototype.mousehover = function(p, shift, ctrl) {
+Chat.prototype.mousehover = function(p, shift, ctrl)
+{
 	if (p === null)
 		{ return null; }
 
@@ -369,10 +473,12 @@ Chat.prototype.mousehover = function(p, shift, ctrl) {
 		{ return "default"; }
 };
 
-/**
+
+/*
 | Draws the input line
 */
-Chat.prototype.sketchILine = function(fabric, border, twist) {
+Chat.prototype.sketchILine = function(fabric, border, twist)
+{
 	var ox   = 0;
 	var w    = fabric.width - 1;
 	var psex = w  - this.sideSlopeX;
@@ -387,35 +493,42 @@ Chat.prototype.sketchILine = function(fabric, border, twist) {
 	fabric.lineTo(                  pnwx, psey);
 };
 
-/**
+
+/*
 | Pokes the component
 */
-Chat.prototype.poke = function() {
+Chat.prototype.poke = function()
+{
 	this.$fabric = null;
 	this.panel.poke();
 };
 
-/**
+
+/*
 | Force clears all caches.
 */
-Chat.prototype.knock = function() {
+Chat.prototype.knock = function()
+{
 	this.$fabric = null;
 };
 
-/**
+
+/*
 | User pressed a special key
 */
-Chat.prototype.specialKey = function(key) {
-	switch(key) {
-	case 'backspace' : this.keyBackspace(); break;
-	case 'del'       : this.keyDel();       break;
-	case 'down'      : this.keyDown();      break;
-	case 'end'       : this.keyEnd();       break;
-	case 'enter'     : this.keyEnter();     break;
-	case 'left'      : this.keyLeft();      break;
-	case 'pos1'      : this.keyPos1();      break;
-	case 'right'     : this.keyRight();     break;
-	case 'up'        : this.keyUp();        break;
+Chat.prototype.specialKey = function(key)
+{
+	switch(key)
+	{
+		case 'backspace' : this.keyBackspace(); break;
+		case 'del'       : this.keyDel();       break;
+		case 'down'      : this.keyDown();      break;
+		case 'end'       : this.keyEnd();       break;
+		case 'enter'     : this.keyEnter();     break;
+		case 'left'      : this.keyLeft();      break;
+		case 'pos1'      : this.keyPos1();      break;
+		case 'right'     : this.keyRight();     break;
+		case 'up'        : this.keyUp();        break;
 	}
 };
 

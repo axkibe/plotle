@@ -23,13 +23,15 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/**
+
+/*
 | Export
 */
 var Dash;
 Dash = Dash || {};
 
-/**
+
+/*
 | Imports
 */
 var Action;
@@ -42,36 +44,39 @@ var shell;
 var system;
 var theme;
 
-/**
+
+/*
 | Capsule
 */
 (function(){
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
-/**
+
+/*
 | Constructor.
 */
-var Button = Dash.Button = function(twig, panel, inherit, name) {
+var Button = Dash.Button = function(twig, panel, inherit, name)
+{
 	if (twig.type !== 'Button')
 		{ throw new Error('invalid twig type'); }
 
-	this.name    = name;
-	this.twig    = twig;
-	this.panel   = panel;
+	this.name         = name;
+	this.twig         = twig;
+	this.panel        = panel;
 
 	var computePoint  = Curve.computePoint;
 	var pnw           = this.pnw    = computePoint(twig.frame.pnw, panel.iframe);
 	var pse           = this.pse    = computePoint(twig.frame.pse, panel.iframe);
 	var iframe        = this.iframe = new Euclid.Rect(Euclid.Point.zero, pse.sub(pnw));
 
-	this.curve      = new Curve(twig.curve, iframe);
-	this.captionPos = computePoint(twig.caption.pos, iframe);
-	this.$path      = new Path([panel.name, name]);
+	this.curve        = new Curve(twig.curve, iframe);
+	this.captionPos   = computePoint(twig.caption.pos, iframe);
+	this.$path        = new Path([panel.name, name]);
 
 	// if true repeats the action on mousedown
-	this.repeat   = false;
-	this.$retimer = null;
+	this.repeat       = false;
+	this.$retimer     = null;
 
 	this.$active      = inherit ? inherit.$active : false;
 	this.$fabric      = null;
@@ -80,37 +85,75 @@ var Button = Dash.Button = function(twig, panel, inherit, name) {
 	this.$accent      = Dash.Accent.NORMAL;
 };
 
-/**
+
+/*
 | Returns true if this component can focus.
 */
-Button.prototype.canFocus = function() {
+Button.prototype.canFocus = function()
+{
 	return this.$visible;
 };
 
-/**
+
+/*
+| Control takes focus.
+*/
+Button.prototype.setFocus = function()
+{
+	shell.setCaret(
+		'board',
+		{
+			path : new Path( [ this.panel.name, this.name ] ),
+			at1  : 0
+		}
+	);
+
+	this.poke();
+};
+
+
+/*
 | Sketches the button.
 */
-Button.prototype.sketch = function(fabric, border, twist) {
+Button.prototype.sketch = function(fabric, border, twist)
+{
 	this.curve.sketch(fabric, border, twist);
 };
 
-/**
+
+/*
 | Returns the fabric for the button.
 */
-Button.prototype._weave = function(accent) {
+Button.prototype._weave = function(accent)
+{
 	var fabric = this.$fabric;
-	if (fabric && this.$accent === accent && !config.debug.noCache) { return fabric; }
+
+	if (fabric && this.$accent === accent && !config.debug.noCache)
+		{ return fabric; }
 
 	fabric   = this.$fabric = new Euclid.Fabric(this.iframe);
 	var twig = this.twig;
 
 	var sname;
 	switch (accent) {
-	case Dash.Accent.NORMA : sname = twig.normaStyle; break;
-	case Dash.Accent.HOVER : sname = twig.hoverStyle; break;
-	case Dash.Accent.FOCUS : sname = twig.focusStyle; break;
-	case Dash.Accent.HOFOC : sname = twig.hofocStyle; break;
-	default : throw new Error('Invalid accent: ' + accent);
+		case Dash.Accent.NORMA :
+			sname = twig.normaStyle;
+			break;
+
+		case Dash.Accent.HOVER :
+			sname = twig.hoverStyle;
+			break;
+
+		case Dash.Accent.FOCUS :
+			sname = twig.focusStyle;
+			break;
+
+		case Dash.Accent.HOFOC :
+			sname = twig.hofocStyle;
+			break;
+
+		default :
+			throw new Error('Invalid accent: ' + accent);
 	}
 
 	var style = Dash.getStyle(sname);
@@ -135,21 +178,22 @@ Button.prototype._weave = function(accent) {
 	return fabric;
 };
 
-/**
+
+/*
 | Input
 */
-Button.prototype.input = function(text) {
-	return true;
-};
+Button.prototype.input = function(text)
+	{ return true; };
 
-/**
+
+/*
 | Input
 */
-Button.prototype.specialKey = function(key, shift, ctrl) {
-	return true;
-};
+Button.prototype.specialKey = function(key, shift, ctrl)
+	{ return true; };
 
-/**
+
+/*
 | Mouse hover.
 */
 Button.prototype.mousehover = function(p) {
@@ -172,17 +216,19 @@ Button.prototype.mousehover = function(p) {
 	return 'default';
 };
 
-/**
+
+/*
 | Button has been pushed
 */
-Button.prototype.push = function(shift, ctrl) {
-	// no default
-};
+Button.prototype.push = function(shift, ctrl)
+	{ /* no default */ };
 
-/**
+
+/*
 | Mouse down.
 */
-Button.prototype.mousedown = function(p, shift, ctrl) {
+Button.prototype.mousedown = function(p, shift, ctrl)
+{
 	var self = this;
 
 	if (!this.$visible)
@@ -192,7 +238,8 @@ Button.prototype.mousedown = function(p, shift, ctrl) {
 		p.y < this.pnw.y ||
 		p.x > this.pse.x ||
 		p.y > this.pse.y
-	) { return null; }
+	)
+		{ return null; }
 
 	var fabric = this._weave(Dash.Accent.NORMA);
 	var pp = p.sub(this.pnw);
@@ -208,11 +255,13 @@ Button.prototype.mousedown = function(p, shift, ctrl) {
 		);
 
 		var repeatFunc;
-		repeatFunc = function() {
-			self.push(false, false);
-			self.$retimer = system.setTimer(theme.zoom.repeatTimer, repeatFunc);
-			shell.poke();
-		};
+		repeatFunc = function()
+			{
+				self.push(false, false);
+				self.$retimer = system.setTimer(theme.zoom.repeatTimer, repeatFunc);
+				shell.poke();
+			}
+			;
 		this.$retimer = system.setTimer(theme.zoom.firstTimer, repeatFunc);
 	}
 
@@ -221,58 +270,80 @@ Button.prototype.mousedown = function(p, shift, ctrl) {
 	return this.repeat ? 'drag' : false;
 };
 
-/**
+
+/*
 | Special keys for buttons having focus
 */
-Button.prototype.specialKey = function(key) {
+Button.prototype.specialKey = function(key)
+{
 	switch (key) {
-	case 'down'  : this.panel.cycleFocus(+1);    return;
-	case 'up'    : this.panel.cycleFocus(-1);    return;
-	case 'enter' : this.push(false, false); return;
+		case 'down' :
+			this.panel.cycleFocus(+1);
+			return;
+
+		case 'up' :
+			this.panel.cycleFocus(-1);
+			return;
+
+		case 'enter' :
+			this.push(false, false);
+			return;
 	}
 };
 
-/**
+
+/*
 | Any normal keys for a buttons having focus triggers a push.
 */
-Button.prototype.input = function(text) {
+Button.prototype.input = function(text)
+{
 	this.push(false, false);
 	return true;
 };
 
 
-/**
+/*
 | Draws the button.
 */
-Button.prototype.draw = function(fabric, accent) {
-	if (!this.$visible) { return; }
+Button.prototype.draw = function(fabric, accent)
+{
+	if (!this.$visible)
+		{ return; }
+
 	fabric.drawImage(this._weave(accent), this.pnw);
 };
 
-/**
-| Clears all caches
+
+/*
+| Clears all caches.
 */
-Button.prototype.poke = function() {
+Button.prototype.poke = function()
+{
 	this.$fabric = null;
 	this.panel.poke();
 };
 
-/**
+
+/*
 | Force clears all caches.
 */
-Button.prototype.knock = function() {
+Button.prototype.knock = function()
+{
 	this.$fabric = null;
 };
 
 
-/**
+
+/*
 | Stops a REBUTTON action.
 */
-Button.prototype.actionstop = function() {
+Button.prototype.actionstop = function()
+{
 	system.cancelTimer(this.$retimer);
 	this.$retimer = null;
 
 	shell.stopAction();
 };
+
 
 })();
