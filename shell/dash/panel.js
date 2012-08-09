@@ -23,11 +23,13 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+
 /**
 | Export
 */
 var Dash;
 Dash = Dash || {};
+
 
 /**
 | Imports
@@ -42,6 +44,7 @@ var Proc;
 var shell;
 var Tree;
 
+
 /**
 | Capsule
 */
@@ -49,10 +52,12 @@ var Tree;
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
+
 /**
 | Constructor
 */
-var Panel = Dash.Panel = function(name, inherit, board, screensize) {
+var Panel = Dash.Panel = function(name, inherit, board, screensize)
+{
 	this.name  = name;
 	this.board = board;
 	var tree   = this.tree  = new Tree(Design[name], Design.Pattern);
@@ -72,39 +77,55 @@ var Panel = Dash.Panel = function(name, inherit, board, screensize) {
 
 	this.$sub = {};
 	var layout = tree.root.layout;
-	for(var a = 0, aZ = layout.length; a < aZ; a++) {
+
+	for(var a = 0, aZ = layout.length; a < aZ; a++)
+	{
 		var cname = layout.ranks[a];
 		var twig  = layout.copse[cname];
 		this.$sub[cname] = this.newControl(twig, inherit && inherit.$sub[cname], cname);
 	}
 };
 
+
 /**
 | Creates a new component.
 */
-Panel.prototype.newControl = function(twig, inherit, name) {
-	if (twig.code && twig.code !== '') {
+Panel.prototype.newControl = function(twig, inherit, name)
+{
+	if (twig.code && twig.code !== '')
+	{
 		var Proto = Proc[twig.code];
-		if (Proto) {
-			return new Proto(twig, this, inherit, name);
-		} else {
-			throw new Error('No prototype for :' + twig.code);
-		}
+		if (Proto)
+			{ return new Proto(twig, this, inherit, name); }
+		else
+			{ throw new Error('No prototype for :' + twig.code); }
 	}
 
 	switch(twig.type) {
-	case 'Chat'   : return new Dash.Chat   (twig, this, inherit, name);
-	case 'Button' : return new Dash.Button (twig, this, inherit, name);
-	case 'Input'  : return new Dash.Input  (twig, this, inherit, name);
-	case 'Label'  : return new Dash.Label  (twig, this, inherit, name);
-	default       : throw new Error('Invalid component type: ' + twig.type);
+
+		case 'Chat'   :
+			return new Dash.Chat(twig, this, inherit, name);
+
+		case 'Button' :
+			return new Dash.Button (twig, this, inherit, name);
+
+		case 'Input' :
+			return new Dash.Input  (twig, this, inherit, name);
+
+		case 'Label' :
+			return new Dash.Label  (twig, this, inherit, name);
+
+		default :
+			throw new Error('Invalid component type: ' + twig.type);
 	}
 };
+
 
 /**
 | Returns the focused item.
 */
-Panel.prototype.focusedControl = function() {
+Panel.prototype.focusedControl = function()
+{
 	var caret = shell.caret;
 
 	if (caret.section !== 'board')
@@ -119,47 +140,54 @@ Panel.prototype.focusedControl = function() {
 	return this.$sub[path.get(1)] || null;
 };
 
+
 /**
 | Sketches the panels frame.
 */
-Panel.prototype.sketch = function(fabric, border, twist) {
-	this.curve.sketch(fabric, border, twist);
-};
+Panel.prototype.sketch = function(fabric, border, twist)
+	{ this.curve.sketch(fabric, border, twist); };
+
 
 /**
 | Force clears all caches.
 */
-Panel.prototype.knock = function() {
+Panel.prototype.knock = function()
+{
 	this.$fabric = null;
-	for(var c in this.$sub) {
-		this.$sub[c].knock();
-	}
+
+	for(var c in this.$sub)
+		{ this.$sub[c].knock(); }
 };
+
 
 /**
 | Draws the panels contents.
 */
-Panel.prototype._weave = function() {
+Panel.prototype._weave = function()
+{
 	if (this.$fabric && !config.debug.noCache)
 		{ return this.$fabric; }
 
 	var iframe = this.iframe;
 	var fabric = this.$fabric = new Euclid.Fabric(iframe);
 	var style = Dash.getStyle(this.tree.root.style);
-	if (!style) { throw new Error('no style!'); }
+	if (!style)
+		{ throw new Error('no style!'); }
 
 	fabric.fill(style.fill, this, 'sketch', Euclid.View.proper);
 	var layout = this.tree.root.layout;
 
 	var focus = this.focusedControl();
-	for(var a = layout.length - 1; a >= 0; a--) {
+	for(var a = layout.length - 1; a >= 0; a--)
+	{
 		var cname = layout.ranks[a];
 		var c = this.$sub[cname];
 		c.draw(fabric, Dash.Accent.state(cname === this.$hover || c.$active, c === focus));
 	}
 	fabric.edge(style.edge, this, 'sketch', Euclid.View.proper);
 
-	if (config.debug.drawBoxes) {
+	if (config.debug.drawBoxes)
+	{
 		fabric.paint(
 			Dash.getStyles('boxes'),
 			new Euclid.Rect(iframe.pnw,
@@ -172,37 +200,45 @@ Panel.prototype._weave = function() {
 	return fabric;
 };
 
+
 /**
 | Draws the panel.
 */
-Panel.prototype.draw = function(fabric) {
-	fabric.drawImage(this._weave(), this.pnw);
-};
+Panel.prototype.draw = function(fabric)
+	{ fabric.drawImage(this._weave(), this.pnw); };
+
 
 /**
 | Draws the caret.
 */
-Panel.prototype.drawCaret = function(view) {
+Panel.prototype.drawCaret = function(view)
+{
 	var cname = shell.caret.sign.path.get(1);
 	var ce = this.$sub[cname];
-	if (!ce) { throw new Error('Caret component does not exist!'); }
-	if (ce.drawCaret) { ce.drawCaret(view); }
+	if (!ce)
+		{ throw new Error('Caret component does not exist!'); }
+
+	if (ce.drawCaret)
+		{ ce.drawCaret(view); }
 };
+
 
 /**
 | Returns true if point is on this panel.
 */
-Panel.prototype.mousehover = function(p, shift, ctrl) {
+Panel.prototype.mousehover = function(p, shift, ctrl)
+{
 	var pnw = this.pnw;
 	var pse = this.pse;
 	var fabric = this._weave();
 	var a, aZ;
 
-	if(p === null) { return this.setHover(null); }
+	if (p === null)
+		{ return this.setHover(null); }
 
-	if (p.y < pnw.y || p.x < pnw.x || p.x > pse.x) {
-		return this.setHover(null);
-	}
+	if (p.y < pnw.y || p.x < pnw.x || p.x > pse.x)
+		{ return this.setHover(null); }
+
 	var pp = p.sub(pnw);
 
 	// FIXME Optimize by reusing the latest path of this.$fabric
@@ -212,38 +248,45 @@ Panel.prototype.mousehover = function(p, shift, ctrl) {
 	var cursor = null;
 
 	var layout = this.tree.root.layout;
-	for(a = 0, aZ = layout.length; a < aZ; a++) {
+	for(a = 0, aZ = layout.length; a < aZ; a++)
+	{
 		var cname = layout.ranks[a];
 		var ce = this.$sub[cname];
 
-		if (cursor) {
-			ce.mousehover(null, shift, ctrl);
-		} else {
-			cursor = ce.mousehover(pp, shift, ctrl);
-		}
+		if (cursor)
+			{ ce.mousehover(null, shift, ctrl); }
+		else
+			{ cursor = ce.mousehover(pp, shift, ctrl); }
 	}
 
-	if (cursor === null) { this.setHover(null); }
+	if (cursor === null)
+		{ this.setHover(null); }
 
 	return cursor || 'default';
 };
 
+
 /**
 | Returns true if point is on this panel.
 */
-Panel.prototype.mousedown = function(p, shift, ctrl) {
+Panel.prototype.mousedown = function(p, shift, ctrl)
+{
 	var pnw = this.pnw;
 	var pse = this.pse;
 	var fabric = this._weave();
 	var a, aZ;
-	if (p.y < pnw.y || p.x < pnw.x || p.x > pse.x) {
+
+	if (p.y < pnw.y || p.x < pnw.x || p.x > pse.x)
+	{
 		this.setHover(null);
 		return null;
 	}
+
 	var pp = p.sub(pnw);
 
 	// FIXME Optimize by reusing the latest path of this.$fabric
-	if (!fabric.within(this, 'sketch', Euclid.View.proper, pp))  {
+	if (!fabric.within(this, 'sketch', Euclid.View.proper, pp))
+	{
 		this.setHover(null);
 		return null;
 	}
@@ -253,8 +296,10 @@ Panel.prototype.mousedown = function(p, shift, ctrl) {
 		var cname = layout.ranks[a];
 		var ce = this.$sub[cname];
 		var r = ce.mousedown(pp, shift, ctrl);
-		if (r) { return r; }
+		if (r)
+			{ return r; }
 	}
+
 	this.setHover(null);
 	return false;
 };
@@ -262,52 +307,71 @@ Panel.prototype.mousedown = function(p, shift, ctrl) {
 /**
 | Text input.
 */
-Panel.prototype.input = function(text) {
+Panel.prototype.input = function(text)
+{
 	var focus = this.focusedControl();
-	if (!focus) { return; }
+	if (!focus)
+		{ return; }
+
 	focus.input(text);
 };
 
 /**
 | Cycles the focus
 */
-Panel.prototype.cycleFocus = function(dir) {
+Panel.prototype.cycleFocus = function(dir)
+{
 	var layout = this.tree.root.layout;
-	var focus = this.focusedControl();
-	if (!focus) { return; }
+	var focus  = this.focusedControl();
+	if (!focus)
+		{ return; }
+
 	var rank = layout.rankOf(focus.name);
-	var rs = rank;
+	var rs   = rank;
 	var cname;
 	var ve;
-	do {
+
+	do
+	{
 		rank = (rank + dir + layout.length) % layout.length;
-		if (rank === rs) { this.setFocus(null); }
+
+		if (rank === rs)
+			{ this.setFocus(null); }
+
 		cname = layout.ranks[rank];
 		ve    = this.$sub[cname];
 	} while (!ve.canFocus());
 
 	this.setFocus(cname);
 	return;
-
 };
+
 
 /**
 | User pressed a special key.
 */
-Panel.prototype.specialKey = function(key, shift, ctrl) {
+Panel.prototype.specialKey = function(key, shift, ctrl)
+{
 	var focus = this.focusedControl();
-	if (!focus) return;
-	if (key === 'tab') {
+
+	if (!focus)
+		{ return; }
+
+	if (key === 'tab')
+	{
 		this.cycleFocus(shift ? -1 : 1);
 		return;
 	}
+
 	focus.specialKey(key, shift, ctrl);
 };
+
 
 /**
 | Clears caches.
 */
-Panel.prototype.poke = function() {
+Panel.prototype.poke = function()
+{
 	this.$fabric = null;
 	shell.redraw = true;
 };
@@ -316,22 +380,30 @@ Panel.prototype.poke = function() {
 /**
 | Sets the focused component.
 */
-Panel.prototype.setFocus = function(cname) {
+Panel.prototype.setFocus = function(cname)
+{
 	var com = this.$sub[cname];
 	var focus = this.focusedControl();
-	if (focus === com) { return; }
+	if (focus === com)
+		{ return; }
 
-	shell.setCaret('board', {
-		path : new Path([this.name, cname]),
-		at1  : 0
-	});
+	// XXX
+	shell.setCaret(
+		'board',
+		{
+			path : new Path([this.name, cname]),
+			at1  : 0
+		}
+	);
 };
 
 /**
 | Sets the hovered component.
 */
-Panel.prototype.setHover = function(cname) {
-	if (this.$hover === cname) { return null; }
+Panel.prototype.setHover = function(cname)
+{
+	if (this.$hover === cname)
+		{ return null; }
 
 	this.$fabric = null;
 	shell.redraw = true;
@@ -343,7 +415,9 @@ Panel.prototype.setHover = function(cname) {
 		{ this.$sub[cname].knock(); }
 
 	this.$hover = cname;
+
 	return null;
 };
+
 
 })();
