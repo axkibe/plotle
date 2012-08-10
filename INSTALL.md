@@ -1,23 +1,23 @@
 Installing a MeshCraft instance
 ===============================
 
-* Have Node.js installed, version >= 0.8, see http://nodejs.org
+* Get Node.js installed, version >= 0.8, see http://nodejs.org.
 
-* Have mongodb installed
+* Get mongodb installed.
 
 * Clone the meshcraft repository and go into that directory
 ```shell
-git clone XXX
+git clone git://github.com/axkibe/meshcraft.git
 cd meshcraft
 ```
 
-* Install streamline (an awesome utility to simply Node.js coding) It has a global and a local part, so you have to call npm twice
+* Install streamline (an awesome utility to simplify Node.js coding) It has a global and a local part, so you have to call npm twice
 ```shell
 sudo npm -g install streamline
 npm install streamline
 ```
 
-* Install following node modules in the MeshCraft directory
+* Install the mongodb and uglify-js node modules
 ```shell
 npm install mongodb
 npm install uglify-js
@@ -44,4 +44,4 @@ screen
 
 * Done!
 
-Note that http://localhost:8833/devel.html serves a non-compressed version of the shell, useful for debugging. This one is also not cached so that always the newest version on disc will be delivered.
+Note that http://localhost:8833/devel.html serves a non-compressed version of the shell, useful for debugging. This one is also not cached so the newest version on disc will be delivered.
