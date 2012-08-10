@@ -331,7 +331,7 @@ Panel.prototype.cycleFocus = function(dir)
 	var cname;
 	var ve;
 
-	do
+	while (true)
 	{
 		rank = (rank + dir + layout.length) % layout.length;
 
@@ -340,9 +340,11 @@ Panel.prototype.cycleFocus = function(dir)
 
 		cname = layout.ranks[rank];
 		ve    = this.$sub[cname];
-	} while (!ve.canFocus());
 
-	this.setFocus(cname);
+		if (this.setFocus(cname))
+			{ break; }
+	}
+
 	return;
 };
 
@@ -386,9 +388,9 @@ Panel.prototype.setFocus = function(cname)
 	var focus = this.focusedControl();
 
 	if (focus === com)
-		{ return; }
+		{ return true; }
 
-	com.setFocus();
+	return com.setFocus();
 };
 
 /**

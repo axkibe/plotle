@@ -77,13 +77,6 @@ var Chat = Dash.Chat = function(twig, panel, inherit, name)
 
 
 /*
-| Chat components can focus.
-*/
-Chat.prototype.canFocus = function()
-	{ return true; };
-
-
-/*
 | Returns the caret position relative to the panel.
 */
 Chat.prototype.getCaretPos = function()
@@ -426,6 +419,8 @@ Chat.prototype.setFocus = function()
 	);
 
 	this.poke();
+
+	return true;
 };
 
 

@@ -86,20 +86,15 @@ var Button = Dash.Button = function(twig, panel, inherit, name)
 };
 
 
-/*
-| Returns true if this component can focus.
-*/
-Button.prototype.canFocus = function()
-{
-	return this.$visible;
-};
-
 
 /*
 | Control takes focus.
 */
 Button.prototype.setFocus = function()
 {
+	if (!this.$visible)
+		{ return false; }
+
 	shell.setCaret(
 		'board',
 		{
@@ -109,6 +104,8 @@ Button.prototype.setFocus = function()
 	);
 
 	this.poke();
+
+	return true;
 };
 
 

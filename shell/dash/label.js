@@ -59,9 +59,8 @@ var Label = Dash.Label = function(twig, panel, inherit, name) {
 /**
 | Labels cannot focus.
 */
-Label.prototype.canFocus = function() {
-	return false;
-};
+Label.prototype.setFocus = function()
+	{ return false; };
 
 /**
 | Draws the label on the fabric.

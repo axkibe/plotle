@@ -81,12 +81,6 @@ Input.prototype.maskKern = function(size)
 	{ return Math.round(size * 0.15); };
 
 /**
-| The input field is focusable.
-*/
-Input.prototype.canFocus = function()
-	{ return true; };
-
-/**
 | Draws the mask for password fields
 */
 Input.prototype.sketchMask = function(fabric, border, twist, view, length, size)
@@ -522,6 +516,8 @@ Input.prototype.setFocus = function()
 	);
 
 	this.poke();
+
+	return true;
 };
 
 

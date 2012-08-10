@@ -24,41 +24,51 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/**
+
+/*
 | Export
 */
 var Proc;
 Proc = Proc || {};
 
-/**
+
+/*
 | Imports
 */
 var Dash;
 var Jools;
 var shell;
 
-/**
+
+/*
 | Capsule
 */
 (function(){
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
-/**
+
+/*
 | Constructor
 */
-var LoginCloseButton = Proc.LoginCloseButton = function(twig, panel, inherit, name) {
+var LoginCloseButton = Proc.LoginCloseButton = function(twig, panel, inherit, name)
+{
 	Dash.Button.call(this, twig, panel, inherit, name);
 };
+
 Jools.subclass(LoginCloseButton, Dash.Button);
 
-LoginCloseButton.prototype.canFocus = function()
-	{ return true; };
 
-LoginCloseButton.prototype.push = function(shift, ctrl) {
+
+/*
+| Button is being pushed.
+*/
+LoginCloseButton.prototype.push = function(shift, ctrl)
+{
 	Proc.Util.clearLogin(this.panel);
 	this.panel.board.setCurPanel('MainPanel');
 	shell.redraw = true;
 };
+
 
 })();
