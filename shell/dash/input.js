@@ -23,13 +23,15 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/**
+
+/*
 | Export
 */
 var Dash;
 Dash = Dash || {};
 
-/**
+
+/*
 | Imports
 */
 var Caret;
@@ -40,7 +42,8 @@ var Path;
 var shell;
 var theme;
 
-/**
+
+/*
 | Capsule
 */
 (function(){
@@ -48,7 +51,7 @@ var theme;
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
 
-/**
+/*
 | Constructor.
 */
 var Input = Dash.Input = function(twig, panel, inherit, name) {
@@ -67,20 +70,21 @@ var Input = Dash.Input = function(twig, panel, inherit, name) {
 };
 
 
-/**
+/*
 | Returns the width of a character for password masks.
 */
 Input.prototype.maskWidth = function(size)
 	{ return Math.round(size * 0.2); };
 
 
-/**
+/*
 | Returns the kerning of characters for password masks.
 */
 Input.prototype.maskKern = function(size)
 	{ return Math.round(size * 0.15); };
 
-/**
+
+/*
 | Draws the mask for password fields
 */
 Input.prototype.sketchMask = function(fabric, border, twist, view, length, size)
@@ -107,7 +111,7 @@ Input.prototype.sketchMask = function(fabric, border, twist, view, length, size)
 };
 
 
-/**
+/*
 | Returns the fabric for the input field.
 */
 Input.prototype._weave = function(accent)
@@ -183,14 +187,14 @@ Input.prototype._weave = function(accent)
 };
 
 
-/**
+/*
 | Draws the input field.
 */
 Input.prototype.draw = function(fabric, accent)
 	{ fabric.drawImage(this._weave(accent), this.pnw); };
 
 
-/**
+/*
 | Returns the point of a given offset.
 |
 | offset:   the offset to get the point from.
@@ -220,7 +224,7 @@ Input.prototype.locateOffset = function(offset)
 };
 
 
-/**
+/*
 | Returns the caret position relative to the panel.
 */
 Input.prototype.getCaretPos = function()
@@ -241,7 +245,8 @@ Input.prototype.getCaretPos = function()
 	});
 };
 
-/**
+
+/*
 | Draws the caret.
 */
 Input.prototype.drawCaret = function(view)
@@ -268,14 +273,15 @@ Input.prototype.drawCaret = function(view)
 	shell.fabric.fillRect('black', cp.x + 1, cp.y + 1, 1, ch);
 };
 
-/**
+
+/*
 | Returns the current value (text in the box)
 */
 Input.prototype.getValue = function()
 	{ return this._$value; };
 
 
-/**
+/*
 | Sets the current value (text in the box)
 */
 Input.prototype.setValue = function(v)
@@ -285,7 +291,7 @@ Input.prototype.setValue = function(v)
 };
 
 
-/**
+/*
 | User input.
 */
 Input.prototype.input = function(text)
@@ -312,7 +318,8 @@ Input.prototype.input = function(text)
 	this.panel.poke();
 };
 
-/**
+
+/*
 | User pressed backspace.
 */
 Input.prototype.keyBackspace = function()
@@ -338,7 +345,7 @@ Input.prototype.keyBackspace = function()
 };
 
 
-/**
+/*
 | User pressed del.
 */
 Input.prototype.keyDel = function()
@@ -356,7 +363,7 @@ Input.prototype.keyDel = function()
 };
 
 
-/**
+/*
 | User pressed return key.
 */
 Input.prototype.keyEnter = function()
@@ -366,7 +373,7 @@ Input.prototype.keyEnter = function()
 };
 
 
-/**
+/*
 | User pressed down key.
 */
 Input.prototype.keyDown = function()
@@ -376,7 +383,7 @@ Input.prototype.keyDown = function()
 };
 
 
-/**
+/*
 | User pressed end key.
 */
 Input.prototype.keyEnd = function()
@@ -400,7 +407,7 @@ Input.prototype.keyEnd = function()
 };
 
 
-/**
+/*
 | User pressed left key.
 */
 Input.prototype.keyLeft = function()
@@ -423,7 +430,7 @@ Input.prototype.keyLeft = function()
 };
 
 
-/**
+/*
 | User pressed pos1 key
 */
 Input.prototype.keyPos1 = function()
@@ -446,7 +453,7 @@ Input.prototype.keyPos1 = function()
 };
 
 
-/**
+/*
 | User pressed right key
 */
 Input.prototype.keyRight = function()
@@ -469,7 +476,7 @@ Input.prototype.keyRight = function()
 };
 
 
-/**
+/*
 | User pressed up key.
 */
 Input.prototype.keyUp = function()
@@ -479,30 +486,32 @@ Input.prototype.keyUp = function()
 };
 
 
-/**
+/*
 | User pressed a special key
 */
 Input.prototype.specialKey = function(key)
 {
 	var poke = false;
 
-	switch(key) {
-	case 'backspace' : poke = this.keyBackspace(); break;
-	case 'del'       : poke = this.keyDel();       break;
-	case 'down'      : poke = this.keyDown();      break;
-	case 'end'       : poke = this.keyEnd();       break;
-	case 'enter'     : poke = this.keyEnter();     break;
-	case 'left'      : poke = this.keyLeft();      break;
-	case 'pos1'      : poke = this.keyPos1();      break;
-	case 'right'     : poke = this.keyRight();     break;
-	case 'up'        : poke = this.keyUp();        break;
+	switch(key)
+	{
+		case 'backspace' : poke = this.keyBackspace(); break;
+		case 'del'       : poke = this.keyDel();       break;
+		case 'down'      : poke = this.keyDown();      break;
+		case 'end'       : poke = this.keyEnd();       break;
+		case 'enter'     : poke = this.keyEnter();     break;
+		case 'left'      : poke = this.keyLeft();      break;
+		case 'pos1'      : poke = this.keyPos1();      break;
+		case 'right'     : poke = this.keyRight();     break;
+		case 'up'        : poke = this.keyUp();        break;
 	}
 
 	if (poke)
 		{ this.panel.poke(); }
 };
 
-/**
+
+/*
 | Control takes focus.
 */
 Input.prototype.setFocus = function()
@@ -521,7 +530,7 @@ Input.prototype.setFocus = function()
 };
 
 
-/**
+/*
 | Clears all caches
 */
 Input.prototype.poke = function()
@@ -531,14 +540,14 @@ Input.prototype.poke = function()
 };
 
 
-/**
+/*
 | Force clears all caches.
 */
 Input.prototype.knock = function()
 	{ this.$fabric = null; };
 
 
-/**
+/*
 | Mouse hover
 */
 Input.prototype.mousehover = function(p, shift, ctrl)
@@ -562,7 +571,8 @@ Input.prototype.mousehover = function(p, shift, ctrl)
 	return 'text';
 };
 
-/**
+
+/*
 | Mouse down
 */
 Input.prototype.mousedown = function(p, shift, ctrl)
@@ -574,7 +584,9 @@ Input.prototype.mousedown = function(p, shift, ctrl)
 		{ return null; }
 
 	this.panel.setFocus(this.name);
+
 	return false;
 };
+
 
 })();
