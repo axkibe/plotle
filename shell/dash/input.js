@@ -46,15 +46,19 @@ var theme;
 /*
 | Capsule
 */
-(function(){
+(function() {
+
 'use strict';
-if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
+
+if (typeof(window) === 'undefined')
+	{ throw new Error('this code needs a browser!'); }
 
 
 /*
 | Constructor.
 */
-var Input = Dash.Input = function(twig, panel, inherit, name) {
+var Input = Dash.Input = function(twig, panel, inherit, name)
+{
 	this.twig    = twig;
 	this.panel   = panel;
 	this.name    = name;
@@ -64,11 +68,49 @@ var Input = Dash.Input = function(twig, panel, inherit, name) {
 
 	this._bezi   = new Euclid.BeziRect(Euclid.Point.zero, pse.sub(pnw), 7, 3);
 	this._pitch  = new Euclid.Point(8, 3);
+
 	this._$value = inherit ? inherit._$value : '';
 	this.$fabric = null;
 	this.$accent = Dash.Accent.NORMA;
 };
 
+
+/*
+| returns the offset nearest to x coordinate
+*/
+Input.prototype.getOffsetAt = function(p)
+{
+	var pitch = this._pitch;
+	var dx    = p.x - pitch.x;
+	var value = this._$value;
+	var x1 = 0;
+	var x2 = 0;
+	var a;
+	var password = this.twig.password;
+
+	var font  = this.twig.font;
+	var mw;
+
+	if (password)
+		{ mw = this.maskWidth(font.size) * 2 + this.maskKern(font.size); }
+
+	for(a = 0; a < value.length; a++)
+	{
+		x1 = x2;
+		if (password)
+			{ x2 = a * mw; }
+		else
+			{ x2 = Euclid.Measure.width(font, value.substr(0, a)); }
+
+		if (x2 >= dx)
+			{ break; }
+	}
+
+	if (dx - x1 < x2 - dx && a > 0)
+		{ a--; }
+
+	return a;
+};
 
 /*
 | Returns the width of a character for password masks.
@@ -158,7 +200,7 @@ Input.prototype._weave = function(accent)
 	var font = this.twig.font;
 	$fabric.setFont(font);
 
-	if(this.twig.password)
+	if (this.twig.password)
 	{
 		$fabric.fill(
 			'black',
@@ -583,7 +625,15 @@ Input.prototype.mousedown = function(p, shift, ctrl)
 	if (!fabric.within(this._bezi, 'sketch', Euclid.View.proper, pp))
 		{ return null; }
 
-	this.panel.setFocus(this.name);
+	shell.setCaret(
+		'board',
+		{
+			path : new Path ( [this.panel.name, this.name ] ),
+			at1  : this.getOffsetAt(pp)
+		}
+	);
+
+	this.poke();
 
 	return false;
 };

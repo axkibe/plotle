@@ -283,6 +283,8 @@ Para.prototype.getHeight = function()
 
 /*
 | Returns the offset by an x coordinate in a flow.
+|
+| TODO rename
 */
 Para.prototype.getLineXOffset = function(line, x)
 {

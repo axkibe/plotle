@@ -447,6 +447,7 @@ Item.prototype.mousehover = function(view, p)
 Item.prototype.click = function(view, p)
 {
 	var vp = view.depoint(p);
+
 	if (!this.getZone().within(vp))
 		{ return false; }
 
@@ -457,16 +458,18 @@ Item.prototype.click = function(view, p)
 		$space.setFocus(this);
 		shell.selection.deselect();
 	}
+
 	shell.redraw = true;
 
-	var pnw = this.getZone().pnw;
-	var pi = vp.sub(pnw.x, pnw.y - (this.scrollbarY ? this.scrollbarY.getPos() : 0 ));
-
+	var pnw  = this.getZone().pnw;
+	var pi   = vp.sub(pnw.x, pnw.y - (this.scrollbarY ? this.scrollbarY.getPos() : 0 ));
 	var para = this.getParaAtPoint(pi);
+
+	// TODO move into para
 	if (para)
 	{
 		var ppnw   = this.$sub.doc.getPNW(para.$key);
-		var at1    = para.getPointOffset(pi.sub(ppnw));
+		var at1    = para.getPointOffset( pi.sub( ppnw ));
 		var caret  = shell.caret;
 
 		caret = shell.setCaret(
@@ -480,6 +483,7 @@ Item.prototype.click = function(view, p)
 		caret.show();
 		shell.selection.deselect();
 	}
+
 	return true;
 };
 
@@ -512,5 +516,6 @@ Item.prototype.knock = function()
 	this.$fabric = null;
 	this.$sub.doc.knock();
 };
+
 
 })();
