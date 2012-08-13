@@ -24,13 +24,15 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/**
+
+/*
 | Export
 */
 var Visual;
 Visual = Visual || {};
 
-/**
+
+/*
 | Imports
 */
 var Action;
@@ -41,18 +43,22 @@ var shell;
 var system;
 var theme;
 
-/**
+
+/*
 | Capsule
 */
-(function(){
+(function() {
 'use strict';
-if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
-/**
+if (typeof(window) === 'undefined')
+	{ throw new Error('this code needs a browser!'); }
+
+
+/*
 | Constructor.
 */
-var Note = Visual.Note = function(spacename, twig, path) {
-
+var Note = Visual.Note = function(spacename, twig, path)
+{
 	Visual.Item.call(this, spacename, twig, path);
 	this.scrollbarY = new Visual.Scrollbar();
 
@@ -60,15 +66,18 @@ var Note = Visual.Note = function(spacename, twig, path) {
 
 Jools.subclass(Note, Visual.Item);
 
-/**
+
+/*
 | Default margin for all notes.
 */
 Note.prototype.innerMargin = new Euclid.Margin(theme.note.innerMargin);
 
-/**
+
+/*
 | Resize handles to show on notes.
 */
-Note.prototype.handles = {
+Note.prototype.handles =
+{
 	n  : true,
 	ne : true,
 	e  : true,
@@ -79,13 +88,15 @@ Note.prototype.handles = {
 	nw : true
 };
 
-/**
+
+/*
 | Returns the notes silhoutte.
 |
 | $zone :  the cache for the items zone
 | zAnchor: if true anchor the silhoute at zero.
 */
-Note.prototype.getSilhoutte = function($zone, zAnchor) {
+Note.prototype.getSilhoutte = function($zone, zAnchor)
+{
 	var $z = $zone;
 	var $s;
 
@@ -104,10 +115,12 @@ Note.prototype.getSilhoutte = function($zone, zAnchor) {
 	}
 };
 
-/**
+
+/*
 | Actualizes the scrollbar.
 */
-Note.prototype.setScrollbar = function(pos) {
+Note.prototype.setScrollbar = function(pos)
+{
 	var sbary = this.scrollbarY;
 	if (!sbary.visible)
 		{ return; }
@@ -126,34 +139,41 @@ Note.prototype.setScrollbar = function(pos) {
 	);
 };
 
-/**
+
+/*
 | Scrolls the note so the caret comes into view.
 */
-Note.prototype.scrollCaretIntoView = function() {
+Note.prototype.scrollCaretIntoView = function()
+{
 	var caret   = shell.caret;
 	var scrolly = this.scrollbarY;
 	var sy      = scrolly.getPos();
 	var para   = shell.getSub('space', caret.sign.path, -1);
-	if (para.constructor !== Visual.Para) { throw new Error('iFail'); }
+	if (para.constructor !== Visual.Para)
+		{ throw new Error('iFail'); }
 	var cp      = para.getCaretPos();
 	var pnw     = this.$sub.doc.getPNW(para.$key);
 	var zone    = this.getZone();
 	var imargin = this.innerMargin;
 
-	if (cp.n + pnw.y - imargin.n < sy) {
+	if (cp.n + pnw.y - imargin.n < sy)
+	{
 		this.setScrollbar(cp.n + pnw.y - imargin.n);
 		this.poke();
-	} else if (cp.s + pnw.y + imargin.s > sy + zone.height) {
+	}
+	else if (cp.s + pnw.y + imargin.s > sy + zone.height)
+	{
 		this.setScrollbar(cp.s + pnw.y - zone.height + imargin.s);
 		this.poke();
 	}
 };
 
 
-/**
+/*
 | Scrolls the note so the caret comes into view.
 */
-Note.prototype.scrollPage = function(up) {
+Note.prototype.scrollPage = function(up)
+{
 	var zone = this.getZone();
 	var dir  = up ? -1 : 1;
 	var fs   = this.$sub.doc.getFont().size;
@@ -162,36 +182,40 @@ Note.prototype.scrollPage = function(up) {
 	this.poke();
 };
 
-/**
+
+/*
 | Sets the items position and size after an action.
 */
-Note.prototype.actionstop = function(view, p) {
+Note.prototype.actionstop = function(view, p)
+{
 	var $action = shell.$action;
 	switch ($action.type) {
-	case Action.ITEMDRAG :
-	case Action.ITEMRESIZE :
-		var zone = this.getZone();
+		case Action.ITEMDRAG :
+		case Action.ITEMRESIZE :
+			var zone = this.getZone();
 
-		if (zone.width < theme.note.minWidth || zone.height < theme.note.minHeight) {
-			throw new Error('Note under minimum size!');
-		}
+			if (zone.width < theme.note.minWidth || zone.height < theme.note.minHeight) {
+				throw new Error('Note under minimum size!');
+			}
 
-		if (this.twig.zone.eq(zone)) return;
-		shell.peer.setZone(this.$path, zone);
+			if (this.twig.zone.eq(zone)) return;
+			shell.peer.setZone(this.$path, zone);
 
-		shell.redraw = true;
-		return true;
-	default :
-		return Visual.Item.prototype.actionstop.call(this, view, p);
+			shell.redraw = true;
+			return true;
+		default :
+			return Visual.Item.prototype.actionstop.call(this, view, p);
 	}
 };
 
-/**
+
+/*
 | Draws the note.
 |
 | fabric: to draw upon.
 */
-Note.prototype.draw = function(fabric, view) {
+Note.prototype.draw = function(fabric, view)
+{
 	var zone  = this.getZone();
 	var vzone = view.rect(zone);
 	var f     = this.$fabric;
@@ -229,10 +253,12 @@ Note.prototype.draw = function(fabric, view) {
 	}
 };
 
-/**
+
+/*
 | Mouse wheel turned.
 */
-Note.prototype.mousewheel = function(view, p, dir, shift, ctrl) {
+Note.prototype.mousewheel = function(view, p, dir, shift, ctrl)
+{
 	var dp = view.depoint(p);
 
 	if (!this.getZone().within(dp)) return false;
@@ -242,28 +268,32 @@ Note.prototype.mousewheel = function(view, p, dir, shift, ctrl) {
 	return true;
 };
 
-/**
+
+/*
 | Returns the width for the contents flow.
 */
-Note.prototype.getFlowWidth = function() {
+Note.prototype.getFlowWidth = function()
+{
 	var zone  = this.getZone();
 	var flowWidth = zone.width - this.innerMargin.x;
 
 	return flowWidth;
 };
 
-/**
+
+/*
 | Returns the para seperation height.
 */
-Note.prototype.getParaSep = function(fontsize) {
-	return Jools.half(fontsize);
-};
+Note.prototype.getParaSep = function(fontsize)
+	{ return Jools.half(fontsize); };
 
-/**
+
+/*
 | Returns the zone of the item.
 | An ongoing action can modify this to be different than meshmashine data.
 */
-Note.prototype.getZone = function() {
+Note.prototype.getZone = function()
+{
 	var twig    = this.twig;
 	var $action = shell.$action;
 	var max     = Math.max;
@@ -274,69 +304,70 @@ Note.prototype.getZone = function() {
 
 	// FIXME cache the last zone
 
-	switch ($action.type) {
-	case Action.ITEMDRAG:
-		return twig.zone.add(
-			$action.move.x - $action.start.x,
-			$action.move.y - $action.start.y);
+	switch ($action.type)
+	{
+		case Action.ITEMDRAG:
+			return twig.zone.add(
+				$action.move.x - $action.start.x,
+				$action.move.y - $action.start.y);
 
-	case Action.ITEMRESIZE:
-		var szone = $action.startZone;
-		if (!szone) return twig.zone;
-		var spnw = szone.pnw;
-		var spse = szone.pse;
-		var dx = $action.move.x - $action.start.x;
-		var dy = $action.move.y - $action.start.y;
-		var minw = theme.note.minWidth;
-		var minh = theme.note.minHeight;
-		var pnw, pse;
+		case Action.ITEMRESIZE:
+			var szone = $action.startZone;
+			if (!szone) return twig.zone;
+			var spnw = szone.pnw;
+			var spse = szone.pse;
+			var dx = $action.move.x - $action.start.x;
+			var dy = $action.move.y - $action.start.y;
+			var minw = theme.note.minWidth;
+			var minh = theme.note.minHeight;
+			var pnw, pse;
 
-		switch ($action.align) {
-		case 'n'  :
-			pnw = Euclid.Point.renew(spnw.x, min(spnw.y + dy, spse.y - minh), spnw, spse);
-			pse = spse;
-			break;
-		case 'ne' :
-			pnw = Euclid.Point.renew(
-				spnw.x, min(spnw.y + dy, spse.y - minh), spnw, spse);
-			pse = Euclid.Point.renew(
-				max(spse.x + dx, spnw.x + minw), spse.y, spnw, spse);
-			break;
-		case 'e'  :
-			pnw = spnw;
-			pse = Euclid.Point.renew(max(spse.x + dx, spnw.x + minw), spse.y, spnw, spse);
-			break;
-		case 'se' :
-			pnw = spnw;
-			pse = Euclid.Point.renew(
-				max(spse.x + dx, spnw.x + minw),
-				max(spse.y + dy, spnw.y + minh), spnw, spse);
-			break;
-		case 's' :
-			pnw = spnw;
-			pse = Euclid.Point.renew(spse.x, max(spse.y + dy, spnw.y + minh), spnw, spse);
-			break;
-		case 'sw'  :
-			pnw = Euclid.Point.renew(min(spnw.x + dx, spse.x - minw), spnw.y, spnw, spse);
-			pse = Euclid.Point.renew(spse.x, max(spse.y + dy, spnw.y + minh), spnw, spse);
-			break;
-		case 'w'   :
-			pnw = Euclid.Point.renew(min(spnw.x + dx, spse.x - minw), spnw.y, spnw, spse);
-			pse = spse;
-			break;
-		case 'nw' :
-			pnw = Euclid.Point.renew(
-				min(spnw.x + dx, spse.x - minw),
-				min(spnw.y + dy, spse.y - minh), spnw, spse);
-			pse = spse;
-			break;
-		//case 'c' :
-		default  :
-			throw new Error('unknown align');
-		}
-		return new Euclid.Rect(pnw, pse);
-	default :
-		return twig.zone;
+			switch ($action.align) {
+			case 'n'  :
+				pnw = Euclid.Point.renew(spnw.x, min(spnw.y + dy, spse.y - minh), spnw, spse);
+				pse = spse;
+				break;
+			case 'ne' :
+				pnw = Euclid.Point.renew(
+					spnw.x, min(spnw.y + dy, spse.y - minh), spnw, spse);
+				pse = Euclid.Point.renew(
+					max(spse.x + dx, spnw.x + minw), spse.y, spnw, spse);
+				break;
+			case 'e'  :
+				pnw = spnw;
+				pse = Euclid.Point.renew(max(spse.x + dx, spnw.x + minw), spse.y, spnw, spse);
+				break;
+			case 'se' :
+				pnw = spnw;
+				pse = Euclid.Point.renew(
+					max(spse.x + dx, spnw.x + minw),
+					max(spse.y + dy, spnw.y + minh), spnw, spse);
+				break;
+			case 's' :
+				pnw = spnw;
+				pse = Euclid.Point.renew(spse.x, max(spse.y + dy, spnw.y + minh), spnw, spse);
+				break;
+			case 'sw'  :
+				pnw = Euclid.Point.renew(min(spnw.x + dx, spse.x - minw), spnw.y, spnw, spse);
+				pse = Euclid.Point.renew(spse.x, max(spse.y + dy, spnw.y + minh), spnw, spse);
+				break;
+			case 'w'   :
+				pnw = Euclid.Point.renew(min(spnw.x + dx, spse.x - minw), spnw.y, spnw, spse);
+				pse = spse;
+				break;
+			case 'nw' :
+				pnw = Euclid.Point.renew(
+					min(spnw.x + dx, spse.x - minw),
+					min(spnw.y + dy, spse.y - minh), spnw, spse);
+				pse = spse;
+				break;
+			//case 'c' :
+			default  :
+				throw new Error('unknown align');
+			}
+			return new Euclid.Rect(pnw, pse);
+		default :
+			return twig.zone;
 	}
 };
 
