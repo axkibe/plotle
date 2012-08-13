@@ -23,13 +23,15 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/**
+
+/*
 | Export
 */
 var Visual;
 Visual = Visual || {};
 
-/**
+
+/*
 | Imports
 */
 var Euclid;
@@ -38,14 +40,18 @@ var Path;
 var shell;
 var theme;
 
-/**
+
+/*
 | Capsule
 */
 (function(){
 'use strict';
-if (typeof(window) === 'undefined') { throw new Error('this code requires a browser!'); }
 
-/**
+if (typeof(window) === 'undefined')
+	{ throw new Error('this code requires a browser!'); }
+
+
+/*
 | Constructor.
 */
 var Doc = Visual.Doc = function(spacename, twig, path)
@@ -66,9 +72,11 @@ var Doc = Visual.Doc = function(spacename, twig, path)
 		$sub[k] = new Visual.Para( spacename, copse[k], new Path( path, '++', k ) );
 	}
 };
+
 Jools.subclass(Doc, Visual.Base);
 
-/**
+
+/*
 | Returns the vtwig at rank 'rank'.
 */
 Doc.prototype.atRank = function(rank)
@@ -76,7 +84,8 @@ Doc.prototype.atRank = function(rank)
 	return this.$sub[this.twig.ranks[rank]];
 };
 
-/**
+
+/*
 | Updates v-vine to match a new twig.
 */
 Doc.prototype.update = function(twig)
@@ -107,7 +116,8 @@ Doc.prototype.update = function(twig)
 
 };
 
-/**
+
+/*
 | Draws the document on a fabric.
 |
 | fabric:      to draw upon
@@ -154,7 +164,8 @@ Doc.prototype.draw = function(fabric, view, width, innerMargin, scrollp)
 	this._$pnws = pnws;   // north-west points of paras
 };
 
-/**
+
+/*
 | Force-clears all caches.
 */
 Doc.prototype.knock = function()
@@ -163,12 +174,15 @@ Doc.prototype.knock = function()
 		{ this.atRank($r).knock(); }
 };
 
-Doc.prototype.getPNW = function(key)
-{
-	return this._$pnws[key];
-};
 
-/**
+/*
+| returns the north-west point of the paragraph with the key 'key'.
+*/
+Doc.prototype.getPNW = function(key)
+	{ return this._$pnws[key]; };
+
+
+/*
 | Returns the height of the document.
 | FIXME caching
 */
@@ -194,7 +208,8 @@ Doc.prototype.getHeight = function()
 	return height;
 };
 
-/**
+
+/*
 | Returns the width actually used of the document.
 */
 Doc.prototype.getSpread = function()
@@ -206,7 +221,8 @@ Doc.prototype.getSpread = function()
 	return spread;
 };
 
-/**
+
+/*
 | Returns the (default) paraSeperator for this document.
 | Parameter item is optional, just to safe double and tripple lookups.
 */
@@ -219,7 +235,8 @@ Doc.prototype.getParaSep = function(item)
 	return item.getParaSep(fs);
 };
 
-/**
+
+/*
 | Returns the default font for the document.
 | Parameter item is optional, just to safe double and tripple lookups.
 */
@@ -247,7 +264,8 @@ Doc.prototype.getFont = function(item)
 	);
 };
 
-/**
+
+/*
 | Returns the paragraph at point
 */
 Doc.prototype.getParaAtPoint = function(p)
@@ -268,7 +286,8 @@ Doc.prototype.getParaAtPoint = function(p)
 	return null;
 };
 
-/**
+
+/*
 | Sketches a selection.
 */
 Doc.prototype.sketchSelection = function(
@@ -323,7 +342,8 @@ Doc.prototype.sketchSelection = function(
 		fabric.lineTo(p2.x, p2.y -  ascend, view);
 		fabric.lineTo(p2.x, p2.y + descend, view);
 		fabric.lineTo(p1.x, p1.y + descend, view);
-	} else if (Math.abs(p1.y + fontsize + descend - p2.y) < 2 && (p2.x <= p1.x))
+	}
+	else if (Math.abs(p1.y + fontsize + descend - p2.y) < 2 && (p2.x <= p1.x))
 	{
 		//      ***
 		// ***
@@ -336,7 +356,8 @@ Doc.prototype.sketchSelection = function(
 		fabric.lineTo(p2.x, p2.y -  ascend, view);
 		fabric.lineTo(p2.x, p2.y + descend, view);
 		fabric.lineTo(lx,   p2.y + descend, view);
-	} else
+	}
+	else
 	{
 		//    *****
 		// *****
