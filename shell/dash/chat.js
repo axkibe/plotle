@@ -31,7 +31,7 @@ var Dash;
 Dash = Dash || {};
 
 
-/**
+/*
 | Imports
 */
 var Caret;
