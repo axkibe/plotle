@@ -30,7 +30,6 @@
 */
 var Euclid;
 var Jools;
-var Peer;
 var Shell;
 var config;
 

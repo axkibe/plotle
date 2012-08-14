@@ -29,10 +29,6 @@
 var Visual;
 Visual = Visual || {};
 
-/**
-| Imports
-*/
-var Jools;
 
 /**
 | Capsule

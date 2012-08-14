@@ -33,7 +33,6 @@ Proc = Proc || {};
 /**
 | Imports
 */
-var config;
 var Dash;
 var Euclid;
 var Jools;

@@ -33,9 +33,7 @@ Proc = Proc || {};
 | Imports
 */
 var Dash;
-var config;
 var Jools;
-var theme;
 
 /**
 | Capsule

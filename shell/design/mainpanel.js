@@ -36,7 +36,6 @@ Design = Design || {};
 */
 var Euclid;
 var Jools;
-var theme;
 
 
 /*

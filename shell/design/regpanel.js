@@ -27,7 +27,6 @@
 | Imports
 */
 var Euclid;
-var theme;
 
 /**
 | Exports

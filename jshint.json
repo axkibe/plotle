@@ -7,5 +7,6 @@
 	"trailing"  : true,
 	"undef"     : true,
 	"onecase"   : true,
-	"strict"    : true
+	"strict"    : true,
+	"unused"    : "paramsignore"
 }

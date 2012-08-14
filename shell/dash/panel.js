@@ -39,7 +39,6 @@ var Curve;
 var Design;
 var Euclid;
 var Jools;
-var Path;
 var Proc;
 var shell;
 var Tree;

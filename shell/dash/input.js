@@ -76,7 +76,7 @@ var Input = Dash.Input = function(twig, panel, inherit, name)
 
 
 /*
-| returns the offset nearest to x coordinate
+| Returns the offset nearest to x coordinate.
 */
 Input.prototype.getOffsetAt = function(p)
 {
@@ -111,6 +111,7 @@ Input.prototype.getOffsetAt = function(p)
 
 	return a;
 };
+
 
 /*
 | Returns the width of a character for password masks.

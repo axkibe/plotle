@@ -70,9 +70,13 @@ var Chat = Dash.Chat = function(twig, panel, inherit, name)
 	this.lineHeight = Math.round(fs * 1.2);
 	this.sideSlopeX = 20;
 	var descend     = Math.round(fs * theme.bottombox);
-	this.pitch      = new Euclid.Point(this.sideSlopeX - 7, iframe.height - descend);
-	this.coff       = 37;
-	this.itext      = '';
+	this._pitch     = new Euclid.Point(this.sideSlopeX - 7, iframe.height - descend);
+
+	// offset of input text line
+	this._coff      = 37;
+
+	// current text being inputed
+	this._$itext    = inherit ? inherit._$itext : '';
 };
 
 
@@ -89,11 +93,42 @@ Chat.prototype.getCaretPos = function()
 	var n       = s - Math.round(fs + descend);
 	var	x       = p.x + this.pnw.x - 1;
 
-	return Jools.immute({
-		s: s,
-		n: n,
-		x: x
-	});
+	return Jools.immute(
+		{
+			s : s,
+			n : n,
+			x : x
+		}
+	);
+};
+
+
+/*
+| Returns the offset nearest to x coordinate.
+*/
+Chat.prototype.getOffsetAt = function(p)
+{
+	var pitch = this._pitch;
+	var dx    = p.x - pitch.x - this._coff;
+	var itext = this._$itext;
+	var x1    = 0;
+	var x2    = 0;
+	var font  = this.twig.font;
+	var a;
+
+	for(a = 0; a < itext.length; a++)
+	{
+		x1 = x2;
+		x2 = Euclid.Measure.width(font, itext.substr(0, a));
+
+		if (x2 >= dx)
+			{ break; }
+	}
+
+	if (dx - x1 < x2 - dx && a > 0)
+		{ a--; }
+
+	return a;
 };
 
 /*
@@ -109,14 +144,14 @@ Chat.prototype._weave = function()
 
 	fabric.paint(Dash.getStyle('chat'), this, 'sketchILine', Euclid.View.proper);
 
-	var x = this.pitch.x;
-	var y = this.pitch.y;
+	var x = this._pitch.x;
+	var y = this._pitch.y;
 
 	fabric.setFont(this.twig.font);
 	var lh = this.lineHeight;
 	fabric.fillText('»', x + 27, y);
 	fabric.fillText('chat', x, y);
-	fabric.fillText(this.itext, x + 37, y);
+	fabric.fillText(this._$itext, x + 37, y);
 	y -= 2;
 
 	for(var a = this.messages.length - 1, aA = Math.max(a - 5, 0); a >= aA; a--)
@@ -150,11 +185,11 @@ Chat.prototype.locateOffset = function(offset)
 	// FIXME cache position
 
 	var font     = this.twig.font;
-	var itext    = this.itext;
-	var pitch    = this.pitch;
+	var itext    = this._$itext;
+	var pitch    = this._pitch;
 
 	return new Euclid.Point(
-		Math.round(pitch.x + this.coff + Euclid.Measure.width(font, itext.substring(0, offset))),
+		Math.round(pitch.x + this._coff + Euclid.Measure.width(font, itext.substring(0, offset))),
 		Math.round(pitch.y)
 	);
 };
@@ -202,10 +237,10 @@ Chat.prototype.drawCaret = function(view)
 Chat.prototype.input = function(text)
 {
 	var csign = shell.caret.sign;
-	var itext = this.itext;
+	var itext = this._$itext;
 	var at1   = csign.at1;
 
-	this.itext = itext.substring(0, at1) + text + itext.substring(at1);
+	this._$itext = itext.substring(0, at1) + text + itext.substring(at1);
 
 	shell.setCaret(
 		'board',
@@ -231,7 +266,7 @@ Chat.prototype.keyBackspace = function()
 	if (at1 <= 0)
 		{ return false; }
 
-	this.itext = this.itext.substring(0, at1 - 1) + this.itext.substring(at1);
+	this._$itext = this._$itext.substring(0, at1 - 1) + this._$itext.substring(at1);
 
 	shell.setCaret(
 		'board',
@@ -242,6 +277,7 @@ Chat.prototype.keyBackspace = function()
 	);
 
 	this.poke();
+
 	return true;
 };
 
@@ -255,10 +291,13 @@ Chat.prototype.keyDel = function()
 	var csign = caret.sign;
 	var at1   = csign.at1;
 
-	if (at1 >= this.itext.length)
+	if (at1 >= this._$itext.length)
 		{ return false; }
 
-	this.itext = this.itext.substring(0, at1) + this.itext.substring(at1 + 1);
+	this._$itext = this._$itext.substring(0, at1) + this._$itext.substring(at1 + 1);
+
+	this.poke();
+
 	return true;
 };
 
@@ -278,14 +317,14 @@ Chat.prototype.keyEnd = function()
 	var csign = caret.sign;
 	var at1   = csign.at1;
 
-	if (at1 >= this.itext.length)
+	if (at1 >= this._$itext.length)
 		{ return false; }
 
 	shell.setCaret(
 		'board',
 		{
 			path : csign.path,
-			at1  : this.itext.length
+			at1  : this._$itext.length
 		}
 	);
 
@@ -298,13 +337,15 @@ Chat.prototype.keyEnd = function()
 */
 Chat.prototype.keyEnter = function()
 {
-	if (this.itext === '')
+	if (this._$itext === '')
 		{ return false; }
 
 	var caret = shell.caret;
 	var csign = caret.sign;
+
 	shell.peer.sendMessage(this.itext);
-	this.itext = '';
+
+	this._$itext = '';
 
 	shell.setCaret(
 		'board',
@@ -369,7 +410,7 @@ Chat.prototype.keyRight = function() {
 	var caret = shell.caret;
 	var csign = caret.sign;
 
-	if (csign.at1 >= this.itext.length)
+	if (csign.at1 >= this._$itext.length)
 		{ return false; }
 
 	shell.setCaret(
@@ -414,7 +455,7 @@ Chat.prototype.setFocus = function()
 		'board',
 		{
 			path : new Path([this.panel.name, this.name]),
-			at1  : this.itext.length
+			at1  : this._$itext.length
 		}
 	);
 
@@ -438,7 +479,7 @@ Chat.prototype.mousedown = function(p, shift, ctrl)
 		'board',
 		{
 			path : new Path([this.panel.name, this.name]),
-			at1  : this.itext.length
+			at1  : this.getOffsetAt(pp)
 		}
 	);
 

@@ -11,7 +11,6 @@
 var Jools;
 var Path;
 var Peer;
-var Tree;
 
 /**
 | Capsule

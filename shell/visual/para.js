@@ -34,7 +34,6 @@ Visual = Visual || {};
 /*
 | Imports
 */
-var Base;
 var Caret;
 var Euclid;
 var Jools;

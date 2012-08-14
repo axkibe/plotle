@@ -32,7 +32,6 @@ Design = Design || {};
 | Imports
 */
 var Euclid;
-var theme;
 
 /**
 | Capsule

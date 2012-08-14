@@ -25,31 +25,31 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/**
-| Imports
-*/
-var Action;
-var Jools;
-var MeshMashine;
-var Path;
-var Tree;
-var VSpace;
 
-var shell;
-var system;
-var theme;
-
-/**
+/*
 | Exports
 */
 var Caret = null;
 
-/**
+
+/*
+| Imports
+*/
+var Jools;
+var shell;
+var system;
+
+
+/*
 | Capsule
 */
-(function(){
+(function() {
+
 'use strict';
-if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
+
+if (typeof(window) === 'undefined')
+	{ throw new Error('this code needs a browser!'); }
+
 
 /**
 | Constructor.

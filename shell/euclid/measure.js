@@ -29,10 +29,6 @@
 */
 var Euclid;
 
-/**
-| Imports
-*/
-var Jools;
 
 /**
 | Capsule

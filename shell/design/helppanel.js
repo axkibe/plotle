@@ -29,11 +29,6 @@
 var Design;
 Design = Design || {};
 
-/**
-| Imports
-*/
-var Jools;
-var theme;
 
 /**
 | Capsule

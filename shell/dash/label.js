@@ -23,25 +23,28 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/**
+
+/*
 | Export
 */
 var Dash;
 Dash = Dash || {};
 
-/**
+
+/*
 | Imports
 */
 var Curve;
-var Euclid;
-var Jools;
 
-/**
+
+/*
 | Capsule
 */
-(function(){
+(function() {
 'use strict';
-if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
+
+if (typeof(window) === 'undefined')
+	{ throw new Error('this code needs a browser!'); }
 
 /**
 | Constructor.

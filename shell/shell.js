@@ -35,7 +35,6 @@ var Dash;
 var Euclid;
 var Jools;
 var MeshMashine;
-var Path;
 var Peer;
 var Range;
 var Sign;

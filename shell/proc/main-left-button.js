@@ -31,7 +31,6 @@ Proc = Proc || {};
 */
 var Dash;
 var Jools;
-var shell;
 
 /**
 | Capsule

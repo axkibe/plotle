@@ -1,5 +1,6 @@
 #!/usr/local/bin/node
-/**
+
+/*
 | This ticker will write in short sequences to a note.
 | Used for debugging
 |
@@ -7,9 +8,7 @@
 | License: MIT(Expat), see accompanying 'License'-file
 */
 
-var fs       = require('fs');
 var http     = require('http');
-var readline = require('readline');
 var util     = require('util');
 var Jools    = require('../shared/jools');
 var config   = require('../config');

@@ -32,7 +32,6 @@ var Range = null;
 /**
 | Imports
 */
-var Jools;
 var shell;
 var system;
 

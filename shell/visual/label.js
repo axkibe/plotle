@@ -22,6 +22,8 @@
  License: MIT(Expat), see accompanying 'License'-file
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+
 /**
 | Exports
 */
@@ -36,7 +38,6 @@ var Euclid;
 var config;
 var Jools;
 var shell;
-var system;
 var theme;
 var Visual;
 
