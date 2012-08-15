@@ -366,11 +366,10 @@ Doc.prototype.sketchSelection = function(
 		fabric.lineTo(p2.x, p2.y + descend, view);
 		fabric.lineTo(lx,   p2.y + descend, view);
 
-		if (twist) {
-			fabric.moveTo(lx, p1.y + descend, view);
-		} else {
-			fabric.lineTo(lx, p1.y + descend, view);
-		}
+		if (twist)
+			{ fabric.moveTo(lx, p1.y + descend, view); }
+		else
+			{ fabric.lineTo(lx, p1.y + descend, view); }
 
 		fabric.lineTo(p1.x, p1.y + descend, view);
 		fabric.lineTo(p1.x, p1.y -  ascend, view);

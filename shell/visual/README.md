@@ -23,10 +23,6 @@ Files
 </td><td>   an item with resizing text
 </td></tr>
 
- <tr><td>   caret.js
-</td><td>   the virtual caret
-</td></tr>
-
  <tr><td>   note.js
 </td><td>   a fix sized text item.
 </td></tr>

@@ -47,7 +47,7 @@ var theme;
 /*
 | Capsule
 */
-(function() {
+( function() {
 'use strict';
 
 if (typeof(window) === 'undefined')

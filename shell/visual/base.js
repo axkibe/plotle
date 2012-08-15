@@ -23,24 +23,29 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/**
+
+/*
 | Export
 */
 var Visual;
 Visual = Visual || {};
 
 
-/**
+/*
 | Capsule
 */
-(function(){
+( function() {
 'use strict';
-if (typeof(window) === 'undefined') { throw new Error('this code requires a browser!'); }
 
-/**
+if (typeof(window) === 'undefined')
+	{ throw new Error('this code requires a browser!'); }
+
+
+/*
 | Constructor
 */
-var Base = Visual.Base = function(spacename, twig, path) {
+var Base = Visual.Base = function(spacename, twig, path)
+{
 	this.twig  = twig;
 
 	this.$spacename = spacename;
@@ -49,7 +54,8 @@ var Base = Visual.Base = function(spacename, twig, path) {
 	this.$sub       = null;
 };
 
-/**
+
+/*
 | Returns the visual with a given twig-rank.
 */
 Base.prototype.atRank = function(rank) {
@@ -58,11 +64,13 @@ Base.prototype.atRank = function(rank) {
 
 
 
-/**
+/*
 | Updates the $sub to match a new twig.
 */
-/* FIXME one common for all visual notes
-Base.prototype.update = function(twig) {
+/*
+FIXME one common for all visual notes
+Base.prototype.update = function(twig)
+{
 	this.twig    = twig;
 	this.$fabric = null;
 
@@ -70,6 +78,7 @@ Base.prototype.update = function(twig) {
 	if (doc.twig !== twig.doc) {
 		doc.update(twig.doc);
 	}
-};*/
+};
+*/
 
-})();
+} )();
