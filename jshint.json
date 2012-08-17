@@ -1,4 +1,5 @@
 // configuration for jshint
+//	"unused"    : "paramsignore"
 {
 	"newcap"    : false,
 	"node"      : true,
@@ -7,6 +8,5 @@
 	"trailing"  : true,
 	"undef"     : true,
 	"onecase"   : true,
-	"strict"    : true,
-	"unused"    : "paramsignore"
+	"strict"    : true
 }

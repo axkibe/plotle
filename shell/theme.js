@@ -24,34 +24,37 @@
  License: MIT(Expat), see accompanying 'License'-file
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/**
+
+/*
 | Exports
 */
 var theme = null;
 
-/**
+
+/*
 | Capsule
 */
-
 (function(){
 "use strict";
-if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
+
+if (typeof(window) === 'undefined')
+	{ throw new Error('this code needs a browser!'); }
 
 var cos = Math.cos;
 var pi  = Math.PI;
 var ro  = Math.round;
 var c30 = cos(pi / 6);
 
-theme = {
+theme =
+{
 	defaultFont : 'DejaVuSans,sans-serif',
 	boldFont    : 'DejaVuSansBold,sans-serif',
-
-	//defaultFont : 'Verdana,Geneva,Kalimati,sans-serif',
 
 	// factor to add to the bottom of font height
 	bottombox : 0.25,
 
-	fade : {
+	fade :
+	{
 		// ms between each fading step.
 		time : 50,
 
@@ -60,7 +63,8 @@ theme = {
 	},
 
 	// zooming settings
-	zoom : {
+	zoom :
+	{
 		base        : 1.1,
 		min         : -15,
 		max         :  15,
@@ -69,208 +73,461 @@ theme = {
 	},
 
 	// standard note in space
-	note : {
+	note :
+	{
 		minWidth  :  40,
 		minHeight :  40,
 		newWidth  : 300,
 		newHeight : 150,
 
-		innerMargin  : { n: 4, e: 5, s: 4, w: 5 },
+		innerMargin  :
+		{
+			n: 4,
+			e: 5,
+			s: 4,
+			w: 5
+		},
 
-		style : {
-			fill : {
+		style :
+		{
+			fill :
+			{
 				gradient : 'askew',
-				steps : [
+				steps :
+				[
 					[ 0, 'rgba(255, 255, 248, 0.955)' ],
 					[ 1, 'rgba(255, 255, 160, 0.955)' ]
 				]
 			},
-			edge : [
-				{ border: 1, width : 1, color : 'rgb(255, 188, 87)' },
-				{ border: 0, width : 1, color : 'black' }
+
+			edge :
+			[
+				{
+					border: 1,
+					width : 1,
+					color : 'rgb(255, 188, 87)'
+				},
+				{
+					border: 0,
+					width : 1,
+					color : 'black'
+				}
 			],
-			highlight : [ { border: 0, width: 3, color: 'rgba(255, 183, 15, 0.5)' } ]
+
+			highlight :
+			[
+				{
+					border: 0,
+					width: 3,
+					color: 'rgba(255, 183, 15, 0.5)'
+				}
+			]
 		},
 
 		cornerRadius : 6
 	},
 
-	label : {
-		minHeight :  20,
+	// portal to another space
+	portal :
+	{
+		minWidth  :  40,
+		minHeight :  40,
+		newWidth  : 100,
+		newHeight :  50,
 
-		style : {
-			edge : [
-				//{ border: 0, width: 0.2, color: 'rgba(200, 100, 0, 0.5)' },
-				//{ border: 0, width: 1, color: 'rgba(100, 100, 0, 0.5)' }
-				{ border: 0, width: 1, color: 'rgba(100, 100, 0, 0.1)' }
+		style :
+		{
+			fill : 'rgb(255, 188, 88)',
+
+			edge :
+			[
+				{
+					border : 1,
+					width  : 1,
+					color  : 'rgb(255, 188, 87)'
+				},
+				{
+					border: 0,
+					width : 1,
+					color : 'black'
+				}
 			],
-			highlight : [ { border: 0, width: 3, color: 'rgba(255, 183, 15, 0.5)' } ]
-		},
 
-		innerMargin  : { n: 1, e: 1, s: 1, w: 1 },
-
-		// offset for creation // FIXME calculate dynamically
-		createOffset : { x: 27, y: 12 }
+			highlight :
+			[
+				{
+					border : 0,
+					width  : 3,
+					color  : 'rgba(255, 183, 15, 0.5)'
+				}
+			]
+		}
 	},
 
+	label :
+	{
+		minHeight :  20,
+
+		style :
+		{
+			edge :
+			[
+				//{ border: 0, width: 0.2, color: 'rgba(200, 100, 0, 0.5)' },
+				//{ border: 0, width: 1, color: 'rgba(100, 100, 0, 0.5)' }
+				{
+					border : 0,
+					width  : 1,
+					color  :
+					'rgba(100, 100, 0, 0.1)'
+				}
+			],
+
+			highlight :
+			[
+				{
+					border : 0,
+					width  : 3,
+					color  : 'rgba(255, 183, 15, 0.5)'
+				}
+			]
+		},
+
+		innerMargin  :
+		{
+			n : 1,
+			e : 1,
+			s : 1,
+			w : 1
+		},
+
+		// offset for creation // FIXME calculate dynamically
+		createOffset :
+		{
+			x: 27,
+			y: 12
+		}
+	},
+
+
 	// dash(board)
-	dash : {
-		panel : {
-			fill : {
+	dash :
+	{
+
+		panel :
+		{
+			fill :
+			{
 				gradient : 'radial',
-				steps : [
+
+				steps :
+				[
 					[ 0, 'rgba(255, 255,  20, 0.955)' ],
 					[ 1, 'rgba(255, 255, 180, 0.955)' ]
 				]
 			},
-			edge : [
-				{ border: 1, width : 1, color : 'rgb(255, 94, 44)' },
-				{ border: 0, width : 1, color : 'rgb( 94, 94,  0)' }
+
+			edge :
+			[
+				{
+					border : 1,
+					width  : 1,
+					color  : 'rgb(255, 94, 44)'
+				},
+				{
+					border : 0,
+					width  : 1,
+					color  : 'rgb( 94, 94,  0)'
+				}
 			]
 		},
 
-		help : {
-			fill : {
+
+		help :
+		{
+			fill :
+			{
 				gradient : 'radial',
+
 				steps : [
 					[ 0, 'rgba(255, 255,  20, 0.955)' ],
 					[ 1, 'rgba(255, 255, 255, 0.955)' ]
 				]
 			},
-			edge : [
-				{ border: 1, width : 1, color : 'rgb(255, 94, 44)' },
-				{ border: 0, width : 1, color : 'rgb( 94, 94,  0)' }
+
+			edge :
+			[
+				{
+					border : 1,
+					width  : 1,
+					color  : 'rgb(255, 94, 44)'
+				},
+				{
+					border : 0,
+					width  : 1,
+					color  : 'rgb( 94, 94,  0)'
+				}
 			]
 		},
 
-		button : {
-			fill : {
+
+		button :
+		{
+			fill :
+			{
 				gradient : 'horizontal',
-				steps : [
+				steps :
+				[
 					[0, 'rgba(255, 237, 210, 0.5)' ],
 					[1, 'rgba(255, 185, 81,  0.5)' ]
 				]
 			},
-			edge : [
-				{ border:  1, width : 1.5, color : 'rgb(255, 141, 66)' },
-				{ border:  0, width :   1, color : 'rgb( 94,  94,  0)' }
+
+			edge :
+			[
+				{
+					border :   1,
+					width  : 1.5,
+					color  : 'rgb(255, 141, 66)'
+				},
+				{
+					border :  0,
+					width  :  1,
+					color  : 'rgb( 94,  94,  0)'
+				}
 			]
 		},
 
-		buttonHover : {
+
+		buttonHover :
+		{
 			fill : 'rgb(255, 188, 88)',
-			edge : [
-				{ border: 1, width : 2, color : 'rgb(255, 188, 87)' },
-				{ border: 0, width : 1, color : 'rgb(128, 128, 0)' }
+			edge :
+			[
+				{
+					border : 1,
+					width  : 2,
+					color  : 'rgb(255, 188, 87)'
+				},
+				{
+					border : 0,
+					width  : 1,
+					color  : 'rgb(128, 128, 0)'
+				}
 			]
 		},
 
-		buttonFocus : {
-			fill : {
+
+		buttonFocus :
+		{
+			fill :
+			{
 				gradient : 'horizontal',
-				steps : [
+				steps :
+				[
 					[0, 'rgba(255, 237, 210, 0.5)' ],
 					[1, 'rgba(255, 185, 81,  0.5)' ]
 				]
 			},
-			edge : [
-				{ border: 1, width :   2, color : 'rgb(255, 99, 188)' },
-				{ border: 0, width :   1, color : 'black' }
+
+			edge :
+			[
+				{
+					border : 1,
+					width  : 2,
+					color  : 'rgb(255, 99, 188)'
+				},
+				{
+					border : 0,
+					width  : 1,
+					color  : 'black'
+				}
 			]
 		},
 
-		buttonHofoc : {
+
+		buttonHofoc :
+		{
 			fill : 'rgb(255, 188, 88)',
-			edge : [
-				{ border: 1, width :   2, color : 'rgb(255, 99, 188)' },
-				{ border: 0, width :   1, color : 'black' }
+			edge :
+			[
+				{
+					border : 1,
+					width  : 2,
+					color  : 'rgb(255, 99, 188)'
+				},
+				{
+					border : 0,
+					width  : 1,
+					color  : 'black'
+				}
 			]
 		},
 
 
-		chat : {
-			//fill : 'rgba(255, 175, 81, 0.5)',
+		chat :
+		{
 			fill : 'rgba(255, 255, 180, 0.7)',
-			edge : [
-				{ border:  0, width :   1, color : 'rgba(184,  64,  0, 0.7)' }
+
+			edge :
+			[
+				{
+					border :  0,
+					width  :  1,
+					color  : 'rgba(184,  64,  0, 0.7)'
+				}
 			]
 		},
 
-		input : {
+
+		input :
+		{
 			fill : 'white',
-			edge : [
-				{ border: 1, width : 1.5, color : 'rgb(255, 188, 87)' },
-				{ border: 0, width :   1, color : 'black' }
+
+			edge :
+			[
+				{
+					border : 1,
+					width  : 1.5,
+					color  : 'rgb(255, 188, 87)'
+				},
+				{
+					border : 0,
+					width  : 1,
+					color  : 'black'
+				}
 			]
 		},
 
-		inputFocus : {
+
+		inputFocus :
+		{
 			fill : 'white',
-			edge : [
-				{ border: 1, width :   2, color : 'rgb(255, 99, 188)' },
-				{ border: 0, width :   1, color : 'black' }
+
+			edge :
+			[
+				{
+					border : 1,
+					width  : 2,
+					color  : 'rgb(255, 99, 188)'
+				},
+				{
+					border : 0,
+					width  : 1,
+					color  : 'black'
+				}
 			]
 		},
 
-		boxes : {
-			edge : [
-				{ border: 0, width : 1, color : 'black' }
+
+		boxes :
+		{
+			edge :
+			[
+				{
+					border : 0,
+					width  : 1,
+					color  : 'black'
+				}
 			]
 		}
 	},
 
-	switchpanel : {
-		dimensions : {
+
+	switchpanel :
+	{
+		dimensions :
+		{
 			a    : 120,
 			b    :  null // calculated below
 		},
 
-		style : {
-			fill : {
+
+		style :
+		{
+			fill :
+			{
 				gradient : 'radial',
-				steps : [
+				steps :
+				[
 					[ 0, 'rgba(255, 255,  20, 0.955)' ],
 					[ 1, 'rgba(255, 255, 180, 0.955)' ]
 				]
 			},
-			edge : [
-				{ border: 1, width : 1, color : 'rgb(255, 94, 44)' },
-				{ border: 0, width : 1, color : 'rgb( 94, 94,  0)' }
+
+			edge :
+			[
+				{
+					border : 1,
+					width  : 1,
+					color  : 'rgb(255, 94, 44)'
+				},
+				{
+					border : 0,
+					width  : 1,
+					color  : 'rgb( 94, 94,  0)'
+				}
 			]
 		},
 
-		space : {
+
+		space :
+		{
 			fill : 'rgba(255, 255, 255, 0.8)',
-			edge : [
-				{ border: 0, width : 0.5, color : 'black' }
+			edge :
+			[
+				{
+					border : 0,
+					width  : 0.5,
+					color  : 'black'
+				}
 			]
 		},
 
-		current  : {
+
+		current  :
+		{
 			fill : 'rgba(255, 255, 255, 0.15)',
 			edge : [
 				{ border: 0, width : 0.5, color : 'black' }
 			]
 		},
 
-		curhov  : {
+
+		curhov  :
+		{
 			fill : 'rgba(255, 188, 88, 0.3)',
-			edge : [
-				{ border: 0, width : 0.5, color : 'black' }
+
+			edge :
+			[
+				{
+					border : 0,
+					width  : 0.5,
+					color  : 'black'
+				}
 			]
 		},
 
-		hover : {
+		hover :
+		{
 			fill : 'rgba(255, 188, 88, 0.8)',
-			edge : [
-				{ border: 0, width : 0.5, color : 'black' }
+
+			edge :
+			[
+				{
+					border : 0,
+					width  : 0.5,
+					color  : 'black'
+				}
 			]
 		}
 	},
 
+
 	// oval menu
-	ovalmenu : {
-		dimensions : {
+	ovalmenu :
+	{
+		dimensions :
+		{
 			a1    :  28,
 			b1    :  null, // calculated below
 			a2    :  90,
@@ -278,76 +535,113 @@ theme = {
 			slice :  0.82
 		},
 
-		style : {
+		style :
+		{
 			edge : [
-				{ border: 1, width : 1, color : 'rgb(255, 94, 44)' },
-				{ border: 0, width : 1, color : 'rgb( 94, 94,  0)' }
+				{
+					border : 1,
+					width  : 1,
+					color  : 'rgb(255, 94, 44)'
+				},
+				{
+					border : 0,
+					width  : 1,
+					color  : 'rgb( 94, 94,  0)'
+				}
 			],
-			/*edge : [
-				{ border: 1, width :   2, color : 'rgb(255, 200, 105)' },
-				{ border: 0, width : 0.5, color : 'black' }
-			],*/
-			fill : {
+
+			fill :
+			{
 				gradient : 'radial',
-				steps : [
+
+				steps :
+				[
 					[ 0, 'rgba(255, 255, 140, 0.955)' ],
 					[ 1, 'rgba(255, 255, 200, 0.955)' ]
 				]
-				/*steps : [
-					[ 0, 'rgba(255, 255, 168, 0.955)' ],
-					[ 1, 'rgba(255, 255, 243, 0.955)' ]
-				]*/
 			}
 		},
 
-		slice : {
-			fill : {
+		slice :
+		{
+			fill :
+			{
 				gradient : 'horizontal',
-				steps : [
+
+				steps :
+				[
 					[ 0, 'rgba(255, 255, 200, 0.9)' ],
 					[ 1, 'rgba(255, 255, 205, 0.9)' ]
 				]
 			},
-			edge : [
-				{ border: 1, width :   1, color : 'rgb(255, 200, 105)' },
-				{ border: 0, width : 0.7, color : 'black' }
+
+			edge :
+			[
+				{
+					border : 1,
+					width  : 1,
+					color  : 'rgb(255, 200, 105)'
+				},
+				{
+					border : 0,
+					width  : 0.7,
+					color  : 'black'
+				}
 			]
 		},
 
-		highlight : {
+
+		highlight :
+		{
 			fill : 'rgb(255, 188, 88)',
-			/*fill : {
-				gradient : 'radial',
-				steps : [
-					[0, 'rgb(255, 185, 81)'  ],
-					[1, 'rgb(255, 237, 210)' ]
-				]
-			},*/
+
 			edge : [
-				{ border: 0, width : 0.4, color : 'black' }
+				{
+					border : 0,
+					width  : 0.4,
+					color  : 'black'
+				}
 			]
 		}
 	},
+
 
 	// selection
-	selection : {
-		style : {
+	selection :
+	{
+		style :
+		{
 			fill   : 'rgba(243, 203, 255, 0.9)',
-			edge : [
-				//{ border : 0, width : 1, color: 'rgb(254,183,253)' },
-				{ border : 0, width : 1, color: 'black' }
+
+			edge :
+			[
+				{
+					border : 0,
+					width  : 1,
+					color  : 'black'
+				}
 			]
 		}
 	},
 
+
 	// scrollbar
-	scrollbar : {
-		style : {
+	scrollbar :
+	{
+		style :
+		{
 			fill : 'rgb(255, 188, 87)',
-			edge : [
-				{ border : 0, width : 1, color: 'rgb(221, 154, 52)' }
+
+			edge :
+			[
+				{
+					border : 0,
+					width  : 1,
+					color  : 'rgb(221, 154, 52)'
+				}
 			]
 		},
+
 		// width
 		strength :  8,
 
@@ -362,39 +656,83 @@ theme = {
 		vdis : 5
 	},
 
+
 	// size of resize handles
-	handle : {
+	handle :
+	{
 		maxSize   : 12,
 		cdistance :  8,
 		edistance : 11,
 
-		style : {
+		style :
+		{
 			fill : 'rgba(255, 240, 150, 0.9)',
-			edge : [
-				{ border: 0, width: 1, color: 'rgba(255, 180, 110, 0.9)' }
+			edge :
+			[
+				{
+					border : 0,
+					width  : 1,
+					color  : 'rgba(255, 180, 110, 0.9)'
+				}
 			]
 		}
 	},
 
-	relation : {
-		style : {
+
+	relation :
+	{
+		style :
+		{
 			fill : 'rgba(255, 225, 40, 0.5)',
-			edge : [
-				{ border: 0, width : 3, color : 'rgba(255, 225, 80, 0.4)' },
-				{ border: 0, width : 1, color : 'rgba(200, 100, 0,  0.8)' }
+
+			edge :
+			[
+				{
+					border : 0,
+					width  : 3,
+					color  : 'rgba(255, 225, 80, 0.4)'
+				},
+				{
+					border : 0,
+					width  : 1,
+					color  : 'rgba(200, 100, 0,  0.8)'
+				}
 			],
-			labeledge : [
-				{ border: 0, width : 0.2, color : 'rgba(200, 100, 0, 0.5)' }
+
+			// TODO
+			labeledge :
+			[
+				{
+					border : 0,
+					width  : 0.2,
+					color  : 'rgba(200, 100, 0, 0.5)'
+				}
 			],
-			highlight : [
-				{ border: 0, width: 3, color: 'rgba(255, 183, 15, 0.5)' }
+
+			highlight :
+			[
+				{
+					border : 0,
+					width  : 3,
+					color  : 'rgba(255, 183, 15, 0.5)'
+				}
 			]
 		},
 
-		innerMargin  : { n: 1, e: 1, s: 1, w: 1 },
+		innerMargin :
+		{
+			n : 1,
+			e : 1,
+			s : 1,
+			w : 1
+		},
 
 		// offset for creation // FIXME calculate dynamically
-		createOffset : { x: 44, y: 12 }
+		createOffset :
+		{
+			x : 44,
+			y : 12
+		}
 	}
 };
 
@@ -406,11 +744,5 @@ var swidim = theme.switchpanel.dimensions;
 swidim.b = ro(swidim.a * c30);
 
 theme.itemmenu = theme.ovalmenu;
-
-// rose
-//					[ 0, 'rgba(255, 234, 234, 0.90)' ],
-//					[ 1, 'rgba(255, 234, 150, 0.90)' ],
-//
-//{ border: 1, width :   2, color : 'rgb(182, 42, 42)' } rose
 
 })();
