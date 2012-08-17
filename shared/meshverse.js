@@ -78,6 +78,16 @@ Meshverse =
 		}
 	},
 
+	'Portal' :
+	{
+		must :
+		{
+			'zone'      : 'Rect',
+			'spaceUser' : 'String',
+			'spaceTag'  : 'String'
+		}
+	},
+
 	'Label' :
 	{
 		must :

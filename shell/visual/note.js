@@ -261,7 +261,9 @@ Note.prototype.mousewheel = function(view, p, dir, shift, ctrl)
 {
 	var dp = view.depoint(p);
 
-	if (!this.getZone().within(dp)) return false;
+	if (!this.getZone().within(dp))
+		{ return false; }
+
 	this.setScrollbar(this.scrollbarY.getPos() - dir * system.settings.textWheelSpeed);
 	this.poke();
 	shell.redraw = true;

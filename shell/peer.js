@@ -156,6 +156,33 @@ Peer.prototype.newNote = function(spacename, zone)
 };
 
 /**
+| Creates a new portal.
+*/
+Peer.prototype.newPortal = function(spacename, zone)
+{
+	if (spacename !== this.$spacename)
+		{ throw new Error('newPortal() wrong spacename'); }
+
+	var chgX = this._iface.alter(
+		{
+			val : {
+				type      : 'Portal',
+				zone      : zone,
+				spaceUser : '',
+				spaceTag  : ''
+			},
+			rank : null
+		},
+		{
+			path: new Path( [ '$new' ] ),
+			rank: 0
+		}
+	);
+
+	return chgX.trg.path.get(-1);
+};
+
+/**
 | Sets the zone for item.
 */
 Peer.prototype.setZone = function(itemPath, zone)

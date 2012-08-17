@@ -75,7 +75,8 @@ var Space = Visual.Space = function(twig, spacename, access)
 		{
 			c  : 'new',
 			n  : 'Note',
-			ne : 'Label'
+			ne : 'Label',
+			se : 'Portal'
 		};
 };
 
@@ -149,11 +150,14 @@ Space.prototype.createItem = function(twig, k)
 
 	switch (twig.type)
 	{
-		case 'Note'     :
-			return new Visual.Note     (this.$spacename, twig, $path, this);
+		case 'Note' :
+			return new Visual.Note (this.$spacename, twig, $path, this);
 
-		case 'Label'    :
-			return new Visual.Label    (this.$spacename, twig, $path, this);
+		case 'Label' :
+			return new Visual.Label (this.$spacename, twig, $path, this);
+
+		case 'Portal' :
+			return new Visual.Portal (this.$spacename, twig, $path, this);
 
 		case 'Relation' :
 			return new Visual.Relation (this.$spacename, twig, $path, this);
@@ -512,13 +516,15 @@ Space.prototype.floatMenuSelect = function(entry, p)
 
 		case 'ne' :
 			// label
-
 			pnw = $view.depoint(p).sub(theme.label.createOffset);
 			key = shell.peer.newLabel(this.$spacename, pnw, 'Label', 20);
 			this.setFocus(this.$sub[key]);
 			break;
-	}
 
+		case 'se' :
+			// portal
+			throw new Error('TODO');
+	}
 };
 
 

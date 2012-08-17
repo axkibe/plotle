@@ -472,6 +472,7 @@ Server.prototype.prepareResources = function(_)
 		'shell/visual/note.js',                             'fb',
 		'shell/visual/label.js',                            'fb',
 		'shell/visual/relation.js',                         'fb',
+		'shell/visual/portal.js',                           'fb',
 		'shell/visual/space.js',                            'fb',
 		'shell/system.js',                                  'fb',
 		'shell/caret.js',                                   'fb',
