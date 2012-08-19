@@ -19,6 +19,8 @@
 
  A rectangle with rounded (beziers) corners.
 
+ FIXME rename to RoundRect
+
  BeziRects are immutable objects.
 
       <-> a
@@ -33,36 +35,46 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/**
+
+/*
 | Export
 */
 var Euclid;
 Euclid = Euclid || {};
 
-/**
+
+/*
 | Imports
 */
 var Jools;
 
-/**
+
+/*
 | Capsule
 */
 (function(){
 'use strict';
-if (typeof(window) === 'undefined') { throw new Error('this code needs a browser'); }
 
-/**
+if (typeof(window) === 'undefined')
+	{ throw new Error('this code needs a browser'); }
+
+
+/*
 | Constructor.
 |
 | BeziRect(rect, a, b)      -or-
 | BeziRect(pnw, pse, a, b)
 */
-var BeziRect = Euclid.BeziRect = function(a1, a2, a3, a4) {
-	if (a1.constructor === Euclid.Point) {
+var BeziRect = Euclid.BeziRect = function(a1, a2, a3, a4)
+{
+	if (a1.constructor === Euclid.Point)
+	{
 		Euclid.Rect.call(this, a1, a2);
 		this.a = a3;
 		this.b = a4;
-	} else {
+	}
+	else
+	{
 		Euclid.Rect.call(this, a1.pnw, a1.pse);
 		this.a = a2;
 		this.b = a3;
@@ -70,10 +82,12 @@ var BeziRect = Euclid.BeziRect = function(a1, a2, a3, a4) {
 };
 Jools.subclass(BeziRect, Euclid.Rect);
 
-/**
+
+/*
 | Draws the roundrect.
 */
-BeziRect.prototype.sketch = function(fabric, border, twist, view) {
+BeziRect.prototype.sketch = function(fabric, border, twist, view)
+{
 	var wx = view.x(this.pnw) + border;
 	var ny = view.y(this.pnw) + border;
 	var ex = view.x(this.pse) - border - 1;
@@ -97,8 +111,7 @@ BeziRect.prototype.sketch = function(fabric, border, twist, view) {
 /**
 | Returns true if Point p is within the BeziRect.
 */
-BeziRect.prototype.within = function(fabric, view, p) {
-	return fabric.within(this, 'sketch', view, p);
-};
+BeziRect.prototype.within = function(fabric, view, p)
+	{ return fabric.within(this, 'sketch', view, p); };
 
 })();

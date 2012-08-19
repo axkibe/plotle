@@ -57,10 +57,10 @@ if (typeof(window) === 'undefined')
 */
 var Portal = Visual.Portal = function(spacename, twig, path)
 {
-	Visual.Item.call(this, spacename, twig, path);
+	Visual.Base.call(this, spacename, twig, path);
 };
 
-Jools.subclass(Portal, Visual.Item);
+Jools.subclass(Portal, Visual.Base);
 
 
 /*
@@ -111,6 +111,51 @@ Portal.prototype.actionstop = function(view, p)
 	*/
 };
 
+/*
+| Sees if this portal is being clicked.
+*/
+Portal.prototype.click = function(view, p)
+{
+	var vp = view.depoint(p);
+
+	if (!this.getZone().within(vp))
+		{ return false; }
+
+	var $space = shell.$space;
+	var focus  = $space.focusedItem();
+	if (focus !== this)
+	{
+		$space.setFocus(this);
+		shell.selection.deselect();
+	}
+
+	shell.redraw = true;
+
+	var pnw  = this.getZone().pnw;
+	var pi   = vp.sub(pnw.x, pnw.y - (this.scrollbarY ? this.scrollbarY.getPos() : 0 ));
+	var para = this.getParaAtPoint(pi);
+
+	// TODO move into para
+	if (para)
+	{
+		var ppnw   = this.$sub.doc.getPNW(para.$key);
+		var at1    = para.getPointOffset( pi.sub( ppnw ));
+		var caret  = shell.caret;
+
+		caret = shell.setCaret(
+			'space',
+			{
+				path : para.textPath,
+				at1  : at1
+			}
+		);
+
+		caret.show();
+		shell.selection.deselect();
+	}
+
+	return true;
+};
 
 /*
 | Draws the portal.
@@ -124,7 +169,9 @@ Portal.prototype.draw = function(fabric, view)
 	var f     = this.$fabric;
 	var sbary = this.scrollbarY;
 
+
 	// no buffer hit?
+	/*
 	if (config.debug.noCache || !f ||
 		vzone.width  !== f.width ||
 		vzone.height !== f.height)
@@ -154,6 +201,7 @@ Portal.prototype.draw = function(fabric, view)
 		this.setScrollbar();
 		sbary.draw(fabric, view);
 	}
+	*/
 };
 
 
@@ -167,6 +215,64 @@ Portal.prototype.mousewheel = function(view, p, dir, shift, ctrl)
 	return this.getZone().within(dp);
 };
 
+/*
+| Mouse is hovering around.
+| Checks if this item reacts on this.
+*/
+Portal.prototype.mousehover = function(view, p)
+{
+	if (p === null)
+		{ return null; }
+
+	var dp = view.depoint(p);
+
+	if (this.getZone().within(dp))
+		{ return 'default'; }
+	else
+		{ return null; }
+};
+
+
+/*
+| Dragstart.
+|
+| Checks if a dragstart targets this item.
+*/
+Portal.prototype.dragstart = function(view, p, shift, ctrl, access)
+{
+	var vp = view.depoint(p);
+	if (!this.getZone().within(vp))
+		{ return false; }
+
+	shell.redraw = true;
+
+	if (ctrl && access == 'rw')
+	{
+		// relation binding
+		shell.startAction(
+			Action.RELBIND, 'space',
+			'itemPath', this.$path,
+			'start',    p,
+			'move',     p
+		);
+
+		return true;
+	}
+
+	// scrolling or dragging
+	if (access == 'rw')
+		{ shell.$space.setFocus(this); }
+
+	if (access == 'rw')
+	{
+		shell.startAction(
+			Action.ITEMDRAG, 'space',
+			'itemPath', this.$path,
+			'start', vp,
+			'move',  vp
+		);
+	}
+};
 
 /*
 | Returns the zone of the item.

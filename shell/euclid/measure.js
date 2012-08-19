@@ -24,29 +24,35 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/**
+
+/*
 | Exports
 */
 var Euclid;
 
 
-/**
+/*
 | Capsule
 */
 (function(){
 'use strict';
-if (typeof(window) === 'undefined') { throw new Error('this code needs a browser'); }
 
-/**
+if (typeof(window) === 'undefined')
+	{ throw new Error('this code needs a browser'); }
+
+
+/*
 | Singleton
 */
 var Measure = Euclid.Measure = {
 
-	/**
+	/*
 	| Initialize is called once by shell
 	*/
-	init : function() {
-		if (Measure._$cs) { throw new Error('Measure already initialized'); }
+	init : function()
+	{
+		if (Measure._$cs)
+			{ throw new Error('Measure already initialized'); }
 
 		var canvas = document.createElement('canvas');
 		Measure._$cx     = canvas.getContext('2d');
@@ -54,15 +60,17 @@ var Measure = Euclid.Measure = {
 		Measure._$family = null;
 	},
 
-	/**
+
+	/*
 	| Returns the width of text with the specified font.
 	*/
-	width : function(font, text) {
+	width : function(font, text)
+	{
 		var cx   = Measure._$cx;
 
 		if (Measure._$size   !== font.size ||
-			Measure._$family !== font.family
-		) {
+			Measure._$family !== font.family)
+		{
 			Measure._$size   = font.size;
 			Measure._$family = font.family;
 			cx.font = font.getCSS();

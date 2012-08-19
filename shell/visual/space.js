@@ -499,31 +499,58 @@ Space.prototype.floatMenuSelect = function(entry, p)
 {
 	var $view = this.$view;
 	var pnw, key;
+	var nw, nh;
 
 	switch(entry)
 	{
 		case 'n' :
 			// note
-			var nw = theme.note.newWidth;
-			var nh = theme.note.newHeight;
-			var dp = $view.depoint(p);
+			nw = theme.note.newWidth;
+			nh = theme.note.newHeight;
 
-			pnw = dp.sub(Jools.half(nw) , Jools.half(nh));
-			key = shell.peer.newNote(this.$spacename, new Euclid.Rect(pnw, pnw.add(nw, nh)));
+			pnw = $view.depoint( p ).
+				sub( Jools.half( nw ), Jools.half ( nh ) );
+
+			key = shell.peer.newNote(
+				this.$spacename,
+				new Euclid.Rect(pnw, pnw.add(nw, nh))
+			);
 
 			this.setFocus(this.$sub[key]);
 			break;
 
 		case 'ne' :
 			// label
-			pnw = $view.depoint(p).sub(theme.label.createOffset);
-			key = shell.peer.newLabel(this.$spacename, pnw, 'Label', 20);
+
+			pnw = $view.depoint( p ).
+				sub( theme.label.createOffset );
+
+			key = shell.peer.newLabel(
+				this.$spacename,
+				pnw,
+				'Label',
+				20
+			);
+
 			this.setFocus(this.$sub[key]);
 			break;
 
 		case 'se' :
 			// portal
-			throw new Error('TODO');
+
+			nw = theme.portal.newWidth;
+			nh = theme.portal.newHeight;
+
+			pnw = $view.depoint(p).
+				sub( Jools.half( nw ) , Jools.half( nh ) );
+
+			key = shell.peer.newPortal(
+				this.$spacename,
+				new Euclid.Rect(pnw, pnw.add(nw, nh))
+			);
+
+			this.setFocus( this.$sub[key] );
+			break;
 	}
 };
 
@@ -531,8 +558,8 @@ Space.prototype.floatMenuSelect = function(entry, p)
 /*
 | An entry of the item menu has been selected
 */
-Space.prototype.itemMenuSelect = function(entry, p, focus) {
-
+Space.prototype.itemMenuSelect = function(entry, p, focus)
+{
 	switch(entry)
 	{
 		case 'n': // remove

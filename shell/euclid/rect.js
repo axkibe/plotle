@@ -25,22 +25,28 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/**
+
+/*
 | Export
 */
 var Euclid;
 
-/**
+
+/*
 | Capsule
 */
 (function(){
 'use strict';
-if (typeof(window) === 'undefined') { throw new Error('this code needs a browser'); }
 
-/**
+if (typeof(window) === 'undefined')
+	{ throw new Error('this code needs a browser'); }
+
+
+/*
 | Draws the rectangle.
 */
-Euclid.Rect.prototype.sketch = function(fabric, border, twist, view) {
+Euclid.Rect.prototype.sketch = function(fabric, border, twist, view)
+{
 	var wx = view.x(this.pnw);
 	var ny = view.y(this.pnw);
 	var ex = view.x(this.pse);
@@ -54,4 +60,4 @@ Euclid.Rect.prototype.sketch = function(fabric, border, twist, view) {
 };
 
 
-})();
+} ) ();

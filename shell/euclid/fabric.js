@@ -24,66 +24,78 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/**
+
+/*
 | Exports
 */
 var Euclid;
 Euclid = Euclid || {};
 
-/**
+
+/*
 | Imports
 */
 var Jools;
 
-/**
+
+/*
 | Capsule
 */
 (function(){
 'use strict';
-if (typeof(window) === 'undefined') { throw new Error('this code needs a browser'); }
 
-/**
+if (typeof(window) === 'undefined')
+	{ throw new Error('this code needs a browser'); }
+
+
+/*
 |'magic' number to approximate ellipses with beziers.
 */
 Euclid.magic = 0.551784;
 
-/**
+
+/*
 | Constructor.
 |
 | Fabric()        -or-    creates a new fabric
 | Fabric(canvas)  -or-    encloses an existing HTML5 canvas
 | Fabric(width, height)   creates a new fabric and sets its size;
 */
-var Fabric = Euclid.Fabric = function(a1, a2) {
+var Fabric = Euclid.Fabric = function(a1, a2)
+{
 	switch (typeof(a1)) {
-	case 'undefined' :
-		this._canvas = document.createElement('canvas');
-		break;
-	case 'object' :
-		switch(a1.constructor) {
-		case Fabric:
-			this._canvas = a1._canvas;
-			break;
-		case Euclid.BeziRect :
-		case Euclid.Rect     :
+		case 'undefined' :
 			this._canvas = document.createElement('canvas');
-			this._canvas.width  = a1.width;
-			this._canvas.height = a1.height;
 			break;
+
+		case 'object' :
+			switch(a1.constructor)
+			{
+				case Fabric:
+					this._canvas = a1._canvas;
+					break;
+				case Euclid.BeziRect :
+				case Euclid.Rect     :
+					this._canvas = document.createElement('canvas');
+					this._canvas.width  = a1.width;
+					this._canvas.height = a1.height;
+					break;
+				default :
+					if (!a1.getContext)
+						{ throw new Error('Invalid parameter to new Fabric: ' + a1); }
+					this._canvas = a1;
+					break;
+			}
+			break;
+
+		case 'number' :
+			this._canvas = document.createElement('canvas');
+			this._canvas.width  = a1;
+			this._canvas.height = a2;
+			break;
+
 		default :
-			if (!a1.getContext)
-				{ throw new Error('Invalid parameter to new Fabric: ' + a1); }
-			this._canvas = a1;
-			break;
-		}
-		break;
-	case 'number' :
-		this._canvas = document.createElement('canvas');
-		this._canvas.width  = a1;
-		this._canvas.height = a2;
-		break;
-	default :
-		throw new Error('Invalid parameter to new Fabric: ' + a1);
+			throw new Error('Invalid parameter to new Fabric: ' + a1);
 	}
 	this._cx = this._canvas.getContext('2d');
 
@@ -92,36 +104,49 @@ var Fabric = Euclid.Fabric = function(a1, a2) {
 	this.$clip = false;
 };
 
-/**
+
+/*
 | Fabric width.
 */
-Object.defineProperty(Fabric.prototype, 'width',  {
-	get: function() { return this._canvas.width; }
-});
+Object.defineProperty(Fabric.prototype, 'width',
+	{
+		get: function()
+			{ return this._canvas.width; }
+	}
+);
 
-/**
+
+/*
 | Fabric height.
 */
-Object.defineProperty(Fabric.prototype, "height", {
-	get: function() { return this._canvas.height; }
-});
+Object.defineProperty(Fabric.prototype, 'height',
+	{
+		get: function()
+			{ return this._canvas.height; }
+	}
+);
 
-/**
+
+/*
 | Draws an arc.
 |
 | arc(p,    radius, startAngle, endAngle, anticlockwise)   -or-
 | arc(x, y, radius, startAngle, endAngle, anticlockwise)   -or-
 */
-Fabric.prototype.arc = function(a1, a2, a3, a4, a5, a6, a7) {
+Fabric.prototype.arc = function(a1, a2, a3, a4, a5, a6)
+{
 	var tw = this._twist, x, y, r, sa, ea, ac;
-	if (typeof(a1) === 'object') {
+	if (typeof(a1) === 'object')
+	{
 		x  = a1.x;
 		y  = a1.y;
 		r  = a2;
 		sa = a3;
 		ea = a4;
 		ac = a5;
-	} else {
+	}
+	else
+	{
 		x  = a1;
 		y  = a2;
 		r  = a3;
@@ -133,50 +158,67 @@ Fabric.prototype.arc = function(a1, a2, a3, a4, a5, a6, a7) {
 	this._cx.arc(x + tw, y + tw, r, sa, ea, ac);
 };
 
-/**
+
+/*
 | Draws a bezier.
 |
 | bezier(cp1,  cp2,  p)   -or-
 | bezier(cp1x, cp1y, cp2x, cp2y, x, y) -or-
 | any combination of points and arguments.
 */
-Fabric.prototype.beziTo = function() {
+Fabric.prototype.beziTo = function()
+{
 	var a   = 0, aZ = arguments.length;
 	var tw  = this._twist;
 
 	var cp1x, cp1y, cp2x, cp2y, x, y;
 
-	if (this._posx === null || this._posy === null) {
-		throw new Error('beziTo: pFail');
-	}
+	if (this._posx === null || this._posy === null)
+		{ throw new Error('beziTo: pFail'); }
 
 	if (a >= aZ) throw new Error('beziTo: aFail');
-	if (typeof(arguments[a]) === 'object') {
+	if (typeof(arguments[a]) === 'object')
+	{
 		cp1x = arguments[a].x;
 		cp1y = arguments[a++].y;
-	} else {
+	}
+	else
+	{
 		cp1x = arguments[a++];
 		if (a >= aZ) throw new Error('beziTo: aFail');
 		cp1y = arguments[a++];
 	}
 
-	if (a >= aZ) throw new Error('beziTo: aFail');
-	if (typeof(arguments[a]) === 'object') {
+	if (a >= aZ)
+		{ throw new Error('beziTo: aFail'); }
+
+
+	if (typeof(arguments[a]) === 'object')
+	{
 		cp2x = arguments[a].x;
 		cp2y = arguments[a++].y;
-	} else {
+	}
+	else
+	{
 		cp2x = arguments[a++];
-		if (a >= aZ) throw new Error('beziTo: aFail');
+		if (a >= aZ)
+			{ throw new Error('beziTo: aFail'); }
 		cp2y = arguments[a++];
 	}
 
-	if (a >= aZ) throw new Error('beziTo: aFail');
-	if (typeof(arguments[a]) === 'object') {
+	if (a >= aZ)
+		{ throw new Error('beziTo: aFail'); }
+
+	if (typeof(arguments[a]) === 'object')
+	{
 		x = arguments[a].x;
 		y = arguments[a++].y;
-	} else {
+	}
+	else
+	{
 		x = arguments[a++];
-		if (a >= aZ) throw new Error('beziTo: aFail');
+		if (a >= aZ)
+			{ throw new Error('beziTo: aFail'); }
 		y = arguments[a++];
 	}
 
@@ -192,10 +234,12 @@ Fabric.prototype.beziTo = function() {
 	this._cx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y);
 };
 
-/**
+
+/*
 | Removes the clipping
 */
-Fabric.prototype.deClip = function() {
+Fabric.prototype.deClip = function()
+{
 	if (!this.$clip)
 		{ throw new Error('not clipping!'); }
 
@@ -203,56 +247,71 @@ Fabric.prototype.deClip = function() {
 	this._cx.restore();
 };
 
-/**
+
+/*
 | Draws an image.
 |
 | drawImage(image, pnw)   -or-
 | drawImage(image, x, y)
 */
-Fabric.prototype.drawImage = function(image, a1, a2, a3) {
+Fabric.prototype.drawImage = function(image, a1, a2, a3)
+{
 	if (image instanceof Fabric) {
-		if (!(image.width > 0 && image.height > 0)) return;
+		if (!(image.width > 0 && image.height > 0))
+			{ return; }
 		image = image._canvas;
 	}
 	var x, y, c;
-	if (typeof(a1) === 'object') {
+
+	if (typeof(a1) === 'object')
+	{
 		x = a1.x;
 		y = a1.y;
 		c = a2;
-	} else {
+	}
+	else
+	{
 		x = a1;
 		y = a2;
 		c = a3;
 	}
+
 	Jools.ensureInt(x, y);
-	if (Jools.is(c)) { this._cx.globalCompositeOperation = c; }
+	if (Jools.is(c))
+		{ this._cx.globalCompositeOperation = c; }
+
 	this._cx.drawImage(image, x, y);
-	if (Jools.is(c)) { this._cx.globalCompositeOperation = 'source-over'; }
+	if (Jools.is(c))
+		{ this._cx.globalCompositeOperation = 'source-over'; }
 };
 
-/**
+
+/*
 | Draws an edge.
 |
 | style: the style formated in meshcraft style notation.
 | shape: an object which has 'sketch'() defined
 */
-Fabric.prototype.edge = function(style, shape, sketch, view, a1, a2, a3, a4) {
-	if (style instanceof Array) {
-		for(var i = 0; i < style.length; i++) {
-			this._edge(style[i], shape, sketch, view, a1, a2, a3, a4);
-		}
-	} else {
-		this._edge(style, shape, sketch, view, a1, a2, a3, a4);
+Fabric.prototype.edge = function(style, shape, sketch, view, a1, a2, a3, a4)
+{
+	if (style instanceof Array)
+	{
+		for(var i = 0; i < style.length; i++)
+			{ this._edge(style[i], shape, sketch, view, a1, a2, a3, a4); }
 	}
+	else
+		{ this._edge(style, shape, sketch, view, a1, a2, a3, a4); }
 };
 
-/**
+
+/*
 | Draws a filled area.
 |
 | style: the style formated in meshcraft style notation.
 | shape: an object which has 'sketch'() defined
 */
-Fabric.prototype.fill = function(style, shape, sketch, view, a1, a2, a3, a4) {
+Fabric.prototype.fill = function(style, shape, sketch, view, a1, a2, a3, a4)
+{
 	var cx = this._cx;
 	this._begin(false);
 
@@ -265,26 +324,31 @@ Fabric.prototype.fill = function(style, shape, sketch, view, a1, a2, a3, a4) {
 	cx.fill();
 };
 
-/**
+
+/*
 | Draws some text.
 */
-Fabric.prototype.fillText = function(text, a1, a2) {
+Fabric.prototype.fillText = function(text, a1, a2)
+{
 	if (typeof(a1) === 'object')
 		{ return this._cx.fillText(text, a1.x, a1.y); }
 	else
 		{ return this._cx.fillText(text, a1, a2); }
 };
 
-/**
+
+/*
 | fillRect(style, rect)     -or-
 | fillRect(style, pnw, pse) -or-
 | fillRect(style, nwx, nwy, width, height)
 */
-Fabric.prototype.fillRect = function(style, a1, a2, a3, a4) {
+Fabric.prototype.fillRect = function(style, a1, a2, a3, a4)
+{
 	var cx = this._cx;
 	cx.fillStyle = style;
 
-	if (typeof(a1) === 'object') {
+	if (typeof(a1) === 'object')
+	{
 		if (a1 instanceof Euclid.Rect)
 			{ return this._cx.fillRect(a1.pnw.x, a1.pnw.y, a1.pse.x, a1.pse.y); }
 
@@ -297,10 +361,12 @@ Fabric.prototype.fillRect = function(style, a1, a2, a3, a4) {
 	return this._cx.fillRect(a1, a2, a3, a4);
 };
 
-/**
+
+/*
 | return the center point of the Fabric
 */
-Fabric.prototype.getCenter = function() {
+Fabric.prototype.getCenter = function()
+{
 	var x = Jools.half(this.width);
 	var y = Jools.half(this.height);
 	var c = this._$center;
@@ -311,25 +377,35 @@ Fabric.prototype.getCenter = function() {
 		{ return this._$center = new Euclid.Point(x, y); }
 };
 
-/**
+
+/*
 | getImageData(rect)     -or-
 | getImageData(pnw, pse) -or-
 | getImageData(x1, y1, x2, y2)
 */
-Fabric.prototype.getImageData = function(a1, a2, a3, a4) {
+Fabric.prototype.getImageData = function(a1, a2, a3, a4)
+{
 	var x1, y1, x2, y2;
 
-	if (typeof(a1) === 'object') {
-		if (a1 instanceof Euclid.Rect) {
+	if (typeof(a1) === 'object')
+	{
+		if (a1 instanceof Euclid.Rect)
+		{
 			x1 = a1.pnw.x; y1 = a1.pnw.y;
 			x2 = a1.pse.x; y2 = a1.pse.y;
-		} else if (a1 instanceof Euclid.Point) {
+		}
+		else if (a1 instanceof Euclid.Point)
+		{
 			x1 = a1.x; y1 = a1.y;
 			x2 = a2.x; y2 = a2.y;
-		} else {
+		}
+		else
+		{
 			throw new Error('getImageData not a rectangle');
 		}
-	} else {
+	}
+	else
+	{
 		x1 = a1;
 		y1 = a2;
 		x2 = a3;
@@ -340,14 +416,17 @@ Fabric.prototype.getImageData = function(a1, a2, a3, a4) {
 	return this._cx.getImageData(a1, a2, a3, a4);
 };
 
-/**
+
+/*
 | Sets the global alpha
 */
-Fabric.prototype.globalAlpha = function(a) {
+Fabric.prototype.globalAlpha = function(a)
+{
 	this._cx.globalAlpha = a;
 };
 
-/**
+
+/*
 | Draws a line.
 |
 | lineto(point)       -or-
@@ -356,19 +435,25 @@ Fabric.prototype.globalAlpha = function(a) {
 | lineto(point, view) -or-
 | lineto(x, y, view)
 */
-Fabric.prototype.lineTo = function(a1, a2, a3) {
+Fabric.prototype.lineTo = function(a1, a2, a3)
+{
 	var tw = this._twist, v, x, y;
-	if (typeof(a1) === 'object') {
+	if (typeof(a1) === 'object')
+	{
 		x = a1.x;
 		y = a1.y;
 		v = a2;
-	} else {
+	}
+	else
+	{
 		x = a1;
 		y = a2;
 		v = a3;
 	}
 	Jools.ensureInt(x, y);
-	if (v) {
+
+	if (v)
+	{
 		var x1 = x;
 		x = v.x(x,  y);
 		y = v.y(x1, y);
@@ -378,7 +463,8 @@ Fabric.prototype.lineTo = function(a1, a2, a3) {
 	this._cx.lineTo(x + tw, y + tw);
 };
 
-/**
+
+/*
 | Moves the sketch maker.
 |
 | moveTo(point)       -or-
@@ -387,19 +473,26 @@ Fabric.prototype.lineTo = function(a1, a2, a3) {
 | moveTo(point, view) -or-
 | moveTo(x, y, view)
 */
-Fabric.prototype.moveTo = function(a1, a2, a3) {
+Fabric.prototype.moveTo = function(a1, a2, a3)
+{
 	var tw = this._twist, v, x, y;
-	if (typeof(a1) === 'object') {
+	if (typeof(a1) === 'object')
+	{
 		x = a1.x;
 		y = a1.y;
 		v = a2;
-	} else {
+	}
+	else
+	{
 		x = a1;
 		y = a2;
 		v = a3;
 	}
+
 	Jools.ensureInt(x, y);
-	if (v) {
+
+	if (v)
+	{
 		var x1 = x;
 		x = v.x(x,  y);
 		y = v.y(x1, y);
@@ -412,89 +505,111 @@ Fabric.prototype.moveTo = function(a1, a2, a3) {
 	this._cx.moveTo(x + tw, y + tw);
 };
 
-/**
+
+/*
 | putImageData(imagedata, p) -or-
 | putImageData(imagedata, x, y)
 */
-Fabric.prototype.putImageData = function(imagedata, a1, a2) {
+Fabric.prototype.putImageData = function(imagedata, a1, a2)
+{
 	var x, y;
-	if (typeof(a1) === 'object') {
-		x = a1.x; y = a1.y;
-	} else {
-		x = a1;   y = a2;
+	if (typeof(a1) === 'object')
+	{
+		x = a1.x;
+		y = a1.y;
 	}
+	else
+	{
+		x = a1;
+		y = a2;
+	}
+
 	Jools.ensureInt(x, y);
 	this._cx.putImageData(imagedata, x, y);
 };
 
 
-/**
+/*
 | The canvas is cleared and resized to width/height (of rect).
 |
 | reset()               -or-
 | reset(rect)           -or-
 | reset(width, height)
 */
-Fabric.prototype.reset = function(a1, a2) {
+Fabric.prototype.reset = function(a1, a2)
+{
 	var c = this._canvas;
 	var w, h;
-	switch(typeof(a1)) {
-	case 'undefined' :
-		this._cx.clearRect(0, 0, c.width, c.height);
-		return;
-	case 'object' :
-		w  = a1.width;
-		h  = a1.height;
-		break;
-	default :
-		w  = a1;
-		h  = a2;
-		break;
+	switch( typeof(a1) )
+	{
+		case 'undefined' :
+			this._cx.clearRect(0, 0, c.width, c.height);
+			return;
+		case 'object' :
+			w  = a1.width;
+			h  = a1.height;
+			break;
+		default :
+			w  = a1;
+			h  = a2;
+			break;
 	}
-	if (c.width === w && c.height === h) {
+
+	if (c.width === w && c.height === h)
+	{
 		// no size change, clearRect() is faster
 		this._cx.clearRect(0, 0, c.width, c.height);
-	} else {
+	}
+	else
+	{
 		// setting width or height clears the contents
 		if (c.width  !== w) { c.width  = w; }
 		if (c.height !== h) { c.height = h; }
 	}
 };
 
-/**
+
+/*
 | Fills an aera and draws its borders
 */
-Fabric.prototype.paint = function(style, shape, sketch, view, a1, a2, a3, a4) {
+Fabric.prototype.paint = function(style, shape, sketch, view, a1, a2, a3, a4)
+{
 	var fillStyle = style.fill;
 	var edgeStyle = style.edge;
 	var cx = this._cx;
 	this._begin(false);
 	shape[sketch](this, 0, false, view, a1, a2, a3, a4);
 
-	if (Jools.isnon(style.fill)) {
+	if (Jools.isnon(style.fill))
+	{
 		cx.fillStyle = this._colorStyle(fillStyle, shape);
 		cx.fill();
 	}
 
-	if (Jools.isArray(edgeStyle)) {
-		for(var i = 0; i < edgeStyle.length; i++) {
-			this._edge(edgeStyle[i], shape, sketch, view, a1, a2, a3, a4);
-		}
-	} else {
+	if (Jools.isArray(edgeStyle))
+	{
+		for(var i = 0; i < edgeStyle.length; i++)
+			{ this._edge(edgeStyle[i], shape, sketch, view, a1, a2, a3, a4); }
+	}
+	else
+	{
 		this._edge(edgeStyle, shape, sketch, view, a1, a2, a3, a4);
 	}
 };
 
-/**
+
+/*
 | Clips the fabric so that the shape is left out.
 */
-Fabric.prototype.reverseClip = function(shape, sketch, view, border, a1, a2, a3, a4) {
+Fabric.prototype.reverseClip = function(shape, sketch, view, border, a1, a2, a3, a4)
+{
 	var cx = this._cx;
 	var c  = this._canvas;
 	var w  = c.width;
 	var h  = c.height;
 
-	if (!this.$clip) {
+	if (!this.$clip)
+	{
 		cx.save();
 		this.$clip = true;
 	}
@@ -510,19 +625,27 @@ Fabric.prototype.reverseClip = function(shape, sketch, view, border, a1, a2, a3,
 	cx.clip();
 };
 
-/**
+
+/*
 | Sets the canvas scale
 */
-Fabric.prototype.scale = function(s) {
+Fabric.prototype.scale = function(s)
+{
 	this._cx.scale(s, s);
 };
 
-/**
+
+/*
 | Sets the font.
 */
-Fabric.prototype.setFont = function(f) {
-	if (!Jools.is(f.fill))  { throw new Error('fontstyle misses fill');  }
-	if (!Jools.is(f.align)) { throw new Error('fontstyle misses align'); }
+Fabric.prototype.setFont = function(f)
+{
+	if (!Jools.is(f.fill))
+		{ throw new Error('fontstyle misses fill'); }
+
+	if (!Jools.is(f.align))
+		{ throw new Error('fontstyle misses align'); }
+
 	if (!Jools.is(f.base))  { throw new Error('fontstyle misses base');  }
 
 	var cx = this._cx;
@@ -570,10 +693,11 @@ Fabric.prototype.within = function(shape, sketch, view, a1, a2, a3, a4, a5) {
 };
 
 
-/**
+/*
 | Begins a sketch
 */
-Fabric.prototype._begin = function(twist) {
+Fabric.prototype._begin = function(twist)
+{
 	// lines are targed at .5 coords.
 	this._twist = twist ? 0.5 : 0;
 	this._cx.beginPath();
@@ -583,54 +707,63 @@ Fabric.prototype._begin = function(twist) {
 /**
 | Returns a HTML5 color style for a meshcraft style notation.
 */
-Fabric.prototype._colorStyle = function(style, shape) {
-	if (style.substring) {
-		return style;
-	} else if (!style.gradient) {
-		throw new Error('unknown style');
-	}
+Fabric.prototype._colorStyle = function(style, shape)
+{
+	if (style.substring)
+		{ return style; }
+	else if (!style.gradient)
+		{ throw new Error('unknown style'); }
 
 	var grad;
-	switch (style.gradient) {
-	case 'askew' :
-		// FIXME use gradientPNW
-		if (!shape.pnw || !shape.pse) throw new Error(style.gradient+' gradiend misses pnw/pse');
-		grad = this._cx.createLinearGradient(
-			shape.pnw.x, shape.pnw.y,
-			shape.pnw.x + shape.width / 10, shape.pse.y);
-		break;
-	case 'horizontal' :
-		// FIXME use gradientPNW
-		if (!shape.pnw || !shape.pse) throw new Error(style.gradient+' gradient misses pnw/pse');
-		grad = this._cx.createLinearGradient(
-			0, shape.pnw.y,
-			0, shape.pse.y);
-		break;
-	case 'radial' :
-		if (!shape.gradientPC || !shape.gradientR1)
-			throw new Error(style.gradient+' gradient misses gradient[PC|R0|R1]');
-		var ro = shape.gradientR0 || 0;
-		grad = this._cx.createRadialGradient(
-			shape.gradientPC.x, shape.gradientPC.y, ro,
-			shape.gradientPC.x, shape.gradientPC.y, shape.gradientR1);
-		break;
-	default :
-		throw new Error('unknown gradient');
+	switch (style.gradient)
+	{
+		case 'askew' :
+			// FIXME use gradientPNW
+			if (!shape.pnw || !shape.pse)
+				{ throw new Error(style.gradient+' gradiend misses pnw/pse'); }
+			grad = this._cx.createLinearGradient(
+				shape.pnw.x, shape.pnw.y,
+				shape.pnw.x + shape.width / 10, shape.pse.y);
+			break;
+
+		case 'horizontal' :
+			// FIXME use gradientPNW
+			if (!shape.pnw || !shape.pse)
+				{ throw new Error(style.gradient+' gradient misses pnw/pse'); }
+			grad = this._cx.createLinearGradient(
+				0, shape.pnw.y,
+				0, shape.pse.y);
+			break;
+
+		case 'radial' :
+			if (!shape.gradientPC || !shape.gradientR1)
+				{ throw new Error(style.gradient+' gradient misses gradient[PC|R0|R1]'); }
+			var ro = shape.gradientR0 || 0;
+			grad = this._cx.createRadialGradient(
+				shape.gradientPC.x, shape.gradientPC.y, ro,
+				shape.gradientPC.x, shape.gradientPC.y, shape.gradientR1);
+			break;
+
+		default :
+			throw new Error('unknown gradient');
 	}
+
 	var steps = style.steps;
-	for(var i = 0; i < steps.length; i++) {
-		grad.addColorStop(steps[i][0], steps[i][1]);
-	}
+	for(var i = 0; i < steps.length; i++)
+		{ grad.addColorStop(steps[i][0], steps[i][1]); }
+
 	return grad;
 };
 
-/**
+
+/*
 | Draws a single edge.
 |
 | style: the style formated in meshcraft style notation.
 | shape: an object which has 'sketch'() defined
 */
-Fabric.prototype._edge = function(style, shape, sketch, view, a1, a2, a3, a4) {
+Fabric.prototype._edge = function(style, shape, sketch, view, a1, a2, a3, a4)
+{
 	var cx = this._cx;
 	this._begin(true);
 
@@ -645,4 +778,4 @@ Fabric.prototype._edge = function(style, shape, sketch, view, a1, a2, a3, a4) {
 };
 
 
-})();
+} ) ();

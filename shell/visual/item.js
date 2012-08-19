@@ -442,7 +442,7 @@ Item.prototype.mousehover = function(view, p)
 
 
 /*
-| Sees if this item reacts on a click event.
+| Sees if this portal is being clicked.
 */
 Item.prototype.click = function(view, p)
 {

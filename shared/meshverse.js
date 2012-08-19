@@ -61,8 +61,9 @@ Meshverse =
 	{
 		copse :
 		{
-			'Note'     : true,
 			'Label'    : true,
+			'Note'     : true,
+			'Portal'   : true,
 			'Relation' : true
 		},
 		ranks : true
