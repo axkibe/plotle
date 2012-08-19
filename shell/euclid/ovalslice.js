@@ -25,7 +25,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /*
-| Exports
+| Export
 */
 var OvalSlice  = null;
 
@@ -67,6 +67,9 @@ OvalSlice = function(psw, dimensions)
 };
 
 
+/*
+| Slices a bezier at fraction f
+*/
 var sliceBezier = function(x2, y2, x3, y3, x4, y4, f)
 {
 	var ff  = f*f;
@@ -162,4 +165,4 @@ OvalSlice.prototype.within = function(fabric, view, p)
 	{ return fabric.within(this, 'sketch', view, p); };
 
 
-})();
+} ) ();

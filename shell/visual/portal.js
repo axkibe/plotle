@@ -83,7 +83,28 @@ Portal.prototype.handles =
 */
 Portal.prototype.getSilhoutte = function($zone, zAnchor)
 {
-	throw new Error('TODO');
+	var $z = $zone;
+	var $s;
+
+	var cr = theme.note.cornerRadius;
+	if (zAnchor)
+	{
+		$s = this._silhoutte$0;
+		if ($s && $s.width === $z.width && $s.height === $z.height)
+			{ return $s; }
+
+		return this._silhoutte$0 = new Euclid.BeziRect(
+			Euclid.Point.zero,
+			new Euclid.Point($z.width, $z.height), cr, cr
+		);
+	}
+	else
+	{
+		$s = this._silhoutte$1;
+		if ($s && $s.eq($z))
+			{ return $s; }
+		return this._silhoutte$1 = new Euclid.BeziRect($z.pnw, $z.pse, cr, cr);
+	}
 };
 
 
@@ -164,6 +185,7 @@ Portal.prototype.click = function(view, p)
 */
 Portal.prototype.draw = function(fabric, view)
 {
+	console.log(draw);
 	var zone  = this.getZone();
 	var vzone = view.rect(zone);
 	var f     = this.$fabric;
@@ -171,37 +193,17 @@ Portal.prototype.draw = function(fabric, view)
 
 
 	// no buffer hit?
-	/*
 	if (config.debug.noCache || !f ||
 		vzone.width  !== f.width ||
 		vzone.height !== f.height)
 	{
 		f = this.$fabric = new Euclid.Fabric(vzone.width, vzone.height);
-		var doc     = this.$sub.doc;
-		var imargin = this.innerMargin;
-
-		// calculates if a scrollbar is needed
-		var height = doc.getHeight();
-		sbary.visible = height > zone.height - imargin.y;
 
 		var silhoutte = this.getSilhoutte(vzone, true);
 		f.fill(theme.note.style.fill, silhoutte, 'sketch', Euclid.View.proper);
-
-		// draws selection and text
-		sbary.point = Euclid.Point.renew(0, sbary.getPos(), sbary.point);
-		doc.draw(f, view.home(), zone.width, imargin, sbary.point);
-
-		// draws the border
-		f.edge(theme.note.style.edge, silhoutte, 'sketch', Euclid.View.proper);
 	}
 
 	fabric.drawImage(f, vzone.pnw);
-
-	if (sbary.visible) {
-		this.setScrollbar();
-		sbary.draw(fabric, view);
-	}
-	*/
 };
 
 
