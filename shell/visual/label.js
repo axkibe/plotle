@@ -58,9 +58,9 @@ if (typeof(window) === 'undefined')
 */
 var Label = Visual.Label = function(spacename, twig, path)
 {
-	Visual.Item.call(this, spacename, twig, path);
+	Visual.DocItem.call(this, spacename, twig, path);
 };
-Jools.subclass(Label, Visual.Item);
+Jools.subclass(Label, Visual.DocItem);
 
 
 /*
@@ -288,7 +288,7 @@ Label.prototype.actionstop = function(view, p)
 			break;
 
 		default :
-			return Visual.Item.prototype.actionstop.call(this, view, p);
+			return Visual.DocItem.prototype.actionstop.call(this, view, p);
 	}
 };
 

@@ -59,12 +59,12 @@ if (typeof(window) === 'undefined')
 */
 var Note = Visual.Note = function(spacename, twig, path)
 {
-	Visual.Item.call(this, spacename, twig, path);
+	Visual.DocItem.call(this, spacename, twig, path);
 	this.scrollbarY = new Visual.Scrollbar();
 
 };
 
-Jools.subclass(Note, Visual.Item);
+Jools.subclass(Note, Visual.DocItem);
 
 
 /*
@@ -210,7 +210,7 @@ Note.prototype.actionstop = function(view, p)
 			shell.redraw = true;
 			return true;
 		default :
-			return Visual.Item.prototype.actionstop.call(this, view, p);
+			return Visual.DocItem.prototype.actionstop.call(this, view, p);
 	}
 };
 

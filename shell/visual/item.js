@@ -60,14 +60,6 @@ var Item = Visual.Item = function(spacename, twig, path)
 {
 	Visual.Base.call(this, spacename, twig, path);
 
-	if (this.$sub !== null)
-		{ throw new Error('iFail'); }
-
-	this.$sub =
-		{
-			doc : new Visual.Doc(spacename, twig.doc, new Path(path, '++', 'doc'))
-		};
-
 	this._$ovalslice = null;
 	this.$fabric     = null;
 	this.$handles    = { };
@@ -81,14 +73,7 @@ Jools.subclass(Item, Visual.Base);
 */
 Item.prototype.update = function(twig)
 {
-	this.twig    = twig;
 	this.$fabric = null;
-
-	var doc = this.$sub.doc;
-	if (doc.twig !== twig.doc)
-	{
-		doc.update(twig.doc);
-	}
 };
 
 
