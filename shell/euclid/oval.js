@@ -65,7 +65,7 @@ var Oval = Euclid.Oval = function(pnw, pse)
 Jools.lazyFixate(Oval.prototype, 'pm',
 	function()
 	{
-		return new Point(
+		return new Euclid.Point(
 			Jools.half(this.pnw.x + this.pse.x),
 			Jools.half(this.pnw.y + this.pse.y)
 		);

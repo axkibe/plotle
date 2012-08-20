@@ -62,7 +62,7 @@ var Label = Dash.Label = function(twig, panel, inherit, name) {
 /**
 | Labels cannot focus.
 */
-Label.prototype.setFocus = function()
+Label.prototype.grepFocus = function()
 	{ return false; };
 
 /**

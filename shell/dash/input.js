@@ -557,8 +557,11 @@ Input.prototype.specialKey = function(key)
 /*
 | Control takes focus.
 */
-Input.prototype.setFocus = function()
+Input.prototype.grepFocus = function()
 {
+	if (this.panel.focusedControl() === this)
+		{ return false; }
+
 	shell.setCaret(
 		'board',
 		{

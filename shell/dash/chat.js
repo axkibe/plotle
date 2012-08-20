@@ -449,8 +449,11 @@ Chat.prototype.addMessage = function(msg)
 /*
 | Control takes focus.
 */
-Chat.prototype.setFocus = function()
+Chat.prototype.grepFocus = function()
 {
+	if (this.panel.focusedControl() === this)
+		{ return false; }
+
 	shell.setCaret(
 		'board',
 		{

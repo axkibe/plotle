@@ -123,7 +123,7 @@ Space.prototype.update = function(twig)
 			shell.selection.sign1.path.get(-4) === csign.path.get(1))
 			{ shell.selection.deselect(true); }
 
-		this.setFocus(null, null);
+		shell.dropFocus();
 	}
 
 	shell.redraw = true;
@@ -212,41 +212,6 @@ Space.prototype.knock = function() {
 */
 Space.prototype.drawCaret = function()
 	{ this.getSub(shell.caret.sign.path, -1).drawCaret(this.$view); };
-
-
-/*
-| Sets the focused item.
-| item === null blurs.
-*/
-Space.prototype.setFocus = function(item)
-{
-	var focus = this.focusedItem();
-
-	if (focus && focus === item)
-		{ return; }
-
-	var caret = shell.caret;
-
-	if (item)
-	{
-		var doc = item.$sub.doc;
-
-		caret = shell.setCaret(
-			'space',
-			{
-				path : doc.atRank(0).textPath,
-				at1  : 0
-			}
-		);
-
-		caret.show();
-		shell.peer.moveToTop(item.$path);
-	}
-	else
-	{
-		shell.setCaret(null, null);
-	}
-};
 
 
 /*
@@ -406,7 +371,7 @@ Space.prototype.click = function(p, shift, ctrl)
 			{ self.floatMenuSelect(entry, p); }
 	));
 
-	this.setFocus(null);
+	shell.dropFocus();
 	shell.redraw = true;
 	return true;
 };
@@ -516,7 +481,8 @@ Space.prototype.floatMenuSelect = function(entry, p)
 				new Euclid.Rect(pnw, pnw.add(nw, nh))
 			);
 
-			this.setFocus(this.$sub[key]);
+			this.$sub[key].grepFocus();
+
 			break;
 
 		case 'ne' :
@@ -532,7 +498,8 @@ Space.prototype.floatMenuSelect = function(entry, p)
 				20
 			);
 
-			this.setFocus(this.$sub[key]);
+			this.$sub[key].grepFocus();
+
 			break;
 
 		case 'se' :
@@ -549,7 +516,8 @@ Space.prototype.floatMenuSelect = function(entry, p)
 				new Euclid.Rect(pnw, pnw.add(nw, nh))
 			);
 
-			this.setFocus( this.$sub[key] );
+			this.$sub[key].grepFocus();
+
 			break;
 	}
 };
@@ -563,7 +531,7 @@ Space.prototype.itemMenuSelect = function(entry, p, focus)
 	switch(entry)
 	{
 		case 'n': // remove
-			this.setFocus(null);
+			shell.dropFocus();
 			shell.peer.removeItem(focus.$path);
 			break;
 	}

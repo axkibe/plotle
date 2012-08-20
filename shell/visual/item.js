@@ -337,7 +337,7 @@ Item.prototype.dragstart = function(view, p, shift, ctrl, access)
 
 	// scrolling or dragging
 	if (access == 'rw')
-		{ shell.$space.setFocus(this); }
+		{ this.grepFocus(); }
 
 	if (access == 'rw')
 	{
@@ -441,7 +441,32 @@ Item.prototype.mousehover = function(view, p)
 
 
 /*
-| Sees if this portal is being clicked.
+| Sets the focus to this item.
+*/
+Item.prototype.grepFocus = function()
+{
+	// already have focus?
+	if (shell.$space.focusedItem() === this)
+		{ return; }
+
+	var doc = this.$sub.doc;
+
+	var caret = shell.setCaret(
+		'space',
+		{
+			path : doc.atRank(0).textPath,
+			at1  : 0
+		}
+	);
+
+	caret.show();
+
+	shell.peer.moveToTop(this.$path);
+};
+
+
+/*
+| Sees if this item is being clicked.
 */
 Item.prototype.click = function(view, p)
 {
@@ -452,9 +477,10 @@ Item.prototype.click = function(view, p)
 
 	var $space = shell.$space;
 	var focus  = $space.focusedItem();
+
 	if (focus !== this)
 	{
-		$space.setFocus(this);
+		this.grepFocus();
 		shell.selection.deselect();
 	}
 

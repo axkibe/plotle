@@ -84,6 +84,16 @@ Shell = function(fabric) {
 	this._draw();
 };
 
+
+/*
+| Retracts the focus.
+*/
+Shell.prototype.dropFocus = function()
+{
+	this.setCaret(null, null);
+};
+
+
 /**
 | Sets the caret position.
 */

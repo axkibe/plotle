@@ -90,9 +90,12 @@ var Button = Dash.Button = function(twig, panel, inherit, name)
 /*
 | Control takes focus.
 */
-Button.prototype.setFocus = function()
+Button.prototype.grepFocus = function()
 {
 	if (!this.$visible)
+		{ return false; }
+
+	if (this.panel.focusedControl() === this)
 		{ return false; }
 
 	shell.setCaret(

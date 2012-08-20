@@ -82,8 +82,7 @@ Relation.create = function(space, item1, item2)
 	);
 
 	// event listener has created the vrel
-	var vrel = space.$sub[key];
-	space.setFocus(vrel);
+	space.$sub[key].grepFocus();
 };
 
 

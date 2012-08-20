@@ -132,6 +132,31 @@ Portal.prototype.actionstop = function(view, p)
 	*/
 };
 
+
+/*
+| Sets the focus to this item.
+*/
+Portal.prototype.grepFocus = function()
+{
+	// already have focus?
+	if (shell.$space.focusedItem() === this)
+		{ return; }
+
+	var caret = shell.setCaret(
+		'space',
+		{
+			path : this.$path,
+			at1  : 0
+		}
+	);
+
+	caret.show();
+
+	shell.peer.moveToTop(this.$path);
+};
+
+
+
 /*
 | Sees if this portal is being clicked.
 */
@@ -146,7 +171,7 @@ Portal.prototype.click = function(view, p)
 	var focus  = $space.focusedItem();
 	if (focus !== this)
 	{
-		$space.setFocus(this);
+		this.grepFocus();
 		shell.selection.deselect();
 	}
 
@@ -262,7 +287,7 @@ Portal.prototype.dragstart = function(view, p, shift, ctrl, access)
 
 	// scrolling or dragging
 	if (access == 'rw')
-		{ shell.$space.setFocus(this); }
+		{ this.grepFocus(); }
 
 	if (access == 'rw')
 	{

@@ -335,16 +335,13 @@ Panel.prototype.cycleFocus = function(dir)
 		rank = (rank + dir + layout.length) % layout.length;
 
 		if (rank === rs)
-			{ this.setFocus(null); }
+			{ shell.dropFocus(); }
 
 		cname = layout.ranks[rank];
 		ve    = this.$sub[cname];
-
-		if (this.setFocus(cname))
+		if (ve.grepFocus())
 			{ break; }
 	}
-
-	return;
 };
 
 
@@ -377,20 +374,6 @@ Panel.prototype.poke = function()
 	shell.redraw = true;
 };
 
-
-/**
-| Sets the focused component.
-*/
-Panel.prototype.setFocus = function(cname)
-{
-	var com   = this.$sub[cname];
-	var focus = this.focusedControl();
-
-	if (focus === com)
-		{ return true; }
-
-	return com.setFocus();
-};
 
 /**
 | Sets the hovered component.
