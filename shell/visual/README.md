@@ -15,6 +15,10 @@ Files
 </td><td>   a sequence of paragraphs
 </td></tr>
 
+ <tr><td>   docitem.js
+</td><td>   an item with a doc
+</td></tr>
+
  <tr><td>   item.js
 </td><td>   common base of note, label and relation
 </td></tr>
@@ -24,11 +28,15 @@ Files
 </td></tr>
 
  <tr><td>   note.js
-</td><td>   a fix sized text item.
+</td><td>   a fix sized text item
 </td></tr>
 
  <tr><td>   para.js
 </td><td>   a paragraph
+</td></tr>
+
+ <tr><td>   portal.js
+</td><td>   a portal to another space
 </td></tr>
 
  <tr><td>   relation.js
