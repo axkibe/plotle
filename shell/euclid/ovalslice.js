@@ -27,7 +27,8 @@
 /*
 | Export
 */
-var OvalSlice  = null;
+var Euclid;
+Euclid = Euclid || {};
 
 
 /*
@@ -49,7 +50,7 @@ if (typeof(window) === 'undefined')
 /*
 | Constructor.
 */
-OvalSlice = function(psw, dimensions)
+var OvalSlice = Euclid.OvalSlice = function(psw, dimensions)
 {
 	this.psw       = psw;
 	var a = this.a = dimensions.a1;

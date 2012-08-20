@@ -37,7 +37,6 @@ Visual = Visual || {};
 var Action;
 var Euclid;
 var Jools;
-var OvalSlice;
 var Path;
 var shell;
 var system;
@@ -100,7 +99,7 @@ Item.prototype.getOvalSlice = function()
 {
 	var zone = this.getZone();
 	if (this._$ovalslice && this._$ovalslice.psw.eq(zone.pnw)) return this._$ovalslice;
-	return this._$ovalslice = new OvalSlice(zone.pnw, theme.ovalmenu.dimensions);
+	return this._$ovalslice = new Euclid.OvalSlice(zone.pnw, theme.ovalmenu.dimensions);
 };
 
 

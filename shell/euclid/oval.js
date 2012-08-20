@@ -27,7 +27,9 @@
 /*
 | Export
 */
-var Oval = null;
+var Euclid;
+Euclid = Euclid || {};
+
 
 /*
 | Imports
@@ -48,7 +50,7 @@ if (typeof(window) === 'undefined')
 /*
 | Constructor.
 */
-Oval = function(pnw, pse)
+var Oval = Euclid.Oval = function(pnw, pse)
 {
 	this.pnw = pnw;
 	this.pse = pse;
@@ -86,20 +88,20 @@ Oval.prototype.sketch = function(fabric, border, twist, view)
 	var am   = m * (mx - wx);
 	var bm   = m * (my - ny);
 
-	fabric.moveTo(                     mx, ny );
-	fabric.beziTo(   0, -bm, -am,   0, ex, my );
-	fabric.beziTo(  am,   0,   0, -bm, mx, sy );
+	fabric.moveTo(                     wx, my );
+	fabric.beziTo(   0, -bm, -am,   0, mx, ny );
+	fabric.beziTo(  am,   0,   0, -bm, ex, my );
 	// FIXME workaround chrome pixel error
 	//fabric.lineTo(                   mx, sy - 1);
-	fabric.beziTo(   0,  bm,  am,   0, wx, my );
-	fabric.beziTo( -am,   0,   0,  bm, mx, ny );
+	fabric.beziTo(   0,  bm,  am,   0, mx, sy );
+	fabric.beziTo( -am,   0,   0,  bm, wx, my );
 };
 
 
 /*
 | Returns true if point is within the slice.
 */
-OvalSlice.prototype.within = function(fabric, view, p)
+Oval.prototype.within = function(fabric, view, p)
 	{ return fabric.within(this, 'sketch', view, p); };
 
 

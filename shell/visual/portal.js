@@ -86,16 +86,15 @@ Portal.prototype.getSilhoutte = function($zone, zAnchor)
 	var $z = $zone;
 	var $s;
 
-	var cr = theme.note.cornerRadius;
 	if (zAnchor)
 	{
 		$s = this._silhoutte$0;
 		if ($s && $s.width === $z.width && $s.height === $z.height)
 			{ return $s; }
 
-		return this._silhoutte$0 = new Euclid.BeziRect(
+		return this._silhoutte$0 = new Euclid.Oval(
 			Euclid.Point.zero,
-			new Euclid.Point($z.width, $z.height), cr, cr
+			new Euclid.Point($z.width, $z.height)
 		);
 	}
 	else
@@ -103,7 +102,8 @@ Portal.prototype.getSilhoutte = function($zone, zAnchor)
 		$s = this._silhoutte$1;
 		if ($s && $s.eq($z))
 			{ return $s; }
-		return this._silhoutte$1 = new Euclid.BeziRect($z.pnw, $z.pse, cr, cr);
+
+		return this._silhoutte$1 = new Euclid.Oval($z.pnw, $z.pse);
 	}
 };
 
@@ -185,7 +185,6 @@ Portal.prototype.click = function(view, p)
 */
 Portal.prototype.draw = function(fabric, view)
 {
-	console.log(draw);
 	var zone  = this.getZone();
 	var vzone = view.rect(zone);
 	var f     = this.$fabric;
@@ -200,7 +199,7 @@ Portal.prototype.draw = function(fabric, view)
 		f = this.$fabric = new Euclid.Fabric(vzone.width, vzone.height);
 
 		var silhoutte = this.getSilhoutte(vzone, true);
-		f.fill(theme.note.style.fill, silhoutte, 'sketch', Euclid.View.proper);
+		f.fill(theme.portal.style.fill, silhoutte, 'sketch', Euclid.View.proper);
 	}
 
 	fabric.drawImage(f, vzone.pnw);
@@ -306,8 +305,8 @@ Portal.prototype.getZone = function()
 			var spse = szone.pse;
 			var dx = $action.move.x - $action.start.x;
 			var dy = $action.move.y - $action.start.y;
-			var minw = theme.note.minWidth;
-			var minh = theme.note.minHeight;
+			var minw = theme.portal.minWidth;
+			var minh = theme.portal.minHeight;
 			var pnw, pse;
 
 			switch ($action.align) {
