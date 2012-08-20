@@ -76,7 +76,7 @@ Jools.subclass(DocItem, Visual.Item);
 */
 DocItem.prototype.actionstop = function(view, p)
 {
-	Visual.Item.prototype.actionstop.call(this, view, p);
+	return Visual.Item.prototype.actionstop.call(this, view, p);
 };
 
 
@@ -85,7 +85,7 @@ DocItem.prototype.actionstop = function(view, p)
 */
 DocItem.prototype.update = function(twig)
 {
-	Visual.Item.prototype.call.update(this, twig);
+	Visual.Item.prototype.update.call(this, twig);
 
 	var doc = this.$sub.doc;
 

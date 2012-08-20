@@ -195,6 +195,7 @@ Note.prototype.scrollPage = function(up)
 Note.prototype.actionstop = function(view, p)
 {
 	var $action = shell.$action;
+
 	switch ($action.type) {
 		case Action.ITEMDRAG :
 		case Action.ITEMRESIZE :
@@ -209,6 +210,7 @@ Note.prototype.actionstop = function(view, p)
 
 			shell.redraw = true;
 			return true;
+
 		default :
 			return Visual.DocItem.prototype.actionstop.call(this, view, p);
 	}

@@ -444,6 +444,7 @@ Space.prototype.actionmove = function(p, shift, ctrl) {
 			for(var r = 0, rZ = this.twig.length; r < rZ; r++)
 			{
 				item = this.atRank(r);
+
 				if (item.actionmove($view, p))
 					{ return 'pointer'; }
 			}

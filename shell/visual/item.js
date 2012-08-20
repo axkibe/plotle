@@ -73,7 +73,10 @@ Jools.subclass(Item, Visual.Base);
 */
 Item.prototype.update = function(twig)
 {
+	this.twig    = twig;
 	this.$fabric = null;
+
+	this.poke();
 };
 
 
@@ -270,17 +273,6 @@ Item.prototype.drawHandles = function(fabric, view)
 };
 
 
-/*
-| Returns the para at point. FIXME, honor scroll here.
-*/
-Item.prototype.getParaAtPoint = function(p)
-{
-	if (p.y < this.innerMargin.n)
-		{ return null; }
-
-	return this.$sub.doc.getParaAtPoint(p);
-};
-
 
 /*
 | Dragstart.
@@ -390,9 +382,13 @@ Item.prototype.actionstop = function(view, p)
 	var vp = view.depoint(p);
 
 	var $action = shell.$action;
+
 	switch ($action.type) {
+
 		case Action.RELBIND :
-			if (!this.getZone().within(vp)) return false;
+			if (!this.getZone().within(vp))
+				{ return false; }
+
 			var $space = shell.getSub('space', this.$path, -1);
 			Visual.Relation.create($space, $space.getSub($action.itemPath), this);
 			shell.redraw = true;
@@ -447,54 +443,6 @@ Item.prototype.grepFocus = function()
 	caret.show();
 
 	shell.peer.moveToTop(this.$path);
-};
-
-
-/*
-| Sees if this item is being clicked.
-*/
-Item.prototype.click = function(view, p)
-{
-	var vp = view.depoint(p);
-
-	if (!this.getZone().within(vp))
-		{ return false; }
-
-	var $space = shell.$space;
-	var focus  = $space.focusedItem();
-
-	if (focus !== this)
-	{
-		this.grepFocus();
-		shell.selection.deselect();
-	}
-
-	shell.redraw = true;
-
-	var pnw  = this.getZone().pnw;
-	var pi   = vp.sub(pnw.x, pnw.y - (this.scrollbarY ? this.scrollbarY.getPos() : 0 ));
-	var para = this.getParaAtPoint(pi);
-
-	// TODO move into para
-	if (para)
-	{
-		var ppnw   = this.$sub.doc.getPNW(para.$key);
-		var at1    = para.getPointOffset( pi.sub( ppnw ));
-		var caret  = shell.caret;
-
-		caret = shell.setCaret(
-			'space',
-			{
-				path : para.textPath,
-				at1  : at1
-			}
-		);
-
-		caret.show();
-		shell.selection.deselect();
-	}
-
-	return true;
 };
 
 

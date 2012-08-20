@@ -57,10 +57,10 @@ if (typeof(window) === 'undefined')
 */
 var Portal = Visual.Portal = function(spacename, twig, path)
 {
-	Visual.Base.call(this, spacename, twig, path);
+	Visual.Item.call(this, spacename, twig, path);
 };
 
-Jools.subclass(Portal, Visual.Base);
+Jools.subclass(Portal, Visual.Item);
 
 
 /*
@@ -105,31 +105,6 @@ Portal.prototype.getSilhoutte = function($zone, zAnchor)
 
 		return this._silhoutte$1 = new Euclid.Oval($z.pnw, $z.pse);
 	}
-};
-
-
-/*
-| Sets the items position and size after an action.
-*/
-Portal.prototype.actionstop = function(view, p)
-{
-	throw new Error('TODO');
-	/*
-	var $action = shell.$action;
-	switch ($action.type) {
-		case Action.ITEMDRAG :
-		case Action.ITEMRESIZE :
-			var zone = this.getZone();
-
-			if (this.twig.zone.eq(zone)) return;
-			shell.peer.setZone(this.$path, zone);
-
-			shell.redraw = true;
-			return true;
-		default :
-			return Visual.Item.prototype.actionstop.call(this, view, p);
-	}
-	*/
 };
 
 
