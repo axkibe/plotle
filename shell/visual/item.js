@@ -69,6 +69,12 @@ Jools.subclass(Item, Visual.Base);
 
 
 /*
+| Used for lookups
+*/
+Item.prototype.isItem = true;
+
+
+/*
 | Updates the $sub to match a new twig.
 */
 Item.prototype.update = function(twig)

@@ -80,7 +80,7 @@ Para.prototype.draw = function(fabric, view, pnw)
 {
 	var flow   = this.getFlow();
 	var width  = flow.spread * view.zoom;
-	var doc    = shell.getSub('space', this.$path, -1);
+	var doc    = shell.getSubDoc( this.$path );
 	var height = this.getHeight() * view.zoom;
 	var $f     = this.$fabric;
 
@@ -123,7 +123,7 @@ Para.prototype.draw = function(fabric, view, pnw)
 Para.prototype.drawCaret = function(view)
 {
 	var caret = shell.caret;
-	var item  = shell.getSub('space', this.$path, -2);
+	var item  = shell.getSubItem( this.$path );
 	var doc   = item.$sub.doc;
 	var zone  = item.getZone();
 	var cpos  = caret.$pos  = this.getCaretPos();
@@ -160,7 +160,7 @@ Para.prototype.drawCaret = function(view)
 */
 Para.prototype.getCaretPos = function()
 {
-	var item    = shell.getSub('space', this.$path, -2);
+	var item    = shell.getSubItem( this.$path );
 	var doc     = item.$sub.doc;
 	var fs      = doc.getFont(item).size;
 	var descend = fs * theme.bottombox;
@@ -183,7 +183,7 @@ Para.prototype.getCaretPos = function()
 */
 Para.prototype.getFlow = function()
 {
-	var item      = shell.getSub('space', this.$path, -2);
+	var item      = shell.getSubItem( this.$path );
 	var doc       = item.$sub.doc;
 	var flowWidth = item.getFlowWidth();
 	var font      = doc.getFont(item);
@@ -274,7 +274,7 @@ Para.prototype.getFlow = function()
 Para.prototype.getHeight = function()
 {
 	var flow = this.getFlow();
-	var doc = shell.getSub('space', this.$path, -1);
+	var doc = shell.getSubDoc('space', -1);
 
 	return flow.height + Math.round(doc.getFont().size * theme.bottombox);
 };
@@ -287,7 +287,7 @@ Para.prototype.getHeight = function()
 */
 Para.prototype.getLineXOffset = function(line, x)
 {
-	var item   = shell.getSub('space', this.$path, -2);
+	var item   = shell.getSubItem ( this.$path );
 	var doc    = item.$sub.doc;
 	var font   = doc.getFont(item);
 
@@ -341,7 +341,7 @@ Para.prototype.locateOffset = function(offset, flowPos$)
 {
 	// FIXME cache position
 	var twig = this.twig;
-	var doc  = shell.getSub('space', this.$path, -1);
+	var doc  = shell.getSubDoc ( this.$path, -1 );
 	var font = doc.getFont();
 	var text = twig.text;
 	var flow = this.getFlow();
@@ -415,7 +415,7 @@ Para.prototype.input = function(text)
 {
     var reg   = /([^\n]+)(\n?)/g;
 	var para  = this;
-	var item  = shell.getSub('space', para.$path, -2);
+	var item  = shell.getSubItem ( para.$path );
 	var doc   = item.$sub.doc;
 
     for (var rx = reg.exec(text); rx !== null; rx = reg.exec(text))
@@ -704,7 +704,7 @@ Para.prototype.specialKey = function(key, shift, ctrl)
 {
 	var caret  = shell.caret;
 	var select = shell.selection;
-	var item   = shell.getSub('space', this.$path, -2);
+	var item   = shell.getSubItem ( this.$path );
 	var doc    = item.$sub.doc;
 
 	// if true the caret moved or the selection changed

@@ -149,6 +149,7 @@ Shell.prototype.setCaret = function(section, sign, retainx) {
 */
 Shell.prototype.getCaretEntity = function(sec, path)
 {
+	throw new Error('TODO');
 
 	switch(sec)
 	{
@@ -157,26 +158,6 @@ Shell.prototype.getCaretEntity = function(sec, path)
 
 		case 'space' :
 			return this.$space.getSub(path, 1);
-
-		default :
-			throw new Error('Invalid sec: ' + sec);
-	}
-};
-
-
-/**
-| Returns the subnode in the section (dashboard or space) marked by path
-| This is either an item, or a dashboard component.
-*/
-Shell.prototype.getSub = function(sec, path, len)
-{
-	switch(sec)
-	{
-		case 'board' :
-			return this.$board.getSub(path, len);
-
-		case 'space' :
-			return this.$space.getSub(path, len);
 
 		default :
 			throw new Error('Invalid sec: ' + sec);

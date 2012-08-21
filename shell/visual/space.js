@@ -138,7 +138,7 @@ Space.prototype.focusedItem = function()
 	if (caret.section !== 'space')
 		{ return null; }
 
-	return this.getSub(caret.sign.path, 1);
+	return this.getSubItem(caret.sign.path);
 };
 
 /**
@@ -187,8 +187,8 @@ Space.prototype.draw = function()
 	switch ($action && $action.type)
 	{
 		case Action.RELBIND :
-			var av  = this.getSub($action.itemPath);
-			var av2 = $action.item2Path ? this.getSub($action.item2Path) : null;
+			var av  = this.getSubItem($action.itemPath);
+			var av2 = $action.item2Path ? this.getSubItem($action.item2Path) : null;
 			var target = av2 ? av2.getZone() : $view.depoint($action.move);
 			var arrow = Euclid.Line.connect(av.getZone(), 'normal', target, 'arrow');
 			if (av2) av2.highlight(this.fabric, $view);
@@ -211,7 +211,9 @@ Space.prototype.knock = function() {
 | Draws the caret.
 */
 Space.prototype.drawCaret = function()
-	{ this.getSub(shell.caret.sign.path, -1).drawCaret(this.$view); };
+{
+	this.getSubItem(shell.caret.sign.path).drawCaret(this.$view);
+};
 
 
 /*
@@ -405,7 +407,7 @@ Space.prototype.actionstop = function(p, shift, ctrl)
 		case Action.ITEMDRAG   :
 		case Action.ITEMRESIZE :
 		case Action.SCROLLY    :
-			item = this.getSub($action.itemPath);
+			item = this.getSubItem($action.itemPath);
 			item.actionstop($view, p, shift, ctrl);
 			break;
 
@@ -451,7 +453,7 @@ Space.prototype.actionmove = function(p, shift, ctrl) {
 			return 'pointer';
 
 		default :
-			item = this.getSub($action.itemPath);
+			item = this.getSubItem($action.itemPath);
 			item.actionmove($view, p);
 			return 'move';
 	}
@@ -591,7 +593,7 @@ Space.prototype.input = function(text)
 	if (!caret.sign)
 		{ return; }
 
-	this.getSub(caret.sign.path, -1).input(text);
+	this.getSubItem(caret.sign.path).input(text);
 };
 
 
@@ -628,14 +630,14 @@ Space.prototype.specialKey = function(key, shift, ctrl)
 	if (!caret.sign)
 		{ return; }
 
-	this.getSub(caret.sign.path, -1).specialKey(key, shift, ctrl);
+	this.getSubItem(caret.sign.path).specialKey(key, shift, ctrl);
 };
 
 
 /*
 | Returns the visual node the path points to.
 */
-Space.prototype.getSub = function(path, plen)
+Space.prototype.getSubItem = function(path, plen)
 {
 	if (!Jools.is(plen))
 		{ plen  = path.length; }
@@ -644,9 +646,13 @@ Space.prototype.getSub = function(path, plen)
 
 	var $n = this;
 	for (var $a = 0; $a < plen; $a++)
-		{ $n = $n.$sub[path.get($a)]; }
+	{
+		$n = $n.$sub[path.get($a)];
+		if ($n.isItem)
+			{ return $n; }
+	}
 
-	return $n;
+	throw new Error('path does not lead to item');
 };
 
 
