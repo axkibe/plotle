@@ -137,14 +137,22 @@ theme =
 
 		style :
 		{
-			fill : 'rgb(255, 188, 88)',
+			fill :
+			{
+				gradient : 'radial',
+				steps :
+				[
+					[ 0, 'rgba(255, 255, 248, 0.955)' ],
+					[ 1, 'rgba(255, 255, 160, 0.955)' ]
+				]
+			},
 
 			edge :
 			[
 				{
-					border : 1,
-					width  : 1,
-					color  : 'rgb(255, 188, 87)'
+					border: 3,
+					width : 6,
+					color : 'rgb(255, 220, 128)'
 				},
 				{
 					border: 0,

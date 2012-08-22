@@ -69,9 +69,13 @@ Jools.subclass(Portal, Visual.Item);
 Portal.prototype.handles =
 {
 	n  : true,
+	ne : true,
 	e  : true,
+	se : true,
 	s  : true,
-	w  : true
+	sw : true,
+	w  : true,
+	nw : true
 };
 
 
@@ -89,6 +93,7 @@ Portal.prototype.getSilhoutte = function($zone, zAnchor)
 	if (zAnchor)
 	{
 		$s = this._silhoutte$0;
+
 		if ($s && $s.width === $z.width && $s.height === $z.height)
 			{ return $s; }
 
@@ -100,6 +105,7 @@ Portal.prototype.getSilhoutte = function($zone, zAnchor)
 	else
 	{
 		$s = this._silhoutte$1;
+
 		if ($s && $s.eq($z))
 			{ return $s; }
 
@@ -152,28 +158,16 @@ Portal.prototype.click = function(view, p)
 
 	shell.redraw = true;
 
-	var pnw  = this.getZone().pnw;
-	var pi   = vp.sub(pnw.x, pnw.y - (this.scrollbarY ? this.scrollbarY.getPos() : 0 ));
-	var para = this.getParaAtPoint(pi);
+	var caret = shell.setCaret(
+		'space',
+		{
+			path : this.$path,
+			at1  : null
+		}
+	);
 
-	// TODO move into para
-	if (para)
-	{
-		var ppnw   = this.$sub.doc.getPNW(para.$key);
-		var at1    = para.getPointOffset( pi.sub( ppnw ));
-		var caret  = shell.caret;
-
-		caret = shell.setCaret(
-			'space',
-			{
-				path : para.textPath,
-				at1  : at1
-			}
-		);
-
-		caret.show();
-		shell.selection.deselect();
-	}
+	caret.show();
+	shell.selection.deselect();
 
 	return true;
 };
@@ -196,10 +190,11 @@ Portal.prototype.draw = function(fabric, view)
 		vzone.width  !== f.width ||
 		vzone.height !== f.height)
 	{
-		f = this.$fabric = new Euclid.Fabric(vzone.width, vzone.height);
+		f = this.$fabric = new Euclid.Fabric(vzone.width + 1, vzone.height + 1);
 
 		var silhoutte = this.getSilhoutte(vzone, true);
 		f.fill(theme.portal.style.fill, silhoutte, 'sketch', Euclid.View.proper);
+		f.edge(theme.portal.style.edge, silhoutte, 'sketch', Euclid.View.proper);
 	}
 
 	fabric.drawImage(f, vzone.pnw);
@@ -215,6 +210,15 @@ Portal.prototype.mousewheel = function(view, p, dir, shift, ctrl)
 
 	return this.getZone().within(dp);
 };
+
+
+/*
+|
+*/
+Portal.prototype.drawCaret = function(view)
+{
+	// TODO remove ?
+}
 
 /*
 | Mouse is hovering around.
