@@ -138,7 +138,7 @@ Space.prototype.focusedItem = function()
 	if (caret.section !== 'space')
 		{ return null; }
 
-	return this.getSubItem(caret.sign.path);
+	return this.getSub(caret.sign.path, 'Item');
 };
 
 /**
@@ -187,12 +187,22 @@ Space.prototype.draw = function()
 	switch ($action && $action.type)
 	{
 		case Action.RELBIND :
-			var av  = this.getSubItem($action.itemPath);
-			var av2 = $action.item2Path ? this.getSubItem($action.item2Path) : null;
+
+			var av     = this.getSub( $action.itemPath, 'Item' );
+
+			var av2    = $action.item2Path ?
+				this.getSub($action.item2Path, 'Item' ) :
+				null;
+
 			var target = av2 ? av2.getZone() : $view.depoint($action.move);
-			var arrow = Euclid.Line.connect(av.getZone(), 'normal', target, 'arrow');
-			if (av2) av2.highlight(this.fabric, $view);
+
+			var arrow  = Euclid.Line.connect(av.getZone(), 'normal', target, 'arrow');
+
+			if (av2)
+				{ av2.highlight(this.fabric, $view); }
+
 			arrow.draw(this.fabric, $view, theme.relation.style);
+
 			break;
 	}
 };
@@ -212,7 +222,7 @@ Space.prototype.knock = function() {
 */
 Space.prototype.drawCaret = function()
 {
-	this.getSubItem(shell.caret.sign.path).drawCaret(this.$view);
+	this.getSub(shell.caret.sign.path, 'drawCaret' ).drawCaret(this.$view);
 };
 
 
@@ -386,6 +396,7 @@ Space.prototype.actionstop = function(p, shift, ctrl)
 	var $action = shell.$action;
 	var $view   = this.$view;
 	var item;
+	var $node;
 
 	if (!$action)
 		{ throw new Error('Dragstop without action?'); }
@@ -407,8 +418,8 @@ Space.prototype.actionstop = function(p, shift, ctrl)
 		case Action.ITEMDRAG   :
 		case Action.ITEMRESIZE :
 		case Action.SCROLLY    :
-			item = this.getSubItem($action.itemPath);
-			item.actionstop($view, p, shift, ctrl);
+			$node = this.getSub( $action.itemPath, 'actionstop' );
+			$node.actionstop($view, p, shift, ctrl);
 			break;
 
 		default :
@@ -425,7 +436,8 @@ Space.prototype.actionstop = function(p, shift, ctrl)
 Space.prototype.actionmove = function(p, shift, ctrl) {
 	var $view   = this.$view;
 	var $action = shell.$action;
-	var item;
+	var item; // TODO
+	var $node;
 
 	switch($action.type) {
 		case Action.PAN :
@@ -453,8 +465,9 @@ Space.prototype.actionmove = function(p, shift, ctrl) {
 			return 'pointer';
 
 		default :
-			item = this.getSubItem($action.itemPath);
-			item.actionmove($view, p);
+			$node = this.getSub( $action.itemPath, 'actionmove' );
+			$node.actionmove($view, p);
+
 			return 'move';
 	}
 };
@@ -593,7 +606,7 @@ Space.prototype.input = function(text)
 	if (!caret.sign)
 		{ return; }
 
-	this.getSubItem(caret.sign.path).input(text);
+	this.getSub( caret.sign.path, 'input' ).input(text);
 };
 
 
@@ -630,29 +643,40 @@ Space.prototype.specialKey = function(key, shift, ctrl)
 	if (!caret.sign)
 		{ return; }
 
-	this.getSubItem(caret.sign.path).specialKey(key, shift, ctrl);
+	this.getSub( caret.sign.path, 'specialKey').specialKey(key, shift, ctrl);
 };
 
 
 /*
-| Returns the visual node the path points to.
+| Returns the sub node path points to.
+|
+| If mark is not null, returns the last node that features the mark
+|
+| For example 'Item' or 'actionmove',
 */
-Space.prototype.getSubItem = function(path, plen)
+Space.prototype.getSub = function(path, mark)
 {
-	if (!Jools.is(plen))
-		{ plen  = path.length; }
-	else if (plen < 0)
-		{ plen += path.length; }
+	var n = this;
+	var m = null;
 
-	var $n = this;
-	for (var $a = 0; $a < plen; $a++)
+	for (var a = 0, aZ = path.length; a < aZ; a++)
 	{
-		$n = $n.$sub[path.get($a)];
-		if ($n.isItem)
-			{ return $n; }
+		if (!n.$sub)
+			{ break; }
+
+		n = n.$sub[path.get(a)];
+
+		if (mark && n[mark])
+			{ m = n; }
 	}
 
-	throw new Error('path does not lead to item');
+	if (!mark)
+		{ return n; }
+
+	if (!m)
+		{ throw new Error('path does not lead to marked item'); }
+
+	return m;
 };
 
 

@@ -119,8 +119,9 @@ Shell.prototype.setCaret = function(section, sign, retainx) {
 	if (this.caret.sign &&
 		(this.caret.section !== section || this.caret.sign.path !== sign.path)
 	) {
-		entity = this.getCaretEntity(this.caret.section, this.caret.sign.path);
+		entity = this._getCaretEntity(this.caret.section, this.caret.sign.path);
 
+		// TODO knock instead of poke?
 		if (entity)
 			{ entity.poke(); }
 	}
@@ -134,7 +135,9 @@ Shell.prototype.setCaret = function(section, sign, retainx) {
 
 	if (sign) {
 
-		entity = this.getCaretEntity(section, sign.path);
+		entity = this._getCaretEntity(section, sign.path);
+
+		// TODO knock instead of poke?
 		if (entity)
 			{ entity.poke(); }
 
@@ -147,17 +150,17 @@ Shell.prototype.setCaret = function(section, sign, retainx) {
 /**
 | Returns the first entity a caret can be in
 */
-Shell.prototype.getCaretEntity = function(sec, path)
+Shell.prototype._getCaretEntity = function(sec, path)
 {
-	throw new Error('TODO');
-
 	switch(sec)
 	{
 		case 'board' :
-			return this.$board.getSub(path, 2);
+			// TODO
+			// return this.$board.getSub(path, Dash.Component);
+			return this.$board.getSub(path);
 
 		case 'space' :
-			return this.$space.getSub(path, 1);
+			return this.$space.getSub(path, 'Item');
 
 		default :
 			throw new Error('Invalid sec: ' + sec);

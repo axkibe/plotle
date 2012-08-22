@@ -75,6 +75,10 @@ var Doc = Visual.Doc = function(spacename, twig, path)
 
 Jools.subclass(Doc, Visual.Base);
 
+/*
+| Marker
+*/
+Doc.prototype.Doc = true;
 
 /*
 | Returns the vtwig at rank 'rank'.
@@ -229,7 +233,7 @@ Doc.prototype.getSpread = function()
 Doc.prototype.getParaSep = function(item)
 {
 	if (!Jools.is(item))
-		{ item = shell.$space.getSub(this.$path, -1); }
+		{ item = shell.$space.getSub( this.$path, 'Item' ); }
 
 	var fs = this.getFont().size;
 	return item.getParaSep(fs);
@@ -244,7 +248,7 @@ Doc.prototype.getFont = function(item)
 {
 	// caller can provide item for performance optimization
 	if (!Jools.is(item))
-		{ item = shell.$space.getSub(this.$path, -1); }
+		{ item = shell.$space.getSub( this.$path, 'Item' ); }
 
 	var fs = item.twig.fontsize;
 	if (item.fontSizeChange)

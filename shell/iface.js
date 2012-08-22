@@ -210,6 +210,9 @@ IFace.prototype.sendMessage = function(message)
 {
 	var self = this;
 
+	if (!Jools.isString(message))
+		{ throw new Error('message is no string'); }
+
 	self._ajax(
 		{
             cmd     : 'message',

@@ -16,7 +16,9 @@
                                      )| \  ,-| | | | | |-'
                                      `'  ` `-^ ' ' `-| `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ,|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-                                                    `'
+
+ TODO this goes to Visual
+
  text range.
 
  Authors: Axel Kittenberger
@@ -24,25 +26,32 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/**
+
+/*
 | Export
 */
 var Range = null;
 
-/**
+
+/*
 | Imports
 */
 var shell;
 var system;
+var Visual;
 
-/**
+
+/*
 | Capsule
 */
-(function(){
+(function() {
 'use strict';
-if (typeof(window) === 'undefined') { throw new Error('this code requires a browser!'); }
 
-/**
+if (typeof(window) === 'undefined')
+	{ throw new Error('this code requires a browser!'); }
+
+
+/*
 | Constructor.
 */
 Range = function()
@@ -54,7 +63,8 @@ Range = function()
 	this.end   = null;
 };
 
-/**
+
+/*
 | Sets begin/end so begin is before end.
 */
 Range.prototype.normalize = function()
@@ -105,7 +115,8 @@ Range.prototype.normalize = function()
 	}
 };
 
-/**
+
+/*
 | The text the selection selects.
 */
 Range.prototype.innerText = function()
@@ -155,7 +166,8 @@ Range.prototype.remove = function()
 	);
 };
 
-/**
+
+/*
 | Deselects the selection.
 */
 Range.prototype.deselect = function(nopoke)
@@ -163,11 +175,12 @@ Range.prototype.deselect = function(nopoke)
 	if (!this.active)
 		{ return; }
 
+	// FIXME, use knock instead?
 	if (!nopoke)
-		{ shell.getSub('space', this.sign1.path, -3).poke(); }
+		{ shell.$space.getSub( this.sign1.path, 'Item' ).poke(); }
 
 	this.active = false;
 	system.setInput('');
 };
 
-})();
+} ) ();

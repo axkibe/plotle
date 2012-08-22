@@ -179,10 +179,14 @@ DocItem.prototype.click = function(view, p)
 	return true;
 };
 
+
+/*
+| TODO
+*/
 DocItem.prototype.knock = function()
 {
-	DocItem.prototype.knock.call(this);
-	this.$fabric = null;
+	Visual.Item.prototype.knock.call(this);
+
 	this.$sub.doc.knock();
 };
 

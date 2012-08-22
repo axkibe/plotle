@@ -71,7 +71,7 @@ Jools.subclass(Item, Visual.Base);
 /*
 | Used for lookups
 */
-Item.prototype.isItem = true;
+Item.prototype.Item = true;
 
 
 /*
@@ -365,7 +365,7 @@ Item.prototype.actionmove = function(view, p, shift, ctrl)
 		case Action.SCROLLY :
 			var start = $action.start;
 			var dy    = p.y - start.y;
-			var item  = shell.$space.getSub($action.itemPath);
+			var item  = shell.$space.getSub( $action.itemPath, 'Item' );
 			var sbary = item.scrollbarY;
 			var spos  = $action.startPos + sbary.scale(dy);
 			item.setScrollbar(spos);
@@ -395,8 +395,8 @@ Item.prototype.actionstop = function(view, p)
 			if (!this.getZone().within(vp))
 				{ return false; }
 
-			var $space = shell.getSub('space', this.$path, -1);
-			Visual.Relation.create($space, $space.getSub($action.itemPath), this);
+			var $space = shell.$space;
+			Visual.Relation.create( $space, $space.getSub( $action.itemPath ), this );
 			shell.redraw = true;
 			return true;
 
@@ -478,7 +478,6 @@ Item.prototype.poke = function()
 Item.prototype.knock = function()
 {
 	this.$fabric = null;
-	this.$sub.doc.knock();
 };
 
 

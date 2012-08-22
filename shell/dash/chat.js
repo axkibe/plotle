@@ -343,7 +343,7 @@ Chat.prototype.keyEnter = function()
 	var caret = shell.caret;
 	var csign = caret.sign;
 
-	shell.peer.sendMessage(this.itext);
+	shell.peer.sendMessage(this._$itext);
 
 	this._$itext = '';
 

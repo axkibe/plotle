@@ -91,7 +91,7 @@ Relation.create = function(space, item1, item2)
 */
 Relation.prototype.draw = function(fabric, view)
 {
-	var space = shell.getSub('space', this.$path, -1);
+	var space = shell.$space;
 	var item1 = space.$sub[this.twig.item1key];
 	var item2 = space.$sub[this.twig.item2key];
 	var zone = this.getZone();
