@@ -115,6 +115,39 @@ Portal.prototype.getSilhoutte = function($zone, zAnchor)
 
 
 /*
+| Sets the items position and size after an action.
+*/
+Portal.prototype.actionstop = function(view, p)
+{
+	switch (shell.$action.type) {
+
+		case Action.ITEMDRAG :
+		case Action.ITEMRESIZE :
+
+			var zone = this.getZone();
+
+			if ( zone.width < theme.portal.minWidth ||
+				zone.height < theme.portal.minHeight )
+				{ throw new Error('Portal under minimum size!'); }
+
+			if (this.twig.zone.eq(zone))
+				{ return; }
+
+			shell.peer.setZone( this.path, zone );
+
+			shell.redraw = true;
+
+			return true;
+
+		default :
+
+			return Visual.Item.prototype.actionstop.call(this, view, p);
+	}
+
+};
+
+
+/*
 | Sets the focus to this item.
 */
 Portal.prototype.grepFocus = function()
@@ -239,47 +272,6 @@ Portal.prototype.mousehover = function(view, p)
 
 
 /*
-| Dragstart.
-|
-| Checks if a dragstart targets this item.
-*/
-Portal.prototype.dragstart = function(view, p, shift, ctrl, access)
-{
-	var vp = view.depoint(p);
-	if (!this.getZone().within(vp))
-		{ return false; }
-
-	shell.redraw = true;
-
-	if (ctrl && access == 'rw')
-	{
-		// relation binding
-		shell.startAction(
-			Action.RELBIND, 'space',
-			'itemPath', this.path,
-			'start',    p,
-			'move',     p
-		);
-
-		return true;
-	}
-
-	// scrolling or dragging
-	if (access == 'rw')
-		{ this.grepFocus(); }
-
-	if (access == 'rw')
-	{
-		shell.startAction(
-			Action.ITEMDRAG, 'space',
-			'itemPath', this.path,
-			'start', vp,
-			'move',  vp
-		);
-	}
-};
-
-/*
 | Returns the zone of the item.
 | An ongoing action can modify this to be different than meshmashine data.
 */
@@ -297,6 +289,7 @@ Portal.prototype.getZone = function()
 
 	switch ($action.type)
 	{
+
 		case Action.ITEMDRAG:
 			return twig.zone.add(
 				$action.move.x - $action.start.x,
@@ -304,7 +297,9 @@ Portal.prototype.getZone = function()
 
 		case Action.ITEMRESIZE:
 			var szone = $action.startZone;
-			if (!szone) return twig.zone;
+			if (!szone)
+				{ return twig.zone; }
+
 			var spnw = szone.pnw;
 			var spse = szone.pse;
 			var dx = $action.move.x - $action.start.x;
@@ -313,50 +308,53 @@ Portal.prototype.getZone = function()
 			var minh = theme.portal.minHeight;
 			var pnw, pse;
 
-			switch ($action.align) {
-			case 'n'  :
-				pnw = Euclid.Point.renew(spnw.x, min(spnw.y + dy, spse.y - minh), spnw, spse);
-				pse = spse;
-				break;
-			case 'ne' :
-				pnw = Euclid.Point.renew(
-					spnw.x, min(spnw.y + dy, spse.y - minh), spnw, spse);
-				pse = Euclid.Point.renew(
-					max(spse.x + dx, spnw.x + minw), spse.y, spnw, spse);
-				break;
-			case 'e'  :
-				pnw = spnw;
-				pse = Euclid.Point.renew(max(spse.x + dx, spnw.x + minw), spse.y, spnw, spse);
-				break;
-			case 'se' :
-				pnw = spnw;
-				pse = Euclid.Point.renew(
-					max(spse.x + dx, spnw.x + minw),
-					max(spse.y + dy, spnw.y + minh), spnw, spse);
-				break;
-			case 's' :
-				pnw = spnw;
-				pse = Euclid.Point.renew(spse.x, max(spse.y + dy, spnw.y + minh), spnw, spse);
-				break;
-			case 'sw'  :
-				pnw = Euclid.Point.renew(min(spnw.x + dx, spse.x - minw), spnw.y, spnw, spse);
-				pse = Euclid.Point.renew(spse.x, max(spse.y + dy, spnw.y + minh), spnw, spse);
-				break;
-			case 'w'   :
-				pnw = Euclid.Point.renew(min(spnw.x + dx, spse.x - minw), spnw.y, spnw, spse);
-				pse = spse;
-				break;
-			case 'nw' :
-				pnw = Euclid.Point.renew(
-					min(spnw.x + dx, spse.x - minw),
-					min(spnw.y + dy, spse.y - minh), spnw, spse);
-				pse = spse;
-				break;
-			//case 'c' :
-			default  :
-				throw new Error('unknown align');
+			switch ($action.align)
+			{
+				case 'n'  :
+					pnw = Euclid.Point.renew(spnw.x, min(spnw.y + dy, spse.y - minh), spnw, spse);
+					pse = spse;
+					break;
+				case 'ne' :
+					pnw = Euclid.Point.renew(
+						spnw.x, min(spnw.y + dy, spse.y - minh), spnw, spse);
+					pse = Euclid.Point.renew(
+						max(spse.x + dx, spnw.x + minw), spse.y, spnw, spse);
+					break;
+				case 'e'  :
+					pnw = spnw;
+					pse = Euclid.Point.renew(max(spse.x + dx, spnw.x + minw), spse.y, spnw, spse);
+					break;
+				case 'se' :
+					pnw = spnw;
+					pse = Euclid.Point.renew(
+						max(spse.x + dx, spnw.x + minw),
+						max(spse.y + dy, spnw.y + minh), spnw, spse);
+					break;
+				case 's' :
+					pnw = spnw;
+					pse = Euclid.Point.renew(spse.x, max(spse.y + dy, spnw.y + minh), spnw, spse);
+					break;
+				case 'sw'  :
+					pnw = Euclid.Point.renew(min(spnw.x + dx, spse.x - minw), spnw.y, spnw, spse);
+					pse = Euclid.Point.renew(spse.x, max(spse.y + dy, spnw.y + minh), spnw, spse);
+					break;
+				case 'w'   :
+					pnw = Euclid.Point.renew(min(spnw.x + dx, spse.x - minw), spnw.y, spnw, spse);
+					pse = spse;
+					break;
+				case 'nw' :
+					pnw = Euclid.Point.renew(
+						min(spnw.x + dx, spse.x - minw),
+						min(spnw.y + dy, spse.y - minh), spnw, spse);
+					pse = spse;
+					break;
+				//case 'c' :
+				default  :
+					throw new Error('unknown align');
 			}
+
 			return new Euclid.Rect(pnw, pse);
+
 		default :
 			return twig.zone;
 	}

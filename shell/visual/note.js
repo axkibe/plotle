@@ -196,11 +196,11 @@ Note.prototype.scrollPage = function(up)
 */
 Note.prototype.actionstop = function(view, p)
 {
-	var $action = shell.$action;
+	switch (shell.$action.type) {
 
-	switch ($action.type) {
 		case Action.ITEMDRAG :
 		case Action.ITEMRESIZE :
+
 			var zone = this.getZone();
 
 			if ( zone.width < theme.note.minWidth ||
@@ -213,9 +213,11 @@ Note.prototype.actionstop = function(view, p)
 			shell.peer.setZone( this.path, zone );
 
 			shell.redraw = true;
+
 			return true;
 
 		default :
+
 			return Visual.DocItem.prototype.actionstop.call(this, view, p);
 	}
 };

@@ -320,21 +320,22 @@ Item.prototype.dragstart = function(view, p, shift, ctrl, access)
 
 	// scrolling or dragging
 	if (access == 'rw')
-		{ this.grepFocus(); }
-
-	if (access == 'rw')
 	{
+		this.grepFocus();
+
 		shell.startAction(
 			Action.ITEMDRAG, 'space',
 			'itemPath', this.path,
 			'start', vp,
 			'move',  vp
 		);
+
+		return true;
 	}
 	else
-		{ return false; }
-
-	return true;
+	{
+		return false;
+	}
 };
 
 
