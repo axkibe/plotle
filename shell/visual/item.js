@@ -292,7 +292,7 @@ Item.prototype.dragstart = function(view, p, shift, ctrl, access)
 	{
 		shell.startAction(
 			Action.SCROLLY, 'space',
-			'itemPath', this.$path,
+			'itemPath', this.path,
 			'start',    p,
 			'startPos', sbary.getPos()
 		);
@@ -310,7 +310,7 @@ Item.prototype.dragstart = function(view, p, shift, ctrl, access)
 		// relation binding
 		shell.startAction(
 			Action.RELBIND, 'space',
-			'itemPath', this.$path,
+			'itemPath', this.path,
 			'start',    p,
 			'move',     p
 		);
@@ -326,7 +326,7 @@ Item.prototype.dragstart = function(view, p, shift, ctrl, access)
 	{
 		shell.startAction(
 			Action.ITEMDRAG, 'space',
-			'itemPath', this.$path,
+			'itemPath', this.path,
 			'start', vp,
 			'move',  vp
 		);
@@ -352,7 +352,7 @@ Item.prototype.actionmove = function(view, p, shift, ctrl)
 			if (!this.getZone().within(vp))
 				{ return false; }
 			$action.move = p;
-			$action.item2Path = this.$path;
+			$action.item2Path = this.path;
 			shell.redraw = true;
 			return true;
 
@@ -441,14 +441,14 @@ Item.prototype.grepFocus = function()
 	var caret = shell.setCaret(
 		'space',
 		{
-			path : doc.atRank(0).textPath,
+			path : doc.atRank( 0 ).textPath,
 			at1  : 0
 		}
 	);
 
 	caret.show();
 
-	shell.peer.moveToTop(this.$path);
+	shell.peer.moveToTop(this.path);
 };
 
 

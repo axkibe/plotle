@@ -44,14 +44,13 @@ if (typeof(window) === 'undefined')
 /*
 | Constructor
 */
-var Base = Visual.Base = function(spacename, twig, path)
+var Base = Visual.Base = function( spacename, twig, path )
 {
 	this.twig  = twig;
 
-	// FIXME remove '$'
-	this.$spacename = spacename;
-	this.$path      = path;
-	this.$key       = path ? path.get(-1) : null;
+	this.spacename = spacename;
+	this.path      = path;
+	this.key       = path ? path.get(-1) : null;
 
 	this.$sub       = null;
 };

@@ -117,10 +117,10 @@ Space.prototype.update = function(twig)
 
 	if (caret.section === 'space' &&
 		csign && csign.path &&
-		!Jools.isnon($sub[csign.path.get(0)]))
+		!Jools.isnon( $sub[ csign.path.get( 0 ) ] ) )
 	{
 		if (shell.selection.active &&
-			shell.selection.sign1.path.get(-4) === csign.path.get(1))
+			shell.selection.sign1.path.get( -4 ) === csign.path.get( 1 ) )
 			{ shell.selection.deselect(true); }
 
 		shell.dropFocus();
@@ -146,21 +146,21 @@ Space.prototype.focusedItem = function()
 */
 Space.prototype.createItem = function(twig, k)
 {
-	var $path = new Path( [ k ] );
+	var path = new Path( [ k ] );
 
 	switch (twig.type)
 	{
 		case 'Note' :
-			return new Visual.Note (this.$spacename, twig, $path, this);
+			return new Visual.Note ( this.spacename, twig, path, this );
 
 		case 'Label' :
-			return new Visual.Label (this.$spacename, twig, $path, this);
+			return new Visual.Label ( this.spacename, twig, path, this );
 
 		case 'Portal' :
-			return new Visual.Portal (this.$spacename, twig, $path, this);
+			return new Visual.Portal ( this.spacename, twig, path, this );
 
 		case 'Relation' :
-			return new Visual.Relation (this.$spacename, twig, $path, this);
+			return new Visual.Relation ( this.spacename, twig, path, this );
 
 		default :
 			throw new Error('unknown type: ' + twig.type);
@@ -222,7 +222,7 @@ Space.prototype.knock = function() {
 */
 Space.prototype.drawCaret = function()
 {
-	this.getSub(shell.caret.sign.path, 'drawCaret' ).drawCaret(this.$view);
+	this.getSub( shell.caret.sign.path, 'drawCaret' ).drawCaret( this.$view );
 };
 
 
@@ -310,7 +310,7 @@ Space.prototype.dragstart = function(p, shift, ctrl)
 		var dp = $view.depoint(p);
 		shell.startAction(
 			Action.RELBIND, 'space',
-			'itemPath', focus.$path,
+			'itemPath', focus.path,
 			'start',    dp,
 			'move',     dp
 		);
@@ -493,7 +493,7 @@ Space.prototype.floatMenuSelect = function(entry, p)
 				sub( Jools.half( nw ), Jools.half ( nh ) );
 
 			key = shell.peer.newNote(
-				this.$spacename,
+				this.spacename,
 				new Euclid.Rect(pnw, pnw.add(nw, nh))
 			);
 
@@ -508,7 +508,7 @@ Space.prototype.floatMenuSelect = function(entry, p)
 				sub( theme.label.createOffset );
 
 			key = shell.peer.newLabel(
-				this.$spacename,
+				this.spacename,
 				pnw,
 				'Label',
 				20
@@ -528,7 +528,7 @@ Space.prototype.floatMenuSelect = function(entry, p)
 				sub( Jools.half( nw ) , Jools.half( nh ) );
 
 			key = shell.peer.newPortal(
-				this.$spacename,
+				this.spacename,
 				new Euclid.Rect(pnw, pnw.add(nw, nh))
 			);
 
@@ -548,7 +548,7 @@ Space.prototype.itemMenuSelect = function(entry, p, focus)
 	{
 		case 'n': // remove
 			shell.dropFocus();
-			shell.peer.removeItem(focus.$path);
+			shell.peer.removeItem( focus.path );
 			break;
 	}
 };
@@ -582,7 +582,7 @@ Space.prototype.mousedown = function(p, shift, ctrl)
 			var dp = $view.depoint(p);
 			$action = shell.startAction(
 				Action.ITEMRESIZE, 'space',
-				'itemPath', focus.$path,
+				'itemPath', focus.path,
 				'start',    dp,
 				'move',     dp
 			);
@@ -654,19 +654,19 @@ Space.prototype.specialKey = function(key, shift, ctrl)
 |
 | For example 'Item' or 'actionmove',
 */
-Space.prototype.getSub = function(path, mark)
+Space.prototype.getSub = function( path, mark )
 {
 	var n = this;
 	var m = null;
 
 	for (var a = 0, aZ = path.length; a < aZ; a++)
 	{
-		if (!n.$sub)
+		if ( !n.$sub )
 			{ break; }
 
-		n = n.$sub[path.get(a)];
+		n = n.$sub[ path.get( a ) ];
 
-		if (mark && n[mark])
+		if ( mark && n[ mark ] )
 			{ m = n; }
 	}
 

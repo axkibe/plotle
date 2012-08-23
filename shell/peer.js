@@ -51,8 +51,9 @@ if (typeof (window) === 'undefined') throw new Error('this code nees a browser!'
 */
 Peer = function(updateRCV, messageRCV)
 {
-	this.$spacename = null;
+	this.spacename = null;
 	this._iface     = new IFace(updateRCV, messageRCV);
+
 	this.$visitUser = null;
 	this.$visitPass = null;
 };
@@ -110,9 +111,9 @@ Peer.prototype.register = function(user, mail, pass, callback)
 /**
 | Aquires a space.
 */
-Peer.prototype.aquireSpace = function(name, callback)
+Peer.prototype.aquireSpace = function( name, callback )
 {
-	this.$spacename = name;
+	this.spacename = name;
 	this._iface.aquireSpace(name, callback);
 };
 
@@ -127,9 +128,9 @@ Peer.prototype.get = function(path, len)
 /**
 | Creates a new note.
 */
-Peer.prototype.newNote = function(spacename, zone)
+Peer.prototype.newNote = function( spacename, zone )
 {
-	if (spacename !== this.$spacename)
+	if ( spacename !== this.spacename )
 		{ throw new Error('newNote() wrong spacename'); }
 
 	var chgX = this._iface.alter(
@@ -158,9 +159,9 @@ Peer.prototype.newNote = function(spacename, zone)
 /**
 | Creates a new portal.
 */
-Peer.prototype.newPortal = function(spacename, zone)
+Peer.prototype.newPortal = function( spacename, zone )
 {
-	if (spacename !== this.$spacename)
+	if ( spacename !== this.spacename )
 		{ throw new Error('newPortal() wrong spacename'); }
 
 	var chgX = this._iface.alter(
@@ -218,9 +219,9 @@ Peer.prototype.setPNW = function(itemPath, pnw)
 /**
 | Creates a new label.
 */
-Peer.prototype.newLabel = function(spacename, pnw, text, fontsize)
+Peer.prototype.newLabel = function( spacename, pnw, text, fontsize )
 {
-	if (spacename !== this.$spacename)
+	if ( spacename !== this.spacename )
 		{ throw new Error('newLabel() wrong spacename'); }
 
 	var chgX = this._iface.alter(
@@ -271,9 +272,9 @@ Peer.prototype.redo = function()
 /**
 | Creates a new relation.
 */
-Peer.prototype.newRelation = function(spacename, pnw, text, fontsize, item1key, item2key)
+Peer.prototype.newRelation = function( spacename, pnw, text, fontsize, item1key, item2key )
 {
-	if (spacename !== this.$spacename)
+	if ( spacename !== this.spacename )
 		{ throw new Error('newRelation() wrong spacename'); }
 
 	var chgX = this._iface.alter(

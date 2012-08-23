@@ -54,9 +54,9 @@ if (typeof(window) === 'undefined')
 /*
 | Constructor.
 */
-var Doc = Visual.Doc = function(spacename, twig, path)
+var Doc = Visual.Doc = function( spacename, twig, path )
 {
-	Visual.Base.call(this, spacename, twig, path);
+	Visual.Base.call( this, spacename, twig, path );
 
 	if (this.$sub !== null)
 		{ throw new Error('iFail'); }
@@ -97,7 +97,7 @@ Doc.prototype.update = function(twig)
 	this.twig      = twig;
 	var $old       = this.$sub;
 	var $sub       = this.$sub = {};
-	var $spacename = this.$spacename;
+	var spacename  = this.spacename;
 	var copse      = twig.copse;
 
 	for(var k in copse)
@@ -112,7 +112,7 @@ Doc.prototype.update = function(twig)
 		}
 		else
 		{
-			o = new Visual.Para( $spacename, s, new Path( this.$path, '++', k ) );
+			o = new Visual.Para( spacename, s, new Path( this.path, '++', k ) );
 			o.update(s);
 			$sub[k] = o;
 		}
@@ -137,7 +137,7 @@ Doc.prototype.draw = function(fabric, view, width, innerMargin, scrollp)
 	var select = shell.selection;
 
 	// draws the selection
-	if (select.active && this.$path.subPathOf(select.sign1.path)) {
+	if (select.active && this.path.subPathOf( select.sign1.path )) {
 		fabric.paint(
 			theme.selection.style,
 			this,
@@ -233,7 +233,7 @@ Doc.prototype.getSpread = function()
 Doc.prototype.getParaSep = function(item)
 {
 	if (!Jools.is(item))
-		{ item = shell.$space.getSub( this.$path, 'Item' ); }
+		{ item = shell.$space.getSub( this.path, 'Item' ); }
 
 	var fs = this.getFont().size;
 	return item.getParaSep(fs);
@@ -248,7 +248,7 @@ Doc.prototype.getFont = function(item)
 {
 	// caller can provide item for performance optimization
 	if (!Jools.is(item))
-		{ item = shell.$space.getSub( this.$path, 'Item' ); }
+		{ item = shell.$space.getSub( this.path, 'Item' ); }
 
 	var fs = item.twig.fontsize;
 	if (item.fontSizeChange)

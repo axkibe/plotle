@@ -126,14 +126,14 @@ Portal.prototype.grepFocus = function()
 	var caret = shell.setCaret(
 		'space',
 		{
-			path : this.$path,
+			path : this.path,
 			at1  : 0
 		}
 	);
 
 	caret.show();
 
-	shell.peer.moveToTop(this.$path);
+	shell.peer.moveToTop( this.path );
 };
 
 
@@ -161,7 +161,7 @@ Portal.prototype.click = function(view, p)
 	var caret = shell.setCaret(
 		'space',
 		{
-			path : this.$path,
+			path : this.path,
 			at1  : null
 		}
 	);
@@ -256,7 +256,7 @@ Portal.prototype.dragstart = function(view, p, shift, ctrl, access)
 		// relation binding
 		shell.startAction(
 			Action.RELBIND, 'space',
-			'itemPath', this.$path,
+			'itemPath', this.path,
 			'start',    p,
 			'move',     p
 		);
@@ -272,7 +272,7 @@ Portal.prototype.dragstart = function(view, p, shift, ctrl, access)
 	{
 		shell.startAction(
 			Action.ITEMDRAG, 'space',
-			'itemPath', this.$path,
+			'itemPath', this.path,
 			'start', vp,
 			'move',  vp
 		);
@@ -290,7 +290,7 @@ Portal.prototype.getZone = function()
 	var max     = Math.max;
 	var min     = Math.min;
 
-	if (!$action || !this.$path.equals($action.itemPath))
+	if ( !$action || !this.path.equals( $action.itemPath ) )
 		{ return twig.zone; }
 
 	// FIXME cache the last zone

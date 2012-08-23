@@ -170,7 +170,7 @@ Label.prototype.fontSizeChange = function(fontsize)
 {
 	var $action = shell.$action;
 
-	if (!$action || !this.$path.equals($action.itemPath))
+	if (!$action || !this.path.equals($action.itemPath))
 		{ return fontsize; }
 
 	switch ($action.type)
@@ -232,8 +232,8 @@ Label.prototype.getZone = function()
 	var width  = Math.max(Math.ceil(doc.getSpread()), Math.round(fs * 0.3));
 	var height = Math.max(Math.ceil(doc.getHeight()), Math.round(fs));
 
-	if (!$action || !this.$path.equals($action.itemPath))
-		{ return new Euclid.Rect(pnw, pnw.add(width, height)); }
+	if (!$action || !this.path.equals( $action.itemPath ))
+		{ return new Euclid.Rect(pnw, pnw.add( width, height )); }
 
 	// FIXME cache the last zone
 
@@ -279,10 +279,10 @@ Label.prototype.actionstop = function(view, p)
 			var fontsize = this.$sub.doc.getFont().size;
 
 			if (!this.twig.pnw.eq(zone.pnw))
-				{ shell.peer.setPNW(this.$path, zone.pnw); }
+				{ shell.peer.setPNW( this.path, zone.pnw ); }
 
 			if (fontsize !== this.twig.fontsize)
-				{ shell.peer.setFontSize(this.$path, fontsize); }
+				{ shell.peer.setFontSize( this.path, fontsize ); }
 
 			shell.redraw = true;
 			break;

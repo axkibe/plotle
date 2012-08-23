@@ -128,7 +128,7 @@ DocItem.prototype.grepFocus = function()
 
 	caret.show();
 
-	shell.peer.moveToTop(this.$path);
+	shell.peer.moveToTop( this.path );
 };
 
 
@@ -160,7 +160,7 @@ DocItem.prototype.click = function(view, p)
 	// TODO move into para
 	if (para)
 	{
-		var ppnw   = this.$sub.doc.getPNW(para.$key);
+		var ppnw   = this.$sub.doc.getPNW( para.key );
 		var at1    = para.getPointOffset( pi.sub( ppnw ));
 		var caret  = shell.caret;
 

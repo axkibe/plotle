@@ -86,7 +86,7 @@ Para.prototype.draw = function(fabric, view, pnw)
 {
 	var flow   = this.getFlow();
 	var width  = flow.spread * view.zoom;
-	var doc    = shell.$space.getSub( this.$path, 'Doc' );
+	var doc    = shell.$space.getSub( this.path, 'Doc' );
 	var height = this.getHeight() * view.zoom;
 	var $f     = this.$fabric;
 
@@ -129,11 +129,11 @@ Para.prototype.draw = function(fabric, view, pnw)
 Para.prototype.drawCaret = function(view)
 {
 	var caret = shell.caret;
-	var item  = shell.$space.getSub( this.$path, 'Item' );
+	var item  = shell.$space.getSub( this.path, 'Item' );
 	var doc   = item.$sub.doc;
 	var zone  = item.getZone();
 	var cpos  = caret.$pos  = this.getCaretPos();
-	var pnw   = doc.getPNW(this.$key);
+	var pnw   = doc.getPNW( this.key );
 	var sbary = item.scrollbarY;
 	var sy    = sbary ? Math.round(sbary.getPos()) : 0;
 
@@ -166,7 +166,7 @@ Para.prototype.drawCaret = function(view)
 */
 Para.prototype.getCaretPos = function()
 {
-	var item    = shell.$space.getSub( this.$path, 'Item' );
+	var item    = shell.$space.getSub( this.path, 'Item' );
 	var doc     = item.$sub.doc;
 	var fs      = doc.getFont(item).size;
 	var descend = fs * theme.bottombox;
@@ -189,7 +189,7 @@ Para.prototype.getCaretPos = function()
 */
 Para.prototype.getFlow = function()
 {
-	var item      = shell.$space.getSub( this.$path, 'Item' );
+	var item      = shell.$space.getSub( this.path, 'Item' );
 	var doc       = item.$sub.doc;
 	var flowWidth = item.getFlowWidth();
 	var font      = doc.getFont(item);
@@ -280,7 +280,7 @@ Para.prototype.getFlow = function()
 Para.prototype.getHeight = function()
 {
 	var flow = this.getFlow();
-	var doc = shell.$space.getSub( this.$path, 'Doc' );
+	var doc = shell.$space.getSub( this.path, 'Doc' );
 
 	return flow.height + Math.round(doc.getFont().size * theme.bottombox);
 };
@@ -293,7 +293,7 @@ Para.prototype.getHeight = function()
 */
 Para.prototype.getLineXOffset = function(line, x)
 {
-	var item   = shell.$space.getSub ( this.$path, 'Item' );
+	var item   = shell.$space.getSub ( this.path, 'Item' );
 	var doc    = item.$sub.doc;
 	var font   = doc.getFont(item);
 
@@ -347,7 +347,7 @@ Para.prototype.locateOffset = function(offset, flowPos$)
 {
 	// FIXME cache position
 	var twig = this.twig;
-	var doc  = shell.$space.getSub ( this.$path, 'Doc' );
+	var doc  = shell.$space.getSub ( this.path, 'Doc' );
 	var font = doc.getFont();
 	var text = twig.text;
 	var flow = this.getFlow();
@@ -421,7 +421,7 @@ Para.prototype.input = function(text)
 {
     var reg   = /([^\n]+)(\n?)/g;
 	var para  = this;
-	var item  = shell.$space.getSub ( para.$path, 'Item' );
+	var item  = shell.$space.getSub ( para.path, 'Item' );
 	var doc   = item.$sub.doc;
 
     for (var rx = reg.exec(text); rx !== null; rx = reg.exec(text))
@@ -430,8 +430,8 @@ Para.prototype.input = function(text)
 		shell.peer.insertText(para.textPath, shell.caret.sign.at1, line);
         if (rx[2])
 		{
-			shell.peer.split(para.textPath, shell.caret.sign.at1);
-			para = doc.atRank(doc.twig.rankOf(para.$key) + 1);
+			shell.peer.split( para.textPath, shell.caret.sign.at1 );
+			para = doc.atRank( doc.twig.rankOf( para.key ) + 1 );
 		}
     }
 	item.scrollCaretIntoView();
@@ -445,11 +445,11 @@ Para.prototype.keyBackspace = function(item, doc, caret)
 {
 	if (caret.sign.at1 > 0)
 	{
-		shell.peer.removeText(this.textPath, caret.sign.at1 - 1, 1);
+		shell.peer.removeText( this.textPath, caret.sign.at1 - 1, 1 );
 		return true;
 	}
 
-	var r = doc.twig.rankOf(this.$key);
+	var r = doc.twig.rankOf( this.key );
 	if (r > 0)
 	{
 		var ve = doc.atRank(r - 1);
@@ -472,7 +472,7 @@ Para.prototype.keyDel = function(item, doc, caret)
 		return true;
 	}
 
-	var r = doc.twig.rankOf(this.$key);
+	var r = doc.twig.rankOf( this.key );
 
 	if (r < doc.twig.length - 1)
 	{
@@ -509,7 +509,7 @@ Para.prototype.keyDown = function(item, doc, caret)
 	}
 
 	// goto next para
-	var r = doc.twig.rankOf(this.$key);
+	var r = doc.twig.rankOf( this.key );
 	if (r < doc.twig.length - 1)
 	{
 		var ve = doc.atRank(r + 1);
@@ -575,7 +575,7 @@ Para.prototype.keyLeft = function(item, doc, caret)
 		return true;
 	}
 
-	var r = doc.twig.rankOf(this.$key);
+	var r = doc.twig.rankOf( this.key );
 	if (r > 0)
 	{
 		var ve = doc.atRank(r - 1);
@@ -629,7 +629,7 @@ Para.prototype.keyRight = function(item, doc, caret)
 		return true;
 	}
 
-	var r = doc.twig.rankOf(this.$key);
+	var r = doc.twig.rankOf( this.key );
 	if (r < doc.twig.length - 1)
 	{
 		var ve = doc.atRank(r + 1);
@@ -673,7 +673,7 @@ Para.prototype.keyUp = function(item, doc, caret)
 	}
 
 	// goto prev para
-	var r = doc.twig.rankOf(this.$key);
+	var r = doc.twig.rankOf( this.key );
 	if (r > 0)
 	{
 		var ve = doc.atRank(r - 1);
@@ -706,11 +706,11 @@ Para.prototype.knock = function()
 /*
 | Handles a special key
 */
-Para.prototype.specialKey = function(key, shift, ctrl)
+Para.prototype.specialKey = function( key, shift, ctrl )
 {
 	var caret  = shell.caret;
 	var select = shell.selection;
-	var item   = shell.$space.getSub ( this.$path, 'Item' );
+	var item   = shell.$space.getSub ( this.path, 'Item' );
 	var doc    = item.$sub.doc;
 
 	// if true the caret moved or the selection changed
@@ -718,14 +718,14 @@ Para.prototype.specialKey = function(key, shift, ctrl)
 
 	if (ctrl)
 	{
-		switch(key)
+		switch( key )
 		{
 			case 'a' :
 				var v0 = doc.atRank(0);
 				var v1 = doc.atRank(doc.twig.length - 1);
 
-				select.sign1 = new Sign({ path: v0.textPath, at1: 0 });
-				select.sign2 = new Sign({ path: v1.textPath, at1: v1.twig.text.length });
+				select.sign1 = new Sign( { path: v0.textPath, at1: 0 } );
+				select.sign2 = new Sign( { path: v1.textPath, at1: v1.twig.text.length } );
 				select.active = true;
 				shell.setCaret('space', select.sign2);
 				system.setInput(select.innerText());
@@ -738,7 +738,7 @@ Para.prototype.specialKey = function(key, shift, ctrl)
 
 	if (!shift && select.active)
 	{
-		switch(key) {
+		switch( key ) {
 			case 'down'      :
 			case 'end'       :
 			case 'left'      :
@@ -762,9 +762,9 @@ Para.prototype.specialKey = function(key, shift, ctrl)
 				break;
 		}
 	}
-	else if (shift && !select.active)
+	else if ( shift && !select.active )
 	{
-		switch(key) {
+		switch( key ) {
 			case 'backup'   :
 			case 'down'     :
 			case 'end'      :
@@ -779,19 +779,52 @@ Para.prototype.specialKey = function(key, shift, ctrl)
 		}
 	}
 
-	switch(key)
+	switch( key )
 	{
-		case 'backspace' : show = this.keyBackspace(item, doc, caret) || show; break;
-		case 'enter'     : show = this.keyEnter    (item, doc, caret) || show; break;
-		case 'pageup'    : item.scrollPage(true);                              break;
-		case 'pagedown'  : item.scrollPage(false);                             break;
-		case 'down'      : show = this.keyDown     (item, doc, caret) || show; break;
-		case 'end'       : show = this.keyEnd      (item, doc, caret) || show; break;
-		case 'left'      : show = this.keyLeft     (item, doc, caret) || show; break;
-		case 'pos1'      : show = this.keyPos1     (item, doc, caret) || show; break;
-		case 'right'     : show = this.keyRight    (item, doc, caret) || show; break;
-		case 'up'        : show = this.keyUp       (item, doc, caret) || show; break;
-		case 'del'       : show = this.keyDel      (item, doc, caret) || show; break;
+		case 'backspace' :
+			show = this.keyBackspace(item, doc, caret) || show;
+			break;
+
+		case 'enter' :
+			show = this.keyEnter(item, doc, caret) || show;
+			break;
+
+		// TODO show?
+		case 'pageup' :
+			item.scrollPage(true);
+			break;
+
+		case 'pagedown' :
+			item.scrollPage(false);
+			break;
+
+		case 'down' :
+			show = this.keyDown(item, doc, caret) || show;
+			break;
+
+		case 'end' :
+			show = this.keyEnd(item, doc, caret) || show;
+			break;
+
+		case 'left' :
+			show = this.keyLeft(item, doc, caret) || show;
+			break;
+
+		case 'pos1'  :
+			show = this.keyPos1(item, doc, caret) || show;
+			break;
+
+		case 'right' :
+			show = this.keyRight(item, doc, caret) || show;
+			break;
+
+		case 'up' :
+			show = this.keyUp(item, doc, caret) || show;
+			break;
+
+		case 'del' :
+			show = this.keyDel(item, doc, caret) || show;
+			break;
 	}
 
 	if (shift)
@@ -828,7 +861,7 @@ Para.prototype.specialKey = function(key, shift, ctrl)
 Jools.lazyFixate(Para.prototype, 'textPath',
 	function()
 	{
-		return new Path(this.$path, '++', 'text');
+		return new Path( this.path, '++', 'text' );
 	}
 );
 

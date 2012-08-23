@@ -160,7 +160,7 @@ Note.prototype.scrollCaretIntoView = function()
 		{ throw new Error('iFail'); }
 
 	var cp      = para.getCaretPos();
-	var pnw     = this.$sub.doc.getPNW(para.$key);
+	var pnw     = this.$sub.doc.getPNW( para.key );
 	var zone    = this.getZone();
 	var imargin = this.innerMargin;
 
@@ -203,12 +203,14 @@ Note.prototype.actionstop = function(view, p)
 		case Action.ITEMRESIZE :
 			var zone = this.getZone();
 
-			if (zone.width < theme.note.minWidth || zone.height < theme.note.minHeight) {
-				throw new Error('Note under minimum size!');
-			}
+			if ( zone.width < theme.note.minWidth ||
+				zone.height < theme.note.minHeight )
+				{ throw new Error('Note under minimum size!'); }
 
-			if (this.twig.zone.eq(zone)) return;
-			shell.peer.setZone(this.$path, zone);
+			if (this.twig.zone.eq(zone))
+				{ return; }
+
+			shell.peer.setZone( this.path, zone );
 
 			shell.redraw = true;
 			return true;
@@ -311,7 +313,7 @@ Note.prototype.getZone = function()
 	var max     = Math.max;
 	var min     = Math.min;
 
-	if (!$action || !this.$path.equals($action.itemPath))
+	if ( !$action || !this.path.equals( $action.itemPath ) )
 		{ return twig.zone; }
 
 	// FIXME cache the last zone

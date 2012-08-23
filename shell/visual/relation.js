@@ -45,13 +45,15 @@ var theme;
 */
 (function(){
 'use strict';
-if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
+
+if (typeof(window) === 'undefined')
+	{ throw new Error('this code needs a browser!'); }
 
 
 /*
 | Constructor.
 */
-var Relation = Visual.Relation = function(spacename, twig, path)
+var Relation = Visual.Relation = function( spacename, twig, path )
 {
 	Visual.Label.call(this, spacename, twig, path);
 };
@@ -73,16 +75,16 @@ Relation.create = function(space, item1, item2)
 	var cline = Euclid.Line.connect(item1.getZone(), null, item2.getZone(), null);
 	var pnw   = cline.pc.sub(theme.relation.createOffset);
 	var key   = shell.peer.newRelation(
-		space.$spacename,
+		space.spacename,
 		pnw,
 		'relates to',
 		20,
-		item1.$key,
-		item2.$key
+		item1.key,
+		item2.key
 	);
 
 	// event listener has created the vrel
-	space.$sub[key].grepFocus();
+	space.$sub[ key ].grepFocus();
 };
 
 

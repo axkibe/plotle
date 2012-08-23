@@ -72,12 +72,12 @@ var Button = Dash.Button = function(twig, panel, inherit, name)
 
 	this.curve        = new Curve(twig.curve, iframe);
 	this.captionPos   = computePoint(twig.caption.pos, iframe);
-	this.$path        = new Path([panel.name, name]);
+	this.path         = new Path([panel.name, name]);
 
 	// if true repeats the action on mousedown
 	this.repeat       = false;
-	this.$retimer     = null;
 
+	this.$retimer     = null;
 	this.$active      = inherit ? inherit.$active : false;
 	this.$fabric      = null;
 	this.$visible     = inherit ? inherit.$visible : true;
@@ -251,7 +251,7 @@ Button.prototype.mousedown = function(p, shift, ctrl)
 		shell.startAction(
 			Action.REBUTTON,
 			'board',
-			'itemPath', this.$path
+			'itemPath', this.path
 		);
 
 		var repeatFunc;
