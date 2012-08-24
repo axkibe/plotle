@@ -635,7 +635,7 @@ Shell.prototype.setUser = function(user, pass) {
 	} else {
 
 		if (this.$space &&
-			this.$space.$spacename.substr(0, 9) !== 'meshcraft'
+			this.$space.spacename.substr(0, 9) !== 'meshcraft'
 		) { this.moveToSpace('meshcraft:home'); }
 
 		window.localStorage.setItem('user', null);
@@ -691,7 +691,7 @@ Shell.prototype.moveToSpace = function(name) {
 
 	if (name === null) {
 
-		name = self.$space.$spacename;
+		name = self.$space.spacename;
 
 		// TODO what does 'help' do here?
 		if (this.$user.substr(0, 5) === 'visit' &&
