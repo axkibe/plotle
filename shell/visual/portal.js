@@ -251,7 +251,8 @@ Portal.prototype.mousewheel = function(view, p, dir, shift, ctrl)
 Portal.prototype.drawCaret = function(view)
 {
 	// TODO remove ?
-}
+};
+
 
 /*
 | Mouse is hovering around.

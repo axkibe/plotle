@@ -334,8 +334,8 @@ Shell.prototype.sketchFrowny = function(fabric, border, twist, view, pos)
 */
 Shell.prototype.setMenu = function(menu)
 {
-	this.menu   = menu;
-	this.redraw = this;
+	this.menu   = menu; // TODO $menu
+	this.redraw = true;
 };
 
 /**

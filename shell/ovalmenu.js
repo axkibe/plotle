@@ -36,12 +36,14 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/**
+
+/*
 | Export
 */
 var OvalMenu;
 
-/**
+
+/*
 | Imports
 */
 var Euclid;
@@ -50,26 +52,32 @@ var shell;
 var system;
 var theme;
 
-/**
+
+/*
 | Capsule
 */
 (function(){
 'use strict';
-if (typeof(window) === 'undefined') { throw new Error('this code requires a browser!'); }
 
-/**
+if (typeof(window) === 'undefined')
+	{ throw new Error('this code requires a browser!'); }
+
+
+/*
 | Constructor.
 */
-OvalMenu = function(fabric, pc, settings, labels, callback) {
+OvalMenu = function(fabric, pc, settings, labels, receiver)
+{
 	this.fabric      = fabric;
 	this.p           = pc;
 	this.labels      = labels;
 
-	this._callback   = callback;
+	this._receiver   = receiver;
 	this._style      = settings.style;
 	this._highlight  = settings.highlight;
 	this._dimensions = settings.dimensions;
 	this._oflower    = new Euclid.OvalFlower(pc, settings.dimensions, labels);
+
 	this.$within     = null;
 	this.$fadeTimer  = null;
 	this.$fade       = false;
@@ -77,15 +85,21 @@ OvalMenu = function(fabric, pc, settings, labels, callback) {
 	this.$font       = new Euclid.Font(12, theme.defaultFont, 'black', 'center', 'middle');
 };
 
-/**
+
+/*
 | Draws the hexmenu.
 */
-OvalMenu.prototype.draw = function(view) {
+OvalMenu.prototype.draw = function(view)
+{
 	var f = this.fabric;
-	if (this.$fade) { f.globalAlpha(this.$fade); }
+
+	if (this.$fade)
+		{ f.globalAlpha(this.$fade); }
 
 	f.fill(this._style.fill, this._oflower, 'sketch', view, 'outer');
-	switch(this.$within) {
+
+	switch(this.$within)
+	{
 		case 'n'  :
 		case 'ne' :
 		case 'se' :
@@ -95,9 +109,10 @@ OvalMenu.prototype.draw = function(view) {
 			f.paint(this._highlight, this._oflower, 'sketch', view, this.$within);
 			break;
 	}
-	f.edge(this._style.edge, this._oflower, 'sketch', view, null);
 
-	f.setFont(this.$font);
+	f.edge( this._style.edge, this._oflower, 'sketch', view, null );
+
+	f.setFont( this.$font );
 	var labels = this.labels;
 
 	var b1  = this._dimensions.b1;
@@ -108,56 +123,90 @@ OvalMenu.prototype.draw = function(view) {
 	var a2h = Math.round(this._dimensions.a2 * m);
 	var pc  = this.p;
 
-	if (labels.n)  f.fillText(labels.n,  pc.x,       pc.y - b2t);
-	if (labels.ne) f.fillText(labels.ne, pc.x + a2h, pc.y - bs );
-	if (labels.se) f.fillText(labels.se, pc.x + a2h, pc.y + bs );
-	if (labels.s)  f.fillText(labels.s,  pc.x,       pc.y + b2t);
-	if (labels.sw) f.fillText(labels.sw, pc.x - a2h, pc.y + bs );
-	if (labels.nw) f.fillText(labels.nw, pc.x - a2h, pc.y - bs );
-	if (labels.c)  f.fillText(labels.c,  pc);
+	if (labels.n)
+		{ f.fillText(labels.n, pc.x, pc.y - b2t); }
 
-	if (this.$fade) { f.globalAlpha(1); }
+	if (labels.ne)
+		{ f.fillText(labels.ne, pc.x + a2h, pc.y - bs ); }
+
+	if (labels.se)
+		{ f.fillText(labels.se, pc.x + a2h, pc.y + bs ); }
+
+	if (labels.s)
+		{ f.fillText(labels.s,  pc.x, pc.y + b2t); }
+
+	if (labels.sw)
+		{ f.fillText(labels.sw, pc.x - a2h, pc.y + bs ); }
+
+	if (labels.nw)
+		{ f.fillText(labels.nw, pc.x - a2h, pc.y - bs ); }
+
+	if (labels.c)
+		{ f.fillText(labels.c,  pc); }
+
+	if (this.$fade)
+		{ f.globalAlpha(1); }
 };
 
-/**
+
+/*
 | Sets this.mousepos and returns it according to p.
 */
-OvalMenu.prototype.within = function(view, p) {
+OvalMenu.prototype.within = function(view, p)
+{
 	var w = this._oflower.within(this.fabric, view, p);
-	if (w === this.$within) return w;
+
+	if (w === this.$within)
+		{ return w; }
+
+	// TODO why?
 	shell.redraw = true;
+
 	return this.$within = w;
 };
 
-/**
+
+/*
 | Mouse button down event.
 */
-OvalMenu.prototype.mousedown = function(view, p, shift, ctrl) {
+OvalMenu.prototype.mousedown = function(view, p, shift, ctrl)
+{
 	var w = this.within(view, p);
+
 	if (!w)
 		{ return null; }
 
-	this._callback(w, this.p);
+	this._receiver.menuSelect(w, this.p);
 	shell.setMenu(null);
 	return false;
 };
 
-/**
+
+/*
 | Called on every step to fade away when mouse isn't on the menu
 */
-OvalMenu.prototype.fadeout = function() {
+OvalMenu.prototype.fadeout = function()
+{
 	var self = this;
 
-	if (shell.menu !== self) {
+	if (shell.menu !== self)
+	{
 		// cancels all fading
 		return;
 	}
 	self.$fade -= theme.fade.step;
 
-	if (self.$fade <= 0) {
+	if (self.$fade <= 0)
+	{
 		shell.setMenu(null);
-	} else {
-		this.$fadeTimer = system.setTimer(theme.fade.time, function() { self.fadeout(); });
+	}
+	else
+	{
+		this.$fadeTimer = system.setTimer
+		(
+			theme.fade.time,
+			function() { self.fadeout(); }
+		);
 	}
 
 	shell.redraw = true;

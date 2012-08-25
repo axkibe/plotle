@@ -37,6 +37,7 @@ Visual = Visual || {};
 var Action;
 var Euclid;
 var Jools;
+var OvalMenu;
 var Path;
 var shell;
 var system;
@@ -98,6 +99,21 @@ Item.prototype.getOvalSlice = function()
 
 
 /*
+| An entry of the item menu has been selected
+*/
+Item.prototype.menuSelect = function(entry, p)
+{
+	switch( entry )
+	{
+		case 'n': // remove
+			shell.dropFocus();
+			shell.peer.removeItem( this.path );
+			break;
+	}
+};
+
+
+/*
 | Returns if point is within the item menu
 */
 Item.prototype.withinItemMenu = function(view, p)
@@ -105,6 +121,23 @@ Item.prototype.withinItemMenu = function(view, p)
 	return this.getOvalSlice().within(system.fabric, view, p);
 };
 
+
+Item.prototype.getMenu = function(view)
+{
+	var self = this; // TODO
+
+	var labels = { n : 'Remove'};
+
+	var os = this.getOvalSlice();
+
+	return new OvalMenu(
+		system.fabric,
+		view.point(os.psw).add(Jools.half(os.width), 0),
+		theme.ovalmenu,
+		labels,
+		self
+	);
+};
 
 /*
 | Returns the compass direction of the handle if p is on a resizer handle.
