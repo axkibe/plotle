@@ -26,10 +26,17 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /*
-| Exports
+| Export
+
 */
 var theme = null;
 
+
+/*
+| Imports
+*/
+var Euclid; // TODO
+var fontPool;
 
 /*
 | Capsule
@@ -40,16 +47,19 @@ var theme = null;
 if (typeof(window) === 'undefined')
 	{ throw new Error('this code needs a browser!'); }
 
-var cos = Math.cos;
-var pi  = Math.PI;
-var ro  = Math.round;
-var c30 = cos(pi / 6);
+
+var fonts =
+{
+	defaultFont : 'DejaVuSans,sans-serif',
+
+	boldFont    : 'DejaVuSansBold,sans-serif'
+};
+
+// TODO remove from theme
+fontPool.setDefaultFonts(fonts.defaultFont, fonts.boldFont);
 
 theme =
 {
-	defaultFont : 'DejaVuSans,sans-serif',
-	boldFont    : 'DejaVuSansBold,sans-serif',
-
 	// factor to add to the bottom of font height
 	bottombox : 0.25,
 
@@ -495,7 +505,8 @@ theme =
 		current  :
 		{
 			fill : 'rgba(255, 255, 255, 0.15)',
-			edge : [
+			edge :
+			[
 				{ border: 0, width : 0.5, color : 'black' }
 			]
 		},
@@ -543,9 +554,13 @@ theme =
 			slice :  0.82
 		},
 
+		// font : getFont (12, 'cm'); TODO
+		font : new Euclid.Font(12, fonts.defaultFont, 'black', 'center', 'middle'),
+
 		style :
 		{
-			edge : [
+			edge :
+			[
 				{
 					border : 1,
 					width  : 1,
@@ -603,7 +618,8 @@ theme =
 		{
 			fill : 'rgb(255, 188, 88)',
 
-			edge : [
+			edge :
+			[
 				{
 					border : 0,
 					width  : 0.4,
@@ -744,12 +760,17 @@ theme =
 	}
 };
 
+// TODO
+theme.defaultFont = fonts.defaultFont;
+theme.boldFont    = fonts.boldFont;
+
 var odim = theme.ovalmenu.dimensions;
-odim.b1 = ro(odim.a1 * c30);
-odim.b2 = ro(odim.b1 / odim.a1 * odim.a2);
+var c30 = Math.cos(Math.PI / 6);
+odim.b1 = Math.round(odim.a1 * c30);
+odim.b2 = Math.round(odim.b1 / odim.a1 * odim.a2);
 
 var swidim = theme.switchpanel.dimensions;
-swidim.b = ro(swidim.a * c30);
+swidim.b = Math.round(swidim.a * c30);
 
 theme.itemmenu = theme.ovalmenu;
 

@@ -35,18 +35,17 @@ Design = Design || {};
 | Imports
 */
 var Euclid;
+var fontPool;
 var Jools;
 
 
 /*
 | Capsule
 */
-(function(){
+( function() {
 'use strict';
 
 var half    = Jools.half;
-var getFont = Design.getFont;
-
 var sideBW  = 120;
 var sideB2W = 190;
 
@@ -189,7 +188,7 @@ MainPanel.layout =
 			{
 				type  : 'Label',
 				text  : 'log in',
-				font  : getFont(13, 'ca'),
+				font  : fontPool.get( 13, 'ca' ),
 				pos   :
 				{
 					type   : 'Point',
@@ -279,7 +278,7 @@ MainPanel.layout =
 			{
 				type  : 'Label',
 				text  : 'register',
-				font  : getFont(14, 'ca'),
+				font  : fontPool.get( 14, 'ca' ),
 				pos   : { type: 'Point', anchor: 'sw', x: half(sideBW + sideB2W) - 5, y: -14 }
 			},
 
@@ -340,7 +339,7 @@ MainPanel.layout =
 			{
 				type   : 'Label',
 				text   : 'switch',
-				font   : getFont(14, 'cm'),
+				font   : fontPool.get( 14, 'cm' ),
 				pos    : { type: 'Point', anchor: 'c', x:  0, y: -2 }
 			},
 
@@ -413,7 +412,7 @@ MainPanel.layout =
 			{
 				type  : 'Label',
 				text  : '-',
-				font  : getFont(14, 'cm'),
+				font  : fontPool.get( 14, 'cm' ),
 
 				pos   :
 				{
@@ -521,7 +520,7 @@ MainPanel.layout =
 			{
 				type  : 'Label',
 				text  : '0',
-				font  : getFont(14, 'cm'),
+				font  : fontPool.get( 14, 'cm' ),
 				pos   :
 				{
 					type   : 'Point',
@@ -603,7 +602,7 @@ MainPanel.layout =
 			{
 				type  : 'Label',
 				text  : '+',
-				font  : getFont(14, 'cm'),
+				font  : fontPool.get( 14, 'cm' ),
 				pos   :
 				{
 					type   : 'Point',
@@ -672,7 +671,7 @@ MainPanel.layout =
 		'chat' :
 		{
 			type     : 'Chat',
-			font     : getFont(12, 'lac'),
+			font     : fontPool.get( 12, 'lac' ),
 			frame    :
 			{
 				type : 'Frame',
@@ -717,7 +716,7 @@ MainPanel.layout =
 			{
 				type  : 'Label',
 				text  : 'help',
-				font  : getFont(13, 'ca'),
+				font  : fontPool.get( 13, 'ca' ),
 				pos   : { type: 'Point', anchor: 'se', x: -90, y:  -7 }
 			},
 
@@ -748,7 +747,7 @@ MainPanel.layout =
 		{
 			type     : 'Label',
 			text     : 'Zoom: ',
-			font     : getFont(12, 'ca'),
+			font     : fontPool.get( 12, 'ca' ),
 			pos      :
 			{
 				type   : 'Point',
@@ -758,11 +757,11 @@ MainPanel.layout =
 			}
 		},
 
-		'zoom'   :
+		'zoom' :
 		{
 			type : 'Label',
 			text : '0',
-			font : getFont(12, 'ca'),
+			font : fontPool.get( 12, 'ca' ),
 			pos  :
 			{
 				type   : 'Point',
@@ -773,11 +772,11 @@ MainPanel.layout =
 		},
 
 
-		'greet'  :
+		'greet' :
 		{
 			type : 'Label',
 			text : 'Hello',
-			font : getFont(12, 'ca'),
+			font : fontPool.get( 12, 'ca' ),
 			pos  :
 			{
 				type   : 'Point',
@@ -792,7 +791,7 @@ MainPanel.layout =
 		{
 			type   : 'Label',
 			text   : '',
-			font   : getFont(16, 'ca'),
+			font   : fontPool.get( 16, 'ca' ),
 			pos    :
 			{
 				type   : 'Point',
@@ -803,12 +802,12 @@ MainPanel.layout =
 		},
 
 
-		'cspace'     :
+		'cspace' :
 		{
-			type     : 'Label',
-			text     : '',
-			font     : getFont(16, 'cab'),
-			pos      :
+			type : 'Label',
+			text : '',
+			font : fontPool.get( 16, 'cab' ),
+			pos  :
 			{
 				type   : 'Point',
 				anchor :  's',
@@ -818,11 +817,11 @@ MainPanel.layout =
 		},
 
 
-		'access'     :
+		'access' :
 		{
 			type     : 'Label',
 			text     : '',
-			font     : getFont(12, 'cadr'),
+			font     : fontPool.get( 12, 'cadr' ),
 			pos      :
 			{
 				type   : 'Point',

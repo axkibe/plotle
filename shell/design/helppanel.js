@@ -23,207 +23,302 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/**
+
+/*
 | Export
 */
 var Design;
 Design = Design || {};
 
 
-/**
+/*
+| Imports
+*/
+var fontPool;
+
+
+/*
 | Capsule
 */
-(function(){
+( function() {
 'use strict';
 
-var getFont     = Design.getFont;
 
-var HelpPanel   = Design.HelpPanel = { type : 'Design' };
+var HelpPanel   = Design.HelpPanel =
+{
+	type : 'Design'
+};
+
 
 HelpPanel.style = 'help';
 
-HelpPanel.frame = {
+
+HelpPanel.frame =
+{
 	type  : 'Frame',
-	pnw   : { type: 'Point', anchor: 'ne',  x: -200, y:    0 },
-	pse   : { type: 'Point', anchor: 'ne',  x:    0, y:  400 }
+
+	pnw   :
+	{
+		type: 'Point',
+		anchor: 'ne',
+		x: -200,
+		y:    0
+	},
+
+	pse   :
+	{
+		type: 'Point',
+		anchor: 'ne',
+		x: 0,
+		y: 400
+	}
 };
 
-HelpPanel.curve = {
+
+HelpPanel.curve =
+{
 	type  : 'Curve',
-	copse : {
-	'1' : {
-		type :  'MoveTo',
-		to   :  { type: 'Point', anchor: 'nw', x: 0, y: 0 },
-		bx   :  1, by : 0
+	copse :
+	{
+		'1' :
+		{
+			type : 'MoveTo',
+
+			to   :
+			{
+				type   : 'Point',
+				anchor : 'nw',
+				x      : 0,
+				y      : 0
+			},
+
+			bx : 1,
+			by : 0
+		},
+
+		'2' :
+		{
+			type : 'BeziTo',
+
+			to   :
+			{
+				type   : 'Point',
+				anchor : 'se',
+				x      :  2,
+				y      : -2
+			},
+
+			c1x :   2,
+			c1y :  380,
+			c2x : -200,
+			c2y :  -60,
+			bx  :    0,
+			by  :   -1
+		},
+
+		'3' :
+		{
+			type : 'LineTo',
+
+			to   :
+			{
+				type   : 'Point',
+				anchor : 'ne',
+				x      : 2,
+				y      : 0
+			},
+
+			bx : -1,
+			by : -1
+		}
 	},
-	'2' : {
-		type :  'BeziTo',
-		to   :  { type: 'Point', anchor: 'se', x: 2, y: -2 },
-		c1x  :    2, c1y :  380,
-		c2x  : -200, c2y :  -60,
-		bx   :  0, by : -1
-	},
-	'3' : {
-		type :  'LineTo',
-		to   :  { type: 'Point', anchor: 'ne', x: 2, y: 0 },
-		bx   : -1, by : -1
-	}},
 
 	ranks : [ '1', '2', '3' ]
 };
 
-HelpPanel.layout = {
+
+HelpPanel.layout =
+{
 	type  : 'Layout',
-	copse : {
-	'help'  : {
-		type      : 'Label',
-		text      : 'Help',
-		font      : getFont(16, 'lahb'),
-		pos       : { type: 'Point', anchor: 'nw', x: 10 , y:  20 }
-	},
 
-	'getstarted'  : {
-		type      : 'Label',
-		text      : 'getting started',
-		font      : getFont(16, 'lahb'),
-		pos       : { type: 'Point', anchor: 'nw', x: 18 , y:  40 }
-	},
-
-	'pan'  : {
-		type      : 'Label',
-		text      : 'to pan, drag the background',
-		font      : getFont(13, 'lah'),
-		pos       : { type: 'Point', anchor: 'nw', x: 18 , y:  65 }
-	},
-
-	'move'  : {
-		type      : 'Label',
-		text      : 'to move items, drag them',
-		font      : getFont(13, 'lah'),
-		pos       : { type: 'Point', anchor: 'nw', x: 18 , y:  85 }
-	},
-
-	'new'  : {
-		type      : 'Label',
-		text      : 'to create new items,',
-		font      : getFont(13, 'lah'),
-		pos       : { type: 'Point', anchor: 'nw', x: 18 , y: 105 }
-	},
-
-	'new2'  : {
-		type      : 'Label',
-		text      : 'click the background',
-		font      : getFont(13, 'lah'),
-		pos       : { type: 'Point', anchor: 'nw', x: 25 , y: 120 }
-	},
-
-	'edit'  : {
-		type      : 'Label',
-		text      : 'to edit an item, click it',
-		font      : getFont(13, 'lah'),
-		pos       : { type: 'Point', anchor: 'nw', x: 18 , y: 140 }
-	},
-
-	'delete1'  : {
-		type      : 'Label',
-		text      : 'to remove an item',
-		font      : getFont(13, 'lah'),
-		pos       : { type: 'Point', anchor: 'nw', x: 18 , y: 160 }
-	},
-
-	'delete2'  : {
-		type      : 'Label',
-		text      : 'click it\'s oval',
-		font      : getFont(13, 'lah'),
-		pos       : { type: 'Point', anchor: 'nw', x: 25 , y: 175 }
-	},
-
-	'relate1'  : {
-		type      : 'Label',
-		text      : 'to create a relation',
-		font      : getFont(13, 'lah'),
-		pos       : { type: 'Point', anchor: 'nw', x: 18 , y: 195 }
-	},
-
-	'relate2'  : {
-		type      : 'Label',
-		text      : 'drag an items oval',
-		font      : getFont(13, 'lah'),
-		pos       : { type: 'Point', anchor: 'nw', x: 25 , y: 210 }
-	},
-
-	'relate3'  : {
-		type      : 'Label',
-		text      : 'or hold ctrl and drag it',
-		font      : getFont(13, 'lah'),
-		pos       : { type: 'Point', anchor: 'nw', x: 25 , y: 225 }
-	},
-
-	'readonly'  : {
-		type      : 'Label',
-		//text      : 'This page is read-only!',
-		text      : '',
-		font      : getFont(13, 'lahr'),
-		pos       : { type: 'Point', anchor: 'nw', x: 28 , y: 255 }
-	},
-
-	'readonly2'  : {
-		type      : 'Label',
-		//text      : 'Click "switch" and select',
-		text      : '',
-		font      : getFont(13, 'lahr'),
-		pos       : { type: 'Point', anchor: 'nw', x: 28 , y: 275 }
-	},
-
-	'readonly3'  : {
-		type      : 'Label',
-		//text      : '"Sandbox" to play around',
-		text      : '',
-		font      : getFont(13, 'lahr'),
-		pos       : { type: 'Point', anchor: 'nw', x: 28 , y: 295 }
-	},
-
-	'hideB' : {
-		type       : 'Button',
-		code       : 'HelpHideButton',
-
-		normaStyle : 'button',
-		hoverStyle : 'buttonHover',
-		focusStyle : 'buttonFocus',
-		hofocStyle : 'buttonHofoc',
-
-		frame : {
-			type  : 'Frame',
-			pnw   : { type: 'Point', anchor: 'se', x: -170, y: -45 },
-			pse   : { type: 'Point', anchor: 'se', x:    0, y:  -3 }
+	copse :
+	{
+		'help'  :
+		{
+			type : 'Label',
+			text : 'Help',
+			font : fontPool.get( 16, 'lahb' ),
+			pos  : { type: 'Point', anchor: 'nw', x: 10 , y:  20 }
 		},
-		caption : {
-			type      : 'Label',
-			text      : 'hide',
-			font      : getFont(13, 'cm'),
-			pos       : { type: 'Point', anchor: 'e', x: -25, y: -3 }
+
+		'getstarted'  :
+		{
+			type : 'Label',
+			text : 'getting started',
+			font : fontPool.get( 16, 'lahb' ),
+			pos  : { type: 'Point', anchor: 'nw', x: 18 , y:  40 }
 		},
-		curve :  {
-			type : 'Curve',
-			copse : {
-			'1' : {
-				type : 'MoveTo',
-				to   : { type: 'Point', anchor: 'se', x: 0, y: 0 },
-				bx   : 1, by   : 0
+
+		'pan'  :
+		{
+			type : 'Label',
+			text : 'to pan, drag the background',
+			font : fontPool.get( 13, 'lah' ),
+			pos  : { type: 'Point', anchor: 'nw', x: 18 , y:  65 }
+		},
+
+		'move'  :
+		{
+			type : 'Label',
+			text : 'to move items, drag them',
+			font : fontPool.get( 13, 'lah' ),
+			pos  : { type: 'Point', anchor: 'nw', x: 18 , y:  85 }
+		},
+
+		'new'  :
+		{
+			type : 'Label',
+			text : 'to create new items,',
+			font : fontPool.get( 13, 'lah' ),
+			pos  : { type: 'Point', anchor: 'nw', x: 18 , y: 105 }
+		},
+
+		'new2'  :
+		{
+			type : 'Label',
+			text : 'click the background',
+			font : fontPool.get( 13, 'lah' ),
+			pos  : { type: 'Point', anchor: 'nw', x: 25 , y: 120 }
+		},
+
+		'edit'  :
+		{
+			type : 'Label',
+			text : 'to edit an item, click it',
+			font : fontPool.get( 13, 'lah' ),
+			pos  : { type: 'Point', anchor: 'nw', x: 18 , y: 140 }
+		},
+
+		'delete1'  :
+		{
+			type : 'Label',
+			text : 'to remove an item',
+			font : fontPool.get( 13, 'lah' ),
+			pos  : { type: 'Point', anchor: 'nw', x: 18 , y: 160 }
+		},
+
+		'delete2'  :
+		{
+			type : 'Label',
+			text : 'click it\'s oval',
+			font : fontPool.get( 13, 'lah' ),
+			pos  : { type: 'Point', anchor: 'nw', x: 25 , y: 175 }
+		},
+
+		'relate1'  :
+		{
+			type : 'Label',
+			text : 'to create a relation',
+			font : fontPool.get( 13, 'lah' ),
+			pos  : { type: 'Point', anchor: 'nw', x: 18 , y: 195 }
+		},
+
+		'relate2'  :
+		{
+			type : 'Label',
+			text : 'drag an items oval',
+			font : fontPool.get( 13, 'lah' ),
+			pos  : { type: 'Point', anchor: 'nw', x: 25 , y: 210 }
+		},
+
+		'relate3'  :
+		{
+			type : 'Label',
+			text : 'or hold ctrl and drag it',
+			font : fontPool.get( 13, 'lah' ),
+			pos  : { type: 'Point', anchor: 'nw', x: 25 , y: 225 }
+		},
+
+		'readonly'  :
+		{
+			type : 'Label',
+			//   : 'This page is read-only!',
+			text : '',
+			font : fontPool.get( 13, 'lahr' ),
+			pos  : { type: 'Point', anchor: 'nw', x: 28 , y: 255 }
+		},
+
+		'readonly2'  : {
+			type : 'Label',
+			//   : 'Click "switch" and select',
+			text : '',
+			font : fontPool.get( 13, 'lahr' ),
+			pos  : { type: 'Point', anchor: 'nw', x: 28 , y: 275 }
+		},
+
+		'readonly3'  :
+		{
+			type : 'Label',
+			//   : '"Sandbox" to play around',
+			text : '',
+			font : fontPool.get( 13, 'lahr' ),
+			pos  : { type: 'Point', anchor: 'nw', x: 28 , y: 295 }
+		},
+
+		'hideB' :
+		{
+			type       : 'Button',
+			code       : 'HelpHideButton',
+
+			normaStyle : 'button',
+			hoverStyle : 'buttonHover',
+			focusStyle : 'buttonFocus',
+			hofocStyle : 'buttonHofoc',
+
+			frame :
+			{
+				type  : 'Frame',
+				pnw   : { type: 'Point', anchor: 'se', x: -170, y: -45 },
+				pse   : { type: 'Point', anchor: 'se', x:    0, y:  -3 }
 			},
-			'2' : {
-				type :  'BeziTo',
-				to   :  { type: 'Point', anchor: 'ne', x : 0, y : 4 },
-				c1x  : -205, c1y : -53,
-				c2x  :  -85, c2y :  0,
-				bx   : -1, by   :  0
-			}},
 
-			ranks : [ '1', '2' ]
+			caption :
+			{
+				type : 'Label',
+				text : 'hide',
+				font : fontPool.get( 13, 'cm' ),
+				pos  : { type: 'Point', anchor: 'e', x: -25, y: -3 }
+			},
+
+			curve :
+			{
+				type : 'Curve',
+				copse :
+				{
+					'1' :
+					{
+						type : 'MoveTo',
+						to   : { type: 'Point', anchor: 'se', x: 0, y: 0 },
+						bx   : 1, by   : 0
+					},
+
+					'2' :
+					{
+						type :  'BeziTo',
+						to   :  { type: 'Point', anchor: 'ne', x : 0, y : 4 },
+						c1x  : -205, c1y : -53,
+						c2x  :  -85, c2y :  0,
+						bx   : -1, by   :  0
+					}
+				},
+
+				ranks : [ '1', '2' ]
+			}
 		}
-	}},
+	},
 
-	ranks : [
+	ranks :
+	[
 		'help',
 		'getstarted',
 		'pan',
@@ -241,7 +336,8 @@ HelpPanel.layout = {
 		'readonly2',
 		'readonly3'
 	]
+
 };
 
 
-})();
+} ) ();

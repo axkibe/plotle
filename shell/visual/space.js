@@ -235,7 +235,7 @@ Space.prototype.drawCaret = function()
 */
 Space.prototype.mousewheel = function(p, dir, shift, ctrl)
 {
-	var view = this.view;
+	var view = this.$view;
 	var twig = this.twig;
 
 	for(var r = 0, rZ = twig.length; r < rZ; r++)

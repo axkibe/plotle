@@ -56,7 +56,8 @@ var theme;
 /*
 | Capsule
 */
-(function(){
+( function() {
+
 'use strict';
 
 if (typeof(window) === 'undefined')
@@ -81,8 +82,7 @@ OvalMenu = function(fabric, pc, settings, labels, receiver)
 	this.$within     = null;
 	this.$fadeTimer  = null;
 	this.$fade       = false;
-
-	this.$font       = new Euclid.Font(12, theme.defaultFont, 'black', 'center', 'middle');
+	this.$font       = theme.ovalmenu.font;
 };
 
 
@@ -113,6 +113,7 @@ OvalMenu.prototype.draw = function(view)
 	f.edge( this._style.edge, this._oflower, 'sketch', view, null );
 
 	f.setFont( this.$font );
+
 	var labels = this.labels;
 
 	var b1  = this._dimensions.b1;
@@ -177,7 +178,9 @@ OvalMenu.prototype.mousedown = function(view, p, shift, ctrl)
 		{ return null; }
 
 	this._receiver.menuSelect(w, this.p);
+
 	shell.setMenu(null);
+
 	return false;
 };
 
@@ -213,23 +216,31 @@ OvalMenu.prototype.fadeout = function()
 	shell.poke();
 };
 
-/**
+
+/*
 | Mouse hover.
 |
 | Returns true if the mouse pointer hovers over anything.
 */
-OvalMenu.prototype.mousehover = function(view, p, shift, ctrl) {
+OvalMenu.prototype.mousehover = function(view, p, shift, ctrl)
+{
 	var self = this;
 
-	if (!this.within(view, p)) {
-		if (!this.$fade) {
+	if (!this.within(view, p))
+	{
+		if (!this.$fade)
+		{
 			this.$fade = 1 - theme.fade.step;
 			this.$fadeTimer = system.setTimer(theme.fade.time, function() { self.fadeout(); });
 		}
 		return null;
-	} else {
+	}
+	else
+	{
 		// cancels fading
-		if (this.$fade) {
+
+		if (this.$fade)
+		{
 			this.$fade = false;
 			system.cancelTimer(this.$fadeTimer);
 			this.$fadeTimer = null;
@@ -242,4 +253,4 @@ OvalMenu.prototype.mousehover = function(view, p, shift, ctrl) {
 };
 
 
-})();
+} ) ();
