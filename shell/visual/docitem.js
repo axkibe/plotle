@@ -157,7 +157,7 @@ DocItem.prototype.click = function(view, p)
 	var pi   = vp.sub(pnw.x, pnw.y - (this.scrollbarY ? this.scrollbarY.getPos() : 0 ));
 	var para = this.getParaAtPoint(pi);
 
-	// TODO move into para
+	// FIXME move into para
 	if (para)
 	{
 		var ppnw   = this.$sub.doc.getPNW( para.key );
@@ -181,7 +181,7 @@ DocItem.prototype.click = function(view, p)
 
 
 /*
-| TODO
+| force-clears all caches.
 */
 DocItem.prototype.knock = function()
 {

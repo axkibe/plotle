@@ -431,8 +431,7 @@ Space.prototype.actionstop = function(p, shift, ctrl)
 Space.prototype.actionmove = function(p, shift, ctrl) {
 	var view   = this.$view;
 	var action = shell.$action;
-	var item; // TODO
-	var node;
+	var item;
 
 	switch( action.type )
 	{
@@ -576,11 +575,9 @@ Space.prototype.mousedown = function(p, shift, ctrl)
 				'itemPath',        focus.path,
 				'start',           dp,
 				'move',            dp
+				'align',           com,
+				'startZone',       focus.getZone()
 			);
-
-			// TODO why not into call?
-			action.align = com;
-			action.startZone = focus.getZone();
 
 			return 'drag';
 		}

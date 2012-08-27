@@ -725,16 +725,6 @@ theme =
 				}
 			],
 
-			// TODO
-			labeledge :
-			[
-				{
-					border : 0,
-					width  : 0.2,
-					color  : 'rgba(200, 100, 0, 0.5)'
-				}
-			],
-
 			highlight :
 			[
 				{

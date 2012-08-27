@@ -160,7 +160,7 @@ OvalMenu.prototype.within = function(view, p)
 	if (w === this.$within)
 		{ return w; }
 
-	// TODO why?
+	// a change of within changes highlighting
 	shell.redraw = true;
 
 	return this.$within = w;

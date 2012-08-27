@@ -99,32 +99,50 @@ Shell.prototype.dropFocus = function()
 | Sets the caret position.
 */
 Shell.prototype.setCaret = function(section, sign, retainx) {
-	switch (section) {
-	case null :
-		if (sign !== null) { throw new Error('setCaret section=null, invalid sign'); }
-		break;
-	case 'board'  :
-	case 'space' :
-		switch(sign && sign.constructor) {
-		case null   : break;
-		case Sign   : break;
-		case Object : sign = new Sign(sign); break;
-		default     : throw new Error('setCaret section=' + section + ', invalid sign');
-		}
-		break;
-	default :
-		throw new Error('invalid section');
+	switch (section)
+	{
+		case null :
+			if (sign !== null)
+				{ throw new Error('setCaret section=null, invalid sign'); }
+			break;
+
+		case 'board'  :
+		case 'space' :
+			switch(sign && sign.constructor)
+			{
+				case null   :
+					break;
+
+				case Sign   :
+					break;
+
+				case Object :
+					sign = new Sign(sign);
+					break;
+
+				default :
+					throw new Error('setCaret section=' + section + ', invalid sign');
+			}
+			break;
+
+		default :
+			throw new Error('invalid section');
 	}
 
 	var entity;
-	if (this.caret.sign &&
-		(this.caret.section !== section || this.caret.sign.path !== sign.path)
-	) {
+
+	if  (
+			this.caret.sign &&
+			(
+				this.caret.section !== section ||
+				this.caret.sign.path !== sign.path
+			)
+		)
+	{
 		entity = this._getCaretEntity(this.caret.section, this.caret.sign.path);
 
-		// TODO knock instead of poke?
 		if (entity)
-			{ entity.poke(); }
+			{ entity.knock(); }
 	}
 
 	this.caret = new Caret(
@@ -134,13 +152,12 @@ Shell.prototype.setCaret = function(section, sign, retainx) {
 		this.caret.$shown
 	);
 
-	if (sign) {
-
+	if (sign)
+	{
 		entity = this._getCaretEntity(section, sign.path);
 
-		// TODO knock instead of poke?
 		if (entity)
-			{ entity.poke(); }
+			{ entity.knock(); }
 
 		shell.redraw = true;
 	}
@@ -293,7 +310,7 @@ Shell.prototype.poke = function()
 };
 
 /**
-| Force-clears all caches.
+| force-clears all caches.
 */
 Shell.prototype.knock = function()
 {

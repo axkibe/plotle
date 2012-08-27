@@ -17,8 +17,6 @@
                                      `'  ` `-^ ' ' `-| `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ,|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- TODO this goes to Visual
-
  text range.
 
  Authors: Axel Kittenberger
@@ -182,5 +180,6 @@ Range.prototype.deselect = function(nopoke)
 	this.active = false;
 	system.setInput('');
 };
+
 
 } ) ();
