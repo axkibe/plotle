@@ -574,7 +574,7 @@ Space.prototype.mousedown = function(p, shift, ctrl)
 				Action.ITEMRESIZE, 'space',
 				'itemPath',        focus.path,
 				'start',           dp,
-				'move',            dp
+				'move',            dp,
 				'align',           com,
 				'startZone',       focus.getZone()
 			);
@@ -672,10 +672,10 @@ Space.prototype.getSub = function( path, mark )
 		{ return n; }
 
 	if (!m)
-		{ throw new Error('path does not lead to marked item'); }
+		{ throw new Error( 'path does not lead to marked item: ' + mark ); }
 
 	return m;
 };
 
 
-})();
+} ) ();

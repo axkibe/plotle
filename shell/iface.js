@@ -534,11 +534,13 @@ IFace.prototype.alter = function(src, trg)
 	this.$outbox.push(c);
 
 	this.$redo = [];
-	var $undo  = this.$undo;
-	$undo.push(c);
 
-	if ($undo.length > config.maxUndo)
-		{ $undo.shift(); }
+	var undo  = this.$undo;
+
+	undo.push(c);
+
+	if (undo.length > config.maxUndo)
+		{ undo.shift(); }
 
 	this.sendChanges();
 
@@ -655,10 +657,10 @@ IFace.prototype.redo = function()
 	if (this.$redo.length === 0)
 		{ return; }
 
-	var chgX   = this.$redo.pop().chgX.invert();
-    var r      = MeshMashine.changeTree(this.$cSpace, chgX);
-    this.$tree = r.tree;
-	chgX       = r.chgX;
+	var chgX     = this.$redo.pop().chgX.invert();
+    var r        = MeshMashine.changeTree(this.$cSpace, chgX);
+    this.$cSpace = r.tree;
+	chgX         = r.chgX;
 
 	if (chgX === null)
 		{ return; }
