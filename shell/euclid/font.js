@@ -85,6 +85,12 @@ var Font = Euclid.Font = function(size_o, family, fill, align, base)
 
 
 /*
+| MeshMashine type
+*/
+Font.prototype.type = 'Font';
+
+
+/*
 | Returns the CSS-string for this font.
 */
 Font.prototype.getCSS = function()

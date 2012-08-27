@@ -201,8 +201,7 @@ SwitchPanel.prototype._weave = function() {
 	this._paintButton(fabric, 'n');
 	this._paintButton(fabric, 'ne');
 
-	// FIXME this should be in a design.
-	fabric.setFont(new Euclid.Font(14, theme.defaultFont, 'black', 'center', 'middle'));
+	fabric.setFont(theme.switchpanel.label.font);
 
 	var bp = this.buttonPos;
 	fabric.fillText('Welcome',   bp.n .x, bp.n. y);
@@ -210,7 +209,8 @@ SwitchPanel.prototype._weave = function() {
 	if (!this.amVisitor)
 		{ fabric.fillText('Your Home', bp.nw.x, bp.nw.y); }
 
-	fabric.setFont(new Euclid.Font(12, theme.defaultFont, 'black', 'center', 'middle'));
+
+	fabric.setFont(theme.switchpanel.message.font);
 
 	var text;
 	switch(this.$hover || this.current) {

@@ -33,6 +33,7 @@ var Action;
 var Caret;
 var Dash;
 var Euclid;
+var fontPool;
 var Jools;
 var MeshMashine;
 var Peer;
@@ -63,8 +64,8 @@ Shell = function(fabric) {
 
 	Euclid.Measure.init();
 
-	this._$fontWFont = new Euclid.Font(20, theme.defaultFont, null, null, null);
-	this._$fontWatch = Euclid.Measure.width(this._$fontWFont, 'meshcraft$8833');
+	this._fontWFont = fontPool.get(20, 'la');
+	this._$fontWatch = Euclid.Measure.width(this._fontWFont, 'meshcraft$8833');
 
 	this.fabric    = fabric;
 
@@ -244,7 +245,7 @@ Shell.prototype.blink = function()
 		{ return; }
 
 	// tests for font size changes
-	var w = Euclid.Measure.width(this._$fontWFont, 'meshcraft$8833');
+	var w = Euclid.Measure.width(this._fontWFont, 'meshcraft$8833');
 	if (w !== this._$fontWatch) {
 		console.log('fontchange detected');
 		this._$fontWatch = w;
@@ -357,30 +358,10 @@ Shell.prototype._draw = function()
 			this, 'sketchFrowny', Euclid.View.proper, ce.add(0, -100)
 		);
 
-		if (!this._$greenFont1) {
-			this._$greenFont1 = new Euclid.Font(
-				40,
-				theme.defaultFont,
-				'black',
-				'center',
-				'middle'
-			);
-		}
-
-		if (!this._$greenFont2) {
-			this._$greenFont2 = new Euclid.Font(
-				24,
-				theme.defaultFont,
-				'black',
-				'center',
-				'middle'
-			);
-		}
-
-		fabric.setFont(this._$greenFont1);
+		fabric.setFont(fontPool.get(40, 'cm'));
 		fabric.fillText(this.green, ce);
 
-		fabric.setFont(this._$greenFont2);
+		fabric.setFont(fontPool.get(24, 'cm'));
 		fabric.fillText('Please refresh the page to reconnect.', ce.x, ce.y + 100);
 		return;
 	}

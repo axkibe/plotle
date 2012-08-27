@@ -73,6 +73,7 @@ OvalMenu = function(fabric, pc, settings, labels, receiver)
 	this.p           = pc;
 	this.labels      = labels;
 
+	this._font       = theme.ovalmenu.font;
 	this._receiver   = receiver;
 	this._style      = settings.style;
 	this._highlight  = settings.highlight;
@@ -82,7 +83,6 @@ OvalMenu = function(fabric, pc, settings, labels, receiver)
 	this.$within     = null;
 	this.$fadeTimer  = null;
 	this.$fade       = false;
-	this.$font       = theme.ovalmenu.font;
 };
 
 
@@ -112,7 +112,7 @@ OvalMenu.prototype.draw = function(view)
 
 	f.edge( this._style.edge, this._oflower, 'sketch', view, null );
 
-	f.setFont( this.$font );
+	f.setFont( this._font );
 
 	var labels = this.labels;
 

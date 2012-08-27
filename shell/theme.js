@@ -35,7 +35,6 @@ var theme = null;
 /*
 | Imports
 */
-var Euclid; // TODO
 var fontPool;
 
 /*
@@ -48,15 +47,10 @@ if (typeof(window) === 'undefined')
 	{ throw new Error('this code needs a browser!'); }
 
 
-var fonts =
-{
-	defaultFont : 'DejaVuSans,sans-serif',
-
-	boldFont    : 'DejaVuSansBold,sans-serif'
-};
-
-// TODO remove from theme
-fontPool.setDefaultFonts(fonts.defaultFont, fonts.boldFont);
+fontPool.setDefaultFonts(
+	'DejaVuSans,sans-serif',
+	'DejaVuSansBold,sans-serif'
+);
 
 theme =
 {
@@ -487,6 +481,15 @@ theme =
 			]
 		},
 
+		label :
+		{
+			font : fontPool.get(14, 'cm')
+		},
+
+		message :
+		{
+			font : fontPool.get(12, 'cm')
+		},
 
 		space :
 		{
@@ -554,8 +557,7 @@ theme =
 			slice :  0.82
 		},
 
-		// font : getFont (12, 'cm'); TODO
-		font : new Euclid.Font(12, fonts.defaultFont, 'black', 'center', 'middle'),
+		font : fontPool.get(12, 'cm'),
 
 		style :
 		{
@@ -759,10 +761,6 @@ theme =
 		}
 	}
 };
-
-// TODO
-theme.defaultFont = fonts.defaultFont;
-theme.boldFont    = fonts.boldFont;
 
 var odim = theme.ovalmenu.dimensions;
 var c30 = Math.cos(Math.PI / 6);

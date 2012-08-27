@@ -20,6 +20,8 @@
 
  Creates font objects by size and code
 
+ FIXME return meshmashine grown Font objects.
+
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
 
@@ -29,6 +31,8 @@
 /*
 | Imports
 */
+var Euclid;
+var Font;
 var theme;
 
 /*
@@ -156,10 +160,10 @@ FontPool.styles =
 */
 FontPool.prototype.setDefaultFonts = function(normal, bold)
 {
-	if (FontPool.$settedDefaultFonts)
+	if (this.$settedDefaultFonts)
 		{ throw new Error('multiple calls to set default font.'); }
 
-	FontPool.$settedDefaultFonts = true;
+	this.$settedDefaultFonts = true;
 
 	var styles = FontPool.styles;
 
@@ -190,34 +194,30 @@ FontPool.prototype.setDefaultFonts = function(normal, bold)
 */
 FontPool.prototype.get = function(size, code)
 {
-	var base = FontPool.styles[code];
+	if (!this.$settedDefaultFonts)
+		{ throw new Error('not setted default fonts'); }
 
-	if (!base)
+	var style = FontPool.styles[code];
+
+	if (!style)
 		{ throw new Error('Invalid font style'); }
 
-	var c = base.$c;
+	var c = style.$c;
 
 	if (!c)
-		{ c = base.$c = {}; }
+		{ c = style.$c = {}; }
 
 	var f = c[size];
-
 	if (f)
 		{ return f; }
 
-	f = {};
-
-	for (var k in base)
-	{
-        if (k === '$c')
-			{ continue; }
-
-        f[k] = base[k];
-	}
-
-	f.size = size;
-
-	return c[size] = f;
+	return c[size] = new Euclid.Font(
+		size,
+		style.family,
+		style.fill,
+		style.align,
+		style.base
+	);
 };
 
 
