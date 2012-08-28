@@ -108,13 +108,13 @@ Caret.prototype.hide = function() {
 */
 Caret.prototype.display = function() {
 	// erases the old caret
-	if (shell.caret.$save) {
+	if (shell.$caret.$save) {
 		if (Caret.useGetImageData) {
-			shell.fabric.putImageData(shell.caret.$save, shell.caret.$screenPos);
+			shell.fabric.putImageData(shell.$caret.$save, shell.$caret.$screenPos);
 		} else {
-			shell.fabric.drawImage(shell.caret.$save, 0, 0);
+			shell.fabric.drawImage(shell.$caret.$save, 0, 0);
 		}
-		shell.caret.$save = shell.caret.$screenPos = null;
+		shell.$caret.$save = shell.$caret.$screenPos = null;
 	}
 
 	// draws new

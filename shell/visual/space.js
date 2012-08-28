@@ -112,7 +112,7 @@ Space.prototype.update = function(twig)
 	}
 
 	// removes the focus if the focused item is removed.
-	var caret = shell.caret;
+	var caret = shell.$caret;
 	var csign = caret.sign;
 
 	if (caret.section === 'space' &&
@@ -134,7 +134,8 @@ Space.prototype.update = function(twig)
 */
 Space.prototype.focusedItem = function()
 {
-	var caret = shell.caret;
+	var caret = shell.$caret;
+
 	if (caret.section !== 'space')
 		{ return null; }
 
@@ -225,7 +226,7 @@ Space.prototype.knock = function() {
 */
 Space.prototype.drawCaret = function()
 {
-	this.getSub( shell.caret.sign.path, 'drawCaret' )
+	this.getSub( shell.$caret.sign.path, 'drawCaret' )
 		.drawCaret( this.$view );
 };
 
@@ -592,12 +593,13 @@ Space.prototype.mousedown = function(p, shift, ctrl)
 */
 Space.prototype.input = function(text)
 {
-	var caret = shell.caret;
+	var caret = shell.$caret;
 
 	if (!caret.sign)
 		{ return; }
 
-	this.getSub( caret.sign.path, 'input' ).input(text);
+	this.getSub( caret.sign.path, 'input' )
+		.input(text);
 };
 
 
@@ -634,7 +636,8 @@ Space.prototype.specialKey = function(key, shift, ctrl)
 		}
 	}
 
-	var caret = shell.caret;
+	var caret = shell.$caret;
+
 	if (!caret.sign)
 		{ return; }
 
@@ -670,9 +673,6 @@ Space.prototype.getSub = function( path, mark )
 
 	if (!mark)
 		{ return n; }
-
-	if (!m)
-		{ throw new Error( 'path does not lead to marked item: ' + mark ); }
 
 	return m;
 };

@@ -418,7 +418,7 @@ MainPanel.layout =
 				{
 					type   : 'Point',
 					anchor : 'c',
-					x      :  1,
+					x      : 0,
 					y      : 1
 				}
 			},
@@ -525,7 +525,7 @@ MainPanel.layout =
 				{
 					type   : 'Point',
 					anchor : 'c',
-					x      :  1,
+					x      :  0,
 					y      :  2
 				}
 			},
@@ -607,7 +607,7 @@ MainPanel.layout =
 				{
 					type   : 'Point',
 					anchor : 'c',
-					x      :  1,
+					x      :  0,
 					y      :  1
 				}
 			},

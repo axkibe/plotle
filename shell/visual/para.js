@@ -128,7 +128,7 @@ Para.prototype.draw = function(fabric, view, pnw)
 */
 Para.prototype.drawCaret = function(view)
 {
-	var caret = shell.caret;
+	var caret = shell.$caret;
 	var item  = shell.$space.getSub( this.path, 'Item' );
 	var doc   = item.$sub.doc;
 	var zone  = item.getZone();
@@ -146,15 +146,15 @@ Para.prototype.drawCaret = function(view)
 		{ return; }
 
 	var cp = view.point(cx + zone.pnw.x, cyn + zone.pnw.y);
-	shell.caret.$screenPos = cp;
+	caret.$screenPos = cp;
 
 	if (Caret.useGetImageData)
-		{ shell.caret.$save = shell.fabric.getImageData(cp.x, cp.y, 3, ch + 2); }
+		{ caret.$save = shell.fabric.getImageData(cp.x, cp.y, 3, ch + 2); }
 	else
 	{
 		// paradoxically this is often way faster, especially on firefox
-		shell.caret.$save = new Euclid.Fabric(shell.fabric.width, shell.fabric.height);
-		shell.caret.$save.drawImage(shell.fabric, 0, 0);
+		caret.$save = new Euclid.Fabric(shell.fabric.width, shell.fabric.height);
+		caret.$save.drawImage(shell.fabric, 0, 0);
 	}
 
 	shell.fabric.fillRect('black', cp.x + 1, cp.y + 1, 1, ch);
@@ -170,7 +170,7 @@ Para.prototype.getCaretPos = function()
 	var doc     = item.$sub.doc;
 	var fs      = doc.getFont(item).size;
 	var descend = fs * theme.bottombox;
-	var p       = this.locateOffset(shell.caret.sign.at1, shell.caret);
+	var p       = this.locateOffset( shell.$caret.sign.at1, shell.$caret );
 
 	var s = Math.round(p.y + descend);
 	var n = s - Math.round(fs + descend);
@@ -204,10 +204,11 @@ Para.prototype.getFlow = function()
 		{ return flow; }
 
 	// claers the caret flow cache if its within this flow
-	if (shell.caret.path && shell.caret.path.equals(this.path))
+	var caret = shell.$caret;
+	if ( caret.path && caret.path.equals(this.path) )
 	{
-		shell.caret.flow$line  = null;
-		shell.caret.flow$token = null;
+		caret.flow$line  = null;
+		caret.flow$token = null;
 	}
 
 	// builds position informations.
@@ -288,10 +289,8 @@ Para.prototype.getHeight = function()
 
 /*
 | Returns the offset by an x coordinate in a flow.
-|
-| TODO rename
 */
-Para.prototype.getLineXOffset = function(line, x)
+Para.prototype.getOffsetAt = function( line, x )
 {
 	var item   = shell.$space.getSub ( this.path, 'Item' );
 	var doc    = item.$sub.doc;
@@ -410,7 +409,7 @@ Para.prototype.getPointOffset = function(point)
 	if (line >= flow.length)
 		{ line--; }
 
-	return this.getLineXOffset(line, point.x);
+	return this.getOffsetAt(line, point.x);
 };
 
 
@@ -427,10 +426,10 @@ Para.prototype.input = function(text)
     for (var rx = reg.exec(text); rx !== null; rx = reg.exec(text))
 	{
 		var line = rx[1];
-		shell.peer.insertText(para.textPath, shell.caret.sign.at1, line);
+		shell.peer.insertText(para.textPath, shell.$caret.sign.at1, line);
         if (rx[2])
 		{
-			shell.peer.split( para.textPath, shell.caret.sign.at1 );
+			shell.peer.split( para.textPath, shell.$caret.sign.at1 );
 			para = doc.atRank( doc.twig.rankOf( para.key ) + 1 );
 		}
     }
@@ -496,7 +495,7 @@ Para.prototype.keyDown = function(item, doc, caret)
 	if (caret.flow$line < flow.length - 1)
 	{
 		// stays within this para
-		at1 = this.getLineXOffset(caret.flow$line + 1, x);
+		at1 = this.getOffsetAt(caret.flow$line + 1, x);
 		shell.setCaret(
 			'space',
 			{
@@ -513,7 +512,7 @@ Para.prototype.keyDown = function(item, doc, caret)
 	if (r < doc.twig.length - 1)
 	{
 		var ve = doc.atRank(r + 1);
-		at1 = ve.getLineXOffset(0, x);
+		at1 = ve.getOffsetAt( 0, x );
 		shell.setCaret(
 			'space',
 			{
@@ -660,7 +659,7 @@ Para.prototype.keyUp = function(item, doc, caret)
 	if (caret.flow$line > 0)
 	{
 		// stay within this para
-		at1 = this.getLineXOffset(caret.flow$line - 1, x);
+		at1 = this.getOffsetAt( caret.flow$line - 1, x );
 		shell.setCaret(
 			'space',
 			{
@@ -677,7 +676,7 @@ Para.prototype.keyUp = function(item, doc, caret)
 	if (r > 0)
 	{
 		var ve = doc.atRank(r - 1);
-		at1 = ve.getLineXOffset(ve.getFlow().length - 1, x);
+		at1 = ve.getOffsetAt( ve.getFlow().length - 1, x );
 		shell.setCaret(
 			'space',
 			{
@@ -708,7 +707,7 @@ Para.prototype.knock = function()
 */
 Para.prototype.specialKey = function( key, shift, ctrl )
 {
-	var caret  = shell.caret;
+	var caret  = shell.$caret;
 	var select = shell.selection;
 	var item   = shell.$space.getSub ( this.path, 'Item' );
 	var doc    = item.$sub.doc;
@@ -789,7 +788,6 @@ Para.prototype.specialKey = function( key, shift, ctrl )
 			show = this.keyEnter(item, doc, caret) || show;
 			break;
 
-		// TODO show?
 		case 'pageup' :
 			item.scrollPage(true);
 			break;
@@ -827,6 +825,8 @@ Para.prototype.specialKey = function( key, shift, ctrl )
 			break;
 	}
 
+	// FIXME use caret var instead of shell.$caret
+
 	if (shift)
 	{
 		switch(key) {
@@ -837,7 +837,7 @@ Para.prototype.specialKey = function( key, shift, ctrl )
 			case 'right' :
 			case 'down'  :
 				select.active = true;
-				select.sign2 = shell.caret.sign;
+				select.sign2 = shell.$caret.sign;
 				system.setInput(select.innerText());
 				item.poke();
 				shell.redraw = true;
@@ -849,7 +849,7 @@ Para.prototype.specialKey = function( key, shift, ctrl )
 	{
 		item.poke();
 		item.scrollCaretIntoView();
-		shell.caret.show();
+		shell.$caret.show();
 		shell.redraw = true;
 	}
 };

@@ -151,7 +151,7 @@ Note.prototype.setScrollbar = function(pos)
 */
 Note.prototype.scrollCaretIntoView = function()
 {
-	var caret   = shell.caret;
+	var caret   = shell.$caret;
 	var scrolly = this.scrollbarY;
 	var sy      = scrolly.getPos();
 	var para   = shell.$space.getSub( caret.sign.path, 'Para' );

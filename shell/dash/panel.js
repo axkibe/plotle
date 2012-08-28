@@ -125,7 +125,7 @@ Panel.prototype.newControl = function(twig, inherit, name)
 */
 Panel.prototype.focusedControl = function()
 {
-	var caret = shell.caret;
+	var caret = shell.$caret;
 
 	if (caret.section !== 'board')
 		{ return null; }
@@ -212,8 +212,10 @@ Panel.prototype.draw = function(fabric)
 */
 Panel.prototype.drawCaret = function(view)
 {
-	var cname = shell.caret.sign.path.get(1);
+	var cname = shell.$caret.sign.path.get(1);
+
 	var ce = this.$sub[cname];
+
 	if (!ce)
 		{ throw new Error('Caret component does not exist!'); }
 

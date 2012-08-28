@@ -87,10 +87,10 @@ Chat.prototype.getCaretPos = function()
 {
 	var fs      = this.twig.font.size;
 	var descend = fs * theme.bottombox;
-	var p       = this.locateOffset(shell.caret.sign.at1);
+	var p       = this.locateOffset( shell.$caret.sign.at1 );
 	var pnw     = this.pnw;
-	var s       = Math.round(p.y + pnw.y + descend);
-	var n       = s - Math.round(fs + descend);
+	var s       = Math.round( p.y + pnw.y + descend );
+	var n       = s - Math.round( fs + descend );
 	var	x       = p.x + this.pnw.x - 1;
 
 	return Jools.immute(
@@ -207,7 +207,7 @@ Chat.prototype.draw = function(fabric)
 */
 Chat.prototype.drawCaret = function(view)
 {
-	var caret = shell.caret;
+	var caret = shell.$caret;
 	var panel = this.panel;
 	var cpos  = caret.$pos = this.getCaretPos();
 
@@ -216,15 +216,18 @@ Chat.prototype.drawCaret = function(view)
 		panel.pnw.x + cpos.x,
 		panel.pnw.y + cpos.n
 	);
-	shell.caret.$screenPos = cp;
 
-	if (Caret.useGetImageData)
-		{ shell.caret.$save = shell.fabric.getImageData(cp.x, cp.y, 3, ch + 2); }
+	shell.$caret.$screenPos = cp;
+
+	if ( Caret.useGetImageData )
+	{
+		shell.$caret.$save = shell.fabric.getImageData(cp.x, cp.y, 3, ch + 2);
+	}
 	else
 	{
 		// paradoxically this is often way faster, especially on firefox
-		shell.caret.$save = new Euclid.Fabric(shell.fabric.width, shell.fabric.height);
-		shell.caret.$save.drawImage(shell.fabric, 0, 0);
+		shell.$caret.$save = new Euclid.Fabric(shell.fabric.width, shell.fabric.height);
+		shell.$caret.$save.drawImage(shell.fabric, 0, 0);
 	}
 
 	shell.fabric.fillRect('black', cp.x + 1, cp.y + 1, 1, ch);
@@ -236,7 +239,7 @@ Chat.prototype.drawCaret = function(view)
 */
 Chat.prototype.input = function(text)
 {
-	var csign = shell.caret.sign;
+	var csign = shell.$caret.sign;
 	var itext = this._$itext;
 	var at1   = csign.at1;
 
@@ -259,7 +262,7 @@ Chat.prototype.input = function(text)
 */
 Chat.prototype.keyBackspace = function()
 {
-	var caret = shell.caret;
+	var caret = shell.$caret;
 	var csign = caret.sign;
 	var at1   = csign.at1;
 
@@ -287,7 +290,7 @@ Chat.prototype.keyBackspace = function()
 */
 Chat.prototype.keyDel = function()
 {
-	var caret = shell.caret;
+	var caret = shell.$caret;
 	var csign = caret.sign;
 	var at1   = csign.at1;
 
@@ -313,8 +316,7 @@ Chat.prototype.keyDown = function()
 */
 Chat.prototype.keyEnd = function()
 {
-	var caret = shell.caret;
-	var csign = caret.sign;
+	var csign = shell.$caret.sign;
 	var at1   = csign.at1;
 
 	if (at1 >= this._$itext.length)
@@ -340,8 +342,7 @@ Chat.prototype.keyEnter = function()
 	if (this._$itext === '')
 		{ return false; }
 
-	var caret = shell.caret;
-	var csign = caret.sign;
+	var csign = shell.$caret.sign;
 
 	shell.peer.sendMessage(this._$itext);
 
@@ -364,8 +365,8 @@ Chat.prototype.keyEnter = function()
 */
 Chat.prototype.keyLeft = function()
 {
-	var caret = shell.caret;
-	var csign = caret.sign;
+	var csign = shell.$caret.sign;
+
 	if (csign.at1 <= 0)
 		{ return false; }
 
@@ -386,8 +387,8 @@ Chat.prototype.keyLeft = function()
 */
 Chat.prototype.keyPos1 = function()
 {
-	var caret = shell.caret;
-	var csign = caret.sign;
+	var csign = shell.$caret.sign;
+
 	if (csign.at1 <= 0)
 		{ return false; }
 
@@ -406,9 +407,9 @@ Chat.prototype.keyPos1 = function()
 /*
 | User pressed right key
 */
-Chat.prototype.keyRight = function() {
-	var caret = shell.caret;
-	var csign = caret.sign;
+Chat.prototype.keyRight = function()
+{
+	var csign = shell.$caret.sign;
 
 	if (csign.at1 >= this._$itext.length)
 		{ return false; }

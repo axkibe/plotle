@@ -274,7 +274,7 @@ Input.prototype.getCaretPos = function()
 {
 	var fs      = this.twig.font.size;
 	var descend = fs * theme.bottombox;
-	var p       = this.locateOffset(shell.caret.sign.at1);
+	var p       = this.locateOffset( shell.$caret.sign.at1 );
 
 	var pnw = this.pnw;
 	var s = Math.round(p.y + pnw.y + descend);
@@ -294,7 +294,7 @@ Input.prototype.getCaretPos = function()
 */
 Input.prototype.drawCaret = function(view)
 {
-	var caret = shell.caret;
+	var caret = shell.$caret;
 	var cpos  = caret.$pos = this.getCaretPos();
 	var ch    = Math.round((cpos.s - cpos.n) * view.zoom);
 	var cp    = view.point(
@@ -302,15 +302,16 @@ Input.prototype.drawCaret = function(view)
 		this.panel.pnw.y + cpos.n
 	);
 
-	shell.caret.$screenPos = cp;
+	// TODO reuse caret variable
+	shell.$caret.$screenPos = cp; // FIXME
 
 	if (Caret.useGetImageData)
-		{ shell.caret.$save = shell.fabric.getImageData(cp.x, cp.y, 3, ch + 2); }
+		{ shell.$caret.$save = shell.fabric.getImageData(cp.x, cp.y, 3, ch + 2); }
 	else
 	{
 		// paradoxically this is often way faster, especially on firefox
-		shell.caret.$save = new Euclid.Fabric(shell.fabric.width, shell.fabric.height);
-		shell.caret.$save.drawImage(shell.fabric, 0, 0);
+		shell.$caret.$save = new Euclid.Fabric(shell.fabric.width, shell.fabric.height);
+		shell.$caret.$save.drawImage(shell.fabric, 0, 0);
 	}
 
 	shell.fabric.fillRect('black', cp.x + 1, cp.y + 1, 1, ch);
@@ -339,8 +340,7 @@ Input.prototype.setValue = function(v)
 */
 Input.prototype.input = function(text)
 {
-	var caret = shell.caret;
-	var csign = caret.sign;
+	var csign = shell.$caret.sign;
 	var v = this._$value;
 	var at1 = csign.at1;
 
@@ -367,8 +367,7 @@ Input.prototype.input = function(text)
 */
 Input.prototype.keyBackspace = function()
 {
-	var caret = shell.caret;
-	var csign = caret.sign;
+	var csign = shell.$caret.sign;
 	var at1   = csign.at1;
 
 	if (at1 <= 0)
@@ -393,9 +392,7 @@ Input.prototype.keyBackspace = function()
 */
 Input.prototype.keyDel = function()
 {
-	var caret = shell.caret;
-	var csign = caret.sign;
-	var at1   = csign.at1;
+	var at1   = shell.$caret.csign.at1;
 
 	if (at1 >= this._$value.length)
 		{ return false; }
@@ -431,8 +428,7 @@ Input.prototype.keyDown = function()
 */
 Input.prototype.keyEnd = function()
 {
-	var caret = shell.caret;
-	var csign = caret.sign;
+	var csign = shell.$caret.sign;
 	var at1   = csign.at1;
 
 	if (at1 >= this._$value.length)
@@ -455,8 +451,7 @@ Input.prototype.keyEnd = function()
 */
 Input.prototype.keyLeft = function()
 {
-	var caret = shell.caret;
-	var csign = caret.sign;
+	var csign = shell.$caret.sign;
 
 	if (csign.at1 <= 0)
 		{ return false; }
@@ -478,8 +473,7 @@ Input.prototype.keyLeft = function()
 */
 Input.prototype.keyPos1 = function()
 {
-	var caret = shell.caret;
-	var csign = caret.sign;
+	var csign = shell.$caret.sign;
 
 	if (csign.at1 <= 0)
 		{ return false; }
@@ -501,8 +495,7 @@ Input.prototype.keyPos1 = function()
 */
 Input.prototype.keyRight = function()
 {
-	var caret = shell.caret;
-	var csign = caret.sign;
+	var csign = shell.$caret.sign;
 
 	if (csign.at1 >= this._$value.length)
 		{ return false; }

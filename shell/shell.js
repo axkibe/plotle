@@ -26,7 +26,15 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/**
+
+/*
+| Export
+*/
+var shell = null;
+var Shell = null;
+
+
+/*
 | Imports
 */
 var Action;
@@ -42,23 +50,25 @@ var Sign;
 var theme;
 var Visual;
 
-/**
-| Exports
-*/
-var shell = null;
-var Shell = null;
 
-/**
+/*
 | Capsule
 */
 (function(){
-'use strict';
-if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
-/**
+'use strict';
+
+if (typeof(window) === 'undefined')
+	{ throw new Error('this code needs a browser!'); }
+
+
+// TODO
+
+/*
 | Constructor.
 */
-Shell = function(fabric) {
+Shell = function(fabric)
+{
 	if (shell !== null) throw new Error('Singleton not single');
 	shell = this;
 
@@ -71,11 +81,11 @@ Shell = function(fabric) {
 
 	this.$space    = null;
 	this.$board    = new Dash.Board();
+	this._$menu    = null;
 
-	this.menu      = null;
-
-	this.caret     = new Caret(null, null, null, false);
+	this.$caret    = new Caret(null, null, null, false);
 	this.$action   = null;
+
 	this.selection = new Range();
 
 	this.green     = false;
@@ -132,24 +142,24 @@ Shell.prototype.setCaret = function(section, sign, retainx) {
 	var entity;
 
 	if  (
-			this.caret.sign &&
+			this.$caret.sign &&
 			(
-				this.caret.section !== section ||
-				this.caret.sign.path !== sign.path
+				this.$caret.section !== section ||
+				this.$caret.sign.path !== sign.path
 			)
 		)
 	{
-		entity = this._getCaretEntity(this.caret.section, this.caret.sign.path);
+		entity = this._getCaretEntity(this.$caret.section, this.$caret.sign.path);
 
 		if (entity)
 			{ entity.knock(); }
 	}
 
-	this.caret = new Caret(
+	this.$caret = new Caret(
 		section,
 		sign,
 		Jools.is(retainx) ? retainx : null,
-		this.caret.$shown
+		this.$caret.$shown
 	);
 
 	if (sign)
@@ -162,7 +172,7 @@ Shell.prototype.setCaret = function(section, sign, retainx) {
 		shell.redraw = true;
 	}
 
-	return this.caret;
+	return this.$caret;
 };
 
 /**
@@ -206,7 +216,7 @@ Shell.prototype.update = function( tree, chgX )
 {
 	this.$space.update(tree.root);
 
-	var caret = this.caret;
+	var caret = this.$caret;
 
 	if (caret.sign !== null)
 	{
@@ -235,8 +245,8 @@ Shell.prototype.systemFocus = function()
 	if (this.green)
 		{ return; }
 
-	this.caret.show();
-	this.caret.display();
+	this.$caret.show();
+	this.$caret.display();
 };
 
 /**
@@ -247,8 +257,8 @@ Shell.prototype.systemBlur = function()
 	if (this.green)
 		{ return; }
 
-	this.caret.hide();
-	this.caret.display();
+	this.$caret.hide();
+	this.$caret.display();
 };
 
 /**
@@ -267,7 +277,7 @@ Shell.prototype.blink = function()
 		this.knock();
 	}
 
-	this.caret.blink();
+	this.$caret.blink();
 };
 
 /**
@@ -315,16 +325,16 @@ Shell.prototype.knock = function()
 	if (this.green)
 		{ return; }
 
-	this.caret.$save = null;
-	this.caret.$screenPos = null;
+	this.$caret.$save = null;
+	this.$caret.$screenPos = null;
 
 	if (this.$space)
 		{ this.$space.knock(); }
 
 	this.$board.knock();
 
-	if (this.menu)
-		{ this.menu.knock(); }
+	if (this._$menu)
+		{ this._$menu.knock(); }
 
 	this._draw();
 };
@@ -350,7 +360,7 @@ Shell.prototype.sketchFrowny = function(fabric, border, twist, view, pos)
 */
 Shell.prototype.setMenu = function(menu)
 {
-	this.menu   = menu; // TODO $menu
+	this._$menu = menu;
 	this.redraw = true;
 };
 
@@ -382,14 +392,18 @@ Shell.prototype._draw = function()
 	}
 
 	// remove caret cache.
-	this.caret.$save = null;
-	this.caret.$screenPos = null;
+	this.$caret.$save = null;
+	this.$caret.$screenPos = null;
 
-	if (this.$space) { this.$space.draw(); }
+	if (this.$space)
+		{ this.$space.draw(); }
+
 	this.$board.draw();
-	if (this.menu) { this.menu.draw(Euclid.View.proper); }
 
-	this.caret.display();
+	if (this._$menu)
+		{ this._$menu.draw(Euclid.View.proper); }
+
+	this.$caret.display();
 
 	this.redraw = false;
 };
@@ -416,8 +430,8 @@ Shell.prototype.mousehover = function(p, shift, ctrl) {
 
 	var cursor = null;
 
-	if (this.menu)
-		{ cursor = this.menu.mousehover(Euclid.View.proper, p, shift, ctrl); }
+	if (this._$menu)
+		{ cursor = this._$menu.mousehover(Euclid.View.proper, p, shift, ctrl); }
 
 
 	if (cursor)
@@ -458,8 +472,8 @@ Shell.prototype.mousedown = function(p, shift, ctrl) {
 
 	var mouseState = null;
 
-	if (this.menu)
-		{ mouseState = this.menu.mousedown(Euclid.View.proper, p, shift, ctrl); }
+	if (this._$menu)
+		{ mouseState = this._$menu.mousedown(Euclid.View.proper, p, shift, ctrl); }
 
 	if (mouseState === null)
 		{ mouseState = this.$board.mousedown(p, shift, ctrl); }
@@ -572,7 +586,7 @@ Shell.prototype.specialKey = function(key, shift, ctrl) {
 	if (this.green)
 		{ return; }
 
-	var caret  = this.caret;
+	var caret  = this.$caret;
 	switch (caret.section) {
 	case 'board' :
 		this.$board.specialKey(key, shift, ctrl);
@@ -596,29 +610,47 @@ Shell.prototype.input = function(text) {
 	if (this.green)
 		{ return; }
 
-	if (this.selection.active) { this.selection.remove(); }
+	if (this.selection.active)
+		{ this.selection.remove(); }
 
-	var caret  = this.caret;
-	switch (caret.section) {
-	case null : break;
-	case 'board' : this.$board.input(text); break;
-	case 'space' : this.$space.input(text); break;
-	default : throw new Error('invalid section');
+	var caret  = this.$caret;
+
+	switch (caret.section)
+	{
+		case null :
+			break;
+
+		case 'board' :
+			this.$board.input(text);
+			break;
+
+		case 'space' :
+			this.$space.input(text);
+			break;
+
+		default :
+			throw new Error('invalid section');
 	}
-	if (this.redraw) this._draw();
+
+	if (this.redraw)
+		{ this._draw(); }
 };
 
-/**
+
+/*
 | The window has been resized.
 */
-Shell.prototype.resize = function(width, height) {
+Shell.prototype.resize = function(width, height)
+{
 	this._draw();
 };
 
-/**
+
+/*
 | Sets the current user
 */
-Shell.prototype.setUser = function(user, pass) {
+Shell.prototype.setUser = function(user, pass)
+{
 	this.$user = user;
 	this.$board.setUser(user);
 	this.peer.setUser(user, pass);
@@ -681,9 +713,9 @@ Shell.prototype.onload = function() {
 */
 Shell.prototype.moveToSpace = function(name) {
 	var self = this;
-	if (this.caret.section === 'space') {
-		this.setCaret(null, null);
-	}
+
+	if (this.$caret.section === 'space')
+		{ this.setCaret(null, null); }
 
 	if (name === null) {
 

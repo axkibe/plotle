@@ -126,11 +126,14 @@ Board.prototype.curPanel = function()
 */
 Board.prototype.setCurPanel = function(panelName)
 {
-	var caret = shell.caret;
+	var caret = shell.$caret;
+
 	if (caret.section === 'board' &&
 		caret.sign &&
 		caret.sign.path.get(0) === this.curPanelName)
-		{ caret = shell.setCaret(null, null); }
+	{
+		caret = shell.setCaret(null, null);
+	}
 
 	this.curPanelName = panelName;
 	shell.redraw = true;
@@ -216,13 +219,8 @@ Board.prototype.knock = function()
 */
 Board.prototype.drawCaret = function()
 {
-	var caret = shell.caret;
-
-	if (caret.sign.path.get(0) !== this.curPanelName)
-	{
-		Jools.log('fail', 'Caret path(0) !== this.curPanelName');
-		return;
-	}
+	if (shell.$caret.sign.path.get(0) !== this.curPanelName)
+		{ throw new Error('Caret path(0) !== this.curPanelName'); }
 
 	this.curPanel().drawCaret(Euclid.View.proper);
 };

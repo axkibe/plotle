@@ -162,7 +162,7 @@ DocItem.prototype.click = function(view, p)
 	{
 		var ppnw   = this.$sub.doc.getPNW( para.key );
 		var at1    = para.getPointOffset( pi.sub( ppnw ));
-		var caret  = shell.caret;
+		var caret  = shell.$caret;
 
 		caret = shell.setCaret(
 			'space',
