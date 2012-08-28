@@ -54,8 +54,8 @@ Peer = function(updateRCV, messageRCV)
 	this.spacename = null;
 	this._iface     = new IFace(updateRCV, messageRCV);
 
-	this.$visitUser = null;
-	this.$visitPass = null;
+	this._$visitUser     = null;
+	this._$visitPasshash = null;
 };
 
 /**
@@ -69,36 +69,66 @@ Peer.prototype.setUser = function(user, pass)
 */
 Peer.prototype.logout = function(callback)
 {
-	if (this.$visitUser) {
-		callback({ ok : true, user : this.$visitUser, pass : this.$visitPass });
-	} else {
-		this.auth('visitor', null, callback);
+	if (this._$visitUser)
+	{
+		callback(
+			{
+				ok : true,
+				user : this._$visitUser,
+				pass : this._$visitPasshash
+			}
+		);
+	}
+	else
+	{
+		this.auth('visitor', null, this, callback, 'logout');
 	}
 };
 
-/**
-| auth
+
+/*
+| authentication completed of a visitor user on log out
 */
-Peer.prototype.auth = function(user, pass, callback)
+Peer.prototype.onAuth = function(user, passhash, asw, callback, op)
+{
+	if (op !== 'logout')
+		{ throw new Error('onAuth unexpected operation: ' + op); }
+
+	callback(asw);
+};
+
+
+/**
+| authenticates a user or visitor.
+*/
+Peer.prototype.auth = function(user, passhash, onAuthReceiver, a1, a2)
 {
 	var self = this;
-	if (user === 'visitor' && pass === null)
-		{ pass = Jools.uid(); }
 
-	self._iface.auth(user, pass, function(asw) {
-		if (asw.ok && user.substring(0, 5) === 'visit') {
-			self.$visitUser = asw.user;
-			self.$visitPass = asw.pass;
+	if (user === 'visitor' && passhash === null)
+		{ passhash = Jools.uid(); }
+
+	self._iface.auth(user, passhash, function(asw)
+	{
+		if (asw.ok && user.substring(0, 5) === 'visit')
+		{
+			self._$visitUser     = asw.user;
+			self._$visitPasshash = asw.pass; // TODO passhash!
 		}
-		callback(asw);
+
+		onAuthReceiver.onAuth(user, passhash, asw, a1, a2);
 	});
 };
+
+
 
 /**
 | Sends a message.
 */
 Peer.prototype.sendMessage = function(message)
-	{ this._iface.sendMessage(message); };
+{
+	this._iface.sendMessage(message);
+};
 
 /**
 | Registers a new user.

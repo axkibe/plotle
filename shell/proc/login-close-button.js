@@ -65,7 +65,7 @@ Jools.subclass(LoginCloseButton, Dash.Button);
 */
 LoginCloseButton.prototype.push = function(shift, ctrl)
 {
-	Proc.Util.clearLogin(this.panel);
+	Proc.util.clearLogin(this.panel);
 	this.panel.board.setCurPanel('MainPanel');
 	shell.redraw = true;
 };

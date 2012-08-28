@@ -54,7 +54,7 @@ var Visual;
 /*
 | Capsule
 */
-(function(){
+( function() {
 
 'use strict';
 
@@ -62,36 +62,35 @@ if (typeof(window) === 'undefined')
 	{ throw new Error('this code needs a browser!'); }
 
 
-// TODO
-
 /*
 | Constructor.
 */
 Shell = function(fabric)
 {
-	if (shell !== null) throw new Error('Singleton not single');
+	if (shell !== null)
+		{ throw new Error('Singleton not single'); }
+
 	shell = this;
 
 	Euclid.Measure.init();
 
-	this._fontWFont = fontPool.get(20, 'la');
+	this._fontWFont  = fontPool.get(20, 'la');
 	this._$fontWatch = Euclid.Measure.width(this._fontWFont, 'meshcraft$8833');
 
 	this.fabric    = fabric;
 
 	this.$space    = null;
 	this.$board    = new Dash.Board();
-	this._$menu    = null;
-
 	this.$caret    = new Caret(null, null, null, false);
 	this.$action   = null;
 
+	this._$menu    = null;
+
 	this.selection = new Range();
 
+	// true at greenscreen frowny
 	this.green     = false;
 
-	// a flag set to true if anything requests a redraw.
-	this.redraw = false;
 	this._draw();
 };
 
@@ -105,7 +104,7 @@ Shell.prototype.dropFocus = function()
 };
 
 
-/**
+/*
 | Sets the caret position.
 */
 Shell.prototype.setCaret = function(section, sign, retainx) {
@@ -175,7 +174,8 @@ Shell.prototype.setCaret = function(section, sign, retainx) {
 	return this.$caret;
 };
 
-/**
+
+/*
 | Returns the first entity a caret can be in
 */
 Shell.prototype._getCaretEntity = function(sec, path)
@@ -183,7 +183,7 @@ Shell.prototype._getCaretEntity = function(sec, path)
 	switch(sec)
 	{
 		case 'board' :
-			// TODO
+			// FIXME
 			// return this.$board.getSub(path, Dash.Component);
 			return this.$board.getSub(path);
 
@@ -196,7 +196,7 @@ Shell.prototype._getCaretEntity = function(sec, path)
 };
 
 
-/**
+/*
 | Peer received a message.
 */
 Shell.prototype.messageRCV = function( space, user, message )
@@ -209,7 +209,8 @@ Shell.prototype.messageRCV = function( space, user, message )
 	this.poke();
 };
 
-/**
+
+/*
 | MeshMashine reports updates.
 */
 Shell.prototype.update = function( tree, chgX )
@@ -237,7 +238,8 @@ Shell.prototype.update = function( tree, chgX )
 	this._draw();
 };
 
-/**
+
+/*
 | The shell got the systems focus.
 */
 Shell.prototype.systemFocus = function()
@@ -249,7 +251,8 @@ Shell.prototype.systemFocus = function()
 	this.$caret.display();
 };
 
-/**
+
+/*
 | The shell lost the systems focus.
 */
 Shell.prototype.systemBlur = function()
@@ -261,7 +264,8 @@ Shell.prototype.systemBlur = function()
 	this.$caret.display();
 };
 
-/**
+
+/*
 | Blinks the caret (if shown)
 */
 Shell.prototype.blink = function()
@@ -271,7 +275,9 @@ Shell.prototype.blink = function()
 
 	// tests for font size changes
 	var w = Euclid.Measure.width(this._fontWFont, 'meshcraft$8833');
-	if (w !== this._$fontWatch) {
+
+	if (w !== this._$fontWatch)
+	{
 		console.log('fontchange detected');
 		this._$fontWatch = w;
 		this.knock();
@@ -280,7 +286,8 @@ Shell.prototype.blink = function()
 	this.$caret.blink();
 };
 
-/**
+
+/*
 | Creates an action.
 */
 Shell.prototype.startAction = function()
@@ -292,7 +299,8 @@ Shell.prototype.startAction = function()
 
 };
 
-/**
+
+/*
 | Ends an action.
 */
 Shell.prototype.stopAction = function()
@@ -304,12 +312,14 @@ Shell.prototype.stopAction = function()
 
 };
 
-/**
+
+/*
 | Lets the shell check if it should redraw.
 | Used by async handlers.
 */
 Shell.prototype.poke = function()
 {
+	// actualizes hover context
 	if (this.$hoverP)
 		{ this.mousehover(this.$hoverP, this.$hoverShift, this.$hoverCtrl); }
 
@@ -317,7 +327,8 @@ Shell.prototype.poke = function()
 		{ this._draw(); }
 };
 
-/**
+
+/*
 | force-clears all caches.
 */
 Shell.prototype.knock = function()
@@ -325,7 +336,7 @@ Shell.prototype.knock = function()
 	if (this.green)
 		{ return; }
 
-	this.$caret.$save = null;
+	this.$caret.$save      = null;
 	this.$caret.$screenPos = null;
 
 	if (this.$space)
@@ -339,7 +350,8 @@ Shell.prototype.knock = function()
 	this._draw();
 };
 
-/**
+
+/*
 | Sketches the greenscreen frowny.
 */
 Shell.prototype.sketchFrowny = function(fabric, border, twist, view, pos)
@@ -355,7 +367,8 @@ Shell.prototype.sketchFrowny = function(fabric, border, twist, view, pos)
 	fabric.lineTo(pos.x +  50, pos.y - 140);
 };
 
-/**
+
+/*
 | Sets the current popup menu.
 */
 Shell.prototype.setMenu = function(menu)
@@ -364,7 +377,8 @@ Shell.prototype.setMenu = function(menu)
 	this.redraw = true;
 };
 
-/**
+
+/*
 | Draws the dashboard and the space.
 */
 Shell.prototype._draw = function()
@@ -373,7 +387,8 @@ Shell.prototype._draw = function()
 
 	fabric.reset();
 
-	if (this.green) {
+	if (this.green)
+	{
 		var ce = fabric.getCenter();
 
 		fabric.fillRect('rgb(170, 255, 170)', 0, 0, fabric.width, fabric.height);
@@ -388,6 +403,7 @@ Shell.prototype._draw = function()
 
 		fabric.setFont(fontPool.get(24, 'cm'));
 		fabric.fillText('Please refresh the page to reconnect.', ce.x, ce.y + 100);
+
 		return;
 	}
 
@@ -408,21 +424,32 @@ Shell.prototype._draw = function()
 	this.redraw = false;
 };
 
-/**
+
+/*
 | A mouse click.
 */
-Shell.prototype.click = function(p, shift, ctrl) {
-	if (this.green) { return; }
+Shell.prototype.click = function(p, shift, ctrl)
+{
+	if (this.green)
+		{ return; }
+
 	// FIXME board
-	if (this.$space) { this.$space.click(p, shift, ctrl); }
-	if (this.redraw) { this._draw(); }
+
+	if (this.$space)
+		{ this.$space.click(p, shift, ctrl); }
+
+	if (this.redraw)
+		{ this._draw(); }
 };
 
-/**
-| Mouse hover.
+
+/*
+| mouse hover.
 */
-Shell.prototype.mousehover = function(p, shift, ctrl) {
-	if (this.green) { return; }
+Shell.prototype.mousehover = function(p, shift, ctrl)
+{
+	if (this.green)
+		{ return; }
 
 	this.$hoverP     = p;
 	this.$hoverShift = shift;
@@ -446,29 +473,39 @@ Shell.prototype.mousehover = function(p, shift, ctrl) {
 			{ cursor = this.$space.mousehover(p, shift, ctrl); }
 	}
 
-	if (this.redraw) { this._draw(); }
+	if (this.redraw)
+		{ this._draw(); }
 
 	return cursor;
 };
 
-/**
+
+/*
 | Changes the shell to a green error screen.
 */
-Shell.prototype.greenscreen = function(message, contract) {
-	if (this.green) { return; }
-	if (!message) { message = 'unknown error.'; }
+Shell.prototype.greenscreen = function(message)
+{
+	if (this.green)
+		{ return; }
+
+	if (!message)
+		{ message = 'unknown error.'; }
+
 	this.green = message;
-	this.greenContact = contract || false;
+
 	this._draw();
 };
 
-/**
+
+/*
 | Mouse button down event.
 |
 | Returns the mouse state code, wheter this is a click/drag or undecided.
 */
-Shell.prototype.mousedown = function(p, shift, ctrl) {
-	if (this.green) { return false; }
+Shell.prototype.mousedown = function(p, shift, ctrl)
+{
+	if (this.green)
+		{ return false; }
 
 	var mouseState = null;
 
@@ -481,15 +518,18 @@ Shell.prototype.mousedown = function(p, shift, ctrl) {
 	if (mouseState === null && this.$space)
 		{ mouseState = this.$space.mousedown(p, shift, ctrl); }
 
-	if (this.redraw) { this._draw(); }
+	if (this.redraw)
+		{ this._draw(); }
 
 	return mouseState || false;
 };
 
-/**
+
+/*
 | Starts an operation with the mouse button held down.
 */
-Shell.prototype.dragstart = function(p, shift, ctrl) {
+Shell.prototype.dragstart = function(p, shift, ctrl)
+{
 	if (this.green)
 		{ return; }
 
@@ -504,10 +544,12 @@ Shell.prototype.dragstart = function(p, shift, ctrl) {
 	return cursor;
 };
 
-/**
+
+/*
 | Moving during an operation with the mouse button held down.
 */
-Shell.prototype.dragmove = function(p, shift, ctrl) {
+Shell.prototype.dragmove = function(p, shift, ctrl)
+{
 	if (this.green)
 		{ return; }
 
@@ -518,14 +560,17 @@ Shell.prototype.dragmove = function(p, shift, ctrl) {
 
 	var cursor = null;
 
-	switch ($action.section) {
-	case 'board' :
-		cursor = this.$board.actionmove(p, shift, ctrl);
-		break;
-	case 'space' :
-		if (this.$space)
-			{ cursor = this.$space.actionmove(p, shift, ctrl); }
-		break;
+	switch ($action.section)
+	{
+		case 'board' :
+			cursor = this.$board.actionmove(p, shift, ctrl);
+			break;
+
+		case 'space' :
+			if (this.$space)
+				{ cursor = this.$space.actionmove(p, shift, ctrl); }
+
+			break;
 	}
 
 	if (this.redraw)
@@ -534,10 +579,12 @@ Shell.prototype.dragmove = function(p, shift, ctrl) {
 	return cursor;
 };
 
-/**
+
+/*
 | Stops an operation with the mouse button held down.
 */
-Shell.prototype.dragstop = function(p, shift, ctrl) {
+Shell.prototype.dragstop = function(p, shift, ctrl)
+{
 	if (this.green)
 		{ return; }
 
@@ -547,25 +594,29 @@ Shell.prototype.dragstop = function(p, shift, ctrl) {
 		{ throw new Error('no action on dragstop'); }
 
 	switch($action.section) {
-	case 'board' :
-		this.$board.actionstop(p, shift, ctrl);
-		break;
-	case 'space' :
-		if (this.$space)
-			{ this.$space.actionstop(p, shift, ctrl); }
-		break;
-	default :
-		throw new Error('unknown $action.section');
+		case 'board' :
+			this.$board.actionstop(p, shift, ctrl);
+			break;
+
+		case 'space' :
+			if (this.$space)
+				{ this.$space.actionstop(p, shift, ctrl); }
+			break;
+
+		default :
+			throw new Error('unknown $action.section');
 	}
 
 	if (this.redraw)
 		{ this._draw(); }
 };
 
-/**
-| Mouse wheel has turned
+
+/*
+| Mouse wheel is being turned.
 */
-Shell.prototype.mousewheel = function(p, dir, shift, ctrl) {
+Shell.prototype.mousewheel = function(p, dir, shift, ctrl)
+{
 	if (this.green)
 		{ return; }
 
@@ -582,31 +633,37 @@ Shell.prototype.mousewheel = function(p, dir, shift, ctrl) {
 /**
 | User pressed a special key.
 */
-Shell.prototype.specialKey = function(key, shift, ctrl) {
+Shell.prototype.specialKey = function(key, shift, ctrl)
+{
 	if (this.green)
 		{ return; }
 
 	var caret  = this.$caret;
+
 	switch (caret.section) {
-	case 'board' :
-		this.$board.specialKey(key, shift, ctrl);
-		break;
-	case null    :
-	case 'space' :
-		if (!this.$space) break;
-		this. $space.specialKey(key, shift, ctrl);
-		break;
-	default : throw new Error('invalid section');
+		case 'board' :
+			this.$board.specialKey(key, shift, ctrl);
+			break;
+
+		case null    :
+		case 'space' :
+			if (this.$space)
+				{ this. $space.specialKey(key, shift, ctrl); }
+			break;
+
+		default : throw new Error('invalid section');
 	}
 
 	if (this.redraw)
 		{ this._draw(); }
 };
 
-/**
+
+/*
 | User entered normal text (one character or more).
 */
-Shell.prototype.input = function(text) {
+Shell.prototype.input = function(text)
+{
 	if (this.green)
 		{ return; }
 
@@ -655,16 +712,18 @@ Shell.prototype.setUser = function(user, pass)
 	this.$board.setUser(user);
 	this.peer.setUser(user, pass);
 
-	if (user.substr(0, 5) !== 'visit') {
-
+	if (user.substr(0, 5) !== 'visit')
+	{
 		window.localStorage.setItem('user', user);
 		window.localStorage.setItem('pass', pass);
-
-	} else {
-
-		if (this.$space &&
-			this.$space.spacename.substr(0, 9) !== 'meshcraft'
-		) { this.moveToSpace('meshcraft:home'); }
+	}
+	else
+	{
+		if( this.$space &&
+			this.$space.spacename.substr(0, 9) !== 'meshcraft')
+		{
+			this.moveToSpace('meshcraft:home');
+		}
 
 		window.localStorage.setItem('user', null);
 		window.localStorage.setItem('pass', null);
@@ -672,120 +731,129 @@ Shell.prototype.setUser = function(user, pass)
 };
 
 
-/**
+/*
 | Sets the space zoom factor.
 */
-Shell.prototype.setSpaceZoom = function(zf) {
+Shell.prototype.setSpaceZoom = function(zf)
+{
 	this.$board.setSpaceZoom(zf);
 };
 
-/**
+
+/*
 | Changes the space zoom factor (around center)
 */
-Shell.prototype.changeSpaceZoom = function(df) {
-	if (!this.$space) { return; }
+Shell.prototype.changeSpaceZoom = function(df)
+{
+	if (!this.$space)
+		{ return; }
 	this.$space.changeZoom(df);
 };
 
-/**
+
+/*
 | Called when loading the website
 */
-Shell.prototype.onload = function() {
+Shell.prototype.onload = function()
+{
 	this.peer = new Peer(this, this);
-	var self = this;
 
 	var user = window.localStorage.getItem('user');
 	var pass = null;
-	if (user) {
-		pass = window.localStorage.getItem('pass');
-	} else {
-		user = 'visitor';
-	}
+	if (user)
+		{ pass = window.localStorage.getItem('pass'); }
+	else
+		{ user = 'visitor'; }
 
-	this.peer.auth(user, pass, function(res) {
-		self.onLoadAuth(user, res);
-	});
+	this.peer.auth(user, pass, this);
 };
 
-/**
+
+/*
 | Moves to space named 'spaceName'.
 | if spaceName is null, reloads current space.
 */
-Shell.prototype.moveToSpace = function(name) {
+Shell.prototype.moveToSpace = function(name)
+{
 	var self = this;
 
 	if (this.$caret.section === 'space')
 		{ this.setCaret(null, null); }
 
-	if (name === null) {
-
+	if (name === null)
+	{
 		name = self.$space.spacename;
 
 		// TODO what does 'help' do here?
 		if (this.$user.substr(0, 5) === 'visit' &&
 			(name !== 'meshcraft:home' && name !== 'help')
 		) { name = 'meshcraft:home'; }
-
-	} else
-		{ self.$board.message('Moving to "' + name + '" ...'); }
+	}
+	else
+	{
+		self.$board.message('Moving to "' + name + '" ...');
+	}
 
 	self.$board.setCurSpace('', '');
 
-	if (!Jools.isString(name)) { throw new Error('XXXX'); }
+	if (!Jools.isString(name))
+		{ throw new Error('XXXX'); }
 
-	this.peer.aquireSpace(name, function(err, val) {
+	this.peer.aquireSpace(
+		name,
+		function(err, val)
+		{
+			if (err !== null) {
+				self.greenscreen('Cannot aquire space: ' + err.message);
+				return;
+			}
 
-		if (err !== null) {
-			self.greenscreen('Cannot aquire space: ' + err.message);
-			return;
+			if (val.name !== name)
+				{ throw new Error('server served wrong space!'); }
+
+			var tree = val.tree;
+
+			self.$space = new Visual.Space(
+				tree.root,
+				name,
+				val.access
+			);
+
+			self.$board.setCurSpace(name, val.access);
+
+			self.$board.setSpaceZoom(0);
+
+			self._draw();
 		}
-
-		if (val.name !== name)
-			{ throw new Error('server served wrong space!'); }
-
-		var tree = val.tree;
-
-		self.$space = new Visual.Space(
-			tree.root,
-			name,
-			val.access
-		);
-
-		self.$board.setCurSpace(name, val.access);
-
-		self.$board.setSpaceZoom(0);
-
-		self._draw();
-
-	});
+	);
 
 };
 
-/**
-| Answer to on loading authentication
-*/
-Shell.prototype.onLoadAuth = function(user, res) {
-	var self = this;
 
-	if (!res.ok) {
-		// when log in with a real user failed
+/*
+| answer to on 'auth' operation.
+*/
+Shell.prototype.onAuth = function(user, passhash, res)
+{
+	if (!res.ok)
+	{
+		// when logging in with a real user failed
 		// takes a visitor instead
-		if (user !== 'visitor') {
-			this.peer.auth('visitor', null, function(res) {
-				self.onLoadAuth('visitor', res);
-			});
+		if (user !== 'visitor')
+		{
+			this.peer.auth('visitor', null, this);
 			return;
 		}
-		// if even that failed, bails to greenscreen
-		Jools.log('fail', res.message);
-		self.greenscreen(res.message);
+
+		// if even that failed, bailing to greenscreen
+		this.greenscreen(res.message);
 		return;
 	}
 
-	self.setUser(res.user, res.pass);
+	this.setUser(res.user, res.pass);
 	if (!this.$space)
-		{ self.moveToSpace('meshcraft:home'); }
+		{ this.moveToSpace('meshcraft:home'); }
 };
 
 
-})();
+} ) ();

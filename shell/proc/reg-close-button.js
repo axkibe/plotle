@@ -59,7 +59,7 @@ Jools.subclass(RegCloseButton, Dash.Button);
 */
 RegCloseButton.prototype.push = function(shift, ctrl)
 {
-	Proc.Util.clearRegister(this.panel);
+	Proc.util.clearRegister(this.panel);
 
 	this.panel.board.setCurPanel('MainPanel');
 };

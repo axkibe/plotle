@@ -57,7 +57,7 @@ Jools.subclass(RegRegisterButton, Dash.Button);
 | Button is being pushed.
 */
 RegRegisterButton.prototype.push = function(shift, ctrl)
-	{ Proc.Util.register(this.panel); };
+	{ Proc.util.register(this.panel); };
 
 
 })();

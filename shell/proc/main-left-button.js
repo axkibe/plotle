@@ -56,7 +56,7 @@ MainLeftButton.prototype.push = function(shift, ctrl) {
 		this.panel.board.setCurPanel('LoginPanel');
 		break;
 	case 'log out' :
-		Proc.Util.logout(this.panel);
+		Proc.util.logout(this.panel);
 		break;
 	default :
 		throw new Error('unknown state of leftB');

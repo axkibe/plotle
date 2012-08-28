@@ -58,7 +58,7 @@ Jools.subclass(LoginLoginButton, Dash.Button);
 */
 LoginLoginButton.prototype.push = function(shift, ctrl)
 {
-	Proc.Util.login(this.panel);
+	Proc.util.login(this.panel);
 };
 
 
