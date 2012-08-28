@@ -206,8 +206,6 @@ Shell.prototype.update = function( tree, chgX )
 {
 	this.$space.update(tree.root);
 
-	this.$tree = tree; // TODO remove
-
 	var caret = this.caret;
 
 	if (caret.sign !== null)

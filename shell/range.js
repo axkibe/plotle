@@ -92,14 +92,19 @@ Range.prototype.normalize = function()
 
 	var k1 = s1.path.get(-2);
 	var k2 = s2.path.get(-2);
-	if (k1 === k2) throw new Error('k1 === k2');
 
-	var pivot = shell.$tree.getPath(s1.path, -2);
-	if (pivot !== shell.$tree.getPath(s2.path, -2))
-		{ throw new Error('pivot(s1) !== pivot(s2)'); }
+	if (k1 === k2)
+		{ throw new Error('k1 === k2'); }
 
-	var r1 = pivot.rankOf(k1);
-	var r2 = pivot.rankOf(k2);
+	var pivot = shell.$space.getSub(s1.path, 'Doc');
+	if (pivot !== shell.$space.getSub(s2.path, 'Doc'))
+	{
+		console.log(pivot, shell.$space.getSub(s2.path, 'drawCaret'));
+		throw new Error('pivot(s1) !== pivot(s2)');
+	}
+
+	var r1 = pivot.twig.rankOf(k1);
+	var r2 = pivot.twig.rankOf(k2);
 
 	if (r1 < r2)
 	{
@@ -128,23 +133,26 @@ Range.prototype.innerText = function()
 
 	if (s1.path.equals(s2.path))
 	{
-		var text = shell.$tree.getPath(s1.path);
-
+		var text = shell.$space.getSub(s1.path, 'Para').twig.text;
 		return text.substring(s1.at1, s2.at1);
 	}
 
-	var pivot = shell.$tree.getPath(s1.path, -2);
+	var pivot = shell.$space.getSub(s1.path, 'Doc');
+	var twig  = pivot.twig;
+
 	var key1  = s1.path.get(-2);
 	var key2  = s2.path.get(-2);
 
-	var text1 = pivot.copse[key1].text;
-	var text2 = pivot.copse[key2].text;
+	var text1 = twig.copse[key1].text;
+	var text2 = twig.copse[key2].text;
 
 	var buf = [ text1.substring(s1.at1, text1.length) ];
-	for (var r = pivot.rankOf(key1), rZ = pivot.rankOf(key2); r < rZ - 1; r++) {
+	for (var r = twig.rankOf(key1), rZ = twig.rankOf(key2); r < rZ - 1; r++)
+	{
 		buf.push('\n');
-		buf.push(pivot.copse[pivot.ranks[r]].text);
+		buf.push(twig.copse[twig.ranks[r]].text);
 	}
+
 	buf.push('\n');
 	buf.push(text2.substring(0, s2.at1));
 	return buf.join('');

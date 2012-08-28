@@ -124,8 +124,6 @@ Item.prototype.withinItemMenu = function(view, p)
 
 Item.prototype.getMenu = function(view)
 {
-	var self = this; // TODO
-
 	var labels = { n : 'Remove'};
 
 	var os = this.getOvalSlice();
@@ -135,7 +133,7 @@ Item.prototype.getMenu = function(view)
 		view.point(os.psw).add(Jools.half(os.width), 0),
 		theme.ovalmenu,
 		labels,
-		self
+		this
 	);
 };
 
