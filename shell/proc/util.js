@@ -246,7 +246,7 @@ Util.prototype.register = function(panel)
 				if (res.message.search(/Username/) >= 0) {
 					shell.setCaret('board', {
 						path : new Path(['RegPanel', 'userI']),
-						at1  : pass2.length // TODO ???
+						at1  : user.length
 					});
 				}
 
