@@ -27,26 +27,32 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/**
+
+/*
 | Export
 */
 var Peer;
 
-/**
+
+/*
 | Imports
 */
 var IFace;
 var Jools;
 var Path;
 
-/**
+
+/*
 | Capsule
 */
 (function () {
-"use strict";
-if (typeof (window) === 'undefined') throw new Error('this code nees a browser!');
 
-/**
+"use strict";
+if (typeof (window) === 'undefined')
+	{ throw new Error('this code nees a browser!'); }
+
+
+/*
 | Constructor
 */
 Peer = function(updateRCV, messageRCV)
@@ -58,13 +64,17 @@ Peer = function(updateRCV, messageRCV)
 	this._$visitPasshash = null;
 };
 
-/**
+
+/*
 | sets the current user
 */
-Peer.prototype.setUser = function(user, pass)
-	{ this._iface.setUser(user, pass); };
+Peer.prototype.setUser = function(user, passhash)
+{
+	this._iface.setUser(user, passhash);
+};
 
-/**
+
+/*
 | Logs out a registered users, switches to visitor
 */
 Peer.prototype.logout = function(callback)
@@ -73,9 +83,9 @@ Peer.prototype.logout = function(callback)
 	{
 		callback(
 			{
-				ok : true,
-				user : this._$visitUser,
-				pass : this._$visitPasshash
+				ok       : true,
+				user     : this._$visitUser,
+				passhash : this._$visitPasshash
 			}
 		);
 	}
@@ -98,7 +108,7 @@ Peer.prototype.onAuth = function(user, passhash, asw, callback, op)
 };
 
 
-/**
+/*
 | authenticates a user or visitor.
 */
 Peer.prototype.auth = function(user, passhash, onAuthReceiver, a1, a2)
@@ -113,7 +123,7 @@ Peer.prototype.auth = function(user, passhash, onAuthReceiver, a1, a2)
 		if (asw.ok && user.substring(0, 5) === 'visit')
 		{
 			self._$visitUser     = asw.user;
-			self._$visitPasshash = asw.pass; // TODO passhash!
+			self._$visitPasshash = asw.passhash;
 		}
 
 		onAuthReceiver.onAuth(user, passhash, asw, a1, a2);
@@ -121,25 +131,26 @@ Peer.prototype.auth = function(user, passhash, onAuthReceiver, a1, a2)
 };
 
 
-
-/**
-| Sends a message.
+/*
+| sends a message.
 */
 Peer.prototype.sendMessage = function(message)
 {
 	this._iface.sendMessage(message);
 };
 
-/**
-| Registers a new user.
+
+/*
+| registers a new user.
 */
-Peer.prototype.register = function(user, mail, pass, callback)
+Peer.prototype.register = function(user, mail, passhash, callback)
 {
-	this._iface.register(user, mail, pass, callback);
+	this._iface.register(user, mail, passhash, callback);
 };
 
-/**
-| Aquires a space.
+
+/*
+| aquires a space.
 */
 Peer.prototype.aquireSpace = function( name, callback )
 {
@@ -147,15 +158,19 @@ Peer.prototype.aquireSpace = function( name, callback )
 	this._iface.aquireSpace(name, callback);
 };
 
-/**
-| Gets a twig
+
+/*
+| gets a twig
 |
 | path: path to twig
 */
 Peer.prototype.get = function(path, len)
-	{ return this._iface.get(path, len); };
+{
+	return this._iface.get(path, len);
+};
 
-/**
+
+/*
 | Creates a new note.
 */
 Peer.prototype.newNote = function( spacename, zone )
@@ -186,8 +201,9 @@ Peer.prototype.newNote = function( spacename, zone )
 	return chgX.trg.path.get(-1);
 };
 
-/**
-| Creates a new portal.
+
+/*
+| creates a new portal.
 */
 Peer.prototype.newPortal = function( spacename, zone )
 {
@@ -196,7 +212,8 @@ Peer.prototype.newPortal = function( spacename, zone )
 
 	var chgX = this._iface.alter(
 		{
-			val : {
+			val :
+			{
 				type      : 'Portal',
 				zone      : zone,
 				spaceUser : '',
@@ -213,8 +230,9 @@ Peer.prototype.newPortal = function( spacename, zone )
 	return chgX.trg.path.get(-1);
 };
 
-/**
-| Sets the zone for item.
+
+/*
+| sets the zone for item.
 */
 Peer.prototype.setZone = function(itemPath, zone)
 {
@@ -224,8 +242,9 @@ Peer.prototype.setZone = function(itemPath, zone)
 	);
 };
 
-/**
-| Sets an items fontsize
+
+/*
+| sets an items fontsize
 */
 Peer.prototype.setFontSize = function(itemPath, fontsize)
 {
@@ -235,8 +254,9 @@ Peer.prototype.setFontSize = function(itemPath, fontsize)
 	);
 };
 
-/**
-| Sets an items PNW. (point in north-west)
+
+/*
+| sets an items PNW. (point in north-west)
 */
 Peer.prototype.setPNW = function(itemPath, pnw)
 {
@@ -246,8 +266,9 @@ Peer.prototype.setPNW = function(itemPath, pnw)
 	);
 };
 
-/**
-| Creates a new label.
+
+/*
+| creates a new label.
 */
 Peer.prototype.newLabel = function( spacename, pnw, text, fontsize )
 {
@@ -283,24 +304,27 @@ Peer.prototype.newLabel = function( spacename, pnw, text, fontsize )
 	return chgX.trg.path.get(-1);
 };
 
-/**
-| Undoes a change..
+
+/*
+| undoes a change..
 */
 Peer.prototype.undo = function()
 {
 	this._iface.undo();
 };
 
-/**
-| Redoes a change.
+
+/*
+| redoes a change.
 */
 Peer.prototype.redo = function()
 {
 	this._iface.redo();
 };
 
-/**
-| Creates a new relation.
+
+/*
+| creates a new relation.
 */
 Peer.prototype.newRelation = function( spacename, pnw, text, fontsize, item1key, item2key )
 {
@@ -337,8 +361,9 @@ Peer.prototype.newRelation = function( spacename, pnw, text, fontsize, item1key,
 	return chgX.trg.path.get(-1);
 };
 
-/**
-| Moves an item up to the z-index
+
+/*
+| moves an item up to the z-index
 */
 Peer.prototype.moveToTop = function(path)
 {
@@ -348,8 +373,9 @@ Peer.prototype.moveToTop = function(path)
 	);
 };
 
-/**
-| Inserts some text.
+
+/*
+| inserts some text.
 */
 Peer.prototype.insertText = function(path, offset, text)
 {
@@ -359,8 +385,9 @@ Peer.prototype.insertText = function(path, offset, text)
 	);
 };
 
-/**
-| Removes some text within one node
+
+/*
+| removes some text within one node.
 */
 Peer.prototype.removeText = function(path, at1, len)
 {
@@ -376,8 +403,9 @@ Peer.prototype.removeText = function(path, at1, len)
 	);
 };
 
-/**
-| Removes a text spawning over severa entities
+
+/*
+| removes a text spawning over severa entities
 */
 Peer.prototype.removeSpan = function(path1, at1, path2, at2)
 {
@@ -406,8 +434,9 @@ Peer.prototype.removeSpan = function(path1, at1, path2, at2)
 	this.removeText(path1, at1, len2 - at1 + at2);
 };
 
-/**
-| Splits a text node.
+
+/*
+| splits a text node.
 */
 Peer.prototype.split = function(path, offset)
 {
@@ -417,8 +446,9 @@ Peer.prototype.split = function(path, offset)
 	);
 };
 
-/**
-| Joins a text node with its next one
+
+/*
+| joins a text node with its next one.
 */
 Peer.prototype.join = function(path, at1)
 {
@@ -428,8 +458,9 @@ Peer.prototype.join = function(path, at1)
 	);
 };
 
-/**
-| Removes an item.
+
+/*
+| removes an item.
 */
 Peer.prototype.removeItem = function(path)
 {
@@ -443,4 +474,5 @@ Peer.prototype.removeItem = function(path)
 	);
 };
 
-})();
+
+} ) ();

@@ -148,38 +148,44 @@ IFace.prototype._ajax = function(request, callback)
 /**
 | Sets the current user
 */
-IFace.prototype.setUser = function(user, pass)
+IFace.prototype.setUser = function(user, passhash)
 {
-	this.$user = user;
-	this.$pass = pass;
+	this.$user     = user;
+	this.$passhash = passhash;
 };
 
 /**
 | Authentication
 */
-IFace.prototype.auth = function(user, pass, callback)
+IFace.prototype.auth = function(user, passhash, callback)
 {
 	var self = this;
-    if (self.$authActive) { throw new Error('Auth already active'); }
+    if (self.$authActive)
+		{ throw new Error('Auth already active'); }
 	self.$authActive = true;
-	self._ajax({
-        cmd  : 'auth',
-        user : user,
-		pass : pass
-	}, function(asw) {
-		self.$authActive = false;
-		if (asw.ok) {
-			callback({ ok: true, user: asw.user, pass: pass });
-		} else {
-			callback(asw);
+
+	self._ajax(
+		{
+	        cmd      : 'auth',
+    	    user     : user,
+			passhash : passhash
+		},
+		function(asw)
+		{
+			self.$authActive = false;
+
+			if (asw.ok)
+				{ callback( { ok: true, user: asw.user, passhash: passhash } ); }
+			else
+				{ callback(asw); }
 		}
-	});
+	);
 };
 
 /**
 | Registers a user.
 */
-IFace.prototype.register = function(user, mail, pass, callback)
+IFace.prototype.register = function(user, mail, passhash, callback)
 {
 	var self = this;
 
@@ -190,10 +196,10 @@ IFace.prototype.register = function(user, mail, pass, callback)
 
 	self._ajax(
 		{
-            cmd   : 'register',
-            user  : user,
-			mail  : mail,
-			pass  : pass
+            cmd      : 'register',
+            user     : user,
+			mail     : mail,
+			passhash : passhash
 		},
 		function(asw)
 		{
@@ -215,11 +221,11 @@ IFace.prototype.sendMessage = function(message)
 
 	self._ajax(
 		{
-            cmd     : 'message',
-			user    : self.$user,
-			pass    : self.$pass,
-			space   : self.$spacename,
-			message : message
+            cmd      : 'message',
+			user     : self.$user,
+			passhash : self.$passhash,
+			space    : self.$spacename,
+			message  : message
 		},
 		null
 	);
@@ -329,12 +335,12 @@ IFace.prototype.aquireSpace = function(spacename, callback)
 
     var request =
 		{
-            cmd   : 'get',
-			space : spacename,
-			path  : new Path([]),
-			pass  : self.$pass,
-            time  : -1,
-			user  : self.$user
+            cmd       : 'get',
+			space     : spacename,
+			path      : new Path([]),
+			passhash  : self.$passhash,
+            time      : -1,
+			user      : self.$user
         };
 
     Jools.log('iface', 'sg->', request);
@@ -497,12 +503,12 @@ IFace.prototype._update = function()
 	};
 
 	var request = {
-		cmd   : 'update',
-		pass  : self.$pass,
-		space : self.$spacename,
-		time  : self.$remoteTime,
-		mseq  : self.$mseq,
-		user  : self.$user
+		cmd      : 'update',
+		passhash : self.$passhash,
+		space    : self.$spacename,
+		time     : self.$remoteTime,
+		mseq     : self.$mseq,
+		user     : self.$user
 	};
 
 	Jools.log('iface', 'u->', request);
@@ -600,13 +606,13 @@ IFace.prototype.sendChanges = function()
 	this.$postbox.push(c);
 
 	var request = {
-		cmd   : 'alter',
-		space : this.$spacename,
-		chgX  : c.chgX,
-		cid   : c.cid,
-		pass  : this.$pass,
-		time  : this.$remoteTime,
-		user  : this.$user
+		cmd      : 'alter',
+		space    : this.$spacename,
+		chgX     : c.chgX,
+		cid      : c.cid,
+		passhash : this.$passhash,
+		time     : this.$remoteTime,
+		user     : this.$user
 	};
 
 	Jools.log('iface', 'sc->', request);

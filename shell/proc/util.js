@@ -111,9 +111,7 @@ Util.prototype.login = function(panel)
 		return;
 	}
 
-	var passhash = Jools.passhash(pass);
-
-	shell.peer.auth(user, passhash, this, panel, pass);
+	shell.peer.auth(user, Jools.passhash(pass), this, panel, pass);
 };
 
 
@@ -168,7 +166,7 @@ Util.prototype.logout = function(panel) {
 			return;
 		}
 
-		shell.setUser(res.user, res.pass);
+		shell.setUser(res.user, res.passhash);
 		panel.board.setCurPanel('MainPanel');
 		shell.moveToSpace(null);
 		shell.poke();
@@ -236,10 +234,10 @@ Util.prototype.register = function(panel)
 		return;
 	}
 
-	pass = Jools.passhash(pass);
+	var passhash = Jools.passhash(pass);
 
 	var self = this;
-	shell.peer.register(user, email, pass,
+	shell.peer.register(user, email, passhash,
 		function(res)
 		{
 			if (!res.ok) {
@@ -248,7 +246,7 @@ Util.prototype.register = function(panel)
 				if (res.message.search(/Username/) >= 0) {
 					shell.setCaret('board', {
 						path : new Path(['RegPanel', 'userI']),
-						at1  : pass2.length
+						at1  : pass2.length // TODO ???
 					});
 				}
 
@@ -256,7 +254,7 @@ Util.prototype.register = function(panel)
 				return;
 			}
 
-			shell.setUser(user, pass);
+			shell.setUser(user, passhash);
 			panel.board.setCurPanel('MainPanel');
 			self.clearRegister(panel);
 			shell.moveToSpace(null);

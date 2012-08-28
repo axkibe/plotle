@@ -706,16 +706,16 @@ Shell.prototype.resize = function(width, height)
 /*
 | Sets the current user
 */
-Shell.prototype.setUser = function(user, pass)
+Shell.prototype.setUser = function(user, passhash)
 {
 	this.$user = user;
 	this.$board.setUser(user);
-	this.peer.setUser(user, pass);
+	this.peer.setUser(user, passhash);
 
 	if (user.substr(0, 5) !== 'visit')
 	{
 		window.localStorage.setItem('user', user);
-		window.localStorage.setItem('pass', pass);
+		window.localStorage.setItem('passhash', passhash);
 	}
 	else
 	{
@@ -726,7 +726,7 @@ Shell.prototype.setUser = function(user, pass)
 		}
 
 		window.localStorage.setItem('user', null);
-		window.localStorage.setItem('pass', null);
+		window.localStorage.setItem('passhash', null);
 	}
 };
 
@@ -758,14 +758,15 @@ Shell.prototype.onload = function()
 {
 	this.peer = new Peer(this, this);
 
-	var user = window.localStorage.getItem('user');
-	var pass = null;
+	var user     = window.localStorage.getItem('user');
+
+	var passhash = null;
 	if (user)
-		{ pass = window.localStorage.getItem('pass'); }
+		{ passhash = window.localStorage.getItem('passhash'); }
 	else
 		{ user = 'visitor'; }
 
-	this.peer.auth(user, pass, this);
+	this.peer.auth(user, passhash, this);
 };
 
 
@@ -850,7 +851,7 @@ Shell.prototype.onAuth = function(user, passhash, res)
 		return;
 	}
 
-	this.setUser(res.user, res.pass);
+	this.setUser(res.user, res.passhash);
 	if (!this.$space)
 		{ this.moveToSpace('meshcraft:home'); }
 };

@@ -324,13 +324,13 @@ Server.prototype.cmdMessage = function(cmd, _)
 	var space    = cmd.space;
 	var message  = cmd.message;
 	var username = cmd.user;
-	var pass     = cmd.pass;
+	var passhash = cmd.passhash;
 
 	if (!is(username))
 		{ throw reject('user missing'); }
 
-	if (!is(pass))
-		{ throw reject('pass missing'); }
+	if (!is(passhash))
+		{ throw reject('passhash missing'); }
 
 	if (!is(space))
 		{ throw reject('space missing'); }
@@ -338,7 +338,7 @@ Server.prototype.cmdMessage = function(cmd, _)
 	if (!is(message))
 		{ throw reject('message missing'); }
 
-	if (this.$users[username].pass !== pass)
+	if (this.$users[username].pass !== passhash)
 		{ throw reject('invalid pass'); }
 
 	this.sendMessage(space, username, message);
@@ -617,12 +617,12 @@ Server.prototype.cmdAlter = function(cmd, _)
 	var cid       = cmd.cid;
 	var spacename = cmd.space;
 	var username  = cmd.user;
-	var pass      = cmd.pass;
+	var passhash  = cmd.passhash;
 
 	if (!is(username))
 		{ throw reject('user missing');  }
 
-	if (this.$users[username].pass !== pass)
+	if (this.$users[username].pass !== passhash)
 		{ throw reject('invalid pass');  }
 
 	if (!is(spacename))
@@ -733,8 +733,8 @@ Server.prototype.cmdAuth = function(cmd, _)
 	if (!is(cmd.user))
 		{ throw reject('user missing'); }
 
-	if (!is(cmd.pass))
-		{ throw reject('pass missing');  }
+	if (!is(cmd.passhash))
+		{ throw reject('passhash missing');  }
 
 	var $users = this.$users;
 
@@ -747,7 +747,7 @@ Server.prototype.cmdAuth = function(cmd, _)
 
 		$users[uid] = {
 			user    : uid,
-			pass    : cmd.pass,
+			pass    : cmd.passhash,
 			created : Date.now(),
 			use     : Date.now()
 		};
@@ -760,11 +760,14 @@ Server.prototype.cmdAuth = function(cmd, _)
 
 	if (!$users[cmd.user]) {
 		var val = this.$db.users.findOne({ _id : cmd.user}, _);
-		if (val === null) { return reject('Username unknown'); }
+
+		if (val === null)
+			{ return reject('Username unknown'); }
+
 		$users[cmd.user] = val;
 	}
 
-	if ($users[cmd.user].pass !== cmd.pass)
+	if ($users[cmd.user].pass !== cmd.passhash)
 		{ return reject('invalid password'); }
 
 	return {
@@ -779,14 +782,14 @@ Server.prototype.cmdAuth = function(cmd, _)
 Server.prototype.cmdRegister = function(cmd, _)
 {
 	var username = cmd.user;
-	var pass     = cmd.pass;
+	var passhash = cmd.passhash;
 	var mail     = cmd.mail;
 
 	if (!is(username))
 		{ return reject('user missing'); }
 
-	if (!is(pass))
-		{ return reject('pass missing'); }
+	if (!is(passhash))
+		{ return reject('passhash missing'); }
 
 	if (!is(mail))
 		{ return reject('mail missing'); }
@@ -803,7 +806,7 @@ Server.prototype.cmdRegister = function(cmd, _)
 
 	user = {
 		_id  : username,
-		pass : pass,
+		pass : passhash,
 		mail : mail
 	};
 
@@ -944,7 +947,7 @@ Server.prototype.expirePresence = function(self, user, spacename)
 Server.prototype.cmdUpdate = function(cmd, res, _)
 {
 	var user      = cmd.user;
-	var pass      = cmd.pass;
+	var passhash  = cmd.passhash;
 	var spacename = cmd.space;
 	var time      = cmd.time;
 	var mseq      = cmd.mseq;
@@ -952,10 +955,10 @@ Server.prototype.cmdUpdate = function(cmd, res, _)
 	if (!is(user))
 		{ throw reject('user missing'); }
 
-	if (!is(pass))
-		{ throw reject('pass missing'); }
+	if (!is(passhash))
+		{ throw reject('passhash missing'); }
 
-	if (this.$users[user].pass !== pass)
+	if (this.$users[user].pass !== passhash)
 		{ throw reject('invalid password'); }
 
 	if (!is(spacename))
@@ -1164,8 +1167,15 @@ Server.prototype.cmdGet = function(cmd, _)
 {
 	var time     = cmd.time;
 	var user     = cmd.user;
+	var passhash = cmd.passhash;
 
-	if (!is(this.$users[user]) || this.$users[user].pass !== cmd.pass)
+	if (!is(cmd.user))
+		{ throw reject('user missing'); }
+
+	if (!is(cmd.passhash))
+		{ throw reject('passhash missing'); }
+
+	if (!is(this.$users[user]) || passhash !== this.$users[user].pass)
 		{ throw reject('wrong user/password'); }
 
 	// TODO dont call it "time"
