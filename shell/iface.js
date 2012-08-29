@@ -53,9 +53,11 @@ var system;
 */
 (function () {
 "use strict";
-if (typeof (window) === 'undefined') throw new Error('this code nees a browser!');
 
-/**
+if (typeof (window) === 'undefined')
+	{ throw new Error('this code nees a browser!'); }
+
+/*
 | Constructor.
 */
 IFace = function(updateRCV, messageRCV)
@@ -90,7 +92,7 @@ IFace = function(updateRCV, messageRCV)
 };
 
 
-/**
+/*
 | General purpose AJAX.
 */
 IFace.prototype._ajax = function(request, callback)
@@ -104,10 +106,13 @@ IFace.prototype._ajax = function(request, callback)
 
     ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
-    ajax.onreadystatechange = function() {
-		if (ajax.readyState !== 4) { return; }
+    ajax.onreadystatechange = function()
+	{
+		if (ajax.readyState !== 4)
+			{ return; }
 
-		if (ajax.status !== 200) {
+		if (ajax.status !== 200)
+		{
 			Jools.log('iface', request.cmd, 'status: ', ajax.status);
 			if (callback)
 				{ callback( { ok: false, message: 'connection' , status: ajax.status } ); }
@@ -122,7 +127,12 @@ IFace.prototype._ajax = function(request, callback)
 		{
 			if (callback)
 			{
-				callback({ ok: false, message: 'nojson' } );
+				callback(
+					{
+						ok      : false,
+						message : 'nojson'
+					}
+				);
 			}
 		}
 
@@ -147,7 +157,8 @@ IFace.prototype._ajax = function(request, callback)
 	ajax.send(rs);
 };
 
-/**
+
+/*
 | Sets the current user
 */
 IFace.prototype.setUser = function(user, passhash)
@@ -156,7 +167,8 @@ IFace.prototype.setUser = function(user, passhash)
 	this.$passhash = passhash;
 };
 
-/**
+
+/*
 | Authentication
 */
 IFace.prototype.auth = function(user, passhash, callback)
@@ -164,6 +176,7 @@ IFace.prototype.auth = function(user, passhash, callback)
 	var self = this;
     if (self.$authActive)
 		{ throw new Error('Auth already active'); }
+
 	self.$authActive = true;
 
 	self._ajax(
@@ -184,7 +197,8 @@ IFace.prototype.auth = function(user, passhash, callback)
 	);
 };
 
-/**
+
+/*
 | Registers a user.
 */
 IFace.prototype.register = function(user, mail, passhash, callback)
@@ -211,7 +225,8 @@ IFace.prototype.register = function(user, mail, passhash, callback)
 	);
 };
 
-/**
+
+/*
 | Sends a message.
 */
 IFace.prototype.sendMessage = function(message)
@@ -233,7 +248,8 @@ IFace.prototype.sendMessage = function(message)
 	);
 };
 
-/**
+
+/*
 | Aquires a space.
 */
 IFace.prototype.aquireSpace = function(spacename, callback)
@@ -316,11 +332,14 @@ IFace.prototype.aquireSpace = function(spacename, callback)
 
 		self.$cSpace = self.$rSpace = new Tree(asw.node, Meshverse);
 
-		callback(null, Jools.immute({
-			tree   : self.$cSpace,
-			name   : spacename,
-			access : asw.access
-		}));
+		callback(
+			null,
+			Jools.immute({
+				tree   : self.$cSpace,
+				name   : spacename,
+				access : asw.access
+			})
+		);
 
 		// waits a second before going into update cycle, so safari
 		// stops its wheely thing.
@@ -339,7 +358,7 @@ IFace.prototype.aquireSpace = function(spacename, callback)
 		{
             cmd       : 'get',
 			space     : spacename,
-			path      : new Path([]),
+			path      : new Path( [] ),
 			passhash  : self.$passhash,
             time      : -1,
 			user      : self.$user
@@ -352,14 +371,17 @@ IFace.prototype.aquireSpace = function(spacename, callback)
     ajax.send(request);
 };
 
-/**
+
+/*
 | Gets a twig.
 */
 IFace.prototype.get = function(path, len)
-	{ return this.$cSpace.getPath(path, len);};
+{
+	return this.$cSpace.getPath(path, len);
+};
 
 
-/**
+/*
 | Sends an update request to the server and computes its answer.
 */
 IFace.prototype._update = function()
@@ -520,7 +542,8 @@ IFace.prototype._update = function()
 	ajax.send(request);
 };
 
-/**
+
+/*
 | Alters the tree
 */
 IFace.prototype.alter = function(src, trg)
@@ -558,7 +581,8 @@ IFace.prototype.alter = function(src, trg)
     return chgX;
 };
 
-/**
+
+/*
 | Sends the stored changes to remote meshmashine
 */
 IFace.prototype.sendChanges = function()
@@ -625,7 +649,7 @@ IFace.prototype.sendChanges = function()
 };
 
 
-/**
+/*
 | Sends the stored changes to remote meshmashine
 */
 IFace.prototype.undo = function()
@@ -657,7 +681,8 @@ IFace.prototype.undo = function()
     return chgX;
 };
 
-/**
+
+/*
 | Sends the stored changes to remote meshmashine
 */
 IFace.prototype.redo = function()
@@ -689,4 +714,5 @@ IFace.prototype.redo = function()
     return chgX;
 };
 
-})();
+
+} ) ();

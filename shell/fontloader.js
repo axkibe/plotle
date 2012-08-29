@@ -23,25 +23,32 @@
 var WebFont;
 var startup;
 
-/**
+/*
 | Capsule
 */
-(function(){
+( function() {
 'use strict';
-if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
+if (typeof(window) === 'undefined')
+	{ throw new Error('this code needs a browser!'); }
 
-window.onload = function(){
-	WebFont.load({
-		custom: {
-			families: [ 'DejaVuSans', 'DejaVuSansBold' ]
-			//urls: [ '/fonts/dejavu.css' ], already in CSS
-		},
+window.onload = function()
+{
+	WebFont.load(
+		{
+			custom:
+			{
+				families: [ 'DejaVuSans', 'DejaVuSansBold' ]
+				//urls: [ '/fonts/dejavu.css' ], already in CSS
+			},
 
-		active: function() {
-			startup();
+			active:
+			function()
+			{
+				startup();
+			}
 		}
-	});
+	);
 };
 
-})();
+} ) ();
