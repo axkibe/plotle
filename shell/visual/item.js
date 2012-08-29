@@ -90,10 +90,13 @@ Item.prototype.update = function(twig)
 /*
 | Return the handle oval slice.
 */
-Item.prototype.getOvalSlice = function()
+Item.prototype._getCtrlArea = function()
 {
 	var zone = this.getZone();
-	if (this._$ovalslice && this._$ovalslice.psw.eq(zone.pnw)) return this._$ovalslice;
+
+	if (this._$ovalslice && this._$ovalslice.psw.eq(zone.pnw))
+		{ return this._$ovalslice; }
+
 	return this._$ovalslice = new Euclid.OvalSlice(zone.pnw, theme.ovalmenu.dimensions);
 };
 
@@ -118,7 +121,7 @@ Item.prototype.menuSelect = function(entry, p)
 */
 Item.prototype.withinItemMenu = function(view, p)
 {
-	return this.getOvalSlice().within(system.fabric, view, p);
+	return this._getCtrlArea().within(system.fabric, view, p);
 };
 
 
@@ -126,7 +129,7 @@ Item.prototype.getMenu = function(view)
 {
 	var labels = { n : 'Remove'};
 
-	var os = this.getOvalSlice();
+	var os = this._getCtrlArea();
 
 	return new OvalMenu(
 		system.fabric,
@@ -298,13 +301,18 @@ Item.prototype.drawHandles = function(fabric, view)
 		fabric.reverseClip(area, 'sketch', Euclid.View.proper, -1);
 	}
 
-	fabric.reverseClip(this.getSilhoutte(this.getZone(), false), 'sketch', view, -1);
+	fabric.reverseClip(
+		this.getSilhoutte(this.getZone(), false),
+		'sketch',
+		view,
+		-1
+	);
 
 	// draws the resize handles
 	fabric.paint(theme.handle.style, this, 'sketchAllHandles', view);
 
 	// draws item menu handler
-	fabric.paint(theme.ovalmenu.slice, this.getOvalSlice(), 'sketch', view);
+	fabric.paint(theme.ovalmenu.slice, this._getCtrlArea(), 'sketch', view);
 
 	fabric.deClip();
 };
