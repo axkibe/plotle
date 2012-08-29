@@ -26,12 +26,13 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/**
+/*
 | Export
 */
 var IFace;
 
-/**
+
+/*
 | Imports
 */
 var Change;
@@ -46,7 +47,8 @@ var config;
 var shell;
 var system;
 
-/**
+
+/*
 | Capsule
 */
 (function () {
@@ -166,8 +168,8 @@ IFace.prototype.auth = function(user, passhash, callback)
 
 	self._ajax(
 		{
-	        cmd      : 'auth',
-    	    user     : user,
+			cmd      : 'auth',
+			user     : user,
 			passhash : passhash
 		},
 		function(asw)

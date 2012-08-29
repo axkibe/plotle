@@ -785,10 +785,11 @@ Shell.prototype.moveToSpace = function(name)
 	{
 		name = self.$space.spacename;
 
-		// TODO what does 'help' do here?
-		if (this.$user.substr(0, 5) === 'visit' &&
-			(name !== 'meshcraft:home' && name !== 'help')
-		) { name = 'meshcraft:home'; }
+		if( this.$user.substr(0, 5) === 'visit' &&
+			(name !== 'meshcraft:home' && name !== 'meshcraft:sandbox'))
+		{
+			name = 'meshcraft:home';
+		}
 	}
 	else
 	{

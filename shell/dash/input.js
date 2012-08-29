@@ -302,16 +302,15 @@ Input.prototype.drawCaret = function(view)
 		this.panel.pnw.y + cpos.n
 	);
 
-	// TODO reuse caret variable
-	shell.$caret.$screenPos = cp; // FIXME
+	caret.$screenPos = cp; // FIXME
 
 	if (Caret.useGetImageData)
-		{ shell.$caret.$save = shell.fabric.getImageData(cp.x, cp.y, 3, ch + 2); }
+		{ caret.$save = shell.fabric.getImageData(cp.x, cp.y, 3, ch + 2); }
 	else
 	{
 		// paradoxically this is often way faster, especially on firefox
-		shell.$caret.$save = new Euclid.Fabric(shell.fabric.width, shell.fabric.height);
-		shell.$caret.$save.drawImage(shell.fabric, 0, 0);
+		caret.$save = new Euclid.Fabric(shell.fabric.width, shell.fabric.height);
+		caret.$save.drawImage(shell.fabric, 0, 0);
 	}
 
 	shell.fabric.fillRect('black', cp.x + 1, cp.y + 1, 1, ch);
