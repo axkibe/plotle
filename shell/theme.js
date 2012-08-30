@@ -84,6 +84,18 @@ theme =
 		newWidth  : 300,
 		newHeight : 150,
 
+		ctrlArea :
+		{
+			x  :   6,
+			y  : -22,
+
+			joint : // FIXME make Point object
+			{
+				x : 0,
+				y : 0
+			}
+		},
+
 		innerMargin  :
 		{
 			n: 4,
@@ -139,6 +151,18 @@ theme =
 		newWidth  : 100,
 		newHeight :  50,
 
+		ctrlArea :
+		{
+			x  : -66,
+			y  : -24,
+
+			joint : // FIXME make Point object
+			{
+				x : 0,
+				y : 0
+			}
+		},
+
 		style :
 		{
 			fill :
@@ -179,6 +203,18 @@ theme =
 	label :
 	{
 		minHeight :  20,
+
+		ctrlArea :
+		{
+			x  :   6,
+			y  : -22,
+
+			joint : // FIXME make Point object
+			{
+				x : 0,
+				y : 0
+			}
+		},
 
 		style :
 		{
@@ -551,7 +587,7 @@ theme =
 		dimensions :
 		{
 			a1    :  28,
-			b1    :  null, // calculated below
+			b1    :  null, // calculated below (24)
 			a2    :  90,
 			b2    :  null, // calculated below
 			slice :  0.82

@@ -162,7 +162,11 @@ MainPanel.prototype.knock = function() {
 /**
 | Returns true if point is on this panel
 */
-MainPanel.prototype.mousehover = function(p, shift, ctrl) {
+MainPanel.prototype.mousehover = function(p, shift, ctrl)
+{
+	if (p === null)
+		{ return false; }
+
 	if (this.switchActive) {
 		var pp = p.sub(this.pnw);
 		var swb = this.$sub.switchB;

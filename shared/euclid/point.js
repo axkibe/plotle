@@ -26,41 +26,51 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/**
+
+/*
 | Exports
 */
 var Euclid;
 Euclid = Euclid || {};
 
-/**
+
+/*
 | Imports
 */
 var Jools;
 
-/**
+
+/*
 | Capsule
 */
-(function(){
+(function() {
 'use strict';
 
-/**
+
+/*
 | Node imports
 */
-if (typeof(window) === 'undefined') {
+if (typeof(window) === 'undefined')
+{
 	Jools = require('../jools');
 }
 
-/**
+
+/*
 | Constructor.
 |
 | Point(x, y) or
 | Point(p)
 */
-var Point = Euclid.Point = function(a1, a2) {
-	if (typeof(a1) === 'object') {
+var Point = Euclid.Point = function(a1, a2)
+{
+	if (typeof(a1) === 'object')
+	{
 		this.x = a1.x;
 		this.y = a1.y;
-	} else {
+	}
+	else
+	{
 		this.x = a1;
 		this.y = a2;
 	}
@@ -68,39 +78,47 @@ var Point = Euclid.Point = function(a1, a2) {
 	Jools.immute(this);
 };
 
-/**
+
+/*
 | Returns true if this point is equal to another.
 */
-Point.prototype.eq = function(a1, a2) {
+Point.prototype.eq = function(a1, a2)
+{
 	return typeof(a1) === 'object' ?
 		this.x === a1.x && this.y === a1.y :
 		this.x === a1   && this.y === a2;
 };
 
-/**
+
+/*
 | Adds two points or x/y values, returns a new point.
 */
-Point.prototype.add = function(a1, a2) {
+Point.prototype.add = function(a1, a2)
+{
 	return typeof(a1) === 'object' ?
 		new Point(this.x + a1.x, this.y + a1.y) :
 		new Point(this.x + a1,   this.y + a2);
 };
 
-/**
+
+/*
 | Subtracts a points (or x/y from this), returns new point
 */
-Point.prototype.sub = function(a1, a2) {
+Point.prototype.sub = function(a1, a2)
+{
 	return typeof(a1) === 'object' ?
 		new Point(this.x - a1.x, this.y - a1.y) :
 		new Point(this.x - a1,   this.y - a2);
 };
 
-/**
+
+/*
 | Shortcut for point at 0/0.
 */
 Point.zero = new Point(0, 0);
 
-/**
+
+/*
 | Creates a new point.
 |
 | However, this will look through a list of points to see if
@@ -110,19 +128,21 @@ Point.zero = new Point(0, 0);
 | Point.renew(x, y, p1, p2, p3, ...)
 */
 Point.renew = function(x, y) {
-	for(var a = 2, aZ = arguments.length; a < aZ; a++) {
+	for(var a = 2, aZ = arguments.length; a < aZ; a++)
+	{
 		var p = arguments[a];
-		if (p instanceof Point && p.x === x && p.y === y) return p;
+		if (p instanceof Point && p.x === x && p.y === y)
+			{ return p; }
 	}
 	return new Point(x, y);
 };
 
-/**
+
+/*
 | Node export.
 */
-if (typeof(window) === 'undefined') {
-	module.exports = Point;
-}
+if (typeof(window) === 'undefined')
+	{ module.exports = Point; }
 
 
-})();
+} ) ();

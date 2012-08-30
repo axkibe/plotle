@@ -55,7 +55,7 @@ if (typeof(window) === 'undefined')
 var Util = function()
 {
 	// nada
-}
+};
 
 
 

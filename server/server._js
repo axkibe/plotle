@@ -422,6 +422,7 @@ Server.prototype.prepareResources = function(_)
 		'shell/fontpool.js',                               'fb',
 		'shell/theme.js',                                  'fb',
 		'shell/euclid/view.js',                            'fb',
+		'shell/euclid/fix.js',                             'fb',
 		'shared/meshverse.js',                             'fb',
 		'shared/path.js',                                  'fb',
 		'shared/twig.js',                                  'fb',

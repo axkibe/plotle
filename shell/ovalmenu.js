@@ -192,11 +192,6 @@ OvalMenu.prototype.fadeout = function()
 {
 	var self = this;
 
-	if (shell.menu !== self)
-	{
-		// cancels all fading
-		return;
-	}
 	self.$fade -= theme.fade.step;
 
 	if (self.$fade <= 0)
@@ -205,8 +200,7 @@ OvalMenu.prototype.fadeout = function()
 	}
 	else
 	{
-		this.$fadeTimer = system.setTimer
-		(
+		this.$fadeTimer = system.setTimer(
 			theme.fade.time,
 			function() { self.fadeout(); }
 		);
@@ -216,6 +210,22 @@ OvalMenu.prototype.fadeout = function()
 	shell.poke();
 };
 
+/*
+| cancels fading
+*/
+OvalMenu.prototype.cancel = function()
+{
+	if (this.$fade)
+	{
+		this.$fade = false;
+
+		system.cancelTimer(this.$fadeTimer);
+
+		this.$fadeTimer = null;
+
+		shell.redraw = true;
+	}
+};
 
 /*
 | Mouse hover.
@@ -231,21 +241,17 @@ OvalMenu.prototype.mousehover = function(view, p, shift, ctrl)
 		if (!this.$fade)
 		{
 			this.$fade = 1 - theme.fade.step;
-			this.$fadeTimer = system.setTimer(theme.fade.time, function() { self.fadeout(); });
+
+			this.$fadeTimer = system.setTimer(
+				theme.fade.time,
+				function() { self.fadeout(); }
+			);
 		}
 		return null;
 	}
 	else
 	{
-		// cancels fading
-
-		if (this.$fade)
-		{
-			this.$fade = false;
-			system.cancelTimer(this.$fadeTimer);
-			this.$fadeTimer = null;
-			shell.redraw = true;
-		}
+		this.cancel();
 	}
 
 	// mouse floated on float menu

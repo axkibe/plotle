@@ -57,8 +57,18 @@ var View = Euclid.View = function(pan, fact)
 	this.pan  = pan;
 	this.fact = Jools.limit(theme.zoom.min, fact, theme.zoom.max);
 	this.zoom = Math.pow(theme.zoom.base, this.fact);
+
 	Jools.immute(this);
 };
+
+
+/*
+| Returns true if this view equals another
+*/
+View.prototype.eq = function(view)
+{
+	return this.pan.eq(view.pan) && this.fact === view.fact;
+}
 
 
 /*
@@ -77,6 +87,7 @@ View.prototype.x = function(a1, a2)
 	{
 		if (typeof(a1) !== 'number' || typeof(a2) !== 'number')
 			{ throw new Error('not a number'); }
+
 		x = a1;
 		y = a2;
 	}
@@ -195,7 +206,9 @@ View.prototype.depoint = function(a1, a2)
 */
 View.prototype.eq = function(a1)
 {
-	return this.zoom === a1.zoom && this.pan.eq(a1.pan);
+	return a1 &&
+		this.zoom === a1.zoom &&
+		this.pan.eq(a1.pan);
 };
 
 
@@ -249,15 +262,15 @@ View.prototype.review = function(df, p)
 	if (df === 0)
 		{ f1 = 0; }
 	else
-		{ f1 = Jools.limit(theme.zoom.min, this.fact + df, theme.zoom.max); }
+		{ f1 = Jools.limit( theme.zoom.min, this.fact + df, theme.zoom.max); }
 
 	var z1 = Math.pow(1.1, f1);
 	var f = 1 / z1  - 1 / this.zoom;
 
 	return new View(
 		new Euclid.Point(
-			Math.round(pan.x + p.x * f),
-			Math.round(pan.y + p.y * f)
+			Math.round( pan.x + p.x * f ),
+			Math.round( pan.y + p.y * f )
 		),
 		f1
 	);
@@ -266,6 +279,6 @@ View.prototype.review = function(df, p)
 /**
 | Proper is the view at point zero with zero zoom.
 */
-View.proper = new View(Euclid.Point.zero, 0);
+View.proper = new View( Euclid.Point.zero, 0 );
 
 } ) ();

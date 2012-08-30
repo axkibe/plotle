@@ -163,7 +163,9 @@ OvalSlice.prototype.sketch = function(fabric, border, twist, view)
 | Returns true if point is within the slice.
 */
 OvalSlice.prototype.within = function(fabric, view, p)
-	{ return fabric.within(this, 'sketch', view, p); };
+{
+	return fabric.within(this, 'sketch', view, p);
+};
 
 
 } ) ();

@@ -88,20 +88,6 @@ Item.prototype.update = function(twig)
 
 
 /*
-| Return the handle oval slice.
-*/
-Item.prototype._getCtrlArea = function()
-{
-	var zone = this.getZone();
-
-	if (this._$ovalslice && this._$ovalslice.psw.eq(zone.pnw))
-		{ return this._$ovalslice; }
-
-	return this._$ovalslice = new Euclid.OvalSlice(zone.pnw, theme.ovalmenu.dimensions);
-};
-
-
-/*
 | An entry of the item menu has been selected
 */
 Item.prototype.menuSelect = function(entry, p)
@@ -117,23 +103,28 @@ Item.prototype.menuSelect = function(entry, p)
 
 
 /*
-| Returns if point is within the item menu
+| Returns if point is within the item menu TODO rename
 */
 Item.prototype.withinItemMenu = function(view, p)
 {
-	return this._getCtrlArea().within(system.fabric, view, p);
+	var cf = this.getCtrlFix();
+
+	return cf.area.within(system.fabric, cf.fixView(view), p);
 };
 
 
+/*
+| Returns the control menu for this item.
+*/
 Item.prototype.getMenu = function(view)
 {
 	var labels = { n : 'Remove'};
 
-	var os = this._getCtrlArea();
+	var cf = this.getCtrlFix();
 
 	return new OvalMenu(
 		system.fabric,
-		view.point(os.psw).add(Jools.half(os.width), 0),
+		cf.fixView( view ).point( cf.area.pm ),
 		theme.ovalmenu,
 		labels,
 		this
@@ -309,10 +300,22 @@ Item.prototype.drawHandles = function(fabric, view)
 	);
 
 	// draws the resize handles
-	fabric.paint(theme.handle.style, this, 'sketchAllHandles', view);
+	fabric.paint(
+		theme.handle.style,
+		this,
+		'sketchAllHandles',
+		view
+	);
 
 	// draws item menu handler
-	fabric.paint(theme.ovalmenu.slice, this._getCtrlArea(), 'sketch', view);
+	var cf = this.getCtrlFix();
+
+	fabric.paint(
+		theme.ovalmenu.slice,
+		cf.area,
+		'sketch',
+		cf.fixView(view)
+	);
 
 	fabric.deClip();
 };

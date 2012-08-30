@@ -387,4 +387,34 @@ Note.prototype.getZone = function()
 	}
 };
 
+/*
+| Returns the ctrl area.
+*/
+Note.prototype.getCtrlFix = function()
+{
+	var zone = this.getZone();
+	var pnw  = zone.pnw;
+	var tca  = theme.note.ctrlArea;
+
+	var ctrlArea = this._$ctrlArea;
+
+	if( ctrlArea &&
+		ctrlArea.area.pnw.x == pnw.x + tca.x &&
+		ctrlArea.area.pnw.y == pnw.y + tca.y )
+	{
+		return ctrlArea;
+	}
+
+	var dim = theme.ovalmenu.dimensions;
+
+	return this._$ctrlArea = new Euclid.Fix(
+		new Euclid.Oval(
+			pnw.add( tca.x,              tca.y              ),
+			pnw.add( tca.x + 2 * dim.a1, tca.y + 2 * dim.b1 )
+		),
+		pnw.add(tca.joint.x, tca.joint.y) // FIXME
+	);
+};
+
+
 })();

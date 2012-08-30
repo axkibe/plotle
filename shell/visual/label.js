@@ -64,13 +64,13 @@ Jools.subclass(Label, Visual.DocItem);
 
 
 /*
-| Default margin for all notes.
+| Default margin for all labels.
 */
 Label.prototype.innerMargin = new Euclid.Margin(theme.label.innerMargin);
 
 
 /*
-| Resize handles to show on notes.
+| Resize handles to show on labels
 */
 Label.prototype.handles = Jools.immute(
 	{
@@ -83,7 +83,7 @@ Label.prototype.handles = Jools.immute(
 
 
 /*
-| Returns the notes silhoutte.
+| Returns the labels silhoutte.
 */
 Label.prototype.getSilhoutte = function($zone, zAnchor)
 {
@@ -290,6 +290,35 @@ Label.prototype.actionstop = function(view, p)
 		default :
 			return Visual.DocItem.prototype.actionstop.call(this, view, p);
 	}
+};
+
+/*
+| Returns the ctrl area.
+*/
+Label.prototype.getCtrlFix = function()
+{
+	var zone = this.getZone();
+	var pnw  = zone.pnw;
+	var tca  = theme.label.ctrlArea;
+
+	var ctrlArea = this._$ctrlArea;
+
+	if( ctrlArea &&
+		ctrlArea.area.pnw.x == pnw.x + tca.x &&
+		ctrlArea.area.pnw.y == pnw.y + tca.y )
+	{
+		return ctrlArea;
+	}
+
+	var dim = theme.ovalmenu.dimensions;
+
+	return this._$ctrlArea = new Euclid.Fix(
+		new Euclid.Oval(
+			pnw.add( tca.x,              tca.y              ),
+			pnw.add( tca.x + 2 * dim.a1, tca.y + 2 * dim.b1 )
+		),
+		pnw.add(tca.joint.x, tca.joint.y) // FIXME
+	);
 };
 
 } ) ();

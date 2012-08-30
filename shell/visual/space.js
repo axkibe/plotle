@@ -242,14 +242,15 @@ Space.prototype.mousewheel = function(p, dir, shift, ctrl)
 	for(var r = 0, rZ = twig.length; r < rZ; r++)
 	{
 		var item = this.atRank(r);
+
 		if (item.mousewheel(view, p, dir, shift, ctrl))
 			{ return true; }
 	}
 
 	if (dir > 0)
-		{ this.view = this.$view.review( 1, p); }
+		{ this.$view = this.$view.review( 1, p); }
 	else
-		{ this.view = this.$view.review(-1, p); }
+		{ this.$view = this.$view.review(-1, p); }
 
 	shell.setSpaceZoom(this.$view.fact);
 

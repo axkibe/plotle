@@ -24,13 +24,15 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/**
-| Expors
+
+/*
+| Export
 */
 var Euclid;
 Euclid = Euclid || {};
 
-/**
+
+/*
 | Imports
 */
 var Jools;
@@ -90,6 +92,16 @@ Jools.lazyFixate(Rect.prototype, 'pc', function() {
 	return new Euclid.Point(
 		Jools.half(this.pse.x + this.pnw.x),
 		Jools.half(this.pse.y + this.pnw.y)
+	);
+});
+
+/**
+| Point in the north.
+*/
+Jools.lazyFixate(Rect.prototype, 'pn', function() {
+	return new Euclid.Point(
+		Jools.half(this.pse.x + this.pnw.x),
+		this.pnw.y
 	);
 });
 

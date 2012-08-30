@@ -200,7 +200,8 @@ System.prototype.setInput = function(text) {
 /**
 | Sets a time through the error catcher
 */
-System.prototype.setTimer = function(time, callback) {
+System.prototype.setTimer = function(time, callback)
+{
 	return window.setTimeout(makeCatcher(null, callback), time);
 };
 

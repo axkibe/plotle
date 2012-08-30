@@ -50,10 +50,15 @@ if (typeof(window) === 'undefined')
 /*
 | Constructor.
 */
-var Oval = Euclid.Oval = function(pnw, pse)
+var Oval = Euclid.Oval =
+	function(
+		pnw, // point in north-west
+		pse  // point in south-east
+	)
 {
 	this.pnw = pnw;
 	this.pse = pse;
+
 	Jools.immute(this);
 };
 
@@ -72,6 +77,7 @@ Jools.lazyFixate(Oval.prototype, 'pm',
 	}
 );
 
+
 /*
 | Middle(center) point an Oval.
 */
@@ -84,6 +90,7 @@ Jools.lazyFixate(Oval.prototype, 'gradientPC',
 		);
 	}
 );
+
 
 /*
 | Middle(center) point an Oval.
@@ -98,10 +105,11 @@ Jools.lazyFixate(Oval.prototype, 'gradientR1',
 	}
 );
 
-/**
+/*
 | Returns true if this rectangle is the same as another
 */
-Oval.prototype.eq = function(r) {
+Oval.prototype.eq = function(r)
+{
 	return this.pnw.eq(r.pnw) && this.pse.eq(r.pse);
 };
 
@@ -137,7 +145,9 @@ Oval.prototype.sketch = function(fabric, border, twist, view)
 | Returns true if point is within the slice.
 */
 Oval.prototype.within = function(fabric, view, p)
-	{ return fabric.within(this, 'sketch', view, p); };
+{
+	return fabric.within(this, 'sketch', view, p);
+};
 
 
 } ) ();
