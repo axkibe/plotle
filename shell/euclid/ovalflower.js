@@ -50,6 +50,7 @@ Euclid = Euclid || {};
 | Imports
 */
 var Jools;
+var system;
 
 
 /*
@@ -201,12 +202,14 @@ OvalFlower.prototype.sketch = function(fabric, border, twist, view, segment)
 /*
 | Returns the segment the point is within.
 */
-OvalFlower.prototype.within = function(fabric, view, p)
+OvalFlower.prototype.within = function( view, p )
 {
+	var fabric = system.fabric;
 	var a2 = this.a2;
 	var b2 = this.b2;
 	var pc = this.pc;
-	if (p.x < pc.x - a2 ||
+
+	if( p.x < pc.x - a2 ||
 		p.x > pc.x + a2 ||
 		p.y < pc.y - b2 ||
 		p.y > pc.y + b2)
@@ -218,25 +221,25 @@ OvalFlower.prototype.within = function(fabric, view, p)
 		{ return null; }
 
 	var isnon = Jools.isnon;
-	if (isnon(this.segs.c ) && fabric.within(this, 'sketch', view, p, 'c' ))
+	if (isnon(this.segs.c ) && fabric.within( this, 'sketch', view, p, 'c' ))
 		{ return 'c'; }
 
-	if (isnon(this.segs.n ) && fabric.within(this, 'sketch', view, p, 'n' ))
+	if (isnon(this.segs.n ) && fabric.within( this, 'sketch', view, p, 'n' ))
 		{ return 'n'; }
 
-	if (isnon(this.segs.ne) && fabric.within(this, 'sketch', view, p, 'ne'))
+	if (isnon(this.segs.ne) && fabric.within( this, 'sketch', view, p, 'ne'))
 		{ return 'ne'; }
 
-	if (isnon(this.segs.se) && fabric.within(this, 'sketch', view, p, 'se'))
+	if (isnon(this.segs.se) && fabric.within( this, 'sketch', view, p, 'se'))
 		{ return 'se'; }
 
-	if (isnon(this.segs.e ) && fabric.within(this, 'sketch', view, p, 'e' ))
+	if (isnon(this.segs.e ) && fabric.within( this, 'sketch', view, p, 'e' ))
 		{ return 's'; }
 
-	if (isnon(this.segs.sw) && fabric.within(this, 'sketch', view, p, 'sw'))
+	if (isnon(this.segs.sw) && fabric.within( this, 'sketch', view, p, 'sw'))
 		{ return 'sw'; }
 
-	if (isnon(this.segs.nw) && fabric.within(this, 'sketch', view, p, 'nw'))
+	if (isnon(this.segs.nw) && fabric.within( this, 'sketch', view, p, 'nw'))
 		{ return 'nw'; }
 
 	return 'gap';

@@ -184,13 +184,6 @@ Rect.prototype.sub = function(a1, a2) {
 };
 
 /**
-| Returns true if point is within this rect.
-*/
-Rect.prototype.within = function(p) {
-	return p.x >= this.pnw.x && p.y >= this.pnw.y && p.x <= this.pse.x && p.y <= this.pse.y;
-};
-
-/**
 | Returns true if this rectangle is the same as another
 */
 Rect.prototype.eq = function(r) {

@@ -92,33 +92,49 @@ Note.prototype.handles =
 /*
 | Returns the notes silhoutte.
 |
-| $zone :  the cache for the items zone
-| zAnchor: if true anchor the silhoute at zero.
+| zone :  the cache for the items zone
 */
-Note.prototype.getSilhoutte = function($zone, zAnchor)
+Note.prototype.getSilhoutte = function( zone )
 {
-	var $z = $zone;
-	var $s;
-
+	var s  = this._$silhoutte;
 	var cr = theme.note.cornerRadius;
-	if (zAnchor)
-	{
-		$s = this._silhoutte$0;
-		if ($s && $s.width === $z.width && $s.height === $z.height)
-			{ return $s; }
 
-		return this._silhoutte$0 = new Euclid.BeziRect(
-			Euclid.Point.zero,
-			new Euclid.Point($z.width, $z.height), cr, cr
-		);
-	}
-	else
+	if( s && s.eq( zone ) )
+		{ return s; }
+
+	return this._$silhoutte = new Euclid.BeziRect(
+		zone.pnw,
+		zone.pse,
+		cr, cr
+	);
+};
+
+
+/*
+| Returns the notes silhoutte anchored at zero
+|
+| zone :  the cache for the items zone
+*/
+Note.prototype.getZeroSilhoutte = function( zone )
+{
+	var s  = this._$zeroSilhoutte;
+	var cr = theme.note.cornerRadius;
+
+	if( s &&
+		s.width  === zone.width &&
+		s.height === zone.height )
 	{
-		$s = this._silhoutte$1;
-		if ($s && $s.eq($z))
-			{ return $s; }
-		return this._silhoutte$1 = new Euclid.BeziRect($z.pnw, $z.pse, cr, cr);
+		return s;
 	}
+
+	return this._$zeroSilhoutte = new Euclid.BeziRect(
+		Euclid.Point.zero,
+		new Euclid.Point(
+			zone.width,
+			zone.height
+		),
+		cr, cr
+	);
 };
 
 
@@ -248,7 +264,7 @@ Note.prototype.draw = function(fabric, view)
 		var height = doc.getHeight();
 		sbary.visible = height > zone.height - imargin.y;
 
-		var silhoutte = this.getSilhoutte(vzone, true);
+		var silhoutte = this.getZeroSilhoutte(vzone);
 		f.fill(theme.note.style.fill, silhoutte, 'sketch', Euclid.View.proper);
 
 		// draws selection and text
@@ -273,9 +289,7 @@ Note.prototype.draw = function(fabric, view)
 */
 Note.prototype.mousewheel = function(view, p, dir, shift, ctrl)
 {
-	var dp = view.depoint(p);
-
-	if (!this.getZone().within(dp))
+	if(! this.getZone().within( view, p) )
 		{ return false; }
 
 	this.setScrollbar(this.scrollbarY.getPos() - dir * system.settings.textWheelSpeed);

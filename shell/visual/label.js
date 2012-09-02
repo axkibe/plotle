@@ -85,25 +85,42 @@ Label.prototype.handles = Jools.immute(
 /*
 | Returns the labels silhoutte.
 */
-Label.prototype.getSilhoutte = function($zone, zAnchor)
+Label.prototype.getSilhoutte = function( zone )
 {
-	var $s = zAnchor ? this._silhoutte$0 : this._silhoutte$1;
-	var $z = $zone;
+	var s = this._$silhoutte;
 
-	if ($s && $s.width === $z.width && $s.height === $z.height)
-		{	return $s; }
+	if( s && s.eq(zone) )
+		{ return s; }
 
-	if (zAnchor)
+	return this._$silhoutte = new Euclid.Rect(
+		zone.pnw,
+		zone.pse.sub(1, 1)
+	);
+};
+
+
+/*
+| Returns the items silhoutte anchored at zero.
+*/
+Label.prototype.getZeroSilhoutte = function( zone )
+{
+	var s = this._$zeroSilhoutte;
+
+	if( s &&
+		s.width  === zone.width &&
+		s.height === zone.height
+	)
 	{
-		return this._silhoutte$0 = new Euclid.Rect(
-			Euclid.Point.zero,
-			new Euclid.Point($z.width - 1, $z.height - 1)
-		);
+		return s;
 	}
-	else
-	{
-		return this._silhoutte$1 = new Euclid.Rect($z.pnw, $z.pse.sub(1, 1));
-	}
+
+	return this._$zeroSilhoutte = new Euclid.Rect(
+		Euclid.Point.zero,
+		new Euclid.Point(
+			zone.width  - 1,
+			zone.height - 1
+		)
+	);
 };
 
 
@@ -143,7 +160,7 @@ Label.prototype.draw = function(fabric, view)
 		f.$zoom       = view.zoom;
 		var doc       = this.$sub.doc;
 		var imargin   = this.innerMargin;
-		var silhoutte = this.getSilhoutte(zone, true);
+		var silhoutte = this.getZeroSilhoutte( zone );
 
 		// draws selection and text
 		doc.draw(f, view.home(), zone.width, imargin, Euclid.Point.zero);

@@ -153,11 +153,11 @@ OvalMenu.prototype.draw = function(view)
 /*
 | Sets this.mousepos and returns it according to p.
 */
-OvalMenu.prototype.within = function(view, p)
+OvalMenu.prototype.within = function( view, p )
 {
-	var w = this._oflower.within(this.fabric, view, p);
+	var w = this._oflower.within( view, p );
 
-	if (w === this.$within)
+	if( w === this.$within )
 		{ return w; }
 
 	// a change of within changes highlighting
@@ -172,7 +172,7 @@ OvalMenu.prototype.within = function(view, p)
 */
 OvalMenu.prototype.mousedown = function(view, p, shift, ctrl)
 {
-	var w = this.within(view, p);
+	var w = this.within( view, p );
 
 	if (!w)
 		{ return null; }
@@ -236,7 +236,7 @@ OvalMenu.prototype.mousehover = function(view, p, shift, ctrl)
 {
 	var self = this;
 
-	if (!this.within(view, p))
+	if( !this.within( view, p ) )
 	{
 		if (!this.$fade)
 		{

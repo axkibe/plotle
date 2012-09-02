@@ -278,9 +278,10 @@ Space.prototype.mousehover = function(p, shift, ctrl)
 	var focus = this.focusedItem();
 	if (focus)
 	{
-		// FIXME move into items
-		if ( focus.withinItemMenu( view, p ) )
-			{ cursor = 'default'; }
+		if( focus.withinCtrlArea( view, p ) )
+		{
+			cursor = 'default';
+		}
 		else
 		{
 			var com = focus.checkHandles( view, p );
@@ -313,7 +314,7 @@ Space.prototype.dragstart = function(p, shift, ctrl)
 	var focus = this.focusedItem();
 
 	// see if the itemmenu of the focus was targeted
-	if (this.access == 'rw' && focus && focus.withinItemMenu( view, p ))
+	if( this.access == 'rw' && focus && focus.withinCtrlArea( view, p ))
 	{
 		var dp = view.depoint(p);
 		shell.startAction(
@@ -355,9 +356,9 @@ Space.prototype.click = function(p, shift, ctrl)
 
 	// clicked the tab of the focused item?
 	var focus = this.focusedItem();
-	if (focus && focus.withinItemMenu(view, p))
+	if( focus && focus.withinCtrlArea( view, p ) )
 	{
-		shell.setMenu(focus.getMenu(view));
+		shell.setMenu( focus.getMenu( view ) );
 		return;
 	}
 
@@ -365,18 +366,18 @@ Space.prototype.click = function(p, shift, ctrl)
 	for(var a = 0, aZ = this.twig.length; a < aZ; a++)
 	{
 		var item = this.atRank(a);
-		if (item.click(view, p, shift, ctrl))
+		if (item.click( view, p, shift, ctrl) )
 			{ return true; }
 	}
 
 	// otherwhise pop up the float menu
-	shell.setMenu(new OvalMenu(
+	shell.setMenu( new OvalMenu(
 		system.fabric,
 		p,
 		theme.ovalmenu,
 		this._floatMenuLabels,
 		self
-	));
+	) );
 
 	shell.dropFocus();
 	shell.redraw = true;
@@ -552,7 +553,7 @@ Space.prototype.mousedown = function(p, shift, ctrl)
 	var view   = this.$view;
 	var action = shell.$action;
 
-	if (this.access == 'ro')
+	if(this.access == 'ro' )
 	{
 		this.dragstart(p, shift, ctrl);
 		return 'drag';
@@ -560,13 +561,13 @@ Space.prototype.mousedown = function(p, shift, ctrl)
 
 	var focus = this.focusedItem();
 
-	if (focus)
+	if( focus )
 	{
-		if (focus.withinItemMenu(view, p))
+		if( focus.withinCtrlArea(view, p) )
 			{ return 'atween'; }
 
 		var com = focus.checkHandles(view, p);
-		if (com)
+		if( com )
 		{
 			// resizing
 			var dp = view.depoint(p);

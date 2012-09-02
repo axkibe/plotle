@@ -47,7 +47,7 @@ Euclid = Euclid || {};
 | Imports
 */
 var Jools;
-
+var system;
 
 /*
 | Capsule
@@ -111,7 +111,9 @@ BeziRect.prototype.sketch = function(fabric, border, twist, view)
 /**
 | Returns true if Point p is within the BeziRect.
 */
-BeziRect.prototype.within = function(fabric, view, p)
-	{ return fabric.within(this, 'sketch', view, p); };
+BeziRect.prototype.within = function( view, p )
+{
+	return system.fabric.within(this, 'sketch', view, p);
+};
 
 })();

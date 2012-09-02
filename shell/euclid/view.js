@@ -52,23 +52,27 @@ if (typeof(window) === 'undefined')
 /*
 | Constructor.
 */
-var View = Euclid.View = function(pan, fact)
+var View = Euclid.View = function( pan, fact )
 {
 	this.pan  = pan;
-	this.fact = Jools.limit(theme.zoom.min, fact, theme.zoom.max);
-	this.zoom = Math.pow(theme.zoom.base, this.fact);
+	this.fact = Jools.limit( theme.zoom.min, fact, theme.zoom.max );
+	this.zoom = Math.pow( theme.zoom.base, this.fact );
 
-	Jools.immute(this);
+	Jools.immute( this );
 };
 
 
 /*
 | Returns true if this view equals another
 */
-View.prototype.eq = function(view)
+View.prototype.eq = function( a1 )
 {
-	return this.pan.eq(view.pan) && this.fact === view.fact;
-}
+	return (
+		(a1 instanceof View) &&
+		this.zoom === a1.zoom &&
+		this.pan.eq(a1.pan)
+	);
+};
 
 
 /*
@@ -198,17 +202,6 @@ View.prototype.point = function(a1, a2)
 View.prototype.depoint = function(a1, a2)
 {
 	return new Euclid.Point(this.dex(a1, a2), this.dey(a1, a2));
-};
-
-
-/*
-| Returns true if views are equal in terms of zoom and pan.
-*/
-View.prototype.eq = function(a1)
-{
-	return a1 &&
-		this.zoom === a1.zoom &&
-		this.pan.eq(a1.pan);
 };
 
 

@@ -139,11 +139,11 @@ DocItem.prototype.click = function(view, p)
 {
 	var vp = view.depoint(p);
 
-	if (!this.getZone().within(vp))
+	if(! this.getZone().within( view, p ) )
 		{ return false; }
 
-	var $space = shell.$space;
-	var focus  = $space.focusedItem();
+	var space = shell.$space;
+	var focus = space.focusedItem();
 
 	if (focus !== this)
 	{

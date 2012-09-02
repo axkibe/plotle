@@ -82,36 +82,47 @@ Portal.prototype.handles =
 /*
 | Returns the portals silhoutte.
 |
-| $zone :  the cache for the items zone
-| zAnchor: if true anchor the silhoute at zero.
+| zone :  the cache for the items zone
 */
-Portal.prototype.getSilhoutte = function($zone, zAnchor)
+Portal.prototype.getSilhoutte = function( zone )
 {
-	var $z = $zone;
-	var $s;
+	var s = this._$silhoutte;
 
-	if (zAnchor)
-	{
-		$s = this._silhoutte$0;
+	if( s && s.eq( zone ) )
+		{ return s; }
 
-		if ($s && $s.width === $z.width && $s.height === $z.height)
-			{ return $s; }
-
-		return this._silhoutte$0 = new Euclid.Oval(
-			Euclid.Point.zero,
-			new Euclid.Point($z.width, $z.height)
-		);
-	}
-	else
-	{
-		$s = this._silhoutte$1;
-
-		if ($s && $s.eq($z))
-			{ return $s; }
-
-		return this._silhoutte$1 = new Euclid.Oval($z.pnw, $z.pse);
-	}
+	return this._$silhoutte = new Euclid.Oval(
+		zone.pnw,
+		zone.pse
+	);
 };
+
+
+/*
+| Returns the portals silhoutte.
+|
+| zone :  the cache for the items zone
+*/
+Portal.prototype.getZeroSilhoutte = function( zone )
+{
+	var s = this._$zeroSilhoutte;
+
+	if( s &&
+		s.width  === zone.width &&
+		s.height === zone.height )
+	{
+		return s;
+	}
+
+	return this._$zeroSilhoutte = new Euclid.Oval(
+		Euclid.Point.zero,
+		new Euclid.Point(
+			zone.width,
+			zone.height
+		)
+	);
+};
+
 
 
 /*
@@ -174,15 +185,13 @@ Portal.prototype.grepFocus = function()
 /*
 | Sees if this portal is being clicked.
 */
-Portal.prototype.click = function(view, p)
+Portal.prototype.click = function( view, p )
 {
-	var vp = view.depoint(p);
-
-	if (!this.getZone().within(vp))
+	if( !this.getZone().within( view, p ) )
 		{ return false; }
 
-	var $space = shell.$space;
-	var focus  = $space.focusedItem();
+	var space = shell.$space;
+	var focus = space.focusedItem();
 	if (focus !== this)
 	{
 		this.grepFocus();
@@ -225,7 +234,7 @@ Portal.prototype.draw = function(fabric, view)
 	{
 		f = this.$fabric = new Euclid.Fabric(vzone.width + 1, vzone.height + 1);
 
-		var silhoutte = this.getSilhoutte(vzone, true);
+		var silhoutte = this.getZeroSilhoutte( vzone );
 		f.fill(theme.portal.style.fill, silhoutte, 'sketch', Euclid.View.proper);
 		f.edge(theme.portal.style.edge, silhoutte, 'sketch', Euclid.View.proper);
 	}
@@ -237,11 +246,9 @@ Portal.prototype.draw = function(fabric, view)
 /*
 | Mouse wheel turned.
 */
-Portal.prototype.mousewheel = function(view, p, dir, shift, ctrl)
+Portal.prototype.mousewheel = function( view, p, dir, shift, ctrl )
 {
-	var dp = view.depoint(p);
-
-	return this.getZone().within(dp);
+	return this.getZone().within( view, p );
 };
 
 
@@ -258,17 +265,15 @@ Portal.prototype.drawCaret = function(view)
 | Mouse is hovering around.
 | Checks if this item reacts on this.
 */
-Portal.prototype.mousehover = function(view, p)
+Portal.prototype.mousehover = function( view, p )
 {
-	if (p === null)
+	if( p === null )
 		{ return null; }
 
-	var dp = view.depoint(p);
-
-	if (this.getZone().within(dp))
+	if( this.getZone().within( view, p ) )
 		{ return 'default'; }
-	else
-		{ return null; }
+
+	return null;
 };
 
 

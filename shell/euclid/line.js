@@ -81,65 +81,70 @@ Line.connect = function(shape1, end1, shape2, end2)
 	if (!shape1 || !shape2)
 		{ throw new Error('error'); }
 
-	var z1, z2;
-
 	if (shape1 instanceof Euclid.Rect && shape2 instanceof Euclid.Point)
 	{
 		var p2 = shape2;
-		z1 = shape1; // REMOVE "z1"
 		var p1;
-		if (z1.within(p2, Euclid.Point.zero))
-			{ p1 = z1.pc; }
+
+		if ( shape1.within( Euclid.View.proper, p2 ) )
+		{
+			p1 = shape1.pc;
+		}
 		else
 		{
 			p1 = new Euclid.Point(
-				Jools.limit(z1.pnw.x, p2.x, z1.pse.x),
-				Jools.limit(z1.pnw.y, p2.y, z1.pse.y)
+				Jools.limit(shape1.pnw.x, p2.x, shape1.pse.x),
+				Jools.limit(shape1.pnw.y, p2.y, shape1.pse.y)
 			);
 		}
+
 		return new Line(p1, end1, p2, end2);
 	}
 
 	if (shape1 instanceof Euclid.Rect && shape2 instanceof Euclid.Rect)
 	{
-		z1 = shape1;
-		z2 = shape2;
 		var x1, y1, x2, y2;
 
-		if (z2.pnw.x > z1.pse.x)
+		if( shape2.pnw.x > shape1.pse.x )
 		{
 			// zone2 is clearly on the right
-			x1 = z1.pse.x;
-			x2 = z2.pnw.x;
+			x1 = shape1.pse.x;
+			x2 = shape2.pnw.x;
 		}
-		else if (z2.pse.x < z1.pnw.x)
+		else if( shape2.pse.x < shape1.pnw.x )
 		{
 			// zone2 is clearly on the left
-			x1 = z1.pnw.x;
-			x2 = z2.pse.x;
+			x1 = shape1.pnw.x;
+			x2 = shape2.pse.x;
 		}
 		else
 		{
 			// an intersection
-			x1 = x2 = Jools.half(Math.max(z1.pnw.x, z2.pnw.x) + Math.min(z1.pse.x, z2.pse.x));
+			x1 = x2 = Jools.half(
+				Math.max(shape1.pnw.x, shape2.pnw.x) +
+				Math.min(shape1.pse.x, shape2.pse.x)
+			);
 		}
 
-		if (z2.pnw.y > z1.pse.y)
+		if ( shape2.pnw.y > shape1.pse.y )
 		{
 			// zone2 is clearly on the bottom
-			y1 = z1.pse.y;
-			y2 = z2.pnw.y;
+			y1 = shape1.pse.y;
+			y2 = shape2.pnw.y;
 		}
-		else if (z2.pse.y < z1.pnw.y)
+		else if ( shape2.pse.y < shape1.pnw.y )
 		{
 			// zone2 is clearly on the top
-			y1 = z1.pnw.y;
-			y2 = z2.pse.y;
+			y1 = shape1.pnw.y;
+			y2 = shape2.pse.y;
 		}
 		else
 		{
 			// an intersection
-			y1 = y2 = Jools.half(Math.max(z1.pnw.y, z2.pnw.y) + Math.min(z1.pse.y, z2.pse.y));
+			y1 = y2 = Jools.half(
+				Math.max(shape1.pnw.y, shape2.pnw.y) +
+				Math.min(shape1.pse.y, shape2.pse.y)
+			);
 		}
 
 		return new Line(

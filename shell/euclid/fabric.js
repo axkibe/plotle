@@ -659,6 +659,8 @@ Fabric.prototype.setFont = function(f)
 /**
 | Returns true is a point is in a sketch.
 |
+| TODO Rename
+|
 | Point is either:
 | Euclid.Point -or-
 | x / y

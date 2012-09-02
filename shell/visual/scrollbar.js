@@ -141,11 +141,13 @@ Scrollbar.prototype.setPos = function(pos, aperture, max, pnw, size)
 /*
 | Returns true if p is within the scrollbar.
 */
-Scrollbar.prototype.within = function(view, p) {
-	if (!this.visible) { return false; }
+Scrollbar.prototype.within = function( view, p )
+{
+	if( !this.visible )
+		{ return false; }
 
 	var pnw = this._$pnw;
-	var dp  = view.depoint(p);
+	var dp  = view.depoint(p); // TODO use x/y
 
 	return (
 		dp.x >= pnw.x &&

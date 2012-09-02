@@ -103,13 +103,19 @@ Item.prototype.menuSelect = function(entry, p)
 
 
 /*
-| Returns if point is within the item menu TODO rename
+| Returns if point is within the item menu
 */
-Item.prototype.withinItemMenu = function(view, p)
+Item.prototype.withinCtrlArea = function(view, p)
 {
 	var cf = this.getCtrlFix();
 
-	return cf.area.within(system.fabric, cf.fixView(view), p);
+	// TODO fast check on rectangle
+
+	if( !cf.area.within( cf.fixView(view), p ) )
+		{ return false; }
+
+	return !( this.getSilhoutte( this.getZone() )
+		.within( view, p ) );
 };
 
 
@@ -145,13 +151,13 @@ Item.prototype.checkHandles = function(view, p)
 		var d = d8cwcf[a];
 		var z = $h[d];
 
-		if (!z)
+		if( !z )
 			{ continue; }
 
-		if (!z.within(p))
+		if( !z.within( view, p ) )
 			{ continue; }
 
-		if (f.within(this, 'sketchHandle', view, p, z))
+		if( f.within( this, 'sketchHandle', view, p, z) ) // TODO
 			{ return d; }
 	}
 	return null;
@@ -286,14 +292,14 @@ Item.prototype.drawHandles = function(fabric, view)
 {
 	var sbary = this.scrollbarY;
 
-	if (sbary && sbary.visible)
+	if( sbary && sbary.visible )
 	{
 		var area = sbary.getArea(view);
-		fabric.reverseClip(area, 'sketch', Euclid.View.proper, -1);
+		fabric.reverseClip( area, 'sketch', Euclid.View.proper, -1 );
 	}
 
 	fabric.reverseClip(
-		this.getSilhoutte(this.getZone(), false),
+		this.getSilhoutte( this.getZone() ),
 		'sketch',
 		view,
 		-1
@@ -330,7 +336,7 @@ Item.prototype.drawHandles = function(fabric, view)
 Item.prototype.dragstart = function(view, p, shift, ctrl, access)
 {
 	var sbary = this.scrollbarY;
-	if (sbary && sbary.within(view, p))
+	if( sbary && sbary.within( view, p ) )
 	{
 		shell.startAction(
 			Action.SCROLLY, 'space',
@@ -341,8 +347,7 @@ Item.prototype.dragstart = function(view, p, shift, ctrl, access)
 		return true;
 	}
 
-	var vp = view.depoint(p);
-	if (!this.getZone().within(vp))
+	if( !this.getZone().within( view, p ) )
 		{ return false; }
 
 	shell.redraw = true;
@@ -364,6 +369,8 @@ Item.prototype.dragstart = function(view, p, shift, ctrl, access)
 	if (access == 'rw')
 	{
 		this.grepFocus();
+
+		var vp = view.depoint(p);
 
 		shell.startAction(
 			Action.ITEMDRAG, 'space',
@@ -387,12 +394,11 @@ Item.prototype.dragstart = function(view, p, shift, ctrl, access)
 Item.prototype.actionmove = function(view, p, shift, ctrl)
 {
 	var $action = shell.$action;
-	var vp      = view.depoint(p);
 
 	switch ($action.type)
 	{
 		case Action.RELBIND    :
-			if (!this.getZone().within(vp))
+			if( !this.getZone().within( view, p ) )
 				{ return false; }
 			$action.move = p;
 			$action.item2Path = this.path;
@@ -401,7 +407,7 @@ Item.prototype.actionmove = function(view, p, shift, ctrl)
 
 		case Action.ITEMDRAG   :
 		case Action.ITEMRESIZE :
-			$action.move = vp;
+			$action.move = view.depoint(p);
 			shell.redraw = true;
 			return true;
 
@@ -428,18 +434,16 @@ Item.prototype.actionmove = function(view, p, shift, ctrl)
 */
 Item.prototype.actionstop = function(view, p)
 {
-	var vp = view.depoint(p);
+	var action = shell.$action;
 
-	var $action = shell.$action;
-
-	switch ($action.type) {
+	switch (action.type) {
 
 		case Action.RELBIND :
-			if (!this.getZone().within(vp))
+			if( !this.getZone().within( view, p ) )
 				{ return false; }
 
-			var $space = shell.$space;
-			Visual.Relation.create( $space, $space.getSub( $action.itemPath ), this );
+			var space = shell.$space;
+			Visual.Relation.create( space, space.getSub( action.itemPath ), this );
 			shell.redraw = true;
 			return true;
 
@@ -451,19 +455,19 @@ Item.prototype.actionstop = function(view, p)
 
 /*
 | Mouse is hovering around.
+|
 | Checks if this item reacts on this.
 */
 Item.prototype.mousehover = function(view, p)
 {
-	if (p === null)
+	if ( p === null )
 		{ return null; }
 
 	var sbary = this.scrollbarY;
-	if (sbary && sbary.within(view, p))
+	if( sbary && sbary.within( view, p ) )
 		{ return 'default'; }
 
-	var vp = view.depoint(p);
-	if (!this.getZone().within(vp))
+	if( !this.getZone().within( view, p ) )
 		{ return null; }
 
 	return 'default';
@@ -500,7 +504,7 @@ Item.prototype.grepFocus = function()
 */
 Item.prototype.highlight = function(fabric, view)
 {
-	var silhoutte = this.getSilhoutte(this.getZone(), false);
+	var silhoutte = this.getSilhoutte( this.getZone() );
 	fabric.edge(theme.note.style.highlight, silhoutte, 'sketch', view);
 };
 

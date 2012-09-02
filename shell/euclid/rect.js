@@ -60,4 +60,24 @@ Euclid.Rect.prototype.sketch = function(fabric, border, twist, view)
 };
 
 
+/*
+| Returns true if point is within this rect.
+*/
+Euclid.Rect.prototype.within = function( view, p )
+{
+	var x   = view.dex( p );
+	var y   = view.dey( p );
+
+	var pnw = this.pnw;
+	var pse = this.pse;
+
+	return (
+		x >= pnw.x &&
+		y >= pnw.y &&
+		x <= pse.x &&
+		y <= pse.y
+	);
+};
+
+
 } ) ();
