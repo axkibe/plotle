@@ -76,6 +76,15 @@ View.prototype.eq = function( a1 )
 
 
 /*
+| Returns the zoomed distance d
+*/
+View.prototype.distance = function( d )
+{
+	return this.zoom * d;
+}
+
+
+/*
 | Returns the x value for a point for this view.
 */
 View.prototype.x = function(a1, a2)

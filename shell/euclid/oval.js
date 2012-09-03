@@ -147,7 +147,7 @@ Oval.prototype.sketch = function(fabric, border, twist, view)
 */
 Oval.prototype.within = function( view, p )
 {
-	return system.fabric.within(this, 'sketch', view, p);
+	return system.fabric.withinSketch(this, 'sketch', view, p);
 };
 
 

@@ -48,9 +48,11 @@ var theme;
 /*
 | Capsule
 */
-(function(){
+( function() {
 'use strict';
-if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
+
+if (typeof(window) === 'undefined')
+	{ throw new Error('this code needs a browser!'); }
 
 
 /*
@@ -135,7 +137,8 @@ Button.prototype._weave = function(accent)
 	var twig = this.twig;
 
 	var sname;
-	switch (accent) {
+	switch (accent)
+	{
 		case Dash.Accent.NORMA :
 			sname = twig.normaStyle;
 			break;
@@ -183,20 +186,25 @@ Button.prototype._weave = function(accent)
 | Input
 */
 Button.prototype.input = function(text)
-	{ return true; };
+{
+	return true;
+};
 
 
 /*
 | Input
 */
 Button.prototype.specialKey = function(key, shift, ctrl)
-	{ return true; };
+{
+	return true;
+};
 
 
 /*
 | Mouse hover.
 */
-Button.prototype.mousehover = function(p) {
+Button.prototype.mousehover = function(p)
+{
 	if (!this.$visible)
 		{ return null; }
 
@@ -209,7 +217,7 @@ Button.prototype.mousehover = function(p) {
 	var fabric = this._weave(Dash.Accent.NORMA);
 	var pp = p.sub(this.pnw);
 
-	if (!fabric.within(this, 'sketch', Euclid.View.proper, pp))
+	if( !fabric.withinSketch(this, 'sketch', Euclid.View.proper, pp ) )
 		{ return null; }
 
 	this.panel.setHover(this.name);
@@ -221,7 +229,9 @@ Button.prototype.mousehover = function(p) {
 | Button has been pushed
 */
 Button.prototype.push = function(shift, ctrl)
-	{ /* no default */ };
+{
+	// no default
+};
 
 
 /*
@@ -234,7 +244,7 @@ Button.prototype.mousedown = function(p, shift, ctrl)
 	if (!this.$visible)
 		{ return; }
 
-	if (p.x < this.pnw.x ||
+	if( p.x < this.pnw.x ||
 		p.y < this.pnw.y ||
 		p.x > this.pse.x ||
 		p.y > this.pse.y
@@ -244,10 +254,17 @@ Button.prototype.mousedown = function(p, shift, ctrl)
 	var fabric = this._weave(Dash.Accent.NORMA);
 	var pp = p.sub(this.pnw);
 
-	if (!fabric.within(this, 'sketch', Euclid.View.proper, pp))
+	if(! fabric.withinSketch(
+			this,
+			'sketch',
+			Euclid.View.proper,
+			pp
+		)
+	)
 		{ return null; }
 
-	if (this.repeat && !this.retimer) {
+	if (this.repeat && !this.retimer)
+	{
 		shell.startAction(
 			Action.REBUTTON,
 			'board',
@@ -276,7 +293,8 @@ Button.prototype.mousedown = function(p, shift, ctrl)
 */
 Button.prototype.specialKey = function(key)
 {
-	switch (key) {
+	switch (key)
+	{
 		case 'down' :
 			this.panel.cycleFocus(+1);
 			return;
@@ -346,4 +364,4 @@ Button.prototype.actionstop = function()
 };
 
 
-})();
+} ) ();

@@ -234,17 +234,30 @@ Panel.prototype.mousehover = function(p, shift, ctrl)
 	var fabric = this._weave();
 	var a, aZ;
 
-	if (p === null)
+	if( p === null )
 		{ return this.setHover(null); }
 
-	if (p.y < pnw.y || p.x < pnw.x || p.x > pse.x)
+	// TODO pse.y?
+	if( p.y < pnw.y ||
+		p.x < pnw.x ||
+		p.x > pse.x
+	)
 		{ return this.setHover(null); }
 
 	var pp = p.sub(pnw);
 
 	// FIXME Optimize by reusing the latest path of this.$fabric
-	if (!fabric.within(this, 'sketch', Euclid.View.proper, pp))
-		{ return this.setHover(null); }
+
+	if( !fabric.withinSketch(
+			this,
+			'sketch',
+			Euclid.View.proper,
+			pp
+		)
+	)
+	{
+		return this.setHover(null);
+	}
 
 	var cursor = null;
 
@@ -277,7 +290,10 @@ Panel.prototype.mousedown = function(p, shift, ctrl)
 	var fabric = this._weave();
 	var a, aZ;
 
-	if (p.y < pnw.y || p.x < pnw.x || p.x > pse.x)
+	// TODO pse.y?
+	if( p.y < pnw.y ||
+		p.x < pnw.x ||
+		p.x > pse.x)
 	{
 		this.setHover(null);
 		return null;
@@ -286,7 +302,7 @@ Panel.prototype.mousedown = function(p, shift, ctrl)
 	var pp = p.sub(pnw);
 
 	// FIXME Optimize by reusing the latest path of this.$fabric
-	if (!fabric.within(this, 'sketch', Euclid.View.proper, pp))
+	if( !fabric.withinSketch( this, 'sketch', Euclid.View.proper, pp ) )
 	{
 		this.setHover(null);
 		return null;

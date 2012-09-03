@@ -476,8 +476,16 @@ Chat.prototype.mousedown = function(p, shift, ctrl)
 {
 	var pp = p.sub(this.pnw);
 	var fabric = this._weave();
-	if (!fabric.within(this, 'sketchILine', Euclid.View.proper, pp))
-		{ return null; }
+
+	if(! fabric.withinSketch(
+			this,
+			'sketchILine',
+			Euclid.View.proper,
+			pp)
+		)
+	{
+		return null;
+	}
 
 	shell.setCaret(
 		'board',
@@ -496,18 +504,25 @@ Chat.prototype.mousedown = function(p, shift, ctrl)
 */
 Chat.prototype.mousehover = function(p, shift, ctrl)
 {
-	if (p === null)
+	if( p === null )
 		{ return null; }
 
 	var pnw = this.pnw;
 	var pse = this.pse;
 
-	if (p.x < pnw.x || p.y < pnw.y || p.x > pse.x || p.y > pse.y)
-		{ return null; }
+	if( p.x < pnw.x ||
+		p.y < pnw.y ||
+		p.x > pse.x ||
+		p.y > pse.y
+	)
+	{
+		return null;
+	}
 
 	var fabric = this._weave();
 	var pp = p.sub(this.pnw);
-	if (fabric.within(this, 'sketchILine', Euclid.View.proper, pp))
+
+	if( fabric.withinSketch( this, 'sketchILine', Euclid.View.proper, pp ) )
 		{ return "text"; }
 	else
 		{ return "default"; }

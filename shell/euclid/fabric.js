@@ -659,13 +659,11 @@ Fabric.prototype.setFont = function(f)
 /**
 | Returns true is a point is in a sketch.
 |
-| TODO Rename
-|
 | Point is either:
 | Euclid.Point -or-
 | x / y
 */
-Fabric.prototype.within = function(shape, sketch, view, a1, a2, a3, a4, a5) {
+Fabric.prototype.withinSketch = function(shape, sketch, view, a1, a2, a3, a4, a5) {
 	var px, py;
 	var pobj;
 	if (typeof(a1) === 'object') {

@@ -140,55 +140,68 @@ Item.prototype.getMenu = function(view)
 /*
 | Returns the compass direction of the handle if p is on a resizer handle.
 */
-Item.prototype.checkHandles = function(view, p)
+Item.prototype.checkHandles = function( view, p )
 {
-	var $h     = this.planHandles(view);
+	var h      = this.planHandles();
 	var f      = shell.fabric;
 	var d8cwcf = Euclid.Compass.dir8CWCF;
 
 	for(var a = 0, aZ = d8cwcf.length; a < aZ; a++)
 	{
 		var d = d8cwcf[a];
-		var z = $h[d];
+		var z = h[d];
 
-		if( !z )
+		//if( !z || !z.within( view, p ) )
+
+		if( !z ) // XXX
 			{ continue; }
 
-		if( !z.within( view, p ) )
-			{ continue; }
+		var fixView = view.review( 0, view.point(z.pc) );
 
-		if( f.within( this, 'sketchHandle', view, p, z) ) // TODO
+		if( f.withinSketch( this, 'sketchHandle', fixView, p, z ) )
 			{ return d; }
 	}
+
 	return null;
 };
 
 
 /*
-| Creates the $handle object to plan where to sketch the handles to
+| Creates the handle object to plan where to sketch the handles to
 */
-Item.prototype.planHandles = function(view)
+Item.prototype.planHandles = function( )
 {
-	var ha = this.handles;
-	var zone = view.rect(this.getZone());
-	var $h = this.$handles;
-	if ($h.zone && zone.eq($h.zone) && view.eq($h.view))
-		{ return $h; }
+	var ha   = this.handles;
+	var zone = this.getZone();
+	var h    = this.$handles;
+
+	if( h.zone && zone.eq( h.zone ) )
+		{ return h; }
 
 	var wx  = zone.pnw.x;
 	var ny  = zone.pnw.y;
 	var ex  = zone.pse.x;
 	var sy  = zone.pse.y;
+
 	var mx = Jools.half(wx + ex);
 	var my = Jools.half(ny + sy);
 
 	var dcx = theme.handle.cdistance;
 	var dcy = theme.handle.cdistance;
+
 	var dex = theme.handle.edistance;
 	var dey = theme.handle.edistance;
 
-	var a  = Math.min(Math.round((zone.width  + 2 * dcx) / 6), theme.handle.maxSize);
-	var b  = Math.min(Math.round((zone.height + 2 * dcy) / 6), theme.handle.maxSize);
+	var a  = Math.min(
+		Math.round((zone.width  + 2 * dcx) / 6),
+		theme.handle.maxSize
+	);
+
+	var b  = Math.min(
+		Math.round((zone.height + 2 * dcy) / 6),
+		theme.handle.maxSize
+	);
+
 	var a2 = 2*a;
 	var b2 = 2*b;
 
@@ -203,47 +216,46 @@ Item.prototype.planHandles = function(view)
 			// ellipse bezier height
 			bb   : Math.round(b / 0.75),
 			zone : zone,
-			view : view,
 
 			nw : ha.nw && Euclid.Rect.renew(
 					wx - dcx,      ny - dcy,
 					wx - dcx + a2, ny - dcy + b2,
-					$h.nw
+					h.nw
 				),
 			n  : ha.n && Euclid.Rect.renew(
 					mx - a,        ny - dey,
 					mx + a,        ny - dey + b2,
-					$h.n
+					h.n
 				),
 			ne : ha.ne && Euclid.Rect.renew(
 					ex + dcx - a2, ny - dcy,
 					ex + dex,      ny - dcy + b2,
-					$h.ne
+					h.ne
 				),
 			e  : ha.e && Euclid.Rect.renew(
 					ex + dex - a2, my - b,
 					ex + dex     , my + b,
-					$h.e
+					h.e
 				),
 			se : ha.se && Euclid.Rect.renew(
 					ex + dcx - a2, sy + dcy - b2,
 					ex + dcx,      sy + dcx,
-					$h.se
+					h.se
 				),
 			s  : ha.s && Euclid.Rect.renew(
 					mx - a, sy + dey -b2,
 					mx + a, sy + dey,
-					$h.s
+					h.s
 				),
 			sw : ha.sw && Euclid.Rect.renew(
 					wx - dcx,      sy + dcy - b2,
 					wx - dcx + a2, sy + dcy,
-					$h.sw
+					h.sw
 				),
 			w  : ha.w && Euclid.Rect.renew(
 					wx - dex,      my - b,
 					wx - dex + a2, my + b,
-					$h.w
+					h.w
 				)
 		};
 };
@@ -257,18 +269,20 @@ Item.prototype.sketchAllHandles = function(fabric, border, twist, view)
 	if (border !== 0)
 		{ throw new Error('borders unsupported for handles'); }
 
-	var $h = this.planHandles(view);
+	var h      = this.planHandles();
 	var d8cwcf = Euclid.Compass.dir8CWCF;
 
 	for(var a = d8cwcf.length - 1; a >= 0; a--)
 	{
 		var d = d8cwcf[a];
-		var z = $h[d];
+		var z = h[d];
 
 		if (!z)
 			{ continue; }
 
-		this.sketchHandle(fabric, border, twist, view, z);
+		var fixView = view.review( 0, view.point( z.pc ) );
+
+		this.sketchHandle( fabric, border, twist, fixView, z );
 	}
 };
 
@@ -278,10 +292,14 @@ Item.prototype.sketchAllHandles = function(fabric, border, twist, view)
 */
 Item.prototype.sketchHandle = function(fabric, border, twist, view, zone)
 {
-	var bb = this.$handles.bb;
-	fabric.moveTo(zone.w);
-	fabric.beziTo(0, -bb, 0, -bb, zone.e);
-	fabric.beziTo(0, +bb, 0, +bb, zone.w);
+	var bb = view.distance( this.$handles.bb );
+
+	var w = view.point( zone.w );
+	var e = view.point( zone.e );
+
+	fabric.moveTo( w );
+	fabric.beziTo( 0, -bb, 0, -bb, e );
+	fabric.beziTo( 0, +bb, 0, +bb, w );
 };
 
 
@@ -320,7 +338,7 @@ Item.prototype.drawHandles = function(fabric, view)
 		theme.ovalmenu.slice,
 		cf.area,
 		'sketch',
-		cf.fixView(view)
+		cf.fixView( view )
 	);
 
 	fabric.deClip();

@@ -44,24 +44,29 @@ var Euclid;
 (function(){
 'use strict';
 
-/**
+
+/*
 | Node imports
 */
-if (typeof(window) === 'undefined') {
+if (typeof(window) === 'undefined')
+{
 	Euclid = {
 		Point  : require('./point'),
 		Margin : require('./margin')
-	}
+	};
+
 	Jools  = require('../jools');
 }
 
-/**
+
+/*
 | Constructor.
 |
 | pnw: point to north west.
 | pse: point to south east.
 */
-var Rect = Euclid.Rect = function(pnw, pse, key) {
+var Rect = Euclid.Rect = function(pnw, pse, key)
+{
 	if (!pnw || !pse || pnw.x > pse.x || pnw.y > pse.y)
 		{ throw Jools.reject('not a rectangle.'); }
 
@@ -73,11 +78,14 @@ var Rect = Euclid.Rect = function(pnw, pse, key) {
 	Jools.immute(this);
 };
 
-/**
+
+/*
 | Returns a rectangle thats reduced on every side by a margin object
 */
-Rect.prototype.reduce = function(margin) {
-	if (margin.constructor !== Euclid.Margin) { throw new Error('margin of wrong type'); }
+Rect.prototype.reduce = function(margin)
+{
+	if (margin.constructor !== Euclid.Margin)
+		{ throw new Error('margin of wrong type'); }
 
 	// allow margins to reduce the rect to zero size without erroring.
 	return new Rect(
@@ -85,67 +93,90 @@ Rect.prototype.reduce = function(margin) {
 		Euclid.Point.renew(this.pse.x - margin.w, this.pse.y - margin.s, this.pnw, this.pse));
 };
 
-/**
+
+/*
 | Point in the center.
 */
-Jools.lazyFixate(Rect.prototype, 'pc', function() {
-	return new Euclid.Point(
-		Jools.half(this.pse.x + this.pnw.x),
-		Jools.half(this.pse.y + this.pnw.y)
-	);
-});
+Jools.lazyFixate(Rect.prototype, 'pc',
+	function()
+	{
+		return new Euclid.Point(
+			Jools.half( this.pse.x + this.pnw.x ),
+			Jools.half( this.pse.y + this.pnw.y )
+		);
+	}
+);
 
-/**
+
+/*
 | Point in the north.
 */
-Jools.lazyFixate(Rect.prototype, 'pn', function() {
-	return new Euclid.Point(
-		Jools.half(this.pse.x + this.pnw.x),
-		this.pnw.y
-	);
-});
+Jools.lazyFixate(Rect.prototype, 'pn',
+	function()
+	{
+		return new Euclid.Point(
+			Jools.half( this.pse.x + this.pnw.x ),
+			this.pnw.y
+		);
+	}
+);
 
-/**
+
+/*
 | West.
 */
-Jools.lazyFixate(Rect.prototype, 'w', function() {
-	return new Euclid.Point(this.pnw.x, Jools.half(this.pse.y + this.pnw.y));
-});
+Jools.lazyFixate(Rect.prototype, 'w',
+	function()
+	{
+		return new Euclid.Point(this.pnw.x, Jools.half(this.pse.y + this.pnw.y));
+	}
+);
 
-/**
+
+/*
 | East.
 */
-Jools.lazyFixate(Rect.prototype, 'e', function() {
-	return new Euclid.Point(this.pse.x, Jools.half(this.pse.y + this.pnw.y));
-});
+Jools.lazyFixate(Rect.prototype, 'e',
+	function()
+	{
+		return new Euclid.Point(this.pse.x, Jools.half(this.pse.y + this.pnw.y));
+	}
+);
 
-/**
+
+/*
 | Returns a rect moved by a point or x/y.
 |
 | add(point)   -or-
 | add(x, y)
 */
-Rect.prototype.add = function(a1, a2) {
+Rect.prototype.add = function(a1, a2)
+{
 	return new this.constructor(this.pnw.add(a1, a2), this.pse.add(a1, a2));
 };
 
-/**
+
+/*
 | Creates a new rect.
 |
 | Looks throw a list of additional rects to look for objects to be reused.
 |
 | Rect.renew(wx, ny, ex, sy, ...[rects]... )
 */
-Rect.renew = function(wx, ny, ex, sy) {
+Rect.renew = function(wx, ny, ex, sy)
+{
 	var pnw   = null;
 	var pse   = null;
 	var isnon = Jools.isnon;
 
-	for(var a = 4, aZ = arguments.length; a < aZ; a++) {
+	for(var a = 4, aZ = arguments.length; a < aZ; a++)
+	{
 		var r = arguments[a];
-		if (!isnon(r)) { continue; }
+		if (!isnon(r))
+			{ continue; }
 
-		if (r.pnw.x === wx && r.pnw.y === ny) {
+		if (r.pnw.x === wx && r.pnw.y === ny)
+		{
 			if (r.pse.x === ex && r.pse.y === sy)
 				{ return r; }
 			pnw = r.pnw;
@@ -156,12 +187,24 @@ Rect.renew = function(wx, ny, ex, sy) {
 			{ pnw = r.pse; break; }
 	}
 
-	for(var a = 4, aZ = arguments.length; a < aZ; a++) {
+	for(var a = 4, aZ = arguments.length; a < aZ; a++)
+	{
 		var r = arguments[a];
-		if (!isnon(r)) { continue; }
 
-		if (r.pnw.x === ex && r.pnw.y === sy) { pse = r.pnw; break; }
-		if (r.pse.x === ex && r.pse.y === sy) { pse = r.pse; break; }
+		if (!isnon(r))
+			{ continue; }
+
+		if (r.pnw.x === ex && r.pnw.y === sy)
+		{
+			pse = r.pnw;
+			break;
+		}
+
+		if (r.pse.x === ex && r.pse.y === sy)
+		{
+			pse = r.pse;
+			break;
+		}
 	}
 
 	if (!pnw)
@@ -173,28 +216,34 @@ Rect.renew = function(wx, ny, ex, sy) {
 	return new Rect(pnw, pse);
 }
 
-/**
+
+/*
 | Returns a rect moved by a -point or -x/-y.
 |
 | sub(point)   -or-
 | sub(x, y)
 */
-Rect.prototype.sub = function(a1, a2) {
+Rect.prototype.sub = function(a1, a2)
+{
 	return new this.constructor(this.pnw.sub(a1, a2), this.pse.sub(a1, a2));
 };
 
-/**
+
+/*
 | Returns true if this rectangle is the same as another
 */
-Rect.prototype.eq = function(r) {
+Rect.prototype.eq = function(r)
+{
 	return this.pnw.eq(r.pnw) && this.pse.eq(r.pse);
 };
 
-/**
+
+/*
 | Node export
 */
-if (typeof(window) === 'undefined') {
+if (typeof(window) === 'undefined')
+{
 	module.exports = Rect;
 }
 
-})();
+} ) ();

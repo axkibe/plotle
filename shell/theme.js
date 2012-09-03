@@ -723,8 +723,12 @@ theme =
 	handle :
 	{
 		maxSize   : 12,
-		cdistance :  8,
-		edistance : 11,
+
+		cdistance : 12,
+		edistance : 12,
+
+//		cdistance :  8,
+//		edistance : 11,
 
 		style :
 		{

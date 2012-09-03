@@ -52,7 +52,7 @@ var system;
 /*
 | Capsule
 */
-(function(){
+( function() {
 'use strict';
 
 if (typeof(window) === 'undefined')
@@ -108,12 +108,18 @@ BeziRect.prototype.sketch = function(fabric, border, twist, view)
 	fabric.beziTo(   0, -mb, -ma,   0, wx + a, ny    );
 };
 
-/**
+
+/*
 | Returns true if Point p is within the BeziRect.
 */
 BeziRect.prototype.within = function( view, p )
 {
-	return system.fabric.within(this, 'sketch', view, p);
+	return system.fabric.withinSketch(
+		this,
+		'sketch',
+		view,
+		p
+	);
 };
 
-})();
+} ) ();
