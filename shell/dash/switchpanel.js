@@ -303,11 +303,11 @@ SwitchPanel.prototype.knock = function()
 /*
 | Returns true if p is within the panel
 */
-SwitchPanel.prototype.within = function(p)
+SwitchPanel.prototype.within = function( view, p )
 {
 	var iframe = this.iframe;
 
-	if (!iframe.within(p))
+	if(! iframe.within( view, p ) )
 		{ return false; }
 
 	var fabric = this._weave();
@@ -315,7 +315,7 @@ SwitchPanel.prototype.within = function(p)
 	return fabric.withinSketch(
 		this,
 		'sketchFrame',
-		Euclid.View.proper,
+		view,
 		p
 	);
 };
@@ -327,33 +327,34 @@ SwitchPanel.prototype.within = function(p)
 SwitchPanel.prototype.mousedown = function(p)
 {
 	p = p.sub(this.pnw);
-	if (!this.within(p))
+	if( !this.within( Euclid.View.proper, p ) )
 		{ return null; }
 
 	var button = null;
 	var fabric = this._weave();
 	var proper = Euclid.View.proper;
 
-	if (fabric.within(this, 'sketchButton', proper, p, 'n' ))
+	if( fabric.withinSketch(this, 'sketchButton', proper, p, 'n' ))
 		{ button = 'n';  }
-	else if (fabric.within(this, 'sketchButton', proper, p, 'ne'))
+	else if( fabric.withinSketch(this, 'sketchButton', proper, p, 'ne'))
 		{ button = 'ne'; }
-	else if (!this.amVisitor && fabric.within(this, 'sketchButton', proper, p, 'nw'))
+	else if( !this.amVisitor && fabric.withinSketch(this, 'sketchButton', proper, p, 'nw'))
 		{ button = 'nw'; }
 
-	if (button && button !== this.current)
+	if( button && button !== this.current )
 	{
-		switch(button) {
+		switch(button)
+		{
 			case 'n'  :
-				shell.moveToSpace('meshcraft:home');
+				shell.moveToSpace( 'meshcraft:home' );
 				break;
 
 			case 'ne' :
-				shell.moveToSpace('meshcraft:sandbox');
+				shell.moveToSpace( 'meshcraft:sandbox' );
 				break;
 
 			case 'nw' :
-				shell.moveToSpace(this.userName+':home');
+				shell.moveToSpace( this.userName + ':home' );
 				break;
 		}
 
@@ -371,13 +372,13 @@ SwitchPanel.prototype.mousedown = function(p)
 SwitchPanel.prototype.mousehover = function(p)
 {
 	var self   = this;
-	p          = p.sub(this.pnw);
+	p          = p.sub( this.pnw );
 	var hd     = null;
 	var cursor = null;
 
-	if (!this.within(p))
+	if( !this.within( Euclid.View.proper, p ) )
 	{
-		if (!this.$fade)
+		if( !this.$fade )
 		{
 			this.$fade = 1 - theme.fade.step;
 			this.$fadeTimer = system.setTimer(theme.fade.time, function() { self.fadeout(); });
@@ -390,17 +391,17 @@ SwitchPanel.prototype.mousehover = function(p)
 
 		var proper = Euclid.View.proper;
 
-		if (fabric.within(this, 'sketchButton', proper, p, 'n' ))
+		if( fabric.withinSketch( this, 'sketchButton', proper, p, 'n' ) )
 			{ hd = 'n';  }
-		else if (fabric.within(this, 'sketchButton', proper, p, 'ne'))
+		else if( fabric.withinSketch( this, 'sketchButton', proper, p, 'ne' ) )
 			{ hd = 'ne'; }
-		else if (!this.amVisitor && fabric.within(this, 'sketchButton', proper, p, 'nw'))
+		else if( !this.amVisitor && fabric.withinSketch( this, 'sketchButton', proper, p, 'nw' ) )
 			{ hd = 'nw'; }
 
 		cursor = 'default';
 	}
 
-	if (this.$hover !== hd)
+	if( this.$hover !== hd )
 	{
 		this.$hover = hd;
 		this.poke();
