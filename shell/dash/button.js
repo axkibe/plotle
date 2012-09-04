@@ -63,14 +63,18 @@ var Button = Dash.Button = function(twig, panel, inherit, name)
 	if (twig.type !== 'Button')
 		{ throw new Error('invalid twig type'); }
 
-	this.name         = name;
-	this.twig         = twig;
-	this.panel        = panel;
+	this.name        = name;
+	this.twig        = twig;
+	this.panel       = panel;
 
-	var computePoint  = Curve.computePoint;
-	var pnw           = this.pnw    = computePoint(twig.frame.pnw, panel.iframe);
-	var pse           = this.pse    = computePoint(twig.frame.pse, panel.iframe);
-	var iframe        = this.iframe = new Euclid.Rect(Euclid.Point.zero, pse.sub(pnw));
+	var computePoint = Curve.computePoint;
+	var pnw          = this.pnw    = computePoint(twig.frame.pnw, panel.iframe);
+	var pse          = this.pse    = computePoint(twig.frame.pse, panel.iframe);
+	var iframe       = this.iframe =
+		new Euclid.Rect(
+			Euclid.Point.zero,
+			pse.sub(pnw)
+		);
 
 	this.curve        = new Curve(twig.curve, iframe);
 	this.captionPos   = computePoint(twig.caption.pos, iframe);
