@@ -89,7 +89,11 @@ Label.prototype.getSilhoutte = function( zone )
 {
 	var s = this._$silhoutte;
 
-	if( s && s.eq(zone) )
+	if( s &&
+		s.pnw.eq( zone.pnw ) &&
+		s.pse.x === zone.pse.x - 1 &&
+		s.pse.y === zone.pse.y - 1
+	)
 		{ return s; }
 
 	return this._$silhoutte = new Euclid.Rect(
@@ -107,12 +111,10 @@ Label.prototype.getZeroSilhoutte = function( zone )
 	var s = this._$zeroSilhoutte;
 
 	if( s &&
-		s.width  === zone.width &&
-		s.height === zone.height
+		s.width  === zone.width  - 1 &&
+		s.height === zone.height - 1
 	)
-	{
-		return s;
-	}
+		{ return s; }
 
 	return this._$zeroSilhoutte = new Euclid.Rect(
 		Euclid.Point.zero,
