@@ -36,7 +36,6 @@ Euclid = Euclid || {};
 */
 var Euclid;
 var Jools;
-var system;
 
 
 /*
@@ -165,7 +164,7 @@ OvalSlice.prototype.sketch = function(fabric, border, twist, view)
 */
 OvalSlice.prototype.within = function( view, p)
 {
-	return system.fabric.within(this, 'sketch', view, p);
+	return Euclid.swatch.within(this, 'sketch', view, p);
 };
 
 

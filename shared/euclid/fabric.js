@@ -44,12 +44,10 @@ var Jools;
 (function(){
 'use strict';
 
-if (typeof(window) === 'undefined')
-	{ throw new Error('this code needs a browser'); }
-
 
 /*
 |'magic' number to approximate ellipses with beziers.
+| TODO move to consts
 */
 Euclid.magic = 0.551784;
 

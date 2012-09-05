@@ -67,7 +67,11 @@ if (typeof(window) === 'undefined')
 */
 var Rect = Euclid.Rect = function(pnw, pse, key)
 {
-	if (!pnw || !pse || pnw.x > pse.x || pnw.y > pse.y)
+	if( !pnw ||
+		!pse ||
+		pnw.x > pse.x ||
+		pnw.y > pse.y
+	)
 		{ throw Jools.reject('not a rectangle.'); }
 
 	this.pnw = pnw;
@@ -75,6 +79,7 @@ var Rect = Euclid.Rect = function(pnw, pse, key)
 	Jools.innumerable(this, 'width',  pse.x - pnw.x);
 	Jools.innumerable(this, 'height', pse.y - pnw.y);
 	this.type = 'Rect';
+
 	Jools.immute(this);
 };
 
@@ -168,10 +173,11 @@ Rect.renew = function(wx, ny, ex, sy)
 	var pnw   = null;
 	var pse   = null;
 	var isnon = Jools.isnon;
+	var a, aZ, r;
 
-	for(var a = 4, aZ = arguments.length; a < aZ; a++)
+	for(a = 4, aZ = arguments.length; a < aZ; a++)
 	{
-		var r = arguments[a];
+		r = arguments[a];
 		if (!isnon(r))
 			{ continue; }
 
@@ -187,9 +193,9 @@ Rect.renew = function(wx, ny, ex, sy)
 			{ pnw = r.pse; break; }
 	}
 
-	for(var a = 4, aZ = arguments.length; a < aZ; a++)
+	for(a = 4, aZ = arguments.length; a < aZ; a++)
 	{
-		var r = arguments[a];
+		r = arguments[a];
 
 		if (!isnon(r))
 			{ continue; }
@@ -214,7 +220,7 @@ Rect.renew = function(wx, ny, ex, sy)
 		{ pse = new Euclid.Point(ex, sy); }
 
 	return new Rect(pnw, pse);
-}
+};
 
 
 /*
@@ -235,6 +241,44 @@ Rect.prototype.sub = function(a1, a2)
 Rect.prototype.eq = function(r)
 {
 	return this.pnw.eq(r.pnw) && this.pse.eq(r.pse);
+};
+
+
+/*
+| Draws the rectangle.
+*/
+Rect.prototype.sketch = function(fabric, border, twist, view)
+{
+	var wx = view.x(this.pnw);
+	var ny = view.y(this.pnw);
+	var ex = view.x(this.pse);
+	var sy = view.y(this.pse);
+
+	fabric.moveTo(wx + border, ny + border);
+	fabric.lineTo(ex - border, ny + border);
+	fabric.lineTo(ex - border, sy - border);
+	fabric.lineTo(wx + border, sy - border);
+	fabric.lineTo(wx + border, ny + border);
+};
+
+
+/*
+| Returns true if point is within this rect.
+*/
+Euclid.Rect.prototype.within = function( view, p )
+{
+	var x   = view.dex( p );
+	var y   = view.dey( p );
+
+	var pnw = this.pnw;
+	var pse = this.pse;
+
+	return (
+		x >= pnw.x &&
+		y >= pnw.y &&
+		x <= pse.x &&
+		y <= pse.y
+	);
 };
 
 

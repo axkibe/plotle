@@ -17,7 +17,8 @@
                        `--' ' ' ' `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- A line. Possibly with arrow-heads as ends.
+ A line.
+ Can have arrow-heads.
 
  Lines are pseudo-immutable objects.
 
@@ -64,6 +65,7 @@ var Line = Euclid.Line = function(p1, p1end, p2, p2end)
 	this.p1end = p1end;
 	this.p2    = p2,
 	this.p2end = p2end;
+
 	Jools.immute(this);
 };
 
@@ -92,6 +94,8 @@ Line.connect = function(shape1, end1, shape2, end2)
 		}
 		else
 		{
+			//p1 = shape1.getProjection( p2 );
+
 			p1 = new Euclid.Point(
 				Jools.limit(shape1.pnw.x, p2.x, shape1.pse.x),
 				Jools.limit(shape1.pnw.y, p2.y, shape1.pse.y)

@@ -47,7 +47,6 @@ Euclid = Euclid || {};
 | Imports
 */
 var Jools;
-var system;
 
 /*
 | Capsule
@@ -55,8 +54,19 @@ var system;
 ( function() {
 'use strict';
 
+
+/*
+| Node imports
+*/
 if (typeof(window) === 'undefined')
-	{ throw new Error('this code needs a browser'); }
+{
+	Euclid = {
+		Point  : require('./point'),
+		Rect   : require('./rect')
+	};
+
+	Jools  = require('../jools');
+}
 
 
 /*
@@ -114,7 +124,7 @@ BeziRect.prototype.sketch = function(fabric, border, twist, view)
 */
 BeziRect.prototype.within = function( view, p )
 {
-	return system.fabric.withinSketch(
+	return Euclid.swatch.withinSketch(
 		this,
 		'sketch',
 		view,

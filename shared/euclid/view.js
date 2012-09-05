@@ -45,9 +45,6 @@ var theme;
 (function(){
 'use strict';
 
-if (typeof(window) === 'undefined')
-	{ throw new Error('this code needs a browser'); }
-
 
 /*
 | Constructor.
@@ -81,7 +78,7 @@ View.prototype.eq = function( a1 )
 View.prototype.distance = function( d )
 {
 	return this.zoom * d;
-}
+};
 
 
 /*
@@ -277,6 +274,7 @@ View.prototype.review = function(df, p)
 		f1
 	);
 };
+
 
 /**
 | Proper is the view at point zero with zero zoom.

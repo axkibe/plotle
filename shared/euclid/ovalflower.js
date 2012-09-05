@@ -50,7 +50,6 @@ Euclid = Euclid || {};
 | Imports
 */
 var Jools;
-var system;
 
 
 /*
@@ -204,7 +203,7 @@ OvalFlower.prototype.sketch = function(fabric, border, twist, view, segment)
 */
 OvalFlower.prototype.within = function( view, p )
 {
-	var fabric = system.fabric;
+	var swatch = Euclid.swatch; // TODO rename
 	var a2 = this.a2;
 	var b2 = this.b2;
 	var pc = this.pc;
@@ -213,35 +212,34 @@ OvalFlower.prototype.within = function( view, p )
 	if( p.x < pc.x - a2 ||
 		p.x > pc.x + a2 ||
 		p.y < pc.y - b2 ||
-		p.y > pc.y + b2)
-	{
-		return null;
-	}
+		p.y > pc.y + b2
+	)
+		{ return null; }
 
-	if( !fabric.withinSketch( this, 'sketch', view, p, 'outer' ))
+	if( !swatch.withinSketch( this, 'sketch', view, p, 'outer' ))
 		{ return null; }
 
 	var isnon = Jools.isnon;
 
-	if( isnon(this.segs.c ) && fabric.withinSketch( this, 'sketch', view, p, 'c' ))
+	if( isnon(this.segs.c ) && swatch.withinSketch( this, 'sketch', view, p, 'c' ))
 		{ return 'c'; }
 
-	if( isnon(this.segs.n ) && fabric.withinSketch( this, 'sketch', view, p, 'n' ))
+	if( isnon(this.segs.n ) && swatch.withinSketch( this, 'sketch', view, p, 'n' ))
 		{ return 'n'; }
 
-	if( isnon(this.segs.ne) && fabric.withinSketch( this, 'sketch', view, p, 'ne'))
+	if( isnon(this.segs.ne) && swatch.withinSketch( this, 'sketch', view, p, 'ne'))
 		{ return 'ne'; }
 
-	if( isnon(this.segs.se) && fabric.withinSketch( this, 'sketch', view, p, 'se'))
+	if( isnon(this.segs.se) && swatch.withinSketch( this, 'sketch', view, p, 'se'))
 		{ return 'se'; }
 
-	if( isnon(this.segs.e ) && fabric.withinSketch( this, 'sketch', view, p, 'e' ))
+	if( isnon(this.segs.e ) && swatch.withinSketch( this, 'sketch', view, p, 'e' ))
 		{ return 's'; }
 
-	if( isnon(this.segs.sw) && fabric.withinSketch( this, 'sketch', view, p, 'sw'))
+	if( isnon(this.segs.sw) && swatch.withinSketch( this, 'sketch', view, p, 'sw'))
 		{ return 'sw'; }
 
-	if( isnon(this.segs.nw) && fabric.withinSketch( this, 'sketch', view, p, 'nw'))
+	if( isnon(this.segs.nw) && swatch.withinSketch( this, 'sketch', view, p, 'nw'))
 		{ return 'nw'; }
 
 	return 'gap';

@@ -55,6 +55,9 @@ var Measure = Euclid.Measure = {
 			{ throw new Error('Measure already initialized'); }
 
 		var canvas = document.createElement('canvas');
+		// TODO make own obejct
+		Euclid.swatch = new Euclid.Fabric(canvas);
+
 		Measure._$cx     = canvas.getContext('2d');
 		Measure._$size   = null;
 		Measure._$family = null;
@@ -80,4 +83,5 @@ var Measure = Euclid.Measure = {
 	}
 };
 
-})();
+
+} ) ();
