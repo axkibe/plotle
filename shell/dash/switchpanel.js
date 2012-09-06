@@ -155,25 +155,28 @@ SwitchPanel.prototype.fadeout = function()
 /*
 | Sketches the panel frame.
 */
-SwitchPanel.prototype.sketchFrame = function(fabric, border, twist) {
+SwitchPanel.prototype.sketchFrame = function( fabric, border, twist )
+{
 	var w = this.iframe.width  - 1;
 	var h = this.iframe.height - 1;
-	var x = Jools.half(w);
+	var x = Jools.half( w );
 	var swidim = theme.switchpanel.dimensions;
-	var am = Euclid.magic * swidim.a;
-	var bm = Euclid.magic * swidim.b;
-	var bo = border;
 
-	fabric.moveTo(                        bo,      h);
-	fabric.beziTo(  0, -bm, -am,   0,      x,     bo);
-	fabric.beziTo( am,   0,   0, -bm, w - bo,      h);
+	var magic = Euclid.Const.magic;
+	var am    = magic * swidim.a;
+	var bm    = magic * swidim.b;
+	var bo    = border;
+
+	fabric.moveTo(                        bo,  h );
+	fabric.beziTo(  0, -bm, -am,   0,      x, bo );
+	fabric.beziTo( am,   0,   0, -bm, w - bo,  h );
 };
 
 
 /*
 | Sketches the buttons.
 */
-SwitchPanel.prototype.sketchButton = function(fabric, border, twist, view, dir)
+SwitchPanel.prototype.sketchButton = function( fabric, border, twist, view, dir )
 {
 	var bh = this.buttonDim.height;
 	var bw = this.buttonDim.width;

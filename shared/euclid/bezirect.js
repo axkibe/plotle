@@ -104,8 +104,10 @@ BeziRect.prototype.sketch = function(fabric, border, twist, view)
 	var sy = view.y(this.pse) - border - 1;
 	var a = this.a;
 	var b = this.b;
-	var ma = Euclid.magic * (a + border);
-	var mb = Euclid.magic * (b + border);
+
+	var magic = Euclid.Const.magic;
+	var ma    = magic * ( a + border );
+	var mb    = magic * ( b + border );
 
 	fabric.moveTo(                     wx + a, ny    );
 	fabric.lineTo(                     ex - a, ny    );

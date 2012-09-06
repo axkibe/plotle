@@ -44,8 +44,6 @@ var Jools;
 (function() {
 'use strict';
 
-if (typeof(window) === 'undefined')
-	{ throw new Error('this code needs a browser'); }
 
 /*
 | Constructor.
@@ -53,10 +51,11 @@ if (typeof(window) === 'undefined')
 var OvalSlice = Euclid.OvalSlice = function(psw, dimensions)
 {
 	this.psw       = psw;
+	var magic      = Euclid.Const.magic;
 	var a = this.a = dimensions.a1;
 	var b = this.b = dimensions.b1;
-	var am         = Euclid.magic * a;
-	var bm         = Euclid.magic * b;
+	var am         = magic * a;
+	var bm         = magic * b;
 
 	this.slice = sliceBezier(
 		-am, 0,

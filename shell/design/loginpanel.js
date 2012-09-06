@@ -50,7 +50,8 @@ var fontPool;
 */
 
 // 'magic' number to approximate ellipses with beziers
-var magic     = Euclid.magic;
+var magic     = Euclid.Const.magic;
+
 var mbConsts  = Design.MainPanel.consts;
 
 

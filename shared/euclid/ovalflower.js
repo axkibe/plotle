@@ -84,7 +84,7 @@ var OvalFlower = Euclid.OvalFlower = function(pc, dimensions, segs)
 /*
 | Makes the OvalFlower sketch.
 */
-OvalFlower.prototype.sketch = function(fabric, border, twist, view, segment)
+OvalFlower.prototype.sketch = function( fabric, border, twist, view, segment )
 {
 	var ro   = Math.round;
 
@@ -97,14 +97,14 @@ OvalFlower.prototype.sketch = function(fabric, border, twist, view, segment)
 	var b2   = this.b2;
 	var bo   = border;
 
-	var m    = Euclid.magic;
-	var am1  = m * this.a1;
-	var bm1  = m * this.b1;
-	var am2  = m * this.a2;
-	var bm2  = m * this.b2;
+	var magic = Euclid.Const.magic;
+	var am1  = magic * this.a1;
+	var bm1  = magic * this.b1;
+	var am2  = magic * this.a2;
+	var bm2  = magic * this.b2;
 
 	// inner oval
-	if (segment === null || segment === 'c')
+	if( segment === null || segment === 'c' )
 	{
 		fabric.moveTo(                       pcx - a1 + bo, pcy);
 		fabric.beziTo(  0, -bm1, -am1,    0, pcx,           pcy - b1 + bo);
@@ -116,7 +116,7 @@ OvalFlower.prototype.sketch = function(fabric, border, twist, view, segment)
 	}
 
 	// outer oval
-	if (segment === null || segment === 'outer')
+	if( segment === null || segment === 'outer' )
 	{
 		fabric.moveTo(                       pcx - a2 + bo, pcy);
 		fabric.beziTo(  0, -bm2, -am2,    0, pcx,           pcy - b2 + bo);
@@ -129,10 +129,10 @@ OvalFlower.prototype.sketch = function(fabric, border, twist, view, segment)
 
 	var bs  = Jools.half(b2 - b1 - 0.5);
 	var bss = Jools.half(b2 - b1) - 2;
-	var bms =  ro((b2 - b1) / 2 * m);
+	var bms =  ro( ( b2 - b1 ) / 2 * magic );
 	var odbg = segment === null && false; // <- to see all remove && false
 
-	if (segment === 'n' || odbg)
+	if( segment === 'n' || odbg )
 	{
 		var pny = pcy - b1 - bs;
 		fabric.moveTo(                       pcx - a1 + bo, pny);
@@ -142,10 +142,10 @@ OvalFlower.prototype.sketch = function(fabric, border, twist, view, segment)
 		fabric.beziTo(-am1,   0,    0,  bms, pcx - a1 + bo, pny);
 	}
 
-	if (segment === 'ne' || odbg)
+	if( segment === 'ne' || odbg )
 	{
 		var pney = pcy - bs;
-		var pnex = pcx + ro(a2 * m);
+		var pnex = pcx + ro(a2 * magic);
 		fabric.moveTo(                       pnex - a1 + bo, pney);
 		fabric.beziTo(  0, -bms, -am1,    0, pnex,           pney - bss + bo);
 		fabric.beziTo( am1,   0,    0, -bms, pnex + a1 - bo, pney);
@@ -153,10 +153,10 @@ OvalFlower.prototype.sketch = function(fabric, border, twist, view, segment)
 		fabric.beziTo(-am1,   0,    0,  bms, pnex - a1 + bo, pney);
 	}
 
-	if (segment === 'se' || odbg)
+	if( segment === 'se' || odbg )
 	{
 		var psey = pcy + bs;
-		var psex = pcx + ro(a2 * m);
+		var psex = pcx + ro(a2 * magic);
 		fabric.moveTo(                       psex - a1 + bo, psey);
 		fabric.beziTo(  0, -bms, -am1,    0, psex,           psey - bss + bo);
 		fabric.beziTo( am1,   0,    0, -bms, psex + a1 - bo, psey);
@@ -164,7 +164,7 @@ OvalFlower.prototype.sketch = function(fabric, border, twist, view, segment)
 		fabric.beziTo(-am1,   0,    0,  bms, psex - a1 + bo, psey);
 	}
 
-	if (segment === 's' || odbg)
+	if( segment === 's' || odbg )
 	{
 		var psy = pcy + b1 + bs;
 		fabric.moveTo(                       pcx - a1 + bo, psy);
@@ -174,10 +174,10 @@ OvalFlower.prototype.sketch = function(fabric, border, twist, view, segment)
 		fabric.beziTo(-am1,   0,    0,  bms, pcx - a1 + bo, psy);
 	}
 
-	if (segment === 'sw' || odbg)
+	if( segment === 'sw' || odbg )
 	{
 		var pswy = pcy + bs;
-		var pswx = pcx - ro(a2 * m);
+		var pswx = pcx - ro(a2 * magic);
 		fabric.moveTo(                       pswx - a1 + bo, pswy);
 		fabric.beziTo(  0, -bms, -am1,    0, pswx,           pswy - bss + bo);
 		fabric.beziTo( am1,   0,    0, -bms, pswx + a1 - bo, pswy);
@@ -185,10 +185,10 @@ OvalFlower.prototype.sketch = function(fabric, border, twist, view, segment)
 		fabric.beziTo(-am1,   0,    0,  bms, pswx - a1 + bo, pswy);
 	}
 
-	if (segment === 'nw' || odbg)
+	if( segment === 'nw' || odbg )
 	{
 		var pnwy = pcy - bs;
-		var pnwx = pcx - ro(a2 * m);
+		var pnwx = pcx - ro( a2 * magic );
 		fabric.moveTo(                       pnwx - a1 + bo, pnwy);
 		fabric.beziTo(  0, -bms, -am1,    0, pnwx,           pnwy - bss + bo);
 		fabric.beziTo( am1,   0,    0, -bms, pnwx + a1 - bo, pnwy);

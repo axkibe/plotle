@@ -64,7 +64,7 @@ var zoomX   =   0;
 var zoomY   =  -9;
 var zoomBW  =  20;
 var zoomBH  =  20;
-var zoomBYM = Math.round(zoomBH * Euclid.magic);
+var zoomBYM = Math.round( zoomBH * Euclid.Const.magic );
 
 var MainPanel = Design.MainPanel = { type : 'Design' };
 

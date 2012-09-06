@@ -127,9 +127,9 @@ Oval.prototype.sketch = function(fabric, border, twist, view)
 	var my  = Jools.half(ny + sy);
 	var mx  = Jools.half(wx + ex);
 
-	var m    = Euclid.magic;
-	var am   = m * (mx - wx);
-	var bm   = m * (my - ny);
+	var magic = Euclid.Const.magic;
+	var am    = magic * (mx - wx);
+	var bm    = magic * (my - ny);
 
 	fabric.moveTo(                     wx, my );
 	fabric.beziTo(   0, -bm, -am,   0, mx, ny );

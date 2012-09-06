@@ -46,13 +46,6 @@ var Jools;
 
 
 /*
-|'magic' number to approximate ellipses with beziers.
-| TODO move to consts
-*/
-Euclid.magic = 0.551784;
-
-
-/*
 | Constructor.
 |
 | Fabric()        -or-    creates a new fabric

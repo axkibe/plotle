@@ -139,16 +139,18 @@ Input.prototype.sketchMask = function(fabric, border, twist, view, length, size)
 	var w     = this.maskWidth(size);
 	var w2    = w * 2;
 	var k     = this.maskKern(size);
-	var wm    = w * Euclid.magic;
-	var wh    = h * Euclid.magic;
+
+	var magic = Euclid.Const.magic;
+	var mw    = magic * w;
+	var mh    = magic * h;
 
 	for (var a = 0; a < length; a++)
 	{
 		fabric.moveTo(                    x + w,  y - h);
-		fabric.beziTo( wm,   0,   0, -wh, x + w2, y);
-		fabric.beziTo(  0,  wh,  wm,   0, x + w,  y + h);
-		fabric.beziTo(-wm,   0,   0,  wh, x,      y);
-		fabric.beziTo(  0, -wh, -wm,   0, x + w,  y - h);
+		fabric.beziTo( mw,   0,   0, -mh, x + w2, y);
+		fabric.beziTo(  0,  mh,  mw,   0, x + w,  y + h);
+		fabric.beziTo(-mw,   0,   0,  mh, x,      y);
+		fabric.beziTo(  0, -mh, -mw,   0, x + w,  y - h);
 		x += w2 + k;
 	}
 };
