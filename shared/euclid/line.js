@@ -78,31 +78,26 @@ var Line = Euclid.Line = function(p1, p1end, p2, p2end)
 | shape2: a Rect or Point
 | end2: 'normal' or 'arrow'
 */
-Line.connect = function(shape1, end1, shape2, end2)
+Line.connect = function( shape1, end1, shape2, end2 )
 {
-	if (!shape1 || !shape2)
-		{ throw new Error('error'); }
+	if( !shape1 || !shape2 )
+		{ throw new Error( 'error' ); }
 
-	if (shape1 instanceof Euclid.Rect && shape2 instanceof Euclid.Point)
+	if( shape2 instanceof Euclid.Point )
 	{
 		var p2 = shape2;
 		var p1;
 
-		if ( shape1.within( Euclid.View.proper, p2 ) )
+		if( shape1.within( Euclid.View.proper, p2 ) )
 		{
 			p1 = shape1.pc;
 		}
 		else
 		{
-			//p1 = shape1.getProjection( p2 );
-
-			p1 = new Euclid.Point(
-				Jools.limit(shape1.pnw.x, p2.x, shape1.pse.x),
-				Jools.limit(shape1.pnw.y, p2.y, shape1.pse.y)
-			);
+			p1 = shape1.getProjection( p2 );
 		}
 
-		return new Line(p1, end1, p2, end2);
+		return new Line( p1, end1, p2, end2 );
 	}
 
 	if (shape1 instanceof Euclid.Rect && shape2 instanceof Euclid.Rect)

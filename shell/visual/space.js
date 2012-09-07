@@ -200,7 +200,12 @@ Space.prototype.draw = function()
 				av2.getZone() :
 				view.depoint( action.move );
 
-			var arrow  = Euclid.Line.connect(av.getZone(), 'normal', target, 'arrow');
+			var arrow  = Euclid.Line.connect(
+				av.getSilhoutte( av.getZone() ),
+				'normal',
+				target,
+				'arrow'
+			);
 
 			if (av2)
 				{ av2.highlight(this.fabric, view); }

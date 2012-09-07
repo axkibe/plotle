@@ -117,7 +117,7 @@ Oval.prototype.eq = function(r)
 /*
 | Draws the ovalslice.
 */
-Oval.prototype.sketch = function(fabric, border, twist, view)
+Oval.prototype.sketch = function( fabric, border, twist, view )
 {
 	var wx = view.x(this.pnw) + border;
 	var ny = view.y(this.pnw) + border;
@@ -139,6 +139,16 @@ Oval.prototype.sketch = function(fabric, border, twist, view)
 	fabric.beziTo(   0,  bm,  am,   0, mx, sy );
 	fabric.beziTo( -am,   0,   0,  bm, wx, my );
 };
+
+
+/*
+| gets the source of a projection to p
+*/
+Oval.prototype.getProjection = function( p )
+{
+
+}
+
 
 
 /*

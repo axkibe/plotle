@@ -17,7 +17,7 @@
                         `'  ` `-' `-' `'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- Objects and operations on an euclidian plane.
+ A rectangle.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -92,10 +92,12 @@ Rect.prototype.reduce = function(margin)
 	if (margin.constructor !== Euclid.Margin)
 		{ throw new Error('margin of wrong type'); }
 
-	// allow margins to reduce the rect to zero size without erroring.
+	// allows margins to reduce the rect to zero size without erroring.
+
 	return new Rect(
 		Euclid.Point.renew(this.pnw.x + margin.e, this.pnw.y + margin.n, this.pnw, this.pse),
-		Euclid.Point.renew(this.pse.x - margin.w, this.pse.y - margin.s, this.pnw, this.pse));
+		Euclid.Point.renew(this.pse.x - margin.w, this.pse.y - margin.s, this.pnw, this.pse)
+	);
 };
 
 
@@ -265,7 +267,7 @@ Rect.prototype.sketch = function(fabric, border, twist, view)
 /*
 | Returns true if point is within this rect.
 */
-Euclid.Rect.prototype.within = function( view, p )
+Rect.prototype.within = function( view, p )
 {
 	var x   = view.dex( p );
 	var y   = view.dey( p );
@@ -280,6 +282,61 @@ Euclid.Rect.prototype.within = function( view, p )
 		y <= pse.y
 	);
 };
+
+
+/*
+| Returns the point where a ray going from
+| pc to p intersects with the rect.
+*/
+Rect.prototype.getProjection = function( p )
+{
+	var pc = this.pc;
+
+	var ny = this.pnw.y;
+	var ex = this.pse.x;
+	var sy = this.pse.y;
+	var wx = this.pnw.x;
+
+	var k  = (p.y - pc.y) / (p.x - pc.x);
+	var x, y;
+
+	// y = (x - pc.x) * k + pc.y
+	// x = (y - pc.y) / k + pc.x
+
+	if (p.y <= ny)
+	{
+		x = (ny - pc.y) / k + pc.x;
+
+		if ( x >= wx && x <= ex )
+			{ return new Euclid.Point( x, ny ); }
+	}
+
+	if (p.y >= sy)
+	{
+		x = (sy - pc.y) / k + pc.x;
+
+		if (x >= wx && x <= ex)
+			{ return new Euclid.Point( x, sy ); }
+	}
+
+	if (p.x >= ex)
+	{
+		y = (ex - pc.x) * k + pc.y;
+
+		if (y >= ny && y <= sy)
+			{ return new Euclid.Point( ex, y ); }
+	}
+
+	if (p.x <= wx)
+	{
+		y = (wx - pc.x) * k + pc.y;
+
+		if (y >= ny && y <= sy)
+			{ return new Euclid.Point( wx, y ); }
+	}
+
+	return pc;
+}
 
 
 /*
