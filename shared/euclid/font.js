@@ -98,7 +98,11 @@ Font.prototype.getCSS = function()
 	if (this._$css)
 		{ return this._$css; }
 
-	return this._$css = this.size + 'px ' + this.family;
+	return Jools.innumerable(
+		this,
+		'_$css',
+		this.size + 'px ' + this.family
+	);
 };
 
 } ) ();

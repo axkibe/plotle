@@ -57,26 +57,42 @@ if (typeof(window) === 'undefined')
 /*
 | Constructor.
 */
-var Input = Dash.Input = function(twig, panel, inherit, name)
+var Input = Dash.Input = function( twig, panel, inherit, name )
 {
 	this.twig    = twig;
 	this.panel   = panel;
 	this.name    = name;
 
-	var pnw  = this.pnw  = Curve.computePoint(twig.frame.pnw, panel.iframe);
-	var pse  = this.pse  = Curve.computePoint(twig.frame.pse, panel.iframe);
+	var pnw  = this.pnw  = Curve.computePoint(
+		twig.frame.pnw,
+		panel.iframe
+	);
 
-	this._bezi   = new Euclid.BeziRect(Euclid.Point.zero, pse.sub(pnw), 7, 3);
-	this._pitch  = new Euclid.Point(8, 3);
+	var pse  = this.pse  = Curve.computePoint(
+		twig.frame.pse,
+		panel.iframe
+	);
+
+	this._bezi   = new Euclid.BeziRect(
+		Euclid.Point.zero,
+		pse.sub( pnw ),
+		7, 3
+	);
+
+	this._pitch  = new Euclid.Point(
+		8, 3
+	);
 
 	this._$value = inherit ? inherit._$value : '';
+
 	this.$fabric = null;
+
 	this.$accent = Dash.Accent.NORMA;
 };
 
 
 /*
-| Returns the offset nearest to x coordinate.
+| Returns the offset nearest to point p.
 */
 Input.prototype.getOffsetAt = function(p)
 {
@@ -91,22 +107,22 @@ Input.prototype.getOffsetAt = function(p)
 	var font  = this.twig.font;
 	var mw;
 
-	if (password)
+	if( password )
 		{ mw = this.maskWidth(font.size) * 2 + this.maskKern(font.size); }
 
-	for(a = 0; a < value.length; a++)
+	for( a = 0; a < value.length; a++ )
 	{
 		x1 = x2;
-		if (password)
+		if( password )
 			{ x2 = a * mw; }
 		else
 			{ x2 = Euclid.Measure.width(font, value.substr(0, a)); }
 
-		if (x2 >= dx)
+		if( x2 >= dx )
 			{ break; }
 	}
 
-	if (dx - x1 < x2 - dx && a > 0)
+	if( dx - x1 < x2 - dx && a > 0 )
 		{ a--; }
 
 	return a;
@@ -116,15 +132,15 @@ Input.prototype.getOffsetAt = function(p)
 /*
 | Returns the width of a character for password masks.
 */
-Input.prototype.maskWidth = function(size)
-	{ return Math.round(size * 0.2); };
+Input.prototype.maskWidth = function( size )
+	{ return Math.round( size * 0.2 ); };
 
 
 /*
 | Returns the kerning of characters for password masks.
 */
-Input.prototype.maskKern = function(size)
-	{ return Math.round(size * 0.15); };
+Input.prototype.maskKern = function( size )
+	{ return Math.round( size * 0.15 ); };
 
 
 /*
@@ -133,24 +149,24 @@ Input.prototype.maskKern = function(size)
 Input.prototype.sketchMask = function(fabric, border, twist, view, length, size)
 {
 	var pitch = this._pitch;
-	var x     = view.x(pitch);
-	var y     = view.y(pitch) + Math.round(size * 0.7);
-	var h     = Math.round(size * 0.32);
-	var w     = this.maskWidth(size);
+	var x     = view.x( pitch );
+	var y     = view.y( pitch ) + Math.round( size * 0.7 );
+	var h     = Math.round( size * 0.32 );
+	var w     = this.maskWidth( size );
 	var w2    = w * 2;
-	var k     = this.maskKern(size);
+	var k     = this.maskKern( size );
 
 	var magic = Euclid.Const.magic;
 	var mw    = magic * w;
 	var mh    = magic * h;
 
-	for (var a = 0; a < length; a++)
+	for ( var a = 0; a < length; a++ )
 	{
-		fabric.moveTo(                    x + w,  y - h);
-		fabric.beziTo( mw,   0,   0, -mh, x + w2, y);
-		fabric.beziTo(  0,  mh,  mw,   0, x + w,  y + h);
-		fabric.beziTo(-mw,   0,   0,  mh, x,      y);
-		fabric.beziTo(  0, -mh, -mw,   0, x + w,  y - h);
+		fabric.moveTo(                     x + w,  y - h );
+		fabric.beziTo(  mw,   0,   0, -mh, x + w2, y     );
+		fabric.beziTo(   0,  mh,  mw,   0, x + w,  y + h );
+		fabric.beziTo( -mw,   0,   0,  mh, x,      y     );
+		fabric.beziTo(   0, -mh, -mw,   0, x + w,  y - h );
 		x += w2 + k;
 	}
 };
@@ -159,21 +175,21 @@ Input.prototype.sketchMask = function(fabric, border, twist, view, length, size)
 /*
 | Returns the fabric for the input field.
 */
-Input.prototype._weave = function(accent)
+Input.prototype._weave = function( accent )
 {
-	var $fabric = this._$fabric;
-	var $value  = this._$value;
+	var fabric = this._$fabric;
+	var value  = this._$value;
 
-	if ($fabric &&
-		$fabric.$accent === accent &&
-		$fabric.$value  === $value
+	if (fabric &&
+		fabric.$accent === accent &&
+		fabric.$value  === value
 	)
-		{ return $fabric; }
+		{ return fabric; }
 
 	var bezi    = this._bezi;
 	var pitch   = this._pitch;
 
-	$fabric = this._$fabric = new Euclid.Fabric(bezi);
+	fabric = this._$fabric = new Euclid.Fabric(bezi);
 
 	var sname;
 	switch (accent)
@@ -199,36 +215,36 @@ Input.prototype._weave = function(accent)
 
 	var style  = Dash.getStyle(sname);
 
-	$fabric.fill(style.fill, bezi, 'sketch', Euclid.View.proper);
+	fabric.fill(style.fill, bezi, 'sketch', Euclid.View.proper);
 	var font = this.twig.font;
-	$fabric.setFont(font);
+	fabric.setFont(font);
 
 	if (this.twig.password)
 	{
-		$fabric.fill(
+		fabric.fill(
 			'black',
 			this,
 			'sketchMask',
 			Euclid.View.proper,
-			$value.length,
+			value.length,
 			font.size
 		);
 	}
 	else
 	{
-		$fabric.fillText(
-			$value,
+		fabric.fillText(
+			value,
 			pitch.x,
 			font.size + pitch.y
 		);
 	}
 
-	$fabric.edge(style.edge, bezi, 'sketch', Euclid.View.proper);
+	fabric.edge(style.edge, bezi, 'sketch', Euclid.View.proper);
 
-	$fabric.$accent = accent;
-	$fabric.$value  = $value;
+	fabric.$accent = accent;
+	fabric.$value  = value;
 
-	return $fabric;
+	return fabric;
 };
 
 
@@ -283,11 +299,13 @@ Input.prototype.getCaretPos = function()
 	var n = s - Math.round(fs + descend);
 	var	x = p.x + this.pnw.x - 1;
 
-	return Jools.immute({
-		s: s,
-		n: n,
-		x: x
-	});
+	return Jools.immute(
+		{
+			s: s,
+			n: n,
+			x: x
+		}
+	);
 };
 
 
@@ -297,8 +315,11 @@ Input.prototype.getCaretPos = function()
 Input.prototype.drawCaret = function(view)
 {
 	var caret = shell.$caret;
+
 	var cpos  = caret.$pos = this.getCaretPos();
+
 	var ch    = Math.round((cpos.s - cpos.n) * view.zoom);
+
 	var cp    = view.point(
 		this.panel.pnw.x + cpos.x,
 		this.panel.pnw.y + cpos.n
@@ -592,10 +613,10 @@ Input.prototype.knock = function()
 */
 Input.prototype.mousehover = function(p, shift, ctrl)
 {
-	if (p === null)
+	if( p === null )
 		{ return null; }
 
-	if (p.x < this.pnw.x ||
+	if( p.x < this.pnw.x ||
 		p.y < this.pnw.y ||
 		p.x > this.pse.x ||
 		p.y > this.pse.y
@@ -605,7 +626,7 @@ Input.prototype.mousehover = function(p, shift, ctrl)
 	var fabric = this._weave(Dash.Accent.NORMA);
 	var pp = p.sub(this.pnw);
 
-	if (!this._bezi.within(fabric, Euclid.View.proper, pp))
+	if( !this._bezi.within( Euclid.View.proper, pp ) )
 		{ return null; }
 
 	return 'text';
@@ -620,14 +641,14 @@ Input.prototype.mousedown = function(p, shift, ctrl)
 	var pp = p.sub(this.pnw);
 	var fabric = this._weave(Dash.Accent.NORMA);
 
-	if (!fabric.within(this._bezi, 'sketch', Euclid.View.proper, pp))
+	if( !this._bezi.within( Euclid.View.proper, pp ) )
 		{ return null; }
 
 	shell.setCaret(
 		'board',
 		{
 			path : new Path ( [this.panel.name, this.name ] ),
-			at1  : this.getOffsetAt(pp)
+			at1  : this.getOffsetAt( pp )
 		}
 	);
 
@@ -637,4 +658,4 @@ Input.prototype.mousedown = function(p, shift, ctrl)
 };
 
 
-})();
+} ) ();
