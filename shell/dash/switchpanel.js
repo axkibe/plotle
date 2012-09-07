@@ -55,7 +55,7 @@ if (typeof(window) === 'undefined')
 /*
 | Constructor
 */
-var SwitchPanel = Dash.SwitchPanel = function(panel, current, userName, psw)
+var SwitchPanel = Dash.SwitchPanel = function( panel, current, userName, psw )
 {
 	this.panel      = panel;
 	this.current    = current;
@@ -90,11 +90,13 @@ var SwitchPanel = Dash.SwitchPanel = function(panel, current, userName, psw)
 	var mx = Jools.half(iframe.width);
 	var hh = Jools.half(this.buttonDim.height);
 
-	this.buttonPos    = {
-		n  : new Euclid.Point(mx,      hh + y1),
-		ne : new Euclid.Point(mx + x2, hh + y2),
-		nw : new Euclid.Point(mx - x2, hh + y2)
-	};
+	this.buttonPos =
+		{
+			n  : new Euclid.Point(mx,      hh + y1),
+			ne : new Euclid.Point(mx + x2, hh + y2),
+			nw : new Euclid.Point(mx - x2, hh + y2)
+		};
+
 	this.$fabric    = null;
 	this.$fadeTimer = null;
 	this.$fade      = false;
@@ -105,8 +107,11 @@ var SwitchPanel = Dash.SwitchPanel = function(panel, current, userName, psw)
 /*
 | Cancels fading
 */
-SwitchPanel.prototype.cancelFade = function() {
-	if (!this.$fade) { return; }
+SwitchPanel.prototype.cancelFade = function()
+{
+	if (!this.$fade)
+		{ return; }
+
 	this.$fade = false;
 	system.cancelTimer(this.$fadeTimer);
 	this.$fadeTimer = null;
@@ -118,10 +123,15 @@ SwitchPanel.prototype.cancelFade = function() {
 /*
 | Draws the switchpanel.
 */
-SwitchPanel.prototype.draw = function(fabric) {
-	if (this.$fade) { fabric.globalAlpha(this.$fade); }
+SwitchPanel.prototype.draw = function(fabric)
+{
+	if (this.$fade)
+		{ fabric.globalAlpha(this.$fade); }
+
 	fabric.drawImage(this._weave(), this.pnw);
-	if (this.$fade) { fabric.globalAlpha(1); }
+
+	if (this.$fade)
+		{ fabric.globalAlpha(1); }
 };
 
 
@@ -185,18 +195,19 @@ SwitchPanel.prototype.sketchButton = function( fabric, border, twist, view, dir 
 	var bw05 = Jools.half(bw);
 	var bh05 = Jools.half(bh);
 
-	var mx   = bw / 2 * Euclid.magic;
-	var my   = bh / 2 * Euclid.magic;
+	var magic = Euclid.Const.magic;
+	var mx    = bw / 2 * magic;
+	var my    = bh / 2 * magic;
 
 	var p = this.buttonPos[dir];
 	var px = view.x(p);
 	var py = view.y(p);
 
-	fabric.moveTo(                     bo - bw05 + px,              py);
-	fabric.beziTo(  0, -my, -mx,   0,              px,  bo - bh05 + py);
-	fabric.beziTo( mx,  0,    0, -my, -bo + bw05 + px,              py);
-	fabric.beziTo(  0,  my,  mx,   0,              px, -bo + bh05 + py);
-	fabric.beziTo(-mx,  0,    0,  my,  bo - bw05 + px,              py);
+	fabric.moveTo(                      bo - bw05 + px,              py);
+	fabric.beziTo(   0, -my, -mx,   0,              px,  bo - bh05 + py);
+	fabric.beziTo(  mx,  0,    0, -my, -bo + bw05 + px,              py);
+	fabric.beziTo(   0,  my,  mx,   0,              px, -bo + bh05 + py);
+	fabric.beziTo( -mx,  0,    0,  my,  bo - bw05 + px,              py);
 };
 
 
