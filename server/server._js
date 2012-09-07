@@ -32,7 +32,8 @@
 if (typeof(require) === 'undefined')
 	{ throw new Error('this code requires node!'); }
 
-/**
+
+/*
 | Imports
 */
 var Jools       = require('../shared/jools');
@@ -50,58 +51,59 @@ var uglify      = config.uglify && require('uglify-js');
 var url         = require('url');
 var zlib        = require('zlib');
 
-/**
+
+/*
 | Shortcuts
 */
 var is           = Jools.is;
-var isArray      = Jools.isArray;
 var log          = Jools.log;
 var reject       = Jools.reject;
 
-/**
+
+/*
 | Server
 */
-var Server = function(_) {
-
+var Server = function(_)
+{
 	// files served
-	this.$resources = {};
+	this.$resources = { };
 
 	// initializes the database
-	var $db = this.$db = {};
+	var db = this.$db = { };
 
-	$db.server    = new mongodb.Server(
+	db.server    = new mongodb.Server(
 		config.database.host,
 		config.database.port,
-		{}
+		{ }
 	);
 
-	$db.connector = new mongodb.Db(
+	db.connector = new mongodb.Db(
 		config.database.name,
-		this.$db.server,
-		{}
+		db.server,
+		{ }
 	);
 
 	// all messages
-	this.$messages = [];
+	this.$messages    = [ ];
 
 	// all spaces
-	this.$spaces  = {};
+	this.$spaces      = { };
 
 	// a table of all clients waiting for an update
-	this.$upsleep   = {};
+	this.$upsleep     = { };
 
 	// next upsleepID
-	this.$nextSleep = 1;
+	this.$nextSleep   = 1;
 
 	// next visitors ID
 	this.$nextVisitor = 1000;
 
 	// table of all cached user credentials
-	this.$users = {};
+	this.$users       = {};
 
 	// the list where a user is present
 	// user for 'entered' and 'left' messages
-	this.$presences = {};
+	this.$presences   = {};
 
 	this.prepareResources(_);
 
@@ -111,9 +113,9 @@ var Server = function(_) {
 		config.database.name
 	);
 
-	$db.connection = $db.connector.open(_);
-	$db.users      = $db.connection.collection('users',   _);
-	$db.spaces     = $db.connection.collection('spaces',  _);
+	db.connection = db.connector.open(_);
+	db.users      = db.connection.collection('users',   _);
+	db.spaces     = db.connection.collection('spaces',  _);
 
 	this.checkRepositorySchemaVersion(_);
 
@@ -136,19 +138,20 @@ var Server = function(_) {
 	log('start', 'server running');
 };
 
-/**
+
+/*
 | Ensures the repository schema version fits this server.
 */
-Server.prototype.checkRepositorySchemaVersion = function (_)
+Server.prototype.checkRepositorySchemaVersion = function(_)
 {
 	log('start', 'checking repository schema version');
 
 	var global  = this.$db.connection.collection('global', _);
 	var version = global.findOne({ _id : 'version' }, _);
 
-	if (version)
+	if( version )
 	{
-		if (version.version !== 3)
+		if( version.version !== 3 )
 		{
 			throw new Error(
 				'Wrong repository schema version, expected 3, got '+
@@ -161,18 +164,21 @@ Server.prototype.checkRepositorySchemaVersion = function (_)
 
 	// if there is no global.version variable the database is either
 	// empty or a version 2 schema. So check for version 2
+
 	var changes = this.$db.connection.collection('changes', _);
-	if (changes.find(_).nextObject(_) !== null)
+
+	if( changes.find(_).nextObject(_) !== null )
 		{ throw new Error('Found a version 2 schema, expected 3'); }
 
 	// if not, initializes the database repository
-	this.initRepository (_);
+
+	this.initRepository(_);
 };
 
 /**
 | Initializes a new repository.
 */
-Server.prototype.initRepository = function (_)
+Server.prototype.initRepository = function(_)
 {
 	log('start', 'found no repository, initializing a new one');
 
@@ -181,23 +187,24 @@ Server.prototype.initRepository = function (_)
 		'meshcraft:sandbox'
 	];
 
-	for (var $s = 0, sZ = initSpaces.length; $s < sZ; $s++)
+	for( var s = 0, sZ = initSpaces.length; s < sZ; s++ )
 	{
-		var $space = initSpaces[$s];
+		var space = initSpaces[ s ];
 
-		log('start', '  initializing space ' + $space);
+		log('start', '  initializing space ' + space);
 
 		this.$db.spaces.insert(
 			{
-				_id : $space
+				_id : space
 			},
 		_);
 	}
 
 	log('start', '  initializing global.version');
 
-	var $global = this.$db.connection.collection('global', _);
-	$global.insert(
+	var global = this.$db.connection.collection('global', _);
+
+	global.insert(
 		{
 			_id     : 'version',
 			version : 3
@@ -217,17 +224,18 @@ Server.prototype.ensureMeshcraftUser = function (_)
 		{ _id : 'meshcraft'},
 	_);
 
-	if (!mUser)
+	if( !mUser )
 	{
 		log('start', 'not found! (re)creating the "meshcraft" user');
 		var pass = Jools.randomPassword(12);
 
-		mUser = {
-			_id       : 'meshcraft',
-			pass      : Jools.passhash(pass),
-			clearPass : pass,
-			mail      : ''
-		};
+		mUser =
+			{
+				_id       : 'meshcraft',
+				pass      : Jools.passhash(pass),
+				clearPass : pass,
+				mail      : ''
+			};
 
 		this.$db.users.insert(mUser, _);
 	}
@@ -238,8 +246,9 @@ Server.prototype.ensureMeshcraftUser = function (_)
 
 };
 
-/**
-| loads all spaces and playbacks all changes from the database
+
+/*
+| loads all spaces and playbacks all changes from the database.
 */
 Server.prototype.loadSpaces = function (_)
 {
@@ -247,52 +256,55 @@ Server.prototype.loadSpaces = function (_)
 
 	var cursor = this.$db.spaces.find({ }, { sort: '_id'}, _);
 
-	for(var $o = cursor.nextObject(_); $o !== null; $o = cursor.nextObject(_))
-		{ this.loadSpace($o._id, _); }
+	for( var o = cursor.nextObject(_); o !== null; o = cursor.nextObject(_) )
+		{ this.loadSpace( o._id, _); }
 
 };
 
 
-/**
-| load a spaces and playbacks its changes from the database
+/*
+| load a spaces and playbacks its changes from the database.
 */
 Server.prototype.loadSpace = function ( spacename, _)
 {
 	log('start', 'loading and replaying all "' + spacename + '"');
 
-	var $space = this.$spaces[spacename] = {
-		$changesDB : this.$db.connection.collection('changes:' + spacename, _),
-		$changes   : [ ],
-		$tree      : new Tree( { type : 'Space' }, Meshverse),
-		$seqZ      : 1
-	};
+	var space = this.$spaces[spacename] =
+		{
+			$changesDB : this.$db.connection.collection('changes:' + spacename, _),
+			$changes   : [ ],
+			$tree      : new Tree( { type : 'Space' }, Meshverse),
+			$seqZ      : 1
+		};
 
-	var cursor = $space.$changesDB.find({ }, { sort : '_id' }, _);
+	var cursor = space.$changesDB.find({ }, { sort : '_id' }, _);
 
-	for(var $o = cursor.nextObject(_); $o !== null; $o = cursor.nextObject(_))
+	for( var o = cursor.nextObject(_); o !== null; o = cursor.nextObject(_) )
 	{
-		if ($o._id !== $space.$seqZ)
+		if( o._id !== space.$seqZ )
 			{ throw new Error('sequence mismatch'); }
 
 		// FIXME there is something quirky, why isn't *this* a "Change"?
-		var $change = {
-			cid  : $o.cid,
+		var change = {
+			cid  : o.cid,
 			chgX : null
 		};
 
-		if (!isArray($o.chgX))
-			{ $change.chgX = new MeshMashine.Change($o.chgX); }
+		if ( !Jools.isArray( o.chgX ) )
+			{ change.chgX = new MeshMashine.Change( o.chgX ); }
 		else
 		{
-			$change.chgX = [];
-			for(var a = 0, aZ = $o.chgX.length; a < aZ; a++)
+			change.chgX = [ ];
+
+			for( var a = 0, aZ = o.chgX.length; a < aZ; a++ )
 			{
-				$change.chgX.push(new MeshMashine.Change($o.chgX[a]));
+				change.chgX.push( new MeshMashine.Change( o.chgX[a] ) );
 			}
 		}
 
-		$space.$seqZ++;
-		$space.$tree = MeshMashine.changeTree($space.$tree, $change.chgX).tree;
+		space.$seqZ++;
+
+		space.$tree = MeshMashine.changeTree( space.$tree, change.chgX ).tree;
 	}
 };
 
@@ -310,13 +322,15 @@ Server.prototype.sendMessage = function(spacename, user, message)
 	);
 
 	var self = this;
+
 	process.nextTick(
 		function()
 			{ self.wake( spacename ); }
 	);
 };
 
-/**
+
+/*
 | Creates a message for a space
 */
 Server.prototype.cmdMessage = function(cmd, _)
@@ -346,51 +360,53 @@ Server.prototype.cmdMessage = function(cmd, _)
 	return { ok : true };
 };
 
-/**
+
+/*
 | Builds the shells config.js file.
+| TODO move \n into join and rework generated code look-alike
 */
 Server.prototype.buildShellConfig = function()
 {
-	var k;
 	var cconfig = [];
+	var k;
 
-	cconfig.push('var config = {\n');
-	cconfig.push('\tdevel   : '  + Jools.configSwitch(config.devel, 'shell') + ',\n');
-	cconfig.push('\tmaxUndo : '  + config.maxUndo + ',\n');
-	cconfig.push('\tdebug   : {\n');
+	cconfig.push( 'var config = {\n' );
+	cconfig.push( '\tdevel   : '  + Jools.configSwitch(config.devel, 'shell') + ',\n' );
+	cconfig.push( '\tmaxUndo : '  + config.maxUndo + ',\n' );
+	cconfig.push( '\tdebug   : {\n' );
 
 	var first = true;
-	for(k in config.debug)
+	for( k in config.debug )
 	{
-		if (!first)
+		if( !first )
 			{ cconfig.push(',\n'); }
 		else
 			{ first = false; }
 
-		cconfig.push('\t\t' + k + ' : ' + config.debug[k]);
+		cconfig.push( '\t\t' + k + ' : ' + config.debug[k] );
 	}
 
-	cconfig.push('\n\t},\n');
-	cconfig.push('\tlog : {\n');
+	cconfig.push( '\n\t},\n' );
+	cconfig.push( '\tlog : {\n' );
+
 	first = true;
-
-	for(k in config.log)
+	for( k in config.log )
 	{
 		if (!first)
 			{ cconfig.push(',\n'); }
 		else
 			{ first = false; }
 
-		cconfig.push('\t\t' + k + ' : ' + Jools.configSwitch(config.log[k], 'shell'));
+		cconfig.push( '\t\t' + k + ' : ' + Jools.configSwitch(config.log[k], 'shell') );
 	}
 
-	cconfig.push('\n\t}\n');
-	cconfig.push('};\n');
-	return cconfig.join('');
+	cconfig.push( '\n\t}\n' );
+	cconfig.push( '};\n' );
+	return cconfig.join( '' );
 };
 
 
-/**
+/*
 | Registers and prepares the resource.
 | also builds the bundle for fast-loading.
 */
@@ -507,7 +523,7 @@ Server.prototype.prepareResources = function(_)
 	var bundleRessources = [];
 
 	// creates the Ressources
-	for (var a = 0, aZ = rlist.length; a < aZ; a += 2)
+	for( var a = 0, aZ = rlist.length; a < aZ; a += 2 )
 	{
 		r = new Resource(rlist[a], rlist[a + 1]);
 
@@ -521,7 +537,7 @@ Server.prototype.prepareResources = function(_)
 
 	log('start', 'preparing resources');
 
-	for(path in this.$resources)
+	for( path in this.$resources )
 	{
 		r = this.$resources[path];
 
@@ -540,13 +556,13 @@ Server.prototype.prepareResources = function(_)
 	cconfig.data = this.buildShellConfig();
 
 	// the bundle itself
-	var bundle = [];
+	var bundle = [ ];
 
 	// file listing for devel.html
-	var devels = [];
+	var devels = [ ];
 
 	// loads the to be bundled files
-	for(a = 0, aZ = bundleRessources.length; a < aZ; a++)
+	for( a = 0, aZ = bundleRessources.length; a < aZ; a++ )
 	{
 		r = bundleRessources[a];
 
@@ -561,7 +577,7 @@ Server.prototype.prepareResources = function(_)
 	bundle = bundle.join('\n');
 
 	// uglifies the bundle if configured so
-	if (config.uglify)
+	if( config.uglify )
 	{
 		var ast;
 		ast    = uglify.parser.parse(bundle);
@@ -598,7 +614,8 @@ Server.prototype.prepareResources = function(_)
 	this.$resources[''] = main;
 
 	// prepares the zipped versions
-	for(path in this.$resources) {
+	for( path in this.$resources )
+	{
 		r = this.$resources[path];
 		if (!r.opts.memory)
 			{ continue; }
@@ -612,7 +629,7 @@ Server.prototype.prepareResources = function(_)
 /**
 | Executes an alter command.
 */
-Server.prototype.cmdAlter = function(cmd, _)
+Server.prototype.cmdAlter = function( cmd, _)
 {
 	var time      = cmd.time;
 	var chgX      = cmd.chgX;
@@ -621,46 +638,46 @@ Server.prototype.cmdAlter = function(cmd, _)
 	var username  = cmd.user;
 	var passhash  = cmd.passhash;
 
-	if (!is(username))
+	if( !is( username ) )
 		{ throw reject('user missing');  }
 
-	if (this.$users[username].pass !== passhash)
+	if( this.$users[username].pass !== passhash )
 		{ throw reject('invalid pass');  }
 
-	if (!is(spacename))
+	if( !is( spacename ) )
 		{ throw reject('space missing'); }
 
-	if (this.testAccess(username, spacename) !== 'rw')
+	if( this.testAccess( username, spacename ) !== 'rw' )
 		{ throw reject('no access');     }
 
-	if (!is(time))
+	if( !is( time ) )
 		{ throw reject('time missing');  }
 
-	if (!is(chgX))
+	if( !is( chgX ) )
 		{ throw reject('chgX missing');  }
 
-	if (!is(cid))
+	if( !is( cid ) )
 		{ throw reject('cid missing');   }
 
 
-	var $space = this.$spaces[spacename];
+	var space = this.$spaces[spacename];
 
-	if (!is($space))
+	if( !is( space ) )
 		{ throw reject('unknown space'); }
 
-	var $changes = $space.$changes;
-	var $seqZ    = $space.$seqZ;
+	var changes = space.$changes;
+	var seqZ    = space.$seqZ;
 
-	if (time === -1)
-		{ time = $seqZ; }
+	if( time === -1 )
+		{ time = seqZ; }
 
-	if (!(time >= 0 && time <= $seqZ))
+	if( !(time >= 0 && time <= seqZ) )
 		{ throw reject('invalid time'); }
 
 	// fits the cmd into data structures
 	try {
 		// FIXME
-		if (isArray(chgX))
+		if (Jools.isArray(chgX))
 			{ throw new Error('Array chgX not yet supported'); }
 
 		chgX = new MeshMashine.Change(chgX);
@@ -669,10 +686,11 @@ Server.prototype.cmdAlter = function(cmd, _)
 		{ throw reject( 'invalid cmd: ' + e.message ); }
 
 	// translates the changes if not most recent
-	for (var a = time; a < $seqZ; a++)
-		{ chgX = MeshMashine.tfxChgX(chgX, $changes[a].chgX); }
+	for( var a = time; a < seqZ; a++ )
+		{ chgX = MeshMashine.tfxChgX(chgX, changes[a].chgX); }
 
-	if (chgX === null || chgX.length === 0) {
+	if( chgX === null || chgX.length === 0 )
+	{
 		return {
 			ok   : true,
 			chgX : chgX
@@ -680,9 +698,9 @@ Server.prototype.cmdAlter = function(cmd, _)
 	}
 
 	// applies the changes
-	var r         = MeshMashine.changeTree($space.$tree, chgX);
-	$space.$tree  = r.tree;
-	chgX          = r.chgX;
+	var r       = MeshMashine.changeTree( space.$tree, chgX );
+	space.$tree = r.tree;
+	chgX        = r.chgX;
 
 	if (chgX === null || chgX.length === 0) {
 		return {
@@ -691,16 +709,16 @@ Server.prototype.cmdAlter = function(cmd, _)
 		};
 	}
 
-	$changes[$space.$seqZ] =
-	{
-		cid  : cmd.cid,
-		chgX : chgX
-	};
+	changes[ space.$seqZ ] =
+		{
+			cid  : cmd.cid,
+			chgX : chgX
+		};
 
 	// saves the change in the database
-	$space.$changesDB.insert(
+	space.$changesDB.insert(
 		{
-			_id  : $seqZ,
+			_id  : seqZ,
 			cid  : cmd.cid,
 			chgX : JSON.parse(JSON.stringify(chgX)), // FIXME why copy?
 			user : cmd.user,
@@ -713,7 +731,7 @@ Server.prototype.cmdAlter = function(cmd, _)
 		}
 	);
 
-	$space.$seqZ++;
+	space.$seqZ++;
 
 	var self = this;
 	process.nextTick(
@@ -738,16 +756,18 @@ Server.prototype.cmdAuth = function(cmd, _)
 	if (!is(cmd.passhash))
 		{ throw reject('passhash missing');  }
 
-	var $users = this.$users;
+	var users = this.$users;
 
 	if (cmd.user === 'visitor') {
 		var uid;
-		do {
+
+		do
+		{
 			this.$nextVisitor++;
 			uid = 'visitor-' + this.$nextVisitor;
-		} while ($users[uid]);
+		} while ( users[uid]);
 
-		$users[uid] = {
+		users[uid] = {
 			user    : uid,
 			pass    : cmd.passhash,
 			created : Date.now(),
@@ -760,16 +780,17 @@ Server.prototype.cmdAuth = function(cmd, _)
 		};
 	}
 
-	if (!$users[cmd.user]) {
+	if( !users[cmd.user] )
+	{
 		var val = this.$db.users.findOne({ _id : cmd.user}, _);
 
 		if (val === null)
 			{ return reject('Username unknown'); }
 
-		$users[cmd.user] = val;
+		users[cmd.user] = val;
 	}
 
-	if ($users[cmd.user].pass !== cmd.passhash)
+	if( users[cmd.user].pass !== cmd.passhash )
 		{ return reject('invalid password'); }
 
 	return {
@@ -818,12 +839,13 @@ Server.prototype.cmdRegister = function(cmd, _)
 	// creates the user's home space
 	var spacename = username + ':home';
 
-	this.$spaces[spacename] = {
-		$changesDB : this.$db.connection.collection('changes:' + spacename, _),
-		$changes   : [],
-		$tree      : new Tree({ type : 'Space' }, Meshverse),
-		$seqZ      : 1
-	};
+	this.$spaces[spacename] =
+		{
+			$changesDB : this.$db.connection.collection('changes:' + spacename, _),
+			$changes   : [],
+			$tree      : new Tree({ type : 'Space' }, Meshverse),
+			$seqZ      : 1
+		};
 
 
 	this.$db.spaces.insert(
@@ -846,21 +868,23 @@ Server.prototype.refreshPresence = function(user, spacename)
 	var pres = this.$presences;
 	var pu = pres[user];
 
-	if (!pu)
+	if( !pu )
 	{
-		pu = pres[user] = {
-			spaces : { }
-		};
+		pu = pres[user] =
+			{
+				spaces : { }
+			};
 	}
 
 	var pus = pu.spaces[spacename];
 
-	if (!pus)
+	if( !pus )
 	{
-		pus = pu.spaces[spacename] = {
-			establish : 0,
-			timerID : null
-		};
+		pus = pu.spaces[spacename] =
+			{
+				establish : 0,
+				timerID : null
+			};
 
 		pus.timerID = setTimeout(this.expirePresence, 5000, this, user, spacename);
 
@@ -876,10 +900,10 @@ Server.prototype.refreshPresence = function(user, spacename)
 
 		pus.timerID = setTimeout(this.expirePresence, 5000, this, user, spacename);
 	}
-
 };
 
-/**
+
+/*
 | Establishes a longer user presence for an update that goes into sleep
 */
 Server.prototype.establishPresence = function(user, spacename, sleepID)
@@ -887,33 +911,34 @@ Server.prototype.establishPresence = function(user, spacename, sleepID)
 	var pres = this.$presences;
 	var pu = pres[user];
 
-	if (!pu)
+	if( !pu )
 		{ pu = pres[user] = { spaces : { } }; }
 
 	var pus = pu.spaces[spacename];
 
-	if (!pus)
+	if( !pus )
 	{
 		pus = pu.spaces[spacename] = { establish : 1, timerID : null  };
 		this.sendMessage(spacename, null, user + ' entered "' + spacename + '"');
 	}
 	else
 	{
-		if (pus.timerID !== null)
+		if( pus.timerID !== null )
 			{ clearTimeout(pus.timerID); pus.timerID = null; }
 
 		pus.establish++;
 	}
 };
 
-/**
+
+/*
 | Destablishes a longer user presence for an update that went out of sleep.
 */
-Server.prototype.destablishPresence = function(user, spacename)
+Server.prototype.destablishPresence = function( user, spacename )
 {
 	var pres = this.$presences;
-	var pu   = pres[user];
-	var pus  = pu.spaces[spacename];
+	var pu   = pres[ user ];
+	var pus  = pu.spaces[ spacename ];
 
 	pus.establish--;
 
@@ -924,15 +949,19 @@ Server.prototype.destablishPresence = function(user, spacename)
 
 		pus.timerID = setTimeout(this.expirePresence, 5000, this, user, spacename);
 	}
-
 };
 
-/**
+
+/*
 | Expires a user presence with zero establishments after timeout
 */
 Server.prototype.expirePresence = function(self, user, spacename)
 {
-	self.sendMessage(spacename, null, user + ' left "' + spacename + '"');
+	self.sendMessage(
+		spacename,
+		null,
+		user + ' left "' + spacename + '"'
+	);
 
 	var pres = self.$presences;
 	var pu   = pres[user];
@@ -943,10 +972,11 @@ Server.prototype.expirePresence = function(self, user, spacename)
 	delete pu.spaces[spacename];
 };
 
-/**
+
+/*
 | Gets new changes or waits for them.
 */
-Server.prototype.cmdUpdate = function(cmd, res, _)
+Server.prototype.cmdUpdate = function( cmd, res, _ )
 {
 	var user      = cmd.user;
 	var passhash  = cmd.passhash;
@@ -954,24 +984,24 @@ Server.prototype.cmdUpdate = function(cmd, res, _)
 	var time      = cmd.time;
 	var mseq      = cmd.mseq;
 
-	if (!is(user))
+	if( !is(user) )
 		{ throw reject('user missing'); }
 
-	if (!is(passhash))
+	if( !is(passhash) )
 		{ throw reject('passhash missing'); }
 
-	if (this.$users[user].pass !== passhash)
+	if( this.$users[user].pass !== passhash )
 		{ throw reject('invalid password'); }
 
-	if (!is(spacename))
+	if( !is(spacename) )
 		{ throw reject('space missing'); }
 
-	var $space = this.$spaces[spacename];
-	if (!$space)
+	var space = this.$spaces[spacename];
+	if( !space )
 		{ throw reject('unknown space'); }
 
-	if (!(time >= 0 && time <= $space.$seqZ))
-		{ throw reject('invalid or missing time'); }
+	if ( !( time >= 0 && time <= space.$seqZ ) )
+		{ throw reject('invalid or missing time: ' + time); }
 
 	if (mseq < 0)
 		{ mseq = this.$messages.length; }
@@ -981,10 +1011,10 @@ Server.prototype.cmdUpdate = function(cmd, res, _)
 
 	this.refreshPresence(user, spacename);
 
-	var asw = this.conveyUpdate(time, mseq, spacename);
+	var asw = this.conveyUpdate( time, mseq, spacename );
 
 	// immediate answer?
-	if (asw.chgs.length > 0 || asw.msgs.length > 0)
+	if( asw.chgs.length > 0 || asw.msgs.length > 0 )
 		{ return asw; }
 
 	// if not immediate puts the request to sleep
@@ -1009,29 +1039,35 @@ Server.prototype.cmdUpdate = function(cmd, res, _)
 
 };
 
-/**
+
+/*
 | A sleeping update expired.
 */
 Server.prototype.expireSleep = function(self, sleepID)
 {
-	var $sleep = self.$upsleep[sleepID];
-	var $space = self.$spaces[$sleep.spacename];
+	var sleep = self.$upsleep[sleepID];
 
-	var $seqZ  = $space.$seqZ;
+	// maybe it just had expired at the same time
+	if( !sleep )
+		{ return; }
+
+	var space = self.$spaces[sleep.spacename];
+
+	var seqZ  = space.$seqZ;
 	delete self.$upsleep[sleepID];
 
 	//TODO call it sleep.username
-	self.destablishPresence($sleep.user, $sleep.spacename);
+	self.destablishPresence( sleep.user, sleep.spacename );
 
 	var asw = {
 		ok    : true,
-		time  : $sleep.time,
-		timeZ : $seqZ,
+		time  : sleep.time,
+		timeZ : seqZ,
 		chgs  : null
 	};
 	log('ajax', '->', asw);
 
-	var res = $sleep.res;
+	var res = sleep.res;
 
 	res.writeHead(200, {
 		'Content-Type'  : 'application/json',
@@ -1043,49 +1079,55 @@ Server.prototype.expireSleep = function(self, sleepID)
 
 };
 
-/**
+
+/*
 | A sleeping update closed prematurely.
 */
 Server.prototype.closeSleep = function(sleepID)
 {
-	var $sleep = this.$upsleep[sleepID];
+	var sleep = this.$upsleep[ sleepID ];
 
-	clearTimeout($sleep.timerID);
+	// maybe it just had expired at the same time
+	if( !sleep )
+		{ return; }
 
-	delete this.$upsleep[sleepID];
+	clearTimeout(sleep.timerID);
 
-	this.destablishPresence($sleep.user, $sleep.spacename);
+	delete this.$upsleep[ sleepID ];
+
+	this.destablishPresence( sleep.user, sleep.spacename );
 };
 
-/**
+
+/*
 | Returns a result for an update operation.
 */
-Server.prototype.conveyUpdate = function(time, mseq, spacename)
+Server.prototype.conveyUpdate = function( time, mseq, spacename )
 {
-	var $space    = this.$spaces[spacename];
-	var $changes  = $space.$changes;
+	var space    = this.$spaces[spacename];
+	var changes  = space.$changes;
 
-	var $messages = this.$messages;
-	var $seqZ     = $space.$seqZ;
-	var msgZ      = $messages.length;
-	var chgA      = [];
-	var msgA      = [];
+	var messages = this.$messages;
+	var seqZ     = space.$seqZ;
+	var msgZ     = messages.length;
+	var chgA     = [];
+	var msgA     = [];
 
-	for (var c = time; c < $seqZ; c++)
-		{ chgA.push( $changes[c] ); }
+	for (var c = time; c < seqZ; c++)
+		{ chgA.push( changes[c] ); }
 
 	for (var m = mseq; m < msgZ; m++)
 	{
-		if ($messages[m].space !== spacename)
+		if( messages[m].space !== spacename )
 			{ continue; }
 
-		msgA.push( $messages[m] );
+		msgA.push( messages[m] );
 	}
 
 	return {
 		ok    : true,
 		time  : time,
-		timeZ : $seqZ,
+		timeZ : seqZ,
 		chgs  : chgA,
 		msgs  : msgA,
 		mseq  : mseq,
@@ -1093,7 +1135,8 @@ Server.prototype.conveyUpdate = function(time, mseq, spacename)
 	};
 };
 
-/**
+
+/*
 | Wakes up any sleeping updates and gives them data if applicatable.
 */
 Server.prototype.wake = function(spacename)
@@ -1162,7 +1205,8 @@ Server.prototype.testAccess = function(user, spacename)
 	}
 };
 
-/**
+
+/*
 | Executes a get command.
 */
 Server.prototype.cmdGet = function(cmd, _)
@@ -1171,56 +1215,56 @@ Server.prototype.cmdGet = function(cmd, _)
 	var user     = cmd.user;
 	var passhash = cmd.passhash;
 
-	if (!is(cmd.user))
+	if( !is(cmd.user) )
 		{ throw reject('user missing'); }
 
-	if (!is(cmd.passhash))
+	if( !is(cmd.passhash) )
 		{ throw reject('passhash missing'); }
 
-	if (!is(this.$users[user]) || passhash !== this.$users[user].pass)
+	if( !is(this.$users[user]) || passhash !== this.$users[user].pass )
 		{ throw reject('wrong user/password'); }
 
 	// TODO dont call it "time"
-	if (!is(cmd.time))
+	if( !is(cmd.time) )
 		{ throw reject('time missing'); }
 
-	if (!is(cmd.path))
+	if( !is(cmd.path) )
 		{ throw reject('path missing'); }
 
 	var spacename = cmd.space;
 
 	var access = this.testAccess(cmd.user, spacename);
-	if (access == 'no')
+	if( access == 'no' )
 		{ throw reject('no access'); }
 
-	var $space = this.$spaces[spacename];
-	if (!$space)
+	var space = this.$spaces[spacename];
+	if( !space )
 		{ throw reject('unknown space'); }
 
-	var $changes = $space.$changes;
-	var $seqZ    = $space.$seqZ;
+	var changes = space.$changes;
+	var seqZ    = space.$seqZ;
 
-	if (time === -1)
-		{ time = $seqZ; }
-	else if (!(time >= 0 && time <= $seqZ))
+	if( time === -1 )
+		{ time = seqZ; }
+	else if( !(time >= 0 && time <= seqZ) )
 		{ throw reject('invalid time'); }
 
-	var $tree = $space.$tree;
+	var tree = space.$tree;
 
 	// if the requested tree is not the latest, replay it backwards
-	for (var $a = $seqZ - 1; $a >= time; $a--)
+	for (var a = seqZ - 1; a >= time; a--)
 	{
-		var chgX = $changes[$a].chgX;
+		var chgX = changes[a].chgX;
 
 		for (var b = 0; b < chgX.length; b++)
-			{ $tree = MeshMashine.changeTree($tree, chgX[b].reverse()).tree; }
+			{ tree = MeshMashine.changeTree( tree, chgX[b].reverse() ).tree; }
 	}
 
 	// returns the path requested
 	var node;
 	try
 	{
-		node = $tree.getPath(new Path(cmd.path));
+		node = tree.getPath(new Path(cmd.path));
 	}
 	catch(e)
 	{
@@ -1236,7 +1280,7 @@ Server.prototype.cmdGet = function(cmd, _)
 };
 
 
-/**
+/*
 | Logs and returns a web error
 */
 Server.prototype.webError = function(res, code, message)
@@ -1252,7 +1296,7 @@ Server.prototype.webError = function(res, code, message)
 };
 
 
-/**
+/*
 | Checks if the request should be proxied
 | Returns true if the proxy applies, false otherwise.
 */
@@ -1281,7 +1325,8 @@ Server.prototype.webRedirect = function(req, res)
 	return true;
 };
 
-/**
+
+/*
 | Listens to http requests
 */
 Server.prototype.requestListener = function(req, res)
@@ -1350,7 +1395,7 @@ Server.prototype.requestListener = function(req, res)
 };
 
 
-/**
+/*
 | Handles ajax requests to the MeshMashine.
 */
 Server.prototype.webAjax = function(req, red, res)
@@ -1428,7 +1473,8 @@ Server.prototype.webAjax = function(req, red, res)
 	);
 };
 
-/**
+
+/*
 | Executes an ajaxCmd
 */
 Server.prototype.ajaxCmd = function( cmd, res, _)
@@ -1436,22 +1482,22 @@ Server.prototype.ajaxCmd = function( cmd, res, _)
 	switch ( cmd.cmd )
 	{
 		case 'alter'    :
-			return this.cmdAlter (cmd, _);
+			return this.cmdAlter( cmd, _);
 
 		case 'auth'     :
-			return this.cmdAuth (cmd, _);
+			return this.cmdAuth(  cmd, _);
 
 		case 'get'      :
-			return this.cmdGet (cmd, _);
+			return this.cmdGet( cmd, _);
 
 		case 'message'  :
-			return this.cmdMessage (cmd, _);
+			return this.cmdMessage( cmd, _);
 
 		case 'register' :
-			return this.cmdRegister (cmd, _);
+			return this.cmdRegister( cmd, _);
 
 		case 'update'   :
-			return this.cmdUpdate (cmd, res, _);
+			return this.cmdUpdate( cmd, res, _);
 
 		default:
 			return reject('unknown command');
@@ -1465,4 +1511,4 @@ new Server(
 	}
 );
 
-})();
+} ) ();
