@@ -130,7 +130,7 @@ Item.prototype.getMenu = function(view)
 
 	return new OvalMenu(
 		system.fabric,
-		cf.fixView( view ).point( cf.area.pm ),
+		cf.fixView( view ).point( cf.area.pc ),
 		theme.ovalmenu,
 		labels,
 		this

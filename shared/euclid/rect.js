@@ -336,7 +336,7 @@ Rect.prototype.getProjection = function( p )
 	}
 
 	return pc;
-}
+};
 
 
 /*

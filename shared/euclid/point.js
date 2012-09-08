@@ -95,9 +95,20 @@ Point.prototype.eq = function(a1, a2)
 */
 Point.prototype.add = function(a1, a2)
 {
-	return typeof(a1) === 'object' ?
-		new Point(this.x + a1.x, this.y + a1.y) :
-		new Point(this.x + a1,   this.y + a2);
+	if( typeof(a1) === 'object' )
+	{
+		if (a1.x === 0 && a1.y === 0)
+			{ return this; }
+
+		return new Point(this.x + a1.x, this.y + a1.y);
+	}
+	else
+	{
+		if (a1 === 0 && a2 === 0)
+			{ return this; }
+
+		return new Point(this.x + a1,   this.y + a2);
+	}
 };
 
 
@@ -106,9 +117,20 @@ Point.prototype.add = function(a1, a2)
 */
 Point.prototype.sub = function(a1, a2)
 {
-	return typeof(a1) === 'object' ?
-		new Point(this.x - a1.x, this.y - a1.y) :
-		new Point(this.x - a1,   this.y - a2);
+	if( typeof(a1) === 'object' )
+	{
+		if (a1.x === 0 && a1.y === 0)
+			{ return this; }
+
+		return new Point(this.x - a1.x, this.y - a1.y);
+	}
+	else
+	{
+		if (a1 === 0 && a2 === 0)
+			{ return this; }
+
+		return new Point(this.x - a1,   this.y - a2);
+	}
 };
 
 

@@ -198,7 +198,21 @@ View.prototype.home = function()
 */
 View.prototype.point = function(a1, a2)
 {
-	return new Euclid.Point(this.x(a1, a2), this.y(a1, a2));
+	if( a1 instanceof Euclid.Point )
+	{
+		if (this.zoom === 1 && this.pan.x === 0 && this.pan.y === 0)
+			{ return a1; }
+
+		return new Euclid.Point(
+			this.x( a1 ),
+			this.y( a1 )
+		);
+	}
+
+	return new Euclid.Point(
+		this.x( a1, a2 ),
+		this.y( a1, a2 )
+	);
 };
 
 
