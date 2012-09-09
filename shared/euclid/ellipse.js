@@ -79,25 +79,15 @@ var Ellipse = Euclid.Ellipse =
 
 	this.hull = Jools.immute(
 		[
-			'start',  pw,
-			'bezier',  0,  m,  m,  0, pn,
-			'bezier',  m,  0,  0,  m, pe,
-			'bezier',  0,  m,  m,  0, ps,
-			'bezier',  m,  0,  0,  m, 'close'
+			'start', pw,
+			'round', 'clockwise', pn,
+			'round', 'clockwise', pe,
+			'round', 'clockwise', ps,
+			'round', 'clockwise', 'close'
 		]
 	);
 
 	Jools.immute(this);
-
-	/*
-	fabric.moveTo(                     wx, my );
-	fabric.beziTo(   0, -bm, -am,   0, mx, ny );
-	fabric.beziTo(  am,   0,   0, -bm, ex, my );
-	// FIXME workaround chrome pixel error
-	//fabric.lineTo(                   mx, sy - 1);
-	fabric.beziTo(   0,  bm,  am,   0, mx, sy );
-	fabric.beziTo( -am,   0,   0,  bm, wx, my );
-	*/
 };
 
 
@@ -176,8 +166,10 @@ Ellipse.prototype.sketch = function( fabric, border, twist, view )
 	var pn     = null;
 	var dx, dy;
 	var bx, by;
+	var magic;
 
 	fabric.moveTo( pstart );
+
 
 	while( h < hZ )
 	{
@@ -188,29 +180,44 @@ Ellipse.prototype.sketch = function( fabric, border, twist, view )
 		{
 
 			case 'bezier' :
-
 				pn = hull[ h + 5 ];
+				break;
 
-				if( pn === 'close')
-				{
-					pn = pstart;
-					pstart = null;
-				}
-				else
-				{
-					pn = view.point( pn );
+			case 'round' :
+				pn    = hull[ h + 2 ];
+			 	magic = Euclid.Const.magic;
+			 	break;
 
-					if( border !== 0 )
-					{
-						pn = pn.add(
-							pn.x > pc.x ? -border : ( pn.x < pc.x ? border : 0 ),
-							pn.y > pc.y ? -border : ( pn.y < pc.y ? border : 0 )
-						);
-					}
-				}
+			default :
+				throw new Error( 'unknown hull section: ' + hull[h] );
 
-				dx = pn.x - pp.x;
-				dy = pn.y - pp.y;
+		}
+
+		if( pn === 'close')
+		{
+			pn = pstart;
+			pstart = null;
+		}
+		else
+		{
+			pn = view.point( pn );
+
+			if( border !== 0 )
+			{
+				pn = pn.add(
+					pn.x > pc.x ? -border : ( pn.x < pc.x ? border : 0 ),
+					pn.y > pc.y ? -border : ( pn.y < pc.y ? border : 0 )
+				);
+			}
+		}
+
+		dx = pn.x - pp.x;
+		dy = pn.y - pp.y;
+
+		switch( hull[h] )
+		{
+
+			case 'bezier' :
 
 				fabric.beziTo(
 					hull[ h + 1 ] * dx,
@@ -219,12 +226,37 @@ Ellipse.prototype.sketch = function( fabric, border, twist, view )
 					- hull[ h + 4 ] * dy,
 					pn
 				);
+
 				h += 6;
+				break;
+
+			case 'round' :
+				var rotation = hull[ h + 1 ];
+				var dxy = dx * dy;
+
+				switch( rotation )
+				{
+					case 'clockwise' :
+
+						fabric.beziTo(
+							dxy > 0 ?   magic * dx : 0,
+							dxy < 0 ?   magic * dy : 0,
+							dxy < 0 ? - magic * dx : 0,
+							dxy > 0 ? - magic * dy : 0,
+							pn
+						);
+						break;
+
+					default :
+
+						throw new Error('unknown rotation');
+				}
+
+				h += 3;
 				break;
 
 			default :
 				throw new Error( 'unknown hull section: ' + hull[h] );
-
 		}
 
 		pp = pn;
