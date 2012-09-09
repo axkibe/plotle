@@ -433,7 +433,7 @@ Server.prototype.prepareResources = function(_)
 		'shared/euclid/rect.js',                           'fb',
 		'shared/euclid/bezirect.js',                       'fb',
 		'shared/euclid/ellipse.js',                        'fb',
-		'shared/euclid/ellipseflower.js',                  'fb',
+		'shared/euclid/ellipse-flower.js',                 'fb',
 		'shared/euclid/line.js',                           'fb',
 		'shell/fontpool.js',                               'fb', // TODO order?
 		'shell/theme.js',                                  'fb', // TODO order?
