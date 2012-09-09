@@ -11,13 +11,14 @@
               |   `'.  |    `-.______ / '---'    \_______|/
               '   .'|  '/            `
                `-'  `--'
-           ,,--.          . .-,--' .
-           |`, | .  , ,-. |  \|__  |  ,-. . , , ,-. ,-.
-           |   | | /  ,-| |   |    |  | | |/|/  |-' |
-           `---' `'   `-^ `' `'    `' `-' ' '   `-' '
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~,~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
- Makes a double oval with 6 segments.
+    .-,--. .  .               .-,--' .
+     `\__  |  |  . ,-. ,-. ,-. \|__  |  ,-. . , , ,-. ,-.
+      /    |  |  | | | `-. |-'  |    |  | | |/|/  |-' |
+     '`--' `' `' ' |-' `-' `-' `'    `' `-' ' '   `-' '
+                   |
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                   '
+ Makes a double ellipse with 6 segments.
 
 
       a1      |----->|
@@ -32,8 +33,8 @@
           ``-----''             outside = null
 
  pc:     center
- a1,b1:  width and height of inner oval
- a2,b2:  width and height of outer oval
+ a1,b1:  width and height of inner ellipse
+ a2,b2:  width and height of outer ellipse
  segs: which segments to include
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -65,7 +66,7 @@ if (typeof(window) === 'undefined')
 /*
 | Constructor
 */
-var OvalFlower = Euclid.OvalFlower = function(pc, dimensions, segs)
+var EllipseFlower = Euclid.EllipseFlower = function(pc, dimensions, segs)
 {
 	this.pc = pc;
 	this.a1 = dimensions.a1;
@@ -82,9 +83,9 @@ var OvalFlower = Euclid.OvalFlower = function(pc, dimensions, segs)
 
 
 /*
-| Makes the OvalFlower sketch.
+| Makes the EllipseFlower sketch.
 */
-OvalFlower.prototype.sketch = function( fabric, border, twist, view, segment )
+EllipseFlower.prototype.sketch = function( fabric, border, twist, view, segment )
 {
 	var ro   = Math.round;
 
@@ -103,7 +104,7 @@ OvalFlower.prototype.sketch = function( fabric, border, twist, view, segment )
 	var am2  = magic * this.a2;
 	var bm2  = magic * this.b2;
 
-	// inner oval
+	// inner ellipse
 	if( segment === null || segment === 'c' )
 	{
 		fabric.moveTo(                       pcx - a1 + bo, pcy);
@@ -115,7 +116,7 @@ OvalFlower.prototype.sketch = function( fabric, border, twist, view, segment )
 		fabric.beziTo(-am1,   0,    0,  bm1, pcx - a1 + bo, pcy);
 	}
 
-	// outer oval
+	// outer ellipse
 	if( segment === null || segment === 'outer' )
 	{
 		fabric.moveTo(                       pcx - a2 + bo, pcy);
@@ -201,7 +202,7 @@ OvalFlower.prototype.sketch = function( fabric, border, twist, view, segment )
 /*
 | Returns the segment the point is within.
 */
-OvalFlower.prototype.within = function( view, p )
+EllipseFlower.prototype.within = function( view, p )
 {
 	var swatch = Euclid.swatch; // TODO rename
 	var a2 = this.a2;

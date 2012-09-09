@@ -68,8 +68,8 @@ Files
 </td><td>   the Meshcraft shell's html file
 </td></tr>
 
- <tr><td>   ovalmenu.js
-</td><td>   an oval styled menu
+ <tr><td>   ellipse-menu.js
+</td><td>   an ellipse styled menu
 </td></tr>
 
  <tr><td>   peer.js

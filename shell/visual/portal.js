@@ -91,7 +91,7 @@ Portal.prototype.getSilhoutte = function( zone )
 	if( s && s.eq( zone ) )
 		{ return s; }
 
-	return this._$silhoutte = new Euclid.Oval(
+	return this._$silhoutte = new Euclid.Ellipse(
 		zone.pnw,
 		zone.pse
 	);
@@ -114,7 +114,7 @@ Portal.prototype.getZeroSilhoutte = function( zone )
 		return s;
 	}
 
-	return this._$zeroSilhoutte = new Euclid.Oval(
+	return this._$zeroSilhoutte = new Euclid.Ellipse(
 		Euclid.Point.zero,
 		new Euclid.Point(
 			zone.width,
@@ -384,10 +384,10 @@ Portal.prototype.getCtrlFix = function()
 		return ctrlArea;
 	}
 
-	var dim = theme.ovalmenu.dimensions;
+	var dim = theme.ellipseMenu.dimensions;
 
 	return this._$ctrlArea = new Euclid.Fix(
-		new Euclid.Oval(
+		new Euclid.Ellipse(
 			pn.add( tca.x,              tca.y              ),
 			pn.add( tca.x + 2 * dim.a1, tca.y + 2 * dim.b1 )
 		),

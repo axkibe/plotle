@@ -210,7 +210,7 @@ HelpPanel.layout =
 		'delete2'  :
 		{
 			type : 'Label',
-			text : 'click it\'s oval',
+			text : 'click it\'s ellipse',
 			font : fontPool.get( 13, 'lah' ),
 			pos  : { type: 'Point', anchor: 'nw', x: 25 , y: 175 }
 		},
@@ -226,7 +226,7 @@ HelpPanel.layout =
 		'relate2'  :
 		{
 			type : 'Label',
-			text : 'drag an items oval',
+			text : 'drag an item\'s ellipse',
 			font : fontPool.get( 13, 'lah' ),
 			pos  : { type: 'Point', anchor: 'nw', x: 25 , y: 210 }
 		},

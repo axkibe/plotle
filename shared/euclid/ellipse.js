@@ -11,13 +11,13 @@
               |   `'.  |    `-.______ / '---'    \_______|/
               '   .'|  '/            `
                `-'  `--'
-              ,,--.          .
-              |`, | .  , ,-. |
-              |   | | /  ,-| |
-              `---' `'   `-^ `'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
- An oval.
+                .-,--. .  .
+                 `\__  |  |  . ,-. ,-. ,-.
+                  /    |  |  | | | `-. |-'
+                 '`--' `' `' ' |-' `-' `-'
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                               '
+ An ellipse.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -50,7 +50,7 @@ if (typeof(window) === 'undefined')
 /*
 | Constructor.
 */
-var Oval = Euclid.Oval =
+var Ellipse = Euclid.Ellipse =
 	function(
 		pnw, // point in north-west
 		pse  // point in south-east
@@ -103,9 +103,9 @@ var Oval = Euclid.Oval =
 
 
 /*
-| Middle(center) point an Oval.
+| Middle(center) point an Ellipse.
 */
-Jools.lazyFixate(Oval.prototype, 'pc',
+Jools.lazyFixate( Ellipse.prototype, 'pc',
 	function()
 	{
 		return new Euclid.Point(
@@ -117,9 +117,9 @@ Jools.lazyFixate(Oval.prototype, 'pc',
 
 
 /*
-| Middle(center) point an Oval.
+| Middle(center) point an Ellipse.
 */
-Jools.lazyFixate(Oval.prototype, 'gradientPC',
+Jools.lazyFixate( Ellipse.prototype, 'gradientPC',
 	function()
 	{
 		return new Euclid.Point(
@@ -131,9 +131,9 @@ Jools.lazyFixate(Oval.prototype, 'gradientPC',
 
 
 /*
-| Middle(center) point an Oval.
+| Middle(center) point an Ellipse.
 */
-Jools.lazyFixate(Oval.prototype, 'gradientR1',
+Jools.lazyFixate( Ellipse.prototype, 'gradientR1',
 	function()
 	{
 		var dx = this.pse.x - this.pnw.x;
@@ -146,16 +146,16 @@ Jools.lazyFixate(Oval.prototype, 'gradientR1',
 /*
 | Returns true if this rectangle is the same as another
 */
-Oval.prototype.eq = function(r)
+Ellipse.prototype.eq = function(r)
 {
 	return this.pnw.eq(r.pnw) && this.pse.eq(r.pse);
 };
 
 
 /*
-| Draws the ovalslice.
+| Draws the ellipse.
 */
-Oval.prototype.sketch = function( fabric, border, twist, view )
+Ellipse.prototype.sketch = function( fabric, border, twist, view )
 {
 	var hull = this.hull;
 	var h    = 0;
@@ -262,7 +262,7 @@ Oval.prototype.sketch = function( fabric, border, twist, view )
 /*
 | gets the source of a projection to p
 */
-Oval.prototype.getProjection = function( p )
+Ellipse.prototype.getProjection = function( p )
 {
 	return this.pc;
 };
@@ -272,7 +272,7 @@ Oval.prototype.getProjection = function( p )
 /*
 | Returns true if point is within the slice.
 */
-Oval.prototype.within = function( view, p )
+Ellipse.prototype.within = function( view, p )
 {
 	return Euclid.swatch.withinSketch(this, 'sketch', view, p);
 };

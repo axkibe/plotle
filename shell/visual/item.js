@@ -37,7 +37,7 @@ Visual = Visual || {};
 var Action;
 var Euclid;
 var Jools;
-var OvalMenu;
+var EllipseMenu;
 var Path;
 var shell;
 var system;
@@ -61,7 +61,6 @@ var Item = Visual.Item = function(spacename, twig, path)
 {
 	Visual.Base.call(this, spacename, twig, path);
 
-	this._$ovalslice = null;
 	this.$fabric     = null;
 	this.$handles    = { };
 };
@@ -128,10 +127,10 @@ Item.prototype.getMenu = function(view)
 
 	var cf = this.getCtrlFix();
 
-	return new OvalMenu(
+	return new EllipseMenu(
 		system.fabric,
 		cf.fixView( view ).point( cf.area.pc ),
-		theme.ovalmenu,
+		theme.ellipseMenu,
 		labels,
 		this
 	);
@@ -335,7 +334,7 @@ Item.prototype.drawHandles = function(fabric, view)
 	var cf = this.getCtrlFix();
 
 	fabric.paint(
-		theme.ovalmenu.slice,
+		theme.ellipseMenu.slice,
 		cf.area,
 		'sketch',
 		cf.fixView( view )

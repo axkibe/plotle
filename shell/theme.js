@@ -581,8 +581,8 @@ theme =
 	},
 
 
-	// oval menu
-	ovalmenu :
+	// ellpse menu
+	ellipseMenu :
 	{
 		dimensions :
 		{
@@ -707,9 +707,9 @@ theme =
 		// width
 		strength :  8,
 
-		// oval cap
-		ovala    :  4,
-		ovalb    :  3,
+		// ellipse cap
+		ellipseA    :  4,
+		ellipseB    :  3,
 
 		// minimum height
 		minSize  : 12,
@@ -792,7 +792,7 @@ theme =
 	}
 };
 
-var odim = theme.ovalmenu.dimensions;
+var odim = theme.ellipseMenu.dimensions;
 var c30 = Math.cos(Math.PI / 6);
 odim.b1 = Math.round(odim.a1 * c30);
 odim.b2 = Math.round(odim.b1 / odim.a1 * odim.a2);
@@ -800,6 +800,6 @@ odim.b2 = Math.round(odim.b1 / odim.a1 * odim.a2);
 var swidim = theme.switchpanel.dimensions;
 swidim.b = Math.round(swidim.a * c30);
 
-theme.itemmenu = theme.ovalmenu;
+theme.itemmenu = theme.ellipseMenu;
 
 } ) ();

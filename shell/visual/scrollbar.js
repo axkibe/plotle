@@ -100,7 +100,7 @@ Scrollbar.prototype.getArea = function(view)
 	return new Euclid.BeziRect(
 		view.point(pnw.x, pnw.y + sy)      .add(-s05, 0),
 		view.point(pnw.x, pnw.y + sy + map).add( s05, 0),
-		ths.ovala, ths.ovalb
+		ths.ellipseA, ths.ellipseB
 	);
 };
 

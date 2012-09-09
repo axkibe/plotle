@@ -12,13 +12,13 @@
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--'
 
-                            ,,--.          . ,-,-,-.
-                            |`, | .  , ,-. | `,| | |   ,-. ,-. . .
-                            |   | | /  ,-| |   | ; | . |-' | | | |
-                            `---' `'   `-^ `'  '   `-' `-' ' ' `-^
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
- An oval styled menu.
+                     .-,--. .  .                ,-,-,-.
+                      `\__  |  |  . ,-. ,-. ,-. `,| | |   ,-. ,-. . .
+                       /    |  |  | | | `-. |-'   | ; | . |-' | | | |
+                      '`--' `' `' ' |-' `-' `-'   '   `-' `-' ' ' `-^
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ | ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                                    '
+ An ellipse styled menu.
 
       a1      |----->|
       a2      |->|   '
@@ -40,7 +40,7 @@
 /*
 | Export
 */
-var OvalMenu;
+var EllipseMenu;
 
 
 /*
@@ -67,18 +67,18 @@ if (typeof(window) === 'undefined')
 /*
 | Constructor.
 */
-OvalMenu = function(fabric, pc, settings, labels, receiver)
+EllipseMenu = function(fabric, pc, settings, labels, receiver)
 {
 	this.fabric      = fabric;
 	this.p           = pc;
 	this.labels      = labels;
 
-	this._font       = theme.ovalmenu.font;
+	this._font       = theme.ellipseMenu.font;
 	this._receiver   = receiver;
 	this._style      = settings.style;
 	this._highlight  = settings.highlight;
 	this._dimensions = settings.dimensions;
-	this._oflower    = new Euclid.OvalFlower(pc, settings.dimensions, labels);
+	this._oflower    = new Euclid.EllipseFlower(pc, settings.dimensions, labels);
 
 	this.$within     = null;
 	this.$fadeTimer  = null;
@@ -89,7 +89,7 @@ OvalMenu = function(fabric, pc, settings, labels, receiver)
 /*
 | Draws the hexmenu.
 */
-OvalMenu.prototype.draw = function(view)
+EllipseMenu.prototype.draw = function(view)
 {
 	var f = this.fabric;
 
@@ -153,7 +153,7 @@ OvalMenu.prototype.draw = function(view)
 /*
 | Sets this.mousepos and returns it according to p.
 */
-OvalMenu.prototype.within = function( view, p )
+EllipseMenu.prototype.within = function( view, p )
 {
 	var w = this._oflower.within( view, p );
 
@@ -170,7 +170,7 @@ OvalMenu.prototype.within = function( view, p )
 /*
 | Mouse button down event.
 */
-OvalMenu.prototype.mousedown = function(view, p, shift, ctrl)
+EllipseMenu.prototype.mousedown = function(view, p, shift, ctrl)
 {
 	var w = this.within( view, p );
 
@@ -188,7 +188,7 @@ OvalMenu.prototype.mousedown = function(view, p, shift, ctrl)
 /*
 | Called on every step to fade away when mouse isn't on the menu
 */
-OvalMenu.prototype.fadeout = function()
+EllipseMenu.prototype.fadeout = function()
 {
 	var self = this;
 
@@ -213,7 +213,7 @@ OvalMenu.prototype.fadeout = function()
 /*
 | cancels fading
 */
-OvalMenu.prototype.cancel = function()
+EllipseMenu.prototype.cancel = function()
 {
 	if (this.$fade)
 	{
@@ -232,7 +232,7 @@ OvalMenu.prototype.cancel = function()
 |
 | Returns true if the mouse pointer hovers over anything.
 */
-OvalMenu.prototype.mousehover = function(view, p, shift, ctrl)
+EllipseMenu.prototype.mousehover = function(view, p, shift, ctrl)
 {
 	var self = this;
 

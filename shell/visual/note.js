@@ -419,10 +419,10 @@ Note.prototype.getCtrlFix = function()
 		return ctrlArea;
 	}
 
-	var dim = theme.ovalmenu.dimensions;
+	var dim = theme.ellipseMenu.dimensions;
 
 	return this._$ctrlArea = new Euclid.Fix(
-		new Euclid.Oval(
+		new Euclid.Ellipse(
 			pnw.add( tca.x,              tca.y              ),
 			pnw.add( tca.x + 2 * dim.a1, tca.y + 2 * dim.b1 )
 		),

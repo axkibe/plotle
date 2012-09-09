@@ -37,7 +37,7 @@ Visual = Visual || {};
 var Action;
 var Euclid;
 var Jools;
-var OvalMenu;
+var EllipseMenu;
 var Path;
 var shell;
 var system;
@@ -376,10 +376,10 @@ Space.prototype.click = function(p, shift, ctrl)
 	}
 
 	// otherwhise pop up the float menu
-	shell.setMenu( new OvalMenu(
+	shell.setMenu( new EllipseMenu(
 		system.fabric,
 		p,
-		theme.ovalmenu,
+		theme.ellipseMenu,
 		this._floatMenuLabels,
 		self
 	) );

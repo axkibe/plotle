@@ -432,9 +432,8 @@ Server.prototype.prepareResources = function(_)
 		'shared/euclid/measure.js',                        'fb',
 		'shared/euclid/rect.js',                           'fb',
 		'shared/euclid/bezirect.js',                       'fb',
-		'shared/euclid/oval.js',                           'fb',
-		'shared/euclid/ovalslice.js',                      'fb',
-		'shared/euclid/ovalflower.js',                     'fb',
+		'shared/euclid/ellipse.js',                        'fb',
+		'shared/euclid/ellipseflower.js',                  'fb',
 		'shared/euclid/line.js',                           'fb',
 		'shell/fontpool.js',                               'fb', // TODO order?
 		'shell/theme.js',                                  'fb', // TODO order?
@@ -482,7 +481,7 @@ Server.prototype.prepareResources = function(_)
 		'shell/dash/switchpanel.js',                       'fb',
 		'shell/dash/board.js',                             'fb',
 		'shell/action.js',                                 'fb',
-		'shell/ovalmenu.js',                               'fb',
+		'shell/ellipse-menu.js',                           'fb',
 		'shell/visual/base.js',                            'fb',
 		'shell/visual/para.js',                            'fb',
 		'shell/visual/scrollbar.js',                       'fb',

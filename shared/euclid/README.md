@@ -16,6 +16,10 @@ Files
 </td><td>   directions on a compass
 </td></tr>
 
+ <tr><td>   ellipse.js
+</td><td>   an ellipse
+</td></tr>
+
  <tr><td>   fabric.js
 </td><td>   canvas wrapper
 </td></tr>
@@ -32,12 +36,8 @@ Files
 </td><td>   measures text widths
 </td></tr>
 
- <tr><td>   ovalflower.js
-</td><td>   a double oval with 6 segments
-</td></tr>
-
- <tr><td>   ovalslice.js
-</td><td>   an oval slice
+ <tr><td>   ellipse-flower.js
+</td><td>   a double ellipse with 6 segments
 </td></tr>
 
  <tr><td>   point.js
