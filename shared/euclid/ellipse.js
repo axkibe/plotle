@@ -332,11 +332,6 @@ Ellipse.prototype.getProjection = function( p )
 
 				dxy = dx * dy;
 
-				if( dx === 0 )
-				{
-					// XXX
-				}
-
 				if( dxy > 0 )
 				{
 					cx = pp.x;
@@ -352,9 +347,19 @@ Ellipse.prototype.getProjection = function( p )
 					b  = Math.abs( pn.y - cy );
 				}
 
-				if(
+				if( p.x === cx )
+				{
+					if( p.y > cy )
+						{ return new Euclid.Point( cx, cy + b ); }
+					else if( p.y < cy )
+						{ return new Euclid.Point( cx, cy - b ); }
+					else
+						{ return new Euclid.Point( cx, cy ); }
+				}
+				else if(
 					( ( p.x >= cx && dy > 0 ) || ( p.x <= cx && dy < 0 ) ) &&
-					( ( p.y >= cy && dx < 0 ) || ( p.y <= cy && dx > 0 ) ) )
+					( ( p.y >= cy && dx < 0 ) || ( p.y <= cy && dx > 0 ) )
+				)
 				{
 					var k = ( p.y - cy ) / ( p.x - cx );
 
