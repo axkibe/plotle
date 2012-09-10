@@ -272,6 +272,8 @@ Ellipse.prototype.sketch = function( fabric, border, twist, view )
 */
 Ellipse.prototype.getProjection = function( p )
 {
+	console.log('G');
+
 	var hull = this.hull;
 	var h    = 0;
 	var hZ   = hull.length;
@@ -330,6 +332,11 @@ Ellipse.prototype.getProjection = function( p )
 
 				dxy = dx * dy;
 
+				if( dx === 0 )
+				{
+					// XXX
+				}
+
 				if( dxy > 0 )
 				{
 					cx = pp.x;
@@ -357,9 +364,12 @@ Ellipse.prototype.getProjection = function( p )
 					// x^2 ( 1 / a^2 + k^2 / b^2) = 1
 
 					var x = Math.sqrt( 1 / ( 1 / ( a * a ) + k * k / ( b * b ) ) );
-					var y = k * x;
+					var y = Math.abs( k * x );
 
-					return new Euclid.Point( cx + x, cy + y );
+					return new Euclid.Point(
+						cx + ( p.x > cx ? x : -x ),
+						cy + ( p.y > cy ? y : -y )
+					);
 
 				}
 
@@ -376,6 +386,8 @@ Ellipse.prototype.getProjection = function( p )
 
 	if( pstart !== null )
 		{ throw new Error( 'hull did not close' ); }
+
+	console.log('PC');
 
 	return this.pc;
 };

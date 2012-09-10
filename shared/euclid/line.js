@@ -100,7 +100,7 @@ Line.connect = function( shape1, end1, shape2, end2 )
 		return new Line( p1, end1, p2, end2 );
 	}
 
-	if (shape1 instanceof Euclid.Rect && shape2 instanceof Euclid.Rect)
+	if( shape1 instanceof Euclid.Rect && shape2 instanceof Euclid.Rect )
 	{
 		var x1, y1, x2, y2;
 

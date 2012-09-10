@@ -66,10 +66,10 @@ var Space = Visual.Space = function(twig, spacename, access)
 	this.access = access;
 	this.fabric = system.fabric;
 
-	this.$view  = new Euclid.View(Euclid.Point.zero, 0);
+	this.$view  = new Euclid.View( Euclid.Point.zero, 0 );
 
-	for (var k in twig.copse)
-		{ $sub[k] = this.createItem(twig.copse[k], k); }
+	for( var k in twig.copse )
+		{ $sub[ k ] = this.createItem( twig.copse[ k ], k ); }
 
 	this._floatMenuLabels =
 		{
@@ -80,35 +80,37 @@ var Space = Visual.Space = function(twig, spacename, access)
 		};
 };
 
-Jools.subclass(Space, Visual.Base);
-
+Jools.subclass( Space, Visual.Base );
 
 /*
 | Updates $sub to match a new twig.
 */
-Space.prototype.update = function(twig)
+Space.prototype.update = function( twig )
 {
 	// no change?
-	if (this.twig === twig)
+	if ( this.twig === twig )
 		{ return; }
 
 	this.twig = twig;
 
+	// TODO remove $
 	var $old = this.$sub;
 	var $sub = this.$sub = { };
 	var copse = twig.copse;
-	for(var k in copse)
+	for( var k in copse )
 	{
-		var sub = twig.copse[k];
-		var o = $old[k];
-		if (Jools.is(o))
+		var sub = twig.copse[ k ];
+		var o = $old[ k ];
+		if ( Jools.is( o ) )
 		{
-			if (o.twig !== sub)
-				{ o.update(sub); }
-			$sub[k] = o;
+			if ( o.twig !== sub )
+				{ o.update( sub ); }
+			$sub[ k ] = o;
 		}
 		else
-			{ $sub[k] = this.createItem(sub, k); }
+		{
+			$sub[ k ] = this.createItem( sub, k );
+		}
 	}
 
 	// removes the focus if the focused item is removed.
@@ -177,16 +179,16 @@ Space.prototype.draw = function()
 	var twig = this.twig;
 	var view = this.$view;
 
-	for( var r = twig.length - 1; r >= 0; r--)
-		{ this.atRank(r).draw(this.fabric, view); }
+	for( var r = twig.length - 1; r >= 0; r-- )
+		{ this.atRank( r ).draw( this.fabric, view ); }
 
-	var focus = this.focusedItem();
-	if (focus)
-		{ focus.drawHandles(this.fabric, view); }
+	var focus = this.focusedItem( );
+	if( focus )
+		{ focus.drawHandles( this.fabric, view ); }
 
 	var action = shell.$action;
 
-	switch ( action && action.type )
+	switch( action && action.type )
 	{
 		case Action.RELBIND :
 
@@ -197,20 +199,22 @@ Space.prototype.draw = function()
 				null;
 
 			var target = av2 ?
-				av2.getZone() :
+				av2.getZone( ) :
 				view.depoint( action.move );
 
+			var target = view.depoint( action.move );
+
 			var arrow  = Euclid.Line.connect(
-				av.getSilhoutte( av.getZone() ),
+				av.getSilhoutte( av.getZone( ) ),
 				'normal',
 				target,
 				'arrow'
 			);
 
-			if (av2)
-				{ av2.highlight(this.fabric, view); }
+			if( av2 )
+				{ av2.highlight( this.fabric, view ); }
 
-			arrow.draw(this.fabric, view, theme.relation.style);
+			arrow.draw( this.fabric, view, theme.relation.style );
 
 			break;
 	}
@@ -220,9 +224,10 @@ Space.prototype.draw = function()
 /*
 | Force-clears all caches.
 */
-Space.prototype.knock = function() {
-	for(var r = this.twig.length - 1; r >= 0; r--)
-		{ this.atRank(r).knock(); }
+Space.prototype.knock = function()
+{
+	for( var r = this.twig.length - 1; r >= 0; r-- )
+		{ this.atRank( r ).knock( ); }
 };
 
 
@@ -239,23 +244,23 @@ Space.prototype.drawCaret = function()
 /*
 | Mouse wheel
 */
-Space.prototype.mousewheel = function(p, dir, shift, ctrl)
+Space.prototype.mousewheel = function( p, dir, shift, ctrl )
 {
 	var view = this.$view;
 	var twig = this.twig;
 
-	for(var r = 0, rZ = twig.length; r < rZ; r++)
+	for( var r = 0, rZ = twig.length; r < rZ; r++ )
 	{
 		var item = this.atRank(r);
 
-		if (item.mousewheel(view, p, dir, shift, ctrl))
+		if ( item.mousewheel( view, p, dir, shift, ctrl ) )
 			{ return true; }
 	}
 
-	if (dir > 0)
-		{ this.$view = this.$view.review( 1, p); }
+	if ( dir > 0 )
+		{ this.$view = this.$view.review(  1, p ); }
 	else
-		{ this.$view = this.$view.review(-1, p); }
+		{ this.$view = this.$view.review( -1, p ); }
 
 	shell.setSpaceZoom(this.$view.fact);
 
