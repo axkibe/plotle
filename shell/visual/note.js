@@ -47,24 +47,24 @@ var theme;
 /*
 | Capsule
 */
-(function() {
+( function( ) {
 'use strict';
 
-if (typeof(window) === 'undefined')
+if ( typeof( window ) === 'undefined' )
 	{ throw new Error('this code needs a browser!'); }
 
 
 /*
 | Constructor.
 */
-var Note = Visual.Note = function(spacename, twig, path)
+var Note = Visual.Note = function( spacename, twig, path )
 {
 	Visual.DocItem.call(this, spacename, twig, path);
 	this.scrollbarY = new Visual.Scrollbar();
 
 };
 
-Jools.subclass(Note, Visual.DocItem);
+Jools.subclass( Note, Visual.DocItem );
 
 
 /*
@@ -144,18 +144,19 @@ Note.prototype.getZeroSilhoutte = function( zone )
 Note.prototype.setScrollbar = function(pos)
 {
 	var sbary = this.scrollbarY;
-	if (!sbary.visible)
+
+	if( !sbary.visible )
 		{ return; }
 
 	var zone = this.getZone();
 
-	if (!Jools.is(pos))
+	if( !Jools.is( pos ) )
 		{ pos = sbary.getPos(); }
 
 	sbary.setPos(
 		pos,
 		zone.height - this.innerMargin.y,
-		this.$sub.doc.getHeight(),
+		this.$sub.doc.getHeight( ),
 		Euclid.Point.renew(zone.pse.x, zone.pnw.y + theme.scrollbar.vdis, sbary.pnw),
 		zone.height - theme.scrollbar.vdis * 2
 	);
@@ -169,26 +170,26 @@ Note.prototype.scrollCaretIntoView = function()
 {
 	var caret   = shell.$caret;
 	var scrolly = this.scrollbarY;
-	var sy      = scrolly.getPos();
+	var sy      = scrolly.getPos( );
 	var para   = shell.$space.getSub( caret.sign.path, 'Para' );
 
 	if (para.constructor !== Visual.Para)
-		{ throw new Error('iFail'); }
+		{ throw new Error( 'para not a para.' ); }
 
 	var cp      = para.getCaretPos();
 	var pnw     = this.$sub.doc.getPNW( para.key );
-	var zone    = this.getZone();
+	var zone    = this.getZone( );
 	var imargin = this.innerMargin;
 
-	if (cp.n + pnw.y - imargin.n < sy)
+	if ( cp.n + pnw.y - imargin.n < sy )
 	{
-		this.setScrollbar(cp.n + pnw.y - imargin.n);
-		this.poke();
+		this.setScrollbar( cp.n + pnw.y - imargin.n );
+		this.poke( );
 	}
-	else if (cp.s + pnw.y + imargin.s > sy + zone.height)
+	else if ( cp.s + pnw.y + imargin.s > sy + zone.height )
 	{
-		this.setScrollbar(cp.s + pnw.y - zone.height + imargin.s);
-		this.poke();
+		this.setScrollbar( cp.s + pnw.y - zone.height + imargin.s );
+		this.poke( );
 	}
 };
 
@@ -196,34 +197,36 @@ Note.prototype.scrollCaretIntoView = function()
 /*
 | Scrolls the note so the caret comes into view.
 */
-Note.prototype.scrollPage = function(up)
+Note.prototype.scrollPage = function( up )
 {
-	var zone = this.getZone();
+	var zone = this.getZone( );
 	var dir  = up ? -1 : 1;
-	var fs   = this.$sub.doc.getFont().size;
+	var fs   = this.$sub.doc.getFont( ).size;
 
-	this.setScrollbar(this.scrollbarY.getPos() + dir * zone.height - fs * 2);
-	this.poke();
+	this.setScrollbar( this.scrollbarY.getPos( ) + dir * zone.height - fs * 2 );
+	this.poke( );
 };
 
 
 /*
 | Sets the items position and size after an action.
 */
-Note.prototype.actionstop = function(view, p)
+Note.prototype.actionstop = function( view, p )
 {
-	switch (shell.$action.type) {
+	switch ( shell.$action.type )
+	{
 
 		case Action.ITEMDRAG :
 		case Action.ITEMRESIZE :
 
-			var zone = this.getZone();
+			var zone = this.getZone( );
 
-			if ( zone.width < theme.note.minWidth ||
-				zone.height < theme.note.minHeight )
-				{ throw new Error('Note under minimum size!'); }
+			if( zone.width < theme.note.minWidth ||
+				zone.height < theme.note.minHeight
+			)
+				{ throw new Error( 'Note under minimum size!' ); }
 
-			if (this.twig.zone.eq(zone))
+			if ( this.twig.zone.eq( zone ) )
 				{ return; }
 
 			shell.peer.setZone( this.path, zone );
@@ -234,7 +237,7 @@ Note.prototype.actionstop = function(view, p)
 
 		default :
 
-			return Visual.DocItem.prototype.actionstop.call(this, view, p);
+			return Visual.DocItem.prototype.actionstop.call( this, view, p );
 	}
 };
 
@@ -244,19 +247,25 @@ Note.prototype.actionstop = function(view, p)
 |
 | fabric: to draw upon.
 */
-Note.prototype.draw = function(fabric, view)
+Note.prototype.draw = function( fabric, view )
 {
-	var zone  = this.getZone();
-	var vzone = view.rect(zone);
+	var zone  = this.getZone( );
+	var vzone = view.rect( zone );
 	var f     = this.$fabric;
 	var sbary = this.scrollbarY;
 
 	// no buffer hit?
-	if (config.debug.noCache || !f ||
+	if( config.debug.noCache ||
+		!f ||
 		vzone.width  !== f.width ||
-		vzone.height !== f.height)
+		vzone.height !== f.height
+	)
 	{
-		f = this.$fabric = new Euclid.Fabric(vzone.width, vzone.height);
+		f = this.$fabric = new Euclid.Fabric(
+			vzone.width,
+			vzone.height
+		);
+
 		var doc     = this.$sub.doc;
 		var imargin = this.innerMargin;
 
@@ -264,21 +273,43 @@ Note.prototype.draw = function(fabric, view)
 		var height = doc.getHeight();
 		sbary.visible = height > zone.height - imargin.y;
 
-		var silhoutte = this.getZeroSilhoutte(vzone);
-		f.fill(theme.note.style.fill, silhoutte, 'sketch', Euclid.View.proper);
+		var silhoutte = this.getZeroSilhoutte( vzone );
+		f.fill(
+			theme.note.style.fill,
+			silhoutte,
+			'sketch',
+			Euclid.View.proper
+		);
 
 		// draws selection and text
-		sbary.point = Euclid.Point.renew(0, sbary.getPos(), sbary.point);
-		doc.draw(f, view.home(), zone.width, imargin, sbary.point);
+		sbary.point = Euclid.Point.renew(
+			0,
+			sbary.getPos( ),
+			sbary.point
+		);
+
+		doc.draw(
+			f,
+			view.home( ),
+			zone.width,
+			imargin,
+			sbary.point
+		);
 
 		// draws the border
-		f.edge(theme.note.style.edge, silhoutte, 'sketch', Euclid.View.proper);
+		f.edge(
+			theme.note.style.edge,
+			silhoutte,
+			'sketch',
+			Euclid.View.proper
+		);
 	}
 
-	fabric.drawImage(f, vzone.pnw);
+	fabric.drawImage( f, vzone.pnw );
 
-	if (sbary.visible) {
-		this.setScrollbar();
+	if( sbary.visible )
+	{
+		this.setScrollbar( );
 		sbary.draw(fabric, view);
 	}
 };
@@ -287,13 +318,23 @@ Note.prototype.draw = function(fabric, view)
 /*
 | Mouse wheel turned.
 */
-Note.prototype.mousewheel = function(view, p, dir, shift, ctrl)
+Note.prototype.mousewheel =
+	function(
+		view,
+		p,
+		dir,
+		shift,
+		ctrl
+	)
 {
 	if(! this.getZone().within( view, p) )
 		{ return false; }
 
-	this.setScrollbar(this.scrollbarY.getPos() - dir * system.settings.textWheelSpeed);
-	this.poke();
+	this.setScrollbar(
+		this.scrollbarY.getPos( ) - dir * system.settings.textWheelSpeed
+	);
+
+	this.poke( );
 	shell.redraw = true;
 	return true;
 };
@@ -302,9 +343,9 @@ Note.prototype.mousewheel = function(view, p, dir, shift, ctrl)
 /*
 | Returns the width for the contents flow.
 */
-Note.prototype.getFlowWidth = function()
+Note.prototype.getFlowWidth = function( )
 {
-	var zone  = this.getZone();
+	var zone  = this.getZone( );
 	var flowWidth = zone.width - this.innerMargin.x;
 
 	return flowWidth;
@@ -314,8 +355,10 @@ Note.prototype.getFlowWidth = function()
 /*
 | Returns the para seperation height.
 */
-Note.prototype.getParaSep = function(fontsize)
-	{ return Jools.half(fontsize); };
+Note.prototype.getParaSep = function( fontsize )
+{
+	return Jools.half( fontsize );
+}
 
 
 /*
@@ -324,35 +367,36 @@ Note.prototype.getParaSep = function(fontsize)
 */
 Note.prototype.getZone = function()
 {
-	var twig    = this.twig;
-	var $action = shell.$action;
-	var max     = Math.max;
-	var min     = Math.min;
+	var twig   = this.twig;
+	var action = shell.$action;
+	var max    = Math.max;
+	var min    = Math.min;
 
-	if ( !$action || !this.path.equals( $action.itemPath ) )
+	if( !action || !this.path.equals( action.itemPath ) )
 		{ return twig.zone; }
 
 	// FIXME cache the last zone
 
-	switch ($action.type)
+	switch( action.type )
 	{
 		case Action.ITEMDRAG:
 			return twig.zone.add(
-				$action.move.x - $action.start.x,
-				$action.move.y - $action.start.y);
+				action.move.x - action.start.x,
+				action.move.y - action.start.y
+			);
 
 		case Action.ITEMRESIZE:
-			var szone = $action.startZone;
+			var szone = action.startZone;
 			if (!szone) return twig.zone;
 			var spnw = szone.pnw;
 			var spse = szone.pse;
-			var dx = $action.move.x - $action.start.x;
-			var dy = $action.move.y - $action.start.y;
+			var dx = action.move.x - action.start.x;
+			var dy = action.move.y - action.start.y;
 			var minw = theme.note.minWidth;
 			var minh = theme.note.minHeight;
 			var pnw, pse;
 
-			switch ($action.align) {
+			switch( action.align ) {
 			case 'n'  :
 				pnw = Euclid.Point.renew(spnw.x, min(spnw.y + dy, spse.y - minh), spnw, spse);
 				pse = spse;

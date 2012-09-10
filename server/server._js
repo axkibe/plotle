@@ -20,36 +20,37 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/**
+
+/*
 | Capsule
 |
 | (to make jshint happy)
 */
-(function(){
+( function( ) {
 
 "use strict";
 
-if (typeof(require) === 'undefined')
-	{ throw new Error('this code requires node!'); }
+if ( typeof( require ) === 'undefined' )
+	{ throw new Error( 'this code requires node!' ); }
 
 
 /*
 | Imports
 */
-var Jools       = require('../shared/jools');
-var MeshMashine = require('../shared/meshmashine');
-var Meshverse   = require('../shared/meshverse');
-var Path        = require('../shared/path');
-var Resource    = require('./resource');
-var Tree        = require('../shared/tree');
-var config      = require('../config');
-var fs          = require('fs');
-var http        = require('http');
-var sha1        = require('../shared/sha1');
-var mongodb     = require('mongodb');
-var uglify      = config.uglify && require('uglify-js');
-var url         = require('url');
-var zlib        = require('zlib');
+var Jools       = require( '../shared/jools'       );
+var MeshMashine = require( '../shared/meshmashine' );
+var Meshverse   = require( '../shared/meshverse'   );
+var Path        = require( '../shared/path'        );
+var Resource    = require( './resource'            );
+var Tree        = require( '../shared/tree'        );
+var config      = require( '../config'             );
+var fs          = require( 'fs'                    );
+var http        = require( 'http'                  );
+var sha1        = require( '../shared/sha1'        );
+var mongodb     = require( 'mongodb'               );
+var uglify      = config.uglify && require( 'uglify-js' );
+var url         = require( 'url'                   );
+var zlib        = require( 'zlib'                  );
 
 
 /*
@@ -146,8 +147,9 @@ Server.prototype.checkRepositorySchemaVersion = function(_)
 {
 	log('start', 'checking repository schema version');
 
-	var global  = this.$db.connection.collection('global', _);
-	var version = global.findOne({ _id : 'version' }, _);
+	var global  = this.$db.connection.collection( 'global', _);
+
+	var version = global.findOne( { _id : 'version' }, _);
 
 	if( version )
 	{
@@ -168,7 +170,7 @@ Server.prototype.checkRepositorySchemaVersion = function(_)
 	var changes = this.$db.connection.collection('changes', _);
 
 	if( changes.find(_).nextObject(_) !== null )
-		{ throw new Error('Found a version 2 schema, expected 3'); }
+		{ throw new Error(' Found a version 2 schema, expected 3' ); }
 
 	// if not, initializes the database repository
 
@@ -180,7 +182,7 @@ Server.prototype.checkRepositorySchemaVersion = function(_)
 */
 Server.prototype.initRepository = function(_)
 {
-	log('start', 'found no repository, initializing a new one');
+	log( 'start', 'found no repository, initializing a new one' );
 
 	var initSpaces = [
 		'meshcraft:home',
@@ -191,7 +193,7 @@ Server.prototype.initRepository = function(_)
 	{
 		var space = initSpaces[ s ];
 
-		log('start', '  initializing space ' + space);
+		log( 'start', '  initializing space ' + space );
 
 		this.$db.spaces.insert(
 			{
@@ -202,7 +204,7 @@ Server.prototype.initRepository = function(_)
 
 	log('start', '  initializing global.version');
 
-	var global = this.$db.connection.collection('global', _);
+	var global = this.$db.connection.collection( 'global', _);
 
 	global.insert(
 		{
@@ -431,6 +433,7 @@ Server.prototype.prepareResources = function(_)
 		'shared/euclid/fabric.js',                         'fb',
 		'shared/euclid/measure.js',                        'fb',
 		'shared/euclid/rect.js',                           'fb',
+		'shared/euclid/shape.js',                          'fb',
 		'shared/euclid/bezirect.js',                       'fb',
 		'shared/euclid/ellipse.js',                        'fb',
 		'shared/euclid/ellipse-flower.js',                 'fb',
