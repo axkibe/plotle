@@ -170,7 +170,6 @@ Ellipse.prototype.sketch = function( fabric, border, twist, view )
 
 	fabric.moveTo( pstart );
 
-
 	while( h < hZ )
 	{
 		if( !pstart )
@@ -265,29 +264,6 @@ Ellipse.prototype.sketch = function( fabric, border, twist, view )
 	if( pstart !== null )
 		{ throw new Error( 'hull did not close' ); }
 
-	/*
-
-	var wx = view.x(this.pnw) + border;
-	var ny = view.y(this.pnw) + border;
-	var ex = view.x(this.pse) - border;
-	var sy = view.y(this.pse) - border;
-
-	var my  = Jools.half(ny + sy);
-	var mx  = Jools.half(wx + ex);
-
-	var magic = Euclid.Const.magic;
-	var am    = magic * (mx - wx);
-	var bm    = magic * (my - ny);
-
-	fabric.moveTo(                     wx, my );
-	fabric.beziTo(   0, -bm, -am,   0, mx, ny );
-	fabric.beziTo(  am,   0,   0, -bm, ex, my );
-	// FIXME workaround chrome pixel error
-	//fabric.lineTo(                   mx, sy - 1);
-	fabric.beziTo(   0,  bm,  am,   0, mx, sy );
-	fabric.beziTo( -am,   0,   0,  bm, wx, my );
-
-	*/
 };
 
 
@@ -296,6 +272,111 @@ Ellipse.prototype.sketch = function( fabric, border, twist, view )
 */
 Ellipse.prototype.getProjection = function( p )
 {
+	var hull = this.hull;
+	var h    = 0;
+	var hZ   = hull.length;
+
+	if( hull[ h++ ] !== 'start' )
+		{ throw new Error( 'hull must have start at [0]' ); }
+
+	var pstart = hull [ h++ ] ;
+	var pc     = this.pc;
+	var pp     = pstart;
+	var pn     = null;
+
+	var dx, dy, dxy;
+	var nx, ny;
+	var cx, cy;
+	var a, b;
+
+	while( h < hZ )
+	{
+		if( !pstart )
+			{ throw new Error( 'hull closed prematurely'); }
+
+		switch( hull[h] )
+		{
+
+			case 'bezier' :
+				pn = hull[ h + 5 ];
+				break;
+
+			case 'round' :
+				pn    = hull[ h + 2 ];
+			 	break;
+
+			default :
+				throw new Error( 'unknown hull section: ' + hull[h] );
+
+		}
+
+		if( pn === 'close')
+		{
+			pn = pstart;
+			pstart = null;
+		}
+
+		switch( hull[h] )
+		{
+
+			case 'bezier' :
+
+				throw new Error(' cannot yet do projections for beziers ');
+
+			case 'round' :
+
+				dx = pn.x - pp.x;
+				dy = pn.y - pp.y;
+
+				dxy = dx * dy;
+
+				if( dxy > 0 )
+				{
+					cx = pp.x;
+					cy = pn.y;
+					a  = Math.abs( pn.x - cx );
+					b  = Math.abs( pp.y - cy );
+				}
+				else
+				{
+					cx = pn.x;
+					cy = pp.y;
+					a  = Math.abs( pp.x - cx );
+					b  = Math.abs( pn.y - cy );
+				}
+
+				if(
+					( ( p.x >= cx && dy > 0 ) || ( p.x <= cx && dy < 0 ) ) &&
+					( ( p.y >= cy && dx < 0 ) || ( p.y <= cy && dx > 0 ) ) )
+				{
+					var k = ( p.y - cy ) / ( p.x - cx );
+
+					// x^2 / a^2 + y^2 / b^2 = 1
+					// y = k * x
+					// x^2 / a^2 + x^2 * k^2 / b^2 = 1
+					// x^2 ( 1 / a^2 + k^2 / b^2) = 1
+
+					var x = Math.sqrt( 1 / ( 1 / ( a * a ) + k * k / ( b * b ) ) );
+					var y = k * x;
+
+					return new Euclid.Point( cx + x, cy + y );
+
+				}
+
+				h += 3;
+			 	break;
+
+			default :
+				throw new Error( 'unknown hull section: ' + hull[h] );
+
+		}
+
+		pp = pn;
+	}
+
+	if( pstart !== null )
+		{ throw new Error( 'hull did not close' ); }
+
 	return this.pc;
 };
 
