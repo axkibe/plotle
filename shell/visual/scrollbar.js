@@ -92,15 +92,16 @@ Scrollbar.prototype.getArea = function(view)
 	var pos  = this._$pos;
 	var max  = this._$max;
 
-	var ap   = Math.round(this._$aperture * size / max);
-	var map  = Math.max(ap, ths.minSize);
-	var sy   = Math.round(pos * ((size - map + ap) / max));
-	var s05  = Jools.half(ths.strength);
+	var ap   = Math.round( this._$aperture * size / max );
+	var map  = Math.max( ap, ths.minSize );
+	var sy   = Math.round( pos * ( ( size - map + ap ) / max ) );
+	var s05  = Jools.half( ths.strength );
 
-	return new Euclid.BeziRect(
-		view.point(pnw.x, pnw.y + sy)      .add(-s05, 0),
-		view.point(pnw.x, pnw.y + sy + map).add( s05, 0),
-		ths.ellipseA, ths.ellipseB
+	return new Euclid.RoundRect(
+		view.point( pnw.x, pnw.y + sy       ).add( -s05, 0 ),
+		view.point( pnw.x, pnw.y + sy + map ).add(  s05, 0 ),
+		ths.ellipseA,
+		ths.ellipseB
 	);
 };
 
@@ -108,9 +109,9 @@ Scrollbar.prototype.getArea = function(view)
 /*
 | Returns the scrollbars position.
 */
-Scrollbar.prototype.getPos = function()
+Scrollbar.prototype.getPos = function( )
 {
-	if (!this.visible)
+	if( !this.visible )
 		{ return 0; }
 
 	return this._$pos;
@@ -120,15 +121,15 @@ Scrollbar.prototype.getPos = function()
 /*
 | Sets the scrollbars position and location.
 */
-Scrollbar.prototype.setPos = function(pos, aperture, max, pnw, size)
+Scrollbar.prototype.setPos = function( pos, aperture, max, pnw, size )
 {
-	if (max - aperture >= 0)
-		{ pos = Jools.limit(0, pos, max - aperture); }
+	if( max - aperture >= 0 )
+		{ pos = Jools.limit( 0, pos, max - aperture ); }
 	else
 		{ pos = 0; }
 
-	if (pos < 0)
-		{ throw new Error('Scrollbar.setPos < 0'); }
+	if( pos < 0 )
+		{ throw new Error( 'Scrollbar.setPos < 0' ); }
 
 	this._$pos      = pos;
 	this._$aperture = aperture;

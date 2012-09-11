@@ -54,41 +54,43 @@ var Jools;
 */
 var Fabric = Euclid.Fabric = function(a1, a2)
 {
-	switch (typeof(a1)) {
+	switch (typeof(a1))
+	{
 		case 'undefined' :
-			this._canvas = document.createElement('canvas');
+			this._canvas = document.createElement( 'canvas' );
 			break;
 
 		case 'object' :
-			switch(a1.constructor)
+
+			switch( a1.constructor )
 			{
 				case Fabric:
 					this._canvas = a1._canvas;
 					break;
-				case Euclid.BeziRect :
-				case Euclid.Rect     :
-					this._canvas = document.createElement('canvas');
+				case Euclid.RoundRect :
+				case Euclid.Rect      :
+					this._canvas = document.createElement( 'canvas' );
 					this._canvas.width  = a1.width;
 					this._canvas.height = a1.height;
 					break;
 				default :
 					if (!a1.getContext)
-						{ throw new Error('Invalid parameter to new Fabric: ' + a1); }
+						{ throw new Error( 'Invalid parameter to new Fabric: ' + a1 ); }
 					this._canvas = a1;
 					break;
 			}
 			break;
 
 		case 'number' :
-			this._canvas = document.createElement('canvas');
+			this._canvas = document.createElement( 'canvas' );
 			this._canvas.width  = a1;
 			this._canvas.height = a2;
 			break;
 
 		default :
-			throw new Error('Invalid parameter to new Fabric: ' + a1);
+			throw new Error( 'Invalid parameter to new Fabric: ' + a1 );
 	}
-	this._cx = this._canvas.getContext('2d');
+	this._cx = this._canvas.getContext( '2d' );
 
 	// curren positiont (without twist)
 	this._posx = this._posy = null;
@@ -124,7 +126,7 @@ Object.defineProperty(Fabric.prototype, 'height',
 | arc(p,    radius, startAngle, endAngle, anticlockwise)   -or-
 | arc(x, y, radius, startAngle, endAngle, anticlockwise)   -or-
 */
-Fabric.prototype.arc = function(a1, a2, a3, a4, a5, a6)
+Fabric.prototype.arc = function( a1, a2, a3, a4, a5, a6 )
 {
 	var tw = this._twist, x, y, r, sa, ea, ac;
 	if (typeof(a1) === 'object')
@@ -146,7 +148,7 @@ Fabric.prototype.arc = function(a1, a2, a3, a4, a5, a6)
 		ac = a6;
 	}
 
-	this._cx.arc(x + tw, y + tw, r, sa, ea, ac);
+	this._cx.arc( x + tw, y + tw, r, sa, ea, ac );
 };
 
 
@@ -157,60 +159,63 @@ Fabric.prototype.arc = function(a1, a2, a3, a4, a5, a6)
 | bezier(cp1x, cp1y, cp2x, cp2y, x, y) -or-
 | any combination of points and arguments.
 */
-Fabric.prototype.beziTo = function()
+Fabric.prototype.beziTo = function( )
 {
 	var a   = 0, aZ = arguments.length;
 	var tw  = this._twist;
 
 	var cp1x, cp1y, cp2x, cp2y, x, y;
 
-	if (this._posx === null || this._posy === null)
-		{ throw new Error('beziTo: pFail'); }
+	if( this._posx === null || this._posy === null )
+		{ throw new Error( 'beziTo: pFail' ); }
 
-	if (a >= aZ) throw new Error('beziTo: aFail');
-	if (typeof(arguments[a]) === 'object')
+	if( a >= aZ )
+		{ throw new Error( 'beziTo: aFail' ); }
+
+	if( typeof( arguments[ a ] ) === 'object' )
 	{
-		cp1x = arguments[a].x;
-		cp1y = arguments[a++].y;
+		cp1x = arguments[ a   ].x;
+		cp1y = arguments[ a++ ].y;
 	}
 	else
 	{
-		cp1x = arguments[a++];
-		if (a >= aZ) throw new Error('beziTo: aFail');
-		cp1y = arguments[a++];
+		cp1x = arguments[ a++ ];
+		if (a >= aZ)
+			{ throw new Error( 'beziTo: aFail' ); }
+		cp1y = arguments[ a++ ];
 	}
 
-	if (a >= aZ)
+	if( a >= aZ )
 		{ throw new Error('beziTo: aFail'); }
 
 
-	if (typeof(arguments[a]) === 'object')
+	if( typeof( arguments[ a ] ) === 'object' )
 	{
-		cp2x = arguments[a].x;
-		cp2y = arguments[a++].y;
+		cp2x = arguments[ a   ].x;
+		cp2y = arguments[ a++ ].y;
 	}
 	else
 	{
-		cp2x = arguments[a++];
-		if (a >= aZ)
-			{ throw new Error('beziTo: aFail'); }
-		cp2y = arguments[a++];
+		cp2x = arguments[ a++ ];
+		if(a >= aZ)
+			{ throw new Error( 'beziTo: aFail' ); }
+		cp2y = arguments[ a++ ];
 	}
 
-	if (a >= aZ)
-		{ throw new Error('beziTo: aFail'); }
+	if(a >= aZ)
+		{ throw new Error( 'beziTo: aFail' ); }
 
-	if (typeof(arguments[a]) === 'object')
+	if( typeof(arguments[ a ]) === 'object' )
 	{
-		x = arguments[a].x;
-		y = arguments[a++].y;
+		x = arguments[ a   ].x;
+		y = arguments[ a++ ].y;
 	}
 	else
 	{
-		x = arguments[a++];
-		if (a >= aZ)
-			{ throw new Error('beziTo: aFail'); }
-		y = arguments[a++];
+		x = arguments[ a++ ];
+		if( a >= aZ )
+			{ throw new Error( 'beziTo: aFail' ); }
+		y = arguments[ a++ ];
 	}
 
 	cp1x += this._posx + tw;
@@ -222,20 +227,20 @@ Fabric.prototype.beziTo = function()
 	x += tw;
 	y += tw;
 
-	this._cx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x, y);
+	this._cx.bezierCurveTo( cp1x, cp1y, cp2x, cp2y, x, y );
 };
 
 
 /*
 | Removes the clipping
 */
-Fabric.prototype.deClip = function()
+Fabric.prototype.deClip = function( )
 {
-	if (!this.$clip)
+	if ( !this.$clip )
 		{ throw new Error('not clipping!'); }
 
 	this.$clip = false;
-	this._cx.restore();
+	this._cx.restore( );
 };
 
 
@@ -245,16 +250,17 @@ Fabric.prototype.deClip = function()
 | drawImage(image, pnw)   -or-
 | drawImage(image, x, y)
 */
-Fabric.prototype.drawImage = function(image, a1, a2, a3)
+Fabric.prototype.drawImage = function( image, a1, a2, a3 )
 {
-	if (image instanceof Fabric) {
-		if (!(image.width > 0 && image.height > 0))
+	if( image instanceof Fabric ) {
+		if( !( image.width > 0 && image.height > 0 ) )
 			{ return; }
+
 		image = image._canvas;
 	}
 	var x, y, c;
 
-	if (typeof(a1) === 'object')
+	if( typeof( a1 ) === 'object' )
 	{
 		x = a1.x;
 		y = a1.y;
@@ -267,12 +273,14 @@ Fabric.prototype.drawImage = function(image, a1, a2, a3)
 		c = a3;
 	}
 
-	Jools.ensureInt(x, y);
-	if (Jools.is(c))
+	Jools.ensureInt( x, y );
+
+	if( Jools.is( c ) )
 		{ this._cx.globalCompositeOperation = c; }
 
 	this._cx.drawImage(image, x, y);
-	if (Jools.is(c))
+
+	if( Jools.is( c ) )
 		{ this._cx.globalCompositeOperation = 'source-over'; }
 };
 
@@ -285,13 +293,17 @@ Fabric.prototype.drawImage = function(image, a1, a2, a3)
 */
 Fabric.prototype.edge = function(style, shape, sketch, view, a1, a2, a3, a4)
 {
-	if (style instanceof Array)
+	if( style instanceof Array )
 	{
-		for(var i = 0; i < style.length; i++)
-			{ this._edge(style[i], shape, sketch, view, a1, a2, a3, a4); }
+		for( var i = 0; i < style.length; i++ )
+		{
+			this._edge( style[ i ], shape, sketch, view, a1, a2, a3, a4 );
+		}
 	}
 	else
-		{ this._edge(style, shape, sketch, view, a1, a2, a3, a4); }
+	{
+		this._edge( style, shape, sketch, view, a1, a2, a3, a4 );
+	}
 };
 
 

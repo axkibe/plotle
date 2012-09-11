@@ -83,76 +83,39 @@ Line.connect = function( shape1, end1, shape2, end2 )
 	if( !shape1 || !shape2 )
 		{ throw new Error( 'error' ); }
 
+	// gets the center points
+	var pc1 = shape1 instanceof Euclid.Point ? shape1 : shape1.pc;
+	var pc2 = shape2 instanceof Euclid.Point ? shape2 : shape2.pc;
+
+	var p1, p2;
+
+	if( shape1 instanceof Euclid.Point )
+	{
+		p1 = shape1;
+	}
+	else if( shape1.within( Euclid.View.proper, pc2 ) )
+	{
+		p1 = shape1.pc;
+	}
+	else
+	{
+		p1 = shape1.getProjection( pc2 );
+	}
+
 	if( shape2 instanceof Euclid.Point )
 	{
-		var p2 = shape2;
-		var p1;
-
-		if( shape1.within( Euclid.View.proper, p2 ) )
-		{
-			p1 = shape1.pc;
-		}
-		else
-		{
-			p1 = shape1.getProjection( p2 );
-		}
-
-		return new Line( p1, end1, p2, end2 );
+		p2 = shape2;
 	}
-
-	if( shape1 instanceof Euclid.Rect && shape2 instanceof Euclid.Rect )
+	else if( shape2.within( Euclid.View.proper, pc1 ) )
 	{
-		var x1, y1, x2, y2;
-
-		if( shape2.pnw.x > shape1.pse.x )
-		{
-			// zone2 is clearly on the right
-			x1 = shape1.pse.x;
-			x2 = shape2.pnw.x;
-		}
-		else if( shape2.pse.x < shape1.pnw.x )
-		{
-			// zone2 is clearly on the left
-			x1 = shape1.pnw.x;
-			x2 = shape2.pse.x;
-		}
-		else
-		{
-			// an intersection
-			x1 = x2 = Jools.half(
-				Math.max(shape1.pnw.x, shape2.pnw.x) +
-				Math.min(shape1.pse.x, shape2.pse.x)
-			);
-		}
-
-		if ( shape2.pnw.y > shape1.pse.y )
-		{
-			// zone2 is clearly on the bottom
-			y1 = shape1.pse.y;
-			y2 = shape2.pnw.y;
-		}
-		else if ( shape2.pse.y < shape1.pnw.y )
-		{
-			// zone2 is clearly on the top
-			y1 = shape1.pnw.y;
-			y2 = shape2.pse.y;
-		}
-		else
-		{
-			// an intersection
-			y1 = y2 = Jools.half(
-				Math.max(shape1.pnw.y, shape2.pnw.y) +
-				Math.min(shape1.pse.y, shape2.pse.y)
-			);
-		}
-
-		return new Line(
-			new Euclid.Point(x1, y1), end1,
-			new Euclid.Point(x2, y2), end2
-		);
+		p2 = shape2.pc;
+	}
+	else
+	{
+		p2 = shape2.getProjection( pc1 );
 	}
 
-	throw new Error('do not know how to create connection.');
+	return new Line( p1, end1, p2, end2 );
 };
 
 

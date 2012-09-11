@@ -73,7 +73,7 @@ var Input = Dash.Input = function( twig, panel, inherit, name )
 		panel.iframe
 	);
 
-	this._bezi   = new Euclid.BeziRect(
+	this._bezi   = new Euclid.RoundRect(
 		Euclid.Point.zero,
 		pse.sub( pnw ),
 		7, 3
@@ -146,7 +146,15 @@ Input.prototype.maskKern = function( size )
 /*
 | Draws the mask for password fields
 */
-Input.prototype.sketchMask = function(fabric, border, twist, view, length, size)
+Input.prototype.sketchMask =
+	function(
+		fabric,
+		border,
+		twist,
+		view,
+		length,
+		size
+	)
 {
 	var pitch = this._pitch;
 	var x     = view.x( pitch );

@@ -102,7 +102,7 @@ Note.prototype.getSilhoutte = function( zone )
 	if( s && s.eq( zone ) )
 		{ return s; }
 
-	return this._$silhoutte = new Euclid.BeziRect(
+	return this._$silhoutte = new Euclid.RoundRect(
 		zone.pnw,
 		zone.pse,
 		cr, cr
@@ -127,14 +127,16 @@ Note.prototype.getZeroSilhoutte = function( zone )
 		return s;
 	}
 
-	return this._$zeroSilhoutte = new Euclid.BeziRect(
-		Euclid.Point.zero,
-		new Euclid.Point(
-			zone.width,
-			zone.height
-		),
-		cr, cr
-	);
+	return this._$zeroSilhoutte =
+		new Euclid.RoundRect(
+			Euclid.Point.zero,
+			new Euclid.Point(
+				zone.width,
+				zone.height
+			),
+			cr,
+			cr
+		);
 };
 
 

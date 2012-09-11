@@ -202,8 +202,6 @@ Space.prototype.draw = function()
 				av2.getZone( ) :
 				view.depoint( action.move );
 
-			var target = view.depoint( action.move );
-
 			var arrow  = Euclid.Line.connect(
 				av.getSilhoutte( av.getZone( ) ),
 				'normal',

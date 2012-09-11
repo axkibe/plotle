@@ -8,16 +8,16 @@ Files
 =====
 <table>
 
- <tr><td>   bezirect.js
-</td><td>   a rectangle with rounded (beziers) corners
-</td></tr>
-
  <tr><td>   compass.js
 </td><td>   directions on a compass
 </td></tr>
 
  <tr><td>   ellipse.js
 </td><td>   an ellipse
+</td></tr>
+
+ <tr><td>   ellipse-flower.js
+</td><td>   a double ellipse with 6 segments
 </td></tr>
 
  <tr><td>   fabric.js
@@ -36,16 +36,16 @@ Files
 </td><td>   measures text widths
 </td></tr>
 
- <tr><td>   ellipse-flower.js
-</td><td>   a double ellipse with 6 segments
-</td></tr>
-
  <tr><td>   point.js
 </td><td>   a point
 </td></tr>
 
  <tr><td>   rect.js
 </td><td>   a rectangle
+</td></tr>
+
+ <tr><td>   roundrect.js
+</td><td>   a rectangle with rounded (beziers) corners
 </td></tr>
 
  <tr><td>   view.js

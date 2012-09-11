@@ -434,7 +434,7 @@ Server.prototype.prepareResources = function(_)
 		'shared/euclid/measure.js',                        'fb',
 		'shared/euclid/rect.js',                           'fb',
 		'shared/euclid/shape.js',                          'fb',
-		'shared/euclid/bezirect.js',                       'fb',
+		'shared/euclid/round-rect.js',                     'fb',
 		'shared/euclid/ellipse.js',                        'fb',
 		'shared/euclid/ellipse-flower.js',                 'fb',
 		'shared/euclid/line.js',                           'fb',

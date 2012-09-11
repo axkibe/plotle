@@ -11,17 +11,15 @@
               |   `'.  |    `-.______ / '---'    \_______|/
               '   .'|  '/            `
                `-'  `--'
-              ,-,---.          .-,--.         .
-               '|___/ ,-. ,_, . `|__/ ,-. ,-. |-
-               ,|   \ |-'  /  | )| \  |-' |   |
-              `-^---' `-' '"' ' `'  ` `-' `-' `'
+             .-,--.               . .-,--.         .
+              `|__/ ,-. . . ,-. ,-|  `|__/ ,-. ,-. |-
+              )| \  | | | | | | | |  )| \  |-' |   |
+              `'  ` `-' `-^ ' ' `-^  `'  ` `-' `-' `'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- A rectangle with rounded (beziers) corners.
+ A rectangle with rounded corners.
 
- FIXME rename to RoundRect
-
- BeziRects are immutable objects.
+ RoundRects are immutable objects.
 
       <-> a
       | |
@@ -72,10 +70,10 @@ if (typeof(window) === 'undefined')
 /*
 | Constructor.
 |
-| BeziRect(rect, a, b)      -or-
-| BeziRect(pnw, pse, a, b)
+| RoundRect(rect, a, b)      -or-
+| RoundRect(pnw, pse, a, b)
 */
-var BeziRect = Euclid.BeziRect = function(a1, a2, a3, a4)
+var RoundRect = Euclid.RoundRect = function(a1, a2, a3, a4)
 {
 	if (a1.constructor === Euclid.Point)
 	{
@@ -90,13 +88,13 @@ var BeziRect = Euclid.BeziRect = function(a1, a2, a3, a4)
 		this.b = a3;
 	}
 };
-Jools.subclass(BeziRect, Euclid.Rect);
+Jools.subclass(RoundRect, Euclid.Rect);
 
 
 /*
 | Draws the roundrect.
 */
-BeziRect.prototype.sketch = function(fabric, border, twist, view)
+RoundRect.prototype.sketch = function(fabric, border, twist, view)
 {
 	var wx = view.x(this.pnw) + border;
 	var ny = view.y(this.pnw) + border;
@@ -122,9 +120,9 @@ BeziRect.prototype.sketch = function(fabric, border, twist, view)
 
 
 /*
-| Returns true if Point p is within the BeziRect.
+| returns true if point p is within the round-rect
 */
-BeziRect.prototype.within = function( view, p )
+RoundRect.prototype.within = function( view, p )
 {
 	return Euclid.swatch.withinSketch(
 		this,
