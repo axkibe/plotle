@@ -8,5 +8,6 @@
 	"trailing"  : true,
 	"undef"     : true,
 	"onecase"   : true,
+	"laxbreak"  : true,
 	"strict"    : true
 }

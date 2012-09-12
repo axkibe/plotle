@@ -107,8 +107,8 @@ Shape.prototype.sketch = function( fabric, border, twist, view )
 
 			case 'round' :
 				pn    = hull[ h + 2 ];
-			 	magic = Euclid.Const.magic;
-			 	break;
+				magic = Euclid.Const.magic;
+				break;
 
 			default :
 				throw new Error( 'unknown hull section: ' + hull[ h ] );
@@ -238,7 +238,7 @@ Shape.prototype.getProjection = function( p )
 
 			case 'round' :
 				pn = hull[ h + 2 ];
-			 	break;
+				break;
 
 			default :
 				throw new Error( 'unknown hull section: ' + hull[h] );
@@ -381,7 +381,7 @@ Shape.prototype.getProjection = function( p )
 				}
 
 				h += 3;
-			 	break;
+				break;
 
 			default :
 

@@ -360,7 +360,7 @@ Note.prototype.getFlowWidth = function( )
 Note.prototype.getParaSep = function( fontsize )
 {
 	return Jools.half( fontsize );
-}
+};
 
 
 /*

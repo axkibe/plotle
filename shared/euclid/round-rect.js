@@ -110,7 +110,7 @@ var RoundRect = Euclid.RoundRect = function(a1, a2, a3, a4)
 			'round' , 'clockwise', pse.sub( a , 0 ),
 			'line'  ,              psw.add( a , 0 ),
 			'round' , 'clockwise', psw.sub( 0 , b ),
-			'line'  ,              'close',
+			'line'  ,             'close'
 		]
 	);
 };
