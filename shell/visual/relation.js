@@ -73,13 +73,14 @@ Relation.imargin = new Euclid.Margin( theme.relation.imargin );
 Relation.create = function( space, item1, item2 )
 {
 	var cline = Euclid.Line.connect(
-		item1.getZone( ),
+		item1.getSilhoutte( item1.getZone( ) ),
 		null,
-		item2.getZone( ),
+		item2.getSilhoutte( item2.getZone( ) ),
 		null
 	);
 
 	var pnw   = cline.pc.sub( theme.relation.createOffset );
+
 	var key   = shell.peer.newRelation(
 		space.spacename,
 		pnw,
@@ -107,7 +108,7 @@ Relation.prototype.draw = function( fabric, view )
 	if( item1 )
 	{
 		var l1 = Euclid.Line.connect(
-			item1.getZone(),
+			item1.getSilhoutte( item1.getZone( ) ),
 			'normal',
 			zone,
 			'normal'
@@ -126,7 +127,7 @@ Relation.prototype.draw = function( fabric, view )
 		var l2 = Euclid.Line.connect(
 			zone,
 			'normal',
-			item2.getZone(),
+			item2.getSilhoutte( item2.getZone() ),
 			'arrow'
 		);
 

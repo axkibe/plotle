@@ -95,17 +95,28 @@ Rect.prototype.reduce = function(margin)
 	// allows margins to reduce the rect to zero size without erroring.
 
 	return new Rect(
-		Euclid.Point.renew(this.pnw.x + margin.e, this.pnw.y + margin.n, this.pnw, this.pse),
-		Euclid.Point.renew(this.pse.x - margin.w, this.pse.y - margin.s, this.pnw, this.pse)
+		Euclid.Point.renew(
+			this.pnw.x + margin.e,
+			this.pnw.y + margin.n,
+			this.pnw,
+			this.pse
+		),
+
+		Euclid.Point.renew(
+			this.pse.x - margin.w,
+			this.pse.y - margin.s,
+			this.pnw,
+			this.pse
+		)
 	);
 };
 
 
 /*
-| Point in the center.
+| point in the center
 */
 Jools.lazyFixate(Rect.prototype, 'pc',
-	function()
+	function( )
 	{
 		return new Euclid.Point(
 			Jools.half( this.pse.x + this.pnw.x ),
@@ -116,10 +127,10 @@ Jools.lazyFixate(Rect.prototype, 'pc',
 
 
 /*
-| Point in the north.
+| point in the north
 */
 Jools.lazyFixate(Rect.prototype, 'pn',
-	function()
+	function( )
 	{
 		return new Euclid.Point(
 			Jools.half( this.pse.x + this.pnw.x ),
@@ -130,98 +141,111 @@ Jools.lazyFixate(Rect.prototype, 'pn',
 
 
 /*
-| West.
+| west point
 */
 Jools.lazyFixate(Rect.prototype, 'w',
-	function()
+	function( )
 	{
-		return new Euclid.Point(this.pnw.x, Jools.half(this.pse.y + this.pnw.y));
+		return new Euclid.Point(
+			this.pnw.x,
+			Jools.half( this.pse.y + this.pnw.y )
+		);
 	}
 );
 
 
 /*
-| East.
+| east point
 */
 Jools.lazyFixate(Rect.prototype, 'e',
 	function()
 	{
-		return new Euclid.Point(this.pse.x, Jools.half(this.pse.y + this.pnw.y));
+		return new Euclid.Point(
+			this.pse.x,
+			Jools.half( this.pse.y + this.pnw.y )
+		);
 	}
 );
 
 
 /*
-| Returns a rect moved by a point or x/y.
+| returns a rect moved by a point or x/y
 |
 | add(point)   -or-
 | add(x, y)
 */
 Rect.prototype.add = function(a1, a2)
 {
-	return new this.constructor(this.pnw.add(a1, a2), this.pse.add(a1, a2));
+	return new this.constructor(
+		this.pnw.add( a1, a2 ),
+		this.pse.add( a1, a2 )
+	);
 };
 
 
 /*
-| Creates a new rect.
+| creates a new rect
 |
-| Looks throw a list of additional rects to look for objects to be reused.
+| looks throw a list of additional rects to look for objects to be reused
 |
 | Rect.renew(wx, ny, ex, sy, ...[rects]... )
 */
-Rect.renew = function(wx, ny, ex, sy)
+Rect.renew = function( wx, ny, ex, sy )
 {
 	var pnw   = null;
 	var pse   = null;
 	var isnon = Jools.isnon;
 	var a, aZ, r;
 
-	for(a = 4, aZ = arguments.length; a < aZ; a++)
+	for( a = 4, aZ = arguments.length; a < aZ; a++ )
 	{
-		r = arguments[a];
-		if (!isnon(r))
+		r = arguments[ a ];
+		if ( !isnon( r ) )
 			{ continue; }
 
-		if (r.pnw.x === wx && r.pnw.y === ny)
+		if( r.pnw.x === wx && r.pnw.y === ny )
 		{
-			if (r.pse.x === ex && r.pse.y === sy)
+			if( r.pse.x === ex && r.pse.y === sy )
 				{ return r; }
+
 			pnw = r.pnw;
 			break;
 		}
 
-		if (r.pse.x === wx && r.pse.y === ny)
-			{ pnw = r.pse; break; }
+		if ( r.pse.x === wx && r.pse.y === ny )
+		{
+			pnw = r.pse;
+			break;
+		}
 	}
 
-	for(a = 4, aZ = arguments.length; a < aZ; a++)
+	for( a = 4, aZ = arguments.length; a < aZ; a++ )
 	{
-		r = arguments[a];
+		r = arguments[ a ];
 
-		if (!isnon(r))
+		if( !isnon( r ) )
 			{ continue; }
 
-		if (r.pnw.x === ex && r.pnw.y === sy)
+		if( r.pnw.x === ex && r.pnw.y === sy )
 		{
 			pse = r.pnw;
 			break;
 		}
 
-		if (r.pse.x === ex && r.pse.y === sy)
+		if( r.pse.x === ex && r.pse.y === sy )
 		{
 			pse = r.pse;
 			break;
 		}
 	}
 
-	if (!pnw)
-		{ pnw = new Euclid.Point(wx, ny); }
+	if( !pnw )
+		{ pnw = new Euclid.Point( wx, ny ); }
 
-	if (!pse)
-		{ pse = new Euclid.Point(ex, sy); }
+	if( !pse )
+		{ pse = new Euclid.Point( ex, sy ); }
 
-	return new Rect(pnw, pse);
+	return new Rect( pnw, pse );
 };
 
 
@@ -231,36 +255,42 @@ Rect.renew = function(wx, ny, ex, sy)
 | sub(point)   -or-
 | sub(x, y)
 */
-Rect.prototype.sub = function(a1, a2)
+Rect.prototype.sub = function( a1, a2 )
 {
-	return new this.constructor(this.pnw.sub(a1, a2), this.pse.sub(a1, a2));
+	return new this.constructor(
+		this.pnw.sub( a1, a2 ),
+		this.pse.sub( a1, a2 )
+	);
 };
 
 
 /*
 | Returns true if this rectangle is the same as another
 */
-Rect.prototype.eq = function(r)
+Rect.prototype.eq = function( r )
 {
-	return this.pnw.eq(r.pnw) && this.pse.eq(r.pse);
+	return (
+		this.pnw.eq( r.pnw ) &&
+		this.pse.eq( r.pse )
+	);
 };
 
 
 /*
 | Draws the rectangle.
 */
-Rect.prototype.sketch = function(fabric, border, twist, view)
+Rect.prototype.sketch = function( fabric, border, twist, view )
 {
-	var wx = view.x(this.pnw);
-	var ny = view.y(this.pnw);
-	var ex = view.x(this.pse);
-	var sy = view.y(this.pse);
+	var wx = view.x( this.pnw );
+	var ny = view.y( this.pnw );
+	var ex = view.x( this.pse );
+	var sy = view.y( this.pse );
 
-	fabric.moveTo(wx + border, ny + border);
-	fabric.lineTo(ex - border, ny + border);
-	fabric.lineTo(ex - border, sy - border);
-	fabric.lineTo(wx + border, sy - border);
-	fabric.lineTo(wx + border, ny + border);
+	fabric.moveTo( wx + border, ny + border );
+	fabric.lineTo( ex - border, ny + border );
+	fabric.lineTo( ex - border, sy - border );
+	fabric.lineTo( wx + border, sy - border );
+	fabric.lineTo( wx + border, ny + border );
 };
 
 
@@ -297,41 +327,41 @@ Rect.prototype.getProjection = function( p )
 	var sy = this.pse.y;
 	var wx = this.pnw.x;
 
-	var k  = (p.y - pc.y) / (p.x - pc.x);
+	var k  = ( p.y - pc.y ) / ( p.x - pc.x );
 	var x, y;
 
 	// y = (x - pc.x) * k + pc.y
 	// x = (y - pc.y) / k + pc.x
 
-	if (p.y <= ny)
+	if( p.y <= ny )
 	{
-		x = (ny - pc.y) / k + pc.x;
+		x = ( ny - pc.y ) / k + pc.x;
 
 		if ( x >= wx && x <= ex )
 			{ return new Euclid.Point( x, ny ); }
 	}
 
-	if (p.y >= sy)
+	if( p.y >= sy )
 	{
-		x = (sy - pc.y) / k + pc.x;
+		x = ( sy - pc.y ) / k + pc.x;
 
-		if (x >= wx && x <= ex)
+		if( x >= wx && x <= ex )
 			{ return new Euclid.Point( x, sy ); }
 	}
 
-	if (p.x >= ex)
+	if( p.x >= ex )
 	{
-		y = (ex - pc.x) * k + pc.y;
+		y = ( ex - pc.x ) * k + pc.y;
 
-		if (y >= ny && y <= sy)
+		if( y >= ny && y <= sy )
 			{ return new Euclid.Point( ex, y ); }
 	}
 
-	if (p.x <= wx)
+	if( p.x <= wx )
 	{
-		y = (wx - pc.x) * k + pc.y;
+		y = ( wx - pc.x ) * k + pc.y;
 
-		if (y >= ny && y <= sy)
+		if( y >= ny && y <= sy )
 			{ return new Euclid.Point( wx, y ); }
 	}
 
@@ -342,9 +372,9 @@ Rect.prototype.getProjection = function( p )
 /*
 | Node export
 */
-if (typeof(window) === 'undefined')
+if( typeof( window ) === 'undefined' )
 {
 	module.exports = Rect;
 }
 
-} ) ();
+} ) ( );

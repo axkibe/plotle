@@ -199,7 +199,7 @@ Space.prototype.draw = function()
 				null;
 
 			var target = av2 ?
-				av2.getZone( ) :
+				av2.getSilhoutte( av2.getZone( ) ) :
 				view.depoint( action.move );
 
 			var arrow  = Euclid.Line.connect(

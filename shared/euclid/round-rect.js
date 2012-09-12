@@ -75,25 +75,55 @@ if (typeof(window) === 'undefined')
 */
 var RoundRect = Euclid.RoundRect = function(a1, a2, a3, a4)
 {
+	var pnw, pse, a, b;
+
 	if (a1.constructor === Euclid.Point)
 	{
-		Euclid.Rect.call(this, a1, a2);
-		this.a = a3;
-		this.b = a4;
+		this.pnw = pnw = a1;
+		this.pse = pse = a2;
+		a = a3;
+		b = a4;
 	}
 	else
 	{
-		Euclid.Rect.call(this, a1.pnw, a1.pse);
-		this.a = a2;
-		this.b = a3;
+		this.pnw = pnw = a1.pnw;
+		this.pse = pse = a1.pse;
+		a = a2;
+		b = a3;
 	}
+
+	pse = pse.sub( 1, 1 );
+	var pne = new Euclid.Point( pse.x, pnw.y );
+	var psw = new Euclid.Point( pnw.x, pse.y );
+
+	Jools.innumerable(this, 'width',  pse.x - pnw.x);
+	Jools.innumerable(this, 'height', pse.y - pnw.y);
+
+	Euclid.Shape.call(
+		this,
+		[
+			'start' ,              pnw.add( 0 , b ),
+			'round' , 'clockwise', pnw.add( a , 0 ),
+			'line'  ,              pne.sub( a , 0 ),
+			'round' , 'clockwise', pne.add( 0 , b ),
+			'line'  ,              pse.sub( 0 , b ),
+			'round' , 'clockwise', pse.sub( a , 0 ),
+			'line'  ,              psw.add( a , 0 ),
+			'round' , 'clockwise', psw.sub( 0 , b ),
+			'line'  ,              'close',
+		]
+	);
 };
-Jools.subclass(RoundRect, Euclid.Rect);
+Jools.subclass( RoundRect, Euclid.Shape );
 
 
 /*
 | Draws the roundrect.
 */
+/*
+
+TODO remove
+
 RoundRect.prototype.sketch = function(fabric, border, twist, view)
 {
 	var wx = view.x(this.pnw) + border;
@@ -117,10 +147,36 @@ RoundRect.prototype.sketch = function(fabric, border, twist, view)
 	fabric.lineTo(                     wx    , ny + b);
 	fabric.beziTo(   0, -mb, -ma,   0, wx + a, ny    );
 };
+*/
 
 
 /*
+| point in the center
+*/
+Jools.lazyFixate(RoundRect.prototype, 'pc',
+	function( )
+	{
+		return new Euclid.Point(
+			Jools.half( this.pse.x + this.pnw.x ),
+			Jools.half( this.pse.y + this.pnw.y )
+		);
+	}
+);
+
+/*
+| Returns true if this rectangle is the same as another
+*/
+RoundRect.prototype.eq = function( r )
+{
+	return (
+		this.pnw.eq( r.pnw ) &&
+		this.pse.eq( r.pse )
+	);
+};
+
+/*
 | returns true if point p is within the round-rect
+| TODO put into Shape
 */
 RoundRect.prototype.within = function( view, p )
 {

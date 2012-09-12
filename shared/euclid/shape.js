@@ -46,8 +46,8 @@ var Jools;
 (function() {
 'use strict';
 
-if (typeof(window) === 'undefined')
-	{ throw new Error('this code needs a browser'); }
+if ( typeof( window ) === 'undefined' )
+	{ throw new Error( 'this code needs a browser' ); }
 
 /*
 | Constructor.
@@ -94,11 +94,15 @@ Shape.prototype.sketch = function( fabric, border, twist, view )
 		if( !pstart )
 			{ throw new Error( 'hull closed prematurely'); }
 
-		switch( hull[h] )
+		switch( hull[ h ] )
 		{
 
 			case 'bezier' :
 				pn = hull[ h + 5 ];
+				break;
+
+			case 'line' :
+				pn = hull[ h + 1 ];
 				break;
 
 			case 'round' :
@@ -107,7 +111,7 @@ Shape.prototype.sketch = function( fabric, border, twist, view )
 			 	break;
 
 			default :
-				throw new Error( 'unknown hull section: ' + hull[h] );
+				throw new Error( 'unknown hull section: ' + hull[ h ] );
 
 		}
 
@@ -129,13 +133,12 @@ Shape.prototype.sketch = function( fabric, border, twist, view )
 			}
 		}
 
-		dx = pn.x - pp.x;
-		dy = pn.y - pp.y;
-
 		switch( hull[h] )
 		{
 
 			case 'bezier' :
+				dx = pn.x - pp.x;
+				dy = pn.y - pp.y;
 
 				fabric.beziTo(
 					hull[ h + 1 ] * dx,
@@ -148,7 +151,16 @@ Shape.prototype.sketch = function( fabric, border, twist, view )
 				h += 6;
 				break;
 
+			case 'line' :
+				fabric.lineTo( pn );
+
+				h += 2;
+				break;
+
 			case 'round' :
+				dx = pn.x - pp.x;
+				dy = pn.y - pp.y;
+
 				var rotation = hull[ h + 1 ];
 				var dxy = dx * dy;
 
@@ -220,8 +232,12 @@ Shape.prototype.getProjection = function( p )
 				pn = hull[ h + 5 ];
 				break;
 
+			case 'line' :
+				pn = hull[ h + 1 ];
+				break;
+
 			case 'round' :
-				pn    = hull[ h + 2 ];
+				pn = hull[ h + 2 ];
 			 	break;
 
 			default :
@@ -241,6 +257,42 @@ Shape.prototype.getProjection = function( p )
 			case 'bezier' :
 
 				throw new Error(' cannot yet do projections for beziers ');
+
+			case 'line' :
+
+				var la1 =  p.y - pc.y;
+				var lb1 = pc.x -  p.x;
+				var lc1 = la1 * pc.x + lb1 * pc.y;
+
+				var la2 = pn.y - pp.y;
+				var lb2 = pp.x - pn.x;
+				var lc2 = la2 * pp.x + lb2 * pp.y;
+
+				var det = la1 * lb2 - la2 * lb1;
+
+				if( det !== 0 )
+				{
+					var pix = ( lb2 * lc1 - lb1 * lc2 ) / det;
+					var piy = ( la1 * lc2 - la2 * lc1 ) / det;
+
+					if(
+						Math.min( pp.x, pn.x ) <= pix &&
+						Math.max( pp.x, pn.x ) >= pix &&
+						Math.min( pp.y, pn.y ) <= piy &&
+						Math.max( pp.y, pn.y ) >= piy &&
+
+						Math.min( pc.x, p.x  ) <= pix &&
+						Math.max( pc.x, p.x  ) >= pix &&
+						Math.min( pc.y, p.y  ) <= piy &&
+						Math.max( pc.y, p.y  ) >= piy
+					)
+					{
+						return new Euclid.Point( pix, piy );
+					}
+				}
+
+				h += 2;
+				break;
 
 			case 'round' :
 
@@ -278,27 +330,61 @@ Shape.prototype.getProjection = function( p )
 					( ( p.y >= cy && dx < 0 ) || ( p.y <= cy && dx > 0 ) )
 				)
 				{
-					var k = ( p.y - cy ) / ( p.x - cx );
+					var k = ( p.y - pc.y ) / ( p.x - pc.x );
+
+					var d = (pc.y - cy) - k * (pc.x - cx);
 
 					// x^2 / a^2 + y^2 / b^2 = 1
-					// y = k * x
-					// x^2 / a^2 + x^2 * k^2 / b^2 = 1
-					// x^2 ( 1 / a^2 + k^2 / b^2) = 1
 
-					var x = Math.sqrt( 1 / ( 1 / ( a * a ) + k * k / ( b * b ) ) );
-					var y = Math.abs( k * x );
+					// y = k * x + d
 
-					return new Euclid.Point(
-						cx + ( p.x > cx ? x : -x ),
-						cy + ( p.y > cy ? y : -y )
-					);
+					// x^2 / a^2 + ( k * x + d )^2 / b^2 = 1
 
+					// x^2 / a^2 + k^2 * x^2 / b^2 + 2 * k * x * d / b^2 + d^2 / b^2 = 1
+
+					// x^2 ( 1 / a^2 + k^2 / b^2 ) + x ( 2 * k * d / b^2 ) + d^2 / b^2 - 1 = 0
+
+					var qa = 1 / (a * a) + k * k / ( b * b );
+					var qb = 2 * k * d / ( b * b );
+					var qc = d * d / ( b * b ) - 1;
+
+					var x;
+					if ( p.x > cx )
+					{
+						x = ( -qb + Math.sqrt ( qb * qb - 4 * qa * qc ) ) / ( 2 * qa );
+					}
+					else
+					{
+						x = ( -qb - Math.sqrt ( qb * qb - 4 * qa * qc ) ) / ( 2 * qa );
+					}
+					// var x = Math.sqrt( 1 / ( 1 / ( a * a ) + k * k / ( b * b ) ) );
+
+					var y = k * x + d;
+
+					x += cx;
+					y += cy;
+
+					if(
+						(
+							( y >= cy && p.y >= cy ) ||
+							( y <= cy && p.y <= cy )
+						)
+						&&
+						(
+							( x >= cx && p.x >= cx ) ||
+							( x <= cx && p.x <= cx )
+						)
+					)
+					{
+						return new Euclid.Point( x, y );
+					}
 				}
 
 				h += 3;
 			 	break;
 
 			default :
+
 				throw new Error( 'unknown hull section: ' + hull[h] );
 
 		}

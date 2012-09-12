@@ -98,10 +98,10 @@ theme =
 
 		innerMargin  :
 		{
-			n: 4,
-			e: 5,
-			s: 4,
-			w: 5
+			n : 4,
+			e : 5,
+			s : 4,
+			w : 5
 		},
 
 		style :
@@ -140,7 +140,7 @@ theme =
 			]
 		},
 
-		cornerRadius : 6
+		cornerRadius : 8
 	},
 
 	// portal to another space

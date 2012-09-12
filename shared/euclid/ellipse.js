@@ -75,9 +75,8 @@ var Ellipse = Euclid.Ellipse =
 	var pe = new Euclid.Point(ex, my);
 	var ps = new Euclid.Point(mx, sy);
 
-	var m  = Euclid.Const.magic;
-
-	this.hull = Jools.immute(
+	Euclid.Shape.call(
+		this,
 		[
 			'start', pw,
 			'round', 'clockwise', pn,
