@@ -93,11 +93,12 @@ var RoundRect = Euclid.RoundRect = function(a1, a2, a3, a4)
 	}
 
 	pse = pse.sub( 1, 1 );
+
 	var pne = new Euclid.Point( pse.x, pnw.y );
 	var psw = new Euclid.Point( pnw.x, pse.y );
 
-	Jools.innumerable(this, 'width',  pse.x - pnw.x);
-	Jools.innumerable(this, 'height', pse.y - pnw.y);
+	Jools.innumerable(this, 'width',  pse.x - pnw.x + 1);
+	Jools.innumerable(this, 'height', pse.y - pnw.y + 1);
 
 	Euclid.Shape.call(
 		this,
@@ -118,39 +119,6 @@ Jools.subclass( RoundRect, Euclid.Shape );
 
 
 /*
-| Draws the roundrect.
-*/
-/*
-
-TODO remove
-
-RoundRect.prototype.sketch = function(fabric, border, twist, view)
-{
-	var wx = view.x(this.pnw) + border;
-	var ny = view.y(this.pnw) + border;
-	var ex = view.x(this.pse) - border - 1;
-	var sy = view.y(this.pse) - border - 1;
-	var a = this.a;
-	var b = this.b;
-
-	var magic = Euclid.Const.magic;
-	var ma    = magic * ( a + border );
-	var mb    = magic * ( b + border );
-
-	fabric.moveTo(                     wx + a, ny    );
-	fabric.lineTo(                     ex - a, ny    );
-	fabric.beziTo(  ma,   0,   0, -mb, ex    , ny + b);
-	fabric.lineTo(                     ex    , sy - b);
-	fabric.beziTo(   0,  mb,  ma,   0, ex - a, sy    );
-	fabric.lineTo(                     wx + a, sy    );
-	fabric.beziTo( -ma,   0,   0,  mb, wx    , sy - b);
-	fabric.lineTo(                     wx    , ny + b);
-	fabric.beziTo(   0, -mb, -ma,   0, wx + a, ny    );
-};
-*/
-
-
-/*
 | point in the center
 */
 Jools.lazyFixate(RoundRect.prototype, 'pc',
@@ -163,6 +131,7 @@ Jools.lazyFixate(RoundRect.prototype, 'pc',
 	}
 );
 
+
 /*
 | Returns true if this rectangle is the same as another
 */
@@ -173,6 +142,7 @@ RoundRect.prototype.eq = function( r )
 		this.pse.eq( r.pse )
 	);
 };
+
 
 /*
 | returns true if point p is within the round-rect
@@ -188,4 +158,4 @@ RoundRect.prototype.within = function( view, p )
 	);
 };
 
-} ) ();
+} ) ( );
