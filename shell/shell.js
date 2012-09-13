@@ -100,22 +100,23 @@ Shell = function(fabric)
 */
 Shell.prototype.dropFocus = function()
 {
-	this.setCaret(null, null);
+	this.setCaret( null, null );
 };
 
 
 /*
 | Sets the caret position.
 */
-Shell.prototype.setCaret = function(section, sign, retainx) {
+Shell.prototype.setCaret = function( section, sign, retainx )
+{
 	switch (section)
 	{
 		case null :
-			if (sign !== null)
+			if( sign !== null )
 				{ throw new Error('setCaret section=null, invalid sign'); }
 			break;
 
-		case 'board'  :
+		case 'board' :
 		case 'space' :
 			switch(sign && sign.constructor)
 			{
@@ -140,13 +141,13 @@ Shell.prototype.setCaret = function(section, sign, retainx) {
 
 	var entity;
 
-	if  (
-			this.$caret.sign &&
-			(
-				this.$caret.section !== section ||
-				this.$caret.sign.path !== sign.path
-			)
+	if(
+		this.$caret.sign &&
+		(
+			this.$caret.section   !== section   ||
+			this.$caret.sign.path !== sign.path
 		)
+	)
 	{
 		entity = this._getCaretEntity(this.$caret.section, this.$caret.sign.path);
 
@@ -185,13 +186,13 @@ Shell.prototype._getCaretEntity = function(sec, path)
 		case 'board' :
 			// FIXME
 			// return this.$board.getSub(path, Dash.Component);
-			return this.$board.getSub(path);
+			return this.$board.getSub( path );
 
 		case 'space' :
-			return this.$space.getSub(path, 'Item');
+			return this.$space.getSub( path, 'Item' );
 
 		default :
-			throw new Error('Invalid sec: ' + sec);
+			throw new Error( 'Invalid sec: ' + sec );
 	}
 };
 

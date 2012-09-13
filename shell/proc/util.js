@@ -42,11 +42,11 @@ var shell;
 /*
 | Capsule
 */
-(function() {
+( function( ) {
 'use strict';
 
-if (typeof(window) === 'undefined')
-	{ throw new Error('this code needs a browser!'); }
+if( typeof( window ) === 'undefined' )
+	{ throw new Error( 'this code needs a browser!' ); }
 
 
 /*
@@ -62,21 +62,21 @@ var Util = function()
 /*
 | Logins the user
 */
-Util.prototype.login = function(panel)
+Util.prototype.login = function( panel )
 {
 	var panSub = panel.$sub;
 
-	panSub.errL.setText('');
-	var user   = panSub.userI.getValue();
-	var pass   = panSub.passI.getValue();
+	panSub.errL.setText( '' );
+	var user   = panSub.userI.getValue( );
+	var pass   = panSub.passI.getValue( );
 
-	if (user.length < 4)
+	if( user.length < 4 )
 	{
-		panel.$sub.errL.setText('Username too short, min. 4 characters');
+		panel.$sub.errL.setText( 'Username too short, min. 4 characters' );
 		shell.setCaret(
 			'board',
 			{
-				path : new Path(['LoginPanel', 'userI']),
+				path : new Path( [ 'LoginPanel', 'userI' ] ),
 				at1  : user.length
 			}
 		);
@@ -84,13 +84,13 @@ Util.prototype.login = function(panel)
 		return;
 	}
 
-	if (user.substr(0, 5) === 'visit')
+	if( user.substr( 0, 5 ) === 'visit' )
 	{
-		panel.$sub.errL.setText('Username must not start with "visit"');
+		panel.$sub.errL.setText( 'Username must not start with "visit"' );
 		shell.setCaret(
 			'board',
 			{
-				path : new Path(['LoginPanel', 'userI']),
+				path : new Path( [ 'LoginPanel', 'userI' ] ),
 				at1  : 0
 			}
 		);
@@ -98,12 +98,13 @@ Util.prototype.login = function(panel)
 		return;
 	}
 
-	if (pass.length < 5) {
-		panel.$sub.errL.setText('Password too short, min. 5 characters');
+	if( pass.length < 5 )
+	{
+		panel.$sub.errL.setText( 'Password too short, min. 5 characters' );
 		shell.setCaret(
 			'board',
 			{
-				path : new Path(['LoginPanel', 'passI']),
+				path : new Path( [ 'LoginPanel', 'passI' ] ),
 				at1  : pass.length
 			}
 		);
@@ -111,14 +112,20 @@ Util.prototype.login = function(panel)
 		return;
 	}
 
-	shell.peer.auth(user, Jools.passhash(pass), this, panel, pass);
+	shell.peer.auth(
+		user,
+		Jools.passhash( pass ),
+		this,
+		panel,
+		pass
+	);
 };
 
 
 /*
 | an auth operation completed.
 */
-Util.prototype.onAuth = function(user, passhash, res, panel, pass)
+Util.prototype.onAuth = function( user, passhash, res, panel, pass )
 {
 	if (!res.ok)
 	{
@@ -149,116 +156,134 @@ Util.prototype.onAuth = function(user, passhash, res, panel, pass)
 		return;
 	}
 
-	shell.setUser(user, passhash);
-	panel.board.setCurPanel('MainPanel');
-	this.clearLogin(panel);
-	shell.moveToSpace(null);
-	shell.poke();
+	shell.setUser( user, passhash );
+	panel.board.setCurPanel( 'MainPanel' );
+	this.clearLogin( panel );
+	shell.moveToSpace( null );
+	shell.poke( );
 };
 
-/**
-| Logouts the user
+
+/*
+| Logs out the user.
 */
-Util.prototype.logout = function(panel) {
-	shell.peer.logout(function(res) {
-		if (!res.ok) {
-			shell.greenscreen('Cannot logout: ' + res.message);
-			return;
-		}
+Util.prototype.logout = function( panel )
+{
+	shell.peer.logout(
+		function( res ) {
+			if(! res.ok ) {
+				shell.greenscreen( 'Cannot logout: ' + res.message );
+				return;
+			}
 
-		shell.setUser(res.user, res.passhash);
-		panel.board.setCurPanel('MainPanel');
-		shell.moveToSpace(null);
-		shell.poke();
-	});
+			shell.setUser( res.user, res.passhash );
+			panel.board.setCurPanel( 'MainPanel' );
+			shell.moveToSpace( null );
+			shell.poke( );
+		}
+	);
 };
 
-/**
+
+/*
 | Registers the user
 */
-Util.prototype.register = function(panel)
+Util.prototype.register = function( panel )
 {
 	var panSub = panel.$sub;
 
-	panSub.errL.setText('');
-	var user   = panSub.userI. getValue();
-	var email  = panSub.emailI.getValue();
-	var pass   = panSub.passI. getValue();
-	var pass2  = panSub.pass2I.getValue();
+	panSub.errL.setText( '' );
+	var user   = panSub.userI. getValue( );
+	var email  = panSub.emailI.getValue( );
+	var pass   = panSub.passI. getValue( );
+	var pass2  = panSub.pass2I.getValue( );
 
-	if (user.length < 4) {
-		panel.$sub.errL.setText('Username too short, min. 4 characters');
+	if( user.length < 4 )
+	{
+		panel.$sub.errL.setText( 'Username too short, min. 4 characters' );
 		shell.setCaret(
 			'board',
 			{
-				path : new Path(['RegPanel', 'userI']),
+				path : new Path( [ 'RegPanel', 'userI' ] ),
 				at1  : user.length
 			}
 		);
 		return;
 	}
 
-	if (user.substr(0, 5) === 'visit') {
-		panel.$sub.errL.setText('Username must not start with "visit"');
+	if ( user.substr( 0, 5 ) === 'visit' )
+	{
+		panel.$sub.errL.setText( 'Username must not start with "visit"' );
 		shell.setCaret(
 			'board',
 			{
-				path : new Path(['RegPanel', 'userI']),
+				path : new Path( [ 'RegPanel', 'userI' ] ),
 				at1  : 0
 			}
 		);
 		return;
 	}
 
-	if (pass.length < 5) {
-		panel.$sub.errL.setText('Password too short, min. 5 characters');
+	if( pass.length < 5 )
+	{
+		panel.$sub.errL.setText( 'Password too short, min. 5 characters' );
 		shell.setCaret(
 			'board',
 			{
-				path : new Path(['RegPanel', 'passI']),
+				path : new Path( [ 'RegPanel', 'passI' ] ),
 				at1  : pass.length
 			}
 		);
 		return;
 	}
 
-	if (pass !== pass2) {
-		panel.$sub.errL.setText('Passwords to not match');
+	if( pass !== pass2 )
+	{
+		panel.$sub.errL.setText( 'Passwords do not match' );
 		shell.setCaret(
 			'board',
 			{
-				path : new Path(['RegPanel', 'pass2I']),
+				path : new Path( [ 'RegPanel', 'pass2I' ] ),
 				at1  : pass2.length
 			}
 		);
 		return;
 	}
 
-	var passhash = Jools.passhash(pass);
+	var passhash = Jools.passhash( pass );
 
 	var self = this;
-	shell.peer.register(user, email, passhash,
+
+	shell.peer.register(
+		user,
+		email,
+		passhash,
 		function(res)
 		{
-			if (!res.ok) {
+			if( !res.ok )
+			{
 				panel.$sub.errL.setText(res.message);
 
-				if (res.message.search(/Username/) >= 0) {
-					shell.setCaret('board', {
-						path : new Path(['RegPanel', 'userI']),
-						at1  : user.length
-					});
+				if( res.message.search(/Username/) >= 0 )
+				{
+					shell.setCaret(
+						'board',
+						{
+							path : new Path(['RegPanel', 'userI']),
+							at1  : user.length
+						}
+					);
 				}
 
-				shell.poke();
+				shell.poke( );
 				return;
 			}
 
-			shell.setUser(user, passhash);
-			panel.board.setCurPanel('MainPanel');
-			self.clearRegister(panel);
-			shell.moveToSpace(null);
-			shell.poke();
+			shell.setUser( user, passhash );
+			panel.board.setCurPanel( 'MainPanel' );
+			self.clearRegister( panel );
+			shell.moveToSpace( null );
+			shell.poke( );
 		}
 	);
 };
@@ -267,24 +292,24 @@ Util.prototype.register = function(panel)
 /*
 | Clears all fields on the login panel.
 */
-Util.prototype.clearLogin = function(panel)
+Util.prototype.clearLogin = function( panel )
 {
 	var panSub = panel.$sub;
-	panSub.userI.setValue('');
-	panSub.passI.setValue('');
+	panSub.userI.setValue( '' );
+	panSub.passI.setValue( '' );
 };
 
 
 /*
 | Clears all fields on the register panel.
 */
-Util.prototype.clearRegister = function(panel)
+Util.prototype.clearRegister = function( panel )
 {
 	var panSub = panel.$sub;
-	panSub.userI. setValue('');
-	panSub.emailI.setValue('');
-	panSub.passI. setValue('');
-	panSub.pass2I.setValue('');
+	panSub.userI. setValue( '' );
+	panSub.emailI.setValue( '' );
+	panSub.passI. setValue( '' );
+	panSub.pass2I.setValue( '' );
 };
 
 

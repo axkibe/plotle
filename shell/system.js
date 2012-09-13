@@ -397,7 +397,7 @@ System.prototype._onKeyUp = function( event )
 */
 System.prototype._onContextMenu = function( event )
 {
-	e.stopPropagation();
+	event.stopPropagation();
 	return false;
 };
 
