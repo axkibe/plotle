@@ -80,7 +80,8 @@ var Button = Dash.Button = function(twig, panel, inherit, name)
 	this.captionPos   = computePoint(twig.caption.pos, iframe);
 	this.path         = new Path([panel.name, name]);
 
-	// if true repeats the action on mousedown
+	// if true repeats the push action if held down
+	// TODO rename to repeating
 	this.repeat       = false;
 
 	this.$retimer     = null;
@@ -207,7 +208,7 @@ Button.prototype.specialKey = function(key, shift, ctrl)
 /*
 | Mouse hover.
 */
-Button.prototype.mousehover = function(p)
+Button.prototype.pointingHover = function(p)
 {
 	if (!this.$visible)
 		{ return null; }
@@ -239,13 +240,13 @@ Button.prototype.push = function(shift, ctrl)
 
 
 /*
-| Mouse down.
+| User is starting to point something ( mouse down, touch start )
 */
-Button.prototype.mousedown = function(p, shift, ctrl)
+Button.prototype.pointingStart = function( p, shift, ctrl )
 {
 	var self = this;
 
-	if (!this.$visible)
+	if(!this.$visible )
 		{ return; }
 
 	if( p.x < this.pnw.x ||
@@ -255,19 +256,22 @@ Button.prototype.mousedown = function(p, shift, ctrl)
 	)
 		{ return null; }
 
-	var fabric = this._weave(Dash.Accent.NORMA);
-	var pp = p.sub(this.pnw);
+	var fabric = this._weave( Dash.Accent.NORMA );
+	var pp = p.sub( this.pnw );
 
-	if(! fabric.withinSketch(
+	if(!
+		fabric.withinSketch(
 			this,
 			'sketch',
 			Euclid.View.proper,
 			pp
 		)
 	)
-		{ return null; }
+	{
+		return null;
+	}
 
-	if (this.repeat && !this.retimer)
+	if ( this.repeat && !this.retimer )
 	{
 		shell.startAction(
 			Action.REBUTTON,
@@ -276,17 +280,18 @@ Button.prototype.mousedown = function(p, shift, ctrl)
 		);
 
 		var repeatFunc;
-		repeatFunc = function()
+		repeatFunc =
+			function()
 			{
 				self.push(false, false);
 				self.$retimer = system.setTimer(theme.zoom.repeatTimer, repeatFunc);
 				shell.poke();
-			}
-			;
+			};
+
 		this.$retimer = system.setTimer(theme.zoom.firstTimer, repeatFunc);
 	}
 
-	this.push(shift, ctrl);
+	this.push( shift, ctrl );
 
 	return this.repeat ? 'drag' : false;
 };
@@ -295,20 +300,20 @@ Button.prototype.mousedown = function(p, shift, ctrl)
 /*
 | Special keys for buttons having focus
 */
-Button.prototype.specialKey = function(key)
+Button.prototype.specialKey = function( key )
 {
-	switch (key)
+	switch( key )
 	{
 		case 'down' :
-			this.panel.cycleFocus(+1);
+			this.panel.cycleFocus( +1 );
 			return;
 
 		case 'up' :
-			this.panel.cycleFocus(-1);
+			this.panel.cycleFocus( -1 );
 			return;
 
 		case 'enter' :
-			this.push(false, false);
+			this.push( false, false );
 			return;
 	}
 };
@@ -317,9 +322,9 @@ Button.prototype.specialKey = function(key)
 /*
 | Any normal keys for a buttons having focus triggers a push.
 */
-Button.prototype.input = function(text)
+Button.prototype.input = function( text )
 {
-	this.push(false, false);
+	this.push( false, false );
 	return true;
 };
 
@@ -327,19 +332,19 @@ Button.prototype.input = function(text)
 /*
 | Draws the button.
 */
-Button.prototype.draw = function(fabric, accent)
+Button.prototype.draw = function( fabric, accent )
 {
-	if (!this.$visible)
+	if( !this.$visible )
 		{ return; }
 
-	fabric.drawImage(this._weave(accent), this.pnw);
+	fabric.drawImage( this._weave( accent ), this.pnw );
 };
 
 
 /*
 | Clears all caches.
 */
-Button.prototype.poke = function()
+Button.prototype.poke = function( )
 {
 	this.$fabric = null;
 	this.panel.poke();
@@ -349,7 +354,7 @@ Button.prototype.poke = function()
 /*
 | Force clears all caches.
 */
-Button.prototype.knock = function()
+Button.prototype.knock = function( )
 {
 	this.$fabric = null;
 };
@@ -359,12 +364,12 @@ Button.prototype.knock = function()
 /*
 | Stops a REBUTTON action.
 */
-Button.prototype.actionstop = function()
+Button.prototype.actionstop = function( )
 {
-	system.cancelTimer(this.$retimer);
+	system.cancelTimer( this.$retimer );
 	this.$retimer = null;
 
-	shell.stopAction();
+	shell.stopAction( );
 };
 
 

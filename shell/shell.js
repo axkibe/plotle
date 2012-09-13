@@ -317,11 +317,17 @@ Shell.prototype.stopAction = function()
 | Lets the shell check if it should redraw.
 | Used by async handlers.
 */
-Shell.prototype.poke = function()
+Shell.prototype.poke = function( )
 {
 	// actualizes hover context
-	if (this.$hoverP)
-		{ this.mousehover(this.$hoverP, this.$hoverShift, this.$hoverCtrl); }
+	if(this.$hoverP )
+	{
+		this.pointingHover(
+			this.$hoverP,
+			this.$hoverShift,
+			this.$hoverCtrl
+		);
+	}
 
 	if (this.redraw)
 		{ this._draw(); }
@@ -433,25 +439,25 @@ Shell.prototype._draw = function()
 */
 Shell.prototype.click = function(p, shift, ctrl)
 {
-	if (this.green)
+	if( this.green )
 		{ return; }
 
 	// FIXME board
 
-	if (this.$space)
+	if( this.$space )
 		{ this.$space.click(p, shift, ctrl); }
 
-	if (this.redraw)
+	if( this.redraw )
 		{ this._draw(); }
 };
 
 
 /*
-| mouse hover.
+| User is hovering his/her point ( mouse move )
 */
-Shell.prototype.mousehover = function(p, shift, ctrl)
+Shell.prototype.pointingHover = function(p, shift, ctrl)
 {
-	if (this.green)
+	if( this.green )
 		{ return; }
 
 	this.$hoverP     = p;
@@ -460,23 +466,31 @@ Shell.prototype.mousehover = function(p, shift, ctrl)
 
 	var cursor = null;
 
-	if (this._$menu)
-		{ cursor = this._$menu.mousehover(Euclid.View.proper, p, shift, ctrl); }
-
-
-	if (cursor)
-		{ this.$board.mousehover(null, shift, ctrl); }
-	else
-		{ cursor = this.$board.mousehover(p, shift, ctrl); }
-
-	if (this.$space) {
-		if (cursor)
-			{ this.$space.mousehover(null, shift, ctrl); }
-		else
-			{ cursor = this.$space.mousehover(p, shift, ctrl); }
+	if( this._$menu )
+	{
+		cursor = this._$menu.pointingHover(
+			Euclid.View.proper,
+			p,
+			shift,
+			ctrl
+		);
 	}
 
-	if (this.redraw)
+
+	if( cursor )
+		{ this.$board.pointingHover( null, shift, ctrl ); }
+	else
+		{ cursor = this.$board.pointingHover( p, shift, ctrl ); }
+
+	if( this.$space )
+	{
+		if( cursor )
+			{ this.$space.pointingHover( null, shift, ctrl ); }
+		else
+			{ cursor = this.$space.pointingHover( p, shift, ctrl ); }
+	}
+
+	if( this.redraw )
 		{ this._draw(); }
 
 	return cursor;
@@ -486,12 +500,12 @@ Shell.prototype.mousehover = function(p, shift, ctrl)
 /*
 | Changes the shell to a green error screen.
 */
-Shell.prototype.greenscreen = function(message)
+Shell.prototype.greenscreen = function( message )
 {
-	if (this.green)
+	if( this.green )
 		{ return; }
 
-	if (!message)
+	if( !message )
 		{ message = 'unknown error.'; }
 
 	this.green = message;
@@ -501,30 +515,36 @@ Shell.prototype.greenscreen = function(message)
 
 
 /*
-| Mouse button down event.
+| pointing device starts pointing ( mouse down, touch start )
 |
-| Returns the mouse state code, wheter this is a click/drag or undecided.
+| returns the pointing state code, wheter this is a click/drag or yet undecided
 */
-Shell.prototype.mousedown = function(p, shift, ctrl)
+Shell.prototype.pointingStart = function( p, shift, ctrl )
 {
-	if (this.green)
+	if( this.green )
 		{ return false; }
 
-	var mouseState = null;
+	var pointingState = null;
 
-	if (this._$menu)
-		{ mouseState = this._$menu.mousedown(Euclid.View.proper, p, shift, ctrl); }
+	if( this._$menu )
+	{
+		pointingState = this._$menu.pointingStart( Euclid.View.proper, p, shift, ctrl );
+	}
 
-	if (mouseState === null)
-		{ mouseState = this.$board.mousedown(p, shift, ctrl); }
+	if( pointingState === null )
+	{
+		pointingState = this.$board.pointingStart( p, shift, ctrl );
+	}
 
-	if (mouseState === null && this.$space)
-		{ mouseState = this.$space.mousedown(p, shift, ctrl); }
+	if( pointingState === null && this.$space )
+	{
+		pointingState = this.$space.pointingStart( p, shift, ctrl );
+	}
 
-	if (this.redraw)
-		{ this._draw(); }
+	if( this.redraw )
+		{ this._draw( ); }
 
-	return mouseState || false;
+	return pointingState || false;
 };
 
 

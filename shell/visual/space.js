@@ -275,7 +275,7 @@ Space.prototype.mousewheel = function( p, dir, shift, ctrl )
 |
 | Returns true if the mouse pointer hovers over anything.
 */
-Space.prototype.mousehover = function(p, shift, ctrl)
+Space.prototype.pointingHover = function( p, shift, ctrl )
 {
 	if (p === null)
 		{ return null; }
@@ -303,9 +303,9 @@ Space.prototype.mousehover = function(p, shift, ctrl)
 	{
 		var item = this.atRank(a);
 		if (cursor)
-			{ item.mousehover( view, null ); }
+			{ item.pointingHover( view, null ); }
 		else
-			{ cursor = item.mousehover( view, p ); }
+			{ cursor = item.pointingHover( view, p ); }
 	}
 
 	return cursor || 'pointer';
@@ -554,9 +554,9 @@ Space.prototype.menuSelect = function(entry, p)
 
 
 /*
-| Mouse button down event.
+| Pointing device starts pointing ( mouse down, touch start )
 */
-Space.prototype.mousedown = function(p, shift, ctrl)
+Space.prototype.pointingStart = function(p, shift, ctrl)
 {
 	var view   = this.$view;
 	var action = shell.$action;

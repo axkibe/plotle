@@ -619,7 +619,7 @@ Input.prototype.knock = function()
 /*
 | Mouse hover
 */
-Input.prototype.mousehover = function(p, shift, ctrl)
+Input.prototype.pointingHover = function(p, shift, ctrl)
 {
 	if( p === null )
 		{ return null; }
@@ -642,9 +642,9 @@ Input.prototype.mousehover = function(p, shift, ctrl)
 
 
 /*
-| Mouse down
+| pointing device is starting a point ( mouse down, touch start )
 */
-Input.prototype.mousedown = function(p, shift, ctrl)
+Input.prototype.pointingStart = function(p, shift, ctrl)
 {
 	var pp = p.sub(this.pnw);
 	var fabric = this._weave(Dash.Accent.NORMA);

@@ -98,7 +98,7 @@ var System = function()
 	this._useCapture = !!canvas.setCapture;
 
 	// false, 'atween' or 'drag'
-	this._$mouseState  = false;
+	this._$pointingState  = false;
 
 	// atween is the state where the mouse button went down,
 	// and its yet unsure if this is a click or drag.
@@ -256,7 +256,7 @@ System.prototype._blink = function()
 */
 System.prototype._onAtweenTime = function( )
 {
-	if (this._$mouseState !== 'atween')
+	if( this._$pointingState !== 'atween' )
 	{
 		Jools.log('warn', 'dragTime() in wrong action mode');
 		return;
@@ -264,7 +264,7 @@ System.prototype._onAtweenTime = function( )
 
 	var atween        = this._$atween;
 
-	this._$mouseState = 'drag';
+	this._$pointingState = 'drag';
 
 	var cursor = null;
 
@@ -429,9 +429,9 @@ System.prototype._onMouseDown = function( event )
 	var ctrl   = event.ctrlKey || event.metaKey;
 
 	// asks the shell if it forces this to be a drag or click, or yet unknown.
-	this._$mouseState = this.shell.mousedown( p, shift, ctrl );
+	this._$pointingState = this.shell.pointingStart( p, shift, ctrl );
 
-	switch( this._$mouseState )
+	switch( this._$pointingState )
 	{
 		case 'atween' :
 			this._$atween =
@@ -444,7 +444,7 @@ System.prototype._onMouseDown = function( event )
 					this.settings.dragtime,
 					this._onAtweenTimeCatcher
 				)
-			}
+			};
 			break;
 
 		case 'drag' :
@@ -452,7 +452,7 @@ System.prototype._onMouseDown = function( event )
 			break;
 	}
 
-	var cursor = this.shell.mousehover( p, shift, ctrl );
+	var cursor = this.shell.pointingHover( p, shift, ctrl );
 
 	if ( cursor !== null )
 		{ canvas.style.cursor = cursor; }
@@ -476,10 +476,10 @@ System.prototype._onMouseMove = function( event )
 	var ctrl   = event.ctrlKey || event.metaKey;
 	var cursor = null;
 
-	switch( this._$mouseState )
+	switch( this._$pointingState )
 	{
 		case false:
-			cursor = this.shell.mousehover( p, shift, ctrl );
+			cursor = this.shell.pointingHover( p, shift, ctrl );
 			break;
 
 		case 'atween':
@@ -493,7 +493,7 @@ System.prototype._onMouseMove = function( event )
 				// moved out of dragbox -> start dragging
 				clearTimeout( atween.timer );
 				this._$atween = null;
-				this._$mouseState = 'drag';
+				this._$pointingState = 'drag';
 
 				this.shell.dragstart(
 					atween.pos,
@@ -521,7 +521,7 @@ System.prototype._onMouseMove = function( event )
 			break;
 
 		default :
-			throw new Error('invalid mouseState');
+			throw new Error('invalid pointingState');
 
 	}
 
@@ -549,7 +549,7 @@ System.prototype._onMouseUp = function( event )
 	var ctrl   = event.ctrlKey || event.metaKey;
 	var cursor = null;
 
-	switch( this._$mouseState )
+	switch( this._$pointingState )
 	{
 		case false :
 			break;
@@ -561,18 +561,18 @@ System.prototype._onMouseUp = function( event )
 			clearTimeout( atween.timer );
 			this._$atween = null;
 			this.shell.click( p, shift, ctrl );
-			cursor = this.shell.mousehover( p, shift, ctrl );
-			this._$mouseState = false;
+			cursor = this.shell.pointingHover( p, shift, ctrl );
+			this._$pointingState = false;
 			break;
 
 		case 'drag' :
 			this.shell.dragstop( p, shift, ctrl );
-			cursor = this.shell.mousehover( p, shift, ctrl );
-			this._$mouseState = false;
+			cursor = this.shell.pointingHover( p, shift, ctrl );
+			this._$pointingState = false;
 			break;
 
 		default :
-			throw new Error( 'invalid mouseState' );
+			throw new Error( 'invalid pointingState' );
 	}
 
 	if( cursor !== null )
@@ -631,9 +631,9 @@ System.prototype._onTouchStart = function( event )
 	var ctrl   = event.ctrlKey || event.metaKey;
 
 	// asks the shell if it forces this to be a drag or click, or yet unknown.
-	this._$mouseState = this.shell.mousedown( p, shift, ctrl );
+	this._$pointingState = this.shell.pointingStart( p, shift, ctrl );
 
-	switch( this._$mouseState )
+	switch( this._$pointingState )
 	{
 		case 'atween' :
 			this._$atween =
@@ -646,7 +646,7 @@ System.prototype._onTouchStart = function( event )
 					this.settings.dragtime,
 					this._onAtweenTimeCatcher
 				)
-			}
+			};
 			break;
 
 		case 'drag' :
@@ -673,10 +673,10 @@ System.prototype._onTouchMove = function( event )
 	var ctrl   = event.ctrlKey || event.metaKey;
 	var cursor = null;
 
-	switch( this._$mouseState )
+	switch( this._$pointingState )
 	{
 		case false:
-			cursor = this.shell.mousehover( p, shift, ctrl );
+			cursor = this.shell.pointingHover( p, shift, ctrl );
 			break;
 
 		case 'atween':
@@ -690,7 +690,7 @@ System.prototype._onTouchMove = function( event )
 				// moved out of dragbox -> start dragging
 				clearTimeout( atween.timer );
 				this._$atween = null;
-				this._$mouseState = 'drag';
+				this._$pointingState = 'drag';
 
 				this.shell.dragstart(
 					atween.pos,
@@ -718,7 +718,7 @@ System.prototype._onTouchMove = function( event )
 			break;
 
 		default :
-			throw new Error('invalid mouseState');
+			throw new Error('invalid pointingState');
 
 	}
 
@@ -743,7 +743,7 @@ System.prototype._onTouchEnd = function( event )
 	var ctrl   = event.ctrlKey || event.metaKey;
 	var cursor = null;
 
-	switch( this._$mouseState )
+	switch( this._$pointingState )
 	{
 		case false :
 			break;
@@ -755,18 +755,18 @@ System.prototype._onTouchEnd = function( event )
 			clearTimeout( atween.timer );
 			this._$atween = null;
 			this.shell.click( p, shift, ctrl );
-			cursor = this.shell.mousehover( p, shift, ctrl );
-			this._$mouseState = false;
+			cursor = this.shell.pointingHover( p, shift, ctrl );
+			this._$pointingState = false;
 			break;
 
 		case 'drag' :
 			this.shell.dragstop( p, shift, ctrl );
-			cursor = this.shell.mousehover( p, shift, ctrl );
-			this._$mouseState = false;
+			cursor = this.shell.pointingHover( p, shift, ctrl );
+			this._$pointingState = false;
 			break;
 
 		default :
-			throw new Error( 'invalid mouseState' );
+			throw new Error( 'invalid pointingState' );
 	}
 
 	return false;

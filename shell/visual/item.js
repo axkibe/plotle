@@ -471,16 +471,17 @@ Item.prototype.actionstop = function(view, p)
 
 
 /*
-| Mouse is hovering around.
+| User is hovering his/her pointing device over something.
 |
 | Checks if this item reacts on this.
 */
-Item.prototype.mousehover = function(view, p)
+Item.prototype.pointingHover = function( view, p )
 {
-	if ( p === null )
+	if( p === null )
 		{ return null; }
 
 	var sbary = this.scrollbarY;
+
 	if( sbary && sbary.within( view, p ) )
 		{ return 'default'; }
 

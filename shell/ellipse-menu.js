@@ -168,18 +168,18 @@ EllipseMenu.prototype.within = function( view, p )
 
 
 /*
-| Mouse button down event.
+| The user is starting to point on something ( mouse down, touch start )
 */
-EllipseMenu.prototype.mousedown = function(view, p, shift, ctrl)
+EllipseMenu.prototype.pointingStart = function( view, p, shift, ctrl )
 {
 	var w = this.within( view, p );
 
-	if (!w)
+	if ( !w )
 		{ return null; }
 
-	this._receiver.menuSelect(w, this.p);
+	this._receiver.menuSelect( w, this.p );
 
-	shell.setMenu(null);
+	shell.setMenu( null );
 
 	return false;
 };
@@ -188,38 +188,38 @@ EllipseMenu.prototype.mousedown = function(view, p, shift, ctrl)
 /*
 | Called on every step to fade away when mouse isn't on the menu
 */
-EllipseMenu.prototype.fadeout = function()
+EllipseMenu.prototype.fadeout = function( )
 {
 	var self = this;
 
 	self.$fade -= theme.fade.step;
 
-	if (self.$fade <= 0)
+	if( self.$fade <= 0 )
 	{
-		shell.setMenu(null);
+		shell.setMenu( null );
 	}
 	else
 	{
 		this.$fadeTimer = system.setTimer(
 			theme.fade.time,
-			function() { self.fadeout(); }
+			function( ) { self.fadeout( ); }
 		);
 	}
 
 	shell.redraw = true;
-	shell.poke();
+	shell.poke( );
 };
 
 /*
 | cancels fading
 */
-EllipseMenu.prototype.cancel = function()
+EllipseMenu.prototype.cancel = function( )
 {
-	if (this.$fade)
+	if( this.$fade )
 	{
 		this.$fade = false;
 
-		system.cancelTimer(this.$fadeTimer);
+		system.cancelTimer( this.$fadeTimer );
 
 		this.$fadeTimer = null;
 
@@ -228,11 +228,11 @@ EllipseMenu.prototype.cancel = function()
 };
 
 /*
-| Mouse hover.
+| User is hovers his / her pointing device over something ( mouse move )
 |
 | Returns true if the mouse pointer hovers over anything.
 */
-EllipseMenu.prototype.mousehover = function(view, p, shift, ctrl)
+EllipseMenu.prototype.pointingHover = function( view, p, shift, ctrl )
 {
 	var self = this;
 
@@ -251,7 +251,7 @@ EllipseMenu.prototype.mousehover = function(view, p, shift, ctrl)
 	}
 	else
 	{
-		this.cancel();
+		this.cancel( );
 	}
 
 	// mouse floated on float menu

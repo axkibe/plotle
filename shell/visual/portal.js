@@ -262,10 +262,11 @@ Portal.prototype.drawCaret = function(view)
 
 
 /*
-| Mouse is hovering around.
+| User is hovering his/her pointing device around.
+|
 | Checks if this item reacts on this.
 */
-Portal.prototype.mousehover = function( view, p )
+Portal.prototype.pointingHover = function( view, p )
 {
 	if( p === null )
 		{ return null; }

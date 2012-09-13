@@ -63,14 +63,14 @@ var SwitchPanel = Dash.SwitchPanel = function( panel, current, userName, psw )
 	var swidim      = theme.switchpanel.dimensions;
 	var iframe      = this.iframe = new Euclid.Rect(
 		Euclid.Point.zero,
-		new Euclid.Point(swidim.a * 2, swidim.b)
+		new Euclid.Point( swidim.a * 2, swidim.b )
 	);
 
-	this.pnw        = psw.sub(0, this.iframe.height);
+	this.pnw        = psw.sub( 0, this.iframe.height );
 
 	this.gradientPC = new Euclid.Point(
-		Jools.half(iframe.width),
-		Jools.half(iframe.height) + 600
+		Jools.half( iframe.width ),
+		Jools.half( iframe.height ) + 600
 	);
 
 	this.gradientR0 = 0;
@@ -82,19 +82,19 @@ var SwitchPanel = Dash.SwitchPanel = function( panel, current, userName, psw )
 	});
 
 	this.userName  = userName;
-	this.amVisitor = userName.substring(0,5) === 'visit';
+	this.amVisitor = userName.substring( 0, 5 ) === 'visit';
 
 	var x2 = 55;
 	var y1 =  5;
 	var y2 = 36;
-	var mx = Jools.half(iframe.width);
-	var hh = Jools.half(this.buttonDim.height);
+	var mx = Jools.half( iframe.width );
+	var hh = Jools.half( this.buttonDim.height );
 
 	this.buttonPos =
 		{
-			n  : new Euclid.Point(mx,      hh + y1),
-			ne : new Euclid.Point(mx + x2, hh + y2),
-			nw : new Euclid.Point(mx - x2, hh + y2)
+			n  : new Euclid.Point( mx,      hh + y1 ),
+			ne : new Euclid.Point( mx + x2, hh + y2 ),
+			nw : new Euclid.Point( mx - x2, hh + y2 )
 		};
 
 	this.$fabric    = null;
@@ -336,11 +336,11 @@ SwitchPanel.prototype.within = function( view, p )
 
 
 /*
-| Mouse down.
+| User is starting to point at something ( mouse down, touch start )
 */
-SwitchPanel.prototype.mousedown = function(p)
+SwitchPanel.prototype.pointingStart = function( p )
 {
-	p = p.sub(this.pnw);
+	p = p.sub( this.pnw );
 	if( !this.within( Euclid.View.proper, p ) )
 		{ return null; }
 
@@ -348,16 +348,16 @@ SwitchPanel.prototype.mousedown = function(p)
 	var fabric = this._weave();
 	var proper = Euclid.View.proper;
 
-	if( fabric.withinSketch(this, 'sketchButton', proper, p, 'n' ))
+	if( fabric.withinSketch(this, 'sketchButton', proper, p, 'n'  ) )
 		{ button = 'n';  }
-	else if( fabric.withinSketch(this, 'sketchButton', proper, p, 'ne'))
+	else if( fabric.withinSketch(this, 'sketchButton', proper, p, 'ne' ) )
 		{ button = 'ne'; }
-	else if( !this.amVisitor && fabric.withinSketch(this, 'sketchButton', proper, p, 'nw'))
+	else if( !this.amVisitor && fabric.withinSketch(this, 'sketchButton', proper, p, 'nw' ) )
 		{ button = 'nw'; }
 
 	if( button && button !== this.current )
 	{
-		switch(button)
+		switch( button )
 		{
 			case 'n'  :
 				shell.moveToSpace( 'meshcraft:home' );
@@ -372,8 +372,8 @@ SwitchPanel.prototype.mousedown = function(p)
 				break;
 		}
 
-		this.panel.toggleSwitch();
-		this.panel.poke();
+		this.panel.toggleSwitch( );
+		this.panel.poke( );
 	}
 
 	return false;
@@ -383,7 +383,7 @@ SwitchPanel.prototype.mousedown = function(p)
 /*
 | Mouse hover.
 */
-SwitchPanel.prototype.mousehover = function(p)
+SwitchPanel.prototype.pointingHover = function( p )
 {
 	var self   = this;
 	p          = p.sub( this.pnw );
@@ -395,13 +395,19 @@ SwitchPanel.prototype.mousehover = function(p)
 		if( !this.$fade )
 		{
 			this.$fade = 1 - theme.fade.step;
-			this.$fadeTimer = system.setTimer(theme.fade.time, function() { self.fadeout(); });
+			this.$fadeTimer = system.setTimer(
+				theme.fade.time,
+				function()
+				{
+					self.fadeout();
+				}
+			);
 		}
 	}
 	else
 	{
-		this.cancelFade();
-		var fabric = this._weave();
+		this.cancelFade( );
+		var fabric = this._weave( );
 
 		var proper = Euclid.View.proper;
 
@@ -418,7 +424,7 @@ SwitchPanel.prototype.mousehover = function(p)
 	if( this.$hover !== hd )
 	{
 		this.$hover = hd;
-		this.poke();
+		this.poke( );
 	}
 
 	return cursor;

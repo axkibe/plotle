@@ -470,19 +470,21 @@ Chat.prototype.grepFocus = function()
 
 
 /*
-| Mouse down.
+| User is starting to point ( mouse down, touch start )
 */
-Chat.prototype.mousedown = function(p, shift, ctrl)
+Chat.prototype.pointingStart = function( p, shift, ctrl )
 {
-	var pp = p.sub(this.pnw);
-	var fabric = this._weave();
+	var pp = p.sub( this.pnw );
+	var fabric = this._weave( );
 
-	if(! fabric.withinSketch(
+	if(!
+		fabric.withinSketch(
 			this,
 			'sketchILine',
 			Euclid.View.proper,
-			pp)
+			pp
 		)
+	)
 	{
 		return null;
 	}
@@ -490,8 +492,8 @@ Chat.prototype.mousedown = function(p, shift, ctrl)
 	shell.setCaret(
 		'board',
 		{
-			path : new Path([this.panel.name, this.name]),
-			at1  : this.getOffsetAt(pp)
+			path : new Path( [ this.panel.name, this.name ] ),
+			at1  : this.getOffsetAt( pp )
 		}
 	);
 
@@ -502,7 +504,7 @@ Chat.prototype.mousedown = function(p, shift, ctrl)
 /*
 | Mouse hover
 */
-Chat.prototype.mousehover = function(p, shift, ctrl)
+Chat.prototype.pointingHover = function(p, shift, ctrl)
 {
 	if( p === null )
 		{ return null; }

@@ -219,40 +219,44 @@ Board.prototype.knock = function()
 */
 Board.prototype.drawCaret = function()
 {
-	if (shell.$caret.sign.path.get(0) !== this.curPanelName)
+	if ( shell.$caret.sign.path.get( 0 ) !== this.curPanelName )
 		{ throw new Error('Caret path(0) !== this.curPanelName'); }
 
-	this.curPanel().drawCaret(Euclid.View.proper);
+	this.curPanel( ).drawCaret( Euclid.View.proper );
 };
 
 
 /*
-| Text input
+| User is entering text.
 */
 Board.prototype.input = function(text)
-	{ this.curPanel().input(text); };
-
-
-/*
-| User pressed a special key.
-*/
-Board.prototype.specialKey = function(key, shift, ctrl)
-	{ this.curPanel().specialKey(key, shift, ctrl); };
-
-
-/*
-| Mouse hover.
-*/
-Board.prototype.mousehover = function(p, shift, ctrl)
 {
-	var cursor = this.curPanel().mousehover(p, shift, ctrl);
+	this.curPanel().input(text);
+};
+
+
+/*
+| User is pressing a special key.
+*/
+Board.prototype.specialKey = function( key, shift, ctrl )
+{
+	this.curPanel( ).specialKey( key, shift, ctrl );
+};
+
+
+/*
+| User is hovers his/her pointing device ( mouse move )
+*/
+Board.prototype.pointingHover = function(p, shift, ctrl)
+{
+	var cursor = this.curPanel().pointingHover(p, shift, ctrl);
 
 	if (this.$showHelp)
 	{
 		if (cursor)
-			{ this.getPanel('HelpPanel').mousehover(null, shift, ctrl); }
+			{ this.getPanel('HelpPanel').pointingHover(null, shift, ctrl); }
 		else
-			{ cursor = this.getPanel('HelpPanel').mousehover(p, shift, ctrl); }
+			{ cursor = this.getPanel('HelpPanel').pointingHover(p, shift, ctrl); }
 	}
 
 	return cursor;
@@ -262,15 +266,20 @@ Board.prototype.mousehover = function(p, shift, ctrl)
 /*
 | Start of a dragging operation.
 */
-Board.prototype.dragstart = function(p, shift, ctrl)
-	{ return null; };
+Board.prototype.dragstart = function( p, shift, ctrl )
+{
+	return null;
+};
 
 
 /*
 | Start of a dragging operation.
+| TODO huh?
 */
-Board.prototype.actionmove = function(p, shift, ctrl)
-	{ return null; };
+Board.prototype.actionmove = function( p, shift, ctrl )
+{
+	return null;
+};
 
 
 /*
@@ -286,22 +295,24 @@ Board.prototype.actionstop = function(p, shift, ctrl)
 
 
 /*
-| Mouse button down event.
+| pointing device is starting a point ( mouse down, touch start )
 */
-Board.prototype.mousedown = function(p, shift, ctrl)
+Board.prototype.pointingStart = function( p, shift, ctrl )
 {
 	var r;
-	if (this.$showHelp)
+	if( this.$showHelp )
 	{
-		r = this.getPanel('HelpPanel').mousedown(p, shift. ctrl);
-		if (r !== null)
+		r = this.getPanel( 'HelpPanel' ).pointingStart( p, shift. ctrl) ;
+		if( r !== null )
 			{ return r; }
 	}
 
-	r = this.curPanel().mousedown(p, shift. ctrl);
-	if (r === null)
+	r = this.curPanel( ).pointingStart( p, shift. ctrl );
+
+	if( r === null )
 		{ return null; }
-	this.curPanel().mousehover(p, shift, ctrl);
+
+	this.curPanel( ).pointingHover( p, shift, ctrl );
 	return r;
 };
 
@@ -309,25 +320,25 @@ Board.prototype.mousedown = function(p, shift, ctrl)
 /*
 | Returns an entity by its path.
 */
-Board.prototype.getSub = function(path)
+Board.prototype.getSub = function( path )
 {
-	var panel = this.getPanel(path.get(0));
+	var panel = this.getPanel( path.get( 0 ) );
 
-	return panel.$sub[path.get(1)];
+	return panel.$sub[ path.get( 1 ) ];
 };
 
 
 /*
 | Shows or hides the help panel.
 */
-Board.prototype.setShowHelp = function(showHelp)
+Board.prototype.setShowHelp = function( showHelp )
 {
-	if (this.$showHelp === showHelp)
+	if( this.$showHelp === showHelp )
 		{ return; }
 
 	this.$showHelp = showHelp;
 
-	this.getPanel('MainPanel').setShowHelp(showHelp);
+	this.getPanel( 'MainPanel' ).setShowHelp( showHelp );
 	shell.redraw = true;
 };
 

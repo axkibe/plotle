@@ -40,7 +40,7 @@ var Curve;
 /*
 | Capsule
 */
-(function() {
+( function( ) {
 'use strict';
 
 if (typeof(window) === 'undefined')
@@ -49,64 +49,80 @@ if (typeof(window) === 'undefined')
 /**
 | Constructor.
 */
-var Label = Dash.Label = function(twig, panel, inherit, name) {
+var Label = Dash.Label = function( twig, panel, inherit, name )
+{
 	this.name    = name;
 	this.twig    = twig;
 	this.panel   = panel;
-	this.pos     = Curve.computePoint(twig.pos, panel.iframe);
+	this.pos     = Curve.computePoint( twig.pos, panel.iframe );
 
 	// if not null, overrides the design text
 	this._$text    = inherit ? inherit._$text : null;
 };
 
-/**
+
+/*
 | Labels cannot focus.
 */
-Label.prototype.grepFocus = function()
-	{ return false; };
-
-/**
-| Draws the label on the fabric.
-*/
-Label.prototype.draw = function(fabric) {
-	fabric.setFont(this.twig.font);
-	fabric.fillText(this._$text || this.twig.text, this.pos);
+Label.prototype.grepFocus = function( )
+{
+	return false;
 };
 
-/**
-| Overrides design text.
+
+/*
+| Draws the label on the fabric.
 */
-Label.prototype.setText = function(text) {
+Label.prototype.draw = function( fabric )
+{
+	fabric.setFont( this.twig.font );
+	fabric.fillText( this._$text || this.twig.text, this.pos );
+};
+
+
+/*
+| overrides the designed text
+*/
+Label.prototype.setText = function(text)
+{
 	this._$text = text;
 	this.poke();
 };
 
-/**
+
+/*
 | Clears cache.
 */
-Label.prototype.poke = function() {
-	this.panel.poke();
+Label.prototype.poke = function( )
+{
+	this.panel.poke( );
 };
 
-/**
+
+/*
 | Force clears all caches.
 */
-Label.prototype.knock = function() {
+Label.prototype.knock = function( )
+{
 	// pass
 };
 
-/**
-| Mouse hover.
+
+/*
+| User is hovering his/her pointer ( mouse move )
 */
-Label.prototype.mousehover = function(p, shift, ctrl) {
+Label.prototype.pointingHover = function( p, shift, ctrl )
+{
 	return null;
 };
 
-/**
-| Mouse down
+
+/*
+| User is starting to point at something ( mouse down, touch start )
 */
-Label.prototype.mousedown = function(p, shift, ctrl) {
+Label.prototype.pointingStart = function( p, shift, ctrl )
+{
 	return null;
 };
 
-})();
+} ) ( );

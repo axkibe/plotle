@@ -139,56 +139,67 @@ MainPanel.prototype.draw = function(fabric) {
 	fabric.drawImage(this._weave(), this.pnw);
 };
 
-/**
-| Mouse down.
+
+/*
+| User is starting to point on something ( mouse down, touch start )
 */
-MainPanel.prototype.mousedown = function(p, shift, ctrl) {
-	if (this.switchActive) {
-		var res = this.getSwitchPanel().mousedown(p);
-		if (res !== null) { return res; }
+MainPanel.prototype.pointingStart = function( p, shift, ctrl )
+{
+	if( this.switchActive )
+	{
+		var res = this.getSwitchPanel( ).pointingStart( p );
+		if( res !== null ){ return res; }
 	}
 
-	return Dash.Panel.prototype.mousedown.call(this, p, shift, ctrl);
+	return Dash.Panel.prototype.pointingStart.call( this, p, shift, ctrl );
 };
 
-/**
+
+/*
 | Force clears all caches.
 */
-MainPanel.prototype.knock = function() {
-	this.getSwitchPanel().knock();
-	Dash.Panel.prototype.poke.call(this);
+MainPanel.prototype.knock = function( )
+{
+	this.getSwitchPanel( ).knock( );
+	Dash.Panel.prototype.poke.call( this );
 };
 
-/**
+
+/*
 | Returns true if point is on this panel
 */
-MainPanel.prototype.mousehover = function(p, shift, ctrl)
+MainPanel.prototype.pointingHover = function( p, shift, ctrl )
 {
-	if (p === null)
+	if ( p === null )
 		{ return false; }
 
-	if (this.switchActive) {
-		var pp = p.sub(this.pnw);
-		var swb = this.$sub.switchB;
-		var over = swb.mousehover(pp);
-		if (over) {
-			this.getSwitchPanel().cancelFade();
-		} else {
-			over = this.getSwitchPanel().mousehover(p);
-			if (over) { return over; }
+	if ( this.switchActive )
+	{
+		var pp   = p.sub( this.pnw );
+		var swb  = this.$sub.switchB;
+		var over = swb.pointingHover( pp );
+		if( over )
+		{
+			this.getSwitchPanel( ).cancelFade( );
+		} else
+		{
+			over = this.getSwitchPanel( ).pointingHover( p );
+			if( over )
+				{ return over; }
 		}
 	}
 
-	return Dash.Panel.prototype.mousehover.call(this, p, shift, ctrl);
+	return Dash.Panel.prototype.pointingHover.call( this, p, shift, ctrl );
 };
 
 /**
 | Sets Help Panel visible/invisible.
 */
-MainPanel.prototype.setShowHelp = function(showHelp) {
+MainPanel.prototype.setShowHelp = function( showHelp )
+{
 	var rb = this.$sub.rightB;
 	rb.$active = showHelp;
-	rb.poke();
+	rb.poke( );
 };
 
-})();
+})( );
