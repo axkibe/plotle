@@ -11,6 +11,7 @@
                    `'-.....-.'.'.-'  / | |     | |    `-._____ / | |     / /   | |_  | |      |  '.'
                                  \_.'  | '.    | '.           `  |_|     \ \._,\ '/  | |      |   /
                                        '___)   '___)                      `~~'  `"   |_|      `--'
+
                                    .---.         .
                                    \___  . . ,-. |- ,-. ,-,-.
                                        \ | | `-. |  |-' | | |
@@ -25,39 +26,49 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/**
-| Imports
+
+/*
+| imports
 */
 var Euclid;
 var Jools;
 var Shell;
 var config;
 
-/**
-| Export
+
+/*
+| export
 */
 var system;
 var startup;
 
-/**
-| Export/Capsule
-*/
-(function(){
-'use strict';
-if (typeof(window) === 'undefined') { throw new Error('browser.js needs a browser!'); }
 
-/**
-| Catches all errors a function throws if config.devel is set.
+/*
+| capsule
 */
-var makeCatcher = function(t, f) {
-	return function() {
-		if (config.devel) {
-			return f.apply(t, arguments);
+( function( ) {
+'use strict';
+if ( typeof( window ) === 'undefined')
+	{ throw new Error( 'browser.js needs a browser!' ); }
+
+
+/*
+| catches all errors a function throws if config.devel is set.
+*/
+var makeCatcher = function( t, f )
+{
+	return function( )
+	{
+		if( config.devel )
+		{
+			return f.apply( t, arguments );
 		}
 
 		try {
-			f.apply(t, arguments);
-		} catch(e) {
+			f.apply( t, arguments );
+		}
+		catch( e )
+		{
 			window.alert(
 				'Internal failure, ' + e.name + ': ' + e.message + '\n\n' +
 				'file: '  + e.fileName   + '\n' +
@@ -68,11 +79,13 @@ var makeCatcher = function(t, f) {
 	};
 };
 
-/**
+
+/*
 | the system
 */
-var System = function() {
-	if (system)
+var System = function()
+{
+	if( system )
 		{ throw new Error('System not a singleton'); }
 
 	var canvas    = this._canvas = document.getElementById('canvas');
@@ -92,7 +105,8 @@ var System = function() {
 	// if the mouse moves out of the atweenBox or the atweenTimer ticks its
 	// a drag, if it goes up before either happens, its a click
 
-	this._$atween = {
+	this._$atween =
+	{
 		// timer for atween state
 		timer : null,
 
@@ -121,25 +135,26 @@ var System = function() {
 	// if it changes the user did something.
 	this._inputVal = '';
 
-	canvas.onmouseup             = makeCatcher(this, this._onMouseUp);
-	canvas.onmousemove           = makeCatcher(this, this._onMouseMove);
-	canvas.onmousedown           = makeCatcher(this, this._onMouseDown);
-	canvas.onmousewheel          = makeCatcher(this, this._onMouseWheel);
-	canvas.addEventListener('DOMMouseScroll', canvas.onmousewheel, false); // Firefox
-	window.onresize              = makeCatcher(this, this._onResize);
-	this._hiddenInput.onfocus    = makeCatcher(this, this._onFocus);
-	this._hiddenInput.onblur     = makeCatcher(this, this._onBlur);
-	this._hiddenInput.onkeydown  = makeCatcher(this, this._onKeyDown);
-	this._hiddenInput.onkeypress = makeCatcher(this, this._onKeyPress);
-	this._hiddenInput.onkeyup    = makeCatcher(this, this._onKeyUp);
-	this._testInputCatcher       = makeCatcher(this, this._testInput);
-	this._onAtweenTimeCatcher    = makeCatcher(this, this._onAtweenTime);
-	this._blinkCatcher           = makeCatcher(this, this._blink);
+	canvas.onmouseup             = makeCatcher( this, this._onMouseUp   );
+	canvas.onmousemove           = makeCatcher( this, this._onMouseMove );
+	canvas.onmousedown           = makeCatcher( this, this._onMouseDown );
 
-	document.oncontextmenu = function(e) {
-		e.stopPropagation();
-		return false;
-	};
+	canvas.ontouchstart          = canvas.onmousedown;
+	canvas.ontouchmove           = canvas.onmousemove;
+	canvas.ontouchend            = canvas.onmouseup;
+
+	canvas.onmousewheel          = makeCatcher( this, this._onMouseWheel  );
+	canvas.addEventListener( 'DOMMouseScroll', canvas.onmousewheel, false ); // Firefox
+	window.onresize              = makeCatcher( this, this._onResize      );
+	this._hiddenInput.onfocus    = makeCatcher( this, this._onFocus       );
+	this._hiddenInput.onblur     = makeCatcher( this, this._onBlur        );
+	this._hiddenInput.onkeydown  = makeCatcher( this, this._onKeyDown     );
+	this._hiddenInput.onkeypress = makeCatcher( this, this._onKeyPress    );
+	this._hiddenInput.onkeyup    = makeCatcher( this, this._onKeyUp       );
+	this._testInputCatcher       = makeCatcher( this, this._testInput     );
+	this._onAtweenTimeCatcher    = makeCatcher( this, this._onAtweenTime  );
+	this._blinkCatcher           = makeCatcher( this, this._blink         );
+	document.oncontextmenu       = makeCatcher( this, this._onContextMenu );
 
 	// the blink (and check input) timer
 	this._blinkTimer = null;
@@ -147,14 +162,16 @@ var System = function() {
 	this.restartBlinker();
 };
 
-/**
-| Default system behavior settings
+
+/*
+| default system behavior settings
 */
-System.prototype.settings = {
+System.prototype.settings =
+{
 	// pixels to scroll for a wheel event
 	textWheelSpeed : 12 * 5,
 
-	// Blink speed of the caret.
+	// blink speed of the caret.
 	caretBlinkSpeed : 530,
 
 	// milliseconds after mouse down, dragging starts
@@ -165,40 +182,47 @@ System.prototype.settings = {
 };
 
 
-/**
-| Cancels a timer
+/*
+| cancels a timer
 */
-System.prototype.cancelTimer = function(id) {
-	return window.clearTimeout(id);
+System.prototype.cancelTimer = function( id )
+{
+	return window.clearTimeout( id );
 };
 
-/**
+
+/*
 | (re)starts the blink timer
 */
-System.prototype.restartBlinker = function() {
+System.prototype.restartBlinker = function( )
+{
 	// double uses the blink timer
 	this._testInput();
 
 	if (this._blinkTimer)
-		{ clearInterval(this._blinkTimer); }
+		{ clearInterval( this._blinkTimer ); }
 
-	this._blinkTimer = setInterval(this._blinkCatcher, this.settings.caretBlinkSpeed);
+	this._blinkTimer = setInterval( this._blinkCatcher, this.settings.caretBlinkSpeed );
 };
 
-/**
-| Sets the hidden input field (text selection).
+
+/*
+| sets the hidden input field (text selection)
 */
-System.prototype.setInput = function(text) {
+System.prototype.setInput = function( text )
+{
 	var hi   = this._hiddenInput;
 	hi.value = this._inputVal = text;
-	if (text !== '') {
+	if ( text !== '' )
+	{
 		hi.selectionStart = 0;
 		hi.selectionEnd = text.length;
 	}
 };
 
-/**
-| Sets a time through the error catcher
+
+/*
+| sets a time through the error catcher
 */
 System.prototype.setTimer = function(time, callback)
 {
@@ -207,22 +231,27 @@ System.prototype.setTimer = function(time, callback)
 
 // ---------------------------
 
-/**
-| does a blink.
+
+/*
+| blinks the caret
 */
-System.prototype._blink = function() {
-	// hackish, also look into the hidden input field,
-	// maybe the user pasted something using the browser menu.
+System.prototype._blink = function()
+{
+	// also looks into the hidden input field,
+	// maybe the user pasted something using the browser menu
 	this._testInput();
 
 	this.shell.blink();
 };
 
-/**
-| Timeout after mouse down so dragging starts.
+
+/*
+| timeout after mouse down so dragging starts
 */
-System.prototype._onAtweenTime = function() {
-	if (this._$mouseState !== 'atween') {
+System.prototype._onAtweenTime = function( )
+{
+	if (this._$mouseState !== 'atween')
+	{
 		Jools.log('warn', 'dragTime() in wrong action mode');
 		return;
 	}
@@ -232,45 +261,53 @@ System.prototype._onAtweenTime = function() {
 	atween.timer      = null;
 
 	var cursor = null;
-	this.shell.dragstart(atween.pos, atween.shift, atween.ctrl);
-	cursor = this.shell.dragmove(atween.move, atween.shift, atween.ctrl);
+	this.shell.dragstart( atween.pos, atween.shift, atween.ctrl );
+	cursor = this.shell.dragmove( atween.move, atween.shift, atween.ctrl );
 
 	if (cursor !== null)
 		{ this._canvas.style.cursor = cursor; }
 };
 
 
-/**
-| Hidden input lost focus.
+/*
+| hidden input lost focus
 */
-System.prototype._onBlur = function(event) {
-	this.shell.systemBlur();
+System.prototype._onBlur = function( event )
+{
+	this.shell.systemBlur( );
 };
 
-/**
-| Hidden input got focus.
+
+/*
+| hidden input got focus
 */
-System.prototype._onFocus = function(event) {
-	this.shell.systemFocus();
+System.prototype._onFocus = function( event )
+{
+	this.shell.systemFocus( );
 };
 
-/**
-| View window resized.
+
+/*
+| view window has resized
 */
-System.prototype._onResize = function(event) {
+System.prototype._onResize = function( event )
+{
 	var c = this._canvas;
 
 	c.width  = window.innerWidth - 1;
 	c.height = window.innerHeight - 1;
-	this.shell.resize(c.width, c.height);
+	this.shell.resize( c.width, c.height );
 };
 
-/**
-| Captures all mouseevents event beyond the canvas (for dragging).
+
+/*
+| captures all mouseevents event beyond the canvas (for dragging)
 */
-System.prototype._captureEvents = function() {
-	if (this._useCapture) {
-		this._canvas.setCapture(this._canvas);
+System.prototype._captureEvents = function( )
+{
+	if( this._useCapture )
+	{
+		this._canvas.setCapture( this._canvas );
 		return;
 	}
 
@@ -279,63 +316,91 @@ System.prototype._captureEvents = function() {
 };
 
 
-/**
-| Key down in hidden input field.
+/*
+| key down in hidden input field
 */
-System.prototype._onKeyDown = function(event) {
+System.prototype._onKeyDown = function( event )
+{
 	var shift = event.shiftKey;
 	var ctrl  = event.ctrlKey || event.metaKey;
 
-	if (!this._specialKey(this._lastSpecialKey = event.keyCode, shift, ctrl))
-		{ event.preventDefault(); }
+	if(
+		!this._specialKey(
+			this._lastSpecialKey = event.keyCode, shift, ctrl
+		)
+	)
+	{
+		event.preventDefault();
+	}
 };
 
 
 /**
 | Hidden input key press.
 */
-System.prototype._onKeyPress = function(event) {
+System.prototype._onKeyPress = function( event )
+{
 	var ew    = event.which;
 	var ek    = event.keyCode;
 	var shift = event.shiftKey;
 	var ctrl  = event.ctrlKey || event.metaKey;
 
-	if (((ek > 0 && ek < 32) || ew === 0) && this._lastSpecialKey !== ek) {
+	if (
+		(
+			( ek > 0 && ek < 32 ) ||
+			ew === 0
+		) &&
+		this._lastSpecialKey !== ek
+	)
+	{
 		this._lastSpecialKey = -1;
 		return this._specialKey(ek, shift, ctrl);
 	}
 
 	this._lastSpecialKey = -1;
 	this._testInput();
-	this.setTimer(0, this._testInputCatcher);
+	this.setTimer( 0, this._testInputCatcher );
 	return true;
 };
 
 
-/**
+/*
 | Hidden input key up.
 */
-System.prototype._onKeyUp = function(event) {
-	this._testInput();
+System.prototype._onKeyUp = function( event )
+{
+	this._testInput( );
 	return true;
 };
 
-/**
+
+/*
+| Disables context menues.
+*/
+System.prototype._onContextMenu = function( event )
+{
+	e.stopPropagation();
+	return false;
+};
+
+
+/*
 | Mouse down event.
 */
-System.prototype._onMouseDown = function(event) {
-	var self = this;
+System.prototype._onMouseDown = function( event )
+{
 	event.preventDefault();
 
-	if (event.button !== 0)
+	if( Jools.is( event.button ) && event.button !== 0 )
 		{ return; }
 
 	this._hiddenInput.focus();
 
 	// worksaround a bug in safari/OSX
-	this.setTimer(0, function() {
+	var self = this;
+	this.setTimer( 0, function( ) {
 		self._hiddenInput.selectionStart = 0;
-	});
+	} );
 
 	var canvas = this._canvas;
 	var p      = new Euclid.Point(
@@ -346,87 +411,103 @@ System.prototype._onMouseDown = function(event) {
 	var ctrl   = event.ctrlKey || event.metaKey;
 
 	// asks the shell if it forces this to be a drag or click, or yet unknown.
-	this._$mouseState = this.shell.mousedown(p, shift, ctrl);
+	this._$mouseState = this.shell.mousedown( p, shift, ctrl );
 
-	switch(this._$mouseState) {
-	case 'atween' :
-		var atween   = this._$atween;
-		atween.pos   = p;
-		atween.move  = p;
-		atween.shift = shift;
-		atween.ctrl  = ctrl;
-		atween.timer = this.setTimer(this.settings.dragtime, this._onAtweenTimeCatcher);
-		break;
+	switch( this._$mouseState )
+	{
+		case 'atween' :
 
-	case 'drag' :
-		this._captureEvents();
-		break;
+			var atween   = this._$atween;
+			atween.pos   = p;
+			atween.move  = p;
+			atween.shift = shift;
+			atween.ctrl  = ctrl;
+			atween.timer = this.setTimer(this.settings.dragtime, this._onAtweenTimeCatcher);
+			break;
+
+		case 'drag' :
+
+			this._captureEvents( );
+			break;
 	}
 
-	var cursor = this.shell.mousehover(p, shift, ctrl);
-	if (cursor !== null) { canvas.style.cursor = cursor; }
+	var cursor = this.shell.mousehover( p, shift, ctrl );
+	if ( cursor !== null )
+		{ canvas.style.cursor = cursor; }
 
 	return false;
 };
 
-/**
+
+/*
 | Mouse move event.
 */
-System.prototype._onMouseMove = function(event) {
+System.prototype._onMouseMove = function( event )
+{
 	var canvas = this._canvas;
 	var p      = new Euclid.Point(
 		event.pageX - canvas.offsetLeft,
 		event.pageY - canvas.offsetTop
 	);
+
 	var shift  = event.shiftKey;
 	var ctrl   = event.ctrlKey || event.metaKey;
 	var cursor = null;
 
-	switch(this._$mouseState) {
-	case false:
-		cursor = this.shell.mousehover(p, shift, ctrl);
-		break;
-	case 'atween':
-		var dragbox = this.settings.dragbox;
-		var atween  = this._$atween;
+	switch( this._$mouseState )
+	{
+		case false:
+			cursor = this.shell.mousehover( p, shift, ctrl );
+			break;
 
-		if ((Math.abs(p.x - atween.pos.x) > dragbox) ||
-			(Math.abs(p.y - atween.pos.y) > dragbox)
-		) {
-			// moved out of dragbox -> start dragging
-			clearTimeout(atween.timer);
-			atween.timer = null;
-			this._$mouseState = 'drag';
-			this.shell.dragstart(atween.pos, shift, ctrl);
-			cursor = this.shell.dragmove(p, shift, ctrl);
-			this._captureEvents();
-		} else {
-			// saves position for possible atween timeout
-			atween.move  = p;
-			atween.shift = shift;
-			atween.ctrl  = ctrl;
-		}
-		break;
-	case 'drag':
-		cursor = this.shell.dragmove(p, shift, ctrl);
-		break;
-	default :
-		throw new Error('invalid mouseState');
+		case 'atween':
+			var dragbox = this.settings.dragbox;
+			var atween  = this._$atween;
+
+			if( (Math.abs( p.x - atween.pos.x ) > dragbox ) ||
+				(Math.abs( p.y - atween.pos.y ) > dragbox )
+			)
+			{
+				// moved out of dragbox -> start dragging
+				clearTimeout( atween.timer );
+				atween.timer = null;
+				this._$mouseState = 'drag';
+				this.shell.dragstart( atween.pos, shift, ctrl );
+				cursor = this.shell.dragmove( p, shift, ctrl );
+				this._captureEvents( );
+			}
+			else
+			{
+				// saves position for possible atween timeout
+				atween.move  = p;
+				atween.shift = shift;
+				atween.ctrl  = ctrl;
+			}
+			break;
+
+		case 'drag':
+			cursor = this.shell.dragmove( p, shift, ctrl );
+			break;
+
+		default :
+			throw new Error('invalid mouseState');
+
 	}
 
-	if (cursor !== null)
+	if( cursor !== null )
 		{ canvas.style.cursor = cursor; }
 
 	return true;
 };
 
 
-/**
+/*
 | Mouse up event.
 */
-System.prototype._onMouseUp = function(event) {
-	event.preventDefault();
-	this._releaseEvents();
+System.prototype._onMouseUp = function( event )
+{
+	event.preventDefault( );
+	this._releaseEvents( );
 
 	var canvas = this._canvas;
 	var p      = new Euclid.Point(
@@ -437,41 +518,44 @@ System.prototype._onMouseUp = function(event) {
 	var ctrl   = event.ctrlKey || event.metaKey;
 	var cursor = null;
 
-	switch (this._$mouseState) {
-	case false :
-		break;
+	switch( this._$mouseState )
+	{
+		case false :
+			break;
 
-	case 'atween' :
-		// A click is a mouse down followed within dragtime by 'mouseup' and
-		// not having moved out of 'dragbox'.
-		var atween = this._$atween;
-		clearTimeout(atween.timer);
-		atween.timer = null;
-		this.shell.click(p, shift, ctrl);
-		cursor = this.shell.mousehover(p, shift, ctrl);
-		this._$mouseState = false;
-		break;
+		case 'atween' :
+			// A click is a mouse down followed within dragtime by 'mouseup' and
+			// not having moved out of 'dragbox'.
+			var atween = this._$atween;
+			clearTimeout( atween.timer );
+			atween.timer = null;
+			this.shell.click( p, shift, ctrl );
+			cursor = this.shell.mousehover( p, shift, ctrl );
+			this._$mouseState = false;
+			break;
 
-	case 'drag' :
-		this.shell.dragstop(p, shift, ctrl);
-		cursor = this.shell.mousehover(p, shift, ctrl);
-		this._$mouseState = false;
-		break;
+		case 'drag' :
+			this.shell.dragstop( p, shift, ctrl );
+			cursor = this.shell.mousehover( p, shift, ctrl );
+			this._$mouseState = false;
+			break;
 
-	default :
-		throw new Error('invalid mouseState');
+		default :
+			throw new Error( 'invalid mouseState' );
 	}
 
-	if (cursor !== null)
+	if( cursor !== null )
 		{ canvas.style.cursor = cursor; }
 
 	return false;
 };
 
-/**
+
+/*
 | Mouse down event.
 */
-System.prototype._onMouseWheel = function(event) {
+System.prototype._onMouseWheel = function( event )
+{
 	var canvas = this._canvas;
 	var p = new Euclid.Point(
 		event.pageX - canvas.offsetLeft,
@@ -479,11 +563,16 @@ System.prototype._onMouseWheel = function(event) {
 	);
 
 	var dir;
-	if (Jools.is(event.wheelDelta)) {
+	if( Jools.is( event.wheelDelta ) )
+	{
 		dir = (event.wheelDelta) > 0 ? 1 : -1;
-	} else if (Jools.is(event.detail)) {
+	}
+	else if( Jools.is( event.detail ) )
+	{
 		dir = (event.detail) > 0 ? -1 : 1;
-	} else {
+	}
+	else
+	{
 		Jools.log('warn', 'invalid wheel event');
 		return;
 	}
@@ -491,14 +580,17 @@ System.prototype._onMouseWheel = function(event) {
 	var shift = event.shiftKey;
 	var ctrl  = event.ctrlKey || event.metaKey;
 
-	this.shell.mousewheel(p, dir, shift, ctrl);
+	this.shell.mousewheel( p, dir, shift, ctrl );
 };
 
-/**
+
+/*
 | Stops capturing all mouseevents
 */
-System.prototype._releaseEvents = function() {
-	if (this._useCapture) {
+System.prototype._releaseEvents = function( )
+{
+	if ( this._useCapture )
+	{
 		document.releaseCapture(this._canvas);
 		return;
 	}
@@ -507,62 +599,80 @@ System.prototype._releaseEvents = function() {
 	document.onmousemove = null;
 };
 
-/**
+
+/*
 | A special key was pressed.
 */
-System.prototype._specialKey = function(keyCode, shift, ctrl) {
+System.prototype._specialKey = function(keyCode, shift, ctrl)
+{
 	var key = null;
-	if (ctrl) {
-		switch(keyCode) {
-		case 65  : key = 'a'; break;
-		case 89  : key = 'y'; break;
-		case 90  : key = 'z'; break;
-		case 188 : key = ','; break;
-		case 190 : key = '.'; break;
-		}
-	} else {
-		switch(keyCode) {
-		case  8 : key = 'backspace'; break;
-		case  9 : key = 'tab';       break;
-		case 13 : key = 'enter';     break;
-		case 27 : key = 'esc';       break;
-		case 33 : key = 'pageup';    break;
-		case 34 : key = 'pagedown';  break;
-		case 35 : key = 'end';       break;
-		case 36 : key = 'pos1';      break;
-		case 37 : key = 'left';      break;
-		case 38 : key = 'up';        break;
-		case 39 : key = 'right';     break;
-		case 40 : key = 'down';      break;
-		case 46 : key = 'del';       break;
+	if( ctrl )
+	{
+		switch( keyCode )
+		{
+			case 65  : key = 'a'; break;
+			case 89  : key = 'y'; break;
+			case 90  : key = 'z'; break;
+			case 188 : key = ','; break;
+			case 190 : key = '.'; break;
 		}
 	}
-	if (key === null) return true;
-	this.shell.specialKey(key, shift, ctrl);
+	else
+	{
+		switch( keyCode )
+		{
+			case  8 : key = 'backspace'; break;
+			case  9 : key = 'tab';       break;
+			case 13 : key = 'enter';     break;
+			case 27 : key = 'esc';       break;
+			case 33 : key = 'pageup';    break;
+			case 34 : key = 'pagedown';  break;
+			case 35 : key = 'end';       break;
+			case 36 : key = 'pos1';      break;
+			case 37 : key = 'left';      break;
+			case 38 : key = 'up';        break;
+			case 39 : key = 'right';     break;
+			case 40 : key = 'down';      break;
+			case 46 : key = 'del';       break;
+		}
+	}
+
+	if( key === null )
+		{ return true; }
+
+	this.shell.specialKey( key, shift, ctrl );
+
 	return false;
 };
 
-/**
+
+/*
 | tests if the hidden input field got data.
 */
-System.prototype._testInput = function() {
+System.prototype._testInput = function( )
+{
 	var hi   = this._hiddenInput;
 	var text = hi.value;
 
-	if (text == this._inputVal)
+	if( text == this._inputVal )
 		{ return; }
 
 	hi.value = this._inputVal = '';
 	this.shell.input(text);
 };
 
+
 //window.onload = function() {
-startup = function() {
-	makeCatcher(null, function() {
-		system = new System();
-		system.shell = new Shell(system.fabric);
-		system.shell.onload();
-	})();
+startup = function( )
+{
+	makeCatcher(
+		null,
+		function( ) {
+			system = new System();
+			system.shell = new Shell(system.fabric);
+			system.shell.onload();
+		}
+	)( );
 };
 
-})();
+} ) ( );
