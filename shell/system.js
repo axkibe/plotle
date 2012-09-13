@@ -135,13 +135,13 @@ var System = function()
 	// if it changes the user did something.
 	this._inputVal = '';
 
-	canvas.onmouseup             = makeCatcher( this, this._onMouseUp   );
-	canvas.onmousemove           = makeCatcher( this, this._onMouseMove );
 	canvas.onmousedown           = makeCatcher( this, this._onMouseDown );
+	canvas.onmousemove           = makeCatcher( this, this._onMouseMove );
+	canvas.onmouseup             = makeCatcher( this, this._onMouseUp   );
 
-	canvas.ontouchstart          = canvas.onmousedown;
-	canvas.ontouchmove           = canvas.onmousemove;
-	canvas.ontouchend            = canvas.onmouseup;
+	canvas.ontouchstart          = makeCatcher( this, this._onTouchStart );
+	canvas.ontouchmove           = makeCatcher( this, this._onTouchMove  );
+	canvas.ontouchend            = makeCatcher( this, this._onTouchEnd   );
 
 	canvas.onmousewheel          = makeCatcher( this, this._onMouseWheel  );
 	canvas.addEventListener( 'DOMMouseScroll', canvas.onmousewheel, false ); // Firefox
@@ -202,7 +202,10 @@ System.prototype.restartBlinker = function( )
 	if (this._blinkTimer)
 		{ clearInterval( this._blinkTimer ); }
 
-	this._blinkTimer = setInterval( this._blinkCatcher, this.settings.caretBlinkSpeed );
+	this._blinkTimer = setInterval(
+		this._blinkCatcher,
+		this.settings.caretBlinkSpeed
+	);
 };
 
 
@@ -226,7 +229,10 @@ System.prototype.setInput = function( text )
 */
 System.prototype.setTimer = function(time, callback)
 {
-	return window.setTimeout(makeCatcher(null, callback), time);
+	return window.setTimeout(
+		makeCatcher( null, callback ),
+		time
+	);
 };
 
 // ---------------------------
@@ -257,14 +263,26 @@ System.prototype._onAtweenTime = function( )
 	}
 
 	var atween        = this._$atween;
+
 	this._$mouseState = 'drag';
-	atween.timer      = null;
 
 	var cursor = null;
-	this.shell.dragstart( atween.pos, atween.shift, atween.ctrl );
-	cursor = this.shell.dragmove( atween.move, atween.shift, atween.ctrl );
 
-	if (cursor !== null)
+	this.shell.dragstart(
+		atween.pos,
+		atween.shift,
+		atween.ctrl
+	);
+
+	cursor = this.shell.dragmove(
+		atween.move,
+		atween.shift,
+		atween.ctrl
+	);
+
+	this._$atween     = null;
+
+	if( cursor !== null )
 		{ this._canvas.style.cursor = cursor; }
 };
 
@@ -416,22 +434,26 @@ System.prototype._onMouseDown = function( event )
 	switch( this._$mouseState )
 	{
 		case 'atween' :
-
-			var atween   = this._$atween;
-			atween.pos   = p;
-			atween.move  = p;
-			atween.shift = shift;
-			atween.ctrl  = ctrl;
-			atween.timer = this.setTimer(this.settings.dragtime, this._onAtweenTimeCatcher);
+			this._$atween =
+			{
+				pos   : p,
+				move  : p,
+				shift : shift,
+				ctrl  : ctrl,
+				timer : this.setTimer(
+					this.settings.dragtime,
+					this._onAtweenTimeCatcher
+				)
+			}
 			break;
 
 		case 'drag' :
-
 			this._captureEvents( );
 			break;
 	}
 
 	var cursor = this.shell.mousehover( p, shift, ctrl );
+
 	if ( cursor !== null )
 		{ canvas.style.cursor = cursor; }
 
@@ -470,18 +492,27 @@ System.prototype._onMouseMove = function( event )
 			{
 				// moved out of dragbox -> start dragging
 				clearTimeout( atween.timer );
-				atween.timer = null;
+				this._$atween = null;
 				this._$mouseState = 'drag';
-				this.shell.dragstart( atween.pos, shift, ctrl );
-				cursor = this.shell.dragmove( p, shift, ctrl );
+
+				this.shell.dragstart(
+					atween.pos,
+					shift,
+					ctrl
+				);
+
+				cursor = this.shell.dragmove(
+					p,
+					shift,
+					ctrl
+				);
+
 				this._captureEvents( );
 			}
 			else
 			{
 				// saves position for possible atween timeout
-				atween.move  = p;
-				atween.shift = shift;
-				atween.ctrl  = ctrl;
+				atween.move = p;
 			}
 			break;
 
@@ -528,7 +559,7 @@ System.prototype._onMouseUp = function( event )
 			// not having moved out of 'dragbox'.
 			var atween = this._$atween;
 			clearTimeout( atween.timer );
-			atween.timer = null;
+			this._$atween = null;
 			this.shell.click( p, shift, ctrl );
 			cursor = this.shell.mousehover( p, shift, ctrl );
 			this._$mouseState = false;
@@ -552,7 +583,7 @@ System.prototype._onMouseUp = function( event )
 
 
 /*
-| Mouse down event.
+|  a mouse wheel event is being received
 */
 System.prototype._onMouseWheel = function( event )
 {
@@ -583,6 +614,163 @@ System.prototype._onMouseWheel = function( event )
 	this.shell.mousewheel( p, dir, shift, ctrl );
 };
 
+
+/*
+| a touch start is being received ( on mobile devices )
+*/
+System.prototype._onTouchStart = function( event )
+{
+	this._hiddenInput.focus();
+
+	var canvas = this._canvas;
+	var p      = new Euclid.Point(
+		event.pageX - canvas.offsetLeft,
+		event.pageY - canvas.offsetTop
+	);
+	var shift  = event.shiftKey;
+	var ctrl   = event.ctrlKey || event.metaKey;
+
+	// asks the shell if it forces this to be a drag or click, or yet unknown.
+	this._$mouseState = this.shell.mousedown( p, shift, ctrl );
+
+	switch( this._$mouseState )
+	{
+		case 'atween' :
+			this._$atween =
+			{
+				pos   : p,
+				move  : p,
+				shift : shift,
+				ctrl  : ctrl,
+				timer : this.setTimer(
+					this.settings.dragtime,
+					this._onAtweenTimeCatcher
+				)
+			}
+			break;
+
+		case 'drag' :
+			this._captureEvents( );
+			break;
+	}
+
+	return false;
+};
+
+
+/*
+| a touch move event is being received ( on mobile devices )
+*/
+System.prototype._onTouchMove = function( event )
+{
+	var canvas = this._canvas;
+	var p      = new Euclid.Point(
+		event.pageX - canvas.offsetLeft,
+		event.pageY - canvas.offsetTop
+	);
+
+	var shift  = event.shiftKey;
+	var ctrl   = event.ctrlKey || event.metaKey;
+	var cursor = null;
+
+	switch( this._$mouseState )
+	{
+		case false:
+			cursor = this.shell.mousehover( p, shift, ctrl );
+			break;
+
+		case 'atween':
+			var dragbox = this.settings.dragbox;
+			var atween  = this._$atween;
+
+			if( (Math.abs( p.x - atween.pos.x ) > dragbox ) ||
+				(Math.abs( p.y - atween.pos.y ) > dragbox )
+			)
+			{
+				// moved out of dragbox -> start dragging
+				clearTimeout( atween.timer );
+				this._$atween = null;
+				this._$mouseState = 'drag';
+
+				this.shell.dragstart(
+					atween.pos,
+					shift,
+					ctrl
+				);
+
+				cursor = this.shell.dragmove(
+					p,
+					shift,
+					ctrl
+				);
+
+				this._captureEvents( );
+			}
+			else
+			{
+				// saves position for possible atween timeout
+				atween.move = p;
+			}
+			break;
+
+		case 'drag':
+			cursor = this.shell.dragmove( p, shift, ctrl );
+			break;
+
+		default :
+			throw new Error('invalid mouseState');
+
+	}
+
+	return true;
+};
+
+
+/*
+| a touch end is being received ( on mobile devices)
+*/
+System.prototype._onTouchEnd = function( event )
+{
+	event.preventDefault( );
+	this._releaseEvents( );
+
+	var canvas = this._canvas;
+	var p      = new Euclid.Point(
+		event.pageX - canvas.offsetLeft,
+		event.pageY - canvas.offsetTop
+	);
+	var shift  = event.shiftKey;
+	var ctrl   = event.ctrlKey || event.metaKey;
+	var cursor = null;
+
+	switch( this._$mouseState )
+	{
+		case false :
+			break;
+
+		case 'atween' :
+			// A click is a mouse down followed within dragtime by 'mouseup' and
+			// not having moved out of 'dragbox'.
+			var atween = this._$atween;
+			clearTimeout( atween.timer );
+			this._$atween = null;
+			this.shell.click( p, shift, ctrl );
+			cursor = this.shell.mousehover( p, shift, ctrl );
+			this._$mouseState = false;
+			break;
+
+		case 'drag' :
+			this.shell.dragstop( p, shift, ctrl );
+			cursor = this.shell.mousehover( p, shift, ctrl );
+			this._$mouseState = false;
+			break;
+
+		default :
+			throw new Error( 'invalid mouseState' );
+	}
+
+	return false;
+};
 
 /*
 | Stops capturing all mouseevents
@@ -647,7 +835,7 @@ System.prototype._specialKey = function(keyCode, shift, ctrl)
 
 
 /*
-| tests if the hidden input field got data.
+| tests if the hidden input field got data
 */
 System.prototype._testInput = function( )
 {
@@ -662,7 +850,9 @@ System.prototype._testInput = function( )
 };
 
 
-//window.onload = function() {
+/*
+| system starts up ( pages loades )
+*/
 startup = function( )
 {
 	makeCatcher(
