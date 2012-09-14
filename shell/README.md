@@ -40,10 +40,6 @@ Files
 </td><td>   an action in the making by the user
 </td></tr>
 
- <tr><td>   browser.js
-</td><td>   wrapper around HTML5 browsers
-</td></tr>
-
  <tr><td>   caret.js
 </td><td>   the virtual caret
 </td></tr>
@@ -56,8 +52,16 @@ Files
 </td><td>   development version of the shells html file
 </td></tr>
 
+ <tr><td>   ellipse-menu.js
+</td><td>   an ellipse styled menu
+</td></tr>
+
  <tr><td>   fontloader.js
 </td><td>   wrapper around webfont loader
+</td></tr>
+
+ <tr><td>   fontpool.js
+</td><td>   creates font objects by size and code
 </td></tr>
 
  <tr><td>   iface.js
@@ -68,16 +72,12 @@ Files
 </td><td>   the Meshcraft shell's html file
 </td></tr>
 
- <tr><td>   ellipse-menu.js
-</td><td>   an ellipse styled menu
-</td></tr>
-
  <tr><td>   peer.js
 </td><td>   routines for abstracting the communicating with the server
 </td></tr>
 
- <tr><td>   selection.js
-</td><td>   a text selection
+ <tr><td>   range.js
+</td><td>   a text range ( e.g. a selection )
 </td></tr>
 
  <tr><td>   shell.js
@@ -86,6 +86,10 @@ Files
 
  <tr><td>   switchpanel.js
 </td><td>   the panel to switch spaces
+</td></tr>
+
+ <tr><td>   system.js
+</td><td>   wrapper around HTML5 browsers
 </td></tr>
 
  <tr><td>   testpad.html
