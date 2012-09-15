@@ -149,11 +149,8 @@ var System = function()
 
 	window.onresize           = makeCatcher( this, this._onResize         );
 
-	hiddenInput.onfocus       = makeCatcher( this, this._onHiddenFocus    ); // TODO
-	window.onfocus            = makeCatcher( this, this._onCanvasFocus    ); // TODO
-
-	hiddenInput.onblur        = makeCatcher( this, this._onHiddenBlur     ); // TODO
-	window.onblur             = makeCatcher( this, this._onCanvasBlur     ); // TODO
+	window.onfocus            = makeCatcher( this, this._onSystemFocus    );
+	window.onblur             = makeCatcher( this, this._onSystemBlur     );
 
 	hiddenInput.onkeydown     = makeCatcher( this, this._onHiddenKeyDown  );
 	hiddenInput.onkeypress    = makeCatcher( this, this._onHiddenKeyPress );
@@ -300,39 +297,19 @@ System.prototype._onAtweenTime = function( )
 
 
 /*
-| Hidden input lost focus
+| The meshcraft system lost focus
 */
-System.prototype._onHiddenBlur = function( event )
+System.prototype._onSystemBlur = function( event )
 {
-	console.log('onHiddenBlur');
-	this.shell.systemBlur( );
-};
-
-/*
-| Hidden input lost focus
-*/
-System.prototype._onCanvasBlur = function( event )
-{
-	console.log('onCanvasBlur');
 	this.shell.systemBlur( );
 };
 
 
 /*
-| Hidden input got focus
+| The meshcraft system got focus
 */
-System.prototype._onHiddenFocus = function( event )
+System.prototype._onSystemFocus = function( event )
 {
-	console.log('onHiddenFocus');
-	this.shell.systemFocus( );
-};
-
-/*
-| Hidden input got focus
-*/
-System.prototype._onCanvasFocus = function( event )
-{
-	console.log('onCanvasFocus');
 	this.shell.systemFocus( );
 };
 
@@ -488,6 +465,9 @@ System.prototype._onMouseDown = function( event )
 
 	if( Jools.is( event.button ) && event.button !== 0 )
 		{ return; }
+
+	// Opera requires to focus the window first
+	window.focus();
 
 	// this._hiddenInput.focus();
 	this._canvas.focus();
