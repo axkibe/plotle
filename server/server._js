@@ -100,11 +100,11 @@ var Server = function(_)
 	this.$nextVisitor = 1000;
 
 	// table of all cached user credentials
-	this.$users       = {};
+	this.$users = { };
 
 	// the list where a user is present
 	// user for 'entered' and 'left' messages
-	this.$presences   = {};
+	this.$presences = { };
 
 	this.prepareResources(_);
 
@@ -865,20 +865,19 @@ Server.prototype.cmdRegister = function(cmd, _)
 /**
 | Refreshes a users presence timeout.
 */
-Server.prototype.refreshPresence = function(user, spacename)
+Server.prototype.refreshPresence = function( user, spacename )
 {
-	var pres = this.$presences;
-	var pu = pres[user];
+	var pu = this.$presences[ user ];
 
 	if( !pu )
 	{
-		pu = pres[user] =
+		pu = this.$presences[ user ] =
 			{
 				spaces : { }
 			};
 	}
 
-	var pus = pu.spaces[spacename];
+	var pus = pu.spaces[ spacename ];
 
 	if( !pus )
 	{
@@ -888,11 +887,21 @@ Server.prototype.refreshPresence = function(user, spacename)
 				timerID : null
 			};
 
-		pus.timerID = setTimeout(this.expirePresence, 5000, this, user, spacename);
+		pus.timerID = setTimeout(
+			this.expirePresence,
+			5000,
+			this,
+			user,
+			spacename
+		);
 
-		this.sendMessage(spacename, null, user + ' entered "' + spacename + '"');
+		this.sendMessage(
+			spacename,
+			null,
+			user + ' entered "' + spacename + '"'
+		);
 	}
-	else
+	else if( pus.references <= 0 )
 	{
 		if (pus.timerID !== null)
 		{
@@ -900,7 +909,7 @@ Server.prototype.refreshPresence = function(user, spacename)
 			pus.timerID = null;
 		}
 
-		pus.timerID = setTimeout(this.expirePresence, 5000, this, user, spacename);
+		pus.timerID = setTimeout( this.expirePresence, 5000, this, user, spacename );
 	}
 };
 
@@ -920,13 +929,25 @@ Server.prototype.establishPresence = function(user, spacename, sleepID)
 
 	if( !pus )
 	{
-		pus = pu.spaces[spacename] = { establish : 1, timerID : null  };
-		this.sendMessage(spacename, null, user + ' entered "' + spacename + '"');
+		pus = pu.spaces[spacename] =
+		{
+			establish : 1,
+			timerID   : null
+		};
+
+		this.sendMessage(
+			spacename,
+			null,
+			user + ' entered "' + spacename + '"'
+		);
 	}
 	else
 	{
 		if( pus.timerID !== null )
-			{ clearTimeout(pus.timerID); pus.timerID = null; }
+		{
+			clearTimeout( pus.timerID );
+			pus.timerID = null;
+		}
 
 		pus.establish++;
 	}
@@ -938,9 +959,8 @@ Server.prototype.establishPresence = function(user, spacename, sleepID)
 */
 Server.prototype.destablishPresence = function( user, spacename )
 {
-	var pres = this.$presences;
-	var pu   = pres[ user ];
-	var pus  = pu.spaces[ spacename ];
+	var pu  = this.$presences[ user ];
+	var pus = pu.spaces[ spacename ];
 
 	pus.establish--;
 
@@ -949,7 +969,13 @@ Server.prototype.destablishPresence = function( user, spacename )
 		if (pus.timerID !== null)
 			{ throw new Error("Presence timers mixed up."); }
 
-		pus.timerID = setTimeout(this.expirePresence, 5000, this, user, spacename);
+		pus.timerID = setTimeout(
+			this.expirePresence,
+			5000,
+			this,
+			user,
+			spacename
+		);
 	}
 };
 
@@ -965,10 +991,9 @@ Server.prototype.expirePresence = function(self, user, spacename)
 		user + ' left "' + spacename + '"'
 	);
 
-	var pres = self.$presences;
-	var pu   = pres[user];
+	var pu   = self.$presences[user];
 
-	if (pu.spaces[spacename].establish !== 0)
+	if( pu.spaces[ spacename ].establish !== 0 )
 		{ throw new Error('Something wrong with presences.'); }
 
 	delete pu.spaces[spacename];
@@ -1011,7 +1036,7 @@ Server.prototype.cmdUpdate = function( cmd, res, _ )
 	if (!(mseq <= this.$messages.length))
 		{ throw reject('invalid or missing mseq: ' + mseq); }
 
-	this.refreshPresence(user, spacename);
+	this.refreshPresence( user, spacename );
 
 	var asw = this.conveyUpdate( time, mseq, spacename );
 
