@@ -115,20 +115,27 @@ Caret.prototype.hide = function()
 Caret.prototype.display = function()
 {
 	// erases the old caret
-	if (shell.$caret.$save)
+	if( shell.$caret.$save )
 	{
-		if (Caret.useGetImageData)
-			{ shell.fabric.putImageData(shell.$caret.$save, shell.$caret.$screenPos); }
+		if( Caret.useGetImageData )
+		{
+			shell.fabric.putImageData(
+				shell.$caret.$save,
+				shell.$caret.$screenPos
+			);
+		}
 		else
-			{ shell.fabric.drawImage(shell.$caret.$save, 0, 0); }
+		{
+			shell.fabric.drawImage(shell.$caret.$save, 0, 0);
+		}
 
 		shell.$caret.$save = shell.$caret.$screenPos = null;
 	}
 
 	// draws new
-	if (this.$shown && !this.$blinked && this.sign)
+	if( this.$shown && !this.$blinked && this.sign )
 	{
-		switch(this.section)
+		switch( this.section )
 		{
 			case 'space' :
 				shell.$space.drawCaret();

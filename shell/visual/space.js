@@ -134,20 +134,20 @@ Space.prototype.update = function( twig )
 /**
 | Returns the focused item.
 */
-Space.prototype.focusedItem = function()
+Space.prototype.focusedItem = function( )
 {
 	var caret = shell.$caret;
 
-	if (caret.section !== 'space')
+	if( caret.section !== 'space' )
 		{ return null; }
 
-	return this.getSub(caret.sign.path, 'Item');
+	return this.getSub( caret.sign.path, 'Item' );
 };
 
 /**
 | Creates a new visual representation of an item.
 */
-Space.prototype.createItem = function(twig, k)
+Space.prototype.createItem = function( twig, k )
 {
 	var path = new Path( [ k ] );
 
@@ -236,6 +236,17 @@ Space.prototype.drawCaret = function()
 {
 	this.getSub( shell.$caret.sign.path, 'drawCaret' )
 		.drawCaret( this.$view );
+};
+
+
+/*
+| Returns true if the shell is suggesting a keyboard.
+| Useful on pad devices with a virtual keyboard.
+*/
+Space.prototype.suggestingKeyboard = function()
+{
+	this.getSub( shell.$caret.sign.path, 'suggestingKeyboard' )
+		.suggestingKeyboard( );
 };
 
 

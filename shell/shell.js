@@ -19,6 +19,7 @@
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  The users shell.
+
  The shell consists of the dashboard and the visual space.
 
  Authors: Axel Kittenberger
@@ -109,7 +110,7 @@ Shell.prototype.dropFocus = function()
 */
 Shell.prototype.setCaret = function( section, sign, retainx )
 {
-	switch (section)
+	switch( section )
 	{
 		case null :
 			if( sign !== null )
@@ -118,7 +119,7 @@ Shell.prototype.setCaret = function( section, sign, retainx )
 
 		case 'board' :
 		case 'space' :
-			switch(sign && sign.constructor)
+			switch( sign && sign.constructor )
 			{
 				case null   :
 					break;
@@ -127,7 +128,7 @@ Shell.prototype.setCaret = function( section, sign, retainx )
 					break;
 
 				case Object :
-					sign = new Sign(sign);
+					sign = new Sign( sign );
 					break;
 
 				default :
@@ -149,9 +150,12 @@ Shell.prototype.setCaret = function( section, sign, retainx )
 		)
 	)
 	{
-		entity = this._getCaretEntity(this.$caret.section, this.$caret.sign.path);
+		entity = this._getCaretEntity(
+			this.$caret.section,
+			this.$caret.sign.path
+		);
 
-		if (entity)
+		if( entity )
 			{ entity.knock(); }
 	}
 
@@ -162,11 +166,14 @@ Shell.prototype.setCaret = function( section, sign, retainx )
 		this.$caret.$shown
 	);
 
-	if (sign)
+	if( sign )
 	{
-		entity = this._getCaretEntity(section, sign.path);
+		entity = this._getCaretEntity(
+			section,
+			sign.path
+		);
 
-		if (entity)
+		if( entity )
 			{ entity.knock(); }
 
 		shell.redraw = true;
@@ -179,9 +186,9 @@ Shell.prototype.setCaret = function( section, sign, retainx )
 /*
 | Returns the first entity a caret can be in
 */
-Shell.prototype._getCaretEntity = function(sec, path)
+Shell.prototype._getCaretEntity = function( sec, path )
 {
-	switch(sec)
+	switch( sec )
 	{
 		case 'board' :
 			// FIXME
@@ -198,21 +205,46 @@ Shell.prototype._getCaretEntity = function(sec, path)
 
 
 /*
+| Returns true if the shell is suggesting a keyboard.
+| Useful on pad devices with a virtual keyboard.
+*/
+Shell.prototype.suggestingKeyboard = function( )
+{
+	switch( this.$caret.section )
+	{
+		case null :
+			return false;
+
+		case 'board' :
+			return this.$board.suggestingKeyboard( );
+
+		case 'space' :
+			return this.$space.suggestingKeyboard( );
+
+		default :
+			throw new Error(
+				'invalid section: ' + this.$caret.section
+			);
+
+	}
+}
+
+/*
 | Peer received a message.
 */
 Shell.prototype.messageRCV = function( space, user, message )
 {
-	if (user)
+	if( user )
 		{ this.$board.message( user + ': ' + message ); }
 	else
 		{ this.$board.message( message ); }
 
-	this.poke();
+	this.poke( );
 };
 
 
 /*
-| MeshMashine reports updates.
+| MeshMashine is reporting updates.
 */
 Shell.prototype.update = function( tree, chgX )
 {
@@ -245,11 +277,12 @@ Shell.prototype.update = function( tree, chgX )
 */
 Shell.prototype.systemFocus = function()
 {
-	if (this.green)
+	if( this.green )
 		{ return; }
 
-	this.$caret.show();
-	this.$caret.display();
+	var caret = this.$caret;
+	caret.show();
+	caret.display();
 };
 
 
@@ -258,11 +291,12 @@ Shell.prototype.systemFocus = function()
 */
 Shell.prototype.systemBlur = function()
 {
-	if (this.green)
+	if( this.green )
 		{ return; }
 
-	this.$caret.hide();
-	this.$caret.display();
+	var caret = this.$caret;
+	caret.hide();
+	caret.display();
 };
 
 
@@ -271,7 +305,7 @@ Shell.prototype.systemBlur = function()
 */
 Shell.prototype.blink = function()
 {
-	if (this.green)
+	if( this.green )
 		{ return; }
 
 	// tests for font size changes
@@ -293,7 +327,7 @@ Shell.prototype.blink = function()
 */
 Shell.prototype.startAction = function()
 {
-	if (this.$action)
+	if( this.$action )
 		{ throw new Error('double action'); }
 
 	return this.$action = new Action(arguments);

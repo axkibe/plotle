@@ -202,14 +202,14 @@ Board.prototype.draw = function()
 /*
 | Force clears all caches.
 */
-Board.prototype.knock = function()
+Board.prototype.knock = function( )
 {
-	for (var b in this.panels)
+	for( var p in this.panels )
 	{
-		var bo = this.panels[b];
+		var po = this.panels[ p ];
 
-		if (bo)
-			{ bo.knock(); }
+		if( po )
+			{ po.knock( ); }
 	}
 };
 
@@ -217,7 +217,7 @@ Board.prototype.knock = function()
 /*
 | Draws the caret.
 */
-Board.prototype.drawCaret = function()
+Board.prototype.drawCaret = function( )
 {
 	if ( shell.$caret.sign.path.get( 0 ) !== this.curPanelName )
 		{ throw new Error('Caret path(0) !== this.curPanelName'); }
@@ -241,6 +241,17 @@ Board.prototype.input = function(text)
 Board.prototype.specialKey = function( key, shift, ctrl )
 {
 	this.curPanel( ).specialKey( key, shift, ctrl );
+};
+
+
+/*
+| Returns true if the shell is suggesting a keyboard.
+| Useful on pad devices with a virtual keyboard.
+*/
+Board.prototype.suggestingKeyboard = function( )
+{
+	this.getSub( shell.$caret.sign.path, 'suggestingKeyboard' )
+		.suggestingKeyboard( );
 };
 
 

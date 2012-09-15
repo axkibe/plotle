@@ -99,7 +99,6 @@ Range.prototype.normalize = function()
 	var pivot = shell.$space.getSub(s1.path, 'Doc');
 	if (pivot !== shell.$space.getSub(s2.path, 'Doc'))
 	{
-		console.log(pivot, shell.$space.getSub(s2.path, 'drawCaret'));
 		throw new Error('pivot(s1) !== pivot(s2)');
 	}
 
@@ -124,17 +123,17 @@ Range.prototype.normalize = function()
 */
 Range.prototype.innerText = function()
 {
-	if (!this.active)
+	if( !this.active )
 		{ return ''; }
 
-	this.normalize();
+	this.normalize( );
 	var s1 = this.begin;
 	var s2 = this.end;
 
-	if (s1.path.equals(s2.path))
+	if(s1.path.equals( s2.path ) )
 	{
-		var text = shell.$space.getSub(s1.path, 'Para').twig.text;
-		return text.substring(s1.at1, s2.at1);
+		var text = shell.$space.getSub( s1.path, 'Para' ).twig.text;
+		return text.substring( s1.at1, s2.at1 );
 	}
 
 	var pivot = shell.$space.getSub(s1.path, 'Doc');
@@ -147,14 +146,15 @@ Range.prototype.innerText = function()
 	var text2 = twig.copse[key2].text;
 
 	var buf = [ text1.substring(s1.at1, text1.length) ];
-	for (var r = twig.rankOf(key1), rZ = twig.rankOf(key2); r < rZ - 1; r++)
+	for ( var r = twig.rankOf(key1), rZ = twig.rankOf(key2); r < rZ - 1; r++ )
 	{
-		buf.push('\n');
-		buf.push(twig.copse[twig.ranks[r]].text);
+		buf.push( '\n' );
+		buf.push( twig.copse[ twig.ranks[ r ] ].text );
 	}
 
 	buf.push('\n');
 	buf.push(text2.substring(0, s2.at1));
+
 	return buf.join('');
 };
 

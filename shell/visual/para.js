@@ -727,7 +727,7 @@ Para.prototype.specialKey = function( key, shift, ctrl )
 				select.sign2 = new Sign( { path: v1.textPath, at1: v1.twig.text.length } );
 				select.active = true;
 				shell.setCaret('space', select.sign2);
-				system.setInput(select.innerText());
+				system.setInput( select.innerText() );
 				caret.show();
 				item.poke();
 				shell.redraw = true;
@@ -827,9 +827,10 @@ Para.prototype.specialKey = function( key, shift, ctrl )
 
 	// FIXME use caret var instead of shell.$caret
 
-	if (shift)
+	if( shift )
 	{
-		switch(key) {
+		switch( key )
+		{
 			case 'end'   :
 			case 'pos1'  :
 			case 'left'  :
@@ -838,18 +839,18 @@ Para.prototype.specialKey = function( key, shift, ctrl )
 			case 'down'  :
 				select.active = true;
 				select.sign2 = shell.$caret.sign;
-				system.setInput(select.innerText());
+				system.setInput( select.innerText( ) );
 				item.poke();
 				shell.redraw = true;
 				break;
 		}
 	}
 
-	if (show)
+	if( show )
 	{
-		item.poke();
-		item.scrollCaretIntoView();
-		shell.$caret.show();
+		item.poke( );
+		item.scrollCaretIntoView( );
+		shell.$caret.show( );
 		shell.redraw = true;
 	}
 };

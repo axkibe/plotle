@@ -28,7 +28,7 @@
 
 
 /*
-| imports
+| Imports
 */
 var Euclid;
 var Jools;
@@ -37,14 +37,14 @@ var config;
 
 
 /*
-| export
+| Export
 */
 var system;
 var startup;
 
 
 /*
-| capsule
+| Capsule
 */
 ( function( ) {
 'use strict';
@@ -53,7 +53,7 @@ if ( typeof( window ) === 'undefined')
 
 
 /*
-| catches all errors a function throws if config.devel is set.
+| Catches all errors a function throws if config.devel is set.
 */
 var makeCatcher = function( t, f )
 {
@@ -81,7 +81,7 @@ var makeCatcher = function( t, f )
 
 
 /*
-| the system
+| The system
 */
 var System = function()
 {
@@ -126,35 +126,46 @@ var System = function()
 	// hidden input that forwards all events
 	this._hiddenInput = document.getElementById('input');
 
-	// remembers last SpecialKey pressed, to hinder double events.
+	// remembers last special key pressed, to hinder double events.
 	// Opera is behaving stupid here.
-	this._lastSpecialKey = -1;
+	this._$lastSpecialKey = -1;
 
 	// The value that is expected to be in input.
 	// either nothing or the text selection.
 	// if it changes the user did something.
-	this._inputVal = '';
+	this._inputVal  = '';
+	var hiddenInput = this._hiddenInput;
 
-	canvas.onmousedown           = makeCatcher( this, this._onMouseDown );
-	canvas.onmousemove           = makeCatcher( this, this._onMouseMove );
-	canvas.onmouseup             = makeCatcher( this, this._onMouseUp   );
+	canvas.onmousedown        = makeCatcher( this, this._onMouseDown      );
+	canvas.onmousemove        = makeCatcher( this, this._onMouseMove      );
+	canvas.onmouseup          = makeCatcher( this, this._onMouseUp        );
 
-	canvas.ontouchstart          = makeCatcher( this, this._onTouchStart );
-	canvas.ontouchmove           = makeCatcher( this, this._onTouchMove  );
-	canvas.ontouchend            = makeCatcher( this, this._onTouchEnd   );
+	canvas.ontouchstart       = makeCatcher( this, this._onTouchStart     );
+	canvas.ontouchmove        = makeCatcher( this, this._onTouchMove      );
+	canvas.ontouchend         = makeCatcher( this, this._onTouchEnd       );
 
-	canvas.onmousewheel          = makeCatcher( this, this._onMouseWheel  );
+	canvas.onmousewheel       = makeCatcher( this, this._onMouseWheel     );
 	canvas.addEventListener( 'DOMMouseScroll', canvas.onmousewheel, false ); // Firefox
-	window.onresize              = makeCatcher( this, this._onResize      );
-	this._hiddenInput.onfocus    = makeCatcher( this, this._onFocus       );
-	this._hiddenInput.onblur     = makeCatcher( this, this._onBlur        );
-	this._hiddenInput.onkeydown  = makeCatcher( this, this._onKeyDown     );
-	this._hiddenInput.onkeypress = makeCatcher( this, this._onKeyPress    );
-	this._hiddenInput.onkeyup    = makeCatcher( this, this._onKeyUp       );
-	this._testInputCatcher       = makeCatcher( this, this._testInput     );
-	this._onAtweenTimeCatcher    = makeCatcher( this, this._onAtweenTime  );
-	this._blinkCatcher           = makeCatcher( this, this._blink         );
-	document.oncontextmenu       = makeCatcher( this, this._onContextMenu );
+
+	window.onresize           = makeCatcher( this, this._onResize         );
+
+	hiddenInput.onfocus       = makeCatcher( this, this._onHiddenFocus    ); // TODO
+	window.onfocus            = makeCatcher( this, this._onCanvasFocus    ); // TODO
+
+	hiddenInput.onblur        = makeCatcher( this, this._onHiddenBlur     ); // TODO
+	window.onblur             = makeCatcher( this, this._onCanvasBlur     ); // TODO
+
+	hiddenInput.onkeydown     = makeCatcher( this, this._onHiddenKeyDown  );
+	hiddenInput.onkeypress    = makeCatcher( this, this._onHiddenKeyPress );
+	hiddenInput.onkeyup       = makeCatcher( this, this._onHiddenKeyUp    );
+
+	canvas.onkeydown          = makeCatcher( this, this._onCanvasKeyDown  );
+	canvas.onkeypress         = makeCatcher( this, this._onCanvasKeyPress );
+
+	this._testInputCatcher    = makeCatcher( this, this._testInput        );
+	this._onAtweenTimeCatcher = makeCatcher( this, this._onAtweenTime     );
+	this._blinkCatcher        = makeCatcher( this, this._blink            );
+	document.oncontextmenu    = makeCatcher( this, this._onContextMenu    );
 
 	// the blink (and check input) timer
 	this._blinkTimer = null;
@@ -164,7 +175,7 @@ var System = function()
 
 
 /*
-| default system behavior settings
+| Default system behavior settings
 */
 System.prototype.settings =
 {
@@ -183,7 +194,7 @@ System.prototype.settings =
 
 
 /*
-| cancels a timer
+| Cancels a timer
 */
 System.prototype.cancelTimer = function( id )
 {
@@ -192,7 +203,7 @@ System.prototype.cancelTimer = function( id )
 
 
 /*
-| (re)starts the blink timer
+| (Re)Starts the blink timer
 */
 System.prototype.restartBlinker = function( )
 {
@@ -210,13 +221,14 @@ System.prototype.restartBlinker = function( )
 
 
 /*
-| sets the hidden input field (text selection)
+| Sets the hidden input field (text selection)
 */
 System.prototype.setInput = function( text )
 {
 	var hi   = this._hiddenInput;
 	hi.value = this._inputVal = text;
-	if ( text !== '' )
+
+	if( text !== '' )
 	{
 		hi.selectionStart = 0;
 		hi.selectionEnd = text.length;
@@ -225,7 +237,7 @@ System.prototype.setInput = function( text )
 
 
 /*
-| sets a time through the error catcher
+| Sets a timer with an error catcher
 */
 System.prototype.setTimer = function(time, callback)
 {
@@ -239,7 +251,7 @@ System.prototype.setTimer = function(time, callback)
 
 
 /*
-| blinks the caret
+| Blinks the caret
 */
 System.prototype._blink = function()
 {
@@ -288,25 +300,45 @@ System.prototype._onAtweenTime = function( )
 
 
 /*
-| hidden input lost focus
+| Hidden input lost focus
 */
-System.prototype._onBlur = function( event )
+System.prototype._onHiddenBlur = function( event )
 {
+	console.log('onHiddenBlur');
+	this.shell.systemBlur( );
+};
+
+/*
+| Hidden input lost focus
+*/
+System.prototype._onCanvasBlur = function( event )
+{
+	console.log('onCanvasBlur');
 	this.shell.systemBlur( );
 };
 
 
 /*
-| hidden input got focus
+| Hidden input got focus
 */
-System.prototype._onFocus = function( event )
+System.prototype._onHiddenFocus = function( event )
 {
+	console.log('onHiddenFocus');
+	this.shell.systemFocus( );
+};
+
+/*
+| Hidden input got focus
+*/
+System.prototype._onCanvasFocus = function( event )
+{
+	console.log('onCanvasFocus');
 	this.shell.systemFocus( );
 };
 
 
 /*
-| view window has resized
+| View window is being resized.
 */
 System.prototype._onResize = function( event )
 {
@@ -319,7 +351,7 @@ System.prototype._onResize = function( event )
 
 
 /*
-| captures all mouseevents event beyond the canvas (for dragging)
+| Captures all mouseevents event beyond the canvas (for dragging)
 */
 System.prototype._captureEvents = function( )
 {
@@ -335,18 +367,63 @@ System.prototype._captureEvents = function( )
 
 
 /*
-| key down in hidden input field
+| Key down in hidden input field TODO
 */
-System.prototype._onKeyDown = function( event )
+System.prototype._onCanvasKeyDown = function( event )
 {
+	var kcode = this._$lastSpecialKey = event.keyCode;
+	var shift = event.shiftKey;
+	var ctrl  = event.ctrlKey || event.metaKey;
+
+	if( !this._specialKey( kcode, shift, ctrl ) )
+	{
+		event.preventDefault();
+		return false;
+	}
+};
+
+
+/**
+| Hidden input key press.
+*/
+System.prototype._onCanvasKeyPress = function( event )
+{
+	var kcode = event.keyCode;
+	var which = event.which;
 	var shift = event.shiftKey;
 	var ctrl  = event.ctrlKey || event.metaKey;
 
 	if(
-		!this._specialKey(
-			this._lastSpecialKey = event.keyCode, shift, ctrl
-		)
+		(
+			ctrl ||
+			( kcode > 0 && kcode < 32 ) ||
+			which === 0
+		) &&
+		this._$lastSpecialKey !== kcode
 	)
+	{
+		this._$lastSpecialKey = -1;
+		return this._specialKey( kcode, shift, ctrl );
+	}
+
+	if( which >= 32 )
+		{ this.shell.input( String.fromCharCode( which ) ); }
+
+	this._$lastSpecialKey = -1;
+	return true;
+};
+
+
+/*
+| Key down in hidden input field TODO
+*/
+System.prototype._onHiddenKeyDown = function( event )
+{
+	var shift = event.shiftKey;
+	var ctrl  = event.ctrlKey || event.metaKey;
+	var kcode = this._$lastSpecialKey = event.keyCode;
+
+	if( !this._specialKey( kcode, shift, ctrl ) )
 	{
 		event.preventDefault();
 	}
@@ -356,27 +433,27 @@ System.prototype._onKeyDown = function( event )
 /**
 | Hidden input key press.
 */
-System.prototype._onKeyPress = function( event )
+System.prototype._onHiddenKeyPress = function( event )
 {
 	var ew    = event.which;
-	var ek    = event.keyCode;
+	var kcode = event.keyCode;
 	var shift = event.shiftKey;
 	var ctrl  = event.ctrlKey || event.metaKey;
 
 	if (
 		(
-			( ek > 0 && ek < 32 ) ||
+			( kcode > 0 && kcode < 32 ) ||
 			ew === 0
 		) &&
-		this._lastSpecialKey !== ek
+		this._$lastSpecialKey !== kcode
 	)
 	{
-		this._lastSpecialKey = -1;
-		return this._specialKey(ek, shift, ctrl);
+		this._$lastSpecialKey = -1;
+		return this._specialKey( kcode, shift, ctrl );
 	}
 
-	this._lastSpecialKey = -1;
-	this._testInput();
+	this._$lastSpecialKey = -1;
+	this._testInput( );
 	this.setTimer( 0, this._testInputCatcher );
 	return true;
 };
@@ -385,7 +462,7 @@ System.prototype._onKeyPress = function( event )
 /*
 | Hidden input key up.
 */
-System.prototype._onKeyUp = function( event )
+System.prototype._onHiddenKeyUp = function( event )
 {
 	this._testInput( );
 	return true;
@@ -412,13 +489,15 @@ System.prototype._onMouseDown = function( event )
 	if( Jools.is( event.button ) && event.button !== 0 )
 		{ return; }
 
-	this._hiddenInput.focus();
+	// this._hiddenInput.focus();
+	this._canvas.focus();
 
+	// TODO
 	// worksaround a bug in safari/OSX
-	var self = this;
-	this.setTimer( 0, function( ) {
-		self._hiddenInput.selectionStart = 0;
-	} );
+	//var self = this;
+	//this.setTimer( 0, function( ) {
+	//	self._hiddenInput.selectionStart = 0;
+	//} );
 
 	var canvas = this._canvas;
 	var p      = new Euclid.Point(
@@ -583,7 +662,7 @@ System.prototype._onMouseUp = function( event )
 
 
 /*
-|  a mouse wheel event is being received
+| The mouse wheel is being turned.
 */
 System.prototype._onMouseWheel = function( event )
 {
@@ -616,11 +695,12 @@ System.prototype._onMouseWheel = function( event )
 
 
 /*
-| a touch start is being received ( on mobile devices )
+| The user is touching something ( on mobile devices )
 */
 System.prototype._onTouchStart = function( event )
 {
-	this._hiddenInput.focus();
+	//this._hiddenInput.focus();
+	this._canvas.focus();
 
 	var canvas = this._canvas;
 	var p      = new Euclid.Point(
@@ -659,7 +739,7 @@ System.prototype._onTouchStart = function( event )
 
 
 /*
-| a touch move event is being received ( on mobile devices )
+| The use is moving the touch ( on mobile devices )
 */
 System.prototype._onTouchMove = function( event )
 {
@@ -727,7 +807,7 @@ System.prototype._onTouchMove = function( event )
 
 
 /*
-| a touch end is being received ( on mobile devices)
+| The using is lifting his/her finger ( on mobile devices)
 */
 System.prototype._onTouchEnd = function( event )
 {
@@ -789,9 +869,9 @@ System.prototype._releaseEvents = function( )
 
 
 /*
-| A special key was pressed.
+| A special key is being pressed.
 */
-System.prototype._specialKey = function(keyCode, shift, ctrl)
+System.prototype._specialKey = function( keyCode, shift, ctrl )
 {
 	var key = null;
 	if( ctrl )
@@ -835,23 +915,26 @@ System.prototype._specialKey = function(keyCode, shift, ctrl)
 
 
 /*
-| tests if the hidden input field got data
+| Tests if the hidden input field got data
 */
 System.prototype._testInput = function( )
 {
 	var hi   = this._hiddenInput;
 	var text = hi.value;
 
+	// works around opera quirks inserting CR characters
+	text = text.replace(/\r/g,'');
+
 	if( text == this._inputVal )
 		{ return; }
 
 	hi.value = this._inputVal = '';
-	this.shell.input(text);
+	this.shell.input( text );
 };
 
 
 /*
-| system starts up ( pages loades )
+| System starts up ( pages loades )
 */
 startup = function( )
 {

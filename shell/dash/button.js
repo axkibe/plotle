@@ -97,12 +97,12 @@ var Button = Dash.Button = function(twig, panel, inherit, name)
 /*
 | Control takes focus.
 */
-Button.prototype.grepFocus = function()
+Button.prototype.grepFocus = function( )
 {
-	if (!this.$visible)
+	if( !this.$visible )
 		{ return false; }
 
-	if (this.panel.focusedControl() === this)
+	if( this.panel.focusedControl() === this )
 		{ return false; }
 
 	shell.setCaret(
@@ -113,7 +113,7 @@ Button.prototype.grepFocus = function()
 		}
 	);
 
-	this.poke();
+	this.poke( );
 
 	return true;
 };
@@ -122,16 +122,16 @@ Button.prototype.grepFocus = function()
 /*
 | Sketches the button.
 */
-Button.prototype.sketch = function(fabric, border, twist)
+Button.prototype.sketch = function( fabric, border, twist )
 {
-	this.curve.sketch(fabric, border, twist);
+	this.curve.sketch( fabric, border, twist );
 };
 
 
 /*
 | Returns the fabric for the button.
 */
-Button.prototype._weave = function(accent)
+Button.prototype._weave = function( accent )
 {
 	var fabric = this.$fabric;
 
@@ -142,7 +142,7 @@ Button.prototype._weave = function(accent)
 	var twig = this.twig;
 
 	var sname;
-	switch (accent)
+	switch( accent )
 	{
 		case Dash.Accent.NORMA :
 			sname = twig.normaStyle;
@@ -161,23 +161,27 @@ Button.prototype._weave = function(accent)
 			break;
 
 		default :
-			throw new Error('Invalid accent: ' + accent);
+			throw new Error( 'Invalid accent: ' + accent );
 	}
 
-	var style = Dash.getStyle(sname);
+	var style = Dash.getStyle( sname );
 
-	if (!Jools.isnon(style))
+	if( !Jools.isnon( style ) )
 		{ throw new Error('Invalid style: ' + sname); }
 
-	fabric.paint(style, this, 'sketch', Euclid.View.proper);
+	fabric.paint( style, this, 'sketch', Euclid.View.proper );
 
-	fabric.setFont(twig.caption.font);
-	fabric.fillText(this.$captionText, this.captionPos);
+	fabric.setFont( twig.caption.font );
+	fabric.fillText( this.$captionText, this.captionPos );
 
-	if (config.debug.drawBoxes) {
+	if( config.debug.drawBoxes )
+	{
 		fabric.paint(
-			Dash.getStyle('boxes'),
-			new Euclid.Rect(this.iframe.pnw, this.iframe.pse.sub(1, 1)),
+			Dash.getStyle( 'boxes' ),
+			new Euclid.Rect(
+				this.iframe.pnw,
+				this.iframe.pse.sub( 1, 1 )
+			),
 			'sketch',
 			Euclid.View.proper
 		);
@@ -190,7 +194,7 @@ Button.prototype._weave = function(accent)
 /*
 | Input
 */
-Button.prototype.input = function(text)
+Button.prototype.input = function( text )
 {
 	return true;
 };
@@ -199,7 +203,7 @@ Button.prototype.input = function(text)
 /*
 | Input
 */
-Button.prototype.specialKey = function(key, shift, ctrl)
+Button.prototype.specialKey = function( key, shift, ctrl )
 {
 	return true;
 };
@@ -208,24 +212,28 @@ Button.prototype.specialKey = function(key, shift, ctrl)
 /*
 | Mouse hover.
 */
-Button.prototype.pointingHover = function(p)
+Button.prototype.pointingHover = function( p )
 {
-	if (!this.$visible)
+	if( !this.$visible )
 		{ return null; }
 
-	if (p === null)
+	if( p === null )
 		{ return null; }
 
-	if (p.x < this.pnw.x || p.y < this.pnw.y || p.x > this.pse.x || p.y > this.pse.y)
+	if( p.x < this.pnw.x ||
+		p.y < this.pnw.y ||
+		p.x > this.pse.x ||
+		p.y > this.pse.y
+	)
 		{ return null; }
 
-	var fabric = this._weave(Dash.Accent.NORMA);
-	var pp = p.sub(this.pnw);
+	var fabric = this._weave( Dash.Accent.NORMA );
+	var pp = p.sub( this.pnw );
 
 	if( !fabric.withinSketch(this, 'sketch', Euclid.View.proper, pp ) )
 		{ return null; }
 
-	this.panel.setHover(this.name);
+	this.panel.setHover( this.name );
 	return 'default';
 };
 
@@ -233,7 +241,7 @@ Button.prototype.pointingHover = function(p)
 /*
 | Button has been pushed
 */
-Button.prototype.push = function(shift, ctrl)
+Button.prototype.push = function( shift, ctrl )
 {
 	// no default
 };

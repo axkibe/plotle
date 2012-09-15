@@ -320,7 +320,7 @@ Input.prototype.getCaretPos = function()
 /*
 | Draws the caret.
 */
-Input.prototype.drawCaret = function(view)
+Input.prototype.drawCaret = function( view )
 {
 	var caret = shell.$caret;
 
