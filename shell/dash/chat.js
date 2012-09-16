@@ -589,4 +589,13 @@ Chat.prototype.specialKey = function(key)
 	}
 };
 
+
+/*
+| If a chat has focus, it suggests a keyboard.
+*/
+Chat.prototype.suggestingKeyboard = function( )
+{
+	return true;
+};
+
 })();

@@ -666,4 +666,13 @@ Input.prototype.pointingStart = function(p, shift, ctrl)
 };
 
 
+/*
+| If an input has focus, it suggests a keyboard.
+*/
+Input.prototype.suggestingKeyboard = function( )
+{
+	return true;
+};
+
+
 } ) ();

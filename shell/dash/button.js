@@ -381,4 +381,13 @@ Button.prototype.actionstop = function( )
 };
 
 
+
+/*
+| If a button has focus, it suggests no keyboard.
+*/
+Button.prototype.suggestingKeyboard = function( )
+{
+	return false;
+;}
+
 } ) ();

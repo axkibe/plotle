@@ -311,6 +311,7 @@ Label.prototype.actionstop = function(view, p)
 	}
 };
 
+
 /*
 | Returns the ctrl area.
 */
@@ -339,5 +340,16 @@ Label.prototype.getCtrlFix = function()
 		pnw.add(tca.joint.x, tca.joint.y) // FIXME
 	);
 };
+
+
+/*
+| If a label has focus, it suggests a keyboard.
+*/
+Label.prototype.suggestingKeyboard = function(i )
+{
+	return true;
+};
+
+
 
 } ) ();

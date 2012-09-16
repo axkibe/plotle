@@ -227,7 +227,7 @@ Shell.prototype.suggestingKeyboard = function( )
 			);
 
 	}
-}
+};
 
 /*
 | Peer received a message.
@@ -303,22 +303,22 @@ Shell.prototype.systemBlur = function()
 /*
 | Blinks the caret (if shown)
 */
-Shell.prototype.blink = function()
+Shell.prototype.blink = function( )
 {
 	if( this.green )
 		{ return; }
 
 	// tests for font size changes
-	var w = Euclid.Measure.width(this._fontWFont, 'meshcraft$8833');
+	var w = Euclid.Measure.width( this._fontWFont, 'meshcraft$8833' );
 
-	if (w !== this._$fontWatch)
+	if( w !== this._$fontWatch )
 	{
-		console.log('fontchange detected');
+		// console.log( 'fontchange detected' );
 		this._$fontWatch = w;
-		this.knock();
+		this.knock( );
 	}
 
-	this.$caret.blink();
+	this.$caret.blink( );
 };
 
 

@@ -179,15 +179,14 @@ DocItem.prototype.click = function(view, p)
 	return true;
 };
 
-
 /*
 | force-clears all caches.
 */
-DocItem.prototype.knock = function()
+DocItem.prototype.knock = function( )
 {
-	Visual.Item.prototype.knock.call(this);
+	Visual.Item.prototype.knock.call( this );
 
-	this.$sub.doc.knock();
+	this.$sub.doc.knock( );
 };
 
 

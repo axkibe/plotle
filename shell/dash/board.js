@@ -250,7 +250,7 @@ Board.prototype.specialKey = function( key, shift, ctrl )
 */
 Board.prototype.suggestingKeyboard = function( )
 {
-	this.getSub( shell.$caret.sign.path, 'suggestingKeyboard' )
+	return this.getSub( shell.$caret.sign.path, 'suggestingKeyboard' )
 		.suggestingKeyboard( );
 };
 

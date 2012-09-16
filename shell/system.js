@@ -236,12 +236,60 @@ System.prototype.setInput = function( text )
 /*
 | Sets a timer with an error catcher
 */
-System.prototype.setTimer = function(time, callback)
+System.prototype.setTimer = function( time, callback )
 {
 	return window.setTimeout(
 		makeCatcher( null, callback ),
 		time
 	);
+};
+
+
+/*
+| Focuses the hidden input
+*/
+System.prototype._focusInput = function( )
+{
+	console.log('focus input');
+	this._hiddenInput.focus();
+	this._$suggestingKeyboard = true;
+
+	// works around a bug in safari/OSX
+	var self = this;
+	this.setTimer(
+		0,
+		function( ) {
+			self._hiddenInput.selectionStart = 0;
+		}
+	);
+};
+
+
+/*
+| Focuses the canvas
+*/
+System.prototype._focusCanvas = function( )
+{
+	console.log('focus canvas');
+	this._canvas.focus();
+};
+
+/*
+| Sets the focus mode so it matched the keyboard suggestion (for iPad)
+| Moves the hidden input vertically so the iPad keeps the caret in view
+*/
+System.prototype.fiddleInput = function( )
+{
+	var sk = this.shell.suggestingKeyboard( );
+
+	if( sk !== this._$suggestingKeyboard ) {
+		if( sk )
+			{ this._focusInput(); }
+		else
+			{ this._focusCanvas(); }
+
+		this._$suggestingKeyboard = sk;
+	}
 };
 
 // ---------------------------
@@ -380,11 +428,15 @@ System.prototype._onCanvasKeyPress = function( event )
 	)
 	{
 		this._$lastSpecialKey = -1;
+
 		return this._specialKey( kcode, shift, ctrl );
 	}
 
 	if( which >= 32 )
-		{ this.shell.input( String.fromCharCode( which ) ); }
+	{
+		this.shell.input( String.fromCharCode( which ) );
+		this.fiddleInput();
+	}
 
 	this._$lastSpecialKey = -1;
 	return true;
@@ -466,18 +518,8 @@ System.prototype._onMouseDown = function( event )
 	if( Jools.is( event.button ) && event.button !== 0 )
 		{ return; }
 
-	// Opera requires to focus the window first
+	// Opera requires focusing the window first
 	window.focus();
-
-	// this._hiddenInput.focus();
-	this._canvas.focus();
-
-	// TODO
-	// worksaround a bug in safari/OSX
-	//var self = this;
-	//this.setTimer( 0, function( ) {
-	//	self._hiddenInput.selectionStart = 0;
-	//} );
 
 	var canvas = this._canvas;
 	var p      = new Euclid.Point(
@@ -515,6 +557,9 @@ System.prototype._onMouseDown = function( event )
 
 	if ( cursor !== null )
 		{ canvas.style.cursor = cursor; }
+
+
+	this.fiddleInput();
 
 	return false;
 };
@@ -637,6 +682,8 @@ System.prototype._onMouseUp = function( event )
 	if( cursor !== null )
 		{ canvas.style.cursor = cursor; }
 
+	this.fiddleInput( );
+
 	return false;
 };
 
@@ -671,6 +718,8 @@ System.prototype._onMouseWheel = function( event )
 	var ctrl  = event.ctrlKey || event.metaKey;
 
 	this.shell.mousewheel( p, dir, shift, ctrl );
+
+	this.fiddleInput();
 };
 
 
@@ -679,8 +728,11 @@ System.prototype._onMouseWheel = function( event )
 */
 System.prototype._onTouchStart = function( event )
 {
-	//this._hiddenInput.focus();
-	this._canvas.focus();
+	// TODO make a fiddle call instead
+	if( this.shell.suggestingKeyboard( ) )
+		{ this._focusInput(); }
+	else
+		{ this._focusCanvas(); }
 
 	var canvas = this._canvas;
 	var p      = new Euclid.Point(
@@ -713,6 +765,8 @@ System.prototype._onTouchStart = function( event )
 			this._captureEvents( );
 			break;
 	}
+
+	this.fiddleInput();
 
 	return false;
 };
@@ -829,6 +883,8 @@ System.prototype._onTouchEnd = function( event )
 			throw new Error( 'invalid pointingState' );
 	}
 
+	this.fiddleInput();
+
 	return false;
 };
 
@@ -890,6 +946,8 @@ System.prototype._specialKey = function( keyCode, shift, ctrl )
 
 	this.shell.specialKey( key, shift, ctrl );
 
+	this.fiddleInput();
+
 	return false;
 };
 
@@ -909,7 +967,10 @@ System.prototype._testInput = function( )
 		{ return; }
 
 	hi.value = this._inputVal = '';
+
 	this.shell.input( text );
+
+	this.fiddleInput();
 };
 
 
