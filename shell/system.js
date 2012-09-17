@@ -725,9 +725,11 @@ System.prototype._onMouseWheel = function( event )
 */
 System.prototype._onTouchStart = function( event )
 {
+	event.preventDefault();
+	
 	// for now ignore multi-touches
 	if( event.touches.length !== 1 )
-		{ return; }
+		{ return false; }
 
 	var canvas = this._canvas;
 	var p      = new Euclid.Point(
@@ -772,9 +774,13 @@ System.prototype._onTouchStart = function( event )
 */
 System.prototype._onTouchMove = function( event )
 {
+	event.preventDefault();
+
 	// for now ignore multi-touches
 	if( event.touches.length !== 1 )
-		{ return; }
+	{
+		return false; 
+	}
 
 	var canvas = this._canvas;
 	var p      = new Euclid.Point(
@@ -844,11 +850,12 @@ System.prototype._onTouchMove = function( event )
 */
 System.prototype._onTouchEnd = function( event )
 {
+	event.preventDefault( );
+
 	// for now ignore multi-touches
 	if( event.touches.length !== 0 )
-		{ return; }
+		{ return false; }
 
-	event.preventDefault( );
 	this._releaseEvents( );
 
 	var canvas = this._canvas;
