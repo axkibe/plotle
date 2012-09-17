@@ -246,50 +246,48 @@ System.prototype.setTimer = function( time, callback )
 
 
 /*
-| Focuses the hidden input
-*/
-System.prototype._focusInput = function( )
-{
-	console.log('focus input');
-	this._hiddenInput.focus();
-	this._$suggestingKeyboard = true;
-
-	// works around a bug in safari/OSX
-	var self = this;
-	this.setTimer(
-		0,
-		function( ) {
-			self._hiddenInput.selectionStart = 0;
-		}
-	);
-};
-
-
-/*
-| Focuses the canvas
-*/
-System.prototype._focusCanvas = function( )
-{
-	console.log('focus canvas');
-	this._canvas.focus();
-};
-
-/*
 | Sets the focus mode so it matched the keyboard suggestion (for iPad)
 | Moves the hidden input vertically so the iPad keeps the caret in view
 */
 System.prototype.fiddleInput = function( )
 {
-	var sk = this.shell.$caret.$height > 0;
+	var caret  = this.shell.$caret;
+	var height = caret.$height;
+	var pos    = caret.$screenPos;
+	var sk     = height > 0;
 
-	if( sk !== this._$suggestingKeyboard ) {
-		if( sk )
-			{ this._focusInput(); }
-		else
-			{ this._focusCanvas(); }
+	if( sk )
+	{
+		var input = this._hiddenInput;
 
-		this._$suggestingKeyboard = sk;
+		console.log(pos.y);
+		input.style.top    = pos.y + 'px';
+		input.style.height = height;
+
+		if( !this._$suggestingKeyboard )
+		{
+			console.log('focus input');
+			input.focus();
+
+			// works around a bug in safari/OSX
+			var self = this;
+			this.setTimer(
+				0,
+				function( )
+					{ self._hiddenInput.selectionStart = 0; }
+			);
+		}
 	}
+	else
+	{
+		if( !this._$suggestingKeyboard )
+		{
+			console.log('focus canvas');
+			this._canvas.focus();
+		}
+	}
+
+	this._$suggestingKeyboard = sk;
 };
 
 // ---------------------------
