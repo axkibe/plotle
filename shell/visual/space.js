@@ -240,17 +240,6 @@ Space.prototype.positionCaret = function()
 
 
 /*
-| Returns true if the shell is suggesting a keyboard.
-| Useful on pad devices with a virtual keyboard.
-*/
-Space.prototype.suggestingKeyboard = function()
-{
-	return this.getSub( shell.$caret.sign.path, 'suggestingKeyboard' )
-		.suggestingKeyboard( );
-};
-
-
-/*
 | Mouse wheel
 */
 Space.prototype.mousewheel = function( p, dir, shift, ctrl )

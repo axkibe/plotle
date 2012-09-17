@@ -342,14 +342,4 @@ Label.prototype.getCtrlFix = function()
 };
 
 
-/*
-| If a label has focus, it suggests a keyboard.
-*/
-Label.prototype.suggestingKeyboard = function(i )
-{
-	return true;
-};
-
-
-
 } ) ();

@@ -478,14 +478,4 @@ Note.prototype.getCtrlFix = function()
 };
 
 
-/*
-| If a note has focus, it suggests a keyboard.
-*/
-Note.prototype.suggestingKeyboard = function()
-{
-	return true;
-
-};
-
-
 })( );

@@ -28,7 +28,7 @@
 | Export
 */
 var Dash;
-Dash = Dash || {};
+Dash = Dash || { };
 
 
 /*
@@ -47,15 +47,18 @@ var theme;
 /*
 | Capsule
 */
-(function(){
+( function( ) {
 'use strict';
-if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
+
+
+if( typeof( window ) === 'undefined' )
+	{ throw new Error('this code needs a browser!'); }
 
 
 /*
 | Constructor.
 */
-var Chat = Dash.Chat = function(twig, panel, inherit, name)
+var Chat = Dash.Chat = function( twig, panel, inherit, name )
 {
 	this.name       = name;
 	this.twig       = twig;
@@ -67,10 +70,10 @@ var Chat = Dash.Chat = function(twig, panel, inherit, name)
 
 	this.messages   = inherit ? inherit.messages : [ ];
 
-	this.lineHeight = Math.round(fs * 1.2);
+	this.lineHeight = Math.round( fs * 1.2 );
 	this.sideSlopeX = 20;
-	var descend     = Math.round(fs * theme.bottombox);
-	this._pitch     = new Euclid.Point(this.sideSlopeX - 7, iframe.height - descend);
+	var descend     = Math.round( fs * theme.bottombox );
+	this._pitch     = new Euclid.Point( this.sideSlopeX - 7, iframe.height - descend );
 
 	// offset of input text line
 	this._coff      = 37;
@@ -84,7 +87,7 @@ var Chat = Dash.Chat = function(twig, panel, inherit, name)
 | Returns the caret position relative to the panel.
 | TODO remove
 */
-Chat.prototype.getCaretPos = function()
+Chat.prototype.getCaretPos = function( )
 {
 	var fs      = this.twig.font.size;
 	var descend = fs * theme.bottombox;
@@ -107,7 +110,7 @@ Chat.prototype.getCaretPos = function()
 /*
 | Returns the offset nearest to x coordinate.
 */
-Chat.prototype.getOffsetAt = function(p)
+Chat.prototype.getOffsetAt = function( p )
 {
 	var pitch = this._pitch;
 	var dx    = p.x - pitch.x - this._coff;
@@ -117,16 +120,16 @@ Chat.prototype.getOffsetAt = function(p)
 	var font  = this.twig.font;
 	var a;
 
-	for(a = 0; a < itext.length; a++)
+	for( a = 0; a < itext.length; a++ )
 	{
 		x1 = x2;
-		x2 = Euclid.Measure.width(font, itext.substr(0, a));
+		x2 = Euclid.Measure.width( font, itext.substr( 0, a ) );
 
-		if (x2 >= dx)
+		if( x2 >= dx )
 			{ break; }
 	}
 
-	if (dx - x1 < x2 - dx && a > 0)
+	if( dx - x1 < x2 - dx && a > 0 )
 		{ a--; }
 
 	return a;
@@ -135,37 +138,45 @@ Chat.prototype.getOffsetAt = function(p)
 /*
 | Creates a new fabric for this component.
 */
-Chat.prototype._weave = function()
+Chat.prototype._weave = function( )
 {
 	var fabric = this.$fabric;
-	if (fabric && !config.debug.noCache)
+	if( fabric && !config.debug.noCache )
 		{ return fabric; }
 
-	fabric = this.$fabric = new Euclid.Fabric(this.iframe);
+	fabric = this.$fabric = new Euclid.Fabric( this.iframe );
 
-	fabric.paint(Dash.getStyle('chat'), this, 'sketchILine', Euclid.View.proper);
+	fabric.paint(
+		Dash.getStyle( 'chat' ),
+		this,
+		'sketchILine',
+		Euclid.View.proper
+	);
 
 	var x = this._pitch.x;
 	var y = this._pitch.y;
 
-	fabric.setFont(this.twig.font);
+	fabric.setFont( this.twig.font );
 	var lh = this.lineHeight;
-	fabric.fillText('»', x + 27, y);
-	fabric.fillText('chat', x, y);
-	fabric.fillText(this._$itext, x + 37, y);
+	fabric.fillText( '»', x + 27, y );
+	fabric.fillText( 'chat', x, y );
+	fabric.fillText( this._$itext, x + 37, y );
 	y -= 2;
 
-	for(var a = this.messages.length - 1, aA = Math.max(a - 5, 0); a >= aA; a--)
+	for( var a = this.messages.length - 1, aA = Math.max(a - 5, 0); a >= aA; a-- )
 	{
 		y -= lh;
-		fabric.fillText(this.messages[a], x, y);
+		fabric.fillText( this.messages[ a ], x, y );
 	}
 
-	if (config.debug.drawBoxes)
+	if( config.debug.drawBoxes )
 	{
 		fabric.paint(
-			Dash.getStyle('boxes'),
-			new Euclid.Rect(this.iframe.pnw, this.iframe.pse.sub(1, 1)),
+			Dash.getStyle( 'boxes' ),
+			new Euclid.Rect(
+				this.iframe.pnw,
+				this.iframe.pse.sub( 1, 1 )
+			),
 			'sketch',
 			Euclid.View.proper
 		);
@@ -181,7 +192,7 @@ Chat.prototype._weave = function()
 |
 | offset:   the offset to get the point from.
 */
-Chat.prototype.locateOffset = function(offset)
+Chat.prototype.locateOffset = function( offset )
 {
 	// FIXME cache position
 
@@ -190,8 +201,12 @@ Chat.prototype.locateOffset = function(offset)
 	var pitch    = this._pitch;
 
 	return new Euclid.Point(
-		Math.round(pitch.x + this._coff + Euclid.Measure.width(font, itext.substring(0, offset))),
-		Math.round(pitch.y)
+		Math.round(
+				pitch.x +
+				this._coff +
+				Euclid.Measure.width( font, itext.substring( 0, offset ) )
+		),
+		Math.round( pitch.y )
 	);
 };
 
@@ -199,14 +214,16 @@ Chat.prototype.locateOffset = function(offset)
 /*
 | Draws the component on the fabric.
 */
-Chat.prototype.draw = function(fabric)
-	{ fabric.drawImage(this._weave(), this.pnw, 'source-atop'); };
+Chat.prototype.draw = function( fabric )
+{
+	fabric.drawImage( this._weave( ), this.pnw, 'source-atop' );
+};
 
 
 /*
 | Positions the caret.
 */
-Chat.prototype.positionCaret = function(view)
+Chat.prototype.positionCaret = function( view )
 {
 	var caret = shell.$caret;
 	var panel = this.panel;
@@ -226,13 +243,13 @@ Chat.prototype.positionCaret = function(view)
 /*
 | User input.
 */
-Chat.prototype.input = function(text)
+Chat.prototype.input = function( text )
 {
 	var csign = shell.$caret.sign;
 	var itext = this._$itext;
 	var at1   = csign.at1;
 
-	this._$itext = itext.substring(0, at1) + text + itext.substring(at1);
+	this._$itext = itext.substring( 0, at1 ) + text + itext.substring( at1 );
 
 	shell.setCaret(
 		'board',
@@ -242,23 +259,25 @@ Chat.prototype.input = function(text)
 		}
 	);
 
-	this.poke();
+	this.poke( );
 };
 
 
 /*
 | User pressed backspace.
 */
-Chat.prototype.keyBackspace = function()
+Chat.prototype.keyBackspace = function( )
 {
 	var caret = shell.$caret;
 	var csign = caret.sign;
 	var at1   = csign.at1;
 
-	if (at1 <= 0)
+	if( at1 <= 0 )
 		{ return false; }
 
-	this._$itext = this._$itext.substring(0, at1 - 1) + this._$itext.substring(at1);
+	this._$itext =
+		this._$itext.substring( 0, at1 - 1 ) +
+		this._$itext.substring( at1 );
 
 	shell.setCaret(
 		'board',
@@ -268,7 +287,7 @@ Chat.prototype.keyBackspace = function()
 		}
 	);
 
-	this.poke();
+	this.poke( );
 
 	return true;
 };
@@ -277,18 +296,20 @@ Chat.prototype.keyBackspace = function()
 /*
 | User pressed del.
 */
-Chat.prototype.keyDel = function()
+Chat.prototype.keyDel = function( )
 {
 	var caret = shell.$caret;
 	var csign = caret.sign;
 	var at1   = csign.at1;
 
-	if (at1 >= this._$itext.length)
+	if( at1 >= this._$itext.length )
 		{ return false; }
 
-	this._$itext = this._$itext.substring(0, at1) + this._$itext.substring(at1 + 1);
+	this._$itext =
+		this._$itext.substring( 0, at1  ) +
+		this._$itext.substring( at1 + 1 );
 
-	this.poke();
+	this.poke( );
 
 	return true;
 };
@@ -296,19 +317,21 @@ Chat.prototype.keyDel = function()
 /*
 | User pressed down key.
 */
-Chat.prototype.keyDown = function()
-	{ return true; };
+Chat.prototype.keyDown = function( )
+{
+	return true;
+};
 
 
 /*
 | User pressed end key.
 */
-Chat.prototype.keyEnd = function()
+Chat.prototype.keyEnd = function( )
 {
 	var csign = shell.$caret.sign;
 	var at1   = csign.at1;
 
-	if (at1 >= this._$itext.length)
+	if( at1 >= this._$itext.length )
 		{ return false; }
 
 	shell.setCaret(
@@ -326,14 +349,14 @@ Chat.prototype.keyEnd = function()
 /*
 | User pressed enter (return) key.
 */
-Chat.prototype.keyEnter = function()
+Chat.prototype.keyEnter = function( )
 {
-	if (this._$itext === '')
+	if( this._$itext === '' )
 		{ return false; }
 
 	var csign = shell.$caret.sign;
 
-	shell.peer.sendMessage(this._$itext);
+	shell.peer.sendMessage( this._$itext );
 
 	this._$itext = '';
 
@@ -352,11 +375,11 @@ Chat.prototype.keyEnter = function()
 /*
 | User pressed left key.
 */
-Chat.prototype.keyLeft = function()
+Chat.prototype.keyLeft = function( )
 {
 	var csign = shell.$caret.sign;
 
-	if (csign.at1 <= 0)
+	if( csign.at1 <= 0 )
 		{ return false; }
 
 	shell.setCaret(
@@ -374,11 +397,11 @@ Chat.prototype.keyLeft = function()
 /*
 | User pressed pos1 key
 */
-Chat.prototype.keyPos1 = function()
+Chat.prototype.keyPos1 = function( )
 {
 	var csign = shell.$caret.sign;
 
-	if (csign.at1 <= 0)
+	if( csign.at1 <= 0 )
 		{ return false; }
 
 	shell.setCaret(
@@ -396,11 +419,11 @@ Chat.prototype.keyPos1 = function()
 /*
 | User pressed right key
 */
-Chat.prototype.keyRight = function()
+Chat.prototype.keyRight = function( )
 {
 	var csign = shell.$caret.sign;
 
-	if (csign.at1 >= this._$itext.length)
+	if( csign.at1 >= this._$itext.length )
 		{ return false; }
 
 	shell.setCaret(
@@ -418,36 +441,38 @@ Chat.prototype.keyRight = function()
 /*
 | User pressed up key.
 */
-Chat.prototype.keyUp = function()
-	{ return true; };
+Chat.prototype.keyUp = function( )
+{
+	return true;
+};
 
 
 /*
 | Adds a message.
 */
-Chat.prototype.addMessage = function(msg)
+Chat.prototype.addMessage = function( msg )
 {
-	this.messages.push(msg);
+	this.messages.push( msg );
 
-	if (this.messages.length > 10)
+	if( this.messages.length > 10 )
 		{ this.messages.unshift(); }
 
-	this.poke();
+	this.poke( );
 };
 
 
 /*
 | Control takes focus.
 */
-Chat.prototype.grepFocus = function()
+Chat.prototype.grepFocus = function( )
 {
-	if (this.panel.focusedControl() === this)
+	if( this.panel.focusedControl( ) === this )
 		{ return false; }
 
 	shell.setCaret(
 		'board',
 		{
-			path : new Path([this.panel.name, this.name]),
+			path : new Path( [ this.panel.name, this.name ] ),
 			at1  : this._$itext.length
 		}
 	);
@@ -493,7 +518,7 @@ Chat.prototype.pointingStart = function( p, shift, ctrl )
 /*
 | Mouse hover
 */
-Chat.prototype.pointingHover = function(p, shift, ctrl)
+Chat.prototype.pointingHover = function( p, shift, ctrl )
 {
 	if( p === null )
 		{ return null; }
@@ -510,7 +535,7 @@ Chat.prototype.pointingHover = function(p, shift, ctrl)
 		return null;
 	}
 
-	var fabric = this._weave();
+	var fabric = this._weave( );
 	var pp = p.sub(this.pnw);
 
 	if( fabric.withinSketch( this, 'sketchILine', Euclid.View.proper, pp ) )
@@ -523,7 +548,7 @@ Chat.prototype.pointingHover = function(p, shift, ctrl)
 /*
 | Draws the input line
 */
-Chat.prototype.sketchILine = function(fabric, border, twist)
+Chat.prototype.sketchILine = function( fabric, border, twist )
 {
 	var ox   = 0;
 	var w    = fabric.width - 1;
@@ -532,28 +557,28 @@ Chat.prototype.sketchILine = function(fabric, border, twist)
 	var pnwx = this.sideSlopeX + ox;
 	var pnwy = psey - this.lineHeight - 2;
 
-	fabric.moveTo(                    ox, psey);
-	fabric.beziTo(  7, -7, -15,  0, pnwx, pnwy);
-	fabric.lineTo(                  psex, pnwy);
-	fabric.beziTo( 15,  0,  -7, -7,    w, psey);
-	fabric.lineTo(                  pnwx, psey);
+	fabric.moveTo(                    ox, psey );
+	fabric.beziTo(  7, -7, -15,  0, pnwx, pnwy );
+	fabric.lineTo(                  psex, pnwy );
+	fabric.beziTo( 15,  0,  -7, -7,    w, psey );
+	fabric.lineTo(                  pnwx, psey );
 };
 
 
 /*
 | Pokes the component
 */
-Chat.prototype.poke = function()
+Chat.prototype.poke = function( )
 {
 	this.$fabric = null;
-	this.panel.poke();
+	this.panel.poke( );
 };
 
 
 /*
 | Force clears all caches.
 */
-Chat.prototype.knock = function()
+Chat.prototype.knock = function( )
 {
 	this.$fabric = null;
 };
@@ -564,27 +589,19 @@ Chat.prototype.knock = function()
 */
 Chat.prototype.specialKey = function(key)
 {
-	switch(key)
+	switch( key )
 	{
-		case 'backspace' : this.keyBackspace(); break;
-		case 'del'       : this.keyDel();       break;
-		case 'down'      : this.keyDown();      break;
-		case 'end'       : this.keyEnd();       break;
-		case 'enter'     : this.keyEnter();     break;
-		case 'left'      : this.keyLeft();      break;
-		case 'pos1'      : this.keyPos1();      break;
-		case 'right'     : this.keyRight();     break;
-		case 'up'        : this.keyUp();        break;
+		case 'backspace' : this.keyBackspace( ); break;
+		case 'del'       : this.keyDel( );       break;
+		case 'down'      : this.keyDown( );      break;
+		case 'end'       : this.keyEnd( );       break;
+		case 'enter'     : this.keyEnter( );     break;
+		case 'left'      : this.keyLeft( );      break;
+		case 'pos1'      : this.keyPos1( );      break;
+		case 'right'     : this.keyRight( );     break;
+		case 'up'        : this.keyUp( );        break;
 	}
 };
 
 
-/*
-| If a chat has focus, it suggests a keyboard.
-*/
-Chat.prototype.suggestingKeyboard = function( )
-{
-	return true;
-};
-
-})();
+})( );

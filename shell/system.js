@@ -280,7 +280,7 @@ System.prototype._focusCanvas = function( )
 */
 System.prototype.fiddleInput = function( )
 {
-	var sk = this.shell.suggestingKeyboard( );
+	var sk = this.shell.$caret.$height > 0;
 
 	if( sk !== this._$suggestingKeyboard ) {
 		if( sk )
@@ -728,12 +728,6 @@ System.prototype._onMouseWheel = function( event )
 */
 System.prototype._onTouchStart = function( event )
 {
-	// TODO make a fiddle call instead
-	if( this.shell.suggestingKeyboard( ) )
-		{ this._focusInput(); }
-	else
-		{ this._focusCanvas(); }
-
 	var canvas = this._canvas;
 	var p      = new Euclid.Point(
 		event.pageX - canvas.offsetLeft,

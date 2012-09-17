@@ -245,17 +245,6 @@ Board.prototype.specialKey = function( key, shift, ctrl )
 
 
 /*
-| Returns true if the shell is suggesting a keyboard.
-| Useful on pad devices with a virtual keyboard.
-*/
-Board.prototype.suggestingKeyboard = function( )
-{
-	return this.getSub( shell.$caret.sign.path, 'suggestingKeyboard' )
-		.suggestingKeyboard( );
-};
-
-
-/*
 | User is hovers his/her pointing device ( mouse move )
 */
 Board.prototype.pointingHover = function(p, shift, ctrl)

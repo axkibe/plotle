@@ -210,32 +210,6 @@ Shell.prototype._getCaretEntity = function( sec, path )
 
 
 /*
-| Returns true if the shell is suggesting a keyboard.
-| Useful on pad devices with a virtual keyboard.
-*/
-Shell.prototype.suggestingKeyboard = function( )
-{
-	switch( this.$caret.section )
-	{
-		case null :
-			return false;
-
-		case 'board' :
-			return this.$board.suggestingKeyboard( );
-
-		case 'space' :
-			return this.$space.suggestingKeyboard( );
-
-		default :
-			throw new Error(
-				'invalid section: ' + this.$caret.section
-			);
-
-	}
-};
-
-
-/*
 | Positions the caret
 */
 Shell.prototype.positionCaret = function( )
