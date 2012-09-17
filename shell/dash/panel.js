@@ -216,9 +216,9 @@ Panel.prototype.draw = function( fabric )
 
 
 /*
-| Draws the caret.
+| Positions the caret.
 */
-Panel.prototype.drawCaret = function( view )
+Panel.prototype.positionCaret = function( view )
 {
 	var cname = shell.$caret.sign.path.get( 1 );
 
@@ -227,8 +227,15 @@ Panel.prototype.drawCaret = function( view )
 	if( !ce )
 		{ throw new Error('Caret component does not exist!'); }
 
-	if( ce.drawCaret )
-		{ ce.drawCaret( view ); }
+	if( ce.positionCaret )
+	{
+		ce.positionCaret( view );
+	}
+	else
+	{
+		var caret = shell.$caret;
+		caret.$screenPos = caret.$heigh = null;
+	}
 };
 
 

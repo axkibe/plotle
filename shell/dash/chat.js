@@ -82,6 +82,7 @@ var Chat = Dash.Chat = function(twig, panel, inherit, name)
 
 /*
 | Returns the caret position relative to the panel.
+| TODO remove
 */
 Chat.prototype.getCaretPos = function()
 {
@@ -203,34 +204,22 @@ Chat.prototype.draw = function(fabric)
 
 
 /*
-| Draws the caret.
+| Positions the caret.
 */
-Chat.prototype.drawCaret = function(view)
+Chat.prototype.positionCaret = function(view)
 {
 	var caret = shell.$caret;
 	var panel = this.panel;
-	var cpos  = caret.$pos = this.getCaretPos();
+	var cpos  = caret.$pos = this.getCaretPos( );
 
-	var ch  = Math.round((cpos.s - cpos.n) * view.zoom);
-	var cp = view.point(
-		panel.pnw.x + cpos.x,
-		panel.pnw.y + cpos.n
-	);
+	shell.$caret.$screenPos =
+		view.point(
+			panel.pnw.x + cpos.x,
+			panel.pnw.y + cpos.n
+		);
 
-	shell.$caret.$screenPos = cp;
-
-	if ( Caret.useGetImageData )
-	{
-		shell.$caret.$save = shell.fabric.getImageData(cp.x, cp.y, 3, ch + 2);
-	}
-	else
-	{
-		// paradoxically this is often way faster, especially on firefox
-		shell.$caret.$save = new Euclid.Fabric(shell.fabric.width, shell.fabric.height);
-		shell.$caret.$save.drawImage(shell.fabric, 0, 0);
-	}
-
-	shell.fabric.fillRect('black', cp.x + 1, cp.y + 1, 1, ch);
+	shell.$caret.$height =
+		Math.round( ( cpos.s - cpos.n ) * view.zoom );
 };
 
 

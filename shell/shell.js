@@ -92,6 +92,11 @@ Shell = function(fabric)
 	// true at greenscreen frowny
 	this.green     = false;
 
+	// sets the caret to shown if the document has focus
+	// if it is unknown, asume shown
+	if( !document.hasFocus || document.hasFocus() )
+		{ this.$caret.show(); }
+
 	this._draw();
 };
 
@@ -176,7 +181,7 @@ Shell.prototype.setCaret = function( section, sign, retainx )
 		if( entity )
 			{ entity.knock(); }
 
-		shell.redraw = true;
+		this.redraw = true;
 	}
 
 	return this.$caret;
@@ -226,6 +231,35 @@ Shell.prototype.suggestingKeyboard = function( )
 				'invalid section: ' + this.$caret.section
 			);
 
+	}
+};
+
+
+/*
+| Positions the caret
+*/
+Shell.prototype.positionCaret = function( )
+{
+	var caret = this.$caret;
+
+	switch( this.$caret.section )
+	{
+		case null :
+			caret.$screenPos = caret.$height = 0;
+			return;
+
+		case 'board' :
+			this.$board.positionCaret( );
+			return;
+
+		case 'space' :
+			this.$space.positionCaret( );
+			return;
+
+		default :
+			throw new Error(
+				'invalid section: ' + this.$caret.section
+			);
 	}
 };
 

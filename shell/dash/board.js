@@ -217,12 +217,12 @@ Board.prototype.knock = function( )
 /*
 | Draws the caret.
 */
-Board.prototype.drawCaret = function( )
+Board.prototype.positionCaret = function( )
 {
 	if ( shell.$caret.sign.path.get( 0 ) !== this.curPanelName )
 		{ throw new Error('Caret path(0) !== this.curPanelName'); }
 
-	this.curPanel( ).drawCaret( Euclid.View.proper );
+	this.curPanel( ).positionCaret( Euclid.View.proper );
 };
 
 

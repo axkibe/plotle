@@ -126,43 +126,31 @@ Para.prototype.draw = function(fabric, view, pnw)
 /**
 | Draws the caret if its in this paragraph.
 */
-Para.prototype.drawCaret = function(view)
+Para.prototype.positionCaret = function( view )
 {
 	var caret = shell.$caret;
 	var item  = shell.$space.getSub( this.path, 'Item' );
 	var doc   = item.$sub.doc;
 	var zone  = item.getZone();
-	var cpos  = caret.$pos  = this.getCaretPos();
+	var cpos  = caret.$pos  = this.getCaretPos( );
+
 	var pnw   = doc.getPNW( this.key );
 	var sbary = item.scrollbarY;
-	var sy    = sbary ? Math.round(sbary.getPos()) : 0;
+	var sy    = sbary ? Math.round( sbary.getPos( ) ) : 0;
 
-	var cyn = Jools.limit(0, cpos.n + pnw.y - sy, zone.height);
-	var cys = Jools.limit(0, cpos.s + pnw.y - sy, zone.height);
+	var cyn = Jools.limit( 0, cpos.n + pnw.y - sy, zone.height );
+	var cys = Jools.limit( 0, cpos.s + pnw.y - sy, zone.height );
 	var cx  = cpos.x + pnw.x;
 
-	var ch  = Math.round((cys - cyn) * view.zoom);
-	if (ch === 0)
-		{ return; }
-
-	var cp = view.point(cx + zone.pnw.x, cyn + zone.pnw.y);
-	caret.$screenPos = cp;
-
-	if (Caret.useGetImageData)
-		{ caret.$save = shell.fabric.getImageData(cp.x, cp.y, 3, ch + 2); }
-	else
-	{
-		// paradoxically this is often way faster, especially on firefox
-		caret.$save = new Euclid.Fabric(shell.fabric.width, shell.fabric.height);
-		caret.$save.drawImage(shell.fabric, 0, 0);
-	}
-
-	shell.fabric.fillRect('black', cp.x + 1, cp.y + 1, 1, ch);
+	caret.$screenPos = view.point( cx + zone.pnw.x, cyn + zone.pnw.y );
+	caret.$height    = Math.round( ( cys - cyn ) * view.zoom );
 };
 
 
 /**
 | Returns the caret position relative to the doc.
+|
+| TODO remove?
 */
 Para.prototype.getCaretPos = function()
 {

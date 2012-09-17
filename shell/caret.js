@@ -35,6 +35,7 @@ var Caret = null;
 /*
 | Imports
 */
+var Euclid;
 var Jools;
 var shell;
 var system;
@@ -114,40 +115,74 @@ Caret.prototype.hide = function()
 */
 Caret.prototype.display = function()
 {
+	if( shell.$caret !== this )
+		{ throw new Error( 'shell.$caret !== this' ); }
+
 	// erases the old caret
-	if( shell.$caret.$save )
+	if( this.$save )
 	{
 		if( Caret.useGetImageData )
 		{
 			shell.fabric.putImageData(
-				shell.$caret.$save,
-				shell.$caret.$screenPos
+				this.$save,
+				this.$screenPos
 			);
 		}
 		else
 		{
-			shell.fabric.drawImage(shell.$caret.$save, 0, 0);
+			shell.fabric.drawImage(this.$save, 0, 0);
 		}
-
-		shell.$caret.$save = shell.$caret.$screenPos = null;
 	}
 
-	// draws new
-	if( this.$shown && !this.$blinked && this.sign )
+	this.$save = this.$screenPos = this.$height = null;
+
+	if( !this.$shown || !this.sign )
+		{ return; }
+
+	// calculates new position
+	// even if blinked, so system can fiddle the input
+	// position correctly
+	shell.positionCaret();
+
+	// double check this is still _the_ caret.
+	if( shell.$caret !== this )
+		{ throw new Error( 'shell.$caret !== this' ); }
+
+	var pos    = this.$screenPos;
+	var height = this.$height;
+
+	if( !this.blinked && pos !== null )
 	{
-		switch( this.section )
+		// saves the caret background
+		if (Caret.useGetImageData)
 		{
-			case 'space' :
-				shell.$space.drawCaret();
-				break;
-
-			case 'board' :
-				shell.$board.drawCaret();
-				break;
-
-			default :
-				throw new Error('invalid section');
+			this.$save = shell.fabric.getImageData(
+				pos.x,
+				pos.y,
+				3,
+				height + 2
+			);
 		}
+		else
+		{
+			// paradoxically this is sometimes faster ( like on firefox )
+			// FIXME autodetect mode
+			this.$save = new Euclid.Fabric(
+				shell.fabric.width,
+				shell.fabric.height
+			);
+
+			this.$save.drawImage(shell.fabric, 0, 0);
+		}
+
+		// draws the caret
+		shell.fabric.fillRect(
+			'black',
+			pos.x + 1,
+			pos.y + 1,
+			1,
+			height
+		);
 	}
 };
 

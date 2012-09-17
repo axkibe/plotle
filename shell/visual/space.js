@@ -230,12 +230,12 @@ Space.prototype.knock = function()
 
 
 /*
-| Draws the caret.
+| Positions the caret.
 */
-Space.prototype.drawCaret = function()
+Space.prototype.positionCaret = function()
 {
-	this.getSub( shell.$caret.sign.path, 'drawCaret' )
-		.drawCaret( this.$view );
+	this.getSub( shell.$caret.sign.path, 'positionCaret' )
+		.positionCaret( this.$view );
 };
 
 

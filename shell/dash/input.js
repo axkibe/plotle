@@ -320,31 +320,20 @@ Input.prototype.getCaretPos = function()
 /*
 | Draws the caret.
 */
-Input.prototype.drawCaret = function( view )
+Input.prototype.positionCaret = function( view )
 {
 	var caret = shell.$caret;
 
 	var cpos  = caret.$pos = this.getCaretPos();
 
-	var ch    = Math.round((cpos.s - cpos.n) * view.zoom);
+	caret.$screenPos =
+		view.point(
+			this.panel.pnw.x + cpos.x,
+			this.panel.pnw.y + cpos.n
+		);
 
-	var cp    = view.point(
-		this.panel.pnw.x + cpos.x,
-		this.panel.pnw.y + cpos.n
-	);
-
-	caret.$screenPos = cp; // FIXME
-
-	if (Caret.useGetImageData)
-		{ caret.$save = shell.fabric.getImageData(cp.x, cp.y, 3, ch + 2); }
-	else
-	{
-		// paradoxically this is often way faster, especially on firefox
-		caret.$save = new Euclid.Fabric(shell.fabric.width, shell.fabric.height);
-		caret.$save.drawImage(shell.fabric, 0, 0);
-	}
-
-	shell.fabric.fillRect('black', cp.x + 1, cp.y + 1, 1, ch);
+	caret.$height =
+		Math.round( ( cpos.s - cpos.n ) * view.zoom );
 };
 
 

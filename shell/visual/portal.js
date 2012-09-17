@@ -255,7 +255,7 @@ Portal.prototype.mousewheel = function( view, p, dir, shift, ctrl )
 /*
 |
 */
-Portal.prototype.drawCaret = function(view)
+Portal.prototype.positionCaret = function(view)
 {
 	// FIXME
 };

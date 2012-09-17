@@ -179,6 +179,7 @@ Note.prototype.scrollCaretIntoView = function()
 		{ throw new Error( 'para not a para.' ); }
 
 	var cp      = para.getCaretPos();
+
 	var pnw     = this.$sub.doc.getPNW( para.key );
 	var zone    = this.getZone( );
 	var imargin = this.innerMargin;

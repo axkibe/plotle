@@ -388,6 +388,6 @@ Button.prototype.actionstop = function( )
 Button.prototype.suggestingKeyboard = function( )
 {
 	return false;
-;}
+};
 
 } ) ();
