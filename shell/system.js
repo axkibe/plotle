@@ -130,10 +130,11 @@ var System = function()
 	// Opera is behaving stupid here.
 	this._$lastSpecialKey = -1;
 
-	// The value that is expected to be in input.
+	// The value expected to be in input.
 	// either nothing or the text selection.
 	// if it changes the user did something.
 	this._inputVal  = '';
+
 	var hiddenInput = this._hiddenInput;
 
 	canvas.onmousedown        = makeCatcher( this, this._onMouseDown      );
@@ -223,11 +224,11 @@ System.prototype.restartBlinker = function( )
 System.prototype.setInput = function( text )
 {
 	var hi   = this._hiddenInput;
-	hi.value = this._inputVal = text;
+	hi.value = this._inputVal = '' + text;
 
+	hi.selectionStart = 0;
 	if( text !== '' )
 	{
-		hi.selectionStart = 0;
 		hi.selectionEnd = text.length;
 	}
 };
@@ -260,13 +261,11 @@ System.prototype.fiddleInput = function( )
 	{
 		var input = this._hiddenInput;
 
-		console.log(pos.y);
 		input.style.top    = pos.y + 'px';
 		input.style.height = height;
 
 		if( !this._$suggestingKeyboard )
 		{
-			console.log('focus input');
 			input.focus();
 
 			// works around a bug in safari/OSX
@@ -274,20 +273,20 @@ System.prototype.fiddleInput = function( )
 			this.setTimer(
 				0,
 				function( )
-					{ self._hiddenInput.selectionStart = 0; }
+					{ self._hiddenInput.selectionStart = 1; }
 			);
+
+			this._$suggestingKeyboard = true;
 		}
 	}
 	else
 	{
-		if( !this._$suggestingKeyboard )
+		if( this._$suggestingKeyboard )
 		{
-			console.log('focus canvas');
 			this._canvas.focus();
+			this._$suggestingKeyboard = false;
 		}
 	}
-
-	this._$suggestingKeyboard = sk;
 };
 
 // ---------------------------
@@ -726,6 +725,10 @@ System.prototype._onMouseWheel = function( event )
 */
 System.prototype._onTouchStart = function( event )
 {
+	// for now ignore multi-touches
+	if( event.touches.length !== 1 )
+		{ return; }
+
 	var canvas = this._canvas;
 	var p      = new Euclid.Point(
 		event.pageX - canvas.offsetLeft,
@@ -769,6 +772,10 @@ System.prototype._onTouchStart = function( event )
 */
 System.prototype._onTouchMove = function( event )
 {
+	// for now ignore multi-touches
+	if( event.touches.length !== 1 )
+		{ return; }
+
 	var canvas = this._canvas;
 	var p      = new Euclid.Point(
 		event.pageX - canvas.offsetLeft,
@@ -837,14 +844,19 @@ System.prototype._onTouchMove = function( event )
 */
 System.prototype._onTouchEnd = function( event )
 {
+	// for now ignore multi-touches
+	if( event.touches.length !== 0 )
+		{ return; }
+
 	event.preventDefault( );
 	this._releaseEvents( );
 
 	var canvas = this._canvas;
 	var p      = new Euclid.Point(
-		event.pageX - canvas.offsetLeft,
-		event.pageY - canvas.offsetTop
+		event.changedTouches[0].pageX - canvas.offsetLeft,
+		event.changedTouches[0].pageY - canvas.offsetTop
 	);
+
 	var shift  = event.shiftKey;
 	var ctrl   = event.ctrlKey || event.metaKey;
 	var cursor = null;
@@ -955,10 +967,11 @@ System.prototype._testInput = function( )
 	// works around opera quirks inserting CR characters
 	text = text.replace(/\r/g,'');
 
-	if( text == this._inputVal )
+	if( text == this._inputVal || !this.shell )
 		{ return; }
 
 	hi.value = this._inputVal = '';
+	hi.selectionStart = 0;
 
 	this.shell.input( text );
 
