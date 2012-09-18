@@ -85,7 +85,8 @@ var Chat = Dash.Chat = function( twig, panel, inherit, name )
 
 /*
 | Returns the caret position relative to the panel.
-| TODO remove
+|
+| FIXME remove
 */
 Chat.prototype.getCaretPos = function( )
 {

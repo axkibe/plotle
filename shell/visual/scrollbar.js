@@ -148,13 +148,14 @@ Scrollbar.prototype.within = function( view, p )
 		{ return false; }
 
 	var pnw = this._$pnw;
-	var dp  = view.depoint(p); // TODO use x/y
+	var dex = view.dex(p);
+	var dey = view.dey(p);
 
 	return (
-		dp.x >= pnw.x &&
-		dp.y >= pnw.y &&
-		dp.x <= pnw.x + theme.scrollbar.strength &&
-		dp.y <= pnw.y + this._$size
+		dex >= pnw.x &&
+		dey >= pnw.y &&
+		dex <= pnw.x + theme.scrollbar.strength &&
+		dey <= pnw.y + this._$size
 	);
 };
 

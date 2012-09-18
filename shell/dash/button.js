@@ -81,8 +81,7 @@ var Button = Dash.Button = function(twig, panel, inherit, name)
 	this.path         = new Path([panel.name, name]);
 
 	// if true repeats the push action if held down
-	// TODO rename to repeating
-	this.repeat       = false;
+	this.repeating    = false;
 
 	this.$retimer     = null;
 	this.$active      = inherit ? inherit.$active : false;
@@ -279,7 +278,7 @@ Button.prototype.pointingStart = function( p, shift, ctrl )
 		return null;
 	}
 
-	if ( this.repeat && !this.retimer )
+	if ( this.repeating && !this.retimer )
 	{
 		shell.startAction(
 			Action.REBUTTON,
@@ -301,7 +300,7 @@ Button.prototype.pointingStart = function( p, shift, ctrl )
 
 	this.push( shift, ctrl );
 
-	return this.repeat ? 'drag' : false;
+	return this.repeating ? 'drag' : false;
 };
 
 

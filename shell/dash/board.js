@@ -273,8 +273,7 @@ Board.prototype.dragstart = function( p, shift, ctrl )
 
 
 /*
-| Start of a dragging operation.
-| TODO huh?
+| Ongoing dragging operation.
 */
 Board.prototype.actionmove = function( p, shift, ctrl )
 {
@@ -283,14 +282,15 @@ Board.prototype.actionmove = function( p, shift, ctrl )
 
 
 /*
-| Start of a dragging operation.
+| End of a dragging operation.
 */
-Board.prototype.actionstop = function(p, shift, ctrl)
+Board.prototype.actionstop = function( p, shift, ctrl )
 {
 	var path  = shell.$action.itemPath;
-	var panel = this.getPanel(path.get(0));
-	var c     = panel.$sub[path.get(1)];
-	return c.actionstop(p, shift, ctrl);
+	var panel = this.getPanel( path.get( 0 ) );
+	var c     = panel.$sub[ path.get( 1 ) ];
+
+	return c.actionstop( p, shift, ctrl );
 };
 
 

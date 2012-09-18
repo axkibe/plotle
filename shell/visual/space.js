@@ -61,7 +61,7 @@ var Space = Visual.Space = function(twig, spacename, access)
 {
 	Visual.Base.call(this, spacename, twig, null);
 
-	var $sub = this.$sub = { };
+	var sub = this.$sub = { };
 
 	this.access = access;
 	this.fabric = system.fabric;
@@ -69,7 +69,7 @@ var Space = Visual.Space = function(twig, spacename, access)
 	this.$view  = new Euclid.View( Euclid.Point.zero, 0 );
 
 	for( var k in twig.copse )
-		{ $sub[ k ] = this.createItem( twig.copse[ k ], k ); }
+		{ sub[ k ] = this.createItem( twig.copse[ k ], k ); }
 
 	this._floatMenuLabels =
 		{
@@ -82,6 +82,7 @@ var Space = Visual.Space = function(twig, spacename, access)
 
 Jools.subclass( Space, Visual.Base );
 
+
 /*
 | Updates $sub to match a new twig.
 */
@@ -93,23 +94,22 @@ Space.prototype.update = function( twig )
 
 	this.twig = twig;
 
-	// TODO remove $
-	var $old = this.$sub;
-	var $sub = this.$sub = { };
+	var old = this.$sub;
+	var sub = this.$sub = { };
 	var copse = twig.copse;
 	for( var k in copse )
 	{
-		var sub = twig.copse[ k ];
-		var o = $old[ k ];
-		if ( Jools.is( o ) )
+		var s = twig.copse[ k ];
+		var o = old[ k ];
+		if( Jools.is( o ) )
 		{
-			if ( o.twig !== sub )
-				{ o.update( sub ); }
-			$sub[ k ] = o;
+			if( o.twig !== s )
+				{ o.update( s ); }
+			sub[ k ] = o;
 		}
 		else
 		{
-			$sub[ k ] = this.createItem( sub, k );
+			sub[ k ] = this.createItem( s, k );
 		}
 	}
 
@@ -119,7 +119,7 @@ Space.prototype.update = function( twig )
 
 	if (caret.section === 'space' &&
 		csign && csign.path &&
-		!Jools.isnon( $sub[ csign.path.get( 0 ) ] ) )
+		!Jools.isnon( sub[ csign.path.get( 0 ) ] ) )
 	{
 		if (shell.selection.active &&
 			shell.selection.sign1.path.get( -4 ) === csign.path.get( 1 ) )
@@ -130,6 +130,7 @@ Space.prototype.update = function( twig )
 
 	shell.redraw = true;
 };
+
 
 /**
 | Returns the focused item.
@@ -490,7 +491,7 @@ Space.prototype.actionmove = function(p, shift, ctrl) {
 */
 Space.prototype.menuSelect = function(entry, p)
 {
-	var $view = this.$view;
+	var view = this.$view;
 	var pnw;
 	var key;
 	var nw;
@@ -503,7 +504,7 @@ Space.prototype.menuSelect = function(entry, p)
 			nw = theme.note.newWidth;
 			nh = theme.note.newHeight;
 
-			pnw = $view.depoint( p ).
+			pnw = view.depoint( p ).
 				sub( Jools.half( nw ), Jools.half ( nh ) );
 
 			key = shell.peer.newNote(
@@ -518,7 +519,7 @@ Space.prototype.menuSelect = function(entry, p)
 		case 'ne' :
 			// label
 
-			pnw = $view.depoint( p ).
+			pnw = view.depoint( p ).
 				sub( theme.label.createOffset );
 
 			key = shell.peer.newLabel(
@@ -538,7 +539,7 @@ Space.prototype.menuSelect = function(entry, p)
 			nw = theme.portal.newWidth;
 			nh = theme.portal.newHeight;
 
-			pnw = $view.depoint(p).
+			pnw = view.depoint(p).
 				sub( Jools.half( nw ) , Jools.half( nh ) );
 
 			key = shell.peer.newPortal(

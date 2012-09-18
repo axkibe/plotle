@@ -389,7 +389,8 @@ System.prototype._captureEvents = function( )
 
 
 /*
-| Key down in hidden input field TODO
+| Key down on canvas.
+| Used when not suggesting a keyboard.
 */
 System.prototype._onCanvasKeyDown = function( event )
 {
@@ -406,7 +407,8 @@ System.prototype._onCanvasKeyDown = function( event )
 
 
 /**
-| Hidden input key press.
+| Key press on canvas.
+| Used when not suggesting a keyboard.
 */
 System.prototype._onCanvasKeyPress = function( event )
 {
@@ -441,7 +443,8 @@ System.prototype._onCanvasKeyPress = function( event )
 
 
 /*
-| Key down in hidden input field TODO
+| Key down on hidden input field.
+| Used when suggesting a keyboard.
 */
 System.prototype._onHiddenKeyDown = function( event )
 {
@@ -778,9 +781,7 @@ System.prototype._onTouchMove = function( event )
 
 	// for now ignore multi-touches
 	if( event.touches.length !== 1 )
-	{
-		return false; 
-	}
+		{ return false; }
 
 	var canvas = this._canvas;
 	var p      = new Euclid.Point(

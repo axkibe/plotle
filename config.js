@@ -17,49 +17,60 @@
                                    `-' `-' ' ' |  ' `-|
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~'~ ~ ~,| ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
                                                      `'
- Meshcrafts easily editable configuration.
+ Meshcraft's editable configuration
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-var config = module.exports = {};
 
-/**
+/*
+| Config infrastructure.
+| Don't change this.
+*/
+var config = module.exports =
+	{
+		database : { },
+		debug    : { }
+	};
+
+
+/*
 | an additional admin user
 */
 config.admin = 'axel';
 
-/**
+
+/*
 | The interface to listen on,.
 |   null       means listens on all interfaces.
 |  '127.0.0.1' means localhost (IPV4)
 */
 config.ip = null;
 
-/**
+
+/*
 | The port to listen on.
 */
 config.port = 8833;
 
-/**
-| Database settings (mongodb)
-*/
-config.database = {};
 
-/**
-| Host the database runs on
+/*
+| Host the mongodb database runs on
 */
 config.database.host = '127.0.0.1';
 
-/**
-| Port the database runs on
+
+/*
+| Port the mongodb database runs on
 */
 config.database.port = 27017;
 
-/**
-| Name of the database
+
+/*
+| Name of the mongodb database
 */
 config.database.name = 'meshcraft03';
 
-/**
+
+/*
 | development mode
 |    none, shell, server or both.
 |
@@ -70,47 +81,48 @@ config.database.name = 'meshcraft03';
 */
 config.devel = 'shell';
 
-/**
-| If true uglifies the javascript pack, that is minizing its size.
+
+/*
+| If true "uglifies" the javascript pack, minimizing its size.
 */
 config.uglify = false;
 
-/**
-| Max. number of events queued.
+
+/*
+| Max. number of undo events queued.
 */
 config.maxUndo = 5000;
 
-/**
-| debugging facilities
+
+/*
+| Disables all caching in the client.
+| Used for debugging.
 */
-config.debug = {
-	/**
-	| In case of doubt, if graphic caching seems faulty, just set this true and
-	| see if the errors vanish.
-	*/
-	noCache : false,
-
-	/**
-	| If true draws boxes around all cockpits frames, to see if
-	| their size is just right.
-	*/
-	drawBoxes : false,
-
-	/**
-	| If true does messages and JSON with whitespace/newlines
-	*/
-	puffed : true,
-
-	/**
-	| If true ensures that objects that should not be immutable
-	| are made immutable. Turned off on releases simply for performance.
-	*/
-	immute : false
-};
+config.debug.noCache = false;
 
 
-/**
-| these enable specific logging categories for the console
+/*
+| If true draws boxes around all cockpits frames, to see if
+| their size is just right.
+*/
+config.debug.drawBoxes = false;
+
+
+/*
+| If true formats messages and JSON with whitespace/newlines
+*/
+config.debug.puffed = true;
+
+
+/*
+| If true ensures that objects that should not be immutable
+| are made immutable. Turned off on releases for performance.
+*/
+config.debug.immute = false;
+
+
+/*
+| enable specific logging categories
 */
 config.log  = {
 	//all:   true,
@@ -129,7 +141,8 @@ config.log  = {
 	warn:   true
 };
 
-/**
+
+/*
 | redirects for VHOSTS
 */
 config.redirect = {

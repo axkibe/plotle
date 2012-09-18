@@ -132,7 +132,7 @@ Para.prototype.positionCaret = function( view )
 	var item  = shell.$space.getSub( this.path, 'Item' );
 	var doc   = item.$sub.doc;
 	var zone  = item.getZone();
-	var cpos  = caret.$pos  = this.getCaretPos( );
+	var cpos  = caret.$pos = this.getCaretPos( );
 
 	var pnw   = doc.getPNW( this.key );
 	var sbary = item.scrollbarY;
@@ -150,7 +150,7 @@ Para.prototype.positionCaret = function( view )
 /**
 | Returns the caret position relative to the doc.
 |
-| TODO remove?
+| FIXME remove?
 */
 Para.prototype.getCaretPos = function()
 {

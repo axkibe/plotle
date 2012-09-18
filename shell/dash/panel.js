@@ -252,8 +252,9 @@ Panel.prototype.pointingHover = function( p, shift, ctrl )
 	if( p === null )
 		{ return this.setHover(null); }
 
-	// TODO pse.y?
+	// shortcut if p is not near the panel
 	if( p.y < pnw.y ||
+		p.y > pse.y ||
 		p.x < pnw.x ||
 		p.x > pse.x
 	)
@@ -305,10 +306,12 @@ Panel.prototype.pointingStart = function( p, shift, ctrl )
 	var fabric = this._weave( );
 	var a, aZ;
 
-	// TODO pse.y?
+	// shortcut if p is not near the panel
 	if( p.y < pnw.y ||
+		p.y > pse.y ||
 		p.x < pnw.x ||
-		p.x > pse.x)
+		p.x > pse.x
+	)
 	{
 		this.setHover( null );
 		return null;

@@ -108,7 +108,7 @@ Item.prototype.withinCtrlArea = function(view, p)
 {
 	var cf = this.getCtrlFix();
 
-	// TODO fast check on rectangle
+	// FIXME fast check on rectangle
 
 	if( !cf.area.within( cf.fixView(view), p ) )
 		{ return false; }
