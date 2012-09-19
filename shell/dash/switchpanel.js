@@ -249,19 +249,38 @@ SwitchPanel.prototype._weave = function()
 	this._paintButton(fabric, 'n');
 	this._paintButton(fabric, 'ne');
 
-	fabric.setFont(theme.switchpanel.label.font);
+	var font = theme.switchpanel.label.font;
 
 	var bp = this.buttonPos;
-	fabric.fillText('Welcome',   bp.n .x, bp.n. y);
-	fabric.fillText('Sandbox',   bp.ne.x, bp.ne.y);
-	if (!this.amVisitor)
-		{ fabric.fillText('Your Home', bp.nw.x, bp.nw.y); }
+	fabric.fillText(
+		'Welcome',
+		bp.n .x,
+		bp.n. y,
+		font
+	);
+
+	fabric.fillText(
+		'Sandbox',
+		bp.ne.x,
+		bp.ne.y,
+		font
+	);
+
+	if( !this.amVisitor )
+	{
+		fabric.fillText(
+			'Your Home',
+			bp.nw,
+			font
+		);
+	}
 
 
-	fabric.setFont(theme.switchpanel.message.font);
+	font = theme.switchpanel.message.font;
 
 	var text;
-	switch(this.$hover || this.current) {
+	switch( this.$hover || this.current )
+	{
 		case 'n'  :
 			text = 'Welcome, public read-only';
 			break;
@@ -275,17 +294,31 @@ SwitchPanel.prototype._weave = function()
 			break;
 
 		default:
-			throw new Error('no valid space text');
+			throw new Error( 'no valid space text' );
 	}
-	fabric.fillText(text, Jools.half(iframe.width), iframe.height - 12);
 
-	fabric.edge(theme.switchpanel.style.edge, this, 'sketchFrame', Euclid.View.proper);
+	fabric.fillText(
+		text,
+		Jools.half(iframe.width),
+		iframe.height - 12,
+		font
+	);
 
-	if (config.debug.drawBoxes)
+	fabric.edge(
+		theme.switchpanel.style.edge,
+		this,
+		'sketchFrame',
+		Euclid.View.proper
+	);
+
+	if( config.debug.drawBoxes )
 	{
 		fabric.paint(
-			Dash.getStyle('boxes'),
-			new Euclid.Rect(iframe.pnw, iframe.pse.sub(1, 1)),
+			Dash.getStyle( 'boxes' ),
+			new Euclid.Rect(
+				iframe.pnw,
+				iframe.pse.sub( 1, 1 )
+			),
 			'sketch',
 			Euclid.View.proper
 		);
@@ -298,7 +331,7 @@ SwitchPanel.prototype._weave = function()
 /*
 | Clears caches.
 */
-SwitchPanel.prototype.poke = function()
+SwitchPanel.prototype.poke = function( )
 {
 	this.$fabric = null;
 	shell.redraw = true;
@@ -308,7 +341,7 @@ SwitchPanel.prototype.poke = function()
 /*
 | Force clears all caches
 */
-SwitchPanel.prototype.knock = function()
+SwitchPanel.prototype.knock = function( )
 {
 	this.$fabric = null;
 };
@@ -324,7 +357,7 @@ SwitchPanel.prototype.within = function( view, p )
 	if(! iframe.within( view, p ) )
 		{ return false; }
 
-	var fabric = this._weave();
+	var fabric = this._weave( );
 
 	return fabric.withinSketch(
 		this,
@@ -431,4 +464,4 @@ SwitchPanel.prototype.pointingHover = function( p )
 };
 
 
-} ) ();
+})( );

@@ -82,27 +82,27 @@ Para.prototype.Para = true;
 /*
 | Draws the paragraph in its cache and returns it.
 */
-Para.prototype.draw = function(fabric, view, pnw)
+Para.prototype.draw = function( fabric, view, pnw )
 {
-	var flow   = this.getFlow();
+	var flow   = this.getFlow( );
 	var width  = flow.spread * view.zoom;
 	var doc    = shell.$space.getSub( this.path, 'Doc' );
 	var height = this.getHeight() * view.zoom;
-	var $f     = this.$fabric;
+	var f      = this.$fabric;
 
 	// cache hit?
 	if (config.debug.noCache ||
-		!$f ||
-		$f.width  !== width  ||
-		$f.height !== height ||
-		view.zoom !== $f.$zoom)
+		!f ||
+		f.width  !== width  ||
+		f.height !== height ||
+		view.zoom !== f.$zoom)
 	{
 		// FIXME work out exact height for text below baseline
-		$f = this.$fabric = new Euclid.Fabric(width, height);
-		$f.scale(view.zoom);
-		$f.$zoom = view.zoom;
+		f = this.$fabric = new Euclid.Fabric(width, height);
+		f.scale(view.zoom);
+		f.$zoom = view.zoom;
 
-		$f.setFont(doc.getFont());
+		var font = doc.getFont();
 
 		// draws text into the fabric
 		for(var a = 0, aZ = flow.length; a < aZ; a++)
@@ -111,16 +111,17 @@ Para.prototype.draw = function(fabric, view, pnw)
 			for(var b = 0, bZ = line.a.length; b < bZ; b++)
 			{
 				var chunk = line.a[b];
-				$f.fillText(
+				f.fillText(
 					chunk.t,
 					chunk.x,
-					line.y
+					line.y,
+					font
 				);
 			}
 		}
 	}
 
-	fabric.drawImage($f, pnw);
+	fabric.drawImage(f, pnw);
 };
 
 /**

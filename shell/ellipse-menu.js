@@ -112,41 +112,91 @@ EllipseMenu.prototype.draw = function(view)
 
 	f.edge( this._style.edge, this._oflower, 'sketch', view, null );
 
-	f.setFont( this._font );
 
 	var labels = this.labels;
 
-	var b1  = this._dimensions.b1;
-	var b2  = this._dimensions.b2;
-	var bs  = Jools.half(b2 - b1);
-	var b2t = b1 + bs;
-	var m   = 0.551784;
-	var a2h = Math.round(this._dimensions.a2 * m);
-	var pc  = this.p;
+	var b1   = this._dimensions.b1;
+	var b2   = this._dimensions.b2;
+	var bs   = Jools.half(b2 - b1);
+	var b2t  = b1 + bs;
+	var m    = 0.551784;
+	var a2h  = Math.round( this._dimensions.a2 * m );
+	var pc   = this.p;
+	var font = this._font;
 
-	if (labels.n)
-		{ f.fillText(labels.n, pc.x, pc.y - b2t); }
+	if( labels.n )
+	{
+		f.fillText(
+			labels.n,
+			pc.x,
+			pc.y - b2t,
+			font
+		);
+	}
 
-	if (labels.ne)
-		{ f.fillText(labels.ne, pc.x + a2h, pc.y - bs ); }
+	if( labels.ne )
+	{
+		f.fillText(
+			labels.ne,
+			pc.x + a2h,
+			pc.y - bs,
+			font
+		);
+	}
 
-	if (labels.se)
-		{ f.fillText(labels.se, pc.x + a2h, pc.y + bs ); }
+	if( labels.se )
+	{
+		f.fillText(
+			labels.se,
+			pc.x + a2h,
+			pc.y + bs,
+			font
+		);
+	}
 
-	if (labels.s)
-		{ f.fillText(labels.s,  pc.x, pc.y + b2t); }
+	if( labels.s )
+	{
+		f.fillText(
+			labels.s,
+			pc.x,
+			pc.y + b2t,
+			font
+		);
+	}
 
-	if (labels.sw)
-		{ f.fillText(labels.sw, pc.x - a2h, pc.y + bs ); }
+	if( labels.sw )
+	{
+		f.fillText(
+			labels.sw,
+			pc.x - a2h,
+			pc.y + bs,
+			font
+		);
+	}
 
-	if (labels.nw)
-		{ f.fillText(labels.nw, pc.x - a2h, pc.y - bs ); }
+	if( labels.nw )
+	{
+		f.fillText(
+			labels.nw,
+			pc.x - a2h,
+			pc.y - bs,
+			font
+		);
+	}
 
-	if (labels.c)
-		{ f.fillText(labels.c,  pc); }
+	if( labels.c )
+	{
+		f.fillText(
+			labels.c,
+			pc,
+			font
+		);
+	}
 
-	if (this.$fade)
-		{ f.globalAlpha(1); }
+	if( this.$fade )
+	{
+		f.globalAlpha( 1 );
+	}
 };
 
 

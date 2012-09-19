@@ -225,7 +225,6 @@ Input.prototype._weave = function( accent )
 
 	fabric.fill(style.fill, bezi, 'sketch', Euclid.View.proper);
 	var font = this.twig.font;
-	fabric.setFont(font);
 
 	if (this.twig.password)
 	{
@@ -243,7 +242,8 @@ Input.prototype._weave = function( accent )
 		fabric.fillText(
 			value,
 			pitch.x,
-			font.size + pitch.y
+			font.size + pitch.y,
+			font
 		);
 	}
 

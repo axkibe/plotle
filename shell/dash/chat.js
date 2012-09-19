@@ -157,17 +157,17 @@ Chat.prototype._weave = function( )
 	var x = this._pitch.x;
 	var y = this._pitch.y;
 
-	fabric.setFont( this.twig.font );
+	var font = this.twig.font;
 	var lh = this.lineHeight;
-	fabric.fillText( '»', x + 27, y );
-	fabric.fillText( 'chat', x, y );
-	fabric.fillText( this._$itext, x + 37, y );
+	fabric.fillText( '»', x + 27, y, font );
+	fabric.fillText( 'chat', x, y, font );
+	fabric.fillText( this._$itext, x + 37, y, font );
 	y -= 2;
 
 	for( var a = this.messages.length - 1, aA = Math.max(a - 5, 0); a >= aA; a-- )
 	{
 		y -= lh;
-		fabric.fillText( this.messages[ a ], x, y );
+		fabric.fillText( this.messages[ a ], x, y, font );
 	}
 
 	if( config.debug.drawBoxes )

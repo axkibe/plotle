@@ -75,8 +75,11 @@ Label.prototype.grepFocus = function( )
 */
 Label.prototype.draw = function( fabric )
 {
-	fabric.setFont( this.twig.font );
-	fabric.fillText( this._$text || this.twig.text, this.pos );
+	fabric.fillText(
+		this._$text || this.twig.text,
+		this.pos,
+		this.twig.font
+	);
 };
 
 

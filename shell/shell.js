@@ -433,28 +433,48 @@ Shell.prototype.setMenu = function(menu)
 /*
 | Draws the dashboard and the space.
 */
-Shell.prototype._draw = function()
+Shell.prototype._draw = function( )
 {
 	var fabric = this.fabric;
 
-	fabric.reset();
+	fabric.reset( );
 
-	if (this.green)
+	if( this.green )
 	{
-		var ce = fabric.getCenter();
+		var ce = fabric.getCenter( );
 
-		fabric.fillRect('rgb(170, 255, 170)', 0, 0, fabric.width, fabric.height);
-
-		fabric.edge(
-			[ { border: 0, width: 1, color: 'black' } ],
-			this, 'sketchFrowny', Euclid.View.proper, ce.add(0, -100)
+		fabric.fillRect(
+			'rgb(170, 255, 170)',
+			0, 0,
+			fabric.width, fabric.height
 		);
 
-		fabric.setFont(fontPool.get(40, 'cm'));
-		fabric.fillText(this.green, ce);
+		fabric.edge(
+			[
+				{
+					border : 0,
+					width  : 1,
+					color  : 'black'
+				}
+			],
+			this,
+			'sketchFrowny',
+			Euclid.View.proper,
+			ce.add( 0, -100 )
+		);
 
-		fabric.setFont(fontPool.get(24, 'cm'));
-		fabric.fillText('Please refresh the page to reconnect.', ce.x, ce.y + 100);
+		fabric.fillText(
+			this.green,
+			ce,
+			fontPool.get( 40, 'cm' )
+		);
+
+		fabric.fillText(
+			'Please refresh the page to reconnect.',
+			ce.x,
+			ce.y + 100,
+			fontPool.get( 24, 'cm' )
+		);
 
 		return;
 	}
@@ -463,15 +483,15 @@ Shell.prototype._draw = function()
 	this.$caret.$save = null;
 	this.$caret.$screenPos = null;
 
-	if (this.$space)
-		{ this.$space.draw(); }
+	if( this.$space )
+		{ this.$space.draw( ); }
 
-	this.$board.draw();
+	this.$board.draw( );
 
-	if (this._$menu)
-		{ this._$menu.draw(Euclid.View.proper); }
+	if( this._$menu )
+		{ this._$menu.draw( Euclid.View.proper ); }
 
-	this.$caret.display();
+	this.$caret.display( );
 
 	this.redraw = false;
 };
@@ -480,7 +500,7 @@ Shell.prototype._draw = function()
 /*
 | A mouse click.
 */
-Shell.prototype.click = function(p, shift, ctrl)
+Shell.prototype.click = function( p, shift, ctrl )
 {
 	if( this.green )
 		{ return; }
@@ -488,17 +508,17 @@ Shell.prototype.click = function(p, shift, ctrl)
 	// FIXME board
 
 	if( this.$space )
-		{ this.$space.click(p, shift, ctrl); }
+		{ this.$space.click( p, shift, ctrl ); }
 
 	if( this.redraw )
-		{ this._draw(); }
+		{ this._draw( ); }
 };
 
 
 /*
 | User is hovering his/her point ( mouse move )
 */
-Shell.prototype.pointingHover = function(p, shift, ctrl)
+Shell.prototype.pointingHover = function( p, shift, ctrl )
 {
 	if( this.green )
 		{ return; }
@@ -534,7 +554,7 @@ Shell.prototype.pointingHover = function(p, shift, ctrl)
 	}
 
 	if( this.redraw )
-		{ this._draw(); }
+		{ this._draw( ); }
 
 	return cursor;
 };
@@ -553,7 +573,7 @@ Shell.prototype.greenscreen = function( message )
 
 	this.green = message;
 
-	this._draw();
+	this._draw( );
 };
 
 
@@ -571,17 +591,31 @@ Shell.prototype.pointingStart = function( p, shift, ctrl )
 
 	if( this._$menu )
 	{
-		pointingState = this._$menu.pointingStart( Euclid.View.proper, p, shift, ctrl );
+		pointingState =
+			this._$menu.pointingStart(
+				Euclid.View.proper,
+				p,
+				shift,
+				ctrl
+			);
 	}
 
 	if( pointingState === null )
 	{
-		pointingState = this.$board.pointingStart( p, shift, ctrl );
+		pointingState = this.$board.pointingStart(
+			p,
+			shift,
+			ctrl
+		);
 	}
 
 	if( pointingState === null && this.$space )
 	{
-		pointingState = this.$space.pointingStart( p, shift, ctrl );
+		pointingState = this.$space.pointingStart(
+			p,
+			shift,
+			ctrl
+		);
 	}
 
 	if( this.redraw )

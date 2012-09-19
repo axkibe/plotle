@@ -118,7 +118,7 @@ config.debug.puffed = true;
 | If true ensures that objects that should not be immutable
 | are made immutable. Turned off on releases for performance.
 */
-config.debug.immute = false;
+config.debug.immute = true;
 
 
 /*

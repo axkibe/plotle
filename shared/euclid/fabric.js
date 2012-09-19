@@ -316,9 +316,13 @@ Fabric.prototype.edge = function(style, shape, sketch, view, a1, a2, a3, a4)
 Fabric.prototype.fill = function(style, shape, sketch, view, a1, a2, a3, a4)
 {
 	var cx = this._cx;
+
+	this._$font = null;
+
 	this._begin(false);
 
 	shape[sketch](this, 0, false, view, a1, a2, a3, a4);
+
 	cx.fillStyle = this._colorStyle(style, shape);
 
 	if (this._twist !== 0)
@@ -331,12 +335,26 @@ Fabric.prototype.fill = function(style, shape, sketch, view, a1, a2, a3, a4)
 /*
 | Draws some text.
 */
-Fabric.prototype.fillText = function(text, a1, a2)
+Fabric.prototype.fillText = function(text, a1, a2, a3)
 {
-	if (typeof(a1) === 'object')
-		{ return this._cx.fillText(text, a1.x, a1.y); }
+	var x, y, font;
+
+	if( typeof( a1 ) === 'object' )
+	{
+		x    = a1.x;
+		y    = a1.y;
+		font = a2;
+	}
 	else
-		{ return this._cx.fillText(text, a1, a2); }
+	{
+		x    = a1;
+		y    = a2;
+		font = a3;
+	}
+
+	this._setFont( font );
+
+	this._cx.fillText(text, x, y);
 };
 
 
@@ -348,6 +366,9 @@ Fabric.prototype.fillText = function(text, a1, a2)
 Fabric.prototype.fillRect = function(style, a1, a2, a3, a4)
 {
 	var cx = this._cx;
+
+	this._$font = null;
+
 	cx.fillStyle = style;
 
 	if (typeof(a1) === 'object')
@@ -580,6 +601,7 @@ Fabric.prototype.paint = function(style, shape, sketch, view, a1, a2, a3, a4)
 	var fillStyle = style.fill;
 	var edgeStyle = style.edge;
 	var cx = this._cx;
+	this._$font = null;
 	this._begin(false);
 	shape[sketch](this, 0, false, view, a1, a2, a3, a4);
 
@@ -641,21 +663,27 @@ Fabric.prototype.scale = function(s)
 /*
 | Sets the font.
 */
-Fabric.prototype.setFont = function(f)
+Fabric.prototype._setFont = function( font )
 {
-	if (!Jools.is(f.fill))
-		{ throw new Error('fontstyle misses fill'); }
+	// already setted this font
+	if( this._$font === font )
+		{ return; }
 
-	if (!Jools.is(f.align))
-		{ throw new Error('fontstyle misses align'); }
+	if( !Jools.is( font.fill ) )
+		{ throw new Error( 'fontstyle misses fill' ); }
 
-	if (!Jools.is(f.base))  { throw new Error('fontstyle misses base');  }
+	if( !Jools.is( font.align ) )
+		{ throw new Error( 'fontstyle misses align' ); }
 
-	var cx = this._cx;
-	cx.font         = f.getCSS();
-	cx.fillStyle    = f.fill;
-	cx.textAlign    = f.align;
-	cx.textBaseline = f.base;
+	if( !Jools.is( font.base ) )
+		{ throw new Error('fontstyle misses base'); }
+
+	var cx          = this._cx;
+	cx.font         = font.getCSS( );
+	cx.fillStyle    = font.fill;
+	cx.textAlign    = font.align;
+	cx.textBaseline = font.base;
+	this._$font     = font;
 };
 
 
@@ -699,7 +727,7 @@ Fabric.prototype.withinSketch = function(shape, sketch, view, a1, a2, a3, a4, a5
 /*
 | Begins a sketch
 */
-Fabric.prototype._begin = function(twist)
+Fabric.prototype._begin = function( twist )
 {
 	// lines are targed at .5 coords.
 	this._twist = twist ? 0.5 : 0;
@@ -710,15 +738,15 @@ Fabric.prototype._begin = function(twist)
 /**
 | Returns a HTML5 color style for a meshcraft style notation.
 */
-Fabric.prototype._colorStyle = function(style, shape)
+Fabric.prototype._colorStyle = function( style, shape )
 {
-	if (style.substring)
+	if( style.substring )
 		{ return style; }
-	else if (!style.gradient)
-		{ throw new Error('unknown style'); }
+	else if( !style.gradient )
+		{ throw new Error( 'unknown style' ); }
 
 	var grad;
-	switch (style.gradient)
+	switch( style.gradient )
 	{
 		case 'askew' :
 			// FIXME use gradientPNW
@@ -765,20 +793,20 @@ Fabric.prototype._colorStyle = function(style, shape)
 | style: the style formated in meshcraft style notation.
 | shape: an object which has 'sketch'() defined
 */
-Fabric.prototype._edge = function(style, shape, sketch, view, a1, a2, a3, a4)
+Fabric.prototype._edge = function( style, shape, sketch, view, a1, a2, a3, a4 )
 {
 	var cx = this._cx;
-	this._begin(true);
+	this._begin( true );
 
-	shape[sketch](this, style.border, true, view, a1, a2, a3, a4);
-	cx.strokeStyle = this._colorStyle(style.color, shape);
+	shape[ sketch ]( this, style.border, true, view, a1, a2, a3, a4 );
+	cx.strokeStyle = this._colorStyle( style.color, shape );
 	cx.lineWidth = style.width;
 
-	if (this._twist !== 0.5)
-		{ throw new Error('wrong twist'); }
+	if( this._twist !== 0.5 )
+		{ throw new Error( 'wrong twist' ); }
 
-	cx.stroke();
+	cx.stroke( );
 };
 
 
-} ) ();
+})( );
