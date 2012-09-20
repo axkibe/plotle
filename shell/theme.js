@@ -477,7 +477,63 @@ theme =
 					color  : 'black'
 				}
 			]
-		}
+		},
+
+		checkbox :
+		{
+			fill : 'white',
+
+			edge :
+			[
+				{
+					border : 0,
+					width  : 1,
+					color  : 'black'
+				}
+			]
+		},
+
+		checkboxHover :
+		{
+			fill : 'white',
+
+			edge :
+			[
+				{
+					border : 0,
+					width  : 1,
+					color  : 'black'
+				}
+			]
+		},
+
+		checkboxFocus :
+		{
+			fill : 'white',
+
+			edge :
+			[
+				{
+					border : 0,
+					width  : 1,
+					color  : 'black'
+				}
+			]
+		},
+
+		checkboxHofoc :
+		{
+			fill : 'white',
+
+			edge :
+			[
+				{
+					border : 0,
+					width  : 1,
+					color  : 'black'
+				}
+			]
+		},
 	},
 
 

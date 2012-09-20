@@ -104,11 +104,14 @@ Panel.prototype.newControl = function( twig, inherit, name )
 
 	switch( twig.type )
 	{
+		case 'Button' :
+			return new Dash.Button( twig, this, inherit, name );
+
 		case 'Chat'   :
 			return new Dash.Chat( twig, this, inherit, name );
 
-		case 'Button' :
-			return new Dash.Button( twig, this, inherit, name );
+		case 'CheckBox' :
+			return new Dash.CheckBox( twig, this, inherit, name );
 
 		case 'Input' :
 			return new Dash.Input( twig, this, inherit, name );

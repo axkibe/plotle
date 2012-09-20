@@ -48,19 +48,19 @@ var theme;
 /*
 | Capsule
 */
-( function() {
+( function( ) {
 'use strict';
 
-if (typeof(window) === 'undefined')
-	{ throw new Error('this code needs a browser!'); }
+if( typeof( window ) === 'undefined' )
+	{ throw new Error( 'this code needs a browser!' ); }
 
 
 /*
 | Constructor.
 */
-var Button = Dash.Button = function(twig, panel, inherit, name)
+var Button = Dash.Button = function( twig, panel, inherit, name )
 {
-	if (twig.type !== 'Button')
+	if ( twig.type !== 'Button' )
 		{ throw new Error('invalid twig type'); }
 
 	this.name        = name;
@@ -68,17 +68,17 @@ var Button = Dash.Button = function(twig, panel, inherit, name)
 	this.panel       = panel;
 
 	var computePoint = Curve.computePoint;
-	var pnw          = this.pnw    = computePoint(twig.frame.pnw, panel.iframe);
-	var pse          = this.pse    = computePoint(twig.frame.pse, panel.iframe);
+	var pnw          = this.pnw    = computePoint( twig.frame.pnw, panel.iframe );
+	var pse          = this.pse    = computePoint( twig.frame.pse, panel.iframe );
 	var iframe       = this.iframe =
 		new Euclid.Rect(
 			Euclid.Point.zero,
-			pse.sub(pnw)
+			pse.sub( pnw )
 		);
 
-	this.curve        = new Curve(twig.curve, iframe);
-	this.captionPos   = computePoint(twig.caption.pos, iframe);
-	this.path         = new Path([panel.name, name]);
+	this.curve        = new Curve( twig.curve, iframe );
+	this.captionPos   = computePoint( twig.caption.pos, iframe );
+	this.path         = new Path( [ panel.name, name ] );
 
 	// if true repeats the push action if held down
 	this.repeating    = false;
@@ -134,10 +134,13 @@ Button.prototype._weave = function( accent )
 {
 	var fabric = this.$fabric;
 
-	if (fabric && this.$accent === accent && !config.debug.noCache)
+	if( fabric &&
+		this.$accent === accent &&
+		!config.debug.noCache
+	)
 		{ return fabric; }
 
-	fabric   = this.$fabric = new Euclid.Fabric(this.iframe);
+	fabric   = this.$fabric = new Euclid.Fabric( this.iframe );
 	var twig = this.twig;
 
 	var sname;
@@ -194,24 +197,6 @@ Button.prototype._weave = function( accent )
 
 
 /*
-| Input
-*/
-Button.prototype.input = function( text )
-{
-	return true;
-};
-
-
-/*
-| Input
-*/
-Button.prototype.specialKey = function( key, shift, ctrl )
-{
-	return true;
-};
-
-
-/*
 | Mouse hover.
 */
 Button.prototype.pointingHover = function( p )
@@ -236,6 +221,7 @@ Button.prototype.pointingHover = function( p )
 		{ return null; }
 
 	this.panel.setHover( this.name );
+
 	return 'default';
 };
 
@@ -256,7 +242,7 @@ Button.prototype.pointingStart = function( p, shift, ctrl )
 {
 	var self = this;
 
-	if(!this.$visible )
+	if( !this.$visible )
 		{ return; }
 
 	if( p.x < this.pnw.x ||
@@ -291,14 +277,14 @@ Button.prototype.pointingStart = function( p, shift, ctrl )
 
 		var repeatFunc;
 		repeatFunc =
-			function()
+			function( )
 			{
-				self.push(false, false);
-				self.$retimer = system.setTimer(theme.zoom.repeatTimer, repeatFunc);
-				shell.poke();
+				self.push( false, false );
+				self.$retimer = system.setTimer( theme.zoom.repeatTimer, repeatFunc );
+				shell.poke( );
 			};
 
-		this.$retimer = system.setTimer(theme.zoom.firstTimer, repeatFunc);
+		this.$retimer = system.setTimer( theme.zoom.firstTimer, repeatFunc );
 	}
 
 	this.push( shift, ctrl );
@@ -330,7 +316,7 @@ Button.prototype.specialKey = function( key )
 
 
 /*
-| Any normal keys for a buttons having focus triggers a push.
+| Any normal key for a button having focus triggers a push.
 */
 Button.prototype.input = function( text )
 {
@@ -357,7 +343,7 @@ Button.prototype.draw = function( fabric, accent )
 Button.prototype.poke = function( )
 {
 	this.$fabric = null;
-	this.panel.poke();
+	this.panel.poke( );
 };
 
 
@@ -383,13 +369,4 @@ Button.prototype.actionstop = function( )
 };
 
 
-
-/*
-| If a button has focus, it suggests no keyboard.
-*/
-Button.prototype.suggestingKeyboard = function( )
-{
-	return false;
-};
-
-} ) ();
+} )( );

@@ -41,7 +41,7 @@ var fontPool;
 /*
 | Capsule
 */
-(function() {
+(function( ) {
 'use strict';
 
 // 'magic' number to approximate ellipses with beziers
@@ -410,6 +410,26 @@ RegPanel.layout =
 					'5'
 				]
 			}
+		},
+
+		'newsletterCB' :
+		{
+			type       : 'CheckBox',
+			normaStyle : 'checkbox',
+			hoverStyle : 'checkboxHover',
+			focusStyle : 'checkboxFocus',
+			hofocStyle : 'checkboxHofoc',
+			caption    : {
+				type : 'Label',
+				text : 'newsletter',
+				font : fontPool.get( 16, 'la' ),
+				pos  : { type: 'Point', anchor: 'c', x:  0, y: 0 }
+			},
+			box : {
+				type : 'Frame',
+				pnw  : { type: 'Point', anchor: 's', x: -10, y: -40 },
+				pse  : { type: 'Point', anchor: 's', x:  10, y: -20 }
+			}
 		}
 	},
 
@@ -421,13 +441,13 @@ RegPanel.layout =
 		'pass2I',
 		'regB',
 		'closeB',
-		//'forgotB',
+		'newsletterCB',
 		'regL',
 		'userL',
 		'emailL',
 		'passL',
 		'pass2L',
-		'errL'
+		'errL',
 	]
 };
 

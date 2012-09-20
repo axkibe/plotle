@@ -46,6 +46,7 @@ if (typeof(window) === 'undefined') { throw new Error('this code needs a browser
 */
 var styles = {
 	boxes       : theme.dash.boxes,
+	checkbox    : theme.dash.checkbox,
 	panel       : theme.dash.panel,
 	help        : theme.dash.help,
 	button      : theme.dash.button,

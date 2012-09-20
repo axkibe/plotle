@@ -16,7 +16,7 @@
                   `'    `-^ `' `' `-' '   ' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- dashboard design patterns.
+ Dashboard design patterns.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -49,46 +49,6 @@ var Euclid;
 */
 Design.Pattern =
 {
-	'Design' :
-	{
-		must :
-		{
-			'frame'  : 'Frame',
-			'curve'  : 'Curve',
-			'style'  : 'String',
-			'layout' : 'Layout'
-		}
-	},
-
-	'Frame' :
-	{
-		must :
-		{
-			pnw : 'Point',
-			pse : 'Point'
-		}
-	},
-
-	'MoveTo' :
-	{
-		must :
-		{
-			to : 'Point',
-			bx : 'Number',
-			by : 'Number'
-		}
-	},
-
-	'LineTo' :
-	{
-		must :
-		{
-			to : 'Point',
-			bx : 'Number',
-			by : 'Number'
-		}
-	},
-
 	'BeziTo' :
 	{
 		must :
@@ -104,58 +64,62 @@ Design.Pattern =
 		}
 	},
 
-	'Curve'   :
-	{
-		copse :
-		{
-			'MoveTo' : true,
-			'LineTo' : true,
-			'BeziTo' : true
-		}
-	},
-
 	'Button' :
 	{
 		must :
 		{
-			'caption'    : 'Label',
-			'code'       : 'String',
-			'curve'      : 'Curve',
-			'frame'      : 'Frame',
-			'normaStyle' : 'String',
-			'hoverStyle' : 'String',
-			'focusStyle' : 'String',
-			'hofocStyle' : 'String'
+			caption    : 'Label',
+			code       : 'String',
+			curve      : 'Curve',
+			frame      : 'Frame',
+			normaStyle : 'String',
+			hoverStyle : 'String',
+			focusStyle : 'String',
+			hofocStyle : 'String'
 		}
 	},
 
-	'Input' :
+	'Chat'  :
 	{
 		must :
 		{
-			'code'       : 'String',
-			'frame'      : 'Frame',
-			'password'   : 'Boolean',
-			'normaStyle' : 'String',
-			'hoverStyle' : 'String',
-			'focusStyle' : 'String',
-			'hofocStyle' : 'String',
-			'font'       : 'Font',
-			'maxlen'     : 'Number'
+			frame : 'Frame',
+			font  : 'Font'
 		}
 	},
 
-	'Layout' :
+	'CheckBox' :
+	{
+		must :
+		{
+			caption    : 'Label',
+			box        : 'Frame',
+			normaStyle : 'String',
+			hoverStyle : 'String',
+			focusStyle : 'String',
+			hofocStyle : 'String'
+		}
+	},
+
+	'Curve'   :
 	{
 		copse :
 		{
-			'Chat'       : true,
-			'Button'     : true,
-			'Input'      : true,
-			'Label'      : true
-		},
+			MoveTo : true,
+			LineTo : true,
+			BeziTo : true
+		}
+	},
 
-		ranks : true
+	'Design' :
+	{
+		must :
+		{
+			frame  : 'Frame',
+			curve  : 'Curve',
+			style  : 'String',
+			layout : 'Layout'
+		}
 	},
 
 	'Font' :
@@ -168,20 +132,36 @@ Design.Pattern =
 
 		must :
 		{
-			'size'   : 'Number',
-			'family' : 'String',
-			'align'  : 'String',
-			'fill'   : 'String',
-			'base'   : 'String'
+			size   : 'Number',
+			family : 'String',
+			align  : 'String',
+			fill   : 'String',
+			base   : 'String'
 		}
 	},
 
-	'Chat'  :
+	'Frame' :
 	{
 		must :
 		{
-			'frame' : 'Frame',
-			'font'  : 'Font'
+			pnw : 'Point',
+			pse : 'Point'
+		}
+	},
+
+	'Input' :
+	{
+		must :
+		{
+			code       : 'String',
+			frame      : 'Frame',
+			password   : 'Boolean',
+			normaStyle : 'String',
+			hoverStyle : 'String',
+			focusStyle : 'String',
+			hofocStyle : 'String',
+			font       : 'Font',
+			maxlen     : 'Number'
 		}
 	},
 
@@ -189,9 +169,43 @@ Design.Pattern =
 	{
 		must :
 		{
-			'text' : 'String',
-			'pos'  : 'Point',
-			'font' : 'Font'
+			text : 'String',
+			pos  : 'Point',
+			font : 'Font'
+		}
+	},
+
+	'Layout' :
+	{
+		copse :
+		{
+			Button     : true,
+			Chat       : true,
+			CheckBox   : true,
+			Input      : true,
+			Label      : true
+		},
+
+		ranks : true
+	},
+
+	'LineTo' :
+	{
+		must :
+		{
+			to : 'Point',
+			bx : 'Number',
+			by : 'Number'
+		}
+	},
+
+	'MoveTo' :
+	{
+		must :
+		{
+			to : 'Point',
+			bx : 'Number',
+			by : 'Number'
 		}
 	},
 
@@ -199,12 +213,12 @@ Design.Pattern =
 	{
 		must :
 		{
-			'anchor' : 'String',
-			'x'      : 'Number',
-			'y'      : 'Number'
+			anchor : 'String',
+			x      : 'Number',
+			y      : 'Number'
 		}
 	}
 };
 
-} ) ();
+} )( );
 

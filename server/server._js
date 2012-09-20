@@ -464,6 +464,7 @@ Server.prototype.prepareResources = function(_)
 		'shell/dash/input.js',                             'fb',
 		'shell/dash/label.js',                             'fb',
 		'shell/dash/chat.js',                              'fb',
+		'shell/dash/checkbox.js',                          'fb',
 		'shell/dash/panel.js',                             'fb',
 		'shell/proc/util.js',                              'fb',
 		'shell/proc/mainpanel.js',                         'fb',
