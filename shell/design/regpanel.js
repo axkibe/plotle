@@ -419,17 +419,11 @@ RegPanel.layout =
 			hoverStyle : 'checkboxHover',
 			focusStyle : 'checkboxFocus',
 			hofocStyle : 'checkboxHofoc',
-			caption    : {
-				type : 'Label',
-				text : 'newsletter',
-				font : fontPool.get( 16, 'la' ),
-				pos  : { type: 'Point', anchor: 'c', x:  0, y: 0 }
-			},
 			box : {
 				type : 'Frame',
-				pnw  : { type: 'Point', anchor: 's', x: -10, y: -40 },
-				pse  : { type: 'Point', anchor: 's', x:  10, y: -20 }
-			}
+				pnw  : { type: 'Point', anchor: 's', x: -126, y: -72 },
+				pse  : { type: 'Point', anchor: 's', x: -110, y: -56 }
+			},
 		}
 	},
 
@@ -439,9 +433,9 @@ RegPanel.layout =
 		'emailI',
 		'passI',
 		'pass2I',
+		'newsletterCB',
 		'regB',
 		'closeB',
-		'newsletterCB',
 		'regL',
 		'userL',
 		'emailL',

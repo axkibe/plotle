@@ -48,14 +48,14 @@ var Euclid;
 /*
 | Node imports
 */
-if (typeof(window) === 'undefined')
+if( typeof( window ) === 'undefined' )
 {
 	Euclid = {
-		Point  : require('./point'),
-		Margin : require('./margin')
+		Point  : require( './point'  ),
+		Margin : require( './margin' )
 	};
 
-	Jools  = require('../jools');
+	Jools  = require( '../jools' );
 }
 
 
@@ -76,21 +76,21 @@ var Rect = Euclid.Rect = function(pnw, pse, key)
 
 	this.pnw = pnw;
 	this.pse = pse;
-	Jools.innumerable(this, 'width',  pse.x - pnw.x);
-	Jools.innumerable(this, 'height', pse.y - pnw.y);
+	Jools.innumerable( this, 'width',  pse.x - pnw.x );
+	Jools.innumerable( this, 'height', pse.y - pnw.y );
 	this.type = 'Rect';
 
-	Jools.immute(this);
+	Jools.immute( this );
 };
 
 
 /*
 | Returns a rectangle thats reduced on every side by a margin object
 */
-Rect.prototype.reduce = function(margin)
+Rect.prototype.reduce = function( margin )
 {
-	if (margin.constructor !== Euclid.Margin)
-		{ throw new Error('margin of wrong type'); }
+	if( margin.constructor !== Euclid.Margin )
+		{ throw new Error( 'margin of wrong type' ); }
 
 	// allows margins to reduce the rect to zero size without erroring.
 
@@ -115,7 +115,7 @@ Rect.prototype.reduce = function(margin)
 /*
 | point in the center
 */
-Jools.lazyFixate(Rect.prototype, 'pc',
+Jools.lazyFixate( Rect.prototype, 'pc',
 	function( )
 	{
 		return new Euclid.Point(
@@ -129,7 +129,7 @@ Jools.lazyFixate(Rect.prototype, 'pc',
 /*
 | point in the north
 */
-Jools.lazyFixate(Rect.prototype, 'pn',
+Jools.lazyFixate( Rect.prototype, 'pn',
 	function( )
 	{
 		return new Euclid.Point(
@@ -143,7 +143,7 @@ Jools.lazyFixate(Rect.prototype, 'pn',
 /*
 | west point
 */
-Jools.lazyFixate(Rect.prototype, 'w',
+Jools.lazyFixate( Rect.prototype, 'w',
 	function( )
 	{
 		return new Euclid.Point(
@@ -157,8 +157,10 @@ Jools.lazyFixate(Rect.prototype, 'w',
 /*
 | east point
 */
-Jools.lazyFixate(Rect.prototype, 'e',
-	function()
+Jools.lazyFixate(
+	Rect.prototype,
+	'e',
+	function( )
 	{
 		return new Euclid.Point(
 			this.pse.x,
@@ -171,10 +173,10 @@ Jools.lazyFixate(Rect.prototype, 'e',
 /*
 | returns a rect moved by a point or x/y
 |
-| add(point)   -or-
-| add(x, y)
+| add( point )   -or-
+| add( x, y  )
 */
-Rect.prototype.add = function(a1, a2)
+Rect.prototype.add = function( a1, a2 )
 {
 	return new this.constructor(
 		this.pnw.add( a1, a2 ),
@@ -377,4 +379,4 @@ if( typeof( window ) === 'undefined' )
 	module.exports = Rect;
 }
 
-} ) ( );
+} )( );

@@ -92,7 +92,6 @@ Design.Pattern =
 	{
 		must :
 		{
-			caption    : 'Label',
 			box        : 'Frame',
 			normaStyle : 'String',
 			hoverStyle : 'String',

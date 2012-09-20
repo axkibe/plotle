@@ -126,6 +126,15 @@ FontPool.styles =
 		base   : 'alphabetic'
 	},
 
+	lm         :
+	{
+		type   : 'Font',
+		family : '(default)',
+		fill   : 'black',
+		align  : 'start',
+		base   : 'middle'
+	},
+
 	lar        :
 	{
 		type   : 'Font',

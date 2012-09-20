@@ -486,6 +486,11 @@ theme =
 			edge :
 			[
 				{
+					border : 1,
+					width  : 1.5,
+					color  : 'rgb(255, 188, 87)'
+				},
+				{
 					border : 0,
 					width  : 1,
 					color  : 'black'
@@ -500,9 +505,14 @@ theme =
 			edge :
 			[
 				{
+					border : 1,
+					width  : 2,
+					color  : 'rgb(255, 188, 87)'
+				},
+				{
 					border : 0,
 					width  : 1,
-					color  : 'black'
+					color  : 'rgb(128, 128, 0)'
 				}
 			]
 		},
@@ -513,6 +523,11 @@ theme =
 
 			edge :
 			[
+				{
+					border : 1,
+					width  : 2,
+					color  : 'rgb(255, 99, 188)'
+				},
 				{
 					border : 0,
 					width  : 1,
@@ -533,6 +548,12 @@ theme =
 					color  : 'black'
 				}
 			]
+		},
+
+		checkboxCheck :
+		{
+			fill : 'black',
+			edge : [ ]
 		},
 	},
 
