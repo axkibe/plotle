@@ -50,6 +50,7 @@ var theme;
 ( function( ) {
 'use strict';
 
+
 if ( typeof( window ) === 'undefined' )
 	{ throw new Error('this code needs a browser!'); }
 
@@ -70,7 +71,8 @@ Jools.subclass( Note, Visual.DocItem );
 /*
 | Default margin for all notes.
 */
-Note.prototype.innerMargin = new Euclid.Margin(theme.note.innerMargin);
+Note.prototype.innerMargin =
+	new Euclid.Margin( theme.note.innerMargin );
 
 
 /*
@@ -265,8 +267,8 @@ Note.prototype.draw = function( fabric, view )
 	)
 	{
 		f = this.$fabric = new Euclid.Fabric(
-			vzone.width,
-			vzone.height
+			vzone.width  + 2,
+			vzone.height + 2
 		);
 
 		var doc     = this.$sub.doc;
@@ -276,12 +278,13 @@ Note.prototype.draw = function( fabric, view )
 		var height = doc.getHeight();
 		sbary.visible = height > zone.height - imargin.y;
 
-		var silhoutte = this.getZeroSilhoutte( vzone );
+		var silhoutte = this.getZeroSilhoutte( zone );
+
 		f.fill(
 			theme.note.style.fill,
 			silhoutte,
 			'sketch',
-			Euclid.View.proper
+			view.home( )
 		);
 
 		// draws selection and text
@@ -304,7 +307,7 @@ Note.prototype.draw = function( fabric, view )
 			theme.note.style.edge,
 			silhoutte,
 			'sketch',
-			Euclid.View.proper
+			view.home( )
 		);
 	}
 
@@ -313,7 +316,7 @@ Note.prototype.draw = function( fabric, view )
 	if( sbary.visible )
 	{
 		this.setScrollbar( );
-		sbary.draw(fabric, view);
+		sbary.draw( fabric, view );
 	}
 };
 

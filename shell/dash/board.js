@@ -57,8 +57,7 @@ if (typeof(window) === 'undefined')
 var Board = Dash.Board = function()
 {
 	this.fabric       = system.fabric;
-	//this.curPanelName = 'MainPanel'; TODO
-	this.curPanelName = 'RegPanel';
+	this.curPanelName = 'MainPanel';
 
 	this.panels =
 		{

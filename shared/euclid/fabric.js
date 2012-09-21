@@ -313,22 +313,45 @@ Fabric.prototype.edge = function(style, shape, sketch, view, a1, a2, a3, a4)
 | style: the style formated in meshcraft style notation.
 | shape: an object which has 'sketch'() defined
 */
-Fabric.prototype.fill = function(style, shape, sketch, view, a1, a2, a3, a4)
+Fabric.prototype.fill =
+	function(
+		style,
+		shape,
+		sketch,
+		view,
+		a1,
+		a2,
+		a3,
+		a4
+	)
 {
 	var cx = this._cx;
 
 	this._$font = null;
 
-	this._begin(false);
+	this._begin( false );
 
-	shape[sketch](this, 0, false, view, a1, a2, a3, a4);
+	shape[ sketch ](
+		this,
+		0,
+		false,
+		view,
+		a1,
+		a2,
+		a3,
+		a4
+	);
 
-	cx.fillStyle = this._colorStyle(style, shape);
+	cx.fillStyle = this._colorStyle(
+		style,
+		shape,
+		view
+	);
 
-	if (this._twist !== 0)
-		{ throw new Error('wrong twist'); }
+	if( this._twist !== 0 )
+		{ throw new Error( 'wrong twist' ); }
 
-	cx.fill();
+	cx.fill( );
 };
 
 
@@ -596,29 +619,78 @@ Fabric.prototype.reset = function(a1, a2)
 /*
 | Fills an aera and draws its borders
 */
-Fabric.prototype.paint = function(style, shape, sketch, view, a1, a2, a3, a4)
+Fabric.prototype.paint =
+	function(
+		style,
+		shape,
+		sketch,
+		view,
+		a1,
+		a2,
+		a3,
+		a4
+	)
 {
 	var fillStyle = style.fill;
 	var edgeStyle = style.edge;
-	var cx = this._cx;
-	this._$font = null;
-	this._begin(false);
-	shape[sketch](this, 0, false, view, a1, a2, a3, a4);
 
-	if (Jools.isnon(style.fill))
+	var cx = this._cx;
+
+	// resets the font since the canvas context
+	// is going to be reconfigured
+	this._$font = null;
+
+	this._begin( false );
+	shape[ sketch ](
+		this,
+		0,
+		false,
+		view,
+		a1,
+		a2,
+		a3,
+		a4
+	);
+
+	if( Jools.isnon( style.fill ) )
 	{
-		cx.fillStyle = this._colorStyle(fillStyle, shape);
-		cx.fill();
+		cx.fillStyle = this._colorStyle(
+			fillStyle,
+			shape,
+			view
+		);
+
+		cx.fill( );
 	}
 
-	if (Jools.isArray(edgeStyle))
+	if( Jools.isArray( edgeStyle ) )
 	{
 		for(var i = 0; i < edgeStyle.length; i++)
-			{ this._edge(edgeStyle[i], shape, sketch, view, a1, a2, a3, a4); }
+		{
+			this._edge(
+				edgeStyle[ i ],
+				shape,
+				sketch,
+				view,
+				a1,
+				a2,
+				a3,
+				a4
+			);
+		}
 	}
 	else
 	{
-		this._edge(edgeStyle, shape, sketch, view, a1, a2, a3, a4);
+		this._edge(
+			edgeStyle,
+			shape,
+			sketch,
+			view,
+			a1,
+			a2,
+			a3,
+			a4
+		);
 	}
 };
 
@@ -738,7 +810,12 @@ Fabric.prototype._begin = function( twist )
 /**
 | Returns a HTML5 color style for a meshcraft style notation.
 */
-Fabric.prototype._colorStyle = function( style, shape )
+Fabric.prototype._colorStyle =
+	function(
+		style,
+		shape,
+		view
+	)
 {
 	if( style.substring )
 		{ return style; }
@@ -750,29 +827,54 @@ Fabric.prototype._colorStyle = function( style, shape )
 	{
 		case 'askew' :
 			// FIXME use gradientPNW
-			if (!shape.pnw || !shape.pse)
-				{ throw new Error(style.gradient+' gradiend misses pnw/pse'); }
+			if( !shape.pnw || !shape.pse )
+			{
+				throw new Error(
+					style.gradient + 'gradiend misses pnw/pse'
+				);
+			}
+
 			grad = this._cx.createLinearGradient(
-				shape.pnw.x, shape.pnw.y,
-				shape.pnw.x + shape.width / 10, shape.pse.y);
+				view.x( shape.pnw ),
+				view.y( shape.pnw ),
+				view.x( shape.pnw ) + view.distance( shape.width / 10 ),
+				view.y( shape.pse )
+			);
 			break;
 
 		case 'horizontal' :
 			// FIXME use gradientPNW
-			if (!shape.pnw || !shape.pse)
-				{ throw new Error(style.gradient+' gradient misses pnw/pse'); }
+			if( !shape.pnw || !shape.pse )
+			{
+				throw new Error(
+					style.gradient + 'gradient misses pnw/pse'
+				);
+			}
+
 			grad = this._cx.createLinearGradient(
-				0, shape.pnw.y,
-				0, shape.pse.y);
+				0,
+				shape.pnw.y,
+				0,
+				shape.pse.y);
 			break;
 
 		case 'radial' :
-			if (!shape.gradientPC || !shape.gradientR1)
-				{ throw new Error(style.gradient+' gradient misses gradient[PC|R0|R1]'); }
+			if( !shape.gradientPC || !shape.gradientR1 )
+			{
+				throw new Error(
+					style.gradient + 'gradient misses gradient[PC|R0|R1]'
+				);
+			}
+
 			var ro = shape.gradientR0 || 0;
 			grad = this._cx.createRadialGradient(
-				shape.gradientPC.x, shape.gradientPC.y, ro,
-				shape.gradientPC.x, shape.gradientPC.y, shape.gradientR1);
+				shape.gradientPC.x,
+				shape.gradientPC.y,
+				ro,
+				shape.gradientPC.x,
+				shape.gradientPC.y,
+				shape.gradientR1
+			);
 			break;
 
 		default :
@@ -798,8 +900,23 @@ Fabric.prototype._edge = function( style, shape, sketch, view, a1, a2, a3, a4 )
 	var cx = this._cx;
 	this._begin( true );
 
-	shape[ sketch ]( this, style.border, true, view, a1, a2, a3, a4 );
-	cx.strokeStyle = this._colorStyle( style.color, shape );
+	shape[ sketch ](
+		this,
+		style.border,
+		true,
+		view,
+		a1,
+		a2,
+		a3,
+		a4
+	);
+
+	cx.strokeStyle = this._colorStyle(
+		style.color,
+		shape,
+		view
+	);
+
 	cx.lineWidth = style.width;
 
 	if( this._twist !== 0.5 )

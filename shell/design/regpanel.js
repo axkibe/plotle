@@ -436,7 +436,7 @@ RegPanel.layout =
 			}
 		},
 
-		'newsletterCB' :
+		'newsCB' :
 		{
 			type       : 'CheckBox',
 
@@ -472,7 +472,7 @@ RegPanel.layout =
 		'emailI',
 		'passI',
 		'pass2I',
-		'newsletterCB',
+		'newsCB',
 		'regB',
 		'closeB',
 		'regL',
