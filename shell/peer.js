@@ -143,9 +143,22 @@ Peer.prototype.sendMessage = function(message)
 /*
 | registers a new user.
 */
-Peer.prototype.register = function(user, mail, passhash, callback)
+Peer.prototype.register =
+	function(
+		user,
+		mail,
+		passhash,
+		newsletter,
+		callback
+	)
 {
-	this._iface.register(user, mail, passhash, callback);
+	this._iface.register(
+		user,
+		mail,
+		passhash,
+		newsletter,
+		callback
+	);
 };
 
 

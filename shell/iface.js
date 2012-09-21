@@ -201,12 +201,19 @@ IFace.prototype.auth = function(user, passhash, callback)
 /*
 | Registers a user.
 */
-IFace.prototype.register = function(user, mail, passhash, callback)
+IFace.prototype.register =
+	function(
+		user,
+		mail,
+		passhash,
+		news,
+		callback
+	)
 {
 	var self = this;
 
-    if (self.$regActive)
-		{ throw new Error('Auth already active'); }
+    if( self.$regActive )
+		{ throw new Error( 'Auth already active' ); }
 
 	self.$regActive = true;
 
@@ -215,12 +222,13 @@ IFace.prototype.register = function(user, mail, passhash, callback)
             cmd      : 'register',
             user     : user,
 			mail     : mail,
-			passhash : passhash
+			passhash : passhash,
+			news     : news
 		},
-		function(asw)
+		function( asw )
 		{
 			self.$regActive = false;
-			callback(asw);
+			callback( asw );
 		}
 	);
 };

@@ -197,6 +197,7 @@ Util.prototype.register = function( panel )
 	var email  = panSub.emailI.getValue( );
 	var pass   = panSub.passI. getValue( );
 	var pass2  = panSub.pass2I.getValue( );
+	var newsl  = panSub.newsCB.getValue( );
 
 	if( user.length < 4 )
 	{
@@ -258,6 +259,7 @@ Util.prototype.register = function( panel )
 		user,
 		email,
 		passhash,
+		newsl,
 		function(res)
 		{
 			if( !res.ok )
@@ -310,9 +312,13 @@ Util.prototype.clearRegister = function( panel )
 	panSub.emailI.setValue( '' );
 	panSub.passI. setValue( '' );
 	panSub.pass2I.setValue( '' );
+	panSub.newsCB.setValue( true );
 };
 
 
+/*
+| Singleton
+*/
 Proc.util = new Util();
 
 

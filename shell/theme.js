@@ -554,7 +554,7 @@ theme =
 		{
 			fill : 'black',
 			edge : [ ]
-		},
+		}
 	},
 
 

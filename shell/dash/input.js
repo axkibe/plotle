@@ -341,7 +341,9 @@ Input.prototype.positionCaret = function( view )
 | Returns the current value (text in the box)
 */
 Input.prototype.getValue = function()
-	{ return this._$value; };
+{
+	return this._$value;
+};
 
 
 /*

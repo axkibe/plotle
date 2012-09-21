@@ -802,51 +802,61 @@ Server.prototype.cmdAuth = function(cmd, _)
 	};
 };
 
-/**
-| Executes an register command.
+
+/*
+| Executes a register command.
 */
-Server.prototype.cmdRegister = function(cmd, _)
+Server.prototype.cmdRegister = function( cmd, _)
 {
 	var username = cmd.user;
 	var passhash = cmd.passhash;
 	var mail     = cmd.mail;
+	var news     = cmd.news;
 
-	if (!is(username))
-		{ return reject('user missing'); }
+	if( !is( username ) )
+		{ return reject( 'user missing' ); }
 
-	if (!is(passhash))
-		{ return reject('passhash missing'); }
+	if( !is( passhash ) )
+		{ return reject( 'passhash missing' ); }
 
-	if (!is(mail))
-		{ return reject('mail missing'); }
+	if( !is( mail ) )
+		{ return reject( 'mail missing' ); }
 
-	if (username.substr(0, 7) === 'visitor')
-		{ return reject('Username must not start with "visitor"'); }
+	if( !is( news ) )
+		{ return reject( 'news missing' ); }
 
-	if (username.length < 4)
-		{ throw reject('Username too short, min. 4 characters'); }
+	if( typeof( news ) !== 'boolean' )
+		{ return reject( 'news not a boolean' ); }
 
-	var user = this.$db.users.findOne({ _id : username}, _);
+	if( username.substr( 0, 7 ) === 'visitor' )
+		{ return reject( 'Username must not start with "visitor"' ); }
 
-	if (user !== null) { return reject('Username already taken'); }
+	if( username.length < 4 )
+		{ throw reject( 'Username too short, min. 4 characters' ); }
+
+	var user = this.$db.users.findOne( { _id : username }, _);
+
+	if( user !== null )
+		{ return reject( 'Username already taken' ); }
 
 	user = {
 		_id  : username,
 		pass : passhash,
-		mail : mail
+		mail : mail,
+		news : news
 	};
 
-	this.$db.users.insert(user, _);
-	this.$users[username] = user;
+	this.$db.users.insert( user, _);
+	this.$users[ username ] = user;
 
 	// creates the user's home space
 	var spacename = username + ':home';
 
-	this.$spaces[spacename] =
+	this.$spaces[ spacename ] =
 		{
-			$changesDB : this.$db.connection.collection('changes:' + spacename, _),
-			$changes   : [],
-			$tree      : new Tree({ type : 'Space' }, Meshverse),
+			$changesDB : this.$db.connection.collection( 'changes:' + spacename, _),
+			$changes   : [ ],
+			$tree      : new Tree( { type : 'Space' }, Meshverse ),
 			$seqZ      : 1
 		};
 
@@ -882,7 +892,7 @@ Server.prototype.refreshPresence = function( user, spacename )
 
 	if( !pus )
 	{
-		pus = pu.spaces[spacename] =
+		pus = pu.spaces[ spacename ] =
 			{
 				establish : 0,
 				timerID : null
@@ -904,13 +914,19 @@ Server.prototype.refreshPresence = function( user, spacename )
 	}
 	else if( pus.references <= 0 )
 	{
-		if (pus.timerID !== null)
+		if( pus.timerID !== null )
 		{
-			clearTimeout(pus.timerID);
+			clearTimeout( pus.timerID );
 			pus.timerID = null;
 		}
 
-		pus.timerID = setTimeout( this.expirePresence, 5000, this, user, spacename );
+		pus.timerID = setTimeout(
+			this.expirePresence,
+			5000,
+			this,
+			user,
+			spacename
+		);
 	}
 };
 
@@ -918,10 +934,15 @@ Server.prototype.refreshPresence = function( user, spacename )
 /*
 | Establishes a longer user presence for an update that goes into sleep
 */
-Server.prototype.establishPresence = function(user, spacename, sleepID)
+Server.prototype.establishPresence =
+	function(
+		user,
+		spacename,
+		sleepID
+	)
 {
 	var pres = this.$presences;
-	var pu = pres[user];
+	var pu = pres[ user ];
 
 	if( !pu )
 		{ pu = pres[user] = { spaces : { } }; }

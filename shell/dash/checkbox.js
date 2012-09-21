@@ -75,10 +75,33 @@ var CheckBox = Dash.CheckBox = function( twig, panel, inherit, name )
 
 	this.path         = new Path( [ panel.name, name ] );
 
-	this.$checked     = inherit ? inherit.$checked : false;
-	this.$fabric      = null;
+	this._$checked     = inherit ? inherit._$checked : true;
+	//this.$fabric      = null;
 	this.$visible     = inherit ? inherit.$visible : true;
 	this.$accent      = Dash.Accent.NORMAL;
+};
+
+
+/*
+| Returns the current value (text in the box)
+*/
+CheckBox.prototype.getValue = function()
+{
+	return this._$checked;
+};
+
+
+/*
+| Returns the current value (text in the box)
+*/
+CheckBox.prototype.setValue = function( value )
+{
+	if( typeof( value ) !== 'boolean' )
+		{ throw new Error( 'Checkbox value not boolean: ' + value ); }
+
+	this._$checked = value;
+	this.poke();
+	return value;
 };
 
 
@@ -112,33 +135,7 @@ CheckBox.prototype.grepFocus = function( )
 */
 CheckBox.prototype.pointingHover = function( p )
 {
-	if( !this.$visible )
-		{ return null; }
-
 	return null;
-
-	/* TODO
-
-	if( p === null )
-		{ return null; }
-
-	if( p.x < this.pnw.x ||
-		p.y < this.pnw.y ||
-		p.x > this.pse.x ||
-		p.y > this.pse.y
-	)
-		{ return null; }
-
-	var fabric = this._weave( Dash.Accent.NORMA );
-	var pp = p.sub( this.pnw );
-
-	if( !fabric.withinSketch(this, 'sketch', Euclid.View.proper, pp ) )
-		{ return null; }
-
-	this.panel.setHover( this.name );
-
-	return 'default';
-	*/
 };
 
 
@@ -151,12 +148,12 @@ CheckBox.prototype.sketchCheck = function( fabric, border, twist )
 	var pcx = pc.x;
 	var pcy = pc.y;
 
-	fabric.moveTo( pcx -  6, pcy -  2 );
-	fabric.lineTo( pcx +  1, pcy +  6 );
-	fabric.lineTo( pcx + 13, pcy - 11 );
-	fabric.lineTo( pcx +  1, pcy      );
-	fabric.lineTo( pcx -  6, pcy -  2 );
-}
+	fabric.moveTo( pcx -  5, pcy -  3 );
+	fabric.lineTo( pcx +  2, pcy +  5 );
+	fabric.lineTo( pcx + 14, pcy - 12 );
+	fabric.lineTo( pcx +  2, pcy -  1 );
+	fabric.lineTo( pcx -  5, pcy -  3 );
+};
 
 
 /*
@@ -180,6 +177,8 @@ CheckBox.prototype.pointingStart = function( p, shift, ctrl )
 
 	if( this.box.within( Euclid.View.proper, p ) )
 	{
+		this._$checked = !this._$checked;
+		this.poke();
 		return false;
 	}
 	else
@@ -205,8 +204,8 @@ CheckBox.prototype.specialKey = function( key )
 			return;
 
 		case 'enter' :
-			// TODO
-			//this.change( false );
+			this._$checked = !this._$checked;
+			this.poke();
 			return;
 	}
 };
@@ -217,8 +216,8 @@ CheckBox.prototype.specialKey = function( key )
 */
 CheckBox.prototype.input = function( text )
 {
-	//TODO
-	//this.push( false, false );
+	this._$checked = !this._$checked;
+	this.poke();
 	return true;
 };
 
@@ -263,12 +262,14 @@ CheckBox.prototype.draw = function( fabric, accent )
 
 	fabric.paint( style, this.box, 'sketch', Euclid.View.proper );
 
-	fabric.paint(
-		Dash.getStyle( 'checkboxCheck' ),
-		this,
-		'sketchCheck',
-		Euclid.View.proper
-	);
+	if( this._$checked ) {
+		fabric.paint(
+			Dash.getStyle( 'checkboxCheck' ),
+			this,
+			'sketchCheck',
+			Euclid.View.proper
+		);
+	}
 
 	if( config.debug.drawBoxes )
 	{
@@ -292,7 +293,7 @@ CheckBox.prototype.draw = function( fabric, accent )
 */
 CheckBox.prototype.poke = function( )
 {
-	this.$fabric = null;
+	//this.$fabric = null;
 	this.panel.poke( );
 };
 
@@ -302,7 +303,7 @@ CheckBox.prototype.poke = function( )
 */
 CheckBox.prototype.knock = function( )
 {
-	this.$fabric = null;
+	//this.$fabric = null;
 };
 
 

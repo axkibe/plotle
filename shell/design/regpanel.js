@@ -173,6 +173,30 @@ RegPanel.layout =
 			pos     : { type: 'Point', anchor: 's', x: -155, y:  -100 }
 		},
 
+		'newsL'    :
+		{
+			type    : 'Label',
+			text    : 'newsletter',
+			font    : fontPool.get( 16, 'ra' ),
+			pos     : { type: 'Point', anchor: 's', x: -155, y:  -60 }
+		},
+
+		'news2L'    :
+		{
+			type    : 'Label',
+			text    : 'Updates and News',
+			font    : fontPool.get( 12, 'la' ),
+			pos     : { type: 'Point', anchor: 's', x: -100, y:  -60 }
+		},
+
+		'news3L'    :
+		{
+			type    : 'Label',
+			text    : 'It\'s never more than a single email a month. Promised!',
+			font    : fontPool.get( 12, 'la' ),
+			pos     : { type: 'Point', anchor: 's', x: -100, y:  -40 }
+		},
+
 		'errL'      :
 		{
 			type    : 'Label',
@@ -415,15 +439,30 @@ RegPanel.layout =
 		'newsletterCB' :
 		{
 			type       : 'CheckBox',
+
 			normaStyle : 'checkbox',
 			hoverStyle : 'checkboxHover',
 			focusStyle : 'checkboxFocus',
 			hofocStyle : 'checkboxHofoc',
+
 			box : {
 				type : 'Frame',
-				pnw  : { type: 'Point', anchor: 's', x: -126, y: -72 },
-				pse  : { type: 'Point', anchor: 's', x: -110, y: -56 }
-			},
+
+				pnw  : {
+					type: 'Point',
+					anchor: 's',
+					x: -131,
+					y: -72
+				},
+
+				pse  :
+				{
+					type: 'Point',
+					anchor: 's',
+					x: -115,
+					y: -56
+				}
+			}
 		}
 	},
 
@@ -441,7 +480,10 @@ RegPanel.layout =
 		'emailL',
 		'passL',
 		'pass2L',
-		'errL',
+		'newsL',
+		'news2L',
+		'news3L',
+		'errL'
 	]
 };
 
