@@ -304,10 +304,15 @@ Change.prototype.set =
 		tree = tree.setPath( trg.path, pivot, -1 );
 	}
 
+	var chg;
+	if( src === this.src && trg === this.trg )
+		{ chg = this; }
+	else
+		{ chg = new Change( src, trg ); }
+
 	return {
 		tree: tree,
-		src: src,
-		trg: trg
+		chg : chg
 	};
 };
 
@@ -355,10 +360,15 @@ Change.prototype.insert = function( tree )
 		nstr
 	);
 
+	var chg;
+	if( src === this.src && trg === this.trg )
+		{ chg = this; }
+	else
+		{ chg = new Change( src, trg ); }
+
 	return {
-		tree : tree,
-		src  : src,
-		trg  : trg
+		tree: tree,
+		chg : chg
 	};
 };
 
@@ -414,10 +424,15 @@ Change.prototype.remove = function( tree )
 
 	tree = tree.setPath( src.path, nstr );
 
+	var chg;
+	if( src === this.src && trg === this.trg )
+		{ chg = this; }
+	else
+		{ chg = new Change( src, trg ); }
+
 	return {
-		tree : tree,
-		src  : src,
-		trg  : trg
+		tree: tree,
+		chg : chg
 	};
 };
 
@@ -499,10 +514,15 @@ Change.prototype.join = function( tree )
 
 	tree = tree.setPath( path, pivot, -2 );
 
+	var chg;
+	if( src === this.src && trg === this.trg )
+		{ chg = this; }
+	else
+		{ chg = new Change( src, trg ); }
+
 	return {
-		tree : tree,
-		src  : src,
-		trg  : trg
+		tree: tree,
+		chg : chg
 	};
 };
 
@@ -594,10 +614,15 @@ Change.prototype.split = function( tree )
 		-2
 	);
 
+	var chg;
+	if( src === this.src && trg === this.trg )
+		{ chg = this; }
+	else
+		{ chg = new Change( src, trg ); }
+
 	return {
 		tree: tree,
-		src: src,
-		trg: trg
+		chg : chg
 	};
 };
 
@@ -638,13 +663,13 @@ Change.prototype.rank = function( tree )
 
 	// FIXME if (orank === trg.rank) return null;
 
-	src   = src.affix(
+	src = src.affix(
 		Jools.is,
 		cm, 'src',
 		'rank', orank
 	);
 
-	trg   = trg.affix(
+	trg = trg.affix(
 		Jools.is,
 		cm, 'trg',
 		'path', src.path
@@ -656,20 +681,26 @@ Change.prototype.rank = function( tree )
 		'+', trg.rank, key
 	);
 
-	tree  = tree.setPath(
+	tree = tree.setPath(
 		src.path,
 		pivot,
 		-1
 	);
 
+	var chg;
+	if( src === this.src && trg === this.trg )
+		{ chg = this; }
+	else
+		{ chg = new Change( src, trg ); }
+
 	return {
-		tree : tree,
-		src  : src,
-		trg  : trg
+		tree: tree,
+		chg : chg
 	};
 };
 
-/**
+
+/*
 | Exports
 */
 if( typeof( window ) === 'undefined' )

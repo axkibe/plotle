@@ -1551,7 +1551,7 @@ Server.prototype.webAjax = function(req, red, res)
 
 	req.on( 'end', function( )
 		{
-			setTimeout( handler, 1800 );
+			setTimeout( handler, 0 ); // TODO
 		});
 };
 

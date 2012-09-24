@@ -112,18 +112,16 @@ var changeTree =
 		// the change returned by the op-handler is stored
 		// as applied changes, either as change-ray
 		// or as single change
-		var rChg = new Change( r.src, r.trg );
-
 		if (aZ > 1)
 		{
 			if (aChgX === null)
 				{ aChgX = new ChangeRay(); }
 
-			aChgX.push( rChg );
+			aChgX.push( r.chg );
 		}
 		else
 		{
-			aChgX = rChg;
+			aChgX = r.chg;
 		}
 	}
 
