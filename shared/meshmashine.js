@@ -25,10 +25,12 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+
 /*
 | Export
 */
 var MeshMashine;
+
 
 /*
 | Imports
@@ -39,11 +41,13 @@ var Jools;
 var Path;
 var Sign;
 
+
 /*
 | Capsule
 */
-(function() {
+( function( ) {
 "use strict";
+
 
 /*
 | Node includes.
@@ -57,6 +61,7 @@ if (typeof(window) === 'undefined')
 	Sign      = require('./sign');
 }
 
+
 var check        = Jools.check;
 var is           = Jools.is;
 var isnon        = Jools.isnon;
@@ -68,285 +73,68 @@ var isPath       = Path.isPath;
 /*
 | Performes one or several changes on a tree
 */
-var changeTree = function(tree, chgX) {
-
-	if (arguments.length !== 2)
-		{ throw new Error('changeTree arguments fail'); }
+var changeTree =
+	function(
+		tree, // the tree to change
+		chgX  // a change or a change-ray
+	)
+{
+	if( arguments.length !== 2 )
+		{ throw new Error( 'changeTree arguments fail' ); }
 
 	var aChgX = null;
 
-	for(var $a = 0, aZ = chgX.length; $a < aZ; $a++) {
+	// iterates through the change ray
+	// ( or the one change )
+	for( var a = 0, aZ = chgX.length; a < aZ; a++ )
+	{
+		var chg   = chgX.get( a );
+		var chgtype = chg.type();
 
-		var chg = chgX.get($a);
+		Jools.log(
+			'change',
+			'src:', chg.src,
+			'trg:', chg.trg,
+			'type:', chgtype
+		);
 
-		var ctype = chg.type();
+		// executes the op-handler
+		var r = chg[ chgtype ]( tree );
 
-		Jools.log('change', 'src:', chg.src, 'trg:', chg.trg, 'type:', ctype);
-
-		var op = ChangeOps[ctype];
-		if (!op)
-			{ throw Jools.reject('invalid change: '+ctype); }
-
-		var r = op(tree, chg);
-
-		if (r === null)
+		// if answer is null the change has vaporated
+		if( r === null )
 			{ continue; }
 
-		var rChg = new Change(r.src, r.trg);
+
+		// the tree returned by op-handler is the new tree
 		tree = r.tree;
+
+		// the change returned by the op-handler is stored
+		// as applied changes, either as change-ray
+		// or as single change
+		var rChg = new Change( r.src, r.trg );
 
 		if (aZ > 1)
 		{
 			if (aChgX === null)
 				{ aChgX = new ChangeRay(); }
 
-			aChgX.push(rChg);
-		} else
-			{ aChgX = rChg; }
-
-	}
-
-	return {
-		tree : tree,
-		chgX : aChgX
-	};
-};
-
-/*
-| The change operations.
-*/
-var ChangeOps = {};
-
-/*
-| Alter: A new item is inserted or replaces an existing.
-*/
-ChangeOps.set = function(tree, chg) {
-	var cm = 'change.set';
-	var src = chg.src;
-	var trg = chg.trg;
-	var pivot = null;
-	var key = null;
-
-	check(!is(trg.at1), cm, 'trg.at1 must not exist.');
-	check(is(src.val), cm, 'src.val missing');
-
-	if (trg.path.get(-1) === '$new') {
-		pivot = tree.getPath(trg.path, -1);
-		key = pivot.newUID();
-		trg = new Sign(trg, 'path', new Path(trg.path, -1, key));
-	}
-
-	// stores the old value to be able restore the history
-	var save = tree.getPath(trg.path);
-	if (!is(save))
-		{ save = null; }
-
-	trg = trg.affix(is, cm, 'trg', 'val',  save);
-	src = src.affix(is, cm, 'src', 'path', trg.path);
-
-	if (!is(trg.rank)) {
-		tree = tree.setPath(trg.path, src.val);
-	} else {
-		pivot = pivot || tree.getPath(trg.path, -1);
-		if (key === null) key = trg.path.get(-1);
-		var orank;
-		if (src.val !== null) {
-			pivot = tree.grow(pivot,
-				key, src.val,
-				'+', trg.rank, key
-			);
-		} else {
-			orank = pivot.rankOf(key);
-			trg = new Sign(trg, 'rank', orank);
-			pivot = tree.grow(pivot,
-				key, src.val,
-				'-', orank
-			);
+			aChgX.push( rChg );
 		}
-		tree = tree.setPath(trg.path, pivot, -1);
+		else
+		{
+			aChgX = rChg;
+		}
 	}
 
-	return { tree: tree, src: src, trg: trg };
-};
-
-/*
-| Alter: A string is inserted into a string item.
-*/
-ChangeOps.insert = function(tree, chg) {
-	var cm = 'change.insert';
-	var src = chg.src;
-	var trg = chg.trg;
-
-	check(isPath(trg.path), cm, 'trg.path missing');
-	var str = tree.getPath(trg.path);
-	check(isString(str), cm, 'trg.path signates no string');
-
-	// where trg span should end
-	var tat2 = trg.at1 + src.val.length;
-
-	trg = trg.affix(is, cm, 'trg', 'at2', tat2);
-	var nstr = str.substring(0, trg.at1) + src.val + str.substring(trg.at1);
-	tree = tree.setPath(trg.path, nstr);
-
-	return { tree: tree, src: src, trg: trg };
-};
-
-/*
-| Alter: a part of a string item is removed.
-*/
-ChangeOps.remove = function(tree, chg) {
-	var cm = 'change.remove';
-	var src = chg.src;
-	var trg = chg.trg;
-
-	check(isPath(src.path), cm, 'src.path missing');
-	var str = tree.getPath(src.path);
-	if (!isString(str)) {
-		Jools.log('change', 'src.path signates no string');
-		return null;
-	}
-
-	if (src.at1 === src.at2) {
-		Jools.log('change', 'removed nothing');
-		return null;
-	}
-
-	var val = str.substring(src.at1, src.at2);
-	trg = trg.affix(isnon, cm, 'trg', 'val', val);
-	var nstr = str.substring(0, src.at1) + str.substring(src.at2);
-
-	tree = tree.setPath(src.path, nstr);
-
-	return { tree: tree, src: src, trg: trg };
-};
-
-/*
-| Alter: two texts are joined into one.
-*/
-ChangeOps.join = function(tree, chg) {
-	var cm   = 'change.join';
-	var src  = chg.src;
-	var trg  = chg.trg;
-	var path = trg.path;
-
-	var at1 = trg.at1;
-	check(is(at1), cm, 'trg.at1 missing');
-	var text = tree.getPath(path);
-	check(isString(text), cm, 'trg signates no text');
-
-	var key = path.get(-2);
-	var pivot   = tree.getPath(path, -2);
-	var pattern = tree.getPattern(pivot);
-	check(pattern.ranks, cm, 'pivot has no ranks');
-	var kn  = pivot.rankOf(key);
-	check(kn >= 0, cm, 'invalid line key');
-	check(kn < pivot.ranks.length,  cm, 'cannot join last line');
-	var key2 = pivot.ranks[kn + 1];
-	var path2 = new Path(path, -2, key2);
-	src = src.affix(is, cm, 'src', 'path', path2);
-
-	var para1 = pivot.copse[key];
-	var para2 = pivot.copse[key2];
-
-	// FIXME check other keys to be equal
-	para1 = tree.grow(para1,
-		'text', para1.text + para2.text
+	return Jools.immute(
+		{
+			tree : tree,
+			chgX : Jools.immute( aChgX )
+		}
 	);
-	pivot = tree.grow(pivot,
-		key, para1,
-		key2, null,
-		'-', kn + 1
-	);
-
-	tree = tree.setPath(path, pivot, -2);
-
-	return { tree: tree, src: src, trg: trg };
 };
 
-/*
-| Alter: a text is split into two.
-*/
-ChangeOps.split = function(tree, chg) {
-	var cm   = 'change.split';
-	var src  = chg.src;
-	var trg  = chg.trg;
-	var path = src.path;
-
-	var at1 = src.at1;
-	check(is(at1), cm, 'src.at1 missing');
-	var text = tree.getPath(path);
-	check(isString(text), cm, 'src signates no text');
-
-	var pivot   = tree.getPath(path, -2);
-	var pattern = tree.getPattern(pivot);
-	check(pattern.ranks, cm, 'pivot has no ranks');
-
-	var vKey;
-	if (is(trg.path)) {
-		vKey = trg.path.get(-2);
-	} else {
-		vKey = pivot.newUID();
-		trg = new Sign(trg,
-			'path', new Path(src.path, -2, vKey)
-		);
-	}
-	check(!isnon(pivot.copse[vKey]), cm, 'newUID not vacant: ', vKey);
-
-	var key = path.get(-2);
-	var kn  = pivot.rankOf(key);
-	check(kn >= 0, cm, 'invalid line key');
-
-	var para1, para2;
-	para1 = pivot.copse[key];
-	para2 = tree.grow(para1,
-		'text', text.substring(at1, text.length)
-	);
-	para1 = tree.grow(para1,
-		'text', text.substring(0, at1)
-	);
-	pivot = tree.grow(pivot,
-		key,  para1,
-		vKey, para2,
-		'+', kn + 1, vKey
-	);
-
-	tree  = tree.setPath(path, pivot, -2);
-
-	return { tree: tree, src: src, trg: trg };
-};
-
-/*
-| A twig's rank in a copse is changed.
-*/
-ChangeOps.rank = function(tree, chg)
-{
-	var cm  = 'change.rank';
-	var src = chg.src;
-	var trg = chg.trg;
-
-	check(is(src.path), cm, 'src.path not present');
-	check(is(trg.rank), cm, 'trg.rank not present');
-
-	var pivot = tree.getPath(src.path, -1);
-	check(is(pivot.ranks), cm, 'pivot not an ranks');
-	var key = src.path.get(-1);
-	var orank = pivot.rankOf(key);
-	if (orank < 0)
-		{ throw Jools.reject('invalid key :'+key); }
-
-	// FIXME if (orank === trg.rank) return null;
-
-	src   = src.affix(is, cm, 'src', 'rank', orank);
-	trg   = trg.affix(is, cm, 'trg', 'path', src.path);
-	pivot = tree.grow(pivot, '-', orank, '+', trg.rank, key);
-	tree  = tree.setPath(src.path, pivot, -1);
-
-	return {
-		tree : tree,
-		src  : src,
-		trg  : trg
-	};
-};
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,--,--'                                   .

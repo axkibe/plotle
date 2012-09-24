@@ -81,6 +81,7 @@ theme =
 	{
 		minWidth  :  40,
 		minHeight :  40,
+
 		newWidth  : 300,
 		newHeight : 150,
 
@@ -148,6 +149,7 @@ theme =
 	{
 		minWidth  :  40,
 		minHeight :  40,
+
 		newWidth  : 100,
 		newHeight :  50,
 
@@ -220,8 +222,6 @@ theme =
 		{
 			edge :
 			[
-				//{ border: 0, width: 0.2, color: 'rgba(200, 100, 0, 0.5)' },
-				//{ border: 0, width: 1, color: 'rgba(100, 100, 0, 0.5)' }
 				{
 					border : 0,
 					width  : 1,

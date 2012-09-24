@@ -1,4 +1,4 @@
-/**                                               .---.
+                                                  /***.
 .----.     .----..--.                             |   |
  \    \   /    / |__|                             |   |
   '   '. /'   /  .--.                             |   |
@@ -36,6 +36,7 @@ Visual = Visual || {};
 */
 var Action;
 var config;
+var fontPool;
 var Euclid;
 var Jools;
 var shell;
@@ -45,22 +46,28 @@ var theme;
 /*
 | Capsule
 */
-(function() {
+( function( ) {
 'use strict';
 
-if (typeof(window) === 'undefined')
-	{ throw new Error('this code needs a browser!'); }
+
+if( typeof( window ) === 'undefined' )
+	{ throw new Error( 'this code needs a browser!' ); }
 
 
 /*
 | Constructor.
 */
-var Portal = Visual.Portal = function(spacename, twig, path)
+var Portal = Visual.Portal =
+	function(
+		spacename,
+		twig,
+		path
+	)
 {
-	Visual.Item.call(this, spacename, twig, path);
+	Visual.Item.call( this, spacename, twig, path );
 };
 
-Jools.subclass(Portal, Visual.Item);
+Jools.subclass( Portal, Visual.Item );
 
 
 /*
@@ -84,7 +91,8 @@ Portal.prototype.handles =
 |
 | zone :  the cache for the items zone
 */
-Portal.prototype.getSilhoutte = function( zone )
+Portal.prototype.getSilhoutte =
+	function( zone )
 {
 	var s = this._$silhoutte;
 
@@ -103,7 +111,8 @@ Portal.prototype.getSilhoutte = function( zone )
 |
 | zone :  the cache for the items zone
 */
-Portal.prototype.getZeroSilhoutte = function( zone )
+Portal.prototype.getZeroSilhoutte =
+	function( zone )
 {
 	var s = this._$zeroSilhoutte;
 
@@ -128,7 +137,11 @@ Portal.prototype.getZeroSilhoutte = function( zone )
 /*
 | Sets the items position and size after an action.
 */
-Portal.prototype.actionstop = function(view, p)
+Portal.prototype.actionstop =
+	function(
+		view,
+		p
+	)
 {
 	switch (shell.$action.type) {
 
@@ -137,11 +150,11 @@ Portal.prototype.actionstop = function(view, p)
 
 			var zone = this.getZone();
 
-			if ( zone.width < theme.portal.minWidth ||
+			if( zone.width < theme.portal.minWidth ||
 				zone.height < theme.portal.minHeight )
 				{ throw new Error('Portal under minimum size!'); }
 
-			if (this.twig.zone.eq(zone))
+			if( this.twig.zone.eq( zone ) )
 				{ return; }
 
 			shell.peer.setZone( this.path, zone );
@@ -152,7 +165,7 @@ Portal.prototype.actionstop = function(view, p)
 
 		default :
 
-			return Visual.Item.prototype.actionstop.call(this, view, p);
+			return Visual.Item.prototype.actionstop.call( this, view, p );
 	}
 
 };
@@ -161,10 +174,11 @@ Portal.prototype.actionstop = function(view, p)
 /*
 | Sets the focus to this item.
 */
-Portal.prototype.grepFocus = function()
+Portal.prototype.grepFocus =
+	function( )
 {
 	// already have focus?
-	if (shell.$space.focusedItem() === this)
+	if( shell.$space.focusedItem( ) === this )
 		{ return; }
 
 	var caret = shell.setCaret(
@@ -175,7 +189,7 @@ Portal.prototype.grepFocus = function()
 		}
 	);
 
-	caret.show();
+	caret.show( );
 
 	shell.peer.moveToTop( this.path );
 };
@@ -185,17 +199,22 @@ Portal.prototype.grepFocus = function()
 /*
 | Sees if this portal is being clicked.
 */
-Portal.prototype.click = function( view, p )
+Portal.prototype.click =
+	function(
+		view,
+		p
+	)
 {
-	if( !this.getZone().within( view, p ) )
+	if( !this.getZone( ).within( view, p ) )
 		{ return false; }
 
 	var space = shell.$space;
-	var focus = space.focusedItem();
-	if (focus !== this)
+	var focus = space.focusedItem( );
+
+	if( focus !== this )
 	{
-		this.grepFocus();
-		shell.selection.deselect();
+		this.grepFocus( );
+		shell.selection.deselect( );
 	}
 
 	shell.redraw = true;
@@ -208,8 +227,8 @@ Portal.prototype.click = function( view, p )
 		}
 	);
 
-	caret.show();
-	shell.selection.deselect();
+	caret.show( );
+	shell.selection.deselect( );
 
 	return true;
 };
@@ -217,36 +236,43 @@ Portal.prototype.click = function( view, p )
 /*
 | Draws the portal.
 |
+| TODO move draw to visual item.
+|
 | fabric: to draw upon.
 */
-Portal.prototype.draw = function(fabric, view)
+Portal.prototype.draw =
+	function(
+		fabric,
+		view
+	)
 {
-	var zone  = this.getZone();
-	var vzone = view.rect(zone);
+	var zone  = this.getZone( );
+	var vzone = view.rect( zone );
 	var f     = this.$fabric;
-	var sbary = this.scrollbarY;
-
 
 	// no buffer hit?
 	if (config.debug.noCache || !f ||
 		vzone.width  !== f.width ||
 		vzone.height !== f.height)
 	{
-		f = this.$fabric = new Euclid.Fabric(vzone.width + 1, vzone.height + 1);
-
-		var silhoutte = this.getZeroSilhoutte( vzone );
-		f.fill(theme.portal.style.fill, silhoutte, 'sketch', Euclid.View.proper);
-		f.edge(theme.portal.style.edge, silhoutte, 'sketch', Euclid.View.proper);
+		f = this._weave( vzone );
 	}
 
-	fabric.drawImage(f, vzone.pnw);
+	fabric.drawImage( f, vzone.pnw );
 };
 
 
 /*
 | Mouse wheel turned.
 */
-Portal.prototype.mousewheel = function( view, p, dir, shift, ctrl )
+Portal.prototype.mousewheel =
+	function(
+		view,
+		p,
+		dir,
+		shift,
+		ctrl
+	)
 {
 	return this.getZone().within( view, p );
 };
@@ -255,7 +281,8 @@ Portal.prototype.mousewheel = function( view, p, dir, shift, ctrl )
 /*
 |
 */
-Portal.prototype.positionCaret = function(view)
+Portal.prototype.positionCaret =
+	function( view )
 {
 	// FIXME
 };
@@ -281,30 +308,34 @@ Portal.prototype.pointingHover = function( view, p )
 /*
 | Returns the zone of the item.
 | An ongoing action can modify this to be different than meshmashine data.
+|
+| TODO move to Visual.Item
 */
-Portal.prototype.getZone = function()
+Portal.prototype.getZone =
+	function( )
 {
 	var twig    = this.twig;
 	var $action = shell.$action;
 	var max     = Math.max;
 	var min     = Math.min;
 
-	if ( !$action || !this.path.equals( $action.itemPath ) )
+	if( !$action || !this.path.equals( $action.itemPath ) )
 		{ return twig.zone; }
 
 	// FIXME cache the last zone
 
-	switch ($action.type)
+	switch( $action.type )
 	{
 
 		case Action.ITEMDRAG:
 			return twig.zone.add(
 				$action.move.x - $action.start.x,
-				$action.move.y - $action.start.y);
+				$action.move.y - $action.start.y
+			);
 
 		case Action.ITEMRESIZE:
 			var szone = $action.startZone;
-			if (!szone)
+			if( !szone )
 				{ return twig.zone; }
 
 			var spnw = szone.pnw;
@@ -315,52 +346,105 @@ Portal.prototype.getZone = function()
 			var minh = theme.portal.minHeight;
 			var pnw, pse;
 
-			switch ($action.align)
+			switch( $action.align )
 			{
+
 				case 'n'  :
-					pnw = Euclid.Point.renew(spnw.x, min(spnw.y + dy, spse.y - minh), spnw, spse);
+					pnw = Euclid.Point.renew(
+						spnw.x,
+						min( spnw.y + dy, spse.y - minh ),
+						spnw,
+						spse
+					);
 					pse = spse;
 					break;
+
 				case 'ne' :
 					pnw = Euclid.Point.renew(
-						spnw.x, min(spnw.y + dy, spse.y - minh), spnw, spse);
+						spnw.x,
+						min( spnw.y + dy, spse.y - minh ),
+						spnw,
+						spse
+					);
 					pse = Euclid.Point.renew(
-						max(spse.x + dx, spnw.x + minw), spse.y, spnw, spse);
+						max( spse.x + dx, spnw.x + minw ),
+						spse.y,
+						spnw,
+						spse
+					);
 					break;
+
 				case 'e'  :
 					pnw = spnw;
-					pse = Euclid.Point.renew(max(spse.x + dx, spnw.x + minw), spse.y, spnw, spse);
+					pse = Euclid.Point.renew(
+						max( spse.x + dx, spnw.x + minw ),
+						spse.y,
+						spnw,
+						spse
+					);
 					break;
+
 				case 'se' :
 					pnw = spnw;
 					pse = Euclid.Point.renew(
-						max(spse.x + dx, spnw.x + minw),
-						max(spse.y + dy, spnw.y + minh), spnw, spse);
+						max( spse.x + dx, spnw.x + minw ),
+						max( spse.y + dy, spnw.y + minh ),
+						spnw,
+						spse
+					);
 					break;
+
 				case 's' :
 					pnw = spnw;
-					pse = Euclid.Point.renew(spse.x, max(spse.y + dy, spnw.y + minh), spnw, spse);
+					pse = Euclid.Point.renew(
+						spse.x,
+						max( spse.y + dy, spnw.y + minh ),
+						spnw,
+						spse
+					);
 					break;
+
 				case 'sw'  :
-					pnw = Euclid.Point.renew(min(spnw.x + dx, spse.x - minw), spnw.y, spnw, spse);
-					pse = Euclid.Point.renew(spse.x, max(spse.y + dy, spnw.y + minh), spnw, spse);
+					pnw = Euclid.Point.renew(
+						min( spnw.x + dx, spse.x - minw ),
+						spnw.y,
+						spnw,
+						spse
+					);
+					pse = Euclid.Point.renew(
+						spse.x,
+						max( spse.y + dy, spnw.y + minh ),
+						spnw,
+						spse
+					);
 					break;
+
 				case 'w'   :
-					pnw = Euclid.Point.renew(min(spnw.x + dx, spse.x - minw), spnw.y, spnw, spse);
+					pnw = Euclid.Point.renew(
+						min( spnw.x + dx, spse.x - minw ),
+						spnw.y,
+						spnw,
+						spse
+					);
 					pse = spse;
 					break;
+
 				case 'nw' :
 					pnw = Euclid.Point.renew(
-						min(spnw.x + dx, spse.x - minw),
-						min(spnw.y + dy, spse.y - minh), spnw, spse);
+						min( spnw.x + dx, spse.x - minw ),
+						min( spnw.y + dy, spse.y - minh ),
+						spnw,
+						spse
+					);
 					pse = spse;
 					break;
+
 				//case 'c' :
 				default  :
 					throw new Error('unknown align');
 			}
 
-			return new Euclid.Rect(pnw, pse);
+			return new Euclid.Rect( pnw, pse );
 
 		default :
 			return twig.zone;
@@ -370,9 +454,10 @@ Portal.prototype.getZone = function()
 /*
 | Returns the ctrl area.
 */
-Portal.prototype.getCtrlFix = function()
+Portal.prototype.getCtrlFix =
+	function( )
 {
-	var zone = this.getZone();
+	var zone = this.getZone( );
 	var pn   = zone.pn;
 	var tca  = theme.portal.ctrlArea;
 
@@ -389,11 +474,84 @@ Portal.prototype.getCtrlFix = function()
 
 	return this._$ctrlArea = new Euclid.Fix(
 		new Euclid.Ellipse(
-			pn.add( tca.x,              tca.y              ),
-			pn.add( tca.x + 2 * dim.a1, tca.y + 2 * dim.b1 )
+			pn.add(
+				tca.x,
+				tca.y
+			),
+			pn.add(
+				tca.x + 2 * dim.a1,
+				tca.y + 2 * dim.b1
+			)
 		),
-		pn.add(tca.joint.x, tca.joint.y) // FIXME
+		pn.add(
+			tca.joint.x,
+			tca.joint.y
+		) // FIXME
 	);
 };
 
-})();
+/*
+| Returns the fabric for the input field.
+*/
+Portal.prototype._weave =
+	function( vzone )
+{
+	var f = this.$fabric = new Euclid.Fabric(
+		vzone.width + 1,
+		vzone.height + 1
+	);
+
+	var silhoutte = this.getZeroSilhoutte( vzone );
+
+	f.fill(
+		theme.portal.style.fill,
+		silhoutte,
+		'sketch',
+		Euclid.View.proper
+	);
+
+	var font = fontPool.get( 13, 'la' );
+
+	var usertext  = 'meshcraft';
+	var userwidth = Euclid.Measure.width( font, usertext  );
+	var upnw =
+		new Euclid.Point(
+			Jools.half( vzone.width - userwidth ),
+			Math.round( vzone.height / 3 )
+		);
+
+
+	//var userrect  = new Euclid.RoundRect(
+	//Math.round( vzone.height / 3 );
+
+	var spacetext = 'sandbox';
+	var spacewidth = Euclid.Measure.width( font, spacetext );
+	var spnw =
+		new Euclid.Point(
+			Jools.half( vzone.width - spacewidth ),
+			upnw.y + 20
+		);
+
+	f.fillText(
+		usertext,
+		upnw,
+		font
+	);
+
+	f.fillText(
+		spacetext,
+		spnw,
+		font
+	);
+
+	f.edge(
+		theme.portal.style.edge,
+		silhoutte,
+		'sketch',
+		Euclid.View.proper
+	);
+
+	return f;
+};
+
+} )( );

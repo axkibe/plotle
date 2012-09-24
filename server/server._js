@@ -685,8 +685,11 @@ Server.prototype.cmdAlter = function( cmd, _)
 
 		chgX = new MeshMashine.Change(chgX);
 
-	} catch(e)
-		{ throw reject( 'invalid cmd: ' + e.message ); }
+	}
+	catch( err )
+	{
+		throw reject( 'invalid cmd: ' + err.message );
+	}
 
 	// translates the changes if not most recent
 	for( var a = time; a < seqZ; a++ )
@@ -873,10 +876,15 @@ Server.prototype.cmdRegister = function( cmd, _)
 	};
 };
 
-/**
+
+/*
 | Refreshes a users presence timeout.
 */
-Server.prototype.refreshPresence = function( user, spacename )
+Server.prototype.refreshPresence =
+	function(
+		user,
+		spacename
+	)
 {
 	var pu = this.$presences[ user ];
 
@@ -1060,18 +1068,30 @@ Server.prototype.cmdUpdate = function( cmd, res, _ )
 
 	this.refreshPresence( user, spacename );
 
-	var asw = this.conveyUpdate( time, mseq, spacename );
+	var asw = this.conveyUpdate(
+		time,
+		mseq,
+		spacename
+	);
 
 	// immediate answer?
-	if( asw.chgs.length > 0 || asw.msgs.length > 0 )
-		{ return asw; }
+	if( asw.chgs.length > 0 ||
+		asw.msgs.length > 0 )
+	{
+		return asw;
+	}
 
 	// if not immediate puts the request to sleep
 	var sleepID = '' + this.$nextSleep++;
 
-	var timerID = setTimeout(this.expireSleep, 60000, this, sleepID);
+	var timerID = setTimeout(
+		this.expireSleep,
+		60000,
+		this,
+		sleepID
+	);
 
-	this.$upsleep[sleepID] = {
+	this.$upsleep[ sleepID ] = {
 		user      : user,
 		time      : time,
 		mseq      : mseq,
@@ -1082,7 +1102,11 @@ Server.prototype.cmdUpdate = function( cmd, res, _ )
 
 	res.sleepID = sleepID;
 
-	this.establishPresence(user, spacename, sleepID);
+	this.establishPresence(
+		user,
+		spacename,
+		sleepID
+	);
 
 	return null;
 
@@ -1315,9 +1339,9 @@ Server.prototype.cmdGet = function(cmd, _)
 	{
 		node = tree.getPath(new Path(cmd.path));
 	}
-	catch(e)
+	catch( err )
 	{
-		throw reject('cannot get path: '+e.message);
+		throw reject('cannot get path: ' + err.message);
 	}
 
 	return {
@@ -1473,53 +1497,62 @@ Server.prototype.webAjax = function(req, red, res)
 		}
 	);
 
-	req.on('end',
-		function() {
-			var query = data.join('');
-			var asw, cmd;
+	var handler = function()
+	{
+		var query = data.join('');
+		var asw, cmd;
 
-			log('ajax', '<-', query);
+		log('ajax', '<-', query);
 
-			try
-				{ cmd = JSON.parse(query); }
-			catch (err)
-			{
-				self.webError(res, 400, 'Not valid JSON');
-				return;
-			}
-
-			asw = self.ajaxCmd(cmd, res,
-				function(e, asw) {
-					if (e)
-					{
-						if (e.ok !== false)
-							{ throw e; }
-						else
-						{
-							asw = {
-								ok : false,
-								message : e.message
-							};
-						}
-					}
-
-					if (asw === null)
-						{ return; }
-
-					log('ajax', '->', asw);
-
-					res.writeHead( 200,
-						{
-							'Content-Type'  : 'application/json',
-							'Cache-Control' : 'no-cache',
-							'Date'          : new Date().toUTCString()
-						}
-					);
-					res.end(JSON.stringify(asw));
-				}
-			);
+		try
+			{ cmd = JSON.parse(query); }
+		catch (err)
+		{
+			self.webError(res, 400, 'Not valid JSON');
+			return;
 		}
-	);
+
+		asw = self.ajaxCmd(cmd, res,
+			function( err, asw )
+			{
+				if (err)
+				{
+					if (err.ok !== false)
+					{
+						throw err;
+					}
+					else
+					{
+						asw = {
+							ok : false,
+							message : err.message
+						};
+					}
+				}
+
+				if (asw === null)
+					{ return; }
+
+				log('ajax', '->', asw);
+
+				res.writeHead( 200,
+					{
+						'Content-Type'  : 'application/json',
+						'Cache-Control' : 'no-cache',
+						'Date'          : new Date().toUTCString()
+					}
+				);
+				res.end(JSON.stringify(asw));
+			}
+		);
+	};
+
+	//req.on( 'end', handler );
+
+	req.on( 'end', function( )
+		{
+			setTimeout( handler, 1800 );
+		});
 };
 
 

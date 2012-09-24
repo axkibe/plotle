@@ -1,4 +1,4 @@
-/**                                               .---.
+                                                  /***.
 .----.     .----..--.                             |   |
  \    \   /    / |__|                             |   |
   '   '. /'   /  .--.                             |   |
@@ -191,9 +191,10 @@ Doc.prototype.getPNW = function(key)
 | Returns the height of the document.
 | FIXME caching
 */
-Doc.prototype.getHeight = function()
+Doc.prototype.getHeight =
+	function( )
 {
-	var fs      = this.getFont().size;
+	var fs      = this.getFont( ).size;
 	var paraSep = this.getParaSep();
 	var twig    = this.twig;
 
@@ -233,10 +234,10 @@ Doc.prototype.getSpread = function()
 */
 Doc.prototype.getParaSep = function(item)
 {
-	if (!Jools.is(item))
+	if( !Jools.is( item ) )
 		{ item = shell.$space.getSub( this.path, 'Item' ); }
 
-	var fs = this.getFont().size;
+	var fs = this.getFont( ).size;
 	return item.getParaSep(fs);
 };
 
@@ -245,22 +246,26 @@ Doc.prototype.getParaSep = function(item)
 | Returns the default font for the document.
 | Parameter item is optional, just to safe double and tripple lookups.
 */
-Doc.prototype.getFont = function(item)
+Doc.prototype.getFont =
+	function( item )
 {
-	// caller can provide item for performance optimization
-	if (!Jools.is(item))
+	// caller can optionally provide the item
+	// for performance optimization otherwise
+	// graps it iself.
+	if(! Jools.is( item ) )
 		{ item = shell.$space.getSub( this.path, 'Item' ); }
 
 	var fs = item.twig.fontsize;
-	if (item.fontSizeChange)
-		{ fs = item.fontSizeChange(fs); }
+
+	if( item.fontSizeChange )
+		{ fs = item.fontSizeChange( fs ); }
 
 	var $f = this._$font;
 
-	if ($f && $f.size === fs)
+	if( $f && $f.size === fs )
 		{ return $f; }
 
-	return this._$font = fontPool.get(fs, 'la');
+	return this._$font = fontPool.get( fs, 'la' );
 };
 
 
