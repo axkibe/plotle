@@ -411,8 +411,8 @@ Server.prototype.prepareResources = function(_)
 
 	var rlist = [
 		'media/favicon.ico',                               'mc',
-		'shell/testpad.html',                              'f',
-		'shell/testpad.js',                                'f',
+		'testpad/testpad.html',                            'f',
+		'testpad/testpad.js',                              'f',
 		'shell/fonts/webfont.js',                          'mc',
 
 		'shared/jools.js',                                 'fb',

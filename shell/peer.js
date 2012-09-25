@@ -55,7 +55,7 @@ if (typeof (window) === 'undefined')
 /*
 | Constructor
 */
-Peer = function(updateRCV, messageRCV)
+Peer = function( updateRCV, messageRCV )
 {
 	this.spacename = null;
 	this._iface     = new IFace(updateRCV, messageRCV);
