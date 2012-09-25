@@ -51,16 +51,16 @@ var system;
 /*
 | Capsule
 */
-(function () {
+( function( ) {
 "use strict";
 
-if (typeof (window) === 'undefined')
-	{ throw new Error('this code nees a browser!'); }
+if( typeof ( window ) === 'undefined' )
+	{ throw new Error( 'this code nees a browser!' ); }
 
 /*
 | Constructor.
 */
-IFace = function(updateRCV, messageRCV)
+IFace = function( updateRCV, messageRCV )
 {
 	// the current space;
 	this.$cSpace  = null;
@@ -95,37 +95,54 @@ IFace = function(updateRCV, messageRCV)
 /*
 | General purpose AJAX.
 */
-IFace.prototype._ajax = function(request, callback)
-{
-	if (!request.cmd)
-		{ throw new Error('ajax request.cmd missing'); }
+IFace.prototype._ajax = function( request, callback )
+ {
+	if( !request.cmd )
+		{ throw new Error( 'ajax request.cmd missing' ); }
 
-    var ajax = new XMLHttpRequest();
+    var ajax = new XMLHttpRequest( );
 
-    ajax.open('POST', '/mm', true);
+    ajax.open( 'POST', '/mm', true );
 
-    ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    ajax.setRequestHeader(
+		'Content-type',
+		'application/x-www-form-urlencoded'
+	);
 
-    ajax.onreadystatechange = function()
+    ajax.onreadystatechange = function( )
 	{
-		if (ajax.readyState !== 4)
+		if( ajax.readyState !== 4 )
 			{ return; }
 
-		if (ajax.status !== 200)
+		if( ajax.status !== 200 )
 		{
-			Jools.log('iface', request.cmd, 'status: ', ajax.status);
-			if (callback)
-				{ callback( { ok: false, message: 'connection' , status: ajax.status } ); }
+			Jools.log(
+				'iface',
+				request.cmd,
+				'status: ',
+				ajax.status
+			);
+
+			if( callback )
+			{
+				callback(
+					{
+						ok: false,
+						message: 'connection' ,
+						status: ajax.status
+					}
+				);
+			}
 
 			return;
 		}
 
 		var asw;
 		try
-			{ asw = JSON.parse(ajax.responseText); }
-		catch (e)
+			{ asw = JSON.parse( ajax.responseText ); }
+		catch( e )
 		{
-			if (callback)
+			if( callback )
 			{
 				callback(
 					{
@@ -136,32 +153,37 @@ IFace.prototype._ajax = function(request, callback)
 			}
 		}
 
-		Jools.log('iface', '<-', asw);
-		if (!asw.ok)
+		Jools.log( 'iface', '<-', asw );
+
+		if( !asw.ok )
 		{
-			Jools.log('iface', request.cmd, 'server not ok');
-			if (callback)
-				{ callback( asw, null); }
+			Jools.log( 'iface', request.cmd, 'server not ok' );
+			if( callback )
+				{ callback( asw, null ); }
 
 			return;
 		}
 
-		if (callback)
-			{ callback(asw); }
+		if( callback )
+			{ callback( asw ); }
 	};
 
-    var rs = JSON.stringify(request);
+    var rs = JSON.stringify( request );
 
-    Jools.log('iface', '->', rs);
+    Jools.log( 'iface', '->', rs );
 
-	ajax.send(rs);
+	ajax.send( rs );
 };
 
 
 /*
 | Sets the current user
 */
-IFace.prototype.setUser = function(user, passhash)
+IFace.prototype.setUser =
+	function(
+		user,
+		passhash
+	)
 {
 	this.$user     = user;
 	this.$passhash = passhash;
@@ -454,34 +476,36 @@ IFace.prototype._update = function()
 				var cid = chgs[a].cid;
 
 				// changes the clients understanding of the server tree
-				self.$rSpace = MeshMashine.changeTree(self.$rSpace, chgX).tree;
+				self.$rSpace = chgX.changeTree( self.$rSpace ).tree;
 
-				if (postbox.length > 0 && postbox[0].cid === cid)
+				if( postbox.length > 0 &&
+					postbox[0].cid === cid
+				)
 				{
-					self.$postbox.splice(0, 1);
+					self.$postbox.splice( 0, 1 );
 					gotOwnChgs = true;
 					continue;
 				}
 
 				// alters undo and redo queues.
-				var $undo = self.$undo;
+				var undo = self.$undo;
 				var u;
-				for(b = 0, bZ = $undo.length; b < bZ; b++)
+				for( b = 0, bZ = undo.length; b < bZ; b++ )
 				{
-					u = $undo[b];
-					if (u.time < time + a)
-						{ u.chgX = MeshMashine.tfxChgX(u.chgX, chgX); }
+					u = undo[ b ];
+					if( u.time < time + a )
+						{ u.chgX = MeshMashine.tfxChgX( u.chgX, chgX ); }
 				}
 
-				var $redo = self.$redo;
-				for(b = 0, bZ = $redo.length; b < bZ; b++)
+				var redo = self.$redo;
+				for( b = 0, bZ = redo.length; b < bZ; b++ )
 				{
-					u = $redo[b];
-					if (u.time < time + a)
-						{ u.chgX = MeshMashine.tfxChgX(u.chgX, chgX); }
+					u = redo[ b ];
+					if( u.time < time + a )
+						{ u.chgX = MeshMashine.tfxChgX( u.chgX, chgX ); }
 				}
 
-				report.push(chgX);
+				report.push( chgX );
 			}
 
 			// adapts all queued changes
@@ -489,19 +513,21 @@ IFace.prototype._update = function()
 			var outbox = self.$outbox;
 			var space  = self.$rSpace;
 
-			for(a = 0, aZ = postbox.length; a < aZ; a++)
-				{ space = MeshMashine.changeTree(space, postbox[a].chgX).tree; }
+			for( a = 0, aZ = postbox.length; a < aZ; a++ )
+				{ space = postbox[ a ].chgX.changeTree( space ).tree; }
 
-			for(a = 0, aZ = outbox.length; a < aZ; a++)
+			for( a = 0, aZ = outbox.length; a < aZ; a++ )
 			{
-				chgX = outbox[a].chgX;
+				chgX = outbox[ a ].chgX;
 
-				for(b = 0, bZ = report.length; b < bZ; b++)
-					{ chgX = MeshMashine.tfxChgX(chgX, report.get(b)); }
+				for( b = 0, bZ = report.length; b < bZ; b++ )
+				{
+					chgX = MeshMashine.tfxChgX( chgX, report.get( b ) );
+				}
 
 				outbox[a].chgX = chgX;
 
-				space = MeshMashine.changeTree(space, chgX).tree;
+				space = chgX.changeTree( space ).tree;
 			}
 
 			self.$cSpace = space;
@@ -553,26 +579,28 @@ IFace.prototype._update = function()
 
 /*
 | Alters the tree
+|
+| TODO why doesnt this get a change?
 */
 IFace.prototype.alter = function(src, trg)
 {
-    var r = MeshMashine.changeTree(
-		this.$cSpace,
-		new Change(new Sign(src), new Sign(trg))
-	);
+    var r = new Change(
+		new Sign( src ),
+		new Sign( trg )
+	).changeTree( this.$cSpace );
 
     this.$cSpace = r.tree;
 	var chgX     = r.chgX;
 
 	var c = {
-		cid  : Jools.uid(),
+		cid  : Jools.uid( ),
 		chgX : chgX,
 		time : this.$remoteTime
 	};
 
-	this.$outbox.push(c);
+	this.$outbox.push( c );
 
-	this.$redo = [];
+	this.$redo = [ ];
 
 	var undo  = this.$undo;
 
@@ -665,26 +693,28 @@ IFace.prototype.undo = function()
 	if (this.$undo.length === 0)
 		{ return; }
 
-	var chgX     = this.$undo.pop().chgX.invert();
-    var r        = MeshMashine.changeTree(this.$cSpace, chgX);
+	var chgX     = this.$undo.pop( ).chgX.invert( );
+    var r        = chgX.changeTree( this.$cSpace );
     this.$cSpace = r.tree;
 	chgX         = r.chgX;
 
-	if (chgX === null)
+	if( chgX === null )
 		{ return; }
 
-	var c = Jools.immute({
-		cid  : Jools.uid(),
-		chgX : chgX,
-		time : this.$remoteTime
-	});
+	var c = Jools.immute(
+		{
+			cid  : Jools.uid( ),
+			chgX : chgX,
+			time : this.$remoteTime
+		}
+	);
 
-	this.$outbox.push(c);
-	this.$redo.push(c);
-	this.sendChanges();
+	this.$outbox.push( c );
+	this.$redo.push( c );
+	this.sendChanges( );
 
-    if (this._updateRCV)
-		{ this._updateRCV.update(r.tree, chgX); }
+    if( this._updateRCV )
+		{ this._updateRCV.update( r.tree, chgX ); }
 
     return chgX;
 };
@@ -693,34 +723,36 @@ IFace.prototype.undo = function()
 /*
 | Sends the stored changes to remote meshmashine
 */
-IFace.prototype.redo = function()
+IFace.prototype.redo = function( )
 {
-	if (this.$redo.length === 0)
+	if( this.$redo.length === 0 )
 		{ return; }
 
-	var chgX     = this.$redo.pop().chgX.invert();
-    var r        = MeshMashine.changeTree(this.$cSpace, chgX);
+	var chgX     = this.$redo.pop( ).chgX.invert( );
+    var r        = chgX.changeTree( this.$cSpace );
     this.$cSpace = r.tree;
 	chgX         = r.chgX;
 
-	if (chgX === null)
+	if( chgX === null )
 		{ return; }
 
-	var c = Jools.immute({
-		cid  : Jools.uid(),
-		chgX : chgX,
-		time : this.$remoteTime
-	});
+	var c = Jools.immute(
+		{
+			cid  : Jools.uid( ),
+			chgX : chgX,
+			time : this.$remoteTime
+		}
+	);
 
-	this.$outbox.push(c);
-	this.$undo.push(c);
-	this.sendChanges();
+	this.$outbox.push( c );
+	this.$undo.push( c );
+	this.sendChanges( );
 
-    if (this._updateRCV)
-		{ this._updateRCV.update(this.$cSpace, chgX); }
+    if( this._updateRCV )
+		{ this._updateRCV.update( this.$cSpace, chgX ); }
 
     return chgX;
 };
 
 
-} ) ();
+} )( );

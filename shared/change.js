@@ -191,14 +191,50 @@ Change.prototype.invert = function( )
 	return r;
 };
 
+
+/*
+| Performes this change on a tree.
+*/
+Change.prototype.changeTree =
+	function( tree )
+{
+	var type = this.type();
+
+	Jools.log(
+		'change',
+		'src:',  this.src,
+		'trg:',  this.trg,
+		'type:', this.type
+	);
+
+	// executes the op-handler
+	// TODO make a switch call around this
+	var r = this[ type ]( tree );
+
+	// if answer is null the change has vaporated
+	if( r === null )
+		{ return null; }
+
+	return Jools.immute(
+		{
+			tree : r.tree,
+			chgX : r.chg
+		}
+	);
+};
+
+
+
 /*
 | Change emulates a ChangeRay with the length of 1.
+| TODO check if needed
 */
 Change.prototype.length = 1;
 
 
 /*
 | Change emulates a ChangeRay with the length of 1.
+| TODO check if needed
 */
 Change.prototype.get = function( idx )
 {

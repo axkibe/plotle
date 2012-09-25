@@ -42,7 +42,7 @@ var Change;
 /*
 | Capsule
 */
-(function() {
+( function( ) {
 "use strict";
 
 
@@ -58,10 +58,31 @@ if (typeof(window) === 'undefined')
 
 /*
 | Constructor
+|
+| model is optional and if given the ray is filled with it
 */
-ChangeRay = function( )
+ChangeRay = function( model )
 {
-	this._$ray = [ ];
+	var ray = this._$ray = [ ];
+
+	// no model: nothing to do
+	if( !Jools.is( model ) )
+		{ return; }
+
+	if( !( model instanceof Array ) )
+		{ throw new Error(' ChangeRay model must be an Array ( or missing )' ); }
+
+	for( var a = 0, aZ = model.length; a < aZ; a++ )
+	{
+		var c = model[a];
+
+		if( !(c instanceof Change ) )
+		{
+			c = new Change( a.src, a.trg );
+		}
+
+		ray[ a ] = c;
+	}
 };
 
 
@@ -75,14 +96,10 @@ ChangeRay.prototype.invert = function()
 
 	var inv = new ChangeRay( );
 
-	for( var a = 0, aZ = this.length; a < aZ; a++)
-		{ inv._$ray[a] = this._$ray[a].invert(); }
+	for( var a = 0, aZ = this.length; a < aZ; a++ )
+		{ inv._$ray[ a ] = this._$ray[ a ].invert( ); }
 
-	if ( Jools.is( this._$invert ) )
-		{ Jools.innumerable( this, '_$invert', inv ); }
-	else
-		{ Jools.innumerable( this, '_$invert', inv ); }
-
+	Jools.innumerable( this, '_$invert', inv );
 	Jools.innumerable( inv, '_$invert', this );
 
 	return inv;
@@ -104,7 +121,9 @@ ChangeRay.prototype.push = function( chg )
 /*
 | Change emulates an Array with the length of 1
 */
-Object.defineProperty ( ChangeRay.prototype, 'length',
+Object.defineProperty (
+	ChangeRay.prototype,
+	'length',
 	{
 		get : function( )
 			{ return this._$ray.length; }
@@ -112,16 +131,12 @@ Object.defineProperty ( ChangeRay.prototype, 'length',
 );
 
 
-// TODO remove
-Jools.keyNonGrata(ChangeRay.prototype, 0);
-
-
 /*
 | Gets one change.
 */
 ChangeRay.prototype.get = function( idx )
 {
-	return this._$ray[idx];
+	return this._$ray[ idx ];
 };
 
 
@@ -133,14 +148,47 @@ ChangeRay.prototype.set = function( idx, chg )
 	if ( this._invert )
 		{ this._invert = null; }
 
-	return this._$ray[idx] = chg;
+	return this._$ray[ idx ] = chg;
+};
+
+
+
+/*
+| Performes this change-ray on a tree.
+|
+| FIXME trace if a signle change has changed and create
+| a new array only then
+*/
+ChangeRay.prototype.changeTree =
+	function( tree )
+{
+	// the ray with the changes applied
+	var cray = new ChangeRay( );
+
+	// iterates through the change ray
+	for( var a = 0, aZ = this.length; a < aZ; a++ )
+	{
+		var chg = this.get( a );
+		var r   = chg.changeTree( tree );
+
+		// the tree returned by op-handler is the new tree
+		tree = r.tree;
+		cray.push( r.chg );
+	}
+
+	return Jools.immute(
+		{
+			tree : tree,
+			chgX : Jools.immute( cray )
+		}
+	);
 };
 
 
 /*
 | Exports
 */
-if (typeof(window) === 'undefined')
+if( typeof( window ) === 'undefined' )
 	{ module.exports = ChangeRay; }
 
-}());
+}( ) );

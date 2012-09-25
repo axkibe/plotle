@@ -70,69 +70,6 @@ var isString     = Jools.isString;
 var reject       = Jools.reject;
 var isPath       = Path.isPath;
 
-/*
-| Performes one or several changes on a tree
-*/
-var changeTree =
-	function(
-		tree, // the tree to change
-		chgX  // a change or a change-ray
-	)
-{
-	if( arguments.length !== 2 )
-		{ throw new Error( 'changeTree arguments fail' ); }
-
-	var aChgX = null;
-
-	// iterates through the change ray
-	// ( or the one change )
-	for( var a = 0, aZ = chgX.length; a < aZ; a++ )
-	{
-		var chg   = chgX.get( a );
-		var chgtype = chg.type();
-
-		Jools.log(
-			'change',
-			'src:', chg.src,
-			'trg:', chg.trg,
-			'type:', chgtype
-		);
-
-		// executes the op-handler
-		var r = chg[ chgtype ]( tree );
-
-		// if answer is null the change has vaporated
-		if( r === null )
-			{ continue; }
-
-
-		// the tree returned by op-handler is the new tree
-		tree = r.tree;
-
-		// the change returned by the op-handler is stored
-		// as applied changes, either as change-ray
-		// or as single change
-		if (aZ > 1)
-		{
-			if (aChgX === null)
-				{ aChgX = new ChangeRay(); }
-
-			aChgX.push( r.chg );
-		}
-		else
-		{
-			aChgX = r.chg;
-		}
-	}
-
-	return Jools.immute(
-		{
-			tree : tree,
-			chgX : Jools.immute( aChgX )
-		}
-	);
-};
-
 
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  ,--,--'                                   .
@@ -621,8 +558,7 @@ MeshMashine =
 	Change     : Change,
 	tfxChg     : tfxChg,
 	tfxChgX    : tfxChgX,
-	tfxSign    : tfxSign,
-	changeTree : changeTree
+	tfxSign    : tfxSign
 };
 
 /**

@@ -295,18 +295,11 @@ Server.prototype.loadSpace = function ( spacename, _)
 		if ( !Jools.isArray( o.chgX ) )
 			{ change.chgX = new MeshMashine.Change( o.chgX ); }
 		else
-		{
-			change.chgX = [ ];
-
-			for( var a = 0, aZ = o.chgX.length; a < aZ; a++ )
-			{
-				change.chgX.push( new MeshMashine.Change( o.chgX[a] ) );
-			}
-		}
+			{ change.chgX = new MeshMashine.ChangeRay( o.chgX ); }
 
 		space.$seqZ++;
 
-		space.$tree = MeshMashine.changeTree( space.$tree, change.chgX ).tree;
+		space.$tree = change.chgX.changeTree( space.$tree ).tree;
 	}
 };
 
@@ -695,7 +688,8 @@ Server.prototype.cmdAlter = function( cmd, _)
 	for( var a = time; a < seqZ; a++ )
 		{ chgX = MeshMashine.tfxChgX(chgX, changes[a].chgX); }
 
-	if( chgX === null || chgX.length === 0 )
+	if( chgX === null ||
+		chgX.length === 0 )
 	{
 		return {
 			ok   : true,
@@ -704,7 +698,7 @@ Server.prototype.cmdAlter = function( cmd, _)
 	}
 
 	// applies the changes
-	var r       = MeshMashine.changeTree( space.$tree, chgX );
+	var r       = chgX.changeTree( space.$tree );
 	space.$tree = r.tree;
 	chgX        = r.chgX;
 
@@ -721,7 +715,7 @@ Server.prototype.cmdAlter = function( cmd, _)
 			chgX : chgX
 		};
 
-	// saves the change in the database
+	// saves the change(ray) in the database
 	space.$changesDB.insert(
 		{
 			_id  : seqZ,
@@ -1327,21 +1321,21 @@ Server.prototype.cmdGet = function(cmd, _)
 	// if the requested tree is not the latest, replay it backwards
 	for (var a = seqZ - 1; a >= time; a--)
 	{
-		var chgX = changes[a].chgX;
+		var chgX = changes[ a ].chgX;
 
 		for (var b = 0; b < chgX.length; b++)
-			{ tree = MeshMashine.changeTree( tree, chgX[b].reverse() ).tree; }
+			{ tree = chgX[ b ].reverse( ).changeTree( tree ).tree; }
 	}
 
 	// returns the path requested
 	var node;
 	try
 	{
-		node = tree.getPath(new Path(cmd.path));
+		node = tree.getPath( new Path( cmd.path ) );
 	}
 	catch( err )
 	{
-		throw reject('cannot get path: ' + err.message);
+		throw reject( 'cannot get path: ' + err.message );
 	}
 
 	return {
