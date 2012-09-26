@@ -9,6 +9,7 @@
 /*
 | Imports
 */
+var IFaceSym;
 var Jools;
 var Path;
 var Peer;
@@ -951,7 +952,7 @@ window.onload =
 	element.up.onclick        = onButtonUpClick;
 	element.down.onclick      = onButtonDownClick;
 
-	peer = new Peer( 'sync' );
+	peer = new Peer( new IFaceSym() );
 	update( -1 );
 	updatePad( );
 	resetBlink( );
