@@ -43,6 +43,7 @@ var Caret;
 var Dash;
 var Euclid;
 var fontPool;
+var IFace;
 var Jools;
 var MeshMashine;
 var Peer;
@@ -59,52 +60,60 @@ var Visual;
 
 'use strict';
 
-if (typeof(window) === 'undefined')
-	{ throw new Error('this code needs a browser!'); }
+if( typeof( window ) === 'undefined' )
+{
+	throw new Error( 'this code needs a browser!' );
+}
 
 
 /*
 | Constructor.
 */
-Shell = function(fabric)
+Shell = function( fabric )
 {
-	if (shell !== null)
-		{ throw new Error('Singleton not single'); }
+	if( shell !== null )
+	{
+		throw new Error( 'Singleton not single' );
+	}
 
 	shell = this;
 
-	Euclid.Measure.init();
+	Euclid.Measure.init( );
 
-	this._fontWFont  = fontPool.get(20, 'la');
-	this._$fontWatch = Euclid.Measure.width(this._fontWFont, 'meshcraft$8833');
+	this._fontWFont  = fontPool.get( 20, 'la' );
+
+	this._$fontWatch = Euclid.Measure.width(
+		this._fontWFont,
+		'meshcraft$8833'
+	);
 
 	this.fabric    = fabric;
 
 	this.$space    = null;
-	this.$board    = new Dash.Board();
-	this.$caret    = new Caret(null, null, null, false);
+	this.$board    = new Dash.Board( );
+	this.$caret    = new Caret( null, null, null, false );
 	this.$action   = null;
 
 	this._$menu    = null;
 
-	this.selection = new Range();
+	this.selection = new Range( );
 
 	// true at greenscreen frowny
 	this.green     = false;
 
 	// sets the caret to shown if the document has focus
 	// if it is unknown, asume shown
-	if( !document.hasFocus || document.hasFocus() )
-		{ this.$caret.show(); }
+	if( !document.hasFocus || document.hasFocus( ) )
+		{ this.$caret.show( ); }
 
-	this._draw();
+	this._draw( );
 };
 
 
 /*
 | Retracts the focus.
 */
-Shell.prototype.dropFocus = function()
+Shell.prototype.dropFocus = function( )
 {
 	this.setCaret( null, null );
 };
@@ -119,7 +128,9 @@ Shell.prototype.setCaret = function( section, sign, retainx )
 	{
 		case null :
 			if( sign !== null )
-				{ throw new Error('setCaret section=null, invalid sign'); }
+			{
+				throw new Error( 'setCaret section=null, invalid sign' );
+			}
 			break;
 
 		case 'board' :
@@ -137,12 +148,16 @@ Shell.prototype.setCaret = function( section, sign, retainx )
 					break;
 
 				default :
-					throw new Error('setCaret section=' + section + ', invalid sign');
+					throw new Error(
+						'setCaret section=' +
+						section +
+						', invalid sign'
+					);
 			}
 			break;
 
 		default :
-			throw new Error('invalid section');
+			throw new Error( 'invalid section' );
 	}
 
 	var entity;
@@ -161,13 +176,13 @@ Shell.prototype.setCaret = function( section, sign, retainx )
 		);
 
 		if( entity )
-			{ entity.knock(); }
+			{ entity.knock( ); }
 	}
 
 	this.$caret = new Caret(
 		section,
 		sign,
-		Jools.is(retainx) ? retainx : null,
+		Jools.is( retainx ) ? retainx : null,
 		this.$caret.$shown
 	);
 
@@ -256,55 +271,55 @@ Shell.prototype.messageRCV = function( space, user, message )
 */
 Shell.prototype.update = function( tree, chgX )
 {
-	this.$space.update(tree.root);
+	this.$space.update( tree.root );
 
 	var caret = this.$caret;
 
-	if (caret.sign !== null)
+	if( caret.sign !== null )
 	{
 		this.setCaret(
 			caret.section,
-			MeshMashine.tfxSign(caret.sign, chgX),
+			MeshMashine.tfxSign( caret.sign, chgX ),
 			caret.retainx
 		);
 	}
 
 	var selection = this.selection;
-	if (selection.active)
+	if( selection.active )
 	{
-		selection.sign1 = MeshMashine.tfxSign(selection.sign1, chgX);
-		selection.sign2 = MeshMashine.tfxSign(selection.sign2, chgX);
+		selection.sign1 = MeshMashine.tfxSign( selection.sign1, chgX );
+		selection.sign2 = MeshMashine.tfxSign( selection.sign2, chgX );
 	}
 
-	this._draw();
+	this._draw( );
 };
 
 
 /*
 | The shell got the systems focus.
 */
-Shell.prototype.systemFocus = function()
+Shell.prototype.systemFocus = function( )
 {
 	if( this.green )
 		{ return; }
 
 	var caret = this.$caret;
-	caret.show();
-	caret.display();
+	caret.show( );
+	caret.display( );
 };
 
 
 /*
 | The shell lost the systems focus.
 */
-Shell.prototype.systemBlur = function()
+Shell.prototype.systemBlur = function( )
 {
 	if( this.green )
 		{ return; }
 
 	var caret = this.$caret;
-	caret.hide();
-	caret.display();
+	caret.hide( );
+	caret.display( );
 };
 
 
@@ -333,12 +348,12 @@ Shell.prototype.blink = function( )
 /*
 | Creates an action.
 */
-Shell.prototype.startAction = function()
+Shell.prototype.startAction = function( )
 {
 	if( this.$action )
-		{ throw new Error('double action'); }
+		{ throw new Error( 'double action' ); }
 
-	return this.$action = new Action(arguments);
+	return this.$action = new Action( arguments );
 
 };
 
@@ -348,8 +363,8 @@ Shell.prototype.startAction = function()
 */
 Shell.prototype.stopAction = function()
 {
-	if (!this.$action)
-		{ throw new Error('ending no action'); }
+	if( !this.$action )
+		{ throw new Error( 'ending no action' ); }
 
 	this.$action = null;
 
@@ -363,7 +378,7 @@ Shell.prototype.stopAction = function()
 Shell.prototype.poke = function( )
 {
 	// actualizes hover context
-	if(this.$hoverP )
+	if( this.$hoverP )
 	{
 		this.pointingHover(
 			this.$hoverP,
@@ -372,8 +387,10 @@ Shell.prototype.poke = function( )
 		);
 	}
 
-	if (this.redraw)
-		{ this._draw(); }
+	if( this.redraw )
+	{
+		this._draw( );
+	}
 };
 
 
@@ -382,50 +399,60 @@ Shell.prototype.poke = function( )
 */
 Shell.prototype.knock = function()
 {
-	if (this.green)
+	if( this.green )
 		{ return; }
 
 	this.$caret.$save      = null;
 	this.$caret.$screenPos = null;
 
-	if (this.$space)
-		{ this.$space.knock(); }
+	if( this.$space )
+		{ this.$space.knock( ); }
 
-	this.$board.knock();
+	this.$board.knock( );
 
-	if (this._$menu)
-		{ this._$menu.knock(); }
+	if( this._$menu )
+		{ this._$menu.knock( ); }
 
-	this._draw();
+	this._draw( );
 };
 
 
 /*
 | Sketches the greenscreen frowny.
 */
-Shell.prototype.sketchFrowny = function(fabric, border, twist, view, pos)
+Shell.prototype.sketchFrowny =
+	function(
+		fabric,
+		border,
+		twist,
+		view,
+		pos
+	)
 {
-	fabric.moveTo(pos.x - 100, pos.y);
-	fabric.lineTo(pos.x,       pos.y - 30);
-	fabric.lineTo(pos.x + 100, pos.y);
+	fabric.moveTo( pos.x - 100, pos.y       );
+	fabric.lineTo( pos.x,       pos.y -  30 );
+	fabric.lineTo( pos.x + 100, pos.y       );
 
-	fabric.moveTo(pos.x - 100, pos.y - 130);
-	fabric.lineTo(pos.x -  50, pos.y - 140);
+	fabric.moveTo( pos.x - 100, pos.y - 130 );
+	fabric.lineTo( pos.x -  50, pos.y - 140 );
 
-	fabric.moveTo(pos.x + 100, pos.y - 130);
-	fabric.lineTo(pos.x +  50, pos.y - 140);
+	fabric.moveTo( pos.x + 100, pos.y - 130 );
+	fabric.lineTo( pos.x +  50, pos.y - 140 );
 };
 
 
 /*
 | Sets the current popup menu.
 */
-Shell.prototype.setMenu = function(menu)
+Shell.prototype.setMenu = function( menu )
 {
-	if (this._$menu)
-		{ this._$menu.cancel(); }
+	if( this._$menu )
+	{
+		this._$menu.cancel( );
+	}
 
 	this._$menu = menu;
+
 	this.redraw = true;
 };
 
@@ -854,64 +881,74 @@ Shell.prototype.changeSpaceZoom = function(df)
 /*
 | Called when loading the website
 */
-Shell.prototype.onload = function()
+Shell.prototype.onload =
+	function( )
 {
-	this.peer = new Peer(this, this);
+	this.peer = new Peer(
+		new IFace( this, this )
+	);
 
-	var user     = window.localStorage.getItem('user');
+	var user     = window.localStorage.getItem( 'user' );
 
 	var passhash = null;
-	if (user)
-		{ passhash = window.localStorage.getItem('passhash'); }
+	if( user )
+		{ passhash = window.localStorage.getItem( 'passhash' ); }
 	else
 		{ user = 'visitor'; }
 
-	this.peer.auth(user, passhash, this);
+	this.peer.auth( user, passhash, this );
 };
 
 
 /*
-| Moves to space named 'spaceName'.
+| Moves to space with the name name.
+|
 | if spaceName is null, reloads current space.
 */
-Shell.prototype.moveToSpace = function(name)
+Shell.prototype.moveToSpace =
+	function( name )
 {
 	var self = this;
 
-	if (this.$caret.section === 'space')
-		{ this.setCaret(null, null); }
+	if( this.$caret.section === 'space' )
+		{ this.setCaret( null, null ); }
 
-	if (name === null)
+	if( name === null )
 	{
 		name = self.$space.spacename;
 
-		if( this.$user.substr(0, 5) === 'visit' &&
-			(name !== 'meshcraft:home' && name !== 'meshcraft:sandbox'))
+		if(
+			this.$user.substr( 0, 5 ) === 'visit' &&
+			(
+				name !== 'meshcraft:home' &&
+				name !== 'meshcraft:sandbox'
+			)
+		)
 		{
 			name = 'meshcraft:home';
 		}
 	}
 	else
 	{
-		self.$board.message('Moving to "' + name + '" ...');
+		self.$board.message( 'Moving to "' + name + '" ...' );
 	}
 
-	self.$board.setCurSpace('', '');
-
-	if (!Jools.isString(name))
-		{ throw new Error('XXXX'); }
+	self.$board.setCurSpace( '', '' );
 
 	this.peer.aquireSpace(
 		name,
-		function(err, val)
+		function( err, val )
 		{
-			if (err !== null) {
-				self.greenscreen('Cannot aquire space: ' + err.message);
+			if( err !== null )
+			{
+				self.greenscreen( 'Cannot aquire space: ' + err.message );
 				return;
 			}
 
 			if (val.name !== name)
-				{ throw new Error('server served wrong space!'); }
+			{
+				throw new Error('server served wrong space!');
+			}
 
 			var tree = val.tree;
 
@@ -921,11 +958,14 @@ Shell.prototype.moveToSpace = function(name)
 				val.access
 			);
 
-			self.$board.setCurSpace(name, val.access);
+			self.$board.setCurSpace(
+				name,
+				val.access
+			);
 
-			self.$board.setSpaceZoom(0);
+			self.$board.setSpaceZoom( 0 );
 
-			self._draw();
+			self._draw( );
 		}
 	);
 
@@ -935,27 +975,40 @@ Shell.prototype.moveToSpace = function(name)
 /*
 | answer to on 'auth' operation.
 */
-Shell.prototype.onAuth = function(user, passhash, res)
+Shell.prototype.onAuth =
+	function(
+		user,
+		passhash,
+		res
+	)
 {
-	if (!res.ok)
+	if( !res.ok )
 	{
 		// when logging in with a real user failed
 		// takes a visitor instead
-		if (user !== 'visitor')
+		if( user !== 'visitor' )
 		{
-			this.peer.auth('visitor', null, this);
+			this.peer.auth(
+				'visitor',
+				null,
+				this
+			);
+
 			return;
 		}
 
 		// if even that failed, bailing to greenscreen
-		this.greenscreen(res.message);
+		this.greenscreen( res.message );
 		return;
 	}
 
-	this.setUser(res.user, res.passhash);
-	if (!this.$space)
-		{ this.moveToSpace('meshcraft:home'); }
+	this.setUser( res.user, res.passhash );
+
+	if( !this.$space )
+	{
+		this.moveToSpace( 'meshcraft:home' );
+	}
 };
 
 
-} ) ();
+} )( );

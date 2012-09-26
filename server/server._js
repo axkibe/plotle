@@ -411,7 +411,6 @@ Server.prototype.prepareResources = function(_)
 
 	var rlist = [
 		'media/favicon.ico',                               'mc',
-		'testpad/testpad.html',                            'f',
 		'testpad/testpad.js',                              'f',
 		'shell/fonts/webfont.js',                          'mc',
 
@@ -593,21 +592,33 @@ Server.prototype.prepareResources = function(_)
 	log('start', 'bundle:', bsha1);
 
 	// the devel.html file
-	var devel = new Resource('shell/devel.html', 'm');
-	devel.data = fs.readFile('shell/devel.html', _) + '';
-	devel.data = devel.data.replace(/<!--DEVELPACK.*>/, devels.join('\n'));
-	this.$resources['devel.html'] = devel;
+	var devel  = new Resource( 'shell/devel.html', 'm' );
+	devel.data =  fs.readFile( 'shell/devel.html', _) + '';
+
+	devel.data = devel.data.replace(
+		/<!--DEVELPACK.*>/,
+		devels.join('\n')
+	);
+	this.$resources[ 'devel.html' ] =
+		devel;
 
 	// the index.html file
-	var main = new Resource('shell/meshcraft.html', 'm');
-	main.data = fs.readFile('shell/meshcraft.html', _) + '';
+	var main  = new Resource( 'shell/meshcraft.html', 'm' );
+	main.data =  fs.readFile( 'shell/meshcraft.html', _) + '';
+
 	main.data = main.data.replace(
 		/<!--COPACK.*>/,
 		'<script src="' + br.path + '" type="text/javascript"></script>'
 	);
-	this.$resources['meshcraft.html'] =
-	this.$resources['index.html'] =
-	this.$resources[''] = main;
+
+	this.$resources[ 'meshcraft.html' ] =
+	this.$resources[ 'index.html'     ] =
+	this.$resources[ ''               ] =
+		main;
+
+	// the testpad html file
+	var testpad = new Resource('testpad/testpad.html', 'f');
+	this.$resources[ 'testpad.html' ] = testpad;
 
 	// prepares the zipped versions
 	for( path in this.$resources )
@@ -1412,7 +1423,7 @@ Server.prototype.requestListener = function(req, res)
 	var r = this.$resources[pathname];
 	if (!r)
 	{
-		this.webError(res, '404 Bad Reqeust');
+		this.webError(res, '404 Bad Request');
 		return;
 	}
 

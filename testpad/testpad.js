@@ -75,13 +75,17 @@ var cursor = {
 	blink  : false
 };
 
+/*
+| TODO
+*/
 var focus     = false;
 
 
 /*
 | Returns true if a keyCode is known to be a "special key".
 */
-function isSpecialKey(keyCode)
+var isSpecialKey =
+	function( keyCode )
 {
 	switch( keyCode )
 	{
@@ -111,11 +115,12 @@ var blinkTimer = null;
 /*
 | Blinks the cursor on/off.
 */
-var blink = function()
+var blink =
+	function( )
 {
 	cursor.blink = !cursor.blink;
-	testinput();
-	updatePad();
+	testinput( );
+	updatePad( );
 	element.beep.innerHTML = '';
 };
 
@@ -123,19 +128,20 @@ var blink = function()
 /*
 | Resets the blink timer
 */
-var resetBlink = function()
+var resetBlink =
+	function( )
 {
 	cursor.blink = false;
 	element.beep.innerHTML = '';
 
-	if (blinkTimer)
+	if( blinkTimer )
 	{
-		clearInterval(blinkTimer);
+		clearInterval( blinkTimer );
 	}
 
-	if (focus)
+	if( focus )
 	{
-		blinkTimer = setInterval(blink, 540);
+		blinkTimer = setInterval( blink, 540 );
 	}
 };
 
@@ -143,7 +149,8 @@ var resetBlink = function()
 /*
 | Mouse down event on pad -> focuses the hidden input,
 */
-var onmousedown = function( event )
+var onmousedown =
+	function( event )
 {
 	if( event.button !== 0 )
 		{ return; }
@@ -155,7 +162,7 @@ var onmousedown = function( event )
 	var x = event.pageX - element.pad.offsetLeft;
 	var y = event.pageY - element.pad.offsetTop;
 
-	if (!ranks)
+	if( !ranks )
 	{
 		beep( );
 		return;
@@ -185,7 +192,8 @@ var onmousedown = function( event )
 /*
 | Captures all mouseevents event
 */
-var captureEvents = function( )
+var captureEvents =
+	function( )
 {
 	if( element.pad.setCapture )
 	{
@@ -202,7 +210,8 @@ var captureEvents = function( )
 /*
 | Stops capturing all mouseevents
 */
-var releaseEvents = function( )
+var releaseEvents =
+	function( )
 {
     if( element.pad.setCapture )
 	{
@@ -219,7 +228,8 @@ var releaseEvents = function( )
 /*
 | Mouse button released
 */
-var onmouseup = function( event )
+var onmouseup =
+	function( event )
 {
 	if( event.button !==  0)
 		{ return; }
@@ -320,7 +330,8 @@ var onblur =
 /*
 | Clears the current action
 */
-var clearAction = function( )
+var clearAction =
+	function( )
 {
 	element.cancel.disabled = true;
 	element.send.disabled   = true;
@@ -331,7 +342,8 @@ var clearAction = function( )
 /*
 | Sends the current action to server.
 */
-var send = function( )
+var send =
+	function( )
 {
 	if( !action )
 	{
@@ -381,7 +393,8 @@ var send = function( )
 /*
 | Cancels the current action
 */
-var cancel = function( )
+var cancel =
+	function( )
 {
 	clearAction( );
 	resetBlink( );
@@ -393,13 +406,17 @@ var cancel = function( )
 /*
 | Displays a beep message.
 */
-var beep = function( )
+var beep =
+	function( )
 {
 	resetBlink( );
 	element.beep.innerHTML = 'BEEP!';
 };
 
 
+/*
+| TODO
+*/
 var startAction =
 	function( newAction )
 {
@@ -469,7 +486,7 @@ var inputSpecialKey =
 {
 	switch( keyCode )
 	{
-	    case  8 :
+		case  8 :
 			// backspace
 			if( !ranks )
 			{
@@ -528,7 +545,7 @@ var inputSpecialKey =
 			cursor.offset--;
 			break;
 
-	    case 13 :
+		case 13 :
 			// return
 			if( !ranks )
 			{
@@ -686,26 +703,33 @@ var inputSpecialKey =
 	updatePad( );
 };
 
-/**
+
+/*
 | Updates data from server
 */
-var update = function(totime) {
+var update =
+	function( totime )
+{
 	var res;
 
-	peer.toTime(totime);
+	//peer.toTime( totime ); TODO
 
-	res   = peer.get(new Path(['meshcraft:home']));
+	res   = peer.get( new Path( [ 'testpad' ] ) );
 	time  = res.time;
 	space = res.node;
 
-	maxtime = Math.max(time, maxtime);
+	maxtime = Math.max( time, maxtime );
 
 	element.now.innerHTML = '' + time;
-	if (space) {
-		note = space.copse['1'];
+
+	if (space)
+	{
+		note  = space.copse[ 'testnote' ];
 		ranks = note.doc.ranks;
 		copse = note.doc.copse;
-	} else {
+	}
+	else
+	{
 		space = null;
 		note  = null;
 		ranks = null;
@@ -713,23 +737,33 @@ var update = function(totime) {
 	}
 };
 
-/**
+
+/*
 | Button update-to-now has been clicked
 */
-var onupnow = function() {
-	update(-1);
-	resetBlink();
-	updatePad();
-	element.input.focus();
+var onButtonUpToNow =
+	function( )
+{
+	update( -1 );
+	resetBlink( );
+	updatePad( );
+	element.input.focus( );
 };
 
 
 /*
 | Button one-up-the-timeline has been clicked.
 */
-var onButtonUpClick = function( )
+var onButtonUpClick =
+	function( )
 {
-	update( Math.min( time + 1, maxtime ) );
+	update(
+		Math.min(
+			time + 1,
+			maxtime
+		)
+	);
+
 	resetBlink( );
 	updatePad( );
 	element.input.focus( );
@@ -739,9 +773,16 @@ var onButtonUpClick = function( )
 /*
 | Button one-down-the-timeline has been clicked.
 */
-var onButtonDownClick = function( )
+var onButtonDownClick =
+	function( )
 {
-	update( Math.max( time - 1, 0 ) );
+	update(
+		Math.max(
+			time - 1,
+			0
+		)
+	);
+
 	resetBlink( );
 	updatePad( );
 	element.input.focus( );
@@ -751,7 +792,8 @@ var onButtonDownClick = function( )
 /*
 | (Re)Computes the pads contents to match the current data and action.
 */
-var updatePad = function( )
+var updatePad =
+	function( )
 {
 	var lines = [ ];
 	var a, aZ, b, bZ, line;
@@ -831,8 +873,8 @@ var updatePad = function( )
 			break;
 
 		case 'join' :
-	       lines[ action.line ].unshift( '<span id="join">↰</span>' );
-    	   break;
+			lines[ action.line ].unshift( '<span id="join">↰</span>' );
+			break;
 
 		case 'split' :
 			lines[ action.line ].splice(
@@ -873,20 +915,19 @@ var updatePad = function( )
 
 	// transforms to HTML
 	for( a = 0, aZ = lines.length; a < aZ; a++ )
-		{ lines[ a ] = lines[ a ].join( '' ); }
+	{
+		lines[ a ] = lines[ a ].join( '' );
+	}
 
 	element.pad.innerHTML = lines.join( '\n' );
 };
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ,.   ,   ,.       .
- `|  /|  / . ,-. ,-| ,-. . , ,
-  | / | /  | | | | | | | |/|/
-  `'  `'   ' ' ' `-^ `-' ' '
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-window.onload = function( )
+/*
+| Window.
+*/
+window.onload =
+	function( )
 {
 	for( var id in element )
 	{
@@ -906,7 +947,7 @@ window.onload = function( )
 	element.send.onclick      = send;
 	element.cancel.disabled   = true;
 	element.cancel.onclick    = cancel;
-	element.upnow.onclick     = onupnow;
+	element.upnow.onclick     = onButtonUpToNow;
 	element.up.onclick        = onButtonUpClick;
 	element.down.onclick      = onButtonDownClick;
 

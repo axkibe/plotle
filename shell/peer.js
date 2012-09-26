@@ -55,10 +55,10 @@ if (typeof (window) === 'undefined')
 /*
 | Constructor
 */
-Peer = function( updateRCV, messageRCV )
+Peer = function( iface )
 {
 	this.spacename = null;
-	this._iface     = new IFace(updateRCV, messageRCV);
+	this._iface    = iface;
 
 	this._$visitUser     = null;
 	this._$visitPasshash = null;
@@ -165,10 +165,18 @@ Peer.prototype.register =
 /*
 | aquires a space.
 */
-Peer.prototype.aquireSpace = function( name, callback )
+Peer.prototype.aquireSpace =
+	function(
+		name,
+		callback
+	)
 {
 	this.spacename = name;
-	this._iface.aquireSpace(name, callback);
+
+	this._iface.aquireSpace(
+		name,
+		callback
+	);
 };
 
 
@@ -177,9 +185,16 @@ Peer.prototype.aquireSpace = function( name, callback )
 |
 | path: path to twig
 */
-Peer.prototype.get = function(path, len)
+Peer.prototype.get =
+	function(
+		path,
+		len
+	)
 {
-	return this._iface.get(path, len);
+	return this._iface.get(
+		path,
+		len
+	);
 };
 
 
@@ -189,7 +204,9 @@ Peer.prototype.get = function(path, len)
 Peer.prototype.newNote = function( spacename, zone )
 {
 	if ( spacename !== this.spacename )
-		{ throw new Error('newNote() wrong spacename'); }
+	{
+		throw new Error('newNote() wrong spacename');
+	}
 
 	var chgX = this._iface.alter(
 		{
@@ -211,14 +228,18 @@ Peer.prototype.newNote = function( spacename, zone )
 		}
 	);
 
-	return chgX.trg.path.get(-1);
+	return chgX.trg.path.get( -1 );
 };
 
 
 /*
 | creates a new portal.
 */
-Peer.prototype.newPortal = function( spacename, zone )
+Peer.prototype.newPortal =
+	function(
+		spacename,
+		zone
+	)
 {
 	if ( spacename !== this.spacename )
 		{ throw new Error('newPortal() wrong spacename'); }
@@ -245,9 +266,13 @@ Peer.prototype.newPortal = function( spacename, zone )
 
 
 /*
-| sets the zone for item.
+| Sets the zone for item.
 */
-Peer.prototype.setZone = function(itemPath, zone)
+Peer.prototype.setZone =
+	function(
+		itemPath,
+		zone
+	)
 {
 	this._iface.alter(
 		{ val  : zone },
@@ -257,52 +282,87 @@ Peer.prototype.setZone = function(itemPath, zone)
 
 
 /*
-| sets an items fontsize
+| Sets an items fontsize.
 */
-Peer.prototype.setFontSize = function(itemPath, fontsize)
+Peer.prototype.setFontSize =
+	function(
+		itemPath,
+		fontsize
+	)
 {
 	this._iface.alter(
-		{ val  : fontsize },
-		{ path : new Path(itemPath, '++', 'fontsize') }
+		{
+			val  : fontsize
+		},
+		{
+			path : new Path(
+				itemPath,
+				'++',
+				'fontsize'
+			)
+		}
 	);
 };
 
 
 /*
-| sets an items PNW. (point in north-west)
+| Sets an items pnw (point in north-west)
 */
-Peer.prototype.setPNW = function(itemPath, pnw)
+Peer.prototype.setPNW =
+	function(
+		itemPath,
+		pnw
+	)
 {
 	this._iface.alter(
-		{ val  : pnw },
-		{ path : new Path(itemPath, '++', 'pnw') }
+		{
+			val  : pnw
+		},
+		{
+			path : new Path(
+				itemPath,
+				'++',
+				'pnw'
+			)
+		}
 	);
 };
 
 
 /*
-| creates a new label.
+| Creates a new label.
 */
-Peer.prototype.newLabel = function( spacename, pnw, text, fontsize )
+Peer.prototype.newLabel = function(
+	spacename,
+	pnw,
+	text,
+	fontsize
+)
 {
 	if ( spacename !== this.spacename )
 		{ throw new Error('newLabel() wrong spacename'); }
 
 	var chgX = this._iface.alter(
 		{
-			val           : {
+			val           :
+			{
 				type      : 'Label',
 				fontsize  : fontsize,
 				pnw       : pnw,
-				doc       : {
+				doc       :
+				{
 					type  : 'Doc',
-					copse : {
-						'1' : {
+					copse :
+					{
+						'1' :
+						{
 							type: 'Para',
 							text: text
 						}
 					},
-					ranks : [ '1' ]
+					ranks : [
+						'1'
+					]
 				}
 			},
 			rank : null
@@ -314,48 +374,62 @@ Peer.prototype.newLabel = function( spacename, pnw, text, fontsize )
 		}
 	);
 
-	return chgX.trg.path.get(-1);
+	return chgX.trg.path.get( -1 );
 };
 
 
 /*
-| undoes a change..
+| Undoes a change.
 */
-Peer.prototype.undo = function()
+Peer.prototype.undo = function( )
 {
-	this._iface.undo();
+	this._iface.undo( );
 };
 
 
 /*
-| redoes a change.
+| Redoes a change.
 */
-Peer.prototype.redo = function()
+Peer.prototype.redo = function( )
 {
-	this._iface.redo();
+	this._iface.redo( );
 };
 
 
 /*
-| creates a new relation.
+| Creates a new relation.
 */
-Peer.prototype.newRelation = function( spacename, pnw, text, fontsize, item1key, item2key )
+Peer.prototype.newRelation =
+	function(
+		spacename,
+		pnw,
+		text,
+		fontsize,
+		item1key,
+		item2key
+	)
 {
-	if ( spacename !== this.spacename )
-		{ throw new Error('newRelation() wrong spacename'); }
+	if( spacename !== this.spacename )
+	{
+		throw new Error('newRelation( ) wrong spacename');
+	}
 
 	var chgX = this._iface.alter(
 		{
-			val           : {
+			val           :
+			{
 				type      : 'Relation',
 				item1key  : item1key,
 				item2key  : item2key,
 				pnw       : pnw,
 				fontsize  : fontsize,
-				doc       : {
+				doc       :
+				{
 					type  : 'Doc',
-					copse : {
-						'1' : {
+					copse :
+					{
+						'1' :
+						{
 							type : 'Para',
 							text : text
 						}
@@ -371,121 +445,197 @@ Peer.prototype.newRelation = function( spacename, pnw, text, fontsize, item1key,
 		}
 	);
 
-	return chgX.trg.path.get(-1);
+	return chgX.trg.path.get( -1 );
 };
 
 
 /*
-| moves an item up to the z-index
+| moves an item's z-index up to top.
 */
-Peer.prototype.moveToTop = function(path)
+Peer.prototype.moveToTop =
+	function( path )
 {
 	this._iface.alter(
-		{ path: path },
-		{ rank: 0    }
+		{
+			path: path
+		},
+		{
+			rank: 0
+		}
 	);
 };
 
 
 /*
-| inserts some text.
+| Inserts some text.
 */
-Peer.prototype.insertText = function(path, offset, text)
+Peer.prototype.insertText =
+	function(
+		path,
+		offset,
+		text
+	)
 {
 	this._iface.alter(
-		{ val  : text },
-		{ path : path, at1  : offset }
+		{
+			val  : text
+		},
+		{
+			path : path,
+			at1  : offset
+		}
 	);
 };
 
 
 /*
-| removes some text within one node.
+| Removes some text within one node.
 */
-Peer.prototype.removeText = function(path, at1, len)
+Peer.prototype.removeText =
+	function(
+		path,
+		at1,
+		len
+	)
 {
-	if (len === 0)
-		{ return; }
+	if( len === 0 )
+	{
+		return;
+	}
 
-	if (len < 0)
-		{ throw new Error('malformed removeText'); }
+	if( len < 0 )
+	{
+		throw new Error('malformed removeText');
+	}
 
 	this._iface.alter(
-		{ path: path, at1: at1, at2: at1 + len },
-		{ val: null }
+		{
+			path : path,
+			at1  : at1,
+			at2  : at1 + len
+		},
+		{
+			val: null
+		}
 	);
 };
 
 
 /*
-| removes a text spawning over severa entities
+| Removes a text spawning over several entities.
 */
-Peer.prototype.removeSpan = function(path1, at1, path2, at2)
+Peer.prototype.removeSpan =
+	function(
+		path1,
+		at1,
+		path2,
+		at2
+	)
 {
-	if (path1.get(-1) !== 'text')
-		{ throw new Error('removeSpan invalid path'); }
+	if( path1.get( -1 ) !== 'text' )
+	{
+		throw new Error( 'removeSpan invalid path' );
+	}
 
-	if (path2.get(-1) !== 'text')
-		{ throw new Error('removeSpan invalid path'); }
+	if( path2.get(-1) !== 'text' )
+	{
+		throw new Error('removeSpan invalid path');
+	}
 
 	if (path1.equals(path2))
-		{ return this.removeText(path1, at1, at2 - at1); }
-
-	var k1 = path1.get(-2);
-	var k2 = path2.get(-2);
-
-	var pivot = this._iface.get(path1, -2);
-	var r1 = pivot.rankOf(k1);
-	var r2 = pivot.rankOf(k2);
-
-	for (var r = r1; r < r2 - 1; r++) {
-		this.join(path1, this._iface.get(path1).length);
+	{
+		return this.removeText(
+			path1,
+			at1,
+			at2 - at1
+		);
 	}
-	var len2 = this._iface.get(path1).length;
-	this.join(path1, len2);
 
-	this.removeText(path1, at1, len2 - at1 + at2);
-};
+	var k1 = path1.get( -2 );
+	var k2 = path2.get( -2 );
 
+	var pivot = this._iface.get( path1, -2 );
+	var r1 = pivot.rankOf( k1 );
+	var r2 = pivot.rankOf( k2 );
 
-/*
-| splits a text node.
-*/
-Peer.prototype.split = function(path, offset)
-{
-	this._iface.alter(
-		{ path: path, at1: offset },
-		{ proc: 'splice' }
+	for( var r = r1; r < r2 - 1; r++ )
+	{
+		this.join( path1, this._iface.get( path1 ).length );
+	}
+	var len2 = this._iface.get( path1 ).length;
+	this.join( path1, len2 );
+
+	this.removeText(
+		path1,
+		at1,
+		len2 - at1 + at2
 	);
 };
 
 
 /*
-| joins a text node with its next one.
+| Splits a text node.
 */
-Peer.prototype.join = function(path, at1)
+Peer.prototype.split =
+	function(
+		path,
+		offset
+	)
 {
 	this._iface.alter(
-		{ proc: 'splice' },
-		{ path: path, at1 : at1 }
+		{
+			path: path,
+			at1: offset
+		},
+		{
+			proc: 'splice'
+		}
 	);
 };
 
 
 /*
-| removes an item.
+| Joins a text node with its next one.
 */
-Peer.prototype.removeItem = function(path)
+Peer.prototype.join =
+	function(
+		path,
+		at1
+	)
 {
-	var key = path.get(-1);
-	var pivot = this._iface.get(path, -1);
-	var r1 = pivot.rankOf(key);
-
 	this._iface.alter(
-		{ val  : null, rank : r1   },
-		{ path : path, rank : null }
+		{
+			proc: 'splice'
+		},
+		{
+			path: path,
+			at1 : at1
+		}
 	);
 };
 
 
-} ) ();
+/*
+| Removes an item.
+*/
+Peer.prototype.removeItem =
+	function( path )
+{
+	var key = path.get( -1 );
+	var pivot = this._iface.get( path, -1 );
+	var r1 = pivot.rankOf( key );
+
+	this._iface.alter(
+		{
+			val  : null,
+			rank : r1
+		},
+		{
+			path : path,
+			rank : null
+		}
+	);
+};
+
+
+} )( );
