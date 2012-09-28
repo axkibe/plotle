@@ -67,7 +67,7 @@ Tree = function( root, pattern )
 		{ throw new Error('aFail'); }
 
 	this.pattern = pattern;
-	this.root = this.grow(root);
+	this.root = this.grow( root );
 };
 
 

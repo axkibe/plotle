@@ -18,69 +18,71 @@
                                            `'    `-^ `' ' '
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- Paths describe places in a tree.
+ Paths describe entities in a tree.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/**
-| Imports
+
+/*
+| Import
 */
 var Jools;
 
-/**
+
+/*
 | Exports
 */
 var Path;
 
-/**
+
+/*
 | Capsule
 */
-(function () {
+( function ( ) {
 "use strict";
 
-/**
+
+/*
 | Node imports.
 */
-if (typeof (window) === 'undefined') {
-	Jools  = require('./jools');
+if( typeof( window ) === 'undefined' )
+{
+	Jools  = require( './jools' );
 }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- .-,--.     .  .
-  '|__/ ,-. |- |-.
-  ,|    ,-| |  | |
-  `'    `-^ `' ' '
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- Path to an entitiy.
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/**
+/*
 | Constructs a new Path.
+|
 | model can be an array or another path or null
 | arguments followed by master are appended to the path
 */
-Path = function(model) {
+Path = function(model)
+{
 	var path;
 
 	// if true the path needs to be copied
 	var copy = arguments.length > 1;
 
-	switch(model.constructor) {
-	case Path  :
-		path = (copy) ? (model._path.slice()) : (model._path);
-		break;
-	case Array :
-		path = (copy) ? (model.slice()) : (model);
-		break;
-	case null  :
-		path = [];
-		break;
-	default :
-		throw new Error('invalid path-model');
+	switch(model.constructor)
+	{
+		case Path  :
+			path = ( copy ) ? model._path.slice( ) : model._path;
+			break;
+
+		case Array :
+			path = ( copy ) ? model.slice( ) : model;
+			break;
+
+		case null :
+			path = [ ];
+			break;
+
+		default :
+			throw new Error( 'invalid path-model' );
 	}
 
 	// length of model
@@ -88,76 +90,105 @@ Path = function(model) {
 
 	// appends additional arguments
 	var a = 1, aZ = arguments.length;
-	while(a < aZ && arguments[a] !== '--' && arguments[a] !== '++') {
+
+	while(
+		a < aZ &&
+		arguments[ a ] !== '--' &&
+		arguments[ a ] !== '++'
+	)
+	{
 		var k = arguments[a];
-		if (k < 0) k += mlen;
-		if (k < 0) throw new Error('invalid path key');
 
-		checkValidPathArc(arguments[a + 1]);
+		if( k < 0 )
+			{ k += mlen; }
 
-		path[k] = arguments[a + 1];
+		if( k < 0 )
+			{ throw new Error( 'invalid path key' ); }
+
+		checkValidPathArc( arguments[ a + 1 ] );
+
+		path[ k ] = arguments[ a + 1 ];
 		a += 2;
 	}
 
-	if (arguments[a] === '--') {
-		var s = arguments[a + 1];
-		path.splice(path.length - s, s);
+	if( arguments[a] === '--' )
+	{
+		var s = arguments[ a + 1 ];
+		path.splice( path.length - s, s );
 		a += 2;
 	}
 
-	if (arguments[a] === '++') {
-		for(a++; a < aZ; a++) {
-			checkValidPathArc(arguments[a]);
-			path[path.length] = arguments[a++];
+	if( arguments[a] === '++' )
+	{
+		for( a++; a < aZ; a++ )
+		{
+			checkValidPathArc( arguments[ a ] );
+			path[ path.length ] = arguments[ a ];
 		}
 	}
 
-	Object.freeze(path);
-	Jools.innumerable(this, '_path', path);
-	Jools.immute(this);
+	Object.freeze( path );
+	Jools.innumerable( this, '_path', path );
+	Jools.immute( this );
 };
 
-/**
-| Returns true if o is a path
+
+/*
+| Returns true if argument is a path
 */
-Path.isPath = function(o) {
-	return o.constructor === Path;
+Path.isPath = function( a )
+{
+	return a.constructor === Path;
 };
 
-/**
+
+/*
 | Returns true is arc is a valid path arc.
 */
-var checkValidPathArc = function(arc) {
-	if (!Jools.isString(arc))
-		{ throw new Error('Path arc not a string'); }
+var checkValidPathArc = function( arc )
+{
+	if( !Jools.isString( arc ) )
+	{
+		throw new Error( 'Path arc not a string' );
+	}
 
-	if (arc[0] === '_')
-		{ throw new Error('Path arc begins with "_"'); }
+	if( arc[ 0 ] === '_' )
+	{
+		throw new Error( 'Path arcs must not begin with "_"' );
+	}
 };
 
-/**
-| Length of the signature.
-*/
-Object.defineProperty(Path.prototype, 'length', {
-	get: function()
-		{ return this._path.length; }
-});
 
-/**
-| Returns the signature at index i.
+/*
+| Length of the path.
 */
-Path.prototype.get = function(i) {
-	if (i < 0)
+Object.defineProperty(
+	Path.prototype,
+	'length',
+	{
+		get: function( )
+			{ return this._path.length; }
+	}
+);
+
+
+/*
+| Returns the arc at index i.
+*/
+Path.prototype.get = function( i )
+{
+	if( i < 0 )
 		{ i += this._path.length; }
 
 	if (i < 0 || i >= this._path.length)
 		{ throw new Error('invalid get'); }
 
-	return this._path[i];
+	return this._path[ i ];
 };
 
-/**
-| True if this path is the same as another.
+
+/*
+| Returns true if this path is the same as another.
 */
 Path.prototype.equals = function(o) {
 	if (!o)

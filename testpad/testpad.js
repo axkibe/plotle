@@ -14,7 +14,6 @@ var Jools;
 var Path;
 var Peer;
 
-
 /*
 | Capsule
 */
@@ -26,21 +25,30 @@ if( typeof( window ) === 'undefined')
 
 
 /*
-| Current action
+| Utility function, binds obj as this to func
 */
-var action    = null;
-
+var bind = function( obj, func )
+{
+	return function( ) {
+		func.apply( obj, arguments );
+	};
+};
 
 /*
-| True when mouse is down
+| Constructor
 */
-var mousedown = false;
+var Testpad = function( )
+{
+	// current action
+	this.$action    = null;
 
+	// true when mouse is down
+	this.$mousedown = false;
 
-/*
-| References to the pages html elements
-*/
-var element =
+	/*
+	| References to the pages html elements
+	*/
+	var elements = this.elements =
 	{
 		measure : null,
 		pad     : null,
@@ -56,36 +64,70 @@ var element =
 		down    : null
 	};
 
+	for( var id in elements )
+	{
+		elements[ id ] = document.getElementById( id );
+	}
 
-var peer;
-var space;
-var note;
-var ranks;
-var copse;
-var time = -1;
-var maxtime = -1;
-var notepath = new Path( ['meshcraft:home', '1' ] );
+	var pad = elements.pad;
+	pad.onmousedown   = bind( this, this.onmousedown  );
+	pad.onmousemove   = bind( this, this.onmousemove  );
+	pad.onmouseup     = bind( this, this.onmouseup    );
+	pad.onclick       = bind( this, this.onmouseclick );
 
+	var input = elements.input;
+	input.onkeypress  = bind( this, this.onkeypress );
+	input.onkeydown   = bind( this, this.onkeydown  );
+	input.onkeyup     = bind( this, this.onkeyup    );
+	input.onfocus     = bind( this, this.onfocus    );
+	input.onblur      = bind( this, this.onblur     );
 
-/*
-| The current cursor position and blinking state
-*/
-var cursor = {
-	line   : 0,
-	offset : 0,
-	blink  : false
+	elements.send.disabled    = true;
+	elements.send.onclick     = bind( this, this.send );
+
+	elements.cancel.disabled  = true;
+	elements.cancel.onclick   = bind( this, this.cancel );
+
+	elements.upnow.onclick     = bind( this, this.onButtonUpToNow );
+
+	elements.up.onclick        = bind( this, this.onButtonUpClick );
+
+	elements.down.onclick      = bind( this, this.onButtonDownClick );
+
+	this.$ranks = null;
+	this.$copse = null;
+
+	// The current cursor position and blinking state
+	this.$cursor = {
+		line   : 0,
+		offset : 0,
+		blink  : false
+	};
+
+	// the blink timer.
+	this.$blinkTimer = null;
+
+	// true when having focus
+	this.$haveFocus = false;
+
+	this.notepath = new Path( [ 'testnote' ] );
+
+	this.iface = new IFaceSym();
+	this.peer  = new Peer( this.iface );
+
+	this.update( -1 );
+	this.updatePad( );
+	this.resetBlink( );
+
+	input.focus( );
 };
 
-/*
-| TODO
-*/
-var focus     = false;
 
 
 /*
 | Returns true if a keyCode is known to be a "special key".
 */
-var isSpecialKey =
+Testpad.prototype.isSpecialKey =
 	function( keyCode )
 {
 	switch( keyCode )
@@ -102,47 +144,45 @@ var isSpecialKey =
 		case 46 : // del
 			return true;
 		default :
-		return false;
+			return false;
 	}
-}
+};
 
-
-/*
-| The blink timer.
-*/
-var blinkTimer = null;
 
 
 /*
 | Blinks the cursor on/off.
 */
-var blink =
-	function( )
+Testpad.prototype.blink =
+	function( self )
 {
-	cursor.blink = !cursor.blink;
-	testinput( );
-	updatePad( );
-	element.beep.innerHTML = '';
+	self.$cursor.blink = !self.$cursor.blink;
+
+	self.testinput( self );
+	self.updatePad( );
+
+	self.elements.beep.innerHTML = '';
 };
 
 
 /*
 | Resets the blink timer
 */
-var resetBlink =
+Testpad.prototype.resetBlink =
 	function( )
 {
-	cursor.blink = false;
-	element.beep.innerHTML = '';
+	this.$cursor.blink = false;
+	this.elements.beep.innerHTML = '';
 
-	if( blinkTimer )
+	if( this.$blinkTimer )
 	{
-		clearInterval( blinkTimer );
+		clearInterval( this.$blinkTimer );
+		this.$blinkTimer = null;
 	}
 
-	if( focus )
+	if( this.$haveFocus )
 	{
-		blinkTimer = setInterval( blink, 540 );
+		this.$blinkTimer = setInterval( this.blink, 540, this );
 	}
 };
 
@@ -150,29 +190,38 @@ var resetBlink =
 /*
 | Mouse down event on pad -> focuses the hidden input,
 */
-var onmousedown =
+Testpad.prototype.onmousedown =
 	function( event )
 {
 	if( event.button !== 0 )
 		{ return; }
 
 	event.preventDefault( );
-	captureEvents( );
-	mousedown = true;
-	element.input.focus( );
-	var x = event.pageX - element.pad.offsetLeft;
-	var y = event.pageY - element.pad.offsetTop;
+	this.captureEvents( );
+
+	this.$mousedown = true;
+	this.elements.input.focus( );
+
+	var pad     = this.elements.pad;
+	var measure = this.elements.measure;
+	var cursor  = this.$cursor;
+	var copse   = this.$copse;
+	var ranks   = this.$ranks;
+
+	var x = event.pageX - pad.offsetLeft;
+	var y = event.pageY - pad.offsetTop;
 
 	if( !ranks )
 	{
-		beep( );
+		this.beep( );
 		return;
 	}
+
 
 	cursor.line =
 		Jools.limit(
 			0,
-			Math.floor( y / element.measure.offsetHeight ),
+			Math.floor( y / measure.offsetHeight ),
 			ranks.length - 1
 		);
 
@@ -181,42 +230,46 @@ var onmousedown =
 	cursor.offset =
 		Jools.limit(
 			0,
-			Math.floor( x / element.measure.offsetWidth ),
+			Math.floor( x / measure.offsetWidth ),
 			text.length
 		);
 
-	resetBlink( );
-	updatePad( );
+	this.resetBlink( );
+	this.updatePad( );
 };
 
 
 /*
-| Captures all mouseevents event
+| Captures all mouse events.
 */
-var captureEvents =
+Testpad.prototype.captureEvents =
 	function( )
 {
-	if( element.pad.setCapture )
+	var pad = this.elements.pad;
+
+	if( pad.setCapture )
 	{
-		element.pad.setCapture( element.pad );
+		pad.setCapture( pad );
 	}
 	else
 	{
-		document.onmouseup   = onmouseup;
-		document.onmousemove = onmousemove;
+		document.onmouseup   = bind( this, this.onmouseup   );
+		document.onmousemove = bind( this, this.onmousemove );
 	}
 };
 
 
 /*
-| Stops capturing all mouseevents
+| Stops capturing all mouse events
 */
-var releaseEvents =
+Testpad.prototype.releaseEvents =
 	function( )
 {
-    if( element.pad.setCapture )
+	var pad = this.elements.pad;
+
+    if( pad.setCapture )
 	{
-        element.pad.releaseCapture( element.pad );
+        pad.releaseCapture( pad );
     }
 	else
 	{
@@ -229,22 +282,25 @@ var releaseEvents =
 /*
 | Mouse button released
 */
-var onmouseup =
+Testpad.prototype.onmouseup =
 	function( event )
 {
 	if( event.button !==  0)
 		{ return; }
+
 	event.preventDefault( );
-	mousedown = false;
-	releaseEvents( );
+
+	this.$mousedown = false;
+	this.releaseEvents( );
 };
 
 
 
 /*
-| Mouse clicked on pad -> move the cursor there.
+| Mouse clicked on pad.
+| TODO remove?
 */
-var onmouseclick =
+Testpad.prototype.onmouseclick =
 	function( event )
 {
 	event.preventDefault( );
@@ -254,32 +310,34 @@ var onmouseclick =
 /*
 | Mouse moved over pad (or while dragging around it);
 */
-var onmousemove =
+Testpad.prototype.onmousemove =
 	function( event )
 {
-	if( mousedown )
-		{ onmousedown(event); }
+	if( this.$mousedown )
+	{
+		this.onmousedown( event );
+	}
 };
 
 
 /*
 | Down event to (hidden) input.
 */
-var onkeydown =
+Testpad.prototype.onkeydown =
 	function( event )
 {
-	if( isSpecialKey( event.keyCode ) )
+	if( this.isSpecialKey( event.keyCode ) )
 	{
 		event.preventDefault( );
 
-		inputSpecialKey(
+		this.inputSpecialKey(
 			event.keyCode,
 			event.ctrlKey
 		);
 	}
 	else
 	{
-		testinput( );
+		this.testinput( this );
 	}
 };
 
@@ -287,169 +345,239 @@ var onkeydown =
 /*
 | Press event to (hidden) input.
 */
-var onkeypress =
+Testpad.prototype.onkeypress =
 	function( event )
 {
-	setTimeout( testinput, 0 );
+	setTimeout( this.testinput, 0, this );
 };
 
 
 /*
 | Up event to (hidden) input.
 */
-var onkeyup =
+Testpad.prototype.onkeyup =
 	function( event )
 {
-	testinput( );
+	this.testinput( this );
 };
 
 
 /*
 | Hidden input got focus.
 */
-var onfocus =
+Testpad.prototype.onfocus =
 	function( )
 {
-	focus = true;
-	resetBlink( );
-	updatePad( );
+	this.$haveFocus = true;
+	this.resetBlink( );
+	this.updatePad( );
 };
 
 
 /*
 | Hidden input lost focus.
 */
-var onblur =
+Testpad.prototype.onblur =
 	function( )
 {
-	focus = false;
-	resetBlink( );
-	updatePad( );
+	this.$haveFocus = false;
+	this.resetBlink( );
+	this.updatePad( );
 };
 
 
 /*
 | Clears the current action
 */
-var clearAction =
+Testpad.prototype.clearAction =
 	function( )
 {
-	element.cancel.disabled = true;
-	element.send.disabled   = true;
-	action = null;
+	var elements = this.elements;
+
+	elements.cancel.disabled = true;
+	elements.send.disabled   = true;
+
+	this.$action = null;
 };
 
 
 /*
 | Sends the current action to server.
 */
-var send =
+Testpad.prototype.send =
 	function( )
 {
+	var path;
+	var action   = this.$action;
+	var copse    = this.$copse;
+	var cursor   = this.$cursor;
+	var ranks    = this.$ranks;
+	var notepath = this.notepath;
+
 	if( !action )
 	{
-		beep( );
+		this.beep( );
 		return;
 	}
-	var path;
 
 	switch( action.type )
 	{
 		case 'insert' :
-			path = new Path(notepath, '++', 'doc', ranks[action.line], 'text');
-			peer.insertText(path, action.at1, action.val);
+
+			path = new Path(
+				this.notepath,
+				'++',
+				'doc',
+				ranks[ action.line ],
+				'text'
+			);
+
+			this.peer.insertText(
+				path,
+				action.at1,
+				action.val
+			);
+
 			cursor.offset += action.val.length;
+
 			break;
 
 		case 'remove' :
-			path = new Path(notepath, '++', 'doc', ranks[action.line], 'text');
-			peer.removeText(path, action.at1, action.at2 - action.at1);
-			if (cursor.offset >= action.at2) {
+
+			path = new Path(
+				notepath,
+				'++',
+				'doc',
+				ranks[action.line],
+				'text'
+			);
+
+			this.peer.removeText(
+				path,
+				action.at1,
+				action.at2 - action.at1
+			);
+
+			if( cursor.offset >= action.at2 )
+			{
 				cursor.offset -= action.at2 - action.at1;
 			}
 			break;
 
 		case 'split' :
-			path = new Path(notepath, '++', 'doc', ranks[action.line], 'text');
-			peer.split(path, action.at1);
+
+			path = new Path(
+				notepath,
+				'++',
+				'doc',
+				ranks[ action.line ],
+				'text'
+			);
+
+			this.peer.split( path, action.at1 );
 			break;
 
 		case 'join' :
-			path = new Path(notepath, '++', 'doc', ranks[action.line - 1], 'text');
-			peer.join(path, copse[ranks[action.line - 1]].text.length);
+
+			path = new Path(
+				notepath,
+				'++',
+				'doc',
+				ranks[ action.line - 1 ],
+				'text'
+			);
+
+			this.peer.join(
+				path,
+				copse[ ranks[ action.line - 1 ] ].text.length
+			);
+
 			break;
 
 		default :
-			throw new Error('invalid action.type');
+			throw new Error( 'invalid action.type' );
 	}
 
-	clearAction( );
-	update( -1 );
-	resetBlink( );
-	updatePad( );
-	element.input.focus( );
+	this.clearAction( );
+
+	this.update( -1 );
+
+	this.resetBlink( );
+
+	this.updatePad( );
+
+	this.elements.input.focus( );
 };
 
 
 /*
 | Cancels the current action
 */
-var cancel =
+Testpad.prototype.cancel =
 	function( )
 {
-	clearAction( );
-	resetBlink( );
-	updatePad( );
-	element.input.focus( );
+	this.clearAction( );
+	this.resetBlink( );
+	this.updatePad( );
+	this.elements.input.focus( );
 };
 
 
 /*
 | Displays a beep message.
 */
-var beep =
+Testpad.prototype.beep =
 	function( )
 {
-	resetBlink( );
-	element.beep.innerHTML = 'BEEP!';
+	this.resetBlink( );
+	this.elements.beep.innerHTML = 'BEEP!';
 };
 
 
 /*
-| TODO
+| Starts an action.
 */
-var startAction =
+Testpad.prototype.startAction =
 	function( newAction )
 {
-	if (action)
+	if (this.$action)
 		{ throw new Error('double action'); }
 
-	action = newAction;
-	element.send.disabled = false;
-	element.cancel.disabled = false;
+	this.$action = newAction;
+
+	var elements = this.elements;
+
+	elements.send.disabled = false;
+	elements.cancel.disabled = false;
 };
 
 
 /*
 | Aquires non-special input from (hidden) input.
 */
-var testinput =
-	function( )
+Testpad.prototype.testinput =
+	function( self )
 {
-	var text = element.input.value;
-	element.input.value = '';
+	var action   = self.$action;
+	var cursor   = self.$cursor;
+
+	var elements = self.elements;
+	var text     = elements.input.value;
+
+	elements.input.value = '';
+
 	if( text === '' )
 		{ return; }
 
-	if( !ranks )
+	if( !self.$ranks )
 	{
-		beep( );
+		this.beep( );
 		return;
 	}
 
 	if( action === null )
 	{
-		startAction(
+		self.startAction(
 			{
 				type : 'insert',
 				line : cursor.line,
@@ -458,56 +586,64 @@ var testinput =
 			}
 		);
 
-		resetBlink( );
-		updatePad( );
+		self.resetBlink( );
+		self.updatePad( );
 		return;
 	}
-	else if( action.type === 'insert' )
+
+	if( action.type === 'insert' )
 	{
 		if( cursor.line === action.line &&
 			cursor.offset === action.at1
 		)
 		{
 			action.val = action.val + text;
-			resetBlink( );
-			updatePad( );
+			self.resetBlink( );
+			self.updatePad( );
 			return;
 		}
 	}
 
-	beep( );
+	self.beep( );
 };
 
 
 /*
 | Handles all kind of special keys.
 */
-var inputSpecialKey =
+Testpad.prototype.inputSpecialKey =
 	function( keyCode, ctrlKey )
 {
+	var action = this.$action;
+	var cursor = this.$cursor;
+	var ranks  = this.$ranks;
+
 	switch( keyCode )
 	{
 		case  8 :
 			// backspace
+
 			if( !ranks )
 			{
-				beep( );
+				this.beep( );
 				return;
 			}
 
 			if( cursor.offset <= 0 )
 			{
-				if (action){
-					beep();
-					return;
-				}
-				if (cursor.line <= 0)
+				if( action )
 				{
-					beep();
+					this.beep( );
 					return;
 				}
 
-				startAction(
+				if( cursor.line <= 0 )
+				{
+					this.beep( );
+					return;
+				}
+
+				this.startAction(
 					{
 						type : 'join',
 						line : cursor.line
@@ -518,7 +654,7 @@ var inputSpecialKey =
 
 			if( !action )
 			{
-				startAction(
+				this.startAction(
 					{
 						type : 'remove',
 						line : cursor.line,
@@ -533,13 +669,13 @@ var inputSpecialKey =
 
 			if( action.type !== 'remove' )
 			{
-				beep( );
+				this.beep( );
 				return;
 			}
 
-			if (cursor.offset !== action.at1)
+			if( cursor.offset !== action.at1 )
 			{
-				beep();
+				this.beep();
 				return;
 			}
 			action.at1--;
@@ -548,25 +684,26 @@ var inputSpecialKey =
 
 		case 13 :
 			// return
+
 			if( !ranks )
 			{
-				beep();
+				this.beep();
 				return;
 			}
 
 			if( ctrlKey )
 			{
-				send();
+				this.send( );
 				break;
 			}
 
-			if (action)
+			if( action )
 			{
-				beep();
+				this.beep( );
 				return;
 			}
 
-			startAction(
+			this.startAction(
 				{
 					type : 'split',
 					line : cursor.line,
@@ -577,24 +714,28 @@ var inputSpecialKey =
 
 		case 27 :
 			// esc
-			cancel( );
+
+			this.cancel( );
 			break;
 
 		case 35 :
 			// end
+
 			if( !ranks )
 			{
-				beep( );
+				this.beep( );
 				return;
 			}
-			cursor.offset = copse[ ranks[ cursor.line ] ].text.length;
+			cursor.offset =
+				this.$copse[ ranks[ cursor.line ] ].text.length;
 			break;
 
 		case 36 :
 			// pos1
+
 			if( !ranks )
 			{
-				beep( );
+				this.beep( );
 				return;
 			}
 			cursor.offset = 0;
@@ -602,14 +743,15 @@ var inputSpecialKey =
 
 		case 37 :
 			// left
-			if (!ranks)
+
+			if( !ranks )
 			{
-				beep( );
+				this.beep( );
 				return;
 			}
-			if (cursor.offset <= 0)
+			if( cursor.offset <= 0 )
 			{
-				beep( );
+				this.beep( );
 				return;
 			}
 			cursor.offset--;
@@ -617,14 +759,15 @@ var inputSpecialKey =
 
 		case 38 :
 			// up
+
 			if( cursor.line <= 0 )
 			{
-				beep( );
+				this.beep( );
 				return;
 			}
 			if( !ranks )
 			{
-				beep( );
+				this.beep( );
 				return;
 			}
 			cursor.line--;
@@ -632,47 +775,55 @@ var inputSpecialKey =
 
 		case 39 :
 			// right
+
 			if( !ranks )
 			{
-				beep( );
+				this.beep( );
 				return;
 			}
+
 			cursor.offset ++;
 			break;
 
 		case 40 :
 			// down
+
 			if( !ranks )
 			{
-				beep( );
+				this.beep( );
 				return;
 			}
+
 			if (cursor.line >= ranks.length)
 			{
-				beep( );
+				this.beep( );
 				return;
 			}
+
 			cursor.line++;
 			break;
 
 		case 46 :
 			// del
+
 			if( !ranks )
 			{
-				beep( );
+				this.beep( );
 				return;
 			}
 
-			var text = copse[ ranks[ cursor.line ] ].text;
+			var text =
+				this.$copse[ ranks[ cursor.line ] ].text;
+
 			if (cursor.offset >= text.length)
 			{
-				beep();
+				this.beep( );
 				return;
 			}
 
-			if (!action)
+			if (!action )
 			{
-				startAction(
+				this.startAction(
 					{
 						type : 'remove',
 						line : cursor.line,
@@ -686,13 +837,13 @@ var inputSpecialKey =
 
 			if( action.type !== 'remove' )
 			{
-				beep();
+				this.beep( );
 				return;
 			}
 
 			if( cursor.offset !== action.at2 )
 			{
-				beep();
+				this.beep( );
 				return;
 			}
 			action.at2++;
@@ -700,41 +851,33 @@ var inputSpecialKey =
 			break;
 	}
 
-	resetBlink( );
-	updatePad( );
+	this.resetBlink( );
+	this.updatePad( );
 };
 
 
 /*
 | Updates data from server
 */
-var update =
-	function( totime )
+Testpad.prototype.update =
+	function( time )
 {
-	var res;
+	this.$time = this.iface.goToTime( time );
 
-	//peer.toTime( totime ); TODO
+	var space = this.peer.get( new Path( [ ] ) );
 
-	res   = peer.get( new Path( [ 'testpad' ] ) );
-	time  = res.time;
-	space = res.node;
+	this.elements.now.innerHTML = '' + time;
 
-	maxtime = Math.max( time, maxtime );
-
-	element.now.innerHTML = '' + time;
-
-	if (space)
+	if( space )
 	{
-		note  = space.copse[ 'testnote' ];
-		ranks = note.doc.ranks;
-		copse = note.doc.copse;
+		var note  = space.copse.testnote;
+		this.$ranks = note.doc.ranks;
+		this.$copse = note.doc.copse;
 	}
 	else
 	{
-		space = null;
-		note  = null;
-		ranks = null;
-		copse = null;
+		this.$ranks = null;
+		this.$copse = null;
 	}
 };
 
@@ -742,60 +885,58 @@ var update =
 /*
 | Button update-to-now has been clicked
 */
-var onButtonUpToNow =
+Testpad.prototype.onButtonUpToNow =
 	function( )
 {
-	update( -1 );
-	resetBlink( );
-	updatePad( );
-	element.input.focus( );
+	this.update( -1 );
+	this.resetBlink( );
+	this.updatePad( );
+
+	this.elements.input.focus( );
 };
 
 
 /*
 | Button one-up-the-timeline has been clicked.
 */
-var onButtonUpClick =
+Testpad.prototype.onButtonUpClick =
 	function( )
 {
-	update(
-		Math.min(
-			time + 1,
-			maxtime
-		)
-	);
+	this.update( this.$time + 1 );
 
-	resetBlink( );
-	updatePad( );
-	element.input.focus( );
+	this.resetBlink( );
+	this.updatePad( );
+	this.elements.input.focus( );
 };
 
 
 /*
 | Button one-down-the-timeline has been clicked.
 */
-var onButtonDownClick =
+Testpad.prototype.onButtonDownClick =
 	function( )
 {
-	update(
-		Math.max(
-			time - 1,
-			0
-		)
-	);
+	this.update( this.$time - 1 );
 
-	resetBlink( );
-	updatePad( );
-	element.input.focus( );
+	this.resetBlink( );
+	this.updatePad( );
+	this.elements.input.focus( );
 };
 
 
 /*
 | (Re)Computes the pads contents to match the current data and action.
 */
-var updatePad =
+Testpad.prototype.updatePad =
 	function( )
 {
+	var action   = this.$action;
+	var cursor   = this.$cursor;
+	var elements = this.elements;
+	var pad      = elements.pad;
+	var copse    = this.$copse;
+	var ranks    = this.$ranks;
+
 	var lines = [ ];
 	var a, aZ, b, bZ, line;
 
@@ -808,12 +949,14 @@ var updatePad =
 			line.push('{}  ');
 		}
 		line = line.join('');
+
 		var line2 = '  ' + line;
+
 		for(a = 0; a < 50; a++)
 		{
 			lines.push(line, line2);
 		}
-		element.pad.innerHTML = lines.join( '\n' );
+		pad.innerHTML = lines.join( '\n' );
 		return;
 	}
 
@@ -824,7 +967,7 @@ var updatePad =
 		);
 	}
 
-	// replaces HTML entities.
+	// replaces HTML entities
 	for( a = 0, aZ = lines.length; a < aZ; a++ )
 	{
 		line = lines[ a ];
@@ -832,18 +975,30 @@ var updatePad =
 		{
 			switch( line[ b ] )
 			{
-				case '&' : line[ b ] = '&amp;';  break;
-				case '"' : line[ b ] = '&quot;'; break;
-				case '<' : line[ b ] = '&lt;';   break;
-				case '>' : line[ b ] = '&gt;';   break;
+				case '&' :
+					line[ b ] = '&amp;';
+					break;
+
+				case '"' :
+					line[ b ] = '&quot;';
+					break;
+
+				case '<' :
+					line[ b ] = '&lt;';
+					break;
+
+				case '>' :
+					line[ b ] = '&gt;';
+					break;
 			}
 		}
 	}
 
 	// inserts the cursor
-	if (focus && !cursor.blink)
+	if( focus && !cursor.blink )
 	{
 		var cline = cursor.line;
+
 		if( cline < 0 )
 			{ cline = cursor.line = 0; }
 
@@ -860,10 +1015,13 @@ var updatePad =
 			lines[ cline ][ coff ] = ' ';
 		}
 
-		lines[ cline ][ coff ] = '<span id="cursor">'+lines[ cline ][ coff ]+'</span>';
-		if (coff === clen)
+		lines[ cline ][ coff ] =
+			'<span id="cursor">'+lines[ cline ][ coff ] +
+			'</span>';
+
+		if( coff === clen )
 		{
-			lines[cline].push( ' ' );
+			lines[ cline ].push( ' ' );
 		}
 	}
 
@@ -874,28 +1032,33 @@ var updatePad =
 			break;
 
 		case 'join' :
-			lines[ action.line ].unshift( '<span id="join">↰</span>' );
+			lines[ action.line ].
+				unshift( '<span id="join">↰</span>' );
 			break;
 
 		case 'split' :
-			lines[ action.line ].splice(
-				action.at1, 0, '<span id="split">⤶</span>'
-			);
+			lines[ action.line ].
+				splice(
+					action.at1, 0, '<span id="split">⤶</span>'
+				);
 			break;
 
 		case 'insert' :
-			lines[ action.line ].splice(
-				action.at1,
-				0,
-				'<span id="insert">',
-				action.val,
-				'</span>'
-			);
+			lines[ action.line ].
+				splice(
+					action.at1,
+					0,
+					'<span id="insert">',
+					action.val,
+					'</span>'
+				);
 			break;
 
 		case 'remove' :
-			if (action.at1 > action.at2)
-				{ throw new Error('Invalid remove action'); }
+			if( action.at1 > action.at2 )
+			{
+				throw new Error( 'Invalid remove action' );
+			}
 
 			lines[ action.line ].splice(
 				action.at1,
@@ -920,7 +1083,7 @@ var updatePad =
 		lines[ a ] = lines[ a ].join( '' );
 	}
 
-	element.pad.innerHTML = lines.join( '\n' );
+	pad.innerHTML = lines.join( '\n' );
 };
 
 
@@ -930,33 +1093,7 @@ var updatePad =
 window.onload =
 	function( )
 {
-	for( var id in element )
-	{
-		element[ id ] = document.getElementById( id );
-	}
-
-	element.pad.onmousedown   = onmousedown;
-	element.pad.onmousemove   = onmousemove;
-	element.pad.onmouseup     = onmouseup;
-	element.pad.onclick       = onmouseclick;
-	element.input.onkeypress  = onkeypress;
-	element.input.onkeydown   = onkeydown;
-	element.input.onkeyup     = onkeyup;
-	element.input.onfocus     = onfocus;
-	element.input.onblur      = onblur;
-	element.send.disabled     = true;
-	element.send.onclick      = send;
-	element.cancel.disabled   = true;
-	element.cancel.onclick    = cancel;
-	element.upnow.onclick     = onButtonUpToNow;
-	element.up.onclick        = onButtonUpClick;
-	element.down.onclick      = onButtonDownClick;
-
-	peer = new Peer( new IFaceSym() );
-	update( -1 );
-	updatePad( );
-	resetBlink( );
-	element.input.focus( );
+	new Testpad();
 };
 
 } )( );

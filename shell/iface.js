@@ -300,8 +300,8 @@ IFace.prototype.aquireSpace = function(spacename, callback)
 	self.$outbox    = [];
 	self.$postbox   = [];
 	self.$mseq      = -1;
-	self.$undo      = [];
-	self.$redo      = [];
+	self._$undo     = [];
+	self._$redo     = [];
 
     var ajax = self.$aquireAjax = new XMLHttpRequest();
 
@@ -488,7 +488,7 @@ IFace.prototype._update = function()
 				}
 
 				// alters undo and redo queues.
-				var undo = self.$undo;
+				var undo = self._$undo;
 				var u;
 				for( b = 0, bZ = undo.length; b < bZ; b++ )
 				{
@@ -497,7 +497,7 @@ IFace.prototype._update = function()
 						{ u.chgX = MeshMashine.tfxChgX( u.chgX, chgX ); }
 				}
 
-				var redo = self.$redo;
+				var redo = self._$redo;
 				for( b = 0, bZ = redo.length; b < bZ; b++ )
 				{
 					u = redo[ b ];
@@ -554,7 +554,7 @@ IFace.prototype._update = function()
 			{ self._updateRCV.update(self.$cSpace, report); }
 
 		if (gotOwnChgs)
-			{ self.sendChanges(); }
+			{ self._sendChanges(); }
 
 		// issue the following update
 		self._update();
@@ -600,16 +600,16 @@ IFace.prototype.alter = function(src, trg)
 
 	this.$outbox.push( c );
 
-	this.$redo = [ ];
+	this._$redo = [ ];
 
-	var undo  = this.$undo;
+	var undo  = this._$undo;
 
 	undo.push(c);
 
 	if (undo.length > config.maxUndo)
 		{ undo.shift(); }
 
-	this.sendChanges();
+	this._sendChanges();
 
     if (this._updateRCV)
 		{ this._updateRCV.update(r.tree, chgX); }
@@ -621,7 +621,7 @@ IFace.prototype.alter = function(src, trg)
 /*
 | Sends the stored changes to remote meshmashine
 */
-IFace.prototype.sendChanges = function()
+IFace.prototype._sendChanges = function()
 {
 	// already sending?
 	if (this.$postbox.length > 0)
@@ -690,10 +690,10 @@ IFace.prototype.sendChanges = function()
 */
 IFace.prototype.undo = function()
 {
-	if (this.$undo.length === 0)
+	if (this._$undo.length === 0)
 		{ return; }
 
-	var chgX     = this.$undo.pop( ).chgX.invert( );
+	var chgX     = this._$undo.pop( ).chgX.invert( );
     var r        = chgX.changeTree( this.$cSpace );
     this.$cSpace = r.tree;
 	chgX         = r.chgX;
@@ -710,8 +710,8 @@ IFace.prototype.undo = function()
 	);
 
 	this.$outbox.push( c );
-	this.$redo.push( c );
-	this.sendChanges( );
+	this._$redo.push( c );
+	this._sendChanges( );
 
     if( this._updateRCV )
 		{ this._updateRCV.update( r.tree, chgX ); }
@@ -725,10 +725,10 @@ IFace.prototype.undo = function()
 */
 IFace.prototype.redo = function( )
 {
-	if( this.$redo.length === 0 )
+	if( this._$redo.length === 0 )
 		{ return; }
 
-	var chgX     = this.$redo.pop( ).chgX.invert( );
+	var chgX     = this._$redo.pop( ).chgX.invert( );
     var r        = chgX.changeTree( this.$cSpace );
     this.$cSpace = r.tree;
 	chgX         = r.chgX;
@@ -745,8 +745,8 @@ IFace.prototype.redo = function( )
 	);
 
 	this.$outbox.push( c );
-	this.$undo.push( c );
-	this.sendChanges( );
+	this._$undo.push( c );
+	this._sendChanges( );
 
     if( this._updateRCV )
 		{ this._updateRCV.update( this.$cSpace, chgX ); }

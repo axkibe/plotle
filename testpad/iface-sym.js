@@ -63,16 +63,64 @@ if( typeof ( window ) === 'undefined' )
 IFaceSym = function( )
 {
 	// the current space;
-	this.$cSpace  =
+	this.$space  =
 		new Tree(
 			{
-				type : 'Space'
+				type  : 'Space',
+				copse :
+				{
+					'testnote' :
+					{
+						type     : 'Note',
+						doc      :
+						{
+							type  : 'Doc',
+							copse :
+							{
+								'1' :
+								{
+									type : 'Para',
+									text : 'muhkuh'
+								}
+							},
+							ranks :
+							[
+								'1'
+							]
+						},
+						zone     :
+						{
+							type : 'Rect',
+
+							pnw  :
+							{
+								type : 'Point',
+								x    : 0,
+								y    : 0
+							},
+
+							pse  :
+							{
+								type : 'Point',
+								x    : 100,
+								y    : 100
+							}
+						},
+
+						fontsize : 13
+					}
+				},
+				ranks : [
+					'testnote'
+				]
 			},
 			Meshverse
 		);
 
 	// current update request
-	this.$updateAjax = null;
+	this.$changes = [ ];
+
+	this.$time = 0;
 };
 
 
@@ -87,45 +135,6 @@ IFaceSym.prototype.setUser =
 {
 	this.$user     = user;
 	this.$passhash = passhash;
-};
-
-
-/*
-| Authentication
-*/
-IFaceSym.prototype.auth =
-	function(
-		user,
-		passhash,
-		callback
-	)
-{
-	throw new Error('there are no auths in IFaceSym');
-};
-
-
-/*
-| Registers a user.
-*/
-IFaceSym.prototype.register =
-	function(
-		user,
-		mail,
-		passhash,
-		news,
-		callback
-	)
-{
-	throw new Error('there is no registering in IFaceSym');
-};
-
-
-/*
-| Sends a message.
-*/
-IFaceSym.prototype.sendMessage = function(message)
-{
-	throw new Error('there are no messages in IFaceSym');
 };
 
 
@@ -145,7 +154,7 @@ IFaceSym.prototype.aquireSpace = function(spacename, callback)
 		null,
 		Jools.immute(
 			{
-				tree   : self.$cSpace,
+				tree   : self.$space,
 				name   : spacename,
 				access : 'rw'
 			}
@@ -158,175 +167,31 @@ IFaceSym.prototype.aquireSpace = function(spacename, callback)
 /*
 | Gets a twig.
 */
-IFaceSym.prototype.get = function(path, len)
+IFaceSym.prototype.get =
+	function(
+		path,
+		len
+	)
 {
-	return this.$cSpace.getPath(path, len);
-};
+	var changes = this.$changes;
+	var cZ      = changes.length;
+	var time    = this.$time;
+	var space   = this.$space;
 
+	if( time < 0 || time > cZ )
+		{ throw new Error('invalid time'); }
 
-/*
-| Sends an update request to the server and computes its answer.
-*/
-IFaceSym.prototype._update = function()
-{
-	var self = this;
-
-	if (self.$updateAjax)
-		{ throw new Error('double update?'); }
-
-	var ajax = self.$updateAjax = new XMLHttpRequest();
-
-	ajax.open('POST', '/mm', true);
-
-	ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-	ajax.onreadystatechange = function()
+	// if the requested tree is not the latest, replay it backwards
+	for (var a = cZ - 1; a >= time; a--)
 	{
-		if (ajax.readyState !== 4)
-			{ return; }
+		var chgX = changes[ a ].chgX;
 
-		var a, aZ, asw, b, bZ, chgX;
+		for (var b = 0; b < chgX.length; b++)
+			{ space = chgX[ b ].reverse( ).changeTree( space ).tree; }
+	}
 
-		// call was willingfull aborted
-		if (ajax.$abort)
-			{ return; }
-
-		self.$updateAjax = null;
-
-		if (ajax.status !== 200)
-		{
-			Jools.log( 'iface', 'update.status == ' + ajax.status );
-			shell.greenscreen( 'Connection with server failed.', false );
-			return;
-		}
-
-		try
-			{ asw = JSON.parse(ajax.responseText); }
-		catch (e)
-			{ throw new Error('Server answered no JSON!'); }
-
-		Jools.log('iface', '<-u', asw);
-
-		if (!asw.ok)
-		{
-			shell.greenscreen('Server not OK: ' + asw.message);
-			return;
-		}
-
-		var chgs       = asw.chgs;
-		var report     = new ChangeRay();
-		var gotOwnChgs = false;
-		var time       = asw.time;
-
-		if (chgs && chgs.length > 0)
-		{
-			// this wasn't an empty timeout?
-			var postbox = self.$postbox;
-
-			for(a = 0, aZ = chgs.length; a < aZ; a++)
-			{
-				chgX = new Change(chgs[a].chgX);
-				var cid = chgs[a].cid;
-
-				// changes the clients understanding of the server tree
-				self.$rSpace = chgX.changeTree( self.$rSpace ).tree;
-
-				if( postbox.length > 0 &&
-					postbox[0].cid === cid
-				)
-				{
-					self.$postbox.splice( 0, 1 );
-					gotOwnChgs = true;
-					continue;
-				}
-
-				// alters undo and redo queues.
-				var undo = self.$undo;
-				var u;
-				for( b = 0, bZ = undo.length; b < bZ; b++ )
-				{
-					u = undo[ b ];
-					if( u.time < time + a )
-						{ u.chgX = MeshMashine.tfxChgX( u.chgX, chgX ); }
-				}
-
-				var redo = self.$redo;
-				for( b = 0, bZ = redo.length; b < bZ; b++ )
-				{
-					u = redo[ b ];
-					if( u.time < time + a )
-						{ u.chgX = MeshMashine.tfxChgX( u.chgX, chgX ); }
-				}
-
-				report.push( chgX );
-			}
-
-			// adapts all queued changes
-			// and rebuilds the clients understanding of its own tree
-			var outbox = self.$outbox;
-			var space  = self.$rSpace;
-
-			for( a = 0, aZ = postbox.length; a < aZ; a++ )
-				{ space = postbox[ a ].chgX.changeTree( space ).tree; }
-
-			for( a = 0, aZ = outbox.length; a < aZ; a++ )
-			{
-				chgX = outbox[ a ].chgX;
-
-				for( b = 0, bZ = report.length; b < bZ; b++ )
-				{
-					chgX = MeshMashine.tfxChgX( chgX, report.get( b ) );
-				}
-
-				outbox[a].chgX = chgX;
-
-				space = chgX.changeTree( space ).tree;
-			}
-
-			self.$cSpace = space;
-		}
-
-		var msgs = asw.msgs;
-		if (msgs && self._messageRCV)
-		{
-			for(a = 0, aZ = msgs.length; a < aZ; a++)
-			{
-				var m = msgs[a];
-				self._messageRCV.messageRCV(m.space, m.user, m.message);
-			}
-		}
-
-		self.$remoteTime = asw.timeZ;
-
-		var mseqZ        = asw.mseqZ;
-
-		if (Jools.is(mseqZ))
-			{ self.$mseq = mseqZ; }
-
-		if (report.length > 0 && self._updateRCV)
-			{ self._updateRCV.update(self.$cSpace, report); }
-
-		if (gotOwnChgs)
-			{ self.sendChanges(); }
-
-		// issue the following update
-		self._update();
-	};
-
-	var request = {
-		cmd      : 'update',
-		passhash : self.$passhash,
-		space    : self.$spacename,
-		time     : self.$remoteTime,
-		mseq     : self.$mseq,
-		user     : self.$user
-	};
-
-	Jools.log('iface', 'u->', request);
-
-	request = JSON.stringify(request);
-
-	ajax.send(request);
+	// returns the path requested
+	return space.getPath( path, len );
 };
 
 
@@ -340,119 +205,36 @@ IFaceSym.prototype.alter = function(src, trg)
     var r = new Change(
 		new Sign( src ),
 		new Sign( trg )
-	).changeTree( this.$cSpace );
+	).changeTree( this.$space );
 
-    this.$cSpace = r.tree;
-	var chgX     = r.chgX;
+    this.$space = r.tree;
 
-	var c = {
-		cid  : Jools.uid( ),
-		chgX : chgX,
-		time : this.$remoteTime
-	};
-
-	this.$outbox.push( c );
-
-	this.$redo = [ ];
-
-	var undo  = this.$undo;
-
-	undo.push(c);
-
-	if (undo.length > config.maxUndo)
-		{ undo.shift(); }
-
-	this.sendChanges();
-
-    if (this._updateRCV)
-		{ this._updateRCV.update(r.tree, chgX); }
-
-    return chgX;
+    return r.chgX;
 };
 
 
 /*
-| Sends the stored changes to remote meshmashine
+| Sets the time 'alter' and 'get' will react on
 */
-IFaceSym.prototype.sendChanges = function()
+IFaceSym.prototype.goToTime =
+	function( time )
 {
-	// already sending?
-	if (this.$postbox.length > 0)
-		{ return; }
+	var cZ = this.$changes.length;
 
-	// nothing to send?
-	if (this.$outbox.length === 0)
-		{ return; }
+	if( time > cZ || time < 0 )
+		{ time = cZ; }
 
-	var ajax = new XMLHttpRequest();
-	ajax.open('POST', '/mm', true);
-	ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-	ajax.onreadystatechange = function() {
-		var asw;
-		if (ajax.readyState !== 4)
-			{ return; }
-
-		if (ajax.status !== 200)
-		{
-			shell.greenscreen('Cannot send changes, error code ' + ajax.status);
-			return;
-		}
-
-		try
-			{ asw = JSON.parse(ajax.responseText); }
-		catch (e)
-		{
-			shell.greenscreen('Server answered no JSON!');
-			return;
-		}
-
-		Jools.log('iface', '<-sc', asw);
-
-		if (!asw.ok)
-		{
-			shell.greenscreen('Server not OK: ' + asw.message);
-			return;
-		}
-	};
-
-	var c = this.$outbox[0];
-	this.$outbox.splice(0, 1);
-	this.$postbox.push(c);
-
-	var request = {
-		cmd      : 'alter',
-		space    : this.$spacename,
-		chgX     : c.chgX,
-		cid      : c.cid,
-		passhash : this.$passhash,
-		time     : this.$remoteTime,
-		user     : this.$user
-	};
-
-	Jools.log('iface', 'sc->', request);
-
-	request = JSON.stringify(request);
-
-	ajax.send(request);
+	return this.$time = time;
 };
 
 
 /*
-| Sends the stored changes to remote meshmashine
+| gets the maximum time
 */
-IFaceSym.prototype.undo = function()
+IFaceSym.prototype.getMaxTime =
+	function( time )
 {
-	throw new Error('no undoing in IFaceSym');
-};
-
-
-/*
-| Sends the stored changes to remote meshmashine
-*/
-IFaceSym.prototype.redo = function( )
-{
-	throw new Error('no redoing in IFaceSym');
+	return this.$changes.length;
 };
 
 
