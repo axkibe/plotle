@@ -184,10 +184,16 @@ IFaceSym.prototype.get =
 	// if the requested tree is not the latest, replay it backwards
 	for (var a = cZ - 1; a >= time; a--)
 	{
-		var chgX = changes[ a ].chgX;
+		var chgX = changes[ a ];
 
 		for (var b = 0; b < chgX.length; b++)
-			{ space = chgX[ b ].reverse( ).changeTree( space ).tree; }
+		{
+			space = chgX.
+				get( 0 ).
+				invert( ).
+				changeTree( space ).
+				tree;
+		}
 	}
 
 	// returns the path requested
@@ -200,12 +206,32 @@ IFaceSym.prototype.get =
 |
 | TODO why doesnt this get a change?
 */
-IFaceSym.prototype.alter = function(src, trg)
+IFaceSym.prototype.alter =
+	function( src, trg )
 {
-    var r = new Change(
+    var chgX = new Change(
 		new Sign( src ),
 		new Sign( trg )
-	).changeTree( this.$space );
+	);
+
+	var changes = this.$changes;
+	var cZ      = changes.length;
+	var time    = this.$time;
+
+	for(var t = time; t < cZ; t++) {
+		chgX = MeshMashine.tfxChgX( chgX, changes[t] );
+		if (chgX === null)
+		{
+			return null;
+		}
+	}
+
+	var r = chgX.changeTree( this.$space );
+	chgX  = r.chgX;
+
+	for(var a = 0; a < chgX.length; a++) {
+		this.$changes.push( chgX.get( a ) );
+	}
 
     this.$space = r.tree;
 

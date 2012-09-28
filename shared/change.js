@@ -168,13 +168,18 @@ Change.prototype.type = function( )
 */
 Change.prototype.invert = function( )
 {
-	// Checks if the inversion is cached.
+	// checks if the inversion is cached.
 	if( Jools.is( this._invert ) )
-		{ return this._invert; }
+	{
+		return this._invert;
+	}
 
-	var r = new Change( this.trg, this.src );
+	var r = new Change(
+		this.trg,
+		this.src
+	);
 
-	// Caches the inversion for both changies
+	// caches the inversion for both changies
 
 	Jools.innumerable(
 		this,

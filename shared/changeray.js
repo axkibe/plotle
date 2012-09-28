@@ -114,7 +114,7 @@ ChangeRay.prototype.push = function( chg )
 	if ( this._invert )
 		{ this._invert = null; }
 
-	this._$ray.push(chg);
+	this._$ray.push( chg );
 };
 
 

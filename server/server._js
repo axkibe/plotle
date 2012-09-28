@@ -698,7 +698,20 @@ Server.prototype.cmdAlter = function( cmd, _)
 
 	// translates the changes if not most recent
 	for( var a = time; a < seqZ; a++ )
-		{ chgX = MeshMashine.tfxChgX(chgX, changes[a].chgX); }
+	{
+		chgX = MeshMashine.tfxChgX(
+			chgX,
+			changes[a].chgX
+		);
+
+		if (chgX === null || chgX.length === 0)
+		{
+			return {
+				ok: true,
+				chgX: chgX
+			};
+		}
+	}
 
 	if( chgX === null ||
 		chgX.length === 0 )
@@ -714,14 +727,7 @@ Server.prototype.cmdAlter = function( cmd, _)
 	space.$tree = r.tree;
 	chgX        = r.chgX;
 
-	if (chgX === null || chgX.length === 0) {
-		return {
-			ok: true,
-			chgX: chgX
-		};
-	}
-
-	changes[ space.$seqZ ] =
+	changes[ seqZ ] =
 		{
 			cid  : cmd.cid,
 			chgX : chgX
@@ -732,7 +738,7 @@ Server.prototype.cmdAlter = function( cmd, _)
 		{
 			_id  : seqZ,
 			cid  : cmd.cid,
-			chgX : JSON.parse(JSON.stringify(chgX)), // FIXME why copy?
+			chgX : JSON.parse( JSON.stringify( chgX ) ), // FIXME why copy?
 			user : cmd.user,
 			date : Date.now()
 		},
@@ -746,9 +752,12 @@ Server.prototype.cmdAlter = function( cmd, _)
 	space.$seqZ++;
 
 	var self = this;
+
 	process.nextTick(
 		function()
-			{ self.wake( spacename ); }
+		{
+			self.wake( spacename );
+		}
 	);
 
 	return {
@@ -760,17 +769,18 @@ Server.prototype.cmdAlter = function( cmd, _)
 /**
 | Executes an auth command.
 */
-Server.prototype.cmdAuth = function(cmd, _)
+Server.prototype.cmdAuth = function( cmd, _)
 {
-	if (!is(cmd.user))
+	if( !is( cmd.user ) )
 		{ throw reject('user missing'); }
 
-	if (!is(cmd.passhash))
+	if( !is( cmd.passhash ) )
 		{ throw reject('passhash missing');  }
 
 	var users = this.$users;
 
-	if (cmd.user === 'visitor') {
+	if( cmd.user === 'visitor' )
+	{
 		var uid;
 
 		do
@@ -1336,7 +1346,13 @@ Server.prototype.cmdGet = function(cmd, _)
 		var chgX = changes[ a ].chgX;
 
 		for (var b = 0; b < chgX.length; b++)
-			{ tree = chgX[ b ].reverse( ).changeTree( tree ).tree; }
+		{
+			tree = chgX.
+				get( b ).
+				invert( ).
+				changeTree( tree ).
+				tree;
+		}
 	}
 
 	// returns the path requested
@@ -1557,7 +1573,7 @@ Server.prototype.webAjax = function(req, red, res)
 
 	req.on( 'end', function( )
 		{
-			setTimeout( handler, 0 ); // TODO
+			setTimeout( handler, 1880 ); // TODO
 		});
 };
 

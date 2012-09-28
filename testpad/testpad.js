@@ -866,7 +866,7 @@ Testpad.prototype.update =
 
 	var space = this.peer.get( new Path( [ ] ) );
 
-	this.elements.now.innerHTML = '' + time;
+	this.elements.now.innerHTML = '' + this.$time;
 
 	if( space )
 	{
