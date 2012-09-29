@@ -25,56 +25,77 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-/**
+
+/*
 | Export
 */
 var Jools;
 
-/**
+
+/*
 | Imports
 */
 var config;
 var sha1hex;
 
-/**
+
+/*
 | Capsule
 */
-(function(){
+( function( ) {
 
 "use strict";
 
-/**
+
+/*
 | Config variables
 */
 var devel;
 
-/**
-| returns boolean parameter for shell or server.
-|
-| param: the parameter
-| side:  'shell' or 'server'
-*/
-var configSwitch = function(param, side) {
-	if (side !== 'shell' && side !== 'server')
-		{ throw new Error('configSwitch side must be shell or server'); }
 
-	return param === true || param === 'both' || param === side;
+/*
+| Returns boolean parameter for shell or server.
+*/
+var configSwitch =
+	function(
+		param,  // the parameter
+		side    // 'shell' or 'server'
+	)
+{
+	if( side !== 'shell' &&
+		side !== 'server'
+	)
+	{
+		throw new Error( 'configSwitch side must be shell or server' );
+	}
+
+	return (
+		param === true   ||
+		param === 'both' ||
+		param === side
+	);
 };
 
-/**
+
+/*
 | Running in node or browser?
 */
-if (typeof(window) === 'undefined') {
+if( typeof( window ) === 'undefined' )
+{
 	// in node
 	config =  require('../config');
 	sha1hex = require('./sha1').sha1hex;
 	devel   = configSwitch(config.devel, 'server');
-} else {
+}
+else
+{
 	// in browser
 	devel  = configSwitch(config.devel, 'shell');
 }
 
+
 var puffed = config.debug.puffed;
+
 
 /**
 | Testers
@@ -85,7 +106,8 @@ var isInteger = function(o) { return typeof(o) === 'number' && Math.floor(o) ===
 var isArray   = function(o) { return o.constructor === Array;                       };
 var isString  = function(o) { return typeof(o) === 'string' || o instanceof String; };
 
-/**
+
+/*
 | Limits value to be between min and max
 */
 var limit = function(min, val, max) {
@@ -283,24 +305,44 @@ var copy = function(o, c) {
 };
 
 
-/**
+/*
 | Returns true if this node matches a master or a node of equal class
 */
-var matches = function(twig1, twig2) {
-	if (twig1 === twig2)
+var matches =
+	function(
+		twig1,
+		twig2
+	)
+{
+	if( twig1 === twig2 )
 		{ return true; }
 
-	switch(twig1.constructor) {
-	case String : return false;
-	case Number : return false;
+	// numbers or strings would have matched before
+	switch( twig1.constructor )
+	{
+		case String :
+			return false;
+
+		case Number :
+			return false;
 	}
 
-	var k1 = Object.keys(twig1);
-	var k2 = Object.keys(twig2);
-	if (k1.length !== k2.length) { return false; }
-	for (var a = 0, aZ = k1.length; a < aZ; a++) {
-		var k = k1[a];
-		if (!matches(twig1[k], twig2[k])) return false;
+	// also if either is null an not equal
+	if( twig1 === null ||
+		twig2 === null
+	) { return false; }
+
+	var k1 = Object.keys( twig1 );
+	var k2 = Object.keys( twig2 );
+
+	if( k1.length !== k2.length )
+		{ return false; }
+
+	for( var a = 0, aZ = k1.length; a < aZ; a++ )
+	{
+		var k = k1[ a ];
+		if( !matches( twig1[ k ], twig2[ k ] ) )
+			{ return false; }
 	}
 
 	return true;

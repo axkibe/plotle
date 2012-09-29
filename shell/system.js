@@ -365,10 +365,15 @@ System.prototype._onSystemFocus = function( event )
 System.prototype._onResize = function( event )
 {
 	var c = this._canvas;
+	var w = document.documentElement.clientWidth;
+	var h = document.documentElement.clientHeight;
 
-	c.width  = window.innerWidth - 1;
-	c.height = window.innerHeight - 1;
-	this.shell.resize( c.width, c.height );
+	c.width  = w - 1;
+	c.height = h - 1;
+
+	if( this.shell ) {
+		this.shell.resize( w - 1, h - 1 );
+	}
 };
 
 
@@ -728,8 +733,8 @@ System.prototype._onMouseWheel = function( event )
 */
 System.prototype._onTouchStart = function( event )
 {
-	event.preventDefault();
-	
+	event.preventDefault( );
+
 	// for now ignore multi-touches
 	if( event.touches.length !== 1 )
 		{ return false; }

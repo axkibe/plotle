@@ -429,12 +429,12 @@ IFace.prototype._update = function()
 {
 	var self = this;
 
-	if (self._$updateAjax)
+	if( self._$updateAjax )
 	{
 		throw new Error('double update?');
 	}
 
-	var ajax = self._$updateAjax = new XMLHttpRequest();
+	var ajax = self._$updateAjax = new XMLHttpRequest( );
 
 	ajax.open('POST', '/mm', true);
 
@@ -442,10 +442,15 @@ IFace.prototype._update = function()
 
 	ajax.onreadystatechange = function( )
 	{
+		var a, aZ, asw, b, bZ, chgX;
+
 		if ( ajax.readyState !== 4 )
 			{ return; }
 
-		var a, aZ, asw, b, bZ, chgX;
+		// ios bug?
+		// hinders the onreadystatechange function to be
+		// called multiple times
+		ajax.onreadystatechange = null;
 
 		// call was willingfull aborted
 		if( ajax.$abort )
@@ -669,9 +674,9 @@ IFace.prototype.alter = function(src, trg)
 	undo.push( c );
 
 	if (undo.length > config.maxUndo)
-		{ undo.shift(); }
+		{ undo.shift( ); }
 
-	this._sendChanges();
+	this._sendChanges( );
 
     if( this._updateRCV )
 		{ this._updateRCV.update(r.tree, chgX); }
@@ -683,23 +688,25 @@ IFace.prototype.alter = function(src, trg)
 /*
 | Sends the stored changes to remote meshmashine
 */
-IFace.prototype._sendChanges = function()
+IFace.prototype._sendChanges =
+	function( )
 {
 	// already sending?
-	if (this.$postbox.length > 0)
+	if( this.$postbox.length > 0 )
 		{ return; }
 
 	// nothing to send?
-	if (this._$outbox.length === 0)
+	if( this._$outbox.length === 0 )
 		{ return; }
 
-	var ajax = new XMLHttpRequest();
+	var ajax = new XMLHttpRequest( );
 	ajax.open('POST', '/mm', true);
 	ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
-	ajax.onreadystatechange = function() {
+	ajax.onreadystatechange = function( )
+	{
 		var asw;
-		if (ajax.readyState !== 4)
+		if ( ajax.readyState !== 4 )
 			{ return; }
 
 		if (ajax.status !== 200)
@@ -709,7 +716,9 @@ IFace.prototype._sendChanges = function()
 		}
 
 		try
-			{ asw = JSON.parse(ajax.responseText); }
+		{
+			asw = JSON.parse(ajax.responseText);
+		}
 		catch (e)
 		{
 			shell.greenscreen('Server answered no JSON!');

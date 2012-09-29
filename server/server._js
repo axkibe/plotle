@@ -1575,12 +1575,14 @@ Server.prototype.webAjax = function(req, red, res)
 		);
 	};
 
-	//req.on( 'end', handler );
+	req.on( 'end', handler );
 
+	/*
 	req.on( 'end', function( )
 		{
 			setTimeout( handler, 1880 ); // TODO
 		});
+	*/
 };
 
 
