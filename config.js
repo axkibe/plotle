@@ -43,7 +43,7 @@ config.admin = 'axel';
 |   null       means listens on all interfaces.
 |  '127.0.0.1' means localhost (IPV4)
 */
-config.ip = '127.0.0.1';
+config.ip = null;
 
 
 /*

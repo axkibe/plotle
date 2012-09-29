@@ -487,20 +487,20 @@ Shell.prototype._draw = function( )
 			this,
 			'sketchFrowny',
 			Euclid.View.proper,
-			ce.add( 0, -100 )
+			ce.add( 0, -80 )
 		);
 
 		fabric.fillText(
 			this.green,
 			ce,
-			fontPool.get( 40, 'cm' )
+			fontPool.get( 26, 'cm' )
 		);
 
 		fabric.fillText(
 			'Please refresh the page to reconnect.',
 			ce.x,
-			ce.y + 100,
-			fontPool.get( 24, 'cm' )
+			ce.y + 50,
+			fontPool.get( 20, 'cm' )
 		);
 
 		return;

@@ -1545,6 +1545,12 @@ Server.prototype.webAjax = function(req, red, res)
 					}
 					else
 					{
+						log(
+							'web',
+							'not ok',
+							err.message
+						);
+
 						asw = {
 							ok : false,
 							message : err.message
