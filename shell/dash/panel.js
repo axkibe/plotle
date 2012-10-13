@@ -195,7 +195,7 @@ Panel.prototype._weave = function( )
 	if( config.debug.drawBoxes )
 	{
 		fabric.paint(
-			Dash.getStyles( 'boxes' ),
+			Dash.getStyle( 'boxes' ),
 			new Euclid.Rect(
 				iframe.pnw,
 				iframe.pse.sub( 1, 1 )

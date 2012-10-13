@@ -28,7 +28,7 @@
 | Export
 */
 var Dash;
-Dash = Dash || {};
+Dash = Dash || { };
 
 
 /*
@@ -44,17 +44,18 @@ var system;
 /*
 | Capsule
 */
-(function() {
+( function( ) {
 'use strict';
 
-if (typeof(window) === 'undefined')
-	{ throw new Error('this code needs a browser!'); }
+if( typeof( window ) === 'undefined' )
+	{ throw new Error( 'this code needs a browser!' ); }
 
 
 /*
 | Constructor
 */
-var Board = Dash.Board = function()
+var Board = Dash.Board =
+	function( )
 {
 	this.fabric       = system.fabric;
 	this.curPanelName = 'MainPanel';
@@ -62,6 +63,7 @@ var Board = Dash.Board = function()
 	this.panels =
 		{
 			MainPanel  : null,
+			DiscPanel  : null,
 			LoginPanel : null,
 			RegPanel   : null,
 			HelpPanel  : null
@@ -76,30 +78,44 @@ var Board = Dash.Board = function()
 /*
 | Sends a message to the chat component.
 */
-Board.prototype.message = function(message)
+Board.prototype.message =
+	function( message )
 {
-	this.getPanel('MainPanel').$sub.chat.addMessage(message);
+	this.getPanel( 'MainPanel' ).
+		$sub.
+		chat.
+		addMessage(message);
 };
 
 
 /*
 | Returns the panel by its name.
 */
-Board.prototype.getPanel = function(name)
+Board.prototype.getPanel =
+	function( name )
 {
 	var fabric = this.fabric;
-	var cpanel = this.panels[name];
-	if (!Jools.is(cpanel)) { throw new Error('invalid curPanelName: ' + this.curPanelName); }
+	var cpanel = this.panels[ name ];
+	if(! Jools.is( cpanel ) )
+	{
+		throw new Error( 'invalid panelname: ' + name );
+	}
 
-	if (cpanel &&
+	if (
+		cpanel &&
 		cpanel.screensize.x === fabric.width &&
-		cpanel.screensize.y === fabric.height)
-		{ return cpanel; }
+		cpanel.screensize.y === fabric.height
+	)
+	{
+		return cpanel;
+	}
 
 	var Proto;
-	switch(name) {
+	switch( name )
+	{
 		case 'MainPanel' : Proto = Proc.MainPanel; break;
 		case 'HelpPanel' : Proto = Proc.HelpPanel; break;
+		case 'DiscPanel' : Proto = Dash.DiscPanel; break;
 		default          : Proto = Dash.Panel;     break;
 	}
 
@@ -107,7 +123,10 @@ Board.prototype.getPanel = function(name)
 		name,
 		cpanel,
 		this,
-		new Euclid.Point(fabric.width, fabric.height)
+		new Euclid.Point(
+			fabric.width,
+			fabric.height
+		)
 	);
 
 	return this.panels[name] = panel;
@@ -116,23 +135,30 @@ Board.prototype.getPanel = function(name)
 
 /*
 | Returns the current panel.
+| TODO rename and private
 */
-Board.prototype.curPanel = function()
-	{ return this.getPanel(this.curPanelName); };
+Board.prototype.curPanel =
+	function( )
+{
+	return this.getPanel( this.curPanelName );
+};
 
 
 /*
 | Sets the current panel.
+| TODO rename and private
 */
-Board.prototype.setCurPanel = function(panelName)
+Board.prototype.setCurPanel =
+	function( panelName )
 {
 	var caret = shell.$caret;
 
 	if (caret.section === 'board' &&
 		caret.sign &&
-		caret.sign.path.get(0) === this.curPanelName)
+		caret.sign.path.get( 0 ) === this.curPanelName
+	)
 	{
-		caret = shell.setCaret(null, null);
+		caret = shell.setCaret( null, null );
 	}
 
 	this.curPanelName = panelName;
@@ -143,16 +169,21 @@ Board.prototype.setCurPanel = function(panelName)
 /*
 | Sets the space name displayed on the main panel.
 */
-Board.prototype.setCurSpace = function(space, access)
+Board.prototype.setCurSpace =
+	function( space, access )
 {
 	this.$curSpace = space;
 	this.$access   = access;
-	this.getPanel('MainPanel').setCurSpace(space, access);
+	this.getPanel( 'MainPanel' ).
+		setCurSpace(space, access);
 
-	if (space === 'meshcraft:sandbox' && this.$autoHelp)
+	if (
+		space === 'meshcraft:sandbox' &&
+		this.$autoHelp
+	)
 	{
 		this.$autoHelp = false;
-		this.setShowHelp(true);
+		this.setShowHelp( true );
 	}
 };
 
@@ -160,49 +191,61 @@ Board.prototype.setCurSpace = function(space, access)
 /*
 | Sets the user greeted on the main panel.
 */
-Board.prototype.setUser = function(userName)
+Board.prototype.setUser =
+	function( userName )
 {
-	this.$amVisitor = userName.substring(0,5) === 'visit';
-	var mainPanel = this.getPanel('MainPanel');
-	mainPanel.setUser(userName);
+	this.$amVisitor = userName.substring( 0, 5) === 'visit';
+
+	var mainPanel = this.getPanel ('MainPanel' );
+	mainPanel.setUser( userName );
 
 	var leftB = mainPanel.$sub.leftB;
 	leftB.$captionText = this.$amVisitor ? 'log in' : 'log out';
-	leftB.poke();
+	leftB.poke( );
 
 	var left2B = mainPanel.$sub.left2B;
 	left2B.$visible = this.$amVisitor;
-	left2B.poke();
+	left2B.poke( );
 };
 
 
 /*
 | Sets the zoom level for the current space shown on the mainPanel.
 */
-Board.prototype.setSpaceZoom = function(zf)
-	{ this.getPanel('MainPanel').setSpaceZoom(zf); };
+Board.prototype.setSpaceZoom =
+	function( zf )
+{
+	this.getPanel( 'MainPanel' ).setSpaceZoom( zf );
+};
 
 
 /*
 | Redraws the dashboard.
 */
-Board.prototype.draw = function()
+Board.prototype.draw =
+	function( )
 {
-	if (this.$showHelp)
+	var fabric = this.fabric;
+
+	if( this.$showHelp )
 	{
-		var helpPanel = this.getPanel('HelpPanel');
-		helpPanel.setAccess(this.$access);
-		helpPanel.draw(this.fabric);
+		var helpPanel = this.getPanel( 'HelpPanel' );
+		helpPanel.setAccess( this.$access );
+		helpPanel.draw( fabric );
 	}
 
-	this.curPanel().draw(this.fabric);
+	this.curPanel( ).draw( fabric );
+
+	var discPanel = this.getPanel( 'DiscPanel' );
+	discPanel.draw( fabric );
 };
 
 
 /*
 | Force clears all caches.
 */
-Board.prototype.knock = function( )
+Board.prototype.knock =
+	function( )
 {
 	for( var p in this.panels )
 	{
@@ -217,46 +260,65 @@ Board.prototype.knock = function( )
 /*
 | Draws the caret.
 */
-Board.prototype.positionCaret = function( )
+Board.prototype.positionCaret =
+	function( )
 {
 	if ( shell.$caret.sign.path.get( 0 ) !== this.curPanelName )
-		{ throw new Error('Caret path(0) !== this.curPanelName'); }
+		{ throw new Error( 'Caret path( 0 ) !== this.curPanelName' ); }
 
-	this.curPanel( ).positionCaret( Euclid.View.proper );
+	this.curPanel( ).
+		positionCaret( Euclid.View.proper );
 };
 
 
 /*
 | User is entering text.
 */
-Board.prototype.input = function(text)
+Board.prototype.input =
+	function( text )
 {
-	this.curPanel().input(text);
+	this.curPanel( ).input( text );
 };
 
 
 /*
 | User is pressing a special key.
 */
-Board.prototype.specialKey = function( key, shift, ctrl )
+Board.prototype.specialKey =
+	function(
+		key,
+		shift,
+		ctrl
+	)
 {
 	this.curPanel( ).specialKey( key, shift, ctrl );
 };
 
 
 /*
-| User is hovers his/her pointing device ( mouse move )
+| User is hovering his/her pointing device ( mouse move )
 */
-Board.prototype.pointingHover = function(p, shift, ctrl)
+Board.prototype.pointingHover =
+	function(
+		p,
+		shift,
+		ctrl
+	)
 {
-	var cursor = this.curPanel().pointingHover(p, shift, ctrl);
+	var cursor = this.curPanel( ).pointingHover( p, shift, ctrl );
 
-	if (this.$showHelp)
+	if( this.$showHelp )
 	{
-		if (cursor)
-			{ this.getPanel('HelpPanel').pointingHover(null, shift, ctrl); }
+		if( cursor )
+		{
+			this.getPanel( 'HelpPanel' ).
+				pointingHover( null, shift, ctrl );
+		}
 		else
-			{ cursor = this.getPanel('HelpPanel').pointingHover(p, shift, ctrl); }
+		{
+			cursor = this.getPanel( 'HelpPanel' ).
+				pointingHover( p, shift, ctrl );
+		}
 	}
 
 	return cursor;
@@ -266,7 +328,8 @@ Board.prototype.pointingHover = function(p, shift, ctrl)
 /*
 | Start of a dragging operation.
 */
-Board.prototype.dragstart = function( p, shift, ctrl )
+Board.prototype.dragstart =
+	function( p, shift, ctrl )
 {
 	return null;
 };
@@ -275,16 +338,18 @@ Board.prototype.dragstart = function( p, shift, ctrl )
 /*
 | Ongoing dragging operation.
 */
-Board.prototype.actionmove = function( p, shift, ctrl )
+Board.prototype.actionmove =
+	function( p, shift, ctrl )
 {
 	return null;
 };
 
 
 /*
-| End of a dragging operation.
+| End of an action.
 */
-Board.prototype.actionstop = function( p, shift, ctrl )
+Board.prototype.actionstop =
+	function( p, shift, ctrl )
 {
 	var path  = shell.$action.itemPath;
 	var panel = this.getPanel( path.get( 0 ) );
@@ -302,17 +367,22 @@ Board.prototype.pointingStart = function( p, shift, ctrl )
 	var r;
 	if( this.$showHelp )
 	{
-		r = this.getPanel( 'HelpPanel' ).pointingStart( p, shift. ctrl) ;
+		r = this.getPanel( 'HelpPanel' ).
+			pointingStart( p, shift. ctrl) ;
+
 		if( r !== null )
 			{ return r; }
 	}
 
-	r = this.curPanel( ).pointingStart( p, shift. ctrl );
+	r = this.curPanel( ).
+		pointingStart( p, shift. ctrl );
 
 	if( r === null )
 		{ return null; }
 
-	this.curPanel( ).pointingHover( p, shift, ctrl );
+	this.curPanel( ).
+		pointingHover( p, shift, ctrl );
+
 	return r;
 };
 
@@ -342,4 +412,4 @@ Board.prototype.setShowHelp = function( showHelp )
 	shell.redraw = true;
 };
 
-})();
+} )( );

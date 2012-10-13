@@ -59,6 +59,7 @@ var styles =
 	checkboxHofoc : theme.dash.checkboxHofoc,
 	checkboxCheck : theme.dash.checkboxCheck,
 
+
 	panel         : theme.dash.panel,
 
 	help          : theme.dash.help,

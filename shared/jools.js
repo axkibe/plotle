@@ -283,7 +283,7 @@ var lazyFixate = function(proto, key, getter) {
 		// get : function() { return fixate(this, key, getter.call(this)); },
 
 		get : function() {
-			var ckey = '_$'+key;
+			var ckey = '_lazy_' + key;
 			return is(this[ckey]) ? this[ckey] : innumerable(this, ckey, getter.call(this));
 		}
 	});

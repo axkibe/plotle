@@ -43,7 +43,7 @@ var Jools;
 /*
 | Capsule
 */
-(function() {
+( function( ) {
 'use strict';
 
 if ( typeof( window ) === 'undefined' )
@@ -199,7 +199,7 @@ Shape.prototype.sketch = function( fabric, border, twist, view )
 
 
 /*
-| gets the source of a projection to p
+| Gets the source of a projection to p.
 */
 Shape.prototype.getProjection = function( p )
 {
@@ -396,4 +396,4 @@ Shape.prototype.getProjection = function( p )
 };
 
 
-} ) ( );
+} )( );

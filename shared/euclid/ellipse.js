@@ -54,6 +54,7 @@ var Ellipse = Euclid.Ellipse =
 	function(
 		pnw, // point in north-west
 		pse  // point in south-east
+		// ...
 	)
 {
 	this.pnw = pnw;
@@ -85,6 +86,29 @@ var Ellipse = Euclid.Ellipse =
 			'round', 'clockwise', 'close'
 		]
 	);
+
+	for( var a = 2; a < arguments.length; a += 2 ) {
+		var arg = arguments[ a ];
+		var val = arguments[ a + 1 ];
+		switch( arg ) {
+
+			case 'gradientPC' :
+				this._lazy_gradientPC = val;
+				break;
+
+			case 'gradientR0' :
+				this._lazy_gradientR0 = val;
+				break;
+
+			case 'gradientR1' :
+				this._lazy_gradientR1 = val;
+				break;
+
+			default :
+				throw new Error( 'invalid argument: ' + arg );
+
+		}
+	}
 
 	Jools.immute(this);
 };

@@ -112,8 +112,8 @@ theme =
 				gradient : 'askew',
 				steps :
 				[
-					[ 0, 'rgba(255, 255, 248, 0.955)' ],
-					[ 1, 'rgba(255, 255, 160, 0.955)' ]
+					[ 0, 'rgba( 255, 255, 248, 0.955 )' ],
+					[ 1, 'rgba( 255, 255, 160, 0.955 )' ]
 				]
 			},
 
@@ -122,7 +122,7 @@ theme =
 				{
 					border: 1,
 					width : 1,
-					color : 'rgb(255, 188, 87)'
+					color : 'rgb( 255, 188, 87 )'
 				},
 				{
 					border: 0,
@@ -136,7 +136,7 @@ theme =
 				{
 					border: 0,
 					width: 3,
-					color: 'rgba(255, 183, 15, 0.5)'
+					color: 'rgba( 255, 183, 15, 0.5 )'
 				}
 			]
 		},
@@ -172,8 +172,8 @@ theme =
 				gradient : 'radial',
 				steps :
 				[
-					[ 0, 'rgba(255, 255, 248, 0.955)' ],
-					[ 1, 'rgba(255, 255, 160, 0.955)' ]
+					[ 0, 'rgba( 255, 255, 248, 0.955 )' ],
+					[ 1, 'rgba( 255, 255, 160, 0.955 )' ]
 				]
 			},
 
@@ -182,7 +182,7 @@ theme =
 				{
 					border: 3,
 					width : 6,
-					color : 'rgb(255, 220, 128)'
+					color : 'rgb( 255, 220, 128 )'
 				},
 				{
 					border: 0,
@@ -196,7 +196,7 @@ theme =
 				{
 					border : 0,
 					width  : 3,
-					color  : 'rgba(255, 183, 15, 0.5)'
+					color  : 'rgba( 255, 183, 15, 0.5 )'
 				}
 			]
 		}
@@ -226,7 +226,7 @@ theme =
 					border : 0,
 					width  : 1,
 					color  :
-					'rgba(100, 100, 0, 0.1)'
+					'rgba( 100, 100, 0, 0.1 )'
 				}
 			],
 
@@ -235,7 +235,7 @@ theme =
 				{
 					border : 0,
 					width  : 3,
-					color  : 'rgba(255, 183, 15, 0.5)'
+					color  : 'rgba( 255, 183, 15, 0.5 )'
 				}
 			]
 		},
@@ -269,8 +269,8 @@ theme =
 
 				steps :
 				[
-					[ 0, 'rgba(255, 255,  20, 0.955)' ],
-					[ 1, 'rgba(255, 255, 180, 0.955)' ]
+					[ 0, 'rgba( 255, 255,  20, 0.955 )' ],
+					[ 1, 'rgba( 255, 255, 180, 0.955 )' ]
 				]
 			},
 
@@ -279,7 +279,7 @@ theme =
 				{
 					border : 1,
 					width  : 1,
-					color  : 'rgb(255, 94, 44)'
+					color  : 'rgb( 255, 94, 44 )'
 				},
 				{
 					border : 0,
@@ -289,16 +289,16 @@ theme =
 			]
 		},
 
-
-		help :
+		discPanel :
 		{
 			fill :
 			{
 				gradient : 'radial',
 
-				steps : [
-					[ 0, 'rgba(255, 255,  20, 0.955)' ],
-					[ 1, 'rgba(255, 255, 255, 0.955)' ]
+				steps :
+				[
+					[ 0, 'rgba( 255, 255,  20, 0.955 )' ],
+					[ 1, 'rgba( 255, 255, 180, 0.955 )' ]
 				]
 			},
 
@@ -307,12 +307,65 @@ theme =
 				{
 					border : 1,
 					width  : 1,
-					color  : 'rgb(255, 94, 44)'
+					color  : 'rgb( 255, 94, 44 )'
 				},
 				{
 					border : 0,
 					width  : 1,
 					color  : 'rgb( 94, 94,  0)'
+				}
+			],
+
+			buttons :
+			{
+				fill : 'rgba( 255, 255, 240, 1 )',
+
+				edge :
+				[
+					{
+						border : 0,
+						width  : 1,
+						color  : 'rgb( 196, 94, 44 )'
+					}
+				],
+
+				normal : {
+					icon :
+					{
+						fill : 'rgb( 120, 0, 0 )',
+
+						edge : [
+						///
+						]
+					}
+				}
+			},
+
+		},
+
+		help :
+		{
+			fill :
+			{
+				gradient : 'radial',
+
+				steps : [
+					[ 0, 'rgba(255, 255,  20, 0.955 )' ],
+					[ 1, 'rgba(255, 255, 255, 0.955 )' ]
+				]
+			},
+
+			edge :
+			[
+				{
+					border : 1,
+					width  : 1,
+					color  : 'rgb( 255, 94, 44 )'
+				},
+				{
+					border : 0,
+					width  : 1,
+					color  : 'rgb( 94, 94,  0 )'
 				}
 			]
 		},
@@ -325,8 +378,8 @@ theme =
 				gradient : 'horizontal',
 				steps :
 				[
-					[0, 'rgba(255, 237, 210, 0.5)' ],
-					[1, 'rgba(255, 185, 81,  0.5)' ]
+					[0, 'rgba( 255, 237, 210, 0.5 )' ],
+					[1, 'rgba( 255, 185, 81,  0.5 )' ]
 				]
 			},
 
@@ -335,12 +388,12 @@ theme =
 				{
 					border :   1,
 					width  : 1.5,
-					color  : 'rgb(255, 141, 66)'
+					color  : 'rgb( 255, 141, 66 )'
 				},
 				{
 					border :  0,
 					width  :  1,
-					color  : 'rgb( 94,  94,  0)'
+					color  : 'rgb( 94,  94,  0 )'
 				}
 			]
 		},
@@ -348,18 +401,18 @@ theme =
 
 		buttonHover :
 		{
-			fill : 'rgb(255, 188, 88)',
+			fill : 'rgb( 255, 188, 88 )',
 			edge :
 			[
 				{
 					border : 1,
 					width  : 2,
-					color  : 'rgb(255, 188, 87)'
+					color  : 'rgb( 255, 188, 87 )'
 				},
 				{
 					border : 0,
 					width  : 1,
-					color  : 'rgb(128, 128, 0)'
+					color  : 'rgb( 128, 128, 0 )'
 				}
 			]
 		},
@@ -372,8 +425,8 @@ theme =
 				gradient : 'horizontal',
 				steps :
 				[
-					[0, 'rgba(255, 237, 210, 0.5)' ],
-					[1, 'rgba(255, 185, 81,  0.5)' ]
+					[0, 'rgba( 255, 237, 210, 0.5 )' ],
+					[1, 'rgba( 255, 185, 81,  0.5 )' ]
 				]
 			},
 
@@ -382,7 +435,7 @@ theme =
 				{
 					border : 1,
 					width  : 2,
-					color  : 'rgb(255, 99, 188)'
+					color  : 'rgb( 255, 99, 188 )'
 				},
 				{
 					border : 0,
@@ -395,13 +448,13 @@ theme =
 
 		buttonHofoc :
 		{
-			fill : 'rgb(255, 188, 88)',
+			fill : 'rgb( 255, 188, 88 )',
 			edge :
 			[
 				{
 					border : 1,
 					width  : 2,
-					color  : 'rgb(255, 99, 188)'
+					color  : 'rgb( 255, 99, 188 )'
 				},
 				{
 					border : 0,
@@ -414,14 +467,14 @@ theme =
 
 		chat :
 		{
-			fill : 'rgba(255, 255, 180, 0.7)',
+			fill : 'rgba( 255, 255, 180, 0.7 )',
 
 			edge :
 			[
 				{
 					border :  0,
 					width  :  1,
-					color  : 'rgba(184,  64,  0, 0.7)'
+					color  : 'rgba( 184,  64,  0, 0.7 )'
 				}
 			]
 		},
@@ -436,7 +489,7 @@ theme =
 				{
 					border : 1,
 					width  : 1.5,
-					color  : 'rgb(255, 188, 87)'
+					color  : 'rgb( 255, 188, 87 )'
 				},
 				{
 					border : 0,
@@ -456,7 +509,7 @@ theme =
 				{
 					border : 1,
 					width  : 2,
-					color  : 'rgb(255, 99, 188)'
+					color  : 'rgb( 255, 99, 188 )'
 				},
 				{
 					border : 0,
@@ -488,7 +541,7 @@ theme =
 				{
 					border : 1,
 					width  : 1.5,
-					color  : 'rgb(255, 188, 87)'
+					color  : 'rgb( 255, 188, 87 )'
 				},
 				{
 					border : 0,
@@ -507,12 +560,12 @@ theme =
 				{
 					border : 1,
 					width  : 2,
-					color  : 'rgb(255, 188, 87)'
+					color  : 'rgb( 255, 188, 87 )'
 				},
 				{
 					border : 0,
 					width  : 1,
-					color  : 'rgb(128, 128, 0)'
+					color  : 'rgb( 128, 128, 0 )'
 				}
 			]
 		},
@@ -526,7 +579,7 @@ theme =
 				{
 					border : 1,
 					width  : 2,
-					color  : 'rgb(255, 99, 188)'
+					color  : 'rgb( 255, 99, 188 )'
 				},
 				{
 					border : 0,
@@ -574,8 +627,8 @@ theme =
 				gradient : 'radial',
 				steps :
 				[
-					[ 0, 'rgba(255, 255,  20, 0.955)' ],
-					[ 1, 'rgba(255, 255, 180, 0.955)' ]
+					[ 0, 'rgba( 255, 255,  20, 0.955 )' ],
+					[ 1, 'rgba( 255, 255, 180, 0.955 )' ]
 				]
 			},
 
@@ -584,12 +637,12 @@ theme =
 				{
 					border : 1,
 					width  : 1,
-					color  : 'rgb(255, 94, 44)'
+					color  : 'rgb( 255, 94, 44 )'
 				},
 				{
 					border : 0,
 					width  : 1,
-					color  : 'rgb( 94, 94,  0)'
+					color  : 'rgb( 94, 94,  0 )'
 				}
 			]
 		},
@@ -606,7 +659,7 @@ theme =
 
 		space :
 		{
-			fill : 'rgba(255, 255, 255, 0.8)',
+			fill : 'rgba( 255, 255, 255, 0.8 )',
 			edge :
 			[
 				{
@@ -620,7 +673,7 @@ theme =
 
 		current  :
 		{
-			fill : 'rgba(255, 255, 255, 0.15)',
+			fill : 'rgba( 255, 255, 255, 0.15 )',
 			edge :
 			[
 				{ border: 0, width : 0.5, color : 'black' }
@@ -630,7 +683,7 @@ theme =
 
 		curhov  :
 		{
-			fill : 'rgba(255, 188, 88, 0.3)',
+			fill : 'rgba( 255, 188, 88, 0.3 )',
 
 			edge :
 			[
@@ -644,7 +697,7 @@ theme =
 
 		hover :
 		{
-			fill : 'rgba(255, 188, 88, 0.8)',
+			fill : 'rgba( 255, 188, 88, 0.8 )',
 
 			edge :
 			[
@@ -679,12 +732,12 @@ theme =
 				{
 					border : 1,
 					width  : 1,
-					color  : 'rgb(255, 94, 44)'
+					color  : 'rgb( 255, 94, 44 )'
 				},
 				{
 					border : 0,
 					width  : 1,
-					color  : 'rgb( 94, 94,  0)'
+					color  : 'rgb( 94, 94,  0 )'
 				}
 			],
 
@@ -694,8 +747,8 @@ theme =
 
 				steps :
 				[
-					[ 0, 'rgba(255, 255, 140, 0.955)' ],
-					[ 1, 'rgba(255, 255, 200, 0.955)' ]
+					[ 0, 'rgba( 255, 255, 140, 0.955 )' ],
+					[ 1, 'rgba( 255, 255, 200, 0.955 )' ]
 				]
 			}
 		},
@@ -708,8 +761,8 @@ theme =
 
 				steps :
 				[
-					[ 0, 'rgba(255, 255, 200, 0.9)' ],
-					[ 1, 'rgba(255, 255, 205, 0.9)' ]
+					[ 0, 'rgba( 255, 255, 200, 0.9 )' ],
+					[ 1, 'rgba( 255, 255, 205, 0.9 )' ]
 				]
 			},
 
@@ -718,7 +771,7 @@ theme =
 				{
 					border : 1,
 					width  : 1,
-					color  : 'rgb(255, 200, 105)'
+					color  : 'rgb( 255, 200, 105 )'
 				},
 				{
 					border : 0,
@@ -731,7 +784,7 @@ theme =
 
 		highlight :
 		{
-			fill : 'rgb(255, 188, 88)',
+			fill : 'rgb( 255, 188, 88 )',
 
 			edge :
 			[
@@ -750,7 +803,7 @@ theme =
 	{
 		style :
 		{
-			fill   : 'rgba(243, 203, 255, 0.9)',
+			fill   : 'rgba( 243, 203, 255, 0.9 )',
 
 			edge :
 			[
@@ -769,14 +822,14 @@ theme =
 	{
 		style :
 		{
-			fill : 'rgb(255, 188, 87)',
+			fill : 'rgb( 255, 188, 87 )',
 
 			edge :
 			[
 				{
 					border : 0,
 					width  : 1,
-					color  : 'rgb(221, 154, 52)'
+					color  : 'rgb( 221, 154, 52 )'
 				}
 			]
 		},
@@ -809,13 +862,13 @@ theme =
 
 		style :
 		{
-			fill : 'rgba(255, 240, 150, 0.9)',
+			fill : 'rgba( 255, 240, 150, 0.9 )',
 			edge :
 			[
 				{
 					border : 0,
 					width  : 1,
-					color  : 'rgba(255, 180, 110, 0.9)'
+					color  : 'rgba( 255, 180, 110, 0.9 )'
 				}
 			]
 		}
@@ -826,19 +879,19 @@ theme =
 	{
 		style :
 		{
-			fill : 'rgba(255, 225, 40, 0.5)',
+			fill : 'rgba( 255, 225, 40, 0.5 )',
 
 			edge :
 			[
 				{
 					border : 0,
 					width  : 3,
-					color  : 'rgba(255, 225, 80, 0.4)'
+					color  : 'rgba( 255, 225, 80, 0.4 )'
 				},
 				{
 					border : 0,
 					width  : 1,
-					color  : 'rgba(200, 100, 0,  0.8)'
+					color  : 'rgba( 200, 100, 0,  0.8 )'
 				}
 			],
 
@@ -847,7 +900,7 @@ theme =
 				{
 					border : 0,
 					width  : 3,
-					color  : 'rgba(255, 183, 15, 0.5)'
+					color  : 'rgba( 255, 183, 15, 0.5 )'
 				}
 			]
 		},

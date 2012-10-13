@@ -557,7 +557,7 @@ IFace.prototype._update = function()
 
 			for( a = 0, aZ = postbox.length; a < aZ; a++ )
 			{
-				var chgX = postbox[ a ].chgX;
+				chgX = postbox[ a ].chgX;
 
 				for( b = 0, bZ = report.length; b < bZ; b++ )
 				{
