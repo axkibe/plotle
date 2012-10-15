@@ -462,6 +462,7 @@ Server.prototype.prepareResources = function(_)
 		'shell/disc/maindisc.js',                          'fb',
 		'shell/disc/discbutton.js',                        'fb',
 		'shell/disc/discbutton-normal.js',                 'fb',
+		'shell/disc/discbutton-create.js',                 'fb',
 		'shell/proc/util.js',                              'fb',
 		'shell/proc/mainpanel.js',                         'fb',
 		'shell/proc/helppanel.js',                         'fb',

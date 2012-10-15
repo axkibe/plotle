@@ -325,7 +325,13 @@ theme =
 			},
 
 			create : {
-				font : fontPool.get( 13, 'ca' )
+
+				pnw : new Euclid.Point(
+					18,
+					118
+				),
+
+				font : fontPool.get( 14, 'ca' )
 			}
 		}
 	},

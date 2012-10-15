@@ -13,11 +13,14 @@
  .-,--.            ,-,---.     .  .
  ' |   \ . ,-. ,-.  '|___/ . . |- |- ,-. ,-.
  , |   / | `-. |    ,|   \ | | |  |  | | | |
- `-^--'  ' `-' `-' `-^---' `-^ `' `' `-' '
-
+ `-^--'  ' `-' `-' `-^---' `-^ `' `' `-' ' '
+           ,--.             .
+           | `-' ,-. ,-. ,-. |- ,-.
+           |   . |   |-' ,-| |  |-'
+           `--'  '   `-' `-^ `' `-'
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- A button on the DiscPanel.
+ The create button on the DiscPanel.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -57,46 +60,36 @@ var Tree;
 if( typeof( window ) === 'undefined')
 	{ throw new Error( 'this code needs a browser!' ); }
 
-
 /*
 | Constructor
 */
-var DiscButton = Disc.DiscButton =
-	function(
-		style
-	)
+var DiscButtonCreate = Disc.DiscButtonCreate = function( )
 {
-	this.style = style;
-	var pnw = this.pnw = style.pnw;
-
-	this.ellipse = new Euclid.Ellipse(
-		pnw,
-		pnw.add(
-			theme.disc.buttons.width,
-			theme.disc.buttons.height
-		)
-	);
-
-	Jools.immute( this );
+	Disc.DiscButton.call( this, theme.disc.buttons.create );
 };
+
+Jools.subclass( DiscButtonCreate, Disc.DiscButton );
 
 
 /*
-| Draws the button.
+| Draws the buttons icon
 */
-DiscButton.prototype.draw =
+DiscButtonCreate.prototype.drawIcon =
 	function(
 		fabric
 	)
 {
-	fabric.paint(
-		theme.disc.buttons,
-		this.ellipse,
-		'sketch',
-		Euclid.View.proper
-	);
+	var pnw = this.pnw;
 
-	this.drawIcon( fabric );
+	var wx = pnw.x + 22;
+	var ny = pnw.y + 26;
+
+	fabric.fillText(
+		'new',
+		wx,
+		ny,
+		this.style.font
+	);
 };
 
 

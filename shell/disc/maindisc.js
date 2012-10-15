@@ -97,32 +97,8 @@ var MainDisc = Disc.MainDisc =
 
 	var buttons = this.buttons =
 	{
-		normal : new Disc.DiscButtonNormal( )
-
-		/*
-		create :
-		{
-			pnw : new Euclid.Point(
-				20,
-				115
-			),
-
-			sketchIcon : function( fabric, border, twist )
-			{
-				var pnw = buttons.create.pnw;
-				var wx = pnw.x + 23;
-				var ny = pnw.y + 22;
-				var myt = theme.disc.buttons.create;
-
-				fabric.fillText(
-					'log',
-					wx,
-					ny,
-					myt.font
-				);
-			}
-		}
-		*/
+		normal : new Disc.DiscButtonNormal( ),
+		create : new Disc.DiscButtonCreate( )
 	};
 };
 

@@ -66,7 +66,7 @@ FontPool.styles =
 	cab        :
 	{
 		type   : 'Font',
-		family : '(default)',
+		family : '(bold)',
 		fill   : 'black',
 		align  : 'center',
 		base   : 'alphabetic'

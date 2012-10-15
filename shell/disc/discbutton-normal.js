@@ -108,6 +108,18 @@ DiscButtonNormal.prototype.sketchIcon =
 };
 
 
+DiscButtonNormal.prototype.drawIcon =
+	function(
+		fabric
+	)
+{
+	fabric.paint(
+		this.style.icon,
+		this,
+		'sketchIcon',
+		Euclid.View.proper
+	);
+};
 
 
 } )( );

@@ -806,7 +806,7 @@ MainPanel.layout =
 		{
 			type : 'Label',
 			text : '',
-			font : fontPool.get( 16, 'cab' ),
+			font : fontPool.get( 16, 'ca' ),
 			pos  :
 			{
 				type   : 'Point',
