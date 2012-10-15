@@ -260,80 +260,94 @@ theme =
 	// disc
 	disc :
 	{
-		fill :
+		main :
 		{
-			gradient : 'radial',
+			width      :  90,
+			height     : 800,
 
-			steps :
-			[
-				[ 0, 'rgba( 255, 255,  20, 0.955 )' ],
-				[ 1, 'rgba( 255, 255, 180, 0.955 )' ]
-			]
-		},
 
-		edge :
-		[
+			ellipse :
 			{
-				border : 1,
-				width  : 1,
-				color  : 'rgb( 255, 94, 44 )'
+				width   : 1600,
+				height  : 1600,
 			},
+
+			fill :
 			{
-				border : 0,
-				width  : 1,
-				color  : 'rgb( 94, 94,  0)'
-			}
-		],
+				gradient : 'radial',
 
-		buttons :
-		{
-			width  : 44,
-			height : 44,
-
-			fill : 'rgba( 255, 255, 240, 0.6 )',
+				steps :
+				[
+					[ 0, 'rgba( 255, 255,  20, 0.955 )' ],
+					[ 1, 'rgba( 255, 255, 180, 0.955 )' ]
+				]
+			},
 
 			edge :
 			[
 				{
+					border : 1,
+					width  : 1,
+					color  : 'rgb( 255, 94, 44 )'
+				},
+				{
 					border : 0,
 					width  : 1,
-					color  : 'rgba( 196, 94, 44, 0.6 )'
+					color  : 'rgb( 94, 94,  0)'
 				}
 			],
 
-			// specific buttons
+			buttons :
+			{
+				width  : 44,
+				height : 44,
 
-			normal : {
+				fill : 'rgba( 255, 255, 240, 0.6 )',
 
-				pnw : new Euclid.Point(
-					4,
-					70
-				),
+				edge :
+				[
+					{
+						border : 0,
+						width  : 1,
+						color  : 'rgba( 196, 94, 44, 0.6 )'
+					}
+				],
 
-				icon :
-				{
-					fill : 'black',
+				// specific buttons
 
-					edge : [
-						{
-							border : 0,
-							width  : 1,
-							color  : 'rgba( 128, 0, 0, 1 )'
-						}
-					]
+				normal : {
+
+					pnw : new Euclid.Point(
+						3,
+						135
+					),
+
+					icon :
+					{
+						fill : 'black',
+
+						edge : [
+							{
+								border : 0,
+								width  : 1,
+								color  : 'rgba( 128, 0, 0, 1 )'
+							}
+						]
+					}
+				},
+
+				create : {
+
+					pnw : new Euclid.Point(
+						16,
+						180
+					),
+
+					font : fontPool.get( 14, 'ca' )
 				}
-			},
-
-			create : {
-
-				pnw : new Euclid.Point(
-					18,
-					118
-				),
-
-				font : fontPool.get( 14, 'ca' )
 			}
-		}
+		},
+
 	},
 
 

@@ -65,7 +65,11 @@ if( typeof( window ) === 'undefined')
 */
 var DiscButtonCreate = Disc.DiscButtonCreate = function( )
 {
-	Disc.DiscButton.call( this, theme.disc.buttons.create );
+	Disc.DiscButton.call(
+		this,
+		theme.disc.main.buttons,
+		theme.disc.main.buttons.create
+	);
 };
 
 Jools.subclass( DiscButtonCreate, Disc.DiscButton );
@@ -88,7 +92,7 @@ DiscButtonCreate.prototype.drawIcon =
 		'new',
 		wx,
 		ny,
-		this.style.font
+		this.myStyle.font
 	);
 };
 

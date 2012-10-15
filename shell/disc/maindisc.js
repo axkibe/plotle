@@ -17,7 +17,7 @@
 
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- The new disc panel.
+ The disc panel.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -71,21 +71,25 @@ var MainDisc = Disc.MainDisc =
 	this.name  = name;
 	this.board = board;
 
-	this.screensize = screensize;
-	var width  = this.width  =  90;
-	var height = this.height = 600; // 690?
+	this.createDisc = new Disc.CreateDisc( screensize );
 
-	var overshootX = 70;
-	var overshootY = 10;
+	this.screensize = screensize;
+	var style = theme.disc.main;
+
+	var width  = this.width  = style.width;
+	var height = this.height = style.height;
+
+	var ew = style.ellipse.width;
+	var eh = style.ellipse.height;
 
 	var silhoutte = this.silhoutte = new Euclid.Ellipse(
 		new Euclid.Point(
-			-width - overshootX,
-			-overshootY
+			width - 1 - ew,
+			0 - Jools.half( eh - height )
 		),
 		new Euclid.Point(
 			width - 1,
-			height + overshootY
+			height + Jools.half( eh - height )
 		),
 		'gradientPC', new Euclid.Point(
 			-600,
@@ -129,7 +133,7 @@ MainDisc.prototype._weave = function( )
 	);
 
 	fabric.fill(
-		theme.disc.fill,
+		theme.disc.main.fill,
 		this.silhoutte,
 		'sketch',
 		Euclid.View.proper
@@ -143,7 +147,7 @@ MainDisc.prototype._weave = function( )
 
 
 	fabric.edge(
-		theme.disc.edge,
+		theme.disc.main.edge,
 		this.silhoutte,
 		'sketch',
 		Euclid.View.proper
@@ -171,6 +175,8 @@ MainDisc.prototype._weave = function( )
 */
 MainDisc.prototype.draw = function( fabric )
 {
+	this.createDisc.draw( fabric );
+
 	fabric.drawImage(
 		this._weave( ),
 		0,

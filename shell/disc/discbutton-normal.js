@@ -65,7 +65,11 @@ if( typeof( window ) === 'undefined')
 */
 var DiscButtonNormal = Disc.DiscButtonNormal = function( )
 {
-	Disc.DiscButton.call( this, theme.disc.buttons.normal );
+	Disc.DiscButton.call(
+		this,
+		theme.disc.main.buttons,
+		theme.disc.main.buttons.normal
+	);
 };
 
 Jools.subclass( DiscButtonNormal, Disc.DiscButton );
@@ -114,7 +118,7 @@ DiscButtonNormal.prototype.drawIcon =
 	)
 {
 	fabric.paint(
-		this.style.icon,
+		this.myStyle.icon,
 		this,
 		'sketchIcon',
 		Euclid.View.proper

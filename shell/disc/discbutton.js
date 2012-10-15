@@ -63,17 +63,19 @@ if( typeof( window ) === 'undefined')
 */
 var DiscButton = Disc.DiscButton =
 	function(
-		style
+		aStyle, myStyle
 	)
 {
-	this.style = style;
-	var pnw = this.pnw = style.pnw;
+	this.aStyle  = aStyle;
+	this.myStyle = myStyle;
+
+	var pnw = this.pnw = myStyle.pnw;
 
 	this.ellipse = new Euclid.Ellipse(
 		pnw,
 		pnw.add(
-			theme.disc.buttons.width,
-			theme.disc.buttons.height
+			aStyle.width,
+			aStyle.height
 		)
 	);
 
@@ -90,7 +92,7 @@ DiscButton.prototype.draw =
 	)
 {
 	fabric.paint(
-		theme.disc.buttons,
+		this.aStyle,
 		this.ellipse,
 		'sketch',
 		Euclid.View.proper
