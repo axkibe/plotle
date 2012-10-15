@@ -29,7 +29,7 @@
 | Export
 */
 var Euclid;
-Euclid = Euclid || {};
+Euclid = Euclid || { };
 
 
 /*
@@ -41,46 +41,43 @@ var Jools;
 /*
 | Capsule
 */
-(function() {
+( function( ) {
 'use strict';
-
-if (typeof(window) === 'undefined')
-	{ throw new Error('this code needs a browser!'); }
 
 
 /*
 | Constructor.
-|
-| size   : font size in pixel
-| family : font family
-| fill   : font color
-| align  : horizontal align
-| base   : vertical base position
-|
-| or
-|
-| o : one object that contains it all
 */
-var Font = Euclid.Font = function(size_o, family, fill, align, base)
+var Font = Euclid.Font =
+	function(
+		size_o, // fontsize or one object having all the arguments
+		family, // font familiy
+		fill,   // font color
+		align,  // horizontal align
+		base    // vertical base position
+	)
 {
-	if (typeof(size_o) === 'object' && !(size_o instanceof Number))
+	if(
+		typeof( size_o ) === 'object' &&
+		!( size_o instanceof Number )
+	)
 	{
 		this.size    = size_o.size;
 		this.family  = size_o.family;
-		this.fill    = size_o.fill;
 		this.align   = size_o.align;
+		this.fill    = size_o.fill;
 		this.base    = size_o.base;
 	}
 	else
 	{
 		this.size    = size_o;
 		this.family  = family;
-		this.fill    = fill;
 		this.align   = align;
+		this.fill    = fill;
 		this.base    = base;
 	}
 
-	Jools.immute(this);
+	Jools.immute( this );
 };
 
 
@@ -95,7 +92,7 @@ Font.prototype.type = 'Font';
 */
 Font.prototype.getCSS = function()
 {
-	if (this._$css)
+	if( this._$css )
 		{ return this._$css; }
 
 	return Jools.innumerable(
@@ -105,4 +102,4 @@ Font.prototype.getCSS = function()
 	);
 };
 
-} ) ();
+})( );

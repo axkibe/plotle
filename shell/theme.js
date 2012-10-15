@@ -256,6 +256,68 @@ theme =
 		}
 	},
 
+	// disc
+	disc :
+	{
+		fill :
+		{
+			gradient : 'radial',
+
+			steps :
+			[
+				[ 0, 'rgba( 255, 255,  20, 0.955 )' ],
+				[ 1, 'rgba( 255, 255, 180, 0.955 )' ]
+			]
+		},
+
+		edge :
+		[
+			{
+				border : 1,
+				width  : 1,
+				color  : 'rgb( 255, 94, 44 )'
+			},
+			{
+				border : 0,
+				width  : 1,
+				color  : 'rgb( 94, 94,  0)'
+			}
+		],
+
+		buttons :
+		{
+			fill : 'rgba( 255, 255, 240, 0.6 )',
+
+			edge :
+			[
+				{
+					border : 0,
+					width  : 1,
+					color  : 'rgba( 196, 94, 44, 0.6 )'
+				}
+			],
+
+			normal : {
+				icon :
+				{
+					fill : 'black',
+
+					edge : [
+						{
+							border : 0,
+							width  : 1,
+							color  : 'rgba( 128, 0, 0, 1 )',
+						}
+					]
+				}
+			},
+
+			create : {
+				font : fontPool.get( 13, 'ca' )
+			}
+		},
+	},
+
 
 	// dash(board)
 	dash :
@@ -263,6 +325,7 @@ theme =
 
 		panel :
 		{
+
 			fill :
 			{
 				gradient : 'radial',
@@ -287,60 +350,6 @@ theme =
 					color  : 'rgb( 94, 94,  0)'
 				}
 			]
-		},
-
-		discPanel :
-		{
-			fill :
-			{
-				gradient : 'radial',
-
-				steps :
-				[
-					[ 0, 'rgba( 255, 255,  20, 0.955 )' ],
-					[ 1, 'rgba( 255, 255, 180, 0.955 )' ]
-				]
-			},
-
-			edge :
-			[
-				{
-					border : 1,
-					width  : 1,
-					color  : 'rgb( 255, 94, 44 )'
-				},
-				{
-					border : 0,
-					width  : 1,
-					color  : 'rgb( 94, 94,  0)'
-				}
-			],
-
-			buttons :
-			{
-				fill : 'rgba( 255, 255, 240, 1 )',
-
-				edge :
-				[
-					{
-						border : 0,
-						width  : 1,
-						color  : 'rgb( 196, 94, 44 )'
-					}
-				],
-
-				normal : {
-					icon :
-					{
-						fill : 'rgb( 120, 0, 0 )',
-
-						edge : [
-						///
-						]
-					}
-				}
-			},
-
 		},
 
 		help :
@@ -649,12 +658,12 @@ theme =
 
 		label :
 		{
-			font : fontPool.get(14, 'cm')
+			font : fontPool.get( 14, 'cm' )
 		},
 
 		message :
 		{
-			font : fontPool.get(12, 'cm')
+			font : fontPool.get( 12, 'cm' )
 		},
 
 		space :
@@ -723,7 +732,7 @@ theme =
 			slice :  0.82
 		},
 
-		font : fontPool.get(12, 'cm'),
+		font : fontPool.get( 12, 'cm' ),
 
 		style :
 		{

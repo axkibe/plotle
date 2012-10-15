@@ -169,17 +169,20 @@ FontPool.styles =
 */
 FontPool.prototype.setDefaultFonts = function(normal, bold)
 {
-	if (this.$settedDefaultFonts)
-		{ throw new Error('multiple calls to set default font.'); }
+	if( this.$settedDefaultFonts )
+	{
+		throw new Error('multiple calls to set default font.');
+	}
 
 	this.$settedDefaultFonts = true;
 
 	var styles = FontPool.styles;
 
-	for (var a in styles)
+	for( var a in styles )
 	{
-		var s = styles[a];
-		switch (s.family)
+		var s = styles[ a ];
+
+		switch( s.family )
 		{
 			case '(default)' :
 				s.family = normal;
@@ -191,7 +194,7 @@ FontPool.prototype.setDefaultFonts = function(normal, bold)
 
 			default :
 				throw new Error(
-					'unknown font family tag in styles ('+ s.family+ ')'
+					'unknown font family tag in styles (' + s.family + ')'
 				);
 		}
 	}
@@ -203,24 +206,27 @@ FontPool.prototype.setDefaultFonts = function(normal, bold)
 */
 FontPool.prototype.get = function(size, code)
 {
-	if (!this.$settedDefaultFonts)
-		{ throw new Error('not setted default fonts'); }
+	if( !this.$settedDefaultFonts )
+		{ throw new Error( 'not setted default fonts' ); }
 
-	var style = FontPool.styles[code];
+	var style = FontPool.styles[ code ];
 
-	if (!style)
+	if( !style )
 		{ throw new Error('Invalid font style'); }
 
 	var c = style.$c;
 
-	if (!c)
-		{ c = style.$c = {}; }
+	if( !c )
+	{
+		c = style.$c = { };
+	}
 
-	var f = c[size];
-	if (f)
+	var f = c[ size ];
+
+	if( f )
 		{ return f; }
 
-	return c[size] = new Euclid.Font(
+	return c[ size ] = new Euclid.Font(
 		size,
 		style.family,
 		style.fill,

@@ -407,7 +407,7 @@ Fabric.prototype.fillText =
 
 	this._setFont( font );
 
-	this._cx.fillText(text, x, y);
+	this._cx.fillText( text, x, y );
 };
 
 

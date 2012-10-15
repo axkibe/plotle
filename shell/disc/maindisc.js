@@ -1,19 +1,20 @@
- /**____
- \  ___ `'.                          .
-  ' |--.\  \                       .'|
-  | |    \  '                     <  |
-  | |     |  '    __               | |
-  | |     |  | .:--.'.         _   | | .'''-.
-  | |     ' .'/ |   \ |      .' |  | |/.'''. \
-  | |___.' /' `" __ | |     .   | /|  /    | |
- /_______.'/   .'.''| |   .'.'| |//| |     | |
- \_______|/   / /   | |_.'.'.-'  / | |     | |
-              \ \._,\ '/.'   \_.'  | '.    | '.
-               `--'  `"            '---'   '---'
-     .-,--.           .-,--.             .
-     ' |   \ . ,-. ,-. '|__/ ,-. ,-. ,-. |
-     , |   / | `-. |   ,|    ,-| | | |-' |
-     `-^--'  ' `-' `-' `'    `-^ ' ' `-' `'
+/*                               _..._
+ _______                      .-'_..._''.
+ \  ___ `'.   .--.          .' .'      '.\
+  ' |--.\  \  |__|         / .'
+  | |    \  ' .--.        . '
+  | |     |  '|  |        | |
+  | |     |  ||  |     _  | |
+  | |     ' .'|  |   .' | . '
+  | |___.' /' |  |  .   | /\ '.          .
+ /_______.'/  |__|.'.'| |// '. `._____.-'/
+ \_______|/     .'.'.-'  /    `-.______ /
+                .'   \_.'              `
+  ,-,-,-.             .-,--.
+  `,| | |   ,-. . ,-. ' |   \ . ,-. ,-.
+    | ; | . ,-| | | | , |   / | `-. |
+    '   `-' `-^ ' ' ' `-^--'  ' `-' `-'
+
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
  The new disc panel.
@@ -27,8 +28,8 @@
 /*
 | Export
 */
-var Dash;
-Dash = Dash || {};
+var Disc;
+Disc = Disc || { };
 
 
 /*
@@ -36,6 +37,7 @@ Dash = Dash || {};
 */
 var config;
 var Curve;
+var Dash;
 var Design;
 var Euclid;
 var Jools;
@@ -58,7 +60,7 @@ if( typeof( window ) === 'undefined')
 /*
 | Constructor
 */
-var DiscPanel = Dash.DiscPanel =
+var MainDisc = Disc.MainDisc =
 	function(
 		name,
 		inherit,
@@ -93,22 +95,23 @@ var DiscPanel = Dash.DiscPanel =
 		'gradientR1',  650
 	);
 
-	var buttonsWidth  = 40;
-	var buttonsHeight = 40;
+	var buttonsWidth  = 44;
+	var buttonsHeight = 44;
 
 	var buttons = this.buttons =
 	{
 		normal :
 		{
 			pnw : new Euclid.Point(
-				6,
+				4,
 				70
 			),
 
-			sketchIcon : function( fabric, border, twist ) {
+			sketchIcon : function( fabric, border, twist )
+			{
 				var pnw = buttons.normal.pnw;
-				var wx = pnw.x + 16;
-				var ny = pnw.y + 11;
+				var wx = pnw.x + 19;
+				var ny = pnw.y + 13;
 
 				//
 				//
@@ -125,13 +128,36 @@ var DiscPanel = Dash.DiscPanel =
 				//        ED
 
 				fabric.moveTo( wx +  0, ny +  0 );  // A
-				fabric.lineTo( wx + 12, ny + 11 );  // B
-				fabric.lineTo( wx +  7, ny + 11 );  // C
-				fabric.lineTo( wx + 11, ny + 18 );  // D
-				fabric.lineTo( wx +  8, ny + 18 );  // E
+				fabric.lineTo( wx + 11, ny + 10 );  // B
+				fabric.lineTo( wx +  6, ny + 11 );  // C
+				fabric.lineTo( wx +  9, ny + 17 );  // D
+				fabric.lineTo( wx +  7, ny + 18 );  // E
 				fabric.lineTo( wx +  4, ny + 12 );  // F
 				fabric.lineTo( wx +  0, ny + 15 );  // G
 				fabric.lineTo( wx +  0, ny +  0 );  // A
+			}
+		},
+
+		create :
+		{
+			pnw : new Euclid.Point(
+				20,
+				115
+			),
+
+			sketchIcon : function( fabric, border, twist )
+			{
+				var pnw = buttons.create.pnw;
+				var wx = pnw.x + 23;
+				var ny = pnw.y + 22;
+				var myt = theme.disc.buttons.create;
+
+				fabric.fillText(
+					'log',
+					wx,
+					ny,
+					myt.font
+				);
 			}
 		}
 	};
@@ -154,7 +180,7 @@ var DiscPanel = Dash.DiscPanel =
 /*
 | Force clears all caches.
 */
-DiscPanel.prototype.knock = function( )
+MainDisc.prototype.knock = function( )
 {
 	this.$fabric = null;
 };
@@ -163,7 +189,7 @@ DiscPanel.prototype.knock = function( )
 /*
 | Prepares the disc panels contents.
 */
-DiscPanel.prototype._weave = function( )
+MainDisc.prototype._weave = function( )
 {
 	/* TODO
 	if( this.$fabric && !config.debug.noCache )
@@ -175,38 +201,38 @@ DiscPanel.prototype._weave = function( )
 		this.height
 	);
 
-	var panelStyle = theme.dash.discPanel;
-
-	if( !panelStyle )
-		{ throw new Error('no style!'); }
-
 	fabric.fill(
-		panelStyle.fill,
+		theme.disc.fill,
 		this.silhoutte,
 		'sketch',
 		Euclid.View.proper
 	);
 
-	var buttonsStyle = theme.dash.discPanel.buttons;
+	var buttons = this.buttons;
+	var buttonsStyle = theme.disc.buttons;
 
-	fabric.paint(
-		buttonsStyle,
-		this.buttons.normal.ellipse,
-		'sketch',
-		Euclid.View.proper
-	);
+	for( var name in this.buttons )
+	{
+		fabric.paint(
+			buttonsStyle,
+			buttons[name].ellipse,
+			'sketch',
+			Euclid.View.proper
+		);
 
-
-	fabric.paint(
-		theme.dash.discPanel.buttons.normal.icon,
-		this.buttons.normal,
-		'sketchIcon',
-		Euclid.View.proper
-	);
+/*
+		fabric.paint(
+			buttonsStyle[name].icon,
+			buttons[name],
+			'sketchIcon',
+			Euclid.View.proper
+		);
+		*/
+	}
 
 
 	fabric.edge(
-		panelStyle.edge,
+		theme.disc.edge,
 		this.silhoutte,
 		'sketch',
 		Euclid.View.proper
@@ -232,12 +258,12 @@ DiscPanel.prototype._weave = function( )
 /*
 | Draws the disc panel.
 */
-DiscPanel.prototype.draw = function( fabric )
+MainDisc.prototype.draw = function( fabric )
 {
 	fabric.drawImage(
 		this._weave( ),
 		0,
-		Jools.half( this.screensize.y - this.height)
+		Jools.half( this.screensize.y - this.height )
 	);
 };
 
@@ -245,7 +271,7 @@ DiscPanel.prototype.draw = function( fabric )
 /*
 | Returns true if point is on the disc panel.
 */
-DiscPanel.prototype.pointingHover = function( p, shift, ctrl )
+MainDisc.prototype.pointingHover = function( p, shift, ctrl )
 {
 	return 'default';
 };
@@ -254,7 +280,7 @@ DiscPanel.prototype.pointingHover = function( p, shift, ctrl )
 /*
 | Returns true if point is on this panel.
 */
-DiscPanel.prototype.pointingStart = function( p, shift, ctrl )
+MainDisc.prototype.pointingStart = function( p, shift, ctrl )
 {
 	return null;
 };
@@ -263,7 +289,7 @@ DiscPanel.prototype.pointingStart = function( p, shift, ctrl )
 /*
 | User is inputing text.
 */
-DiscPanel.prototype.input = function( text )
+MainDisc.prototype.input = function( text )
 {
 	// TODO
 	return;
@@ -273,7 +299,7 @@ DiscPanel.prototype.input = function( text )
 /*
 | Cycles the focus
 */
-DiscPanel.prototype.cycleFocus = function( dir )
+MainDisc.prototype.cycleFocus = function( dir )
 {
 	throw new Error( 'TODO' );
 };
@@ -282,7 +308,7 @@ DiscPanel.prototype.cycleFocus = function( dir )
 /*
 | User is pressing a special key.
 */
-DiscPanel.prototype.specialKey = function( key, shift, ctrl )
+MainDisc.prototype.specialKey = function( key, shift, ctrl )
 {
 	// TODO
 };
@@ -291,7 +317,7 @@ DiscPanel.prototype.specialKey = function( key, shift, ctrl )
 /*
 | Clears caches.
 */
-DiscPanel.prototype.poke = function( )
+MainDisc.prototype.poke = function( )
 {
 	this.$fabric = null;
 	shell.redraw = true;

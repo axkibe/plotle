@@ -34,6 +34,7 @@ Dash = Dash || { };
 /*
 | Imports
 */
+var Disc;
 var Euclid;
 var Jools;
 var Proc;
@@ -63,7 +64,7 @@ var Board = Dash.Board =
 	this.panels =
 		{
 			MainPanel  : null,
-			DiscPanel  : null,
+			MainDisc   : null,
 			LoginPanel : null,
 			RegPanel   : null,
 			HelpPanel  : null
@@ -115,7 +116,7 @@ Board.prototype.getPanel =
 	{
 		case 'MainPanel' : Proto = Proc.MainPanel; break;
 		case 'HelpPanel' : Proto = Proc.HelpPanel; break;
-		case 'DiscPanel' : Proto = Dash.DiscPanel; break;
+		case 'MainDisc'  : Proto = Disc.MainDisc;  break;
 		default          : Proto = Dash.Panel;     break;
 	}
 
@@ -236,8 +237,8 @@ Board.prototype.draw =
 
 	this.curPanel( ).draw( fabric );
 
-	var discPanel = this.getPanel( 'DiscPanel' );
-	discPanel.draw( fabric );
+	var mainDisc = this.getPanel( 'MainDisc' );
+	mainDisc.draw( fabric );
 };
 
 
