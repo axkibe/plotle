@@ -43,7 +43,7 @@ var Euclid;
 var Jools;
 var Proc;
 var shell;
-var Tree;
+var theme;
 
 
 /*
@@ -95,49 +95,11 @@ var MainDisc = Disc.MainDisc =
 		'gradientR1',  650
 	);
 
-	var buttonsWidth  = 44;
-	var buttonsHeight = 44;
-
 	var buttons = this.buttons =
 	{
-		normal :
-		{
-			pnw : new Euclid.Point(
-				4,
-				70
-			),
+		normal : new Disc.DiscButtonNormal( )
 
-			sketchIcon : function( fabric, border, twist )
-			{
-				var pnw = buttons.normal.pnw;
-				var wx = pnw.x + 19;
-				var ny = pnw.y + 13;
-
-				//
-				//
-				//  A
-				//  **
-				//  ***
-				//  ****
-				//  *****
-				//  ******
-				//  *******
-				//  **F**C*B
-				//  G   **
-				//       **
-				//        ED
-
-				fabric.moveTo( wx +  0, ny +  0 );  // A
-				fabric.lineTo( wx + 11, ny + 10 );  // B
-				fabric.lineTo( wx +  6, ny + 11 );  // C
-				fabric.lineTo( wx +  9, ny + 17 );  // D
-				fabric.lineTo( wx +  7, ny + 18 );  // E
-				fabric.lineTo( wx +  4, ny + 12 );  // F
-				fabric.lineTo( wx +  0, ny + 15 );  // G
-				fabric.lineTo( wx +  0, ny +  0 );  // A
-			}
-		},
-
+		/*
 		create :
 		{
 			pnw : new Euclid.Point(
@@ -160,19 +122,8 @@ var MainDisc = Disc.MainDisc =
 				);
 			}
 		}
+		*/
 	};
-
-	for( var name in buttons ) {
-		var button = buttons[ name ];
-		button.ellipse = new Euclid.Ellipse(
-			button.pnw,
-			button.pnw.add(
-				buttonsWidth,
-				buttonsHeight
-			)
-		);
-
-	}
 };
 
 
@@ -212,23 +163,7 @@ MainDisc.prototype._weave = function( )
 	var buttonsStyle = theme.disc.buttons;
 
 	for( var name in this.buttons )
-	{
-		fabric.paint(
-			buttonsStyle,
-			buttons[name].ellipse,
-			'sketch',
-			Euclid.View.proper
-		);
-
-/*
-		fabric.paint(
-			buttonsStyle[name].icon,
-			buttons[name],
-			'sketchIcon',
-			Euclid.View.proper
-		);
-		*/
-	}
+		{ buttons[ name ].draw( fabric ); }
 
 
 	fabric.edge(

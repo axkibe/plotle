@@ -36,6 +36,7 @@ var theme = null;
 | Imports
 */
 var fontPool;
+var Euclid;
 
 /*
 | Capsule
@@ -286,6 +287,9 @@ theme =
 
 		buttons :
 		{
+			width  : 44,
+			height : 44,
+
 			fill : 'rgba( 255, 255, 240, 0.6 )',
 
 			edge :
@@ -297,7 +301,15 @@ theme =
 				}
 			],
 
+			// specific buttons
+
 			normal : {
+
+				pnw : new Euclid.Point(
+					4,
+					70
+				),
+
 				icon :
 				{
 					fill : 'black',
@@ -306,7 +318,7 @@ theme =
 						{
 							border : 0,
 							width  : 1,
-							color  : 'rgba( 128, 0, 0, 1 )',
+							color  : 'rgba( 128, 0, 0, 1 )'
 						}
 					]
 				}
@@ -315,7 +327,7 @@ theme =
 			create : {
 				font : fontPool.get( 13, 'ca' )
 			}
-		},
+		}
 	},
 
 

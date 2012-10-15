@@ -460,6 +460,8 @@ Server.prototype.prepareResources = function(_)
 		'shell/dash/checkbox.js',                          'fb',
 		'shell/dash/panel.js',                             'fb',
 		'shell/disc/maindisc.js',                          'fb',
+		'shell/disc/discbutton.js',                        'fb',
+		'shell/disc/discbutton-normal.js',                 'fb',
 		'shell/proc/util.js',                              'fb',
 		'shell/proc/mainpanel.js',                         'fb',
 		'shell/proc/helppanel.js',                         'fb',
