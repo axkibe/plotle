@@ -82,6 +82,16 @@ var MainDisc = Disc.MainDisc =
 	var ew = style.ellipse.width;
 	var eh = style.ellipse.height;
 
+	this.pnw = new Euclid.Point(
+		0,
+		Jools.half( this.screensize.y - this.height )
+	);
+
+	this.pse = this.pnw.add(
+		width,
+		height
+	);
+
 	var silhoutte = this.silhoutte = new Euclid.Ellipse(
 		new Euclid.Point(
 			width - 1 - ew,
@@ -101,9 +111,11 @@ var MainDisc = Disc.MainDisc =
 
 	var buttons = this.buttons =
 	{
-		normal : new Disc.DiscButtonNormal( ),
-		create : new Disc.DiscButtonCreate( )
+		normal : new Disc.DiscButtonNormal( this ),
+		create : new Disc.DiscButtonCreate( this )
 	};
+
+	this.$hover = null;
 };
 
 
@@ -122,6 +134,8 @@ MainDisc.prototype.knock = function( )
 */
 MainDisc.prototype._weave = function( )
 {
+	var fabric = this.$fabric;
+
 	/* TODO
 	if( this.$fabric && !config.debug.noCache )
 		{ return this.$fabric; }
@@ -143,7 +157,13 @@ MainDisc.prototype._weave = function( )
 	var buttonsStyle = theme.disc.buttons;
 
 	for( var name in this.buttons )
-		{ buttons[ name ].draw( fabric ); }
+	{
+		buttons[ name ].
+			draw(
+				fabric,
+				this.$hover === name
+			);
+	}
 
 
 	fabric.edge(
@@ -179,8 +199,7 @@ MainDisc.prototype.draw = function( fabric )
 
 	fabric.drawImage(
 		this._weave( ),
-		0,
-		Jools.half( this.screensize.y - this.height )
+		this.pnw
 	);
 };
 
@@ -190,7 +209,61 @@ MainDisc.prototype.draw = function( fabric )
 */
 MainDisc.prototype.pointingHover = function( p, shift, ctrl )
 {
-	return 'default';
+	var pnw = this.pnw;
+	var pse = this.pse;
+	var a, aZ;
+
+	if( p === null )
+	{
+		return this.setHover( null );
+	}
+
+	// shortcut if p is not near the panel
+	if( p.y < pnw.y ||
+		p.y > pse.y ||
+		p.x < pnw.x ||
+		p.x > pse.x
+	)
+	{
+		return this.setHover( null );
+	}
+
+	var fabric = this._weave();
+
+	var pp = p.sub(pnw);
+
+	// FIXME Optimize by reusing the latest path of this.$fabric
+
+	if( !fabric.withinSketch(
+			this.silhoutte,
+			'sketch',
+			Euclid.View.proper,
+			pp
+		)
+	)
+	{
+		return this.setHover( null );
+	}
+
+	// this is on the disc
+	var buttons = this.buttons;
+
+	var cursor = null;
+	for( var name in this.buttons )
+	{
+		cursor = buttons[ name ].
+			pointingHover( pp, shift, ctrl );
+
+		if ( cursor )
+			{ break; }
+	}
+
+	if ( cursor === null )
+	{
+		this.setHover( null );
+	}
+
+	return cursor || 'default';
 };
 
 
@@ -238,6 +311,23 @@ MainDisc.prototype.poke = function( )
 {
 	this.$fabric = null;
 	shell.redraw = true;
+};
+
+
+/*
+| Sets the hovered component.
+*/
+MainDisc.prototype.setHover = function( name )
+{
+	if( this.$hover === name )
+	{
+		return null;
+	}
+
+	this.$fabric = null;
+	shell.redraw = true;
+
+	this.$hover = name;
 };
 
 

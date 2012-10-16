@@ -20,7 +20,7 @@
 
  The users shell.
 
- The shell consists of the dashboard and the visual space.
+ The shell consists of the disc, dashboard and the visual space.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -506,7 +506,7 @@ Shell.prototype._draw = function( )
 		return;
 	}
 
-	// remove caret cache.
+	// removes caret cache.
 	this.$caret.$save = null;
 	this.$caret.$screenPos = null;
 

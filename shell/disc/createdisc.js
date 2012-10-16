@@ -65,22 +65,24 @@ var CreateDisc = Disc.CreateDisc =
 		screensize
 	)
 {
-	this.$screensize = screensize;
+	this.screensize = screensize;
 
-	var width  = this.width  = 150;
-	var height = this.height = 710; // 690?
+	var style = theme.disc.create;
 
-	var overshootX = 70;
-	var overshootY = 10;
+	var width  = this.width  = style.width;
+	var height = this.height = style.height;
+
+	var ew = style.ellipse.width;
+	var eh = style.ellipse.height;
 
 	var silhoutte = this.silhoutte = new Euclid.Ellipse(
 		new Euclid.Point(
-			-width - overshootX,
-			-overshootY
+			width - 1 - ew,
+			0 - Jools.half( eh - height )
 		),
 		new Euclid.Point(
 			width - 1,
-			height + overshootY
+			height + Jools.half( eh - height )
 		),
 		'gradientPC', new Euclid.Point(
 			-600,
@@ -114,18 +116,13 @@ CreateDisc.prototype.knock = function( )
 */
 CreateDisc.prototype._weave = function( )
 {
-	/* TODO
-	if( this.$fabric && !config.debug.noCache )
-		{ return this.$fabric; }
-	*/
-
 	var fabric = this.$fabric = new Euclid.Fabric(
 		this.width,
 		this.height
 	);
 
 	fabric.fill(
-		theme.disc.fill,
+		theme.disc.main.fill,
 		this.silhoutte,
 		'sketch',
 		Euclid.View.proper
@@ -139,7 +136,7 @@ CreateDisc.prototype._weave = function( )
 
 
 	fabric.edge(
-		theme.disc.edge,
+		theme.disc.main.edge,
 		this.silhoutte,
 		'sketch',
 		Euclid.View.proper
@@ -167,12 +164,10 @@ CreateDisc.prototype._weave = function( )
 */
 CreateDisc.prototype.draw = function( fabric )
 {
-	return;
-
 	fabric.drawImage(
 		this._weave( ),
 		0,
-		Jools.half( this.$screensize.y - this.height )
+		Jools.half( this.screensize.y - this.height )
 	);
 };
 

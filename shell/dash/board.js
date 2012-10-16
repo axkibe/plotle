@@ -308,6 +308,17 @@ Board.prototype.pointingHover =
 {
 	var cursor = this.curPanel( ).pointingHover( p, shift, ctrl );
 
+	if( cursor )
+	{
+		this.getPanel( 'MainDisc' ).
+			pointingHover( null, shift, ctrl );
+	}
+	else
+	{
+		cursor = this.getPanel( 'MainDisc' ).
+			pointingHover( p, shift, ctrl );
+	}
+
 	if( this.$showHelp )
 	{
 		if( cursor )

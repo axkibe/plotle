@@ -63,12 +63,14 @@ if( typeof( window ) === 'undefined')
 /*
 | Constructor
 */
-var DiscButtonNormal = Disc.DiscButtonNormal = function( )
+var DiscButtonNormal = Disc.DiscButtonNormal = function(
+	disc
+)
 {
 	Disc.DiscButton.call(
 		this,
-		theme.disc.main.buttons,
-		theme.disc.main.buttons.normal
+		disc,
+		'normal'
 	);
 };
 
@@ -82,10 +84,8 @@ DiscButtonNormal.prototype.sketchIcon =
 		twist
 	)
 {
-	var pnw = this.pnw;
-
-	var wx = pnw.x + 19;
-	var ny = pnw.y + 13;
+	var wx = 19;
+	var ny = 13;
 
 	//
 	//

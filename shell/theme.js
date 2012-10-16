@@ -48,14 +48,22 @@ if (typeof(window) === 'undefined')
 	{ throw new Error('this code needs a browser!'); }
 
 
+/*
+| The default fonts
+*/
 fontPool.setDefaultFonts(
 	'DejaVuSans,sans-serif',
 	'DejaVuSansBold,sans-serif'
 );
 
+/*
+| The whole theme
+*/
 theme =
 {
-	// factor to add to the bottom of font height
+	/*
+	| Factor to add to the bottom of font height
+	*/
 	bottombox : 0.25,
 
 	fade :
@@ -67,7 +75,9 @@ theme =
 		step : 0.2
 	},
 
-	// zooming settings
+	/*
+	| Zooming settings.
+	*/
 	zoom :
 	{
 		base        : 1.1,
@@ -77,7 +87,9 @@ theme =
 		repeatTimer :  50
 	},
 
-	// standard note in space
+	/*
+	| Standard note in space.
+	*/
 	note :
 	{
 		minWidth  :  40,
@@ -145,7 +157,9 @@ theme =
 		cornerRadius : 8
 	},
 
-	// portal to another space
+	/*
+	| Portal to another space.
+	*/
 	portal :
 	{
 		minWidth  :  40,
@@ -203,6 +217,9 @@ theme =
 		}
 	},
 
+	/*
+	| A Label in space.
+	*/
 	label :
 	{
 		minHeight :  20,
@@ -257,9 +274,15 @@ theme =
 		}
 	},
 
-	// disc
+	/*
+	| The disc menues.
+	*/
 	disc :
 	{
+
+		/*
+		| The main disc.
+		*/
 		main :
 		{
 			width      :  90,
@@ -269,7 +292,122 @@ theme =
 			ellipse :
 			{
 				width   : 1600,
-				height  : 1600,
+				height  : 1600
+			},
+
+			fill :
+			{
+				gradient : 'radial',
+
+				steps :
+				[
+					[ 0, 'rgba( 255, 255,  20, 0.955 )' ],
+					[ 1, 'rgba( 255, 255, 180, 0.955 )' ]
+				]
+			},
+
+			edge :
+			[
+				{
+					border : 1,
+					width  : 1,
+					color  : 'rgb( 255, 94, 44 )'
+				},
+				{
+					border : 0,
+					width  : 1,
+					color  : 'rgb( 94, 94,  0)'
+				}
+			],
+
+			buttons :
+			{
+				/*
+				| All buttons on this panel.
+				*/
+				generic : {
+					width  : 44,
+					height : 44,
+
+					normal : {
+						fill : 'rgba( 255, 255, 240, 0.7 )',
+
+						edge :
+						[
+							{
+								border : 0,
+								width  : 1,
+								color  : 'rgba( 196, 94, 44, 0.4 )'
+							}
+						],
+					},
+
+					hover : {
+						fill : 'rgba( 255, 235, 210, 0.7 )',
+
+						edge :
+						[
+							{
+								border : 0,
+								width  : 1,
+								color  : 'rgba( 196, 94, 44, 0.4 )'
+							}
+						],
+					},
+
+				},
+
+				/*
+				| Default arrow button on main disc
+				*/
+				normal : {
+
+					pnw : new Euclid.Point(
+						4,
+						145
+					),
+
+					icon :
+					{
+						fill : 'black',
+
+						edge : [
+							{
+								border : 0,
+								width  : 1,
+								color  : 'rgba( 128, 0, 0, 1 )'
+							}
+						]
+					}
+				},
+
+				/*
+				| New button on main disc
+				*/
+				create : {
+
+					pnw : new Euclid.Point(
+						17,
+						194
+					),
+
+					font : fontPool.get( 14, 'ca' )
+				}
+			}
+		},
+
+		/*
+		| The creation disc.
+		*/
+		create : {
+
+			width      : 180,
+			height     : 800,
+
+			ellipse :
+			{
+				width   : 1600,
+				height  : 1600
 			},
 
 			fill :
@@ -311,47 +449,15 @@ theme =
 						width  : 1,
 						color  : 'rgba( 196, 94, 44, 0.6 )'
 					}
-				],
-
-				// specific buttons
-
-				normal : {
-
-					pnw : new Euclid.Point(
-						3,
-						135
-					),
-
-					icon :
-					{
-						fill : 'black',
-
-						edge : [
-							{
-								border : 0,
-								width  : 1,
-								color  : 'rgba( 128, 0, 0, 1 )'
-							}
-						]
-					}
-				},
-
-				create : {
-
-					pnw : new Euclid.Point(
-						16,
-						180
-					),
-
-					font : fontPool.get( 14, 'ca' )
-				}
+				]
 			}
-		},
-
+		}
 	},
 
 
-	// dash(board)
+	/*
+	| Dash(board)
+	*/
 	dash :
 	{
 

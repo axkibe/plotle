@@ -63,11 +63,14 @@ if( typeof( window ) === 'undefined')
 /*
 | Constructor
 */
-var DiscButtonCreate = Disc.DiscButtonCreate = function( )
+var DiscButtonCreate = Disc.DiscButtonCreate =
+	function( disc )
 {
 	Disc.DiscButton.call(
 		this,
-		theme.disc.main.buttons,
+		disc,
+		'create',
+		theme.disc.main.buttons.generic,
 		theme.disc.main.buttons.create
 	);
 };
@@ -83,10 +86,8 @@ DiscButtonCreate.prototype.drawIcon =
 		fabric
 	)
 {
-	var pnw = this.pnw;
-
-	var wx = pnw.x + 22;
-	var ny = pnw.y + 26;
+	var wx = 22;
+	var ny = 26;
 
 	fabric.fillText(
 		'new',

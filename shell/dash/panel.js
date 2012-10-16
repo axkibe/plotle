@@ -28,7 +28,7 @@
 | Export
 */
 var Dash;
-Dash = Dash || {};
+Dash = Dash || { };
 
 
 /*
@@ -249,11 +249,12 @@ Panel.prototype.pointingHover = function( p, shift, ctrl )
 {
 	var pnw = this.pnw;
 	var pse = this.pse;
-	var fabric = this._weave();
 	var a, aZ;
 
 	if( p === null )
-		{ return this.setHover(null); }
+	{
+		return this.setHover( null );
+	}
 
 	// shortcut if p is not near the panel
 	if( p.y < pnw.y ||
@@ -261,9 +262,13 @@ Panel.prototype.pointingHover = function( p, shift, ctrl )
 		p.x < pnw.x ||
 		p.x > pse.x
 	)
-		{ return this.setHover(null); }
+	{
+		return this.setHover( null );
+	}
 
-	var pp = p.sub(pnw);
+	var fabric = this._weave( );
+
+	var pp = p.sub( pnw );
 
 	// FIXME Optimize by reusing the latest path of this.$fabric
 
@@ -275,7 +280,7 @@ Panel.prototype.pointingHover = function( p, shift, ctrl )
 		)
 	)
 	{
-		return this.setHover(null);
+		return this.setHover( null );
 	}
 
 	var cursor = null;
@@ -283,8 +288,8 @@ Panel.prototype.pointingHover = function( p, shift, ctrl )
 	var layout = this.tree.root.layout;
 	for( a = 0, aZ = layout.length; a < aZ; a++ )
 	{
-		var cname = layout.ranks[a];
-		var ce = this.$sub[cname];
+		var cname = layout.ranks[ a ];
+		var ce = this.$sub[ cname ];
 
 		if( cursor )
 			{ ce.pointingHover( null, shift, ctrl ); }
@@ -293,7 +298,9 @@ Panel.prototype.pointingHover = function( p, shift, ctrl )
 	}
 
 	if ( cursor === null )
-		{ this.setHover( null ); }
+	{
+		this.setHover( null );
+	}
 
 	return cursor || 'default';
 };
@@ -440,4 +447,4 @@ Panel.prototype.setHover = function( cname )
 };
 
 
-})();
+} )( );
