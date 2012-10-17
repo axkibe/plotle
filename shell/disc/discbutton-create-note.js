@@ -85,8 +85,8 @@ DiscButtonCreateNote.prototype.drawIcon =
 		fabric
 	)
 {
-	var wx = 22;
-	var ny = 26;
+	var wx = 30;
+	var ny = 35;
 
 	fabric.fillText(
 		'note',

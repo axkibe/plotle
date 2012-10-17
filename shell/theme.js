@@ -463,8 +463,8 @@ theme =
 			buttons :
 			{
 				generic : {
-					width  : 44,
-					height : 44,
+					width  : 60,
+					height : 60,
 
 					fill : 'rgba( 255, 255, 240, 0.6 )',
 
@@ -537,8 +537,8 @@ theme =
 				note : {
 
 					pnw : new Euclid.Point(
-						4,
-						145
+						52,
+						195
 					),
 
 					font : fontPool.get( 14, 'ca' )

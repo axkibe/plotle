@@ -112,8 +112,8 @@ var MainDisc = Disc.MainDisc =
 		create : new Disc.DiscButtonCreate( this )
 	};
 
-	this.$active = null;
-	this.$hover  = null;
+	this.$active = inherit ? inherit.$active : null;
+	this.$hover  = inherit ? inherit.$hover  : null;
 };
 
 
