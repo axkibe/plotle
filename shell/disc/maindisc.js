@@ -53,7 +53,7 @@ var theme;
 'use strict';
 
 
-if( typeof( window ) === 'undefined')
+if( typeof( window ) === 'undefined' )
 	{ throw new Error( 'this code needs a browser!' ); }
 
 
@@ -62,14 +62,11 @@ if( typeof( window ) === 'undefined')
 */
 var MainDisc = Disc.MainDisc =
 	function(
-		name,
 		inherit,
-		board,
 		screensize
 	)
 {
-	this.name  = name;
-	this.board = board;
+	this.name  = 'main';
 
 	this.createDisc = new Disc.CreateDisc( screensize );
 
@@ -115,8 +112,8 @@ var MainDisc = Disc.MainDisc =
 		create : new Disc.DiscButtonCreate( this )
 	};
 
-	this.$hover  = null;
 	this.$active = null;
+	this.$hover  = null;
 };
 
 
@@ -162,11 +159,10 @@ MainDisc.prototype._weave = function( )
 		buttons[ name ].
 			draw(
 				fabric,
-				this.$hover  === name,
-				this.$active === name
+				this.$active === name,
+				this.$hover  === name
 			);
 	}
-
 
 	fabric.edge(
 		theme.disc.main.edge,
@@ -384,7 +380,7 @@ MainDisc.prototype.setActive = function( name )
 {
 	if( this.$active === name )
 	{
-		return null;
+		return;
 	}
 
 	this.$fabric = null;

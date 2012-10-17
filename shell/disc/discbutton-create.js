@@ -57,7 +57,7 @@ var Tree;
 'use strict';
 
 
-if( typeof( window ) === 'undefined')
+if( typeof( window ) === 'undefined' )
 	{ throw new Error( 'this code needs a browser!' ); }
 
 /*
@@ -69,9 +69,7 @@ var DiscButtonCreate = Disc.DiscButtonCreate =
 	Disc.DiscButton.call(
 		this,
 		disc,
-		'create',
-		theme.disc.main.buttons.generic,
-		theme.disc.main.buttons.create
+		'create'
 	);
 };
 

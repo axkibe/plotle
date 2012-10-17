@@ -66,6 +66,7 @@ var CreateDisc = Disc.CreateDisc =
 	)
 {
 	this.screensize = screensize;
+	this.name = 'create';
 
 	var style = theme.disc.create;
 
@@ -92,12 +93,13 @@ var CreateDisc = Disc.CreateDisc =
 		'gradientR1',  650
 	);
 
-	/*
 	var buttons = this.buttons =
 	{
-		normal : new Disc.DiscButtonNormal( ),
-		create : new Disc.DiscButtonCreate( )
-	};*/
+		note   : new Disc.DiscButtonCreateNote( this )
+	};
+
+	this.$active = null;
+	this.$hover  = null;
 };
 
 

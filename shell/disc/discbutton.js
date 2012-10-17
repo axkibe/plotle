@@ -59,7 +59,7 @@ if( typeof( window ) === 'undefined')
 
 
 /*
-| Constructor
+| Constructor.
 */
 var DiscButton = Disc.DiscButton =
 	function(
@@ -69,8 +69,8 @@ var DiscButton = Disc.DiscButton =
 {
 	this.disc    = disc;
 	this.name    = name;
-	var gStyle  = this.gStyle  = theme.disc.main.buttons.generic;
-	var myStyle = this.myStyle = theme.disc.main.buttons[ name ];
+	var gStyle  = this.gStyle  = theme.disc[ disc.name ].buttons.generic;
+	var myStyle = this.myStyle = theme.disc[ disc.name ].buttons[ name ];
 
 	var width  = gStyle.width;
 	var height = gStyle.height;
@@ -99,19 +99,25 @@ var DiscButton = Disc.DiscButton =
 DiscButton.prototype.draw =
 	function(
 		fabric,
-		hover,
-		active
+		active,
+		hover
 	)
 {
 	fabric.drawImage(
-		this._weave( hover, active ),
+		this._weave( active, hover ),
 		this.pnw
 	);
 };
 
 
+/*
+| Weaves the buttons fabric
+*/
 DiscButton.prototype._weave =
-	function( hover, active )
+	function(
+		active, // true if this button is active
+		hover   // true if the pointing device is hovering above this
+	)
 {
 	var fabricName;
 	var gStyle = this.gStyle;

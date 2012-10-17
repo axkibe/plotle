@@ -97,6 +97,7 @@ Board.prototype.getPanel =
 {
 	var fabric = this.fabric;
 	var cpanel = this.panels[ name ];
+
 	if(! Jools.is( cpanel ) )
 	{
 		throw new Error( 'invalid panelname: ' + name );
@@ -111,24 +112,54 @@ Board.prototype.getPanel =
 		return cpanel;
 	}
 
-	var Proto;
+	var panel;
 	switch( name )
 	{
-		case 'MainPanel' : Proto = Proc.MainPanel; break;
-		case 'HelpPanel' : Proto = Proc.HelpPanel; break;
-		case 'MainDisc'  : Proto = Disc.MainDisc;  break;
-		default          : Proto = Dash.Panel;     break;
-	}
+		case 'MainPanel' :
+			panel = new Proc.MainPanel(
+				name,
+				cpanel,
+				this,
+				new Euclid.Point(
+					fabric.width,
+					fabric.height
+				)
+			);
+			break;
 
-	var panel = new Proto(
-		name,
-		cpanel,
-		this,
-		new Euclid.Point(
-			fabric.width,
-			fabric.height
-		)
-	);
+		case 'HelpPanel' :
+			panel = new Proc.HelpPanel(
+				name,
+				cpanel,
+				this,
+				new Euclid.Point(
+					fabric.width,
+					fabric.height
+				)
+			);
+			break;
+
+		case 'MainDisc' :
+			panel = new Disc.MainDisc(
+				cpanel,
+				new Euclid.Point(
+					fabric.width,
+					fabric.height
+				)
+			);
+			break;
+		default :
+			panel = new Dash.Panel(
+				name,
+				cpanel,
+				this,
+				new Euclid.Point(
+					fabric.width,
+					fabric.height
+				)
+			);
+			break;
+	}
 
 	return this.panels[name] = panel;
 };

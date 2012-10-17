@@ -462,19 +462,87 @@ theme =
 
 			buttons :
 			{
-				width  : 44,
-				height : 44,
+				generic : {
+					width  : 44,
+					height : 44,
 
-				fill : 'rgba( 255, 255, 240, 0.6 )',
+					fill : 'rgba( 255, 255, 240, 0.6 )',
 
-				edge :
-				[
+					edge :
+					[
+						{
+							border : 0,
+							width  : 1,
+							color  : 'rgba( 196, 94, 44, 0.6 )'
+						}
+					],
+
+
+					/*
+					| Button is in its default state.
+					*/
+					normal :
 					{
-						border : 0,
-						width  : 1,
-						color  : 'rgba( 196, 94, 44, 0.6 )'
+						fill : 'rgba( 255, 255, 240, 0.7 )',
+
+						edge :
+						[
+							{
+								border : 0,
+								width  : 1,
+								color  : 'rgba( 196, 94, 44, 0.4 )'
+							}
+						]
+					},
+
+					/*
+					| The users pointing device is hovering over the button.
+					*/
+					hover :
+					{
+						fill : 'rgba( 255, 235, 210, 0.7 )',
+
+						edge :
+						[
+							{
+								border : 0,
+								width  : 1,
+								color  : 'rgba( 196, 94, 44, 0.4 )'
+							}
+						]
+					},
+
+					/*
+					| This button is currently active.
+					*/
+					active :
+					{
+						fill : 'rgb( 255, 188, 88 )',
+
+						edge :
+						[
+							{
+								border : 0,
+								width  : 1,
+								color  : 'rgba( 196, 94, 44, 0.4 )'
+							}
+						]
 					}
-				]
+
+				},
+
+				/*
+				| Create-Note button.
+				*/
+				note : {
+
+					pnw : new Euclid.Point(
+						4,
+						145
+					),
+
+					font : fontPool.get( 14, 'ca' )
+				}
 			}
 		}
 	},
