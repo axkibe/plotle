@@ -317,7 +317,8 @@ Panel.prototype.pointingStart = function( p, shift, ctrl )
 	var a, aZ;
 
 	// shortcut if p is not near the panel
-	if( p.y < pnw.y ||
+	if(
+		p.y < pnw.y ||
 		p.y > pse.y ||
 		p.x < pnw.x ||
 		p.x > pse.x
@@ -347,6 +348,7 @@ Panel.prototype.pointingStart = function( p, shift, ctrl )
 	}
 
 	this.setHover( null );
+
 	return false;
 };
 

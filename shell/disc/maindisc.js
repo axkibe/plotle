@@ -115,7 +115,8 @@ var MainDisc = Disc.MainDisc =
 		create : new Disc.DiscButtonCreate( this )
 	};
 
-	this.$hover = null;
+	this.$hover  = null;
+	this.$active = null;
 };
 
 
@@ -136,12 +137,12 @@ MainDisc.prototype._weave = function( )
 {
 	var fabric = this.$fabric;
 
-	/* TODO
-	if( this.$fabric && !config.debug.noCache )
-		{ return this.$fabric; }
-	*/
+	if( fabric && !config.debug.noCache )
+	{
+		return fabric;
+	}
 
-	var fabric = this.$fabric = new Euclid.Fabric(
+	fabric = this.$fabric = new Euclid.Fabric(
 		this.width,
 		this.height
 	);
@@ -161,7 +162,8 @@ MainDisc.prototype._weave = function( )
 		buttons[ name ].
 			draw(
 				fabric,
-				this.$hover === name
+				this.$hover  === name,
+				this.$active === name
 			);
 	}
 
@@ -195,7 +197,10 @@ MainDisc.prototype._weave = function( )
 */
 MainDisc.prototype.draw = function( fabric )
 {
-	this.createDisc.draw( fabric );
+	if( this.$active === 'create' )
+	{
+		this.createDisc.draw( fabric );
+	}
 
 	fabric.drawImage(
 		this._weave( ),
@@ -213,13 +218,10 @@ MainDisc.prototype.pointingHover = function( p, shift, ctrl )
 	var pse = this.pse;
 	var a, aZ;
 
-	if( p === null )
-	{
-		return this.setHover( null );
-	}
-
 	// shortcut if p is not near the panel
-	if( p.y < pnw.y ||
+	if(
+		p === null ||
+		p.y < pnw.y ||
 		p.y > pse.y ||
 		p.x < pnw.x ||
 		p.x > pse.x
@@ -233,7 +235,6 @@ MainDisc.prototype.pointingHover = function( p, shift, ctrl )
 	var pp = p.sub(pnw);
 
 	// FIXME Optimize by reusing the latest path of this.$fabric
-
 	if( !fabric.withinSketch(
 			this.silhoutte,
 			'sketch',
@@ -249,7 +250,7 @@ MainDisc.prototype.pointingHover = function( p, shift, ctrl )
 	var buttons = this.buttons;
 
 	var cursor = null;
-	for( var name in this.buttons )
+	for( var name in buttons )
 	{
 		cursor = buttons[ name ].
 			pointingHover( pp, shift, ctrl );
@@ -272,7 +273,52 @@ MainDisc.prototype.pointingHover = function( p, shift, ctrl )
 */
 MainDisc.prototype.pointingStart = function( p, shift, ctrl )
 {
-	return null;
+	var pnw = this.pnw;
+	var pse = this.pse;
+	var a, aZ;
+
+	// shortcut if p is not near the panel
+	if(
+		p.y < pnw.y ||
+		p.y > pse.y ||
+		p.x < pnw.x ||
+		p.x > pse.x
+	)
+	{
+		return null;
+	}
+
+	var fabric = this._weave();
+
+	var pp = p.sub(pnw);
+
+	// FIXME Optimize by reusing the latest path of this.$fabric
+	if(
+		!fabric.withinSketch(
+			this.silhoutte,
+			'sketch',
+			Euclid.View.proper,
+			pp
+		)
+	)
+	{
+		return null;
+	}
+
+	// this is on the disc
+	var buttons = this.buttons;
+
+	var cursor = null;
+	for( var name in buttons )
+	{
+		var r = buttons[ name ].
+			pointingStart( pp, shift, ctrl );
+
+		if ( r )
+			{ return r; }
+	}
+
+	return false;
 };
 
 
@@ -325,9 +371,26 @@ MainDisc.prototype.setHover = function( name )
 	}
 
 	this.$fabric = null;
-	shell.redraw = true;
+	this.$hover  = name;
 
-	this.$hover = name;
+	shell.redraw = true;
+};
+
+
+/*
+| Sets the active component.
+*/
+MainDisc.prototype.setActive = function( name )
+{
+	if( this.$active === name )
+	{
+		return null;
+	}
+
+	this.$fabric = null;
+	this.$active = name;
+
+	shell.redraw = true;
 };
 
 

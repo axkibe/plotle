@@ -329,7 +329,11 @@ theme =
 					width  : 44,
 					height : 44,
 
-					normal : {
+					/*
+					| Button is in its default state.
+					*/
+					normal :
+					{
 						fill : 'rgba( 255, 255, 240, 0.7 )',
 
 						edge :
@@ -339,10 +343,14 @@ theme =
 								width  : 1,
 								color  : 'rgba( 196, 94, 44, 0.4 )'
 							}
-						],
+						]
 					},
 
-					hover : {
+					/*
+					| The users pointing device is hovering over the button.
+					*/
+					hover :
+					{
 						fill : 'rgba( 255, 235, 210, 0.7 )',
 
 						edge :
@@ -352,8 +360,25 @@ theme =
 								width  : 1,
 								color  : 'rgba( 196, 94, 44, 0.4 )'
 							}
-						],
+						]
 					},
+
+					/*
+					| This button is currently active.
+					*/
+					active :
+					{
+						fill : 'rgb( 255, 188, 88 )',
+
+						edge :
+						[
+							{
+								border : 0,
+								width  : 1,
+								color  : 'rgba( 196, 94, 44, 0.4 )'
+							}
+						]
+					}
 
 				},
 
@@ -401,8 +426,8 @@ theme =
 		*/
 		create : {
 
-			width      : 180,
-			height     : 800,
+			width      :  180,
+			height     : 1010,
 
 			ellipse :
 			{

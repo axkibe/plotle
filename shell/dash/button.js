@@ -242,15 +242,16 @@ Button.prototype.pointingStart = function( p, shift, ctrl )
 {
 	var self = this;
 
-	if( !this.$visible )
-		{ return; }
-
-	if( p.x < this.pnw.x ||
+	if(
+		!this.$visible ||
+		p.x < this.pnw.x ||
 		p.y < this.pnw.y ||
 		p.x > this.pse.x ||
 		p.y > this.pse.y
 	)
-		{ return null; }
+	{
+		return null;
+	}
 
 	var fabric = this._weave( Dash.Accent.NORMA );
 	var pp = p.sub( this.pnw );

@@ -99,20 +99,40 @@ var DiscButton = Disc.DiscButton =
 DiscButton.prototype.draw =
 	function(
 		fabric,
-		hover
+		hover,
+		active
 	)
 {
 	fabric.drawImage(
-		this._weave( hover ),
+		this._weave( hover, active ),
 		this.pnw
 	);
 };
 
 
 DiscButton.prototype._weave =
-	function( hover )
+	function( hover, active )
 {
-	var fabricName = hover ? '$fabricNormal' : '$fabricHover';
+	var fabricName;
+	var gStyle = this.gStyle;
+	var style;
+
+	if( active )
+	{
+		fabricName = '$fabricActive';
+		style = gStyle.active;
+	}
+	else if( hover )
+	{
+		fabricName = '$fabricHover';
+		style = gStyle.hover;
+	}
+	else
+	{
+		fabricName = '$fabricName';
+		style = gStyle.normal;
+	}
+
 	var fabric = this[ fabricName ];
 
 	/* TODO
@@ -122,15 +142,15 @@ DiscButton.prototype._weave =
 	}
 	*/
 
-	var fabric = new Euclid.Fabric(
-		this.gStyle.width  + 1,
-		this.gStyle.height + 1
+	fabric = new Euclid.Fabric(
+		gStyle.width  + 1,
+		gStyle.height + 1
 	);
 
 	this[ fabricName ] = fabric;
 
 	fabric.paint(
-		hover ? this.gStyle.hover : this.gStyle.normal,
+		style,
 		this.ellipse,
 		'sketch',
 		Euclid.View.proper
@@ -139,7 +159,7 @@ DiscButton.prototype._weave =
 	this.drawIcon( fabric );
 
 	return fabric;
-}
+};
 
 
 /*
@@ -182,7 +202,50 @@ DiscButton.prototype.pointingHover =
 	this.disc.setHover( this.name );
 
 	return 'default';
-}
+};
 
+
+/*
+| The users might point his/her pointing device ( touch or mouse )
+| on this button.
+*/
+DiscButton.prototype.pointingStart =
+	function(
+		p
+	)
+{
+	var pnw = this.pnw;
+	var pse = this.pse;
+
+	if(
+		p === null  ||
+		p.x < pnw.x ||
+		p.y < pnw.y ||
+		p.x > pse.x ||
+		p.y > pse.y
+	)
+	{
+		return null;
+	}
+
+	var fabric = this._weave( false );
+	var pp = p.sub( this.pnw );
+
+	if(
+		!fabric.withinSketch(
+			this.ellipse,
+			'sketch',
+			Euclid.View.proper,
+			pp
+		)
+	)
+	{
+		return null;
+	}
+
+	this.disc.setActive( this.name );
+
+	return  false;
+};
 
 } )( );

@@ -377,6 +377,13 @@ Board.prototype.actionstop =
 Board.prototype.pointingStart = function( p, shift, ctrl )
 {
 	var r;
+
+	r = this.getPanel( 'MainDisc' ).
+			pointingStart( p, shift. ctrl) ;
+
+	if( r !== null )
+		{ return r; }
+
 	if( this.$showHelp )
 	{
 		r = this.getPanel( 'HelpPanel' ).
