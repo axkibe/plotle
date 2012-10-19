@@ -223,10 +223,17 @@ MainDisc.prototype.pointingHover = function( p, shift, ctrl )
 		p.x > pse.x
 	)
 	{
-		return this.setHover( null );
+		this.setHover( null );
+
+		if( this.$active === 'create' )
+		{
+			return this.createDisc.pointingHover( p, shift, ctrl );
+		}
+
+		return null;
 	}
 
-	var fabric = this._weave();
+	var fabric = this._weave( );
 
 	var pp = p.sub(pnw);
 
@@ -239,7 +246,14 @@ MainDisc.prototype.pointingHover = function( p, shift, ctrl )
 		)
 	)
 	{
-		return this.setHover( null );
+		this.setHover( null );
+
+		if( this.$active === 'create' )
+		{
+			return this.createDisc.pointingHover( p, shift, ctrl );
+		}
+
+		return null;
 	}
 
 	// this is on the disc
@@ -281,6 +295,13 @@ MainDisc.prototype.pointingStart = function( p, shift, ctrl )
 		p.x > pse.x
 	)
 	{
+		this.setHover( null );
+
+		if( this.$active === 'create' )
+		{
+			return this.createDisc.pointingStart( p, shift, ctrl );
+		}
+
 		return null;
 	}
 
@@ -298,6 +319,13 @@ MainDisc.prototype.pointingStart = function( p, shift, ctrl )
 		)
 	)
 	{
+		this.setHover( null );
+
+		if( this.$active === 'create' )
+		{
+			return this.createDisc.pointingStart( p, shift, ctrl );
+		}
+
 		return null;
 	}
 

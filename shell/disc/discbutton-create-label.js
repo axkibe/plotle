@@ -89,9 +89,8 @@ DiscButtonCreateLabel.prototype.drawIcon =
 	var ny = 35;
 
 	fabric.fillText(
-		'label',
-		wx,
-		ny,
+		'Label',
+		this.myStyle.textAnchor,
 		this.myStyle.font
 	);
 };

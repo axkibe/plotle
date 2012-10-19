@@ -323,9 +323,10 @@ theme =
 			buttons :
 			{
 				/*
-				| All buttons on this panel.
+				| All buttons on the main disc.
 				*/
-				generic : {
+				generic :
+				{
 					width  : 44,
 					height : 44,
 
@@ -426,13 +427,13 @@ theme =
 		*/
 		create : {
 
-			width      :  180,
+			width      :  166,
 			height     : 1010,
 
 			ellipse :
 			{
-				width   : 1600,
-				height  : 1600
+				width   : 1700,
+				height  : 1700
 			},
 
 			fill :
@@ -442,7 +443,7 @@ theme =
 				steps :
 				[
 					[ 0, 'rgba( 255, 255,  20, 0.955 )' ],
-					[ 1, 'rgba( 255, 255, 180, 0.955 )' ]
+					[ 1, 'rgba( 255, 255, 205, 0.955 )' ]
 				]
 			},
 
@@ -462,36 +463,30 @@ theme =
 
 			buttons :
 			{
-				generic : {
-					width  : 60,
-					height : 60,
-
-					fill : 'rgba( 255, 255, 240, 0.6 )',
-
-					edge :
-					[
-						{
-							border : 0,
-							width  : 1,
-							color  : 'rgba( 196, 94, 44, 0.6 )'
-						}
-					],
-
+				/*
+				| All buttons on the creation disc.
+				*/
+				generic :
+				{
+					width  : 70,
+					height : 70,
 
 					/*
 					| Button is in its default state.
 					*/
 					normal :
 					{
-						fill : 'rgba( 255, 255, 240, 0.7 )',
+						//fill : 'rgba( 255, 255, 240, 0.7 )',
 
 						edge :
 						[
+							/*
 							{
 								border : 0,
 								width  : 1,
 								color  : 'rgba( 196, 94, 44, 0.4 )'
 							}
+							*/
 						]
 					},
 
@@ -532,16 +527,75 @@ theme =
 				},
 
 				/*
-				| Create-Note button.
+				| Create note button.
 				*/
 				note : {
 
 					pnw : new Euclid.Point(
 						52,
-						195
+						216
 					),
 
-					font : fontPool.get( 14, 'ca' )
+					textAnchor : new Euclid.Point(
+						35,
+						35
+					),
+
+					font : fontPool.get( 16, 'cm' )
+				},
+
+				/*
+				| Create label button.
+				*/
+				label : {
+
+					pnw : new Euclid.Point(
+						71,
+						284
+					),
+
+					textAnchor : new Euclid.Point(
+						35,
+						35
+					),
+
+					font : fontPool.get( 16, 'cm' )
+				},
+
+				/*
+				| Create relation button.
+				*/
+				relation : {
+
+					pnw : new Euclid.Point(
+						84,
+						354
+					),
+
+					textAnchor : new Euclid.Point(
+						35,
+						35
+					),
+
+					font : fontPool.get( 16, 'cm' )
+				},
+
+				/*
+				| Create portal button.
+				*/
+				portal : {
+
+					pnw : new Euclid.Point(
+						91,
+						425
+					),
+
+					textAnchor : new Euclid.Point(
+						35,
+						35
+					),
+
+					font : fontPool.get( 16, 'cm' )
 				}
 			}
 		}

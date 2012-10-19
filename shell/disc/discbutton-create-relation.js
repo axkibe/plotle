@@ -14,14 +14,14 @@
  ' |   \ . ,-. ,-.  '|___/ . . |- |- ,-. ,-.
  , |   / | `-. |    ,|   \ | | |  |  | | | |
  `-^--'  ' `-' `-' `-^---' `-^ `' `' `-' ' '
- ,--.             .       ,       .       .
- | `-' ,-. ,-. ,-. |- ,-.  )   ,-. |-. ,-. |
- |   . |   |-' ,-| |  |-' /    ,-| | | |-' |
- `--'  '   `-' `-^ `' `-' `--' `-^ ^-' `-' `'
+ ,--.             .     .-,--.     .      .
+ | `-' ,-. ,-. ,-. |- ,-. `|__/ ,-. |  ,-. |- . ,-. ,-.
+ |   . |   |-' ,-| |  |-' )| \  |-' |  ,-| |  | | | | |
+ `--'  '   `-' `-^ `' `-' `'  ` `-' `' `-^ `' ' `-' ' '
 
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- The label button on the creation disc.
+ The relation button on the creation disc.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -64,34 +64,41 @@ if( typeof( window ) === 'undefined' )
 /*
 | Constructor
 */
-var DiscButtonCreateLabel = Disc.DiscButtonCreateLabel =
+var DiscButtonCreateRelation = Disc.DiscButtonCreateRelation =
 	function( disc )
 {
 	Disc.DiscButton.call(
 		this,
 		disc,
-		'label'
+		'relation'
 	);
 };
 
-Jools.subclass( DiscButtonCreateLabel, Disc.DiscButton );
+Jools.subclass( DiscButtonCreateRelation, Disc.DiscButton );
 
 
 /*
 | Draws the buttons icon
 */
-DiscButtonCreateLabel.prototype.drawIcon =
+DiscButtonCreateRelation.prototype.drawIcon =
 	function(
 		fabric
 	)
 {
-	var wx = 30;
-	var ny = 35;
+	var ax = this.myStyle.textAnchor.x;
+	var ay = this.myStyle.textAnchor.x;
 
 	fabric.fillText(
-		'label',
-		wx,
-		ny,
+		'Rela-',
+		ax,
+		ay - 10,
+		this.myStyle.font
+	);
+
+	fabric.fillText(
+		'tion',
+		ax,
+		ay + 10,
 		this.myStyle.font
 	);
 };

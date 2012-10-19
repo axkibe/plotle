@@ -84,13 +84,9 @@ DiscButtonCreatePortal.prototype.drawIcon =
 		fabric
 	)
 {
-	var wx = 30;
-	var ny = 35;
-
 	fabric.fillText(
 		'Portal',
-		wx,
-		ny,
+		this.myStyle.textAnchor,
 		this.myStyle.font
 	);
 };
