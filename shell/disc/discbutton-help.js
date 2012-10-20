@@ -14,11 +14,13 @@
  ' |   \ . ,-. ,-.  '|___/ . . |- |- ,-. ,-.
  , |   / | `-. |    ,|   \ | | |  |  | | | |
  `-^--'  ' `-' `-' `-^---' `-^ `' `' `-' ' '
-
-
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
- The create button on the DiscPanel.
+            ,-_/,.     .
+            ' |_|/ ,-. |  ,-.
+             /| |  |-' |  | |
+             `' `' `-' `' |-'
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ | ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                          '
+ The help button on the DiscPanel.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -61,41 +63,30 @@ if( typeof( window ) === 'undefined' )
 /*
 | Constructor
 */
-var DiscButtonLogin = Disc.DiscButtonLogin =
+var DiscButtonHelp = Disc.DiscButtonHelp =
 	function( disc )
 {
 	Disc.DiscButton.call(
 		this,
 		disc,
-		'login'
+		'help'
 	);
 };
 
-Jools.subclass( DiscButtonLogin, Disc.DiscButton );
+Jools.subclass( DiscButtonHelp, Disc.DiscButton );
 
 
 /*
 | Draws the buttons icon.
 */
-DiscButtonLogin.prototype.drawIcon =
+DiscButtonHelp.prototype.drawIcon =
 	function(
 		fabric
 	)
 {
-	var ax = this.myStyle.textAnchor.x;
-	var ay = this.myStyle.textAnchor.x;
-
 	fabric.fillText(
-		'log',
-		ax,
-		ay - 8,
-		this.myStyle.font
-	);
-
-	fabric.fillText(
-		'in',
-		ax,
-		ay + 8,
+		'?',
+		this.myStyle.textAnchor,
 		this.myStyle.font
 	);
 };
@@ -104,7 +95,7 @@ DiscButtonLogin.prototype.drawIcon =
 /*
 | Button is being pushed.
 */
-DiscButtonLogin.prototype.push =
+DiscButtonHelp.prototype.push =
 	function(
 	)
 {

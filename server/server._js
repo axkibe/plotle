@@ -463,6 +463,8 @@ Server.prototype.prepareResources = function(_)
 		'shell/disc/discbutton-normal.js',                 'fb',
 		'shell/disc/discbutton-create.js',                 'fb',
 		'shell/disc/discbutton-login.js',                  'fb',
+		'shell/disc/discbutton-signup.js',                 'fb',
+		'shell/disc/discbutton-help.js',                   'fb',
 		'shell/disc/discbutton-create-note.js',            'fb',
 		'shell/disc/discbutton-create-label.js',           'fb',
 		'shell/disc/discbutton-create-relation.js',        'fb',

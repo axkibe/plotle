@@ -417,21 +417,51 @@ theme =
 						194
 					),
 
-					font : fontPool.get( 14, 'ca' )
+					textAnchor : new Euclid.Point(
+						22,
+						22
+					),
+
+					font : fontPool.get( 14, 'cm' )
 				},
 
 				/*
-				| Login button on main disc
+				| Sign up button on main disc
+				*/
+				signup :
+				{
+					pnw : new Euclid.Point(
+						28,
+						510
+					),
+
+					textAnchor : new Euclid.Point(
+						22,
+						22
+					),
+
+					font : fontPool.get( 13, 'cm' )
+				},
+
+
+				/*
+				| Log in button on main disc
 				*/
 				login :
 				{
 					pnw : new Euclid.Point(
 						17,
-						450
+						560
 					),
 
-					font : fontPool.get( 12, 'ca' )
-				}
+					textAnchor : new Euclid.Point(
+						22,
+						22
+					),
+
+					font : fontPool.get( 13, 'cm' )
+				},
+
 
 				/*
 				| Help button on main disc
@@ -439,11 +469,16 @@ theme =
 				help :
 				{
 					pnw : new Euclid.Point(
-						17,
-						550
+						4,
+						610
 					),
 
-					font : fontPool.get( 22, 'ca' )
+					textAnchor : new Euclid.Point(
+						22,
+						22
+					),
+
+					font : fontPool.get( 22, 'cm' )
 				}
 			}
 		},

@@ -14,11 +14,13 @@
  ' |   \ . ,-. ,-.  '|___/ . . |- |- ,-. ,-.
  , |   / | `-. |    ,|   \ | | |  |  | | | |
  `-^--'  ' `-' `-' `-^---' `-^ `' `' `-' ' '
-
-
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
- The create button on the DiscPanel.
+          .---.         ,-.  .
+          \___  . ,-. ,-. |  |   ,-.
+              \ | | | | | |  | . | |
+          `---' ' `-| ' ' `--^-' |-'
+~ ~ ~ ~ ~ ~ ~ ~ ~ ~,| ~ ~ ~ ~ ~ ~|~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+                   `'            '
+ The signup button on the DiscPanel.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -61,23 +63,23 @@ if( typeof( window ) === 'undefined' )
 /*
 | Constructor
 */
-var DiscButtonLogin = Disc.DiscButtonLogin =
+var DiscButtonSignup = Disc.DiscButtonSignup =
 	function( disc )
 {
 	Disc.DiscButton.call(
 		this,
 		disc,
-		'login'
+		'signup'
 	);
 };
 
-Jools.subclass( DiscButtonLogin, Disc.DiscButton );
+Jools.subclass( DiscButtonSignup, Disc.DiscButton );
 
 
 /*
 | Draws the buttons icon.
 */
-DiscButtonLogin.prototype.drawIcon =
+DiscButtonSignup.prototype.drawIcon =
 	function(
 		fabric
 	)
@@ -86,14 +88,14 @@ DiscButtonLogin.prototype.drawIcon =
 	var ay = this.myStyle.textAnchor.x;
 
 	fabric.fillText(
-		'log',
+		'sign',
 		ax,
 		ay - 8,
 		this.myStyle.font
 	);
 
 	fabric.fillText(
-		'in',
+		'up',
 		ax,
 		ay + 8,
 		this.myStyle.font
@@ -104,7 +106,7 @@ DiscButtonLogin.prototype.drawIcon =
 /*
 | Button is being pushed.
 */
-DiscButtonLogin.prototype.push =
+DiscButtonSignup.prototype.push =
 	function(
 	)
 {

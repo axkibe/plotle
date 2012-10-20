@@ -108,9 +108,11 @@ var MainDisc = Disc.MainDisc =
 
 	var buttons = this.buttons =
 	{
-		normal : new Disc.DiscButtonNormal( this ),
-		create : new Disc.DiscButtonCreate( this ),
-		login  : new Disc.DiscButtonLogin ( this )
+		normal  : new Disc.DiscButtonNormal ( this ),
+		create  : new Disc.DiscButtonCreate ( this ),
+		login   : new Disc.DiscButtonLogin  ( this ),
+		signup  : new Disc.DiscButtonSignup ( this ),
+		help    : new Disc.DiscButtonHelp   ( this )
 	};
 
 	this.$hover  = inherit ? inherit.$hover  : null;
