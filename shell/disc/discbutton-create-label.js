@@ -96,4 +96,13 @@ DiscButtonCreateLabel.prototype.drawIcon =
 };
 
 
+/*
+| Button is being pushed.
+*/
+DiscButtonCreateLabel.prototype.push =
+	function( )
+{
+	shell.bridge.changeCreate( this.name );
+};
+
 } )( );

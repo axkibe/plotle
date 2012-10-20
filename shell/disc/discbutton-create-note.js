@@ -93,4 +93,14 @@ DiscButtonCreateNote.prototype.drawIcon =
 };
 
 
+/*
+| Button is being pushed.
+*/
+DiscButtonCreateNote.prototype.push =
+	function( )
+{
+	shell.bridge.changeCreate( this.name );
+};
+
+
 } )( );

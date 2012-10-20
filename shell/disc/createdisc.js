@@ -112,7 +112,6 @@ var CreateDisc = Disc.CreateDisc =
 		portal   : new Disc.DiscButtonCreatePortal   ( this )
 	};
 
-	this.$active = null;
 	this.$hover  = null;
 };
 
@@ -151,7 +150,7 @@ CreateDisc.prototype._weave = function( )
 	{
 		buttons[ name ].draw(
 			fabric,
-			this.$active === name,
+			shell.bridge.inCreate( name ),
 			this.$hover === name
 		);
 	}
@@ -359,21 +358,5 @@ CreateDisc.prototype.setHover = function( name )
 	shell.redraw = true;
 };
 
-
-/*
-| Sets the active component.
-*/
-CreateDisc.prototype.setActive = function( name )
-{
-	if( this.$active === name )
-	{
-		return;
-	}
-
-	this.$fabric = null;
-	this.$active = name;
-
-	shell.redraw = true;
-};
 
 } )( );

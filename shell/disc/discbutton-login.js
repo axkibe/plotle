@@ -14,13 +14,11 @@
  ' |   \ . ,-. ,-.  '|___/ . . |- |- ,-. ,-.
  , |   / | `-. |    ,|   \ | | |  |  | | | |
  `-^--'  ' `-' `-' `-^---' `-^ `' `' `-' ' '
-  ,--.             .     .-,--.         .      .
- | `-' ,-. ,-. ,-. |- ,-. '|__/ ,-. ,-. |- ,-. |
- |   . |   |-' ,-| |  |-' ,|    | | |   |  ,-| |
- `--'  '   `-' `-^ `' `-' `'    `-' '   `' `-^ `'
+
+
 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
- The portal button on the creation disc.
+ The create button on the DiscPanel.
 
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
@@ -63,30 +61,34 @@ if( typeof( window ) === 'undefined' )
 /*
 | Constructor
 */
-var DiscButtonCreatePortal = Disc.DiscButtonCreatePortal =
+var DiscButtonLogin = Disc.DiscButtonLogin =
 	function( disc )
 {
 	Disc.DiscButton.call(
 		this,
 		disc,
-		'portal'
+		'login'
 	);
 };
 
-Jools.subclass( DiscButtonCreatePortal, Disc.DiscButton );
+Jools.subclass( DiscButtonLogin, Disc.DiscButton );
 
 
 /*
-| Draws the buttons icon
+| Draws the buttons icon.
 */
-DiscButtonCreatePortal.prototype.drawIcon =
+DiscButtonLogin.prototype.drawIcon =
 	function(
 		fabric
 	)
 {
+	var wx = 22;
+	var ny = 26;
+
 	fabric.fillText(
-		'Portal',
-		this.myStyle.textAnchor,
+		'login',
+		wx,
+		ny,
 		this.myStyle.font
 	);
 };
@@ -95,12 +97,12 @@ DiscButtonCreatePortal.prototype.drawIcon =
 /*
 | Button is being pushed.
 */
-DiscButtonCreatePortal.prototype.push =
-	function( )
+DiscButtonLogin.prototype.push =
+	function(
+	)
 {
-	shell.bridge.changeCreate( this.name );
+	shell.bridge.changeMode( this.name );
 };
-
 
 
 } )( );

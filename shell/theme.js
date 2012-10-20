@@ -386,8 +386,8 @@ theme =
 				/*
 				| Default arrow button on main disc
 				*/
-				normal : {
-
+				normal :
+				{
 					pnw : new Euclid.Point(
 						4,
 						145
@@ -410,14 +410,40 @@ theme =
 				/*
 				| New button on main disc
 				*/
-				create : {
-
+				create :
+				{
 					pnw : new Euclid.Point(
 						17,
 						194
 					),
 
 					font : fontPool.get( 14, 'ca' )
+				},
+
+				/*
+				| Login button on main disc
+				*/
+				login :
+				{
+					pnw : new Euclid.Point(
+						17,
+						450
+					),
+
+					font : fontPool.get( 12, 'ca' )
+				}
+
+				/*
+				| Help button on main disc
+				*/
+				help :
+				{
+					pnw : new Euclid.Point(
+						17,
+						550
+					),
+
+					font : fontPool.get( 22, 'ca' )
 				}
 			}
 		},

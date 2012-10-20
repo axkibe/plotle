@@ -109,10 +109,10 @@ var MainDisc = Disc.MainDisc =
 	var buttons = this.buttons =
 	{
 		normal : new Disc.DiscButtonNormal( this ),
-		create : new Disc.DiscButtonCreate( this )
+		create : new Disc.DiscButtonCreate( this ),
+		login  : new Disc.DiscButtonLogin ( this )
 	};
 
-	this.$active = inherit ? inherit.$active : null;
 	this.$hover  = inherit ? inherit.$hover  : null;
 };
 
@@ -159,7 +159,7 @@ MainDisc.prototype._weave = function( )
 		buttons[ name ].
 			draw(
 				fabric,
-				this.$active === name,
+				shell.bridge.inMode( name ),
 				this.$hover  === name
 			);
 	}
@@ -193,7 +193,7 @@ MainDisc.prototype._weave = function( )
 */
 MainDisc.prototype.draw = function( fabric )
 {
-	if( this.$active === 'create' )
+	if( shell.bridge.inMode( 'create' ) )
 	{
 		this.createDisc.draw( fabric );
 	}
@@ -225,7 +225,7 @@ MainDisc.prototype.pointingHover = function( p, shift, ctrl )
 	{
 		this.setHover( null );
 
-		if( this.$active === 'create' )
+		if( shell.bridge.inMode( 'create' ) )
 		{
 			return this.createDisc.pointingHover( p, shift, ctrl );
 		}
@@ -248,7 +248,7 @@ MainDisc.prototype.pointingHover = function( p, shift, ctrl )
 	{
 		this.setHover( null );
 
-		if( this.$active === 'create' )
+		if( shell.bridge.inMode( 'create' ) )
 		{
 			return this.createDisc.pointingHover( p, shift, ctrl );
 		}
@@ -297,7 +297,7 @@ MainDisc.prototype.pointingStart = function( p, shift, ctrl )
 	{
 		this.setHover( null );
 
-		if( this.$active === 'create' )
+		if( shell.bridge.inMode( 'create' ) )
 		{
 			return this.createDisc.pointingStart( p, shift, ctrl );
 		}
@@ -321,7 +321,7 @@ MainDisc.prototype.pointingStart = function( p, shift, ctrl )
 	{
 		this.setHover( null );
 
-		if( this.$active === 'create' )
+		if( shell.bridge.inMode( 'create' ) )
 		{
 			return this.createDisc.pointingStart( p, shift, ctrl );
 		}
@@ -396,23 +396,6 @@ MainDisc.prototype.setHover = function( name )
 
 	this.$fabric = null;
 	this.$hover  = name;
-
-	shell.redraw = true;
-};
-
-
-/*
-| Sets the active component.
-*/
-MainDisc.prototype.setActive = function( name )
-{
-	if( this.$active === name )
-	{
-		return;
-	}
-
-	this.$fabric = null;
-	this.$active = name;
 
 	shell.redraw = true;
 };

@@ -77,7 +77,7 @@ Jools.subclass( DiscButtonCreate, Disc.DiscButton );
 
 
 /*
-| Draws the buttons icon
+| Draws the buttons icon.
 */
 DiscButtonCreate.prototype.drawIcon =
 	function(
@@ -93,6 +93,17 @@ DiscButtonCreate.prototype.drawIcon =
 		ny,
 		this.myStyle.font
 	);
+};
+
+
+/*
+| Button is being pushed.
+*/
+DiscButtonCreate.prototype.push =
+	function(
+	)
+{
+	shell.bridge.changeMode( this.name );
 };
 
 

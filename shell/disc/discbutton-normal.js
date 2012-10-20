@@ -77,6 +77,9 @@ var DiscButtonNormal = Disc.DiscButtonNormal = function(
 Jools.subclass( DiscButtonNormal, Disc.DiscButton );
 
 
+/*
+| Sketches the button's icon.
+*/
 DiscButtonNormal.prototype.sketchIcon =
 	function(
 		fabric,
@@ -112,6 +115,9 @@ DiscButtonNormal.prototype.sketchIcon =
 };
 
 
+/*
+| Draws the buttons icon
+*/
 DiscButtonNormal.prototype.drawIcon =
 	function(
 		fabric
@@ -123,6 +129,17 @@ DiscButtonNormal.prototype.drawIcon =
 		'sketchIcon',
 		Euclid.View.proper
 	);
+};
+
+
+/*
+| Button is being pushed.
+*/
+DiscButtonNormal.prototype.push =
+	function(
+	)
+{
+	shell.bridge.changeMode( this.name );
 };
 
 

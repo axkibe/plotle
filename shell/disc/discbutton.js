@@ -249,7 +249,7 @@ DiscButton.prototype.pointingStart =
 		return null;
 	}
 
-	this.disc.setActive( this.name );
+	this.push();
 
 	return  false;
 };

@@ -104,4 +104,14 @@ DiscButtonCreateRelation.prototype.drawIcon =
 };
 
 
+/*
+| Button is being pushed.
+*/
+DiscButtonCreateRelation.prototype.push =
+	function( )
+{
+	shell.bridge.changeCreate( this.name );
+};
+
+
 } )( );

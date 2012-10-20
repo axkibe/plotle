@@ -39,6 +39,7 @@ var Shell = null;
 | Imports
 */
 var Action;
+var Bridge;
 var Caret;
 var Dash;
 var Euclid;
@@ -87,14 +88,17 @@ Shell = function( fabric )
 		'meshcraft$8833'
 	);
 
-	this.fabric    = fabric;
+	this.fabric  = fabric;
 
-	this.$space    = null;
-	this.$board    = new Dash.Board( );
-	this.$caret    = new Caret( null, null, null, false );
-	this.$action   = null;
+	this.$space  = null;
+	this.$board  = new Dash.Board( );
 
-	this._$menu    = null;
+	this.$caret  = new Caret( null, null, null, false );
+	this.$action = null;
+
+	this.bridge = new Bridge();
+
+	this._$menu  = null;
 
 	this.selection = new Range( );
 
@@ -373,6 +377,7 @@ Shell.prototype.stopAction = function()
 
 /*
 | Lets the shell check if it should redraw.
+|
 | Used by async handlers.
 */
 Shell.prototype.poke = function( )
@@ -395,7 +400,7 @@ Shell.prototype.poke = function( )
 
 
 /*
-| force-clears all caches.
+| Force-clears all caches.
 */
 Shell.prototype.knock = function()
 {
@@ -609,7 +614,12 @@ Shell.prototype.greenscreen = function( message )
 |
 | returns the pointing state code, wheter this is a click/drag or yet undecided
 */
-Shell.prototype.pointingStart = function( p, shift, ctrl )
+Shell.prototype.pointingStart =
+	function(
+		p,
+		shift,
+		ctrl
+	)
 {
 	if( this.green )
 		{ return false; }
@@ -720,7 +730,8 @@ Shell.prototype.dragstop = function(p, shift, ctrl)
 	if (!$action)
 		{ throw new Error('no action on dragstop'); }
 
-	switch($action.section) {
+	switch($action.section)
+	{
 		case 'board' :
 			this.$board.actionstop(p, shift, ctrl);
 			break;
@@ -757,8 +768,8 @@ Shell.prototype.mousewheel = function(p, dir, shift, ctrl)
 };
 
 
-/**
-| User pressed a special key.
+/*
+| User is pressing a special key.
 */
 Shell.prototype.specialKey = function(key, shift, ctrl)
 {
