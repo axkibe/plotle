@@ -310,7 +310,7 @@ Label.prototype.getZone = function( )
 			);
 
 		case Action.ITEMRESIZE:
-			// resizing is done by fontSizeChange()
+			// resizing is done by fontSizeChange( )
 			var szone = action.startZone;
 			if( !szone )
 			{
@@ -394,9 +394,9 @@ Label.prototype.actionstop =
 /*
 | Returns the ctrl area.
 */
-Label.prototype.getCtrlFix = function()
+Label.prototype.getCtrlFix = function( )
 {
-	var zone = this.getZone();
+	var zone = this.getZone( );
 	var pnw  = zone.pnw;
 	var tca  = theme.label.ctrlArea;
 
@@ -421,4 +421,4 @@ Label.prototype.getCtrlFix = function()
 };
 
 
-} ) ();
+} )( );
