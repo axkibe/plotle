@@ -268,9 +268,9 @@ Button.prototype.pointingStart = function( p, shift, ctrl )
 		return null;
 	}
 
-	if ( this.repeating && !this.retimer )
+	if( this.repeating && !this.retimer )
 	{
-		shell.startAction(
+		shell.bridge.startAction(
 			Action.REBUTTON,
 			'board',
 			'itemPath', this.path
@@ -366,7 +366,7 @@ Button.prototype.actionstop = function( )
 	system.cancelTimer( this.$retimer );
 	this.$retimer = null;
 
-	shell.stopAction( );
+	shell.bridge.stopAction( );
 };
 
 

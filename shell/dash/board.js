@@ -394,7 +394,7 @@ Board.prototype.actionmove =
 Board.prototype.actionstop =
 	function( p, shift, ctrl )
 {
-	var path  = shell.$action.itemPath;
+	var path  = shell.bridge.action( );
 	var panel = this.getPanel( path.get( 0 ) );
 	var c     = panel.$sub[ path.get( 1 ) ];
 

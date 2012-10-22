@@ -143,19 +143,26 @@ Portal.prototype.actionstop =
 		p
 	)
 {
-	switch (shell.$action.type) {
+	var action = shell.bridge.action( );
 
+	switch( action.type )
+	{
 		case Action.ITEMDRAG :
 		case Action.ITEMRESIZE :
 
-			var zone = this.getZone();
+			var zone = this.getZone( );
 
 			if( zone.width < theme.portal.minWidth ||
-				zone.height < theme.portal.minHeight )
-				{ throw new Error('Portal under minimum size!'); }
+				zone.height < theme.portal.minHeight
+			)
+			{
+				throw new Error( 'Portal under minimum size!' );
+			}
 
 			if( this.twig.zone.eq( zone ) )
-				{ return; }
+			{
+				return;
+			}
 
 			shell.peer.setZone( this.path, zone );
 
@@ -314,39 +321,44 @@ Portal.prototype.pointingHover = function( view, p )
 Portal.prototype.getZone =
 	function( )
 {
-	var twig    = this.twig;
-	var $action = shell.$action;
-	var max     = Math.max;
-	var min     = Math.min;
+	var twig   = this.twig;
+	var action = shell.bridge.action( );
+	var max    = Math.max;
+	var min    = Math.min;
 
-	if( !$action || !this.path.equals( $action.itemPath ) )
-		{ return twig.zone; }
+	if(
+		!action ||
+		!this.path.equals( action.itemPath )
+	)
+	{
+		return twig.zone;
+	}
 
 	// FIXME cache the last zone
 
-	switch( $action.type )
+	switch( action.type )
 	{
 
 		case Action.ITEMDRAG:
 			return twig.zone.add(
-				$action.move.x - $action.start.x,
-				$action.move.y - $action.start.y
+				action.move.x - action.start.x,
+				action.move.y - action.start.y
 			);
 
 		case Action.ITEMRESIZE:
-			var szone = $action.startZone;
+			var szone = action.startZone;
 			if( !szone )
 				{ return twig.zone; }
 
 			var spnw = szone.pnw;
 			var spse = szone.pse;
-			var dx = $action.move.x - $action.start.x;
-			var dy = $action.move.y - $action.start.y;
+			var dx = action.move.x - action.start.x;
+			var dy = action.move.y - action.start.y;
 			var minw = theme.portal.minWidth;
 			var minh = theme.portal.minHeight;
 			var pnw, pse;
 
-			switch( $action.align )
+			switch( action.align )
 			{
 
 				case 'n'  :

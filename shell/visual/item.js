@@ -355,8 +355,9 @@ Item.prototype.dragstart = function(view, p, shift, ctrl, access)
 	var sbary = this.scrollbarY;
 	if( sbary && sbary.within( view, p ) )
 	{
-		shell.startAction(
-			Action.SCROLLY, 'space',
+		shell.bridge,startAction(
+			Action.SCROLLY,
+			'space',
 			'itemPath', this.path,
 			'start',    p,
 			'startPos', sbary.getPos()
@@ -372,8 +373,9 @@ Item.prototype.dragstart = function(view, p, shift, ctrl, access)
 	if (ctrl && access == 'rw')
 	{
 		// relation binding
-		shell.startAction(
-			Action.RELBIND, 'space',
+		shell.bridge.startAction(
+			Action.RELBIND,
+			'space',
 			'itemPath', this.path,
 			'start',    p,
 			'move',     p
@@ -389,8 +391,9 @@ Item.prototype.dragstart = function(view, p, shift, ctrl, access)
 
 		var vp = view.depoint(p);
 
-		shell.startAction(
-			Action.ITEMDRAG, 'space',
+		shell.bridge.startAction(
+			Action.ITEMDRAG,
+			'space',
 			'itemPath', this.path,
 			'start', vp,
 			'move',  vp
@@ -410,30 +413,34 @@ Item.prototype.dragstart = function(view, p, shift, ctrl, access)
 */
 Item.prototype.actionmove = function(view, p, shift, ctrl)
 {
-	var $action = shell.$action;
+	var action = shell.bridge.action( );
 
-	switch ($action.type)
+	switch( action.type )
 	{
 		case Action.RELBIND    :
+
 			if( !this.getZone().within( view, p ) )
 				{ return false; }
-			$action.move = p;
-			$action.item2Path = this.path;
+
+			action.move = p;
+			action.item2Path = this.path;
 			shell.redraw = true;
 			return true;
 
 		case Action.ITEMDRAG   :
 		case Action.ITEMRESIZE :
-			$action.move = view.depoint(p);
+
+			action.move  = view.depoint(p);
 			shell.redraw = true;
 			return true;
 
 		case Action.SCROLLY :
-			var start = $action.start;
+
+			var start = action.start;
 			var dy    = p.y - start.y;
-			var item  = shell.$space.getSub( $action.itemPath, 'Item' );
+			var item  = shell.$space.getSub( action.itemPath, 'Item' );
 			var sbary = item.scrollbarY;
-			var spos  = $action.startPos + sbary.scale(dy);
+			var spos  = action.startPos + sbary.scale(dy);
 			item.setScrollbar(spos);
 			item.poke();
 			shell.redraw = true;
@@ -449,12 +456,13 @@ Item.prototype.actionmove = function(view, p, shift, ctrl)
 /*
 | Sets the items position and size after an action.
 */
-Item.prototype.actionstop = function(view, p)
+Item.prototype.actionstop =
+	function( view, p )
 {
-	var action = shell.$action;
+	var action = shell.bridge.action();
 
-	switch (action.type) {
-
+	switch( action.type )
+	{
 		case Action.RELBIND :
 			if( !this.getZone().within( view, p ) )
 				{ return false; }

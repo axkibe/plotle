@@ -84,7 +84,20 @@ Bridge = function( )
 	*/
 	this._$mode = 'default';
 
+	/*
+	| Creating this item:
+	|
+	| 'note',
+	| 'label',
+	| 'relation' or
+	| 'portal
+	*/
 	this._$create = null;
+
+	/*
+	| an Action object for the current action
+	*/
+	this._$action = null;
 };
 
 
@@ -141,7 +154,6 @@ Bridge.prototype.inCreate =
 };
 
 
-
 /*
 | Changes the creation.
 */
@@ -152,6 +164,43 @@ Bridge.prototype.changeCreate =
 
 	shell.$board.getPanel( 'MainDisc' ).poke();
 };
+
+
+/*
+| Returns the current action.
+*/
+Bridge.prototype.action =
+	function( )
+{
+	return this._$action;
+}
+
+
+/*
+| Creates an action.
+*/
+Bridge.prototype.startAction = function( )
+{
+	if( this._$action )
+		{ throw new Error( 'double action' ); }
+
+	return this._$action = new Action( arguments );
+
+};
+
+
+/*
+| Ends an action.
+*/
+Bridge.prototype.stopAction = function()
+{
+	if( !this._$action )
+		{ throw new Error( 'ending no action' ); }
+
+	this._$action = null;
+
+};
+
 
 
 } )( );

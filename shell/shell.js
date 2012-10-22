@@ -94,7 +94,6 @@ Shell = function( fabric )
 	this.$board  = new Dash.Board( );
 
 	this.$caret  = new Caret( null, null, null, false );
-	this.$action = null;
 
 	this.bridge = new Bridge();
 
@@ -346,32 +345,6 @@ Shell.prototype.blink = function( )
 	}
 
 	this.$caret.blink( );
-};
-
-
-/*
-| Creates an action.
-*/
-Shell.prototype.startAction = function( )
-{
-	if( this.$action )
-		{ throw new Error( 'double action' ); }
-
-	return this.$action = new Action( arguments );
-
-};
-
-
-/*
-| Ends an action.
-*/
-Shell.prototype.stopAction = function()
-{
-	if( !this.$action )
-		{ throw new Error( 'ending no action' ); }
-
-	this.$action = null;
-
 };
 
 
@@ -685,33 +658,42 @@ Shell.prototype.dragstart = function(p, shift, ctrl)
 /*
 | Moving during an operation with the mouse button held down.
 */
-Shell.prototype.dragmove = function(p, shift, ctrl)
+Shell.prototype.dragmove =
+	function(
+		p,
+		shift,
+		ctrl
+	)
 {
-	if (this.green)
+	if( this.green )
 		{ return; }
 
-	var $action = this.$action;
+	var action = this.bridge.action( );
 
-	if (!$action)
-		{ throw new Error('no action on dragmove'); }
+	if( !action )
+		{ throw new Error( 'no action on dragmove' ); }
 
 	var cursor = null;
 
-	switch ($action.section)
+	switch( action.section )
 	{
 		case 'board' :
-			cursor = this.$board.actionmove(p, shift, ctrl);
+			cursor = this.$board.actionmove( p, shift, ctrl );
 			break;
 
 		case 'space' :
-			if (this.$space)
-				{ cursor = this.$space.actionmove(p, shift, ctrl); }
+			if( this.$space )
+			{
+				cursor = this.$space.actionmove( p, shift, ctrl );
+			}
 
 			break;
 	}
 
-	if (this.redraw)
-		{ this._draw(); }
+	if( this.redraw )
+	{
+		this._draw();
+	}
 
 	return cursor;
 };
@@ -720,33 +702,42 @@ Shell.prototype.dragmove = function(p, shift, ctrl)
 /*
 | Stops an operation with the mouse button held down.
 */
-Shell.prototype.dragstop = function(p, shift, ctrl)
+Shell.prototype.dragstop =
+	function(
+		p,
+		shift,
+		ctrl
+	)
 {
-	if (this.green)
+	if( this.green )
 		{ return; }
 
-	var $action = this.$action;
+	var action = this.bridge.action( );
 
-	if (!$action)
-		{ throw new Error('no action on dragstop'); }
+	if( !action )
+		{ throw new Error( 'no action on dragstop' ); }
 
-	switch($action.section)
+	switch( action.section )
 	{
 		case 'board' :
-			this.$board.actionstop(p, shift, ctrl);
+			this.$board.actionstop( p, shift, ctrl );
 			break;
 
 		case 'space' :
-			if (this.$space)
-				{ this.$space.actionstop(p, shift, ctrl); }
+			if( this.$space )
+			{
+				this.$space.actionstop( p, shift, ctrl );
+			}
 			break;
 
 		default :
-			throw new Error('unknown $action.section');
+			throw new Error( 'unknown action.section' );
 	}
 
-	if (this.redraw)
-		{ this._draw(); }
+	if( this.redraw )
+	{
+		this._draw( );
+	}
 };
 
 

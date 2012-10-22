@@ -28,7 +28,7 @@
 | Export
 */
 var Visual;
-Visual = Visual || {};
+Visual = Visual || { };
 
 
 /*
@@ -47,7 +47,7 @@ var theme;
 /*
 | Capsule
 */
-(function(){
+( function( ) {
 'use strict';
 
 if (typeof(window) === 'undefined')
@@ -125,7 +125,7 @@ Space.prototype.update = function( twig )
 			shell.selection.sign1.path.get( -4 ) === csign.path.get( 1 ) )
 			{ shell.selection.deselect(true); }
 
-		shell.dropFocus();
+		shell.dropFocus( );
 	}
 
 	shell.redraw = true;
@@ -175,19 +175,23 @@ Space.prototype.createItem = function( twig, k )
 /*
 | Redraws the complete space.
 */
-Space.prototype.draw = function()
+Space.prototype.draw = function( )
 {
 	var twig = this.twig;
 	var view = this.$view;
 
 	for( var r = twig.length - 1; r >= 0; r-- )
-		{ this.atRank( r ).draw( this.fabric, view ); }
+	{
+		this.atRank( r ).draw( this.fabric, view );
+	}
 
 	var focus = this.focusedItem( );
 	if( focus )
-		{ focus.drawHandles( this.fabric, view ); }
+	{
+		focus.drawHandles( this.fabric, view );
+	}
 
-	var action = shell.$action;
+	var action = shell.bridge.action( );
 
 	switch( action && action.type )
 	{
@@ -223,7 +227,7 @@ Space.prototype.draw = function()
 /*
 | Force-clears all caches.
 */
-Space.prototype.knock = function()
+Space.prototype.knock = function( )
 {
 	for( var r = this.twig.length - 1; r >= 0; r-- )
 		{ this.atRank( r ).knock( ); }
@@ -233,7 +237,7 @@ Space.prototype.knock = function()
 /*
 | Positions the caret.
 */
-Space.prototype.positionCaret = function()
+Space.prototype.positionCaret = function( )
 {
 	this.getSub( shell.$caret.sign.path, 'positionCaret' )
 		.positionCaret( this.$view );
@@ -261,9 +265,9 @@ Space.prototype.mousewheel = function( p, dir, shift, ctrl )
 	else
 		{ this.$view = this.$view.review( -1, p ); }
 
-	shell.setSpaceZoom(this.$view.fact);
+	shell.setSpaceZoom( this.$view.fact );
 
-	this.knock();
+	this.knock( );
 
 	shell.redraw = true;
 
@@ -284,7 +288,7 @@ Space.prototype.pointingHover = function( p, shift, ctrl )
 	var view   = this.$view;
 	var cursor = null;
 
-	var focus = this.focusedItem();
+	var focus = this.focusedItem( );
 	if (focus)
 	{
 		if( focus.withinCtrlArea( view, p ) )
@@ -320,14 +324,19 @@ Space.prototype.pointingHover = function( p, shift, ctrl )
 Space.prototype.dragstart = function(p, shift, ctrl)
 {
 	var view  = this.$view;
-	var focus = this.focusedItem();
+	var focus = this.focusedItem( );
 
 	// see if the itemmenu of the focus was targeted
-	if( this.access == 'rw' && focus && focus.withinCtrlArea( view, p ))
+	if(
+		this.access == 'rw' &&
+		focus &&
+		focus.withinCtrlArea( view, p )
+	)
 	{
 		var dp = view.depoint(p);
 		shell.startAction(
-			Action.RELBIND, 'space',
+			Action.RELBIND,
+			'space',
 			'itemPath', focus.path,
 			'start',    dp,
 			'move',     dp
@@ -337,19 +346,30 @@ Space.prototype.dragstart = function(p, shift, ctrl)
 	}
 
 	// see if one item was targeted
-	for(var a = 0, aZ = this.twig.length; a < aZ; a++)
+	for( var a = 0, aZ = this.twig.length; a < aZ; a++ )
 	{
-		var item = this.atRank(a);
-		if ( item.dragstart( view, p, shift, ctrl, this.access ))
-			{ return; }
+		var item = this.atRank( a );
+		if(
+			item.dragstart(
+				view,
+				p,
+				shift,
+				ctrl,
+				this.access
+			)
+		)
+		{
+			return;
+		}
 	}
 
 	// otherwise do panning
-	shell.startAction
+	shell.bridge.startAction
 	(
-		Action.PAN, 'space',
-		'start',    p,
-		'pan',      view.pan
+		Action.PAN,
+		'space',
+		'start',  p,
+		'pan',    view.pan
 	);
 
 	return;
@@ -364,7 +384,7 @@ Space.prototype.click = function(p, shift, ctrl)
 	var view = this.$view;
 
 	// clicked the tab of the focused item?
-	var focus = this.focusedItem();
+	var focus = this.focusedItem( );
 	if( focus && focus.withinCtrlArea( view, p ) )
 	{
 		shell.setMenu( focus.getMenu( view ) );
@@ -388,7 +408,7 @@ Space.prototype.click = function(p, shift, ctrl)
 		self
 	) );
 
-	shell.dropFocus();
+	shell.dropFocus( );
 	shell.redraw = true;
 	return true;
 };
@@ -396,16 +416,23 @@ Space.prototype.click = function(p, shift, ctrl)
 /**
 | Stops an operation with the mouse button held down.
 */
-Space.prototype.actionstop = function(p, shift, ctrl)
+Space.prototype.actionstop =
+	function(
+		p,
+		shift,
+		ctrl
+	)
 {
-	var action = shell.$action;
+	var action = shell.bridge.action( );
 	var view   = this.$view;
 	var item;
 
-	if (!action)
-		{ throw new Error('Dragstop without action?'); }
+	if( !action )
+	{
+		throw new Error('Dragstop without action?');
+	}
 
-	switch (action.type)
+	switch( action.type )
 	{
 
 		case Action.PAN :
@@ -413,10 +440,13 @@ Space.prototype.actionstop = function(p, shift, ctrl)
 
 		case Action.RELBIND :
 
-			for(var r = 0, rZ = this.twig.length; r < rZ; r++) {
-				item = this.atRank(r);
-				if (item.actionstop(view, p))
-					{ break; }
+			for( var r = 0, rZ = this.twig.length; r < rZ; r++ )
+			{
+				item = this.atRank( r );
+				if( item.actionstop( view, p ) )
+				{
+					break;
+				}
 			}
 			shell.redraw = true;
 			break;
@@ -426,23 +456,30 @@ Space.prototype.actionstop = function(p, shift, ctrl)
 		case Action.SCROLLY    :
 
 			this.getSub( action.itemPath, 'actionstop' )
-				.actionstop(view, p, shift, ctrl);
+				.actionstop(
+					view,
+					p,
+					shift,
+					ctrl
+				);
 			break;
 
 		default :
-			throw new Error('Do not know how to handle Action.' + action.type);
+			throw new Error( 'Do not know how to handle Action: ' + action.type );
 	}
 
-	shell.stopAction();
+	shell.bridge.stopAction( );
 	return true;
 };
 
-/**
+
+/*
 | Moving during an operation with the mouse button held down.
 */
-Space.prototype.actionmove = function(p, shift, ctrl) {
+Space.prototype.actionmove = function( p, shift, ctrl )
+{
 	var view   = this.$view;
-	var action = shell.$action;
+	var action = shell.bridge.action( );
 	var item;
 
 	switch( action.type )
@@ -512,7 +549,7 @@ Space.prototype.menuSelect = function(entry, p)
 				new Euclid.Rect(pnw, pnw.add(nw, nh))
 			);
 
-			this.$sub[key].grepFocus();
+			this.$sub[key].grepFocus( );
 
 			break;
 
@@ -529,7 +566,7 @@ Space.prototype.menuSelect = function(entry, p)
 				20
 			);
 
-			this.$sub[key].grepFocus();
+			this.$sub[ key ].grepFocus( );
 
 			break;
 
@@ -540,14 +577,20 @@ Space.prototype.menuSelect = function(entry, p)
 			nh = theme.portal.newHeight;
 
 			pnw = view.depoint(p).
-				sub( Jools.half( nw ) , Jools.half( nh ) );
+				sub(
+					Jools.half( nw ),
+					Jools.half( nh )
+				);
 
 			key = shell.peer.newPortal(
 				this.spacename,
-				new Euclid.Rect(pnw, pnw.add(nw, nh))
+				new Euclid.Rect(
+					pnw,
+					pnw.add( nw, nh )
+				)
 			);
 
-			this.$sub[key].grepFocus();
+			this.$sub[key].grepFocus( );
 
 			break;
 	}
@@ -557,10 +600,15 @@ Space.prototype.menuSelect = function(entry, p)
 /*
 | Pointing device starts pointing ( mouse down, touch start )
 */
-Space.prototype.pointingStart = function(p, shift, ctrl)
+Space.prototype.pointingStart =
+	function(
+		p,
+		shift,
+		ctrl
+	)
 {
 	var view   = this.$view;
-	var action = shell.$action;
+	var action = shell.bridge.action( );
 
 	if(this.access == 'ro' )
 	{
@@ -568,7 +616,7 @@ Space.prototype.pointingStart = function(p, shift, ctrl)
 		return 'drag';
 	}
 
-	var focus = this.focusedItem();
+	var focus = this.focusedItem( );
 
 	if( focus )
 	{
@@ -581,14 +629,14 @@ Space.prototype.pointingStart = function(p, shift, ctrl)
 			// resizing
 			var dp = view.depoint(p);
 
-			action = shell.startAction
-			(
-				Action.ITEMRESIZE, 'space',
-				'itemPath',        focus.path,
-				'start',           dp,
-				'move',            dp,
-				'align',           com,
-				'startZone',       focus.getZone()
+			action = shell.bridge.startAction(
+				Action.ITEMRESIZE,
+				'space',
+				'itemPath',  focus.path,
+				'start',     dp,
+				'move',      dp,
+				'align',     com,
+				'startZone', focus.getZone( )
 			);
 
 			return 'drag';
@@ -617,15 +665,16 @@ Space.prototype.input = function(text)
 /*
 | Changes the zoom factor (around center)
 */
-Space.prototype.changeZoom = function(df)
+Space.prototype.changeZoom =
+	function( df )
 {
-	var pm     = this.$view.depoint(this.fabric.getCenter());
+	var pm = this.$view.depoint( this.fabric.getCenter( ) );
 
-	this.$view = this.$view.review(df, pm);
+	this.$view = this.$view.review( df, pm );
 
-	shell.setSpaceZoom(this.$view.fact);
+	shell.setSpaceZoom( this.$view.fact );
 
-	this.knock();
+	this.knock( );
 
 	shell.redraw = true;
 };
@@ -634,16 +683,24 @@ Space.prototype.changeZoom = function(df)
 /*
 | User pressed a special key.
 */
-Space.prototype.specialKey = function(key, shift, ctrl)
+Space.prototype.specialKey = function( key, shift, ctrl )
 {
-	if (ctrl)
+	if( ctrl )
 	{
-		switch(key)
+		switch( key )
 		{
-			case 'z' : shell.peer.undo();   return;
-			case 'y' : shell.peer.redo();   return;
-			case ',' : this.changeZoom( 1); return;
-			case '.' : this.changeZoom(-1); return;
+			case 'z' :
+				shell.peer.undo( );
+				return;
+			case 'y' :
+				shell.peer.redo( );
+				return;
+			case ',' :
+				this.changeZoom(  1 );
+				return;
+			case '.' :
+				this.changeZoom( -1 );
+				return;
 		}
 	}
 
@@ -668,25 +725,26 @@ Space.prototype.getSub = function( path, mark )
 	var n = this;
 	var m = null;
 
-	for (var a = 0, aZ = path.length; a < aZ; a++)
+	for( var a = 0, aZ = path.length; a < aZ; a++ )
 	{
-		if ( !n.$sub )
+		if( !n.$sub )
 			{ break; }
 
 		n = n.$sub[ path.get( a ) ];
 
-		if (!n)
+		if( !n )
 			{ break; }
 
-		if ( mark && n[ mark ] )
+		if( mark && n[ mark ] )
 			{ m = n; }
 	}
 
-	if (!mark)
+	if( !mark )
 		{ return n; }
 
 	return m;
 };
 
 
-} ) ();
+} )( );
+

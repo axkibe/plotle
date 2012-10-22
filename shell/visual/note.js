@@ -202,7 +202,8 @@ Note.prototype.scrollCaretIntoView = function()
 /*
 | Scrolls the note so the caret comes into view.
 */
-Note.prototype.scrollPage = function( up )
+Note.prototype.scrollPage =
+	function( up )
 {
 	var zone = this.getZone( );
 	var dir  = up ? -1 : 1;
@@ -216,9 +217,15 @@ Note.prototype.scrollPage = function( up )
 /*
 | Sets the items position and size after an action.
 */
-Note.prototype.actionstop = function( view, p )
+Note.prototype.actionstop =
+	function(
+		view,
+		p
+	)
 {
-	switch ( shell.$action.type )
+	var action = shell.bridge.action( );
+
+	switch( action.type )
 	{
 
 		case Action.ITEMDRAG :
@@ -226,10 +233,13 @@ Note.prototype.actionstop = function( view, p )
 
 			var zone = this.getZone( );
 
-			if( zone.width < theme.note.minWidth ||
+			if(
+				zone.width < theme.note.minWidth ||
 				zone.height < theme.note.minHeight
 			)
-				{ throw new Error( 'Note under minimum size!' ); }
+			{
+				throw new Error( 'Note under minimum size!' );
+			}
 
 			if ( this.twig.zone.eq( zone ) )
 				{ return; }
@@ -369,17 +379,24 @@ Note.prototype.getParaSep = function( fontsize )
 
 /*
 | Returns the zone of the item.
-| An ongoing action can modify this to be different than meshmashine data.
+|
+| An ongoing action can modify this
+| to something different than meshmashine data.
 */
-Note.prototype.getZone = function()
+Note.prototype.getZone = function( )
 {
 	var twig   = this.twig;
-	var action = shell.$action;
+	var action = shell.bridge.action( );
 	var max    = Math.max;
 	var min    = Math.min;
 
-	if( !action || !this.path.equals( action.itemPath ) )
-		{ return twig.zone; }
+	if(
+		!action ||
+		!this.path.equals( action.itemPath )
+	)
+	{
+		return twig.zone;
+	}
 
 	// FIXME cache the last zone
 
@@ -393,7 +410,10 @@ Note.prototype.getZone = function()
 
 		case Action.ITEMRESIZE:
 			var szone = action.startZone;
-			if (!szone) return twig.zone;
+
+			if( !szone )
+				{ return twig.zone; }
+
 			var spnw = szone.pnw;
 			var spse = szone.pse;
 			var dx = action.move.x - action.start.x;
@@ -402,48 +422,49 @@ Note.prototype.getZone = function()
 			var minh = theme.note.minHeight;
 			var pnw, pse;
 
-			switch( action.align ) {
-			case 'n'  :
-				pnw = Euclid.Point.renew(spnw.x, min(spnw.y + dy, spse.y - minh), spnw, spse);
-				pse = spse;
-				break;
-			case 'ne' :
-				pnw = Euclid.Point.renew(
-					spnw.x, min(spnw.y + dy, spse.y - minh), spnw, spse);
-				pse = Euclid.Point.renew(
-					max(spse.x + dx, spnw.x + minw), spse.y, spnw, spse);
-				break;
-			case 'e'  :
-				pnw = spnw;
-				pse = Euclid.Point.renew(max(spse.x + dx, spnw.x + minw), spse.y, spnw, spse);
-				break;
-			case 'se' :
-				pnw = spnw;
-				pse = Euclid.Point.renew(
-					max(spse.x + dx, spnw.x + minw),
-					max(spse.y + dy, spnw.y + minh), spnw, spse);
-				break;
-			case 's' :
-				pnw = spnw;
-				pse = Euclid.Point.renew(spse.x, max(spse.y + dy, spnw.y + minh), spnw, spse);
-				break;
-			case 'sw'  :
-				pnw = Euclid.Point.renew(min(spnw.x + dx, spse.x - minw), spnw.y, spnw, spse);
-				pse = Euclid.Point.renew(spse.x, max(spse.y + dy, spnw.y + minh), spnw, spse);
-				break;
-			case 'w'   :
-				pnw = Euclid.Point.renew(min(spnw.x + dx, spse.x - minw), spnw.y, spnw, spse);
-				pse = spse;
-				break;
-			case 'nw' :
-				pnw = Euclid.Point.renew(
-					min(spnw.x + dx, spse.x - minw),
-					min(spnw.y + dy, spse.y - minh), spnw, spse);
-				pse = spse;
-				break;
-			//case 'c' :
-			default  :
-				throw new Error('unknown align');
+			switch( action.align )
+			{
+				case 'n'  :
+					pnw = Euclid.Point.renew(spnw.x, min(spnw.y + dy, spse.y - minh), spnw, spse);
+					pse = spse;
+					break;
+				case 'ne' :
+					pnw = Euclid.Point.renew(
+						spnw.x, min(spnw.y + dy, spse.y - minh), spnw, spse);
+					pse = Euclid.Point.renew(
+						max(spse.x + dx, spnw.x + minw), spse.y, spnw, spse);
+					break;
+				case 'e'  :
+					pnw = spnw;
+					pse = Euclid.Point.renew(max(spse.x + dx, spnw.x + minw), spse.y, spnw, spse);
+					break;
+				case 'se' :
+					pnw = spnw;
+					pse = Euclid.Point.renew(
+						max(spse.x + dx, spnw.x + minw),
+						max(spse.y + dy, spnw.y + minh), spnw, spse);
+					break;
+				case 's' :
+					pnw = spnw;
+					pse = Euclid.Point.renew(spse.x, max(spse.y + dy, spnw.y + minh), spnw, spse);
+					break;
+				case 'sw'  :
+					pnw = Euclid.Point.renew(min(spnw.x + dx, spse.x - minw), spnw.y, spnw, spse);
+					pse = Euclid.Point.renew(spse.x, max(spse.y + dy, spnw.y + minh), spnw, spse);
+					break;
+				case 'w'   :
+					pnw = Euclid.Point.renew(min(spnw.x + dx, spse.x - minw), spnw.y, spnw, spse);
+					pse = spse;
+					break;
+				case 'nw' :
+					pnw = Euclid.Point.renew(
+						min(spnw.x + dx, spse.x - minw),
+						min(spnw.y + dy, spse.y - minh), spnw, spse);
+					pse = spse;
+					break;
+				//case 'c' :
+				default  :
+					throw new Error('unknown align');
 			}
 			return new Euclid.Rect(pnw, pse);
 		default :
