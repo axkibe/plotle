@@ -195,7 +195,7 @@ Space.prototype.draw = function( )
 
 	switch( action && action.type )
 	{
-		case Action.RELBIND :
+		case 'RELBIND' :
 
 			var av  = this.getSub( action.itemPath, 'Item' );
 
@@ -335,7 +335,7 @@ Space.prototype.dragstart = function(p, shift, ctrl)
 	{
 		var dp = view.depoint(p);
 		shell.startAction(
-			Action.RELBIND,
+			'RELBIND',
 			'space',
 			'itemPath', focus.path,
 			'start',    dp,
@@ -366,7 +366,7 @@ Space.prototype.dragstart = function(p, shift, ctrl)
 	// otherwise do panning
 	shell.bridge.startAction
 	(
-		Action.PAN,
+		'PAN',
 		'space',
 		'start',  p,
 		'pan',    view.pan
@@ -435,10 +435,10 @@ Space.prototype.actionstop =
 	switch( action.type )
 	{
 
-		case Action.PAN :
+		case 'PAN' :
 			break;
 
-		case Action.RELBIND :
+		case 'RELBIND' :
 
 			for( var r = 0, rZ = this.twig.length; r < rZ; r++ )
 			{
@@ -451,9 +451,9 @@ Space.prototype.actionstop =
 			shell.redraw = true;
 			break;
 
-		case Action.ITEMDRAG   :
-		case Action.ITEMRESIZE :
-		case Action.SCROLLY    :
+		case 'ITEMDRAG'   :
+		case 'ITEMRESIZE' :
+		case 'SCROLLY'    :
 
 			this.getSub( action.itemPath, 'actionstop' )
 				.actionstop(
@@ -485,7 +485,7 @@ Space.prototype.actionmove = function( p, shift, ctrl )
 	switch( action.type )
 	{
 
-		case Action.PAN :
+		case 'PAN' :
 
 			var pd = p.sub( action.start );
 
@@ -498,7 +498,7 @@ Space.prototype.actionmove = function( p, shift, ctrl )
 
 			return 'pointer';
 
-		case Action.RELBIND :
+		case 'RELBIND' :
 
 			action.item2Path = null;
 			action.move      = p;
@@ -630,7 +630,7 @@ Space.prototype.pointingStart =
 			var dp = view.depoint(p);
 
 			action = shell.bridge.startAction(
-				Action.ITEMRESIZE,
+				'ITEMRESIZE',
 				'space',
 				'itemPath',  focus.path,
 				'start',     dp,

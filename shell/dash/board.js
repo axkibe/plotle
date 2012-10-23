@@ -392,11 +392,16 @@ Board.prototype.actionmove =
 | End of an action.
 */
 Board.prototype.actionstop =
-	function( p, shift, ctrl )
+	function(
+		p,
+		shift,
+		ctrl
+	)
 {
-	var path  = shell.bridge.action( );
-	var panel = this.getPanel( path.get( 0 ) );
-	var c     = panel.$sub[ path.get( 1 ) ];
+	var action = shell.bridge.action( );
+	var path   = action.itemPath;
+	var panel  = this.getPanel( path.get( 0 ) );
+	var c      = panel.$sub[ path.get( 1 ) ];
 
 	return c.actionstop( p, shift, ctrl );
 };
@@ -405,7 +410,12 @@ Board.prototype.actionstop =
 /*
 | pointing device is starting a point ( mouse down, touch start )
 */
-Board.prototype.pointingStart = function( p, shift, ctrl )
+Board.prototype.pointingStart =
+	function(
+		p,
+		shift,
+		ctrl
+	)
 {
 	var r;
 

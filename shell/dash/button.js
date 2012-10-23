@@ -271,7 +271,7 @@ Button.prototype.pointingStart = function( p, shift, ctrl )
 	if( this.repeating && !this.retimer )
 	{
 		shell.bridge.startAction(
-			Action.REBUTTON,
+			'REBUTTON',
 			'board',
 			'itemPath', this.path
 		);

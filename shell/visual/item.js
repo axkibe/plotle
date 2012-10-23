@@ -356,7 +356,7 @@ Item.prototype.dragstart = function(view, p, shift, ctrl, access)
 	if( sbary && sbary.within( view, p ) )
 	{
 		shell.bridge,startAction(
-			Action.SCROLLY,
+			'SCROLLY',
 			'space',
 			'itemPath', this.path,
 			'start',    p,
@@ -374,7 +374,7 @@ Item.prototype.dragstart = function(view, p, shift, ctrl, access)
 	{
 		// relation binding
 		shell.bridge.startAction(
-			Action.RELBIND,
+			'RELBIND',
 			'space',
 			'itemPath', this.path,
 			'start',    p,
@@ -392,7 +392,7 @@ Item.prototype.dragstart = function(view, p, shift, ctrl, access)
 		var vp = view.depoint(p);
 
 		shell.bridge.startAction(
-			Action.ITEMDRAG,
+			'ITEMDRAG',
 			'space',
 			'itemPath', this.path,
 			'start', vp,
@@ -417,7 +417,7 @@ Item.prototype.actionmove = function(view, p, shift, ctrl)
 
 	switch( action.type )
 	{
-		case Action.RELBIND    :
+		case 'RELBIND' :
 
 			if( !this.getZone().within( view, p ) )
 				{ return false; }
@@ -427,14 +427,14 @@ Item.prototype.actionmove = function(view, p, shift, ctrl)
 			shell.redraw = true;
 			return true;
 
-		case Action.ITEMDRAG   :
-		case Action.ITEMRESIZE :
+		case 'ITEMDRAG' :
+		case 'ITEMRESIZE' :
 
 			action.move  = view.depoint(p);
 			shell.redraw = true;
 			return true;
 
-		case Action.SCROLLY :
+		case 'SCROLLY' :
 
 			var start = action.start;
 			var dy    = p.y - start.y;
@@ -463,7 +463,7 @@ Item.prototype.actionstop =
 
 	switch( action.type )
 	{
-		case Action.RELBIND :
+		case 'RELBIND' :
 			if( !this.getZone().within( view, p ) )
 				{ return false; }
 

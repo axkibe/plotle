@@ -214,7 +214,7 @@ Label.prototype.fontSizeChange =
 
 	switch( action.type )
 	{
-		case Action.ITEMRESIZE:
+		case 'ITEMRESIZE' :
 			if( !action.startZone )
 				{ return fontsize; }
 
@@ -301,7 +301,7 @@ Label.prototype.getZone = function( )
 
 	switch( action.type )
 	{
-		case Action.ITEMDRAG:
+		case 'ITEMDRAG' :
 			var mx = action.move.x - action.start.x;
 			var my = action.move.y - action.start.y;
 			return new Euclid.Rect(
@@ -309,7 +309,7 @@ Label.prototype.getZone = function( )
 				pnw.add( mx + width, my + height )
 			);
 
-		case Action.ITEMRESIZE:
+		case 'ITEMRESIZE' :
 			// resizing is done by fontSizeChange( )
 			var szone = action.startZone;
 			if( !szone )
@@ -363,8 +363,8 @@ Label.prototype.actionstop =
 
 	switch( action.type )
 	{
-		case Action.ITEMDRAG :
-		case Action.ITEMRESIZE :
+		case 'ITEMDRAG' :
+		case 'ITEMRESIZE' :
 			var zone = this.getZone( );
 			var fontsize = this.$sub.doc.getFont( ).size;
 
