@@ -636,17 +636,18 @@ Shell.prototype.pointingStart =
 
 
 /*
-| Starts an operation with the mouse button held down.
+| Starts an operation with the pointing device active.
+| Mouse down or finger on screen.
 */
-Shell.prototype.dragstart = function(p, shift, ctrl)
+Shell.prototype.dragStart = function(p, shift, ctrl)
 {
 	if (this.green)
 		{ return; }
 
-	var cursor = this.$board.dragstart(p, shift, ctrl);
+	var cursor = this.$board.dragStart(p, shift, ctrl);
 
 	if (cursor === null && this.$space)
-		{ cursor = this.$space.dragstart(p, shift, ctrl); }
+		{ cursor = this.$space.dragStart(p, shift, ctrl); }
 
 	if (this.redraw)
 		{ this._draw(); }

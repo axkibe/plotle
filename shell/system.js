@@ -322,7 +322,7 @@ System.prototype._onAtweenTime = function( )
 
 	var cursor = null;
 
-	this.shell.dragstart(
+	this.shell.dragStart(
 		atween.pos,
 		atween.shift,
 		atween.ctrl
@@ -604,7 +604,7 @@ System.prototype._onMouseMove = function( event )
 				this._$atween = null;
 				this._$pointingState = 'drag';
 
-				this.shell.dragstart(
+				this.shell.dragStart(
 					atween.pos,
 					shift,
 					ctrl
@@ -817,7 +817,7 @@ System.prototype._onTouchMove = function( event )
 				this._$atween = null;
 				this._$pointingState = 'drag';
 
-				this.shell.dragstart(
+				this.shell.dragStart(
 					atween.pos,
 					shift,
 					ctrl

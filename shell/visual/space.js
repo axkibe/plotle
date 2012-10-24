@@ -321,7 +321,7 @@ Space.prototype.pointingHover = function( p, shift, ctrl )
 /*
 | Starts an operation with the mouse button held down.
 */
-Space.prototype.dragstart = function(p, shift, ctrl)
+Space.prototype.dragStart = function(p, shift, ctrl)
 {
 	var view  = this.$view;
 	var focus = this.focusedItem( );
@@ -350,7 +350,7 @@ Space.prototype.dragstart = function(p, shift, ctrl)
 	{
 		var item = this.atRank( a );
 		if(
-			item.dragstart(
+			item.dragStart(
 				view,
 				p,
 				shift,
@@ -612,7 +612,7 @@ Space.prototype.pointingStart =
 
 	if(this.access == 'ro' )
 	{
-		this.dragstart(p, shift, ctrl);
+		this.dragStart( p, shift, ctrl );
 		return 'drag';
 	}
 
@@ -624,6 +624,7 @@ Space.prototype.pointingStart =
 			{ return 'atween'; }
 
 		var com = focus.checkHandles(view, p);
+
 		if( com )
 		{
 			// resizing

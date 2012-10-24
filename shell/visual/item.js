@@ -346,13 +346,12 @@ Item.prototype.drawHandles = function(fabric, view)
 
 
 /*
-| Dragstart.
-|
-| Checks if a dragstart targets this item.
+| Checks if a dragStart targets this item.
 */
-Item.prototype.dragstart = function(view, p, shift, ctrl, access)
+Item.prototype.dragStart = function(view, p, shift, ctrl, access)
 {
 	var sbary = this.scrollbarY;
+
 	if( sbary && sbary.within( view, p ) )
 	{
 		shell.bridge,startAction(

@@ -371,7 +371,7 @@ Board.prototype.pointingHover =
 /*
 | Start of a dragging operation.
 */
-Board.prototype.dragstart =
+Board.prototype.dragStart =
 	function( p, shift, ctrl )
 {
 	return null;
