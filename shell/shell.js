@@ -703,7 +703,7 @@ Shell.prototype.dragmove =
 /*
 | Stops an operation with the mouse button held down.
 */
-Shell.prototype.dragstop =
+Shell.prototype.dragStop =
 	function(
 		p,
 		shift,
@@ -716,7 +716,7 @@ Shell.prototype.dragstop =
 	var action = this.bridge.action( );
 
 	if( !action )
-		{ throw new Error( 'no action on dragstop' ); }
+		{ throw new Error( 'no action on dragStop' ); }
 
 	switch( action.section )
 	{

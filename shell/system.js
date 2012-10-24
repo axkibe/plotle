@@ -664,6 +664,7 @@ System.prototype._onMouseUp = function( event )
 			break;
 
 		case 'atween' :
+
 			// A click is a mouse down followed within dragtime by 'mouseup' and
 			// not having moved out of 'dragbox'.
 			var atween = this._$atween;
@@ -675,12 +676,14 @@ System.prototype._onMouseUp = function( event )
 			break;
 
 		case 'drag' :
-			this.shell.dragstop( p, shift, ctrl );
+
+			this.shell.dragStop( p, shift, ctrl );
 			cursor = this.shell.pointingHover( p, shift, ctrl );
 			this._$pointingState = false;
 			break;
 
 		default :
+
 			throw new Error( 'invalid pointingState' );
 	}
 
@@ -877,9 +880,11 @@ System.prototype._onTouchEnd = function( event )
 	switch( this._$pointingState )
 	{
 		case false :
+
 			break;
 
 		case 'atween' :
+
 			// A click is a mouse down followed within dragtime by 'mouseup' and
 			// not having moved out of 'dragbox'.
 			var atween = this._$atween;
@@ -891,7 +896,8 @@ System.prototype._onTouchEnd = function( event )
 			break;
 
 		case 'drag' :
-			this.shell.dragstop( p, shift, ctrl );
+
+			this.shell.dragStop( p, shift, ctrl );
 			cursor = this.shell.pointingHover( p, shift, ctrl );
 			this._$pointingState = false;
 			break;
