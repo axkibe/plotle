@@ -659,7 +659,7 @@ Shell.prototype.dragStart = function(p, shift, ctrl)
 /*
 | Moving during an operation with the mouse button held down.
 */
-Shell.prototype.dragmove =
+Shell.prototype.dragMove =
 	function(
 		p,
 		shift,
@@ -672,7 +672,7 @@ Shell.prototype.dragmove =
 	var action = this.bridge.action( );
 
 	if( !action )
-		{ throw new Error( 'no action on dragmove' ); }
+		{ throw new Error( 'no action on dragMove' ); }
 
 	var cursor = null;
 

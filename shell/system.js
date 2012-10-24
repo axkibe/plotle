@@ -328,7 +328,7 @@ System.prototype._onAtweenTime = function( )
 		atween.ctrl
 	);
 
-	cursor = this.shell.dragmove(
+	cursor = this.shell.dragMove(
 		atween.move,
 		atween.shift,
 		atween.ctrl
@@ -610,7 +610,7 @@ System.prototype._onMouseMove = function( event )
 					ctrl
 				);
 
-				cursor = this.shell.dragmove(
+				cursor = this.shell.dragMove(
 					p,
 					shift,
 					ctrl
@@ -626,7 +626,7 @@ System.prototype._onMouseMove = function( event )
 			break;
 
 		case 'drag':
-			cursor = this.shell.dragmove( p, shift, ctrl );
+			cursor = this.shell.dragMove( p, shift, ctrl );
 			break;
 
 		default :
@@ -826,7 +826,7 @@ System.prototype._onTouchMove = function( event )
 					ctrl
 				);
 
-				cursor = this.shell.dragmove(
+				cursor = this.shell.dragMove(
 					p,
 					shift,
 					ctrl
@@ -842,7 +842,11 @@ System.prototype._onTouchMove = function( event )
 			break;
 
 		case 'drag':
-			cursor = this.shell.dragmove( p, shift, ctrl );
+			cursor = this.shell.dragMove(
+				p,
+				shift,
+				ctrl
+			);
 			break;
 
 		default :
