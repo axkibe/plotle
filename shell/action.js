@@ -56,7 +56,7 @@ var actionlist = Jools.immute({
 	'ITEMRESIZE' : true,  // resizing one item
 	'SCROLLY'    : true,  // scrolling a note
 	'RELBIND'    : true,  // binding a new relation
-	'REBUTTON'   : true,  // holding a button repeating its effect
+	'REBUTTON'   : true   // holding a button repeating its effect
 });
 
 
@@ -89,4 +89,4 @@ Action = function(args)
 	}
 };
 
-} ) ();
+} )( );

@@ -63,12 +63,17 @@ if( typeof( window ) === 'undefined')
 */
 var DiscButton = Disc.DiscButton =
 	function(
-		disc,
-		name
+		disc,          // the disc the button belongs to
+		name,          // the name of the button (FIXME, needed?)
+		pushChange,    // if set, which bridge field to change on push
+		pushValue      // if set, what to set the bridge field to on push
 	)
 {
-	this.disc    = disc;
-	this.name    = name;
+	this.disc       = disc;
+	this.name       = name;
+	this.pushChange = pushChange;
+	this.pushValue  = pushValue;
+
 	var gStyle  = this.gStyle  = theme.disc[ disc.name ].buttons.generic;
 	var myStyle = this.myStyle = theme.disc[ disc.name ].buttons[ name ];
 
@@ -253,5 +258,26 @@ DiscButton.prototype.pointingStart =
 
 	return  false;
 };
+
+
+/*
+| Button is being pushed.
+*/
+DiscButton.prototype.push =
+	function(
+	)
+{
+	switch( this.pushChange ) {
+
+		case 'MODE' :
+			shell.bridge.changeMode( this.pushValue );
+			break;
+
+		case 'CREATE' :
+			shell.bridge.changeCreate( this.pushValue );
+			break;
+	}
+};
+
 
 } )( );

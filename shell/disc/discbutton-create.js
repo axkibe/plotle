@@ -69,7 +69,8 @@ var DiscButtonCreate = Disc.DiscButtonCreate =
 	Disc.DiscButton.call(
 		this,
 		disc,
-		'create'
+		'create',
+		'MODE', 'CREATE'
 	);
 };
 
@@ -91,16 +92,6 @@ DiscButtonCreate.prototype.drawIcon =
 	);
 };
 
-
-/*
-| Button is being pushed.
-*/
-DiscButtonCreate.prototype.push =
-	function(
-	)
-{
-	shell.bridge.changeMode( this.name );
-};
 
 
 } )( );

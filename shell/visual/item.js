@@ -354,7 +354,7 @@ Item.prototype.dragStart = function(view, p, shift, ctrl, access)
 
 	if( sbary && sbary.within( view, p ) )
 	{
-		shell.bridge,startAction(
+		shell.bridge.startAction(
 			'SCROLLY',
 			'space',
 			'itemPath', this.path,

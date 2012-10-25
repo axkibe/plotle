@@ -69,7 +69,8 @@ var DiscButtonSignup = Disc.DiscButtonSignup =
 	Disc.DiscButton.call(
 		this,
 		disc,
-		'signup'
+		'signup',
+		'MODE', 'SIGNUP'
 	);
 };
 
@@ -100,17 +101,6 @@ DiscButtonSignup.prototype.drawIcon =
 		ay + 8,
 		this.myStyle.font
 	);
-};
-
-
-/*
-| Button is being pushed.
-*/
-DiscButtonSignup.prototype.push =
-	function(
-	)
-{
-	shell.bridge.changeMode( this.name );
 };
 
 

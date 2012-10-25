@@ -644,6 +644,8 @@ Space.prototype.pointingStart =
 		}
 	}
 
+	console.log(shell.bridge.mode());
+
 	return 'atween';
 };
 

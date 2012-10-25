@@ -70,7 +70,8 @@ var DiscButtonNormal = Disc.DiscButtonNormal = function(
 	Disc.DiscButton.call(
 		this,
 		disc,
-		'normal'
+		'normal',
+		'MODE', 'DEFAULT'
 	);
 };
 
@@ -129,17 +130,6 @@ DiscButtonNormal.prototype.drawIcon =
 		'sketchIcon',
 		Euclid.View.proper
 	);
-};
-
-
-/*
-| Button is being pushed.
-*/
-DiscButtonNormal.prototype.push =
-	function(
-	)
-{
-	shell.bridge.changeMode( this.name );
 };
 
 

@@ -158,12 +158,13 @@ MainDisc.prototype._weave = function( )
 
 	for( var name in this.buttons )
 	{
-		buttons[ name ].
-			draw(
-				fabric,
-				shell.bridge.inMode( name ),
-				this.$hover  === name
-			);
+		var button = buttons[ name ];
+
+		button.draw(
+			fabric,
+			shell.bridge.inMode( button.pushValue ),
+			this.$hover  === name
+		);
 	}
 
 	fabric.edge(
@@ -195,7 +196,7 @@ MainDisc.prototype._weave = function( )
 */
 MainDisc.prototype.draw = function( fabric )
 {
-	if( shell.bridge.inMode( 'create' ) )
+	if( shell.bridge.inMode( 'CREATE' ) )
 	{
 		this.createDisc.draw( fabric );
 	}
@@ -227,7 +228,7 @@ MainDisc.prototype.pointingHover = function( p, shift, ctrl )
 	{
 		this.setHover( null );
 
-		if( shell.bridge.inMode( 'create' ) )
+		if( shell.bridge.inMode( 'CREATE' ) )
 		{
 			return this.createDisc.pointingHover( p, shift, ctrl );
 		}
@@ -250,7 +251,7 @@ MainDisc.prototype.pointingHover = function( p, shift, ctrl )
 	{
 		this.setHover( null );
 
-		if( shell.bridge.inMode( 'create' ) )
+		if( shell.bridge.inMode( 'CREATE' ) )
 		{
 			return this.createDisc.pointingHover( p, shift, ctrl );
 		}
@@ -299,7 +300,7 @@ MainDisc.prototype.pointingStart = function( p, shift, ctrl )
 	{
 		this.setHover( null );
 
-		if( shell.bridge.inMode( 'create' ) )
+		if( shell.bridge.inMode( 'CREATE' ) )
 		{
 			return this.createDisc.pointingStart( p, shift, ctrl );
 		}
@@ -323,7 +324,7 @@ MainDisc.prototype.pointingStart = function( p, shift, ctrl )
 	{
 		this.setHover( null );
 
-		if( shell.bridge.inMode( 'create' ) )
+		if( shell.bridge.inMode( 'CREATE' ) )
 		{
 			return this.createDisc.pointingStart( p, shift, ctrl );
 		}

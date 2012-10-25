@@ -67,7 +67,8 @@ var DiscButtonLogin = Disc.DiscButtonLogin =
 	Disc.DiscButton.call(
 		this,
 		disc,
-		'login'
+		'login',
+		'MODE', 'LOGIN'
 	);
 };
 
@@ -98,17 +99,6 @@ DiscButtonLogin.prototype.drawIcon =
 		ay + 8,
 		this.myStyle.font
 	);
-};
-
-
-/*
-| Button is being pushed.
-*/
-DiscButtonLogin.prototype.push =
-	function(
-	)
-{
-	shell.bridge.changeMode( this.name );
 };
 
 

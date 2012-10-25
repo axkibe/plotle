@@ -21,6 +21,8 @@
  A central control center for the user interaction of diverse MeshCraft elements
  interlocking with each other, like modes.
 
+ FIXME, remove validity checks in releases
+
  Authors: Axel Kittenberger
  License: MIT(Expat), see accompanying 'License'-file
 
@@ -37,18 +39,8 @@ var Bridge = null;
 | Imports
 */
 var Action;
-var Caret;
-var Dash;
-var Euclid;
-var fontPool;
-var IFace;
 var Jools;
-var MeshMashine;
-var Peer;
-var Range;
-var Sign;
-var theme;
-var Visual;
+var shell;
 
 
 /*
@@ -65,24 +57,46 @@ if( typeof( window ) === 'undefined' )
 
 
 /*
+| Valid modes.
+*/
+var modes =
+{
+	/*
+	| Standard selection, moving stuff around.
+	*/
+	'DEFAULT' : true,
+
+	/*
+	| Creating a new item.
+	| this.$create is set or null.
+	*/
+	'CREATE'  : true,
+
+	/*
+	| Logging in
+	*/
+	'LOGIN' : true,
+
+	/*
+	| Siging up
+	*/
+	'SIGNUP' : true,
+
+	/*
+	| Help
+	*/
+	'HELP' : true
+};
+
+/*
 | Constructor.
 */
 Bridge = function( )
 {
 	/*
-	| $mode can be:
-	|
-	| 'default':
-	|    Standard selection, moving stuff around.
-	|
-	| 'create' :
-	|    Creating a new item.
-	|    this.$create is set or null.
-	|
-	|  ...
-	|
+	| current mode
 	*/
-	this._$mode = 'default';
+	this._$mode = 'DEFAULT';
 
 	/*
 	| Creating this item:
@@ -117,6 +131,10 @@ Bridge.prototype.mode =
 Bridge.prototype.inMode =
 	function( mode )
 {
+	if( !modes[ mode ] ) {
+		throw new Error( 'invalid mode:' + mode  );
+	}
+
 	return this._$mode === mode;
 };
 
@@ -128,6 +146,10 @@ Bridge.prototype.inMode =
 Bridge.prototype.changeMode =
 	function( mode )
 {
+	if( !modes[ mode ] ) {
+		throw new Error( 'invalid mode:' + mode );
+	}
+
 	this._$mode = mode;
 
 	shell.$board.getPanel( 'MainDisc' ).poke();
@@ -173,7 +195,7 @@ Bridge.prototype.action =
 	function( )
 {
 	return this._$action;
-}
+};
 
 
 /*

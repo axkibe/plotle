@@ -69,7 +69,8 @@ var DiscButtonHelp = Disc.DiscButtonHelp =
 	Disc.DiscButton.call(
 		this,
 		disc,
-		'help'
+		'help',
+		'MODE', 'HELP'
 	);
 };
 
@@ -89,17 +90,6 @@ DiscButtonHelp.prototype.drawIcon =
 		this.myStyle.textAnchor,
 		this.myStyle.font
 	);
-};
-
-
-/*
-| Button is being pushed.
-*/
-DiscButtonHelp.prototype.push =
-	function(
-	)
-{
-	shell.bridge.changeMode( this.name );
 };
 
 
