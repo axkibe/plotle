@@ -148,10 +148,12 @@ CreateDisc.prototype._weave = function( )
 
 	for( var name in this.buttons )
 	{
-		buttons[ name ].draw(
+		var button = buttons[ name ];
+
+		button.draw(
 			fabric,
-			shell.bridge.inCreate( name ),
-			this.$hover === name
+			shell.bridge.inCreate( button.pushValue ),
+			this.$hover  === name
 		);
 	}
 

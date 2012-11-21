@@ -97,6 +97,7 @@ Label.prototype.getSilhoutte = function( zone )
 		{ return s; }
 
 	return this._$silhoutte = new Euclid.Rect(
+		'pnw/psw',
 		zone.pnw,
 		zone.pse.sub(1, 1)
 	);
@@ -117,7 +118,7 @@ Label.prototype.getZeroSilhoutte = function( zone )
 		{ return s; }
 
 	return this._$zeroSilhoutte = new Euclid.Rect(
-		Euclid.Point.zero,
+		'pse',
 		new Euclid.Point(
 			zone.width  - 1,
 			zone.height - 1
@@ -294,7 +295,12 @@ Label.prototype.getZone = function( )
 		!this.path.equals( action.itemPath )
 	)
 	{
-		return new Euclid.Rect( pnw, pnw.add( width, height ) );
+		return new Euclid.Rect(
+			'pnw/size',
+			pnw,
+			width,
+			height
+		);
 	}
 
 	// FIXME cache the last zone
@@ -302,11 +308,15 @@ Label.prototype.getZone = function( )
 	switch( action.type )
 	{
 		case 'ITEMDRAG' :
+
 			var mx = action.move.x - action.start.x;
 			var my = action.move.y - action.start.y;
+
 			return new Euclid.Rect(
+				'pnw/size',
 				pnw.add( mx, my ),
-				pnw.add( mx + width, my + height )
+				width,
+				height
 			);
 
 		case 'ITEMRESIZE' :
@@ -315,8 +325,10 @@ Label.prototype.getZone = function( )
 			if( !szone )
 			{
 				return new Euclid.Rect(
+					'pnw/size',
 					pnw,
-					pnw.add( width, height )
+					width,
+					height
 				);
 			}
 
@@ -338,15 +350,19 @@ Label.prototype.getZone = function( )
 			}
 
 			return new Euclid.Rect(
+				'pnw/size',
 				pnw,
-				pnw.add( width, height )
+				width,
+				height
 			);
 
 		default :
 
 			return new Euclid.Rect(
+				'pnw/size',
 				pnw,
-				pnw.add( width, height )
+				width,
+				height
 			);
 	}
 	// TODO pull the Rect creation out

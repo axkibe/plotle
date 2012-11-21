@@ -57,7 +57,7 @@ if( typeof( window ) === 'undefined' )
 
 
 /*
-| Valid modes.
+| Valid modes
 */
 var modes =
 {
@@ -87,6 +87,33 @@ var modes =
 	*/
 	'HELP' : true
 };
+
+/*
+| Valid creates
+*/
+var creates =
+{
+	/*
+	| A new note.
+	*/
+	'NOTE' : true,
+
+	/*
+	| A new label.
+	*/
+	'LABEL'  : true,
+
+	/*
+	| A new relation
+	*/
+	'RELATION' : true,
+
+	/*
+	| A new portal
+	*/
+	'PORTAL' : true
+};
+
 
 /*
 | Constructor.
@@ -132,7 +159,7 @@ Bridge.prototype.inMode =
 	function( mode )
 {
 	if( !modes[ mode ] ) {
-		throw new Error( 'invalid mode:' + mode  );
+		throw new Error( 'invalid mode : ' + mode  );
 	}
 
 	return this._$mode === mode;
@@ -147,7 +174,7 @@ Bridge.prototype.changeMode =
 	function( mode )
 {
 	if( !modes[ mode ] ) {
-		throw new Error( 'invalid mode:' + mode );
+		throw new Error( 'invalid mode : ' + mode );
 	}
 
 	this._$mode = mode;
@@ -172,6 +199,10 @@ Bridge.prototype.create =
 Bridge.prototype.inCreate =
 	function( create )
 {
+	if( !creates[ create ] ) {
+		throw new Error( 'invalid create : ' + create );
+	}
+
 	return this._$create === create;
 };
 
@@ -182,6 +213,10 @@ Bridge.prototype.inCreate =
 Bridge.prototype.changeCreate =
 	function( create )
 {
+	if( !creates[ create ] ) {
+		throw new Error( 'invalid create : ' + create );
+	}
+
 	this._$create = create;
 
 	shell.$board.getPanel( 'MainDisc' ).poke();

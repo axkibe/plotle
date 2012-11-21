@@ -69,7 +69,8 @@ var DiscButtonCreatePortal = Disc.DiscButtonCreatePortal =
 	Disc.DiscButton.call(
 		this,
 		disc,
-		'portal'
+		'portal',
+		'CREATE', 'PORTAL'
 	);
 };
 
@@ -90,17 +91,6 @@ DiscButtonCreatePortal.prototype.drawIcon =
 		this.myStyle.font
 	);
 };
-
-
-/*
-| Button is being pushed.
-*/
-DiscButtonCreatePortal.prototype.push =
-	function( )
-{
-	shell.bridge.changeCreate( this.name );
-};
-
 
 
 } )( );

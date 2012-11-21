@@ -51,12 +51,40 @@ if( typeof( window ) === 'undefined' )
 
 
 var actionlist = Jools.immute({
-	'PAN'        : true,  // panning the background
-	'ITEMDRAG'   : true,  // dragging one item
-	'ITEMRESIZE' : true,  // resizing one item
-	'SCROLLY'    : true,  // scrolling a note
-	'RELBIND'    : true,  // binding a new relation
-	'REBUTTON'   : true   // holding a button repeating its effect
+	/*
+	| Panning the background.
+	*/
+	'PAN'         : true,
+
+	/*
+	| Dragging one item.
+	*/
+	'ITEMDRAG'    : true,
+
+	/*
+	| Resizing one item.
+	*/
+	'ITEMRESIZE'  : true,
+
+	/*
+	| Scrolling a note
+	*/
+	'SCROLLY'     : true,
+
+	/*
+	| Binding a new relation
+	*/
+	'RELBIND'     : true,
+
+	/*
+	| Holding a button repeating its effect.
+	*/
+	'REBUTTON'    : true,
+
+	/*
+	| Creating a new note
+	*/
+	'CREATE-NOTE' : true
 });
 
 

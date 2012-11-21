@@ -51,7 +51,7 @@ var theme;
 'use strict';
 
 
-if ( typeof( window ) === 'undefined' )
+if( typeof( window ) === 'undefined' )
 	{ throw new Error('this code needs a browser!'); }
 
 
@@ -65,30 +65,106 @@ var Note = Visual.Note = function( spacename, twig, path )
 
 };
 
+
 Jools.subclass( Note, Visual.DocItem );
 
 
 /*
-| Default margin for all notes.
+| Draws a transitory note
+| ( A note in the making )
 */
-Note.prototype.innerMargin =
-	new Euclid.Margin( theme.note.innerMargin );
+Note.transDraw =
+	function(
+		fabric,
+		view,
+		p1,
+		p2
+	)
+{
+	var zone = new Euclid.Rect( '2-point', pnw, pse );
+	console.log( 'transDraw', zone );
+
+	var silhoutte = Note.transGetSilhoutte( zone );
+
+	fabric.paint(
+		theme.note.style,
+		silhoutte,
+		'sketch',
+		view.home( )
+	);
+};
+
+
+/*
+| Returns a silhoutte matching the zone.
+*/
+Note.transGetSilhoutte =
+	function( zone )
+{
+	var cr = theme.note.cornerRadius;
+
+	return new Euclid.RoundRect(
+		zone.pnw,
+		zone.pse,
+		cr,
+		cr
+	);
+};
+
+
+/*
+| Returns the notes silhoutte anchored at zero.
+*/
+Note.transGetZeroSilhoutte =
+	function( zone )
+{
+	var cr = theme.note.cornerRadius;
+
+	return new Euclid.RoundRect(
+		Euclid.Point.zero,
+		new Euclid.Point(
+			zone.width,
+			zone.height
+		),
+		cr,
+		cr
+	);
+};
 
 
 /*
 | Resize handles to show on notes.
 */
-Note.prototype.handles =
-{
-	n  : true,
-	ne : true,
-	e  : true,
-	se : true,
-	s  : true,
-	sw : true,
-	w  : true,
-	nw : true
-};
+Note.transHandles =
+	Jools.immute({
+		n  : true,
+		ne : true,
+		e  : true,
+		se : true,
+		s  : true,
+		sw : true,
+		w  : true,
+		nw : true
+	});
+
+
+/*
+| Default margin for all notes.
+*/
+Note.transInnerMargin =
+	new Euclid.Margin( theme.note.innerMargin );
+
+
+/*
+| Default margin for all notes.
+*/
+Note.prototype.innerMargin = Note.transInnerMargin;
+
+
+/*
+| Resize handles to show on notes.
+*/
+Note.prototype.handles = Note.transHandles;
 
 
 /*
@@ -96,63 +172,52 @@ Note.prototype.handles =
 |
 | zone :  the cache for the items zone
 */
-Note.prototype.getSilhoutte = function( zone )
+Note.prototype.getSilhoutte =
+	function( zone )
 {
 	var s  = this._$silhoutte;
-	var cr = theme.note.cornerRadius;
 
 	if( s && s.eq( zone ) )
 		{ return s; }
 
-	return this._$silhoutte = new Euclid.RoundRect(
-		zone.pnw,
-		zone.pse,
-		cr, cr
-	);
+	return this._$silhoutte = Note.transGetSilhoutte( zone );
 };
 
 
 /*
-| Returns the notes silhoutte anchored at zero
-|
-| zone :  the cache for the items zone
+| Returns the notes silhoutte anchored at zero.
 */
-Note.prototype.getZeroSilhoutte = function( zone )
+Note.prototype.getZeroSilhoutte =
+	function( zone )
 {
 	var s  = this._$zeroSilhoutte;
 	var cr = theme.note.cornerRadius;
 
-	if( s &&
+	if(
+		s &&
 		s.width  === zone.width &&
-		s.height === zone.height )
+		s.height === zone.height
+	)
 	{
 		return s;
 	}
 
-	return this._$zeroSilhoutte =
-		new Euclid.RoundRect(
-			Euclid.Point.zero,
-			new Euclid.Point(
-				zone.width,
-				zone.height
-			),
-			cr,
-			cr
-		);
+	return Note.transGetZeroSilhoutte( zone );
 };
 
 
 /*
 | Actualizes the scrollbar.
 */
-Note.prototype.setScrollbar = function(pos)
+Note.prototype.setScrollbar =
+	function( pos )
 {
 	var sbary = this.scrollbarY;
 
 	if( !sbary.visible )
 		{ return; }
 
-	var zone = this.getZone();
+	var zone = this.getZone( );
 
 	if( !Jools.is( pos ) )
 		{ pos = sbary.getPos(); }
@@ -173,27 +238,35 @@ Note.prototype.setScrollbar = function(pos)
 Note.prototype.scrollCaretIntoView = function()
 {
 	var caret   = shell.$caret;
-	var scrolly = this.scrollbarY;
-	var sy      = scrolly.getPos( );
-	var para   = shell.$space.getSub( caret.sign.path, 'Para' );
 
-	if (para.constructor !== Visual.Para)
+	var scrolly = this.scrollbarY;
+
+	var sy      = scrolly.getPos( );
+
+	var para   =  shell.$space.getSub(
+		caret.sign.path,
+		'Para'
+	);
+
+	if( para.constructor !== Visual.Para )
 		{ throw new Error( 'para not a para.' ); }
 
-	var cp      = para.getCaretPos();
+	var cp      = para.getCaretPos( );
 
 	var pnw     = this.$sub.doc.getPNW( para.key );
 	var zone    = this.getZone( );
 	var imargin = this.innerMargin;
 
-	if ( cp.n + pnw.y - imargin.n < sy )
+	if( cp.n + pnw.y - imargin.n < sy )
 	{
 		this.setScrollbar( cp.n + pnw.y - imargin.n );
+
 		this.poke( );
 	}
-	else if ( cp.s + pnw.y + imargin.s > sy + zone.height )
+	else if( cp.s + pnw.y + imargin.s > sy + zone.height )
 	{
 		this.setScrollbar( cp.s + pnw.y - zone.height + imargin.s );
+
 		this.poke( );
 	}
 };
@@ -209,7 +282,10 @@ Note.prototype.scrollPage =
 	var dir  = up ? -1 : 1;
 	var fs   = this.$sub.doc.getFont( ).size;
 
-	this.setScrollbar( this.scrollbarY.getPos( ) + dir * zone.height - fs * 2 );
+	this.setScrollbar(
+		this.scrollbarY.getPos( ) + dir * zone.height - fs * 2
+	);
+
 	this.poke( );
 };
 
@@ -241,7 +317,7 @@ Note.prototype.actionstop =
 				throw new Error( 'Note under minimum size!' );
 			}
 
-			if ( this.twig.zone.eq( zone ) )
+			if( this.twig.zone.eq( zone ) )
 				{ return; }
 
 			shell.peer.setZone( this.path, zone );
@@ -252,7 +328,11 @@ Note.prototype.actionstop =
 
 		default :
 
-			return Visual.DocItem.prototype.actionstop.call( this, view, p );
+			return Visual.DocItem.prototype.actionstop.call(
+				this,
+				view,
+				p
+			);
 	}
 };
 
@@ -262,7 +342,11 @@ Note.prototype.actionstop =
 |
 | fabric: to draw upon.
 */
-Note.prototype.draw = function( fabric, view )
+Note.prototype.draw =
+	function(
+		fabric,
+		view
+	)
 {
 	var zone  = this.getZone( );
 	var vzone = view.rect( zone );
@@ -359,7 +443,8 @@ Note.prototype.mousewheel =
 /*
 | Returns the width for the contents flow.
 */
-Note.prototype.getFlowWidth = function( )
+Note.prototype.getFlowWidth =
+	function( )
 {
 	var zone  = this.getZone( );
 	var flowWidth = zone.width - this.innerMargin.x;
@@ -371,7 +456,8 @@ Note.prototype.getFlowWidth = function( )
 /*
 | Returns the para seperation height.
 */
-Note.prototype.getParaSep = function( fontsize )
+Note.prototype.getParaSep =
+	function( fontsize )
 {
 	return Jools.half( fontsize );
 };
@@ -383,7 +469,8 @@ Note.prototype.getParaSep = function( fontsize )
 | An ongoing action can modify this
 | to something different than meshmashine data.
 */
-Note.prototype.getZone = function( )
+Note.prototype.getZone =
+	function( )
 {
 	var twig   = this.twig;
 	var action = shell.bridge.action( );
@@ -475,9 +562,10 @@ Note.prototype.getZone = function( )
 /*
 | Returns the ctrl area.
 */
-Note.prototype.getCtrlFix = function()
+Note.prototype.getCtrlFix =
+	function( )
 {
-	var zone = this.getZone();
+	var zone = this.getZone( );
 	var pnw  = zone.pnw;
 	var tca  = theme.note.ctrlArea;
 
@@ -497,9 +585,12 @@ Note.prototype.getCtrlFix = function()
 			pnw.add( tca.x,              tca.y              ),
 			pnw.add( tca.x + 2 * dim.a1, tca.y + 2 * dim.b1 )
 		),
-		pnw.add(tca.joint.x, tca.joint.y) // FIXME
+		pnw.add(
+			tca.joint.x,
+			tca.joint.y
+		) // FIXME
 	);
 };
 
 
-})( );
+} )( );

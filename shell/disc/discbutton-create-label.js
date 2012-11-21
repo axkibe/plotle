@@ -70,7 +70,8 @@ var DiscButtonCreateLabel = Disc.DiscButtonCreateLabel =
 	Disc.DiscButton.call(
 		this,
 		disc,
-		'label'
+		'label',
+		'CREATE', 'LABEL'
 	);
 };
 
@@ -93,16 +94,6 @@ DiscButtonCreateLabel.prototype.drawIcon =
 		this.myStyle.textAnchor,
 		this.myStyle.font
 	);
-};
-
-
-/*
-| Button is being pushed.
-*/
-DiscButtonCreateLabel.prototype.push =
-	function( )
-{
-	shell.bridge.changeCreate( this.name );
 };
 
 } )( );

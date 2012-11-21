@@ -65,20 +65,53 @@ if( typeof( window ) === 'undefined' )
 | pnw: point to north west.
 | pse: point to south east.
 */
-var Rect = Euclid.Rect = function(pnw, pse, key)
+var Rect = Euclid.Rect =
+	function(
+		overload,
+		a1,
+		a2
+	)
 {
-	if( !pnw ||
-		!pse ||
+	switch( overload ) {
+
+		case 'pnw/pse' :
+			this.pnw = a1;
+			this.pse = a2;
+			break;
+
+		case 'pse' :
+			this.pnw = Euclid.Point.Zero;
+			this.pse = a1;
+			break;
+
+		case 'rect' :
+			this.pnw = a1.pnw;
+			this.pse = a1.pse;
+			break;
+
+		case 'arbitrary' :
+			throw new Error('TODO');
+			break;
+
+		default :
+			throw new Error('invalid overload');
+	}
+
+	if(
 		pnw.x > pse.x ||
 		pnw.y > pse.y
 	)
-		{ throw Jools.reject('not a rectangle.'); }
+	{
+		throw Jools.reject('not a rectangle.');
+	}
 
 	this.pnw = pnw;
 	this.pse = pse;
+
 	Jools.innumerable( this, 'width',  pse.x - pnw.x );
 	Jools.innumerable( this, 'height', pse.y - pnw.y );
-	this.type = 'Rect';
+
+	this.type = 'Rect'; // FIXME - can this be circumvented?
 
 	Jools.immute( this );
 };
@@ -95,6 +128,9 @@ Rect.prototype.reduce = function( margin )
 	// allows margins to reduce the rect to zero size without erroring.
 
 	return new Rect(
+
+		'pnw/pse',
+
 		Euclid.Point.renew(
 			this.pnw.x + margin.e,
 			this.pnw.y + margin.n,

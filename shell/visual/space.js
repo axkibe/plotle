@@ -50,16 +50,21 @@ var theme;
 ( function( ) {
 'use strict';
 
-if (typeof(window) === 'undefined')
-	{ throw new Error('this code needs a browser!'); }
+if( typeof( window ) === 'undefined' )
+	{ throw new Error( 'this code needs a browser!' ); }
 
 
 /*
 | Constructor
 */
-var Space = Visual.Space = function(twig, spacename, access)
+var Space = Visual.Space =
+	function(
+		twig,
+		spacename,
+		access
+	)
 {
-	Visual.Base.call(this, spacename, twig, null);
+	Visual.Base.call( this, spacename, twig, null );
 
 	var sub = this.$sub = { };
 
@@ -86,7 +91,8 @@ Jools.subclass( Space, Visual.Base );
 /*
 | Updates $sub to match a new twig.
 */
-Space.prototype.update = function( twig )
+Space.prototype.update =
+	function( twig )
 {
 	// no change?
 	if ( this.twig === twig )
@@ -117,13 +123,17 @@ Space.prototype.update = function( twig )
 	var caret = shell.$caret;
 	var csign = caret.sign;
 
-	if (caret.section === 'space' &&
+	if( caret.section === 'space' &&
 		csign && csign.path &&
 		!Jools.isnon( sub[ csign.path.get( 0 ) ] ) )
 	{
-		if (shell.selection.active &&
-			shell.selection.sign1.path.get( -4 ) === csign.path.get( 1 ) )
-			{ shell.selection.deselect(true); }
+		if(
+			shell.selection.active &&
+			shell.selection.sign1.path.get( -4 ) === csign.path.get( 1 )
+		)
+		{
+			shell.selection.deselect( true );
+		}
 
 		shell.dropFocus( );
 	}
@@ -132,7 +142,7 @@ Space.prototype.update = function( twig )
 };
 
 
-/**
+/*
 | Returns the focused item.
 */
 Space.prototype.focusedItem = function( )
@@ -217,7 +227,22 @@ Space.prototype.draw = function( )
 			if( av2 )
 				{ av2.highlight( this.fabric, view ); }
 
-			arrow.draw( this.fabric, view, theme.relation.style );
+			arrow.draw(
+				this.fabric,
+				view,
+				theme.relation.style
+			);
+
+			break;
+
+		case 'CREATE-NOTE' :
+
+			Visual.Note.transDraw(
+				this.fabric,
+				view,
+				action.start,
+				action.move
+			);
 
 			break;
 	}
@@ -357,13 +382,25 @@ Space.prototype.dragStart = function(p, shift, ctrl)
 				ctrl,
 				this.access
 			)
-		)
+		) { return; }
+	}
+
+	if( shell.bridge.inMode( 'CREATE' ) )
+	{
+		if( shell.bridge.inCreate( 'NOTE' ) )
 		{
+			console.log('START CREATE-NOTE');
+			shell.bridge.startAction
+			(
+				'CREATE-NOTE',
+				'space',
+				'start', p
+			);
 			return;
 		}
 	}
 
-	// otherwise do panning
+	// otherwise panning is initiated
 	shell.bridge.startAction
 	(
 		'PAN',
@@ -434,6 +471,9 @@ Space.prototype.actionstop =
 
 	switch( action.type )
 	{
+		case 'CREATE-NOTE' :
+			console.log('TODO');
+			break;
 
 		case 'PAN' :
 			break;
@@ -484,6 +524,11 @@ Space.prototype.actionmove = function( p, shift, ctrl )
 
 	switch( action.type )
 	{
+		case 'CREATE-NOTE' :
+
+			action.move      = p;
+			shell.redraw     = true;
+			return 'pointer';
 
 		case 'PAN' :
 
@@ -504,19 +549,22 @@ Space.prototype.actionmove = function( p, shift, ctrl )
 			action.move      = p;
 			shell.redraw     = true;
 
-			for(var r = 0, rZ = this.twig.length; r < rZ; r++)
+			for( var r = 0, rZ = this.twig.length; r < rZ; r++ )
 			{
-				item = this.atRank(r);
+				item = this.atRank( r );
 
-				if (item.actionmove(view, p))
-					{ return 'pointer'; }
+				if( item.actionmove( view, p ) )
+				{
+					return 'pointer';
+				}
 			}
+
 			return 'pointer';
 
 		default :
 
 			this.getSub( action.itemPath, 'actionmove' )
-				.actionmove(view, p);
+				.actionmove( view, p );
 
 			return 'move';
 	}
@@ -546,7 +594,12 @@ Space.prototype.menuSelect = function(entry, p)
 
 			key = shell.peer.newNote(
 				this.spacename,
-				new Euclid.Rect(pnw, pnw.add(nw, nh))
+				new Euclid.Rect(
+					'pnw/size',
+					pnw,
+					nw,
+					nh
+				)
 			);
 
 			this.$sub[key].grepFocus( );
@@ -643,8 +696,6 @@ Space.prototype.pointingStart =
 			return 'drag';
 		}
 	}
-
-	console.log(shell.bridge.mode());
 
 	return 'atween';
 };

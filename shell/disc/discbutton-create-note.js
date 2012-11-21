@@ -70,7 +70,8 @@ var DiscButtonCreateNote = Disc.DiscButtonCreateNote =
 	Disc.DiscButton.call(
 		this,
 		disc,
-		'note'
+		'note',
+		'CREATE', 'NOTE'
 	);
 };
 
@@ -90,16 +91,6 @@ DiscButtonCreateNote.prototype.drawIcon =
 		this.myStyle.textAnchor,
 		this.myStyle.font
 	);
-};
-
-
-/*
-| Button is being pushed.
-*/
-DiscButtonCreateNote.prototype.push =
-	function( )
-{
-	shell.bridge.changeCreate( this.name );
 };
 
 

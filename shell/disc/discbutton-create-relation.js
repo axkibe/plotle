@@ -70,7 +70,8 @@ var DiscButtonCreateRelation = Disc.DiscButtonCreateRelation =
 	Disc.DiscButton.call(
 		this,
 		disc,
-		'relation'
+		'relation',
+		'CREATE', 'RELATION'
 	);
 };
 
@@ -101,16 +102,6 @@ DiscButtonCreateRelation.prototype.drawIcon =
 		ay + 10,
 		this.myStyle.font
 	);
-};
-
-
-/*
-| Button is being pushed.
-*/
-DiscButtonCreateRelation.prototype.push =
-	function( )
-{
-	shell.bridge.changeCreate( this.name );
 };
 
 
