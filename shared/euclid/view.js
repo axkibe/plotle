@@ -231,7 +231,8 @@ View.prototype.depoint = function(a1, a2)
 View.prototype.rect = function(a1, a2)
 {
 	if (this.zoom === 1) {
-		var r = (a1 instanceof Euclid.Rect) ? a1 : new Euclid.Rect(a1, a2);
+
+		var r = (a1 instanceof Euclid.Rect) ? a1 : new Euclid.Rect( 'pnw/pse', a1, a2 );
 
 		return (this.pan.x === 0 && this.pan.y === 0)  ? r : r.add(this.pan);
 	}
@@ -248,7 +249,11 @@ View.prototype.rect = function(a1, a2)
 		pse = a2;
 	}
 
-	return new Euclid.Rect(this.point(pnw), this.point(pse));
+	return new Euclid.Rect(
+		'pnw/pse',
+		this.point(pnw),
+		this.point(pse)
+	);
 };
 
 

@@ -61,7 +61,7 @@ var SwitchPanel = Dash.SwitchPanel = function( panel, current, userName, psw )
 
 	var swidim      = theme.switchpanel.dimensions;
 	var iframe      = this.iframe = new Euclid.Rect(
-		Euclid.Point.zero,
+		'pse',
 		new Euclid.Point( swidim.a * 2, swidim.b )
 	);
 
@@ -315,6 +315,7 @@ SwitchPanel.prototype._weave = function()
 		fabric.paint(
 			Dash.getStyle( 'boxes' ),
 			new Euclid.Rect(
+				'pnw/pse',
 				iframe.pnw,
 				iframe.pse.sub( 1, 1 )
 			),

@@ -62,9 +62,9 @@ var Chat = Dash.Chat = function( twig, panel, inherit, name )
 	this.name       = name;
 	this.twig       = twig;
 	this.panel      = panel;
-	var pnw         = this.pnw    = Curve.computePoint(twig.frame.pnw, panel.iframe);
-	var pse         = this.pse    = Curve.computePoint(twig.frame.pse, panel.iframe);
-	var iframe      = this.iframe = new Euclid.Rect(Euclid.Point.zero, pse.sub(pnw));
+	var pnw         = this.pnw    = Curve.computePoint( twig.frame.pnw, panel.iframe );
+	var pse         = this.pse    = Curve.computePoint( twig.frame.pse, panel.iframe );
+	var iframe      = this.iframe = new Euclid.Rect( 'pse', pse.sub( pnw ) );
 	var fs          = twig.font.size;
 
 	this.messages   = inherit ? inherit.messages : [ ];
@@ -174,6 +174,7 @@ Chat.prototype._weave = function( )
 		fabric.paint(
 			Dash.getStyle( 'boxes' ),
 			new Euclid.Rect(
+				'pnw/pse',
 				this.iframe.pnw,
 				this.iframe.pse.sub( 1, 1 )
 			),

@@ -121,12 +121,16 @@ Line.connect = function( shape1, end1, shape2, end2 )
 /*
 | Returns the zone of the arrow.
 */
-Jools.lazyFixate(Line.prototype, 'zone',
+Jools.lazyFixate(
+	Line.prototype,
+	'zone',
 	function()
 	{
 		var p1 = this.p1;
 		var p2 = this.p2;
+
 		return new Euclid.Rect(
+			'pnw/pse',
 			Euclid.Point.renew(Math.min(p1.x, p2.x), Math.min(p1.y, p2.y), p1, p2),
 			Euclid.Point.renew(Math.max(p1.x, p2.x), Math.max(p1.y, p2.y), p1, p2));
 	}
@@ -136,7 +140,9 @@ Jools.lazyFixate(Line.prototype, 'zone',
 /*
 | Returns the point at center.
 */
-Jools.lazyFixate(Line.prototype, 'pc',
+Jools.lazyFixate(
+	Line.prototype,
+	'pc',
 	function() {
 		var p1 = this.p1;
 		var p2 = this.p2;

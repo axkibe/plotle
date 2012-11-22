@@ -64,7 +64,7 @@ Note.transDraw =
 		p2
 	)
 {
-	var zone = new Euclid.Rect( '2-point', pnw, pse );
+	var zone = new Euclid.Rect( 'arbitrary', pnw, pse );
 	console.log( 'transDraw', zone );
 
 	var silhoutte = Note.transGetSilhoutte( zone );
@@ -534,9 +534,9 @@ Note.prototype.getZone =
 					break;
 				//case 'c' :
 				default  :
-					throw new Error('unknown align');
+					throw new Error( 'unknown align' );
 			}
-			return new Euclid.Rect(pnw, pse);
+			return new Euclid.Rect( 'pnw/pse', pnw, pse );
 		default :
 			return twig.zone;
 	}

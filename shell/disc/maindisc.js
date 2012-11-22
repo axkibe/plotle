@@ -161,7 +161,7 @@ MainDisc.prototype._weave = function( )
 		fabric.paint(
 			Dash.getStyle( 'boxes' ),
 			new Euclid.Rect(
-				Euclid.Point.zero,
+				'pse',
 				new Euclid.Point( this.width - 1, this.height - 1)
 			),
 			'sketch',

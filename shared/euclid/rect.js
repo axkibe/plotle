@@ -1,27 +1,10 @@
-/**                            _..._
-    _....._                 .-'_..._''. .---.    _______
-  .'       '.             .' .'      '.\|   |.--.\  ___ `'.
- /   .-'"'.  \           / .'           |   ||__| ' |--.\  \
-/   /______\  |         . '             |   |.--. | |    \  '
-|   __________|         | |             |   ||  | | |     |  '
-\  (          '  _    _ | |             |   ||  | | |     |  |
- \  '-.___..-~. | '  / |. '             |   ||  | | |     ' .'
-  `         .'..' | .' | \ '.          .|   ||  | | |___.' /'
-   `'-.....-.'./  | /  |  '. `._____.-'/|   ||__|/_______.'/
-              |   `'.  |    `-.______ / '---'    \_______|/
-              '   .'|  '/            `
-               `-'  `--'
-                       .-,--.         .
-                        `|__/ ,-. ,-. |-
-                        )| \  |-' |   |
-                        `'  ` `-' `-' `'
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
-
- A rectangle.
-
- Authors: Axel Kittenberger
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+/*
+|
+| A rectangle.
+|
+| Authors: Axel Kittenberger
+|
+*/
 
 
 /*
@@ -84,6 +67,9 @@ var Rect = Euclid.Rect =
 			break;
 
 		case 'rect' :
+			throw new Error('this makes no sense');
+
+		case 'o' :
 			this.pnw = a1.pnw;
 			this.pse = a1.pse;
 			break;
@@ -127,16 +113,13 @@ Rect.prototype.reduce = function( margin )
 	// allows margins to reduce the rect to zero size without erroring.
 
 	return new Rect(
-
 		'pnw/pse',
-
 		Euclid.Point.renew(
 			this.pnw.x + margin.e,
 			this.pnw.y + margin.n,
 			this.pnw,
 			this.pse
 		),
-
 		Euclid.Point.renew(
 			this.pse.x - margin.w,
 			this.pse.y - margin.s,
@@ -150,7 +133,9 @@ Rect.prototype.reduce = function( margin )
 /*
 | point in the center
 */
-Jools.lazyFixate( Rect.prototype, 'pc',
+Jools.lazyFixate(
+	Rect.prototype,
+	'pc',
 	function( )
 	{
 		return new Euclid.Point(
@@ -164,7 +149,9 @@ Jools.lazyFixate( Rect.prototype, 'pc',
 /*
 | point in the north
 */
-Jools.lazyFixate( Rect.prototype, 'pn',
+Jools.lazyFixate(
+	Rect.prototype,
+	'pn',
 	function( )
 	{
 		return new Euclid.Point(
@@ -178,7 +165,9 @@ Jools.lazyFixate( Rect.prototype, 'pn',
 /*
 | west point
 */
-Jools.lazyFixate( Rect.prototype, 'w',
+Jools.lazyFixate(
+	Rect.prototype,
+	'w',
 	function( )
 	{
 		return new Euclid.Point(
@@ -214,6 +203,7 @@ Jools.lazyFixate(
 Rect.prototype.add = function( a1, a2 )
 {
 	return new this.constructor(
+		'pnw/pse',
 		this.pnw.add( a1, a2 ),
 		this.pse.add( a1, a2 )
 	);
@@ -282,7 +272,7 @@ Rect.renew = function( wx, ny, ex, sy )
 	if( !pse )
 		{ pse = new Euclid.Point( ex, sy ); }
 
-	return new Rect( pnw, pse );
+	return new Rect( 'pnw/pse', pnw, pse );
 };
 
 
@@ -295,6 +285,7 @@ Rect.renew = function( wx, ny, ex, sy )
 Rect.prototype.sub = function( a1, a2 )
 {
 	return new this.constructor(
+		'pnw/pse',
 		this.pnw.sub( a1, a2 ),
 		this.pse.sub( a1, a2 )
 	);

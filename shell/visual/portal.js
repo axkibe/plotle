@@ -439,7 +439,7 @@ Portal.prototype.getZone =
 					throw new Error('unknown align');
 			}
 
-			return new Euclid.Rect( pnw, pse );
+			return new Euclid.Rect( 'pnw/pse', pnw, pse );
 
 		default :
 			return twig.zone;

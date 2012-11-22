@@ -68,6 +68,7 @@ var CheckBox = Dash.CheckBox = function( twig, panel, inherit, name )
 
 	var computePoint = Curve.computePoint;
 	var box = this.box = new Euclid.Rect(
+		'pnw/pse',
 		computePoint( twig.box.pnw, panel.iframe ),
 		computePoint( twig.box.pse, panel.iframe )
 	);
@@ -275,6 +276,7 @@ CheckBox.prototype.draw = function( fabric, accent )
 		fabric.paint(
 			Dash.getStyle( 'boxes' ),
 			new Euclid.Rect(
+				'pnw/pse',
 				this.iframe.pnw,
 				this.iframe.pse.sub( 1, 1 )
 			),

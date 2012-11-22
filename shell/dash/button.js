@@ -71,7 +71,7 @@ var Button = Dash.Button = function( twig, panel, inherit, name )
 	var pse          = this.pse    = computePoint( twig.frame.pse, panel.iframe );
 	var iframe       = this.iframe =
 		new Euclid.Rect(
-			Euclid.Point.zero,
+			'pse',
 			pse.sub( pnw )
 		);
 
@@ -183,6 +183,7 @@ Button.prototype._weave = function( accent )
 		fabric.paint(
 			Dash.getStyle( 'boxes' ),
 			new Euclid.Rect(
+				'pnw/pse',
 				this.iframe.pnw,
 				this.iframe.pse.sub( 1, 1 )
 			),
