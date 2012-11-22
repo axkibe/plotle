@@ -123,9 +123,11 @@ var Resource = function(path, opts)
 	}
 };
 
-/**
+
+/*
 | Node export
 */
 module.exports = Resource;
 
-})();
+
+} )( );

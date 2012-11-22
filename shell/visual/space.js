@@ -342,13 +342,15 @@ Space.prototype.dragStart = function(p, shift, ctrl)
 	)
 	{
 		var dp = view.depoint(p);
-		shell.startAction(
+
+		shell.bridge.startAction(
 			'RELBIND',
 			'space',
 			'itemPath', focus.path,
 			'start',    dp,
 			'move',     dp
 		);
+
 		shell.redraw = true;
 		return;
 	}
@@ -621,8 +623,10 @@ Space.prototype.menuSelect = function(entry, p)
 			key = shell.peer.newPortal(
 				this.spacename,
 				new Euclid.Rect(
+					'pnw/size',
 					pnw,
-					pnw.add( nw, nh )
+					nw,
+					nh
 				)
 			);
 

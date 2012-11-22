@@ -80,7 +80,7 @@ Label.prototype.getSilhoutte = function( zone )
 		{ return s; }
 
 	return this._$silhoutte = new Euclid.Rect(
-		'pnw/psw',
+		'pnw/pse',
 		zone.pnw,
 		zone.pse.sub(1, 1)
 	);

@@ -33,9 +33,13 @@ var fs          = require( 'fs'                    );
 var http        = require( 'http'                  );
 var sha1        = require( '../shared/sha1'        );
 var mongodb     = require( 'mongodb'               );
-var uglify      = config.uglify && require( 'uglify-js' );
 var url         = require( 'url'                   );
 var zlib        = require( 'zlib'                  );
+
+var uglify;
+if (config.uglify) {
+	uglify = require( 'uglify-js' );
+}
 
 
 /*
@@ -573,12 +577,13 @@ Server.prototype.prepareResources = function(_)
 	// uglifies the bundle if configured so
 	if( config.uglify )
 	{
-		var ast;
-		ast    = uglify.parser.parse(bundle);
-		ast    = uglify.uglify.ast_mangle(ast, {toplevel: true});
-		ast    = uglify.uglify.ast_lift_variables(ast);
-		ast    = uglify.uglify.ast_squeeze(ast);
-		bundle = uglify.uglify.gen_code(ast);
+		var compressor = uglify.Compressor({});
+		var ast = uglify.parse(bundle);
+		ast.figure_out_scope();
+		ast = ast.transform(compressor);
+		ast.compute_char_frequency();
+		ast.mangle_names();
+		bundle = ast.print_to_string({});
 	}
 
 	// calculates the hash for the bundle
@@ -591,15 +596,16 @@ Server.prototype.prepareResources = function(_)
 	log('start', 'bundle:', bsha1);
 
 	// the devel.html file
-	var devel  = new Resource( 'shell/devel.html', 'm' );
-	devel.data =  fs.readFile( 'shell/devel.html', _) + '';
+	if (config.devel === 'shell' || config.devel === 'both') {
+		var devel  = new Resource( 'shell/devel.html', 'm' );
+		devel.data =  fs.readFile( 'shell/devel.html', _) + '';
 
-	devel.data = devel.data.replace(
-		/<!--DEVELPACK.*>/,
-		devels.join('\n')
-	);
-	this.$resources[ 'devel.html' ] =
-		devel;
+		devel.data = devel.data.replace(
+			/<!--DEVELPACK.*>/,
+			devels.join('\n')
+		);
+		this.$resources[ 'devel.html' ] = devel;
+	}
 
 	// the index.html file
 	var main  = new Resource( 'shell/meshcraft.html', 'm' );
@@ -1467,6 +1473,10 @@ Server.prototype.requestListener = function(req, res)
 	}
 
 	var self = this;
+
+	if (config.devel !== 'shell' && config.devel !== 'both') {
+		this.webError(res, '404 Bad Request');
+	}
 
 	fs.readFile(
 		r.path,

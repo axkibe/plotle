@@ -43,39 +43,40 @@ if( typeof( window ) === 'undefined' )
 
 /*
 | Constructor.
-|
-| pnw: point to north west.
-| pse: point to south east.
 */
 var Rect = Euclid.Rect =
 	function(
 		overload,
 		a1,
-		a2
+		a2,
+		a3
 	)
 {
+	var pnw;
+	var pse;
+
 	switch( overload ) {
 
+		case 'arbitrary' :
+			// TODO
 		case 'pnw/pse' :
-			this.pnw = a1;
-			this.pse = a2;
+			pnw = a1;
+			pse = a2;
+			break;
+
+		case 'pnw/size' :
+			pnw = a1;
+			pse = a1.add( a2, a3 );
 			break;
 
 		case 'pse' :
-			this.pnw = Euclid.Point.Zero;
-			this.pse = a1;
+			pnw = Euclid.Point.zero;
+			pse = a1;
 			break;
-
-		case 'rect' :
-			throw new Error('this makes no sense');
 
 		case 'o' :
-			this.pnw = a1.pnw;
-			this.pse = a1.pse;
-			break;
-
-		case 'arbitrary' :
-			throw new Error('TODO');
+			pnw = a1.pnw;
+			pse = a1.pse;
 			break;
 
 		default :

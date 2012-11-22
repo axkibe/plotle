@@ -147,6 +147,7 @@ Board.prototype.getPanel =
 				)
 			);
 			break;
+
 		default :
 			panel = new Dash.Panel(
 				name,
@@ -267,8 +268,8 @@ Board.prototype.draw =
 
 	this.curPanel( ).draw( fabric );
 
-	var mainDisc = this.getPanel( 'MainDisc' );
-	mainDisc.draw( fabric );
+//	var mainDisc = this.getPanel( 'MainDisc' );
+//	mainDisc.draw( fabric );
 };
 
 

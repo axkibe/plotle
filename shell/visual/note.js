@@ -64,7 +64,7 @@ Note.transDraw =
 		p2
 	)
 {
-	var zone = new Euclid.Rect( 'arbitrary', pnw, pse );
+	var zone = new Euclid.Rect( 'arbitrary', p1, p2 );
 	console.log( 'transDraw', zone );
 
 	var silhoutte = Note.transGetSilhoutte( zone );
