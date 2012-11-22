@@ -19,7 +19,6 @@
  A panel of the dashboard.
 
  Authors: Axel Kittenberger
- License: MIT(Expat), see accompanying 'License'-file
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -62,13 +61,17 @@ var Panel = Dash.Panel = function(name, inherit, board, screensize)
 	this.board = board;
 	var tree   = this.tree  = new Tree(Design[name], Design.Pattern);
 	var frameD = tree.root.frame;
-	var oframe = new Euclid.Rect(Euclid.Point.zero, screensize);
-	var pnw    = this.pnw    = Curve.computePoint(frameD.pnw, oframe);
-	var pse    = this.pse    = Curve.computePoint(frameD.pse, oframe);
-	var iframe = this.iframe = new Euclid.Rect(Euclid.Point.zero, pse.sub(pnw));
+	var oframe = new Euclid.Rect( 'pse', screensize );
+	var pnw    = this.pnw    = Curve.computePoint( frameD.pnw, oframe );
+	var pse    = this.pse    = Curve.computePoint( frameD.pse, oframe );
+	var iframe = this.iframe = new Euclid.Rect( 'pse', pse.sub( pnw ) );
 	this.curve = new Curve(tree.root.curve, iframe);
 
-	this.gradientPC = new Euclid.Point(Jools.half(iframe.width), iframe.height + 450);
+	this.gradientPC = new Euclid.Point(
+		Jools.half(iframe.width),
+		iframe.height + 450
+	);
+
 	this.gradientR0 = 0;
 	this.gradientR1 = 650;
 	this.screensize = screensize;
@@ -197,6 +200,7 @@ Panel.prototype._weave = function( )
 		fabric.paint(
 			Dash.getStyle( 'boxes' ),
 			new Euclid.Rect(
+				'pnw/pse',
 				iframe.pnw,
 				iframe.pse.sub( 1, 1 )
 			),

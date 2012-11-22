@@ -5,7 +5,6 @@
 | Used for debugging
 |
 | Authors: Axel Kittenberger
-| License: MIT(Expat), see accompanying 'License'-file
 */
 
 var http     = require('http');

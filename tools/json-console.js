@@ -4,7 +4,6 @@
 | Used to debug the meshmashine.
 |
 | Authors: Axel Kittenberger
-| License: MIT(Expat), see accompanying 'License'-file
 */
 
 var fs       = require('fs');
