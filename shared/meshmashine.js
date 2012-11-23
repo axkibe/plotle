@@ -52,16 +52,15 @@ var reject       = Jools.reject;
 var isPath       = Path.isPath;
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- ,--,--'                                   .
- `- | ,-. ,-. ,-. ,-. ," ,-. ,-. ,-,-. ,-. |- . ,-. ,-.
-  , | |   ,-| | | `-. |- | | |   | | | ,-| |  | | | | |
-  `-' '   `-^ ' ' `-' |  `-' '   ' ' ' `-^ `' ' `-' ' '
-~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ' ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+/*
+|
+| Transformation.
+| FIXME move elsewhere.
+|
+| Action Transformation. Changes signatures due to past alternations.
+|
+*/
 
- Action Transformation. Changes signatures due to past alternations.
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 /*
 | List of formation action on different alternation types
