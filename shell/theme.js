@@ -74,8 +74,8 @@ theme =
 	*/
 	note :
 	{
-		minWidth  :  40,
-		minHeight :  40,
+		minWidth  :  30,
+		minHeight :  30,
 
 		newWidth  : 300,
 		newHeight : 150,

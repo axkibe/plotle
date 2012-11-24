@@ -143,25 +143,23 @@ Space.prototype.focusedItem = function( )
 */
 Space.prototype.createItem = function( twig, k )
 {
-	var path = new Path( [ k ] );
+	var Proto;
 
 	switch (twig.type)
 	{
-		case 'Note' :
-			return new Visual.Note ( this.spacename, twig, path, this );
-
-		case 'Label' :
-			return new Visual.Label ( this.spacename, twig, path, this );
-
-		case 'Portal' :
-			return new Visual.Portal ( this.spacename, twig, path, this );
-
-		case 'Relation' :
-			return new Visual.Relation ( this.spacename, twig, path, this );
-
-		default :
-			throw new Error('unknown type: ' + twig.type);
+		case 'Note'     : Proto = Visual.Note;     break;
+		case 'Label'    : Proto = Visual.Label;    break;
+		case 'Portal'   : Proto = Visual.Portal;   break;
+		case 'Relation' : Proto = Visual.Relation; break;
+		default : throw new Error( 'unknown type: ' + twig.type );
 	}
+
+	return new Proto(
+		this.spacename,
+		twig,
+		new Path( [ k ] ),
+		this
+	);
 };
 
 
@@ -175,13 +173,19 @@ Space.prototype.draw = function( )
 
 	for( var r = twig.length - 1; r >= 0; r-- )
 	{
-		this.atRank( r ).draw( this.fabric, view );
+		this.atRank( r ).draw(
+			this.fabric,
+			view
+		);
 	}
 
 	var focus = this.focusedItem( );
 	if( focus )
 	{
-		focus.drawHandles( this.fabric, view );
+		focus.drawHandles(
+			this.fabric,
+			view
+		);
 	}
 
 	var action = shell.bridge.action( );
@@ -190,10 +194,16 @@ Space.prototype.draw = function( )
 	{
 		case 'RELBIND' :
 
-			var av  = this.getSub( action.itemPath, 'Item' );
+			var av  = this.getSub(
+				action.itemPath,
+				'Item'
+			);
 
 			var av2 = action.item2Path ?
-				this.getSub( action.item2Path, 'Item' ) :
+				this.getSub(
+					action.item2Path,
+					'Item'
+				) :
 				null;
 
 			var target = av2 ?
@@ -220,11 +230,15 @@ Space.prototype.draw = function( )
 
 		case 'CREATE-NOTE' :
 
+			var zone = Visual.Note.transGetZone(
+				view.depoint( action.start ),
+				view.depoint( action.move  )
+			);
+
 			Visual.Note.transDraw(
 				this.fabric,
 				view,
-				action.start,
-				action.move
+				zone
 			);
 
 			break;
@@ -374,7 +388,6 @@ Space.prototype.dragStart = function(p, shift, ctrl)
 	{
 		if( shell.bridge.inCreate( 'NOTE' ) )
 		{
-			console.log('START CREATE-NOTE');
 			shell.bridge.startAction
 			(
 				'CREATE-NOTE',
@@ -457,7 +470,19 @@ Space.prototype.actionstop =
 	switch( action.type )
 	{
 		case 'CREATE-NOTE' :
-			console.log('TODO');
+
+			var key = shell.peer.newNote(
+				this.spacename,
+				Visual.Note.transGetZone(
+					view.depoint( action.start ),
+					view.depoint( action.move  )
+				)
+			);
+
+			this.$sub[ key ].grepFocus( );
+
+			shell.bridge.changeCreate( null );
+
 			break;
 
 		case 'PAN' :
@@ -575,7 +600,10 @@ Space.prototype.menuSelect = function(entry, p)
 			nh = theme.note.newHeight;
 
 			pnw = view.depoint( p ).
-				sub( Jools.half( nw ), Jools.half ( nh ) );
+				sub(
+					Jools.half( nw ),
+					Jools.half( nh )
+				);
 
 			key = shell.peer.newNote(
 				this.spacename,
@@ -587,7 +615,7 @@ Space.prototype.menuSelect = function(entry, p)
 				)
 			);
 
-			this.$sub[key].grepFocus( );
+			this.$sub[ key ].grepFocus( );
 
 			break;
 

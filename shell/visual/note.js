@@ -52,6 +52,37 @@ var Note = Visual.Note = function( spacename, twig, path )
 Jools.subclass( Note, Visual.DocItem );
 
 
+Note.transGetZone =
+	function(
+		p1,
+		p2
+	)
+{
+	var zone = new Euclid.Rect(
+		'arbitrary',
+		p1,
+		p2
+	);
+
+	var minWidth  = theme.note.minWidth;
+	var minHeight = theme.note.minHeight;
+
+	if(
+		zone.width  < minWidth ||
+		zone.height < minHeight
+	) {
+		return new Euclid.Rect(
+			'pnw/size',
+			zone.pnw,
+			Math.max( minWidth,  zone.width  ),
+			Math.max( minHeight, zone.height )
+		);
+	} else {
+		return zone;
+	}
+};
+
+
 /*
 | Draws a transitory note
 | ( A note in the making )
@@ -60,20 +91,16 @@ Note.transDraw =
 	function(
 		fabric,
 		view,
-		p1,
-		p2
+		zone
 	)
 {
-	var zone = new Euclid.Rect( 'arbitrary', p1, p2 );
-	console.log( 'transDraw', zone );
-
 	var silhoutte = Note.transGetSilhoutte( zone );
 
 	fabric.paint(
 		theme.note.style,
 		silhoutte,
 		'sketch',
-		view.home( )
+		view
 	);
 };
 
@@ -293,7 +320,7 @@ Note.prototype.actionstop =
 			var zone = this.getZone( );
 
 			if(
-				zone.width < theme.note.minWidth ||
+				zone.width  < theme.note.minWidth ||
 				zone.height < theme.note.minHeight
 			)
 			{

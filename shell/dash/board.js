@@ -252,8 +252,8 @@ Board.prototype.draw =
 
 	this.curPanel( ).draw( fabric );
 
-//	var mainDisc = this.getPanel( 'MainDisc' );
-//	mainDisc.draw( fabric );
+	var mainDisc = this.getPanel( 'MainDisc' );
+	mainDisc.draw( fabric );
 };
 
 

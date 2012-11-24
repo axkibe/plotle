@@ -62,8 +62,8 @@ config.database.name = 'meshcraft03';
 | For example, if the server is in devel mode,
 | it will die on a command it considers unacceptable.
 */
-//config.devel = 'shell';
-config.devel = 'none';
+config.devel = 'shell';
+//config.devel = 'none';
 
 
 /*

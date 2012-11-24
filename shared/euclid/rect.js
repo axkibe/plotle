@@ -57,8 +57,6 @@ var Rect = Euclid.Rect =
 
 	switch( overload ) {
 
-		case 'arbitrary' :
-			// TODO
 		case 'pnw/pse' :
 			pnw = a1;
 			pse = a2;
@@ -79,8 +77,26 @@ var Rect = Euclid.Rect =
 			pse = a1.pse;
 			break;
 
+		case 'arbitrary' :
+			if( a2.x >= a1.x && a2.y >= a1.y) {
+				pnw = a1;
+				pse = a2;
+			} else if ( a1.x >= a2.x && a1.y >= a2.y) {
+				pnw = a2;
+				pse = a1;
+			} else if( a2.x >= a1.x && a1.y >= a2.y) {
+				pnw = new Euclid.Point( a1.x, a2.y );
+				pse = new Euclid.Point( a2.x, a1.y );
+			} else if ( a1.x >= a2.x && a2.y >= a1.y) {
+				pnw = new Euclid.Point( a2.x, a1.y );
+				pse = new Euclid.Point( a1.x, a2.y );
+			} else {
+				throw new Error( 'this is not possible' );
+			}
+			break;
+
 		default :
-			throw new Error('invalid overload');
+			throw new Error( 'invalid overload' );
 	}
 
 	if(

@@ -42,6 +42,7 @@ if( typeof( window ) === 'undefined' )
 */
 var modes =
 {
+
 	/*
 	| Standard selection, moving stuff around.
 	*/
@@ -67,6 +68,7 @@ var modes =
 	| Help
 	*/
 	'HELP' : true
+
 };
 
 /*
@@ -74,6 +76,7 @@ var modes =
 */
 var creates =
 {
+
 	/*
 	| A new note.
 	*/
@@ -93,6 +96,7 @@ var creates =
 	| A new portal
 	*/
 	'PORTAL' : true
+
 };
 
 
@@ -101,6 +105,7 @@ var creates =
 */
 Bridge = function( )
 {
+
 	/*
 	| current mode
 	*/
@@ -120,6 +125,7 @@ Bridge = function( )
 	| an Action object for the current action
 	*/
 	this._$action = null;
+
 };
 
 
@@ -139,7 +145,8 @@ Bridge.prototype.mode =
 Bridge.prototype.inMode =
 	function( mode )
 {
-	if( !modes[ mode ] ) {
+	if( !modes[ mode ] )
+	{
 		throw new Error( 'invalid mode : ' + mode  );
 	}
 
@@ -154,7 +161,8 @@ Bridge.prototype.inMode =
 Bridge.prototype.changeMode =
 	function( mode )
 {
-	if( !modes[ mode ] ) {
+	if( !modes[ mode ] )
+	{
 		throw new Error( 'invalid mode : ' + mode );
 	}
 
@@ -180,7 +188,8 @@ Bridge.prototype.create =
 Bridge.prototype.inCreate =
 	function( create )
 {
-	if( !creates[ create ] ) {
+	if( !creates[ create ] && create !== null )
+	{
 		throw new Error( 'invalid create : ' + create );
 	}
 
@@ -194,7 +203,8 @@ Bridge.prototype.inCreate =
 Bridge.prototype.changeCreate =
 	function( create )
 {
-	if( !creates[ create ] ) {
+	if( !creates[ create ] && create !== null )
+	{
 		throw new Error( 'invalid create : ' + create );
 	}
 
@@ -238,7 +248,6 @@ Bridge.prototype.stopAction = function()
 	this._$action = null;
 
 };
-
 
 
 } )( );
