@@ -226,8 +226,8 @@ Doc.prototype.getHeight =
 	var fs      = this.getFont( ).size;
 	var paraSep = this.getParaSep();
 	var twig    = this.twig;
+	var height  = 0;
 
-	var height   = 0;
 	for ( var r = 0, rZ = twig.length; r < rZ; r++ )
 	{
 		var vpara = this.atRank( r );
@@ -235,9 +235,7 @@ Doc.prototype.getHeight =
 		var flow = vpara.getFlow( );
 
 		if( r > 0 )
-		{
-			height += paraSep;
-		}
+			{ height += paraSep; }
 
 		height += flow.height;
 	}
@@ -270,13 +268,19 @@ Doc.prototype.getSpread =
 
 /*
 | Returns the (default) paraSeperator for this document.
-| Parameter item is optional, just to safe double and tripple lookups.
+| Parameter item is optional,
+| just to safe double and tripple lookups.
 */
 Doc.prototype.getParaSep =
 	function( item )
 {
 	if( !Jools.is( item ) )
-		{ item = shell.$space.getSub( this.path, 'Item' ); }
+	{
+		item = shell.$space.getSub(
+			this.path,
+			'Item'
+		);
+	}
 
 	var fs = this.getFont( ).size;
 

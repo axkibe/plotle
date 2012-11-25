@@ -65,6 +65,30 @@ Label.s_handles = Jools.immute(
 
 
 /*
+| Returns the labels silhoutte.
+*/
+Label.s_getSilhoutte = function( zone )
+{
+	var s = this._$silhoutte;
+
+	if(
+		s &&
+		s.pnw.eq( zone.pnw ) &&
+		s.pse.x === zone.pse.x - 1 &&
+		s.pse.y === zone.pse.y - 1
+	)
+		{ return s; }
+
+	return this._$silhoutte = new Euclid.Rect(
+		'pnw/pse',
+		zone.pnw,
+		zone.pse.sub( 1, 1 )
+	);
+};
+
+
+
+/*
 | Draws a transitory label
 | ( A label in the making )
 */
@@ -72,52 +96,28 @@ Label.s_draw =
 	function(
 		fabric,
 		view,
-		zone
+		position
 	)
 {
-	var silhoutte = Note.s_getSilhoutte( zone );
+	var imargin   = Label.s_innerMargin;
+	var silhoutte = Label.s_getSilhoutte( zone );
 
-	fabric.paint(
-		theme.note.style,
-		silhoutte,
-		'sketch',
-		view
+	// draws selection and text
+	Visual.Doc.s_draw(
+		fabric,
+		view,
+		position.zone.width,
+		imargin,
+		Euclid.Point.zero
 	);
 
-	var zone = view.rect( this.getZone( ) );
-
-	// no buffer hit?
-	if (config.debug.noCache || !f ||
-		zone.width  !== f.width ||
-		zone.height !== f.height ||
-		view.zoom !== f.$zoom
-	)
-	{
-		f = this.$fabric = new Euclid.Fabric( zone.width, zone.height );
-		f.$zoom       = view.zoom;
-		var doc       = this.$sub.doc;
-		var imargin   = this.innerMargin;
-		var silhoutte = this.getZeroSilhoutte( zone );
-
-		// draws selection and text
-		doc.draw(
-			f,
-			view.home( ),
-			zone.width,
-			imargin,
-			Euclid.Point.zero
-		);
-
-		// draws the border
-		f.edge(
-			theme.label.style.edge,
-			silhoutte,
-			'sketch',
-			Euclid.View.proper
-		);
-	}
-
-	fabric.drawImage( f, zone.pnw );
+	// draws the border
+	f.edge(
+		theme.label.style.edge,
+		silhoutte,
+		'sketch',
+		Euclid.View.proper
+	);
 };
 
 
@@ -125,13 +125,22 @@ Label.s_draw =
 | Returns the zone of the item.
 | An ongoing action can modify this to be different than meshmashine data.
 */
-Label.prototype.s_getPNWSize = function( p1, p2 )
+Label.prototype.s_getPlacement = function( p1, p2 )
 {
-	
 	var action = shell.bridge.action( );
 	var pnw = this.twig.pnw;
 
+	return Jools.immute( {
+		pnw      : p2,
+		fontsize : 10
+	} );
+
+	//  height += flow.height;
+	//  height += Math.round( fs * theme.bottombox );
+
+
 	// FIXME Caching!
+	/*
 	var doc    = this.$sub.doc;
 	var fs     = doc.getFont( ).size;
 
@@ -174,6 +183,7 @@ Label.prototype.s_getPNWSize = function( p1, p2 )
 			);
 
 		case 'ITEMRESIZE' :
+
 			// resizing is done by fontSizeChange( )
 			var szone = action.startZone;
 			if( !szone )
@@ -219,7 +229,9 @@ Label.prototype.s_getPNWSize = function( p1, p2 )
 				height
 			);
 	}
+
 	// TODO pull the Rect creation out
+	*/
 };
 
 
@@ -476,8 +488,10 @@ Label.prototype.getZone = function( )
 			);
 
 		case 'ITEMRESIZE' :
+
 			// resizing is done by fontSizeChange( )
 			var szone = action.startZone;
+
 			if( !szone )
 			{
 				return new Euclid.Rect(

@@ -32,42 +32,55 @@ if( typeof( window ) === 'undefined' )
 	{ throw new Error('this code needs a browser!'); }
 
 
-var actionlist = Jools.immute({
+var actionlist = Jools.immute( {
 	/*
 	| Panning the background.
 	*/
 	'PAN'         : true,
+
 
 	/*
 	| Dragging one item.
 	*/
 	'ITEMDRAG'    : true,
 
+
 	/*
 	| Resizing one item.
 	*/
 	'ITEMRESIZE'  : true,
+
 
 	/*
 	| Scrolling a note
 	*/
 	'SCROLLY'     : true,
 
+
 	/*
 	| Binding a new relation
 	*/
 	'RELBIND'     : true,
+
 
 	/*
 	| Holding a button repeating its effect.
 	*/
 	'REBUTTON'    : true,
 
+
 	/*
 	| Creating a new note
 	*/
-	'CREATE-NOTE' : true
-});
+	'CREATE-NOTE' : true,
+
+
+	/*
+	| Creating a new label
+	*/
+	'CREATE-LABEL' : true
+
+} );
 
 
 /*
@@ -77,7 +90,7 @@ var actionlist = Jools.immute({
 | recv: object to receive events during action.
 | + key value list for additional params
 */
-Action = function(args)
+Action = function( args )
 {
 	var type = this.type    = args[0];
 	if( !actionlist[ type ] ) {

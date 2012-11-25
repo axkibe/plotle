@@ -31,29 +31,40 @@ var theme;
 /*
 | Capsule
 */
-(function(){
+( function( ) {
 'use strict';
 
-if (typeof(window) === 'undefined')
-	{ throw new Error('this code requires a browser!'); }
+
+if( typeof( window ) === 'undefined' )
+	{ throw new Error( 'this code requires a browser!' ); }
 
 
 /*
 | Constructor.
 */
-var Para = Visual.Para = function(spacename, twig, path)
+var Para = Visual.Para =
+	function(
+		spacename,
+		twig,
+		path
+	)
 {
-	if (twig.type !== 'Para')
-		{ throw new Error('type error'); }
+	if( twig.type !== 'Para' )
+		{ throw new Error( 'type error' ); }
 
-	Visual.Base.call(this, spacename, twig, path);
+	Visual.Base.call(
+		this,
+		spacename,
+		twig,
+		path
+	);
 
 	// caching
 	this.$fabric = null;
 	this.$flow   = null;
 };
 
-Jools.subclass(Para, Visual.Base);
+Jools.subclass( Para, Visual.Base );
 
 
 /*
@@ -70,30 +81,31 @@ Para.prototype.draw = function( fabric, view, pnw )
 	var flow   = this.getFlow( );
 	var width  = flow.spread * view.zoom;
 	var doc    = shell.$space.getSub( this.path, 'Doc' );
-	var height = this.getHeight() * view.zoom;
+	var height = this.getHeight( ) * view.zoom;
 	var f      = this.$fabric;
 
 	// cache hit?
 	if (config.debug.noCache ||
 		!f ||
-		f.width  !== width  ||
-		f.height !== height ||
+		f.width   !== width  ||
+		f.height  !== height ||
 		view.zoom !== f.$zoom)
 	{
 		// FIXME work out exact height for text below baseline
-		f = this.$fabric = new Euclid.Fabric(width, height);
-		f.scale(view.zoom);
+		f = this.$fabric = new Euclid.Fabric( width, height );
+		f.scale( view.zoom );
 		f.$zoom = view.zoom;
 
-		var font = doc.getFont();
+		var font = doc.getFont( );
 
 		// draws text into the fabric
-		for(var a = 0, aZ = flow.length; a < aZ; a++)
+		for( var a = 0, aZ = flow.length; a < aZ; a++ )
 		{
-			var line = flow[a];
-			for(var b = 0, bZ = line.a.length; b < bZ; b++)
+			var line = flow[ a ];
+			for( var b = 0, bZ = line.a.length; b < bZ; b++ )
 			{
-				var chunk = line.a[b];
+				var chunk = line.a[ b ];
+
 				f.fillText(
 					chunk.t,
 					chunk.x,
@@ -104,13 +116,15 @@ Para.prototype.draw = function( fabric, view, pnw )
 		}
 	}
 
-	fabric.drawImage(f, pnw);
+	fabric.drawImage( f, pnw );
 };
 
-/**
+
+/*
 | Draws the caret if its in this paragraph.
 */
-Para.prototype.positionCaret = function( view )
+Para.prototype.positionCaret =
+	function( view )
 {
 	var caret = shell.$caret;
 	var item  = shell.$space.getSub( this.path, 'Item' );
@@ -126,8 +140,12 @@ Para.prototype.positionCaret = function( view )
 	var cys = Jools.limit( 0, cpos.s + pnw.y - sy, zone.height );
 	var cx  = cpos.x + pnw.x;
 
-	caret.$screenPos = view.point( cx + zone.pnw.x, cyn + zone.pnw.y );
-	caret.$height    = Math.round( ( cys - cyn ) * view.zoom );
+	caret.$screenPos = view.point(
+		cx + zone.pnw.x,
+		cyn + zone.pnw.y
+	);
+
+	caret.$height = Math.round( ( cys - cyn ) * view.zoom );
 };
 
 
@@ -136,86 +154,112 @@ Para.prototype.positionCaret = function( view )
 |
 | FIXME remove?
 */
-Para.prototype.getCaretPos = function()
+Para.prototype.getCaretPos =
+	function( )
 {
 	var item    = shell.$space.getSub( this.path, 'Item' );
 	var doc     = item.$sub.doc;
-	var fs      = doc.getFont(item).size;
+	var fs      = doc.getFont( item ).size;
 	var descend = fs * theme.bottombox;
-	var p       = this.locateOffset( shell.$caret.sign.at1, shell.$caret );
+	var p       = this.locateOffset(
+		shell.$caret.sign.at1,
+		shell.$caret
+	);
 
-	var s = Math.round(p.y + descend);
-	var n = s - Math.round(fs + descend);
+	var s = Math.round( p.y + descend );
+	var n = s - Math.round( fs + descend );
 	var	x = p.x - 1;
 
-	return Jools.immute({
+	return Jools.immute( {
 		s: s,
 		n: n,
 		x: x
-	});
+	} );
 };
 
 
-/**
+/*
 | (re)flows the paragraph, positioning all chunks.
 */
-Para.prototype.getFlow = function()
+Para.prototype.getFlow = function( )
 {
-	var item      = shell.$space.getSub( this.path, 'Item' );
-	var doc       = item.$sub.doc;
-	var flowWidth = item.getFlowWidth();
-	var font      = doc.getFont(item);
+	var item = shell.$space.getSub(
+		this.path,
+		'Item'
+	);
+	var doc = item.$sub.doc;
+	var flowWidth = item.getFlowWidth( );
+	var font = doc.getFont( item );
 
 	var flow  = this.$flow;
 	// FIXME go into subnodes instead
 	var text = this.twig.text;
 
-	if (!config.debug.noCache && flow &&
+	if (
+		!config.debug.noCache && flow &&
 		flow.flowWidth === flowWidth &&
-		flow.fontsize  === font.size)
+		flow.fontsize  === font.size
+	)
 		{ return flow; }
 
 	// claers the caret flow cache if its within this flow
 	var caret = shell.$caret;
-	if ( caret.path && caret.path.equals(this.path) )
+	if (
+		caret.path &&
+		caret.path.equals( this.path )
+	)
 	{
 		caret.flow$line  = null;
 		caret.flow$token = null;
 	}
 
 	// builds position informations.
-	flow  = this.$flow = [];
+	flow  = this.$flow = [ ];
 	var spread = 0;  // width really used.
 
 	// current x positon, and current x including last tokens width
 	var x = 0, xw = 0;
 
 	var y = font.size;
-	var space = Euclid.Measure.width(font, ' ');
+	var space = Euclid.Measure.width( font, ' ' );
 	var line = 0;
-	flow[line] = { a: [], y: y, o: 0 };
+
+	flow[ line ] = {
+		a : [ ],
+		y : y,
+		o : 0
+	};
 
 	//var reg = !pre ? (/(\s*\S+|\s+$)\s?(\s*)/g) : (/(.+)()$/g);
-	var reg = (/(\s*\S+|\s+$)\s?(\s*)/g);
+	var reg = ( /(\s*\S+|\s+$)\s?(\s*)/g );
 
-	for(var ca = reg.exec(text); ca !== null; ca = reg.exec(text))
+	for( var ca = reg.exec(text); ca !== null; ca = reg.exec( text ) )
 	{
 		// a token is a word plus following hard spaces
-		var token = ca[1] + ca[2];
-		var w = Euclid.Measure.width(font, token);
+		var token = ca[ 1 ] + ca[ 2 ];
+		var w = Euclid.Measure.width( font, token );
 		xw = x + w + space;
 
-		if (flowWidth > 0 && xw > flowWidth)
+		if( flowWidth > 0 && xw > flowWidth )
 		{
-			if (x > 0)
+			if( x > 0 )
 			{
 				// soft break
-				if (spread < xw) spread = xw;
+				if( spread < xw )
+					{ spread = xw; }
+
 				x = 0;
 				xw = x + w + space;
-				y += Math.round(font.size * (1 + theme.bottombox));
+
+				y += Math.round( font.size * ( 1 + theme.bottombox ) );
+
 				line++;
-				flow[line] = {a: [], y: y, o: ca.index};
+
+				flow[ line ] = {
+					a : [ ],
+					y : y,
+					o : ca.index
+				};
 			}
 			else
 			{
@@ -224,7 +268,7 @@ Para.prototype.getFlow = function()
 			}
 		}
 
-		flow[line].a.push(
+		flow[ line ].a.push(
 			{
 				x: x,
 				w: w,
@@ -236,13 +280,14 @@ Para.prototype.getFlow = function()
 		x = xw;
 	}
 
-	if (spread < xw)
+	if( spread < xw )
 		{ spread = xw; }
 
 	flow.height    = y;
 	flow.flowWidth = flowWidth;
 	flow.spread    = spread;
 	flow.fontsize  = font.size;
+
 	return flow;
 };
 
@@ -250,19 +295,29 @@ Para.prototype.getFlow = function()
 /*
 | Returns the height of the para
 */
-Para.prototype.getHeight = function()
+Para.prototype.getHeight = function( )
 {
-	var flow = this.getFlow();
-	var doc = shell.$space.getSub( this.path, 'Doc' );
+	var flow = this.getFlow( );
+	var doc = shell.$space.getSub(
+		this.path,
+		'Doc'
+	);
 
-	return flow.height + Math.round(doc.getFont().size * theme.bottombox);
+	return (
+		flow.height +
+		Math.round( doc.getFont( ).size * theme.bottombox )
+	);
 };
 
 
 /*
 | Returns the offset by an x coordinate in a flow.
 */
-Para.prototype.getOffsetAt = function( line, x )
+Para.prototype.getOffsetAt =
+	function(
+		line,
+		x
+	)
 {
 	var item   = shell.$space.getSub ( this.path, 'Item' );
 	var doc    = item.$sub.doc;
@@ -308,23 +363,29 @@ Para.prototype.getOffsetAt = function( line, x )
 /*
 | Returns the point of a given offset.
 |
-| offset:   the offset to get the point from.
-| flowPos$: if set, writes flow$line and flow$token to
-|           the flow position used.
+| offset:   
 |
 | FIXME change to multireturn.
 */
-Para.prototype.locateOffset = function(offset, flowPos$)
+Para.prototype.locateOffset =
+	function(
+		offset,    // the offset to get the point from.
+		flowPos$   // if set, writes flow$line and flow$token
+		//         // to the flow position used.
+	)
 {
 	// FIXME cache position
 	var twig = this.twig;
-	var doc  = shell.$space.getSub ( this.path, 'Doc' );
-	var font = doc.getFont();
+	var doc  = shell.$space.getSub (
+		this.path,
+		'Doc'
+	);
+	var font = doc.getFont( );
 	var text = twig.text;
-	var flow = this.getFlow();
+	var flow = this.getFlow( );
 	var a, aZ, lineN, tokenN;
 
-	for (a = 1, aZ = flow.length, lineN = aZ - 1; a < aZ; a++)
+	for( a = 1, aZ = flow.length, lineN = aZ - 1; a < aZ; a++ )
 	{
 		if (flow[a].o > offset)
 			{ lineN = a - 1; break; }
@@ -364,47 +425,64 @@ Para.prototype.locateOffset = function(offset, flowPos$)
 
 /*
 | Returns the offset closest to a point.
-|
-| point: the point to look for
 */
-Para.prototype.getPointOffset = function(point)
+Para.prototype.getPointOffset =
+	function(
+		point     // the point to look for
+	)
 {
-	var flow = this.getFlow();
+	var flow = this.getFlow( );
 
 	var line;
-	for (line = 0; line < flow.length; line++)
+	for( line = 0; line < flow.length; line++ )
 	{
-		if (point.y <= flow[line].y)
+		if( point.y <= flow[ line ].y )
 			{ break; }
 	}
 
-	if (line >= flow.length)
+	if( line >= flow.length )
 		{ line--; }
 
-	return this.getOffsetAt(line, point.x);
+	return this.getOffsetAt( line, point.x );
 };
 
 
 /*
 | Text has been inputted.
 */
-Para.prototype.input = function(text)
+Para.prototype.input =
+	function(
+		text
+	)
 {
     var reg   = /([^\n]+)(\n?)/g;
 	var para  = this;
 	var item  = shell.$space.getSub ( para.path, 'Item' );
 	var doc   = item.$sub.doc;
 
-    for (var rx = reg.exec(text); rx !== null; rx = reg.exec(text))
+    for( var rx = reg.exec(text); rx !== null; rx = reg.exec( text ) )
 	{
-		var line = rx[1];
-		shell.peer.insertText(para.textPath, shell.$caret.sign.at1, line);
-        if (rx[2])
+		var line = rx[ 1 ];
+
+		shell.peer.insertText(
+			para.textPath,
+			shell.$caret.sign.at1,
+			line
+		);
+
+        if( rx[ 2 ] )
 		{
-			shell.peer.split( para.textPath, shell.$caret.sign.at1 );
-			para = doc.atRank( doc.twig.rankOf( para.key ) + 1 );
+			shell.peer.split(
+				para.textPath,
+				shell.$caret.sign.at1
+			);
+
+			para = doc.atRank(
+				doc.twig.rankOf( para.key ) + 1
+			);
 		}
     }
+
 	item.scrollCaretIntoView();
 };
 
@@ -412,7 +490,12 @@ Para.prototype.input = function(text)
 /*
 | Backspace pressed.
 */
-Para.prototype.keyBackspace = function(item, doc, caret)
+Para.prototype.keyBackspace =
+	function(
+		item,
+		doc,
+		caret
+	)
 {
 	if (caret.sign.at1 > 0)
 	{
@@ -437,9 +520,14 @@ Para.prototype.keyBackspace = function(item, doc, caret)
 */
 Para.prototype.keyDel = function(item, doc, caret)
 {
-	if (caret.sign.at1 < this.twig.text.length)
+	if( caret.sign.at1 < this.twig.text.length )
 	{
-		shell.peer.removeText(this.textPath, caret.sign.at1, 1);
+		shell.peer.removeText(
+			this.textPath,
+			caret.sign.at1,
+			1
+		);
+
 		return true;
 	}
 
@@ -447,7 +535,11 @@ Para.prototype.keyDel = function(item, doc, caret)
 
 	if (r < doc.twig.length - 1)
 	{
-		shell.peer.join(this.textPath, this.twig.text.length);
+		shell.peer.join(
+			this.textPath,
+			this.twig.text.length
+		);
+
 		return true;
 	}
 
@@ -458,16 +550,22 @@ Para.prototype.keyDel = function(item, doc, caret)
 /*
 | Down arrow pressed.
 */
-Para.prototype.keyDown = function(item, doc, caret)
+Para.prototype.keyDown =
+	function(
+		item,
+		doc,
+		caret
+	)
 {
-	var flow = this.getFlow();
+	var flow = this.getFlow( );
 	var x = caret.retainx !== null ? caret.retainx : caret.$pos.x;
 	var at1;
 
-	if (caret.flow$line < flow.length - 1)
+	if( caret.flow$line < flow.length - 1 )
 	{
 		// stays within this para
-		at1 = this.getOffsetAt(caret.flow$line + 1, x);
+		at1 = this.getOffsetAt( caret.flow$line + 1, x );
+
 		shell.setCaret(
 			'space',
 			{
@@ -476,6 +574,7 @@ Para.prototype.keyDown = function(item, doc, caret)
 			},
 			x
 		);
+
 		return true;
 	}
 
@@ -502,9 +601,14 @@ Para.prototype.keyDown = function(item, doc, caret)
 /*
 | End-key pressed.
 */
-Para.prototype.keyEnd = function(item, doc, caret)
+Para.prototype.keyEnd =
+	function(
+		item,
+		doc,
+		caret
+	)
 {
-	if (caret.sign.at1 === this.twig.text.length)
+	if( caret.sign.at1 === this.twig.text.length )
 		{ return false; }
 
 	shell.setCaret(
@@ -522,19 +626,33 @@ Para.prototype.keyEnd = function(item, doc, caret)
 /*
 | Enter-key pressed
 */
-Para.prototype.keyEnter = function(item, doc, caret)
+Para.prototype.keyEnter =
+	function(
+		item,
+		doc,
+		caret
+	)
 {
-	shell.peer.split(this.textPath, caret.sign.at1);
+	shell.peer.split(
+		this.textPath,
+		ca1ret.sign.at1
+	);
+
 	return true;
 };
 
 
-/**
+/*
 | Left arrow pressed.
 */
-Para.prototype.keyLeft = function(item, doc, caret)
+Para.prototype.keyLeft =
+	function(
+		item,
+		doc,
+		caret
+	)
 {
-	if (caret.sign.at1 > 0)
+	if( caret.sign.at1 > 0 )
 	{
 		shell.setCaret(
 			'space',
@@ -547,9 +665,11 @@ Para.prototype.keyLeft = function(item, doc, caret)
 	}
 
 	var r = doc.twig.rankOf( this.key );
-	if (r > 0)
+
+	if( r > 0 )
 	{
-		var ve = doc.atRank(r - 1);
+		var ve = doc.atRank( r - 1 );
+
 		shell.setCaret(
 			'space',
 			{
@@ -557,8 +677,10 @@ Para.prototype.keyLeft = function(item, doc, caret)
 				at1  : ve.twig.text.length
 			}
 		);
+
 		return true;
 	}
+
 	return false;
 };
 
@@ -566,9 +688,14 @@ Para.prototype.keyLeft = function(item, doc, caret)
 /*
 | Pos1-key pressed.
 */
-Para.prototype.keyPos1 = function(item, doc, caret)
+Para.prototype.keyPos1 =
+	function(
+		item,
+		doc,
+		caret
+	)
 {
-	if (caret.at1 === 0)
+	if( caret.at1 === 0 )
 		{ return false; }
 
 	shell.setCaret(
@@ -586,9 +713,14 @@ Para.prototype.keyPos1 = function(item, doc, caret)
 /*
 | Right arrow pressed.
 */
-Para.prototype.keyRight = function(item, doc, caret)
+Para.prototype.keyRight =
+	function(
+		item,
+		doc,
+		caret
+	)
 {
-	if (caret.sign.at1 < this.twig.text.length)
+	if( caret.sign.at1 < this.twig.text.length )
 	{
 		shell.setCaret(
 			'space',
@@ -601,9 +733,10 @@ Para.prototype.keyRight = function(item, doc, caret)
 	}
 
 	var r = doc.twig.rankOf( this.key );
-	if (r < doc.twig.length - 1)
+
+	if( r < doc.twig.length - 1 )
 	{
-		var ve = doc.atRank(r + 1);
+		var ve = doc.atRank( r + 1 );
 
 		shell.setCaret(
 			'space',
@@ -612,6 +745,7 @@ Para.prototype.keyRight = function(item, doc, caret)
 				at1  : 0
 			}
 		);
+
 		return true;
 	}
 
@@ -622,16 +756,25 @@ Para.prototype.keyRight = function(item, doc, caret)
 /*
 | Up arrow pressed.
 */
-Para.prototype.keyUp = function(item, doc, caret)
+Para.prototype.keyUp =
+	function(
+		item,
+		doc,
+		caret
+	)
 {
-	this.getFlow(); // FIXME, needed?
-	var x = (caret.retainx !== null ? caret.retainx : caret.$pos.x);
+	this.getFlow( ); // FIXME, needed?
+	var x = ( caret.retainx !== null ? caret.retainx : caret.$pos.x );
 	var at1;
 
-	if (caret.flow$line > 0)
+	if( caret.flow$line > 0 )
 	{
 		// stay within this para
-		at1 = this.getOffsetAt( caret.flow$line - 1, x );
+		at1 = this.getOffsetAt(
+			caret.flow$line - 1,
+			x
+		);
+
 		shell.setCaret(
 			'space',
 			{
@@ -667,7 +810,8 @@ Para.prototype.keyUp = function(item, doc, caret)
 /*
 | Force clears all caches.
 */
-Para.prototype.knock = function()
+Para.prototype.knock =
+	function( )
 {
 	this.$fabric = null;
 	this.$flow   = null;
@@ -677,39 +821,57 @@ Para.prototype.knock = function()
 /*
 | Handles a special key
 */
-Para.prototype.specialKey = function( key, shift, ctrl )
+Para.prototype.specialKey =
+	function(
+		key,
+		shift,
+		ctrl
+	)
 {
 	var caret  = shell.$caret;
 	var select = shell.selection;
-	var item   = shell.$space.getSub ( this.path, 'Item' );
+	var item   = shell.$space.getSub( this.path, 'Item' );
 	var doc    = item.$sub.doc;
 
 	// if true the caret moved or the selection changed
 	var show   = false;
 
-	if (ctrl)
+	if( ctrl )
 	{
 		switch( key )
 		{
 			case 'a' :
-				var v0 = doc.atRank(0);
-				var v1 = doc.atRank(doc.twig.length - 1);
+				var v0 = doc.atRank( 0 );
+				var v1 = doc.atRank( doc.twig.length - 1 );
 
-				select.sign1 = new Sign( { path: v0.textPath, at1: 0 } );
-				select.sign2 = new Sign( { path: v1.textPath, at1: v1.twig.text.length } );
+				select.sign1 = new Sign(
+					{
+						path: v0.textPath,
+						at1: 0
+					}
+				);
+
+				select.sign2 = new Sign(
+					{
+						path: v1.textPath,
+						at1: v1.twig.text.length
+					}
+				);
+
 				select.active = true;
-				shell.setCaret('space', select.sign2);
+				shell.setCaret( 'space', select.sign2 );
 				system.setInput( select.innerText() );
-				caret.show();
-				item.poke();
+				caret.show( );
+				item.poke( );
 				shell.redraw = true;
 				return true;
 		}
 	}
 
-	if (!shift && select.active)
+	if( !shift && select.active )
 	{
-		switch( key ) {
+		switch( key )
+		{
 			case 'down'      :
 			case 'end'       :
 			case 'left'      :
@@ -718,17 +880,19 @@ Para.prototype.specialKey = function( key, shift, ctrl )
 			case 'pos1'      :
 			case 'right'     :
 			case 'up'        :
-				select.deselect();
+				select.deselect( );
 				show = true;
 				break;
+
 			case 'backspace' :
 			case 'del'       :
-				select.remove();
+				select.remove( );
 				show = true;
 				key = null;
 				break;
+
 			case 'enter'     :
-				select.remove();
+				select.remove( );
 				show = true;
 				break;
 		}
@@ -746,54 +910,54 @@ Para.prototype.specialKey = function( key, shift, ctrl )
 			case 'up'       :
 				select.sign1 = caret.sign;
 				show = true;
-				item.poke();
+				item.poke( );
 		}
 	}
 
 	switch( key )
 	{
 		case 'backspace' :
-			show = this.keyBackspace(item, doc, caret) || show;
+			show = this.keyBackspace( item, doc, caret ) || show;
 			break;
 
 		case 'enter' :
-			show = this.keyEnter(item, doc, caret) || show;
+			show = this.keyEnter( item, doc, caret ) || show;
 			break;
 
 		case 'pageup' :
-			item.scrollPage(true);
+			item.scrollPage( true );
 			break;
 
 		case 'pagedown' :
-			item.scrollPage(false);
+			item.scrollPage( false );
 			break;
 
 		case 'down' :
-			show = this.keyDown(item, doc, caret) || show;
+			show = this.keyDown( item, doc, caret ) || show;
 			break;
 
 		case 'end' :
-			show = this.keyEnd(item, doc, caret) || show;
+			show = this.keyEnd( item, doc, caret ) || show;
 			break;
 
 		case 'left' :
-			show = this.keyLeft(item, doc, caret) || show;
+			show = this.keyLeft( item, doc, caret ) || show;
 			break;
 
 		case 'pos1'  :
-			show = this.keyPos1(item, doc, caret) || show;
+			show = this.keyPos1( item, doc, caret ) || show;
 			break;
 
 		case 'right' :
-			show = this.keyRight(item, doc, caret) || show;
+			show = this.keyRight( item, doc, caret ) || show;
 			break;
 
 		case 'up' :
-			show = this.keyUp(item, doc, caret) || show;
+			show = this.keyUp( item, doc, caret ) || show;
 			break;
 
 		case 'del' :
-			show = this.keyDel(item, doc, caret) || show;
+			show = this.keyDel( item, doc, caret ) || show;
 			break;
 	}
 
@@ -832,9 +996,12 @@ Para.prototype.specialKey = function( key, shift, ctrl )
 | Return the path to the .text attribute if this para.
 */
 Jools.lazyFixate(Para.prototype, 'textPath',
-	function()
+	function( )
 	{
-		return new Path( this.path, '++', 'text' );
+		return new Path(
+			this.path,
+			'++', 'text'
+		);
 	}
 );
 
@@ -842,11 +1009,12 @@ Jools.lazyFixate(Para.prototype, 'textPath',
 /*
 | Updates v-vine to match a new twig.
 */
-Para.prototype.update = function(twig)
+Para.prototype.update = function( twig )
 {
 	this.twig    = twig;
 	this.$flow   = null;
 	this.$fabric = null;
 };
 
-})();
+
+} )( );

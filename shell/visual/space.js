@@ -242,6 +242,21 @@ Space.prototype.draw = function( )
 			);
 
 			break;
+
+		case 'CREATE-LABEL' :
+
+			var position = Visual.Label.s_getPosition(
+				view.depoint( action.start ),
+				view.depoint( action.move  )
+			);
+
+			Visual.Label.s_draw(
+				this.fabric,
+				view,
+				position
+			);
+
+			break;
 	}
 };
 
@@ -391,6 +406,17 @@ Space.prototype.dragStart = function(p, shift, ctrl)
 			shell.bridge.startAction
 			(
 				'CREATE-NOTE',
+				'space',
+				'start', p
+			);
+			return;
+		}
+
+		if( shell.bridge.inCreate( 'LABEL' ) )
+		{
+			shell.bridge.startAction
+			(
+				'CREATE-LABEL',
 				'space',
 				'start', p
 			);
