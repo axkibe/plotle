@@ -230,12 +230,12 @@ Space.prototype.draw = function( )
 
 		case 'CREATE-NOTE' :
 
-			var zone = Visual.Note.transGetZone(
+			var zone = Visual.Note.s_getZone(
 				view.depoint( action.start ),
 				view.depoint( action.move  )
 			);
 
-			Visual.Note.transDraw(
+			Visual.Note.s_draw(
 				this.fabric,
 				view,
 				zone
@@ -473,7 +473,7 @@ Space.prototype.actionstop =
 
 			var key = shell.peer.newNote(
 				this.spacename,
-				Visual.Note.transGetZone(
+				Visual.Note.s_getZone(
 					view.depoint( action.start ),
 					view.depoint( action.move  )
 				)

@@ -11,7 +11,7 @@
 | Export
 */
 var Visual;
-Visual = Visual || {};
+Visual = Visual || { };
 
 
 /*
@@ -28,11 +28,12 @@ var theme;
 /*
 | Capsule
 */
-(function(){
+( function( ) {
 'use strict';
 
-if (typeof(window) === 'undefined')
-	{ throw new Error('this code requires a browser!'); }
+
+if ( typeof( window ) === 'undefined' )
+	{ throw new Error( 'this code requires a browser!' ); }
 
 
 /*
@@ -42,63 +43,83 @@ var Doc = Visual.Doc = function( spacename, twig, path )
 {
 	Visual.Base.call( this, spacename, twig, path );
 
-	if (this.$sub !== null)
+	if( this.$sub !== null )
 		{ throw new Error('iFail'); }
 
-	var $sub    = this.$sub = [];
+	var sub = this.$sub = [];
+
 	this._$pnws = null;
 
 	var ranks = twig.ranks;
 	var copse = twig.copse;
-	for (var $r = 0, rZ = twig.length; $r < rZ; $r++)
+
+	for( var r = 0, rZ = twig.length; r < rZ; r++ )
 	{
-		var k = ranks[$r];
-		$sub[k] = new Visual.Para( spacename, copse[k], new Path( path, '++', k ) );
+		var k = ranks[ r ];
+
+		sub[ k ] = new Visual.Para(
+			spacename,
+			copse[ k ],
+			new Path( path, '++', k )
+		);
 	}
 };
 
-Jools.subclass(Doc, Visual.Base);
+Jools.subclass( Doc, Visual.Base );
+
 
 /*
 | Marker
 */
 Doc.prototype.Doc = true;
 
+
 /*
 | Returns the vtwig at rank 'rank'.
 */
-Doc.prototype.atRank = function(rank)
+Doc.prototype.atRank =
+	function( rank )
 {
-	return this.$sub[this.twig.ranks[rank]];
+	return this.$sub[ this.twig.ranks[ rank ] ];
 };
 
 
 /*
-| Updates v-vine to match a new twig.
+| Updates the subtree to match a new twig.
 */
-Doc.prototype.update = function(twig)
+Doc.prototype.update =
+	function( twig )
 {
-	this.twig      = twig;
-	var $old       = this.$sub;
-	var $sub       = this.$sub = {};
-	var spacename  = this.spacename;
-	var copse      = twig.copse;
+	this.twig     = twig;
+	var old       = this.$sub;
+	var sub       = this.$sub = { };
+	var spacename = this.spacename;
+	var copse     = twig.copse;
 
-	for(var k in copse)
+	for( var k in copse )
 	{
-		var s = twig.copse[k];
-		var o = $old[k];
-		if (Jools.is(o))
+		var s = twig.copse[ k ];
+		var o = old[ k ];
+
+		if ( Jools.is( o ) )
 		{
-			if (o.twig !== s)
-				{ o.update(s); }
-			$sub[k] = o;
+			if ( o.twig !== s )
+			{
+				o.update( s );
+			}
+
+			sub[ k ] = o;
 		}
 		else
 		{
-			o = new Visual.Para( spacename, s, new Path( this.path, '++', k ) );
-			o.update(s);
-			$sub[k] = o;
+			o = new Visual.Para(
+				spacename,
+				s,
+				new Path( this.path, '++', k )
+			);
+
+			o.update( s );
+			sub[ k ] = o;
 		}
 	}
 
@@ -107,21 +128,25 @@ Doc.prototype.update = function(twig)
 
 /*
 | Draws the document on a fabric.
-|
-| fabric:      to draw upon
-| view:        current pan/zoom/motion
-| width:       the width to draw the document with.
-| innerMargin: distance of text to edge
-| scrollp:     scroll position
 */
-Doc.prototype.draw = function(fabric, view, width, innerMargin, scrollp)
+Doc.prototype.draw = function(
+	fabric,      // to draw upon
+	view,        // current pan/zoom/motion
+	width,       // the width to draw the document with
+	innerMargin, // distance of text to edge
+	scrollp      // scroll position
+)
 {
 	// FIXME <pre>
-	var paraSep = this.getParaSep();
+	var paraSep = this.getParaSep( );
 	var select = shell.selection;
 
 	// draws the selection
-	if (select.active && this.path.subPathOf( select.sign1.path )) {
+	if (
+		select.active &&
+		this.path.subPathOf( select.sign1.path )
+	)
+	{
 		fabric.paint(
 			theme.selection.style,
 			this,
@@ -134,21 +159,36 @@ Doc.prototype.draw = function(fabric, view, width, innerMargin, scrollp)
 	}
 
 	var y = innerMargin.n;
-	var pnws = {};   // north-west points of paras
+	var pnws = { };   // north-west points of paras
 
 	// draws the paragraphs
 	var twig = this.twig;
-	for (var $r = 0, rZ = twig.length; $r < rZ; $r++)
+	for ( var r = 0, rZ = twig.length; r < rZ; r++ )
 	{
-		var vpara = this.atRank($r);
-		var flow = vpara.getFlow();
+		var vpara = this.atRank( r );
+		var flow = vpara.getFlow( );
 
-		pnws[twig.ranks[$r]] = new Euclid.Point(innerMargin.w, Math.round(y));
-		var p = new Euclid.Point(innerMargin.w, Math.round(y - scrollp.y));
+		pnws[ twig.ranks[ r ] ] =
+			new Euclid.Point(
+				innerMargin.w,
+				Math.round( y )
+			);
 
-		vpara.draw(fabric, view, view.point(p));
+		var p =
+			new Euclid.Point(
+				innerMargin.w,
+				Math.round( y - scrollp.y )
+			);
+
+		vpara.draw(
+			fabric,
+			view,
+			view.point( p )
+		);
+
 		y += flow.height + paraSep;
 	}
+
 	this._$pnws = pnws;   // north-west points of paras
 };
 
@@ -156,18 +196,24 @@ Doc.prototype.draw = function(fabric, view, width, innerMargin, scrollp)
 /*
 | Force-clears all caches.
 */
-Doc.prototype.knock = function()
+Doc.prototype.knock =
+	function( )
 {
-	for (var $r = 0, rZ = this.twig.length; $r < rZ; $r++)
-		{ this.atRank($r).knock(); }
+	for ( var r = 0, rZ = this.twig.length; r < rZ; r++ )
+	{
+		this.atRank( r ).knock( );
+	}
 };
 
 
 /*
 | returns the north-west point of the paragraph with the key 'key'.
 */
-Doc.prototype.getPNW = function(key)
-	{ return this._$pnws[key]; };
+Doc.prototype.getPNW =
+	function( key )
+{
+	return this._$pnws[ key ];
+};
 
 
 /*
@@ -182,18 +228,22 @@ Doc.prototype.getHeight =
 	var twig    = this.twig;
 
 	var height   = 0;
-	for (var $r = 0, rZ = twig.length; $r < rZ; $r++)
+	for ( var r = 0, rZ = twig.length; r < rZ; r++ )
 	{
-		var vpara = this.atRank($r);
+		var vpara = this.atRank( r );
 
-		var flow = vpara.getFlow();
-		if ($r > 0)
-			{ height += paraSep; }
+		var flow = vpara.getFlow( );
+
+		if( r > 0 )
+		{
+			height += paraSep;
+		}
 
 		height += flow.height;
 	}
 
-	height += Math.round(fs * theme.bottombox);
+	height += Math.round( fs * theme.bottombox );
+
 	return height;
 };
 
@@ -201,11 +251,18 @@ Doc.prototype.getHeight =
 /*
 | Returns the width actually used of the document.
 */
-Doc.prototype.getSpread = function()
+Doc.prototype.getSpread =
+	function( )
 {
 	var spread = 0;
-	for (var $r = 0, rZ = this.twig.length; $r < rZ; $r++)
-		{ spread = Math.max(spread, this.atRank($r).getFlow().spread); }
+
+	for ( var r = 0, rZ = this.twig.length; r < rZ; r++ )
+	{
+		spread = Math.max(
+			spread,
+			this.atRank( r ).getFlow( ).spread
+		);
+	}
 
 	return spread;
 };
@@ -215,13 +272,15 @@ Doc.prototype.getSpread = function()
 | Returns the (default) paraSeperator for this document.
 | Parameter item is optional, just to safe double and tripple lookups.
 */
-Doc.prototype.getParaSep = function(item)
+Doc.prototype.getParaSep =
+	function( item )
 {
 	if( !Jools.is( item ) )
 		{ item = shell.$space.getSub( this.path, 'Item' ); }
 
 	var fs = this.getFont( ).size;
-	return item.getParaSep(fs);
+
+	return item.getParaSep( fs );
 };
 
 
@@ -236,17 +295,23 @@ Doc.prototype.getFont =
 	// for performance optimization otherwise
 	// graps it iself.
 	if(! Jools.is( item ) )
-		{ item = shell.$space.getSub( this.path, 'Item' ); }
+	{
+		item = shell.$space.getSub( this.path, 'Item' );
+	}
 
 	var fs = item.twig.fontsize;
 
 	if( item.fontSizeChange )
-		{ fs = item.fontSizeChange( fs ); }
+	{
+		fs = item.fontSizeChange( fs );
+	}
 
-	var $f = this._$font;
+	var f = this._$font;
 
-	if( $f && $f.size === fs )
-		{ return $f; }
+	if( f && f.size === fs )
+	{
+		return f;
+	}
 
 	return this._$font = fontPool.get( fs, 'la' );
 };
@@ -255,19 +320,22 @@ Doc.prototype.getFont =
 /*
 | Returns the paragraph at point
 */
-Doc.prototype.getParaAtPoint = function(p)
+Doc.prototype.getParaAtPoint =
+	function( p )
 {
 	var twig  = this.twig;
-	var $sub  = this.$sub;
-	var $pnws = this._$pnws;
+	var sub   = this.$sub;
+	var pnws  = this._$pnws;
 
-	for(var $r = 0, rZ = twig.length; $r < rZ; $r++)
+	for( var r = 0, rZ = twig.length; r < rZ; r++ )
 	{
-		var k     = twig.ranks[$r];
-		var vpara = $sub[k];
+		var k     = twig.ranks[ r ];
+		var vpara = sub[ k ];
 
-		if (p.y < $pnws[k].y + vpara.getFlow().height)
-			{ return vpara; }
+		if( p.y < pnws[ k ].y + vpara.getFlow( ).height )
+		{
+			return vpara;
+		}
 	}
 
 	return null;
@@ -287,83 +355,87 @@ Doc.prototype.sketchSelection = function(
 	scrollp)     // scroll position of the doc
 {
 	var select = shell.selection;
-	select.normalize();
+
+	select.normalize( );
 
 	var sp = scrollp;
 
 	var s1 = select.begin;
 	var s2 = select.end;
 
-	var key1 = s1.path.get(-2);
-	var key2 = s2.path.get(-2);
+	var key1 = s1.path.get( -2 );
+	var key2 = s2.path.get( -2 );
 
-	var pnw1 = this.getPNW(key1);
-	var pnw2 = this.getPNW(key2);
+	var pnw1 = this.getPNW( key1 );
+	var pnw2 = this.getPNW( key2 );
 
-	var vpara1 = this.$sub[key1];
-	var vpara2 = this.$sub[key2];
+	var vpara1 = this.$sub[ key1 ];
+	var vpara2 = this.$sub[ key2 ];
 
-	var p1 = vpara1.locateOffset(s1.at1);
-	var p2 = vpara2.locateOffset(s2.at1);
+	var p1 = vpara1.locateOffset( s1.at1 );
+	var p2 = vpara2.locateOffset( s2.at1 );
 
 	p1 = new Euclid.Point(
-		Math.round(p1.x + pnw1.x - sp.x),
-		Math.round(p1.y + pnw1.y - sp.y)
+		Math.round( p1.x + pnw1.x - sp.x ),
+		Math.round( p1.y + pnw1.y - sp.y )
 	);
 
 	p2 = new Euclid.Point(
-		Math.round(p2.x + pnw2.x - sp.x),
-		Math.round(p2.y + pnw2.y - sp.y)
+		Math.round( p2.x + pnw2.x - sp.x ),
+		Math.round( p2.y + pnw2.y - sp.y )
 	);
 
-	var fontsize = this.getFont().size;
-	var descend = Math.round(fontsize * theme.bottombox);
-	var  ascend = Math.round(fontsize);
+	var fontsize = this.getFont( ).size;
+	var descend = Math.round( fontsize * theme.bottombox );
+	var  ascend = Math.round( fontsize );
 	var rx = width - innerMargin.e;
 	var lx = innerMargin.w;
-	if ((Math.abs(p2.y - p1.y) < 2))
+
+	if( ( Math.abs( p2.y - p1.y ) < 2 ) )
 	{
 		// ***
-		fabric.moveTo(p1.x, p1.y + descend, view);
-		fabric.lineTo(p1.x, p1.y -  ascend, view);
-		fabric.lineTo(p2.x, p2.y -  ascend, view);
-		fabric.lineTo(p2.x, p2.y + descend, view);
-		fabric.lineTo(p1.x, p1.y + descend, view);
+		fabric.moveTo( p1.x, p1.y + descend, view );
+		fabric.lineTo( p1.x, p1.y -  ascend, view );
+		fabric.lineTo( p2.x, p2.y -  ascend, view );
+		fabric.lineTo( p2.x, p2.y + descend, view );
+		fabric.lineTo( p1.x, p1.y + descend, view );
 	}
-	else if (Math.abs(p1.y + fontsize + descend - p2.y) < 2 && (p2.x <= p1.x))
+	else if ( Math.abs( p1.y + fontsize + descend - p2.y ) < 2 && ( p2.x <= p1.x ) )
 	{
 		//      ***
 		// ***
-		fabric.moveTo(rx,   p1.y -  ascend, view);
-		fabric.lineTo(p1.x, p1.y -  ascend, view);
-		fabric.lineTo(p1.x, p1.y + descend, view);
-		fabric.lineTo(rx,   p1.y + descend, view);
+		fabric.moveTo( rx,   p1.y -  ascend, view );
+		fabric.lineTo( p1.x, p1.y -  ascend, view );
+		fabric.lineTo( p1.x, p1.y + descend, view );
+		fabric.lineTo( rx,   p1.y + descend, view );
 
-		fabric.moveTo(lx,   p2.y -  ascend, view);
-		fabric.lineTo(p2.x, p2.y -  ascend, view);
-		fabric.lineTo(p2.x, p2.y + descend, view);
-		fabric.lineTo(lx,   p2.y + descend, view);
+		fabric.moveTo( lx,   p2.y -  ascend, view );
+		fabric.lineTo( p2.x, p2.y -  ascend, view );
+		fabric.lineTo( p2.x, p2.y + descend, view );
+		fabric.lineTo( lx,   p2.y + descend, view );
 	}
 	else
 	{
 		//    *****
 		// *****
-		fabric.moveTo(rx,   p2.y -  ascend, view);
-		fabric.lineTo(p2.x, p2.y -  ascend, view);
-		fabric.lineTo(p2.x, p2.y + descend, view);
-		fabric.lineTo(lx,   p2.y + descend, view);
+		fabric.moveTo( rx,   p2.y -  ascend, view );
+		fabric.lineTo( p2.x, p2.y -  ascend, view );
+		fabric.lineTo( p2.x, p2.y + descend, view );
+		fabric.lineTo( lx,   p2.y + descend, view );
 
-		if (twist)
-			{ fabric.moveTo(lx, p1.y + descend, view); }
+		if( twist )
+			{ fabric.moveTo( lx, p1.y + descend, view ); }
 		else
-			{ fabric.lineTo(lx, p1.y + descend, view); }
+			{ fabric.lineTo( lx, p1.y + descend, view ); }
 
-		fabric.lineTo(p1.x, p1.y + descend, view);
-		fabric.lineTo(p1.x, p1.y -  ascend, view);
-		fabric.lineTo(rx,   p1.y -  ascend, view);
-		if (!twist)
-			{ fabric.lineTo(rx, p2.y - ascend, view); }
+		fabric.lineTo( p1.x, p1.y + descend, view );
+		fabric.lineTo( p1.x, p1.y -  ascend, view );
+		fabric.lineTo( rx,   p1.y -  ascend, view );
+
+		if( !twist )
+			{ fabric.lineTo( rx, p2.y - ascend, view ); }
 	}
 };
 
-})();
+
+} )( );

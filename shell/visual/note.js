@@ -52,7 +52,7 @@ var Note = Visual.Note = function( spacename, twig, path )
 Jools.subclass( Note, Visual.DocItem );
 
 
-Note.transGetZone =
+Note.s_getZone =
 	function(
 		p1,
 		p2
@@ -87,14 +87,14 @@ Note.transGetZone =
 | Draws a transitory note
 | ( A note in the making )
 */
-Note.transDraw =
+Note.s_draw =
 	function(
 		fabric,
 		view,
 		zone
 	)
 {
-	var silhoutte = Note.transGetSilhoutte( zone );
+	var silhoutte = Note.s_getSilhoutte( zone );
 
 	fabric.paint(
 		theme.note.style,
@@ -108,7 +108,7 @@ Note.transDraw =
 /*
 | Returns a silhoutte matching the zone.
 */
-Note.transGetSilhoutte =
+Note.s_getSilhoutte =
 	function( zone )
 {
 	var cr = theme.note.cornerRadius;
@@ -125,7 +125,7 @@ Note.transGetSilhoutte =
 /*
 | Returns the notes silhoutte anchored at zero.
 */
-Note.transGetZeroSilhoutte =
+Note.s_getZeroSilhoutte =
 	function( zone )
 {
 	var cr = theme.note.cornerRadius;
@@ -145,7 +145,7 @@ Note.transGetZeroSilhoutte =
 /*
 | Resize handles to show on notes.
 */
-Note.transHandles =
+Note.s_handles =
 	Jools.immute({
 		n  : true,
 		ne : true,
@@ -161,20 +161,20 @@ Note.transHandles =
 /*
 | Default margin for all notes.
 */
-Note.transInnerMargin =
+Note.s_innerMargin =
 	new Euclid.Margin( theme.note.innerMargin );
 
 
 /*
 | Default margin for all notes.
 */
-Note.prototype.innerMargin = Note.transInnerMargin;
+Note.prototype.innerMargin = Note.s_innerMargin;
 
 
 /*
 | Resize handles to show on notes.
 */
-Note.prototype.handles = Note.transHandles;
+Note.prototype.handles = Note.s_handles;
 
 
 /*
@@ -190,7 +190,7 @@ Note.prototype.getSilhoutte =
 	if( s && s.eq( zone ) )
 		{ return s; }
 
-	return this._$silhoutte = Note.transGetSilhoutte( zone );
+	return this._$silhoutte = Note.s_getSilhoutte( zone );
 };
 
 
@@ -212,7 +212,7 @@ Note.prototype.getZeroSilhoutte =
 		return s;
 	}
 
-	return Note.transGetZeroSilhoutte( zone );
+	return Note.s_getZeroSilhoutte( zone );
 };
 
 

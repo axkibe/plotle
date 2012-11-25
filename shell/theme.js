@@ -204,7 +204,7 @@ theme =
 	*/
 	label :
 	{
-		minHeight :  20,
+		minSize :  8,
 
 		ctrlArea :
 		{
