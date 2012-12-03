@@ -18,8 +18,9 @@ Visual = Visual || {};
 | Imports
 */
 var Action;
-var Euclid;
 var config;
+var Euclid;
+var fontPool;
 var Jools;
 var shell;
 var theme;
@@ -69,17 +70,7 @@ Label.s_handles = Jools.immute(
 */
 Label.s_getSilhoutte = function( zone )
 {
-	var s = this._$silhoutte;
-
-	if(
-		s &&
-		s.pnw.eq( zone.pnw ) &&
-		s.pse.x === zone.pse.x - 1 &&
-		s.pse.y === zone.pse.y - 1
-	)
-		{ return s; }
-
-	return this._$silhoutte = new Euclid.Rect(
+	return new Euclid.Rect(
 		'pnw/pse',
 		zone.pnw,
 		zone.pse.sub( 1, 1 )
@@ -96,27 +87,67 @@ Label.s_draw =
 	function(
 		fabric,
 		view,
-		position
+		placement
 	)
 {
 	var imargin   = Label.s_innerMargin;
+
+	var font = fontPool.get(
+		placement.fontsize,
+		'la'
+	);
+
+	var flow = Visual.Para.s_getFlow(
+		font,
+		0,
+		'Label'
+	);
+
+	var height = flow.height;
+	height += Math.round( font.size * theme.bottombox );
+
+	var zone;
+
+	if( Jools.is(placement.pnw) ) {
+		zone = new Euclid.Rect(
+			'pnw/size',
+			placement.pnw,
+			flow.spread,
+			height
+		);
+	} else {
+		zone = new Euclid.Rect(
+			'pnw/size', // FIXME make it pne/size
+			placement.pne.sub( flow.spread, 0 ),
+			flow.spread,
+			height
+		);
+	}
+
 	var silhoutte = Label.s_getSilhoutte( zone );
 
 	// draws selection and text
-	Visual.Doc.s_draw(
+	/*
+	var f = Visual.Para.s_draw(
 		fabric,
 		view,
-		position.zone.width,
+		zone.width,
 		imargin,
-		Euclid.Point.zero
+		placement.pnw
 	);
+		width,
+		height,
+		zoom,
+		font,
+		flow
+	*/
 
 	// draws the border
-	f.edge(
+	fabric.edge(
 		theme.label.style.edge,
 		silhoutte,
 		'sketch',
-		Euclid.View.proper
+		view
 	);
 };
 
@@ -125,15 +156,38 @@ Label.s_draw =
 | Returns the zone of the item.
 | An ongoing action can modify this to be different than meshmashine data.
 */
-Label.prototype.s_getPlacement = function( p1, p2 )
+Label.s_getPlacement = function( p1, p2 )
 {
 	var action = shell.bridge.action( );
-	var pnw = this.twig.pnw;
 
-	return Jools.immute( {
-		pnw      : p2,
-		fontsize : 10
-	} );
+	var rect = new Euclid.Rect(
+		'arbitrary',
+		p1,
+		p2
+	);
+
+	var dy = Math.abs( p1.y - p2.y );
+
+	var ny = Math.min( p1.y, p2.y );
+
+	var fs = dy / ( 1 + theme.bottombox );
+	fs = Math.max( fs, theme.label.minSize );
+
+	if( p2.x > p1.x ) {
+		return Jools.immute(
+			{
+				pnw      : new Euclid.Point( p1.x, ny ),
+				fontsize : fs
+			}
+		);
+	} else {
+		return Jools.immute(
+			{
+				pne      : new Euclid.Point( p1.x, ny ),
+				fontsize : fs
+			}
+		);
+	}
 
 	//  height += flow.height;
 	//  height += Math.round( fs * theme.bottombox );

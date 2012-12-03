@@ -68,6 +68,44 @@ Jools.subclass( Para, Visual.Base );
 
 
 /*
+| Draws the paragraph in a fabric and returns it.
+*/
+Para.s_draw =
+	function(
+		width,
+		height,
+		zoom,
+		font,
+		flow
+	)
+{
+	// FIXME work out exact height for text below baseline
+	var f = new Euclid.Fabric( width, height );
+	f.scale( zoom );
+	f.$zoom = zoom;
+
+	// draws text into the fabric
+	for( var a = 0, aZ = flow.length; a < aZ; a++ )
+	{
+		var line = flow[ a ];
+		for( var b = 0, bZ = line.a.length; b < bZ; b++ )
+		{
+			var chunk = line.a[ b ];
+
+			f.fillText(
+				chunk.t,
+				chunk.x,
+				line.y,
+				font
+			);
+		}
+	}
+
+	return f;
+};
+
+
+/*
 | Marker.
 */
 Para.prototype.Para = true;
@@ -76,44 +114,40 @@ Para.prototype.Para = true;
 /*
 | Draws the paragraph in its cache and returns it.
 */
-Para.prototype.draw = function( fabric, view, pnw )
+Para.prototype.draw =
+	function(
+		fabric,
+		view,
+		pnw
+	)
 {
 	var flow   = this.getFlow( );
+	var doc    = shell.$space.getSub(
+		this.path,
+		'Doc'
+	);
+	var font   = doc.getFont( );
 	var width  = flow.spread * view.zoom;
-	var doc    = shell.$space.getSub( this.path, 'Doc' );
 	var height = this.getHeight( ) * view.zoom;
 	var f      = this.$fabric;
 
-	// cache hit?
-	if (config.debug.noCache ||
+	// not a cache hit?
+	if (
+		config.debug.noCache ||
 		!f ||
 		f.width   !== width  ||
 		f.height  !== height ||
-		view.zoom !== f.$zoom)
+		view.zoom !== f.$zoom
+	)
 	{
-		// FIXME work out exact height for text below baseline
-		f = this.$fabric = new Euclid.Fabric( width, height );
-		f.scale( view.zoom );
-		f.$zoom = view.zoom;
+		f = this.$fabric = Para.s_draw(
+			width,
+			height,
+			view.zoom,
+			font,
+			flow
+		);
 
-		var font = doc.getFont( );
-
-		// draws text into the fabric
-		for( var a = 0, aZ = flow.length; a < aZ; a++ )
-		{
-			var line = flow[ a ];
-			for( var b = 0, bZ = line.a.length; b < bZ; b++ )
-			{
-				var chunk = line.a[ b ];
-
-				f.fillText(
-					chunk.t,
-					chunk.x,
-					line.y,
-					font
-				);
-			}
-		}
 	}
 
 	fabric.drawImage( f, pnw );
@@ -178,43 +212,13 @@ Para.prototype.getCaretPos =
 };
 
 
-/*
-| (re)flows the paragraph, positioning all chunks.
-*/
-Para.prototype.getFlow = function( )
+Para.s_getFlow =
+	function(
+		font,
+		flowWidth,
+		text
+	)
 {
-	var item = shell.$space.getSub(
-		this.path,
-		'Item'
-	);
-	var doc = item.$sub.doc;
-	var flowWidth = item.getFlowWidth( );
-	var font = doc.getFont( item );
-
-	var flow  = this.$flow;
-	// FIXME go into subnodes instead
-	var text = this.twig.text;
-
-	if (
-		!config.debug.noCache && flow &&
-		flow.flowWidth === flowWidth &&
-		flow.fontsize  === font.size
-	)
-		{ return flow; }
-
-	// claers the caret flow cache if its within this flow
-	var caret = shell.$caret;
-	if (
-		caret.path &&
-		caret.path.equals( this.path )
-	)
-	{
-		caret.flow$line  = null;
-		caret.flow$token = null;
-	}
-
-	// builds position informations.
-	flow  = this.$flow = [ ];
 	var spread = 0;  // width really used.
 
 	// current x positon, and current x including last tokens width
@@ -223,6 +227,7 @@ Para.prototype.getFlow = function( )
 	var y = font.size;
 	var space = Euclid.Measure.width( font, ' ' );
 	var line = 0;
+	var flow = [ ];
 
 	flow[ line ] = {
 		a : [ ],
@@ -293,11 +298,62 @@ Para.prototype.getFlow = function( )
 
 
 /*
+| (re)flows the paragraph, positioning all chunks.
+*/
+Para.prototype.getFlow =
+	function( )
+{
+	var item = shell.$space.getSub(
+		this.path,
+		'Item'
+	);
+
+	var flowWidth = item.getFlowWidth( );
+	var font      = item.$sub.doc.getFont( item );
+
+	var flow      = this.$flow;
+	// FIXME go into subnodes instead
+	var text      = this.twig.text;
+
+	// checks for cache hit
+	if (
+		!config.debug.noCache && flow &&
+		flow.flowWidth === flowWidth &&
+		flow.fontsize  === font.size
+	)
+	{
+		return flow;
+	}
+
+	// clears the caret flow cache if its within this flow
+	var caret = shell.$caret;
+	if (
+		caret.path &&
+		caret.path.equals( this.path )
+	)
+	{
+		caret.flow$line  = null;
+		caret.flow$token = null;
+	}
+
+
+	// builds position informations.
+	return this.$flow = Para.s_getFlow(
+		font,
+		flowWidth,
+		text
+	);
+};
+
+
+/*
 | Returns the height of the para
 */
-Para.prototype.getHeight = function( )
+Para.prototype.getHeight =
+	function( )
 {
 	var flow = this.getFlow( );
+
 	var doc = shell.$space.getSub(
 		this.path,
 		'Doc'
@@ -362,8 +418,6 @@ Para.prototype.getOffsetAt =
 
 /*
 | Returns the point of a given offset.
-|
-| offset:   
 |
 | FIXME change to multireturn.
 */
@@ -635,7 +689,7 @@ Para.prototype.keyEnter =
 {
 	shell.peer.split(
 		this.textPath,
-		ca1ret.sign.at1
+		caret.sign.at1
 	);
 
 	return true;

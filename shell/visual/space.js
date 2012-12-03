@@ -245,7 +245,7 @@ Space.prototype.draw = function( )
 
 		case 'CREATE-LABEL' :
 
-			var position = Visual.Label.s_getPosition(
+			var placement = Visual.Label.s_getPlacement(
 				view.depoint( action.start ),
 				view.depoint( action.move  )
 			);
@@ -253,7 +253,7 @@ Space.prototype.draw = function( )
 			Visual.Label.s_draw(
 				this.fabric,
 				view,
-				position
+				placement
 			);
 
 			break;
@@ -511,7 +511,14 @@ Space.prototype.actionstop =
 
 			break;
 
+		case 'CREATE-LABEL' :
+
+			// TODO
+
+			break;
+
 		case 'PAN' :
+
 			break;
 
 		case 'RELBIND' :
@@ -565,6 +572,13 @@ Space.prototype.actionmove = function( p, shift, ctrl )
 			action.move      = p;
 			shell.redraw     = true;
 			return 'pointer';
+
+		case 'CREATE-LABEL' :
+
+			action.move      = p;
+			shell.redraw     = true;
+			return 'pointer';
+
 
 		case 'PAN' :
 

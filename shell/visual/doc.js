@@ -163,6 +163,7 @@ Doc.prototype.draw = function(
 
 	// draws the paragraphs
 	var twig = this.twig;
+
 	for ( var r = 0, rZ = twig.length; r < rZ; r++ )
 	{
 		var vpara = this.atRank( r );
@@ -190,29 +191,6 @@ Doc.prototype.draw = function(
 	}
 
 	this._$pnws = pnws;   // north-west points of paras
-};
-
-
-/*
-| Force-clears all caches.
-*/
-Doc.prototype.knock =
-	function( )
-{
-	for ( var r = 0, rZ = this.twig.length; r < rZ; r++ )
-	{
-		this.atRank( r ).knock( );
-	}
-};
-
-
-/*
-| returns the north-west point of the paragraph with the key 'key'.
-*/
-Doc.prototype.getPNW =
-	function( key )
-{
-	return this._$pnws[ key ];
 };
 
 
@@ -247,6 +225,16 @@ Doc.prototype.getHeight =
 
 
 /*
+| returns the north-west point of the paragraph with the key 'key'.
+*/
+Doc.prototype.getPNW =
+	function( key )
+{
+	return this._$pnws[ key ];
+};
+
+
+/*
 | Returns the width actually used of the document.
 */
 Doc.prototype.getSpread =
@@ -263,28 +251,6 @@ Doc.prototype.getSpread =
 	}
 
 	return spread;
-};
-
-
-/*
-| Returns the (default) paraSeperator for this document.
-| Parameter item is optional,
-| just to safe double and tripple lookups.
-*/
-Doc.prototype.getParaSep =
-	function( item )
-{
-	if( !Jools.is( item ) )
-	{
-		item = shell.$space.getSub(
-			this.path,
-			'Item'
-		);
-	}
-
-	var fs = this.getFont( ).size;
-
-	return item.getParaSep( fs );
 };
 
 
@@ -344,6 +310,43 @@ Doc.prototype.getParaAtPoint =
 
 	return null;
 };
+
+
+
+/*
+| Returns the (default) paraSeperator for this document.
+| Parameter item is optional,
+| just to safe double and tripple lookups.
+*/
+Doc.prototype.getParaSep =
+	function( item )
+{
+	if( !Jools.is( item ) )
+	{
+		item = shell.$space.getSub(
+			this.path,
+			'Item'
+		);
+	}
+
+	var fs = this.getFont( ).size;
+
+	return item.getParaSep( fs );
+};
+
+
+/*
+| Force-clears all caches.
+*/
+Doc.prototype.knock =
+	function( )
+{
+	for ( var r = 0, rZ = this.twig.length; r < rZ; r++ )
+	{
+		this.atRank( r ).knock( );
+	}
+};
+
 
 
 /*

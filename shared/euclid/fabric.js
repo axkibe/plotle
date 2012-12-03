@@ -258,8 +258,15 @@ Fabric.prototype.drawImage =
 {
 	if( image instanceof Fabric )
 	{
-		if( !( image.width > 0 && image.height > 0 ) )
-			{ return; }
+		if(
+			!(
+				image.width > 0 &&
+				image.height > 0
+			)
+		)
+		{
+			return;
+		}
 
 		image = image._canvas;
 	}
@@ -282,12 +289,20 @@ Fabric.prototype.drawImage =
 	Jools.ensureInt( x, y );
 
 	if( Jools.is( c ) )
-		{ this._cx.globalCompositeOperation = c; }
+	{
+		this._cx.globalCompositeOperation = c;
+	}
 
-	this._cx.drawImage(image, x, y);
+	this._cx.drawImage(
+		image,
+		x,
+		y
+	);
 
 	if( Jools.is( c ) )
-		{ this._cx.globalCompositeOperation = 'source-over'; }
+	{
+		this._cx.globalCompositeOperation = 'source-over';
+	}
 };
 
 
