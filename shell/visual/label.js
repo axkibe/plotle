@@ -40,17 +40,27 @@ if( typeof( window ) === 'undefined' )
 /*
 | Constructor.
 */
-var Label = Visual.Label = function(spacename, twig, path)
+var Label = Visual.Label = function(
+	spacename,
+	twig,
+	path
+)
 {
-	Visual.DocItem.call(this, spacename, twig, path);
+	Visual.DocItem.call(
+		this,
+		spacename,
+		twig,
+		path
+	);
 };
-Jools.subclass(Label, Visual.DocItem);
+
+Jools.subclass( Label, Visual.DocItem );
 
 
 /*
 | Default margin for all labels.
 */
-Label.s_innerMargin = new Euclid.Margin(theme.label.innerMargin);
+Label.s_innerMargin = new Euclid.Margin( theme.label.innerMargin );
 
 /*
 | Resize handles to show on labels
@@ -83,64 +93,30 @@ Label.s_getSilhoutte = function( zone )
 | Draws a transitory label
 | ( A label in the making )
 */
-Label.s_draw =
+Label.s_drawTrans =
 	function(
-		fabric,
-		view,
-		placement
+		fabric,    // the fabric to draw upon
+		view,      // the current view
+		transLabel // the transLabel to draw
 	)
 {
-	var imargin   = Label.s_innerMargin;
-
-	var font = fontPool.get(
-		placement.fontsize,
-		'la'
-	);
-
-	var flow = Visual.Para.s_getFlow(
-		font,
-		0,
-		'Label'
-	);
-
-	var height = flow.height;
-	height += Math.round( font.size * theme.bottombox );
-
-	var zone;
-
-	if( Jools.is(placement.pnw) ) {
-		zone = new Euclid.Rect(
-			'pnw/size',
-			placement.pnw,
-			flow.spread,
-			height
-		);
-	} else {
-		zone = new Euclid.Rect(
-			'pnw/size', // FIXME make it pne/size
-			placement.pne.sub( flow.spread, 0 ),
-			flow.spread,
-			height
-		);
-	}
+	var zone = transLabel.zone;
 
 	var silhoutte = Label.s_getSilhoutte( zone );
 
 	// draws selection and text
-	/*
 	var f = Visual.Para.s_draw(
-		fabric,
-		view,
 		zone.width,
-		imargin,
-		placement.pnw
+		zone.height,
+		view.zoom,
+		transLabel.font,
+		transLabel.flow
 	);
-		width,
-		height,
-		zoom,
-		font,
-		flow
-	*/
+
+	fabric.drawImage(
+		f,
+		zone.pnw
+	);
 
 	// draws the border
 	fabric.edge(
@@ -153,10 +129,13 @@ Label.s_draw =
 
 
 /*
-| Returns the zone of the item.
-| An ongoing action can modify this to be different than meshmashine data.
+| Creates and returns a transient label.
 */
-Label.s_getPlacement = function( p1, p2 )
+Label.s_createTrans =
+	function(
+		p1,
+		p2
+	)
 {
 	var action = shell.bridge.action( );
 
@@ -173,119 +152,53 @@ Label.s_getPlacement = function( p1, p2 )
 	var fs = dy / ( 1 + theme.bottombox );
 	fs = Math.max( fs, theme.label.minSize );
 
-	if( p2.x > p1.x ) {
-		return Jools.immute(
-			{
-				pnw      : new Euclid.Point( p1.x, ny ),
-				fontsize : fs
-			}
-		);
-	} else {
-		return Jools.immute(
-			{
-				pne      : new Euclid.Point( p1.x, ny ),
-				fontsize : fs
-			}
-		);
-	}
-
-	//  height += flow.height;
-	//  height += Math.round( fs * theme.bottombox );
-
-
-	// FIXME Caching!
-	/*
-	var doc    = this.$sub.doc;
-	var fs     = doc.getFont( ).size;
-
-	var width  = Math.max(
-		Math.ceil( doc.getSpread( ) ),
-		Math.round( fs * 0.3 )
-	);
-	var height = Math.max(
-		Math.ceil( doc.getHeight( ) ),
-		Math.round( fs )
+	var font = fontPool.get(
+		fs,
+		'la'
 	);
 
-	if(
-		!action ||
-		!this.path.equals( action.itemPath )
-	)
+	var flow = Visual.Para.s_getFlow(
+		font,
+		0,
+		'Label'
+	);
+
+	var height =
+		flow.height +
+		Math.round( font.size * theme.bottombox );
+
+	var pnw;
+
+	if( p2.x > p1.x )
 	{
-		return new Euclid.Rect(
-			'pnw/size',
-			pnw,
-			width,
-			height
+		pnw = new Euclid.Point(
+			p1.x,
+			ny
+		);
+	}
+	else
+	{
+		pnw = new Euclid.Point(
+			p1.x - flow.spread,
+			ny
 		);
 	}
 
-	// FIXME cache the last zone
+	var zone = new Euclid.Rect(
+		'pnw/size',
+		pnw,
+		flow.spread,
+		height
+	);
 
-	switch( action.type )
-	{
-		case 'ITEMDRAG' :
-
-			var mx = action.move.x - action.start.x;
-			var my = action.move.y - action.start.y;
-
-			return new Euclid.Rect(
-				'pnw/size',
-				pnw.add( mx, my ),
-				width,
-				height
-			);
-
-		case 'ITEMRESIZE' :
-
-			// resizing is done by fontSizeChange( )
-			var szone = action.startZone;
-			if( !szone )
-			{
-				return new Euclid.Rect(
-					'pnw/size',
-					pnw,
-					width,
-					height
-				);
-			}
-
-			switch( action.align )
-			{
-				case 'ne' :
-					pnw = pnw.add( 0, szone.height - height );
-					break;
-				case 'se' :
-					break;
-				case 'sw' :
-					pnw = pnw.add( szone.width - width, 0 );
-					break;
-				case 'nw' :
-					pnw = pnw.add( szone.width - width, szone.height - height );
-					break;
-				default :
-					throw new Error( 'unknown align' );
-			}
-
-			return new Euclid.Rect(
-				'pnw/size',
-				pnw,
-				width,
-				height
-			);
-
-		default :
-
-			return new Euclid.Rect(
-				'pnw/size',
-				pnw,
-				width,
-				height
-			);
-	}
-
-	// TODO pull the Rect creation out
-	*/
+	return Jools.immute(
+		{
+			font     : font,
+			flow     : flow,
+			pnw      : pnw,
+			zone     : zone
+		}
+	);
 };
 
 
@@ -304,7 +217,10 @@ Label.prototype.handles = Label.s_handles;
 /*
 | Returns the labels silhoutte.
 */
-Label.prototype.getSilhoutte = function( zone )
+Label.prototype.getSilhoutte =
+	function(
+		zone
+	)
 {
 	var s = this._$silhoutte;
 
@@ -327,7 +243,10 @@ Label.prototype.getSilhoutte = function( zone )
 /*
 | Returns the items silhoutte anchored at zero.
 */
-Label.prototype.getZeroSilhoutte = function( zone )
+Label.prototype.getZeroSilhoutte =
+	function(
+		zone
+	)
 {
 	var s = this._$zeroSilhoutte;
 
@@ -351,7 +270,8 @@ Label.prototype.getZeroSilhoutte = function( zone )
 /*
 | Dummy since a label does not scroll.
 */
-Label.prototype.scrollCaretIntoView = function( )
+Label.prototype.scrollCaretIntoView
+	= function( )
 {
 	// nada
 };
@@ -360,7 +280,8 @@ Label.prototype.scrollCaretIntoView = function( )
 /*
 | Dummy since a label does not scroll.
 */
-Label.prototype.scrollPage = function( up )
+Label.prototype.scrollPage
+	= function( up )
 {
 	// nada
 };
@@ -369,13 +290,19 @@ Label.prototype.scrollPage = function( up )
 /*
 | Draws the label.
 */
-Label.prototype.draw = function( fabric, view )
+Label.prototype.draw
+	= function(
+		fabric,
+		view
+	)
 {
 	var f    = this.$fabric;
 	var zone = view.rect( this.getZone( ) );
 
 	// no buffer hit?
-	if (config.debug.noCache || !f ||
+	if (
+		config.debug.noCache ||
+		!f ||
 		zone.width  !== f.width ||
 		zone.height !== f.height ||
 		view.zoom !== f.$zoom
@@ -405,14 +332,18 @@ Label.prototype.draw = function( fabric, view )
 		);
 	}
 
-	fabric.drawImage( f, zone.pnw );
+	fabric.drawImage(
+		f,
+		zone.pnw
+	);
 };
 
 
 /*
 | Returns the width for the contents flow.
 */
-Label.prototype.getFlowWidth = function( )
+Label.prototype.getFlowWidth =
+	function( )
 {
 	return 0;
 };
@@ -484,7 +415,11 @@ Label.prototype.getParaSep =
 | Mouse wheel turned.
 */
 Label.prototype.mousewheel =
-	function( view, p, dir )
+	function(
+		view,
+		p,
+		dir
+	)
 {
 	return false;
 };
@@ -494,7 +429,8 @@ Label.prototype.mousewheel =
 | Returns the zone of the item.
 | An ongoing action can modify this to be different than meshmashine data.
 */
-Label.prototype.getZone = function( )
+Label.prototype.getZone =
+	function( )
 {
 	var action = shell.bridge.action( );
 	var pnw = this.twig.pnw;
@@ -610,7 +546,10 @@ Label.prototype.getZone = function( )
 | Sets the items position and size aften an action.
 */
 Label.prototype.actionstop =
-	function( view, p )
+	function(
+		view,
+		p
+	)
 {
 	var action = shell.bridge.action( );
 
@@ -647,7 +586,8 @@ Label.prototype.actionstop =
 /*
 | Returns the ctrl area.
 */
-Label.prototype.getCtrlFix = function( )
+Label.prototype.getCtrlFix =
+	function( )
 {
 	var zone = this.getZone( );
 	var pnw  = zone.pnw;

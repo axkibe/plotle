@@ -68,7 +68,10 @@ var Space = Visual.Space =
 		};
 };
 
-Jools.subclass( Space, Visual.Base );
+Jools.subclass(
+	Space,
+	Visual.Base
+);
 
 
 /*
@@ -147,11 +150,24 @@ Space.prototype.createItem = function( twig, k )
 
 	switch (twig.type)
 	{
-		case 'Note'     : Proto = Visual.Note;     break;
-		case 'Label'    : Proto = Visual.Label;    break;
-		case 'Portal'   : Proto = Visual.Portal;   break;
-		case 'Relation' : Proto = Visual.Relation; break;
-		default : throw new Error( 'unknown type: ' + twig.type );
+		case 'Note' :
+			Proto = Visual.Note;
+			break;
+
+		case 'Label' :
+			Proto = Visual.Label;
+			break;
+
+		case 'Portal' :
+			Proto = Visual.Portal;
+			break;
+
+		case 'Relation' :
+			Proto = Visual.Relation;
+			break;
+
+		default :
+			throw new Error( 'unknown type: ' + twig.type );
 	}
 
 	return new Proto(
@@ -166,7 +182,8 @@ Space.prototype.createItem = function( twig, k )
 /*
 | Redraws the complete space.
 */
-Space.prototype.draw = function( )
+Space.prototype.draw =
+	function( )
 {
 	var twig = this.twig;
 	var view = this.$view;
@@ -245,15 +262,15 @@ Space.prototype.draw = function( )
 
 		case 'CREATE-LABEL' :
 
-			var placement = Visual.Label.s_getPlacement(
+			var trans = Visual.Label.s_createTrans(
 				view.depoint( action.start ),
 				view.depoint( action.move  )
 			);
 
-			Visual.Label.s_draw(
+			Visual.Label.s_drawTrans(
 				this.fabric,
 				view,
-				placement
+				trans
 			);
 
 			break;
@@ -264,17 +281,21 @@ Space.prototype.draw = function( )
 /*
 | Force-clears all caches.
 */
-Space.prototype.knock = function( )
+Space.prototype.knock =
+	function( )
 {
 	for( var r = this.twig.length - 1; r >= 0; r-- )
-		{ this.atRank( r ).knock( ); }
+	{
+		this.atRank( r ).knock( );
+	}
 };
 
 
 /*
 | Positions the caret.
 */
-Space.prototype.positionCaret = function( )
+Space.prototype.positionCaret =
+	function( )
 {
 	this.getSub( shell.$caret.sign.path, 'positionCaret' )
 		.positionCaret( this.$view );
@@ -284,7 +305,13 @@ Space.prototype.positionCaret = function( )
 /*
 | Mouse wheel
 */
-Space.prototype.mousewheel = function( p, dir, shift, ctrl )
+Space.prototype.mousewheel =
+	function(
+		p,
+		dir,
+		shift,
+		ctrl
+	)
 {
 	var view = this.$view;
 	var twig = this.twig;
@@ -317,16 +344,24 @@ Space.prototype.mousewheel = function( p, dir, shift, ctrl )
 |
 | Returns true if the mouse pointer hovers over anything.
 */
-Space.prototype.pointingHover = function( p, shift, ctrl )
+Space.prototype.pointingHover =
+	function(
+		p,
+		shift,
+		ctrl
+	)
 {
-	if (p === null)
-		{ return null; }
+	if( p === null )
+	{
+		return null;
+	}
 
 	var view   = this.$view;
 	var cursor = null;
 
 	var focus = this.focusedItem( );
-	if (focus)
+
+	if( focus )
 	{
 		if( focus.withinCtrlArea( view, p ) )
 		{
@@ -336,29 +371,46 @@ Space.prototype.pointingHover = function( p, shift, ctrl )
 		{
 			var com = focus.checkHandles( view, p );
 
-			if (com)
-				{ cursor = com + '-resize'; }
+			if( com )
+			{
+				cursor = com + '-resize';
+			}
 		}
 	}
 
-	for(var a = 0, aZ = this.twig.length; a < aZ; a++)
+	for( var a = 0, aZ = this.twig.length; a < aZ; a++ )
 	{
-		var item = this.atRank(a);
-		if (cursor)
-			{ item.pointingHover( view, null ); }
+		var item = this.atRank( a );
+
+		if( cursor )
+		{
+			item.pointingHover(
+				view,
+				null
+			);
+		}
 		else
-			{ cursor = item.pointingHover( view, p ); }
+		{
+			cursor = item.pointingHover(
+				view,
+				p
+			);
+		}
 	}
 
 	return cursor || 'pointer';
-
 };
 
 
 /*
 | Starts an operation with the mouse button held down.
 */
-Space.prototype.dragStart = function(p, shift, ctrl)
+Space.prototype.dragStart =
+	function(
+		p,
+		shift,
+		ctrl
+	)
 {
 	var view  = this.$view;
 	var focus = this.focusedItem( );
@@ -396,7 +448,10 @@ Space.prototype.dragStart = function(p, shift, ctrl)
 				ctrl,
 				this.access
 			)
-		) { return; }
+		)
+		{
+			return;
+		}
 	}
 
 	if( shell.bridge.inMode( 'CREATE' ) )
@@ -436,38 +491,59 @@ Space.prototype.dragStart = function(p, shift, ctrl)
 	return;
 };
 
-/**
+
+/*
 | A mouse click.
 */
-Space.prototype.click = function(p, shift, ctrl)
+Space.prototype.click =
+	function(
+		p,
+		shift,
+		ctrl
+	)
 {
 	var self = this;
 	var view = this.$view;
 
 	// clicked the tab of the focused item?
 	var focus = this.focusedItem( );
-	if( focus && focus.withinCtrlArea( view, p ) )
+
+	if(
+		focus &&
+		focus.withinCtrlArea( view, p )
+	)
 	{
 		shell.setMenu( focus.getMenu( view ) );
 		return;
 	}
 
 	// clicked some item?
-	for(var a = 0, aZ = this.twig.length; a < aZ; a++)
+	for( var a = 0, aZ = this.twig.length; a < aZ; a++ )
 	{
 		var item = this.atRank(a);
-		if (item.click( view, p, shift, ctrl) )
-			{ return true; }
+		if(
+			item.click(
+				view,
+				p,
+				shift,
+				ctrl
+			)
+		)
+		{
+			return true;
+		}
 	}
 
 	// otherwhise pop up the float menu
-	shell.setMenu( new EllipseMenu(
-		system.fabric,
-		p,
-		theme.ellipseMenu,
-		this._floatMenuLabels,
-		self
-	) );
+	shell.setMenu(
+		new EllipseMenu(
+			system.fabric,
+			p,
+			theme.ellipseMenu,
+			this._floatMenuLabels,
+			self
+		)
+	);
 
 	shell.dropFocus( );
 	shell.redraw = true;
@@ -509,12 +585,26 @@ Space.prototype.actionstop =
 
 			shell.bridge.changeCreate( null );
 
+			shell.redraw = true;
 			break;
 
 		case 'CREATE-LABEL' :
 
-			// TODO
+			var trans = Visual.Label.s_createTrans(
+				view.depoint( action.start ),
+				view.depoint( action.move  )
+			);
 
+			key = shell.peer.newLabel(
+				this.spacename,
+				trans.pnw,
+				'Label',
+				trans.font.size
+			);
+
+			this.$sub[ key ].grepFocus( );
+
+			shell.redraw = true;
 			break;
 
 		case 'PAN' :
