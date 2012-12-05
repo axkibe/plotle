@@ -47,42 +47,126 @@ var Portal = Visual.Portal =
 		path
 	)
 {
-	Visual.Item.call( this, spacename, twig, path );
+	Visual.Item.call(
+		this,
+		spacename,
+		twig,
+		path
+	);
 };
 
-Jools.subclass( Portal, Visual.Item );
+Jools.subclass(
+	Portal,
+	Visual.Item
+);
+
+
+Portal.s_handles =
+	Jools.immute(
+		{
+			n  : true,
+			ne : true,
+			e  : true,
+			se : true,
+			s  : true,
+			sw : true,
+			w  : true,
+			nw : true
+		}
+	);
+
 
 
 /*
-| Resize handles to show on notes.
+| Resize handles to show on portals.
 */
-Portal.prototype.handles =
+Portal.prototype.handles = Portal.s_handles;
+
+
+/*
+| Gets the zone for a transient portal
+*/
+Portal.s_getZone =
+	function(
+		p1,
+		p2
+	)
 {
-	n  : true,
-	ne : true,
-	e  : true,
-	se : true,
-	s  : true,
-	sw : true,
-	w  : true,
-	nw : true
+	var zone = new Euclid.Rect(
+		'arbitrary',
+		p1,
+		p2
+	);
+
+	var minWidth  = theme.portal.minWidth;
+	var minHeight = theme.portal.minHeight;
+
+	if(
+		zone.width  < minWidth ||
+		zone.height < minHeight
+	) {
+		return new Euclid.Rect(
+			'pnw/size',
+			zone.pnw,
+			Math.max( minWidth,  zone.width  ),
+			Math.max( minHeight, zone.height )
+		);
+	} else {
+		return zone;
+	}
 };
 
+
+/*
+| Draws a transitory portal
+| ( A portal in the making )
+*/
+Portal.s_drawTrans =
+	function(
+		fabric,
+		view,
+		zone
+	)
+{
+	var silhoutte = Portal.s_getSilhoutte( zone );
+
+	console.log(silhoutte);
+
+	fabric.paint(
+		theme.portal.style,
+		silhoutte,
+		'sketch',
+		view
+	);
+};
+
+
+/*
+| Returns the portals silhoutte anchored at zero.
+*/
+Portal.s_getZeroSilhoutte =
+	function(
+		zone //  the portals zone
+	)
+{
+	return new Euclid.Ellipse(
+		Euclid.Point.zero,
+		new Euclid.Point(
+			zone.width,
+			zone.height
+		)
+	);
+};
 
 /*
 | Returns the portals silhoutte.
-|
-| zone :  the cache for the items zone
 */
-Portal.prototype.getSilhoutte =
-	function( zone )
+Portal.s_getSilhoutte =
+	function(
+		zone //  the portals zone
+	)
 {
-	var s = this._$silhoutte;
-
-	if( s && s.eq( zone ) )
-		{ return s; }
-
-	return this._$silhoutte = new Euclid.Ellipse(
+	return new Euclid.Ellipse(
 		zone.pnw,
 		zone.pse
 	);
@@ -91,28 +175,51 @@ Portal.prototype.getSilhoutte =
 
 /*
 | Returns the portals silhoutte.
-|
-| zone :  the cache for the items zone
 */
-Portal.prototype.getZeroSilhoutte =
-	function( zone )
+Portal.prototype.getSilhoutte =
+	function(
+		zone //  the portals zone
+	)
 {
-	var s = this._$zeroSilhoutte;
+	// checks for a cache hit
+	var s = this._$silhoutte;
 
-	if( s &&
-		s.width  === zone.width &&
-		s.height === zone.height )
+	if(
+		s &&
+		s.eq( zone )
+	)
 	{
 		return s;
 	}
 
-	return this._$zeroSilhoutte = new Euclid.Ellipse(
-		Euclid.Point.zero,
-		new Euclid.Point(
-			zone.width,
-			zone.height
-		)
-	);
+	// otherwise creates a new silhoutte
+
+	return this._$silhoutte = Portal.s_getSilhoutte( zone );
+};
+
+
+/*
+| Returns the portals silhoutte.
+*/
+Portal.prototype.getZeroSilhoutte =
+	function(
+		zone    // the cache for the items zone
+	)
+{
+	// checks for cache hit
+	var s = this._$zeroSilhoutte;
+
+	if(
+		s &&
+		s.width  === zone.width &&
+		s.height === zone.height
+	)
+	{
+		return s;
+	}
+
+	// if not creates a new silhoutte
+	return this._$zeroSilhoutte = Portal.s_getZeroSilhoutte( zone );
 };
 
 

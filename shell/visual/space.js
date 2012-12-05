@@ -187,6 +187,7 @@ Space.prototype.draw =
 {
 	var twig = this.twig;
 	var view = this.$view;
+	var zone;
 
 	for( var r = twig.length - 1; r >= 0; r-- )
 	{
@@ -247,12 +248,12 @@ Space.prototype.draw =
 
 		case 'CREATE-NOTE' :
 
-			var zone = Visual.Note.s_getZone(
+			zone = Visual.Note.s_getZone(
 				view.depoint( action.start ),
 				view.depoint( action.move  )
 			);
 
-			Visual.Note.s_draw(
+			Visual.Note.s_drawTrans(
 				this.fabric,
 				view,
 				zone
@@ -271,6 +272,21 @@ Space.prototype.draw =
 				this.fabric,
 				view,
 				trans
+			);
+
+			break;
+
+		case 'CREATE-PORTAL' :
+
+			zone = Visual.Portal.s_getZone(
+				view.depoint( action.start ),
+				view.depoint( action.move  )
+			);
+
+			Visual.Portal.s_drawTrans(
+				this.fabric,
+				view,
+				zone
 			);
 
 			break;
@@ -436,26 +452,11 @@ Space.prototype.dragStart =
 		return;
 	}
 
-	// see if one item was targeted
-	for( var a = 0, aZ = this.twig.length; a < aZ; a++ )
-	{
-		var item = this.atRank( a );
-		if(
-			item.dragStart(
-				view,
-				p,
-				shift,
-				ctrl,
-				this.access
-			)
-		)
-		{
-			return;
-		}
-	}
 
 	if( shell.bridge.inMode( 'CREATE' ) )
 	{
+		// TODO simplify this code
+
 		if( shell.bridge.inCreate( 'NOTE' ) )
 		{
 			shell.bridge.startAction
@@ -475,6 +476,37 @@ Space.prototype.dragStart =
 				'space',
 				'start', p
 			);
+			return;
+		}
+
+		if( shell.bridge.inCreate( 'PORTAL' ) )
+		{
+			shell.bridge.startAction
+			(
+				'CREATE-PORTAL',
+				'space',
+				'start', p
+			);
+			return;
+		}
+	}
+
+	// normal mode
+
+	// see if one item was targeted
+	for( var a = 0, aZ = this.twig.length; a < aZ; a++ )
+	{
+		var item = this.atRank( a );
+		if(
+			item.dragStart(
+				view,
+				p,
+				shift,
+				ctrl,
+				this.access
+			)
+		)
+		{
 			return;
 		}
 	}
@@ -586,6 +618,7 @@ Space.prototype.actionstop =
 			shell.bridge.changeCreate( null );
 
 			shell.redraw = true;
+
 			break;
 
 		case 'CREATE-LABEL' :
@@ -604,7 +637,28 @@ Space.prototype.actionstop =
 
 			this.$sub[ key ].grepFocus( );
 
+			shell.bridge.changeCreate( null );
+
 			shell.redraw = true;
+
+			break;
+
+		case 'CREATE-PORTAL' :
+
+			var key = shell.peer.newPortal(
+				this.spacename,
+				Visual.Portal.s_getZone(
+					view.depoint( action.start ),
+					view.depoint( action.move  )
+				)
+			);
+
+			this.$sub[ key ].grepFocus( );
+
+			shell.bridge.changeCreate( null );
+
+			shell.redraw = true;
+
 			break;
 
 		case 'PAN' :
@@ -642,6 +696,7 @@ Space.prototype.actionstop =
 	}
 
 	shell.bridge.stopAction( );
+
 	return true;
 };
 
@@ -658,17 +713,12 @@ Space.prototype.actionmove = function( p, shift, ctrl )
 	switch( action.type )
 	{
 		case 'CREATE-NOTE' :
-
-			action.move      = p;
-			shell.redraw     = true;
-			return 'pointer';
-
 		case 'CREATE-LABEL' :
+		case 'CREATE-PORTAL' :
 
 			action.move      = p;
 			shell.redraw     = true;
 			return 'pointer';
-
 
 		case 'PAN' :
 

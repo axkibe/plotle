@@ -70,21 +70,29 @@ var Ellipse = Euclid.Ellipse =
 		]
 	);
 
-	for( var a = 2; a < arguments.length; a += 2 ) {
+	for( var a = 2; a < arguments.length; a += 2 )
+	{
 		var arg = arguments[ a ];
 		var val = arguments[ a + 1 ];
+
 		switch( arg ) {
 
 			case 'gradientPC' :
+
 				this._lazy_gradientPC = val;
+
 				break;
 
 			case 'gradientR0' :
+
 				this._lazy_gradientR0 = val;
+
 				break;
 
 			case 'gradientR1' :
+
 				this._lazy_gradientR1 = val;
+
 				break;
 
 			default :
@@ -108,8 +116,8 @@ Jools.lazyFixate(
 	function()
 	{
 		return new Euclid.Point(
-			Jools.half(this.pnw.x + this.pse.x),
-			Jools.half(this.pnw.y + this.pse.y)
+			Jools.half( this.pnw.x + this.pse.x ),
+			Jools.half( this.pnw.y + this.pse.y )
 		);
 	}
 );
@@ -124,15 +132,15 @@ Jools.lazyFixate(
 	function()
 	{
 		return new Euclid.Point(
-			Jools.half(this.pnw.x + this.pse.x),
-			Jools.half(this.pnw.y + this.pse.y)
+			Jools.half( this.pnw.x + this.pse.x ),
+			Jools.half( this.pnw.y + this.pse.y )
 		);
 	}
 );
 
 
 /*
-| gradient's radius
+| Gradient radius
 */
 Jools.lazyFixate(
 	Ellipse.prototype,
@@ -140,28 +148,44 @@ Jools.lazyFixate(
 	function( )
 	{
 		var dx = this.pse.x - this.pnw.x;
-		var dy = this.pse.y - this.pnw.x;
+		var dy = this.pse.y - this.pnw.y;
 
 		return Math.max( dx, dy );
 	}
 );
 
 /*
-| returns true if this ellipse is the same as another
+| Returns true if this ellipse is the same as another
 */
-Ellipse.prototype.eq = function( r )
+Ellipse.prototype.eq =
+	function(
+		r
+	)
 {
-	return this.pnw.eq( r.pnw ) && this.pse.eq( r.pse );
+	return (
+		this.pnw.eq( r.pnw ) &&
+		this.pse.eq( r.pse )
+	);
 };
 
 
 /*
 | Returns true if point is within the ellipse.
 */
-Ellipse.prototype.within = function( view, p )
+Ellipse.prototype.within =
+	function(
+		view,
+		p
+	)
 {
-	return Euclid.swatch.withinSketch(this, 'sketch', view, p);
+	return Euclid.swatch.withinSketch(
+		this,
+		'sketch',
+		view,
+		p
+	);
 };
 
 
-} ) ();
+} )( );
+

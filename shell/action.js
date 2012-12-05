@@ -32,55 +32,63 @@ if( typeof( window ) === 'undefined' )
 	{ throw new Error('this code needs a browser!'); }
 
 
-var actionlist = Jools.immute( {
-	/*
-	| Panning the background.
-	*/
-	'PAN'         : true,
+var actionlist =
+	Jools.immute(
+		{
+			/*
+			| Panning the background.
+			*/
+			'PAN'         : true,
 
 
-	/*
-	| Dragging one item.
-	*/
-	'ITEMDRAG'    : true,
+			/*
+			| Dragging one item.
+			*/
+			'ITEMDRAG'    : true,
 
 
-	/*
-	| Resizing one item.
-	*/
-	'ITEMRESIZE'  : true,
+			/*
+			| Resizing one item.
+			*/
+			'ITEMRESIZE'  : true,
 
 
-	/*
-	| Scrolling a note
-	*/
-	'SCROLLY'     : true,
+			/*
+			| Scrolling a note
+			*/
+			'SCROLLY'     : true,
 
 
-	/*
-	| Binding a new relation
-	*/
-	'RELBIND'     : true,
+			/*
+			| Binding a new relation
+			*/
+			'RELBIND'     : true,
 
 
-	/*
-	| Holding a button repeating its effect.
-	*/
-	'REBUTTON'    : true,
+			/*
+			| Holding a button repeating its effect.
+			*/
+			'REBUTTON'    : true,
 
 
-	/*
-	| Creating a new note
-	*/
-	'CREATE-NOTE' : true,
+			/*
+			| Creating a new note
+			*/
+			'CREATE-NOTE' : true,
 
 
-	/*
-	| Creating a new label
-	*/
-	'CREATE-LABEL' : true
+			/*
+			| Creating a new label
+			*/
+			'CREATE-LABEL' : true,
 
-} );
+
+			/*
+			| Creating a new portal
+			*/
+			'CREATE-PORTAL' : true
+		}
+	);
 
 
 /*
@@ -101,9 +109,14 @@ Action = function( args )
 
 	switch( this.section )
 	{
-		case 'space' : break;
-		case 'board' : break;
-		default      : throw new Error( 'invalid section' );
+		case 'space' :
+			break;
+
+		case 'board' :
+			break;
+
+		default :
+			throw new Error( 'invalid section' );
 	}
 
 	for( var a = 2, aZ = args.length; a < aZ; a += 2 )

@@ -969,11 +969,15 @@ Fabric.prototype._colorStyle =
 			break;
 
 		case 'horizontal' :
+
 			// FIXME use gradientPNW
-			if( !shape.pnw || !shape.pse )
+			if(
+				!shape.pnw ||
+				!shape.pse
+			)
 			{
 				throw new Error(
-					style.gradient + 'gradient misses pnw/pse'
+					style.gradient + ': gradient misses pnw/pse'
 				);
 			}
 
@@ -981,26 +985,33 @@ Fabric.prototype._colorStyle =
 				0,
 				shape.pnw.y,
 				0,
-				shape.pse.y);
+				shape.pse.y
+			);
+
 			break;
 
 		case 'radial' :
-			if( !shape.gradientPC || !shape.gradientR1 )
+
+			var r0 = shape.gradientR0 || 0;
+			var r1 = shape.gradientR1;
+			var pc = shape.gradientPC;
+
+			if( !pc || !r1 )
 			{
 				throw new Error(
 					style.gradient + 'gradient misses gradient[PC|R0|R1]'
 				);
 			}
 
-			var ro = shape.gradientR0 || 0;
 			grad = this._cx.createRadialGradient(
-				shape.gradientPC.x,
-				shape.gradientPC.y,
-				ro,
-				shape.gradientPC.x,
-				shape.gradientPC.y,
-				shape.gradientR1
+				pc.x,
+				pc.y,
+				r0,
+				pc.x,
+				pc.y,
+				r1
 			);
+
 			break;
 
 		default :

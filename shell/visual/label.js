@@ -115,7 +115,7 @@ Label.s_drawTrans =
 
 	fabric.drawImage(
 		f,
-		zone.pnw
+		view.point(zone.pnw)
 	);
 
 	// draws the border

@@ -52,6 +52,9 @@ var Note = Visual.Note = function( spacename, twig, path )
 Jools.subclass( Note, Visual.DocItem );
 
 
+/*
+| Gets the zone for a transient note
+*/
 Note.s_getZone =
 	function(
 		p1,
@@ -87,7 +90,7 @@ Note.s_getZone =
 | Draws a transitory note
 | ( A note in the making )
 */
-Note.s_draw =
+Note.s_drawTrans =
 	function(
 		fabric,
 		view,
