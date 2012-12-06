@@ -130,10 +130,15 @@ Portal.s_drawTrans =
 {
 	var silhoutte = Portal.s_getSilhoutte( zone );
 
-	console.log(silhoutte);
+	fabric.fill(
+		theme.portal.style.fill,
+		silhoutte,
+		'sketch',
+		view
+	);
 
-	fabric.paint(
-		theme.portal.style,
+	fabric.edge(
+		theme.portal.style.edge,
 		silhoutte,
 		'sketch',
 		view

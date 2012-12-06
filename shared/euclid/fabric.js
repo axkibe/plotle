@@ -741,6 +741,7 @@ Fabric.prototype.paint =
 	this._$font = null;
 
 	this._begin( false );
+
 	shape[ sketch ](
 		this,
 		0,
@@ -752,7 +753,7 @@ Fabric.prototype.paint =
 		a4
 	);
 
-	if( Jools.isnon( style.fill ) )
+	if( Jools.isnon( fillStyle ) )
 	{
 		cx.fillStyle = this._colorStyle(
 			fillStyle,

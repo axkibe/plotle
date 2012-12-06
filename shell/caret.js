@@ -29,14 +29,20 @@ var system;
 
 'use strict';
 
-if (typeof(window) === 'undefined')
-	{ throw new Error('this code needs a browser!'); }
+if( typeof( window ) === 'undefined' )
+	{ throw new Error( 'this code needs a browser!' ); }
 
 
 /*
 | Constructor.
 */
-Caret = function(section, sign, retainx, shown)
+Caret =
+	function(
+		section,
+		sign,
+		retainx,
+		shown
+	)
 {
 	// the section the caret is in
 	//   space or board.
@@ -74,7 +80,8 @@ Caret.useGetImageData = true;
 /*
 | Shows the caret or resets the blink timer if already shown
 */
-Caret.prototype.show = function()
+Caret.prototype.show =
+	function( )
 {
 	this.$shown = true;
 	this.$blinked = false;
@@ -85,7 +92,8 @@ Caret.prototype.show = function()
 /*
 | Hides the caret.
 */
-Caret.prototype.hide = function()
+Caret.prototype.hide
+	= function( )
 {
 	this.$shown = false;
 };
@@ -94,10 +102,13 @@ Caret.prototype.hide = function()
 /*
 | Draws or erases the caret.
 */
-Caret.prototype.display = function()
+Caret.prototype.display
+	= function( )
 {
 	if( shell.$caret !== this )
-		{ throw new Error( 'shell.$caret !== this' ); }
+	{
+		throw new Error( 'shell.$caret !== this' );
+	}
 
 	// erases the old caret
 	if( this.$save )
@@ -115,10 +126,15 @@ Caret.prototype.display = function()
 		}
 	}
 
-	this.$save = this.$screenPos = this.$height = null;
+	this.$save =
+	this.$screenPos =
+	this.$height =
+		null;
 
 	if( !this.$shown || !this.sign )
-		{ return; }
+	{
+		return;
+	}
 
 	// calculates new position
 	// even if blinked, so system can fiddle the input
@@ -127,12 +143,14 @@ Caret.prototype.display = function()
 
 	// double check this is still _the_ caret.
 	if( shell.$caret !== this )
-		{ throw new Error( 'shell.$caret !== this' ); }
+	{
+		throw new Error( 'shell.$caret !== this' );
+	}
 
 	var pos    = this.$screenPos;
 	var height = this.$height;
 
-	if( !this.blinked && pos !== null )
+	if( !this.$blinked && pos !== null )
 	{
 		// saves the caret background
 		if (Caret.useGetImageData)
@@ -171,13 +189,15 @@ Caret.prototype.display = function()
 /*
 | Switches caret visibility state.
 */
-Caret.prototype.blink = function()
+Caret.prototype.blink =
+	function( )
 {
-	if (this.$shown)
+	if( this.$shown )
 	{
 		this.$blinked = !this.$blinked;
-		this.display();
+		this.display( );
 	}
 };
 
-} ) ();
+
+})( );
