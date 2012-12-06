@@ -356,7 +356,11 @@ Board.prototype.pointingHover =
 | Start of a dragging operation.
 */
 Board.prototype.dragStart =
-	function( p, shift, ctrl )
+	function(
+		p,
+		shift,
+		ctrl
+	)
 {
 	return null;
 };
@@ -365,8 +369,12 @@ Board.prototype.dragStart =
 /*
 | Ongoing dragging operation.
 */
-Board.prototype.actionmove =
-	function( p, shift, ctrl )
+Board.prototype.dragMove =
+	function(
+		p,
+		shift,
+		ctrl
+	)
 {
 	return null;
 };

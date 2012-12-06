@@ -660,13 +660,24 @@ Shell.prototype.dragMove =
 	switch( action.section )
 	{
 		case 'board' :
-			cursor = this.$board.actionmove( p, shift, ctrl );
+
+			cursor = this.$board.dragMove(
+				p,
+				shift,
+				ctrl
+			);
+
 			break;
 
 		case 'space' :
+
 			if( this.$space )
 			{
-				cursor = this.$space.actionmove( p, shift, ctrl );
+				cursor = this.$space.dragMove(
+					p,
+					shift,
+					ctrl
+				);
 			}
 
 			break;
@@ -702,17 +713,26 @@ Shell.prototype.dragStop =
 	switch( action.section )
 	{
 		case 'board' :
-			this.$board.actionstop( p, shift, ctrl );
+
+			this.$board.dragStop(
+				p,
+				shift,
+				ctrl
+			);
+
 			break;
 
 		case 'space' :
+
 			if( this.$space )
 			{
-				this.$space.actionstop( p, shift, ctrl );
+				this.$space.dragStop( p, shift, ctrl );
 			}
+
 			break;
 
 		default :
+
 			throw new Error( 'unknown action.section' );
 	}
 

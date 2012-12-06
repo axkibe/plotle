@@ -1,9 +1,7 @@
 /*
-|
 | The server-side repository.
 |
 | Authors: Axel Kittenberger
-|
 */
 
 /*
@@ -70,7 +68,7 @@ var Server = function(_)
 	db.connector = new mongodb.Db(
 		config.database.name,
 		db.server,
-		{ }
+		{ w: 1 }
 	);
 
 	// all messages
@@ -566,50 +564,78 @@ Server.prototype.prepareResources = function(_)
 
 		devels.push('<script src="' + r.path + '" type="text/javascript"></script>');
 
-		if (r.data === null)
-			{ bundle.push(fs.readFile(r.path, _)); }
+		if( r.data === null )
+		{
+			bundle.push(
+				fs.readFile(
+					r.path,
+				_)
+			);
+		}
 		else
-			{ bundle.push(r.data); }
+		{
+			bundle.push( r.data );
+		}
 	}
 
-	bundle = bundle.join('\n');
+	bundle = bundle.join( '\n' );
 
 	// uglifies the bundle if configured so
 	if( config.uglify )
 	{
-		var compressor = uglify.Compressor({});
-		var ast = uglify.parse(bundle);
-		ast.figure_out_scope();
-		ast = ast.transform(compressor);
-		ast.compute_char_frequency();
-		ast.mangle_names();
-		bundle = ast.print_to_string({});
+		var compressor = uglify.Compressor( { } );
+		var ast = uglify.parse( bundle );
+		fs.writeFile('BUNDLE', bundle, _);
+		ast.figure_out_scope( );
+		ast = ast.transform( compressor );
+		ast.compute_char_frequency( );
+		ast.mangle_names( );
+		bundle = ast.print_to_string( { } );
 	}
 
 	// calculates the hash for the bundle
-	var bsha1 = sha1.sha1hex(bundle);
+	var bsha1 = sha1.sha1hex( bundle );
 
 	// registers the bundle as ressource
-	var br = new Resource('meshcraft-' + bsha1 + '.js', 'mc');
+	var br = new Resource(
+		'meshcraft-' + bsha1 + '.js',
+		'mc'
+	);
 	br.data = bundle;
-	this.$resources[br.path] = br;
-	log('start', 'bundle:', bsha1);
+	this.$resources[ br.path ] = br;
+	log( 'start', 'bundle:', bsha1 );
 
 	// the devel.html file
-	if (config.devel === 'shell' || config.devel === 'both') {
-		var devel  = new Resource( 'shell/devel.html', 'm' );
-		devel.data =  fs.readFile( 'shell/devel.html', _) + '';
+	if(
+		config.devel === 'shell' ||
+		config.devel === 'both'
+	)
+	{
+		var devel  = new Resource(
+			'shell/devel.html',
+			'm'
+		);
+
+		devel.data = fs.readFile(
+			'shell/devel.html',
+		_) + '';
 
 		devel.data = devel.data.replace(
 			/<!--DEVELPACK.*>/,
-			devels.join('\n')
+			devels.join( '\n' )
 		);
 		this.$resources[ 'devel.html' ] = devel;
 	}
 
 	// the index.html file
-	var main  = new Resource( 'shell/meshcraft.html', 'm' );
-	main.data =  fs.readFile( 'shell/meshcraft.html', _) + '';
+	var main  = new Resource(
+		'shell/meshcraft.html',
+		'm'
+	);
+
+	main.data =  fs.readFile(
+		'shell/meshcraft.html',
+	_) + '';
 
 	main.data = main.data.replace(
 		/<!--COPACK.*>/,
@@ -617,31 +643,42 @@ Server.prototype.prepareResources = function(_)
 	);
 
 	this.$resources[ 'meshcraft.html' ] =
-	this.$resources[ 'index.html'     ] =
-	this.$resources[ ''               ] =
+	this.$resources[ 'index.html' ] =
+	this.$resources[ '' ] =
 		main;
 
 	// the testpad html file
-	var testpad = new Resource('testpad/testpad.html', 'f');
+	var testpad = new Resource(
+		'testpad/testpad.html',
+		'f'
+	);
 	this.$resources[ 'testpad.html' ] = testpad;
 
 	// prepares the zipped versions
 	for( path in this.$resources )
 	{
 		r = this.$resources[path];
-		if (!r.opts.memory)
-			{ continue; }
-		r.gzip = zlib.gzip(r.data, _);
+		if( !r.opts.memory )
+		{
+			continue;
+		}
+		r.gzip = zlib.gzip(
+			r.data,
+		_);
 	}
 
-	log('start', 'uncompressed bundle size is ', br.data.length);
-	log('start', '  compressed bundle size is ', br.gzip.length);
+	log( 'start', 'uncompressed bundle size is ', br.data.length );
+	log( 'start', '  compressed bundle size is ', br.gzip.length );
 };
 
-/**
+
+/*
 | Executes an alter command.
 */
-Server.prototype.cmdAlter = function( cmd, _)
+Server.prototype.cmdAlter =
+	function(
+		cmd,
+	_)
 {
 	var time      = cmd.time;
 	var chgX      = cmd.chgX;
@@ -770,10 +807,14 @@ Server.prototype.cmdAlter = function( cmd, _)
 	};
 };
 
-/**
+
+/*
 | Executes an auth command.
 */
-Server.prototype.cmdAuth = function( cmd, _)
+Server.prototype.cmdAuth =
+	function(
+		cmd,
+	_)
 {
 	if( !is( cmd.user ) )
 		{ throw reject('user missing'); }
@@ -829,7 +870,10 @@ Server.prototype.cmdAuth = function( cmd, _)
 /*
 | Executes a register command.
 */
-Server.prototype.cmdRegister = function( cmd, _)
+Server.prototype.cmdRegister =
+	function(
+		cmd,
+	_)
 {
 	var username = cmd.user;
 	var passhash = cmd.passhash;
@@ -1007,17 +1051,23 @@ Server.prototype.establishPresence =
 /*
 | Destablishes a longer user presence for an update that went out of sleep.
 */
-Server.prototype.destablishPresence = function( user, spacename )
+Server.prototype.destablishPresence =
+	function(
+		user,
+		spacename
+	)
 {
 	var pu  = this.$presences[ user ];
 	var pus = pu.spaces[ spacename ];
 
 	pus.establish--;
 
-	if (pus.establish <= 0)
+	if( pus.establish <= 0 )
 	{
-		if (pus.timerID !== null)
-			{ throw new Error("Presence timers mixed up."); }
+		if( pus.timerID !== null )
+		{
+			throw new Error("Presence timers mixed up.");
+		}
 
 		pus.timerID = setTimeout(
 			this.expirePresence,
@@ -1033,7 +1083,12 @@ Server.prototype.destablishPresence = function( user, spacename )
 /*
 | Expires a user presence with zero establishments after timeout
 */
-Server.prototype.expirePresence = function(self, user, spacename)
+Server.prototype.expirePresence =
+	function(
+		self,
+		user,
+		spacename
+	)
 {
 	self.sendMessage(
 		spacename,
@@ -1041,19 +1096,25 @@ Server.prototype.expirePresence = function(self, user, spacename)
 		user + ' left "' + spacename + '"'
 	);
 
-	var pu   = self.$presences[user];
+	var pu   = self.$presences[ user ];
 
 	if( pu.spaces[ spacename ].establish !== 0 )
-		{ throw new Error('Something wrong with presences.'); }
+	{
+		throw new Error('Something wrong with presences.');
+	}
 
-	delete pu.spaces[spacename];
+	delete pu.spaces[ spacename ];
 };
 
 
 /*
 | Gets new changes or waits for them.
 */
-Server.prototype.cmdUpdate = function( cmd, res, _ )
+Server.prototype.cmdUpdate =
+	function(
+		cmd,
+		res,
+	_)
 {
 	var user      = cmd.user;
 	var passhash  = cmd.passhash;
@@ -1095,13 +1156,15 @@ Server.prototype.cmdUpdate = function( cmd, res, _ )
 	);
 
 	// immediate answer?
-	if( asw.chgs.length > 0 ||
-		asw.msgs.length > 0 )
+	if(
+		asw.chgs.length > 0 ||
+		asw.msgs.length > 0
+	)
 	{
 		return asw;
 	}
 
-	// if not immediate puts the request to sleep
+	// if not an immediate anwwer, the request is put to sleep
 	var sleepID = '' + this.$nextSleep++;
 
 	var timerID = setTimeout(
@@ -1136,21 +1199,28 @@ Server.prototype.cmdUpdate = function( cmd, res, _ )
 /*
 | A sleeping update expired.
 */
-Server.prototype.expireSleep = function(self, sleepID)
+Server.prototype.expireSleep =
+	function(
+		self,
+		sleepID
+	)
 {
-	var sleep = self.$upsleep[sleepID];
+	var sleep = self.$upsleep[ sleepID ];
 
 	// maybe it just had expired at the same time
 	if( !sleep )
 		{ return; }
 
-	var space = self.$spaces[sleep.spacename];
+	var space = self.$spaces[ sleep.spacename ];
 
 	var seqZ  = space.$seqZ;
-	delete self.$upsleep[sleepID];
+	delete self.$upsleep[ sleepID ];
 
 	//TODO call it sleep.username
-	self.destablishPresence( sleep.user, sleep.spacename );
+	self.destablishPresence(
+		sleep.user,
+		sleep.spacename
+	);
 
 	var asw = {
 		ok    : true,

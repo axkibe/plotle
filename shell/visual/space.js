@@ -1,9 +1,7 @@
 /*
-|
 | The visual of a space.
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
@@ -373,6 +371,7 @@ Space.prototype.pointingHover =
 	}
 
 	var view   = this.$view;
+
 	var cursor = null;
 
 	var focus = this.focusedItem( );
@@ -582,10 +581,11 @@ Space.prototype.click =
 	return true;
 };
 
-/**
+
+/*
 | Stops an operation with the mouse button held down.
 */
-Space.prototype.actionstop =
+Space.prototype.dragStop =
 	function(
 		p,
 		shift,
@@ -594,7 +594,7 @@ Space.prototype.actionstop =
 {
 	var action = shell.bridge.action( );
 	var view   = this.$view;
-	var item;
+	var key, item;
 
 	if( !action )
 	{
@@ -605,7 +605,7 @@ Space.prototype.actionstop =
 	{
 		case 'CREATE-NOTE' :
 
-			var key = shell.peer.newNote(
+			key = shell.peer.newNote(
 				this.spacename,
 				Visual.Note.s_getZone(
 					view.depoint( action.start ),
@@ -645,7 +645,7 @@ Space.prototype.actionstop =
 
 		case 'CREATE-PORTAL' :
 
-			var key = shell.peer.newPortal(
+			key = shell.peer.newPortal(
 				this.spacename,
 				Visual.Portal.s_getZone(
 					view.depoint( action.start ),
@@ -670,7 +670,7 @@ Space.prototype.actionstop =
 			for( var r = 0, rZ = this.twig.length; r < rZ; r++ )
 			{
 				item = this.atRank( r );
-				if( item.actionstop( view, p ) )
+				if( item.dragStop( view, p ) )
 				{
 					break;
 				}
@@ -682,16 +682,20 @@ Space.prototype.actionstop =
 		case 'ITEMRESIZE' :
 		case 'SCROLLY'    :
 
-			this.getSub( action.itemPath, 'actionstop' )
-				.actionstop(
-					view,
-					p,
-					shift,
-					ctrl
-				);
+			this.getSub(
+				action.itemPath,
+				'dragStop'
+			).dragStop(
+				view,
+				p,
+				shift,
+				ctrl
+			);
+
 			break;
 
 		default :
+
 			throw new Error( 'Do not know how to handle Action: ' + action.type );
 	}
 
@@ -704,7 +708,12 @@ Space.prototype.actionstop =
 /*
 | Moving during an operation with the mouse button held down.
 */
-Space.prototype.actionmove = function( p, shift, ctrl )
+Space.prototype.dragMove =
+	function(
+		p,
+		shift,
+		ctrl
+	)
 {
 	var view   = this.$view;
 	var action = shell.bridge.action( );
@@ -743,7 +752,12 @@ Space.prototype.actionmove = function( p, shift, ctrl )
 			{
 				item = this.atRank( r );
 
-				if( item.actionmove( view, p ) )
+				if(
+					item.dragMove(
+						view,
+						p
+					)
+				)
 				{
 					return 'pointer';
 				}
@@ -753,8 +767,8 @@ Space.prototype.actionmove = function( p, shift, ctrl )
 
 		default :
 
-			this.getSub( action.itemPath, 'actionmove' )
-				.actionmove( view, p );
+			this.getSub( action.itemPath, 'dragMove' )
+				.dragMove( view, p );
 
 			return 'move';
 	}
@@ -764,7 +778,11 @@ Space.prototype.actionmove = function( p, shift, ctrl )
 /*
 | An entry of the float menu has been selected
 */
-Space.prototype.menuSelect = function(entry, p)
+Space.prototype.menuSelect =
+	function(
+		entry,
+		p
+	)
 {
 	var view = this.$view;
 	var pnw;
@@ -772,7 +790,7 @@ Space.prototype.menuSelect = function(entry, p)
 	var nw;
 	var nh;
 
-	switch(entry)
+	switch( entry )
 	{
 		case 'n' :
 			// note
@@ -965,11 +983,15 @@ Space.prototype.specialKey = function( key, shift, ctrl )
 /*
 | Returns the sub node path points to.
 |
-| If mark is not null, returns the last node that features the mark
 |
-| For example 'Item' or 'actionmove',
+| For example 'Item'
 */
-Space.prototype.getSub = function( path, mark )
+Space.prototype.getSub =
+	function(
+		path,
+		mark   // If mark is not null,
+		//     // returns the last node that features the mark
+)
 {
 	var n = this;
 	var m = null;
@@ -977,19 +999,27 @@ Space.prototype.getSub = function( path, mark )
 	for( var a = 0, aZ = path.length; a < aZ; a++ )
 	{
 		if( !n.$sub )
-			{ break; }
+		{
+			break;
+		}
 
 		n = n.$sub[ path.get( a ) ];
 
 		if( !n )
-			{ break; }
+		{
+			break;
+		}
 
 		if( mark && n[ mark ] )
-			{ m = n; }
+		{
+			m = n;
+		}
 	}
 
 	if( !mark )
-		{ return n; }
+	{
+		return n;
+	}
 
 	return m;
 };

@@ -545,7 +545,7 @@ Label.prototype.getZone =
 /**
 | Sets the items position and size aften an action.
 */
-Label.prototype.actionstop =
+Label.prototype.dragStop =
 	function(
 		view,
 		p
@@ -574,7 +574,7 @@ Label.prototype.actionstop =
 			break;
 
 		default :
-			return Visual.DocItem.prototype.actionstop.call(
+			return Visual.DocItem.prototype.dragStop.call(
 				this,
 				view,
 				p

@@ -393,7 +393,12 @@ Item.prototype.dragStart = function(view, p, shift, ctrl, access)
 /*
 | A move during an action.
 */
-Item.prototype.actionmove = function(view, p, shift, ctrl)
+Item.prototype.dragMove = function(
+	view,
+	p,
+	shift,
+	ctrl
+)
 {
 	var action = shell.bridge.action( );
 
@@ -429,8 +434,9 @@ Item.prototype.actionmove = function(view, p, shift, ctrl)
 			return true;
 
 		default :
-			throw new Error('invalid actionmove');
+			throw new Error('invalid action.type in dragMove');
 	}
+
 	return true;
 };
 
@@ -438,23 +444,40 @@ Item.prototype.actionmove = function(view, p, shift, ctrl)
 /*
 | Sets the items position and size after an action.
 */
-Item.prototype.actionstop =
-	function( view, p )
+Item.prototype.dragStop =
+	function(
+		view,
+		p
+	)
 {
 	var action = shell.bridge.action();
 
 	switch( action.type )
 	{
 		case 'RELBIND' :
-			if( !this.getZone().within( view, p ) )
-				{ return false; }
+
+			if(
+				!this.getZone().within(
+					view,
+					p
+				)
+			)
+			{
+				return false;
+			}
 
 			var space = shell.$space;
-			Visual.Relation.create( space, space.getSub( action.itemPath ), this );
+			Visual.Relation.create(
+				space,
+				space.getSub( action.itemPath ),
+				this
+			);
 			shell.redraw = true;
+
 			return true;
 
 		default :
+
 			return false;
 	}
 };

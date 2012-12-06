@@ -57,9 +57,9 @@ Jools.subclass(DocItem, Visual.Item);
 /*
 | Sets the items position and size after an action.
 */
-DocItem.prototype.actionstop = function(view, p)
+DocItem.prototype.dragStop = function(view, p)
 {
-	return Visual.Item.prototype.actionstop.call(this, view, p);
+	return Visual.Item.prototype.dragStop.call(this, view, p);
 };
 
 
