@@ -844,7 +844,7 @@ var keyNonGrata =
 			},
 
 			set :
-			function( v )
+			function( /* v */ )
 			{
 				throw new Error( 'accessed key non grata! ' + key );
 			}

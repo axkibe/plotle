@@ -376,7 +376,12 @@ Portal.prototype.mousewheel =
 		ctrl
 	)
 {
-	return this.getZone().within( view, p );
+	return (
+		this.getZone().within(
+			view,
+			p
+		)
+	);
 };
 
 
@@ -384,7 +389,9 @@ Portal.prototype.mousewheel =
 |
 */
 Portal.prototype.positionCaret =
-	function( view )
+	function(
+		// view
+	)
 {
 	// FIXME
 };

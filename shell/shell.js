@@ -1,11 +1,9 @@
 /*
-|
 | The users shell.
 |
 | The shell consists of the disc, dashboard and the visual space.
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
@@ -828,7 +826,11 @@ Shell.prototype.input = function(text)
 /*
 | The window has been resized.
 */
-Shell.prototype.resize = function(width, height)
+Shell.prototype.resize =
+	function(
+		// width,
+		// height
+	)
 {
 	this._draw();
 };
@@ -837,7 +839,11 @@ Shell.prototype.resize = function(width, height)
 /*
 | Sets the current user
 */
-Shell.prototype.setUser = function(user, passhash)
+Shell.prototype.setUser =
+	function(
+		user,
+		passhash
+	)
 {
 	this.$user = user;
 	this.$board.setUser(user);
@@ -865,20 +871,27 @@ Shell.prototype.setUser = function(user, passhash)
 /*
 | Sets the space zoom factor.
 */
-Shell.prototype.setSpaceZoom = function(zf)
+Shell.prototype.setSpaceZoom =
+	function(
+		zf
+	)
 {
-	this.$board.setSpaceZoom(zf);
+	this.$board.setSpaceZoom( zf );
 };
 
 
 /*
 | Changes the space zoom factor (around center)
 */
-Shell.prototype.changeSpaceZoom = function(df)
+Shell.prototype.changeSpaceZoom =
+	function(
+		df
+	)
 {
-	if (!this.$space)
+	if( !this.$space )
 		{ return; }
-	this.$space.changeZoom(df);
+
+	this.$space.changeZoom( df );
 };
 
 
@@ -889,18 +902,29 @@ Shell.prototype.onload =
 	function( )
 {
 	this.peer = new Peer(
-		new IFace( this, this )
+		new IFace(
+			this,
+			this
+		)
 	);
 
-	var user     = window.localStorage.getItem( 'user' );
+	var user = window.localStorage.getItem( 'user' );
 
 	var passhash = null;
 	if( user )
-		{ passhash = window.localStorage.getItem( 'passhash' ); }
+	{
+		passhash = window.localStorage.getItem( 'passhash' );
+	}
 	else
-		{ user = 'visitor'; }
+	{
+		user = 'visitor';
+	}
 
-	this.peer.auth( user, passhash, this );
+	this.peer.auth(
+		user,
+		passhash,
+		this
+	);
 };
 
 
@@ -910,12 +934,19 @@ Shell.prototype.onload =
 | if spaceName is null, reloads current space.
 */
 Shell.prototype.moveToSpace =
-	function( name )
+	function(
+		name
+	)
 {
 	var self = this;
 
 	if( this.$caret.section === 'space' )
-		{ this.setCaret( null, null ); }
+	{
+		this.setCaret(
+			null,
+			null
+		);
+	}
 
 	if( name === null )
 	{

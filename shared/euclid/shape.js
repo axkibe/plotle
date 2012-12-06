@@ -67,7 +67,6 @@ Shape.prototype.sketch = function( fabric, border, twist, view )
 	var pp = pstart;
 	var pn = null;
 	var dx, dy;
-	var bx, by;
 	var magic;
 
 	fabric.moveTo( pstart );

@@ -37,7 +37,11 @@ if ( typeof( window ) === 'undefined')
 /*
 | Catches all errors a function throws if config.devel is set.
 */
-var makeCatcher = function( t, f )
+var makeCatcher =
+	function(
+		t,
+		f
+	)
 {
 	return function( )
 	{
@@ -65,7 +69,7 @@ var makeCatcher = function( t, f )
 /*
 | The system
 */
-var System = function()
+var System = function( )
 {
 	if( system )
 		{ throw new Error('System not a singleton'); }
@@ -150,7 +154,7 @@ var System = function()
 	// the blink (and check input) timer
 	this._blinkTimer = null;
 
-	this.restartBlinker();
+	this.restartBlinker() ;
 };
 
 
@@ -176,7 +180,8 @@ System.prototype.settings =
 /*
 | Cancels a timer
 */
-System.prototype.cancelTimer = function( id )
+System.prototype.cancelTimer =
+	function( id )
 {
 	return window.clearTimeout( id );
 };
@@ -185,13 +190,16 @@ System.prototype.cancelTimer = function( id )
 /*
 | (Re)Starts the blink timer
 */
-System.prototype.restartBlinker = function( )
+System.prototype.restartBlinker =
+	function( )
 {
 	// double uses the blink timer
 	this._testInput();
 
 	if (this._blinkTimer)
-		{ clearInterval( this._blinkTimer ); }
+	{
+		clearInterval( this._blinkTimer );
+	}
 
 	this._blinkTimer = setInterval(
 		this._blinkCatcher,
@@ -203,7 +211,10 @@ System.prototype.restartBlinker = function( )
 /*
 | Sets the hidden input field (text selection)
 */
-System.prototype.setInput = function( text )
+System.prototype.setInput =
+	function(
+		text
+	)
 {
 	var hi   = this._hiddenInput;
 	hi.value = this._inputVal = '' + text;
@@ -232,7 +243,8 @@ System.prototype.setTimer = function( time, callback )
 | Sets the focus mode so it matched the keyboard suggestion (for iPad)
 | Moves the hidden input vertically so the iPad keeps the caret in view
 */
-System.prototype.fiddleInput = function( )
+System.prototype.fiddleInput =
+	function( )
 {
 	var caret  = this.shell.$caret;
 	var height = caret.$height;
@@ -277,20 +289,22 @@ System.prototype.fiddleInput = function( )
 /*
 | Blinks the caret
 */
-System.prototype._blink = function()
+System.prototype._blink =
+	function( )
 {
 	// also looks into the hidden input field,
 	// maybe the user pasted something using the browser menu
-	this._testInput();
+	this._testInput( );
 
-	this.shell.blink();
+	this.shell.blink( );
 };
 
 
 /*
 | timeout after mouse down so dragging starts
 */
-System.prototype._onAtweenTime = function( )
+System.prototype._onAtweenTime =
+	function( )
 {
 	if( this._$pointingState !== 'atween' )
 	{
@@ -319,14 +333,19 @@ System.prototype._onAtweenTime = function( )
 	this._$atween     = null;
 
 	if( cursor !== null )
-		{ this._canvas.style.cursor = cursor; }
+	{
+		this._canvas.style.cursor = cursor;
+	}
 };
 
 
 /*
 | The meshcraft system lost focus
 */
-System.prototype._onSystemBlur = function( event )
+System.prototype._onSystemBlur =
+	function(
+		// event
+	)
 {
 	this.shell.systemBlur( );
 };
@@ -335,7 +354,10 @@ System.prototype._onSystemBlur = function( event )
 /*
 | The meshcraft system got focus
 */
-System.prototype._onSystemFocus = function( event )
+System.prototype._onSystemFocus =
+	function(
+		// event
+	)
 {
 	this.shell.systemFocus( );
 };
@@ -344,9 +366,13 @@ System.prototype._onSystemFocus = function( event )
 /*
 | View window is being resized.
 */
-System.prototype._onResize = function( event )
+System.prototype._onResize =
+	function(
+		// event
+	)
 {
 	var c = this._canvas;
+
 	var w = document.documentElement.clientWidth;
 	var h = document.documentElement.clientHeight;
 
@@ -354,7 +380,10 @@ System.prototype._onResize = function( event )
 	c.height = h - 1;
 
 	if( this.shell ) {
-		this.shell.resize( w - 1, h - 1 );
+		this.shell.resize(
+			w - 1,
+			h - 1
+		);
 	}
 };
 
@@ -433,23 +462,35 @@ System.prototype._onCanvasKeyPress = function( event )
 | Key down on hidden input field.
 | Used when suggesting a keyboard.
 */
-System.prototype._onHiddenKeyDown = function( event )
+System.prototype._onHiddenKeyDown =
+	function(
+		event
+	)
 {
 	var shift = event.shiftKey;
 	var ctrl  = event.ctrlKey || event.metaKey;
 	var kcode = this._$lastSpecialKey = event.keyCode;
 
-	if( !this._specialKey( kcode, shift, ctrl ) )
+	if(
+		!this._specialKey(
+			kcode,
+			shift,
+			ctrl
+		)
+	)
 	{
-		event.preventDefault();
+		event.preventDefault( );
 	}
 };
 
 
-/**
+/*
 | Hidden input key press.
 */
-System.prototype._onHiddenKeyPress = function( event )
+System.prototype._onHiddenKeyPress =
+	function(
+		event
+	)
 {
 	var ew    = event.which;
 	var kcode = event.keyCode;
@@ -465,12 +506,20 @@ System.prototype._onHiddenKeyPress = function( event )
 	)
 	{
 		this._$lastSpecialKey = -1;
-		return this._specialKey( kcode, shift, ctrl );
+
+		return this._specialKey(
+			kcode,
+			shift,
+			ctrl
+		);
 	}
 
 	this._$lastSpecialKey = -1;
+
 	this._testInput( );
+
 	this.setTimer( 0, this._testInputCatcher );
+
 	return true;
 };
 
@@ -478,9 +527,13 @@ System.prototype._onHiddenKeyPress = function( event )
 /*
 | Hidden input key up.
 */
-System.prototype._onHiddenKeyUp = function( event )
+System.prototype._onHiddenKeyUp =
+	function(
+		// event
+	)
 {
 	this._testInput( );
+
 	return true;
 };
 
@@ -488,9 +541,13 @@ System.prototype._onHiddenKeyUp = function( event )
 /*
 | Disables context menues.
 */
-System.prototype._onContextMenu = function( event )
+System.prototype._onContextMenu =
+	function(
+		event
+	)
 {
-	event.stopPropagation();
+	event.stopPropagation( );
+
 	return false;
 };
 
@@ -498,55 +555,72 @@ System.prototype._onContextMenu = function( event )
 /*
 | Mouse down event.
 */
-System.prototype._onMouseDown = function( event )
+System.prototype._onMouseDown =
+	function(
+		event
+	)
 {
 	event.preventDefault();
 
-	if( Jools.is( event.button ) && event.button !== 0 )
-		{ return; }
+	if(
+		Jools.is( event.button ) &&
+		event.button !== 0
+	)
+	{
+		return;
+	}
 
 	// Opera requires focusing the window first
-	window.focus();
+	window.focus( );
 
 	var canvas = this._canvas;
-	var p      = new Euclid.Point(
+	var p = new Euclid.Point(
 		event.pageX - canvas.offsetLeft,
 		event.pageY - canvas.offsetTop
 	);
-	var shift  = event.shiftKey;
-	var ctrl   = event.ctrlKey || event.metaKey;
+	var shift = event.shiftKey;
+	var ctrl  = event.ctrlKey || event.metaKey;
 
-	// asks the shell if it forces this to be a drag or click, or yet unknown.
-	this._$pointingState = this.shell.pointingStart( p, shift, ctrl );
+	// asks the shell if it forces this to be a drag or click
+	// or the state is yet unknown.
+	this._$pointingState =
+		this.shell.pointingStart(
+			p,
+			shift,
+			ctrl
+		);
 
 	switch( this._$pointingState )
 	{
 		case 'atween' :
+
 			this._$atween =
-			{
-				pos   : p,
-				move  : p,
-				shift : shift,
-				ctrl  : ctrl,
-				timer : this.setTimer(
-					this.settings.dragtime,
-					this._onAtweenTimeCatcher
-				)
-			};
+				{
+					pos   : p,
+					move  : p,
+					shift : shift,
+					ctrl  : ctrl,
+					timer : this.setTimer(
+						this.settings.dragtime,
+						this._onAtweenTimeCatcher
+					)
+				};
 			break;
 
 		case 'drag' :
+
 			this._captureEvents( );
 			break;
+
 	}
 
 	var cursor = this.shell.pointingHover( p, shift, ctrl );
 
-	if ( cursor !== null )
+	if( cursor !== null )
 		{ canvas.style.cursor = cursor; }
 
 
-	this.fiddleInput();
+	this.fiddleInput( );
 
 	return false;
 };
@@ -555,7 +629,10 @@ System.prototype._onMouseDown = function( event )
 /*
 | Mouse move event.
 */
-System.prototype._onMouseMove = function( event )
+System.prototype._onMouseMove =
+	function(
+		event
+	)
 {
 	var canvas = this._canvas;
 	var p      = new Euclid.Point(
@@ -577,8 +654,9 @@ System.prototype._onMouseMove = function( event )
 			var dragbox = this.settings.dragbox;
 			var atween  = this._$atween;
 
-			if( (Math.abs( p.x - atween.pos.x ) > dragbox ) ||
-				(Math.abs( p.y - atween.pos.y ) > dragbox )
+			if(
+				( Math.abs( p.x - atween.pos.x ) > dragbox ) ||
+				( Math.abs( p.y - atween.pos.y ) > dragbox )
 			)
 			{
 				// moved out of dragbox -> start dragging
@@ -608,16 +686,23 @@ System.prototype._onMouseMove = function( event )
 			break;
 
 		case 'drag':
-			cursor = this.shell.dragMove( p, shift, ctrl );
+			cursor =
+				this.shell.dragMove(
+					p,
+					shift,
+					ctrl
+				);
 			break;
 
 		default :
-			throw new Error('invalid pointingState');
+			throw new Error( 'invalid pointingState' );
 
 	}
 
 	if( cursor !== null )
-		{ canvas.style.cursor = cursor; }
+	{
+		canvas.style.cursor = cursor;
+	}
 
 	return true;
 };
@@ -626,7 +711,10 @@ System.prototype._onMouseMove = function( event )
 /*
 | Mouse up event.
 */
-System.prototype._onMouseUp = function( event )
+System.prototype._onMouseUp =
+	function(
+		event
+	)
 {
 	event.preventDefault( );
 	this._releaseEvents( );
@@ -652,16 +740,39 @@ System.prototype._onMouseUp = function( event )
 			var atween = this._$atween;
 			clearTimeout( atween.timer );
 			this._$atween = null;
-			this.shell.click( p, shift, ctrl );
-			cursor = this.shell.pointingHover( p, shift, ctrl );
+
+			this.shell.click(
+				p,
+				shift,
+				ctrl
+			);
+
+			cursor = this.shell.pointingHover(
+				p,
+				shift,
+				ctrl
+			);
+
 			this._$pointingState = false;
+
 			break;
 
 		case 'drag' :
 
-			this.shell.dragStop( p, shift, ctrl );
-			cursor = this.shell.pointingHover( p, shift, ctrl );
+			this.shell.dragStop(
+				p,
+				shift,
+				ctrl
+			);
+
+			cursor = this.shell.pointingHover(
+				p,
+				shift,
+				ctrl
+			);
+
 			this._$pointingState = false;
+
 			break;
 
 		default :
@@ -670,7 +781,9 @@ System.prototype._onMouseUp = function( event )
 	}
 
 	if( cursor !== null )
-		{ canvas.style.cursor = cursor; }
+	{
+		canvas.style.cursor = cursor;
+	}
 
 	this.fiddleInput( );
 
@@ -681,9 +794,13 @@ System.prototype._onMouseUp = function( event )
 /*
 | The mouse wheel is being turned.
 */
-System.prototype._onMouseWheel = function( event )
+System.prototype._onMouseWheel =
+	function(
+		event
+	)
 {
 	var canvas = this._canvas;
+
 	var p = new Euclid.Point(
 		event.pageX - canvas.offsetLeft,
 		event.pageY - canvas.offsetTop
@@ -709,14 +826,17 @@ System.prototype._onMouseWheel = function( event )
 
 	this.shell.mousewheel( p, dir, shift, ctrl );
 
-	this.fiddleInput();
+	this.fiddleInput( );
 };
 
 
 /*
 | The user is touching something ( on mobile devices )
 */
-System.prototype._onTouchStart = function( event )
+System.prototype._onTouchStart =
+	function(
+		event
+	)
 {
 	event.preventDefault( );
 

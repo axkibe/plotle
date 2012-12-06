@@ -360,9 +360,9 @@ Space.prototype.mousewheel =
 */
 Space.prototype.pointingHover =
 	function(
-		p,
-		shift,
-		ctrl
+		p
+		// shift,
+		// ctrl
 	)
 {
 	if( p === null )
@@ -710,9 +710,9 @@ Space.prototype.dragStop =
 */
 Space.prototype.dragMove =
 	function(
-		p,
-		shift,
-		ctrl
+		p
+		// shift,
+		// ctrl
 	)
 {
 	var view   = this.$view;
@@ -950,7 +950,12 @@ Space.prototype.changeZoom =
 /*
 | User pressed a special key.
 */
-Space.prototype.specialKey = function( key, shift, ctrl )
+Space.prototype.specialKey =
+	function(
+		key,
+		shift,
+		ctrl
+	)
 {
 	if( ctrl )
 	{
@@ -974,24 +979,32 @@ Space.prototype.specialKey = function( key, shift, ctrl )
 	var caret = shell.$caret;
 
 	if (!caret.sign)
-		{ return; }
+	{
+		return;
+	}
 
-	this.getSub( caret.sign.path, 'specialKey').specialKey(key, shift, ctrl);
+	this.getSub(
+		caret.sign.path,
+		'specialKey'
+	).specialKey(
+		key,
+		shift,
+		ctrl
+	);
 };
 
 
 /*
 | Returns the sub node path points to.
 |
-|
-| For example 'Item'
+| For example 'Item' or having a method like 'specialKey'
 */
 Space.prototype.getSub =
 	function(
 		path,
 		mark   // If mark is not null,
 		//     // returns the last node that features the mark
-)
+	)
 {
 	var n = this;
 	var m = null;
