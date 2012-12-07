@@ -321,30 +321,55 @@ Board.prototype.pointingHover =
 		ctrl
 	)
 {
-	var cursor = this.curPanel( ).pointingHover( p, shift, ctrl );
+	var cursor = (
+		this.curPanel( ).pointingHover(
+			p,
+			shift,
+			ctrl
+		)
+	);
 
 	if( cursor )
 	{
-		this.getPanel( 'MainDisc' ).
-			pointingHover( null, shift, ctrl );
+		this.getPanel(
+			'MainDisc'
+		).pointingHover(
+			null,
+			shift,
+			ctrl
+		);
 	}
 	else
 	{
-		cursor = this.getPanel( 'MainDisc' ).
-			pointingHover( p, shift, ctrl );
+		cursor = this.getPanel(
+			'MainDisc'
+		).pointingHover(
+			p,
+			shift,
+			ctrl
+		);
 	}
 
 	if( this.$showHelp )
 	{
 		if( cursor )
 		{
-			this.getPanel( 'HelpPanel' ).
-				pointingHover( null, shift, ctrl );
+			this.getPanel(
+				'HelpPanel'
+			).pointingHover(
+				null,
+				shift,
+				ctrl
+			);
 		}
 		else
 		{
 			cursor = this.getPanel( 'HelpPanel' ).
-				pointingHover( p, shift, ctrl );
+				pointingHover(
+					p,
+					shift,
+					ctrl
+				);
 		}
 	}
 
@@ -357,9 +382,9 @@ Board.prototype.pointingHover =
 */
 Board.prototype.dragStart =
 	function(
-		p,
-		shift,
-		ctrl
+		// p,
+		// shift,
+		// ctrl
 	)
 {
 	return null;
@@ -371,9 +396,9 @@ Board.prototype.dragStart =
 */
 Board.prototype.dragMove =
 	function(
-		p,
-		shift,
-		ctrl
+		// p,
+		// shift,
+		// ctrl
 	)
 {
 	return null;
@@ -395,7 +420,11 @@ Board.prototype.dragStop =
 	var panel  = this.getPanel( path.get( 0 ) );
 	var c      = panel.$sub[ path.get( 1 ) ];
 
-	return c.dragStop( p, shift, ctrl );
+	return c.dragStop(
+		p,
+		shift,
+		ctrl
+	);
 };
 
 
@@ -411,11 +440,20 @@ Board.prototype.pointingStart =
 {
 	var r;
 
-	r = this.getPanel( 'MainDisc' ).
-			pointingStart( p, shift. ctrl) ;
+	r = (
+		this.getPanel(
+			'MainDisc'
+		).pointingStart(
+			p,
+			shift.
+			ctrl
+		)
+	);
 
 	if( r !== null )
-		{ return r; }
+	{
+		return r;
+	}
 
 	if( this.$showHelp )
 	{

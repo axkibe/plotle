@@ -85,16 +85,20 @@ Item.prototype.update =
 */
 Item.prototype.menuSelect =
 	function(
-		entry,
-		p
+		entry
+		// p
 	)
 {
 	switch( entry )
 	{
 		case 'n': // remove
+
 			shell.dropFocus();
+
 			shell.peer.removeItem( this.path );
+
 			break;
+
 	}
 };
 
@@ -474,12 +478,13 @@ Item.prototype.dragStart =
 /*
 | A move during an action.
 */
-Item.prototype.dragMove = function(
-	view,
-	p,
-	shift,
-	ctrl
-)
+Item.prototype.dragMove =
+	function(
+		view,
+		p
+		// shift,
+		// ctrl
+	)
 {
 	var action = shell.bridge.action( );
 
@@ -498,15 +503,20 @@ Item.prototype.dragMove = function(
 			}
 
 			action.move = p;
+
 			action.item2Path = this.path;
+
 			shell.redraw = true;
+
 			return true;
 
 		case 'ITEMDRAG' :
 		case 'ITEMRESIZE' :
 
 			action.move  = view.depoint( p );
+
 			shell.redraw = true;
+
 			return true;
 
 		case 'SCROLLY' :

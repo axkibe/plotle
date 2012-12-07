@@ -37,18 +37,25 @@ var theme;
 /*
 | Capsule
 */
-( function() {
+( function( ) {
 
 'use strict';
 
-if (typeof(window) === 'undefined')
-	{ throw new Error('this code requires a browser!'); }
+if( typeof( window ) === 'undefined' )
+	{ throw new Error( 'this code requires a browser!' ); }
 
 
 /*
 | Constructor.
 */
-EllipseMenu = function(fabric, pc, settings, labels, receiver)
+EllipseMenu =
+	function(
+		fabric,
+		pc,
+		settings,
+		labels,
+		receiver
+	)
 {
 	this.fabric      = fabric;
 	this.p           = pc;
@@ -70,14 +77,25 @@ EllipseMenu = function(fabric, pc, settings, labels, receiver)
 /*
 | Draws the hexmenu.
 */
-EllipseMenu.prototype.draw = function(view)
+EllipseMenu.prototype.draw =
+	function(
+		view
+	)
 {
 	var f = this.fabric;
 
-	if (this.$fade)
-		{ f.globalAlpha(this.$fade); }
+	if( this.$fade )
+	{
+		f.globalAlpha( this.$fade );
+	}
 
-	f.fill(this._style.fill, this._oflower, 'sketch', view, 'outer');
+	f.fill(
+		this._style.fill,
+		this._oflower,
+		'sketch',
+		view,
+		'outer'
+	);
 
 	switch(this.$within)
 	{
@@ -87,11 +105,23 @@ EllipseMenu.prototype.draw = function(view)
 		case 's'  :
 		case 'sw' :
 		case 'nw' :
-			f.paint(this._highlight, this._oflower, 'sketch', view, this.$within);
+			f.paint(
+				this._highlight,
+				this._oflower,
+				'sketch',
+				view,
+				this.$within
+			);
 			break;
 	}
 
-	f.edge( this._style.edge, this._oflower, 'sketch', view, null );
+	f.edge(
+		this._style.edge,
+		this._oflower,
+		'sketch',
+		view,
+		null
+	);
 
 
 	var labels = this.labels;
@@ -184,7 +214,11 @@ EllipseMenu.prototype.draw = function(view)
 /*
 | Sets this.mousepos and returns it according to p.
 */
-EllipseMenu.prototype.within = function( view, p )
+EllipseMenu.prototype.within =
+	function(
+		view,
+		p
+	)
 {
 	var w = this._oflower.within( view, p );
 
@@ -201,12 +235,20 @@ EllipseMenu.prototype.within = function( view, p )
 /*
 | The user is starting to point on something ( mouse down, touch start )
 */
-EllipseMenu.prototype.pointingStart = function( view, p, shift, ctrl )
+EllipseMenu.prototype.pointingStart =
+	function(
+		view,
+		p
+		// shift,
+		// ctrl
+	)
 {
 	var w = this.within( view, p );
 
-	if ( !w )
-		{ return null; }
+	if( !w )
+	{
+		return null;
+	}
 
 	this._receiver.menuSelect( w, this.p );
 
@@ -219,7 +261,8 @@ EllipseMenu.prototype.pointingStart = function( view, p, shift, ctrl )
 /*
 | Called on every step to fade away when mouse isn't on the menu
 */
-EllipseMenu.prototype.fadeout = function( )
+EllipseMenu.prototype.fadeout =
+	function( )
 {
 	var self = this;
 
@@ -242,9 +285,10 @@ EllipseMenu.prototype.fadeout = function( )
 };
 
 /*
-| cancels fading
+| Cancels fading.
 */
-EllipseMenu.prototype.cancel = function( )
+EllipseMenu.prototype.cancel =
+	function( )
 {
 	if( this.$fade )
 	{
@@ -263,7 +307,13 @@ EllipseMenu.prototype.cancel = function( )
 |
 | Returns true if the mouse pointer hovers over anything.
 */
-EllipseMenu.prototype.pointingHover = function( view, p, shift, ctrl )
+EllipseMenu.prototype.pointingHover =
+	function(
+		view,
+		p
+		// shift,
+		// ctrl
+	)
 {
 	var self = this;
 
@@ -275,7 +325,9 @@ EllipseMenu.prototype.pointingHover = function( view, p, shift, ctrl )
 
 			this.$fadeTimer = system.setTimer(
 				theme.fade.time,
-				function() { self.fadeout(); }
+				function( ) {
+					self.fadeout();
+				}
 			);
 		}
 		return null;
@@ -290,4 +342,4 @@ EllipseMenu.prototype.pointingHover = function( view, p, shift, ctrl )
 };
 
 
-} ) ();
+} )( );
