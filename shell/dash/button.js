@@ -345,9 +345,10 @@ Button.prototype.knock = function( )
 /*
 | Stops a REBUTTON action.
 */
-Button.prototype.actionstop = function( )
+Button.prototype.dragStop = function( )
 {
 	system.cancelTimer( this.$retimer );
+
 	this.$retimer = null;
 
 	shell.bridge.stopAction( );

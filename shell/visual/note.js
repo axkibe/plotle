@@ -306,7 +306,7 @@ Note.prototype.scrollPage =
 /*
 | Sets the items position and size after an action.
 */
-Note.prototype.actionstop =
+Note.prototype.dragStop =
 	function(
 		view,
 		p
@@ -341,7 +341,7 @@ Note.prototype.actionstop =
 
 		default :
 
-			return Visual.DocItem.prototype.actionstop.call(
+			return Visual.DocItem.prototype.dragStop.call(
 				this,
 				view,
 				p

@@ -232,7 +232,7 @@ Portal.prototype.getZeroSilhoutte =
 /*
 | Sets the items position and size after an action.
 */
-Portal.prototype.actionstop =
+Portal.prototype.dragStop =
 	function(
 		view,
 		p
@@ -267,7 +267,7 @@ Portal.prototype.actionstop =
 
 		default :
 
-			return Visual.Item.prototype.actionstop.call( this, view, p );
+			return Visual.Item.prototype.dragStop.call( this, view, p );
 	}
 
 };

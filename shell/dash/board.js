@@ -383,7 +383,7 @@ Board.prototype.dragMove =
 /*
 | End of an action.
 */
-Board.prototype.actionstop =
+Board.prototype.dragStop =
 	function(
 		p,
 		shift,
@@ -395,7 +395,7 @@ Board.prototype.actionstop =
 	var panel  = this.getPanel( path.get( 0 ) );
 	var c      = panel.$sub[ path.get( 1 ) ];
 
-	return c.actionstop( p, shift, ctrl );
+	return c.dragStop( p, shift, ctrl );
 };
 
 
