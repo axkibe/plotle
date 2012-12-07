@@ -1,9 +1,7 @@
 /*
-|
 | The causal consistency / operation transformation engine for meshcraft.
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
@@ -43,22 +41,13 @@ if (typeof(window) === 'undefined')
 }
 
 
-var check        = Jools.check;
-var is           = Jools.is;
-var isnon        = Jools.isnon;
-var isArray      = Jools.isArray;
-var isString     = Jools.isString;
-var reject       = Jools.reject;
-var isPath       = Path.isPath;
-
+var is = Jools.is; // TODO remove
 
 /*
-|
 | Transformation.
 | FIXME move elsewhere.
 |
 | Action Transformation. Changes signatures due to past alternations.
-|
 */
 
 
@@ -188,11 +177,13 @@ var tfxChg = function(chg, chgX)
 
 	var $a, aZ, ray;
 
-	var srcA = isArray(srcX);
-	var trgA = isArray(trgX);
+	var srcA = Jools.isArray( srcX );
+	var trgA = Jools.isArray( trgX );
 
 	if (!srcA && !trgA)
-		{ return new Change(srcX, trgX); }
+	{
+		return new Change(srcX, trgX);
+	}
 	else if (!srcA && trgA)
 	{
 		ray = new ChangeRay();
@@ -242,7 +233,7 @@ var tfxChgX = function(chgX1, chgX2)
 			return ray;
 
 		default :
-			throw reject('invalid chgX1');
+			throw Jools.reject('invalid chgX1');
 
 	}
 };
@@ -447,7 +438,12 @@ TFXOps.insert = function(sign, src, trg)
 /*
 | Transforms a signature on a remove
 */
-TFXOps.remove = function(sign, src, trg)
+TFXOps.remove =
+	function(
+		sign,
+		src
+		// trg
+	)
 {
 	if (!src.path || !src.path.equals(sign.path))
 		{ return sign; }

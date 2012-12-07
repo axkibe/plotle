@@ -1,9 +1,7 @@
 /*
-|
 | The help panel.
 |
 | Authors: Axel Kittenberger
-|
 */
 
 

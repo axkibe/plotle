@@ -1,9 +1,7 @@
 /*
-|
 | A label on a dashboard.
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
@@ -26,28 +24,42 @@ var Curve;
 ( function( ) {
 'use strict';
 
-if (typeof(window) === 'undefined')
-	{ throw new Error('this code needs a browser!'); }
+if(typeof( window ) === 'undefined' )
+	{ throw new Error( 'this code needs a browser!' ); }
 
-/**
+
+/*
 | Constructor.
 */
-var Label = Dash.Label = function( twig, panel, inherit, name )
+var Label = Dash.Label =
+	function(
+		twig,
+		panel,
+		inherit,
+		name
+	)
 {
-	this.name    = name;
-	this.twig    = twig;
-	this.panel   = panel;
-	this.pos     = Curve.computePoint( twig.pos, panel.iframe );
+	this.name = name;
+
+	this.twig = twig;
+
+	this.panel= panel;
+
+	this.pos = Curve.computePoint(
+		twig.pos,
+		panel.iframe
+	);
 
 	// if not null, overrides the design text
-	this._$text    = inherit ? inherit._$text : null;
+	this._$text = inherit ? inherit._$text : null;
 };
 
 
 /*
 | Labels cannot focus.
 */
-Label.prototype.grepFocus = function( )
+Label.prototype.grepFocus =
+	function( )
 {
 	return false;
 };
@@ -56,7 +68,10 @@ Label.prototype.grepFocus = function( )
 /*
 | Draws the label on the fabric.
 */
-Label.prototype.draw = function( fabric )
+Label.prototype.draw =
+	function(
+		fabric
+	)
 {
 	fabric.fillText(
 		this._$text || this.twig.text,
@@ -69,7 +84,10 @@ Label.prototype.draw = function( fabric )
 /*
 | overrides the designed text
 */
-Label.prototype.setText = function(text)
+Label.prototype.setText =
+	function(
+		text
+	)
 {
 	this._$text = text;
 	this.poke();
@@ -79,7 +97,8 @@ Label.prototype.setText = function(text)
 /*
 | Clears cache.
 */
-Label.prototype.poke = function( )
+Label.prototype.poke =
+	function( )
 {
 	this.panel.poke( );
 };
@@ -88,7 +107,8 @@ Label.prototype.poke = function( )
 /*
 | Force clears all caches.
 */
-Label.prototype.knock = function( )
+Label.prototype.knock =
+	function( )
 {
 	// pass
 };
@@ -97,7 +117,12 @@ Label.prototype.knock = function( )
 /*
 | User is hovering his/her pointer ( mouse move )
 */
-Label.prototype.pointingHover = function( p, shift, ctrl )
+Label.prototype.pointingHover =
+	function(
+		// p,
+		// shift,
+		// ctrl
+	)
 {
 	return null;
 };
@@ -106,7 +131,12 @@ Label.prototype.pointingHover = function( p, shift, ctrl )
 /*
 | User is starting to point at something ( mouse down, touch start )
 */
-Label.prototype.pointingStart = function( p, shift, ctrl )
+Label.prototype.pointingStart =
+	function(
+		// p,
+		// shift,
+		// ctrl
+	)
 {
 	return null;
 };

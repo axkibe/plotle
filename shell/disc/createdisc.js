@@ -67,7 +67,7 @@ var CreateDisc = Disc.CreateDisc =
 	);
 
 
-	var silhoutte = this.silhoutte = new Euclid.Ellipse(
+	this.silhoutte = new Euclid.Ellipse(
 		new Euclid.Point(
 			width - 1 - ew,
 			0 - Jools.half( eh - height )
@@ -84,13 +84,22 @@ var CreateDisc = Disc.CreateDisc =
 		'gradientR1',  650
 	);
 
-	var buttons = this.buttons =
-	{
-		note     : new Disc.DiscButtonCreateNote     ( this ),
-		label    : new Disc.DiscButtonCreateLabel    ( this ),
-		relation : new Disc.DiscButtonCreateRelation ( this ),
-		portal   : new Disc.DiscButtonCreatePortal   ( this )
-	};
+	this.buttons =
+		Jools.immute(
+			{
+				note :
+					new Disc.DiscButtonCreateNote( this ),
+
+				label :
+					new Disc.DiscButtonCreateLabel( this ),
+
+				relation :
+					new Disc.DiscButtonCreateRelation( this ),
+
+				portal :
+					new Disc.DiscButtonCreatePortal( this )
+			}
+		);
 
 	this.$hover  = null;
 };
@@ -100,7 +109,8 @@ var CreateDisc = Disc.CreateDisc =
 /*
 | Force clears all caches.
 */
-CreateDisc.prototype.knock = function( )
+CreateDisc.prototype.knock =
+	function( )
 {
 	this.$fabric = null;
 };
@@ -109,7 +119,8 @@ CreateDisc.prototype.knock = function( )
 /*
 | Prepares the disc panels contents.
 */
-CreateDisc.prototype._weave = function( )
+CreateDisc.prototype._weave =
+	function( )
 {
 	var fabric = this.$fabric = new Euclid.Fabric(
 		this.width,
@@ -124,7 +135,6 @@ CreateDisc.prototype._weave = function( )
 	);
 
 	var buttons = this.buttons;
-	var buttonsStyle = theme.disc.buttons;
 
 	for( var name in this.buttons )
 	{
@@ -164,7 +174,10 @@ CreateDisc.prototype._weave = function( )
 /*
 | Draws the disc panel.
 */
-CreateDisc.prototype.draw = function( fabric )
+CreateDisc.prototype.draw =
+	function(
+		fabric
+	)
 {
 	fabric.drawImage(
 		this._weave( ),
@@ -177,11 +190,15 @@ CreateDisc.prototype.draw = function( fabric )
 /*
 | Returns true if point is on the disc panel.
 */
-CreateDisc.prototype.pointingHover = function( p, shift, ctrl )
+CreateDisc.prototype.pointingHover =
+	function(
+		p,
+		shift,
+		ctrl
+	)
 {
 	var pnw = this.pnw;
 	var pse = this.pse;
-	var a, aZ;
 
 	// shortcut if p is not near the panel
 	if(
@@ -236,11 +253,15 @@ CreateDisc.prototype.pointingHover = function( p, shift, ctrl )
 /*
 | Returns true if point is on this panel.
 */
-CreateDisc.prototype.pointingStart = function( p, shift, ctrl )
+CreateDisc.prototype.pointingStart =
+	function(
+		p,
+		shift,
+		ctrl
+	)
 {
 	var pnw = this.pnw;
 	var pse = this.pse;
-	var a, aZ;
 
 	// shortcut if p is not near the panel
 	if(
@@ -273,14 +294,20 @@ CreateDisc.prototype.pointingStart = function( p, shift, ctrl )
 	// this is on the disc
 	var buttons = this.buttons;
 
-	var cursor = null;
 	for( var name in buttons )
 	{
-		var r = buttons[ name ].
-			pointingStart( pp, shift, ctrl );
+		var r =
+			buttons[ name ].
+			pointingStart(
+				pp,
+				shift,
+				ctrl
+			);
 
-		if ( r )
-			{ return r; }
+		if( r )
+		{
+			return r;
+		}
 	}
 
 	return false;
@@ -290,7 +317,10 @@ CreateDisc.prototype.pointingStart = function( p, shift, ctrl )
 /*
 | User is inputing text.
 */
-CreateDisc.prototype.input = function( text )
+CreateDisc.prototype.input =
+	function(
+		// text
+	)
 {
 	// TODO
 	return;
@@ -300,7 +330,10 @@ CreateDisc.prototype.input = function( text )
 /*
 | Cycles the focus
 */
-CreateDisc.prototype.cycleFocus = function( dir )
+CreateDisc.prototype.cycleFocus =
+	function(
+		// dir
+	)
 {
 	throw new Error( 'TODO' );
 };
@@ -309,7 +342,12 @@ CreateDisc.prototype.cycleFocus = function( dir )
 /*
 | User is pressing a special key.
 */
-CreateDisc.prototype.specialKey = function( key, shift, ctrl )
+CreateDisc.prototype.specialKey =
+	function(
+	//	key,
+	//	shift,
+	//	ctrl
+	)
 {
 	// TODO
 };
@@ -318,16 +356,21 @@ CreateDisc.prototype.specialKey = function( key, shift, ctrl )
 /*
 | Clears caches.
 */
-CreateDisc.prototype.poke = function( )
+CreateDisc.prototype.poke =
+	function( )
 {
 	this.$fabric = null;
 	shell.redraw = true;
 };
 
+
 /*
 | Sets the hovered component.
 */
-CreateDisc.prototype.setHover = function( name )
+CreateDisc.prototype.setHover =
+	function(
+		name
+	)
 {
 	if( this.$hover === name )
 	{

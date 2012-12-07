@@ -1,9 +1,7 @@
 /*
-|
 | A checkbox
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
@@ -11,7 +9,7 @@
 | Export
 */
 var Dash;
-Dash = Dash || {};
+Dash = Dash || { };
 
 
 /*
@@ -41,35 +39,57 @@ if( typeof( window ) === 'undefined' )
 /*
 | Constructor.
 */
-var CheckBox = Dash.CheckBox = function( twig, panel, inherit, name )
+var CheckBox = Dash.CheckBox =
+	function(
+		twig,
+		panel,
+		inherit,
+		name
+	)
 {
 	if ( twig.type !== 'CheckBox' )
 		{ throw new Error('invalid twig type'); }
 
-	this.name        = name;
-	this.twig        = twig;
-	this.panel       = panel;
+	this.name = name;
+
+	this.twig = twig;
+
+	this.panel = panel;
 
 	var computePoint = Curve.computePoint;
-	var box = this.box = new Euclid.Rect(
+
+	this.box = new Euclid.Rect(
 		'pnw/pse',
-		computePoint( twig.box.pnw, panel.iframe ),
-		computePoint( twig.box.pse, panel.iframe )
+		computePoint(
+			twig.box.pnw,
+			panel.iframe
+		),
+		computePoint(
+			twig.box.pse,
+			panel.iframe
+		)
 	);
 
-	this.path         = new Path( [ panel.name, name ] );
+	this.path =
+		new Path(
+			[ panel.name, name ]
+		);
 
-	this._$checked     = inherit ? inherit._$checked : true;
-	//this.$fabric      = null;
-	this.$visible     = inherit ? inherit.$visible : true;
-	this.$accent      = Dash.Accent.NORMAL;
+	this._$checked = inherit ? inherit._$checked : true;
+
+	//this.$fabric = null;
+
+	this.$visible = inherit ? inherit.$visible : true;
+
+	this.$accent = Dash.Accent.NORMAL;
 };
 
 
 /*
 | Returns the current value (text in the box)
 */
-CheckBox.prototype.getValue = function()
+CheckBox.prototype.getValue =
+	function( )
 {
 	return this._$checked;
 };
@@ -78,13 +98,17 @@ CheckBox.prototype.getValue = function()
 /*
 | Returns the current value (text in the box)
 */
-CheckBox.prototype.setValue = function( value )
+CheckBox.prototype.setValue =
+	function(
+		value
+	)
 {
 	if( typeof( value ) !== 'boolean' )
 		{ throw new Error( 'Checkbox value not boolean: ' + value ); }
 
 	this._$checked = value;
-	this.poke();
+	this.poke( );
+
 	return value;
 };
 
@@ -92,7 +116,8 @@ CheckBox.prototype.setValue = function( value )
 /*
 | Control takes focus.
 */
-CheckBox.prototype.grepFocus = function( )
+CheckBox.prototype.grepFocus =
+	function( )
 {
 	if( !this.$visible )
 		{ return false; }
@@ -117,7 +142,10 @@ CheckBox.prototype.grepFocus = function( )
 /*
 | Mouse hover.
 */
-CheckBox.prototype.pointingHover = function( p )
+CheckBox.prototype.pointingHover =
+	function(
+		// p
+	)
 {
 	return null;
 };
@@ -126,16 +154,25 @@ CheckBox.prototype.pointingHover = function( p )
 /*
 | Sketches the check
 */
-CheckBox.prototype.sketchCheck = function( fabric, border, twist )
+CheckBox.prototype.sketchCheck =
+	function(
+		fabric
+		// border,
+		// twist
+	)
 {
 	var pc  = this.box.pc;
 	var pcx = pc.x;
 	var pcy = pc.y;
 
 	fabric.moveTo( pcx -  5, pcy -  3 );
+
 	fabric.lineTo( pcx +  2, pcy +  5 );
+
 	fabric.lineTo( pcx + 14, pcy - 12 );
+
 	fabric.lineTo( pcx +  2, pcy -  1 );
+
 	fabric.lineTo( pcx -  5, pcy -  3 );
 };
 
@@ -143,7 +180,11 @@ CheckBox.prototype.sketchCheck = function( fabric, border, twist )
 /*
 | CheckBox is being changed.
 */
-CheckBox.prototype.change = function( shift, ctrl )
+CheckBox.prototype.change =
+	function(
+		// shift,
+		// ctrl
+	)
 {
 	// no default
 };
@@ -152,10 +193,13 @@ CheckBox.prototype.change = function( shift, ctrl )
 /*
 | User is starting to point something ( mouse down, touch start )
 */
-CheckBox.prototype.pointingStart = function( p, shift, ctrl )
+CheckBox.prototype.pointingStart =
+	function(
+		p
+		// shift,
+		// ctrl
+	)
 {
-	var self = this;
-
 	if( !this.$visible )
 		{ return null; }
 
@@ -175,21 +219,27 @@ CheckBox.prototype.pointingStart = function( p, shift, ctrl )
 /*
 | Special keys for buttons having focus
 */
-CheckBox.prototype.specialKey = function( key )
+CheckBox.prototype.specialKey =
+	function(
+		key
+	)
 {
 	switch( key )
 	{
 		case 'down' :
+
 			this.panel.cycleFocus( +1 );
 			return;
 
 		case 'up' :
+
 			this.panel.cycleFocus( -1 );
 			return;
 
 		case 'enter' :
+
 			this._$checked = !this._$checked;
-			this.poke();
+			this.poke( );
 			return;
 	}
 };
@@ -198,10 +248,15 @@ CheckBox.prototype.specialKey = function( key )
 /*
 | Any normal key for a checkbox triggers it to change
 */
-CheckBox.prototype.input = function( text )
+CheckBox.prototype.input =
+	function(
+		// text
+	)
 {
 	this._$checked = !this._$checked;
-	this.poke();
+
+	this.poke( );
+
 	return true;
 };
 
@@ -209,7 +264,11 @@ CheckBox.prototype.input = function( text )
 /*
 | Draws the checkbox.
 */
-CheckBox.prototype.draw = function( fabric, accent )
+CheckBox.prototype.draw =
+	function(
+		fabric,
+		accent
+	)
 {
 	if( !this.$visible )
 		{ return; }
@@ -244,9 +303,15 @@ CheckBox.prototype.draw = function( fabric, accent )
 	if( !Jools.isnon( style ) )
 		{ throw new Error('Invalid style: ' + sname); }
 
-	fabric.paint( style, this.box, 'sketch', Euclid.View.proper );
+	fabric.paint(
+		style,
+		this.box,
+		'sketch',
+		Euclid.View.proper
+	);
 
-	if( this._$checked ) {
+	if( this._$checked )
+	{
 		fabric.paint(
 			Dash.getStyle( 'checkboxCheck' ),
 			this,

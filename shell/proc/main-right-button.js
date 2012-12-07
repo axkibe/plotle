@@ -38,9 +38,15 @@ Jools.subclass(MainRightButton, Dash.Button);
 /**
 | Button has been pressed
 */
-MainRightButton.prototype.push = function(p, shift, ctrl) {
-	this.panel.board.setShowHelp(!this.$active);
+MainRightButton.prototype.push =
+	function(
+		// p,
+		// shift,
+		// ctrl
+	)
+{
+	this.panel.board.setShowHelp( !this.$active );
 	shell.redraw = true;
 };
 
-})();
+} )( );

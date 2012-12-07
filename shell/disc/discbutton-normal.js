@@ -62,9 +62,9 @@ Jools.subclass( DiscButtonNormal, Disc.DiscButton );
 */
 DiscButtonNormal.prototype.sketchIcon =
 	function(
-		fabric,
-		border,
-		twist
+		fabric
+		// border,
+		// twist
 	)
 {
 	var wx = 19;

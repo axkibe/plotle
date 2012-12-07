@@ -25,7 +25,8 @@ var shell;
 /**
 | Capsule
 */
-(function(){
+( function( ) {
+
 'use strict';
 if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
 
@@ -37,9 +38,14 @@ var HelpHideButton = Proc.HelpHideButton = function(twig, panel, inherit, name) 
 };
 Jools.subclass(HelpHideButton, Dash.Button);
 
-HelpHideButton.prototype.push = function(shift, ctrl) {
-	this.panel.board.setShowHelp(false);
+HelpHideButton.prototype.push =
+	function(
+		// shift,
+		// ctrl
+	)
+{
+	this.panel.board.setShowHelp( false );
 	shell.redraw = true;
 };
 
-})();
+} )( );

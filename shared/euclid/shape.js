@@ -1,11 +1,9 @@
 /*
-|
 | A geometric shape.
 |
 | Base of Ellipse, RoundRect
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
@@ -13,7 +11,7 @@
 | Export
 */
 var Euclid;
-Euclid = Euclid || {};
+Euclid = Euclid || { };
 
 
 /*
@@ -36,7 +34,9 @@ if ( typeof( window ) === 'undefined' )
 | Constructor.
 */
 var Shape = Euclid.Shape =
-	function( hull )
+	function(
+		hull
+	)
 {
 	this.hull = Jools.immute( hull );
 
@@ -47,7 +47,13 @@ var Shape = Euclid.Shape =
 /*
 | Draws the shape
 */
-Shape.prototype.sketch = function( fabric, border, twist, view )
+Shape.prototype.sketch =
+	function(
+		fabric,
+		border,
+		twist,
+		view
+	)
 {
 	var hull = this.hull;
 	var h    = 0;
@@ -175,7 +181,9 @@ Shape.prototype.sketch = function( fabric, border, twist, view )
 	}
 
 	if( pstart !== null )
-		{ throw new Error( 'hull did not close' ); }
+	{
+		throw new Error( 'hull did not close' );
+	}
 
 };
 
@@ -183,7 +191,10 @@ Shape.prototype.sketch = function( fabric, border, twist, view )
 /*
 | Gets the source of a projection to p.
 */
-Shape.prototype.getProjection = function( p )
+Shape.prototype.getProjection =
+	function(
+		p
+	)
 {
 	var hull = this.hull;
 	var h    = 0;
@@ -198,7 +209,6 @@ Shape.prototype.getProjection = function( p )
 	var pn     = null;
 
 	var dx, dy, dxy;
-	var nx, ny;
 	var cx, cy;
 	var a, b;
 

@@ -51,30 +51,43 @@ var DiscButton = Disc.DiscButton =
 		pushValue      // if set, what to set the bridge field to on push
 	)
 {
-	this.disc       = disc;
-	this.name       = name;
-	this.pushChange = pushChange;
-	this.pushValue  = pushValue;
+	this.disc = disc;
 
-	var gStyle  = this.gStyle  = theme.disc[ disc.name ].buttons.generic;
-	var myStyle = this.myStyle = theme.disc[ disc.name ].buttons[ name ];
+	this.name = name;
+
+	this.pushChange = pushChange;
+
+	this.pushValue = pushValue;
+
+	var gStyle =
+	this.gStyle =
+		theme.disc[ disc.name ].buttons.generic;
+
+	var myStyle =
+	this.myStyle =
+		theme.disc[ disc.name ].buttons[ name ];
 
 	var width  = gStyle.width;
 	var height = gStyle.height;
 
-	var pnw = this.pnw = myStyle.pnw;
-	var pse = this.pse = pnw.add(
-		width,
-		height
-	);
+	var pnw =
+	this.pnw =
+		myStyle.pnw;
 
-	this.ellipse = new Euclid.Ellipse(
-		Euclid.Point.zero,
-		new Euclid.Point(
+	this.pse =
+		pnw.add(
 			width,
 			height
-		)
-	);
+		);
+
+	this.ellipse =
+		new Euclid.Ellipse(
+			Euclid.Point.zero,
+			new Euclid.Point(
+				width,
+				height
+			)
+		);
 
 	Jools.immute( this );
 };

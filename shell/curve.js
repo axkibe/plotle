@@ -1,9 +1,7 @@
 /*
-|
 | A bezier curve.
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
@@ -33,7 +31,11 @@ if (typeof(window) === 'undefined')
 /*
 | Constructor.
 */
-Curve = function(twig, frame)
+Curve =
+	function(
+		twig,
+		frame
+	)
 {
 	var data = this.data = [];
 
@@ -49,10 +51,12 @@ Curve = function(twig, frame)
 	}
 };
 
-/**
+
+/*
 | Computes a point by its anchor
 */
-Curve.computePoint = function(model, frame) {
+Curve.computePoint = function(model, frame)
+{
 	var half = Jools.half;
 	var pnw = frame.pnw;
 	var pse = frame.pse;
@@ -114,7 +118,12 @@ Curve.computePoint = function(model, frame) {
 /*
 | Sketches a curve in a fabric
 */
-Curve.prototype.sketch = function(fabric, border, twist)
+Curve.prototype.sketch =
+	function(
+		fabric,
+		border
+		// twist
+	)
 {
 	var data = this.data;
 	var lbx = 0;

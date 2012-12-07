@@ -38,7 +38,12 @@ var MainZoomNullButton = Proc.MainZoomNullButton = function(twig, panel, inherit
 };
 Jools.subclass(MainZoomNullButton, Dash.Button);
 
-MainZoomNullButton.prototype.push = function(shift, ctrl) {
+MainZoomNullButton.prototype.push =
+	function(
+		// shift,
+		// ctrl
+	)
+{
 	shell.changeSpaceZoom(0);
 };
 

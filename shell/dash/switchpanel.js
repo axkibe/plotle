@@ -1,9 +1,7 @@
 /*
-|
 | The panel to switch spaces.
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
@@ -28,17 +26,23 @@ var theme;
 /*
 | Capsule
 */
-( function() {
+( function( ) {
 'use strict';
 
-if (typeof(window) === 'undefined')
-	{ throw new Error('this code needs a browser!'); }
+if( typeof( window ) === 'undefined' )
+	{ throw new Error( 'this code needs a browser!' ); }
 
 
 /*
 | Constructor
 */
-var SwitchPanel = Dash.SwitchPanel = function( panel, current, userName, psw )
+var SwitchPanel = Dash.SwitchPanel =
+	function(
+		panel,
+		current,
+		userName,
+		psw
+	)
 {
 	this.panel      = panel;
 	this.current    = current;
@@ -90,7 +94,8 @@ var SwitchPanel = Dash.SwitchPanel = function( panel, current, userName, psw )
 /*
 | Cancels fading
 */
-SwitchPanel.prototype.cancelFade = function()
+SwitchPanel.prototype.cancelFade =
+	function( )
 {
 	if (!this.$fade)
 		{ return; }
@@ -106,7 +111,10 @@ SwitchPanel.prototype.cancelFade = function()
 /*
 | Draws the switchpanel.
 */
-SwitchPanel.prototype.draw = function(fabric)
+SwitchPanel.prototype.draw =
+	function(
+		fabric
+	)
 {
 	if (this.$fade)
 		{ fabric.globalAlpha(this.$fade); }
@@ -121,7 +129,8 @@ SwitchPanel.prototype.draw = function(fabric)
 /*
 | Called on every step to fade away when mouse isn't on the panel or its switch
 */
-SwitchPanel.prototype.fadeout = function()
+SwitchPanel.prototype.fadeout =
+	function( )
 {
 	var self = this;
 
@@ -148,7 +157,12 @@ SwitchPanel.prototype.fadeout = function()
 /*
 | Sketches the panel frame.
 */
-SwitchPanel.prototype.sketchFrame = function( fabric, border, twist )
+SwitchPanel.prototype.sketchFrame =
+	function(
+		fabric,
+		border
+		// twist
+	)
 {
 	var w = this.iframe.width  - 1;
 	var h = this.iframe.height - 1;
@@ -169,22 +183,29 @@ SwitchPanel.prototype.sketchFrame = function( fabric, border, twist )
 /*
 | Sketches the buttons.
 */
-SwitchPanel.prototype.sketchButton = function( fabric, border, twist, view, dir )
+SwitchPanel.prototype.sketchButton =
+	function(
+		fabric,
+		border,
+		twist,
+		view,
+		dir
+	)
 {
 	var bh = this.buttonDim.height;
 	var bw = this.buttonDim.width;
 	var bo = border;
 
-	var bw05 = Jools.half(bw);
-	var bh05 = Jools.half(bh);
+	var bw05 = Jools.half( bw );
+	var bh05 = Jools.half( bh );
 
 	var magic = Euclid.Const.magic;
 	var mx    = bw / 2 * magic;
 	var my    = bh / 2 * magic;
 
-	var p = this.buttonPos[dir];
-	var px = view.x(p);
-	var py = view.y(p);
+	var p = this.buttonPos[ dir ];
+	var px = view.x( p );
+	var py = view.y( p );
 
 	fabric.moveTo(                      bo - bw05 + px,              py);
 	fabric.beziTo(   0, -my, -mx,   0,              px,  bo - bh05 + py);
@@ -197,7 +218,11 @@ SwitchPanel.prototype.sketchButton = function( fabric, border, twist, view, dir 
 /*
 | Paints button dir on the fabric
 */
-SwitchPanel.prototype._paintButton = function(fabric, dir)
+SwitchPanel.prototype._paintButton =
+	function(
+		fabric,
+		dir
+	)
 {
 	var style;
 
@@ -217,7 +242,8 @@ SwitchPanel.prototype._paintButton = function(fabric, dir)
 /*
 | Draws the contents.
 */
-SwitchPanel.prototype._weave = function()
+SwitchPanel.prototype._weave =
+	function( )
 {
 	if (!config.debug.noCache && this.$fabric)
 		{ return this.$fabric; }
@@ -315,7 +341,8 @@ SwitchPanel.prototype._weave = function()
 /*
 | Clears caches.
 */
-SwitchPanel.prototype.poke = function( )
+SwitchPanel.prototype.poke =
+	function( )
 {
 	this.$fabric = null;
 	shell.redraw = true;
@@ -325,7 +352,8 @@ SwitchPanel.prototype.poke = function( )
 /*
 | Force clears all caches
 */
-SwitchPanel.prototype.knock = function( )
+SwitchPanel.prototype.knock =
+	function( )
 {
 	this.$fabric = null;
 };
@@ -334,7 +362,11 @@ SwitchPanel.prototype.knock = function( )
 /*
 | Returns true if p is within the panel
 */
-SwitchPanel.prototype.within = function( view, p )
+SwitchPanel.prototype.within =
+	function(
+		view,
+		p
+	)
 {
 	var iframe = this.iframe;
 
@@ -355,7 +387,10 @@ SwitchPanel.prototype.within = function( view, p )
 /*
 | User is starting to point at something ( mouse down, touch start )
 */
-SwitchPanel.prototype.pointingStart = function( p )
+SwitchPanel.prototype.pointingStart =
+	function(
+		p
+	)
 {
 	p = p.sub( this.pnw );
 	if( !this.within( Euclid.View.proper, p ) )
@@ -400,7 +435,10 @@ SwitchPanel.prototype.pointingStart = function( p )
 /*
 | Mouse hover.
 */
-SwitchPanel.prototype.pointingHover = function( p )
+SwitchPanel.prototype.pointingHover =
+	function(
+		p
+	)
 {
 	var self   = this;
 	p          = p.sub( this.pnw );
@@ -448,4 +486,4 @@ SwitchPanel.prototype.pointingHover = function( p )
 };
 
 
-})( );
+} )( );

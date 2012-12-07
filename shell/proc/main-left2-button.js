@@ -1,14 +1,12 @@
 /*
-|
 | Second to left Button on the main panel..
 | Registers.
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
-/**
+/*
 | Export
 */
 var Proc;
@@ -39,7 +37,12 @@ Jools.subclass(MainLeft2Button, Dash.Button);
 /**
 | Button has been pressed.
 */
-MainLeft2Button.prototype.push = function(shift, ctrl) {
+MainLeft2Button.prototype.push =
+	function(
+		// shift,
+		// ctrl
+	)
+{
 	this.panel.board.setCurPanel('RegPanel');
 	shell.redraw = true;
 };

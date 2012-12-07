@@ -305,4 +305,4 @@ Util.prototype.clearRegister = function( panel )
 Proc.util = new Util();
 
 
-} ) ();
+} )( );

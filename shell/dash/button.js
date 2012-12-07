@@ -1,9 +1,7 @@
 /*
-|
 | A button on a panel.
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
@@ -213,7 +211,11 @@ Button.prototype.pointingHover = function( p )
 /*
 | Button has been pushed
 */
-Button.prototype.push = function( shift, ctrl )
+Button.prototype.push =
+	function(
+		// shift,
+		// ctrl
+	)
 {
 	// no default
 };
@@ -222,7 +224,12 @@ Button.prototype.push = function( shift, ctrl )
 /*
 | User is starting to point something ( mouse down, touch start )
 */
-Button.prototype.pointingStart = function( p, shift, ctrl )
+Button.prototype.pointingStart =
+	function(
+		p,
+		shift,
+		ctrl
+	)
 {
 	var self = this;
 
@@ -272,7 +279,10 @@ Button.prototype.pointingStart = function( p, shift, ctrl )
 		this.$retimer = system.setTimer( theme.zoom.firstTimer, repeatFunc );
 	}
 
-	this.push( shift, ctrl );
+	this.push(
+		shift,
+		ctrl
+	);
 
 	return this.repeating ? 'drag' : false;
 };
@@ -281,7 +291,10 @@ Button.prototype.pointingStart = function( p, shift, ctrl )
 /*
 | Special keys for buttons having focus
 */
-Button.prototype.specialKey = function( key )
+Button.prototype.specialKey =
+	function(
+		key
+	)
 {
 	switch( key )
 	{
@@ -303,7 +316,10 @@ Button.prototype.specialKey = function( key )
 /*
 | Any normal key for a button having focus triggers a push.
 */
-Button.prototype.input = function( text )
+Button.prototype.input =
+	function(
+		// text
+	)
 {
 	this.push( false, false );
 	return true;
@@ -313,19 +329,27 @@ Button.prototype.input = function( text )
 /*
 | Draws the button.
 */
-Button.prototype.draw = function( fabric, accent )
+Button.prototype.draw =
+	function(
+		fabric,
+		accent
+	)
 {
 	if( !this.$visible )
 		{ return; }
 
-	fabric.drawImage( this._weave( accent ), this.pnw );
+	fabric.drawImage(
+		this._weave( accent ),
+		this.pnw
+	);
 };
 
 
 /*
 | Clears all caches.
 */
-Button.prototype.poke = function( )
+Button.prototype.poke =
+	function( )
 {
 	this.$fabric = null;
 	this.panel.poke( );
@@ -335,7 +359,8 @@ Button.prototype.poke = function( )
 /*
 | Force clears all caches.
 */
-Button.prototype.knock = function( )
+Button.prototype.knock =
+	function( )
 {
 	this.$fabric = null;
 };
@@ -345,7 +370,8 @@ Button.prototype.knock = function( )
 /*
 | Stops a REBUTTON action.
 */
-Button.prototype.dragStop = function( )
+Button.prototype.dragStop =
+	function( )
 {
 	system.cancelTimer( this.$retimer );
 

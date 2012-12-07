@@ -1,10 +1,8 @@
 /*
-|
 | Left Button on the main panel.
 | Log in / Log out
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
@@ -38,7 +36,12 @@ Jools.subclass(MainLeftButton, Dash.Button);
 /**
 | Button has been pushed.
 */
-MainLeftButton.prototype.push = function(shift, ctrl) {
+MainLeftButton.prototype.push =
+	function(
+		// shift,
+		// ctrl
+	)
+{
 	switch (this.$captionText) {
 	case 'log in'  :
 		this.panel.board.setCurPanel('LoginPanel');

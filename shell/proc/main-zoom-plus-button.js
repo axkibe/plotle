@@ -45,7 +45,11 @@ Jools.subclass( MainZoomPlusButton, Dash.Button );
 /*
 | Button is being pushed.
 */
-MainZoomPlusButton.prototype.push = function( shift, ctrl )
+MainZoomPlusButton.prototype.push =
+	function(
+		// shift,
+		// ctrl
+	)
 {
 	shell.changeSpaceZoom( 1 );
 };

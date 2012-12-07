@@ -35,7 +35,12 @@ var MainSwitchButton = Proc.MainSwitchButton = function(twig, panel, inherit, na
 };
 Jools.subclass(MainSwitchButton, Dash.Button);
 
-MainSwitchButton.prototype.push = function(shift, ctrl) {
+MainSwitchButton.prototype.push =
+	function(
+		// shift,
+		// ctrl
+	)
+{
 	this.panel.toggleSwitch();
 	shell.redraw = true;
 };

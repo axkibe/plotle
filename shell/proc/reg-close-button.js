@@ -43,7 +43,11 @@ Jools.subclass(RegCloseButton, Dash.Button);
 /*
 | Button is being pushed.
 */
-RegCloseButton.prototype.push = function(shift, ctrl)
+RegCloseButton.prototype.push =
+	function(
+		// shift,
+		// ctrl
+	)
 {
 	Proc.util.clearRegister(this.panel);
 

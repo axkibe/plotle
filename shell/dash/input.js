@@ -1,9 +1,7 @@
 /*
-|
 | An input field on a panel.
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
@@ -40,7 +38,13 @@ if (typeof(window) === 'undefined')
 /*
 | Constructor.
 */
-var Input = Dash.Input = function( twig, panel, inherit, name )
+var Input = Dash.Input =
+	function(
+		twig,
+		panel,
+		inherit,
+		name
+	)
 {
 	this.twig    = twig;
 	this.panel   = panel;
@@ -77,7 +81,10 @@ var Input = Dash.Input = function( twig, panel, inherit, name )
 /*
 | Returns the offset nearest to point p.
 */
-Input.prototype.getOffsetAt = function(p)
+Input.prototype.getOffsetAt =
+	function(
+		p
+	)
 {
 	var pitch = this._pitch;
 	var dx    = p.x - pitch.x;
@@ -122,8 +129,13 @@ Input.prototype.maskWidth = function( size )
 /*
 | Returns the kerning of characters for password masks.
 */
-Input.prototype.maskKern = function( size )
-	{ return Math.round( size * 0.15 ); };
+Input.prototype.maskKern =
+	function(
+		size
+	)
+{
+	return Math.round( size * 0.15 );
+};
 
 
 /*
@@ -166,7 +178,10 @@ Input.prototype.sketchMask =
 /*
 | Returns the fabric for the input field.
 */
-Input.prototype._weave = function( accent )
+Input.prototype._weave =
+	function(
+		accent
+	)
 {
 	var fabric = this._$fabric;
 	var value  = this._$value;
@@ -242,8 +257,17 @@ Input.prototype._weave = function( accent )
 /*
 | Draws the input field.
 */
-Input.prototype.draw = function(fabric, accent)
-	{ fabric.drawImage(this._weave(accent), this.pnw); };
+Input.prototype.draw =
+	function(
+		fabric,
+		accent
+	)
+{
+	fabric.drawImage(
+		this._weave( accent ),
+		this.pnw
+	);
+};
 
 
 /*
@@ -251,7 +275,10 @@ Input.prototype.draw = function(fabric, accent)
 |
 | offset:   the offset to get the point from.
 */
-Input.prototype.locateOffset = function(offset)
+Input.prototype.locateOffset =
+	function(
+		offset
+	)
 {
 	// FIXME cache position
 	var twig  = this.twig;
@@ -593,23 +620,38 @@ Input.prototype.knock = function()
 /*
 | Mouse hover
 */
-Input.prototype.pointingHover = function(p, shift, ctrl)
+Input.prototype.pointingHover =
+	function(
+		p
+		// shift,
+		// ctrl
+	)
 {
 	if( p === null )
-		{ return null; }
+	{
+		return null;
+	}
 
-	if( p.x < this.pnw.x ||
+	if(
+		p.x < this.pnw.x ||
 		p.y < this.pnw.y ||
 		p.x > this.pse.x ||
 		p.y > this.pse.y
 	)
-		{ return null; }
+	{
+		return null;
+	}
 
-	var fabric = this._weave(Dash.Accent.NORMA);
-	var pp = p.sub(this.pnw);
+	var pp = p.sub(
+		this.pnw
+	);
 
-	if( !this._bezi.within( Euclid.View.proper, pp ) )
-		{ return null; }
+	if(
+		!this._bezi.within( Euclid.View.proper, pp )
+	)
+	{
+		return null;
+	}
 
 	return 'text';
 };
@@ -618,23 +660,37 @@ Input.prototype.pointingHover = function(p, shift, ctrl)
 /*
 | pointing device is starting a point ( mouse down, touch start )
 */
-Input.prototype.pointingStart = function(p, shift, ctrl)
+Input.prototype.pointingStart =
+	function(
+		p
+		// shift,
+		// ctrl
+	)
 {
-	var pp = p.sub(this.pnw);
-	var fabric = this._weave(Dash.Accent.NORMA);
+	var pp = p.sub( this.pnw );
 
-	if( !this._bezi.within( Euclid.View.proper, pp ) )
-		{ return null; }
+	if(
+		!this._bezi.within(
+			Euclid.View.proper,
+			pp
+		)
+	)
+	{
+		return null;
+	}
 
 	shell.setCaret(
 		'board',
 		{
-			path : new Path ( [this.panel.name, this.name ] ),
-			at1  : this.getOffsetAt( pp )
+			path :
+				new Path ( [this.panel.name, this.name ] ),
+
+			at1 :
+				this.getOffsetAt( pp )
 		}
 	);
 
-	this.poke();
+	this.poke( );
 
 	return false;
 };

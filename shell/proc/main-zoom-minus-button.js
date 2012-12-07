@@ -46,10 +46,14 @@ var MainZoomMinusButton = Proc.MainZoomMinusButton =
 Jools.subclass( MainZoomMinusButton, Dash.Button );
 
 
-MainZoomMinusButton.prototype.push = function( shift, ctrl )
+MainZoomMinusButton.prototype.push =
+	function(
+		// shift,
+		// ctrl
+	)
 {
 	shell.changeSpaceZoom( -1 );
 	return true;
 };
 
-})( );
+} )( );

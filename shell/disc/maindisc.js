@@ -71,7 +71,7 @@ var MainDisc = Disc.MainDisc =
 		height
 	);
 
-	var silhoutte = this.silhoutte = new Euclid.Ellipse(
+	this.silhoutte = new Euclid.Ellipse(
 		new Euclid.Point(
 			width - 1 - ew,
 			0 - Jools.half( eh - height )
@@ -88,14 +88,16 @@ var MainDisc = Disc.MainDisc =
 		'gradientR1',  650
 	);
 
-	var buttons = this.buttons =
-	{
-		normal  : new Disc.DiscButtonNormal ( this ),
-		create  : new Disc.DiscButtonCreate ( this ),
-		login   : new Disc.DiscButtonLogin  ( this ),
-		signup  : new Disc.DiscButtonSignup ( this ),
-		help    : new Disc.DiscButtonHelp   ( this )
-	};
+	this.buttons =
+		Jools.immute(
+			{
+				normal  : new Disc.DiscButtonNormal ( this ),
+				create  : new Disc.DiscButtonCreate ( this ),
+				login   : new Disc.DiscButtonLogin  ( this ),
+				signup  : new Disc.DiscButtonSignup ( this ),
+				help    : new Disc.DiscButtonHelp   ( this )
+			}
+		);
 
 	this.$hover  = inherit ? inherit.$hover  : null;
 };
@@ -105,7 +107,8 @@ var MainDisc = Disc.MainDisc =
 /*
 | Force clears all caches.
 */
-MainDisc.prototype.knock = function( )
+MainDisc.prototype.knock =
+	function( )
 {
 	this.$fabric = null;
 };
@@ -114,7 +117,8 @@ MainDisc.prototype.knock = function( )
 /*
 | Prepares the disc panels contents.
 */
-MainDisc.prototype._weave = function( )
+MainDisc.prototype._weave =
+	function( )
 {
 	var fabric = this.$fabric;
 
@@ -136,7 +140,6 @@ MainDisc.prototype._weave = function( )
 	);
 
 	var buttons = this.buttons;
-	var buttonsStyle = theme.disc.buttons;
 
 	for( var name in this.buttons )
 	{
@@ -176,7 +179,10 @@ MainDisc.prototype._weave = function( )
 /*
 | Draws the disc panel.
 */
-MainDisc.prototype.draw = function( fabric )
+MainDisc.prototype.draw =
+	function(
+		fabric
+	)
 {
 	if( shell.bridge.inMode( 'CREATE' ) )
 	{
@@ -193,11 +199,15 @@ MainDisc.prototype.draw = function( fabric )
 /*
 | Returns true if point is on the disc panel.
 */
-MainDisc.prototype.pointingHover = function( p, shift, ctrl )
+MainDisc.prototype.pointingHover =
+	function(
+		p,
+		shift,
+		ctrl
+	)
 {
 	var pnw = this.pnw;
 	var pse = this.pse;
-	var a, aZ;
 
 	// shortcut if p is not near the panel
 	if(
@@ -212,7 +222,13 @@ MainDisc.prototype.pointingHover = function( p, shift, ctrl )
 
 		if( shell.bridge.inMode( 'CREATE' ) )
 		{
-			return this.createDisc.pointingHover( p, shift, ctrl );
+			return (
+				this.createDisc.pointingHover(
+					p,
+					shift,
+					ctrl
+				)
+			);
 		}
 
 		return null;
@@ -235,7 +251,13 @@ MainDisc.prototype.pointingHover = function( p, shift, ctrl )
 
 		if( shell.bridge.inMode( 'CREATE' ) )
 		{
-			return this.createDisc.pointingHover( p, shift, ctrl );
+			return (
+				this.createDisc.pointingHover(
+					p,
+					shift,
+					ctrl
+				)
+			);
 		}
 
 		return null;
@@ -247,8 +269,12 @@ MainDisc.prototype.pointingHover = function( p, shift, ctrl )
 	var cursor = null;
 	for( var name in buttons )
 	{
-		cursor = buttons[ name ].
-			pointingHover( pp, shift, ctrl );
+		cursor =
+			buttons[ name ].pointingHover(
+				pp,
+				shift,
+				ctrl
+			);
 
 		if ( cursor )
 			{ break; }
@@ -266,11 +292,15 @@ MainDisc.prototype.pointingHover = function( p, shift, ctrl )
 /*
 | Returns true if point is on this panel.
 */
-MainDisc.prototype.pointingStart = function( p, shift, ctrl )
+MainDisc.prototype.pointingStart =
+	function(
+		p,
+		shift,
+		ctrl
+	)
 {
 	var pnw = this.pnw;
 	var pse = this.pse;
-	var a, aZ;
 
 	// shortcut if p is not near the panel
 	if(
@@ -284,7 +314,11 @@ MainDisc.prototype.pointingStart = function( p, shift, ctrl )
 
 		if( shell.bridge.inMode( 'CREATE' ) )
 		{
-			return this.createDisc.pointingStart( p, shift, ctrl );
+			return this.createDisc.pointingStart(
+				p,
+				shift,
+				ctrl
+			);
 		}
 
 		return null;
@@ -308,7 +342,11 @@ MainDisc.prototype.pointingStart = function( p, shift, ctrl )
 
 		if( shell.bridge.inMode( 'CREATE' ) )
 		{
-			return this.createDisc.pointingStart( p, shift, ctrl );
+			return this.createDisc.pointingStart(
+				p,
+				shift,
+				ctrl
+			);
 		}
 
 		return null;
@@ -317,13 +355,17 @@ MainDisc.prototype.pointingStart = function( p, shift, ctrl )
 	// this is on the disc
 	var buttons = this.buttons;
 
-	var cursor = null;
 	for( var name in buttons )
 	{
-		var r = buttons[ name ].
-			pointingStart( pp, shift, ctrl );
+		var r =
+			buttons[ name ].
+			pointingStart(
+				pp,
+				shift,
+				ctrl
+			);
 
-		if ( r )
+		if( r )
 			{ return r; }
 	}
 
@@ -334,7 +376,10 @@ MainDisc.prototype.pointingStart = function( p, shift, ctrl )
 /*
 | User is inputing text.
 */
-MainDisc.prototype.input = function( text )
+MainDisc.prototype.input =
+	function(
+		// text
+	)
 {
 	// TODO
 	return;
@@ -344,7 +389,10 @@ MainDisc.prototype.input = function( text )
 /*
 | Cycles the focus
 */
-MainDisc.prototype.cycleFocus = function( dir )
+MainDisc.prototype.cycleFocus =
+	function(
+		// dir
+	)
 {
 	throw new Error( 'TODO' );
 };
@@ -353,7 +401,12 @@ MainDisc.prototype.cycleFocus = function( dir )
 /*
 | User is pressing a special key.
 */
-MainDisc.prototype.specialKey = function( key, shift, ctrl )
+MainDisc.prototype.specialKey =
+	function(
+		// key,
+		// shift,
+		// ctrl
+	)
 {
 	// TODO
 };
@@ -362,7 +415,8 @@ MainDisc.prototype.specialKey = function( key, shift, ctrl )
 /*
 | Clears caches.
 */
-MainDisc.prototype.poke = function( )
+MainDisc.prototype.poke =
+	function( )
 {
 	this.$fabric = null;
 	shell.redraw = true;
@@ -372,7 +426,10 @@ MainDisc.prototype.poke = function( )
 /*
 | Sets the hovered component.
 */
-MainDisc.prototype.setHover = function( name )
+MainDisc.prototype.setHover =
+	function(
+		name
+	)
 {
 	if( this.$hover === name )
 	{

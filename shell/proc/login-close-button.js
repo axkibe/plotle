@@ -1,9 +1,7 @@
 /*
-|
 | Login panel, close button
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
@@ -25,9 +23,12 @@ var shell;
 /*
 | Capsule
 */
-(function(){
+( function( ) {
 'use strict';
-if (typeof(window) === 'undefined') { throw new Error('this code needs a browser!'); }
+
+
+if( typeof( window ) === 'undefined' )
+	{ throw new Error( 'this code needs a browser!' ); }
 
 
 /*
@@ -45,12 +46,16 @@ Jools.subclass(LoginCloseButton, Dash.Button);
 /*
 | Button is being pushed.
 */
-LoginCloseButton.prototype.push = function(shift, ctrl)
+LoginCloseButton.prototype.push =
+	function(
+		// shift,
+		// ctrl
+	)
 {
-	Proc.util.clearLogin(this.panel);
-	this.panel.board.setCurPanel('MainPanel');
+	Proc.util.clearLogin( this.panel );
+	this.panel.board.setCurPanel( 'MainPanel' );
 	shell.redraw = true;
 };
 
 
-})();
+} )( );

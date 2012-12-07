@@ -51,7 +51,11 @@ var DiscButtonCreateLabel = Disc.DiscButtonCreateLabel =
 	);
 };
 
-Jools.subclass( DiscButtonCreateLabel, Disc.DiscButton );
+
+Jools.subclass(
+	DiscButtonCreateLabel,
+	Disc.DiscButton
+);
 
 
 /*
@@ -62,9 +66,6 @@ DiscButtonCreateLabel.prototype.drawIcon =
 		fabric
 	)
 {
-	var wx = 30;
-	var ny = 35;
-
 	fabric.fillText(
 		'Label',
 		this.myStyle.textAnchor,

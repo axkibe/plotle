@@ -41,28 +41,61 @@ if( typeof( window ) === 'undefined' )
 /*
 | Constructor.
 */
-var Chat = Dash.Chat = function( twig, panel, inherit, name )
+var Chat = Dash.Chat =
+	function(
+		twig,
+		panel,
+		inherit,
+		name
+	)
 {
-	this.name       = name;
-	this.twig       = twig;
-	this.panel      = panel;
-	var pnw         = this.pnw    = Curve.computePoint( twig.frame.pnw, panel.iframe );
-	var pse         = this.pse    = Curve.computePoint( twig.frame.pse, panel.iframe );
-	var iframe      = this.iframe = new Euclid.Rect( 'pse', pse.sub( pnw ) );
-	var fs          = twig.font.size;
+	this.name =
+		name;
 
-	this.messages   = inherit ? inherit.messages : [ ];
+	this.twig =
+		twig;
+
+	this.panel =
+		panel;
+
+	var pnw =
+	this.pnw =
+		Curve.computePoint( twig.frame.pnw, panel.iframe );
+
+	var pse =
+	this.pse =
+		Curve.computePoint( twig.frame.pse, panel.iframe );
+
+	var iframe =
+		this.iframe =
+		new Euclid.Rect( 'pse', pse.sub( pnw ) );
+
+	var fs = twig.font.size;
+
+	this.messages = inherit ? inherit.messages : [ ];
 
 	this.lineHeight = Math.round( fs * 1.2 );
+
 	this.sideSlopeX = 20;
-	var descend     = Math.round( fs * theme.bottombox );
-	this._pitch     = new Euclid.Point( this.sideSlopeX - 7, iframe.height - descend );
+
+	var descend =
+		Math.round(
+			fs * theme.bottombox
+		);
+
+	this._pitch =
+		new Euclid.Point(
+			this.sideSlopeX - 7,
+			iframe.height - descend
+		);
 
 	// offset of input text line
-	this._coff      = 37;
+	this._coff =
+		37;
 
 	// current text being inputed
-	this._$itext    = inherit ? inherit._$itext : '';
+	this._$itext =
+		inherit ? inherit._$itext : '';
 };
 
 
@@ -71,14 +104,21 @@ var Chat = Dash.Chat = function( twig, panel, inherit, name )
 |
 | FIXME remove
 */
-Chat.prototype.getCaretPos = function( )
+Chat.prototype.getCaretPos =
+	function( )
 {
 	var fs      = this.twig.font.size;
+
 	var descend = fs * theme.bottombox;
+
 	var p       = this.locateOffset( shell.$caret.sign.at1 );
+
 	var pnw     = this.pnw;
+
 	var s       = Math.round( p.y + pnw.y + descend );
+
 	var n       = s - Math.round( fs + descend );
+
 	var	x       = p.x + this.pnw.x - 1;
 
 	return Jools.immute(
@@ -94,27 +134,44 @@ Chat.prototype.getCaretPos = function( )
 /*
 | Returns the offset nearest to x coordinate.
 */
-Chat.prototype.getOffsetAt = function( p )
+Chat.prototype.getOffsetAt =
+	function(
+		p
+	)
 {
 	var pitch = this._pitch;
+
 	var dx    = p.x - pitch.x - this._coff;
+
 	var itext = this._$itext;
-	var x1    = 0;
-	var x2    = 0;
-	var font  = this.twig.font;
+
+	var x1 = 0;
+
+	var x2 = 0;
+
+	var font = this.twig.font;
+
 	var a;
 
 	for( a = 0; a < itext.length; a++ )
 	{
 		x1 = x2;
-		x2 = Euclid.Measure.width( font, itext.substr( 0, a ) );
+
+		x2 = Euclid.Measure.width(
+			font,
+			itext.substr( 0, a )
+		);
 
 		if( x2 >= dx )
-			{ break; }
+		{
+			break;
+		}
 	}
 
 	if( dx - x1 < x2 - dx && a > 0 )
-		{ a--; }
+	{
+		a--;
+	}
 
 	return a;
 };
@@ -125,6 +182,7 @@ Chat.prototype.getOffsetAt = function( p )
 Chat.prototype._weave = function( )
 {
 	var fabric = this.$fabric;
+
 	if( fabric && !config.debug.noCache )
 		{ return fabric; }
 
@@ -471,9 +529,15 @@ Chat.prototype.grepFocus = function( )
 /*
 | User is starting to point ( mouse down, touch start )
 */
-Chat.prototype.pointingStart = function( p, shift, ctrl )
+Chat.prototype.pointingStart =
+	function(
+		p
+		// shift,
+		// ctrl
+	)
 {
 	var pp = p.sub( this.pnw );
+
 	var fabric = this._weave( );
 
 	if(!
@@ -503,15 +567,23 @@ Chat.prototype.pointingStart = function( p, shift, ctrl )
 /*
 | Mouse hover
 */
-Chat.prototype.pointingHover = function( p, shift, ctrl )
+Chat.prototype.pointingHover =
+	function(
+		p
+		// shift,
+		// ctrl
+	)
 {
 	if( p === null )
-		{ return null; }
+	{
+		return null;
+	}
 
 	var pnw = this.pnw;
 	var pse = this.pse;
 
-	if( p.x < pnw.x ||
+	if(
+		p.x < pnw.x ||
 		p.y < pnw.y ||
 		p.x > pse.x ||
 		p.y > pse.y
@@ -533,19 +605,33 @@ Chat.prototype.pointingHover = function( p, shift, ctrl )
 /*
 | Draws the input line
 */
-Chat.prototype.sketchILine = function( fabric, border, twist )
+Chat.prototype.sketchILine =
+	function(
+		fabric
+		// border,
+		// twist
+	)
 {
-	var ox   = 0;
-	var w    = fabric.width - 1;
+	var ox = 0;
+
+	var w = fabric.width - 1;
+
 	var psex = w  - this.sideSlopeX;
+
 	var psey = fabric.height;
+
 	var pnwx = this.sideSlopeX + ox;
+
 	var pnwy = psey - this.lineHeight - 2;
 
 	fabric.moveTo(                    ox, psey );
+
 	fabric.beziTo(  7, -7, -15,  0, pnwx, pnwy );
+
 	fabric.lineTo(                  psex, pnwy );
+
 	fabric.beziTo( 15,  0,  -7, -7,    w, psey );
+
 	fabric.lineTo(                  pnwx, psey );
 };
 
@@ -553,7 +639,8 @@ Chat.prototype.sketchILine = function( fabric, border, twist )
 /*
 | Pokes the component
 */
-Chat.prototype.poke = function( )
+Chat.prototype.poke =
+	function( )
 {
 	this.$fabric = null;
 	this.panel.poke( );
@@ -563,7 +650,8 @@ Chat.prototype.poke = function( )
 /*
 | Force clears all caches.
 */
-Chat.prototype.knock = function( )
+Chat.prototype.knock =
+	function( )
 {
 	this.$fabric = null;
 };
@@ -572,21 +660,50 @@ Chat.prototype.knock = function( )
 /*
 | User pressed a special key
 */
-Chat.prototype.specialKey = function(key)
+Chat.prototype.specialKey =
+	function(
+		key
+	)
 {
 	switch( key )
 	{
-		case 'backspace' : this.keyBackspace( ); break;
-		case 'del'       : this.keyDel( );       break;
-		case 'down'      : this.keyDown( );      break;
-		case 'end'       : this.keyEnd( );       break;
-		case 'enter'     : this.keyEnter( );     break;
-		case 'left'      : this.keyLeft( );      break;
-		case 'pos1'      : this.keyPos1( );      break;
-		case 'right'     : this.keyRight( );     break;
-		case 'up'        : this.keyUp( );        break;
+		case 'backspace' :
+			this.keyBackspace( );
+			break;
+
+		case 'del' :
+			this.keyDel( );
+			break;
+
+		case 'down' :
+			this.keyDown( );
+			break;
+
+		case 'end' :
+			this.keyEnd( );
+			break;
+
+		case 'enter' :
+			this.keyEnter( );
+			break;
+
+		case 'left' :
+			this.keyLeft( );
+			break;
+
+		case 'pos1' :
+			this.keyPos1( );
+			break;
+
+		case 'right' :
+			this.keyRight( );
+			break;
+
+		case 'up' :
+			this.keyUp( );
+			break;
 	}
 };
 
 
-})( );
+} )( );
