@@ -370,10 +370,10 @@ Portal.prototype.draw =
 Portal.prototype.mousewheel =
 	function(
 		view,
-		p,
-		dir,
-		shift,
-		ctrl
+		p
+		// dir,
+		// shift,
+		// ctrl
 	)
 {
 	return (

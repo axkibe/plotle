@@ -1,10 +1,8 @@
 /*
-|
 | A fix sized text item.
 | Possibly has a scrollbar.
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
@@ -204,7 +202,6 @@ Note.prototype.getZeroSilhoutte =
 	function( zone )
 {
 	var s  = this._$zeroSilhoutte;
-	var cr = theme.note.cornerRadius;
 
 	if(
 		s &&
@@ -435,9 +432,9 @@ Note.prototype.mousewheel =
 	function(
 		view,
 		p,
-		dir,
-		shift,
-		ctrl
+		dir
+		// shift,
+		// ctrl
 	)
 {
 	if(! this.getZone().within( view, p) )

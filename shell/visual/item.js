@@ -1,9 +1,7 @@
 /*
-|
 | Common base of Note, Label and Relation.
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
@@ -11,7 +9,7 @@
 | Export
 */
 var Visual;
-Visual = Visual || {};
+Visual = Visual || { };
 
 
 /*
@@ -40,9 +38,19 @@ if (typeof(window) === 'undefined')
 /*
 | Constructor
 */
-var Item = Visual.Item = function(spacename, twig, path)
+var Item = Visual.Item =
+	function(
+		spacename,
+		twig,
+		path
+	)
 {
-	Visual.Base.call(this, spacename, twig, path);
+	Visual.Base.call(
+		this,
+		spacename,
+		twig,
+		path
+	);
 
 	this.$fabric     = null;
 	this.$handles    = { };
@@ -60,19 +68,26 @@ Item.prototype.Item = true;
 /*
 | Updates the $sub to match a new twig.
 */
-Item.prototype.update = function(twig)
+Item.prototype.update =
+	function(
+		twig
+	)
 {
 	this.twig    = twig;
 	this.$fabric = null;
 
-	this.poke();
+	this.poke( );
 };
 
 
 /*
 | An entry of the item menu has been selected
 */
-Item.prototype.menuSelect = function(entry, p)
+Item.prototype.menuSelect =
+	function(
+		entry,
+		p
+	)
 {
 	switch( entry )
 	{
@@ -87,28 +102,51 @@ Item.prototype.menuSelect = function(entry, p)
 /*
 | Returns if point is within the item menu
 */
-Item.prototype.withinCtrlArea = function(view, p)
+Item.prototype.withinCtrlArea =
+	function(
+		view,
+		p
+	)
 {
-	var cf = this.getCtrlFix();
+	var cf = this.getCtrlFix( );
 
 	// FIXME fast check on rectangle
 
-	if( !cf.area.within( cf.fixView(view), p ) )
-		{ return false; }
+	if(
+		!cf.area.within(
+			cf.fixView( view ),
+			p
+		)
+	)
+	{
+		return false;
+	}
 
-	return !( this.getSilhoutte( this.getZone() )
-		.within( view, p ) );
+	return !(
+		this.getSilhoutte(
+			this.getZone()
+		).within(
+			view,
+			p
+		)
+	);
 };
 
 
 /*
 | Returns the control menu for this item.
 */
-Item.prototype.getMenu = function(view)
+Item.prototype.getMenu =
+	function(
+		view
+	)
 {
-	var labels = { n : 'Remove'};
+	var labels =
+		{
+			n : 'Remove'
+		};
 
-	var cf = this.getCtrlFix();
+	var cf = this.getCtrlFix( );
 
 	return new EllipseMenu(
 		system.fabric,
@@ -122,7 +160,11 @@ Item.prototype.getMenu = function(view)
 /*
 | Returns the compass direction of the handle if p is on a resizer handle.
 */
-Item.prototype.checkHandles = function( view, p )
+Item.prototype.checkHandles =
+	function(
+		view,
+		p
+	)
 {
 	var h      = this.planHandles();
 	var f      = shell.fabric;
@@ -151,7 +193,8 @@ Item.prototype.checkHandles = function( view, p )
 /*
 | Creates the handle object to plan where to sketch the handles to
 */
-Item.prototype.planHandles = function( )
+Item.prototype.planHandles =
+	function( )
 {
 	var ha   = this.handles;
 	var zone = this.getZone();
@@ -246,20 +289,28 @@ Item.prototype.planHandles = function( )
 /*
 | Sketches all resize handles.
 */
-Item.prototype.sketchAllHandles = function(fabric, border, twist, view)
+Item.prototype.sketchAllHandles =
+	function(
+		fabric,
+		border,
+		twist,
+		view
+	)
 {
-	if (border !== 0)
-		{ throw new Error('borders unsupported for handles'); }
+	if( border !== 0 )
+	{
+		throw new Error( 'borders unsupported for handles' );
+	}
 
-	var h      = this.planHandles();
+	var h      = this.planHandles( );
 	var d8cwcf = Euclid.Compass.dir8CWCF;
 
-	for(var a = d8cwcf.length - 1; a >= 0; a--)
+	for( var a = d8cwcf.length - 1; a >= 0; a-- )
 	{
-		var d = d8cwcf[a];
-		var z = h[d];
+		var d = d8cwcf[ a ];
+		var z = h[ d ];
 
-		if (!z)
+		if( !z )
 			{ continue; }
 
 		var fixView = view.review( 0, view.point( z.pc ) );
@@ -272,9 +323,18 @@ Item.prototype.sketchAllHandles = function(fabric, border, twist, view)
 /*
 | Sketches one or all resize handles.
 */
-Item.prototype.sketchHandle = function(fabric, border, twist, view, zone)
+Item.prototype.sketchHandle =
+	function(
+		fabric,
+		border,
+		twist,
+		view,
+		zone
+	)
 {
-	var bb = view.distance( this.$handles.bb );
+	var bb = view.distance(
+		this.$handles.bb
+	);
 
 	var w = view.point( zone.w );
 	var e = view.point( zone.e );
@@ -288,7 +348,11 @@ Item.prototype.sketchHandle = function(fabric, border, twist, view, zone)
 /*
 | Draws the handles of an item (resize, itemmenu)
 */
-Item.prototype.drawHandles = function(fabric, view)
+Item.prototype.drawHandles =
+	function(
+		fabric,
+		view
+	)
 {
 	var sbary = this.scrollbarY;
 
@@ -323,7 +387,7 @@ Item.prototype.drawHandles = function(fabric, view)
 		cf.fixView( view )
 	);
 
-	fabric.deClip();
+	fabric.deClip( );
 };
 
 
@@ -331,11 +395,21 @@ Item.prototype.drawHandles = function(fabric, view)
 /*
 | Checks if a dragStart targets this item.
 */
-Item.prototype.dragStart = function(view, p, shift, ctrl, access)
+Item.prototype.dragStart =
+	function(
+		view,
+		p,
+		shift,
+		ctrl,
+		access
+	)
 {
 	var sbary = this.scrollbarY;
 
-	if( sbary && sbary.within( view, p ) )
+	if(
+		sbary &&
+		sbary.within( view, p )
+	)
 	{
 		shell.bridge.startAction(
 			'SCROLLY',
@@ -347,12 +421,19 @@ Item.prototype.dragStart = function(view, p, shift, ctrl, access)
 		return true;
 	}
 
-	if( !this.getZone().within( view, p ) )
-		{ return false; }
+	if(
+		!this.getZone( ).within(
+			view,
+			p
+		)
+	)
+	{
+		return false;
+	}
 
 	shell.redraw = true;
 
-	if (ctrl && access == 'rw')
+	if( ctrl && access == 'rw' )
 	{
 		// relation binding
 		shell.bridge.startAction(
@@ -367,11 +448,11 @@ Item.prototype.dragStart = function(view, p, shift, ctrl, access)
 	}
 
 	// scrolling or dragging
-	if (access == 'rw')
+	if( access == 'rw' )
 	{
-		this.grepFocus();
+		this.grepFocus( );
 
-		var vp = view.depoint(p);
+		var vp = view.depoint( p );
 
 		shell.bridge.startAction(
 			'ITEMDRAG',
@@ -406,8 +487,15 @@ Item.prototype.dragMove = function(
 	{
 		case 'RELBIND' :
 
-			if( !this.getZone().within( view, p ) )
-				{ return false; }
+			if(
+				!this.getZone( ).within(
+					view,
+					p
+				)
+			)
+			{
+				return false;
+			}
 
 			action.move = p;
 			action.item2Path = this.path;
@@ -417,23 +505,35 @@ Item.prototype.dragMove = function(
 		case 'ITEMDRAG' :
 		case 'ITEMRESIZE' :
 
-			action.move  = view.depoint(p);
+			action.move  = view.depoint( p );
 			shell.redraw = true;
 			return true;
 
 		case 'SCROLLY' :
 
 			var start = action.start;
+
 			var dy    = p.y - start.y;
-			var item  = shell.$space.getSub( action.itemPath, 'Item' );
+
+			var item  = shell.$space.getSub(
+				action.itemPath,
+				'Item'
+			);
+
 			var sbary = item.scrollbarY;
-			var spos  = action.startPos + sbary.scale(dy);
-			item.setScrollbar(spos);
-			item.poke();
+
+			var spos  = action.startPos + sbary.scale( dy );
+
+			item.setScrollbar( spos );
+
+			item.poke( );
+
 			shell.redraw = true;
+
 			return true;
 
 		default :
+
 			throw new Error('invalid action.type in dragMove');
 	}
 
@@ -488,7 +588,11 @@ Item.prototype.dragStop =
 |
 | Checks if this item reacts on this.
 */
-Item.prototype.pointingHover = function( view, p )
+Item.prototype.pointingHover =
+	function(
+		view,
+		p
+	)
 {
 	if( p === null )
 		{ return null; }
@@ -508,11 +612,14 @@ Item.prototype.pointingHover = function( view, p )
 /*
 | Sets the focus to this item.
 */
-Item.prototype.grepFocus = function()
+Item.prototype.grepFocus =
+	function( )
 {
 	// already have focus?
-	if (shell.$space.focusedItem() === this)
-		{ return; }
+	if( shell.$space.focusedItem( ) === this )
+	{
+		return;
+	}
 
 	var doc = this.$sub.doc;
 
@@ -526,24 +633,35 @@ Item.prototype.grepFocus = function()
 
 	caret.show();
 
-	shell.peer.moveToTop(this.path);
+	shell.peer.moveToTop( this.path );
 };
 
 
 /*
 | Highlights the item.
 */
-Item.prototype.highlight = function(fabric, view)
+Item.prototype.highlight =
+	function(
+		fabric,
+		view
+	)
 {
 	var silhoutte = this.getSilhoutte( this.getZone() );
-	fabric.edge(theme.note.style.highlight, silhoutte, 'sketch', view);
+
+	fabric.edge(
+		theme.note.style.highlight,
+		silhoutte,
+		'sketch',
+		view
+	);
 };
 
 
 /*
 | Called by subvisuals when they got changed.
 */
-Item.prototype.poke = function()
+Item.prototype.poke =
+	function( )
 {
 	this.$fabric = null;
 	shell.redraw = true;
@@ -553,10 +671,11 @@ Item.prototype.poke = function()
 /*
 | Force-clears all caches.
 */
-Item.prototype.knock = function()
+Item.prototype.knock =
+	function( )
 {
 	this.$fabric = null;
 };
 
 
-})();
+} )( );

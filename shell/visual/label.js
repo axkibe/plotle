@@ -1,9 +1,7 @@
 /*
-|
 | An item with resizing text.
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
@@ -33,6 +31,7 @@ var Visual;
 ( function( ) {
 'use strict';
 
+
 if( typeof( window ) === 'undefined' )
 	{ throw new Error( 'this code needs a browser!' ); }
 
@@ -54,25 +53,32 @@ var Label = Visual.Label = function(
 	);
 };
 
-Jools.subclass( Label, Visual.DocItem );
+Jools.subclass(
+	Label,
+	Visual.DocItem
+);
 
 
 /*
 | Default margin for all labels.
 */
-Label.s_innerMargin = new Euclid.Margin( theme.label.innerMargin );
+Label.s_innerMargin =
+	new Euclid.Margin(
+		theme.label.innerMargin
+	);
 
 /*
 | Resize handles to show on labels
 */
-Label.s_handles = Jools.immute(
-	{
-		ne : true,
-		se : true,
-		sw : true,
-		nw : true
-	}
-);
+Label.s_handles =
+	Jools.immute(
+		{
+			ne : true,
+			se : true,
+			sw : true,
+			nw : true
+		}
+	);
 
 
 /*
@@ -137,17 +143,8 @@ Label.s_createTrans =
 		p2
 	)
 {
-	var action = shell.bridge.action( );
-
-	var rect = new Euclid.Rect(
-		'arbitrary',
-		p1,
-		p2
-	);
-
 	var dy = Math.abs( p1.y - p2.y );
-
-	var ny = Math.min( p1.y, p2.y );
+	var ny = Math.min( p1.y , p2.y );
 
 	var fs = dy / ( 1 + theme.bottombox );
 	fs = Math.max( fs, theme.label.minSize );
@@ -270,8 +267,8 @@ Label.prototype.getZeroSilhoutte =
 /*
 | Dummy since a label does not scroll.
 */
-Label.prototype.scrollCaretIntoView
-	= function( )
+Label.prototype.scrollCaretIntoView =
+	function( )
 {
 	// nada
 };
@@ -280,8 +277,10 @@ Label.prototype.scrollCaretIntoView
 /*
 | Dummy since a label does not scroll.
 */
-Label.prototype.scrollPage
-	= function( up )
+Label.prototype.scrollPage =
+	function(
+		// up
+	)
 {
 	// nada
 };
@@ -290,8 +289,8 @@ Label.prototype.scrollPage
 /*
 | Draws the label.
 */
-Label.prototype.draw
-	= function(
+Label.prototype.draw =
+	function(
 		fabric,
 		view
 	)
@@ -405,7 +404,9 @@ Label.prototype.fontSizeChange =
 | Returns the para seperation height.
 */
 Label.prototype.getParaSep =
-	function( fontsize )
+	function(
+		// fontsize
+	)
 {
 	return 0;
 };
@@ -416,9 +417,9 @@ Label.prototype.getParaSep =
 */
 Label.prototype.mousewheel =
 	function(
-		view,
-		p,
-		dir
+		// view,
+		// p,
+		// dir
 	)
 {
 	return false;
