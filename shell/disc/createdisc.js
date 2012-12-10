@@ -88,7 +88,12 @@ var CreateDisc = Disc.CreateDisc =
 		Jools.immute(
 			{
 				note :
-					new Disc.DiscButtonCreateNote( this ),
+					new Disc.DiscButton(
+						this,
+						'note',
+						'CREATE',
+						'NOTE'
+					),
 
 				label :
 					new Disc.DiscButton(
@@ -99,10 +104,20 @@ var CreateDisc = Disc.CreateDisc =
 					),
 
 				relation :
-					new Disc.DiscButtonCreateRelation( this ),
+					new Disc.DiscButton(
+						this,
+						'relation',
+						'CREATE',
+						'RELATION'
+					),
 
 				portal :
-					new Disc.DiscButtonCreatePortal( this )
+					new Disc.DiscButton(
+						this,
+						'portal',
+						'CREATE',
+						'PORTAL'
+					)
 			}
 		);
 

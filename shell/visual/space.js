@@ -301,7 +301,7 @@ Space.prototype.draw =
 
 			if( action.fromItemPath )
 			{
-				itemFrom = this.getSub(
+				var itemFrom = this.getSub(
 					action.fromItemPath,
 					'Item'
 				);
@@ -469,7 +469,7 @@ Space.prototype.pointingHover =
 				{
 					var action = shell.bridge.action( );
 
-					//action.fromItemPath = 
+					//action.fromItemPath =
 				}
 			}
 		}

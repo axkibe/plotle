@@ -397,7 +397,7 @@ Server.prototype.prepareResources = function(_)
 	var r;
 
 	var rlist = [
-		'media/favicon.ico',                               'mc',
+		// 'media/favicon.ico',                               'mc', AAA
 		'testpad/testpad.js',                              'f',
 		'testpad/iface-sym.js',                            'f',
 		'shell/fonts/webfont.js',                          'mc',
@@ -451,9 +451,6 @@ Server.prototype.prepareResources = function(_)
 		'shell/disc/discbutton-login.js',                  'fb',
 		'shell/disc/discbutton-signup.js',                 'fb',
 		'shell/disc/discbutton-help.js',                   'fb',
-		'shell/disc/discbutton-create-note.js',            'fb',
-		'shell/disc/discbutton-create-relation.js',        'fb',
-		'shell/disc/discbutton-create-portal.js',          'fb',
 		'shell/disc/createdisc.js',                        'fb',
 		'shell/disc/maindisc.js',                          'fb',
 		'shell/proc/util.js',                              'fb',
@@ -541,7 +538,9 @@ Server.prototype.prepareResources = function(_)
 		r.data = fs.readFile(r.path, _);
 	}
 
-	this.$resources['favicon.ico'] = this.$resources['media/favicon.ico'];
+	// AAA
+	//this.$resources['favicon.ico'] =
+	//	this.$resources['media/favicon.ico'];
 
 	var cconfig = new Resource('shell/config.js', 'mb');
 	bundleRessources.unshift(cconfig);

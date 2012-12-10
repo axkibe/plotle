@@ -174,13 +174,37 @@ DiscButton.prototype.drawIcon =
 {
 	var style = this.myStyle;
 
-	if( style.text )
+	var text = style.text;
+
+	if( Jools.isString( text ) )
 	{
 		fabric.fillText(
-			style.text,
+			text,
 			style.textAnchor,
 			style.font
 		);
+	}
+	else if( Jools.isArray( text ) )
+	{
+		var x = style.textAnchor.x;
+
+		var y = style.textAnchor.y;
+
+		var tZ = text.length;
+
+		var sepy = style.textSepY;
+
+		y -= Math.round( ( tZ - 1 ) / 2 * sepy);
+
+		for( var a = 0; a < tZ; a++, y += sep y)
+		{
+			fabric.fillText(
+				text[ a ],
+				x,
+				y,
+				style.font
+			);
+		}
 	}
 };
 

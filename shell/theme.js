@@ -1,9 +1,7 @@
 /*
-|
 | Meshcraft default theme.
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
@@ -577,87 +575,106 @@ theme =
 				/*
 				| Create note button.
 				*/
-				note : {
+				note :
+				{
+					pnw :
+						new Euclid.Point(
+							52,
+							216
+						),
 
-					pnw : new Euclid.Point(
-						52,
-						216
-					),
+					text :
+						'Note',
 
-					text : 'Note',
+					textAnchor :
+						new Euclid.Point(
+							35,
+							35
+						),
 
-					textAnchor : new Euclid.Point(
-						35,
-						35
-					),
-
-					font : fontPool.get( 16, 'cm' )
+					font :
+						fontPool.get( 16, 'cm' )
 				},
 
 
 				/*
 				| Create label button.
 				*/
-				label : {
+				label :
+				{
+					pnw :
+						new Euclid.Point(
+							71,
+							284
+						),
 
-					pnw : new Euclid.Point(
-						71,
-						284
-					),
+					text :
+						'Label',
 
-					text : 'Label',
+					textAnchor :
+						new Euclid.Point(
+							35,
+							35
+						),
 
-					textAnchor : new Euclid.Point(
-						35,
-						35
-					),
-
-					font : fontPool.get( 16, 'cm' )
+					font :
+						fontPool.get( 16, 'cm' )
 				},
 
 
 				/*
 				| Create relation button.
 				*/
-				relation : {
+				relation :
+				{
+					pnw :
+						new Euclid.Point(
+							84,
+							354
+						),
 
-					pnw : new Euclid.Point(
-						84,
-						354
-					),
+					text :
+						[
+							'Rela-',
+							'tion'
+						],
 
-					text : [
-						'Rela-',
-						'tion',
-					],
+					textAnchor :
+						new Euclid.Point(
+							35,
+							35
+						),
 
-					textAnchor : new Euclid.Point(
-						35,
-						35
-					),
+					textSepY :
+						20,
 
-					font : fontPool.get( 16, 'cm' )
+					font :
+						fontPool.get( 16, 'cm' )
 				},
 
 
 				/*
 				| Create portal button.
 				*/
-				portal : {
+				portal :
+				{
+					pnw :
+						new Euclid.Point(
+							91,
+							425
+						),
 
-					pnw : new Euclid.Point(
-						91,
-						425
-					),
+					text :
+						'Portal',
 
-					text : 'Portal',
+					textAnchor :
+						new Euclid.Point(
+							35,
+							35
+						),
 
-					textAnchor : new Euclid.Point(
-						35,
-						35
-					),
-
-					font : fontPool.get( 16, 'cm' )
+					font :
+						fontPool.get( 16, 'cm' )
 				}
 			}
 		}
