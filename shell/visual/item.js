@@ -656,7 +656,10 @@ Item.prototype.highlight =
 		view
 	)
 {
-	var silhoutte = this.getSilhoutte( this.getZone() );
+	var silhoutte =
+		this.getSilhoutte(
+			this.getZone( )
+		);
 
 	fabric.edge(
 		theme.note.style.highlight,

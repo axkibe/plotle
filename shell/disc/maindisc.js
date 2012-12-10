@@ -92,7 +92,13 @@ var MainDisc = Disc.MainDisc =
 		Jools.immute(
 			{
 				normal  : new Disc.DiscButtonNormal ( this ),
-				create  : new Disc.DiscButtonCreate ( this ),
+				create  :
+					new Disc.DiscButton(
+						this,
+						'create',
+						'MODE',
+						'CREATE'
+					),
 				login   : new Disc.DiscButtonLogin  ( this ),
 				signup  : new Disc.DiscButtonSignup ( this ),
 				help    : new Disc.DiscButtonHelp   ( this )

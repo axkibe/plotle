@@ -234,27 +234,17 @@ Space.prototype.draw =
 			);
 
 			if( av2 )
-				{ av2.highlight( this.fabric, view ); }
+			{
+				av2.highlight(
+					this.fabric,
+					view
+				);
+			}
 
 			arrow.draw(
 				this.fabric,
 				view,
 				theme.relation.style
-			);
-
-			break;
-
-		case 'CREATE-NOTE' :
-
-			zone = Visual.Note.s_getZone(
-				view.depoint( action.start ),
-				view.depoint( action.move  )
-			);
-
-			Visual.Note.s_drawTrans(
-				this.fabric,
-				view,
-				zone
 			);
 
 			break;
@@ -274,6 +264,22 @@ Space.prototype.draw =
 
 			break;
 
+
+		case 'CREATE-NOTE' :
+
+			zone = Visual.Note.s_getZone(
+				view.depoint( action.start ),
+				view.depoint( action.move  )
+			);
+
+			Visual.Note.s_drawTrans(
+				this.fabric,
+				view,
+				zone
+			);
+
+			break;
+
 		case 'CREATE-PORTAL' :
 
 			zone = Visual.Portal.s_getZone(
@@ -286,6 +292,57 @@ Space.prototype.draw =
 				view,
 				zone
 			);
+
+			break;
+
+		case 'CREATE-RELEATION' :
+
+			var fromItem = null;
+
+			if( action.fromItemPath )
+			{
+				itemFrom = this.getSub(
+					action.fromItemPath,
+					'Item'
+				);
+
+				itemFrom.highlight(
+					this.fabric,
+					view
+				);
+			}
+
+			//var av2 = action.item2Path ?
+			//	this.getSub(
+			//		action.item2Path,
+			//		'Item'
+			//	) :
+			//	null;
+
+			//var target = av2 ?
+			//	av2.getSilhoutte( av2.getZone( ) ) :
+			//	view.depoint( action.move );
+
+			//var arrow  = Euclid.Line.connect(
+			//	av.getSilhoutte( av.getZone( ) ),
+			//	'normal',
+			//	target,
+			//	'arrow'
+			//);
+
+			//if( av2 )
+			//{
+			//	av2.highlight(
+			//		this.fabric,
+			//		view
+			//	);
+			//}
+
+			//arrow.draw(
+			//	this.fabric,
+			//	view,
+			//	theme.relation.style
+			//);
 
 			break;
 	}
@@ -397,19 +454,24 @@ Space.prototype.pointingHover =
 	{
 		var item = this.atRank( a );
 
-		if( cursor )
+		var cu = item.pointingHover(
+			view,
+			null
+		);
+
+		if( !cursor )
 		{
-			item.pointingHover(
-				view,
-				null
-			);
-		}
-		else
-		{
-			cursor = item.pointingHover(
-				view,
-				p
-			);
+			cursor = cu;
+
+			if( shell.bridge.inMode( 'CREATE' ) )
+			{
+				if( shell.bridge.inCreate( 'RELATION' ) )
+				{
+					var action = shell.bridge.action( );
+
+					//action.fromItemPath = 
+				}
+			}
 		}
 	}
 
@@ -464,6 +526,7 @@ Space.prototype.dragStart =
 				'space',
 				'start', p
 			);
+
 			return;
 		}
 
@@ -475,6 +538,7 @@ Space.prototype.dragStart =
 				'space',
 				'start', p
 			);
+
 			return;
 		}
 
@@ -486,6 +550,7 @@ Space.prototype.dragStart =
 				'space',
 				'start', p
 			);
+
 			return;
 		}
 	}
@@ -745,8 +810,10 @@ Space.prototype.dragMove =
 		case 'RELBIND' :
 
 			action.item2Path = null;
-			action.move      = p;
-			shell.redraw     = true;
+
+			action.move = p;
+
+			shell.redraw = true;
 
 			for( var r = 0, rZ = this.twig.length; r < rZ; r++ )
 			{

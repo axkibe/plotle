@@ -16,12 +16,8 @@ Disc = Disc || { };
 | Imports
 */
 var config;
-var Curve;
-var Dash;
-var Design;
 var Euclid;
 var Jools;
-var Proc;
 var shell;
 var theme;
 var Tree;

@@ -448,7 +448,6 @@ Server.prototype.prepareResources = function(_)
 		'shell/dash/panel.js',                             'fb',
 		'shell/disc/discbutton.js',                        'fb',
 		'shell/disc/discbutton-normal.js',                 'fb',
-		'shell/disc/discbutton-create.js',                 'fb',
 		'shell/disc/discbutton-login.js',                  'fb',
 		'shell/disc/discbutton-signup.js',                 'fb',
 		'shell/disc/discbutton-help.js',                   'fb',
@@ -584,12 +583,22 @@ Server.prototype.prepareResources = function(_)
 	if( config.uglify )
 	{
 		var compressor = uglify.Compressor( { } );
+
 		var ast = uglify.parse( bundle );
-		fs.writeFile('BUNDLE', bundle, _);
+
+		fs.writeFile(
+			'bundle.js',
+			bundle,
+		_);
+
 		ast.figure_out_scope( );
+
 		ast = ast.transform( compressor );
+
 		ast.compute_char_frequency( );
+
 		ast.mangle_names( );
+
 		bundle = ast.print_to_string( { } );
 	}
 
@@ -601,8 +610,11 @@ Server.prototype.prepareResources = function(_)
 		'meshcraft-' + bsha1 + '.js',
 		'mc'
 	);
+
 	br.data = bundle;
+
 	this.$resources[ br.path ] = br;
+
 	log( 'start', 'bundle:', bsha1 );
 
 	// the devel.html file
@@ -652,6 +664,7 @@ Server.prototype.prepareResources = function(_)
 		'testpad/testpad.html',
 		'f'
 	);
+
 	this.$resources[ 'testpad.html' ] = testpad;
 
 	// prepares the zipped versions

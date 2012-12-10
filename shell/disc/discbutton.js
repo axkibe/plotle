@@ -19,14 +19,10 @@ Disc = Disc || { };
 */
 var config;
 var Curve;
-var Dash;
-var Design;
 var Euclid;
 var Jools;
-var Proc;
 var shell;
 var theme;
-var Tree;
 
 
 /*
@@ -169,6 +165,27 @@ DiscButton.prototype._weave =
 
 
 /*
+| Draws the buttons icon.
+*/
+DiscButton.prototype.drawIcon =
+	function(
+		fabric
+	)
+{
+	var style = this.myStyle;
+
+	if( style.text )
+	{
+		fabric.fillText(
+			style.text,
+			style.textAnchor,
+			style.font
+		);
+	}
+};
+
+
+/*
 | Users pointing device may be hovering above the button
 */
 DiscButton.prototype.pointingHover =
@@ -235,6 +252,7 @@ DiscButton.prototype.pointingStart =
 	}
 
 	var fabric = this._weave( false );
+
 	var pp = p.sub( this.pnw );
 
 	if(
@@ -249,7 +267,7 @@ DiscButton.prototype.pointingStart =
 		return null;
 	}
 
-	this.push();
+	this.push( );
 
 	return  false;
 };
@@ -259,11 +277,10 @@ DiscButton.prototype.pointingStart =
 | Button is being pushed.
 */
 DiscButton.prototype.push =
-	function(
-	)
+	function( )
 {
-	switch( this.pushChange ) {
-
+	switch( this.pushChange )
+	{
 		case 'MODE' :
 			shell.bridge.changeMode( this.pushValue );
 			break;

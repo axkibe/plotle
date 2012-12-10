@@ -399,6 +399,8 @@ theme =
 						194
 					),
 
+					text : 'new',
+
 					textAnchor : new Euclid.Point(
 						22,
 						22
