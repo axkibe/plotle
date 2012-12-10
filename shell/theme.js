@@ -375,6 +375,8 @@ theme =
 
 					icon :
 					{
+						sketch : 'sketchNormalIcon',
+
 						fill : 'black',
 
 						edge : [
@@ -412,17 +414,29 @@ theme =
 				*/
 				signup :
 				{
-					pnw : new Euclid.Point(
-						28,
-						510
-					),
+					pnw :
+						new Euclid.Point(
+							28,
+							510
+						),
 
-					textAnchor : new Euclid.Point(
-						22,
-						22
-					),
+					text :
+						[
+							'sign',
+							'up'
+						],
 
-					font : fontPool.get( 13, 'cm' )
+					textSepY :
+						16,
+
+					textAnchor :
+						new Euclid.Point(
+							22,
+							22
+						),
+
+					font :
+						fontPool.get( 13, 'cm' )
 				},
 
 
@@ -431,7 +445,8 @@ theme =
 				*/
 				login :
 				{
-					pnw : new Euclid.Point(
+					pnw :
+						new Euclid.Point(
 						17,
 						560
 					),

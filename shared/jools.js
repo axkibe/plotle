@@ -112,6 +112,9 @@ var isInteger =
 var isArray =
 	function( o )
 {
+	if( !o )
+		{ return false; }
+
 	return o.constructor === Array;
 };
 

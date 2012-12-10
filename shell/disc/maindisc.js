@@ -1,9 +1,7 @@
 /*
-|
 | The disc panel.
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
@@ -91,17 +89,35 @@ var MainDisc = Disc.MainDisc =
 	this.buttons =
 		Jools.immute(
 			{
-				normal  : new Disc.DiscButtonNormal ( this ),
-				create  :
+				normal :
+					new Disc.DiscButton(
+						this,
+						'normal',
+						'MODE',
+						'DEFAULT'
+					),
+
+				create :
 					new Disc.DiscButton(
 						this,
 						'create',
 						'MODE',
 						'CREATE'
 					),
-				login   : new Disc.DiscButtonLogin  ( this ),
-				signup  : new Disc.DiscButtonSignup ( this ),
-				help    : new Disc.DiscButtonHelp   ( this )
+
+				login :
+					new Disc.DiscButtonLogin  ( this ),
+
+				signup :
+					new Disc.DiscButton(
+						this,
+						'signup',
+						'MODE',
+						'SIGNUP'
+					),
+
+				help :
+					new Disc.DiscButtonHelp   ( this )
 			}
 		);
 

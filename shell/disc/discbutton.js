@@ -194,9 +194,9 @@ DiscButton.prototype.drawIcon =
 
 		var sepy = style.textSepY;
 
-		y -= Math.round( ( tZ - 1 ) / 2 * sepy);
+		y -= Math.round( ( tZ - 1 ) / 2 * sepy );
 
-		for( var a = 0; a < tZ; a++, y += sep y)
+		for( var a = 0; a < tZ; a++, y += sepy )
 		{
 			fabric.fillText(
 				text[ a ],
@@ -205,6 +205,15 @@ DiscButton.prototype.drawIcon =
 				style.font
 			);
 		}
+	}
+	else if( style.icon )
+	{
+		fabric.paint(
+			style.icon,
+			this,
+			style.icon.sketch,
+			Euclid.View.proper
+		);
 	}
 };
 
@@ -294,6 +303,44 @@ DiscButton.prototype.pointingStart =
 	this.push( );
 
 	return  false;
+};
+
+
+/*
+| Sketches the normal button's icon.
+*/
+DiscButton.prototype.sketchNormalIcon =
+	function(
+		fabric
+		// border,
+		// twist
+	)
+{
+	var wx = 19;
+	var ny = 13;
+
+	//
+	//
+	//  A
+	//  **
+	//  ***
+	//  ****
+	//  *****
+	//  ******
+	//  *******
+	//  **F**C*B
+	//  G   **
+	//       **
+	//        ED
+
+	fabric.moveTo( wx +  0, ny +  0 );  // A
+	fabric.lineTo( wx + 11, ny + 10 );  // B
+	fabric.lineTo( wx +  6, ny + 11 );  // C
+	fabric.lineTo( wx +  9, ny + 17 );  // D
+	fabric.lineTo( wx +  7, ny + 18 );  // E
+	fabric.lineTo( wx +  4, ny + 12 );  // F
+	fabric.lineTo( wx +  0, ny + 15 );  // G
+	fabric.lineTo( wx +  0, ny +  0 );  // A
 };
 
 
