@@ -508,6 +508,7 @@ theme =
 
 			buttons :
 			{
+
 				/*
 				| All buttons on the creation disc.
 				*/
@@ -534,6 +535,7 @@ theme =
 							*/
 						]
 					},
+
 
 					/*
 					| The users pointing device is hovering over the button.
@@ -571,6 +573,7 @@ theme =
 
 				},
 
+
 				/*
 				| Create note button.
 				*/
@@ -581,6 +584,8 @@ theme =
 						216
 					),
 
+					text : 'Note',
+
 					textAnchor : new Euclid.Point(
 						35,
 						35
@@ -588,6 +593,7 @@ theme =
 
 					font : fontPool.get( 16, 'cm' )
 				},
+
 
 				/*
 				| Create label button.
@@ -599,6 +605,8 @@ theme =
 						284
 					),
 
+					text : 'Label',
+
 					textAnchor : new Euclid.Point(
 						35,
 						35
@@ -606,6 +614,7 @@ theme =
 
 					font : fontPool.get( 16, 'cm' )
 				},
+
 
 				/*
 				| Create relation button.
@@ -617,6 +626,11 @@ theme =
 						354
 					),
 
+					text : [
+						'Rela-',
+						'tion',
+					],
+
 					textAnchor : new Euclid.Point(
 						35,
 						35
@@ -624,6 +638,7 @@ theme =
 
 					font : fontPool.get( 16, 'cm' )
 				},
+
 
 				/*
 				| Create portal button.
@@ -634,6 +649,8 @@ theme =
 						91,
 						425
 					),
+
+					text : 'Portal',
 
 					textAnchor : new Euclid.Point(
 						35,

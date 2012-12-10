@@ -91,7 +91,12 @@ var CreateDisc = Disc.CreateDisc =
 					new Disc.DiscButtonCreateNote( this ),
 
 				label :
-					new Disc.DiscButtonCreateLabel( this ),
+					new Disc.DiscButton(
+						this,
+						'label',
+						'CREATE',
+						'LABEL'
+					),
 
 				relation :
 					new Disc.DiscButtonCreateRelation( this ),
