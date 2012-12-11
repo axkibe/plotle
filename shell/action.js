@@ -1,12 +1,10 @@
 /*
-|
 | An users action in the making.
 |
 | This overlays repository data, so for example a move is not transmitted
 | with every pixel changed but when the the object is released.
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
@@ -38,55 +36,65 @@ var actionlist =
 			/*
 			| Panning the background.
 			*/
-			'PAN'         : true,
+			'Pan' :
+				true,
 
 
 			/*
 			| Dragging one item.
 			*/
-			'ITEMDRAG'    : true,
+			'ItemDrag' :
+				true,
 
 
 			/*
 			| Resizing one item.
 			*/
-			'ITEMRESIZE'  : true,
+			'ItemResize' :
+				true,
 
 
 			/*
 			| Scrolling a note
 			*/
-			'SCROLLY'     : true,
+			'ScrollY' :
+				true,
 
 
 			/*
 			| Binding a new relation
 			*/
-			'RELBIND'     : true,
+			'RelBind' :
+				true,
 
 
 			/*
 			| Holding a button repeating its effect.
 			*/
-			'REBUTTON'    : true,
+			'ReButton' :
+				true,
 
 
 			/*
 			| Creating a new note
 			*/
-			'CREATE-NOTE' : true,
+			'CreateNote' :
+				true,
 
 
 			/*
 			| Creating a new label
 			*/
-			'CREATE-LABEL' : true,
+			'CreateLabel' :
+				true,
 
 
 			/*
 			| Creating a new portal
 			*/
-			'CREATE-PORTAL' : true
+			'CreatePortal' :
+				true
+
 		}
 	);
 

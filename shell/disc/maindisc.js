@@ -92,42 +92,38 @@ var MainDisc = Disc.MainDisc =
 				normal :
 					new Disc.DiscButton(
 						this,
-						'normal',
-						'MODE',
-						'DEFAULT'
+						'normal'
 					),
 
 				create :
 					new Disc.DiscButton(
 						this,
-						'create',
-						'MODE',
-						'CREATE'
+						'create'
+					),
+
+				remove :
+					new Disc.DiscButton(
+						this,
+						'remove'
 					),
 
 				login :
 					new Disc.DiscButton(
 						this,
-						'login',
-						'MODE',
-						'LOGIN'
+						'login'
 					),
 
 				signup :
 					new Disc.DiscButton(
 						this,
-						'signup',
-						'MODE',
-						'SIGNUP'
+						'signup'
 					),
 
 				help :
 					new Disc.DiscButton(
 						this,
-						'help',
-						'MODE',
-						'HELP'
-					),
+						'help'
+					)
 			}
 		);
 
@@ -179,7 +175,9 @@ MainDisc.prototype._weave =
 
 		button.draw(
 			fabric,
-			shell.bridge.inMode( button.pushValue ),
+			shell.bridge.inMode(
+				this.getModeOfButton( button.name )
+			),
 			this.$hover  === name
 		);
 	}
@@ -209,6 +207,56 @@ MainDisc.prototype._weave =
 
 
 /*
+| Returns the mode associated with a button
+*/
+MainDisc.prototype.getModeOfButton =
+	function(
+		buttonName
+	)
+{
+	switch( buttonName )
+	{
+		case 'create' :
+			return 'Create';
+
+		case 'help' :
+			return 'Help';
+
+		case 'login' :
+			return 'Login';
+
+		case 'remove' :
+			return 'Remove';
+
+		case 'signup' :
+			return 'SignUp';
+
+		case 'normal' :
+			return 'Normal';
+
+		default :
+			throw new Error( 'unknown button:' + buttonName );
+	}
+};
+
+
+/*
+| A button of the main disc has been pushed.
+*/
+MainDisc.prototype.pushButton =
+	function(
+		buttonName
+	)
+{
+	shell.bridge.changeMode(
+		this.getModeOfButton(
+			buttonName
+		)
+	);
+};
+
+
+/*
 | Draws the disc panel.
 */
 MainDisc.prototype.draw =
@@ -216,7 +264,7 @@ MainDisc.prototype.draw =
 		fabric
 	)
 {
-	if( shell.bridge.inMode( 'CREATE' ) )
+	if( shell.bridge.inMode( 'Create' ) )
 	{
 		this.createDisc.draw( fabric );
 	}
@@ -252,7 +300,7 @@ MainDisc.prototype.pointingHover =
 	{
 		this.setHover( null );
 
-		if( shell.bridge.inMode( 'CREATE' ) )
+		if( shell.bridge.inMode( 'Create' ) )
 		{
 			return (
 				this.createDisc.pointingHover(
@@ -281,7 +329,7 @@ MainDisc.prototype.pointingHover =
 	{
 		this.setHover( null );
 
-		if( shell.bridge.inMode( 'CREATE' ) )
+		if( shell.bridge.inMode( 'Create' ) )
 		{
 			return (
 				this.createDisc.pointingHover(
@@ -344,7 +392,7 @@ MainDisc.prototype.pointingStart =
 	{
 		this.setHover( null );
 
-		if( shell.bridge.inMode( 'CREATE' ) )
+		if( shell.bridge.inMode( 'Create' ) )
 		{
 			return this.createDisc.pointingStart(
 				p,
@@ -372,7 +420,7 @@ MainDisc.prototype.pointingStart =
 	{
 		this.setHover( null );
 
-		if( shell.bridge.inMode( 'CREATE' ) )
+		if( shell.bridge.inMode( 'Create' ) )
 		{
 			return this.createDisc.pointingStart(
 				p,

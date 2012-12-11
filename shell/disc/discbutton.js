@@ -1,9 +1,7 @@
 /*
-|
-| A button on the DiscPanel.
+| A button on a DiscPanel
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
@@ -41,19 +39,13 @@ if( typeof( window ) === 'undefined')
 */
 var DiscButton = Disc.DiscButton =
 	function(
-		disc,          // the disc the button belongs to
-		name,          // the name of the button (FIXME, needed?)
-		pushChange,    // if set, which bridge field to change on push
-		pushValue      // if set, what to set the bridge field to on push
+		disc, // the disc the button belongs to
+		name  // the name of the button (FIXME, needed?)
 	)
 {
 	this.disc = disc;
 
 	this.name = name;
-
-	this.pushChange = pushChange;
-
-	this.pushValue = pushValue;
 
 	var gStyle =
 	this.gStyle =
@@ -345,21 +337,85 @@ DiscButton.prototype.sketchNormalIcon =
 
 
 /*
+| Sketches the remove button's icon.
+*/
+DiscButton.prototype.sketchRemoveIcon =
+	function(
+		fabric
+		// border,
+		// twist
+	)
+{
+	var w = 13;
+	var h = 13;
+
+	// zone
+	var wx = 16;
+	var ny = 15;
+	var ex = wx + w;
+	var sy = ny + h;
+
+	var cx = Jools.half( wx + ex );
+	var cy = Jools.half( ny + sy );
+
+	// arm with and height
+	var aw = 2;
+	var ah = 2;
+
+	// center point width/height
+	var cw = 3;
+	var ch = 3;
+
+	//
+	// A**B   D**E
+	// P***   ***F
+	//   ***C***
+	//    O***G
+	//   ***K***
+	// N***   ***H
+	// M**L   J**I
+	//
+
+	fabric.moveTo( wx      , ny      );  // A
+	fabric.lineTo( wx + aw , ny      );  // B
+	fabric.lineTo( cx      , cy - ch );  // C
+	fabric.lineTo( ex - aw , ny      );  // D
+	fabric.lineTo( ex      , ny      );  // E
+	fabric.lineTo( ex      , ny + ah );  // F
+	fabric.lineTo( cx + cw , cy      );  // G
+	fabric.lineTo( ex      , sy - ah );  // H
+	fabric.lineTo( ex      , sy      );  // I
+	fabric.lineTo( ex - aw , sy      );  // J
+	fabric.lineTo( cx      , cy + ch );  // K
+	fabric.lineTo( wx + aw , sy      );  // L
+	fabric.lineTo( wx      , sy      );  // M
+	fabric.lineTo( wx      , sy - ah );  // N
+	fabric.lineTo( cx - cw , cy      );  // O
+	fabric.lineTo( wx      , ny + ah );  // P
+	fabric.lineTo( wx      , ny      );  // A
+
+};
+
+
+/*
 | Button is being pushed.
 */
 DiscButton.prototype.push =
 	function( )
 {
+	this.disc.pushButton( this.name );
+	/*
 	switch( this.pushChange )
 	{
-		case 'MODE' :
+		case 'Mode' :
 			shell.bridge.changeMode( this.pushValue );
 			break;
 
-		case 'CREATE' :
+		case 'Create' :
 			shell.bridge.changeCreate( this.pushValue );
 			break;
 	}
+	*/
 };
 
 

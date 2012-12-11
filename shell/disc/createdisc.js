@@ -90,33 +90,25 @@ var CreateDisc = Disc.CreateDisc =
 				note :
 					new Disc.DiscButton(
 						this,
-						'note',
-						'CREATE',
-						'NOTE'
+						'note'
 					),
 
 				label :
 					new Disc.DiscButton(
 						this,
-						'label',
-						'CREATE',
-						'LABEL'
+						'label'
 					),
 
 				relation :
 					new Disc.DiscButton(
 						this,
-						'relation',
-						'CREATE',
-						'RELATION'
+						'relation'
 					),
 
 				portal :
 					new Disc.DiscButton(
 						this,
-						'portal',
-						'CREATE',
-						'PORTAL'
+						'portal'
 					)
 			}
 		);
@@ -162,7 +154,9 @@ CreateDisc.prototype._weave =
 
 		button.draw(
 			fabric,
-			shell.bridge.inCreate( button.pushValue ),
+			shell.bridge.inCreate(
+				this.getCreateOfButton( button.name )
+			),
 			this.$hover  === name
 		);
 	}
@@ -188,6 +182,48 @@ CreateDisc.prototype._weave =
 	}
 
 	return fabric;
+};
+
+/*
+| Returns the create mode associated with a button
+*/
+CreateDisc.prototype.getCreateOfButton =
+	function(
+		buttonName
+	)
+{
+	switch( buttonName )
+	{
+		case 'note' :
+			return 'Note';
+
+		case 'label' :
+			return 'Label';
+
+		case 'relation' :
+			return 'Relation';
+
+		case 'portal' :
+			return 'Portal';
+
+		default :
+			throw new Error( 'unknown button:' + buttonName );
+	}
+};
+
+/*
+| A button of the main disc has been pushed.
+*/
+CreateDisc.prototype.pushButton =
+	function(
+		buttonName
+	)
+{
+	shell.bridge.changeCreate(
+		this.getCreateOfButton(
+			buttonName
+		)
+	);
 };
 
 

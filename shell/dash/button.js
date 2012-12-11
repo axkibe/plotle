@@ -262,7 +262,7 @@ Button.prototype.pointingStart =
 	if( this.repeating && !this.retimer )
 	{
 		shell.bridge.startAction(
-			'REBUTTON',
+			'ReButton',
 			'board',
 			'itemPath', this.path
 		);
@@ -368,7 +368,7 @@ Button.prototype.knock =
 
 
 /*
-| Stops a REBUTTON action.
+| Stops a ReButton action.
 */
 Button.prototype.dragStop =
 	function( )

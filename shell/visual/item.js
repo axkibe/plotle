@@ -416,7 +416,7 @@ Item.prototype.dragStart =
 	)
 	{
 		shell.bridge.startAction(
-			'SCROLLY',
+			'ScrollY',
 			'space',
 			'itemPath', this.path,
 			'start',    p,
@@ -441,7 +441,7 @@ Item.prototype.dragStart =
 	{
 		// relation binding
 		shell.bridge.startAction(
-			'RELBIND',
+			'RelBind',
 			'space',
 			'itemPath', this.path,
 			'start',    p,
@@ -459,7 +459,7 @@ Item.prototype.dragStart =
 		var vp = view.depoint( p );
 
 		shell.bridge.startAction(
-			'ITEMDRAG',
+			'ItemDrag',
 			'space',
 			'itemPath', this.path,
 			'start', vp,
@@ -490,7 +490,7 @@ Item.prototype.dragMove =
 
 	switch( action.type )
 	{
-		case 'RELBIND' :
+		case 'RelBind' :
 
 			if(
 				!this.getZone( ).within(
@@ -510,8 +510,8 @@ Item.prototype.dragMove =
 
 			return true;
 
-		case 'ITEMDRAG' :
-		case 'ITEMRESIZE' :
+		case 'ItemDrag' :
+		case 'ItemResize' :
 
 			action.move  = view.depoint( p );
 
@@ -519,7 +519,7 @@ Item.prototype.dragMove =
 
 			return true;
 
-		case 'SCROLLY' :
+		case 'ScrollY' :
 
 			var start = action.start;
 
@@ -564,7 +564,7 @@ Item.prototype.dragStop =
 
 	switch( action.type )
 	{
-		case 'RELBIND' :
+		case 'RelBind' :
 
 			if(
 				!this.getZone().within(

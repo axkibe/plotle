@@ -46,28 +46,39 @@ var modes =
 	/*
 	| Standard selection, moving stuff around.
 	*/
-	'DEFAULT' : true,
+	'Normal' :
+		true,
 
 	/*
 	| Creating a new item.
 	| this.$create is set or null.
 	*/
-	'CREATE'  : true,
+	'Create' :
+		true,
+
+	/*
+	| Removing items.
+	*/
+	'Remove' :
+		true,
 
 	/*
 	| Logging in
 	*/
-	'LOGIN' : true,
+	'Login' :
+		true,
 
 	/*
 	| Siging up
 	*/
-	'SIGNUP' : true,
+	'SignUp' :
+		true,
 
 	/*
 	| Help
 	*/
-	'HELP' : true
+	'Help' :
+		true
 
 };
 
@@ -80,22 +91,22 @@ var creates =
 	/*
 	| A new note.
 	*/
-	'NOTE' : true,
+	'Note' : true,
 
 	/*
 	| A new label.
 	*/
-	'LABEL'  : true,
+	'Label'  : true,
 
 	/*
 	| A new relation
 	*/
-	'RELATION' : true,
+	'Relation' : true,
 
 	/*
 	| A new portal
 	*/
-	'PORTAL' : true
+	'Portal' : true
 
 };
 
@@ -109,7 +120,7 @@ Bridge = function( )
 	/*
 	| current mode
 	*/
-	this._$mode = 'DEFAULT';
+	this._$mode = 'Normal';
 
 	/*
 	| Creating this item:

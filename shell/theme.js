@@ -375,11 +375,14 @@ theme =
 
 					icon :
 					{
-						sketch : 'sketchNormalIcon',
+						sketch :
+							'sketchNormalIcon',
 
-						fill : 'black',
+						fill :
+							'black',
 
-						edge : [
+						edge :
+						[
 							{
 								border : 0,
 								width  : 1,
@@ -408,6 +411,36 @@ theme =
 
 					font : fontPool.get( 14, 'cm' )
 				},
+
+				/*
+				| Remove button on main disc
+				*/
+				remove :
+				{
+					pnw : new Euclid.Point(
+						28,
+						243
+					),
+
+					icon :
+					{
+						sketch :
+							'sketchRemoveIcon',
+
+						fill :
+							'#ff0000',
+
+						edge :
+						[
+							{
+								border : 0,
+								width  : 1,
+								color  : 'rgba( 128, 0, 0, 1 )'
+							}
+						]
+					}
+				},
+
 
 				/*
 				| Sign up button on main disc

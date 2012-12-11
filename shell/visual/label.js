@@ -364,7 +364,8 @@ Label.prototype.fontSizeChange =
 
 	switch( action.type )
 	{
-		case 'ITEMRESIZE' :
+		case 'ItemResize' :
+
 			if( !action.startZone )
 				{ return fontsize; }
 
@@ -466,7 +467,7 @@ Label.prototype.getZone =
 
 	switch( action.type )
 	{
-		case 'ITEMDRAG' :
+		case 'ItemDrag' :
 
 			var mx = action.move.x - action.start.x;
 			var my = action.move.y - action.start.y;
@@ -478,7 +479,7 @@ Label.prototype.getZone =
 				height
 			);
 
-		case 'ITEMRESIZE' :
+		case 'ItemResize' :
 
 			// resizing is done by fontSizeChange( )
 			var szone = action.startZone;
@@ -556,8 +557,8 @@ Label.prototype.dragStop =
 
 	switch( action.type )
 	{
-		case 'ITEMDRAG' :
-		case 'ITEMRESIZE' :
+		case 'ItemDrag' :
+		case 'ItemResize' :
 			var zone = this.getZone( );
 			var fontsize = this.$sub.doc.getFont( ).size;
 

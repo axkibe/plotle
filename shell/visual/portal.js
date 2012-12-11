@@ -242,8 +242,8 @@ Portal.prototype.dragStop =
 
 	switch( action.type )
 	{
-		case 'ITEMDRAG' :
-		case 'ITEMRESIZE' :
+		case 'ItemDrag' :
+		case 'ItemResize' :
 
 			var zone = this.getZone( );
 
@@ -441,13 +441,15 @@ Portal.prototype.getZone =
 	switch( action.type )
 	{
 
-		case 'ITEMDRAG' :
+		case 'ItemDrag' :
+
 			return twig.zone.add(
 				action.move.x - action.start.x,
 				action.move.y - action.start.y
 			);
 
-		case 'ITEMRESIZE' :
+		case 'ItemResize' :
+
 			var szone = action.startZone;
 			if( !szone )
 				{ return twig.zone; }

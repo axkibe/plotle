@@ -208,7 +208,7 @@ Space.prototype.draw =
 
 	switch( action && action.type )
 	{
-		case 'RELBIND' :
+		case 'RelBind' :
 
 			var av  = this.getSub(
 				action.itemPath,
@@ -249,7 +249,7 @@ Space.prototype.draw =
 
 			break;
 
-		case 'CREATE-LABEL' :
+		case 'CreateLabel' :
 
 			var trans = Visual.Label.s_createTrans(
 				view.depoint( action.start ),
@@ -265,7 +265,7 @@ Space.prototype.draw =
 			break;
 
 
-		case 'CREATE-NOTE' :
+		case 'CreateNote' :
 
 			zone = Visual.Note.s_getZone(
 				view.depoint( action.start ),
@@ -280,7 +280,7 @@ Space.prototype.draw =
 
 			break;
 
-		case 'CREATE-PORTAL' :
+		case 'CreatePortal' :
 
 			zone = Visual.Portal.s_getZone(
 				view.depoint( action.start ),
@@ -295,9 +295,7 @@ Space.prototype.draw =
 
 			break;
 
-		case 'CREATE-RELEATION' :
-
-			var fromItem = null;
+		case 'CreateRelation' :
 
 			if( action.fromItemPath )
 			{
@@ -463,12 +461,11 @@ Space.prototype.pointingHover =
 		{
 			cursor = cu;
 
-			if( shell.bridge.inMode( 'CREATE' ) )
+			if( shell.bridge.inMode( 'Create' ) )
 			{
-				if( shell.bridge.inCreate( 'RELATION' ) )
+				if( shell.bridge.inCreate( 'Relation' ) )
 				{
-					var action = shell.bridge.action( );
-
+					//var action = shell.bridge.action( );
 					//action.fromItemPath =
 				}
 			}
@@ -502,7 +499,7 @@ Space.prototype.dragStart =
 		var dp = view.depoint(p);
 
 		shell.bridge.startAction(
-			'RELBIND',
+			'RelBind',
 			'space',
 			'itemPath', focus.path,
 			'start',    dp,
@@ -514,15 +511,15 @@ Space.prototype.dragStart =
 	}
 
 
-	if( shell.bridge.inMode( 'CREATE' ) )
+	if( shell.bridge.inMode( 'Create' ) )
 	{
 		// TODO simplify this code
 
-		if( shell.bridge.inCreate( 'NOTE' ) )
+		if( shell.bridge.inCreate( 'Note' ) )
 		{
 			shell.bridge.startAction
 			(
-				'CREATE-NOTE',
+				'CreateNote',
 				'space',
 				'start', p
 			);
@@ -530,11 +527,11 @@ Space.prototype.dragStart =
 			return;
 		}
 
-		if( shell.bridge.inCreate( 'LABEL' ) )
+		if( shell.bridge.inCreate( 'Label' ) )
 		{
 			shell.bridge.startAction
 			(
-				'CREATE-LABEL',
+				'CreateLabel',
 				'space',
 				'start', p
 			);
@@ -542,11 +539,11 @@ Space.prototype.dragStart =
 			return;
 		}
 
-		if( shell.bridge.inCreate( 'PORTAL' ) )
+		if( shell.bridge.inCreate( 'Portal' ) )
 		{
 			shell.bridge.startAction
 			(
-				'CREATE-PORTAL',
+				'CreatePortal',
 				'space',
 				'start', p
 			);
@@ -578,7 +575,7 @@ Space.prototype.dragStart =
 	// otherwise panning is initiated
 	shell.bridge.startAction
 	(
-		'PAN',
+		'Pan',
 		'space',
 		'start',  p,
 		'pan',    view.pan
@@ -668,7 +665,7 @@ Space.prototype.dragStop =
 
 	switch( action.type )
 	{
-		case 'CREATE-NOTE' :
+		case 'CreateNote' :
 
 			key = shell.peer.newNote(
 				this.spacename,
@@ -686,7 +683,7 @@ Space.prototype.dragStop =
 
 			break;
 
-		case 'CREATE-LABEL' :
+		case 'CreateLabel' :
 
 			var trans = Visual.Label.s_createTrans(
 				view.depoint( action.start ),
@@ -708,7 +705,7 @@ Space.prototype.dragStop =
 
 			break;
 
-		case 'CREATE-PORTAL' :
+		case 'CreatePortal' :
 
 			key = shell.peer.newPortal(
 				this.spacename,
@@ -726,11 +723,11 @@ Space.prototype.dragStop =
 
 			break;
 
-		case 'PAN' :
+		case 'Pan' :
 
 			break;
 
-		case 'RELBIND' :
+		case 'RelBind' :
 
 			for( var r = 0, rZ = this.twig.length; r < rZ; r++ )
 			{
@@ -743,9 +740,9 @@ Space.prototype.dragStop =
 			shell.redraw = true;
 			break;
 
-		case 'ITEMDRAG'   :
-		case 'ITEMRESIZE' :
-		case 'SCROLLY'    :
+		case 'ItemDrag' :
+		case 'ItemResize' :
+		case 'ScrollY' :
 
 			this.getSub(
 				action.itemPath,
@@ -786,15 +783,15 @@ Space.prototype.dragMove =
 
 	switch( action.type )
 	{
-		case 'CREATE-NOTE' :
-		case 'CREATE-LABEL' :
-		case 'CREATE-PORTAL' :
+		case 'CreateNote' :
+		case 'CreateLabel' :
+		case 'CreatePortal' :
 
 			action.move      = p;
 			shell.redraw     = true;
 			return 'pointer';
 
-		case 'PAN' :
+		case 'Pan' :
 
 			var pd = p.sub( action.start );
 
@@ -807,7 +804,7 @@ Space.prototype.dragMove =
 
 			return 'pointer';
 
-		case 'RELBIND' :
+		case 'RelBind' :
 
 			action.item2Path = null;
 
@@ -964,7 +961,7 @@ Space.prototype.pointingStart =
 			var dp = view.depoint(p);
 
 			action = shell.bridge.startAction(
-				'ITEMRESIZE',
+				'ItemResize',
 				'space',
 				'itemPath',  focus.path,
 				'start',     dp,
