@@ -447,16 +447,28 @@ theme =
 				{
 					pnw :
 						new Euclid.Point(
-						17,
-						560
-					),
+							17,
+							560
+						),
 
-					textAnchor : new Euclid.Point(
-						22,
-						22
-					),
+					text :
+						[
+							'log',
+							'in'
+						],
 
-					font : fontPool.get( 13, 'cm' )
+					textSepY :
+						16,
+
+
+					textAnchor :
+						new Euclid.Point(
+							22,
+							22
+						),
+
+					font :
+						fontPool.get( 13, 'cm' )
 				},
 
 
@@ -465,17 +477,23 @@ theme =
 				*/
 				help :
 				{
-					pnw : new Euclid.Point(
-						4,
-						610
-					),
+					pnw :
+						new Euclid.Point(
+							4,
+							610
+						),
 
-					textAnchor : new Euclid.Point(
-						22,
-						22
-					),
+					text :
+						'?',
 
-					font : fontPool.get( 22, 'cm' )
+					textAnchor :
+						new Euclid.Point(
+							22,
+							22
+						),
+
+					font :
+						fontPool.get( 22, 'cm' )
 				}
 			}
 		},
@@ -483,20 +501,28 @@ theme =
 		/*
 		| The creation disc.
 		*/
-		create : {
+		create :
+		{
 
-			width      :  166,
-			height     : 1010,
+			width :
+				166,
+
+			height :
+				1010,
 
 			ellipse :
 			{
-				width   : 1700,
-				height  : 1700
+				width :
+					1700,
+
+				height :
+					1700
 			},
 
 			fill :
 			{
-				gradient : 'radial',
+				gradient :
+					'radial',
 
 				steps :
 				[
@@ -519,6 +545,9 @@ theme =
 				}
 			],
 
+			/*
+			| The creation discs buttons
+			*/
 			buttons :
 			{
 

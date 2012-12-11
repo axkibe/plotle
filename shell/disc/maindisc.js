@@ -106,7 +106,12 @@ var MainDisc = Disc.MainDisc =
 					),
 
 				login :
-					new Disc.DiscButtonLogin  ( this ),
+					new Disc.DiscButton(
+						this,
+						'login',
+						'MODE',
+						'LOGIN'
+					),
 
 				signup :
 					new Disc.DiscButton(
@@ -117,7 +122,12 @@ var MainDisc = Disc.MainDisc =
 					),
 
 				help :
-					new Disc.DiscButtonHelp   ( this )
+					new Disc.DiscButton(
+						this,
+						'help',
+						'MODE',
+						'HELP'
+					),
 			}
 		);
 
