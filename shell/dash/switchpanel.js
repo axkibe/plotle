@@ -120,7 +120,7 @@ SwitchPanel.prototype.draw =
 		{ fabric.globalAlpha(this.$fade); }
 
 	fabric.drawImage(
-		'fabric', this._weave(),
+		'image', this._weave(),
 		'pnw', this.pnw
 	);
 

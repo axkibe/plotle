@@ -86,7 +86,9 @@ Shell = function( fabric )
 	// sets the caret to shown if the document has focus
 	// if it is unknown, asume shown
 	if( !document.hasFocus || document.hasFocus( ) )
-		{ this.$caret.show( ); }
+	{
+		this.$caret.show( );
+	}
 
 	this._draw( );
 };
@@ -95,16 +97,25 @@ Shell = function( fabric )
 /*
 | Retracts the focus.
 */
-Shell.prototype.dropFocus = function( )
+Shell.prototype.dropFocus =
+	function( )
 {
-	this.setCaret( null, null );
+	this.setCaret(
+		null,
+		null
+	);
 };
 
 
 /*
 | Sets the caret position.
 */
-Shell.prototype.setCaret = function( section, sign, retainx )
+Shell.prototype.setCaret =
+	function(
+		section,
+		sign,
+		retainx
+	)
 {
 	switch( section )
 	{
@@ -280,7 +291,8 @@ Shell.prototype.update = function( tree, chgX )
 /*
 | The shell got the systems focus.
 */
-Shell.prototype.systemFocus = function( )
+Shell.prototype.systemFocus =
+	function( )
 {
 	if( this.green )
 		{ return; }
@@ -294,10 +306,13 @@ Shell.prototype.systemFocus = function( )
 /*
 | The shell lost the systems focus.
 */
-Shell.prototype.systemBlur = function( )
+Shell.prototype.systemBlur =
+	function( )
 {
 	if( this.green )
-		{ return; }
+	{
+		return;
+	}
 
 	var caret = this.$caret;
 	caret.hide( );
@@ -308,10 +323,13 @@ Shell.prototype.systemBlur = function( )
 /*
 | Blinks the caret (if shown)
 */
-Shell.prototype.blink = function( )
+Shell.prototype.blink =
+	function( )
 {
 	if( this.green )
-		{ return; }
+	{
+		return;
+	}
 
 	// tests for font size changes
 	var w = Euclid.Measure.width( this._fontWFont, 'meshcraft$8833' );
@@ -332,7 +350,8 @@ Shell.prototype.blink = function( )
 |
 | Used by async handlers.
 */
-Shell.prototype.poke = function( )
+Shell.prototype.poke =
+	function( )
 {
 	// actualizes hover context
 	if( this.$hoverP )
@@ -354,12 +373,15 @@ Shell.prototype.poke = function( )
 /*
 | Force-clears all caches.
 */
-Shell.prototype.knock = function()
+Shell.prototype.knock =
+	function()
 {
 	if( this.green )
-		{ return; }
+	{
+		return;
+	}
 
-	this.$caret.$save      = null;
+	this.$caret.$save = null;
 	this.$caret.$screenPos = null;
 
 	if( this.$space )
@@ -368,7 +390,9 @@ Shell.prototype.knock = function()
 	this.$board.knock( );
 
 	if( this._$menu )
-		{ this._$menu.knock( ); }
+	{
+		this._$menu.knock( );
+	}
 
 	this._draw( );
 };
@@ -468,12 +492,16 @@ Shell.prototype._draw = function( )
 	this.$caret.$screenPos = null;
 
 	if( this.$space )
-		{ this.$space.draw( ); }
+	{
+		this.$space.draw( );
+	}
 
 	this.$board.draw( );
 
 	if( this._$menu )
-		{ this._$menu.draw( Euclid.View.proper ); }
+	{
+		this._$menu.draw( Euclid.View.proper );
+	}
 
 	this.$caret.display( );
 
@@ -484,61 +512,119 @@ Shell.prototype._draw = function( )
 /*
 | A mouse click.
 */
-Shell.prototype.click = function( p, shift, ctrl )
+Shell.prototype.click =
+	function(
+		p,
+		shift,
+		ctrl
+	)
 {
 	if( this.green )
-		{ return; }
+	{
+		return;
+	}
 
 	// FIXME board
 
 	if( this.$space )
-		{ this.$space.click( p, shift, ctrl ); }
-
-	if( this.redraw )
-		{ this._draw( ); }
-};
-
-
-/*
-| User is hovering his/her point ( mouse move )
-*/
-Shell.prototype.pointingHover = function( p, shift, ctrl )
-{
-	if( this.green )
-		{ return; }
-
-	this.$hoverP     = p;
-	this.$hoverShift = shift;
-	this.$hoverCtrl  = ctrl;
-
-	var cursor = null;
-
-	if( this._$menu )
 	{
-		cursor = this._$menu.pointingHover(
-			Euclid.View.proper,
+		this.$space.click(
 			p,
 			shift,
 			ctrl
 		);
 	}
 
+	if( this.redraw )
+	{
+		this._draw( );
+	}
+};
+
+
+/*
+| User is hovering his/her point ( mouse move )
+*/
+Shell.prototype.pointingHover =
+	function(
+		p,
+		shift,
+		ctrl
+	)
+{
+	if( this.green )
+	{
+		return;
+	}
+
+	this.$hoverP =
+		p;
+
+	this.$hoverShift =
+		shift;
+
+	this.$hoverCtrl =
+		ctrl;
+
+	var cursor = null;
+
+	if( this._$menu )
+	{
+		cursor =
+			this._$menu.pointingHover(
+				Euclid.View.proper,
+				p,
+				shift,
+				ctrl
+			);
+	}
+
 
 	if( cursor )
-		{ this.$board.pointingHover( null, shift, ctrl ); }
+	{
+		this.$board.pointingHover(
+			null,
+			shift,
+			ctrl
+		);
+	}
 	else
-		{ cursor = this.$board.pointingHover( p, shift, ctrl ); }
+	{
+		cursor =
+			this.$board.pointingHover(
+				p,
+				shift,
+				ctrl
+			);
+	}
 
 	if( this.$space )
 	{
 		if( cursor )
-			{ this.$space.pointingHover( null, shift, ctrl ); }
+		{
+			this.$space.pointingHover(
+				null,
+				shift,
+				ctrl
+			);
+		}
 		else
-			{ cursor = this.$space.pointingHover( p, shift, ctrl ); }
+		{
+			cursor =
+				this.$space.pointingHover(
+					p,
+					shift,
+					ctrl
+				);
+		}
 	}
 
+	// FIXME this should be called $redraw
+
 	if( this.redraw )
-		{ this._draw( ); }
+	{
+		this._draw( );
+	}
 
 	return cursor;
 };
@@ -550,10 +636,14 @@ Shell.prototype.pointingHover = function( p, shift, ctrl )
 Shell.prototype.greenscreen = function( message )
 {
 	if( this.green )
-		{ return; }
+	{
+		return;
+	}
 
 	if( !message )
-		{ message = 'unknown error.'; }
+	{
+		message = 'unknown error.';
+	}
 
 	this.green = message;
 
@@ -574,7 +664,9 @@ Shell.prototype.pointingStart =
 	)
 {
 	if( this.green )
-		{ return false; }
+	{
+		return false;
+	}
 
 	var pointingState = null;
 
@@ -608,7 +700,9 @@ Shell.prototype.pointingStart =
 	}
 
 	if( this.redraw )
-		{ this._draw( ); }
+	{
+		this._draw( );
+	}
 
 	return pointingState || false;
 };
@@ -618,7 +712,12 @@ Shell.prototype.pointingStart =
 | Starts an operation with the pointing device active.
 | Mouse down or finger on screen.
 */
-Shell.prototype.dragStart = function(p, shift, ctrl)
+Shell.prototype.dragStart =
+	function(
+		p,
+		shift,
+		ctrl
+	)
 {
 	if (this.green)
 		{ return; }
@@ -659,11 +758,12 @@ Shell.prototype.dragMove =
 	{
 		case 'board' :
 
-			cursor = this.$board.dragMove(
-				p,
-				shift,
-				ctrl
-			);
+			cursor =
+				this.$board.dragMove(
+					p,
+					shift,
+					ctrl
+				);
 
 			break;
 
@@ -671,11 +771,12 @@ Shell.prototype.dragMove =
 
 			if( this.$space )
 			{
-				cursor = this.$space.dragMove(
-					p,
-					shift,
-					ctrl
-				);
+				cursor =
+					this.$space.dragMove(
+						p,
+						shift,
+						ctrl
+					);
 			}
 
 			break;
@@ -744,82 +845,136 @@ Shell.prototype.dragStop =
 /*
 | Mouse wheel is being turned.
 */
-Shell.prototype.mousewheel = function(p, dir, shift, ctrl)
+Shell.prototype.mousewheel =
+	function(
+		p,
+		dir,
+		shift,
+		ctrl
+	)
 {
 	if (this.green)
-		{ return; }
+	{
+		return;
+	}
 
 	// board?
 
-	if (this.$space)
-		{ this.$space.mousewheel(p, dir, shift, ctrl); }
+	if( this.$space )
+	{
+		this.$space.mousewheel(
+			p,
+			dir,
+			shift,
+			ctrl
+		);
+	}
 
-	if (this.redraw)
-		{ this._draw(); }
+	if( this.redraw )
+	{
+		this._draw();
+	}
 };
 
 
 /*
 | User is pressing a special key.
 */
-Shell.prototype.specialKey = function(key, shift, ctrl)
+Shell.prototype.specialKey =
+	function(
+		key,
+		shift,
+		ctrl
+	)
 {
 	if (this.green)
-		{ return; }
+	{
+		return;
+	}
 
 	var caret  = this.$caret;
 
-	switch (caret.section) {
+	switch (caret.section)
+	{
 		case 'board' :
-			this.$board.specialKey(key, shift, ctrl);
+
+			this.$board.specialKey(
+				key,
+				shift,
+				ctrl
+			);
 			break;
 
 		case null    :
 		case 'space' :
+
 			if (this.$space)
-				{ this. $space.specialKey(key, shift, ctrl); }
+			{
+				this. $space.specialKey(
+					key,
+					shift,
+					ctrl
+				);
+			}
 			break;
 
-		default : throw new Error('invalid section');
+		default :
+
+			throw new Error('invalid section');
 	}
 
-	if (this.redraw)
-		{ this._draw(); }
+	if( this.redraw )
+	{
+		this._draw();
+	}
 };
 
 
 /*
 | User entered normal text (one character or more).
 */
-Shell.prototype.input = function(text)
+Shell.prototype.input =
+	function( text )
 {
-	if (this.green)
-		{ return; }
+	if( this.green )
+	{
+		return;
+	}
 
-	if (this.selection.active)
-		{ this.selection.remove(); }
+	if( this.selection.active )
+	{
+		this.selection.remove();
+	}
 
 	var caret  = this.$caret;
 
-	switch (caret.section)
+	switch( caret.section )
 	{
 		case null :
+
 			break;
 
 		case 'board' :
-			this.$board.input(text);
+
+			this.$board.input( text );
+
 			break;
 
 		case 'space' :
-			this.$space.input(text);
+
+			this.$space.input( text );
+
 			break;
 
 		default :
-			throw new Error('invalid section');
+
+			throw new Error( 'invalid section' );
 	}
 
-	if (this.redraw)
-		{ this._draw(); }
+	if( this.redraw )
+	{
+		this._draw( );
+	}
 };
 
 
@@ -832,7 +987,7 @@ Shell.prototype.resize =
 		// height
 	)
 {
-	this._draw();
+	this._draw( );
 };
 
 

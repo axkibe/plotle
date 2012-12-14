@@ -32,7 +32,9 @@ var theme;
 'use strict';
 
 if( typeof( window ) === 'undefined' )
-	{ throw new Error( 'this code needs a browser!' ); }
+{
+	throw new Error( 'this code needs a browser!' );
+}
 
 
 /*
@@ -134,7 +136,9 @@ Space.prototype.focusedItem = function( )
 	var caret = shell.$caret;
 
 	if( caret.section !== 'space' )
-		{ return null; }
+	{
+		return null;
+	}
 
 	return this.getSub( caret.sign.path, 'Item' );
 };
@@ -477,9 +481,14 @@ Space.prototype.pointingHover =
 		{
 			cursor = cu;
 
-			if( action && action.type === 'Remove' )
+			if(
+				action &&
+				action.type === 'Remove'
+			)
 			{
-				if( !item.path.equals( action.removeItemPath ) )
+				if(
+					!item.path.equals( action.removeItemPath )
+				)
 				{
 					action.removeItemPath = item.path;
 
@@ -557,6 +566,9 @@ Space.prototype.dragStart =
 		case 'CreatePortal' :
 
 			action.start = p;
+			return;
+
+		case 'Remove' :
 			return;
 
 		default :
@@ -692,6 +704,8 @@ Space.prototype.dragStop =
 
 			shell.redraw = true;
 
+			shell.bridge.stopAction( );
+
 			break;
 
 		case 'CreateLabel' :
@@ -712,6 +726,8 @@ Space.prototype.dragStop =
 
 			shell.redraw = true;
 
+			shell.bridge.stopAction( );
+
 			break;
 
 		case 'CreatePortal' :
@@ -728,9 +744,13 @@ Space.prototype.dragStop =
 
 			shell.redraw = true;
 
+			shell.bridge.stopAction( );
+
 			break;
 
 		case 'Pan' :
+
+			shell.bridge.stopAction( );
 
 			break;
 
@@ -744,7 +764,10 @@ Space.prototype.dragStop =
 					break;
 				}
 			}
+
 			shell.redraw = true;
+
+			shell.bridge.stopAction( );
 
 			break;
 
@@ -762,14 +785,33 @@ Space.prototype.dragStop =
 				ctrl
 			);
 
+			shell.bridge.stopAction( );
+
+			break;
+
+		case 'Remove' :
+
+			var focus = this.focusedItem( );
+
+			if(
+				focus &&
+				action.removeItemPath.equals( focus.path )
+			)
+
+			shell.dropFocus( );
+
+			shell.peer.removeItem(
+				action.removeItemPath
+			);
+
+			action.removeItemPath = null;
+
 			break;
 
 		default :
 
 			throw new Error( 'Do not know how to handle Action: ' + action.type );
 	}
-
-	shell.bridge.stopAction( );
 
 	return true;
 };
@@ -785,8 +827,12 @@ Space.prototype.dragMove =
 		// ctrl
 	)
 {
-	var view   = this.$view;
-	var action = shell.bridge.action( );
+	var view =
+		this.$view;
+
+	var action =
+		shell.bridge.action( );
+
 	var item;
 
 	switch( action.type )
@@ -795,8 +841,16 @@ Space.prototype.dragMove =
 		case 'CreateLabel' :
 		case 'CreatePortal' :
 
-			action.move      = p;
-			shell.redraw     = true;
+		case 'DragMove' :
+
+			action.move = p;
+
+			shell.redraw = true;
+
+			return 'pointer';
+
+		case 'Remove' :
+
 			return 'pointer';
 
 		case 'Pan' :
@@ -948,20 +1002,40 @@ Space.prototype.pointingStart =
 	var view   = this.$view;
 	var action = shell.bridge.action( );
 
-	if(this.access == 'ro' )
+	if( this.access == 'ro' )
 	{
-		this.dragStart( p, shift, ctrl );
+		this.dragStart(
+			p,
+			shift,
+			ctrl
+		);
+
 		return 'drag';
 	}
+
+	var action = shell.bridge.action( );
+
+	// starts a drag operation on deletion
+	// so the item gets removed on
+	// mouse/finger up
+	if(
+		action &&
+		action.type === 'Remove' &&
+		action.removeItemPath
+	)
+	{
+		return 'drag';
+	}
+
 
 	var focus = this.focusedItem( );
 
 	if( focus )
 	{
-		if( focus.withinCtrlArea(view, p) )
+		if( focus.withinCtrlArea( view, p ) )
 			{ return 'atween'; }
 
-		var com = focus.checkHandles(view, p);
+		var com = focus.checkHandles( view, p );
 
 		if( com )
 		{
@@ -989,15 +1063,18 @@ Space.prototype.pointingStart =
 /*
 | Text input
 */
-Space.prototype.input = function(text)
+Space.prototype.input =
+	function( text )
 {
 	var caret = shell.$caret;
 
 	if (!caret.sign)
 		{ return; }
 
-	this.getSub( caret.sign.path, 'input' )
-		.input(text);
+	this.getSub(
+		caret.sign.path,
+		'input'
+	).input( text );
 };
 
 

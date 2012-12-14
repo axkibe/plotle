@@ -67,6 +67,7 @@ Label.s_innerMargin =
 		theme.label.innerMargin
 	);
 
+
 /*
 | Resize handles to show on labels
 */
@@ -121,7 +122,7 @@ Label.s_drawTrans =
 
 	fabric.drawImage(
 		'image', f,
-		'pnw', view.point(zone.pnw)
+		'pnw', view.point( zone.pnw )
 	);
 
 	// draws the border
