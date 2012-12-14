@@ -422,20 +422,20 @@ Note.prototype.draw =
 	if(
 		action &&
 		action.type === 'Remove' &&
-		this.path.equals( action.removeItem )
+		this.path.equals( action.removeItemPath )
 	)
 	{
 		fabric.drawImage(
 			'image', f,
-			'pnw', vzone.pnw
+			'pnw', vzone.pnw,
+			'alpha', theme.removeAlpha
 		);
 	}
 	else
 	{
 		fabric.drawImage(
 			'image', f,
-			'pnw', vzone.pnw,
-			'alpha', 0.5
+			'pnw', vzone.pnw
 		);
 	}
 

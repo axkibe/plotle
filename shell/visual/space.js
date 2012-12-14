@@ -445,6 +445,8 @@ Space.prototype.pointingHover =
 
 	var focus = this.focusedItem( );
 
+	var action = shell.bridge.action( );
+
 	if( focus )
 	{
 		if( focus.withinCtrlArea( view, p ) )
@@ -468,14 +470,12 @@ Space.prototype.pointingHover =
 
 		var cu = item.pointingHover(
 			view,
-			null
+			p
 		);
 
-		if( !cursor )
+		if( !cursor && cu )
 		{
 			cursor = cu;
-
-			var action = shell.bridge.action( );
 
 			if( action && action.type === 'Remove' )
 			{
@@ -493,6 +493,18 @@ Space.prototype.pointingHover =
 				//action.fromItemPath =
 			}
 		}
+	}
+
+	if(
+		!cursor &&
+		action &&
+		action.type === 'Remove' &&
+		action.removeItemPath
+	)
+	{
+		action.removeItemPath = null;
+
+		shell.redraw = true;
 	}
 
 	return cursor || 'pointer';

@@ -288,6 +288,9 @@ Label.prototype.scrollPage =
 
 /*
 | Draws the label.
+|
+| FIXME: move the common stuff into Visual.Item.draw()
+|        and make the specific into weave()
 */
 Label.prototype.draw =
 	function(
@@ -331,10 +334,27 @@ Label.prototype.draw =
 		);
 	}
 
-	fabric.drawImage(
-		'image', f,
-		'pnw', zone.pnw
-	);
+	var action = shell.bridge.action( );
+
+	if(
+		action &&
+		action.type === 'Remove' &&
+		this.path.equals( action.removeItemPath )
+	)
+	{
+		fabric.drawImage(
+			'image', f,
+			'pnw', zone.pnw,
+			'alpha', theme.removeAlpha
+		);
+	}
+	else
+	{
+		fabric.drawImage(
+			'image', f,
+			'pnw', zone.pnw
+		);
+	}
 };
 
 

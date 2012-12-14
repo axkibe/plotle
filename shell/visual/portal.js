@@ -337,8 +337,6 @@ Portal.prototype.click =
 | Draws the portal.
 |
 | TODO move draw to visual item.
-|
-| fabric: to draw upon.
 */
 Portal.prototype.draw =
 	function(
@@ -358,10 +356,27 @@ Portal.prototype.draw =
 		f = this._weave( vzone );
 	}
 
-	fabric.drawImage(
-		'image', f,
-		'pnw', vzone.pnw
-	);
+	var action = shell.bridge.action( );
+
+	if(
+		action &&
+		action.type === 'Remove' &&
+		this.path.equals( action.removeItemPath )
+	)
+	{
+		fabric.drawImage(
+			'image', f,
+			'pnw', vzone.pnw,
+			'alpha', theme.removeAlpha
+		);
+	}
+	else
+	{
+		fabric.drawImage(
+			'image', f,
+			'pnw', vzone.pnw
+		);
+	}
 };
 
 

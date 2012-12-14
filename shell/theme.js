@@ -44,7 +44,8 @@ theme =
 	/*
 	| Factor to add to the bottom of font height
 	*/
-	bottombox : 0.25,
+	bottombox :
+		0.25,
 
 	fade :
 	{
@@ -60,49 +61,85 @@ theme =
 	*/
 	zoom :
 	{
-		base        : 1.1,
-		min         : -15,
-		max         :  15,
-		firstTimer  : 200,
-		repeatTimer :  50
+		base :
+			1.1,
+
+		min :
+			-15,
+
+		max :
+			15,
+
+		firstTimer :
+			200,
+
+		repeatTimer :
+			50
 	},
+
+	/*
+	| Alpha level of hovering on remove operations.
+	*/
+	removeAlpha :
+		0.55,
 
 	/*
 	| Standard note in space.
 	*/
 	note :
 	{
-		minWidth  :  30,
-		minHeight :  30,
+		minWidth :
+			30,
 
-		newWidth  : 300,
-		newHeight : 150,
+		minHeight :
+			30,
+
+		newWidth :
+			300,
+
+		newHeight :
+			150,
 
 		ctrlArea :
 		{
-			x  :   6,
-			y  : -22,
+			x :
+				6,
+
+			y :
+				-22,
 
 			joint : // FIXME make Point object
 			{
-				x : 0,
-				y : 0
+				x :
+					0,
+
+				y :
+					0
 			}
 		},
 
 		innerMargin  :
 		{
-			n : 4,
-			e : 5,
-			s : 4,
-			w : 5
+			n :
+				4,
+
+			e :
+				5,
+
+			s :
+				4,
+
+			w :
+				5
 		},
 
 		style :
 		{
 			fill :
 			{
-				gradient : 'askew',
+				gradient :
+					'askew',
+
 				steps :
 				[
 					[ 0, 'rgba( 255, 255, 248, 0.955 )' ],
@@ -113,23 +150,38 @@ theme =
 			edge :
 			[
 				{
-					border: 1,
-					width : 1,
-					color : 'rgb( 255, 188, 87 )'
+					border :
+						1,
+
+					width :
+						1,
+
+					color :
+						'rgb( 255, 188, 87 )'
 				},
 				{
-					border: 0,
-					width : 1,
-					color : 'black'
+					border :
+						0,
+
+					width :
+						1,
+
+					color :
+						'black'
 				}
 			],
 
 			highlight :
 			[
 				{
-					border: 0,
-					width: 3,
-					color: 'rgba( 255, 183, 15, 0.5 )'
+					border :
+						0,
+
+					width :
+						3,
+
+					color :
+						'rgba( 255, 183, 15, 0.5 )'
 				}
 			]
 		},
@@ -142,21 +194,33 @@ theme =
 	*/
 	portal :
 	{
-		minWidth  :  40,
-		minHeight :  40,
+		minWidth :
+			40,
 
-		newWidth  : 100,
-		newHeight :  50,
+		minHeight :
+			40,
+
+		newWidth :
+			100,
+
+		newHeight :
+			50,
 
 		ctrlArea :
 		{
-			x  : -66,
-			y  : -24,
+			x :
+				-66,
+
+			y :
+				-24,
 
 			joint : // FIXME make Point object
 			{
-				x : 0,
-				y : 0
+				x :
+					0,
+
+				y :
+					0
 			}
 		},
 
