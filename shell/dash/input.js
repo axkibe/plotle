@@ -264,8 +264,8 @@ Input.prototype.draw =
 	)
 {
 	fabric.drawImage(
-		this._weave( accent ),
-		this.pnw
+		'image', this._weave( accent ),
+		'pnw', this.pnw
 	);
 };
 

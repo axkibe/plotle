@@ -112,14 +112,24 @@ MainPanel.prototype.setSpaceZoom = function(zf) {
 	zoom.setText('' + zf);
 };
 
-/**
+
+/*
 | Draws the main panel.
 */
-MainPanel.prototype.draw = function(fabric) {
-	if (this.switchActive) {
+MainPanel.prototype.draw =
+	function(
+		fabric
+	)
+{
+	if( this.switchActive )
+	{
 		this.getSwitchPanel().draw(fabric);
 	}
-	fabric.drawImage(this._weave(), this.pnw);
+
+	fabric.drawImage(
+		'image', this._weave(),
+		'pnw', this.pnw
+	);
 };
 
 

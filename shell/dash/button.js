@@ -339,8 +339,8 @@ Button.prototype.draw =
 		{ return; }
 
 	fabric.drawImage(
-		this._weave( accent ),
-		this.pnw
+		'image', this._weave( accent ),
+		'pnw',   this.pnw
 	);
 };
 

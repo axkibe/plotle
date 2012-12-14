@@ -120,8 +120,8 @@ Label.s_drawTrans =
 	);
 
 	fabric.drawImage(
-		f,
-		view.point(zone.pnw)
+		'image', f,
+		'pnw', view.point(zone.pnw)
 	);
 
 	// draws the border
@@ -332,8 +332,8 @@ Label.prototype.draw =
 	}
 
 	fabric.drawImage(
-		f,
-		zone.pnw
+		'image', f,
+		'pnw', zone.pnw
 	);
 };
 

@@ -248,11 +248,35 @@ MainDisc.prototype.pushButton =
 		buttonName
 	)
 {
-	shell.bridge.changeMode(
+	var bridge = shell.bridge;
+
+	bridge.changeMode(
 		this.getModeOfButton(
 			buttonName
 		)
 	);
+
+	var action = bridge.action( );
+
+	if( buttonName === 'remove' )
+	{
+		if( action )
+		{
+			bridge.stopAction( );
+		}
+
+		bridge.startAction(
+			'Remove',
+			'space'
+		);
+	}
+	else
+	{
+		if( action && action.type === 'Remove' )
+		{
+			bridge.stopAction( );
+		}
+	}
 };
 
 
@@ -270,8 +294,8 @@ MainDisc.prototype.draw =
 	}
 
 	fabric.drawImage(
-		this._weave( ),
-		this.pnw
+		'image', this._weave( ),
+		'pnw', this.pnw
 	);
 };
 

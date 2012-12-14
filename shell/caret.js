@@ -70,9 +70,10 @@ Caret =
 
 
 /*
-| If true uses getImageData() to cache the image without the caret to achieve blinking.
-| Without it uses drawImage() for the whole canvas. On firefox this is paradoxically way
-| faster.
+| If true uses getImageData() to cache the image
+| without the caret to achieve blinking.
+| Without it uses drawImage() for the whole canvas.
+| On firefox this is paradoxically way faster.
 */
 Caret.useGetImageData = true;
 
@@ -122,7 +123,11 @@ Caret.prototype.display
 		}
 		else
 		{
-			shell.fabric.drawImage(this.$save, 0, 0);
+			shell.fabric.drawImage(
+				'image', this.$save,
+				'x', 0,
+				'y', 0
+			);
 		}
 	}
 
@@ -171,7 +176,11 @@ Caret.prototype.display
 				shell.fabric.height
 			);
 
-			this.$save.drawImage(shell.fabric, 0, 0);
+			this.$save.drawImage(
+				'image', shell.fabric,
+				'x', 0,
+				'y', 0
+			);
 		}
 
 		// draws the caret

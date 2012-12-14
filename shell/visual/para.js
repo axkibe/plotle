@@ -1,9 +1,7 @@
 /*
-|
 | A visual paragraph.
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
@@ -150,7 +148,10 @@ Para.prototype.draw =
 
 	}
 
-	fabric.drawImage( f, pnw );
+	fabric.drawImage(
+		'image', f,
+		'pnw', pnw
+	);
 };
 
 

@@ -1,9 +1,7 @@
 /*
-|
 | A portal to another space
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
@@ -360,7 +358,10 @@ Portal.prototype.draw =
 		f = this._weave( vzone );
 	}
 
-	fabric.drawImage( f, vzone.pnw );
+	fabric.drawImage(
+		'image', f,
+		'pnw', vzone.pnw
+	);
 };
 
 

@@ -41,14 +41,15 @@ if( typeof( window ) === 'undefined' )
 | model can be an array or another path or null
 | arguments followed by master are appended to the path
 */
-Path = function(model)
+Path =
+	function( model )
 {
 	var path;
 
 	// if true the path needs to be copied
 	var copy = arguments.length > 1;
 
-	switch(model.constructor)
+	switch( model.constructor )
 	{
 		case Path  :
 			path = ( copy ) ? model._path.slice( ) : model._path;
@@ -170,8 +171,12 @@ Path.prototype.get = function( i )
 
 /*
 | Returns true if this path is the same as another.
+|
+| FIXME: optimize by using local variables
 */
-Path.prototype.equals = function(o) {
+Path.prototype.equals =
+	function( o )
+{
 	if (!o)
 		{ return false; }
 
@@ -186,53 +191,73 @@ Path.prototype.equals = function(o) {
 	return true;
 };
 
-/**
+
+/*
 | True if this path is a subPath of another.
 |
-| o: the other path
-| [len]: the length of this path to consider.
+| FIXME: optimize by using local variables
 */
-Path.prototype.subPathOf = function(o, len) {
-	if (!Jools.is(len)) {
+Path.prototype.subPathOf =
+	function(
+		o,     // the other path
+		len    // the length of this path to consider.
+	)
+{
+	if( !Jools.is( len ) )
+	{
 		len  = this._path.length;
-	} else {
-		if (len < 0)
+	}
+	else
+	{
+		if( len < 0 )
 			{ len += this._path.length; }
 
-		if (len < 0)
+		if( len < 0 )
 			{ throw new Error('subPathOf out of range'); }
 	}
 
-	if (len > o._path.length)
+	if( len > o._path.length )
 		{ return false; }
 
-	for(var a = 0; a < len; a++) {
-		if (this._path[a] !== o._path[a])
-			{ return false; }
+	for( var a = 0; a < len; a++)
+	{
+		if( this._path[ a ] !== o._path[ a ] )
+		{
+			return false;
+		}
 	}
 
 	return true;
 };
 
-/**
+
+/*
 | Turns the path to a String.
 */
-Path.prototype.toString = function() {
+Path.prototype.toString =
+	function( )
+{
 	return '[' + this._path.toString() + ']';
 };
 
-/**
+
+/*
 | Jsonfy.
 */
-Path.prototype.toJSON = function() {
+Path.prototype.toJSON =
+	function( )
+{
 	return this._path;
 };
 
-/**
+
+/*
 | Node export
 */
-if (typeof(window) === 'undefined')
-	{ module.exports = Path; }
+if( typeof( window ) === 'undefined' )
+{
+	module.exports = Path;
+}
 
-})();
+} )( );
 

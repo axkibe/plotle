@@ -119,7 +119,10 @@ SwitchPanel.prototype.draw =
 	if (this.$fade)
 		{ fabric.globalAlpha(this.$fade); }
 
-	fabric.drawImage(this._weave(), this.pnw);
+	fabric.drawImage(
+		'fabric', this._weave(),
+		'pnw', this.pnw
+	);
 
 	if (this.$fade)
 		{ fabric.globalAlpha(1); }

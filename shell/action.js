@@ -30,13 +30,21 @@ if( typeof( window ) === 'undefined' )
 	{ throw new Error('this code needs a browser!'); }
 
 
-var actionlist =
+var actionList =
+
 	Jools.immute(
 		{
 			/*
 			| Panning the background.
 			*/
 			'Pan' :
+				true,
+
+			/*
+			| The finger of item destruction
+			| hovering around.
+			*/
+			'Remove' :
 				true,
 
 
@@ -106,14 +114,21 @@ var actionlist =
 | recv: object to receive events during action.
 | + key value list for additional params
 */
-Action = function( args )
+Action =
+	function(
+		args
+	)
 {
-	var type = this.type    = args[0];
-	if( !actionlist[ type ] ) {
+	var type =
+	this.type =
+		args[0];
+
+	if( !actionList[ type ] )
+	{
 		throw new Error( 'invalid action' );
 	}
 
-	this.section = args[1];
+	this.section = args[ 1 ];
 
 	switch( this.section )
 	{

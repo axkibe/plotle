@@ -1,5 +1,5 @@
 /*
-| The visual of a space.
+| The visual space.
 |
 | Authors: Axel Kittenberger
 */
@@ -139,10 +139,15 @@ Space.prototype.focusedItem = function( )
 	return this.getSub( caret.sign.path, 'Item' );
 };
 
-/**
+
+/*
 | Creates a new visual representation of an item.
 */
-Space.prototype.createItem = function( twig, k )
+Space.prototype.createItem =
+	function(
+		twig,
+		k
+	)
 {
 	var Proto;
 
@@ -251,47 +256,56 @@ Space.prototype.draw =
 
 		case 'CreateLabel' :
 
-			var trans = Visual.Label.s_createTrans(
-				view.depoint( action.start ),
-				view.depoint( action.move  )
-			);
+			if( action.start && action.move )
+			{
+				var trans = Visual.Label.s_createTrans(
+					view.depoint( action.start ),
+					view.depoint( action.move  )
+				);
 
-			Visual.Label.s_drawTrans(
-				this.fabric,
-				view,
-				trans
-			);
+				Visual.Label.s_drawTrans(
+					this.fabric,
+					view,
+					trans
+				);
+			}
 
 			break;
 
 
 		case 'CreateNote' :
 
-			zone = Visual.Note.s_getZone(
-				view.depoint( action.start ),
-				view.depoint( action.move  )
-			);
+			if( action.start && action.move )
+			{
+				zone = Visual.Note.s_getZone(
+					view.depoint( action.start ),
+					view.depoint( action.move  )
+				);
 
-			Visual.Note.s_drawTrans(
-				this.fabric,
-				view,
-				zone
-			);
+				Visual.Note.s_drawTrans(
+					this.fabric,
+					view,
+					zone
+				);
+			}
 
 			break;
 
 		case 'CreatePortal' :
 
-			zone = Visual.Portal.s_getZone(
-				view.depoint( action.start ),
-				view.depoint( action.move  )
-			);
+			if( action.start && action.move )
+			{
+				zone = Visual.Portal.s_getZone(
+					view.depoint( action.start ),
+					view.depoint( action.move  )
+				);
 
-			Visual.Portal.s_drawTrans(
-				this.fabric,
-				view,
-				zone
-			);
+				Visual.Portal.s_drawTrans(
+					this.fabric,
+					view,
+					zone
+				);
+			}
 
 			break;
 
@@ -461,13 +475,22 @@ Space.prototype.pointingHover =
 		{
 			cursor = cu;
 
+			var action = shell.bridge.action( );
+
+			if( action && action.type === 'Remove' )
+			{
+				if( !item.path.equals( action.removeItemPath ) )
+				{
+					action.removeItemPath = item.path;
+
+					shell.redraw = true;
+				}
+			}
+
 			if( shell.bridge.inMode( 'Create' ) )
 			{
-				if( shell.bridge.inCreate( 'Relation' ) )
-				{
-					//var action = shell.bridge.action( );
-					//action.fromItemPath =
-				}
+				//var action = shell.bridge.action( );
+				//action.fromItemPath =
 			}
 		}
 	}
@@ -513,42 +536,20 @@ Space.prototype.dragStart =
 
 	if( shell.bridge.inMode( 'Create' ) )
 	{
-		// TODO simplify this code
+		var action = shell.bridge.action( );
 
-		if( shell.bridge.inCreate( 'Note' ) )
-		{
-			shell.bridge.startAction
-			(
-				'CreateNote',
-				'space',
-				'start', p
-			);
+		switch( action && action.type ) {
 
+		case 'CreateLabel' :
+		case 'CreateNote' :
+		case 'CreatePortal' :
+
+			action.start = p;
 			return;
-		}
 
-		if( shell.bridge.inCreate( 'Label' ) )
-		{
-			shell.bridge.startAction
-			(
-				'CreateLabel',
-				'space',
-				'start', p
-			);
-
-			return;
-		}
-
-		if( shell.bridge.inCreate( 'Portal' ) )
-		{
-			shell.bridge.startAction
-			(
-				'CreatePortal',
-				'space',
-				'start', p
-			);
-
-			return;
+		default :
+			// ignore and go on
+			break;
 		}
 	}
 
@@ -677,8 +678,6 @@ Space.prototype.dragStop =
 
 			this.$sub[ key ].grepFocus( );
 
-			shell.bridge.changeCreate( null );
-
 			shell.redraw = true;
 
 			break;
@@ -699,8 +698,6 @@ Space.prototype.dragStop =
 
 			this.$sub[ key ].grepFocus( );
 
-			shell.bridge.changeCreate( null );
-
 			shell.redraw = true;
 
 			break;
@@ -716,8 +713,6 @@ Space.prototype.dragStop =
 			);
 
 			this.$sub[ key ].grepFocus( );
-
-			shell.bridge.changeCreate( null );
 
 			shell.redraw = true;
 
@@ -738,6 +733,7 @@ Space.prototype.dragStop =
 				}
 			}
 			shell.redraw = true;
+
 			break;
 
 		case 'ItemDrag' :

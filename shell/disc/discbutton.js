@@ -92,8 +92,8 @@ DiscButton.prototype.draw =
 	)
 {
 	fabric.drawImage(
-		this._weave( active, hover ),
-		this.pnw
+		'image', this._weave( active, hover ),
+		'pnw', this.pnw
 	);
 };
 
@@ -346,12 +346,12 @@ DiscButton.prototype.sketchRemoveIcon =
 		// twist
 	)
 {
-	var w = 13;
-	var h = 13;
+	var w = 11;
+	var h = 11;
 
 	// zone
-	var wx = 16;
-	var ny = 15;
+	var wx = 17;
+	var ny = 16;
 	var ex = wx + w;
 	var sy = ny + h;
 
@@ -363,8 +363,8 @@ DiscButton.prototype.sketchRemoveIcon =
 	var ah = 2;
 
 	// center point width/height
-	var cw = 3;
-	var ch = 3;
+	var cw = 2;
+	var ch = 2;
 
 	//
 	// A**B   D**E

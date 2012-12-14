@@ -349,8 +349,6 @@ Note.prototype.dragStop =
 
 /*
 | Draws the note.
-|
-| fabric: to draw upon.
 */
 Note.prototype.draw =
 	function(
@@ -358,15 +356,19 @@ Note.prototype.draw =
 		view
 	)
 {
-	var zone  = this.getZone( );
+	var zone = this.getZone( );
+
 	var vzone = view.rect( zone );
-	var f     = this.$fabric;
+
+	var f = this.$fabric;
+
 	var sbary = this.scrollbarY;
 
 	// no buffer hit?
-	if( config.debug.noCache ||
+	if(
+		config.debug.noCache ||
 		!f ||
-		vzone.width  !== f.width ||
+		vzone.width !== f.width ||
 		vzone.height !== f.height
 	)
 	{
@@ -415,7 +417,27 @@ Note.prototype.draw =
 		);
 	}
 
-	fabric.drawImage( f, vzone.pnw );
+	var action = shell.bridge.action( );
+
+	if(
+		action &&
+		action.type === 'Remove' &&
+		this.path.equals( action.removeItem )
+	)
+	{
+		fabric.drawImage(
+			'image', f,
+			'pnw', vzone.pnw
+		);
+	}
+	else
+	{
+		fabric.drawImage(
+			'image', f,
+			'pnw', vzone.pnw,
+			'alpha', 0.5
+		);
+	}
 
 	if( sbary.visible )
 	{

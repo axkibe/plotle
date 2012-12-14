@@ -245,17 +245,77 @@ Fabric.prototype.deClip = function( )
 /*
 | Draws an image.
 |
-| drawImage(image, pnw)   -or-
-| drawImage(image, x, y)
+| possible arguments:
+|    'image'
+|    'point'
+|    'x'
+|    'y'
+|    'composite'
+|    'alpha'
+|
 */
 Fabric.prototype.drawImage =
-	function(
-		image,
-		a1,
-		a2,
-		a3
-	)
+	function( )
 {
+	var image;
+
+	var x, y, composite, alpha;
+
+	var is = Jools.is;
+
+	var a = 0;
+	var aZ = arguments.length;
+
+	while( a < aZ )
+	{
+		var arg = arguments[ a++ ];
+
+		switch( arg )
+		{
+		case 'image' :
+
+			image = arguments[ a++ ];
+
+			continue;
+
+		case 'pnw' :
+
+			x = arguments[ a ].x;
+
+			y = arguments[ a++ ].y;
+
+			continue;
+
+		case 'x' :
+
+			x = arguments[ a++ ];
+
+			continue;
+
+		case 'y' :
+
+			y = arguments[ a++ ];
+
+			continue;
+
+		case 'composite' :
+
+			composite = arguments[ a++ ];
+
+			continue;
+
+		case 'alpha' :
+
+			alpha = arguments[ a++ ];
+
+			continue;
+
+		default :
+
+			throw new Error( 'unknown argument: ' + arg );
+		}
+	}
+
 	if( image instanceof Fabric )
 	{
 		if(
@@ -271,26 +331,33 @@ Fabric.prototype.drawImage =
 		image = image._canvas;
 	}
 
-	var x, y, c;
-
-	if( typeof( a1 ) === 'object' )
+	if( !is( image ) )
 	{
-		x = a1.x;
-		y = a1.y;
-		c = a2;
-	}
-	else
-	{
-		x = a1;
-		y = a2;
-		c = a3;
+		throw new Error( 'image missing' );
 	}
 
-	Jools.ensureInt( x, y );
-
-	if( Jools.is( c ) )
+	if( !is( x ) || !is( y ) )
 	{
-		this._cx.globalCompositeOperation = c;
+		throw new Error( 'x/y missing' );
+	}
+
+	Jools.ensureInt(
+		x,
+		y
+	);
+
+	if( is( composite ) )
+	{
+		this._cx.globalCompositeOperation = composite;
+	}
+
+	var saveAlpha;
+
+	if( is( alpha ) )
+	{
+		saveAlpha = this._cx.globalAlpha;
+
+		this._cx.globalAlpha = alpha;
 	}
 
 	this._cx.drawImage(
@@ -299,9 +366,14 @@ Fabric.prototype.drawImage =
 		y
 	);
 
-	if( Jools.is( c ) )
+	if( is( composite ) )
 	{
 		this._cx.globalCompositeOperation = 'source-over';
+	}
+
+	if( is( alpha ) )
+	{
+		this._cx.globalAlpha = saveAlpha;
 	}
 };
 

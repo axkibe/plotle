@@ -1,12 +1,10 @@
 /*
-|
 | A central control center for the user interaction of diverse MeshCraft elements
 | interlocking with each other, like modes.
 |
 | FIXME, remove validity checks in releases
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
@@ -27,9 +25,10 @@ var shell;
 /*
 | Capsule
 */
-( function() {
+( function( ) {
 
 'use strict';
+
 
 if( typeof( window ) === 'undefined' )
 {
@@ -69,7 +68,7 @@ var modes =
 		true,
 
 	/*
-	| Siging up
+	| Signing up
 	*/
 	'SignUp' :
 		true,
@@ -82,33 +81,33 @@ var modes =
 
 };
 
-/*
-| Valid creates
-*/
-var creates =
-{
-
-	/*
-	| A new note.
-	*/
-	'Note' : true,
-
-	/*
-	| A new label.
-	*/
-	'Label'  : true,
-
-	/*
-	| A new relation
-	*/
-	'Relation' : true,
-
-	/*
-	| A new portal
-	*/
-	'Portal' : true
-
-};
+///*
+//| Valid creates
+//*/
+//var creates =
+//{
+//
+//	/*
+//	| A new note.
+//	*/
+//	'Note' : true,
+//
+//	/*
+//	| A new label.
+//	*/
+//	'Label'  : true,
+//
+//	/*
+//	| A new relation
+//	*/
+//	'Relation' : true,
+//
+//	/*
+//	| A new portal
+//	*/
+//	'Portal' : true
+//
+//};
 
 
 /*
@@ -186,16 +185,18 @@ Bridge.prototype.changeMode =
 /*
 | Returns the current creation.
 */
+/*
 Bridge.prototype.create =
 	function( )
 {
 	return this._$create;
 };
-
+*/
 
 /*
 | Returns true if creating 'crate'.
 */
+/*
 Bridge.prototype.inCreate =
 	function( create )
 {
@@ -206,11 +207,12 @@ Bridge.prototype.inCreate =
 
 	return this._$create === create;
 };
-
+*/
 
 /*
 | Changes the creation.
 */
+/*
 Bridge.prototype.changeCreate =
 	function( create )
 {
@@ -223,7 +225,7 @@ Bridge.prototype.changeCreate =
 
 	shell.$board.getPanel( 'MainDisc' ).poke();
 };
-
+*/
 
 /*
 | Returns the current action.
@@ -238,10 +240,13 @@ Bridge.prototype.action =
 /*
 | Creates an action.
 */
-Bridge.prototype.startAction = function( )
+Bridge.prototype.startAction =
+	function( )
 {
 	if( this._$action )
-		{ throw new Error( 'double action' ); }
+	{
+		throw new Error( 'double action' );
+	}
 
 	return this._$action = new Action( arguments );
 
@@ -251,10 +256,13 @@ Bridge.prototype.startAction = function( )
 /*
 | Ends an action.
 */
-Bridge.prototype.stopAction = function()
+Bridge.prototype.stopAction =
+	function( )
 {
 	if( !this._$action )
-		{ throw new Error( 'ending no action' ); }
+	{
+		throw new Error( 'ending no action' );
+	}
 
 	this._$action = null;
 

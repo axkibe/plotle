@@ -1,9 +1,7 @@
 /*
-|
 | A chat interface.
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
@@ -259,7 +257,11 @@ Chat.prototype.locateOffset = function( offset )
 */
 Chat.prototype.draw = function( fabric )
 {
-	fabric.drawImage( this._weave( ), this.pnw, 'source-atop' );
+	fabric.drawImage(
+		'image', this._weave( ),
+		'pnw', this.pnw,
+		'composite', 'source-atop'
+	);
 };
 
 

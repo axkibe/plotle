@@ -2,7 +2,6 @@
 | The creation disc.
 |
 | Authors: Axel Kittenberger
-|
 */
 
 /*
@@ -148,16 +147,16 @@ CreateDisc.prototype._weave =
 
 	var buttons = this.buttons;
 
+	var action = shell.bridge.action( );
+
 	for( var name in this.buttons )
 	{
 		var button = buttons[ name ];
 
 		button.draw(
 			fabric,
-			shell.bridge.inCreate(
-				this.getCreateOfButton( button.name )
-			),
-			this.$hover  === name
+			this.buttonMatchesAction( button.name, action ),
+			this.$hover === name
 		);
 	}
 
@@ -185,8 +184,42 @@ CreateDisc.prototype._weave =
 };
 
 /*
+| TODO
+*/
+CreateDisc.prototype.buttonMatchesAction =
+	function(
+		buttonName, action
+	)
+{
+	if( !action )
+	{
+		return false;
+	}
+
+	switch( buttonName )
+	{
+		case 'note' :
+			return action.type === 'CreateNote';
+
+		case 'label' :
+			return action.type === 'CreateLabel';
+
+		case 'relation' :
+			return action.type === 'CreateRelation';
+
+		case 'portal' :
+			return action.type === 'CreatePortal';
+
+		default :
+			throw new Error( 'unknown button:' + buttonName );
+	}
+};
+
+
+/*
 | Returns the create mode associated with a button
 */
+/*
 CreateDisc.prototype.getCreateOfButton =
 	function(
 		buttonName
@@ -210,6 +243,7 @@ CreateDisc.prototype.getCreateOfButton =
 			throw new Error( 'unknown button:' + buttonName );
 	}
 };
+*/
 
 /*
 | A button of the main disc has been pushed.
@@ -219,11 +253,53 @@ CreateDisc.prototype.pushButton =
 		buttonName
 	)
 {
-	shell.bridge.changeCreate(
-		this.getCreateOfButton(
-			buttonName
-		)
-	);
+	var action = shell.bridge.action( );
+
+	if ( this.buttonMatchesAction( buttonName, action ) )
+	{
+		return;
+	}
+
+	shell.redraw = true;
+
+	if ( action ) {
+		shell.bridge.stopAction( );
+	}
+
+	switch( buttonName )
+	{
+		case 'note' :
+			shell.bridge.startAction(
+				'CreateNote',
+				'space'
+			);
+			return;
+
+		case 'label' :
+			shell.bridge.startAction(
+				'CreateLabel',
+				'space'
+			);
+			return;
+
+		case 'relation' :
+			shell.bridge.startAction(
+				'CreateRelation',
+				'space'
+			);
+			return;
+
+		case 'portal' :
+			shell.bridge.startAction(
+				'CreatePortal',
+				'space'
+			);
+			return;
+
+		default :
+			throw new Error( 'unknown button:' + buttonName );
+	}
+
 };
 
 
@@ -236,9 +312,9 @@ CreateDisc.prototype.draw =
 	)
 {
 	fabric.drawImage(
-		this._weave( ),
-		0,
-		Jools.half( this.screensize.y - this.height )
+		'image', this._weave( ),
+		'x', 0,
+		'y', Jools.half( this.screensize.y - this.height )
 	);
 };
 

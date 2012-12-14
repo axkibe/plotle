@@ -1,9 +1,7 @@
 /*
-|
 | A panel of the dashboard.
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
@@ -202,7 +200,10 @@ Panel.prototype._weave = function( )
 */
 Panel.prototype.draw = function( fabric )
 {
-	fabric.drawImage( this._weave( ), this.pnw );
+	fabric.drawImage(
+		'image', this._weave( ),
+		'pnw', this.pnw
+	);
 };
 
 
