@@ -605,16 +605,28 @@ System.prototype._onMouseDown =
 						this._onAtweenTimeCatcher
 					)
 				};
+
 			break;
 
 		case 'drag' :
 
+			this.shell.dragStart(
+				p,
+				shift,
+				ctrl
+			);
+
 			this._captureEvents( );
+
 			break;
 
 	}
 
-	var cursor = this.shell.pointingHover( p, shift, ctrl );
+	var cursor = this.shell.pointingHover(
+		p,
+		shift,
+		ctrl
+	);
 
 	if( cursor !== null )
 		{ canvas.style.cursor = cursor; }
@@ -651,7 +663,9 @@ System.prototype._onMouseMove =
 			break;
 
 		case 'atween':
+
 			var dragbox = this.settings.dragbox;
+
 			var atween  = this._$atween;
 
 			if(
@@ -661,7 +675,9 @@ System.prototype._onMouseMove =
 			{
 				// moved out of dragbox -> start dragging
 				clearTimeout( atween.timer );
+
 				this._$atween = null;
+
 				this._$pointingState = 'drag';
 
 				this.shell.dragStart(
@@ -686,6 +702,7 @@ System.prototype._onMouseMove =
 			break;
 
 		case 'drag':
+
 			cursor =
 				this.shell.dragMove(
 					p,
@@ -858,6 +875,7 @@ System.prototype._onTouchStart =
 	switch( this._$pointingState )
 	{
 		case 'atween' :
+
 			this._$atween =
 			{
 				pos   : p,
@@ -872,7 +890,9 @@ System.prototype._onTouchStart =
 			break;
 
 		case 'drag' :
+
 			this._captureEvents( );
+
 			break;
 	}
 

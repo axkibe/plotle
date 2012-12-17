@@ -98,6 +98,13 @@ var actionList =
 
 
 			/*
+			| Creating a new relation
+			*/
+			'CreateRelation' :
+				true,
+
+
+			/*
 			| Creating a new portal
 			*/
 			'CreatePortal' :

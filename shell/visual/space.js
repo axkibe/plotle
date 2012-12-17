@@ -481,11 +481,10 @@ Space.prototype.pointingHover =
 		{
 			cursor = cu;
 
-			if(
-				action &&
-				action.type === 'Remove'
-			)
-			{
+			switch( action && action.type ) {
+
+			case 'Remove' :
+
 				if(
 					!item.path.equals( action.removeItemPath )
 				)
@@ -494,12 +493,20 @@ Space.prototype.pointingHover =
 
 					shell.redraw = true;
 				}
-			}
+				break;
 
-			if( shell.bridge.inMode( 'Create' ) )
-			{
-				//var action = shell.bridge.action( );
-				//action.fromItemPath =
+			case 'CreateRelation' :
+
+				if(
+					!action.hadSelect &&
+					!item.path.equals( action.fromItemPath )
+				)
+				{
+					action.fromItemPath = item.path;
+
+					shell.redraw = true;
+				}
+				break;
 			}
 		}
 	}
@@ -531,50 +538,97 @@ Space.prototype.dragStart =
 	)
 {
 	var view  = this.$view;
+
 	var focus = this.focusedItem( );
 
 	// see if the itemmenu of the focus was targeted
 	if(
 		this.access == 'rw' &&
-		focus &&
-		focus.withinCtrlArea( view, p )
+		focus
 	)
 	{
-		var dp = view.depoint(p);
+		var dp;
 
-		shell.bridge.startAction(
-			'RelBind',
-			'space',
-			'itemPath', focus.path,
-			'start',    dp,
-			'move',     dp
-		);
+		if(
+			focus.withinCtrlArea( view, p )
+		)
+		{
+			dp = view.depoint(p);
 
-		shell.redraw = true;
-		return;
+			shell.bridge.startAction(
+				'RelBind',
+				'space',
+				'itemPath', focus.path,
+				'start',    dp,
+				'move',     dp
+			);
+
+			shell.redraw = true;
+
+			return;
+		}
+
+		var com =
+			focus.checkHandles(
+				view,
+				p
+			);
+
+		if( com )
+		{
+			// resizing
+			dp = view.depoint(p);
+
+			action = shell.bridge.startAction(
+				'ItemResize',
+				'space',
+				'itemPath',  focus.path,
+				'start',     dp,
+				'move',      dp,
+				'align',     com,
+				'startZone', focus.getZone( )
+			);
+
+			return;
+		}
 	}
 
+	var action = shell.bridge.action( );
 
-	if( shell.bridge.inMode( 'Create' ) )
-	{
-		var action = shell.bridge.action( );
+	switch( action && action.type ) {
 
-		switch( action && action.type ) {
+	case 'CreateLabel' :
+	case 'CreateNote' :
+	case 'CreatePortal' :
 
-		case 'CreateLabel' :
-		case 'CreateNote' :
-		case 'CreatePortal' :
+		action.start = p;
+		return;
+
+	case 'CreateRelation' :
+
+		return;
+
+	case 'Remove' :
+
+		if( !action.removeItemPath )
+		{
+			// starts a dragging operation instead
+			// while removing
 
 			action.start = p;
-			return;
 
-		case 'Remove' :
-			return;
-
-		default :
-			// ignore and go on
-			break;
+			action.pan = view.pan;
 		}
+
+		// otherwise starts a true remove operation
+		// itemRemovePath is already set by Hover
+
+		return;
+
+	default :
+
+		// ignore and go on
+		break;
 	}
 
 	// normal mode
@@ -793,18 +847,22 @@ Space.prototype.dragStop =
 
 			var focus = this.focusedItem( );
 
-			if(
-				focus &&
-				action.removeItemPath.equals( focus.path )
-			)
+			if( action.removeItemPath )
+			{
+				if(
+					focus &&
+					action.removeItemPath.equals( focus.path )
+				)
+				{
+					shell.dropFocus( );
+				}
 
-			shell.dropFocus( );
+				shell.peer.removeItem(
+					action.removeItemPath
+				);
 
-			shell.peer.removeItem(
-				action.removeItemPath
-			);
-
-			action.removeItemPath = null;
+				action.removeItemPath = null;
+			}
 
 			break;
 
@@ -833,15 +891,13 @@ Space.prototype.dragMove =
 	var action =
 		shell.bridge.action( );
 
-	var item;
+	var item, pd;
 
 	switch( action.type )
 	{
 		case 'CreateNote' :
 		case 'CreateLabel' :
 		case 'CreatePortal' :
-
-		case 'DragMove' :
 
 			action.move = p;
 
@@ -851,11 +907,25 @@ Space.prototype.dragMove =
 
 		case 'Remove' :
 
+			if( !action.removeItemPath )
+			{
+				// dragging while removing
+
+				pd = p.sub( action.start );
+
+				this.$view = view = new Euclid.View(
+					action.pan.add( pd.x / view.zoom, pd.y / view.zoom ),
+					view.fact
+				);
+
+				shell.redraw = true;
+			}
+
 			return 'pointer';
 
 		case 'Pan' :
 
-			var pd = p.sub( action.start );
+			pd = p.sub( action.start );
 
 			this.$view = view = new Euclid.View(
 				action.pan.add( pd.x / view.zoom, pd.y / view.zoom ),
@@ -1004,26 +1074,23 @@ Space.prototype.pointingStart =
 
 	if( this.access == 'ro' )
 	{
-		this.dragStart(
-			p,
-			shift,
-			ctrl
-		);
-
 		return 'drag';
 	}
 
 	var action = shell.bridge.action( );
 
-	// starts a drag operation on deletion
-	// so the item gets removed on
-	// mouse/finger up
-	if(
-		action &&
-		action.type === 'Remove' &&
-		action.removeItemPath
-	)
-	{
+	switch( action && action.type ) {
+
+	case 'Remove' :
+		// starts a drag operation on deletion
+		// so the item gets removed on
+		// mouse/finger up
+		return 'drag';
+
+	case 'CreateRelation' :
+
+		action.hadSelect = true;
+
 		return 'drag';
 	}
 
@@ -1033,25 +1100,18 @@ Space.prototype.pointingStart =
 	if( focus )
 	{
 		if( focus.withinCtrlArea( view, p ) )
-			{ return 'atween'; }
+		{
+			return 'atween';
+		}
 
-		var com = focus.checkHandles( view, p );
+		var com =
+			focus.checkHandles(
+				view,
+				p
+			);
 
 		if( com )
 		{
-			// resizing
-			var dp = view.depoint(p);
-
-			action = shell.bridge.startAction(
-				'ItemResize',
-				'space',
-				'itemPath',  focus.path,
-				'start',     dp,
-				'move',      dp,
-				'align',     com,
-				'startZone', focus.getZone( )
-			);
-
 			return 'drag';
 		}
 	}
