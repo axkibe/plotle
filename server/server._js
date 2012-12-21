@@ -468,7 +468,6 @@ Server.prototype.prepareResources = function(_)
 		'shell/dash/switchpanel.js',                       'fb',
 		'shell/dash/board.js',                             'fb',
 		'shell/action.js',                                 'fb',
-		'shell/ellipse-menu.js',                           'fb',
 		'shell/visual/base.js',                            'fb',
 		'shell/visual/para.js',                            'fb',
 		'shell/visual/scrollbar.js',                       'fb',

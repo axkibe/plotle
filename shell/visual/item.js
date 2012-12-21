@@ -104,64 +104,6 @@ Item.prototype.menuSelect =
 
 
 /*
-| Returns if point is within the item menu
-*/
-Item.prototype.withinCtrlArea =
-	function(
-		view,
-		p
-	)
-{
-	var cf = this.getCtrlFix( );
-
-	// FIXME fast check on rectangle
-
-	if(
-		!cf.area.within(
-			cf.fixView( view ),
-			p
-		)
-	)
-	{
-		return false;
-	}
-
-	return !(
-		this.getSilhoutte(
-			this.getZone()
-		).within(
-			view,
-			p
-		)
-	);
-};
-
-
-/*
-| Returns the control menu for this item.
-*/
-Item.prototype.getMenu =
-	function(
-		view
-	)
-{
-	var labels =
-		{
-			n : 'Remove'
-		};
-
-	var cf = this.getCtrlFix( );
-
-	return new EllipseMenu(
-		system.fabric,
-		cf.fixView( view ).point( cf.area.pc ),
-		theme.ellipseMenu,
-		labels,
-		this
-	);
-};
-
-/*
 | Returns the compass direction of the handle if p is on a resizer handle.
 */
 Item.prototype.checkHandles =
@@ -379,16 +321,6 @@ Item.prototype.drawHandles =
 		this,
 		'sketchAllHandles',
 		view
-	);
-
-	// draws item menu handler
-	var cf = this.getCtrlFix();
-
-	fabric.paint(
-		theme.ellipseMenu.slice,
-		cf.area,
-		'sketch',
-		cf.fixView( view )
 	);
 
 	fabric.deClip( );

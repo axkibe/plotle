@@ -470,18 +470,11 @@ Space.prototype.pointingHover =
 
 	if( focus )
 	{
-		if( focus.withinCtrlArea( view, p ) )
-		{
-			cursor = 'default';
-		}
-		else
-		{
-			var com = focus.checkHandles( view, p );
+		var com = focus.checkHandles( view, p );
 
-			if( com )
-			{
-				cursor = com + '-resize';
-			}
+		if( com )
+		{
+			cursor = com + '-resize';
 		}
 	}
 
@@ -706,15 +699,6 @@ Space.prototype.click =
 	// clicked the tab of the focused item?
 	var focus = this.focusedItem( );
 
-	if(
-		focus &&
-		focus.withinCtrlArea( view, p )
-	)
-	{
-		shell.setMenu( focus.getMenu( view ) );
-		return;
-	}
-
 	// clicked some item?
 	for( var a = 0, aZ = this.twig.length; a < aZ; a++ )
 	{
@@ -732,19 +716,10 @@ Space.prototype.click =
 		}
 	}
 
-	// otherwhise pop up the float menu
-	shell.setMenu(
-		new EllipseMenu(
-			system.fabric,
-			p,
-			theme.ellipseMenu,
-			this._floatMenuLabels,
-			self
-		)
-	);
-
 	shell.dropFocus( );
+
 	shell.redraw = true;
+
 	return true;
 };
 
@@ -1129,9 +1104,9 @@ Space.prototype.menuSelect =
 */
 Space.prototype.pointingStart =
 	function(
-		p,
-		shift,
-		ctrl
+		p
+		// shift,
+		// ctrl
 	)
 {
 	var view   = this.$view;
@@ -1171,11 +1146,6 @@ Space.prototype.pointingStart =
 
 	if( focus )
 	{
-		if( focus.withinCtrlArea( view, p ) )
-		{
-			return 'atween';
-		}
-
 		var com =
 			focus.checkHandles(
 				view,

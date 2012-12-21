@@ -76,8 +76,6 @@ Shell = function( fabric )
 
 	this.bridge = new Bridge();
 
-	this._$menu  = null;
-
 	this.selection = new Range( );
 
 	// true at greenscreen frowny
@@ -389,11 +387,6 @@ Shell.prototype.knock =
 
 	this.$board.knock( );
 
-	if( this._$menu )
-	{
-		this._$menu.knock( );
-	}
-
 	this._draw( );
 };
 
@@ -419,22 +412,6 @@ Shell.prototype.sketchFrowny =
 
 	fabric.moveTo( pos.x + 100, pos.y - 130 );
 	fabric.lineTo( pos.x +  50, pos.y - 140 );
-};
-
-
-/*
-| Sets the current popup menu.
-*/
-Shell.prototype.setMenu = function( menu )
-{
-	if( this._$menu )
-	{
-		this._$menu.cancel( );
-	}
-
-	this._$menu = menu;
-
-	this.redraw = true;
 };
 
 
@@ -497,11 +474,6 @@ Shell.prototype._draw = function( )
 	}
 
 	this.$board.draw( );
-
-	if( this._$menu )
-	{
-		this._$menu.draw( Euclid.View.proper );
-	}
 
 	this.$caret.display( );
 
@@ -567,17 +539,6 @@ Shell.prototype.pointingHover =
 		ctrl;
 
 	var cursor = null;
-
-	if( this._$menu )
-	{
-		cursor =
-			this._$menu.pointingHover(
-				Euclid.View.proper,
-				p,
-				shift,
-				ctrl
-			);
-	}
 
 
 	if( cursor )
@@ -669,17 +630,6 @@ Shell.prototype.pointingStart =
 	}
 
 	var pointingState = null;
-
-	if( this._$menu )
-	{
-		pointingState =
-			this._$menu.pointingStart(
-				Euclid.View.proper,
-				p,
-				shift,
-				ctrl
-			);
-	}
 
 	if( pointingState === null )
 	{

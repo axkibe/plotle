@@ -583,44 +583,6 @@ Portal.prototype.getZone =
 	}
 };
 
-/*
-| Returns the ctrl area.
-*/
-Portal.prototype.getCtrlFix =
-	function( )
-{
-	var zone = this.getZone( );
-	var pn   = zone.pn;
-	var tca  = theme.portal.ctrlArea;
-
-	var ctrlArea = this._$ctrlArea;
-
-	if( ctrlArea &&
-		ctrlArea.area.pnw.x == pn.x + tca.x &&
-		ctrlArea.area.pnw.y == pn.y + tca.y )
-	{
-		return ctrlArea;
-	}
-
-	var dim = theme.ellipseMenu.dimensions;
-
-	return this._$ctrlArea = new Euclid.Fix(
-		new Euclid.Ellipse(
-			pn.add(
-				tca.x,
-				tca.y
-			),
-			pn.add(
-				tca.x + 2 * dim.a1,
-				tca.y + 2 * dim.b1
-			)
-		),
-		pn.add(
-			tca.joint.x,
-			tca.joint.y
-		) // FIXME
-	);
-};
 
 /*
 | Returns the fabric for the input field.

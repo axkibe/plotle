@@ -100,24 +100,6 @@ theme =
 		newHeight :
 			150,
 
-		ctrlArea :
-		{
-			x :
-				6,
-
-			y :
-				-22,
-
-			joint : // FIXME make Point object
-			{
-				x :
-					0,
-
-				y :
-					0
-			}
-		},
-
 		innerMargin  :
 		{
 			n :
@@ -206,24 +188,6 @@ theme =
 		newHeight :
 			50,
 
-		ctrlArea :
-		{
-			x :
-				-66,
-
-			y :
-				-24,
-
-			joint : // FIXME make Point object
-			{
-				x :
-					0,
-
-				y :
-					0
-			}
-		},
-
 		style :
 		{
 			fill :
@@ -267,18 +231,6 @@ theme =
 	label :
 	{
 		minSize :  8,
-
-		ctrlArea :
-		{
-			x  :   6,
-			y  : -22,
-
-			joint : // FIXME make Point object
-			{
-				x : 0,
-				y : 0
-			}
-		},
 
 		style :
 		{
