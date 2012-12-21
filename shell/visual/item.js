@@ -490,6 +490,26 @@ Item.prototype.dragMove =
 
 	switch( action.type )
 	{
+		case 'CreateRelation' :
+
+			if(
+				!this.getZone( ).within(
+					view,
+					p
+				)
+			)
+			{
+				return false;
+			}
+
+			action.move = p;
+
+			action.toItemPath = this.path;
+
+			shell.redraw = true;
+
+			return true;
+
 		case 'RelBind' :
 
 			if(
@@ -564,7 +584,7 @@ Item.prototype.dragStop =
 
 	switch( action.type )
 	{
-		case 'RelBind' :
+		case 'CreateRelation' :
 
 			if(
 				!this.getZone().within(
@@ -577,11 +597,13 @@ Item.prototype.dragStop =
 			}
 
 			var space = shell.$space;
+
 			Visual.Relation.create(
 				space,
-				space.getSub( action.itemPath ),
+				space.getSub( action.fromItemPath ),
 				this
 			);
+
 			shell.redraw = true;
 
 			return true;

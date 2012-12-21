@@ -27,8 +27,10 @@ var Jools;
 ( function( ) {
 'use strict';
 
-if ( typeof( window ) === 'undefined' )
-	{ throw new Error( 'this code needs a browser' ); }
+if( typeof( window ) === 'undefined' )
+{
+	throw new Error( 'this code needs a browser' );
+}
 
 /*
 | Constructor.
@@ -103,7 +105,7 @@ Shape.prototype.sketch =
 
 		}
 
-		if( pn === 'close')
+		if( pn === 'close' )
 		{
 			pn = pstart;
 			pstart = null;
@@ -125,6 +127,7 @@ Shape.prototype.sketch =
 		{
 
 			case 'bezier' :
+
 				dx = pn.x - pp.x;
 				dy = pn.y - pp.y;
 
@@ -137,15 +140,19 @@ Shape.prototype.sketch =
 				);
 
 				h += 6;
+
 				break;
 
 			case 'line' :
+
 				fabric.lineTo( pn );
 
 				h += 2;
+
 				break;
 
 			case 'round' :
+
 				dx = pn.x - pp.x;
 				dy = pn.y - pp.y;
 
@@ -163,6 +170,7 @@ Shape.prototype.sketch =
 							dxy > 0 ? - magic * dy : 0,
 							pn
 						);
+
 						break;
 
 					default :
@@ -171,6 +179,7 @@ Shape.prototype.sketch =
 				}
 
 				h += 3;
+
 				break;
 
 			default :
@@ -197,11 +206,15 @@ Shape.prototype.getProjection =
 	)
 {
 	var hull = this.hull;
+
 	var h    = 0;
+
 	var hZ   = hull.length;
 
 	if( hull[ h++ ] !== 'start' )
-		{ throw new Error( 'hull must have start at [0]' ); }
+	{
+		throw new Error( 'hull must have start at [0]' );
+	}
 
 	var pstart = hull [ h++ ] ;
 	var pc     = this.pc;
@@ -221,15 +234,21 @@ Shape.prototype.getProjection =
 		{
 
 			case 'bezier' :
+
 				pn = hull[ h + 5 ];
+
 				break;
 
 			case 'line' :
+
 				pn = hull[ h + 1 ];
+
 				break;
 
 			case 'round' :
+
 				pn = hull[ h + 2 ];
+
 				break;
 
 			default :
@@ -311,11 +330,17 @@ Shape.prototype.getProjection =
 				if( p.x === cx )
 				{
 					if( p.y > cy )
-						{ return new Euclid.Point( cx, cy + b ); }
+					{
+						return new Euclid.Point( cx, cy + b );
+					}
 					else if( p.y < cy )
-						{ return new Euclid.Point( cx, cy - b ); }
+					{
+						return new Euclid.Point( cx, cy - b );
+					}
 					else
-						{ return new Euclid.Point( cx, cy ); }
+					{
+						return new Euclid.Point( cx, cy );
+					}
 				}
 				else if(
 					( ( p.x >= cx && dy > 0 ) || ( p.x <= cx && dy < 0 ) ) &&
@@ -388,4 +413,4 @@ Shape.prototype.getProjection =
 };
 
 
-} )( );
+})( );

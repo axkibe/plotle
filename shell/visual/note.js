@@ -181,10 +181,11 @@ Note.prototype.handles = Note.s_handles;
 /*
 | Returns the notes silhoutte.
 |
-| zone :  the cache for the items zone
 */
 Note.prototype.getSilhoutte =
-	function( zone )
+	function(
+		zone //  the cache for the items zone
+	)
 {
 	var s  = this._$silhoutte;
 

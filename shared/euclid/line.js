@@ -54,22 +54,50 @@ var Line = Euclid.Line = function(p1, p1end, p2, p2end)
 
 /*
 | Returns the line connecting entity1 to entity2
-|
-| shape1: a Rect or Point
-| end1: 'normal' or 'arrow'
-| shape2: a Rect or Point
-| end2: 'normal' or 'arrow'
 */
-Line.connect = function( shape1, end1, shape2, end2 )
+Line.connect =
+	function(
+		shape1,  // a Rect or Point
+		end1,    // 'normal' or 'arrow'
+		shape2,  // shape2: a Rect or Point
+		end2     // 'normal' or 'arrow'
+	)
 {
 	if( !shape1 || !shape2 )
-		{ throw new Error( 'error' ); }
+	{
+		throw new Error( 'Line.connect() missing shape1 or shape2' );
+	}
 
-	// gets the center points
-	var pc1 = shape1 instanceof Euclid.Point ? shape1 : shape1.pc;
-	var pc2 = shape2 instanceof Euclid.Point ? shape2 : shape2.pc;
+	// the center points
+
+	var pc1, pc2;
+
+	if( shape1 instanceof Euclid.Point )
+	{
+		pc1 = shape1;
+	}
+	else
+	{
+		pc1 = shape1.pc;
+
+	}
+
+	if( shape2 instanceof Euclid.Point )
+	{
+		pc2 = shape2;
+	}
+	else
+	{
+		pc2 = shape2.pc;
+
+	}
+
+	// the projection points
 
 	var p1, p2;
+
+	//console.log( 'WITHIN1', shape1.within( Euclid.View.proper, pc2 ) );
+	//console.log( 'WITHIN2', shape1.within( Euclid.View.proper, pc2 ) );
 
 	if( shape1 instanceof Euclid.Point )
 	{
@@ -77,7 +105,7 @@ Line.connect = function( shape1, end1, shape2, end2 )
 	}
 	else if( shape1.within( Euclid.View.proper, pc2 ) )
 	{
-		p1 = shape1.pc;
+		p1 = pc1;
 	}
 	else
 	{
@@ -90,14 +118,19 @@ Line.connect = function( shape1, end1, shape2, end2 )
 	}
 	else if( shape2.within( Euclid.View.proper, pc1 ) )
 	{
-		p2 = shape2.pc;
+		p2 = pc2;
 	}
 	else
 	{
 		p2 = shape2.getProjection( pc1 );
 	}
 
-	return new Line( p1, end1, p2, end2 );
+	return new Line(
+		p1,
+		end1,
+		p2,
+		end2
+	);
 };
 
 
@@ -138,55 +171,72 @@ Jools.lazyFixate(
 );
 
 
-/**
-| Draws the sketch of the line.
-|
-| fabric: Fabric to draw upon.
-| border: pixel offset for fancy borders (unused)
-| twist:  0.5 if drawing lines
+/*
+| Sketches the line.
 */
-Line.prototype.sketch = function(fabric, border, twist, view)
+Line.prototype.sketch =
+	function(
+		fabric,
+		border,
+		twist,
+		view
+	)
 {
-	var p1x = view.x(this.p1);
-	var p1y = view.y(this.p1);
-	var p2x = view.x(this.p2);
-	var p2y = view.y(this.p2);
+	var p1x = view.x( this.p1 );
+	var p1y = view.y( this.p1 );
+	var p2x = view.x( this.p2 );
+	var p2y = view.y( this.p2 );
 
 	// @@, multiple line end types
-	switch(this.p1end) {
+	switch(this.p1end)
+	{
 		case 'normal':
-			if (twist)
-				{ fabric.moveTo(p1x, p1y); }
+			if( twist )
+			{
+				fabric.moveTo( p1x, p1y );
+			}
 			break;
 
 		default :
 			throw new Error('unknown line end');
 	}
 
-	switch(this.p2end) {
+	switch(this.p2end)
+	{
 		case 'normal' :
-			if (twist)
-				{ fabric.lineTo(p2x, p2y);}
+
+			if( twist )
+			{
+				fabric.lineTo( p2x, p2y );
+			}
 			break;
 
 		case 'arrow' :
+
 			var cos = Math.cos;
 			var sin = Math.sin;
 			var ro  = Math.round;
 
 			// arrow size
 			var as = 12;
+
 			// degree of arrow tail
 			var d = Math.atan2(p2y - p1y, p2x - p1x);
+
 			// degree of arrow head
 			var ad = Math.PI/12;
+
 			// arrow span, the arrow is formed as hexagon piece
 			var ms = 2 / Math.sqrt(3) * as;
 
 			if (twist)
-				{ fabric.lineTo(p2x - ro(ms * cos(d)), p2y - ro(ms * sin(d))); }
+			{
+				fabric.lineTo(p2x - ro(ms * cos(d)), p2y - ro(ms * sin(d)));
+			}
 			else
-				{ fabric.moveTo(p2x - ro(ms * cos(d)), p2y - ro(ms * sin(d))); }
+			{
+				fabric.moveTo(p2x - ro(ms * cos(d)), p2y - ro(ms * sin(d)));
+			}
 
 			fabric.lineTo(p2x - ro(as * cos(d - ad)), p2y - ro(as * sin(d - ad)));
 			fabric.lineTo(p2x, p2y);
@@ -203,13 +253,25 @@ Line.prototype.sketch = function(fabric, border, twist, view)
 /*
 | Draws the line.
 */
-Line.prototype.draw = function(fabric, view, style)
+Line.prototype.draw =
+	function(
+		fabric,
+		view,
+		style
+	)
 {
-	if (!style)
-		{ throw new Error('Line.draw misses style'); }
+	if( !style )
+	{
+		throw new Error('Line.draw misses style');
+	}
 
-	fabric.paint(style, this, 'sketch', view);
+	fabric.paint(
+		style,
+		this,
+		'sketch',
+		view
+	);
 };
 
 
-} ) ();
+} )( );

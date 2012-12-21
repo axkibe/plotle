@@ -183,51 +183,6 @@ Bridge.prototype.changeMode =
 
 
 /*
-| Returns the current creation.
-*/
-/*
-Bridge.prototype.create =
-	function( )
-{
-	return this._$create;
-};
-*/
-
-/*
-| Returns true if creating 'crate'.
-*/
-/*
-Bridge.prototype.inCreate =
-	function( create )
-{
-	if( !creates[ create ] && create !== null )
-	{
-		throw new Error( 'invalid create : ' + create );
-	}
-
-	return this._$create === create;
-};
-*/
-
-/*
-| Changes the creation.
-*/
-/*
-Bridge.prototype.changeCreate =
-	function( create )
-{
-	if( !creates[ create ] && create !== null )
-	{
-		throw new Error( 'invalid create : ' + create );
-	}
-
-	this._$create = create;
-
-	shell.$board.getPanel( 'MainDisc' ).poke();
-};
-*/
-
-/*
 | Returns the current action.
 */
 Bridge.prototype.action =

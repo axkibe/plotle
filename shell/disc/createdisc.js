@@ -285,7 +285,8 @@ CreateDisc.prototype.pushButton =
 		case 'relation' :
 			shell.bridge.startAction(
 				'CreateRelation',
-				'space'
+				'space',
+				'relationState', 'start'
 			);
 			return;
 

@@ -1,5 +1,4 @@
 /*
-|
 | A rectangle with rounded corners.
 |
 | RoundRects are immutable objects.
@@ -131,7 +130,11 @@ RoundRect.prototype.eq = function( r )
 | returns true if point p is within the round-rect
 | TODO put into Shape
 */
-RoundRect.prototype.within = function( view, p )
+RoundRect.prototype.within =
+	function(
+		view,
+		p
+	)
 {
 	return Euclid.swatch.withinSketch(
 		this,

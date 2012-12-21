@@ -26,21 +26,26 @@ if (typeof(window) === 'undefined')
 /*
 | Singleton
 */
-var Measure = Euclid.Measure = {
+var Measure = Euclid.Measure =
+{
 
 	/*
 	| Initialize is called once by shell
 	*/
-	init : function()
+	init :
+		function( )
 	{
-		if (Measure._$cs)
-			{ throw new Error('Measure already initialized'); }
+		if( Measure._$cs )
+		{
+			throw new Error( 'Measure already initialized' );
+		}
 
-		var canvas = document.createElement('canvas');
+		var canvas = document.createElement( 'canvas' );
+
 		// TODO make own obejct
-		Euclid.swatch = new Euclid.Fabric(canvas);
+		Euclid.swatch = new Euclid.Fabric( canvas );
 
-		Measure._$cx     = canvas.getContext('2d');
+		Measure._$cx     = canvas.getContext( '2d' );
 		Measure._$size   = null;
 		Measure._$family = null;
 	},
@@ -49,21 +54,29 @@ var Measure = Euclid.Measure = {
 	/*
 	| Returns the width of text with the specified font.
 	*/
-	width : function(font, text)
+	width :
+		function(
+			font,
+			text
+		)
 	{
 		var cx   = Measure._$cx;
 
-		if (Measure._$size   !== font.size ||
-			Measure._$family !== font.family)
+		if(
+			Measure._$size !== font.size ||
+			Measure._$family !== font.family
+		)
 		{
-			Measure._$size   = font.size;
+			Measure._$size = font.size;
+
 			Measure._$family = font.family;
-			cx.font = font.getCSS();
+
+			cx.font = font.getCSS( );
 		}
 
-		return cx.measureText(text).width;
+		return cx.measureText( text ).width;
 	}
 };
 
 
-} ) ();
+})( );

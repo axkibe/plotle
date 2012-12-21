@@ -935,10 +935,9 @@ Fabric.prototype._setFont =
 };
 
 
-/**
-| Returns true is a point is in a sketch.
+/*
+| Returns true if a point is in a sketch.
 |
-| Point is either:
 | Euclid.Point -or-
 | x / y
 */
@@ -970,24 +969,31 @@ Fabric.prototype.withinSketch =
 		pobj = false;
 	}
 
-	if( typeof( px ) !== 'number' ||
+	if(
+		typeof( px ) !== 'number' ||
 		typeof( py ) !== 'number'
 	)
 	{
 		throw new Error( 'px|py not a number ' + px + ' ' + py );
 	}
 
+	/*
 	var tw = this._twist;
 
 	px += tw;
 	py += tw;
+	*/
 
 	this._begin( true );
 
 	if( pobj )
-		{ shape[ sketch ]( this, 0, true, view, a2, a3, a4 ); }
+	{
+		shape[ sketch ]( this, 0, true, view, a2, a3, a4 );
+	}
 	else
-		{ shape[ sketch ]( this, 0, true, view, a3, a4, a5 ); }
+	{
+		shape[ sketch ]( this, 0, true, view, a3, a4, a5 );
+	}
 
 	return this._cx.isPointInPath( px, py );
 };

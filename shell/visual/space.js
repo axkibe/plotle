@@ -217,47 +217,6 @@ Space.prototype.draw =
 
 	switch( action && action.type )
 	{
-		case 'RelBind' :
-
-			var av  = this.getSub(
-				action.itemPath,
-				'Item'
-			);
-
-			var av2 = action.item2Path ?
-				this.getSub(
-					action.item2Path,
-					'Item'
-				) :
-				null;
-
-			var target = av2 ?
-				av2.getSilhoutte( av2.getZone( ) ) :
-				view.depoint( action.move );
-
-			var arrow  = Euclid.Line.connect(
-				av.getSilhoutte( av.getZone( ) ),
-				'normal',
-				target,
-				'arrow'
-			);
-
-			if( av2 )
-			{
-				av2.highlight(
-					this.fabric,
-					view
-				);
-			}
-
-			arrow.draw(
-				this.fabric,
-				view,
-				theme.relation.style
-			);
-
-			break;
-
 		case 'CreateLabel' :
 
 			if( action.start && action.move )
@@ -317,16 +276,76 @@ Space.prototype.draw =
 
 			if( action.fromItemPath )
 			{
-				var itemFrom = this.getSub(
+				var fromItem = this.getSub(
 					action.fromItemPath,
 					'Item'
 				);
 
-				itemFrom.highlight(
+				fromItem.highlight(
 					this.fabric,
 					view
 				);
+
+				var toItem = null;
+
+				if( action.toItemPath )
+				{
+					toItem =
+						this.getSub(
+							action.toItemPath,
+							'Item'
+						);
+
+					toItem.highlight(
+						this.fabric,
+						view
+					);
+				}
+
+				var fromSilhoutte =
+					fromItem.getSilhoutte(
+						fromItem.getZone( )
+					);
+
+				var toSilhoutte;
+
+				if(
+					action.toItemPath &&
+					!action.toItemPath.equals( action.fromItemPath )
+				)
+				{
+					// arrow connects two items
+					toSilhoutte =
+						toItem.getSilhoutte(
+							toItem.getZone( )
+						);
+				}
+				else if ( action.relationState === 'hadSelect' )
+				{
+					// arrow points into nowhere
+					toSilhoutte =
+						view.depoint( action.move );
+				}
+
+				if( toSilhoutte )
+				{
+					var arrow =
+						Euclid.Line.connect(
+							fromSilhoutte,
+							'normal',
+							toSilhoutte,
+							'arrow'
+						);
+
+					arrow.draw(
+						this.fabric,
+						view,
+						theme.relation.style
+					);
+				}
 			}
+
+			break;
 
 			//var av2 = action.item2Path ?
 			//	this.getSub(
@@ -359,8 +378,6 @@ Space.prototype.draw =
 			//	view,
 			//	theme.relation.style
 			//);
-
-			break;
 	}
 };
 
@@ -493,12 +510,13 @@ Space.prototype.pointingHover =
 
 					shell.redraw = true;
 				}
+
 				break;
 
 			case 'CreateRelation' :
 
 				if(
-					!action.hadSelect &&
+					action.relationState === 'start' &&
 					!item.path.equals( action.fromItemPath )
 				)
 				{
@@ -506,21 +524,38 @@ Space.prototype.pointingHover =
 
 					shell.redraw = true;
 				}
+
 				break;
 			}
 		}
 	}
 
-	if(
-		!cursor &&
-		action &&
-		action.type === 'Remove' &&
-		action.removeItemPath
-	)
+	if( !cursor )
 	{
-		action.removeItemPath = null;
+		switch( action && action.type )
+		{
+		case 'Remove' :
 
-		shell.redraw = true;
+			if( action.removeItemPath )
+			{
+				action.removeItemPath = null;
+
+				shell.redraw = true;
+			}
+
+			break;
+
+		case 'CreateRelation' :
+
+			if( action.fromItemPath )
+			{
+				action.fromItemPath = null;
+
+				shell.redraw = true;
+			}
+
+			break;
+		}
 	}
 
 	return cursor || 'pointer';
@@ -548,26 +583,6 @@ Space.prototype.dragStart =
 	)
 	{
 		var dp;
-
-		if(
-			focus.withinCtrlArea( view, p )
-		)
-		{
-			dp = view.depoint(p);
-
-			shell.bridge.startAction(
-				'RelBind',
-				'space',
-				'itemPath', focus.path,
-				'start',    dp,
-				'move',     dp
-			);
-
-			shell.redraw = true;
-
-			return;
-		}
-
 		var com =
 			focus.checkHandles(
 				view,
@@ -597,38 +612,49 @@ Space.prototype.dragStart =
 
 	switch( action && action.type ) {
 
-	case 'CreateLabel' :
-	case 'CreateNote' :
-	case 'CreatePortal' :
-
-		action.start = p;
-		return;
-
-	case 'CreateRelation' :
-
-		return;
-
-	case 'Remove' :
-
-		if( !action.removeItemPath )
-		{
-			// starts a dragging operation instead
-			// while removing
+		case 'CreateLabel' :
+		case 'CreateNote' :
+		case 'CreatePortal' :
 
 			action.start = p;
 
-			action.pan = view.pan;
-		}
+			return;
 
-		// otherwise starts a true remove operation
-		// itemRemovePath is already set by Hover
+		case 'CreateRelation' :
 
-		return;
+			if( action.relationState === 'pan' )
+			{
+				// starts a panning operation instead
+				// while creating a relation
 
-	default :
+				action.start = p;
 
-		// ignore and go on
-		break;
+				action.pan = view.pan;
+			}
+
+			return;
+
+		case 'Remove' :
+
+			if( !action.removeItemPath )
+			{
+				// starts a panning operation instead
+				// while removing
+
+				action.start = p;
+
+				action.pan = view.pan;
+			}
+
+			// otherwise starts a true remove operation
+			// itemRemovePath is already set by Hover
+
+			return;
+
+		default :
+
+			// ignore and go on
+			break;
 	}
 
 	// normal mode
@@ -758,7 +784,10 @@ Space.prototype.dragStop =
 
 			shell.redraw = true;
 
-			shell.bridge.stopAction( );
+			if( !ctrl )
+			{
+				shell.bridge.stopAction( );
+			}
 
 			break;
 
@@ -808,20 +837,29 @@ Space.prototype.dragStop =
 
 			break;
 
-		case 'RelBind' :
+		case 'CreateRelation' :
 
-			for( var r = 0, rZ = this.twig.length; r < rZ; r++ )
+			switch( action.relationState )
 			{
-				item = this.atRank( r );
-				if( item.dragStop( view, p ) )
-				{
+
+				case 'hadSelect' :
+
+					item = this.getSub( action.toItemPath );
+
+					item.dragStop( view, p );
+
+					shell.redraw = true;
+
+					shell.bridge.stopAction( );
+
 					break;
-				}
+
+				case 'pan' :
+
+					action.relationState = 'start';
+
+					break;
 			}
-
-			shell.redraw = true;
-
-			shell.bridge.stopAction( );
 
 			break;
 
@@ -864,6 +902,15 @@ Space.prototype.dragStop =
 				action.removeItemPath = null;
 			}
 
+			if( !ctrl )
+			{
+				shell.bridge.stopAction( );
+
+				shell.bridge.changeMode( 'Normal' );
+			}
+
+			shell.redraw = true;
+
 			break;
 
 		default :
@@ -905,6 +952,49 @@ Space.prototype.dragMove =
 
 			return 'pointer';
 
+		case 'CreateRelation' :
+
+			if( action.relationState === 'pan' )
+			{
+				// panning while creating a relation
+
+				pd = p.sub( action.start );
+
+				this.$view = view = new Euclid.View(
+					action.pan.add( pd.x / view.zoom, pd.y / view.zoom ),
+					view.fact
+				);
+
+				shell.redraw = true;
+
+				return 'pointer';
+			}
+
+
+			action.toItemPath = null;
+
+			action.move = p;
+
+			for( var r = 0, rZ = this.twig.length; r < rZ; r++ )
+			{
+				item = this.atRank( r );
+
+				if(
+					item.dragMove(
+						view,
+						p
+					)
+				)
+				{
+					return 'pointer';
+				}
+			}
+
+			shell.redraw = true;
+
+			return 'pointer';
+
+
 		case 'Remove' :
 
 			if( !action.removeItemPath )
@@ -933,31 +1023,6 @@ Space.prototype.dragMove =
 			);
 
 			shell.redraw = true;
-
-			return 'pointer';
-
-		case 'RelBind' :
-
-			action.item2Path = null;
-
-			action.move = p;
-
-			shell.redraw = true;
-
-			for( var r = 0, rZ = this.twig.length; r < rZ; r++ )
-			{
-				item = this.atRank( r );
-
-				if(
-					item.dragMove(
-						view,
-						p
-					)
-				)
-				{
-					return 'pointer';
-				}
-			}
 
 			return 'pointer';
 
@@ -1070,7 +1135,6 @@ Space.prototype.pointingStart =
 	)
 {
 	var view   = this.$view;
-	var action = shell.bridge.action( );
 
 	if( this.access == 'ro' )
 	{
@@ -1082,6 +1146,7 @@ Space.prototype.pointingStart =
 	switch( action && action.type ) {
 
 	case 'Remove' :
+
 		// starts a drag operation on deletion
 		// so the item gets removed on
 		// mouse/finger up
@@ -1089,7 +1154,14 @@ Space.prototype.pointingStart =
 
 	case 'CreateRelation' :
 
-		action.hadSelect = true;
+		if( action.fromItemPath )
+		{
+			action.relationState = 'hadSelect';
+		}
+		else
+		{
+			action.relationState = 'pan';
+		}
 
 		return 'drag';
 	}
