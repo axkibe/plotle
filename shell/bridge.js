@@ -62,6 +62,12 @@ var modes =
 		true,
 
 	/*
+	| Space view
+	*/
+	'Space' :
+		true,
+
+	/*
 	| Logging in
 	*/
 	'Login' :

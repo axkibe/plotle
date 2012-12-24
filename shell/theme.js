@@ -433,10 +433,11 @@ theme =
 				*/
 				remove :
 				{
-					pnw : new Euclid.Point(
-						28,
-						243
-					),
+					pnw :
+						new Euclid.Point(
+							28,
+							243
+						),
 
 					icon :
 					{
@@ -457,6 +458,35 @@ theme =
 					}
 				},
 
+				/*
+				| Space button on main disc
+				*/
+				space :
+				{
+					width :
+						70,
+
+					height :
+						70,
+
+					pnw :
+						new Euclid.Point(
+							10,
+							354
+						),
+
+					text :
+						'Space',
+
+					textAnchor :
+						new Euclid.Point(
+							35,
+							35
+						),
+
+					font :
+						fontPool.get( 14, 'cm' )
+				},
 
 				/*
 				| Sign up button on main disc

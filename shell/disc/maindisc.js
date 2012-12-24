@@ -107,6 +107,12 @@ var MainDisc = Disc.MainDisc =
 						'remove'
 					),
 
+				space :
+					new Disc.DiscButton(
+						this,
+						'space'
+					),
+
 				login :
 					new Disc.DiscButton(
 						this,
@@ -230,6 +236,9 @@ MainDisc.prototype.getModeOfButton =
 
 		case 'signup' :
 			return 'SignUp';
+
+		case 'space' :
+			return 'Space';
 
 		case 'normal' :
 			return 'Normal';

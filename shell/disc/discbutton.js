@@ -55,8 +55,13 @@ var DiscButton = Disc.DiscButton =
 	this.myStyle =
 		theme.disc[ disc.name ].buttons[ name ];
 
-	var width  = gStyle.width;
-	var height = gStyle.height;
+	var width =
+	this.width =
+		myStyle.width || gStyle.width;
+
+	var height =
+	this.height =
+		myStyle.height || gStyle.height;
 
 	var pnw =
 	this.pnw =
@@ -137,8 +142,8 @@ DiscButton.prototype._weave =
 	*/
 
 	fabric = new Euclid.Fabric(
-		gStyle.width  + 1,
-		gStyle.height + 1
+		this.width  + 1,
+		this.height + 1
 	);
 
 	this[ fabricName ] = fabric;
