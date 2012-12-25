@@ -9,7 +9,7 @@
 | Export
 */
 var Dash;
-Dash = Dash || {};
+Dash = Dash || { };
 
 
 /*
@@ -24,8 +24,10 @@ var Curve;
 ( function( ) {
 'use strict';
 
-if(typeof( window ) === 'undefined' )
-	{ throw new Error( 'this code needs a browser!' ); }
+if( typeof( window ) === 'undefined' )
+{
+	throw new Error( 'this code needs a browser!' );
+}
 
 
 /*
@@ -73,16 +75,19 @@ Label.prototype.draw =
 		fabric
 	)
 {
-	fabric.fillText(
-		this._$text || this.twig.text,
-		this.pos,
-		this.twig.font
+	fabric.paintText(
+		'text',
+			this._$text || this.twig.text,
+		'p',
+			this.pos,
+		'font',
+			this.twig.font
 	);
 };
 
 
 /*
-| overrides the designed text
+| Overrides the designed text.
 */
 Label.prototype.setText =
 	function(

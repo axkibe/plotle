@@ -132,14 +132,33 @@ var isString  =
 /*
 | Limits value to be between min and max
 */
-var limit = function(min, val, max) {
-	if (min > max) throw new Error('limit() min > max');
-	if (val < min) return min;
-	if (val > max) return max;
+var limit =
+	function(
+		min,
+		val,
+		max
+	)
+{
+	if( min > max )
+	{
+		throw new Error('limit() min > max');
+	}
+
+	if( val < min )
+	{
+		return min;
+	}
+
+	if( val > max )
+	{
+		return max;
+	}
+
 	return val;
 };
 
-/**
+
+/*
 | buils a fail message
 */
 var fail = function(args, aoffset) {
@@ -151,28 +170,32 @@ var fail = function(args, aoffset) {
 	throw reject(a.join(' '));
 };
 
-/**
+
+/*
 | Throws a reject if condition is not met.
 */
 var check = function(condition) {
 	if (!condition) fail(arguments, 1);
 };
 
-/**
+
+/*
 | Throws a reject if v is not within limits
 */
 var checkLimits = function(v, low, high) {
 	if (v < low || v > high) fail(arguments, 3, low, '<=', v, '<=', high);
 };
 
-/**
-| hashes the password
+
+/*
+| Hashes the password.
 */
 var passhash = function(pass) {
 	return sha1hex(pass + '-meshcraft-8833');
 };
 
-/**
+
+/*
 | Returns a rejection error.
 */
 var reject = function(message) {
@@ -182,7 +205,8 @@ var reject = function(message) {
 	return {ok: false, message: message};
 };
 
-/**
+
+/*
 | Returns an unique identifier.
 */
 var uid = function() {
@@ -198,7 +222,8 @@ var uid = function() {
 	return ua.join('');
 };
 
-/**
+
+/*
 | Creates a random password with only numbers and lower case alphas.
 */
 var randomPassword = function(length) {
@@ -209,7 +234,8 @@ var randomPassword = function(length) {
 	return ua.join('');
 };
 
-/**
+
+/*
 | Legacy (for opera browser)
 */
 if (!Object.defineProperty) {
@@ -279,7 +305,10 @@ var subclass =
 /*
 | Throws an error if any argument is not an integer.
 */
-var ensureInt = function( )
+var ensureInt =
+	function(
+		// integers
+	)
 {
 	for( var a in arguments )
 	{
@@ -292,6 +321,29 @@ var ensureInt = function( )
 	}
 };
 
+
+/*
+| Checks the definedness of a list of variables
+| and throws an arguments error if not.
+*/
+var ensureArgs =
+	function(
+		// list of:
+		//   argument name, defined variable
+	)
+{
+	for( var a = 0, aZ = arguments.length; a < aZ; a+= 2 )
+	{
+		var arg = arguments[ a + 1 ];
+
+		if(! Jools.is( arg ) )
+		{
+			throw new Error(
+				'Argument missing: ' + arguments[ a ]
+			);
+		}
+	}
+}
 
 /*
 | Fixates a value to an object (not changeable)
@@ -796,8 +848,11 @@ var immute =
 		obj
 	)
 {
+	// for releases immute checking is disabled in favor of speed
 	if( !config.debug.immute )
-		{ return obj; }
+	{
+		return obj;
+	}
 
 	var names = Object.getOwnPropertyNames( obj );
 
@@ -809,7 +864,9 @@ var immute =
 		);
 
 		if( !desc.configurable )
-			{ continue; }
+		{
+			continue;
+		}
 
 		desc.configurable = false;
 		desc.writable = false;
@@ -841,16 +898,18 @@ var keyNonGrata =
 		key,
 		{
 			get :
-			function( )
-			{
-				throw new Error( 'accessed key non grata! ' + key );
-			},
+				function( )
+				{
+					throw new Error( 'accessed key non grata! ' + key );
+				},
 
 			set :
-			function( /* v */ )
-			{
-				throw new Error( 'accessed key non grata! ' + key );
-			}
+				function(
+					// v
+				)
+				{
+					throw new Error( 'accessed key non grata! ' + key );
+				}
 		}
 	);
 };
@@ -875,6 +934,7 @@ Jools =
 	debug          : debug,
 	devel          : devel,
 	ensureInt      : ensureInt,
+	ensureArgs     : ensureArgs,
 	fixate         : fixate,
 	half           : half,
 	inspect        : inspect,

@@ -90,11 +90,14 @@ Para.s_draw =
 		{
 			var chunk = line.a[ b ];
 
-			f.fillText(
-				chunk.t,
-				chunk.x,
-				line.y,
-				font
+			f.paintText(
+				'text',
+					chunk.t,
+				'xy',
+					chunk.x,
+					line.y,
+				'font',
+					font
 			);
 		}
 	}

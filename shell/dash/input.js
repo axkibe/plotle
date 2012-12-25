@@ -237,18 +237,29 @@ Input.prototype._weave =
 	}
 	else
 	{
-		fabric.fillText(
-			value,
-			pitch.x,
-			font.size + pitch.y,
-			font
+		fabric.paintText(
+			'text',
+				value,
+			'xy',
+				pitch.x,
+				font.size + pitch.y,
+			'font',
+				font
 		);
 	}
 
-	fabric.edge(style.edge, bezi, 'sketch', Euclid.View.proper);
+	fabric.edge(
+		style.edge,
+		bezi,
+		'sketch',
+		Euclid.View.proper
+	);
 
-	fabric.$accent = accent;
-	fabric.$value  = value;
+	fabric.$accent =
+		accent;
+
+	fabric.$value =
+		value;
 
 	return fabric;
 };

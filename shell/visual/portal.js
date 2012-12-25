@@ -626,16 +626,22 @@ Portal.prototype._weave =
 			upnw.y + 20
 		);
 
-	f.fillText(
-		usertext,
-		upnw,
-		font
+	f.paintText(
+		'text',
+			usertext,
+		'p',
+			upnw,
+		'font',
+			font
 	);
 
-	f.fillText(
-		spacetext,
-		spnw,
-		font
+	f.paintText(
+		'text',
+			spacetext,
+		'p',
+			spnw,
+		'font',
+			font
 	);
 
 	f.edge(

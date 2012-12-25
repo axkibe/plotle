@@ -182,9 +182,13 @@ Chat.prototype._weave = function( )
 	var fabric = this.$fabric;
 
 	if( fabric && !config.debug.noCache )
-		{ return fabric; }
+	{
+		return fabric;
+	}
 
-	fabric = this.$fabric = new Euclid.Fabric( this.iframe );
+	fabric =
+	this.$fabric =
+		new Euclid.Fabric( this.iframe );
 
 	fabric.paint(
 		Dash.getStyle( 'chat' ),
@@ -193,20 +197,63 @@ Chat.prototype._weave = function( )
 		Euclid.View.proper
 	);
 
-	var x = this._pitch.x;
-	var y = this._pitch.y;
+	var x =
+		this._pitch.x;
 
-	var font = this.twig.font;
-	var lh = this.lineHeight;
-	fabric.fillText( '»', x + 27, y, font );
-	fabric.fillText( 'chat', x, y, font );
-	fabric.fillText( this._$itext, x + 37, y, font );
+	var y =
+		this._pitch.y;
+
+	var font =
+		this.twig.font;
+
+	var lh =
+		this.lineHeight;
+
+	fabric.paintText(
+		'text',
+			'»',
+		'xy',
+			x + 27,
+			y,
+		'font',
+			font
+	);
+
+	fabric.paintText(
+		'text',
+			'chat',
+		'xy',
+			x,
+			y,
+		'font',
+			font
+	);
+
+	fabric.paintText(
+		'text',
+			this._$itext,
+		'xy',
+			x + 37,
+			y,
+		'font',
+			font
+	);
+
 	y -= 2;
 
 	for( var a = this.messages.length - 1, aA = Math.max(a - 5, 0); a >= aA; a-- )
 	{
 		y -= lh;
-		fabric.fillText( this.messages[ a ], x, y, font );
+
+		fabric.paintText(
+			'text',
+				this.messages[ a ],
+			'xy',
+				x,
+				y,
+			'font',
+				font
+		);
 	}
 
 	if( config.debug.drawBoxes )

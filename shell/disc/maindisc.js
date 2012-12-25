@@ -91,49 +91,49 @@ var MainDisc = Disc.MainDisc =
 			{
 				normal :
 					new Disc.DiscButton(
-						this,
-						'normal'
+						'disc',   this,
+						'name',  'normal'
 					),
 
 				create :
 					new Disc.DiscButton(
-						this,
-						'create'
+						'disc',   this,
+						'name',  'create'
 					),
 
 				remove :
 					new Disc.DiscButton(
-						this,
-						'remove'
+						'disc',   this,
+						'name',  'remove'
 					),
 
 				space :
 					new Disc.DiscButton(
-						this,
-						'space'
+						'disc',   this,
+						'name',  'space'
 					),
 
 				login :
 					new Disc.DiscButton(
-						this,
-						'login'
+						'disc',   this,
+						'name',  'login'
 					),
 
 				signup :
 					new Disc.DiscButton(
-						this,
-						'signup'
+						'disc',   this,
+						'name',  'signup'
 					),
 
 				help :
 					new Disc.DiscButton(
-						this,
-						'help'
+						'disc',   this,
+						'name',  'help'
 					)
 			}
 		);
 
-	this.$hover  = inherit ? inherit.$hover  : null;
+	this.$hover = inherit ? inherit.$hover  : null;
 };
 
 
@@ -234,11 +234,11 @@ MainDisc.prototype.getModeOfButton =
 		case 'remove' :
 			return 'Remove';
 
-		case 'signup' :
-			return 'SignUp';
-
 		case 'space' :
 			return 'Space';
+
+		case 'signup' :
+			return 'SignUp';
 
 		case 'normal' :
 			return 'Normal';

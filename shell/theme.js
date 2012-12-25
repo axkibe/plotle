@@ -94,12 +94,6 @@ theme =
 		minHeight :
 			30,
 
-		newWidth :
-			300,
-
-		newHeight :
-			150,
-
 		innerMargin  :
 		{
 			n :
@@ -182,12 +176,6 @@ theme =
 		minHeight :
 			40,
 
-		newWidth :
-			100,
-
-		newHeight :
-			50,
-
 		style :
 		{
 			fill :
@@ -260,13 +248,6 @@ theme =
 			e : 1,
 			s : 1,
 			w : 1
-		},
-
-		// offset for creation // FIXME calculate dynamically
-		createOffset :
-		{
-			x: 27,
-			y: 12
 		}
 	},
 
@@ -281,14 +262,19 @@ theme =
 		*/
 		main :
 		{
-			width      :  90,
-			height     : 800,
+			width :
+				100,
 
+			height :
+				800,
 
 			ellipse :
 			{
-				width   : 1600,
-				height  : 1600
+				width :
+					1600,
+
+				height :
+					1600
 			},
 
 			fill :
@@ -386,7 +372,7 @@ theme =
 				{
 					pnw : new Euclid.Point(
 						4,
-						145
+						120
 					),
 
 					icon :
@@ -414,8 +400,8 @@ theme =
 				create :
 				{
 					pnw : new Euclid.Point(
-						17,
-						194
+						20,
+						169
 					),
 
 					text : 'new',
@@ -435,8 +421,8 @@ theme =
 				{
 					pnw :
 						new Euclid.Point(
-							28,
-							243
+							32,
+							218
 						),
 
 					icon :
@@ -459,44 +445,14 @@ theme =
 				},
 
 				/*
-				| Space button on main disc
-				*/
-				space :
-				{
-					width :
-						70,
-
-					height :
-						70,
-
-					pnw :
-						new Euclid.Point(
-							10,
-							354
-						),
-
-					text :
-						'Space',
-
-					textAnchor :
-						new Euclid.Point(
-							35,
-							35
-						),
-
-					font :
-						fontPool.get( 14, 'cm' )
-				},
-
-				/*
 				| Sign up button on main disc
 				*/
 				signup :
 				{
 					pnw :
 						new Euclid.Point(
-							28,
-							510
+							30,
+							535
 						),
 
 					text :
@@ -518,6 +474,44 @@ theme =
 						fontPool.get( 13, 'cm' )
 				},
 
+				/*
+				| Space button on main disc
+				*/
+				space :
+				{
+					width :
+						30,
+
+					height :
+						310,
+
+					pnw :
+						new Euclid.Point(
+							0,
+							275
+						),
+
+					offset :
+						new Euclid.Point(
+							-100,
+							0
+						),
+
+					text :
+						'meshcraft:home',
+
+					textAnchor :
+						new Euclid.Point(
+							5,
+							17
+						),
+
+					textRotate :
+						Math.PI / 2,
+
+					font :
+						fontPool.get( 13, 'cm' )
+				},
 
 				/*
 				| Log in button on main disc
@@ -526,8 +520,8 @@ theme =
 				{
 					pnw :
 						new Euclid.Point(
-							17,
-							560
+							19,
+							585
 						),
 
 					text :
@@ -559,7 +553,7 @@ theme =
 					pnw :
 						new Euclid.Point(
 							4,
-							610
+							635
 						),
 
 					text :
@@ -584,7 +578,7 @@ theme =
 		{
 
 			width :
-				166,
+				176,
 
 			height :
 				1010,
@@ -635,8 +629,11 @@ theme =
 				*/
 				generic :
 				{
-					width  : 70,
-					height : 70,
+					width :
+						70,
+
+					height :
+						70,
 
 					/*
 					| Button is in its default state.
@@ -702,7 +699,7 @@ theme =
 				{
 					pnw :
 						new Euclid.Point(
-							52,
+							62,
 							216
 						),
 
@@ -727,7 +724,7 @@ theme =
 				{
 					pnw :
 						new Euclid.Point(
-							71,
+							81,
 							284
 						),
 
@@ -752,7 +749,7 @@ theme =
 				{
 					pnw :
 						new Euclid.Point(
-							84,
+							94,
 							354
 						),
 
@@ -783,7 +780,7 @@ theme =
 				{
 					pnw :
 						new Euclid.Point(
-							91,
+							101,
 							425
 						),
 

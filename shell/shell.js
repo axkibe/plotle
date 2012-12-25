@@ -448,17 +448,23 @@ Shell.prototype._draw = function( )
 			ce.add( 0, -80 )
 		);
 
-		fabric.fillText(
-			this.green,
-			ce,
-			fontPool.get( 26, 'cm' )
+		fabric.paintText(
+			'text',
+				this.green,
+			'p',
+				ce,
+			'font',
+				fontPool.get( 26, 'cm' )
 		);
 
-		fabric.fillText(
-			'Please refresh the page to reconnect.',
-			ce.x,
-			ce.y + 50,
-			fontPool.get( 20, 'cm' )
+		fabric.paintText(
+			'text',
+				'Please refresh the page to reconnect.',
+			'xy',
+				ce.x,
+				ce.y + 50,
+			'font',
+				fontPool.get( 20, 'cm' )
 		);
 
 		return;

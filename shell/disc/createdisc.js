@@ -44,8 +44,11 @@ var CreateDisc = Disc.CreateDisc =
 		screensize
 	)
 {
-	this.screensize = screensize;
-	this.name = 'create';
+	this.screensize =
+		screensize;
+
+	this.name =
+		'create';
 
 	var style = this._style = theme.disc.create;
 
@@ -88,26 +91,26 @@ var CreateDisc = Disc.CreateDisc =
 			{
 				note :
 					new Disc.DiscButton(
-						this,
-						'note'
+						'disc',   this,
+						'name',  'note'
 					),
 
 				label :
 					new Disc.DiscButton(
-						this,
-						'label'
+						'disc',   this,
+						'name',  'label'
 					),
 
 				relation :
 					new Disc.DiscButton(
-						this,
-						'relation'
+						'disc',   this,
+						'name',  'relation'
 					),
 
 				portal :
 					new Disc.DiscButton(
-						this,
-						'portal'
+						'disc',   this,
+						'name',  'portal'
 					)
 			}
 		);

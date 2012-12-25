@@ -154,10 +154,13 @@ Button.prototype._weave = function( accent )
 
 	fabric.paint( style, this, 'sketch', Euclid.View.proper );
 
-	fabric.fillText(
-		this.$captionText,
-		this.captionPos,
-		twig.caption.font
+	fabric.paintText(
+		'text',
+			this.$captionText,
+		'p',
+			this.captionPos,
+		'font',
+			twig.caption.font
 	);
 
 	if( config.debug.drawBoxes )

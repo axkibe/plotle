@@ -264,29 +264,37 @@ SwitchPanel.prototype._weave =
 	var font = theme.switchpanel.label.font;
 
 	var bp = this.buttonPos;
-	fabric.fillText(
-		'Welcome',
-		bp.n .x,
-		bp.n. y,
-		font
+	fabric.paintText(
+		'text',
+			'Welcome',
+		'xy',
+			bp.n .x,
+			bp.n. y,
+		'font',
+			font
 	);
 
-	fabric.fillText(
-		'Sandbox',
-		bp.ne.x,
-		bp.ne.y,
-		font
+	fabric.paintText(
+		'text',
+			'Sandbox',
+		'xy',
+			bp.ne.x,
+			bp.ne.y,
+		'font',
+			font
 	);
 
 	if( !this.amVisitor )
 	{
-		fabric.fillText(
-			'Your Home',
-			bp.nw,
-			font
+		fabric.paintText(
+			'text',
+				'Your Home',
+			'p',
+				bp.nw,
+			'font',
+				font
 		);
 	}
-
 
 	font = theme.switchpanel.message.font;
 
@@ -309,11 +317,14 @@ SwitchPanel.prototype._weave =
 			throw new Error( 'no valid space text' );
 	}
 
-	fabric.fillText(
-		text,
-		Jools.half(iframe.width),
-		iframe.height - 12,
-		font
+	fabric.paintText(
+		'text',
+			text,
+		'xy',
+			Jools.half(iframe.width),
+			iframe.height - 12,
+		'font',
+			font
 	);
 
 	fabric.edge(

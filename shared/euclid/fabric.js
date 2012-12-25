@@ -1,9 +1,7 @@
 /*
-|
 | This wrapper enhances the HTML5 canvas by using immutable euclidean objects.
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
@@ -30,9 +28,9 @@ var Jools;
 /*
 | Constructor.
 |
-| Fabric()        -or-    creates a new fabric
-| Fabric(canvas)  -or-    encloses an existing HTML5 canvas
-| Fabric(width, height)   creates a new fabric and sets its size;
+| Fabric( )         -or-    creates a new fabric
+| Fabric( canvas )  -or-    encloses an existing HTML5 canvas
+| Fabric( width, height )   creates a new fabric and sets its size;
 */
 var Fabric = Euclid.Fabric =
 	function( a1, a2 )
@@ -157,7 +155,8 @@ Fabric.prototype.arc =
 | bezier(cp1x, cp1y, cp2x, cp2y, x, y) -or-
 | any combination of points and arguments.
 */
-Fabric.prototype.beziTo = function( )
+Fabric.prototype.beziTo =
+	function( )
 {
 	var a   = 0, aZ = arguments.length;
 	var tw  = this._twist;
@@ -232,7 +231,8 @@ Fabric.prototype.beziTo = function( )
 /*
 | Removes the clipping
 */
-Fabric.prototype.deClip = function( )
+Fabric.prototype.deClip =
+	function( )
 {
 	if ( !this.$clip )
 		{ throw new Error('not clipping!'); }
@@ -245,7 +245,7 @@ Fabric.prototype.deClip = function( )
 /*
 | Draws an image.
 |
-| possible arguments:
+| Free string arguments:
 |    'image'
 |    'point'
 |    'x'
@@ -450,33 +450,97 @@ Fabric.prototype.fill =
 
 /*
 | Draws some text.
+|
+| Free string arguments
+|
+| 'xy'   ( x, y )
+|      base point of text
+|
+| 'font' ( font )
+|      font to draw the text in
+|
+| 'rotate' ( degree )
+|      text is rotated by degree
 */
-Fabric.prototype.fillText =
+Fabric.prototype.paintText =
 	function(
-		text,
-		a1,
-		a2,
-		a3
+		// free string
 	)
 {
-	var x, y, font;
+	var text;
+	var x;
+	var y;
+	var font;
+	var rotate;
 
-	if( typeof( a1 ) === 'object' )
+	var a = 0;
+	var aZ = arguments.length;
+	var p;
+
+	while( a < aZ )
 	{
-		x    = a1.x;
-		y    = a1.y;
-		font = a2;
+		switch( arguments[ a ] )
+		{
+			case 'text' :
+
+				text = arguments[ a + 1 ];
+
+				a += 2;
+
+				continue;
+
+			case 'xy' :
+
+				x = arguments[ a + 1 ];
+
+				y = arguments[ a + 2 ];
+
+				a += 3;
+
+				continue;
+
+			case 'p' :
+
+				p = arguments[ a + 1 ];
+
+				x = p.x;
+
+				y = p.y;
+
+				a += 2;
+
+				continue;
+
+			case 'font' :
+
+				font = arguments[ a + 1 ];
+
+				a += 2;
+
+				continue;
+
+			default :
+
+				throw new Error(
+					'unknown argument:' + arguments[ a ]
+				);
+		}
 	}
-	else
-	{
-		x    = a1;
-		y    = a2;
-		font = a3;
-	}
+
+	Jools.ensureArgs(
+		'text',   text,
+		'point',  x,
+		'point',  y,
+		'font',   font
+	);
 
 	this._setFont( font );
 
-	this._cx.fillText( text, x, y );
+	this._cx.fillText(
+		text,
+		x,
+		y
+	);
 };
 
 
@@ -535,7 +599,7 @@ Fabric.prototype.fillRect =
 
 
 /*
-| return the center point of the Fabric
+| Returns the center point of the fabric.
 */
 Fabric.prototype.getCenter =
 	function( )
@@ -711,7 +775,12 @@ Fabric.prototype.moveTo =
 | putImageData( imagedata, p ) -or-
 | putImageData( imagedata, x, y )
 */
-Fabric.prototype.putImageData = function( imagedata, a1, a2 )
+Fabric.prototype.putImageData =
+	function(
+		imagedata,
+		a1,
+		a2
+	)
 {
 	var x, y;
 	if( typeof( a1 ) === 'object' )
@@ -871,7 +940,17 @@ Fabric.prototype.paint =
 /*
 | Clips the fabric so that the shape is left out.
 */
-Fabric.prototype.reverseClip = function(shape, sketch, view, border, a1, a2, a3, a4)
+Fabric.prototype.reverseClip =
+	function(
+		shape,
+		sketch,
+		view,
+		border,
+		a1,
+		a2,
+		a3,
+		a4
+	)
 {
 	var cx = this._cx;
 	var c  = this._canvas;
@@ -1107,14 +1186,11 @@ Fabric.prototype._colorStyle =
 
 /*
 | Draws a single edge.
-|
-| style: the style formated in meshcraft style notation.
-| shape: an object which has 'sketch'() defined
 */
 Fabric.prototype._edge =
 	function(
-		style,
-		shape,
+		style,   // style: the style formated in meshcraft style notation.
+		shape,   // shape: an object which has 'sketch'() defined
 		sketch,
 		view,
 		a1,

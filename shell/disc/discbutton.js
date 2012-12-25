@@ -36,36 +36,89 @@ if( typeof( window ) === 'undefined')
 
 /*
 | Constructor.
+|
+| Free string style arguments:
+|
+|	disc
+|		the disc the button belongs to
+|
+|	name
+|		the name of the label
 */
 var DiscButton = Disc.DiscButton =
-	function(
-		disc, // the disc the button belongs to
-		name  // the name of the button (FIXME, needed?)
-	)
+	function( )
 {
-	this.disc = disc;
+	var a = 0;
+	var aZ = arguments.length;
 
-	this.name = name;
+	var disc;
+	var name;
 
-	var gStyle =
-	this.gStyle =
+	while( a < aZ )
+	{
+		switch( arguments[ a ] )
+		{
+			case 'disc' :
+
+				disc =
+				this.disc =
+					arguments[ a + 1 ];
+
+				a += 2;
+
+				break;
+
+			case 'name' :
+
+				name =
+				this.name =
+					arguments[ a + 1 ];
+
+				a += 2;
+
+				break;
+
+			default :
+
+				throw new Error(
+					'unknown argument: ' + arguments[ a ]
+				);
+		}
+	}
+
+	if( !this.disc )
+	{
+		throw new Error( 'required argument disc missing' );
+	}
+
+	if( !this.name )
+	{
+		throw new Error( 'required argument name missing' );
+	}
+
+	var gstyle =
+	this._gstyle =
 		theme.disc[ disc.name ].buttons.generic;
 
-	var myStyle =
-	this.myStyle =
+	var style =
+	this._style =
 		theme.disc[ disc.name ].buttons[ name ];
+
+	var offset =
+	this._offset =
+		style.offset || gstyle.offset;
 
 	var width =
 	this.width =
-		myStyle.width || gStyle.width;
+		style.width || gstyle.width;
 
 	var height =
 	this.height =
-		myStyle.height || gStyle.height;
+		style.height || gstyle.height;
 
 	var pnw =
 	this.pnw =
-		myStyle.pnw;
+		style.pnw;
 
 	this.pse =
 		pnw.add(
@@ -73,14 +126,32 @@ var DiscButton = Disc.DiscButton =
 			height
 		);
 
-	this.ellipse =
-		new Euclid.Ellipse(
-			Euclid.Point.zero,
-			new Euclid.Point(
-				width,
-				height
-			)
-		);
+	if( !offset )
+	{
+		this.ellipse =
+			new Euclid.Ellipse(
+				Euclid.Point.zero,
+				new Euclid.Point(
+					width,
+					height
+				)
+			);
+	}
+	else
+	{
+		this.ellipse =
+			new Euclid.Ellipse(
+				new Euclid.Point(
+					offset.x,
+					offset.y
+				),
+				new Euclid.Point(
+					width,
+					height
+				)
+			);
+	}
+
 
 	Jools.immute( this );
 };
@@ -113,40 +184,54 @@ DiscButton.prototype._weave =
 	)
 {
 	var fabricName;
-	var gStyle = this.gStyle;
+
+	var gstyle =
+		this._gstyle;
+
 	var style;
 
 	if( active )
 	{
-		fabricName = '$fabricActive';
-		style = gStyle.active;
+		fabricName =
+			'$fabricActive';
+
+		style =
+			gstyle.active;
 	}
 	else if( hover )
 	{
-		fabricName = '$fabricHover';
-		style = gStyle.hover;
+		fabricName =
+			'$fabricHover';
+
+		style =
+			gstyle.hover;
 	}
 	else
 	{
-		fabricName = '$fabricName';
-		style = gStyle.normal;
+		fabricName =
+			'$fabricName';
+
+		style =
+			gstyle.normal;
 	}
 
-	var fabric = this[ fabricName ];
+	var fabric =
+		this[ fabricName ];
 
-	/* TODO
-	if( this.$fabric && !config.debug.noCache )
+	if(
+		this.fabric &&
+		!config.debug.noCache
+	)
 	{
 		return this.$fabric;
 	}
-	*/
 
-	fabric = new Euclid.Fabric(
-		this.width  + 1,
-		this.height + 1
-	);
-
-	this[ fabricName ] = fabric;
+	fabric =
+	this[ fabricName ] =
+		new Euclid.Fabric(
+			this.width  + 1,
+			this.height + 1
+		);
 
 	fabric.paint(
 		style,
@@ -169,16 +254,19 @@ DiscButton.prototype.drawIcon =
 		fabric
 	)
 {
-	var style = this.myStyle;
+	var style = this._style;
 
 	var text = style.text;
 
 	if( Jools.isString( text ) )
 	{
-		fabric.fillText(
-			text,
-			style.textAnchor,
-			style.font
+		fabric.paintText(
+			'text',
+				text,
+			'p',
+				style.textAnchor,
+			'font',
+				style.font
 		);
 	}
 	else if( Jools.isArray( text ) )
@@ -195,11 +283,14 @@ DiscButton.prototype.drawIcon =
 
 		for( var a = 0; a < tZ; a++, y += sepy )
 		{
-			fabric.fillText(
-				text[ a ],
-				x,
-				y,
-				style.font
+			fabric.paintText(
+				'text',
+					text[ a ],
+				'xy',
+					x,
+					y,
+				'font',
+					style.font
 			);
 		}
 	}
@@ -409,18 +500,6 @@ DiscButton.prototype.push =
 	function( )
 {
 	this.disc.pushButton( this.name );
-	/*
-	switch( this.pushChange )
-	{
-		case 'Mode' :
-			shell.bridge.changeMode( this.pushValue );
-			break;
-
-		case 'Create' :
-			shell.bridge.changeCreate( this.pushValue );
-			break;
-	}
-	*/
 };
 
 
