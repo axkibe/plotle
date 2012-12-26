@@ -471,7 +471,7 @@ Fabric.prototype.paintText =
 	var x;
 	var y;
 	var font;
-	var rotate;
+	var rotate = null;
 
 	var a = 0;
 	var aZ = arguments.length;
@@ -519,6 +519,14 @@ Fabric.prototype.paintText =
 
 				continue;
 
+			case 'rotate' :
+
+				rotate = arguments[ a + 1 ];
+
+				a += 2;
+
+				continue;
+
 			default :
 
 				throw new Error(
@@ -528,19 +536,61 @@ Fabric.prototype.paintText =
 	}
 
 	Jools.ensureArgs(
-		'text',   text,
-		'point',  x,
-		'point',  y,
-		'font',   font
+		'text',
+			text,
+		'point',
+			x,
+		'point',
+			y,
+		'font',
+			font
 	);
 
 	this._setFont( font );
 
-	this._cx.fillText(
-		text,
-		x,
-		y
-	);
+	var cx = this._cx;
+
+	if( rotate === null )
+	{
+		cx.fillText(
+			text,
+			x,
+			y
+		);
+	}
+	else
+	{
+		var t1 =
+			Math.cos( rotate );
+
+		var t2 =
+			Math.sin( rotate );
+
+		var det =
+			t1 * t1 + t2 * t2;
+
+		//x += radius * t2;
+		//y -= radius * t1;
+
+		cx.setTransform(
+			t1,  t2,
+			-t2, t1,
+			0, 0
+		);
+
+
+		cx.fillText(
+			text,
+			( x * t1 + y * t2 ) / det,
+			( y * t1 - x * t2 ) / det
+		);
+
+		cx.setTransform(
+			1, 0,
+			0, 1,
+			0, 0
+		);
+	}
 };
 
 
@@ -1005,12 +1055,23 @@ Fabric.prototype._setFont =
 	if( !Jools.is( font.base ) )
 		{ throw new Error('fontstyle misses base'); }
 
-	var cx          = this._cx;
-	cx.font         = font.getCSS( );
-	cx.fillStyle    = font.fill;
-	cx.textAlign    = font.align;
-	cx.textBaseline = font.base;
-	this._$font     = font;
+	var cx =
+		this._cx;
+
+	cx.font =
+		font.getCSS( );
+
+	cx.fillStyle =
+		font.fill;
+
+	cx.textAlign =
+		font.align;
+
+	cx.textBaseline =
+		font.base;
+
+	this._$font =
+		font;
 };
 
 

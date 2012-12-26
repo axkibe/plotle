@@ -168,8 +168,10 @@ DiscButton.prototype.draw =
 	)
 {
 	fabric.drawImage(
-		'image', this._weave( active, hover ),
-		'pnw', this.pnw
+		'image',
+			this._weave( active, hover ),
+		'pnw',
+			this.pnw
 	);
 };
 
@@ -254,32 +256,61 @@ DiscButton.prototype.drawIcon =
 		fabric
 	)
 {
-	var style = this._style;
+	var style =
+		this._style;
 
-	var text = style.text;
+	var text =
+		style.text;
+
+	var textAnchor =
+		style.textAnchor;
+
+	var textRotate =
+		style.textRotate;
 
 	if( Jools.isString( text ) )
 	{
-		fabric.paintText(
-			'text',
-				text,
-			'p',
-				style.textAnchor,
-			'font',
-				style.font
-		);
+		if( !Jools.is( textRotate ) )
+		{
+			fabric.paintText(
+				'text',
+					text,
+				'p',
+					textAnchor,
+				'font',
+					style.font
+			);
+		}
+		else
+		{
+			fabric.paintText(
+				'text',
+					text,
+				'p',
+					textAnchor,
+				'font',
+					style.font,
+				'rotate',
+					textRotate
+			);
+		}
 	}
 	else if( Jools.isArray( text ) )
 	{
-		var x = style.textAnchor.x;
+		var x =
+			textAnchor.x;
 
-		var y = style.textAnchor.y;
+		var y =
+			textAnchor.y;
 
-		var tZ = text.length;
+		var tZ =
+			text.length;
 
-		var sepy = style.textSepY;
+		var sepy =
+			style.textSepY;
 
-		y -= Math.round( ( tZ - 1 ) / 2 * sepy );
+		y -=
+			Math.round( ( tZ - 1 ) / 2 * sepy );
 
 		for( var a = 0; a < tZ; a++, y += sepy )
 		{

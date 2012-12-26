@@ -21,11 +21,13 @@ var Euclid;
 /*
 | Capsule
 */
-(function(){
+( function( ) {
 "use strict";
 
-if (typeof(window) === 'undefined')
-	{ throw new Error('this code needs a browser!'); }
+if( typeof( window ) === 'undefined' )
+{
+	throw new Error('this code needs a browser!');
+}
 
 
 /*
@@ -480,15 +482,15 @@ theme =
 				space :
 				{
 					width :
-						30,
+						32,
 
 					height :
-						310,
+						290,
 
 					pnw :
 						new Euclid.Point(
 							0,
-							275
+							170
 						),
 
 					offset :
@@ -502,12 +504,51 @@ theme =
 
 					textAnchor :
 						new Euclid.Point(
-							5,
-							17
+							11,
+							145
 						),
 
 					textRotate :
-						Math.PI / 2,
+						- Math.PI / 2,
+
+					font :
+						fontPool.get( 13, 'cm' )
+				},
+
+				/*
+				| User button on main disc
+				*/
+				user :
+				{
+					width :
+						32,
+
+					height :
+						170,
+
+					pnw :
+						new Euclid.Point(
+							0,
+							300
+						),
+
+					offset :
+						new Euclid.Point(
+							-100,
+							0
+						),
+
+					text :
+						'visitor-1',
+
+					textAnchor :
+						new Euclid.Point(
+							11,
+							85
+						),
+
+					textRotate :
+						- Math.PI / 2,
 
 					font :
 						fontPool.get( 13, 'cm' )

@@ -78,12 +78,15 @@ var MainDisc = Disc.MainDisc =
 			width - 1,
 			height + Jools.half( eh - height )
 		),
-		'gradientPC', new Euclid.Point(
-			-600,
-			Jools.half( height )
-		),
-		'gradientR0',  0,
-		'gradientR1',  650
+		'gradientPC',
+			new Euclid.Point(
+				-600,
+				Jools.half( height )
+			),
+		'gradientR0',
+			0,
+		'gradientR1',
+			650
 	);
 
 	this.buttons =
@@ -91,44 +94,66 @@ var MainDisc = Disc.MainDisc =
 			{
 				normal :
 					new Disc.DiscButton(
-						'disc',   this,
-						'name',  'normal'
+						'disc',
+							this,
+						'name',
+							'normal'
 					),
 
 				create :
 					new Disc.DiscButton(
-						'disc',   this,
-						'name',  'create'
+						'disc',
+							this,
+						'name',
+							'create'
 					),
 
 				remove :
 					new Disc.DiscButton(
-						'disc',   this,
-						'name',  'remove'
+						'disc',
+							this,
+						'name',
+							'remove'
 					),
 
 				space :
 					new Disc.DiscButton(
-						'disc',   this,
-						'name',  'space'
+						'disc',
+							this,
+						'name',
+							'space'
+					),
+
+				user :
+					new Disc.DiscButton(
+						'disc',
+							this,
+						'name',
+							'user'
 					),
 
 				login :
 					new Disc.DiscButton(
-						'disc',   this,
-						'name',  'login'
+						'disc',
+							this,
+						'name',
+							'login'
 					),
 
 				signup :
 					new Disc.DiscButton(
-						'disc',   this,
-						'name',  'signup'
+						'disc',
+							this,
+						'name',
+							'signup'
 					),
 
 				help :
 					new Disc.DiscButton(
-						'disc',   this,
-						'name',  'help'
+						'disc',
+							this,
+						'name',
+							'help'
 					)
 			}
 		);
@@ -236,6 +261,9 @@ MainDisc.prototype.getModeOfButton =
 
 		case 'space' :
 			return 'Space';
+
+		case 'user' :
+			return 'User';
 
 		case 'signup' :
 			return 'SignUp';

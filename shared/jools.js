@@ -343,7 +343,7 @@ var ensureArgs =
 			);
 		}
 	}
-}
+};
 
 /*
 | Fixates a value to an object (not changeable)
