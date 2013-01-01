@@ -68,6 +68,12 @@ var modes =
 		true,
 
 	/*
+	| User view
+	*/
+	'User' :
+		true,
+
+	/*
 	| Logging in
 	*/
 	'Login' :

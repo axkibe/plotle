@@ -447,55 +447,25 @@ theme =
 				},
 
 				/*
-				| Sign up button on main disc
-				*/
-				signup :
-				{
-					pnw :
-						new Euclid.Point(
-							30,
-							535
-						),
-
-					text :
-						[
-							'sign',
-							'up'
-						],
-
-					textSepY :
-						16,
-
-					textAnchor :
-						new Euclid.Point(
-							22,
-							22
-						),
-
-					font :
-						fontPool.get( 13, 'cm' )
-				},
-
-				/*
 				| Space button on main disc
 				*/
 				space :
 				{
 					width :
-						32,
+						28,
 
 					height :
 						290,
 
 					pnw :
 						new Euclid.Point(
-							0,
+							3,
 							170
 						),
 
 					offset :
 						new Euclid.Point(
-							-100,
+							-60,
 							0
 						),
 
@@ -512,7 +482,7 @@ theme =
 						- Math.PI / 2,
 
 					font :
-						fontPool.get( 13, 'cm' )
+						fontPool.get( 12, 'cm' )
 				},
 
 				/*
@@ -521,20 +491,20 @@ theme =
 				user :
 				{
 					width :
-						32,
+						24,
 
 					height :
-						170,
+						180,
 
 					pnw :
 						new Euclid.Point(
-							0,
-							300
+							1,
+							440
 						),
 
 					offset :
 						new Euclid.Point(
-							-100,
+							-70,
 							0
 						),
 
@@ -544,14 +514,14 @@ theme =
 					textAnchor :
 						new Euclid.Point(
 							11,
-							85
+							90
 						),
 
 					textRotate :
 						- Math.PI / 2,
 
 					font :
-						fontPool.get( 13, 'cm' )
+						fontPool.get( 12, 'cm' )
 				},
 
 				/*
@@ -561,8 +531,8 @@ theme =
 				{
 					pnw :
 						new Euclid.Point(
-							19,
-							585
+							30,
+							535
 						),
 
 					text :
@@ -574,6 +544,37 @@ theme =
 					textSepY :
 						16,
 
+
+					textAnchor :
+						new Euclid.Point(
+							22,
+							22
+						),
+
+					font :
+						fontPool.get( 13, 'cm' )
+				},
+
+
+				/*
+				| Sign up button on main disc
+				*/
+				signup :
+				{
+					pnw :
+						new Euclid.Point(
+							19,
+							585
+						),
+
+					text :
+						[
+							'sign',
+							'up'
+						],
+
+					textSepY :
+						16,
 
 					textAnchor :
 						new Euclid.Point(

@@ -140,7 +140,10 @@ Space.prototype.focusedItem = function( )
 		return null;
 	}
 
-	return this.getSub( caret.sign.path, 'Item' );
+	return this.getSub(
+		caret.sign.path,
+		'Item'
+	);
 };
 
 
@@ -346,38 +349,6 @@ Space.prototype.draw =
 			}
 
 			break;
-
-			//var av2 = action.item2Path ?
-			//	this.getSub(
-			//		action.item2Path,
-			//		'Item'
-			//	) :
-			//	null;
-
-			//var target = av2 ?
-			//	av2.getSilhoutte( av2.getZone( ) ) :
-			//	view.depoint( action.move );
-
-			//var arrow  = Euclid.Line.connect(
-			//	av.getSilhoutte( av.getZone( ) ),
-			//	'normal',
-			//	target,
-			//	'arrow'
-			//);
-
-			//if( av2 )
-			//{
-			//	av2.highlight(
-			//		this.fabric,
-			//		view
-			//	);
-			//}
-
-			//arrow.draw(
-			//	this.fabric,
-			//	view,
-			//	theme.relation.style
-			//);
 	}
 };
 
@@ -500,6 +471,8 @@ Space.prototype.pointingHover =
 				)
 				{
 					action.removeItemPath = item.path;
+
+					action.removeItemFade = true;
 
 					shell.redraw = true;
 				}
@@ -858,6 +831,28 @@ Space.prototype.dragStop =
 
 		case 'Remove' :
 
+			var removeItem = this.getSub(
+				action.removeItemPath,
+				'Item'
+			);
+
+			// checks if the pointer is still
+			// on the items to be removed
+			// otherwise it is not removed!
+			if(
+				!removeItem.getZone().within(
+					view,
+					p
+				)
+			)
+			{
+				action.removeItemPath = null;
+
+				shell.redraw = true;
+
+				break;
+			}
+
 			var focus = this.focusedItem( );
 
 			if( action.removeItemPath )
@@ -875,13 +870,6 @@ Space.prototype.dragStop =
 				);
 
 				action.removeItemPath = null;
-			}
-
-			if( !ctrl )
-			{
-				shell.bridge.stopAction( );
-
-				shell.bridge.changeMode( 'Normal' );
 			}
 
 			shell.redraw = true;
@@ -982,9 +970,27 @@ Space.prototype.dragMove =
 					action.pan.add( pd.x / view.zoom, pd.y / view.zoom ),
 					view.fact
 				);
-
-				shell.redraw = true;
 			}
+			else
+			{
+				var removeItem = this.getSub(
+					action.removeItemPath,
+					'Item'
+				);
+
+				// the item to removed is faded
+				// when the pointer is still upon
+				// it
+
+				action.removeItemFade = (
+					removeItem.getZone().within(
+						view,
+						p
+					)
+				);
+			}
+
+			shell.redraw = true;
 
 			return 'pointer';
 
@@ -1125,6 +1131,7 @@ Space.prototype.pointingStart =
 		// starts a drag operation on deletion
 		// so the item gets removed on
 		// mouse/finger up
+
 		return 'drag';
 
 	case 'CreateRelation' :

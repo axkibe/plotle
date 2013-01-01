@@ -340,6 +340,7 @@ Label.prototype.draw =
 	if(
 		action &&
 		action.type === 'Remove' &&
+		action.removeItemFade &&
 		this.path.equals( action.removeItemPath )
 	)
 	{

@@ -420,9 +420,11 @@ Note.prototype.draw =
 
 	var action = shell.bridge.action( );
 
+	// TODO move this logic into the callee
 	if(
 		action &&
 		action.type === 'Remove' &&
+		action.removeItemFade &&
 		this.path.equals( action.removeItemPath )
 	)
 	{
