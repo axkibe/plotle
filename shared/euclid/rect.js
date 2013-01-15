@@ -324,7 +324,13 @@ Rect.prototype.eq = function( r )
 /*
 | Draws the rectangle.
 */
-Rect.prototype.sketch = function( fabric, border, twist, view )
+Rect.prototype.sketch =
+	function(
+		fabric,
+		border,
+		twist,
+		view
+	)
 {
 	var wx = view.x( this.pnw );
 	var ny = view.y( this.pnw );

@@ -93,34 +93,6 @@ var modes =
 
 };
 
-///*
-//| Valid creates
-//*/
-//var creates =
-//{
-//
-//	/*
-//	| A new note.
-//	*/
-//	'Note' : true,
-//
-//	/*
-//	| A new label.
-//	*/
-//	'Label'  : true,
-//
-//	/*
-//	| A new relation
-//	*/
-//	'Relation' : true,
-//
-//	/*
-//	| A new portal
-//	*/
-//	'Portal' : true
-//
-//};
-
 
 /*
 | Constructor.
@@ -147,7 +119,6 @@ Bridge = function( )
 	| an Action object for the current action
 	*/
 	this._$action = null;
-
 };
 
 
@@ -190,7 +161,7 @@ Bridge.prototype.changeMode =
 
 	this._$mode = mode;
 
-	shell.$board.getPanel( 'MainDisc' ).poke();
+	shell.$disc.poke( );
 };
 
 

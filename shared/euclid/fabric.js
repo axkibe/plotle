@@ -9,7 +9,7 @@
 | Exports
 */
 var Euclid;
-Euclid = Euclid || {};
+Euclid = Euclid || { };
 
 
 /*
@@ -21,7 +21,7 @@ var Jools;
 /*
 | Capsule
 */
-(function(){
+( function( ) {
 'use strict';
 
 
@@ -48,17 +48,20 @@ var Fabric = Euclid.Fabric =
 				case Fabric:
 					this._canvas = a1._canvas;
 					break;
+
 				case Euclid.RoundRect :
 				case Euclid.Rect      :
 					this._canvas = document.createElement( 'canvas' );
 					this._canvas.width  = a1.width;
 					this._canvas.height = a1.height;
 					break;
+
 				default :
 					if (!a1.getContext)
 						{ throw new Error( 'Invalid parameter to new Fabric: ' + a1 ); }
 					this._canvas = a1;
 					break;
+
 			}
 			break;
 
@@ -79,32 +82,6 @@ var Fabric = Euclid.Fabric =
 
 	this.$clip = false;
 };
-
-
-/*
-| Fabric width.
-*/
-Object.defineProperty(
-	Fabric.prototype,
-	'width',
-	{
-		get: function( )
-			{ return this._canvas.width; }
-	}
-);
-
-
-/*
-| Fabric height.
-*/
-Object.defineProperty(
-	Fabric.prototype,
-	'height',
-	{
-		get: function( )
-			{ return this._canvas.height; }
-	}
-);
 
 
 /*
@@ -144,7 +121,14 @@ Fabric.prototype.arc =
 		ac = a6;
 	}
 
-	this._cx.arc( x + tw, y + tw, r, sa, ea, ac );
+	this._cx.arc(
+		x + tw,
+		y + tw,
+		r,
+		sa,
+		ea,
+		ac
+	);
 };
 
 
@@ -183,7 +167,9 @@ Fabric.prototype.beziTo =
 	}
 
 	if( a >= aZ )
-		{ throw new Error('beziTo: aFail'); }
+	{
+		throw new Error('beziTo: aFail');
+	}
 
 
 	if( typeof( arguments[ a ] ) === 'object' )
@@ -224,7 +210,14 @@ Fabric.prototype.beziTo =
 	x += tw;
 	y += tw;
 
-	this._cx.bezierCurveTo( cp1x, cp1y, cp2x, cp2y, x, y );
+	this._cx.bezierCurveTo(
+		cp1x,
+		cp1y,
+		cp2x,
+		cp2y,
+		x,
+		y
+	);
 };
 
 
@@ -234,10 +227,13 @@ Fabric.prototype.beziTo =
 Fabric.prototype.deClip =
 	function( )
 {
-	if ( !this.$clip )
-		{ throw new Error('not clipping!'); }
+	if( !this.$clip )
+	{
+		throw new Error('not clipping!');
+	}
 
 	this.$clip = false;
+
 	this._cx.restore( );
 };
 
@@ -255,7 +251,9 @@ Fabric.prototype.deClip =
 |
 */
 Fabric.prototype.drawImage =
-	function( )
+	function(
+		// free strings
+	)
 {
 	var image;
 
@@ -380,36 +378,58 @@ Fabric.prototype.drawImage =
 
 /*
 | Draws an edge.
-|
-| style: the style formated in meshcraft style notation.
-| shape: an object which has 'sketch'() defined
 */
-Fabric.prototype.edge = function(style, shape, sketch, view, a1, a2, a3, a4)
+Fabric.prototype.edge =
+	function(
+		style,  // the style formated in meshcraft style notation.
+		shape,  // an object which has 'sketch'() defined
+		sketch,
+		view,
+		a1,
+		a2,
+		a3,
+		a4
+	)
 {
 	if( style instanceof Array )
 	{
 		for( var i = 0; i < style.length; i++ )
 		{
-			this._edge( style[ i ], shape, sketch, view, a1, a2, a3, a4 );
+			this._edge(
+				style[ i ],
+				shape,
+				sketch,
+				view,
+				a1,
+				a2,
+				a3,
+				a4
+			);
 		}
 	}
 	else
 	{
-		this._edge( style, shape, sketch, view, a1, a2, a3, a4 );
+		this._edge(
+			style,
+			shape,
+			sketch,
+			view,
+			a1,
+			a2,
+			a3,
+			a4
+		);
 	}
 };
 
 
 /*
 | Draws a filled area.
-|
-| style: the style formated in meshcraft style notation.
-| shape: an object which has 'sketch'() defined
 */
 Fabric.prototype.fill =
 	function(
-		style,
-		shape,
+		style,   // the style formated in meshcraft style notation.
+		shape,   // an object which has 'sketch'() defined
 		sketch,
 		view,
 		a1,
@@ -464,7 +484,7 @@ Fabric.prototype.fill =
 */
 Fabric.prototype.paintText =
 	function(
-		// free string
+		// free strings
 	)
 {
 	var text;
@@ -608,6 +628,8 @@ Fabric.prototype.fillRect =
 		a4
 	)
 {
+	console.log('TODO', 'REMOVE fillRect');
+
 	var cx = this._cx;
 
 	this._$font = null;
@@ -625,14 +647,22 @@ Fabric.prototype.fillRect =
 				a1.pse.y
 			);
 		}
-
-		if( a1 instanceof Euclid.Point )
+		else if( a1 instanceof Euclid.Point )
 		{
 			return this._cx.fillRect(
 				a1.x,
 				a1.y,
 				a2.x,
 				a2.y
+			);
+		}
+		else if( a1 instanceof Euclid.Fabric )
+		{
+			return this._cx.fillRect(
+				0,
+				0,
+				this.width,
+				this.height
 			);
 		}
 
@@ -659,9 +689,15 @@ Fabric.prototype.getCenter =
 	var c = this._$center;
 
 	if( c && c.x === x && c.y === y )
-		{ return c; }
+	{
+		return c;
+	}
 	else
-		{ return this._$center = new Euclid.Point(x, y); }
+	{
+		return (
+			this._$center = new Euclid.Point( x, y )
+		);
+	}
 };
 
 
@@ -684,8 +720,10 @@ Fabric.prototype.getImageData =
 	{
 		if( a1 instanceof Euclid.Rect )
 		{
-			x1 = a1.pnw.x; y1 = a1.pnw.y;
-			x2 = a1.pse.x; y2 = a1.pse.y;
+			x1 = a1.pnw.x;
+			y1 = a1.pnw.y;
+			x2 = a1.pse.x;
+			y2 = a1.pse.y;
 		}
 		else if( a1 instanceof Euclid.Point )
 		{
@@ -923,6 +961,7 @@ Fabric.prototype.paint =
 	)
 {
 	var fillStyle = style.fill;
+
 	var edgeStyle = style.edge;
 
 	var cx = this._cx;
@@ -1164,6 +1203,7 @@ Fabric.prototype._colorStyle =
 {
 	if( style.substring )
 		{ return style; }
+
 	else if( !style.gradient )
 		{ throw new Error( 'unknown style' ); }
 
@@ -1287,6 +1327,86 @@ Fabric.prototype._edge =
 
 	cx.stroke( );
 };
+
+
+/*
+| Draws the fabrics background
+*/
+Fabric.prototype.sketch =
+	function(
+		fabric,
+		border,
+		twist,
+		view
+	)
+{
+	var w = this.width;
+	var h = this.height;
+
+	fabric.moveTo( 0, 0 );
+	fabric.lineTo( w, 0 );
+	fabric.lineTo( w, h );
+	fabric.lineTo( 0, h );
+	fabric.lineTo( 0, 0 );
+};
+
+
+/*
+| pnw
+*/
+Fabric.prototype.pnw =
+	Euclid.Point.zero;
+
+/*
+| pse
+*/
+Object.defineProperty(
+	Fabric.prototype,
+	'pse',
+	{
+		get :
+			function( )
+			{
+				return new Euclid.Point(
+					this.width,
+					this.height
+				);
+			}
+	}
+);
+
+
+/*
+| Fabric width.
+*/
+Object.defineProperty(
+	Fabric.prototype,
+	'width',
+	{
+		get :
+			function( )
+			{
+				return this._canvas.width;
+			}
+	}
+);
+
+
+/*
+| Fabric height.
+*/
+Object.defineProperty(
+	Fabric.prototype,
+	'height',
+	{
+		get :
+			function( )
+			{
+				return this._canvas.height;
+			}
+	}
+);
+
 
 
 } )( );

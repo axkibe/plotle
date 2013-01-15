@@ -9,6 +9,7 @@
 | Export
 */
 var Disc;
+
 Disc = Disc || { };
 
 
@@ -39,6 +40,8 @@ if( typeof( window ) === 'undefined' )
 
 /*
 | Constructor
+|
+| TODO change to free string arguments
 */
 var MainDisc = Disc.MainDisc =
 	function(
@@ -48,16 +51,27 @@ var MainDisc = Disc.MainDisc =
 {
 	this.name  = 'main';
 
-	this.createDisc = new Disc.CreateDisc( screensize );
+	this.createDisc = new Disc.CreateDisc(
+		screensize
+	);
 
 	this.screensize = screensize;
+
 	var style = theme.disc.main;
 
-	var width  = this.width  = style.width;
-	var height = this.height = style.height;
+	var width =
+		this.width =
+		style.width;
 
-	var ew = style.ellipse.width;
-	var eh = style.ellipse.height;
+	var height =
+		this.height =
+		style.height;
+
+	var ew =
+		style.ellipse.width;
+
+	var eh =
+		style.ellipse.height;
 
 	this.pnw = new Euclid.Point(
 		0,
@@ -88,6 +102,7 @@ var MainDisc = Disc.MainDisc =
 		'gradientR1',
 			650
 	);
+
 
 	this.buttons =
 		Jools.immute(
@@ -158,7 +173,9 @@ var MainDisc = Disc.MainDisc =
 			}
 		);
 
-	this.$hover = inherit ? inherit.$hover  : null;
+	this.$hover = inherit ?
+		inherit.$hover :
+		null;
 };
 
 
@@ -347,8 +364,11 @@ MainDisc.prototype.pointingHover =
 		ctrl
 	)
 {
-	var pnw = this.pnw;
-	var pse = this.pse;
+	var pnw =
+		this.pnw;
+
+	var pse =
+		this.pse;
 
 	// shortcut if p is not near the panel
 	if(
@@ -380,6 +400,7 @@ MainDisc.prototype.pointingHover =
 	var pp = p.sub(pnw);
 
 	// FIXME Optimize by reusing the latest path of this.$fabric
+
 	if( !fabric.withinSketch(
 			this.silhoutte,
 			'sketch',
@@ -560,6 +581,7 @@ MainDisc.prototype.poke =
 	function( )
 {
 	this.$fabric = null;
+
 	shell.redraw = true;
 };
 
@@ -578,10 +600,73 @@ MainDisc.prototype.setHover =
 	}
 
 	this.$fabric = null;
+
 	this.$hover  = name;
 
 	shell.redraw = true;
 };
 
+
+/*
+| Sets the current user
+*/
+MainDisc.prototype.setUser =
+	function(
+		user,
+		passhash
+	)
+{
+//XXX	console.log( 'TODO setuser():', user, passhash );
+};
+
+
+/*
+| Displays a message
+*/
+MainDisc.prototype.message =
+	function(
+		message
+	)
+{
+//XXX	console.log( 'TODO message():', message );
+};
+
+
+/*
+| Displays a current space
+*/
+MainDisc.prototype.setCurSpace =
+	function(
+		space,
+		access
+	)
+{
+//XXX	console.log( 'TODO setCurSpace():', space, access );
+};
+
+
+/*
+| Displays the current space zoom level
+*/
+MainDisc.prototype.setSpaceZoom =
+	function(
+		zf
+	)
+{
+//XXX	console.log( 'TODO setSpaceZoom():', zf );
+};
+
+/*
+| Start of a dragging operation.
+*/
+MainDisc.prototype.dragStart =
+	function(
+		// p,
+		// shift,
+		// ctrl
+	)
+{
+	return null;
+};
 
 } )( );

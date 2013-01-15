@@ -104,6 +104,7 @@ var Ellipse = Euclid.Ellipse =
 	Jools.immute(this);
 };
 
+
 Jools.subclass( Ellipse, Euclid.Shape );
 
 

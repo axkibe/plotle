@@ -414,9 +414,16 @@ System.prototype._onCanvasKeyDown = function( event )
 	var shift = event.shiftKey;
 	var ctrl  = event.ctrlKey || event.metaKey;
 
-	if( !this._specialKey( kcode, shift, ctrl ) )
+	if(
+		!this._specialKey(
+			kcode,
+			shift,
+			ctrl
+		)
+	)
 	{
 		event.preventDefault();
+
 		return false;
 	}
 };

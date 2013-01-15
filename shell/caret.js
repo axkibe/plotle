@@ -30,7 +30,9 @@ var system;
 'use strict';
 
 if( typeof( window ) === 'undefined' )
-	{ throw new Error( 'this code needs a browser!' ); }
+{
+	throw new Error( 'this code needs a browser!' );
+}
 
 
 /*
@@ -46,26 +48,32 @@ Caret =
 {
 	// the section the caret is in
 	//   space or board.
-	this.section = section;
+	this.section =
+		section;
 
 	// when section is
 	// space: a signature pointing to the item the caret is in
 	// board: the panel and the component
-	this.sign = sign;
+	this.sign =
+		sign;
 
 	// x position to retain when using up/down keys.
-	this.retainx = retainx;
+	this.retainx =
+		retainx;
 
-	Jools.immute(this);
+	Jools.immute( this );
 
 	// position cache
-	this.$pos = null;
+	this.$pos =
+		null;
 
 	// true if visible
-	this.$shown = !!shown;
+	this.$shown =
+		!!shown;
 
 	// true when just blinked away
-	this.$blinked = false;
+	this.$blinked =
+		false;
 };
 
 
@@ -75,7 +83,8 @@ Caret =
 | Without it uses drawImage() for the whole canvas.
 | On firefox this is paradoxically way faster.
 */
-Caret.useGetImageData = true;
+Caret.useGetImageData =
+	true;
 
 
 /*
@@ -84,8 +93,12 @@ Caret.useGetImageData = true;
 Caret.prototype.show =
 	function( )
 {
-	this.$shown = true;
-	this.$blinked = false;
+	this.$shown =
+		true;
+
+	this.$blinked =
+		false;
+
 	system.restartBlinker();
 };
 
@@ -93,8 +106,8 @@ Caret.prototype.show =
 /*
 | Hides the caret.
 */
-Caret.prototype.hide
-	= function( )
+Caret.prototype.hide =
+	function( )
 {
 	this.$shown = false;
 };
@@ -103,8 +116,8 @@ Caret.prototype.hide
 /*
 | Draws or erases the caret.
 */
-Caret.prototype.display
-	= function( )
+Caret.prototype.display =
+	function( )
 {
 	if( shell.$caret !== this )
 	{
@@ -136,7 +149,10 @@ Caret.prototype.display
 	this.$height =
 		null;
 
-	if( !this.$shown || !this.sign )
+	if(
+		!this.$shown ||
+		!this.sign
+	)
 	{
 		return;
 	}
@@ -144,7 +160,7 @@ Caret.prototype.display
 	// calculates new position
 	// even if blinked, so system can fiddle the input
 	// position correctly
-	shell.positionCaret();
+	shell.positionCaret( );
 
 	// double check this is still _the_ caret.
 	if( shell.$caret !== this )
@@ -152,13 +168,16 @@ Caret.prototype.display
 		throw new Error( 'shell.$caret !== this' );
 	}
 
-	var pos    = this.$screenPos;
-	var height = this.$height;
+	var pos =
+		this.$screenPos;
+
+	var height =
+		this.$height;
 
 	if( !this.$blinked && pos !== null )
 	{
 		// saves the caret background
-		if (Caret.useGetImageData)
+		if( Caret.useGetImageData )
 		{
 			this.$save = shell.fabric.getImageData(
 				pos.x,
@@ -209,4 +228,4 @@ Caret.prototype.blink =
 };
 
 
-})( );
+} )( );

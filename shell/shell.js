@@ -20,9 +20,10 @@ var Shell = null;
 var Action;
 var Bridge;
 var Caret;
-var Dash;
+var Disc;
 var Euclid;
 var fontPool;
+var Forms;
 var IFace;
 var Jools;
 var MeshMashine;
@@ -69,21 +70,46 @@ Shell = function( fabric )
 
 	this.fabric  = fabric;
 
+	// TODO mark as private
 	this.$space  = null;
-	this.$board  = new Dash.Board( );
 
-	this.$caret  = new Caret( null, null, null, false );
+	this.$forms = {
+		login : new Forms.Form()
+	};
 
-	this.bridge = new Bridge();
+	// TODO mark as private
+	this.$disc = new Disc.MainDisc(
+		null,
+		new Euclid.Point(
+			fabric.width,
+			fabric.height
+		)
+	);
 
-	this.selection = new Range( );
+	// TODO change Caret to free string arguments
+	this.$caret  = new Caret(
+		null,
+		null,
+		null,
+		false
+	);
+
+	this.bridge =
+		new Bridge( );
+
+	this.selection =
+		new Range( );
 
 	// true at greenscreen frowny
-	this.green     = false;
+	this.green =
+		false;
 
 	// sets the caret to shown if the document has focus
-	// if it is unknown, asume shown
-	if( !document.hasFocus || document.hasFocus( ) )
+	// if it is unknown, assumes shown
+	if(
+		!document.hasFocus ||
+		document.hasFocus( )
+	)
 	{
 		this.$caret.show( );
 	}
@@ -117,7 +143,9 @@ Shell.prototype.setCaret =
 {
 	switch( section )
 	{
+
 		case null :
+
 			if( sign !== null )
 			{
 				throw new Error( 'setCaret section=null, invalid sign' );
@@ -126,15 +154,18 @@ Shell.prototype.setCaret =
 
 		case 'board' :
 		case 'space' :
+
 			switch( sign && sign.constructor )
 			{
-				case null   :
+				case null :
 					break;
 
-				case Sign   :
+				case Sign :
+
 					break;
 
 				case Object :
+
 					sign = new Sign( sign );
 					break;
 
@@ -145,9 +176,11 @@ Shell.prototype.setCaret =
 						', invalid sign'
 					);
 			}
+
 			break;
 
 		default :
+
 			throw new Error( 'invalid section' );
 	}
 
@@ -167,7 +200,9 @@ Shell.prototype.setCaret =
 		);
 
 		if( entity )
-			{ entity.knock( ); }
+		{
+			entity.knock( );
+		}
 	}
 
 	this.$caret = new Caret(
@@ -185,7 +220,9 @@ Shell.prototype.setCaret =
 		);
 
 		if( entity )
-			{ entity.knock(); }
+		{
+			entity.knock( );
+		}
 
 		this.redraw = true;
 	}
@@ -197,46 +234,62 @@ Shell.prototype.setCaret =
 /*
 | Returns the first entity a caret can be in
 */
-Shell.prototype._getCaretEntity = function( sec, path )
+Shell.prototype._getCaretEntity =
+	function(
+		sec,
+		path
+	)
 {
 	switch( sec )
 	{
-		case 'board' :
-			// FIXME
-			// return this.$board.getSub(path, Dash.Component);
-			return this.$board.getSub( path );
+		case 'disc' :
+
+			return this.$disc.getSub( path );
 
 		case 'space' :
-			return this.$space.getSub( path, 'Item' );
+
+			return this.$space.getSub(
+				path,
+				'Item'
+			);
 
 		default :
+
 			throw new Error( 'Invalid sec: ' + sec );
 	}
 };
 
 
 /*
-| Positions the caret
+| Positions the caret.
 */
-Shell.prototype.positionCaret = function( )
+Shell.prototype.positionCaret =
+	function( )
 {
 	var caret = this.$caret;
 
 	switch( this.$caret.section )
 	{
 		case null :
+
 			caret.$screenPos = caret.$height = 0;
+
 			return;
 
-		case 'board' :
-			this.$board.positionCaret( );
+		case 'disc' :
+
+			this.$disc.positionCaret( );
+
 			return;
 
 		case 'space' :
+
 			this.$space.positionCaret( );
+
 			return;
 
 		default :
+
 			throw new Error(
 				'invalid section: ' + this.$caret.section
 			);
@@ -246,12 +299,21 @@ Shell.prototype.positionCaret = function( )
 /*
 | Peer received a message.
 */
-Shell.prototype.messageRCV = function( space, user, message )
+Shell.prototype.messageRCV =
+	function(
+		space,
+		user,
+		message
+	)
 {
 	if( user )
-		{ this.$board.message( user + ': ' + message ); }
+	{
+		this.$disc.message( user + ': ' + message );
+	}
 	else
-		{ this.$board.message( message ); }
+	{
+		this.$disc.message( message );
+	}
 
 	this.poke( );
 };
@@ -260,7 +322,11 @@ Shell.prototype.messageRCV = function( space, user, message )
 /*
 | MeshMashine is reporting updates.
 */
-Shell.prototype.update = function( tree, chgX )
+Shell.prototype.update =
+	function(
+		tree,
+		chgX
+	)
 {
 	this.$space.update( tree.root );
 
@@ -270,16 +336,29 @@ Shell.prototype.update = function( tree, chgX )
 	{
 		this.setCaret(
 			caret.section,
-			MeshMashine.tfxSign( caret.sign, chgX ),
+			MeshMashine.tfxSign(
+				caret.sign,
+				chgX
+			),
 			caret.retainx
 		);
 	}
 
 	var selection = this.selection;
+
 	if( selection.active )
 	{
-		selection.sign1 = MeshMashine.tfxSign( selection.sign1, chgX );
-		selection.sign2 = MeshMashine.tfxSign( selection.sign2, chgX );
+		selection.sign1 =
+			MeshMashine.tfxSign(
+				selection.sign1,
+				chgX
+			);
+
+		selection.sign2 =
+			MeshMashine.tfxSign(
+				selection.sign2,
+				chgX
+			);
 	}
 
 	this._draw( );
@@ -293,7 +372,9 @@ Shell.prototype.systemFocus =
 	function( )
 {
 	if( this.green )
-		{ return; }
+	{
+		return;
+	}
 
 	var caret = this.$caret;
 	caret.show( );
@@ -330,7 +411,10 @@ Shell.prototype.blink =
 	}
 
 	// tests for font size changes
-	var w = Euclid.Measure.width( this._fontWFont, 'meshcraft$8833' );
+	var w = Euclid.Measure.width(
+		this._fontWFont,
+		'meshcraft$8833'
+	);
 
 	if( w !== this._$fontWatch )
 	{
@@ -372,7 +456,7 @@ Shell.prototype.poke =
 | Force-clears all caches.
 */
 Shell.prototype.knock =
-	function()
+	function( )
 {
 	if( this.green )
 	{
@@ -383,9 +467,11 @@ Shell.prototype.knock =
 	this.$caret.$screenPos = null;
 
 	if( this.$space )
-		{ this.$space.knock( ); }
+	{
+		this.$space.knock( );
+	}
 
-	this.$board.knock( );
+	this.$disc.knock( );
 
 	this._draw( );
 };
@@ -416,9 +502,67 @@ Shell.prototype.sketchFrowny =
 
 
 /*
+| Draws the green screen
+*/
+Shell.prototype._drawGreenScreen =
+	function(
+		fabric
+	)
+{
+	var ce = fabric.getCenter( );
+
+	fabric.fillRect(
+		'rgb(170, 255, 170)',
+		0, 0,
+		fabric.width, fabric.height
+	);
+
+	fabric.edge(
+		[
+			{
+				border : 0,
+				width  : 1,
+				color  : 'black'
+			}
+		],
+		this,
+		'sketchFrowny',
+		Euclid.View.proper,
+		ce.add( 0, -80 )
+	);
+
+	fabric.paintText(
+		'text',
+			this.green,
+		'p',
+			ce,
+		'font',
+			fontPool.get(
+				26,
+				'cm'
+			)
+	);
+
+	fabric.paintText(
+		'text',
+			'Please refresh the page to reconnect.',
+		'xy',
+			ce.x,
+			ce.y + 50,
+		'font',
+			fontPool.get(
+				20,
+				'cm'
+			)
+	);
+};
+
+
+/*
 | Draws the dashboard and the space.
 */
-Shell.prototype._draw = function( )
+Shell.prototype._draw =
+	function( )
 {
 	var fabric = this.fabric;
 
@@ -426,60 +570,35 @@ Shell.prototype._draw = function( )
 
 	if( this.green )
 	{
-		var ce = fabric.getCenter( );
-
-		fabric.fillRect(
-			'rgb(170, 255, 170)',
-			0, 0,
-			fabric.width, fabric.height
-		);
-
-		fabric.edge(
-			[
-				{
-					border : 0,
-					width  : 1,
-					color  : 'black'
-				}
-			],
-			this,
-			'sketchFrowny',
-			Euclid.View.proper,
-			ce.add( 0, -80 )
-		);
-
-		fabric.paintText(
-			'text',
-				this.green,
-			'p',
-				ce,
-			'font',
-				fontPool.get( 26, 'cm' )
-		);
-
-		fabric.paintText(
-			'text',
-				'Please refresh the page to reconnect.',
-			'xy',
-				ce.x,
-				ce.y + 50,
-			'font',
-				fontPool.get( 20, 'cm' )
-		);
+		this._drawGreenScreen( fabric );
 
 		return;
 	}
 
 	// removes caret cache.
 	this.$caret.$save = null;
+
 	this.$caret.$screenPos = null;
 
-	if( this.$space )
+	switch( this.bridge.mode( ) )
 	{
-		this.$space.draw( );
+		case 'Login' :
+
+			this.$forms.login.draw( fabric );
+
+			break;
+
+		default :
+
+			if( this.$space )
+			{
+				this.$space.draw( fabric );
+			}
+			break;
 	}
 
-	this.$board.draw( );
+
+	this.$disc.draw( fabric );
 
 	this.$caret.display( );
 
@@ -549,7 +668,7 @@ Shell.prototype.pointingHover =
 
 	if( cursor )
 	{
-		this.$board.pointingHover(
+		this.$disc.pointingHover(
 			null,
 			shift,
 			ctrl
@@ -558,7 +677,7 @@ Shell.prototype.pointingHover =
 	else
 	{
 		cursor =
-			this.$board.pointingHover(
+			this.$disc.pointingHover(
 				p,
 				shift,
 				ctrl
@@ -600,7 +719,8 @@ Shell.prototype.pointingHover =
 /*
 | Changes the shell to a green error screen.
 */
-Shell.prototype.greenscreen = function( message )
+Shell.prototype.greenscreen =
+	function( message )
 {
 	if( this.green )
 	{
@@ -639,7 +759,7 @@ Shell.prototype.pointingStart =
 
 	if( pointingState === null )
 	{
-		pointingState = this.$board.pointingStart(
+		pointingState = this.$disc.pointingStart(
 			p,
 			shift,
 			ctrl
@@ -675,16 +795,32 @@ Shell.prototype.dragStart =
 		ctrl
 	)
 {
-	if (this.green)
-		{ return; }
+	if( this.green )
+	{
+		return;
+	}
 
-	var cursor = this.$board.dragStart(p, shift, ctrl);
+	var cursor =
+		this.$disc.dragStart(
+			p,
+			shift,
+			ctrl
+		);
 
-	if (cursor === null && this.$space)
-		{ cursor = this.$space.dragStart(p, shift, ctrl); }
+	if( cursor === null && this.$space )
+	{
+		cursor =
+			this.$space.dragStart(
+				p,
+				shift,
+				ctrl
+			);
+	}
 
-	if (this.redraw)
-		{ this._draw(); }
+	if( this.redraw )
+	{
+		this._draw( );
+	}
 
 	return cursor;
 };
@@ -701,21 +837,27 @@ Shell.prototype.dragMove =
 	)
 {
 	if( this.green )
-		{ return; }
+	{
+		return;
+	}
 
-	var action = this.bridge.action( );
+	var action =
+		this.bridge.action( );
 
 	if( !action )
-		{ throw new Error( 'no action on dragMove' ); }
+	{
+		throw new Error( 'no action on dragMove' );
+	}
 
-	var cursor = null;
+	var cursor =
+		null;
 
 	switch( action.section )
 	{
 		case 'board' :
 
 			cursor =
-				this.$board.dragMove(
+				this.$disc.dragMove(
 					p,
 					shift,
 					ctrl
@@ -758,18 +900,23 @@ Shell.prototype.dragStop =
 	)
 {
 	if( this.green )
-		{ return; }
+	{
+		return;
+	}
 
-	var action = this.bridge.action( );
+	var action =
+		this.bridge.action( );
 
 	if( !action )
-		{ throw new Error( 'no action on dragStop' ); }
+	{
+		throw new Error( 'no action on dragStop' );
+	}
 
 	switch( action.section )
 	{
 		case 'board' :
 
-			this.$board.dragStop(
+			this.$disc.dragStop(
 				p,
 				shift,
 				ctrl
@@ -781,7 +928,11 @@ Shell.prototype.dragStop =
 
 			if( this.$space )
 			{
-				this.$space.dragStop( p, shift, ctrl );
+				this.$space.dragStop(
+					p,
+					shift,
+					ctrl
+				);
 			}
 
 			break;
@@ -843,7 +994,9 @@ Shell.prototype.specialKey =
 		ctrl
 	)
 {
-	if (this.green)
+	console.log('SK', key);
+
+	if( this.green )
 	{
 		return;
 	}
@@ -854,7 +1007,7 @@ Shell.prototype.specialKey =
 	{
 		case 'board' :
 
-			this.$board.specialKey(
+			this.$disc.specialKey(
 				key,
 				shift,
 				ctrl
@@ -864,7 +1017,7 @@ Shell.prototype.specialKey =
 		case null    :
 		case 'space' :
 
-			if (this.$space)
+			if( this.$space )
 			{
 				this. $space.specialKey(
 					key,
@@ -881,7 +1034,7 @@ Shell.prototype.specialKey =
 
 	if( this.redraw )
 	{
-		this._draw();
+		this._draw( );
 	}
 };
 
@@ -897,12 +1050,16 @@ Shell.prototype.input =
 		return;
 	}
 
+	console.log('INP', text);
+
+
 	if( this.selection.active )
 	{
-		this.selection.remove();
+		this.selection.remove( );
 	}
 
-	var caret  = this.$caret;
+	var caret =
+		this.$caret;
 
 	switch( caret.section )
 	{
@@ -912,13 +1069,17 @@ Shell.prototype.input =
 
 		case 'board' :
 
-			this.$board.input( text );
+			this.$disc.input(
+				text
+			);
 
 			break;
 
 		case 'space' :
 
-			this.$space.input( text );
+			this.$space.input(
+				text
+			);
 
 			break;
 
@@ -939,10 +1100,22 @@ Shell.prototype.input =
 */
 Shell.prototype.resize =
 	function(
-		// width,
-		// height
+		width,
+		height
 	)
 {
+	var fabric =
+		this.fabric;
+
+	this.$disc =
+		new Disc.MainDisc(
+			this.$disc,
+			new Euclid.Point(
+				fabric.width,
+				fabric.height
+			)
+		);
+
 	this._draw( );
 };
 
@@ -957,24 +1130,38 @@ Shell.prototype.setUser =
 	)
 {
 	this.$user = user;
-	this.$board.setUser(user);
-	this.peer.setUser(user, passhash);
 
-	if (user.substr(0, 5) !== 'visit')
+	this.$disc.setUser( user );
+
+	this.peer.setUser(
+		user,
+		passhash
+	);
+
+	if( user.substr( 0, 5 ) !== 'visit' )
 	{
 		window.localStorage.setItem('user', user);
 		window.localStorage.setItem('passhash', passhash);
 	}
 	else
 	{
-		if( this.$space &&
-			this.$space.spacename.substr(0, 9) !== 'meshcraft')
+		if(
+			this.$space &&
+			this.$space.spacename.substr(0, 9) !== 'meshcraft'
+		)
 		{
 			this.moveToSpace('meshcraft:home');
 		}
 
-		window.localStorage.setItem('user', null);
-		window.localStorage.setItem('passhash', null);
+		window.localStorage.setItem(
+			'user',
+			null
+		);
+
+		window.localStorage.setItem(
+			'passhash',
+			null
+		);
 	}
 };
 
@@ -987,7 +1174,7 @@ Shell.prototype.setSpaceZoom =
 		zf
 	)
 {
-	this.$board.setSpaceZoom( zf );
+	this.$disc.setSpaceZoom( zf );
 };
 
 
@@ -1000,7 +1187,9 @@ Shell.prototype.changeSpaceZoom =
 	)
 {
 	if( !this.$space )
-		{ return; }
+	{
+		return;
+	}
 
 	this.$space.changeZoom( df );
 };
@@ -1019,12 +1208,16 @@ Shell.prototype.onload =
 		)
 	);
 
-	var user = window.localStorage.getItem( 'user' );
+	var user =
+		window.localStorage.getItem( 'user' );
 
-	var passhash = null;
+	var passhash =
+		null;
+
 	if( user )
 	{
-		passhash = window.localStorage.getItem( 'passhash' );
+		passhash =
+			window.localStorage.getItem( 'passhash' );
 	}
 	else
 	{
@@ -1076,10 +1269,15 @@ Shell.prototype.moveToSpace =
 	}
 	else
 	{
-		self.$board.message( 'Moving to "' + name + '" ...' );
+		self.$disc.message(
+			'Moving to "' + name + '" ...'
+		);
 	}
 
-	self.$board.setCurSpace( '', '' );
+	self.$disc.setCurSpace(
+		'',
+		''
+	);
 
 	this.peer.aquireSpace(
 		name,
@@ -1091,9 +1289,9 @@ Shell.prototype.moveToSpace =
 				return;
 			}
 
-			if (val.name !== name)
+			if( val.name !== name )
 			{
-				throw new Error('server served wrong space!');
+				throw new Error( 'server served wrong space!' );
 			}
 
 			var tree = val.tree;
@@ -1104,12 +1302,12 @@ Shell.prototype.moveToSpace =
 				val.access
 			);
 
-			self.$board.setCurSpace(
+			self.$disc.setCurSpace(
 				name,
 				val.access
 			);
 
-			self.$board.setSpaceZoom( 0 );
+			self.$disc.setSpaceZoom( 0 );
 
 			self._draw( );
 		}

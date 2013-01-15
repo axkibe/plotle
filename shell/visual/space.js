@@ -52,7 +52,6 @@ var Space = Visual.Space =
 	var sub = this.$sub = { };
 
 	this.access = access;
-	this.fabric = system.fabric;
 
 	this.$view  = new Euclid.View( Euclid.Point.zero, 0 );
 
@@ -193,16 +192,19 @@ Space.prototype.createItem =
 | Redraws the complete space.
 */
 Space.prototype.draw =
-	function( )
+	function(
+		fabric
+	)
 {
 	var twig = this.twig;
 	var view = this.$view;
+	this._center = fabric.getCenter( );
 	var zone;
 
 	for( var r = twig.length - 1; r >= 0; r-- )
 	{
 		this.atRank( r ).draw(
-			this.fabric,
+			fabric,
 			view
 		);
 	}
@@ -211,7 +213,7 @@ Space.prototype.draw =
 	if( focus )
 	{
 		focus.drawHandles(
-			this.fabric,
+			fabric,
 			view
 		);
 	}
@@ -230,7 +232,7 @@ Space.prototype.draw =
 				);
 
 				Visual.Label.s_drawTrans(
-					this.fabric,
+					fabric,
 					view,
 					trans
 				);
@@ -249,7 +251,7 @@ Space.prototype.draw =
 				);
 
 				Visual.Note.s_drawTrans(
-					this.fabric,
+					fabric,
 					view,
 					zone
 				);
@@ -267,7 +269,7 @@ Space.prototype.draw =
 				);
 
 				Visual.Portal.s_drawTrans(
-					this.fabric,
+					fabric,
 					view,
 					zone
 				);
@@ -285,7 +287,7 @@ Space.prototype.draw =
 				);
 
 				fromItem.highlight(
-					this.fabric,
+					fabric,
 					view
 				);
 
@@ -300,7 +302,7 @@ Space.prototype.draw =
 						);
 
 					toItem.highlight(
-						this.fabric,
+						fabric,
 						view
 					);
 				}
@@ -341,7 +343,7 @@ Space.prototype.draw =
 						);
 
 					arrow.draw(
-						this.fabric,
+						fabric,
 						view,
 						theme.relation.style
 					);
@@ -666,11 +668,7 @@ Space.prototype.click =
 		ctrl
 	)
 {
-	var self = this;
 	var view = this.$view;
-
-	// clicked the tab of the focused item?
-	var focus = this.focusedItem( );
 
 	// clicked some item?
 	for( var a = 0, aZ = this.twig.length; a < aZ; a++ )
@@ -1193,7 +1191,7 @@ Space.prototype.input =
 Space.prototype.changeZoom =
 	function( df )
 {
-	var pm = this.$view.depoint( this.fabric.getCenter( ) );
+	var pm = this.$view.depoint( this._center );
 
 	this.$view = this.$view.review( df, pm );
 
@@ -1222,12 +1220,15 @@ Space.prototype.specialKey =
 			case 'z' :
 				shell.peer.undo( );
 				return;
+
 			case 'y' :
 				shell.peer.redo( );
 				return;
+
 			case ',' :
 				this.changeZoom(  1 );
 				return;
+
 			case '.' :
 				this.changeZoom( -1 );
 				return;

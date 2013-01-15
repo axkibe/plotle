@@ -1,10 +1,8 @@
 /*
-|
 | The interface that talks asynchronously with the server.
 | This is the normal way the meshcraft shell operates.
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
@@ -38,55 +36,80 @@ var system;
 
 
 if( typeof ( window ) === 'undefined' )
-	{ throw new Error( 'this code nees a browser!' ); }
+{
+	throw new Error( 'this code nees a browser!' );
+}
 
 
 /*
 | Constructor.
 */
-IFace = function( updateRCV, messageRCV )
+IFace =
+	function(
+		updateRCV,
+		messageRCV
+	)
 {
 	// the current space;
-	this.$cSpace  = null;
+	this.$cSpace =
+		null;
 
 	// the remote tree.
 	// what the client thinks the server thinks.
-	this.$rSpace  = null;
+	this.$rSpace =
+		null;
 
 	// the remote time sequence
-	this.$remoteTime = null;
+	this.$remoteTime =
+		null;
 
 	// the current message sequence number
-	this.$mseq = null;
+	this.$mseq =
+		null;
 
 	// changes to be send to the server
-	this._$outbox = null;
+	this._$outbox =
+		null;
 
 	// changes that are currently on the way to the server
-	this.$postbox = null;
+	this.$postbox =
+		null;
 
 	// reports updates to this object.
-	this._updateRCV  = updateRCV;
+	this._updateRCV =
+		updateRCV;
 
 	// reports messages to this object.
-	this._messageRCV = messageRCV;
+	this._messageRCV =
+		messageRCV;
 
 	// current update request
-	this._$updateAjax = null;
+	this._$updateAjax =
+		null;
 };
 
 
 /*
 | General purpose AJAX.
 */
-IFace.prototype._ajax = function( request, callback )
+IFace.prototype._ajax =
+	function(
+		request,
+		callback
+	)
  {
 	if( !request.cmd )
-		{ throw new Error( 'ajax request.cmd missing' ); }
+	{
+		throw new Error( 'ajax request.cmd missing' );
+	}
 
     var ajax = new XMLHttpRequest( );
 
-    ajax.open( 'POST', '/mm', true );
+    ajax.open(
+		'POST',
+		'/mm',
+		true
+	);
 
     ajax.setRequestHeader(
 		'Content-type',
@@ -96,7 +119,9 @@ IFace.prototype._ajax = function( request, callback )
     ajax.onreadystatechange = function( )
 	{
 		if( ajax.readyState !== 4 )
-			{ return; }
+		{
+			return;
+		}
 
 		if( ajax.status !== 200 )
 		{
@@ -123,7 +148,9 @@ IFace.prototype._ajax = function( request, callback )
 
 		var asw;
 		try
-			{ asw = JSON.parse( ajax.responseText ); }
+		{
+			asw = JSON.parse( ajax.responseText );
+		}
 		catch( e )
 		{
 			if( callback )
@@ -142,19 +169,28 @@ IFace.prototype._ajax = function( request, callback )
 		if( !asw.ok )
 		{
 			Jools.log( 'iface', request.cmd, 'server not ok' );
+
 			if( callback )
-				{ callback( asw, null ); }
+			{
+				callback( asw, null );
+			}
 
 			return;
 		}
 
 		if( callback )
-			{ callback( asw ); }
+		{
+			callback( asw );
+		}
 	};
 
     var rs = JSON.stringify( request );
 
-    Jools.log( 'iface', '->', rs );
+    Jools.log(
+		'iface',
+		'->',
+		rs
+	);
 
 	ajax.send( rs );
 };
@@ -169,19 +205,30 @@ IFace.prototype.setUser =
 		passhash
 	)
 {
-	this.$user     = user;
-	this.$passhash = passhash;
+	this.$user =
+		user;
+
+	this.$passhash =
+		passhash;
 };
 
 
 /*
 | Authentication
 */
-IFace.prototype.auth = function(user, passhash, callback)
+IFace.prototype.auth =
+	function(
+		user,
+		passhash,
+		callback
+	)
 {
 	var self = this;
-    if (self.$authActive)
-		{ throw new Error('Auth already active'); }
+
+    if( self.$authActive )
+	{
+		throw new Error( 'Auth already active' );
+	}
 
 	self.$authActive = true;
 
@@ -191,14 +238,27 @@ IFace.prototype.auth = function(user, passhash, callback)
 			user     : user,
 			passhash : passhash
 		},
-		function(asw)
+		function( asw )
 		{
 			self.$authActive = false;
 
-			if (asw.ok)
-				{ callback( { ok: true, user: asw.user, passhash: passhash } ); }
+			if( asw.ok )
+			{
+				callback(
+					{
+						ok :
+							true,
+						user :
+							asw.user,
+						passhash :
+							passhash
+					}
+				);
+			}
 			else
-				{ callback(asw); }
+			{
+				callback( asw );
+			}
 		}
 	);
 };
@@ -219,7 +279,9 @@ IFace.prototype.register =
 	var self = this;
 
     if( self.$regActive )
-		{ throw new Error( 'Auth already active' ); }
+	{
+		throw new Error( 'Auth already active' );
+	}
 
 	self.$regActive = true;
 
@@ -243,20 +305,32 @@ IFace.prototype.register =
 /*
 | Sends a message.
 */
-IFace.prototype.sendMessage = function(message)
+IFace.prototype.sendMessage =
+	function( message )
 {
 	var self = this;
 
-	if (!Jools.isString(message))
-		{ throw new Error('message is no string'); }
+	if( !Jools.isString( message ) )
+	{
+		throw new Error( 'message is no string' );
+	}
 
 	self._ajax(
 		{
-            cmd      : 'message',
-			user     : self.$user,
-			passhash : self.$passhash,
-			space    : self.$spacename,
-			message  : message
+            cmd :
+				'message',
+
+			user :
+				self.$user,
+
+			passhash :
+				self.$passhash,
+
+			space :
+				self.$spacename,
+
+			message :
+				message
 		},
 		null
 	);
@@ -266,42 +340,78 @@ IFace.prototype.sendMessage = function(message)
 /*
 | Aquires a space.
 */
-IFace.prototype.aquireSpace = function(spacename, callback)
+IFace.prototype.aquireSpace =
+	function(
+		spacename,
+		callback
+	)
 {
 	var self = this;
 
 	// aborts the current running update.
-	if (self._$updateAjax)
+	if( self._$updateAjax )
 	{
-		self._$updateAjax.$abort = true;
-		self._$updateAjax.abort();
-		self._$updateAjax = null;
+		self._$updateAjax.$abort =
+			true;
+
+		self._$updateAjax.abort( );
+
+		self._$updateAjax =
+			null;
 	}
 
-	self.$spacename = spacename;
-	self.$cSpace    = null;
-	self.$rSpace    = null;
-	self._$outbox   = [];
-	self.$postbox   = [];
-	self.$mseq      = -1;
-	self._$undo     = [];
-	self._$redo     = [];
+	self.$spacename =
+		spacename;
 
-    var ajax = self.$aquireAjax = new XMLHttpRequest();
+	self.$cSpace =
+		null;
 
-    ajax.open('POST', '/mm', true);
+	self.$rSpace =
+		null;
 
-    ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	self._$outbox =
+		[ ];
 
-    ajax.onreadystatechange = function()
+	self.$postbox =
+		[ ];
+
+	self.$mseq =
+		-1;
+
+	self._$undo =
+		[ ];
+
+	self._$redo =
+		[ ];
+
+    var ajax =
+	self.$aquireAjax =
+		new XMLHttpRequest( );
+
+    ajax.open(
+		'POST',
+		'/mm',
+		true
+	);
+
+    ajax.setRequestHeader(
+		'Content-type',
+		'application/x-www-form-urlencoded'
+	);
+
+    ajax.onreadystatechange = function( )
 	{
 		var asw;
-		if (ajax.readyState !== 4)
-			{ return; }
 
-		if (ajax.status !== 200)
+		if( ajax.readyState !== 4 )
 		{
-			self.$aquireAjax = null;
+			return;
+		}
+
+		if( ajax.status !== 200 )
+		{
+			self.$aquireAjax =
+				null;
 
 			Jools.log(
 				'iface',
@@ -310,8 +420,11 @@ IFace.prototype.aquireSpace = function(spacename, callback)
 
 			callback(
 				{
-					error  : 'connection',
-					status : ajax.status
+					error :
+						'connection',
+
+					status :
+						ajax.status
 				},
 				null
 			);
@@ -325,23 +438,39 @@ IFace.prototype.aquireSpace = function(spacename, callback)
 		}
 		catch( e )
 		{
-			self.$aquireAjax = null;
-			shell.greenscreen( 'Server delivered no JSON.' );
+			self.$aquireAjax =
+				null;
+
+			shell.greenscreen(
+				'Server delivered no JSON.'
+			);
+
 			return;
 		}
 
-		Jools.log('iface', '<-sg', asw);
+		Jools.log(
+			'iface',
+			'<-sg',
+			asw
+		);
 
 		if( !asw.ok )
 		{
-			self.$aquireAjax = null;
-			shell.greenscreen( 'Server not OK: ' + asw.message );
+			self.$aquireAjax =
+				null;
+
+			shell.greenscreen(
+				'Server not OK: ' + asw.message
+			);
+
 			return;
 		}
 
-		self.aquireSpaceActive = false;
+		self.aquireSpaceActive =
+			false;
 
-		self.$remoteTime = asw.time;
+		self.$remoteTime =
+			asw.time;
 
 		if( asw.node.type !== 'Space' )
 		{
@@ -355,80 +484,116 @@ IFace.prototype.aquireSpace = function(spacename, callback)
 		}
 
 		self.$cSpace = self.$rSpace =
-			new Tree( asw.node, Meshverse );
+			new Tree(
+				asw.node,
+				Meshverse
+			);
 
 		callback(
 			null,
-			Jools.immute({
-				tree   : self.$cSpace,
-				name   : spacename,
-				access : asw.access
-			})
+			Jools.immute(
+				{
+					tree   : self.$cSpace,
+					name   : spacename,
+					access : asw.access
+				}
+			)
 		);
 
 		// waits a second before going into update cycle, so safari
 		// stops its wheely thing.
-		system.setTimer(1, function()
-		{
-			if (self.$aquireAjax === ajax)
+		system.setTimer(
+			1,
+			function( )
 			{
-				self._update();
-			}
+				if( self.$aquireAjax === ajax )
+				{
+					self._update( );
+				}
 
-			self.$aquireAjax = null;
-		});
+				self.$aquireAjax =
+					null;
+			}
+		);
 	};
 
     var request =
 		{
-            cmd       : 'get',
-			space     : spacename,
-			path      : new Path( [] ),
-			passhash  : self.$passhash,
-            time      : -1,
-			user      : self.$user
+            cmd :
+				'get',
+
+			space :
+				spacename,
+
+			path :
+				new Path( [ ] ),
+
+			passhash :
+				self.$passhash,
+
+            time :
+				-1,
+
+			user :
+				self.$user
         };
 
-    Jools.log('iface', 'sg->', request);
+    Jools.log(
+		'iface',
+		'sg->',
+		request
+	);
 
-	request = JSON.stringify(request);
+	request = JSON.stringify( request );
 
-    ajax.send(request);
+    ajax.send( request );
 };
 
 
 /*
 | Gets a twig.
 */
-IFace.prototype.get = function(path, len)
+IFace.prototype.get =
+	function(
+		path,
+		len
+	)
 {
-	return this.$cSpace.getPath(path, len);
+	return this.$cSpace.getPath( path, len );
 };
 
 
 /*
 | Sends an update request to the server and computes its answer.
 */
-IFace.prototype._update = function()
+IFace.prototype._update =
+	function( )
 {
 	var self = this;
 
 	if( self._$updateAjax )
 	{
-		throw new Error('double update?');
+		throw new Error( 'double update?' );
 	}
 
 	var ajax = self._$updateAjax = new XMLHttpRequest( );
 
-	ajax.open('POST', '/mm', true);
+	ajax.open(
+		'POST',
+		'/mm',
+		true
+	);
 
-	ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	ajax.setRequestHeader(
+		'Content-type',
+		'application/x-www-form-urlencoded'
+	);
 
 	ajax.onreadystatechange = function( )
 	{
 		var a, aZ, asw, b, bZ, chgX;
 
-		if ( ajax.readyState !== 4 )
+		if( ajax.readyState !== 4 )
 			{ return; }
 
 		// ios bug?
@@ -450,6 +615,7 @@ IFace.prototype._update = function()
 			);
 
 			shell.greenscreen( 'Connection with server failed.' );
+
 			return;
 		}
 
@@ -470,15 +636,23 @@ IFace.prototype._update = function()
 			return;
 		}
 
-		var chgs       = asw.chgs;
-		var report     = new ChangeRay( );
-		var gotOwnChgs = false;
-		var time       = asw.time;
+		var chgs =
+			asw.chgs;
+
+		var report =
+			new ChangeRay( );
+
+		var gotOwnChgs =
+			false;
+
+		var time =
+			asw.time;
 
 		// this wasn't an empty timeout?
 		if( chgs && chgs.length > 0 )
 		{
-			var postbox = self.$postbox;
+			var postbox =
+				self.$postbox;
 
 			for( a = 0, aZ = chgs.length; a < aZ; a++ )
 			{
@@ -536,8 +710,11 @@ IFace.prototype._update = function()
 
 			// adapts all queued changes
 			// and rebuilds the clients understanding of its own tree
-			var outbox = self._$outbox;
-			var space  = self.$rSpace;
+			var outbox =
+				self._$outbox;
+
+			var space =
+				self.$rSpace;
 
 			for( a = 0, aZ = postbox.length; a < aZ; a++ )
 			{
@@ -545,7 +722,10 @@ IFace.prototype._update = function()
 
 				for( b = 0, bZ = report.length; b < bZ; b++ )
 				{
-					chgX = MeshMashine.tfxChgX( chgX, report.get( b ) );
+					chgX = MeshMashine.tfxChgX(
+						chgX,
+						report.get( b )
+					);
 				}
 
 				space = chgX.changeTree( space ).tree;
@@ -559,18 +739,29 @@ IFace.prototype._update = function()
 
 				for( b = 0, bZ = report.length; b < bZ; b++ )
 				{
-					chgX = MeshMashine.tfxChgX( chgX, report.get( b ) );
+					chgX = MeshMashine.tfxChgX(
+						chgX,
+						report.get( b )
+					);
 				}
 
-				c = outbox[ a ] = Jools.immute(
-					{
-						cid  : c.cid,
-						chgX : chgX,
-						time : c.time
-					}
-				);
+				c =
+				outbox[ a ] =
+					Jools.immute(
+						{
+							cid :
+								c.cid,
 
-				space = chgX.changeTree( space ).tree;
+							chgX :
+								chgX,
+
+							time :
+								c.time
+						}
+					);
+
+				space =
+					chgX.changeTree( space ).tree;
 			}
 
 			self.$cSpace = space;
@@ -592,30 +783,52 @@ IFace.prototype._update = function()
 			}
 		}
 
-		self.$remoteTime = asw.timeZ;
+		self.$remoteTime =
+			asw.timeZ;
 
-		var mseqZ = asw.mseqZ;
+		var mseqZ =
+			asw.mseqZ;
 
 		if( Jools.is( mseqZ ) )
-			{ self.$mseq = mseqZ; }
+		{
+			self.$mseq = mseqZ;
+		}
 
 		if( report.length > 0 && self._updateRCV )
-			{ self._updateRCV.update( self.$cSpace, report ); }
+		{
+			self._updateRCV.update(
+				self.$cSpace,
+				report
+			);
+		}
 
 		if( gotOwnChgs )
-			{ self._sendChanges( ); }
+		{
+			self._sendChanges( );
+		}
 
 		// issue the following update
 		self._update( );
 	};
 
 	var request = {
-		cmd      : 'update',
-		passhash : self.$passhash,
-		space    : self.$spacename,
-		time     : self.$remoteTime,
-		mseq     : self.$mseq,
-		user     : self.$user
+		cmd :
+			'update',
+
+		passhash :
+			self.$passhash,
+
+		space :
+			self.$spacename,
+
+		time :
+			self.$remoteTime,
+
+		mseq :
+			self.$mseq,
+
+		user :
+			self.$user
 	};
 
 	Jools.log( 'iface', 'u->', request );
