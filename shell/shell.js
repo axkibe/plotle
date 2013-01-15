@@ -1104,15 +1104,12 @@ Shell.prototype.resize =
 		height
 	)
 {
-	var fabric =
-		this.fabric;
-
 	this.$disc =
 		new Disc.MainDisc(
 			this.$disc,
 			new Euclid.Point(
-				fabric.width,
-				fabric.height
+				width,
+				height
 			)
 		);
 

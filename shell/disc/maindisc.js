@@ -616,7 +616,7 @@ MainDisc.prototype.setUser =
 		passhash
 	)
 {
-//XXX	console.log( 'TODO setuser():', user, passhash );
+	console.log( 'TODO setuser():', user, passhash );
 };
 
 
@@ -628,7 +628,7 @@ MainDisc.prototype.message =
 		message
 	)
 {
-//XXX	console.log( 'TODO message():', message );
+	console.log( 'TODO message():', message );
 };
 
 
@@ -641,7 +641,7 @@ MainDisc.prototype.setCurSpace =
 		access
 	)
 {
-//XXX	console.log( 'TODO setCurSpace():', space, access );
+	console.log( 'TODO setCurSpace():', space, access );
 };
 
 
@@ -653,7 +653,7 @@ MainDisc.prototype.setSpaceZoom =
 		zf
 	)
 {
-//XXX	console.log( 'TODO setSpaceZoom():', zf );
+	console.log( 'TODO setSpaceZoom():', zf );
 };
 
 /*

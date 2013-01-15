@@ -1335,19 +1335,20 @@ Fabric.prototype._edge =
 Fabric.prototype.sketch =
 	function(
 		fabric,
-		border,
-		twist,
-		view
+		border
+		// twist
+		// view
 	)
 {
-	var w = this.width;
-	var h = this.height;
+	var b = border;
+	var w = this.width - b;
+	var h = this.height - b;
 
-	fabric.moveTo( 0, 0 );
-	fabric.lineTo( w, 0 );
+	fabric.moveTo( b, b );
+	fabric.lineTo( w, b );
 	fabric.lineTo( w, h );
-	fabric.lineTo( 0, h );
-	fabric.lineTo( 0, 0 );
+	fabric.lineTo( b, h );
+	fabric.lineTo( b, b );
 };
 
 
