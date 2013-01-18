@@ -13,39 +13,61 @@
 
 "use strict";
 
-if ( typeof( require ) === 'undefined' )
-	{ throw new Error( 'this code requires node!' ); }
+if( typeof( require ) === 'undefined' )
+{
+	throw new Error( 'this code requires node!' );
+}
 
 
 /*
 | Imports
 */
-var Jools       = require( '../shared/jools'       );
-var MeshMashine = require( '../shared/meshmashine' );
-var Meshverse   = require( '../shared/meshverse'   );
-var Path        = require( '../shared/path'        );
-var Resource    = require( './resource'            );
-var Tree        = require( '../shared/tree'        );
-var config      = require( '../config'             );
-var fs          = require( 'fs'                    );
-var http        = require( 'http'                  );
-var sha1        = require( '../shared/sha1'        );
-var mongodb     = require( 'mongodb'               );
-var url         = require( 'url'                   );
-var zlib        = require( 'zlib'                  );
+var Jools =
+	require( '../shared/jools' );
+
+var MeshMashine =
+	require( '../shared/meshmashine' );
+
+var Meshverse =
+	require( '../shared/meshverse' );
+
+var Path =
+	require( '../shared/path' );
+
+var Resource =
+	require( './resource' );
+
+var Tree =
+	require( '../shared/tree' );
+
+var config =
+	require( '../config' );
+
+var fs =
+	require( 'fs' );
+
+var http =
+	require( 'http' );
+
+var sha1 =
+	require( '../shared/sha1' );
+
+var mongodb =
+	require( 'mongodb' );
+
+var url =
+	require( 'url' );
+
+var zlib =
+	require( 'zlib' );
 
 var uglify;
-if (config.uglify) {
-	uglify = require( 'uglify-js' );
+
+if( config.uglify )
+{
+	uglify =
+		require( 'uglify-js' );
 }
-
-
-/*
-| Shortcuts
-*/
-var is           = Jools.is;
-var log          = Jools.log;
-var reject       = Jools.reject;
 
 
 /*
@@ -72,16 +94,16 @@ var Server = function(_)
 	);
 
 	// all messages
-	this.$messages    = [ ];
+	this.$messages = [ ];
 
 	// all spaces
-	this.$spaces      = { };
+	this.$spaces = { };
 
 	// a table of all clients waiting for an update
-	this.$upsleep     = { };
+	this.$upsleep = { };
 
 	// next upsleepID
-	this.$nextSleep   = 1;
+	this.$nextSleep = 1;
 
 	// next visitors ID
 	this.$nextVisitor = 1000;
@@ -95,15 +117,25 @@ var Server = function(_)
 
 	this.prepareResources(_);
 
-	log('start',
+	Jools.log(
+		'start',
 		'connecting to database',
 		config.database.host + ':' + config.database.port,
 		config.database.name
 	);
 
-	db.connection = db.connector.open(_);
-	db.users      = db.connection.collection('users',   _);
-	db.spaces     = db.connection.collection('spaces',  _);
+	db.connection =
+		db.connector.open(_);
+
+	db.users =
+		db.connection.collection(
+			'users',
+		_);
+
+	db.spaces =
+		db.connection.collection(
+			'spaces',
+		_);
 
 	this.checkRepositorySchemaVersion(_);
 
@@ -111,19 +143,25 @@ var Server = function(_)
 
 	this.loadSpaces(_);
 
-	log('start',
+	Jools.log(
+		'start',
 		'starting server @ http://' +
-		(config.ip || '*') + '/:' + config.port
+			( config.ip || '*' ) + '/:' + config.port
 	);
 
 	var self = this;
 
 	http.createServer(
-		function(req, res)
-			{ self.requestListener(req, res); }
-	).listen(config.port, config.ip, _);
+		function( req, res )
+		{
+			self.requestListener( req, res );
+		}
+	).listen(
+		config.port,
+		config.ip,
+	_);
 
-	log('start', 'server running');
+	Jools.log( 'start', 'server running' );
 };
 
 
@@ -132,7 +170,7 @@ var Server = function(_)
 */
 Server.prototype.checkRepositorySchemaVersion = function(_)
 {
-	log('start', 'checking repository schema version');
+	Jools.log('start', 'checking repository schema version');
 
 	var global  = this.$db.connection.collection( 'global', _);
 
@@ -154,10 +192,15 @@ Server.prototype.checkRepositorySchemaVersion = function(_)
 	// if there is no global.version variable the database is either
 	// empty or a version 2 schema. So check for version 2
 
-	var changes = this.$db.connection.collection('changes', _);
+	var changes =
+		this.$db.connection.collection(
+			'changes',
+		_);
 
 	if( changes.find(_).nextObject(_) !== null )
-		{ throw new Error(' Found a version 2 schema, expected 3' ); }
+	{
+		throw new Error( 'Found a version 2 schema, expected 3' );
+	}
 
 	// if not, initializes the database repository
 
@@ -169,7 +212,10 @@ Server.prototype.checkRepositorySchemaVersion = function(_)
 */
 Server.prototype.initRepository = function(_)
 {
-	log( 'start', 'found no repository, initializing a new one' );
+	Jools.log(
+		'start',
+		'found no repository, initializing a new one'
+	);
 
 	var initSpaces = [
 		'meshcraft:home',
@@ -180,7 +226,10 @@ Server.prototype.initRepository = function(_)
 	{
 		var space = initSpaces[ s ];
 
-		log( 'start', '  initializing space ' + space );
+		Jools.log(
+			'start',
+			'  initializing space ' + space
+		);
 
 		this.$db.spaces.insert(
 			{
@@ -189,9 +238,15 @@ Server.prototype.initRepository = function(_)
 		_);
 	}
 
-	log('start', '  initializing global.version');
+	Jools.log(
+		'start',
+		'  initializing global.version'
+	);
 
-	var global = this.$db.connection.collection( 'global', _);
+	var global =
+		this.$db.connection.collection(
+			'global',
+		_);
 
 	global.insert(
 		{
@@ -202,20 +257,24 @@ Server.prototype.initRepository = function(_)
 };
 
 
-/**
+/*
 | Ensures there is the meshcraft (root) user
 */
-Server.prototype.ensureMeshcraftUser = function (_)
+Server.prototype.ensureMeshcraftUser =
+	function (_)
 {
-	log('start', 'ensuring existence of the "meshcraft" user');
+	Jools.log(
+		'start',
+		'ensuring existence of the "meshcraft" user'
+	);
 
 	var mUser = this.$db.users.findOne(
-		{ _id : 'meshcraft'},
+		{ _id : 'meshcraft' },
 	_);
 
 	if( !mUser )
 	{
-		log('start', 'not found! (re)creating the "meshcraft" user');
+		Jools.log('start', 'not found! (re)creating the "meshcraft" user');
 		var pass = Jools.randomPassword(12);
 
 		mUser =
@@ -231,7 +290,7 @@ Server.prototype.ensureMeshcraftUser = function (_)
 
 	this.$users.meshcraft = mUser;
 
-	log('start', '"meshcraft" user\'s clear password is: ', mUser.clearPass);
+	Jools.log('start', '"meshcraft" user\'s clear password is: ', mUser.clearPass);
 
 };
 
@@ -241,7 +300,7 @@ Server.prototype.ensureMeshcraftUser = function (_)
 */
 Server.prototype.loadSpaces = function (_)
 {
-	log('start', 'loading and replaying all spaces');
+	Jools.log('start', 'loading and replaying all spaces');
 
 	var cursor = this.$db.spaces.find({ }, { sort: '_id'}, _);
 
@@ -256,17 +315,28 @@ Server.prototype.loadSpaces = function (_)
 */
 Server.prototype.loadSpace = function ( spacename, _)
 {
-	log('start', 'loading and replaying all "' + spacename + '"');
+	Jools.log('start', 'loading and replaying all "' + spacename + '"');
 
 	var space = this.$spaces[spacename] =
 		{
-			$changesDB : this.$db.connection.collection('changes:' + spacename, _),
-			$changes   : [ ],
-			$tree      : new Tree( { type : 'Space' }, Meshverse),
-			$seqZ      : 1
+			$changesDB :
+				this.$db.connection.collection('changes:' + spacename, _),
+
+			$changes :
+				[ ],
+
+			$tree :
+				new Tree( { type : 'Space' }, Meshverse),
+
+			$seqZ :
+				1
 		};
 
-	var cursor = space.$changesDB.find({ }, { sort : '_id' }, _);
+	var cursor =
+		space.$changesDB.find(
+			{ },
+			{ sort : '_id' },
+		_);
 
 	for( var o = cursor.nextObject(_); o !== null; o = cursor.nextObject(_) )
 	{
@@ -280,9 +350,13 @@ Server.prototype.loadSpace = function ( spacename, _)
 		};
 
 		if ( !Jools.isArray( o.chgX ) )
-			{ change.chgX = new MeshMashine.Change( o.chgX ); }
+		{
+			change.chgX = new MeshMashine.Change( o.chgX );
+		}
 		else
-			{ change.chgX = new MeshMashine.ChangeRay( o.chgX ); }
+		{
+			change.chgX = new MeshMashine.ChangeRay( o.chgX );
+		}
 
 		space.$seqZ++;
 
@@ -290,10 +364,16 @@ Server.prototype.loadSpace = function ( spacename, _)
 	}
 };
 
-/**
+
+/*
 | sends a message
 */
-Server.prototype.sendMessage = function(spacename, user, message)
+Server.prototype.sendMessage =
+	function(
+		spacename,
+		user,
+		message
+	)
 {
 	this.$messages.push (
 		{
@@ -317,27 +397,48 @@ Server.prototype.sendMessage = function(spacename, user, message)
 */
 Server.prototype.cmdMessage = function(cmd, _)
 {
-	var space    = cmd.space;
-	var message  = cmd.message;
-	var username = cmd.user;
-	var passhash = cmd.passhash;
+	var space =
+		cmd.space;
 
-	if (!is(username))
-		{ throw reject('user missing'); }
+	var message =
+		cmd.message;
 
-	if (!is(passhash))
-		{ throw reject('passhash missing'); }
+	var username =
+		cmd.user;
 
-	if (!is(space))
-		{ throw reject('space missing'); }
+	var passhash =
+		cmd.passhash;
 
-	if (!is(message))
-		{ throw reject('message missing'); }
+	if( !Jools.is( username ) )
+	{
+		throw Jools.reject('user missing');
+	}
 
-	if (this.$users[username].pass !== passhash)
-		{ throw reject('invalid pass'); }
+	if( !Jools.is( passhash ) )
+	{
+		throw Jools.reject( 'passhash missing' );
+	}
 
-	this.sendMessage(space, username, message);
+	if( !Jools.is( space ) )
+	{
+		throw Jools.reject( 'space missing' );
+	}
+
+	if( !Jools.is( message ) )
+	{
+		throw Jools.reject( 'message missing' );
+	}
+
+	if( this.$users[username].pass !== passhash )
+	{
+		throw Jools.reject( 'invalid pass' );
+	}
+
+	this.sendMessage(
+		space,
+		username,
+		message
+	);
 
 	return { ok : true };
 };
@@ -347,9 +448,10 @@ Server.prototype.cmdMessage = function(cmd, _)
 | Builds the shells config.js file.
 | TODO move \n into join and rework generated code look-alike
 */
-Server.prototype.buildShellConfig = function()
+Server.prototype.buildShellConfig =
+	function( )
 {
-	var cconfig = [];
+	var cconfig = [ ];
 	var k;
 
 	cconfig.push( 'var config = {\n' );
@@ -392,140 +494,324 @@ Server.prototype.buildShellConfig = function()
 | Registers and prepares the resource.
 | also builds the bundle for fast-loading.
 */
-Server.prototype.prepareResources = function(_)
+Server.prototype.prepareResources =
+	function(_)
 {
 	var r;
 
 	var rlist = [
 		// 'media/favicon.ico',                               'mc', AAA
-		'testpad/testpad.js',                              'f',
-		'testpad/iface-sym.js',                            'f',
-		'shell/fonts/webfont.js',                          'mc',
 
-		'shared/jools.js',                                 'fb',
-		'shared/sha1.js',                                  'fb',
-		'shared/euclid/const.js',                          'fb',
-		'shared/euclid/compass.js',                        'fb',
-		'shared/euclid/point.js',                          'fb',
-		'shared/euclid/rect.js',                           'fb',
-		'shared/euclid/margin.js',                         'fb',
-		'shared/euclid/font.js',                           'fb',
-		'shared/euclid/fabric.js',                         'fb',
-		'shared/euclid/measure.js',                        'fb',
-		'shared/euclid/rect.js',                           'fb',
-		'shared/euclid/shape.js',                          'fb',
-		'shared/euclid/round-rect.js',                     'fb',
-		'shared/euclid/ellipse.js',                        'fb',
-		'shared/euclid/ellipse-flower.js',                 'fb',
-		'shared/euclid/line.js',                           'fb',
-		'shell/fontpool.js',                               'fb', // TODO order?
-		'shell/theme.js',                                  'fb', // TODO order?
-		'shared/euclid/view.js',                           'fb',
-		'shared/euclid/fix.js',                            'fb',
-		'shared/meshverse.js',                             'fb',
-		'shared/path.js',                                  'fb',
-		'shared/twig.js',                                  'fb',
-		'shared/tree.js',                                  'fb',
-		'shared/sign.js',                                  'fb',
-		'shared/change.js',                                'fb',
-		'shared/changeray.js',                             'fb',
-		'shared/meshmashine.js',                           'fb',
-		'shell/iface.js',                                  'fb',
-		'shell/peer.js',                                   'fb',
-		'shell/curve.js',                                  'fb',
-		'shell/disc/discbutton.js',                        'fb',
-		'shell/disc/createdisc.js',                        'fb',
-		'shell/disc/maindisc.js',                          'fb',
-		'shell/action.js',                                 'fb',
-		'shell/forms/form.js',                             'fb',
-		'shell/forms/login.js',                            'fb',
-		'shell/visual/base.js',                            'fb',
-		'shell/visual/para.js',                            'fb',
-		'shell/visual/scrollbar.js',                       'fb',
-		'shell/visual/doc.js',                             'fb',
-		'shell/visual/item.js',                            'fb',
-		'shell/visual/docitem.js',                         'fb',
-		'shell/visual/note.js',                            'fb',
-		'shell/visual/label.js',                           'fb',
-		'shell/visual/relation.js',                        'fb',
-		'shell/visual/portal.js',                          'fb',
-		'shell/visual/space.js',                           'fb',
-		'shell/system.js',                                 'fb',
-		'shell/caret.js',                                  'fb',
-		'shell/range.js',                                  'fb',
-		'shell/bridge.js',                                 'fb',
-		'shell/shell.js',                                  'fb',
-		'shell/fontloader.js',                             'fb',
+		'testpad/testpad.js',
+			'f',
 
-		'shell/fonts/dejavu.css',                          'mc',
-		'shell/fonts/dejavusans-boldoblique-webfont.eot',  'mc',
-		'shell/fonts/dejavusans-boldoblique-webfont.svg',  'mc',
-		'shell/fonts/dejavusans-boldoblique-webfont.ttf',  'mc',
-		'shell/fonts/dejavusans-boldoblique-webfont.woff', 'mc',
-		'shell/fonts/dejavusans-bold-webfont.eot',         'mc',
-		'shell/fonts/dejavusans-bold-webfont.svg',         'mc',
-		'shell/fonts/dejavusans-bold-webfont.ttf',         'mc',
-		'shell/fonts/dejavusans-bold-webfont.woff',        'mc',
-		'shell/fonts/dejavusans-oblique-webfont.eot',      'mc',
-		'shell/fonts/dejavusans-oblique-webfont.svg',      'mc',
-		'shell/fonts/dejavusans-oblique-webfont.ttf',      'mc',
-		'shell/fonts/dejavusans-oblique-webfont.woff',     'mc',
-		'shell/fonts/dejavusans-webfont.eot',              'mc',
-		'shell/fonts/dejavusans-webfont.svg',              'mc',
-		'shell/fonts/dejavusans-webfont.ttf',              'mc',
-		'shell/fonts/dejavusans-webfont.woff',             'mc'
+		'testpad/iface-sym.js',
+			'f',
+
+		'shell/fonts/webfont.js',
+			'mc',
+
+		'shared/jools.js',
+			'fb',
+
+		'shared/sha1.js',
+			'fb',
+
+		'shared/euclid/const.js',
+			'fb',
+
+		'shared/euclid/compass.js',
+			'fb',
+
+		'shared/euclid/point.js',
+			'fb',
+
+		'shared/euclid/rect.js',
+			'fb',
+
+		'shared/euclid/margin.js',
+			'fb',
+
+		'shared/euclid/font.js',
+			'fb',
+
+		'shared/euclid/fabric.js',
+			'fb',
+
+		'shared/euclid/measure.js',
+			'fb',
+
+		'shared/euclid/rect.js',
+			'fb',
+
+		'shared/euclid/shape.js',
+			'fb',
+
+		'shared/euclid/round-rect.js',
+			'fb',
+
+		'shared/euclid/ellipse.js',
+			'fb',
+
+		'shared/euclid/ellipse-flower.js',
+			'fb',
+
+		'shared/euclid/line.js',
+			'fb',
+
+		'shell/fontpool.js',
+			'fb', // TODO order?
+
+		'shell/theme.js',
+			'fb', // TODO order?
+
+		'shared/euclid/view.js',
+			'fb',
+
+		'shared/euclid/fix.js',
+			'fb',
+
+		'shared/meshverse.js',
+			'fb',
+
+		'shared/path.js',
+			'fb',
+
+		'shared/twig.js',
+			'fb',
+
+		'shared/tree.js',
+			'fb',
+
+		'shared/sign.js',
+			'fb',
+
+		'shared/change.js',
+			'fb',
+
+		'shared/changeray.js',
+			'fb',
+
+		'shared/meshmashine.js',
+			'fb',
+
+		'shell/iface.js',
+			'fb',
+
+		'shell/peer.js',
+			'fb',
+
+		'shell/curve.js',
+			'fb',
+
+		'shell/disc/discbutton.js',
+			'fb',
+
+		'shell/disc/createdisc.js',
+			'fb',
+
+		'shell/disc/maindisc.js',
+			'fb',
+
+		'shell/action.js',
+			'fb',
+
+		'shell/forms/layout-pattern.js',
+			'fb',
+
+		'shell/forms/accent.js',
+			'fb',
+
+		'shell/forms/getstyle.js',
+			'fb',
+
+		'shell/forms/label.js',
+			'fb',
+
+		'shell/forms/input.js',
+			'fb',
+
+		'shell/forms/form.js',
+			'fb',
+
+		'shell/forms/login.js',
+			'fb',
+
+		'shell/visual/base.js',
+			'fb',
+
+		'shell/visual/para.js',
+			'fb',
+
+		'shell/visual/scrollbar.js',
+			'fb',
+
+		'shell/visual/doc.js',
+			'fb',
+
+		'shell/visual/item.js',
+			'fb',
+
+		'shell/visual/docitem.js',
+			'fb',
+
+		'shell/visual/note.js',
+			'fb',
+
+		'shell/visual/label.js',
+			'fb',
+
+		'shell/visual/relation.js',
+			'fb',
+
+		'shell/visual/portal.js',
+			'fb',
+
+		'shell/visual/space.js',
+			'fb',
+
+		'shell/system.js',
+			'fb',
+
+		'shell/caret.js',
+			'fb',
+
+		'shell/range.js',
+			'fb',
+
+		'shell/bridge.js',
+			'fb',
+
+		'shell/shell.js',
+			'fb',
+
+		'shell/fontloader.js',
+			'fb',
+
+		'shell/fonts/dejavu.css',
+			'mc',
+
+		'shell/fonts/dejavusans-boldoblique-webfont.eot',
+			'mc',
+
+		'shell/fonts/dejavusans-boldoblique-webfont.svg',
+			'mc',
+
+		'shell/fonts/dejavusans-boldoblique-webfont.ttf',
+			'mc',
+
+		'shell/fonts/dejavusans-boldoblique-webfont.woff',
+			'mc',
+
+		'shell/fonts/dejavusans-bold-webfont.eot',
+			'mc',
+
+		'shell/fonts/dejavusans-bold-webfont.svg',
+			'mc',
+
+		'shell/fonts/dejavusans-bold-webfont.ttf',
+			'mc',
+
+		'shell/fonts/dejavusans-bold-webfont.woff',
+			'mc',
+
+		'shell/fonts/dejavusans-oblique-webfont.eot',
+			'mc',
+
+		'shell/fonts/dejavusans-oblique-webfont.svg',
+			'mc',
+
+		'shell/fonts/dejavusans-oblique-webfont.ttf',
+			'mc',
+
+		'shell/fonts/dejavusans-oblique-webfont.woff',
+			'mc',
+
+		'shell/fonts/dejavusans-webfont.eot',
+			'mc',
+
+		'shell/fonts/dejavusans-webfont.svg',
+			'mc',
+
+		'shell/fonts/dejavusans-webfont.ttf',
+			'mc',
+
+		'shell/fonts/dejavusans-webfont.woff',
+			'mc'
 	];
 
 	// ressources served in the bundle
-	var bundleRessources = [];
+	var bundleRessources =
+		[ ];
 
 	// creates the Ressources
 	for( var a = 0, aZ = rlist.length; a < aZ; a += 2 )
 	{
-		r = new Resource(rlist[a], rlist[a + 1]);
+		r =
+			new Resource(rlist[a], rlist[a + 1]);
 
-		if (r.opts.bundle)
-			{ bundleRessources.push(r); }
+		if( r.opts.bundle )
+		{
+			bundleRessources.push( r );
+		}
 
-		this.$resources[r.path] = r;
+		this.$resources[ r.path ] = r;
 	}
 
 	var path;
 
-	log('start', 'preparing resources');
+	Jools.log( 'start', 'preparing resources' );
 
 	for( path in this.$resources )
 	{
 		r = this.$resources[path];
 
-		if (r.data !== null || !r.opts.memory)
-			{ continue; }
+		if(
+			r.data !== null ||
+			!r.opts.memory
+		)
+		{
+			continue;
+		}
 
-		r.data = fs.readFile(r.path, _);
+		r.data =
+			fs.readFile(r.path, _);
 	}
 
 	// AAA
 	//this.$resources['favicon.ico'] =
 	//	this.$resources['media/favicon.ico'];
 
-	var cconfig = new Resource('shell/config.js', 'mb');
-	bundleRessources.unshift(cconfig);
+	var cconfig =
+		new Resource(
+			'shell/config.js',
+			'mb'
+		);
+	bundleRessources.unshift( cconfig );
 
-	this.$resources[cconfig.path] = cconfig;
-	cconfig.data = this.buildShellConfig();
+	this.$resources[ cconfig.path ] =
+		cconfig;
+
+	cconfig.data =
+		this.buildShellConfig();
 
 	// the bundle itself
-	var bundle = [ ];
+	var bundle =
+		[ ];
 
 	// file listing for devel.html
-	var devels = [ ];
+	var devels =
+		[ ];
 
 	// loads the to be bundled files
 	for( a = 0, aZ = bundleRessources.length; a < aZ; a++ )
 	{
-		r = bundleRessources[a];
+		r =
+			bundleRessources[a];
 
-		devels.push('<script src="' + r.path + '" type="text/javascript"></script>');
+		devels.push(
+			'<script src="' + r.path + '" type="text/javascript"></script>'
+		);
 
 		if( r.data === null )
 		{
@@ -546,9 +832,11 @@ Server.prototype.prepareResources = function(_)
 	// uglifies the bundle if configured so
 	if( config.uglify )
 	{
-		var compressor = uglify.Compressor( { } );
+		var compressor =
+			uglify.Compressor( { } );
 
-		var ast = uglify.parse( bundle );
+		var ast =
+			uglify.parse( bundle );
 
 		fs.writeFile(
 			'bundle.js',
@@ -557,17 +845,20 @@ Server.prototype.prepareResources = function(_)
 
 		ast.figure_out_scope( );
 
-		ast = ast.transform( compressor );
+		ast =
+			ast.transform( compressor );
 
 		ast.compute_char_frequency( );
 
 		ast.mangle_names( );
 
-		bundle = ast.print_to_string( { } );
+		bundle =
+			ast.print_to_string( { } );
 	}
 
 	// calculates the hash for the bundle
-	var bsha1 = sha1.sha1hex( bundle );
+	var bsha1 =
+		sha1.sha1hex( bundle );
 
 	// registers the bundle as ressource
 	var br = new Resource(
@@ -577,9 +868,10 @@ Server.prototype.prepareResources = function(_)
 
 	br.data = bundle;
 
-	this.$resources[ br.path ] = br;
+	this.$resources[ br.path ] =
+		br;
 
-	log( 'start', 'bundle:', bsha1 );
+	Jools.log( 'start', 'bundle:', bsha1 );
 
 	// the devel.html file
 	if(
@@ -587,36 +879,44 @@ Server.prototype.prepareResources = function(_)
 		config.devel === 'both'
 	)
 	{
-		var devel  = new Resource(
-			'shell/devel.html',
-			'm'
-		);
+		var devel =
+			new Resource(
+				'shell/devel.html',
+				'm'
+			);
 
-		devel.data = fs.readFile(
-			'shell/devel.html',
-		_) + '';
+		devel.data =
+			fs.readFile(
+				'shell/devel.html',
+			_) + '';
 
-		devel.data = devel.data.replace(
-			/<!--DEVELPACK.*>/,
-			devels.join( '\n' )
-		);
-		this.$resources[ 'devel.html' ] = devel;
+		devel.data =
+			devel.data.replace(
+				/<!--DEVELPACK.*>/,
+				devels.join( '\n' )
+			);
+
+		this.$resources[ 'devel.html' ] =
+			devel;
 	}
 
 	// the index.html file
-	var main  = new Resource(
-		'shell/meshcraft.html',
-		'm'
-	);
+	var main =
+		new Resource(
+			'shell/meshcraft.html',
+			'm'
+		);
 
-	main.data =  fs.readFile(
-		'shell/meshcraft.html',
-	_) + '';
+	main.data =
+		fs.readFile(
+			'shell/meshcraft.html',
+		_) + '';
 
-	main.data = main.data.replace(
-		/<!--COPACK.*>/,
-		'<script src="' + br.path + '" type="text/javascript"></script>'
-	);
+	main.data =
+		main.data.replace(
+			/<!--COPACK.*>/,
+			'<script src="' + br.path + '" type="text/javascript"></script>'
+		);
 
 	this.$resources[ 'meshcraft.html' ] =
 	this.$resources[ 'index.html' ] =
@@ -624,28 +924,34 @@ Server.prototype.prepareResources = function(_)
 		main;
 
 	// the testpad html file
-	var testpad = new Resource(
-		'testpad/testpad.html',
-		'f'
-	);
+	var testpad =
+		new Resource(
+			'testpad/testpad.html',
+			'f'
+		);
 
-	this.$resources[ 'testpad.html' ] = testpad;
+	this.$resources[ 'testpad.html' ] =
+		testpad;
 
 	// prepares the zipped versions
 	for( path in this.$resources )
 	{
-		r = this.$resources[path];
+		r =
+			this.$resources[path];
+
 		if( !r.opts.memory )
 		{
 			continue;
 		}
-		r.gzip = zlib.gzip(
-			r.data,
-		_);
+
+		r.gzip =
+			zlib.gzip(
+				r.data,
+			_);
 	}
 
-	log( 'start', 'uncompressed bundle size is ', br.data.length );
-	log( 'start', '  compressed bundle size is ', br.gzip.length );
+	Jools.log( 'start', 'uncompressed bundle size is ', br.data.length );
+	Jools.log( 'start', '  compressed bundle size is ', br.gzip.length );
 };
 
 
@@ -657,61 +963,98 @@ Server.prototype.cmdAlter =
 		cmd,
 	_)
 {
-	var time      = cmd.time;
-	var chgX      = cmd.chgX;
-	var cid       = cmd.cid;
-	var spacename = cmd.space;
-	var username  = cmd.user;
-	var passhash  = cmd.passhash;
+	var time =
+		cmd.time;
 
-	if( !is( username ) )
-		{ throw reject('user missing');  }
+	var chgX =
+		cmd.chgX;
+
+	var cid =
+		cmd.cid;
+
+	var spacename =
+		cmd.space;
+
+	var username =
+		cmd.user;
+
+	var passhash =
+		cmd.passhash;
+
+	if( !Jools.is( username ) )
+	{
+		throw Jools.reject( 'user missing' );
+	}
 
 	if( this.$users[username].pass !== passhash )
-		{ throw reject('invalid pass');  }
+	{
+		throw Jools.reject( 'invalid pass' );
+	}
 
-	if( !is( spacename ) )
-		{ throw reject('space missing'); }
+	if( !Jools.is( spacename ) )
+	{
+		throw Jools.reject( 'space missing' );
+	}
 
 	if( this.testAccess( username, spacename ) !== 'rw' )
-		{ throw reject('no access');     }
+	{
+		throw Jools.reject( 'no access' );
+	}
 
-	if( !is( time ) )
-		{ throw reject('time missing');  }
+	if( !Jools.is( time ) )
+	{
+		throw Jools.reject( 'time missing' );
+	}
 
-	if( !is( chgX ) )
-		{ throw reject('chgX missing');  }
+	if( !Jools.is( chgX ) )
+	{
+		throw Jools.reject( 'chgX missing' );
+	}
 
-	if( !is( cid ) )
-		{ throw reject('cid missing');   }
+	if( !Jools.is( cid ) )
+	{
+		throw Jools.reject( 'cid missing' );
+	}
 
 
-	var space = this.$spaces[spacename];
+	var space =
+		this.$spaces[ spacename ];
 
-	if( !is( space ) )
-		{ throw reject('unknown space'); }
+	if( !Jools.is( space ) )
+	{
+		throw Jools.reject( 'unknown space' );
+	}
 
-	var changes = space.$changes;
-	var seqZ    = space.$seqZ;
+	var changes =
+		space.$changes;
+
+	var seqZ =
+		space.$seqZ;
 
 	if( time === -1 )
-		{ time = seqZ; }
+	{
+		time = seqZ;
+	}
 
 	if( !(time >= 0 && time <= seqZ) )
-		{ throw reject('invalid time'); }
+	{
+		throw Jools.reject('invalid time');
+	}
 
 	// fits the cmd into data structures
 	try {
 		// FIXME
 		if (Jools.isArray(chgX))
-			{ throw new Error('Array chgX not yet supported'); }
+		{
+			throw new Error('Array chgX not yet supported');
+		}
 
 		chgX = new MeshMashine.Change(chgX);
 
 	}
 	catch( err )
 	{
-		throw reject( 'invalid cmd: ' + err.message );
+		throw Jools.reject( 'invalid cmd: ' + err.message );
 	}
 
 	// translates the changes if not most recent
@@ -722,7 +1065,10 @@ Server.prototype.cmdAlter =
 			changes[a].chgX
 		);
 
-		if (chgX === null || chgX.length === 0)
+		if(
+			chgX === null ||
+			chgX.length === 0
+		)
 		{
 			return {
 				ok: true,
@@ -731,8 +1077,10 @@ Server.prototype.cmdAlter =
 		}
 	}
 
-	if( chgX === null ||
-		chgX.length === 0 )
+	if(
+		chgX === null ||
+		chgX.length === 0
+	)
 	{
 		return {
 			ok   : true,
@@ -741,9 +1089,14 @@ Server.prototype.cmdAlter =
 	}
 
 	// applies the changes
-	var r       = chgX.changeTree( space.$tree );
-	space.$tree = r.tree;
-	chgX        = r.chgX;
+	var r =
+		chgX.changeTree( space.$tree );
+
+	space.$tree =
+		r.tree;
+
+	chgX =
+		r.chgX;
 
 	changes[ seqZ ] =
 		{
@@ -754,16 +1107,28 @@ Server.prototype.cmdAlter =
 	// saves the change(ray) in the database
 	space.$changesDB.insert(
 		{
-			_id  : seqZ,
-			cid  : cmd.cid,
-			chgX : JSON.parse( JSON.stringify( chgX ) ), // FIXME why copy?
-			user : cmd.user,
-			date : Date.now()
+			_id :
+				seqZ,
+
+			cid :
+				cmd.cid,
+
+			chgX :
+				JSON.parse( JSON.stringify( chgX ) ), // FIXME why copy?
+
+			user :
+				cmd.user,
+
+			date :
+				Date.now()
 		},
-		function(error, count)
+
+		function( error, count )
 		{
-			if (error !== null)
-				{ throw new Error('Database fail!'); }
+			if( error !== null )
+			{
+				throw new Error( 'Database fail!' );
+			}
 		}
 	);
 
@@ -772,7 +1137,7 @@ Server.prototype.cmdAlter =
 	var self = this;
 
 	process.nextTick(
-		function()
+		function( )
 		{
 			self.wake( spacename );
 		}
@@ -793,11 +1158,15 @@ Server.prototype.cmdAuth =
 		cmd,
 	_)
 {
-	if( !is( cmd.user ) )
-		{ throw reject('user missing'); }
+	if( !Jools.is( cmd.user ) )
+	{
+		throw Jools.reject('user missing');
+	}
 
-	if( !is( cmd.passhash ) )
-		{ throw reject('passhash missing');  }
+	if( !Jools.is( cmd.passhash ) )
+	{
+		throw Jools.reject('passhash missing');
+	}
 
 	var users = this.$users;
 
@@ -808,38 +1177,55 @@ Server.prototype.cmdAuth =
 		do
 		{
 			this.$nextVisitor++;
-			uid = 'visitor-' + this.$nextVisitor;
-		} while ( users[uid]);
 
-		users[uid] = {
-			user    : uid,
-			pass    : cmd.passhash,
-			created : Date.now(),
-			use     : Date.now()
-		};
+			uid = 'visitor-' + this.$nextVisitor;
+		}
+		while ( users[uid]);
+
+		users[ uid ] =
+			{
+				user    : uid,
+				pass    : cmd.passhash,
+				created : Date.now( ),
+				use     : Date.now( )
+			};
 
 		return {
-			ok: true,
-			user: uid
+			ok :
+				true,
+
+			user:
+				uid
 		};
 	}
 
 	if( !users[cmd.user] )
 	{
-		var val = this.$db.users.findOne({ _id : cmd.user}, _);
+		var val =
+			this.$db.users.findOne(
+				{ _id : cmd.user},
+			_);
 
-		if (val === null)
-			{ return reject('Username unknown'); }
+		if( val === null )
+		{
+			return Jools.reject( 'Username unknown' );
+		}
 
-		users[cmd.user] = val;
+		users[cmd.user] =
+			val;
 	}
 
 	if( users[cmd.user].pass !== cmd.passhash )
-		{ return reject('invalid password'); }
+	{
+		return Jools.reject('invalid password');
+	}
 
 	return {
-		ok   : true,
-		user : cmd.user
+		ok :
+			true,
+
+		user :
+			cmd.user
 	};
 };
 
@@ -852,36 +1238,59 @@ Server.prototype.cmdRegister =
 		cmd,
 	_)
 {
-	var username = cmd.user;
-	var passhash = cmd.passhash;
-	var mail     = cmd.mail;
-	var news     = cmd.news;
+	var username =
+		cmd.user;
 
-	if( !is( username ) )
-		{ return reject( 'user missing' ); }
+	var passhash =
+		cmd.passhash;
 
-	if( !is( passhash ) )
-		{ return reject( 'passhash missing' ); }
+	var mail =
+		cmd.mail;
 
-	if( !is( mail ) )
-		{ return reject( 'mail missing' ); }
+	var news =
+		cmd.news;
 
-	if( !is( news ) )
-		{ return reject( 'news missing' ); }
+	if( !Jools.is( username ) )
+	{
+		return Jools.reject( 'user missing' );
+	}
+
+	if( !Jools.is( passhash ) )
+	{
+		return Jools.reject( 'passhash missing' );
+	}
+
+	if( !Jools.is( mail ) )
+	{
+		return Jools.reject( 'mail missing' );
+	}
+
+	if( !Jools.is( news ) )
+	{
+		return Jools.reject( 'news missing' );
+	}
 
 	if( typeof( news ) !== 'boolean' )
-		{ return reject( 'news not a boolean' ); }
+	{
+		return Jools.reject( 'news not a boolean' );
+	}
 
 	if( username.substr( 0, 7 ) === 'visitor' )
-		{ return reject( 'Username must not start with "visitor"' ); }
+	{
+		return Jools.reject( 'Username must not start with "visitor"' );
+	}
 
 	if( username.length < 4 )
-		{ throw reject( 'Username too short, min. 4 characters' ); }
+	{
+		throw Jools.reject( 'Username too short, min. 4 characters' );
+	}
 
 	var user = this.$db.users.findOne( { _id : username }, _);
 
 	if( user !== null )
-		{ return reject( 'Username already taken' ); }
+	{
+		return Jools.reject( 'Username already taken' );
+	}
 
 	user = {
 		_id  : username,
@@ -898,10 +1307,20 @@ Server.prototype.cmdRegister =
 
 	this.$spaces[ spacename ] =
 		{
-			$changesDB : this.$db.connection.collection( 'changes:' + spacename, _),
-			$changes   : [ ],
-			$tree      : new Tree( { type : 'Space' }, Meshverse ),
-			$seqZ      : 1
+			$changesDB :
+				this.$db.connection.collection( 'changes:' + spacename, _),
+
+			$changes :
+				[ ],
+
+			$tree :
+				new Tree(
+					{ type : 'Space' },
+					Meshverse
+				),
+
+			$seqZ :
+				1
 		};
 
 
@@ -912,8 +1331,11 @@ Server.prototype.cmdRegister =
 	_);
 
 	return {
-		ok   : true,
-		user : username
+		ok :
+			true,
+
+		user :
+			username
 	};
 };
 
@@ -927,33 +1349,38 @@ Server.prototype.refreshPresence =
 		spacename
 	)
 {
-	var pu = this.$presences[ user ];
+	var pu =
+		this.$presences[ user ];
 
 	if( !pu )
 	{
-		pu = this.$presences[ user ] =
+		pu =
+		this.$presences[ user ] =
 			{
 				spaces : { }
 			};
 	}
 
-	var pus = pu.spaces[ spacename ];
+	var pus =
+		pu.spaces[ spacename ];
 
 	if( !pus )
 	{
-		pus = pu.spaces[ spacename ] =
+		pus =
+		pu.spaces[ spacename ] =
 			{
 				establish : 0,
 				timerID : null
 			};
 
-		pus.timerID = setTimeout(
-			this.expirePresence,
-			5000,
-			this,
-			user,
-			spacename
-		);
+		pus.timerID =
+			setTimeout(
+				this.expirePresence,
+				5000,
+				this,
+				user,
+				spacename
+			);
 
 		this.sendMessage(
 			spacename,
@@ -966,16 +1393,19 @@ Server.prototype.refreshPresence =
 		if( pus.timerID !== null )
 		{
 			clearTimeout( pus.timerID );
-			pus.timerID = null;
+
+			pus.timerID =
+				null;
 		}
 
-		pus.timerID = setTimeout(
-			this.expirePresence,
-			5000,
-			this,
-			user,
-			spacename
-		);
+		pus.timerID =
+			setTimeout(
+				this.expirePresence,
+				5000,
+				this,
+				user,
+				spacename
+			);
 	}
 };
 
@@ -990,21 +1420,36 @@ Server.prototype.establishPresence =
 		sleepID
 	)
 {
-	var pres = this.$presences;
-	var pu = pres[ user ];
+	var pres =
+		this.$presences;
+
+	var pu =
+		pres[ user ];
 
 	if( !pu )
-		{ pu = pres[user] = { spaces : { } }; }
+	{
+		pu =
+		pres[user] =
+			{
+				spaces :
+					{ }
+			};
+	}
 
-	var pus = pu.spaces[spacename];
+	var pus =
+		pu.spaces[ spacename ];
 
 	if( !pus )
 	{
-		pus = pu.spaces[spacename] =
-		{
-			establish : 1,
-			timerID   : null
-		};
+		pus =
+		pu.spaces[spacename] =
+			{
+				establish :
+					1,
+
+				timerID :
+					null
+			};
 
 		this.sendMessage(
 			spacename,
@@ -1017,7 +1462,9 @@ Server.prototype.establishPresence =
 		if( pus.timerID !== null )
 		{
 			clearTimeout( pus.timerID );
-			pus.timerID = null;
+
+			pus.timerID =
+				null;
 		}
 
 		pus.establish++;
@@ -1043,16 +1490,17 @@ Server.prototype.destablishPresence =
 	{
 		if( pus.timerID !== null )
 		{
-			throw new Error("Presence timers mixed up.");
+			throw new Error( 'Presence timers mixed up.' );
 		}
 
-		pus.timerID = setTimeout(
-			this.expirePresence,
-			5000,
-			this,
-			user,
-			spacename
-		);
+		pus.timerID =
+			setTimeout(
+				this.expirePresence,
+				5000,
+				this,
+				user,
+				spacename
+			);
 	}
 };
 
@@ -1073,11 +1521,12 @@ Server.prototype.expirePresence =
 		user + ' left "' + spacename + '"'
 	);
 
-	var pu   = self.$presences[ user ];
+	var pu =
+		self.$presences[ user ];
 
 	if( pu.spaces[ spacename ].establish !== 0 )
 	{
-		throw new Error('Something wrong with presences.');
+		throw new Error( 'Something wrong with presences.' );
 	}
 
 	delete pu.spaces[ spacename ];
@@ -1093,38 +1542,68 @@ Server.prototype.cmdUpdate =
 		res,
 	_)
 {
-	var user      = cmd.user;
-	var passhash  = cmd.passhash;
-	var spacename = cmd.space;
-	var time      = cmd.time;
-	var mseq      = cmd.mseq;
+	var user =
+		cmd.user;
 
-	if( !is(user) )
-		{ throw reject('user missing'); }
+	var passhash =
+		cmd.passhash;
 
-	if( !is(passhash) )
-		{ throw reject('passhash missing'); }
+	var spacename =
+		cmd.space;
+
+	var time =
+		cmd.time;
+
+	var mseq =
+		cmd.mseq;
+
+	if( !Jools.is(user) )
+	{
+		throw Jools.reject( 'user missing' );
+	}
+
+	if( !Jools.is(passhash) )
+	{
+		throw Jools.reject( 'passhash missing' );
+	}
 
 	if( this.$users[user].pass !== passhash )
-		{ throw reject('invalid password'); }
+	{
+		throw Jools.reject( 'invalid password' );
+	}
 
-	if( !is(spacename) )
-		{ throw reject('space missing'); }
+	if( !Jools.is( spacename ) )
+	{
+		throw Jools.reject( 'space missing' );
+	}
 
-	var space = this.$spaces[spacename];
+	var space =
+		this.$spaces[ spacename ];
+
 	if( !space )
-		{ throw reject('unknown space'); }
+	{
+		throw Jools.reject( 'unknown space' );
+	}
 
 	if ( !( time >= 0 && time <= space.$seqZ ) )
-		{ throw reject('invalid or missing time: ' + time); }
+	{
+		throw Jools.reject( 'invalid or missing time: ' + time );
+	}
 
-	if (mseq < 0)
-		{ mseq = this.$messages.length; }
+	if( mseq < 0 )
+	{
+		mseq = this.$messages.length;
+	}
 
-	if (!(mseq <= this.$messages.length))
-		{ throw reject('invalid or missing mseq: ' + mseq); }
+	if ( !(mseq <= this.$messages.length) )
+	{
+		throw Jools.reject('invalid or missing mseq: ' + mseq);
+	}
 
-	this.refreshPresence( user, spacename );
+	this.refreshPresence(
+		user,
+		spacename
+	);
 
 	var asw = this.conveyUpdate(
 		time,
@@ -1142,25 +1621,29 @@ Server.prototype.cmdUpdate =
 	}
 
 	// if not an immediate anwwer, the request is put to sleep
-	var sleepID = '' + this.$nextSleep++;
+	var sleepID =
+		'' + this.$nextSleep++;
 
-	var timerID = setTimeout(
-		this.expireSleep,
-		60000,
-		this,
-		sleepID
-	);
+	var timerID =
+		setTimeout(
+			this.expireSleep,
+			60000,
+			this,
+			sleepID
+		);
 
-	this.$upsleep[ sleepID ] = {
-		user      : user,
-		time      : time,
-		mseq      : mseq,
-		timerID   : timerID,
-		res       : res,
-		spacename : spacename
-	};
+	this.$upsleep[ sleepID ] =
+		{
+			user : user,
+			time : time,
+			mseq : mseq,
+			timerID : timerID,
+			res : res,
+			spacename : spacename
+		};
 
-	res.sleepID = sleepID;
+	res.sleepID =
+		sleepID;
 
 	this.establishPresence(
 		user,
@@ -1182,15 +1665,19 @@ Server.prototype.expireSleep =
 		sleepID
 	)
 {
-	var sleep = self.$upsleep[ sleepID ];
+	var sleep =
+		self.$upsleep[ sleepID ];
 
 	// maybe it just had expired at the same time
 	if( !sleep )
 		{ return; }
 
-	var space = self.$spaces[ sleep.spacename ];
+	var space =
+		self.$spaces[ sleep.spacename ];
 
-	var seqZ  = space.$seqZ;
+	var seqZ =
+		space.$seqZ;
+
 	delete self.$upsleep[ sleepID ];
 
 	//TODO call it sleep.username
@@ -1199,23 +1686,42 @@ Server.prototype.expireSleep =
 		sleep.spacename
 	);
 
-	var asw = {
-		ok    : true,
-		time  : sleep.time,
-		timeZ : seqZ,
-		chgs  : null
-	};
-	log('ajax', '->', asw);
+	var asw =
+		{
+			ok :
+				true,
+
+			time :
+				sleep.time,
+
+			timeZ :
+				seqZ,
+
+			chgs :
+				null
+		};
+
+	Jools.log( 'ajax', '->', asw );
 
 	var res = sleep.res;
 
-	res.writeHead(200, {
-		'Content-Type'  : 'application/json',
-		'Cache-Control' : 'no-cache',
-		'Date'          : new Date().toUTCString()
-	});
+	res.writeHead(
+		200,
+		{
+			'Content-Type' :
+				'application/json',
 
-	res.end(JSON.stringify(asw));
+			'Cache-Control' :
+				'no-cache',
+
+			'Date' :
+				new Date().toUTCString()
+		}
+	);
+
+	res.end(
+		JSON.stringify( asw )
+	);
 
 };
 
@@ -1223,7 +1729,8 @@ Server.prototype.expireSleep =
 /*
 | A sleeping update closed prematurely.
 */
-Server.prototype.closeSleep = function(sleepID)
+Server.prototype.closeSleep =
+	function( sleepID )
 {
 	var sleep = this.$upsleep[ sleepID ];
 
@@ -1231,7 +1738,7 @@ Server.prototype.closeSleep = function(sleepID)
 	if( !sleep )
 		{ return; }
 
-	clearTimeout(sleep.timerID);
+	clearTimeout( sleep.timerID );
 
 	delete this.$upsleep[ sleepID ];
 
@@ -1242,16 +1749,33 @@ Server.prototype.closeSleep = function(sleepID)
 /*
 | Returns a result for an update operation.
 */
-Server.prototype.conveyUpdate = function( time, mseq, spacename )
+Server.prototype.conveyUpdate =
+	function(
+		time,
+		mseq,
+		spacename
+	)
 {
-	var space    = this.$spaces[spacename];
-	var changes  = space.$changes;
+	var space =
+		this.$spaces[spacename];
 
-	var messages = this.$messages;
-	var seqZ     = space.$seqZ;
-	var msgZ     = messages.length;
-	var chgA     = [];
-	var msgA     = [];
+	var changes =
+		space.$changes;
+
+	var messages =
+		this.$messages;
+
+	var seqZ =
+		space.$seqZ;
+
+	var msgZ =
+		messages.length;
+
+	var chgA =
+		[ ];
+
+	var msgA =
+		[ ];
 
 	for (var c = time; c < seqZ; c++)
 		{ chgA.push( changes[c] ); }
@@ -1279,7 +1803,8 @@ Server.prototype.conveyUpdate = function( time, mseq, spacename )
 /*
 | Wakes up any sleeping updates and gives them data if applicatable.
 */
-Server.prototype.wake = function(spacename)
+Server.prototype.wake =
+	function( spacename )
 {
 	var sleepKeys = Object.keys( this.$upsleep );
 
@@ -1300,7 +1825,8 @@ Server.prototype.wake = function(spacename)
 		var asw = this.conveyUpdate(sleep.time, sleep.mseq, sleep.spacename);
 		var res = sleep.res;
 
-		log('ajax', '->', asw);
+		Jools.log('ajax', '->', asw);
+
 		res.writeHead(200,
 			{
 				'Content-Type'  : 'application/json',
@@ -1313,33 +1839,49 @@ Server.prototype.wake = function(spacename)
 	}
 };
 
-/**
+
+/*
 | Tests if the user has access to a space.
 */
-Server.prototype.testAccess = function(user, spacename)
+Server.prototype.testAccess =
+	function(
+		user,
+		spacename
+	)
 {
-	if (user === 'root')
-		{ return 'rw'; }
+	if( user === 'root' )
+	{
+		return 'rw';
+	}
 
-	if (!Jools.isString(spacename))
-		{ return 'no'; }
+	if( !Jools.isString( spacename ) )
+	{
+		return 'no';
+	}
 
-	switch (spacename)
+	switch( spacename )
 	{
 		case 'meshcraft:sandbox' :
+
 			return 'rw';
 
 		case 'meshcraft:home' :
+
 			return user === config.admin ? 'rw' : 'ro';
 
 		default :
+
 			var sp = spacename.split(':', 2);
 
-			if (sp.length < 2)
-				{ return 'no'; }
+			if( sp.length < 2 )
+			{
+				return 'no';
+			}
 
-			if (user == sp[0])
-				{ return 'rw'; }
+			if( user == sp[ 0 ] )
+			{
+				return 'rw';
+			}
 
 			return 'no';
 	}
@@ -1355,39 +1897,59 @@ Server.prototype.cmdGet = function(cmd, _)
 	var user     = cmd.user;
 	var passhash = cmd.passhash;
 
-	if( !is(cmd.user) )
-		{ throw reject('user missing'); }
+	if( !Jools.is(cmd.user) )
+	{
+		throw Jools.reject('user missing');
+	}
 
-	if( !is(cmd.passhash) )
-		{ throw reject('passhash missing'); }
+	if( !Jools.is(cmd.passhash) )
+	{
+		throw Jools.reject('passhash missing');
+	}
 
-	if( !is(this.$users[user]) || passhash !== this.$users[user].pass )
-		{ throw reject('wrong user/password'); }
+	if( !Jools.is(this.$users[user]) || passhash !== this.$users[user].pass )
+	{
+		throw Jools.reject('wrong user/password');
+	}
 
 	// TODO dont call it "time"
-	if( !is(cmd.time) )
-		{ throw reject('time missing'); }
+	if( !Jools.is(cmd.time) )
+	{
+		throw Jools.reject('time missing');
+	}
 
-	if( !is(cmd.path) )
-		{ throw reject('path missing'); }
+	if( !Jools.is(cmd.path) )
+	{
+		throw Jools.reject('path missing');
+	}
 
 	var spacename = cmd.space;
 
 	var access = this.testAccess(cmd.user, spacename);
+
 	if( access == 'no' )
-		{ throw reject('no access'); }
+	{
+		throw Jools.reject('no access');
+	}
 
 	var space = this.$spaces[spacename];
+
 	if( !space )
-		{ throw reject('unknown space'); }
+	{
+		throw Jools.reject('unknown space');
+	}
 
 	var changes = space.$changes;
-	var seqZ    = space.$seqZ;
+	var seqZ = space.$seqZ;
 
 	if( time === -1 )
-		{ time = seqZ; }
+	{
+		time = seqZ;
+	}
 	else if( !(time >= 0 && time <= seqZ) )
-		{ throw reject('invalid time'); }
+	{
+		throw Jools.reject('invalid time');
+	}
 
 	var tree = space.$tree;
 
@@ -1418,10 +1980,10 @@ Server.prototype.cmdGet = function(cmd, _)
 	}
 
 	return {
-		ok     : true,
+		ok : true,
 		access : access,
-		time   : time,
-		node   : node
+		time : time,
+		node : node
 	};
 };
 
@@ -1429,16 +1991,29 @@ Server.prototype.cmdGet = function(cmd, _)
 /*
 | Logs and returns a web error
 */
-Server.prototype.webError = function(res, code, message)
+Server.prototype.webError =
+	function(
+		res,
+		code,
+		message
+	)
 {
 	res.writeHead(code, {
-		'Content-Type'  : 'text/plain',
-		'Cache-Control' : 'no-cache',
-		'Date'          : new Date().toUTCString()
+		'Content-Type' :
+			'text/plain',
+
+		'Cache-Control' :
+			'no-cache',
+
+		'Date' :
+			new Date().toUTCString()
 	});
+
 	message = code+' '+message;
-	log('web', 'error', code, message);
-	res.end(message);
+
+	Jools.log( 'web', 'error', code, message );
+
+	res.end( message );
 };
 
 
@@ -1446,27 +2021,44 @@ Server.prototype.webError = function(res, code, message)
 | Checks if the request should be proxied
 | Returns true if the proxy applies, false otherwise.
 */
-Server.prototype.webRedirect = function(req, res)
+Server.prototype.webRedirect =
+	function(
+		req,
+		res
+	)
 {
-	if (!config.redirect)
-		{ return false; }
+	if( !config.redirect )
+	{
+		return false;
+	}
 
 	var host = req.headers.host;
 	var loc  = config.redirect[host];
 
-	if (!loc)
-		{ return false; }
+	if( !loc )
+	{
+		return false;
+	}
 
 	var locp = loc + req.url;
-	log('web', 'redirect', '->', locp);
+
+	Jools.log( 'web', 'redirect', '->', locp );
 
 	res.writeHead(307, {
-		'Content-Type'  : 'text/plain',
-		'Cache-Control' : 'max-age=86400',
-		'Date'          : new Date().toUTCString(),
-		'Location'      : locp
+		'Content-Type' :
+			'text/plain',
+
+		'Cache-Control' :
+			'max-age=86400',
+
+		'Date' :
+			new Date().toUTCString(),
+
+		'Location' :
+			locp
 	});
-	res.end();
+
+	res.end( );
 
 	return true;
 };
@@ -1475,71 +2067,108 @@ Server.prototype.webRedirect = function(req, res)
 /*
 | Listens to http requests
 */
-Server.prototype.requestListener = function(req, res)
+Server.prototype.requestListener =
+	function(
+		req,
+		res
+	)
 {
-	var red = url.parse(req.url);
+	var red = url.parse( req.url );
 
-	if (this.webRedirect(req, res))
-		{ return; }
+	if(
+		this.webRedirect(
+			req,
+			res
+		)
+	)
+	{
+		return;
+	}
 
-	log('web', req.connection.remoteAddress, red.href);
+	Jools.log( 'web', req.connection.remoteAddress, red.href );
 
-	var pathname = red.pathname.replace(/^[\/]+/g, '');
-	if (pathname === 'mm')
-		{ return this.webAjax(req, red, res); }
+	var pathname = red.pathname.replace( /^[\/]+/g, '' );
 
-	var r = this.$resources[pathname];
+	if( pathname === 'mm' )
+	{
+		return this.webAjax( req, red, res );
+	}
+
+	var r = this.$resources[ pathname ];
 	if (!r)
 	{
-		this.webError(res, '404 Bad Request');
+		this.webError( res, '404 Bad Request' );
 		return;
 	}
 
 	if (r.data)
 	{
-		var aenc = r.gzip && req.headers['accept-encoding'];
+		var aenc = r.gzip && req.headers[ 'accept-encoding' ];
 		var header = {
-			'Content-Type'     : r.mime,
-			'Cache-Control'    : r.opts.cache ? 'max-age=7884000' : 'no-cache',
-			'Date'             : new Date().toUTCString()
+			'Content-Type' :
+				r.mime,
+
+			'Cache-Control' :
+				r.opts.cache ? 'max-age=7884000' : 'no-cache',
+
+			'Date' :
+				new Date().toUTCString()
 		};
+
 		if (aenc && aenc.indexOf('gzip') >= 0)
 		{
 			// delivers compressed
-			header['Content-Encoding'] = 'gzip';
-			res.writeHead(200, header);
-			res.end(r.gzip, 'binary');
+			header[ 'Content-Encoding' ] = 'gzip';
+			res.writeHead( 200, header );
+			res.end( r.gzip, 'binary' );
 		}
 		else
 		{
 			// delivers uncompressed
-			res.writeHead(200, header);
-			res.end(r.data, r.code);
+			res.writeHead( 200, header );
+			res.end( r.data, r.code );
 		}
 		return;
 	}
 
 	var self = this;
 
-	if (config.devel !== 'shell' && config.devel !== 'both') {
-		this.webError(res, '404 Bad Request');
+	if (
+		config.devel !== 'shell' &&
+		config.devel !== 'both'
+	) {
+		this.webError( res, '404 Bad Request' );
 	}
 
 	fs.readFile(
 		r.path,
-		function(err, data)
+		function( err, data )
 		{
-			if (err) {
-				self.webError(res, 500, 'Internal Server Error');
-				log('fail', 'Missing file: ' + r.path);
+			if( err )
+			{
+				self.webError( res, 500, 'Internal Server Error' );
+				Jools.log( 'fail', 'Missing file: ' + r.path );
 				return;
 			}
-			res.writeHead(200, {
-				'Content-Type'  : r.mime,
-				'Cache-Control' : r.opts.cache ? 'max-age=7884000' : 'no-cache',
-				'Date'          : new Date().toUTCString()
-			});
-			res.end(data, r.code);
+
+			res.writeHead(
+				200,
+				{
+					'Content-Type' :
+						r.mime,
+
+					'Cache-Control' :
+						r.opts.cache ? 'max-age=7884000' : 'no-cache',
+
+					'Date' :
+						new Date().toUTCString()
+				}
+			);
+
+			res.end(
+				data,
+				r.code
+			);
 		}
 	);
 };
@@ -1548,48 +2177,59 @@ Server.prototype.requestListener = function(req, res)
 /*
 | Handles ajax requests to the MeshMashine.
 */
-Server.prototype.webAjax = function(req, red, res)
+Server.prototype.webAjax =
+	function(
+		req,
+		red,
+		res
+	)
 {
 	var self = this;
-	var data = [];
+	var data = [ ];
 
-	if (req.method !== 'POST')
+	if( req.method !== 'POST' )
 	{
-		this.webError(res, 400, 'Must use POST');
+		this.webError( res, 400, 'Must use POST' );
 		return;
 	}
 
 	req.on('close',
-		function()
+		function( )
 		{
-			if (res.sleepID)
-				{ self.closeSleep(res.sleepID); }
+			if( res.sleepID )
+			{
+				self.closeSleep( res.sleepID );
+			}
 		}
 	);
 
 	req.on('data',
-		function(chunk)
+		function( chunk )
 		{
-			data.push(chunk);
+			data.push( chunk );
 		}
 	);
 
-	var handler = function()
+	var handler = function( )
 	{
-		var query = data.join('');
+		var query = data.join( '' );
 		var asw, cmd;
 
-		log('ajax', '<-', query);
+		Jools.log( 'ajax', '<-', query );
 
 		try
-			{ cmd = JSON.parse(query); }
-		catch (err)
 		{
-			self.webError(res, 400, 'Not valid JSON');
+			cmd = JSON.parse(query);
+		}
+		catch( err )
+		{
+			self.webError( res, 400, 'Not valid JSON' );
 			return;
 		}
 
-		asw = self.ajaxCmd(cmd, res,
+		asw = self.ajaxCmd(
+			cmd,
+			res,
 			function( err, asw )
 			{
 				if (err)
@@ -1600,7 +2240,7 @@ Server.prototype.webAjax = function(req, red, res)
 					}
 					else
 					{
-						log(
+						Jools.log(
 							'web',
 							'not ok',
 							err.message
@@ -1613,10 +2253,12 @@ Server.prototype.webAjax = function(req, red, res)
 					}
 				}
 
-				if (asw === null)
-					{ return; }
+				if( asw === null )
+				{
+					return;
+				}
 
-				log('ajax', '->', asw);
+				Jools.log( 'ajax', '->', asw );
 
 				res.writeHead( 200,
 					{
@@ -1625,7 +2267,8 @@ Server.prototype.webAjax = function(req, red, res)
 						'Date'          : new Date().toUTCString()
 					}
 				);
-				res.end(JSON.stringify(asw));
+
+				res.end( JSON.stringify( asw ) );
 			}
 		);
 	};
@@ -1648,33 +2291,35 @@ Server.prototype.ajaxCmd = function( cmd, res, _)
 {
 	switch ( cmd.cmd )
 	{
-		case 'alter'    :
+		case 'alter' :
 			return this.cmdAlter( cmd, _);
 
-		case 'auth'     :
+		case 'auth' :
 			return this.cmdAuth(  cmd, _);
 
-		case 'get'      :
+		case 'get' :
 			return this.cmdGet( cmd, _);
 
-		case 'message'  :
+		case 'message' :
 			return this.cmdMessage( cmd, _);
 
 		case 'register' :
 			return this.cmdRegister( cmd, _);
 
-		case 'update'   :
+		case 'update' :
 			return this.cmdUpdate( cmd, res, _);
 
 		default:
-			return reject('unknown command');
+			return Jools.reject('unknown command');
 	}
 };
 
 new Server(
-	function(err) {
-		if (err)
-			{ throw err; }
+	function( err ) {
+		if( err )
+		{
+			throw err;
+		}
 	}
 );
 

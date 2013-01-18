@@ -26,7 +26,7 @@ var Euclid;
 
 if( typeof( window ) === 'undefined' )
 {
-	throw new Error('this code needs a browser!');
+	throw new Error( 'this code needs a browser!' );
 }
 
 
@@ -321,8 +321,14 @@ theme =
 
 				steps :
 				[
-					[ 0, 'rgba( 255, 255,  20, 0.955 )' ],
-					[ 1, 'rgba( 255, 255, 180, 0.955 )' ]
+					[
+						0,
+						'rgba( 255, 255,  20, 0.955 )'
+					],
+					[
+						1,
+						'rgba( 255, 255, 180, 0.955 )'
+					]
 				]
 			},
 
@@ -969,7 +975,75 @@ theme =
 			},
 
 			edge : [ ]
-		}
+		},
+
+		/*
+		| default input field style
+		| TODO move this into 'style'
+		*/
+		input :
+		{
+			fill :
+				'white',
+
+			edge :
+			[
+				{
+					border :
+						1,
+
+					width :
+						1.5,
+
+					color :
+						'rgb( 255, 188, 87 )'
+				},
+				{
+					border :
+						0,
+
+					width :
+						1,
+
+					color :
+						'black'
+				}
+			]
+		},
+
+
+		/*
+		| default input focused field style
+		*/
+		inputFocus :
+		{
+			fill :
+				'white',
+
+			edge :
+			[
+				{
+					border :
+						1,
+
+					width :
+						2,
+
+					color :
+						'rgb( 255, 99, 188 )'
+				},
+				{
+					border :
+						0,
+
+					width :
+						1,
+
+					color :
+						'black'
+				}
+			]
+		},
 	},
 
 

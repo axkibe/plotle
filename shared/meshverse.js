@@ -121,10 +121,10 @@ Meshverse =
 	'Point' :
 	{
 		creator :
-		function(t)
-		{
-			return new Euclid.Point(t.x, t.y);
-		},
+			function(t)
+			{
+				return new Euclid.Point(t.x, t.y);
+			},
 
 		must :
 		{
@@ -166,7 +166,7 @@ Meshverse =
 
 })(Meshverse);
 
-/**
+/*
 | Node export
 */
 if (typeof(window) === 'undefined')

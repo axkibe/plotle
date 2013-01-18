@@ -45,11 +45,11 @@ Forms.Label =
 	this.name =
 		name;
 
-	this.form =
-		form;
-
 	this.twig =
 		twig;
+
+	this.form =
+		form;
 
 	this.pos =
 		Curve.computePoint(
@@ -101,6 +101,7 @@ Label.prototype.setText =
 	)
 {
 	this._$text = text;
+
 	this.poke();
 };
 

@@ -608,19 +608,6 @@ MainDisc.prototype.setHover =
 
 
 /*
-| Sets the current user
-*/
-MainDisc.prototype.setUser =
-	function(
-		user,
-		passhash
-	)
-{
-	console.log( 'TODO setuser():', user, passhash );
-};
-
-
-/*
 | Displays a message
 */
 MainDisc.prototype.message =

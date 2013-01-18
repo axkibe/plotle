@@ -20,7 +20,7 @@ var Curve;
 var Design;
 var Euclid;
 var Jools;
-var Proc;
+//var Proc;
 var shell;
 var system;
 var theme;
@@ -32,6 +32,8 @@ var Tree;
 */
 ( function( ) {
 'use strict';
+
+
 if( typeof( window ) === 'undefined')
 {
 	throw new Error( 'this code needs a browser!' );
@@ -43,14 +45,56 @@ if( typeof( window ) === 'undefined')
 */
 var Form =
 Forms.Form =
-	function(/* free strings */)
+	function(
+		// free strings
+	)
 {
-	this.fabric = system.fabric;
+	var fabric =
+	this.fabric =
+		system.fabric;
+
+	this.iframe =
+		new Euclid.Rect(
+			'pse',
+			new Euclid.Point(
+				fabric.width,
+				fabric.height
+			)
+		);
+
+	var tree =
+	this.tree =
+		new Tree(
+			this.layout,
+			Forms.LayoutPattern
+		);
+
+	this.$sub =
+		{ };
+
+	var inherit =
+		null;
+
+	var root =
+		tree.root;
+
+	for( var a = 0, aZ = root.ranks.length; a < aZ; a++ )
+	{
+		var name =
+			root.ranks[ a ];
+
+		var twig =
+			root.copse[ name ];
+
+		this.$sub[ name ] =
+			this.newComponent(
+				name,
+				twig,
+				inherit && inherit.$sub[ name ]
+			);
+	}
 
 	/*
-	this.name  = name;
-	this.board = board;
-	var tree   = this.tree  = new Tree(Design[name], Design.Pattern);
 	var frameD = tree.root.frame;
 	var oframe = new Euclid.Rect( 'pse', screensize );
 	var pnw    = this.pnw    = Curve.computePoint( frameD.pnw, oframe );
@@ -63,74 +107,77 @@ Forms.Form =
 		iframe.height + 450
 	);
 
-	this.gradientR0 = 0;
-	this.gradientR1 = 650;
-	this.screensize = screensize;
-
 	this.$hover = inherit ? inherit.$hover : null;
 
-	this.$sub = {};
-	var layout = tree.root.layout;
-
-	for(var a = 0, aZ = layout.length; a < aZ; a++)
-	{
-		var cname = layout.ranks[a];
-		var twig  = layout.copse[cname];
-		this.$sub[cname] = this.newControl(twig, inherit && inherit.$sub[cname], cname);
-	}
 	*/
 };
 
 
 /*
-| Creates a new component.
+| Creates a new component
 */
-/*
-Panel.prototype.newControl =
+Form.prototype.newComponent =
 	function(
+		name,
 		twig,
-		inherit,
-		name
+		inherit
 	)
 {
+	/*
 	if( twig.code && twig.code !== '' )
 	{
-		var Proto = Proc[ twig.code ];
+		var Proto =
+			Proc[ twig.code ];
 
 		if( Proto )
-			{ return new Proto( twig, this, inherit, name ); }
+		{
+			return new Proto( twig, this, inherit, name );
+		}
 		else
-			{ throw new Error( 'No prototype for :' + twig.code ); }
+		{
+			throw new Error( 'No prototype for :' + twig.code );
+		}
 	}
+	*/
 
 	switch( twig.type )
 	{
-		case 'Button' :
-			return new Dash.Button( twig, this, inherit, name );
+//		case 'Button' :
+//			return new Dash.Button( twig, this, inherit, name );
 
-		case 'Chat'   :
-			return new Dash.Chat( twig, this, inherit, name );
-
-		case 'CheckBox' :
-			return new Dash.CheckBox( twig, this, inherit, name );
+//		case 'CheckBox' :
+//			return new Dash.CheckBox( twig, this, inherit, name );
 
 		case 'Input' :
-			return new Dash.Input( twig, this, inherit, name );
+
+			return new Forms.Input(
+				name,
+				twig,
+				this,
+				inherit
+			);
 
 		case 'Label' :
-			return new Dash.Label( twig, this, inherit, name );
+
+			return new Forms.Label(
+				name,
+				twig,
+				this,
+				inherit
+			);
 
 		default :
-			throw new Error('Invalid component type: ' + twig.type);
+
+			throw new Error( 'Invalid component type: ' + twig.type );
 	}
 };
-*/
 
 /*
 | Returns the focused item.
 */
 /*
-Panel.prototype.focusedControl = function()
+Panel.prototype.focusedControl =
+	function( )
 {
 	var caret = shell.$caret;
 
@@ -149,35 +196,27 @@ Panel.prototype.focusedControl = function()
 
 
 /*
-| Sketches the panels frame.
-*/
-/*
-Panel.prototype.sketch = function( fabric, border, twist )
-{
-	this.curve.sketch( fabric, border, twist );
-};
-*/
-
-
-/*
 | Force clears all caches.
 */
-/*
-Panel.prototype.knock = function( )
+Form.prototype.knock =
+	function( )
 {
-	this.$fabric = null;
+	this.$fabric =
+		null;
 
 	for( var c in this.$sub )
-		{ this.$sub[ c ].knock( ); }
+	{
+		this.$sub[ c ].knock( );
+	}
 };
-*/
 
 
 /*
 | Draws the panels contents.
 */
 /*
-Panel.prototype._weave = function( )
+Panel.prototype._weave =
+	function( )
 {
 	if( this.$fabric && !config.debug.noCache )
 		{ return this.$fabric; }
@@ -233,6 +272,37 @@ Form.prototype.draw =
 		'sketch',
 		Euclid.View.proper
 	);
+
+	var iframe =
+		this.iframe;
+
+
+//	var style = Dash.getStyle(this.tree.root.style);
+//	if( !style )
+//		{ throw new Error('no style!'); }
+
+	var root =
+		this.tree.root;
+
+	var ranks =
+		root.ranks;
+
+//	var focus = this.focusedControl( );
+
+	for( var a = ranks.length - 1; a >= 0; a-- )
+	{
+		var name =
+			ranks[ a ];
+
+		var comp =
+			this.$sub[ name ];
+
+		comp.draw(
+			fabric,
+			Forms.Accent.state( false, false )
+			// Dash.Accent.state(cname === this.$hover || c.$active, c === focus)
+		);
+	}
 };
 
 
@@ -240,7 +310,8 @@ Form.prototype.draw =
 | Positions the caret.
 */
 /*
-Panel.prototype.positionCaret = function( view )
+Panel.prototype.positionCaret =
+	function( view )
 {
 	var cname = shell.$caret.sign.path.get( 1 );
 
@@ -265,9 +336,18 @@ Panel.prototype.positionCaret = function( view )
 /*
 | Returns true if point is on this panel.
 */
-/*
-Panel.prototype.pointingHover = function( p, shift, ctrl )
+Form.prototype.pointingHover =
+	function(
+		p,
+		shift,
+		ctrl
+	)
 {
+	this._setHover( null );
+
+	return null;
+
+	/*
 	var pnw = this.pnw;
 	var pse = this.pse;
 	var a, aZ;
@@ -277,17 +357,8 @@ Panel.prototype.pointingHover = function( p, shift, ctrl )
 		return this.setHover( null );
 	}
 
-	// shortcut if p is not near the panel
-	if( p.y < pnw.y ||
-		p.y > pse.y ||
-		p.x < pnw.x ||
-		p.x > pse.x
-	)
-	{
-		return this.setHover( null );
-	}
-
-	var fabric = this._weave( );
+	var fabric =
+		this._weave( );
 
 	var pp = p.sub( pnw );
 
@@ -324,16 +395,58 @@ Panel.prototype.pointingHover = function( p, shift, ctrl )
 	}
 
 	return cursor || 'default';
+	**/
 };
-*/
 
 
 /*
-| Returns true if point is on this panel.
+| User clicked
 */
-/*
-Panel.prototype.pointingStart = function( p, shift, ctrl )
+Form.prototype.click =
+	function(
+		// p,
+		// shift,
+		// ctrl
+	)
 {
+	// nada
+}
+
+
+/*
+| Starts an operation with the pointing device active.
+|
+| Mouse down or finger on screen.
+*/
+Form.prototype.dragStart =
+	function(
+		p,
+		shift,
+		ctrl
+	)
+{
+	return false;
+}
+
+
+/*
+| Pointing device starts pointing
+| ( mouse down, touch start )
+|
+| Returns the pointing state code,
+| wheter this is a click/drag or yet undecided.
+*/
+Form.prototype.pointingStart =
+	function(
+		p,
+		shift,
+		ctrl
+	)
+{
+	console.log(' form pointing start ');
+
+	return false;
+	/*
 	var pnw = this.pnw;
 	var pse = this.pse;
 	var fabric = this._weave( );
@@ -373,15 +486,16 @@ Panel.prototype.pointingStart = function( p, shift, ctrl )
 	this.setHover( null );
 
 	return false;
-};
 */
+};
 
 
 /*
 | User is inputing text.
 */
 /*
-Panel.prototype.input = function( text )
+Panel.prototype.input =
+	function( text )
 {
 	var focus = this.focusedControl( );
 	if( !focus )
@@ -396,7 +510,8 @@ Panel.prototype.input = function( text )
 | Cycles the focus
 */
 /*
-Panel.prototype.cycleFocus = function( dir )
+Panel.prototype.cycleFocus =
+	function( dir )
 {
 	var layout = this.tree.root.layout;
 	var focus  = this.focusedControl( );
@@ -428,7 +543,12 @@ Panel.prototype.cycleFocus = function( dir )
 | User is pressing a special key.
 */
 /*
-Panel.prototype.specialKey = function( key, shift, ctrl )
+Panel.prototype.specialKey =
+	function(
+		key,
+		shift,
+		ctrl
+	)
 {
 	var focus = this.focusedControl( );
 
@@ -449,38 +569,45 @@ Panel.prototype.specialKey = function( key, shift, ctrl )
 /*
 | Clears caches.
 */
-/*
-Panel.prototype.poke = function( )
+Form.prototype.poke =
+	function( )
 {
-	this.$fabric = null;
-	shell.redraw = true;
+	this.$fabric =
+		null;
+
+	shell.redraw =
+		true;
 };
-*/
 
 
 /*
 | Sets the hovered component.
 */
-/*
-Panel.prototype.setHover = function( cname )
+Form.prototype._setHover =
+	function( name )
 {
-	if( this.$hover === cname )
-		{ return null; }
+	if( this.$hover === name )
+	{
+		return
+	}
 
-	this.$fabric = null;
-	shell.redraw = true;
+	this.poke();
 
 	if( this.$hover )
-		{ this.$sub[this.$hover].knock(); }
+	{
+		this.$sub[ this.$hover ].knock( );
+	}
 
-	if( cname )
-		{ this.$sub[cname].knock(); }
+	if( name )
+	{
+		this.$sub[ name ].knock( );
+	}
 
-	this.$hover = cname;
+	this.$hover =
+		name;
 
-	return null;
+	return;
 };
-*/
 
 
 } )( );

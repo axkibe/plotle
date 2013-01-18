@@ -628,7 +628,7 @@ Fabric.prototype.fillRect =
 		a4
 	)
 {
-	console.log('TODO', 'REMOVE fillRect');
+	// FIXME remove fillRect
 
 	var cx = this._cx;
 

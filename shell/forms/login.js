@@ -1,17 +1,15 @@
 /*
-|
-| Design of the login panel.
+| The login form.
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
 /*
 | Export
 */
-var Design;
-Design = Design || {};
+var Forms;
+Forms = Forms || { };
 
 
 /*
@@ -19,408 +17,270 @@ Design = Design || {};
 */
 var Euclid;
 var fontPool;
+var Jools;
 
 
 /*
 | Capsule
 */
-(function() {
+(function( ) {
 'use strict';
 
 
 /*
-| Shortcuts
+| The login form
 */
-
-// 'magic' number to approximate ellipses with beziers
-var magic     = Euclid.Const.magic;
-
-var mbConsts  = Design.MainPanel.consts;
-
-
-/*
-| Login control
-*/
-var loginBW   = 70;
-var loginBH   = 70;
-var loginBXM  = loginBW * magic / 2;
-var loginBYM  = loginBH * magic / 2;
-
-
-/*
-| Close control
-*/
-var closeBW  = 54;
-var closeBH  = 54;
-var closeBXM = closeBW * magic / 2;
-var closeBYM = closeBH * magic / 2;
-
-
-/*
-| Login Panel
-*/
-var LoginPanel = Design.LoginPanel =
+var Login =
+Forms.Login =
+	function(
+		// free strings
+	)
 {
-	type   : 'Design'
+	Forms.Form.apply(
+		this,
+		arguments
+	);
 };
 
 
-LoginPanel.style = 'panel';
+Jools.subclass(
+	Login,
+	Forms.Form
+);
 
 
-LoginPanel.frame =
-{
-	type  : 'Frame',
-
-	pnw   : { type   : 'Point', anchor : 's', x : -512, y : -110 },
-
-	pse   : { type   : 'Point', anchor : 's', x :  512, y :    0 }
-};
-
-
-LoginPanel.curve =
-{
-	type  : 'Curve',
-
-	copse :
+/*
+| Layout
+*/
+Login.prototype.layout =
 	{
-		'1' :
+		type :
+			'Layout',
+
+		copse :
 		{
-			type : 'MoveTo',
-			to   :
+			'headline' :
 			{
-				type   : 'Point',
-				anchor : 'sw',
-				x      : 0,
-				y      : 0
-			},
-			bx   : 1,
-			by   : 0
-		},
+				type :
+					'Label',
 
-		'2' :
-		{
-			type :  'BeziTo',
+				text :
+					'Log In',
+				font :
+					fontPool.get( 22, 'la' ),
 
-			to   :
-			{
-				type   : 'Point',
-				anchor :  'n',
-				x      : 0,
-				y      : 0
-			},
-
-			c1x  :  mbConsts.C1X,
-			c1y  :  mbConsts.C1Y,
-			c2x  : -mbConsts.C2X,
-			c2y  :  mbConsts.C2Y,
-
-			bx   :  0,
-			by   :  1
-		},
-
-		'3' :
-		{
-			type :  'BeziTo',
-
-			to   :
-			{
-				type   : 'Point',
-				anchor : 'se',
-				x      : 0,
-				y      : 0
-			},
-
-			c1x  :  mbConsts.C2X,
-			c1y  : -mbConsts.C2Y,
-			c2x  : -mbConsts.C1X,
-			c2y  :  mbConsts.C1Y,
-
-			bx   : -1,
-			by   :  0
-		}
-	},
-
-	ranks : [ '1', '2', '3' ]
-};
-
-
-LoginPanel.layout =
-{
-	type  : 'Layout',
-
-	copse :
-	{
-		'loginL' :
-		{
-			type      : 'Label',
-			text      : 'Log In',
-			font      : fontPool.get( 22, 'ca' ),
-			pos       : { type: 'Point', anchor: 'sw', x: 160, y: -14 }
-		},
-
-		'userL' :
-		{
-			type      : 'Label',
-			text      : 'username',
-			font      : fontPool.get( 16, 'la' ),
-			pos       : { type: 'Point', anchor: 's', x: -230, y:  -56 }
-		},
-
-		'passL' :
-		{
-			type      : 'Label',
-			text      : 'password',
-			font      : fontPool.get( 16, 'la' ),
-			pos       : { type: 'Point', anchor: 's', x: -230, y:  -21 }
-		},
-
-		'errL' :
-		{
-			type      : 'Label',
-			//        : 'username/password not accepted',
-			text      : '',
-			font      : fontPool.get( 14, 'lar' ),
-			pos       : { type: 'Point', anchor: 's', x: -135, y:  -81 }
-		},
-
-		'userI' :
-		{
-			type       : 'Input',
-			code       : '',
-			password   :  false,
-			normaStyle : 'input',
-			focusStyle : 'inputFocus',
-			hoverStyle : 'input',
-			hofocStyle : 'inputFocus',
-			font       : fontPool.get( 14, 'la' ),
-			maxlen     : 100,
-			frame      : {
-				type   : 'Frame',
-				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -74 },
-				pse    : { type: 'Point', anchor: 's', x:   95, y:  -48 }
-			}
-		},
-
-		'passI' :
-		{
-			type       : 'Input',
-			code       : 'LoginPassInput',
-			password   :  true,
-			normaStyle : 'input',
-			focusStyle : 'inputFocus',
-			hoverStyle : 'input',
-			hofocStyle : 'inputFocus',
-			font       : fontPool.get( 14, 'la' ),
-			maxlen     : 0,
-			frame      : {
-				type   : 'Frame',
-				pnw    : { type: 'Point', anchor: 's', x: -135, y:  -40 },
-				pse    : { type: 'Point', anchor: 's', x:   95, y:  -14 }
-			}
-		},
-
-		'loginB'       :
-		{
-			type       : 'Button',
-			code       : 'LoginLoginButton',
-			normaStyle : 'button',
-			hoverStyle : 'buttonHover',
-			focusStyle : 'buttonFocus',
-			hofocStyle : 'buttonHofoc',
-
-			frame :
-			{
-				type : 'Frame',
-				pnw  : { type: 'Point', anchor: 'se', x: -380,           y: -10 - loginBH },
-				pse  : { type: 'Point', anchor: 'se', x: -380 + loginBW, y: -10           }
-			},
-
-			caption :
-			{
-				type : 'Label',
-				text : 'login',
-				font : fontPool.get( 14, 'cm' ),
-				pos  : { type: 'Point', anchor: 'c', x:  0, y: 0 }
-			},
-
-			curve :
-			{
-				type  : 'Curve',
-
-				copse :
+				pos :
 				{
-					'1' :
-					{
-						type : 'MoveTo',
-						to   : { type: 'Point', anchor:  'n', x:  0, y:  1 },
-						bx   :  0, by : 1
-					},
+					type :
+						'Point',
 
-					'2' :
-					{
-						type : 'BeziTo',
-						to   :  { type: 'Point', anchor: 'e', x: -1, y:  0 },
-						c1x  :  loginBXM, c1y :         0,
-						c2x  :         0, c2y : -loginBYM,
-						bx   : -1, by:  0
-					},
+					anchor :
+						'nw',
 
-					'3' :
-					{
-						type : 'BeziTo',
-						to   :  { type: 'Point', anchor: 's', x:  0, y: -1 },
-						c1x  :         0, c1y :  loginBYM,
-						c2x  :  loginBXM, c2y :         0,
-						bx   :  0, by: -1
-					},
+					x :
+						150,
 
-					'4' :
-					{
-						type : 'BeziTo',
-						to   :  { type: 'Point', anchor: 'w', x:  1, y:  0 },
-						c1x  : -loginBXM, c1y :         0,
-						c2x  :         0, c2y :  loginBYM,
-						bx   :  1, by:  0
-					},
-
-					'5' :
-					{
-						type : 'BeziTo',
-						to   :  { type: 'Point', anchor: 'n', x:  0, y:  1 },
-						c1x  :         0, c1y : -loginBYM,
-						c2x  : -loginBXM, c2y :         0,
-						bx   :  0, by:  1
-					}
-				},
-
-				ranks :
-				[
-					'1',
-					'2',
-					'3',
-					'4',
-					'5'
-				]
-			}
-		},
-
-		'closeB'       :
-		{
-			type       : 'Button',
-			code       : 'LoginCloseButton',
-			normaStyle : 'button',
-			hoverStyle : 'buttonHover',
-			focusStyle : 'buttonFocus',
-			hofocStyle : 'buttonHofoc',
-
-			frame :
-			{
-				type  : 'Frame',
-				pnw   : { type: 'Point', anchor: 'se', x: -300,           y: -10 - closeBH },
-				pse   : { type: 'Point', anchor: 'se', x: -300 + closeBW, y: -10 }
-			},
-
-			caption :
-			{
-				type : 'Label',
-				text : 'close',
-				font : fontPool.get( 14, 'cm' ),
-				pos  :
-				{
-					type   : 'Point',
-					anchor : 'c',
-					x      : 0,
-					y      : 0
+					y :
+						50
 				}
 			},
 
-			curve :
+			'usernameLabel' :
 			{
-				type  : 'Curve',
-				copse :
+				type :
+					'Label',
+
+				text :
+					'username',
+
+				font :
+					fontPool.get( 16, 'la' ),
+
+				pos :
 				{
+					type :
+						'Point',
 
-					'1' :
+					anchor :
+						'nw',
+
+					x :
+						200,
+
+					y :
+						110
+				}
+			},
+
+			'passwordLabel' :
+			{
+				type :
+					'Label',
+
+				text :
+					'password',
+
+				font :
+					fontPool.get( 16, 'la' ),
+
+				pos :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'nw',
+
+					x :
+						200,
+
+					y :
+						150
+				}
+			},
+
+			'userInput' :
+			{
+				type :
+					'Input',
+
+				code :
+					'',
+
+				password :
+					false,
+
+				normaStyle :
+					'input',
+
+				focusStyle :
+					'inputFocus',
+
+				hoverStyle :
+					'input',
+
+				hofocStyle :
+					'inputFocus',
+
+				font :
+					fontPool.get( 14, 'la' ),
+
+				maxlen :
+					100,
+
+				frame  :
+				{
+					type :
+						'Frame',
+
+					pnw :
 					{
-						type : 'MoveTo',
-						to   : { type: 'Point', anchor:  'n', x:  0, y:  1 },
-						bx   : 0,
-						by   : 1
+						type :
+							'Point',
+
+						anchor :
+							'nw',
+
+						x :
+							295,
+
+						y :
+							95
 					},
 
-					'2' :
+					pse :
 					{
-						type : 'BeziTo',
-						to   :  { type: 'Point', anchor: 'e', x: -1, y:  0 },
-						c1x  :  closeBXM,
-						c1y  :  0,
-						c2x  :  0,
-						c2y  : -closeBYM,
-						bx   : -1,
-						by   :  0
-					},
+						type :
+							'Point',
 
-					'3' :
-					{
-						type : 'BeziTo',
-						to   :  { type: 'Point', anchor: 's', x:  0, y: -1 },
-						c1x  :  0,
-						c1y  :  closeBYM,
-						c2x  :  closeBXM,
-						c2y  :  0,
-						bx   :  0,
-						by   : -1
-					},
+						anchor :
+							'nw',
 
-					'4' :
-					{
-						type : 'BeziTo',
-						to   :  { type: 'Point', anchor: 'w', x:  1, y:  0 },
-						c1x  :  -closeBXM,
-						c1y  :  0,
-						c2x  :  0,
-						c2y  :  closeBYM,
-						bx   :  1,
-						by   :  0
-					},
+						x :
+							505,
 
-					'5' :
-					{
-						type : 'BeziTo',
-						to   :  { type: 'Point', anchor: 'n', x:  0, y:  1 },
-						c1x  :  0,
-						c1y  : -closeBYM,
-						c2x  : -closeBXM,
-						c2y  :  0,
-						bx   :  0,
-						by   :  1
+						y :
+							118
 					}
-				},
+				}
+			},
 
-				ranks :
-				[
-					'1',
-					'2',
-					'3',
-					'4',
-					'5'
-				]
+			'passwordInput' :
+			{
+				type :
+					'Input',
+
+				code :
+					'',
+
+				password :
+					false,
+
+				normaStyle :
+					'input',
+
+				focusStyle :
+					'inputFocus',
+
+				hoverStyle :
+					'input',
+
+				hofocStyle :
+					'inputFocus',
+
+				font :
+					fontPool.get( 14, 'la' ),
+
+				maxlen :
+					100,
+
+				frame  :
+				{
+					type :
+						'Frame',
+
+					pnw :
+					{
+						type :
+							'Point',
+
+						anchor :
+							'nw',
+
+						x :
+							295,
+
+						y :
+							135
+					},
+
+					pse :
+					{
+						type :
+							'Point',
+
+						anchor :
+							'nw',
+
+						x :
+							505,
+
+						y :
+							158
+					}
+				}
 			}
-		}
-	},
+		},
 
-	ranks :
-	[
-		'userI',
-		'passI',
-		'loginB',
-		'closeB',
-		'loginL',
-		'userL',
-		'passL',
-		'errL'
-	]
-};
+		ranks :
+		[
+			'headline',
+			'usernameLabel',
+			'passwordLabel',
+			'userInput',
+			'passwordInput'
+		]
+	};
 
-} ) ();
+
+} )( );

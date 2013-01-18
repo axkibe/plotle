@@ -39,10 +39,23 @@ if( typeof( window ) === 'undefined' )
 /*
 | Constructor.
 */
-var Note = Visual.Note = function( spacename, twig, path )
+var Note =
+Visual.Note =
+	function(
+		spacename,
+		twig,
+		path
+	)
 {
-	Visual.DocItem.call(this, spacename, twig, path);
-	this.scrollbarY = new Visual.Scrollbar();
+	Visual.DocItem.call(
+		this,
+		spacename,
+		twig,
+		path
+	);
+
+	this.scrollbarY =
+		new Visual.Scrollbar( );
 
 };
 
