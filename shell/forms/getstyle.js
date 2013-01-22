@@ -72,7 +72,7 @@ var styles =
 		theme.forms.input,
 
 	inputFocus :
-		theme.forms.inputFocus,
+		theme.forms.inputFocus
 
 //	sides :
 //		theme.dash.sides

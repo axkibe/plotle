@@ -122,15 +122,26 @@ Para.prototype.draw =
 		pnw
 	)
 {
-	var flow   = this.getFlow( );
-	var doc    = shell.$space.getSub(
-		this.path,
-		'Doc'
-	);
-	var font   = doc.getFont( );
-	var width  = flow.spread * view.zoom;
-	var height = this.getHeight( ) * view.zoom;
-	var f      = this.$fabric;
+	var flow =
+		this.getFlow( );
+
+	var doc =
+		shell.$space.getSub(
+			this.path,
+			'Doc'
+		);
+
+	var font =
+		doc.getFont( );
+
+	var width =
+		flow.spread * view.zoom;
+
+	var height =
+		this.getHeight( ) * view.zoom;
+
+	var f =
+		this.$fabric;
 
 	// not a cache hit?
 	if (
@@ -164,30 +175,53 @@ Para.prototype.draw =
 Para.prototype.positionCaret =
 	function( view )
 {
-	var caret = shell.$caret;
-	var item  = shell.$space.getSub( this.path, 'Item' );
-	var doc   = item.$sub.doc;
-	var zone  = item.getZone();
-	var cpos  = caret.$pos = this.getCaretPos( );
+	// TODO properly hand down stuff
+	var caret =
+		shell.$space.$caret;
 
-	var pnw   = doc.getPNW( this.key );
-	var sbary = item.scrollbarY;
-	var sy    = sbary ? Math.round( sbary.getPos( ) ) : 0;
+	var item =
+		shell.$space.getSub( this.path, 'Item' );
 
-	var cyn = Jools.limit( 0, cpos.n + pnw.y - sy, zone.height );
-	var cys = Jools.limit( 0, cpos.s + pnw.y - sy, zone.height );
-	var cx  = cpos.x + pnw.x;
+	var doc =
+		item.$sub.doc;
 
-	caret.$screenPos = view.point(
-		cx + zone.pnw.x,
-		cyn + zone.pnw.y
-	);
+	var zone =
+		item.getZone( );
 
-	caret.$height = Math.round( ( cys - cyn ) * view.zoom );
+	var cpos =
+	caret.$pos =
+		this.getCaretPos( );
+
+	var pnw =
+		doc.getPNW( this.key );
+
+	var sbary =
+		item.scrollbarY;
+
+	var sy =
+		sbary ? Math.round( sbary.getPos( ) ) : 0;
+
+	var cyn =
+		Jools.limit( 0, cpos.n + pnw.y - sy, zone.height );
+
+	var cys =
+		Jools.limit( 0, cpos.s + pnw.y - sy, zone.height );
+
+	var cx =
+		cpos.x + pnw.x;
+
+	caret.$screenPos =
+		view.point(
+			cx + zone.pnw.x,
+			cyn + zone.pnw.y
+		);
+
+	caret.$height =
+		Math.round( ( cys - cyn ) * view.zoom );
 };
 
 
-/**
+/*
 | Returns the caret position relative to the doc.
 |
 | FIXME remove?
@@ -195,24 +229,44 @@ Para.prototype.positionCaret =
 Para.prototype.getCaretPos =
 	function( )
 {
-	var item    = shell.$space.getSub( this.path, 'Item' );
-	var doc     = item.$sub.doc;
-	var fs      = doc.getFont( item ).size;
-	var descend = fs * theme.bottombox;
-	var p       = this.locateOffset(
-		shell.$caret.sign.at1,
-		shell.$caret
+	var item =
+		shell.$space.getSub( this.path, 'Item' );
+
+	var doc =
+		item.$sub.doc;
+
+	var fs =
+		doc.getFont( item ).size;
+
+	var descend =
+		fs * theme.bottombox;
+
+	// TODO hand down caret.
+	var caret =
+		shell.$space.$caret;
+
+	var p =
+		this.locateOffset(
+			caret.sign.at1,
+			caret
+		);
+
+	var s =
+		Math.round( p.y + descend );
+
+	var n =
+		s - Math.round( fs + descend );
+
+	var	x =
+		p.x - 1;
+
+	return Jools.immute(
+		{
+			s: s,
+			n: n,
+			x: x
+		}
 	);
-
-	var s = Math.round( p.y + descend );
-	var n = s - Math.round( fs + descend );
-	var	x = p.x - 1;
-
-	return Jools.immute( {
-		s: s,
-		n: n,
-		x: x
-	} );
 };
 
 
@@ -330,7 +384,9 @@ Para.prototype.getFlow =
 	}
 
 	// clears the caret flow cache if its within this flow
-	var caret = shell.$caret;
+	var caret =
+		shell.$space.$caret;
+
 	if (
 		caret.path &&
 		caret.path.equals( this.path )
@@ -513,10 +569,25 @@ Para.prototype.input =
 		text
 	)
 {
-    var reg   = /([^\n]+)(\n?)/g;
-	var para  = this;
-	var item  = shell.$space.getSub ( para.path, 'Item' );
-	var doc   = item.$sub.doc;
+    var reg  =
+		/([^\n]+)(\n?)/g;
+
+	// TODO what the heck?
+	var para =
+		this;
+
+	var item =
+		shell.$space.getSub(
+			para.path,
+			'Item'
+		);
+
+	var doc =
+		item.$sub.doc;
+
+	// TODO, how about handing the caret as param to input?
+	var caret =
+		shell.$space.$caret;
 
     for( var rx = reg.exec(text); rx !== null; rx = reg.exec( text ) )
 	{
@@ -524,7 +595,7 @@ Para.prototype.input =
 
 		shell.peer.insertText(
 			para.textPath,
-			shell.$caret.sign.at1,
+			caret.sign.at1,
 			line
 		);
 
@@ -532,7 +603,7 @@ Para.prototype.input =
 		{
 			shell.peer.split(
 				para.textPath,
-				shell.$caret.sign.at1
+				caret.sign.at1
 			);
 
 			para = doc.atRank(
@@ -555,17 +626,25 @@ Para.prototype.keyBackspace =
 		caret
 	)
 {
-	if (caret.sign.at1 > 0)
+	if( caret.sign.at1 > 0 )
 	{
 		shell.peer.removeText( this.textPath, caret.sign.at1 - 1, 1 );
 		return true;
 	}
 
-	var r = doc.twig.rankOf( this.key );
-	if (r > 0)
+	var r =
+		doc.twig.rankOf( this.key );
+
+	if( r > 0 )
 	{
-		var ve = doc.atRank(r - 1);
-		shell.peer.join(ve.textPath, ve.twig.text.length);
+		var ve =
+			doc.atRank( r - 1 );
+
+		shell.peer.join(
+			ve.textPath,
+			ve.twig.text.length
+		);
+
 		return true;
 	}
 
@@ -615,17 +694,23 @@ Para.prototype.keyDown =
 		caret
 	)
 {
-	var flow = this.getFlow( );
-	var x = caret.retainx !== null ? caret.retainx : caret.$pos.x;
+	var flow =
+		this.getFlow( );
+
+	var x =
+		caret.retainx !== null ? caret.retainx : caret.$pos.x;
+
 	var at1;
+
+	var space =
+		shell.$space;
 
 	if( caret.flow$line < flow.length - 1 )
 	{
 		// stays within this para
 		at1 = this.getOffsetAt( caret.flow$line + 1, x );
 
-		shell.setCaret(
-			'space',
+		space.setCaret(
 			{
 				path: this.textPath,
 				at1: at1
@@ -710,10 +795,12 @@ Para.prototype.keyLeft =
 		caret
 	)
 {
+	var space =
+		shell.$space;
+
 	if( caret.sign.at1 > 0 )
 	{
-		shell.setCaret(
-			'space',
+		space.setCaret(
 			{
 				path : this.textPath,
 				at1  : caret.sign.at1 - 1
@@ -722,14 +809,14 @@ Para.prototype.keyLeft =
 		return true;
 	}
 
-	var r = doc.twig.rankOf( this.key );
+	var r =
+		doc.twig.rankOf( this.key );
 
 	if( r > 0 )
 	{
 		var ve = doc.atRank( r - 1 );
 
-		shell.setCaret(
-			'space',
+		space.setCaret(
 			{
 				path : ve.textPath,
 				at1  : ve.twig.text.length
@@ -753,11 +840,15 @@ Para.prototype.keyPos1 =
 		caret
 	)
 {
-	if( caret.at1 === 0 )
-		{ return false; }
+	var space =
+		shell.$space;
 
-	shell.setCaret(
-		'space',
+	if( caret.at1 === 0 )
+	{
+		return false;
+	}
+
+	space.setCaret(
 		{
 			path : this.textPath,
 			at1  : 0
@@ -778,10 +869,12 @@ Para.prototype.keyRight =
 		caret
 	)
 {
+	var space =
+		shell.$space;
+
 	if( caret.sign.at1 < this.twig.text.length )
 	{
-		shell.setCaret(
-			'space',
+		space.setCaret(
 			{
 				path : this.textPath,
 				at1  : caret.sign.at1 + 1
@@ -796,8 +889,7 @@ Para.prototype.keyRight =
 	{
 		var ve = doc.atRank( r + 1 );
 
-		shell.setCaret(
-			'space',
+		space.setCaret(
 			{
 				path : ve.textPath,
 				at1  : 0
@@ -822,25 +914,32 @@ Para.prototype.keyUp =
 	)
 {
 	this.getFlow( ); // FIXME, needed?
-	var x = ( caret.retainx !== null ? caret.retainx : caret.$pos.x );
+
+	var x =
+		( caret.retainx !== null ? caret.retainx : caret.$pos.x );
+
 	var at1;
+
+	var space =
+		shell.$space;
 
 	if( caret.flow$line > 0 )
 	{
 		// stay within this para
-		at1 = this.getOffsetAt(
-			caret.flow$line - 1,
-			x
-		);
+		at1 =
+			this.getOffsetAt(
+				caret.flow$line - 1,
+				x
+			);
 
-		shell.setCaret(
-			'space',
+		space.setCaret(
 			{
 				path : this.textPath,
 				at1  : at1
 			},
 			x
 		);
+
 		return true;
 	}
 
@@ -848,16 +947,20 @@ Para.prototype.keyUp =
 	var r = doc.twig.rankOf( this.key );
 	if (r > 0)
 	{
-		var ve = doc.atRank(r - 1);
-		at1 = ve.getOffsetAt( ve.getFlow().length - 1, x );
-		shell.setCaret(
-			'space',
+		var ve =
+			doc.atRank( r - 1 );
+
+		at1 =
+			ve.getOffsetAt( ve.getFlow().length - 1, x );
+
+		space.setCaret(
 			{
 				path : ve.textPath,
 				at1  : at1
 			},
 			x
 		);
+
 		return true;
 	}
 
@@ -871,8 +974,11 @@ Para.prototype.keyUp =
 Para.prototype.knock =
 	function( )
 {
-	this.$fabric = null;
-	this.$flow   = null;
+	this.$fabric =
+		null;
+
+	this.$flow =
+		null;
 };
 
 
@@ -886,10 +992,22 @@ Para.prototype.specialKey =
 		ctrl
 	)
 {
-	var caret  = shell.$caret;
-	var select = shell.selection;
-	var item   = shell.$space.getSub( this.path, 'Item' );
-	var doc    = item.$sub.doc;
+	var space =
+		shell.$space;
+
+	// TODO hand caret as param to specialKey
+	var caret =
+		space.$caret;
+
+	var select =
+		shell.selection;
+
+	// TODO similar item, doc, hand it properly instead of regetting them.
+	var item =
+		space.getSub( this.path, 'Item' );
+
+	var doc =
+		item.$sub.doc;
 
 	// if true the caret moved or the selection changed
 	var show   = false;
@@ -917,7 +1035,7 @@ Para.prototype.specialKey =
 				);
 
 				select.active = true;
-				shell.setCaret( 'space', select.sign2 );
+				space.setCaret( select.sign2 );
 				system.setInput( select.innerText() );
 				caret.show( );
 				item.poke( );

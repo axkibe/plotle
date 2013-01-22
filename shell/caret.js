@@ -40,20 +40,12 @@ if( typeof( window ) === 'undefined' )
 */
 Caret =
 	function(
-		section,
 		sign,
 		retainx,
 		shown
 	)
 {
-	// the section the caret is in
-	//   space or board.
-	this.section =
-		section;
-
-	// when section is
-	// space: a signature pointing to the item the caret is in
-	// board: the panel and the component
+	// a signature pointing to the item the caret is in
 	this.sign =
 		sign;
 
@@ -74,6 +66,9 @@ Caret =
 	// true when just blinked away
 	this.$blinked =
 		false;
+
+	// TODO remove
+	Jools.keyNonGrata( this, 'section' );
 };
 
 
@@ -119,11 +114,6 @@ Caret.prototype.hide =
 Caret.prototype.display =
 	function( )
 {
-	if( shell.$caret !== this )
-	{
-		throw new Error( 'shell.$caret !== this' );
-	}
-
 	// erases the old caret
 	if( this.$save )
 	{
@@ -161,12 +151,6 @@ Caret.prototype.display =
 	// even if blinked, so system can fiddle the input
 	// position correctly
 	shell.positionCaret( );
-
-	// double check this is still _the_ caret.
-	if( shell.$caret !== this )
-	{
-		throw new Error( 'shell.$caret !== this' );
-	}
 
 	var pos =
 		this.$screenPos;

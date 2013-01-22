@@ -261,25 +261,38 @@ Note.prototype.setScrollbar =
 */
 Note.prototype.scrollCaretIntoView = function()
 {
-	var caret   = shell.$caret;
+	// TODO hand down
+	var caret =
+		shell.$space.$caret;
 
-	var scrolly = this.scrollbarY;
+	var scrolly =
+		this.scrollbarY;
 
-	var sy      = scrolly.getPos( );
+	var sy =
+		scrolly.getPos( );
 
-	var para   =  shell.$space.getSub(
-		caret.sign.path,
-		'Para'
-	);
+	var para =
+		shell.$space.getSub(
+			caret.sign.path,
+			'Para'
+		);
 
 	if( para.constructor !== Visual.Para )
-		{ throw new Error( 'para not a para.' ); }
+	{
+		throw new Error( 'para not a para.' );
+	}
 
-	var cp      = para.getCaretPos( );
+	var cp =
+		para.getCaretPos( );
 
-	var pnw     = this.$sub.doc.getPNW( para.key );
-	var zone    = this.getZone( );
-	var imargin = this.innerMargin;
+	var pnw =
+		this.$sub.doc.getPNW( para.key );
+
+	var zone =
+		this.getZone( );
+
+	var imargin =
+		this.innerMargin;
 
 	if( cp.n + pnw.y - imargin.n < sy )
 	{
@@ -300,11 +313,18 @@ Note.prototype.scrollCaretIntoView = function()
 | Scrolls the note so the caret comes into view.
 */
 Note.prototype.scrollPage =
-	function( up )
+	function(
+		up
+	)
 {
-	var zone = this.getZone( );
-	var dir  = up ? -1 : 1;
-	var fs   = this.$sub.doc.getFont( ).size;
+	var zone =
+		this.getZone( );
+
+	var dir =
+		up ? -1 : 1;
+
+	var fs =
+		this.$sub.doc.getFont( ).size;
 
 	this.setScrollbar(
 		this.scrollbarY.getPos( ) + dir * zone.height - fs * 2

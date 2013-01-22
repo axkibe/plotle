@@ -246,10 +246,17 @@ System.prototype.setTimer = function( time, callback )
 System.prototype.fiddleInput =
 	function( )
 {
-	var caret  = this.shell.$caret;
-	var height = caret.$height;
-	var pos    = caret.$screenPos;
-	var sk     = height > 0;
+	var caret =
+		this.shell.getCaret();
+
+	var height =
+		caret.$height;
+
+	var pos =
+		caret.$screenPos;
+
+	var sk =
+		height > 0;
 
 	if( sk )
 	{

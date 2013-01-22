@@ -15,13 +15,13 @@ Visual = Visual || { };
 /*
 | Imports
 */
-var Action;
+var Caret;
 var Euclid;
 var Jools;
-var EllipseMenu;
+var MeshMashine;
 var Path;
+var Sign;
 var shell;
-var system;
 var theme;
 
 
@@ -40,23 +40,39 @@ if( typeof( window ) === 'undefined' )
 /*
 | Constructor
 */
-var Space = Visual.Space =
+var Space =
+Visual.Space =
 	function(
 		twig,
 		spacename,
 		access
 	)
 {
-	Visual.Base.call( this, spacename, twig, null );
+	Visual.Base.call(
+		this,
+		spacename,
+		twig,
+		null
+	);
 
-	var sub = this.$sub = { };
+	var sub =
+	this.$sub =
+		{ };
 
-	this.access = access;
+	this.access =
+		access;
 
-	this.$view  = new Euclid.View( Euclid.Point.zero, 0 );
+	this.$view =
+		new Euclid.View(
+			Euclid.Point.zero,
+			0
+		);
 
 	for( var k in twig.copse )
-		{ sub[ k ] = this.createItem( twig.copse[ k ], k ); }
+	{
+		sub[ k ] =
+			this.createItem( twig.copse[ k ], k );
+	}
 
 	this._floatMenuLabels =
 		{
@@ -65,6 +81,15 @@ var Space = Visual.Space =
 			ne : 'Label',
 			se : 'Portal'
 		};
+
+	// TODO change Caret to free string arguments
+	this.$caret =
+		new Caret(
+			null,
+			null,
+			false
+		);
+
 };
 
 Jools.subclass(
@@ -77,40 +102,66 @@ Jools.subclass(
 | Updates $sub to match a new twig.
 */
 Space.prototype.update =
-	function( twig )
+	function(
+		twig,
+		chgX
+	)
 {
 	// no change?
 	if ( this.twig === twig )
-		{ return; }
+	{
+		return;
+	}
 
 	this.twig = twig;
 
-	var old = this.$sub;
-	var sub = this.$sub = { };
-	var copse = twig.copse;
+	var old =
+		this.$sub;
+
+	var sub =
+		this.$sub =
+		{ };
+
+	var copse =
+		twig.copse;
+
 	for( var k in copse )
 	{
-		var s = twig.copse[ k ];
-		var o = old[ k ];
+		var s =
+			twig.copse[ k ];
+
+		var o =
+			old[ k ];
+
 		if( Jools.is( o ) )
 		{
 			if( o.twig !== s )
-				{ o.update( s ); }
-			sub[ k ] = o;
+			{
+				o.update( s );
+			}
+
+			sub[ k ] =
+				o;
 		}
 		else
 		{
-			sub[ k ] = this.createItem( s, k );
+			sub[ k ] =
+				this.createItem( s, k );
 		}
 	}
 
 	// removes the focus if the focused item is removed.
-	var caret = shell.$caret;
-	var csign = caret.sign;
 
-	if( caret.section === 'space' &&
+	var caret =
+		this.$caret;
+
+	var csign =
+		caret.sign;
+
+	if(
 		csign && csign.path &&
-		!Jools.isnon( sub[ csign.path.get( 0 ) ] ) )
+		!Jools.isnon( sub[ csign.path.get( 0 ) ] )
+	)
 	{
 		if(
 			shell.selection.active &&
@@ -120,10 +171,22 @@ Space.prototype.update =
 			shell.selection.deselect( true );
 		}
 
-		shell.dropFocus( );
+		this.setCaret( null );
 	}
 
-	shell.redraw = true;
+	shell.redraw =
+		true;
+
+	if( caret.sign !== null )
+	{
+		this.setCaret(
+			MeshMashine.tfxSign(
+				caret.sign,
+				chgX
+			),
+			caret.retainx
+		);
+	}
 };
 
 
@@ -132,17 +195,20 @@ Space.prototype.update =
 */
 Space.prototype.focusedItem = function( )
 {
-	var caret = shell.$caret;
+	var caret =
+		this.$caret;
 
-	if( caret.section !== 'space' )
+	if( !caret.sign )
 	{
 		return null;
 	}
-
-	return this.getSub(
-		caret.sign.path,
-		'Item'
-	);
+	else
+	{
+		return this.getSub(
+			caret.sign.path,
+			'Item'
+		);
+	}
 };
 
 
@@ -196,10 +262,21 @@ Space.prototype.draw =
 		fabric
 	)
 {
-	var twig = this.twig;
-	var view = this.$view;
-	this._center = fabric.getCenter( );
+	var twig =
+		this.twig;
+
+	var view =
+		this.$view;
+
+	this._center =
+		fabric.getCenter( );
+
 	var zone;
+
+	// removes caret caches.
+	this.$caret.$save =
+	this.$caret.$screenPos =
+		null;
 
 	for( var r = twig.length - 1; r >= 0; r-- )
 	{
@@ -209,7 +286,9 @@ Space.prototype.draw =
 		);
 	}
 
-	var focus = this.focusedItem( );
+	var focus =
+		this.focusedItem( );
+
 	if( focus )
 	{
 		focus.drawHandles(
@@ -352,6 +431,9 @@ Space.prototype.draw =
 
 			break;
 	}
+
+	this.$caret.display( );
+
 };
 
 
@@ -361,6 +443,12 @@ Space.prototype.draw =
 Space.prototype.knock =
 	function( )
 {
+	this.$caret.$save =
+		null;
+
+	this.$caret.$screenPos =
+		null;
+
 	for( var r = this.twig.length - 1; r >= 0; r-- )
 	{
 		this.atRank( r ).knock( );
@@ -374,8 +462,12 @@ Space.prototype.knock =
 Space.prototype.positionCaret =
 	function( )
 {
-	this.getSub( shell.$caret.sign.path, 'positionCaret' )
-		.positionCaret( this.$view );
+	this.getSub(
+		this.$caret.sign.path,
+		'positionCaret'
+	).positionCaret(
+		this.$view
+	);
 };
 
 
@@ -397,20 +489,37 @@ Space.prototype.mousewheel =
 	{
 		var item = this.atRank(r);
 
-		if ( item.mousewheel( view, p, dir, shift, ctrl ) )
-			{ return true; }
+		if (
+			item.mousewheel(
+				view,
+				p,
+				dir,
+				shift,
+				ctrl
+			)
+		)
+		{
+			return true;
+		}
 	}
 
 	if ( dir > 0 )
-		{ this.$view = this.$view.review(  1, p ); }
+	{
+		this.$view =
+			this.$view.review(  1, p );
+	}
 	else
-		{ this.$view = this.$view.review( -1, p ); }
+	{
+		this.$view =
+			this.$view.review( -1, p );
+	}
 
 	shell.setSpaceZoom( this.$view.fact );
 
 	this.knock( );
 
-	shell.redraw = true;
+	shell.redraw =
+		true;
 
 	return true;
 };
@@ -433,17 +542,22 @@ Space.prototype.pointingHover =
 		return null;
 	}
 
-	var view   = this.$view;
+	var view =
+		this.$view;
 
-	var cursor = null;
+	var cursor =
+		null;
 
-	var focus = this.focusedItem( );
+	var focus =
+		this.focusedItem( );
 
-	var action = shell.bridge.action( );
+	var action =
+		shell.bridge.action( );
 
 	if( focus )
 	{
-		var com = focus.checkHandles( view, p );
+		var com =
+			focus.checkHandles( view, p );
 
 		if( com )
 		{
@@ -453,12 +567,14 @@ Space.prototype.pointingHover =
 
 	for( var a = 0, aZ = this.twig.length; a < aZ; a++ )
 	{
-		var item = this.atRank( a );
+		var item =
+			this.atRank( a );
 
-		var cu = item.pointingHover(
-			view,
-			p
-		);
+		var cu =
+			item.pointingHover(
+				view,
+				p
+			);
 
 		if( !cursor && cu )
 		{
@@ -472,11 +588,14 @@ Space.prototype.pointingHover =
 					!item.path.equals( action.removeItemPath )
 				)
 				{
-					action.removeItemPath = item.path;
+					action.removeItemPath =
+						item.path;
 
-					action.removeItemFade = true;
+					action.removeItemFade =
+						true;
 
-					shell.redraw = true;
+					shell.redraw =
+						true;
 				}
 
 				break;
@@ -488,9 +607,11 @@ Space.prototype.pointingHover =
 					!item.path.equals( action.fromItemPath )
 				)
 				{
-					action.fromItemPath = item.path;
+					action.fromItemPath =
+						item.path;
 
-					shell.redraw = true;
+					shell.redraw =
+						true;
 				}
 
 				break;
@@ -506,9 +627,11 @@ Space.prototype.pointingHover =
 
 			if( action.removeItemPath )
 			{
-				action.removeItemPath = null;
+				action.removeItemPath =
+					null;
 
-				shell.redraw = true;
+				shell.redraw =
+					true;
 			}
 
 			break;
@@ -517,9 +640,11 @@ Space.prototype.pointingHover =
 
 			if( action.fromItemPath )
 			{
-				action.fromItemPath = null;
+				action.fromItemPath =
+					null;
 
-				shell.redraw = true;
+				shell.redraw =
+					true;
 			}
 
 			break;
@@ -527,6 +652,84 @@ Space.prototype.pointingHover =
 	}
 
 	return cursor || 'pointer';
+};
+
+
+/*
+| Sets the caret position.
+|
+| TODO make free strings
+*/
+Space.prototype.setCaret =
+	function(
+		sign,
+		retainx
+	)
+{
+	switch( sign && sign.constructor )
+	{
+		case null :
+		case Sign :
+
+			break;
+
+		case Object :
+
+			sign =
+				new Sign( sign );
+
+			break;
+
+		default :
+
+			throw new Error(
+				'Space.setCaret: invalid sign'
+			);
+	}
+
+	var entity;
+
+	if(
+		this.$caret.sign &&
+		this.$caret.sign.path !== sign.path
+	)
+	{
+		entity =
+			this._getCaretEntity(
+				this.$caret.sign.path
+			);
+
+		if( entity )
+		{
+			entity.knock( );
+		}
+
+		this.redraw = true;
+	}
+
+	this.$caret =
+		new Caret(
+			sign,
+			Jools.is( retainx ) ? retainx : null,
+			this.$caret.$shown
+		);
+
+	if( sign )
+	{
+		entity =
+			this._getCaretEntity(
+				sign.path
+			);
+
+		if( entity )
+		{
+			entity.knock( );
+		}
+
+		this.redraw = true;
+	}
+
+	return this.$caret;
 };
 
 
@@ -540,9 +743,11 @@ Space.prototype.dragStart =
 		ctrl
 	)
 {
-	var view  = this.$view;
+	var view =
+		this.$view;
 
-	var focus = this.focusedItem( );
+	var focus =
+		this.focusedItem( );
 
 	// see if the itemmenu of the focus was targeted
 	if(
@@ -673,7 +878,9 @@ Space.prototype.click =
 	// clicked some item?
 	for( var a = 0, aZ = this.twig.length; a < aZ; a++ )
 	{
-		var item = this.atRank(a);
+		var item =
+			this.atRank( a );
+
 		if(
 			item.click(
 				view,
@@ -687,7 +894,9 @@ Space.prototype.click =
 		}
 	}
 
-	shell.dropFocus( );
+	// otherwise ...
+
+	this.setCaret( null );
 
 	shell.redraw = true;
 
@@ -860,7 +1069,7 @@ Space.prototype.dragStop =
 					action.removeItemPath.equals( focus.path )
 				)
 				{
-					shell.dropFocus( );
+					this.setCaret( null );
 				}
 
 				shell.peer.removeItem(
@@ -1173,10 +1382,13 @@ Space.prototype.pointingStart =
 Space.prototype.input =
 	function( text )
 {
-	var caret = shell.$caret;
+	var caret =
+		this.$caret;
 
 	if (!caret.sign)
-		{ return; }
+	{
+		return;
+	}
 
 	this.getSub(
 		caret.sign.path,
@@ -1235,9 +1447,10 @@ Space.prototype.specialKey =
 		}
 	}
 
-	var caret = shell.$caret;
+	var caret =
+		this.$caret;
 
-	if (!caret.sign)
+	if ( !caret.sign )
 	{
 		return;
 	}
@@ -1295,6 +1508,64 @@ Space.prototype.getSub =
 
 	return m;
 };
+
+
+/*
+| The shell got the systems focus.
+*/
+Space.prototype.systemFocus =
+	function( )
+{
+	var caret =
+		this.$caret;
+
+	caret.show( );
+
+	caret.display( );
+};
+
+
+
+/*
+| The shell lost the systems focus.
+*/
+Space.prototype.systemBlur =
+	function( )
+{
+	var caret =
+		this.$caret;
+
+	caret.hide( );
+
+	caret.display( );
+};
+
+
+/*
+| Blinks the caret (if shown)
+*/
+Space.prototype.blink =
+	function( )
+{
+	this.$caret.blink( );
+};
+
+
+/*
+| Returns the first entity a caret can be in
+| TODO might remove this func
+*/
+Space.prototype._getCaretEntity =
+	function(
+		path
+	)
+{
+	return this.getSub(
+		path,
+		'Item'
+	);
+};
+
 
 
 } )( );

@@ -54,14 +54,17 @@ if( typeof( window ) === 'undefined' )
 | Constructor.
 */
 Shell =
-	function( fabric )
+	function(
+		fabric
+	)
 {
 	if( shell !== null )
 	{
 		throw new Error( 'Singleton not single' );
 	}
 
-	shell = this;
+	shell =
+		this;
 
 	Euclid.Measure.init( );
 
@@ -97,14 +100,8 @@ Shell =
 			)
 		);
 
-	// TODO change Caret to free string arguments
-	this.$caret =
-		new Caret(
-			null,
-			null,
-			null,
-			false
-		);
+	// TODO remove
+	Jools.keyNonGrata( this, '$caret' );
 
 	this.bridge =
 		new Bridge( );
@@ -118,6 +115,8 @@ Shell =
 
 	// sets the caret to shown if the document has focus
 	// if it is unknown, assumes shown
+	/*
+	TODO tis needed?
 	if(
 		!document.hasFocus ||
 		document.hasFocus( )
@@ -125,142 +124,9 @@ Shell =
 	{
 		this.$caret.show( );
 	}
+	*/
 
 	this._draw( );
-};
-
-
-/*
-| Retracts the focus.
-*/
-Shell.prototype.dropFocus =
-	function( )
-{
-	this.setCaret(
-		null,
-		null
-	);
-};
-
-
-/*
-| Sets the caret position.
-*/
-Shell.prototype.setCaret =
-	function(
-		section,
-		sign,
-		retainx
-	)
-{
-	if(
-		section === null &&
-		sign !== null
-	)
-	{
-			throw new Error( 'setCaret section === null, invalid sign' );
-	}
-
-	switch( sign && sign.constructor )
-	{
-		case null :
-		case Sign :
-
-			break;
-
-		case Object :
-
-			sign =
-				new Sign( sign );
-				break;
-
-		default :
-
-			throw new Error(
-				'setCaret section=' +
-				section +
-				', invalid sign'
-			);
-	}
-
-
-	var entity;
-
-	if(
-		this.$caret.sign &&
-		(
-			this.$caret.section !== section   ||
-			this.$caret.sign.path !== sign.path
-		)
-	)
-	{
-		entity =
-			this._getCaretEntity(
-				this.$caret.section,
-				this.$caret.sign.path
-			);
-
-		if( entity )
-		{
-			entity.knock( );
-		}
-	}
-
-	this.$caret =
-		new Caret(
-			section,
-			sign,
-			Jools.is( retainx ) ? retainx : null,
-			this.$caret.$shown
-		);
-
-	if( sign )
-	{
-		entity =
-			this._getCaretEntity(
-				section,
-				sign.path
-			);
-
-		if( entity )
-		{
-			entity.knock( );
-		}
-
-		this.redraw =
-			true;
-	}
-
-	return this.$caret;
-};
-
-
-/*
-| Returns the first entity a caret can be in
-*/
-Shell.prototype._getCaretEntity =
-	function(
-		sec,
-		path
-	)
-{
-	switch( sec )
-	{
-		case 'disc' :
-
-			return this.$disc.getSub( path );
-
-		case 'space' :
-
-			return this.$space.getSub(
-				path,
-				'Item'
-			);
-
-		default :
-
-			throw new Error( 'Invalid sec: ' + sec );
-	}
 };
 
 
@@ -270,35 +136,7 @@ Shell.prototype._getCaretEntity =
 Shell.prototype.positionCaret =
 	function( )
 {
-	var caret =
-		this.$caret;
-
-	switch( this.$caret.section )
-	{
-		case null :
-
-			caret.$screenPos = caret.$height = 0;
-
-			return;
-
-		case 'disc' :
-
-			this.$disc.positionCaret( );
-
-			return;
-
-		case 'space' :
-
-			this.$space.positionCaret( );
-
-			return;
-
-		default :
-
-			throw new Error(
-				'invalid section: ' + this.$caret.section
-			);
-	}
+	this.getCurrentDisplay( ).positionCaret( );
 };
 
 /*
@@ -333,22 +171,13 @@ Shell.prototype.update =
 		chgX
 	)
 {
-	this.$space.update( tree.root );
+	this.$space.update(
+		tree.root,
+		chgX
+	);
 
-	var caret =
-		this.$caret;
 
-	if( caret.sign !== null )
-	{
-		this.setCaret(
-			caret.section,
-			MeshMashine.tfxSign(
-				caret.sign,
-				chgX
-			),
-			caret.retainx
-		);
-	}
+	// TODO move selection to space / forms
 
 	var selection =
 		this.selection;
@@ -383,9 +212,7 @@ Shell.prototype.systemFocus =
 		return;
 	}
 
-	var caret = this.$caret;
-	caret.show( );
-	caret.display( );
+	this.getCurrentDisplay( ).systemFocus( );
 };
 
 
@@ -400,12 +227,7 @@ Shell.prototype.systemBlur =
 		return;
 	}
 
-	var caret =
-		this.$caret;
-
-	caret.hide( );
-
-	caret.display( );
+	this.getCurrentDisplay( ).systemBlur( );
 };
 
 
@@ -436,7 +258,7 @@ Shell.prototype.blink =
 		this.knock( );
 	}
 
-	this.$caret.blink( );
+	this.getCurrentDisplay( ).blink( );
 };
 
 
@@ -476,11 +298,7 @@ Shell.prototype.knock =
 		return;
 	}
 
-	this.$caret.$save =
-		null;
-
-	this.$caret.$screenPos =
-		null;
+	// TODO knock forms?
 
 	if( this.$space )
 	{
@@ -618,13 +436,6 @@ Shell.prototype._draw =
 		return;
 	}
 
-	// removes caret cache.
-	this.$caret.$save =
-		null;
-
-	this.$caret.$screenPos =
-		null;
-
 	switch( this.bridge.mode( ) )
 	{
 		case 'Login' :
@@ -639,15 +450,15 @@ Shell.prototype._draw =
 			{
 				this.$space.draw( fabric );
 			}
+
 			break;
 	}
 
 
 	this.$disc.draw( fabric );
 
-	this.$caret.display( );
-
-	this.redraw = false;
+	this.redraw =
+		false;
 };
 
 
@@ -703,7 +514,7 @@ Shell.prototype.getCurrentDisplay =
 
 			return this.$space;
 	}
-}
+};
 
 /*
 | User is hovering his/her point ( mouse move )
@@ -1087,40 +898,22 @@ Shell.prototype.specialKey =
 		ctrl
 	)
 {
+	// TODO make the green screen a "Display".
+
 	if( this.green )
 	{
 		return;
 	}
 
-	var caret  = this.$caret;
+	var current = this.getCurrentDisplay( );
 
-	switch( caret.section )
+	if( current )
 	{
-		case 'board' :
-
-			this.$disc.specialKey(
-				key,
-				shift,
-				ctrl
-			);
-			break;
-
-		case null    :
-		case 'space' :
-
-			if( this.$space )
-			{
-				this. $space.specialKey(
-					key,
-					shift,
-					ctrl
-				);
-			}
-			break;
-
-		default :
-
-			throw new Error('invalid section');
+		current.specialKey(
+			key,
+			shift,
+			ctrl
+		);
 	}
 
 	if( this.redraw )
@@ -1147,34 +940,11 @@ Shell.prototype.input =
 		this.selection.remove( );
 	}
 
-	var caret =
-		this.$caret;
+	var current =
+		this.getCurrentDisplay( );
 
-	switch( caret.section )
-	{
-		case null :
-
-			break;
-
-		case 'board' :
-
-			this.$disc.input(
-				text
-			);
-
-			break;
-
-		case 'space' :
-
-			this.$space.input(
-				text
-			);
-
-			break;
-
-		default :
-
-			throw new Error( 'invalid section' );
+	if( current ) {
+		current.input( text );
 	}
 
 	if( this.redraw )
@@ -1337,14 +1107,6 @@ Shell.prototype.moveToSpace =
 {
 	var self = this;
 
-	if( this.$caret.section === 'space' )
-	{
-		this.setCaret(
-			null,
-			null
-		);
-	}
-
 	if( name === null )
 	{
 		name = self.$space.spacename;
@@ -1439,12 +1201,25 @@ Shell.prototype.onAuth =
 		return;
 	}
 
-	this.setUser( res.user, res.passhash );
+	this.setUser(
+		res.user,
+		res.passhash
+	);
 
 	if( !this.$space )
 	{
 		this.moveToSpace( 'meshcraft:home' );
 	}
+};
+
+
+/*
+| Gets the current caret.
+*/
+Shell.prototype.getCaret =
+	function( )
+{
+	return this.getCurrentDisplay( ).$caret;
 };
 
 

@@ -93,23 +93,29 @@ DocItem.prototype.getParaAtPoint = function(p)
 /*
 | Sets the focus to this item.
 */
-DocItem.prototype.grepFocus = function()
+DocItem.prototype.grepFocus = function( )
 {
+	// TODO hand this down.
+	var space =
+		shell.$space;
+
 	// already have focus?
-	if (shell.$space.focusedItem() === this)
-		{ return; }
+	if( space.focusedItem() === this )
+	{
+		return;
+	}
 
 	var doc = this.$sub.doc;
 
-	var caret = shell.setCaret(
-		'space',
-		{
-			path : doc.atRank(0).textPath,
-			at1  : 0
-		}
-	);
+	var caret =
+		space.setCaret(
+			{
+				path : doc.atRank(0).textPath,
+				at1  : 0
+			}
+		);
 
-	caret.show();
+	caret.show( );
 
 	shell.peer.moveToTop( this.path );
 };
@@ -118,45 +124,62 @@ DocItem.prototype.grepFocus = function()
 /*
 | Sees if this item is being clicked.
 */
-DocItem.prototype.click = function(view, p)
+DocItem.prototype.click =
+	function(
+		view,
+		p
+	)
 {
-	var vp = view.depoint(p);
+	var vp = view.depoint( p );
 
-	if(! this.getZone().within( view, p ) )
-		{ return false; }
-
-	var space = shell.$space;
-	var focus = space.focusedItem();
-
-	if (focus !== this)
+	if( !this.getZone( ).within( view, p ) )
 	{
-		this.grepFocus();
-		shell.selection.deselect();
+		return false;
+	}
+
+	var space =
+		shell.$space;
+
+	var focus =
+		space.focusedItem( );
+
+	if( focus !== this )
+	{
+		this.grepFocus( );
+
+		shell.selection.deselect( );
 	}
 
 	shell.redraw = true;
 
-	var pnw  = this.getZone().pnw;
-	var pi   = vp.sub(pnw.x, pnw.y - (this.scrollbarY ? this.scrollbarY.getPos() : 0 ));
-	var para = this.getParaAtPoint(pi);
+	var pnw =
+		this.getZone( ).pnw;
+
+	var pi =
+		vp.sub(pnw.x, pnw.y - (this.scrollbarY ? this.scrollbarY.getPos() : 0 ));
+
+	var para =
+		this.getParaAtPoint(pi);
 
 	// FIXME move into para
-	if (para)
+	if( para )
 	{
-		var ppnw   = this.$sub.doc.getPNW( para.key );
-		var at1    = para.getPointOffset( pi.sub( ppnw ));
-		var caret  = shell.$caret;
+		var ppnw =
+			this.$sub.doc.getPNW( para.key );
 
-		caret = shell.setCaret(
-			'space',
+		var at1 =
+			para.getPointOffset( pi.sub( ppnw ));
+
+		var caret = space.setCaret(
 			{
 				path : para.textPath,
 				at1  : at1
 			}
 		);
 
-		caret.show();
-		shell.selection.deselect();
+		caret.show( );
+
+		shell.selection.deselect( );
 	}
 
 	return true;
@@ -173,4 +196,4 @@ DocItem.prototype.knock = function( )
 };
 
 
-})();
+} )( );

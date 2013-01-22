@@ -58,8 +58,6 @@ Forms.Input =
 	this.form =
 		form;
 
-	console.log('TWIG', twig);
-
 	var pnw =
 	this.pnw =
 		Curve.computePoint(
@@ -346,8 +344,6 @@ Input.prototype._weave =
 
 			throw new Error('Invalid accent: ' + accent);
 	}
-
-	console.log( 'accent', 'sname', accent, sname);
 
 	var style =
 		Forms.getStyle( sname );

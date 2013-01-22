@@ -69,6 +69,13 @@ Forms.Form =
 			Forms.LayoutPattern
 		);
 
+	this.$caret =
+		new Caret(
+			null,
+			null,
+			false
+		);
+
 	this.$sub =
 		{ };
 
@@ -181,9 +188,6 @@ Panel.prototype.focusedControl =
 {
 	var caret = shell.$caret;
 
-	if( caret.section !== 'board' )
-		{ return null; }
-
 	var sign = caret.sign;
 	var path = sign.path;
 
@@ -273,10 +277,6 @@ Form.prototype.draw =
 		Euclid.View.proper
 	);
 
-	var iframe =
-		this.iframe;
-
-
 //	var style = Dash.getStyle(this.tree.root.style);
 //	if( !style )
 //		{ throw new Error('no style!'); }
@@ -338,9 +338,9 @@ Panel.prototype.positionCaret =
 */
 Form.prototype.pointingHover =
 	function(
-		p,
-		shift,
-		ctrl
+		// p,
+		// shift,
+		// ctrl
 	)
 {
 	this._setHover( null );
@@ -410,7 +410,7 @@ Form.prototype.click =
 	)
 {
 	// nada
-}
+};
 
 
 /*
@@ -420,13 +420,13 @@ Form.prototype.click =
 */
 Form.prototype.dragStart =
 	function(
-		p,
-		shift,
-		ctrl
+		// p,
+		// shift,
+		// ctrl
 	)
 {
 	return false;
-}
+};
 
 
 /*
@@ -438,55 +438,38 @@ Form.prototype.dragStart =
 */
 Form.prototype.pointingStart =
 	function(
-		p,
-		shift,
-		ctrl
+		// p,
+		// shift,
+		// ctrl
 	)
 {
 	console.log(' form pointing start ');
-
-	return false;
 	/*
 	var pnw = this.pnw;
 	var pse = this.pse;
 	var fabric = this._weave( );
 	var a, aZ;
+	*/
 
-	// shortcut if p is not near the panel
-	if(
-		p.y < pnw.y ||
-		p.y > pse.y ||
-		p.x < pnw.x ||
-		p.x > pse.x
-	)
-	{
-		this.setHover( null );
-		return null;
-	}
+	var layout =
+		this.tree.root.layout;
 
-	var pp = p.sub( pnw );
-
-	// FIXME Optimize by reusing the latest path of this.$fabric
-	if( !fabric.withinSketch( this, 'sketch', Euclid.View.proper, pp ) )
-	{
-		this.setHover( null );
-		return null;
-	}
-
-	var layout = this.tree.root.layout;
+	/*
 	for( a = 0, aZ = layout.length; a < aZ; a++ )
 	{
 		var cname = layout.ranks[ a ];
 		var ce = this.$sub[ cname ];
 		var r = ce.pointingStart( pp, shift, ctrl) ;
 		if ( r )
-			{ return r; }
+		{
+			return r;
+		}
 	}
 
 	this.setHover( null );
+	*/
 
 	return false;
-*/
 };
 
 
@@ -588,7 +571,7 @@ Form.prototype._setHover =
 {
 	if( this.$hover === name )
 	{
-		return
+		return;
 	}
 
 	this.poke();
@@ -607,6 +590,46 @@ Form.prototype._setHover =
 		name;
 
 	return;
+};
+
+/*
+| The shell got the systems focus.
+*/
+Form.prototype.systemFocus =
+	function( )
+{
+	var caret =
+		this.$caret;
+
+	caret.show( );
+
+	caret.display( );
+};
+
+
+
+/*
+| The shell lost the systems focus.
+*/
+Form.prototype.systemBlur =
+	function( )
+{
+	var caret =
+		this.$caret;
+
+	caret.hide( );
+
+	caret.display( );
+};
+
+
+/*
+| Blinks the caret (if shown)
+*/
+Form.prototype.blink =
+	function( )
+{
+	this.$caret.blink( );
 };
 
 
