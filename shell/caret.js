@@ -94,7 +94,7 @@ Caret.prototype.show =
 	this.$blinked =
 		false;
 
-	system.restartBlinker();
+	system.restartBlinker( );
 };
 
 
@@ -104,7 +104,8 @@ Caret.prototype.show =
 Caret.prototype.hide =
 	function( )
 {
-	this.$shown = false;
+	this.$shown =
+		false;
 };
 
 
@@ -206,7 +207,9 @@ Caret.prototype.blink =
 {
 	if( this.$shown )
 	{
-		this.$blinked = !this.$blinked;
+		this.$blinked =
+			!this.$blinked;
+
 		this.display( );
 	}
 };

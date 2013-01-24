@@ -85,10 +85,17 @@ Forms.Form =
 	var root =
 		tree.root;
 
-	for( var a = 0, aZ = root.ranks.length; a < aZ; a++ )
+	var ranks =
+		root.ranks;
+
+	for(
+		var a = 0, aZ = ranks.length;
+		a < aZ;
+		a++
+	)
 	{
 		var name =
-			root.ranks[ a ];
+			ranks[ a ];
 
 		var twig =
 			root.copse[ name ];
@@ -182,21 +189,25 @@ Form.prototype.newComponent =
 /*
 | Returns the focused item.
 */
-/*
-Panel.prototype.focusedControl =
+Form.prototype.getFocus =
 	function( )
 {
-	var caret = shell.$caret;
+	var caret =
+		this.$caret;
 
-	var sign = caret.sign;
-	var path = sign.path;
+	var sign =
+		caret.sign;
+
+	var path =
+		sign.path;
 
 	if( path.get( 0 ) !== this.name )
-		{ return null; }
+	{
+		throw new Error( 'this caret not on this form!' );
+	}
 
 	return this.$sub[ path.get( 1 ) ] || null;
 };
-*/
 
 
 /*
@@ -234,7 +245,7 @@ Panel.prototype._weave =
 	fabric.fill( style.fill, this, 'sketch', Euclid.View.proper );
 	var layout = this.tree.root.layout;
 
-	var focus = this.focusedControl( );
+	var focus = this.getFocus( );
 	for( var a = layout.length - 1; a >= 0; a-- )
 	{
 		var cname = layout.ranks[a];
@@ -287,7 +298,7 @@ Form.prototype.draw =
 	var ranks =
 		root.ranks;
 
-//	var focus = this.focusedControl( );
+//	var focus = this.getFocus( );
 
 	for( var a = ranks.length - 1; a >= 0; a-- )
 	{
@@ -303,34 +314,44 @@ Form.prototype.draw =
 			// Dash.Accent.state(cname === this.$hover || c.$active, c === focus)
 		);
 	}
+
+	this.$caret.display( );
 };
 
 
 /*
 | Positions the caret.
 */
-/*
-Panel.prototype.positionCaret =
-	function( view )
+Form.prototype.positionCaret =
+	function( )
 {
-	var cname = shell.$caret.sign.path.get( 1 );
+	var caret =
+		this.$caret;
 
-	var ce = this.$sub[ cname ];
+	var name =
+		caret.sign.path.get( 1 );
+
+	var ce =
+		this.$sub[ name ];
 
 	if( !ce )
-		{ throw new Error('Caret component does not exist!'); }
+	{
+		throw new Error('Caret component does not exist!');
+	}
 
 	if( ce.positionCaret )
 	{
-		ce.positionCaret( view );
+		ce.positionCaret(
+			Euclid.View.proper
+		);
 	}
 	else
 	{
-		var caret = shell.$caret;
-		caret.$screenPos = caret.$heigh = null;
+		caret.$screenPos =
+		caret.$heigh =
+			null;
 	}
 };
-*/
 
 
 /*
@@ -343,7 +364,7 @@ Form.prototype.pointingHover =
 		// ctrl
 	)
 {
-	this._setHover( null );
+	this.setHover( null );
 
 	return null;
 
@@ -438,36 +459,45 @@ Form.prototype.dragStart =
 */
 Form.prototype.pointingStart =
 	function(
-		// p,
-		// shift,
-		// ctrl
+		p,
+		shift,
+		ctrl
 	)
 {
-	console.log(' form pointing start ');
-	/*
-	var pnw = this.pnw;
-	var pse = this.pse;
-	var fabric = this._weave( );
-	var a, aZ;
-	*/
-
 	var layout =
-		this.tree.root.layout;
+		this.tree.root;
 
-	/*
-	for( a = 0, aZ = layout.length; a < aZ; a++ )
+	var ranks =
+		layout.ranks;
+
+	for(
+		var a = 0, aZ = ranks.length;
+		a < aZ;
+		a++
+	)
 	{
-		var cname = layout.ranks[ a ];
-		var ce = this.$sub[ cname ];
-		var r = ce.pointingStart( pp, shift, ctrl) ;
-		if ( r )
+		var name =
+			ranks[ a ];
+
+		var ce =
+			this.$sub[ name ];
+
+		var r =
+			ce.pointingStart(
+				p,
+				shift,
+				ctrl
+			);
+
+		if( r !== null )
 		{
 			return r;
 		}
 	}
 
+	// otherwise ...
+
 	this.setHover( null );
-	*/
 
 	return false;
 };
@@ -476,17 +506,21 @@ Form.prototype.pointingStart =
 /*
 | User is inputing text.
 */
-/*
-Panel.prototype.input =
+Form.prototype.input =
 	function( text )
 {
-	var focus = this.focusedControl( );
+	console.log( 'input' );
+
+	var focus =
+		this.getFocus( );
+
 	if( !focus )
-		{ return; }
+	{
+		return;
+	}
 
 	focus.input( text );
 };
-*/
 
 
 /*
@@ -564,9 +598,86 @@ Form.prototype.poke =
 
 
 /*
+| Sets the caret position.
+*/
+Form.prototype.setCaret =
+	function(
+		sign
+	)
+{
+	switch( sign && sign.constructor )
+	{
+		case null :
+		case Sign :
+
+			break;
+
+		case Object :
+
+			sign =
+				new Sign( sign );
+
+			break;
+
+		default :
+
+			throw new Error(
+				'Space.setCaret: invalid sign'
+			);
+	}
+
+	var entity;
+
+	if(
+		this.$caret.sign &&
+		this.$caret.sign.path !== sign.path
+	)
+	{
+		entity =
+			this._getCaretEntity(
+				this.$caret.sign.path
+			);
+
+		if( entity )
+		{
+			entity.knock( );
+		}
+
+		this.redraw = true;
+	}
+
+	this.$caret =
+		new Caret(
+			sign,
+			null,
+			this.$caret.$shown
+		);
+
+	if( sign )
+	{
+		entity =
+			this._getCaretEntity(
+				sign.path
+			);
+
+		if( entity )
+		{
+			entity.knock( );
+		}
+
+		this.redraw = true;
+	}
+
+	return this.$caret;
+};
+
+
+
+
+/*
 | Sets the hovered component.
 */
-Form.prototype._setHover =
+Form.prototype.setHover =
 	function( name )
 {
 	if( this.$hover === name )
@@ -630,6 +741,26 @@ Form.prototype.blink =
 	function( )
 {
 	this.$caret.blink( );
+};
+
+
+/*
+| Returns the first entity a caret can be in
+*/
+Form.prototype._getCaretEntity =
+	function(
+		path
+	)
+{
+	if( path.length !== 2 ) {
+		throw new Error('Form._getCaretEntity, path.length expected to be 1');
+	}
+
+	if( path.get( 0 ) !== this.name ) {
+		throw new Error('Caret path mismatch');
+	}
+
+	return this.$sub[ path.get( 1 ) ];
 };
 
 

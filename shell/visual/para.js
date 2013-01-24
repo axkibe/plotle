@@ -1137,8 +1137,6 @@ Para.prototype.specialKey =
 			break;
 	}
 
-	// FIXME use caret var instead of shell.$caret
-
 	if( shift )
 	{
 		switch( key )
@@ -1150,7 +1148,7 @@ Para.prototype.specialKey =
 			case 'right' :
 			case 'down'  :
 				select.active = true;
-				select.sign2 = shell.$caret.sign;
+				select.sign2 = caret.sign;
 				system.setInput( select.innerText( ) );
 				item.poke();
 				shell.redraw = true;
@@ -1162,7 +1160,7 @@ Para.prototype.specialKey =
 	{
 		item.poke( );
 		item.scrollCaretIntoView( );
-		shell.$caret.show( );
+		caret.show( );
 		shell.redraw = true;
 	}
 };

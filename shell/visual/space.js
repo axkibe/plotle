@@ -433,7 +433,6 @@ Space.prototype.draw =
 	}
 
 	this.$caret.display( );
-
 };
 
 
@@ -657,8 +656,6 @@ Space.prototype.pointingHover =
 
 /*
 | Sets the caret position.
-|
-| TODO make free strings
 */
 Space.prototype.setCaret =
 	function(

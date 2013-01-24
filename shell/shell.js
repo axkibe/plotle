@@ -87,7 +87,7 @@ Shell =
 	this.$forms =
 		{
 			login :
-				new Forms.Login()
+				new Forms.Login( )
 		};
 
 	// TODO mark as private
@@ -251,7 +251,6 @@ Shell.prototype.blink =
 
 	if( w !== this._$fontWatch )
 	{
-		// console.log( 'fontchange detected' );
 		this._$fontWatch =
 			w;
 
@@ -436,24 +435,13 @@ Shell.prototype._draw =
 		return;
 	}
 
-	switch( this.bridge.mode( ) )
+	var display =
+		this.getCurrentDisplay( );
+
+	if( display )
 	{
-		case 'Login' :
-
-			this.$forms.login.draw( fabric );
-
-			break;
-
-		default :
-
-			if( this.$space )
-			{
-				this.$space.draw( fabric );
-			}
-
-			break;
+		display.draw( fabric );
 	}
-
 
 	this.$disc.draw( fabric );
 
@@ -477,12 +465,12 @@ Shell.prototype.click =
 		return;
 	}
 
-	var current =
+	var display =
 		this.getCurrentDisplay( );
 
-	if( current )
+	if( display )
 	{
-		current.click(
+		display.click(
 			p,
 			shift,
 			ctrl
@@ -561,15 +549,15 @@ Shell.prototype.pointingHover =
 			);
 	}
 
-	var current =
+	var display =
 		this.getCurrentDisplay( );
 
 
-	if( current )
+	if( display )
 	{
 		if( cursor )
 		{
-			current.pointingHover(
+			display.pointingHover(
 				null,
 				shift,
 				ctrl
@@ -578,7 +566,7 @@ Shell.prototype.pointingHover =
 		else
 		{
 			cursor =
-				current.pointingHover(
+				display.pointingHover(
 					p,
 					shift,
 					ctrl
@@ -653,16 +641,16 @@ Shell.prototype.pointingStart =
 			);
 	}
 
-	var current =
+	var display =
 		this.getCurrentDisplay( );
 
 	if(
 		pointingState === null &&
-		current
+		display
 	)
 	{
 		pointingState =
-			current.pointingStart(
+			display.pointingStart(
 				p,
 				shift,
 				ctrl
@@ -704,13 +692,13 @@ Shell.prototype.dragStart =
 
 	if( cursor === null )
 	{
-		var current =
+		var display =
 			this.getCurrentDisplay( );
 
-		if( current )
+		if( display )
 		{
 			cursor =
-				current.dragStart(
+				display.dragStart(
 					p,
 					shift,
 					ctrl
@@ -868,12 +856,12 @@ Shell.prototype.mousewheel =
 
 	// disc?
 
-	var current =
+	var display =
 		this.getCurrentDisplay( );
 
-	if( current )
+	if( display )
 	{
-		current.mousewheel(
+		display.mousewheel(
 			p,
 			dir,
 			shift,
@@ -905,11 +893,12 @@ Shell.prototype.specialKey =
 		return;
 	}
 
-	var current = this.getCurrentDisplay( );
+	var display =
+		this.getCurrentDisplay( );
 
-	if( current )
+	if( display )
 	{
-		current.specialKey(
+		display.specialKey(
 			key,
 			shift,
 			ctrl
@@ -934,17 +923,17 @@ Shell.prototype.input =
 		return;
 	}
 
-
 	if( this.selection.active )
 	{
 		this.selection.remove( );
 	}
 
-	var current =
+	var display =
 		this.getCurrentDisplay( );
 
-	if( current ) {
-		current.input( text );
+	if( display )
+	{
+		display.input( text );
 	}
 
 	if( this.redraw )

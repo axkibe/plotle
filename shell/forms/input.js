@@ -1,5 +1,5 @@
 /*
-| An input field on a panel.
+| An input field on a form.
 |
 | Authors: Axel Kittenberger
 */
@@ -103,15 +103,29 @@ Input.prototype.getOffsetAt =
 		p
 	)
 {
-	var pitch = this._pitch;
-	var dx    = p.x - pitch.x;
-	var value = this._$value;
-	var x1 = 0;
-	var x2 = 0;
-	var a;
-	var password = this.twig.password;
+	var pitch =
+		this._pitch;
 
-	var font  = this.twig.font;
+	var dx =
+		p.x - pitch.x;
+
+	var value =
+		this._$value;
+
+	var x1 =
+		0;
+
+	var x2 =
+		0;
+
+	var a;
+
+	var password =
+		this.twig.password;
+
+	var font =
+		this.twig.font;
+
 	var mw;
 
 	if( password )
@@ -123,10 +137,13 @@ Input.prototype.getOffsetAt =
 
 	for( a = 0; a < value.length; a++ )
 	{
-		x1 = x2;
+		x1 =
+			x2;
+
 		if( password )
 		{
-			x2 = a * mw;
+			x2 =
+				a * mw;
 		}
 		else
 		{
@@ -489,7 +506,9 @@ Input.prototype.getCaretPos =
 		fs * theme.bottombox;
 
 	var p =
-		this.locateOffset( shell.$caret.sign.at1 );
+		this.locateOffset(
+			this.form.$caret.sign.at1
+		);
 
 	var pnw =
 		this.pnw;
@@ -520,7 +539,7 @@ Input.prototype.positionCaret =
 	function( view )
 {
 	var caret =
-		shell.$caret;
+		this.form.$caret;
 
 	var cpos =
 	caret.$pos =
@@ -569,7 +588,7 @@ Input.prototype.input =
 	function( text )
 {
 	var csign =
-		shell.$caret.sign;
+		this.form.$caret.sign;
 
 	var v =
 		this._$value;
@@ -594,8 +613,7 @@ Input.prototype.input =
 		text +
 		v.substring( at1 );
 
-	shell.setCaret(
-		'board',
+	this.form.setCaret(
 		{
 			path :
 				csign.path,
@@ -616,7 +634,7 @@ Input.prototype.keyBackspace =
 	function( )
 {
 	var csign =
-		shell.$caret.sign;
+		this.form.$caret.sign;
 
 	var at1 =
 		csign.at1;
@@ -630,8 +648,7 @@ Input.prototype.keyBackspace =
 		this._$value.substring(0, at1 - 1) +
 		this._$value.substring(at1);
 
-	shell.setCaret(
-		'board',
+	this.form.setCaret(
 		{
 			path : csign.path,
 			at1  : csign.at1 - 1
@@ -649,7 +666,7 @@ Input.prototype.keyDel =
 	function( )
 {
 	var at1 =
-		shell.$caret.csign.at1;
+		this.form.$caret.csign.at1;
 
 	if( at1 >= this._$value.length )
 	{
@@ -695,7 +712,7 @@ Input.prototype.keyEnd =
 	function( )
 {
 	var csign =
-		shell.$caret.sign;
+		this.form.$caret.sign;
 
 	var at1 =
 		csign.at1;
@@ -705,8 +722,7 @@ Input.prototype.keyEnd =
 		return false;
 	}
 
-	shell.setCaret(
-		'board',
+	this.form.setCaret(
 		{
 			path :
 				csign.path,
@@ -727,15 +743,14 @@ Input.prototype.keyLeft =
 	function( )
 {
 	var csign =
-		shell.$caret.sign;
+		this.form.$caret.sign;
 
 	if( csign.at1 <= 0 )
 	{
 		return false;
 	}
 
-	shell.setCaret(
-		'board',
+	this.form.setCaret(
 		{
 			path :
 				csign.path,
@@ -755,15 +770,15 @@ Input.prototype.keyLeft =
 Input.prototype.keyPos1 =
 	function( )
 {
-	var csign = shell.$caret.sign;
+	var csign =
+		this.form.$caret.sign;
 
 	if( csign.at1 <= 0 )
 	{
 		return false;
 	}
 
-	shell.setCaret(
-		'board',
+	this.form.setCaret(
 		{
 			path :
 				csign.path,
@@ -782,13 +797,15 @@ Input.prototype.keyPos1 =
 */
 Input.prototype.keyRight = function()
 {
-	var csign = shell.$caret.sign;
+	var csign =
+		this.form.$caret.sign;
 
 	if (csign.at1 >= this._$value.length)
-		{ return false; }
+	{
+		return false;
+	}
 
-	shell.setCaret(
-		'board',
+	this.form.setCaret(
 		{
 			path : csign.path,
 			at1  : csign.at1 + 1
@@ -826,60 +843,69 @@ Input.prototype.specialKey =
 
 			poke =
 				this.keyBackspace( );
+
 			break;
 
 		case 'del' :
 
 			poke =
 				this.keyDel( );
+
 			break;
 
 		case 'down' :
 
 			poke =
 				this.keyDown( );
+
 			break;
 
 		case 'end' :
 
 			poke =
 				this.keyEnd( );
+
 			break;
 
 		case 'enter' :
 
 			poke =
 				this.keyEnter( );
+
 			break;
 
 		case 'left' :
 
 			poke =
 				this.keyLeft( );
+
 			break;
 
 		case 'pos1' :
 
 			poke =
 				this.keyPos1( );
+
 			break;
 
 		case 'right' :
 
 			poke =
 				this.keyRight( );
+
 			break;
 
 		case 'up' :
 
 			poke =
 				this.keyUp( );
+
 			break;
 	}
 
 	if( poke )
 	{
-		this.panel.poke( );
+		this.form.poke( );
 	}
 };
 
@@ -890,21 +916,23 @@ Input.prototype.specialKey =
 Input.prototype.grepFocus =
 	function( )
 {
-	if( this.panel.focusedControl( ) === this )
+	if( this.form.focusedControl( ) === this )
 	{
 		return false;
 	}
 
-	shell.setCaret(
-		'board',
-		{
-			path :
-				new Path ( [this.panel.name, this.name ] ),
+	var caret =
+		this.form.setCaret(
+			{
+				path :
+					new Path ( [this.form.name, this.name ] ),
 
-			at1 :
-				this._$value.length
-		}
-	);
+				at1 :
+					this._$value.length
+			}
+		);
+
+	caret.show( );
 
 	this.poke( );
 
@@ -921,7 +949,10 @@ Input.prototype.poke =
 	this.$fabric =
 		null;
 
-	this.panel.poke( );
+	shell.redraw =
+		true;
+
+	this.form.poke( );
 };
 
 
@@ -946,12 +977,8 @@ Input.prototype.pointingHover =
 		// ctrl
 	)
 {
-	if( p === null )
-	{
-		return null;
-	}
-
 	if(
+		p === null ||
 		p.x < this.pnw.x ||
 		p.y < this.pnw.y ||
 		p.x > this.pse.x ||
@@ -986,7 +1013,19 @@ Input.prototype.pointingStart =
 		// ctrl
 	)
 {
-	var pp = p.sub( this.pnw );
+	if(
+		p === null ||
+		p.x < this.pnw.x ||
+		p.y < this.pnw.y ||
+		p.x > this.pse.x ||
+		p.y > this.pse.y
+	)
+	{
+		return null;
+	}
+
+	var pp =
+		p.sub( this.pnw );
 
 	if(
 		!this._bezi.within(
@@ -998,16 +1037,18 @@ Input.prototype.pointingStart =
 		return null;
 	}
 
-	shell.setCaret(
-		'board',
-		{
-			path :
-				new Path ( [this.panel.name, this.name ] ),
+	var caret =
+		this.form.setCaret(
+			{
+				path :
+					new Path ( [this.form.name, this.name ] ),
 
-			at1 :
-				this.getOffsetAt( pp )
-		}
-	);
+				at1 :
+					this.getOffsetAt( pp )
+			}
+		);
+
+	caret.show( );
 
 	this.poke( );
 

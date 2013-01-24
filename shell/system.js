@@ -94,34 +94,43 @@ var System = function( )
 	this._$atween =
 	{
 		// timer for atween state
-		timer : null,
+		timer :
+			null,
 
 		// position mouse button went down
-		pos   : null,
+		pos :
+			null,
 
 		// latest mouse position seen in atween state
-		move  : null,
+		move :
+			null,
 
 		// shift key in atween state
-		shift : null,
+		shift :
+			null,
 
 		// ctrl  key in atween state
-		ctrl  : null
+		ctrl :
+			null
 	};
 
 	// hidden input that forwards all events
-	this._hiddenInput = document.getElementById('input');
+	this._hiddenInput =
+		document.getElementById('input');
 
 	// remembers last special key pressed, to hinder double events.
 	// Opera is behaving stupid here.
-	this._$lastSpecialKey = -1;
+	this._$lastSpecialKey =
+		-1;
 
 	// The value expected to be in input.
 	// either nothing or the text selection.
 	// if it changes the user did something.
-	this._inputVal  = '';
+	this._inputVal =
+		'';
 
-	var hiddenInput = this._hiddenInput;
+	var hiddenInput =
+		this._hiddenInput;
 
 	canvas.onmousedown        = makeCatcher( this, this._onMouseDown      );
 	canvas.onmousemove        = makeCatcher( this, this._onMouseMove      );
@@ -146,6 +155,11 @@ var System = function( )
 	canvas.onkeydown          = makeCatcher( this, this._onCanvasKeyDown  );
 	canvas.onkeypress         = makeCatcher( this, this._onCanvasKeyPress );
 
+	// TODO rename?
+	//document.onkeydown          = makeCatcher( this, this._onCanvasKeyDown  );
+	//document.onkeypress         = makeCatcher( this, this._onCanvasKeyPress );
+	//document.onkeyup            = makeCatcher( this, this._onHiddenKeyUp    );
+
 	this._testInputCatcher    = makeCatcher( this, this._testInput        );
 	this._onAtweenTimeCatcher = makeCatcher( this, this._onAtweenTime     );
 	this._blinkCatcher        = makeCatcher( this, this._blink            );
@@ -164,16 +178,20 @@ var System = function( )
 System.prototype.settings =
 {
 	// pixels to scroll for a wheel event
-	textWheelSpeed : 12 * 5,
+	textWheelSpeed :
+		12 * 5,
 
 	// blink speed of the caret.
-	caretBlinkSpeed : 530,
+	caretBlinkSpeed :
+		530,
 
 	// milliseconds after mouse down, dragging starts
-	dragtime : 400,
+	dragtime :
+		400,
 
 	// pixels after mouse down and move, dragging starts
-	dragbox  : 10
+	dragbox :
+		10
 };
 
 
@@ -243,11 +261,11 @@ System.prototype.setTimer = function( time, callback )
 | Sets the focus mode so it matched the keyboard suggestion (for iPad)
 | Moves the hidden input vertically so the iPad keeps the caret in view
 */
-System.prototype.fiddleInput =
+System.prototype._fiddleInput =
 	function( )
 {
 	var caret =
-		this.shell.getCaret();
+		this.shell.getCaret( );
 
 	var height =
 		caret.$height;
@@ -255,29 +273,32 @@ System.prototype.fiddleInput =
 	var pos =
 		caret.$screenPos;
 
-	var sk =
-		height > 0;
-
-	if( sk )
+	if( height > 0 )
 	{
 		var input = this._hiddenInput;
 
-		input.style.top    = pos.y + 'px';
-		input.style.height = height;
+		input.style.top =
+			pos.y + 'px';
+
+		input.style.height =
+			height;
 
 		if( !this._$suggestingKeyboard )
 		{
 			input.focus();
 
 			// works around a bug in safari/OSX
-			var self = this;
+			var self =
+				this;
+
 			this.setTimer(
 				0,
 				function( )
 					{ self._hiddenInput.selectionStart = 1; }
 			);
 
-			this._$suggestingKeyboard = true;
+			this._$suggestingKeyboard =
+				true;
 		}
 	}
 	else
@@ -285,7 +306,9 @@ System.prototype.fiddleInput =
 		if( this._$suggestingKeyboard )
 		{
 			this._canvas.focus();
-			this._$suggestingKeyboard = false;
+
+			this._$suggestingKeyboard =
+				false;
 		}
 	}
 };
@@ -417,9 +440,15 @@ System.prototype._captureEvents = function( )
 */
 System.prototype._onCanvasKeyDown = function( event )
 {
-	var kcode = this._$lastSpecialKey = event.keyCode;
-	var shift = event.shiftKey;
-	var ctrl  = event.ctrlKey || event.metaKey;
+	var kcode =
+		this._$lastSpecialKey =
+		event.keyCode;
+
+	var shift =
+		event.shiftKey;
+
+	var ctrl =
+		event.ctrlKey || event.metaKey;
 
 	if(
 		!this._specialKey(
@@ -429,23 +458,31 @@ System.prototype._onCanvasKeyDown = function( event )
 		)
 	)
 	{
-		event.preventDefault();
+		event.preventDefault( );
 
 		return false;
 	}
 };
 
 
-/**
+/*
 | Key press on canvas.
 | Used when not suggesting a keyboard.
 */
-System.prototype._onCanvasKeyPress = function( event )
+System.prototype._onCanvasKeyPress =
+	function( event )
 {
-	var kcode = event.keyCode;
-	var which = event.which;
-	var shift = event.shiftKey;
-	var ctrl  = event.ctrlKey || event.metaKey;
+	var kcode =
+		event.keyCode;
+
+	var which =
+		event.which;
+
+	var shift =
+		event.shiftKey;
+
+	var ctrl =
+		event.ctrlKey || event.metaKey;
 
 	if(
 		(
@@ -456,18 +493,28 @@ System.prototype._onCanvasKeyPress = function( event )
 		this._$lastSpecialKey !== kcode
 	)
 	{
-		this._$lastSpecialKey = -1;
+		this._$lastSpecialKey =
+			-1;
 
-		return this._specialKey( kcode, shift, ctrl );
+		return this._specialKey(
+			kcode,
+			shift,
+			ctrl
+		);
 	}
 
 	if( which >= 32 )
 	{
-		this.shell.input( String.fromCharCode( which ) );
-		this.fiddleInput();
+		this.shell.input(
+			String.fromCharCode( which )
+		);
+
+		this._fiddleInput( );
 	}
 
-	this._$lastSpecialKey = -1;
+	this._$lastSpecialKey =
+		-1;
+
 	return true;
 };
 
@@ -481,9 +528,14 @@ System.prototype._onHiddenKeyDown =
 		event
 	)
 {
-	var shift = event.shiftKey;
-	var ctrl  = event.ctrlKey || event.metaKey;
-	var kcode = this._$lastSpecialKey = event.keyCode;
+	var shift =
+		event.shiftKey;
+
+	var ctrl =
+		event.ctrlKey || event.metaKey;
+
+	var kcode =
+		this._$lastSpecialKey = event.keyCode;
 
 	if(
 		!this._specialKey(
@@ -506,10 +558,17 @@ System.prototype._onHiddenKeyPress =
 		event
 	)
 {
-	var ew    = event.which;
-	var kcode = event.keyCode;
-	var shift = event.shiftKey;
-	var ctrl  = event.ctrlKey || event.metaKey;
+	var ew =
+		event.which;
+
+	var kcode =
+		event.keyCode;
+
+	var shift =
+		event.shiftKey;
+
+	var ctrl =
+		event.ctrlKey || event.metaKey;
 
 	if (
 		(
@@ -528,11 +587,15 @@ System.prototype._onHiddenKeyPress =
 		);
 	}
 
-	this._$lastSpecialKey = -1;
+	this._$lastSpecialKey =
+		-1;
 
 	this._testInput( );
 
-	this.setTimer( 0, this._testInputCatcher );
+	this.setTimer(
+		0,
+		this._testInputCatcher
+	);
 
 	return true;
 };
@@ -587,13 +650,20 @@ System.prototype._onMouseDown =
 	// Opera requires focusing the window first
 	window.focus( );
 
-	var canvas = this._canvas;
-	var p = new Euclid.Point(
-		event.pageX - canvas.offsetLeft,
-		event.pageY - canvas.offsetTop
-	);
-	var shift = event.shiftKey;
-	var ctrl  = event.ctrlKey || event.metaKey;
+	var canvas =
+		this._canvas;
+
+	var p =
+		new Euclid.Point(
+			event.pageX - canvas.offsetLeft,
+			event.pageY - canvas.offsetTop
+		);
+
+	var shift =
+		event.shiftKey;
+
+	var ctrl =
+		event.ctrlKey || event.metaKey;
 
 	// asks the shell if it forces this to be a drag or click
 	// or the state is yet unknown.
@@ -610,14 +680,23 @@ System.prototype._onMouseDown =
 
 			this._$atween =
 				{
-					pos   : p,
-					move  : p,
-					shift : shift,
-					ctrl  : ctrl,
-					timer : this.setTimer(
-						this.settings.dragtime,
-						this._onAtweenTimeCatcher
-					)
+					pos :
+						p,
+
+					move :
+						p,
+
+					shift :
+						shift,
+
+					ctrl :
+						ctrl,
+
+					timer :
+						this.setTimer(
+							this.settings.dragtime,
+							this._onAtweenTimeCatcher
+						)
 				};
 
 			break;
@@ -633,20 +712,22 @@ System.prototype._onMouseDown =
 			this._captureEvents( );
 
 			break;
-
 	}
 
-	var cursor = this.shell.pointingHover(
-		p,
-		shift,
-		ctrl
-	);
+	var cursor =
+		this.shell.pointingHover(
+			p,
+			shift,
+			ctrl
+		);
 
 	if( cursor !== null )
-		{ canvas.style.cursor = cursor; }
+	{
+		canvas.style.cursor = cursor;
+	}
 
 
-	this.fiddleInput( );
+	this._fiddleInput( );
 
 	return false;
 };
@@ -816,7 +897,7 @@ System.prototype._onMouseUp =
 		canvas.style.cursor = cursor;
 	}
 
-	this.fiddleInput( );
+	this._fiddleInput( );
 
 	return false;
 };
@@ -857,7 +938,7 @@ System.prototype._onMouseWheel =
 
 	this.shell.mousewheel( p, dir, shift, ctrl );
 
-	this.fiddleInput( );
+	this._fiddleInput( );
 };
 
 
@@ -884,7 +965,12 @@ System.prototype._onTouchStart =
 	var ctrl   = event.ctrlKey || event.metaKey;
 
 	// asks the shell if it forces this to be a drag or click, or yet unknown.
-	this._$pointingState = this.shell.pointingStart( p, shift, ctrl );
+	this._$pointingState =
+		this.shell.pointingStart(
+			p,
+			shift,
+			ctrl
+		);
 
 	switch( this._$pointingState )
 	{
@@ -910,7 +996,7 @@ System.prototype._onTouchStart =
 			break;
 	}
 
-	this.fiddleInput();
+	this._fiddleInput( );
 
 	return false;
 };
@@ -1046,7 +1132,7 @@ System.prototype._onTouchEnd = function( event )
 			throw new Error( 'invalid pointingState' );
 	}
 
-	this.fiddleInput();
+	this._fiddleInput( );
 
 	return false;
 };
@@ -1062,8 +1148,11 @@ System.prototype._releaseEvents = function( )
 		return;
 	}
 
-	document.onmouseup   = null;
-	document.onmousemove = null;
+	document.onmouseup =
+		null;
+
+	document.onmousemove =
+		null;
 };
 
 
@@ -1109,7 +1198,7 @@ System.prototype._specialKey = function( keyCode, shift, ctrl )
 
 	this.shell.specialKey( key, shift, ctrl );
 
-	this.fiddleInput();
+	this._fiddleInput( );
 
 	return false;
 };
@@ -1134,7 +1223,7 @@ System.prototype._testInput = function( )
 
 	this.shell.input( text );
 
-	this.fiddleInput();
+	this._fiddleInput( );
 };
 
 

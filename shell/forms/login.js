@@ -283,4 +283,10 @@ Login.prototype.layout =
 	};
 
 
+/*
+| Name of the form.
+*/
+Login.prototype.name =
+	'login';
+
 } )( );
