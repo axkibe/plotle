@@ -248,9 +248,9 @@ Panel.prototype._weave =
 	var focus = this.getFocus( );
 	for( var a = layout.length - 1; a >= 0; a-- )
 	{
-		var cname = layout.ranks[a];
-		var c = this.$sub[cname];
-		c.draw(fabric, Dash.Accent.state(cname === this.$hover || c.$active, c === focus));
+		var name = layout.ranks[a];
+		var c = this.$sub[name];
+		c.draw(fabric, Dash.Accent.state(name === this.$hover || c.$active, c === focus));
 	}
 	fabric.edge( style.edge, this, 'sketch', Euclid.View.proper );
 
@@ -311,7 +311,7 @@ Form.prototype.draw =
 		comp.draw(
 			fabric,
 			Forms.Accent.state( false, false )
-			// Dash.Accent.state(cname === this.$hover || c.$active, c === focus)
+			// Dash.Accent.state(name === this.$hover || c.$active, c === focus)
 		);
 	}
 
@@ -401,8 +401,8 @@ Form.prototype.pointingHover =
 	var layout = this.tree.root.layout;
 	for( a = 0, aZ = layout.length; a < aZ; a++ )
 	{
-		var cname = layout.ranks[ a ];
-		var ce = this.$sub[ cname ];
+		var name = layout.ranks[ a ];
+		var ce = this.$sub[ name ];
 
 		if( cursor )
 			{ ce.pointingHover( null, shift, ctrl ); }
@@ -509,8 +509,6 @@ Form.prototype.pointingStart =
 Form.prototype.input =
 	function( text )
 {
-	console.log( 'input' );
-
 	var focus =
 		this.getFocus( );
 
@@ -526,61 +524,88 @@ Form.prototype.input =
 /*
 | Cycles the focus
 */
-/*
-Panel.prototype.cycleFocus =
-	function( dir )
+Form.prototype.cycleFocus =
+	function(
+		dir
+	)
 {
-	var layout = this.tree.root.layout;
-	var focus  = this.focusedControl( );
-	if( !focus )
-		{ return; }
+	var root =
+		this.tree.root;
 
-	var rank = layout.rankOf( focus.name );
-	var rs   = rank;
-	var cname;
+	var focus =
+		this.getFocus( );
+
+	if( !focus )
+	{
+		return;
+	}
+
+	var rank =
+		root.rankOf( focus.name );
+
+	var rs =
+		rank;
+
+	var name;
 	var ve;
 
 	while( true )
 	{
-		rank = ( rank + dir + layout.length ) % layout.length;
+		rank =
+			( rank + dir + root.length ) % root.length;
 
 		if( rank === rs )
-			{ shell.dropFocus( ); }
+		{
+			shell.dropFocus( );
+		}
 
-		cname = layout.ranks[ rank ];
-		ve    = this.$sub[ cname ];
+		name =
+			root.ranks[ rank ];
+
+		ve =
+			this.$sub[ name ];
+
 		if( ve.grepFocus( ) )
-			{ break; }
+		{
+			break;
+		}
 	}
 };
-*/
 
 
 /*
 | User is pressing a special key.
 */
-/*
-Panel.prototype.specialKey =
+Form.prototype.specialKey =
 	function(
 		key,
 		shift,
 		ctrl
 	)
 {
-	var focus = this.focusedControl( );
+	var focus =
+		this.getFocus( );
 
 	if( !focus )
-		{ return; }
-
-	if( key === 'tab' )
 	{
-		this.cycleFocus( shift ? -1 : 1 );
 		return;
 	}
 
-	focus.specialKey( key, shift, ctrl );
+	if( key === 'tab' )
+	{
+		this.cycleFocus(
+			shift ? -1 : 1
+		);
+
+		return;
+	}
+
+	focus.specialKey(
+		key,
+		shift,
+		ctrl
+	);
 };
-*/
 
 
 /*

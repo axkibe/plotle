@@ -916,7 +916,7 @@ Input.prototype.specialKey =
 Input.prototype.grepFocus =
 	function( )
 {
-	if( this.form.focusedControl( ) === this )
+	if( this.form.getFocus( ) === this )
 	{
 		return false;
 	}

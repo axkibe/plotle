@@ -214,7 +214,7 @@ Login.prototype.layout =
 					'',
 
 				password :
-					false,
+					true,
 
 				normaStyle :
 					'input',
