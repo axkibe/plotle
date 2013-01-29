@@ -965,8 +965,12 @@ theme =
 
 				steps :
 				[
+					/*
 					[ 0, 'rgba( 255, 255, 248, 0.955 )' ],
 					[ 1, 'rgba( 255, 255, 160, 0.955 )' ]
+					*/
+					[ 0, 'rgba( 255, 255, 248, 0.955 )' ],
+					[ 1, 'rgba( 255, 255, 210, 0.955 )' ]
 					/*
 					[ 0, 'rgba( 255, 255,  20, 0.955 )' ],
 					[ 1, 'rgba( 255, 255, 180, 0.955 )' ]
@@ -976,6 +980,159 @@ theme =
 
 			edge : [ ]
 		},
+
+		button :
+		{
+			fill :
+			{
+				gradient :
+					'horizontal',
+
+				steps :
+				[
+					[
+						0,
+						'rgba( 255, 237, 210, 0.5 )'
+					],
+					[
+						1,
+						'rgba( 255, 185, 81,  0.5 )'
+					]
+				]
+			},
+
+			edge :
+			[
+				{
+					border :
+						1,
+
+					width :
+						1.5,
+
+					color :
+						'rgb( 255, 141, 66 )'
+				},
+				{
+					border :
+						0,
+
+					width  :
+						1,
+
+					color :
+						'rgb( 94,  94,  0 )'
+				}
+			]
+		},
+
+
+		buttonHover :
+		{
+			fill :
+				'rgb( 255, 188, 88 )',
+
+			edge :
+			[
+				{
+					border :
+						1,
+
+					width :
+						2,
+
+					color :
+						'rgb( 255, 188, 87 )'
+				},
+				{
+					border :
+						0,
+
+					width :
+						1,
+
+					color :
+						'rgb( 128, 128, 0 )'
+				}
+			]
+		},
+
+		buttonFocus :
+		{
+			fill :
+			{
+				gradient :
+					'horizontal',
+
+				steps :
+				[
+					[
+						0,
+						'rgba( 255, 237, 210, 0.5 )'
+					],
+					[
+						1,
+						'rgba( 255, 185, 81,  0.5 )'
+					]
+				]
+			},
+
+			edge :
+			[
+				{
+					border :
+						1,
+
+					width  :
+						2,
+
+					color :
+						'rgb( 255, 99, 188 )'
+				},
+				{
+					border :
+						0,
+
+					width :
+						1,
+
+					color :
+						'black'
+				}
+			]
+		},
+
+
+		buttonHofoc :
+		{
+			fill :
+				'rgb( 255, 188, 88 )',
+
+			edge :
+			[
+				{
+					border :
+						1,
+
+					width :
+						2,
+
+					color :
+						'rgb( 255, 99, 188 )'
+				},
+				{
+					border :
+						0,
+
+					width :
+						1,
+
+					color :
+						'black'
+				}
+			]
+		},
+
 
 		/*
 		| default input field style

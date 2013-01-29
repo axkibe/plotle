@@ -53,17 +53,17 @@ var styles =
 //		theme.dash.checkboxCheck,
 
 
-//	button :
-//		theme.dash.button,
+	button :
+		theme.forms.button,
 
-//	buttonHover :
-//		theme.dash.buttonHover,
+	buttonHover :
+		theme.forms.buttonHover,
 
-//	buttonFocus :
-//		theme.dash.buttonFocus,
+	buttonFocus :
+		theme.forms.buttonFocus,
 
-//	buttonHofoc :
-//		theme.dash.buttonHofoc,
+	buttonHofoc :
+		theme.forms.buttonHofoc,
 
 //	highlight :
 //		theme.dash.highlight,
@@ -73,9 +73,6 @@ var styles =
 
 	inputFocus :
 		theme.forms.inputFocus
-
-//	sides :
-//		theme.dash.sides
 };
 
 

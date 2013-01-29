@@ -16,11 +16,13 @@ Forms = Forms || { };
 | Imports
 */
 var config;
+var Caret;
 var Curve;
 var Design;
 var Euclid;
 var Jools;
 //var Proc;
+var Sign;
 var shell;
 var system;
 var theme;
@@ -69,6 +71,12 @@ Forms.Form =
 			Forms.LayoutPattern
 		);
 
+	// hinder direct access of the layout
+	this.layout =
+		null;
+
+	// the caret or a caret less component
+	// having the focus (for example a button)
 	this.$caret =
 		new Caret(
 			null,
@@ -76,11 +84,16 @@ Forms.Form =
 			false
 		);
 
+	// all components of the form
 	this.$sub =
 		{ };
 
 	var inherit =
 		null;
+
+	// the component the pointer is hovering above
+	this.$hover =
+		inherit ? inherit.$hover : null;
 
 	var root =
 		tree.root;
@@ -107,23 +120,6 @@ Forms.Form =
 				inherit && inherit.$sub[ name ]
 			);
 	}
-
-	/*
-	var frameD = tree.root.frame;
-	var oframe = new Euclid.Rect( 'pse', screensize );
-	var pnw    = this.pnw    = Curve.computePoint( frameD.pnw, oframe );
-	var pse    = this.pse    = Curve.computePoint( frameD.pse, oframe );
-	var iframe = this.iframe = new Euclid.Rect( 'pse', pse.sub( pnw ) );
-	this.curve = new Curve(tree.root.curve, iframe);
-
-	this.gradientPC = new Euclid.Point(
-		Jools.half(iframe.width),
-		iframe.height + 450
-	);
-
-	this.$hover = inherit ? inherit.$hover : null;
-
-	*/
 };
 
 
@@ -156,11 +152,17 @@ Form.prototype.newComponent =
 
 	switch( twig.type )
 	{
-//		case 'Button' :
-//			return new Dash.Button( twig, this, inherit, name );
+		case 'Button' :
+
+			return new Forms.Button(
+				name,
+				twig,
+				this,
+				inherit
+			);
 
 //		case 'CheckBox' :
-//			return new Dash.CheckBox( twig, this, inherit, name );
+//			return new Forms.CheckBox( twig, this, inherit, name );
 
 		case 'Input' :
 
@@ -197,6 +199,11 @@ Form.prototype.getFocus =
 
 	var sign =
 		caret.sign;
+
+	if( !sign )
+	{
+		return null;
+	}
 
 	var path =
 		sign.path;
@@ -238,7 +245,7 @@ Panel.prototype._weave =
 
 	var iframe = this.iframe;
 	var fabric = this.$fabric = new Euclid.Fabric(iframe);
-	var style = Dash.getStyle(this.tree.root.style);
+	var style = Forms.getStyle(this.tree.root.style);
 	if( !style )
 		{ throw new Error('no style!'); }
 
@@ -250,23 +257,9 @@ Panel.prototype._weave =
 	{
 		var name = layout.ranks[a];
 		var c = this.$sub[name];
-		c.draw(fabric, Dash.Accent.state(name === this.$hover || c.$active, c === focus));
+		c.draw(fabric, Forms.Accent.state(name === this.$hover || c.$active, c === focus));
 	}
 	fabric.edge( style.edge, this, 'sketch', Euclid.View.proper );
-
-	if( config.debug.drawBoxes )
-	{
-		fabric.paint(
-			Dash.getStyle( 'boxes' ),
-			new Euclid.Rect(
-				'pnw/pse',
-				iframe.pnw,
-				iframe.pse.sub( 1, 1 )
-			),
-			'sketch',
-			Euclid.View.proper
-		);
-	}
 
 	return fabric;
 };
@@ -288,7 +281,7 @@ Form.prototype.draw =
 		Euclid.View.proper
 	);
 
-//	var style = Dash.getStyle(this.tree.root.style);
+//	var style = Forms.getStyle(this.tree.root.style);
 //	if( !style )
 //		{ throw new Error('no style!'); }
 
@@ -298,9 +291,14 @@ Form.prototype.draw =
 	var ranks =
 		root.ranks;
 
-//	var focus = this.getFocus( );
+	var focus =
+		this.getFocus( );
 
-	for( var a = ranks.length - 1; a >= 0; a-- )
+	for(
+		var a = ranks.length - 1;
+		a >= 0;
+		a--
+	)
 	{
 		var name =
 			ranks[ a ];
@@ -310,8 +308,10 @@ Form.prototype.draw =
 
 		comp.draw(
 			fabric,
-			Forms.Accent.state( false, false )
-			// Dash.Accent.state(name === this.$hover || c.$active, c === focus)
+			Forms.Accent.state(
+				name === this.$hover,
+				focus ? name === focus.name : false
+			)
 		);
 	}
 
@@ -359,55 +359,58 @@ Form.prototype.positionCaret =
 */
 Form.prototype.pointingHover =
 	function(
-		// p,
-		// shift,
-		// ctrl
+		p,
+		shift,
+		ctrl
 	)
 {
-	this.setHover( null );
-
-	return null;
-
-	/*
-	var pnw = this.pnw;
-	var pse = this.pse;
-	var a, aZ;
-
 	if( p === null )
 	{
-		return this.setHover( null );
+		this.setHover( null );
+
+		return;
 	}
 
-	var fabric =
-		this._weave( );
+	var a, aZ;
 
-	var pp = p.sub( pnw );
+	var cursor =
+		null;
 
-	// FIXME Optimize by reusing the latest path of this.$fabric
+	var layout =
+		this.tree.root;
+	
+	var ranks =
+		layout.ranks;
 
-	if( !fabric.withinSketch(
-			this,
-			'sketch',
-			Euclid.View.proper,
-			pp
-		)
+	for(
+		a = 0, aZ = ranks.length;
+		a < aZ;
+		a++
 	)
 	{
-		return this.setHover( null );
-	}
+		var name =
+			ranks[ a ];
 
-	var cursor = null;
-
-	var layout = this.tree.root.layout;
-	for( a = 0, aZ = layout.length; a < aZ; a++ )
-	{
-		var name = layout.ranks[ a ];
-		var ce = this.$sub[ name ];
+		var comp =
+			this.$sub[ name ];
 
 		if( cursor )
-			{ ce.pointingHover( null, shift, ctrl ); }
+		{
+			comp.pointingHover(
+				null,
+				shift,
+				ctrl
+			);
+		}
 		else
-			{ cursor = ce.pointingHover( pp, shift, ctrl ); }
+		{
+			cursor =
+				comp.pointingHover(
+					p,
+					shift,
+					ctrl
+				);
+		}
 	}
 
 	if ( cursor === null )
@@ -416,7 +419,6 @@ Form.prototype.pointingHover =
 	}
 
 	return cursor || 'default';
-	**/
 };
 
 

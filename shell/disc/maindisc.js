@@ -395,9 +395,11 @@ MainDisc.prototype.pointingHover =
 		return null;
 	}
 
-	var fabric = this._weave( );
+	var fabric =
+		this._weave( );
 
-	var pp = p.sub(pnw);
+	var pp =
+		p.sub(pnw);
 
 	// FIXME Optimize by reusing the latest path of this.$fabric
 
@@ -426,9 +428,12 @@ MainDisc.prototype.pointingHover =
 	}
 
 	// this is on the disc
-	var buttons = this.buttons;
+	var buttons =
+		this.buttons;
 
-	var cursor = null;
+	var cursor =
+		null;
+
 	for( var name in buttons )
 	{
 		cursor =
@@ -461,8 +466,11 @@ MainDisc.prototype.pointingStart =
 		ctrl
 	)
 {
-	var pnw = this.pnw;
-	var pse = this.pse;
+	var pnw =
+		this.pnw;
+
+	var pse =
+		this.pse;
 
 	// shortcut if p is not near the panel
 	if(

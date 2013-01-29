@@ -628,6 +628,9 @@ Server.prototype.prepareResources =
 		'shell/forms/label.js',
 			'fb',
 
+		'shell/forms/button.js',
+			'fb',
+
 		'shell/forms/input.js',
 			'fb',
 

@@ -725,10 +725,13 @@ Para.prototype.keyDown =
 	var r = doc.twig.rankOf( this.key );
 	if (r < doc.twig.length - 1)
 	{
-		var ve = doc.atRank(r + 1);
-		at1 = ve.getOffsetAt( 0, x );
-		shell.setCaret(
-			'space',
+		var ve =
+			doc.atRank(r + 1);
+
+		at1 =
+			ve.getOffsetAt( 0, x );
+
+		space.setCaret(
 			{
 				path : ve.textPath,
 				at1  : at1
@@ -754,8 +757,10 @@ Para.prototype.keyEnd =
 	if( caret.sign.at1 === this.twig.text.length )
 		{ return false; }
 
-	shell.setCaret(
-		'space',
+	var space =
+		shell.$space;
+
+	space.setCaret(
 		{
 			path : this.textPath,
 			at1  : this.twig.text.length
@@ -814,7 +819,8 @@ Para.prototype.keyLeft =
 
 	if( r > 0 )
 	{
-		var ve = doc.atRank( r - 1 );
+		var ve =
+			doc.atRank( r - 1 );
 
 		space.setCaret(
 			{
@@ -880,6 +886,7 @@ Para.prototype.keyRight =
 				at1  : caret.sign.at1 + 1
 			}
 		);
+
 		return true;
 	}
 
@@ -887,7 +894,8 @@ Para.prototype.keyRight =
 
 	if( r < doc.twig.length - 1 )
 	{
-		var ve = doc.atRank( r + 1 );
+		var ve =
+			doc.atRank( r + 1 );
 
 		space.setCaret(
 			{
@@ -1004,7 +1012,10 @@ Para.prototype.specialKey =
 
 	// TODO similar item, doc, hand it properly instead of regetting them.
 	var item =
-		space.getSub( this.path, 'Item' );
+		space.getSub(
+			this.path,
+			'Item'
+		);
 
 	var doc =
 		item.$sub.doc;
@@ -1034,12 +1045,24 @@ Para.prototype.specialKey =
 					}
 				);
 
-				select.active = true;
-				space.setCaret( select.sign2 );
-				system.setInput( select.innerText() );
+				select.active =
+					true;
+
+				space.setCaret(
+					select.sign2
+				);
+
+				system.setInput(
+					select.innerText( )
+				);
+
 				caret.show( );
+
 				item.poke( );
-				shell.redraw = true;
+
+				shell.redraw =
+					true;
+
 				return true;
 		}
 	}
@@ -1057,19 +1080,30 @@ Para.prototype.specialKey =
 			case 'right'     :
 			case 'up'        :
 				select.deselect( );
-				show = true;
+
+				show =
+					true;
+
 				break;
 
 			case 'backspace' :
 			case 'del'       :
 				select.remove( );
-				show = true;
+
+				show =
+					true;
+
 				key = null;
+
 				break;
 
 			case 'enter'     :
+
 				select.remove( );
-				show = true;
+
+				show =
+					true;
+
 				break;
 		}
 	}
@@ -1084,8 +1118,12 @@ Para.prototype.specialKey =
 			case 'pos1'     :
 			case 'right'    :
 			case 'up'       :
-				select.sign1 = caret.sign;
-				show = true;
+				select.sign1 =
+					caret.sign;
+
+				show =
+					true;
+
 				item.poke( );
 		}
 	}
@@ -1093,47 +1131,128 @@ Para.prototype.specialKey =
 	switch( key )
 	{
 		case 'backspace' :
-			show = this.keyBackspace( item, doc, caret ) || show;
+
+			show =
+				this.keyBackspace(
+					item,
+					doc,
+					caret
+				) || show;
+
 			break;
 
 		case 'enter' :
-			show = this.keyEnter( item, doc, caret ) || show;
+
+			show =
+				this.keyEnter(
+					item,
+					doc,
+					caret
+				) || show;
+
 			break;
 
 		case 'pageup' :
+
 			item.scrollPage( true );
+
 			break;
 
 		case 'pagedown' :
+
 			item.scrollPage( false );
+
 			break;
 
 		case 'down' :
-			show = this.keyDown( item, doc, caret ) || show;
+
+			show =
+				this.keyDown(
+					item,
+					doc,
+					caret
+				)
+				||
+				show;
+
 			break;
 
 		case 'end' :
-			show = this.keyEnd( item, doc, caret ) || show;
+
+			show =
+				this.keyEnd(
+					item,
+					doc,
+					caret
+				)
+				||
+				show;
+
 			break;
 
 		case 'left' :
-			show = this.keyLeft( item, doc, caret ) || show;
+
+			show =
+				this.keyLeft(
+					item,
+					doc,
+					caret
+				)
+				||
+				show;
+
 			break;
 
 		case 'pos1'  :
-			show = this.keyPos1( item, doc, caret ) || show;
+
+			show =
+				this.keyPos1(
+					item,
+					doc,
+					caret
+				)
+				||
+				show;
+
 			break;
 
 		case 'right' :
-			show = this.keyRight( item, doc, caret ) || show;
+
+			show =
+				this.keyRight(
+					item,
+					doc,
+					caret
+				)
+				||
+				show;
+
 			break;
 
 		case 'up' :
-			show = this.keyUp( item, doc, caret ) || show;
+
+			show =
+				this.keyUp(
+					item,
+					doc,
+					caret
+				)
+				||
+				show;
+
 			break;
 
 		case 'del' :
-			show = this.keyDel( item, doc, caret ) || show;
+
+			show =
+				this.keyDel(
+					item,
+					doc,
+					caret
+				)
+				||
+				show;
+
 			break;
 	}
 
@@ -1141,17 +1260,28 @@ Para.prototype.specialKey =
 	{
 		switch( key )
 		{
-			case 'end'   :
-			case 'pos1'  :
-			case 'left'  :
-			case 'up'    :
+			case 'end' :
+			case 'pos1' :
+			case 'left' :
+			case 'up' :
 			case 'right' :
-			case 'down'  :
-				select.active = true;
-				select.sign2 = caret.sign;
-				system.setInput( select.innerText( ) );
-				item.poke();
-				shell.redraw = true;
+			case 'down' :
+
+				select.active =
+					true;
+
+				select.sign2 =
+					caret.sign;
+
+				system.setInput(
+					select.innerText( )
+				);
+
+				item.poke( );
+
+				shell.redraw =
+					true;
+
 				break;
 		}
 	}
@@ -1159,9 +1289,13 @@ Para.prototype.specialKey =
 	if( show )
 	{
 		item.poke( );
+
 		item.scrollCaretIntoView( );
+
 		caret.show( );
-		shell.redraw = true;
+
+		shell.redraw =
+			true;
 	}
 };
 
@@ -1185,9 +1319,14 @@ Jools.lazyFixate(Para.prototype, 'textPath',
 */
 Para.prototype.update = function( twig )
 {
-	this.twig    = twig;
-	this.$flow   = null;
-	this.$fabric = null;
+	this.twig =
+		twig;
+
+	this.$flow =
+		null;
+
+	this.$fabric =
+		null;
 };
 
 
