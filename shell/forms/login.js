@@ -65,10 +65,10 @@ var loginButton =
 		70,
 
 	w :
-		470,
+		95,
 
 	n :
-		180
+		28
 };
 
 loginButton.xm =
@@ -90,10 +90,10 @@ var closeButton =
 		50,
 
 	w :
-		550,
+		175,
 
 	n :
-		190
+		38
 };
 
 closeButton.xm =
@@ -129,13 +129,13 @@ Login.prototype.layout =
 						'Point',
 
 					anchor :
-						'nw',
+						'c',
 
 					x :
-						150,
+						-225,
 
 					y :
-						50
+						-112
 				}
 			},
 
@@ -156,13 +156,13 @@ Login.prototype.layout =
 						'Point',
 
 					anchor :
-						'nw',
+						'c',
 
 					x :
-						200,
+						-175,
 
 					y :
-						113
+						-49
 				}
 			},
 
@@ -183,13 +183,13 @@ Login.prototype.layout =
 						'Point',
 
 					anchor :
-						'nw',
+						'c',
 
 					x :
-						200,
+						-175,
 
 					y :
-						153
+						-9
 				}
 			},
 
@@ -233,13 +233,13 @@ Login.prototype.layout =
 							'Point',
 
 						anchor :
-							'nw',
+							'c',
 
 						x :
-							295,
+							-80,
 
 						y :
-							95
+							-67
 					},
 
 					pse :
@@ -248,13 +248,13 @@ Login.prototype.layout =
 							'Point',
 
 						anchor :
-							'nw',
+							'c',
 
 						x :
-							505,
+							130,
 
 						y :
-							121
+							-41
 					}
 				}
 			},
@@ -299,13 +299,13 @@ Login.prototype.layout =
 							'Point',
 
 						anchor :
-							'nw',
+							'c',
 
 						x :
-							295,
+							-80,
 
 						y :
-							135
+							-27
 					},
 
 					pse :
@@ -314,13 +314,13 @@ Login.prototype.layout =
 							'Point',
 
 						anchor :
-							'nw',
+							'c',
 
 						x :
-							505,
+							130,
 
 						y :
-							161
+							-1
 					}
 				}
 			},
@@ -356,7 +356,7 @@ Login.prototype.layout =
 							'Point',
 
 						anchor :
-							'nw',
+							'c',
 
 						x :
 							loginButton.w,
@@ -371,7 +371,7 @@ Login.prototype.layout =
 							'Point',
 
 						anchor :
-							'nw',
+							'c',
 
 						x :
 							loginButton.w + loginButton.width,
@@ -641,7 +641,7 @@ Login.prototype.layout =
 							'Point',
 
 						anchor :
-							'nw',
+							'c',
 
 						x :
 							closeButton.w,
@@ -656,7 +656,7 @@ Login.prototype.layout =
 							'Point',
 
 						anchor :
-							'nw',
+							'c',
 
 						x :
 							closeButton.w + closeButton.width,
@@ -914,5 +914,34 @@ Login.prototype.layout =
 */
 Login.prototype.name =
 	'login';
+
+/*
+| A button of the form has been pushed.
+*/
+Login.prototype.pushButton =
+	function(
+		buttonName
+		// shift,
+		// ctrl
+	)
+{
+	switch( buttonName )
+	{
+		case 'loginButton' :
+
+			break;
+
+		case 'closeButton' :
+
+			shell.bridge.changeMode( 'Normal' );
+
+			break;
+
+		default :
+		
+			throw new Error( 'unknown button pushed: ' + buttonName );
+	}
+}
+
 
 } )( );

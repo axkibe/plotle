@@ -49,15 +49,19 @@ var MainDisc = Disc.MainDisc =
 		screensize
 	)
 {
-	this.name  = 'main';
+	this.name =
+		'main';
 
-	this.createDisc = new Disc.CreateDisc(
-		screensize
-	);
+	this.createDisc =
+		new Disc.CreateDisc(
+			screensize
+		);
 
-	this.screensize = screensize;
+	this.screensize =
+		screensize;
 
-	var style = theme.disc.main;
+	var style =
+		theme.disc.main;
 
 	var width =
 		this.width =
@@ -73,35 +77,38 @@ var MainDisc = Disc.MainDisc =
 	var eh =
 		style.ellipse.height;
 
-	this.pnw = new Euclid.Point(
-		0,
-		Jools.half( this.screensize.y - this.height )
-	);
-
-	this.pse = this.pnw.add(
-		width,
-		height
-	);
-
-	this.silhoutte = new Euclid.Ellipse(
+	this.pnw =
 		new Euclid.Point(
-			width - 1 - ew,
-			0 - Jools.half( eh - height )
-		),
-		new Euclid.Point(
-			width - 1,
-			height + Jools.half( eh - height )
-		),
-		'gradientPC',
-			new Euclid.Point(
-				-600,
-				Jools.half( height )
-			),
-		'gradientR0',
 			0,
-		'gradientR1',
-			650
-	);
+			Jools.half( this.screensize.y - this.height )
+		);
+
+	this.pse =
+		this.pnw.add(
+			width,
+			height
+		);
+
+	this.silhoutte =
+		new Euclid.Ellipse(
+			new Euclid.Point(
+				width - 1 - ew,
+				0 - Jools.half( eh - height )
+			),
+			new Euclid.Point(
+				width - 1,
+				height + Jools.half( eh - height )
+			),
+			'gradientPC',
+				new Euclid.Point(
+					-600,
+					Jools.half( height )
+				),
+			'gradientR0',
+				0,
+			'gradientR1',
+				650
+		);
 
 
 	this.buttons =
@@ -173,9 +180,30 @@ var MainDisc = Disc.MainDisc =
 			}
 		);
 
+	// makes signup/login invisible until the
+	// start up Auth request is answered.
+
+	this.buttons.login.setVisibility(
+		inherit ?
+			inherit.buttons.login.isVisible( ) :
+			false
+	);
+
+	this.buttons.signup.setVisibility(
+		inherit ?
+			inherit.buttons.signup.isVisible( ) :
+			false
+	);
+
 	this.$hover = inherit ?
 		inherit.$hover :
 		null;
+
+	this.$user =
+		null;
+
+	this._$loggedIn =
+		false;
 };
 
 
@@ -186,7 +214,8 @@ var MainDisc = Disc.MainDisc =
 MainDisc.prototype.knock =
 	function( )
 {
-	this.$fabric = null;
+	this.$fabric =
+		null;
 };
 
 
@@ -196,17 +225,20 @@ MainDisc.prototype.knock =
 MainDisc.prototype._weave =
 	function( )
 {
-	var fabric = this.$fabric;
+	var fabric =
+		this.$fabric;
 
 	if( fabric && !config.debug.noCache )
 	{
 		return fabric;
 	}
 
-	fabric = this.$fabric = new Euclid.Fabric(
-		this.width,
-		this.height
-	);
+	fabric =
+	this.$fabric =
+		new Euclid.Fabric(
+			this.width,
+			this.height
+		);
 
 	fabric.fill(
 		theme.disc.main.fill,
@@ -215,11 +247,13 @@ MainDisc.prototype._weave =
 		Euclid.View.proper
 	);
 
-	var buttons = this.buttons;
+	var buttons =
+		this.buttons;
 
 	for( var name in this.buttons )
 	{
-		var button = buttons[ name ];
+		var button =
+			buttons[ name ];
 
 		button.draw(
 			fabric,
@@ -302,7 +336,17 @@ MainDisc.prototype.pushButton =
 		buttonName
 	)
 {
-	var bridge = shell.bridge;
+	var bridge =
+		shell.bridge;
+
+	if(
+		buttonName === 'login' &&
+		this._$loggedIn
+	)
+	{
+		shell.logout( );
+		return;
+	}
 
 	bridge.changeMode(
 		this.getModeOfButton(
@@ -310,7 +354,8 @@ MainDisc.prototype.pushButton =
 		)
 	);
 
-	var action = bridge.action( );
+	var action =
+		bridge.action( );
 
 	if( buttonName === 'remove' )
 	{
@@ -637,6 +682,53 @@ MainDisc.prototype.setCurSpace =
 	)
 {
 	console.log( 'TODO setCurSpace():', space, access );
+};
+
+
+/*
+| Displays the current user
+| Adapts login/logout/signup button
+*/
+MainDisc.prototype.setUser =
+	function(
+		user
+	)
+{
+	this.$user
+		= user;
+		
+	this.buttons.login.setVisibility( true );
+	
+	if( user.substr( 0, 5 ) !== 'visit' )
+	{
+		this._$loggedIn =
+			true;
+
+		this.buttons.signup.setVisibility( false );
+
+		this.buttons.login.setText(
+			[
+				'log',
+				'out'
+			]
+		);
+	}
+	else
+	{
+		this._$loggedOut =
+			true;
+
+		this.buttons.signup.setVisibility( true );
+
+		this.buttons.login.setText(
+			[
+				'log',
+				'in'
+			]
+		);
+	}
+
+	this.poke( );
 };
 
 

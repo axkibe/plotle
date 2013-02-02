@@ -459,7 +459,9 @@ var matches =
 	)
 {
 	if( twig1 === twig2 )
-		{ return true; }
+	{
+		return true;
+	}
 
 	// numbers or strings would have matched before
 	switch( twig1.constructor )
@@ -476,19 +478,38 @@ var matches =
 		twig1 === null ||
 		twig2 === null
 	)
-		{ return false; }
+	{
+		return false;
+	}
 
-	var k1 = Object.keys( twig1 );
-	var k2 = Object.keys( twig2 );
+	var k1 =
+		Object.keys( twig1 );
+
+	var k2 =
+		Object.keys( twig2 );
 
 	if( k1.length !== k2.length )
-		{ return false; }
+	{
+		return false;
+	}
 
-	for( var a = 0, aZ = k1.length; a < aZ; a++ )
+	for(
+		var a = 0, aZ = k1.length;
+		a < aZ;
+		a++
+	)
 	{
 		var k = k1[ a ];
-		if( !matches( twig1[ k ], twig2[ k ] ) )
-			{ return false; }
+
+		if(
+			!matches(
+				twig1[ k ],
+				twig2[ k ]
+			)
+		)
+		{
+			return false;
+		}
 	}
 
 	return true;
@@ -506,10 +527,12 @@ var _pushpad =
 	)
 {
 	if( n < 10 )
-		{ a.push('0'); }
+	{
+		a.push( '0' );
+	}
 
-	a.push(n);
-	a.push(s);
+	a.push( n );
+	a.push( s );
 
 	return a;
 };
@@ -522,13 +545,14 @@ var _pushpad =
 var _timestamp =
 	function( a )
 {
-	var now = new Date( );
+	var now =
+		new Date( );
 
-	_pushpad( a, now.getMonth() + 1, '-' );
-	_pushpad( a, now.getDate(),      ' ' );
-	_pushpad( a, now.getHours(),     ':' );
-	_pushpad( a, now.getMinutes(),   ':' );
-	_pushpad( a, now.getSeconds(),   ' ' );
+	_pushpad( a, now.getMonth( ) + 1, '-' );
+	_pushpad( a, now.getDate( ),      ' ' );
+	_pushpad( a, now.getHours( ),     ':' );
+	_pushpad( a, now.getMinutes( ),   ':' );
+	_pushpad( a, now.getSeconds( ),   ' ' );
 
 	return a;
 };
@@ -544,7 +568,9 @@ var _pushindent =
 	)
 {
 	for( var i = 0; i < indent; i++ )
-		{ a.push('  '); }
+	{
+		a.push( '  ' );
+	}
 };
 
 
@@ -715,7 +741,8 @@ var _inspect =
 				if (puffed) _pushindent(indent + 1, array);
 				array.push(k, ': ');
 
-				if (k === 'parent') {
+				if ( k === 'parent' )
+				{
 					array.push('###');
 					continue;
 				}
@@ -767,15 +794,17 @@ var log =
 
 	if( category !== true )
 	{
-		a.push('(');
-		a.push(category);
-		a.push(') ');
+		a.push( '(' );
+		a.push( category );
+		a.push( ') ' );
 	}
 
 	for( var i = 1; i < arguments.length; i++ )
 	{
 		if( i > 1 )
-			{ a.push(' '); }
+		{
+			a.push(' ');
+		}
 
 		_inspect(
 			arguments[ i ],
@@ -797,16 +826,21 @@ var log =
 function debug( )
 {
 	if( !config.log.debug )
-		{ return; }
+	{
+		return;
+	}
 
-	var a = _timestamp( [ ] );
+	var a =
+		_timestamp( [ ] );
 
 	a.push( '(debug) ' );
 
 	for( var i = 0; i < arguments.length; i++ )
 	{
 		if (i > 0)
-			{ a.push(' '); }
+		{
+			a.push(' ');
+		}
 
 		_inspect(
 			arguments[ i ],
@@ -854,26 +888,46 @@ var immute =
 		return obj;
 	}
 
-	var names = Object.getOwnPropertyNames( obj );
+	var names =
+		Object.getOwnPropertyNames( obj );
 
-	for( var a = 0, aZ = names.length; a < aZ; a++ )
+	for(
+		var a = 0, aZ = names.length;
+		a < aZ; 
+		a++
+	)
 	{
-		var desc = Object.getOwnPropertyDescriptor(
-			obj,
-			names[ a ]
-		);
+		var name =
+			names[ a ];
+
+		if(
+			name.substring( 0, 1 ) === '$' ||
+			name.substring( 0, 2 ) === '_$'
+		)
+		{
+			continue;
+		}
+
+		var desc =
+			Object.getOwnPropertyDescriptor(
+				obj,
+				names[ a ]
+			);
 
 		if( !desc.configurable )
 		{
 			continue;
 		}
 
-		desc.configurable = false;
-		desc.writable = false;
+		desc.configurable =
+			false;
+
+		desc.writable =
+			false;
 
 		Object.defineProperty(
 			obj,
-			names[ a ],
+			name,
 			desc
 		);
 	}

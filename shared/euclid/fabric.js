@@ -28,6 +28,8 @@ var Jools;
 /*
 | Constructor.
 |
+| TODO: change to free strings
+|
 | Fabric( )         -or-    creates a new fabric
 | Fabric( canvas )  -or-    encloses an existing HTML5 canvas
 | Fabric( width, height )   creates a new fabric and sets its size;
@@ -259,10 +261,14 @@ Fabric.prototype.drawImage =
 
 	var x, y, composite, alpha;
 
-	var is = Jools.is;
+	var is =
+		Jools.is;
 
-	var a = 0;
-	var aZ = arguments.length;
+	var a =
+		0;
+
+	var aZ =
+		arguments.length;
 
 	while( a < aZ )
 	{

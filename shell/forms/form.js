@@ -51,17 +51,51 @@ Forms.Form =
 		// free strings
 	)
 {
-	var fabric =
-	this.fabric =
-		system.fabric;
+	var inherit =
+		null;
+
+	this.screensize =
+		null;
+
+	var a =
+		0;
+
+	var aZ =
+		arguments.length;
+
+	while( a < aZ )
+	{
+		var arg =
+			arguments[ a++ ];
+
+		switch( arg )
+		{
+
+			case 'inherit' :
+
+				inherit =
+					arguments[ a++ ];
+
+				continue;
+
+			case 'screensize' :
+
+				this.screensize =
+					arguments[ a++ ];
+
+				continue;
+
+			default :
+
+				throw new Error( 'unknown argument: ' + arg );
+
+		}
+	}
 
 	this.iframe =
 		new Euclid.Rect(
 			'pse',
-			new Euclid.Point(
-				fabric.width,
-				fabric.height
-			)
+			this.screensize
 		);
 
 	var tree =
@@ -87,9 +121,6 @@ Forms.Form =
 	// all components of the form
 	this.$sub =
 		{ };
-
-	var inherit =
-		null;
 
 	// the component the pointer is hovering above
 	this.$hover =
@@ -120,6 +151,8 @@ Forms.Form =
 				inherit && inherit.$sub[ name ]
 			);
 	}
+
+	Jools.immute( this );
 };
 
 
@@ -223,8 +256,8 @@ Form.prototype.getFocus =
 Form.prototype.knock =
 	function( )
 {
-	this.$fabric =
-		null;
+//	this.$fabric =
+//		null;
 
 	for( var c in this.$sub )
 	{
@@ -272,7 +305,8 @@ Panel.prototype._weave =
 Form.prototype.draw =
 	function(  )
 {
-	var fabric = this.fabric;
+	var fabric =
+		shell.fabric;
 
 	fabric.paint(
 		theme.forms.style,
@@ -378,7 +412,7 @@ Form.prototype.pointingHover =
 
 	var layout =
 		this.tree.root;
-	
+
 	var ranks =
 		layout.ranks;
 
@@ -616,8 +650,8 @@ Form.prototype.specialKey =
 Form.prototype.poke =
 	function( )
 {
-	this.$fabric =
-		null;
+//	this.$fabric =
+//		null;
 
 	shell.redraw =
 		true;
@@ -762,6 +796,17 @@ Form.prototype.systemBlur =
 
 
 /*
+| A button of the form has been pushed.
+*/
+Form.prototype.pushButton =
+	function(
+		buttonName
+	)
+{
+	throw new Error( 'pushButton should be overloaded!' );
+}
+
+/*
 | Blinks the caret (if shown)
 */
 Form.prototype.blink =
@@ -779,12 +824,14 @@ Form.prototype._getCaretEntity =
 		path
 	)
 {
-	if( path.length !== 2 ) {
-		throw new Error('Form._getCaretEntity, path.length expected to be 1');
+	if( path.length !== 2 )
+	{
+		throw new Error( 'path.length expected to be 1' );
 	}
 
-	if( path.get( 0 ) !== this.name ) {
-		throw new Error('Caret path mismatch');
+	if( path.get( 0 ) !== this.name )
+	{
+		throw new Error( 'caret path mismatch' );
 	}
 
 	return this.$sub[ path.get( 1 ) ];

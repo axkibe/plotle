@@ -45,11 +45,15 @@ if( typeof( window ) === 'undefined')
 |	name
 |		the name of the label
 */
-var DiscButton = Disc.DiscButton =
+var DiscButton =
+Disc.DiscButton =
 	function( )
 {
-	var a = 0;
-	var aZ = arguments.length;
+	var a =
+		0;
+
+	var aZ =
+		arguments.length;
 
 	var disc;
 	var name;
@@ -152,6 +156,11 @@ var DiscButton = Disc.DiscButton =
 			);
 	}
 
+	this._$visible =
+		true;
+
+	this._$text =
+		style.text;
 
 	Jools.immute( this );
 };
@@ -167,12 +176,29 @@ DiscButton.prototype.draw =
 		hover
 	)
 {
+	if( !this._$visible ) {
+		return;
+	}
+
 	fabric.drawImage(
 		'image',
 			this._weave( active, hover ),
 		'pnw',
 			this.pnw
 	);
+};
+
+
+/*
+| Clears caches.
+*/
+DiscButton.prototype.poke =
+	function(
+	)
+{
+	// TODO remove cache
+
+	this.disc.poke( );
 };
 
 
@@ -247,6 +273,47 @@ DiscButton.prototype._weave =
 	return fabric;
 };
 
+/*
+| Sets the button in/visible.
+*/
+DiscButton.prototype.setVisibility =
+	function(
+		visible
+	)
+{
+	this._$visible
+		= visible;
+};
+
+/*
+| Returns visibility status.
+*/
+DiscButton.prototype.isVisible =
+	function( )
+{
+	return this._$visible;
+};
+
+
+/*
+| Sets the buttons text.
+*/
+DiscButton.prototype.setText =
+	function(
+		text
+	)
+{
+	if( this._$text === text )
+	{
+		return;
+	}
+
+	this._$text
+		= text;
+
+	this.poke( );
+}
+
 
 /*
 | Draws the buttons icon.
@@ -260,7 +327,7 @@ DiscButton.prototype.drawIcon =
 		this._style;
 
 	var text =
-		style.text;
+		this._$text;
 
 	var textAnchor =
 		style.textAnchor;
@@ -345,8 +412,11 @@ DiscButton.prototype.pointingHover =
 		p
 	)
 {
-	var pnw = this.pnw;
-	var pse = this.pse;
+	var pnw =
+		this.pnw;
+
+	var pse =
+		this.pse;
 
 	if(
 		p === null  ||
@@ -359,8 +429,11 @@ DiscButton.prototype.pointingHover =
 		return null;
 	}
 
-	var fabric = this._weave( false );
-	var pp = p.sub( this.pnw );
+	var fabric =
+		this._weave( false );
+
+	var pp =
+		p.sub( this.pnw );
 
 	if(
 		!fabric.withinSketch(
@@ -473,8 +546,11 @@ DiscButton.prototype.sketchRemoveIcon =
 		// twist
 	)
 {
-	var w = 11;
-	var h = 11;
+	var w =
+		11;
+
+	var h =
+		11;
 
 	// zone
 	var wx = 17;

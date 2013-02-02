@@ -9,7 +9,8 @@
 | Export
 
 */
-var theme = null;
+var theme =
+	null;
 
 
 /*

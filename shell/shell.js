@@ -84,20 +84,27 @@ Shell =
 	this.$space =
 		null;
 
+	var screensize =
+	this.screensize =
+		new Euclid.Point(
+			fabric.width,
+			fabric.height
+		);
+
 	this.$forms =
 		{
 			login :
-				new Forms.Login( )
+				new Forms.Login(
+					'screensize',
+						screensize
+				)
 		};
 
 	// TODO mark as private
 	this.$disc =
 		new Disc.MainDisc(
 			null,
-			new Euclid.Point(
-				fabric.width,
-				fabric.height
-			)
+			screensize
 		);
 
 	// TODO remove
@@ -496,6 +503,21 @@ Shell.prototype.getCurrentDisplay =
 	{
 		case 'Login' :
 
+			if(
+				!this.screensize.eq(
+					this.$forms.login.screensize
+				)
+			)
+			{
+				this.$forms.login =
+					new Forms.Login(
+						'inherit',
+							this.$forms.login,
+						'screensize',
+							this.screensize
+					);
+			}
+
 			return this.$forms.login;
 
 		default :
@@ -518,6 +540,9 @@ Shell.prototype.pointingHover =
 	{
 		return;
 	}
+
+
+	// TODO make an $hover object
 
 	this.$hoverP =
 		p;
@@ -849,7 +874,7 @@ Shell.prototype.mousewheel =
 		ctrl
 	)
 {
-	if (this.green)
+	if( this.green )
 	{
 		return;
 	}
@@ -952,13 +977,18 @@ Shell.prototype.resize =
 		height
 	)
 {
+	var screensize =
+	this.screensize =
+		new Euclid.Point(
+			width,
+			height
+		);
+
+	// TODO only when changed
 	this.$disc =
 		new Disc.MainDisc(
 			this.$disc,
-			new Euclid.Point(
-				width,
-				height
-			)
+			screensize
 		);
 
 	this._draw( );
@@ -974,7 +1004,8 @@ Shell.prototype.setUser =
 		passhash
 	)
 {
-	this.$user = user;
+	this.$user =
+		user;
 
 	this.peer.setUser(
 		user,
@@ -1014,7 +1045,9 @@ Shell.prototype.setUser =
 		);
 	}
 
-	this.$disc.poke( );
+	this.$disc.setUser(
+		user
+	);
 };
 
 
@@ -1187,6 +1220,7 @@ Shell.prototype.onAuth =
 
 		// if even that failed, bailing to greenscreen
 		this.greenscreen( res.message );
+
 		return;
 	}
 
@@ -1209,6 +1243,40 @@ Shell.prototype.getCaret =
 	function( )
 {
 	return this.getCurrentDisplay( ).$caret;
+};
+
+
+/*
+| Logs out the current user
+*/
+Shell.prototype.logout =
+	function( )
+{
+	var self =
+		this;
+
+	this.peer.logout(
+		function( res )
+		{
+			if(! res.ok )
+			{
+				self.greenscreen(
+					'Cannot logout: ' + res.message
+				);
+
+				return;
+			}
+
+			self.setUser(
+				res.user,
+				res.passhash
+			);
+
+			self.moveToSpace( null );
+
+			self.poke( );
+		}
+	);
 };
 
 
