@@ -133,7 +133,7 @@ Forms.Form =
 		root.ranks;
 
 	for(
-		var a = 0, aZ = ranks.length;
+		a = 0, aZ = ranks.length;
 		a < aZ;
 		a++
 	)
@@ -804,7 +804,7 @@ Form.prototype.pushButton =
 	)
 {
 	throw new Error( 'pushButton should be overloaded!' );
-}
+};
 
 /*
 | Blinks the caret (if shown)

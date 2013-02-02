@@ -1,9 +1,7 @@
 /*
-|
 | The tree is Meshcraft's basic data structure.
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
@@ -18,7 +16,8 @@ var Twig;
 /*
 | Exports
 */
-var Tree;
+var Tree
+	= null;
 
 
 /*
@@ -33,29 +32,44 @@ var Tree;
 */
 if( typeof( window ) === 'undefined' )
 {
-	Jools = require( './jools' );
-	Path  = require( './path'  );
-	Twig  = require( './twig'  );
+	Jools =
+		require( './jools' );
+
+	Path =
+		require( './path' );
+
+	Twig =
+		require( './twig' );
 }
 
 
 /*
 | Constructor.
 */
-Tree = function( root, pattern )
+Tree =
+	function(
+		root,
+		pattern
+	)
 {
-	if( !Jools.isnon (pattern ) )
-		{ throw new Error('aFail'); }
+	if( !Jools.isnon( pattern ) )
+	{
+		throw new Error('fail');
+	}
 
-	this.pattern = pattern;
-	this.root = this.grow( root );
+	this.pattern =
+		pattern;
+
+	this.root =
+		this.grow( root );
 };
 
 
 /*
-| Returns the pattern for object o
+| Returns the pattern for object o.
 */
-Tree.prototype.getPattern = function( o )
+Tree.prototype.getPattern =
+	function( o )
 {
 	return this.pattern[ Twig.getType( o ) ];
 };
@@ -76,54 +90,84 @@ Tree.prototype.getPattern = function( o )
 |    '--', count         shortens an array by count.
 |    '++', values...     for an array everything after '++' is extended.
 */
-Tree.prototype.grow = function(model /*, ... */)
+Tree.prototype.grow =
+	function(
+		model //,
+		// ...
+	)
 {
-	var a, aZ = arguments.length;
+	var a;
+
+	var aZ =
+		arguments.length;
 
 	// nothing to do?
-	if (model._$grown && aZ === 1)
-		{ return model; }
+	if( model._$grown && aZ === 1 )
+	{
+		return model;
+	}
 
 	var twig, k, k1, k2, val, vtype;
 
-	var ttype = Twig.getType( model );
+	var ttype =
+		Twig.getType( model );
 
 	Jools.log( 'grow', ttype, arguments );
 
 	var pattern = this.pattern[ ttype ];
+
 	if( !pattern )
-		{ throw Jools.reject( 'cannot grow type: ' + ttype ); }
-
-	// copies the model
-	twig = Jools.copy( model, new Twig( ) );
-
-	if (pattern.copse)
 	{
-		twig.copse = model.copse ? Jools.copy( model.copse, { } ) : { };
+		throw Jools.reject( 'cannot grow type: ' + ttype );
 	}
 
-	if (pattern.ranks)
+	// copies the model
+	twig =
+		Jools.copy(
+			model,
+			new Twig( )
+		);
+
+	if( pattern.copse )
 	{
-		twig.ranks = model.ranks ? model.ranks.slice( ) : [ ];
+		twig.copse =
+			model.copse ?
+				Jools.copy( model.copse, { } ) :
+				{ };
+	}
+
+	if( pattern.ranks )
+	{
+		twig.ranks =
+			model.ranks ?
+				model.ranks.slice( ) :
+				[ ];
 	}
 
 	// applies changes specified by the arguments
 	a = 1;
+
 	while(
 		a < aZ &&
 		arguments[a] !== '++' &&
 		arguments[a] !== '--'
 	)
 	{
-		k  = arguments[ a ];
-		k1 = arguments[ a + 1 ];
+		k =
+			arguments[ a ];
+
+		k1 =
+			arguments[ a + 1 ];
+
 		switch( k )
 		{
 			case '+' :
+
 				if( !pattern.ranks )
 				{
 					throw Jools.reject( '"+": ' + ttype + ' has no ranks' );
 				}
+
 				k2 = arguments[ a + 2 ];
 
 				if( !Jools.isInteger( k1 ) )
@@ -136,8 +180,10 @@ Tree.prototype.grow = function(model /*, ... */)
 					throw Jools.reject( '"+": value must be a String' );
 				}
 
-				twig.ranks.splice(k1, 0, k2);
+				twig.ranks.splice( k1, 0, k2 );
+
 				a += 3;
+
 				break;
 
 			case '-' :

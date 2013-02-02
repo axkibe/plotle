@@ -1,39 +1,46 @@
 /*
-|
 | Meshcraft tree patterns.
 |
 | Authors: Axel Kittenberger
-|
 */
 
-/**
+
+/*
 | Imports
 */
 var Euclid;
 var Jools;
 
-/**
+
+/*
 | Exports
 */
 var Meshverse;
 
-/**
+
+/*
 | Capsule
 */
-(function () {
+( function( ) {
 "use strict";
 
 // node imports
-if (typeof (window) === 'undefined') {
+if( typeof( window ) === 'undefined')
+{
 	Euclid = {
-		Point  : require('./euclid/point'),
-		Rect   : require('./euclid/rect')
+		Point :
+			require('./euclid/point'),
+
+		Rect :
+			require('./euclid/rect')
 	};
 
-	Jools  = require('./jools');
+	Jools =
+		require('./jools');
 }
 
-/**
+
+/*
 | The meshcraft universe
 */
 Meshverse =
@@ -42,21 +49,35 @@ Meshverse =
 	{
 		copse :
 		{
-			'Label'    : true,
-			'Note'     : true,
-			'Portal'   : true,
-			'Relation' : true
+			'Label' :
+				true,
+
+			'Note' :
+				true,
+
+			'Portal' :
+				true,
+
+			'Relation' :
+				true
 		},
-		ranks : true
+
+		ranks :
+			true
 	},
 
 	'Note' :
 	{
 		must :
 		{
-			'doc'      : 'Doc',
-			'zone'     : 'Rect',
-			'fontsize' : 'Number'
+			'doc' :
+				'Doc',
+
+			'zone' :
+				'Rect',
+
+			'fontsize' :
+				'Number'
 		}
 	},
 
@@ -64,9 +85,14 @@ Meshverse =
 	{
 		must :
 		{
-			'zone'      : 'Rect',
-			'spaceUser' : 'String',
-			'spaceTag'  : 'String'
+			'zone' :
+				'Rect',
+
+			'spaceUser' :
+				'String',
+
+			'spaceTag' :
+				'String'
 		}
 	},
 
@@ -74,9 +100,14 @@ Meshverse =
 	{
 		must :
 		{
-			'doc'      : 'Doc',
-			'pnw'      : 'Point',
-			'fontsize' : 'Number'
+			'doc' :
+				'Doc',
+
+			'pnw' :
+				'Point',
+
+			'fontsize' :
+				'Number'
 		}
 	},
 
@@ -84,37 +115,58 @@ Meshverse =
 	{
 		must :
 		{
-			'doc'      : 'Doc',
-			'pnw'      : 'Point',
-			'item1key' : 'Key',
-			'item2key' : 'Key',
-			'fontsize' : 'Number'
+			'doc' :
+				'Doc',
+
+			'pnw' :
+				'Point',
+
+			'item1key' :
+				'Key',
+
+			'item2key' :
+				'Key',
+
+			'fontsize' :
+				'Number'
 		}
 	},
 
 	'Doc' :
 	{
-		copse : { 'Para' : true },
-		ranks : true
+		copse :
+		{
+			'Para' :
+				true
+		},
+
+		ranks :
+			true
 	},
 
 	'Para' :
 	{
-		must : { 'text' : 'String' }
+		must : {
+			'text' :
+				'String'
+		}
 	},
 
 	'Rect' :
 	{
 		creator :
-		function(t)
-		{
-			return new Euclid.Rect( 'o', t );
-		},
+			function( t )
+			{
+				return new Euclid.Rect( 'o', t );
+			},
 
 		must :
 		{
-			'pnw' : 'Point',
-			'pse' : 'Point'
+			'pnw' :
+				'Point',
+
+			'pse' :
+				'Point'
 		}
 	},
 
@@ -123,54 +175,74 @@ Meshverse =
 		creator :
 			function(t)
 			{
-				return new Euclid.Point(t.x, t.y);
+				return new Euclid.Point(
+					t.x,
+					t.y
+				);
 			},
 
 		must :
 		{
-			'x' : 'Integer',
-			'y' : 'Integer'
+			'x' :
+				'Integer',
+
+			'y' :
+				'Integer'
 		}
 	}
 };
 
-/**
+
+/*
 | Some sanity tests on the patterns.
 */
-(function(patterns)
+( function( patterns )
 {
-	for(var k in patterns)
+	for( var k in patterns )
 	{
-		var p = patterns[k];
+		var p =
+			patterns[ k ];
 
-		Jools.immute(p);
+		Jools.immute( p );
 
-		if (p.copse)
-			{ Jools.immute(p.copse); }
-
-		if (p.must)
-			{ Jools.immute(p.must); }
-
-		if (p.must)
+		if( p.copse )
 		{
-			if (p.copse)
-				{ throw new Error('Patterns must not have .must and .copse'); }
-
-			if (p.must.index)
-				{ throw new Error('indexOf must not be a must'); }
+			Jools.immute( p.copse );
 		}
 
-		if (p.ranks && !p.copse)
-				{ throw new Error('Patterns must not have .ranks without .copse'); }
+		if( p.must )
+		{
+			Jools.immute( p.must );
+		}
+
+		if( p.must )
+		{
+			if( p.copse )
+			{
+				throw new Error( 'Patterns must not have .must and .copse' );
+			}
+
+			if( p.must.index )
+			{
+				throw new Error( 'index must not be a must' );
+			}
+		}
+
+		if( p.ranks && !p.copse )
+		{
+			throw new Error( 'Patterns must not have .ranks without .copse' );
+		}
 	}
 
-})(Meshverse);
+} )( Meshverse );
 
 /*
 | Node export
 */
-if (typeof(window) === 'undefined')
-	{ module.exports = Meshverse; }
+if( typeof( window ) === 'undefined' )
+{
+	module.exports = Meshverse;
+}
 
-})();
+} )( );
 

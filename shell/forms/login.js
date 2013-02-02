@@ -18,7 +18,7 @@ Forms = Forms || { };
 var Euclid;
 var fontPool;
 var Jools;
-
+var shell;
 
 /*
 | Capsule
@@ -409,7 +409,7 @@ Login.prototype.layout =
 				},
 
 				// FIXME replace this by any shape.
-				curve :
+				shape :
 				{
 					type :
 						'Curve',
@@ -694,7 +694,7 @@ Login.prototype.layout =
 				},
 
 				// FIXME replace this by any shape.
-				curve :
+				shape :
 				{
 					type :
 						'Curve',
@@ -938,10 +938,76 @@ Login.prototype.pushButton =
 			break;
 
 		default :
-		
+
 			throw new Error( 'unknown button pushed: ' + buttonName );
 	}
-}
+};
 
+/*
+| Logins the user
+*/
+Login.prototype.login = function( )
+{
+	var sub =
+		this.$sub;
+
+	var errorLabel =
+		sub.errorLabel;
+
+/*
+	var user   = panSub.userI.getValue( );
+	var pass   = panSub.passI.getValue( );
+
+	if( user.length < 4 )
+	{
+		panel.$sub.errL.setText( 'Username too short, min. 4 characters' );
+		shell.setCaret(
+			'board',
+			{
+				path : new Path( [ 'LoginPanel', 'userI' ] ),
+				at1  : user.length
+			}
+		);
+
+		return;
+	}
+
+	if( user.substr( 0, 5 ) === 'visit' )
+	{
+		panel.$sub.errL.setText( 'Username must not start with "visit"' );
+		shell.setCaret(
+			'board',
+			{
+				path : new Path( [ 'LoginPanel', 'userI' ] ),
+				at1  : 0
+			}
+		);
+
+		return;
+	}
+
+	if( pass.length < 5 )
+	{
+		panel.$sub.errL.setText( 'Password too short, min. 5 characters' );
+		shell.setCaret(
+			'board',
+			{
+				path : new Path( [ 'LoginPanel', 'passI' ] ),
+				at1  : pass.length
+			}
+		);
+
+		return;
+	}
+
+	shell.peer.auth(
+		user,
+		Jools.passhash( pass ),
+		this,
+		panel,
+		pass
+	);
+	*/
+};
 
 } )( );

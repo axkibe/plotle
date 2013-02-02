@@ -31,7 +31,9 @@ var theme;
 
 
 if( typeof( window ) === 'undefined')
-	{ throw new Error( 'this code needs a browser!' ); }
+{
+	throw new Error( 'this code needs a browser!' );
+}
 
 
 /*
@@ -312,7 +314,7 @@ DiscButton.prototype.setText =
 		= text;
 
 	this.poke( );
-}
+};
 
 
 /*

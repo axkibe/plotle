@@ -68,7 +68,7 @@ Forms.LayoutPattern =
 			code :
 				'String',
 
-			curve :
+			shape :
 				'Curve',
 
 			frame :

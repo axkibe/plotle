@@ -41,7 +41,8 @@ var configSwitch =
 		side    // 'shell' or 'server'
 	)
 {
-	if( side !== 'shell' &&
+	if(
+		side !== 'shell' &&
 		side !== 'server'
 	)
 	{
@@ -49,7 +50,7 @@ var configSwitch =
 	}
 
 	return (
-		param === true   ||
+		param === true ||
 		param === 'both' ||
 		param === side
 	);
@@ -73,7 +74,8 @@ else
 }
 
 
-var puffed = config.debug.puffed;
+var puffed =
+	config.debug.puffed;
 
 
 /*
@@ -174,42 +176,68 @@ var fail = function(args, aoffset) {
 /*
 | Throws a reject if condition is not met.
 */
-var check = function(condition) {
-	if (!condition) fail(arguments, 1);
+var check =
+	function( condition )
+{
+	if( !condition )
+	{
+		fail( arguments, 1 );
+	}
 };
 
 
 /*
 | Throws a reject if v is not within limits
 */
-var checkLimits = function(v, low, high) {
-	if (v < low || v > high) fail(arguments, 3, low, '<=', v, '<=', high);
+var checkLimits =
+	function( v, low, high )
+{
+	if ( v < low || v > high )
+	{
+		fail(arguments, 3, low, '<=', v, '<=', high);
+	}
 };
 
 
 /*
 | Hashes the password.
 */
-var passhash = function(pass) {
-	return sha1hex(pass + '-meshcraft-8833');
-};
+var passhash =
+	function( pass )
+	{
+		return sha1hex( pass + '-meshcraft-8833' );
+	};
 
 
 /*
 | Returns a rejection error.
 */
-var reject = function(message) {
+var reject =
+	function(message)
+{
 	// in devel mode any failure is fatal.{
-	if (Jools.devel) throw new Error(message);
-	log('reject', 'reject', message);
-	return {ok: false, message: message};
+	if (Jools.devel)
+	{
+		throw new Error( message );
+	}
+
+	log( 'reject', 'reject', message );
+
+	return {
+		ok :
+			false,
+		message :
+			message
+	};
 };
 
 
 /*
 | Returns an unique identifier.
 */
-var uid = function() {
+var uid =
+	function( )
+{
 	var mime ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 	var ua   = [];
 	for(var a = 0; a < 3; a++) {
@@ -226,7 +254,9 @@ var uid = function() {
 /*
 | Creates a random password with only numbers and lower case alphas.
 */
-var randomPassword = function(length) {
+var randomPassword =
+	function( length )
+{
 	var ch ='abcdefghijklmnopqrstuvwxyz0123456789';
 	var ua   = [];
 	for(var a = 0; a < length; a++)
@@ -238,7 +268,8 @@ var randomPassword = function(length) {
 /*
 | Legacy (for opera browser)
 */
-if (!Object.defineProperty) {
+if( !Object.defineProperty )
+{
 	console.log('Using legacy Object.defineProperty');
 	Object.defineProperty = function(obj, label, funcs) {
 		if (typeof(funcs.value) !== 'undefined') {
@@ -893,7 +924,7 @@ var immute =
 
 	for(
 		var a = 0, aZ = names.length;
-		a < aZ; 
+		a < aZ;
 		a++
 	)
 	{
