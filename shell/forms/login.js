@@ -325,6 +325,7 @@ Login.prototype.layout =
 				}
 			},
 
+/*
 			'loginButton' :
 			{
 				type :
@@ -408,207 +409,43 @@ Login.prototype.layout =
 					}
 				},
 
-				// FIXME replace this by any shape.
 				shape :
 				{
 					type :
-						'Curve',
+						'Ellipse',
 
-					copse :
+					pnw :
 					{
-						'1' :
-						{
-							type :
-								'MoveTo',
+						type:
+							'Point',
 
-							to :
-							{
-								type :
-									'Point',
+						anchor:
+							'nw',
 
-								anchor :
-									'n',
+						x :
+							0,
 
-								x :
-									0,
-								y :
-									1
-							},
-
-							bx :
-								0,
-
-							by :
-								1
-						},
-
-						'2' :
-						{
-							type :
-								'BeziTo',
-
-							to :
-							{
-								type :
-									'Point',
-
-								anchor :
-									'e',
-
-								x :
-									-1,
-
-								y :
-									0
-							},
-
-							c1x  :
-								loginButton.xm,
-
-							c1y :
-								0,
-
-							c2x :
-								0,
-
-							c2y :
-								-loginButton.ym,
-
-							bx :
-								-1,
-
-							by :
-								0
-						},
-
-						'3' :
-						{
-							type :
-								'BeziTo',
-
-							to :
-							{
-								type :
-									'Point',
-
-								anchor :
-									's',
-
-								x :
-									0,
-
-								y :
-									-1
-							},
-
-							c1x :
-								0,
-
-							c1y :
-								loginButton.ym,
-
-							c2x :
-								loginButton.xm,
-
-							c2y :
-								0,
-
-							bx :
-								0,
-
-							by :
-								-1
-						},
-
-						'4' :
-						{
-							type :
-								'BeziTo',
-
-							to :
-							{
-								type :
-									'Point',
-
-								anchor :
-									'w',
-
-								x :
-									1,
-
-								y :
-									0
-							},
-
-							c1x :
-								-loginButton.xm,
-
-							c1y :
-								0,
-
-							c2x :
-								0,
-
-							c2y :
-								loginButton.ym,
-
-							bx :
-								1,
-
-							by :
-								0
-						},
-
-						'5' :
-						{
-							type :
-								'BeziTo',
-
-							to :
-							{
-								type :
-									'Point',
-
-								anchor :
-									'n',
-
-								x :
-									0,
-
-								y :
-									1
-							},
-
-							c1x :
-								0,
-
-							c1y :
-								-loginButton.ym,
-
-							c2x :
-								-loginButton.xm,
-
-							c2y :
-								0,
-
-							bx :
-								0,
-							by :
-								1
-						}
+						y :
+							0
 					},
 
-					ranks :
-					[
-						'1',
-						'2',
-						'3',
-						'4',
-						'5'
-					]
+					pse :
+					{
+						type:
+							'Point',
+
+						anchor:
+							'se',
+
+						x :
+							0,
+
+						y :
+							0
+					}
 				}
 			},
-
+*/
 
 			'closeButton' :
 			{
@@ -903,7 +740,7 @@ Login.prototype.layout =
 			'passwordLabel',
 			'userInput',
 			'passwordInput',
-			'loginButton',
+//			'loginButton',
 			'closeButton'
 		]
 	};

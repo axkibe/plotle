@@ -76,24 +76,53 @@ Tree.prototype.getPattern =
 
 
 /*
+| Returns true if the pattern specifier
+| allows a value of type.
+*/
+var allowsType =
+	function(
+		pattern,
+		type
+	)
+{
+	// Integers are also Numbers
+	if(
+		type === 'Integer' &&
+		allowsType( pattern, 'Number' )
+	)
+	{
+		return true;
+	}
+
+	return (
+		pattern === type ||
+		(
+			typeof(pattern === 'object') &&
+			pattern[type]
+		)
+	);
+};
+
+
+/*
 | Grows new twigs.
 |
 | The model is copied and extended by additional arguments.
 |
 | mandatory arguments:
-|    model : the model to copy
 |
-| additional arguments:
-|    'key', value        sets [key] = value
-|    '+', key, value     inserts a key if this an array
-|    '-', key            removes a key if this an array
-|    '--', count         shortens an array by count.
-|    '++', values...     for an array everything after '++' is extended.
 */
 Tree.prototype.grow =
 	function(
-		model //,
-		// ...
+		model // the model to copy
+		//
+		// additional arguments:
+		//
+		//    'key', value        sets [key] = value
+		//    '+', key, value     inserts a key if this an array
+		//    '-', key            removes a key if this an array
+		//    '--', count         shortens an array by count.
+		//    '++', values...     for an array everything after '++' is extended.
 	)
 {
 	var a;
@@ -107,14 +136,15 @@ Tree.prototype.grow =
 		return model;
 	}
 
-	var twig, k, k1, k2, val, vtype;
+	var twig, k, k1, k2, val;
 
 	var ttype =
 		Twig.getType( model );
 
 	Jools.log( 'grow', ttype, arguments );
 
-	var pattern = this.pattern[ ttype ];
+	var pattern =
+		this.pattern[ ttype ];
 
 	if( !pattern )
 	{
@@ -168,7 +198,8 @@ Tree.prototype.grow =
 					throw Jools.reject( '"+": ' + ttype + ' has no ranks' );
 				}
 
-				k2 = arguments[ a + 2 ];
+				k2 =
+					arguments[ a + 2 ];
 
 				if( !Jools.isInteger( k1 ) )
 				{
@@ -187,21 +218,27 @@ Tree.prototype.grow =
 				break;
 
 			case '-' :
+
 				if( !pattern.ranks )
 				{
-					throw Jools.reject('"-": '+ttype+' has no ranks');
+					throw Jools.reject( '"-": '+ttype+' has no ranks' );
 				}
 
 				if( !Jools.isInteger( k1 ) )
 				{
-					throw Jools.reject('"-": key must be an Integer');
+					throw Jools.reject( '"-": key must be an Integer' );
 				}
 
 				twig.ranks.splice( k1, 1 );
+
 				a += 2;
+
 				break;
+
 			default  :
-				if( Jools.isInteger( k ) ) {
+
+				if( Jools.isInteger( k ) )
+				{
 					if( !pattern.ranks )
 					{
 						throw Jools.reject(
@@ -211,7 +248,9 @@ Tree.prototype.grow =
 					}
 
 					twig.ranks[k] = k1;
-				} else {
+				}
+				else
+				{
 					if( !Jools.isString( k ) )
 					{
 						throw Jools.reject(
@@ -231,11 +270,12 @@ Tree.prototype.grow =
 				}
 
 				a += 2;
+
 				break;
 		}
 	}
 
-	if (a < aZ)
+	if( a < aZ )
 	{
 		if( !pattern.ranks )
 		{
@@ -245,13 +285,16 @@ Tree.prototype.grow =
 			);
 		}
 
-		if(arguments[ a ] === '--' )
+		if( arguments[ a ] === '--' )
 		{
-			var shorten = arguments[ a + 1 ];
+			var shorten =
+				arguments[ a + 1 ];
+
 			twig.ranks.splice(
 				twig.ranks.length - shorten,
 				shorten
 			);
+
 			a += 2;
 		}
 
@@ -259,7 +302,9 @@ Tree.prototype.grow =
 		{
 			for( a++; a < aZ; a++ )
 			{
-				k = arguments[ a++ ];
+				k =
+					arguments[ a++ ];
+
 				if( !Jools.isString( k ) )
 				{
 					throw Jools.reject(
@@ -278,9 +323,10 @@ Tree.prototype.grow =
 	}
 
 	// grows the subtwigs
-	var klen = 0;
+	var klen =
+		0;
 
-	if (pattern.copse)
+	if( pattern.copse )
 	{
 		for( k in twig.copse )
 		{
@@ -294,15 +340,18 @@ Tree.prototype.grow =
 				throw Jools.reject( 'key of copse no String: ' + k );
 			}
 
-			val = twig.copse[ k ];
+			val =
+				twig.copse[ k ];
 
 			if( val === null )
 			{
 				delete twig.copse[ k ];
+
 				continue;
 			}
 
 			klen++;
+
 			if( !pattern.copse[ Twig.getType( val ) ] )
 			{
 				throw Jools.reject(
@@ -313,12 +362,15 @@ Tree.prototype.grow =
 			switch( val.constructor )
 			{
 				case Boolean :
+
 					throw new Error( '.copse does not allow native Boolean' );
 
 				case Number :
+
 					throw new Error( '.copse does not allow native Number' );
 
 				case String :
+
 					throw new Error( '.copse does not allow native String' );
 			}
 
@@ -332,7 +384,7 @@ Tree.prototype.grow =
 	{
 		for( k in twig )
 		{
-			if (!Object.hasOwnProperty.call(twig, k))
+			if( !Object.hasOwnProperty.call( twig, k ) )
 			{
 				continue;
 			}
@@ -347,66 +399,69 @@ Tree.prototype.grow =
 				continue;
 			}
 
-			val = twig[ k ];
+			val =
+				twig[ k ];
 
 			if( val === null )
 			{
 				delete twig[ k ];
+
 				continue;
 			}
 
 			klen++;
-			vtype = Twig.getType( val );
 
-			if( !pattern.must[ k ] )
+			var vtype =
+				Twig.getType( val );
+
+			var ptype =
+				pattern.must[ k ];
+
+			if( !ptype )
 			{
 				throw Jools.reject(
 					ttype + ' does not allow key: ' + k
 				);
 			}
 
-			switch( val.constructor )
+			if(
+				vtype === 'Number' &&
+				Jools.isInteger( val )
+			)
 			{
-				case Boolean :
-					if( vtype !== 'Boolean' )
-					{
-						throw Jools.reject(ttype + '[' + k + '] must be Boolean');
-					}
-					break;
+				vtype = 'Integer';
+			}
 
-				case Number :
-					if( vtype === 'Integer' )
-					{
-						if( !Jools.isInteger( val ) )
-						{
-							throw Jools.reject(ttype + '[' + k + '] must be Integer');
-						}
-						break;
-					}
+			// grows non basic types
 
-					if (vtype !== 'Number')
-					{
-						throw Jools.reject(ttype + '[' + k + '] must be Number');
-					}
-					break;
+			switch( vtype )
+			{
+				case 'Boolean' :
+				case 'String' :
+				case 'Integer' :
+				case 'Number' :
 
-				case String :
-					if (vtype !== 'String')
-					{
-						throw Jools.reject(ttype + '[' + k + '] must be String');
-					}
 					break;
 
 				default :
+
 					if( !val._$grown )
 					{
 						twig[ k ] = this.grow( twig[ k ] );
 					}
 			}
+
+			if( !allowsType( ptype, vtype ) )
+			{
+				throw Jools.reject(
+					ttype + '[' + k + '] must be ' + vtype
+				);
+			}
 		}
 	}
 
-	// makes some additional checks
+	// tests if all keys that must be there are there
+
 	if( pattern.must )
 	{
 		for( k in pattern.must )
@@ -420,22 +475,27 @@ Tree.prototype.grow =
 		}
 	}
 
+	// tests the ranks
+
 	if( pattern.ranks )
 	{
-		aZ = twig.ranks.length;
-		if( aZ !== Object.keys(twig.ranks).length )
+		aZ =
+			twig.ranks.length;
+
+		if( aZ !== Object.keys( twig.ranks ).length )
 		{
 			throw Jools.reject( 'ranks not a sequence' );
 		}
 
 		if( aZ !== klen )
 		{
-			throw Jools.reject('ranks length does not match to copse');
+			throw Jools.reject( 'ranks length does not match to copse' );
 		}
 
 		for (a = 0; a < aZ; a++)
 		{
-			k = twig.ranks[a];
+			k = twig.ranks[ a ];
+
 			if( !Jools.is( twig.copse[ k ] ) )
 			{
 				throw new Error( 'copse misses ranks value: ' + k );
@@ -444,6 +504,7 @@ Tree.prototype.grow =
 	}
 
 	// if there is a custom constructor, it is called to replace the new twig.
+
 	if( pattern.creator )
 	{
 		twig = pattern.creator( twig );
@@ -553,5 +614,5 @@ if( typeof( window ) === 'undefined' )
 	module.exports = Tree;
 }
 
-} )( );
+})( );
 

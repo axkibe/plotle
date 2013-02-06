@@ -69,7 +69,13 @@ Forms.LayoutPattern =
 				'String',
 
 			shape :
-				'Curve',
+			{
+				'Curve' :
+					true,
+
+				'Ellipse' :
+					true
+			},
 
 			frame :
 				'Frame',
@@ -121,6 +127,18 @@ Forms.LayoutPattern =
 
 			BeziTo :
 				true
+		}
+	},
+
+	'Ellipse' :
+	{
+		must :
+		{
+			pnw :
+				'Point',
+
+			pse :
+				'Point'
 		}
 	},
 

@@ -35,7 +35,8 @@ if( typeof( window ) === 'undefined' )
 /*
 | Constructor.
 */
-var Shape = Euclid.Shape =
+var Shape =
+Euclid.Shape =
 	function(
 		hull
 	)

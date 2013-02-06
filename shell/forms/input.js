@@ -60,17 +60,11 @@ Forms.Input =
 
 	var pnw =
 	this.pnw =
-		Curve.computePoint(
-			twig.frame.pnw,
-			form.iframe
-		);
+		form.iframe.computePoint( twig.frame.pnw );
 
 	var pse =
 	this.pse =
-		Curve.computePoint(
-			twig.frame.pse,
-			form.iframe
-		);
+		form.iframe.computePoint( twig.frame.pse );
 
 	this._bezi =
 		new Euclid.RoundRect(

@@ -8,7 +8,8 @@
 /*
 | Exports
 */
-var Curve = null;
+var Curve =
+	null;
 
 
 /*
@@ -24,8 +25,10 @@ var Euclid;
 ( function() {
 'use strict';
 
-if (typeof(window) === 'undefined')
-	{ throw new Error('this code needs a browser!'); }
+if( typeof( window ) === 'undefined' )
+{
+	throw new Error( 'this code needs a browser!' );
+}
 
 
 /*
@@ -37,80 +40,36 @@ Curve =
 		frame
 	)
 {
-	var data = this.data = [];
+	var data =
+	this.data =
+		[ ];
 
-	if (twig.copse[twig.ranks[0]].type !== 'MoveTo')
-		{ throw new Error('Curve does not begin with MoveTo'); }
-
-	for(var a = 0, aZ = twig.length; a < aZ; a++) {
-		var ct = twig.copse[twig.ranks[a]];
-		data.push({
-			to   : Curve.computePoint(ct.to, frame),
-			twig : ct
-		});
-	}
-};
-
-
-/*
-| Computes a point by its anchor
-*/
-Curve.computePoint = function(model, frame)
-{
-	var half = Jools.half;
-	var pnw = frame.pnw;
-	var pse = frame.pse;
-
-	switch (model.anchor)
+	if( twig.type !== 'Curve' )
 	{
-		// FIXME make this part of frame logic
-		case 'c'  :
-			return new Euclid.Point(
-				half(pnw.x + pse.x) + model.x,
-				half(pnw.y + pse.y) + model.y
-			);
+		throw new Error( 'Curve twig not a Curve' );
+	}
 
-		case 'n'  :
-			return new Euclid.Point(
-				half(pnw.x + pse.x) + model.x,
-				pnw.y + model.y
-			);
+	if( twig.copse[ twig.ranks[ 0 ] ].type !== 'MoveTo' )
+	{
+		throw new Error(' Curve does not begin with MoveTo' );
+	}
 
-		case 'ne' :
-			return new Euclid.Point(
-				pse.x + model.x,
-				pnw.y + model.y
-			);
+	for(
+		var a = 0, aZ = twig.length;
+		a < aZ;
+		a++
+	) {
+		var ct =
+			twig.copse[ twig.ranks[ a ] ];
 
-		case 'e'  :
-			return new Euclid.Point(
-				pse.x + model.x,
-				half(pnw.y + pse.y) + model.y
-			);
-
-		case 'se' :
-			return pse.add(model.x, model.y);
-
-		case 's'  :
-			return new Euclid.Point(
-				half(pnw.x + pse.x) + model.x,
-				pse.y + model.y
-			);
-
-		case 'sw' :
-			return new Euclid.Point(
-				pnw.x + model.x,
-				pse.y + model.y
-			);
-
-		case 'w'  :
-			return new Euclid.Point(
-				pnw.x + model.y,
-				half(pnw.y + pse.y) + model.y
-			);
-
-		case 'nw' :
-			return pnw.add(model.x, model.y);
+		data.push(
+			{
+				to :
+					frame.computePoint( ct.to ),
+				twig :
+					ct
+			}
+		);
 	}
 };
 

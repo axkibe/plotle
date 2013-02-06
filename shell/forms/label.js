@@ -52,10 +52,7 @@ Forms.Label =
 		form;
 
 	this.pos =
-		Curve.computePoint(
-			twig.pos,
-			form.iframe
-		);
+		form.iframe.computePoint( twig.pos );
 
 	// if not null, overrides the design text
 	this._$text =
