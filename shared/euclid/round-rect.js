@@ -12,7 +12,6 @@
 |      |                    |
 |      '                    '
 |       `------------------'+ pse
-|
 */
 
 
@@ -20,7 +19,8 @@
 | Export
 */
 var Euclid;
-Euclid = Euclid || {};
+Euclid =
+	Euclid || { };
 
 
 /*
@@ -55,7 +55,9 @@ if (typeof(window) === 'undefined')
 | RoundRect(rect, a, b)      -or-
 | RoundRect(pnw, pse, a, b)
 */
-var RoundRect = Euclid.RoundRect = function(a1, a2, a3, a4)
+var RoundRect =
+Euclid.RoundRect =
+	function(a1, a2, a3, a4)
 {
 	var pnw, pse, a, b;
 
@@ -85,19 +87,36 @@ var RoundRect = Euclid.RoundRect = function(a1, a2, a3, a4)
 	Euclid.Shape.call(
 		this,
 		[
-			'start' ,              pnw.add( 0 , b ),
-			'round' , 'clockwise', pnw.add( a , 0 ),
-			'line'  ,              pne.sub( a , 0 ),
-			'round' , 'clockwise', pne.add( 0 , b ),
-			'line'  ,              pse.sub( 0 , b ),
-			'round' , 'clockwise', pse.sub( a , 0 ),
-			'line'  ,              psw.add( a , 0 ),
-			'round' , 'clockwise', psw.sub( 0 , b ),
-			'line'  ,             'close'
+			'start',
+				pnw.add( 0 , b ),
+			'round',
+				'clockwise',
+				pnw.add( a , 0 ),
+			'line',
+				pne.sub( a , 0 ),
+			'round',
+				'clockwise',
+				pne.add( 0 , b ),
+			'line',
+				pse.sub( 0 , b ),
+			'round',
+				'clockwise',
+				pse.sub( a , 0 ),
+			'line',
+				psw.add( a , 0 ),
+			'round',
+				'clockwise',
+				psw.sub( 0 , b ),
+			'line',
+				'close'
 		]
 	);
 };
-Jools.subclass( RoundRect, Euclid.Shape );
+
+Jools.subclass(
+	RoundRect,
+	Euclid.Shape
+);
 
 
 /*
@@ -117,7 +136,8 @@ Jools.lazyFixate(RoundRect.prototype, 'pc',
 /*
 | Returns true if this rectangle is the same as another
 */
-RoundRect.prototype.eq = function( r )
+RoundRect.prototype.eq =
+	function( r )
 {
 	return (
 		this.pnw.eq( r.pnw ) &&
@@ -144,4 +164,4 @@ RoundRect.prototype.within =
 	);
 };
 
-} ) ( );
+} )( );

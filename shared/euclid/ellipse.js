@@ -1,9 +1,7 @@
 /*
-|
 | An ellipse.
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
@@ -11,7 +9,8 @@
 | Export
 */
 var Euclid;
-Euclid = Euclid || {};
+Euclid =
+	Euclid || { };
 
 
 /*
@@ -24,40 +23,65 @@ var Jools;
 /*
 | Capsule
 */
-(function() {
+( function( ) {
 'use strict';
 
-if (typeof(window) === 'undefined')
-	{ throw new Error('this code needs a browser'); }
+if( typeof( window ) === 'undefined' )
+{
+	throw new Error(
+		'this code needs a browser'
+	);
+}
 
 /*
 | Constructor.
 */
-var Ellipse = Euclid.Ellipse =
+var Ellipse =
+Euclid.Ellipse =
 	function(
 		pnw, // point in north-west
 		pse  // point in south-east
 		// ...
 	)
 {
-	this.pnw = pnw;
-	this.pse = pse;
+	this.pnw =
+		pnw;
+
+	this.pse =
+		pse;
 
 	// cardinal coords
-	var wx = pnw.x;
-	var ny = pnw.y;
-	var ex = pse.x;
-	var sy = pse.y;
+	var wx =
+		pnw.x;
+
+	var ny =
+		pnw.y;
+
+	var ex =
+		pse.x;
+
+	var sy =
+		pse.y;
 
 	// middles of cardinal cords
-	var my  = Jools.half(ny + sy);
-	var mx  = Jools.half(wx + ex);
+	var my =
+		Jools.half(ny + sy);
+
+	var mx =
+		Jools.half(wx + ex);
 
 	// cardinal points
-	var pw = new Euclid.Point(wx, my);
-	var pn = new Euclid.Point(mx, ny);
-	var pe = new Euclid.Point(ex, my);
-	var ps = new Euclid.Point(mx, sy);
+	var pw =
+		new Euclid.Point(wx, my);
+
+	var pn =
+		new Euclid.Point(mx, ny);
+
+	var pe =
+		new Euclid.Point(ex, my);
+
+	var ps =
+		new Euclid.Point(mx, sy);
 
 	Euclid.Shape.call(
 		this,
@@ -70,13 +94,20 @@ var Ellipse = Euclid.Ellipse =
 		]
 	);
 
-	for( var a = 2; a < arguments.length; a += 2 )
+	for(
+		var a = 2, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
 	{
-		var arg = arguments[ a ];
-		var val = arguments[ a + 1 ];
+		var arg =
+			arguments[ a ];
 
-		switch( arg ) {
+		var val =
+			arguments[ a + 1 ];
 
+		switch( arg )
+		{
 			case 'gradientPC' :
 
 				this._lazy_gradientPC = val;
@@ -97,7 +128,6 @@ var Ellipse = Euclid.Ellipse =
 
 			default :
 				throw new Error( 'invalid argument: ' + arg );
-
 		}
 	}
 
@@ -105,11 +135,14 @@ var Ellipse = Euclid.Ellipse =
 };
 
 
-Jools.subclass( Ellipse, Euclid.Shape );
+Jools.subclass(
+	Ellipse,
+	Euclid.Shape
+);
 
 
 /*
-| center point of an ellipse
+| Center point of an ellipse.
 */
 Jools.lazyFixate(
 	Ellipse.prototype,
@@ -148,10 +181,16 @@ Jools.lazyFixate(
 	'gradientR1',
 	function( )
 	{
-		var dx = this.pse.x - this.pnw.x;
-		var dy = this.pse.y - this.pnw.y;
+		var dx =
+			this.pse.x - this.pnw.x;
 
-		return Math.max( dx, dy );
+		var dy =
+			this.pse.y - this.pnw.y;
+
+		return Math.max(
+			dx,
+			dy
+		);
 	}
 );
 
@@ -172,6 +211,8 @@ Ellipse.prototype.eq =
 
 /*
 | Returns true if point is within the ellipse.
+|
+| TODO this should be inherited by Shape.
 */
 Ellipse.prototype.within =
 	function(

@@ -48,7 +48,8 @@ if( typeof( window ) === 'undefined' )
 /*
 | Constructor.
 */
-var Rect = Euclid.Rect =
+var Rect =
+Euclid.Rect =
 	function(
 		overload,
 		a1,
@@ -59,47 +60,78 @@ var Rect = Euclid.Rect =
 	var pnw;
 	var pse;
 
-	switch( overload ) {
-
+	switch( overload )
+	{
 		case 'pnw/pse' :
-			pnw = a1;
-			pse = a2;
+
+			pnw =
+				a1;
+
+			pse =
+				a2;
+
 			break;
 
 		case 'pnw/size' :
-			pnw = a1;
-			pse = a1.add( a2, a3 );
+
+			pnw =
+				a1;
+
+			pse =
+				a1.add( a2, a3 );
+
 			break;
 
 		case 'pse' :
-			pnw = Euclid.Point.zero;
-			pse = a1;
+
+			pnw =
+				Euclid.Point.zero;
+
+			pse =
+				a1;
+
 			break;
 
 		case 'o' :
-			pnw = a1.pnw;
-			pse = a1.pse;
+
+			pnw =
+				a1.pnw;
+
+			pse =
+				a1.pse;
+
 			break;
 
 		case 'arbitrary' :
-			if( a2.x >= a1.x && a2.y >= a1.y) {
+
+			if( a2.x >= a1.x && a2.y >= a1.y)
+			{
 				pnw = a1;
 				pse = a2;
-			} else if ( a1.x >= a2.x && a1.y >= a2.y) {
+			}
+			else if ( a1.x >= a2.x && a1.y >= a2.y)
+			{
 				pnw = a2;
 				pse = a1;
-			} else if( a2.x >= a1.x && a1.y >= a2.y) {
+			}
+			else if( a2.x >= a1.x && a1.y >= a2.y)
+			{
 				pnw = new Euclid.Point( a1.x, a2.y );
 				pse = new Euclid.Point( a2.x, a1.y );
-			} else if ( a1.x >= a2.x && a2.y >= a1.y) {
+			}
+			else if ( a1.x >= a2.x && a2.y >= a1.y)
+			{
 				pnw = new Euclid.Point( a2.x, a1.y );
 				pse = new Euclid.Point( a1.x, a2.y );
-			} else {
+			}
+			else
+			{
 				throw new Error( 'this is not possible' );
 			}
 			break;
 
 		default :
+
 			throw new Error( 'invalid overload' );
 	}
 
@@ -111,13 +143,26 @@ var Rect = Euclid.Rect =
 		throw Jools.reject('not a rectangle.');
 	}
 
-	this.pnw = pnw;
-	this.pse = pse;
+	this.pnw =
+		pnw;
 
-	Jools.innumerable( this, 'width',  pse.x - pnw.x );
-	Jools.innumerable( this, 'height', pse.y - pnw.y );
+	this.pse =
+		pse;
 
-	this.type = 'Rect'; // FIXME - can this be circumvented?
+	Jools.innumerable(
+		this,
+		'width',
+		pse.x - pnw.x
+	);
+
+	Jools.innumerable(
+		this,
+		'height',
+		pse.y - pnw.y
+	);
+
+	this.type =
+		'Rect'; // FIXME - can this be circumvented?
 
 	Jools.immute( this );
 };
@@ -473,10 +518,17 @@ Rect.prototype.sketch =
 		view
 	)
 {
-	var wx = view.x( this.pnw );
-	var ny = view.y( this.pnw );
-	var ex = view.x( this.pse );
-	var sy = view.y( this.pse );
+	var wx =
+		view.x( this.pnw );
+
+	var ny =
+		view.y( this.pnw );
+
+	var ex =
+		view.x( this.pse );
+
+	var sy =
+		view.y( this.pse );
 
 	fabric.moveTo( wx + border, ny + border );
 	fabric.lineTo( ex - border, ny + border );
@@ -603,4 +655,4 @@ if( typeof( window ) === 'undefined' )
 		Rect;
 }
 
-} )( );
+})( );

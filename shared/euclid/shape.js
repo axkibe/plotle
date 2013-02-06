@@ -58,15 +58,25 @@ Shape.prototype.sketch =
 		view
 	)
 {
-	var hull = this.hull;
-	var h    = 0;
-	var hZ   = hull.length;
+	var hull =
+		this.hull;
+
+	var h =
+		0;
+
+	var hZ =
+		hull.length;
 
 	if( hull[ h++ ] !== 'start' )
-		{ throw new Error( 'hull must have start at [0]' ); }
+	{
+		throw new Error( 'hull must have start at [0]' );
+	}
 
-	var pstart = view.point( hull [ h++ ] );
-	var pc     = view.point( this.pc );
+	var pstart =
+		view.point( hull [ h++ ] );
+
+	var pc =
+		view.point( this.pc );
 
 	pstart = pstart.add(
 		pstart.x > pc.x ? -border : ( pstart.x < pc.x ? border : 0 ),
