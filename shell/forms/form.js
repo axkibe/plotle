@@ -221,6 +221,7 @@ Form.prototype.newComponent =
 	}
 };
 
+
 /*
 | Returns the focused item.
 */
@@ -264,39 +265,6 @@ Form.prototype.knock =
 		this.$sub[ c ].knock( );
 	}
 };
-
-
-/*
-| Draws the panels contents.
-*/
-/*
-Panel.prototype._weave =
-	function( )
-{
-	if( this.$fabric && !config.debug.noCache )
-		{ return this.$fabric; }
-
-	var iframe = this.iframe;
-	var fabric = this.$fabric = new Euclid.Fabric(iframe);
-	var style = Forms.getStyle(this.tree.root.style);
-	if( !style )
-		{ throw new Error('no style!'); }
-
-	fabric.fill( style.fill, this, 'sketch', Euclid.View.proper );
-	var layout = this.tree.root.layout;
-
-	var focus = this.getFocus( );
-	for( var a = layout.length - 1; a >= 0; a-- )
-	{
-		var name = layout.ranks[a];
-		var c = this.$sub[name];
-		c.draw(fabric, Forms.Accent.state(name === this.$hover || c.$active, c === focus));
-	}
-	fabric.edge( style.edge, this, 'sketch', Euclid.View.proper );
-
-	return fabric;
-};
-*/
 
 
 /*
@@ -344,7 +312,9 @@ Form.prototype.draw =
 			fabric,
 			Forms.Accent.state(
 				name === this.$hover,
-				focus ? name === focus.name : false
+				( this.$caret.$shown && focus ) ?
+					name === focus.name :
+					false
 			)
 		);
 	}
@@ -691,7 +661,10 @@ Form.prototype.setCaret =
 
 	if(
 		this.$caret.sign &&
-		this.$caret.sign.path !== sign.path
+		(
+			!sign ||
+			this.$caret.sign.path !== sign.path
+		)
 	)
 	{
 		entity =
@@ -704,7 +677,8 @@ Form.prototype.setCaret =
 			entity.knock( );
 		}
 
-		this.redraw = true;
+		this.redraw =
+			true;
 	}
 
 	this.$caret =
@@ -726,13 +700,12 @@ Form.prototype.setCaret =
 			entity.knock( );
 		}
 
-		this.redraw = true;
+		this.redraw =
+			true;
 	}
 
 	return this.$caret;
 };
-
-
 
 
 /*
@@ -764,6 +737,7 @@ Form.prototype.setHover =
 	return;
 };
 
+
 /*
 | The shell got the systems focus.
 */
@@ -776,6 +750,9 @@ Form.prototype.systemFocus =
 	caret.show( );
 
 	caret.display( );
+
+	shell.redraw =
+		true;
 };
 
 
@@ -792,6 +769,9 @@ Form.prototype.systemBlur =
 	caret.hide( );
 
 	caret.display( );
+
+	shell.redraw =
+		true;
 };
 
 
@@ -800,7 +780,7 @@ Form.prototype.systemBlur =
 */
 Form.prototype.pushButton =
 	function(
-		buttonName
+		// buttonName
 	)
 {
 	throw new Error( 'pushButton should be overloaded!' );

@@ -18,6 +18,7 @@ Forms = Forms || { };
 var Euclid;
 var fontPool;
 var Jools;
+var Path;
 var shell;
 
 /*
@@ -49,13 +50,9 @@ Jools.subclass(
 );
 
 
-var magic =
-	Euclid.Const.magic;
-
 /*
 | Login control
 */
-
 var loginButton =
 {
 	width :
@@ -75,7 +72,6 @@ var loginButton =
 /*
 | Close control
 */
-
 var closeButton =
 {
 	width :
@@ -85,7 +81,7 @@ var closeButton =
 		50,
 
 	w :
-		175,
+		180,
 
 	n :
 		38
@@ -179,6 +175,34 @@ Login.prototype.layout =
 
 					y :
 						-9
+				}
+			},
+
+			'errorLabel' :
+			{
+				type :
+					'Label',
+
+				text :
+					'',
+					// 'username/password not accepted',
+
+				font :
+					fontPool.get( 14, 'car' ),
+
+				pos :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'c',
+
+					x :
+						-20,
+
+					y :
+						-83
 				}
 			},
 
@@ -563,6 +587,7 @@ Login.prototype.layout =
 			'headline',
 			'usernameLabel',
 			'passwordLabel',
+			'errorLabel',
 			'userInput',
 			'passwordInput',
 			'loginButton',
@@ -591,6 +616,8 @@ Login.prototype.pushButton =
 	{
 		case 'loginButton' :
 
+			this.login( );
+
 			break;
 
 		case 'closeButton' :
@@ -608,7 +635,8 @@ Login.prototype.pushButton =
 /*
 | Logins the user
 */
-Login.prototype.login = function( )
+Login.prototype.login =
+	function( )
 {
 	var sub =
 		this.$sub;
@@ -616,18 +644,25 @@ Login.prototype.login = function( )
 	var errorLabel =
 		sub.errorLabel;
 
-/*
-	var user   = panSub.userI.getValue( );
-	var pass   = panSub.passI.getValue( );
+	var user =
+		sub.userInput.getValue( );
+
+	var pass =
+		sub.passwordInput.getValue( );
 
 	if( user.length < 4 )
 	{
-		panel.$sub.errL.setText( 'Username too short, min. 4 characters' );
-		shell.setCaret(
-			'board',
+		errorLabel.setText(
+			'Username too short, min. 4 characters'
+		);
+
+		this.setCaret(
 			{
-				path : new Path( [ 'LoginPanel', 'userI' ] ),
-				at1  : user.length
+				path :
+					new Path( [ 'login', 'userInput' ] ),
+
+				at1 :
+					user.length
 			}
 		);
 
@@ -636,12 +671,15 @@ Login.prototype.login = function( )
 
 	if( user.substr( 0, 5 ) === 'visit' )
 	{
-		panel.$sub.errL.setText( 'Username must not start with "visit"' );
-		shell.setCaret(
-			'board',
+		errorLabel.setText( 'Username must not start with "visit"' );
+
+		this.setCaret(
 			{
-				path : new Path( [ 'LoginPanel', 'userI' ] ),
-				at1  : 0
+				path :
+					new Path( [ 'login', 'userInput' ] ),
+
+				at1 :
+					0
 			}
 		);
 
@@ -650,12 +688,15 @@ Login.prototype.login = function( )
 
 	if( pass.length < 5 )
 	{
-		panel.$sub.errL.setText( 'Password too short, min. 5 characters' );
-		shell.setCaret(
-			'board',
+		errorLabel.setText( 'Password too short, min. 5 characters' );
+
+		this.setCaret(
 			{
-				path : new Path( [ 'LoginPanel', 'passI' ] ),
-				at1  : pass.length
+				path :
+					new Path( [ 'login', 'passwordInput' ] ),
+
+				at1 :
+					pass.length
 			}
 		);
 
@@ -666,10 +707,127 @@ Login.prototype.login = function( )
 		user,
 		Jools.passhash( pass ),
 		this,
-		panel,
 		pass
 	);
-	*/
 };
+
+
+/*
+| User is pressing a special key.
+*/
+Login.prototype.specialKey =
+	function(
+		key,
+		shift,
+		ctrl
+	)
+{
+	var focus =
+		this.getFocus( );
+
+	if( !focus )
+	{
+		return;
+	}
+
+	// a return in the password field is made
+	// to be a login command right away
+
+	if(
+		key === 'enter' &&
+		focus.name === 'passwordInput'
+	)
+	{
+		this.login( );
+
+		return;
+	}
+
+	return Forms.Form.prototype.specialKey.call(
+		this,
+		key,
+		shift,
+		ctrl
+	);
+};
+
+
+/*
+| an auth ( login ) operation completed.
+*/
+Login.prototype.onAuth =
+	function(
+		user,
+		passhash,
+		res,
+		pass
+	)
+{
+	if( !res.ok )
+	{
+		this.$sub.errorLabel.setText( res.message );
+
+		if( res.message.search(/Username/) >= 0 )
+		{
+			this.setCaret(
+				{
+					path :
+						new Path(
+							[ 'login', 'userInput' ]
+						),
+
+					at1 :
+						user.length
+				}
+			);
+		}
+		else
+		{
+			this.setCaret(
+				{
+					path :
+						new Path(
+							[ 'login', 'passInput' ]
+						),
+					at1  : pass.length
+				}
+			);
+		}
+
+		this.poke( );
+
+		return;
+	}
+
+	shell.setUser(
+		user,
+		passhash
+	);
+
+	this.clear( );
+
+	shell.moveToSpace( null );
+
+	shell.bridge.changeMode( 'Normal' );
+
+	this.poke( );
+};
+
+
+/*
+| Clears all fields
+*/
+Login.prototype.clear =
+	function( )
+{
+	var sub = this.$sub;
+
+	sub.userInput.setValue( '' );
+
+	sub.passwordInput.setValue( '' );
+
+	this.setCaret( null );
+};
+
 
 } )( );

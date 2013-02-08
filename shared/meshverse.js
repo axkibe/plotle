@@ -122,10 +122,12 @@ Meshverse =
 				'Point',
 
 			'item1key' :
-				'Key',
+				// 'Key', FIXME
+				'String',
 
 			'item2key' :
-				'Key',
+				// 'Key', FIXME
+				'String',
 
 			'fontsize' :
 				'Number'

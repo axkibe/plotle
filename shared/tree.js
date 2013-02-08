@@ -97,8 +97,8 @@ var allowsType =
 	return (
 		pattern === type ||
 		(
-			typeof(pattern === 'object') &&
-			pattern[type]
+			typeof( pattern === 'object' ) &&
+			pattern[ type ]
 		)
 	);
 };
@@ -453,8 +453,11 @@ Tree.prototype.grow =
 
 			if( !allowsType( ptype, vtype ) )
 			{
+				console.log( ptype, vtype, ptype === vtype );
+
 				throw Jools.reject(
-					ttype + '[' + k + '] must be ' + vtype
+					ttype + '[' + k + '] must be ' + ptype + '. ' +
+					'is: ' + vtype + ' (' + val + ')'
 				);
 			}
 		}

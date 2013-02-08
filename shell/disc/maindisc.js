@@ -110,100 +110,69 @@ var MainDisc = Disc.MainDisc =
 				650
 		);
 
-
+	// the buttons
+	//
+	// true/false determines their startup visibility
+	//
 	this.buttons =
-		Jools.immute(
-			{
-				normal :
-					new Disc.DiscButton(
-						'disc',
-							this,
-						'name',
-							'normal'
-					),
+		{
+			normal :
+				true,
 
-				create :
-					new Disc.DiscButton(
-						'disc',
-							this,
-						'name',
-							'create'
-					),
+			create :
+				false,
 
-				remove :
-					new Disc.DiscButton(
-						'disc',
-							this,
-						'name',
-							'remove'
-					),
+			remove :
+				false,
 
-				space :
-					new Disc.DiscButton(
-						'disc',
-							this,
-						'name',
-							'space'
-					),
+			space :
+				true,
 
-				user :
-					new Disc.DiscButton(
-						'disc',
-							this,
-						'name',
-							'user'
-					),
+			user :
+				true,
 
-				login :
-					new Disc.DiscButton(
-						'disc',
-							this,
-						'name',
-							'login'
-					),
+			login :
+				false,
 
-				signup :
-					new Disc.DiscButton(
-						'disc',
-							this,
-						'name',
-							'signup'
-					),
+			signup :
+				false,
 
-				help :
-					new Disc.DiscButton(
-						'disc',
-							this,
-						'name',
-							'help'
-					)
-			}
+			help :
+				true
+		};
+
+	for( var name in this.buttons )
+	{
+		this.buttons[ name ] =
+			new Disc.DiscButton(
+				'disc',
+					this,
+				'name',
+					name,
+				'visibility',
+					inherit ?
+						inherit.buttons[ name ].isVisible( ) :
+						this.buttons[ name ]
+			);
+	}
+
+	if( inherit )
+	{
+		this.buttons.login.setText(
+			inherit.buttons.login.getText( )
 		);
+	}
 
-	// makes signup/login invisible until the
-	// start up Auth request is answered.
-
-	this.buttons.login.setVisibility(
+	this.$hover =
 		inherit ?
-			inherit.buttons.login.isVisible( ) :
-			false
-	);
-
-	this.buttons.signup.setVisibility(
-		inherit ?
-			inherit.buttons.signup.isVisible( ) :
-			false
-	);
-
-	this.$hover = inherit ?
-		inherit.$hover :
-		null;
+			inherit.$hover :
+			null;
 
 	this.$user =
 		null;
 
 	this._$loggedIn =
-		false;
+		inherit ? inherit._$loggedIn : false;
 };
 
 
@@ -345,6 +314,7 @@ MainDisc.prototype.pushButton =
 	)
 	{
 		shell.logout( );
+
 		return;
 	}
 
@@ -705,6 +675,10 @@ MainDisc.prototype.setUser =
 			true;
 
 		this.buttons.signup.setVisibility( false );
+		
+		this.buttons.create.setVisibility( true );
+		
+		this.buttons.remove.setVisibility( true );
 
 		this.buttons.login.setText(
 			[
@@ -715,10 +689,14 @@ MainDisc.prototype.setUser =
 	}
 	else
 	{
-		this._$loggedOut =
-			true;
+		this._$loggedIn =
+			false;
 
 		this.buttons.signup.setVisibility( true );
+
+		this.buttons.create.setVisibility( false );
+		
+		this.buttons.remove.setVisibility( false );
 
 		this.buttons.login.setText(
 			[
@@ -727,6 +705,8 @@ MainDisc.prototype.setUser =
 			]
 		);
 	}
+
+	shell.bridge.changeMode( 'Normal' );
 
 	this.poke( );
 };

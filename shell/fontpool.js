@@ -53,6 +53,15 @@ FontPool.styles =
 		base   : 'alphabetic'
 	},
 
+	car        :
+	{
+		type   : 'Font',
+		family : '(default)',
+		fill   : 'red',
+		align  : 'center',
+		base   : 'alphabetic'
+	},
+
 	cm         :
 	{
 		type   : 'Font',

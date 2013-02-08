@@ -338,29 +338,54 @@ Server.prototype.loadSpace = function ( spacename, _)
 			{ sort : '_id' },
 		_);
 
-	for( var o = cursor.nextObject(_); o !== null; o = cursor.nextObject(_) )
+	for(
+		var o = cursor.nextObject(_);
+		o !== null;
+		o = cursor.nextObject(_)
+	)
 	{
 		if( o._id !== space.$seqZ )
-			{ throw new Error('sequence mismatch'); }
+		{
+			throw new Error('sequence mismatch');
+		}
 
 		// FIXME there is something quirky, why isn't *this* a "Change"?
 		var change = {
-			cid  : o.cid,
-			chgX : null
+			cid :
+				o.cid,
+
+			chgX :
+				null
 		};
 
 		if ( !Jools.isArray( o.chgX ) )
 		{
-			change.chgX = new MeshMashine.Change( o.chgX );
+			change.chgX =
+				new MeshMashine.Change( o.chgX );
 		}
 		else
 		{
-			change.chgX = new MeshMashine.ChangeRay( o.chgX );
+			change.chgX =
+				new MeshMashine.ChangeRay( o.chgX );
 		}
 
 		space.$seqZ++;
+		
+		try
+		{
+			space.$tree =
+				change.chgX.changeTree( space.$tree ).tree;
 
-		space.$tree = change.chgX.changeTree( space.$tree ).tree;
+		}
+		catch( e )
+		{
+			// catch this to get a useful error message at least
+			// if things go woo.
+
+			console.log('Error playing back changes: ', e);
+
+			throw e;
+		}
 	}
 };
 

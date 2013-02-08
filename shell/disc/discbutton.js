@@ -59,6 +59,9 @@ Disc.DiscButton =
 
 	var disc;
 	var name;
+	
+	this._$visible =
+		true;
 
 	while( a < aZ )
 	{
@@ -79,6 +82,15 @@ Disc.DiscButton =
 				name =
 				this.name =
 					arguments[ a + 1 ];
+
+				a += 2;
+
+				break;
+
+			case 'visibility' :
+
+				this._$visible =
+					!!arguments[ a + 1 ];
 
 				a += 2;
 
@@ -157,9 +169,6 @@ Disc.DiscButton =
 				)
 			);
 	}
-
-	this._$visible =
-		true;
 
 	this._$text =
 		style.text;
@@ -316,6 +325,15 @@ DiscButton.prototype.setText =
 	this.poke( );
 };
 
+
+/*
+| Gets the buttons text.
+*/
+DiscButton.prototype.getText =
+	function( )
+{
+	return this._$text;
+}
 
 /*
 | Draws the buttons icon.

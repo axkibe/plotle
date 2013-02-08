@@ -448,7 +448,11 @@ Space.prototype.knock =
 	this.$caret.$screenPos =
 		null;
 
-	for( var r = this.twig.length - 1; r >= 0; r-- )
+	for(
+		var r = this.twig.length - 1;
+		r >= 0;
+		r--
+	)
 	{
 		this.atRank( r ).knock( );
 	}
@@ -461,12 +465,17 @@ Space.prototype.knock =
 Space.prototype.positionCaret =
 	function( )
 {
-	this.getSub(
-		this.$caret.sign.path,
-		'positionCaret'
-	).positionCaret(
-		this.$view
-	);
+	var item =
+		this.getSub(
+			this.$caret.sign.path,
+			'positionCaret'
+		);
+	
+	if( item ) {
+		item.positionCaret(
+			this.$view
+		);
+	}
 };
 
 
@@ -481,12 +490,20 @@ Space.prototype.mousewheel =
 		ctrl
 	)
 {
-	var view = this.$view;
-	var twig = this.twig;
+	var view =
+		this.$view;
 
-	for( var r = 0, rZ = twig.length; r < rZ; r++ )
+	var twig =
+		this.twig;
+
+	for(
+		var r = 0, rZ = twig.length;
+		r < rZ;
+		r++
+	)
 	{
-		var item = this.atRank(r);
+		var item =
+			this.atRank(r);
 
 		if (
 			item.mousewheel(
@@ -688,7 +705,10 @@ Space.prototype.setCaret =
 
 	if(
 		this.$caret.sign &&
-		this.$caret.sign.path !== sign.path
+		(
+			!sign ||
+			this.$caret.sign.path !== sign.path
+		)
 	)
 	{
 		entity =
@@ -767,11 +787,16 @@ Space.prototype.dragStart =
 			action = shell.bridge.startAction(
 				'ItemResize',
 				'space',
-				'itemPath',  focus.path,
-				'start',     dp,
-				'move',      dp,
-				'align',     com,
-				'startZone', focus.getZone( )
+				'itemPath',
+					focus.path,
+				'start',
+					dp,
+				'move',
+					dp,
+				'align',
+					com,
+				'startZone',
+					focus.getZone( )
 			);
 
 			return;
@@ -786,7 +811,8 @@ Space.prototype.dragStart =
 		case 'CreateNote' :
 		case 'CreatePortal' :
 
-			action.start = p;
+			action.start =
+				p;
 
 			return;
 
@@ -797,9 +823,11 @@ Space.prototype.dragStart =
 				// starts a panning operation instead
 				// while creating a relation
 
-				action.start = p;
+				action.start =
+					p;
 
-				action.pan = view.pan;
+				action.pan =
+					view.pan;
 			}
 
 			return;
@@ -811,9 +839,11 @@ Space.prototype.dragStart =
 				// starts a panning operation instead
 				// while removing
 
-				action.start = p;
+				action.start =
+					p;
 
-				action.pan = view.pan;
+				action.pan =
+					view.pan;
 			}
 
 			// otherwise starts a true remove operation
@@ -830,9 +860,15 @@ Space.prototype.dragStart =
 	// normal mode
 
 	// see if one item was targeted
-	for( var a = 0, aZ = this.twig.length; a < aZ; a++ )
+	for(
+		var a = 0, aZ = this.twig.length;
+		a < aZ;
+		a++
+	)
 	{
-		var item = this.atRank( a );
+		var item =
+			this.atRank( a );
+
 		if(
 			item.dragStart(
 				view,
@@ -852,8 +888,10 @@ Space.prototype.dragStart =
 	(
 		'Pan',
 		'space',
-		'start',  p,
-		'pan',    view.pan
+		'start',
+			p,
+		'pan',
+			view.pan
 	);
 
 	return;
@@ -870,10 +908,15 @@ Space.prototype.click =
 		ctrl
 	)
 {
-	var view = this.$view;
+	var view =
+		this.$view;
 
 	// clicked some item?
-	for( var a = 0, aZ = this.twig.length; a < aZ; a++ )
+	for(
+		var a = 0, aZ = this.twig.length;
+		a < aZ;
+		a++
+	)
 	{
 		var item =
 			this.atRank( a );
@@ -895,7 +938,8 @@ Space.prototype.click =
 
 	this.setCaret( null );
 
-	shell.redraw = true;
+	shell.redraw =
+		true;
 
 	return true;
 };
@@ -911,8 +955,12 @@ Space.prototype.dragStop =
 		ctrl
 	)
 {
-	var action = shell.bridge.action( );
-	var view   = this.$view;
+	var action =
+		shell.bridge.action( );
+
+	var view =
+		this.$view;
+
 	var key, item;
 
 	if( !action )
@@ -924,17 +972,19 @@ Space.prototype.dragStop =
 	{
 		case 'CreateNote' :
 
-			key = shell.peer.newNote(
-				this.spacename,
-				Visual.Note.s_getZone(
-					view.depoint( action.start ),
-					view.depoint( action.move  )
-				)
-			);
+			key =
+				shell.peer.newNote(
+					this.spacename,
+					Visual.Note.s_getZone(
+						view.depoint( action.start ),
+						view.depoint( action.move  )
+					)
+				);
 
 			this.$sub[ key ].grepFocus( );
 
-			shell.redraw = true;
+			shell.redraw =
+				true;
 
 			if( !ctrl )
 			{
@@ -945,21 +995,24 @@ Space.prototype.dragStop =
 
 		case 'CreateLabel' :
 
-			var trans = Visual.Label.s_createTrans(
-				view.depoint( action.start ),
-				view.depoint( action.move  )
-			);
+			var trans =
+				Visual.Label.s_createTrans(
+					view.depoint( action.start ),
+					view.depoint( action.move  )
+				);
 
-			key = shell.peer.newLabel(
-				this.spacename,
-				trans.pnw,
-				'Label',
-				trans.font.size
-			);
+			key =
+				shell.peer.newLabel(
+					this.spacename,
+					trans.pnw,
+					'Label',
+					trans.font.size
+				);
 
 			this.$sub[ key ].grepFocus( );
 
-			shell.redraw = true;
+			shell.redraw =
+				true;
 
 			shell.bridge.stopAction( );
 
@@ -996,11 +1049,16 @@ Space.prototype.dragStop =
 
 				case 'hadSelect' :
 
-					item = this.getSub( action.toItemPath );
+					item =
+						this.getSub( action.toItemPath );
 
-					item.dragStop( view, p );
+					item.dragStop(
+						view,
+						p
+					);
 
-					shell.redraw = true;
+					shell.redraw =
+						true;
 
 					shell.bridge.stopAction( );
 
@@ -1035,32 +1093,37 @@ Space.prototype.dragStop =
 
 		case 'Remove' :
 
-			var removeItem = this.getSub(
-				action.removeItemPath,
-				'Item'
-			);
 
-			// checks if the pointer is still
-			// on the items to be removed
-			// otherwise it is not removed!
-			if(
-				!removeItem.getZone().within(
-					view,
-					p
-				)
-			)
-			{
-				action.removeItemPath = null;
-
-				shell.redraw = true;
-
-				break;
-			}
-
-			var focus = this.focusedItem( );
+			var focus =
+				this.focusedItem( );
 
 			if( action.removeItemPath )
 			{
+				var removeItem =
+					this.getSub(
+						action.removeItemPath,
+						'Item'
+					);
+
+				// checks if the pointer is still
+				// on the items to be removed
+				// otherwise it is not removed!
+				if(
+					!removeItem.getZone().within(
+						view,
+						p
+					)
+				)
+				{
+					action.removeItemPath =
+						null;
+
+					shell.redraw =
+						true;
+
+					break;
+				}
+
 				if(
 					focus &&
 					action.removeItemPath.equals( focus.path )
@@ -1073,10 +1136,12 @@ Space.prototype.dragStop =
 					action.removeItemPath
 				);
 
-				action.removeItemPath = null;
+				action.removeItemPath =
+					null;
 			}
 
-			shell.redraw = true;
+			shell.redraw =
+				true;
 
 			break;
 
@@ -1387,10 +1452,16 @@ Space.prototype.input =
 		return;
 	}
 
-	this.getSub(
-		caret.sign.path,
-		'input'
-	).input( text );
+	var item =
+		this.getSub(
+			caret.sign.path,
+			'input'
+		);
+	
+	if( item )
+	{
+		item.input( text );
+	}
 };
 
 
@@ -1452,14 +1523,20 @@ Space.prototype.specialKey =
 		return;
 	}
 
-	this.getSub(
-		caret.sign.path,
-		'specialKey'
-	).specialKey(
-		key,
-		shift,
-		ctrl
-	);
+	var item =
+		this.getSub(
+			caret.sign.path,
+			'specialKey'
+		);
+		
+	if( item )
+	{
+		item.specialKey(
+			key,
+			shift,
+			ctrl
+		);
+	}
 };
 
 
@@ -1475,10 +1552,17 @@ Space.prototype.getSub =
 		//     // returns the last node that features the mark
 	)
 {
-	var n = this;
-	var m = null;
+	var n =
+		this;
 
-	for( var a = 0, aZ = path.length; a < aZ; a++ )
+	var m =
+		null;
+
+	for(
+		var a = 0, aZ = path.length;
+		a < aZ;
+		a++
+	)
 	{
 		if( !n.$sub )
 		{

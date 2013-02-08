@@ -143,7 +143,13 @@ Shell =
 Shell.prototype.positionCaret =
 	function( )
 {
-	this.getCurrentDisplay( ).positionCaret( );
+	var display =
+		this.getCurrentDisplay( );
+
+	if( display )
+	{
+		display.positionCaret( );
+	}
 };
 
 /*
@@ -219,7 +225,18 @@ Shell.prototype.systemFocus =
 		return;
 	}
 
-	this.getCurrentDisplay( ).systemFocus( );
+	var display =
+		this.getCurrentDisplay( );
+
+	if( display )
+	{
+		display.systemFocus( );
+	}
+
+	if( this.redraw )
+	{
+		this._draw( );
+	}
 };
 
 
@@ -234,7 +251,18 @@ Shell.prototype.systemBlur =
 		return;
 	}
 
-	this.getCurrentDisplay( ).systemBlur( );
+	var display =
+		this.getCurrentDisplay( );
+
+	if( display )
+	{
+		display.systemBlur( );
+	}
+
+	if( this.redraw )
+	{
+		this._draw( );
+	}
 };
 
 
@@ -264,7 +292,13 @@ Shell.prototype.blink =
 		this.knock( );
 	}
 
-	this.getCurrentDisplay( ).blink( );
+	var display =
+		this.getCurrentDisplay( );
+
+	if( display )
+	{
+		display.blink( );
+	}
 };
 
 
@@ -1242,7 +1276,10 @@ Shell.prototype.onAuth =
 Shell.prototype.getCaret =
 	function( )
 {
-	return this.getCurrentDisplay( ).$caret;
+	var display =
+		this.getCurrentDisplay( );
+
+	return display && display.$caret;
 };
 
 

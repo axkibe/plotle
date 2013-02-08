@@ -1,10 +1,8 @@
 /*
-|
 | A peer to a meshcraft repository.
 | Utilizes its own meshmashine.
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
@@ -29,50 +27,80 @@ var Path;
 
 
 "use strict";
-if (typeof (window) === 'undefined')
-	{ throw new Error('this code nees a browser!'); }
+if( typeof( window ) === 'undefined' )
+{
+	throw new Error( 'this code nees a browser!' );
+}
 
 
 /*
 | Constructor
 */
-Peer = function( iface )
+Peer =
+	function( iface )
 {
-	this.spacename = null;
-	this._iface    = iface;
+	this.spacename =
+		null;
 
-	this._$visitUser     = null;
-	this._$visitPasshash = null;
+	this._iface =
+		iface;
+
+	this._$visitUser =
+		null;
+
+	this._$visitPasshash =
+		null;
 };
 
 
 /*
 | sets the current user
 */
-Peer.prototype.setUser = function(user, passhash)
+Peer.prototype.setUser =
+	function(
+		user,
+		passhash
+	)
 {
-	this._iface.setUser(user, passhash);
+	this._iface.setUser(
+		user,
+		passhash
+	);
 };
 
 
 /*
 | Logs out a registered users, switches to visitor
 */
-Peer.prototype.logout = function(callback)
+Peer.prototype.logout =
+	function(
+		callback
+	)
 {
-	if (this._$visitUser)
+	if( this._$visitUser )
 	{
 		callback(
 			{
-				ok       : true,
-				user     : this._$visitUser,
-				passhash : this._$visitPasshash
+				ok :
+					true,
+
+				user :
+					this._$visitUser,
+
+				passhash :
+					this._$visitPasshash
 			}
 		);
 	}
 	else
 	{
-		this.auth('visitor', null, this, callback, 'logout');
+		this.auth(
+			'visitor',
+			null,
+			this,
+			callback,
+			'logout'
+		);
 	}
 };
 
@@ -80,44 +108,80 @@ Peer.prototype.logout = function(callback)
 /*
 | authentication completed of a visitor user on log out
 */
-Peer.prototype.onAuth = function(user, passhash, asw, callback, op)
+Peer.prototype.onAuth =
+	function(
+		user,
+		passhash,
+		asw,
+		callback,
+		op
+	)
 {
-	if (op !== 'logout')
-		{ throw new Error('onAuth unexpected operation: ' + op); }
+	if( op !== 'logout' )
+	{
+		throw new Error( 'onAuth unexpected operation: ' + op );
+	}
 
-	callback(asw);
+	callback( asw );
 };
 
 
 /*
 | authenticates a user or visitor.
 */
-Peer.prototype.auth = function(user, passhash, onAuthReceiver, a1, a2)
+Peer.prototype.auth =
+	function(
+		user,
+		passhash,
+		onAuthReceiver,
+		a1,
+		a2
+	)
 {
-	var self = this;
+	var self =
+		this;
 
-	if (user === 'visitor' && passhash === null)
-		{ passhash = Jools.uid(); }
-
-	self._iface.auth(user, passhash, function(asw)
+	if(
+		user === 'visitor' &&
+		passhash === null
+	)
 	{
-		if (asw.ok && user.substring(0, 5) === 'visit')
-		{
-			self._$visitUser     = asw.user;
-			self._$visitPasshash = asw.passhash;
-		}
+		passhash = Jools.uid( );
+	}
 
-		onAuthReceiver.onAuth(user, passhash, asw, a1, a2);
-	});
+	self._iface.auth(
+		user,
+		passhash,
+		function( asw )
+		{
+			if( asw.ok && user.substring( 0, 5 ) === 'visit' )
+			{
+				self._$visitUser =
+					asw.user;
+
+				self._$visitPasshash =
+					asw.passhash;
+			}
+
+			onAuthReceiver.onAuth(
+				user,
+				passhash,
+				asw,
+				a1,
+				a2
+			);
+		}
+	);
 };
 
 
 /*
 | sends a message.
 */
-Peer.prototype.sendMessage = function(message)
+Peer.prototype.sendMessage =
+	function( message )
 {
-	this._iface.sendMessage(message);
+	this._iface.sendMessage( message );
 };
 
 
@@ -182,7 +246,11 @@ Peer.prototype.get =
 /*
 | Creates a new note.
 */
-Peer.prototype.newNote = function( spacename, zone )
+Peer.prototype.newNote =
+	function(
+		spacename,
+		zone
+	)
 {
 	if ( spacename !== this.spacename )
 	{
@@ -192,20 +260,42 @@ Peer.prototype.newNote = function( spacename, zone )
 	var chgX = this._iface.alter(
 		{
 			val : {
-				type : 'Note',
-				fontsize : 13,
-				zone : zone,
-				doc  : {
-					type  : 'Doc',
-					copse : { '1' : { type: 'Para', text: '' } },
-					ranks : [ '1' ]
+				type :
+					'Note',
+
+				fontsize :
+					13,
+
+				zone :
+					zone,
+				doc  :
+				{
+					type :
+						'Doc',
+
+					copse :
+						{
+							'1' :
+							{
+								type : 'Para',
+								text : ''
+							}
+						},
+
+					ranks :
+						[ '1' ]
 				}
 			},
-			rank : null
+
+			rank :
+				null
 		},
 		{
-			path: new Path( [ '$new' ] ),
-			rank: 0
+			path :
+				new Path( [ '$new' ] ),
+
+			rank :
+				0
 		}
 	);
 
@@ -223,24 +313,41 @@ Peer.prototype.newPortal =
 	)
 {
 	if ( spacename !== this.spacename )
-		{ throw new Error('newPortal() wrong spacename'); }
+	{
+		throw new Error(
+			'newPortal() wrong spacename'
+		);
+	}
 
-	var chgX = this._iface.alter(
-		{
-			val :
+	var chgX =
+		this._iface.alter(
 			{
-				type      : 'Portal',
-				zone      : zone,
-				spaceUser : '',
-				spaceTag  : ''
+				val :
+				{
+					type :
+						'Portal',
+
+					zone :
+						zone,
+
+					spaceUser :
+						'',
+
+					spaceTag :
+						''
+				},
+
+				rank :
+					null
 			},
-			rank : null
-		},
-		{
-			path: new Path( [ '$new' ] ),
-			rank: 0
-		}
-	);
+			{
+				path :
+					new Path( [ '$new' ] ),
+
+				rank :
+					0
+			}
+		);
 
 	return chgX.trg.path.get(-1);
 };
@@ -256,8 +363,17 @@ Peer.prototype.setZone =
 	)
 {
 	this._iface.alter(
-		{ val  : zone },
-		{ path : new Path(itemPath, '++', 'zone') }
+		{
+			val : zone
+		},
+		{
+			path :
+				new Path(
+					itemPath,
+					'++',
+					'zone'
+				)
+		}
 	);
 };
 

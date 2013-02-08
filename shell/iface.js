@@ -954,35 +954,64 @@ IFace.prototype._sendChanges =
 
 
 /*
-| Sends the stored changes to remote meshmashine
+| Reverts actions from the undo chain.
 */
-IFace.prototype.undo = function()
+IFace.prototype.undo =
+	function()
 {
-	if (this._$undo.length === 0)
-		{ return; }
+	if( this._$undo.length === 0 )
+	{
+		return;
+	}
 
-	var chgX     = this._$undo.pop( ).chgX.invert( );
-    var r        = chgX.changeTree( this.$cSpace );
-    this.$cSpace = r.tree;
-	chgX         = r.chgX;
+	var chgX =
+		this._$undo.pop( ).chgX.invert( );
+
+    var r =
+		chgX.changeTree( this.$cSpace );
+	
+	if( r === null )
+	{
+		return;
+	}
+
+    this.$cSpace =
+		r.tree;
+
+	chgX =
+		r.chgX;
 
 	if( chgX === null )
-		{ return; }
+	{
+		return;
+	}
 
 	var c = Jools.immute(
 		{
-			cid  : Jools.uid( ),
-			chgX : chgX,
-			time : this.$remoteTime
+			cid :
+				Jools.uid( ),
+
+			chgX :
+				chgX,
+
+			time :
+				this.$remoteTime
 		}
 	);
 
 	this._$outbox.push( c );
+
 	this._$redo.push( c );
+
 	this._sendChanges( );
 
     if( this._updateRCV )
-		{ this._updateRCV.update( r.tree, chgX ); }
+	{
+		this._updateRCV.update(
+			r.tree,
+			chgX
+		);
+	}
 
     return chgX;
 };
