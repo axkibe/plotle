@@ -1,5 +1,5 @@
 /*
-| The login form.
+| The signup form.
 |
 | Authors: Axel Kittenberger
 */
@@ -24,15 +24,15 @@ var shell;
 /*
 | Capsule
 */
-(function( ) {
+( function( ) {
 'use strict';
 
 
 /*
 | The login form
 */
-var Login =
-Forms.Login =
+var SignUp =
+Forms.SignUp =
 	function(
 		// free strings
 	)
@@ -45,7 +45,7 @@ Forms.Login =
 
 
 Jools.subclass(
-	Login,
+	SignUp,
 	Forms.Form
 );
 
@@ -53,7 +53,7 @@ Jools.subclass(
 /*
 | Login control
 */
-var loginButton =
+var signupButton =
 {
 	width :
 		70,
@@ -65,7 +65,7 @@ var loginButton =
 		95,
 
 	n :
-		28
+		148
 };
 
 
@@ -84,14 +84,14 @@ var closeButton =
 		180,
 
 	n :
-		38
+		158
 };
 
 
 /*
 | Layout
 */
-Login.prototype.layout =
+SignUp.prototype.layout =
 	{
 		type :
 			'Layout',
@@ -104,7 +104,7 @@ Login.prototype.layout =
 					'Label',
 
 				text :
-					'Log In',
+					'Sign Up',
 				font :
 					fontPool.get( 22, 'la' ),
 
@@ -117,7 +117,7 @@ Login.prototype.layout =
 						'c',
 
 					x :
-						-225,
+						-245,
 
 					y :
 						-112
@@ -133,7 +133,7 @@ Login.prototype.layout =
 					'username',
 
 				font :
-					fontPool.get( 16, 'la' ),
+					fontPool.get( 16, 'ra' ),
 
 				pos :
 				{
@@ -144,10 +144,37 @@ Login.prototype.layout =
 						'c',
 
 					x :
-						-175,
+						-98,
 
 					y :
 						-49
+				}
+			},
+
+			'emailLabel' :
+			{
+				type :
+					'Label',
+
+				text :
+					'email',
+
+				font :
+					fontPool.get( 16, 'ra' ),
+
+				pos :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'c',
+
+					x :
+						-98,
+
+					y :
+						-9
 				}
 			},
 
@@ -160,7 +187,7 @@ Login.prototype.layout =
 					'password',
 
 				font :
-					fontPool.get( 16, 'la' ),
+					fontPool.get( 16, 'ra' ),
 
 				pos :
 				{
@@ -171,10 +198,64 @@ Login.prototype.layout =
 						'c',
 
 					x :
-						-175,
+						-98,
 
 					y :
-						-9
+						31
+				}
+			},
+
+			'password2Label' :
+			{
+				type :
+					'Label',
+
+				text :
+					'repeat password',
+
+				font :
+					fontPool.get( 16, 'ra' ),
+
+				pos :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'c',
+
+					x :
+						-98,
+
+					y :
+						71
+				}
+			},
+
+			'newsletterLabel' :
+			{
+				type :
+					'Label',
+
+				text :
+					'newsletter',
+
+				font :
+					fontPool.get( 16, 'ra' ),
+
+				pos :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'c',
+
+					x :
+						-98,
+
+					y :
+						111
 				}
 			},
 
@@ -272,7 +353,7 @@ Login.prototype.layout =
 				}
 			},
 
-			'passwordInput' :
+			'emailInput' :
 			{
 				type :
 					'Input',
@@ -281,7 +362,7 @@ Login.prototype.layout =
 					'',
 
 				password :
-					true,
+					false,
 
 				normaStyle :
 					'input',
@@ -338,14 +419,253 @@ Login.prototype.layout =
 				}
 			},
 
+			'passwordInput' :
+			{
+				type :
+					'Input',
 
-			'loginButton' :
+				code :
+					'',
+
+				password :
+					true,
+
+				normaStyle :
+					'input',
+
+				focusStyle :
+					'inputFocus',
+
+				hoverStyle :
+					'input',
+
+				hofocStyle :
+					'inputFocus',
+
+				font :
+					fontPool.get( 14, 'la' ),
+
+				maxlen :
+					100,
+
+				frame  :
+				{
+					type :
+						'Frame',
+
+					pnw :
+					{
+						type :
+							'Point',
+
+						anchor :
+							'c',
+
+						x :
+							-80,
+
+						y :
+							13
+					},
+
+					pse :
+					{
+						type :
+							'Point',
+
+						anchor :
+							'c',
+
+						x :
+							130,
+
+						y :
+							39
+					}
+				}
+			},
+
+
+			'password2Input' :
+			{
+				type :
+					'Input',
+
+				code :
+					'',
+
+				password :
+					true,
+
+				normaStyle :
+					'input',
+
+				focusStyle :
+					'inputFocus',
+
+				hoverStyle :
+					'input',
+
+				hofocStyle :
+					'inputFocus',
+
+				font :
+					fontPool.get( 14, 'la' ),
+
+				maxlen :
+					100,
+
+				frame  :
+				{
+					type :
+						'Frame',
+
+					pnw :
+					{
+						type :
+							'Point',
+
+						anchor :
+							'c',
+
+						x :
+							-80,
+
+						y :
+							53
+					},
+
+					pse :
+					{
+						type :
+							'Point',
+
+						anchor :
+							'c',
+
+						x :
+							130,
+
+						y :
+							79
+					}
+				}
+			},
+
+			'newsletterCheckBox' :
+			{
+				type :
+					'CheckBox',
+
+				normaStyle :
+					'checkbox',
+
+				hoverStyle :
+					'checkboxHover',
+
+				focusStyle :
+					'checkboxFocus',
+
+				hofocStyle :
+					'checkboxHofoc',
+
+				box :
+				{
+					type :
+						'Frame',
+
+					pnw :
+					{
+						type :
+							'Point',
+
+						anchor :
+							'c',
+
+						x :
+							-75,
+						y :
+							98
+					},
+
+					pse  :
+					{
+						type:
+							'Point',
+
+						anchor:
+							'c',
+
+						x :
+							-59,
+
+						y :
+							114
+					}
+				}
+			},
+
+			'newsletter2Label' :
+			{
+				type :
+					'Label',
+
+				text :
+					'Updates and News',
+
+				font :
+					fontPool.get( 12, 'la' ),
+
+				pos :
+				{
+					type :
+						'Point',
+
+					anchor:
+						'c',
+
+					x :
+						-45,
+
+					y :
+						110
+				}
+			},
+
+			'newsletter3Label' :
+			{
+				type :
+					'Label',
+
+				text :
+					'Never going to be more than an email a month. For sure!',
+
+				font :
+					fontPool.get( 12, 'la' ),
+
+				pos :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'c',
+
+					x :
+						-45,
+
+					y :
+						130
+				}
+			},
+
+			'signupButton' :
 			{
 				type :
 					'Button',
 
 				code :
-					'LoginLoginButton',
+					'TODO',
 
 				normaStyle :
 					'button',
@@ -373,10 +693,10 @@ Login.prototype.layout =
 							'c',
 
 						x :
-							loginButton.w,
+							signupButton.w,
 
 						y :
-							loginButton.n
+							signupButton.n
 					},
 
 					pse  :
@@ -388,10 +708,10 @@ Login.prototype.layout =
 							'c',
 
 						x :
-							loginButton.w + loginButton.width,
+							signupButton.w + signupButton.width,
 
 						y :
-							loginButton.n + loginButton.height
+							signupButton.n + signupButton.height
 					}
 				},
 
@@ -401,7 +721,7 @@ Login.prototype.layout =
 						'Label',
 
 					text :
-						'log in',
+						'sign up',
 
 					font :
 						fontPool.get( 14, 'cm' ),
@@ -586,11 +906,19 @@ Login.prototype.layout =
 		[
 			'headline',
 			'usernameLabel',
+			'emailLabel',
 			'passwordLabel',
+			'password2Label',
+			'newsletterLabel',
 			'errorLabel',
 			'userInput',
+			'emailInput',
 			'passwordInput',
-			'loginButton',
+			'password2Input',
+			'newsletterCheckBox',
+			'newsletter2Label',
+			'newsletter3Label',
+			'signupButton',
 			'closeButton'
 		]
 	};
@@ -599,13 +927,13 @@ Login.prototype.layout =
 /*
 | Name of the form.
 */
-Login.prototype.name =
-	'login';
+SignUp.prototype.name =
+	'signup';
 
 /*
 | A button of the form has been pushed.
 */
-Login.prototype.pushButton =
+SignUp.prototype.pushButton =
 	function(
 		buttonName
 		// shift,
@@ -614,9 +942,9 @@ Login.prototype.pushButton =
 {
 	switch( buttonName )
 	{
-		case 'loginButton' :
+		case 'signupButton' :
 
-			this.login( );
+			this.signup( );
 
 			break;
 
@@ -635,9 +963,10 @@ Login.prototype.pushButton =
 /*
 | Logins the user
 */
-Login.prototype.login =
+SignUp.prototype.signup =
 	function( )
 {
+	/*
 	var sub =
 		this.$sub;
 
@@ -709,12 +1038,13 @@ Login.prototype.login =
 		this,
 		pass
 	);
+*/
 };
-
 
 /*
 | User is pressing a special key.
 */
+/*
 Login.prototype.specialKey =
 	function(
 		key,
@@ -750,11 +1080,12 @@ Login.prototype.specialKey =
 		ctrl
 	);
 };
-
+*/
 
 /*
 | an auth ( login ) operation completed.
 */
+/*
 Login.prototype.onAuth =
 	function(
 		user,
@@ -812,12 +1143,12 @@ Login.prototype.onAuth =
 
 	this.poke( );
 };
-
+*/
 
 /*
 | Clears all fields
 */
-Login.prototype.clear =
+SignUp.prototype.clear =
 	function( )
 {
 	var sub = this.$sub;

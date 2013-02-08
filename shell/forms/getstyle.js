@@ -37,20 +37,20 @@ var styles =
 //	boxes :
 //		theme.dash.boxes,
 
-//	checkbox :
-//		theme.dash.checkbox,
+	checkbox :
+		theme.forms.checkbox,
 
-//	checkboxHover :
-//		theme.dash.checkboxHover,
+	checkboxHover :
+		theme.forms.checkboxHover,
 
-//	checkboxFocus :
-//		theme.dash.checkboxFocus,
+	checkboxFocus :
+		theme.forms.checkboxFocus,
 
-//	checkboxHofoc :
-//		theme.dash.checkboxHofoc,
+	checkboxHofoc :
+		theme.forms.checkboxHofoc,
 
-//	checkboxCheck :
-//		theme.dash.checkboxCheck,
+	checkboxCheck :
+		theme.forms.checkboxCheck,
 
 
 	button :
@@ -67,6 +67,7 @@ var styles =
 
 //	highlight :
 //		theme.dash.highlight,
+
 
 	input :
 		theme.forms.input,

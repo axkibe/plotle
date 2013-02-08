@@ -982,6 +982,9 @@ theme =
 			edge : [ ]
 		},
 
+		// TODO make Focus, Hover, Hofoc part of a larger
+		// table
+
 		button :
 		{
 			fill :
@@ -1134,6 +1137,125 @@ theme =
 			]
 		},
 
+
+		checkbox :
+		{
+			fill :
+				'white',
+
+			edge :
+			[
+				{
+					border :
+						1,
+
+					width :
+						1.5,
+
+					color :
+						'rgb( 255, 188, 87 )'
+				},
+				{
+					border :
+						0,
+
+					width :
+						1,
+
+					color :
+						'black'
+				}
+			]
+		},
+
+		checkboxHover :
+		{
+			fill :
+				'white',
+
+			edge :
+			[
+				{
+					border :
+						1,
+
+					width :
+						2,
+
+					color :
+						'rgb( 255, 188, 87 )'
+				},
+				{
+					border :
+						0,
+
+					width :
+						1,
+
+					color :
+						'rgb( 128, 128, 0 )'
+				}
+			]
+		},
+
+		checkboxFocus :
+		{
+			fill :
+				'white',
+
+			edge :
+			[
+				{
+					border :
+						1,
+
+					width :
+						2,
+
+					color :
+						'rgb( 255, 99, 188 )'
+				},
+				{
+					border :
+						0,
+
+					width :
+						1,
+
+					color :
+						'black'
+				}
+			]
+		},
+
+		checkboxHofoc :
+		{
+			fill :
+				'white',
+
+			edge :
+			[
+				{
+					border :
+						0,
+
+					width :
+						1,
+
+					color :
+						'black'
+				}
+			]
+		},
+
+		checkboxCheck :
+		{
+			fill :
+				'black',
+
+			edge :
+				[ ]
+		},
 
 		/*
 		| default input field style

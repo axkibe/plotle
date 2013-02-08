@@ -9,7 +9,8 @@
 | Export
 */
 var Forms;
-Forms = Forms || { };
+Forms =
+	Forms || { };
 
 
 /*
@@ -144,10 +145,14 @@ Forms.Form =
 		var twig =
 			root.copse[ name ];
 
+		var Proto =
+			this.getWidgetPrototype( twig.type );
+
 		this.$sub[ name ] =
-			this.newComponent(
+			new Proto(
 				name,
 				twig,
+				this,
 				inherit && inherit.$sub[ name ]
 			);
 	}
@@ -157,69 +162,37 @@ Forms.Form =
 
 
 /*
-| Creates a new component
+| Returns the widgets prototype matching type
 */
-Form.prototype.newComponent =
-	function(
-		name,
-		twig,
-		inherit
-	)
+Form.prototype.getWidgetPrototype =
+	function( type )
 {
-	/*
-	if( twig.code && twig.code !== '' )
-	{
-		var Proto =
-			Proc[ twig.code ];
-
-		if( Proto )
-		{
-			return new Proto( twig, this, inherit, name );
-		}
-		else
-		{
-			throw new Error( 'No prototype for :' + twig.code );
-		}
-	}
-	*/
-
-	switch( twig.type )
+	switch( type )
 	{
 		case 'Button' :
 
-			return new Forms.Button(
-				name,
-				twig,
-				this,
-				inherit
-			);
+			return Forms.Button;
 
-//		case 'CheckBox' :
-//			return new Forms.CheckBox( twig, this, inherit, name );
+		case 'CheckBox' :
+
+			return Forms.CheckBox;
 
 		case 'Input' :
 
-			return new Forms.Input(
-				name,
-				twig,
-				this,
-				inherit
-			);
+			return Forms.Input;
 
 		case 'Label' :
 
-			return new Forms.Label(
-				name,
-				twig,
-				this,
-				inherit
-			);
+			return Forms.Label;
 
 		default :
 
-			throw new Error( 'Invalid component type: ' + twig.type );
+			throw new Error(
+				'Invalid component type: ' + type
+			);
 	}
 };
+
 
 
 /*

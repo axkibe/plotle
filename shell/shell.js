@@ -97,6 +97,12 @@ Shell =
 				new Forms.Login(
 					'screensize',
 						screensize
+				),
+			
+			signup :
+				new Forms.SignUp(
+					'screensize',
+						screensize
 				)
 		};
 
@@ -553,6 +559,26 @@ Shell.prototype.getCurrentDisplay =
 			}
 
 			return this.$forms.login;
+		
+		case 'SignUp' :
+
+			if(
+				!this.screensize.eq(
+					this.$forms.signup.screensize
+				)
+			)
+			{
+				this.$forms.signup =
+					new Forms.SignUp(
+						'inherit',
+							this.$forms.signup,
+						'screensize',
+							this.screensize
+					);
+			}
+
+			return this.$forms.signup;
+
 
 		default :
 

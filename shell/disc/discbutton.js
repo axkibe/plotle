@@ -333,7 +333,7 @@ DiscButton.prototype.getText =
 	function( )
 {
 	return this._$text;
-}
+};
 
 /*
 | Draws the buttons icon.

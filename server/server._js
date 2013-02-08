@@ -659,10 +659,16 @@ Server.prototype.prepareResources =
 		'shell/forms/input.js',
 			'fb',
 
+		'shell/forms/checkbox.js',
+			'fb',
+
 		'shell/forms/form.js',
 			'fb',
 
 		'shell/forms/login.js',
+			'fb',
+
+		'shell/forms/signup.js',
 			'fb',
 
 		'shell/visual/base.js',
