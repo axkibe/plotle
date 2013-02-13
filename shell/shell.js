@@ -1211,10 +1211,13 @@ Shell.prototype.moveToSpace =
 		);
 	}
 
+	/*
+	TODO remove?
 	self.$disc.setCurSpace(
 		'',
 		''
 	);
+	*/
 
 	this.peer.aquireSpace(
 		name,
@@ -1233,11 +1236,12 @@ Shell.prototype.moveToSpace =
 
 			var tree = val.tree;
 
-			self.$space = new Visual.Space(
-				tree.root,
-				name,
-				val.access
-			);
+			self.$space =
+				new Visual.Space(
+					tree.root,
+					name,
+					val.access
+				);
 
 			self.$disc.setCurSpace(
 				name,

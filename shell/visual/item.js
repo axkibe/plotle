@@ -528,7 +528,8 @@ Item.prototype.dragStop =
 				return false;
 			}
 
-			var space = shell.$space;
+			var space =
+				shell.$space;
 
 			Visual.Relation.create(
 				space,

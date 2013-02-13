@@ -98,24 +98,24 @@ CheckBox.prototype.isChecked =
 
 
 /*
-| Returns the current value (text in the box)
+| Sets the current checked state
 */
-CheckBox.prototype.setValue =
+CheckBox.prototype.setChecked =
 	function(
-		value
+		checked
 	)
 {
-	if( typeof( value ) !== 'boolean' )
+	if( typeof( checked ) !== 'boolean' )
 	{
-		throw new Error( 'CheckBox value not boolean: ' + value );
+		throw new Error( 'CheckBox setChecked not boolean: ' + checked );
 	}
 
 	this._$checked =
-		value;
+		checked;
 
 	this.poke( );
 
-	return value;
+	return checked;
 };
 
 

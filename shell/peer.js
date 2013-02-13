@@ -70,7 +70,8 @@ Peer.prototype.setUser =
 
 
 /*
-| Logs out a registered users, switches to visitor
+| Logs out a registered users.
+| Switches to visitor.
 */
 Peer.prototype.logout =
 	function(
@@ -186,7 +187,7 @@ Peer.prototype.sendMessage =
 
 
 /*
-| registers a new user.
+| Registers a new user.
 */
 Peer.prototype.register =
 	function(
@@ -194,7 +195,7 @@ Peer.prototype.register =
 		mail,
 		passhash,
 		newsletter,
-		callback
+		onRegisterReceiver
 	)
 {
 	this._iface.register(
@@ -202,7 +203,7 @@ Peer.prototype.register =
 		mail,
 		passhash,
 		newsletter,
-		callback
+		onRegisterReceiver
 	);
 };
 

@@ -265,7 +265,11 @@ Portal.prototype.dragStop =
 
 		default :
 
-			return Visual.Item.prototype.dragStop.call( this, view, p );
+			return Visual.Item.prototype.dragStop.call(
+				this,
+				view,
+				p
+			);
 	}
 
 };
@@ -277,15 +281,19 @@ Portal.prototype.dragStop =
 Portal.prototype.grepFocus =
 	function( )
 {
+	var space =
+		shell.$space;
+
 	// already have focus?
-	if( shell.$space.focusedItem( ) === this )
+	if( space.focusedItem( ) === this )
 		{ return; }
 
-	var caret = shell.setCaret(
-		'space',
+	var caret = space.setCaret(
 		{
-			path : this.path,
-			at1  : 0
+			path :
+				this.path,
+			at1 :
+				0
 		}
 	);
 
@@ -306,18 +314,25 @@ Portal.prototype.click =
 	)
 {
 	if( !this.getZone( ).within( view, p ) )
-		{ return false; }
+	{
+		return false;
+	}
 
-	var space = shell.$space;
-	var focus = space.focusedItem( );
+	var space =
+		shell.$space;
+
+	var focus =
+		space.focusedItem( );
 
 	if( focus !== this )
 	{
 		this.grepFocus( );
+
 		shell.selection.deselect( );
 	}
 
-	shell.redraw = true;
+	shell.redraw =
+		true;
 
 	var caret = shell.setCaret(
 		'space',
@@ -328,6 +343,7 @@ Portal.prototype.click =
 	);
 
 	caret.show( );
+
 	shell.selection.deselect( );
 
 	return true;
@@ -344,19 +360,29 @@ Portal.prototype.draw =
 		view
 	)
 {
-	var zone  = this.getZone( );
-	var vzone = view.rect( zone );
-	var f     = this.$fabric;
+	var zone =
+		this.getZone( );
+
+	var vzone =
+		view.rect( zone );
+
+	var f =
+		this.$fabric;
 
 	// no buffer hit?
-	if (config.debug.noCache || !f ||
-		vzone.width  !== f.width ||
-		vzone.height !== f.height)
+	if (
+		config.debug.noCache ||
+		!f ||
+		vzone.width !== f.width ||
+		vzone.height !== f.height
+	)
 	{
-		f = this._weave( vzone );
+		f =
+			this._weave( vzone );
 	}
 
-	var action = shell.bridge.action( );
+	var action =
+		shell.bridge.action( );
 
 	if(
 		action &&

@@ -59,9 +59,12 @@ Disc.DiscButton =
 
 	var disc;
 	var name;
-	
+
 	this._$visible =
 		true;
+
+	this._$text =
+		null;
 
 	while( a < aZ )
 	{
@@ -91,6 +94,15 @@ Disc.DiscButton =
 
 				this._$visible =
 					!!arguments[ a + 1 ];
+
+				a += 2;
+
+				break;
+
+			case 'text' :
+
+				this._$text =
+					arguments[ a + 1 ];
 
 				a += 2;
 
@@ -170,8 +182,11 @@ Disc.DiscButton =
 			);
 	}
 
-	this._$text =
-		style.text;
+	if( this._$text === null )
+	{
+		this._$text =
+			style.text;
+	}
 
 	Jools.immute( this );
 };

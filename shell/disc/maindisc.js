@@ -10,7 +10,8 @@
 */
 var Disc;
 
-Disc = Disc || { };
+Disc =
+	Disc || { };
 
 
 /*
@@ -152,7 +153,13 @@ var MainDisc = Disc.MainDisc =
 				'visibility',
 					inherit ?
 						inherit.buttons[ name ].isVisible( ) :
-						this.buttons[ name ]
+						this.buttons[ name ],
+				'text',
+					(
+						inherit && inherit.buttons[ name ].getText( )
+					)
+					||
+					null
 			);
 	}
 
@@ -246,7 +253,10 @@ MainDisc.prototype._weave =
 			Dash.getStyle( 'boxes' ),
 			new Euclid.Rect(
 				'pse',
-				new Euclid.Point( this.width - 1, this.height - 1)
+				new Euclid.Point(
+					this.width - 1,
+					this.height - 1
+				)
 			),
 			'sketch',
 			Euclid.View.proper
@@ -363,8 +373,10 @@ MainDisc.prototype.draw =
 	}
 
 	fabric.drawImage(
-		'image', this._weave( ),
-		'pnw', this.pnw
+		'image',
+			this._weave( ),
+		'pnw',
+			this.pnw
 	);
 };
 
@@ -459,7 +471,9 @@ MainDisc.prototype.pointingHover =
 			);
 
 		if ( cursor )
-			{ break; }
+		{
+			break;
+		}
 	}
 
 	if ( cursor === null )
@@ -551,7 +565,9 @@ MainDisc.prototype.pointingStart =
 			);
 
 		if( r )
-			{ return r; }
+		{
+			return r;
+		}
 	}
 
 	return false;
@@ -651,7 +667,32 @@ MainDisc.prototype.setCurSpace =
 		access
 	)
 {
-	console.log( 'TODO setCurSpace():', space, access );
+	this.buttons.space.setText( space );
+
+	switch( access )
+	{
+		case 'ro' :
+
+			this.buttons.create.setVisibility( false );
+
+			this.buttons.remove.setVisibility( false );
+
+			break;
+
+		case 'rw' :
+
+			this.buttons.create.setVisibility( true );
+
+			this.buttons.remove.setVisibility( true );
+
+			break;
+
+		default :
+
+			throw new Error(
+				'access neither ro or rw: ' + access
+			);
+	};
 };
 
 
@@ -666,19 +707,17 @@ MainDisc.prototype.setUser =
 {
 	this.$user
 		= user;
-		
+
+	this.buttons.user.setText( user );
+
 	this.buttons.login.setVisibility( true );
-	
+
 	if( user.substr( 0, 5 ) !== 'visit' )
 	{
 		this._$loggedIn =
 			true;
 
 		this.buttons.signup.setVisibility( false );
-		
-		this.buttons.create.setVisibility( true );
-		
-		this.buttons.remove.setVisibility( true );
 
 		this.buttons.login.setText(
 			[
@@ -693,10 +732,6 @@ MainDisc.prototype.setUser =
 			false;
 
 		this.buttons.signup.setVisibility( true );
-
-		this.buttons.create.setVisibility( false );
-		
-		this.buttons.remove.setVisibility( false );
 
 		this.buttons.login.setText(
 			[

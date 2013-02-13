@@ -559,7 +559,7 @@ theme =
 						),
 
 					text :
-						'meshcraft:home',
+						'',
 
 					textAnchor :
 						new Euclid.Point(
@@ -598,7 +598,7 @@ theme =
 						),
 
 					text :
-						'visitor-1',
+						'',
 
 					textAnchor :
 						new Euclid.Point(
@@ -1483,6 +1483,13 @@ theme =
 
 			w :
 				1
+		},
+
+		// offset for creation // FIXME calculate dynamically
+		createOffset :
+		{
+			x : 44,
+			y : 12
 		}
 	}
 };

@@ -65,9 +65,6 @@ Forms.LayoutPattern =
 			caption :
 				'Label',
 
-			code :
-				'String',
-
 			shape :
 			{
 				'Curve' :
@@ -185,9 +182,6 @@ Forms.LayoutPattern =
 	{
 		must :
 		{
-			code :
-				'String',
-
 			frame :
 				'Frame',
 

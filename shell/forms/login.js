@@ -211,9 +211,6 @@ Login.prototype.layout =
 				type :
 					'Input',
 
-				code :
-					'',
-
 				password :
 					false,
 
@@ -276,9 +273,6 @@ Login.prototype.layout =
 			{
 				type :
 					'Input',
-
-				code :
-					'',
 
 				password :
 					true,
@@ -343,9 +337,6 @@ Login.prototype.layout =
 			{
 				type :
 					'Button',
-
-				code :
-					'LoginLoginButton',
 
 				normaStyle :
 					'button',
@@ -464,9 +455,6 @@ Login.prototype.layout =
 			{
 				type :
 					'Button',
-
-				code :
-					'LoginCloseButton',
 
 				normaStyle :
 					'button',
@@ -659,7 +647,7 @@ Login.prototype.login =
 		this.setCaret(
 			{
 				path :
-					new Path( [ 'login', 'userInput' ] ),
+					new Path( [ this.name, 'userInput' ] ),
 
 				at1 :
 					user.length
@@ -676,7 +664,7 @@ Login.prototype.login =
 		this.setCaret(
 			{
 				path :
-					new Path( [ 'login', 'userInput' ] ),
+					new Path( [ this.name, 'userInput' ] ),
 
 				at1 :
 					0
@@ -693,7 +681,7 @@ Login.prototype.login =
 		this.setCaret(
 			{
 				path :
-					new Path( [ 'login', 'passwordInput' ] ),
+					new Path( [ this.name, 'passwordInput' ] ),
 
 				at1 :
 					pass.length
@@ -773,7 +761,7 @@ Login.prototype.onAuth =
 				{
 					path :
 						new Path(
-							[ 'login', 'userInput' ]
+							[ this.name, 'userInput' ]
 						),
 
 					at1 :
@@ -787,7 +775,7 @@ Login.prototype.onAuth =
 				{
 					path :
 						new Path(
-							[ 'login', 'passInput' ]
+							[ this.name, 'passwordInput' ]
 						),
 					at1  : pass.length
 				}

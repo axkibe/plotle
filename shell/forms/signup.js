@@ -65,7 +65,7 @@ var signupButton =
 		95,
 
 	n :
-		148
+		95
 };
 
 
@@ -84,7 +84,7 @@ var closeButton =
 		180,
 
 	n :
-		158
+		105
 };
 
 
@@ -120,7 +120,7 @@ SignUp.prototype.layout =
 						-245,
 
 					y :
-						-112
+						-165
 				}
 			},
 
@@ -147,7 +147,7 @@ SignUp.prototype.layout =
 						-98,
 
 					y :
-						-49
+						-102
 				}
 			},
 
@@ -174,7 +174,7 @@ SignUp.prototype.layout =
 						-98,
 
 					y :
-						-9
+						-62
 				}
 			},
 
@@ -201,7 +201,7 @@ SignUp.prototype.layout =
 						-98,
 
 					y :
-						31
+						-22
 				}
 			},
 
@@ -228,7 +228,7 @@ SignUp.prototype.layout =
 						-98,
 
 					y :
-						71
+						18
 				}
 			},
 
@@ -255,7 +255,7 @@ SignUp.prototype.layout =
 						-98,
 
 					y :
-						111
+						58
 				}
 			},
 
@@ -283,7 +283,7 @@ SignUp.prototype.layout =
 						-20,
 
 					y :
-						-83
+						-136
 				}
 			},
 
@@ -291,9 +291,6 @@ SignUp.prototype.layout =
 			{
 				type :
 					'Input',
-
-				code :
-					'',
 
 				password :
 					false,
@@ -333,7 +330,7 @@ SignUp.prototype.layout =
 							-80,
 
 						y :
-							-67
+							-120
 					},
 
 					pse :
@@ -348,7 +345,7 @@ SignUp.prototype.layout =
 							130,
 
 						y :
-							-41
+							-94
 					}
 				}
 			},
@@ -358,9 +355,6 @@ SignUp.prototype.layout =
 				type :
 					'Input',
 
-				code :
-					'',
-
 				password :
 					false,
 
@@ -399,7 +393,7 @@ SignUp.prototype.layout =
 							-80,
 
 						y :
-							-27
+							-80
 					},
 
 					pse :
@@ -414,7 +408,7 @@ SignUp.prototype.layout =
 							130,
 
 						y :
-							-1
+							-54
 					}
 				}
 			},
@@ -423,9 +417,6 @@ SignUp.prototype.layout =
 			{
 				type :
 					'Input',
-
-				code :
-					'',
 
 				password :
 					true,
@@ -465,7 +456,7 @@ SignUp.prototype.layout =
 							-80,
 
 						y :
-							13
+							-40
 					},
 
 					pse :
@@ -480,7 +471,7 @@ SignUp.prototype.layout =
 							130,
 
 						y :
-							39
+							-14
 					}
 				}
 			},
@@ -491,9 +482,6 @@ SignUp.prototype.layout =
 				type :
 					'Input',
 
-				code :
-					'',
-
 				password :
 					true,
 
@@ -532,7 +520,7 @@ SignUp.prototype.layout =
 							-80,
 
 						y :
-							53
+							0
 					},
 
 					pse :
@@ -547,7 +535,7 @@ SignUp.prototype.layout =
 							130,
 
 						y :
-							79
+							26
 					}
 				}
 			},
@@ -585,7 +573,7 @@ SignUp.prototype.layout =
 						x :
 							-75,
 						y :
-							98
+							45
 					},
 
 					pse  :
@@ -600,7 +588,7 @@ SignUp.prototype.layout =
 							-59,
 
 						y :
-							114
+							61
 					}
 				}
 			},
@@ -628,7 +616,7 @@ SignUp.prototype.layout =
 						-45,
 
 					y :
-						110
+						57
 				}
 			},
 
@@ -655,7 +643,7 @@ SignUp.prototype.layout =
 						-45,
 
 					y :
-						130
+						77
 				}
 			},
 
@@ -663,9 +651,6 @@ SignUp.prototype.layout =
 			{
 				type :
 					'Button',
-
-				code :
-					'TODO',
 
 				normaStyle :
 					'button',
@@ -784,9 +769,6 @@ SignUp.prototype.layout =
 			{
 				type :
 					'Button',
-
-				code :
-					'LoginCloseButton',
 
 				normaStyle :
 					'button',
@@ -961,12 +943,11 @@ SignUp.prototype.pushButton =
 };
 
 /*
-| Logins the user
+| Signs a new user up
 */
 SignUp.prototype.signup =
 	function( )
 {
-	/*
 	var sub =
 		this.$sub;
 
@@ -976,8 +957,17 @@ SignUp.prototype.signup =
 	var user =
 		sub.userInput.getValue( );
 
+	var email =
+		sub.emailInput.getValue( );
+
 	var pass =
 		sub.passwordInput.getValue( );
+
+	var pass2 =
+		sub.password2Input.getValue( );
+
+	var newsletter =
+		sub.newsletterCheckBox.isChecked();
 
 	if( user.length < 4 )
 	{
@@ -988,7 +978,7 @@ SignUp.prototype.signup =
 		this.setCaret(
 			{
 				path :
-					new Path( [ 'login', 'userInput' ] ),
+					new Path( [ this.name, 'userInput' ] ),
 
 				at1 :
 					user.length
@@ -1000,12 +990,14 @@ SignUp.prototype.signup =
 
 	if( user.substr( 0, 5 ) === 'visit' )
 	{
-		errorLabel.setText( 'Username must not start with "visit"' );
+		errorLabel.setText(
+			'Username must not start with "visit"'
+		);
 
 		this.setCaret(
 			{
 				path :
-					new Path( [ 'login', 'userInput' ] ),
+					new Path( [ this.name, 'userInput' ] ),
 
 				at1 :
 					0
@@ -1017,12 +1009,14 @@ SignUp.prototype.signup =
 
 	if( pass.length < 5 )
 	{
-		errorLabel.setText( 'Password too short, min. 5 characters' );
+		errorLabel.setText(
+			'Password too short, min. 5 characters'
+		);
 
 		this.setCaret(
 			{
 				path :
-					new Path( [ 'login', 'passwordInput' ] ),
+					new Path( [ this.name, 'passwordInput' ] ),
 
 				at1 :
 					pass.length
@@ -1032,13 +1026,31 @@ SignUp.prototype.signup =
 		return;
 	}
 
-	shell.peer.auth(
+	if( pass !== pass2 )
+	{
+		errorLabel.setText( 'Passwords do not match' );
+
+		shell.setCaret(
+			{
+				path :
+					new Path( [ this.name, 'password2Input' ] ),
+				at1 :
+					pass2.length
+			}
+		);
+		return;
+	}
+
+	var passhash =
+		Jools.passhash( pass );
+
+	shell.peer.register(
 		user,
-		Jools.passhash( pass ),
-		this,
-		pass
+		email,
+		passhash,
+		newsletter,
+		this
 	);
-*/
 };
 
 /*
@@ -1083,20 +1095,21 @@ Login.prototype.specialKey =
 */
 
 /*
-| an auth ( login ) operation completed.
+| A register operation completed.
 */
-/*
-Login.prototype.onAuth =
+SignUp.prototype.onRegister =
 	function(
 		user,
 		passhash,
-		res,
-		pass
+		res
 	)
 {
+	var sub =
+		this.$sub;
+
 	if( !res.ok )
 	{
-		this.$sub.errorLabel.setText( res.message );
+		sub.errorLabel.setText( res.message );
 
 		if( res.message.search(/Username/) >= 0 )
 		{
@@ -1104,29 +1117,16 @@ Login.prototype.onAuth =
 				{
 					path :
 						new Path(
-							[ 'login', 'userInput' ]
+							[ this.name, 'userInput' ]
 						),
 
 					at1 :
-						user.length
-				}
-			);
-		}
-		else
-		{
-			this.setCaret(
-				{
-					path :
-						new Path(
-							[ 'login', 'passInput' ]
-						),
-					at1  : pass.length
+						sub.userInput.getValue( ).length
 				}
 			);
 		}
 
-		this.poke( );
-
+		shell.poke( );
 		return;
 	}
 
@@ -1137,13 +1137,11 @@ Login.prototype.onAuth =
 
 	this.clear( );
 
-	shell.moveToSpace( null );
-
 	shell.bridge.changeMode( 'Normal' );
 
 	this.poke( );
 };
-*/
+
 
 /*
 | Clears all fields
@@ -1155,7 +1153,13 @@ SignUp.prototype.clear =
 
 	sub.userInput.setValue( '' );
 
+	sub.emailInput.setValue( '' );
+
 	sub.passwordInput.setValue( '' );
+
+	sub.password2Input.setValue( '' );
+
+	sub.newsletterCheckBox.setChecked( true );
 
 	this.setCaret( null );
 };

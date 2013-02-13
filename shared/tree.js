@@ -453,11 +453,10 @@ Tree.prototype.grow =
 
 			if( !allowsType( ptype, vtype ) )
 			{
-				console.log( ptype, vtype, ptype === vtype );
-
 				throw Jools.reject(
-					ttype + '[' + k + '] must be ' + ptype + '. ' +
-					'is: ' + vtype + ' (' + val + ')'
+					ttype + '.' + k + ' must be ' + ptype +
+					' but is ' +
+					vtype + ' (' + val + ')'
 				);
 			}
 		}

@@ -1251,7 +1251,7 @@ Server.prototype.cmdAuth =
 
 	if( users[cmd.user].pass !== cmd.passhash )
 	{
-		return Jools.reject('invalid password');
+		return Jools.reject('Invalid password');
 	}
 
 	return {
@@ -1593,22 +1593,22 @@ Server.prototype.cmdUpdate =
 
 	if( !Jools.is(user) )
 	{
-		throw Jools.reject( 'user missing' );
+		throw Jools.reject( 'User missing' );
 	}
 
 	if( !Jools.is(passhash) )
 	{
-		throw Jools.reject( 'passhash missing' );
+		throw Jools.reject( 'Passhash missing' );
 	}
 
 	if( this.$users[user].pass !== passhash )
 	{
-		throw Jools.reject( 'invalid password' );
+		throw Jools.reject( 'Invalid password' );
 	}
 
 	if( !Jools.is( spacename ) )
 	{
-		throw Jools.reject( 'space missing' );
+		throw Jools.reject( 'Space missing' );
 	}
 
 	var space =
@@ -1616,12 +1616,12 @@ Server.prototype.cmdUpdate =
 
 	if( !space )
 	{
-		throw Jools.reject( 'unknown space' );
+		throw Jools.reject( 'Unknown space' );
 	}
 
 	if ( !( time >= 0 && time <= space.$seqZ ) )
 	{
-		throw Jools.reject( 'invalid or missing time: ' + time );
+		throw Jools.reject( 'Invalid or missing time: ' + time );
 	}
 
 	if( mseq < 0 )
@@ -1631,7 +1631,9 @@ Server.prototype.cmdUpdate =
 
 	if ( !(mseq <= this.$messages.length) )
 	{
-		throw Jools.reject('invalid or missing mseq: ' + mseq);
+		throw Jools.reject(
+			'Invalid or missing mseq: ' + mseq
+		);
 	}
 
 	this.refreshPresence(
@@ -1668,12 +1670,18 @@ Server.prototype.cmdUpdate =
 
 	this.$upsleep[ sleepID ] =
 		{
-			user : user,
-			time : time,
-			mseq : mseq,
-			timerID : timerID,
-			res : res,
-			spacename : spacename
+			user :
+				user,
+			time :
+				time,
+			mseq :
+				mseq,
+			timerID :
+				timerID,
+			res :
+				res,
+			spacename :
+				spacename
 		};
 
 	res.sleepID =

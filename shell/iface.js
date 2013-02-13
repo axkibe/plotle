@@ -273,30 +273,43 @@ IFace.prototype.register =
 		mail,
 		passhash,
 		news,
-		callback
+		onRegisterReceiver
 	)
 {
-	var self = this;
+	var self =
+		this;
 
     if( self.$regActive )
 	{
-		throw new Error( 'Auth already active' );
+		throw new Error( 'Register already active' );
 	}
 
-	self.$regActive = true;
+	self.$regActive =
+		true;
 
 	self._ajax(
 		{
-            cmd      : 'register',
-            user     : user,
-			mail     : mail,
-			passhash : passhash,
-			news     : news
+            cmd :
+				'register',
+            user :
+				user,
+			mail :
+				mail,
+			passhash :
+				passhash,
+			news  :
+				news
 		},
 		function( asw )
 		{
-			self.$regActive = false;
-			callback( asw );
+			self.$regActive =
+				false;
+
+			onRegisterReceiver.onRegister(
+				user,
+				passhash,
+				asw
+			);
 		}
 	);
 };
