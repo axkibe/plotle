@@ -9,7 +9,8 @@
 | Export
 */
 var Disc;
-Disc = Disc || { };
+Disc =
+	Disc || { };
 
 
 /*

@@ -37,6 +37,7 @@ if( typeof( window ) === 'undefined' )
 var Label =
 Widgets.Label =
 	function(
+		// ... free strings ...
 		name,
 		twig,
 		form,

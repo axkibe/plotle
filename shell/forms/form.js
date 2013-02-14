@@ -28,6 +28,7 @@ var shell;
 var system;
 var theme;
 var Tree;
+var Widgets;
 
 
 /*
@@ -148,13 +149,36 @@ Forms.Form =
 		var Proto =
 			this.getWidgetPrototype( twig.type );
 
-		this.$sub[ name ] =
-			new Proto(
-				name,
-				twig,
-				this,
-				inherit && inherit.$sub[ name ]
-			);
+		// TODO remove
+		switch(twig.type)
+		{
+			case 'Button' :
+
+				this.$sub[ name ] =
+					new Proto(
+						'name',
+							name,
+						'twig',
+							twig,
+						'parent',
+							this,
+						'inherit',
+							inherit && inherit.$sub[ name ]
+					);
+				break;
+
+			default :
+
+				this.$sub[ name ] =
+					new Proto(
+						name,
+						twig,
+						this,
+						inherit && inherit.$sub[ name ]
+					);
+
+				break;
+		}
 	}
 
 	Jools.immute( this );

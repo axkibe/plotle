@@ -1008,38 +1008,131 @@ var half =
 
 
 /*
+| Parses free string.
+*/
+var parseFreeStrings =
+	function(
+		freetype,
+		args,
+		recurse
+	)
+{
+	var a =
+		0;
+
+	var aZ =
+		args.length;
+
+	var arg;
+
+	var type;
+
+	var property;
+
+	// TODO ensure null-ness of params in non recursive calls
+
+	while( a < aZ )
+	{
+		arg =
+			args[ a ];
+
+		type =
+			freetype[ arg ];
+
+		if( !type )
+		{
+			throw new Error(
+				'unknown argument: ' + arg
+			);
+		}
+
+		property =
+			type.property || arg;
+
+		console.log( 'PP', property );
+
+		switch( type.type )
+		{
+			case 'param' :
+
+				this[ property ]
+					= args[ a + 1 ];
+
+				a += 2;
+
+				break;
+
+			default :
+
+				throw new Error(
+					'invalid freestring type ' + type.type +
+					' for ' + arg
+				);
+		}
+
+	}
+
+
+	// checks if all required params are there
+	// but not when recursing, since its not yet finished
+	if( !recurse )
+	{
+		for( arg in freetype )
+		{
+			type =
+				freetype[ arg ];
+
+			property =
+				type.property || arg;
+
+			if(
+				type.required &&
+				this[ property ] === null
+			)
+			{
+				throw new Error(
+					'required param ' + arg + ' missing.'
+				);
+			}
+		}
+	}
+};
+
+
+/*
 | Exports
 */
 Jools =
 {
-	check          : check,
-	checkLimits    : checkLimits,
-	configSwitch   : configSwitch,
-	copy           : copy,
-	debug          : debug,
-	devel          : devel,
-	ensureInt      : ensureInt,
-	ensureArgs     : ensureArgs,
-	fixate         : fixate,
-	half           : half,
-	inspect        : inspect,
-	innumerable    : innumerable,
-	is             : is,
-	isnon          : isnon,
-	isArray        : isArray,
-	isInteger      : isInteger,
-	isString       : isString,
-	immute         : immute,
-	keyNonGrata    : keyNonGrata,
-	lazyFixate     : lazyFixate,
-	limit          : limit,
-	log            : log,
-	matches        : matches,
-	passhash       : passhash,
-	randomPassword : randomPassword,
-	reject         : reject,
-	subclass       : subclass,
-	uid            : uid
+	check            : check,
+	checkLimits      : checkLimits,
+	configSwitch     : configSwitch,
+	copy             : copy,
+	debug            : debug,
+	devel            : devel,
+	ensureInt        : ensureInt,
+	ensureArgs       : ensureArgs,
+	fixate           : fixate,
+	half             : half,
+	inspect          : inspect,
+	innumerable      : innumerable,
+	is               : is,
+	isnon            : isnon,
+	isArray          : isArray,
+	isInteger        : isInteger,
+	isString         : isString,
+	immute           : immute,
+	keyNonGrata      : keyNonGrata,
+	lazyFixate       : lazyFixate,
+	limit            : limit,
+	log              : log,
+	matches          : matches,
+	parseFreeStrings : parseFreeStrings,
+	passhash         : passhash,
+	randomPassword   : randomPassword,
+	reject           : reject,
+	subclass         : subclass,
+	uid              : uid
 };
 
 

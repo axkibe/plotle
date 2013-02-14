@@ -1,5 +1,5 @@
 /*
-| A button on a form.
+| A button
 |
 | Authors: Axel Kittenberger
 */
@@ -44,33 +44,79 @@ if( typeof( window ) === 'undefined' )
 var Button =
 Widgets.Button =
 	function(
-		name,
-		twig,
-		form,
-		inherit
+		// ... free strings ...
 	)
 {
+	this._$visible =
+		null;
+
+	this.inherit =
+	this.name =
+	this.parent =
+	this.twig =
+		null;
+
+	Jools.parseFreeStrings.call(
+		this,
+		{
+			'inherit' :
+			{
+				type :
+					'param'
+			},
+
+			'name' :
+			{
+				type :
+					'param',
+
+				required :
+					true
+			},
+
+			'parent' :
+			{
+				type :
+					'param',
+
+				required :
+					true
+			},
+
+			'twig' :
+			{
+				type :
+					'param',
+
+				required :
+					true
+			}
+		},
+
+		arguments
+	);
+
+	var twig =
+		this.twig;
+
+	var parent =
+		this.parent;
+
+	var inherit =
+		this.inherit;
+
 	if ( twig.type !== 'Button' )
 	{
 		throw new Error('invalid twig type');
 	}
 
-	this.name =
-		name;
-
-	this.twig =
-		twig;
-
-	this.form =
-		form;
-
 	var pnw =
 	this.pnw =
-		form.iframe.computePoint( twig.frame.pnw );
+		parent.iframe.computePoint( twig.frame.pnw );
 
 	var pse =
 	this.pse =
-		form.iframe.computePoint( twig.frame.pse );
+		parent.iframe.computePoint( twig.frame.pse );
 
 	var iframe =
 	this.iframe =
@@ -116,8 +162,8 @@ Widgets.Button =
 
 	this.path = new Path(
 		[
-			form.name,
-			name
+			parent.name,
+			this.name
 		]
 	);
 
@@ -131,8 +177,9 @@ Widgets.Button =
 	this.$fabric =
 		null;
 
-	this.$visible =
-		inherit ? inherit.$visible : true;
+	this._$visible =
+		this._$visible ||
+		inherit ? inherit._$visible : true;
 
 	this.$captionText =
 		inherit ? inherit.$captionText : twig.caption.text;
@@ -149,25 +196,20 @@ Widgets.Button =
 Button.prototype.grepFocus =
 	function( )
 {
-	if( !this.$visible )
+	if( !this._$visible )
 	{
 		return false;
 	}
 
-	if( this.form.getFocus( ) === this )
+	if( this.parent.getFocus( ) === this )
 	{
 		return false;
 	}
 
-	this.form.setCaret(
+	this.parent.setCaret(
 		{
 			path :
-				new Path(
-					[
-						this.form.name,
-						this.name
-					]
-				),
+				this.path,
 
 			at1 :
 				0
@@ -317,7 +359,7 @@ Button.prototype.pointingHover =
 	function( p )
 {
 	if(
-		!this.$visible ||
+		!this._$visible ||
 		p === null ||
 		p.x < this.pnw.x ||
 		p.y < this.pnw.y ||
@@ -346,7 +388,7 @@ Button.prototype.pointingHover =
 		return null;
 	}
 
-	this.form.setHover(
+	this.parent.setHover(
 		this.name
 	);
 
@@ -368,7 +410,7 @@ Button.prototype.pointingStart =
 		this;
 
 	if(
-		!this.$visible ||
+		!this._$visible ||
 		p.x < this.pnw.x ||
 		p.y < this.pnw.y ||
 		p.x > this.pse.x ||
@@ -396,8 +438,8 @@ Button.prototype.pointingStart =
 		return null;
 	}
 
-	var form =
-		this.form;
+	var parent =
+		this.parent;
 
 	if(
 		this.repeating &&
@@ -415,7 +457,7 @@ Button.prototype.pointingStart =
 		repeatFunc =
 			function( )
 			{
-				form.pushButton(
+				parent.pushButton(
 					self.name,
 					false,
 					false
@@ -437,7 +479,7 @@ Button.prototype.pointingStart =
 			);
 	}
 
-	form.pushButton(
+	parent.pushButton(
 		this.name,
 		shift,
 		ctrl
@@ -459,19 +501,19 @@ Button.prototype.specialKey =
 	{
 		case 'down' :
 
-			this.form.cycleFocus( +1 );
+			this.parent.cycleFocus( +1 );
 
 			return;
 
 		case 'up' :
 
-			this.form.cycleFocus( -1 );
+			this.parent.cycleFocus( -1 );
 
 			return;
 
 		case 'enter' :
 
-			this.form.pushButton(
+			this.parent.pushButton(
 				this.name,
 				false,
 				false
@@ -490,7 +532,7 @@ Button.prototype.input =
 		// text
 	)
 {
-	this.form.pushButton(
+	this.parent.pushButton(
 		this.name,
 		false,
 		false
@@ -509,7 +551,7 @@ Button.prototype.draw =
 		accent
 	)
 {
-	if( !this.$visible )
+	if( !this._$visible )
 	{
 		return;
 	}
@@ -529,7 +571,7 @@ Button.prototype.poke =
 {
 	this.$fabric = null;
 
-	this.form.poke( );
+	this.parent.poke( );
 };
 
 
