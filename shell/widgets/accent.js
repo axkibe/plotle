@@ -8,8 +8,9 @@
 /*
 | Export
 */
-var Forms;
-Forms = Forms || { };
+var Widgets;
+Widgets =
+	Widgets || { };
 
 
 /*
@@ -31,7 +32,7 @@ if( typeof( window ) === 'undefined' )
 
 
 var Accent =
-Forms.Accent =
+Widgets.Accent =
 	Jools.immute(
 		{
 			NORMA : 0,

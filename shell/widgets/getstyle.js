@@ -8,8 +8,9 @@
 /*
 | Export
 */
-var Forms;
-Forms = Forms || { };
+var Widgets;
+Widgets =
+	Widgets || { };
 
 
 /*
@@ -80,7 +81,7 @@ var styles =
 /*
 | Gets a style by its name.
 */
-Forms.getStyle =
+Widgets.getStyle =
 	function( name )
 {
 	var style =

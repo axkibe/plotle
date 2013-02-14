@@ -9,7 +9,8 @@
 | Export
 */
 var Forms;
-Forms = Forms || { };
+Forms =
+	Forms || { };
 
 
 /*

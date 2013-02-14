@@ -171,19 +171,19 @@ Form.prototype.getWidgetPrototype =
 	{
 		case 'Button' :
 
-			return Forms.Button;
+			return Widgets.Button;
 
 		case 'CheckBox' :
 
-			return Forms.CheckBox;
+			return Widgets.CheckBox;
 
 		case 'Input' :
 
-			return Forms.Input;
+			return Widgets.Input;
 
 		case 'Label' :
 
-			return Forms.Label;
+			return Widgets.Label;
 
 		default :
 
@@ -256,10 +256,6 @@ Form.prototype.draw =
 		Euclid.View.proper
 	);
 
-//	var style = Forms.getStyle(this.tree.root.style);
-//	if( !style )
-//		{ throw new Error('no style!'); }
-
 	var root =
 		this.tree.root;
 
@@ -283,7 +279,7 @@ Form.prototype.draw =
 
 		comp.draw(
 			fabric,
-			Forms.Accent.state(
+			Widgets.Accent.state(
 				name === this.$hover,
 				( this.$caret.$shown && focus ) ?
 					name === focus.name :

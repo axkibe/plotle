@@ -8,8 +8,9 @@
 /*
 | Export
 */
-var Forms;
-Forms = Forms || { };
+var Widgets;
+Widgets =
+	Widgets || { };
 
 
 /*
@@ -34,7 +35,7 @@ if( typeof( window ) === 'undefined' )
 | Constructor.
 */
 var Label =
-Forms.Label =
+Widgets.Label =
 	function(
 		name,
 		twig,

@@ -692,7 +692,7 @@ MainDisc.prototype.setCurSpace =
 			throw new Error(
 				'access neither ro or rw: ' + access
 			);
-	};
+	}
 };
 
 

@@ -641,25 +641,26 @@ Server.prototype.prepareResources =
 		'shell/action.js',
 			'fb',
 
+		'shell/widgets/accent.js',
+			'fb',
+
+		'shell/widgets/getstyle.js',
+			'fb',
+
+		'shell/widgets/label.js',
+			'fb',
+
+		'shell/widgets/button.js',
+			'fb',
+
+		'shell/widgets/input.js',
+			'fb',
+
+		'shell/widgets/checkbox.js',
+			'fb',
+
+
 		'shell/forms/layout-pattern.js',
-			'fb',
-
-		'shell/forms/accent.js',
-			'fb',
-
-		'shell/forms/getstyle.js',
-			'fb',
-
-		'shell/forms/label.js',
-			'fb',
-
-		'shell/forms/button.js',
-			'fb',
-
-		'shell/forms/input.js',
-			'fb',
-
-		'shell/forms/checkbox.js',
 			'fb',
 
 		'shell/forms/form.js',

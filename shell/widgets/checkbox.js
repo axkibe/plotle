@@ -8,9 +8,9 @@
 /*
 | Export
 */
-var Forms;
-Forms =
-	Forms || { };
+var Widgets;
+Widgets =
+	Widgets || { };
 
 
 /*
@@ -43,7 +43,7 @@ if( typeof( window ) === 'undefined' )
 | Constructor.
 */
 var CheckBox =
-Forms.CheckBox =
+Widgets.CheckBox =
 	function(
 		name,
 		twig,
@@ -83,7 +83,7 @@ Forms.CheckBox =
 		inherit ? inherit.$visible : true;
 
 	this.$accent =
-		Forms.Accent.NORMAL;
+		Widgets.Accent.NORMAL;
 };
 
 
@@ -323,19 +323,19 @@ CheckBox.prototype.draw =
 	var sname;
 	switch( accent )
 	{
-		case Forms.Accent.NORMA :
+		case Widgets.Accent.NORMA :
 			sname = twig.normaStyle;
 			break;
 
-		case Forms.Accent.HOVER :
+		case Widgets.Accent.HOVER :
 			sname = twig.hoverStyle;
 			break;
 
-		case Forms.Accent.FOCUS :
+		case Widgets.Accent.FOCUS :
 			sname = twig.focusStyle;
 			break;
 
-		case Forms.Accent.HOFOC :
+		case Widgets.Accent.HOFOC :
 			sname = twig.hofocStyle;
 			break;
 
@@ -343,7 +343,7 @@ CheckBox.prototype.draw =
 			throw new Error( 'Invalid accent: ' + accent );
 	}
 
-	var style = Forms.getStyle( sname );
+	var style = Widgets.getStyle( sname );
 
 	if( !Jools.isnon( style ) )
 		{ throw new Error('Invalid style: ' + sname); }
@@ -358,28 +358,12 @@ CheckBox.prototype.draw =
 	if( this._$checked )
 	{
 		fabric.paint(
-			Forms.getStyle( 'checkboxCheck' ),
+			Widgets.getStyle( 'checkboxCheck' ),
 			this,
 			'sketchCheck',
 			Euclid.View.proper
 		);
 	}
-
-	/*
-	if( config.debug.drawBoxes )
-	{
-		fabric.paint(
-			Forms.getStyle( 'boxes' ),
-			new Euclid.Rect(
-				'pnw/pse',
-				this.iframe.pnw,
-				this.iframe.pse.sub( 1, 1 )
-			),
-			'sketch',
-			Euclid.View.proper
-		);
-	}
-	*/
 
 	return fabric;
 };

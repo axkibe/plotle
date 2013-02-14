@@ -8,8 +8,8 @@
 /*
 | Export
 */
-var Forms;
-Forms = Forms || { };
+var Widgets;
+Widgets = Widgets || { };
 
 
 /*
@@ -41,7 +41,7 @@ if( typeof( window ) === 'undefined' )
 | Constructor.
 */
 var Input =
-Forms.Input =
+Widgets.Input =
 	function(
 		name,
 		twig,
@@ -85,7 +85,7 @@ Forms.Input =
 		null;
 
 	this._$accent =
-		Forms.Accent.NORMA;
+		Widgets.Accent.NORMA;
 };
 
 
@@ -323,28 +323,28 @@ Input.prototype._weave =
 
 	switch( accent )
 	{
-		case Forms.Accent.NORMA :
+		case Widgets.Accent.NORMA :
 
 			sname =
 				this.twig.normaStyle;
 
 			break;
 
-		case Forms.Accent.HOVER :
+		case Widgets.Accent.HOVER :
 
 			sname =
 				this.twig.hoverStyle;
 
 			break;
 
-		case Forms.Accent.FOCUS :
+		case Widgets.Accent.FOCUS :
 
 			sname =
 				this.twig.focusStyle;
 
 			break;
 
-		case Forms.Accent.HOFOC :
+		case Widgets.Accent.HOFOC :
 
 			sname =
 				this.twig.hofocStyle;
@@ -357,7 +357,7 @@ Input.prototype._weave =
 	}
 
 	var style =
-		Forms.getStyle( sname );
+		Widgets.getStyle( sname );
 
 	fabric.fill(
 		style.fill,

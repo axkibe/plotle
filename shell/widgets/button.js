@@ -8,8 +8,9 @@
 /*
 | Export
 */
-var Forms;
-Forms = Forms || {};
+var Widgets;
+Widgets =
+	Widgets || { };
 
 
 /*
@@ -41,7 +42,7 @@ if( typeof( window ) === 'undefined' )
 | Constructor.
 */
 var Button =
-Forms.Button =
+Widgets.Button =
 	function(
 		name,
 		twig,
@@ -137,7 +138,7 @@ Forms.Button =
 		inherit ? inherit.$captionText : twig.caption.text;
 
 	this.$accent =
-		Forms.Accent.NORMAL;
+		Widgets.Accent.NORMAL;
 };
 
 
@@ -228,7 +229,7 @@ Button.prototype._weave =
 	var sname;
 
 	var Accent =
-		Forms.Accent;
+		Widgets.Accent;
 
 	switch( accent )
 	{
@@ -268,7 +269,7 @@ Button.prototype._weave =
 	}
 
 	var style =
-		Forms.getStyle( sname );
+		Widgets.getStyle( sname );
 
 	if( !Jools.isnon( style ) )
 	{
@@ -294,7 +295,7 @@ Button.prototype._weave =
 	if( config.debug.drawBoxes )
 	{
 		fabric.paint(
-			Forms.getStyle( 'boxes' ),
+			Widgets.getStyle( 'boxes' ),
 			new Euclid.Rect(
 				'pnw/pse',
 				this.iframe.pnw,
@@ -328,7 +329,7 @@ Button.prototype.pointingHover =
 	}
 
 	var fabric =
-		this._weave( Forms.Accent.NORMA );
+		this._weave( Widgets.Accent.NORMA );
 
 	var pp =
 		p.sub( this.pnw );
@@ -378,7 +379,7 @@ Button.prototype.pointingStart =
 	}
 
 	var fabric =
-		this._weave( Forms.Accent.NORMA );
+		this._weave( Widgets.Accent.NORMA );
 
 	var pp =
 		p.sub( this.pnw );
