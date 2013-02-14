@@ -257,11 +257,21 @@ var uid =
 var randomPassword =
 	function( length )
 {
-	var ch ='abcdefghijklmnopqrstuvwxyz0123456789';
-	var ua   = [];
-	for(var a = 0; a < length; a++)
-		{ ua.push(ch[Math.floor(36 * Math.random())]); }
-	return ua.join('');
+	var ch =
+		'abcdefghijklmnopqrstuvwxyz0123456789';
+
+	var ua =
+		[];
+
+	for(
+		var a = 0;
+		a < length;
+		a++
+	)
+	{
+		ua.push( ch[ Math.floor( 36 * Math.random( ) ) ] );
+	}
+	return ua.join( '' );
 };
 
 
@@ -271,6 +281,7 @@ var randomPassword =
 if( !Object.defineProperty )
 {
 	console.log('Using legacy Object.defineProperty');
+
 	Object.defineProperty = function(obj, label, funcs) {
 		if (typeof(funcs.value) !== 'undefined') {
 			obj[label] = funcs.value;
@@ -1023,6 +1034,8 @@ var parseFreeStrings =
 	var aZ =
 		args.length;
 
+	var f, fZ;
+
 	var arg;
 
 	var type;
@@ -1036,8 +1049,31 @@ var parseFreeStrings =
 		arg =
 			args[ a ];
 
-		type =
-			freetype[ arg ];
+		if( !isArray( freetype ) )
+		{
+			type =
+				freetype[ arg ];
+		}
+		else
+		{
+			for(
+				f = 0, fZ = freetype.length;
+				f < fZ;
+				f++
+			)
+			{
+				var fi =
+					freetype[ f ];
+
+				if( fi[ arg ] )
+				{
+					type =
+						fi[ arg ];
+
+					break;
+				}
+			}
+		}
 
 		if( !type )
 		{
@@ -1048,8 +1084,6 @@ var parseFreeStrings =
 
 		property =
 			type.property || arg;
-
-		console.log( 'PP', property );
 
 		switch( type.type )
 		{
@@ -1077,27 +1111,69 @@ var parseFreeStrings =
 	// but not when recursing, since its not yet finished
 	if( !recurse )
 	{
-		for( arg in freetype )
+		for(
+			f = 0, fZ = isArray( freetype ) ? freetype.length : 1;
+			f < fZ;
+			f++
+		)
 		{
-			type =
-				freetype[ arg ];
+			var ft =
+				isArray( freetype ) ?
+					freetype[ f ] :
+					freetype;
 
-			property =
-				type.property || arg;
-
-			if(
-				type.required &&
-				this[ property ] === null
-			)
+			for( arg in ft )
 			{
-				throw new Error(
-					'required param ' + arg + ' missing.'
-				);
+				type =
+					ft[ arg ];
+
+				property =
+					type.property || arg;
+
+				if(
+					type.required &&
+					this[ property ] === null
+				)
+				{
+					throw new Error(
+						'required param ' + arg + ' missing.'
+					);
+				}
 			}
 		}
 	}
 };
 
+
+/*
+| Extens a free strings typification
+*/
+var extentFreeType =
+	function(
+		base,
+		sub
+	)
+{
+	if( !sub )
+	{
+		return base;
+	}
+
+	if( isArray( sub ) )
+	{
+		throw new Error(
+			'Cannot extent freeType by Array'
+		);
+	}
+
+	if( isArray( base ) )
+	{
+		base.push( sub );
+		return;
+	}
+
+	return [ base, sub ];
+};
 
 /*
 | Exports
@@ -1112,6 +1188,7 @@ Jools =
 	devel            : devel,
 	ensureInt        : ensureInt,
 	ensureArgs       : ensureArgs,
+	extentFreeType   : extentFreeType,
 	fixate           : fixate,
 	half             : half,
 	inspect          : inspect,
