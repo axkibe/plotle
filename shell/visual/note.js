@@ -60,7 +60,10 @@ Visual.Note =
 };
 
 
-Jools.subclass( Note, Visual.DocItem );
+Jools.subclass(
+	Note,
+	Visual.DocItem
+);
 
 
 /*
@@ -364,7 +367,10 @@ Note.prototype.dragStop =
 			if( this.twig.zone.eq( zone ) )
 				{ return; }
 
-			shell.peer.setZone( this.path, zone );
+			shell.peer.setZone(
+				this.path,
+				zone
+			);
 
 			shell.redraw = true;
 

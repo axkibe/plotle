@@ -94,14 +94,14 @@ Widgets.Widget =
 
 	Jools.parseFreeStrings.call(
 		this,
-		freeStrings,
-		Jools.freeTypeExtend(
+		Jools.extentFreeType(
 			baseFreeType,
 			freeType
-		)
+		),
+		freeStrings
 	);
 
-	if ( this.twig.type !== type )
+	if( this.twig.type !== type )
 	{
 		throw new Error(
 			'invalid twig type'
@@ -110,14 +110,14 @@ Widgets.Widget =
 
 	this.path = new Path(
 		[
-			parent.name,
+			this.parent.name,
 			this.name
 		]
 	);
 
 	this._$visible =
 		this._$visible ||
-		inherit ? inherit._$visible : true;
+		this.inherit ? this.inherit._$visible : true;
 
 //	this.$accent =
 //		Widgets.Accent.NORMAL;
@@ -131,9 +131,9 @@ Widget.prototype.grepFocus =
 	function( )
 {
 	if(
-		!this.focusable
+		!this.focusable ||
 		!this._$visible ||
-		this.parent.getFocus( ) === this ||
+		this.parent.getFocus( ) === this
 	)
 	{
 		return false;

@@ -47,52 +47,9 @@ Widgets.Button =
 		// ... free strings ...
 	)
 {
-	this._$visible =
-		null;
-
-	this.inherit =
-	this.name =
-	this.parent =
-	this.twig =
-		null;
-
-	Jools.parseFreeStrings.call(
+	Widgets.Widget.call(
 		this,
-		{
-			'inherit' :
-			{
-				type :
-					'param'
-			},
-
-			'name' :
-			{
-				type :
-					'param',
-
-				required :
-					true
-			},
-
-			'parent' :
-			{
-				type :
-					'param',
-
-				required :
-					true
-			},
-
-			'twig' :
-			{
-				type :
-					'param',
-
-				required :
-					true
-			}
-		},
-
+		'Button',
 		arguments
 	);
 
@@ -104,11 +61,6 @@ Widgets.Button =
 
 	var inherit =
 		this.inherit;
-
-	if ( twig.type !== 'Button' )
-	{
-		throw new Error('invalid twig type');
-	}
 
 	var pnw =
 	this.pnw =
@@ -160,13 +112,6 @@ Widgets.Button =
 	this.captionPos =
 		iframe.computePoint( twig.caption.pos );
 
-	this.path = new Path(
-		[
-			parent.name,
-			this.name
-		]
-	);
-
 	// if true repeats the push action if held down
 	this.repeating =
 		false;
@@ -179,7 +124,7 @@ Widgets.Button =
 
 	this._$visible =
 		this._$visible ||
-		inherit ? inherit._$visible : true;
+		( inherit ? inherit._$visible : true );
 
 	this.$captionText =
 		inherit ? inherit.$captionText : twig.caption.text;
@@ -189,37 +134,21 @@ Widgets.Button =
 };
 
 
+/*
+| Buttons are Widgets
+*/
+Jools.subclass(
+	Button,
+	Widgets.Widget
+);
+
 
 /*
-| Control takes focus.
+| Buttons are focusable
 */
-Button.prototype.grepFocus =
-	function( )
-{
-	if( !this._$visible )
-	{
-		return false;
-	}
+Button.prototype.focusable =
+	true;
 
-	if( this.parent.getFocus( ) === this )
-	{
-		return false;
-	}
-
-	this.parent.setCaret(
-		{
-			path :
-				this.path,
-
-			at1 :
-				0
-		}
-	);
-
-	this.poke( );
-
-	return true;
-};
 
 
 /*
@@ -449,7 +378,8 @@ Button.prototype.pointingStart =
 		shell.bridge.startAction(
 			'ReButton',
 			'board',
-			'itemPath', this.path
+			'itemPath',
+				this.path
 		);
 
 		var repeatFunc;

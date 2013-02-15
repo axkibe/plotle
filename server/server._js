@@ -647,6 +647,9 @@ Server.prototype.prepareResources =
 		'shell/widgets/getstyle.js',
 			'fb',
 
+		'shell/widgets/widget.js',
+			'fb',
+
 		'shell/widgets/label.js',
 			'fb',
 

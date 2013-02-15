@@ -294,8 +294,14 @@ if( !Object.defineProperty )
 
 if( !Object.freeze )
 {
-	console.log( 'Using legacy Object.freeze' );
-	Object.freeze = function( ) { };
+	console.log(
+		'Using legacy Object.freeze'
+	);
+
+	Object.freeze =
+		function( )
+		{
+		};
 }
 
 
@@ -1023,7 +1029,7 @@ var half =
 */
 var parseFreeStrings =
 	function(
-		freetype,
+		freeType,
 		args,
 		recurse
 	)
@@ -1049,21 +1055,21 @@ var parseFreeStrings =
 		arg =
 			args[ a ];
 
-		if( !isArray( freetype ) )
+		if( !isArray( freeType ) )
 		{
 			type =
-				freetype[ arg ];
+				freeType[ arg ];
 		}
 		else
 		{
 			for(
-				f = 0, fZ = freetype.length;
+				f = 0, fZ = freeType.length;
 				f < fZ;
 				f++
 			)
 			{
 				var fi =
-					freetype[ f ];
+					freeType[ f ];
 
 				if( fi[ arg ] )
 				{
@@ -1106,21 +1112,20 @@ var parseFreeStrings =
 
 	}
 
-
 	// checks if all required params are there
 	// but not when recursing, since its not yet finished
 	if( !recurse )
 	{
 		for(
-			f = 0, fZ = isArray( freetype ) ? freetype.length : 1;
+			f = 0, fZ = isArray( freeType ) ? freeType.length : 1;
 			f < fZ;
 			f++
 		)
 		{
 			var ft =
-				isArray( freetype ) ?
-					freetype[ f ] :
-					freetype;
+				isArray( freeType ) ?
+					freeType[ f ] :
+					freeType;
 
 			for( arg in ft )
 			{
