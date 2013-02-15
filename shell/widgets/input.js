@@ -1,5 +1,5 @@
 /*
-| An input field on a form.
+| An input field.
 |
 | Authors: Axel Kittenberger
 */
@@ -43,28 +43,31 @@ if( typeof( window ) === 'undefined' )
 var Input =
 Widgets.Input =
 	function(
-		name,
-		twig,
-		form,
-		inherit
+		// ... free strings ...
 	)
 {
-	this.name =
-		name;
+	Widgets.Widget.call(
+		this,
+		'Input',
+		arguments
+	);
 
-	this.twig =
-		twig;
+	var parent =
+		this.parent;
 
-	this.form =
-		form;
+	var twig =
+		this.twig;
+
+	var inherit =
+		this.inherit;
 
 	var pnw =
 	this.pnw =
-		form.iframe.computePoint( twig.frame.pnw );
+		parent.iframe.computePoint( twig.frame.pnw );
 
 	var pse =
 	this.pse =
-		form.iframe.computePoint( twig.frame.pse );
+		parent.iframe.computePoint( twig.frame.pse );
 
 	this._bezi =
 		new Euclid.RoundRect(
@@ -87,6 +90,16 @@ Widgets.Input =
 	this._$accent =
 		Widgets.Accent.NORMA;
 };
+
+
+/*
+| Inputs are Widgets.
+*/
+Jools.subclass(
+	Input,
+	Widgets.Widget
+);
+
 
 
 /*
@@ -488,7 +501,7 @@ Input.prototype.locateOffset =
 
 
 /*
-| Returns the caret position relative to the form.
+| Returns the caret position relative to the parent.
 */
 Input.prototype.getCaretPos =
 	function( )
@@ -501,7 +514,7 @@ Input.prototype.getCaretPos =
 
 	var p =
 		this.locateOffset(
-			this.form.$caret.sign.at1
+			this.parent.$caret.sign.at1
 		);
 
 	var pnw =
@@ -533,7 +546,7 @@ Input.prototype.positionCaret =
 	function( view )
 {
 	var caret =
-		this.form.$caret;
+		this.parent.$caret;
 
 	var cpos =
 	caret.$pos =
@@ -582,7 +595,7 @@ Input.prototype.input =
 	function( text )
 {
 	var csign =
-		this.form.$caret.sign;
+		this.parent.$caret.sign;
 
 	var v =
 		this._$value;
@@ -607,7 +620,7 @@ Input.prototype.input =
 		text +
 		v.substring( at1 );
 
-	this.form.setCaret(
+	this.parent.setCaret(
 		{
 			path :
 				csign.path,
@@ -617,7 +630,7 @@ Input.prototype.input =
 		}
 	);
 
-	this.form.poke( );
+	this.parent.poke( );
 };
 
 
@@ -628,7 +641,7 @@ Input.prototype.keyBackspace =
 	function( )
 {
 	var csign =
-		this.form.$caret.sign;
+		this.parent.$caret.sign;
 
 	var at1 =
 		csign.at1;
@@ -642,7 +655,7 @@ Input.prototype.keyBackspace =
 		this._$value.substring(0, at1 - 1) +
 		this._$value.substring(at1);
 
-	this.form.setCaret(
+	this.parent.setCaret(
 		{
 			path : csign.path,
 			at1  : csign.at1 - 1
@@ -660,7 +673,7 @@ Input.prototype.keyDel =
 	function( )
 {
 	var at1 =
-		this.form.$caret.csign.at1;
+		this.parent.$caret.csign.at1;
 
 	if( at1 >= this._$value.length )
 	{
@@ -681,7 +694,7 @@ Input.prototype.keyDel =
 Input.prototype.keyEnter =
 	function( )
 {
-	this.form.cycleFocus( 1 );
+	this.parent.cycleFocus( 1 );
 
 	return true;
 };
@@ -693,7 +706,7 @@ Input.prototype.keyEnter =
 Input.prototype.keyDown =
 	function( )
 {
-	this.form.cycleFocus( 1 );
+	this.parent.cycleFocus( 1 );
 
 	return true;
 };
@@ -706,7 +719,7 @@ Input.prototype.keyEnd =
 	function( )
 {
 	var csign =
-		this.form.$caret.sign;
+		this.parent.$caret.sign;
 
 	var at1 =
 		csign.at1;
@@ -716,7 +729,7 @@ Input.prototype.keyEnd =
 		return false;
 	}
 
-	this.form.setCaret(
+	this.parent.setCaret(
 		{
 			path :
 				csign.path,
@@ -737,14 +750,14 @@ Input.prototype.keyLeft =
 	function( )
 {
 	var csign =
-		this.form.$caret.sign;
+		this.parent.$caret.sign;
 
 	if( csign.at1 <= 0 )
 	{
 		return false;
 	}
 
-	this.form.setCaret(
+	this.parent.setCaret(
 		{
 			path :
 				csign.path,
@@ -765,14 +778,14 @@ Input.prototype.keyPos1 =
 	function( )
 {
 	var csign =
-		this.form.$caret.sign;
+		this.parent.$caret.sign;
 
 	if( csign.at1 <= 0 )
 	{
 		return false;
 	}
 
-	this.form.setCaret(
+	this.parent.setCaret(
 		{
 			path :
 				csign.path,
@@ -792,14 +805,14 @@ Input.prototype.keyPos1 =
 Input.prototype.keyRight = function()
 {
 	var csign =
-		this.form.$caret.sign;
+		this.parent.$caret.sign;
 
 	if (csign.at1 >= this._$value.length)
 	{
 		return false;
 	}
 
-	this.form.setCaret(
+	this.parent.setCaret(
 		{
 			path : csign.path,
 			at1  : csign.at1 + 1
@@ -816,7 +829,7 @@ Input.prototype.keyRight = function()
 Input.prototype.keyUp =
 	function( )
 {
-	this.form.cycleFocus( -1 );
+	this.parent.cycleFocus( -1 );
 
 	return true;
 };
@@ -899,39 +912,16 @@ Input.prototype.specialKey =
 
 	if( poke )
 	{
-		this.form.poke( );
+		this.parent.poke( );
 	}
 };
 
 
 /*
-| Control takes focus.
+| Inputs are focusable
 */
-Input.prototype.grepFocus =
-	function( )
-{
-	if( this.form.getFocus( ) === this )
-	{
-		return false;
-	}
-
-	var caret =
-		this.form.setCaret(
-			{
-				path :
-					new Path ( [this.form.name, this.name ] ),
-
-				at1 :
-					this._$value.length
-			}
-		);
-
-	caret.show( );
-
-	this.poke( );
-
-	return true;
-};
+Input.prototype.focusable =
+	true;
 
 
 /*
@@ -946,7 +936,7 @@ Input.prototype.poke =
 	shell.redraw =
 		true;
 
-	this.form.poke( );
+	this.parent.poke( );
 };
 
 
@@ -1032,10 +1022,15 @@ Input.prototype.pointingStart =
 	}
 
 	var caret =
-		this.form.setCaret(
+		this.parent.setCaret(
 			{
 				path :
-					new Path ( [this.form.name, this.name ] ),
+					new Path (
+						[
+							this.parent.name,
+							this.name
+						]
+					),
 
 				at1 :
 					this.getOffsetAt( pp )

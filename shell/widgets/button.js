@@ -1,5 +1,5 @@
 /*
-| A button
+| A button.
 |
 | Authors: Axel Kittenberger
 */
@@ -144,7 +144,7 @@ Jools.subclass(
 
 
 /*
-| Buttons are focusable
+| Buttons are focusable.
 */
 Button.prototype.focusable =
 	true;

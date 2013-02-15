@@ -149,36 +149,17 @@ Forms.Form =
 		var Proto =
 			this.getWidgetPrototype( twig.type );
 
-		// TODO remove
-		switch(twig.type)
-		{
-			case 'Button' :
-
-				this.$sub[ name ] =
-					new Proto(
-						'name',
-							name,
-						'twig',
-							twig,
-						'parent',
-							this,
-						'inherit',
-							inherit && inherit.$sub[ name ]
-					);
-				break;
-
-			default :
-
-				this.$sub[ name ] =
-					new Proto(
-						name,
-						twig,
-						this,
-						inherit && inherit.$sub[ name ]
-					);
-
-				break;
-		}
+		this.$sub[ name ] =
+			new Proto(
+				'name',
+					name,
+				'twig',
+					twig,
+				'parent',
+					this,
+				'inherit',
+					inherit && inherit.$sub[ name ]
+			);
 	}
 
 	Jools.immute( this );

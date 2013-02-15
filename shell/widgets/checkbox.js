@@ -45,35 +45,29 @@ if( typeof( window ) === 'undefined' )
 var CheckBox =
 Widgets.CheckBox =
 	function(
-		name,
-		twig,
-		form,
-		inherit
+		// ... free strings ...
 	)
 {
-	if ( twig.type !== 'CheckBox' )
-	{
-		throw new Error('invalid twig type');
-	}
-
-	this.name =
-		name;
-
-	this.twig =
-		twig;
-
-	this.form =
-		form;
-
-	this.box = new Euclid.Rect(
-		'pnw/pse',
-		form.iframe.computePoint( twig.box.pnw ),
-		form.iframe.computePoint( twig.box.pse )
+	Widgets.Widget.call(
+		this,
+		'CheckBox',
+		arguments
 	);
 
-	this.path =
-		new Path(
-			[ form.name, name ]
+	var twig =
+		this.twig;
+
+	var parent =
+		this.parent;
+
+	var inherit =
+		this.inherit;
+
+	this.box =
+		new Euclid.Rect(
+			'pnw/pse',
+			parent.iframe.computePoint( twig.box.pnw ),
+			parent.iframe.computePoint( twig.box.pse )
 		);
 
 	this._$checked =
@@ -85,6 +79,22 @@ Widgets.CheckBox =
 	this.$accent =
 		Widgets.Accent.NORMAL;
 };
+
+
+/*
+| CheckBoxes are Widgets
+*/
+Jools.subclass(
+	CheckBox,
+	Widgets.Widget
+);
+
+
+/*
+| CheckBoxes are focusable.
+*/
+CheckBox.prototype.focusable =
+	true;
 
 
 /*
@@ -107,7 +117,9 @@ CheckBox.prototype.setChecked =
 {
 	if( typeof( checked ) !== 'boolean' )
 	{
-		throw new Error( 'CheckBox setChecked not boolean: ' + checked );
+		throw new Error(
+			'CheckBox setChecked not boolean: ' + checked
+		);
 	}
 
 	this._$checked =
@@ -116,35 +128,6 @@ CheckBox.prototype.setChecked =
 	this.poke( );
 
 	return checked;
-};
-
-
-/*
-| Control takes focus.
-*/
-CheckBox.prototype.grepFocus =
-	function( )
-{
-	if( !this.$visible )
-	{
-		return false;
-	}
-
-	if( this.form.getFocus( ) === this )
-	{
-		return false;
-	}
-
-	this.form.setCaret(
-		{
-			path : this.path,
-			at1  : 0
-		}
-	);
-
-	this.poke( );
-
-	return true;
 };
 
 
@@ -267,13 +250,13 @@ CheckBox.prototype.specialKey =
 	{
 		case 'down' :
 
-			this.form.cycleFocus( +1 );
+			this.parent.cycleFocus( +1 );
 
 			return;
 
 		case 'up' :
 
-			this.form.cycleFocus( -1 );
+			this.parent.cycleFocus( -1 );
 
 			return;
 
@@ -376,7 +359,7 @@ CheckBox.prototype.poke = function( )
 {
 	//this.$fabric = null;
 
-	this.form.poke( );
+	this.parent.poke( );
 };
 
 

@@ -1,5 +1,5 @@
 /*
-| A label on a form.
+| A label.
 |
 | Authors: Axel Kittenberger
 */
@@ -38,28 +38,35 @@ var Label =
 Widgets.Label =
 	function(
 		// ... free strings ...
-		name,
-		twig,
-		form,
-		inherit
 	)
 {
-	this.name =
-		name;
+	Widgets.Widget.call(
+		this,
+		'Label',
+		arguments
+	);
 
-	this.twig =
-		twig;
-
-	this.form =
-		form;
+	var inherit =
+		this.inherit;
 
 	this.pos =
-		form.iframe.computePoint( twig.pos );
+		this.parent.iframe.computePoint(
+			this.twig.pos
+		);
 
 	// if not null, overrides the design text
 	this._$text =
 		inherit ? inherit._$text : null;
 };
+
+
+/*
+| Labels are Widgets
+*/
+Jools.subclass(
+	Label,
+	Widgets.Widget
+);
 
 
 /*
@@ -111,7 +118,7 @@ Label.prototype.setText =
 Label.prototype.poke =
 	function( )
 {
-	this.form.poke( );
+	this.parent.poke( );
 };
 
 
