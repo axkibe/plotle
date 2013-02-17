@@ -89,6 +89,15 @@ Widgets.Widget =
 
 			required :
 				true
+		},
+
+		'visibility' :
+		{
+			type :
+				'param',
+
+			property :
+				'_$visible'
 		}
 	};
 
@@ -153,5 +162,29 @@ Widget.prototype.grepFocus =
 
 	return true;
 };
+
+/*
+| Returns visibility status.
+*/
+Widget.prototype.isVisible =
+function( )
+{
+	return this._$visible;
+};
+
+/*
+| Sets the button in/visible.
+| TODO rename setVisible
+*/
+Widget.prototype.setVisibility =
+    function(
+        visible
+    )
+{
+    this._$visible
+        = visible;
+};
+
+
 
 } )( );

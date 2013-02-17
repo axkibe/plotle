@@ -455,7 +455,7 @@ theme =
 					icon :
 					{
 						sketch :
-							'sketchNormalIcon',
+							'normal',
 
 						fill :
 							'black',
@@ -514,7 +514,7 @@ theme =
 					icon :
 					{
 						sketch :
-							'sketchRemoveIcon',
+							'remove',
 
 						fill :
 							'#ff0000',

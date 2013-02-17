@@ -24,6 +24,7 @@ var Design;
 var Euclid;
 var Jools;
 var Proc;
+var Tree;
 var shell;
 var theme;
 
@@ -78,16 +79,21 @@ var MainDisc = Disc.MainDisc =
 	var eh =
 		style.ellipse.height;
 
-	this.pnw =
-		new Euclid.Point(
-			0,
-			Jools.half( this.screensize.y - this.height )
-		);
-
-	this.pse =
-		this.pnw.add(
+	this.iframe =
+		new Euclid.Rect(
+			'pnw/size',
+			new Euclid.Point(
+				0,
+				Jools.half( this.screensize.y - this.height )
+			),
 			width,
 			height
+		);
+
+	this.tree =
+		new Tree(
+			this.layout,
+			Disc.LayoutPattern
 		);
 
 	this.silhoutte =
@@ -142,6 +148,12 @@ var MainDisc = Disc.MainDisc =
 				true
 		};
 
+	var icons =
+	this._icons =
+		inherit ?
+			inherit._icons :
+			new Disc.Icons( );
+
 	for( var name in this.buttons )
 	{
 		this.buttons[ name ] =
@@ -159,7 +171,9 @@ var MainDisc = Disc.MainDisc =
 						inherit && inherit.buttons[ name ].getText( )
 					)
 					||
-					null
+					null,
+				'icons',
+					icons
 			);
 	}
 
@@ -183,6 +197,141 @@ var MainDisc = Disc.MainDisc =
 };
 
 
+/*
+| All important design variables for convenience
+*/
+var design = {
+
+	buttonWidth :
+		60,
+
+	buttonHeight :
+		60,
+
+	normal :
+	{
+		x :
+			4,
+
+		y :
+			120
+	}
+};
+
+MainDisc.prototype.layout =
+	{
+		type :
+			'Layout',
+
+		copse :
+		{
+			'normal' :
+			{
+				type :
+					'Button',
+
+				normaStyle :
+					'discButtonGeneric',
+
+				hoverStyle :
+					'discButtonGenericHover',
+
+				focusStyle :
+					'discButtonGenericFocus',
+
+				hofocStyle :
+					'discButtonGenericHofoc',
+
+				sketch :
+					'normalIcon',
+
+				frame :
+				{
+					type :
+						'Frame',
+
+					pnw :
+					{
+						type :
+							'Point',
+
+						anchor :
+							'nw',
+
+						x :
+							design.normal.x,
+
+						y :
+							design.normal.y
+					},
+
+					pse :
+					{
+						type :
+							'Point',
+
+						anchor :
+							'nw',
+
+						x :
+							design.normal.x + design.buttonWidth,
+
+						y :
+							design.normal.y + design.buttonHeight
+					}
+				},
+
+				shape :
+				{
+					type :
+						'Ellipse',
+
+					pnw :
+					{
+						type:
+							'Point',
+
+						anchor:
+							'nw',
+
+						x :
+							0,
+
+						y :
+							0
+					},
+
+					pse :
+					{
+						type:
+							'Point',
+
+						anchor:
+							'se',
+
+						x :
+							-1,
+
+						y :
+							-1
+					}
+				}
+			}
+		},
+
+		ranks :
+		[
+			'normal'
+
+		]
+	};
+
+
+/*
+| Design helper is no longer needed, cleanup
+*/
+design =
+	null;
 
 /*
 | Force clears all caches.
@@ -376,7 +525,7 @@ MainDisc.prototype.draw =
 		'image',
 			this._weave( ),
 		'pnw',
-			this.pnw
+			this.iframe.pnw
 	);
 };
 
@@ -391,13 +540,17 @@ MainDisc.prototype.pointingHover =
 		ctrl
 	)
 {
+	var iframe =
+		this.iframe;
+
 	var pnw =
-		this.pnw;
+		iframe.pnw;
 
 	var pse =
-		this.pse;
+		iframe.pse;
 
 	// shortcut if p is not near the panel
+	// TODO replace with iframe.within
 	if(
 		p === null ||
 		p.y < pnw.y ||
@@ -426,7 +579,7 @@ MainDisc.prototype.pointingHover =
 		this._weave( );
 
 	var pp =
-		p.sub(pnw);
+		p.sub( pnw );
 
 	// FIXME Optimize by reusing the latest path of this.$fabric
 
@@ -495,13 +648,17 @@ MainDisc.prototype.pointingStart =
 		ctrl
 	)
 {
+	var iframe =
+		this.iframe;
+
 	var pnw =
-		this.pnw;
+		iframe.pnw;
 
 	var pse =
-		this.pse;
+		iframe.pse;
 
 	// shortcut if p is not near the panel
+	// TODO replace with iframe.within
 	if(
 		p.y < pnw.y ||
 		p.y > pse.y ||

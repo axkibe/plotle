@@ -17,6 +17,7 @@ Widgets =
 | Imports
 */
 var Curve;
+var Jools;
 
 
 /*

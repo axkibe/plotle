@@ -76,16 +76,20 @@ if( config.uglify )
 var Server = function(_)
 {
 	// files served
-	this.$resources = { };
+	this.$resources =
+		{ };
 
 	// initializes the database
-	var db = this.$db = { };
+	var db =
+	this.$db =
+		{ };
 
-	db.server    = new mongodb.Server(
-		config.database.host,
-		config.database.port,
-		{ }
-	);
+	db.server =
+		new mongodb.Server(
+			config.database.host,
+			config.database.port,
+			{ }
+		);
 
 	db.connector = new mongodb.Db(
 		config.database.name,
@@ -94,26 +98,33 @@ var Server = function(_)
 	);
 
 	// all messages
-	this.$messages = [ ];
+	this.$messages =
+		[ ];
 
 	// all spaces
-	this.$spaces = { };
+	this.$spaces =
+		{ };
 
 	// a table of all clients waiting for an update
-	this.$upsleep = { };
+	this.$upsleep =
+		{ };
 
 	// next upsleepID
-	this.$nextSleep = 1;
+	this.$nextSleep =
+		1;
 
 	// next visitors ID
-	this.$nextVisitor = 1000;
+	this.$nextVisitor =
+		1000;
 
 	// table of all cached user credentials
-	this.$users = { };
+	this.$users =
+		{ };
 
 	// the list where a user is present
 	// user for 'entered' and 'left' messages
-	this.$presences = { };
+	this.$presences =
+		{ };
 
 	this.prepareResources(_);
 
@@ -149,7 +160,8 @@ var Server = function(_)
 			( config.ip || '*' ) + '/:' + config.port
 	);
 
-	var self = this;
+	var self =
+		this;
 
 	http.createServer(
 		function( req, res )
@@ -268,30 +280,51 @@ Server.prototype.ensureMeshcraftUser =
 		'ensuring existence of the "meshcraft" user'
 	);
 
-	var mUser = this.$db.users.findOne(
-		{ _id : 'meshcraft' },
-	_);
+	var mUser =
+		this.$db.users.findOne(
+			{
+				_id : 'meshcraft'
+			},
+		_);
 
 	if( !mUser )
 	{
-		Jools.log('start', 'not found! (re)creating the "meshcraft" user');
-		var pass = Jools.randomPassword(12);
+		Jools.log(
+			'start',
+			'not found! (re)creating the "meshcraft" user'
+		);
+
+		var pass =
+			Jools.randomPassword(12);
 
 		mUser =
 			{
-				_id       : 'meshcraft',
-				pass      : Jools.passhash(pass),
-				clearPass : pass,
-				mail      : ''
+				_id :
+					'meshcraft',
+
+				pass :
+					Jools.passhash(pass),
+
+				clearPass :
+					pass,
+
+				mail :
+					''
 			};
 
-		this.$db.users.insert(mUser, _);
+		this.$db.users.insert(
+			mUser,
+		_);
 	}
 
-	this.$users.meshcraft = mUser;
+	this.$users.meshcraft =
+		mUser;
 
-	Jools.log('start', '"meshcraft" user\'s clear password is: ', mUser.clearPass);
-
+	Jools.log(
+		'start',
+		'"meshcraft" user\'s clear password is: ',
+		mUser.clearPass
+	);
 };
 
 
@@ -300,24 +333,45 @@ Server.prototype.ensureMeshcraftUser =
 */
 Server.prototype.loadSpaces = function (_)
 {
-	Jools.log('start', 'loading and replaying all spaces');
+	Jools.log(
+		'start',
+		'loading and replaying all spaces'
+	);
 
-	var cursor = this.$db.spaces.find({ }, { sort: '_id'}, _);
+	var cursor =
+		this.$db.spaces.find(
+			{ },
+			{ sort: '_id'},
+		_);
 
-	for( var o = cursor.nextObject(_); o !== null; o = cursor.nextObject(_) )
-		{ this.loadSpace( o._id, _); }
-
+	for(
+		var o = cursor.nextObject(_);
+		o !== null;
+		o = cursor.nextObject(_)
+	)
+	{
+		this.loadSpace(
+			o._id,
+		_);
+	}
 };
 
 
 /*
 | load a spaces and playbacks its changes from the database.
 */
-Server.prototype.loadSpace = function ( spacename, _)
+Server.prototype.loadSpace =
+	function(
+		spacename,
+	_)
 {
-	Jools.log('start', 'loading and replaying all "' + spacename + '"');
+	Jools.log(
+		'start',
+		'loading and replaying all "' + spacename + '"'
+	);
 
-	var space = this.$spaces[spacename] =
+	var space =
+	this.$spaces[spacename] =
 		{
 			$changesDB :
 				this.$db.connection.collection('changes:' + spacename, _),
@@ -334,8 +388,13 @@ Server.prototype.loadSpace = function ( spacename, _)
 
 	var cursor =
 		space.$changesDB.find(
-			{ },
-			{ sort : '_id' },
+			{
+				// ...
+			},
+			{
+				sort :
+					'_id'
+			},
 		_);
 
 	for(
@@ -370,7 +429,7 @@ Server.prototype.loadSpace = function ( spacename, _)
 		}
 
 		space.$seqZ++;
-		
+
 		try
 		{
 			space.$tree =
@@ -629,6 +688,12 @@ Server.prototype.prepareResources =
 		'shell/curve.js',
 			'fb',
 
+		'shell/disc/pattern-disc.js',
+			'fb',
+
+		'shell/disc/icons.js',
+			'fb',
+
 		'shell/disc/discbutton.js',
 			'fb',
 
@@ -663,7 +728,7 @@ Server.prototype.prepareResources =
 			'fb',
 
 
-		'shell/forms/layout-pattern.js',
+		'shell/forms/pattern-form.js',
 			'fb',
 
 		'shell/forms/form.js',

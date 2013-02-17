@@ -1,5 +1,5 @@
 /*
-| Forms layout patterns.
+| Disc patterns.
 |
 | Authors: Axel Kittenberger
 */
@@ -8,8 +8,9 @@
 /*
 | Export
 */
-var Forms;
-Forms = Forms || { };
+var Disc;
+Disc =
+	Disc || { };
 
 
 /*
@@ -28,7 +29,7 @@ var Euclid;
 /*
 | Form layouts
 */
-Forms.LayoutPattern =
+Disc.LayoutPattern =
 {
 	'BeziTo' :
 	{
@@ -62,9 +63,6 @@ Forms.LayoutPattern =
 	{
 		must :
 		{
-			caption :
-				'Label',
-
 			shape :
 			{
 				'Curve' :
@@ -88,6 +86,15 @@ Forms.LayoutPattern =
 
 			hofocStyle :
 				'String'
+		},
+
+		can :
+		{
+			sketch :
+				'String',
+
+			caption :
+				'Label'
 		}
 	},
 

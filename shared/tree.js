@@ -415,7 +415,9 @@ Tree.prototype.grow =
 				Twig.getType( val );
 
 			var ptype =
-				pattern.must[ k ];
+				( pattern.must && pattern.must[ k ] )
+				||
+				( pattern.can && pattern.can[ k ] );
 
 			if( !ptype )
 			{
