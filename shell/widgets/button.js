@@ -47,10 +47,21 @@ Widgets.Button =
 		// ... free strings ...
 	)
 {
+	// class used to sketch icons if applicable
+	this.icons =
+		null;
+
 	Widgets.Widget.call(
 		this,
 		'Button',
-		arguments
+		arguments,
+		{
+			'icons' :
+			{
+				type :
+					'param'
+			}
+		}
 	);
 
 	var twig =
@@ -109,8 +120,35 @@ Widgets.Button =
 			throw new Error( 'unknown shape: ' + tshape.type );
 	}
 
-	this.captionPos =
-		iframe.computePoint( twig.caption.pos );
+	if( twig.caption )
+	{
+		var caption =
+		this._$caption = {
+			pos :
+				iframe.computePoint( twig.caption.pos ),
+
+			$text :
+				inherit ?
+					inherit._$caption.text :
+					twig.caption.text,
+		};
+
+		if( twig.caption.rotate )
+		{
+			caption.rotate = twig.caption.rotate;
+		}
+	}
+	else if( twig.icon )
+	{
+		this._icon =
+		{
+			sketch :
+				twig.icon,
+
+			style :
+				twig.iconStyle
+		};
+	}
 
 	// if true repeats the push action if held down
 	this.repeating =
@@ -125,9 +163,6 @@ Widgets.Button =
 	this._$visible =
 		this._$visible ||
 		( inherit ? inherit._$visible : true );
-
-	this.$captionText =
-		inherit ? inherit.$captionText : twig.caption.text;
 
 	this.$accent =
 		Widgets.Accent.NORMAL;
@@ -254,14 +289,91 @@ Button.prototype._weave =
 		Euclid.View.proper
 	);
 
-	fabric.paintText(
-		'text',
-			this.$captionText,
-		'p',
-			this.captionPos,
-		'font',
-			twig.caption.font
-	);
+	var caption =
+		this._$caption;
+
+	if( caption )
+	{
+		var text =
+			caption.$text;
+
+		if( Jools.isString( text ) )
+		{
+			if( !Jools.is( caption.rotate ) )
+			{
+				fabric.paintText(
+					'text',
+						caption.$text,
+					'p',
+						caption.pos,
+					'font',
+						twig.caption.font
+				);
+			}
+			else
+			{
+				fabric.paintText(
+					'text',
+						text,
+					'p',
+						caption.pos,
+					'font',
+						twig.caption.font,
+					'rotate',
+						caption.rotate
+				);
+			}
+		}
+		else if( Jools.isArray( text ) )
+		{
+			var pos =
+				caption.pos;
+
+			var x =
+				pos.x;
+
+			var y =
+				pos.y;
+
+			var tZ =
+				text.length;
+
+			var sepy =
+				style.textSepY;
+
+			y -=
+				Math.round( ( tZ - 1 ) / 2 * sepy );
+
+			for( var a = 0; a < tZ; a++, y += sepy )
+			{
+				fabric.paintText(
+					'text',
+						text[ a ],
+					'xy',
+						x,
+						y,
+					'font',
+						style.font
+				);
+			}
+		}
+	}
+
+	var icon =
+		this._icon;
+
+	if( icon )
+	{
+		style =
+			Widgets.getStyle( icon.style );
+
+		fabric.paint(
+			style,
+			this.icons,
+			icon.sketch,
+			Euclid.View.proper
+		);
+	}
 
 	if( config.debug.drawBoxes )
 	{
@@ -514,6 +626,25 @@ Button.prototype.knock =
 	this.$fabric = null;
 };
 
+
+/*
+| Sets the buttons text.
+*/
+Button.prototype.setText =
+	function(
+		text
+	)
+{
+	if( this._$caption.$text === text )
+	{
+		return;
+	}
+
+	this._$caption.$text
+		= text;
+
+	this.poke( );
+};
 
 
 /*

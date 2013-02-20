@@ -66,9 +66,26 @@ var styles =
 	buttonHofoc :
 		theme.forms.buttonHofoc,
 
+	discButtonGeneric :
+		theme.disc.button,
+
+	discButtonGenericHover :
+		theme.disc.buttonHover,
+
+	discButtonGenericFocus :
+		theme.disc.buttonFocus,
+
+	discButtonGenericHofoc :
+		theme.disc.buttonHofoc,
+
 //	highlight :
 //		theme.dash.highlight,
 
+	iconNormal :
+		theme.disc.iconNormal,
+
+	iconRemove :
+		theme.disc.iconRemove,
 
 	input :
 		theme.forms.input,

@@ -294,6 +294,145 @@ theme =
 	*/
 	disc :
 	{
+		/*
+		| Button is in its default state.
+		*/
+		button :
+		{
+			fill :
+				'rgba( 255, 255, 240, 0.7 )',
+
+			edge :
+			[
+				{
+					border :
+						0,
+
+					width :
+						1,
+
+					color :
+						'rgba( 196, 94, 44, 0.4 )'
+				}
+			]
+		},
+
+		/*
+		| The users pointing device is hovering over the button.
+		*/
+		buttonHover :
+		{
+			fill :
+				'rgba( 255, 235, 210, 0.7 )',
+
+			edge :
+			[
+				{
+					border :
+						0,
+
+					width :
+						1,
+
+					color :
+						'rgba( 196, 94, 44, 0.4 )'
+				}
+			]
+		},
+
+		/*
+		| Button has focus
+		*/
+		buttonFocus :
+		{
+			fill :
+				'rgb( 255, 188, 88 )',
+
+			edge :
+			[
+				{
+					border :
+						0,
+
+					width :
+						1,
+
+					color :
+						'rgba( 196, 94, 44, 0.4 )'
+				}
+			]
+		},
+
+		/*
+		| Button has focus and hover
+		*/
+		buttonHofoc :
+		{
+			fill :
+				'rgb( 255, 188, 88 )',
+
+			edge :
+			[
+				{
+					border :
+						0,
+
+					width :
+						1,
+
+					color :
+						'rgba( 196, 94, 44, 0.4 )'
+				}
+			]
+		},
+
+		/*
+		| The default arrow for the normal button.
+		*/
+		iconNormal :
+		{
+			fill :
+				'black',
+
+			edge :
+			[
+				{
+					border :
+						0,
+
+					width :
+						1,
+
+					color :
+						'rgba( 128, 0, 0, 1 )'
+				}
+			]
+		},
+
+
+		/*
+		| The red criss-cross for the remove button
+		*/
+		iconRemove :
+		{
+			fill :
+				'#ff0000',
+
+			edge :
+			[
+				{
+					border :
+						0,
+
+					width :
+						1,
+
+					color :
+						'rgba( 128, 0, 0, 1 )'
+				}
+			]
+		},
+
 
 		/*
 		| The main disc.
@@ -440,138 +579,6 @@ theme =
 						]
 					}
 
-				},
-
-				/*
-				| Default arrow button on main disc
-				*/
-				normal :
-				{
-					pnw : new Euclid.Point(
-						4,
-						120
-					),
-
-					icon :
-					{
-						sketch :
-							'normal',
-
-						fill :
-							'black',
-
-						edge :
-						[
-							{
-								border :
-									0,
-
-								width :
-									1,
-
-								color :
-									'rgba( 128, 0, 0, 1 )'
-							}
-						]
-					}
-				},
-
-				/*
-				| New button on main disc
-				*/
-				create :
-				{
-					pnw :
-						new Euclid.Point(
-							20,
-							169
-						),
-
-					text :
-						'new',
-
-					textAnchor :
-						new Euclid.Point(
-							22,
-							22
-						),
-
-					font :
-						fontPool.get( 14, 'cm' )
-				},
-
-				/*
-				| Remove button on main disc
-				*/
-				remove :
-				{
-					pnw :
-						new Euclid.Point(
-							32,
-							218
-						),
-
-					icon :
-					{
-						sketch :
-							'remove',
-
-						fill :
-							'#ff0000',
-
-						edge :
-						[
-							{
-								border :
-									0,
-
-								width :
-									1,
-
-								color :
-									'rgba( 128, 0, 0, 1 )'
-							}
-						]
-					}
-				},
-
-				/*
-				| Space button on main disc
-				*/
-				space :
-				{
-					width :
-						28,
-
-					height :
-						290,
-
-					pnw :
-						new Euclid.Point(
-							0,
-							170
-						),
-
-					offset :
-						new Euclid.Point(
-							-60,
-							0
-						),
-
-					text :
-						'',
-
-					textAnchor :
-						new Euclid.Point(
-							11,
-							145
-						),
-
-					textRotate :
-						- Math.PI / 2,
-
-					font :
-						fontPool.get( 12, 'cm' )
 				},
 
 				/*

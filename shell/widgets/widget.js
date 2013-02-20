@@ -126,7 +126,7 @@ Widgets.Widget =
 
 	this._$visible =
 		this._$visible ||
-		this.inherit ? this.inherit._$visible : true;
+		( this.inherit ? this.inherit._$visible : true );
 
 //	this.$accent =
 //		Widgets.Accent.NORMAL;

@@ -90,7 +90,10 @@ Disc.LayoutPattern =
 
 		can :
 		{
-			sketch :
+			icon :
+				'String',
+
+			iconStyle :
 				'String',
 
 			caption :
@@ -227,6 +230,12 @@ Disc.LayoutPattern =
 
 			font :
 				'Font'
+		},
+
+		can :
+		{
+			rotate :
+				'Number'
 		}
 	},
 

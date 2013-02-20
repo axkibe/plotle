@@ -27,6 +27,7 @@ var Proc;
 var Tree;
 var shell;
 var theme;
+var Widgets;
 
 
 /*
@@ -45,7 +46,8 @@ if( typeof( window ) === 'undefined' )
 |
 | TODO change to free string arguments
 */
-var MainDisc = Disc.MainDisc =
+var MainDisc =
+Disc.MainDisc =
 	function(
 		inherit,
 		screensize
@@ -65,6 +67,8 @@ var MainDisc = Disc.MainDisc =
 	var style =
 		theme.disc.main;
 
+
+	// TODO remove this.width/height vars
 	var width =
 		this.width =
 		style.width;
@@ -79,7 +83,7 @@ var MainDisc = Disc.MainDisc =
 	var eh =
 		style.ellipse.height;
 
-	this.iframe =
+	this.oframe =
 		new Euclid.Rect(
 			'pnw/size',
 			new Euclid.Point(
@@ -90,7 +94,17 @@ var MainDisc = Disc.MainDisc =
 			height
 		);
 
-	this.tree =
+	this.iframe =
+		new Euclid.Rect(
+			'pnw/size',
+			Euclid.Point.zero,
+			width,
+			height
+		);
+
+	// TODO inherit, make private
+	var tree =
+	this._tree =
 		new Tree(
 			this.layout,
 			Disc.LayoutPattern
@@ -156,6 +170,33 @@ var MainDisc = Disc.MainDisc =
 
 	for( var name in this.buttons )
 	{
+		// TODO XXX remove switch
+		switch( name ) {
+		case 'normal' :
+		case 'create' :
+		case 'remove' :
+		case 'space' :
+		this.buttons[ name ] =
+			new Widgets.Button(
+				'parent',
+					this,
+				'name',
+					name,
+				'twig',
+					tree.root.copse[ name ],
+				'visibility',
+					inherit ?
+						inherit.buttons[ name ].isVisible( ) :
+						this.buttons[ name ],
+				'inherit',
+					inherit ?
+						inherit && inherit.buttons[ name ] :
+						null,
+				'icons',
+					icons
+			);
+		break;
+		default :
 		this.buttons[ name ] =
 			new Disc.DiscButton(
 				'disc',
@@ -175,10 +216,13 @@ var MainDisc = Disc.MainDisc =
 				'icons',
 					icons
 			);
+		break;
+		}
 	}
 
 	if( inherit )
 	{
+
 		this.buttons.login.setText(
 			inherit.buttons.login.getText( )
 		);
@@ -202,11 +246,17 @@ var MainDisc = Disc.MainDisc =
 */
 var design = {
 
-	buttonWidth :
-		60,
+	generic :
+	{
+		width :
+			44,
 
-	buttonHeight :
-		60,
+		height :
+			44,
+
+		font :
+			fontPool.get( 14, 'cm' ),
+	},
 
 	normal :
 	{
@@ -215,7 +265,48 @@ var design = {
 
 		y :
 			120
-	}
+	},
+
+	create :
+	{
+		x :
+			20,
+
+		y :
+			169
+	},
+
+	remove :
+	{
+		x :
+			32,
+
+		y :
+			218,
+	},
+
+	space :
+	{
+		width :
+			28,
+
+		height :
+			290,
+
+		x :
+			0,
+
+		y :
+			170,
+	},
+
+	/*
+		textAnchor :
+			new Euclid.Point(
+				11,
+				145
+			),
+	*/
 };
 
 MainDisc.prototype.layout =
@@ -242,8 +333,11 @@ MainDisc.prototype.layout =
 				hofocStyle :
 					'discButtonGenericHofoc',
 
-				sketch :
-					'normalIcon',
+				icon :
+					'normal',
+
+				iconStyle :
+					'iconNormal',
 
 				frame :
 				{
@@ -274,10 +368,12 @@ MainDisc.prototype.layout =
 							'nw',
 
 						x :
-							design.normal.x + design.buttonWidth,
+							design.normal.x +
+								design.generic.width,
 
 						y :
-							design.normal.y + design.buttonHeight
+							design.normal.y +
+								design.generic.height
 					}
 				},
 
@@ -316,13 +412,354 @@ MainDisc.prototype.layout =
 							-1
 					}
 				}
+			},
+
+			'create' :
+			{
+				type :
+					'Button',
+
+				normaStyle :
+					'discButtonGeneric',
+
+				hoverStyle :
+					'discButtonGenericHover',
+
+				focusStyle :
+					'discButtonGenericFocus',
+
+				hofocStyle :
+					'discButtonGenericHofoc',
+
+				caption :
+				{
+					type :
+						'Label',
+
+					text :
+						'new',
+
+					font :
+						design.generic.font,
+
+					pos :
+					{
+						type :
+							'Point',
+
+						anchor :
+							'c',
+
+						x :
+							0,
+
+						y :
+							0
+					}
+				},
+
+				frame :
+				{
+					type :
+						'Frame',
+
+					pnw :
+					{
+						type :
+							'Point',
+
+						anchor :
+							'nw',
+
+						x :
+							design.create.x,
+
+						y :
+							design.create.y
+					},
+
+					pse :
+					{
+						type :
+							'Point',
+
+						anchor :
+							'nw',
+
+						x :
+							design.create.x +
+								design.generic.width,
+
+						y :
+							design.create.y +
+								design.generic.height
+					}
+				},
+
+				shape :
+				{
+					type :
+						'Ellipse',
+
+					pnw :
+					{
+						type:
+							'Point',
+
+						anchor:
+							'nw',
+
+						x :
+							0,
+
+						y :
+							0
+					},
+
+					pse :
+					{
+						type:
+							'Point',
+
+						anchor:
+							'se',
+
+						x :
+							-1,
+
+						y :
+							-1
+					}
+				}
+			},
+
+			'remove' :
+			{
+				type :
+					'Button',
+
+				normaStyle :
+					'discButtonGeneric',
+
+				hoverStyle :
+					'discButtonGenericHover',
+
+				focusStyle :
+					'discButtonGenericFocus',
+
+				hofocStyle :
+					'discButtonGenericHofoc',
+
+				icon :
+					'remove',
+
+				iconStyle :
+					'iconRemove',
+
+				frame :
+				{
+					type :
+						'Frame',
+
+					pnw :
+					{
+						type :
+							'Point',
+
+						anchor :
+							'nw',
+
+						x :
+							design.remove.x,
+
+						y :
+							design.remove.y
+					},
+
+					pse :
+					{
+						type :
+							'Point',
+
+						anchor :
+							'nw',
+
+						x :
+							design.remove.x +
+								design.generic.width,
+
+						y :
+							design.remove.y +
+								design.generic.height
+					}
+				},
+
+				shape :
+				{
+					type :
+						'Ellipse',
+
+					pnw :
+					{
+						type:
+							'Point',
+
+						anchor:
+							'nw',
+
+						x :
+							0,
+
+						y :
+							0
+					},
+
+					pse :
+					{
+						type:
+							'Point',
+
+						anchor:
+							'se',
+
+						x :
+							-1,
+
+						y :
+							-1
+					}
+				}
+			},
+
+			'space' :
+			{
+				type :
+					'Button',
+
+				normaStyle :
+					'discButtonGeneric',
+
+				hoverStyle :
+					'discButtonGenericHover',
+
+				focusStyle :
+					'discButtonGenericFocus',
+
+				hofocStyle :
+					'discButtonGenericHofoc',
+
+				frame :
+				{
+					type :
+						'Frame',
+
+					pnw :
+					{
+						type :
+							'Point',
+
+						anchor :
+							'nw',
+
+						x :
+							design.space.x,
+
+						y :
+							design.space.y
+					},
+
+					pse :
+					{
+						type :
+							'Point',
+
+						anchor :
+							'nw',
+
+						x :
+							design.space.x +
+								design.space.width,
+
+						y :
+							design.space.y +
+								design.space.height
+					}
+				},
+
+				caption :
+				{
+					type :
+						'Label',
+
+					text :
+						'',
+
+					font :
+						fontPool.get( 12, 'cm' ),
+
+					pos :
+					{
+						type :
+							'Point',
+
+						anchor :
+							'c',
+
+						x :
+							0,
+
+						y :
+							0
+					},
+
+					rotate :
+						- Math.PI / 2,
+				},
+
+				shape :
+				{
+					type :
+						'Ellipse',
+
+					pnw :
+					{
+						type:
+							'Point',
+
+						anchor:
+							'nw',
+
+						x :
+							-60,
+
+						y :
+							0
+					},
+
+					pse :
+					{
+						type:
+							'Point',
+
+						anchor:
+							'se',
+
+						x :
+							-1,
+
+						y :
+							-1
+					}
+				}
 			}
 		},
 
 		ranks :
 		[
-			'normal'
-
+			'normal',
+			'create',
+			'remove',
+			'space'
 		]
 	};
 
@@ -380,6 +817,24 @@ MainDisc.prototype._weave =
 		var button =
 			buttons[ name ];
 
+		// TODO XXX remove switch
+		switch( name ) {
+		case 'normal' :
+		case 'create' :
+		case 'remove' :
+		case 'space' :
+		button.draw(
+			fabric,
+			Widgets.Accent.state(
+				name === this.$hover,
+				shell.bridge.inMode(
+					this.getModeOfButton( button.name )
+				)
+			)
+		);
+		break;
+
+		default :
 		button.draw(
 			fabric,
 			shell.bridge.inMode(
@@ -387,6 +842,8 @@ MainDisc.prototype._weave =
 			),
 			this.$hover  === name
 		);
+		break;
+		}
 	}
 
 	fabric.edge(
@@ -525,7 +982,7 @@ MainDisc.prototype.draw =
 		'image',
 			this._weave( ),
 		'pnw',
-			this.iframe.pnw
+			this.oframe.pnw
 	);
 };
 
@@ -540,17 +997,17 @@ MainDisc.prototype.pointingHover =
 		ctrl
 	)
 {
-	var iframe =
-		this.iframe;
+	var oframe =
+		this.oframe;
 
 	var pnw =
-		iframe.pnw;
+		oframe.pnw;
 
 	var pse =
-		iframe.pse;
+		oframe.pse;
 
 	// shortcut if p is not near the panel
-	// TODO replace with iframe.within
+	// TODO replace with oframe.within
 	if(
 		p === null ||
 		p.y < pnw.y ||
@@ -648,17 +1105,17 @@ MainDisc.prototype.pointingStart =
 		ctrl
 	)
 {
-	var iframe =
-		this.iframe;
+	var oframe =
+		this.oframe;
 
 	var pnw =
-		iframe.pnw;
+		oframe.pnw;
 
 	var pse =
-		iframe.pse;
+		oframe.pse;
 
 	// shortcut if p is not near the panel
-	// TODO replace with iframe.within
+	// TODO replace with oframe.within
 	if(
 		p.y < pnw.y ||
 		p.y > pse.y ||
