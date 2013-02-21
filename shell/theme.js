@@ -386,6 +386,88 @@ theme =
 			]
 		},
 
+
+		/*
+		| Button is in its default state.
+		*/
+		createNormal :
+		{
+			//fill : 'rgba( 255, 255, 240, 0.7 )',
+
+			edge :
+			[
+				/*
+				{
+					border : 0,
+					width  : 1,
+					color  : 'rgba( 196, 94, 44, 0.4 )'
+				}
+				*/
+			]
+		},
+
+
+		/*
+		| The users pointing device is hovering over the button.
+		*/
+		createHover :
+		{
+			fill : 'rgba( 255, 235, 210, 0.7 )',
+
+			edge :
+			[
+				{
+					border : 0,
+					width  : 1,
+					color  : 'rgba( 196, 94, 44, 0.4 )'
+				}
+			]
+		},
+
+		/*
+		| This button is currently active.
+		*/
+		createFocus :
+		{
+			fill : 'rgb( 255, 188, 88 )',
+
+			edge :
+			[
+				{
+					border :
+						0,
+
+					width :
+						1,
+
+					color :
+						'rgba( 196, 94, 44, 0.4 )'
+				}
+			]
+		},
+
+		/*
+		| This button is currently active.
+		*/
+		createHofoc :
+		{
+			fill : 'rgb( 255, 188, 88 )',
+
+			edge :
+			[
+				{
+					border :
+						0,
+
+					width :
+						1,
+
+					color :
+						'rgba( 196, 94, 44, 0.4 )'
+				}
+			]
+		},
+
 		/*
 		| The default arrow for the normal button.
 		*/
@@ -497,216 +579,6 @@ theme =
 				}
 			],
 
-			buttons :
-			{
-				/*
-				| All buttons on the main disc.
-				*/
-				generic :
-				{
-					width :
-						44,
-
-					height :
-						44,
-
-					/*
-					| Button is in its default state.
-					*/
-					normal :
-					{
-						fill :
-							'rgba( 255, 255, 240, 0.7 )',
-
-						edge :
-						[
-							{
-								border :
-									0,
-
-								width :
-									1,
-
-								color :
-									'rgba( 196, 94, 44, 0.4 )'
-							}
-						]
-					},
-
-					/*
-					| The users pointing device is hovering over the button.
-					*/
-					hover :
-					{
-						fill :
-							'rgba( 255, 235, 210, 0.7 )',
-
-						edge :
-						[
-							{
-								border :
-									0,
-
-								width :
-									1,
-
-								color :
-									'rgba( 196, 94, 44, 0.4 )'
-							}
-						]
-					},
-
-					/*
-					| This button is currently active.
-					*/
-					active :
-					{
-						fill :
-							'rgb( 255, 188, 88 )',
-
-						edge :
-						[
-							{
-								border :
-									0,
-
-								width :
-									1,
-
-								color :
-									'rgba( 196, 94, 44, 0.4 )'
-							}
-						]
-					}
-
-				},
-
-				/*
-				| User button on main disc
-				*/
-				user :
-				{
-					width :
-						24,
-
-					height :
-						180,
-
-					pnw :
-						new Euclid.Point(
-							0,
-							440
-						),
-
-					offset :
-						new Euclid.Point(
-							-70,
-							0
-						),
-
-					text :
-						'',
-
-					textAnchor :
-						new Euclid.Point(
-							11,
-							90
-						),
-
-					textRotate :
-						- Math.PI / 2,
-
-					font :
-						fontPool.get( 12, 'cm' )
-				},
-
-				/*
-				| Log in button on main disc
-				*/
-				login :
-				{
-					pnw :
-						new Euclid.Point(
-							30,
-							535
-						),
-
-					text :
-						[
-							'log',
-							'in'
-						],
-
-					textSepY :
-						16,
-
-
-					textAnchor :
-						new Euclid.Point(
-							22,
-							22
-						),
-
-					font :
-						fontPool.get( 13, 'cm' )
-				},
-
-
-				/*
-				| Sign up button on main disc
-				*/
-				signup :
-				{
-					pnw :
-						new Euclid.Point(
-							19,
-							585
-						),
-
-					text :
-						[
-							'sign',
-							'up'
-						],
-
-					textSepY :
-						16,
-
-					textAnchor :
-						new Euclid.Point(
-							22,
-							22
-						),
-
-					font :
-						fontPool.get( 13, 'cm' )
-				},
-
-
-				/*
-				| Help button on main disc
-				*/
-				help :
-				{
-					pnw :
-						new Euclid.Point(
-							4,
-							635
-						),
-
-					text :
-						'?',
-
-					textAnchor :
-						new Euclid.Point(
-							22,
-							22
-						),
-
-					font :
-						fontPool.get( 22, 'cm' )
-				}
-			}
 		},
 
 		/*
@@ -848,87 +720,6 @@ theme =
 						]
 					}
 
-				},
-
-
-				/*
-				| Create note button.
-				*/
-				note :
-				{
-					pnw :
-						new Euclid.Point(
-							62,
-							216
-						),
-
-					text :
-						'Note',
-
-					textAnchor :
-						new Euclid.Point(
-							35,
-							35
-						),
-
-					font :
-						fontPool.get( 16, 'cm' )
-				},
-
-
-				/*
-				| Create label button.
-				*/
-				label :
-				{
-					pnw :
-						new Euclid.Point(
-							81,
-							284
-						),
-
-					text :
-						'Label',
-
-					textAnchor :
-						new Euclid.Point(
-							35,
-							35
-						),
-
-					font :
-						fontPool.get( 16, 'cm' )
-				},
-
-
-				/*
-				| Create relation button.
-				*/
-				relation :
-				{
-					pnw :
-						new Euclid.Point(
-							94,
-							354
-						),
-
-					text :
-						[
-							'Rela-',
-							'tion'
-						],
-
-					textAnchor :
-						new Euclid.Point(
-							35,
-							35
-						),
-
-					textSepY :
-						20,
-
-					font :
-						fontPool.get( 16, 'cm' )
 				},
 
 

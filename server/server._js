@@ -694,9 +694,6 @@ Server.prototype.prepareResources =
 		'shell/disc/icons.js',
 			'fb',
 
-		'shell/disc/discbutton.js',
-			'fb',
-
 		'shell/disc/createdisc.js',
 			'fb',
 

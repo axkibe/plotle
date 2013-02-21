@@ -19,10 +19,12 @@ var Curve;
 var Dash;
 var Design;
 var Euclid;
+var fontPool;
 var Jools;
 var Proc;
 var shell;
 var theme;
+var Tree;
 
 
 /*
@@ -50,75 +52,675 @@ var CreateDisc = Disc.CreateDisc =
 	this.name =
 		'create';
 
-	var style = this._style = theme.disc.create;
+	var style =
+	this._style =
+		theme.disc.create;
 
-	var width  = this.width  = style.width;
-	var height = this.height = style.height;
+	var width =
+	this.width =
+		style.width;
 
-	var ew = style.ellipse.width;
-	var eh = style.ellipse.height;
+	var height =
+	this.height =
+		style.height;
 
-	this.pnw = new Euclid.Point(
-		0,
-		Jools.half( this.screensize.y - this.height )
-	);
+	var ew =
+		style.ellipse.width;
 
-	this.pse = this.pnw.add(
-		width,
-		height
-	);
+	var eh =
+		style.ellipse.height;
+
+	// TODO inherit, make private
+	var tree =
+	this._tree =
+		new Tree(
+			this.layout,
+			Disc.LayoutPattern
+		);
+
+	this.oframe =
+		new Euclid.Rect(
+			'pnw/size',
+			new Euclid.Point(
+				0,
+				Jools.half( this.screensize.y - this.height )
+			),
+			width,
+			height
+		);
+
+	this.iframe =
+		new Euclid.Rect(
+			'pnw/size',
+			Euclid.Point.zero,
+			width,
+			height
+		);
 
 
-	this.silhoutte = new Euclid.Ellipse(
-		new Euclid.Point(
-			width - 1 - ew,
-			0 - Jools.half( eh - height )
-		),
-		new Euclid.Point(
-			width - 1,
-			height + Jools.half( eh - height )
-		),
-		'gradientPC', new Euclid.Point(
-			-600,
-			Jools.half( height )
-		),
-		'gradientR0',  0,
-		'gradientR1',  650
-	);
+	this.silhoutte =
+		new Euclid.Ellipse(
+			new Euclid.Point(
+				width - 1 - ew,
+				0 - Jools.half( eh - height )
+			),
+			new Euclid.Point(
+				width - 1,
+				height + Jools.half( eh - height )
+			),
+			'gradientPC',
+				new Euclid.Point(
+					-600,
+					Jools.half( height )
+			),
+			'gradientR0',
+				0,
+			'gradientR1',
+				650
+		);
 
 	this.buttons =
 		Jools.immute(
 			{
 				note :
-					new Disc.DiscButton(
-						'disc',   this,
-						'name',  'note'
+					new Widgets.Button(
+						'parent',
+							this,
+						'name',
+							'note',
+						'twig',
+							tree.root.copse.note
 					),
 
 				label :
-					new Disc.DiscButton(
-						'disc',   this,
-						'name',  'label'
+					new Widgets.Button(
+						'parent',
+							this,
+						'name',
+							'label',
+						'twig',
+							tree.root.copse.label
 					),
 
 				relation :
-					new Disc.DiscButton(
-						'disc',   this,
-						'name',  'relation'
+					new Widgets.Button(
+						'parent',
+							this,
+						'name',
+							'relation',
+						'twig',
+							tree.root.copse.relation
 					),
 
 				portal :
-					new Disc.DiscButton(
-						'disc',   this,
-						'name',  'portal'
-					)
+					new Widgets.Button(
+						'parent',
+							this,
+						'name',
+							'portal',
+						'twig',
+							tree.root.copse.portal
+					),
 			}
 		);
 
-	this.$hover  = null;
+	this.$hover =
+		null;
 };
 
+/*
+| All important design variables for convenience
+*/
+var design = {
 
+	generic :
+	{
+		width :
+			70,
+
+		height :
+			70,
+
+		font :
+			fontPool.get( 16, 'cm' )
+	},
+
+	note :
+	{
+		x :
+			62,
+
+		y :
+			216
+	},
+
+	label :
+	{
+		x :
+			81,
+
+		y :
+			284
+	},
+
+	relation :
+	{
+		x :
+			94,
+
+		y :
+			354
+	},
+
+	portal :
+	{
+		x :
+			101,
+
+		y :
+			425
+	}
+};
+
+CreateDisc.prototype.layout =
+{
+	type :
+		'Layout',
+
+	copse :
+	{
+		'note' :
+		{
+			type :
+				'Button',
+
+			normaStyle :
+				'createButtonGeneric',
+
+			hoverStyle :
+				'createButtonGenericHover',
+
+			focusStyle :
+				'createButtonGenericFocus',
+
+			hofocStyle :
+				'createButtonGenericHofoc',
+
+			caption :
+			{
+				type :
+					'Label',
+
+				text :
+					'Note',
+
+				font :
+					design.generic.font,
+
+				pos :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'c',
+
+					x :
+						0,
+
+					y :
+						0
+				}
+			},
+
+
+			frame :
+			{
+				type :
+					'Frame',
+
+				pnw :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'nw',
+
+					x :
+						design.note.x,
+
+					y :
+						design.note.y
+				},
+
+				pse :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'nw',
+
+					x :
+						design.note.x +
+							design.generic.width,
+
+					y :
+						design.note.y +
+							design.generic.height
+				}
+			},
+
+			shape :
+			{
+				type :
+					'Ellipse',
+
+				pnw :
+				{
+					type:
+						'Point',
+
+					anchor:
+						'nw',
+
+					x :
+						0,
+
+					y :
+						0
+				},
+
+				pse :
+				{
+					type:
+						'Point',
+
+					anchor:
+						'se',
+
+					x :
+						-1,
+
+					y :
+						-1
+				}
+			}
+		},
+
+		'label' :
+		{
+			type :
+				'Button',
+
+			normaStyle :
+				'createButtonGeneric',
+
+			hoverStyle :
+				'createButtonGenericHover',
+
+			focusStyle :
+				'createButtonGenericFocus',
+
+			hofocStyle :
+				'createButtonGenericHofoc',
+
+			caption :
+			{
+				type :
+					'Label',
+
+				text :
+					'Label',
+
+				font :
+					design.generic.font,
+
+				pos :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'c',
+
+					x :
+						0,
+
+					y :
+						0
+				}
+			},
+
+
+			frame :
+			{
+				type :
+					'Frame',
+
+				pnw :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'nw',
+
+					x :
+						design.label.x,
+
+					y :
+						design.label.y
+				},
+
+				pse :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'nw',
+
+					x :
+						design.label.x +
+							design.generic.width,
+
+					y :
+						design.label.y +
+							design.generic.height
+				}
+			},
+
+			shape :
+			{
+				type :
+					'Ellipse',
+
+				pnw :
+				{
+					type:
+						'Point',
+
+					anchor:
+						'nw',
+
+					x :
+						0,
+
+					y :
+						0
+				},
+
+				pse :
+				{
+					type:
+						'Point',
+
+					anchor:
+						'se',
+
+					x :
+						-1,
+
+					y :
+						-1
+				}
+			}
+		},
+
+		'relation' :
+		{
+			type :
+				'Button',
+
+			normaStyle :
+				'createButtonGeneric',
+
+			hoverStyle :
+				'createButtonGenericHover',
+
+			focusStyle :
+				'createButtonGenericFocus',
+
+			hofocStyle :
+				'createButtonGenericHofoc',
+
+			caption :
+			{
+				type :
+					'Label',
+
+				text :
+					'Rela-\ntion',
+
+				newline :
+					20,
+
+				font :
+					design.generic.font,
+
+				pos :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'c',
+
+					x :
+						0,
+
+					y :
+						0
+				}
+			},
+
+
+			frame :
+			{
+				type :
+					'Frame',
+
+				pnw :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'nw',
+
+					x :
+						design.relation.x,
+
+					y :
+						design.relation.y
+				},
+
+				pse :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'nw',
+
+					x :
+						design.relation.x +
+							design.generic.width,
+
+					y :
+						design.relation.y +
+							design.generic.height
+				}
+			},
+
+			shape :
+			{
+				type :
+					'Ellipse',
+
+				pnw :
+				{
+					type:
+						'Point',
+
+					anchor:
+						'nw',
+
+					x :
+						0,
+
+					y :
+						0
+				},
+
+				pse :
+				{
+					type:
+						'Point',
+
+					anchor:
+						'se',
+
+					x :
+						-1,
+
+					y :
+						-1
+				}
+			}
+		},
+
+		'portal' :
+		{
+			type :
+				'Button',
+
+			normaStyle :
+				'createButtonGeneric',
+
+			hoverStyle :
+				'createButtonGenericHover',
+
+			focusStyle :
+				'createButtonGenericFocus',
+
+			hofocStyle :
+				'createButtonGenericHofoc',
+
+			caption :
+			{
+				type :
+					'Label',
+
+				text :
+					'Portal',
+
+				font :
+					design.generic.font,
+
+				pos :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'c',
+
+					x :
+						0,
+
+					y :
+						0
+				}
+			},
+
+
+			frame :
+			{
+				type :
+					'Frame',
+
+				pnw :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'nw',
+
+					x :
+						design.portal.x,
+
+					y :
+						design.portal.y
+				},
+
+				pse :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'nw',
+
+					x :
+						design.portal.x +
+							design.generic.width,
+
+					y :
+						design.portal.y +
+							design.generic.height
+				}
+			},
+
+			shape :
+			{
+				type :
+					'Ellipse',
+
+				pnw :
+				{
+					type:
+						'Point',
+
+					anchor:
+						'nw',
+
+					x :
+						0,
+
+					y :
+						0
+				},
+
+				pse :
+				{
+					type:
+						'Point',
+
+					anchor:
+						'se',
+
+					x :
+						-1,
+
+					y :
+						-1
+				}
+			}
+		}
+	},
+
+	ranks :
+	[
+		'note',
+		'label',
+		'relation',
+		'portal'
+	]
+};
 
 /*
 | Force clears all caches.
@@ -136,10 +738,12 @@ CreateDisc.prototype.knock =
 CreateDisc.prototype._weave =
 	function( )
 {
-	var fabric = this.$fabric = new Euclid.Fabric(
-		this.width,
-		this.height
-	);
+	var fabric =
+	this.$fabric =
+		new Euclid.Fabric(
+			this.width,
+			this.height
+		);
 
 	fabric.fill(
 		this._style.fill,
@@ -148,19 +752,43 @@ CreateDisc.prototype._weave =
 		Euclid.View.proper
 	);
 
-	var buttons = this.buttons;
+	var buttons =
+		this.buttons;
 
-	var action = shell.bridge.action( );
+	var action =
+		shell.bridge.action( );
 
 	for( var name in this.buttons )
 	{
 		var button = buttons[ name ];
 
-		button.draw(
-			fabric,
-			this.buttonMatchesAction( button.name, action ),
-			this.$hover === name
-		);
+		// XXX
+		switch( name )
+		{
+			case 'note' :
+			case 'label' :
+			case 'relation' :
+			case 'portal' :
+			button.draw(
+				fabric,
+				Widgets.Accent.state(
+					name === this.$hover,
+					this.buttonMatchesAction(
+						button.name,
+						action
+					)
+				)
+			);
+			break;
+
+			default :
+			button.draw(
+				fabric,
+				this.buttonMatchesAction( button.name, action ),
+				this.$hover === name
+			);
+			break;
+		}
 	}
 
 	fabric.edge(
@@ -191,7 +819,8 @@ CreateDisc.prototype._weave =
 */
 CreateDisc.prototype.buttonMatchesAction =
 	function(
-		buttonName, action
+		buttonName,
+		action
 	)
 {
 	if( !action )
@@ -202,51 +831,27 @@ CreateDisc.prototype.buttonMatchesAction =
 	switch( buttonName )
 	{
 		case 'note' :
+
 			return action.type === 'CreateNote';
 
 		case 'label' :
+
 			return action.type === 'CreateLabel';
 
 		case 'relation' :
+
 			return action.type === 'CreateRelation';
 
 		case 'portal' :
+
 			return action.type === 'CreatePortal';
 
 		default :
+
 			throw new Error( 'unknown button:' + buttonName );
 	}
 };
 
-
-/*
-| Returns the create mode associated with a button
-*/
-/*
-CreateDisc.prototype.getCreateOfButton =
-	function(
-		buttonName
-	)
-{
-	switch( buttonName )
-	{
-		case 'note' :
-			return 'Note';
-
-		case 'label' :
-			return 'Label';
-
-		case 'relation' :
-			return 'Relation';
-
-		case 'portal' :
-			return 'Portal';
-
-		default :
-			throw new Error( 'unknown button:' + buttonName );
-	}
-};
-*/
 
 /*
 | A button of the main disc has been pushed.
@@ -256,7 +861,8 @@ CreateDisc.prototype.pushButton =
 		buttonName
 	)
 {
-	var action = shell.bridge.action( );
+	var action =
+		shell.bridge.action( );
 
 	if ( this.buttonMatchesAction( buttonName, action ) )
 	{
@@ -333,8 +939,11 @@ CreateDisc.prototype.pointingHover =
 		ctrl
 	)
 {
-	var pnw = this.pnw;
-	var pse = this.pse;
+	var pnw =
+		this.oframe.pnw;
+
+	var pse =
+		this.oframe.pse;
 
 	// shortcut if p is not near the panel
 	if(
@@ -396,8 +1005,11 @@ CreateDisc.prototype.pointingStart =
 		ctrl
 	)
 {
-	var pnw = this.pnw;
-	var pse = this.pse;
+	var pnw =
+		this.oframe.pnw;
+
+	var pse =
+		this.oframe.pse;
 
 	// shortcut if p is not near the panel
 	if(

@@ -107,7 +107,6 @@ Widgets.Button =
 		case 'Ellipse' :
 
 			this.shape =
-
 				new Euclid.Ellipse(
 					iframe.computePoint( tshape.pnw ),
 					iframe.computePoint( tshape.pse )
@@ -123,20 +122,35 @@ Widgets.Button =
 	if( twig.caption )
 	{
 		var caption =
-		this._$caption = {
-			pos :
-				iframe.computePoint( twig.caption.pos ),
+		this._$caption =
+			{
+				pos :
+					iframe.computePoint( twig.caption.pos ),
 
-			$text :
-				inherit ?
-					inherit._$caption.text :
-					twig.caption.text,
-		};
+				$text :
+					inherit ?
+						inherit._$caption.$text :
+						twig.caption.text
+		}	;
 
 		if( twig.caption.rotate )
 		{
-			caption.rotate = twig.caption.rotate;
+			caption.rotate =
+				twig.caption.rotate;
 		}
+
+		if( twig.caption.newline )
+		{
+			caption.newline =
+				twig.caption.newline;
+
+			if( Jools.isString( caption.$text ) )
+			{
+				caption.$text =
+					caption.$text.split( '\n' );
+			}
+		}
+
 	}
 	else if( twig.icon )
 	{
@@ -297,7 +311,10 @@ Button.prototype._weave =
 		var text =
 			caption.$text;
 
-		if( Jools.isString( text ) )
+		var newline =
+			caption.newline;
+
+		if( !Jools.is( newline ) )
 		{
 			if( !Jools.is( caption.rotate ) )
 			{
@@ -324,7 +341,7 @@ Button.prototype._weave =
 				);
 			}
 		}
-		else if( Jools.isArray( text ) )
+		else
 		{
 			var pos =
 				caption.pos;
@@ -338,13 +355,14 @@ Button.prototype._weave =
 			var tZ =
 				text.length;
 
-			var sepy =
-				style.textSepY;
-
 			y -=
-				Math.round( ( tZ - 1 ) / 2 * sepy );
+				Math.round( ( tZ - 1 ) / 2 * newline );
 
-			for( var a = 0; a < tZ; a++, y += sepy )
+			for(
+				var a = 0;
+				a < tZ;
+				a++, y += newline
+			)
 			{
 				fabric.paintText(
 					'text',
@@ -353,7 +371,7 @@ Button.prototype._weave =
 						x,
 						y,
 					'font',
-						style.font
+						twig.caption.font
 				);
 			}
 		}
@@ -624,6 +642,16 @@ Button.prototype.knock =
 	function( )
 {
 	this.$fabric = null;
+};
+
+
+/*
+| Sets the buttons text.
+*/
+Button.prototype.getText =
+	function( )
+{
+	return this._$caption && this._$caption.$text;
 };
 
 

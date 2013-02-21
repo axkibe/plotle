@@ -22,6 +22,7 @@ var Curve;
 var Dash;
 var Design;
 var Euclid;
+var fontPool;
 var Jools;
 var Proc;
 var Tree;
@@ -38,7 +39,9 @@ var Widgets;
 
 
 if( typeof( window ) === 'undefined' )
-	{ throw new Error( 'this code needs a browser!' ); }
+{
+	throw new Error( 'this code needs a browser!' );
+}
 
 
 /*
@@ -170,12 +173,6 @@ Disc.MainDisc =
 
 	for( var name in this.buttons )
 	{
-		// TODO XXX remove switch
-		switch( name ) {
-		case 'normal' :
-		case 'create' :
-		case 'remove' :
-		case 'space' :
 		this.buttons[ name ] =
 			new Widgets.Button(
 				'parent',
@@ -184,6 +181,10 @@ Disc.MainDisc =
 					name,
 				'twig',
 					tree.root.copse[ name ],
+				'text',
+					inherit ?
+						inherit.buttons[ name ].getText( ) :
+						null,
 				'visibility',
 					inherit ?
 						inherit.buttons[ name ].isVisible( ) :
@@ -195,29 +196,6 @@ Disc.MainDisc =
 				'icons',
 					icons
 			);
-		break;
-		default :
-		this.buttons[ name ] =
-			new Disc.DiscButton(
-				'disc',
-					this,
-				'name',
-					name,
-				'visibility',
-					inherit ?
-						inherit.buttons[ name ].isVisible( ) :
-						this.buttons[ name ],
-				'text',
-					(
-						inherit && inherit.buttons[ name ].getText( )
-					)
-					||
-					null,
-				'icons',
-					icons
-			);
-		break;
-		}
 	}
 
 	if( inherit )
@@ -255,7 +233,7 @@ var design = {
 			44,
 
 		font :
-			fontPool.get( 14, 'cm' ),
+			fontPool.get( 14, 'cm' )
 	},
 
 	normal :
@@ -282,7 +260,7 @@ var design = {
 			32,
 
 		y :
-			218,
+			218
 	},
 
 	space :
@@ -297,471 +275,993 @@ var design = {
 			0,
 
 		y :
-			170,
+			170
 	},
 
-	/*
-		textAnchor :
-			new Euclid.Point(
-				11,
-				145
-			),
-	*/
+	user :
+	{
+		width :
+			24,
+
+		height :
+			180,
+
+		x :
+			0,
+		y :
+			440
+	},
+
+	login :
+	{
+		x :
+			30,
+
+		y :
+			535
+	},
+
+	signup :
+	{
+		x :
+			19,
+
+		y :
+			585
+	},
+
+	help :
+	{
+		x :
+			4,
+
+		y :
+			635
+	}
 };
 
 MainDisc.prototype.layout =
+{
+	type :
+		'Layout',
+
+	copse :
 	{
-		type :
-			'Layout',
-
-		copse :
+		'normal' :
 		{
-			'normal' :
+			type :
+				'Button',
+
+			normaStyle :
+				'discButtonGeneric',
+
+			hoverStyle :
+				'discButtonGenericHover',
+
+			focusStyle :
+				'discButtonGenericFocus',
+
+			hofocStyle :
+				'discButtonGenericHofoc',
+
+			icon :
+				'normal',
+
+			iconStyle :
+				'iconNormal',
+
+			frame :
 			{
 				type :
-					'Button',
+					'Frame',
 
-				normaStyle :
-					'discButtonGeneric',
-
-				hoverStyle :
-					'discButtonGenericHover',
-
-				focusStyle :
-					'discButtonGenericFocus',
-
-				hofocStyle :
-					'discButtonGenericHofoc',
-
-				icon :
-					'normal',
-
-				iconStyle :
-					'iconNormal',
-
-				frame :
+				pnw :
 				{
 					type :
-						'Frame',
+						'Point',
 
-					pnw :
-					{
-						type :
-							'Point',
+					anchor :
+						'nw',
 
-						anchor :
-							'nw',
+					x :
+						design.normal.x,
 
-						x :
-							design.normal.x,
-
-						y :
-							design.normal.y
-					},
-
-					pse :
-					{
-						type :
-							'Point',
-
-						anchor :
-							'nw',
-
-						x :
-							design.normal.x +
-								design.generic.width,
-
-						y :
-							design.normal.y +
-								design.generic.height
-					}
+					y :
+						design.normal.y
 				},
 
-				shape :
+				pse :
 				{
 					type :
-						'Ellipse',
+						'Point',
 
-					pnw :
-					{
-						type:
-							'Point',
+					anchor :
+						'nw',
 
-						anchor:
-							'nw',
+					x :
+						design.normal.x +
+							design.generic.width,
 
-						x :
-							0,
-
-						y :
-							0
-					},
-
-					pse :
-					{
-						type:
-							'Point',
-
-						anchor:
-							'se',
-
-						x :
-							-1,
-
-						y :
-							-1
-					}
+					y :
+						design.normal.y +
+							design.generic.height
 				}
 			},
 
-			'create' :
+			shape :
 			{
 				type :
-					'Button',
+					'Ellipse',
 
-				normaStyle :
-					'discButtonGeneric',
-
-				hoverStyle :
-					'discButtonGenericHover',
-
-				focusStyle :
-					'discButtonGenericFocus',
-
-				hofocStyle :
-					'discButtonGenericHofoc',
-
-				caption :
+				pnw :
 				{
-					type :
-						'Label',
+					type:
+						'Point',
 
-					text :
-						'new',
+					anchor:
+						'nw',
 
-					font :
-						design.generic.font,
+					x :
+						0,
 
-					pos :
-					{
-						type :
-							'Point',
-
-						anchor :
-							'c',
-
-						x :
-							0,
-
-						y :
-							0
-					}
+					y :
+						0
 				},
 
-				frame :
+				pse :
 				{
-					type :
-						'Frame',
+					type:
+						'Point',
 
-					pnw :
-					{
-						type :
-							'Point',
+					anchor:
+						'se',
 
-						anchor :
-							'nw',
+					x :
+						-1,
 
-						x :
-							design.create.x,
-
-						y :
-							design.create.y
-					},
-
-					pse :
-					{
-						type :
-							'Point',
-
-						anchor :
-							'nw',
-
-						x :
-							design.create.x +
-								design.generic.width,
-
-						y :
-							design.create.y +
-								design.generic.height
-					}
-				},
-
-				shape :
-				{
-					type :
-						'Ellipse',
-
-					pnw :
-					{
-						type:
-							'Point',
-
-						anchor:
-							'nw',
-
-						x :
-							0,
-
-						y :
-							0
-					},
-
-					pse :
-					{
-						type:
-							'Point',
-
-						anchor:
-							'se',
-
-						x :
-							-1,
-
-						y :
-							-1
-					}
-				}
-			},
-
-			'remove' :
-			{
-				type :
-					'Button',
-
-				normaStyle :
-					'discButtonGeneric',
-
-				hoverStyle :
-					'discButtonGenericHover',
-
-				focusStyle :
-					'discButtonGenericFocus',
-
-				hofocStyle :
-					'discButtonGenericHofoc',
-
-				icon :
-					'remove',
-
-				iconStyle :
-					'iconRemove',
-
-				frame :
-				{
-					type :
-						'Frame',
-
-					pnw :
-					{
-						type :
-							'Point',
-
-						anchor :
-							'nw',
-
-						x :
-							design.remove.x,
-
-						y :
-							design.remove.y
-					},
-
-					pse :
-					{
-						type :
-							'Point',
-
-						anchor :
-							'nw',
-
-						x :
-							design.remove.x +
-								design.generic.width,
-
-						y :
-							design.remove.y +
-								design.generic.height
-					}
-				},
-
-				shape :
-				{
-					type :
-						'Ellipse',
-
-					pnw :
-					{
-						type:
-							'Point',
-
-						anchor:
-							'nw',
-
-						x :
-							0,
-
-						y :
-							0
-					},
-
-					pse :
-					{
-						type:
-							'Point',
-
-						anchor:
-							'se',
-
-						x :
-							-1,
-
-						y :
-							-1
-					}
-				}
-			},
-
-			'space' :
-			{
-				type :
-					'Button',
-
-				normaStyle :
-					'discButtonGeneric',
-
-				hoverStyle :
-					'discButtonGenericHover',
-
-				focusStyle :
-					'discButtonGenericFocus',
-
-				hofocStyle :
-					'discButtonGenericHofoc',
-
-				frame :
-				{
-					type :
-						'Frame',
-
-					pnw :
-					{
-						type :
-							'Point',
-
-						anchor :
-							'nw',
-
-						x :
-							design.space.x,
-
-						y :
-							design.space.y
-					},
-
-					pse :
-					{
-						type :
-							'Point',
-
-						anchor :
-							'nw',
-
-						x :
-							design.space.x +
-								design.space.width,
-
-						y :
-							design.space.y +
-								design.space.height
-					}
-				},
-
-				caption :
-				{
-					type :
-						'Label',
-
-					text :
-						'',
-
-					font :
-						fontPool.get( 12, 'cm' ),
-
-					pos :
-					{
-						type :
-							'Point',
-
-						anchor :
-							'c',
-
-						x :
-							0,
-
-						y :
-							0
-					},
-
-					rotate :
-						- Math.PI / 2,
-				},
-
-				shape :
-				{
-					type :
-						'Ellipse',
-
-					pnw :
-					{
-						type:
-							'Point',
-
-						anchor:
-							'nw',
-
-						x :
-							-60,
-
-						y :
-							0
-					},
-
-					pse :
-					{
-						type:
-							'Point',
-
-						anchor:
-							'se',
-
-						x :
-							-1,
-
-						y :
-							-1
-					}
+					y :
+						-1
 				}
 			}
 		},
 
-		ranks :
-		[
-			'normal',
-			'create',
-			'remove',
-			'space'
-		]
-	};
+		'create' :
+		{
+			type :
+				'Button',
+
+			normaStyle :
+				'discButtonGeneric',
+
+			hoverStyle :
+				'discButtonGenericHover',
+
+			focusStyle :
+				'discButtonGenericFocus',
+
+			hofocStyle :
+				'discButtonGenericHofoc',
+
+			caption :
+			{
+				type :
+					'Label',
+
+				text :
+					'new',
+
+				font :
+					design.generic.font,
+
+				pos :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'c',
+
+					x :
+						0,
+
+					y :
+						0
+				}
+			},
+
+			frame :
+			{
+				type :
+					'Frame',
+
+				pnw :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'nw',
+
+					x :
+						design.create.x,
+
+					y :
+						design.create.y
+				},
+
+				pse :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'nw',
+
+					x :
+						design.create.x +
+							design.generic.width,
+
+					y :
+						design.create.y +
+							design.generic.height
+				}
+			},
+
+			shape :
+			{
+				type :
+					'Ellipse',
+
+				pnw :
+				{
+					type:
+						'Point',
+
+					anchor:
+						'nw',
+
+					x :
+						0,
+
+					y :
+						0
+				},
+
+				pse :
+				{
+					type:
+						'Point',
+
+					anchor:
+						'se',
+
+					x :
+						-1,
+
+					y :
+						-1
+				}
+			}
+		},
+
+		'remove' :
+		{
+			type :
+				'Button',
+
+			normaStyle :
+				'discButtonGeneric',
+
+			hoverStyle :
+				'discButtonGenericHover',
+
+			focusStyle :
+				'discButtonGenericFocus',
+
+			hofocStyle :
+				'discButtonGenericHofoc',
+
+			icon :
+				'remove',
+
+			iconStyle :
+				'iconRemove',
+
+			frame :
+			{
+				type :
+					'Frame',
+
+				pnw :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'nw',
+
+					x :
+						design.remove.x,
+
+					y :
+						design.remove.y
+				},
+
+				pse :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'nw',
+
+					x :
+						design.remove.x +
+							design.generic.width,
+
+					y :
+						design.remove.y +
+							design.generic.height
+				}
+			},
+
+			shape :
+			{
+				type :
+					'Ellipse',
+
+				pnw :
+				{
+					type:
+						'Point',
+
+					anchor:
+						'nw',
+
+					x :
+						0,
+
+					y :
+						0
+				},
+
+				pse :
+				{
+					type:
+						'Point',
+
+					anchor:
+						'se',
+
+					x :
+						-1,
+
+					y :
+						-1
+				}
+			}
+		},
+
+		'space' :
+		{
+			type :
+				'Button',
+
+			normaStyle :
+				'discButtonGeneric',
+
+			hoverStyle :
+				'discButtonGenericHover',
+
+			focusStyle :
+				'discButtonGenericFocus',
+
+			hofocStyle :
+				'discButtonGenericHofoc',
+
+			frame :
+			{
+				type :
+					'Frame',
+
+				pnw :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'nw',
+
+					x :
+						design.space.x,
+
+					y :
+						design.space.y
+				},
+
+				pse :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'nw',
+
+					x :
+						design.space.x +
+							design.space.width,
+
+					y :
+						design.space.y +
+							design.space.height
+				}
+			},
+
+			caption :
+			{
+				type :
+					'Label',
+
+				text :
+					'',
+
+				font :
+					fontPool.get( 12, 'cm' ),
+
+				pos :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'c',
+
+					x :
+						0,
+
+					y :
+						0
+				},
+
+				rotate :
+					- Math.PI / 2
+			},
+
+			shape :
+			{
+				type :
+					'Ellipse',
+
+				pnw :
+				{
+					type:
+						'Point',
+
+					anchor:
+						'nw',
+
+					x :
+						-60,
+
+					y :
+						0
+				},
+
+				pse :
+				{
+					type:
+						'Point',
+
+					anchor:
+						'se',
+
+					x :
+						-1,
+
+					y :
+						-1
+				}
+			}
+		},
+
+		'user' :
+		{
+			type :
+				'Button',
+
+			normaStyle :
+				'discButtonGeneric',
+
+			hoverStyle :
+				'discButtonGenericHover',
+
+			focusStyle :
+				'discButtonGenericFocus',
+
+			hofocStyle :
+				'discButtonGenericHofoc',
+
+			frame :
+			{
+				type :
+					'Frame',
+
+				pnw :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'nw',
+
+					x :
+						design.user.x,
+
+					y :
+						design.user.y
+				},
+
+				pse :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'nw',
+
+					x :
+						design.user.x +
+							design.user.width,
+
+					y :
+						design.user.y +
+							design.user.height
+				}
+			},
+
+			caption :
+			{
+				type :
+					'Label',
+
+				text :
+					'',
+
+				font :
+					fontPool.get( 12, 'cm' ),
+
+				pos :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'c',
+
+					x :
+						0,
+
+					y :
+						0
+				},
+
+				rotate :
+					- Math.PI / 2
+			},
+
+			shape :
+			{
+				type :
+					'Ellipse',
+
+				pnw :
+				{
+					type:
+						'Point',
+
+					anchor:
+						'nw',
+
+					x :
+						-70,
+
+					y :
+						0
+				},
+
+				pse :
+				{
+					type:
+						'Point',
+
+					anchor:
+						'se',
+
+					x :
+						-1,
+
+					y :
+						-1
+				}
+			}
+		},
+
+		'login' :
+		{
+			type :
+				'Button',
+
+			normaStyle :
+				'discButtonGeneric',
+
+			hoverStyle :
+				'discButtonGenericHover',
+
+			focusStyle :
+				'discButtonGenericFocus',
+
+			hofocStyle :
+				'discButtonGenericHofoc',
+
+			caption :
+			{
+				type :
+					'Label',
+
+				text :
+					'log\nin',
+
+				newline :
+					14,
+
+				font :
+					fontPool.get( 13, 'cm' ),
+
+				pos :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'c',
+
+					x :
+						0,
+
+					y :
+						0
+				}
+			},
+
+			frame :
+			{
+				type :
+					'Frame',
+
+				pnw :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'nw',
+
+					x :
+						design.login.x,
+
+					y :
+						design.login.y
+				},
+
+				pse :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'nw',
+
+					x :
+						design.login.x +
+							design.generic.width,
+
+					y :
+						design.login.y +
+							design.generic.height
+				}
+			},
+
+			shape :
+			{
+				type :
+					'Ellipse',
+
+				pnw :
+				{
+					type:
+						'Point',
+
+					anchor:
+						'nw',
+
+					x :
+						0,
+
+					y :
+						0
+				},
+
+				pse :
+				{
+					type:
+						'Point',
+
+					anchor:
+						'se',
+
+					x :
+						-1,
+
+					y :
+						-1
+				}
+			}
+		},
+
+		'signup' :
+		{
+			type :
+				'Button',
+
+			normaStyle :
+				'discButtonGeneric',
+
+			hoverStyle :
+				'discButtonGenericHover',
+
+			focusStyle :
+				'discButtonGenericFocus',
+
+			hofocStyle :
+				'discButtonGenericHofoc',
+
+			caption :
+			{
+				type :
+					'Label',
+
+				text :
+					'sign\nup',
+
+				newline :
+					14,
+
+				font :
+					fontPool.get( 13, 'cm' ),
+
+				pos :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'c',
+
+					x :
+						0,
+
+					y :
+						0
+				}
+			},
+
+			frame :
+			{
+				type :
+					'Frame',
+
+				pnw :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'nw',
+
+					x :
+						design.signup.x,
+
+					y :
+						design.signup.y
+				},
+
+				pse :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'nw',
+
+					x :
+						design.signup.x +
+							design.generic.width,
+
+					y :
+						design.signup.y +
+							design.generic.height
+				}
+			},
+
+			shape :
+			{
+				type :
+					'Ellipse',
+
+				pnw :
+				{
+					type:
+						'Point',
+
+					anchor:
+						'nw',
+
+					x :
+						0,
+
+					y :
+						0
+				},
+
+				pse :
+				{
+					type:
+						'Point',
+
+					anchor:
+						'se',
+
+					x :
+						-1,
+
+					y :
+						-1
+				}
+			}
+		},
+
+		'help' :
+		{
+			type :
+				'Button',
+
+			normaStyle :
+				'discButtonGeneric',
+
+			hoverStyle :
+				'discButtonGenericHover',
+
+			focusStyle :
+				'discButtonGenericFocus',
+
+			hofocStyle :
+				'discButtonGenericHofoc',
+
+			caption :
+			{
+				type :
+					'Label',
+
+				text :
+					'help',
+
+				font :
+					fontPool.get( 13, 'cm' ),
+
+				pos :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'c',
+
+					x :
+						0,
+
+					y :
+						0
+				}
+			},
+
+			frame :
+			{
+				type :
+					'Frame',
+
+				pnw :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'nw',
+
+					x :
+						design.help.x,
+
+					y :
+						design.help.y
+				},
+
+				pse :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'nw',
+
+					x :
+						design.help.x +
+							design.generic.width,
+
+					y :
+						design.help.y +
+							design.generic.height
+				}
+			},
+
+			shape :
+			{
+				type :
+					'Ellipse',
+
+				pnw :
+				{
+					type:
+						'Point',
+
+					anchor:
+						'nw',
+
+					x :
+						0,
+
+					y :
+						0
+				},
+
+				pse :
+				{
+					type:
+						'Point',
+
+					anchor:
+						'se',
+
+					x :
+						-1,
+
+					y :
+						-1
+				}
+			}
+		}
+	},
+
+	ranks :
+	[
+		'normal',
+		'create',
+		'remove',
+		'space',
+		'user',
+		'login',
+		'signup',
+		'help'
+	]
+};
 
 
 /*
@@ -817,12 +1317,6 @@ MainDisc.prototype._weave =
 		var button =
 			buttons[ name ];
 
-		// TODO XXX remove switch
-		switch( name ) {
-		case 'normal' :
-		case 'create' :
-		case 'remove' :
-		case 'space' :
 		button.draw(
 			fabric,
 			Widgets.Accent.state(
@@ -832,18 +1326,6 @@ MainDisc.prototype._weave =
 				)
 			)
 		);
-		break;
-
-		default :
-		button.draw(
-			fabric,
-			shell.bridge.inMode(
-				this.getModeOfButton( button.name )
-			),
-			this.$hover  === name
-		);
-		break;
-		}
 	}
 
 	fabric.edge(

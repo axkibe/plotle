@@ -66,6 +66,18 @@ var styles =
 	buttonHofoc :
 		theme.forms.buttonHofoc,
 
+	createButtonGeneric :
+		theme.disc.createNormal,
+
+	createButtonGenericHover :
+		theme.disc.createHover,
+
+	createButtonGenericFocus :
+		theme.disc.createFocus,
+
+	createButtonGenericHofoc :
+		theme.disc.createHofoc,
+
 	discButtonGeneric :
 		theme.disc.button,
 

@@ -152,9 +152,9 @@ Disc.LayoutPattern =
 	'Font' :
 	{
 		creator :
-			function(t)
+			function( t )
 			{
-				return new Euclid.Font(t);
+				return new Euclid.Font( t );
 			},
 
 		must :
@@ -214,7 +214,7 @@ Disc.LayoutPattern =
 				'Font',
 
 			maxlen :
-				'Number'
+				'Number' // TODO make it Integer
 		}
 	},
 
@@ -235,7 +235,10 @@ Disc.LayoutPattern =
 		can :
 		{
 			rotate :
-				'Number'
+				'Number',
+
+			newline :
+				'Integer'
 		}
 	},
 
