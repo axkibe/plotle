@@ -27,7 +27,6 @@ var Jools;
 var Proc;
 var Tree;
 var shell;
-var theme;
 var Widgets;
 
 
@@ -56,151 +55,24 @@ Disc.MainDisc =
 		screensize
 	)
 {
-	this.name =
-		'main';
+	Disc.Disc.call(
+		this,
+		'name',
+			'main',
+		'inherit',
+			inherit,
+		'screensize',
+			screensize
+	);
 
 	this.createDisc =
 		new Disc.CreateDisc(
-			screensize
+			screensize,
+			inherit && inherit.createDisc
 		);
-
-	this.screensize =
-		screensize;
-
-	var style =
-		theme.disc.main;
-
-
-	// TODO remove this.width/height vars
-	var width =
-		this.width =
-		style.width;
-
-	var height =
-		this.height =
-		style.height;
-
-	var ew =
-		style.ellipse.width;
-
-	var eh =
-		style.ellipse.height;
-
-	this.oframe =
-		new Euclid.Rect(
-			'pnw/size',
-			new Euclid.Point(
-				0,
-				Jools.half( this.screensize.y - this.height )
-			),
-			width,
-			height
-		);
-
-	this.iframe =
-		new Euclid.Rect(
-			'pnw/size',
-			Euclid.Point.zero,
-			width,
-			height
-		);
-
-	// TODO inherit, make private
-	var tree =
-	this._tree =
-		new Tree(
-			this.layout,
-			Disc.LayoutPattern
-		);
-
-	this.silhoutte =
-		new Euclid.Ellipse(
-			new Euclid.Point(
-				width - 1 - ew,
-				0 - Jools.half( eh - height )
-			),
-			new Euclid.Point(
-				width - 1,
-				height + Jools.half( eh - height )
-			),
-			'gradientPC',
-				new Euclid.Point(
-					-600,
-					Jools.half( height )
-				),
-			'gradientR0',
-				0,
-			'gradientR1',
-				650
-		);
-
-	// the buttons
-	//
-	// true/false determines their startup visibility
-	//
-	this.buttons =
-		{
-			normal :
-				true,
-
-			create :
-				false,
-
-			remove :
-				false,
-
-			space :
-				true,
-
-			user :
-				true,
-
-			login :
-				false,
-
-			signup :
-				false,
-
-			help :
-				true
-		};
-
-	var icons =
-	this._icons =
-		inherit ?
-			inherit._icons :
-			new Disc.Icons( );
-
-	for( var name in this.buttons )
-	{
-		this.buttons[ name ] =
-			new Widgets.Button(
-				'parent',
-					this,
-				'name',
-					name,
-				'twig',
-					tree.root.copse[ name ],
-				'text',
-					inherit ?
-						inherit.buttons[ name ].getText( ) :
-						null,
-				'visibility',
-					inherit ?
-						inherit.buttons[ name ].isVisible( ) :
-						this.buttons[ name ],
-				'inherit',
-					inherit ?
-						inherit && inherit.buttons[ name ] :
-						null,
-				'icons',
-					icons
-			);
-	}
 
 	if( inherit )
 	{
-
 		this.buttons.login.setText(
 			inherit.buttons.login.getText( )
 		);
@@ -215,8 +87,23 @@ Disc.MainDisc =
 		null;
 
 	this._$loggedIn =
-		inherit ? inherit._$loggedIn : false;
+		inherit ?
+			inherit._$loggedIn :
+			false;
+
+	// TODO remove this
+	this.inherit =
+		null;
 };
+
+
+/*
+| The MainDisc is a Disc.
+*/
+Jools.subclass(
+	MainDisc,
+	Disc.Disc
+);
 
 
 /*
@@ -442,6 +329,9 @@ MainDisc.prototype.layout =
 			hofocStyle :
 				'discButtonGenericHofoc',
 
+			visible :
+				false,
+
 			caption :
 			{
 				type :
@@ -566,6 +456,9 @@ MainDisc.prototype.layout =
 
 			iconStyle :
 				'iconRemove',
+
+			visible :
+				false,
 
 			frame :
 			{
@@ -903,6 +796,9 @@ MainDisc.prototype.layout =
 			hofocStyle :
 				'discButtonGenericHofoc',
 
+			visible :
+				false,
+
 			caption :
 			{
 				type :
@@ -1024,6 +920,9 @@ MainDisc.prototype.layout =
 
 			hofocStyle :
 				'discButtonGenericHofoc',
+
+			visible :
+				false,
 
 			caption :
 			{
@@ -1270,16 +1169,6 @@ MainDisc.prototype.layout =
 design =
 	null;
 
-/*
-| Force clears all caches.
-*/
-MainDisc.prototype.knock =
-	function( )
-{
-	this.$fabric =
-		null;
-};
-
 
 /*
 | Prepares the disc panels contents.
@@ -1303,7 +1192,7 @@ MainDisc.prototype._weave =
 		);
 
 	fabric.fill(
-		theme.disc.main.fill,
+		this.style.fill,
 		this.silhoutte,
 		'sketch',
 		Euclid.View.proper
@@ -1329,7 +1218,7 @@ MainDisc.prototype._weave =
 	}
 
 	fabric.edge(
-		theme.disc.main.edge,
+		this.style.edge,
 		this.silhoutte,
 		'sketch',
 		Euclid.View.proper

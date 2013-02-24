@@ -180,6 +180,10 @@ Widgets.Button =
 
 	this.$accent =
 		Widgets.Accent.NORMAL;
+
+	// TODO dont store it into this from startago
+	this.inherit =
+		null;
 };
 
 

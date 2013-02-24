@@ -184,9 +184,15 @@ Server.prototype.checkRepositorySchemaVersion = function(_)
 {
 	Jools.log('start', 'checking repository schema version');
 
-	var global  = this.$db.connection.collection( 'global', _);
+	var global =
+		this.$db.connection.collection(
+			'global',
+		_);
 
-	var version = global.findOne( { _id : 'version' }, _);
+	var version =
+		global.findOne(
+			{ _id : 'version' },
+		_);
 
 	if( version )
 	{
@@ -222,17 +228,19 @@ Server.prototype.checkRepositorySchemaVersion = function(_)
 /**
 | Initializes a new repository.
 */
-Server.prototype.initRepository = function(_)
+Server.prototype.initRepository =
+	function(_)
 {
 	Jools.log(
 		'start',
 		'found no repository, initializing a new one'
 	);
 
-	var initSpaces = [
-		'meshcraft:home',
-		'meshcraft:sandbox'
-	];
+	var initSpaces =
+		[
+			'meshcraft:home',
+			'meshcraft:sandbox'
+		];
 
 	for( var s = 0, sZ = initSpaces.length; s < sZ; s++ )
 	{
@@ -374,13 +382,18 @@ Server.prototype.loadSpace =
 	this.$spaces[spacename] =
 		{
 			$changesDB :
-				this.$db.connection.collection('changes:' + spacename, _),
+				this.$db.connection.collection(
+					'changes:' + spacename,
+				_),
 
 			$changes :
 				[ ],
 
 			$tree :
-				new Tree( { type : 'Space' }, Meshverse),
+				new Tree(
+					{ type : 'Space' },
+					Meshverse
+				),
 
 			$seqZ :
 				1
@@ -461,13 +474,19 @@ Server.prototype.sendMessage =
 {
 	this.$messages.push (
 		{
-			space   : spacename,
-			user    : user,
-			message : message
+			space :
+				spacename,
+
+			user :
+				user,
+
+			message :
+				message
 		}
 	);
 
-	var self = this;
+	var self =
+		this;
 
 	process.nextTick(
 		function()
@@ -495,27 +514,37 @@ Server.prototype.cmdMessage = function(cmd, _)
 
 	if( !Jools.is( username ) )
 	{
-		throw Jools.reject('user missing');
+		throw Jools.reject(
+			'user missing'
+		);
 	}
 
 	if( !Jools.is( passhash ) )
 	{
-		throw Jools.reject( 'passhash missing' );
+		throw Jools.reject(
+			'passhash missing'
+		);
 	}
 
 	if( !Jools.is( space ) )
 	{
-		throw Jools.reject( 'space missing' );
+		throw Jools.reject(
+			'space missing'
+		);
 	}
 
 	if( !Jools.is( message ) )
 	{
-		throw Jools.reject( 'message missing' );
+		throw Jools.reject(
+			'message missing'
+		);
 	}
 
 	if( this.$users[username].pass !== passhash )
 	{
-		throw Jools.reject( 'invalid pass' );
+		throw Jools.reject(
+			'invalid pass'
+		);
 	}
 
 	this.sendMessage(
@@ -695,6 +724,9 @@ Server.prototype.prepareResources =
 			'fb',
 
 		'shell/disc/createdisc.js',
+			'fb',
+
+		'shell/disc/disc.js',
 			'fb',
 
 		'shell/disc/maindisc.js',

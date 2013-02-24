@@ -97,7 +97,10 @@ Disc.LayoutPattern =
 				'String',
 
 			caption :
-				'Label'
+				'Label',
+
+			visible :
+				'Boolean'
 		}
 	},
 

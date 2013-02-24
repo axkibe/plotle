@@ -23,9 +23,8 @@ var fontPool;
 var Jools;
 var Proc;
 var shell;
-var theme;
 var Tree;
-
+var Widgets;
 
 /*
 | Capsule
@@ -41,130 +40,25 @@ if( typeof( window ) === 'undefined')
 /*
 | Constructor
 */
-var CreateDisc = Disc.CreateDisc =
+var CreateDisc =
+Disc.CreateDisc =
 	function(
-		screensize
+		screensize,
+		inherit
 	)
 {
-	this.screensize =
-		screensize;
+	Disc.Disc.call(
+		this,
+		'name',
+			'create',
+		'inherit',
+			inherit,
+		'screensize',
+			screensize
+	);
 
-	this.name =
-		'create';
-
-	var style =
-	this._style =
-		theme.disc.create;
-
-	var width =
-	this.width =
-		style.width;
-
-	var height =
-	this.height =
-		style.height;
-
-	var ew =
-		style.ellipse.width;
-
-	var eh =
-		style.ellipse.height;
-
-	// TODO inherit, make private
-	var tree =
-	this._tree =
-		new Tree(
-			this.layout,
-			Disc.LayoutPattern
-		);
-
-	this.oframe =
-		new Euclid.Rect(
-			'pnw/size',
-			new Euclid.Point(
-				0,
-				Jools.half( this.screensize.y - this.height )
-			),
-			width,
-			height
-		);
-
-	this.iframe =
-		new Euclid.Rect(
-			'pnw/size',
-			Euclid.Point.zero,
-			width,
-			height
-		);
-
-
-	this.silhoutte =
-		new Euclid.Ellipse(
-			new Euclid.Point(
-				width - 1 - ew,
-				0 - Jools.half( eh - height )
-			),
-			new Euclid.Point(
-				width - 1,
-				height + Jools.half( eh - height )
-			),
-			'gradientPC',
-				new Euclid.Point(
-					-600,
-					Jools.half( height )
-			),
-			'gradientR0',
-				0,
-			'gradientR1',
-				650
-		);
-
-	this.buttons =
-		Jools.immute(
-			{
-				note :
-					new Widgets.Button(
-						'parent',
-							this,
-						'name',
-							'note',
-						'twig',
-							tree.root.copse.note
-					),
-
-				label :
-					new Widgets.Button(
-						'parent',
-							this,
-						'name',
-							'label',
-						'twig',
-							tree.root.copse.label
-					),
-
-				relation :
-					new Widgets.Button(
-						'parent',
-							this,
-						'name',
-							'relation',
-						'twig',
-							tree.root.copse.relation
-					),
-
-				portal :
-					new Widgets.Button(
-						'parent',
-							this,
-						'name',
-							'portal',
-						'twig',
-							tree.root.copse.portal
-					),
-			}
-		);
-
-	this.$hover =
+	// TODO remove this
+	this.inherit =
 		null;
 };
 
@@ -722,15 +616,6 @@ CreateDisc.prototype.layout =
 	]
 };
 
-/*
-| Force clears all caches.
-*/
-CreateDisc.prototype.knock =
-	function( )
-{
-	this.$fabric = null;
-};
-
 
 /*
 | Prepares the disc panels contents.
@@ -746,7 +631,7 @@ CreateDisc.prototype._weave =
 		);
 
 	fabric.fill(
-		this._style.fill,
+		this.style.fill,
 		this.silhoutte,
 		'sketch',
 		Euclid.View.proper
@@ -792,7 +677,7 @@ CreateDisc.prototype._weave =
 	}
 
 	fabric.edge(
-		this._style.edge,
+		this.style.edge,
 		this.silhoutte,
 		'sketch',
 		Euclid.View.proper

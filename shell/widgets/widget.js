@@ -91,7 +91,7 @@ Widgets.Widget =
 				true
 		},
 
-		'visibility' :
+		'visible' :
 		{
 			type :
 				'param',
