@@ -328,7 +328,9 @@ Portal.prototype.click =
 	{
 		this.grepFocus( );
 
-		shell.selection.deselect( );
+		// TODO double deselect below?
+
+		shell.deselect( );
 	}
 
 	shell.redraw =
@@ -344,7 +346,7 @@ Portal.prototype.click =
 
 	caret.show( );
 
-	shell.selection.deselect( );
+	shell.deselect( );
 
 	return true;
 };

@@ -25,8 +25,8 @@ config.admin = 'axel';
 |   null       means listens on all interfaces.
 |  '127.0.0.1' means localhost (IPV4)
 */
-config.ip = '127.0.0.1';
-//config.ip = null;
+//config.ip = '127.0.0.1';
+config.ip = null;
 
 
 /*
@@ -82,7 +82,7 @@ config.maxUndo = 5000;
 | Disables all caching in the client.
 | Used for debugging.
 */
-config.debug.noCache = false;
+config.debug.noCache = true;
 
 
 /*

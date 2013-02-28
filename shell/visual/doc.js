@@ -65,7 +65,10 @@ var Doc = Visual.Doc = function( spacename, twig, path )
 	}
 };
 
-Jools.subclass( Doc, Visual.Base );
+Jools.subclass(
+	Doc,
+	Visual.Base
+);
 
 
 /*
@@ -90,11 +93,21 @@ Doc.prototype.atRank =
 Doc.prototype.update =
 	function( twig )
 {
-	this.twig     = twig;
-	var old       = this.$sub;
-	var sub       = this.$sub = { };
-	var spacename = this.spacename;
-	var copse     = twig.copse;
+	this.twig =
+		twig;
+
+	var old =
+		this.$sub;
+
+	var sub =
+	this.$sub =
+		{ };
+
+	var spacename =
+		this.spacename;
+
+	var copse =
+		twig.copse;
 
 	for( var k in copse )
 	{
@@ -112,11 +125,12 @@ Doc.prototype.update =
 		}
 		else
 		{
-			o = new Visual.Para(
-				spacename,
-				s,
-				new Path( this.path, '++', k )
-			);
+			o =
+				new Visual.Para(
+					spacename,
+					s,
+					new Path( this.path, '++', k )
+				);
 
 			o.update( s );
 			sub[ k ] = o;
@@ -138,13 +152,16 @@ Doc.prototype.draw = function(
 )
 {
 	// FIXME <pre>
-	var paraSep = this.getParaSep( );
-	var select = shell.selection;
+	var paraSep =
+		this.getParaSep( );
+
+	var selection =
+		shell.getSelection( );
 
 	// draws the selection
 	if (
-		select.active &&
-		this.path.subPathOf( select.sign1.path )
+		selection &&
+		this.path.subPathOf( selection.sign1.path )
 	)
 	{
 		fabric.paint(
@@ -201,19 +218,34 @@ Doc.prototype.draw = function(
 Doc.prototype.getHeight =
 	function( )
 {
-	var fs      = this.getFont( ).size;
-	var paraSep = this.getParaSep();
-	var twig    = this.twig;
-	var height  = 0;
+	var fs =
+		this.getFont( ).size;
 
-	for ( var r = 0, rZ = twig.length; r < rZ; r++ )
+	var paraSep =
+		this.getParaSep( );
+
+	var twig =
+		this.twig;
+
+	var height =
+		0;
+
+	for(
+		var r = 0, rZ = twig.length;
+		r < rZ;
+		r++
+	)
 	{
-		var vpara = this.atRank( r );
+		var vpara =
+			this.atRank( r );
 
-		var flow = vpara.getFlow( );
+		var flow =
+			vpara.getFlow( );
 
 		if( r > 0 )
-			{ height += paraSep; }
+		{
+			height += paraSep;
+		}
 
 		height += flow.height;
 	}
@@ -242,7 +274,11 @@ Doc.prototype.getSpread =
 {
 	var spread = 0;
 
-	for ( var r = 0, rZ = this.twig.length; r < rZ; r++ )
+	for(
+		var r = 0, rZ = this.twig.length;
+		r < rZ;
+		r++
+	)
 	{
 		spread = Math.max(
 			spread,
@@ -264,19 +300,22 @@ Doc.prototype.getFont =
 	// caller can optionally provide the item
 	// for performance optimization otherwise
 	// graps it iself.
+
 	if(! Jools.is( item ) )
 	{
 		item = shell.$space.getSub( this.path, 'Item' );
 	}
 
-	var fs = item.twig.fontsize;
+	var fs =
+		item.twig.fontsize;
 
 	if( item.fontSizeChange )
 	{
 		fs = item.fontSizeChange( fs );
 	}
 
-	var f = this._$font;
+	var f =
+		this._$font;
 
 	if( f && f.size === fs )
 	{
@@ -293,14 +332,26 @@ Doc.prototype.getFont =
 Doc.prototype.getParaAtPoint =
 	function( p )
 {
-	var twig  = this.twig;
-	var sub   = this.$sub;
-	var pnws  = this._$pnws;
+	var twig =
+		this.twig;
 
-	for( var r = 0, rZ = twig.length; r < rZ; r++ )
+	var sub =
+		this.$sub;
+
+	var pnws =
+		this._$pnws;
+
+	for(
+		var r = 0, rZ = twig.length;
+		r < rZ;
+		r++
+	)
 	{
-		var k     = twig.ranks[ r ];
-		var vpara = sub[ k ];
+		var k =
+			twig.ranks[ r ];
+
+		var vpara =
+			sub[ k ];
 
 		if( p.y < pnws[ k ].y + vpara.getFlow( ).height )
 		{
@@ -341,7 +392,11 @@ Doc.prototype.getParaSep =
 Doc.prototype.knock =
 	function( )
 {
-	for ( var r = 0, rZ = this.twig.length; r < rZ; r++ )
+	for(
+		var r = 0, rZ = this.twig.length;
+		r < rZ;
+		r++
+	)
 	{
 		this.atRank( r ).knock( );
 	}
@@ -359,44 +414,72 @@ Doc.prototype.sketchSelection = function(
 	view,        // current view
 	width,       // width the vdoc is drawn
 	innerMargin, // inner margin of the doc
-	scrollp)     // scroll position of the doc
+	scrollp      // scroll position of the doc
+)
 {
-	var select = shell.selection;
+	var selection =
+		shell.getSelection( );
 
-	select.normalize( );
+	selection.normalize( );
 
 	var sp = scrollp;
 
-	var s1 = select.begin;
-	var s2 = select.end;
+	var s1 =
+		selection.$begin;
 
-	var key1 = s1.path.get( -2 );
-	var key2 = s2.path.get( -2 );
+	var s2 =
+		selection.$end;
 
-	var pnw1 = this.getPNW( key1 );
-	var pnw2 = this.getPNW( key2 );
+	var key1 =
+		s1.path.get( -2 );
 
-	var vpara1 = this.$sub[ key1 ];
-	var vpara2 = this.$sub[ key2 ];
+	var key2 =
+		s2.path.get( -2 );
 
-	var p1 = vpara1.locateOffset( s1.at1 );
-	var p2 = vpara2.locateOffset( s2.at1 );
+	var pnw1 =
+		this.getPNW( key1 );
 
-	p1 = new Euclid.Point(
-		Math.round( p1.x + pnw1.x - sp.x ),
-		Math.round( p1.y + pnw1.y - sp.y )
-	);
+	var pnw2 =
+		this.getPNW( key2 );
 
-	p2 = new Euclid.Point(
-		Math.round( p2.x + pnw2.x - sp.x ),
-		Math.round( p2.y + pnw2.y - sp.y )
-	);
+	var vpara1 =
+		this.$sub[ key1 ];
 
-	var fontsize = this.getFont( ).size;
-	var descend = Math.round( fontsize * theme.bottombox );
-	var  ascend = Math.round( fontsize );
-	var rx = width - innerMargin.e;
-	var lx = innerMargin.w;
+	var vpara2 =
+		this.$sub[ key2 ];
+
+	var p1 =
+		vpara1.locateOffset( s1.at1 );
+
+	var p2 =
+		vpara2.locateOffset( s2.at1 );
+
+	p1 =
+		new Euclid.Point(
+			Math.round( p1.x + pnw1.x - sp.x ),
+			Math.round( p1.y + pnw1.y - sp.y )
+		);
+
+	p2 =
+		new Euclid.Point(
+			Math.round( p2.x + pnw2.x - sp.x ),
+			Math.round( p2.y + pnw2.y - sp.y )
+		);
+
+	var fontsize =
+		this.getFont( ).size;
+
+	var descend =
+		Math.round( fontsize * theme.bottombox );
+
+	var ascend =
+		Math.round( fontsize );
+
+	var rx =
+		width - innerMargin.e;
+
+	var lx =
+		innerMargin.w;
 
 	if( ( Math.abs( p2.y - p1.y ) < 2 ) )
 	{
@@ -431,16 +514,22 @@ Doc.prototype.sketchSelection = function(
 		fabric.lineTo( lx,   p2.y + descend, view );
 
 		if( twist )
-			{ fabric.moveTo( lx, p1.y + descend, view ); }
+		{
+			fabric.moveTo( lx, p1.y + descend, view );
+		}
 		else
-			{ fabric.lineTo( lx, p1.y + descend, view ); }
+		{
+			fabric.lineTo( lx, p1.y + descend, view );
+		}
 
 		fabric.lineTo( p1.x, p1.y + descend, view );
 		fabric.lineTo( p1.x, p1.y -  ascend, view );
 		fabric.lineTo( rx,   p1.y -  ascend, view );
 
 		if( !twist )
-			{ fabric.lineTo( rx, p2.y - ascend, view ); }
+		{
+			fabric.lineTo( rx, p2.y - ascend, view );
+		}
 	}
 };
 

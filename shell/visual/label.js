@@ -112,13 +112,14 @@ Label.s_drawTrans =
 	var silhoutte = Label.s_getSilhoutte( zone );
 
 	// draws selection and text
-	var f = Visual.Para.s_draw(
-		zone.width,
-		zone.height,
-		view.zoom,
-		transLabel.font,
-		transLabel.flow
-	);
+	var f =
+		Visual.Para.s_draw(
+			zone.width,
+			zone.height,
+			view.zoom,
+			transLabel.font,
+			transLabel.flow
+		);
 
 	fabric.drawImage(
 		'image', f,

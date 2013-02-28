@@ -9,7 +9,7 @@
 | Export
 */
 var Visual;
-Visual = Visual || {};
+Visual = Visual || { };
 
 
 /*
@@ -34,13 +34,16 @@ var theme;
 
 
 if( typeof( window ) === 'undefined' )
-	{ throw new Error( 'this code requires a browser!' ); }
+{
+	throw new Error( 'this code requires a browser!' );
+}
 
 
 /*
 | Constructor.
 */
-var Para = Visual.Para =
+var Para =
+Visual.Para =
 	function(
 		spacename,
 		twig,
@@ -48,7 +51,9 @@ var Para = Visual.Para =
 	)
 {
 	if( twig.type !== 'Para' )
-		{ throw new Error( 'type error' ); }
+	{
+		throw new Error( 'type error' );
+	}
 
 	Visual.Base.call(
 		this,
@@ -58,8 +63,11 @@ var Para = Visual.Para =
 	);
 
 	// caching
-	this.$fabric = null;
-	this.$flow   = null;
+	this.$fabric =
+		null;
+
+	this.$flow =
+		null;
 };
 
 Jools.subclass( Para, Visual.Base );
@@ -1007,8 +1015,8 @@ Para.prototype.specialKey =
 	var caret =
 		space.$caret;
 
-	var select =
-		shell.selection;
+	var selection =
+		shell.getSelection( );
 
 	// TODO similar item, doc, hand it properly instead of regetting them.
 	var item =
@@ -1021,7 +1029,8 @@ Para.prototype.specialKey =
 		item.$sub.doc;
 
 	// if true the caret moved or the selection changed
-	var show   = false;
+	var show =
+		false;
 
 	if( ctrl )
 	{
@@ -1031,29 +1040,28 @@ Para.prototype.specialKey =
 				var v0 = doc.atRank( 0 );
 				var v1 = doc.atRank( doc.twig.length - 1 );
 
-				select.sign1 = new Sign(
-					{
-						path: v0.textPath,
-						at1: 0
-					}
-				);
-
-				select.sign2 = new Sign(
-					{
-						path: v1.textPath,
-						at1: v1.twig.text.length
-					}
-				);
-
-				select.active =
-					true;
+				selection =
+					shell.setSelection(
+						new Sign(
+							{
+								path :
+									v0.textPath,
+								at1 :
+									0
+							}
+						),
+						new Sign(
+							{
+								path :
+									v1.textPath,
+								at1 :
+									v1.twig.text.length
+							}
+						)
+					);
 
 				space.setCaret(
-					select.sign2
-				);
-
-				system.setInput(
-					select.innerText( )
+					selection.sign2
 				);
 
 				caret.show( );
@@ -1067,7 +1075,10 @@ Para.prototype.specialKey =
 		}
 	}
 
-	if( !shift && select.active )
+	var select1 =
+		selection && selection.sign1;
+
+	if( !shift && selection )
 	{
 		switch( key )
 		{
@@ -1079,7 +1090,8 @@ Para.prototype.specialKey =
 			case 'pos1'      :
 			case 'right'     :
 			case 'up'        :
-				select.deselect( );
+
+				shell.deselect( );
 
 				show =
 					true;
@@ -1088,7 +1100,9 @@ Para.prototype.specialKey =
 
 			case 'backspace' :
 			case 'del'       :
-				select.remove( );
+
+				selection =
+					shell.removeSelection( );
 
 				show =
 					true;
@@ -1099,7 +1113,8 @@ Para.prototype.specialKey =
 
 			case 'enter'     :
 
-				select.remove( );
+				selection =
+					shell.removeSelection( );
 
 				show =
 					true;
@@ -1107,24 +1122,23 @@ Para.prototype.specialKey =
 				break;
 		}
 	}
-	else if ( shift && !select.active )
+	else if ( shift && !selection )
 	{
 		switch( key ) {
-			case 'backup'   :
-			case 'down'     :
-			case 'end'      :
-			case 'left'     :
+			case 'backup' :
+			case 'down' :
+			case 'end' :
+			case 'left' :
 			case 'pagedown' :
-			case 'pos1'     :
-			case 'right'    :
-			case 'up'       :
-				select.sign1 =
+			case 'pos1':
+			case 'right' :
+			case 'up' :
+
+				select1 =
 					caret.sign;
 
 				show =
 					true;
-
-				item.poke( );
 		}
 	}
 
@@ -1256,6 +1270,9 @@ Para.prototype.specialKey =
 			break;
 	}
 
+	caret =
+		space.$caret;
+
 	if( shift )
 	{
 		switch( key )
@@ -1267,15 +1284,11 @@ Para.prototype.specialKey =
 			case 'right' :
 			case 'down' :
 
-				select.active =
-					true;
-
-				select.sign2 =
-					caret.sign;
-
-				system.setInput(
-					select.innerText( )
-				);
+				selection =
+					shell.setSelection(
+						select1,
+						caret.sign
+					);
 
 				item.poke( );
 
@@ -1303,12 +1316,15 @@ Para.prototype.specialKey =
 /*
 | Return the path to the .text attribute if this para.
 */
-Jools.lazyFixate(Para.prototype, 'textPath',
+Jools.lazyFixate(
+	Para.prototype,
+	'textPath',
 	function( )
 	{
 		return new Path(
 			this.path,
-			'++', 'text'
+			'++',
+				'text'
 		);
 	}
 );
@@ -1317,7 +1333,8 @@ Jools.lazyFixate(Para.prototype, 'textPath',
 /*
 | Updates v-vine to match a new twig.
 */
-Para.prototype.update = function( twig )
+Para.prototype.update =
+	function( twig )
 {
 	this.twig =
 		twig;

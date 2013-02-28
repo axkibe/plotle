@@ -33,6 +33,7 @@ var MeshMashine;
 var Peer;
 var Range;
 var Sign;
+var system;
 var theme;
 var Visual;
 
@@ -98,7 +99,7 @@ Shell =
 					'screensize',
 						screensize
 				),
-			
+
 			signup :
 				new Forms.SignUp(
 					'screensize',
@@ -114,30 +115,17 @@ Shell =
 		);
 
 	// TODO remove
-	Jools.keyNonGrata( this, '$caret' );
+	Jools.keyNonGrata( this, 'selection' );
 
 	this.bridge =
 		new Bridge( );
 
-	this.selection =
-		new Range( );
+	this._$selection =
+		null;
 
 	// true at greenscreen frowny
 	this.green =
 		false;
-
-	// sets the caret to shown if the document has focus
-	// if it is unknown, assumes shown
-	/*
-	TODO tis needed?
-	if(
-		!document.hasFocus ||
-		document.hasFocus( )
-	)
-	{
-		this.$caret.show( );
-	}
-	*/
 
 	this._draw( );
 };
@@ -199,21 +187,20 @@ Shell.prototype.update =
 	// TODO move selection to space / forms
 
 	var selection =
-		this.selection;
+		this._$selection;
 
-	if( selection.active )
+	if( selection )
 	{
-		selection.sign1 =
+		this.setSelection(
 			MeshMashine.tfxSign(
 				selection.sign1,
 				chgX
-			);
-
-		selection.sign2 =
+			),
 			MeshMashine.tfxSign(
 				selection.sign2,
 				chgX
-			);
+			)
+		);
 	}
 
 	this._draw( );
@@ -1008,9 +995,9 @@ Shell.prototype.input =
 		return;
 	}
 
-	if( this.selection.active )
+	if( this._$selection )
 	{
-		this.selection.remove( );
+		this._$selection.remove( );
 	}
 
 	var display =
@@ -1344,6 +1331,110 @@ Shell.prototype.logout =
 			self.poke( );
 		}
 	);
+};
+
+
+/*
+| Gets the selection.
+*/
+Shell.prototype.getSelection =
+	function( )
+{
+	return this._$selection;
+};
+
+/*
+| Sets the selection.
+*/
+Shell.prototype.setSelection =
+	function(
+		sign1,
+		sign2
+	)
+{
+	if( !sign1 )
+	{
+		throw new Error( 'sign1 null' );
+	}
+
+	if( !sign2 )
+	{
+		throw new Error( 'sign2 null' );
+	}
+
+	var selection =
+	this._$selection =
+		new Range(
+			sign1,
+			sign2
+		);
+
+	system.setInput(
+		selection.innerText( )
+	);
+
+	return selection;
+};
+
+/*
+| Removes the selection including its contents.
+*/
+Shell.prototype.removeSelection =
+	function( )
+{
+	var selection =
+		this._$selection;
+
+	if( !selection ) {
+		return null;
+	}
+
+	selection.normalize();
+
+	this.deselect();
+
+	this.redraw =
+		true;
+
+	this.peer.removeSpan(
+		selection.$begin.path,
+		selection.$begin.at1,
+
+		selection.$end.path,
+		selection.$end.at1
+	);
+
+	return null;
+};
+
+
+/*
+| Deselects the selection.
+*/
+Shell.prototype.deselect =
+	function( nopoke )
+{
+	var selection =
+		this._$selection;
+
+	if( !selection )
+	{
+		return;
+	}
+
+	// FIXME, use knock instead?
+	if( !nopoke )
+	{
+		this.$space.getSub(
+			selection.sign1.path,
+			'Item'
+		).poke( );
+	}
+
+	this._$selection
+		= null;
+
+	system.setInput( '' );
 };
 
 

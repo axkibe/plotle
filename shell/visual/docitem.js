@@ -1,11 +1,9 @@
 /*
-|
 | An item with a doc.
 |
 | Common base of Note, Label and Relation.
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
@@ -13,7 +11,7 @@
 | Export
 */
 var Visual;
-Visual = Visual || {};
+Visual = Visual || { };
 
 
 /*
@@ -34,46 +32,81 @@ var theme;
 ( function() {
 'use strict';
 
-if (typeof(window) === 'undefined')
-	{ throw new Error('this code needs a browser!'); }
+if( typeof( window ) === 'undefined' )
+{
+	throw new Error( 'this code needs a browser!' );
+}
 
 
 /*
 | Constructor
 */
-var DocItem = Visual.DocItem = function(spacename, twig, path)
+var DocItem =
+Visual.DocItem =
+	function(
+		spacename,
+		twig,
+		path
+	)
 {
-	Visual.Item.call(this, spacename, twig, path);
+	Visual.Item.call(
+		this,
+		spacename,
+		twig,
+		path
+	);
 
 	this.$sub =
 		{
-			doc : new Visual.Doc(spacename, twig.doc, new Path(path, '++', 'doc'))
+			doc : new Visual.Doc(
+				spacename,
+				twig.doc,
+				new Path( path, '++', 'doc' )
+			)
 		};
 };
 
-Jools.subclass(DocItem, Visual.Item);
+Jools.subclass(
+	DocItem,
+	Visual.Item
+);
 
 
 /*
 | Sets the items position and size after an action.
 */
-DocItem.prototype.dragStop = function(view, p)
+DocItem.prototype.dragStop =
+	function(
+		view,
+		p
+	)
 {
-	return Visual.Item.prototype.dragStop.call(this, view, p);
+	return Visual.Item.prototype.dragStop.call(
+		this,
+		view,
+		p
+	);
 };
 
 
 /*
 | Updates the $sub to match a new twig.
 */
-DocItem.prototype.update = function(twig)
+DocItem.prototype.update =
+	function( twig )
 {
-	Visual.Item.prototype.update.call(this, twig);
+	Visual.Item.prototype.update.call(
+		this,
+		twig
+	);
 
-	var doc = this.$sub.doc;
+	var doc =
+		this.$sub.doc;
 
 	if (doc.twig !== twig.doc)
-		{ doc.update(twig.doc); }
+	{
+		doc.update( twig.doc );
+	}
 
 };
 
@@ -81,10 +114,13 @@ DocItem.prototype.update = function(twig)
 /*
 | Returns the para at point. FIXME, honor scroll here.
 */
-DocItem.prototype.getParaAtPoint = function(p)
+DocItem.prototype.getParaAtPoint =
+	function( p )
 {
-	if (p.y < this.innerMargin.n)
-		{ return null; }
+	if( p.y < this.innerMargin.n )
+	{
+		return null;
+	}
 
 	return this.$sub.doc.getParaAtPoint(p);
 };
@@ -93,7 +129,8 @@ DocItem.prototype.getParaAtPoint = function(p)
 /*
 | Sets the focus to this item.
 */
-DocItem.prototype.grepFocus = function( )
+DocItem.prototype.grepFocus =
+	function( )
 {
 	// TODO hand this down.
 	var space =
@@ -117,7 +154,9 @@ DocItem.prototype.grepFocus = function( )
 
 	caret.show( );
 
-	shell.peer.moveToTop( this.path );
+	shell.peer.moveToTop(
+		this.path
+	);
 };
 
 
@@ -147,7 +186,7 @@ DocItem.prototype.click =
 	{
 		this.grepFocus( );
 
-		shell.selection.deselect( );
+		shell.deselect( );
 	}
 
 	shell.redraw = true;
@@ -156,10 +195,13 @@ DocItem.prototype.click =
 		this.getZone( ).pnw;
 
 	var pi =
-		vp.sub(pnw.x, pnw.y - (this.scrollbarY ? this.scrollbarY.getPos() : 0 ));
+		vp.sub(
+			pnw.x,
+			pnw.y - (this.scrollbarY ? this.scrollbarY.getPos() : 0 )
+		);
 
 	var para =
-		this.getParaAtPoint(pi);
+		this.getParaAtPoint( pi );
 
 	// FIXME move into para
 	if( para )
@@ -168,7 +210,9 @@ DocItem.prototype.click =
 			this.$sub.doc.getPNW( para.key );
 
 		var at1 =
-			para.getPointOffset( pi.sub( ppnw ));
+			para.getPointOffset(
+				pi.sub( ppnw )
+			);
 
 		var caret = space.setCaret(
 			{
@@ -179,7 +223,7 @@ DocItem.prototype.click =
 
 		caret.show( );
 
-		shell.selection.deselect( );
+		shell.deselect( );
 	}
 
 	return true;
@@ -188,7 +232,8 @@ DocItem.prototype.click =
 /*
 | force-clears all caches.
 */
-DocItem.prototype.knock = function( )
+DocItem.prototype.knock =
+	function( )
 {
 	Visual.Item.prototype.knock.call( this );
 

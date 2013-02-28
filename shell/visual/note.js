@@ -10,7 +10,7 @@
 | Export
 */
 var Visual;
-Visual = Visual || {};
+Visual = Visual || { };
 
 
 /*
@@ -33,7 +33,9 @@ var theme;
 
 
 if( typeof( window ) === 'undefined' )
-	{ throw new Error('this code needs a browser!'); }
+{
+	throw new Error('this code needs a browser!');
+}
 
 
 /*
@@ -56,7 +58,6 @@ Visual.Note =
 
 	this.scrollbarY =
 		new Visual.Scrollbar( );
-
 };
 
 
@@ -75,26 +76,33 @@ Note.s_getZone =
 		p2
 	)
 {
-	var zone = new Euclid.Rect(
-		'arbitrary',
-		p1,
-		p2
-	);
+	var zone =
+		new Euclid.Rect(
+			'arbitrary',
+			p1,
+			p2
+		);
 
-	var minWidth  = theme.note.minWidth;
-	var minHeight = theme.note.minHeight;
+	var minWidth =
+		theme.note.minWidth;
+
+	var minHeight =
+		theme.note.minHeight;
 
 	if(
 		zone.width  < minWidth ||
 		zone.height < minHeight
-	) {
+	)
+	{
 		return new Euclid.Rect(
 			'pnw/size',
 			zone.pnw,
 			Math.max( minWidth,  zone.width  ),
 			Math.max( minHeight, zone.height )
 		);
-	} else {
+	}
+	else
+{
 		return zone;
 	}
 };
@@ -111,7 +119,8 @@ Note.s_drawTrans =
 		zone
 	)
 {
-	var silhoutte = Note.s_getSilhoutte( zone );
+	var silhoutte =
+		Note.s_getSilhoutte( zone );
 
 	fabric.paint(
 		theme.note.style,
@@ -128,13 +137,16 @@ Note.s_drawTrans =
 Note.s_getSilhoutte =
 	function( zone )
 {
-	var cr = theme.note.cornerRadius;
+	var cr =
+		theme.note.cornerRadius;
 
-	return new Euclid.RoundRect(
-		zone.pnw,
-		zone.pse,
-		cr,
-		cr
+	return (
+		new Euclid.RoundRect(
+			zone.pnw,
+			zone.pse,
+			cr,
+			cr
+		)
 	);
 };
 
@@ -145,16 +157,19 @@ Note.s_getSilhoutte =
 Note.s_getZeroSilhoutte =
 	function( zone )
 {
-	var cr = theme.note.cornerRadius;
+	var cr =
+		theme.note.cornerRadius;
 
-	return new Euclid.RoundRect(
-		Euclid.Point.zero,
-		new Euclid.Point(
-			zone.width,
-			zone.height
-		),
-		cr,
-		cr
+	return (
+		new Euclid.RoundRect(
+			Euclid.Point.zero,
+			new Euclid.Point(
+				zone.width,
+				zone.height
+			),
+			cr,
+			cr
+		)
 	);
 };
 
@@ -163,35 +178,41 @@ Note.s_getZeroSilhoutte =
 | Resize handles to show on notes.
 */
 Note.s_handles =
-	Jools.immute({
-		n  : true,
-		ne : true,
-		e  : true,
-		se : true,
-		s  : true,
-		sw : true,
-		w  : true,
-		nw : true
-	});
+	Jools.immute(
+		{
+			n  : true,
+			ne : true,
+			e  : true,
+			se : true,
+			s  : true,
+			sw : true,
+			w  : true,
+			nw : true
+		}
+	);
 
 
 /*
 | Default margin for all notes.
 */
 Note.s_innerMargin =
-	new Euclid.Margin( theme.note.innerMargin );
+	new Euclid.Margin(
+		theme.note.innerMargin
+	);
 
 
 /*
 | Default margin for all notes.
 */
-Note.prototype.innerMargin = Note.s_innerMargin;
+Note.prototype.innerMargin =
+	Note.s_innerMargin;
 
 
 /*
 | Resize handles to show on notes.
 */
-Note.prototype.handles = Note.s_handles;
+Note.prototype.handles =
+	Note.s_handles;
 
 
 /*
@@ -203,12 +224,18 @@ Note.prototype.getSilhoutte =
 		zone //  the cache for the items zone
 	)
 {
-	var s  = this._$silhoutte;
+	var s =
+		this._$silhoutte;
 
 	if( s && s.eq( zone ) )
-		{ return s; }
+	{
+		return s;
+	}
 
-	return this._$silhoutte = Note.s_getSilhoutte( zone );
+	return (
+		this._$silhoutte =
+			Note.s_getSilhoutte( zone )
+	);
 };
 
 
@@ -239,21 +266,30 @@ Note.prototype.getZeroSilhoutte =
 Note.prototype.setScrollbar =
 	function( pos )
 {
-	var sbary = this.scrollbarY;
+	var sbary =
+		this.scrollbarY;
 
 	if( !sbary.visible )
-		{ return; }
+	{
+		return;
+	}
 
-	var zone = this.getZone( );
+	var zone =
+		this.getZone( );
 
 	if( !Jools.is( pos ) )
-		{ pos = sbary.getPos(); }
+	{
+		pos =
+			sbary.getPos( );
+	}
 
 	sbary.setPos(
 		pos,
 		zone.height - this.innerMargin.y,
 		this.$sub.doc.getHeight( ),
-		Euclid.Point.renew(zone.pse.x, zone.pnw.y + theme.scrollbar.vdis, sbary.pnw),
+		Euclid.Point.renew(
+			zone.pse.x, zone.pnw.y + theme.scrollbar.vdis, sbary.pnw
+		),
 		zone.height - theme.scrollbar.vdis * 2
 	);
 };
@@ -262,7 +298,8 @@ Note.prototype.setScrollbar =
 /*
 | Scrolls the note so the caret comes into view.
 */
-Note.prototype.scrollCaretIntoView = function()
+Note.prototype.scrollCaretIntoView =
+	function( )
 {
 	// TODO hand down
 	var caret =
@@ -396,13 +433,17 @@ Note.prototype.draw =
 		view
 	)
 {
-	var zone = this.getZone( );
+	var zone =
+		this.getZone( );
 
-	var vzone = view.rect( zone );
+	var vzone =
+		view.rect( zone );
 
-	var f = this.$fabric;
+	var f =
+		this.$fabric;
 
-	var sbary = this.scrollbarY;
+	var sbary =
+		this.scrollbarY;
 
 	// no buffer hit?
 	if(
@@ -412,19 +453,28 @@ Note.prototype.draw =
 		vzone.height !== f.height
 	)
 	{
-		f = this.$fabric = new Euclid.Fabric(
-			vzone.width  + 2,
-			vzone.height + 2
-		);
+		f =
+		this.$fabric =
+			new Euclid.Fabric(
+				vzone.width  + 2,
+				vzone.height + 2
+			);
 
-		var doc     = this.$sub.doc;
-		var imargin = this.innerMargin;
+		var doc =
+			this.$sub.doc;
+
+		var imargin =
+			this.innerMargin;
 
 		// calculates if a scrollbar is needed
-		var height = doc.getHeight();
-		sbary.visible = height > zone.height - imargin.y;
+		var height =
+			doc.getHeight();
 
-		var silhoutte = this.getZeroSilhoutte( zone );
+		sbary.visible =
+			height > zone.height - imargin.y;
+
+		var silhoutte =
+			this.getZeroSilhoutte( zone );
 
 		f.fill(
 			theme.note.style.fill,
@@ -457,7 +507,8 @@ Note.prototype.draw =
 		);
 	}
 
-	var action = shell.bridge.action( );
+	var action =
+		shell.bridge.action( );
 
 	// TODO move this logic into the callee
 	if(
@@ -468,23 +519,32 @@ Note.prototype.draw =
 	)
 	{
 		fabric.drawImage(
-			'image', f,
-			'pnw', vzone.pnw,
-			'alpha', theme.removeAlpha
+			'image',
+				f,
+			'pnw',
+				vzone.pnw,
+			'alpha',
+				theme.removeAlpha
 		);
 	}
 	else
 	{
 		fabric.drawImage(
-			'image', f,
-			'pnw', vzone.pnw
+			'image',
+				f,
+			'pnw',
+				vzone.pnw
 		);
 	}
 
 	if( sbary.visible )
 	{
 		this.setScrollbar( );
-		sbary.draw( fabric, view );
+
+		sbary.draw(
+			fabric,
+			view
+		);
 	}
 };
 
@@ -501,15 +561,20 @@ Note.prototype.mousewheel =
 		// ctrl
 	)
 {
-	if(! this.getZone().within( view, p) )
-		{ return false; }
+	if( !this.getZone().within( view, p) )
+	{
+		return false;
+	}
 
 	this.setScrollbar(
 		this.scrollbarY.getPos( ) - dir * system.settings.textWheelSpeed
 	);
 
 	this.poke( );
-	shell.redraw = true;
+
+	shell.redraw =
+		true;
+
 	return true;
 };
 
@@ -520,8 +585,11 @@ Note.prototype.mousewheel =
 Note.prototype.getFlowWidth =
 	function( )
 {
-	var zone  = this.getZone( );
-	var flowWidth = zone.width - this.innerMargin.x;
+	var zone =
+		this.getZone( );
+
+	var flowWidth =
+		zone.width - this.innerMargin.x;
 
 	return flowWidth;
 };
@@ -546,10 +614,17 @@ Note.prototype.getParaSep =
 Note.prototype.getZone =
 	function( )
 {
-	var twig   = this.twig;
-	var action = shell.bridge.action( );
-	var max    = Math.max;
-	var min    = Math.min;
+	var twig =
+		this.twig;
+
+	var action =
+		shell.bridge.action( );
+
+	var max =
+		Math.max;
+
+	var min =
+		Math.min;
 
 	if(
 		!action ||
@@ -572,65 +647,217 @@ Note.prototype.getZone =
 
 		case 'ItemResize' :
 
-			var szone = action.startZone;
+			var szone =
+				action.startZone;
 
 			if( !szone )
-				{ return twig.zone; }
+			{
+				return twig.zone;
+			}
 
-			var spnw = szone.pnw;
-			var spse = szone.pse;
-			var dx = action.move.x - action.start.x;
-			var dy = action.move.y - action.start.y;
-			var minw = theme.note.minWidth;
-			var minh = theme.note.minHeight;
+			var spnw =
+				szone.pnw;
+
+			var spse =
+				szone.pse;
+
+			var dx =
+				action.move.x - action.start.x;
+
+			var dy =
+				action.move.y - action.start.y;
+
+			var minw =
+				theme.note.minWidth;
+
+			var minh =
+				theme.note.minHeight;
+
 			var pnw, pse;
 
 			switch( action.align )
 			{
 				case 'n'  :
-					pnw = Euclid.Point.renew(spnw.x, min(spnw.y + dy, spse.y - minh), spnw, spse);
-					pse = spse;
+
+					pnw =
+						Euclid.Point.renew(
+							spnw.x,
+							min(
+								spnw.y + dy,
+								spse.y - minh
+							),
+							spnw,
+							spse
+						);
+
+					pse =
+						spse;
+
 					break;
+
 				case 'ne' :
-					pnw = Euclid.Point.renew(
-						spnw.x, min(spnw.y + dy, spse.y - minh), spnw, spse);
-					pse = Euclid.Point.renew(
-						max(spse.x + dx, spnw.x + minw), spse.y, spnw, spse);
+
+					pnw =
+						Euclid.Point.renew(
+							spnw.x,
+							min(
+								spnw.y + dy,
+								spse.y - minh
+							),
+							spnw,
+							spse
+						);
+
+					pse =
+						Euclid.Point.renew(
+							max(
+								spse.x + dx,
+								spnw.x + minw
+							),
+							spse.y,
+							spnw,
+							spse
+						);
+
 					break;
+
 				case 'e'  :
-					pnw = spnw;
-					pse = Euclid.Point.renew(max(spse.x + dx, spnw.x + minw), spse.y, spnw, spse);
+
+					pnw =
+						spnw;
+
+					pse =
+						Euclid.Point.renew(
+							max(
+								spse.x + dx,
+								spnw.x + minw
+							),
+							spse.y,
+							spnw,
+							spse
+						);
+
 					break;
+
 				case 'se' :
-					pnw = spnw;
-					pse = Euclid.Point.renew(
-						max(spse.x + dx, spnw.x + minw),
-						max(spse.y + dy, spnw.y + minh), spnw, spse);
+
+					pnw =
+						spnw;
+
+					pse =
+						Euclid.Point.renew(
+							max(
+								spse.x + dx,
+								spnw.x + minw
+							),
+							max(
+								spse.y + dy,
+								spnw.y + minh
+							),
+							spnw,
+							spse
+						);
+
 					break;
+
 				case 's' :
-					pnw = spnw;
-					pse = Euclid.Point.renew(spse.x, max(spse.y + dy, spnw.y + minh), spnw, spse);
+
+					pnw =
+						spnw;
+
+					pse =
+						Euclid.Point.renew(
+							spse.x,
+							max(
+								spse.y + dy,
+								spnw.y + minh
+							),
+							spnw,
+							spse
+						);
+
 					break;
+
 				case 'sw'  :
-					pnw = Euclid.Point.renew(min(spnw.x + dx, spse.x - minw), spnw.y, spnw, spse);
-					pse = Euclid.Point.renew(spse.x, max(spse.y + dy, spnw.y + minh), spnw, spse);
+
+					pnw =
+						Euclid.Point.renew(
+							min(
+								spnw.x + dx,
+								spse.x - minw
+							),
+							spnw.y,
+							spnw,
+							spse
+						);
+
+					pse =
+						Euclid.Point.renew(
+							spse.x,
+							max(
+								spse.y + dy,
+								spnw.y + minh
+							),
+							spnw,
+							spse
+						);
+
 					break;
+
 				case 'w'   :
-					pnw = Euclid.Point.renew(min(spnw.x + dx, spse.x - minw), spnw.y, spnw, spse);
-					pse = spse;
+
+					pnw =
+						Euclid.Point.renew(
+							min(
+								spnw.x + dx,
+								spse.x - minw
+							),
+							spnw.y,
+							spnw,
+							spse
+						);
+
+					pse =
+						spse;
+
 					break;
+
 				case 'nw' :
-					pnw = Euclid.Point.renew(
-						min(spnw.x + dx, spse.x - minw),
-						min(spnw.y + dy, spse.y - minh), spnw, spse);
-					pse = spse;
+
+					pnw =
+						Euclid.Point.renew(
+							min(
+								spnw.x + dx,
+								spse.x - minw
+							),
+							min(
+								spnw.y + dy,
+								spse.y - minh
+							),
+							spnw,
+							spse
+						);
+
+					pse =
+						spse;
+
 					break;
+
 				//case 'c' :
 				default  :
 					throw new Error( 'unknown align' );
 			}
-			return new Euclid.Rect( 'pnw/pse', pnw, pse );
+
+			return (
+				new Euclid.Rect(
+					'pnw/pse',
+					pnw,
+					pse
+				)
+			);
+
 		default :
+
 			return twig.zone;
 	}
 };

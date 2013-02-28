@@ -1,11 +1,9 @@
 /*
-|
 | This is a wrapper around HTML5 browsers,
 | creating a more comfortable interface for
 | graphical systems like the meshcraft shell.
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
@@ -234,13 +232,20 @@ System.prototype.setInput =
 		text
 	)
 {
-	var hi   = this._hiddenInput;
-	hi.value = this._inputVal = '' + text;
+	var hi =
+		this._hiddenInput;
 
-	hi.selectionStart = 0;
+	hi.value =
+	this._inputVal =
+		'' + text;
+
+	hi.selectionStart =
+		0;
+
 	if( text !== '' )
 	{
-		hi.selectionEnd = text.length;
+		hi.selectionEnd =
+			text.length;
 	}
 };
 
@@ -248,10 +253,17 @@ System.prototype.setInput =
 /*
 | Sets a timer with an error catcher
 */
-System.prototype.setTimer = function( time, callback )
+System.prototype.setTimer =
+	function(
+		time,
+		callback
+	)
 {
 	return window.setTimeout(
-		makeCatcher( null, callback ),
+		makeCatcher(
+			null,
+			callback
+		),
 		time
 	);
 };
@@ -275,7 +287,8 @@ System.prototype._fiddleInput =
 
 	if( height > 0 )
 	{
-		var input = this._hiddenInput;
+		var input =
+			this._hiddenInput;
 
 		input.style.top =
 			pos.y + 'px';
@@ -294,7 +307,9 @@ System.prototype._fiddleInput =
 			this.setTimer(
 				0,
 				function( )
-					{ self._hiddenInput.selectionStart = 1; }
+					{
+						self._hiddenInput.selectionStart = 1;
+					}
 			);
 
 			this._$suggestingKeyboard =
@@ -342,11 +357,14 @@ System.prototype._onAtweenTime =
 		return;
 	}
 
-	var atween        = this._$atween;
+	var atween =
+		this._$atween;
 
-	this._$pointingState = 'drag';
+	this._$pointingState =
+		'drag';
 
-	var cursor = null;
+	var cursor =
+		null;
 
 	this.shell.dragStart(
 		atween.pos,
@@ -354,17 +372,20 @@ System.prototype._onAtweenTime =
 		atween.ctrl
 	);
 
-	cursor = this.shell.dragMove(
-		atween.move,
-		atween.shift,
-		atween.ctrl
-	);
+	cursor =
+		this.shell.dragMove(
+			atween.move,
+			atween.shift,
+			atween.ctrl
+		);
 
-	this._$atween     = null;
+	this._$atween =
+		null;
 
 	if( cursor !== null )
 	{
-		this._canvas.style.cursor = cursor;
+		this._canvas.style.cursor =
+			cursor;
 	}
 };
 
@@ -401,18 +422,21 @@ System.prototype._onResize =
 		// event
 	)
 {
-	var c = this._canvas;
+	var c =
+		this._canvas;
 
-	var w = document.documentElement.clientWidth;
-	var h = document.documentElement.clientHeight;
+	var w =
+	c.width =
+		document.documentElement.clientWidth - 1;
 
-	c.width  = w - 1;
-	c.height = h - 1;
+	var h =
+	c.height =
+		document.documentElement.clientHeight - 1;
 
 	if( this.shell ) {
 		this.shell.resize(
-			w - 1,
-			h - 1
+			w,
+			h
 		);
 	}
 };
@@ -429,8 +453,11 @@ System.prototype._captureEvents = function( )
 		return;
 	}
 
-	document.onmouseup   = this._canvas.onmouseup;
-	document.onmousemove = this._canvas.onmousemove;
+	document.onmouseup =
+		this._canvas.onmouseup;
+
+	document.onmousemove =
+		this._canvas.onmousemove;
 };
 
 

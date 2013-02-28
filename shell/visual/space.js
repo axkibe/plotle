@@ -163,12 +163,15 @@ Space.prototype.update =
 		!Jools.isnon( sub[ csign.path.get( 0 ) ] )
 	)
 	{
+		var selection =
+			shell.getSelection( );
+
 		if(
-			shell.selection.active &&
-			shell.selection.sign1.path.get( -4 ) === csign.path.get( 1 )
+			selection &&
+			selection.sign1.path.get( -4 ) === csign.path.get( 1 )
 		)
 		{
-			shell.selection.deselect( true );
+			shell.deselect( true );
 		}
 
 		this.setCaret( null );
