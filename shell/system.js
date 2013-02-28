@@ -213,34 +213,22 @@ var System =
 			this._onSystemBlur
 		);
 
-	hiddenInput.onkeydown =
-		makeCatcher(
-			this,
-			this._onHiddenKeyDown
-		);
-
-	hiddenInput.onkeypress =
-		makeCatcher(
-			this,
-			this._onHiddenKeyPress
-		);
-
-	hiddenInput.onkeyup =
+	document.onkeyup =
 		makeCatcher(
 			this,
 			this._onHiddenKeyUp
 		);
 
-	canvas.onkeydown =
+	document.onkeydown =
 		makeCatcher(
 			this,
-			this._onCanvasKeyDown
+			this._onHiddenKeyDown
 		);
 
-	canvas.onkeypress =
+	document.onkeypress =
 		makeCatcher(
 			this,
-			this._onCanvasKeyPress
+			this._onHiddenKeyPress
 		);
 
 	// TODO rename?
@@ -322,7 +310,7 @@ System.prototype.restartBlinker =
 	// double uses the blink timer
 	this._testInput();
 
-	if (this._blinkTimer)
+	if( this._blinkTimer )
 	{
 		clearInterval( this._blinkTimer );
 	}
@@ -408,7 +396,7 @@ System.prototype._fiddleInput =
 
 		if( !this._$suggestingKeyboard )
 		{
-			input.focus();
+			input.focus( );
 
 			// works around a bug in safari/OSX
 			var self =
@@ -430,7 +418,7 @@ System.prototype._fiddleInput =
 	{
 		if( this._$suggestingKeyboard )
 		{
-			this._canvas.focus();
+			this._hiddenInput.blur( );
 
 			this._$suggestingKeyboard =
 				false;
@@ -667,20 +655,14 @@ System.prototype._onHiddenKeyDown =
 		event
 	)
 {
-	var shift =
-		event.shiftKey;
-
-	var ctrl =
-		event.ctrlKey || event.metaKey;
-
 	var kcode =
 		this._$lastSpecialKey = event.keyCode;
 
 	if(
 		!this._specialKey(
 			kcode,
-			shift,
-			ctrl
+			event.shiftKey,
+			event.ctrlKey || event.metaKey
 		)
 	)
 	{
@@ -711,13 +693,18 @@ System.prototype._onHiddenKeyPress =
 
 	if (
 		(
-			( kcode > 0 && kcode < 32 ) ||
+			(
+				kcode > 0 && kcode < 32
+			)
+			||
 			ew === 0
-		) &&
+		)
+		&&
 		this._$lastSpecialKey !== kcode
 	)
 	{
-		this._$lastSpecialKey = -1;
+		this._$lastSpecialKey =
+			-1;
 
 		return this._specialKey(
 			kcode,
@@ -1403,31 +1390,36 @@ System.prototype._specialKey =
 		{
 			case 65 :
 
-				key = 'a';
+				key =
+					'a';
 
 				break;
 
 			case 89 :
 
-				key = 'y';
+				key =
+					'y';
 
 				break;
 
 			case 90 :
 
-				key = 'z';
+				key =
+					'z';
 
 				break;
 
 			case 188 :
 
-				key = ',';
+				key =
+					',';
 
 				break;
 
 			case 190 :
 
-				key = '.';
+				key =
+					'.';
 
 				break;
 		}
@@ -1436,8 +1428,18 @@ System.prototype._specialKey =
 	{
 		switch( keyCode )
 		{
-			case  8 : key = 'backspace'; break;
-			case  9 : key = 'tab';       break;
+			case  8 :
+
+				key = 'backspace';
+
+				break;
+
+			case  9 :
+
+				key = 'tab';
+
+				break;
+
 			case 13 : key = 'enter';     break;
 			case 27 : key = 'esc';       break;
 			case 33 : key = 'pageup';    break;
@@ -1451,6 +1453,8 @@ System.prototype._specialKey =
 			case 46 : key = 'del';       break;
 		}
 	}
+
+	console.log('special', key);
 
 	if( key === null )
 	{
@@ -1486,7 +1490,8 @@ System.prototype._testInput =
 		text.replace( /\r/g, '' );
 
 	if(
-		text === this._inputVal || !this.shell
+		text === this._inputVal ||
+		!this.shell
 	)
 	{
 		return;
