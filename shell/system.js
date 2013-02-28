@@ -28,8 +28,10 @@ var startup;
 */
 ( function( ) {
 'use strict';
-if ( typeof( window ) === 'undefined')
-	{ throw new Error( 'browser.js needs a browser!' ); }
+if( typeof( window ) === 'undefined' )
+{
+	throw new Error( 'this code needs a browser!' );
+}
 
 
 /*
@@ -48,7 +50,8 @@ var makeCatcher =
 			return f.apply( t, arguments );
 		}
 
-		try {
+		try
+		{
 			f.apply( t, arguments );
 		}
 		catch( e )
@@ -67,22 +70,35 @@ var makeCatcher =
 /*
 | The system
 */
-var System = function( )
+var System =
+	function( )
 {
 	if( system )
-		{ throw new Error('System not a singleton'); }
+	{
+		throw new Error('System not a singleton');
+	}
 
-	var canvas    = this._canvas = document.getElementById('canvas');
-	canvas.width  = window.innerWidth - 1;
-	canvas.height = window.innerHeight - 1;
-	this.fabric   = new Euclid.Fabric(canvas);
+	var canvas =
+	this._canvas =
+		document.getElementById( 'canvas' );
+
+	canvas.width  =
+		window.innerWidth - 1;
+
+	canvas.height =
+		window.innerHeight - 1;
+
+	this.fabric =
+		new Euclid.Fabric(canvas);
 
 	// if true browser supports the setCapture() call
 	// if false needs work around
-	this._useCapture = !!canvas.setCapture;
+	this._useCapture =
+		!!canvas.setCapture;
 
 	// false, 'atween' or 'drag'
-	this._$pointingState  = false;
+	this._$pointingState =
+		false;
 
 	// atween is the state where the mouse button went down,
 	// and its yet unsure if this is a click or drag.
@@ -130,43 +146,137 @@ var System = function( )
 	var hiddenInput =
 		this._hiddenInput;
 
-	canvas.onmousedown        = makeCatcher( this, this._onMouseDown      );
-	canvas.onmousemove        = makeCatcher( this, this._onMouseMove      );
-	canvas.onmouseup          = makeCatcher( this, this._onMouseUp        );
+	canvas.onmousedown =
+		makeCatcher(
+			this,
+			this._onMouseDown
+		);
 
-	canvas.ontouchstart       = makeCatcher( this, this._onTouchStart     );
-	canvas.ontouchmove        = makeCatcher( this, this._onTouchMove      );
-	canvas.ontouchend         = makeCatcher( this, this._onTouchEnd       );
+	canvas.onmousemove =
+		makeCatcher(
+			this,
+			this._onMouseMove
+		);
 
-	canvas.onmousewheel       = makeCatcher( this, this._onMouseWheel     );
-	canvas.addEventListener( 'DOMMouseScroll', canvas.onmousewheel, false ); // Firefox
+	canvas.onmouseup =
+		makeCatcher(
+			this,
+			this._onMouseUp
+		);
 
-	window.onresize           = makeCatcher( this, this._onResize         );
+	canvas.ontouchstart =
+		makeCatcher(
+			this,
+			this._onTouchStart
+		);
 
-	window.onfocus            = makeCatcher( this, this._onSystemFocus    );
-	window.onblur             = makeCatcher( this, this._onSystemBlur     );
+	canvas.ontouchmove =
+		makeCatcher(
+			this,
+			this._onTouchMove
+		);
 
-	hiddenInput.onkeydown     = makeCatcher( this, this._onHiddenKeyDown  );
-	hiddenInput.onkeypress    = makeCatcher( this, this._onHiddenKeyPress );
-	hiddenInput.onkeyup       = makeCatcher( this, this._onHiddenKeyUp    );
+	canvas.ontouchend =
+		makeCatcher(
+			this,
+			this._onTouchEnd
+		);
 
-	canvas.onkeydown          = makeCatcher( this, this._onCanvasKeyDown  );
-	canvas.onkeypress         = makeCatcher( this, this._onCanvasKeyPress );
+	canvas.onmousewheel =
+		makeCatcher(
+			this,
+			this._onMouseWheel
+		);
+
+	// firefox wheel listening
+	canvas.addEventListener(
+		'DOMMouseScroll',
+		canvas.onmousewheel,
+		false
+	);
+
+	window.onresize =
+		makeCatcher(
+			this,
+			this._onResize
+		);
+
+	window.onfocus =
+		makeCatcher(
+			this,
+			this._onSystemFocus
+		);
+
+	window.onblur =
+		makeCatcher(
+			this,
+			this._onSystemBlur
+		);
+
+	hiddenInput.onkeydown =
+		makeCatcher(
+			this,
+			this._onHiddenKeyDown
+		);
+
+	hiddenInput.onkeypress =
+		makeCatcher(
+			this,
+			this._onHiddenKeyPress
+		);
+
+	hiddenInput.onkeyup =
+		makeCatcher(
+			this,
+			this._onHiddenKeyUp
+		);
+
+	canvas.onkeydown =
+		makeCatcher(
+			this,
+			this._onCanvasKeyDown
+		);
+
+	canvas.onkeypress =
+		makeCatcher(
+			this,
+			this._onCanvasKeyPress
+		);
 
 	// TODO rename?
 	//document.onkeydown          = makeCatcher( this, this._onCanvasKeyDown  );
 	//document.onkeypress         = makeCatcher( this, this._onCanvasKeyPress );
 	//document.onkeyup            = makeCatcher( this, this._onHiddenKeyUp    );
 
-	this._testInputCatcher    = makeCatcher( this, this._testInput        );
-	this._onAtweenTimeCatcher = makeCatcher( this, this._onAtweenTime     );
-	this._blinkCatcher        = makeCatcher( this, this._blink            );
-	document.oncontextmenu    = makeCatcher( this, this._onContextMenu    );
+	this._testInputCatcher =
+		makeCatcher(
+			this,
+			this._testInput
+		);
+
+	this._onAtweenTimeCatcher =
+		makeCatcher(
+			this,
+			this._onAtweenTime
+		);
+
+	this._blinkCatcher =
+		makeCatcher(
+			this,
+			this._blink
+		);
+
+	document.oncontextmenu =
+		makeCatcher(
+			this,
+			this._onContextMenu
+		);
 
 	// the blink (and check input) timer
-	this._blinkTimer = null;
+	this._blinkTimer =
+		null;
 
-	this.restartBlinker() ;
+	this.restartBlinker( );
 };
 
 
@@ -445,7 +555,8 @@ System.prototype._onResize =
 /*
 | Captures all mouseevents event beyond the canvas (for dragging)
 */
-System.prototype._captureEvents = function( )
+System.prototype._captureEvents =
+	function( )
 {
 	if( this._useCapture )
 	{
@@ -465,7 +576,8 @@ System.prototype._captureEvents = function( )
 | Key down on canvas.
 | Used when not suggesting a keyboard.
 */
-System.prototype._onCanvasKeyDown = function( event )
+System.prototype._onCanvasKeyDown =
+	function( event )
 {
 	var kcode =
 		this._$lastSpecialKey =
@@ -938,7 +1050,8 @@ System.prototype._onMouseWheel =
 		event
 	)
 {
-	var canvas = this._canvas;
+	var canvas =
+		this._canvas;
 
 	var p = new Euclid.Point(
 		event.pageX - canvas.offsetLeft,
@@ -960,10 +1073,12 @@ System.prototype._onMouseWheel =
 		return;
 	}
 
-	var shift = event.shiftKey;
-	var ctrl  = event.ctrlKey || event.metaKey;
-
-	this.shell.mousewheel( p, dir, shift, ctrl );
+	this.shell.mousewheel(
+		p,
+		dir,
+		event.shiftKey,
+		event.ctrlKey || event.metaKey
+	);
 
 	this._fiddleInput( );
 };
@@ -981,15 +1096,24 @@ System.prototype._onTouchStart =
 
 	// for now ignore multi-touches
 	if( event.touches.length !== 1 )
-		{ return false; }
+	{
+		return false;
+	}
 
-	var canvas = this._canvas;
-	var p      = new Euclid.Point(
-		event.pageX - canvas.offsetLeft,
-		event.pageY - canvas.offsetTop
-	);
-	var shift  = event.shiftKey;
-	var ctrl   = event.ctrlKey || event.metaKey;
+	var canvas =
+		this._canvas;
+
+	var p =
+		new Euclid.Point(
+			event.pageX - canvas.offsetLeft,
+			event.pageY - canvas.offsetTop
+		);
+
+	var shift =
+		event.shiftKey;
+
+	var ctrl =
+		event.ctrlKey || event.metaKey;
 
 	// asks the shell if it forces this to be a drag or click, or yet unknown.
 	this._$pointingState =
@@ -1003,17 +1127,17 @@ System.prototype._onTouchStart =
 	{
 		case 'atween' :
 
-			this._$atween =
-			{
-				pos   : p,
-				move  : p,
-				shift : shift,
-				ctrl  : ctrl,
-				timer : this.setTimer(
-					this.settings.dragtime,
-					this._onAtweenTimeCatcher
-				)
-			};
+			this._$atween = // TODO immute
+				{
+					pos   : p,
+					move  : p,
+					shift : shift,
+					ctrl  : ctrl,
+					timer : this.setTimer(
+						this.settings.dragtime,
+						this._onAtweenTimeCatcher
+					)
+				};
 			break;
 
 		case 'drag' :
@@ -1032,42 +1156,69 @@ System.prototype._onTouchStart =
 /*
 | The use is moving the touch ( on mobile devices )
 */
-System.prototype._onTouchMove = function( event )
+System.prototype._onTouchMove =
+	function( event )
 {
 	event.preventDefault();
 
 	// for now ignore multi-touches
 	if( event.touches.length !== 1 )
-		{ return false; }
+	{
+		return false;
+	}
 
-	var canvas = this._canvas;
-	var p      = new Euclid.Point(
-		event.pageX - canvas.offsetLeft,
-		event.pageY - canvas.offsetTop
-	);
+	var canvas =
+		this._canvas;
 
-	var shift  = event.shiftKey;
-	var ctrl   = event.ctrlKey || event.metaKey;
-	var cursor = null;
+	var p =
+		new Euclid.Point(
+			event.pageX - canvas.offsetLeft,
+			event.pageY - canvas.offsetTop
+		);
+
+	var shift =
+		event.shiftKey;
+
+	var ctrl =
+		event.ctrlKey || event.metaKey;
+
+	var cursor =
+		null;
 
 	switch( this._$pointingState )
 	{
 		case false:
-			cursor = this.shell.pointingHover( p, shift, ctrl );
+
+			cursor =
+				this.shell.pointingHover(
+					p,
+					shift,
+					ctrl
+				);
+
 			break;
 
 		case 'atween':
-			var dragbox = this.settings.dragbox;
-			var atween  = this._$atween;
 
-			if( (Math.abs( p.x - atween.pos.x ) > dragbox ) ||
+			var dragbox =
+				this.settings.dragbox;
+
+			var atween =
+				this._$atween;
+
+			if(
+				(Math.abs( p.x - atween.pos.x ) > dragbox ) ||
 				(Math.abs( p.y - atween.pos.y ) > dragbox )
 			)
 			{
 				// moved out of dragbox -> start dragging
 				clearTimeout( atween.timer );
-				this._$atween = null;
-				this._$pointingState = 'drag';
+
+				this._$atween =
+					null;
+
+				this._$pointingState =
+					'drag';
 
 				this.shell.dragStart(
 					atween.pos,
@@ -1075,11 +1226,12 @@ System.prototype._onTouchMove = function( event )
 					ctrl
 				);
 
-				cursor = this.shell.dragMove(
-					p,
-					shift,
-					ctrl
-				);
+				cursor =
+					this.shell.dragMove(
+						p,
+						shift,
+						ctrl
+					);
 
 				this._captureEvents( );
 			}
@@ -1088,17 +1240,22 @@ System.prototype._onTouchMove = function( event )
 				// saves position for possible atween timeout
 				atween.move = p;
 			}
+
 			break;
 
 		case 'drag':
-			cursor = this.shell.dragMove(
-				p,
-				shift,
-				ctrl
-			);
+
+			cursor =
+				this.shell.dragMove(
+					p,
+					shift,
+					ctrl
+				);
+
 			break;
 
 		default :
+
 			throw new Error('invalid pointingState');
 
 	}
@@ -1110,25 +1267,36 @@ System.prototype._onTouchMove = function( event )
 /*
 | The using is lifting his/her finger ( on mobile devices)
 */
-System.prototype._onTouchEnd = function( event )
+System.prototype._onTouchEnd =
+	function( event )
 {
 	event.preventDefault( );
 
 	// for now ignore multi-touches
 	if( event.touches.length !== 0 )
-		{ return false; }
+	{
+		return false;
+	}
 
 	this._releaseEvents( );
 
-	var canvas = this._canvas;
-	var p      = new Euclid.Point(
-		event.changedTouches[0].pageX - canvas.offsetLeft,
-		event.changedTouches[0].pageY - canvas.offsetTop
-	);
+	var canvas =
+		this._canvas;
 
-	var shift  = event.shiftKey;
-	var ctrl   = event.ctrlKey || event.metaKey;
-	var cursor = null;
+	var p =
+		new Euclid.Point(
+			event.changedTouches[0].pageX - canvas.offsetLeft,
+			event.changedTouches[0].pageY - canvas.offsetTop
+		);
+
+	var shift =
+		event.shiftKey;
+
+	var ctrl =
+		event.ctrlKey || event.metaKey;
+
+	var cursor =
+		null;
 
 	switch( this._$pointingState )
 	{
@@ -1140,22 +1308,54 @@ System.prototype._onTouchEnd = function( event )
 
 			// A click is a mouse down followed within dragtime by 'mouseup' and
 			// not having moved out of 'dragbox'.
-			var atween = this._$atween;
+			var atween =
+				this._$atween;
+
 			clearTimeout( atween.timer );
-			this._$atween = null;
-			this.shell.click( p, shift, ctrl );
-			cursor = this.shell.pointingHover( p, shift, ctrl );
-			this._$pointingState = false;
+
+			this._$atween =
+				null;
+
+			this.shell.click(
+				p,
+				shift,
+				ctrl
+			);
+
+			cursor =
+				this.shell.pointingHover(
+					p,
+					shift,
+					ctrl
+				);
+
+			this._$pointingState =
+				false;
+
 			break;
 
 		case 'drag' :
 
-			this.shell.dragStop( p, shift, ctrl );
-			cursor = this.shell.pointingHover( p, shift, ctrl );
-			this._$pointingState = false;
+			this.shell.dragStop(
+				p,
+				shift,
+				ctrl
+			);
+
+			cursor =
+				this.shell.pointingHover(
+					p,
+					shift,
+					ctrl
+				);
+
+			this._$pointingState =
+				false;
+
 			break;
 
 		default :
+
 			throw new Error( 'invalid pointingState' );
 	}
 
@@ -1167,7 +1367,8 @@ System.prototype._onTouchEnd = function( event )
 /*
 | Stops capturing all mouseevents
 */
-System.prototype._releaseEvents = function( )
+System.prototype._releaseEvents =
+	function( )
 {
 	if ( this._useCapture )
 	{
@@ -1186,18 +1387,49 @@ System.prototype._releaseEvents = function( )
 /*
 | A special key is being pressed.
 */
-System.prototype._specialKey = function( keyCode, shift, ctrl )
+System.prototype._specialKey =
+	function(
+		keyCode,
+		shift,
+		ctrl
+	)
 {
-	var key = null;
+	var key =
+		null;
+
 	if( ctrl )
 	{
 		switch( keyCode )
 		{
-			case 65  : key = 'a'; break;
-			case 89  : key = 'y'; break;
-			case 90  : key = 'z'; break;
-			case 188 : key = ','; break;
-			case 190 : key = '.'; break;
+			case 65 :
+
+				key = 'a';
+
+				break;
+
+			case 89 :
+
+				key = 'y';
+
+				break;
+
+			case 90 :
+
+				key = 'z';
+
+				break;
+
+			case 188 :
+
+				key = ',';
+
+				break;
+
+			case 190 :
+
+				key = '.';
+
+				break;
 		}
 	}
 	else
@@ -1221,9 +1453,15 @@ System.prototype._specialKey = function( keyCode, shift, ctrl )
 	}
 
 	if( key === null )
-		{ return true; }
+	{
+		return true;
+	}
 
-	this.shell.specialKey( key, shift, ctrl );
+	this.shell.specialKey(
+		key,
+		shift,
+		ctrl
+	);
 
 	this._fiddleInput( );
 
@@ -1234,19 +1472,32 @@ System.prototype._specialKey = function( keyCode, shift, ctrl )
 /*
 | Tests if the hidden input field got data
 */
-System.prototype._testInput = function( )
+System.prototype._testInput =
+	function( )
 {
-	var hi   = this._hiddenInput;
-	var text = hi.value;
+	var hi =
+		this._hiddenInput;
+
+	var text =
+		hi.value;
 
 	// works around opera quirks inserting CR characters
-	text = text.replace(/\r/g,'');
+	text =
+		text.replace( /\r/g, '' );
 
-	if( text == this._inputVal || !this.shell )
-		{ return; }
+	if(
+		text === this._inputVal || !this.shell
+	)
+	{
+		return;
+	}
 
-	hi.value = this._inputVal = '';
-	hi.selectionStart = 0;
+	hi.value =
+	this._inputVal =
+		'';
+
+	hi.selectionStart =
+		0;
 
 	this.shell.input( text );
 
@@ -1262,11 +1513,15 @@ startup = function( )
 	makeCatcher(
 		null,
 		function( ) {
-			system = new System();
-			system.shell = new Shell(system.fabric);
-			system.shell.onload();
+			system =
+				new System( );
+
+			system.shell =
+				new Shell( system.fabric );
+
+			system.shell.onload( );
 		}
 	)( );
 };
 
-} ) ( );
+} )( );
