@@ -104,6 +104,12 @@ Shell =
 				new Forms.SignUp(
 					'screensize',
 						screensize
+				),
+
+			user :
+				new Forms.User(
+					'screensize',
+						screensize
 				)
 		};
 
@@ -113,9 +119,6 @@ Shell =
 			null,
 			screensize
 		);
-
-	// TODO remove
-	Jools.keyNonGrata( this, 'selection' );
 
 	this.bridge =
 		new Bridge( );
@@ -526,51 +529,70 @@ Shell.prototype.click =
 Shell.prototype.getCurrentDisplay =
 	function( )
 {
+	var name =
+		null;
+
+	var Proto =
+		null;
+
 	switch( this.bridge.mode( ) )
 	{
 		case 'Login' :
 
-			if(
-				!this.screensize.eq(
-					this.$forms.login.screensize
-				)
-			)
-			{
-				this.$forms.login =
-					new Forms.Login(
-						'inherit',
-							this.$forms.login,
-						'screensize',
-							this.screensize
-					);
-			}
+			name =
+				'login';
 
-			return this.$forms.login;
-		
+			Proto =
+				Forms.Login;
+
+			break;
+
 		case 'SignUp' :
 
-			if(
-				!this.screensize.eq(
-					this.$forms.signup.screensize
-				)
-			)
-			{
-				this.$forms.signup =
-					new Forms.SignUp(
-						'inherit',
-							this.$forms.signup,
-						'screensize',
-							this.screensize
-					);
-			}
+			name =
+				'signup';
 
-			return this.$forms.signup;
+			Proto =
+				Forms.SignUp;
+
+			break;
+
+		case 'User' :
+
+			name =
+				'user';
+
+			Proto =
+				Forms.User;
+
+			break;
 
 
 		default :
 
 			return this.$space;
+
 	}
+
+	var inherit =
+		this.$forms[ name ];
+
+	if(
+		!this.screensize.eq(
+			inherit.screensize
+		)
+	)
+	{
+		this.$forms[ name ] =
+			new Proto(
+				'inherit',
+					inherit,
+				'screensize',
+					this.screensize
+			);
+	}
+
+	return this.$forms[ name ];
 };
 
 /*

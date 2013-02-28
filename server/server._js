@@ -756,7 +756,6 @@ Server.prototype.prepareResources =
 		'shell/widgets/checkbox.js',
 			'fb',
 
-
 		'shell/forms/pattern-form.js',
 			'fb',
 
@@ -767,6 +766,9 @@ Server.prototype.prepareResources =
 			'fb',
 
 		'shell/forms/signup.js',
+			'fb',
+
+		'shell/forms/user.js',
 			'fb',
 
 		'shell/visual/base.js',

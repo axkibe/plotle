@@ -792,4 +792,19 @@ Form.prototype._getCaretEntity =
 };
 
 
-} )( );
+/*
+| Mouse wheel
+*/
+Form.prototype.mousewheel =
+	function(
+		// p,
+		// dir,
+		// shift,
+		// ctrl
+	)
+{
+	return true;
+}
+
+
+})( );

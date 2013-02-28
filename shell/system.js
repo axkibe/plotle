@@ -1454,8 +1454,6 @@ System.prototype._specialKey =
 		}
 	}
 
-	console.log('special', key);
-
 	if( key === null )
 	{
 		return true;

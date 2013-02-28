@@ -109,8 +109,8 @@ Jools.subclass(
 /*
 | All important design variables for convenience
 */
-var design = {
-
+var design =
+{
 	generic :
 	{
 		width :

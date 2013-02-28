@@ -71,16 +71,11 @@ Visual.Space =
 	for( var k in twig.copse )
 	{
 		sub[ k ] =
-			this.createItem( twig.copse[ k ], k );
+			this.createItem(
+				twig.copse[ k ],
+				k
+			);
 	}
-
-	this._floatMenuLabels =
-		{
-			c  : 'new',
-			n  : 'Note',
-			ne : 'Label',
-			se : 'Portal'
-		};
 
 	// TODO change Caret to free string arguments
 	this.$caret =
@@ -473,8 +468,9 @@ Space.prototype.positionCaret =
 			this.$caret.sign.path,
 			'positionCaret'
 		);
-	
-	if( item ) {
+
+	if( item )
+	{
 		item.positionCaret(
 			this.$view
 		);
