@@ -161,7 +161,7 @@ Bridge.prototype.changeMode =
 
 	this._$mode = mode;
 
-	shell.$disc.poke( );
+	shell.pokeDisc( );
 };
 
 

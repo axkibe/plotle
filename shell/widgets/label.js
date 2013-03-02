@@ -88,6 +88,11 @@ Label.prototype.draw =
 		fabric
 	)
 {
+	if( !this._$visible )
+	{
+		return;
+	}
+
 	fabric.paintText(
 		'text',
 			this._$text || this.twig.text,

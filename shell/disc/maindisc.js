@@ -1652,23 +1652,26 @@ MainDisc.prototype.setCurSpace =
 		access
 	)
 {
-	this.buttons.space.setText( space );
+	var buttons =
+		this.buttons;
+
+	buttons.space.setText( space );
 
 	switch( access )
 	{
 		case 'ro' :
 
-			this.buttons.create.setVisibility( false );
+			buttons.create.setVisible( false );
 
-			this.buttons.remove.setVisibility( false );
+			buttons.remove.setVisible( false );
 
 			break;
 
 		case 'rw' :
 
-			this.buttons.create.setVisibility( true );
+			buttons.create.setVisible( true );
 
-			this.buttons.remove.setVisibility( true );
+			buttons.remove.setVisible( true );
 
 			break;
 
@@ -1690,21 +1693,24 @@ MainDisc.prototype.setUser =
 		user
 	)
 {
-	this.$user
-		= user;
+	this.$user =
+		user;
 
-	this.buttons.user.setText( user );
+	var buttons =
+		this.buttons;
 
-	this.buttons.login.setVisibility( true );
+	buttons.user.setText( user );
+
+	buttons.login.setVisible( true );
 
 	if( user.substr( 0, 5 ) !== 'visit' )
 	{
 		this._$loggedIn =
 			true;
 
-		this.buttons.signup.setVisibility( false );
+		buttons.signup.setVisible( false );
 
-		this.buttons.login.setText(
+		buttons.login.setText(
 			[
 				'log',
 				'out'
@@ -1716,9 +1722,9 @@ MainDisc.prototype.setUser =
 		this._$loggedIn =
 			false;
 
-		this.buttons.signup.setVisibility( true );
+		buttons.signup.setVisible( true );
 
-		this.buttons.login.setText(
+		buttons.login.setText(
 			[
 				'log',
 				'in'

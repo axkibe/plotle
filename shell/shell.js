@@ -92,7 +92,7 @@ Shell =
 			fabric.height
 		);
 
-	this.$forms =
+	this._$forms =
 		{
 			login :
 				new Forms.Login(
@@ -113,12 +113,15 @@ Shell =
 				)
 		};
 
-	// TODO mark as private
-	this.$disc =
+	this._$disc =
 		new Disc.MainDisc(
 			null,
 			screensize
 		);
+
+	// TODO remove
+	Jools.keyNonGrata( this, '$disc' );
+	Jools.keyNonGrata( this, '$forms' );
 
 	this.bridge =
 		new Bridge( );
@@ -161,11 +164,11 @@ Shell.prototype.messageRCV =
 {
 	if( user )
 	{
-		this.$disc.message( user + ': ' + message );
+		this._$disc.message( user + ': ' + message );
 	}
 	else
 	{
-		this.$disc.message( message );
+		this._$disc.message( message );
 	}
 
 	this.poke( );
@@ -324,6 +327,16 @@ Shell.prototype.poke =
 
 
 /*
+| Pokes the disc
+*/
+Shell.prototype.pokeDisc =
+	function( )
+{
+	this._$disc.poke( );
+};
+
+
+/*
 | Force-clears all caches.
 */
 Shell.prototype.knock =
@@ -341,7 +354,7 @@ Shell.prototype.knock =
 		this.$space.knock( );
 	}
 
-	this.$disc.knock( );
+	this._$disc.knock( );
 
 	this._draw( );
 };
@@ -480,7 +493,7 @@ Shell.prototype._draw =
 		display.draw( fabric );
 	}
 
-	this.$disc.draw( fabric );
+	this._$disc.draw( fabric );
 
 	this.redraw =
 		false;
@@ -575,7 +588,7 @@ Shell.prototype.getCurrentDisplay =
 	}
 
 	var inherit =
-		this.$forms[ name ];
+		this._$forms[ name ];
 
 	if(
 		!this.screensize.eq(
@@ -583,7 +596,7 @@ Shell.prototype.getCurrentDisplay =
 		)
 	)
 	{
-		this.$forms[ name ] =
+		this._$forms[ name ] =
 			new Proto(
 				'inherit',
 					inherit,
@@ -592,7 +605,7 @@ Shell.prototype.getCurrentDisplay =
 			);
 	}
 
-	return this.$forms[ name ];
+	return this._$forms[ name ];
 };
 
 /*
@@ -627,7 +640,7 @@ Shell.prototype.pointingHover =
 
 	if( cursor )
 	{
-		this.$disc.pointingHover(
+		this._$disc.pointingHover(
 			null,
 			shift,
 			ctrl
@@ -636,7 +649,7 @@ Shell.prototype.pointingHover =
 	else
 	{
 		cursor =
-			this.$disc.pointingHover(
+			this._$disc.pointingHover(
 				p,
 				shift,
 				ctrl
@@ -728,7 +741,7 @@ Shell.prototype.pointingStart =
 	if( pointingState === null )
 	{
 		pointingState =
-			this.$disc.pointingStart(
+			this._$disc.pointingStart(
 				p,
 				shift,
 				ctrl
@@ -778,7 +791,7 @@ Shell.prototype.dragStart =
 	}
 
 	var cursor =
-		this.$disc.dragStart(
+		this._$disc.dragStart(
 			p,
 			shift,
 			ctrl
@@ -840,7 +853,7 @@ Shell.prototype.dragMove =
 		case 'board' :
 
 			cursor =
-				this.$disc.dragMove(
+				this._$disc.dragMove(
 					p,
 					shift,
 					ctrl
@@ -899,7 +912,7 @@ Shell.prototype.dragStop =
 	{
 		case 'board' :
 
-			this.$disc.dragStop(
+			this._$disc.dragStop(
 				p,
 				shift,
 				ctrl
@@ -1054,9 +1067,9 @@ Shell.prototype.resize =
 		);
 
 	// TODO only when changed
-	this.$disc =
+	this._$disc =
 		new Disc.MainDisc(
-			this.$disc,
+			this._$disc,
 			screensize
 		);
 
@@ -1114,9 +1127,9 @@ Shell.prototype.setUser =
 		);
 	}
 
-	this.$disc.setUser(
-		user
-	);
+	this._$disc.setUser( user );
+
+	this._$forms.user.setUsername( user );
 };
 
 
@@ -1128,7 +1141,7 @@ Shell.prototype.setSpaceZoom =
 		zf
 	)
 {
-	this.$disc.setSpaceZoom( zf );
+	this._$disc.setSpaceZoom( zf );
 };
 
 
@@ -1215,14 +1228,14 @@ Shell.prototype.moveToSpace =
 	}
 	else
 	{
-		self.$disc.message(
+		self._$disc.message(
 			'Moving to "' + name + '" ...'
 		);
 	}
 
 	/*
 	TODO remove?
-	self.$disc.setCurSpace(
+	self._$disc.setCurSpace(
 		'',
 		''
 	);
@@ -1252,12 +1265,12 @@ Shell.prototype.moveToSpace =
 					val.access
 				);
 
-			self.$disc.setCurSpace(
+			self._$disc.setCurSpace(
 				name,
 				val.access
 			);
 
-			self.$disc.setSpaceZoom( 0 );
+			self._$disc.setSpaceZoom( 0 );
 
 			self._draw( );
 		}
