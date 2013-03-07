@@ -56,243 +56,242 @@ Jools.subclass(
 | Layout
 */
 User.prototype.layout =
+{
+	type :
+		'Layout',
+
+	copse :
 	{
-		type :
-			'Layout',
-
-		copse :
+		'headline' :
 		{
-			'headline' :
+			type :
+				'Label',
+
+			text :
+				'Hello',
+
+			font :
+				fontPool.get( 22, 'ca' ),
+
+			pos :
 			{
 				type :
-					'Label',
+					'Point',
 
-				text :
-					'Hello',
+				anchor :
+					'c',
 
-				font :
-					fontPool.get( 22, 'ca' ),
+				x :
+					0,
 
-				pos :
-				{
-					type :
-						'Point',
-
-					anchor :
-						'c',
-
-					x :
-						0,
-
-					y :
-						-120
-				}
-			},
-
-			'visitor1' :
-			{
-				type :
-					'Label',
-
-				text :
-					'You\'re currently an anonymous visitor!',
-
-				font :
-					fontPool.get( 16, 'ca' ),
-
-				pos :
-				{
-					type :
-						'Point',
-
-					anchor :
-						'c',
-
-					x :
-						0,
-
-					y :
-						-50
-				}
-			},
-
-			'visitor2' :
-			{
-				type :
-					'Label',
-
-				text :
-					'Click on "sign up" or "log in"',
-
-				font :
-					fontPool.get( 16, 'ca' ),
-
-				pos :
-				{
-					type :
-						'Point',
-
-					anchor :
-						'c',
-
-					x :
-						0,
-
-					y :
-						0
-				}
-			},
-
-			'visitor3' :
-			{
-				type :
-					'Label',
-
-				text :
-					'on the control disc to the left',
-
-				font :
-					fontPool.get( 16, 'ca' ),
-
-				pos :
-				{
-					type :
-						'Point',
-
-					anchor :
-						'c',
-
-					x :
-						0,
-
-					y :
-						20
-				}
-			},
-
-			'visitor4' :
-			{
-				type :
-					'Label',
-
-				text :
-					' to register as an user.',
-
-				font :
-					fontPool.get( 16, 'ca' ),
-
-				pos :
-				{
-					type :
-						'Point',
-
-					anchor :
-						'c',
-
-					x :
-						0,
-
-					y :
-						40
-				}
-			},
-
-			'greeting1' :
-			{
-				type :
-					'Label',
-
-				text :
-					'This is your profile page!',
-
-				font :
-					fontPool.get( 16, 'ca' ),
-
-				pos :
-				{
-					type :
-						'Point',
-
-					anchor :
-						'c',
-
-					x :
-						0,
-
-					y :
-						-50
-				}
-			},
-
-			'greeting2' :
-			{
-				type :
-					'Label',
-
-				text :
-					'In future you will be able to do stuff',
-
-				font :
-					fontPool.get( 16, 'ca' ),
-
-				pos :
-				{
-					type :
-						'Point',
-
-					anchor :
-						'c',
-
-					x :
-						0,
-
-					y :
-						-10
-				}
-			},
-
-			'greeting3' :
-			{
-				type :
-					'Label',
-
-				text :
-					'here, like for example change your password',
-
-				font :
-					fontPool.get( 16, 'ca' ),
-
-				pos :
-				{
-					type :
-						'Point',
-
-					anchor :
-						'c',
-
-					x :
-						0,
-
-					y :
-						10
-				}
-			},
-
+				y :
+					-120
+			}
 		},
 
+		'visitor1' :
+		{
+			type :
+				'Label',
 
-		ranks :
-		[
-			'headline',
-			'visitor1',
-			'visitor2',
-			'visitor3',
-			'visitor4',
-			'greeting1',
-			'greeting2',
-			'greeting3',
-		]
-	};
+			text :
+				'You\'re currently an anonymous visitor!',
+
+			font :
+				fontPool.get( 16, 'ca' ),
+
+			pos :
+			{
+				type :
+					'Point',
+
+				anchor :
+					'c',
+
+				x :
+					0,
+
+				y :
+					-50
+			}
+		},
+
+		'visitor2' :
+		{
+			type :
+				'Label',
+
+			text :
+				'Click on "sign up" or "log in"',
+
+			font :
+				fontPool.get( 16, 'ca' ),
+
+			pos :
+			{
+				type :
+					'Point',
+
+				anchor :
+					'c',
+
+				x :
+					0,
+
+				y :
+					0
+			}
+		},
+
+		'visitor3' :
+		{
+			type :
+				'Label',
+
+			text :
+				'on the control disc to the left',
+
+			font :
+				fontPool.get( 16, 'ca' ),
+
+			pos :
+			{
+				type :
+					'Point',
+
+				anchor :
+					'c',
+
+				x :
+					0,
+
+				y :
+					20
+			}
+		},
+
+		'visitor4' :
+		{
+			type :
+				'Label',
+
+			text :
+				' to register as an user.',
+
+			font :
+				fontPool.get( 16, 'ca' ),
+
+			pos :
+			{
+				type :
+					'Point',
+
+				anchor :
+					'c',
+
+				x :
+					0,
+
+				y :
+					40
+			}
+		},
+
+		'greeting1' :
+		{
+			type :
+				'Label',
+
+			text :
+				'This is your profile page!',
+
+			font :
+				fontPool.get( 16, 'ca' ),
+
+			pos :
+			{
+				type :
+					'Point',
+
+				anchor :
+					'c',
+
+				x :
+					0,
+
+				y :
+					-50
+			}
+		},
+
+		'greeting2' :
+		{
+			type :
+				'Label',
+
+			text :
+				'In future you will be able to do stuff here,',
+
+			font :
+				fontPool.get( 16, 'ca' ),
+
+			pos :
+			{
+				type :
+					'Point',
+
+				anchor :
+					'c',
+
+				x :
+					0,
+
+				y :
+					-10
+			}
+		},
+
+		'greeting3' :
+		{
+			type :
+				'Label',
+
+			text :
+				'like for example change your password',
+
+			font :
+				fontPool.get( 16, 'ca' ),
+
+			pos :
+			{
+				type :
+					'Point',
+
+				anchor :
+					'c',
+
+				x :
+					0,
+
+				y :
+					10
+			}
+		}
+	},
+
+
+	ranks :
+	[
+		'headline',
+		'visitor1',
+		'visitor2',
+		'visitor3',
+		'visitor4',
+		'greeting1',
+		'greeting2',
+		'greeting3'
+	]
+};
 
 /*
 | sets the username

@@ -173,16 +173,23 @@ var Server = function(_)
 		config.ip,
 	_);
 
-	Jools.log( 'start', 'server running' );
+	Jools.log(
+		'start',
+		'server running'
+	);
 };
 
 
 /*
 | Ensures the repository schema version fits this server.
 */
-Server.prototype.checkRepositorySchemaVersion = function(_)
+Server.prototype.checkRepositorySchemaVersion =
+	function(_)
 {
-	Jools.log('start', 'checking repository schema version');
+	Jools.log(
+		'start',
+		'checking repository schema version'
+	);
 
 	var global =
 		this.$db.connection.collection(
@@ -191,7 +198,10 @@ Server.prototype.checkRepositorySchemaVersion = function(_)
 
 	var version =
 		global.findOne(
-			{ _id : 'version' },
+			{
+				_id :
+					'version'
+			},
 		_);
 
 	if( version )
@@ -217,7 +227,9 @@ Server.prototype.checkRepositorySchemaVersion = function(_)
 
 	if( changes.find(_).nextObject(_) !== null )
 	{
-		throw new Error( 'Found a version 2 schema, expected 3' );
+		throw new Error(
+			'Found a version 2 schema, expected 3'
+		);
 	}
 
 	// if not, initializes the database repository
@@ -339,7 +351,8 @@ Server.prototype.ensureMeshcraftUser =
 /*
 | loads all spaces and playbacks all changes from the database.
 */
-Server.prototype.loadSpaces = function (_)
+Server.prototype.loadSpaces =
+	function(_)
 {
 	Jools.log(
 		'start',
@@ -567,38 +580,62 @@ Server.prototype.buildShellConfig =
 	var cconfig = [ ];
 	var k;
 
-	cconfig.push( 'var config = {\n' );
-	cconfig.push( '\tdevel   : '  + Jools.configSwitch(config.devel, 'shell') + ',\n' );
-	cconfig.push( '\tmaxUndo : '  + config.maxUndo + ',\n' );
-	cconfig.push( '\tdebug   : {\n' );
+	cconfig.push(
+		'var config = {\n',
+		'\tdevel   : ', Jools.configSwitch(config.devel, 'shell'), ',\n',
+		'\tmaxUndo : ', config.maxUndo, ',\n',
+		'\tdebug   : {\n'
+	);
 
-	var first = true;
+	var first =
+		true;
+
 	for( k in config.debug )
 	{
 		if( !first )
-			{ cconfig.push(',\n'); }
+		{
+			cconfig.push(',\n');
+		}
 		else
-			{ first = false; }
+		{
+			first = false;
+		}
 
-		cconfig.push( '\t\t' + k + ' : ' + config.debug[k] );
+		cconfig.push(
+			'\t\t', k, ' : ', config.debug[k]
+		);
 	}
 
-	cconfig.push( '\n\t},\n' );
-	cconfig.push( '\tlog : {\n' );
+	cconfig.push(
+		'\n\t},\n',
+		'\tlog : {\n'
+	);
 
-	first = true;
+	first =
+		true;
+
 	for( k in config.log )
 	{
 		if (!first)
-			{ cconfig.push(',\n'); }
+		{
+			cconfig.push(',\n');
+		}
 		else
-			{ first = false; }
+		{
+			first = false;
+		}
 
-		cconfig.push( '\t\t' + k + ' : ' + Jools.configSwitch(config.log[k], 'shell') );
+		cconfig.push(
+			'\t\t', k, ' : ',
+			Jools.configSwitch(config.log[k], 'shell')
+		);
 	}
 
-	cconfig.push( '\n\t}\n' );
-	cconfig.push( '};\n' );
+	cconfig.push(
+		'\n\t}\n',
+		'};\n'
+	);
+
 	return cconfig.join( '' );
 };
 
@@ -613,7 +650,8 @@ Server.prototype.prepareResources =
 	var r;
 
 	var rlist = [
-		// 'media/favicon.ico',                               'mc', AAA
+		// 'media/favicon.ico',
+		//	'mc', AAA
 
 		'testpad/testpad.js',
 			'f',
@@ -766,6 +804,9 @@ Server.prototype.prepareResources =
 			'fb',
 
 		'shell/forms/signup.js',
+			'fb',
+
+		'shell/forms/space.js',
 			'fb',
 
 		'shell/forms/user.js',

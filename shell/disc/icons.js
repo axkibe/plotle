@@ -57,8 +57,8 @@ Icons.prototype.normal =
 		// twist
 	)
 {
-	var wx = 19;
-	var ny = 13;
+	var wx = 18;
+	var ny = 12;
 
 	//
 	//
@@ -82,6 +82,51 @@ Icons.prototype.normal =
 	fabric.lineTo( wx +  4, ny + 12 );  // F
 	fabric.lineTo( wx +  0, ny + 15 );  // G
 	fabric.lineTo( wx +  0, ny +  0 );  // A
+};
+
+
+/*
+| Sketches the goto button's icon.
+*/
+Icons.prototype.goto =
+	function(
+		fabric
+		// border,
+		// twist
+	)
+{
+	var wx = 22;
+	var ny = 11;
+
+	//
+	//     A
+	//    ***
+	//   *****
+	//  *******
+	// G*F***C*B
+	//   *****
+	//   *****
+	//   *****
+	//   E***D
+	//
+	//   H***I
+	//   K***J
+
+	fabric.moveTo( wx + 0, ny +  0 );  // A
+	fabric.moveTo( wx + 1, ny +  0 );  // A
+	fabric.lineTo( wx + 6, ny +  7 );  // B
+	fabric.lineTo( wx + 3, ny +  7 );  // C
+	fabric.lineTo( wx + 3, ny + 14 );  // D
+	fabric.lineTo( wx - 2, ny + 14 );  // E
+	fabric.lineTo( wx - 2, ny +  7 );  // F
+	fabric.lineTo( wx - 5, ny +  7 );  // G
+	fabric.lineTo( wx + 0, ny +  0 );  // A
+
+	fabric.moveTo( wx - 2, ny + 17 );  // H
+	fabric.lineTo( wx + 3, ny + 17 );  // I
+	fabric.lineTo( wx + 3, ny + 19 );  // J
+	fabric.lineTo( wx - 2, ny + 19 );  // K
+	fabric.moveTo( wx - 2, ny + 17 );  // H
 };
 
 

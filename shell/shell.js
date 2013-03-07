@@ -106,6 +106,12 @@ Shell =
 						screensize
 				),
 
+			space :
+				new Forms.Space(
+					'screensize',
+						screensize
+				),
+
 			user :
 				new Forms.User(
 					'screensize',
@@ -118,10 +124,6 @@ Shell =
 			null,
 			screensize
 		);
-
-	// TODO remove
-	Jools.keyNonGrata( this, '$disc' );
-	Jools.keyNonGrata( this, '$forms' );
 
 	this.bridge =
 		new Bridge( );
@@ -188,7 +190,6 @@ Shell.prototype.update =
 		tree.root,
 		chgX
 	);
-
 
 	// TODO move selection to space / forms
 
@@ -570,6 +571,16 @@ Shell.prototype.getCurrentDisplay =
 
 			break;
 
+		case 'Space' :
+
+			name =
+				'space';
+
+			Proto =
+				Forms.Space;
+
+			break;
+
 		case 'User' :
 
 			name =
@@ -580,11 +591,9 @@ Shell.prototype.getCurrentDisplay =
 
 			break;
 
-
 		default :
 
 			return this.$space;
-
 	}
 
 	var inherit =
@@ -658,7 +667,6 @@ Shell.prototype.pointingHover =
 
 	var display =
 		this.getCurrentDisplay( );
-
 
 	if( display )
 	{
@@ -878,7 +886,7 @@ Shell.prototype.dragMove =
 
 	if( this.redraw )
 	{
-		this._draw();
+		this._draw( );
 	}
 
 	return cursor;
@@ -1110,10 +1118,10 @@ Shell.prototype.setUser =
 	{
 		if(
 			this.$space &&
-			this.$space.spacename.substr(0, 9) !== 'meshcraft'
+			this.$space.spacename.substr( 0, 9 ) !== 'meshcraft'
 		)
 		{
-			this.moveToSpace('meshcraft:home');
+			this.moveToSpace( 'meshcraft:home' );
 		}
 
 		window.localStorage.setItem(
@@ -1233,13 +1241,7 @@ Shell.prototype.moveToSpace =
 		);
 	}
 
-	/*
-	TODO remove?
-	self._$disc.setCurSpace(
-		'',
-		''
-	);
-	*/
+	// TODO show move to message
 
 	this.peer.aquireSpace(
 		name,
@@ -1247,16 +1249,22 @@ Shell.prototype.moveToSpace =
 		{
 			if( err !== null )
 			{
-				self.greenscreen( 'Cannot aquire space: ' + err.message );
+				self.greenscreen(
+					'Cannot aquire space: ' + err.message
+				);
+
 				return;
 			}
 
 			if( val.name !== name )
 			{
-				throw new Error( 'server served wrong space!' );
+				throw new Error(
+					'server served wrong space!'
+				);
 			}
 
-			var tree = val.tree;
+			var tree =
+				val.tree;
 
 			self.$space =
 				new Visual.Space(
@@ -1265,7 +1273,7 @@ Shell.prototype.moveToSpace =
 					val.access
 				);
 
-			self._$disc.setCurSpace(
+			self.arrivedAtSpace(
 				name,
 				val.access
 			);
@@ -1410,6 +1418,28 @@ Shell.prototype.setSelection =
 
 	return selection;
 };
+
+/*
+| A space finished loading.
+*/
+Shell.prototype.arrivedAtSpace =
+	function(
+		name,
+		access
+	)
+{
+	this._$disc.arrivedAtSpace(
+		name,
+		access
+	);
+
+	this._$forms.space.arrivedAtSpace(
+		name,
+		access
+	);
+
+};
+
 
 /*
 | Removes the selection including its contents.

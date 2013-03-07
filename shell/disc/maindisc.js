@@ -150,6 +150,15 @@ var design =
 			218
 	},
 
+	goto :
+	{
+		x :
+			47,
+
+		y :
+			326
+	},
+
 	space :
 	{
 		width :
@@ -534,6 +543,108 @@ MainDisc.prototype.layout =
 				}
 			}
 		},
+
+		'goto' :
+		{
+			type :
+				'Button',
+
+			normaStyle :
+				'discButtonGeneric',
+
+			hoverStyle :
+				'discButtonGenericHover',
+
+			focusStyle :
+				'discButtonGenericFocus',
+
+			hofocStyle :
+				'discButtonGenericHofoc',
+
+			icon :
+				'goto',
+
+			iconStyle :
+				'iconNormal',
+
+			visible :
+				false,
+
+			frame :
+			{
+				type :
+					'Frame',
+
+				pnw :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'nw',
+
+					x :
+						design.goto.x,
+
+					y :
+						design.goto.y
+				},
+
+				pse :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'nw',
+
+					x :
+						design.goto.x +
+							design.generic.width,
+
+					y :
+						design.goto.y +
+							design.generic.height
+				}
+			},
+
+			shape :
+			{
+				type :
+					'Ellipse',
+
+				pnw :
+				{
+					type:
+						'Point',
+
+					anchor:
+						'nw',
+
+					x :
+						0,
+
+					y :
+						0
+				},
+
+				pse :
+				{
+					type:
+						'Point',
+
+					anchor:
+						'se',
+
+					x :
+						-1,
+
+					y :
+						-1
+				}
+			}
+		},
+
 
 		'space' :
 		{
@@ -1154,6 +1265,7 @@ MainDisc.prototype.layout =
 		'normal',
 		'create',
 		'remove',
+		'goto',
 		'space',
 		'user',
 		'login',
@@ -1257,14 +1369,23 @@ MainDisc.prototype.getModeOfButton =
 		case 'create' :
 			return 'Create';
 
+		case 'goto' :
+			return 'Goto';
+
 		case 'help' :
 			return 'Help';
 
 		case 'login' :
 			return 'Login';
 
+		case 'normal' :
+			return 'Normal';
+
 		case 'remove' :
 			return 'Remove';
+
+		case 'signup' :
+			return 'SignUp';
 
 		case 'space' :
 			return 'Space';
@@ -1272,14 +1393,10 @@ MainDisc.prototype.getModeOfButton =
 		case 'user' :
 			return 'User';
 
-		case 'signup' :
-			return 'SignUp';
-
-		case 'normal' :
-			return 'Normal';
-
 		default :
-			throw new Error( 'unknown button:' + buttonName );
+			throw new Error(
+				'unknown button:' + buttonName
+			);
 	}
 };
 
@@ -1646,7 +1763,7 @@ MainDisc.prototype.message =
 /*
 | Displays a current space
 */
-MainDisc.prototype.setCurSpace =
+MainDisc.prototype.arrivedAtSpace =
 	function(
 		space,
 		access

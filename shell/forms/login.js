@@ -92,23 +92,152 @@ var closeButton =
 | Layout
 */
 Login.prototype.layout =
+{
+	type :
+		'Layout',
+
+	copse :
 	{
-		type :
-			'Layout',
-
-		copse :
+		'headline' :
 		{
-			'headline' :
+			type :
+				'Label',
+
+			text :
+				'Log In',
+			font :
+				fontPool.get( 22, 'la' ),
+
+			pos :
 			{
 				type :
-					'Label',
+					'Point',
 
-				text :
-					'Log In',
-				font :
-					fontPool.get( 22, 'la' ),
+				anchor :
+					'c',
 
-				pos :
+				x :
+					-225,
+
+				y :
+					-112
+			}
+		},
+
+		'usernameLabel' :
+		{
+			type :
+				'Label',
+
+			text :
+				'username',
+
+			font :
+				fontPool.get( 16, 'la' ),
+
+			pos :
+			{
+				type :
+					'Point',
+
+				anchor :
+					'c',
+
+				x :
+					-175,
+
+				y :
+					-49
+			}
+		},
+
+		'passwordLabel' :
+		{
+			type :
+				'Label',
+
+			text :
+				'password',
+
+			font :
+				fontPool.get( 16, 'la' ),
+
+			pos :
+			{
+				type :
+					'Point',
+
+				anchor :
+					'c',
+
+				x :
+					-175,
+
+				y :
+					-9
+			}
+		},
+
+		'errorLabel' :
+		{
+			type :
+				'Label',
+
+			text :
+				'',
+				// 'username/password not accepted',
+
+			font :
+				fontPool.get( 14, 'car' ),
+
+			pos :
+			{
+				type :
+					'Point',
+
+				anchor :
+					'c',
+
+				x :
+					-20,
+
+				y :
+					-83
+			}
+		},
+
+		'userInput' :
+		{
+			type :
+				'Input',
+
+			password :
+				false,
+
+			normaStyle :
+				'input',
+
+			focusStyle :
+				'inputFocus',
+
+			hoverStyle :
+				'input',
+
+			hofocStyle :
+				'inputFocus',
+
+			font :
+				fontPool.get( 14, 'la' ),
+
+			maxlen :
+				100,
+
+			frame  :
+			{
+				type :
+					'Frame',
+
+				pnw :
 				{
 					type :
 						'Point',
@@ -117,25 +246,13 @@ Login.prototype.layout =
 						'c',
 
 					x :
-						-225,
+						-80,
 
 					y :
-						-112
-				}
-			},
+						-67
+				},
 
-			'usernameLabel' :
-			{
-				type :
-					'Label',
-
-				text :
-					'username',
-
-				font :
-					fontPool.get( 16, 'la' ),
-
-				pos :
+				pse :
 				{
 					type :
 						'Point',
@@ -144,25 +261,46 @@ Login.prototype.layout =
 						'c',
 
 					x :
-						-175,
+						130,
 
 					y :
-						-49
+						-41
 				}
-			},
+			}
+		},
 
-			'passwordLabel' :
+		'passwordInput' :
+		{
+			type :
+				'Input',
+
+			password :
+				true,
+
+			normaStyle :
+				'input',
+
+			focusStyle :
+				'inputFocus',
+
+			hoverStyle :
+				'input',
+
+			hofocStyle :
+				'inputFocus',
+
+			font :
+				fontPool.get( 14, 'la' ),
+
+			maxlen :
+				100,
+
+			frame  :
 			{
 				type :
-					'Label',
+					'Frame',
 
-				text :
-					'password',
-
-				font :
-					fontPool.get( 16, 'la' ),
-
-				pos :
+				pnw :
 				{
 					type :
 						'Point',
@@ -171,26 +309,13 @@ Login.prototype.layout =
 						'c',
 
 					x :
-						-175,
+						-80,
 
 					y :
-						-9
-				}
-			},
+						-27
+				},
 
-			'errorLabel' :
-			{
-				type :
-					'Label',
-
-				text :
-					'',
-					// 'username/password not accepted',
-
-				font :
-					fontPool.get( 14, 'car' ),
-
-				pos :
+				pse :
 				{
 					type :
 						'Point',
@@ -199,389 +324,264 @@ Login.prototype.layout =
 						'c',
 
 					x :
-						-20,
+						130,
 
 					y :
-						-83
-				}
-			},
-
-			'userInput' :
-			{
-				type :
-					'Input',
-
-				password :
-					false,
-
-				normaStyle :
-					'input',
-
-				focusStyle :
-					'inputFocus',
-
-				hoverStyle :
-					'input',
-
-				hofocStyle :
-					'inputFocus',
-
-				font :
-					fontPool.get( 14, 'la' ),
-
-				maxlen :
-					100,
-
-				frame  :
-				{
-					type :
-						'Frame',
-
-					pnw :
-					{
-						type :
-							'Point',
-
-						anchor :
-							'c',
-
-						x :
-							-80,
-
-						y :
-							-67
-					},
-
-					pse :
-					{
-						type :
-							'Point',
-
-						anchor :
-							'c',
-
-						x :
-							130,
-
-						y :
-							-41
-					}
-				}
-			},
-
-			'passwordInput' :
-			{
-				type :
-					'Input',
-
-				password :
-					true,
-
-				normaStyle :
-					'input',
-
-				focusStyle :
-					'inputFocus',
-
-				hoverStyle :
-					'input',
-
-				hofocStyle :
-					'inputFocus',
-
-				font :
-					fontPool.get( 14, 'la' ),
-
-				maxlen :
-					100,
-
-				frame  :
-				{
-					type :
-						'Frame',
-
-					pnw :
-					{
-						type :
-							'Point',
-
-						anchor :
-							'c',
-
-						x :
-							-80,
-
-						y :
-							-27
-					},
-
-					pse :
-					{
-						type :
-							'Point',
-
-						anchor :
-							'c',
-
-						x :
-							130,
-
-						y :
-							-1
-					}
-				}
-			},
-
-
-			'loginButton' :
-			{
-				type :
-					'Button',
-
-				normaStyle :
-					'button',
-
-				hoverStyle :
-					'buttonHover',
-
-				focusStyle :
-					'buttonFocus',
-
-				hofocStyle :
-					'buttonHofoc',
-
-				frame :
-				{
-					type :
-						'Frame',
-
-					pnw  :
-					{
-						type :
-							'Point',
-
-						anchor :
-							'c',
-
-						x :
-							loginButton.w,
-
-						y :
-							loginButton.n
-					},
-
-					pse  :
-					{
-						type :
-							'Point',
-
-						anchor :
-							'c',
-
-						x :
-							loginButton.w + loginButton.width,
-
-						y :
-							loginButton.n + loginButton.height
-					}
-				},
-
-				caption :
-				{
-					type :
-						'Label',
-
-					text :
-						'log in',
-
-					font :
-						fontPool.get( 14, 'cm' ),
-
-					pos  :
-					{
-						type:
-							'Point',
-
-						anchor:
-							'c',
-
-						x :
-							0,
-
-						y :
-							0
-					}
-				},
-
-				shape :
-				{
-					type :
-						'Ellipse',
-
-					pnw :
-					{
-						type:
-							'Point',
-
-						anchor:
-							'nw',
-
-						x :
-							0,
-
-						y :
-							0
-					},
-
-					pse :
-					{
-						type:
-							'Point',
-
-						anchor:
-							'se',
-
-						x :
-							-1,
-
-						y :
-							-1
-					}
-				}
-			},
-
-
-			'closeButton' :
-			{
-				type :
-					'Button',
-
-				normaStyle :
-					'button',
-
-				hoverStyle :
-					'buttonHover',
-
-				focusStyle :
-					'buttonFocus',
-
-				hofocStyle :
-					'buttonHofoc',
-
-				frame :
-				{
-					type :
-						'Frame',
-
-					pnw  :
-					{
-						type :
-							'Point',
-
-						anchor :
-							'c',
-
-						x :
-							closeButton.w,
-
-						y :
-							closeButton.n
-					},
-
-					pse  :
-					{
-						type :
-							'Point',
-
-						anchor :
-							'c',
-
-						x :
-							closeButton.w + closeButton.width,
-
-						y :
-							closeButton.n + closeButton.height
-					}
-				},
-
-				caption :
-				{
-					type :
-						'Label',
-
-					text :
-						'close',
-
-					font :
-						fontPool.get( 14, 'cm' ),
-
-					pos  :
-					{
-						type:
-							'Point',
-
-						anchor:
-							'c',
-
-						x :
-							0,
-
-						y :
-							0
-					}
-				},
-
-				shape :
-				{
-					type :
-						'Ellipse',
-
-					pnw :
-					{
-						type:
-							'Point',
-
-						anchor:
-							'nw',
-
-						x :
-							0,
-
-						y :
-							0
-					},
-
-					pse :
-					{
-						type:
-							'Point',
-
-						anchor:
-							'se',
-
-						x :
-							-1,
-
-						y :
-							-1
-					}
+						-1
 				}
 			}
 		},
 
 
-		ranks :
-		[
-			'headline',
-			'usernameLabel',
-			'passwordLabel',
-			'errorLabel',
-			'userInput',
-			'passwordInput',
-			'loginButton',
-			'closeButton'
-		]
-	};
+		'loginButton' :
+		{
+			type :
+				'Button',
+
+			normaStyle :
+				'button',
+
+			hoverStyle :
+				'buttonHover',
+
+			focusStyle :
+				'buttonFocus',
+
+			hofocStyle :
+				'buttonHofoc',
+
+			frame :
+			{
+				type :
+					'Frame',
+
+				pnw  :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'c',
+
+					x :
+						loginButton.w,
+
+					y :
+						loginButton.n
+				},
+
+				pse  :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'c',
+
+					x :
+						loginButton.w + loginButton.width,
+
+					y :
+						loginButton.n + loginButton.height
+				}
+			},
+
+			caption :
+			{
+				type :
+					'Label',
+
+				text :
+					'log in',
+
+				font :
+					fontPool.get( 14, 'cm' ),
+
+				pos  :
+				{
+					type:
+						'Point',
+
+					anchor:
+						'c',
+
+					x :
+						0,
+
+					y :
+						0
+				}
+			},
+
+			shape :
+			{
+				type :
+					'Ellipse',
+
+				pnw :
+				{
+					type:
+						'Point',
+
+					anchor:
+						'nw',
+
+					x :
+						0,
+
+					y :
+						0
+				},
+
+				pse :
+				{
+					type:
+						'Point',
+
+					anchor:
+						'se',
+
+					x :
+						-1,
+
+					y :
+						-1
+				}
+			}
+		},
+
+
+		'closeButton' :
+		{
+			type :
+				'Button',
+
+			normaStyle :
+				'button',
+
+			hoverStyle :
+				'buttonHover',
+
+			focusStyle :
+				'buttonFocus',
+
+			hofocStyle :
+				'buttonHofoc',
+
+			frame :
+			{
+				type :
+					'Frame',
+
+				pnw  :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'c',
+
+					x :
+						closeButton.w,
+
+					y :
+						closeButton.n
+				},
+
+				pse  :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'c',
+
+					x :
+						closeButton.w + closeButton.width,
+
+					y :
+						closeButton.n + closeButton.height
+				}
+			},
+
+			caption :
+			{
+				type :
+					'Label',
+
+				text :
+					'close',
+
+				font :
+					fontPool.get( 14, 'cm' ),
+
+				pos  :
+				{
+					type:
+						'Point',
+
+					anchor:
+						'c',
+
+					x :
+						0,
+
+					y :
+						0
+				}
+			},
+
+			shape :
+			{
+				type :
+					'Ellipse',
+
+				pnw :
+				{
+					type:
+						'Point',
+
+					anchor:
+						'nw',
+
+					x :
+						0,
+
+					y :
+						0
+				},
+
+				pse :
+				{
+					type:
+						'Point',
+
+					anchor:
+						'se',
+
+					x :
+						-1,
+
+					y :
+						-1
+				}
+			}
+		}
+	},
+
+
+	ranks :
+	[
+		'headline',
+		'usernameLabel',
+		'passwordLabel',
+		'errorLabel',
+		'userInput',
+		'passwordInput',
+		'loginButton',
+		'closeButton'
+	]
+};
 
 
 /*

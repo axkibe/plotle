@@ -93,23 +93,233 @@ var closeButton =
 | Layout
 */
 SignUp.prototype.layout =
+{
+	type :
+		'Layout',
+
+	copse :
 	{
-		type :
-			'Layout',
-
-		copse :
+		'headline' :
 		{
-			'headline' :
+			type :
+				'Label',
+
+			text :
+				'Sign Up',
+			font :
+				fontPool.get( 22, 'la' ),
+
+			pos :
 			{
 				type :
-					'Label',
+					'Point',
 
-				text :
-					'Sign Up',
-				font :
-					fontPool.get( 22, 'la' ),
+				anchor :
+					'c',
 
-				pos :
+				x :
+					-245,
+
+				y :
+					-165
+			}
+		},
+
+		'usernameLabel' :
+		{
+			type :
+				'Label',
+
+			text :
+				'username',
+
+			font :
+				fontPool.get( 16, 'ra' ),
+
+			pos :
+			{
+				type :
+					'Point',
+
+				anchor :
+					'c',
+
+				x :
+					-98,
+
+				y :
+					-102
+			}
+		},
+
+		'emailLabel' :
+		{
+			type :
+				'Label',
+
+			text :
+				'email',
+
+			font :
+				fontPool.get( 16, 'ra' ),
+
+			pos :
+			{
+				type :
+					'Point',
+
+				anchor :
+					'c',
+
+				x :
+					-98,
+
+				y :
+					-62
+			}
+		},
+
+		'passwordLabel' :
+		{
+			type :
+				'Label',
+
+			text :
+				'password',
+
+			font :
+				fontPool.get( 16, 'ra' ),
+
+			pos :
+			{
+				type :
+					'Point',
+
+				anchor :
+					'c',
+
+				x :
+					-98,
+
+				y :
+					-22
+			}
+		},
+
+		'password2Label' :
+		{
+			type :
+				'Label',
+
+			text :
+				'repeat password',
+
+			font :
+				fontPool.get( 16, 'ra' ),
+
+			pos :
+			{
+				type :
+					'Point',
+
+				anchor :
+					'c',
+
+				x :
+					-98,
+
+				y :
+					18
+			}
+		},
+
+		'newsletterLabel' :
+		{
+			type :
+				'Label',
+
+			text :
+				'newsletter',
+
+			font :
+				fontPool.get( 16, 'ra' ),
+
+			pos :
+			{
+				type :
+					'Point',
+
+				anchor :
+					'c',
+
+				x :
+					-98,
+
+				y :
+					58
+			}
+		},
+
+		'errorLabel' :
+		{
+			type :
+				'Label',
+
+			text :
+				'',
+				// 'username/password not accepted',
+
+			font :
+				fontPool.get( 14, 'car' ),
+
+			pos :
+			{
+				type :
+					'Point',
+
+				anchor :
+					'c',
+
+				x :
+					-20,
+
+				y :
+					-136
+			}
+		},
+
+		'userInput' :
+		{
+			type :
+				'Input',
+
+			password :
+				false,
+
+			normaStyle :
+				'input',
+
+			focusStyle :
+				'inputFocus',
+
+			hoverStyle :
+				'input',
+
+			hofocStyle :
+				'inputFocus',
+
+			font :
+				fontPool.get( 14, 'la' ),
+
+			maxlen :
+				100,
+
+			frame  :
+			{
+				type :
+					'Frame',
+
+				pnw :
 				{
 					type :
 						'Point',
@@ -118,25 +328,13 @@ SignUp.prototype.layout =
 						'c',
 
 					x :
-						-245,
+						-80,
 
 					y :
-						-165
-				}
-			},
+						-120
+				},
 
-			'usernameLabel' :
-			{
-				type :
-					'Label',
-
-				text :
-					'username',
-
-				font :
-					fontPool.get( 16, 'ra' ),
-
-				pos :
+				pse :
 				{
 					type :
 						'Point',
@@ -145,25 +343,46 @@ SignUp.prototype.layout =
 						'c',
 
 					x :
-						-98,
+						130,
 
 					y :
-						-102
+						-94
 				}
-			},
+			}
+		},
 
-			'emailLabel' :
+		'emailInput' :
+		{
+			type :
+				'Input',
+
+			password :
+				false,
+
+			normaStyle :
+				'input',
+
+			focusStyle :
+				'inputFocus',
+
+			hoverStyle :
+				'input',
+
+			hofocStyle :
+				'inputFocus',
+
+			font :
+				fontPool.get( 14, 'la' ),
+
+			maxlen :
+				100,
+
+			frame  :
 			{
 				type :
-					'Label',
+					'Frame',
 
-				text :
-					'email',
-
-				font :
-					fontPool.get( 16, 'ra' ),
-
-				pos :
+				pnw :
 				{
 					type :
 						'Point',
@@ -172,25 +391,13 @@ SignUp.prototype.layout =
 						'c',
 
 					x :
-						-98,
+						-80,
 
 					y :
-						-62
-				}
-			},
+						-80
+				},
 
-			'passwordLabel' :
-			{
-				type :
-					'Label',
-
-				text :
-					'password',
-
-				font :
-					fontPool.get( 16, 'ra' ),
-
-				pos :
+				pse :
 				{
 					type :
 						'Point',
@@ -199,25 +406,46 @@ SignUp.prototype.layout =
 						'c',
 
 					x :
-						-98,
+						130,
 
 					y :
-						-22
+						-54
 				}
-			},
+			}
+		},
 
-			'password2Label' :
+		'passwordInput' :
+		{
+			type :
+				'Input',
+
+			password :
+				true,
+
+			normaStyle :
+				'input',
+
+			focusStyle :
+				'inputFocus',
+
+			hoverStyle :
+				'input',
+
+			hofocStyle :
+				'inputFocus',
+
+			font :
+				fontPool.get( 14, 'la' ),
+
+			maxlen :
+				100,
+
+			frame  :
 			{
 				type :
-					'Label',
+					'Frame',
 
-				text :
-					'repeat password',
-
-				font :
-					fontPool.get( 16, 'ra' ),
-
-				pos :
+				pnw :
 				{
 					type :
 						'Point',
@@ -226,25 +454,13 @@ SignUp.prototype.layout =
 						'c',
 
 					x :
-						-98,
+						-80,
 
 					y :
-						18
-				}
-			},
+						-40
+				},
 
-			'newsletterLabel' :
-			{
-				type :
-					'Label',
-
-				text :
-					'newsletter',
-
-				font :
-					fontPool.get( 16, 'ra' ),
-
-				pos :
+				pse :
 				{
 					type :
 						'Point',
@@ -253,26 +469,47 @@ SignUp.prototype.layout =
 						'c',
 
 					x :
-						-98,
+						130,
 
 					y :
-						58
+						-14
 				}
-			},
+			}
+		},
 
-			'errorLabel' :
+
+		'password2Input' :
+		{
+			type :
+				'Input',
+
+			password :
+				true,
+
+			normaStyle :
+				'input',
+
+			focusStyle :
+				'inputFocus',
+
+			hoverStyle :
+				'input',
+
+			hofocStyle :
+				'inputFocus',
+
+			font :
+				fontPool.get( 14, 'la' ),
+
+			maxlen :
+				100,
+
+			frame  :
 			{
 				type :
-					'Label',
+					'Frame',
 
-				text :
-					'',
-					// 'username/password not accepted',
-
-				font :
-					fontPool.get( 14, 'car' ),
-
-				pos :
+				pnw :
 				{
 					type :
 						'Point',
@@ -281,358 +518,159 @@ SignUp.prototype.layout =
 						'c',
 
 					x :
-						-20,
+						-80,
 
 					y :
-						-136
-				}
-			},
+						0
+				},
 
-			'userInput' :
-			{
-				type :
-					'Input',
-
-				password :
-					false,
-
-				normaStyle :
-					'input',
-
-				focusStyle :
-					'inputFocus',
-
-				hoverStyle :
-					'input',
-
-				hofocStyle :
-					'inputFocus',
-
-				font :
-					fontPool.get( 14, 'la' ),
-
-				maxlen :
-					100,
-
-				frame  :
+				pse :
 				{
 					type :
-						'Frame',
+						'Point',
 
-					pnw :
-					{
-						type :
-							'Point',
+					anchor :
+						'c',
 
-						anchor :
-							'c',
+					x :
+						130,
 
-						x :
-							-80,
-
-						y :
-							-120
-					},
-
-					pse :
-					{
-						type :
-							'Point',
-
-						anchor :
-							'c',
-
-						x :
-							130,
-
-						y :
-							-94
-					}
+					y :
+						26
 				}
-			},
+			}
+		},
 
-			'emailInput' :
+		'newsletterCheckBox' :
+		{
+			type :
+				'CheckBox',
+
+			normaStyle :
+				'checkbox',
+
+			hoverStyle :
+				'checkboxHover',
+
+			focusStyle :
+				'checkboxFocus',
+
+			hofocStyle :
+				'checkboxHofoc',
+
+			box :
 			{
 				type :
-					'Input',
+					'Frame',
 
-				password :
-					false,
-
-				normaStyle :
-					'input',
-
-				focusStyle :
-					'inputFocus',
-
-				hoverStyle :
-					'input',
-
-				hofocStyle :
-					'inputFocus',
-
-				font :
-					fontPool.get( 14, 'la' ),
-
-				maxlen :
-					100,
-
-				frame  :
+				pnw :
 				{
 					type :
-						'Frame',
+						'Point',
 
-					pnw :
-					{
-						type :
-							'Point',
+					anchor :
+						'c',
 
-						anchor :
-							'c',
+					x :
+						-75,
+					y :
+						45
+				},
 
-						x :
-							-80,
-
-						y :
-							-80
-					},
-
-					pse :
-					{
-						type :
-							'Point',
-
-						anchor :
-							'c',
-
-						x :
-							130,
-
-						y :
-							-54
-					}
-				}
-			},
-
-			'passwordInput' :
-			{
-				type :
-					'Input',
-
-				password :
-					true,
-
-				normaStyle :
-					'input',
-
-				focusStyle :
-					'inputFocus',
-
-				hoverStyle :
-					'input',
-
-				hofocStyle :
-					'inputFocus',
-
-				font :
-					fontPool.get( 14, 'la' ),
-
-				maxlen :
-					100,
-
-				frame  :
+				pse  :
 				{
-					type :
-						'Frame',
-
-					pnw :
-					{
-						type :
-							'Point',
-
-						anchor :
-							'c',
-
-						x :
-							-80,
-
-						y :
-							-40
-					},
-
-					pse :
-					{
-						type :
-							'Point',
-
-						anchor :
-							'c',
-
-						x :
-							130,
-
-						y :
-							-14
-					}
-				}
-			},
-
-
-			'password2Input' :
-			{
-				type :
-					'Input',
-
-				password :
-					true,
-
-				normaStyle :
-					'input',
-
-				focusStyle :
-					'inputFocus',
-
-				hoverStyle :
-					'input',
-
-				hofocStyle :
-					'inputFocus',
-
-				font :
-					fontPool.get( 14, 'la' ),
-
-				maxlen :
-					100,
-
-				frame  :
-				{
-					type :
-						'Frame',
-
-					pnw :
-					{
-						type :
-							'Point',
-
-						anchor :
-							'c',
-
-						x :
-							-80,
-
-						y :
-							0
-					},
-
-					pse :
-					{
-						type :
-							'Point',
-
-						anchor :
-							'c',
-
-						x :
-							130,
-
-						y :
-							26
-					}
-				}
-			},
-
-			'newsletterCheckBox' :
-			{
-				type :
-					'CheckBox',
-
-				normaStyle :
-					'checkbox',
-
-				hoverStyle :
-					'checkboxHover',
-
-				focusStyle :
-					'checkboxFocus',
-
-				hofocStyle :
-					'checkboxHofoc',
-
-				box :
-				{
-					type :
-						'Frame',
-
-					pnw :
-					{
-						type :
-							'Point',
-
-						anchor :
-							'c',
-
-						x :
-							-75,
-						y :
-							45
-					},
-
-					pse  :
-					{
-						type:
-							'Point',
-
-						anchor:
-							'c',
-
-						x :
-							-59,
-
-						y :
-							61
-					}
-				}
-			},
-
-			'newsletter2Label' :
-			{
-				type :
-					'Label',
-
-				text :
-					'Updates and News',
-
-				font :
-					fontPool.get( 12, 'la' ),
-
-				pos :
-				{
-					type :
+					type:
 						'Point',
 
 					anchor:
 						'c',
 
 					x :
-						-45,
+						-59,
 
 					y :
-						57
+						61
 				}
-			},
+			}
+		},
 
-			'newsletter3Label' :
+		'newsletter2Label' :
+		{
+			type :
+				'Label',
+
+			text :
+				'Updates and News',
+
+			font :
+				fontPool.get( 12, 'la' ),
+
+			pos :
 			{
 				type :
-					'Label',
+					'Point',
 
-				text :
-					'Never going to be more than an email a month. For sure!',
+				anchor:
+					'c',
 
-				font :
-					fontPool.get( 12, 'la' ),
+				x :
+					-45,
 
-				pos :
+				y :
+					57
+			}
+		},
+
+		'newsletter3Label' :
+		{
+			type :
+				'Label',
+
+			text :
+				'Never going to be more than an email a month. For sure!',
+
+			font :
+				fontPool.get( 12, 'la' ),
+
+			pos :
+			{
+				type :
+					'Point',
+
+				anchor :
+					'c',
+
+				x :
+					-45,
+
+				y :
+					77
+			}
+		},
+
+		'signupButton' :
+		{
+			type :
+				'Button',
+
+			normaStyle :
+				'button',
+
+			hoverStyle :
+				'buttonHover',
+
+			focusStyle :
+				'buttonFocus',
+
+			hofocStyle :
+				'buttonHofoc',
+
+			frame :
+			{
+				type :
+					'Frame',
+
+				pnw  :
 				{
 					type :
 						'Point',
@@ -641,270 +679,232 @@ SignUp.prototype.layout =
 						'c',
 
 					x :
-						-45,
+						signupButton.w,
 
 					y :
-						77
+						signupButton.n
+				},
+
+				pse  :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'c',
+
+					x :
+						signupButton.w + signupButton.width,
+
+					y :
+						signupButton.n + signupButton.height
 				}
 			},
 
-			'signupButton' :
+			caption :
 			{
 				type :
-					'Button',
+					'Label',
 
-				normaStyle :
-					'button',
+				text :
+					'sign up',
 
-				hoverStyle :
-					'buttonHover',
+				font :
+					fontPool.get( 14, 'cm' ),
 
-				focusStyle :
-					'buttonFocus',
-
-				hofocStyle :
-					'buttonHofoc',
-
-				frame :
+				pos  :
 				{
-					type :
-						'Frame',
+					type:
+						'Point',
 
-					pnw  :
-					{
-						type :
-							'Point',
+					anchor:
+						'c',
 
-						anchor :
-							'c',
+					x :
+						0,
 
-						x :
-							signupButton.w,
-
-						y :
-							signupButton.n
-					},
-
-					pse  :
-					{
-						type :
-							'Point',
-
-						anchor :
-							'c',
-
-						x :
-							signupButton.w + signupButton.width,
-
-						y :
-							signupButton.n + signupButton.height
-					}
-				},
-
-				caption :
-				{
-					type :
-						'Label',
-
-					text :
-						'sign up',
-
-					font :
-						fontPool.get( 14, 'cm' ),
-
-					pos  :
-					{
-						type:
-							'Point',
-
-						anchor:
-							'c',
-
-						x :
-							0,
-
-						y :
-							0
-					}
-				},
-
-				shape :
-				{
-					type :
-						'Ellipse',
-
-					pnw :
-					{
-						type:
-							'Point',
-
-						anchor:
-							'nw',
-
-						x :
-							0,
-
-						y :
-							0
-					},
-
-					pse :
-					{
-						type:
-							'Point',
-
-						anchor:
-							'se',
-
-						x :
-							-1,
-
-						y :
-							-1
-					}
+					y :
+						0
 				}
 			},
 
-
-			'closeButton' :
+			shape :
 			{
 				type :
-					'Button',
+					'Ellipse',
 
-				normaStyle :
-					'button',
-
-				hoverStyle :
-					'buttonHover',
-
-				focusStyle :
-					'buttonFocus',
-
-				hofocStyle :
-					'buttonHofoc',
-
-				frame :
+				pnw :
 				{
-					type :
-						'Frame',
+					type:
+						'Point',
 
-					pnw  :
-					{
-						type :
-							'Point',
+					anchor:
+						'nw',
 
-						anchor :
-							'c',
+					x :
+						0,
 
-						x :
-							closeButton.w,
-
-						y :
-							closeButton.n
-					},
-
-					pse  :
-					{
-						type :
-							'Point',
-
-						anchor :
-							'c',
-
-						x :
-							closeButton.w + closeButton.width,
-
-						y :
-							closeButton.n + closeButton.height
-					}
+					y :
+						0
 				},
 
-				caption :
+				pse :
 				{
-					type :
-						'Label',
+					type:
+						'Point',
 
-					text :
-						'close',
+					anchor:
+						'se',
 
-					font :
-						fontPool.get( 14, 'cm' ),
+					x :
+						-1,
 
-					pos  :
-					{
-						type:
-							'Point',
-
-						anchor:
-							'c',
-
-						x :
-							0,
-
-						y :
-							0
-					}
-				},
-
-				shape :
-				{
-					type :
-						'Ellipse',
-
-					pnw :
-					{
-						type:
-							'Point',
-
-						anchor:
-							'nw',
-
-						x :
-							0,
-
-						y :
-							0
-					},
-
-					pse :
-					{
-						type:
-							'Point',
-
-						anchor:
-							'se',
-
-						x :
-							-1,
-
-						y :
-							-1
-					}
+					y :
+						-1
 				}
 			}
 		},
 
 
-		ranks :
-		[
-			'headline',
-			'usernameLabel',
-			'emailLabel',
-			'passwordLabel',
-			'password2Label',
-			'newsletterLabel',
-			'errorLabel',
-			'userInput',
-			'emailInput',
-			'passwordInput',
-			'password2Input',
-			'newsletterCheckBox',
-			'newsletter2Label',
-			'newsletter3Label',
-			'signupButton',
-			'closeButton'
-		]
-	};
+		'closeButton' :
+		{
+			type :
+				'Button',
+
+			normaStyle :
+				'button',
+
+			hoverStyle :
+				'buttonHover',
+
+			focusStyle :
+				'buttonFocus',
+
+			hofocStyle :
+				'buttonHofoc',
+
+			frame :
+			{
+				type :
+					'Frame',
+
+				pnw  :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'c',
+
+					x :
+						closeButton.w,
+
+					y :
+						closeButton.n
+				},
+
+				pse  :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'c',
+
+					x :
+						closeButton.w + closeButton.width,
+
+					y :
+						closeButton.n + closeButton.height
+				}
+			},
+
+			caption :
+			{
+				type :
+					'Label',
+
+				text :
+					'close',
+
+				font :
+					fontPool.get( 14, 'cm' ),
+
+				pos  :
+				{
+					type:
+						'Point',
+
+					anchor:
+						'c',
+
+					x :
+						0,
+
+					y :
+						0
+				}
+			},
+
+			shape :
+			{
+				type :
+					'Ellipse',
+
+				pnw :
+				{
+					type:
+						'Point',
+
+					anchor:
+						'nw',
+
+					x :
+						0,
+
+					y :
+						0
+				},
+
+				pse :
+				{
+					type:
+						'Point',
+
+					anchor:
+						'se',
+
+					x :
+						-1,
+
+					y :
+						-1
+				}
+			}
+		}
+	},
+
+
+	ranks :
+	[
+		'headline',
+		'usernameLabel',
+		'emailLabel',
+		'passwordLabel',
+		'password2Label',
+		'newsletterLabel',
+		'errorLabel',
+		'userInput',
+		'emailInput',
+		'passwordInput',
+		'password2Input',
+		'newsletterCheckBox',
+		'newsletter2Label',
+		'newsletter3Label',
+		'signupButton',
+		'closeButton'
+	]
+};
 
 
 /*

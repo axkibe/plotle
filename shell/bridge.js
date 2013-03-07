@@ -41,13 +41,6 @@ if( typeof( window ) === 'undefined' )
 */
 var modes =
 {
-
-	/*
-	| Standard selection, moving stuff around.
-	*/
-	'Normal' :
-		true,
-
 	/*
 	| Creating a new item.
 	| this.$create is set or null.
@@ -56,9 +49,39 @@ var modes =
 		true,
 
 	/*
+	| Goto
+	*/
+	'Goto' :
+		true,
+
+	/*
+	| Help
+	*/
+	'Help' :
+		true,
+
+	/*
+	| Logging in
+	*/
+	'Login' :
+		true,
+
+	/*
+	| Standard selection, moving stuff around.
+	*/
+	'Normal' :
+		true,
+
+	/*
 	| Removing items.
 	*/
 	'Remove' :
+		true,
+
+	/*
+	| Signing up
+	*/
+	'SignUp' :
 		true,
 
 	/*
@@ -71,24 +94,6 @@ var modes =
 	| User view
 	*/
 	'User' :
-		true,
-
-	/*
-	| Logging in
-	*/
-	'Login' :
-		true,
-
-	/*
-	| Signing up
-	*/
-	'SignUp' :
-		true,
-
-	/*
-	| Help
-	*/
-	'Help' :
 		true
 
 };
@@ -202,7 +207,8 @@ Bridge.prototype.stopAction =
 		throw new Error( 'ending no action' );
 	}
 
-	this._$action = null;
+	this._$action =
+		null;
 
 };
 

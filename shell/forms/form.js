@@ -487,7 +487,9 @@ Form.prototype.pointingStart =
 | User is inputing text.
 */
 Form.prototype.input =
-	function( text )
+	function(
+		text
+	)
 {
 	var focus =
 		this.getFocus( );
@@ -804,7 +806,7 @@ Form.prototype.mousewheel =
 	)
 {
 	return true;
-}
+};
 
 
 })( );
