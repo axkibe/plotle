@@ -100,6 +100,12 @@ Shell =
 						screensize
 				),
 
+			moveto :
+				new Forms.MoveTo(
+					'screensize',
+						screensize
+				),
+
 			signup :
 				new Forms.SignUp(
 					'screensize',
@@ -560,6 +566,17 @@ Shell.prototype.getCurrentDisplay =
 				Forms.Login;
 
 			break;
+
+		case 'MoveTo' :
+
+			name =
+				'moveto';
+
+			Proto =
+				Forms.MoveTo;
+
+			break;
+
 
 		case 'SignUp' :
 

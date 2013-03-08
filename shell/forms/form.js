@@ -528,8 +528,7 @@ Form.prototype.cycleFocus =
 	var rs =
 		rank;
 
-	var name;
-	var ve;
+	var name, ve;
 
 	while( true )
 	{

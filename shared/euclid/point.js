@@ -13,7 +13,8 @@
 | Exports
 */
 var Euclid;
-Euclid = Euclid || {};
+Euclid =
+	Euclid || { };
 
 
 /*
@@ -32,9 +33,9 @@ var Jools;
 /*
 | Node imports
 */
-if (typeof(window) === 'undefined')
+if( typeof( window ) === 'undefined' )
 {
-	Jools = require('../jools');
+	Jools = require( '../jools' );
 }
 
 
@@ -44,52 +45,83 @@ if (typeof(window) === 'undefined')
 | Point(x, y) or
 | Point(p)
 */
-var Point = Euclid.Point = function(a1, a2)
+var Point =
+Euclid.Point =
+	function( a1, a2 )
 {
-	if (typeof(a1) === 'object')
+	if( typeof( a1 ) === 'object' )
 	{
-		this.x = a1.x;
-		this.y = a1.y;
+		this.x =
+			a1.x;
+
+		this.y =
+			a1.y;
 	}
 	else
 	{
-		this.x = a1;
-		this.y = a2;
+		this.x =
+			a1;
+
+		this.y =
+			a2;
 	}
-	this.type = 'Point';
-	Jools.immute(this);
+
+	this.type =
+		'Point';
+
+	Jools.immute( this );
 };
 
 
 /*
 | Returns true if this point is equal to another.
 */
-Point.prototype.eq = function(a1, a2)
+Point.prototype.eq =
+	function(
+		a1,
+		a2
+	)
 {
-	return typeof(a1) === 'object' ?
-		this.x === a1.x && this.y === a1.y :
-		this.x === a1   && this.y === a2;
+	return (
+		typeof( a1 ) === 'object' ?
+			this.x === a1.x && this.y === a1.y :
+			this.x === a1   && this.y === a2
+	);
 };
 
 
 /*
 | Adds two points or x/y values, returns a new point.
 */
-Point.prototype.add = function(a1, a2)
+Point.prototype.add =
+	function(
+		a1,
+		a2
+	)
 {
 	if( typeof(a1) === 'object' )
 	{
-		if (a1.x === 0 && a1.y === 0)
-			{ return this; }
+		if( a1.x === 0 && a1.y === 0 )
+		{
+			return this;
+		}
 
-		return new Point(this.x + a1.x, this.y + a1.y);
+		return new Point(
+			this.x + a1.x,
+			this.y + a1.y
+		);
 	}
 	else
 	{
-		if (a1 === 0 && a2 === 0)
-			{ return this; }
+		if( a1 === 0 && a2 === 0 )
+		{
+			return this;
+		}
 
-		return new Point(this.x + a1,   this.y + a2);
+		return new Point(
+			this.x + a1,
+			this.y + a2
+		);
 	}
 };
 
@@ -97,21 +129,35 @@ Point.prototype.add = function(a1, a2)
 /*
 | Subtracts a points (or x/y from this), returns new point
 */
-Point.prototype.sub = function(a1, a2)
+Point.prototype.sub =
+	function(
+		a1,
+		a2
+	)
 {
-	if( typeof(a1) === 'object' )
+	if( typeof( a1 ) === 'object' )
 	{
-		if (a1.x === 0 && a1.y === 0)
-			{ return this; }
+		if( a1.x === 0 && a1.y === 0 )
+		{
+			return this;
+		}
 
-		return new Point(this.x - a1.x, this.y - a1.y);
+		return new Point(
+			this.x - a1.x,
+			this.y - a1.y
+		);
 	}
 	else
 	{
-		if (a1 === 0 && a2 === 0)
-			{ return this; }
+		if( a1 === 0 && a2 === 0 )
+		{
+			return this;
+		}
 
-		return new Point(this.x - a1,   this.y - a2);
+		return new Point(
+			this.x - a1,
+			this.y - a2
+		);
 	}
 };
 
@@ -119,7 +165,11 @@ Point.prototype.sub = function(a1, a2)
 /*
 | Shortcut for point at 0/0.
 */
-Point.zero = new Point(0, 0);
+Point.zero =
+	new Point(
+		0,
+		0
+	);
 
 
 /*
@@ -131,22 +181,42 @@ Point.zero = new Point(0, 0);
 |
 | Point.renew(x, y, p1, p2, p3, ...)
 */
-Point.renew = function(x, y) {
-	for(var a = 2, aZ = arguments.length; a < aZ; a++)
+Point.renew =
+	function(
+		x,
+		y
+	)
+{
+	for(
+		var a = 2, aZ = arguments.length;
+		a < aZ;
+		a++
+	)
 	{
-		var p = arguments[a];
-		if (p instanceof Point && p.x === x && p.y === y)
-			{ return p; }
+		var p =
+			arguments[a];
+
+		if(
+			p instanceof Point &&
+			p.x === x &&
+			p.y === y
+		)
+		{
+			return p;
+		}
 	}
-	return new Point(x, y);
+
+	return new Point( x, y );
 };
 
 
 /*
 | Node export.
 */
-if (typeof(window) === 'undefined')
-	{ module.exports = Point; }
+if( typeof( window ) === 'undefined' )
+{
+	module.exports = Point;
+}
 
 
-} ) ();
+} )( );

@@ -257,7 +257,7 @@ User.prototype.layout =
 				'Label',
 
 			text :
-				'like for example change your password',
+				'like for example change your password.',
 
 			font :
 				fontPool.get( 16, 'ca' ),

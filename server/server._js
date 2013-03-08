@@ -94,7 +94,10 @@ var Server = function(_)
 	db.connector = new mongodb.Db(
 		config.database.name,
 		db.server,
-		{ w: 1 }
+		{
+			w :
+				1
+		}
 	);
 
 	// all messages
@@ -807,6 +810,9 @@ Server.prototype.prepareResources =
 			'fb',
 
 		'shell/forms/space.js',
+			'fb',
+
+		'shell/forms/moveto.js',
 			'fb',
 
 		'shell/forms/user.js',

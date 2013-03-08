@@ -86,9 +86,9 @@ Icons.prototype.normal =
 
 
 /*
-| Sketches the goto button's icon.
+| Sketches the moveto button's icon.
 */
-Icons.prototype.goto =
+Icons.prototype.moveto =
 	function(
 		fabric
 		// border,
@@ -113,20 +113,25 @@ Icons.prototype.goto =
 	//   K***J
 
 	fabric.moveTo( wx + 0, ny +  0 );  // A
-	fabric.moveTo( wx + 1, ny +  0 );  // A
-	fabric.lineTo( wx + 6, ny +  7 );  // B
-	fabric.lineTo( wx + 3, ny +  7 );  // C
-	fabric.lineTo( wx + 3, ny + 14 );  // D
+	fabric.lineTo( wx + 6, ny +  8 );  // B
+	fabric.lineTo( wx + 2, ny +  8 );  // C
+	fabric.lineTo( wx + 2, ny + 14 );  // D
 	fabric.lineTo( wx - 2, ny + 14 );  // E
-	fabric.lineTo( wx - 2, ny +  7 );  // F
-	fabric.lineTo( wx - 5, ny +  7 );  // G
+	fabric.lineTo( wx - 2, ny +  8 );  // F
+	fabric.lineTo( wx - 6, ny +  8 );  // G
 	fabric.lineTo( wx + 0, ny +  0 );  // A
 
-	fabric.moveTo( wx - 2, ny + 17 );  // H
-	fabric.lineTo( wx + 3, ny + 17 );  // I
-	fabric.lineTo( wx + 3, ny + 19 );  // J
-	fabric.lineTo( wx - 2, ny + 19 );  // K
-	fabric.moveTo( wx - 2, ny + 17 );  // H
+	fabric.moveTo( wx - 2, ny + 16 );  // H
+	fabric.lineTo( wx + 2, ny + 16 );  // I
+	fabric.lineTo( wx + 2, ny + 17 );  // J
+	fabric.lineTo( wx - 2, ny + 17 );  // K
+	fabric.moveTo( wx - 2, ny + 16 );  // H
+
+	fabric.moveTo( wx - 2, ny + 19 );  // H
+	fabric.lineTo( wx + 2, ny + 19 );  // I
+	fabric.lineTo( wx + 2, ny + 20 );  // J
+	fabric.lineTo( wx - 2, ny + 20 );  // K
+	fabric.moveTo( wx - 2, ny + 19 );  // H
 };
 
 

@@ -11,7 +11,8 @@
 | Export
 */
 var Euclid;
-Euclid = Euclid || { };
+Euclid =
+	Euclid || { };
 
 
 /*
@@ -41,7 +42,8 @@ Euclid.Shape =
 		hull
 	)
 {
-	this.hull = Jools.immute( hull );
+	this.hull =
+		Jools.immute( hull );
 
 	Jools.immute( this );
 };

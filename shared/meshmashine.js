@@ -81,7 +81,12 @@ var tfxSign1 = function(sign, chg)
 */
 var tfxSign = function(sign, chgX)
 {
-	Jools.log('tfx', 'tfxSign', sign, chgX);
+	Jools.log(
+		'tfx',
+		'tfxSign',
+		sign,
+		chgX
+	);
 
 	switch(chgX.constructor)
 	{

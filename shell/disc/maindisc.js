@@ -150,7 +150,7 @@ var design =
 			218
 	},
 
-	goto :
+	moveto :
 	{
 		x :
 			47,
@@ -544,7 +544,7 @@ MainDisc.prototype.layout =
 			}
 		},
 
-		'goto' :
+		'moveto' :
 		{
 			type :
 				'Button',
@@ -562,7 +562,7 @@ MainDisc.prototype.layout =
 				'discButtonGenericHofoc',
 
 			icon :
-				'goto',
+				'moveto',
 
 			iconStyle :
 				'iconNormal',
@@ -584,10 +584,10 @@ MainDisc.prototype.layout =
 						'nw',
 
 					x :
-						design.goto.x,
+						design.moveto.x,
 
 					y :
-						design.goto.y
+						design.moveto.y
 				},
 
 				pse :
@@ -599,11 +599,11 @@ MainDisc.prototype.layout =
 						'nw',
 
 					x :
-						design.goto.x +
+						design.moveto.x +
 							design.generic.width,
 
 					y :
-						design.goto.y +
+						design.moveto.y +
 							design.generic.height
 				}
 			},
@@ -1265,7 +1265,7 @@ MainDisc.prototype.layout =
 		'normal',
 		'create',
 		'remove',
-		'goto',
+		'moveto',
 		'space',
 		'user',
 		'login',
@@ -1369,8 +1369,8 @@ MainDisc.prototype.getModeOfButton =
 		case 'create' :
 			return 'Create';
 
-		case 'goto' :
-			return 'Goto';
+		case 'moveto' :
+			return 'MoveTo';
 
 		case 'help' :
 			return 'Help';

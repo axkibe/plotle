@@ -104,22 +104,34 @@ Euclid.Rect =
 
 		case 'arbitrary' :
 
-			if( a2.x >= a1.x && a2.y >= a1.y)
+			if(
+				a2.x >= a1.x &&
+				a2.y >= a1.y
+			)
 			{
 				pnw = a1;
 				pse = a2;
 			}
-			else if ( a1.x >= a2.x && a1.y >= a2.y)
+			else if (
+				a1.x >= a2.x &&
+				a1.y >= a2.y
+			)
 			{
 				pnw = a2;
 				pse = a1;
 			}
-			else if( a2.x >= a1.x && a1.y >= a2.y)
+			else if(
+				a2.x >= a1.x &&
+				a1.y >= a2.y
+			)
 			{
 				pnw = new Euclid.Point( a1.x, a2.y );
 				pse = new Euclid.Point( a2.x, a1.y );
 			}
-			else if ( a1.x >= a2.x && a2.y >= a1.y)
+			else if (
+				a1.x >= a2.x &&
+				a2.y >= a1.y
+			)
 			{
 				pnw = new Euclid.Point( a2.x, a1.y );
 				pse = new Euclid.Point( a1.x, a2.y );
@@ -236,7 +248,7 @@ Rect.prototype.computePoint =
 		case 'w'  :
 
 			return new Euclid.Point(
-				pnw.x + model.y,
+				pnw.x + model.x,
 				half( pnw.y + pse.y ) + model.y
 			);
 
@@ -530,11 +542,30 @@ Rect.prototype.sketch =
 	var sy =
 		view.y( this.pse );
 
-	fabric.moveTo( wx + border, ny + border );
-	fabric.lineTo( ex - border, ny + border );
-	fabric.lineTo( ex - border, sy - border );
-	fabric.lineTo( wx + border, sy - border );
-	fabric.lineTo( wx + border, ny + border );
+	fabric.moveTo(
+		wx + border,
+		ny + border
+	);
+
+	fabric.lineTo(
+		ex - border,
+		ny + border
+	);
+
+	fabric.lineTo(
+		ex - border,
+		sy - border
+	);
+
+	fabric.lineTo(
+		wx + border,
+		sy - border
+	);
+
+	fabric.lineTo(
+		wx + border,
+		ny + border
+	);
 };
 
 

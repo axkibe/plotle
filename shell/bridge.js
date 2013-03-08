@@ -51,7 +51,7 @@ var modes =
 	/*
 	| Goto
 	*/
-	'Goto' :
+	'MoveTo' :
 		true,
 
 	/*
