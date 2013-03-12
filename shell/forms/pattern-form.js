@@ -2,6 +2,8 @@
 | Forms patterns.
 |
 | Authors: Axel Kittenberger
+|
+| TODO combine with other patterns
 */
 
 
@@ -220,6 +222,15 @@ Forms.LayoutPattern =
 
 			font :
 				'Font'
+		},
+
+		can :
+		{
+			rotate :
+				'Number',
+
+			newline :
+				'Integer'
 		}
 	},
 

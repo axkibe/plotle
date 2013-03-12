@@ -53,6 +53,25 @@ Jools.subclass(
 
 
 /*
+| Design
+*/
+var homeButton =
+{
+	w :
+		-300,
+
+	n :
+		-100,
+
+	width :
+		150,
+
+
+	height :
+		150
+};
+
+/*
 | Layout
 */
 MoveTo.prototype.layout =
@@ -68,10 +87,10 @@ MoveTo.prototype.layout =
 				'Label',
 
 			text :
-				'Move to another space:',
+				'move to another space',
 
 			font :
-				fontPool.get( 22, 'la' ),
+				fontPool.get( 22, 'ca' ),
 
 			pos :
 			{
@@ -79,13 +98,133 @@ MoveTo.prototype.layout =
 					'Point',
 
 				anchor :
-					'w',
+					'c',
 
 				x :
-					150,
+					0,
 
 				y :
-					-250
+					-150
+			}
+		},
+
+		'meshcraftHomeButton' :
+		{
+			type :
+				'Button',
+
+			normaStyle :
+				'button',
+
+			hoverStyle :
+				'buttonHover',
+
+			focusStyle :
+				'buttonFocus',
+
+			hofocStyle :
+				'buttonHofoc',
+
+			frame :
+			{
+				type :
+					'Frame',
+
+				pnw  :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'c',
+
+					x :
+						homeButton.w,
+
+					y :
+						homeButton.n
+				},
+
+				pse  :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'c',
+
+					x :
+						homeButton.w + homeButton.width,
+
+					y :
+						homeButton.n + homeButton.height
+				}
+			},
+
+			caption :
+			{
+				type :
+					'Label',
+
+				text :
+					'meshraft\nhome',
+
+				newline :
+					25,
+
+				font :
+					fontPool.get( 14, 'cm' ),
+
+				pos  :
+				{
+					type:
+						'Point',
+
+					anchor:
+						'c',
+
+					x :
+						0,
+
+					y :
+						0
+				}
+			},
+
+			shape :
+			{
+				type :
+					'Ellipse',
+
+				pnw :
+				{
+					type:
+						'Point',
+
+					anchor:
+						'nw',
+
+					x :
+						0,
+
+					y :
+						0
+				},
+
+				pse :
+				{
+					type:
+						'Point',
+
+					anchor:
+						'se',
+
+					x :
+						-1,
+
+					y :
+						-1
+				}
 			}
 		},
 	},
@@ -93,7 +232,8 @@ MoveTo.prototype.layout =
 
 	ranks :
 	[
-		'headline'
+		'headline',
+		'meshcraftHomeButton',
 	]
 };
 
