@@ -128,17 +128,8 @@ CreateDisc.prototype.layout =
 			type :
 				'Button',
 
-			normaStyle :
-				'createButtonGeneric',
-
-			hoverStyle :
-				'createButtonGenericHover',
-
-			focusStyle :
-				'createButtonGenericFocus',
-
-			hofocStyle :
-				'createButtonGenericHofoc',
+			style :
+				'createButton',
 
 			caption :
 			{
@@ -248,17 +239,8 @@ CreateDisc.prototype.layout =
 			type :
 				'Button',
 
-			normaStyle :
-				'createButtonGeneric',
-
-			hoverStyle :
-				'createButtonGenericHover',
-
-			focusStyle :
-				'createButtonGenericFocus',
-
-			hofocStyle :
-				'createButtonGenericHofoc',
+			style :
+				'createButton',
 
 			caption :
 			{
@@ -368,17 +350,8 @@ CreateDisc.prototype.layout =
 			type :
 				'Button',
 
-			normaStyle :
-				'createButtonGeneric',
-
-			hoverStyle :
-				'createButtonGenericHover',
-
-			focusStyle :
-				'createButtonGenericFocus',
-
-			hofocStyle :
-				'createButtonGenericHofoc',
+			style :
+				'createButton',
 
 			caption :
 			{
@@ -491,17 +464,8 @@ CreateDisc.prototype.layout =
 			type :
 				'Button',
 
-			normaStyle :
-				'createButtonGeneric',
-
-			hoverStyle :
-				'createButtonGenericHover',
-
-			focusStyle :
-				'createButtonGenericFocus',
-
-			hofocStyle :
-				'createButtonGenericHofoc',
+			style :
+				'createButton',
 
 			caption :
 			{

@@ -818,6 +818,9 @@ Server.prototype.prepareResources =
 		'shell/forms/user.js',
 			'fb',
 
+		'shell/forms/welcome.js',
+			'fb',
+
 		'shell/visual/base.js',
 			'fb',
 

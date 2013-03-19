@@ -79,16 +79,7 @@ Forms.LayoutPattern =
 			frame :
 				'Frame',
 
-			normaStyle :
-				'String',
-
-			hoverStyle :
-				'String',
-
-			focusStyle :
-				'String',
-
-			hofocStyle :
+			style :
 				'String'
 		}
 	},
@@ -100,16 +91,7 @@ Forms.LayoutPattern =
 			box :
 				'Frame',
 
-			normaStyle :
-				'String',
-
-			hoverStyle :
-				'String',
-
-			focusStyle :
-				'String',
-
-			hofocStyle :
+			style :
 				'String'
 		}
 	},
@@ -190,16 +172,7 @@ Forms.LayoutPattern =
 			password :
 				'Boolean',
 
-			normaStyle :
-				'String',
-
-			hoverStyle :
-				'String',
-
-			focusStyle :
-				'String',
-
-			hofocStyle :
+			style :
 				'String',
 
 			font :

@@ -75,16 +75,7 @@ Disc.LayoutPattern =
 			frame :
 				'Frame',
 
-			normaStyle :
-				'String',
-
-			hoverStyle :
-				'String',
-
-			focusStyle :
-				'String',
-
-			hofocStyle :
+			style :
 				'String'
 		},
 
@@ -111,16 +102,7 @@ Disc.LayoutPattern =
 			box :
 				'Frame',
 
-			normaStyle :
-				'String',
-
-			hoverStyle :
-				'String',
-
-			focusStyle :
-				'String',
-
-			hofocStyle :
+			style :
 				'String'
 		}
 	},
@@ -201,16 +183,7 @@ Disc.LayoutPattern =
 			password :
 				'Boolean',
 
-			normaStyle :
-				'String',
-
-			hoverStyle :
-				'String',
-
-			focusStyle :
-				'String',
-
-			hofocStyle :
+			style :
 				'String',
 
 			font :

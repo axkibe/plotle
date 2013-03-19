@@ -94,6 +94,12 @@ var modes =
 	| User view
 	*/
 	'User' :
+		true,
+
+	/*
+	| Welcome view
+	*/
+	'Welcome' :
 		true
 
 };
@@ -108,7 +114,9 @@ Bridge = function( )
 	/*
 	| current mode
 	*/
-	this._$mode = 'Normal';
+	// TODO change to a loading screen as startup
+	this._$mode =
+		'Normal';
 
 	/*
 	| Creating this item:
@@ -118,12 +126,14 @@ Bridge = function( )
 	| 'relation' or
 	| 'portal
 	*/
-	this._$create = null;
+	this._$create =
+		null;
 
 	/*
 	| an Action object for the current action
 	*/
-	this._$action = null;
+	this._$action =
+		null;
 };
 
 
@@ -145,7 +155,9 @@ Bridge.prototype.inMode =
 {
 	if( !modes[ mode ] )
 	{
-		throw new Error( 'invalid mode : ' + mode  );
+		throw new Error(
+			'invalid mode : ' + mode
+		);
 	}
 
 	return this._$mode === mode;
@@ -161,7 +173,9 @@ Bridge.prototype.changeMode =
 {
 	if( !modes[ mode ] )
 	{
-		throw new Error( 'invalid mode : ' + mode );
+		throw new Error(
+			'invalid mode : ' + mode
+		);
 	}
 
 	this._$mode = mode;
@@ -188,10 +202,16 @@ Bridge.prototype.startAction =
 {
 	if( this._$action )
 	{
-		throw new Error( 'double action' );
+		throw new Error(
+			'double action'
+		);
 	}
 
-	return this._$action = new Action( arguments );
+	var action =
+	this._$action =
+		new Action( arguments );
+
+	return action;
 
 };
 
@@ -204,13 +224,34 @@ Bridge.prototype.stopAction =
 {
 	if( !this._$action )
 	{
-		throw new Error( 'ending no action' );
+		throw new Error(
+			'ending no action'
+		);
 	}
 
 	this._$action =
 		null;
 
 };
+
+/*
+| Sets the current username.
+*/
+Bridge.prototype.setUsername =
+	function( username )
+{
+	this._$username =
+		username;
+}
+
+/*
+| Gets the current username.
+*/
+Bridge.prototype.getUsername =
+	function( username )
+{
+	return this._$username;
+}
 
 
 } )( );

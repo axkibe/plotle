@@ -92,38 +92,38 @@ Shell =
 			fabric.height
 		);
 
-	this._$forms =
+	var forms =
 		{
 			login :
-				new Forms.Login(
-					'screensize',
-						screensize
-				),
+				Forms.Login,
 
 			moveto :
-				new Forms.MoveTo(
-					'screensize',
-						screensize
-				),
+				Forms.MoveTo,
 
 			signup :
-				new Forms.SignUp(
-					'screensize',
-						screensize
-				),
+				Forms.SignUp,
 
 			space :
-				new Forms.Space(
-					'screensize',
-						screensize
-				),
+				Forms.Space,
 
 			user :
-				new Forms.User(
-					'screensize',
-						screensize
-				)
+				Forms.User,
+
+			welcome :
+				Forms.Welcome
 		};
+
+	this._$forms =
+		{ };
+
+	for( var name in forms )
+	{
+		this._$forms[ name ] =
+			new forms[ name ](
+				'screensize',
+					screensize
+				);
+	}
 
 	this._$disc =
 		new Disc.MainDisc(
@@ -605,6 +605,16 @@ Shell.prototype.getCurrentDisplay =
 
 			Proto =
 				Forms.User;
+
+			break;
+
+		case 'Welcome' :
+
+			name =
+				'welcome';
+
+			Proto =
+				Forms.Welcome;
 
 			break;
 
@@ -1152,9 +1162,13 @@ Shell.prototype.setUser =
 		);
 	}
 
+	this.bridge.setUsername( user );
+
 	this._$disc.setUser( user );
 
 	this._$forms.user.setUsername( user );
+
+	this._$forms.welcome.setUsername( user );
 };
 
 
@@ -1227,7 +1241,7 @@ Shell.prototype.onload =
 /*
 | Moves to space with the name name.
 |
-| if spaceName is null, reloads current space.
+| if name is null, reloads current space.
 */
 Shell.prototype.moveToSpace =
 	function(
@@ -1260,6 +1274,7 @@ Shell.prototype.moveToSpace =
 
 	// TODO show move to message
 
+	// TODO replace by callback object
 	this.peer.aquireSpace(
 		name,
 		function( err, val )
@@ -1455,6 +1470,7 @@ Shell.prototype.arrivedAtSpace =
 		access
 	);
 
+	this.bridge.changeMode( 'Normal' );
 };
 
 

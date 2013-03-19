@@ -228,17 +228,8 @@ MainDisc.prototype.layout =
 			type :
 				'Button',
 
-			normaStyle :
-				'discButtonGeneric',
-
-			hoverStyle :
-				'discButtonGenericHover',
-
-			focusStyle :
-				'discButtonGenericFocus',
-
-			hofocStyle :
-				'discButtonGenericHofoc',
+			style :
+				'mainButton',
 
 			icon :
 				'normal',
@@ -326,17 +317,8 @@ MainDisc.prototype.layout =
 			type :
 				'Button',
 
-			normaStyle :
-				'discButtonGeneric',
-
-			hoverStyle :
-				'discButtonGenericHover',
-
-			focusStyle :
-				'discButtonGenericFocus',
-
-			hofocStyle :
-				'discButtonGenericHofoc',
+			style :
+				'mainButton',
 
 			visible :
 				false,
@@ -448,17 +430,8 @@ MainDisc.prototype.layout =
 			type :
 				'Button',
 
-			normaStyle :
-				'discButtonGeneric',
-
-			hoverStyle :
-				'discButtonGenericHover',
-
-			focusStyle :
-				'discButtonGenericFocus',
-
-			hofocStyle :
-				'discButtonGenericHofoc',
+			style :
+				'mainButton',
 
 			icon :
 				'remove',
@@ -549,17 +522,8 @@ MainDisc.prototype.layout =
 			type :
 				'Button',
 
-			normaStyle :
-				'discButtonGeneric',
-
-			hoverStyle :
-				'discButtonGenericHover',
-
-			focusStyle :
-				'discButtonGenericFocus',
-
-			hofocStyle :
-				'discButtonGenericHofoc',
+			style :
+				'mainButton',
 
 			icon :
 				'moveto',
@@ -651,17 +615,8 @@ MainDisc.prototype.layout =
 			type :
 				'Button',
 
-			normaStyle :
-				'discButtonGeneric',
-
-			hoverStyle :
-				'discButtonGenericHover',
-
-			focusStyle :
-				'discButtonGenericFocus',
-
-			hofocStyle :
-				'discButtonGenericHofoc',
+			style :
+				'mainButton',
 
 			frame :
 			{
@@ -773,17 +728,8 @@ MainDisc.prototype.layout =
 			type :
 				'Button',
 
-			normaStyle :
-				'discButtonGeneric',
-
-			hoverStyle :
-				'discButtonGenericHover',
-
-			focusStyle :
-				'discButtonGenericFocus',
-
-			hofocStyle :
-				'discButtonGenericHofoc',
+			style :
+				'mainButton',
 
 			frame :
 			{
@@ -895,17 +841,8 @@ MainDisc.prototype.layout =
 			type :
 				'Button',
 
-			normaStyle :
-				'discButtonGeneric',
-
-			hoverStyle :
-				'discButtonGenericHover',
-
-			focusStyle :
-				'discButtonGenericFocus',
-
-			hofocStyle :
-				'discButtonGenericHofoc',
+			style :
+				'mainButton',
 
 			visible :
 				false,
@@ -1020,17 +957,8 @@ MainDisc.prototype.layout =
 			type :
 				'Button',
 
-			normaStyle :
-				'discButtonGeneric',
-
-			hoverStyle :
-				'discButtonGenericHover',
-
-			focusStyle :
-				'discButtonGenericFocus',
-
-			hofocStyle :
-				'discButtonGenericHofoc',
+			style :
+				'mainButton',
 
 			visible :
 				false,
@@ -1145,17 +1073,8 @@ MainDisc.prototype.layout =
 			type :
 				'Button',
 
-			normaStyle :
-				'discButtonGeneric',
-
-			hoverStyle :
-				'discButtonGenericHover',
-
-			focusStyle :
-				'discButtonGenericFocus',
-
-			hofocStyle :
-				'discButtonGenericHofoc',
+			style :
+				'mainButton',
 
 			caption :
 			{
@@ -1336,6 +1255,9 @@ MainDisc.prototype._weave =
 		Euclid.View.proper
 	);
 
+	/*
+	| TODO fix boxes
+	*/
 	if( config.debug.drawBoxes )
 	{
 		fabric.paint(
@@ -1740,11 +1662,14 @@ MainDisc.prototype.setHover =
 		return null;
 	}
 
-	this.$fabric = null;
+	this.$fabric =
+		null;
 
-	this.$hover  = name;
+	this.$hover =
+		name;
 
-	shell.redraw = true;
+	shell.redraw =
+		true;
 };
 
 
