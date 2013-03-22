@@ -1,16 +1,16 @@
 /*
-| Disc patterns.
+| Pattern.
 |
 | Authors: Axel Kittenberger
+|
+| TODO move to shared.
 */
 
 
 /*
 | Export
 */
-var Disc;
-Disc =
-	Disc || { };
+var Pattern;
 
 
 /*
@@ -29,7 +29,7 @@ var Euclid;
 /*
 | Form layouts
 */
-Disc.LayoutPattern =
+Pattern =
 {
 	'BeziTo' :
 	{
@@ -95,6 +95,7 @@ Disc.LayoutPattern =
 		}
 	},
 
+
 	'CheckBox' :
 	{
 		must :
@@ -137,9 +138,9 @@ Disc.LayoutPattern =
 	'Font' :
 	{
 		creator :
-			function( t )
+			function(t)
 			{
-				return new Euclid.Font( t );
+				return new Euclid.Font(t);
 			},
 
 		must :
@@ -190,9 +191,10 @@ Disc.LayoutPattern =
 				'Font',
 
 			maxlen :
-				'Number' // TODO make it Integer
+				'Number'
 		}
 	},
+
 
 	'Label'  :
 	{

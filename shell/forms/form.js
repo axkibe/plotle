@@ -22,7 +22,7 @@ var Curve;
 var Design;
 var Euclid;
 var Jools;
-//var Proc;
+var Pattern;
 var Sign;
 var shell;
 var system;
@@ -104,7 +104,7 @@ Forms.Form =
 	this.tree =
 		new Tree(
 			this.layout,
-			Forms.LayoutPattern
+			Pattern
 		);
 
 	// hinder direct access of the layout

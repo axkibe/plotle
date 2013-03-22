@@ -758,7 +758,7 @@ Server.prototype.prepareResources =
 		'shell/curve.js',
 			'fb',
 
-		'shell/disc/pattern-disc.js',
+		'shell/pattern.js',
 			'fb',
 
 		'shell/disc/icons.js',
@@ -795,9 +795,6 @@ Server.prototype.prepareResources =
 			'fb',
 
 		'shell/widgets/checkbox.js',
-			'fb',
-
-		'shell/forms/pattern-form.js',
 			'fb',
 
 		'shell/forms/form.js',

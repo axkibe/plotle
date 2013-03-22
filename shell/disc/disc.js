@@ -127,7 +127,7 @@ Disc.Disc =
 	this._tree =
 		new Tree(
 			this.layout,
-			Disc.LayoutPattern
+			Pattern
 		);
 
 	this.silhoutte =

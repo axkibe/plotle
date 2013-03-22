@@ -242,7 +242,7 @@ Bridge.prototype.setUsername =
 {
 	this._$username =
 		username;
-}
+};
 
 /*
 | Gets the current username.
@@ -251,7 +251,7 @@ Bridge.prototype.getUsername =
 	function( username )
 {
 	return this._$username;
-}
+};
 
 
 } )( );
