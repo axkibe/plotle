@@ -214,17 +214,8 @@ Login.prototype.layout =
 			password :
 				false,
 
-			normaStyle :
+			style :
 				'input',
-
-			focusStyle :
-				'inputFocus',
-
-			hoverStyle :
-				'input',
-
-			hofocStyle :
-				'inputFocus',
 
 			font :
 				fontPool.get( 14, 'la' ),
@@ -277,17 +268,8 @@ Login.prototype.layout =
 			password :
 				true,
 
-			normaStyle :
+			style :
 				'input',
-
-			focusStyle :
-				'inputFocus',
-
-			hoverStyle :
-				'input',
-
-			hofocStyle :
-				'inputFocus',
 
 			font :
 				fontPool.get( 14, 'la' ),
@@ -338,17 +320,8 @@ Login.prototype.layout =
 			type :
 				'Button',
 
-			normaStyle :
-				'button',
-
-			hoverStyle :
-				'buttonHover',
-
-			focusStyle :
-				'buttonFocus',
-
-			hofocStyle :
-				'buttonHofoc',
+			style :
+				'genericButton',
 
 			frame :
 			{
@@ -456,17 +429,8 @@ Login.prototype.layout =
 			type :
 				'Button',
 
-			normaStyle :
-				'button',
-
-			hoverStyle :
-				'buttonHover',
-
-			focusStyle :
-				'buttonFocus',
-
-			hofocStyle :
-				'buttonHofoc',
+			style :
+				'genericButton',
 
 			frame :
 			{

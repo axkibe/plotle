@@ -301,35 +301,20 @@ CheckBox.prototype.draw =
 	if( !this.$visible )
 		{ return; }
 
-	var twig = this.twig;
+	var style =
+		Widgets.getStyle(
+			this.twig.style,
+			accent
+		);
 
-	var sname;
-	switch( accent )
-	{
-		case Widgets.Accent.NORMA :
-			sname = twig.normaStyle;
-			break;
-
-		case Widgets.Accent.HOVER :
-			sname = twig.hoverStyle;
-			break;
-
-		case Widgets.Accent.FOCUS :
-			sname = twig.focusStyle;
-			break;
-
-		case Widgets.Accent.HOFOC :
-			sname = twig.hofocStyle;
-			break;
-
-		default :
-			throw new Error( 'Invalid accent: ' + accent );
-	}
-
-	var style = Widgets.getStyle( sname );
+	// TODO why doesnt getStyle throw the Error?
 
 	if( !Jools.isnon( style ) )
-		{ throw new Error('Invalid style: ' + sname); }
+	{
+		throw new Error(
+			'Invalid style: ' + this.twig.style
+		);
+	}
 
 	fabric.paint(
 		style,
@@ -341,7 +326,10 @@ CheckBox.prototype.draw =
 	if( this._$checked )
 	{
 		fabric.paint(
-			Widgets.getStyle( 'checkboxCheck' ),
+			Widgets.getStyle(
+				'checkboxCheck',
+				Widgets.Accent.NORMA
+			),
 			this,
 			'sketchCheck',
 			Euclid.View.proper

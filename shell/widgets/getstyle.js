@@ -33,6 +33,10 @@ if( typeof( window ) === 'undefined' )
 /*
 | List of tagnames.
 */
+/*
+
+TODO remove
+
 var styles =
 {
 //	boxes :
@@ -41,54 +45,17 @@ var styles =
 	checkbox :
 		theme.forms.checkbox,
 
-	checkboxHover :
-		theme.forms.checkboxHover,
-
-	checkboxFocus :
-		theme.forms.checkboxFocus,
-
-	checkboxHofoc :
-		theme.forms.checkboxHofoc,
-
 	checkboxCheck :
 		theme.forms.checkboxCheck,
 
+	genericButton :
+		theme.forms.genericButton,
 
-	button :
-		theme.forms.button,
+	createButton :
+		theme.disc.createButton,
 
-	buttonHover :
-		theme.forms.buttonHover,
-
-	buttonFocus :
-		theme.forms.buttonFocus,
-
-	buttonHofoc :
-		theme.forms.buttonHofoc,
-
-	createButtonGeneric :
-		theme.disc.createNormal,
-
-	createButtonGenericHover :
-		theme.disc.createHover,
-
-	createButtonGenericFocus :
-		theme.disc.createFocus,
-
-	createButtonGenericHofoc :
-		theme.disc.createHofoc,
-
-	discButtonGeneric :
-		theme.disc.button,
-
-	discButtonGenericHover :
-		theme.disc.buttonHover,
-
-	discButtonGenericFocus :
-		theme.disc.buttonFocus,
-
-	discButtonGenericHofoc :
-		theme.disc.buttonHofoc,
+	mainButton :
+		theme.disc.mainButton,
 
 //	highlight :
 //		theme.dash.highlight,
@@ -100,25 +67,78 @@ var styles =
 		theme.disc.iconRemove,
 
 	input :
-		theme.forms.input,
-
-	inputFocus :
-		theme.forms.inputFocus
+		theme.forms.input
 };
+*/
 
 
 /*
 | Gets a style by its name.
 */
 Widgets.getStyle =
-	function( name )
+	function(
+		name,
+		accent
+	)
 {
 	var style =
-		styles[ name ];
+		theme.styles[ name ];
 
 	if( !style )
 	{
-		throw new Error( 'Invalid style name: ' + name );
+		throw new Error(
+			'Invalid style name: ' + name
+		);
+	}
+
+	var Accent =
+		Widgets.Accent;
+
+	switch( accent )
+	{
+		case Accent.NORMA :
+
+			style =
+				style.normal;
+
+			break;
+
+		case Accent.HOVER :
+
+			style =
+				style.hover;
+
+			break;
+
+		case Accent.FOCUS :
+
+			style =
+				style.focus;
+
+			break;
+
+		case Accent.HOFOC :
+
+			style =
+				style.hofoc;
+
+			break;
+
+		default :
+
+			throw new Error(
+				'Invalid accent: ' + accent
+			);
+	}
+
+	if( !style )
+	{
+		throw new Error(
+			'Style ' +
+			name +
+			' does not have requested accent: ' +
+			accent
+		);
 	}
 
 	return style;

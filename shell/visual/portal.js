@@ -9,7 +9,8 @@
 | Export
 */
 var Visual;
-Visual = Visual || {};
+Visual =
+	Visual || {};
 
 
 /*
@@ -32,7 +33,9 @@ var theme;
 
 
 if( typeof( window ) === 'undefined' )
-	{ throw new Error( 'this code needs a browser!' ); }
+{
+	throw new Error( 'this code needs a browser!' );
+}
 
 
 /*
@@ -52,6 +55,7 @@ var Portal = Visual.Portal =
 		path
 	);
 };
+
 
 Jools.subclass(
 	Portal,
@@ -78,7 +82,8 @@ Portal.s_handles =
 /*
 | Resize handles to show on portals.
 */
-Portal.prototype.handles = Portal.s_handles;
+Portal.prototype.handles =
+	Portal.s_handles;
 
 
 /*
@@ -90,26 +95,33 @@ Portal.s_getZone =
 		p2
 	)
 {
-	var zone = new Euclid.Rect(
-		'arbitrary',
-		p1,
-		p2
-	);
+	var zone =
+		new Euclid.Rect(
+			'arbitrary',
+			p1,
+			p2
+		);
 
-	var minWidth  = theme.portal.minWidth;
-	var minHeight = theme.portal.minHeight;
+	var minWidth =
+		theme.portal.minWidth;
+
+	var minHeight =
+		theme.portal.minHeight;
 
 	if(
 		zone.width  < minWidth ||
 		zone.height < minHeight
-	) {
+	)
+	{
 		return new Euclid.Rect(
 			'pnw/size',
 			zone.pnw,
 			Math.max( minWidth,  zone.width  ),
 			Math.max( minHeight, zone.height )
 		);
-	} else {
+	}
+	else
+	{
 		return zone;
 	}
 };
@@ -126,7 +138,8 @@ Portal.s_drawTrans =
 		zone
 	)
 {
-	var silhoutte = Portal.s_getSilhoutte( zone );
+	var silhoutte =
+		Portal.s_getSilhoutte( zone );
 
 	fabric.fill(
 		theme.portal.style.fill,
@@ -160,6 +173,7 @@ Portal.s_getZeroSilhoutte =
 		)
 	);
 };
+
 
 /*
 | Returns the portals silhoutte.
@@ -236,16 +250,19 @@ Portal.prototype.dragStop =
 		p
 	)
 {
-	var action = shell.bridge.action( );
+	var action =
+		shell.bridge.action( );
 
 	switch( action.type )
 	{
 		case 'ItemDrag' :
 		case 'ItemResize' :
 
-			var zone = this.getZone( );
+			var zone =
+				this.getZone( );
 
-			if( zone.width < theme.portal.minWidth ||
+			if(
+				zone.width < theme.portal.minWidth ||
 				zone.height < theme.portal.minHeight
 			)
 			{
@@ -257,9 +274,13 @@ Portal.prototype.dragStop =
 				return;
 			}
 
-			shell.peer.setZone( this.path, zone );
+			shell.peer.setZone(
+				this.path,
+				zone
+			);
 
-			shell.redraw = true;
+			shell.redraw =
+				true;
 
 			return true;
 
@@ -286,7 +307,9 @@ Portal.prototype.grepFocus =
 
 	// already have focus?
 	if( space.focusedItem( ) === this )
-		{ return; }
+	{
+		return;
+	}
 
 	var caret = space.setCaret(
 		{
@@ -313,7 +336,13 @@ Portal.prototype.click =
 		p
 	)
 {
-	if( !this.getZone( ).within( view, p ) )
+	if(
+		!this.getZone( )
+			.within(
+				view,
+				p
+			)
+		)
 	{
 		return false;
 	}
@@ -336,11 +365,13 @@ Portal.prototype.click =
 	shell.redraw =
 		true;
 
-	var caret = shell.setCaret(
-		'space',
+	var caret = shell.$space.setCaret(
 		{
-			path : this.path,
-			at1  : null
+			path :
+				this.path,
+
+			at1  :
+				null
 		}
 	);
 
@@ -450,10 +481,20 @@ Portal.prototype.positionCaret =
 Portal.prototype.pointingHover = function( view, p )
 {
 	if( p === null )
-		{ return null; }
+	{
+		return null;
+	}
 
-	if( this.getZone().within( view, p ) )
-		{ return 'default'; }
+	if(
+		this.getZone( )
+			.within(
+				view,
+				p
+			)
+		)
+	{
+		return 'default';
+	}
 
 	return null;
 };
@@ -468,10 +509,17 @@ Portal.prototype.pointingHover = function( view, p )
 Portal.prototype.getZone =
 	function( )
 {
-	var twig   = this.twig;
-	var action = shell.bridge.action( );
-	var max    = Math.max;
-	var min    = Math.min;
+	var twig =
+		this.twig;
+
+	var action =
+		shell.bridge.action( );
+
+	var max =
+		Math.max;
+
+	var min =
+		Math.min;
 
 	if(
 		!action ||
@@ -495,9 +543,13 @@ Portal.prototype.getZone =
 
 		case 'ItemResize' :
 
-			var szone = action.startZone;
+			var szone =
+				action.startZone;
+
 			if( !szone )
-				{ return twig.zone; }
+			{
+				return twig.zone;
+			}
 
 			var spnw = szone.pnw;
 			var spse = szone.pse;
@@ -511,93 +563,130 @@ Portal.prototype.getZone =
 			{
 
 				case 'n'  :
-					pnw = Euclid.Point.renew(
-						spnw.x,
-						min( spnw.y + dy, spse.y - minh ),
-						spnw,
-						spse
-					);
-					pse = spse;
+
+					pnw =
+						Euclid.Point.renew(
+							spnw.x,
+							min( spnw.y + dy, spse.y - minh ),
+							spnw,
+							spse
+						);
+
+					pse =
+						spse;
+
 					break;
 
 				case 'ne' :
-					pnw = Euclid.Point.renew(
-						spnw.x,
-						min( spnw.y + dy, spse.y - minh ),
-						spnw,
-						spse
-					);
-					pse = Euclid.Point.renew(
-						max( spse.x + dx, spnw.x + minw ),
-						spse.y,
-						spnw,
-						spse
-					);
+
+					pnw =
+						Euclid.Point.renew(
+							spnw.x,
+							min( spnw.y + dy, spse.y - minh ),
+							spnw,
+							spse
+						);
+
+					pse =
+						Euclid.Point.renew(
+							max( spse.x + dx, spnw.x + minw ),
+							spse.y,
+							spnw,
+							spse
+						);
 					break;
 
 				case 'e'  :
-					pnw = spnw;
-					pse = Euclid.Point.renew(
-						max( spse.x + dx, spnw.x + minw ),
-						spse.y,
-						spnw,
-						spse
-					);
+
+					pnw =
+						spnw;
+
+					pse =
+						Euclid.Point.renew(
+							max( spse.x + dx, spnw.x + minw ),
+							spse.y,
+							spnw,
+							spse
+						);
+
 					break;
 
 				case 'se' :
-					pnw = spnw;
-					pse = Euclid.Point.renew(
-						max( spse.x + dx, spnw.x + minw ),
-						max( spse.y + dy, spnw.y + minh ),
-						spnw,
-						spse
-					);
+
+					pnw =
+						spnw;
+
+					pse =
+						Euclid.Point.renew(
+							max( spse.x + dx, spnw.x + minw ),
+							max( spse.y + dy, spnw.y + minh ),
+							spnw,
+							spse
+						);
+
 					break;
 
 				case 's' :
-					pnw = spnw;
-					pse = Euclid.Point.renew(
-						spse.x,
-						max( spse.y + dy, spnw.y + minh ),
-						spnw,
-						spse
-					);
+
+					pnw =
+						spnw;
+
+					pse =
+						Euclid.Point.renew(
+							spse.x,
+							max( spse.y + dy, spnw.y + minh ),
+							spnw,
+							spse
+						);
+
 					break;
 
 				case 'sw'  :
-					pnw = Euclid.Point.renew(
-						min( spnw.x + dx, spse.x - minw ),
-						spnw.y,
-						spnw,
-						spse
-					);
-					pse = Euclid.Point.renew(
-						spse.x,
-						max( spse.y + dy, spnw.y + minh ),
-						spnw,
-						spse
-					);
+
+					pnw =
+						Euclid.Point.renew(
+							min( spnw.x + dx, spse.x - minw ),
+							spnw.y,
+							spnw,
+							spse
+						);
+
+					pse =
+						Euclid.Point.renew(
+							spse.x,
+							max( spse.y + dy, spnw.y + minh ),
+							spnw,
+							spse
+						);
+
 					break;
 
 				case 'w'   :
-					pnw = Euclid.Point.renew(
-						min( spnw.x + dx, spse.x - minw ),
-						spnw.y,
-						spnw,
-						spse
-					);
-					pse = spse;
+					pnw =
+						Euclid.Point.renew(
+							min( spnw.x + dx, spse.x - minw ),
+							spnw.y,
+							spnw,
+							spse
+						);
+
+					pse =
+						spse;
+
 					break;
 
 				case 'nw' :
-					pnw = Euclid.Point.renew(
-						min( spnw.x + dx, spse.x - minw ),
-						min( spnw.y + dy, spse.y - minh ),
-						spnw,
-						spse
-					);
-					pse = spse;
+					pnw =
+						Euclid.Point.renew(
+							min( spnw.x + dx, spse.x - minw ),
+							min( spnw.y + dy, spse.y - minh ),
+							spnw,
+							spse
+						);
+
+					pse =
+						spse;
+
 					break;
 
 				//case 'c' :
@@ -608,6 +697,7 @@ Portal.prototype.getZone =
 			return new Euclid.Rect( 'pnw/pse', pnw, pse );
 
 		default :
+
 			return twig.zone;
 	}
 };
@@ -619,12 +709,15 @@ Portal.prototype.getZone =
 Portal.prototype._weave =
 	function( vzone )
 {
-	var f = this.$fabric = new Euclid.Fabric(
-		vzone.width + 1,
-		vzone.height + 1
-	);
+	var f =
+	this.$fabric =
+		new Euclid.Fabric(
+			vzone.width + 1,
+			vzone.height + 1
+		);
 
-	var silhoutte = this.getZeroSilhoutte( vzone );
+	var silhoutte =
+		this.getZeroSilhoutte( vzone );
 
 	f.fill(
 		theme.portal.style.fill,
@@ -633,22 +726,30 @@ Portal.prototype._weave =
 		Euclid.View.proper
 	);
 
-	var font = fontPool.get( 13, 'la' );
+	var font =
+		fontPool.get( 13, 'la' );
 
-	var usertext  = 'meshcraft';
-	var userwidth = Euclid.Measure.width( font, usertext  );
+	var usertext =
+		'meshcraft';
+
+	var userwidth =
+		Euclid.Measure.width( font, usertext  );
+
 	var upnw =
 		new Euclid.Point(
 			Jools.half( vzone.width - userwidth ),
 			Math.round( vzone.height / 3 )
 		);
 
-
 	//var userrect  = new Euclid.RoundRect(
 	//Math.round( vzone.height / 3 );
 
-	var spacetext = 'sandbox';
-	var spacewidth = Euclid.Measure.width( font, spacetext );
+	var spacetext =
+		'sandbox';
+
+	var spacewidth =
+		Euclid.Measure.width( font, spacetext );
+
 	var spnw =
 		new Euclid.Point(
 			Jools.half( vzone.width - spacewidth ),

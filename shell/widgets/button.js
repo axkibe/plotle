@@ -250,54 +250,17 @@ Button.prototype._weave =
 	var twig =
 		this.twig;
 
-	var sname;
-
-	var Accent =
-		Widgets.Accent;
-
-	switch( accent )
-	{
-		case Accent.NORMA :
-
-			sname =
-				twig.normaStyle;
-
-			break;
-
-		case Accent.HOVER :
-
-			sname =
-				twig.hoverStyle;
-
-			break;
-
-		case Accent.FOCUS :
-
-			sname =
-				twig.focusStyle;
-
-			break;
-
-		case Accent.HOFOC :
-
-			sname =
-				twig.hofocStyle;
-
-			break;
-
-		default :
-
-			throw new Error(
-				'Invalid accent: ' + accent
-			);
-	}
-
 	var style =
-		Widgets.getStyle( sname );
+		Widgets.getStyle(
+			twig.style,
+			accent
+		);
+
+	// TODO throw in getStyle
 
 	if( !Jools.isnon( style ) )
 	{
-		throw new Error('Invalid style: ' + sname);
+		throw new Error('Invalid style: ' + twig.style);
 	}
 
 	fabric.paint(
@@ -387,7 +350,10 @@ Button.prototype._weave =
 	if( icon )
 	{
 		style =
-			Widgets.getStyle( icon.style );
+			Widgets.getStyle(
+				icon.style,
+				Widgets.Accent.NORMA
+			);
 
 		fabric.paint(
 			style,
@@ -400,7 +366,10 @@ Button.prototype._weave =
 	if( config.debug.drawBoxes )
 	{
 		fabric.paint(
-			Widgets.getStyle( 'boxes' ),
+			Widgets.getStyle(
+				'boxes',
+				Widgets.Accent.NORMA
+			),
 			new Euclid.Rect(
 				'pnw/pse',
 				this.iframe.pnw,

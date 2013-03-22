@@ -296,17 +296,8 @@ SignUp.prototype.layout =
 			password :
 				false,
 
-			normaStyle :
+			style :
 				'input',
-
-			focusStyle :
-				'inputFocus',
-
-			hoverStyle :
-				'input',
-
-			hofocStyle :
-				'inputFocus',
 
 			font :
 				fontPool.get( 14, 'la' ),
@@ -359,17 +350,8 @@ SignUp.prototype.layout =
 			password :
 				false,
 
-			normaStyle :
+			style :
 				'input',
-
-			focusStyle :
-				'inputFocus',
-
-			hoverStyle :
-				'input',
-
-			hofocStyle :
-				'inputFocus',
 
 			font :
 				fontPool.get( 14, 'la' ),
@@ -422,17 +404,8 @@ SignUp.prototype.layout =
 			password :
 				true,
 
-			normaStyle :
+			style :
 				'input',
-
-			focusStyle :
-				'inputFocus',
-
-			hoverStyle :
-				'input',
-
-			hofocStyle :
-				'inputFocus',
 
 			font :
 				fontPool.get( 14, 'la' ),
@@ -486,17 +459,8 @@ SignUp.prototype.layout =
 			password :
 				true,
 
-			normaStyle :
+			style :
 				'input',
-
-			focusStyle :
-				'inputFocus',
-
-			hoverStyle :
-				'input',
-
-			hofocStyle :
-				'inputFocus',
 
 			font :
 				fontPool.get( 14, 'la' ),
@@ -546,17 +510,8 @@ SignUp.prototype.layout =
 			type :
 				'CheckBox',
 
-			normaStyle :
+			style :
 				'checkbox',
-
-			hoverStyle :
-				'checkboxHover',
-
-			focusStyle :
-				'checkboxFocus',
-
-			hofocStyle :
-				'checkboxHofoc',
 
 			box :
 			{
@@ -653,17 +608,8 @@ SignUp.prototype.layout =
 			type :
 				'Button',
 
-			normaStyle :
-				'button',
-
-			hoverStyle :
-				'buttonHover',
-
-			focusStyle :
-				'buttonFocus',
-
-			hofocStyle :
-				'buttonHofoc',
+			style :
+				'genericButton',
 
 			frame :
 			{
@@ -771,17 +717,8 @@ SignUp.prototype.layout =
 			type :
 				'Button',
 
-			normaStyle :
-				'button',
-
-			hoverStyle :
-				'buttonHover',
-
-			focusStyle :
-				'buttonFocus',
-
-			hofocStyle :
-				'buttonHofoc',
+			style :
+				'genericButton',
 
 			frame :
 			{
@@ -1138,7 +1075,7 @@ SignUp.prototype.onRegister =
 
 	this.clear( );
 
-	shell.bridge.changeMode( 'Normal' );
+	shell.bridge.changeMode( 'Welcome' );
 
 	this.poke( );
 };

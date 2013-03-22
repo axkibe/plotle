@@ -332,45 +332,11 @@ Input.prototype._weave =
 	this._$fabric =
 		new Euclid.Fabric( bezi );
 
-	var sname;
-
-	switch( accent )
-	{
-		case Widgets.Accent.NORMA :
-
-			sname =
-				this.twig.normaStyle;
-
-			break;
-
-		case Widgets.Accent.HOVER :
-
-			sname =
-				this.twig.hoverStyle;
-
-			break;
-
-		case Widgets.Accent.FOCUS :
-
-			sname =
-				this.twig.focusStyle;
-
-			break;
-
-		case Widgets.Accent.HOFOC :
-
-			sname =
-				this.twig.hofocStyle;
-
-			break;
-
-		default :
-
-			throw new Error('Invalid accent: ' + accent);
-	}
-
 	var style =
-		Widgets.getStyle( sname );
+		Widgets.getStyle(
+			this.twig.style,
+			accent
+		);
 
 	fabric.fill(
 		style.fill,
