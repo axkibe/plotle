@@ -69,7 +69,7 @@ Widgets.Input =
 	this.pse =
 		parent.iframe.computePoint( twig.frame.pse );
 
-	this._bezi =
+	this._shape =
 		new Euclid.RoundRect(
 			Euclid.Point.zero,
 			pse.sub( pnw ),
@@ -322,15 +322,15 @@ Input.prototype._weave =
 		return fabric;
 	}
 
-	var bezi =
-		this._bezi;
+	var shape =
+		this._shape;
 
 	var pitch =
 		this._pitch;
 
 	fabric =
 	this._$fabric =
-		new Euclid.Fabric( bezi );
+		new Euclid.Fabric( shape );
 
 	var style =
 		Widgets.getStyle(
@@ -340,7 +340,7 @@ Input.prototype._weave =
 
 	fabric.fill(
 		style.fill,
-		bezi,
+		shape,
 		'sketch',
 		Euclid.View.proper
 	);
@@ -374,7 +374,7 @@ Input.prototype._weave =
 
 	fabric.edge(
 		style.edge,
-		bezi,
+		shape,
 		'sketch',
 		Euclid.View.proper
 	);
@@ -545,10 +545,10 @@ Input.prototype.getValue =
 | Sets the current value (text in the box)
 */
 Input.prototype.setValue =
-	function( v )
+	function( value )
 {
 	this._$value =
-		v;
+		value;
 
 	this.poke( );
 };
@@ -563,28 +563,32 @@ Input.prototype.input =
 	var csign =
 		this.parent.$caret.sign;
 
-	var v =
+	var value =
 		this._$value;
 
 	var at1 =
 		csign.at1;
 
-	var mlen =
+	var maxlen =
 		this.twig.maxlen;
 
-	if( mlen > 0 && v.length + text.length > mlen )
+	// cuts of text if larger than this maxlen
+	if(
+		maxlen > 0 &&
+		value.length + text.length > maxlen
+	)
 	{
 		text =
 			text.substring(
 				0,
-				mlen - v.length
+				maxlen - value.length
 			);
 	}
 
 	this._$value =
-		v.substring( 0, at1 ) +
+		value.substring( 0, at1 ) +
 		text +
-		v.substring( at1 );
+		value.substring( at1 );
 
 	this.parent.setCaret(
 		{
@@ -943,7 +947,7 @@ Input.prototype.pointingHover =
 	);
 
 	if(
-		!this._bezi.within( Euclid.View.proper, pp )
+		!this._shape.within( Euclid.View.proper, pp )
 	)
 	{
 		return null;
@@ -978,7 +982,7 @@ Input.prototype.pointingStart =
 		p.sub( this.pnw );
 
 	if(
-		!this._bezi.within(
+		!this._shape.within(
 			Euclid.View.proper,
 			pp
 		)

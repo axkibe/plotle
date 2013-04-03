@@ -230,6 +230,26 @@ theme =
 						'rgba( 255, 183, 15, 0.5 )'
 				}
 			]
+		},
+
+		/*
+		| Style of the input fields on the portal
+		*/
+		input :
+		{
+			edge :
+			[
+				{
+					border :
+						0,
+
+					width :
+						1,
+
+					color :
+						'rgb( 255, 188, 87 )'
+				}
+			]
 		}
 	},
 

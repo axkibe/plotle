@@ -94,7 +94,7 @@ Jools.subclass(
 
 
 /*
-| Updates $sub to match a new twig.
+| Updates the subtree to match a new twig.
 */
 Space.prototype.update =
 	function(
@@ -103,22 +103,24 @@ Space.prototype.update =
 	)
 {
 	// no change?
-	if ( this.twig === twig )
+	if( this.twig === twig )
 	{
 		return;
 	}
 
-	this.twig = twig;
+	this.twig =
+		twig;
 
-	var old =
-		this.$sub;
+	var
+		old =
+			this.$sub,
 
-	var sub =
+		sub =
 		this.$sub =
-		{ };
+				{ },
 
-	var copse =
-		twig.copse;
+		copse =
+			twig.copse;
 
 	for( var k in copse )
 	{
@@ -147,15 +149,19 @@ Space.prototype.update =
 
 	// removes the focus if the focused item is removed.
 
-	var caret =
-		this.$caret;
+	var
+		caret =
+			this.$caret,
 
-	var csign =
-		caret.sign;
+		csign =
+			caret.sign;
 
 	if(
-		csign && csign.path &&
-		!Jools.isnon( sub[ csign.path.get( 0 ) ] )
+		csign &&
+		csign.path &&
+		!Jools.isnon( // TODO why not Jools.is?
+			sub[ csign.path.get( 0 ) ]
+		)
 	)
 	{
 		var selection =
@@ -219,28 +225,12 @@ Space.prototype.createItem =
 		k
 	)
 {
-	var Proto;
+	var Proto =
+		Visual[ twig.type ];
 
-	switch (twig.type)
+	if( !Proto )
 	{
-		case 'Note' :
-			Proto = Visual.Note;
-			break;
-
-		case 'Label' :
-			Proto = Visual.Label;
-			break;
-
-		case 'Portal' :
-			Proto = Visual.Portal;
-			break;
-
-		case 'Relation' :
-			Proto = Visual.Relation;
-			break;
-
-		default :
-			throw new Error( 'unknown type: ' + twig.type );
+		throw new Error( 'unknown type: ' + twig.type );
 	}
 
 	return new Proto(
@@ -295,7 +285,8 @@ Space.prototype.draw =
 		);
 	}
 
-	var action = shell.bridge.action( );
+	var action =
+		shell.bridge.action( );
 
 	switch( action && action.type )
 	{
@@ -557,17 +548,18 @@ Space.prototype.pointingHover =
 		return null;
 	}
 
-	var view =
-		this.$view;
+	var
+		view =
+			this.$view,
 
-	var cursor =
-		null;
+		cursor =
+			null,
 
-	var focus =
-		this.focusedItem( );
+		focus =
+			this.focusedItem( ),
 
-	var action =
-		shell.bridge.action( );
+		action =
+			shell.bridge.action( );
 
 	if( focus )
 	{
@@ -580,7 +572,11 @@ Space.prototype.pointingHover =
 		}
 	}
 
-	for( var a = 0, aZ = this.twig.length; a < aZ; a++ )
+	for(
+		var a = 0, aZ = this.twig.length;
+		a < aZ;
+		a++
+	)
 	{
 		var item =
 			this.atRank( a );
@@ -593,21 +589,59 @@ Space.prototype.pointingHover =
 
 		if( !cursor && cu )
 		{
-			cursor = cu;
+			cursor =
+				cu;
 
-			switch( action && action.type ) {
+			switch( action && action.type )
+			{
 
+				case 'Remove' :
+
+					if(
+						!item.path.equals( action.removeItemPath )
+					)
+					{
+						action.removeItemPath =
+							item.path;
+
+						action.removeItemFade =
+							true;
+
+						shell.redraw =
+							true;
+					}
+
+					break;
+
+				case 'CreateRelation' :
+
+					if(
+						action.relationState === 'start' &&
+						!item.path.equals( action.fromItemPath )
+					)
+					{
+						action.fromItemPath =
+							item.path;
+
+						shell.redraw =
+							true;
+					}
+
+					break;
+			}
+		}
+	}
+
+	if( !cursor )
+	{
+		switch( action && action.type )
+		{
 			case 'Remove' :
 
-				if(
-					!item.path.equals( action.removeItemPath )
-				)
+				if( action.removeItemPath )
 				{
 					action.removeItemPath =
-						item.path;
-
-					action.removeItemFade =
-						true;
+						null;
 
 					shell.redraw =
 						true;
@@ -617,52 +651,16 @@ Space.prototype.pointingHover =
 
 			case 'CreateRelation' :
 
-				if(
-					action.relationState === 'start' &&
-					!item.path.equals( action.fromItemPath )
-				)
+				if( action.fromItemPath )
 				{
 					action.fromItemPath =
-						item.path;
+						null;
 
 					shell.redraw =
-						true;
+					true;
 				}
 
 				break;
-			}
-		}
-	}
-
-	if( !cursor )
-	{
-		switch( action && action.type )
-		{
-		case 'Remove' :
-
-			if( action.removeItemPath )
-			{
-				action.removeItemPath =
-					null;
-
-				shell.redraw =
-					true;
-			}
-
-			break;
-
-		case 'CreateRelation' :
-
-			if( action.fromItemPath )
-			{
-				action.fromItemPath =
-					null;
-
-				shell.redraw =
-					true;
-			}
-
-			break;
 		}
 	}
 
@@ -802,7 +800,8 @@ Space.prototype.dragStart =
 		}
 	}
 
-	var action = shell.bridge.action( );
+	var action =
+		shell.bridge.action( );
 
 	switch( action && action.type ) {
 
@@ -1163,13 +1162,16 @@ Space.prototype.dragMove =
 		// ctrl
 	)
 {
-	var view =
-		this.$view;
+	var
+		view =
+			this.$view,
 
-	var action =
-		shell.bridge.action( );
+		action =
+			shell.bridge.action( ),
 
-	var item, pd;
+		item,
+
+		pd;
 
 	switch( action.type )
 	{
@@ -1177,9 +1179,11 @@ Space.prototype.dragMove =
 		case 'CreateLabel' :
 		case 'CreatePortal' :
 
-			action.move = p;
+			action.move =
+				p;
 
-			shell.redraw = true;
+			shell.redraw =
+				true;
 
 			return 'pointer';
 
@@ -1189,26 +1193,39 @@ Space.prototype.dragMove =
 			{
 				// panning while creating a relation
 
-				pd = p.sub( action.start );
+				pd =
+					p.sub( action.start );
 
-				this.$view = view = new Euclid.View(
-					action.pan.add( pd.x / view.zoom, pd.y / view.zoom ),
-					view.fact
-				);
+				this.$view =
+				view =
+					new Euclid.View(
+						action.pan.add(
+							pd.x / view.zoom,
+							pd.y / view.zoom
+						),
+						view.fact
+					);
 
-				shell.redraw = true;
+				shell.redraw =
+					true;
 
 				return 'pointer';
 			}
 
+			action.toItemPath =
+				null;
 
-			action.toItemPath = null;
+			action.move =
+				p;
 
-			action.move = p;
-
-			for( var r = 0, rZ = this.twig.length; r < rZ; r++ )
+			for(
+				var r = 0, rZ = this.twig.length;
+				r < rZ;
+				r++
+			)
 			{
-				item = this.atRank( r );
+				item =
+					this.atRank( r );
 
 				if(
 					item.dragMove(
@@ -1221,7 +1238,8 @@ Space.prototype.dragMove =
 				}
 			}
 
-			shell.redraw = true;
+			shell.redraw =
+				true;
 
 			return 'pointer';
 
@@ -1232,19 +1250,23 @@ Space.prototype.dragMove =
 			{
 				// dragging while removing
 
-				pd = p.sub( action.start );
+				pd =
+					p.sub( action.start );
 
-				this.$view = view = new Euclid.View(
-					action.pan.add( pd.x / view.zoom, pd.y / view.zoom ),
-					view.fact
-				);
+				view =
+				this.$view =
+					new Euclid.View(
+						action.pan.add( pd.x / view.zoom, pd.y / view.zoom ),
+						view.fact
+					);
 			}
 			else
 			{
-				var removeItem = this.getSub(
-					action.removeItemPath,
-					'Item'
-				);
+				var removeItem =
+					this.getSub(
+						action.removeItemPath,
+						'Item'
+					);
 
 				// the item to removed is faded
 				// when the pointer is still upon
@@ -1258,27 +1280,40 @@ Space.prototype.dragMove =
 				);
 			}
 
-			shell.redraw = true;
+			shell.redraw =
+				true;
 
 			return 'pointer';
 
 		case 'Pan' :
 
-			pd = p.sub( action.start );
+			pd =
+				p.sub( action.start );
 
-			this.$view = view = new Euclid.View(
-				action.pan.add( pd.x / view.zoom, pd.y / view.zoom ),
-				view.fact
-			);
+			view =
+			this.$view =
+				new Euclid.View(
+					action.pan.add(
+						pd.x / view.zoom,
+						pd.y / view.zoom
+					),
+					view.fact
+				);
 
-			shell.redraw = true;
+			shell.redraw =
+				true;
 
 			return 'pointer';
 
 		default :
 
-			this.getSub( action.itemPath, 'dragMove' )
-				.dragMove( view, p );
+			this.getSub(
+				action.itemPath,
+				'dragMove'
+			).dragMove(
+				view,
+				p
+			);
 
 			return 'move';
 	}
@@ -1288,6 +1323,7 @@ Space.prototype.dragMove =
 /*
 | An entry of the float menu has been selected
 */
+/*
 Space.prototype.menuSelect =
 	function(
 		entry,
@@ -1371,6 +1407,7 @@ Space.prototype.menuSelect =
 			break;
 	}
 };
+*/
 
 
 /*
@@ -1383,7 +1420,9 @@ Space.prototype.pointingStart =
 		// ctrl
 	)
 {
-	var view   = this.$view;
+	var
+		view =
+			this.$view;
 
 	if( this.access == 'ro' )
 	{
@@ -1392,32 +1431,33 @@ Space.prototype.pointingStart =
 
 	var action = shell.bridge.action( );
 
-	switch( action && action.type ) {
+	switch( action && action.type )
+	{
+		case 'Remove' :
 
-	case 'Remove' :
+			// starts a drag operation on deletion
+			// so the item gets removed on
+			// mouse/finger up
 
-		// starts a drag operation on deletion
-		// so the item gets removed on
-		// mouse/finger up
+			return 'drag';
 
-		return 'drag';
+		case 'CreateRelation' :
 
-	case 'CreateRelation' :
+			if( action.fromItemPath )
+			{
+				action.relationState = 'hadSelect';
+			}
+			else
+			{
+				action.relationState = 'pan';
+			}
 
-		if( action.fromItemPath )
-		{
-			action.relationState = 'hadSelect';
-		}
-		else
-		{
-			action.relationState = 'pan';
-		}
-
-		return 'drag';
+			return 'drag';
 	}
 
 
-	var focus = this.focusedItem( );
+	var focus =
+		this.focusedItem( );
 
 	if( focus )
 	{
@@ -1456,7 +1496,7 @@ Space.prototype.input =
 			caret.sign.path,
 			'input'
 		);
-	
+
 	if( item )
 	{
 		item.input( text );
@@ -1470,15 +1510,23 @@ Space.prototype.input =
 Space.prototype.changeZoom =
 	function( df )
 {
-	var pm = this.$view.depoint( this._center );
+	var pm =
+		this.$view.depoint( this._center );
 
-	this.$view = this.$view.review( df, pm );
+	this.$view =
+		this.$view.review(
+			df,
+			pm
+		);
 
-	shell.setSpaceZoom( this.$view.fact );
+	shell.setSpaceZoom(
+		this.$view.fact
+	);
 
 	this.knock( );
 
-	shell.redraw = true;
+	shell.redraw =
+		true;
 };
 
 
@@ -1527,7 +1575,7 @@ Space.prototype.specialKey =
 			caret.sign.path,
 			'specialKey'
 		);
-		
+
 	if( item )
 	{
 		item.specialKey(
@@ -1568,7 +1616,8 @@ Space.prototype.getSub =
 			break;
 		}
 
-		n = n.$sub[ path.get( a ) ];
+		n =
+			n.$sub[ path.get( a ) ];
 
 		if( !n )
 		{

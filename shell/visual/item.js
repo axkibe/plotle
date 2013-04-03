@@ -9,7 +9,8 @@
 | Export
 */
 var Visual;
-Visual = Visual || { };
+Visual =
+	Visual || { };
 
 
 /*
@@ -28,17 +29,20 @@ var theme;
 /*
 | Capsule
 */
-( function() {
+( function( ) {
 'use strict';
 
-if (typeof(window) === 'undefined')
-	{ throw new Error('this code needs a browser!'); }
+if( typeof( window ) === 'undefined' )
+{
+	throw new Error( 'this code needs a browser!' );
+}
 
 
 /*
 | Constructor
 */
-var Item = Visual.Item =
+var Item =
+Visual.Item =
 	function(
 		spacename,
 		twig,
@@ -52,17 +56,24 @@ var Item = Visual.Item =
 		path
 	);
 
-	this.$fabric     = null;
-	this.$handles    = { };
+	this.$fabric =
+		null;
+
+	this.$handles =
+		{ };
 };
 
-Jools.subclass(Item, Visual.Base);
+Jools.subclass(
+	Item,
+	Visual.Base
+);
 
 
 /*
 | Used for lookups
 */
-Item.prototype.Item = true;
+Item.prototype.Item =
+	true;
 
 
 /*
@@ -112,24 +123,49 @@ Item.prototype.checkHandles =
 		p
 	)
 {
-	var h      = this.planHandles();
-	var f      = shell.fabric;
-	var d8cwcf = Euclid.Compass.dir8CWCF;
+	var
+		h =
+			this.planHandles(),
+		f =
+			shell.fabric,
+		d8cwcf =
+			Euclid.Compass.dir8CWCF;
 
-	for(var a = 0, aZ = d8cwcf.length; a < aZ; a++)
+	for(
+		var a = 0, aZ = d8cwcf.length;
+		a < aZ;
+		a++
+	)
 	{
-		var d = d8cwcf[a];
-		var z = h[d];
-
-		//if( !z || !z.within( view, p ) )
+		var
+			d =
+				d8cwcf[ a ],
+			z =
+				h[ d ];
 
 		if( !z ) // XXX
-			{ continue; }
+		{
+			continue;
+		}
 
-		var fixView = view.review( 0, view.point(z.pc) );
+		var fixView =
+			view.review(
+				0,
+				view.point( z.pc )
+			);
 
-		if( f.withinSketch( this, 'sketchHandle', fixView, p, z ) )
-			{ return d; }
+		if(
+			f.withinSketch(
+				this,
+				'sketchHandle',
+				fixView,
+				p,
+				z
+			)
+		)
+		{
+			return d;
+		}
 	}
 
 	return null;
@@ -142,90 +178,182 @@ Item.prototype.checkHandles =
 Item.prototype.planHandles =
 	function( )
 {
-	var ha   = this.handles;
-	var zone = this.getZone();
-	var h    = this.$handles;
+	var
+		ha =
+			this.handles,
+		zone =
+			this.getZone( ),
+		h =
+			this.$handles;
 
 	if( h.zone && zone.eq( h.zone ) )
-		{ return h; }
+	{
+		return h;
+	}
 
-	var wx  = zone.pnw.x;
-	var ny  = zone.pnw.y;
-	var ex  = zone.pse.x;
-	var sy  = zone.pse.y;
+	var
+		wx =
+			zone.pnw.x,
+		ny =
+			zone.pnw.y,
+		ex =
+			zone.pse.x,
+		sy =
+			zone.pse.y,
 
-	var mx = Jools.half(wx + ex);
-	var my = Jools.half(ny + sy);
+		mx =
+			Jools.half( wx + ex ),
+		my =
+			Jools.half( ny + sy ),
 
-	var dcx = theme.handle.cdistance;
-	var dcy = theme.handle.cdistance;
+		dcx =
+			theme.handle.cdistance,
+		dcy =
+			theme.handle.cdistance,
 
-	var dex = theme.handle.edistance;
-	var dey = theme.handle.edistance;
+		dex =
+			theme.handle.edistance,
+		dey =
+			theme.handle.edistance,
 
-	var a  = Math.min(
-		Math.round((zone.width  + 2 * dcx) / 6),
-		theme.handle.maxSize
-	);
+		a =
+			Math.min(
+				Math.round( ( zone.width  + 2 * dcx ) / 6 ),
+				theme.handle.maxSize
+			),
 
-	var b  = Math.min(
-		Math.round((zone.height + 2 * dcy) / 6),
-		theme.handle.maxSize
-	);
+		b =
+			Math.min(
+				Math.round( ( zone.height + 2 * dcy ) / 6 ),
+				theme.handle.maxSize
+			),
 
-	var a2 = 2*a;
-	var b2 = 2*b;
+		a2 =
+			2 * a,
 
-	if (dcx > a)
-		{ dex -= Jools.half(dcx - a); dcx = a; }
+		b2 =
+			2 * b;
 
-	if (dcy > b)
-		{ dey -= Jools.half(dcy - b); dcy = b; }
+	if( dcx > a )
+	{
+		dex -=
+			Jools.half( dcx - a );
+
+		dcx =
+			a;
+	}
+
+	if( dcy > b )
+	{
+		dey -=
+			Jools.half( dcy - b );
+
+		dcy =
+			b;
+	}
 
 	return this.$handles =
 		{
 			// ellipse bezier height
-			bb   : Math.round(b / 0.75),
-			zone : zone,
+			bb :
+				Math.round( b / 0.75 ),
 
-			nw : ha.nw && Euclid.Rect.renew(
-					wx - dcx,      ny - dcy,
-					wx - dcx + a2, ny - dcy + b2,
+			zone :
+				zone,
+
+			nw :
+				ha.nw &&
+				Euclid.Rect.renew(
+					wx - dcx,
+					ny - dcy,
+
+					wx - dcx + a2,
+					ny - dcy + b2,
+
 					h.nw
 				),
-			n  : ha.n && Euclid.Rect.renew(
-					mx - a,        ny - dey,
-					mx + a,        ny - dey + b2,
+
+			n :
+				ha.n &&
+				Euclid.Rect.renew(
+					mx - a,
+					ny - dey,
+
+					mx + a,
+					ny - dey + b2,
+
 					h.n
 				),
-			ne : ha.ne && Euclid.Rect.renew(
-					ex + dcx - a2, ny - dcy,
-					ex + dex,      ny - dcy + b2,
+
+			ne :
+				ha.ne &&
+				Euclid.Rect.renew(
+					ex + dcx - a2,
+					ny - dcy,
+
+					ex + dex,
+					ny - dcy + b2,
+
 					h.ne
 				),
-			e  : ha.e && Euclid.Rect.renew(
-					ex + dex - a2, my - b,
-					ex + dex     , my + b,
+
+			e :
+				ha.e &&
+				Euclid.Rect.renew(
+					ex + dex - a2,
+					my - b,
+
+					ex + dex,
+					my + b,
+
 					h.e
 				),
-			se : ha.se && Euclid.Rect.renew(
-					ex + dcx - a2, sy + dcy - b2,
-					ex + dcx,      sy + dcx,
+
+			se :
+				ha.se &&
+				Euclid.Rect.renew(
+					ex + dcx - a2,
+					sy + dcy - b2,
+
+					ex + dcx,
+					sy + dcx,
+
 					h.se
 				),
-			s  : ha.s && Euclid.Rect.renew(
-					mx - a, sy + dey -b2,
-					mx + a, sy + dey,
+
+			s :
+				ha.s &&
+				Euclid.Rect.renew(
+					mx - a,
+					sy + dey -b2,
+
+					mx + a,
+					sy + dey,
+
 					h.s
 				),
-			sw : ha.sw && Euclid.Rect.renew(
-					wx - dcx,      sy + dcy - b2,
-					wx - dcx + a2, sy + dcy,
+
+			sw :
+				ha.sw &&
+				Euclid.Rect.renew(
+					wx - dcx,
+					sy + dcy - b2,
+
+					wx - dcx + a2,
+					sy + dcy,
+
 					h.sw
 				),
-			w  : ha.w && Euclid.Rect.renew(
-					wx - dex,      my - b,
-					wx - dex + a2, my + b,
+
+			w :
+				ha.w &&
+				Euclid.Rect.renew(
+					wx - dex,
+					my - b,
+
+					wx - dex + a2,
+					my + b,
+
 					h.w
 				)
 		};
@@ -248,20 +376,42 @@ Item.prototype.sketchAllHandles =
 		throw new Error( 'borders unsupported for handles' );
 	}
 
-	var h      = this.planHandles( );
-	var d8cwcf = Euclid.Compass.dir8CWCF;
+	var
+		h =
+			this.planHandles( ),
+		d8cwcf =
+			Euclid.Compass.dir8CWCF;
 
-	for( var a = d8cwcf.length - 1; a >= 0; a-- )
+	for(
+		var a = d8cwcf.length - 1;
+		a >= 0;
+		a--
+	)
 	{
-		var d = d8cwcf[ a ];
-		var z = h[ d ];
+		var
+			d =
+				d8cwcf[ a ],
+			z =
+				h[ d ];
 
 		if( !z )
-			{ continue; }
+		{
+			continue;
+		}
 
-		var fixView = view.review( 0, view.point( z.pc ) );
+		var fixView =
+			view.review(
+				0,
+				view.point( z.pc )
+			);
 
-		this.sketchHandle( fabric, border, twist, fixView, z );
+		this.sketchHandle(
+			fabric,
+			border,
+			twist,
+			fixView,
+			z
+		);
 	}
 };
 
@@ -278,16 +428,37 @@ Item.prototype.sketchHandle =
 		zone
 	)
 {
-	var bb = view.distance(
-		this.$handles.bb
-	);
-
-	var w = view.point( zone.w );
-	var e = view.point( zone.e );
+	var
+		bb =
+			view.distance(
+				this.$handles.bb
+			),
+		w =
+			view.point( zone.w ),
+		e =
+			view.point( zone.e );
 
 	fabric.moveTo( w );
-	fabric.beziTo( 0, -bb, 0, -bb, e );
-	fabric.beziTo( 0, +bb, 0, +bb, w );
+
+	fabric.beziTo(
+		0,
+		-bb,
+
+		0,
+		-bb,
+
+		e
+	);
+
+	fabric.beziTo(
+		0,
+		+bb,
+
+		0,
+		+bb,
+
+		w
+	);
 };
 
 
@@ -300,16 +471,26 @@ Item.prototype.drawHandles =
 		view
 	)
 {
-	var sbary = this.scrollbarY;
+	var sbary =
+		this.scrollbarY;
 
 	if( sbary && sbary.visible )
 	{
-		var area = sbary.getArea(view);
-		fabric.reverseClip( area, 'sketch', Euclid.View.proper, -1 );
+		var area =
+			sbary.getArea( view );
+
+		fabric.reverseClip(
+			area,
+			'sketch',
+			Euclid.View.proper,
+			-1
+		);
 	}
 
 	fabric.reverseClip(
-		this.getSilhoutte( this.getZone() ),
+		this.getSilhoutte(
+			this.getZone( )
+		),
 		'sketch',
 		view,
 		-1
@@ -340,7 +521,8 @@ Item.prototype.dragStart =
 		access
 	)
 {
-	var sbary = this.scrollbarY;
+	var sbary =
+		this.scrollbarY;
 
 	if(
 		sbary &&
@@ -350,10 +532,14 @@ Item.prototype.dragStart =
 		shell.bridge.startAction(
 			'ScrollY',
 			'space',
-			'itemPath', this.path,
-			'start',    p,
-			'startPos', sbary.getPos()
+			'itemPath',
+				this.path,
+			'start',
+				p,
+			'startPos',
+				sbary.getPos( )
 		);
+
 		return true;
 	}
 
@@ -375,9 +561,12 @@ Item.prototype.dragStart =
 		shell.bridge.startAction(
 			'RelBind',
 			'space',
-			'itemPath', this.path,
-			'start',    p,
-			'move',     p
+			'itemPath',
+				this.path,
+			'start',
+				p,
+			'move',
+				p
 		);
 
 		return true;
@@ -393,9 +582,12 @@ Item.prototype.dragStart =
 		shell.bridge.startAction(
 			'ItemDrag',
 			'space',
-			'itemPath', this.path,
-			'start', vp,
-			'move',  vp
+			'itemPath',
+				this.path,
+			'start',
+				vp,
+			'move',
+				vp
 		);
 
 		return true;
@@ -418,7 +610,8 @@ Item.prototype.dragMove =
 		// ctrl
 	)
 {
-	var action = shell.bridge.action( );
+	var action =
+		shell.bridge.action( );
 
 	switch( action.type )
 	{
@@ -434,11 +627,14 @@ Item.prototype.dragMove =
 				return false;
 			}
 
-			action.move = p;
+			action.move =
+				p;
 
-			action.toItemPath = this.path;
+			action.toItemPath =
+				this.path;
 
-			shell.redraw = true;
+			shell.redraw =
+				true;
 
 			return true;
 
@@ -454,49 +650,57 @@ Item.prototype.dragMove =
 				return false;
 			}
 
-			action.move = p;
+			action.move =
+				p;
 
-			action.item2Path = this.path;
+			action.item2Path =
+				this.path;
 
-			shell.redraw = true;
+			shell.redraw =
+				true;
 
 			return true;
 
 		case 'ItemDrag' :
 		case 'ItemResize' :
 
-			action.move  = view.depoint( p );
+			action.move =
+				view.depoint( p );
 
-			shell.redraw = true;
+			shell.redraw =
+				true;
 
 			return true;
 
 		case 'ScrollY' :
 
-			var start = action.start;
-
-			var dy    = p.y - start.y;
-
-			var item  = shell.$space.getSub(
-				action.itemPath,
-				'Item'
-			);
-
-			var sbary = item.scrollbarY;
-
-			var spos  = action.startPos + sbary.scale( dy );
+			var
+				start =
+					action.start,
+				dy =
+					p.y - start.y,
+				item =
+					shell.$space.getSub(
+						action.itemPath,
+						'Item'
+					),
+				sbary =
+					item.scrollbarY,
+				spos =
+					action.startPos + sbary.scale( dy );
 
 			item.setScrollbar( spos );
 
 			item.poke( );
 
-			shell.redraw = true;
+			shell.redraw =
+				true;
 
 			return true;
 
 		default :
 
-			throw new Error('invalid action.type in dragMove');
+			throw new Error( 'invalid action.type in dragMove' );
 	}
 
 	return true;
@@ -512,7 +716,8 @@ Item.prototype.dragStop =
 		p
 	)
 {
-	var action = shell.bridge.action();
+	var action =
+		shell.bridge.action();
 
 	switch( action.type )
 	{
@@ -560,15 +765,27 @@ Item.prototype.pointingHover =
 	)
 {
 	if( p === null )
-		{ return null; }
+	{
+		return null;
+	}
 
-	var sbary = this.scrollbarY;
+	var sbary =
+		this.scrollbarY;
 
-	if( sbary && sbary.within( view, p ) )
-		{ return 'default'; }
+	if(
+		sbary &&
+		sbary.within( view, p )
+	)
+	{
+		return 'default';
+	}
 
-	if( !this.getZone().within( view, p ) )
-		{ return null; }
+	if(
+		!this.getZone().within( view, p )
+	)
+	{
+		return null;
+	}
 
 	return 'default';
 };
@@ -581,22 +798,28 @@ Item.prototype.grepFocus =
 	function( )
 {
 	// already have focus?
-	if( shell.$space.focusedItem( ) === this )
+	if(
+		shell.$space.focusedItem( ) === this
+	)
 	{
 		return;
 	}
 
-	var doc = this.$sub.doc;
+	var
+		doc =
+			this.$sub.doc,
+		caret =
+			shell.setCaret(
+				'space',
+				{
+					path :
+						doc.atRank( 0 ).textPath,
+					at1 :
+						0
+				}
+			);
 
-	var caret = shell.setCaret(
-		'space',
-		{
-			path : doc.atRank( 0 ).textPath,
-			at1  : 0
-		}
-	);
-
-	caret.show();
+	caret.show( );
 
 	shell.peer.moveToTop( this.path );
 };
@@ -631,8 +854,11 @@ Item.prototype.highlight =
 Item.prototype.poke =
 	function( )
 {
-	this.$fabric = null;
-	shell.redraw = true;
+	this.$fabric =
+		null;
+
+	shell.redraw =
+		true;
 };
 
 
@@ -642,7 +868,8 @@ Item.prototype.poke =
 Item.prototype.knock =
 	function( )
 {
-	this.$fabric = null;
+	this.$fabric =
+		null;
 };
 
 

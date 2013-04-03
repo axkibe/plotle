@@ -1,9 +1,7 @@
 /*
-|
 | A sequence of visual paragraphs.
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
@@ -11,7 +9,8 @@
 | Export
 */
 var Visual;
-Visual = Visual || { };
+Visual =
+	Visual || { };
 
 
 /*
@@ -33,37 +32,65 @@ var theme;
 
 
 if ( typeof( window ) === 'undefined' )
-	{ throw new Error( 'this code requires a browser!' ); }
+{
+	throw new Error( 'this code requires a browser!' );
+}
 
 
 /*
 | Constructor.
 */
-var Doc = Visual.Doc = function( spacename, twig, path )
+var Doc =
+Visual.Doc =
+	function(
+		spacename,
+		twig,
+		path
+	)
 {
-	Visual.Base.call( this, spacename, twig, path );
+	Visual.Base.call(
+		this,
+		spacename,
+		twig,
+		path
+	);
 
 	if( this.$sub !== null )
-		{ throw new Error('iFail'); }
-
-	var sub = this.$sub = [];
-
-	this._$pnws = null;
-
-	var ranks = twig.ranks;
-	var copse = twig.copse;
-
-	for( var r = 0, rZ = twig.length; r < rZ; r++ )
 	{
-		var k = ranks[ r ];
+		throw new Error('iFail');
+	}
 
-		sub[ k ] = new Visual.Para(
-			spacename,
-			copse[ k ],
-			new Path( path, '++', k )
-		);
+	var sub =
+	this.$sub =
+		[ ];
+
+	this._$pnws =
+		null;
+
+	var ranks =
+		twig.ranks;
+
+	var copse =
+		twig.copse;
+
+	for(
+		var r = 0, rZ = twig.length;
+		r < rZ;
+		r++
+	)
+	{
+		var k =
+			ranks[ r ];
+
+		sub[ k ] =
+			new Visual.Para(
+				spacename,
+				copse[ k ],
+				new Path( path, '++', k )
+			);
 	}
 };
+
 
 Jools.subclass(
 	Doc,
@@ -74,7 +101,8 @@ Jools.subclass(
 /*
 | Marker
 */
-Doc.prototype.Doc = true;
+Doc.prototype.Doc =
+	true;
 
 
 /*
@@ -143,13 +171,14 @@ Doc.prototype.update =
 /*
 | Draws the document on a fabric.
 */
-Doc.prototype.draw = function(
-	fabric,      // to draw upon
-	view,        // current pan/zoom/motion
-	width,       // the width to draw the document with
-	innerMargin, // distance of text to edge
-	scrollp      // scroll position
-)
+Doc.prototype.draw =
+	function(
+		fabric,      // to draw upon
+		view,        // current pan/zoom/motion
+		width,       // the width to draw the document with
+		innerMargin, // distance of text to edge
+		scrollp      // scroll position
+	)
 {
 	// FIXME <pre>
 	var paraSep =
@@ -175,16 +204,28 @@ Doc.prototype.draw = function(
 		);
 	}
 
-	var y = innerMargin.n;
-	var pnws = { };   // north-west points of paras
+	var y =
+		innerMargin.n;
+
+	// north-west points of paras
+	var pnws =
+		{ };
 
 	// draws the paragraphs
-	var twig = this.twig;
+	var twig =
+		this.twig;
 
-	for ( var r = 0, rZ = twig.length; r < rZ; r++ )
+	for(
+		var r = 0, rZ = twig.length;
+		r < rZ;
+		r++
+	)
 	{
-		var vpara = this.atRank( r );
-		var flow = vpara.getFlow( );
+		var vpara =
+			this.atRank( r );
+
+		var flow =
+			vpara.getFlow( );
 
 		pnws[ twig.ranks[ r ] ] =
 			new Euclid.Point(

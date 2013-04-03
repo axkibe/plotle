@@ -180,14 +180,29 @@ Note.s_getZeroSilhoutte =
 Note.s_handles =
 	Jools.immute(
 		{
-			n  : true,
-			ne : true,
-			e  : true,
-			se : true,
-			s  : true,
-			sw : true,
-			w  : true,
-			nw : true
+			n :
+				true,
+
+			ne :
+				true,
+
+			e :
+				true,
+
+			se :
+				true,
+
+			s :
+				true,
+
+			sw :
+				true,
+
+			w :
+				true,
+
+			nw :
+				true
 		}
 	);
 
@@ -302,47 +317,53 @@ Note.prototype.scrollCaretIntoView =
 	function( )
 {
 	// TODO hand down
-	var caret =
-		shell.$space.$caret;
+	var
+		caret =
+			shell.$space.$caret,
 
-	var scrolly =
-		this.scrollbarY;
+		scrolly =
+			this.scrollbarY,
 
-	var sy =
-		scrolly.getPos( );
+		sy =
+			scrolly.getPos( ),
 
-	var para =
-		shell.$space.getSub(
-			caret.sign.path,
-			'Para'
-		);
+		para =
+			shell.$space.getSub(
+				caret.sign.path,
+				'Para'
+			);
 
 	if( para.constructor !== Visual.Para )
 	{
 		throw new Error( 'para not a para.' );
 	}
 
-	var cp =
-		para.getCaretPos( );
+	var
+		cp =
+			para.getCaretPos( ),
 
-	var pnw =
-		this.$sub.doc.getPNW( para.key );
+		pnw =
+			this.$sub.doc.getPNW( para.key ),
 
-	var zone =
-		this.getZone( );
+		zone =
+			this.getZone( ),
 
-	var imargin =
-		this.innerMargin;
+		imargin =
+			this.innerMargin;
 
 	if( cp.n + pnw.y - imargin.n < sy )
 	{
-		this.setScrollbar( cp.n + pnw.y - imargin.n );
+		this.setScrollbar(
+			cp.n + pnw.y - imargin.n
+		);
 
 		this.poke( );
 	}
 	else if( cp.s + pnw.y + imargin.s > sy + zone.height )
 	{
-		this.setScrollbar( cp.s + pnw.y - zone.height + imargin.s );
+		this.setScrollbar(
+			cp.s + pnw.y - zone.height + imargin.s
+		);
 
 		this.poke( );
 	}
@@ -383,7 +404,8 @@ Note.prototype.dragStop =
 		p
 	)
 {
-	var action = shell.bridge.action( );
+	var action =
+		shell.bridge.action( );
 
 	switch( action.type )
 	{
@@ -391,7 +413,8 @@ Note.prototype.dragStop =
 		case 'ItemDrag' :
 		case 'ItemResize' :
 
-			var zone = this.getZone( );
+			var zone =
+				this.getZone( );
 
 			if(
 				zone.width  < theme.note.minWidth ||
@@ -402,7 +425,9 @@ Note.prototype.dragStop =
 			}
 
 			if( this.twig.zone.eq( zone ) )
-				{ return; }
+			{
+				return;
+			}
 
 			shell.peer.setZone(
 				this.path,

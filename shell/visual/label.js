@@ -9,7 +9,8 @@
 | Export
 */
 var Visual;
-Visual = Visual || {};
+Visual =
+	Visual || {};
 
 
 /*
@@ -33,17 +34,21 @@ var Visual;
 
 
 if( typeof( window ) === 'undefined' )
-	{ throw new Error( 'this code needs a browser!' ); }
+{
+	throw new Error( 'this code needs a browser!' );
+}
 
 
 /*
 | Constructor.
 */
-var Label = Visual.Label = function(
-	spacename,
-	twig,
-	path
-)
+var Label =
+Visual.Label =
+	function(
+		spacename,
+		twig,
+		path
+	)
 {
 	Visual.DocItem.call(
 		this,
@@ -52,6 +57,7 @@ var Label = Visual.Label = function(
 		path
 	);
 };
+
 
 Jools.subclass(
 	Label,
@@ -85,7 +91,8 @@ Label.s_handles =
 /*
 | Returns the labels silhoutte.
 */
-Label.s_getSilhoutte = function( zone )
+Label.s_getSilhoutte =
+	function( zone )
 {
 	return new Euclid.Rect(
 		'pnw/pse',
@@ -107,9 +114,11 @@ Label.s_drawTrans =
 		transLabel // the transLabel to draw
 	)
 {
-	var zone = transLabel.zone;
+	var zone =
+		transLabel.zone;
 
-	var silhoutte = Label.s_getSilhoutte( zone );
+	var silhoutte =
+		Label.s_getSilhoutte( zone );
 
 	// draws selection and text
 	var f =
@@ -122,8 +131,11 @@ Label.s_drawTrans =
 		);
 
 	fabric.drawImage(
-		'image', f,
-		'pnw', view.point( zone.pnw )
+		'image',
+			f,
+
+		'pnw',
+			view.point( zone.pnw )
 	);
 
 	// draws the border
@@ -145,57 +157,77 @@ Label.s_createTrans =
 		p2
 	)
 {
-	var dy = Math.abs( p1.y - p2.y );
-	var ny = Math.min( p1.y , p2.y );
+	var dy =
+		Math.abs( p1.y - p2.y );
 
-	var fs = dy / ( 1 + theme.bottombox );
-	fs = Math.max( fs, theme.label.minSize );
+	var ny =
+		Math.min( p1.y , p2.y );
 
-	var font = fontPool.get(
-		fs,
-		'la'
-	);
+	var fs =
+		Math.max(
+			dy / ( 1 + theme.bottombox ),
+			theme.label.minSize
+		);
 
-	var flow = Visual.Para.s_getFlow(
-		font,
-		0,
-		'Label'
-	);
+	var font =
+		fontPool.get(
+			fs,
+			'la'
+		);
+
+	var flow =
+		Visual.Para.s_getFlow(
+			font,
+			0,
+			'Label'
+		);
 
 	var height =
 		flow.height +
-		Math.round( font.size * theme.bottombox );
+		Math.round(
+			font.size * theme.bottombox
+		);
 
 	var pnw;
 
 	if( p2.x > p1.x )
 	{
-		pnw = new Euclid.Point(
-			p1.x,
-			ny
-		);
+		pnw =
+			new Euclid.Point(
+				p1.x,
+				ny
+			);
 	}
 	else
 	{
-		pnw = new Euclid.Point(
-			p1.x - flow.spread,
-			ny
-		);
+		pnw =
+			new Euclid.Point(
+				p1.x - flow.spread,
+				ny
+			);
 	}
 
-	var zone = new Euclid.Rect(
-		'pnw/size',
-		pnw,
-		flow.spread,
-		height
-	);
+	var zone =
+		new Euclid.Rect(
+			'pnw/size',
+			pnw,
+			flow.spread,
+			height
+		);
 
 	return Jools.immute(
 		{
-			font     : font,
-			flow     : flow,
-			pnw      : pnw,
-			zone     : zone
+			font :
+				font,
+
+			flow :
+				flow,
+
+			pnw :
+				pnw,
+
+			zone :
+				zone
 		}
 	);
 };
@@ -204,13 +236,15 @@ Label.s_createTrans =
 /*
 | Default margin for all labels.
 */
-Label.prototype.innerMargin = Label.s_innerMargin;
+Label.prototype.innerMargin =
+	Label.s_innerMargin;
 
 
 /*
 | Resize handles to show on labels
 */
-Label.prototype.handles = Label.s_handles;
+Label.prototype.handles =
+	Label.s_handles;
 
 
 /*
@@ -221,7 +255,8 @@ Label.prototype.getSilhoutte =
 		zone
 	)
 {
-	var s = this._$silhoutte;
+	var s =
+		this._$silhoutte;
 
 	if(
 		s &&
@@ -229,13 +264,20 @@ Label.prototype.getSilhoutte =
 		s.pse.x === zone.pse.x - 1 &&
 		s.pse.y === zone.pse.y - 1
 	)
-		{ return s; }
+	{
+		return s;
+	}
 
-	return this._$silhoutte = new Euclid.Rect(
-		'pnw/pse',
-		zone.pnw,
-		zone.pse.sub( 1, 1 )
-	);
+
+	s =
+	this._$silhoutte =
+		new Euclid.Rect(
+			'pnw/pse',
+			zone.pnw,
+			zone.pse.sub( 1, 1 )
+		);
+
+	return s;
 };
 
 
@@ -247,22 +289,29 @@ Label.prototype.getZeroSilhoutte =
 		zone
 	)
 {
-	var s = this._$zeroSilhoutte;
+	var s =
+		this._$zeroSilhoutte;
 
 	if(
 		s &&
 		s.width  === zone.width  - 1 &&
 		s.height === zone.height - 1
 	)
-		{ return s; }
+	{
+		return s;
+	}
 
-	return this._$zeroSilhoutte = new Euclid.Rect(
-		'pse',
-		new Euclid.Point(
-			zone.width  - 1,
-			zone.height - 1
-		)
-	);
+	s =
+	this._$zeroSilhoutte =
+		new Euclid.Rect(
+			'pse',
+			new Euclid.Point(
+				zone.width  - 1,
+				zone.height - 1
+			)
+		);
+
+	return s;
 };
 
 
@@ -300,8 +349,11 @@ Label.prototype.draw =
 		view
 	)
 {
-	var f    = this.$fabric;
-	var zone = view.rect( this.getZone( ) );
+	var f =
+		this.$fabric;
+
+	var zone =
+		view.rect( this.getZone( ) );
 
 	// no buffer hit?
 	if (
@@ -312,11 +364,24 @@ Label.prototype.draw =
 		view.zoom !== f.$zoom
 	)
 	{
-		f = this.$fabric = new Euclid.Fabric( zone.width, zone.height );
-		f.$zoom       = view.zoom;
-		var doc       = this.$sub.doc;
-		var imargin   = this.innerMargin;
-		var silhoutte = this.getZeroSilhoutte( zone );
+		f =
+		this.$fabric =
+			new Euclid.Fabric(
+				zone.width,
+				zone.height
+			);
+
+		f.$zoom =
+			view.zoom;
+
+		var doc =
+			this.$sub.doc;
+
+		var imargin =
+			this.innerMargin;
+
+		var silhoutte =
+			this.getZeroSilhoutte( zone );
 
 		// draws selection and text
 		doc.draw(
@@ -336,7 +401,8 @@ Label.prototype.draw =
 		);
 	}
 
-	var action = shell.bridge.action( );
+	var action =
+		shell.bridge.action( );
 
 	if(
 		action &&
@@ -346,16 +412,21 @@ Label.prototype.draw =
 	)
 	{
 		fabric.drawImage(
-			'image', f,
-			'pnw', zone.pnw,
-			'alpha', theme.removeAlpha
+			'image',
+				f,
+			'pnw',
+				zone.pnw,
+			'alpha',
+				theme.removeAlpha
 		);
 	}
 	else
 	{
 		fabric.drawImage(
-			'image', f,
-			'pnw', zone.pnw
+			'image',
+				f,
+			'pnw',
+				zone.pnw
 		);
 	}
 };
@@ -377,38 +448,54 @@ Label.prototype.getFlowWidth =
 Label.prototype.fontSizeChange =
 	function( fontsize )
 {
-	var action = shell.bridge.action( );
+	var action =
+		shell.bridge.action( );
 
 	if(
 		!action ||
 		!this.path.equals( action.itemPath )
 	)
-		{ return fontsize; }
+	{
+		return fontsize;
+	}
 
 	switch( action.type )
 	{
 		case 'ItemResize' :
 
 			if( !action.startZone )
-				{ return fontsize; }
+			{
+				return fontsize;
+			}
 
-			var height = action.startZone.height;
+			var height =
+				action.startZone.height;
+
 			var dy;
 
 			switch( action.align )
 			{
 				case 'ne' :
 				case 'nw' :
-					dy = action.start.y - action.move.y;
+
+					dy =
+						action.start.y - action.move.y;
+
 					break;
 
 				case 'se' :
 				case 'sw' :
-					dy = action.move.y - action.start.y;
+
+					dy =
+						action.move.y - action.start.y;
+
 					break;
 
 				default :
-					throw new Error( 'unknown align: '+ action.align );
+
+					throw new Error(
+						'unknown align: '+ action.align
+					);
 			}
 
 			return Math.max(
@@ -417,6 +504,7 @@ Label.prototype.fontSizeChange =
 			);
 
 		default:
+
 			return fontsize;
 	}
 
@@ -457,17 +545,24 @@ Label.prototype.mousewheel =
 Label.prototype.getZone =
 	function( )
 {
-	var action = shell.bridge.action( );
-	var pnw = this.twig.pnw;
+	var action =
+		shell.bridge.action( );
+
+	var pnw =
+		this.twig.pnw;
 
 	// FIXME Caching!
-	var doc    = this.$sub.doc;
-	var fs     = doc.getFont( ).size;
+	var doc =
+		this.$sub.doc;
+
+	var fs =
+		doc.getFont( ).size;
 
 	var width  = Math.max(
 		Math.ceil( doc.getSpread( ) ),
 		Math.round( fs * 0.3 )
 	);
+
 	var height = Math.max(
 		Math.ceil( doc.getHeight( ) ),
 		Math.round( fs )
@@ -492,8 +587,11 @@ Label.prototype.getZone =
 	{
 		case 'ItemDrag' :
 
-			var mx = action.move.x - action.start.x;
-			var my = action.move.y - action.start.y;
+			var mx =
+				action.move.x - action.start.x;
+
+			var my =
+				action.move.y - action.start.y;
 
 			return new Euclid.Rect(
 				'pnw/size',
@@ -505,7 +603,8 @@ Label.prototype.getZone =
 		case 'ItemResize' :
 
 			// resizing is done by fontSizeChange( )
-			var szone = action.startZone;
+			var szone =
+				action.startZone;
 
 			if( !szone )
 			{
@@ -520,30 +619,38 @@ Label.prototype.getZone =
 			switch( action.align )
 			{
 				case 'ne' :
+
 					pnw = pnw.add(
 						0,
 						szone.height - height
 					);
+
 					break;
 
 				case 'se' :
+
 					break;
 
 				case 'sw' :
+
 					pnw = pnw.add(
 						szone.width - width,
 						0
 					);
+
 					break;
 
 				case 'nw' :
+
 					pnw = pnw.add(
 						szone.width - width,
 						szone.height - height
 					);
+
 					break;
 
 				default :
+
 					throw new Error( 'unknown align' );
 			}
 
@@ -567,7 +674,7 @@ Label.prototype.getZone =
 };
 
 
-/**
+/*
 | Sets the items position and size aften an action.
 */
 Label.prototype.dragStop =
@@ -576,29 +683,42 @@ Label.prototype.dragStop =
 		p
 	)
 {
-	var action = shell.bridge.action( );
+	var action =
+		shell.bridge.action( );
 
 	switch( action.type )
 	{
 		case 'ItemDrag' :
 		case 'ItemResize' :
-			var zone = this.getZone( );
-			var fontsize = this.$sub.doc.getFont( ).size;
+
+			var zone =
+				this.getZone( );
+
+			var fontsize =
+				this.$sub.doc.getFont( ).size;
 
 			if( !this.twig.pnw.eq( zone.pnw ) )
 			{
-				shell.peer.setPNW( this.path, zone.pnw );
+				shell.peer.setPNW(
+					this.path,
+					zone.pnw
+				);
 			}
 
 			if( fontsize !== this.twig.fontsize )
 			{
-				shell.peer.setFontSize( this.path, fontsize );
+				shell.peer.setFontSize(
+					this.path,
+					fontsize
+				);
 			}
 
 			shell.redraw = true;
+
 			break;
 
 		default :
+
 			return Visual.DocItem.prototype.dragStop.call(
 				this,
 				view,

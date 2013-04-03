@@ -147,8 +147,11 @@ DocItem.prototype.grepFocus =
 	var caret =
 		space.setCaret(
 			{
-				path : doc.atRank(0).textPath,
-				at1  : 0
+				path :
+					doc.atRank( 0 ).textPath,
+
+				at1 :
+					0
 			}
 		);
 
@@ -216,8 +219,11 @@ DocItem.prototype.click =
 
 		var caret = space.setCaret(
 			{
-				path : para.textPath,
-				at1  : at1
+				path :
+					para.textPath,
+
+				at1 :
+					at1
 			}
 		);
 

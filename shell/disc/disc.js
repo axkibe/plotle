@@ -24,6 +24,7 @@ var Design;
 var Euclid;
 var fontPool;
 var Jools;
+var Pattern;
 var Proc;
 var Tree;
 var shell;

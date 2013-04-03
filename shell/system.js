@@ -57,10 +57,15 @@ var makeCatcher =
 		catch( e )
 		{
 			window.alert(
-				'Internal failure, ' + e.name + ': ' + e.message + '\n\n' +
-				'file: '  + e.fileName   + '\n' +
-				'line: '  + e.lineNumber + '\n' +
-				'stack: ' + e.stack
+				'Internal failure, ' +
+					e.name + ': ' +
+					e.message + '\n\n' +
+				'file: ' +
+					e.fileName   + '\n' +
+				'line: ' +
+					e.lineNumber + '\n' +
+				'stack: ' +
+					e.stack
 			);
 		}
 	};
@@ -82,7 +87,7 @@ var System =
 	this._canvas =
 		document.getElementById( 'canvas' );
 
-	canvas.width  =
+	canvas.width =
 		window.innerWidth - 1;
 
 	canvas.height =
@@ -129,8 +134,9 @@ var System =
 	};
 
 	// hidden input that forwards all events
+	var hiddenInput =
 	this._hiddenInput =
-		document.getElementById('input');
+		document.getElementById( 'input' );
 
 	// remembers last special key pressed, to hinder double events.
 	// Opera is behaving stupid here.
@@ -142,9 +148,6 @@ var System =
 	// if it changes the user did something.
 	this._inputVal =
 		'';
-
-	var hiddenInput =
-		this._hiddenInput;
 
 	canvas.onmousedown =
 		makeCatcher(
@@ -230,11 +233,6 @@ var System =
 			this,
 			this._onHiddenKeyPress
 		);
-
-	// TODO rename?
-	//document.onkeydown          = makeCatcher( this, this._onCanvasKeyDown  );
-	//document.onkeypress         = makeCatcher( this, this._onCanvasKeyPress );
-	//document.onkeyup            = makeCatcher( this, this._onHiddenKeyUp    );
 
 	this._testInputCatcher =
 		makeCatcher(
@@ -374,14 +372,15 @@ System.prototype.setTimer =
 System.prototype._fiddleInput =
 	function( )
 {
-	var caret =
-		this.shell.getCaret( );
+	var
+		caret =
+			this.shell.getCaret( ),
 
-	var height =
-		caret.$height;
+		height =
+			caret.$height,
 
-	var pos =
-		caret.$screenPos;
+		pos =
+			caret.$screenPos;
 
 	if( height > 0 )
 	{
@@ -405,9 +404,9 @@ System.prototype._fiddleInput =
 			this.setTimer(
 				0,
 				function( )
-					{
-						self._hiddenInput.selectionStart = 1;
-					}
+				{
+					self._hiddenInput.selectionStart = 1;
+				}
 			);
 
 			this._$suggestingKeyboard =
@@ -449,7 +448,9 @@ System.prototype._blink =
 System.prototype._onAtweenTime =
 	function( )
 {
-	if( this._$pointingState !== 'atween' )
+	if(
+		this._$pointingState !== 'atween'
+	)
 	{
 		Jools.log('warn', 'dragTime() in wrong action mode');
 		return;
@@ -557,92 +558,6 @@ System.prototype._captureEvents =
 
 	document.onmousemove =
 		this._canvas.onmousemove;
-};
-
-
-/*
-| Key down on canvas.
-| Used when not suggesting a keyboard.
-*/
-System.prototype._onCanvasKeyDown =
-	function( event )
-{
-	var kcode =
-		this._$lastSpecialKey =
-		event.keyCode;
-
-	var shift =
-		event.shiftKey;
-
-	var ctrl =
-		event.ctrlKey || event.metaKey;
-
-	if(
-		!this._specialKey(
-			kcode,
-			shift,
-			ctrl
-		)
-	)
-	{
-		event.preventDefault( );
-
-		return false;
-	}
-};
-
-
-/*
-| Key press on canvas.
-| Used when not suggesting a keyboard.
-*/
-System.prototype._onCanvasKeyPress =
-	function( event )
-{
-	var kcode =
-		event.keyCode;
-
-	var which =
-		event.which;
-
-	var shift =
-		event.shiftKey;
-
-	var ctrl =
-		event.ctrlKey || event.metaKey;
-
-	if(
-		(
-			ctrl ||
-			( kcode > 0 && kcode < 32 ) ||
-			which === 0
-		) &&
-		this._$lastSpecialKey !== kcode
-	)
-	{
-		this._$lastSpecialKey =
-			-1;
-
-		return this._specialKey(
-			kcode,
-			shift,
-			ctrl
-		);
-	}
-
-	if( which >= 32 )
-	{
-		this.shell.input(
-			String.fromCharCode( which )
-		);
-
-		this._fiddleInput( );
-	}
-
-	this._$lastSpecialKey =
-		-1;
-
-	return true;
 };
 
 
@@ -763,7 +678,7 @@ System.prototype._onMouseDown =
 		event
 	)
 {
-	event.preventDefault();
+	event.preventDefault( );
 
 	if(
 		Jools.is( event.button ) &&
@@ -867,27 +782,41 @@ System.prototype._onMouseMove =
 		event
 	)
 {
-	var canvas = this._canvas;
-	var p      = new Euclid.Point(
-		event.pageX - canvas.offsetLeft,
-		event.pageY - canvas.offsetTop
-	);
-
-	var shift  = event.shiftKey;
-	var ctrl   = event.ctrlKey || event.metaKey;
-	var cursor = null;
+	var
+		canvas =
+			this._canvas,
+		p =
+			new Euclid.Point(
+				event.pageX - canvas.offsetLeft,
+				event.pageY - canvas.offsetTop
+			),
+		shift =
+			event.shiftKey,
+		ctrl =
+			event.ctrlKey || event.metaKey,
+		cursor =
+			null;
 
 	switch( this._$pointingState )
 	{
-		case false:
-			cursor = this.shell.pointingHover( p, shift, ctrl );
+		case false :
+
+			cursor =
+				this.shell.pointingHover(
+					p,
+					shift,
+					ctrl
+				);
+
 			break;
 
-		case 'atween':
+		case 'atween' :
 
-			var dragbox = this.settings.dragbox;
+			var dragbox =
+				this.settings.dragbox;
 
-			var atween  = this._$atween;
+			var atween =
+				this._$atween;
 
 			if(
 				( Math.abs( p.x - atween.pos.x ) > dragbox ) ||
@@ -897,9 +826,11 @@ System.prototype._onMouseMove =
 				// moved out of dragbox -> start dragging
 				clearTimeout( atween.timer );
 
-				this._$atween = null;
+				this._$atween =
+					null;
 
-				this._$pointingState = 'drag';
+				this._$pointingState =
+					'drag';
 
 				this.shell.dragStart(
 					atween.pos,
@@ -907,18 +838,20 @@ System.prototype._onMouseMove =
 					ctrl
 				);
 
-				cursor = this.shell.dragMove(
-					p,
-					shift,
-					ctrl
-				);
+				cursor =
+					this.shell.dragMove(
+						p,
+						shift,
+						ctrl
+					);
 
 				this._captureEvents( );
 			}
 			else
 			{
 				// saves position for possible atween timeout
-				atween.move = p;
+				atween.move =
+					p;
 			}
 			break;
 
@@ -930,6 +863,7 @@ System.prototype._onMouseMove =
 					shift,
 					ctrl
 				);
+
 			break;
 
 		default :
@@ -939,7 +873,8 @@ System.prototype._onMouseMove =
 
 	if( cursor !== null )
 	{
-		canvas.style.cursor = cursor;
+		canvas.style.cursor =
+			cursor;
 	}
 
 	return true;
@@ -955,29 +890,41 @@ System.prototype._onMouseUp =
 	)
 {
 	event.preventDefault( );
+
 	this._releaseEvents( );
 
-	var canvas = this._canvas;
-	var p      = new Euclid.Point(
-		event.pageX - canvas.offsetLeft,
-		event.pageY - canvas.offsetTop
-	);
-	var shift  = event.shiftKey;
-	var ctrl   = event.ctrlKey || event.metaKey;
-	var cursor = null;
+	var
+		canvas =
+			this._canvas,
+		p =
+			new Euclid.Point(
+				event.pageX - canvas.offsetLeft,
+				event.pageY - canvas.offsetTop
+			),
+		shift =
+			event.shiftKey,
+		ctrl =
+			event.ctrlKey || event.metaKey,
+		cursor =
+			null;
 
 	switch( this._$pointingState )
 	{
 		case false :
+
 			break;
 
 		case 'atween' :
 
 			// A click is a mouse down followed within dragtime by 'mouseup' and
 			// not having moved out of 'dragbox'.
-			var atween = this._$atween;
+			var atween =
+				this._$atween;
+
 			clearTimeout( atween.timer );
-			this._$atween = null;
+
+			this._$atween =
+				null;
 
 			this.shell.click(
 				p,
@@ -985,13 +932,15 @@ System.prototype._onMouseUp =
 				ctrl
 			);
 
-			cursor = this.shell.pointingHover(
-				p,
-				shift,
-				ctrl
-			);
+			cursor =
+				this.shell.pointingHover(
+					p,
+					shift,
+					ctrl
+				);
 
-			this._$pointingState = false;
+			this._$pointingState =
+				false;
 
 			break;
 
@@ -1003,13 +952,15 @@ System.prototype._onMouseUp =
 				ctrl
 			);
 
-			cursor = this.shell.pointingHover(
-				p,
-				shift,
-				ctrl
-			);
+			cursor =
+				this.shell.pointingHover(
+					p,
+					shift,
+					ctrl
+				);
 
-			this._$pointingState = false;
+			this._$pointingState =
+				false;
 
 			break;
 
@@ -1020,7 +971,8 @@ System.prototype._onMouseUp =
 
 	if( cursor !== null )
 	{
-		canvas.style.cursor = cursor;
+		canvas.style.cursor =
+			cursor;
 	}
 
 	this._fiddleInput( );
@@ -1037,26 +989,34 @@ System.prototype._onMouseWheel =
 		event
 	)
 {
-	var canvas =
-		this._canvas;
-
-	var p = new Euclid.Point(
-		event.pageX - canvas.offsetLeft,
-		event.pageY - canvas.offsetTop
-	);
+	var
+		canvas =
+			this._canvas,
+		p =
+			new Euclid.Point(
+				event.pageX - canvas.offsetLeft,
+				event.pageY - canvas.offsetTop
+			);
 
 	var dir;
+
 	if( Jools.is( event.wheelDelta ) )
 	{
-		dir = (event.wheelDelta) > 0 ? 1 : -1;
+		dir =
+			event.wheelDelta > 0 ? 1 : -1;
 	}
 	else if( Jools.is( event.detail ) )
 	{
-		dir = (event.detail) > 0 ? -1 : 1;
+		dir =
+			event.detail > 0 ? -1 : 1;
 	}
 	else
 	{
-		Jools.log('warn', 'invalid wheel event');
+		Jools.log(
+			'warn',
+			'invalid wheel event'
+		);
+
 		return;
 	}
 
@@ -1116,15 +1076,21 @@ System.prototype._onTouchStart =
 
 			this._$atween = // TODO immute
 				{
-					pos   : p,
-					move  : p,
-					shift : shift,
-					ctrl  : ctrl,
-					timer : this.setTimer(
-						this.settings.dragtime,
-						this._onAtweenTimeCatcher
-					)
+					pos :
+						p,
+					move :
+						p,
+					shift :
+						shift,
+					ctrl :
+						ctrl,
+					timer :
+						this.setTimer(
+							this.settings.dragtime,
+							this._onAtweenTimeCatcher
+						)
 				};
+
 			break;
 
 		case 'drag' :
@@ -1194,8 +1160,8 @@ System.prototype._onTouchMove =
 				this._$atween;
 
 			if(
-				(Math.abs( p.x - atween.pos.x ) > dragbox ) ||
-				(Math.abs( p.y - atween.pos.y ) > dragbox )
+				( Math.abs( p.x - atween.pos.x ) > dragbox ) ||
+				( Math.abs( p.y - atween.pos.y ) > dragbox )
 			)
 			{
 				// moved out of dragbox -> start dragging
@@ -1243,7 +1209,9 @@ System.prototype._onTouchMove =
 
 		default :
 
-			throw new Error('invalid pointingState');
+			throw new Error(
+				'invalid pointingState'
+			);
 
 	}
 
@@ -1272,8 +1240,8 @@ System.prototype._onTouchEnd =
 
 	var p =
 		new Euclid.Point(
-			event.changedTouches[0].pageX - canvas.offsetLeft,
-			event.changedTouches[0].pageY - canvas.offsetTop
+			event.changedTouches[ 0 ].pageX - canvas.offsetLeft,
+			event.changedTouches[ 0 ].pageY - canvas.offsetTop
 		);
 
 	var shift =
@@ -1359,7 +1327,8 @@ System.prototype._releaseEvents =
 {
 	if ( this._useCapture )
 	{
-		document.releaseCapture(this._canvas);
+		document.releaseCapture( this._canvas );
+
 		return;
 	}
 

@@ -9,7 +9,8 @@
 | Exports
 */
 var Euclid;
-Euclid = Euclid || { };
+Euclid =
+	Euclid || { };
 
 
 /*
@@ -34,55 +35,86 @@ var Jools;
 | Fabric( canvas )  -or-    encloses an existing HTML5 canvas
 | Fabric( width, height )   creates a new fabric and sets its size;
 */
-var Fabric = Euclid.Fabric =
+var Fabric =
+Euclid.Fabric =
 	function( a1, a2 )
 {
 	switch( typeof( a1 ) )
 	{
 		case 'undefined' :
-			this._canvas = document.createElement( 'canvas' );
+
+			this._canvas =
+				document.createElement( 'canvas' );
+
 			break;
 
 		case 'object' :
 
 			switch( a1.constructor )
 			{
-				case Fabric:
-					this._canvas = a1._canvas;
+				case Fabric :
+
+					this._canvas =
+						a1._canvas;
+
 					break;
 
 				case Euclid.RoundRect :
-				case Euclid.Rect      :
-					this._canvas = document.createElement( 'canvas' );
-					this._canvas.width  = a1.width;
-					this._canvas.height = a1.height;
+				case Euclid.Rect :
+
+					this._canvas =
+						document.createElement( 'canvas' );
+
+					this._canvas.width =
+						a1.width;
+
+					this._canvas.height =
+						a1.height;
+
 					break;
 
 				default :
-					if (!a1.getContext)
-						{ throw new Error( 'Invalid parameter to new Fabric: ' + a1 ); }
-					this._canvas = a1;
+					if( !a1.getContext )
+					{
+						throw new Error( 'Invalid parameter to new Fabric: ' + a1 );
+					}
+
+					this._canvas =
+						a1;
+
 					break;
 
 			}
+
 			break;
 
 		case 'number' :
-			this._canvas = document.createElement( 'canvas' );
-			this._canvas.width  = a1;
-			this._canvas.height = a2;
+
+			this._canvas =
+				document.createElement( 'canvas' );
+
+			this._canvas.width =
+				a1;
+
+			this._canvas.height =
+				a2;
+
 			break;
 
 		default :
 			throw new Error( 'Invalid parameter to new Fabric: ' + a1 );
 	}
 
-	this._cx = this._canvas.getContext( '2d' );
+	this._cx =
+		this._canvas.getContext( '2d' );
 
 	// curren positiont ( without twist )
-	this._posx = this._posy = null;
+	this._posx =
+	this._posy =
+		null;
 
-	this.$clip = false;
+	this.$clip =
+		false;
 };
 
 
@@ -144,28 +176,49 @@ Fabric.prototype.arc =
 Fabric.prototype.beziTo =
 	function( )
 {
-	var a   = 0, aZ = arguments.length;
-	var tw  = this._twist;
-
-	var cp1x, cp1y, cp2x, cp2y, x, y;
+	var a =
+			0,
+		aZ =
+			arguments.length,
+		tw =
+			this._twist,
+		cp1x,
+		cp1y,
+		cp2x,
+		cp2y,
+		x,
+		y;
 
 	if( this._posx === null || this._posy === null )
-		{ throw new Error( 'beziTo: pFail' ); }
+	{
+		throw new Error( 'beziTo: pFail' );
+	}
 
 	if( a >= aZ )
-		{ throw new Error( 'beziTo: aFail' ); }
+	{
+		throw new Error( 'beziTo: aFail' );
+	}
 
 	if( typeof( arguments[ a ] ) === 'object' )
 	{
-		cp1x = arguments[ a   ].x;
-		cp1y = arguments[ a++ ].y;
+		cp1x =
+			arguments[ a ].x;
+
+		cp1y =
+			arguments[ a++ ].y;
 	}
 	else
 	{
-		cp1x = arguments[ a++ ];
+		cp1x =
+			arguments[ a++ ];
+
 		if (a >= aZ)
-			{ throw new Error( 'beziTo: aFail' ); }
-		cp1y = arguments[ a++ ];
+		{
+			throw new Error( 'beziTo: aFail' );
+		}
+
+		cp1y =
+			arguments[ a++ ];
 	}
 
 	if( a >= aZ )
@@ -176,31 +229,51 @@ Fabric.prototype.beziTo =
 
 	if( typeof( arguments[ a ] ) === 'object' )
 	{
-		cp2x = arguments[ a   ].x;
-		cp2y = arguments[ a++ ].y;
+		cp2x =
+			arguments[ a ].x;
+
+		cp2y =
+			arguments[ a++ ].y;
 	}
 	else
 	{
-		cp2x = arguments[ a++ ];
+		cp2x =
+			arguments[ a++ ];
+
 		if(a >= aZ)
-			{ throw new Error( 'beziTo: aFail' ); }
-		cp2y = arguments[ a++ ];
+		{
+			throw new Error( 'beziTo: aFail' );
+		}
+
+		cp2y =
+			arguments[ a++ ];
 	}
 
 	if(a >= aZ)
-		{ throw new Error( 'beziTo: aFail' ); }
+	{
+		throw new Error( 'beziTo: aFail' );
+	}
 
 	if( typeof(arguments[ a ]) === 'object' )
 	{
-		x = arguments[ a   ].x;
-		y = arguments[ a++ ].y;
+		x =
+			arguments[ a ].x;
+
+		y =
+			arguments[ a++ ].y;
 	}
 	else
 	{
-		x = arguments[ a++ ];
+		x =
+			arguments[ a++ ];
+
 		if( a >= aZ )
-			{ throw new Error( 'beziTo: aFail' ); }
-		y = arguments[ a++ ];
+		{
+			throw new Error( 'beziTo: aFail' );
+		}
+
+		y =
+			arguments[ a++ ];
 	}
 
 	cp1x += this._posx + tw;
@@ -224,6 +297,48 @@ Fabric.prototype.beziTo =
 
 
 /*
+| Clips the fabric into a shape.
+*/
+Fabric.prototype.clip =
+	function(
+		shape,
+		sketch,
+		view,
+		border,
+		a1,
+		a2,
+		a3,
+		a4
+	)
+{
+	var cx =
+		this._cx;
+
+	if( !this.$clip )
+	{
+		cx.save( );
+
+		this.$clip =
+			true;
+	}
+
+	cx.beginPath( );
+
+	shape[ sketch ](
+		this,
+		border,
+		true,
+		view,
+		a1,
+		a2,
+		a3,
+		a4
+	);
+
+	cx.clip( );
+};
+
+/*
 | Removes the clipping
 */
 Fabric.prototype.deClip =
@@ -231,10 +346,11 @@ Fabric.prototype.deClip =
 {
 	if( !this.$clip )
 	{
-		throw new Error('not clipping!');
+		throw new Error( 'not clipping!' );
 	}
 
-	this.$clip = false;
+	this.$clip =
+		false;
 
 	this._cx.restore( );
 };
@@ -272,51 +388,59 @@ Fabric.prototype.drawImage =
 
 	while( a < aZ )
 	{
-		var arg = arguments[ a++ ];
+		var arg =
+			arguments[ a++ ];
 
 		switch( arg )
 		{
-		case 'image' :
+			case 'image' :
 
-			image = arguments[ a++ ];
+				image =
+					arguments[ a++ ];
 
-			continue;
+				continue;
 
-		case 'pnw' :
+			case 'pnw' :
 
-			x = arguments[ a ].x;
+				x =
+					arguments[ a ].x;
 
-			y = arguments[ a++ ].y;
+				y =
+					arguments[ a++ ].y;
 
-			continue;
+				continue;
 
-		case 'x' :
+			case 'x' :
 
-			x = arguments[ a++ ];
+				x =
+					arguments[ a++ ];
 
-			continue;
+				continue;
 
-		case 'y' :
+			case 'y' :
 
-			y = arguments[ a++ ];
+				y =
+					arguments[ a++ ];
 
-			continue;
+				continue;
 
-		case 'composite' :
+			case 'composite' :
 
-			composite = arguments[ a++ ];
+				composite =
+					arguments[ a++ ];
 
-			continue;
+				continue;
 
-		case 'alpha' :
+			case 'alpha' :
 
-			alpha = arguments[ a++ ];
+				alpha =
+					arguments[ a++ ];
 
-			continue;
+				continue;
 
-		default :
+			default :
 
-			throw new Error( 'unknown argument: ' + arg );
+				throw new Error( 'unknown argument: ' + arg );
 		}
 	}
 
@@ -332,7 +456,8 @@ Fabric.prototype.drawImage =
 			return;
 		}
 
-		image = image._canvas;
+		image =
+			image._canvas;
 	}
 
 	if( !is( image ) )
@@ -1047,26 +1172,36 @@ Fabric.prototype.reverseClip =
 		a4
 	)
 {
-	var cx = this._cx;
-	var c  = this._canvas;
-	var w  = c.width;
-	var h  = c.height;
+	var cx =
+		this._cx;
 
-	if (!this.$clip)
+	var c =
+		this._canvas;
+
+	var w =
+		c.width;
+
+	var h =
+		c.height;
+
+	if( !this.$clip )
 	{
-		cx.save();
-		this.$clip = true;
+		cx.save( );
+
+		this.$clip =
+			true;
 	}
 
-	cx.beginPath();
-	cx.moveTo(0, 0);
-	cx.lineTo(0, h);
-	cx.lineTo(w, h);
-	cx.lineTo(w, 0);
-	cx.lineTo(0, 0);
+	cx.beginPath( );
+	cx.moveTo( 0, 0 );
+	cx.lineTo( 0, h );
+	cx.lineTo( w, h );
+	cx.lineTo( w, 0 );
+	cx.lineTo( 0, 0 );
 
-	shape[sketch](this, border, true, view, a1, a2, a3, a4);
-	cx.clip();
+	shape[ sketch ]( this, border, true, view, a1, a2, a3, a4 );
+
+	cx.clip( );
 };
 
 
