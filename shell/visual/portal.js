@@ -57,6 +57,25 @@ Visual.Portal =
 		twig,
 		path
 	);
+
+	// Paths to spaceUser and spaceTag
+	this._spacePath =
+		Jools.immute({
+
+			spaceUser :
+				new Path(
+					this.path,
+					'++',
+					'spaceUser'
+				),
+
+			spaceTag :
+				new Path(
+					this.path,
+					'++',
+					'spaceTag'
+				)
+		});
 };
 
 
@@ -67,23 +86,7 @@ Jools.subclass(
 
 
 /*
-| Returns the path to the .text attribute
-*/
-Jools.lazyFixate(
-	Portal.prototype,
-	'spaceUserPath',
-	function( )
-	{
-		return new Path(
-			this.path,
-			'++',
-				'spaceUser'
-		);
-	}
-);
-
-/*
-| TODO
+| Resizing handles.
 */
 Portal.s_handles =
 	Jools.immute(
@@ -352,7 +355,7 @@ Portal.prototype.grepFocus =
 			space.setCaret(
 				{
 					path :
-						this.spaceUserPath,
+						this._spacePath.spaceUser,
 
 					at1 :
 						0
@@ -407,15 +410,16 @@ Portal.prototype.click =
 		true;
 
 	// TODO
-	var caret = shell.$space.setCaret(
-		{
-			path :
-				this.spaceUserPath,
+	var caret =
+		shell.$space.setCaret(
+			{
+				path :
+					this._spacePath.spaceUser,
 
-			at1  :
-				null
-		}
-	);
+				at1  :
+					null
+			}
+		);
 
 	caret.show( );
 
@@ -524,6 +528,9 @@ Portal.prototype.positionCaret =
 		caret =
 			shell.$space.$caret,
 
+		section =
+			caret.sign.path.get( -1 ),
+
 		cpos =
 			caret.$pos =
 			this.getCaretPos( ),
@@ -531,14 +538,14 @@ Portal.prototype.positionCaret =
 		pnw =
 			this.getZone( ).pnw,
 
-		textPNW =
-			this._$spaceUserPNW;
+		fieldPNW =
+			this[ '_$' + section ].pnw;
 
 	caret.$screenPos =
 		view.point(
 			cpos.x + pnw.x,
 			cpos.n + pnw.y
-		).add( textPNW );
+		).add( fieldPNW );
 
 	caret.$height =
 		Math.round(
@@ -818,114 +825,34 @@ Portal.prototype._weave =
 		0
 	);
 
-	var pitch =
-		Math.round(
-			5 * view.zoom
-		);
-
-	var round =
-		Math.round(
-			3 * view.zoom
-		);
-
 	var spaceUser =
-		twig.spaceUser;
-
-	var spaceUserWidth =
-		Math.round(
-			Euclid.Measure.width(
-				this._spaceUserFont,
-				spaceUser
-			)
-			*
-			view.zoom
-		);
-
-	var spaceUserHeight =
-		Math.round(
-			( this._spaceUserFont.size + 2 ) * view.zoom
-		);
-
-	var spaceUserPNW =
-	this._$spaceUserPNW =
-		new Euclid.Point(
-			Jools.half(
-				vzone.width - spaceUserWidth
-			),
-			Math.round(
-				vzone.height / 3
-			)
-		);
-
-	var spaceUserBox =
-	this._$spaceUserBox =
-		new Euclid.RoundRect(
-			spaceUserPNW.sub(
-				pitch,
-				spaceUserHeight
-			),
-			spaceUserPNW.add(
-				spaceUserWidth + pitch,
-				pitch
-			),
-			round,
-			round
+	this._$spaceUser =
+		this._prepareField(
+			'spaceUser',
+			vzone,
+			view,
+			null
 		);
 
 	var spaceTag =
-		twig.spaceTag;
-
-	spaceTag = 'home'; //XXX
-
-	var spaceTagWidth =
-		Math.round(
-			Euclid.Measure.width(
-				this._spaceTagFont,
-				spaceTag
-			)
-			*
-			view.zoom
-		);
-
-	var spaceTagHeight =
-		Math.round(
-			( this._spaceTagFont.size + 2 ) * view.zoom
-		);
-
-	var spaceTagPNW =
-	this._$spaceTagPNW =
-		new Euclid.Point(
-			Jools.half(
-				vzone.width - spaceTagWidth
-			),
-			spaceUserPNW.y + Math.round( 23 * view.zoom )
-		);
-
-	var spaceTagBox =
-	this._$spaceTagBox =
-		new Euclid.RoundRect(
-			spaceTagPNW.sub(
-				pitch,
-				spaceTagHeight
-			),
-			spaceTagPNW.add(
-				spaceTagWidth + pitch,
-				pitch
-			),
-			round,
-			round
+	this._$spaceTag =
+		this._prepareField(
+			'spaceTag',
+			vzone,
+			view,
+			spaceUser.pnw
 		);
 
 	f.edge(
 		theme.portal.input.edge,
-		spaceUserBox,
+		spaceUser.box,
 		'sketch',
 		Euclid.View.proper
 	);
 
 	f.edge(
 		theme.portal.input.edge,
-		spaceTagBox,
+		spaceTag.box,
 		'sketch',
 		Euclid.View.proper
 	);
@@ -934,20 +861,20 @@ Portal.prototype._weave =
 
 	f.paintText(
 		'text',
-			spaceUser,
+			spaceUser.text,
 		'p',
-			view.depoint( spaceUserPNW ),
+			view.depoint( spaceUser.pnw ),
 		'font',
-			this._spaceUserFont
+			this._spaceFont.spaceUser
 	);
 
 	f.paintText(
 		'text',
-			spaceTag,
+			spaceTag.text,
 		'p',
-			view.depoint( spaceTagPNW ),
+			view.depoint( spaceTag.pnw ),
 		'font',
-			this._spaceTagFont
+			this._spaceFont.spaceTag
 	);
 
 	f.scale( 1 / view.zoom );
@@ -974,20 +901,33 @@ Portal.prototype.input =
 		text
 	)
 {
-    var reg  =
-		/([^\n]+)(\n?)/g;
+    var
+		reg  =
+			/([^\n]+)(\n?)/g,
 
-	// TODO, how about handing the caret as param to input?
-	var caret =
-		shell.$space.$caret;
+		// TODO, how about handing the caret as param to input?
+		caret =
+			shell.$space.$caret,
+
+		section =
+			caret.sign.path.get( -1 );
+
+	if( !this._isSection( section ) )
+	{
+		return false;
+	}
 
 	// ignores newlines
-    for( var rx = reg.exec(text); rx !== null; rx = reg.exec( text ) )
+    for(
+		var rx = reg.exec(text);
+		rx !== null;
+		rx = reg.exec( text )
+	)
 	{
 		var line = rx[ 1 ];
 
 		shell.peer.insertText(
-			this.spaceUserPath,
+			this._spacePath[ section ],
 			caret.sign.at1,
 			line
 		);
@@ -998,35 +938,48 @@ Portal.prototype.input =
 /*
 | Font for spacesUser/Tag
 */
-Portal.prototype._spaceUserFont =
-Portal.prototype._spaceTagFont =
-	fontPool.get(
-		13,
-		'la'
-	);
+Portal.prototype._spaceFont =
+	Jools.immute( {
+		spaceUser :
+			fontPool.get(
+				13,
+				'la'
+			),
+
+		spaceTag :
+			fontPool.get(
+				13,
+				'la'
+			)
+	} );
+
 
 /*
 | Returns the caret position.
 |
 | FIXME remove?
+| FIXME private?
 */
 Portal.prototype.getCaretPos =
 	function( )
 {
 	var
+		// TODO hand down caret.
+		caret =
+			shell.$space.$caret,
+
+		section =
+			caret.sign.path.get( -1 ),
+
 		fs =
-			this._spaceUserFont.size, // TODO
+			this._spaceFont[ section ].size,
 
 		descend =
 			fs * theme.bottombox,
 
-	// TODO hand down caret.
-		caret =
-			shell.$space.$caret,
-
 		p =
 			this._locateOffset(
-				'spaceUser',
+				section,
 				caret.sign.at1
 			),
 
@@ -1069,11 +1022,10 @@ Portal.prototype._locateOffset =
 			this.twig,
 
 		font =
-			this._spaceUserFont, // TODO
+			this._spaceFont[ section ],
 
 		text =
-			twig.spaceUser; // TODO
-
+			this.twig[ section ];
 
 	return new Euclid.Point(
 		Math.round(
@@ -1115,6 +1067,7 @@ Portal.prototype.specialKey =
 				this.keyDel( );
 
 			break;
+*/
 
 		case 'down' :
 
@@ -1122,7 +1075,6 @@ Portal.prototype.specialKey =
 				this.keyDown( );
 
 			break;
-*/
 
 		case 'end' :
 
@@ -1161,14 +1113,12 @@ Portal.prototype.specialKey =
 
 			break;
 
-/*
 		case 'up' :
 
 			poke =
 				this.keyUp( );
 
 			break;
-*/
 	}
 
 	if( poke )
@@ -1204,6 +1154,99 @@ Portal.prototype.keyLeft =
 };
 
 /*
+| User pressed down key.
+*/
+Portal.prototype.keyDown =
+	function( )
+{
+	var
+		caret =
+			shell.$space.$caret,
+
+		csign =
+			caret.sign,
+
+		section =
+			csign.path.get( -1 );
+
+	if( !this._isSection( section ) )
+	{
+		return false;
+	}
+
+	switch( section )
+	{
+		case 'spaceUser' :
+
+			shell.$space.setCaret(
+				{
+					path :
+						new Path(
+							csign.path,
+							csign.path.length - 1,
+								'spaceTag'
+							),
+
+					at1 :
+						0
+				}
+			);
+
+			break;
+	}
+
+
+	return true;
+};
+
+
+/*
+| User pressed down key.
+*/
+Portal.prototype.keyUp =
+	function( )
+{
+	var
+		caret =
+			shell.$space.$caret,
+
+		csign =
+			caret.sign,
+
+		section =
+			csign.path.get( -1 );
+
+	if( !this._isSection( section ) )
+	{
+		return false;
+	}
+
+	switch( section )
+	{
+		case 'spaceTag' :
+
+			shell.$space.setCaret(
+				{
+					path :
+						new Path(
+							csign.path,
+							csign.path.length - 1,
+								'spaceUser'
+							),
+
+					at1 :
+						0
+				}
+			);
+
+			break;
+	}
+
+
+	return true;
+};
+
+/*
 | User pressed right key.
 */
 Portal.prototype.keyRight =
@@ -1212,8 +1255,16 @@ Portal.prototype.keyRight =
 	var csign =
 		shell.$space.$caret.sign;
 
+	var section =
+		csign.path.get( -1 );
+
+	if( !this._isSection( section ) )
+	{
+		return false;
+	}
+
 	var value =
-		this.twig.spaceUser; // TODO
+		this.twig[ section ];
 
 	if( csign.at1 >= value.length )
 	{
@@ -1224,6 +1275,7 @@ Portal.prototype.keyRight =
 		{
 			path :
 				csign.path,
+
 			at1 :
 				csign.at1 + 1
 		}
@@ -1242,6 +1294,14 @@ Portal.prototype.keyBackspace =
 	var csign =
 		shell.$space.$caret.sign;
 
+	var section =
+		csign.path.get( -1 );
+
+	if( !this._isSection( section ) )
+	{
+		return false;
+	}
+
 	var at1 =
 		csign.at1;
 
@@ -1251,7 +1311,7 @@ Portal.prototype.keyBackspace =
 	}
 
 	shell.peer.removeText(
-		this.spaceUserPath,
+		this._spacePath.spaceUser,
 		at1 - 1,
 		1
 	);
@@ -1267,6 +1327,16 @@ Portal.prototype.keyEnd =
 {
 	var csign =
 		shell.$space.$caret.sign;
+
+	var section =
+		csign.path.get( -1 );
+
+	if( !this._isSection( section ) )
+	{
+		return false;
+	}
+
+	// AAAA
 
 	var at1 =
 		csign.at1;
@@ -1290,6 +1360,126 @@ Portal.prototype.keyEnd =
 	);
 
 	return true;
+};
+
+
+/*
+| Returns true if section is a section.
+*/
+Portal.prototype._isSection =
+	function(
+		section
+	)
+{
+	switch( section )
+	{
+		case 'spaceUser' :
+		case 'spaceTag' :
+
+			return true;
+
+		default :
+
+			return false;
+
+	}
+}
+
+
+/*
+| Prepares an input field ( user / tag )
+*/
+Portal.prototype._prepareField =
+	function(
+		section,
+		vzone,
+		view,
+		basePNW
+	)
+{
+	var pitch =
+		Math.round(
+			5 * view.zoom
+		);
+
+	var round =
+		Math.round(
+			3 * view.zoom
+		);
+
+	var text =
+		this.twig[ section ];
+
+	var width =
+		Math.round(
+			Euclid.Measure.width(
+				this._spaceFont[ section ],
+				text
+			)
+			*
+			view.zoom
+		);
+
+	var height =
+		Math.round(
+			( this._spaceFont[ section ].size + 2 )
+			*
+			view.zoom
+		);
+
+	var pnw =
+		basePNW === null
+		?
+		(
+			new Euclid.Point(
+				Jools.half(
+					vzone.width - width
+				),
+				Math.round(
+					vzone.height / 3
+				)
+			)
+		)
+		:
+		(
+			new Euclid.Point(
+				Jools.half(
+					vzone.width - width
+				),
+				basePNW.y + Math.round( 23 * view.zoom )
+			)
+		);
+
+	var box =
+		new Euclid.RoundRect(
+			pnw.sub(
+				pitch,
+				height
+			),
+			pnw.add(
+				width + pitch,
+				pitch
+			),
+			round,
+			round
+		);
+
+	return {
+		text :
+			text,
+
+		width :
+			width,
+
+		height :
+			height,
+
+		pnw :
+			pnw,
+
+		box :
+			box
+	};
 };
 
 

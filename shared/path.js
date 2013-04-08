@@ -52,15 +52,23 @@ Path =
 	switch( model.constructor )
 	{
 		case Path  :
-			path = ( copy ) ? model._path.slice( ) : model._path;
+
+			path =
+				copy ? model._path.slice( ) : model._path;
+
 			break;
 
 		case Array :
-			path = ( copy ) ? model.slice( ) : model;
+
+			path =
+				copy ? model.slice( ) : model;
+
 			break;
 
 		case null :
+
 			path = [ ];
+
 			break;
 
 		default :
@@ -82,21 +90,30 @@ Path =
 		var k = arguments[a];
 
 		if( k < 0 )
-			{ k += mlen; }
+		{
+			k += mlen;
+		}
 
 		if( k < 0 )
-			{ throw new Error( 'invalid path key' ); }
+		{
+			throw new Error( 'invalid path key' );
+		}
 
 		checkValidPathArc( arguments[ a + 1 ] );
 
-		path[ k ] = arguments[ a + 1 ];
+		path[ k ] =
+			arguments[ a + 1 ];
+
 		a += 2;
 	}
 
 	if( arguments[a] === '--' )
 	{
-		var s = arguments[ a + 1 ];
+		var s =
+			arguments[ a + 1 ];
+
 		path.splice( path.length - s, s );
+
 		a += 2;
 	}
 
@@ -105,12 +122,15 @@ Path =
 		for( a++; a < aZ; a++ )
 		{
 			checkValidPathArc( arguments[ a ] );
+
 			path[ path.length ] = arguments[ a ];
 		}
 	}
 
-	Object.freeze( path );
+	Jools.immute( path );
+
 	Jools.innumerable( this, '_path', path );
+
 	Jools.immute( this );
 };
 
@@ -127,7 +147,8 @@ Path.isPath = function( a )
 /*
 | Returns true is arc is a valid path arc.
 */
-var checkValidPathArc = function( arc )
+var checkValidPathArc =
+	function( arc )
 {
 	if( !Jools.isString( arc ) )
 	{
@@ -148,8 +169,11 @@ Object.defineProperty(
 	Path.prototype,
 	'length',
 	{
-		get: function( )
-			{ return this._path.length; }
+		get :
+			function( )
+			{
+				return this._path.length;
+			}
 	}
 );
 
@@ -157,13 +181,18 @@ Object.defineProperty(
 /*
 | Returns the arc at index i.
 */
-Path.prototype.get = function( i )
+Path.prototype.get =
+	function( i )
 {
 	if( i < 0 )
-		{ i += this._path.length; }
+	{
+		i += this._path.length;
+	}
 
-	if (i < 0 || i >= this._path.length)
-		{ throw new Error('invalid get'); }
+	if( i < 0 || i >= this._path.length )
+	{
+		throw new Error( 'invalid get' );
+	}
 
 	return this._path[ i ];
 };
@@ -177,15 +206,22 @@ Path.prototype.get = function( i )
 Path.prototype.equals =
 	function( o )
 {
-	if (!o)
-		{ return false; }
+	if( !o )
+	{
+		return false;
+	}
 
-	if (this._path.length !== o._path.length)
-		{ return false; }
+	if( this._path.length !== o._path.length )
+	{
+		return false;
+	}
 
-	for(var k in this._path) {
-		if (this._path[k] !== o._path[k])
-			{ return false; }
+	for( var k in this._path )
+	{
+		if( this._path[k] !== o._path[k] )
+		{
+			return false;
+		}
 	}
 
 	return true;
@@ -210,14 +246,22 @@ Path.prototype.subPathOf =
 	else
 	{
 		if( len < 0 )
-			{ len += this._path.length; }
+		{
+			len += this._path.length;
+		}
 
 		if( len < 0 )
-			{ throw new Error('subPathOf out of range'); }
+		{
+			throw new Error(
+				'subPathOf out of range'
+			);
+		}
 	}
 
 	if( len > o._path.length )
-		{ return false; }
+	{
+		return false;
+	}
 
 	for( var a = 0; a < len; a++)
 	{
