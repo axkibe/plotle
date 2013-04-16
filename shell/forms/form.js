@@ -326,7 +326,7 @@ Form.prototype.positionCaret =
 	else
 	{
 		caret.$screenPos =
-		caret.$heigh =
+		caret.$height =
 			null;
 	}
 };

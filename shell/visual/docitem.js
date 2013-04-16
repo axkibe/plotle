@@ -210,7 +210,9 @@ DocItem.prototype.click =
 	if( para )
 	{
 		var ppnw =
-			this.$sub.doc.getPNW( para.key );
+			this.$sub.doc.getPNW(
+				para.key
+			);
 
 		var at1 =
 			para.getPointOffset(

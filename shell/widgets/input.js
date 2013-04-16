@@ -9,7 +9,8 @@
 | Export
 */
 var Widgets;
-Widgets = Widgets || { };
+Widgets =
+	Widgets || { };
 
 
 /*
@@ -28,7 +29,6 @@ var theme;
 | Capsule
 */
 ( function( ) {
-
 'use strict';
 
 if( typeof( window ) === 'undefined' )
@@ -52,40 +52,41 @@ Widgets.Input =
 		arguments
 	);
 
-	var parent =
-		this.parent;
+	var
+		parent =
+			this.parent,
 
-	var twig =
-		this.twig;
+		twig =
+			this.twig,
 
-	var inherit =
-		this.inherit;
+		inherit =
+			this.inherit,
 
-	var pnw =
-	this.pnw =
-		parent.iframe.computePoint( twig.frame.pnw );
+		pnw =
+		this.pnw =
+			parent.iframe.computePoint( twig.frame.pnw ),
 
-	var pse =
-	this.pse =
-		parent.iframe.computePoint( twig.frame.pse );
+		pse =
+		this.pse =
+			parent.iframe.computePoint( twig.frame.pse );
 
 	this._shape =
 		new Euclid.RoundRect(
 			Euclid.Point.zero,
 			pse.sub( pnw ),
 			7, 3
-		);
+		),
 
 	this._pitch =
 		new Euclid.Point(
 			8, 3
-		);
+		),
 
 	this._$value =
-		inherit ? inherit._$value : '';
+		( inherit ? inherit._$value : '' ),
 
 	this._$fabric =
-		null;
+		null,
 
 	this._$accent =
 		Widgets.Accent.NORMA;
@@ -110,30 +111,31 @@ Input.prototype.getOffsetAt =
 		p
 	)
 {
-	var pitch =
-		this._pitch;
+	var
+		pitch =
+			this._pitch,
 
-	var dx =
-		p.x - pitch.x;
+		dx =
+			p.x - pitch.x,
 
-	var value =
-		this._$value;
+		value =
+			this._$value,
 
-	var x1 =
-		0;
+		x1 =
+			0,
 
-	var x2 =
-		0;
+		x2 =
+			0,
 
-	var a;
+		a,
 
-	var password =
-		this.twig.password;
+		password =
+			this.twig.password,
 
-	var font =
-		this.twig.font;
+		font =
+			this.twig.font,
 
-	var mw;
+		mw;
 
 	if( password )
 	{
@@ -154,10 +156,11 @@ Input.prototype.getOffsetAt =
 		}
 		else
 		{
-			x2 = Euclid.Measure.width(
-				font,
-				value.substr( 0, a )
-			);
+			x2 =
+				Euclid.Measure.width(
+					font,
+					value.substr( 0, a )
+				);
 		}
 
 		if( x2 >= dx )
@@ -166,7 +169,10 @@ Input.prototype.getOffsetAt =
 		}
 	}
 
-	if( dx - x1 < x2 - dx && a > 0 )
+	if(
+		dx - x1 < x2 - dx &&
+		a > 0
+	)
 	{
 		a--;
 	}

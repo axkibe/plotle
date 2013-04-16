@@ -76,6 +76,16 @@ Visual.Portal =
 					'spaceTag'
 				)
 		});
+
+	// the prepared space fields
+	this._$spaceFields =
+		{
+			spaceUser :
+				null,
+
+			spaceTag :
+				null
+		};
 };
 
 
@@ -91,17 +101,59 @@ Jools.subclass(
 Portal.s_handles =
 	Jools.immute(
 		{
-			n  : true,
-			ne : true,
-			e  : true,
-			se : true,
-			s  : true,
-			sw : true,
-			w  : true,
-			nw : true
+			n :
+				true,
+
+			ne :
+				true,
+
+			e :
+				true,
+
+			se :
+				true,
+
+			s :
+				true,
+
+			sw :
+				true,
+
+			w :
+				true,
+
+			nw :
+				true
 		}
 	);
 
+
+/*
+| The round rects of the input fields
+*/
+Portal.fieldRounding =
+	3;
+
+/*
+| Distance between field text and box
+*/
+Portal.fieldPitch =
+	5;
+
+
+/*
+| List of all space fields of the portal
+*/
+Portal.spaceFields =
+	Jools.immute(
+		{
+			spaceUser :
+				true,
+
+			spaceTag :
+				true
+		}
+	);
 
 
 /*
@@ -230,7 +282,8 @@ Portal.prototype.getSilhoutte =
 	)
 {
 	// checks for a cache hit
-	var s = this._$silhoutte;
+	var s =
+		this._$silhoutte;
 
 	if(
 		s &&
@@ -259,7 +312,8 @@ Portal.prototype.getZeroSilhoutte =
 	)
 {
 	// checks for cache hit
-	var s = this._$zeroSilhoutte;
+	var s =
+		this._$zeroSilhoutte;
 
 	if(
 		s &&
@@ -380,8 +434,16 @@ Portal.prototype.click =
 		p
 	)
 {
+	var
+		zone =
+			this.getZone( ),
+
+		silhoutte =
+			this.getSilhoutte( zone );
+
+	// not clicked on the portal?
 	if(
-		!this.getZone( )
+		!silhoutte
 			.within(
 				view,
 				p
@@ -391,37 +453,80 @@ Portal.prototype.click =
 		return false;
 	}
 
-	var space =
-		shell.$space;
+	var
+		space =
+			shell.$space,
 
-	var focus =
-		space.focusedItem( );
+		focus =
+			space.focusedItem( );
 
 	if( focus !== this )
 	{
 		this.grepFocus( );
 
 		// TODO double deselect below?
-
 		shell.deselect( );
 	}
 
 	shell.redraw =
 		true;
 
-	// TODO
-	var caret =
-		shell.$space.setCaret(
-			{
-				path :
-					this._spacePath.spaceUser,
+	var
+		caret =
+			null,
 
-				at1  :
-					null
-			}
-		);
+		pp =
+			p.sub(
+				view.point(
+					zone.pnw
+				)
+			);
 
-	caret.show( );
+	for( var field in Portal.spaceFields )
+	{
+		var sf =
+			this._$spaceFields[ field ];
+
+		if(
+			sf.box
+				.within(
+					Euclid.View.proper,
+					pp
+				)
+		)
+		{
+			console.log(
+				this._getOffsetAt(
+					view,
+					field,
+					pp
+				)
+			);
+
+			caret =
+				shell.$space.setCaret(
+					{
+						path :
+							this._spacePath[ field ],
+
+						at1  :
+							this._getOffsetAt(
+								view,
+								field,
+								pp
+							)
+					}
+				);
+
+			break;
+		}
+
+	}
+
+	if( caret )
+	{
+		caret.show( );
+	}
 
 	shell.deselect( );
 
@@ -439,14 +544,15 @@ Portal.prototype.draw =
 		view
 	)
 {
-	var zone =
-		this.getZone( );
+	var
+		zone =
+			this.getZone( ),
 
-	var vzone =
-		view.rect( zone );
+		vzone =
+			view.rect( zone ),
 
-	var f =
-		this.$fabric;
+		f =
+			this.$fabric;
 
 	// no buffer hit?
 	if (
@@ -529,8 +635,18 @@ Portal.prototype.positionCaret =
 			shell.$space.$caret,
 
 		section =
-			caret.sign.path.get( -1 ),
+			caret.sign.path.get( -1 );
 
+	if( !this._isSection( section ) )
+	{
+		caret.$screenPos =
+		caret.$height =
+			null;
+
+		return;
+	}
+
+	var
 		cpos =
 			caret.$pos =
 			this.getCaretPos( ),
@@ -539,7 +655,7 @@ Portal.prototype.positionCaret =
 			this.getZone( ).pnw,
 
 		fieldPNW =
-			this[ '_$' + section ].pnw;
+			this._$spaceFields[ section ].pnw;
 
 	caret.$screenPos =
 		view.point(
@@ -594,17 +710,12 @@ Portal.prototype.pointingHover =
 Portal.prototype.getZone =
 	function( )
 {
-	var twig =
-		this.twig;
+	var
+		twig =
+			this.twig,
 
-	var action =
-		shell.bridge.action( );
-
-	var max =
-		Math.max;
-
-	var min =
-		Math.min;
+		action =
+			shell.bridge.action( );
 
 	if(
 		!action ||
@@ -636,13 +747,27 @@ Portal.prototype.getZone =
 				return twig.zone;
 			}
 
-			var spnw = szone.pnw;
-			var spse = szone.pse;
-			var dx = action.move.x - action.start.x;
-			var dy = action.move.y - action.start.y;
-			var minw = theme.portal.minWidth;
-			var minh = theme.portal.minHeight;
-			var pnw, pse;
+			var
+				spnw =
+					szone.pnw,
+
+				spse =
+					szone.pse,
+
+				dx =
+					action.move.x - action.start.x,
+
+				dy =
+					action.move.y - action.start.y,
+
+				minw =
+					theme.portal.minWidth,
+
+				minh =
+					theme.portal.minHeight,
+
+				pnw,
+				pse;
 
 			switch( action.align )
 			{
@@ -652,7 +777,10 @@ Portal.prototype.getZone =
 					pnw =
 						Euclid.Point.renew(
 							spnw.x,
-							min( spnw.y + dy, spse.y - minh ),
+							Math.min(
+								spnw.y + dy,
+								spse.y - minh
+							),
 							spnw,
 							spse
 						);
@@ -667,14 +795,14 @@ Portal.prototype.getZone =
 					pnw =
 						Euclid.Point.renew(
 							spnw.x,
-							min( spnw.y + dy, spse.y - minh ),
+							Math.min( spnw.y + dy, spse.y - minh ),
 							spnw,
 							spse
 						);
 
 					pse =
 						Euclid.Point.renew(
-							max( spse.x + dx, spnw.x + minw ),
+							Math.max( spse.x + dx, spnw.x + minw ),
 							spse.y,
 							spnw,
 							spse
@@ -688,7 +816,7 @@ Portal.prototype.getZone =
 
 					pse =
 						Euclid.Point.renew(
-							max( spse.x + dx, spnw.x + minw ),
+							Math.max( spse.x + dx, spnw.x + minw ),
 							spse.y,
 							spnw,
 							spse
@@ -703,8 +831,8 @@ Portal.prototype.getZone =
 
 					pse =
 						Euclid.Point.renew(
-							max( spse.x + dx, spnw.x + minw ),
-							max( spse.y + dy, spnw.y + minh ),
+							Math.max( spse.x + dx, spnw.x + minw ),
+							Math.max( spse.y + dy, spnw.y + minh ),
 							spnw,
 							spse
 						);
@@ -719,7 +847,7 @@ Portal.prototype.getZone =
 					pse =
 						Euclid.Point.renew(
 							spse.x,
-							max( spse.y + dy, spnw.y + minh ),
+							Math.max( spse.y + dy, spnw.y + minh ),
 							spnw,
 							spse
 						);
@@ -730,7 +858,7 @@ Portal.prototype.getZone =
 
 					pnw =
 						Euclid.Point.renew(
-							min( spnw.x + dx, spse.x - minw ),
+							Math.min( spnw.x + dx, spse.x - minw ),
 							spnw.y,
 							spnw,
 							spse
@@ -739,7 +867,7 @@ Portal.prototype.getZone =
 					pse =
 						Euclid.Point.renew(
 							spse.x,
-							max( spse.y + dy, spnw.y + minh ),
+							Math.max( spse.y + dy, spnw.y + minh ),
 							spnw,
 							spse
 						);
@@ -749,7 +877,7 @@ Portal.prototype.getZone =
 				case 'w'   :
 					pnw =
 						Euclid.Point.renew(
-							min( spnw.x + dx, spse.x - minw ),
+							Math.min( spnw.x + dx, spse.x - minw ),
 							spnw.y,
 							spnw,
 							spse
@@ -763,8 +891,8 @@ Portal.prototype.getZone =
 				case 'nw' :
 					pnw =
 						Euclid.Point.renew(
-							min( spnw.x + dx, spse.x - minw ),
-							min( spnw.y + dy, spse.y - minh ),
+							Math.min( spnw.x + dx, spse.x - minw ),
+							Math.min( spnw.y + dy, spse.y - minh ),
 							spnw,
 							spse
 						);
@@ -798,18 +926,19 @@ Portal.prototype._weave =
 		view
 	)
 {
-	var f =
-	this.$fabric =
-		new Euclid.Fabric(
-			vzone.width + 1,
-			vzone.height + 1
-		);
+	var
+		f =
+		this.$fabric =
+			new Euclid.Fabric(
+				vzone.width + 1,
+				vzone.height + 1
+			),
 
-	var twig =
-		this.twig;
+		twig =
+			this.twig,
 
-	var silhoutte =
-		this.getZeroSilhoutte( vzone );
+		silhoutte =
+			this.getZeroSilhoutte( vzone );
 
 	f.paint(
 		theme.portal.style,
@@ -826,7 +955,7 @@ Portal.prototype._weave =
 	);
 
 	var spaceUser =
-	this._$spaceUser =
+	this._$spaceFields.spaceUser =
 		this._prepareField(
 			'spaceUser',
 			vzone,
@@ -835,7 +964,7 @@ Portal.prototype._weave =
 		);
 
 	var spaceTag =
-	this._$spaceTag =
+	this._$spaceFields.spaceTag =
 		this._prepareField(
 			'spaceTag',
 			vzone,
@@ -1007,8 +1136,6 @@ Portal.prototype.getCaretPos =
 
 /*
 | Returns the point of a given offset.
-|
-| FIXME change to multireturn.
 */
 Portal.prototype._locateOffset =
 	function(
@@ -1048,38 +1175,46 @@ Portal.prototype._locateOffset =
 Portal.prototype.specialKey =
 	function( key )
 {
-	var poke =
+	var show =
 		false;
 
 	switch( key )
 	{
 		case 'backspace' :
 
-			poke =
-				this.keyBackspace( );
+			show =
+				this.keyBackspace( )
+				||
+				show;
 
 			break;
 /*
 
 		case 'del' :
 
-			poke =
-				this.keyDel( );
+			show =
+				this.keyDel( )
+				||
+				show;
 
 			break;
 */
 
 		case 'down' :
 
-			poke =
-				this.keyDown( );
+			show =
+				this.keyDown( )
+				||
+				show;
 
 			break;
 
 		case 'end' :
 
-			poke =
-				this.keyEnd( );
+			show =
+				this.keyEnd( )
+				||
+				show;
 
 			break;
 
@@ -1087,43 +1222,59 @@ Portal.prototype.specialKey =
 		case 'enter' :
 
 			poke =
-				this.keyEnter( );
+				this.keyEnter( )
+				||
+				show;
 
 			break;
 */
 
 		case 'left' :
 
-			poke =
-				this.keyLeft( );
+			show =
+				this.keyLeft( )
+				||
+				show;
 
 			break;
 
 		case 'pos1' :
 
-			poke =
-				this.keyPos1( );
+			show =
+				this.keyPos1( )
+				||
+				show;
 
 			break;
 
 		case 'right' :
 
-			poke =
-				this.keyRight( );
+			show =
+				this.keyRight( )
+				||
+				show;
 
 			break;
 
 		case 'up' :
 
-			poke =
-				this.keyUp( );
+			show =
+				this.keyUp( )
+				||
+				show;
+
 
 			break;
 	}
 
-	if( poke )
+	if( show )
 	{
 		this.poke( );
+
+		shell.$space.$caret.show( );
+
+		shell.redraw =
+			true;
 	}
 };
 
@@ -1311,7 +1462,7 @@ Portal.prototype.keyBackspace =
 	}
 
 	shell.peer.removeText(
-		this._spacePath.spaceUser,
+		this._spacePath[ section ],
 		at1 - 1,
 		1
 	);
@@ -1336,13 +1487,11 @@ Portal.prototype.keyEnd =
 		return false;
 	}
 
-	// AAAA
-
 	var at1 =
 		csign.at1;
 
 	var value =
-		this.twig.spaceUser;
+		this.twig[ section ];
 
 	if( at1 >= value.length )
 	{
@@ -1383,7 +1532,7 @@ Portal.prototype._isSection =
 			return false;
 
 	}
-}
+};
 
 
 /*
@@ -1399,12 +1548,12 @@ Portal.prototype._prepareField =
 {
 	var pitch =
 		Math.round(
-			5 * view.zoom
+			view.distance( Portal.fieldPitch )
 		);
 
-	var round =
+	var rounding =
 		Math.round(
-			3 * view.zoom
+			view.distance( Portal.fieldRounding )
 		);
 
 	var text =
@@ -1460,8 +1609,8 @@ Portal.prototype._prepareField =
 				width + pitch,
 				pitch
 			),
-			round,
-			round
+			rounding,
+			rounding
 		);
 
 	return {
@@ -1508,6 +1657,76 @@ Portal.prototype.keyPos1 =
 	);
 
 	return true;
+};
+
+
+/*
+| Returns the offset nearest to point p.
+*/
+Portal.prototype._getOffsetAt =
+	function(
+		view,
+		section,
+		p
+	)
+{
+	var
+		pitch =
+			Math.round(
+				view.distance( Portal.fieldPitch )
+			),
+
+		dx =
+			p.x - this._$spaceFields[ section ].pnw.x,
+
+		value =
+			this.twig[ section ],
+
+		x1 =
+			0,
+
+		x2 =
+			0,
+
+		a,
+
+		aZ,
+
+		font =
+			this._spaceFont[ section ];
+
+	/// console.log('DX', dx, p.x, this._$spaceFields[ section ].pnw.x, pitch);
+
+	for(
+		a = 0, aZ = value.length;
+		a < aZ;
+		a++
+	)
+	{
+		x1 =
+			x2;
+
+		x2 =
+			Euclid.Measure.width(
+				font,
+				value.substr( 0, a )
+			);
+
+		if( x2 >= dx )
+		{
+			break;
+		}
+	}
+
+	if(
+		dx - x1 < x2 - dx &&
+		a > 0
+	)
+	{
+		a--;
+	}
+
+	return a;
 };
 
 

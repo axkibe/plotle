@@ -340,11 +340,15 @@ Doc.prototype.getFont =
 {
 	// caller can optionally provide the item
 	// for performance optimization otherwise
-	// graps it iself.
+	// greps it itself.
 
 	if(! Jools.is( item ) )
 	{
-		item = shell.$space.getSub( this.path, 'Item' );
+		item =
+			shell.$space.getSub(
+				this.path,
+				'Item'
+			);
 	}
 
 	var fs =
@@ -352,7 +356,8 @@ Doc.prototype.getFont =
 
 	if( item.fontSizeChange )
 	{
-		fs = item.fontSizeChange( fs );
+		fs =
+			item.fontSizeChange( fs );
 	}
 
 	var f =

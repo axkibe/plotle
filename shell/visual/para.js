@@ -9,7 +9,8 @@
 | Export
 */
 var Visual;
-Visual = Visual || { };
+Visual =
+	Visual || { };
 
 
 /*
@@ -268,36 +269,40 @@ Para.prototype.positionCaret =
 Para.prototype.getCaretPos =
 	function( )
 {
-	var item =
-		shell.$space.getSub( this.path, 'Item' );
+	var
+		item =
+			shell.$space.getSub(
+				this.path,
+				'Item'
+			),
 
-	var doc =
-		item.$sub.doc;
+		doc =
+			item.$sub.doc,
 
-	var fs =
-		doc.getFont( item ).size;
+		fs =
+			doc.getFont( item ).size,
 
-	var descend =
-		fs * theme.bottombox;
+		descend =
+			fs * theme.bottombox,
 
-	// TODO hand down caret.
-	var caret =
-		shell.$space.$caret;
+		// TODO hand down caret.
+		caret =
+			shell.$space.$caret,
 
-	var p =
-		this.locateOffset(
-			caret.sign.at1,
-			caret
-		);
+		p =
+			this.locateOffset(
+				caret.sign.at1,
+				caret
+			),
 
-	var s =
-		Math.round( p.y + descend );
+		s =
+			Math.round( p.y + descend ),
 
-	var n =
-		s - Math.round( fs + descend );
+		n =
+			s - Math.round( fs + descend ),
 
-	var	x =
-		p.x - 1;
+		x =
+			p.x - 1;
 
 	return Jools.immute(
 		{
@@ -539,15 +544,23 @@ Para.prototype.getOffsetAt =
 {
 	var
 		item =
-			shell.$space.getSub ( this.path, 'Item' ),
+			shell.$space.getSub (
+				this.path,
+				'Item'
+			),
+
 		doc =
 			item.$sub.doc,
+
 		font =
 			doc.getFont( item ),
+
 		flow =
 			this.getFlow( ),
+
 		fline =
 			flow[ line ],
+
 		ftoken =
 			null;
 
@@ -599,7 +612,8 @@ Para.prototype.getOffsetAt =
 
 		x2 =
 			Euclid.Measure.width(
-				font, text.substr( 0, a )
+				font,
+				text.substr( 0, a )
 			);
 
 		if( x2 >= dx )
@@ -726,20 +740,29 @@ Para.prototype.getPointOffset =
 		point     // the point to look for
 	)
 {
-	var flow =
-		this.getFlow( );
+	var
+		flow =
+			this.getFlow( ),
 
-	var line;
+		line;
+
 	for( line = 0; line < flow.length; line++ )
 	{
 		if( point.y <= flow[ line ].y )
-			{ break; }
+		{
+			break;
+		}
 	}
 
 	if( line >= flow.length )
-		{ line--; }
+	{
+		line--;
+	}
 
-	return this.getOffsetAt( line, point.x );
+	return this.getOffsetAt(
+		line,
+		point.x
+	);
 };
 
 
@@ -751,26 +774,31 @@ Para.prototype.input =
 		text
 	)
 {
-    var reg  =
-		/([^\n]+)(\n?)/g;
+    var
+		reg  =
+			/([^\n]+)(\n?)/g,
 
-	var para =
-		this;
+		para =
+			this,
 
-	var item =
-		shell.$space.getSub(
-			para.path,
-			'Item'
-		);
+		item =
+			shell.$space.getSub(
+				para.path,
+				'Item'
+			),
 
-	var doc =
-		item.$sub.doc;
+		doc =
+			item.$sub.doc,
 
-	// TODO, how about handing the caret as param to input?
-	var caret =
-		shell.$space.$caret;
+		// TODO, how about handing the caret as param to input?
+		caret =
+			shell.$space.$caret;
 
-    for( var rx = reg.exec(text); rx !== null; rx = reg.exec( text ) )
+    for(
+		var rx = reg.exec(text);
+		rx !== null;
+		rx = reg.exec( text )
+	)
 	{
 		var line = rx[ 1 ];
 
@@ -841,7 +869,12 @@ Para.prototype.keyBackspace =
 /*
 | Del-key pressed.
 */
-Para.prototype.keyDel = function(item, doc, caret)
+Para.prototype.keyDel =
+	function(
+		item,
+		doc,
+		caret
+	)
 {
 	if( caret.sign.at1 < this.twig.text.length )
 	{
@@ -854,9 +887,10 @@ Para.prototype.keyDel = function(item, doc, caret)
 		return true;
 	}
 
-	var r = doc.twig.rankOf( this.key );
+	var r =
+		doc.twig.rankOf( this.key );
 
-	if (r < doc.twig.length - 1)
+	if( r < doc.twig.length - 1 )
 	{
 		shell.peer.join(
 			this.textPath,
@@ -885,8 +919,10 @@ Para.prototype.keyDown =
 			this.getFlow( ),
 		x =
 			caret.retainx !== null ? caret.retainx : caret.$pos.x,
+
 		space =
 			shell.$space,
+
 		at1;
 
 	if( caret.flow$line < flow.length - 1 )
@@ -1007,6 +1043,7 @@ Para.prototype.keyLeft =
 			{
 				path :
 					this.textPath,
+
 				at1 :
 					caret.sign.at1 - 1
 			}
@@ -1027,6 +1064,7 @@ Para.prototype.keyLeft =
 			{
 				path :
 					ve.textPath,
+
 				at1 :
 					ve.twig.text.length
 			}
@@ -1061,6 +1099,7 @@ Para.prototype.keyPos1 =
 		{
 			path :
 				this.textPath,
+
 			at1 :
 				0
 		}
@@ -1089,6 +1128,7 @@ Para.prototype.keyRight =
 			{
 				path :
 					this.textPath,
+
 				at1 :
 					caret.sign.at1 + 1
 			}
@@ -1109,6 +1149,7 @@ Para.prototype.keyRight =
 			{
 				path :
 					ve.textPath,
+
 				at1 :
 					0
 			}
@@ -1140,8 +1181,10 @@ Para.prototype.keyUp =
 					caret.retainx :
 					caret.$pos.x
 			),
+
 		space =
 			shell.$space,
+
 		at1;
 
 	if( caret.flow$line > 0 )
@@ -1157,6 +1200,7 @@ Para.prototype.keyUp =
 			{
 				path :
 					this.textPath,
+
 				at1 :
 					at1
 			},
@@ -1220,29 +1264,30 @@ Para.prototype.specialKey =
 		ctrl
 	)
 {
-	var space =
-		shell.$space;
+	var
+		space =
+			shell.$space,
 
-	// TODO hand caret as param to specialKey
-	var caret =
-		space.$caret;
+		// TODO hand caret as param to specialKey
+		caret =
+			space.$caret,
 
-	var selection =
-		shell.getSelection( );
+		selection =
+			shell.getSelection( ),
 
-	// TODO similar item, doc, hand it properly instead of regetting them.
-	var item =
-		space.getSub(
-			this.path,
-			'Item'
-		);
+		// TODO similar item, doc, hand it properly instead of regetting them.
+		item =
+			space.getSub(
+				this.path,
+				'Item'
+			),
 
-	var doc =
-		item.$sub.doc;
+		doc =
+			item.$sub.doc,
 
-	// if true the caret moved or the selection changed
-	var show =
-		false;
+		// if true the caret moved or the selection changed
+		show =
+			false;
 
 	if( ctrl )
 	{
