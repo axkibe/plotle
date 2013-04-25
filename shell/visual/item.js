@@ -521,8 +521,9 @@ Item.prototype.dragStart =
 		access
 	)
 {
-	var sbary =
-		this.scrollbarY;
+	var
+		sbary =
+			this.scrollbarY;
 
 	if(
 		sbary &&
@@ -543,8 +544,15 @@ Item.prototype.dragStart =
 		return true;
 	}
 
+	var
+		zone =
+			this.getZone( ),
+
+		silhoutte =
+			this.getSilhoutte( zone );
+
 	if(
-		!this.getZone( ).within(
+		!silhoutte.within(
 			view,
 			p
 		)

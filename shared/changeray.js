@@ -10,14 +10,16 @@
 /*
 | Export
 */
-var ChangeRay;
+var
+	ChangeRay;
 
 
 /*
 | Imports
 */
-var Jools;
-var Change;
+var
+	Jools,
+	Change;
 
 
 /*
@@ -32,8 +34,11 @@ var Change;
 */
 if (typeof(window) === 'undefined')
 {
-	Jools  = require( './jools'  );
-	Change = require( './change' );
+	Jools =
+		require( './jools'  );
+
+	Change =
+		require( './change' );
 }
 
 
@@ -44,25 +49,38 @@ if (typeof(window) === 'undefined')
 */
 ChangeRay = function( model )
 {
-	var ray = this._$ray = [ ];
+	var ray =
+	this._$ray =
+		[ ];
 
-	// no model: nothing to do
+	// no model -> nothing to do
 	if( !Jools.is( model ) )
-		{ return; }
+	{
+		return;
+	}
 
 	if( !( model instanceof Array ) )
-		{ throw new Error(' ChangeRay model must be an Array ( or missing )' ); }
+	{
+		throw new Error(
+			'ChangeRay model must be an Array'
+		);
+	}
 
 	for( var a = 0, aZ = model.length; a < aZ; a++ )
 	{
-		var c = model[a];
+		var c = model[ a ];
 
 		if( !(c instanceof Change ) )
 		{
-			c = new Change( a.src, a.trg );
+			c =
+				new Change(
+					a.src,
+					a.trg
+				);
 		}
 
-		ray[ a ] = c;
+		ray[ a ] =
+			c;
 	}
 };
 
@@ -70,18 +88,38 @@ ChangeRay = function( model )
 /*
 | Returns a change ray with inverted changes.
 */
-ChangeRay.prototype.invert = function()
+ChangeRay.prototype.invert =
+	function( )
 {
-	if ( this._$invert )
-		{ return this._$invert; }
+	if( this._$invert )
+	{
+		return this._$invert;
+	}
 
-	var inv = new ChangeRay( );
+	var inv =
+		new ChangeRay( );
 
-	for( var a = 0, aZ = this.length; a < aZ; a++ )
-		{ inv._$ray[ a ] = this._$ray[ a ].invert( ); }
+	for(
+		var a = 0, aZ = this.length;
+		a < aZ;
+		a++
+	)
+	{
+		inv._$ray[ a ] =
+			this._$ray[ a ].invert( );
+	}
 
-	Jools.innumerable( this, '_$invert', inv );
-	Jools.innumerable( inv, '_$invert', this );
+	Jools.innumerable(
+		this,
+		'_$invert',
+		inv
+	);
+
+	Jools.innumerable(
+		inv,
+		'_$invert',
+		this
+	);
 
 	return inv;
 };
@@ -89,18 +127,24 @@ ChangeRay.prototype.invert = function()
 
 /*
 | Pushes a change to the change ray.
+|
+| TODO: this is bad, a changeray should be immutable!
 */
-ChangeRay.prototype.push = function( chg )
+ChangeRay.prototype.push =
+	function( chg )
 {
-	if ( this._invert )
-		{ this._invert = null; }
+	if( this._$invert )
+	{
+		this._$invert =
+			null;
+	}
 
 	this._$ray.push( chg );
 };
 
 
 /*
-| Change emulates an Array with the length of 1
+| Returns the length of the changeray 
 */
 Object.defineProperty (
 	ChangeRay.prototype,
@@ -126,8 +170,11 @@ ChangeRay.prototype.get = function( idx )
 */
 ChangeRay.prototype.set = function( idx, chg )
 {
-	if ( this._invert )
-		{ this._invert = null; }
+	if( this._$invert )
+	{
+		this._$invert =
+			null;
+	}
 
 	return this._$ray[ idx ] = chg;
 };
@@ -144,23 +191,33 @@ ChangeRay.prototype.changeTree =
 	function( tree )
 {
 	// the ray with the changes applied
-	var cray = new ChangeRay( );
+	var cray =
+		new ChangeRay( );
 
 	// iterates through the change ray
 	for( var a = 0, aZ = this.length; a < aZ; a++ )
 	{
-		var chg = this.get( a );
-		var r   = chg.changeTree( tree );
+		var
+			chg =
+				this.get( a ),
+
+			r =
+				chg.changeTree( tree );
 
 		// the tree returned by op-handler is the new tree
-		tree = r.tree;
+		tree =
+			r.tree;
+
 		cray.push( r.chg );
 	}
 
 	return Jools.immute(
 		{
-			tree : tree,
-			chgX : Jools.immute( cray )
+			tree :
+				tree,
+
+			chgX :
+				Jools.immute( cray )
 		}
 	);
 };

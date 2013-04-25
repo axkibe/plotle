@@ -667,54 +667,112 @@ IFace.prototype._update =
 			var postbox =
 				self.$postbox;
 
-			for( a = 0, aZ = chgs.length; a < aZ; a++ )
+			for(
+				a = 0, aZ = chgs.length;
+				a < aZ;
+				a++
+			)
 			{
-				chgX = new Change( chgs[a].chgX );
-				var cid = chgs[ a ].cid;
+				chgX =
+					new Change( chgs[a].chgX );
+
+				var cid =
+					chgs[ a ].cid;
 
 				// changes the clients understanding of the server tree
-				self.$rSpace = chgX.changeTree( self.$rSpace ).tree;
+				self.$rSpace =
+					chgX.changeTree( self.$rSpace ).tree;
 
-				if( postbox.length > 0 &&
+				if(
+					postbox.length > 0 &&
 					postbox[0].cid === cid
 				)
 				{
 					postbox.splice( 0, 1 );
-					gotOwnChgs = true;
+
+					gotOwnChgs =
+						true;
 					continue;
 				}
 
 				// alters undo and redo queues.
-				var undo = self._$undo;
-				var u;
-				for( b = 0, bZ = undo.length; b < bZ; b++ )
+				var
+					u,
+					undo =
+						self._$undo;
+
+				for(
+					b = 0, bZ = undo.length;
+					b < bZ;
+					b++
+				)
 				{
-					u = undo[ b ];
+					u =
+						undo[ b ];
+
 					if( u.time < time + a )
 					{
-						u = undo[ b ] = Jools.immute(
-							{
-								cid  : u.cid,
-								chgX : MeshMashine.tfxChgX( u.chgX, chgX ),
-								time : u.time
-							}
-						);
+						// TODO apply to redo as well AAA
+						var tfxChgX =
+							MeshMashine.tfxChgX(
+								u.chgX,
+								chgX
+							);
+
+						// the change vanished by transformation
+						if( tfxChgX === null )
+						{
+							undo.splice( b--, 1 );
+							bZ--;
+
+							continue;
+						}
+
+						u =
+						undo[ b ] =
+							Jools.immute( {
+								cid :
+									u.cid,
+
+								chgX :
+									tfxChgX,
+
+								time :
+									u.time
+							} );
 					}
 				}
 
-				var redo = self._$redo;
-				for( b = 0, bZ = redo.length; b < bZ; b++ )
+				var
+					redo =
+						self._$redo;
+
+				for(
+					b = 0, bZ = redo.length;
+					b < bZ;
+					b++
+				)
 				{
-					u = redo[ b ];
+					u =
+						redo[ b ];
+
 					if( u.time < time + a )
 					{
-						u = redo[ b ] = Jools.immute(
-							{
-								cid  : u.cid,
-								chgX : MeshMashine.tfxChgX( u.chgX, chgX ),
-								time : u.time
-							}
-						);
+						u =
+						redo[ b ] =
+							Jools.immute( {
+								cid :
+									u.cid,
+
+								chgX :
+									MeshMashine.tfxChgX(
+										u.chgX,
+										chgX
+									),
+
+								time :
+									u.time
+							} );
 					}
 				}
 
@@ -729,33 +787,56 @@ IFace.prototype._update =
 			var space =
 				self.$rSpace;
 
-			for( a = 0, aZ = postbox.length; a < aZ; a++ )
+			for(
+				a = 0, aZ = postbox.length;
+				a < aZ;
+				a++
+			)
 			{
-				chgX = postbox[ a ].chgX;
+				chgX =
+					postbox[ a ].chgX;
 
-				for( b = 0, bZ = report.length; b < bZ; b++ )
+				for(
+					b = 0, bZ = report.length;
+					b < bZ;
+					b++
+				)
 				{
-					chgX = MeshMashine.tfxChgX(
-						chgX,
-						report.get( b )
-					);
+					chgX =
+						MeshMashine.tfxChgX(
+							chgX,
+							report.get( b )
+						);
 				}
 
-				space = chgX.changeTree( space ).tree;
+				space =
+					chgX.changeTree( space ).tree;
 			}
 
 			// transforms the outbox
-			for( a = 0, aZ = outbox.length; a < aZ; a++ )
+			for(
+				a = 0, aZ = outbox.length;
+				a < aZ;
+				a++
+			)
 			{
-				var c = outbox[ a ];
-				chgX = c.chgX;
+				var c =
+					outbox[ a ];
 
-				for( b = 0, bZ = report.length; b < bZ; b++ )
+				chgX =
+					c.chgX;
+
+				for(
+					b = 0, bZ = report.length;
+					b < bZ;
+					b++
+				)
 				{
-					chgX = MeshMashine.tfxChgX(
-						chgX,
-						report.get( b )
-					);
+					chgX =
+						MeshMashine.tfxChgX(
+							chgX,
+							report.get( b )
+						);
 				}
 
 				c =
@@ -777,10 +858,12 @@ IFace.prototype._update =
 					chgX.changeTree( space ).tree;
 			}
 
-			self.$cSpace = space;
+			self.$cSpace =
+				space;
 		}
 
-		var msgs = asw.msgs;
+		var msgs =
+			asw.msgs;
 
 		if( msgs && self._messageRCV )
 		{
@@ -804,7 +887,8 @@ IFace.prototype._update =
 
 		if( Jools.is( mseqZ ) )
 		{
-			self.$mseq = mseqZ;
+			self.$mseq =
+				mseqZ;
 		}
 
 		if( report.length > 0 && self._updateRCV )
@@ -824,29 +908,35 @@ IFace.prototype._update =
 		self._update( );
 	};
 
-	var request = {
-		cmd :
-			'update',
+	var request =
+		{
+			cmd :
+				'update',
 
-		passhash :
-			self.$passhash,
+			passhash :
+				self.$passhash,
 
-		space :
-			self.$spacename,
+			space :
+				self.$spacename,
 
-		time :
-			self.$remoteTime,
+			time :
+				self.$remoteTime,
 
-		mseq :
-			self.$mseq,
+			mseq :
+				self.$mseq,
 
-		user :
-			self.$user
-	};
+			user :
+				self.$user
+		};
 
-	Jools.log( 'iface', 'u->', request );
+	Jools.log(
+		'iface',
+		'u->',
+		request
+	);
 
-	request = JSON.stringify( request );
+	request =
+		JSON.stringify( request );
 
 	ajax.send( request );
 };
@@ -857,39 +947,63 @@ IFace.prototype._update =
 |
 | TODO why doesnt this get a change?
 */
-IFace.prototype.alter = function(src, trg)
+IFace.prototype.alter =
+	function(
+		src,
+		trg
+	)
 {
-    var r = new Change(
-		new Sign( src ),
-		new Sign( trg )
-	).changeTree( this.$cSpace );
+	console.log('ALTER', src, trg);
+    var r =
+		new Change(
+			new Sign( src ),
+			new Sign( trg )
+		).changeTree( this.$cSpace );
+	console.log('AR', r);
 
-    this.$cSpace = r.tree;
-	var chgX     = r.chgX;
+    this.$cSpace =
+		r.tree;
+
+	var chgX =
+		r.chgX;
 
 	var c = Jools.immute(
 		{
-			cid  : Jools.uid( ),
-			chgX : chgX,
-			time : this.$remoteTime
+			cid :
+				Jools.uid( ),
+
+			chgX :
+				chgX,
+
+			time :
+				this.$remoteTime
 		}
 	);
 
 	this._$outbox.push( c );
 
-	this._$redo = [ ];
+	this._$redo =
+		[ ];
 
-	var undo  = this._$undo;
+	var undo =
+		this._$undo;
 
 	undo.push( c );
 
-	if (undo.length > config.maxUndo)
-		{ undo.shift( ); }
+	if( undo.length > config.maxUndo )
+	{
+		undo.shift( );
+	}
 
 	this._sendChanges( );
 
     if( this._updateRCV )
-		{ this._updateRCV.update(r.tree, chgX); }
+	{
+		this._updateRCV.update(
+			r.tree,
+			chgX
+		);
+	}
 
     return chgX;
 };
@@ -903,66 +1017,109 @@ IFace.prototype._sendChanges =
 {
 	// already sending?
 	if( this.$postbox.length > 0 )
-		{ return; }
+	{
+		return;
+	}
 
 	// nothing to send?
 	if( this._$outbox.length === 0 )
-		{ return; }
-
-	var ajax = new XMLHttpRequest( );
-	ajax.open('POST', '/mm', true);
-	ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-	ajax.onreadystatechange = function( )
 	{
-		var asw;
-		if ( ajax.readyState !== 4 )
-			{ return; }
+		return;
+	}
 
-		if (ajax.status !== 200)
-		{
-			shell.greenscreen('Cannot send changes, error code ' + ajax.status);
-			return;
-		}
+	var ajax =
+		new XMLHttpRequest( );
 
-		try
-		{
-			asw = JSON.parse(ajax.responseText);
-		}
-		catch (e)
-		{
-			shell.greenscreen('Server answered no JSON!');
-			return;
-		}
+	ajax.open(
+		'POST',
+		'/mm',
+		true
+	);
 
-		Jools.log('iface', '<-sc', asw);
+	ajax.setRequestHeader(
+		'Content-type',
+		'application/x-www-form-urlencoded'
+	);
 
-		if (!asw.ok)
+	ajax.onreadystatechange =
+		function( )
 		{
-			shell.greenscreen('Server not OK: ' + asw.message);
-			return;
-		}
-	};
+			var asw;
+
+			if( ajax.readyState !== 4 )
+			{
+				return;
+			}
+
+			if( ajax.status !== 200 )
+			{
+				shell.greenscreen(
+					'Cannot send changes, error code ' + ajax.status
+				);
+				return;
+			}
+
+			try
+			{
+				asw =
+					JSON.parse( ajax.responseText );
+			}
+			catch( e )
+			{
+				shell.greenscreen(
+					'Server answered no JSON!'
+				);
+
+				return;
+			}
+
+			Jools.log(
+				'iface',
+				'<-sc',
+				asw
+			);
+
+			if( !asw.ok )
+			{
+				shell.greenscreen(
+					'Server not OK: ' + asw.message
+				);
+
+				return;
+			}
+		};
 
 	var c = this._$outbox[0];
 	this._$outbox.splice(0, 1);
 	this.$postbox.push(c);
 
 	var request = {
-		cmd      : 'alter',
-		space    : this.$spacename,
-		chgX     : c.chgX,
-		cid      : c.cid,
-		passhash : this.$passhash,
-		time     : this.$remoteTime,
-		user     : this.$user
+		cmd :
+			'alter',
+		space :
+			this.$spacename,
+		chgX :
+			c.chgX,
+		cid :
+			c.cid,
+		passhash :
+			this.$passhash,
+		time :
+			this.$remoteTime,
+		user :
+			this.$user
 	};
 
-	Jools.log('iface', 'sc->', request);
+	Jools.log(
+		'iface',
+		'sc->',
+		request
+	);
 
-	request = JSON.stringify(request);
+	request =
+		JSON.stringify( request );
 
-	ajax.send(request);
+	ajax.send( request );
 };
 
 
@@ -970,19 +1127,21 @@ IFace.prototype._sendChanges =
 | Reverts actions from the undo chain.
 */
 IFace.prototype.undo =
-	function()
+	function( )
 {
 	if( this._$undo.length === 0 )
 	{
 		return;
 	}
 
+	console.log( '$undo', this._$undo );
+
 	var chgX =
 		this._$undo.pop( ).chgX.invert( );
 
     var r =
 		chgX.changeTree( this.$cSpace );
-	
+
 	if( r === null )
 	{
 		return;
@@ -1033,33 +1192,57 @@ IFace.prototype.undo =
 /*
 | Sends the stored changes to remote meshmashine
 */
-IFace.prototype.redo = function( )
+IFace.prototype.redo =
+	function( )
 {
 	if( this._$redo.length === 0 )
 		{ return; }
 
-	var chgX     = this._$redo.pop( ).chgX.invert( );
-    var r        = chgX.changeTree( this.$cSpace );
-    this.$cSpace = r.tree;
-	chgX         = r.chgX;
+	var
+		chgX =
+			this._$redo.pop( ).chgX.invert( ),
+
+		r =
+			chgX.changeTree( this.$cSpace );
+
+    this.$cSpace =
+		r.tree;
+
+	chgX =
+		r.chgX;
 
 	if( chgX === null )
-		{ return; }
+	{
+		return;
+	}
 
-	var c = Jools.immute(
-		{
-			cid  : Jools.uid( ),
-			chgX : chgX,
-			time : this.$remoteTime
-		}
-	);
+	var c =
+		Jools.immute(
+			{
+				cid :
+					Jools.uid( ),
+
+				chgX :
+					chgX,
+
+				time :
+					this.$remoteTime
+			}
+		);
 
 	this._$outbox.push( c );
+
 	this._$undo.push( c );
+
 	this._sendChanges( );
 
     if( this._updateRCV )
-		{ this._updateRCV.update( this.$cSpace, chgX ); }
+	{
+		this._updateRCV.update(
+			this.$cSpace,
+			chgX
+		);
+	}
 
     return chgX;
 };

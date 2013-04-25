@@ -7,7 +7,7 @@
 */
 
 
-/**
+/*
 | Imports
 */
 var Jools;
@@ -15,10 +15,11 @@ var Path;
 var Sign;
 
 
-/**
+/*
 | Exports
 */
-var Change = null;
+var Change =
+	null;
 
 
 /*
@@ -33,9 +34,14 @@ var Change = null;
 */
 if( typeof( window ) === 'undefined' )
 {
-	Jools = require( './jools' );
-	Path  = require( './path'  );
-	Sign  = require( './sign'  );
+	Jools =
+		require( './jools' );
+
+	Path =
+		require( './path'  );
+
+	Sign =
+		require( './sign'  );
 }
 
 
@@ -44,44 +50,63 @@ if( typeof( window ) === 'undefined' )
 */
 Change =
 	function(
-		a1,   // src   -or-   obj ( with o.src and o.trg)
-		a2    // trg   -or-   -
+		a1, // src   -or-   obj ( with o.src and o.trg)
+		a2  // trg   -or-   -
 	)
 {
-	var src, trg;
+	var
+		src,
+		trg;
+
 	switch ( arguments.length )
 	{
 		case 2:
-			src = a1;
-			trg = a2;
+
+			src =
+				a1;
+
+			trg =
+				a2;
+
 			break;
 
 		case 1:
-			src = a1.src;
-			trg = a1.trg;
+
+			src =
+				a1.src;
+
+			trg =
+				a1.trg;
+
 			break;
+
 		default :
+
 			throw new Error( 'Change Constructor: argument fail' );
 	}
 
 	if( src.constructor === Sign )
 	{
-		this.src = src;
+		this.src =
+			src;
 	}
 	else
 	{
 		// TODO move into Sign Constructor
 		if( src.path && !Path.isPath( src.path ) )
 		{
-			src.path = new Path( src.path );
+			src.path =
+				new Path( src.path );
 		}
 
-		this.src = new Sign( src );
+		this.src =
+			new Sign( src );
 	}
 
 	if( trg.constructor === Sign )
 	{
-		this.trg = trg;
+		this.trg =
+			trg;
 	}
 	else
 	{
@@ -91,7 +116,8 @@ Change =
 			trg.path = new Path( trg.path );
 		}
 
-		this.trg = new Sign( trg );
+		this.trg =
+			new Sign( trg );
 	}
 
 	Jools.immute( this );
@@ -101,9 +127,11 @@ Change =
 /*
 | Returns the type of this change.
 */
-Change.prototype.type = function( )
+Change.prototype.type =
+	function( )
 {
-	var is = Jools.is;
+	var is =
+		Jools.is;
 
 	// checks if the answer is cached
 	if( is( this._type ) )
@@ -111,26 +139,50 @@ Change.prototype.type = function( )
 		return this._type;
 	}
 
-	var src = this.src;
-	var trg = this.trg;
+	var
+		src =
+			this.src,
 
-	var type;
+		trg =
+			this.trg,
+
+		type;
 
 	if( trg.proc === 'splice' )
-		{ type = 'split';  }
+	{
+		type =
+			'split';
+	}
 	else if( src.proc === 'splice' )
-		{ type = 'join';   }
+	{
+		type =
+			'join';
+	}
 	else if( is( src.val ) && !is( trg.at1 ) )
-		{ type = 'set';    }
+	{
+		type =
+			'set';
+	}
 	else if( is( src.val ) && is( trg.at1 ) )
-		{ type = 'insert'; }
+	{
+		type =
+			'insert';
+	}
 	else if( is( src.at1 ) && is( src.at2 ) && !is( trg.at1 ) )
-		{ type = 'remove'; }
+	{
+		type =
+			'remove';
+	}
 	else if( is( trg.rank ) )
-		{ type = 'rank';   }
+	{
+		type =
+			'rank';
+	}
 	else
 	{
-		type = null;
+		type =
+			null;
+
 		if( Jools.prissy )
 		{
 			Jools.log( 'fail', this );
@@ -156,10 +208,11 @@ Change.prototype.invert = function( )
 		return this._invert;
 	}
 
-	var r = new Change(
-		this.trg,
-		this.src
-	);
+	var r =
+		new Change(
+			this.trg,
+			this.src
+		);
 
 	// caches the inversion for both changies
 
@@ -185,27 +238,37 @@ Change.prototype.invert = function( )
 Change.prototype.changeTree =
 	function( tree )
 {
-	var type = this.type();
+	var type =
+		this.type( );
 
 	Jools.log(
 		'change',
-		'src:',  this.src,
-		'trg:',  this.trg,
-		'type:', this.type
+		'src:',
+			this.src,
+		'trg:',
+			this.trg,
+		'type:',
+			this.type
 	);
 
 	// executes the op-handler
 	// TODO make a switch call around this
-	var r = this[ type ]( tree );
+	var r =
+		this[ type ]( tree );
 
 	// if answer is null the change has vaporated
 	if( r === null )
-		{ return null; }
+	{
+		return null;
+	}
 
 	return Jools.immute(
 		{
-			tree : r.tree,
-			chgX : r.chg
+			tree :
+				r.tree,
+
+			chgX :
+				r.chg
 		}
 	);
 };
@@ -216,17 +279,23 @@ Change.prototype.changeTree =
 | Change emulates a ChangeRay with the length of 1.
 | TODO check if needed
 */
-Change.prototype.length = 1;
+Change.prototype.length =
+	1;
 
 
 /*
 | Change emulates a ChangeRay with the length of 1.
 | TODO check if needed
 */
-Change.prototype.get = function( idx )
+Change.prototype.get =
+	function( idx )
 {
 	if( idx !== 0 )
-		{ throw new Error( 'Change.get: out of bonds' ); }
+	{
+		throw new Error(
+			'Change.get: out of bonds'
+		);
+	}
 
 	return this;
 };
@@ -240,11 +309,21 @@ Change.prototype.get = function( idx )
 Change.prototype.set =
 	function( tree )
 {
-	var cm    = 'change.set';
-	var src   = this.src;
-	var trg   = this.trg;
-	var pivot = null;
-	var key   = null;
+	var
+		cm =
+			'change.set',
+
+		src =
+			this.src,
+
+		trg =
+			this.trg,
+
+		pivot =
+			null,
+
+		key =
+			null;
 
 	Jools.check(
 		!Jools.is( trg.at1 ),
@@ -261,81 +340,127 @@ Change.prototype.set =
 	// if $new is given, replaces it with a unique ID
 	if( trg.path.get(-1) === '$new' )
 	{
-		pivot = tree.getPath( trg.path, -1 );
-		key = pivot.newUID( );
-		trg = new Sign(
-			trg,
-			'path', new Path( trg.path, -1, key )
-		);
+		pivot =
+			tree.getPath( trg.path, -1 );
+
+		key =
+			pivot.newUID( );
+
+		trg =
+			new Sign(
+				trg,
+				'path',
+					new Path( trg.path, -1, key )
+			);
 	}
 
 	// Stores the old value for history tracking.
-	var save = tree.getPath( trg.path );
+	var save =
+		tree.getPath( trg.path );
 
 	if( !Jools.is( save ) )
-		{ save = null; }
+	{
+		save =
+			null;
+	}
 
 	trg = trg.affix(
 		Jools.is,
-		cm, 'trg',
-		'val',  save
+		cm,
+		'trg',
+		'val',
+			save
 	);
 
 	src = src.affix(
 		Jools.is,
-		cm, 'src',
-		'path', trg.path
+		cm,
+		'src',
+		'path',
+			trg.path
 	);
 
 	// TODO simplify
 	if( !Jools.is( trg.rank ) )
 	{
-		tree = tree.setPath( trg.path, src.val );
+		tree =
+			tree.setPath(
+				trg.path,
+				src.val
+			);
 	}
 	else
 	{
-		pivot = pivot || tree.getPath( trg.path, -1 );
+		pivot =
+			pivot || tree.getPath( trg.path, -1 );
 
 		if( key === null )
-			{ key = trg.path.get( -1 ); }
+		{
+			key =
+				trg.path.get( -1 );
+		}
 
 		var orank;
 		if( src.val !== null )
 		{
-			pivot = tree.grow(
-				pivot,
-				key, src.val,
-				'+', trg.rank, key
-			);
+			pivot =
+				tree.grow(
+					pivot,
+					key,
+						src.val,
+					'+',
+						trg.rank, key
+				);
 		}
 		else
 		{
-			orank = pivot.rankOf( key );
+			orank =
+				pivot.rankOf( key );
 
 			trg = new Sign(
 				trg,
-				'rank', orank
+				'rank',
+					orank
 			);
 
-			pivot = tree.grow(
-				pivot,
-				key, src.val,
-				'-', orank
-			);
+			pivot =
+				tree.grow(
+					pivot,
+					key,
+						src.val,
+					'-',
+						orank
+				);
 		}
 
-		tree = tree.setPath( trg.path, pivot, -1 );
+		tree =
+			tree.setPath(
+				trg.path,
+				pivot,
+				-1
+			);
 	}
 
 	var chg;
 	if( src === this.src && trg === this.trg )
-		{ chg = this; }
+	{
+		chg =
+			this;
+	}
 	else
-		{ chg = new Change( src, trg ); }
+	{
+		chg =
+			new Change(
+				src,
+				trg
+			);
+	}
 
 	return {
-		tree: tree,
-		chg : chg
+		tree :
+			tree,
+		chg :
+			chg
 	};
 };
 
@@ -345,32 +470,44 @@ Change.prototype.set =
 |
 | A string is inserted into a string item.
 */
-Change.prototype.insert = function( tree )
+Change.prototype.insert =
+	function( tree )
 {
-	var cm = 'change.insert';
-	var src = this.src;
-	var trg = this.trg;
+	var
+		cm = 'change.insert',
+
+		src =
+			this.src,
+
+		trg =
+			this.trg;
 
 	Jools.check(
 		Path.isPath( trg.path ),
-		cm, 'trg.path missing'
+		cm,
+		'trg.path missing'
 	);
 
-	var str = tree.getPath( trg.path );
+	var str =
+		tree.getPath( trg.path );
 
 	Jools.check(
 		Jools.isString( str ),
-		cm, 'trg.path signates no string'
+		cm,
+		'trg.path signates no string'
 	);
 
 	// where trg span should end
-	var tat2 = trg.at1 + src.val.length;
+	var tat2 =
+		trg.at1 + src.val.length;
 
-	trg = trg.affix(
-		Jools.is,
-		cm, 'trg',
-		'at2', tat2
-	);
+	trg =
+		trg.affix(
+			Jools.is,
+			cm, 'trg',
+			'at2',
+				tat2
+		);
 
 	var nstr = (
 		str.substring( 0, trg.at1 ) +
@@ -385,13 +522,24 @@ Change.prototype.insert = function( tree )
 
 	var chg;
 	if( src === this.src && trg === this.trg )
-		{ chg = this; }
+	{
+		chg =
+			this;
+	}
 	else
-		{ chg = new Change( src, trg ); }
+	{
+		chg =
+			new Change(
+				src,
+				trg
+			);
+	}
 
 	return {
-		tree: tree,
-		chg : chg
+		tree :
+			tree,
+		chg :
+			chg
 	};
 };
 
@@ -401,18 +549,26 @@ Change.prototype.insert = function( tree )
 |
 | A part of a string item is removed.
 */
-Change.prototype.remove = function( tree )
+Change.prototype.remove =
+	function( tree )
 {
-	var cm = 'change.remove';
-	var src = this.src;
-	var trg = this.trg;
+	var
+		cm =
+			'change.remove',
+
+		src =
+			this.src,
+
+		trg =
+			this.trg;
 
 	Jools.check(
 		Path.isPath( src.path ),
 		cm, 'src.path missing'
 	);
 
-	var str = tree.getPath( src.path );
+	var str =
+		tree.getPath( src.path );
 
 	if( !Jools.isString( str ) )
 	{
@@ -420,6 +576,7 @@ Change.prototype.remove = function( tree )
 			'change',
 			'src.path signates no string'
 		);
+
 		return null;
 	}
 
@@ -429,15 +586,21 @@ Change.prototype.remove = function( tree )
 			'change',
 			'removed nothing'
 		);
+
 		return null;
 	}
 
-	var val = str.substring( src.at1, src.at2 );
+	var val =
+		str.substring(
+			src.at1,
+			src.at2
+		);
 
 	trg = trg.affix(
 		Jools.isnon,
 		cm, 'trg',
-		'val', val
+		'val',
+			val
 	);
 
 	var nstr = (
@@ -448,14 +611,28 @@ Change.prototype.remove = function( tree )
 	tree = tree.setPath( src.path, nstr );
 
 	var chg;
-	if( src === this.src && trg === this.trg )
-		{ chg = this; }
+	if(
+		src === this.src &&
+		trg === this.trg
+	)
+	{
+		chg =
+			this;
+	}
 	else
-		{ chg = new Change( src, trg ); }
+	{
+		chg =
+			new Change(
+				src,
+				trg
+			);
+	}
 
 	return {
-		tree: tree,
-		chg : chg
+		tree :
+			tree,
+		chg :
+			chg
 	};
 };
 
@@ -465,14 +642,26 @@ Change.prototype.remove = function( tree )
 |
 | Two texts are joined into one.
 */
-Change.prototype.join = function( tree )
+Change.prototype.join =
+	function( tree )
 {
-	var cm   = 'change.join';
-	var src  = this.src;
-	var trg  = this.trg;
-	var path = trg.path;
+	var
+		cm =
+			'change.join',
 
-	var at1 = trg.at1;
+		src =
+			this.src,
+
+		trg =
+			this.trg,
+
+		path =
+			trg.path,
+
+		at1 =
+			trg.at1;
+
+	console.log( 'ST', src, trg );
 
 	Jools.check(
 		Jools.is( at1 ),
@@ -480,72 +669,125 @@ Change.prototype.join = function( tree )
 		'trg.at1 missing'
 	);
 
-	var text = tree.getPath( path );
+	var text =
+		tree.getPath( path );
 
 	Jools.check(
-		Jools.isString(text),
-		cm, 'trg signates no text'
+		Jools.isString( text ),
+		cm,
+		'trg signates no text'
 	);
 
-	var key = path.get( -2 );
-	var pivot   = tree.getPath( path, -2 );
-	var pattern = tree.getPattern( pivot );
+	var
+		key =
+			path.get( -2 ),
+	
+		pivot =
+			tree.getPath( path, -2 ),
+
+		pattern =
+			tree.getPattern( pivot );
 
 	Jools.check(
 		pattern.ranks,
-		cm, 'pivot has no ranks'
+		cm,
+		'pivot has no ranks'
 	);
 
-	var kn  = pivot.rankOf( key );
+	var kn =
+		pivot.rankOf( key );
 
 	Jools.check(
 		kn >= 0,
-		cm, 'invalid line key'
+		cm,
+		'invalid line key'
 	);
 
 	Jools.check(
 		kn < pivot.ranks.length,
-		cm, 'cannot join last line'
-	);
-
-	var key2 = pivot.ranks[ kn + 1 ];
-	var path2 = new Path( path, -2, key2 );
-
-	src = src.affix(
-		Jools.is,
 		cm,
-		'src', 'path',
-		path2
+		'cannot join last line'
 	);
 
-	var para1 = pivot.copse[ key  ];
-	var para2 = pivot.copse[ key2 ];
+	var
+		key2 =
+			pivot.ranks[ kn + 1 ];
+
+	var
+		path2 =
+			new Path(
+				path,
+				-2,
+				key2
+			);
+
+	src =
+		src.affix(
+			Jools.is,
+			cm,
+			'src', 'path',
+			path2
+		);
+
+	var
+		para1 =
+			pivot.copse[ key  ],
+
+		para2 =
+			pivot.copse[ key2 ];
 
 	// FIXME check other keys to be equal
 
-	para1 = tree.grow(
-		para1,
-		'text', para1.text + para2.text
-	);
+	para1 =
+		tree.grow(
+			para1,
+			'text',
+				para1.text + para2.text
+		);
 
-	pivot = tree.grow(
-		pivot,
-		key, para1,
-		key2, null,
-		'-', kn + 1
-	);
+	pivot =
+		tree.grow(
+			pivot,
+			key,
+				para1,
+			key2,
+				null,
+			'-',
+				kn + 1
+		);
 
-	tree = tree.setPath( path, pivot, -2 );
+	tree =
+		tree.setPath(
+			path,
+			pivot,
+			-2
+		);
 
 	var chg;
-	if( src === this.src && trg === this.trg )
-		{ chg = this; }
+
+	if(
+		src === this.src &&
+		trg === this.trg
+	)
+	{
+		chg =
+			this;
+	}
 	else
-		{ chg = new Change( src, trg ); }
+	{
+		chg =
+			new Change(
+				src,
+				trg
+			);
+	}
 
 	return {
-		tree: tree,
-		chg : chg
+		tree :
+			tree,
+
+		chg :
+			chg
 	};
 };
 

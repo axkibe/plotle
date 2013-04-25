@@ -476,11 +476,13 @@ Portal.prototype.click =
 			null,
 
 		pp =
-			p.sub(
-				view.point(
-					zone.pnw
+			view
+				.depoint(
+					p
 				)
-			);
+				.sub(
+					zone.pnw
+				);
 
 	for( var field in Portal.spaceFields )
 	{
@@ -495,14 +497,6 @@ Portal.prototype.click =
 				)
 		)
 		{
-			console.log(
-				this._getOffsetAt(
-					view,
-					field,
-					pp
-				)
-			);
-
 			caret =
 				shell.$space.setCaret(
 					{
@@ -511,16 +505,14 @@ Portal.prototype.click =
 
 						at1  :
 							this._getOffsetAt(
-								view,
 								field,
-								pp
+								pp.x
 							)
 					}
 				);
 
 			break;
 		}
-
 	}
 
 	if( caret )
@@ -613,11 +605,16 @@ Portal.prototype.mousewheel =
 		// ctrl
 	)
 {
-	return (
-		this.getZone().within(
-			view,
-			p
-		)
+	var
+		zone =
+			this.getZone( ),
+
+		silhoutte =
+			this.getSilhoutte( zone );
+
+	return silhoutte.within(
+		view,
+		p
 	);
 };
 
@@ -659,9 +656,9 @@ Portal.prototype.positionCaret =
 
 	caret.$screenPos =
 		view.point(
-			cpos.x + pnw.x,
-			cpos.n + pnw.y
-		).add( fieldPNW );
+			cpos.x + pnw.x + fieldPNW.x,
+			cpos.n + pnw.y + fieldPNW.y
+		);
 
 	caret.$height =
 		Math.round(
@@ -958,8 +955,7 @@ Portal.prototype._weave =
 	this._$spaceFields.spaceUser =
 		this._prepareField(
 			'spaceUser',
-			vzone,
-			view,
+			zone,
 			null
 		);
 
@@ -967,8 +963,7 @@ Portal.prototype._weave =
 	this._$spaceFields.spaceTag =
 		this._prepareField(
 			'spaceTag',
-			vzone,
-			view,
+			zone,
 			spaceUser.pnw
 		);
 
@@ -976,14 +971,14 @@ Portal.prototype._weave =
 		theme.portal.input.edge,
 		spaceUser.box,
 		'sketch',
-		Euclid.View.proper
+		view
 	);
 
 	f.edge(
 		theme.portal.input.edge,
 		spaceTag.box,
 		'sketch',
-		Euclid.View.proper
+		view
 	);
 
 	f.scale( view.zoom );
@@ -992,7 +987,7 @@ Portal.prototype._weave =
 		'text',
 			spaceUser.text,
 		'p',
-			view.depoint( spaceUser.pnw ),
+			spaceUser.pnw,
 		'font',
 			this._spaceFont.spaceUser
 	);
@@ -1001,7 +996,7 @@ Portal.prototype._weave =
 		'text',
 			spaceTag.text,
 		'p',
-			view.depoint( spaceTag.pnw ),
+			spaceTag.pnw,
 		'font',
 			this._spaceFont.spaceTag
 	);
@@ -1188,7 +1183,6 @@ Portal.prototype.specialKey =
 				show;
 
 			break;
-/*
 
 		case 'del' :
 
@@ -1198,7 +1192,6 @@ Portal.prototype.specialKey =
 				show;
 
 			break;
-*/
 
 		case 'down' :
 
@@ -1284,11 +1277,39 @@ Portal.prototype.specialKey =
 Portal.prototype.keyLeft =
 	function( )
 {
-	var csign =
-		shell.$space.$caret.sign;
+	var
+		csign =
+			shell.$space.$caret.sign,
+
+		section =
+			csign.path.get( -1 );
+
+	if( !this._isSection( section ) )
+	{
+		return false;
+	}
+
 
 	if( csign.at1 === 0 )
 	{
+		if( section === 'spaceTag' )
+		{
+			shell.$space.setCaret(
+				{
+					path :
+						new Path(
+							csign.path,
+							csign.path.length - 1,
+								'spaceUser'
+							),
+					at1 :
+						this.twig.spaceUser.length
+				}
+			);
+
+			return true;
+		}
+
 		return false;
 	}
 
@@ -1325,6 +1346,10 @@ Portal.prototype.keyDown =
 		return false;
 	}
 
+	var
+		cpos =
+			this.getCaretPos();
+
 	switch( section )
 	{
 		case 'spaceUser' :
@@ -1339,7 +1364,11 @@ Portal.prototype.keyDown =
 							),
 
 					at1 :
-						0
+						this._getOffsetAt(
+							'spaceTag',
+							cpos.x +
+								this._$spaceFields.spaceUser.pnw.x
+						)
 				}
 			);
 
@@ -1372,6 +1401,10 @@ Portal.prototype.keyUp =
 		return false;
 	}
 
+	var
+		cpos =
+			this.getCaretPos();
+
 	switch( section )
 	{
 		case 'spaceTag' :
@@ -1386,7 +1419,11 @@ Portal.prototype.keyUp =
 							),
 
 					at1 :
-						0
+						this._getOffsetAt(
+							'spaceUser',
+							cpos.x +
+								this._$spaceFields.spaceTag.pnw.x
+						)
 				}
 			);
 
@@ -1419,6 +1456,24 @@ Portal.prototype.keyRight =
 
 	if( csign.at1 >= value.length )
 	{
+		if( section === 'spaceUser' )
+		{
+			shell.$space.setCaret(
+				{
+					path :
+						new Path(
+							csign.path,
+							csign.path.length - 1,
+								'spaceTag'
+							),
+					at1 :
+						0
+				}
+			);
+
+			return true;
+		}
+
 		return false;
 	}
 
@@ -1469,6 +1524,45 @@ Portal.prototype.keyBackspace =
 
 	return true;
 };
+
+
+/*
+| User pressed backspace.
+*/
+Portal.prototype.keyDel =
+	function( )
+{
+	var csign =
+		shell.$space.$caret.sign;
+
+	var section =
+		csign.path.get( -1 );
+
+	var value =
+		this.twig[ section ];
+
+	if( !this._isSection( section ) )
+	{
+		return false;
+	}
+
+	var at1 =
+		csign.at1;
+
+	if( at1 >= value.length )
+	{
+		return false;
+	}
+
+	shell.peer.removeText(
+		this._spacePath[ section ],
+		at1,
+		1
+	);
+
+	return true;
+};
+
 
 /*
 | User pressed end key.
@@ -1541,77 +1635,65 @@ Portal.prototype._isSection =
 Portal.prototype._prepareField =
 	function(
 		section,
-		vzone,
-		view,
+		zone,
 		basePNW
 	)
 {
-	var pitch =
-		Math.round(
-			view.distance( Portal.fieldPitch )
-		);
+	var
+		pitch =
+			Portal.fieldPitch,
 
-	var rounding =
-		Math.round(
-			view.distance( Portal.fieldRounding )
-		);
+		rounding =
+			Portal.fieldRounding,
 
-	var text =
-		this.twig[ section ];
+		text =
+			this.twig[ section ],
 
-	var width =
-		Math.round(
+		width =
 			Euclid.Measure.width(
 				this._spaceFont[ section ],
 				text
-			)
-			*
-			view.zoom
-		);
+			),
 
-	var height =
-		Math.round(
-			( this._spaceFont[ section ].size + 2 )
-			*
-			view.zoom
-		);
+		height =
+			this._spaceFont[ section ].size + 2,
 
-	var pnw =
-		basePNW === null
-		?
-		(
-			new Euclid.Point(
-				Jools.half(
-					vzone.width - width
-				),
-				Math.round(
-					vzone.height / 3
+		pnw =
+			basePNW === null
+			?
+			(
+				new Euclid.Point(
+					Jools.half(
+						zone.width - width
+					),
+					Math.round(
+						zone.height / 3
+					)
 				)
 			)
-		)
-		:
-		(
-			new Euclid.Point(
-				Jools.half(
-					vzone.width - width
-				),
-				basePNW.y + Math.round( 23 * view.zoom )
-			)
-		);
+			:
+			(
+				new Euclid.Point(
+					Jools.half(
+						zone.width - width
+					),
+					basePNW.y + 23
+				)
+			),
 
-	var box =
-		new Euclid.RoundRect(
-			pnw.sub(
-				pitch,
-				height
-			),
-			pnw.add(
-				width + pitch,
-				pitch
-			),
-			rounding,
-			rounding
-		);
+		box =
+			new Euclid.RoundRect(
+				pnw.sub(
+					pitch,
+					height
+				),
+				pnw.add(
+					width + pitch,
+					pitch
+				),
+				rounding,
+				rounding
+			);
 
 	return {
 		text :
@@ -1665,19 +1747,13 @@ Portal.prototype.keyPos1 =
 */
 Portal.prototype._getOffsetAt =
 	function(
-		view,
 		section,
-		p
+		x
 	)
 {
 	var
-		pitch =
-			Math.round(
-				view.distance( Portal.fieldPitch )
-			),
-
 		dx =
-			p.x - this._$spaceFields[ section ].pnw.x,
+			x - this._$spaceFields[ section ].pnw.x,
 
 		value =
 			this.twig[ section ],
@@ -1695,8 +1771,6 @@ Portal.prototype._getOffsetAt =
 		font =
 			this._spaceFont[ section ];
 
-	/// console.log('DX', dx, p.x, this._$spaceFields[ section ].pnw.x, pitch);
-
 	for(
 		a = 0, aZ = value.length;
 		a < aZ;
@@ -1710,7 +1784,7 @@ Portal.prototype._getOffsetAt =
 			Euclid.Measure.width(
 				font,
 				value.substr( 0, a )
-			);
+			)
 
 		if( x2 >= dx )
 		{

@@ -1065,10 +1065,7 @@ Shell.prototype.input =
 		return;
 	}
 
-	if( this._$selection )
-	{
-		this._$selection.remove( );
-	}
+	this.removeSelection( );
 
 	var display =
 		this.getCurrentDisplay( );

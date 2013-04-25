@@ -8,17 +8,19 @@
 /*
 | Export
 */
-var MeshMashine;
+var
+	MeshMashine;
 
 
 /*
 | Imports
 */
-var Change;
-var ChangeRay;
-var Jools;
-var Path;
-var Sign;
+var
+	Change,
+	ChangeRay,
+	Jools,
+	Path,
+	Sign;
 
 
 /*
@@ -71,6 +73,7 @@ var TFXOps = { };
 | Transforms a signature on a single change
 |
 | If the signature is a span,
+|
 | it can return an array of signs.
 */
 var tfxSign1 =
@@ -295,7 +298,10 @@ var tfxChg =
 			chgX
 		);
 
-	if( srcX === null || trgX === null )
+	if(
+		srcX === null ||
+		trgX === null
+	)
 	{
 		Jools.log(
 			'tfx',
@@ -306,7 +312,7 @@ var tfxChg =
 	}
 
 	var
-		$a,
+		a,
 
 		aZ,
 
@@ -320,6 +326,23 @@ var tfxChg =
 
 	if( !srcA && !trgA )
 	{
+		// FIXME check in ray conditions too if this happens
+		if(
+			( srcX.proc === 'splice' || trgX.proc === 'splice' ) &&
+			( srcX.path.equals( trgX.path ) )
+		)
+		{
+			console.log('SPLICE EQUALNESS!');
+
+			Jools.log(
+				'tfx',
+				'splice transformed to equalness'
+			);
+
+			return null;
+		}
+
+
 		return new Change(
 			srcX,
 			trgX
@@ -329,13 +352,18 @@ var tfxChg =
 	{
 		ray =
 			new ChangeRay( );
-		for($a = 0, aZ = trgX.length; $a < aZ; $a++)
+
+		for(
+			a = 0, aZ = trgX.length;
+			a < aZ;
+			a++
+		)
 		{
 			ray.set(
-				$a,
+				a,
 				new Change(
 					srcX,
-					trgX.get( $a )
+					trgX.get( a )
 				)
 			);
 		}
@@ -348,15 +376,15 @@ var tfxChg =
 			new ChangeRay( );
 
 		for(
-			$a = 0, aZ = srcX.length;
-			$a < aZ;
-			$a++
+			a = 0, aZ = srcX.length;
+			a < aZ;
+			a++
 		)
 		{
 			ray.set(
-				$a,
+				a,
 				new Change(
-					srcX.get( $a ),
+					srcX.get( a ),
 					trgX
 				)
 			);
@@ -374,7 +402,7 @@ var tfxChg =
 };
 
 /*
-| Transforms a change or an array of changes upon a change or an array of changes.
+| Transforms a change(ray) upon a change(ray).
 */
 var tfxChgX =
 	function(
@@ -402,25 +430,25 @@ var tfxChgX =
 				new ChangeRay( );
 
 			for(
-				var $a = 0, aZ = chgX1.length;
-				$a < aZ;
-				$a++
+				var a = 0, aZ = chgX1.length;
+				a < aZ;
+				a++
 			)
 			{
 				var rX =
 					tfxChg(
-						chgX1[ $a ],
+						chgX1[ a ],
 						chgX2
 					);
 
 				for(
-					var $b = 0, bZ = rX.length;
-					$b < bZ;
-					$b++
+					var b = 0, bZ = rX.length;
+					b < bZ;
+					b++
 				)
 				{
 					ray.push(
-						rX.get( $b )
+						rX.get( b )
 					);
 				}
 			}
@@ -665,33 +693,65 @@ TFXOps.set =
 		trg
 	)
 {
-	if (!is(sign.rank))
-		{ return sign; }
-
-	if (!is(trg.rank))
-		{ return sign; }
-
-	if (!trg.path || !trg.path.subPathOf(sign.path, - 1))
-		{ return sign; }
-
-	Jools.log('tfx', 'set');
-
-	if (trg.rank === null)
+	if(
+		!is(sign.rank) ||
+		!is(trg.rank) ||
+		!trg.path ||
+		!trg.path.subPathOf( sign.path, - 1 )
+	)
 	{
-		if (sign.rank >= trg.rank)
-			{ sign = new Sign(sign, 'rank', sign.rank - 1); }
+		return sign;
 	}
-	else if (src.rank === null)
+
+	Jools.log(
+		'tfx',
+		'set'
+	);
+
+	if( trg.rank === null )
 	{
-		if (sign.rank >= src.rank)
-			{ sign = new Sign(sign, 'rank', sign.rank + 1); }
+		if( sign.rank >= trg.rank )
+		{
+			sign =
+				new Sign(
+					sign,
+					'rank',
+						sign.rank - 1
+				);
+		}
+	}
+	else if( src.rank === null )
+	{
+		if( sign.rank >= src.rank )
+		{
+			sign =
+				new Sign(
+					sign,
+					'rank',
+						sign.rank + 1
+				);
+		}
 	}
 	else
 	{
-		if (src.rank <= sign.rank && trg.rank > sign.rank)
-			{ sign = new Sign(sign, 'rank', sign.rank - 1); }
-		else if (src.rank > sign.rank && trg.rank <= sign.rank)
-			{ sign = new Sign(sign, 'rank', sign.rank + 1); }
+		if( src.rank <= sign.rank && trg.rank > sign.rank )
+		{
+			sign =
+				new Sign(
+					sign,
+					'rank',
+						sign.rank - 1
+				);
+		}
+		else if( src.rank > sign.rank && trg.rank <= sign.rank )
+		{
+			sign =
+				new Sign(
+					sign,
+					'rank',
+						sign.rank + 1
+				);
+		}
 	}
 
 	return sign;
