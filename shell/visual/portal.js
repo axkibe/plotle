@@ -10,7 +10,7 @@
 */
 var Visual;
 Visual =
-	Visual || {};
+	Visual || { };
 
 
 /*
@@ -317,7 +317,7 @@ Portal.prototype.getZeroSilhoutte =
 
 	if(
 		s &&
-		s.width  === zone.width &&
+		s.width === zone.width &&
 		s.height === zone.height
 	)
 	{
@@ -1784,7 +1784,7 @@ Portal.prototype._getOffsetAt =
 			Euclid.Measure.width(
 				font,
 				value.substr( 0, a )
-			)
+			);
 
 		if( x2 >= dx )
 		{

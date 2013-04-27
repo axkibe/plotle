@@ -8,7 +8,8 @@
 /*
 | Export
 */
-var Disc;
+var
+	Disc;
 
 Disc =
 	Disc || { };
@@ -17,18 +18,19 @@ Disc =
 /*
 | Imports
 */
-var config;
-var Curve;
-var Dash;
-var Design;
-var Euclid;
-var fontPool;
-var Jools;
-var Proc;
-var Tree;
-var shell;
-var Widgets;
-
+var
+	Accent,
+	config,
+	Curve,
+	Dash,
+	Design,
+	Euclid,
+	fontPool,
+	Jools,
+	Proc,
+	Tree,
+	shell,
+	Widgets;
 
 /*
 | Capsule
@@ -39,7 +41,9 @@ var Widgets;
 
 if( typeof( window ) === 'undefined' )
 {
-	throw new Error( 'this code needs a browser!' );
+	throw new Error(
+		'this code needs a browser!'
+	);
 }
 
 
@@ -1239,7 +1243,7 @@ MainDisc.prototype._weave =
 
 		button.draw(
 			fabric,
-			Widgets.Accent.state(
+			Accent.state(
 				name === this.$hover,
 				shell.bridge.inMode(
 					this.getModeOfButton( button.name )

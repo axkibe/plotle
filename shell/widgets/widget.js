@@ -8,7 +8,9 @@
 /*
 | Export
 */
-var Widgets;
+var
+	Widgets;
+
 Widgets =
 	Widgets || { };
 
@@ -16,14 +18,15 @@ Widgets =
 /*
 | Imports
 */
-var config;
-var Curve;
-var Euclid;
-var Jools;
-var Path;
-var shell;
-var system;
-var theme;
+var
+	config,
+	Curve,
+	Euclid,
+	Jools,
+	Path,
+	shell,
+	system,
+	theme;
 
 
 /*
@@ -127,9 +130,6 @@ Widgets.Widget =
 	this._$visible =
 		this._$visible ||
 		( this.inherit ? this.inherit._$visible : true );
-
-//	this.$accent =
-//		Widgets.Accent.NORMAL;
 };
 
 
@@ -163,6 +163,7 @@ Widget.prototype.grepFocus =
 	return true;
 };
 
+
 /*
 | Returns visibility status.
 */
@@ -171,6 +172,7 @@ function( )
 {
 	return this._$visible;
 };
+
 
 /*
 | Sets the button in/visible.

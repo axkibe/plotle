@@ -953,13 +953,11 @@ IFace.prototype.alter =
 		trg
 	)
 {
-	console.log('ALTER', src, trg);
     var r =
 		new Change(
 			new Sign( src ),
 			new Sign( trg )
 		).changeTree( this.$cSpace );
-	console.log('AR', r);
 
     this.$cSpace =
 		r.tree;
@@ -1133,8 +1131,6 @@ IFace.prototype.undo =
 	{
 		return;
 	}
-
-	console.log( '$undo', this._$undo );
 
 	var chgX =
 		this._$undo.pop( ).chgX.invert( );

@@ -144,14 +144,17 @@ ChangeRay.prototype.push =
 
 
 /*
-| Returns the length of the changeray 
+| Returns the length of the changeray
+| TODO once ChangeRay is immutable this can be fixed as well
 */
 Object.defineProperty (
 	ChangeRay.prototype,
 	'length',
 	{
 		get : function( )
-			{ return this._$ray.length; }
+		{
+			return this._$ray.length;
+		}
 	}
 );
 

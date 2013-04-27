@@ -16,15 +16,17 @@ Widgets =
 /*
 | Imports
 */
-var Action;
-var config;
-var Curve;
-var Euclid;
-var Jools;
-var Path;
-var shell;
-var system;
-var theme;
+var
+	Accent,
+	Action,
+	config,
+	Curve,
+	Euclid,
+	Jools,
+	Path,
+	shell,
+	system,
+	theme;
 
 
 /*
@@ -77,7 +79,7 @@ Widgets.CheckBox =
 		inherit ? inherit.$visible : true;
 
 	this.$accent =
-		Widgets.Accent.NORMAL;
+		Accent.NORMAL;
 };
 
 
@@ -328,7 +330,7 @@ CheckBox.prototype.draw =
 		fabric.paint(
 			Widgets.getStyle(
 				'checkboxCheck',
-				Widgets.Accent.NORMA
+				Accent.NORMA
 			),
 			this,
 			'sketchCheck',

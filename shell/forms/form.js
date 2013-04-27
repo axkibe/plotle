@@ -8,7 +8,9 @@
 /*
 | Export
 */
-var Forms;
+var
+	Forms;
+
 Forms =
 	Forms || { };
 
@@ -16,19 +18,21 @@ Forms =
 /*
 | Imports
 */
-var config;
-var Caret;
-var Curve;
-var Design;
-var Euclid;
-var Jools;
-var Pattern;
-var Sign;
-var shell;
-var system;
-var theme;
-var Tree;
-var Widgets;
+var
+	Accent,
+	config,
+	Caret,
+	Curve,
+	Design,
+	Euclid,
+	Jools,
+	Pattern,
+	Sign,
+	shell,
+	system,
+	theme,
+	Tree,
+	Widgets;
 
 
 /*
@@ -284,7 +288,7 @@ Form.prototype.draw =
 
 		comp.draw(
 			fabric,
-			Widgets.Accent.state(
+			Accent.state(
 				name === this.$hover,
 				( this.$caret.$shown && focus ) ?
 					name === focus.name :

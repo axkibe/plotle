@@ -8,7 +8,9 @@
 /*
 | Export
 */
-var Widgets;
+var
+	Widgets;
+
 Widgets =
 	Widgets || { };
 
@@ -16,7 +18,9 @@ Widgets =
 /*
 | Imports
 */
-var theme;
+var
+	Accent,
+	Style;
 
 
 /*
@@ -31,48 +35,6 @@ if( typeof( window ) === 'undefined' )
 
 
 /*
-| List of tagnames.
-*/
-/*
-
-TODO remove
-
-var styles =
-{
-//	boxes :
-//		theme.dash.boxes,
-
-	checkbox :
-		theme.forms.checkbox,
-
-	checkboxCheck :
-		theme.forms.checkboxCheck,
-
-	genericButton :
-		theme.forms.genericButton,
-
-	createButton :
-		theme.disc.createButton,
-
-	mainButton :
-		theme.disc.mainButton,
-
-//	highlight :
-//		theme.dash.highlight,
-
-	iconNormal :
-		theme.disc.iconNormal,
-
-	iconRemove :
-		theme.disc.iconRemove,
-
-	input :
-		theme.forms.input
-};
-*/
-
-
-/*
 | Gets a style by its name.
 */
 Widgets.getStyle =
@@ -82,7 +44,7 @@ Widgets.getStyle =
 	)
 {
 	var style =
-		theme.styles[ name ];
+		Style.styles[ name ];
 
 	if( !style )
 	{
@@ -90,9 +52,6 @@ Widgets.getStyle =
 			'Invalid style name: ' + name
 		);
 	}
-
-	var Accent =
-		Widgets.Accent;
 
 	switch( accent )
 	{

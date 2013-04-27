@@ -661,8 +661,6 @@ Change.prototype.join =
 		at1 =
 			trg.at1;
 
-	console.log( 'ST', src, trg );
-
 	Jools.check(
 		Jools.is( at1 ),
 		cm,

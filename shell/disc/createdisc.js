@@ -7,24 +7,30 @@
 /*
 | Export
 */
-var Disc;
-Disc = Disc || { };
+var
+	Disc;
+
+Disc =
+	Disc || { };
 
 
 /*
 | Imports
 */
-var config;
-var Curve;
-var Dash;
-var Design;
-var Euclid;
-var fontPool;
-var Jools;
-var Proc;
-var shell;
-var Tree;
-var Widgets;
+var
+	Accent,
+	config,
+	Curve,
+	Dash,
+	Design,
+	Euclid,
+	fontPool,
+	Jools,
+	Proc,
+	shell,
+	Tree,
+	Widgets;
+
 
 /*
 | Capsule
@@ -34,7 +40,11 @@ var Widgets;
 
 
 if( typeof( window ) === 'undefined')
-	{ throw new Error( 'this code needs a browser!' ); }
+{
+	throw new Error(
+		'this code needs a browser!'
+	);
+}
 
 
 /*
@@ -618,25 +628,25 @@ CreateDisc.prototype._weave =
 			case 'label' :
 			case 'relation' :
 			case 'portal' :
-			button.draw(
-				fabric,
-				Widgets.Accent.state(
-					name === this.$hover,
-					this.buttonMatchesAction(
-						button.name,
-						action
+				button.draw(
+					fabric,
+					Accent.state(
+						name === this.$hover,
+						this.buttonMatchesAction(
+							button.name,
+							action
+						)
 					)
-				)
-			);
-			break;
+				);
+				break;
 
 			default :
-			button.draw(
-				fabric,
-				this.buttonMatchesAction( button.name, action ),
-				this.$hover === name
-			);
-			break;
+				button.draw(
+					fabric,
+					this.buttonMatchesAction( button.name, action ),
+					this.$hover === name
+				);
+				break;
 		}
 	}
 
@@ -713,14 +723,15 @@ CreateDisc.prototype.pushButton =
 	var action =
 		shell.bridge.action( );
 
-	if ( this.buttonMatchesAction( buttonName, action ) )
+	if( this.buttonMatchesAction( buttonName, action ) )
 	{
 		return;
 	}
 
 	shell.redraw = true;
 
-	if ( action ) {
+	if( action )
+	{
 		shell.bridge.stopAction( );
 	}
 
@@ -806,9 +817,12 @@ CreateDisc.prototype.pointingHover =
 		return this.setHover( null );
 	}
 
-	var fabric = this._weave();
+	var
+		fabric =
+			this._weave(),
 
-	var pp = p.sub(pnw);
+		pp =
+			p.sub(pnw);
 
 	// FIXME Optimize by reusing the latest path of this.$fabric
 	if( !fabric.withinSketch(
@@ -823,16 +837,22 @@ CreateDisc.prototype.pointingHover =
 	}
 
 	// this is on the disc
-	var buttons = this.buttons;
+	var
+		buttons =
+			this.buttons,
 
-	var cursor = null;
+		cursor =
+			null;
+
 	for( var name in buttons )
 	{
 		cursor = buttons[ name ].
 			pointingHover( pp, shift, ctrl );
 
 		if ( cursor )
-			{ break; }
+		{
+			break;
+		}
 	}
 
 	if ( cursor === null )
@@ -854,11 +874,12 @@ CreateDisc.prototype.pointingStart =
 		ctrl
 	)
 {
-	var pnw =
-		this.oframe.pnw;
+	var
+		pnw =
+			this.oframe.pnw,
 
-	var pse =
-		this.oframe.pse;
+		pse =
+			this.oframe.pse;
 
 	// shortcut if p is not near the panel
 	if(
@@ -871,9 +892,12 @@ CreateDisc.prototype.pointingStart =
 		return null;
 	}
 
-	var fabric = this._weave();
+	var
+		fabric =
+			this._weave(),
 
-	var pp = p.sub(pnw);
+		pp =
+			p.sub(pnw);
 
 	// FIXME Optimize by reusing the latest path of this.$fabric
 	if(
@@ -889,7 +913,8 @@ CreateDisc.prototype.pointingStart =
 	}
 
 	// this is on the disc
-	var buttons = this.buttons;
+	var buttons =
+		this.buttons;
 
 	for( var name in buttons )
 	{
@@ -956,8 +981,11 @@ CreateDisc.prototype.specialKey =
 CreateDisc.prototype.poke =
 	function( )
 {
-	this.$fabric = null;
-	shell.redraw = true;
+	this.$fabric =
+		null;
+
+	shell.redraw =
+		true;
 };
 
 
@@ -974,10 +1002,14 @@ CreateDisc.prototype.setHover =
 		return null;
 	}
 
-	this.$fabric = null;
-	this.$hover  = name;
+	this.$fabric =
+		null;
 
-	shell.redraw = true;
+	this.$hover  =
+		name;
+
+	shell.redraw =
+		true;
 };
 
 

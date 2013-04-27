@@ -96,9 +96,6 @@ Line.connect =
 
 	var p1, p2;
 
-	//console.log( 'WITHIN1', shape1.within( Euclid.View.proper, pc2 ) );
-	//console.log( 'WITHIN2', shape1.within( Euclid.View.proper, pc2 ) );
-
 	if( shape1 instanceof Euclid.Point )
 	{
 		p1 = shape1;

@@ -332,8 +332,6 @@ var tfxChg =
 			( srcX.path.equals( trgX.path ) )
 		)
 		{
-			console.log('SPLICE EQUALNESS!');
-
 			Jools.log(
 				'tfx',
 				'splice transformed to equalness'

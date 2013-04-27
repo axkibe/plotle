@@ -22,58 +22,56 @@ if( typeof( require ) === 'undefined' )
 /*
 | Imports
 */
-var Jools =
-	require( '../shared/jools' );
+var
+	Jools =
+		require( '../shared/jools' ),
 
-var MeshMashine =
-	require( '../shared/meshmashine' );
+	MeshMashine =
+		require( '../shared/meshmashine' ),
 
-var Meshverse =
-	require( '../shared/meshverse' );
+	Meshverse =
+		require( '../shared/meshverse' ),
 
-var Path =
-	require( '../shared/path' );
+	Path =
+		require( '../shared/path' ),
 
-var Resource =
-	require( './resource' );
+	Resource =
+		require( './resource' ),
 
-var Tree =
-	require( '../shared/tree' );
+	Tree =
+		require( '../shared/tree' ),
 
-var config =
-	require( '../config' );
+	config =
+		require( '../config' ),
 
-var fs =
-	require( 'fs' );
+	fs =
+		require( 'fs' ),
 
-var http =
-	require( 'http' );
+	http =
+		require( 'http' ),
 
-var sha1 =
-	require( '../shared/sha1' );
+	sha1 =
+		require( '../shared/sha1' ),
 
-var mongodb =
-	require( 'mongodb' );
+	mongodb =
+		require( 'mongodb' ),
 
-var url =
-	require( 'url' );
+	url =
+		require( 'url' ),
 
-var zlib =
-	require( 'zlib' );
+	zlib =
+		require( 'zlib' ),
 
-var uglify;
-
-if( config.uglify )
-{
 	uglify =
-		require( 'uglify-js' );
-}
-
+		config.uglify ? 
+			require( 'uglify-js' ) :
+			null;
 
 /*
 | Server
 */
-var Server = function(_)
+var Server =
+	function(_)
 {
 	// files served
 	this.$resources =
@@ -91,14 +89,15 @@ var Server = function(_)
 			{ }
 		);
 
-	db.connector = new mongodb.Db(
-		config.database.name,
-		db.server,
-		{
-			w :
-				1
-		}
-	);
+	db.connector =
+		new mongodb.Db(
+			config.database.name,
+			db.server,
+			{
+				w :
+					1
+			}
+		);
 
 	// all messages
 	this.$messages =
@@ -712,12 +711,18 @@ Server.prototype.prepareResources =
 
 		'shared/euclid/line.js',
 			'fb',
-
+		
 		'shell/fontpool.js',
-			'fb', // TODO order?
+			'fb',
 
 		'shell/theme.js',
-			'fb', // TODO order?
+			'fb',
+		
+		'shell/style.js',
+			'fb',
+		
+		'shell/accent.js',
+			'fb',
 
 		'shared/euclid/view.js',
 			'fb',
@@ -774,9 +779,6 @@ Server.prototype.prepareResources =
 			'fb',
 
 		'shell/action.js',
-			'fb',
-
-		'shell/widgets/accent.js',
 			'fb',
 
 		'shell/widgets/getstyle.js',

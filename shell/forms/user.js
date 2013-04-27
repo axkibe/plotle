@@ -319,7 +319,6 @@ User.prototype.setUsername =
 	}
 	else
 	{
-		console.log(' YYY ');
 		$sub.visitor1.setVisible( false );
 
 		$sub.visitor1.setVisible( true );

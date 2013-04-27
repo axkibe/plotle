@@ -16,14 +16,16 @@ Widgets =
 /*
 | Imports
 */
-var config;
-var Curve;
-var Euclid;
-var Jools;
-var Path;
-var shell;
-var system;
-var theme;
+var
+	Accent,
+	config,
+	Curve,
+	Euclid,
+	Jools,
+	Path,
+	shell,
+	system,
+	theme;
 
 
 /*
@@ -34,7 +36,9 @@ var theme;
 
 if( typeof( window ) === 'undefined' )
 {
-	throw new Error( 'this code needs a browser!' );
+	throw new Error(
+		'this code needs a browser!'
+	);
 }
 
 
@@ -64,33 +68,34 @@ Widgets.Button =
 		}
 	);
 
-	var twig =
-		this.twig;
+	var
+		twig =
+			this.twig,
 
-	var parent =
-		this.parent;
+		parent =
+			this.parent,
 
-	var inherit =
-		this.inherit;
+		inherit =
+			this.inherit,
 
-	var pnw =
-	this.pnw =
-		parent.iframe.computePoint( twig.frame.pnw );
+		pnw =
+		this.pnw =
+			parent.iframe.computePoint( twig.frame.pnw ),
 
-	var pse =
-	this.pse =
-		parent.iframe.computePoint( twig.frame.pse );
+		pse =
+		this.pse =
+			parent.iframe.computePoint( twig.frame.pse ),
 
-	var iframe =
-	this.iframe =
-		new Euclid.Rect(
-			'pse',
-			pse.sub( pnw )
-		);
+		iframe =
+		this.iframe =
+			new Euclid.Rect(
+				'pse',
+				pse.sub( pnw )
+			),
 
-	// TODO move this to Shape
-
-	var tshape = twig.shape;
+		// TODO move this to Shape
+		tshape =
+			twig.shape;
 
 	switch( tshape.type )
 	{
@@ -116,7 +121,9 @@ Widgets.Button =
 
 		default :
 
-			throw new Error( 'unknown shape: ' + tshape.type );
+			throw new Error(
+				'unknown shape: ' + tshape.type
+			);
 	}
 
 	if( twig.caption )
@@ -131,7 +138,7 @@ Widgets.Button =
 					inherit ?
 						inherit._$caption.$text :
 						twig.caption.text
-		}	;
+			};
 
 		if( twig.caption.rotate )
 		{
@@ -179,7 +186,7 @@ Widgets.Button =
 		( inherit ? inherit._$visible : true );
 
 	this.$accent =
-		Widgets.Accent.NORMAL;
+		Accent.NORMAL;
 
 	// TODO dont store it into this from startago
 	this.inherit =
@@ -352,7 +359,7 @@ Button.prototype._weave =
 		style =
 			Widgets.getStyle(
 				icon.style,
-				Widgets.Accent.NORMA
+				Accent.NORMA
 			);
 
 		fabric.paint(
@@ -368,7 +375,7 @@ Button.prototype._weave =
 		fabric.paint(
 			Widgets.getStyle(
 				'boxes',
-				Widgets.Accent.NORMA
+				Accent.NORMA
 			),
 			new Euclid.Rect(
 				'pnw/pse',
@@ -403,7 +410,7 @@ Button.prototype.pointingHover =
 	}
 
 	var fabric =
-		this._weave( Widgets.Accent.NORMA );
+		this._weave( Accent.NORMA );
 
 	var pp =
 		p.sub( this.pnw );
@@ -452,11 +459,12 @@ Button.prototype.pointingStart =
 		return null;
 	}
 
-	var fabric =
-		this._weave( Widgets.Accent.NORMA );
+	var
+		fabric =
+			this._weave( Accent.NORMA ),
 
-	var pp =
-		p.sub( this.pnw );
+		pp =
+			p.sub( this.pnw );
 
 	if(!
 		fabric.withinSketch(

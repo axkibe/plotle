@@ -8,7 +8,9 @@
 /*
 | Export
 */
-var Widgets;
+var
+	Widgets;
+
 Widgets =
 	Widgets || { };
 
@@ -16,13 +18,15 @@ Widgets =
 /*
 | Imports
 */
-var Caret;
-var Curve;
-var Euclid;
-var Jools;
-var Path;
-var shell;
-var theme;
+var
+	Accent,
+	Caret,
+	Curve,
+	Euclid,
+	Jools,
+	Path,
+	shell,
+	theme;
 
 
 /*
@@ -89,7 +93,7 @@ Widgets.Input =
 		null,
 
 	this._$accent =
-		Widgets.Accent.NORMA;
+		Accent.NORMA;
 };
 
 

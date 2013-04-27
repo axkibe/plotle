@@ -8,15 +8,15 @@
 /*
 | Export
 */
-var Widgets;
-Widgets =
-	Widgets || { };
+var
+	Accent;
 
 
 /*
 | Imports
 */
-var Jools;
+var
+	Jools;
 
 
 /*
@@ -31,16 +31,20 @@ if( typeof( window ) === 'undefined' )
 }
 
 
-var Accent =
-Widgets.Accent =
-	Jools.immute(
-		{
-			NORMA : 0,
-			HOVER : 1,
-			FOCUS : 2,
-			HOFOC : 3
-		}
-	);
+Accent =
+	{
+		NORMA :
+			0,
+
+		HOVER :
+			1,
+
+		FOCUS :
+			2,
+
+		HOFOC :
+			3
+	};
 
 
 /*
@@ -75,5 +79,10 @@ Accent.state =
 		}
 	}
 };
+
+
+Jools.immute(
+	Accent
+);
 
 } )( );
