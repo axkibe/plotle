@@ -238,6 +238,9 @@ Style.styles =
 	},
 
 
+
+
+
 	/*
 	| The red criss-cross for the remove button
 	*/
@@ -263,6 +266,9 @@ Style.styles =
 			]
 		}
 	},
+
+
+
 
 	/*
 	| TODO
@@ -432,12 +438,15 @@ Style.styles =
 	},
 
 
+
+
 	/*
 	| Standard look of note
 	*/
 	note :
 	{
 		normal :
+		{
 			fill :
 			{
 				gradient :
@@ -472,7 +481,7 @@ Style.styles =
 					color :
 						'black'
 				}
-			],
+			]
 		},
 
 		highlight :
@@ -492,6 +501,9 @@ Style.styles =
 			]
 		}
 	},
+
+
+
 
 	/*
 	| portal buttons on moveto form
@@ -590,6 +602,9 @@ Style.styles =
 			]
 		}
 	},
+
+
+
 
 	/*
 	| TODO
@@ -723,6 +738,8 @@ Style.styles =
 		}
 	},
 
+
+
 	/*
 	| default input field style
 	| TODO move this into 'style'
@@ -792,6 +809,83 @@ Style.styles =
 			]
 		}
 	}
+};
+
+
+/*
+| Gets a style by its name.
+*/
+Style.getStyle =
+	function(
+		name,
+		accent
+	)
+{
+	var style =
+		Style.styles[ name ];
+
+	if( !style )
+	{
+		throw new Error(
+			'Invalid style name: ' + name
+		);
+	}
+
+	switch( accent )
+	{
+		case Accent.NORMA :
+
+			style =
+				style.normal;
+
+			break;
+
+		case Accent.HOVER :
+
+			style =
+				style.hover;
+
+			break;
+
+		case Accent.FOCUS :
+
+			style =
+				style.focus;
+
+			break;
+
+		case Accent.HOFOC :
+
+			style =
+				style.hofoc;
+
+			break;
+
+		default :
+
+			if( style[ accent ] )
+			{
+				style = style[ accent ];
+			}
+			else
+			{
+				throw new Error(
+					'Invalid accent: ' + accent
+				);
+			}
+	}
+
+	if( !style )
+	{
+		throw new Error(
+			'Style ' +
+			name +
+			' does not have requested accent: ' +
+			accent
+		);
+	}
+
+	return style;
 };
 
 } ) ();

@@ -501,8 +501,12 @@ Note.prototype.draw =
 		var silhoutte =
 			this.getZeroSilhoutte( zone );
 
+		var style =
+			Style.getStyle( theme.note.style, 'normal' );
+
+		// TODO give fill a style object itself
 		f.fill(
-			theme.note.style.fill,
+			style.fill,
 			silhoutte,
 			'sketch',
 			view.home( )
@@ -525,7 +529,7 @@ Note.prototype.draw =
 
 		// draws the border
 		f.edge(
-			theme.note.style.edge,
+			style.edge,
 			silhoutte,
 			'sketch',
 			view.home( )

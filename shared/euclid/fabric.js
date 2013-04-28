@@ -1343,10 +1343,14 @@ Fabric.prototype._colorStyle =
 	)
 {
 	if( style.substring )
-		{ return style; }
+	{
+		return style;
+	}
 
 	else if( !style.gradient )
-		{ throw new Error( 'unknown style' ); }
+	{
+		throw new Error( 'unknown style' );
+	}
 
 	var grad;
 	switch( style.gradient )
