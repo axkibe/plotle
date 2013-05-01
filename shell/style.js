@@ -6,8 +6,14 @@
 
 
 /*
-| Export
+| Imports
+*/
+var
+	Accent;
 
+
+/*
+| Export
 */
 var
 	Style =

@@ -9,20 +9,25 @@
 /*
 | Export
 */
-var Visual;
-Visual = Visual || { };
+var
+	Visual;
+
+Visual =
+	Visual || { };
 
 
 /*
 | Imports
 */
-var Action;
-var config;
-var Euclid;
-var Jools;
-var shell;
-var system;
-var theme;
+var
+	Action,
+	config,
+	Euclid,
+	Jools,
+	shell,
+	Style,
+	system,
+	theme;
 
 
 /*
@@ -502,7 +507,10 @@ Note.prototype.draw =
 			this.getZeroSilhoutte( zone );
 
 		var style =
-			Style.getStyle( theme.note.style, 'normal' );
+			Style.getStyle(
+				theme.note.style,
+				'normal'
+			);
 
 		// TODO give fill a style object itself
 		f.fill(

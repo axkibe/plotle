@@ -848,7 +848,11 @@ Item.prototype.highlight =
 		);
 
 	fabric.edge(
-		theme.note.style.highlight,
+		// TODO XXX note not applicatable here!
+		Style.getStyle(
+			theme.note.style,
+			'highlight'
+		).edge,
 		silhoutte,
 		'sketch',
 		view

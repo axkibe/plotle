@@ -97,13 +97,14 @@ IFace.prototype._ajax =
 		request,
 		callback
 	)
- {
+{
 	if( !request.cmd )
 	{
 		throw new Error( 'ajax request.cmd missing' );
 	}
 
-    var ajax = new XMLHttpRequest( );
+    var ajax =
+		new XMLHttpRequest( );
 
     ajax.open(
 		'POST',
@@ -116,7 +117,8 @@ IFace.prototype._ajax =
 		'application/x-www-form-urlencoded'
 	);
 
-    ajax.onreadystatechange = function( )
+    ajax.onreadystatechange =
+		function( )
 	{
 		if( ajax.readyState !== 4 )
 		{
@@ -136,9 +138,12 @@ IFace.prototype._ajax =
 			{
 				callback(
 					{
-						ok: false,
-						message: 'connection' ,
-						status: ajax.status
+						ok:
+							false,
+						message:
+							'connection',
+						status:
+							ajax.status
 					}
 				);
 			}

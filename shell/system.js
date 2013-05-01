@@ -45,7 +45,10 @@ var makeCatcher =
 {
 	return function( )
 	{
-		if( config.devel )
+		if(
+			config.devel &&
+			!config.debug.weinre
+		)
 		{
 			return f.apply( t, arguments );
 		}
@@ -56,7 +59,8 @@ var makeCatcher =
 		}
 		catch( e )
 		{
-			window.alert(
+			( config.debug.weinre ?  console.log : window.alert )
+			(
 				'Internal failure, ' +
 					e.name + ': ' +
 					e.message + '\n\n' +
@@ -1480,20 +1484,32 @@ System.prototype._testInput =
 /*
 | System starts up ( pages loades )
 */
-startup = function( )
+startup =
+	function( )
 {
-	makeCatcher(
-		null,
-		function( ) {
-			system =
-				new System( );
+	var catcher =
+		makeCatcher(
+			null,
+			function( ) {
+				system =
+					new System( );
 
-			system.shell =
-				new Shell( system.fabric );
+				system.shell =
+					new Shell( system.fabric );
 
-			system.shell.onload( );
-		}
-	)( );
+				system.shell.onload( );
+			}
+		);
+
+	if( !config.debug.weinre )
+	{
+		catcher( );
+	}
+	else
+	{
+		// gives weinre a moment to set itself up
+		window.setTimeout( catcher, 1000 );
+	}
 };
 
 } )( );

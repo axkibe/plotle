@@ -122,6 +122,14 @@ config.debug.immute =
 
 
 /*
+| Activates all hacks needed to debug the client with weinre.
+| Set to false/null or the address of the weinre server
+*/
+config.debug.weinre =
+	//'127.0.0.1:8080';
+	false;
+
+/*
 | enable specific logging categories
 */
 config.log  = {

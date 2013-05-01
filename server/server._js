@@ -63,7 +63,7 @@ var
 		require( 'zlib' ),
 
 	uglify =
-		config.uglify ? 
+		config.uglify ?
 			require( 'uglify-js' ) :
 			null;
 
@@ -394,7 +394,7 @@ Server.prototype.loadSpace =
 	);
 
 	var space =
-	this.$spaces[spacename] =
+	this.$spaces[ spacename ] =
 		{
 			$changesDB :
 				this.$db.connection.collection(
@@ -406,7 +406,10 @@ Server.prototype.loadSpace =
 
 			$tree :
 				new Tree(
-					{ type : 'Space' },
+					{
+						type :
+							'Space'
+					},
 					Meshverse
 				),
 
@@ -426,9 +429,9 @@ Server.prototype.loadSpace =
 		_);
 
 	for(
-		var o = cursor.nextObject(_);
+		var o = cursor.nextObject( _ );
 		o !== null;
-		o = cursor.nextObject(_)
+		o = cursor.nextObject( _ )
 	)
 	{
 		if( o._id !== space.$seqZ )
@@ -504,8 +507,10 @@ Server.prototype.sendMessage =
 		this;
 
 	process.nextTick(
-		function()
-			{ self.wake( spacename ); }
+		function( )
+		{
+			self.wake( spacename );
+		}
 	);
 };
 
@@ -513,7 +518,8 @@ Server.prototype.sendMessage =
 /*
 | Creates a message for a space
 */
-Server.prototype.cmdMessage = function(cmd, _)
+Server.prototype.cmdMessage =
+	function( cmd, _ )
 {
 	var space =
 		cmd.space;
@@ -594,6 +600,9 @@ Server.prototype.buildShellConfig =
 
 	for( k in config.debug )
 	{
+		var val =
+			config.debug[ k ];
+
 		if( !first )
 		{
 			cconfig.push(',\n');
@@ -604,7 +613,12 @@ Server.prototype.buildShellConfig =
 		}
 
 		cconfig.push(
-			'\t\t', k, ' : ', config.debug[k]
+			'\t\t',
+			k,
+			' : ',
+			Jools.isString( val ) ? "'" : '',
+			val,
+			Jools.isString( val ) ? "'" : ''
 		);
 	}
 
@@ -711,16 +725,16 @@ Server.prototype.prepareResources =
 
 		'shared/euclid/line.js',
 			'fb',
-		
+
 		'shell/fontpool.js',
 			'fb',
 
 		'shell/theme.js',
 			'fb',
-		
+
 		'shell/style.js',
 			'fb',
-		
+
 		'shell/accent.js',
 			'fb',
 
@@ -1010,7 +1024,14 @@ Server.prototype.prepareResources =
 		}
 	}
 
-	bundle = bundle.join( '\n' );
+	bundle =
+		bundle.join( '\n' );
+
+	fs.writeFile(
+		'bundle.js',
+		bundle,
+	_);
+
 
 	// uglifies the bundle if configured so
 	if( config.uglify )
@@ -1020,11 +1041,6 @@ Server.prototype.prepareResources =
 
 		var ast =
 			uglify.parse( bundle );
-
-		fs.writeFile(
-			'bundle.js',
-			bundle,
-		_);
 
 		ast.figure_out_scope( );
 
@@ -1078,6 +1094,17 @@ Server.prototype.prepareResources =
 				/<!--DEVELPACK.*>/,
 				devels.join( '\n' )
 			);
+
+		if( config.debug.weinre )
+		{
+			devel.data =
+				devel.data.replace(
+					/<!--WEINRE.*>/,
+					'<script src="http://' +
+						config.debug.weinre +
+						'/target/target-script-min.js"></script>'
+				);
+		}
 
 		this.$resources[ 'devel.html' ] =
 			devel;
@@ -2278,7 +2305,8 @@ Server.prototype.requestListener =
 
 	Jools.log( 'web', req.connection.remoteAddress, red.href );
 
-	var pathname = red.pathname.replace( /^[\/]+/g, '' );
+	var pathname =
+		red.pathname.replace( /^[\/]+/g, '' );
 
 	if( pathname === 'mm' )
 	{
@@ -2322,7 +2350,8 @@ Server.prototype.requestListener =
 		return;
 	}
 
-	var self = this;
+	var self =
+		this;
 
 	if (
 		config.devel !== 'shell' &&
@@ -2337,8 +2366,17 @@ Server.prototype.requestListener =
 		{
 			if( err )
 			{
-				self.webError( res, 500, 'Internal Server Error' );
-				Jools.log( 'fail', 'Missing file: ' + r.path );
+				self.webError(
+					res,
+					500,
+					'Internal Server Error'
+				);
+
+				Jools.log(
+					'fail',
+					'Missing file: ' + r.path
+				);
+
 				return;
 			}
 
@@ -2355,6 +2393,20 @@ Server.prototype.requestListener =
 						new Date().toUTCString()
 				}
 			);
+
+			// weinre can't cope with strict mode
+			// so its disabled when weinre is enabled
+			if( config.debug.weinre )
+			{
+				data =
+					('' + data).replace(
+						/'use strict'/,
+						"'not strict'"
+					).replace(
+						/"use strict"/,
+						'"not strict"'
+					);
+			}
 
 			res.end(
 				data,

@@ -80,48 +80,75 @@ Shape.prototype.sketch =
 	var pc =
 		view.point( this.pc );
 
-	pstart = pstart.add(
-		pstart.x > pc.x ? -border : ( pstart.x < pc.x ? border : 0 ),
-		pstart.y > pc.y ? -border : ( pstart.y < pc.y ? border : 0 )
-	);
 
-	var pp = pstart;
-	var pn = null;
-	var dx, dy;
-	var magic;
+	pstart =
+		pstart.add(
+			pstart.x > pc.x ? -border : ( pstart.x < pc.x ? border : 0 ),
+			pstart.y > pc.y ? -border : ( pstart.y < pc.y ? border : 0 )
+		);
+
+	var
+		pp =
+			pstart,
+
+		pn =
+			null,
+
+		dx,
+		dy,
+		magic;
 
 	fabric.moveTo( pstart );
 
 	while( h < hZ )
 	{
 		if( !pstart )
-			{ throw new Error( 'hull closed prematurely'); }
+		{
+			throw new Error( 'hull closed prematurely' );
+		}
 
 		switch( hull[ h ] )
 		{
 
 			case 'bezier' :
-				pn = hull[ h + 5 ];
+
+				pn =
+					hull[ h + 5 ];
+
 				break;
 
 			case 'line' :
-				pn = hull[ h + 1 ];
+
+				pn =
+					hull[ h + 1 ];
+
 				break;
 
 			case 'round' :
-				pn    = hull[ h + 2 ];
-				magic = Euclid.Const.magic;
+
+				pn =
+					hull[ h + 2 ];
+
+				magic =
+					Euclid.Const.magic;
+
 				break;
 
 			default :
-				throw new Error( 'unknown hull section: ' + hull[ h ] );
+
+				throw new Error(
+					'unknown hull section: ' + hull[ h ]
+				);
 
 		}
 
 		if( pn === 'close' )
 		{
-			pn = pstart;
-			pstart = null;
+			pn =
+				pstart;
+
+			pstart =
+				null;
 		}
 		else
 		{
