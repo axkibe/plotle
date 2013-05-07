@@ -248,7 +248,7 @@ Bridge.prototype.setUsername =
 | Gets the current username.
 */
 Bridge.prototype.getUsername =
-	function( username )
+	function( )
 {
 	return this._$username;
 };

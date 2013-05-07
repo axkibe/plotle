@@ -138,7 +138,6 @@ var System =
 	};
 
 	// hidden input that forwards all events
-	var hiddenInput =
 	this._hiddenInput =
 		document.getElementById( 'input' );
 
@@ -1450,11 +1449,12 @@ System.prototype._specialKey =
 System.prototype._testInput =
 	function( )
 {
-	var hi =
-		this._hiddenInput;
+	var
+		hi =
+			this._hiddenInput,
 
-	var text =
-		hi.value;
+		text =
+			hi.value;
 
 	// works around opera quirks inserting CR characters
 	text =

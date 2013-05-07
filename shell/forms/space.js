@@ -138,17 +138,15 @@ Space.prototype.name =
 */
 Space.prototype.arrivedAtSpace =
 	function(
-		name,
-		access
+		name
+		// access
 	)
 {
 	var $sub =
 		this.$sub;
 
 	$sub.headline.setText( name );
-
-
 };
 
-})( );
+} )( );
 

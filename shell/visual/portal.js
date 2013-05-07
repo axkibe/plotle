@@ -931,9 +931,6 @@ Portal.prototype._weave =
 				vzone.height + 1
 			),
 
-		twig =
-			this.twig,
-
 		silhoutte =
 			this.getZeroSilhoutte( vzone );
 
@@ -1140,9 +1137,6 @@ Portal.prototype._locateOffset =
 {
 	// FIXME cache position
 	var
-		twig =
-			this.twig,
-
 		font =
 			this._spaceFont[ section ],
 
