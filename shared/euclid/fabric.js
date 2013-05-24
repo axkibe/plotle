@@ -522,12 +522,15 @@ Fabric.prototype.edge =
 		a4
 	)
 {
-	if( style instanceof Array )
+	var edge =
+		style.edge;
+
+	if( edge instanceof Array )
 	{
-		for( var i = 0; i < style.length; i++ )
+		for( var i = 0; i < edge.length; i++ )
 		{
 			this._edge(
-				style[ i ],
+				edge[ i ],
 				shape,
 				sketch,
 				view,
@@ -541,7 +544,7 @@ Fabric.prototype.edge =
 	else
 	{
 		this._edge(
-			style,
+			edge,
 			shape,
 			sketch,
 			view,
@@ -569,9 +572,15 @@ Fabric.prototype.fill =
 		a4
 	)
 {
-	var cx = this._cx;
+	var
+		fill =
+			style.fill,
 
-	this._$font = null;
+		cx =
+			this._cx;
+
+	this._$font =
+		null;
 
 	this._begin( false );
 
@@ -586,14 +595,19 @@ Fabric.prototype.fill =
 		a4
 	);
 
-	cx.fillStyle = this._colorStyle(
-		style,
-		shape,
-		view
-	);
+	cx.fillStyle =
+		this._colorStyle(
+			fill,
+			shape,
+			view
+		);
 
 	if( this._twist !== 0 )
-		{ throw new Error( 'wrong twist' ); }
+	{
+		throw new Error(
+			'wrong twist'
+		);
+	}
 
 	cx.fill( );
 };
@@ -746,9 +760,9 @@ Fabric.prototype.paintText =
 
 
 /*
-| fillRect(style, rect)     -or-
-| fillRect(style, pnw, pse) -or-
-| fillRect(style, nwx, nwy, width, height)
+| fillRect( style, rect )     -or-
+| fillRect( style, pnw, pse ) -or-
+| fillRect( style, nwx, nwy, width, height )
 */
 Fabric.prototype.fillRect =
 	function(
@@ -761,11 +775,15 @@ Fabric.prototype.fillRect =
 {
 	// FIXME remove fillRect
 
-	var cx = this._cx;
+	var
+		cx =
+			this._cx;
 
-	this._$font = null;
+	this._$font =
+		null;
 
-	cx.fillStyle = style;
+	cx.fillStyle =
+		style;
 
 	if( typeof( a1 ) === 'object' )
 	{
@@ -1435,8 +1453,8 @@ Fabric.prototype._colorStyle =
 */
 Fabric.prototype._edge =
 	function(
-		style,   // style: the style formated in meshcraft style notation.
-		shape,   // shape: an object which has 'sketch'() defined
+		style,  // the style formated in meshcraft style notation.
+		shape,  // an object which has 'sketch'() defined
 		sketch,
 		view,
 		a1,
@@ -1445,7 +1463,10 @@ Fabric.prototype._edge =
 		a4
 	)
 {
-	var cx = this._cx;
+	var
+		cx =
+			this._cx;
+
 	this._begin( true );
 
 	shape[ sketch ](
@@ -1459,16 +1480,22 @@ Fabric.prototype._edge =
 		a4
 	);
 
-	cx.strokeStyle = this._colorStyle(
-		style.color,
-		shape,
-		view
-	);
+	cx.strokeStyle =
+		this._colorStyle(
+			style.color,
+			shape,
+			view
+		);
 
-	cx.lineWidth = style.width;
+	cx.lineWidth =
+		style.width;
 
 	if( this._twist !== 0.5 )
-		{ throw new Error( 'wrong twist' ); }
+	{
+		throw new Error(
+			'wrong twist'
+		);
+	}
 
 	cx.stroke( );
 };

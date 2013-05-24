@@ -610,7 +610,8 @@ Button.prototype.draw =
 Button.prototype.poke =
 	function( )
 {
-	this.$fabric = null;
+	this.$fabric =
+		null;
 
 	this.parent.poke( );
 };
@@ -622,7 +623,8 @@ Button.prototype.poke =
 Button.prototype.knock =
 	function( )
 {
-	this.$fabric = null;
+	this.$fabric =
+		null;
 };
 
 

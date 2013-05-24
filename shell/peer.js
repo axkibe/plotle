@@ -309,8 +309,10 @@ Peer.prototype.newNote =
 */
 Peer.prototype.newPortal =
 	function(
-		spacename,
-		zone
+		spacename,  // the space the portal is to be created in
+		zone,       // the zone of the potal
+		spaceUser,  // the user of the space the portal leads to
+		spaceTag    // the tag of the space the portal leads to
 	)
 {
 	if ( spacename !== this.spacename )
@@ -332,10 +334,10 @@ Peer.prototype.newPortal =
 						zone,
 
 					spaceUser :
-						'',
+						spaceUser,
 
 					spaceTag :
-						''
+						spaceTag
 				},
 
 				rank :

@@ -16,14 +16,16 @@ Visual =
 /*
 | Imports
 */
-var Action;
-var Euclid;
-var Jools;
-var EllipseMenu;
-var Path;
-var shell;
-var system;
-var theme;
+var
+	Action,
+	EllipseMenu,
+	Euclid,
+	Jools,
+	Path,
+	shell,
+	Style,
+	system,
+	theme;
 
 
 /*
@@ -852,7 +854,7 @@ Item.prototype.highlight =
 		Style.getStyle(
 			theme.note.style,
 			'highlight'
-		).edge,
+		),
 		silhoutte,
 		'sketch',
 		view

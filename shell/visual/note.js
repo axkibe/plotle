@@ -126,9 +126,15 @@ Note.s_drawTrans =
 {
 	var silhoutte =
 		Note.s_getSilhoutte( zone );
+		
+	var style =
+		Style.getStyle(
+			theme.note.style,
+			'normal'
+		);
 
 	fabric.paint(
-		theme.note.style,
+		style,
 		silhoutte,
 		'sketch',
 		view
@@ -512,9 +518,8 @@ Note.prototype.draw =
 				'normal'
 			);
 
-		// TODO give fill a style object itself
 		f.fill(
-			style.fill,
+			style,
 			silhoutte,
 			'sketch',
 			view.home( )
@@ -537,7 +542,7 @@ Note.prototype.draw =
 
 		// draws the border
 		f.edge(
-			style.edge,
+			style,
 			silhoutte,
 			'sketch',
 			view.home( )

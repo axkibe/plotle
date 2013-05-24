@@ -193,19 +193,29 @@ theme =
 		*/
 		input :
 		{
-			edge :
-			[
-				{
-					border :
-						0,
+			style :
+				'portalInput',
 
-					width :
-						1,
+			rounding :
+				3,
 
-					color :
-						'rgb( 255, 219, 165 )'
-				}
-			]
+			pitch :
+				5
+		},
+		
+		moveTo :
+		{
+			style :
+				'portalButton',
+
+			width :
+				80,
+
+			height :
+				22,
+
+			rounding :
+				11
 		}
 	},
 

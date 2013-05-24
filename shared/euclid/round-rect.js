@@ -57,23 +57,44 @@ if (typeof(window) === 'undefined')
 */
 var RoundRect =
 Euclid.RoundRect =
-	function(a1, a2, a3, a4)
+	function( a1, a2, a3, a4 )
 {
-	var pnw, pse, a, b;
+	var
+		pnw,
+		pse,
+		a,
+		b;
 
-	if (a1.constructor === Euclid.Point)
+	if( a1.constructor === Euclid.Point )
 	{
-		this.pnw = pnw = a1;
-		this.pse = pse = a2;
-		a = a3;
-		b = a4;
+		this.pnw =
+		pnw =
+			a1;
+
+		this.pse =
+		pse =
+			a2;
+
+		a =
+			a3;
+		b =
+			a4;
 	}
 	else
 	{
-		this.pnw = pnw = a1.pnw;
-		this.pse = pse = a1.pse;
-		a = a2;
-		b = a3;
+		this.pnw =
+		pnw =
+			a1.pnw;
+
+		this.pse =
+		pse =
+			a1.pse;
+
+		a =
+			a2;
+
+		b =
+			a3;
 	}
 
 	pse = pse.sub( 1, 1 );

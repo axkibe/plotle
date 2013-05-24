@@ -1,5 +1,5 @@
 /*
-| Meshcraft default theme.
+| Meshcraft's styles.
 |
 | Authors: Axel Kittenberger
 */
@@ -132,7 +132,7 @@ Style.styles =
 	},
 
 	/*
-	| TODO
+	| Buttons on the create disc.
 	*/
 	createButton :
 	{
@@ -277,7 +277,7 @@ Style.styles =
 
 
 	/*
-	| TODO
+	| Default button.
 	*/
 	genericButton :
 	{
@@ -509,10 +509,32 @@ Style.styles =
 	},
 
 
+	/*
+	| Input fields on portals.
+	*/
+	portalInput :
+	{
+		normal :
+		{
+			edge :
+			[
+				{
+					border :
+						0,
+
+					width :
+						1,
+
+					color :
+						'rgb( 255, 219, 165 )'
+				}
+			]
+		}
+	},
 
 
 	/*
-	| portal buttons on moveto form
+	| Portal buttons on moveto form and in the portal
 	*/
 	portalButton :
 	{
@@ -522,7 +544,7 @@ Style.styles =
 		normal :
 		{
 			fill :
-				'rgba( 255, 255, 240, 0.7 )',
+				'rgba( 255, 237, 210, 0.5 )',
 
 			edge :
 			[
@@ -534,7 +556,7 @@ Style.styles =
 						1,
 
 					color :
-						'rgba( 196, 94, 44, 0.4 )'
+						'rgb( 255, 141, 66 )'
 				}
 			]
 		},
@@ -545,7 +567,7 @@ Style.styles =
 		hover :
 		{
 			fill :
-				'rgba( 255, 235, 210, 0.7 )',
+				'rgba( 255, 188, 88, 0.7 )',
 
 			edge :
 			[
@@ -554,33 +576,33 @@ Style.styles =
 						0,
 
 					width :
-						1,
+						1.5,
 
 					color :
-						'rgba( 196, 94, 44, 0.4 )'
+						'rgb( 255, 141, 66 )'
 				}
 			]
 		},
 
 		/*
-		| Widget has focus
+		| Widget has focus.
 		*/
 		focus :
 		{
 			fill :
-				'rgb( 255, 188, 88 )',
+				'rgba( 255, 237, 210, 0.5 )',
 
 			edge :
 			[
 				{
 					border :
-						0,
-
-					width :
 						1,
 
+					width  :
+						1.5,
+
 					color :
-						'rgba( 196, 94, 44, 0.4 )'
+						'rgb( 255, 99, 188 )'
 				}
 			]
 		},
@@ -591,29 +613,29 @@ Style.styles =
 		hofoc :
 		{
 			fill :
-				'rgb( 255, 188, 88 )',
+				'rgba( 255, 188, 88, 0.7 )',
 
 			edge :
 			[
 				{
 					border :
-						0,
-
-					width :
 						1,
 
+					width  :
+						1.5,
+
 					color :
-						'rgba( 196, 94, 44, 0.4 )'
+						'rgb( 255, 99, 188 )'
 				}
 			]
-		}
+		},
 	},
 
 
 
 
 	/*
-	| TODO
+	| Default checkbox.
 	*/
 	checkbox :
 	{
@@ -731,7 +753,9 @@ Style.styles =
 		}
 	},
 
-	// TODO make this an icon
+	/*
+	| TODO make this an icon
+	*/
 	checkboxCheck :
 	{
 		normal :
@@ -747,8 +771,7 @@ Style.styles =
 
 
 	/*
-	| default input field style
-	| TODO move this into 'style'
+	| Default input field style.
 	*/
 	input :
 	{
@@ -783,7 +806,7 @@ Style.styles =
 		},
 
 		/*
-		| default input focused field style
+		| Default input focused field style.
 		*/
 		focus :
 		{

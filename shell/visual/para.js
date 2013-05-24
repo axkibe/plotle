@@ -807,6 +807,9 @@ Para.prototype.input =
 			caret.sign.at1,
 			line
 		);
+		
+		caret =
+			shell.$space.$caret;
 
         if( rx[ 2 ] )
 		{
@@ -815,9 +818,13 @@ Para.prototype.input =
 				caret.sign.at1
 			);
 
-			para = doc.atRank(
-				doc.twig.rankOf( para.key ) + 1
-			);
+			caret =
+				shell.$space.$caret;
+
+			para =
+				doc.atRank(
+					doc.twig.rankOf( para.key ) + 1
+				);
 		}
     }
 

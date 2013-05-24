@@ -10,17 +10,19 @@
 /*
 | Imports
 */
-var Euclid;
-var Jools;
-var Shell;
-var config;
+var
+	Euclid,
+	Jools,
+	Shell,
+	config;
 
 
 /*
 | Export
 */
-var system;
-var startup;
+var
+	system,
+	startup;
 
 
 /*
@@ -59,7 +61,7 @@ var makeCatcher =
 		}
 		catch( e )
 		{
-			( config.debug.weinre ?  console.log : window.alert )
+			( config.debug.weinre ? console.log : window.alert )
 			(
 				'Internal failure, ' +
 					e.name + ': ' +
@@ -77,7 +79,7 @@ var makeCatcher =
 
 
 /*
-| The system
+| The system.
 */
 var System =
 	function( )

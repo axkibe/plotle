@@ -140,7 +140,7 @@ Label.s_drawTrans =
 
 	// draws the border
 	fabric.edge(
-		theme.label.style.edge,
+		theme.label.style,
 		silhoutte,
 		'sketch',
 		view
@@ -394,7 +394,7 @@ Label.prototype.draw =
 
 		// draws the border
 		f.edge(
-			theme.label.style.edge,
+			theme.label.style,
 			silhoutte,
 			'sketch',
 			Euclid.View.proper

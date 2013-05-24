@@ -605,7 +605,7 @@ CreateDisc.prototype._weave =
 		);
 
 	fabric.fill(
-		this.style.fill,
+		this.style,
 		this.silhoutte,
 		'sketch',
 		Euclid.View.proper
@@ -651,7 +651,7 @@ CreateDisc.prototype._weave =
 	}
 
 	fabric.edge(
-		this.style.edge,
+		this.style,
 		this.silhoutte,
 		'sketch',
 		Euclid.View.proper

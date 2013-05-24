@@ -9,6 +9,7 @@
 | Export
 */
 var Visual;
+
 Visual =
 	Visual || { };
 
@@ -16,15 +17,18 @@ Visual =
 /*
 | Imports
 */
-var Action;
-var config;
-var fontPool;
-var Euclid;
-var Jools;
-var Path;
-var Portal;
-var shell;
-var theme;
+var
+	Accent,
+	Action,
+	config,
+	fontPool,
+	Euclid,
+	Jools,
+	Path,
+	Portal,
+	shell,
+	Style,
+	theme;
 
 
 /*
@@ -36,7 +40,9 @@ var theme;
 
 if( typeof( window ) === 'undefined' )
 {
-	throw new Error( 'this code needs a browser!' );
+	throw new Error(
+		'this code needs a browser!'
+	);
 }
 
 
@@ -86,6 +92,9 @@ Visual.Portal =
 			spaceTag :
 				null
 		};
+
+	this._$hover =
+		null;
 };
 
 
@@ -126,19 +135,6 @@ Portal.s_handles =
 				true
 		}
 	);
-
-
-/*
-| The round rects of the input fields
-*/
-Portal.fieldRounding =
-	3;
-
-/*
-| Distance between field text and box
-*/
-Portal.fieldPitch =
-	5;
 
 
 /*
@@ -221,18 +217,12 @@ Portal.s_drawTrans =
 		zone
 	)
 {
-	var silhoutte =
-		Portal.s_getSilhoutte( zone );
+	var
+		silhoutte =
+			Portal.s_getSilhoutte( zone );
 
-	fabric.fill(
-		theme.portal.style.fill,
-		silhoutte,
-		'sketch',
-		view
-	);
-
-	fabric.edge(
-		theme.portal.style.edge,
+	fabric.paint(
+		theme.portal.style,
 		silhoutte,
 		'sketch',
 		view
@@ -477,12 +467,8 @@ Portal.prototype.click =
 
 		pp =
 			view
-				.depoint(
-					p
-				)
-				.sub(
-					zone.pnw
-				);
+				.depoint( p )
+				.sub( zone.pnw );
 
 	for( var field in Portal.spaceFields )
 	{
@@ -524,6 +510,7 @@ Portal.prototype.click =
 
 	return true;
 };
+
 
 /*
 | Draws the portal.
@@ -634,7 +621,10 @@ Portal.prototype.positionCaret =
 		section =
 			caret.sign.path.get( -1 );
 
-	if( !this._isSection( section ) )
+	if(
+		!this._isSection( section ) ||
+		section === 'moveToButton'
+	)
 	{
 		caret.$screenPos =
 		caret.$height =
@@ -683,18 +673,52 @@ Portal.prototype.pointingHover =
 		return null;
 	}
 
+	var
+		zone =
+			this.getZone( ),
+
+		silhoutte =
+			this.getSilhoutte( zone );
+
+	// not clicked on the portal?
 	if(
-		this.getZone( )
+		!silhoutte
 			.within(
 				view,
 				p
 			)
 		)
 	{
-		return 'default';
+		this._setHover( null );
+
+		return false;
 	}
 
-	return null;
+	var
+		mtb =
+			this._$moveToButton,
+
+		pp =
+			view
+				.depoint( p )
+				.sub( zone.pnw );
+
+	if(
+		mtb.shape
+			.within(
+				Euclid.View.proper,
+				pp
+			)
+	)
+	{
+		this._setHover( 'moveToButton' );
+	}
+	else
+	{
+		this._setHover( null );
+	}
+
+	return 'default';
 };
 
 
@@ -804,6 +828,7 @@ Portal.prototype.getZone =
 							spnw,
 							spse
 						);
+
 					break;
 
 				case 'e'  :
@@ -901,10 +926,18 @@ Portal.prototype.getZone =
 
 				//case 'c' :
 				default  :
-					throw new Error('unknown align');
+					throw new Error(
+						'unknown align'
+					);
 			}
 
-			return new Euclid.Rect( 'pnw/pse', pnw, pse );
+			return (
+				new Euclid.Rect(
+					'pnw/pse',
+					pnw,
+					pse
+				)
+			);
 
 		default :
 
@@ -932,7 +965,14 @@ Portal.prototype._weave =
 			),
 
 		silhoutte =
-			this.getZeroSilhoutte( vzone );
+			this.getZeroSilhoutte( vzone ),
+	
+		caret =
+			shell.$space.$caret,
+
+		section =
+			caret.sign && caret.sign.path.get( -1 );
+
 
 	f.paint(
 		theme.portal.style,
@@ -964,15 +1004,40 @@ Portal.prototype._weave =
 			spaceUser.pnw
 		);
 
-	f.edge(
-		theme.portal.input.edge,
+	var moveToButton =
+	this._$moveToButton =
+		this._prepareMoveToButton(
+			zone
+		);
+
+	f.paint(
+		Style.getStyle(
+			theme.portal.moveTo.style,
+			Accent.state(
+				this._$hover === 'moveToButton',
+				section === 'moveToButton'
+			)
+		),
+		moveToButton.shape,
+		'sketch',
+		view
+	);
+
+	f.paint(
+		Style.getStyle(
+			theme.portal.input.style,
+			'normal'
+		),
 		spaceUser.box,
 		'sketch',
 		view
 	);
 
-	f.edge(
-		theme.portal.input.edge,
+	f.paint(
+		Style.getStyle(
+			theme.portal.input.style,
+			'normal'
+		),
 		spaceTag.box,
 		'sketch',
 		view
@@ -986,7 +1051,7 @@ Portal.prototype._weave =
 		'p',
 			spaceUser.pnw,
 		'font',
-			this._spaceFont.spaceUser
+			this._fonts.spaceUser
 	);
 
 	f.paintText(
@@ -995,7 +1060,16 @@ Portal.prototype._weave =
 		'p',
 			spaceTag.pnw,
 		'font',
-			this._spaceFont.spaceTag
+			this._fonts.spaceTag
+	);
+
+	f.paintText(
+		'text',
+			'move to',
+		'p',
+			moveToButton.textCenter,
+		'font',
+			this._fonts.moveTo
 	);
 
 	f.scale( 1 / view.zoom );
@@ -1004,7 +1078,7 @@ Portal.prototype._weave =
 	// everything else
 
 	f.edge(
-		theme.portal.style.edge,
+		theme.portal.style,
 		silhoutte,
 		'sketch',
 		Euclid.View.proper
@@ -1059,7 +1133,7 @@ Portal.prototype.input =
 /*
 | Font for spacesUser/Tag
 */
-Portal.prototype._spaceFont =
+Portal.prototype._fonts =
 	Jools.immute( {
 		spaceUser :
 			fontPool.get(
@@ -1071,6 +1145,12 @@ Portal.prototype._spaceFont =
 			fontPool.get(
 				13,
 				'la'
+			),
+
+		moveTo :
+			fontPool.get(
+				13,
+				'cm'
 			)
 	} );
 
@@ -1093,7 +1173,7 @@ Portal.prototype.getCaretPos =
 			caret.sign.path.get( -1 ),
 
 		fs =
-			this._spaceFont[ section ].size,
+			this._fonts[ section ].size,
 
 		descend =
 			fs * theme.bottombox,
@@ -1117,8 +1197,10 @@ Portal.prototype.getCaretPos =
 		{
 			s :
 				s,
+
 			n :
 				n,
+
 			x :
 				x
 		}
@@ -1138,7 +1220,7 @@ Portal.prototype._locateOffset =
 	// FIXME cache position
 	var
 		font =
-			this._spaceFont[ section ],
+			this._fonts[ section ],
 
 		text =
 			this.twig[ section ];
@@ -1238,6 +1320,15 @@ Portal.prototype.specialKey =
 
 			show =
 				this.keyRight( )
+				||
+				show;
+
+			break;
+
+		case 'tab' :
+
+			show =
+				this.keyTab( )
 				||
 				show;
 
@@ -1373,6 +1464,72 @@ Portal.prototype.keyDown =
 	return true;
 };
 
+
+/*
+| User pressed down key.
+*/
+Portal.prototype.keyTab =
+	function( )
+{
+	var
+		caret =
+			shell.$space.$caret,
+
+		csign =
+			caret.sign,
+
+		section =
+			csign.path.get( -1 );
+
+	if( !this._isSection( section ) )
+	{
+		return false;
+	}
+
+	var
+		cycle =
+			null;
+
+	switch( section )
+	{
+		case 'spaceUser' :
+
+			cycle =
+				'spaceTag';
+
+			break;
+
+		case 'spaceTag' :
+
+			cycle =
+				'moveToButton';
+
+			break;
+
+		case 'moveToButton' :
+
+			cycle =
+				'spaceUser';
+
+			break;
+	}
+
+	shell.$space.setCaret(
+		{
+			path :
+				new Path(
+					csign.path,
+					csign.path.length - 1,
+						cycle
+				),
+
+			at1 :
+				0
+		}
+	);
+
+	return true;
+};
 
 /*
 | User pressed down key.
@@ -1521,7 +1678,7 @@ Portal.prototype.keyBackspace =
 
 
 /*
-| User pressed backspace.
+| User pressed del.
 */
 Portal.prototype.keyDel =
 	function( )
@@ -1612,6 +1769,7 @@ Portal.prototype._isSection =
 	{
 		case 'spaceUser' :
 		case 'spaceTag' :
+		case 'moveToButton' :
 
 			return true;
 
@@ -1622,6 +1780,53 @@ Portal.prototype._isSection =
 	}
 };
 
+
+/*
+| Prepares the moveto button
+*/
+Portal.prototype._prepareMoveToButton =
+	function(
+		zone
+	)
+{
+	var
+		width =
+			theme.portal.moveTo.width,
+
+		height =
+			theme.portal.moveTo.height,
+
+		rounding =
+			theme.portal.moveTo.rounding,
+
+		pnw =
+			new Euclid.Point(
+				Jools.half( zone.width - width ),
+				Jools.half( zone.height ) + 10
+			),
+
+		pse =
+			pnw.add(
+				width,
+				height
+			);
+
+	return {
+		shape :
+			new Euclid.RoundRect(
+				pnw,
+				pse,
+				rounding,
+				rounding
+			),
+
+		textCenter :
+			new Euclid.Point(
+				Jools.half(pnw.x + pse.x),
+				Jools.half(pnw.y + pse.y)
+			)
+	};
+};
 
 /*
 | Prepares an input field ( user / tag )
@@ -1635,22 +1840,22 @@ Portal.prototype._prepareField =
 {
 	var
 		pitch =
-			Portal.fieldPitch,
+			theme.portal.input.pitch,
 
 		rounding =
-			Portal.fieldRounding,
+			theme.portal.input.rounding,
 
 		text =
 			this.twig[ section ],
 
 		width =
 			Euclid.Measure.width(
-				this._spaceFont[ section ],
+				this._fonts[ section ],
 				text
 			),
 
 		height =
-			this._spaceFont[ section ].size + 2,
+			this._fonts[ section ].size + 2,
 
 		pnw =
 			basePNW === null
@@ -1661,7 +1866,7 @@ Portal.prototype._prepareField =
 						zone.width - width
 					),
 					Math.round(
-						zone.height / 3
+						zone.height / 2 - 30
 					)
 				)
 			)
@@ -1709,7 +1914,7 @@ Portal.prototype._prepareField =
 
 
 /*
-| User pressed pos1 key
+| User pressed pos1 key,
 */
 Portal.prototype.keyPos1 =
 	function( )
@@ -1734,6 +1939,27 @@ Portal.prototype.keyPos1 =
 
 	return true;
 };
+
+
+/*
+| Sets the hovered element.
+*/
+Portal.prototype._setHover =
+	function(
+		hover
+	)
+{
+	if( this._$hover === hover )
+	{
+		return;
+	}
+
+	this._$hover =
+		hover;
+
+	this.poke( );
+};
+
 
 
 /*
@@ -1763,7 +1989,7 @@ Portal.prototype._getOffsetAt =
 		aZ,
 
 		font =
-			this._spaceFont[ section ];
+			this._fonts[ section ];
 
 	for(
 		a = 0, aZ = value.length;

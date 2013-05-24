@@ -11,31 +11,48 @@
 | Export
 */
 var Visual;
-Visual = Visual || {};
+Visual = Visual || { };
 
 
 /*
 | Capsule
 */
-( function() {
+( function( ) {
 'use strict';
 
-if (typeof(window) === 'undefined')
-	{ throw new Error('this code requires a browser!'); }
+if( typeof( window ) === 'undefined' )
+{
+	throw new Error(
+		'this code requires a browser!'
+	);
+}
 
 
 /*
 | Constructor
 */
-var Base = Visual.Base = function( spacename, twig, path )
+var Base =
+Visual.Base =
+	function(
+		spacename,
+		twig,
+		path
+	)
 {
-	this.twig  = twig;
+	this.twig =
+		twig;
 
-	this.spacename = spacename;
-	this.path      = path;
-	this.key       = path ? path.get(-1) : null;
+	this.spacename =
+		spacename;
 
-	this.$sub       = null;
+	this.path =
+		path;
+
+	this.key =
+		path ? path.get(-1) : null;
+
+	this.$sub =
+		null;
 };
 
 

@@ -208,8 +208,9 @@ var design =
 
 		y :
 			585
-	},
+	}
 
+	/*
 	help :
 	{
 		x :
@@ -218,6 +219,7 @@ var design =
 		y :
 			635
 	}
+	*/
 };
 
 MainDisc.prototype.layout =
@@ -1070,8 +1072,9 @@ MainDisc.prototype.layout =
 						-1
 				}
 			}
-		},
+		}
 
+		/*
 		'help' :
 		{
 			type :
@@ -1181,6 +1184,7 @@ MainDisc.prototype.layout =
 				}
 			}
 		}
+		*/
 	},
 
 	ranks :
@@ -1192,8 +1196,8 @@ MainDisc.prototype.layout =
 		'space',
 		'user',
 		'login',
-		'signup',
-		'help'
+		'signup'
+		// 'help'
 	]
 };
 
@@ -1227,7 +1231,7 @@ MainDisc.prototype._weave =
 		);
 
 	fabric.fill(
-		this.style.fill,
+		this.style,
 		this.silhoutte,
 		'sketch',
 		Euclid.View.proper
@@ -1253,7 +1257,7 @@ MainDisc.prototype._weave =
 	}
 
 	fabric.edge(
-		this.style.edge,
+		this.style,
 		this.silhoutte,
 		'sketch',
 		Euclid.View.proper

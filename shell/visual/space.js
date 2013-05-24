@@ -1023,7 +1023,9 @@ Space.prototype.dragStop =
 				Visual.Portal.s_getZone(
 					view.depoint( action.start ),
 					view.depoint( action.move  )
-				)
+				),
+				shell.bridge.getUsername( ),
+				'home'
 			);
 
 			this.$sub[ key ].grepFocus( );
@@ -1318,97 +1320,6 @@ Space.prototype.dragMove =
 			return 'move';
 	}
 };
-
-
-/*
-| An entry of the float menu has been selected
-*/
-/*
-Space.prototype.menuSelect =
-	function(
-		entry,
-		p
-	)
-{
-	var view = this.$view;
-	var pnw;
-	var key;
-	var nw;
-	var nh;
-
-	switch( entry )
-	{
-		case 'n' :
-			// note
-			nw = theme.note.newWidth;
-			nh = theme.note.newHeight;
-
-			pnw = view.depoint( p ).
-				sub(
-					Jools.half( nw ),
-					Jools.half( nh )
-				);
-
-			key = shell.peer.newNote(
-				this.spacename,
-				new Euclid.Rect(
-					'pnw/size',
-					pnw,
-					nw,
-					nh
-				)
-			);
-
-			this.$sub[ key ].grepFocus( );
-
-			break;
-
-		case 'ne' :
-			// label
-
-			pnw = view.depoint( p ).
-				sub( theme.label.createOffset );
-
-			key = shell.peer.newLabel(
-				this.spacename,
-				pnw,
-				'Label',
-				20
-			);
-
-			this.$sub[ key ].grepFocus( );
-
-			break;
-
-		case 'se' :
-			// portal
-
-			nw = theme.portal.newWidth;
-			nh = theme.portal.newHeight;
-
-			pnw = view.depoint(p).
-				sub(
-					Jools.half( nw ),
-					Jools.half( nh )
-				);
-
-			key = shell.peer.newPortal(
-				this.spacename,
-				new Euclid.Rect(
-					'pnw/size',
-					pnw,
-					nw,
-					nh
-				)
-			);
-
-			this.$sub[key].grepFocus( );
-
-			break;
-	}
-};
-*/
-
 
 /*
 | Pointing device starts pointing ( mouse down, touch start )

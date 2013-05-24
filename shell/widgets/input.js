@@ -349,7 +349,7 @@ Input.prototype._weave =
 		);
 
 	fabric.fill(
-		style.fill,
+		style,
 		shape,
 		'sketch',
 		Euclid.View.proper
@@ -361,7 +361,7 @@ Input.prototype._weave =
 	if( this.twig.password )
 	{
 		fabric.fill(
-			'black',
+			{ fill: 'black' },
 			this,
 			'sketchMask',
 			Euclid.View.proper,
@@ -383,7 +383,7 @@ Input.prototype._weave =
 	}
 
 	fabric.edge(
-		style.edge,
+		style,
 		shape,
 		'sketch',
 		Euclid.View.proper
