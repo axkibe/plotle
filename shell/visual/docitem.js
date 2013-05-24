@@ -44,14 +44,12 @@ if( typeof( window ) === 'undefined' )
 var DocItem =
 Visual.DocItem =
 	function(
-		spacename,
 		twig,
 		path
 	)
 {
 	Visual.Item.call(
 		this,
-		spacename,
 		twig,
 		path
 	);
@@ -59,7 +57,6 @@ Visual.DocItem =
 	this.$sub =
 		{
 			doc : new Visual.Doc(
-				spacename,
 				twig.doc,
 				new Path( path, '++', 'doc' )
 			)

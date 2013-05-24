@@ -45,14 +45,12 @@ if( typeof( window ) === 'undefined' )
 var Label =
 Visual.Label =
 	function(
-		spacename,
 		twig,
 		path
 	)
 {
 	Visual.DocItem.call(
 		this,
-		spacename,
 		twig,
 		path
 	);

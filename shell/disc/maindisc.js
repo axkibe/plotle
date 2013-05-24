@@ -1698,14 +1698,15 @@ MainDisc.prototype.message =
 */
 MainDisc.prototype.arrivedAtSpace =
 	function(
-		space,
+		spaceUser,
+		spaceTag,
 		access
 	)
 {
 	var buttons =
 		this.buttons;
 
-	buttons.space.setText( space );
+	buttons.space.setText( spaceUser + ':' + spaceTag );
 
 	switch( access )
 	{

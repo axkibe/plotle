@@ -499,8 +499,8 @@ MoveTo.prototype.name =
 */
 MoveTo.prototype.arrivedAtSpace =
 	function(
-		// name,
-		// access
+		// spaceUser,
+		// spaceTag
 	)
 {
 };

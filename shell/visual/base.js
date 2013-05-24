@@ -34,16 +34,12 @@ if( typeof( window ) === 'undefined' )
 var Base =
 Visual.Base =
 	function(
-		spacename,
 		twig,
 		path
 	)
 {
 	this.twig =
 		twig;
-
-	this.spacename =
-		spacename;
 
 	this.path =
 		path;

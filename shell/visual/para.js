@@ -46,7 +46,6 @@ if( typeof( window ) === 'undefined' )
 var Para =
 Visual.Para =
 	function(
-		spacename,
 		twig,
 		path
 	)
@@ -58,7 +57,6 @@ Visual.Para =
 
 	Visual.Base.call(
 		this,
-		spacename,
 		twig,
 		path
 	);

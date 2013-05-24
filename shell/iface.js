@@ -344,8 +344,11 @@ IFace.prototype.sendMessage =
 			passhash :
 				self.$passhash,
 
-			space :
-				self.$spacename,
+			spaceUser :
+				self.$spaceUser,
+
+			spaceTag :
+				self.$spaceTag,
 
 			message :
 				message
@@ -360,11 +363,15 @@ IFace.prototype.sendMessage =
 */
 IFace.prototype.aquireSpace =
 	function(
-		spacename,
+		spaceUser,
+		spaceTag,
 		callback
 	)
 {
-	var self = this;
+	var self =
+		this;
+
+	console.log('AQ', spaceUser, spaceTag);
 
 	// aborts the current running update.
 	if( self._$updateAjax )
@@ -378,8 +385,11 @@ IFace.prototype.aquireSpace =
 			null;
 	}
 
-	self.$spacename =
-		spacename;
+	self.$spaceUser =
+		spaceUser;
+
+	self.$spaceTag =
+		spaceTag;
 
 	self.$cSpace =
 		null;
@@ -511,9 +521,17 @@ IFace.prototype.aquireSpace =
 			null,
 			Jools.immute(
 				{
-					tree   : self.$cSpace,
-					name   : spacename,
-					access : asw.access
+					tree :
+						self.$cSpace,
+
+					spaceUser :
+						spaceUser,
+
+					spaceTag :
+						spaceTag,
+
+					access :
+						asw.access
 				}
 			)
 		);
@@ -540,8 +558,11 @@ IFace.prototype.aquireSpace =
             cmd :
 				'get',
 
-			space :
-				spacename,
+			spaceUser :
+				spaceUser,
+
+			spaceTag :
+				spaceTag,
 
 			path :
 				new Path( [ ] ),
@@ -921,8 +942,11 @@ IFace.prototype._update =
 			passhash :
 				self.$passhash,
 
-			space :
-				self.$spacename,
+			spaceUser :
+				self.$spaceUser,
+
+			spaceTag :
+				self.$spaceTag,
 
 			time :
 				self.$remoteTime,
@@ -1096,22 +1120,32 @@ IFace.prototype._sendChanges =
 	this._$outbox.splice(0, 1);
 	this.$postbox.push(c);
 
-	var request = {
-		cmd :
-			'alter',
-		space :
-			this.$spacename,
-		chgX :
-			c.chgX,
-		cid :
-			c.cid,
-		passhash :
-			this.$passhash,
-		time :
-			this.$remoteTime,
-		user :
-			this.$user
-	};
+	var request =
+		{
+			cmd :
+				'alter',
+
+			spaceUser :
+				this.$spaceUser,
+
+			spaceTag :
+				this.$spaceTag,
+
+			chgX :
+				c.chgX,
+
+			cid :
+				c.cid,
+
+			passhash :
+				this.$passhash,
+
+			time :
+				this.$remoteTime,
+
+			user :
+				this.$user
+		};
 
 	Jools.log(
 		'iface',

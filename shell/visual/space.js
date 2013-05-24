@@ -44,16 +44,24 @@ var Space =
 Visual.Space =
 	function(
 		twig,
-		spacename,
+		spaceUser,
+		spaceTag,
 		access
 	)
 {
 	Visual.Base.call(
 		this,
-		spacename,
 		twig,
 		null
 	);
+
+	Jools.keyNonGrata( this, 'spacename' );
+
+	this.spaceUser =
+		spaceUser;
+
+	this.spaceTag =
+		spaceTag;
 
 	var sub =
 	this.$sub =
@@ -234,7 +242,6 @@ Space.prototype.createItem =
 	}
 
 	return new Proto(
-		this.spacename,
 		twig,
 		new Path( [ k ] ),
 		this
@@ -972,7 +979,8 @@ Space.prototype.dragStop =
 
 			key =
 				shell.peer.newNote(
-					this.spacename,
+					this.spaceUser,
+					this.spaceTag,
 					Visual.Note.s_getZone(
 						view.depoint( action.start ),
 						view.depoint( action.move  )
@@ -1001,7 +1009,8 @@ Space.prototype.dragStop =
 
 			key =
 				shell.peer.newLabel(
-					this.spacename,
+					this.spaceUser,
+					this.spaceTag,
 					trans.pnw,
 					'Label',
 					trans.font.size
@@ -1019,7 +1028,8 @@ Space.prototype.dragStop =
 		case 'CreatePortal' :
 
 			key = shell.peer.newPortal(
-				this.spacename,
+				this.spaceUser,
+				this.spaceTag,
 				Visual.Portal.s_getZone(
 					view.depoint( action.start ),
 					view.depoint( action.move  )

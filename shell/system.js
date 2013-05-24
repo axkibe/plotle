@@ -379,8 +379,14 @@ System.prototype._fiddleInput =
 {
 	var
 		caret =
-			this.shell.getCaret( ),
+			this.shell.getCaret( );
 
+	if( !caret )
+	{
+		return;
+	}
+	
+	var
 		height =
 			caret.$height,
 

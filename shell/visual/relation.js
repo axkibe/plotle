@@ -40,14 +40,12 @@ if( typeof( window ) === 'undefined' )
 var Relation =
 Visual.Relation =
 	function(
-		spacename,
 		twig,
 		path
 	)
 {
 	Visual.Label.call(
 		this,
-		spacename,
 		twig,
 		path
 	);
@@ -93,7 +91,8 @@ Relation.create =
 
 	var key =
 		shell.peer.newRelation(
-			space.spacename,
+			space.spaceUser,
+			space.spaceTag,
 			pnw,
 			'relates to',
 			20,

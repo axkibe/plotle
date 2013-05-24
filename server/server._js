@@ -256,9 +256,14 @@ Server.prototype.initRepository =
 			'meshcraft:sandbox'
 		];
 
-	for( var s = 0, sZ = initSpaces.length; s < sZ; s++ )
+	for(
+		var s = 0, sZ = initSpaces.length;
+		s < sZ;
+		s++
+	)
 	{
-		var space = initSpaces[ s ];
+		var space =
+			initSpaces[ s ];
 
 		Jools.log(
 			'start',
@@ -385,20 +390,20 @@ Server.prototype.loadSpaces =
 */
 Server.prototype.loadSpace =
 	function(
-		spacename,
+		spaceName,
 	_)
 {
 	Jools.log(
 		'start',
-		'loading and replaying all "' + spacename + '"'
+		'loading and replaying all "' + spaceName + '"'
 	);
 
 	var space =
-	this.$spaces[ spacename ] =
+	this.$spaces[ spaceName ] =
 		{
 			$changesDB :
 				this.$db.connection.collection(
-					'changes:' + spacename,
+					'changes:' + spaceName,
 				_),
 
 			$changes :
@@ -472,7 +477,7 @@ Server.prototype.loadSpace =
 			// catch this to get a useful error message at least
 			// if things go woo.
 
-			console.log('Error playing back changes: ', e);
+			console.log( 'Error playing back changes: ', e );
 
 			throw e;
 		}
@@ -485,15 +490,19 @@ Server.prototype.loadSpace =
 */
 Server.prototype.sendMessage =
 	function(
-		spacename,
+		spaceUser,
+		spaceTag,
 		user,
 		message
 	)
 {
 	this.$messages.push (
 		{
-			space :
-				spacename,
+			spaceUser :
+				spaceUser,
+
+			spaceTag :
+				spaceTag,
 
 			user :
 				user,
@@ -509,7 +518,10 @@ Server.prototype.sendMessage =
 	process.nextTick(
 		function( )
 		{
-			self.wake( spacename );
+			self.wake(
+				spaceUser,
+				spaceTag
+			);
 		}
 	);
 };
@@ -521,8 +533,11 @@ Server.prototype.sendMessage =
 Server.prototype.cmdMessage =
 	function( cmd, _ )
 {
-	var space =
-		cmd.space;
+	var spaceUser =
+		cmd.spaceUser;
+
+	var spaceTag =
+		cmd.spaceTag;
 
 	var message =
 		cmd.message;
@@ -547,10 +562,17 @@ Server.prototype.cmdMessage =
 		);
 	}
 
-	if( !Jools.is( space ) )
+	if( !Jools.is( spaceUser ) )
 	{
 		throw Jools.reject(
-			'space missing'
+			'spaceUser missing'
+		);
+	}
+
+	if( !Jools.is( spaceTag ) )
+	{
+		throw Jools.reject(
+			'spaceTag missing'
 		);
 	}
 
@@ -569,12 +591,15 @@ Server.prototype.cmdMessage =
 	}
 
 	this.sendMessage(
-		space,
+		spaceUser,
+		spaceTag,
 		username,
 		message
 	);
 
-	return { ok : true };
+	return {
+		ok : true
+	};
 };
 
 
@@ -1182,8 +1207,11 @@ Server.prototype.cmdAlter =
 	var cid =
 		cmd.cid;
 
-	var spacename =
-		cmd.space;
+	var spaceUser =
+		cmd.spaceUser;
+
+	var spaceTag =
+		cmd.spaceTag;
 
 	var username =
 		cmd.user;
@@ -1201,12 +1229,23 @@ Server.prototype.cmdAlter =
 		throw Jools.reject( 'invalid pass' );
 	}
 
-	if( !Jools.is( spacename ) )
+	if( !Jools.is( spaceUser ) )
 	{
-		throw Jools.reject( 'space missing' );
+		throw Jools.reject( 'spaceUser missing' );
 	}
 
-	if( this.testAccess( username, spacename ) !== 'rw' )
+	if( !Jools.is( spaceTag ) )
+	{
+		throw Jools.reject( 'spaceTag missing' );
+	}
+
+	if(
+		this.testAccess(
+			username,
+			spaceUser,
+			spaceTag
+		) !== 'rw'
+	)
 	{
 		throw Jools.reject( 'no access' );
 	}
@@ -1226,9 +1265,11 @@ Server.prototype.cmdAlter =
 		throw Jools.reject( 'cid missing' );
 	}
 
+	var spaceName =
+		spaceUser + ':' + spaceTag;
 
 	var space =
-		this.$spaces[ spacename ];
+		this.$spaces[ spaceName ];
 
 	if( !Jools.is( space ) )
 	{
@@ -1344,12 +1385,13 @@ Server.prototype.cmdAlter =
 
 	space.$seqZ++;
 
-	var self = this;
+	var self =
+		this;
 
 	process.nextTick(
 		function( )
 		{
-			self.wake( spacename );
+			self.wake( spaceUser, spaceTag );
 		}
 	);
 
@@ -1513,12 +1555,13 @@ Server.prototype.cmdRegister =
 	this.$users[ username ] = user;
 
 	// creates the user's home space
-	var spacename = username + ':home';
+	var spaceName =
+		username + ':home';
 
-	this.$spaces[ spacename ] =
+	this.$spaces[ spaceName ] =
 		{
 			$changesDB :
-				this.$db.connection.collection( 'changes:' + spacename, _),
+				this.$db.connection.collection( 'changes:' + spaceName, _),
 
 			$changes :
 				[ ],
@@ -1536,7 +1579,7 @@ Server.prototype.cmdRegister =
 
 	this.$db.spaces.insert(
 		{
-			_id : spacename
+			_id : spaceName
 		},
 	_);
 
@@ -1556,7 +1599,8 @@ Server.prototype.cmdRegister =
 Server.prototype.refreshPresence =
 	function(
 		user,
-		spacename
+		spaceUser,
+		spaceTag
 	)
 {
 	var pu =
@@ -1571,13 +1615,16 @@ Server.prototype.refreshPresence =
 			};
 	}
 
+	var spaceName =
+		spaceUser + ':' + spaceTag;
+
 	var pus =
-		pu.spaces[ spacename ];
+		pu.spaces[ spaceName ];
 
 	if( !pus )
 	{
 		pus =
-		pu.spaces[ spacename ] =
+		pu.spaces[ spaceName ] =
 			{
 				establish : 0,
 				timerID : null
@@ -1589,13 +1636,15 @@ Server.prototype.refreshPresence =
 				5000,
 				this,
 				user,
-				spacename
+				spaceUser,
+				spaceTag
 			);
 
 		this.sendMessage(
-			spacename,
+			spaceUser,
+			spaceTag,
 			null,
-			user + ' entered "' + spacename + '"'
+			user + ' entered "' + spaceName + '"'
 		);
 	}
 	else if( pus.references <= 0 )
@@ -1614,7 +1663,8 @@ Server.prototype.refreshPresence =
 				5000,
 				this,
 				user,
-				spacename
+				spaceUser,
+				spaceTag
 			);
 	}
 };
@@ -1626,7 +1676,8 @@ Server.prototype.refreshPresence =
 Server.prototype.establishPresence =
 	function(
 		user,
-		spacename,
+		spaceUser,
+		spaceTag,
 		sleepID
 	)
 {
@@ -1646,13 +1697,16 @@ Server.prototype.establishPresence =
 			};
 	}
 
+	var spaceName =
+		spaceUser + ':' + spaceTag;
+
 	var pus =
-		pu.spaces[ spacename ];
+		pu.spaces[ spaceName ];
 
 	if( !pus )
 	{
 		pus =
-		pu.spaces[spacename] =
+		pu.spaces[ spaceName ] =
 			{
 				establish :
 					1,
@@ -1662,9 +1716,10 @@ Server.prototype.establishPresence =
 			};
 
 		this.sendMessage(
-			spacename,
+			spaceUser,
+			spaceTag,
 			null,
-			user + ' entered "' + spacename + '"'
+			user + ' entered "' + spaceName + '"'
 		);
 	}
 	else
@@ -1688,11 +1743,18 @@ Server.prototype.establishPresence =
 Server.prototype.destablishPresence =
 	function(
 		user,
-		spacename
+		spaceUser,
+		spaceTag
 	)
 {
-	var pu  = this.$presences[ user ];
-	var pus = pu.spaces[ spacename ];
+	var pu =
+		this.$presences[ user ];
+
+	var spaceName =
+		spaceUser + ':' + spaceTag;
+
+	var pus =
+		pu.spaces[ spaceName ];
 
 	pus.establish--;
 
@@ -1709,7 +1771,8 @@ Server.prototype.destablishPresence =
 				5000,
 				this,
 				user,
-				spacename
+				spaceUser,
+				spaceTag
 			);
 	}
 };
@@ -1722,24 +1785,29 @@ Server.prototype.expirePresence =
 	function(
 		self,
 		user,
-		spacename
+		spaceUser,
+		spaceTag
 	)
 {
+	var spaceName =
+		spaceUser + ':' + spaceTag;
+
 	self.sendMessage(
-		spacename,
+		spaceUser,
+		spaceTag,
 		null,
-		user + ' left "' + spacename + '"'
+		user + ' left "' + spaceName + '"'
 	);
 
 	var pu =
 		self.$presences[ user ];
 
-	if( pu.spaces[ spacename ].establish !== 0 )
+	if( pu.spaces[ spaceName ].establish !== 0 )
 	{
 		throw new Error( 'Something wrong with presences.' );
 	}
 
-	delete pu.spaces[ spacename ];
+	delete pu.spaces[ spaceName ];
 };
 
 
@@ -1758,8 +1826,11 @@ Server.prototype.cmdUpdate =
 	var passhash =
 		cmd.passhash;
 
-	var spacename =
-		cmd.space;
+	var spaceUser =
+		cmd.spaceUser;
+
+	var spaceTag =
+		cmd.spaceTag;
 
 	var time =
 		cmd.time;
@@ -1782,13 +1853,22 @@ Server.prototype.cmdUpdate =
 		throw Jools.reject( 'Invalid password' );
 	}
 
-	if( !Jools.is( spacename ) )
+	if( !Jools.is( spaceUser ) )
 	{
-		throw Jools.reject( 'Space missing' );
+		throw Jools.reject( 'spaceUser missing' );
 	}
 
-	var space =
-		this.$spaces[ spacename ];
+	if( !Jools.is( spaceTag ) )
+	{
+		throw Jools.reject( 'spaceTag missing' );
+	}
+
+	var
+		spaceName =
+			spaceUser + ':' + spaceTag,
+
+		space =
+			this.$spaces[ spaceName ];
 
 	if( !space )
 	{
@@ -1814,13 +1894,15 @@ Server.prototype.cmdUpdate =
 
 	this.refreshPresence(
 		user,
-		spacename
+		spaceUser,
+		spaceTag
 	);
 
 	var asw = this.conveyUpdate(
 		time,
 		mseq,
-		spacename
+		spaceUser,
+		spaceTag
 	);
 
 	// immediate answer?
@@ -1848,16 +1930,24 @@ Server.prototype.cmdUpdate =
 		{
 			user :
 				user,
+
 			time :
 				time,
+
 			mseq :
 				mseq,
+
 			timerID :
 				timerID,
+
 			res :
 				res,
-			spacename :
-				spacename
+
+			spaceUser :
+				spaceUser,
+
+			spaceTag :
+				spaceTag
 		};
 
 	res.sleepID =
@@ -1865,7 +1955,8 @@ Server.prototype.cmdUpdate =
 
 	this.establishPresence(
 		user,
-		spacename,
+		spaceUser,
+		spaceTag,
 		sleepID
 	);
 
@@ -1888,10 +1979,15 @@ Server.prototype.expireSleep =
 
 	// maybe it just had expired at the same time
 	if( !sleep )
-		{ return; }
+	{
+		return;
+	}
+
+	var spaceName =
+		sleep.spaceUser + ':' + sleep.spaceTag;
 
 	var space =
-		self.$spaces[ sleep.spacename ];
+		self.$spaces[ spaceName ];
 
 	var seqZ =
 		space.$seqZ;
@@ -1901,7 +1997,8 @@ Server.prototype.expireSleep =
 	//TODO call it sleep.username
 	self.destablishPresence(
 		sleep.user,
-		sleep.spacename
+		sleep.spaceUser,
+		sleep.spaceTag
 	);
 
 	var asw =
@@ -1960,7 +2057,11 @@ Server.prototype.closeSleep =
 
 	delete this.$upsleep[ sleepID ];
 
-	this.destablishPresence( sleep.user, sleep.spacename );
+	this.destablishPresence(
+		sleep.user,
+		sleep.spaceUser,
+		sleep.spaceTag
+	);
 };
 
 
@@ -1971,11 +2072,15 @@ Server.prototype.conveyUpdate =
 	function(
 		time,
 		mseq,
-		spacename
+		spaceUser,
+		spaceTag
 	)
 {
+	var spaceName =
+		spaceUser + ':' + spaceTag;
+
 	var space =
-		this.$spaces[spacename];
+		this.$spaces[ spaceName ];
 
 	var changes =
 		space.$changes;
@@ -1995,25 +2100,45 @@ Server.prototype.conveyUpdate =
 	var msgA =
 		[ ];
 
-	for (var c = time; c < seqZ; c++)
-		{ chgA.push( changes[c] ); }
-
-	for (var m = mseq; m < msgZ; m++)
+	for( var c = time; c < seqZ; c++ )
 	{
-		if( messages[m].space !== spacename )
-			{ continue; }
+		chgA.push( changes[c] );
+	}
+
+	for( var m = mseq; m < msgZ; m++ )
+	{
+		if(
+			messages[m].spaceUser !== spaceUser ||
+			messages[m].spaceTag !== spaceTag
+		)
+		{
+			continue;
+		}
 
 		msgA.push( messages[m] );
 	}
 
 	return {
-		ok    : true,
-		time  : time,
-		timeZ : seqZ,
-		chgs  : chgA,
-		msgs  : msgA,
-		mseq  : mseq,
-		mseqZ : msgZ
+		ok :
+			true,
+
+		time :
+			time,
+
+		timeZ :
+			seqZ,
+
+		chgs :
+			chgA,
+
+		msgs :
+			msgA,
+
+		mseq :
+			mseq,
+
+		mseqZ :
+			msgZ
 	};
 };
 
@@ -2022,7 +2147,10 @@ Server.prototype.conveyUpdate =
 | Wakes up any sleeping updates and gives them data if applicatable.
 */
 Server.prototype.wake =
-	function( spacename )
+	function(
+		spaceUser,
+		spaceTag
+	)
 {
 	var sleepKeys = Object.keys( this.$upsleep );
 
@@ -2033,23 +2161,47 @@ Server.prototype.wake =
 		var sKey  = sleepKeys[a];
 		var sleep = this.$upsleep[sKey];
 
-		if (spacename !== sleep.spacename)
-			{ continue; }
+		if(
+			spaceUser !== sleep.spaceUser ||
+			spaceTag !== sleep.spaceTag
+		)
+		{
+			continue;
+		}
 
-		clearTimeout(sleep.timerID);
+		clearTimeout( sleep.timerID );
+
 		delete this.$upsleep[sKey];
-		this.destablishPresence(sleep.user, sleep.spacename);
 
-		var asw = this.conveyUpdate(sleep.time, sleep.mseq, sleep.spacename);
-		var res = sleep.res;
+		this.destablishPresence(
+			sleep.user,
+			sleep.spaceUser,
+			sleep.spaceTag
+		);
+
+		var asw =
+			this.conveyUpdate(
+				sleep.time,
+				sleep.mseq,
+				sleep.spaceUser,
+				sleep.spaceTag
+			);
+
+		var res =
+			sleep.res;
 
 		Jools.log('ajax', '->', asw);
 
 		res.writeHead(200,
 			{
-				'Content-Type'  : 'application/json',
-				'Cache-Control' : 'no-cache',
-				'Date'          : new Date().toUTCString()
+				'Content-Type' :
+					'application/json',
+
+				'Cache-Control' :
+					'no-cache',
+
+				'Date' :
+					new Date().toUTCString()
 			}
 		);
 
@@ -2064,70 +2216,78 @@ Server.prototype.wake =
 Server.prototype.testAccess =
 	function(
 		user,
-		spacename
+		spaceUser,
+		spaceTag
 	)
 {
-	if( user === 'root' )
-	{
-		return 'rw';
-	}
-
-	if( !Jools.isString( spacename ) )
+	if(
+		!Jools.isString( spaceUser ) ||
+		!Jools.isString( spaceTag )
+	)
 	{
 		return 'no';
 	}
 
-	switch( spacename )
+	if( spaceUser == 'meshcraft' )
 	{
-		case 'meshcraft:sandbox' :
+		switch( spaceTag )
+		{
+			case 'sandbox' :
 
-			return 'rw';
-
-		case 'meshcraft:home' :
-
-			return user === config.admin ? 'rw' : 'ro';
-
-		default :
-
-			var sp = spacename.split(':', 2);
-
-			if( sp.length < 2 )
-			{
-				return 'no';
-			}
-
-			if( user == sp[ 0 ] )
-			{
 				return 'rw';
-			}
 
-			return 'no';
+			case 'home' :
+
+				return user === config.admin ? 'rw' : 'ro';
+
+			default :
+
+				return 'no';
+		}
 	}
+
+	if( user === spaceUser )
+	{
+		return 'rw';
+	}
+
+	return 'no';
 };
 
 
 /*
 | Executes a get command.
 */
-Server.prototype.cmdGet = function(cmd, _)
+Server.prototype.cmdGet =
+	function(
+		cmd,
+	_)
 {
-	var time     = cmd.time;
-	var user     = cmd.user;
-	var passhash = cmd.passhash;
+	var time =
+		cmd.time;
 
-	if( !Jools.is(cmd.user) )
+	var user =
+		cmd.user;
+
+	var passhash =
+		cmd.passhash;
+
+	if( !Jools.is( cmd.user ) )
 	{
 		throw Jools.reject('user missing');
 	}
 
-	if( !Jools.is(cmd.passhash) )
+	if( !Jools.is( cmd.passhash ) )
 	{
 		throw Jools.reject('passhash missing');
 	}
 
-	if( !Jools.is(this.$users[user]) || passhash !== this.$users[user].pass )
+	if(
+		!Jools.is(this.$users[user]) ||
+		passhash !== this.$users[user].pass
+	)
 	{
-		throw Jools.reject('wrong user/password');
+		throw Jools.reject( 'wrong user/password' );
 	}
 
 	// TODO dont call it "time"
@@ -2141,16 +2301,32 @@ Server.prototype.cmdGet = function(cmd, _)
 		throw Jools.reject('path missing');
 	}
 
-	var spacename = cmd.space;
+	var spaceUser =
+		cmd.spaceUser;
 
-	var access = this.testAccess(cmd.user, spacename);
+	var spaceTag =
+		cmd.spaceTag;
+
+	// TODO test spaceUser/Tag
+
+	var spaceName =
+		cmd.spaceUser + ':'  + cmd.spaceTag;
+
+	var access =
+		this.testAccess(
+			cmd.user,
+			spaceUser,
+			spaceTag
+		);
+
+	console.log('XX', cmd.user, spaceUser, spaceTag );
 
 	if( access == 'no' )
 	{
 		throw Jools.reject('no access');
 	}
 
-	var space = this.$spaces[spacename];
+	var space = this.$spaces[ spaceName ];
 
 	if( !space )
 	{

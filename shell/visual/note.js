@@ -49,14 +49,12 @@ if( typeof( window ) === 'undefined' )
 var Note =
 Visual.Note =
 	function(
-		spacename,
 		twig,
 		path
 	)
 {
 	Visual.DocItem.call(
 		this,
-		spacename,
 		twig,
 		path
 	);

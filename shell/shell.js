@@ -434,13 +434,16 @@ Shell.prototype._drawGreenScreen =
 	);
 
 	fabric.edge(
-		[
-			{
-				border : 0,
-				width  : 1,
-				color  : 'black'
-			}
-		],
+		{
+			edge :
+			[
+				{
+					border : 0,
+					width  : 1,
+					color  : 'black'
+				}
+			]
+		},
 		this,
 		'sketchFrowny',
 		Euclid.View.proper,
@@ -1145,7 +1148,10 @@ Shell.prototype.setUser =
 			this.$space.spacename.substr( 0, 9 ) !== 'meshcraft'
 		)
 		{
-			this.moveToSpace( 'meshcraft:home' );
+			this.moveToSpace(
+				'meshcraft',
+				'home'
+			);
 		}
 
 		window.localStorage.setItem(
@@ -1204,12 +1210,13 @@ Shell.prototype.changeSpaceZoom =
 Shell.prototype.onload =
 	function( )
 {
-	this.peer = new Peer(
-		new IFace(
-			this,
-			this
-		)
-	);
+	this.peer =
+		new Peer(
+			new IFace(
+				this,
+				this
+			)
+		);
 
 	var user =
 		window.localStorage.getItem( 'user' );
@@ -1242,50 +1249,36 @@ Shell.prototype.onload =
 */
 Shell.prototype.moveToSpace =
 	function(
-		name
+		spaceUser,
+		spaceTag
 	)
 {
 	var self = this;
 
-	if( name === null )
-	{
-		name = self.$space.spacename;
-
-		if(
-			this.$user.substr( 0, 5 ) === 'visit' &&
-			(
-				name !== 'meshcraft:home' &&
-				name !== 'meshcraft:sandbox'
-			)
-		)
-		{
-			name = 'meshcraft:home';
-		}
-	}
-	else
-	{
-		self._$disc.message(
-			'Moving to "' + name + '" ...'
-		);
-	}
-
-	// TODO show move to message
+	// TODO make message a function of shell
+	self._$disc.message(
+		'Moving to ' + spaceUser + ':' + spaceTag + ' ...'
+	);
 
 	// TODO replace by callback object
 	this.peer.aquireSpace(
-		name,
+		spaceUser,
+		spaceTag,
 		function( err, val )
 		{
 			if( err !== null )
 			{
 				self.greenscreen(
-					'Cannot aquire space: ' + err.message
+					'Cannot move to space: ' + err.message
 				);
 
 				return;
 			}
 
-			if( val.name !== name )
+			if(
+				val.spaceUser !== spaceUser ||
+				val.spaceTag !== spaceTag
+			)
 			{
 				throw new Error(
 					'server served wrong space!'
@@ -1298,12 +1291,14 @@ Shell.prototype.moveToSpace =
 			self.$space =
 				new Visual.Space(
 					tree.root,
-					name,
+					spaceUser,
+					spaceTag,
 					val.access
 				);
 
 			self.arrivedAtSpace(
-				name,
+				spaceUser,
+				spaceTag,
 				val.access
 			);
 
@@ -1354,7 +1349,10 @@ Shell.prototype.onAuth =
 
 	if( !this.$space )
 	{
-		this.moveToSpace( 'meshcraft:home' );
+		this.moveToSpace(
+			'meshcraft',
+			'home'
+		);
 	}
 };
 
@@ -1398,7 +1396,10 @@ Shell.prototype.logout =
 				res.passhash
 			);
 
-			self.moveToSpace( null );
+			self.moveToSpace(
+				'meshcraft',
+				'home'
+			);
 
 			self.poke( );
 		}
@@ -1453,15 +1454,18 @@ Shell.prototype.setSelection =
 */
 Shell.prototype.arrivedAtSpace =
 	function(
-		name,
+		spaceUser,
+		spaceTag,
 		access
 	)
 {
 	this._$disc.arrivedAtSpace(
-		name,
+		spaceUser,
+		spaceTag,
 		access
 	);
 
+	// XXX
 	this._$forms.space.arrivedAtSpace(
 		name,
 		access

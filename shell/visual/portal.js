@@ -52,14 +52,12 @@ if( typeof( window ) === 'undefined' )
 var Portal =
 Visual.Portal =
 	function(
-		spacename,
 		twig,
 		path
 	)
 {
 	Visual.Item.call(
 		this,
-		spacename,
 		twig,
 		path
 	);
@@ -448,7 +446,29 @@ Portal.prototype.click =
 			shell.$space,
 
 		focus =
-			space.focusedItem( );
+			space.focusedItem( ),
+
+		moveToButton =
+			this._$moveToButton;
+
+		pp =
+			view
+				.depoint( p )
+				.sub( zone.pnw );
+
+	if(
+		moveToButton.shape
+			.within(
+				Euclid.View.proper,
+				pp
+			)
+	)
+	{
+		this._moveTo( );
+
+		return true;
+	}
+
 
 	if( focus !== this )
 	{
@@ -695,7 +715,7 @@ Portal.prototype.pointingHover =
 	}
 
 	var
-		mtb =
+		moveToButton =
 			this._$moveToButton,
 
 		pp =
@@ -704,7 +724,7 @@ Portal.prototype.pointingHover =
 				.sub( zone.pnw );
 
 	if(
-		mtb.shape
+		moveToButton.shape
 			.within(
 				Euclid.View.proper,
 				pp
@@ -2023,5 +2043,14 @@ Portal.prototype._getOffsetAt =
 	return a;
 };
 
+
+/*
+| Issues the moveTo action.
+*/
+Portal.prototype._moveTo =
+	function( )
+{
+	console.log( 'XXX' );
+};
 
 } )( );

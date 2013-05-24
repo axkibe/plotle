@@ -43,14 +43,12 @@ if ( typeof( window ) === 'undefined' )
 var Doc =
 Visual.Doc =
 	function(
-		spacename,
 		twig,
 		path
 	)
 {
 	Visual.Base.call(
 		this,
-		spacename,
 		twig,
 		path
 	);
@@ -84,7 +82,6 @@ Visual.Doc =
 
 		sub[ k ] =
 			new Visual.Para(
-				spacename,
 				copse[ k ],
 				new Path( path, '++', k )
 			);
@@ -131,9 +128,6 @@ Doc.prototype.update =
 	this.$sub =
 		{ };
 
-	var spacename =
-		this.spacename;
-
 	var copse =
 		twig.copse;
 
@@ -155,7 +149,6 @@ Doc.prototype.update =
 		{
 			o =
 				new Visual.Para(
-					spacename,
 					s,
 					new Path( this.path, '++', k )
 				);

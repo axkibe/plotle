@@ -39,7 +39,10 @@ if( typeof( window ) === 'undefined' )
 Peer =
 	function( iface )
 {
-	this.spacename =
+	this.spaceUser =
+		null;
+
+	this.spaceTag =
 		null;
 
 	this._iface =
@@ -213,14 +216,20 @@ Peer.prototype.register =
 */
 Peer.prototype.aquireSpace =
 	function(
-		name,
+		spaceUser,
+		spaceTag,
 		callback
 	)
 {
-	this.spacename = name;
+	this.spaceUser =
+		spaceUser;
+
+	this.spaceTag =
+		spaceTag;
 
 	this._iface.aquireSpace(
-		name,
+		spaceUser,
+		spaceTag,
 		callback
 	);
 };
@@ -249,13 +258,17 @@ Peer.prototype.get =
 */
 Peer.prototype.newNote =
 	function(
-		spacename,
+		spaceUser,
+		spaceTag,
 		zone
 	)
 {
-	if ( spacename !== this.spacename )
+	if (
+		spaceUser !== this.spaceUser ||
+		spaceTag !== this.spaceTag
+	)
 	{
-		throw new Error('newNote() wrong spacename');
+		throw new Error('newNote() wrong space');
 	}
 
 	var chgX = this._iface.alter(
@@ -309,16 +322,20 @@ Peer.prototype.newNote =
 */
 Peer.prototype.newPortal =
 	function(
-		spacename,  // the space the portal is to be created in
+		spaceUser,  // the space the portal is to be created in
+		spaceTag,   // the space the portal is to be created in
 		zone,       // the zone of the potal
-		spaceUser,  // the user of the space the portal leads to
-		spaceTag    // the tag of the space the portal leads to
+		destSpaceUser,  // the user of the space the portal leads to
+		destSpaceTag    // the tag of the space the portal leads to
 	)
 {
-	if ( spacename !== this.spacename )
+	if (
+		spaceUser !== this.spaceUser ||
+		spaceTag  !== this.spaceTag
+	)
 	{
 		throw new Error(
-			'newPortal() wrong spacename'
+			'newPortal() wrong space'
 		);
 	}
 
@@ -334,10 +351,10 @@ Peer.prototype.newPortal =
 						zone,
 
 					spaceUser :
-						spaceUser,
+						destSpaceUser,
 
 					spaceTag :
-						spaceTag
+						destSpaceTag
 				},
 
 				rank :
@@ -433,44 +450,58 @@ Peer.prototype.setPNW =
 | Creates a new label.
 */
 Peer.prototype.newLabel = function(
-	spacename,
+	spaceUser,
+	spaceTag,
 	pnw,
 	text,
 	fontsize
 )
 {
-	if ( spacename !== this.spacename )
-		{ throw new Error('newLabel() wrong spacename'); }
+	if (
+		spaceUser !== this.spaceUser ||
+		spaceTag !== this.spaceTag
+	)
+	{
+		throw new Error(
+			'newLabel() wrong space'
+		);
+	}
 
-	var chgX = this._iface.alter(
-		{
-			val           :
+	var chgX =
+		this._iface.alter(
 			{
-				type      : 'Label',
-				fontsize  : fontsize,
-				pnw       : pnw,
-				doc       :
+				val :
 				{
-					type  : 'Doc',
-					copse :
+					type      : 'Label',
+					fontsize  : fontsize,
+					pnw       : pnw,
+					doc       :
 					{
-						'1' :
+						type  : 'Doc',
+						copse :
 						{
-							type: 'Para',
-							text: text
-						}
-					},
-					ranks : [
-						'1'
-					]
-				}
-			},
-			rank : null
+							'1' :
+							{
+								type: 'Para',
+								text: text
+							}
+						},
+						ranks : [
+							'1'
+						]
+					}
+				},
+
+				rank :
+					null
 		},
 
 		{
-			path: new Path( [ '$new' ] ),
-			rank: 0
+			path :
+				new Path( [ '$new' ] ),
+
+			rank :
+				0
 		}
 	);
 
@@ -501,7 +532,8 @@ Peer.prototype.redo = function( )
 */
 Peer.prototype.newRelation =
 	function(
-		spacename,
+		spaceUser,
+		spaceTag,
 		pnw,
 		text,
 		fontsize,
@@ -509,39 +541,65 @@ Peer.prototype.newRelation =
 		item2key
 	)
 {
-	if( spacename !== this.spacename )
+	if (
+		spaceUser !== this.spaceUser ||
+		spaceTag !== this.spaceTag
+	)
 	{
-		throw new Error('newRelation( ) wrong spacename');
+		throw new Error(
+			'newRelation() wrong space'
+		);
 	}
 
 	var chgX = this._iface.alter(
 		{
-			val           :
+			val :
 			{
-				type      : 'Relation',
-				item1key  : item1key,
-				item2key  : item2key,
-				pnw       : pnw,
-				fontsize  : fontsize,
-				doc       :
+				type :
+					'Relation',
+
+				item1key :
+					item1key,
+
+				item2key :
+					item2key,
+
+				pnw :
+					pnw,
+
+				fontsize :
+					fontsize,
+
+				doc :
 				{
-					type  : 'Doc',
+					type :
+						'Doc',
+
 					copse :
 					{
 						'1' :
 						{
-							type : 'Para',
-							text : text
+							type :
+								'Para',
+
+							text :
+								text
 						}
 					},
-					ranks : [ '1' ]
+
+					ranks :
+						[ '1' ]
 				}
 			},
-			rank : null
+			rank :
+				null
 		},
 		{
-			path : new Path( [ '$new' ] ),
-			rank : 0
+			path :
+				new Path( [ '$new' ] ),
+
+			rank :
+				0
 		}
 	);
 
