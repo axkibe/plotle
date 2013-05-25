@@ -521,7 +521,8 @@ MoveTo.prototype.pushButton =
 		case 'meshcraftHomeButton' :
 
 			shell.moveToSpace(
-				'meshcraft:home'
+				'meshcraft',
+				'home'
 			);
 
 
@@ -530,7 +531,8 @@ MoveTo.prototype.pushButton =
 		case 'meshcraftSandboxButton' :
 
 			shell.moveToSpace(
-				'meshcraft:sandbox'
+				'meshcraft',
+				'sandbox'
 			);
 
 			break;
@@ -538,7 +540,8 @@ MoveTo.prototype.pushButton =
 		case 'userHomeButton' :
 
 			shell.moveToSpace(
-				shell.bridge.getUsername( ) + ':home'
+				shell.bridge.getUsername( ),
+				'home'
 			);
 
 			break;

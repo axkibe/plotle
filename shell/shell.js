@@ -1465,9 +1465,9 @@ Shell.prototype.arrivedAtSpace =
 		access
 	);
 
-	// XXX
 	this._$forms.space.arrivedAtSpace(
-		name,
+		spaceUser,
+		spaceTag,
 		access
 	);
 
