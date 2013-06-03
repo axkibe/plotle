@@ -53,6 +53,25 @@ Jools.subclass(
 
 
 /*
+| Close control
+*/
+var closeButton =
+{
+	width :
+		50,
+
+	height :
+		50,
+
+	w :
+		180,
+
+	n :
+		38
+};
+
+
+/*
 | Layout
 */
 User.prototype.layout =
@@ -276,6 +295,114 @@ User.prototype.layout =
 				y :
 					10
 			}
+		},
+
+		'closeButton' :
+		{
+			type :
+				'Button',
+
+			style :
+				'genericButton',
+
+			frame :
+			{
+				type :
+					'Frame',
+
+				pnw  :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'c',
+
+					x :
+						closeButton.w,
+
+					y :
+						closeButton.n
+				},
+
+				pse  :
+				{
+					type :
+						'Point',
+
+					anchor :
+						'c',
+
+					x :
+						closeButton.w + closeButton.width,
+
+					y :
+						closeButton.n + closeButton.height
+				}
+			},
+
+			caption :
+			{
+				type :
+					'Label',
+
+				text :
+					'close',
+
+				font :
+					fontPool.get( 14, 'cm' ),
+
+				pos  :
+				{
+					type:
+						'Point',
+
+					anchor:
+						'c',
+
+					x :
+						0,
+
+					y :
+						0
+				}
+			},
+
+			shape :
+			{
+				type :
+					'Ellipse',
+
+				pnw :
+				{
+					type:
+						'Point',
+
+					anchor:
+						'nw',
+
+					x :
+						0,
+
+					y :
+						0
+				},
+
+				pse :
+				{
+					type:
+						'Point',
+
+					anchor:
+						'se',
+
+					x :
+						-1,
+
+					y :
+						-1
+				}
+			}
 		}
 	},
 
@@ -289,7 +416,8 @@ User.prototype.layout =
 		'visitor4',
 		'greeting1',
 		'greeting2',
-		'greeting3'
+		'greeting3',
+		'closeButton'
 	]
 };
 
@@ -329,6 +457,31 @@ User.prototype.setUsername =
 		$sub.greeting1.setVisible( false );
 		$sub.greeting2.setVisible( false );
 		$sub.greeting3.setVisible( false );
+	}
+};
+
+
+/*
+| A button of the form has been pushed.
+*/
+User.prototype.pushButton =
+	function(
+		buttonName
+		// shift,
+		// ctrl
+	)
+{
+	switch( buttonName )
+	{
+		case 'closeButton' :
+
+			shell.bridge.changeMode( 'Normal' );
+
+			break;
+
+		default :
+
+			throw new Error( 'unknown button pushed: ' + buttonName );
 	}
 };
 

@@ -1,5 +1,7 @@
 /*
-| The user's form.
+| The welcome form.
+|
+| Shown only after successfull signing up.
 |
 | Authors: Axel Kittenberger
 */
@@ -9,8 +11,7 @@
 | Export
 */
 var Forms;
-Forms =
-	Forms || { };
+Forms = Forms || { };
 
 
 /*
@@ -22,7 +23,6 @@ var Jools;
 var Path;
 var shell;
 
-
 /*
 | Capsule
 */
@@ -33,8 +33,8 @@ var shell;
 /*
 | The login form
 */
-var Space =
-Forms.Space =
+var Welcome =
+Forms.Welcome =
 	function(
 		// free strings
 	)
@@ -47,7 +47,7 @@ Forms.Space =
 
 
 Jools.subclass(
-	Space,
+	Welcome,
 	Forms.Form
 );
 
@@ -74,7 +74,7 @@ var closeButton =
 /*
 | Layout
 */
-Space.prototype.layout =
+Welcome.prototype.layout =
 {
 	type :
 		'Layout',
@@ -87,7 +87,7 @@ Space.prototype.layout =
 				'Label',
 
 			text :
-				'',
+				'Welcome',
 
 			font :
 				fontPool.get( 22, 'ca' ),
@@ -114,7 +114,7 @@ Space.prototype.layout =
 				'Label',
 
 			text :
-				'In future space settings can be altered here.',
+				'Your registration was successful :-)',
 
 			font :
 				fontPool.get( 16, 'ca' ),
@@ -255,9 +255,29 @@ Space.prototype.layout =
 
 
 /*
+| Name of the form.
+*/
+Welcome.prototype.name =
+	'welcome';
+
+/*
+| sets the username
+*/
+Welcome.prototype.setUsername =
+	function( username )
+{
+	var $sub =
+		this.$sub;
+
+	$sub.headline.setText(
+		'Welcome ' + username + '!'
+	);
+};
+
+/*
 | A button of the form has been pushed.
 */
-Space.prototype.pushButton =
+Welcome.prototype.pushButton =
 	function(
 		buttonName
 		// shift,
@@ -280,30 +300,4 @@ Space.prototype.pushButton =
 
 
 
-/*
-| Name of the form.
-*/
-Space.prototype.name =
-	'space';
-
-
-/*
-| Finished loading a space.
-*/
-Space.prototype.arrivedAtSpace =
-	function(
-		spaceUser,
-		spaceTag
-		// access
-	)
-{
-	var $sub =
-		this.$sub;
-
-	$sub.headline.setText(
-		spaceUser + ':' + spaceTag
-	);
-};
-
 } )( );
-

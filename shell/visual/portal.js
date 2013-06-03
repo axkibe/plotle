@@ -2050,7 +2050,10 @@ Portal.prototype._getOffsetAt =
 Portal.prototype._moveTo =
 	function( )
 {
-	console.log( 'XXX' );
+	shell.moveToSpace(
+		this.twig.spaceUser,
+		this.twig.spaceTag
+	);
 };
 
 } )( );

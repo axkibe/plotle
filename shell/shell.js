@@ -1145,7 +1145,7 @@ Shell.prototype.setUser =
 	{
 		if(
 			this.$space &&
-			this.$space.spacename.substr( 0, 9 ) !== 'meshcraft'
+			this.$space.spaceUser !== 'meshcraft'
 		)
 		{
 			this.moveToSpace(
@@ -1253,61 +1253,94 @@ Shell.prototype.moveToSpace =
 		spaceTag
 	)
 {
-	var self = this;
-
 	// TODO make message a function of shell
-	self._$disc.message(
+	this._$disc.message(
 		'Moving to ' + spaceUser + ':' + spaceTag + ' ...'
 	);
 
-	// TODO replace by callback object
 	this.peer.aquireSpace(
 		spaceUser,
 		spaceTag,
-		function( err, val )
-		{
-			if( err !== null )
-			{
-				self.greenscreen(
-					'Cannot move to space: ' + err.message
-				);
+		this
+	);
+};
 
-				return;
-			}
 
-			if(
-				val.spaceUser !== spaceUser ||
-				val.spaceTag !== spaceTag
-			)
-			{
-				throw new Error(
-					'server served wrong space!'
-				);
-			}
+/*
+| Receiving a moveTo event
+*/
+Shell.prototype.onAquireSpace =
+	function(
+		asw
+	)
+{
+	switch( asw.status ) {
 
-			var tree =
-				val.tree;
+		case 'served' :
 
-			self.$space =
-				new Visual.Space(
-					tree.root,
-					spaceUser,
-					spaceTag,
-					val.access
-				);
+			break;
+		
+		case 'nonexistent' :
 
-			self.arrivedAtSpace(
-				spaceUser,
-				spaceTag,
-				val.access
+			console.log( 'nonexistent' );
+
+			return;
+
+		case 'no access' :
+
+			console.log( 'noaccess' );
+
+			return;
+
+		case 'connection fail' :
+
+			this.greenscreen(
+				'Connection failed: ' +
+				asw.message
 			);
 
-			self._$disc.setSpaceZoom( 0 );
+			return;
 
-			self._draw( );
-		}
+		default :
+
+			this.greenscreen(
+				'Unknown aquireSpace() status: ' +
+				asw.status + ': ' + asw.message
+			);
+
+			return;
+	}
+		
+	var
+		spaceUser =
+			asw.spaceUser,
+
+		spaceTag =
+			asw.spaceTag,
+
+		tree =
+			asw.tree,
+
+		access =
+			asw.access;
+
+	this.$space =
+		new Visual.Space(
+			tree.root,
+			spaceUser,
+			spaceTag,
+			access
+		);
+
+	this.arrivedAtSpace(
+		spaceUser,
+		spaceTag,
+		access
 	);
 
+	this._$disc.setSpaceZoom( 0 );
+
+	this._draw( );
 };
 
 

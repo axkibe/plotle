@@ -1,6 +1,5 @@
 /*
 | The interface that talks asynchronously with the server.
-| This is the normal way the meshcraft shell operates.
 |
 | Authors: Axel Kittenberger
 */
@@ -9,23 +8,25 @@
 /*
 | Export
 */
-var IFace;
+var
+	IFace;
 
 
 /*
 | Imports
 */
-var Change;
-var ChangeRay;
-var MeshMashine;
-var Meshverse;
-var Path;
-var Sign;
-var Tree;
-var Jools;
-var config;
-var shell;
-var system;
+var
+	Change,
+	ChangeRay,
+	MeshMashine,
+	Meshverse,
+	Path,
+	Sign,
+	Tree,
+	Jools,
+	config,
+	shell,
+	system;
 
 
 /*
@@ -365,13 +366,11 @@ IFace.prototype.aquireSpace =
 	function(
 		spaceUser,
 		spaceTag,
-		callback
+		onAquireSpaceReceiver
 	)
 {
 	var self =
 		this;
-
-	console.log('AQ', spaceUser, spaceTag);
 
 	// aborts the current running update.
 	if( self._$updateAjax )
@@ -384,33 +383,6 @@ IFace.prototype.aquireSpace =
 		self._$updateAjax =
 			null;
 	}
-
-	self.$spaceUser =
-		spaceUser;
-
-	self.$spaceTag =
-		spaceTag;
-
-	self.$cSpace =
-		null;
-
-	self.$rSpace =
-		null;
-
-	self._$outbox =
-		[ ];
-
-	self.$postbox =
-		[ ];
-
-	self.$mseq =
-		-1;
-
-	self._$undo =
-		[ ];
-
-	self._$redo =
-		[ ];
 
     var ajax =
 	self.$aquireAjax =
@@ -427,11 +399,14 @@ IFace.prototype.aquireSpace =
 		'application/x-www-form-urlencoded'
 	);
 
-    ajax.onreadystatechange = function( )
+    ajax.onreadystatechange =
+	function( )
 	{
 		var asw;
 
-		if( ajax.readyState !== 4 )
+		if( ajax.readyState !== 4 ||
+			self.$aquireAjax !== ajax
+		)
 		{
 			return;
 		}
@@ -446,16 +421,17 @@ IFace.prototype.aquireSpace =
 				'aquireSpace.status == ' + ajax.status
 			);
 
-			callback(
-				{
-					error :
-						'connection',
-
+			onAquireSpaceReceiver.onAquireSpace(
+				Jools.immute({
 					status :
-						ajax.status
-				},
-				null
+						'connection fail',
+
+					message :
+						'connection fail: ' + ajax.status
+				})
 			);
+
+			self._update( );
 
 			return;
 		}
@@ -469,11 +445,9 @@ IFace.prototype.aquireSpace =
 			self.$aquireAjax =
 				null;
 
-			shell.greenscreen(
+			throw new Error(
 				'Server delivered no JSON.'
 			);
-
-			return;
 		}
 
 		Jools.log(
@@ -487,53 +461,80 @@ IFace.prototype.aquireSpace =
 			self.$aquireAjax =
 				null;
 
-			shell.greenscreen(
+			throw new Error(
 				'Server not OK: ' + asw.message
 			);
-
-			return;
 		}
 
-		self.aquireSpaceActive =
-			false;
+		switch( asw.status )
+		{
+			case 'nonexistent' :
+			case 'no access' :
+				onAquireSpaceReceiver.onAquireSpace(
+					Jools.immute({
+						status :
+							asw.status,
+					})
+				);
 
-		self.$remoteTime =
-			asw.time;
+				self._update( );
+
+				return;
+		}
 
 		if( asw.node.type !== 'Space' )
 		{
-			callback(
-				{
-					error : 'nospace'
-				},
-				null
-			);
-			return;
+			throw new Error(' aquireSpace(): server served no space ');
 		}
 
-		self.$cSpace = self.$rSpace =
+		self.$cSpace =
+		self.$rSpace =
 			new Tree(
 				asw.node,
 				Meshverse
 			);
 
-		callback(
-			null,
-			Jools.immute(
-				{
-					tree :
-						self.$cSpace,
+		self.$spaceUser =
+			spaceUser;
 
-					spaceUser :
-						spaceUser,
+		self.$spaceTag =
+			spaceTag;
 
-					spaceTag :
-						spaceTag,
+		self._$outbox =
+			[ ];
 
-					access :
-						asw.access
-				}
-			)
+		self.$postbox =
+			[ ];
+
+		self.$mseq =
+			-1;
+
+		self.$remoteTime =
+			asw.time;
+
+		self._$undo =
+			[ ];
+
+		self._$redo =
+			[ ];
+
+		onAquireSpaceReceiver.onAquireSpace(
+			Jools.immute({
+				status :
+					asw.status,
+
+				spaceUser :
+					spaceUser,
+
+				spaceTag :
+					spaceTag,
+
+				tree :
+					self.$cSpace,
+
+				access :
+					asw.access
+			})
 		);
 
 		// waits a second before going into update cycle, so safari
@@ -615,7 +616,9 @@ IFace.prototype._update =
 		throw new Error( 'double update?' );
 	}
 
-	var ajax = self._$updateAjax = new XMLHttpRequest( );
+	var ajax =
+	self._$updateAjax =
+		 new XMLHttpRequest( );
 
 	ajax.open(
 		'POST',
@@ -642,7 +645,9 @@ IFace.prototype._update =
 
 		// call was willingfull aborted
 		if( ajax.$abort )
-			{ return; }
+		{
+			return;
+		}
 
 		self._$updateAjax = null;
 

@@ -143,7 +143,7 @@ Item.prototype.checkHandles =
 			z =
 				h[ d ];
 
-		if( !z ) // XXX
+		if( !z )
 		{
 			continue;
 		}

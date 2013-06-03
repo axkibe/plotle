@@ -621,7 +621,6 @@ CreateDisc.prototype._weave =
 	{
 		var button = buttons[ name ];
 
-		// XXX
 		switch( name )
 		{
 			case 'note' :

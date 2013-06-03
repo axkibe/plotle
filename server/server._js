@@ -1295,12 +1295,12 @@ Server.prototype.cmdAlter =
 	// fits the cmd into data structures
 	try {
 		// FIXME
-		if (Jools.isArray(chgX))
+		if( Jools.isArray( chgX ) )
 		{
 			throw new Error('Array chgX not yet supported');
 		}
 
-		chgX = new MeshMashine.Change(chgX);
+		chgX = new MeshMashine.Change( chgX );
 
 	}
 	catch( err )
@@ -2263,14 +2263,21 @@ Server.prototype.cmdGet =
 		cmd,
 	_)
 {
-	var time =
-		cmd.time;
+	var
+		time =
+			cmd.time,
 
-	var user =
-		cmd.user;
+		user =
+			cmd.user,
 
-	var passhash =
-		cmd.passhash;
+		passhash =
+			cmd.passhash,
+	
+		spaceUser =
+			cmd.spaceUser,
+
+		spaceTag =
+			cmd.spaceTag;
 
 	if( !Jools.is( cmd.user ) )
 	{
@@ -2279,33 +2286,27 @@ Server.prototype.cmdGet =
 
 	if( !Jools.is( cmd.passhash ) )
 	{
-		throw Jools.reject('passhash missing');
+		throw Jools.reject( 'passhash missing' );
 	}
 
 	if(
-		!Jools.is(this.$users[user]) ||
-		passhash !== this.$users[user].pass
+		!Jools.is( this.$users[ user ] ) ||
+		passhash !== this.$users[ user ].pass
 	)
 	{
 		throw Jools.reject( 'wrong user/password' );
 	}
 
 	// TODO dont call it "time"
-	if( !Jools.is(cmd.time) )
+	if( !Jools.is( cmd.time ) )
 	{
-		throw Jools.reject('time missing');
+		throw Jools.reject( 'time missing' );
 	}
 
-	if( !Jools.is(cmd.path) )
+	if( !Jools.is( cmd.path ) )
 	{
-		throw Jools.reject('path missing');
+		throw Jools.reject( 'path missing' );
 	}
-
-	var spaceUser =
-		cmd.spaceUser;
-
-	var spaceTag =
-		cmd.spaceTag;
 
 	// TODO test spaceUser/Tag
 
@@ -2319,40 +2320,63 @@ Server.prototype.cmdGet =
 			spaceTag
 		);
 
-	console.log('XX', cmd.user, spaceUser, spaceTag );
-
 	if( access == 'no' )
 	{
-		throw Jools.reject('no access');
+		return {
+			ok :
+				true,
+
+			access :
+				access,
+			
+			status :
+				'no access'
+		};
 	}
 
-	var space = this.$spaces[ spaceName ];
+	var space =
+		this.$spaces[ spaceName ];
 
 	if( !space )
 	{
-		throw Jools.reject('unknown space');
+		return {
+			ok :
+				true,
+
+			access :
+				access,
+
+			status :
+				'nonexistent'
+		};
 	}
 
-	var changes = space.$changes;
-	var seqZ = space.$seqZ;
+	var
+		changes =
+			space.$changes,
+
+		seqZ =
+			space.$seqZ;
 
 	if( time === -1 )
 	{
 		time = seqZ;
 	}
-	else if( !(time >= 0 && time <= seqZ) )
+	else if( !( time >= 0 && time <= seqZ ) )
 	{
-		throw Jools.reject('invalid time');
+		throw Jools.reject( 'invalid time' );
 	}
 
-	var tree = space.$tree;
+	var tree =
+		space.$tree;
 
 	// if the requested tree is not the latest, replay it backwards
-	for (var a = seqZ - 1; a >= time; a--)
+	for( var a = seqZ - 1; a >= time; a-- )
 	{
-		var chgX = changes[ a ].chgX;
+		var chgX =
+			changes[ a ].chgX;
 
-		for (var b = 0; b < chgX.length; b++)
+		for( var b = 0; b < chgX.length; b++ )
 		{
 			tree = chgX.
 				get( b ).
@@ -2374,10 +2398,20 @@ Server.prototype.cmdGet =
 	}
 
 	return {
-		ok : true,
-		access : access,
-		time : time,
-		node : node
+		ok :
+			true,
+
+		status :
+			'served',
+
+		access :
+			access,
+
+		time :
+			time,
+
+		node :
+			node
 	};
 };
 

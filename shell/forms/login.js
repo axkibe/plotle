@@ -758,7 +758,7 @@ Login.prototype.onAuth =
 
 	this.clear( );
 
-	shell.moveToSpace( null );
+	shell.moveToSpace( 'meshcraft', 'home' );
 
 	shell.bridge.changeMode( 'Normal' );
 

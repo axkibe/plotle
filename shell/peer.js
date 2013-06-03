@@ -37,14 +37,10 @@ if( typeof( window ) === 'undefined' )
 | Constructor
 */
 Peer =
-	function( iface )
+	function(
+		iface
+	)
 {
-	this.spaceUser =
-		null;
-
-	this.spaceTag =
-		null;
-
 	this._iface =
 		iface;
 
@@ -218,19 +214,13 @@ Peer.prototype.aquireSpace =
 	function(
 		spaceUser,
 		spaceTag,
-		callback
+		onAquireSpaceReceiver
 	)
 {
-	this.spaceUser =
-		spaceUser;
-
-	this.spaceTag =
-		spaceTag;
-
 	this._iface.aquireSpace(
 		spaceUser,
 		spaceTag,
-		callback
+		onAquireSpaceReceiver
 	);
 };
 
@@ -263,54 +253,52 @@ Peer.prototype.newNote =
 		zone
 	)
 {
-	if (
-		spaceUser !== this.spaceUser ||
-		spaceTag !== this.spaceTag
-	)
-	{
-		throw new Error('newNote() wrong space');
-	}
-
-	var chgX = this._iface.alter(
-		{
-			val : {
-				type :
-					'Note',
-
-				fontsize :
-					13,
-
-				zone :
-					zone,
-				doc  :
+	var chgX =
+		this._iface.alter(
+			{
+				val :
 				{
 					type :
-						'Doc',
+						'Note',
 
-					copse :
-						{
-							'1' :
+					fontsize :
+						13,
+
+					zone :
+						zone,
+
+					doc  :
+					{
+						type :
+							'Doc',
+
+						copse :
 							{
-								type : 'Para',
-								text : ''
-							}
-						},
+								'1' :
+								{
+									type :
+										'Para',
 
-					ranks :
-						[ '1' ]
-				}
+									text :
+										''
+								}
+							},
+
+						ranks :
+							[ '1' ]
+					}
+				},
+
+				rank :
+					null
 			},
+			{
+				path :
+					new Path( [ '$new' ] ),
 
-			rank :
-				null
-		},
-		{
-			path :
-				new Path( [ '$new' ] ),
-
-			rank :
-				0
-		}
+				rank :
+					0
+			}
 	);
 
 	return chgX.trg.path.get( -1 );
@@ -329,16 +317,6 @@ Peer.prototype.newPortal =
 		destSpaceTag    // the tag of the space the portal leads to
 	)
 {
-	if (
-		spaceUser !== this.spaceUser ||
-		spaceTag  !== this.spaceTag
-	)
-	{
-		throw new Error(
-			'newPortal() wrong space'
-		);
-	}
-
 	var chgX =
 		this._iface.alter(
 			{
@@ -384,7 +362,8 @@ Peer.prototype.setZone =
 {
 	this._iface.alter(
 		{
-			val : zone
+			val :
+				zone
 		},
 		{
 			path :
@@ -400,6 +379,7 @@ Peer.prototype.setZone =
 
 /*
 | Sets an items fontsize.
+| XXXX
 */
 Peer.prototype.setFontSize =
 	function(
@@ -412,11 +392,12 @@ Peer.prototype.setFontSize =
 			val  : fontsize
 		},
 		{
-			path : new Path(
-				itemPath,
-				'++',
-				'fontsize'
-			)
+			path :
+				new Path(
+					itemPath,
+					'++',
+					'fontsize'
+				)
 		}
 	);
 };
@@ -449,24 +430,15 @@ Peer.prototype.setPNW =
 /*
 | Creates a new label.
 */
-Peer.prototype.newLabel = function(
-	spaceUser,
-	spaceTag,
-	pnw,
-	text,
-	fontsize
-)
-{
-	if (
-		spaceUser !== this.spaceUser ||
-		spaceTag !== this.spaceTag
+Peer.prototype.newLabel =
+	function(
+		spaceUser,
+		spaceTag,
+		pnw,
+		text,
+		fontsize
 	)
-	{
-		throw new Error(
-			'newLabel() wrong space'
-		);
-	}
-
+{
 	var chgX =
 		this._iface.alter(
 			{
@@ -512,7 +484,8 @@ Peer.prototype.newLabel = function(
 /*
 | Undoes a change.
 */
-Peer.prototype.undo = function( )
+Peer.prototype.undo =
+	function( )
 {
 	this._iface.undo( );
 };
@@ -521,7 +494,8 @@ Peer.prototype.undo = function( )
 /*
 | Redoes a change.
 */
-Peer.prototype.redo = function( )
+Peer.prototype.redo =
+	function( )
 {
 	this._iface.redo( );
 };
@@ -541,67 +515,58 @@ Peer.prototype.newRelation =
 		item2key
 	)
 {
-	if (
-		spaceUser !== this.spaceUser ||
-		spaceTag !== this.spaceTag
-	)
-	{
-		throw new Error(
-			'newRelation() wrong space'
-		);
-	}
-
-	var chgX = this._iface.alter(
-		{
-			val :
+	var chgX =
+		this._iface.alter(
 			{
-				type :
-					'Relation',
-
-				item1key :
-					item1key,
-
-				item2key :
-					item2key,
-
-				pnw :
-					pnw,
-
-				fontsize :
-					fontsize,
-
-				doc :
+				val :
 				{
 					type :
-						'Doc',
+						'Relation',
 
-					copse :
+					item1key :
+						item1key,
+
+					item2key :
+						item2key,
+
+					pnw :
+						pnw,
+
+					fontsize :
+						fontsize,
+
+					doc :
 					{
-						'1' :
+						type :
+							'Doc',
+
+						copse :
 						{
-							type :
-								'Para',
+							'1' :
+							{
+								type :
+									'Para',
 
-							text :
-								text
-						}
-					},
+								text :
+									text
+							}
+						},
 
-					ranks :
-						[ '1' ]
-				}
+						ranks :
+							[ '1' ]
+					}
+				},
+				rank :
+					null
 			},
-			rank :
-				null
-		},
-		{
-			path :
-				new Path( [ '$new' ] ),
+			{
+				path :
+					new Path( [ '$new' ] ),
 
-			rank :
-				0
-		}
-	);
+				rank :
+					0
+			}
+		);
 
 	return chgX.trg.path.get( -1 );
 };
@@ -611,7 +576,9 @@ Peer.prototype.newRelation =
 | moves an item's z-index up to top.
 */
 Peer.prototype.moveToTop =
-	function( path )
+	function(
+		path
+	)
 {
 	this._iface.alter(
 		{
@@ -777,11 +744,18 @@ Peer.prototype.join =
 | Removes an item.
 */
 Peer.prototype.removeItem =
-	function( path )
+	function(
+		path
+	)
 {
-	var key = path.get( -1 );
-	var pivot = this._iface.get( path, -1 );
-	var r1 = pivot.rankOf( key );
+	var key =
+		path.get( -1 );
+
+	var pivot =
+		this._iface.get( path, -1 );
+
+	var r1 =
+		pivot.rankOf( key );
 
 	this._iface.alter(
 		{

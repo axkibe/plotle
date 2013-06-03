@@ -211,22 +211,30 @@ FontPool.prototype.get = function(size, code)
 		c = style.$c = { };
 	}
 
-	var f = c[ size ];
+	var f =
+		c[ size ];
 
 	if( f )
-		{ return f; }
+	{
+		return f;
+	}
 
-	return c[ size ] = new Euclid.Font(
-		size,
-		style.family,
-		style.fill,
-		style.align,
-		style.base
-	);
+	f =
+	c[ size ] =
+		new Euclid.Font(
+			size,
+			style.family,
+			style.fill,
+			style.align,
+			style.base
+		);
+
+	return f;
 };
 
 
-fontPool = new FontPool();
+fontPool =
+	new FontPool();
 
 
 } ) ();
