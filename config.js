@@ -30,8 +30,8 @@ config.admin =
 |  '127.0.0.1' means localhost (IPV4)
 */
 config.ip =
-	'127.0.0.1';
-	//null;
+	//'127.0.0.1';
+	null;
 
 
 /*
@@ -126,8 +126,8 @@ config.debug.immute =
 | Set to false/null or the address of the weinre server
 */
 config.debug.weinre =
-	//'127.0.0.1:8080';
-	false;
+	'192.168.88.1:8080';
+	//false;
 
 /*
 | enable specific logging categories

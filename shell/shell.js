@@ -828,6 +828,8 @@ Shell.prototype.dragStart =
 		return;
 	}
 
+	console.log('DRAGSTART');
+
 	var cursor =
 		this._$disc.dragStart(
 			p,
@@ -937,6 +939,8 @@ Shell.prototype.dragStop =
 	{
 		return;
 	}
+
+	console.log('DRAGSTOP');
 
 	var action =
 		this.bridge.action( );

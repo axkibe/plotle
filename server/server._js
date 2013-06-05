@@ -691,8 +691,8 @@ Server.prototype.prepareResources =
 	var r;
 
 	var rlist = [
-		// 'media/favicon.ico',
-		//	'mc', AAA
+		'media/favicon.ico',
+			'mc',
 
 		'testpad/testpad.js',
 			'f',

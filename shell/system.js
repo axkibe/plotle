@@ -61,18 +61,33 @@ var makeCatcher =
 		}
 		catch( e )
 		{
-			( config.debug.weinre ? console.log : window.alert )
-			(
-				'Internal failure, ' +
-					e.name + ': ' +
-					e.message + '\n\n' +
-				'file: ' +
-					e.fileName   + '\n' +
-				'line: ' +
-					e.lineNumber + '\n' +
-				'stack: ' +
-					e.stack
-			);
+			try {
+				var message =
+					[
+						'Internal failure, ',
+							e.name, ': ',
+							e.message, '\n\n',
+						'file: ',
+							e.fileName, '\n',
+						'line: ',
+							e.lineNumber, '\n',
+						'stack: ',
+							e.stack
+					].join('');
+
+				if( !config.debug.weinre )
+				{
+					window.alert( message );
+				}
+				else
+				{
+					console.log( message );
+				}
+			}
+			catch ( ee )
+			{
+				console.log( 'error in error:' + ee );
+			}
 		}
 	};
 };
@@ -116,7 +131,7 @@ var System =
 	// if the mouse moves out of the atweenBox or the atweenTimer ticks its
 	// a drag, if it goes up before either happens, its a click
 
-	this._$atween =
+	this._$atween = // TODO immute
 	{
 		// timer for atween state
 		timer :
@@ -730,7 +745,7 @@ System.prototype._onMouseDown =
 	{
 		case 'atween' :
 
-			this._$atween =
+			this._$atween = // TODO immute
 				{
 					pos :
 						p,
@@ -1089,12 +1104,16 @@ System.prototype._onTouchStart =
 				{
 					pos :
 						p,
+
 					move :
 						p,
+
 					shift :
 						shift,
+
 					ctrl :
 						ctrl,
+
 					timer :
 						this.setTimer(
 							this.settings.dragtime,
@@ -1105,6 +1124,12 @@ System.prototype._onTouchStart =
 			break;
 
 		case 'drag' :
+
+			this.shell.dragStart(
+				p,
+				shift,
+				ctrl
+			);
 
 			this._captureEvents( );
 
@@ -1202,7 +1227,8 @@ System.prototype._onTouchMove =
 			else
 			{
 				// saves position for possible atween timeout
-				atween.move = p;
+				atween.move =
+					p;
 			}
 
 			break;
@@ -1516,7 +1542,7 @@ startup =
 	else
 	{
 		// gives weinre a moment to set itself up
-		window.setTimeout( catcher, 1000 );
+		window.setTimeout( catcher, 1500 );
 	}
 };
 

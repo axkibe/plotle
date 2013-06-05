@@ -496,7 +496,7 @@ Portal.prototype.click =
 			this._$spaceFields[ field ];
 
 		if(
-			sf.box
+			sf.silhoutte
 				.within(
 					Euclid.View.proper,
 					pp
@@ -986,13 +986,12 @@ Portal.prototype._weave =
 
 		silhoutte =
 			this.getZeroSilhoutte( vzone ),
-	
+
 		caret =
 			shell.$space.$caret,
 
 		section =
 			caret.sign && caret.sign.path.get( -1 );
-
 
 	f.paint(
 		theme.portal.style,
@@ -1048,7 +1047,7 @@ Portal.prototype._weave =
 			theme.portal.input.style,
 			'normal'
 		),
-		spaceUser.box,
+		spaceUser.silhoutte,
 		'sketch',
 		view
 	);
@@ -1058,7 +1057,7 @@ Portal.prototype._weave =
 			theme.portal.input.style,
 			'normal'
 		),
-		spaceTag.box,
+		spaceTag.silhoutte,
 		'sketch',
 		view
 	);
@@ -1886,7 +1885,7 @@ Portal.prototype._prepareField =
 						zone.width - width
 					),
 					Math.round(
-						zone.height / 2 - 30
+						Jools.half( zone.height ) - 30
 					)
 				)
 			)
@@ -1900,14 +1899,14 @@ Portal.prototype._prepareField =
 				)
 			),
 
-		box =
+		silhoutte =
 			new Euclid.RoundRect(
 				pnw.sub(
 					pitch,
 					height
 				),
 				pnw.add(
-					width + pitch,
+					Math.round( width ) + pitch,
 					pitch
 				),
 				rounding,
@@ -1927,8 +1926,8 @@ Portal.prototype._prepareField =
 		pnw :
 			pnw,
 
-		box :
-			box
+		silhoutte :
+			silhoutte
 	};
 };
 
