@@ -1000,9 +1000,8 @@ Server.prototype.prepareResources =
 			fs.readFile(r.path, _);
 	}
 
-	// AAA
-	//this.$resources['favicon.ico'] =
-	//	this.$resources['media/favicon.ico'];
+	this.$resources['favicon.ico'] =
+		this.$resources['media/favicon.ico'];
 
 	var cconfig =
 		new Resource(

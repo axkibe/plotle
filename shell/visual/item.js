@@ -522,12 +522,19 @@ Item.prototype.dragStart =
 	)
 {
 	var
+		action =
+			shell.bridge.action( ),
+
 		sbary =
 			this.scrollbarY;
 
 	if(
+		!action &&
 		sbary &&
-		sbary.within( view, p )
+		sbary.within(
+			view,
+			p
+		)
 	)
 	{
 		shell.bridge.startAction(
@@ -560,12 +567,33 @@ Item.prototype.dragStart =
 	{
 		return false;
 	}
+	
+	switch( action && action.type )
+	{
+		case 'Remove' :
+            if(
+                !this.path.equals( action.removeItemPath )
+            )
+            {
+                action.removeItemPath =
+                    this.path;
 
-	shell.redraw = true;
+                action.removeItemFade =
+                    true;
+
+                shell.redraw =
+                    true;
+            }
+
+			return true;
+	}
 
 	if( ctrl && access == 'rw' )
 	{
 		// relation binding
+		shell.redraw =
+			true;
+
 		shell.bridge.startAction(
 			'RelBind',
 			'space',
@@ -585,7 +613,12 @@ Item.prototype.dragStart =
 	{
 		this.grepFocus( );
 
-		var vp = view.depoint( p );
+		var
+			vp =
+				view.depoint( p );
+
+		shell.redraw =
+			true;
 
 		shell.bridge.startAction(
 			'ItemDrag',

@@ -571,7 +571,10 @@ Space.prototype.pointingHover =
 	if( focus )
 	{
 		var com =
-			focus.checkHandles( view, p );
+			focus.checkHandles(
+				view,
+				p
+			);
 
 		if( com )
 		{
@@ -770,7 +773,7 @@ Space.prototype.dragStart =
 	var focus =
 		this.focusedItem( );
 
-	// see if the itemmenu of the focus was targeted
+	// see if the handles were targeted
 	if(
 		this.access == 'rw' &&
 		focus
@@ -807,8 +810,10 @@ Space.prototype.dragStart =
 		}
 	}
 
-	var action =
-		shell.bridge.action( );
+	var
+		action =
+			shell.bridge.action( );
+
 
 	switch( action && action.type ) {
 
@@ -837,33 +842,13 @@ Space.prototype.dragStart =
 
 			return;
 
-		case 'Remove' :
-
-			if( !action.removeItemPath )
-			{
-				// starts a panning operation instead
-				// while removing
-
-				action.start =
-					p;
-
-				action.pan =
-					view.pan;
-			}
-
-			// otherwise starts a true remove operation
-			// itemRemovePath is already set by Hover
-
-			return;
-
 		default :
 
 			// ignore and go on
+
 			break;
 	}
-
-	// normal mode
-
+	
 	// see if one item was targeted
 	for(
 		var a = 0, aZ = this.twig.length;
@@ -887,6 +872,18 @@ Space.prototype.dragStart =
 			return;
 		}
 	}
+
+	if( action && action.type == 'Remove')
+	{
+			action.start =
+				p;
+
+			action.pan =
+				view.pan;
+
+			return;
+	}
+
 
 	// otherwise panning is initiated
 	shell.bridge.startAction
@@ -1102,7 +1099,6 @@ Space.prototype.dragStop =
 			break;
 
 		case 'Remove' :
-
 
 			var focus =
 				this.focusedItem( );
