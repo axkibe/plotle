@@ -667,7 +667,7 @@ Space.prototype.pointingHover =
 						null;
 
 					shell.redraw =
-					true;
+						true;
 				}
 
 				break;
@@ -826,22 +826,6 @@ Space.prototype.dragStart =
 
 			return;
 
-		case 'CreateRelation' :
-
-			if( action.relationState === 'pan' )
-			{
-				// starts a panning operation instead
-				// while creating a relation
-
-				action.start =
-					p;
-
-				action.pan =
-					view.pan;
-			}
-
-			return;
-
 		default :
 
 			// ignore and go on
@@ -873,8 +857,11 @@ Space.prototype.dragStart =
 		}
 	}
 
-	if( action && action.type == 'Remove')
+	// starts a panning operation instead
+	switch( action && action.type )
 	{
+		case 'Remove' :
+
 			action.start =
 				p;
 
@@ -882,8 +869,20 @@ Space.prototype.dragStart =
 				view.pan;
 
 			return;
-	}
 
+		case 'CreateRelation' :
+
+			action.start =
+				p;
+
+			action.pan =
+				view.pan;
+		
+			action.relationState =
+				'pan';
+
+			return;
+	}
 
 	// otherwise panning is initiated
 	shell.bridge.startAction
@@ -1346,7 +1345,8 @@ Space.prototype.pointingStart =
 		return 'drag';
 	}
 
-	var action = shell.bridge.action( );
+	var action =
+		shell.bridge.action( );
 
 	switch( action && action.type )
 	{
@@ -1360,14 +1360,8 @@ Space.prototype.pointingStart =
 
 		case 'CreateRelation' :
 
-			if( action.fromItemPath )
-			{
-				action.relationState = 'hadSelect';
-			}
-			else
-			{
-				action.relationState = 'pan';
-			}
+			// this is either a pan or creates the relation
+			// anyway its a drag.
 
 			return 'drag';
 	}

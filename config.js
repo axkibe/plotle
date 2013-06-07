@@ -127,7 +127,7 @@ config.debug.immute =
 | Set to false/null or the address of the weinre server
 */
 config.debug.weinre =
-//	false &&
+	false &&
 	'192.168.88.1:8080';
 
 /*

@@ -586,6 +586,16 @@ Item.prototype.dragStart =
             }
 
 			return true;
+
+		case 'CreateRelation' :
+
+			action.fromItemPath =
+				this.path;
+			
+			action.relationState =
+				'hadSelect';
+		
+			return true;
 	}
 
 	if( ctrl && access == 'rw' )
