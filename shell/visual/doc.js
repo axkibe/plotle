@@ -361,7 +361,11 @@ Doc.prototype.getFont =
 		return f;
 	}
 
-	return this._$font = fontPool.get( fs, 'la' );
+	f =
+	this._$font =
+		fontPool.get( fs, 'la' );
+
+	return f;
 };
 
 

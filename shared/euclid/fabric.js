@@ -833,9 +833,15 @@ Fabric.prototype.fillRect =
 Fabric.prototype.getCenter =
 	function( )
 {
-	var x = Jools.half( this.width  );
-	var y = Jools.half( this.height );
-	var c = this._$center;
+	var
+		x =
+			Jools.half( this.width ),
+
+		y =
+			Jools.half( this.height ),
+
+		c =
+			this._$center;
 
 	if( c && c.x === x && c.y === y )
 	{
@@ -843,9 +849,11 @@ Fabric.prototype.getCenter =
 	}
 	else
 	{
-		return (
-			this._$center = new Euclid.Point( x, y )
-		);
+		c =
+		this._$center =
+			new Euclid.Point( x, y );
+
+		return c;
 	}
 };
 

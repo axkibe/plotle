@@ -12,6 +12,8 @@
 */
 var
 	shell =
+		null,
+
 	Shell =
 		null;
 
@@ -96,6 +98,7 @@ Shell =
 			'Login',
 			'MoveTo',
 			'NoAccessToSpace',
+			'NonExistingSpace',
 			'SignUp',
 			'Space',
 			'User',
@@ -553,12 +556,14 @@ Shell.prototype._getCurrentDisplay =
 	{
 		case 'Create' :
 		case 'Normal' :
+		case 'Remove' :
 
 			return this.$space;
 
 		case 'Login' :
 		case 'MoveTo' :
 		case 'NoAccessToSpace' :
+		case 'NonExistingSpace' :
 		case 'SignUp' :
 		case 'Space' :
 		case 'User' :
@@ -1094,7 +1099,8 @@ Shell.prototype.setUser =
 		{
 			this.moveToSpace(
 				'meshcraft',
-				'home'
+				'home',
+				false
 			);
 		}
 
@@ -1194,7 +1200,8 @@ Shell.prototype.onload =
 Shell.prototype.moveToSpace =
 	function(
 		spaceUser,
-		spaceTag
+		spaceTag,
+		create
 	)
 {
 	// TODO make message a function of shell
@@ -1205,6 +1212,7 @@ Shell.prototype.moveToSpace =
 	this.peer.aquireSpace(
 		spaceUser,
 		spaceTag,
+		create,
 		this
 	);
 };
@@ -1226,13 +1234,23 @@ Shell.prototype.onAquireSpace =
 
 		case 'nonexistent' :
 
-			console.log( 'nonexistent' );
+			console.log( asw );
+
+			this._$forms.NonExistingSpace.setSpace(
+				asw.spaceUser,
+				asw.spaceTag
+			);
+
+			shell.bridge.changeMode( 'NonExistingSpace' );
+
+			this.redraw =
+				true;
+
+			this.poke( );
 
 			return;
 
 		case 'no access' :
-
-			console.log( asw );
 
 			this._$forms.NoAccessToSpace.setSpace(
 				asw.spaceUser,
@@ -1340,7 +1358,8 @@ Shell.prototype.onAuth =
 	{
 		this.moveToSpace(
 			'meshcraft',
-			'home'
+			'home',
+			false
 		);
 	}
 };
@@ -1387,7 +1406,8 @@ Shell.prototype.logout =
 
 			self.moveToSpace(
 				'meshcraft',
-				'home'
+				'home',
+				false
 			);
 
 			self.poke( );

@@ -60,7 +60,9 @@ Twig.prototype.rankOf =
 
 	if( !Jools.isString( key ) )
 	{
-		throw new Error('key no string');
+		throw new Error(
+			'key no string'
+		);
 	}
 
 	// checks ranking cache
@@ -84,12 +86,16 @@ Twig.prototype.rankOf =
 		return r;
 	}
 
+	// TODO see if the statement below can be integrated
 	var x =
 		Jools.is( this.copse[key] ) ?
 			ranks.indexOf( key ) :
 			-1;
 
-	return rof[ key ] = x;
+	rof[ key ] =
+		x;
+
+	return x;
 };
 
 

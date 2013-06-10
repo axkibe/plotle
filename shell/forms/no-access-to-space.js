@@ -304,7 +304,7 @@ NoAccessToSpace.prototype.setSpace =
 		':' +
 		spaceTag
 	);
-}
+};
 
 
 } )( );

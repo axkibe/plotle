@@ -84,6 +84,12 @@ var modes =
 		true,
 
 	/*
+	| Space does not exist, but user is allowed to create it.
+	*/
+	'NonExistingSpace' :
+		true,
+
+	/*
 	| Removing items.
 	*/
 	'Remove' :

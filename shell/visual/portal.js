@@ -2051,7 +2051,8 @@ Portal.prototype._moveTo =
 {
 	shell.moveToSpace(
 		this.twig.spaceUser,
-		this.twig.spaceTag
+		this.twig.spaceTag,
+		false
 	);
 };
 

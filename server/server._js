@@ -862,6 +862,9 @@ Server.prototype.prepareResources =
 		'shell/forms/no-access-to-space.js',
 			'fb',
 
+		'shell/forms/non-existing-space.js',
+			'fb',
+
 		'shell/visual/base.js',
 			'fb',
 
@@ -1485,6 +1488,48 @@ Server.prototype.cmdAuth =
 
 
 /*
+| Creates a new space.
+*/
+Server.prototype.createSpace =
+	function(
+		spaceUser,
+		spaceTag,
+	_)
+{
+	var spaceName =
+		spaceUser + ':' + spaceTag;
+
+	var space =
+	this.$spaces[ spaceName ] =
+		{
+			$changesDB :
+				this.$db.connection.collection( 'changes:' + spaceName, _),
+
+			$changes :
+				[ ],
+
+			$tree :
+				new Tree(
+					{ type : 'Space' },
+					Meshverse
+				),
+
+			$seqZ :
+				1
+		};
+
+
+	this.$db.spaces.insert(
+		{
+			_id : spaceName
+		},
+	_);
+
+	return space;
+};
+
+
+/*
 | Executes a register command.
 */
 Server.prototype.cmdRegister =
@@ -1556,33 +1601,9 @@ Server.prototype.cmdRegister =
 	this.$db.users.insert( user, _);
 	this.$users[ username ] = user;
 
-	// creates the user's home space
-	var spaceName =
-		username + ':home';
-
-	this.$spaces[ spaceName ] =
-		{
-			$changesDB :
-				this.$db.connection.collection( 'changes:' + spaceName, _),
-
-			$changes :
-				[ ],
-
-			$tree :
-				new Tree(
-					{ type : 'Space' },
-					Meshverse
-				),
-
-			$seqZ :
-				1
-		};
-
-
-	this.$db.spaces.insert(
-		{
-			_id : spaceName
-		},
+	this.createSpace(
+		username,
+		'home',
 	_);
 
 	return {
@@ -2274,7 +2295,7 @@ Server.prototype.cmdGet =
 
 		passhash =
 			cmd.passhash,
-	
+
 		spaceUser =
 			cmd.spaceUser,
 
@@ -2330,7 +2351,7 @@ Server.prototype.cmdGet =
 
 			access :
 				access,
-			
+
 			status :
 				'no access'
 		};
@@ -2341,16 +2362,27 @@ Server.prototype.cmdGet =
 
 	if( !space )
 	{
-		return {
-			ok :
-				true,
+		if( !cmd.create === true )
+		{
+			return {
+				ok :
+					true,
 
-			access :
-				access,
+				access :
+					access,
 
-			status :
-				'nonexistent'
-		};
+				status :
+					'nonexistent'
+			};
+		}
+		else
+		{
+			space =
+				this.createSpace(
+					spaceUser,
+					spaceTag,
+				_);
+		}
 	}
 
 	var
@@ -2728,7 +2760,10 @@ Server.prototype.webAjax =
 		);
 	};
 
-	req.on( 'end', handler );
+	req.on(
+		'end',
+		handler
+	);
 
 	/*
 	req.on( 'end', function( )

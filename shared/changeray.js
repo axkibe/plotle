@@ -171,7 +171,11 @@ ChangeRay.prototype.get = function( idx )
 /*
 | Sets one change.
 */
-ChangeRay.prototype.set = function( idx, chg )
+ChangeRay.prototype.set =
+	function(
+		idx,
+		chg
+	)
 {
 	if( this._$invert )
 	{
@@ -179,7 +183,10 @@ ChangeRay.prototype.set = function( idx, chg )
 			null;
 	}
 
-	return this._$ray[ idx ] = chg;
+	this._$ray[ idx ] =
+		chg;
+
+	return chg;
 };
 
 

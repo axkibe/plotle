@@ -256,10 +256,11 @@ Note.prototype.getSilhoutte =
 		return s;
 	}
 
-	return (
-		this._$silhoutte =
-			Note.s_getSilhoutte( zone )
-	);
+	s =
+	this._$silhoutte =
+		Note.s_getSilhoutte( zone );
+
+	return s;
 };
 
 

@@ -232,13 +232,14 @@ View.prototype.home =
 		return this._$home;
 	}
 
-	return (
-		this._$home =
-			new View(
-				Euclid.Point.zero,
-				this.fact
-			)
-	);
+	var home =
+	this._$home =
+		new View(
+			Euclid.Point.zero,
+			this.fact
+		);
+
+	return home;
 };
 
 

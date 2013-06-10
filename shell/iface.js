@@ -366,11 +366,20 @@ IFace.prototype.aquireSpace =
 	function(
 		spaceUser,
 		spaceTag,
+		create,
 		onAquireSpaceReceiver
 	)
 {
 	var self =
 		this;
+
+	// TODO remove
+	if( typeof( create ) !== 'boolean' )
+	{
+		throw new Error(
+			'create not boolean: ' + typeof( create )
+		);
+	}
 
 	// aborts the current running update.
 	if( self._$updateAjax )
@@ -565,6 +574,9 @@ IFace.prototype.aquireSpace =
             cmd :
 				'get',
 
+			create :
+				create,
+
 			spaceUser :
 				spaceUser,
 
@@ -624,7 +636,7 @@ IFace.prototype._update =
 
 	var ajax =
 	self._$updateAjax =
-		 new XMLHttpRequest( );
+		new XMLHttpRequest( );
 
 	ajax.open(
 		'POST',

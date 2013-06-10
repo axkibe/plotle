@@ -212,11 +212,13 @@ IFaceSym.prototype.alter =
 	var r = chgX.changeTree( this.$space );
 	chgX  = r.chgX;
 
-	for(var a = 0; a < chgX.length; a++) {
+	for(var a = 0; a < chgX.length; a++)
+	{
 		this.$changes.push( chgX.get( a ) );
 	}
 
-    this.$space = r.tree;
+    this.$space =
+		r.tree;
 
     return r.chgX;
 };
@@ -228,12 +230,19 @@ IFaceSym.prototype.alter =
 IFaceSym.prototype.goToTime =
 	function( time )
 {
-	var cZ = this.$changes.length;
+	var
+		cZ =
+			this.$changes.length;
 
 	if( time > cZ || time < 0 )
-		{ time = cZ; }
+	{
+		time = cZ;
+	}
 
-	return this.$time = time;
+	this.$time =
+		time;
+
+	return time;
 };
 
 

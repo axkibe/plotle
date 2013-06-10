@@ -1,10 +1,8 @@
 /*
-|
 | A fixed area that keeps a constant zoom level, but is attached to a zooming element.
 | Used for control elements.
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
@@ -35,16 +33,27 @@ if (typeof(window) === 'undefined')
 /*
 | Constructor.
 */
-var Fix = Euclid.Fix = function(area, joint)
+var Fix =
+Euclid.Fix =
+	function(
+		area,
+		joint
+	)
 {
-	this.joint  = joint;
-	this.area   = area;
+	this.joint =
+		joint;
+
+	this.area =
+		area;
 
 	Jools.immute(this);
 
 	// TODOC
-	this.$preView = null;
-	this.$fixView = null;
+	this.$preView =
+		null;
+
+	this.$fixView =
+		null;
 };
 
 
@@ -54,15 +63,22 @@ var Fix = Euclid.Fix = function(area, joint)
 Fix.prototype.fixView = function(view)
 {
 	if( view.eq( this.$preView ) )
-		{ return this.$fixView; }
+	{
+		return this.$fixView;
+	}
 
-	this.$preView = view;
+	this.$preView =
+		view;
 
-	return this.$fixView = view.review(
-		0,
-		view.point( this.joint )
-	);
+	var fv =
+	this.$fixView =
+		view.review(
+			0,
+			view.point( this.joint )
+		);
+
+	return fv;
 };
 
 
-} ) ();
+} )( );

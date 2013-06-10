@@ -252,7 +252,8 @@ Item.prototype.planHandles =
 			b;
 	}
 
-	return this.$handles =
+	h =
+	this.$handles =
 		{
 			// ellipse bezier height
 			bb :
@@ -357,6 +358,8 @@ Item.prototype.planHandles =
 					h.w
 				)
 		};
+
+	return h;
 };
 
 

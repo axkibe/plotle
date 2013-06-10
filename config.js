@@ -7,7 +7,8 @@
 | Config infrastructure.
 | Don't change this.
 */
-var config = module.exports =
+var config =
+module.exports =
 	{
 		database :
 			{ },
