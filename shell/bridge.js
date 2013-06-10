@@ -11,15 +11,18 @@
 /*
 | Export
 */
-var Bridge = null;
+var
+	Bridge =
+		null;
 
 
 /*
 | Imports
 */
-var Action;
-var Jools;
-var shell;
+var
+	Action,
+	Jools,
+	shell;
 
 
 /*
@@ -32,7 +35,9 @@ var shell;
 
 if( typeof( window ) === 'undefined' )
 {
-	throw new Error( 'this code needs a browser!' );
+	throw new Error(
+		'this code needs a browser!'
+	);
 }
 
 
@@ -49,12 +54,6 @@ var modes =
 		true,
 
 	/*
-	| Goto
-	*/
-	'MoveTo' :
-		true,
-
-	/*
 	| Help
 	*/
 	'Help' :
@@ -67,9 +66,21 @@ var modes =
 		true,
 
 	/*
+	| Goto
+	*/
+	'MoveTo' :
+		true,
+
+	/*
 	| Standard selection, moving stuff around.
 	*/
 	'Normal' :
+		true,
+
+	/*
+	| User does not have access to a space.
+	*/
+	'NoAccessToSpace' :
 		true,
 
 	/*
@@ -151,7 +162,9 @@ Bridge.prototype.mode =
 | Returns true if in 'mode'.
 */
 Bridge.prototype.inMode =
-	function( mode )
+	function(
+		mode
+	)
 {
 	if( !modes[ mode ] )
 	{
@@ -169,7 +182,9 @@ Bridge.prototype.inMode =
 | Changes the mode
 */
 Bridge.prototype.changeMode =
-	function( mode )
+	function(
+		mode
+	)
 {
 	if( !modes[ mode ] )
 	{
@@ -178,7 +193,8 @@ Bridge.prototype.changeMode =
 		);
 	}
 
-	this._$mode = mode;
+	this._$mode =
+		mode;
 
 	shell.pokeDisc( );
 };
@@ -238,7 +254,9 @@ Bridge.prototype.stopAction =
 | Sets the current username.
 */
 Bridge.prototype.setUsername =
-	function( username )
+	function(
+		username
+	)
 {
 	this._$username =
 		username;

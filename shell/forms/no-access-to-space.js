@@ -8,18 +8,22 @@
 /*
 | Export
 */
-var Forms;
-Forms = Forms || { };
+var
+	Forms;
+
+Forms =
+	Forms || { };
 
 
 /*
 | Imports
 */
-var Euclid;
-var fontPool;
-var Jools;
-var Path;
-var shell;
+var
+	Euclid,
+	fontPool,
+	Jools,
+	Path,
+	shell;
 
 /*
 | Capsule
@@ -31,11 +35,12 @@ var shell;
 /*
 | The login form
 */
-var Welcome =
-Forms.Welcome =
-	function(
-		// free strings
-	)
+var
+	NoAccessToSpace =
+	Forms.NoAccessToSpace =
+		function(
+			// free strings
+		)
 {
 	Forms.Form.apply(
 		this,
@@ -45,7 +50,7 @@ Forms.Welcome =
 
 
 Jools.subclass(
-	Welcome,
+	NoAccessToSpace,
 	Forms.Form
 );
 
@@ -53,7 +58,7 @@ Jools.subclass(
 /*
 | Close control
 */
-var closeButton =
+var okButton =
 {
 	width :
 		50,
@@ -72,7 +77,7 @@ var closeButton =
 /*
 | Layout
 */
-Welcome.prototype.layout =
+NoAccessToSpace.prototype.layout =
 {
 	type :
 		'Layout',
@@ -85,7 +90,7 @@ Welcome.prototype.layout =
 				'Label',
 
 			text :
-				'Welcome',
+				'',
 
 			font :
 				fontPool.get( 22, 'ca' ),
@@ -112,7 +117,7 @@ Welcome.prototype.layout =
 				'Label',
 
 			text :
-				'Your registration was successful :-)',
+				'Sorry, you cannot port to this space or create it.',
 
 			font :
 				fontPool.get( 16, 'ca' ),
@@ -133,7 +138,7 @@ Welcome.prototype.layout =
 			}
 		},
 
-		'closeButton' :
+		'okButton' :
 		{
 			type :
 				'Button',
@@ -155,10 +160,10 @@ Welcome.prototype.layout =
 						'c',
 
 					x :
-						closeButton.w,
+						okButton.w,
 
 					y :
-						closeButton.n
+						okButton.n
 				},
 
 				pse  :
@@ -170,10 +175,10 @@ Welcome.prototype.layout =
 						'c',
 
 					x :
-						closeButton.w + closeButton.width,
+						okButton.w + okButton.width,
 
 					y :
-						closeButton.n + closeButton.height
+						okButton.n + okButton.height
 				}
 			},
 
@@ -183,7 +188,7 @@ Welcome.prototype.layout =
 					'Label',
 
 				text :
-					'close',
+					'ok',
 
 				font :
 					fontPool.get( 14, 'cm' ),
@@ -247,7 +252,7 @@ Welcome.prototype.layout =
 	[
 		'headline',
 		'message1',
-		'closeButton'
+		'okButton'
 	]
 };
 
@@ -255,27 +260,14 @@ Welcome.prototype.layout =
 /*
 | Name of the form.
 */
-Welcome.prototype.name =
-	'welcome';
+NoAccessToSpace.prototype.name =
+	'noAccessSpace';
 
-/*
-| sets the username
-*/
-Welcome.prototype.setUsername =
-	function( username )
-{
-	var $sub =
-		this.$sub;
-
-	$sub.headline.setText(
-		'Welcome ' + username + '!'
-	);
-};
 
 /*
 | A button of the form has been pushed.
 */
-Welcome.prototype.pushButton =
+NoAccessToSpace.prototype.pushButton =
 	function(
 		buttonName
 		// shift,
@@ -284,7 +276,7 @@ Welcome.prototype.pushButton =
 {
 	switch( buttonName )
 	{
-		case 'closeButton' :
+		case 'okButton' :
 
 			shell.bridge.changeMode( 'Normal' );
 
@@ -296,6 +288,23 @@ Welcome.prototype.pushButton =
 	}
 };
 
+
+NoAccessToSpace.prototype.setSpace =
+	function(
+		spaceUser,
+		spaceTag
+	)
+{
+	var $sub =
+		this.$sub;
+
+	$sub.headline.setText(
+		'no access to ' +
+		spaceUser +
+		':' +
+		spaceTag
+	);
+}
 
 
 } )( );

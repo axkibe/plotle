@@ -474,6 +474,12 @@ IFace.prototype.aquireSpace =
 					Jools.immute({
 						status :
 							asw.status,
+
+						spaceUser :
+							spaceUser,
+
+						spaceTag :
+							spaceTag
 					})
 				);
 

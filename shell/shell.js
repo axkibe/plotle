@@ -10,32 +10,31 @@
 /*
 | Export
 */
-var shell =
-	null;
-
-var Shell =
-	null;
-
+var
+	shell =
+	Shell =
+		null;
 
 /*
 | Imports
 */
-var Action;
-var Bridge;
-var Caret;
-var Disc;
-var Euclid;
-var fontPool;
-var Forms;
-var IFace;
-var Jools;
-var MeshMashine;
-var Peer;
-var Range;
-var Sign;
-var system;
-var theme;
-var Visual;
+var
+	Action,
+	Bridge,
+	Caret,
+	Disc,
+	Euclid,
+	fontPool,
+	Forms,
+	IFace,
+	Jools,
+	MeshMashine,
+	Peer,
+	Range,
+	Sign,
+	system,
+	theme,
+	Visual;
 
 
 /*
@@ -93,36 +92,30 @@ Shell =
 		);
 
 	var forms =
-		{
-			login :
-				Forms.Login,
-
-			moveto :
-				Forms.MoveTo,
-
-			signup :
-				Forms.SignUp,
-
-			space :
-				Forms.Space,
-
-			user :
-				Forms.User,
-
-			welcome :
-				Forms.Welcome
-		};
+		[
+			'Login',
+			'MoveTo',
+			'NoAccessToSpace',
+			'SignUp',
+			'Space',
+			'User',
+			'Welcome'
+		];
 
 	this._$forms =
 		{ };
 
-	for( var name in forms )
+	for( var i in forms )
 	{
+		var
+			name =
+				forms[ i ];
+
 		this._$forms[ name ] =
-			new forms[ name ](
+			new Forms[ name ](
 				'screensize',
 					screensize
-				);
+			);
 	}
 
 	this._$disc =
@@ -152,7 +145,7 @@ Shell.prototype.positionCaret =
 	function( )
 {
 	var display =
-		this.getCurrentDisplay( );
+		this._getCurrentDisplay( );
 
 	if( display )
 	{
@@ -232,7 +225,7 @@ Shell.prototype.systemFocus =
 	}
 
 	var display =
-		this.getCurrentDisplay( );
+		this._getCurrentDisplay( );
 
 	if( display )
 	{
@@ -258,7 +251,7 @@ Shell.prototype.systemBlur =
 	}
 
 	var display =
-		this.getCurrentDisplay( );
+		this._getCurrentDisplay( );
 
 	if( display )
 	{
@@ -299,7 +292,7 @@ Shell.prototype.blink =
 	}
 
 	var display =
-		this.getCurrentDisplay( );
+		this._getCurrentDisplay( );
 
 	if( display )
 	{
@@ -496,7 +489,7 @@ Shell.prototype._draw =
 	}
 
 	var display =
-		this.getCurrentDisplay( );
+		this._getCurrentDisplay( );
 
 	if( display )
 	{
@@ -526,7 +519,7 @@ Shell.prototype.click =
 	}
 
 	var display =
-		this.getCurrentDisplay( );
+		this._getCurrentDisplay( );
 
 	if( display )
 	{
@@ -549,103 +542,54 @@ Shell.prototype.click =
 |
 | This is either a visual space or a form
 */
-Shell.prototype.getCurrentDisplay =
+Shell.prototype._getCurrentDisplay =
 	function( )
 {
-	var name =
-		null;
+	var
+		name =
+			this.bridge.mode( );
 
-	var Proto =
-		null;
-
-	switch( this.bridge.mode( ) )
+	switch( name )
 	{
+		case 'Create' :
+		case 'Normal' :
+
+			return this.$space;
+
 		case 'Login' :
-
-			name =
-				'login';
-
-			Proto =
-				Forms.Login;
-
-			break;
-
 		case 'MoveTo' :
-
-			name =
-				'moveto';
-
-			Proto =
-				Forms.MoveTo;
-
-			break;
-
-
+		case 'NoAccessToSpace' :
 		case 'SignUp' :
-
-			name =
-				'signup';
-
-			Proto =
-				Forms.SignUp;
-
-			break;
-
 		case 'Space' :
-
-			name =
-				'space';
-
-			Proto =
-				Forms.Space;
-
-			break;
-
 		case 'User' :
-
-			name =
-				'user';
-
-			Proto =
-				Forms.User;
-
-			break;
-
 		case 'Welcome' :
 
-			name =
-				'welcome';
+			var inherit =
+				this._$forms[ name ];
 
-			Proto =
-				Forms.Welcome;
+			if(
+				!this.screensize.eq(
+					inherit.screensize
+				)
+			)
+			{
+				this._$forms[ name ] =
+					new Forms[ name ](
+						'inherit',
+							inherit,
+						'screensize',
+							this.screensize
+					);
+			}
 
-			break;
+			return this._$forms[ name ];
 
 		default :
 
-			return this.$space;
+			throw new Error( 'unknown mode: ' + name );
 	}
-
-	var inherit =
-		this._$forms[ name ];
-
-	if(
-		!this.screensize.eq(
-			inherit.screensize
-		)
-	)
-	{
-		this._$forms[ name ] =
-			new Proto(
-				'inherit',
-					inherit,
-				'screensize',
-					this.screensize
-			);
-	}
-
-	return this._$forms[ name ];
 };
+
 
 /*
 | User is hovering his/her point ( mouse move )
@@ -696,7 +640,7 @@ Shell.prototype.pointingHover =
 	}
 
 	var display =
-		this.getCurrentDisplay( );
+		this._getCurrentDisplay( );
 
 	if( display )
 	{
@@ -787,7 +731,7 @@ Shell.prototype.pointingStart =
 	}
 
 	var display =
-		this.getCurrentDisplay( );
+		this._getCurrentDisplay( );
 
 	if(
 		pointingState === null &&
@@ -838,7 +782,7 @@ Shell.prototype.dragStart =
 	if( cursor === null )
 	{
 		var display =
-			this.getCurrentDisplay( );
+			this._getCurrentDisplay( );
 
 		if( display )
 		{
@@ -1002,7 +946,7 @@ Shell.prototype.mousewheel =
 	// disc?
 
 	var display =
-		this.getCurrentDisplay( );
+		this._getCurrentDisplay( );
 
 	if( display )
 	{
@@ -1039,7 +983,7 @@ Shell.prototype.specialKey =
 	}
 
 	var display =
-		this.getCurrentDisplay( );
+		this._getCurrentDisplay( );
 
 	if( display )
 	{
@@ -1071,7 +1015,7 @@ Shell.prototype.input =
 	this.removeSelection( );
 
 	var display =
-		this.getCurrentDisplay( );
+		this._getCurrentDisplay( );
 
 	if( display )
 	{
@@ -1169,9 +1113,9 @@ Shell.prototype.setUser =
 
 	this._$disc.setUser( user );
 
-	this._$forms.user.setUsername( user );
+	this._$forms.User.setUsername( user );
 
-	this._$forms.welcome.setUsername( user );
+	this._$forms.Welcome.setUsername( user );
 };
 
 
@@ -1279,7 +1223,7 @@ Shell.prototype.onAquireSpace =
 		case 'served' :
 
 			break;
-		
+
 		case 'nonexistent' :
 
 			console.log( 'nonexistent' );
@@ -1288,7 +1232,19 @@ Shell.prototype.onAquireSpace =
 
 		case 'no access' :
 
-			console.log( 'noaccess' );
+			console.log( asw );
+
+			this._$forms.NoAccessToSpace.setSpace(
+				asw.spaceUser,
+				asw.spaceTag
+			);
+
+			shell.bridge.changeMode( 'NoAccessToSpace' );
+
+			this.redraw =
+				true;
+
+			this.poke( );
 
 			return;
 
@@ -1310,7 +1266,7 @@ Shell.prototype.onAquireSpace =
 
 			return;
 	}
-		
+
 	var
 		spaceUser =
 			asw.spaceUser,
@@ -1397,7 +1353,7 @@ Shell.prototype.getCaret =
 	function( )
 {
 	var display =
-		this.getCurrentDisplay( );
+		this._getCurrentDisplay( );
 
 	return display && display.$caret;
 };
@@ -1449,6 +1405,7 @@ Shell.prototype.getSelection =
 	return this._$selection;
 };
 
+
 /*
 | Sets the selection.
 */
@@ -1498,7 +1455,7 @@ Shell.prototype.arrivedAtSpace =
 		access
 	);
 
-	this._$forms.space.arrivedAtSpace(
+	this._$forms.Space.arrivedAtSpace(
 		spaceUser,
 		spaceTag,
 		access
