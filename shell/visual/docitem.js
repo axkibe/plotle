@@ -10,20 +10,24 @@
 /*
 | Export
 */
-var Visual;
-Visual = Visual || { };
+var
+	Visual;
+
+Visual =
+	Visual || { };
 
 
 /*
 | Imports
 */
-var Action;
-var Euclid;
-var Jools;
-var Path;
-var shell;
-var system;
-var theme;
+var
+	Action,
+	Euclid,
+	Jools,
+	Path,
+	shell,
+	system,
+	theme;
 
 
 /*
@@ -58,10 +62,14 @@ Visual.DocItem =
 		{
 			doc : new Visual.Doc(
 				twig.doc,
-				new Path( path, '++', 'doc' )
+				new Path(
+					path,
+					'++', 'doc'
+				)
 			)
 		};
 };
+
 
 Jools.subclass(
 	DocItem,
@@ -166,10 +174,19 @@ DocItem.prototype.grepFocus =
 DocItem.prototype.click =
 	function(
 		view,
-		p
+		p,
+		shift,
+		ctrl,
+		access
 	)
 {
-	var vp = view.depoint( p );
+	var vp =
+		view.depoint( p );
+
+	if( access != 'rw' )
+	{
+		return false;
+	}
 
 	if( !this.getZone( ).within( view, p ) )
 	{

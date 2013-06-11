@@ -33,7 +33,7 @@ config.admin =
 config.ip =
 	'127.0.0.1';
 	//'192.168.88.1';
-	// null;
+	//null;
 
 
 /*
@@ -61,7 +61,7 @@ config.database.port =
 | Name of the mongodb database
 */
 config.database.name =
-	'devel03';
+	'meshcraft03';
 
 
 /*

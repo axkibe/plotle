@@ -8,18 +8,21 @@
 /*
 | Export
 */
-var Forms;
-Forms = Forms || { };
+var
+	Forms;
+
+Forms =
+	Forms || { };
 
 
 /*
 | Imports
 */
-var Euclid;
-var fontPool;
-var Jools;
-var Path;
-var shell;
+var Euclid,
+	fontPool,
+	Jools,
+	Path,
+	shell;
 
 /*
 | Capsule
@@ -758,7 +761,11 @@ Login.prototype.onAuth =
 
 	this.clear( );
 
-	shell.moveToSpace( 'meshcraft', 'home' );
+	shell.moveToSpace(
+		'meshcraft',
+		'home',
+		false
+	);
 
 	shell.bridge.changeMode( 'Normal' );
 

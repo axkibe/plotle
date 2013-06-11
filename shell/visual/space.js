@@ -8,21 +8,25 @@
 /*
 | Export
 */
-var Visual;
-Visual = Visual || { };
+var
+	Visual;
+
+Visual =
+	Visual || { };
 
 
 /*
 | Imports
 */
-var Caret;
-var Euclid;
-var Jools;
-var MeshMashine;
-var Path;
-var Sign;
-var shell;
-var theme;
+var
+	Caret,
+	Euclid,
+	Jools,
+	MeshMashine,
+	Path,
+	Sign,
+	shell,
+	theme;
 
 
 /*
@@ -54,8 +58,6 @@ Visual.Space =
 		twig,
 		null
 	);
-
-	Jools.keyNonGrata( this, 'spacename' );
 
 	this.spaceUser =
 		spaceUser;
@@ -94,6 +96,7 @@ Visual.Space =
 		);
 
 };
+
 
 Jools.subclass(
 	Space,
@@ -832,7 +835,7 @@ Space.prototype.dragStart =
 
 			break;
 	}
-	
+
 	// see if one item was targeted
 	for(
 		var a = 0, aZ = this.twig.length;
@@ -877,7 +880,7 @@ Space.prototype.dragStart =
 
 			action.pan =
 				view.pan;
-		
+
 			action.relationState =
 				'pan';
 
@@ -927,7 +930,8 @@ Space.prototype.click =
 				view,
 				p,
 				shift,
-				ctrl
+				ctrl,
+				this.access
 			)
 		)
 		{
@@ -1340,10 +1344,12 @@ Space.prototype.pointingStart =
 		view =
 			this.$view;
 
+	/*
 	if( this.access == 'ro' )
 	{
 		return 'drag';
 	}
+	*/
 
 	var action =
 		shell.bridge.action( );

@@ -419,7 +419,10 @@ Portal.prototype.grepFocus =
 Portal.prototype.click =
 	function(
 		view,
-		p
+		p,
+		shift,
+		ctrl,
+		access
 	)
 {
 	var
@@ -469,6 +472,10 @@ Portal.prototype.click =
 		return true;
 	}
 
+	if( access != 'rw' )
+	{
+		return false;
+	}
 
 	if( focus !== this )
 	{

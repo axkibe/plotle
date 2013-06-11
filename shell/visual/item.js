@@ -8,7 +8,9 @@
 /*
 | Export
 */
-var Visual;
+var
+	Visual;
+
 Visual =
 	Visual || { };
 
@@ -36,7 +38,9 @@ var
 
 if( typeof( window ) === 'undefined' )
 {
-	throw new Error( 'this code needs a browser!' );
+	throw new Error(
+		'this code needs a browser!'
+	);
 }
 
 
@@ -594,10 +598,10 @@ Item.prototype.dragStart =
 
 			action.fromItemPath =
 				this.path;
-			
+
 			action.relationState =
 				'hadSelect';
-		
+
 			return true;
 	}
 
