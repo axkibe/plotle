@@ -9,6 +9,7 @@
 | Export
 */
 var Widgets;
+
 Widgets =
 	Widgets || { };
 
@@ -668,7 +669,8 @@ Button.prototype.dragStop =
 		this.$retimer
 	);
 
-	this.$retimer = null;
+	this.$retimer =
+		null;
 
 	shell.bridge.stopAction( );
 };

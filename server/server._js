@@ -1599,7 +1599,9 @@ Server.prototype.cmdRegister =
 	};
 
 	this.$db.users.insert( user, _);
-	this.$users[ username ] = user;
+
+	this.$users[ username ] =
+		user;
 
 	this.createSpace(
 		username,
@@ -2267,6 +2269,11 @@ Server.prototype.testAccess =
 
 				return 'no';
 		}
+	}
+
+	if( user.substring( 0, 7 ) === 'visitor' )
+	{
+		return 'no';
 	}
 
 	if( user === spaceUser )

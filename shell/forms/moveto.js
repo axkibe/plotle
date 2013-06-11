@@ -43,6 +43,9 @@ Forms.MoveTo =
 		this,
 		arguments
 	);
+
+	this.$username =
+		null;
 };
 
 
@@ -70,6 +73,7 @@ var meshcraftHomeButton =
 		130
 };
 
+
 var meshcraftSandboxButton =
 {
 	w :
@@ -84,6 +88,7 @@ var meshcraftSandboxButton =
 	height :
 		130
 };
+
 
 var userHomeButton =
 {
@@ -497,12 +502,30 @@ MoveTo.prototype.name =
 /*
 | Finished loading a space.
 */
-MoveTo.prototype.arrivedAtSpace =
+MoveTo.prototype.setUsername =
 	function(
-		// spaceUser,
-		// spaceTag
+		username
 	)
 {
+	this.$username =
+		username;
+
+	var userHomeButton =
+		this.$sub.userHomeButton;
+
+	if( username.substr( 0, 7 ) === 'visitor' )
+	{
+		userHomeButton.setVisible( false );
+	}
+	else
+	{
+		userHomeButton.setVisible( true );
+
+		userHomeButton.setText(
+			[ username, 'home' ]
+		);
+	}
+
 };
 
 

@@ -1689,7 +1689,7 @@ MainDisc.prototype.message =
 		message
 	)
 {
-	console.log( 'TODO message():', message );
+	// console.log( 'TODO message():', message );
 };
 
 
@@ -1797,7 +1797,7 @@ MainDisc.prototype.setSpaceZoom =
 		zf
 	)
 {
-	console.log( 'TODO setSpaceZoom():', zf );
+	// console.log( 'TODO setSpaceZoom():', zf );
 };
 
 /*

@@ -1122,6 +1122,8 @@ Shell.prototype.setUser =
 	this._$forms.User.setUsername( user );
 
 	this._$forms.Welcome.setUsername( user );
+
+	this._$forms.MoveTo.setUsername( user );
 };
 
 
