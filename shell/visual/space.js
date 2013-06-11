@@ -1059,13 +1059,16 @@ Space.prototype.dragStop =
 
 				case 'hadSelect' :
 
-					item =
-						this.getSub( action.toItemPath );
+					if( action.toItemPath )
+					{
+						item =
+							this.getSub( action.toItemPath );
 
-					item.dragStop(
-						view,
-						p
-					);
+						item.dragStop(
+							view,
+							p
+						);
+					}
 
 					shell.redraw =
 						true;
