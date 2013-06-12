@@ -50,7 +50,7 @@ if( typeof( window ) === 'undefined' )
 /*
 | Constructor
 |
-| TODO change to free string arguments
+| XXX change to free string arguments
 */
 var MainDisc =
 Disc.MainDisc =
@@ -94,10 +94,6 @@ Disc.MainDisc =
 		inherit ?
 			inherit._$loggedIn :
 			false;
-
-	// TODO remove this
-	this.inherit =
-		null;
 };
 
 

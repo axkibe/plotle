@@ -55,35 +55,36 @@ Disc.Disc =
 		// ... free strings ...
 	)
 {
-	Jools.parseFreeStrings.call(
-		this,
-		{
-			'name' :
+	var inherit =
+		Jools.parseFreeStrings.call(
+			this,
 			{
-				type :
-					'param',
+				'name' :
+				{
+					type :
+						'param',
 
-				required :
-					true
+					required :
+						true
+				},
+
+				'inherit' :
+				{
+					type :
+						'return'
+				},
+
+				'screensize' :
+				{
+					type :
+						'param',
+
+					required :
+						true
+				}
 			},
-
-			'inherit' :
-			{
-				type :
-					'param'
-			},
-
-			'screensize' :
-			{
-				type :
-					'param',
-
-				required :
-					true
-			}
-		},
-		arguments
-	);
+			arguments
+		);
 
 	var style =
 	this.style =
@@ -156,9 +157,6 @@ Disc.Disc =
 	this.buttons =
 		{ };
 
-	var inherit =
-		this.inherit;
-
 	var icons =
 	this._icons =
 		inherit ?
@@ -215,10 +213,6 @@ Disc.Disc =
 
 	this.$hover =
 		inherit && inherit.$hover;
-
-	// TODO dont store it into this from start on
-//	this.inherit =
-//		null;
 };
 
 

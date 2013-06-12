@@ -1067,24 +1067,28 @@ var half =
 */
 var parseFreeStrings =
 	function(
-		freeType,
-		args,
-		recurse
+		freeType, // a type object, or an array of type objects
+		args,     // the arguments used to create this
+		recurse   // true if recursing
 	)
 {
-	var a =
-		0;
+	var
+		a =
+			0,
 
-	var aZ =
-		args.length;
+		aZ =
+			args.length,
 
-	var f, fZ;
+		f, fZ,
 
-	var arg;
+		arg,
 
-	var type;
+		type,
 
-	var property;
+		property,
+
+		ret =
+			null;
 
 	// TODO ensure null-ness of params in non recursive calls
 
@@ -1133,8 +1137,24 @@ var parseFreeStrings =
 		{
 			case 'param' :
 
-				this[ property ]
-					= args[ a + 1 ];
+				this[ property ] =
+					args[ a + 1 ];
+
+				a += 2;
+
+				break;
+
+			case 'return' :
+
+				if( ret !== null )
+				{
+					throw new Error(
+						'multiple return values to free-strings'
+					);
+				}
+
+				ret =
+					args[ a + 1 ];
 
 				a += 2;
 
@@ -1185,6 +1205,8 @@ var parseFreeStrings =
 			}
 		}
 	}
+
+	return ret;
 };
 
 
