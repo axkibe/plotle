@@ -1614,7 +1614,7 @@ MainDisc.prototype.input =
 		// text
 	)
 {
-	// TODO
+	// XXX
 	return;
 };
 
@@ -1627,7 +1627,7 @@ MainDisc.prototype.cycleFocus =
 		// dir
 	)
 {
-	throw new Error( 'TODO' );
+	throw new Error( 'XXX' );
 };
 
 
@@ -1641,7 +1641,7 @@ MainDisc.prototype.specialKey =
 		// ctrl
 	)
 {
-	// TODO
+	// XXX
 };
 
 
@@ -1686,10 +1686,10 @@ MainDisc.prototype.setHover =
 */
 MainDisc.prototype.message =
 	function(
-		message
+		// message
 	)
 {
-	// console.log( 'TODO message():', message );
+	// console.log( 'XXX message():', message );
 };
 
 
@@ -1794,10 +1794,10 @@ MainDisc.prototype.setUser =
 */
 MainDisc.prototype.setSpaceZoom =
 	function(
-		zf
+		// zf
 	)
 {
-	// console.log( 'TODO setSpaceZoom():', zf );
+	// console.log( 'XXX setSpaceZoom():', zf );
 };
 
 /*

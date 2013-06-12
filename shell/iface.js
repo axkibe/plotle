@@ -373,14 +373,6 @@ IFace.prototype.aquireSpace =
 	var self =
 		this;
 
-	// TODO remove
-	if( typeof( create ) !== 'boolean' )
-	{
-		throw new Error(
-			'create not boolean: ' + typeof( create )
-		);
-	}
-
 	// aborts the current running update.
 	if( self._$updateAjax )
 	{
@@ -746,6 +738,7 @@ IFace.prototype._update =
 
 				// alters undo and redo queues.
 				var
+					tfxChgX,
 					u,
 					undo =
 						self._$undo;
@@ -761,8 +754,7 @@ IFace.prototype._update =
 
 					if( u.time < time + a )
 					{
-						// TODO apply to redo as well AAA
-						var tfxChgX =
+						tfxChgX =
 							MeshMashine.tfxChgX(
 								u.chgX,
 								chgX
@@ -807,6 +799,21 @@ IFace.prototype._update =
 
 					if( u.time < time + a )
 					{
+						tfxChgX =
+							MeshMashine.tfxChgX(
+								u.chgX,
+								chgX
+							);
+
+						// the change vanished by transformation
+						if( tfxChgX === null )
+						{
+							undo.splice( b--, 1 );
+							bZ--;
+
+							continue;
+						}
+
 						u =
 						redo[ b ] =
 							Jools.immute( {

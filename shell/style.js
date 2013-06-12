@@ -282,7 +282,7 @@ Style.styles =
 	genericButton :
 	{
 		/*
-		| TODO
+		| Widget is in its default state.
 		*/
 		normal :
 		{
@@ -331,7 +331,7 @@ Style.styles =
 		},
 
 		/*
-		| TODO
+		| The users pointing device is hovering over the widget
 		*/
 		hover :
 		{
@@ -364,7 +364,7 @@ Style.styles =
 		},
 
 		/*
-		| TODO
+		| The widget got currently the focus.
 		*/
 		focus :
 		{
@@ -640,7 +640,7 @@ Style.styles =
 	checkbox :
 	{
 		/*
-		| TODO
+		| Widget is in its default state.
 		*/
 		normal :
 		{

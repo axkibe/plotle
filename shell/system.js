@@ -142,7 +142,7 @@ var System =
 			null,
 
 		// latest mouse position seen in atween state
-		move :
+		$move :
 			null,
 
 		// shift key in atween state
@@ -400,7 +400,7 @@ System.prototype._fiddleInput =
 	{
 		return;
 	}
-	
+
 	var
 		height =
 			caret.$height,
@@ -499,7 +499,7 @@ System.prototype._onAtweenTime =
 
 	cursor =
 		this.shell.dragMove(
-			atween.move,
+			atween.$move,
 			atween.shift,
 			atween.ctrl
 		);
@@ -745,12 +745,12 @@ System.prototype._onMouseDown =
 	{
 		case 'atween' :
 
-			this._$atween = // TODO immute
-				{
+			this._$atween =
+				Jools.immute({
 					pos :
 						p,
 
-					move :
+					$move :
 						p,
 
 					shift :
@@ -764,7 +764,7 @@ System.prototype._onMouseDown =
 							this.settings.dragtime,
 							this._onAtweenTimeCatcher
 						)
-				};
+				});
 
 			break;
 
@@ -876,7 +876,7 @@ System.prototype._onMouseMove =
 			else
 			{
 				// saves position for possible atween timeout
-				atween.move =
+				atween.$move =
 					p;
 			}
 			break;

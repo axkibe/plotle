@@ -66,9 +66,6 @@ Caret =
 	// true when just blinked away
 	this.$blinked =
 		false;
-
-	// TODO remove
-	Jools.keyNonGrata( this, 'section' );
 };
 
 

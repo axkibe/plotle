@@ -31,9 +31,9 @@ config.admin =
 |  '127.0.0.1' means localhost (IPV4)
 */
 config.ip =
-	'127.0.0.1';
+	//'127.0.0.1';
 	//'192.168.88.1';
-	//null;
+	null;
 
 
 /*
