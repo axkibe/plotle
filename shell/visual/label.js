@@ -8,7 +8,9 @@
 /*
 | Export
 */
-var Visual;
+var
+	Visual;
+
 Visual =
 	Visual || {};
 
@@ -16,14 +18,16 @@ Visual =
 /*
 | Imports
 */
-var Action;
-var config;
-var Euclid;
-var fontPool;
-var Jools;
-var shell;
-var theme;
-var Visual;
+var
+	Action,
+	config,
+	Euclid,
+	fontPool,
+	Jools,
+	shell,
+	Style,
+	theme,
+	Visual;
 
 
 /*
@@ -246,6 +250,32 @@ Label.prototype.handles =
 
 
 /*
+| Highlights the label.
+*/
+Label.prototype.highlight =
+	function(
+		fabric,
+		view
+	)
+{
+	var silhoutte =
+		this.getSilhoutte(
+			this.getZone( )
+		);
+
+	fabric.edge(
+		Style.getStyle(
+			theme.label.style,
+			'highlight'
+		),
+		silhoutte,
+		'sketch',
+		view
+	);
+};
+
+
+/*
 | Returns the labels silhoutte.
 */
 Label.prototype.getSilhoutte =
@@ -314,24 +344,56 @@ Label.prototype.getZeroSilhoutte =
 
 
 /*
-| Dummy since a label does not scroll.
+| Sets the items position and size aften an action.
 */
-Label.prototype.scrollCaretIntoView =
-	function( )
-{
-	// nada
-};
-
-
-/*
-| Dummy since a label does not scroll.
-*/
-Label.prototype.scrollPage =
+Label.prototype.dragStop =
 	function(
-		// up
+		view,
+		p
 	)
 {
-	// nada
+	var action =
+		shell.bridge.action( );
+
+	switch( action.type )
+	{
+		case 'ItemDrag' :
+		case 'ItemResize' :
+
+			var zone =
+				this.getZone( );
+
+			var fontsize =
+				this.$sub.doc.getFont( ).size;
+
+			if( !this.twig.pnw.eq( zone.pnw ) )
+			{
+				shell.peer.setPNW(
+					this.path,
+					zone.pnw
+				);
+			}
+
+			if( fontsize !== this.twig.fontsize )
+			{
+				shell.peer.setFontSize(
+					this.path,
+					fontsize
+				);
+			}
+
+			shell.redraw = true;
+
+			break;
+
+		default :
+
+			return Visual.DocItem.prototype.dragStop.call(
+				this,
+				view,
+				p
+			);
+	}
 };
 
 
@@ -392,7 +454,10 @@ Label.prototype.draw =
 
 		// draws the border
 		f.edge(
-			theme.label.style,
+			Style.getStyle(
+				theme.label.style,
+				'normal'
+			),
 			silhoutte,
 			'sketch',
 			Euclid.View.proper
@@ -427,16 +492,6 @@ Label.prototype.draw =
 				zone.pnw
 		);
 	}
-};
-
-
-/*
-| Returns the width for the contents flow.
-*/
-Label.prototype.getFlowWidth =
-	function( )
-{
-	return 0;
 };
 
 
@@ -511,6 +566,16 @@ Label.prototype.fontSizeChange =
 
 
 /*
+| Returns the width for the contents flow.
+*/
+Label.prototype.getFlowWidth =
+	function( )
+{
+	return 0;
+};
+
+
+/*
 | Returns the para seperation height.
 */
 Label.prototype.getParaSep =
@@ -519,20 +584,6 @@ Label.prototype.getParaSep =
 	)
 {
 	return 0;
-};
-
-
-/*
-| Mouse wheel turned.
-*/
-Label.prototype.mousewheel =
-	function(
-		// view,
-		// p,
-		// dir
-	)
-{
-	return false;
 };
 
 
@@ -673,57 +724,39 @@ Label.prototype.getZone =
 
 
 /*
-| Sets the items position and size aften an action.
+| Mouse wheel turned.
 */
-Label.prototype.dragStop =
+Label.prototype.mousewheel =
 	function(
-		view,
-		p
+		// view,
+		// p,
+		// dir
 	)
 {
-	var action =
-		shell.bridge.action( );
-
-	switch( action.type )
-	{
-		case 'ItemDrag' :
-		case 'ItemResize' :
-
-			var zone =
-				this.getZone( );
-
-			var fontsize =
-				this.$sub.doc.getFont( ).size;
-
-			if( !this.twig.pnw.eq( zone.pnw ) )
-			{
-				shell.peer.setPNW(
-					this.path,
-					zone.pnw
-				);
-			}
-
-			if( fontsize !== this.twig.fontsize )
-			{
-				shell.peer.setFontSize(
-					this.path,
-					fontsize
-				);
-			}
-
-			shell.redraw = true;
-
-			break;
-
-		default :
-
-			return Visual.DocItem.prototype.dragStop.call(
-				this,
-				view,
-				p
-			);
-	}
+	return false;
 };
 
+
+
+/*
+| Dummy since a label does not scroll.
+*/
+Label.prototype.scrollCaretIntoView =
+	function( )
+{
+	// nada
+};
+
+
+/*
+| Dummy since a label does not scroll.
+*/
+Label.prototype.scrollPage =
+	function(
+		// up
+	)
+{
+	// nada
+};
 
 } )( );

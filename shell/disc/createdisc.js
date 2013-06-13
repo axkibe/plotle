@@ -66,10 +66,6 @@ Disc.CreateDisc =
 		'screensize',
 			screensize
 	);
-
-	// TODO remove this
-	this.inherit =
-		null;
 };
 
 /*
@@ -133,7 +129,7 @@ CreateDisc.prototype.layout =
 
 	copse :
 	{
-		'note' :
+		'createNote' :
 		{
 			type :
 				'Button',
@@ -244,7 +240,7 @@ CreateDisc.prototype.layout =
 			}
 		},
 
-		'label' :
+		'createLabel' :
 		{
 			type :
 				'Button',
@@ -355,7 +351,7 @@ CreateDisc.prototype.layout =
 			}
 		},
 
-		'relation' :
+		'createRelation' :
 		{
 			type :
 				'Button',
@@ -469,7 +465,7 @@ CreateDisc.prototype.layout =
 			}
 		},
 
-		'portal' :
+		'createPortal' :
 		{
 			type :
 				'Button',
@@ -583,10 +579,10 @@ CreateDisc.prototype.layout =
 
 	ranks :
 	[
-		'note',
-		'label',
-		'relation',
-		'portal'
+		'createNote',
+		'createLabel',
+		'createRelation',
+		'createPortal'
 	]
 };
 
@@ -623,26 +619,25 @@ CreateDisc.prototype._weave =
 
 		switch( name )
 		{
-			case 'note' :
-			case 'label' :
-			case 'relation' :
-			case 'portal' :
+			case 'createNote' :
+			case 'createLabel' :
+			case 'createRelation' :
+			case 'createPortal' :
+
 				button.draw(
 					fabric,
 					Accent.state(
 						name === this.$hover,
-						this.buttonMatchesAction(
-							button.name,
-							action
-						)
+						action && action.type === button.name
 					)
 				);
 				break;
 
 			default :
+
 				button.draw(
 					fabric,
-					this.buttonMatchesAction( button.name, action ),
+					action && action.type === button.name,
 					this.$hover === name
 				);
 				break;
@@ -672,44 +667,6 @@ CreateDisc.prototype._weave =
 	return fabric;
 };
 
-/*
-| TODO
-*/
-CreateDisc.prototype.buttonMatchesAction =
-	function(
-		buttonName,
-		action
-	)
-{
-	if( !action )
-	{
-		return false;
-	}
-
-	switch( buttonName )
-	{
-		case 'note' :
-
-			return action.type === 'CreateNote';
-
-		case 'label' :
-
-			return action.type === 'CreateLabel';
-
-		case 'relation' :
-
-			return action.type === 'CreateRelation';
-
-		case 'portal' :
-
-			return action.type === 'CreatePortal';
-
-		default :
-
-			throw new Error( 'unknown button:' + buttonName );
-	}
-};
-
 
 /*
 | A button of the main disc has been pushed.
@@ -722,8 +679,9 @@ CreateDisc.prototype.pushButton =
 	var action =
 		shell.bridge.action( );
 
-	if( this.buttonMatchesAction( buttonName, action ) )
+	if( action && action.type === buttonName )
 	{
+		// already in this action
 		return;
 	}
 
@@ -736,37 +694,32 @@ CreateDisc.prototype.pushButton =
 
 	switch( buttonName )
 	{
-		case 'note' :
+		case 'createLabel' :
+		case 'createNote' :
+		case 'createPortal' :
+
 			shell.bridge.startAction(
-				'CreateNote',
+				buttonName,
 				'space'
 			);
+
 			return;
 
-		case 'label' :
-			shell.bridge.startAction(
-				'CreateLabel',
-				'space'
-			);
-			return;
+		case 'createRelation' :
 
-		case 'relation' :
 			shell.bridge.startAction(
-				'CreateRelation',
+				'createRelation',
 				'space',
 				'relationState', 'start'
 			);
-			return;
 
-		case 'portal' :
-			shell.bridge.startAction(
-				'CreatePortal',
-				'space'
-			);
 			return;
 
 		default :
-			throw new Error( 'unknown button:' + buttonName );
+
+			throw new Error(
+				'unknown button:' + buttonName
+			);
 	}
 
 };

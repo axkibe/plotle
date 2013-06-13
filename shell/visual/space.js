@@ -300,7 +300,7 @@ Space.prototype.draw =
 
 	switch( action && action.type )
 	{
-		case 'CreateLabel' :
+		case 'createLabel' :
 
 			if( action.start && action.move )
 			{
@@ -319,7 +319,7 @@ Space.prototype.draw =
 			break;
 
 
-		case 'CreateNote' :
+		case 'createNote' :
 
 			if( action.start && action.move )
 			{
@@ -337,7 +337,7 @@ Space.prototype.draw =
 
 			break;
 
-		case 'CreatePortal' :
+		case 'createPortal' :
 
 			if( action.start && action.move )
 			{
@@ -355,7 +355,7 @@ Space.prototype.draw =
 
 			break;
 
-		case 'CreateRelation' :
+		case 'createRelation' :
 
 			if( action.fromItemPath )
 			{
@@ -626,7 +626,7 @@ Space.prototype.pointingHover =
 
 					break;
 
-				case 'CreateRelation' :
+				case 'createRelation' :
 
 					if(
 						action.relationState === 'start' &&
@@ -662,7 +662,7 @@ Space.prototype.pointingHover =
 
 				break;
 
-			case 'CreateRelation' :
+			case 'createRelation' :
 
 				if( action.fromItemPath )
 				{
@@ -820,9 +820,9 @@ Space.prototype.dragStart =
 
 	switch( action && action.type ) {
 
-		case 'CreateLabel' :
-		case 'CreateNote' :
-		case 'CreatePortal' :
+		case 'createLabel' :
+		case 'createNote' :
+		case 'createPortal' :
 
 			action.start =
 				p;
@@ -873,7 +873,7 @@ Space.prototype.dragStart =
 
 			return;
 
-		case 'CreateRelation' :
+		case 'createRelation' :
 
 			action.start =
 				p;
@@ -975,7 +975,7 @@ Space.prototype.dragStop =
 
 	switch( action.type )
 	{
-		case 'CreateNote' :
+		case 'createNote' :
 
 			key =
 				shell.peer.newNote(
@@ -999,7 +999,7 @@ Space.prototype.dragStop =
 
 			break;
 
-		case 'CreateLabel' :
+		case 'createLabel' :
 
 			var trans =
 				Visual.Label.s_createTrans(
@@ -1025,7 +1025,7 @@ Space.prototype.dragStop =
 
 			break;
 
-		case 'CreatePortal' :
+		case 'createPortal' :
 
 			key = shell.peer.newPortal(
 				this.spaceUser,
@@ -1052,7 +1052,7 @@ Space.prototype.dragStop =
 
 			break;
 
-		case 'CreateRelation' :
+		case 'createRelation' :
 
 			switch( action.relationState )
 			{
@@ -1189,9 +1189,9 @@ Space.prototype.dragMove =
 
 	switch( action.type )
 	{
-		case 'CreateNote' :
-		case 'CreateLabel' :
-		case 'CreatePortal' :
+		case 'createNote' :
+		case 'createLabel' :
+		case 'createPortal' :
 
 			action.move =
 				p;
@@ -1201,7 +1201,7 @@ Space.prototype.dragMove =
 
 			return 'pointer';
 
-		case 'CreateRelation' :
+		case 'createRelation' :
 
 			if( action.relationState === 'pan' )
 			{
@@ -1367,7 +1367,7 @@ Space.prototype.pointingStart =
 
 			return 'drag';
 
-		case 'CreateRelation' :
+		case 'createRelation' :
 
 			// this is either a pan or creates the relation
 			// anyway its a drag.

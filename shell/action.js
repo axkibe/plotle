@@ -86,28 +86,28 @@ var actionList =
 			/*
 			| Creating a new note
 			*/
-			'CreateNote' :
+			'createNote' :
 				true,
 
 
 			/*
 			| Creating a new label
 			*/
-			'CreateLabel' :
+			'createLabel' :
 				true,
 
 
 			/*
 			| Creating a new relation
 			*/
-			'CreateRelation' :
+			'createRelation' :
 				true,
 
 
 			/*
 			| Creating a new portal
 			*/
-			'CreatePortal' :
+			'createPortal' :
 				true
 
 		}

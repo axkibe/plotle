@@ -226,186 +226,6 @@ Note.s_innerMargin =
 
 
 /*
-| Default margin for all notes.
-*/
-Note.prototype.innerMargin =
-	Note.s_innerMargin;
-
-
-/*
-| Resize handles to show on notes.
-*/
-Note.prototype.handles =
-	Note.s_handles;
-
-
-/*
-| Returns the notes silhoutte.
-|
-*/
-Note.prototype.getSilhoutte =
-	function(
-		zone //  the cache for the items zone
-	)
-{
-	var s =
-		this._$silhoutte;
-
-	if( s && s.eq( zone ) )
-	{
-		return s;
-	}
-
-	s =
-	this._$silhoutte =
-		Note.s_getSilhoutte( zone );
-
-	return s;
-};
-
-
-/*
-| Returns the notes silhoutte anchored at zero.
-*/
-Note.prototype.getZeroSilhoutte =
-	function( zone )
-{
-	var s  = this._$zeroSilhoutte;
-
-	if(
-		s &&
-		s.width  === zone.width &&
-		s.height === zone.height
-	)
-	{
-		return s;
-	}
-
-	return Note.s_getZeroSilhoutte( zone );
-};
-
-
-/*
-| Actualizes the scrollbar.
-*/
-Note.prototype.setScrollbar =
-	function( pos )
-{
-	var sbary =
-		this.scrollbarY;
-
-	if( !sbary.visible )
-	{
-		return;
-	}
-
-	var zone =
-		this.getZone( );
-
-	if( !Jools.is( pos ) )
-	{
-		pos =
-			sbary.getPos( );
-	}
-
-	sbary.setPos(
-		pos,
-		zone.height - this.innerMargin.y,
-		this.$sub.doc.getHeight( ),
-		Euclid.Point.renew(
-			zone.pse.x, zone.pnw.y + theme.scrollbar.vdis, sbary.pnw
-		),
-		zone.height - theme.scrollbar.vdis * 2
-	);
-};
-
-
-/*
-| Scrolls the note so the caret comes into view.
-*/
-Note.prototype.scrollCaretIntoView =
-	function( )
-{
-	// TODO hand down
-	var
-		caret =
-			shell.$space.$caret,
-
-		scrolly =
-			this.scrollbarY,
-
-		sy =
-			scrolly.getPos( ),
-
-		para =
-			shell.$space.getSub(
-				caret.sign.path,
-				'Para'
-			);
-
-	if( para.constructor !== Visual.Para )
-	{
-		throw new Error( 'para not a para.' );
-	}
-
-	var
-		cp =
-			para.getCaretPos( ),
-
-		pnw =
-			this.$sub.doc.getPNW( para.key ),
-
-		zone =
-			this.getZone( ),
-
-		imargin =
-			this.innerMargin;
-
-	if( cp.n + pnw.y - imargin.n < sy )
-	{
-		this.setScrollbar(
-			cp.n + pnw.y - imargin.n
-		);
-
-		this.poke( );
-	}
-	else if( cp.s + pnw.y + imargin.s > sy + zone.height )
-	{
-		this.setScrollbar(
-			cp.s + pnw.y - zone.height + imargin.s
-		);
-
-		this.poke( );
-	}
-};
-
-
-/*
-| Scrolls the note so the caret comes into view.
-*/
-Note.prototype.scrollPage =
-	function(
-		up
-	)
-{
-	var zone =
-		this.getZone( );
-
-	var dir =
-		up ? -1 : 1;
-
-	var fs =
-		this.$sub.doc.getFont( ).size;
-
-	this.setScrollbar(
-		this.scrollbarY.getPos( ) + dir * zone.height - fs * 2
-	);
-
-	this.poke( );
-};
-
-
-/*
 | Sets the items position and size after an action.
 */
 Note.prototype.dragStop =
@@ -587,6 +407,213 @@ Note.prototype.draw =
 			view
 		);
 	}
+};
+
+
+
+/*
+| Default margin for all notes.
+*/
+Note.prototype.innerMargin =
+	Note.s_innerMargin;
+
+
+/*
+| Resize handles to show on notes.
+*/
+Note.prototype.handles =
+	Note.s_handles;
+
+
+/*
+| Returns the notes silhoutte.
+|
+*/
+Note.prototype.getSilhoutte =
+	function(
+		zone //  the cache for the items zone
+	)
+{
+	var s =
+		this._$silhoutte;
+
+	if( s && s.eq( zone ) )
+	{
+		return s;
+	}
+
+	s =
+	this._$silhoutte =
+		Note.s_getSilhoutte( zone );
+
+	return s;
+};
+
+
+/*
+| Returns the notes silhoutte anchored at zero.
+*/
+Note.prototype.getZeroSilhoutte =
+	function( zone )
+{
+	var s  = this._$zeroSilhoutte;
+
+	if(
+		s &&
+		s.width  === zone.width &&
+		s.height === zone.height
+	)
+	{
+		return s;
+	}
+
+	return Note.s_getZeroSilhoutte( zone );
+};
+
+
+/*
+| Highlights the note.
+*/
+Note.prototype.highlight =
+	function(
+		fabric,
+		view
+	)
+{
+	var silhoutte =
+		this.getSilhoutte(
+			this.getZone( )
+		);
+
+	fabric.edge(
+		Style.getStyle(
+			theme.note.style,
+			'highlight'
+		),
+		silhoutte,
+		'sketch',
+		view
+	);
+};
+
+
+/*
+| Actualizes the scrollbar.
+*/
+Note.prototype.setScrollbar =
+	function( pos )
+{
+	var sbary =
+		this.scrollbarY;
+
+	if( !sbary.visible )
+	{
+		return;
+	}
+
+	var zone =
+		this.getZone( );
+
+	if( !Jools.is( pos ) )
+	{
+		pos =
+			sbary.getPos( );
+	}
+
+	sbary.setPos(
+		pos,
+		zone.height - this.innerMargin.y,
+		this.$sub.doc.getHeight( ),
+		Euclid.Point.renew(
+			zone.pse.x, zone.pnw.y + theme.scrollbar.vdis, sbary.pnw
+		),
+		zone.height - theme.scrollbar.vdis * 2
+	);
+};
+
+
+/*
+| Scrolls the note so the caret comes into view.
+*/
+Note.prototype.scrollCaretIntoView =
+	function( )
+{
+	// TODO hand down
+	var
+		caret =
+			shell.$space.$caret,
+
+		scrolly =
+			this.scrollbarY,
+
+		sy =
+			scrolly.getPos( ),
+
+		para =
+			shell.$space.getSub(
+				caret.sign.path,
+				'Para'
+			);
+
+	if( para.constructor !== Visual.Para )
+	{
+		throw new Error( 'para not a para.' );
+	}
+
+	var
+		cp =
+			para.getCaretPos( ),
+
+		pnw =
+			this.$sub.doc.getPNW( para.key ),
+
+		zone =
+			this.getZone( ),
+
+		imargin =
+			this.innerMargin;
+
+	if( cp.n + pnw.y - imargin.n < sy )
+	{
+		this.setScrollbar(
+			cp.n + pnw.y - imargin.n
+		);
+
+		this.poke( );
+	}
+	else if( cp.s + pnw.y + imargin.s > sy + zone.height )
+	{
+		this.setScrollbar(
+			cp.s + pnw.y - zone.height + imargin.s
+		);
+
+		this.poke( );
+	}
+};
+
+
+/*
+| Scrolls the note so the caret comes into view.
+*/
+Note.prototype.scrollPage =
+	function(
+		up
+	)
+{
+	var zone =
+		this.getZone( );
+
+	var dir =
+		up ? -1 : 1;
+
+	var fs =
+		this.$sub.doc.getFont( ).size;
+
+	this.setScrollbar(
+		this.scrollbarY.getPos( ) + dir * zone.height - fs * 2
+	);
+
+	this.poke( );
 };
 
 

@@ -574,7 +574,7 @@ Item.prototype.dragStart =
 	{
 		return false;
 	}
-	
+
 	switch( action && action.type )
 	{
 		case 'Remove' :
@@ -594,7 +594,7 @@ Item.prototype.dragStart =
 
 			return true;
 
-		case 'CreateRelation' :
+		case 'createRelation' :
 
 			action.fromItemPath =
 				this.path;
@@ -673,7 +673,7 @@ Item.prototype.dragMove =
 
 	switch( action.type )
 	{
-		case 'CreateRelation' :
+		case 'createRelation' :
 
 			if(
 				!this.getZone( ).within(
@@ -779,7 +779,7 @@ Item.prototype.dragStop =
 
 	switch( action.type )
 	{
-		case 'CreateRelation' :
+		case 'createRelation' :
 
 			if(
 				!this.getZone().within(
@@ -880,33 +880,6 @@ Item.prototype.grepFocus =
 	caret.show( );
 
 	shell.peer.moveToTop( this.path );
-};
-
-
-/*
-| Highlights the item.
-*/
-Item.prototype.highlight =
-	function(
-		fabric,
-		view
-	)
-{
-	var silhoutte =
-		this.getSilhoutte(
-			this.getZone( )
-		);
-
-	fabric.edge(
-		// TODO XXX note not applicatable here!
-		Style.getStyle(
-			theme.note.style,
-			'highlight'
-		),
-		silhoutte,
-		'sketch',
-		view
-	);
 };
 
 

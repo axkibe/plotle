@@ -1424,10 +1424,10 @@ MainDisc.prototype.pointingHover =
 	// TODO replace with oframe.within
 	if(
 		p === null ||
-		p.y < pnw.y ||
-		p.y > pse.y ||
-		p.x < pnw.x ||
-		p.x > pse.x
+		!oframe.within(
+			null,
+			p
+		)
 	)
 	{
 		this.setHover( null );

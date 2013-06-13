@@ -136,60 +136,10 @@ theme =
 			40,
 
 		style :
-		{
-			fill :
-			{
-				gradient :
-					'radial',
-
-				steps :
-				[
-					[ 0, 'rgba( 255, 255, 248, 0.955 )' ],
-					[ 1, 'rgba( 255, 255, 160, 0.955 )' ]
-				]
-			},
-
-			edge :
-			[
-				{
-					border :
-						3,
-
-					width :
-						6,
-
-					color :
-						'rgb( 255, 220, 128 )'
-				},
-				{
-					border :
-						0,
-
-					width :
-						1,
-
-					color :
-						'black'
-				}
-			],
-
-			highlight :
-			[
-				{
-					border :
-						0,
-
-					width :
-						3,
-
-					color :
-						'rgba( 255, 183, 15, 0.5 )'
-				}
-			]
-		},
+			'portal',
 
 		/*
-		| Style of the input fields on the portal
+		| input fields on the portal
 		*/
 		input :
 		{
@@ -202,7 +152,10 @@ theme =
 			pitch :
 				5
 		},
-		
+
+		/*
+		| moveto button on the portal
+		*/
 		moveTo :
 		{
 			style :
@@ -229,35 +182,7 @@ theme =
 			8,
 
 		style :
-		{
-			edge :
-			[
-				{
-					border :
-						0,
-
-					width :
-						1,
-
-					color :
-						'rgba( 100, 100, 0, 0.1 )'
-				}
-			],
-
-			highlight :
-			[
-				{
-					border :
-						0,
-
-					width :
-						3,
-
-					color :
-						'rgba( 255, 183, 15, 0.5 )'
-				}
-			]
-		},
+			'label',
 
 		innerMargin  :
 		{

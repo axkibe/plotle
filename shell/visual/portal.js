@@ -220,7 +220,10 @@ Portal.s_drawTrans =
 			Portal.s_getSilhoutte( zone );
 
 	fabric.paint(
-		theme.portal.style,
+		Style.getStyle(
+			theme.portal.style,
+			'normal'
+		),
 		silhoutte,
 		'sketch',
 		view
@@ -634,6 +637,33 @@ Portal.prototype.mousewheel =
 
 
 /*
+| Highlights the portal.
+*/
+Portal.prototype.highlight =
+	function(
+		fabric,
+		view
+	)
+{
+	var silhoutte =
+		this.getSilhoutte(
+			this.getZone( )
+		);
+
+	fabric.edge(
+		Style.getStyle(
+			theme.portal.style,
+			'highlight'
+		),
+		silhoutte,
+		'sketch',
+		view
+	);
+};
+
+
+
+/*
 | Draws the caret if its in this portal.
 */
 Portal.prototype.positionCaret =
@@ -1001,7 +1031,10 @@ Portal.prototype._weave =
 			caret.sign && caret.sign.path.get( -1 );
 
 	f.paint(
-		theme.portal.style,
+		Style.getStyle(
+			theme.portal.style,
+			'normal'
+		),
 		silhoutte,
 		'sketch',
 		Euclid.View.proper
@@ -1104,7 +1137,10 @@ Portal.prototype._weave =
 	// everything else
 
 	f.edge(
-		theme.portal.style,
+		Style.getStyle(
+			theme.portal.style,
+			'normal'
+		),
 		silhoutte,
 		'sketch',
 		Euclid.View.proper

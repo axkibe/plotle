@@ -313,12 +313,12 @@ Shell.prototype.poke =
 	function( )
 {
 	// actualizes hover context
-	if( this.$hoverP )
+	if( this.$hover )
 	{
 		this.pointingHover(
-			this.$hoverP,
-			this.$hoverShift,
-			this.$hoverCtrl
+			this.$hover.p,
+			this.$hover.shift,
+			this.$hover.ctrl
 		);
 	}
 
@@ -614,35 +614,25 @@ Shell.prototype.pointingHover =
 
 	// TODO make an $hover object
 
-	this.$hoverP =
-		p;
+	this.$hover =
+		Jools.immute({
+			p :
+				p,
 
-	this.$hoverShift =
-		shift;
+			shift :
+				shift,
 
-	this.$hoverCtrl =
-		ctrl;
+			ctrl :
+				ctrl
+		});
 
-	var cursor = null;
-
-
-	if( cursor )
-	{
-		this._$disc.pointingHover(
-			null,
-			shift,
-			ctrl
-		);
-	}
-	else
-	{
+	var
 		cursor =
 			this._$disc.pointingHover(
 				p,
 				shift,
 				ctrl
 			);
-	}
 
 	var display =
 		this._getCurrentDisplay( );

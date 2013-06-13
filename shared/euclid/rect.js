@@ -530,17 +530,21 @@ Rect.prototype.sketch =
 		view
 	)
 {
-	var wx =
-		view.x( this.pnw );
+	var
+		wx =
+			view.x( this.pnw );
 
-	var ny =
-		view.y( this.pnw );
+	var
+		ny =
+			view.y( this.pnw );
 
-	var ex =
-		view.x( this.pse );
+	var
+		ex =
+			view.x( this.pse );
 
-	var sy =
-		view.y( this.pse );
+	var
+		sy =
+			view.y( this.pse );
 
 	fabric.moveTo(
 		wx + border,
@@ -578,17 +582,18 @@ Rect.prototype.within =
 		p
 	)
 {
-	var x =
-		view.dex( p );
+	var
+		x =
+			view ? view.dex( p ) : p,
 
-	var y =
-		view.dey( p );
+		y =
+			view ? view.dey( p ) : p,
 
-	var pnw =
-		this.pnw;
-
-	var pse =
-		this.pse;
+		pnw =
+			this.pnw,
+	
+		pse =
+			this.pse;
 
 	return (
 		x >= pnw.x &&
