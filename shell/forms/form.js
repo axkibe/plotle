@@ -239,9 +239,6 @@ Form.prototype.getFocus =
 Form.prototype.knock =
 	function( )
 {
-//	this.$fabric =
-//		null;
-
 	for( var c in this.$sub )
 	{
 		this.$sub[ c ].knock( );

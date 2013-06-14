@@ -142,7 +142,10 @@ Label.s_drawTrans =
 
 	// draws the border
 	fabric.edge(
-		theme.label.style,
+		Style.getStyle(
+			theme.label.style,
+			'normal'
+		),
 		silhoutte,
 		'sketch',
 		view
@@ -594,28 +597,31 @@ Label.prototype.getParaSep =
 Label.prototype.getZone =
 	function( )
 {
-	var action =
-		shell.bridge.action( );
+	var
+		action =
+			shell.bridge.action( ),
 
-	var pnw =
-		this.twig.pnw;
+		pnw =
+			this.twig.pnw,
 
-	// FIXME Caching!
-	var doc =
-		this.$sub.doc;
+		// FIXME Caching!
+		doc =
+			this.$sub.doc,
 
-	var fs =
-		doc.getFont( ).size;
+		fs =
+			doc.getFont( ).size,
 
-	var width  = Math.max(
-		Math.ceil( doc.getSpread( ) ),
-		Math.round( fs * 0.3 )
-	);
+		width =
+			Math.max(
+				Math.ceil( doc.getSpread( ) ),
+				Math.round( fs * 0.3 )
+			),
 
-	var height = Math.max(
-		Math.ceil( doc.getHeight( ) ),
-		Math.round( fs )
-	);
+		height =
+			Math.max(
+				Math.ceil( doc.getHeight( ) ),
+				Math.round( fs )
+			);
 
 	if(
 		!action ||
@@ -636,18 +642,13 @@ Label.prototype.getZone =
 	{
 		case 'ItemDrag' :
 
-			var mx =
-				action.move.x - action.start.x;
+			pnw =
+				pnw.add(
+					action.move.x - action.start.x,
+					action.move.y - action.start.y
+				);
 
-			var my =
-				action.move.y - action.start.y;
-
-			return new Euclid.Rect(
-				'pnw/size',
-				pnw.add( mx, my ),
-				width,
-				height
-			);
+			break;
 
 		case 'ItemResize' :
 
@@ -657,22 +658,18 @@ Label.prototype.getZone =
 
 			if( !szone )
 			{
-				return new Euclid.Rect(
-					'pnw/size',
-					pnw,
-					width,
-					height
-				);
+				break;
 			}
 
 			switch( action.align )
 			{
 				case 'ne' :
 
-					pnw = pnw.add(
-						0,
-						szone.height - height
-					);
+					pnw =
+						pnw.add(
+							0,
+							szone.height - height
+						);
 
 					break;
 
@@ -682,19 +679,21 @@ Label.prototype.getZone =
 
 				case 'sw' :
 
-					pnw = pnw.add(
-						szone.width - width,
-						0
-					);
+					pnw =
+						pnw.add(
+							szone.width - width,
+							0
+						);
 
 					break;
 
 				case 'nw' :
 
-					pnw = pnw.add(
-						szone.width - width,
-						szone.height - height
-					);
+					pnw =
+						pnw.add(
+							szone.width - width,
+							szone.height - height
+						);
 
 					break;
 
@@ -703,23 +702,18 @@ Label.prototype.getZone =
 					throw new Error( 'unknown align' );
 			}
 
-			return new Euclid.Rect(
-				'pnw/size',
-				pnw,
-				width,
-				height
-			);
-
-		default :
-
-			return new Euclid.Rect(
-				'pnw/size',
-				pnw,
-				width,
-				height
-			);
+			break;
 	}
-	// TODO pull the Rect creation out
+
+	return (
+		new Euclid.Rect(
+			'pnw/size',
+			pnw,
+			width,
+			height
+		)
+	);
+
 };
 
 

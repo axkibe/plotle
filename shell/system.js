@@ -131,28 +131,28 @@ var System =
 	// if the mouse moves out of the atweenBox or the atweenTimer ticks its
 	// a drag, if it goes up before either happens, its a click
 
-	this._$atween = // TODO immute
-	{
-		// timer for atween state
-		timer :
-			null,
+	this._$atween =
+		Jools.immute({
+			// timer for atween state
+			timer :
+				null,
 
-		// position mouse button went down
-		pos :
-			null,
+			// position mouse button went down
+			pos :
+				null,
 
-		// latest mouse position seen in atween state
-		$move :
-			null,
+			// latest mouse position seen in atween state
+			$move :
+				null,
 
-		// shift key in atween state
-		shift :
-			null,
+			// shift key in atween state
+			shift :
+				null,
 
-		// ctrl  key in atween state
-		ctrl :
-			null
-	};
+			// ctrl  key in atween state
+			ctrl :
+				null
+		});
 
 	// hidden input that forwards all events
 	this._hiddenInput =
@@ -1100,12 +1100,12 @@ System.prototype._onTouchStart =
 	{
 		case 'atween' :
 
-			this._$atween = // TODO immute
-				{
+			this._$atween =
+				Jools.immute({
 					pos :
 						p,
 
-					move :
+					$move :
 						p,
 
 					shift :
@@ -1119,7 +1119,7 @@ System.prototype._onTouchStart =
 							this.settings.dragtime,
 							this._onAtweenTimeCatcher
 						)
-				};
+				});
 
 			break;
 
@@ -1227,7 +1227,7 @@ System.prototype._onTouchMove =
 			else
 			{
 				// saves position for possible atween timeout
-				atween.move =
+				atween.$move =
 					p;
 			}
 

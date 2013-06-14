@@ -896,7 +896,6 @@ CreateDisc.prototype.input =
 		// text
 	)
 {
-	// TODO
 	return;
 };
 
@@ -909,7 +908,7 @@ CreateDisc.prototype.cycleFocus =
 		// dir
 	)
 {
-	throw new Error( 'TODO' );
+	throw new Error( 'not implemented' );
 };
 
 
@@ -923,7 +922,7 @@ CreateDisc.prototype.specialKey =
 	//	ctrl
 	)
 {
-	// TODO
+	// not implemented
 };
 
 

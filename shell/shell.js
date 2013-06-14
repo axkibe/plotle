@@ -350,7 +350,16 @@ Shell.prototype.knock =
 		return;
 	}
 
-	// TODO knock forms?
+	var forms =
+		this._$forms;
+
+	for( var name in forms )
+	{
+		var form =
+			form[ name ];
+
+		form.knock( );
+	}
 
 	if( this.$space )
 	{

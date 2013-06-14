@@ -17,19 +17,20 @@ Disc =
 /*
 | Imports
 */
-var config;
-var Curve;
-var Dash;
-var Design;
-var Euclid;
-var fontPool;
-var Jools;
-var Pattern;
-var Proc;
-var Tree;
-var shell;
-var theme;
-var Widgets;
+var
+	config;
+	Curve;
+	Dash;
+	Design;
+	Euclid;
+	fontPool;
+	Jools;
+	Pattern;
+	Proc;
+	Tree;
+	shell;
+	theme;
+	Widgets;
 
 
 /*

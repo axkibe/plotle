@@ -48,7 +48,6 @@ var modes =
 {
 	/*
 	| Creating a new item.
-	| this.$create is set or null.
 	*/
 	'Create' :
 		true,
@@ -134,17 +133,6 @@ Bridge = function( )
 	// TODO change to a loading screen as startup
 	this._$mode =
 		'Normal';
-
-	/*
-	| Creating this item:
-	|
-	| 'note',
-	| 'label',
-	| 'relation' or
-	| 'portal
-	*/
-	this._$create =
-		null;
 
 	/*
 	| an Action object for the current action

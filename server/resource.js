@@ -115,7 +115,7 @@ var Resource = function(path, opts)
 	case 'woff' :
 		// some font
 		this.code = 'binary';
-		this.mime = 'application/x-font-woff';
+		this.mime = 'application/font-woff';
 		break;
 
 	default :

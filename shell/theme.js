@@ -52,18 +52,6 @@ theme =
 	bottombox :
 		0.25,
 
-	// TODO, used anywhere?
-	fade :
-	{
-		// ms between each fading step.
-		time :
-			50,
-
-		// alpha reducition by each step
-		step :
-			0.2
-	},
-
 	/*
 	| Zooming settings.
 	*/
