@@ -383,12 +383,10 @@ Portal.prototype.dragStop =
 | Sets the focus to this item.
 */
 Portal.prototype.grepFocus =
-	function( )
+	function(
+		space
+	)
 {
-	var
-		space =
-			shell.$space;
-
 	// already have focus?
 	if( space.focusedItem( ) === this )
 	{
@@ -421,6 +419,7 @@ Portal.prototype.grepFocus =
 */
 Portal.prototype.click =
 	function(
+		space,
 		view,
 		p,
 		shift,
@@ -448,9 +447,6 @@ Portal.prototype.click =
 	}
 
 	var
-		space =
-			shell.$space,
-
 		focus =
 			space.focusedItem( ),
 
@@ -482,7 +478,7 @@ Portal.prototype.click =
 
 	if( focus !== this )
 	{
-		this.grepFocus( );
+		this.grepFocus( space );
 
 		// TODO double deselect below?
 		shell.deselect( );
@@ -514,7 +510,7 @@ Portal.prototype.click =
 		)
 		{
 			caret =
-				shell.$space.setCaret(
+				space.setCaret(
 					{
 						path :
 							this._spacePath[ field ],
@@ -550,6 +546,7 @@ Portal.prototype.click =
 Portal.prototype.draw =
 	function(
 		fabric,
+		caret,
 		view
 	)
 {
@@ -573,6 +570,7 @@ Portal.prototype.draw =
 	{
 		f =
 			this._weave(
+				caret,
 				zone,
 				vzone,
 				view.home( )
@@ -668,13 +666,12 @@ Portal.prototype.highlight =
 */
 Portal.prototype.positionCaret =
 	function(
+		space,
+		caret,
 		view
 	)
 {
 	var
-		caret =
-			shell.$space.$caret,
-
 		section =
 			caret.sign.path.get( -1 );
 
@@ -693,7 +690,7 @@ Portal.prototype.positionCaret =
 	var
 		cpos =
 			caret.$pos =
-			this.getCaretPos( ),
+			this._getCaretPos( ),
 
 		pnw =
 			this.getZone( ).pnw,
@@ -1008,6 +1005,7 @@ Portal.prototype.getZone =
 */
 Portal.prototype._weave =
 	function(
+		caret,
 		zone,
 		vzone,
 		view
@@ -1023,9 +1021,6 @@ Portal.prototype._weave =
 
 		silhoutte =
 			this.getZeroSilhoutte( vzone ),
-
-		caret =
-			shell.$space.$caret,
 
 		section =
 			caret.sign && caret.sign.path.get( -1 );
@@ -1155,16 +1150,13 @@ Portal.prototype._weave =
 */
 Portal.prototype.input =
 	function(
+		caret,
 		text
 	)
 {
     var
 		reg  =
 			/([^\n]+)(\n?)/g,
-
-		// TODO, how about handing the caret as param to input?
-		caret =
-			shell.$space.$caret,
 
 		section =
 			caret.sign.path.get( -1 );
@@ -1221,9 +1213,8 @@ Portal.prototype._fonts =
 | Returns the caret position.
 |
 | FIXME remove?
-| FIXME private?
 */
-Portal.prototype.getCaretPos =
+Portal.prototype._getCaretPos =
 	function( )
 {
 	var
@@ -1495,7 +1486,7 @@ Portal.prototype.keyDown =
 
 	var
 		cpos =
-			this.getCaretPos();
+			this._getCaretPos( );
 
 	switch( section )
 	{
@@ -1616,7 +1607,7 @@ Portal.prototype.keyUp =
 
 	var
 		cpos =
-			this.getCaretPos();
+			this._getCaretPos( );
 
 	switch( section )
 	{

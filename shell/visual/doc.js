@@ -460,42 +460,62 @@ Doc.prototype.sketchSelection = function(
 	scrollp      // scroll position of the doc
 )
 {
-	var selection =
-		shell.getSelection( );
+	var
+		selection =
+			shell.getSelection( ),
 
-	selection.normalize( );
+		space =
+			shell.$space;
+
+	selection.normalize( space );
 
 	var sp = scrollp;
 
-	var s1 =
-		selection.$begin;
+	var
+		s1 =
+			selection.$begin,
 
-	var s2 =
-		selection.$end;
+		s2 =
+			selection.$end,
 
-	var key1 =
-		s1.path.get( -2 );
+		key1 =
+			s1.path.get( -2 ),
 
-	var key2 =
-		s2.path.get( -2 );
+		key2 =
+			s2.path.get( -2 ),
 
-	var pnw1 =
-		this.getPNW( key1 );
+		pnw1 =
+			this.getPNW( key1 ),
 
-	var pnw2 =
-		this.getPNW( key2 );
+		pnw2 =
+			this.getPNW( key2 ),
 
-	var vpara1 =
-		this.$sub[ key1 ];
+		vpara1 =
+			this.$sub[ key1 ],
 
-	var vpara2 =
-		this.$sub[ key2 ];
+		vpara2 =
+			this.$sub[ key2 ],
 
-	var p1 =
-		vpara1.locateOffset( s1.at1 );
+		p1 =
+			vpara1.locateOffset( s1.at1 ),
 
-	var p2 =
-		vpara2.locateOffset( s2.at1 );
+		p2 =
+			vpara2.locateOffset( s2.at1 ),
+
+		fontsize =
+			this.getFont( ).size,
+
+		descend =
+			Math.round( fontsize * theme.bottombox ),
+
+		ascend =
+			Math.round( fontsize ),
+
+		rx =
+			width - innerMargin.e,
+
+		lx =
+			innerMargin.w;
 
 	p1 =
 		new Euclid.Point(
@@ -508,21 +528,6 @@ Doc.prototype.sketchSelection = function(
 			Math.round( p2.x + pnw2.x - sp.x ),
 			Math.round( p2.y + pnw2.y - sp.y )
 		);
-
-	var fontsize =
-		this.getFont( ).size;
-
-	var descend =
-		Math.round( fontsize * theme.bottombox );
-
-	var ascend =
-		Math.round( fontsize );
-
-	var rx =
-		width - innerMargin.e;
-
-	var lx =
-		innerMargin.w;
 
 	if( ( Math.abs( p2.y - p1.y ) < 2 ) )
 	{

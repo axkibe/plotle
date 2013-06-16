@@ -18,18 +18,18 @@ Disc =
 | Imports
 */
 var
-	config;
-	Curve;
-	Dash;
-	Design;
-	Euclid;
-	fontPool;
-	Jools;
-	Pattern;
-	Proc;
-	Tree;
-	shell;
-	theme;
+	config,
+	Curve,
+	Dash,
+	Design,
+	Euclid,
+	fontPool,
+	Jools,
+	Pattern,
+	Proc,
+	Tree,
+	shell,
+	theme,
 	Widgets;
 
 

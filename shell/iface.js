@@ -1004,7 +1004,7 @@ IFace.prototype._update =
 /*
 | Alters the tree
 |
-| TODO why doesnt this get a change?
+| FIXME why doesnt this get a change?
 */
 IFace.prototype.alter =
 	function(

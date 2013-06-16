@@ -124,7 +124,7 @@ Note.s_drawTrans =
 {
 	var silhoutte =
 		Note.s_getSilhoutte( zone );
-		
+
 	var style =
 		Style.getStyle(
 			theme.note.style,
@@ -285,6 +285,7 @@ Note.prototype.dragStop =
 Note.prototype.draw =
 	function(
 		fabric,
+		caret,
 		view
 	)
 {

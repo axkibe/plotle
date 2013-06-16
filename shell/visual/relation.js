@@ -101,7 +101,7 @@ Relation.create =
 		);
 
 	// event listener has created the vrel
-	space.$sub[ key ].grepFocus( );
+	space.$sub[ key ].grepFocus( space );
 };
 
 
@@ -111,6 +111,7 @@ Relation.create =
 Relation.prototype.draw =
 	function(
 		fabric,
+		caret,
 		view
 	)
 {
@@ -167,6 +168,7 @@ Relation.prototype.draw =
 	Visual.Label.prototype.draw.call(
 		this,
 		fabric,
+		caret,
 		view
 	);
 };

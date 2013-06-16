@@ -409,6 +409,7 @@ Label.prototype.dragStop =
 Label.prototype.draw =
 	function(
 		fabric,
+		caret,
 		view
 	)
 {

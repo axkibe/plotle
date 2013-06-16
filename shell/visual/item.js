@@ -533,7 +533,10 @@ Item.prototype.dragStart =
 			shell.bridge.action( ),
 
 		sbary =
-			this.scrollbarY;
+			this.scrollbarY,
+
+		space =
+			shell.$space;
 
 	if(
 		!action &&
@@ -628,7 +631,7 @@ Item.prototype.dragStart =
 	// scrolling or dragging
 	if( access == 'rw' )
 	{
-		this.grepFocus( );
+		this.grepFocus( space );
 
 		var
 			vp =
@@ -853,11 +856,11 @@ Item.prototype.pointingHover =
 | Sets the focus to this item.
 */
 Item.prototype.grepFocus =
-	function( )
+	function( space )
 {
 	// already have focus?
 	if(
-		shell.$space.focusedItem( ) === this
+		space.focusedItem( ) === this
 	)
 	{
 		return;
@@ -866,6 +869,7 @@ Item.prototype.grepFocus =
 	var
 		doc =
 			this.$sub.doc,
+
 		caret =
 			shell.setCaret(
 				'space',

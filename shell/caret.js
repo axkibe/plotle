@@ -150,11 +150,12 @@ Caret.prototype.display =
 	// position correctly
 	shell.positionCaret( );
 
-	var pos =
-		this.$screenPos;
+	var
+		pos =
+			this.$screenPos,
 
-	var height =
-		this.$height;
+		height =
+			this.$height;
 
 	if( !this.$blinked && pos !== null )
 	{

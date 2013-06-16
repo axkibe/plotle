@@ -49,8 +49,6 @@ Range =
 		sign2;
 
 	this.$begin =
-		null;
-
 	this.$end =
 		null;
 
@@ -62,13 +60,16 @@ Range =
 | Sets begin/end so begin is before end.
 */
 Range.prototype.normalize =
-	function( )
+	function(
+		space
+	)
 {
-	var s1 =
-		this.sign1;
+	var
+		s1 =
+			this.sign1,
 
-	var s2 =
-		this.sign2;
+		s2 =
+			this.sign2;
 
 	if( s1.path.get(-1) !== 'text' )
 	{
@@ -101,11 +102,12 @@ Range.prototype.normalize =
 		return;
 	}
 
-	var k1 =
-		s1.path.get( -2 );
+	var
+		k1 =
+			s1.path.get( -2 ),
 
-	var k2 =
-		s2.path.get( -2 );
+		k2 =
+			s2.path.get( -2 );
 
 	if( k1 === k2 )
 	{
@@ -113,20 +115,21 @@ Range.prototype.normalize =
 	}
 
 	var pivot =
-		shell.$space.getSub( s1.path, 'Doc' );
+		space.getSub( s1.path, 'Doc' );
 
 	if(
-		pivot !== shell.$space.getSub( s2.path, 'Doc' )
+		pivot !== space.getSub( s2.path, 'Doc' )
 	)
 	{
 		throw new Error( 'pivot(s1) !== pivot(s2)' );
 	}
 
-	var r1 =
-		pivot.twig.rankOf( k1 );
+	var
+		r1 =
+			pivot.twig.rankOf( k1 ),
 
-	var r2 =
-		pivot.twig.rankOf( k2 );
+		r2 =
+			pivot.twig.rankOf( k2 );
 
 	if( r1 < r2 )
 	{
@@ -151,14 +154,16 @@ Range.prototype.normalize =
 | The text the selection selects.
 */
 Range.prototype.innerText =
-	function( )
+	function(
+		space
+	)
 {
 	if( !this.active )
 	{
 		return '';
 	}
 
-	this.normalize( );
+	this.normalize( space );
 
 	var s1 =
 		this.$begin;
@@ -169,7 +174,7 @@ Range.prototype.innerText =
 	if( s1.path.equals( s2.path ) )
 	{
 		var text =
-			shell.$space.getSub(
+			space.getSub(
 				s1.path,
 				'Para'
 			).twig.text;
@@ -181,7 +186,7 @@ Range.prototype.innerText =
 	}
 
 	var pivot =
-		shell.$space.getSub(s1.path, 'Doc');
+		space.getSub(s1.path, 'Doc');
 
 	var twig =
 		pivot.twig;

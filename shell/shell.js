@@ -1454,7 +1454,9 @@ Shell.prototype.setSelection =
 		);
 
 	system.setInput(
-		selection.innerText( )
+		selection.innerText(
+			this.$space
+		)
 	);
 
 	return selection;
@@ -1499,7 +1501,7 @@ Shell.prototype.removeSelection =
 		return null;
 	}
 
-	selection.normalize();
+	selection.normalize( this.$space );
 
 	this.deselect();
 

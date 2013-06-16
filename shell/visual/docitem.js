@@ -135,12 +135,10 @@ DocItem.prototype.getParaAtPoint =
 | Sets the focus to this item.
 */
 DocItem.prototype.grepFocus =
-	function( )
+	function(
+		space
+	)
 {
-	// TODO hand this down.
-	var space =
-		shell.$space;
-
 	// already have focus?
 	if( space.focusedItem() === this )
 	{
@@ -173,6 +171,7 @@ DocItem.prototype.grepFocus =
 */
 DocItem.prototype.click =
 	function(
+		space,
 		view,
 		p,
 		shift,
@@ -193,15 +192,9 @@ DocItem.prototype.click =
 		return false;
 	}
 
-	var space =
-		shell.$space;
-
-	var focus =
-		space.focusedItem( );
-
-	if( focus !== this )
+	if( space.focusedItem( ) !== this )
 	{
-		this.grepFocus( );
+		this.grepFocus( space );
 
 		shell.deselect( );
 	}

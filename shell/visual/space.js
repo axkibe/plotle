@@ -260,16 +260,18 @@ Space.prototype.draw =
 		fabric
 	)
 {
-	var twig =
-		this.twig;
+	var
+		twig =
+			this.twig,
 
-	var view =
-		this.$view;
+		view =
+			this.$view,
+
+		zone;
 
 	this._center =
 		fabric.getCenter( );
 
-	var zone;
 
 	// removes caret caches.
 	this.$caret.$save =
@@ -280,6 +282,7 @@ Space.prototype.draw =
 	{
 		this.atRank( r ).draw(
 			fabric,
+			this.$caret,
 			view
 		);
 	}
@@ -442,8 +445,6 @@ Space.prototype.knock =
 	function( )
 {
 	this.$caret.$save =
-		null;
-
 	this.$caret.$screenPos =
 		null;
 
@@ -464,15 +465,17 @@ Space.prototype.knock =
 Space.prototype.positionCaret =
 	function( )
 {
-	var item =
+	var node =
 		this.getSub(
 			this.$caret.sign.path,
 			'positionCaret'
 		);
 
-	if( item )
+	if( node )
 	{
-		item.positionCaret(
+		node.positionCaret(
+			this,
+			this.$caret,
 			this.$view
 		);
 	}
@@ -927,6 +930,7 @@ Space.prototype.click =
 
 		if(
 			item.click(
+				this,
 				view,
 				p,
 				shift,
@@ -987,7 +991,7 @@ Space.prototype.dragStop =
 					)
 				);
 
-			this.$sub[ key ].grepFocus( );
+			this.$sub[ key ].grepFocus( this );
 
 			shell.redraw =
 				true;
@@ -1016,7 +1020,7 @@ Space.prototype.dragStop =
 					trans.font.size
 				);
 
-			this.$sub[ key ].grepFocus( );
+			this.$sub[ key ].grepFocus( this );
 
 			shell.redraw =
 				true;
@@ -1038,7 +1042,7 @@ Space.prototype.dragStop =
 				'home'
 			);
 
-			this.$sub[ key ].grepFocus( );
+			this.$sub[ key ].grepFocus( this );
 
 			shell.redraw = true;
 
@@ -1406,20 +1410,23 @@ Space.prototype.input =
 	var caret =
 		this.$caret;
 
-	if (!caret.sign)
+	if( !caret.sign )
 	{
 		return;
 	}
 
-	var item =
+	var node =
 		this.getSub(
 			caret.sign.path,
 			'input'
 		);
 
-	if( item )
+	if( node )
 	{
-		item.input( text );
+		node.input(
+			caret,
+			text
+		);
 	}
 };
 

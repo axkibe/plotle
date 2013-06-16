@@ -16,15 +16,16 @@ Visual =
 /*
 | Imports
 */
-var Caret;
-var Euclid;
-var Jools;
-var Sign;
-var Path;
-var config;
-var shell;
-var system;
-var theme;
+var
+	Caret,
+	Euclid,
+	Jools,
+	Sign,
+	Path,
+	config,
+	shell,
+	system,
+	theme;
 
 
 /*
@@ -196,15 +197,15 @@ Para.prototype.draw =
 | Draws the caret if its in this paragraph.
 */
 Para.prototype.positionCaret =
-	function( view )
+	function(
+		space,
+		caret,
+		view
+	)
 {
-	// TODO properly hand down stuff
 	var
-		caret =
-			shell.$space.$caret,
-
 		item =
-			shell.$space.getSub(
+			space.getSub(
 				this.path,
 				'Item'
 			),
@@ -769,6 +770,7 @@ Para.prototype.getPointOffset =
 */
 Para.prototype.input =
 	function(
+		caret,
 		text
 	)
 {
@@ -786,11 +788,7 @@ Para.prototype.input =
 			),
 
 		doc =
-			item.$sub.doc,
-
-		// TODO, how about handing the caret as param to input?
-		caret =
-			shell.$space.$caret;
+			item.$sub.doc;
 
     for(
 		var rx = reg.exec(text);
@@ -805,7 +803,7 @@ Para.prototype.input =
 			caret.sign.at1,
 			line
 		);
-		
+
 		caret =
 			shell.$space.$caret;
 
