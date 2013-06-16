@@ -64,8 +64,6 @@ Visual.Para =
 
 	// caching
 	this.$fabric =
-		null;
-
 	this.$flow =
 		null;
 };
@@ -137,20 +135,15 @@ Para.prototype.Para =
 */
 Para.prototype.draw =
 	function(
-		fabric,
-		view,
-		pnw
+		doc,    // the document the para belongs to
+		fabric, // the fabric to draw upon
+		view,   // the current vient
+		pnw     // pnw of this para
 	)
 {
 	var
 		flow =
 			this.getFlow( ),
-
-		doc =
-			shell.$space.getSub(
-				this.path,
-				'Doc'
-			),
 
 		font =
 			doc.getFont( ),
@@ -159,7 +152,7 @@ Para.prototype.draw =
 			flow.spread * view.zoom,
 
 		height =
-			this.getHeight( ) * view.zoom,
+			this.getHeight( doc ) * view.zoom,
 
 		f =
 			this.$fabric;
@@ -194,7 +187,7 @@ Para.prototype.draw =
 
 
 /*
-| Draws the caret if its in this paragraph.
+| Positions the caret drawing data. 
 */
 Para.prototype.positionCaret =
 	function(
@@ -217,8 +210,11 @@ Para.prototype.positionCaret =
 			item.getZone( ),
 
 		cpos =
-			caret.$pos =
-			this.getCaretPos( ),
+		caret.$pos =
+			this.getCaretPos(
+				item,
+				caret
+			),
 
 		pnw =
 			doc.getPNW( this.key ),
@@ -266,15 +262,12 @@ Para.prototype.positionCaret =
 | FIXME remove?
 */
 Para.prototype.getCaretPos =
-	function( )
+	function(
+		item, // the item the para belongs to,
+		caret // the caret
+	)
 {
 	var
-		item =
-			shell.$space.getSub(
-				this.path,
-				'Item'
-			),
-
 		doc =
 			item.$sub.doc,
 
@@ -284,12 +277,9 @@ Para.prototype.getCaretPos =
 		descend =
 			fs * theme.bottombox,
 
-		// TODO hand down caret.
-		caret =
-			shell.$space.$caret,
-
 		p =
 			this.locateOffset(
+				doc,
 				caret.sign.at1,
 				caret
 			),
@@ -460,12 +450,16 @@ Para.prototype.getFlow =
 				this.path,
 				'Item'
 			),
+
 		flowWidth =
 			item.getFlowWidth( ),
+
 		font =
 			item.$sub.doc.getFont( item ),
+
 		flow =
 			this.$flow,
+
 		// FIXME go into subnodes instead
 		text =
 			this.twig.text;
@@ -514,16 +508,13 @@ Para.prototype.getFlow =
 | Returns the height of the para
 */
 Para.prototype.getHeight =
-	function( )
+	function(
+		doc  // the document this para belongs to
+	)
 {
 	var
 		flow =
-			this.getFlow( ),
-		doc =
-			shell.$space.getSub(
-				this.path,
-				'Doc'
-			);
+			this.getFlow( );
 
 	return (
 		flow.height +
@@ -637,8 +628,9 @@ Para.prototype.getOffsetAt =
 */
 Para.prototype.locateOffset =
 	function(
+		doc,       // the doc this para belongs to
 		offset,    // the offset to get the point from.
-		flowPos$   // if set, writes flow$line and flow$token
+		flowPos    // if set, writes flow$line and flow$token
 		//         // to the flow position used.
 	)
 {
@@ -646,15 +638,13 @@ Para.prototype.locateOffset =
 	var
 		twig =
 			this.twig,
-		doc =
-			shell.$space.getSub (
-				this.path,
-				'Doc'
-			),
+
 		font =
 			doc.getFont( ),
+
 		text =
 			twig.text,
+
 		flow =
 			this.getFlow( ),
 		a,
@@ -695,12 +685,12 @@ Para.prototype.locateOffset =
 		}
 	}
 
-	if( flowPos$ )
+	if( flowPos )
 	{
-		flowPos$.flow$line =
+		flowPos.flow$line =
 			lineN;
 
-		flowPos$.flow$token =
+		flowPos.flow$token =
 			tokenN;
 	}
 
@@ -1224,7 +1214,7 @@ Para.prototype.keyUp =
 
 		at1 =
 			ve.getOffsetAt(
-				ve.getFlow().length - 1,
+				ve.getFlow( ).length - 1,
 				x
 			);
 
@@ -1599,14 +1589,8 @@ Jools.lazyFixate(
 Para.prototype.update =
 	function( twig )
 {
-	this.twig =
-		twig;
-
-	this.$flow =
-		null;
-
-	this.$fabric =
-		null;
+	// TODO
+	throw new Error( 'Paras no longer update');
 };
 
 

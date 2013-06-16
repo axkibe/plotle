@@ -8,7 +8,8 @@
 /*
 | Imports
 */
-var Jools;
+var
+	Jools;
 
 
 /*
@@ -22,7 +23,7 @@ var Twig =
 | Capsule
 */
 ( function( ) {
-"use strict";
+'use strict';
 
 
 /*
@@ -40,6 +41,8 @@ if( typeof( window ) === 'undefined' )
 Twig =
 	function( )
 {
+
+	Jools.immute( this );
 };
 
 
@@ -86,14 +89,11 @@ Twig.prototype.rankOf =
 		return r;
 	}
 
-	// TODO see if the statement below can be integrated
 	var x =
-		Jools.is( this.copse[key] ) ?
+	rof[ key ] =
+		Jools.is( this.copse[ key ] ) ?
 			ranks.indexOf( key ) :
 			-1;
-
-	rof[ key ] =
-		x;
 
 	return x;
 };
@@ -166,7 +166,8 @@ Twig.getType =
 */
 if( typeof( window ) === 'undefined')
 {
-	module.exports = Twig;
+	module.exports =
+		Twig;
 }
 
 } )( );

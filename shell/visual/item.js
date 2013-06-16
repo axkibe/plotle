@@ -81,15 +81,18 @@ Item.prototype.Item =
 
 
 /*
-| Updates the $sub to match a new twig.
+| Updates the item to match a new twig.
 */
 Item.prototype.update =
 	function(
 		twig
 	)
 {
-	this.twig    = twig;
-	this.$fabric = null;
+	this.twig =
+		twig;
+
+	this.$fabric =
+		null;
 
 	this.poke( );
 };
@@ -185,8 +188,10 @@ Item.prototype.planHandles =
 	var
 		ha =
 			this.handles,
+
 		zone =
 			this.getZone( ),
+
 		h =
 			this.$handles;
 
@@ -470,7 +475,7 @@ Item.prototype.sketchHandle =
 
 
 /*
-| Draws the handles of an item (resize, itemmenu)
+| Draws the handles of an item ( resize, itemmenu )
 */
 Item.prototype.drawHandles =
 	function(
@@ -856,7 +861,9 @@ Item.prototype.pointingHover =
 | Sets the focus to this item.
 */
 Item.prototype.grepFocus =
-	function( space )
+	function(
+		space
+	)
 {
 	// already have focus?
 	if(

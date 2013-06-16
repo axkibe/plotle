@@ -563,7 +563,10 @@ Note.prototype.scrollCaretIntoView =
 
 	var
 		cp =
-			para.getCaretPos( ),
+			para.getCaretPos(
+				this,
+				caret
+			),
 
 		pnw =
 			this.$sub.doc.getPNW( para.key ),

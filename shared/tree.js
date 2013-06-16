@@ -2,22 +2,25 @@
 | The tree is Meshcraft's basic data structure.
 |
 | Authors: Axel Kittenberger
+|
+| FIXME: integreate tree and twig to be only one thing
 */
 
 
 /*
 | Imports
 */
-var Jools;
-var Path;
-var Twig;
+var
+	Jools,
+	Path,
+	Twig;
 
 
 /*
 | Exports
 */
-var Tree
-	= null;
+var Tree =
+	null;
 
 
 /*
@@ -54,7 +57,7 @@ Tree =
 {
 	if( !Jools.isnon( pattern ) )
 	{
-		throw new Error('fail');
+		throw new Error( 'fail' );
 	}
 
 	this.pattern =
@@ -551,8 +554,11 @@ Tree.prototype.getPath =
 		throw new Error( 'getPath invalid shorten' );
 	}
 
-	var aZ   = Jools.is( shorten ) ? shorten : path.length;
-	var twig = this.root;
+	var aZ =
+		Jools.is( shorten ) ? shorten : path.length;
+
+	var twig =
+		this.root;
 
 	for( var a = 0; a < aZ; a++ )
 	{
@@ -602,8 +608,11 @@ Tree.prototype.setPath =
 
 	for( var a = aZ - 1; a >= 0; a-- )
 	{
-		var twig = this.getPath( path, a );
-		val      = this.grow( twig, path.get( a ), val );
+		var twig =
+			this.getPath( path, a );
+
+		val =
+			this.grow( twig, path.get( a ), val );
 	}
 
 	return new Tree( val, this.pattern );

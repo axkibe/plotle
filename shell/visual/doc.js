@@ -121,9 +121,7 @@ Doc.prototype.update =
 	this.twig =
 		twig;
 
-	var old =
-		this.$sub;
-
+	// TODO make $sub no longer $
 	var sub =
 	this.$sub =
 		{ };
@@ -133,31 +131,15 @@ Doc.prototype.update =
 
 	for( var k in copse )
 	{
-		var s = twig.copse[ k ];
-		var o = old[ k ];
-
-		if ( Jools.is( o ) )
-		{
-			if ( o.twig !== s )
-			{
-				o.update( s );
-			}
-
-			sub[ k ] = o;
-		}
-		else
-		{
-			o =
-				new Visual.Para(
-					s,
-					new Path( this.path, '++', k )
-				);
-
-			o.update( s );
-			sub[ k ] = o;
-		}
+		sub[ k ] =
+			new Visual.Para(
+				twig.copse[ k ],
+				new Path(
+					this.path,
+					'++', k
+				)
+			);
 	}
-
 };
 
 
@@ -233,6 +215,7 @@ Doc.prototype.draw =
 			);
 
 		vpara.draw(
+			this,
 			fabric,
 			view,
 			view.point( p )
@@ -497,10 +480,16 @@ Doc.prototype.sketchSelection = function(
 			this.$sub[ key2 ],
 
 		p1 =
-			vpara1.locateOffset( s1.at1 ),
+			vpara1.locateOffset(
+				this,
+				s1.at1
+			),
 
 		p2 =
-			vpara2.locateOffset( s2.at1 ),
+			vpara2.locateOffset(
+				this,
+				s2.at1
+			),
 
 		fontsize =
 			this.getFont( ).size,
