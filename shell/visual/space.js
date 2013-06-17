@@ -773,11 +773,12 @@ Space.prototype.dragStart =
 		ctrl
 	)
 {
-	var view =
-		this.$view;
+	var
+		view =
+			this.$view,
 
-	var focus =
-		this.focusedItem( );
+		focus =
+			this.focusedItem( );
 
 	// see if the handles were targeted
 	if(
@@ -785,32 +786,35 @@ Space.prototype.dragStart =
 		focus
 	)
 	{
-		var dp;
-		var com =
-			focus.checkHandles(
-				view,
-				p
-			);
+		var
+			dp,
+			com =
+				focus.checkHandles(
+					view,
+					p
+				);
 
 		if( com )
 		{
 			// resizing
-			dp = view.depoint(p);
+			dp =
+				view.depoint( p );
 
-			action = shell.bridge.startAction(
-				'ItemResize',
-				'space',
-				'itemPath',
-					focus.path,
-				'start',
-					dp,
-				'move',
-					dp,
-				'align',
-					com,
-				'startZone',
-					focus.getZone( )
-			);
+			action =
+				shell.bridge.startAction(
+					'ItemResize',
+					'space',
+					'itemPath',
+						focus.path,
+					'start',
+						dp,
+					'move',
+						dp,
+					'align',
+						com,
+					'startZone',
+						focus.getZone( )
+				);
 
 			return;
 		}

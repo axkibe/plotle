@@ -27,7 +27,11 @@ var Jools;
 'use strict';
 
 if( typeof( window ) === 'undefined' )
-	{ throw new Error('this code needs a browser!'); }
+{
+	throw new Error(
+		'this code needs a browser!'
+	);
+}
 
 
 var actionList =
@@ -135,13 +139,12 @@ Action =
 		throw new Error( 'invalid action' );
 	}
 
-	this.section = args[ 1 ];
+	this.section =
+		args[ 1 ];
 
 	switch( this.section )
 	{
 		case 'space' :
-			break;
-
 		case 'board' :
 			break;
 
