@@ -289,17 +289,18 @@ Note.prototype.draw =
 		view
 	)
 {
-	var zone =
-		this.getZone( );
+	var
+		zone =
+			this.getZone( ),
 
-	var vzone =
-		view.rect( zone );
+		vzone =
+			view.rect( zone ),
 
-	var f =
-		this.$fabric;
+		f =
+			this.$fabric,
 
-	var sbary =
-		this.scrollbarY;
+		sbary =
+			this.scrollbarY;
 
 	// no buffer hit?
 	if(
@@ -316,27 +317,28 @@ Note.prototype.draw =
 				vzone.height + 2
 			);
 
-		var doc =
-			this.$sub.doc;
+		var
+			doc =
+				this.$sub.doc,
 
-		var imargin =
-			this.innerMargin;
+			imargin =
+				this.innerMargin,
 
-		// calculates if a scrollbar is needed
-		var height =
-			doc.getHeight();
+			// calculates if a scrollbar is needed
+			height =
+				doc.getHeight( this ),
+
+			silhoutte =
+				this.getZeroSilhoutte( zone ),
+
+			style =
+				Style.getStyle(
+					theme.note.style,
+					'normal'
+				);
 
 		sbary.visible =
 			height > zone.height - imargin.y;
-
-		var silhoutte =
-			this.getZeroSilhoutte( zone );
-
-		var style =
-			Style.getStyle(
-				theme.note.style,
-				'normal'
-			);
 
 		f.fill(
 			style,
@@ -355,8 +357,8 @@ Note.prototype.draw =
 		doc.draw(
 			f,
 			view.home( ),
+			this,
 			zone.width,
-			imargin,
 			sbary.point
 		);
 
@@ -524,7 +526,7 @@ Note.prototype.setScrollbar =
 	sbary.setPos(
 		pos,
 		zone.height - this.innerMargin.y,
-		this.$sub.doc.getHeight( ),
+		this.$sub.doc.getHeight( this ),
 		Euclid.Point.renew(
 			zone.pse.x, zone.pnw.y + theme.scrollbar.vdis, sbary.pnw
 		),

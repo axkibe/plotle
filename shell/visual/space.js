@@ -1497,15 +1497,17 @@ Space.prototype.specialKey =
 		return;
 	}
 
-	var item =
+	var node =
 		this.getSub(
 			caret.sign.path,
 			'specialKey'
 		);
 
-	if( item )
+	if( node )
 	{
-		item.specialKey(
+		node.specialKey(
+			this,
+			caret,
 			key,
 			shift,
 			ctrl

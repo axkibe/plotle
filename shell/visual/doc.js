@@ -43,6 +43,7 @@ if ( typeof( window ) === 'undefined' )
 var Doc =
 Visual.Doc =
 	function(
+		inherit,
 		twig,
 		path
 	)
@@ -65,11 +66,12 @@ Visual.Doc =
 	this._$pnws =
 		null;
 
-	var ranks =
-		twig.ranks;
+	var
+		ranks =
+			twig.ranks,
 
-	var copse =
-		twig.copse;
+		copse =
+			twig.copse;
 
 	for(
 		var r = 0, rZ = twig.length;
@@ -80,11 +82,22 @@ Visual.Doc =
 		var k =
 			ranks[ r ];
 
-		sub[ k ] =
-			new Visual.Para(
-				copse[ k ],
-				new Path( path, '++', k )
-			);
+		if(
+			inherit &&
+			inherit.twig.copse[ k ] === copse[ k ]
+		)
+		{
+			sub[ k ] =
+				inherit.$sub[ k ];
+		}
+		else
+		{
+			sub[ k ] =
+				new Visual.Para(
+					copse[ k ],
+					new Path( path, '++', k )
+				);
+		}
 	}
 };
 
@@ -116,30 +129,12 @@ Doc.prototype.atRank =
 | Updates the subtree to match a new twig.
 */
 Doc.prototype.update =
-	function( twig )
+	function( )
 {
-	this.twig =
-		twig;
-
-	// TODO make $sub no longer $
-	var sub =
-	this.$sub =
-		{ };
-
-	var copse =
-		twig.copse;
-
-	for( var k in copse )
-	{
-		sub[ k ] =
-			new Visual.Para(
-				twig.copse[ k ],
-				new Path(
-					this.path,
-					'++', k
-				)
-			);
-	}
+	// TODO
+	throw new Error(
+		'Doc.update()'
+	);
 };
 
 
@@ -150,17 +145,21 @@ Doc.prototype.draw =
 	function(
 		fabric,      // to draw upon
 		view,        // current pan/zoom/motion
+		item,        // the item the doc belongs to
 		width,       // the width to draw the document with
-		innerMargin, // distance of text to edge
 		scrollp      // scroll position
 	)
 {
 	// FIXME <pre>
-	var paraSep =
-		this.getParaSep( );
+	var
+		paraSep =
+			this.getParaSep( item ),
 
-	var selection =
-		shell.getSelection( );
+		selection =
+			shell.getSelection( ),
+
+		innerMargin =
+			item.innerMargin;
 
 	// draws the selection
 	if (
@@ -173,6 +172,7 @@ Doc.prototype.draw =
 			this,
 			'sketchSelection',
 			view,
+			item,
 			width,
 			innerMargin,
 			scrollp
@@ -218,6 +218,7 @@ Doc.prototype.draw =
 			this,
 			fabric,
 			view,
+			item,
 			view.point( p )
 		);
 
@@ -233,19 +234,29 @@ Doc.prototype.draw =
 | FIXME caching
 */
 Doc.prototype.getHeight =
-	function( )
+	function(
+		item
+	)
 {
-	var fs =
-		this.getFont( ).size;
+	if(! Jools.is( item ) )
+	{
+		throw new Error(
+			'TODO'
+		);
+	}
 
-	var paraSep =
-		this.getParaSep( );
+	var
+		fs =
+			this.getFont( item ).size,
 
-	var twig =
-		this.twig;
+		paraSep =
+			this.getParaSep( item ),
 
-	var height =
-		0;
+		twig =
+			this.twig,
+
+		height =
+			0;
 
 	for(
 		var r = 0, rZ = twig.length;
@@ -289,7 +300,12 @@ Doc.prototype.getPNW =
 Doc.prototype.getSpread =
 	function( )
 {
-	var spread = 0;
+	var
+		spread =
+			0,
+
+		max =
+			Math.max;
 
 	for(
 		var r = 0, rZ = this.twig.length;
@@ -297,10 +313,11 @@ Doc.prototype.getSpread =
 		r++
 	)
 	{
-		spread = Math.max(
-			spread,
-			this.atRank( r ).getFlow( ).spread
-		);
+		spread =
+			max(
+				spread,
+				this.atRank( r ).getFlow( ).spread
+			);
 	}
 
 	return spread;
@@ -309,22 +326,15 @@ Doc.prototype.getSpread =
 
 /*
 | Returns the default font for the document.
-| Parameter item is optional, just to safe double and tripple lookups.
 */
 Doc.prototype.getFont =
 	function( item )
 {
-	// caller can optionally provide the item
-	// for performance optimization otherwise
-	// greps it itself.
-
 	if(! Jools.is( item ) )
 	{
-		item =
-			shell.$space.getSub(
-				this.path,
-				'Item'
-			);
+		throw new Error(
+			'TODO'
+		);
 	}
 
 	var fs =
@@ -400,13 +410,11 @@ Doc.prototype.getParaSep =
 {
 	if( !Jools.is( item ) )
 	{
-		item = shell.$space.getSub(
-			this.path,
-			'Item'
-		);
+		throw new Error('TODO');
 	}
 
-	var fs = this.getFont( ).size;
+	var fs =
+		this.getFont( item ).size;
 
 	return item.getParaSep( fs );
 };
@@ -438,6 +446,7 @@ Doc.prototype.sketchSelection = function(
 	border,      // width of the path (ignored)
 	twist,       // true -> drawing a border, false -> fill
 	view,        // current view
+	item,        // the item of the doc
 	width,       // width the vdoc is drawn
 	innerMargin, // inner margin of the doc
 	scrollp      // scroll position of the doc
@@ -452,9 +461,10 @@ Doc.prototype.sketchSelection = function(
 
 	selection.normalize( space );
 
-	var sp = scrollp;
-
 	var
+		sp =
+			scrollp,
+
 		s1 =
 			selection.$begin,
 
@@ -481,18 +491,18 @@ Doc.prototype.sketchSelection = function(
 
 		p1 =
 			vpara1.locateOffset(
-				this,
+				item,
 				s1.at1
 			),
 
 		p2 =
 			vpara2.locateOffset(
-				this,
+				item,
 				s2.at1
 			),
 
 		fontsize =
-			this.getFont( ).size,
+			this.getFont( item ).size,
 
 		descend =
 			Math.round( fontsize * theme.bottombox ),

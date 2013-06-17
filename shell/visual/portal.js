@@ -690,7 +690,7 @@ Portal.prototype.positionCaret =
 	var
 		cpos =
 			caret.$pos =
-			this._getCaretPos( ),
+			this._getCaretPos( caret ),
 
 		pnw =
 			this.getZone( ).pnw,
@@ -1211,17 +1211,13 @@ Portal.prototype._fonts =
 
 /*
 | Returns the caret position.
-|
-| FIXME remove?
 */
 Portal.prototype._getCaretPos =
-	function( )
+	function(
+		caret
+	)
 {
 	var
-		// TODO hand down caret.
-		caret =
-			shell.$space.$caret,
-
 		section =
 			caret.sign.path.get( -1 ),
 
@@ -1297,7 +1293,13 @@ Portal.prototype._locateOffset =
 | User pressed a special key.
 */
 Portal.prototype.specialKey =
-	function( key )
+	function(
+		space,
+		caret,
+		key
+		// shift
+		// ctrl
+	)
 {
 	var show =
 		false;
@@ -1307,7 +1309,7 @@ Portal.prototype.specialKey =
 		case 'backspace' :
 
 			show =
-				this.keyBackspace( )
+				this.keyBackspace( caret )
 				||
 				show;
 
@@ -1325,7 +1327,7 @@ Portal.prototype.specialKey =
 		case 'down' :
 
 			show =
-				this.keyDown( )
+				this.keyDown( caret )
 				||
 				show;
 
@@ -1467,12 +1469,11 @@ Portal.prototype.keyLeft =
 | User pressed down key.
 */
 Portal.prototype.keyDown =
-	function( )
+	function(
+		caret
+	)
 {
 	var
-		caret =
-			shell.$space.$caret,
-
 		csign =
 			caret.sign,
 
@@ -1486,7 +1487,7 @@ Portal.prototype.keyDown =
 
 	var
 		cpos =
-			this._getCaretPos( );
+			this._getCaretPos( caret );
 
 	switch( section )
 	{
@@ -1607,7 +1608,7 @@ Portal.prototype.keyUp =
 
 	var
 		cpos =
-			this._getCaretPos( );
+			this._getCaretPos( caret );
 
 	switch( section )
 	{
@@ -1699,13 +1700,14 @@ Portal.prototype.keyRight =
 | User pressed backspace.
 */
 Portal.prototype.keyBackspace =
-	function( )
+	function( caret )
 {
-	var csign =
-		shell.$space.$caret.sign;
+	var
+		csign =
+			caret.sign,
 
-	var section =
-		csign.path.get( -1 );
+		section =
+			csign.path.get( -1 );
 
 	if( !this._isSection( section ) )
 	{

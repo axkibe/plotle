@@ -116,11 +116,12 @@ Label.s_drawTrans =
 		transLabel // the transLabel to draw
 	)
 {
-	var zone =
-		transLabel.zone;
+	var
+		zone =
+			transLabel.zone,
 
-	var silhoutte =
-		Label.s_getSilhoutte( zone );
+		silhoutte =
+			Label.s_getSilhoutte( zone );
 
 	// draws selection and text
 	var f =
@@ -135,7 +136,6 @@ Label.s_drawTrans =
 	fabric.drawImage(
 		'image',
 			f,
-
 		'pnw',
 			view.point( zone.pnw )
 	);
@@ -162,38 +162,39 @@ Label.s_createTrans =
 		p2
 	)
 {
-	var dy =
-		Math.abs( p1.y - p2.y );
+	var
+		dy =
+			Math.abs( p1.y - p2.y ),
 
-	var ny =
-		Math.min( p1.y , p2.y );
+		ny =
+			Math.min( p1.y , p2.y ),
 
-	var fs =
-		Math.max(
-			dy / ( 1 + theme.bottombox ),
-			theme.label.minSize
-		);
+		fs =
+			Math.max(
+				dy / ( 1 + theme.bottombox ),
+				theme.label.minSize
+			),
 
-	var font =
-		fontPool.get(
-			fs,
-			'la'
-		);
+		font =
+			fontPool.get(
+				fs,
+				'la'
+			),
 
-	var flow =
-		Visual.Para.s_getFlow(
-			font,
-			0,
-			'Label'
-		);
+		flow =
+			Visual.Para.s_getFlow(
+				font,
+				0,
+				'Label'
+			),
 
-	var height =
-		flow.height +
-		Math.round(
-			font.size * theme.bottombox
-		);
+		height =
+			flow.height +
+			Math.round(
+				font.size * theme.bottombox
+			),
 
-	var pnw;
+		pnw;
 
 	if( p2.x > p1.x )
 	{
@@ -363,11 +364,12 @@ Label.prototype.dragStop =
 		case 'ItemDrag' :
 		case 'ItemResize' :
 
-			var zone =
-				this.getZone( );
+			var
+				zone =
+					this.getZone( ),
 
-			var fontsize =
-				this.$sub.doc.getFont( ).size;
+				fontsize =
+					this.$sub.doc.getFont( this ).size;
 
 			if( !this.twig.pnw.eq( zone.pnw ) )
 			{
@@ -438,21 +440,22 @@ Label.prototype.draw =
 		f.$zoom =
 			view.zoom;
 
-		var doc =
-			this.$sub.doc;
+		var
+			doc =
+				this.$sub.doc,
 
-		var imargin =
-			this.innerMargin;
+			imargin =
+				this.innerMargin,
 
-		var silhoutte =
-			this.getZeroSilhoutte( zone );
+			silhoutte =
+				this.getZeroSilhoutte( zone );
 
 		// draws selection and text
 		doc.draw(
 			f,
 			view.home( ),
+			this,
 			zone.width,
-			imargin,
 			Euclid.Point.zero
 		);
 
@@ -610,7 +613,7 @@ Label.prototype.getZone =
 			this.$sub.doc,
 
 		fs =
-			doc.getFont( ).size,
+			doc.getFont( this ).size,
 
 		width =
 			Math.max(
@@ -620,7 +623,7 @@ Label.prototype.getZone =
 
 		height =
 			Math.max(
-				Math.ceil( doc.getHeight( ) ),
+				Math.ceil( doc.getHeight( this ) ),
 				Math.round( fs )
 			);
 

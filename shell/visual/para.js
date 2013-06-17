@@ -137,7 +137,8 @@ Para.prototype.draw =
 	function(
 		doc,    // the document the para belongs to
 		fabric, // the fabric to draw upon
-		view,   // the current vient
+		view,   // the current vient,
+		item,   // the item this para belongs to
 		pnw     // pnw of this para
 	)
 {
@@ -146,13 +147,13 @@ Para.prototype.draw =
 			this.getFlow( ),
 
 		font =
-			doc.getFont( ),
+			doc.getFont( item ),
 
 		width =
 			flow.spread * view.zoom,
 
 		height =
-			this.getHeight( doc ) * view.zoom,
+			this.getHeight( item ) * view.zoom,
 
 		f =
 			this.$fabric;
@@ -268,18 +269,15 @@ Para.prototype.getCaretPos =
 	)
 {
 	var
-		doc =
-			item.$sub.doc,
-
 		fs =
-			doc.getFont( item ).size,
+			item.$sub.doc.getFont( item ).size,
 
 		descend =
 			fs * theme.bottombox,
 
 		p =
 			this.locateOffset(
-				doc,
+				item,
 				caret.sign.at1,
 				caret
 			),
@@ -509,7 +507,7 @@ Para.prototype.getFlow =
 */
 Para.prototype.getHeight =
 	function(
-		doc  // the document this para belongs to
+		item // the item this para belongs to
 	)
 {
 	var
@@ -518,7 +516,9 @@ Para.prototype.getHeight =
 
 	return (
 		flow.height +
-		Math.round( doc.getFont( ).size * theme.bottombox )
+		Math.round(
+			item.$sub.doc.getFont( item ).size * theme.bottombox
+		)
 	);
 };
 
@@ -628,19 +628,24 @@ Para.prototype.getOffsetAt =
 */
 Para.prototype.locateOffset =
 	function(
-		doc,       // the doc this para belongs to
+		item,      // the doc this para belongs to
 		offset,    // the offset to get the point from.
 		flowPos    // if set, writes flow$line and flow$token
 		//         // to the flow position used.
 	)
 {
+	if(! item.Item )
+	{
+		throw new Error('TODO');
+	}
+
 	// FIXME cache position
 	var
 		twig =
 			this.twig,
 
 		font =
-			doc.getFont( ),
+			item.$sub.doc.getFont( item ),
 
 		text =
 			twig.text,
@@ -1252,26 +1257,20 @@ Para.prototype.knock =
 */
 Para.prototype.specialKey =
 	function(
+		space,
+		caret,
 		key,
 		shift,
 		ctrl
 	)
 {
 	var
-		space =
-			shell.$space,
-
-		// TODO hand caret as param to specialKey
-		caret =
-			space.$caret,
-
 		selection =
 			shell.getSelection( ),
 
-		// TODO similar item, doc, hand it properly instead of regetting them.
 		item =
 			space.getSub(
-				this.path,
+				caret.sign.path,
 				'Item'
 			),
 

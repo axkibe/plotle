@@ -60,13 +60,15 @@ Visual.DocItem =
 
 	this.$sub =
 		{
-			doc : new Visual.Doc(
-				twig.doc,
-				new Path(
-					path,
-					'++', 'doc'
+			doc :
+				new Visual.Doc(
+					null,
+					twig.doc,
+					new Path(
+						path,
+						'++', 'doc'
+					)
 				)
-			)
 		};
 };
 
@@ -110,7 +112,15 @@ DocItem.prototype.update =
 
 	if (doc.twig !== twig.doc)
 	{
-		doc.update( twig.doc );
+		this.$sub.doc =
+			new Visual.Doc(
+				doc,
+				twig.doc,
+				new Path(
+					this.path,
+					'++', 'doc'
+				)
+			);
 	}
 
 };
