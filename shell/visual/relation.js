@@ -40,6 +40,8 @@ if( typeof( window ) === 'undefined' )
 var Relation =
 Visual.Relation =
 	function(
+		overload,
+		inherit,
 		twig,
 		path
 	)
@@ -47,6 +49,7 @@ Visual.Relation =
 	Visual.Label.call(
 		this,
 		'twig',
+		inherit,
 		twig,
 		path
 	);
