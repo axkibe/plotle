@@ -418,9 +418,14 @@ var ensureArgs =
 		//   argument name, defined variable
 	)
 {
-	for( var a = 0, aZ = arguments.length; a < aZ; a+= 2 )
+	for(
+		var a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
 	{
-		var arg = arguments[ a + 1 ];
+		var arg =
+			arguments[ a + 1 ];
 
 		if(! Jools.is( arg ) )
 		{

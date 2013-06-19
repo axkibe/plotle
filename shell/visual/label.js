@@ -12,7 +12,7 @@ var
 	Visual;
 
 Visual =
-	Visual || {};
+	Visual || { };
 
 
 /*
@@ -49,15 +49,119 @@ if( typeof( window ) === 'undefined' )
 var Label =
 Visual.Label =
 	function(
-		twig,
-		path
+		overload,
+		inherit,
+		a1,   // twig  -  p1
+		a2    // path  -  p2
 	)
 {
-	Visual.DocItem.call(
-		this,
-		twig,
-		path
-	);
+	switch( overload )
+	{
+		case 'twig' :
+
+			var
+				twig =
+					a1,
+
+				path =
+					a2;
+
+			Visual.DocItem.call(
+				this,
+				'twig',
+				null, // inherit, TODO
+				twig,
+				path
+			);
+
+			this.pnw =
+				twig.pnw;
+
+			break;
+
+		case 'p1p2' :
+
+			var
+				p1 =
+					a1,
+
+				p2 =
+					a2;
+
+			var
+				dy =
+					Math.abs( p1.y - p2.y ),
+
+				ny =
+					Math.min( p1.y , p2.y ),
+
+				fontsize =
+					Math.max(
+						dy / ( 1 + theme.bottombox ),
+						theme.label.minSize
+					),
+
+				font =
+					fontPool.get(
+						fontsize,
+						'la'
+					),
+
+				flow =
+					Visual.Para.s_getFlow(
+						font,
+						0,
+						'Label'
+					),
+
+				height =
+					flow.height +
+					Math.round(
+						font.size * theme.bottombox
+					);
+
+			Visual.DocItem.call(
+				this,
+				'phrase',
+				null,
+				'Label',
+				fontsize
+			);
+
+
+			if( p2.x > p1.x )
+			{
+				this.pnw =
+					new Euclid.Point(
+						p1.x,
+					ny
+				);
+			}
+			else
+			{
+				this.pnw =
+					new Euclid.Point(
+						p1.x - flow.spread,
+						ny
+					);
+			}
+
+			var zone =
+				new Euclid.Rect(
+					'pnw/size',
+					this.pnw,
+					flow.spread,
+					height
+				);
+
+			break;
+
+		default :
+
+			throw new Error(
+				'invalid overload'
+			);
+	}
 };
 
 
@@ -68,47 +172,10 @@ Jools.subclass(
 
 
 /*
-| Default margin for all labels.
-*/
-Label.s_innerMargin =
-	new Euclid.Margin(
-		theme.label.innerMargin
-	);
-
-
-/*
-| Resize handles to show on labels
-*/
-Label.s_handles =
-	Jools.immute(
-		{
-			ne : true,
-			se : true,
-			sw : true,
-			nw : true
-		}
-	);
-
-
-/*
-| Returns the labels silhoutte.
-*/
-Label.s_getSilhoutte =
-	function( zone )
-{
-	return new Euclid.Rect(
-		'pnw/pse',
-		zone.pnw,
-		zone.pse.sub( 1, 1 )
-	);
-};
-
-
-
-/*
 | Draws a transitory label
 | ( A label in the making )
 */
+/*
 Label.s_drawTrans =
 	function(
 		fabric,    // the fabric to draw upon
@@ -151,106 +218,30 @@ Label.s_drawTrans =
 		view
 	);
 };
-
-
-/*
-| Creates and returns a transient label.
 */
-Label.s_createTrans =
-	function(
-		p1,
-		p2
-	)
-{
-	var
-		dy =
-			Math.abs( p1.y - p2.y ),
-
-		ny =
-			Math.min( p1.y , p2.y ),
-
-		fs =
-			Math.max(
-				dy / ( 1 + theme.bottombox ),
-				theme.label.minSize
-			),
-
-		font =
-			fontPool.get(
-				fs,
-				'la'
-			),
-
-		flow =
-			Visual.Para.s_getFlow(
-				font,
-				0,
-				'Label'
-			),
-
-		height =
-			flow.height +
-			Math.round(
-				font.size * theme.bottombox
-			),
-
-		pnw;
-
-	if( p2.x > p1.x )
-	{
-		pnw =
-			new Euclid.Point(
-				p1.x,
-				ny
-			);
-	}
-	else
-	{
-		pnw =
-			new Euclid.Point(
-				p1.x - flow.spread,
-				ny
-			);
-	}
-
-	var zone =
-		new Euclid.Rect(
-			'pnw/size',
-			pnw,
-			flow.spread,
-			height
-		);
-
-	return Jools.immute(
-		{
-			font :
-				font,
-
-			flow :
-				flow,
-
-			pnw :
-				pnw,
-
-			zone :
-				zone
-		}
-	);
-};
 
 
 /*
 | Default margin for all labels.
 */
 Label.prototype.innerMargin =
-	Label.s_innerMargin;
+	new Euclid.Margin(
+		theme.label.innerMargin
+	);
 
 
 /*
 | Resize handles to show on labels
 */
 Label.prototype.handles =
-	Label.s_handles;
+	Jools.immute(
+		{
+			ne : true,
+			se : true,
+			sw : true,
+			nw : true
+		}
+	);
 
 
 /*
@@ -513,6 +504,7 @@ Label.prototype.fontSizeChange =
 
 	if(
 		!action ||
+		!this.path ||
 		!this.path.equals( action.itemPath )
 	)
 	{
@@ -528,10 +520,11 @@ Label.prototype.fontSizeChange =
 				return fontsize;
 			}
 
-			var height =
-				action.startZone.height;
+			var
+				height =
+					action.startZone.height,
 
-			var dy;
+				dy;
 
 			switch( action.align )
 			{
@@ -606,29 +599,32 @@ Label.prototype.getZone =
 			shell.bridge.action( ),
 
 		pnw =
-			this.twig.pnw,
+			this.pnw,
 
 		// FIXME Caching!
 		doc =
 			this.$sub.doc,
 
-		fs =
+		fontsize =
 			doc.getFont( this ).size,
 
 		width =
 			Math.max(
-				Math.ceil( doc.getSpread( ) ),
-				Math.round( fs * 0.3 )
+				Math.ceil(
+					doc.getSpread( this )
+				),
+				Math.round( fontsize * 0.3 )
 			),
 
 		height =
 			Math.max(
 				Math.ceil( doc.getHeight( this ) ),
-				Math.round( fs )
+				Math.round( fontsize )
 			);
 
 	if(
 		!action ||
+		!this.path ||
 		!this.path.equals( action.itemPath )
 	)
 	{

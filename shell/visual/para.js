@@ -47,20 +47,57 @@ if( typeof( window ) === 'undefined' )
 var Para =
 Visual.Para =
 	function(
-		twig,
-		path
+		overload,
+		a1,
+		a2
 	)
 {
-	if( twig.type !== 'Para' )
+	switch( overload )
 	{
-		throw new Error( 'type error' );
-	}
+		case 'twig' :
 
-	Visual.Base.call(
-		this,
-		twig,
-		path
-	);
+			var
+				twig =
+					a1,
+
+				path =
+					a2;
+
+			if( twig.type !== 'Para' )
+			{
+				throw new Error( 'type error' );
+			}
+
+			Visual.Base.call(
+				this,
+				twig,
+				path
+			);
+
+			this.text =
+				twig.text;
+
+			break;
+
+		case 'phrase' :
+
+			Visual.Base.call(
+				this,
+				null,
+				null
+			);
+
+			this.text =
+				a1;
+
+			break;
+
+		default :
+
+			throw new Error(
+				'invalid overload'
+			);
+	}
 
 	// caching
 	this.$fabric =
@@ -100,12 +137,23 @@ Para.s_draw =
 		zoom;
 
 	// draws text into the fabric
-	for( var a = 0, aZ = flow.length; a < aZ; a++ )
+	for(
+		var a = 0, aZ = flow.length;
+		a < aZ;
+		a++
+	)
 	{
-		var line = flow[ a ];
-		for( var b = 0, bZ = line.a.length; b < bZ; b++ )
+		var line =
+			flow[ a ];
+
+		for(
+			var b = 0, bZ = line.a.length;
+			b < bZ;
+			b++
+		)
 		{
-			var chunk = line.a[ b ];
+			var chunk =
+				line.a[ b ];
 
 			f.paintText(
 				'text',
@@ -144,7 +192,7 @@ Para.prototype.draw =
 {
 	var
 		flow =
-			this.getFlow( ),
+			this.getFlow( item ),
 
 		font =
 			doc.getFont( item ),
@@ -188,7 +236,7 @@ Para.prototype.draw =
 
 
 /*
-| Positions the caret drawing data. 
+| Positions the caret drawing data.
 */
 Para.prototype.positionCaret =
 	function(
@@ -440,15 +488,18 @@ Para.s_getFlow =
 | (Re)flows the paragraph, positioning all chunks.
 */
 Para.prototype.getFlow =
-	function( )
+	function(
+		item
+	)
 {
-	var
-		item =
-			shell.$space.getSub(
-				this.path,
-				'Item'
-			),
+	if( !item )
+	{
+		throw new Error(
+			'TODO'
+		);
+	}
 
+	var
 		flowWidth =
 			item.getFlowWidth( ),
 
@@ -460,7 +511,7 @@ Para.prototype.getFlow =
 
 		// FIXME go into subnodes instead
 		text =
-			this.twig.text;
+			this.text;
 
 	// checks for cache hit
 	if (
@@ -482,8 +533,6 @@ Para.prototype.getFlow =
 	)
 	{
 		caret.flow$line =
-			null;
-
 		caret.flow$token =
 			null;
 	}
@@ -510,9 +559,16 @@ Para.prototype.getHeight =
 		item // the item this para belongs to
 	)
 {
+	if( !item )
+	{
+		throw new Error(
+			'TODO'
+		);
+	}
+
 	var
 		flow =
-			this.getFlow( );
+			this.getFlow( item );
 
 	return (
 		flow.height +
@@ -546,7 +602,7 @@ Para.prototype.getOffsetAt =
 			doc.getFont( item ),
 
 		flow =
-			this.getFlow( ),
+			this.getFlow( item ),
 
 		fline =
 			flow[ line ],
@@ -648,10 +704,10 @@ Para.prototype.locateOffset =
 			item.$sub.doc.getFont( item ),
 
 		text =
-			twig.text,
+			this.text,
 
 		flow =
-			this.getFlow( ),
+			this.getFlow( item ),
 		a,
 		aZ,
 		lineN,
@@ -731,12 +787,13 @@ Para.prototype.locateOffset =
 */
 Para.prototype.getPointOffset =
 	function(
+		item,
 		point     // the point to look for
 	)
 {
 	var
 		flow =
-			this.getFlow( ),
+			this.getFlow( item ),
 
 		line;
 
@@ -854,7 +911,7 @@ Para.prototype.keyBackspace =
 
 		shell.peer.join(
 			ve.textPath,
-			ve.twig.text.length
+			ve.text.length
 		);
 
 		return true;
@@ -874,7 +931,7 @@ Para.prototype.keyDel =
 		caret
 	)
 {
-	if( caret.sign.at1 < this.twig.text.length )
+	if( caret.sign.at1 < this.text.length )
 	{
 		shell.peer.removeText(
 			this.textPath,
@@ -892,7 +949,7 @@ Para.prototype.keyDel =
 	{
 		shell.peer.join(
 			this.textPath,
-			this.twig.text.length
+			this.text.length
 		);
 
 		return true;
@@ -914,7 +971,7 @@ Para.prototype.keyDown =
 {
 	var
 		flow =
-			this.getFlow( ),
+			this.getFlow( item ),
 		x =
 			caret.retainx !== null ? caret.retainx : caret.$pos.x,
 
@@ -982,7 +1039,7 @@ Para.prototype.keyEnd =
 		caret
 	)
 {
-	if( caret.sign.at1 === this.twig.text.length )
+	if( caret.sign.at1 === this.text.length )
 	{
 		return false;
 	}
@@ -995,7 +1052,7 @@ Para.prototype.keyEnd =
 			path :
 				this.textPath,
 			at1 :
-				this.twig.text.length
+				this.text.length
 		}
 	);
 
@@ -1064,7 +1121,7 @@ Para.prototype.keyLeft =
 					ve.textPath,
 
 				at1 :
-					ve.twig.text.length
+					ve.text.length
 			}
 		);
 
@@ -1120,7 +1177,7 @@ Para.prototype.keyRight =
 	var space =
 		shell.$space;
 
-	if( caret.sign.at1 < this.twig.text.length )
+	if( caret.sign.at1 < this.text.length )
 	{
 		space.setCaret(
 			{
@@ -1170,7 +1227,7 @@ Para.prototype.keyUp =
 		caret
 	)
 {
-	this.getFlow( ); // FIXME, needed?
+	this.getFlow( item ); // FIXME, needed?
 
 	var
 		x =
@@ -1219,7 +1276,7 @@ Para.prototype.keyUp =
 
 		at1 =
 			ve.getOffsetAt(
-				ve.getFlow( ).length - 1,
+				ve.getFlow( item ).length - 1,
 				x
 			);
 
@@ -1306,8 +1363,9 @@ Para.prototype.specialKey =
 							{
 								path :
 									v1.textPath,
+
 								at1 :
-									v1.twig.text.length
+									v1.text.length
 							}
 						)
 					);

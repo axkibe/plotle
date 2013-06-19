@@ -52,6 +52,8 @@ if( typeof( window ) === 'undefined' )
 var Portal =
 Visual.Portal =
 	function(
+		overload,
+		inherit,
 		twig,
 		path
 	)

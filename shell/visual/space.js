@@ -37,7 +37,9 @@ var
 
 if( typeof( window ) === 'undefined' )
 {
-	throw new Error( 'this code needs a browser!' );
+	throw new Error(
+		'this code needs a browser!'
+	);
 }
 
 
@@ -135,27 +137,12 @@ Space.prototype.update =
 
 	for( var k in copse )
 	{
-		var s =
-			twig.copse[ k ];
-
-		var o =
-			old[ k ];
-
-		if( Jools.is( o ) )
-		{
-			if( o.twig !== s )
-			{
-				o.update( s );
-			}
-
-			sub[ k ] =
-				o;
-		}
-		else
-		{
-			sub[ k ] =
-				this.createItem( s, k );
-		}
+		sub[ k ] =
+			this.createItem(
+				twig.copse[ k ],
+				k,
+				old[ k ]
+			);
 	}
 
 	// removes the focus if the focused item is removed.
@@ -233,7 +220,8 @@ Space.prototype.focusedItem = function( )
 Space.prototype.createItem =
 	function(
 		twig,
-		k
+		key,
+		inherit
 	)
 {
 	var Proto =
@@ -245,9 +233,12 @@ Space.prototype.createItem =
 	}
 
 	return new Proto(
+		'twig',
+		inherit,
 		twig,
-		new Path( [ k ] ),
-		this
+		inherit ?
+			inherit.path :
+			new Path( [ key ] )
 	);
 };
 
@@ -307,15 +298,10 @@ Space.prototype.draw =
 
 			if( action.start && action.move )
 			{
-				var trans = Visual.Label.s_createTrans(
-					view.depoint( action.start ),
-					view.depoint( action.move  )
-				);
-
-				Visual.Label.s_drawTrans(
+				action.item.draw(
 					fabric,
-					view,
-					trans
+					this.$caret,
+					view
 				);
 			}
 
@@ -326,10 +312,11 @@ Space.prototype.draw =
 
 			if( action.start && action.move )
 			{
-				zone = Visual.Note.s_getZone(
-					view.depoint( action.start ),
-					view.depoint( action.move  )
-				);
+				zone =
+					Visual.Note.s_getZone(
+						view.depoint( action.start ),
+						view.depoint( action.move  )
+					);
 
 				Visual.Note.s_drawTrans(
 					fabric,
@@ -362,10 +349,11 @@ Space.prototype.draw =
 
 			if( action.fromItemPath )
 			{
-				var fromItem = this.getSub(
-					action.fromItemPath,
-					'Item'
-				);
+				var fromItem =
+					this.getSub(
+						action.fromItemPath,
+						'Item'
+					);
 
 				fromItem.highlight(
 					fabric,
@@ -584,7 +572,8 @@ Space.prototype.pointingHover =
 
 		if( com )
 		{
-			cursor = com + '-resize';
+			cursor =
+				com + '-resize';
 		}
 	}
 
@@ -800,21 +789,20 @@ Space.prototype.dragStart =
 			dp =
 				view.depoint( p );
 
-			action =
-				shell.bridge.startAction(
-					'ItemResize',
-					'space',
-					'itemPath',
-						focus.path,
-					'start',
-						dp,
-					'move',
-						dp,
-					'align',
-						com,
-					'startZone',
-						focus.getZone( )
-				);
+			shell.bridge.startAction(
+				'ItemResize',
+				'space',
+				'itemPath',
+					focus.path,
+				'start',
+					dp,
+				'move',
+					dp,
+				'align',
+					com,
+				'startZone',
+					focus.getZone( )
+			);
 
 			return;
 		}
@@ -828,6 +816,20 @@ Space.prototype.dragStart =
 	switch( action && action.type ) {
 
 		case 'createLabel' :
+
+			action.start =
+				p;
+
+			action.item =
+				new Visual.Label(
+					'p1p2',
+					null,
+					p,
+					p
+				);
+
+			return;
+
 		case 'createNote' :
 		case 'createPortal' :
 
@@ -1009,19 +1011,22 @@ Space.prototype.dragStop =
 
 		case 'createLabel' :
 
-			var trans =
-				Visual.Label.s_createTrans(
-					view.depoint( action.start ),
-					view.depoint( action.move  )
-				);
+			var
+				label =
+					new Visual.Label(
+						'p1p2',
+						null,
+						view.depoint( action.start ),
+						view.depoint( action.move  )
+					);
 
 			key =
 				shell.peer.newLabel(
 					this.spaceUser,
 					this.spaceTag,
-					trans.pnw,
+					label.pnw,
 					'Label',
-					trans.font.size
+					label.$sub.doc.getFont( label ).size
 				);
 
 			this.$sub[ key ].grepFocus( this );
@@ -1197,8 +1202,26 @@ Space.prototype.dragMove =
 
 	switch( action.type )
 	{
-		case 'createNote' :
 		case 'createLabel' :
+
+			action.move =
+				p;
+
+			action.item =
+				new Visual.Label(
+					'p1p2',
+					null,
+					action.start,
+					p
+				);
+
+
+			shell.redraw =
+				true;
+
+			return 'pointer';
+
+		case 'createNote' :
 		case 'createPortal' :
 
 			action.move =

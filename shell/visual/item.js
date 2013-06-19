@@ -83,6 +83,7 @@ Item.prototype.Item =
 /*
 | Updates the item to match a new twig.
 */
+/*
 Item.prototype.update =
 	function(
 		twig
@@ -96,6 +97,7 @@ Item.prototype.update =
 
 	this.poke( );
 };
+*/
 
 
 /*

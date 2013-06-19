@@ -49,12 +49,16 @@ if( typeof( window ) === 'undefined' )
 var Note =
 Visual.Note =
 	function(
+		overload,
+		inherit,
 		twig,
 		path
 	)
 {
 	Visual.DocItem.call(
 		this,
+		'twig',
+		inherit,
 		twig,
 		path
 	);
@@ -688,17 +692,18 @@ Note.prototype.getParaSep =
 Note.prototype.getZone =
 	function( )
 {
-	var twig =
-		this.twig;
+	var
+		twig =
+			this.twig,
 
-	var action =
-		shell.bridge.action( );
+		action =
+			shell.bridge.action( ),
 
-	var max =
-		Math.max;
+		max =
+			Math.max,
 
-	var min =
-		Math.min;
+		min =
+			Math.min;
 
 	if(
 		!action ||

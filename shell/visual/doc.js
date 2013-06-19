@@ -8,7 +8,9 @@
 /*
 | Export
 */
-var Visual;
+var
+	Visual;
+
 Visual =
 	Visual || { };
 
@@ -16,12 +18,13 @@ Visual =
 /*
 | Imports
 */
-var Euclid;
-var fontPool;
-var Jools;
-var Path;
-var shell;
-var theme;
+var
+	Euclid,
+	fontPool,
+	Jools,
+	Path,
+	shell,
+	theme;
 
 
 /*
@@ -33,71 +36,136 @@ var theme;
 
 if ( typeof( window ) === 'undefined' )
 {
-	throw new Error( 'this code requires a browser!' );
+	throw new Error(
+		'this code requires a browser!'
+	);
 }
 
 
 /*
 | Constructor.
+|
+| TODO: make fontsize into doc twig
 */
 var Doc =
 Visual.Doc =
 	function(
+		overload,
 		inherit,
-		twig,
-		path
+		a1,   // twig       | phrase
+		a2,   // path       | fontsize
+		a3    // fontsize
 	)
 {
-	Visual.Base.call(
-		this,
-		twig,
-		path
-	);
-
-	if( this.$sub !== null )
-	{
-		throw new Error('iFail');
-	}
-
-	var sub =
-	this.$sub =
-		[ ];
+	var
+		sub;
 
 	this._$pnws =
 		null;
 
-	var
-		ranks =
-			twig.ranks,
-
-		copse =
-			twig.copse;
-
-	for(
-		var r = 0, rZ = twig.length;
-		r < rZ;
-		r++
-	)
+	switch( overload )
 	{
-		var k =
-			ranks[ r ];
+		case 'twig' :
 
-		if(
-			inherit &&
-			inherit.twig.copse[ k ] === copse[ k ]
-		)
-		{
-			sub[ k ] =
-				inherit.$sub[ k ];
-		}
-		else
-		{
-			sub[ k ] =
+			var
+				twig =
+					a1,
+
+				path =
+					a2,
+
+				ranks =
+					twig.ranks,
+
+				copse =
+					twig.copse;
+
+			Visual.Base.call(
+				this,
+				twig,
+				path
+			);
+
+			this.fontsize =
+				a3;
+
+			this.ranks =
+				ranks;
+
+			sub =
+			this.$sub =
+				[ ];
+
+			for(
+				var r = 0, rZ = twig.length;
+				r < rZ;
+				r++
+			)
+			{
+				var k =
+					ranks[ r ];
+
+				if(
+					inherit &&
+					inherit.twig.copse[ k ] === copse[ k ]
+				)
+				{
+					sub[ k ] =
+						inherit.$sub[ k ];
+				}
+				else
+				{
+					sub[ k ] =
+						new Visual.Para(
+							'twig',
+							copse[ k ],
+							new Path(
+								path,
+								'++', k
+							)
+						);
+				}
+			}
+
+			break;
+
+		case 'phrase' :
+
+			var
+				phrase =
+					a1;
+
+			this.fontsize =
+				a2;
+
+			Visual.Base.call(
+				this,
+				null,
+				null
+			);
+
+			sub =
+			this.$sub =
+				[ ];
+
+			this.ranks =
+				[
+					'1'
+				];
+
+			sub[ '1' ] =
 				new Visual.Para(
-					copse[ k ],
-					new Path( path, '++', k )
+					'phrase',
+					phrase
 				);
-		}
+
+			break;
+
+		default :
+
+			throw new Error(
+				'invalid overload'
+			);
 	}
 };
 
@@ -121,20 +189,7 @@ Doc.prototype.Doc =
 Doc.prototype.atRank =
 	function( rank )
 {
-	return this.$sub[ this.twig.ranks[ rank ] ];
-};
-
-
-/*
-| Updates the subtree to match a new twig.
-*/
-Doc.prototype.update =
-	function( )
-{
-	// TODO
-	throw new Error(
-		'Doc.update()'
-	);
+	return this.$sub[ this.ranks[ rank ] ];
 };
 
 
@@ -179,30 +234,31 @@ Doc.prototype.draw =
 		);
 	}
 
-	var y =
-		innerMargin.n;
+	var
+		y =
+			innerMargin.n,
 
-	// north-west points of paras
-	var pnws =
-		{ };
+		// north-west points of paras
+		pnws =
+			{ },
 
-	// draws the paragraphs
-	var twig =
-		this.twig;
+		ranks =
+			this.ranks;
 
 	for(
-		var r = 0, rZ = twig.length;
+		var r = 0, rZ = ranks.length;
 		r < rZ;
 		r++
 	)
 	{
-		var vpara =
-			this.atRank( r );
+		var
+			vpara =
+				this.atRank( r ),
 
-		var flow =
-			vpara.getFlow( );
+			flow =
+				vpara.getFlow( item );
 
-		pnws[ twig.ranks[ r ] ] =
+		pnws[ ranks[ r ] ] =
 			new Euclid.Point(
 				innerMargin.w,
 				Math.round( y )
@@ -252,23 +308,24 @@ Doc.prototype.getHeight =
 		paraSep =
 			this.getParaSep( item ),
 
-		twig =
-			this.twig,
+		ranks =
+			this.ranks,
 
 		height =
 			0;
 
 	for(
-		var r = 0, rZ = twig.length;
+		var r = 0, rZ = ranks.length;
 		r < rZ;
 		r++
 	)
 	{
-		var vpara =
-			this.atRank( r );
+		var
+			vpara =
+				this.atRank( r ),
 
-		var flow =
-			vpara.getFlow( );
+			flow =
+				vpara.getFlow( item );
 
 		if( r > 0 )
 		{
@@ -298,25 +355,24 @@ Doc.prototype.getPNW =
 | Returns the width actually used of the document.
 */
 Doc.prototype.getSpread =
-	function( )
+	function( item )
 {
 	var
 		spread =
 			0,
 
+		sub =
+			this.$sub,
+
 		max =
 			Math.max;
 
-	for(
-		var r = 0, rZ = this.twig.length;
-		r < rZ;
-		r++
-	)
+	for( var k in sub )
 	{
 		spread =
 			max(
 				spread,
-				this.atRank( r ).getFlow( ).spread
+				sub[ k ].getFlow( item ).spread
 			);
 	}
 
@@ -337,26 +393,26 @@ Doc.prototype.getFont =
 		);
 	}
 
-	var fs =
-		item.twig.fontsize;
+	var fontsize =
+		this.fontsize;
 
 	if( item.fontSizeChange )
 	{
-		fs =
-			item.fontSizeChange( fs );
+		fontsize =
+			item.fontSizeChange( fontsize );
 	}
 
 	var f =
 		this._$font;
 
-	if( f && f.size === fs )
+	if( f && f.size === fontsize )
 	{
 		return f;
 	}
 
 	f =
 	this._$font =
-		fontPool.get( fs, 'la' );
+		fontPool.get( fontsize, 'la' );
 
 	return f;
 };
@@ -366,30 +422,35 @@ Doc.prototype.getFont =
 | Returns the paragraph at point
 */
 Doc.prototype.getParaAtPoint =
-	function( p )
+	function(
+		item,
+		p
+	)
 {
-	var twig =
-		this.twig;
+	var
+		ranks =
+			this.ranks,
 
-	var sub =
-		this.$sub;
+		sub =
+			this.$sub,
 
-	var pnws =
-		this._$pnws;
+		pnws =
+			this._$pnws;
 
 	for(
-		var r = 0, rZ = twig.length;
+		var r = 0, rZ = ranks.length;
 		r < rZ;
 		r++
 	)
 	{
-		var k =
-			twig.ranks[ r ];
+		var
+			k =
+				ranks[ r ],
 
-		var vpara =
-			sub[ k ];
+			vpara =
+				sub[ k ];
 
-		if( p.y < pnws[ k ].y + vpara.getFlow( ).height )
+		if( p.y < pnws[ k ].y + vpara.getFlow( item ).height )
 		{
 			return vpara;
 		}
@@ -427,7 +488,7 @@ Doc.prototype.knock =
 	function( )
 {
 	for(
-		var r = 0, rZ = this.twig.length;
+		var r = 0, rZ = this.ranks.length;
 		r < rZ;
 		r++
 	)
@@ -441,16 +502,17 @@ Doc.prototype.knock =
 /*
 | Sketches a selection.
 */
-Doc.prototype.sketchSelection = function(
-	fabric,      // the fabric to path for
-	border,      // width of the path (ignored)
-	twist,       // true -> drawing a border, false -> fill
-	view,        // current view
-	item,        // the item of the doc
-	width,       // width the vdoc is drawn
-	innerMargin, // inner margin of the doc
-	scrollp      // scroll position of the doc
-)
+Doc.prototype.sketchSelection =
+	function(
+		fabric,      // the fabric to path for
+		border,      // width of the path (ignored)
+		twist,       // true -> drawing a border, false -> fill
+		view,        // current view
+		item,        // the item of the doc
+		width,       // width the vdoc is drawn
+		innerMargin, // inner margin of the doc
+		scrollp      // scroll position of the doc
+	)
 {
 	var
 		selection =

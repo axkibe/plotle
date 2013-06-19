@@ -703,9 +703,9 @@ Fabric.prototype.paintText =
 	Jools.ensureArgs(
 		'text',
 			text,
-		'point',
+		'x',
 			x,
-		'point',
+		'y',
 			y,
 		'font',
 			font

@@ -48,28 +48,91 @@ if( typeof( window ) === 'undefined' )
 var DocItem =
 Visual.DocItem =
 	function(
-		twig,
-		path
+		overload,
+		inherit,
+		a1,   // twig  |  phrase
+		a2    // path  |  fontsize
 	)
 {
-	Visual.Item.call(
-		this,
-		twig,
-		path
-	);
+	switch( overload )
+	{
+		case 'twig' :
 
-	this.$sub =
-		{
-			doc :
-				new Visual.Doc(
-					null,
-					twig.doc,
-					new Path(
-						path,
-						'++', 'doc'
-					)
-				)
-		};
+			var
+				twig =
+					a1,
+
+				path =
+					a2;
+
+			Visual.Item.call(
+				this,
+				twig,
+				path
+			);
+
+			if( inherit && inherit.twig.doc === twig.doc )
+			{
+				this.$sub =
+					{
+						doc :
+							inherit.$sub.doc
+					};
+			}
+			else
+			{
+				this.$sub =
+					{
+						doc :
+							new Visual.Doc(
+								'twig',
+								null,
+								twig.doc,
+								new Path(
+									path,
+									'++', 'doc'
+								),
+								twig.fontsize
+							)
+					};
+			}
+
+			break;
+
+		case 'phrase' :
+
+			var
+				phrase =
+					a1,
+
+				fontsize =
+					a2;
+
+			Visual.Item.call(
+				this,
+				null,
+				null
+			);
+
+			this.$sub =
+				{
+					doc :
+						new Visual.Doc(
+							'phrase',
+							null,
+							phrase,
+							fontsize
+						)
+				};
+
+			break;
+
+		default :
+
+			throw new Error(
+				'invalid overload'
+			);
+	}
 };
 
 
@@ -97,47 +160,22 @@ DocItem.prototype.dragStop =
 
 
 /*
-| Updates the $sub to match a new twig.
-*/
-DocItem.prototype.update =
-	function( twig )
-{
-	Visual.Item.prototype.update.call(
-		this,
-		twig
-	);
-
-	var doc =
-		this.$sub.doc;
-
-	if (doc.twig !== twig.doc)
-	{
-		this.$sub.doc =
-			new Visual.Doc(
-				doc,
-				twig.doc,
-				new Path(
-					this.path,
-					'++', 'doc'
-				)
-			);
-	}
-
-};
-
-
-/*
 | Returns the para at point. FIXME, honor scroll here.
 */
 DocItem.prototype.getParaAtPoint =
-	function( p )
+	function(
+		p
+	)
 {
 	if( p.y < this.innerMargin.n )
 	{
 		return null;
 	}
 
-	return this.$sub.doc.getParaAtPoint(p);
+	return this.$sub.doc.getParaAtPoint(
+		this,
+		p
+	);
 };
 
 
@@ -209,7 +247,8 @@ DocItem.prototype.click =
 		shell.deselect( );
 	}
 
-	shell.redraw = true;
+	shell.redraw =
+		true;
 
 	var pnw =
 		this.getZone( ).pnw;
@@ -221,7 +260,9 @@ DocItem.prototype.click =
 		);
 
 	var para =
-		this.getParaAtPoint( pi );
+		this.getParaAtPoint(
+			pi
+		);
 
 	// FIXME move into para
 	if( para )
@@ -233,18 +274,20 @@ DocItem.prototype.click =
 
 		var at1 =
 			para.getPointOffset(
+				this,
 				pi.sub( ppnw )
 			);
 
-		var caret = space.setCaret(
-			{
-				path :
-					para.textPath,
+		var caret =
+			space.setCaret(
+				{
+					path :
+						para.textPath,
 
-				at1 :
-					at1
-			}
-		);
+					at1 :
+						at1
+				}
+			);
 
 		caret.show( );
 

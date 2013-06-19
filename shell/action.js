@@ -152,9 +152,14 @@ Action =
 			throw new Error( 'invalid section' );
 	}
 
-	for( var a = 2, aZ = args.length; a < aZ; a += 2 )
+	for(
+		var a = 2, aZ = args.length;
+		a < aZ;
+		a += 2
+	)
 	{
-		this[ args[ a ] ] = args[ a + 1 ];
+		this[ args[ a ] ] =
+			args[ a + 1 ];
 	}
 };
 

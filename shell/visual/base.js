@@ -55,27 +55,13 @@ Visual.Base =
 /*
 | Returns the visual with a given twig-rank.
 */
-Base.prototype.atRank = function(rank) {
-	return this.$sub[this.twig.ranks[rank]];
-};
-
-
-
-/*
-| Updates the $sub to match a new twig.
-*/
-/*
-FIXME one common for all visual notes
-Base.prototype.update = function(twig)
+Base.prototype.atRank =
+	function(
+		rank
+	)
 {
-	this.twig    = twig;
-	this.$fabric = null;
-
-	var doc = this.$sub.doc;
-	if (doc.twig !== twig.doc) {
-		doc.update(twig.doc);
-	}
+	return this.$sub[ this.twig.ranks[ rank ] ];
 };
-*/
 
-} )();
+
+} )( );

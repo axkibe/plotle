@@ -46,6 +46,7 @@ Visual.Relation =
 {
 	Visual.Label.call(
 		this,
+		'twig',
 		twig,
 		path
 	);
