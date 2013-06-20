@@ -1611,6 +1611,12 @@ Para.prototype.specialKey =
 
 	if( show )
 	{
+		item =
+			space.getSub(
+				caret.sign.path,
+				'Item'
+			);
+
 		item.poke( );
 
 		item.scrollCaretIntoView( );

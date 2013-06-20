@@ -69,7 +69,7 @@ Visual.Label =
 			Visual.DocItem.call(
 				this,
 				'twig',
-				null, // inherit, TODO
+				inherit,
 				twig,
 				path
 			);

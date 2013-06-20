@@ -177,6 +177,93 @@ Jools.subclass(
 
 
 /*
+| Creates a new doc node
+*/
+Doc.create =
+	function(
+		overload,
+		inherit,
+		a1,  // twig       | phrase
+		a2,  // fatherPath | fontsize
+		a3   // fontsize
+	)
+{
+	var
+		fatherPath,
+		fontsize;
+
+	switch( overload )
+	{
+		case 'twig' :
+
+			var
+				twig =
+					a1,
+
+				fatherPath =
+					a2,
+
+				fontsize =
+					a3;
+
+			if(
+				inherit &&
+				inherit.twig === twig &&
+				inherit.fontsize === fontsize
+			)
+			{
+				return inherit;
+			}
+
+			return (
+				new Doc(
+					overload,
+					inherit,
+					twig,
+					new Path(
+						fatherPath,
+						'++', 'doc'
+					),
+					fontsize
+				)
+			);
+
+		case 'phrase' :
+
+			var
+				phrase =
+					a1,
+
+				fontsize =
+					a2;
+
+			if(
+				inherit &&
+				inherit.phrase === phrase &&
+				inherit.fontsize === fontsize
+			)
+			{
+				return inherit;
+			}
+
+			return (
+				new Doc(
+					overload,
+					inherit,
+					phrase,
+					fontsize
+				)
+			);
+
+		default :
+
+			throw new Error(
+				'invalid overload'
+			);
+	}
+}
+
+/*
 | Marker
 */
 Doc.prototype.Doc =
@@ -264,11 +351,12 @@ Doc.prototype.draw =
 				Math.round( y )
 			);
 
-		var p =
-			new Euclid.Point(
-				innerMargin.w,
-				Math.round( y - scrollp.y )
-			);
+		var
+			p =
+				new Euclid.Point(
+					innerMargin.w,
+					Math.round( y - scrollp.y )
+				);
 
 		vpara.draw(
 			this,
@@ -278,10 +366,12 @@ Doc.prototype.draw =
 			view.point( p )
 		);
 
-		y += flow.height + paraSep;
+		y +=
+			flow.height + paraSep;
 	}
 
-	this._$pnws = pnws;   // north-west points of paras
+	this._$pnws =
+		pnws;   // north-west points of paras
 };
 
 

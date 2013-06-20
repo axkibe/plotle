@@ -15,8 +15,9 @@ var
 /*
 | Exports
 */
-var Twig =
-	null;
+var
+	Twig =
+		null;
 
 
 /*
@@ -31,7 +32,8 @@ var Twig =
 */
 if( typeof( window ) === 'undefined' )
 {
-	Jools = require( './jools' );
+	Jools =
+		require( './jools' );
 }
 
 
@@ -58,7 +60,9 @@ Twig.prototype.rankOf =
 
 	if( !Jools.isArray( ranks ) )
 	{
-		throw new Error( 'twig has no ranks' );
+		throw new Error(
+			'twig has no ranks'
+		);
 	}
 
 	if( !Jools.isString( key ) )
@@ -89,13 +93,13 @@ Twig.prototype.rankOf =
 		return r;
 	}
 
-	var x =
+	var rank =
 	rof[ key ] =
 		Jools.is( this.copse[ key ] ) ?
 			ranks.indexOf( key ) :
 			-1;
 
-	return x;
+	return rank;
 };
 
 

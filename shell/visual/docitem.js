@@ -65,37 +65,28 @@ Visual.DocItem =
 				path =
 					a2;
 
+			console.log(
+				'X3',
+				inherit
+			);
+
 			Visual.Item.call(
 				this,
 				twig,
 				path
 			);
 
-			if( inherit && inherit.twig.doc === twig.doc )
-			{
-				this.$sub =
-					{
-						doc :
-							inherit.$sub.doc
-					};
-			}
-			else
-			{
-				this.$sub =
-					{
-						doc :
-							new Visual.Doc(
-								'twig',
-								null,
-								twig.doc,
-								new Path(
-									path,
-									'++', 'doc'
-								),
-								twig.fontsize
-							)
-					};
-			}
+			this.$sub =
+				{
+					doc :
+						Visual.Doc.create(
+							'twig',
+							inherit && inherit.$sub.doc,
+							twig.doc,
+							path,
+							twig.fontsize
+						)
+				};
 
 			break;
 
@@ -117,9 +108,9 @@ Visual.DocItem =
 			this.$sub =
 				{
 					doc :
-						new Visual.Doc(
+						Visual.Doc.create(
 							'phrase',
-							null,
+							inherit,
 							phrase,
 							fontsize
 						)
