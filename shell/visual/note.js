@@ -51,17 +51,85 @@ Visual.Note =
 	function(
 		overload,
 		inherit,
-		twig,
-		path
+		a1,       // twig  | p1
+		a2,       // path  | p2
+		a3        //       | fontsize
 	)
 {
-	Visual.DocItem.call(
-		this,
-		'twig',
-		inherit,
-		twig,
-		path
-	);
+	switch( overload )
+	{
+		case 'twig' :
+
+			var
+				twig =
+					a1,
+
+				path =
+					a2;
+
+			Visual.DocItem.call(
+				this,
+				'twig',
+				inherit,
+				twig,
+				path
+			);
+
+			this.zone =
+				twig.zone;
+
+			break;
+
+		case 'p1p2' :
+
+			var
+				p1 =
+					a1,
+
+				p2 =
+					a2,
+
+				fontsize =
+					a1,
+
+				zone =
+					new Euclid.Rect(
+						'arbitrary',
+						p1,
+						p2
+					),
+
+				minWidth =
+					theme.note.minWidth,
+
+				minHeight =
+					theme.note.minHeight;
+
+			if(
+				zone.width  < minWidth ||
+				zone.height < minHeight
+			)
+			{
+				zone =
+					new Euclid.Rect(
+						'pnw/size',
+						zone.pnw,
+						Math.max( minWidth,  zone.width  ),
+						Math.max( minHeight, zone.height )
+					);
+			}
+
+			Visual.DocItem.call(
+				this,
+				'phrase',
+				inherit,
+				'',
+				fontsize
+			);
+
+			this.zone =
+				zone;
+	}
 
 	this.scrollbarY =
 		new Visual.Scrollbar( );
@@ -72,161 +140,6 @@ Jools.subclass(
 	Note,
 	Visual.DocItem
 );
-
-
-/*
-| Gets the zone for a transient note
-*/
-Note.s_getZone =
-	function(
-		p1,
-		p2
-	)
-{
-	var zone =
-		new Euclid.Rect(
-			'arbitrary',
-			p1,
-			p2
-		);
-
-	var minWidth =
-		theme.note.minWidth;
-
-	var minHeight =
-		theme.note.minHeight;
-
-	if(
-		zone.width  < minWidth ||
-		zone.height < minHeight
-	)
-	{
-		return new Euclid.Rect(
-			'pnw/size',
-			zone.pnw,
-			Math.max( minWidth,  zone.width  ),
-			Math.max( minHeight, zone.height )
-		);
-	}
-	else
-{
-		return zone;
-	}
-};
-
-
-/*
-| Draws a transitory note
-| ( A note in the making )
-*/
-Note.s_drawTrans =
-	function(
-		fabric,
-		view,
-		zone
-	)
-{
-	var silhoutte =
-		Note.s_getSilhoutte( zone );
-
-	var style =
-		Style.getStyle(
-			theme.note.style,
-			'normal'
-		);
-
-	fabric.paint(
-		style,
-		silhoutte,
-		'sketch',
-		view
-	);
-};
-
-
-/*
-| Returns a silhoutte matching the zone.
-*/
-Note.s_getSilhoutte =
-	function( zone )
-{
-	var cr =
-		theme.note.cornerRadius;
-
-	return (
-		new Euclid.RoundRect(
-			zone.pnw,
-			zone.pse,
-			cr,
-			cr
-		)
-	);
-};
-
-
-/*
-| Returns the notes silhoutte anchored at zero.
-*/
-Note.s_getZeroSilhoutte =
-	function( zone )
-{
-	var cr =
-		theme.note.cornerRadius;
-
-	return (
-		new Euclid.RoundRect(
-			Euclid.Point.zero,
-			new Euclid.Point(
-				zone.width,
-				zone.height
-			),
-			cr,
-			cr
-		)
-	);
-};
-
-
-/*
-| Resize handles to show on notes.
-*/
-Note.s_handles =
-	Jools.immute(
-		{
-			n :
-				true,
-
-			ne :
-				true,
-
-			e :
-				true,
-
-			se :
-				true,
-
-			s :
-				true,
-
-			sw :
-				true,
-
-			w :
-				true,
-
-			nw :
-				true
-		}
-	);
-
-
-/*
-| Default margin for all notes.
-*/
-Note.s_innerMargin =
-	new Euclid.Margin(
-		theme.note.innerMargin
-	);
 
 
 /*
@@ -422,14 +335,42 @@ Note.prototype.draw =
 | Default margin for all notes.
 */
 Note.prototype.innerMargin =
-	Note.s_innerMargin;
+	new Euclid.Margin(
+		theme.note.innerMargin
+	);
 
 
 /*
 | Resize handles to show on notes.
 */
 Note.prototype.handles =
-	Note.s_handles;
+	Jools.immute(
+		{
+			n :
+				true,
+
+			ne :
+				true,
+
+			e :
+				true,
+
+			se :
+				true,
+
+			s :
+				true,
+
+			sw :
+				true,
+
+			w :
+				true,
+
+			nw :
+				true
+		}
+	);
 
 
 /*
@@ -441,17 +382,27 @@ Note.prototype.getSilhoutte =
 		zone //  the cache for the items zone
 	)
 {
-	var s =
-		this._$silhoutte;
+	var
+		s =
+			this._$silhoutte;
 
 	if( s && s.eq( zone ) )
 	{
 		return s;
 	}
 
+	var
+		cr =
+			theme.note.cornerRadius;
+
 	s =
 	this._$silhoutte =
-		Note.s_getSilhoutte( zone );
+		new Euclid.RoundRect(
+			zone.pnw,
+			zone.pse,
+			cr,
+			cr
+		);
 
 	return s;
 };
@@ -463,7 +414,8 @@ Note.prototype.getSilhoutte =
 Note.prototype.getZeroSilhoutte =
 	function( zone )
 {
-	var s  = this._$zeroSilhoutte;
+	var s =
+		this._$zeroSilhoutte;
 
 	if(
 		s &&
@@ -474,7 +426,23 @@ Note.prototype.getZeroSilhoutte =
 		return s;
 	}
 
-	return Note.s_getZeroSilhoutte( zone );
+	var
+		cr =
+			theme.note.cornerRadius;
+
+	s =
+	this._$zeroSilhoutte =
+		new Euclid.RoundRect(
+			Euclid.Point.zero,
+			new Euclid.Point(
+				zone.width,
+				zone.height
+			),
+			cr,
+			cr
+		);
+
+	return s;
 };
 
 
@@ -693,8 +661,8 @@ Note.prototype.getZone =
 	function( )
 {
 	var
-		twig =
-			this.twig,
+		zone =
+			this.zone,
 
 		action =
 			shell.bridge.action( ),
@@ -707,10 +675,11 @@ Note.prototype.getZone =
 
 	if(
 		!action ||
+		!this.path ||
 		!this.path.equals( action.itemPath )
 	)
 	{
-		return twig.zone;
+		return zone;
 	}
 
 	// FIXME cache the last zone
@@ -719,7 +688,7 @@ Note.prototype.getZone =
 	{
 		case 'ItemDrag' :
 
-			return twig.zone.add(
+			return zone.add(
 				action.move.x - action.start.x,
 				action.move.y - action.start.y
 			);
@@ -731,7 +700,7 @@ Note.prototype.getZone =
 
 			if( !szone )
 			{
-				return twig.zone;
+				return zone;
 			}
 
 			var spnw =
@@ -937,7 +906,7 @@ Note.prototype.getZone =
 
 		default :
 
-			return twig.zone;
+			return zone;
 	}
 };
 

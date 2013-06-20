@@ -189,7 +189,6 @@ Doc.create =
 	)
 {
 	var
-		fatherPath,
 		fontsize;
 
 	switch( overload )
@@ -201,10 +200,10 @@ Doc.create =
 					a1,
 
 				fatherPath =
-					a2,
+					a2;
 
-				fontsize =
-					a3;
+			fontsize =
+				a3;
 
 			if(
 				inherit &&
@@ -232,10 +231,10 @@ Doc.create =
 
 			var
 				phrase =
-					a1,
+					a1;
 
-				fontsize =
-					a2;
+			fontsize =
+				a2;
 
 			if(
 				inherit &&
@@ -261,7 +260,7 @@ Doc.create =
 				'invalid overload'
 			);
 	}
-}
+};
 
 /*
 | Marker

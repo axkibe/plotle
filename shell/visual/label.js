@@ -165,60 +165,86 @@ Visual.Label =
 };
 
 
+/*
+| Creates a new Label
+*/
+Label.create =
+	function(
+		overload,
+		inherit,
+		a1,   // twig  -  p1
+		a2    // path  -  p2
+	)
+{
+	switch( overload )
+	{
+		case 'twig' :
+
+			var
+				twig =
+					a1,
+
+				path =
+					a2;
+
+			if(
+				inherit &&
+				inherit.twig === twig &&
+				inherit.path === path
+			)
+			{
+				return inherit;
+			}
+
+			return (
+				new Label(
+					'twig',
+					inherit,
+					twig,
+					path
+				)
+			);
+
+		case 'p1p2' :
+
+			var
+				p1 =
+					a1,
+
+				p2 =
+					a2;
+
+			if(
+				inherit &&
+				inherit.p1 === p1,
+				inherit.p2 === p2
+			)
+			{
+				return inherit;
+			}
+
+			return (
+				new Label(
+					'twig',
+					inherit,
+					twig,
+					path
+				)
+			);
+
+		default :
+
+			throw new Error(
+				'invalid overload'
+			);
+	}
+};
+
+
 Jools.subclass(
 	Label,
 	Visual.DocItem
 );
-
-
-/*
-| Draws a transitory label
-| ( A label in the making )
-*/
-/*
-Label.s_drawTrans =
-	function(
-		fabric,    // the fabric to draw upon
-		view,      // the current view
-		transLabel // the transLabel to draw
-	)
-{
-	var
-		zone =
-			transLabel.zone,
-
-		silhoutte =
-			Label.s_getSilhoutte( zone );
-
-	// draws selection and text
-	var f =
-		Visual.Para.s_draw(
-			zone.width,
-			zone.height,
-			view.zoom,
-			transLabel.font,
-			transLabel.flow
-		);
-
-	fabric.drawImage(
-		'image',
-			f,
-		'pnw',
-			view.point( zone.pnw )
-	);
-
-	// draws the border
-	fabric.edge(
-		Style.getStyle(
-			theme.label.style,
-			'normal'
-		),
-		silhoutte,
-		'sketch',
-		view
-	);
-};
-*/
 
 
 /*

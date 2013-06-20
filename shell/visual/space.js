@@ -295,6 +295,7 @@ Space.prototype.draw =
 	switch( action && action.type )
 	{
 		case 'createLabel' :
+		case 'createNote' :
 
 			if( action.start && action.move )
 			{
@@ -307,11 +308,12 @@ Space.prototype.draw =
 
 			break;
 
-
+				/*
 		case 'createNote' :
 
 			if( action.start && action.move )
 			{
+
 				zone =
 					Visual.Note.s_getZone(
 						view.depoint( action.start ),
@@ -326,7 +328,7 @@ Space.prototype.draw =
 			}
 
 			break;
-
+*/
 		case 'createPortal' :
 
 			if( action.start && action.move )
@@ -813,6 +815,7 @@ Space.prototype.dragStart =
 			shell.bridge.action( );
 
 
+	// TODO pull common stuff out
 	switch( action && action.type ) {
 
 		case 'createLabel' :
@@ -820,6 +823,7 @@ Space.prototype.dragStart =
 			action.start =
 				p;
 
+			// TODO inherit action.item
 			action.item =
 				new Visual.Label(
 					'p1p2',
@@ -831,6 +835,21 @@ Space.prototype.dragStart =
 			return;
 
 		case 'createNote' :
+
+			action.start =
+				p;
+
+			// TODO inherit action.item
+			action.item =
+				new Visual.Note(
+					'p1p2',
+					null,
+					p,
+					p
+				);
+
+			return;
+
 		case 'createPortal' :
 
 			action.start =
@@ -987,15 +1006,21 @@ Space.prototype.dragStop =
 	{
 		case 'createNote' :
 
-			key =
-				shell.peer.newNote(
-					this.spaceUser,
-					this.spaceTag,
-					Visual.Note.s_getZone(
+			var
+				note =
+					new Visual.Note(
+						'p1p2',
+						null,
 						view.depoint( action.start ),
 						view.depoint( action.move  )
-					)
-				);
+					);
+
+				key =
+					shell.peer.newNote(
+						this.spaceUser,
+						this.spaceTag,
+						note.zone
+					);
 
 			this.$sub[ key ].grepFocus( this );
 
@@ -1200,6 +1225,7 @@ Space.prototype.dragMove =
 
 		pd;
 
+	// TODO move p1p1 creation out
 	switch( action.type )
 	{
 		case 'createLabel' :
@@ -1222,6 +1248,24 @@ Space.prototype.dragMove =
 			return 'pointer';
 
 		case 'createNote' :
+
+			action.move =
+				p;
+
+			action.item =
+				new Visual.Note(
+					'p1p2',
+					null,
+					action.start,
+					p
+				);
+
+
+			shell.redraw =
+				true;
+
+			return 'pointer';
+
 		case 'createPortal' :
 
 			action.move =

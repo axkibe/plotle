@@ -65,11 +65,6 @@ Visual.DocItem =
 				path =
 					a2;
 
-			console.log(
-				'X3',
-				inherit
-			);
-
 			Visual.Item.call(
 				this,
 				twig,
