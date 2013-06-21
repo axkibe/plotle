@@ -777,49 +777,21 @@ Space.prototype.dragStart =
 			shell.bridge.action( );
 
 
-	// TODO pull common stuff out
 	switch( action && action.type ) {
 
 		case 'createLabel' :
-
-			action.start =
-				p;
-
-			// TODO inherit action.item
-			action.item =
-				new Visual.Label(
-					'p1p2',
-					null,
-					p,
-					p
-				);
-
-			return;
-
 		case 'createNote' :
-
-			action.start =
-				p;
-
-			// TODO inherit action.item
-			action.item =
-				new Visual.Note(
-					'p1p2',
-					null,
-					p,
-					p
-				);
-
-			return;
-
 		case 'createPortal' :
 
+			var Proto =
+				this.getActionItemCreator( action );
+
 			action.start =
 				p;
 
 			// TODO inherit action.item
 			action.item =
-				new Visual.Portal(
+				new Proto(
 					'p1p2',
 					null,
 					p,
@@ -900,6 +872,36 @@ Space.prototype.dragStart =
 	return;
 };
 
+
+/*
+| Returns the creator for an item to be created
+*/
+Space.prototype.getActionItemCreator =
+	function(
+		action
+	)
+{
+	switch( action.type )
+	{
+		case 'createLabel' :
+
+			return Visual.Label;
+
+		case 'createNote' :
+
+			return Visual.Note;
+
+		case 'createPortal' :
+
+			return Visual.Portal;
+
+		default :
+
+			throw new Error(
+				'unknown action'
+			);
+	}
+}
 
 /*
 | A mouse click.
