@@ -54,34 +54,111 @@ Visual.Portal =
 	function(
 		overload,
 		inherit,
-		twig,
-		path
+		a1,   // twig  |  p1
+		a2    // path  |  p2
 	)
 {
-	Visual.Item.call(
-		this,
-		twig,
-		path
-	);
+	switch( overload )
+	{
+		case 'twig' :
 
-	// Paths to spaceUser and spaceTag
-	this._spacePath =
-		Jools.immute({
+			var
+				twig =
+					a1,
 
-			spaceUser :
-				new Path(
-					this.path,
-					'++',
-					'spaceUser'
-				),
+				path =
+					a2;
 
-			spaceTag :
-				new Path(
-					this.path,
-					'++',
-					'spaceTag'
-				)
-		});
+			Visual.Item.call(
+				this,
+				twig,
+				path
+			);
+
+
+			// paths to spaceUser and spaceTag
+			this._spacePath =
+				Jools.immute(
+					{
+						spaceUser :
+							new Path(
+								this.path,
+								'++',
+								'spaceUser'
+							),
+
+						spaceTag :
+							new Path(
+								this.path,
+								'++',
+								'spaceTag'
+							)
+					}
+				);
+
+			this.zone =
+				twig.zone;
+
+			break;
+
+		case 'p1p2' :
+
+			var
+				p1 =
+					a1,
+
+				p2 =
+					a2;
+
+			Visual.Item.call(
+				this,
+				null,
+				null
+			);
+
+			this._spacePath =
+				null;
+
+			var
+				zone =
+					new Euclid.Rect(
+						'arbitrary',
+						p1,
+						p2
+					),
+
+				minWidth =
+					theme.portal.minWidth,
+
+				minHeight =
+					theme.portal.minHeight;
+
+			if(
+				zone.width < minWidth ||
+				zone.height < minHeight
+			)
+			{
+				zone =
+					new Euclid.Rect(
+						'pnw/size',
+						zone.pnw,
+						Math.max(
+							minWidth,
+							zone.width
+						),
+						Math.max(
+							minHeight,
+							zone.height
+						)
+				);
+			}
+
+			this.zone =
+				zone;
+
+			break;
+	};
+
 
 	// the prepared space fields
 	this._$spaceFields =
@@ -92,6 +169,8 @@ Visual.Portal =
 			spaceTag :
 				null
 		};
+
+
 
 	this._$hover =
 		null;
@@ -105,9 +184,24 @@ Jools.subclass(
 
 
 /*
-| Resizing handles.
+| List of all space fields of the portal
 */
-Portal.s_handles =
+Portal.spaceFields =
+	Jools.immute(
+		{
+			spaceUser :
+				true,
+
+			spaceTag :
+				true
+		}
+	);
+
+
+/*
+| Resize handles to show on portals.
+*/
+Portal.prototype.handles =
 	Jools.immute(
 		{
 			n :
@@ -138,28 +232,6 @@ Portal.s_handles =
 
 
 /*
-| List of all space fields of the portal
-*/
-Portal.spaceFields =
-	Jools.immute(
-		{
-			spaceUser :
-				true,
-
-			spaceTag :
-				true
-		}
-	);
-
-
-/*
-| Resize handles to show on portals.
-*/
-Portal.prototype.handles =
-	Portal.s_handles;
-
-
-/*
 | Gets the zone for a transient portal
 */
 Portal.s_getZone =
@@ -168,41 +240,6 @@ Portal.s_getZone =
 		p2
 	)
 {
-	var zone =
-		new Euclid.Rect(
-			'arbitrary',
-			p1,
-			p2
-		);
-
-	var minWidth =
-		theme.portal.minWidth;
-
-	var minHeight =
-		theme.portal.minHeight;
-
-	if(
-		zone.width < minWidth ||
-		zone.height < minHeight
-	)
-	{
-		return new Euclid.Rect(
-			'pnw/size',
-			zone.pnw,
-			Math.max(
-				minWidth,
-				zone.width
-			),
-			Math.max(
-				minHeight,
-				zone.height
-			)
-		);
-	}
-	else
-	{
-		return zone;
-	}
 };
 
 
@@ -210,6 +247,7 @@ Portal.s_getZone =
 | Draws a transitory portal
 | ( A portal in the making )
 */
+/*
 Portal.s_drawTrans =
 	function(
 		fabric,
@@ -231,24 +269,7 @@ Portal.s_drawTrans =
 		view
 	);
 };
-
-
-/*
-| Returns the portals silhoutte anchored at zero.
 */
-Portal.s_getZeroSilhoutte =
-	function(
-		zone //  the portals zone
-	)
-{
-	return new Euclid.Ellipse(
-		Euclid.Point.zero,
-		new Euclid.Point(
-			zone.width,
-			zone.height
-		)
-	);
-};
 
 
 /*
@@ -320,7 +341,13 @@ Portal.prototype.getZeroSilhoutte =
 	// if not creates a new silhoutte
 	var zs =
 	this._$zeroSilhoutte =
-		Portal.s_getZeroSilhoutte( zone );
+		new Euclid.Ellipse(
+			Euclid.Point.zero,
+			new Euclid.Point(
+				zone.width,
+				zone.height
+			)
+		);
 
 	return zs;
 };
@@ -579,13 +606,15 @@ Portal.prototype.draw =
 			);
 	}
 
-	var action =
-		shell.bridge.action( );
+	var
+		action =
+			shell.bridge.action( );
 
 	if(
 		action &&
 		action.type === 'Remove' &&
 		action.removeItemFade &&
+		this.path &&
 		this.path.equals( action.removeItemPath )
 	)
 	{
@@ -788,18 +817,19 @@ Portal.prototype.getZone =
 	function( )
 {
 	var
-		twig =
-			this.twig,
+		zone =
+			this.zone,
 
 		action =
 			shell.bridge.action( );
 
 	if(
 		!action ||
+		!this.path ||
 		!this.path.equals( action.itemPath )
 	)
 	{
-		return twig.zone;
+		return zone;
 	}
 
 	// FIXME cache the last zone
@@ -809,7 +839,7 @@ Portal.prototype.getZone =
 
 		case 'ItemDrag' :
 
-			return twig.zone.add(
+			return zone.add(
 				action.move.x - action.start.x,
 				action.move.y - action.start.y
 			);
@@ -821,7 +851,7 @@ Portal.prototype.getZone =
 
 			if( !szone )
 			{
-				return twig.zone;
+				return zone;
 			}
 
 			var
@@ -997,7 +1027,7 @@ Portal.prototype.getZone =
 
 		default :
 
-			return twig.zone;
+			return zone;
 	}
 };
 
@@ -1027,6 +1057,7 @@ Portal.prototype._weave =
 		section =
 			caret.sign && caret.sign.path.get( -1 );
 
+	// TODO only fill here
 	f.paint(
 		Style.getStyle(
 			theme.portal.style,
@@ -1037,98 +1068,101 @@ Portal.prototype._weave =
 		Euclid.View.proper
 	);
 
-	f.clip(
-		silhoutte,
-		'sketch',
-		Euclid.View.proper,
-		0
-	);
-
-	var spaceUser =
-	this._$spaceFields.spaceUser =
-		this._prepareField(
-			'spaceUser',
-			zone,
-			null
+	if( this._spacePath )
+	{
+		f.clip(
+			silhoutte,
+			'sketch',
+			Euclid.View.proper,
+			0
 		);
 
-	var spaceTag =
-	this._$spaceFields.spaceTag =
-		this._prepareField(
-			'spaceTag',
-			zone,
-			spaceUser.pnw
+		var spaceUser =
+		this._$spaceFields.spaceUser =
+			this._prepareField(
+				'spaceUser',
+				zone,
+				null
+			);
+
+		var spaceTag =
+		this._$spaceFields.spaceTag =
+			this._prepareField(
+				'spaceTag',
+				zone,
+				spaceUser.pnw
+			);
+
+		var moveToButton =
+		this._$moveToButton =
+			this._prepareMoveToButton(
+				zone
+			);
+
+		f.paint(
+			Style.getStyle(
+				theme.portal.moveTo.style,
+				Accent.state(
+					this._$hover === 'moveToButton',
+					section === 'moveToButton'
+				)
+			),
+			moveToButton.shape,
+			'sketch',
+			view
 		);
 
-	var moveToButton =
-	this._$moveToButton =
-		this._prepareMoveToButton(
-			zone
+		f.paint(
+			Style.getStyle(
+				theme.portal.input.style,
+				'normal'
+			),
+			spaceUser.silhoutte,
+			'sketch',
+			view
 		);
 
-	f.paint(
-		Style.getStyle(
-			theme.portal.moveTo.style,
-			Accent.state(
-				this._$hover === 'moveToButton',
-				section === 'moveToButton'
-			)
-		),
-		moveToButton.shape,
-		'sketch',
-		view
-	);
+		f.paint(
+			Style.getStyle(
+				theme.portal.input.style,
+				'normal'
+			),
+			spaceTag.silhoutte,
+			'sketch',
+			view
+		);
 
-	f.paint(
-		Style.getStyle(
-			theme.portal.input.style,
-			'normal'
-		),
-		spaceUser.silhoutte,
-		'sketch',
-		view
-	);
+		f.scale( view.zoom );
 
-	f.paint(
-		Style.getStyle(
-			theme.portal.input.style,
-			'normal'
-		),
-		spaceTag.silhoutte,
-		'sketch',
-		view
-	);
+		f.paintText(
+			'text',
+				spaceUser.text,
+			'p',
+				spaceUser.pnw,
+			'font',
+				this._fonts.spaceUser
+		);
 
-	f.scale( view.zoom );
+		f.paintText(
+			'text',
+				spaceTag.text,
+			'p',
+				spaceTag.pnw,
+			'font',
+				this._fonts.spaceTag
+		);
 
-	f.paintText(
-		'text',
-			spaceUser.text,
-		'p',
-			spaceUser.pnw,
-		'font',
-			this._fonts.spaceUser
-	);
+		f.paintText(
+			'text',
+				'move to',
+			'p',
+				moveToButton.textCenter,
+			'font',
+				this._fonts.moveTo
+		);
 
-	f.paintText(
-		'text',
-			spaceTag.text,
-		'p',
-			spaceTag.pnw,
-		'font',
-			this._fonts.spaceTag
-	);
-
-	f.paintText(
-		'text',
-			'move to',
-		'p',
-			moveToButton.textCenter,
-		'font',
-			this._fonts.moveTo
-	);
-
-	f.scale( 1 / view.zoom );
+		f.scale( 1 / view.zoom );
+	}
 
 	// redraws the edge on the end to top
 	// everything else

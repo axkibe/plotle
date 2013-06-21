@@ -296,6 +296,7 @@ Space.prototype.draw =
 	{
 		case 'createLabel' :
 		case 'createNote' :
+		case 'createPortal' :
 
 			if( action.start && action.move )
 			{
@@ -303,45 +304,6 @@ Space.prototype.draw =
 					fabric,
 					this.$caret,
 					view
-				);
-			}
-
-			break;
-
-				/*
-		case 'createNote' :
-
-			if( action.start && action.move )
-			{
-
-				zone =
-					Visual.Note.s_getZone(
-						view.depoint( action.start ),
-						view.depoint( action.move  )
-					);
-
-				Visual.Note.s_drawTrans(
-					fabric,
-					view,
-					zone
-				);
-			}
-
-			break;
-*/
-		case 'createPortal' :
-
-			if( action.start && action.move )
-			{
-				zone = Visual.Portal.s_getZone(
-					view.depoint( action.start ),
-					view.depoint( action.move  )
-				);
-
-				Visual.Portal.s_drawTrans(
-					fabric,
-					view,
-					zone
 				);
 			}
 
@@ -855,6 +817,15 @@ Space.prototype.dragStart =
 			action.start =
 				p;
 
+			// TODO inherit action.item
+			action.item =
+				new Visual.Portal(
+					'p1p2',
+					null,
+					p,
+					p
+				);
+
 			return;
 
 		default :
@@ -1065,13 +1036,19 @@ Space.prototype.dragStop =
 
 		case 'createPortal' :
 
+			var
+				portal =
+					new Visual.Portal(
+						'p1p2',
+						null,
+						view.depoint( action.start ),
+						view.depoint( action.move  )
+					);
+
 			key = shell.peer.newPortal(
 				this.spaceUser,
 				this.spaceTag,
-				Visual.Portal.s_getZone(
-					view.depoint( action.start ),
-					view.depoint( action.move  )
-				),
+				portal.zone,
 				shell.bridge.getUsername( ),
 				'home'
 			);
@@ -1260,7 +1237,6 @@ Space.prototype.dragMove =
 					p
 				);
 
-
 			shell.redraw =
 				true;
 
@@ -1270,6 +1246,14 @@ Space.prototype.dragMove =
 
 			action.move =
 				p;
+
+			action.item =
+				new Visual.Portal(
+					'p1p2',
+					null,
+					action.start,
+					p
+				);
 
 			shell.redraw =
 				true;
