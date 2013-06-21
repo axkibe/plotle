@@ -52,13 +52,12 @@ Visual.Note =
 		overload,
 		inherit,
 		a1,       // twig  | p1
-		a2,       // path  | p2
-		a3        //       | fontsize
+		a2        // path  | p2
 	)
 {
 	switch( overload )
 	{
-		case 'twig' :
+		case '_twig' :
 
 			var
 				twig =
@@ -80,7 +79,7 @@ Visual.Note =
 
 			break;
 
-		case 'p1p2' :
+		case '_p1p2' :
 
 			var
 				p1 =
@@ -129,6 +128,14 @@ Visual.Note =
 
 			this.zone =
 				zone;
+
+			break;
+
+		default :
+
+			throw new Error(
+				'invalid overload'
+			);
 	}
 
 	this.scrollbarY =
@@ -141,6 +148,86 @@ Jools.subclass(
 	Visual.DocItem
 );
 
+
+Note.create =
+	function(
+		overload,
+		inherit,
+		a1,  //  twig  |  p1
+		a2   //  path  |  p2
+	)
+{
+	switch( overload )
+	{
+		case 'twig' :
+
+			var
+				twig =
+					a1,
+
+				path =
+					a2;
+
+			if(
+				inherit &&
+				inherit.twig === twig &&
+				inherit.path === path
+			)
+			{
+				return inherit;
+			}
+
+			return (
+				new Note(
+					'_twig',
+					inherit,
+					twig,
+					path
+				)
+			);
+
+		case 'p1p2' :
+
+			var
+				p1 =
+					a1,
+
+				p2 =
+					a2;
+
+			if(
+				inherit &&
+				(
+					(
+						inherit.pnw === a1 &&
+						inherit.pse === a2
+					) ||
+					(
+						inherit.pse === a1 &&
+						inherit.pnw === a2
+					)
+				)
+			)
+			{
+				return inherit;
+			}
+
+			return (
+				new Note(
+					'_p1p2',
+					inherit,
+					p1,
+					p2
+				)
+			);
+
+		default :
+
+			throw new Error(
+				'invalid overload'
+			);
+	}
+}
 
 /*
 | Sets the items position and size after an action.

@@ -109,7 +109,11 @@ theme =
 			'note',
 
 		cornerRadius :
-			8
+			8,
+
+		// default fontsize
+		fontsize :
+			13
 	},
 
 	/*

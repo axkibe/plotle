@@ -232,14 +232,33 @@ Space.prototype.createItem =
 		throw new Error( 'unknown type: ' + twig.type );
 	}
 
-	return new Proto(
-		'twig',
-		inherit,
-		twig,
-		inherit ?
-			inherit.path :
-			new Path( [ key ] )
+	// TODO remove
+	switch( twig.type )
+	{
+	case 'Note' :
+	return (
+		Proto.create(
+			'twig',
+			inherit,
+			twig,
+			inherit ?
+				inherit.path :
+				new Path( [ key ] )
+		)
 	);
+
+	default :
+	return (
+		new Proto(
+			'twig',
+			inherit,
+			twig,
+			inherit ?
+				inherit.path :
+				new Path( [ key ] )
+		)
+	);
+	}
 };
 
 
@@ -779,8 +798,26 @@ Space.prototype.dragStart =
 
 	switch( action && action.type ) {
 
-		case 'createLabel' :
 		case 'createNote' :
+
+			var Proto =
+				this.getActionItemCreator( action );
+
+			action.start =
+				p;
+
+			// TODO inherit action.item
+			action.item =
+				Proto.create(
+					'p1p2',
+					action.item,
+					p,
+					p
+				);
+
+			return;
+
+		case 'createLabel' :
 		case 'createPortal' :
 
 			var Proto =
@@ -981,11 +1018,11 @@ Space.prototype.dragStop =
 
 			var
 				note =
-					new Visual.Note(
+					Visual.Note.create(
 						'p1p2',
-						null,
+						action.item,
 						view.depoint( action.start ),
-						view.depoint( action.move  )
+						view.depoint( action.move )
 					);
 
 				key =
@@ -1032,7 +1069,10 @@ Space.prototype.dragStop =
 			shell.redraw =
 				true;
 
-			shell.bridge.stopAction( );
+			if( !ctrl )
+			{
+				shell.bridge.stopAction( );
+			}
 
 			break;
 
@@ -1232,9 +1272,9 @@ Space.prototype.dragMove =
 				p;
 
 			action.item =
-				new Visual.Note(
+				Visual.Note.create(
 					'p1p2',
-					null,
+					action.item,
 					action.start,
 					p
 				);
