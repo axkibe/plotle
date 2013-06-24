@@ -785,24 +785,20 @@ Space.prototype.dragStart =
 		case 'createNote' :
 		case 'createPortal' :
 
-			var
-				Proto =
-					this.getActionItemCreator( action );
-
 			action.start =
 				p;
 
-			// TODO inherit action.item
 			action.item =
-				Proto.create(
-					'zone',
-					action.item,
-					new Euclid.Rect(
-						'pnw/pse',
-						p,
-						p
-					)
-				);
+				this.getActionItemCreator( action )
+					.create(
+						'zone',
+						action.item,
+						new Euclid.Rect(
+							'pnw/pse',
+							p,
+							p
+						)
+					);
 
 			return;
 
@@ -1224,68 +1220,26 @@ Space.prototype.dragMove =
 
 		pd;
 
-	// TODO move common stuff out
-	// XXX
 	switch( action.type )
 	{
 		case 'createLabel' :
-
-			action.move =
-				p;
-
-			action.item =
-				Visual.Label.create(
-					'zone',
-					action.item,
-					new Euclid.Rect(
-						'arbitrary',
-						view.depoint( action.start ),
-						view.depoint( p )
-					)
-				);
-
-
-			shell.redraw =
-				true;
-
-			return 'pointer';
-
 		case 'createNote' :
-
-			action.move =
-				p;
-
-			action.item =
-				Visual.Note.create(
-					'zone',
-					action.item,
-					new Euclid.Rect(
-						'arbitrary',
-						view.depoint( action.start ),
-						view.depoint( p )
-					)
-				);
-
-			shell.redraw =
-				true;
-
-			return 'pointer';
-
 		case 'createPortal' :
 
 			action.move =
 				p;
 
 			action.item =
-				Visual.Portal.create(
-					'zone',
-					action.item,
-					new Euclid.Rect(
-						'arbitrary',
-						view.depoint( action.start ),
-						view.depoint( p )
-					)
-				);
+				this.getActionItemCreator( action )
+					.create(
+						'zone',
+						action.item,
+						new Euclid.Rect(
+							'arbitrary',
+							view.depoint( action.start ),
+							view.depoint( p )
+						)
+					);
 
 			shell.redraw =
 				true;
