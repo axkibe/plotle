@@ -235,6 +235,7 @@ Space.prototype.createItem =
 	// TODO remove
 	switch( twig.type )
 	{
+	case 'Label' :
 	case 'Note' :
 	return (
 		Proto.create(
@@ -798,10 +799,12 @@ Space.prototype.dragStart =
 
 	switch( action && action.type ) {
 
+		case 'createLabel' :
 		case 'createNote' :
 
-			var Proto =
-				this.getActionItemCreator( action );
+			var
+				Proto =
+					this.getActionItemCreator( action );
 
 			action.start =
 				p;
@@ -809,15 +812,17 @@ Space.prototype.dragStart =
 			// TODO inherit action.item
 			action.item =
 				Proto.create(
-					'p1p2',
+					'zone',
 					action.item,
-					p,
-					p
+					new Euclid.Rect(
+						'pnw/pse',
+						p,
+						p
+					)
 				);
 
 			return;
 
-		case 'createLabel' :
 		case 'createPortal' :
 
 			var Proto =
@@ -1019,10 +1024,13 @@ Space.prototype.dragStop =
 			var
 				note =
 					Visual.Note.create(
-						'p1p2',
+						'zone',
 						action.item,
-						view.depoint( action.start ),
-						view.depoint( action.move )
+						new Euclid.Rect(
+							'arbitrary',
+							view.depoint( action.start ),
+							view.depoint( action.move )
+						)
 					);
 
 				key =
@@ -1048,11 +1056,14 @@ Space.prototype.dragStop =
 
 			var
 				label =
-					new Visual.Label(
-						'p1p2',
-						null,
-						view.depoint( action.start ),
-						view.depoint( action.move  )
+					Visual.Label.create(
+						'zone',
+						action.item,
+						new Euclid.Rect(
+							'arbitrary',
+							view.depoint( action.start ),
+							view.depoint( action.move  )
+						)
 					);
 
 			key =
@@ -1244,7 +1255,7 @@ Space.prototype.dragMove =
 
 		pd;
 
-	// TODO move p1p1 creation out
+	// TODO move common stuff out
 	switch( action.type )
 	{
 		case 'createLabel' :
@@ -1253,11 +1264,14 @@ Space.prototype.dragMove =
 				p;
 
 			action.item =
-				new Visual.Label(
-					'p1p2',
-					null,
-					action.start,
-					p
+				Visual.Label.create(
+					'zone',
+					action.item,
+					new Euclid.Rect(
+						'arbitrary',
+						view.depoint( action.start ),
+						view.depoint( p )
+					)
 				);
 
 
@@ -1273,10 +1287,13 @@ Space.prototype.dragMove =
 
 			action.item =
 				Visual.Note.create(
-					'p1p2',
+					'zone',
 					action.item,
-					action.start,
-					p
+					new Euclid.Rect(
+						'arbitrary',
+						view.depoint( action.start ),
+						view.depoint( p )
+					)
 				);
 
 			shell.redraw =
@@ -1292,9 +1309,9 @@ Space.prototype.dragMove =
 			action.item =
 				new Visual.Portal(
 					'p1p2',
-					null,
-					action.start,
-					p
+					action.item,
+					view.depoint( action.start ),
+					view.depoint( p )
 				);
 
 			shell.redraw =

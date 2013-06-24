@@ -157,12 +157,12 @@ Jools.lazyFixate(RoundRect.prototype, 'pc',
 /*
 | Returns true if this rectangle is the same as another
 */
-RoundRect.prototype.eq =
+RoundRect.prototype.equals =
 	function( r )
 {
 	return (
-		this.pnw.eq( r.pnw ) &&
-		this.pse.eq( r.pse )
+		this.pnw.equals( r.pnw ) &&
+		this.pse.equals( r.pse )
 	);
 };
 

@@ -45,9 +45,13 @@ if( typeof( window ) === 'undefined' )
 | Point(x, y) or
 | Point(p)
 */
-var Point =
-Euclid.Point =
-	function( a1, a2 )
+var
+	Point =
+	Euclid.Point =
+		function(
+			a1,
+			a2
+		)
 {
 	if( typeof( a1 ) === 'object' )
 	{
@@ -76,7 +80,7 @@ Euclid.Point =
 /*
 | Returns true if this point is equal to another.
 */
-Point.prototype.eq =
+Point.prototype.equals =
 	function(
 		a1,
 		a2

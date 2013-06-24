@@ -197,14 +197,14 @@ Jools.lazyFixate(
 /*
 | Returns true if this ellipse is the same as another
 */
-Ellipse.prototype.eq =
+Ellipse.prototype.equals =
 	function(
 		r
 	)
 {
 	return (
-		this.pnw.eq( r.pnw ) &&
-		this.pse.eq( r.pse )
+		this.pnw.equals( r.pnw ) &&
+		this.pse.equals( r.pse )
 	);
 };
 

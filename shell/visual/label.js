@@ -51,13 +51,13 @@ Visual.Label =
 	function(
 		overload,
 		inherit,
-		a1,   // twig  -  p1
-		a2    // path  -  p2
+		a1,   // twig  |  zone
+		a2    // path
 	)
 {
 	switch( overload )
 	{
-		case 'twig' :
+		case '_twig' :
 
 			var
 				twig =
@@ -79,25 +79,16 @@ Visual.Label =
 
 			break;
 
-		case 'p1p2' :
+		case '_zone' :
 
 			var
-				p1 =
-					a1,
-
-				p2 =
-					a2;
+				zone =
+					a1;
 
 			var
-				dy =
-					Math.abs( p1.y - p2.y ),
-
-				ny =
-					Math.min( p1.y , p2.y ),
-
 				fontsize =
 					Math.max(
-						dy / ( 1 + theme.bottombox ),
+						zone.height / ( 1 + theme.bottombox ),
 						theme.label.minSize
 					),
 
@@ -129,23 +120,11 @@ Visual.Label =
 			);
 
 
-			if( p2.x > p1.x )
-			{
-				this.pnw =
-					new Euclid.Point(
-						p1.x,
-					ny
-				);
-			}
-			else
-			{
-				this.pnw =
-					new Euclid.Point(
-						p1.x - flow.spread,
-						ny
-					);
-			}
+			this.pnw =
+				zone.pnw;
 
+			/*
+			TODO
 			var zone =
 				new Euclid.Rect(
 					'pnw/size',
@@ -153,6 +132,7 @@ Visual.Label =
 					flow.spread,
 					height
 				);
+			*/
 
 			break;
 
@@ -172,8 +152,8 @@ Label.create =
 	function(
 		overload,
 		inherit,
-		a1,   // twig  -  p1
-		a2    // path  -  p2
+		a1,   // twig  |  zone
+		a2    // path
 	)
 {
 	switch( overload )
@@ -198,26 +178,22 @@ Label.create =
 
 			return (
 				new Label(
-					'twig',
+					'_twig',
 					inherit,
 					twig,
 					path
 				)
 			);
 
-		case 'p1p2' :
+		case 'zone' :
 
 			var
-				p1 =
-					a1,
-
-				p2 =
-					a2;
+				zone =
+					a1;
 
 			if(
 				inherit &&
-				inherit.p1 === p1,
-				inherit.p2 === p2
+				inherit.getZone( ).equals( zone )
 			)
 			{
 				return inherit;
@@ -225,10 +201,9 @@ Label.create =
 
 			return (
 				new Label(
-					'twig',
+					'_zone',
 					inherit,
-					twig,
-					path
+					zone
 				)
 			);
 
@@ -309,7 +284,7 @@ Label.prototype.getSilhoutte =
 
 	if(
 		s &&
-		s.pnw.eq( zone.pnw ) &&
+		s.pnw.equals( zone.pnw ) &&
 		s.pse.x === zone.pse.x - 1 &&
 		s.pse.y === zone.pse.y - 1
 	)
@@ -388,7 +363,9 @@ Label.prototype.dragStop =
 				fontsize =
 					this.$sub.doc.getFont( this ).size;
 
-			if( !this.twig.pnw.eq( zone.pnw ) )
+			if(
+				!this.twig.pnw.equals( zone.pnw )
+			)
 			{
 				shell.peer.setPNW(
 					this.path,

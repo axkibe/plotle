@@ -197,7 +197,9 @@ Item.prototype.planHandles =
 		h =
 			this.$handles;
 
-	if( h.zone && zone.eq( h.zone ) )
+	if(
+		h.zone && zone.equals( h.zone )
+	)
 	{
 		return h;
 	}
@@ -205,25 +207,31 @@ Item.prototype.planHandles =
 	var
 		wx =
 			zone.pnw.x,
+
 		ny =
 			zone.pnw.y,
+
 		ex =
 			zone.pse.x,
+
 		sy =
 			zone.pse.y,
 
 		mx =
 			Jools.half( wx + ex ),
+
 		my =
 			Jools.half( ny + sy ),
 
 		dcx =
 			theme.handle.cdistance,
+
 		dcy =
 			theme.handle.cdistance,
 
 		dex =
 			theme.handle.edistance,
+
 		dey =
 			theme.handle.edistance,
 

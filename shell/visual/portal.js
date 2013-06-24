@@ -301,7 +301,7 @@ Portal.prototype.getSilhoutte =
 
 	if(
 		s &&
-		s.eq( zone )
+		s.equals( zone )
 	)
 	{
 		return s;
@@ -382,7 +382,7 @@ Portal.prototype.dragStop =
 				throw new Error( 'Portal under minimum size!' );
 			}
 
-			if( this.twig.zone.eq( zone ) )
+			if( this.twig.zone.equals( zone ) )
 			{
 				return;
 			}

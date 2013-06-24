@@ -582,7 +582,7 @@ Shell.prototype._getCurrentDisplay =
 				this._$forms[ name ];
 
 			if(
-				!this.screensize.eq(
+				!this.screensize.equals(
 					inherit.screensize
 				)
 			)

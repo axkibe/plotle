@@ -51,8 +51,8 @@ Visual.Note =
 	function(
 		overload,
 		inherit,
-		a1,       // twig  | p1
-		a2        // path  | p2
+		a1,       // twig  | zone
+		a2        // path
 	)
 {
 	switch( overload )
@@ -79,24 +79,11 @@ Visual.Note =
 
 			break;
 
-		case '_p1p2' :
+		case '_zone' :
 
 			var
-				p1 =
-					a1,
-
-				p2 =
-					a2,
-
-				fontsize =
-					a1,
-
 				zone =
-					new Euclid.Rect(
-						'arbitrary',
-						p1,
-						p2
-					),
+					a1,
 
 				minWidth =
 					theme.note.minWidth,
@@ -123,7 +110,7 @@ Visual.Note =
 				'phrase',
 				inherit,
 				'',
-				fontsize
+				theme.note.fontsize
 			);
 
 			this.zone =
@@ -153,8 +140,8 @@ Note.create =
 	function(
 		overload,
 		inherit,
-		a1,  //  twig  |  p1
-		a2   //  path  |  p2
+		a1,  //  twig  |  zone
+		a2   //  path
 	)
 {
 	switch( overload )
@@ -186,38 +173,27 @@ Note.create =
 				)
 			);
 
-		case 'p1p2' :
+		case 'zone' :
 
 			var
-				p1 =
-					a1,
+				zone =
+					a1;
 
-				p2 =
-					a2;
-
-			if(
-				inherit &&
-				(
-					(
-						inherit.pnw === a1 &&
-						inherit.pse === a2
-					) ||
-					(
-						inherit.pse === a1 &&
-						inherit.pnw === a2
-					)
-				)
-			)
+			if( inherit )
 			{
-				return inherit;
+				if (
+					inherit.zone.equals( zone )
+				)
+				{
+					return inherit;
+				}
 			}
 
 			return (
 				new Note(
-					'_p1p2',
+					'_zone',
 					inherit,
-					p1,
-					p2
+					zone
 				)
 			);
 
@@ -258,7 +234,7 @@ Note.prototype.dragStop =
 				throw new Error( 'Note under minimum size!' );
 			}
 
-			if( this.twig.zone.eq( zone ) )
+			if( this.twig.zone.equals( zone ) )
 			{
 				return;
 			}
@@ -473,7 +449,7 @@ Note.prototype.getSilhoutte =
 		s =
 			this._$silhoutte;
 
-	if( s && s.eq( zone ) )
+	if( s && s.equals( zone ) )
 	{
 		return s;
 	}

@@ -48,7 +48,7 @@ Visual.Relation =
 {
 	Visual.Label.call(
 		this,
-		'twig',
+		'_twig',
 		inherit,
 		twig,
 		path
