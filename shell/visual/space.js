@@ -834,10 +834,13 @@ Space.prototype.dragStart =
 			// TODO inherit action.item
 			action.item =
 				new Proto(
-					'p1p2',
+					'zone',
 					null,
-					p,
-					p
+					new Euclid.Rect(
+						'pnw/pse',
+						p,
+						p
+					)
 				);
 
 			return;
@@ -1092,19 +1095,23 @@ Space.prototype.dragStop =
 			var
 				portal =
 					new Visual.Portal(
-						'p1p2',
+						'zone',
 						null,
-						view.depoint( action.start ),
-						view.depoint( action.move  )
+						new Euclid.Rect(
+							'arbitrary',
+							view.depoint( action.start ),
+							view.depoint( action.move  )
+						)
 					);
 
-			key = shell.peer.newPortal(
-				this.spaceUser,
-				this.spaceTag,
-				portal.zone,
-				shell.bridge.getUsername( ),
-				'home'
-			);
+			key =
+				shell.peer.newPortal(
+					this.spaceUser,
+					this.spaceTag,
+					portal.zone,
+					shell.bridge.getUsername( ),
+					'home'
+				);
 
 			this.$sub[ key ].grepFocus( this );
 
@@ -1308,10 +1315,13 @@ Space.prototype.dragMove =
 
 			action.item =
 				new Visual.Portal(
-					'p1p2',
+					'zone',
 					action.item,
-					view.depoint( action.start ),
-					view.depoint( p )
+					new Euclid.Rect(
+						'arbitrary',
+						view.depoint( action.start ),
+						view.depoint( p )
+					)
 				);
 
 			shell.redraw =

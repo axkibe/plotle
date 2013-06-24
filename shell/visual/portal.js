@@ -54,8 +54,8 @@ Visual.Portal =
 	function(
 		overload,
 		inherit,
-		a1,   // twig  |  p1
-		a2    // path  |  p2
+		a1,   // twig  |  zone
+		a2    // path
 	)
 {
 	switch( overload )
@@ -101,14 +101,11 @@ Visual.Portal =
 
 			break;
 
-		case 'p1p2' :
+		case 'zone' :
 
 			var
-				p1 =
-					a1,
-
-				p2 =
-					a2;
+				zone =
+					a1;
 
 			Visual.Item.call(
 				this,
@@ -120,13 +117,6 @@ Visual.Portal =
 				null;
 
 			var
-				zone =
-					new Euclid.Rect(
-						'arbitrary',
-						p1,
-						p2
-					),
-
 				minWidth =
 					theme.portal.minWidth,
 
@@ -232,62 +222,6 @@ Portal.prototype.handles =
 
 
 /*
-| Gets the zone for a transient portal
-*/
-Portal.s_getZone =
-	function(
-		p1,
-		p2
-	)
-{
-};
-
-
-/*
-| Draws a transitory portal
-| ( A portal in the making )
-*/
-/*
-Portal.s_drawTrans =
-	function(
-		fabric,
-		view,
-		zone
-	)
-{
-	var
-		silhoutte =
-			Portal.s_getSilhoutte( zone );
-
-	fabric.paint(
-		Style.getStyle(
-			theme.portal.style,
-			'normal'
-		),
-		silhoutte,
-		'sketch',
-		view
-	);
-};
-*/
-
-
-/*
-| Returns the portals silhoutte.
-*/
-Portal.s_getSilhoutte =
-	function(
-		zone //  the portals zone
-	)
-{
-	return new Euclid.Ellipse(
-		zone.pnw,
-		zone.pse
-	);
-};
-
-
-/*
 | Returns the portals silhoutte.
 */
 Portal.prototype.getSilhoutte =
@@ -296,8 +230,9 @@ Portal.prototype.getSilhoutte =
 	)
 {
 	// checks for a cache hit
-	var s =
-		this._$silhoutte;
+	var
+		s =
+			this._$silhoutte;
 
 	if(
 		s &&
@@ -311,7 +246,10 @@ Portal.prototype.getSilhoutte =
 
 	s =
 	this._$silhoutte =
-		Portal.s_getSilhoutte( zone );
+		new Euclid.Ellipse(
+			zone.pnw,
+			zone.pse
+		);
 
 	return s;
 };
