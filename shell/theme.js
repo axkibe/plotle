@@ -525,10 +525,11 @@ theme =
 		},
 
 		// offset for creation // FIXME calculate dynamically
-		createOffset :
+		spawnOffset :
 		{
 			x :
 				44,
+
 			y :
 				12
 		}

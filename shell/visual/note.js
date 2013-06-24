@@ -203,7 +203,8 @@ Note.create =
 				'invalid overload'
 			);
 	}
-}
+};
+
 
 /*
 | Sets the items position and size after an action.

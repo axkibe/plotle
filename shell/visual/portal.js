@@ -60,7 +60,7 @@ Visual.Portal =
 {
 	switch( overload )
 	{
-		case 'twig' :
+		case '_twig' :
 
 			var
 				twig =
@@ -101,7 +101,7 @@ Visual.Portal =
 
 			break;
 
-		case 'zone' :
+		case '_zone' :
 
 			var
 				zone =
@@ -147,7 +147,13 @@ Visual.Portal =
 				zone;
 
 			break;
-	};
+
+		default :
+
+			throw new Error(
+				'invalid overload'
+			);
+	}
 
 
 	// the prepared space fields
@@ -171,6 +177,76 @@ Jools.subclass(
 	Portal,
 	Visual.Item
 );
+
+
+Portal.create =
+	function(
+		overload,
+		inherit,
+		a1,  //  twig  |  zone
+		a2   //  path
+	)
+{
+	switch( overload )
+	{
+		case 'twig' :
+
+			var
+				twig =
+					a1,
+
+				path =
+					a2;
+
+			if(
+				inherit &&
+				inherit.twig === twig &&
+				inherit.path === path
+			)
+			{
+				return inherit;
+			}
+
+			return (
+				new Portal(
+					'_twig',
+					inherit,
+					twig,
+					path
+				)
+			);
+
+		case 'zone' :
+
+			var
+				zone =
+					a1;
+
+			if( inherit )
+			{
+				if (
+					inherit.zone.equals( zone )
+				)
+				{
+					return inherit;
+				}
+			}
+
+			return (
+				new Portal(
+					'_zone',
+					inherit,
+					zone
+				)
+			);
+
+		default :
+
+			throw new Error(
+				'invalid overload'
+			);
+	}
+};
 
 
 /*

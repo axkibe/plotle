@@ -55,6 +55,7 @@ Visual.Relation =
 	);
 };
 
+
 Jools.subclass(
 	Relation,
 	Visual.Label
@@ -71,9 +72,58 @@ Relation.imargin =
 
 
 /*
-| Creates a new Relation by specifing its relates.
+| Creates a new Relation
 */
 Relation.create =
+	function(
+		overload,
+		inherit,
+		a1,     // twig
+		a2      // path
+	)
+{
+	switch( overload )
+	{
+		case 'twig' :
+
+			var
+				twig =
+					a1,
+
+				path =
+					a2;
+
+			if(
+				inherit &&
+				inherit.twig === twig &&
+				inherit.path.equals( path )
+			)
+			{
+				return inherit;
+			}
+
+			return (
+				new Relation(
+					'twig',
+					inherit,
+					twig,
+					path
+				)
+			);
+
+		default :
+
+			throw new Error(
+				'invalid overload'
+			);
+	}
+};
+
+
+/*
+| Creates a new Relation by specifing its relates.
+*/
+Relation.spawn =
 	function(
 		space,
 		item1,
@@ -90,7 +140,7 @@ Relation.create =
 
 	var pnw =
 		cline.pc.sub(
-			theme.relation.createOffset
+			theme.relation.spawnOffset
 		);
 
 	var key =
@@ -104,7 +154,7 @@ Relation.create =
 			item2.key
 		);
 
-	// event listener has created the vrel
+	// event listener has spawned the vrel
 	space.$sub[ key ].grepFocus( space );
 };
 

@@ -812,7 +812,7 @@ Item.prototype.dragStop =
 			var space =
 				shell.$space;
 
-			Visual.Relation.create(
+			Visual.Relation.spawn(
 				space,
 				space.getSub( action.fromItemPath ),
 				this

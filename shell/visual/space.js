@@ -157,7 +157,7 @@ Space.prototype.update =
 	if(
 		csign &&
 		csign.path &&
-		!Jools.isnon( // TODO why not Jools.is?
+		Jools.is(
 			sub[ csign.path.get( 0 ) ]
 		)
 	)
@@ -232,11 +232,6 @@ Space.prototype.createItem =
 		throw new Error( 'unknown type: ' + twig.type );
 	}
 
-	// TODO remove
-	switch( twig.type )
-	{
-	case 'Label' :
-	case 'Note' :
 	return (
 		Proto.create(
 			'twig',
@@ -247,19 +242,6 @@ Space.prototype.createItem =
 				new Path( [ key ] )
 		)
 	);
-
-	default :
-	return (
-		new Proto(
-			'twig',
-			inherit,
-			twig,
-			inherit ?
-				inherit.path :
-				new Path( [ key ] )
-		)
-	);
-	}
 };
 
 
@@ -801,6 +783,7 @@ Space.prototype.dragStart =
 
 		case 'createLabel' :
 		case 'createNote' :
+		case 'createPortal' :
 
 			var
 				Proto =
@@ -823,32 +806,9 @@ Space.prototype.dragStart =
 
 			return;
 
-		case 'createPortal' :
-
-			var Proto =
-				this.getActionItemCreator( action );
-
-			action.start =
-				p;
-
-			// TODO inherit action.item
-			action.item =
-				new Proto(
-					'zone',
-					null,
-					new Euclid.Rect(
-						'pnw/pse',
-						p,
-						p
-					)
-				);
-
-			return;
-
 		default :
 
 			// ignore and go on
-
 			break;
 	}
 
@@ -946,7 +906,8 @@ Space.prototype.getActionItemCreator =
 				'unknown action'
 			);
 	}
-}
+};
+
 
 /*
 | A mouse click.
@@ -1094,9 +1055,10 @@ Space.prototype.dragStop =
 
 			var
 				portal =
-					new Visual.Portal(
+					Visual.Portal.create(
 						'zone',
-						null,
+						action.item,
+						// FIXME, provide reusable points/rects
 						new Euclid.Rect(
 							'arbitrary',
 							view.depoint( action.start ),
@@ -1263,6 +1225,7 @@ Space.prototype.dragMove =
 		pd;
 
 	// TODO move common stuff out
+	// XXX
 	switch( action.type )
 	{
 		case 'createLabel' :
@@ -1314,7 +1277,7 @@ Space.prototype.dragMove =
 				p;
 
 			action.item =
-				new Visual.Portal(
+				Visual.Portal.create(
 					'zone',
 					action.item,
 					new Euclid.Rect(
