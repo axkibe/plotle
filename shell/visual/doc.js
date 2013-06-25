@@ -54,7 +54,8 @@ Visual.Doc =
 		inherit,
 		a1,   // twig       | phrase
 		a2,   // path       | fontsize
-		a3    // fontsize
+		a3,   // fontsize   | flowWidth
+		a4    // flowWidth
 	)
 {
 	var
@@ -89,6 +90,9 @@ Visual.Doc =
 			this.fontsize =
 				a3;
 
+			this.flowWidth =
+				a4;
+
 			this.ranks =
 				ranks;
 
@@ -105,15 +109,18 @@ Visual.Doc =
 				var k =
 					ranks[ r ];
 
+				/*
+				TODO reusal
 				if(
 					inherit &&
-					inherit.twig.copse[ k ] === copse[ k ]
+					inherit.twig.copse[ k ] === copse[ k ] &&
 				)
 				{
 					sub[ k ] =
 						inherit.$sub[ k ];
 				}
 				else
+				*/
 				{
 					sub[ k ] =
 						new Visual.Para(
@@ -122,7 +129,9 @@ Visual.Doc =
 							new Path(
 								path,
 								'++', k
-							)
+							),
+							this.fontsize,
+							this.flowWidth
 						);
 				}
 			}
@@ -138,6 +147,9 @@ Visual.Doc =
 			this.fontsize =
 				a2;
 
+			this.flowWidth =
+				a3;
+
 			Visual.Base.call(
 				this,
 				null,
@@ -149,14 +161,14 @@ Visual.Doc =
 				[ ];
 
 			this.ranks =
-				[
-					'1'
-				];
+				[ '1' ];
 
 			sub[ '1' ] =
 				new Visual.Para(
 					'phrase',
-					phrase
+					phrase,
+					this.fontsize,
+					this.flowWidth
 				);
 
 			break;
@@ -192,11 +204,14 @@ Doc.create =
 		inherit,
 		a1,  // twig       | phrase
 		a2,  // fatherPath | fontsize
-		a3   // fontsize
+		a3,  // fontsize   | flowWidth
+		a4   // flowWidth
 	)
 {
 	var
-		fontsize;
+		fontsize,
+
+		flowWidth;
 
 	switch( overload )
 	{
@@ -211,6 +226,9 @@ Doc.create =
 
 			fontsize =
 				a3;
+
+			flowWidth =
+				a4;
 
 			if(
 				inherit &&
@@ -230,7 +248,8 @@ Doc.create =
 						fatherPath,
 						'++', 'doc'
 					),
-					fontsize
+					fontsize,
+					flowWidth
 				)
 			);
 
@@ -242,6 +261,9 @@ Doc.create =
 
 			fontsize =
 				a2;
+
+			flowWidth =
+				a3;
 
 			if(
 				inherit &&
@@ -257,7 +279,8 @@ Doc.create =
 					overload,
 					inherit,
 					phrase,
-					fontsize
+					fontsize,
+					flowWidth
 				)
 			);
 
@@ -301,7 +324,7 @@ Doc.prototype.draw =
 	// FIXME <pre>
 	var
 		paraSep =
-			this.getParaSep( item ),
+			this.getParaSep( ),
 
 		selection =
 			shell.getSelection( ),
@@ -386,23 +409,14 @@ Doc.prototype.draw =
 | FIXME caching
 */
 Doc.prototype.getHeight =
-	function(
-		item
-	)
+	function( )
 {
-	if(! Jools.is( item ) )
-	{
-		throw new Error(
-			'TODO'
-		);
-	}
-
 	var
 		fs =
-			this.getFont( item ).size,
+			this.fontsize,
 
 		paraSep =
-			this.getParaSep( item ),
+			this.getParaSep( ),
 
 		ranks =
 			this.ranks,
@@ -421,17 +435,20 @@ Doc.prototype.getHeight =
 				this.atRank( r ),
 
 			flow =
-				vpara.getFlow( item );
+				vpara.getFlow( );
 
 		if( r > 0 )
 		{
-			height += paraSep;
+			height +=
+				paraSep;
 		}
 
-		height += flow.height;
+		height +=
+			flow.height;
 	}
 
-	height += Math.round( fs * theme.bottombox );
+	height +=
+		Math.round( fs * theme.bottombox );
 
 	return height;
 };
@@ -441,7 +458,9 @@ Doc.prototype.getHeight =
 | returns the north-west point of the paragraph with the key 'key'.
 */
 Doc.prototype.getPNW =
-	function( key )
+	function(
+		key
+	)
 {
 	return this._$pnws[ key ];
 };
@@ -449,9 +468,10 @@ Doc.prototype.getPNW =
 
 /*
 | Returns the width actually used of the document.
+| XXX
 */
 Doc.prototype.getSpread =
-	function( item )
+	function( )
 {
 	var
 		spread =
@@ -468,7 +488,7 @@ Doc.prototype.getSpread =
 		spread =
 			max(
 				spread,
-				sub[ k ].getFlow( item ).spread
+				sub[ k ].getFlow( ).spread
 			);
 	}
 
@@ -478,25 +498,26 @@ Doc.prototype.getSpread =
 
 /*
 | Returns the default font for the document.
+| XXX
+|
+| TODO simplify
 */
 Doc.prototype.getFont =
-	function( item )
+	function( )
 {
-	if(! Jools.is( item ) )
-	{
-		throw new Error(
-			'TODO'
-		);
-	}
-
 	var fontsize =
 		this.fontsize;
+
+	/*
+
+	TODO
 
 	if( item.fontSizeChange )
 	{
 		fontsize =
 			item.fontSizeChange( fontsize );
 	}
+	*/
 
 	var f =
 		this._$font;
@@ -559,21 +580,13 @@ Doc.prototype.getParaAtPoint =
 
 /*
 | Returns the (default) paraSeperator for this document.
-| Parameter item is optional,
-| just to safe double and tripple lookups.
+| XXX
 */
 Doc.prototype.getParaSep =
-	function( item )
+	function( )
 {
-	if( !Jools.is( item ) )
-	{
-		throw new Error('TODO');
-	}
-
-	var fs =
-		this.getFont( item ).size;
-
-	return item.getParaSep( fs );
+	return 0;
+	// return item.getParaSep( this.fontsize );
 };
 
 
@@ -660,7 +673,7 @@ Doc.prototype.sketchSelection =
 			),
 
 		fontsize =
-			this.getFont( item ).size,
+			this.fontsize,
 
 		descend =
 			Math.round( fontsize * theme.bottombox ),

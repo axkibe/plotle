@@ -50,7 +50,6 @@ var Note =
 Visual.Note =
 	function(
 		overload,
-		inherit,
 		twig,
 		path,
 		zone,
@@ -202,6 +201,12 @@ Note.create =
 				twig.fontsize;
 		}
 
+		if( !zone )
+		{
+			zone =
+				twig.zone;
+		}
+
 		if( !doc )
 		{
 			doc =
@@ -210,18 +215,11 @@ Note.create =
 					inherit && inherit.$sub.doc,
 					twig.doc,
 					path,
-					fontsize
+					fontsize,
+					zone.width - Note.innerMargin.x
 				);
 		}
-
-		if( !zone )
-		{
-			zone =
-				twig.zone;
-		}
 	}
-
-
 
 	if( inherit )
 	{
@@ -269,7 +267,6 @@ Note.create =
 	return (
 		new Note(
 			'XOXO',
-			inherit,
 			twig,
 			path,
 			zone,
@@ -470,6 +467,7 @@ Note.prototype.draw =
 /*
 | Default margin for all notes.
 */
+Note.innerMargin =
 Note.prototype.innerMargin =
 	new Euclid.Margin(
 		theme.note.innerMargin

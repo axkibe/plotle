@@ -48,8 +48,10 @@ var Para =
 Visual.Para =
 	function(
 		overload,
-		a1,
-		a2
+		a1,  // twig       | phrase
+		a2,  // path       | fontsize
+		a3,  // fontsize   | flowWidth
+		a4   // flowWidth
 	)
 {
 	switch( overload )
@@ -61,11 +63,19 @@ Visual.Para =
 					a1,
 
 				path =
-					a2;
+					a2,
 
-			if( twig.type !== 'Para' )
+				fontsize =
+					a3,
+
+				flowWidth =
+					a4;
+
+			if( CHECKBUILD && twig.type !== 'Para' )
 			{
-				throw new Error( 'type error' );
+				throw new Error(
+					'type error'
+				);
 			}
 
 			Visual.Base.call(
@@ -76,6 +86,12 @@ Visual.Para =
 
 			this.text =
 				twig.text;
+
+			this.fontsize =
+				fontsize;
+
+			this.flowWidth =
+				flowWidth;
 
 			break;
 
@@ -90,6 +106,12 @@ Visual.Para =
 			this.text =
 				a1;
 
+			this.fontsize =
+				a2;
+
+			this.flowWidth =
+				a3;
+
 			break;
 
 		default :
@@ -103,6 +125,16 @@ Visual.Para =
 	this.$fabric =
 	this.$flow =
 		null;
+
+	if(
+		CHECKBUILD &&
+		!Jools.is( this.flowWidth )
+	)
+	{
+		throw new Error(
+			'no flowWidth'
+		);
+	}
 };
 
 
@@ -192,7 +224,7 @@ Para.prototype.draw =
 {
 	var
 		flow =
-			this.getFlow( item ),
+			this.getFlow( ),
 
 		font =
 			doc.getFont( item ),
@@ -485,26 +517,32 @@ Para.s_getFlow =
 
 
 /*
-| (Re)flows the paragraph, positioning all chunks.
+| Returns the font for this para.
+*/
+Para.prototype.getFont =
+	function( )
+{
+	return (
+		fontPool.get(
+			this.fontsize,
+			'la'
+		)
+	);
+}
+
+/*
+| Flows the paragraph, positioning all chunks.
+| XXX
 */
 Para.prototype.getFlow =
-	function(
-		item
-	)
+	function( )
 {
-	if( !item )
-	{
-		throw new Error(
-			'TODO'
-		);
-	}
-
 	var
 		flowWidth =
-			item.getFlowWidth( ),
+			this.flowWidth,
 
 		font =
-			item.$sub.doc.getFont( item ),
+			this.getFont( ),
 
 		flow =
 			this.$flow,
@@ -514,20 +552,18 @@ Para.prototype.getFlow =
 			this.text;
 
 	// checks for cache hit
-	if (
-		!config.debug.noCache && flow &&
-		flow.flowWidth === flowWidth &&
-		flow.fontsize  === font.size
-	)
+	if ( flow )
 	{
 		return flow;
 	}
 
 	// clears the caret flow cache if its within this flow
+	// TODO this is not nice
 	var caret =
-		shell.$space.$caret;
+		shell.$space && shell.$space.$caret;
 
 	if (
+		caret &&
 		caret.path &&
 		caret.path.equals( this.path )
 	)
@@ -538,7 +574,7 @@ Para.prototype.getFlow =
 	}
 
 
-	// builds position informations.
+	// builds position informations
 	flow =
 	this.$flow =
 		Para.s_getFlow(
@@ -553,27 +589,20 @@ Para.prototype.getFlow =
 
 /*
 | Returns the height of the para
+|
+| XXX
 */
 Para.prototype.getHeight =
-	function(
-		item // the item this para belongs to
-	)
+	function( )
 {
-	if( !item )
-	{
-		throw new Error(
-			'TODO'
-		);
-	}
-
 	var
 		flow =
-			this.getFlow( item );
+			this.getFlow( );
 
 	return (
 		flow.height +
 		Math.round(
-			item.$sub.doc.getFont( item ).size * theme.bottombox
+			this.fontsize * theme.bottombox
 		)
 	);
 };
@@ -590,7 +619,7 @@ Para.prototype.getOffsetAt =
 {
 	var
 		item =
-			shell.$space.getSub (
+			shell.$space.getSub(
 				this.path,
 				'Item'
 			),
@@ -701,7 +730,7 @@ Para.prototype.locateOffset =
 			this.twig,
 
 		font =
-			item.$sub.doc.getFont( item ),
+			this.getFont( ),
 
 		text =
 			this.text,
@@ -793,7 +822,7 @@ Para.prototype.getPointOffset =
 {
 	var
 		flow =
-			this.getFlow( item ),
+			this.getFlow( ),
 
 		line;
 
@@ -971,7 +1000,8 @@ Para.prototype.keyDown =
 {
 	var
 		flow =
-			this.getFlow( item ),
+			this.getFlow( ),
+
 		x =
 			caret.retainx !== null ? caret.retainx : caret.$pos.x,
 
@@ -1227,7 +1257,7 @@ Para.prototype.keyUp =
 		caret
 	)
 {
-	this.getFlow( item ); // FIXME, needed?
+	this.getFlow( ); // FIXME, needed?
 
 	var
 		x =

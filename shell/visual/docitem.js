@@ -63,29 +63,8 @@ Visual.DocItem =
 		{
 			doc :
 				doc
-				/*
-				Visual.Doc.create(
-					'twig',
-					inherit && inherit.$sub.doc,
-					twig.doc,
-					path,
-					twig.fontsize
-				)
-				*/
 		};
 
-
-		/*
-		{
-			doc :
-				Visual.Doc.create(
-					'phrase',
-					inherit,
-					phrase,
-					fontsize
-				)
-		};
-		*/
 };
 
 

@@ -614,8 +614,6 @@ Server.prototype.buildShellConfig =
 	var k;
 
 	cconfig.push(
-//		'var CHECKBUILD = true;\n',
-		'\n',
 		'var config = {\n',
 		'\tdevel   : ', Jools.configSwitch(config.devel, 'shell'), ',\n',
 		'\tmaxUndo : ', config.maxUndo, ',\n',
@@ -1011,11 +1009,13 @@ Server.prototype.prepareResources =
 	this.$resources['favicon.ico'] =
 		this.$resources['media/favicon.ico'];
 
-	var cconfig =
-		new Resource(
-			'shell/config.js',
-			'mb'
-		);
+	var
+		cconfig =
+			new Resource(
+				'shell/config.js',
+				'mb'
+			);
+
 	bundleRessources.unshift( cconfig );
 
 	this.$resources[ cconfig.path ] =
@@ -1124,6 +1124,12 @@ Server.prototype.prepareResources =
 		br;
 
 	Jools.log( 'start', 'bundle:', bsha1 );
+
+	// Prepends the CHECKBUILD flag after
+	// the bundle has been created.
+	cconfig.data =
+		'var CHECKBUILD = true;\n' +
+		cconfig.data;
 
 	// the devel.html file
 	if(

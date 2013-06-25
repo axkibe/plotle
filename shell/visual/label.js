@@ -52,7 +52,7 @@ Visual.Label =
 		overload,
 		twig,
 		path,
-		pnw,
+		zone,
 		doc
 	)
 {
@@ -70,8 +70,15 @@ Visual.Label =
 		doc
 	);
 
-	this.pnw =
-		pnw;
+	if( CHECKBUILD && !zone )
+	{
+		throw new Error(
+			'no zone!'
+		);
+	}
+
+	this.zone =
+		zone
 
 	this.creator =
 		Label;
@@ -166,20 +173,12 @@ Label.create =
 		}
 	}
 
-	if( fontsize !== null && zone !== null )
-	{
-		throw new Error(
-			'Label cannot be created with fontsize and zone'
-		);
-	}
-
 	if( pnw !== null && zone !== null )
 	{
 		throw new Error(
 			'Label cannot be created with pnw and zone'
 		);
 	}
-
 
 	if( twig )
 	{
@@ -190,7 +189,79 @@ Label.create =
 			);
 		}
 
+		if( !fontsize )
+		{
+			fontsize =
+				twig.fontsize;
+		}
+
 		if( !doc )
+		{
+			doc =
+				Visual.Doc.create(
+					'twig',
+					inherit && inherit.$sub.doc,
+					twig.doc,
+					path,
+					fontsize,
+					0
+				);
+		}
+
+		if( !pnw )
+		{
+			pnw =
+				twig.pnw;
+		}
+	}
+
+	if( inherit )
+	{
+		if( !twig )
+		{
+			twig =
+				inherit.twig;
+		}
+
+		if( !fontsize )
+		{
+			fontsize =
+				inherit.fontsize;
+		}
+
+		if( !path )
+		{
+			path =
+				inherit.path;
+		}
+
+		if( !doc )
+		{
+			doc =
+				inherit.$sub.doc;
+		}
+	}
+
+
+	/*if( zone )
+	{
+		if( inherit )
+		{
+			doc =
+				inherit.$sub.doc;
+
+			if(
+				zone === inherit.zone ||
+				(
+					zone && zone.equals( inherit.zone )
+				)
+			)
+			{
+				fontsize =
+					doc.fontsize;
+			}
+		}
+		else
 		{
 			doc =
 				Visual.Doc.create(
@@ -201,8 +272,27 @@ Label.create =
 					fontsize
 				);
 		}
-	}
 
+		if( fontsize === null )
+		{
+			console.log( 'TODO' );
+
+			fontsize = 20;
+		}
+	}
+	*/
+
+	zone =
+		new Euclid.Rect(
+			'pnw/pse',
+			pnw,
+			pnw.add(
+				doc.getSpread( ),
+				doc.getHeight( )
+			)
+		);
+
+	/*
 	if( zone )
 	{
 		pnw =
@@ -214,7 +304,6 @@ Label.create =
 				theme.label.minSize
 			);
 
-			/*
 				font =
 					fontPool.get(
 						fontsize,
@@ -233,30 +322,11 @@ Label.create =
 					Math.round(
 						font.size * theme.bottombox
 					);
+	}
 			*/
-	}
 
 
-	if( twig )
-	{
-		if( !pnw )
-		{
-			pnw =
-				twig.pnw;
-		}
-
-	}
-
-	if( inherit )
-	{
-		if( !doc )
-		{
-			doc =
-				inherit.$sub.doc;
-		}
-	}
-
-	if( !doc )
+	if( CHECKBUILD && !doc )
 	{
 		throw new Error(
 			'no doc!'
@@ -268,7 +338,7 @@ Label.create =
 			'XOXO',
 			twig,
 			path,
-			pnw,
+			zone,
 			doc
 		)
 	);
@@ -316,7 +386,7 @@ Label.prototype.highlight =
 {
 	var silhoutte =
 		this.getSilhoutte(
-			this.getZone( )
+			this.zone
 		);
 
 	fabric.edge(
@@ -418,7 +488,7 @@ Label.prototype.dragStop =
 
 			var
 				zone =
-					this.getZone( ),
+					this.zone,
 
 				fontsize =
 					this.$sub.doc.getFont( this ).size;
@@ -473,7 +543,7 @@ Label.prototype.draw =
 		this.$fabric;
 
 	var zone =
-		view.rect( this.getZone( ) );
+		view.rect( this.zone );
 
 	// no buffer hit?
 	if (
@@ -657,6 +727,11 @@ Label.prototype.getParaSep =
 Label.prototype.getZone =
 	function( )
 {
+	// TODO remove
+	return this.zone;
+};
+
+/*
 	var
 		action =
 			shell.bridge.action( ),
@@ -776,8 +851,8 @@ Label.prototype.getZone =
 			height
 		)
 	);
-
 };
+*/
 
 
 /*
