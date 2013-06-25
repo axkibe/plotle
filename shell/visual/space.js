@@ -96,7 +96,6 @@ Visual.Space =
 			null,
 			false
 		);
-
 };
 
 
@@ -195,22 +194,44 @@ Space.prototype.update =
 /*
 | Returns the focused item.
 */
-Space.prototype.focusedItem = function( )
+Space.prototype.focusedItem =
+	function( )
 {
-	var caret =
-		this.$caret;
+	var
+		caret =
+			this.$caret;
 
 	if( !caret.sign )
 	{
 		return null;
 	}
-	else
-	{
-		return this.getSub(
+
+	var
+		path =
 			caret.sign.path,
-			'Item'
-		);
+
+		action =
+			shell.bridge.action( );
+
+
+	switch( action && action.type )
+	{
+		case 'ItemDrag' :
+
+			if( action.itemPath.subPathOf( path ) )
+			{
+				return action.item;
+			}
+
+			break;
 	}
+
+	return (
+		this.getSub(
+			path,
+			'Item'
+		)
+	);
 };
 
 
@@ -230,6 +251,20 @@ Space.prototype.createItem =
 	if( !Proto )
 	{
 		throw new Error( 'unknown type: ' + twig.type );
+	}
+
+	if( twig.type === 'Note' || twig.type === 'Label' )
+	{ // TODO remove
+		return (
+			Proto.create(
+				'inherit',
+					inherit,
+				'twig',
+					twig,
+				'path',
+					new Path( [ key ] )
+			)
+		);
 	}
 
 	return (
@@ -260,6 +295,9 @@ Space.prototype.draw =
 		view =
 			this.$view,
 
+		action =
+			shell.bridge.action( ),
+
 		zone;
 
 	this._center =
@@ -271,9 +309,28 @@ Space.prototype.draw =
 	this.$caret.$screenPos =
 		null;
 
-	for( var r = twig.length - 1; r >= 0; r-- )
+	for(
+		var r = twig.length - 1;
+		r >= 0;
+		r--
+	)
 	{
-		this.atRank( r ).draw(
+		var
+			item =
+				this.atRank( r );
+
+		switch( action && action.type )
+		{
+			case 'ItemDrag' :
+
+				if( item.path.equals( action.itemPath ) )
+				{
+					item =
+						action.item;
+				}
+		}
+
+		item.draw(
 			fabric,
 			this.$caret,
 			view
@@ -290,9 +347,6 @@ Space.prototype.draw =
 			view
 		);
 	}
-
-	var action =
-		shell.bridge.action( );
 
 	switch( action && action.type )
 	{
@@ -419,11 +473,12 @@ Space.prototype.knock =
 Space.prototype.positionCaret =
 	function( )
 {
-	var node =
-		this.getSub(
-			this.$caret.sign.path,
-			'positionCaret'
-		);
+	var
+		node =
+			this.getSub(
+				this.$caret.sign.path,
+				'positionCaret'
+			);
 
 	if( node )
 	{
@@ -669,7 +724,8 @@ Space.prototype.setCaret =
 			);
 	}
 
-	var entity;
+	var
+		item;
 
 	if(
 		this.$caret.sign &&
@@ -679,14 +735,14 @@ Space.prototype.setCaret =
 		)
 	)
 	{
-		entity =
-			this._getCaretEntity(
+		item =
+			this._getCaretItem(
 				this.$caret.sign.path
 			);
 
-		if( entity )
+		if( item )
 		{
-			entity.knock( );
+			item.knock( );
 		}
 
 		this.redraw = true;
@@ -701,14 +757,14 @@ Space.prototype.setCaret =
 
 	if( sign )
 	{
-		entity =
-			this._getCaretEntity(
+		item =
+			this._getCaretItem(
 				sign.path
 			);
 
-		if( entity )
+		if( item )
 		{
-			entity.knock( );
+			item.knock( );
 		}
 
 		this.redraw = true;
@@ -781,8 +837,32 @@ Space.prototype.dragStart =
 
 	switch( action && action.type ) {
 
-		case 'createLabel' :
 		case 'createNote' :
+
+			action.start =
+				p;
+
+			action.item =
+				this.getActionItemCreator( action )
+					.create(
+						'zone',
+							new Euclid.Rect(
+								'pnw/pse',
+								p, //TODO depoint?
+								p
+							),
+						'doc',
+							Visual.Doc.create(
+								'phrase',
+								null,
+								'',
+								theme.note.fontsize
+							)
+					);
+
+			return;
+
+		case 'createLabel' :
 		case 'createPortal' :
 
 			action.start =
@@ -792,12 +872,18 @@ Space.prototype.dragStart =
 				this.getActionItemCreator( action )
 					.create(
 						'zone',
-						action.item,
-						new Euclid.Rect(
-							'pnw/pse',
-							p,
-							p
-						)
+							new Euclid.Rect(
+								'pnw/pse',
+								p,
+								p
+							),
+						'doc',
+							Visual.Doc.create(
+								'phrase',
+								null,
+								'Label',
+								theme.label.minSize
+							)
 					);
 
 			return;
@@ -964,13 +1050,15 @@ Space.prototype.dragStop =
 		ctrl
 	)
 {
-	var action =
-		shell.bridge.action( );
+	var
+		action =
+			shell.bridge.action( ),
 
-	var view =
-		this.$view;
+		view =
+			this.$view,
 
-	var key, item;
+		key,
+		item;
 
 	if( !action )
 	{
@@ -984,13 +1072,14 @@ Space.prototype.dragStop =
 			var
 				note =
 					Visual.Note.create(
+						'inherit',
+							action.item,
 						'zone',
-						action.item,
-						new Euclid.Rect(
-							'arbitrary',
-							view.depoint( action.start ),
-							view.depoint( action.move )
-						)
+							new Euclid.Rect(
+								'arbitrary',
+								view.depoint( action.start ),
+								view.depoint( action.move )
+							)
 					);
 
 				key =
@@ -1017,13 +1106,14 @@ Space.prototype.dragStop =
 			var
 				label =
 					Visual.Label.create(
+						'inherit',
+							action.item,
 						'zone',
-						action.item,
-						new Euclid.Rect(
-							'arbitrary',
-							view.depoint( action.start ),
-							view.depoint( action.move  )
-						)
+							new Euclid.Rect(
+								'arbitrary',
+								view.depoint( action.start ),
+								view.depoint( action.move  )
+							)
 					);
 
 			key =
@@ -1095,7 +1185,9 @@ Space.prototype.dragStop =
 					if( action.toItemPath )
 					{
 						item =
-							this.getSub( action.toItemPath );
+							this.getSub(
+								action.toItemPath
+							);
 
 						item.dragStop(
 							view,
@@ -1120,6 +1212,21 @@ Space.prototype.dragStop =
 			break;
 
 		case 'ItemDrag' :
+
+			if( !action.item.zone.equals( action.origin.zone ) )
+			{
+				shell.peer.setZone(
+					action.itemPath,
+					action.item.zone
+				);
+
+				shell.bridge.stopAction( );
+
+				shell.redraw = true;
+			}
+
+			break;
+
 		case 'ItemResize' :
 		case 'ScrollY' :
 
@@ -1192,7 +1299,9 @@ Space.prototype.dragStop =
 
 		default :
 
-			throw new Error( 'Do not know how to handle Action: ' + action.type );
+			throw new Error(
+				'Do not know how to handle action: ' + action.type
+			);
 	}
 
 	return true;
@@ -1232,13 +1341,14 @@ Space.prototype.dragMove =
 			action.item =
 				this.getActionItemCreator( action )
 					.create(
+						'inherit',
+							action.item,
 						'zone',
-						action.item,
-						new Euclid.Rect(
-							'arbitrary',
-							view.depoint( action.start ),
-							view.depoint( p )
-						)
+							new Euclid.Rect(
+								'arbitrary',
+								view.depoint( action.start ),
+								view.depoint( p )
+							)
 					);
 
 			shell.redraw =
@@ -1363,6 +1473,38 @@ Space.prototype.dragMove =
 				true;
 
 			return 'pointer';
+
+		case 'ItemDrag' :
+
+			action.move =
+				view.depoint( p );
+
+			action.item =
+				action.origin.creator.create(
+					'inherit',
+						action.item,
+					'zone',
+						action.origin.zone.add(
+							action.move.x - action.start.x,
+							action.move.y - action.start.y
+						)
+				);
+
+			shell.redraw =
+				true;
+
+			return true;
+
+
+		case 'ItemResize' :
+
+			action.move =
+				view.depoint( p );
+
+			shell.redraw =
+				true;
+
+			return true;
 
 		default :
 
@@ -1569,11 +1711,15 @@ Space.prototype.getSub =
 		//     // returns the last node that features the mark
 	)
 {
-	var n =
-		this;
+	var
+		n =
+			this,
 
-	var m =
-		null;
+		m =
+			null,
+
+		action =
+			shell.bridge.action( );
 
 	for(
 		var a = 0, aZ = path.length;
@@ -1581,6 +1727,36 @@ Space.prototype.getSub =
 		a++
 	)
 	{
+		if (
+			action &&
+			action.itemPath &&
+			action.itemPath.length === a
+		)
+		{
+			switch( action.type )
+			{
+				case 'ItemDrag' :
+
+					if(
+						action.itemPath.subPathOf( path )
+					)
+					{
+						n =
+							action.item;
+
+						if( mark && n[ mark ] )
+						{
+							m =
+								n;
+						}
+
+						continue;
+					}
+
+					break;
+			}
+		}
+
 		if( !n.$sub )
 		{
 			break;
@@ -1596,7 +1772,8 @@ Space.prototype.getSub =
 
 		if( mark && n[ mark ] )
 		{
-			m = n;
+			m =
+				n;
 		}
 	}
 
@@ -1651,10 +1828,10 @@ Space.prototype.blink =
 
 
 /*
-| Returns the first entity a caret can be in
+| Returns the the item the caret is in
 | TODO might remove this func
 */
-Space.prototype._getCaretEntity =
+Space.prototype._getCaretItem =
 	function(
 		path
 	)

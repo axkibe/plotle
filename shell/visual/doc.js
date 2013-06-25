@@ -167,6 +167,13 @@ Visual.Doc =
 				'invalid overload'
 			);
 	}
+
+	if( CHECKBUILD && !this.fontsize )
+	{
+		throw new Error(
+			'fontsize is zero'
+		);
+	}
 };
 
 

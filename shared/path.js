@@ -1,22 +1,22 @@
 /*
-|
 | Paths describe entities in a tree.
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
 /*
 | Import
 */
-var Jools;
+var
+	Jools;
 
 
 /*
 | Exports
 */
-var Path;
+var
+	Path;
 
 
 /*
@@ -31,7 +31,8 @@ var Path;
 */
 if( typeof( window ) === 'undefined' )
 {
-	Jools  = require( './jools' );
+	Jools =
+		require( './jools' );
 }
 
 
@@ -75,11 +76,17 @@ Path =
 			throw new Error( 'invalid path-model' );
 	}
 
-	// length of model
-	var mlen = path.length;
+	var
+		// length of model
+		mlen =
+			path.length,
 
-	// appends additional arguments
-	var a = 1, aZ = arguments.length;
+		// appends additional arguments
+		a =
+			1,
+
+		aZ =
+			arguments.length;
 
 	while(
 		a < aZ &&
@@ -87,7 +94,8 @@ Path =
 		arguments[ a ] !== '++'
 	)
 	{
-		var k = arguments[a];
+		var k =
+			arguments[a];
 
 		if( k < 0 )
 		{
@@ -148,16 +156,22 @@ Path.isPath = function( a )
 | Returns true is arc is a valid path arc.
 */
 var checkValidPathArc =
-	function( arc )
+	function(
+		arc
+	)
 {
 	if( !Jools.isString( arc ) )
 	{
-		throw new Error( 'Path arc not a string' );
+		throw new Error(
+			'Path arc not a string'
+		);
 	}
 
 	if( arc[ 0 ] === '_' )
 	{
-		throw new Error( 'Path arcs must not begin with "_"' );
+		throw new Error(
+			'Path arcs must not begin with "_"'
+		);
 	}
 };
 
@@ -241,7 +255,8 @@ Path.prototype.subPathOf =
 {
 	if( !Jools.is( len ) )
 	{
-		len  = this._path.length;
+		len =
+			this._path.length;
 	}
 	else
 	{

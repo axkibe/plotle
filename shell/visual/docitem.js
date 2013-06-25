@@ -48,77 +48,44 @@ if( typeof( window ) === 'undefined' )
 var DocItem =
 Visual.DocItem =
 	function(
-		overload,
-		inherit,
-		a1,   // twig  |  phrase
-		a2    // path  |  fontsize
+		twig,
+		path,
+		doc
 	)
 {
-	switch( overload )
-	{
-		case 'twig' :
+	Visual.Item.call(
+		this,
+		twig,
+		path
+	);
 
-			var
-				twig =
-					a1,
+	this.$sub =
+		{
+			doc :
+				doc
+				/*
+				Visual.Doc.create(
+					'twig',
+					inherit && inherit.$sub.doc,
+					twig.doc,
+					path,
+					twig.fontsize
+				)
+				*/
+		};
 
-				path =
-					a2;
 
-			Visual.Item.call(
-				this,
-				twig,
-				path
-			);
-
-			this.$sub =
-				{
-					doc :
-						Visual.Doc.create(
-							'twig',
-							inherit && inherit.$sub.doc,
-							twig.doc,
-							path,
-							twig.fontsize
-						)
-				};
-
-			break;
-
-		case 'phrase' :
-
-			var
-				phrase =
-					a1,
-
-				fontsize =
-					a2;
-
-			Visual.Item.call(
-				this,
-				null,
-				null
-			);
-
-			this.$sub =
-				{
-					doc :
-						Visual.Doc.create(
-							'phrase',
-							inherit,
-							phrase,
-							fontsize
-						)
-				};
-
-			break;
-
-		default :
-
-			throw new Error(
-				'invalid overload'
-			);
-	}
+		/*
+		{
+			doc :
+				Visual.Doc.create(
+					'phrase',
+					inherit,
+					phrase,
+					fontsize
+				)
+		};
+		*/
 };
 
 

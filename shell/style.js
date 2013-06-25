@@ -549,7 +549,7 @@ Style.styles =
 					color :
 						'black'
 				}
-			],
+			]
 		},
 
 		highlight :

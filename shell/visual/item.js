@@ -663,7 +663,11 @@ Item.prototype.dragStart =
 			'start',
 				vp,
 			'move',
-				vp
+				vp,
+			'item',
+				this,
+			'origin',
+				this
 		);
 
 		return true;
@@ -737,31 +741,24 @@ Item.prototype.dragMove =
 
 			return true;
 
-		case 'ItemDrag' :
-		case 'ItemResize' :
-
-			action.move =
-				view.depoint( p );
-
-			shell.redraw =
-				true;
-
-			return true;
-
 		case 'ScrollY' :
 
 			var
 				start =
 					action.start,
+
 				dy =
 					p.y - start.y,
+
 				item =
 					shell.$space.getSub(
 						action.itemPath,
 						'Item'
 					),
+
 				sbary =
 					item.scrollbarY,
+
 				spos =
 					action.startPos + sbary.scale( dy );
 
@@ -776,7 +773,9 @@ Item.prototype.dragMove =
 
 		default :
 
-			throw new Error( 'invalid action.type in dragMove' );
+			throw new Error(
+				'invalid action.type in dragMove'
+			);
 	}
 
 	return true;

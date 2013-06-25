@@ -170,6 +170,9 @@ Visual.Portal =
 
 	this._$hover =
 		null;
+
+	this.creator =
+		Portal;
 };
 
 

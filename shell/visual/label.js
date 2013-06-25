@@ -50,48 +50,171 @@ var Label =
 Visual.Label =
 	function(
 		overload,
-		inherit,
-		a1,   // twig  |  zone
-		a2    // path
+		twig,
+		path,
+		pnw,
+		doc
 	)
 {
-	switch( overload )
+	if( overload !== 'XOXO' )
 	{
-		case '_twig' :
+		throw new Error(
+			'do not call new Label directly'
+		);
+	}
 
-			var
+	Visual.DocItem.call(
+		this,
+		twig,
+		path,
+		doc
+	);
+
+	this.pnw =
+		pnw;
+
+	this.creator =
+		Label;
+};
+
+
+/*
+| Creates a new Label
+*/
+Label.create =
+	function(
+		// free strings
+	)
+{
+	var
+		twig =
+			null,
+
+		path =
+			null,
+
+		inherit =
+			null,
+
+		pnw =
+			null,
+
+		zone =
+			null,
+
+		doc =
+			null,
+
+		fontsize =
+			null;
+
+	for(
+		var a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
+	{
+		switch( arguments[ a ] )
+		{
+			case 'zone' :
+
+				zone =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'inherit' :
+
+				inherit =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'twig' :
+
 				twig =
-					a1,
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'path' :
 
 				path =
-					a2;
+					arguments[ a + 1 ];
 
-			Visual.DocItem.call(
-				this,
-				'twig',
-				inherit,
-				twig,
-				path
+				break;
+
+			case 'doc' :
+
+				doc =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'fontsize' :
+
+				fontsize =
+					arguments[ a + 1 ];
+
+				break;
+
+			default :
+
+				throw new Error(
+					'invalid argument: ' + arguments[ a ]
+				);
+		}
+	}
+
+	if( fontsize !== null && zone !== null )
+	{
+		throw new Error(
+			'Label cannot be created with fontsize and zone'
+		);
+	}
+
+	if( pnw !== null && zone !== null )
+	{
+		throw new Error(
+			'Label cannot be created with pnw and zone'
+		);
+	}
+
+
+	if( twig )
+	{
+		if( !path )
+		{
+			throw new Error(
+				'twig needs path'
+			);
+		}
+
+		if( !doc )
+		{
+			doc =
+				Visual.Doc.create(
+					'twig',
+					inherit && inherit.$sub.doc,
+					twig.doc,
+					path,
+					fontsize
+				);
+		}
+	}
+
+	if( zone )
+	{
+		pnw =
+			zone.pnw;
+
+		fontsize =
+			Math.max(
+				zone.height / ( 1 + theme.bottombox ),
+				theme.label.minSize
 			);
 
-			this.pnw =
-				twig.pnw;
-
-			break;
-
-		case '_zone' :
-
-			var
-				zone =
-					a1;
-
-			var
-				fontsize =
-					Math.max(
-						zone.height / ( 1 + theme.bottombox ),
-						theme.label.minSize
-					),
-
+			/*
 				font =
 					fontPool.get(
 						fontsize,
@@ -110,109 +233,46 @@ Visual.Label =
 					Math.round(
 						font.size * theme.bottombox
 					);
-
-			Visual.DocItem.call(
-				this,
-				'phrase',
-				null,
-				'Label',
-				fontsize
-			);
-
-
-			this.pnw =
-				zone.pnw;
-
-			/*
-			TODO
-			var zone =
-				new Euclid.Rect(
-					'pnw/size',
-					this.pnw,
-					flow.spread,
-					height
-				);
 			*/
-
-			break;
-
-		default :
-
-			throw new Error(
-				'invalid overload'
-			);
 	}
-};
 
 
-/*
-| Creates a new Label
-*/
-Label.create =
-	function(
-		overload,
-		inherit,
-		a1,   // twig  |  zone
-		a2    // path
-	)
-{
-	switch( overload )
+	if( twig )
 	{
-		case 'twig' :
+		if( !pnw )
+		{
+			pnw =
+				twig.pnw;
+		}
 
-			var
-				twig =
-					a1,
-
-				path =
-					a2;
-
-			if(
-				inherit &&
-				inherit.twig === twig &&
-				inherit.path === path
-			)
-			{
-				return inherit;
-			}
-
-			return (
-				new Label(
-					'_twig',
-					inherit,
-					twig,
-					path
-				)
-			);
-
-		case 'zone' :
-
-			var
-				zone =
-					a1;
-
-			if(
-				inherit &&
-				inherit.getZone( ).equals( zone )
-			)
-			{
-				return inherit;
-			}
-
-			return (
-				new Label(
-					'_zone',
-					inherit,
-					zone
-				)
-			);
-
-		default :
-
-			throw new Error(
-				'invalid overload'
-			);
 	}
+
+	if( inherit )
+	{
+		if( !doc )
+		{
+			doc =
+				inherit.$sub.doc;
+		}
+	}
+
+	if( !doc )
+	{
+		throw new Error(
+			'no doc!'
+		);
+	}
+
+	return (
+		new Label(
+			'XOXO',
+			twig,
+			path,
+			pnw,
+			doc
+		)
+	);
+
 };
 
 

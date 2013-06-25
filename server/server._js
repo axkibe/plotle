@@ -614,6 +614,8 @@ Server.prototype.buildShellConfig =
 	var k;
 
 	cconfig.push(
+//		'var CHECKBUILD = true;\n',
+		'\n',
 		'var config = {\n',
 		'\tdevel   : ', Jools.configSwitch(config.devel, 'shell'), ',\n',
 		'\tmaxUndo : ', config.maxUndo, ',\n',
@@ -1022,13 +1024,14 @@ Server.prototype.prepareResources =
 	cconfig.data =
 		this.buildShellConfig();
 
-	// the bundle itself
-	var bundle =
-		[ ];
+	var
+		// the bundle itself
+		bundle =
+			[ ],
 
-	// file listing for devel.html
-	var devels =
-		[ ];
+		// file listing for devel.html
+		devels =
+			[ ];
 
 	// loads the to be bundled files
 	for( a = 0, aZ = bundleRessources.length; a < aZ; a++ )
@@ -1066,13 +1069,33 @@ Server.prototype.prepareResources =
 	// uglifies the bundle if configured so
 	if( config.uglify )
 	{
-		var compressor =
-			uglify.Compressor( { } );
-
-		var ast =
-			uglify.parse( bundle );
+		var
+			ast =
+				uglify.parse(
+					bundle,
+					{
+						filename :
+							'bundle.js'
+					}
+				);
 
 		ast.figure_out_scope( );
+
+		var
+			compressor =
+				uglify.Compressor(
+					{
+							/*
+						dead_code :
+							true,
+							*/
+
+						global_defs :
+						{
+							'CHECKBUILD' : false
+						}
+					}
+				),
 
 		ast =
 			ast.transform( compressor );

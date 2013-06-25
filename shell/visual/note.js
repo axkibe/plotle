@@ -51,82 +51,36 @@ Visual.Note =
 	function(
 		overload,
 		inherit,
-		a1,       // twig  | zone
-		a2        // path
+		twig,
+		path,
+		zone,
+		doc
 	)
 {
-	switch( overload )
+	if( overload !== 'XOXO' )
 	{
-		case '_twig' :
-
-			var
-				twig =
-					a1,
-
-				path =
-					a2;
-
-			Visual.DocItem.call(
-				this,
-				'twig',
-				inherit,
-				twig,
-				path
-			);
-
-			this.zone =
-				twig.zone;
-
-			break;
-
-		case '_zone' :
-
-			var
-				zone =
-					a1,
-
-				minWidth =
-					theme.note.minWidth,
-
-				minHeight =
-					theme.note.minHeight;
-
-			if(
-				zone.width  < minWidth ||
-				zone.height < minHeight
-			)
-			{
-				zone =
-					new Euclid.Rect(
-						'pnw/size',
-						zone.pnw,
-						Math.max( minWidth,  zone.width  ),
-						Math.max( minHeight, zone.height )
-					);
-			}
-
-			Visual.DocItem.call(
-				this,
-				'phrase',
-				inherit,
-				'',
-				theme.note.fontsize
-			);
-
-			this.zone =
-				zone;
-
-			break;
-
-		default :
-
-			throw new Error(
-				'invalid overload'
-			);
+		throw new Error(
+			'do not call new Note directly'
+		);
 	}
 
-	this.scrollbarY =
-		new Visual.Scrollbar( );
+	Visual.DocItem.call(
+		this,
+		twig,
+		path,
+		doc
+	);
+
+	this.zone =
+		zone;
+
+	var
+		sbary =
+		this.scrollbarY =
+			new Visual.Scrollbar( );
+
+	this.creator =
+		Note;
 };
 
 
@@ -138,71 +92,190 @@ Jools.subclass(
 
 Note.create =
 	function(
-		overload,
-		inherit,
-		a1,  //  twig  |  zone
-		a2   //  path
+		// free strings
 	)
 {
-	switch( overload )
+	var
+		twig =
+			null,
+
+		path =
+			null,
+
+		inherit =
+			null,
+
+		zone =
+			null,
+
+		doc =
+			null,
+
+		fontsize =
+			null;
+
+	for(
+		var a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
 	{
-		case 'twig' :
+		switch( arguments[ a ] )
+		{
+			case 'zone' :
 
-			var
-				twig =
-					a1,
+				var
+					minWidth =
+						theme.note.minWidth,
 
-				path =
-					a2;
+					minHeight =
+						theme.note.minHeight;
 
-			if(
-				inherit &&
-				inherit.twig === twig &&
-				inherit.path === path
-			)
-			{
-				return inherit;
-			}
-
-			return (
-				new Note(
-					'_twig',
-					inherit,
-					twig,
-					path
-				)
-			);
-
-		case 'zone' :
-
-			var
 				zone =
-					a1;
+					arguments[ a + 1 ];
 
-			if( inherit )
-			{
-				if (
-					inherit.zone.equals( zone )
+				if(
+					zone.width  < minWidth ||
+					zone.height < minHeight
 				)
 				{
-					return inherit;
+					zone =
+						new Euclid.Rect(
+							'pnw/size',
+							zone.pnw,
+							Math.max( minWidth,  zone.width  ),
+							Math.max( minHeight, zone.height )
+						);
 				}
-			}
 
-			return (
-				new Note(
-					'_zone',
-					inherit,
-					zone
-				)
-			);
+				break;
+
+			case 'inherit' :
+
+				inherit =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'twig' :
+
+				twig =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'path' :
+
+				path =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'doc' :
+
+				doc =
+					arguments[ a + 1 ];
+
+				break;
 
 		default :
 
 			throw new Error(
-				'invalid overload'
+				'invalid argument: ' + arguments[ a ]
 			);
+
+		}
 	}
+
+	if( twig )
+	{
+		if( !path )
+		{
+			throw new Error(
+				'twig needs path'
+			);
+		}
+
+		if( !fontsize )
+		{
+			fontsize =
+				twig.fontsize;
+		}
+
+		if( !doc )
+		{
+			doc =
+				Visual.Doc.create(
+					'twig',
+					inherit && inherit.$sub.doc,
+					twig.doc,
+					path,
+					fontsize
+				);
+		}
+
+		if( !zone )
+		{
+			zone =
+				twig.zone;
+		}
+	}
+
+
+
+	if( inherit )
+	{
+		if( !twig )
+		{
+			twig =
+				inherit.twig;
+		}
+
+		if( !fontsize )
+		{
+			fontsize =
+				inherit.fontsize;
+		}
+
+		if( !path )
+		{
+			path =
+				inherit.path;
+		}
+
+		if( !doc )
+		{
+			doc =
+				inherit.$sub.doc;
+		}
+
+		if(
+			inherit.twig === twig &&
+			(
+				inherit.path === path ||
+				( inherit.path && inherit.path.equals( path ) )
+			) &&
+			(
+				inherit.zone === zone ||
+				( inherit.zone && inherit.zone.equals( zone ) )
+			) &&
+			inherit.doc === doc
+		)
+		{
+			return inherit;
+		}
+	}
+
+	return (
+		new Note(
+			'XOXO',
+			inherit,
+			twig,
+			path,
+			zone,
+			doc
+		)
+	);
 };
 
 
@@ -221,7 +294,6 @@ Note.prototype.dragStop =
 	switch( action.type )
 	{
 
-		case 'ItemDrag' :
 		case 'ItemResize' :
 
 			var zone =
@@ -752,10 +824,7 @@ Note.prototype.getZone =
 	{
 		case 'ItemDrag' :
 
-			return zone.add(
-				action.move.x - action.start.x,
-				action.move.y - action.start.y
-			);
+			return zone;
 
 		case 'ItemResize' :
 

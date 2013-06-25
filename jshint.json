@@ -9,5 +9,6 @@
 	"undef"     : true,
 	"onecase"   : true,
 	"laxbreak"  : true,
-	"strict"    : true
+	"strict"    : true,
+	"globals"   : { "CHECKBUILD": true }
 }
