@@ -402,10 +402,8 @@ Doc.prototype.draw =
 				);
 
 		vpara.draw(
-			this,
 			fabric,
 			view,
-			item,
 			view.point( p )
 		);
 
@@ -668,21 +666,19 @@ Doc.prototype.sketchSelection =
 		pnw2 =
 			this.getPNW( key2 ),
 
-		vpara1 =
+		para1 =
 			this.$sub[ key1 ],
 
-		vpara2 =
+		para2 =
 			this.$sub[ key2 ],
 
 		p1 =
-			vpara1.locateOffset(
-				item,
+			para1.locateOffset(
 				s1.at1
 			),
 
 		p2 =
-			vpara2.locateOffset(
-				item,
+			para2.locateOffset(
 				s2.at1
 			),
 

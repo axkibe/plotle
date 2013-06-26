@@ -146,65 +146,6 @@ Jools.subclass(
 
 
 /*
-| Draws the paragraph in a fabric and returns it.
-*/
-Para.s_draw =
-	function(
-		width,
-		height,
-		zoom,
-		font,
-		flow
-	)
-{
-	// FIXME work out exact height for text below baseline
-	var f =
-		new Euclid.Fabric(
-			width,
-			height
-		);
-
-	f.scale( zoom );
-
-	f.$zoom =
-		zoom;
-
-	// draws text into the fabric
-	for(
-		var a = 0, aZ = flow.length;
-		a < aZ;
-		a++
-	)
-	{
-		var line =
-			flow[ a ];
-
-		for(
-			var b = 0, bZ = line.a.length;
-			b < bZ;
-			b++
-		)
-		{
-			var chunk =
-				line.a[ b ];
-
-			f.paintText(
-				'text',
-					chunk.t,
-				'xy',
-					chunk.x,
-					line.y,
-				'font',
-					font
-			);
-		}
-	}
-
-	return f;
-};
-
-
-/*
 | Marker.
 */
 Para.prototype.Para =
@@ -216,47 +157,79 @@ Para.prototype.Para =
 */
 Para.prototype.draw =
 	function(
-		doc,    // the document the para belongs to
 		fabric, // the fabric to draw upon
 		view,   // the current vient,
-		item,   // the item this para belongs to
 		pnw     // pnw of this para
 	)
 {
 	var
-		flow =
-			this.getFlow( ),
-
-		font =
-			doc.getFont( item ),
-
-		width =
-			flow.spread * view.zoom,
-
-		height =
-			this.getHeight( item ) * view.zoom,
-
 		f =
-			this.$fabric;
+			this.$fabric,
 
-	// not a cache hit?
-	if (
-		config.debug.noCache ||
-		!f ||
-		f.width !== width  ||
-		f.height !== height ||
-		view.zoom !== f.$zoom
-	)
+		zoom =
+			view.zoom;
+
+	if( !f || f.zoom !== zoom )
 	{
-		f =
-		this.$fabric =
-			Para.s_draw(
-				width,
-				height,
-				view.zoom,
-				font,
-				flow
-			);
+		// no cache
+
+		var
+			flow =
+				this.getFlow( ),
+
+			font =
+				this.getFont( ),
+
+			width =
+				flow.spread * view.zoom,
+
+			height =
+				this.getHeight( ) * view.zoom,
+
+			f =
+			this.$fabric =
+				new Euclid.Fabric(
+					width,
+					height
+				);
+
+			f.scale( zoom );
+
+			f.zoom =
+				zoom;
+
+		// draws text into the fabric
+		for(
+			var a = 0, aZ = flow.length;
+			a < aZ;
+			a++
+		)
+		{
+			var
+				line =
+					flow[ a ];
+
+			for(
+				var b = 0, bZ = line.a.length;
+				b < bZ;
+				b++
+			)
+			{
+				var
+					chunk =
+						line.a[ b ];
+
+				f.paintText(
+					'text',
+						chunk.t,
+					'xy',
+						chunk.x,
+						line.y,
+					'font',
+						font
+				);
+			}
+		}
 	}
 
 	fabric.drawImage(
@@ -358,7 +331,6 @@ Para.prototype.getCaretPos =
 
 		p =
 			this.locateOffset(
-				item,
 				caret.sign.at1,
 				caret
 			),
@@ -383,31 +355,86 @@ Para.prototype.getCaretPos =
 
 
 /*
-| (Re)flows a static paragraph, positioning all chunks.
+| Returns the font for this para.
 */
-Para.s_getFlow =
-	function(
-		font,
-		flowWidth,
-		text
-	)
+Para.prototype.getFont =
+	function( )
 {
+	return (
+		fontPool.get(
+			this.fontsize,
+			'la'
+		)
+	);
+};
+
+/*
+| Flows the paragraph, positioning all chunks.
+| XXX
+*/
+Para.prototype.getFlow =
+	function( )
+{
+	var
+		flowWidth =
+			this.flowWidth,
+
+		font =
+			this.getFont( ),
+
+		flow =
+			this.$flow,
+
+		// FIXME go into subnodes instead
+		text =
+			this.text;
+
+	// checks for cache hit
+	if ( flow )
+	{
+		return flow;
+	}
+
+	// clears the caret flow cache if its within this flow
+	// TODO this is not nice
+	var caret =
+		shell.$space && shell.$space.$caret;
+
+	if (
+		caret &&
+		caret.path &&
+		caret.path.equals( this.path )
+	)
+	{
+		caret.flow$line =
+		caret.flow$token =
+			null;
+	}
+
+
 	var
 		// width really used.
 		spread =
 			0,
+
 		// current x positon, and current x including last tokens width
 		x =
 			0,
+
 		xw =
 			0,
+
 		y =
 			font.size,
+
 		space =
 			Euclid.Measure.width( font, ' ' ),
+
 		line =
 			0,
+
 		flow =
+		this.$flow =
 			[ ];
 
 	flow[ line ] = {
@@ -422,7 +449,6 @@ Para.s_getFlow =
 
 	var reg =
 		( /(\s*\S+|\s+$)\s?(\s*)/g );
-
 		// !pre ? (/(\s*\S+|\s+$)\s?(\s*)/g) : (/(.+)()$/g);
 
 	for(
@@ -518,77 +544,6 @@ Para.s_getFlow =
 
 
 /*
-| Returns the font for this para.
-*/
-Para.prototype.getFont =
-	function( )
-{
-	return (
-		fontPool.get(
-			this.fontsize,
-			'la'
-		)
-	);
-};
-
-/*
-| Flows the paragraph, positioning all chunks.
-| XXX
-*/
-Para.prototype.getFlow =
-	function( )
-{
-	var
-		flowWidth =
-			this.flowWidth,
-
-		font =
-			this.getFont( ),
-
-		flow =
-			this.$flow,
-
-		// FIXME go into subnodes instead
-		text =
-			this.text;
-
-	// checks for cache hit
-	if ( flow )
-	{
-		return flow;
-	}
-
-	// clears the caret flow cache if its within this flow
-	// TODO this is not nice
-	var caret =
-		shell.$space && shell.$space.$caret;
-
-	if (
-		caret &&
-		caret.path &&
-		caret.path.equals( this.path )
-	)
-	{
-		caret.flow$line =
-		caret.flow$token =
-			null;
-	}
-
-
-	// builds position informations
-	flow =
-	this.$flow =
-		Para.s_getFlow(
-			font,
-			flowWidth,
-			text
-		);
-
-	return flow;
-};
-
-
-/*
 | Returns the height of the para
 |
 | XXX
@@ -619,20 +574,11 @@ Para.prototype.getOffsetAt =
 	)
 {
 	var
-		item =
-			shell.$space.getSub(
-				this.path,
-				'Item'
-			),
-
-		doc =
-			item.$sub.doc,
-
 		font =
-			doc.getFont( item ),
+			this.getFont( ),
 
 		flow =
-			this.getFlow( item ),
+			this.getFlow( ),
 
 		fline =
 			flow[ line ],
@@ -711,18 +657,17 @@ Para.prototype.getOffsetAt =
 | Returns the point of a given offset.
 |
 | FIXME change to multireturn.
+| XXX
 */
 Para.prototype.locateOffset =
 	function(
-		item,      // the doc this para belongs to
 		offset,    // the offset to get the point from.
 		flowPos    // if set, writes flow$line and flow$token
 		//         // to the flow position used.
 	)
 {
-	if(! item.Item )
-	{
-		throw new Error('TODO');
+	if( typeof(offset) !== 'number' ) {
+		throw new Error( 'TODO' );
 	}
 
 	// FIXME cache position
@@ -737,7 +682,7 @@ Para.prototype.locateOffset =
 			this.text,
 
 		flow =
-			this.getFlow( item ),
+			this.getFlow( ),
 		a,
 		aZ,
 		lineN,
@@ -758,8 +703,9 @@ Para.prototype.locateOffset =
 		}
 	}
 
-	var line =
-		flow[ lineN ];
+	var
+		line =
+			flow[ lineN ];
 
 	for(
 		a = 1, aZ = line.a.length, tokenN = aZ - 1;
@@ -785,8 +731,9 @@ Para.prototype.locateOffset =
 			tokenN;
 	}
 
-	var token =
-		line.a[ tokenN ];
+	var
+		token =
+			line.a[ tokenN ];
 
 	if( token )
 	{
