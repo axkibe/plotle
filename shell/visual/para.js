@@ -18,11 +18,12 @@ Visual =
 */
 var
 	Caret,
+	config,
 	Euclid,
+	fontPool,
 	Jools,
 	Sign,
 	Path,
-	config,
 	shell,
 	system,
 	theme;
@@ -528,7 +529,7 @@ Para.prototype.getFont =
 			'la'
 		)
 	);
-}
+};
 
 /*
 | Flows the paragraph, positioning all chunks.

@@ -150,6 +150,20 @@ Visual.Doc =
 			this.flowWidth =
 				a3;
 
+			if( CHECKBUILD && !Jools.is( this.fontsize ) )
+			{
+				throw new Error(
+					'fontsize missing'
+				);
+			}
+
+			if( CHECKBUILD && !Jools.is( this.flowWidth ) )
+			{
+				throw new Error(
+					'flowWidth missing'
+				);
+			}
+
 			Visual.Base.call(
 				this,
 				null,

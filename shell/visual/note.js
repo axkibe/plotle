@@ -39,7 +39,9 @@ var
 
 if( typeof( window ) === 'undefined' )
 {
-	throw new Error('this code needs a browser!');
+	throw new Error(
+		'this code needs a browser!'
+	);
 }
 
 
@@ -294,7 +296,7 @@ Note.prototype.dragStop =
 		case 'ItemResize' :
 
 			var zone =
-				this.getZone( );
+				this.zone;
 
 			if(
 				zone.width  < theme.note.minWidth ||
@@ -341,7 +343,7 @@ Note.prototype.draw =
 {
 	var
 		zone =
-			this.getZone( ),
+			this.zone,
 
 		vzone =
 			view.rect( zone ),
@@ -379,7 +381,7 @@ Note.prototype.draw =
 				doc.getHeight( this ),
 
 			silhoutte =
-				this.getZeroSilhoutte( zone ),
+				this.getZeroSilhoutte( ),
 
 			style =
 				Style.getStyle(
@@ -509,23 +511,24 @@ Note.prototype.handles =
 
 /*
 | Returns the notes silhoutte.
-|
+| XXX
 */
 Note.prototype.getSilhoutte =
-	function(
-		zone //  the cache for the items zone
-	)
+	function( )
 {
 	var
 		s =
 			this._$silhoutte;
 
-	if( s && s.equals( zone ) )
+	if( s )
 	{
 		return s;
 	}
 
 	var
+		zone =
+			this.zone,
+
 		cr =
 			theme.note.cornerRadius;
 
@@ -544,23 +547,24 @@ Note.prototype.getSilhoutte =
 
 /*
 | Returns the notes silhoutte anchored at zero.
+| XXX
 */
 Note.prototype.getZeroSilhoutte =
-	function( zone )
+	function( )
 {
-	var s =
-		this._$zeroSilhoutte;
+	var
+		s =
+			this._$zeroSilhoutte;
 
-	if(
-		s &&
-		s.width  === zone.width &&
-		s.height === zone.height
-	)
+	if( s )
 	{
 		return s;
 	}
 
 	var
+		zone =
+			this.zone,
+
 		cr =
 			theme.note.cornerRadius;
 
@@ -589,10 +593,9 @@ Note.prototype.highlight =
 		view
 	)
 {
-	var silhoutte =
-		this.getSilhoutte(
-			this.getZone( )
-		);
+	var
+		silhoutte =
+			this.getSilhoutte( );
 
 	fabric.edge(
 		Style.getStyle(
@@ -621,7 +624,7 @@ Note.prototype.setScrollbar =
 	}
 
 	var zone =
-		this.getZone( );
+		this.zone;
 
 	if( !Jools.is( pos ) )
 	{
@@ -680,7 +683,7 @@ Note.prototype.scrollCaretIntoView =
 			this.$sub.doc.getPNW( para.key ),
 
 		zone =
-			this.getZone( ),
+			this.zone,
 
 		imargin =
 			this.innerMargin;
@@ -712,14 +715,15 @@ Note.prototype.scrollPage =
 		up
 	)
 {
-	var zone =
-		this.getZone( );
+	var
+		zone =
+			this.zone,
 
-	var dir =
-		up ? -1 : 1;
+		dir =
+			up ? -1 : 1,
 
-	var fs =
-		this.$sub.doc.getFont( ).size;
+		fs =
+			this.$sub.doc.getFont( ).size;
 
 	this.setScrollbar(
 		this.scrollbarY.getPos( ) + dir * zone.height - fs * 2
@@ -741,7 +745,13 @@ Note.prototype.mousewheel =
 		// ctrl
 	)
 {
-	if( !this.getZone().within( view, p) )
+	if(
+		!this.zone
+			.within(
+				view,
+				p
+			)
+		)
 	{
 		return false;
 	}
@@ -761,17 +771,12 @@ Note.prototype.mousewheel =
 
 /*
 | Returns the width for the contents flow.
+| XXX
 */
 Note.prototype.getFlowWidth =
 	function( )
 {
-	var zone =
-		this.getZone( );
-
-	var flowWidth =
-		zone.width - this.innerMargin.x;
-
-	return flowWidth;
+	return this.zone.width - this.innerMargin.x;
 };
 
 
@@ -790,256 +795,13 @@ Note.prototype.getParaSep =
 |
 | An ongoing action can modify this
 | to something different than meshmashine data.
+|
+| TODO remove
 */
 Note.prototype.getZone =
 	function( )
 {
-	var
-		zone =
-			this.zone,
-
-		action =
-			shell.bridge.action( ),
-
-		max =
-			Math.max,
-
-		min =
-			Math.min;
-
-	if(
-		!action ||
-		!this.path ||
-		!this.path.equals( action.itemPath )
-	)
-	{
-		return zone;
-	}
-
-	// FIXME cache the last zone
-
-	switch( action.type )
-	{
-		case 'ItemDrag' :
-
-			return zone;
-
-		case 'ItemResize' :
-
-			var szone =
-				action.startZone;
-
-			if( !szone )
-			{
-				return zone;
-			}
-
-			var spnw =
-				szone.pnw;
-
-			var spse =
-				szone.pse;
-
-			var dx =
-				action.move.x - action.start.x;
-
-			var dy =
-				action.move.y - action.start.y;
-
-			var minw =
-				theme.note.minWidth;
-
-			var minh =
-				theme.note.minHeight;
-
-			var pnw, pse;
-
-			switch( action.align )
-			{
-				case 'n'  :
-
-					pnw =
-						Euclid.Point.renew(
-							spnw.x,
-							min(
-								spnw.y + dy,
-								spse.y - minh
-							),
-							spnw,
-							spse
-						);
-
-					pse =
-						spse;
-
-					break;
-
-				case 'ne' :
-
-					pnw =
-						Euclid.Point.renew(
-							spnw.x,
-							min(
-								spnw.y + dy,
-								spse.y - minh
-							),
-							spnw,
-							spse
-						);
-
-					pse =
-						Euclid.Point.renew(
-							max(
-								spse.x + dx,
-								spnw.x + minw
-							),
-							spse.y,
-							spnw,
-							spse
-						);
-
-					break;
-
-				case 'e'  :
-
-					pnw =
-						spnw;
-
-					pse =
-						Euclid.Point.renew(
-							max(
-								spse.x + dx,
-								spnw.x + minw
-							),
-							spse.y,
-							spnw,
-							spse
-						);
-
-					break;
-
-				case 'se' :
-
-					pnw =
-						spnw;
-
-					pse =
-						Euclid.Point.renew(
-							max(
-								spse.x + dx,
-								spnw.x + minw
-							),
-							max(
-								spse.y + dy,
-								spnw.y + minh
-							),
-							spnw,
-							spse
-						);
-
-					break;
-
-				case 's' :
-
-					pnw =
-						spnw;
-
-					pse =
-						Euclid.Point.renew(
-							spse.x,
-							max(
-								spse.y + dy,
-								spnw.y + minh
-							),
-							spnw,
-							spse
-						);
-
-					break;
-
-				case 'sw'  :
-
-					pnw =
-						Euclid.Point.renew(
-							min(
-								spnw.x + dx,
-								spse.x - minw
-							),
-							spnw.y,
-							spnw,
-							spse
-						);
-
-					pse =
-						Euclid.Point.renew(
-							spse.x,
-							max(
-								spse.y + dy,
-								spnw.y + minh
-							),
-							spnw,
-							spse
-						);
-
-					break;
-
-				case 'w'   :
-
-					pnw =
-						Euclid.Point.renew(
-							min(
-								spnw.x + dx,
-								spse.x - minw
-							),
-							spnw.y,
-							spnw,
-							spse
-						);
-
-					pse =
-						spse;
-
-					break;
-
-				case 'nw' :
-
-					pnw =
-						Euclid.Point.renew(
-							min(
-								spnw.x + dx,
-								spse.x - minw
-							),
-							min(
-								spnw.y + dy,
-								spse.y - minh
-							),
-							spnw,
-							spse
-						);
-
-					pse =
-						spse;
-
-					break;
-
-				//case 'c' :
-				default  :
-					throw new Error( 'unknown align' );
-			}
-
-			return (
-				new Euclid.Rect(
-					'pnw/pse',
-					pnw,
-					pse
-				)
-			);
-
-		default :
-
-			return zone;
-	}
+	return this.zone;
 };
-
 
 } )( );

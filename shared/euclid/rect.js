@@ -302,6 +302,223 @@ Rect.prototype.reduce =
 
 
 /*
+| Returns a resized rect with cardinal limits.
+*/
+Rect.prototype.cardinalResize =
+	function(
+		cardinal,  // 'n', 'ne', 'e', etc.
+		dx,        // x-difference
+		dy,        // y-difference
+		minw,      // minimum width
+		minh       // minimum height
+	)
+{
+	/*
+	TODO remove
+	var dx =
+		action.move.x - action.start.x;
+
+	var dy =
+		action.move.y - action.start.y;
+	*/
+
+	var
+		pnw =
+			this.pnw,
+
+		pse =
+			this.pse,
+
+		wx,
+
+		ny,
+
+		ex,
+
+		sy;
+
+	switch( cardinal )
+	{
+		case 'n'  :
+
+			wx =
+				pnw.x;
+
+			ny =
+				Math.min(
+					pnw.y + dy,
+					pse.y - minh
+				);
+
+			ex =
+				pse.x;
+
+			sy =
+				pse.y;
+
+			break;
+
+		case 'ne' :
+
+			wx =
+				pnw.y;
+
+			ny =
+				Math.min(
+					pnw.y + dy,
+					pse.y - minh
+				);
+
+			ex =
+				Math.max(
+					pse.x + dx,
+					pnw.x + minw
+				);
+
+			sy =
+				pse.y;
+
+			break;
+
+		case 'e'  :
+
+			wx =
+				pnw.x;
+
+			ny =
+				pnw.y;
+
+			ex =
+				Math.max(
+					pse.x + dx,
+					pnw.x + minw
+				),
+
+			sy =
+				pse.y;
+
+			break;
+
+		case 'se' :
+
+			wx =
+				pnw.x;
+
+			ny =
+				pnw.y;
+
+			ex =
+				Math.max(
+					pse.x + dx,
+					pnw.x + minw
+				);
+
+			sy =
+				Math.max(
+					pse.y + dy,
+					pnw.y + minh
+				);
+
+			break;
+
+		case 's' :
+
+			wx =
+				pnw.x;
+
+			ny =
+				pnw.y;
+
+			ex =
+				pse.x;
+
+			sy =
+				Math.max(
+					pse.y + dy,
+					pnw.y + minh
+				);
+
+			break;
+
+		case 'sw'  :
+
+			wx =
+				Math.min(
+					pnw.x + dx,
+					pse.x - minw
+				);
+
+			ny =
+				pnw.y;
+
+			ex =
+				pse.x;
+
+			sy =
+				Math.max(
+					pse.y + dy,
+					pnw.y + minh
+				);
+
+			break;
+
+		case 'w'   :
+
+			wx =
+				Math.min(
+					pnw.x + dx,
+					pse.x - minw
+				);
+
+			ny =
+				pnw.y;
+
+			ex =
+				pse.x;
+
+			sy =
+				pse.y;
+
+			break;
+
+		case 'nw' :
+
+			wx =
+				Math.min(
+					pnw.x + dx,
+					pse.x - minw
+				);
+
+			ny =
+				Math.min(
+					pnw.y + dy,
+					pse.y - minh
+				);
+
+			ex =
+				pse.x;
+
+			sy =
+				pse.y;
+
+			break;
+
+		default  :
+			throw new Error( 'unknown cardinal' );
+	}
+
+	return (
+		Rect.renew(
+			wx,
+			ny,
+			ex,
+			sy,
+			this
+		)
+	);
+};
+
+/*
 | point in the center
 */
 Jools.lazyFixate(
@@ -397,16 +614,19 @@ Rect.renew =
 		//, ...  a list of additional rects to look for objects to be reused
 	)
 {
-	var pnw =
-		null;
+	var
+		pnw =
+			null,
 
-	var pse =
-		null;
+		pse =
+			null,
 
-	var isnon =
-		Jools.isnon;
+		isnon =
+			Jools.isnon,
 
-	var a, aZ, r;
+		a,
+		aZ,
+		r;
 
 	for(
 		a = 4, aZ = arguments.length;
@@ -428,13 +648,17 @@ Rect.renew =
 				return r;
 			}
 
-			pnw = r.pnw;
+			pnw =
+				r.pnw;
+
 			break;
 		}
 
 		if ( r.pse.x === wx && r.pse.y === ny )
 		{
-			pnw = r.pse;
+			pnw =
+				r.pse;
+
 			break;
 		}
 	}
@@ -470,12 +694,16 @@ Rect.renew =
 
 	if( !pnw )
 	{
-		pnw = new Euclid.Point( wx, ny );
+		pnw =
+			new
+				Euclid.Point( wx, ny );
 	}
 
 	if( !pse )
 	{
-		pse = new Euclid.Point( ex, sy );
+		pse =
+			new
+				Euclid.Point( ex, sy );
 	}
 
 	return new Rect(

@@ -217,6 +217,7 @@ Space.prototype.focusedItem =
 	switch( action && action.type )
 	{
 		case 'ItemDrag' :
+		case 'ItemResize' :
 
 			if( action.itemPath.subPathOf( path ) )
 			{
@@ -322,6 +323,7 @@ Space.prototype.draw =
 		switch( action && action.type )
 		{
 			case 'ItemDrag' :
+			case 'ItemResize' :
 
 				if( item.path.equals( action.itemPath ) )
 				{
@@ -820,10 +822,13 @@ Space.prototype.dragStart =
 					dp,
 				'move',
 					dp,
+				'item',
+					focus,
+				'origin',
+					focus,
 				'align',
-					com,
-				'startZone',
-					focus.getZone( )
+					com
+//				'startZone' XXX
 			);
 
 			return;
@@ -856,7 +861,8 @@ Space.prototype.dragStart =
 								'phrase',
 								null,
 								'',
-								theme.note.fontsize
+								theme.note.fontsize,
+								0
 							)
 					);
 
@@ -882,7 +888,8 @@ Space.prototype.dragStart =
 								'phrase',
 								null,
 								'Label',
-								theme.label.minSize
+								theme.label.minSize,
+								0
 							)
 					);
 
@@ -1228,6 +1235,27 @@ Space.prototype.dragStop =
 			break;
 
 		case 'ItemResize' :
+
+			console.log( 'TODO' );
+
+			shell.bridge.stopAction( );
+
+			/*
+			if( !action.item.zone.equals( action.origin.zone ) )
+			{
+				shell.peer.setZone(
+					action.itemPath,
+					action.item.zone
+				);
+
+				shell.bridge.stopAction( );
+
+				shell.redraw = true;
+			}
+			*/
+
+			break;
+
 		case 'ScrollY' :
 
 			this.getSub(
@@ -1482,7 +1510,7 @@ Space.prototype.dragMove =
 			action.item =
 				action.origin.creator.create(
 					'inherit',
-						action.item,
+						action.origin,
 					'zone',
 						action.origin.zone.add(
 							action.move.x - action.start.x,
@@ -1500,6 +1528,20 @@ Space.prototype.dragMove =
 
 			action.move =
 				view.depoint( p );
+
+			action.item =
+				action.origin.creator.create(
+					'inherit',
+						action.origin,
+					'zone',
+						action.origin.zone.cardinalResize(
+							action.align,
+							action.move.x - action.start.x,
+							action.move.y - action.start.y,
+							10,
+							10
+						)
+				);
 
 			shell.redraw =
 				true;
@@ -1736,6 +1778,7 @@ Space.prototype.getSub =
 			switch( action.type )
 			{
 				case 'ItemDrag' :
+				case 'ItemResize' :
 
 					if(
 						action.itemPath.subPathOf( path )

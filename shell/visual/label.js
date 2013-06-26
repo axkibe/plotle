@@ -78,7 +78,7 @@ Visual.Label =
 	}
 
 	this.zone =
-		zone
+		zone;
 
 	this.creator =
 		Label;
