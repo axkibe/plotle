@@ -1227,20 +1227,16 @@ Space.prototype.dragStop =
 					action.item.zone
 				);
 
-				shell.bridge.stopAction( );
-
-				shell.redraw = true;
+				shell.redraw =
+					true;
 			}
+
+			shell.bridge.stopAction( );
 
 			break;
 
 		case 'ItemResize' :
 
-			console.log( 'TODO' );
-
-			shell.bridge.stopAction( );
-
-			/*
 			if( !action.item.zone.equals( action.origin.zone ) )
 			{
 				shell.peer.setZone(
@@ -1248,11 +1244,11 @@ Space.prototype.dragStop =
 					action.item.zone
 				);
 
-				shell.bridge.stopAction( );
-
-				shell.redraw = true;
+				shell.redraw =
+					true;
 			}
-			*/
+
+			shell.bridge.stopAction( );
 
 			break;
 
@@ -1538,8 +1534,8 @@ Space.prototype.dragMove =
 							action.align,
 							action.move.x - action.start.x,
 							action.move.y - action.start.y,
-							10,
-							10
+							theme.note.minHeight,
+							theme.note.minWidth
 						)
 				);
 
