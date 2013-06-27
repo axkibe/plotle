@@ -40,18 +40,23 @@ if( typeof( window ) === 'undefined' )
 var Relation =
 Visual.Relation =
 	function(
-		overload,
+		tag,
 		inherit,
 		twig,
-		path
+		path,
+		pnw,
+		zone,
+		doc
 	)
 {
 	Visual.Label.call(
 		this,
-		'_twig',
-		inherit,
+		tag,
 		twig,
-		path
+		path,
+		pnw,
+		zone,
+		doc
 	);
 };
 
@@ -76,47 +81,241 @@ Relation.imargin =
 */
 Relation.create =
 	function(
-		overload,
-		inherit,
-		a1,     // twig
-		a2      // path
+		// free strings
 	)
 {
-	switch( overload )
-	{
-		case 'twig' :
+	var
+		inherit =
+			null,
 
-			var
+		twig =
+			null,
+
+		path =
+			null,
+
+		inherit =
+			null,
+
+		pnw =
+			null,
+
+		zone =
+			null,
+
+		doc =
+			null,
+
+		fontsize =
+			null
+
+	for(
+		var a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
+	{
+		switch( arguments[ a ] )
+		{
+			case 'zone' :
+
+				zone =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'inherit' :
+
+				inherit =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'twig' :
+
 				twig =
-					a1,
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'path' :
 
 				path =
-					a2;
+					arguments[ a + 1 ];
 
-			if(
-				inherit &&
-				inherit.twig === twig &&
-				inherit.path.equals( path )
-			)
+				break;
+
+			case 'doc' :
+
+				doc =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'fontsize' :
+
+				fontsize =
+					arguments[ a + 1 ];
+
+				break;
+
+			default :
+
+				throw new Error(
+					'invalid argument: ' + arguments[ a ]
+				);
+		}
+	}
+
+	if( pnw !== null && zone !== null )
+	{
+		throw new Error(
+			'Label cannot be created with pnw and zone'
+		);
+	}
+
+	if( twig )
+	{
+		if( !path )
+		{
+			throw new Error(
+				'twig needs path'
+			);
+		}
+
+		if( !fontsize )
+		{
+			fontsize =
+				twig.fontsize;
+		}
+
+		if( !doc )
+		{
+			doc =
+				Visual.Doc.create(
+					'inherit',
+						inherit && inherit.$sub.doc,
+					'twig',
+						twig.doc,
+					'path',
+						new Path(
+							path,
+							'++',
+								'doc'
+						),
+					'fontsize',
+						fontsize,
+					'flowWidth',
+						0
+				);
+		}
+
+		if( !pnw )
+		{
+			pnw =
+				twig.pnw;
+		}
+	}
+
+	if( inherit )
+	{
+		if( !twig )
+		{
+			twig =
+				inherit.twig;
+		}
+
+		if( !path )
+		{
+			path =
+				inherit.path;
+		}
+
+		if( !fontsize )
+		{
+			fontsize =
+				inherit.fontsize;
+		}
+
+		if( !pnw )
+		{
+			pnw =
+				inherit.pnw;
+		}
+
+		if( !doc )
+		{
+			doc =
+				inherit.$sub.doc;
+		}
+	}
+
+
+	if( !fontsize )
+	{
+		fontsize =
+			doc.fontsize;
+	}
+
+	if( zone )
+	{
+		if( CHECK )
+		{
+			if( !doc )
 			{
-				return inherit;
+				throw new Error(
+					'doc missing'
+				);
 			}
 
-			return (
-				new Relation(
-					'twig',
-					inherit,
-					twig,
-					path
-				)
+			if( fontsize !== doc.fontsize )
+			{
+				throw new Error(
+					'fontsize !== doc.fontsize: ' +
+					fontsize + '!==' +  doc.fontsize
+				);
+			}
+		}
+
+		// resizing is done by fontSizeChange( )
+		var
+			height =
+				doc.getHeight( ),
+
+			dy =
+				zone.height - height;
+
+		fontsize =
+			Math.max(
+				fontsize * ( height + dy ) / height,
+				theme.label.minSize
 			);
 
-		default :
-
-			throw new Error(
-				'invalid overload'
+		doc =
+			Visual.Doc.create(
+				'inherit',
+					doc,
+				'fontsize',
+					fontsize
 			);
+
+		pnw =
+			zone.pnw;
 	}
+
+	// TODO return inherit
+
+	return (
+		new Relation(
+			'XOXO',
+			inherit,
+			twig,
+			path,
+			pnw,
+			zone,
+			doc
+		)
+	);
 };
 
 
@@ -169,17 +368,18 @@ Relation.prototype.draw =
 		view
 	)
 {
-	var space =
-		shell.$space;
+	var
+		space =
+			shell.$space,
 
-	var item1 =
-		space.$sub[ this.twig.item1key ];
+		item1 =
+			space.$sub[ this.twig.item1key ],
 
-	var item2 =
-		space.$sub[ this.twig.item2key ];
+		item2 =
+			space.$sub[ this.twig.item2key ],
 
-	var zone =
-		this.getZone( );
+		zone =
+			this.zone;
 
 	if( item1 )
 	{

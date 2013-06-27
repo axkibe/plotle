@@ -254,7 +254,7 @@ Space.prototype.createItem =
 		throw new Error( 'unknown type: ' + twig.type );
 	}
 
-	if( twig.type === 'Note' || twig.type === 'Label' )
+	if( twig.type === 'Note' || twig.type === 'Label' || twig.type === 'Relation')
 	{ // TODO remove
 		return (
 			Proto.create(
@@ -859,16 +859,44 @@ Space.prototype.dragStart =
 						'doc',
 							Visual.Doc.create(
 								'phrase',
-								null,
-								'',
-								theme.note.fontsize,
-								0
+									'',
+								'fontsize',
+									theme.note.fontsize,
+								'flowWidth',
+									0
 							)
 					);
 
 			return;
 
 		case 'createLabel' :
+
+			action.start =
+				p;
+
+			action.item =
+				this.getActionItemCreator( action )
+					.create(
+						'zone',
+							new Euclid.Rect(
+								'pnw/pse',
+								p, //TODO depoint?
+								p
+							),
+						'doc',
+							Visual.Doc.create(
+								'phrase',
+									'',
+								'fontsize',
+									theme.note.fontsize,
+								'flowWidth',
+									0
+							)
+					);
+
+			return;
+
+
 		case 'createPortal' :
 
 			action.start =
@@ -1222,10 +1250,33 @@ Space.prototype.dragStop =
 
 			if( !action.item.zone.equals( action.origin.zone ) )
 			{
-				shell.peer.setZone(
-					action.itemPath,
-					action.item.zone
-				);
+				switch( action.item.positioning )
+				{
+					case 'zone' :
+
+						shell.peer.setZone(
+							action.itemPath,
+							action.item.zone
+						);
+
+						break;
+
+					case 'pnw/fontsize' :
+
+						shell.peer.setPNW(
+							action.itemPath,
+							action.item.zone.pnw
+						);
+
+						break;
+
+					default :
+
+						throw new Error(
+							'invalid positioning' +
+							action.item.positioning
+						);
+				}
 
 				shell.redraw =
 					true;
@@ -1239,10 +1290,39 @@ Space.prototype.dragStop =
 
 			if( !action.item.zone.equals( action.origin.zone ) )
 			{
-				shell.peer.setZone(
-					action.itemPath,
-					action.item.zone
-				);
+
+				switch( action.item.positioning )
+				{
+					case 'zone' :
+
+						shell.peer.setZone(
+							action.itemPath,
+							action.item.zone
+						);
+
+						break;
+
+					case 'pnw/fontsize' :
+
+						shell.peer.setPNW(
+							action.itemPath,
+							action.item.zone.pnw
+						);
+
+						shell.peer.setFontSize(
+							action.itemPath,
+							action.item.$sub.doc.fontsize
+						);
+
+						break;
+
+					default :
+
+						throw new Error(
+							'invalid positioning' +
+							action.item.positioning
+						);
+				}
 
 				shell.redraw =
 					true;
@@ -1351,7 +1431,9 @@ Space.prototype.dragMove =
 
 		item,
 
-		pd;
+		pd,
+
+		origin;
 
 	switch( action.type )
 	{
@@ -1503,16 +1585,39 @@ Space.prototype.dragMove =
 			action.move =
 				view.depoint( p );
 
-			action.item =
-				action.origin.creator.create(
-					'inherit',
-						action.origin,
-					'zone',
-						action.origin.zone.add(
-							action.move.x - action.start.x,
-							action.move.y - action.start.y
-						)
-				);
+			origin =
+				action.origin;
+
+			switch( origin.positioning )
+			{
+				case 'zone' :
+
+					action.item =
+						origin.creator.create(
+							'inherit',
+								origin,
+							'zone',
+								origin.zone.add(
+									action.move.x - action.start.x,
+									action.move.y - action.start.y
+								)
+					);
+
+					break;
+
+				case 'pnw/fontsize' :
+
+					action.item =
+						origin.creator.create(
+							'inherit',
+								origin,
+							'pnw',
+								origin.pnw.add(
+									action.move.x - action.start.x,
+									action.move.y - action.start.y
+								)
+					);
+			}
 
 			shell.redraw =
 				true;
@@ -1525,17 +1630,21 @@ Space.prototype.dragMove =
 			action.move =
 				view.depoint( p );
 
+			var
+				origin =
+					action.origin;
+
 			action.item =
 				action.origin.creator.create(
 					'inherit',
-						action.origin,
+						origin,
 					'zone',
-						action.origin.zone.cardinalResize(
+						origin.zone.cardinalResize(
 							action.align,
 							action.move.x - action.start.x,
 							action.move.y - action.start.y,
-							theme.note.minHeight, // XXX
-							theme.note.minWidth   // XXX
+							origin.minHeight,
+							origin.minWidth
 						)
 				);
 

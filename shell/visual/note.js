@@ -307,6 +307,13 @@ Note.create =
 
 
 /*
+| Notes use zone for positioning
+*/
+Note.prototype.positioning =
+	'zone';
+
+
+/*
 | Sets the items position and size after an action.
 */
 Note.prototype.dragStop =
@@ -358,6 +365,19 @@ Note.prototype.dragStop =
 	}
 };
 
+
+/*
+| Minimum height.
+*/
+Note.prototype.minHeight =
+	theme.note.minHeight;
+
+
+/*
+| Minimum width.
+*/
+Note.prototype.minWidth =
+	theme.note.minWidth;
 
 /*
 | Draws the note.

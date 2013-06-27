@@ -49,14 +49,15 @@ if( typeof( window ) === 'undefined' )
 var Label =
 Visual.Label =
 	function(
-		overload,
+		tag,
 		twig,
 		path,
+		pnw,
 		zone,
 		doc
 	)
 {
-	if( overload !== 'XOXO' )
+	if( CHECK && tag !== 'XOXO' )
 	{
 		throw new Error(
 			'do not call new Label directly'
@@ -70,15 +71,19 @@ Visual.Label =
 		doc
 	);
 
-	if( CHECK && !zone )
-	{
-		throw new Error(
-			'no zone!'
-		);
-	}
+	this.pnw =
+		pnw;
 
+	// TODO use para if given;
 	this.zone =
-		zone;
+		new Euclid.Rect(
+			'pnw/pse',
+			pnw,
+			pnw.add(
+				doc.getSpread( ),
+				doc.getHeight( )
+			)
+		);
 
 	this.creator =
 		Label;
@@ -199,12 +204,20 @@ Label.create =
 		{
 			doc =
 				Visual.Doc.create(
+					'inherit',
+						inherit && inherit.$sub.doc,
 					'twig',
-					inherit && inherit.$sub.doc,
-					twig.doc,
-					path,
-					fontsize,
-					0
+						twig.doc,
+					'path',
+						new Path(
+							path,
+							'++',
+								'doc'
+						),
+					'fontsize',
+						fontsize,
+					'flowWidth',
+						0
 				);
 		}
 
@@ -223,16 +236,22 @@ Label.create =
 				inherit.twig;
 		}
 
+		if( !path )
+		{
+			path =
+				inherit.path;
+		}
+
 		if( !fontsize )
 		{
 			fontsize =
 				inherit.fontsize;
 		}
 
-		if( !path )
+		if( !pnw )
 		{
-			path =
-				inherit.path;
+			pnw =
+				inherit.pnw;
 		}
 
 		if( !doc )
@@ -243,88 +262,57 @@ Label.create =
 	}
 
 
-	/*if( zone )
+	if( !fontsize )
 	{
-		if( inherit )
-		{
-			doc =
-				inherit.$sub.doc;
-
-			if(
-				zone === inherit.zone ||
-				(
-					zone && zone.equals( inherit.zone )
-				)
-			)
-			{
-				fontsize =
-					doc.fontsize;
-			}
-		}
-		else
-		{
-			doc =
-				Visual.Doc.create(
-					'twig',
-					inherit && inherit.$sub.doc,
-					twig.doc,
-					path,
-					fontsize
-				);
-		}
-
-		if( fontsize === null )
-		{
-			console.log( 'TODO' );
-
-			fontsize = 20;
-		}
+		fontsize =
+			doc.fontsize;
 	}
-	*/
 
-	zone =
-		new Euclid.Rect(
-			'pnw/pse',
-			pnw,
-			pnw.add(
-				doc.getSpread( ),
-				doc.getHeight( )
-			)
-		);
-
-	/*
 	if( zone )
 	{
-		pnw =
-			zone.pnw;
+		if( CHECK )
+		{
+			if( !doc )
+			{
+				throw new Error(
+					'doc missing'
+				);
+			}
+
+			if( fontsize !== doc.fontsize )
+			{
+				throw new Error(
+					'fontsize !== doc.fontsize: ' +
+					fontsize + '!==' +  doc.fontsize
+				);
+			}
+		}
+
+		// resizing is done by fontSizeChange( )
+		var
+			height =
+				doc.getHeight( ),
+
+			dy =
+				zone.height - height;
 
 		fontsize =
 			Math.max(
-				zone.height / ( 1 + theme.bottombox ),
+				fontsize * ( height + dy ) / height,
 				theme.label.minSize
 			);
 
-				font =
-					fontPool.get(
-						fontsize,
-						'la'
-					),
+		doc =
+			Visual.Doc.create(
+				'inherit',
+					doc,
+				'fontsize',
+					fontsize
+			);
 
-				flow =
-					Visual.Para.s_getFlow(
-						font,
-						0,
-						'Label'
-					),
-
-				height =
-					flow.height +
-					Math.round(
-						font.size * theme.bottombox
-					);
+		pnw =
+			zone.pnw;
 	}
-			*/
-
 
 	if( CHECK && !doc )
 	{
@@ -333,11 +321,14 @@ Label.create =
 		);
 	}
 
+	// TODO return inherit
+
 	return (
 		new Label(
 			'XOXO',
 			twig,
 			path,
+			pnw,
 			zone,
 			doc
 		)
@@ -351,6 +342,12 @@ Jools.subclass(
 	Visual.DocItem
 );
 
+
+/*
+| Labels use pnw/fontsize for positioning
+*/
+Label.prototype.positioning =
+	'pnw/fontsize';
 
 /*
 | Default margin for all labels.
@@ -437,31 +434,31 @@ Label.prototype.getSilhoutte =
 
 /*
 | Returns the items silhoutte anchored at zero.
+| XXX
 */
 Label.prototype.getZeroSilhoutte =
-	function(
-		zone
-	)
+	function( )
 {
-	var s =
-		this._$zeroSilhoutte;
+	var
+		s =
+			this._zeroSilhoutte;
 
-	if(
-		s &&
-		s.width  === zone.width  - 1 &&
-		s.height === zone.height - 1
-	)
+	if( s )
 	{
 		return s;
 	}
 
+	var
+		zone =
+			this.zone;
+
 	s =
-	this._$zeroSilhoutte =
+	this._zeroSilhoutte =
 		new Euclid.Rect(
 			'pse',
 			new Euclid.Point(
-				zone.width  - 1,
-				zone.height - 1
+				Math.max( zone.width  - 1, 0 ),
+				Math.max( zone.height - 1, 0 )
 			)
 		);
 
@@ -539,18 +536,16 @@ Label.prototype.draw =
 		view
 	)
 {
-	var f =
-		this.$fabric;
+	var
+		f =
+			this.$fabric,
 
-	var zone =
-		view.rect( this.zone );
+		zone =
+			view.rect( this.zone );
 
 	// no buffer hit?
 	if (
-		config.debug.noCache ||
 		!f ||
-		zone.width  !== f.width ||
-		zone.height !== f.height ||
 		view.zoom !== f.$zoom
 	)
 	{
@@ -572,7 +567,7 @@ Label.prototype.draw =
 				this.innerMargin,
 
 			silhoutte =
-				this.getZeroSilhoutte( zone );
+				this.getZeroSilhoutte( );
 
 		// draws selection and text
 		doc.draw(
