@@ -50,78 +50,94 @@ if ( typeof( window ) === 'undefined' )
 var Doc =
 Visual.Doc =
 	function(
-		overload,
+		tag,
 		inherit,
-		a1,   // twig       | phrase
-		a2,   // path       | fontsize
-		a3,   // fontsize   | flowWidth
-		a4    // flowWidth
+		twig,
+		path,
+		phrase,
+		fontsize,
+		flowWidth
 	)
 {
+	if( CHECK && tag !== 'XOXO' )
+	{
+		throw new Error(
+			'do not call new Doc directly'
+		);
+	}
+
 	var
+		ranks,
+
 		sub;
+
+	Visual.Base.call(
+		this,
+		twig,
+		path
+	);
+
+	this.phrase =
+		phrase;
+
+	this.fontsize =
+		fontsize;
+
+	this.flowWidth =
+		flowWidth;
 
 	this._$pnws =
 		null;
 
-	switch( overload )
+	if( CHECK )
 	{
-		case 'twig' :
-
-			var
-				twig =
-					a1,
-
-				path =
-					a2,
-
-				ranks =
-					twig.ranks,
-
-				copse =
-					twig.copse;
-
-			Visual.Base.call(
-				this,
-				twig,
-				path
+		if( twig && phrase )
+		{
+			throw new Error(
+				'Doc cannot have twig and phrase.'
 			);
+		}
 
-			this.fontsize =
-				a3;
+		if( !fontsize )
+		{
+			throw new Error(
+				'fontsize missing'
+			);
+		}
 
-			this.flowWidth =
-				a4;
+		if( !Jools.is( this.flowWidth ) )
+		{
+			throw new Error(
+				'flowWidth missing'
+			);
+		}
+	}
 
-			this.ranks =
-				ranks;
+	sub =
+	this.$sub =
+		[ ];
 
-			sub =
-			this.$sub =
-				[ ];
+	if( twig )
+	{
+		ranks =
+		this.ranks =
+			twig.ranks;
 
-			for(
-				var r = 0, rZ = twig.length;
-				r < rZ;
-				r++
-			)
+		var
+			copse =
+				twig.copse;
+
+		for(
+			var r = 0, rZ = twig.length;
+			r < rZ;
+			r++
+		)
 			{
 				var k =
 					ranks[ r ];
 
-				/*
-				TODO reusal
-				if(
-					inherit &&
-					inherit.twig.copse[ k ] === copse[ k ] &&
-				)
 				{
-					sub[ k ] =
-						inherit.$sub[ k ];
-				}
-				else
-				*/
-				{
+					// TODO Para.create for reusal
 					sub[ k ] =
 						new Visual.Para(
 							'twig',
@@ -135,70 +151,22 @@ Visual.Doc =
 						);
 				}
 			}
-
-			break;
-
-		case 'phrase' :
-
-			var
-				phrase =
-					a1;
-
-			this.fontsize =
-				a2;
-
-			this.flowWidth =
-				a3;
-
-			if( CHECKBUILD && !Jools.is( this.fontsize ) )
-			{
-				throw new Error(
-					'fontsize missing'
-				);
-			}
-
-			if( CHECKBUILD && !Jools.is( this.flowWidth ) )
-			{
-				throw new Error(
-					'flowWidth missing'
-				);
-			}
-
-			Visual.Base.call(
-				this,
-				null,
-				null
-			);
-
-			sub =
-			this.$sub =
-				[ ];
-
-			this.ranks =
-				[ '1' ];
-
-			sub[ '1' ] =
-				new Visual.Para(
-					'phrase',
-					phrase,
-					this.fontsize,
-					this.flowWidth
-				);
-
-			break;
-
-		default :
-
-			throw new Error(
-				'invalid overload'
-			);
 	}
-
-	if( CHECKBUILD && !this.fontsize )
+	else
 	{
-		throw new Error(
-			'fontsize is zero'
-		);
+		this.ranks =
+			[ '1' ];
+
+		// TODO Visual.Para.create
+		sub[ '1' ] =
+			new Visual.Para(
+				'phrase',
+				phrase,
+				this.fontsize,
+				this.flowWidth
+			);
+
+
 	}
 };
 
@@ -214,96 +182,155 @@ Jools.subclass(
 */
 Doc.create =
 	function(
-		overload,
-		inherit,
-		a1,  // twig       | phrase
-		a2,  // fatherPath | fontsize
-		a3,  // fontsize   | flowWidth
-		a4   // flowWidth
+		// free strings
 	)
 {
 	var
-		fontsize,
+		twig =
+			null,
 
-		flowWidth;
+		inherit =
+			null,
 
-	switch( overload )
+		path =
+			null,
+
+		phrase =
+			null,
+
+		fontsize =
+			null,
+
+		flowWidth =
+			null;
+
+	for(
+		var a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
 	{
-		case 'twig' :
+		switch( arguments[ a ] )
+		{
+			case 'twig' :
 
-			var
 				twig =
-					a1,
+					arguments[ a + 1 ];
 
-				fatherPath =
-					a2;
+				break;
 
-			fontsize =
-				a3;
+			case 'inherit' :
 
-			flowWidth =
-				a4;
+				inherit =
+					arguments[ a + 1 ];
 
-			if(
-				inherit &&
-				inherit.twig === twig &&
-				inherit.fontsize === fontsize
-			)
-			{
-				return inherit;
-			}
+				break;
 
-			return (
-				new Doc(
-					overload,
-					inherit,
-					twig,
-					new Path(
-						fatherPath,
-						'++', 'doc'
-					),
-					fontsize,
-					flowWidth
-				)
-			);
+			case 'path' :
 
-		case 'phrase' :
+				path =
+					arguments[ a + 1 ];
 
-			var
+				break;
+
+			case 'phrase' :
+
 				phrase =
-					a1;
+					arguments[ a + 1 ];
 
-			fontsize =
-				a2;
+				break;
 
-			flowWidth =
-				a3;
+			case 'fontsize' :
 
-			if(
-				inherit &&
-				inherit.phrase === phrase &&
-				inherit.fontsize === fontsize
-			)
-			{
-				return inherit;
-			}
+				fontsize =
+					arguments[ a + 1 ];
 
-			return (
-				new Doc(
-					overload,
-					inherit,
-					phrase,
-					fontsize,
-					flowWidth
-				)
-			);
+				break;
 
-		default :
+			case 'flowWidth' :
 
-			throw new Error(
-				'invalid overload'
-			);
+				flowWidth =
+					arguments[ a+ 1 ];
+
+				break;
+
+			default :
+
+				throw new Error(
+					'invalid argument: ' + arguments[ a ]
+				);
+		}
 	}
+
+	if( twig )
+	{
+		if( !path )
+		{
+			throw new Error(
+				'twig needs path'
+			);
+		}
+	}
+
+	if( inherit )
+	{
+		if( !twig )
+		{
+			twig =
+				inherit.twig;
+		}
+
+		if( !path )
+		{
+			path =
+				inherit.path;
+		}
+
+
+		if( !phrase )
+		{
+			phrase =
+				inherit.phrase;
+		}
+
+		if( !fontsize )
+		{
+			fontsize =
+				inherit.fontsize;
+		}
+
+		if( !flowWidth )
+		{
+			flowWidth =
+				inherit.flowWidth;
+		}
+
+		if(
+			inherit.twig === twig &&
+			(
+				inherit.path === path ||
+				( inherit.path && inherit.path.equals( path ) )
+			) &&
+			inherit.phrase === phrase &&
+			inherit.fontsize === fontsize &&
+			inherit.flowWidth === flowWidth
+		)
+		{
+			return inherit;
+		}
+	}
+
+	return (
+		new Doc(
+			'XOXO',
+			inherit,
+			twig,
+			path,
+			phrase,
+			fontsize,
+			flowWidth
+		)
+	);
 };
 
 /*

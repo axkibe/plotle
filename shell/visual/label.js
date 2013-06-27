@@ -70,7 +70,7 @@ Visual.Label =
 		doc
 	);
 
-	if( CHECKBUILD && !zone )
+	if( CHECK && !zone )
 	{
 		throw new Error(
 			'no zone!'
@@ -326,7 +326,7 @@ Label.create =
 			*/
 
 
-	if( CHECKBUILD && !doc )
+	if( CHECK && !doc )
 	{
 		throw new Error(
 			'no doc!'

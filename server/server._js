@@ -1092,7 +1092,7 @@ Server.prototype.prepareResources =
 
 						global_defs :
 						{
-							'CHECKBUILD' : false
+							'CHECK' : false
 						}
 					}
 				),
@@ -1125,10 +1125,10 @@ Server.prototype.prepareResources =
 
 	Jools.log( 'start', 'bundle:', bsha1 );
 
-	// Prepends the CHECKBUILD flag after
+	// Prepends the CHECK flag after
 	// the bundle has been created.
 	cconfig.data =
-		'var CHECKBUILD = true;\n' +
+		'var CHECK = true;\n' +
 		cconfig.data;
 
 	// the devel.html file

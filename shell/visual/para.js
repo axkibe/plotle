@@ -72,7 +72,7 @@ Visual.Para =
 				flowWidth =
 					a4;
 
-			if( CHECKBUILD && twig.type !== 'Para' )
+			if( CHECK && twig.type !== 'Para' )
 			{
 				throw new Error(
 					'type error'
@@ -128,7 +128,7 @@ Visual.Para =
 		null;
 
 	if(
-		CHECKBUILD &&
+		CHECK &&
 		!Jools.is( this.flowWidth )
 	)
 	{
@@ -184,19 +184,19 @@ Para.prototype.draw =
 				flow.spread * view.zoom,
 
 			height =
-				this.getHeight( ) * view.zoom,
+				this.getHeight( ) * view.zoom;
 
-			f =
-			this.$fabric =
-				new Euclid.Fabric(
-					width,
-					height
-				);
+		f =
+		this.$fabric =
+			new Euclid.Fabric(
+				width,
+				height
+			);
 
-			f.scale( zoom );
+		f.scale( zoom );
 
-			f.zoom =
-				zoom;
+		f.zoom =
+			zoom;
 
 		// draws text into the fabric
 		for(
@@ -431,11 +431,11 @@ Para.prototype.getFlow =
 			Euclid.Measure.width( font, ' ' ),
 
 		line =
-			0,
+			0;
 
-		flow =
-		this.$flow =
-			[ ];
+	flow =
+	this.$flow =
+		[ ];
 
 	flow[ line ] = {
 		a :

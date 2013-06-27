@@ -1534,8 +1534,8 @@ Space.prototype.dragMove =
 							action.align,
 							action.move.x - action.start.x,
 							action.move.y - action.start.y,
-							theme.note.minHeight,
-							theme.note.minWidth
+							theme.note.minHeight, // XXX
+							theme.note.minWidth   // XXX
 						)
 				);
 

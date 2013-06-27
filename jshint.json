@@ -10,5 +10,5 @@
 	"onecase"   : true,
 	"laxbreak"  : true,
 	"strict"    : true,
-	"globals"   : { "CHECKBUILD": true }
+	"globals"   : { "CHECK": true }
 }

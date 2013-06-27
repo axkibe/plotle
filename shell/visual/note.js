@@ -24,6 +24,7 @@ var
 	config,
 	Euclid,
 	Jools,
+	Path,
 	shell,
 	Style,
 	system,
@@ -58,7 +59,7 @@ Visual.Note =
 		doc
 	)
 {
-	if( overload !== 'XOXO' )
+	if( CHECK && overload !== 'XOXO' )
 	{
 		throw new Error(
 			'do not call new Note directly'
@@ -200,7 +201,8 @@ Note.create =
 		if( !fontsize )
 		{
 			fontsize =
-				twig.fontsize;
+				theme.note.fontsize;
+				// twig.fontsize; FIXME
 		}
 
 		if( !zone )
@@ -213,12 +215,20 @@ Note.create =
 		{
 			doc =
 				Visual.Doc.create(
+					'inherit',
+						inherit && inherit.$sub.doc,
 					'twig',
-					inherit && inherit.$sub.doc,
-					twig.doc,
-					path,
-					fontsize,
-					zone.width - Note.innerMargin.x
+						twig.doc,
+					'path',
+						new Path(
+							path,
+							'++',
+								'doc'
+						),
+					'fontsize',
+						fontsize,
+					'flowWidth',
+						zone.width - Note.innerMargin.x
 				);
 		}
 	}
@@ -246,20 +256,38 @@ Note.create =
 		if( !doc )
 		{
 			doc =
-				inherit.$sub.doc;
+				Visual.Doc.create(
+					'inherit',
+						inherit.$sub.doc,
+					'flowWidth',
+						(
+							zone
+						)
+						&&
+						(
+							zone.width - Note.innerMargin.x
+						)
+				);
 		}
 
 		if(
-			inherit.twig === twig &&
+			(
+				inherit.twig === twig
+			)
+			&&
 			(
 				inherit.path === path ||
 				( inherit.path && inherit.path.equals( path ) )
-			) &&
+			)
+			&&
 			(
 				inherit.zone === zone ||
 				( inherit.zone && inherit.zone.equals( zone ) )
-			) &&
-			inherit.doc === doc
+			)
+			&&
+			(
+				inherit.doc === doc
+			)
 		)
 		{
 			return inherit;
