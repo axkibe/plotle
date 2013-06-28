@@ -80,9 +80,6 @@ Visual.Note =
 		sbary =
 		this.scrollbarY =
 			new Visual.Scrollbar( );
-
-	this.creator =
-		Note;
 };
 
 
@@ -311,6 +308,16 @@ Note.create =
 */
 Note.prototype.positioning =
 	'zone';
+
+
+/*
+| Self referencing creator.
+|
+| FIXME: check if ".constructor" is supported by
+|        every JS implementation concerned about.
+*/
+Note.prototype.creator =
+	Note;
 
 
 /*

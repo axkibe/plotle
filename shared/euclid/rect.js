@@ -313,15 +313,6 @@ Rect.prototype.cardinalResize =
 		minh       // minimum height
 	)
 {
-	/*
-	TODO remove
-	var dx =
-		action.move.x - action.start.x;
-
-	var dy =
-		action.move.y - action.start.y;
-	*/
-
 	var
 		pnw =
 			this.pnw,
@@ -361,7 +352,7 @@ Rect.prototype.cardinalResize =
 		case 'ne' :
 
 			wx =
-				pnw.y;
+				pnw.x;
 
 			ny =
 				Math.min(

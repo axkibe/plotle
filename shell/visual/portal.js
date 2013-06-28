@@ -52,109 +52,48 @@ if( typeof( window ) === 'undefined' )
 var Portal =
 Visual.Portal =
 	function(
-		overload,
-		inherit,
-		a1,   // twig  |  zone
-		a2    // path
+		tag,
+		twig,
+		path,
+		zone
 	)
 {
-	switch( overload )
+	Visual.Item.call(
+		this,
+		twig,
+		path
+	);
+
+	if( path )
 	{
-		case '_twig' :
-
-			var
-				twig =
-					a1,
-
-				path =
-					a2;
-
-			Visual.Item.call(
-				this,
-				twig,
-				path
-			);
-
-
-			// paths to spaceUser and spaceTag
-			this._spacePath =
-				Jools.immute(
-					{
-						spaceUser :
-							new Path(
-								this.path,
-								'++',
-								'spaceUser'
-							),
-
-						spaceTag :
-							new Path(
-								this.path,
-								'++',
-								'spaceTag'
-							)
-					}
-				);
-
-			this.zone =
-				twig.zone;
-
-			break;
-
-		case '_zone' :
-
-			var
-				zone =
-					a1;
-
-			Visual.Item.call(
-				this,
-				null,
-				null
-			);
-
-			this._spacePath =
-				null;
-
-			var
-				minWidth =
-					theme.portal.minWidth,
-
-				minHeight =
-					theme.portal.minHeight;
-
-			if(
-				zone.width < minWidth ||
-				zone.height < minHeight
-			)
-			{
-				zone =
-					new Euclid.Rect(
-						'pnw/size',
-						zone.pnw,
-						Math.max(
-							minWidth,
-							zone.width
+		// paths to spaceUser and spaceTag
+		this._spacePath =
+			Jools.immute(
+				{
+					spaceUser :
+						new Path(
+							this.path,
+							'++',
+							'spaceUser'
 						),
-						Math.max(
-							minHeight,
-							zone.height
+
+					spaceTag :
+						new Path(
+							this.path,
+							'++',
+							'spaceTag'
 						)
-				);
-			}
-
-			this.zone =
-				zone;
-
-			break;
-
-		default :
-
-			throw new Error(
-				'invalid overload'
+				}
 			);
 	}
+	else
+	{
+		this._spacePath =
+			null;
+	}
 
+	this.zone =
+		zone;
 
 	// the prepared space fields
 	this._$spaceFields =
@@ -166,13 +105,8 @@ Visual.Portal =
 				null
 		};
 
-
-
 	this._$hover =
 		null;
-
-	this.creator =
-		Portal;
 };
 
 
@@ -184,71 +118,163 @@ Jools.subclass(
 
 Portal.create =
 	function(
-		overload,
-		inherit,
-		a1,  //  twig  |  zone
-		a2   //  path
+		// free string
 	)
 {
-	switch( overload )
+	var
+		twig =
+			null,
+
+		path =
+			null,
+
+		inherit =
+			null,
+
+		zone =
+			null,
+
+		fontsize =
+			null;
+
+	for(
+		var a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
 	{
-		case 'twig' :
 
-			var
-				twig =
-					a1,
+		switch( arguments[ a ] )
+		{
+			case 'zone' :
 
-				path =
-					a2;
+				var
+					minWidth =
+						theme.portal.minWidth,
 
-			if(
-				inherit &&
-				inherit.twig === twig &&
-				inherit.path === path
-			)
-			{
-				return inherit;
-			}
+					minHeight =
+						theme.portal.minHeight;
 
-			return (
-				new Portal(
-					'_twig',
-					inherit,
-					twig,
-					path
-				)
-			);
-
-		case 'zone' :
-
-			var
 				zone =
-					a1;
+					arguments[ a + 1 ];
 
-			if( inherit )
-			{
-				if (
-					inherit.zone.equals( zone )
+				if(
+					zone.width  < minWidth ||
+					zone.height < minHeight
 				)
 				{
-					return inherit;
+					zone =
+						new Euclid.Rect(
+							'pnw/size',
+							zone.pnw,
+							Math.max( minWidth,  zone.width  ),
+							Math.max( minHeight, zone.height )
+						);
 				}
-			}
 
-			return (
-				new Portal(
-					'_zone',
-					inherit,
-					zone
-				)
-			);
+				break;
+
+			case 'inherit' :
+
+				inherit =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'twig' :
+
+				twig =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'path' :
+
+				path =
+					arguments[ a + 1 ];
+
+				break;
 
 		default :
 
 			throw new Error(
-				'invalid overload'
+				'invalid argument: ' + arguments[ a ]
 			);
+
+		}
 	}
+
+	if( twig )
+	{
+		if( !path )
+		{
+			throw new Error(
+				'twig needs path'
+			);
+		}
+
+		if( !fontsize )
+		{
+			fontsize =
+				theme.note.fontsize;
+				// twig.fontsize; FIXME
+		}
+
+		if( !zone )
+		{
+			zone =
+				twig.zone;
+		}
+	}
+
+	if( inherit )
+	{
+		if( !twig )
+		{
+			twig =
+				inherit.twig;
+		}
+
+		if( !fontsize )
+		{
+			fontsize =
+				inherit.fontsize;
+		}
+
+		if( !path )
+		{
+			path =
+				inherit.path;
+		}
+
+		if(
+			(
+				inherit.twig === twig
+			)
+			&&
+			(
+				inherit.path === path ||
+				( inherit.path && inherit.path.equals( path ) )
+			)
+			&&
+			(
+				inherit.zone === zone ||
+				( inherit.zone && inherit.zone.equals( zone ) )
+			)
+		)
+		{
+			return inherit;
+		}
+	}
+
+	return (
+		new Portal(
+			'XOXO',
+			twig,
+			path,
+			zone
+		)
+	);
 };
 
 
@@ -265,6 +291,34 @@ Portal.spaceFields =
 				true
 		}
 	);
+
+
+/*
+| Portals are positioned by their zone.
+*/
+Portal.prototype.positioning =
+	'zone';
+
+
+/*
+| Self referencing creator.
+*/
+Portal.prototype.creator =
+	Portal;
+
+
+/*
+| Minimum height.
+*/
+Portal.prototype.minHeight =
+	theme.portal.minHeight;
+
+
+/*
+| Minimum width.
+*/
+Portal.prototype.minWidth =
+	theme.portal.minWidth;
 
 
 /*
@@ -302,21 +356,17 @@ Portal.prototype.handles =
 
 /*
 | Returns the portals silhoutte.
+| XXX
 */
 Portal.prototype.getSilhoutte =
-	function(
-		zone //  the portals zone
-	)
+	function( )
 {
 	// checks for a cache hit
 	var
 		s =
 			this._$silhoutte;
 
-	if(
-		s &&
-		s.equals( zone )
-	)
+	if( s )
 	{
 		return s;
 	}
@@ -326,8 +376,8 @@ Portal.prototype.getSilhoutte =
 	s =
 	this._$silhoutte =
 		new Euclid.Ellipse(
-			zone.pnw,
-			zone.pse
+			this.zone.pnw,
+			this.zone.pse
 		);
 
 	return s;
@@ -389,7 +439,7 @@ Portal.prototype.dragStop =
 		case 'ItemResize' :
 
 			var zone =
-				this.getZone( );
+				this.zone;
 
 			if(
 				zone.width < theme.portal.minWidth ||
@@ -475,10 +525,10 @@ Portal.prototype.click =
 {
 	var
 		zone =
-			this.getZone( ),
+			this.zone,
 
 		silhoutte =
-			this.getSilhoutte( zone );
+			this.getSilhoutte( );
 
 	// not clicked on the portal?
 	if(
@@ -598,7 +648,7 @@ Portal.prototype.draw =
 {
 	var
 		zone =
-			this.getZone( ),
+			this.zone,
 
 		vzone =
 			view.rect( zone ),
@@ -670,10 +720,10 @@ Portal.prototype.mousewheel =
 {
 	var
 		zone =
-			this.getZone( ),
+			this.zone,
 
 		silhoutte =
-			this.getSilhoutte( zone );
+			this.getSilhoutte( );
 
 	return silhoutte.within(
 		view,
@@ -692,9 +742,7 @@ Portal.prototype.highlight =
 	)
 {
 	var silhoutte =
-		this.getSilhoutte(
-			this.getZone( )
-		);
+		this.getSilhoutte( );
 
 	fabric.edge(
 		Style.getStyle(
@@ -741,7 +789,7 @@ Portal.prototype.positionCaret =
 			this._getCaretPos( caret ),
 
 		pnw =
-			this.getZone( ).pnw,
+			this.zone.pnw,
 
 		fieldPNW =
 			this._$spaceFields[ section ].pnw;
@@ -777,10 +825,10 @@ Portal.prototype.pointingHover =
 
 	var
 		zone =
-			this.getZone( ),
+			this.zone,
 
 		silhoutte =
-			this.getSilhoutte( zone );
+			this.getSilhoutte( );
 
 	// not clicked on the portal?
 	if(
@@ -828,224 +876,12 @@ Portal.prototype.pointingHover =
 | Returns the zone of the item.
 | An ongoing action can modify this to be different than meshmashine data.
 |
-| TODO move to Visual.Item
+| TODO remove
 */
 Portal.prototype.getZone =
 	function( )
 {
-	var
-		zone =
-			this.zone,
-
-		action =
-			shell.bridge.action( );
-
-	if(
-		!action ||
-		!this.path ||
-		!this.path.equals( action.itemPath )
-	)
-	{
-		return zone;
-	}
-
-	// FIXME cache the last zone
-
-	switch( action.type )
-	{
-
-		case 'ItemDrag' :
-
-			return zone.add(
-				action.move.x - action.start.x,
-				action.move.y - action.start.y
-			);
-
-		case 'ItemResize' :
-
-			var szone =
-				action.startZone;
-
-			if( !szone )
-			{
-				return zone;
-			}
-
-			var
-				spnw =
-					szone.pnw,
-
-				spse =
-					szone.pse,
-
-				dx =
-					action.move.x - action.start.x,
-
-				dy =
-					action.move.y - action.start.y,
-
-				minw =
-					theme.portal.minWidth,
-
-				minh =
-					theme.portal.minHeight,
-
-				pnw,
-				pse;
-
-			switch( action.align )
-			{
-
-				case 'n'  :
-
-					pnw =
-						Euclid.Point.renew(
-							spnw.x,
-							Math.min(
-								spnw.y + dy,
-								spse.y - minh
-							),
-							spnw,
-							spse
-						);
-
-					pse =
-						spse;
-
-					break;
-
-				case 'ne' :
-
-					pnw =
-						Euclid.Point.renew(
-							spnw.x,
-							Math.min( spnw.y + dy, spse.y - minh ),
-							spnw,
-							spse
-						);
-
-					pse =
-						Euclid.Point.renew(
-							Math.max( spse.x + dx, spnw.x + minw ),
-							spse.y,
-							spnw,
-							spse
-						);
-
-					break;
-
-				case 'e'  :
-
-					pnw =
-						spnw;
-
-					pse =
-						Euclid.Point.renew(
-							Math.max( spse.x + dx, spnw.x + minw ),
-							spse.y,
-							spnw,
-							spse
-						);
-
-					break;
-
-				case 'se' :
-
-					pnw =
-						spnw;
-
-					pse =
-						Euclid.Point.renew(
-							Math.max( spse.x + dx, spnw.x + minw ),
-							Math.max( spse.y + dy, spnw.y + minh ),
-							spnw,
-							spse
-						);
-
-					break;
-
-				case 's' :
-
-					pnw =
-						spnw;
-
-					pse =
-						Euclid.Point.renew(
-							spse.x,
-							Math.max( spse.y + dy, spnw.y + minh ),
-							spnw,
-							spse
-						);
-
-					break;
-
-				case 'sw'  :
-
-					pnw =
-						Euclid.Point.renew(
-							Math.min( spnw.x + dx, spse.x - minw ),
-							spnw.y,
-							spnw,
-							spse
-						);
-
-					pse =
-						Euclid.Point.renew(
-							spse.x,
-							Math.max( spse.y + dy, spnw.y + minh ),
-							spnw,
-							spse
-						);
-
-					break;
-
-				case 'w'   :
-					pnw =
-						Euclid.Point.renew(
-							Math.min( spnw.x + dx, spse.x - minw ),
-							spnw.y,
-							spnw,
-							spse
-						);
-
-					pse =
-						spse;
-
-					break;
-
-				case 'nw' :
-					pnw =
-						Euclid.Point.renew(
-							Math.min( spnw.x + dx, spse.x - minw ),
-							Math.min( spnw.y + dy, spse.y - minh ),
-							spnw,
-							spse
-						);
-
-					pse =
-						spse;
-
-					break;
-
-				//case 'c' :
-				default  :
-					throw new Error(
-						'unknown align'
-					);
-			}
-
-			return (
-				new Euclid.Rect(
-					'pnw/pse',
-					pnw,
-					pse
-				)
-			);
-
-		default :
-
-			return zone;
-	}
+	return this.zone;
 };
 
 

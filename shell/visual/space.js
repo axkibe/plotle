@@ -237,6 +237,35 @@ Space.prototype.focusedItem =
 
 
 /*
+| Returns an item by its key
+*/
+Space.prototype.getItem =
+	function(
+		key
+	)
+{
+	var
+		action =
+			shell.bridge.action( );
+
+	switch( action && action.type )
+	{
+		case 'ItemDrag' :
+		case 'ItemResize' :
+
+			if( action.itemPath.get( 0 ) === key )
+			{
+				return action.item;
+			}
+
+			break;
+	}
+
+	return this.$sub[ key ];
+}
+
+
+/*
 | Creates a new visual representation of an item.
 */
 Space.prototype.createItem =
@@ -254,27 +283,13 @@ Space.prototype.createItem =
 		throw new Error( 'unknown type: ' + twig.type );
 	}
 
-	if( twig.type === 'Note' || twig.type === 'Label' || twig.type === 'Relation')
-	{ // TODO remove
-		return (
-			Proto.create(
-				'inherit',
-					inherit,
-				'twig',
-					twig,
-				'path',
-					new Path( [ key ] )
-			)
-		);
-	}
-
 	return (
 		Proto.create(
+			'inherit',
+				inherit,
 			'twig',
-			inherit,
-			twig,
-			inherit ?
-				inherit.path :
+				twig,
+			'path',
 				new Path( [ key ] )
 		)
 	);
@@ -299,7 +314,10 @@ Space.prototype.draw =
 		action =
 			shell.bridge.action( ),
 
-		zone;
+		zone,
+
+		ranks =
+			this.ranks;
 
 	this._center =
 		fabric.getCenter( );
@@ -316,9 +334,10 @@ Space.prototype.draw =
 		r--
 	)
 	{
+		// FIXME, maybe overload this.atRank
 		var
 			item =
-				this.atRank( r );
+				this.getItem( this.twig.ranks[ rank ] );
 
 		switch( action && action.type )
 		{
@@ -339,8 +358,9 @@ Space.prototype.draw =
 		);
 	}
 
-	var focus =
-		this.focusedItem( );
+	var
+		focus =
+			this.focusedItem( );
 
 	if( focus )
 	{
@@ -828,7 +848,6 @@ Space.prototype.dragStart =
 					focus,
 				'align',
 					com
-//				'startZone' XXX
 			);
 
 			return;
@@ -900,22 +919,15 @@ Space.prototype.dragStart =
 			action.start =
 				p;
 
+			action.origin =
 			action.item =
 				this.getActionItemCreator( action )
 					.create(
 						'zone',
 							new Euclid.Rect(
 								'pnw/pse',
-								p,
+								p, //TODO depoint?
 								p
-							),
-						'doc',
-							Visual.Doc.create(
-								'phrase',
-								null,
-								'Label',
-								theme.label.minSize,
-								0
 							)
 					);
 
@@ -1208,14 +1220,14 @@ Space.prototype.dragStop =
 			var
 				portal =
 					Visual.Portal.create(
+						'inherit',
+							action.item,
 						'zone',
-						action.item,
-						// FIXME, provide reusable points/rects
-						new Euclid.Rect(
-							'arbitrary',
-							view.depoint( action.start ),
-							view.depoint( action.move  )
-						)
+							new Euclid.Rect(
+								'arbitrary',
+								view.depoint( action.start ),
+								view.depoint( action.move )
+							)
 					);
 
 			key =

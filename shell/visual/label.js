@@ -82,8 +82,6 @@ Visual.Label =
 			doc.getHeight( )
 		);
 
-	this.creator =
-		Label;
 };
 
 
@@ -278,6 +276,13 @@ Jools.subclass(
 */
 Label.prototype.positioning =
 	'pnw/fontsize';
+
+/*
+| Self referencing creator.
+*/
+Label.prototype.creator =
+	Label;
+
 
 /*
 | Default margin for all labels.

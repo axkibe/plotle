@@ -8,7 +8,9 @@
 /*
 | Export
 */
-var Visual;
+var
+	Visual;
+
 Visual =
 	Visual || { };
 
@@ -30,7 +32,9 @@ var theme;
 
 if( typeof( window ) === 'undefined' )
 {
-	throw new Error( 'this code needs a browser!' );
+	throw new Error(
+		'this code needs a browser!'
+	);
 }
 
 
@@ -41,11 +45,12 @@ var Relation =
 Visual.Relation =
 	function(
 		tag,
-		inherit,
 		twig,
 		path,
 		pnw,
-		doc
+		doc,
+		item1key,
+		item2key
 	)
 {
 	Visual.Label.call(
@@ -56,14 +61,29 @@ Visual.Relation =
 		pnw,
 		doc
 	);
+
+	this.item1key =
+		item1key;
+
+	this.item2key =
+		item2key;
 };
 
 
+/*
+| Relations extend labels.
+*/
 Jools.subclass(
 	Relation,
 	Visual.Label
 );
 
+
+/*
+| Self referencing creator.
+*/
+Relation.prototype.creator =
+	Relation;
 
 /*
 | Default margin for all relations.
@@ -99,6 +119,12 @@ Relation.create =
 			null,
 
 		fontsize =
+			null,
+
+		item1key =
+			null,
+
+		item2key =
 			null;
 
 	for(
@@ -151,6 +177,20 @@ Relation.create =
 
 				break;
 
+			case 'item1key ' :
+
+				item1key =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'item2key' :
+
+				item2key =
+					arguments[ a + 1 ];
+
+				break;
+
 			default :
 
 				throw new Error(
@@ -174,31 +214,22 @@ Relation.create =
 				twig.fontsize;
 		}
 
-		if( !doc )
-		{
-			doc =
-				Visual.Doc.create(
-					'inherit',
-						inherit && inherit.$sub.doc,
-					'twig',
-						twig.doc,
-					'path',
-						new Path(
-							path,
-							'++',
-								'doc'
-						),
-					'fontsize',
-						fontsize,
-					'flowWidth',
-						0
-				);
-		}
-
 		if( !pnw )
 		{
 			pnw =
 				twig.pnw;
+		}
+
+		if( !item1key )
+		{
+			item1key =
+				twig.item1key;
+		}
+
+		if( !item2key )
+		{
+			item2key =
+				twig.item2key;
 		}
 	}
 
@@ -233,72 +264,50 @@ Relation.create =
 			doc =
 				inherit.$sub.doc;
 		}
-	}
 
-
-	if( !fontsize )
-	{
-		fontsize =
-			doc.fontsize;
-	}
-
-	if( zone )
-	{
-		if( CHECK )
+		if( !item1key )
 		{
-			if( !doc )
-			{
-				throw new Error(
-					'doc missing'
-				);
-			}
-
-			if( fontsize !== doc.fontsize )
-			{
-				throw new Error(
-					'fontsize !== doc.fontsize: ' +
-					fontsize + '!==' +  doc.fontsize
-				);
-			}
+			item1key =
+				inherit.item1key;
 		}
 
-		// resizing is done by fontSizeChange( )
-		var
-			height =
-				doc.getHeight( ),
-
-			dy =
-				zone.height - height;
-
-		fontsize =
-			Math.max(
-				fontsize * ( height + dy ) / height,
-				theme.label.minSize
-			);
-
-		doc =
-			Visual.Doc.create(
-				'inherit',
-					doc,
-				'fontsize',
-					fontsize
-			);
-
-		pnw =
-			zone.pnw;
+		if( !item2key )
+		{
+			item2key =
+				inherit.item2key;
+		}
 	}
 
-	// TODO return inherit
+	doc =
+		Visual.Doc.create(
+			'inherit',
+				doc,
+			'twig',
+				twig && twig.doc,
+			'path',
+				inherit ?
+					inherit.$sub.doc.path
+					:
+					new Path(
+						path,
+						'++',
+							'doc'
+					),
+			'fontsize',
+				fontsize,
+			'flowWidth',
+				0
+		);
 
 	return (
 		new Relation(
 			'XOXO',
-			inherit,
 			twig,
 			path,
 			pnw,
-			zone,
-			doc
+			doc,
+			item1key,
+			item2key
 		)
 	);
 };
@@ -358,10 +367,10 @@ Relation.prototype.draw =
 			shell.$space,
 
 		item1 =
-			space.$sub[ this.twig.item1key ],
+			space.getItem( this.item1key ),
 
 		item2 =
-			space.$sub[ this.twig.item2key ],
+			space.getItem( this.item2key ),
 
 		zone =
 			this.zone;

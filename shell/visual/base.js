@@ -45,7 +45,7 @@ Visual.Base =
 		path;
 
 	this.key =
-		path ? path.get(-1) : null;
+		path ? path.get( -1 ) : null;
 
 	this.$sub =
 		null;
