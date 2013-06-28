@@ -238,7 +238,14 @@ Label.create =
 			'twig',
 				twig && twig.doc,
 			'path',
-				path,
+				inherit ?
+					inherit.$sub.doc.path
+					:
+					new Path(
+						path,
+						'++',
+							'doc'
+					),
 			'fontsize',
 				fontsize,
 			'flowWidth',
