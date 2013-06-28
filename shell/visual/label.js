@@ -74,12 +74,19 @@ Visual.Label =
 	this.pnw =
 		pnw;
 
+	var
+		h =
+			doc.getHeight( );
+
 	this.zone =
 		new Euclid.Rect(
 			'pnw/size',
 			pnw,
-			doc.getSpread( ),
-			doc.getHeight( )
+			Math.max(
+				doc.getSpread( ),
+				Math.round( h / 4 )
+			),
+			h
 		);
 
 };
@@ -317,9 +324,7 @@ Label.prototype.highlight =
 	)
 {
 	var silhoutte =
-		this.getSilhoutte(
-			this.zone
-		);
+		this.getSilhoutte( );
 
 	fabric.edge(
 		Style.getStyle(
@@ -337,18 +342,13 @@ Label.prototype.highlight =
 | Returns the labels silhoutte.
 */
 Label.prototype.getSilhoutte =
-	function(
-		zone
-	)
+	function( )
 {
 	var s =
 		this._$silhoutte;
 
 	if(
-		s &&
-		s.pnw.equals( zone.pnw ) &&
-		s.pse.x === zone.pse.x - 1 &&
-		s.pse.y === zone.pse.y - 1
+		s
 	)
 	{
 		return s;
@@ -359,8 +359,8 @@ Label.prototype.getSilhoutte =
 	this._$silhoutte =
 		new Euclid.Rect(
 			'pnw/pse',
-			zone.pnw,
-			zone.pse.sub( 1, 1 )
+			this.zone.pnw,
+			this.zone.pse.sub( 1, 1 )
 		);
 
 	return s;

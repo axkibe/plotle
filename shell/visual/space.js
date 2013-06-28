@@ -335,27 +335,12 @@ Space.prototype.draw =
 	)
 	{
 		// FIXME, maybe overload this.atRank
-		var
-			item =
-				this.getItem( this.twig.ranks[ rank ] );
-
-		switch( action && action.type )
-		{
-			case 'ItemDrag' :
-			case 'ItemResize' :
-
-				if( item.path.equals( action.itemPath ) )
-				{
-					item =
-						action.item;
-				}
-		}
-
-		item.draw(
-			fabric,
-			this.$caret,
-			view
-		);
+		this.getItem( this.twig.ranks[ r ] )
+			.draw(
+				fabric,
+				this.$caret,
+				view
+			);
 	}
 
 	var
