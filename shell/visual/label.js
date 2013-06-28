@@ -24,6 +24,7 @@ var
 	Euclid,
 	fontPool,
 	Jools,
+	Path,
 	shell,
 	Style,
 	theme,
@@ -53,7 +54,6 @@ Visual.Label =
 		twig,
 		path,
 		pnw,
-		zone,
 		doc
 	)
 {
@@ -74,15 +74,12 @@ Visual.Label =
 	this.pnw =
 		pnw;
 
-	// TODO use para if given;
 	this.zone =
 		new Euclid.Rect(
-			'pnw/pse',
+			'pnw/size',
 			pnw,
-			pnw.add(
-				doc.getSpread( ),
-				doc.getHeight( )
-			)
+			doc.getSpread( ),
+			doc.getHeight( )
 		);
 
 	this.creator =
@@ -128,16 +125,16 @@ Label.create =
 	{
 		switch( arguments[ a ] )
 		{
-			case 'zone' :
+			case 'inherit' :
 
-				zone =
+				inherit =
 					arguments[ a + 1 ];
 
 				break;
 
-			case 'inherit' :
+			case 'pnw' :
 
-				inherit =
+				pnw =
 					arguments[ a + 1 ];
 
 				break;
@@ -178,16 +175,9 @@ Label.create =
 		}
 	}
 
-	if( pnw !== null && zone !== null )
-	{
-		throw new Error(
-			'Label cannot be created with pnw and zone'
-		);
-	}
-
 	if( twig )
 	{
-		if( !path )
+		if( CHECK && !path )
 		{
 			throw new Error(
 				'twig needs path'
@@ -200,33 +190,13 @@ Label.create =
 				twig.fontsize;
 		}
 
-		if( !doc )
-		{
-			doc =
-				Visual.Doc.create(
-					'inherit',
-						inherit && inherit.$sub.doc,
-					'twig',
-						twig.doc,
-					'path',
-						new Path(
-							path,
-							'++',
-								'doc'
-						),
-					'fontsize',
-						fontsize,
-					'flowWidth',
-						0
-				);
-		}
-
 		if( !pnw )
 		{
 			pnw =
 				twig.pnw;
 		}
 	}
+
 
 	if( inherit )
 	{
@@ -261,65 +231,19 @@ Label.create =
 		}
 	}
 
-
-	if( !fontsize )
-	{
-		fontsize =
-			doc.fontsize;
-	}
-
-	if( zone )
-	{
-		if( CHECK )
-		{
-			if( !doc )
-			{
-				throw new Error(
-					'doc missing'
-				);
-			}
-
-			if( fontsize !== doc.fontsize )
-			{
-				throw new Error(
-					'fontsize !== doc.fontsize: ' +
-					fontsize + '!==' +  doc.fontsize
-				);
-			}
-		}
-
-		// resizing is done by fontSizeChange( )
-		var
-			height =
-				doc.getHeight( ),
-
-			dy =
-				zone.height - height;
-
-		fontsize =
-			Math.max(
-				fontsize * ( height + dy ) / height,
-				theme.label.minSize
-			);
-
-		doc =
-			Visual.Doc.create(
-				'inherit',
-					doc,
-				'fontsize',
-					fontsize
-			);
-
-		pnw =
-			zone.pnw;
-	}
-
-	if( CHECK && !doc )
-	{
-		throw new Error(
-			'no doc!'
+	doc =
+		Visual.Doc.create(
+			'inherit',
+				doc,
+			'twig',
+				twig && twig.doc,
+			'path',
+				path,
+			'fontsize',
+				fontsize,
+			'flowWidth',
+				0
 		);
-	}
 
 	// TODO return inherit
 
@@ -329,7 +253,6 @@ Label.create =
 			twig,
 			path,
 			pnw,
-			zone,
 			doc
 		)
 	);

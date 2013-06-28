@@ -45,7 +45,6 @@ Visual.Relation =
 		twig,
 		path,
 		pnw,
-		zone,
 		doc
 	)
 {
@@ -55,7 +54,6 @@ Visual.Relation =
 		twig,
 		path,
 		pnw,
-		zone,
 		doc
 	);
 };
@@ -94,20 +92,14 @@ Relation.create =
 		path =
 			null,
 
-		inherit =
-			null,
-
 		pnw =
-			null,
-
-		zone =
 			null,
 
 		doc =
 			null,
 
 		fontsize =
-			null
+			null;
 
 	for(
 		var a = 0, aZ = arguments.length;
@@ -117,16 +109,16 @@ Relation.create =
 	{
 		switch( arguments[ a ] )
 		{
-			case 'zone' :
+			case 'inherit' :
 
-				zone =
+				inherit =
 					arguments[ a + 1 ];
 
 				break;
 
-			case 'inherit' :
+			case 'pnw' :
 
-				inherit =
+				pnw =
 					arguments[ a + 1 ];
 
 				break;
@@ -167,16 +159,9 @@ Relation.create =
 		}
 	}
 
-	if( pnw !== null && zone !== null )
-	{
-		throw new Error(
-			'Label cannot be created with pnw and zone'
-		);
-	}
-
 	if( twig )
 	{
-		if( !path )
+		if( CHECK && !path )
 		{
 			throw new Error(
 				'twig needs path'

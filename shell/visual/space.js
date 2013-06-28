@@ -847,6 +847,7 @@ Space.prototype.dragStart =
 			action.start =
 				p;
 
+			action.origin =
 			action.item =
 				this.getActionItemCreator( action )
 					.create(
@@ -874,21 +875,18 @@ Space.prototype.dragStart =
 			action.start =
 				p;
 
+			action.origin =
 			action.item =
 				this.getActionItemCreator( action )
 					.create(
-						'zone',
-							new Euclid.Rect(
-								'pnw/pse',
-								p, //TODO depoint?
-								p
-							),
+						'pnw',
+							view.depoint( p ),
 						'doc',
 							Visual.Doc.create(
 								'phrase',
-									'',
+									'Label',
 								'fontsize',
-									theme.note.fontsize,
+									theme.note.fontsize, // FIXME
 								'flowWidth',
 									0
 							)
@@ -1139,17 +1137,50 @@ Space.prototype.dragStop =
 		case 'createLabel' :
 
 			var
-				label =
-					Visual.Label.create(
+				origin =
+					action.origin,
+
+				zone =
+					new Euclid.Rect(
+						'arbitrary',
+						view.depoint( action.start ),
+						view.depoint( action.move ) // TODO why not p?
+					),
+
+				oheight =
+					origin.zone.height,
+
+				dy =
+					zone.height - oheight,
+
+				fs =
+					Math.max(
+						origin.$sub.doc.fontsize * ( oheight + dy ) / oheight,
+						theme.label.minSize
+					),
+
+				resized =
+					action.item.creator.create(
 						'inherit',
-							action.item,
-						'zone',
-							new Euclid.Rect(
-								'arbitrary',
-								view.depoint( action.start ),
-								view.depoint( action.move  )
-							)
-					);
+							origin,
+						'fontsize',
+							fs
+					),
+
+				label =
+					this.getActionItemCreator( action )
+						.create(
+							'inherit',
+								resized,
+							'pnw',
+								( p.x > action.start.x ) ?
+									zone.pnw
+									:
+									new Euclid.Point(
+										zone.pse.x - resized.zone.width,
+										zone.pnw.y
+									)
+						);
 
 			key =
 				shell.peer.newLabel(
@@ -1157,7 +1188,7 @@ Space.prototype.dragStop =
 					this.spaceTag,
 					label.pnw,
 					'Label',
-					label.$sub.doc.getFont( label ).size
+					label.$sub.doc.fontsize
 				);
 
 			this.$sub[ key ].grepFocus( this );
@@ -1441,21 +1472,72 @@ Space.prototype.dragMove =
 		case 'createNote' :
 		case 'createPortal' :
 
-			action.move =
+			action.move = // TODO remove action.move
 				p;
 
-			action.item =
-				this.getActionItemCreator( action )
-					.create(
-						'inherit',
-							action.item,
-						'zone',
-							new Euclid.Rect(
-								'arbitrary',
-								view.depoint( action.start ),
-								view.depoint( p )
-							)
+			origin =
+				action.origin;
+
+			var
+				zone =
+					new Euclid.Rect(
+						'arbitrary',
+						view.depoint( action.start ),
+						view.depoint( p )
 					);
+
+			switch( origin.positioning )
+			{
+				case 'zone' :
+
+					action.item =
+						this.getActionItemCreator( action )
+							.create(
+								'inherit',
+									origin,
+								'zone',
+									zone
+							);
+
+					break;
+
+				case 'pnw/fontsize' :
+
+					var
+						oheight =
+							origin.zone.height,
+
+						fs =
+							Math.max(
+								origin.$sub.doc.fontsize * zone.height / oheight,
+								theme.label.minSize
+							),
+
+						resized =
+							action.item.creator.create(
+								'inherit',
+									origin,
+								'fontsize',
+									fs
+							);
+
+					action.item =
+						this.getActionItemCreator( action )
+							.create(
+								'inherit',
+									resized,
+								'pnw',
+									( p.x > action.start.x ) ?
+										zone.pnw
+										:
+										new Euclid.Point(
+											zone.pse.x - resized.zone.width,
+											zone.pnw.y
+										)
+							);
+
+					break;
+			}
 
 			shell.redraw =
 				true;
@@ -1630,23 +1712,113 @@ Space.prototype.dragMove =
 			action.move =
 				view.depoint( p );
 
-			var
-				origin =
-					action.origin;
+			origin =
+				action.origin;
 
-			action.item =
-				action.origin.creator.create(
-					'inherit',
-						origin,
-					'zone',
-						origin.zone.cardinalResize(
-							action.align,
-							action.move.x - action.start.x,
-							action.move.y - action.start.y,
-							origin.minHeight,
-							origin.minWidth
-						)
-				);
+			var
+				align =
+					action.align;
+
+			switch( origin.positioning )
+			{
+				case 'zone' :
+
+					action.item =
+						action.origin.creator.create(
+							'inherit',
+								origin,
+							'zone',
+								origin.zone.cardinalResize(
+									align,
+									action.move.x - action.start.x,
+									action.move.y - action.start.y,
+									origin.minHeight,
+									origin.minWidth
+								)
+						);
+
+					break;
+
+				case 'pnw/fontsize' :
+
+					var
+						oheight =
+							origin.zone.height,
+
+						dy;
+
+					switch( action.align )
+					{
+						case 'ne' :
+						case 'nw' :
+
+							dy =
+								action.start.y - action.move.y;
+
+							break;
+
+						case 'se' :
+						case 'sw' :
+
+							dy =
+								action.move.y - action.start.y;
+
+							break;
+
+						default :
+
+							if( CHECK )
+							{
+								throw new Error(
+									'unknown align'
+								);
+							}
+					}
+
+					var
+						fs =
+							Math.max(
+								origin.$sub.doc.fontsize * ( oheight + dy ) / oheight,
+								theme.label.minSize
+							),
+
+						resized =
+							action.item.creator.create(
+								'inherit',
+									origin,
+								'fontsize',
+									fs
+							);
+
+					action.item =
+						action.item.creator.create(
+							'inherit',
+								resized,
+							'fontsize',
+								fs,
+							'pnw',
+								origin.pnw.add(
+									align === 'sw' || align === 'nw' ?
+										Math.round( origin.zone.width - resized.zone.width ) :
+										0,
+									align === 'ne' || align === 'nw' ?
+										Math.round( origin.zone.height - resized.zone.height ) :
+										0
+								)
+						);
+
+					break;
+
+				default :
+
+					if( CHECK )
+					{
+						throw new Error(
+							'invalid positioning'
+						);
+					}
+			}
+
 
 			shell.redraw =
 				true;
