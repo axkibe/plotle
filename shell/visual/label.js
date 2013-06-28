@@ -82,11 +82,15 @@ Visual.Label =
 		new Euclid.Rect(
 			'pnw/size',
 			pnw,
-			Math.max(
-				doc.getSpread( ),
-				Math.round( h / 4 )
+			Math.round(
+				Math.max(
+					doc.getSpread( ),
+					h / 4
+				)
 			),
-			h
+			Math.round(
+				h
+			)
 		);
 
 };
@@ -244,12 +248,17 @@ Label.create =
 				twig && twig.doc,
 			'path',
 				inherit ?
-					inherit.$sub.doc.path
+					(
+						inherit.$sub.doc.path
+					)
 					:
-					new Path(
-						path,
-						'++',
-							'doc'
+					(
+						path &&
+						new Path(
+							path,
+							'++',
+								'doc'
+						)
 					),
 			'fontsize',
 				fontsize,
