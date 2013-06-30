@@ -296,6 +296,8 @@ Relation.create =
 			'fontsize',
 				fontsize,
 			'flowWidth',
+				0,
+			'paraSep',
 				0
 		);
 

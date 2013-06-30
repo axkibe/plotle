@@ -263,6 +263,8 @@ Label.create =
 			'fontsize',
 				fontsize,
 			'flowWidth',
+				0,
+			'paraSep',
 				0
 		);
 
@@ -642,18 +644,6 @@ Label.prototype.fontSizeChange =
 */
 Label.prototype.getFlowWidth =
 	function( )
-{
-	return 0;
-};
-
-
-/*
-| Returns the para seperation height.
-*/
-Label.prototype.getParaSep =
-	function(
-		// fontsize
-	)
 {
 	return 0;
 };

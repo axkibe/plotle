@@ -56,7 +56,8 @@ Visual.Doc =
 		path,
 		phrase,
 		fontsize,
-		flowWidth
+		flowWidth,
+		paraSep
 	)
 {
 	if( CHECK && tag !== 'XOXO' )
@@ -86,6 +87,9 @@ Visual.Doc =
 	this.flowWidth =
 		flowWidth;
 
+	this.paraSep =
+		paraSep;
+
 	this._$pnws =
 		null;
 
@@ -109,6 +113,13 @@ Visual.Doc =
 		{
 			throw new Error(
 				'flowWidth missing'
+			);
+		}
+
+		if( typeof( paraSep) !== 'number' )
+		{
+			throw new Error(
+				'paraSep missing'
 			);
 		}
 	}
@@ -202,6 +213,9 @@ Doc.create =
 			null,
 
 		flowWidth =
+			null,
+
+		paraSep =
 			null;
 
 	for(
@@ -250,7 +264,14 @@ Doc.create =
 			case 'flowWidth' :
 
 				flowWidth =
-					arguments[ a+ 1 ];
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'paraSep' :
+
+				paraSep =
+					arguments[ a + 1 ];
 
 				break;
 
@@ -328,7 +349,8 @@ Doc.create =
 			path,
 			phrase,
 			fontsize,
-			flowWidth
+			flowWidth,
+			paraSep
 		)
 	);
 };
@@ -365,7 +387,7 @@ Doc.prototype.draw =
 	// FIXME <pre>
 	var
 		paraSep =
-			this.getParaSep( ),
+			this.paraSep,
 
 		selection =
 			shell.getSelection( ),
@@ -455,7 +477,7 @@ Doc.prototype.getHeight =
 			this.fontsize,
 
 		paraSep =
-			this.getParaSep( ),
+			this.paraSep,
 
 		ranks =
 			this.ranks,
@@ -613,19 +635,6 @@ Doc.prototype.getParaAtPoint =
 	}
 
 	return null;
-};
-
-
-
-/*
-| Returns the (default) paraSeperator for this document.
-| XXX
-*/
-Doc.prototype.getParaSep =
-	function( )
-{
-	return 0;
-	// return item.getParaSep( this.fontsize );
 };
 
 

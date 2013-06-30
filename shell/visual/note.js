@@ -225,7 +225,9 @@ Note.create =
 					'fontsize',
 						fontsize,
 					'flowWidth',
-						zone.width - Note.innerMargin.x
+						zone.width - Note.innerMargin.x,
+					'paraSep',
+						Jools.half( fontsize )
 				);
 		}
 	}
@@ -832,16 +834,6 @@ Note.prototype.getFlowWidth =
 	function( )
 {
 	return this.zone.width - this.innerMargin.x;
-};
-
-
-/*
-| Returns the para seperation height.
-*/
-Note.prototype.getParaSep =
-	function( fontsize )
-{
-	return Jools.half( fontsize );
 };
 
 
