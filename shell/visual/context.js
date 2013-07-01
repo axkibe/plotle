@@ -147,7 +147,7 @@ Context.create =
 			paraSep
 		)
 	);
-}
+};
 
 
 } )( );
