@@ -868,7 +868,11 @@ Space.prototype.dragStart =
 								'fontsize',
 									theme.note.fontsize,
 								'flowWidth',
-									0
+									0,
+								'paraSep',
+									Jools.half(
+										theme.note.fontsize
+									)
 							)
 					);
 
@@ -1526,11 +1530,6 @@ Space.prototype.dragMove =
 							'fontsize',
 								fs
 						);
-
-					console.log(
-						resized,
-						resized.fontsize
-					);
 
 					action.item =
 						action.item.creator.create(

@@ -159,14 +159,6 @@ Meshverse =
 
 	'Rect' :
 	{
-		creator :
-			function( t )
-			{
-				return new Euclid.Rect(
-					'o', t
-				);
-			},
-
 		must :
 		{
 			'pnw' :
@@ -179,15 +171,6 @@ Meshverse =
 
 	'Point' :
 	{
-		creator :
-			function(t)
-			{
-				return new Euclid.Point(
-					t.x,
-					t.y
-				);
-			},
-
 		must :
 		{
 			'x' :

@@ -204,8 +204,17 @@ Note.create =
 
 		if( !zone )
 		{
+			// TODO multicreate
 			zone =
-				twig.zone;
+				new Euclid.Rect(
+					'pnw/pse',
+					new Euclid.Point(
+						twig.zone.pnw
+					),
+					new Euclid.Point(
+						twig.zone.pse
+					)
+				);
 		}
 
 		if( !doc )

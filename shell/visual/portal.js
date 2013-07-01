@@ -223,7 +223,12 @@ Portal.create =
 		if( !zone )
 		{
 			zone =
-				twig.zone;
+				// TODO multi create
+				new Euclid.Rect(
+					'pnw/pse',
+					new Euclid.Point( twig.zone.pnw ),
+					new Euclid.Point( twig.zone.pse )
+				);
 		}
 	}
 

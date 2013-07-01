@@ -220,8 +220,11 @@ Relation.create =
 
 		if( pnw === null )
 		{
+			// TODO multi create
 			pnw =
-				twig.pnw;
+				new Euclid.Point(
+					twig.pnw
+				);
 		}
 
 		if( item1key === null )

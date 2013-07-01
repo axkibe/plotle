@@ -72,21 +72,23 @@ Visual.Para =
 			);
 		}
 
-		if( twig && !path )
+		if( twig !== null && path === null )
 		{
 			throw new Error(
 				'twig needs path'
 			);
 		}
 
-		if( twig && phrase )
+		/* TODO
+		if( twig !== null && phrase !== null )
 		{
 			throw new Error(
 				'cannot have twig and phrase.'
 			);
 		}
+		*/
 
-		if( !twig && !phrase )
+		if( twig === null && phrase === null )
 		{
 			throw new Error(
 				'need twig or phrase'
