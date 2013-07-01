@@ -49,7 +49,7 @@ if( typeof( window ) === 'undefined' )
 var Space =
 Visual.Space =
 	function(
-		twig,
+		tree,
 		spaceUser,
 		spaceTag,
 		access
@@ -57,7 +57,7 @@ Visual.Space =
 {
 	Visual.Base.call(
 		this,
-		twig,
+		tree,
 		null
 	);
 
@@ -80,11 +80,11 @@ Visual.Space =
 			0
 		);
 
-	for( var k in twig.copse )
+	for( var k in tree.copse )
 	{
 		sub[ k ] =
 			this.createItem(
-				twig.copse[ k ],
+				tree.copse[ k ],
 				k
 			);
 	}
@@ -106,22 +106,22 @@ Jools.subclass(
 
 
 /*
-| Updates the subtree to match a new twig.
+| Updates the subtree to match a new tree.
 */
 Space.prototype.update =
 	function(
-		twig,
+		tree,
 		chgX
 	)
 {
 	// no change?
-	if( this.twig === twig )
+	if( this.tree === tree )
 	{
 		return;
 	}
 
-	this.twig =
-		twig;
+	this.tree =
+		tree;
 
 	var
 		old =
@@ -132,13 +132,13 @@ Space.prototype.update =
 				{ },
 
 		copse =
-			twig.copse;
+			tree.copse;
 
 	for( var k in copse )
 	{
 		sub[ k ] =
 			this.createItem(
-				twig.copse[ k ],
+				tree.copse[ k ],
 				k,
 				old[ k ]
 			);
@@ -270,25 +270,27 @@ Space.prototype.getItem =
 */
 Space.prototype.createItem =
 	function(
-		twig,
+		tree,
 		key,
 		inherit
 	)
 {
 	var Proto =
-		Visual[ twig.type ];
+		Visual[ tree.type ];
 
 	if( !Proto )
 	{
-		throw new Error( 'unknown type: ' + twig.type );
+		throw new Error(
+			'unknown type: ' + tree.type
+		);
 	}
 
 	return (
 		Proto.create(
 			'inherit',
 				inherit,
-			'twig',
-				twig,
+			'tree',
+				tree,
 			'path',
 				new Path( [ key ] )
 		)
@@ -305,8 +307,8 @@ Space.prototype.draw =
 	)
 {
 	var
-		twig =
-			this.twig,
+		tree =
+			this.tree,
 
 		view =
 			this.$view,
@@ -329,13 +331,13 @@ Space.prototype.draw =
 		null;
 
 	for(
-		var r = twig.length - 1;
+		var r = tree.length - 1;
 		r >= 0;
 		r--
 	)
 	{
 		// FIXME, maybe overload this.atRank
-		this.getItem( this.twig.ranks[ r ] )
+		this.getItem( this.tree.ranks[ r ] )
 			.draw(
 				fabric,
 				this.$caret,
@@ -464,7 +466,7 @@ Space.prototype.knock =
 		null;
 
 	for(
-		var r = this.twig.length - 1;
+		var r = this.tree.length - 1;
 		r >= 0;
 		r--
 	)
@@ -509,14 +511,15 @@ Space.prototype.mousewheel =
 		ctrl
 	)
 {
-	var view =
-		this.$view;
+	var
+		view =
+			this.$view,
 
-	var twig =
-		this.twig;
+		tree =
+			this.tree;
 
 	for(
-		var r = 0, rZ = twig.length;
+		var r = 0, rZ = tree.length;
 		r < rZ;
 		r++
 	)
@@ -606,19 +609,20 @@ Space.prototype.pointingHover =
 	}
 
 	for(
-		var a = 0, aZ = this.twig.length;
+		var a = 0, aZ = this.tree.length;
 		a < aZ;
 		a++
 	)
 	{
-		var item =
-			this.atRank( a );
+		var
+			item =
+				this.atRank( a ),
 
-		var cu =
-			item.pointingHover(
-				view,
-				p
-			);
+			cu =
+				item.pointingHover(
+					view,
+					p
+				);
 
 		if( !cursor && cu )
 		{
@@ -934,7 +938,7 @@ Space.prototype.dragStart =
 
 	// see if one item was targeted
 	for(
-		var a = 0, aZ = this.twig.length;
+		var a = 0, aZ = this.tree.length;
 		a < aZ;
 		a++
 	)
@@ -1044,7 +1048,7 @@ Space.prototype.click =
 
 	// clicked some item?
 	for(
-		var a = 0, aZ = this.twig.length;
+		var a = 0, aZ = this.tree.length;
 		a < aZ;
 		a++
 	)
@@ -1585,7 +1589,7 @@ Space.prototype.dragMove =
 				p;
 
 			for(
-				var r = 0, rZ = this.twig.length;
+				var r = 0, rZ = this.tree.length;
 				r < rZ;
 				r++
 			)

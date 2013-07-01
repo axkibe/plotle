@@ -47,7 +47,7 @@ var Relation =
 Visual.Relation =
 	function(
 		tag,
-		twig,
+		tree,
 		path,
 		pnw,
 		fontsize,
@@ -59,7 +59,7 @@ Visual.Relation =
 	Visual.Label.call(
 		this,
 		tag,
-		twig,
+		tree,
 		path,
 		pnw,
 		fontsize,
@@ -110,7 +110,7 @@ Relation.create =
 		inherit =
 			null,
 
-		twig =
+		tree =
 			null,
 
 		path =
@@ -153,9 +153,9 @@ Relation.create =
 
 				break;
 
-			case 'twig' :
+			case 'tree' :
 
-				twig =
+				tree =
 					arguments[ a + 1 ];
 
 				break;
@@ -203,19 +203,19 @@ Relation.create =
 		}
 	}
 
-	if( twig )
+	if( tree )
 	{
 		if( CHECK && !path )
 		{
 			throw new Error(
-				'twig needs path'
+				'tree needs path'
 			);
 		}
 
 		if( fontsize === null )
 		{
 			fontsize =
-				twig.fontsize;
+				tree.fontsize;
 		}
 
 		if( pnw === null )
@@ -223,29 +223,29 @@ Relation.create =
 			// TODO multi create
 			pnw =
 				new Euclid.Point(
-					twig.pnw
+					tree.pnw
 				);
 		}
 
 		if( item1key === null )
 		{
 			item1key =
-				twig.item1key;
+				tree.item1key;
 		}
 
 		if( item2key === null )
 		{
 			item2key =
-				twig.item2key;
+				tree.item2key;
 		}
 	}
 
 	if( inherit )
 	{
-		if( twig === null )
+		if( tree === null )
 		{
-			twig =
-				inherit.twig;
+			tree =
+				inherit.tree;
 		}
 
 		if( path === null )
@@ -289,8 +289,8 @@ Relation.create =
 		Visual.Doc.create(
 			'inherit',
 				doc,
-			'twig',
-				twig && twig.doc,
+			'tree',
+				tree && tree.doc,
 			'path',
 				inherit ?
 					inherit.$sub.doc.path
@@ -311,7 +311,7 @@ Relation.create =
 	return (
 		new Relation(
 			'XOXO',
-			twig,
+			tree,
 			path,
 			pnw,
 			fontsize,

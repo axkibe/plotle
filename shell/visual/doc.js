@@ -50,7 +50,7 @@ Visual.Doc =
 	function(
 		tag,
 		inherit,
-		twig,
+		tree,
 		path,
 		phrase,
 		fontsize,
@@ -74,7 +74,7 @@ Visual.Doc =
 
 	Visual.Base.call(
 		this,
-		twig,
+		tree,
 		path
 	);
 
@@ -95,17 +95,17 @@ Visual.Doc =
 
 	if( CHECK )
 	{
-		if( twig && !path )
+		if( tree && !path )
 		{
 			throw new Error(
-				'twig needs path'
+				'tree needs path'
 			);
 		}
 
-		if( twig && phrase )
+		if( tree && phrase )
 		{
 			throw new Error(
-				'cannot have twig and phrase.'
+				'cannot have tree and phrase.'
 			);
 		}
 
@@ -135,18 +135,18 @@ Visual.Doc =
 	this.$sub =
 		[ ];
 
-	if( twig )
+	if( tree )
 	{
 		ranks =
 		this.ranks =
-			twig.ranks;
+			tree.ranks;
 
 		var
 			copse =
-				twig.copse;
+				tree.copse;
 
 		for(
-			var r = 0, rZ = twig.length;
+			var r = 0, rZ = tree.length;
 			r < rZ;
 			r++
 		)
@@ -160,7 +160,7 @@ Visual.Doc =
 						Visual.Para.create(
 							'inherit',
 								inherit && inherit.$sub[ k ],
-							'twig',
+							'tree',
 								copse[ k ],
 							'path',
 								new Path(
@@ -210,7 +210,7 @@ Doc.create =
 	)
 {
 	var
-		twig =
+		tree =
 			null,
 
 		inherit =
@@ -239,9 +239,9 @@ Doc.create =
 	{
 		switch( arguments[ a ] )
 		{
-			case 'twig' :
+			case 'tree' :
 
-				twig =
+				tree =
 					arguments[ a + 1 ];
 
 				break;
@@ -298,10 +298,10 @@ Doc.create =
 
 	if( inherit )
 	{
-		if( twig === null )
+		if( tree === null )
 		{
-			twig =
-				inherit.twig;
+			tree =
+				inherit.tree;
 		}
 
 		if( path === null )
@@ -336,7 +336,7 @@ Doc.create =
 		}
 
 		if(
-			inherit.twig === twig &&
+			inherit.tree === tree &&
 			(
 				inherit.path === path ||
 				( inherit.path && inherit.path.equals( path ) )
@@ -355,7 +355,7 @@ Doc.create =
 		new Doc(
 			'XOXO',
 			inherit,
-			twig,
+			tree,
 			path,
 			phrase,
 			fontsize,
@@ -373,7 +373,7 @@ Doc.prototype.Doc =
 
 
 /*
-| Returns the vtwig at rank 'rank'.
+| Returns the tree at rank 'rank'.
 */
 Doc.prototype.atRank =
 	function( rank )

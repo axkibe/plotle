@@ -48,14 +48,14 @@ if( typeof( window ) === 'undefined' )
 var DocItem =
 Visual.DocItem =
 	function(
-		twig,
+		tree,
 		path,
 		doc
 	)
 {
 	Visual.Item.call(
 		this,
-		twig,
+		tree,
 		path
 	);
 

@@ -51,7 +51,7 @@ var Label =
 Visual.Label =
 	function(
 		tag,
-		twig,
+		tree,
 		path,
 		pnw,
 		fontsize,
@@ -78,7 +78,7 @@ Visual.Label =
 
 	Visual.DocItem.call(
 		this,
-		twig,
+		tree,
 		path,
 		doc
 	);
@@ -119,7 +119,7 @@ Label.create =
 	)
 {
 	var
-		twig =
+		tree =
 			null,
 
 		path =
@@ -162,9 +162,9 @@ Label.create =
 
 				break;
 
-			case 'twig' :
+			case 'tree' :
 
-				twig =
+				tree =
 					arguments[ a + 1 ];
 
 				break;
@@ -198,19 +198,19 @@ Label.create =
 		}
 	}
 
-	if( twig )
+	if( tree )
 	{
 		if( CHECK && !path )
 		{
 			throw new Error(
-				'twig needs path'
+				'tree needs path'
 			);
 		}
 
 		if( fontsize === null )
 		{
 			fontsize =
-				twig.fontsize;
+				tree.fontsize;
 		}
 
 		if( pnw === null )
@@ -218,7 +218,7 @@ Label.create =
 			// TODO this is always created...
 			pnw =
 				new Euclid.Point(
-					twig.pnw
+					tree.pnw
 				);
 		}
 	}
@@ -226,10 +226,10 @@ Label.create =
 
 	if( inherit )
 	{
-		if( twig === null )
+		if( tree === null )
 		{
-			twig =
-				inherit.twig;
+			tree =
+				inherit.tree;
 		}
 
 		if( !path )
@@ -261,8 +261,8 @@ Label.create =
 		Visual.Doc.create(
 			'inherit',
 				doc,
-			'twig',
-				twig && twig.doc,
+			'tree',
+				tree && tree.doc,
 			'path',
 				inherit ?
 					(
@@ -290,7 +290,7 @@ Label.create =
 	return (
 		new Label(
 			'XOXO',
-			twig,
+			tree,
 			path,
 			pnw,
 			fontsize,
@@ -455,7 +455,7 @@ Label.prototype.dragStop =
 					this.$sub.doc.getFont( this ).size;
 
 			if(
-				!this.twig.pnw.equals( zone.pnw )
+				!this.tree.pnw.equals( zone.pnw )
 			)
 			{
 				shell.peer.setPNW(
@@ -464,7 +464,7 @@ Label.prototype.dragStop =
 				);
 			}
 
-			if( fontsize !== this.twig.fontsize )
+			if( fontsize !== this.tree.fontsize )
 			{
 				shell.peer.setFontSize(
 					this.path,

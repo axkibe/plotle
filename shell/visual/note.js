@@ -53,7 +53,7 @@ var Note =
 Visual.Note =
 	function(
 		overload,
-		twig,
+		tree,
 		path,
 		zone,
 		doc
@@ -68,7 +68,7 @@ Visual.Note =
 
 	Visual.DocItem.call(
 		this,
-		twig,
+		tree,
 		path,
 		doc
 	);
@@ -95,7 +95,7 @@ Note.create =
 	)
 {
 	var
-		twig =
+		tree =
 			null,
 
 		path =
@@ -156,9 +156,9 @@ Note.create =
 
 				break;
 
-			case 'twig' :
+			case 'tree' :
 
-				twig =
+				tree =
 					arguments[ a + 1 ];
 
 				break;
@@ -186,12 +186,12 @@ Note.create =
 		}
 	}
 
-	if( twig )
+	if( tree )
 	{
 		if( CHECK && !path )
 		{
 			throw new Error(
-				'twig needs path'
+				'tree needs path'
 			);
 		}
 
@@ -199,7 +199,7 @@ Note.create =
 		{
 			fontsize =
 				theme.note.fontsize;
-				// twig.fontsize; FIXME
+				// tree.fontsize; FIXME
 		}
 
 		if( !zone )
@@ -209,10 +209,10 @@ Note.create =
 				new Euclid.Rect(
 					'pnw/pse',
 					new Euclid.Point(
-						twig.zone.pnw
+						tree.zone.pnw
 					),
 					new Euclid.Point(
-						twig.zone.pse
+						tree.zone.pse
 					)
 				);
 		}
@@ -223,8 +223,8 @@ Note.create =
 				Visual.Doc.create(
 					'inherit',
 						inherit && inherit.$sub.doc,
-					'twig',
-						twig.doc,
+					'tree',
+						tree.doc,
 					'path',
 						new Path(
 							path,
@@ -243,10 +243,10 @@ Note.create =
 
 	if( inherit )
 	{
-		if( !twig )
+		if( !tree )
 		{
-			twig =
-				inherit.twig;
+			tree =
+				inherit.tree;
 		}
 
 		if( !fontsize )
@@ -280,7 +280,7 @@ Note.create =
 
 		if(
 			(
-				inherit.twig === twig
+				inherit.tree === tree
 			)
 			&&
 			(
@@ -305,7 +305,7 @@ Note.create =
 	return (
 		new Note(
 			'XOXO',
-			twig,
+			tree,
 			path,
 			zone,
 			doc
@@ -359,7 +359,7 @@ Note.prototype.dragStop =
 				throw new Error( 'Note under minimum size!' );
 			}
 
-			if( this.twig.zone.equals( zone ) )
+			if( this.tree.zone.equals( zone ) )
 			{
 				return;
 			}

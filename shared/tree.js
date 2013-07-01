@@ -1,5 +1,4 @@
 /*
-| The base of all meshcraft twigs.
 | Meshcraft's basic data structure.
 |
 | Authors: Axel Kittenberger
@@ -18,7 +17,7 @@ var
 | Exports
 */
 var
-	Twig =
+	Tree =
 		null;
 
 
@@ -74,7 +73,7 @@ var allowsType =
 /*
 | Constructor
 */
-Twig =
+Tree =
 	function(
 		model, // the model to copy
 		verse
@@ -116,7 +115,7 @@ Twig =
 			null,
 
 		type =
-			Twig.getType( model ),
+			Tree.getType( model ),
 		k,
 		k1,
 		k2,
@@ -135,7 +134,7 @@ Twig =
 	if( !pattern )
 	{
 		throw Jools.reject(
-			'cannot create twig of type: ' + type
+			'cannot create tree of type: ' + type
 		);
 	}
 
@@ -300,7 +299,7 @@ Twig =
 		}
 	}
 
-	// grows the subtwigs
+	// grows the subtrees
 	var
 		klen =
 			0;
@@ -333,7 +332,7 @@ Twig =
 
 			klen++;
 
-			if( !pattern.copse[ Twig.getType( val ) ] )
+			if( !pattern.copse[ Tree.getType( val ) ] )
 			{
 				throw Jools.reject(
 					type + '.copse does not allow ' + val.type
@@ -364,7 +363,7 @@ Twig =
 			if( !val._$grown )
 			{
 				copse[ k ] =
-					new Twig(
+					new Tree(
 						copse[ k ],
 						verse
 					);
@@ -399,7 +398,7 @@ Twig =
 
 			var
 				vtype =
-					Twig.getType( val ),
+					Tree.getType( val ),
 
 				ptype =
 					( pattern.must && pattern.must[ k ] )
@@ -437,7 +436,7 @@ Twig =
 					if( !val._$grown )
 					{
 						this[ k ] =
-							new Twig(
+							new Tree(
 								this[ k ],
 								verse
 							);
@@ -521,7 +520,7 @@ Twig =
 /*
 | Gets the node a path leads to.
 */
-Twig.prototype.getPath =
+Tree.prototype.getPath =
 	function(
 		path,
 		shorten
@@ -549,7 +548,7 @@ Twig.prototype.getPath =
 		aZ =
 			Jools.is( shorten ) ? shorten : path.length,
 
-		twig =
+		tree =
 			this;
 
 	for(
@@ -558,31 +557,31 @@ Twig.prototype.getPath =
 		a++
 	)
 	{
-		if( !Jools.isnon( twig ) )
+		if( !Jools.isnon( tree ) )
 		{
 			return null;
 		}
 
-		if( this.verse[ Twig.getType( twig ) ].copse )
+		if( this.verse[ Tree.getType( tree ) ].copse )
 		{
-			twig =
-				twig.copse [ path.get( a ) ];
+			tree =
+				tree.copse [ path.get( a ) ];
 		}
 		else
 		{
-			twig =
-				twig [ path.get( a ) ];
+			tree =
+				tree [ path.get( a ) ];
 		}
 	}
 
-	return twig;
+	return tree;
 };
 
 
 /*
 | Returns a tree where the node pointed by path is replaced by val.
 */
-Twig.prototype.setPath =
+Tree.prototype.setPath =
 	function(
 		path,
 		val,
@@ -616,15 +615,15 @@ Twig.prototype.setPath =
 	)
 	{
 		var
-			twig =
+			tree =
 				this.getPath(
 					path,
 					a
 				);
 
 		val =
-			new Twig(
-				twig,
+			new Tree(
+				tree,
 				this.verse,
 				path.get( a ),
 				val
@@ -639,7 +638,7 @@ Twig.prototype.setPath =
 | Returns the rank of the key
 | That means it returns the index of key in the ranks array.
 */
-Twig.prototype.rankOf =
+Tree.prototype.rankOf =
 	function(
 		key
 	)
@@ -651,7 +650,7 @@ Twig.prototype.rankOf =
 	if( !Jools.isArray( ranks ) )
 	{
 		throw new Error(
-			'twig has no ranks'
+			'tree has no ranks'
 		);
 	}
 
@@ -697,7 +696,7 @@ Twig.prototype.rankOf =
 | Returns length of a copse
 */
 Jools.lazyFixate(
-	Twig.prototype,
+	Tree.prototype,
 	'length',
 	function( )
 	{
@@ -709,7 +708,7 @@ Jools.lazyFixate(
 /*
 | Creates a new unique identifier
 */
-Twig.prototype.newUID =
+Tree.prototype.newUID =
 	function( )
 {
 	var u =
@@ -724,9 +723,9 @@ Twig.prototype.newUID =
 
 
 /*
-| Returns the twig type.
+| Returns the tree type.
 */
-Twig.getType =
+Tree.getType =
 	function( o )
 {
 	switch( o.constructor )
@@ -757,12 +756,12 @@ Twig.getType =
 /*
 | Returns the pattern for object o.
 */
-Twig.prototype.getPattern =
+Tree.prototype.getPattern =
 	function(
 		o
 	)
 {
-	return this.verse[ Twig.getType( o ) ];
+	return this.verse[ Tree.getType( o ) ];
 };
 
 /*
@@ -771,7 +770,7 @@ Twig.prototype.getPattern =
 if( typeof( window ) === 'undefined')
 {
 	module.exports =
-		Twig;
+		Tree;
 }
 
 } )( );

@@ -49,7 +49,7 @@ var Para =
 Visual.Para =
 	function(
 		tag,
-		twig,
+		tree,
 		path,
 		phrase,
 		fontsize,
@@ -65,33 +65,33 @@ Visual.Para =
 			);
 		}
 
-		if( twig && twig.type !== 'Para' )
+		if( tree && tree.type !== 'Para' )
 		{
 			throw new Error(
 				'type error'
 			);
 		}
 
-		if( twig !== null && path === null )
+		if( tree !== null && path === null )
 		{
 			throw new Error(
-				'twig needs path'
+				'tree needs path'
 			);
 		}
 
 		/* TODO
-		if( twig !== null && phrase !== null )
+		if( tree !== null && phrase !== null )
 		{
 			throw new Error(
-				'cannot have twig and phrase.'
+				'cannot have tree and phrase.'
 			);
 		}
 		*/
 
-		if( twig === null && phrase === null )
+		if( tree === null && phrase === null )
 		{
 			throw new Error(
-				'need twig or phrase'
+				'need tree or phrase'
 			);
 		}
 
@@ -105,7 +105,7 @@ Visual.Para =
 
 	Visual.Base.call(
 		this,
-		twig,
+		tree,
 		path
 	);
 
@@ -116,8 +116,8 @@ Visual.Para =
 		flowWidth;
 
 	this.text =
-		twig ?
-			twig.text :
+		tree ?
+			tree.text :
 			phrase;
 
 	// caching
@@ -149,7 +149,7 @@ Para.create =
 		inherit =
 			null,
 
-		twig =
+		tree =
 			null,
 
 		path =
@@ -179,9 +179,9 @@ Para.create =
 
 				break;
 
-			case 'twig' :
+			case 'tree' :
 
-				twig =
+				tree =
 					arguments[ a + 1 ];
 
 				break;
@@ -224,10 +224,10 @@ Para.create =
 
 	if( inherit )
 	{
-		if( !twig )
+		if( !tree )
 		{
-			twig =
-				inherit.twig;
+			tree =
+				inherit.tree;
 		}
 
 		if( !path )
@@ -255,7 +255,7 @@ Para.create =
 		}
 
 		if(
-			inherit.twig === twig &&
+			inherit.tree === tree &&
 			(
 				inherit.path === path ||
 				( inherit.path && inherit.path.equals( path ) )
@@ -272,7 +272,7 @@ Para.create =
 	return (
 		new Para(
 			'XOXO',
-			twig,
+			tree,
 			path,
 			phrase,
 			fontsize,
@@ -809,8 +809,8 @@ Para.prototype.locateOffset =
 
 	// FIXME cache position
 	var
-		twig =
-			this.twig,
+		tree =
+			this.tree,
 
 		font =
 			this.getFont( ),
@@ -985,7 +985,7 @@ Para.prototype.input =
 
 			para =
 				doc.atRank(
-					doc.twig.rankOf( para.key ) + 1
+					doc.tree.rankOf( para.key ) + 1
 				);
 		}
     }
@@ -1016,7 +1016,7 @@ Para.prototype.keyBackspace =
 	}
 
 	var r =
-		doc.twig.rankOf( this.key );
+		doc.tree.rankOf( this.key );
 
 	if( r > 0 )
 	{
@@ -1057,9 +1057,9 @@ Para.prototype.keyDel =
 	}
 
 	var r =
-		doc.twig.rankOf( this.key );
+		doc.tree.rankOf( this.key );
 
-	if( r < doc.twig.length - 1 )
+	if( r < doc.tree.length - 1 )
 	{
 		shell.peer.join(
 			this.textPath,
@@ -1119,9 +1119,9 @@ Para.prototype.keyDown =
 
 	// goto next para
 	var r =
-		doc.twig.rankOf( this.key );
+		doc.tree.rankOf( this.key );
 
-	if (r < doc.twig.length - 1)
+	if (r < doc.tree.length - 1)
 	{
 		var ve =
 			doc.atRank(r + 1);
@@ -1223,7 +1223,7 @@ Para.prototype.keyLeft =
 	}
 
 	var r =
-		doc.twig.rankOf( this.key );
+		doc.tree.rankOf( this.key );
 
 	if( r > 0 )
 	{
@@ -1308,9 +1308,9 @@ Para.prototype.keyRight =
 	}
 
 	var r =
-		doc.twig.rankOf( this.key );
+		doc.tree.rankOf( this.key );
 
-	if( r < doc.twig.length - 1 )
+	if( r < doc.tree.length - 1 )
 	{
 		var ve =
 			doc.atRank( r + 1 );
@@ -1382,7 +1382,7 @@ Para.prototype.keyUp =
 
 	// goto prev para
 	var r =
-		doc.twig.rankOf( this.key );
+		doc.tree.rankOf( this.key );
 
 	if( r > 0 )
 	{
@@ -1462,7 +1462,7 @@ Para.prototype.specialKey =
 					v0 =
 						doc.atRank( 0 ),
 					v1 =
-						doc.atRank( doc.twig.length - 1 );
+						doc.atRank( doc.tree.length - 1 );
 
 				selection =
 					shell.setSelection(
@@ -1762,10 +1762,10 @@ Jools.lazyFixate(
 
 
 /*
-| Updates v-vine to match a new twig.
+| Updates v-vine to match a new tree.
 */
 Para.prototype.update =
-	function( twig )
+	function( tree )
 {
 	// TODO
 	throw new Error( 'Paras no longer update');

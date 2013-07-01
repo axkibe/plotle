@@ -55,7 +55,7 @@ Widgets.Widget =
 	this.inherit =
 	this.name =
 	this.parent =
-	this.twig =
+	this.tree =
 	this._$visible =
 		null;
 
@@ -85,7 +85,7 @@ Widgets.Widget =
 				true
 		},
 
-		'twig' :
+		'tree' :
 		{
 			type :
 				'param',
@@ -113,10 +113,10 @@ Widgets.Widget =
 		freeStrings
 	);
 
-	if( this.twig.type !== type )
+	if( this.tree.type !== type )
 	{
 		throw new Error(
-			'invalid twig type'
+			'invalid tree type'
 		);
 	}
 

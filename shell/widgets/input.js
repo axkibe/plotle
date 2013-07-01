@@ -60,19 +60,19 @@ Widgets.Input =
 		parent =
 			this.parent,
 
-		twig =
-			this.twig,
+		tree =
+			this.tree,
 
 		inherit =
 			this.inherit,
 
 		pnw =
 		this.pnw =
-			parent.iframe.computePoint( twig.frame.pnw ),
+			parent.iframe.computePoint( tree.frame.pnw ),
 
 		pse =
 		this.pse =
-			parent.iframe.computePoint( twig.frame.pse );
+			parent.iframe.computePoint( tree.frame.pse );
 
 	this._shape =
 		new Euclid.RoundRect(
@@ -94,6 +94,11 @@ Widgets.Input =
 
 	this._$accent =
 		Accent.NORMA;
+
+	this._font =
+		new Euclid.Font(
+			tree.font
+		);
 };
 
 
@@ -134,10 +139,10 @@ Input.prototype.getOffsetAt =
 		a,
 
 		password =
-			this.twig.password,
+			this.tree.password,
 
 		font =
-			this.twig.font,
+			this._font,
 
 		mw;
 
@@ -344,7 +349,7 @@ Input.prototype._weave =
 
 	var style =
 		Widgets.getStyle(
-			this.twig.style,
+			this.tree.style,
 			accent
 		);
 
@@ -356,9 +361,9 @@ Input.prototype._weave =
 	);
 
 	var font =
-		this.twig.font;
+		this._font;
 
-	if( this.twig.password )
+	if( this.tree.password )
 	{
 		fabric.fill(
 			{ fill: 'black' },
@@ -428,19 +433,20 @@ Input.prototype.locateOffset =
 	)
 {
 	// FIXME cache position
-	var twig =
-		this.twig;
+	var
+		tree =
+			this.tree,
 
-	var font =
-		twig.font;
+		font =
+			this._font,
 
-	var pitch =
-		this._pitch;
+		pitch =
+			this._pitch,
 
-	var val =
-		this._$value;
+		val =
+			this._$value;
 
-	if( this.twig.password )
+	if( this.tree.password )
 	{
 		return new Euclid.Point(
 			pitch.x +
@@ -483,7 +489,7 @@ Input.prototype.getCaretPos =
 	function( )
 {
 	var fs =
-		this.twig.font.size;
+		this._font.size;
 
 	var descend =
 		fs * theme.bottombox;
@@ -570,17 +576,18 @@ Input.prototype.setValue =
 Input.prototype.input =
 	function( text )
 {
-	var csign =
-		this.parent.$caret.sign;
+	var
+		csign =
+			this.parent.$caret.sign,
 
-	var value =
-		this._$value;
+		value =
+			this._$value,
 
-	var at1 =
-		csign.at1;
+		at1 =
+			csign.at1,
 
-	var maxlen =
-		this.twig.maxlen;
+		maxlen =
+			this.tree.maxlen;
 
 	// cuts of text if larger than this maxlen
 	if(

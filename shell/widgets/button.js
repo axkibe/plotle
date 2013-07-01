@@ -70,8 +70,8 @@ Widgets.Button =
 	);
 
 	var
-		twig =
-			this.twig,
+		tree =
+			this.tree,
 
 		parent =
 			this.parent,
@@ -81,11 +81,11 @@ Widgets.Button =
 
 		pnw =
 		this.pnw =
-			parent.iframe.computePoint( twig.frame.pnw ),
+			parent.iframe.computePoint( tree.frame.pnw ),
 
 		pse =
 		this.pse =
-			parent.iframe.computePoint( twig.frame.pse ),
+			parent.iframe.computePoint( tree.frame.pse ),
 
 		iframe =
 		this.iframe =
@@ -96,7 +96,7 @@ Widgets.Button =
 
 		// TODO move this to Shape
 		tshape =
-			twig.shape;
+			tree.shape;
 
 	switch( tshape.type )
 	{
@@ -127,30 +127,30 @@ Widgets.Button =
 			);
 	}
 
-	if( twig.caption )
+	if( tree.caption )
 	{
 		var caption =
 		this._$caption =
 			{
 				pos :
-					iframe.computePoint( twig.caption.pos ),
+					iframe.computePoint( tree.caption.pos ),
 
 				$text :
 					inherit ?
 						inherit._$caption.$text :
-						twig.caption.text
+						tree.caption.text
 			};
 
-		if( twig.caption.rotate )
+		if( tree.caption.rotate )
 		{
 			caption.rotate =
-				twig.caption.rotate;
+				tree.caption.rotate;
 		}
 
-		if( twig.caption.newline )
+		if( tree.caption.newline )
 		{
 			caption.newline =
-				twig.caption.newline;
+				tree.caption.newline;
 
 			if( Jools.isString( caption.$text ) )
 			{
@@ -160,15 +160,15 @@ Widgets.Button =
 		}
 
 	}
-	else if( twig.icon )
+	else if( tree.icon )
 	{
 		this._icon =
 		{
 			sketch :
-				twig.icon,
+				tree.icon,
 
 			style :
-				twig.iconStyle
+				tree.iconStyle
 		};
 	}
 
@@ -255,20 +255,23 @@ Button.prototype._weave =
 	this.$fabric =
 		new Euclid.Fabric( this.iframe );
 
-	var twig =
-		this.twig;
+	var
+		tree =
+			this.tree,
 
-	var style =
-		Widgets.getStyle(
-			twig.style,
-			accent
-		);
+		style =
+			Widgets.getStyle(
+				tree.style,
+				accent
+			);
 
 	// TODO throw in getStyle
 
 	if( !Jools.isnon( style ) )
 	{
-		throw new Error('Invalid style: ' + twig.style);
+		throw new Error(
+			'Invalid style: ' + tree.style
+		);
 	}
 
 	fabric.paint(
@@ -291,10 +294,10 @@ Button.prototype._weave =
 			newline =
 				caption.newline,
 
-			// TODO twig creator
+			// TODO tree creator
 			font =
 				new Euclid.Font(
-					twig.caption.font
+					tree.caption.font
 				);
 
 

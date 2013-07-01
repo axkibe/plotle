@@ -31,7 +31,7 @@ var
 	shell,
 	system,
 	theme,
-	Twig,
+	Tree,
 	Widgets;
 
 
@@ -106,7 +106,7 @@ Forms.Form =
 
 	var tree =
 	this.tree =
-		new Twig(
+		new Tree(
 			this.layout,
 			Pattern
 		);
@@ -145,21 +145,22 @@ Forms.Form =
 		a++
 	)
 	{
-		var name =
-			ranks[ a ];
+		var
+			name =
+				ranks[ a ],
 
-		var twig =
-			copse[ name ];
+			tree =
+				copse[ name ],
 
-		var Proto =
-			this.getWidgetPrototype( twig.type );
+			Proto =
+				this.getWidgetPrototype( tree.type );
 
 		this.$sub[ name ] =
 			new Proto(
 				'name',
 					name,
-				'twig',
-					twig,
+				'tree',
+					tree,
 				'parent',
 					this,
 				'inherit',

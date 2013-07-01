@@ -541,21 +541,21 @@ var copy =
 
 
 /*
-| Returns true if this node matches a master or a node of equal class
+| Returns true if a node matches another node
 */
 var matches =
 	function(
-		twig1,
-		twig2
+		o1,
+		o2
 	)
 {
-	if( twig1 === twig2 )
+	if( o1 === o2 )
 	{
 		return true;
 	}
 
 	// numbers or strings would have matched before
-	switch( twig1.constructor )
+	switch( o1.constructor )
 	{
 		case String :
 			return false;
@@ -566,8 +566,8 @@ var matches =
 
 	// also if either is null an not equal
 	if(
-		twig1 === null ||
-		twig2 === null
+		o1 === null ||
+		o2 === null
 	)
 	{
 		return false;
@@ -575,11 +575,11 @@ var matches =
 
 	var
 		k1 =
-			Object.keys( twig1 );
+			Object.keys( o1 );
 
 	var
 		k2 =
-			Object.keys( twig2 );
+			Object.keys( o2 );
 
 	if( k1.length !== k2.length )
 	{
@@ -596,8 +596,8 @@ var matches =
 
 		if(
 			!matches(
-				twig1[ k ],
-				twig2[ k ]
+				o1[ k ],
+				o2[ k ]
 			)
 		)
 		{

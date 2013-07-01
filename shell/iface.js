@@ -26,7 +26,7 @@ var
 	config,
 	shell,
 	system,
-	Twig;
+	Tree;
 
 
 /*
@@ -496,7 +496,7 @@ IFace.prototype.aquireSpace =
 
 		self.$cSpace =
 		self.$rSpace =
-			new Twig(
+			new Tree(
 				asw.node,
 				Meshverse
 			);
@@ -601,7 +601,7 @@ IFace.prototype.aquireSpace =
 
 
 /*
-| Gets a twig.
+| Gets a tree.
 */
 IFace.prototype.get =
 	function(

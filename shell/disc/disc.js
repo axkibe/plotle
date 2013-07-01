@@ -29,7 +29,7 @@ var
 	Proc,
 	shell,
 	theme,
-	Twig,
+	Tree,
 	Widgets;
 
 
@@ -130,7 +130,7 @@ Disc.Disc =
 	// TODO inherit
 	var tree =
 	this._tree =
-		new Twig(
+		new Tree(
 			this.layout,
 			Pattern
 		);
@@ -178,23 +178,25 @@ Disc.Disc =
 		r++
 	)
 	{
-		var wname =
-			ranks[ r ];
+		var
+			wname =
+				ranks[ r ],
 
-		var twig =
-			copse[ wname ];
+			tree =
+				copse[ wname ];
 
-		switch( twig.type )
+		switch( tree.type )
 		{
 			case 'Button' :
+
 				this.buttons[ wname ] =
 					new Widgets.Button(
 						'parent',
 							this,
 						'name',
 							wname,
-						'twig',
-							twig,
+						'tree',
+							tree,
 						'inherit',
 							inherit && inherit.buttons[ wname ],
 						'icons',
@@ -206,7 +208,7 @@ Disc.Disc =
 			default :
 
 				throw new Error(
-					'Cannot create widget of type: ' + twig.type
+					'Cannot create widget of type: ' + tree.type
 				);
 		}
 	}

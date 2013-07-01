@@ -53,14 +53,14 @@ var Portal =
 Visual.Portal =
 	function(
 		tag,
-		twig,
+		tree,
 		path,
 		zone
 	)
 {
 	Visual.Item.call(
 		this,
-		twig,
+		tree,
 		path
 	);
 
@@ -122,7 +122,7 @@ Portal.create =
 	)
 {
 	var
-		twig =
+		tree =
 			null,
 
 		path =
@@ -181,9 +181,9 @@ Portal.create =
 
 				break;
 
-			case 'twig' :
+			case 'tree' :
 
-				twig =
+				tree =
 					arguments[ a + 1 ];
 
 				break;
@@ -204,12 +204,12 @@ Portal.create =
 		}
 	}
 
-	if( twig )
+	if( tree )
 	{
 		if( !path )
 		{
 			throw new Error(
-				'twig needs path'
+				'tree needs path'
 			);
 		}
 
@@ -217,7 +217,7 @@ Portal.create =
 		{
 			fontsize =
 				theme.note.fontsize;
-				// twig.fontsize; FIXME
+				// tree.fontsize; FIXME
 		}
 
 		if( !zone )
@@ -226,18 +226,18 @@ Portal.create =
 				// TODO multi create
 				new Euclid.Rect(
 					'pnw/pse',
-					new Euclid.Point( twig.zone.pnw ),
-					new Euclid.Point( twig.zone.pse )
+					new Euclid.Point( tree.zone.pnw ),
+					new Euclid.Point( tree.zone.pse )
 				);
 		}
 	}
 
 	if( inherit )
 	{
-		if( !twig )
+		if( !tree )
 		{
-			twig =
-				inherit.twig;
+			tree =
+				inherit.tree;
 		}
 
 		if( !fontsize )
@@ -254,7 +254,7 @@ Portal.create =
 
 		if(
 			(
-				inherit.twig === twig
+				inherit.tree === tree
 			)
 			&&
 			(
@@ -275,7 +275,7 @@ Portal.create =
 	return (
 		new Portal(
 			'XOXO',
-			twig,
+			tree,
 			path,
 			zone
 		)
@@ -454,7 +454,7 @@ Portal.prototype.dragStop =
 				throw new Error( 'Portal under minimum size!' );
 			}
 
-			if( this.twig.zone.equals( zone ) )
+			if( this.tree.zone.equals( zone ) )
 			{
 				return;
 			}
@@ -1166,7 +1166,7 @@ Portal.prototype._locateOffset =
 			this._fonts[ section ],
 
 		text =
-			this.twig[ section ];
+			this.tree[ section ];
 
 	return new Euclid.Point(
 		Math.round(
@@ -1337,7 +1337,7 @@ Portal.prototype.keyLeft =
 								'spaceUser'
 							),
 					at1 :
-						this.twig.spaceUser.length
+						this.tree.spaceUser.length
 				}
 			);
 
@@ -1551,7 +1551,7 @@ Portal.prototype.keyRight =
 	}
 
 	var value =
-		this.twig[ section ];
+		this.tree[ section ];
 
 	if( csign.at1 >= value.length )
 	{
@@ -1639,7 +1639,7 @@ Portal.prototype.keyDel =
 		csign.path.get( -1 );
 
 	var value =
-		this.twig[ section ];
+		this.tree[ section ];
 
 	if( !this._isSection( section ) )
 	{
@@ -1685,7 +1685,7 @@ Portal.prototype.keyEnd =
 		csign.at1;
 
 	var value =
-		this.twig[ section ];
+		this.tree[ section ];
 
 	if( at1 >= value.length )
 	{
@@ -1795,7 +1795,7 @@ Portal.prototype._prepareField =
 			theme.portal.input.rounding,
 
 		text =
-			this.twig[ section ],
+			this.tree[ section ],
 
 		width =
 			Euclid.Measure.width(
@@ -1925,7 +1925,7 @@ Portal.prototype._getOffsetAt =
 			x - this._$spaceFields[ section ].pnw.x,
 
 		value =
-			this.twig[ section ],
+			this.tree[ section ],
 
 		x1 =
 			0,
@@ -1980,8 +1980,8 @@ Portal.prototype._moveTo =
 	function( )
 {
 	shell.moveToSpace(
-		this.twig.spaceUser,
-		this.twig.spaceTag,
+		this.tree.spaceUser,
+		this.tree.spaceTag,
 		false
 	);
 };

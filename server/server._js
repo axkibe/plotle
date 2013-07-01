@@ -38,8 +38,8 @@ var
 	Resource =
 		require( './resource' ),
 
-	Twig =
-		require( '../shared/twig' ),
+	Tree =
+		require( '../shared/tree' ),
 
 	config =
 		require( '../config' ),
@@ -410,7 +410,7 @@ Server.prototype.loadSpace =
 				[ ],
 
 			$tree :
-				new Twig(
+				new Tree(
 					{
 						type :
 							'Space'
@@ -775,7 +775,7 @@ Server.prototype.prepareResources =
 		'shared/path.js',
 			'fb',
 
-		'shared/twig.js',
+		'shared/tree.js',
 			'fb',
 
 		'shared/sign.js',
@@ -1535,7 +1535,7 @@ Server.prototype.createSpace =
 				[ ],
 
 			$tree :
-				new Twig(
+				new Tree(
 					{
 						type :
 							'Space'

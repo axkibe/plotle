@@ -126,10 +126,10 @@ Range.prototype.normalize =
 
 	var
 		r1 =
-			pivot.twig.rankOf( k1 ),
+			pivot.tree.rankOf( k1 ),
 
 		r2 =
-			pivot.twig.rankOf( k2 );
+			pivot.tree.rankOf( k2 );
 
 	if( r1 < r2 )
 	{
@@ -177,7 +177,7 @@ Range.prototype.innerText =
 			space.getSub(
 				s1.path,
 				'Para'
-			).twig.text;
+			).tree.text;
 
 		return text.substring(
 			s1.at1,
@@ -188,8 +188,8 @@ Range.prototype.innerText =
 	var pivot =
 		space.getSub(s1.path, 'Doc');
 
-	var twig =
-		pivot.twig;
+	var tree =
+		pivot.tree;
 
 	var key1 =
 		s1.path.get( -2 );
@@ -198,10 +198,10 @@ Range.prototype.innerText =
 		s2.path.get(-2);
 
 	var text1 =
-		twig.copse[ key1 ].text;
+		tree.copse[ key1 ].text;
 
 	var text2 =
-		twig.copse[ key2 ].text;
+		tree.copse[ key2 ].text;
 
 	var buf = [
 		text1.substring(
@@ -211,14 +211,14 @@ Range.prototype.innerText =
 	];
 
 	for(
-		var r = twig.rankOf(key1), rZ = twig.rankOf(key2);
+		var r = tree.rankOf(key1), rZ = tree.rankOf(key2);
 		r < rZ - 1;
 		r++
 	)
 	{
 		buf.push(
 			'\n',
-			twig.copse[ twig.ranks[ r ] ].text
+			tree.copse[ tree.ranks[ r ] ].text
 		);
 	}
 

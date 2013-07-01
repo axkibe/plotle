@@ -50,13 +50,13 @@ if( typeof( window ) === 'undefined' )
 var Item =
 Visual.Item =
 	function(
-		twig,
+		tree,
 		path
 	)
 {
 	Visual.Base.call(
 		this,
-		twig,
+		tree,
 		path
 	);
 

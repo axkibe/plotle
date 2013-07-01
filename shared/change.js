@@ -13,7 +13,7 @@ var
 	Meshverse,
 	Path,
 	Sign,
-	Twig;
+	Tree;
 
 
 /*
@@ -44,8 +44,8 @@ if( typeof( window ) === 'undefined' )
 	Sign =
 		require( './sign'  );
 
-	Twig =
-		require( './twig' );
+	Tree =
+		require( './tree' );
 
 	Meshverse =
 		require( './meshverse' );
@@ -415,7 +415,7 @@ Change.prototype.set =
 		if( src.val !== null )
 		{
 			pivot =
-				new Twig(
+				new Tree(
 					pivot,
 					Meshverse,
 					key,
@@ -437,7 +437,7 @@ Change.prototype.set =
 				);
 
 			pivot =
-				new Twig(
+				new Tree(
 					pivot,
 					Meshverse,
 					key,
@@ -752,7 +752,7 @@ Change.prototype.join =
 	// FIXME check other keys to be equal
 
 	para1 =
-		new Twig(
+		new Tree(
 			para1,
 			Meshverse,
 			'text',
@@ -760,7 +760,7 @@ Change.prototype.join =
 		);
 
 	pivot =
-		new Twig(
+		new Tree(
 			pivot,
 			Meshverse,
 			key,
@@ -874,7 +874,7 @@ Change.prototype.split = function( tree )
 			pivot.copse[ key ],
 
 		para2 =
-			new Twig(
+			new Tree(
 				para1,
 				Meshverse,
 				'text',
@@ -882,7 +882,7 @@ Change.prototype.split = function( tree )
 			);
 
 	para1 =
-		new Twig(
+		new Tree(
 			para1,
 			Meshverse,
 			'text',
@@ -890,7 +890,7 @@ Change.prototype.split = function( tree )
 		);
 
 	pivot =
-		new Twig(
+		new Tree(
 			pivot,
 			Meshverse,
 			key,
@@ -937,7 +937,7 @@ Change.prototype.split = function( tree )
 /*
 | Change Operation: rank
 |
-| A twig's rank in a copse is changed.
+| A tree's rank in a copse is changed.
 */
 Change.prototype.rank =
 	function(
@@ -988,7 +988,7 @@ Change.prototype.rank =
 		);
 
 	pivot =
-		new Twig(
+		new Tree(
 			pivot,
 			Meshverse,
 			'-',

@@ -56,8 +56,8 @@ Widgets.CheckBox =
 		arguments
 	);
 
-	var twig =
-		this.twig;
+	var tree =
+		this.tree;
 
 	var parent =
 		this.parent;
@@ -68,8 +68,8 @@ Widgets.CheckBox =
 	this.box =
 		new Euclid.Rect(
 			'pnw/pse',
-			parent.iframe.computePoint( twig.box.pnw ),
-			parent.iframe.computePoint( twig.box.pse )
+			parent.iframe.computePoint( tree.box.pnw ),
+			parent.iframe.computePoint( tree.box.pse )
 		);
 
 	this._$checked =
@@ -305,7 +305,7 @@ CheckBox.prototype.draw =
 
 	var style =
 		Widgets.getStyle(
-			this.twig.style,
+			this.tree.style,
 			accent
 		);
 
@@ -314,7 +314,7 @@ CheckBox.prototype.draw =
 	if( !Jools.isnon( style ) )
 	{
 		throw new Error(
-			'Invalid style: ' + this.twig.style
+			'Invalid style: ' + this.tree.style
 		);
 	}
 

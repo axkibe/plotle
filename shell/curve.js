@@ -36,7 +36,7 @@ if( typeof( window ) === 'undefined' )
 */
 Curve =
 	function(
-		twig,
+		tree,
 		frame
 	)
 {
@@ -44,29 +44,29 @@ Curve =
 	this.data =
 		[ ];
 
-	if( twig.type !== 'Curve' )
+	if( tree.type !== 'Curve' )
 	{
-		throw new Error( 'Curve twig not a Curve' );
+		throw new Error( 'Curve tree not a Curve' );
 	}
 
-	if( twig.copse[ twig.ranks[ 0 ] ].type !== 'MoveTo' )
+	if( tree.copse[ tree.ranks[ 0 ] ].type !== 'MoveTo' )
 	{
 		throw new Error(' Curve does not begin with MoveTo' );
 	}
 
 	for(
-		var a = 0, aZ = twig.length;
+		var a = 0, aZ = tree.length;
 		a < aZ;
 		a++
 	) {
 		var ct =
-			twig.copse[ twig.ranks[ a ] ];
+			tree.copse[ tree.ranks[ a ] ];
 
 		data.push(
 			{
 				to :
 					frame.computePoint( ct.to ),
-				twig :
+				tree :
 					ct
 			}
 		);
@@ -92,7 +92,7 @@ Curve.prototype.sketch =
 	for(var a = 0, aZ = data.length; a < aZ; a++)
 	{
 		var c = data[a];
-		var ct = c.twig;
+		var ct = c.tree;
 		var to = c.to;
 		var bx = ct.bx * bo;
 		var by = ct.by * bo;

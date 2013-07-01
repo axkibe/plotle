@@ -47,17 +47,23 @@ Widgets.Label =
 		arguments
 	);
 
-	var inherit =
-		this.inherit;
+	var
+		inherit =
+			this.inherit;
 
 	this.pos =
 		this.parent.iframe.computePoint(
-			this.twig.pos
+			this.tree.pos
 		);
 
 	// if not null, overrides the design text
 	this._$text =
 		inherit ? inherit._$text : null;
+
+	this._font =
+		new Euclid.Font(
+			this.tree.font
+		);
 };
 
 
@@ -95,11 +101,11 @@ Label.prototype.draw =
 
 	fabric.paintText(
 		'text',
-			this._$text || this.twig.text,
+			this._$text || this.tree.text,
 		'p',
 			this.pos,
 		'font',
-			this.twig.font
+			this._font
 	);
 };
 

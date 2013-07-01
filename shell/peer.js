@@ -228,9 +228,9 @@ Peer.prototype.aquireSpace =
 
 
 /*
-| gets a twig
+| gets a tree
 |
-| path: path to twig
+| path: path to tree
 */
 Peer.prototype.get =
 	function(

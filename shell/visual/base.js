@@ -35,12 +35,12 @@ if( typeof( window ) === 'undefined' )
 var Base =
 Visual.Base =
 	function(
-		twig,
+		tree,
 		path
 	)
 {
-	this.twig =
-		twig;
+	this.tree =
+		tree;
 
 	this.path =
 		path;
@@ -54,14 +54,14 @@ Visual.Base =
 
 
 /*
-| Returns the visual with a given twig-rank.
+| Returns the visual with a given tree-rank.
 */
 Base.prototype.atRank =
 	function(
 		rank
 	)
 {
-	return this.$sub[ this.twig.ranks[ rank ] ];
+	return this.$sub[ this.tree.ranks[ rank ] ];
 };
 
 
