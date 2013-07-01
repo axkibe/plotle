@@ -81,26 +81,6 @@ Item.prototype.Item =
 
 
 /*
-| Updates the item to match a new twig.
-*/
-/*
-Item.prototype.update =
-	function(
-		twig
-	)
-{
-	this.twig =
-		twig;
-
-	this.$fabric =
-		null;
-
-	this.poke( );
-};
-*/
-
-
-/*
 | An entry of the item menu has been selected
 */
 Item.prototype.menuSelect =

@@ -48,101 +48,236 @@ if( typeof( window ) === 'undefined' )
 var Para =
 Visual.Para =
 	function(
-		overload,
-		a1,  // twig       | phrase
-		a2,  // path       | fontsize
-		a3,  // fontsize   | flowWidth
-		a4   // flowWidth
+		tag,
+		twig,
+		path,
+		phrase,
+		fontsize,
+		flowWidth
 	)
 {
-	switch( overload )
+	if( CHECK )
 	{
-		case 'twig' :
-
-			var
-				twig =
-					a1,
-
-				path =
-					a2,
-
-				fontsize =
-					a3,
-
-				flowWidth =
-					a4;
-
-			if( CHECK && twig.type !== 'Para' )
-			{
-				throw new Error(
-					'type error'
-				);
-			}
-
-			Visual.Base.call(
-				this,
-				twig,
-				path
-			);
-
-			this.text =
-				twig.text;
-
-			this.fontsize =
-				fontsize;
-
-			this.flowWidth =
-				flowWidth;
-
-			break;
-
-		case 'phrase' :
-
-			Visual.Base.call(
-				this,
-				null,
-				null
-			);
-
-			this.text =
-				a1;
-
-			this.fontsize =
-				a2;
-
-			this.flowWidth =
-				a3;
-
-			break;
-
-		default :
-
+		if( tag !== 'XOXO' )
+		{
 			throw new Error(
-				'invalid overload'
+				'invalid tag'
 			);
+		}
+
+		if( twig && twig.type !== 'Para' )
+		{
+			throw new Error(
+				'type error'
+			);
+		}
+
+		if( twig && !path )
+		{
+			throw new Error(
+				'twig needs path'
+			);
+		}
+
+		if( twig && phrase )
+		{
+			throw new Error(
+				'cannot have twig and phrase.'
+			);
+		}
+
+		if( !twig && !phrase )
+		{
+			throw new Error(
+				'need twig or phrase'
+			);
+		}
+
+		if( !Jools.is( flowWidth ) )
+		{
+			throw new Error(
+				'no flowWidth'
+			);
+		}
 	}
+
+	Visual.Base.call(
+		this,
+		twig,
+		path
+	);
+
+	this.fontsize =
+		fontsize;
+
+	this.flowWidth =
+		flowWidth;
+
+	this.text =
+		twig ?
+			twig.text :
+			phrase;
 
 	// caching
 	this.$fabric =
 	this.$flow =
 		null;
-
-	if(
-		CHECK &&
-		!Jools.is( this.flowWidth )
-	)
-	{
-		throw new Error(
-			'no flowWidth'
-		);
-	}
 };
 
 
+/*
+| Paras extend visual base
+*/
 Jools.subclass(
 	Para,
 	Visual.Base
 );
+
+
+
+/*
+| Creates a new para
+*/
+Para.create =
+	function(
+		// free strings
+	)
+{
+	var
+		inherit =
+			null,
+
+		twig =
+			null,
+
+		path =
+			null,
+
+		phrase =
+			null,
+
+		fontsize =
+			null,
+
+		flowWidth =
+			null;
+
+	for(
+		var a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
+	{
+		switch( arguments[ a ] )
+		{
+			case 'inherit' :
+
+				inherit =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'twig' :
+
+				twig =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'path' :
+
+				path =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'phrase' :
+
+				phrase =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'fontsize' :
+
+				fontsize =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'flowWidth' :
+
+				flowWidth =
+					arguments[ a + 1 ];
+
+				break;
+
+			default :
+
+				throw new Error(
+					'invalid argument: ' + arguments[ a ]
+				);
+		}
+	}
+
+	if( inherit )
+	{
+		if( !twig )
+		{
+			twig =
+				inherit.twig;
+		}
+
+		if( !path )
+		{
+			path =
+				inherit.path;
+		}
+
+		if( !phrase )
+		{
+			phrase =
+				inherit.phrase;
+		}
+
+		if( !fontsize )
+		{
+			fontsize =
+				inherit.fontsize;
+		}
+
+		if( !flowWidth )
+		{
+			flowWidth =
+				inherit.flowWidth;
+		}
+
+		if(
+			inherit.twig === twig &&
+			(
+				inherit.path === path ||
+				( inherit.path && inherit.path.equals( path ) )
+			) &&
+			inherit.phrase === phrase &&
+			inherit.fontsize === fontsize &&
+			inherit.flowWidth === flowWidth
+		)
+		{
+			return inherit;
+		}
+	}
+
+	return (
+		new Para(
+			'XOXO',
+			twig,
+			path,
+			phrase,
+			fontsize,
+			flowWidth
+		)
+	);
+};
 
 
 /*

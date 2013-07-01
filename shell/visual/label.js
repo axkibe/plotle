@@ -54,14 +54,26 @@ Visual.Label =
 		twig,
 		path,
 		pnw,
+		fontsize,
 		doc
 	)
 {
-	if( CHECK && tag !== 'XOXO' )
+	if( CHECK )
 	{
-		throw new Error(
-			'do not call new Label directly'
-		);
+		if( tag !== 'XOXO' )
+		{
+			throw new Error(
+				'do not call new Label directly'
+			);
+		}
+
+		if( fontsize !== doc.fontsize )
+		{
+			console.log( fontsize, doc.fontsize );
+			throw new Error(
+				'fontsize mismatch'
+			);
+		}
 	}
 
 	Visual.DocItem.call(
@@ -93,6 +105,8 @@ Visual.Label =
 			)
 		);
 
+	this.fontsize =
+		fontsize;
 };
 
 
@@ -193,13 +207,13 @@ Label.create =
 			);
 		}
 
-		if( !fontsize )
+		if( fontsize === null )
 		{
 			fontsize =
 				twig.fontsize;
 		}
 
-		if( !pnw )
+		if( pnw === null )
 		{
 			pnw =
 				twig.pnw;
@@ -209,7 +223,7 @@ Label.create =
 
 	if( inherit )
 	{
-		if( !twig )
+		if( twig === null )
 		{
 			twig =
 				inherit.twig;
@@ -221,19 +235,19 @@ Label.create =
 				inherit.path;
 		}
 
-		if( !fontsize )
+		if( fontsize === null )
 		{
 			fontsize =
 				inherit.fontsize;
 		}
 
-		if( !pnw )
+		if( pnw  === null )
 		{
 			pnw =
 				inherit.pnw;
 		}
 
-		if( !doc )
+		if( doc === null )
 		{
 			doc =
 				inherit.$sub.doc;
@@ -276,6 +290,7 @@ Label.create =
 			twig,
 			path,
 			pnw,
+			fontsize,
 			doc
 		)
 	);

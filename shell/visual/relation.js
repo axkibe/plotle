@@ -18,10 +18,12 @@ Visual =
 /*
 | Imports
 */
-var Euclid;
-var Jools;
-var shell;
-var theme;
+var
+	Euclid,
+	Jools,
+	Path,
+	shell,
+	theme;
 
 
 /*
@@ -48,6 +50,7 @@ Visual.Relation =
 		twig,
 		path,
 		pnw,
+		fontsize,
 		doc,
 		item1key,
 		item2key
@@ -59,6 +62,7 @@ Visual.Relation =
 		twig,
 		path,
 		pnw,
+		fontsize,
 		doc
 	);
 
@@ -208,25 +212,25 @@ Relation.create =
 			);
 		}
 
-		if( !fontsize )
+		if( fontsize === null )
 		{
 			fontsize =
 				twig.fontsize;
 		}
 
-		if( !pnw )
+		if( pnw === null )
 		{
 			pnw =
 				twig.pnw;
 		}
 
-		if( !item1key )
+		if( item1key === null )
 		{
 			item1key =
 				twig.item1key;
 		}
 
-		if( !item2key )
+		if( item2key === null )
 		{
 			item2key =
 				twig.item2key;
@@ -235,43 +239,43 @@ Relation.create =
 
 	if( inherit )
 	{
-		if( !twig )
+		if( twig === null )
 		{
 			twig =
 				inherit.twig;
 		}
 
-		if( !path )
+		if( path === null )
 		{
 			path =
 				inherit.path;
 		}
 
-		if( !fontsize )
+		if( fontsize === null )
 		{
 			fontsize =
 				inherit.fontsize;
 		}
 
-		if( !pnw )
+		if( pnw === null )
 		{
 			pnw =
 				inherit.pnw;
 		}
 
-		if( !doc )
+		if( doc === null )
 		{
 			doc =
 				inherit.$sub.doc;
 		}
 
-		if( !item1key )
+		if( item1key === null )
 		{
 			item1key =
 				inherit.item1key;
 		}
 
-		if( !item2key )
+		if( item2key === null )
 		{
 			item2key =
 				inherit.item2key;
@@ -307,6 +311,7 @@ Relation.create =
 			twig,
 			path,
 			pnw,
+			fontsize,
 			doc,
 			item1key,
 			item2key

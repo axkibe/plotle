@@ -44,8 +44,6 @@ if ( typeof( window ) === 'undefined' )
 
 /*
 | Constructor.
-|
-| TODO: make fontsize into doc twig
 */
 var Doc =
 Visual.Doc =
@@ -69,7 +67,6 @@ Visual.Doc =
 
 	var
 		ranks,
-
 		sub;
 
 	Visual.Base.call(
@@ -95,10 +92,17 @@ Visual.Doc =
 
 	if( CHECK )
 	{
+		if( twig && !path )
+		{
+			throw new Error(
+				'twig needs path'
+			);
+		}
+
 		if( twig && phrase )
 		{
 			throw new Error(
-				'Doc cannot have twig and phrase.'
+				'cannot have twig and phrase.'
 			);
 		}
 
@@ -116,7 +120,7 @@ Visual.Doc =
 			);
 		}
 
-		if( typeof( paraSep) !== 'number' )
+		if( typeof( paraSep ) !== 'number' )
 		{
 			throw new Error(
 				'paraSep missing'
@@ -150,15 +154,20 @@ Visual.Doc =
 				{
 					// TODO Para.create for reusal
 					sub[ k ] =
-						new Visual.Para(
+						Visual.Para.create(
+							'inherit',
+								inherit && inherit.$sub[ k ],
 							'twig',
-							copse[ k ],
-							new Path(
-								path,
-								'++', k
-							),
-							this.fontsize,
-							this.flowWidth
+								copse[ k ],
+							'path',
+								new Path(
+									path,
+									'++', k
+								),
+							'fontsize',
+								fontsize,
+							'flowWidth',
+								flowWidth
 						);
 				}
 			}
@@ -168,16 +177,17 @@ Visual.Doc =
 		this.ranks =
 			[ '1' ];
 
-		// TODO Visual.Para.create
 		sub[ '1' ] =
-			new Visual.Para(
+			Visual.Para.create(
+				'inherit',
+					inherit && inherit.$sub[ '1 ' ],
 				'phrase',
-				phrase,
-				this.fontsize,
-				this.flowWidth
+					phrase,
+				'fontsize',
+					fontsize,
+				'flowWidth',
+					flowWidth
 			);
-
-
 	}
 };
 
@@ -189,7 +199,7 @@ Jools.subclass(
 
 
 /*
-| Creates a new doc node
+| Creates a new doc.
 */
 Doc.create =
 	function(
@@ -283,47 +293,43 @@ Doc.create =
 		}
 	}
 
-	if( twig )
-	{
-		if( !path )
-		{
-			throw new Error(
-				'twig needs path'
-			);
-		}
-	}
-
 	if( inherit )
 	{
-		if( !twig )
+		if( twig === null )
 		{
 			twig =
 				inherit.twig;
 		}
 
-		if( !path )
+		if( path === null )
 		{
 			path =
 				inherit.path;
 		}
 
 
-		if( !phrase )
+		if( phrase === null )
 		{
 			phrase =
 				inherit.phrase;
 		}
 
-		if( !fontsize )
+		if( fontsize === null )
 		{
 			fontsize =
 				inherit.fontsize;
 		}
 
-		if( !flowWidth )
+		if( flowWidth === null )
 		{
 			flowWidth =
 				inherit.flowWidth;
+		}
+
+		if( paraSep === null )
+		{
+			paraSep =
+				inherit.paraSep;
 		}
 
 		if(
@@ -334,7 +340,8 @@ Doc.create =
 			) &&
 			inherit.phrase === phrase &&
 			inherit.fontsize === fontsize &&
-			inherit.flowWidth === flowWidth
+			inherit.flowWidth === flowWidth &&
+			inherit.paraSep === paraSep
 		)
 		{
 			return inherit;

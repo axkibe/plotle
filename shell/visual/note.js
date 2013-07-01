@@ -188,7 +188,7 @@ Note.create =
 
 	if( twig )
 	{
-		if( !path )
+		if( CHECK && !path )
 		{
 			throw new Error(
 				'twig needs path'

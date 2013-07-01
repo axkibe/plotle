@@ -262,7 +262,7 @@ Space.prototype.getItem =
 	}
 
 	return this.$sub[ key ];
-}
+};
 
 
 /*
@@ -885,6 +885,8 @@ Space.prototype.dragStart =
 					.create(
 						'pnw',
 							view.depoint( p ),
+						'fontsize',
+							theme.note.fontsize, // FIXME
 						'doc',
 							Visual.Doc.create(
 								'phrase',
@@ -892,6 +894,8 @@ Space.prototype.dragStart =
 								'fontsize',
 									theme.note.fontsize, // FIXME
 								'flowWidth',
+									0,
+								'paraSep',
 									0
 							)
 					);
@@ -1459,9 +1463,15 @@ Space.prototype.dragMove =
 
 		item,
 
+		fs,
+
+		origin,
+
+		oheight,
+
 		pd,
 
-		origin;
+		resized;
 
 	switch( action.type )
 	{
@@ -1500,38 +1510,41 @@ Space.prototype.dragMove =
 
 				case 'pnw/fontsize' :
 
-					var
-						oheight =
-							origin.zone.height,
+					oheight =
+						origin.zone.height;
 
-						fs =
-							Math.max(
-								origin.$sub.doc.fontsize * zone.height / oheight,
-								theme.label.minSize
-							),
+					fs =
+						Math.max(
+							origin.$sub.doc.fontsize * zone.height / oheight,
+							theme.label.minSize
+						);
 
-						resized =
-							action.item.creator.create(
-								'inherit',
-									origin,
-								'fontsize',
-									fs
-							);
+					resized =
+						action.item.creator.create(
+							'inherit',
+								origin,
+							'fontsize',
+								fs
+						);
+
+					console.log(
+						resized,
+						resized.fontsize
+					);
 
 					action.item =
-						this.getActionItemCreator( action )
-							.create(
-								'inherit',
-									resized,
-								'pnw',
-									( p.x > action.start.x ) ?
-										zone.pnw
-										:
-										new Euclid.Point(
-											zone.pse.x - resized.zone.width,
-											zone.pnw.y
-										)
-							);
+						action.item.creator.create(
+							'inherit',
+								resized,
+							'pnw',
+								( p.x > action.start.x ) ?
+									zone.pnw
+									:
+									new Euclid.Point(
+										zone.pse.x - resized.zone.width,
+										zone.pnw.y
+									)
+						);
 
 					break;
 			}
@@ -1738,11 +1751,10 @@ Space.prototype.dragMove =
 
 				case 'pnw/fontsize' :
 
-					var
-						oheight =
-							origin.zone.height,
+					oheight =
+						origin.zone.height;
 
-						dy;
+					var dy;
 
 					switch( action.align )
 					{
@@ -1772,20 +1784,19 @@ Space.prototype.dragMove =
 							}
 					}
 
-					var
-						fs =
-							Math.max(
-								origin.$sub.doc.fontsize * ( oheight + dy ) / oheight,
-								theme.label.minSize
-							),
+					fs =
+						Math.max(
+							origin.$sub.doc.fontsize * ( oheight + dy ) / oheight,
+							theme.label.minSize
+						);
 
-						resized =
-							action.item.creator.create(
-								'inherit',
-									origin,
-								'fontsize',
-									fs
-							);
+					resized =
+						action.item.creator.create(
+							'inherit',
+								origin,
+							'fontsize',
+								fs
+						);
 
 					action.item =
 						action.item.creator.create(
