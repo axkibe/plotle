@@ -8,14 +8,16 @@
 /*
 | Imports
 */
-var Euclid;
-var Jools;
+var
+	Euclid,
+	Jools;
 
 
 /*
 | Exports
 */
-var Meshverse;
+var
+	Meshverse;
 
 
 /*
@@ -148,7 +150,8 @@ Meshverse =
 
 	'Para' :
 	{
-		must : {
+		must :
+		{
 			'text' :
 				'String'
 		}
@@ -159,7 +162,9 @@ Meshverse =
 		creator :
 			function( t )
 			{
-				return new Euclid.Rect( 'o', t );
+				return new Euclid.Rect(
+					'o', t
+				);
 			},
 
 		must :

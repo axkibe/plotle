@@ -1,17 +1,18 @@
 /*
-|
 | Common base of all visual objects
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
 /*
 | Export
 */
-var Visual;
-Visual = Visual || { };
+var
+	Visual;
+
+Visual =
+	Visual || { };
 
 
 /*

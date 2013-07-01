@@ -58,11 +58,14 @@ Visual.Doc =
 		paraSep
 	)
 {
-	if( CHECK && tag !== 'XOXO' )
+	if( CHECK )
 	{
-		throw new Error(
-			'do not call new Doc directly'
-		);
+		if( tag !== 'XOXO' )
+		{
+			throw new Error(
+				'do not call new Doc directly'
+			);
+		}
 	}
 
 	var
