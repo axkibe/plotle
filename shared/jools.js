@@ -573,11 +573,13 @@ var matches =
 		return false;
 	}
 
-	var k1 =
-		Object.keys( twig1 );
+	var
+		k1 =
+			Object.keys( twig1 );
 
-	var k2 =
-		Object.keys( twig2 );
+	var
+		k2 =
+			Object.keys( twig2 );
 
 	if( k1.length !== k2.length )
 	{

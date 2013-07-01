@@ -1,18 +1,19 @@
 /*
-|
 | A change to a tree.
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
 /*
 | Imports
 */
-var Jools;
-var Path;
-var Sign;
+var
+	Jools,
+	Meshverse,
+	Path,
+	Sign,
+	Twig;
 
 
 /*
@@ -42,6 +43,12 @@ if( typeof( window ) === 'undefined' )
 
 	Sign =
 		require( './sign'  );
+
+	Twig =
+		require( './twig' );
+
+	Meshverse =
+		require( './meshverse' );
 }
 
 
@@ -307,7 +314,9 @@ Change.prototype.get =
 | A new item is inserted or replaces an existing.
 */
 Change.prototype.set =
-	function( tree )
+	function(
+		tree
+	)
 {
 	var
 		cm =
@@ -364,21 +373,23 @@ Change.prototype.set =
 			null;
 	}
 
-	trg = trg.affix(
-		Jools.is,
-		cm,
-		'trg',
-		'val',
-			save
-	);
+	trg =
+		trg.affix(
+			Jools.is,
+			cm,
+			'trg',
+			'val',
+				save
+		);
 
-	src = src.affix(
-		Jools.is,
-		cm,
-		'src',
-		'path',
-			trg.path
-	);
+	src =
+		src.affix(
+			Jools.is,
+			cm,
+			'src',
+			'path',
+				trg.path
+		);
 
 	// TODO simplify
 	if( !Jools.is( trg.rank ) )
@@ -404,8 +415,9 @@ Change.prototype.set =
 		if( src.val !== null )
 		{
 			pivot =
-				tree.grow(
+				new Twig(
 					pivot,
+					Meshverse,
 					key,
 						src.val,
 					'+',
@@ -417,15 +429,17 @@ Change.prototype.set =
 			orank =
 				pivot.rankOf( key );
 
-			trg = new Sign(
-				trg,
-				'rank',
-					orank
-			);
+			trg =
+				new Sign(
+					trg,
+					'rank',
+						orank
+				);
 
 			pivot =
-				tree.grow(
+				new Twig(
 					pivot,
+					Meshverse,
 					key,
 						src.val,
 					'-',
@@ -596,12 +610,13 @@ Change.prototype.remove =
 			src.at2
 		);
 
-	trg = trg.affix(
-		Jools.isnon,
-		cm, 'trg',
-		'val',
-			val
-	);
+	trg =
+		trg.affix(
+			Jools.isnon,
+			cm, 'trg',
+			'val',
+				val
+		);
 
 	var nstr = (
 		str.substring( 0, src.at1 ) +
@@ -679,7 +694,7 @@ Change.prototype.join =
 	var
 		key =
 			path.get( -2 ),
-	
+
 		pivot =
 			tree.getPath( path, -2 ),
 
@@ -737,15 +752,17 @@ Change.prototype.join =
 	// FIXME check other keys to be equal
 
 	para1 =
-		tree.grow(
+		new Twig(
 			para1,
+			Meshverse,
 			'text',
 				para1.text + para2.text
 		);
 
 	pivot =
-		tree.grow(
+		new Twig(
 			pivot,
+			Meshverse,
 			key,
 				para1,
 			key2,
@@ -852,40 +869,67 @@ Change.prototype.split = function( tree )
 		cm, 'invalid line key'
 	);
 
-	var para1 = pivot.copse[ key ];
+	var
+		para1 =
+			pivot.copse[ key ],
 
-	var para2 = tree.grow(
-		para1,
-		'text', text.substring( at1, text.length )
-	);
+		para2 =
+			new Twig(
+				para1,
+				Meshverse,
+				'text',
+					text.substring( at1, text.length )
+			);
 
-	para1 = tree.grow(
-		para1,
-		'text', text.substring(0, at1)
-	);
+	para1 =
+		new Twig(
+			para1,
+			Meshverse,
+			'text',
+				text.substring( 0, at1 )
+		);
 
-	pivot = tree.grow(
-		pivot,
-		key,  para1,
-		vKey, para2,
-		'+', kn + 1, vKey
-	);
+	pivot =
+		new Twig(
+			pivot,
+			Meshverse,
+			key,
+				para1,
+			vKey,
+				para2,
+			'+',
+				kn + 1, vKey
+		);
 
-	tree  = tree.setPath(
-		path,
-		pivot,
-		-2
-	);
+	tree =
+		tree.setPath(
+			path,
+			pivot,
+			-2
+		);
 
 	var chg;
+
 	if( src === this.src && trg === this.trg )
-		{ chg = this; }
+	{
+		chg =
+			this;
+	}
 	else
-		{ chg = new Change( src, trg ); }
+	{
+		chg =
+			new Change(
+				src,
+				trg
+			);
+	}
 
 	return {
-		tree: tree,
-		chg : chg
+		tree :
+			tree,
+
+		chg :
+			chg
 	};
 };
 
@@ -926,39 +970,58 @@ Change.prototype.rank = function( tree )
 
 	// FIXME if (orank === trg.rank) return null;
 
-	src = src.affix(
-		Jools.is,
-		cm, 'src',
-		'rank', orank
-	);
+	src =
+		src.affix(
+			Jools.is,
+			cm, 'src',
+			'rank', orank
+		);
 
-	trg = trg.affix(
-		Jools.is,
-		cm, 'trg',
-		'path', src.path
-	);
+	trg =
+		trg.affix(
+			Jools.is,
+			cm, 'trg',
+			'path', src.path
+		);
 
-	pivot = tree.grow(
-		pivot,
-		'-', orank,
-		'+', trg.rank, key
-	);
+	pivot =
+		new Twig(
+			pivot,
+			Meshverse,
+			'-',
+				orank,
+			'+',
+				trg.rank, key
+		);
 
-	tree = tree.setPath(
-		src.path,
-		pivot,
-		-1
-	);
+	tree =
+		tree.setPath(
+			src.path,
+			pivot,
+			-1
+		);
 
 	var chg;
 	if( src === this.src && trg === this.trg )
-		{ chg = this; }
+	{
+		chg =
+			this;
+	}
 	else
-		{ chg = new Change( src, trg ); }
+	{
+		chg =
+			new Change(
+				src,
+				trg
+			);
+	}
 
 	return {
-		tree: tree,
-		chg : chg
+		tree :
+			tree,
+
+		chg :
+			chg
 	};
 };
 
@@ -968,7 +1031,8 @@ Change.prototype.rank = function( tree )
 */
 if( typeof( window ) === 'undefined' )
 {
-	module.exports = Change;
+	module.exports =
+		Change;
 }
 
 

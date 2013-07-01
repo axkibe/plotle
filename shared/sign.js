@@ -46,7 +46,9 @@ Sign = function(model /*, ...*/)
 	{
 		// ignores inherited properties
 		if( !Object.hasOwnProperty.call( model, k ) )
-			{ continue; }
+		{
+			continue;
+		}
 
 		if( !Sign.field[ k ] )
 		{
@@ -58,9 +60,14 @@ Sign = function(model /*, ...*/)
 
 	// then properties from arguments are applied
 
-	for( var a = 1, aZ = arguments.length; a < aZ; a += 2 )
+	for(
+		var a = 1, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
 	{
-		k = arguments[ a ];
+		k =
+			arguments[ a ];
 
 		if( !Sign.field[ k ] )
 		{
@@ -77,8 +84,8 @@ Sign = function(model /*, ...*/)
 /*
 | List of keys allowed in a signature
 */
-Sign.field = Jools.immute(
-	{
+Sign.field =
+	Jools.immute({
 		'at1'   : true,
 		'at2'   : true,
 		'path'  : true,
@@ -86,8 +93,7 @@ Sign.field = Jools.immute(
 		'rank'  : true,
 		'space' : true,
 		'val'   : true
-	}
-);
+	});
 
 
 /*
@@ -104,13 +110,22 @@ Sign.field = Jools.immute(
 */
 Sign.prototype.affix = function(test, cm, base, key, val) {
 
-	if( test( this[key] ) )
+	if( test( this[ key ] ) )
 	{
 		if (! Jools.matches( val, this[ key ] ) )
 		{
+			console.log( key );
+			console.log( '\n' );
+			console.log( '\n' );
+			console.log( val );
+			console.log( '\n' );
+			console.log( '\n' );
+			console.log( this[ key ] );
+
 			throw new Jools.reject(
 				[
 					cm,
+					' ',
 					base,
 					'.',
 					key,

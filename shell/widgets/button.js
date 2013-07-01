@@ -278,16 +278,25 @@ Button.prototype._weave =
 		Euclid.View.proper
 	);
 
-	var caption =
-		this._$caption;
+	var
+		caption =
+			this._$caption;
 
 	if( caption )
 	{
-		var text =
-			caption.$text;
+		var
+			text =
+				caption.$text,
 
-		var newline =
-			caption.newline;
+			newline =
+				caption.newline,
+
+			// TODO twig creator
+			font =
+				new Euclid.Font(
+					twig.caption.font
+				);
+
 
 		if( !Jools.is( newline ) )
 		{
@@ -299,7 +308,7 @@ Button.prototype._weave =
 					'p',
 						caption.pos,
 					'font',
-						twig.caption.font
+						font
 				);
 			}
 			else
@@ -310,7 +319,7 @@ Button.prototype._weave =
 					'p',
 						caption.pos,
 					'font',
-						twig.caption.font,
+						font,
 					'rotate',
 						caption.rotate
 				);
@@ -346,14 +355,15 @@ Button.prototype._weave =
 						x,
 						y,
 					'font',
-						twig.caption.font
+						font
 				);
 			}
 		}
 	}
 
-	var icon =
-		this._icon;
+	var
+		icon =
+			this._icon;
 
 	if( icon )
 	{

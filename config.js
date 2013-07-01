@@ -140,7 +140,7 @@ config.log  = {
 	change: false,
 	debug:  true,
 	fail:   true,
-	grow:   false,
+	twig:   false,
 	iface:  false,
 	peer:   false,
 	report: false,
