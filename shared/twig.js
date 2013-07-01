@@ -1,5 +1,6 @@
 /*
-| The base of all meshcraft nodes.
+| The base of all meshcraft twigs.
+| Meshcraft's basic data structure.
 |
 | Authors: Axel Kittenberger
 */
@@ -9,7 +10,8 @@
 | Imports
 */
 var
-	Jools;
+	Jools,
+	Path;
 
 
 /*
@@ -34,6 +36,9 @@ if( typeof( window ) === 'undefined' )
 {
 	Jools =
 		require( './jools' );
+
+	Path =
+		require( './path' );
 }
 
 
@@ -514,6 +519,123 @@ Twig =
 
 
 /*
+| Gets the node a path leads to.
+*/
+Twig.prototype.getPath =
+	function(
+		path,
+		shorten
+	)
+{
+	if( !Path.isPath( path ) ) // TODO CHECK
+	{
+		throw new Error(
+			'not a path.'
+		);
+	}
+
+	if( shorten < 0 )
+	{
+		shorten +=
+			path.length;
+	}
+
+	if( shorten < 0 )
+	{
+		throw new Error( 'getPath invalid shorten' );
+	}
+
+	var
+		aZ =
+			Jools.is( shorten ) ? shorten : path.length,
+
+		twig =
+			this;
+
+	for(
+		var a = 0;
+		a < aZ;
+		a++
+	)
+	{
+		if( !Jools.isnon( twig ) )
+		{
+			return null;
+		}
+
+		if( this.verse[ Twig.getType( twig ) ].copse )
+		{
+			twig =
+				twig.copse [ path.get( a ) ];
+		}
+		else
+		{
+			twig =
+				twig [ path.get( a ) ];
+		}
+	}
+
+	return twig;
+};
+
+
+/*
+| Returns a tree where the node pointed by path is replaced by val.
+*/
+Twig.prototype.setPath =
+	function(
+		path,
+		val,
+		shorten
+	)
+{
+	if( !Path.isPath( path ) )
+	{
+		throw new Error( 'no path' );
+	}
+
+	if( shorten < 0 )
+	{
+		shorten +=
+			path.length;
+	}
+
+	if( shorten < 0 )
+	{
+		throw new Error( 'invalid shorten' );
+	}
+
+	var
+		aZ =
+		Jools.is( shorten ) ? shorten : path.length;
+
+	for(
+		var a = aZ - 1;
+		a >= 0;
+		a--
+	)
+	{
+		var
+			twig =
+				this.getPath(
+					path,
+					a
+				);
+
+		val =
+			new Twig(
+				twig,
+				this.verse,
+				path.get( a ),
+				val
+			);
+	}
+
+	return val;
+};
+
+
+/*
 | Returns the rank of the key
 | That means it returns the index of key in the ranks array.
 */
@@ -632,6 +754,16 @@ Twig.getType =
 	}
 };
 
+/*
+| Returns the pattern for object o.
+*/
+Twig.prototype.getPattern =
+	function(
+		o
+	)
+{
+	return this.verse[ Twig.getType( o ) ];
+};
 
 /*
 | Node export

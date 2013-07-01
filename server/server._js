@@ -38,8 +38,8 @@ var
 	Resource =
 		require( './resource' ),
 
-	Tree =
-		require( '../shared/tree' ),
+	Twig =
+		require( '../shared/twig' ),
 
 	config =
 		require( '../config' ),
@@ -410,7 +410,7 @@ Server.prototype.loadSpace =
 				[ ],
 
 			$tree :
-				new Tree(
+				new Twig(
 					{
 						type :
 							'Space'
@@ -776,9 +776,6 @@ Server.prototype.prepareResources =
 			'fb',
 
 		'shared/twig.js',
-			'fb',
-
-		'shared/tree.js',
 			'fb',
 
 		'shared/sign.js',
@@ -1538,8 +1535,11 @@ Server.prototype.createSpace =
 				[ ],
 
 			$tree :
-				new Tree(
-					{ type : 'Space' },
+				new Twig(
+					{
+						type :
+							'Space'
+					},
 					Meshverse
 				),
 
@@ -2460,11 +2460,12 @@ Server.prototype.cmdGet =
 	var node;
 	try
 	{
-		node = tree.getPath( new Path( cmd.path ) );
+		node =
+			tree.getPath( new Path( cmd.path ) );
 	}
 	catch( err )
 	{
-		throw reject( 'cannot get path: ' + err.message );
+		throw Jools.reject( 'cannot get path: ' + err.message );
 	}
 
 	return {

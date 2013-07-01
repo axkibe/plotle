@@ -31,7 +31,7 @@ var
 	shell,
 	system,
 	theme,
-	Tree,
+	Twig,
 	Widgets;
 
 
@@ -106,7 +106,7 @@ Forms.Form =
 
 	var tree =
 	this.tree =
-		new Tree(
+		new Twig(
 			this.layout,
 			Pattern
 		);
@@ -132,11 +132,12 @@ Forms.Form =
 	this.$hover =
 		inherit ? inherit.$hover : null;
 
-	var root =
-		tree.root;
+	var
+		copse =
+			tree.copse,
 
-	var ranks =
-		root.ranks;
+		ranks =
+			tree.ranks;
 
 	for(
 		a = 0, aZ = ranks.length;
@@ -148,7 +149,7 @@ Forms.Form =
 			ranks[ a ];
 
 		var twig =
-			root.copse[ name ];
+			copse[ name ];
 
 		var Proto =
 			this.getWidgetPrototype( twig.type );
@@ -262,11 +263,8 @@ Form.prototype.draw =
 		Euclid.View.proper
 	);
 
-	var root =
-		this.tree.root;
-
 	var ranks =
-		root.ranks;
+		this.tree.ranks;
 
 	var focus =
 		this.getFocus( );
@@ -356,7 +354,7 @@ Form.prototype.pointingHover =
 		null;
 
 	var layout =
-		this.tree.root;
+		this.tree;
 
 	var ranks =
 		layout.ranks;
@@ -446,7 +444,7 @@ Form.prototype.pointingStart =
 	)
 {
 	var layout =
-		this.tree.root;
+		this.tree;
 
 	var ranks =
 		layout.ranks;
@@ -512,8 +510,8 @@ Form.prototype.cycleFocus =
 		dir
 	)
 {
-	var root =
-		this.tree.root;
+	var tree =
+		this.tree;
 
 	var focus =
 		this.getFocus( );
@@ -524,7 +522,7 @@ Form.prototype.cycleFocus =
 	}
 
 	var rank =
-		root.rankOf( focus.name );
+		tree.rankOf( focus.name );
 
 	var rs =
 		rank;
@@ -534,7 +532,7 @@ Form.prototype.cycleFocus =
 	while( true )
 	{
 		rank =
-			( rank + dir + root.length ) % root.length;
+			( rank + dir + tree.length ) % tree.length;
 
 		if( rank === rs )
 		{
@@ -542,7 +540,7 @@ Form.prototype.cycleFocus =
 		}
 
 		name =
-			root.ranks[ rank ];
+			tree.ranks[ rank ];
 
 		ve =
 			this.$sub[ name ];

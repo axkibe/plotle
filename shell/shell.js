@@ -189,7 +189,7 @@ Shell.prototype.update =
 	)
 {
 	this.$space.update(
-		tree.root,
+		tree,
 		chgX
 	);
 
@@ -1301,7 +1301,7 @@ Shell.prototype.onAquireSpace =
 
 	this.$space =
 		new Visual.Space(
-			tree.root,
+			tree,
 			spaceUser,
 			spaceTag,
 			access

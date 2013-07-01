@@ -27,9 +27,9 @@ var
 	Jools,
 	Pattern,
 	Proc,
-	Tree,
 	shell,
 	theme,
+	Twig,
 	Widgets;
 
 
@@ -42,7 +42,9 @@ var
 
 if( typeof( window ) === 'undefined' )
 {
-	throw new Error( 'this code needs a browser!' );
+	throw new Error(
+		'this code needs a browser!'
+	);
 }
 
 
@@ -128,7 +130,7 @@ Disc.Disc =
 	// TODO inherit
 	var tree =
 	this._tree =
-		new Tree(
+		new Twig(
 			this.layout,
 			Pattern
 		);
@@ -164,14 +166,11 @@ Disc.Disc =
 			inherit._icons :
 			new Disc.Icons( );
 
-	var root =
-		tree.root;
-
 	var ranks =
-		root.ranks;
+		tree.ranks;
 
 	var copse =
-		root.copse;
+		tree.copse;
 
 	for(
 		var r = 0, rZ = ranks.length;

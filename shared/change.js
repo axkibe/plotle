@@ -939,7 +939,10 @@ Change.prototype.split = function( tree )
 |
 | A twig's rank in a copse is changed.
 */
-Change.prototype.rank = function( tree )
+Change.prototype.rank =
+	function(
+		tree
+	)
 {
 	var cm  = 'change.rank';
 	var src = this.src;

@@ -22,11 +22,11 @@ var
 	Meshverse,
 	Path,
 	Sign,
-	Tree,
 	Jools,
 	config,
 	shell,
-	system;
+	system,
+	Twig;
 
 
 /*
@@ -496,7 +496,7 @@ IFace.prototype.aquireSpace =
 
 		self.$cSpace =
 		self.$rSpace =
-			new Tree(
+			new Twig(
 				asw.node,
 				Meshverse
 			);
