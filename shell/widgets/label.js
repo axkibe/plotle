@@ -16,8 +16,10 @@ Widgets =
 /*
 | Imports
 */
-var Curve;
-var Jools;
+var
+	Curve,
+	Euclid,
+	Jools;
 
 
 /*

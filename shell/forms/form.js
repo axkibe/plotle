@@ -104,7 +104,6 @@ Forms.Form =
 			this.screensize
 		);
 
-	var tree =
 	this.tree =
 		new Tree(
 			this.layout,
@@ -134,10 +133,10 @@ Forms.Form =
 
 	var
 		twig =
-			tree.twig,
+			this.tree.twig,
 
 		ranks =
-			tree.ranks;
+			this.tree.ranks;
 
 	for(
 		a = 0, aZ = ranks.length;

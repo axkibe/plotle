@@ -128,7 +128,6 @@ Disc.Disc =
 		);
 
 	// TODO inherit
-	var tree =
 	this._tree =
 		new Tree(
 			this.layout,
@@ -168,10 +167,10 @@ Disc.Disc =
 
 	var
 		twig =
-			tree.twig,
+			this._tree.twig,
 
 		ranks =
-			tree.ranks;
+			this._tree.ranks;
 
 	for(
 		var r = 0, rZ = ranks.length;

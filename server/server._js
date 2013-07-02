@@ -775,16 +775,19 @@ Server.prototype.prepareResources =
 		'shared/meshmashine.js',
 			'fb',
 
+		'shell/curve.js',
+			'fb',
+
 		'shell/iface.js',
 			'fb',
 
 		'shell/peer.js',
 			'fb',
 
-		'shell/curve.js',
+		'shell/pattern.js',
 			'fb',
 
-		'shell/pattern.js',
+		'shell/stubs.js',
 			'fb',
 
 		'shell/disc/icons.js',
