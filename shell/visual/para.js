@@ -51,7 +51,6 @@ Visual.Para =
 		tag,
 		tree,
 		path,
-		phrase,
 		fontsize,
 		flowWidth
 	)
@@ -72,26 +71,10 @@ Visual.Para =
 			);
 		}
 
-		if( tree !== null && path === null )
+		if( tree === null )
 		{
 			throw new Error(
-				'tree needs path'
-			);
-		}
-
-		/* TODO
-		if( tree !== null && phrase !== null )
-		{
-			throw new Error(
-				'cannot have tree and phrase.'
-			);
-		}
-		*/
-
-		if( tree === null && phrase === null )
-		{
-			throw new Error(
-				'need tree or phrase'
+				'tree missing'
 			);
 		}
 
@@ -116,9 +99,7 @@ Visual.Para =
 		flowWidth;
 
 	this.text =
-		tree ?
-			tree.text :
-			phrase;
+		tree.text;
 
 	// caching
 	this.$fabric =
@@ -155,9 +136,6 @@ Para.create =
 		path =
 			null,
 
-		phrase =
-			null,
-
 		fontsize =
 			null,
 
@@ -189,13 +167,6 @@ Para.create =
 			case 'path' :
 
 				path =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'phrase' :
-
-				phrase =
 					arguments[ a + 1 ];
 
 				break;
@@ -236,12 +207,6 @@ Para.create =
 				inherit.path;
 		}
 
-		if( !phrase )
-		{
-			phrase =
-				inherit.phrase;
-		}
-
 		if( !fontsize )
 		{
 			fontsize =
@@ -260,7 +225,6 @@ Para.create =
 				inherit.path === path ||
 				( inherit.path && inherit.path.equals( path ) )
 			) &&
-			inherit.phrase === phrase &&
 			inherit.fontsize === fontsize &&
 			inherit.flowWidth === flowWidth
 		)
@@ -274,7 +238,6 @@ Para.create =
 			'XOXO',
 			tree,
 			path,
-			phrase,
 			fontsize,
 			flowWidth
 		)

@@ -29,7 +29,9 @@ var
 
 if( CHECK && typeof( window ) === 'undefined' )
 {
-	throw new Error( 'this code needs a browser!' );
+	throw new Error(
+		'this code needs a browser!'
+	);
 }
 
 
@@ -37,6 +39,7 @@ if( CHECK && typeof( window ) === 'undefined' )
 | Constructor.
 */
 Stubs = { };
+
 
 Stubs.labelDoc =
 	new Tree(
@@ -61,6 +64,35 @@ Stubs.labelDoc =
 					'1'
 				]
 		},
+
+		Meshverse
+	);
+
+
+Stubs.emptyDoc =
+	new Tree(
+		{
+			type:
+				'Doc',
+
+			twig :
+				{
+					'1' :
+						{
+							type :
+								'Para',
+
+							text :
+								''
+						}
+				},
+
+			ranks :
+				[
+					'1'
+				]
+		},
+
 		Meshverse
 	);
 

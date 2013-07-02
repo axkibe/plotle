@@ -52,7 +52,6 @@ Visual.Doc =
 		inherit,
 		tree,
 		path,
-		phrase,
 		fontsize,
 		flowWidth,
 		paraSep
@@ -78,9 +77,6 @@ Visual.Doc =
 		path
 	);
 
-	this.phrase =
-		phrase;
-
 	this.fontsize =
 		fontsize;
 
@@ -95,17 +91,10 @@ Visual.Doc =
 
 	if( CHECK )
 	{
-		if( tree && !path )
+		if( !tree )
 		{
 			throw new Error(
-				'tree needs path'
-			);
-		}
-
-		if( tree && phrase )
-		{
-			throw new Error(
-				'cannot have tree and phrase.'
+				'tree missing.'
 			);
 		}
 
@@ -155,7 +144,6 @@ Visual.Doc =
 					ranks[ r ];
 
 				{
-					// TODO Para.create for reusal
 					sub[ k ] =
 						Visual.Para.create(
 							'inherit',
@@ -163,6 +151,7 @@ Visual.Doc =
 							'tree',
 								twig[ k ],
 							'path',
+								path &&
 								new Path(
 									path,
 									'++', k
@@ -184,8 +173,6 @@ Visual.Doc =
 			Visual.Para.create(
 				'inherit',
 					inherit && inherit.$sub[ '1 ' ],
-				'phrase',
-					phrase,
 				'fontsize',
 					fontsize,
 				'flowWidth',
@@ -217,9 +204,6 @@ Doc.create =
 			null,
 
 		path =
-			null,
-
-		phrase =
 			null,
 
 		fontsize =
@@ -256,13 +240,6 @@ Doc.create =
 			case 'path' :
 
 				path =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'phrase' :
-
-				phrase =
 					arguments[ a + 1 ];
 
 				break;
@@ -311,12 +288,6 @@ Doc.create =
 		}
 
 
-		if( phrase === null )
-		{
-			phrase =
-				inherit.phrase;
-		}
-
 		if( fontsize === null )
 		{
 			fontsize =
@@ -341,7 +312,6 @@ Doc.create =
 				inherit.path === path ||
 				( inherit.path && inherit.path.equals( path ) )
 			) &&
-			inherit.phrase === phrase &&
 			inherit.fontsize === fontsize &&
 			inherit.flowWidth === flowWidth &&
 			inherit.paraSep === paraSep
@@ -357,7 +327,6 @@ Doc.create =
 			inherit,
 			tree,
 			path,
-			phrase,
 			fontsize,
 			flowWidth,
 			paraSep

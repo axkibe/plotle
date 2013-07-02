@@ -26,6 +26,7 @@ var
 	Path,
 	Sign,
 	shell,
+	Stubs,
 	theme;
 
 
@@ -867,8 +868,8 @@ Space.prototype.dragStart =
 							),
 						'doc',
 							Visual.Doc.create(
-								'phrase',
-									'',
+								'tree',
+									Stubs.emptyDoc,
 								'fontsize',
 									theme.note.fontsize,
 								'flowWidth',
@@ -897,8 +898,8 @@ Space.prototype.dragStart =
 							theme.note.fontsize, // FIXME
 						'doc',
 							Visual.Doc.create(
-								'phrase',
-									'Label',
+								'tree',
+									Stubs.labelDoc,
 								'fontsize',
 									theme.note.fontsize, // FIXME
 								'flowWidth',
