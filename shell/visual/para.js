@@ -910,8 +910,11 @@ Para.prototype.input =
 		para =
 			this,
 
+		space =
+			shell.$space,
+
 		item =
-			shell.$space.getSub(
+			space.getSub(
 				para.path,
 				'Item'
 			),
@@ -934,14 +937,25 @@ Para.prototype.input =
 		);
 
 		caret =
-			shell.$space.$caret;
+			space.$caret;
 
         if( rx[ 2 ] )
 		{
+			// FIXME, somehow use changes
+			// over return values
 			shell.peer.split(
 				para.textPath,
 				caret.sign.at1
 			);
+
+			item =
+				space.getSub(
+					para.path,
+					'Item'
+				);
+
+			doc =
+				item.$sub.doc;
 
 			caret =
 				shell.$space.$caret;
@@ -953,7 +967,7 @@ Para.prototype.input =
 		}
     }
 
-	item.scrollCaretIntoView();
+	item.scrollCaretIntoView( );
 };
 
 
@@ -1374,20 +1388,6 @@ Para.prototype.keyUp =
 
 
 /*
-| Force clears all caches.
-*/
-Para.prototype.knock =
-	function( )
-{
-	this.$fabric =
-		null;
-
-	this.$flow =
-		null;
-};
-
-
-/*
 | Handles a special key
 */
 Para.prototype.specialKey =
@@ -1453,8 +1453,6 @@ Para.prototype.specialKey =
 				);
 
 				caret.show( );
-
-				item.poke( );
 
 				shell.redraw =
 					true;
@@ -1678,8 +1676,6 @@ Para.prototype.specialKey =
 						caret.sign
 					);
 
-				item.poke( );
-
 				shell.redraw =
 					true;
 
@@ -1694,8 +1690,6 @@ Para.prototype.specialKey =
 				caret.sign.path,
 				'Item'
 			);
-
-		item.poke( );
 
 		item.scrollCaretIntoView( );
 

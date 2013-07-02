@@ -229,16 +229,5 @@ DocItem.prototype.click =
 	return true;
 };
 
-/*
-| force-clears all caches.
-*/
-DocItem.prototype.knock =
-	function( )
-{
-	Visual.Item.prototype.knock.call( this );
-
-	this.$sub.doc.knock( );
-};
-
 
 } )( );

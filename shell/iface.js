@@ -1042,8 +1042,9 @@ IFace.prototype.alter =
 	this._$redo =
 		[ ];
 
-	var undo =
-		this._$undo;
+	var
+		undo =
+			this._$undo;
 
 	undo.push( c );
 
@@ -1062,7 +1063,7 @@ IFace.prototype.alter =
 		);
 	}
 
-    return chgX;
+    return r.tree;
 };
 
 

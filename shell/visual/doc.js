@@ -617,23 +617,6 @@ Doc.prototype.getParaAtPoint =
 };
 
 
-/*
-| Force-clears all caches.
-*/
-Doc.prototype.knock =
-	function( )
-{
-	for(
-		var r = 0, rZ = this.ranks.length;
-		r < rZ;
-		r++
-	)
-	{
-		this.atRank( r ).knock( );
-	}
-};
-
-
 
 /*
 | Sketches a selection.

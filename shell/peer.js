@@ -720,14 +720,20 @@ Peer.prototype.split =
 		offset
 	)
 {
-	this._iface.alter(
-		{
-			path: path,
-			at1: offset
-		},
-		{
-			proc: 'splice'
-		}
+	return (
+		this._iface.alter(
+			{
+				path:
+					path,
+
+				at1:
+					offset
+			},
+			{
+				proc:
+					'splice'
+			}
+		)
 	);
 };
 

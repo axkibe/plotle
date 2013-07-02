@@ -759,16 +759,12 @@ Note.prototype.scrollCaretIntoView =
 		this.setScrollbar(
 			cp.n + pnw.y - imargin.n
 		);
-
-		this.poke( );
 	}
 	else if( cp.s + pnw.y + imargin.s > sy + zone.height )
 	{
 		this.setScrollbar(
 			cp.s + pnw.y - zone.height + imargin.s
 		);
-
-		this.poke( );
 	}
 };
 
@@ -794,8 +790,6 @@ Note.prototype.scrollPage =
 	this.setScrollbar(
 		this.scrollbarY.getPos( ) + dir * zone.height - fs * 2
 	);
-
-	this.poke( );
 };
 
 
@@ -825,8 +819,6 @@ Note.prototype.mousewheel =
 	this.setScrollbar(
 		this.scrollbarY.getPos( ) - dir * system.settings.textWheelSpeed
 	);
-
-	this.poke( );
 
 	shell.redraw =
 		true;
