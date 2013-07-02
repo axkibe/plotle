@@ -49,7 +49,7 @@ Curve =
 		throw new Error( 'Curve tree not a Curve' );
 	}
 
-	if( tree.copse[ tree.ranks[ 0 ] ].type !== 'MoveTo' )
+	if( tree.twig[ tree.ranks[ 0 ] ].type !== 'MoveTo' )
 	{
 		throw new Error(' Curve does not begin with MoveTo' );
 	}
@@ -60,7 +60,7 @@ Curve =
 		a++
 	) {
 		var ct =
-			tree.copse[ tree.ranks[ a ] ];
+			tree.twig[ tree.ranks[ a ] ];
 
 		data.push(
 			{

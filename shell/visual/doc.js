@@ -142,8 +142,8 @@ Visual.Doc =
 			tree.ranks;
 
 		var
-			copse =
-				tree.copse;
+			twig =
+				tree.twig;
 
 		for(
 			var r = 0, rZ = tree.length;
@@ -161,7 +161,7 @@ Visual.Doc =
 							'inherit',
 								inherit && inherit.$sub[ k ],
 							'tree',
-								copse[ k ],
+								twig[ k ],
 							'path',
 								new Path(
 									path,

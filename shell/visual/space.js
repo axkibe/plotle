@@ -80,11 +80,11 @@ Visual.Space =
 			0
 		);
 
-	for( var k in tree.copse )
+	for( var k in tree.twig )
 	{
 		sub[ k ] =
 			this.createItem(
-				tree.copse[ k ],
+				tree.twig[ k ],
 				k
 			);
 	}
@@ -131,14 +131,14 @@ Space.prototype.update =
 		this.$sub =
 				{ },
 
-		copse =
-			tree.copse;
+		twig =
+			tree.twig;
 
-	for( var k in copse )
+	for( var k in twig )
 	{
 		sub[ k ] =
 			this.createItem(
-				tree.copse[ k ],
+				tree.twig[ k ],
 				k,
 				old[ k ]
 			);

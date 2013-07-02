@@ -166,11 +166,12 @@ Disc.Disc =
 			inherit._icons :
 			new Disc.Icons( );
 
-	var ranks =
-		tree.ranks;
+	var
+		twig =
+			tree.twig,
 
-	var copse =
-		tree.copse;
+		ranks =
+			tree.ranks;
 
 	for(
 		var r = 0, rZ = ranks.length;
@@ -183,7 +184,7 @@ Disc.Disc =
 				ranks[ r ],
 
 			tree =
-				copse[ wname ];
+				twig[ wname ];
 
 		switch( tree.type )
 		{

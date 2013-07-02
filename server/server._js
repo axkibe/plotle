@@ -208,10 +208,10 @@ Server.prototype.checkRepositorySchemaVersion =
 
 	if( version )
 	{
-		if( version.version !== 3 )
+		if( version.version !== 4 )
 		{
 			throw new Error(
-				'Wrong repository schema version, expected 3, got '+
+				'Wrong repository schema version, expected 4, got '+
 				version.version
 			);
 		}
@@ -219,22 +219,7 @@ Server.prototype.checkRepositorySchemaVersion =
 		return;
 	}
 
-	// if there is no global.version variable the database is either
-	// empty or a version 2 schema. So check for version 2
-
-	var changes =
-		this.$db.connection.collection(
-			'changes',
-		_);
-
-	if( changes.find(_).nextObject(_) !== null )
-	{
-		throw new Error(
-			'Found a version 2 schema, expected 3'
-		);
-	}
-
-	// if not, initializes the database repository
+	// otherwise initializes the database repository
 
 	this.initRepository(_);
 };

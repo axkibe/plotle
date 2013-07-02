@@ -133,8 +133,8 @@ Forms.Form =
 		inherit ? inherit.$hover : null;
 
 	var
-		copse =
-			tree.copse,
+		twig =
+			tree.twig,
 
 		ranks =
 			tree.ranks;
@@ -150,7 +150,7 @@ Forms.Form =
 				ranks[ a ],
 
 			tree =
-				copse[ name ],
+				twig[ name ],
 
 			Proto =
 				this.getWidgetPrototype( tree.type );

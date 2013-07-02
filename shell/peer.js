@@ -274,7 +274,7 @@ Peer.prototype.newNote =
 						type :
 							'Doc',
 
-						copse :
+						twig :
 							{
 								'1' :
 								{
@@ -446,18 +446,29 @@ Peer.prototype.newLabel =
 			{
 				val :
 				{
-					type      : 'Label',
-					fontsize  : fontsize,
-					pnw       : pnw,
-					doc       :
+					type :
+						'Label',
+
+					fontsize :
+						fontsize,
+
+					pnw :
+						pnw,
+
+					doc :
 					{
-						type  : 'Doc',
-						copse :
+						type :
+							'Doc',
+
+						twig :
 						{
 							'1' :
 							{
-								type: 'Para',
-								text: text
+								type :
+									'Para',
+
+								text :
+									text
 							}
 						},
 						ranks : [
@@ -542,7 +553,7 @@ Peer.prototype.newRelation =
 						type :
 							'Doc',
 
-						copse :
+						twig :
 						{
 							'1' :
 							{

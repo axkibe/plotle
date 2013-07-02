@@ -1,8 +1,5 @@
 #!/usr/local/bin/_node -lp
 
-this is not usable
-exit(1);
-
 /*
 | Converts a v03 repository to v04
 |
@@ -105,17 +102,18 @@ trg.connection =
 console.log( '* dropping trg' );
 	trg.connection.dropDatabase(_);
 
-src.global = src.connection.collection('global',  _);
-src.spaces = src.connection.collection('spaces',  _);
-src.users  = src.connection.collection('users',   _);
+src.global = src.connection.collection( 'global',  _);
+src.spaces = src.connection.collection( 'spaces',  _);
+src.users  = src.connection.collection( 'users',   _);
 
-trg.global = trg.connection.collection('global',  _);
-trg.users  = trg.connection.collection('users',   _);
-trg.spaces = trg.connection.collection('spaces',  _);
+trg.global = trg.connection.collection( 'global',  _);
+trg.users  = trg.connection.collection( 'users',   _);
+trg.spaces = trg.connection.collection( 'spaces',  _);
 
-if( src.global.count(_) == 0 ) {
-	console.log('ERROR: src has a no "global" collection');
-	process.exit(1);
+if( src.global.count(_) == 0 )
+{
+	console.log( 'ERROR: src has a no "global" collection' );
+	process.exit( 1 );
 }
 
 o =
@@ -183,23 +181,32 @@ for(
 
 console.log( '* copying src.changes.* -> trg.changes.*' );
 
-var translatePath =
-	function(path)
+var translateChange =
+	function( o )
 {
-	for(
-		var a = 0;
-		a < path.length;
-		a++
+	if(
+		Jools.isString( o ) ||
+		typeof( o ) === 'number' ||
+		o === null
 	)
 	{
-		if( path[ a ].length === 18 || path[ a ] === '1' )
-		{
-			path.splice( a, 0, 'copse' );
-			a++;
-		}
+		return o;
 	}
-};
 
+	var
+		t =
+			o instanceof Array ?
+			[ ] :
+			{ };
+
+	for( var k in o )
+	{
+		t[ k === 'copse' ? 'twig' : k ] =
+			translateChange( o[ k ] );
+	}
+
+	return t;
+};
 
 for( var spaceName in spaces )
 {
@@ -221,134 +228,11 @@ for( var spaceName in spaces )
 		o = cursor.nextObject(_)
 	)
 	{
-		var
-			s =
-				o.chgX.src,
-
-			t =
-				o.chgX.trg;
-
-		/*
-		if( s.val && typeof( s.val.fontsize ) === 'number' )
-		{
-			if( !s.val.doc ) {
-				throw new Error( 'doc missing for fontsize!' );
-			}
-
-			s.val.doc.fontsize =
-				s.val.fontsize;
-
-			delete s.val.fontsize;
-		}
-		*/
-
-		if( s.path )
-		{
-			translatePath( s.path );
-		}
-
-		if( t.path )
-		{
-			translatePath( t.path );
-		}
-
-
-		// s.path[ s.path.length - 1 ] === 'fontsize' )
-		// {
-		//	s.path[ s.path.length - 1 ] = 'doc';
-		//	s.path[ s.path.length - 1 ] = 'fontsize';
-		// }
-
-		/*
-		if( t.val && typeof( t.val.fontsize ) === 'number' )
-		{
-			if( !t.val.doc ) {
-				throw new Error( 'doc missing for fontsize!' );
-			}
-
-			t.val.doc.fontsize =
-				t.val.fontsize;
-
-			delete t.val.fontsize;
-		}
-
-		if( t.path && t.path[ t.path.length - 1 ] === 'fontsize' )
-		{
-			t.path[ t.path.length - 1 ] = 'doc';
-			t.path[ t.path.length - 1 ] = 'fontsize';
-		}
-		*/
-
-
+		o = translateChange( o );
 
 		tc.insert( o, _)
 	}
 }
-
-
-/*
-cursor = src.changes.find(_);
-
-	if (!users[o.user] && o.user.substr(0,5) !== 'visit' ) {
-		console.log('ERROR: user: '+o.user+' not in users table');
-		process.exit(1);
-	}
-
-	var cSrc = o.chgX.src;
-	var cTrg = o.chgX.trg;
-
-	if (cSrc.path) {
-		cSrc.space = translateSpaceName(cSrc.path[0]);
-		cSrc.path.shift();
-	}
-
-	if (cTrg.path) {
-		cTrg.space = translateSpaceName(cTrg.path[0]);
-		cTrg.path.shift();
-	}
-
-	var space;
-	if (cSrc.space && cTrg.space) {
-		if (cSrc.space !== cTrg.space) {
-			console.log('ERROR: paths mismatch at change._id ' + o._id);
-			process.exit(1);
-		}
-		space = cSrc.space;
-	} else if (cSrc.space)
-		{ space = cSrc.space; }
-	else if (cTrg.space)
-		{ space = cTrg.space; }
-	else {
-		console.log('ERROR: paths mising at change._id ' + o._id);
-		process.exit(1);
-	}
-
-	if (!is(spaces[space])) {
-		trg.spaces.insert({
-			_id : space
-		}, _);
-
-		spaces[space] = 0;
-	}
-
-	// skips old style space creations
-	if (cSrc.val && cSrc.val.type === 'Space')
-		{ continue; }
-
-	o._id = ++spaces[space];
-
-	var cname = 'changes:' + space;
-	if (!trg[cname])
-		{ trg[cname] = trg.connection.collection(cname, _); }
-
-	trg[cname].insert(o, _);
-}
-
-console.log('* created:');
-for(var a in spaces) {
-	console.log('  changes:'+a+'  '+spaces[a]);
-}
-*/
 
 console.log( '* closing connections' );
 src.connection.close( );

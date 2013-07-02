@@ -97,7 +97,7 @@ SignUp.prototype.layout =
 	type :
 		'Layout',
 
-	copse :
+	twig :
 	{
 		'headline' :
 		{

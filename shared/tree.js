@@ -108,7 +108,7 @@ Tree =
 	}
 
 	var
-		copse =
+		twig =
 			null,
 
 		ranks =
@@ -144,12 +144,12 @@ Tree =
 		this
 	);
 
-	if( pattern.copse )
+	if( pattern.twig )
 	{
-		copse =
-		this.copse =
-			model.copse ?
-				Jools.copy( model.copse, { } ) :
+		twig =
+		this.twig =
+			model.twig ?
+				Jools.copy( model.twig, { } ) :
 				{ };
 	}
 
@@ -253,9 +253,9 @@ Tree =
 						);
 					}
 
-					if( pattern.copse )
+					if( pattern.twig )
 					{
-						copse[ k ] =
+						twig[ k ] =
 							k1;
 					}
 					else
@@ -304,11 +304,11 @@ Tree =
 		klen =
 			0;
 
-	if( pattern.copse )
+	if( pattern.twig )
 	{
-		for( k in copse )
+		for( k in twig )
 		{
-			if( !Object.hasOwnProperty.call( copse, k ) )
+			if( !Object.hasOwnProperty.call( twig, k ) )
 			{
 				continue;
 			}
@@ -316,26 +316,26 @@ Tree =
 			if( !Jools.isString( k ) )
 			{
 				throw Jools.reject(
-					'key of copse no String: ' + k
+					'key of twig no String: ' + k
 				);
 			}
 
 			val =
-				copse[ k ];
+				twig[ k ];
 
 			if( val === null )
 			{
-				delete copse[ k ];
+				delete twig[ k ];
 
 				continue;
 			}
 
 			klen++;
 
-			if( !pattern.copse[ Tree.getType( val ) ] )
+			if( !pattern.twig[ Tree.getType( val ) ] )
 			{
 				throw Jools.reject(
-					type + '.copse does not allow ' + val.type
+					type + '.twig does not allow ' + val.type
 				);
 			}
 
@@ -344,27 +344,27 @@ Tree =
 				case Boolean :
 
 					throw new Error(
-						'.copse does not allow native Boolean'
+						'.twig does not allow native Boolean'
 					);
 
 				case Number :
 
 					throw new Error(
-						'.copse does not allow native Number'
+						'.twig does not allow native Number'
 					);
 
 				case String :
 
 					throw new Error(
-						'.copse does not allow native String'
+						'.twig does not allow native String'
 					);
 			}
 
 			if( !val._$grown )
 			{
-				copse[ k ] =
+				twig[ k ] =
 					new Tree(
-						copse[ k ],
+						twig[ k ],
 						verse
 					);
 			}
@@ -486,7 +486,7 @@ Tree =
 		if( aZ !== klen )
 		{
 			throw Jools.reject(
-				'ranks length does not match to copse'
+				'ranks length does not match to twig'
 			);
 		}
 
@@ -495,10 +495,10 @@ Tree =
 			k =
 				ranks[ a ];
 
-			if( !Jools.is( copse[ k ] ) )
+			if( !Jools.is( twig[ k ] ) )
 			{
 				throw new Error(
-					'copse misses ranks value: ' + k
+					'twig misses ranks value: ' + k
 				);
 			}
 		}
@@ -562,10 +562,10 @@ Tree.prototype.getPath =
 			return null;
 		}
 
-		if( this.verse[ Tree.getType( tree ) ].copse )
+		if( this.verse[ Tree.getType( tree ) ].twig )
 		{
 			tree =
-				tree.copse [ path.get( a ) ];
+				tree.twig[ path.get( a ) ];
 		}
 		else
 		{
@@ -684,7 +684,7 @@ Tree.prototype.rankOf =
 
 	var rank =
 	rof[ key ] =
-		Jools.is( this.copse[ key ] ) ?
+		Jools.is( this.twig[ key ] ) ?
 			ranks.indexOf( key ) :
 			-1;
 
@@ -693,7 +693,7 @@ Tree.prototype.rankOf =
 
 
 /*
-| Returns length of a copse
+| Returns length of the twig
 */
 Jools.lazyFixate(
 	Tree.prototype,
@@ -715,7 +715,7 @@ Tree.prototype.newUID =
 		Jools.uid( );
 
 	return (
-		( !Jools.is( this.copse[ u ] ) ) ?
+		( !Jools.is( this.twig[ u ] ) ) ?
 			u :
 			this.newUID( )
 	);

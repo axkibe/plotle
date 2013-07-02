@@ -8,17 +8,19 @@
 /*
 | Export
 */
-var Range =
-	null;
+var
+	Range =
+		null;
 
 
 /*
 | Imports
 */
-var Jools;
-var shell;
-var system;
-var Visual;
+var
+	Jools,
+	shell,
+	system,
+	Visual;
 
 
 /*
@@ -198,10 +200,10 @@ Range.prototype.innerText =
 		s2.path.get(-2);
 
 	var text1 =
-		tree.copse[ key1 ].text;
+		tree.twig[ key1 ].text;
 
 	var text2 =
-		tree.copse[ key2 ].text;
+		tree.twig[ key2 ].text;
 
 	var buf = [
 		text1.substring(
@@ -218,7 +220,7 @@ Range.prototype.innerText =
 	{
 		buf.push(
 			'\n',
-			tree.copse[ tree.ranks[ r ] ].text
+			tree.twig[ tree.ranks[ r ] ].text
 		);
 	}
 

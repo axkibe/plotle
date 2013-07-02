@@ -49,7 +49,7 @@ Meshverse =
 {
 	'Space' :
 	{
-		copse :
+		twig :
 		{
 			'Label' :
 				true,
@@ -138,7 +138,7 @@ Meshverse =
 
 	'Doc' :
 	{
-		copse :
+		twig :
 		{
 			'Para' :
 				true
@@ -195,9 +195,9 @@ Meshverse =
 
 		Jools.immute( p );
 
-		if( p.copse )
+		if( p.twig )
 		{
-			Jools.immute( p.copse );
+			Jools.immute( p.twig );
 		}
 
 		if( p.must )
@@ -207,9 +207,9 @@ Meshverse =
 
 		if( p.must )
 		{
-			if( p.copse )
+			if( p.twig )
 			{
-				throw new Error( 'Patterns must not have .must and .copse' );
+				throw new Error( 'Patterns must not have .must and .twig' );
 			}
 
 			if( p.must.index )
@@ -218,9 +218,9 @@ Meshverse =
 			}
 		}
 
-		if( p.ranks && !p.copse )
+		if( p.ranks && !p.twig )
 		{
-			throw new Error( 'Patterns must not have .ranks without .copse' );
+			throw new Error( 'Patterns must not have .ranks without .twig' );
 		}
 	}
 

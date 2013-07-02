@@ -110,7 +110,7 @@ Pattern =
 
 	'Curve'   :
 	{
-		copse :
+		twig :
 		{
 			MoveTo :
 				true,
@@ -216,7 +216,7 @@ Pattern =
 
 	'Layout' :
 	{
-		copse :
+		twig :
 		{
 			Button :
 				true,

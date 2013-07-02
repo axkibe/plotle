@@ -61,7 +61,7 @@ config.database.port =
 | Name of the mongodb database
 */
 config.database.name =
-	'meshcraft03';
+	'meshcraft04';
 
 
 /*
@@ -112,7 +112,7 @@ config.debug.drawBoxes =
 | If true formats messages and JSON with whitespace/newlines
 */
 config.debug.puffed =
-	false;
+	true;
 
 
 /*

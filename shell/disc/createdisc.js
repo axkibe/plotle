@@ -127,7 +127,7 @@ CreateDisc.prototype.layout =
 	type :
 		'Layout',
 
-	copse :
+	twig :
 	{
 		'createNote' :
 		{

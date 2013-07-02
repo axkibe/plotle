@@ -744,10 +744,10 @@ Change.prototype.join =
 
 	var
 		para1 =
-			pivot.copse[ key  ],
+			pivot.twig[ key  ],
 
 		para2 =
-			pivot.copse[ key2 ];
+			pivot.twig[ key2 ];
 
 	// FIXME check other keys to be equal
 
@@ -857,7 +857,7 @@ Change.prototype.split = function( tree )
 	}
 
 	Jools.check(
-		!Jools.isnon( pivot.copse[ vKey ] ),
+		!Jools.isnon( pivot.twig[ vKey ] ),
 		cm, 'newUID not vacant: ', vKey
 	);
 
@@ -871,7 +871,7 @@ Change.prototype.split = function( tree )
 
 	var
 		para1 =
-			pivot.copse[ key ],
+			pivot.twig[ key ],
 
 		para2 =
 			new Tree(
@@ -937,7 +937,7 @@ Change.prototype.split = function( tree )
 /*
 | Change Operation: rank
 |
-| A tree's rank in a copse is changed.
+| A tree's rank is changed.
 */
 Change.prototype.rank =
 	function(

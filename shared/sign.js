@@ -112,16 +112,8 @@ Sign.prototype.affix = function(test, cm, base, key, val) {
 
 	if( test( this[ key ] ) )
 	{
-		if (! Jools.matches( val, this[ key ] ) )
+		if( !Jools.matches( val, this[ key ] ) )
 		{
-			console.log( key );
-			console.log( '\n' );
-			console.log( '\n' );
-			console.log( val );
-			console.log( '\n' );
-			console.log( '\n' );
-			console.log( this[ key ] );
-
 			throw new Jools.reject(
 				[
 					cm,
