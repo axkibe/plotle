@@ -510,22 +510,22 @@ MoveTo.prototype.setUsername =
 	this.$username =
 		username;
 
-	var userHomeButton =
-		this.$sub.userHomeButton;
+	var
+		userHomeButton =
+			this.$sub.userHomeButton,
 
-	if( username.substr( 0, 7 ) === 'visitor' )
-	{
-		userHomeButton.setVisible( false );
-	}
-	else
-	{
-		userHomeButton.setVisible( true );
+		isGuest =
+			 username.substr( 0, 7 ) === 'visitor';
 
-		userHomeButton.setText(
-			[ username, 'home' ]
+	this.$sub.userHomeButton =
+		Widgets.Button.create(
+			'inherit',
+				this.$sub.userHomeButton,
+			'visible',
+				!isGuest,
+			'text',
+				username + '\n' + 'home'
 		);
-	}
-
 };
 
 

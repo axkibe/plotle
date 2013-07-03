@@ -59,6 +59,16 @@ Disc.MainDisc =
 		screensize
 	)
 {
+	this.$hover =
+		inherit ?
+			inherit.$hover :
+			null;
+
+	this.$mode =
+		inherit ?
+			inherit.$mode :
+			null;
+
 	Disc.Disc.call(
 		this,
 		'name',
@@ -74,18 +84,6 @@ Disc.MainDisc =
 			screensize,
 			inherit && inherit.createDisc
 		);
-
-	if( inherit )
-	{
-		this.buttons.login.setText(
-			inherit.buttons.login.getText( )
-		);
-	}
-
-	this.$hover =
-		inherit ?
-			inherit.$hover :
-			null;
 
 	this.$user =
 		null;
@@ -1238,18 +1236,7 @@ MainDisc.prototype._weave =
 
 	for( var name in this.buttons )
 	{
-		var button =
-			buttons[ name ];
-
-		button.draw(
-			fabric,
-			Accent.state(
-				name === this.$hover,
-				shell.bridge.inMode(
-					this.getModeOfButton( button.name )
-				)
-			)
-		);
+		buttons[ name ].draw( fabric );
 	}
 
 	fabric.edge(
@@ -1259,31 +1246,13 @@ MainDisc.prototype._weave =
 		Euclid.View.proper
 	);
 
-	/*
-	| TODO fix boxes
-	*/
-	if( config.debug.drawBoxes )
-	{
-		fabric.paint(
-			Dash.getStyle( 'boxes' ),
-			new Euclid.Rect(
-				'pse',
-				new Euclid.Point(
-					this.width - 1,
-					this.height - 1
-				)
-			),
-			'sketch',
-			Euclid.View.proper
-		);
-	}
-
 	return fabric;
 };
 
 
 /*
 | Returns the mode associated with a button
+| TODO remove
 */
 MainDisc.prototype.getModeOfButton =
 	function(
@@ -1322,6 +1291,55 @@ MainDisc.prototype.getModeOfButton =
 		default :
 			throw new Error(
 				'unknown button:' + buttonName
+			);
+	}
+};
+
+
+/*
+| Returns the mode associated with a button
+| TODO remove
+*/
+MainDisc.prototype.getButtonOfMode =
+	function(
+		mode
+	)
+{
+	switch( mode )
+	{
+		case 'Create' :
+			return 'create';
+
+		case 'MoveTo' :
+			return 'moveto';
+
+		case 'Help' :
+			return 'help';
+
+		case 'Login' :
+			return 'login';
+
+		case 'Normal' :
+			return 'normal';
+
+		case 'Remove' :
+			return 'remove';
+
+		case 'SignUp' :
+			return 'signup';
+
+		case 'Space' :
+			return 'space';
+
+		case 'User' :
+			return 'user';
+
+		case null :
+			return null;
+
+		default :
+			throw new Error(
+				'unknown mode:' + mode
 			);
 	}
 };
@@ -1421,7 +1439,6 @@ MainDisc.prototype.pointingHover =
 		oframe.pse;
 
 	// shortcut if p is not near the panel
-	// TODO replace with oframe.within
 	if(
 		p === null ||
 		!oframe.within(
@@ -1661,20 +1678,61 @@ MainDisc.prototype.setHover =
 		name
 	)
 {
-	if( this.$hover === name )
+	// FIXME
+};
+
+
+/*
+| An action started or stoped or changed
+*/
+MainDisc.prototype.setMode =
+	function(
+		mode
+	)
+{
+	if( this.$mode === mode )
 	{
-		return null;
+		return;
 	}
 
 	this.$fabric =
 		null;
 
-	this.$hover =
-		name;
+	var
+		buttonName =
+			this.getButtonOfMode( this.$mode );
+
+	if( this.buttons[ buttonName ] )
+	{
+		this.buttons[ buttonName ] =
+			Widgets.Button.create(
+				'inherit',
+					this.buttons[ buttonName ],
+				'focusAccent',
+					false
+			);
+	}
+
+	this.$mode =
+		mode;
+
+	buttonName =
+		this.getButtonOfMode( mode );
+
+	if( this.buttons[ buttonName ] )
+	{
+		this.buttons[ buttonName ] =
+			Widgets.Button.create(
+				'inherit',
+					this.buttons[ buttonName ],
+				'focusAccent',
+					true
+			);
+	}
 
 	shell.redraw =
 		true;
-};
+}
 
 
 /*
@@ -1702,32 +1760,29 @@ MainDisc.prototype.arrivedAtSpace =
 	var buttons =
 		this.buttons;
 
-	buttons.space.setText( spaceUser + ':' + spaceTag );
+	buttons.space =
+		Widgets.Button.create(
+			'inherit',
+				buttons.space,
+			'text',
+				spaceUser + ':' + spaceTag
+		);
 
-	switch( access )
-	{
-		case 'ro' :
+	buttons.create =
+		Widgets.Button.create(
+			'inherit',
+				buttons.create,
+			'visible',
+				access === 'rw'
+		);
 
-			buttons.create.setVisible( false );
-
-			buttons.remove.setVisible( false );
-
-			break;
-
-		case 'rw' :
-
-			buttons.create.setVisible( true );
-
-			buttons.remove.setVisible( true );
-
-			break;
-
-		default :
-
-			throw new Error(
-				'access neither ro or rw: ' + access
-			);
-	}
+	buttons.remove =
+		Widgets.Button.create(
+			'inherit',
+				buttons.remove,
+			'visible',
+				access === 'rw'
+		);
 };
 
 
@@ -1743,43 +1798,47 @@ MainDisc.prototype.setUser =
 	this.$user =
 		user;
 
-	var buttons =
-		this.buttons;
+	var
+		buttons =
+			this.buttons,
 
-	buttons.user.setText( user );
+		isGuest =
+			user.substr( 0, 5 ) === 'visit';
 
-	buttons.login.setVisible( true );
-
-	if( user.substr( 0, 5 ) !== 'visit' )
-	{
-		this._$loggedIn =
-			true;
-
-		buttons.signup.setVisible( false );
-
-		buttons.login.setText(
-			[
-				'log',
-				'out'
-			]
+	buttons.user =
+		Widgets.Button.create(
+			'inherit',
+				buttons.user,
+			'text',
+				user,
+			'visible',
+				true
 		);
-	}
-	else
-	{
-		this._$loggedIn =
-			false;
 
-		buttons.signup.setVisible( true );
+	this._$loggedIn =
+		!isGuest;
 
-		buttons.login.setText(
-			[
-				'log',
-				'in'
-			]
+	buttons.signup =
+		Widgets.Button.create(
+			'inherit',
+				buttons.signup,
+			'visible',
+				isGuest
 		);
-	}
 
-	shell.bridge.changeMode( 'Normal' );
+	buttons.login =
+		Widgets.Button.create(
+			'inherit',
+				buttons.login,
+			'text',
+				isGuest ?
+					'log\nin' :
+					'log\nout'
+		);
+
+	shell.bridge.changeMode(
+		'Normal'
+	);
 
 	this.poke( );
 };
@@ -1808,5 +1867,15 @@ MainDisc.prototype.dragStart =
 {
 	return null;
 };
+
+MainDisc.prototype.setActive =
+	function(
+		active
+	)
+{
+	this.createDisc.setActive( active );
+}
+
+
 
 } )( );

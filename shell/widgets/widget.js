@@ -176,7 +176,6 @@ function( )
 
 /*
 | Sets the button in/visible.
-| TODO rename setVisible
 */
 Widget.prototype.setVisible =
     function(

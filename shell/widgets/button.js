@@ -35,7 +35,7 @@ var
 ( function( ) {
 'use strict';
 
-if( typeof( window ) === 'undefined' )
+if( CHECK && typeof( window ) === 'undefined' )
 {
 	throw new Error(
 		'this code needs a browser!'
@@ -49,43 +49,102 @@ if( typeof( window ) === 'undefined' )
 var Button =
 Widgets.Button =
 	function(
-		// ... free strings ...
+		tag,
+		inherit,
+		tree,
+		parent,
+		name,
+		focusAccent,
+		hoverAccent,
+		icons,
+		text,
+		visible
 	)
 {
+	if( CHECK )
+	{
+		if( tag !== 'XOXO' )
+		{
+			throw new Error(
+				'tag mismatch'
+			);
+		}
+
+		if( parent === null )
+		{
+			throw new Error(
+				'parent missing'
+			);
+		}
+
+		if( tree === null )
+		{
+			throw new Error(
+				'tree missing'
+			);
+		}
+
+		if( typeof( focusAccent ) !== 'boolean' )
+		{
+			throw new Error(
+				'invalid focusAccent'
+			);
+		}
+
+		if( typeof( hoverAccent ) !== 'boolean' )
+		{
+			throw new Error(
+				'invalid hoverAccent'
+			);
+		}
+	}
+
 	// class used to sketch icons if applicable
 	this.icons =
-		null;
+		icons;
 
-	Widgets.Widget.call(
-		this,
-		'Button',
-		arguments,
-		{
-			'icons' :
-			{
-				type :
-					'param'
-			}
-		}
-	);
+	this.focusAccent =
+		focusAccent;
+
+	this.hoverAccent =
+		hoverAccent;
+
+	this.name =
+		name;
+
+	// TODO inherit.
+	this.path =
+		new Path(
+			[
+				parent.name,
+				name
+			]
+		);
+
+	this.parent =
+		parent;
+
+	this.text =
+		text;
+
+	this.tree =
+		tree;
+
+	this.visible =
+		visible;
 
 	var
-		tree =
-			this.tree,
-
-		parent =
-			this.parent,
-
-		inherit =
-			this.inherit,
-
 		pnw =
 		this.pnw =
-			parent.iframe.computePoint( tree.frame.pnw ),
+			parent.iframe.computePoint(
+				tree.frame.pnw
+			),
 
 		pse =
 		this.pse =
-			parent.iframe.computePoint( tree.frame.pse ),
+			parent.iframe.computePoint(
+				tree.frame.pse
+			),
 
 		iframe =
 		this.iframe =
@@ -102,6 +161,7 @@ Widgets.Button =
 	{
 		case 'Curve' :
 
+			// TODO _shape
 			this.shape =
 				new Curve(
 					tshape,
@@ -127,81 +187,221 @@ Widgets.Button =
 			);
 	}
 
-	if( tree.caption )
-	{
-		var caption =
-		this._$caption =
-			{
-				pos :
-					iframe.computePoint( tree.caption.pos ),
-
-				$text :
-					inherit ?
-						inherit._$caption.$text :
-						tree.caption.text
-			};
-
-		if( tree.caption.rotate )
-		{
-			caption.rotate =
-				tree.caption.rotate;
-		}
-
-		if( tree.caption.newline )
-		{
-			caption.newline =
-				tree.caption.newline;
-
-			if( Jools.isString( caption.$text ) )
-			{
-				caption.$text =
-					caption.$text.split( '\n' );
-			}
-		}
-
-	}
-	else if( tree.icon )
-	{
-		this._icon =
-		{
-			sketch :
-				tree.icon,
-
-			style :
-				tree.iconStyle
-		};
-	}
-
 	// if true repeats the push action if held down
 	this.repeating =
 		false;
 
-	this.$retimer =
+	this._$retimer =
 		null;
 
-	this.$fabric =
+	this._$fabric =
 		null;
 
-	this._$visible =
-		this._$visible ||
-		( inherit ? inherit._$visible : true );
-
-	this.$accent =
-		Accent.NORMAL;
-
-	// TODO dont store it into this from startago
-	this.inherit =
-		null;
+	this.visible =
+		visible;
 };
 
 
 /*
-| Buttons are Widgets
+| Creates a button.
 */
-Jools.subclass(
-	Button,
-	Widgets.Widget
-);
+Button.create =
+	function(
+		// free strings
+	)
+{
+	var
+		focusAccent =
+			null,
+
+		hoverAccent =
+			null,
+
+		icons =
+			null,
+
+		inherit =
+			null,
+
+		name =
+			null,
+
+		parent =
+			null,
+
+		text =
+			null,
+
+		tree =
+			null,
+
+		visible =
+			null;
+
+	for(
+		var a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
+	{
+		switch( arguments[ a ] )
+		{
+			case 'inherit' :
+
+				inherit =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'focusAccent' :
+
+				focusAccent =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'hoverAccent' :
+
+				hoverAccent =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'icons' :
+
+				icons =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'name' :
+
+				name =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'parent' :
+
+				parent =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'text' :
+
+				text =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'tree' :
+
+				tree =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'visible' :
+
+				visible =
+					arguments[ a + 1 ];
+
+				break;
+
+			default :
+
+				throw new Error(
+					'invalid argument: ' + arguments[ a ]
+				);
+		}
+	}
+
+	if( inherit )
+	{
+		if( focusAccent === null )
+		{
+			focusAccent =
+				inherit.focusAccent;
+		}
+
+		if( hoverAccent === null )
+		{
+			hoverAccent =
+				inherit.hoverAccent;
+		}
+
+		if( icons === null )
+		{
+			icons =
+				inherit.icons;
+		}
+
+		if( name === null )
+		{
+			name =
+				inherit.name;
+		}
+
+		if( parent === null )
+		{
+			parent =
+				inherit.parent;
+		}
+
+		if( text === null )
+		{
+			text =
+				inherit.text;
+		}
+
+		if( tree === null )
+		{
+			tree =
+				inherit.tree;
+		}
+
+		if( visible === null )
+		{
+			visible =
+				inherit.visible;
+		}
+	}
+
+	if( focusAccent === null )
+	{
+		focusAccent =
+			false;
+	}
+
+	if( hoverAccent === null )
+	{
+		hoverAccent =
+			false;
+	}
+
+	if( visible === null )
+	{
+		visible =
+			Jools.is( tree.visible ) ?
+				tree.visible :
+				true;
+	}
+
+	return new Button(
+		'XOXO',
+		inherit,
+		tree,
+		parent,
+		name,
+		focusAccent,
+		hoverAccent,
+		icons,
+		text,
+		visible
+	);
+
+};
 
 
 /*
@@ -235,24 +435,25 @@ Button.prototype.sketch =
 | Returns the fabric for the button.
 */
 Button.prototype._weave =
-	function(
-		accent
-	)
+	function( )
 {
-	var fabric =
-		this.$fabric;
+	var
+		fabric =
+			this._$fabric,
 
-	if(
-		fabric &&
-		this.$accent === accent &&
-		!config.debug.noCache
-	)
+		accent =
+			Accent.state(
+				this.hoverAccent,
+				this.focusAccent
+			);
+
+	if( fabric )
 	{
 		return fabric;
 	}
 
 	fabric =
-	this.$fabric =
+	this._$fabric =
 		new Euclid.Fabric( this.iframe );
 
 	var
@@ -283,13 +484,13 @@ Button.prototype._weave =
 
 	var
 		caption =
-			this._$caption;
+			tree.caption;
 
 	if( caption )
 	{
 		var
 			text =
-				caption.$text,
+				this.text || caption.text,
 
 			newline =
 				caption.newline,
@@ -297,9 +498,13 @@ Button.prototype._weave =
 			// TODO tree creator
 			font =
 				new Euclid.Font(
-					tree.caption.font
-				);
+					caption.font
+				),
 
+			pos =
+				this.iframe.computePoint(
+					caption.pos
+				);
 
 		if( !Jools.is( newline ) )
 		{
@@ -307,9 +512,9 @@ Button.prototype._weave =
 			{
 				fabric.paintText(
 					'text',
-						caption.$text,
+						caption.text,
 					'p',
-						caption.pos,
+						pos,
 					'font',
 						font
 				);
@@ -320,7 +525,7 @@ Button.prototype._weave =
 					'text',
 						text,
 					'p',
-						caption.pos,
+						pos,
 					'font',
 						font,
 					'rotate',
@@ -330,17 +535,19 @@ Button.prototype._weave =
 		}
 		else
 		{
-			var pos =
-				caption.pos;
+			var
+				x =
+					pos.x,
 
-			var x =
-				pos.x;
+				y =
+					pos.y,
 
-			var y =
-				pos.y;
+			text =
+				text.split( '\n' );
 
-			var tZ =
-				text.length;
+			var
+				tZ =
+					text.length;
 
 			y -=
 				Math.round( ( tZ - 1 ) / 2 * newline );
@@ -366,37 +573,20 @@ Button.prototype._weave =
 
 	var
 		icon =
-			this._icon;
+			tree.icon;
 
 	if( icon )
 	{
 		style =
 			Widgets.getStyle(
-				icon.style,
+				tree.iconStyle,
 				Accent.NORMA
 			);
 
 		fabric.paint(
 			style,
 			this.icons,
-			icon.sketch,
-			Euclid.View.proper
-		);
-	}
-
-	if( config.debug.drawBoxes )
-	{
-		fabric.paint(
-			Widgets.getStyle(
-				'boxes',
-				Accent.NORMA
-			),
-			new Euclid.Rect(
-				'pnw/pse',
-				this.iframe.pnw,
-				this.iframe.pse.sub( 1, 1 )
-			),
-			'sketch',
+			icon,
 			Euclid.View.proper
 		);
 	}
@@ -412,9 +602,9 @@ Button.prototype.pointingHover =
 	function( p )
 {
 	if(
-		!this._$visible ||
+		!this.visible ||
 		p === null ||
-		p.x < this.pnw.x ||
+		p.x < this.pnw.x || // TODO within
 		p.y < this.pnw.y ||
 		p.x > this.pse.x ||
 		p.y > this.pse.y
@@ -424,7 +614,7 @@ Button.prototype.pointingHover =
 	}
 
 	var fabric =
-		this._weave( Accent.NORMA );
+		this._weave( );
 
 	var pp =
 		p.sub( this.pnw );
@@ -463,7 +653,7 @@ Button.prototype.pointingStart =
 		this;
 
 	if(
-		!this._$visible ||
+		!this.visible ||
 		p.x < this.pnw.x ||
 		p.y < this.pnw.y ||
 		p.x > this.pse.x ||
@@ -475,7 +665,7 @@ Button.prototype.pointingStart =
 
 	var
 		fabric =
-			this._weave( Accent.NORMA ),
+			this._weave( ),
 
 		pp =
 			p.sub( this.pnw );
@@ -497,7 +687,7 @@ Button.prototype.pointingStart =
 
 	if(
 		this.repeating &&
-		!this.retimer
+		!this._$retimer
 	)
 	{
 		shell.bridge.startAction(
@@ -518,7 +708,7 @@ Button.prototype.pointingStart =
 					false
 				);
 
-				self.$retimer =
+				self._$retimer =
 					system.setTimer(
 						theme.zoom.repeatTimer,
 						repeatFunc
@@ -527,7 +717,7 @@ Button.prototype.pointingStart =
 				shell.poke( );
 			};
 
-		this.$retimer =
+		this._$retimer =
 			system.setTimer(
 				theme.zoom.firstTimer,
 				repeatFunc
@@ -602,18 +792,19 @@ Button.prototype.input =
 */
 Button.prototype.draw =
 	function(
-		fabric,
-		accent
+		fabric
 	)
 {
-	if( !this._$visible )
+	if( !this.visible )
 	{
 		return;
 	}
 
 	fabric.drawImage(
-		'image', this._weave( accent ),
-		'pnw',   this.pnw
+		'image',
+			this._weave( ),
+		'pnw',
+			this.pnw
 	);
 };
 
@@ -624,10 +815,7 @@ Button.prototype.draw =
 Button.prototype.poke =
 	function( )
 {
-	this.$fabric =
-		null;
-
-	this.parent.poke( );
+	// TODO remove
 };
 
 
@@ -637,8 +825,7 @@ Button.prototype.poke =
 Button.prototype.knock =
 	function( )
 {
-	this.$fabric =
-		null;
+	// TODO remove
 };
 
 
@@ -648,27 +835,49 @@ Button.prototype.knock =
 Button.prototype.getText =
 	function( )
 {
-	return this._$caption && this._$caption.$text;
+//	return this._$caption && this._$caption.$text;
+	throw new Error( 'TODO' );
 };
+
+
+/*
+| Control takes focus.
+| TODO remove
+*/
+Button.prototype.grepFocus =
+	function( )
+{
+	if(
+		!this.focusable ||
+		!this.visible ||
+		this.parent.getFocus( ) === this
+	)
+	{
+		return false;
+	}
+
+	this.parent.setCaret(
+		{
+			path :
+				this.path,
+
+			at1 :
+				0
+		}
+	);
+
+	return true;
+};
+
 
 
 /*
 | Sets the buttons text.
 */
 Button.prototype.setText =
-	function(
-		text
-	)
+	function( text )
 {
-	if( this._$caption.$text === text )
-	{
-		return;
-	}
-
-	this._$caption.$text
-		= text;
-
-	this.poke( );
+	throw new Error( 'TODO' );
 };
 
 
@@ -679,10 +888,10 @@ Button.prototype.dragStop =
 	function( )
 {
 	system.cancelTimer(
-		this.$retimer
+		this._$retimer
 	);
 
-	this.$retimer =
+	this._$retimer =
 		null;
 
 	shell.bridge.stopAction( );

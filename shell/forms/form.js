@@ -42,9 +42,11 @@ var
 'use strict';
 
 
-if( typeof( window ) === 'undefined')
+if( CHECK && typeof( window ) === 'undefined')
 {
-	throw new Error( 'this code needs a browser!' );
+	throw new Error(
+		'this code needs a browser!'
+	);
 }
 
 
@@ -57,26 +59,27 @@ Forms.Form =
 		// free strings
 	)
 {
-	var inherit =
-		null;
+	var
+		inherit =
+			null,
+
+		a =
+			0,
+
+		aZ =
+			arguments.length;
 
 	this.screensize =
 		null;
 
-	var a =
-		0;
-
-	var aZ =
-		arguments.length;
-
 	while( a < aZ )
 	{
-		var arg =
-			arguments[ a++ ];
+		var
+			arg =
+				arguments[ a++ ];
 
 		switch( arg )
 		{
-
 			case 'inherit' :
 
 				inherit =
@@ -110,7 +113,7 @@ Forms.Form =
 			Pattern
 		);
 
-	// hinder direct access of the layout
+	// hinders direct access of the layout
 	this.layout =
 		null;
 
@@ -154,17 +157,34 @@ Forms.Form =
 			Proto =
 				this.getWidgetPrototype( tree.type );
 
-		this.$sub[ name ] =
-			new Proto(
-				'name',
-					name,
-				'tree',
-					tree,
-				'parent',
-					this,
-				'inherit',
-					inherit && inherit.$sub[ name ]
-			);
+		if( tree.type === 'Input' || tree.type ==='Button' ) // TODO
+		{
+			this.$sub[ name ] =
+				Proto.create(
+					'name',
+						name,
+					'tree',
+						tree,
+					'parent',
+						this,
+					'inherit',
+						inherit && inherit.$sub[ name ]
+				);
+		}
+		else
+		{
+			this.$sub[ name ] =
+				new Proto(
+					'name',
+						name,
+					'tree',
+						tree,
+					'parent',
+						this,
+					'inherit',
+						inherit && inherit.$sub[ name ]
+				);
+		}
 	}
 
 	Jools.immute( this );
@@ -177,6 +197,7 @@ Forms.Form =
 Form.prototype.getWidgetPrototype =
 	function( type )
 {
+
 	switch( type )
 	{
 		case 'Button' :
@@ -263,11 +284,9 @@ Form.prototype.draw =
 		Euclid.View.proper
 	);
 
-	var ranks =
-		this.tree.ranks;
-
-	var focus =
-		this.getFocus( );
+	var
+		ranks =
+			this.tree.ranks;
 
 	for(
 		var a = ranks.length - 1;
@@ -281,15 +300,7 @@ Form.prototype.draw =
 		var comp =
 			this.$sub[ name ];
 
-		comp.draw(
-			fabric,
-			Accent.state(
-				name === this.$hover,
-				( this.$caret.$shown && focus ) ?
-					name === focus.name :
-					false
-			)
-		);
+		comp.draw( fabric );
 	}
 
 	this.$caret.display( );
@@ -302,14 +313,15 @@ Form.prototype.draw =
 Form.prototype.positionCaret =
 	function( )
 {
-	var caret =
-		this.$caret;
+	var
+		caret =
+			this.$caret,
 
-	var name =
-		caret.sign.path.get( 1 );
+		name =
+			caret.sign.path.get( 1 ),
 
-	var ce =
-		this.$sub[ name ];
+		ce =
+			this.$sub[ name ];
 
 	if( !ce )
 	{
@@ -348,16 +360,18 @@ Form.prototype.pointingHover =
 		return;
 	}
 
-	var a, aZ;
+	var
+		a,
+		aZ,
 
-	var cursor =
-		null;
+		cursor =
+			null,
 
-	var layout =
-		this.tree;
+		layout =
+			this.tree,
 
-	var ranks =
-		layout.ranks;
+		ranks =
+			layout.ranks;
 
 	for(
 		a = 0, aZ = ranks.length;
@@ -365,11 +379,12 @@ Form.prototype.pointingHover =
 		a++
 	)
 	{
-		var name =
-			ranks[ a ];
+		var
+			name =
+				ranks[ a ],
 
-		var comp =
-			this.$sub[ name ];
+			comp =
+				this.$sub[ name ];
 
 		if( cursor )
 		{
@@ -443,11 +458,12 @@ Form.prototype.pointingStart =
 		ctrl
 	)
 {
-	var layout =
-		this.tree;
+	var
+		layout =
+			this.tree,
 
-	var ranks =
-		layout.ranks;
+		ranks =
+			layout.ranks;
 
 	for(
 		var a = 0, aZ = ranks.length;
@@ -455,18 +471,19 @@ Form.prototype.pointingStart =
 		a++
 	)
 	{
-		var name =
-			ranks[ a ];
+		var
+			name =
+				ranks[ a ],
 
-		var ce =
-			this.$sub[ name ];
+			ce =
+				this.$sub[ name ],
 
-		var r =
-			ce.pointingStart(
-				p,
-				shift,
-				ctrl
-			);
+			r =
+				ce.pointingStart(
+					p,
+					shift,
+					ctrl
+				);
 
 		if( r !== null )
 		{
@@ -510,24 +527,28 @@ Form.prototype.cycleFocus =
 		dir
 	)
 {
-	var tree =
-		this.tree;
+	var
+		tree =
+			this.tree,
 
-	var focus =
-		this.getFocus( );
+		focus =
+			this.getFocus( );
 
 	if( !focus )
 	{
 		return;
 	}
 
-	var rank =
-		tree.rankOf( focus.name );
+	var
+		rank =
+			tree.rankOf( focus.name ),
 
-	var rs =
-		rank;
+		rs =
+			rank,
 
-	var name, ve;
+		name,
+
+		ve;
 
 	while( true )
 	{
@@ -563,8 +584,9 @@ Form.prototype.specialKey =
 		ctrl
 	)
 {
-	var focus =
-		this.getFocus( );
+	var
+		focus =
+			this.getFocus( );
 
 	if( !focus )
 	{
@@ -631,7 +653,8 @@ Form.prototype.setCaret =
 			);
 	}
 
-	var entity;
+	var
+		entity;
 
 	if(
 		this.$caret.sign &&
@@ -641,18 +664,10 @@ Form.prototype.setCaret =
 		)
 	)
 	{
-		entity =
-			this._getCaretEntity(
-				this.$caret.sign.path
-			);
-
-		if( entity )
-		{
-			entity.knock( );
-		}
-
-		this.redraw =
-			true;
+		this.setFocusAccent(
+			this.$caret.sign.path.get( 1 ),
+			false
+		);
 	}
 
 	this.$caret =
@@ -664,49 +679,133 @@ Form.prototype.setCaret =
 
 	if( sign )
 	{
-		entity =
-			this._getCaretEntity(
-				sign.path
-			);
-
-		if( entity )
-		{
-			entity.knock( );
-		}
-
-		this.redraw =
-			true;
+		this.setFocusAccent(
+			this.$caret.sign.path.get( 1 ),
+			true
+		);
 	}
+
+	shell.redraw =
+		true;
 
 	return this.$caret;
 };
 
 
 /*
+| Sets the value of a widget.
+*/
+Form.prototype.setValue =
+	function(
+		widgetName,
+		value
+	)
+{
+	var
+		Proto =
+			this.getWidgetPrototype(
+				this.tree.twig[ widgetName ].type
+			);
+
+	this.$sub[ widgetName ] =
+		Proto.create(
+			'inherit',
+				this.$sub[ widgetName ],
+			'value',
+				value
+		);
+
+	shell.redraw =
+		true;
+};
+
+
+/*
+| Sets the focus accent of a widget.
+*/
+Form.prototype.setFocusAccent =
+	function(
+		widgetName,
+		value
+	)
+{
+	var
+		Proto =
+			this.getWidgetPrototype(
+				this.tree.twig[ widgetName ].type
+			);
+
+	this.$sub[ widgetName ] =
+		Proto.create(
+			'inherit',
+				this.$sub[ widgetName ],
+			'focusAccent',
+				value
+		);
+
+	shell.redraw =
+		true;
+};
+
+
+/*
+| Sets the hover accent of a widget.
+*/
+Form.prototype.setHoverAccent =
+	function(
+		widgetName,
+		value
+	)
+{
+	var
+		Proto =
+			this.getWidgetPrototype(
+				this.tree.twig[ widgetName ].type
+			);
+
+	this.$sub[ widgetName ] =
+		Proto.create(
+			'inherit',
+				this.$sub[ widgetName ],
+			'hoverAccent',
+				value
+		);
+
+	shell.redraw =
+		true;
+};
+
+/*
 | Sets the hovered component.
 */
 Form.prototype.setHover =
-	function( name )
+	function(
+		name
+	)
 {
 	if( this.$hover === name )
 	{
 		return;
 	}
 
-	this.poke();
-
 	if( this.$hover )
 	{
-		this.$sub[ this.$hover ].knock( );
-	}
-
-	if( name )
-	{
-		this.$sub[ name ].knock( );
+		this.setHoverAccent(
+			this.$hover,
+			false
+		);
 	}
 
 	this.$hover =
 		name;
+
+	if( name )
+	{
+		this.setHoverAccent(
+			name,
+			true
+		);
+	}
 
 	return;
 };
@@ -728,7 +827,6 @@ Form.prototype.systemFocus =
 	shell.redraw =
 		true;
 };
-
 
 
 /*
@@ -757,7 +855,9 @@ Form.prototype.pushButton =
 		// buttonName
 	)
 {
-	throw new Error( 'pushButton should be overloaded!' );
+	throw new Error(
+		'pushButton should be overloaded!'
+	);
 };
 
 /*
@@ -780,12 +880,16 @@ Form.prototype._getCaretEntity =
 {
 	if( path.length !== 2 )
 	{
-		throw new Error( 'path.length expected to be 1' );
+		throw new Error(
+			'path.length expected to be 1'
+		);
 	}
 
 	if( path.get( 0 ) !== this.name )
 	{
-		throw new Error( 'caret path mismatch' );
+		throw new Error(
+			'caret path mismatch'
+		);
 	}
 
 	return this.$sub[ path.get( 1 ) ];

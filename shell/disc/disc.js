@@ -40,7 +40,7 @@ var
 'use strict';
 
 
-if( typeof( window ) === 'undefined' )
+if( CHECK && typeof( window ) === 'undefined' )
 {
 	throw new Error(
 		'this code needs a browser!'
@@ -89,24 +89,25 @@ Disc.Disc =
 			arguments
 		);
 
-	var style =
-	this.style =
-		theme.disc[ this.name ];
+	var
+		style =
+		this.style =
+			theme.disc[ this.name ],
 
 	// TODO remove this.width/height vars
-	var width =
-		this.width =
-		style.width;
+		width =
+			this.width =
+			style.width,
 
-	var height =
-		this.height =
-		style.height;
+		height =
+			this.height =
+			style.height,
 
-	var ew =
-		style.ellipse.width;
+		ew =
+			style.ellipse.width,
 
-	var eh =
-		style.ellipse.height;
+		eh =
+			style.ellipse.height;
 
 	this.oframe =
 		new Euclid.Rect(
@@ -190,17 +191,19 @@ Disc.Disc =
 			case 'Button' :
 
 				this.buttons[ wname ] =
-					new Widgets.Button(
+					Widgets.Button.create(
 						'parent',
 							this,
+						'inherit',
+							inherit && inherit.buttons[ wname ],
 						'name',
 							wname,
 						'tree',
 							tree,
-						'inherit',
-							inherit && inherit.buttons[ wname ],
 						'icons',
-							icons
+							icons,
+						'visible',
+							true
 					);
 
 					break;

@@ -190,7 +190,11 @@ Bridge.prototype.changeMode =
 	this._$mode =
 		mode;
 
-	shell.pokeDisc( );
+	// FIXME evil knevil
+	if( shell._$disc )
+	{
+		shell._$disc.setMode( mode );
+	}
 };
 
 
@@ -221,8 +225,13 @@ Bridge.prototype.startAction =
 	this._$action =
 		new Action( arguments );
 
-	return action;
+	// FIXME evil knevil
+	if( shell._$disc )
+	{
+		shell._$disc.setActive( action && action.type );
+	}
 
+	return action;
 };
 
 
@@ -242,6 +251,11 @@ Bridge.prototype.stopAction =
 	this._$action =
 		null;
 
+	// FIXME evil knevil
+	if( shell._$disc )
+	{
+		shell._$disc.setActive( null );
+	}
 };
 
 /*

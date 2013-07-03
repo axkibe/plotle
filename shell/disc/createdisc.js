@@ -39,7 +39,7 @@ var
 'use strict';
 
 
-if( typeof( window ) === 'undefined')
+if( CHECK && typeof( window ) === 'undefined')
 {
 	throw new Error(
 		'this code needs a browser!'
@@ -66,6 +66,9 @@ Disc.CreateDisc =
 		'screensize',
 			screensize
 	);
+
+	this.$active =
+		inherit && inherit.$active;
 };
 
 /*
@@ -607,41 +610,16 @@ CreateDisc.prototype._weave =
 		Euclid.View.proper
 	);
 
-	var buttons =
-		this.buttons;
+	var
+		buttons =
+			this.buttons,
 
-	var action =
-		shell.bridge.action( );
+		action =
+			shell.bridge.action( );
 
 	for( var name in this.buttons )
 	{
-		var button = buttons[ name ];
-
-		switch( name )
-		{
-			case 'createNote' :
-			case 'createLabel' :
-			case 'createRelation' :
-			case 'createPortal' :
-
-				button.draw(
-					fabric,
-					Accent.state(
-						name === this.$hover,
-						action && action.type === button.name
-					)
-				);
-				break;
-
-			default :
-
-				button.draw(
-					fabric,
-					action && action.type === button.name,
-					this.$hover === name
-				);
-				break;
-		}
+		buttons[ name ].draw( fabric );
 	}
 
 	fabric.edge(
@@ -650,19 +628,6 @@ CreateDisc.prototype._weave =
 		'sketch',
 		Euclid.View.proper
 	);
-
-	if( config.debug.drawBoxes )
-	{
-		fabric.paint(
-			Dash.getStyle( 'boxes' ),
-			new Euclid.Rect(
-				'pse',
-				new Euclid.Point( this.width - 1, this.height - 1)
-			),
-			'sketch',
-			Euclid.View.proper
-		);
-	}
 
 	return fabric;
 };
@@ -734,9 +699,14 @@ CreateDisc.prototype.draw =
 	)
 {
 	fabric.drawImage(
-		'image', this._weave( ),
-		'x', 0,
-		'y', Jools.half( this.screensize.y - this.height )
+		'image',
+			this._weave( ),
+		'x',
+			0,
+		'y',
+			Jools.half(
+				this.screensize.y - this.height
+			)
 	);
 };
 
@@ -751,16 +721,17 @@ CreateDisc.prototype.pointingHover =
 		ctrl
 	)
 {
-	var pnw =
-		this.oframe.pnw;
+	var
+		pnw =
+			this.oframe.pnw,
 
-	var pse =
-		this.oframe.pse;
+		pse =
+			this.oframe.pse;
 
 	// shortcut if p is not near the panel
 	if(
 		p === null ||
-		p.y < pnw.y ||
+		p.y < pnw.y || // TODO
 		p.y > pse.y ||
 		p.x < pnw.x ||
 		p.x > pse.x
@@ -798,8 +769,13 @@ CreateDisc.prototype.pointingHover =
 
 	for( var name in buttons )
 	{
-		cursor = buttons[ name ].
-			pointingHover( pp, shift, ctrl );
+		cursor =
+			buttons[ name ]
+				.pointingHover(
+					pp,
+					shift,
+					ctrl
+				);
 
 		if ( cursor )
 		{
@@ -835,7 +811,7 @@ CreateDisc.prototype.pointingStart =
 
 	// shortcut if p is not near the panel
 	if(
-		p.y < pnw.y ||
+		p.y < pnw.y || // TODO
 		p.y > pse.y ||
 		p.x < pnw.x ||
 		p.x > pse.x
@@ -871,12 +847,12 @@ CreateDisc.prototype.pointingStart =
 	for( var name in buttons )
 	{
 		var r =
-			buttons[ name ].
-			pointingStart(
-				pp,
-				shift,
-				ctrl
-			);
+			buttons[ name ]
+				.pointingStart(
+					pp,
+					shift,
+					ctrl
+				);
 
 		if( r )
 		{
@@ -908,7 +884,9 @@ CreateDisc.prototype.cycleFocus =
 		// dir
 	)
 {
-	throw new Error( 'not implemented' );
+	throw new Error(
+		'not implemented'
+	);
 };
 
 
@@ -950,18 +928,82 @@ CreateDisc.prototype.setHover =
 {
 	if( this.$hover === name )
 	{
-		return null;
+		return;
 	}
 
 	this.$fabric =
 		null;
 
-	this.$hover  =
+	if( this.$hover )
+	{
+		this.buttons[ this.$hover ] =
+			Widgets.Button.create(
+				'inherit',
+					this.buttons[ this.$hover ],
+				'hoverAccent',
+					false
+			);
+	}
+
+	this.$hover =
 		name;
+
+	if( name )
+	{
+		this.buttons[ name ] =
+			Widgets.Button.create(
+				'inherit',
+					this.buttons[ name ],
+				'hoverAccent',
+					true
+			);
+	}
 
 	shell.redraw =
 		true;
 };
+
+CreateDisc.prototype.setActive =
+	function(
+		active
+	)
+{
+	if( this.$active === active )
+	{
+		return;
+	}
+
+	this.$fabric =
+		null;
+
+	if( this.buttons[ this.$active ] )
+	{
+		this.buttons[ this.$active ] =
+			Widgets.Button.create(
+				'inherit',
+					this.buttons[ this.$active ],
+				'focusAccent',
+					false
+			);
+	}
+
+	this.$active =
+		active;
+
+	if( this.buttons[ active ] )
+	{
+		this.buttons[ active ] =
+			Widgets.Button.create(
+				'inherit',
+					this.buttons[ active ],
+				'focusAccent',
+					true
+			);
+	}
+
+	shell.redraw =
+		true;
+}
 
 
 } )( );

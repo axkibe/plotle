@@ -89,6 +89,9 @@ Jools.subclass(
 );
 
 
+/*
+| Creates a note.
+*/
 Note.create =
 	function(
 		// free strings

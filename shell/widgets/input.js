@@ -47,25 +47,83 @@ if( typeof( window ) === 'undefined' )
 var Input =
 Widgets.Input =
 	function(
-		// ... free strings ...
+		tag,
+		inherit,
+		tree,
+		parent,
+		name,
+		focusAccent,
+		hoverAccent,
+		visible,
+		value
 	)
 {
-	Widgets.Widget.call(
-		this,
-		'Input',
-		arguments
-	);
+	if( CHECK )
+	{
+		if( tag !== 'XOXO' )
+		{
+			throw new Error(
+				'tag mismatch'
+			);
+		}
+
+		if( parent === null )
+		{
+			throw new Error(
+				'parent missing'
+			);
+		}
+
+		if( tree === null )
+		{
+			throw new Error(
+				'tree missing'
+			);
+		}
+
+		if( typeof( focusAccent ) !== 'boolean' )
+		{
+			throw new Error(
+				'invalid focusAccent.'
+			);
+		}
+
+		if( typeof( hoverAccent ) !== 'boolean' )
+		{
+			throw new Error(
+				'invalid hoverAccent.'
+			);
+		}
+	}
+
+	// TODO inherit
+	this.path =
+		new Path(
+			[
+				parent.name,
+				name
+			]
+		);
+
+	this.tree =
+		tree;
+
+	this.parent =
+		parent;
+
+	this.name =
+		name;
+
+	this.focusAccent =
+		focusAccent;
+
+	this.hoverAccent =
+		hoverAccent;
+
+	this.visible =
+		visible;
 
 	var
-		parent =
-			this.parent,
-
-		tree =
-			this.tree,
-
-		inherit =
-			this.inherit,
-
 		pnw =
 		this.pnw =
 			parent.iframe.computePoint( tree.frame.pnw ),
@@ -78,39 +136,227 @@ Widgets.Input =
 		new Euclid.RoundRect(
 			Euclid.Point.zero,
 			pse.sub( pnw ),
-			7, 3
+			7,
+			3
 		),
 
 	this._pitch =
-		new Euclid.Point(
-			8, 3
-		),
+		Input._pitch;
 
-	this._$value =
-		( inherit ? inherit._$value : '' ),
+	this.value =
+		value;
 
-	this._$fabric =
-		null,
+	this.focusAccent =
+		focusAccent;
 
-	this._$accent =
-		Accent.NORMA;
+	this.hoverAccent =
+		hoverAccent;
 
 	this._font =
 		new Euclid.Font(
 			tree.font
 		);
+
+	Jools.immute( this );
 };
 
 
 /*
-| Inputs are Widgets.
+| Creates an input.
 */
-Jools.subclass(
-	Input,
-	Widgets.Widget
-);
+Input.create =
+	function(
+		// free strings
+	)
+{
+	var
+		inherit =
+			null,
+
+		focusAccent =
+			null,
+
+		hoverAccent =
+			null,
+
+		parent =
+			null,
+
+		name =
+			null,
+
+		tree =
+			null,
+
+		value =
+			null,
+
+		visible =
+			null;
 
 
+	for(
+		var a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
+	{
+		switch( arguments[ a ] )
+		{
+			case 'inherit' :
+
+				inherit =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'focusAccent' :
+
+				focusAccent =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'hoverAccent' :
+
+				hoverAccent =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'name' :
+
+				name =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'parent' :
+
+				parent =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'tree' :
+
+				tree =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'value' :
+
+				value =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'visible' :
+
+				visible =
+					arguments[ a + 1 ];
+
+				break;
+
+			default :
+
+				throw new Error(
+					'invalid argument: ' + arguments[ a ]
+				);
+		}
+	}
+
+	if( inherit )
+	{
+		if( focusAccent === null )
+		{
+			focusAccent =
+				inherit.focusAccent;
+		}
+
+		if( hoverAccent === null )
+		{
+			hoverAccent =
+				inherit.hoverAccent;
+		}
+
+		if( name === null )
+		{
+			name =
+				inherit.name;
+		}
+
+		if( parent === null )
+		{
+			parent =
+				inherit.parent;
+		}
+
+		if( tree === null )
+		{
+			tree =
+				inherit.tree;
+		}
+
+		if( value === null )
+		{
+			value =
+				inherit.value;
+		}
+
+		if( visible === null )
+		{
+			visible =
+				inherit.visible;
+		}
+	}
+
+	if( focusAccent === null )
+	{
+		focusAccent =
+			false;
+	}
+
+	if( hoverAccent === null )
+	{
+		hoverAccent =
+			false;
+	}
+
+	if( visible === null )
+	{
+		visible =
+			true;
+	}
+
+	if( value === null )
+	{
+		value =
+			'';
+	}
+
+	return new Input(
+		'XOXO',
+		inherit,
+		tree,
+		parent,
+		name,
+		focusAccent,
+		hoverAccent,
+		visible,
+		value
+	);
+};
+
+
+/*
+| Default distance of text
+*/
+Input._pitch =
+	new Euclid.Point(
+		8, 3
+	);
 
 /*
 | Returns the offset nearest to point p.
@@ -128,7 +374,7 @@ Input.prototype.getOffsetAt =
 			p.x - pitch.x,
 
 		value =
-			this._$value,
+			this.value,
 
 		x1 =
 			0,
@@ -227,38 +473,39 @@ Input.prototype.sketchMask =
 		size
 	)
 {
-	var pitch =
-		this._pitch;
+	var
+		pitch =
+			this._pitch,
 
-	var x =
-		view.x( pitch );
+		x =
+			view.x( pitch ),
 
-	var y =
-		view.y( pitch ) +
-		Math.round( size * 0.7 );
+		y =
+			view.y( pitch ) +
+			Math.round( size * 0.7 ),
 
-	var h =
-		Math.round( size * 0.32 );
+		h =
+			Math.round( size * 0.32 ),
 
-	var w =
-		this.maskWidth( size );
+		w =
+			this.maskWidth( size ),
 
-	var w2 =
-		w * 2;
+		w2 =
+			w * 2,
 
-	var k =
-		this.maskKern( size );
+		k =
+			this.maskKern( size ),
 
-	var magic =
-		Euclid.Const.magic;
+		magic =
+			Euclid.Const.magic,
 
-	var mw =
-		magic * w;
+		mw =
+			magic * w,
 
-	var mh =
-		magic * h;
+		mh =
+			magic * h;
 
-	for ( var a = 0; a < length; a++ )
+	for( var a = 0; a < length; a++ )
 	{
 		fabric.moveTo(
 			x + w,
@@ -318,40 +565,45 @@ Input.prototype.sketchMask =
 | Returns the fabric for the input field.
 */
 Input.prototype._weave =
-	function(
-		accent
-	)
+	function( )
 {
-	var fabric =
-		this._$fabric;
+	var
+		fabric =
+			this._$fabric;
 
-	var value =
-		this._$value;
-
-	if (
-		fabric &&
-		fabric.$accent === accent &&
-		fabric.$value === value
-	)
+	if( fabric )
 	{
 		return fabric;
 	}
 
-	var shape =
-		this._shape;
+	var
+		value =
+			this.value,
 
-	var pitch =
-		this._pitch;
+		shape =
+			this._shape,
+
+		pitch =
+			this._pitch;
 
 	fabric =
 	this._$fabric =
-		new Euclid.Fabric( shape );
-
-	var style =
-		Widgets.getStyle(
-			this.tree.style,
-			accent
+		new Euclid.Fabric(
+			shape
 		);
+
+	var
+		style =
+			Widgets.getStyle(
+				this.tree.style,
+				Accent.state(
+					this.hoverAccent,
+					this.focusAccent
+				)
+			),
+
+		font =
+			this._font;
 
 	fabric.fill(
 		style,
@@ -360,13 +612,13 @@ Input.prototype._weave =
 		Euclid.View.proper
 	);
 
-	var font =
-		this._font;
-
 	if( this.tree.password )
 	{
 		fabric.fill(
-			{ fill: 'black' },
+			{
+				fill:
+					'black'
+			},
 			this,
 			'sketchMask',
 			Euclid.View.proper,
@@ -394,12 +646,6 @@ Input.prototype._weave =
 		Euclid.View.proper
 	);
 
-	fabric.$accent =
-		accent;
-
-	fabric.$value =
-		value;
-
 	return fabric;
 };
 
@@ -409,13 +655,12 @@ Input.prototype._weave =
 */
 Input.prototype.draw =
 	function(
-		fabric,
-		accent
+		fabric
 	)
 {
 	fabric.drawImage(
 		'image',
-			this._weave( accent ),
+			this._weave( ),
 		'pnw',
 			this.pnw
 	);
@@ -424,12 +669,10 @@ Input.prototype.draw =
 
 /*
 | Returns the point of a given offset.
-|
-| offset:   the offset to get the point from.
 */
 Input.prototype.locateOffset =
 	function(
-		offset
+		offset // the offset to get the point from.
 	)
 {
 	// FIXME cache position
@@ -443,8 +686,8 @@ Input.prototype.locateOffset =
 		pitch =
 			this._pitch,
 
-		val =
-			this._$value;
+		value =
+			this.value;
 
 	if( this.tree.password )
 	{
@@ -469,7 +712,7 @@ Input.prototype.locateOffset =
 				pitch.x +
 				Euclid.Measure.width(
 					font,
-					val.substring( 0, offset )
+					value.substring( 0, offset )
 				)
 			),
 
@@ -488,34 +731,38 @@ Input.prototype.locateOffset =
 Input.prototype.getCaretPos =
 	function( )
 {
-	var fs =
-		this._font.size;
+	var
+		fs =
+			this._font.size,
 
-	var descend =
-		fs * theme.bottombox;
+		descend =
+			fs * theme.bottombox,
 
-	var p =
-		this.locateOffset(
-			this.parent.$caret.sign.at1
-		);
+		p =
+			this.locateOffset(
+				this.parent.$caret.sign.at1
+			),
 
-	var pnw =
-		this.pnw;
+		pnw =
+			this.pnw,
 
-	var s =
-		Math.round( p.y + pnw.y + descend );
+		s =
+			Math.round( p.y + pnw.y + descend ),
 
-	var n =
-		s - Math.round( fs + descend );
+		n =
+			s - Math.round( fs + descend ),
 
-	var	x =
-		p.x + this.pnw.x - 1;
+		x =
+			p.x + this.pnw.x - 1;
 
 	return Jools.immute(
 		{
-			s: s,
-			n: n,
-			x: x
+			s :
+				s,
+			n :
+				n,
+			x :
+				x
 		}
 	);
 };
@@ -525,14 +772,17 @@ Input.prototype.getCaretPos =
 | Draws the caret.
 */
 Input.prototype.positionCaret =
-	function( view )
+	function(
+		view
+	)
 {
-	var caret =
-		this.parent.$caret;
+	var
+		caret =
+			this.parent.$caret,
 
-	var cpos =
-	caret.$pos =
-		this.getCaretPos();
+		cpos =
+		caret.$pos =
+			this.getCaretPos();
 
 	caret.$screenPos =
 		view.point(
@@ -549,11 +799,13 @@ Input.prototype.positionCaret =
 
 /*
 | Returns the current value (text in the box)
+|
+| TODO remove
 */
 Input.prototype.getValue =
 	function( )
 {
-	return this._$value;
+	return this.value;
 };
 
 
@@ -561,12 +813,11 @@ Input.prototype.getValue =
 | Sets the current value (text in the box)
 */
 Input.prototype.setValue =
-	function( value )
+	function( )
 {
-	this._$value =
-		value;
-
-	this.poke( );
+	throw new Error(
+		'TODO'
+	);
 };
 
 
@@ -574,14 +825,16 @@ Input.prototype.setValue =
 | User input.
 */
 Input.prototype.input =
-	function( text )
+	function(
+		text
+	)
 {
 	var
 		csign =
 			this.parent.$caret.sign,
 
 		value =
-			this._$value,
+			this.value,
 
 		at1 =
 			csign.at1,
@@ -602,10 +855,12 @@ Input.prototype.input =
 			);
 	}
 
-	this._$value =
+	this.parent.setValue(
+		this.name,
 		value.substring( 0, at1 ) +
-		text +
-		value.substring( at1 );
+			text +
+			value.substring( at1 )
+	);
 
 	this.parent.setCaret(
 		{
@@ -616,8 +871,6 @@ Input.prototype.input =
 				at1 + text.length
 		}
 	);
-
-	this.parent.poke( );
 };
 
 
@@ -627,20 +880,23 @@ Input.prototype.input =
 Input.prototype.keyBackspace =
 	function( )
 {
-	var csign =
-		this.parent.$caret.sign;
+	var
+		csign =
+			this.parent.$caret.sign,
 
-	var at1 =
-		csign.at1;
+		at1 =
+			csign.at1;
 
 	if( at1 <= 0 )
 	{
-		return false;
+		return;
 	}
 
-	this._$value =
-		this._$value.substring(0, at1 - 1) +
-		this._$value.substring(at1);
+	this.parent.setValue(
+		this.name,
+		this._$value.substring( 0, at1 - 1 ) +
+			this._$value.substring( at1 )
+	);
 
 	this.parent.setCaret(
 		{
@@ -648,8 +904,6 @@ Input.prototype.keyBackspace =
 			at1  : csign.at1 - 1
 		}
 	);
-
-	return true;
 };
 
 
@@ -659,19 +913,20 @@ Input.prototype.keyBackspace =
 Input.prototype.keyDel =
 	function( )
 {
-	var at1 =
-		this.parent.$caret.csign.at1;
+	var
+		at1 =
+			this.parent.$caret.csign.at1;
 
 	if( at1 >= this._$value.length )
 	{
-		return false;
+		return;
 	}
 
-	this._$value =
+	this.parent.setValue(
+		this.name,
 		this._$value.substring( 0, at1 ) +
-		this._$value.substring( at1 + 1 );
-
-	return true;
+			this._$value.substring( at1 + 1 )
+	);
 };
 
 
@@ -682,8 +937,6 @@ Input.prototype.keyEnter =
 	function( )
 {
 	this.parent.cycleFocus( 1 );
-
-	return true;
 };
 
 
@@ -694,8 +947,6 @@ Input.prototype.keyDown =
 	function( )
 {
 	this.parent.cycleFocus( 1 );
-
-	return true;
 };
 
 
@@ -705,15 +956,16 @@ Input.prototype.keyDown =
 Input.prototype.keyEnd =
 	function( )
 {
-	var csign =
-		this.parent.$caret.sign;
+	var
+		csign =
+			this.parent.$caret.sign,
 
-	var at1 =
-		csign.at1;
+		at1 =
+			csign.at1;
 
 	if( at1 >= this._$value.length )
 	{
-		return false;
+		return;
 	}
 
 	this.parent.setCaret(
@@ -725,8 +977,6 @@ Input.prototype.keyEnd =
 				this._$value.length
 		}
 	);
-
-	return true;
 };
 
 
@@ -736,12 +986,13 @@ Input.prototype.keyEnd =
 Input.prototype.keyLeft =
 	function( )
 {
-	var csign =
-		this.parent.$caret.sign;
+	var
+		csign =
+			this.parent.$caret.sign;
 
 	if( csign.at1 <= 0 )
 	{
-		return false;
+		return;
 	}
 
 	this.parent.setCaret(
@@ -753,8 +1004,6 @@ Input.prototype.keyLeft =
 				csign.at1 - 1
 		}
 	);
-
-	return true;
 };
 
 
@@ -764,12 +1013,13 @@ Input.prototype.keyLeft =
 Input.prototype.keyPos1 =
 	function( )
 {
-	var csign =
-		this.parent.$caret.sign;
+	var
+		csign =
+			this.parent.$caret.sign;
 
 	if( csign.at1 <= 0 )
 	{
-		return false;
+		return;
 	}
 
 	this.parent.setCaret(
@@ -781,22 +1031,22 @@ Input.prototype.keyPos1 =
 				0
 		}
 	);
-
-	return true;
 };
 
 
 /*
 | User pressed right key
 */
-Input.prototype.keyRight = function()
+Input.prototype.keyRight =
+	function( )
 {
-	var csign =
-		this.parent.$caret.sign;
+	var
+		csign =
+			this.parent.$caret.sign;
 
-	if (csign.at1 >= this._$value.length)
+	if( csign.at1 >= this._$value.length )
 	{
-		return false;
+		return;
 	}
 
 	this.parent.setCaret(
@@ -805,8 +1055,6 @@ Input.prototype.keyRight = function()
 			at1  : csign.at1 + 1
 		}
 	);
-
-	return true;
 };
 
 
@@ -818,7 +1066,7 @@ Input.prototype.keyUp =
 {
 	this.parent.cycleFocus( -1 );
 
-	return true;
+	return;
 };
 
 
@@ -826,80 +1074,65 @@ Input.prototype.keyUp =
 | User pressed a special key
 */
 Input.prototype.specialKey =
-	function( key )
+	function(
+		key
+	)
 {
-	var poke =
-		false;
-
 	switch( key )
 	{
 		case 'backspace' :
 
-			poke =
-				this.keyBackspace( );
+			this.keyBackspace( );
 
 			break;
 
 		case 'del' :
 
-			poke =
-				this.keyDel( );
+			this.keyDel( );
 
 			break;
 
 		case 'down' :
 
-			poke =
-				this.keyDown( );
+			this.keyDown( );
 
 			break;
 
 		case 'end' :
 
-			poke =
-				this.keyEnd( );
+			this.keyEnd( );
 
 			break;
 
 		case 'enter' :
 
-			poke =
-				this.keyEnter( );
+			this.keyEnter( );
 
 			break;
 
 		case 'left' :
 
-			poke =
-				this.keyLeft( );
+			this.keyLeft( );
 
 			break;
 
 		case 'pos1' :
 
-			poke =
-				this.keyPos1( );
+			this.keyPos1( );
 
 			break;
 
 		case 'right' :
 
-			poke =
-				this.keyRight( );
+			this.keyRight( );
 
 			break;
 
 		case 'up' :
 
-			poke =
-				this.keyUp( );
+			this.keyUp( );
 
 			break;
-	}
-
-	if( poke )
-	{
-		this.parent.poke( );
 	}
 };
 
@@ -909,33 +1142,6 @@ Input.prototype.specialKey =
 */
 Input.prototype.focusable =
 	true;
-
-
-/*
-| Clears all caches
-*/
-Input.prototype.poke =
-	function( )
-{
-	this.$fabric =
-		null;
-
-	shell.redraw =
-		true;
-
-	this.parent.poke( );
-};
-
-
-/*
-| Force clears all caches.
-*/
-Input.prototype.knock =
-	function( )
-{
-	this.$fabric =
-		null;
-};
 
 
 /*
@@ -950,7 +1156,7 @@ Input.prototype.pointingHover =
 {
 	if(
 		p === null ||
-		p.x < this.pnw.x ||
+		p.x < this.pnw.x || // FIXME use within
 		p.y < this.pnw.y ||
 		p.x > this.pse.x ||
 		p.y > this.pse.y
@@ -959,12 +1165,17 @@ Input.prototype.pointingHover =
 		return null;
 	}
 
-	var pp = p.sub(
-		this.pnw
-	);
+	var
+		pp =
+			p.sub(
+				this.pnw
+			);
 
 	if(
-		!this._shape.within( Euclid.View.proper, pp )
+		!this._shape.within(
+			Euclid.View.proper,
+			pp
+		)
 	)
 	{
 		return null;
@@ -986,7 +1197,7 @@ Input.prototype.pointingStart =
 {
 	if(
 		p === null ||
-		p.x < this.pnw.x ||
+		p.x < this.pnw.x || // FIXME use within
 		p.y < this.pnw.y ||
 		p.x > this.pse.x ||
 		p.y > this.pse.y
@@ -995,8 +1206,9 @@ Input.prototype.pointingStart =
 		return null;
 	}
 
-	var pp =
-		p.sub( this.pnw );
+	var
+		pp =
+			p.sub( this.pnw );
 
 	if(
 		!this._shape.within(
@@ -1026,10 +1238,43 @@ Input.prototype.pointingStart =
 
 	caret.show( );
 
-	this.poke( );
-
 	return false;
 };
+
+
+/*
+| Control takes focus.
+| TODO remove
+*/
+Input.prototype.grepFocus =
+	function( )
+{
+	if(
+		!this.focusable ||
+		!this.visible ||
+		this.parent.getFocus( ) === this
+	)
+	{
+		return false;
+	}
+
+	this.parent.setCaret(
+		{
+			path :
+				this.path,
+
+			at1 :
+				0
+		}
+	);
+
+	return true;
+};
+
+
+// TODO remove
+Input.prototype.knock =
+	function() {};
 
 
 })( );

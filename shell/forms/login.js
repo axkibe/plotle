@@ -779,11 +779,19 @@ Login.prototype.onAuth =
 Login.prototype.clear =
 	function( )
 {
-	var sub = this.$sub;
+	var
+		sub =
+			this.$sub;
 
-	sub.userInput.setValue( '' );
+	this.setValue(
+		'userInput',
+		''
+	);
 
-	sub.passwordInput.setValue( '' );
+	this.setValue(
+		'passwordInput',
+		''
+	);
 
 	this.setCaret( null );
 };
