@@ -1212,10 +1212,13 @@ MainDisc.prototype._weave =
 	var fabric =
 		this.$fabric;
 
-	if( fabric && !config.debug.noCache )
-	{
-		return fabric;
-	}
+//  TODO reenable caching once
+//       disc recreation is fixed
+//
+//	if( fabric && !config.debug.noCache )
+//	{
+//		return fabric;
+//	}
 
 	fabric =
 	this.$fabric =
