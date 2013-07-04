@@ -513,6 +513,9 @@ SignUp.prototype.layout =
 			style :
 				'checkbox',
 
+			checked :
+				true,
+
 			box :
 			{
 				type :
@@ -886,26 +889,27 @@ SignUp.prototype.pushButton =
 SignUp.prototype.signup =
 	function( )
 {
-	var sub =
-		this.$sub;
+	var
+		sub =
+			this.$sub,
 
-	var errorLabel =
-		sub.errorLabel;
+		errorLabel =
+			sub.errorLabel,
 
-	var user =
-		sub.userInput.getValue( );
+		user =
+			sub.userInput.value,
 
-	var email =
-		sub.emailInput.getValue( );
+		email =
+			sub.emailInput.value,
 
-	var pass =
-		sub.passwordInput.getValue( );
+		pass =
+			sub.passwordInput.value,
 
-	var pass2 =
-		sub.password2Input.getValue( );
+		pass2 =
+			sub.password2Input.value,
 
-	var newsletter =
-		sub.newsletterCheckBox.isChecked();
+		newsletter =
+			sub.newsletterCheckBox.checked;
 
 	if( user.length < 4 )
 	{
@@ -1059,7 +1063,7 @@ SignUp.prototype.onRegister =
 						),
 
 					at1 :
-						sub.userInput.getValue( ).length
+						sub.userInput.value.length
 				}
 			);
 		}
@@ -1087,17 +1091,30 @@ SignUp.prototype.onRegister =
 SignUp.prototype.clear =
 	function( )
 {
-	var sub = this.$sub;
+	this.setValue(
+		'userInput',
+		''
+	);
 
-	sub.userInput.setValue( '' );
+	this.setValue(
+		'emailInput',
+		''
+	);
 
-	sub.emailInput.setValue( '' );
+	this.setValue(
+		'passwordInput',
+		''
+	);
 
-	sub.passwordInput.setValue( '' );
+	this.setValue(
+		'password2Input',
+		''
+	);
 
-	sub.password2Input.setValue( '' );
-
-	sub.newsletterCheckBox.setChecked( true );
+	this.setChecked(
+		'newsletterCheckBox',
+		true
+	);
 
 	this.setCaret( null );
 };

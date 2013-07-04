@@ -1334,6 +1334,7 @@ MainDisc.prototype.getButtonOfMode =
 		case 'User' :
 			return 'user';
 
+		case 'Welcome' :
 		case null :
 			return null;
 

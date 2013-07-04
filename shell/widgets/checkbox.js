@@ -8,7 +8,9 @@
 /*
 | Export
 */
-var Widgets;
+var
+	Widgets;
+
 Widgets =
 	Widgets || { };
 
@@ -35,7 +37,7 @@ var
 ( function( ) {
 'use strict';
 
-if( typeof( window ) === 'undefined' )
+if( CHECK && typeof( window ) === 'undefined' )
 {
 	throw new Error( 'this code needs a browser!' );
 }
@@ -47,23 +49,81 @@ if( typeof( window ) === 'undefined' )
 var CheckBox =
 Widgets.CheckBox =
 	function(
-		// ... free strings ...
+		tag,
+		inherit,
+		tree,
+		parent,
+		name,
+		focusAccent,
+		hoverAccent,
+		visible,
+		checked
 	)
 {
-	Widgets.Widget.call(
-		this,
-		'CheckBox',
-		arguments
-	);
+	if( CHECK )
+	{
+		if( tag !== 'XOXO' )
+		{
+			throw new Error(
+				'tag mismatch'
+			);
+		}
 
-	var tree =
-		this.tree;
+		if( parent === null )
+		{
+			throw new Error(
+				'parent missing'
+			);
+		}
 
-	var parent =
-		this.parent;
+		if( tree === null )
+		{
+			throw new Error(
+				'tree missing'
+			);
+		}
 
-	var inherit =
-		this.inherit;
+		if( typeof( focusAccent ) !== 'boolean' )
+		{
+			throw new Error(
+				'invalid focusAccent.'
+			);
+		}
+
+		if( typeof( hoverAccent ) !== 'boolean' )
+		{
+			throw new Error(
+				'invalid hoverAccent.'
+			);
+		}
+	}
+
+	// TODO inherit
+	this.path =
+		new Path(
+			[
+				parent.name,
+				name
+			]
+		);
+
+	this.tree =
+		tree;
+
+	this.parent =
+		parent;
+
+	this.name =
+		name;
+
+	this.focusAccent =
+		focusAccent;
+
+	this.hoverAccent =
+		hoverAccent;
+
+	this.visible =
+		visible;
 
 	this.box =
 		new Euclid.Rect(
@@ -72,24 +132,208 @@ Widgets.CheckBox =
 			parent.iframe.computePoint( tree.box.pse )
 		);
 
-	this._$checked =
-		inherit ? inherit._$checked : true;
+	this.checked =
+		checked;
 
-	this.$visible =
-		inherit ? inherit.$visible : true;
+	this.focusAccent =
+		focusAccent;
 
-	this.$accent =
-		Accent.NORMAL;
+	this.hoverAccent =
+		hoverAccent;
+
+	Jools.immute( this );
 };
 
 
 /*
-| CheckBoxes are Widgets
+| Creates an input.
 */
-Jools.subclass(
-	CheckBox,
-	Widgets.Widget
-);
+CheckBox.create =
+	function(
+		// free strings
+	)
+{
+	var
+		inherit =
+			null,
+
+		focusAccent =
+			null,
+
+		hoverAccent =
+			null,
+
+		parent =
+			null,
+
+		name =
+			null,
+
+		tree =
+			null,
+
+		checked =
+			null,
+
+		visible =
+			null;
+
+
+	for(
+		var a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
+	{
+		switch( arguments[ a ] )
+		{
+			case 'inherit' :
+
+				inherit =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'focusAccent' :
+
+				focusAccent =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'hoverAccent' :
+
+				hoverAccent =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'name' :
+
+				name =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'parent' :
+
+				parent =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'tree' :
+
+				tree =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'checked' :
+
+				checked =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'visible' :
+
+				visible =
+					arguments[ a + 1 ];
+
+				break;
+
+			default :
+
+				throw new Error(
+					'invalid argument: ' + arguments[ a ]
+				);
+		}
+	}
+
+	if( inherit )
+	{
+		if( focusAccent === null )
+		{
+			focusAccent =
+				inherit.focusAccent;
+		}
+
+		if( hoverAccent === null )
+		{
+			hoverAccent =
+				inherit.hoverAccent;
+		}
+
+		if( name === null )
+		{
+			name =
+				inherit.name;
+		}
+
+		if( parent === null )
+		{
+			parent =
+				inherit.parent;
+		}
+
+		if( tree === null )
+		{
+			tree =
+				inherit.tree;
+		}
+
+		if( checked === null )
+		{
+			checked =
+				inherit.checked;
+		}
+
+		if( visible === null )
+		{
+			visible =
+				inherit.visible;
+		}
+	}
+
+	if( focusAccent === null )
+	{
+		focusAccent =
+			false;
+	}
+
+	if( hoverAccent === null )
+	{
+		hoverAccent =
+			false;
+	}
+
+	if( visible === null )
+	{
+		visible =
+			true;
+	}
+
+	if( checked === null )
+	{
+		checked =
+			Jools.is( tree.checked ) ?
+				tree.checked :
+				false;
+	}
+
+	return new CheckBox(
+		'XOXO',
+		inherit,
+		tree,
+		parent,
+		name,
+		focusAccent,
+		hoverAccent,
+		visible,
+		checked
+	);
+};
 
 
 /*
@@ -105,7 +349,9 @@ CheckBox.prototype.focusable =
 CheckBox.prototype.isChecked =
 	function( )
 {
-	return this._$checked;
+	throw new Error(
+		'TODO'
+	);
 };
 
 
@@ -117,19 +363,9 @@ CheckBox.prototype.setChecked =
 		checked
 	)
 {
-	if( typeof( checked ) !== 'boolean' )
-	{
-		throw new Error(
-			'CheckBox setChecked not boolean: ' + checked
-		);
-	}
-
-	this._$checked =
-		checked;
-
-	this.poke( );
-
-	return checked;
+	throw new Error(
+		'TODO'
+	);
 };
 
 
@@ -214,7 +450,7 @@ CheckBox.prototype.pointingStart =
 		// ctrl
 	)
 {
-	if( !this.$visible )
+	if( !this.visible )
 	{
 		return null;
 	}
@@ -226,10 +462,10 @@ CheckBox.prototype.pointingStart =
 		)
 	)
 	{
-		this._$checked =
-			!this._$checked;
-
-		this.poke();
+		this.parent.setChecked(
+			this.name,
+			!this.checked
+		);
 
 		return false;
 	}
@@ -264,10 +500,10 @@ CheckBox.prototype.specialKey =
 
 		case 'enter' :
 
-			this._$checked =
-				!this._$checked;
-
-			this.poke( );
+			this.parent.setChecked(
+				this.name,
+				!this.checked
+			);
 
 			return;
 	}
@@ -282,10 +518,10 @@ CheckBox.prototype.input =
 		// text
 	)
 {
-	this._$checked =
-		!this._$checked;
-
-	this.poke( );
+	this.parent.setChecked(
+		this.name,
+		!this.checked
+	);
 
 	return true;
 };
@@ -293,20 +529,25 @@ CheckBox.prototype.input =
 
 /*
 | Draws the checkbox.
+| TODO _weave caching
 */
 CheckBox.prototype.draw =
 	function(
-		fabric,
-		accent
+		fabric
 	)
 {
-	if( !this.$visible )
-		{ return; }
+	if( !this.visible )
+	{
+		return;
+	}
 
 	var style =
 		Widgets.getStyle(
 			this.tree.style,
-			accent
+			Accent.state(
+				this.hoverAccent,
+				this.focusAccent
+			)
 		);
 
 	// TODO why doesnt getStyle throw the Error?
@@ -325,7 +566,7 @@ CheckBox.prototype.draw =
 		Euclid.View.proper
 	);
 
-	if( this._$checked )
+	if( this.checked )
 	{
 		fabric.paint(
 			Widgets.getStyle(
@@ -337,28 +578,55 @@ CheckBox.prototype.draw =
 			Euclid.View.proper
 		);
 	}
-
-	return fabric;
 };
 
 
 /*
+| Control takes focus.
+| TODO remove
+*/
+CheckBox.prototype.grepFocus =
+	function( )
+{
+	if(
+		!this.focusable ||
+		!this.visible ||
+		this.parent.getFocus( ) === this
+	)
+	{
+		return false;
+	}
+
+	this.parent.setCaret(
+		{
+			path :
+				this.path,
+
+			at1 :
+				0
+		}
+	);
+
+	return true;
+};
+
+
+
+/*
 | Clears all caches.
+| TODO remove
 */
 CheckBox.prototype.poke = function( )
 {
-	//this.$fabric = null;
-
-	this.parent.poke( );
 };
 
 
 /*
 | Force clears all caches.
+| TODO remove
 */
 CheckBox.prototype.knock = function( )
 {
-	//this.$fabric = null;
 };
 
 

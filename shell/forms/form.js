@@ -157,7 +157,7 @@ Forms.Form =
 			Proto =
 				this.getWidgetPrototype( tree.type );
 
-		if( tree.type === 'Input' || tree.type ==='Button' ) // TODO
+		if( tree.type === 'Input' || tree.type ==='Button' || tree.type === 'CheckBox') // TODO
 		{
 			this.$sub[ name ] =
 				Proto.create(
@@ -810,6 +810,33 @@ Form.prototype.setHover =
 	return;
 };
 
+
+/*
+| Sets the hovered component.
+*/
+Form.prototype.setChecked =
+	function(
+		widgetName,
+		value
+	)
+{
+	var
+		Proto =
+			this.getWidgetPrototype(
+				this.tree.twig[ widgetName ].type
+			);
+
+	this.$sub[ widgetName ] =
+		Proto.create(
+			'inherit',
+				this.$sub[ widgetName ],
+			'checked',
+				value
+		);
+
+	shell.redraw =
+		true;
+};
 
 /*
 | The shell got the systems focus.

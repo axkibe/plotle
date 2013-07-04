@@ -103,6 +103,9 @@ Pattern =
 			box :
 				'Frame',
 
+			checked :
+				'Boolean',
+
 			style :
 				'String'
 		}
