@@ -1063,7 +1063,7 @@ IFace.prototype.alter =
 		);
 	}
 
-    return r.tree;
+    return chgX;
 };
 
 

@@ -301,7 +301,7 @@ Peer.prototype.newNote =
 				rank :
 					0
 			}
-	);
+		);
 
 	return chgX.trg.path.get( -1 );
 };
@@ -349,7 +349,7 @@ Peer.prototype.newPortal =
 			}
 		);
 
-	return chgX.trg.path.get(-1);
+	return chgX.trg.path.get( -1 );
 };
 
 
@@ -720,21 +720,19 @@ Peer.prototype.split =
 		offset
 	)
 {
-	return (
-		this._iface.alter(
-			{
-				path:
-					path,
+	this._iface.alter(
+		{
+			path:
+				path,
 
-				at1:
-					offset
-			},
-			{
-				proc:
-					'splice'
-			}
-		)
-	);
+			at1:
+				offset
+		},
+		{
+			proc:
+				'splice'
+		}
+	)
 };
 
 

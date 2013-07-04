@@ -894,8 +894,8 @@ Input.prototype.keyBackspace =
 
 	this.parent.setValue(
 		this.name,
-		this._$value.substring( 0, at1 - 1 ) +
-			this._$value.substring( at1 )
+		this.value.substring( 0, at1 - 1 ) +
+			this.value.substring( at1 )
 	);
 
 	this.parent.setCaret(
@@ -917,15 +917,15 @@ Input.prototype.keyDel =
 		at1 =
 			this.parent.$caret.csign.at1;
 
-	if( at1 >= this._$value.length )
+	if( at1 >= this.value.length )
 	{
 		return;
 	}
 
 	this.parent.setValue(
 		this.name,
-		this._$value.substring( 0, at1 ) +
-			this._$value.substring( at1 + 1 )
+		this.value.substring( 0, at1 ) +
+			this.value.substring( at1 + 1 )
 	);
 };
 
@@ -963,7 +963,7 @@ Input.prototype.keyEnd =
 		at1 =
 			csign.at1;
 
-	if( at1 >= this._$value.length )
+	if( at1 >= this.value.length )
 	{
 		return;
 	}
@@ -974,7 +974,7 @@ Input.prototype.keyEnd =
 				csign.path,
 
 			at1 :
-				this._$value.length
+				this.value.length
 		}
 	);
 };
@@ -1044,7 +1044,7 @@ Input.prototype.keyRight =
 		csign =
 			this.parent.$caret.sign;
 
-	if( csign.at1 >= this._$value.length )
+	if( csign.at1 >= this.value.length )
 	{
 		return;
 	}
