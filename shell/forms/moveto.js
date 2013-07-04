@@ -8,7 +8,9 @@
 /*
 | Export
 */
-var Forms;
+var
+	Forms;
+
 Forms =
 	Forms || { };
 
@@ -16,11 +18,13 @@ Forms =
 /*
 | Imports
 */
-var Euclid;
-var fontPool;
-var Jools;
-var Path;
-var shell;
+var
+	Euclid,
+	fontPool,
+	Jools,
+	Path,
+	shell,
+	Widgets;
 
 
 /*
@@ -515,7 +519,7 @@ MoveTo.prototype.setUsername =
 			this.$sub.userHomeButton,
 
 		isGuest =
-			 username.substr( 0, 7 ) === 'visitor';
+			username.substr( 0, 7 ) === 'visitor';
 
 	this.$sub.userHomeButton =
 		Widgets.Button.create(

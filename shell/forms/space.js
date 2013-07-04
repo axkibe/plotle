@@ -300,7 +300,8 @@ Space.prototype.arrivedAtSpace =
 	var $sub =
 		this.$sub;
 
-	$sub.headline.setText(
+	this.setText(
+		'headline',
 		spaceUser + ':' + spaceTag
 	);
 };

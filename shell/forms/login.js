@@ -593,17 +593,18 @@ Login.prototype.pushButton =
 Login.prototype.login =
 	function( )
 {
-	var sub =
-		this.$sub;
+	var
+		sub =
+			this.$sub,
 
-	var errorLabel =
-		sub.errorLabel;
+		errorLabel =
+			sub.errorLabel,
 
-	var user =
-		sub.userInput.getValue( );
+		user =
+			sub.userInput.value,
 
-	var pass =
-		sub.passwordInput.getValue( );
+		pass =
+			sub.passwordInput.value;
 
 	if( user.length < 4 )
 	{

@@ -1334,6 +1334,7 @@ MainDisc.prototype.getButtonOfMode =
 		case 'User' :
 			return 'user';
 
+		case 'NoAccessToSpace' :
 		case 'Welcome' :
 		case null :
 			return null;
@@ -1733,7 +1734,7 @@ MainDisc.prototype.setMode =
 
 	shell.redraw =
 		true;
-}
+};
 
 
 /*
@@ -1841,6 +1842,9 @@ MainDisc.prototype.setUser =
 		'Normal'
 	);
 
+	shell.redraw =
+		true;
+
 	this.poke( );
 };
 
@@ -1875,7 +1879,7 @@ MainDisc.prototype.setActive =
 	)
 {
 	this.createDisc.setActive( active );
-}
+};
 
 
 

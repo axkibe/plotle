@@ -540,7 +540,7 @@ Button.prototype._weave =
 					pos.x,
 
 				y =
-					pos.y,
+					pos.y;
 
 			text =
 				text.split( '\n' );

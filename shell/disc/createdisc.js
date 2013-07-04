@@ -1003,7 +1003,7 @@ CreateDisc.prototype.setActive =
 
 	shell.redraw =
 		true;
-}
+};
 
 
 } )( );

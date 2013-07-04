@@ -427,37 +427,23 @@ User.prototype.layout =
 User.prototype.setUsername =
 	function( username )
 {
-	var $sub =
-		this.$sub;
-
-	$sub.headline.setText(
+	this.setText(
+		'headline',
 		'hello ' + username + '!'
 	);
 
-	if( username.substr( 0, 7 ) !== 'visitor' )
-	{
-		$sub.visitor1.setVisible( false );
-		$sub.visitor2.setVisible( false );
-		$sub.visitor3.setVisible( false );
-		$sub.visitor4.setVisible( false );
+	var
+		isGuest =
+			username.substr( 0, 7 ) === 'visitor';
 
-		$sub.greeting1.setVisible( true );
-		$sub.greeting2.setVisible( true );
-		$sub.greeting3.setVisible( true );
-	}
-	else
-	{
-		$sub.visitor1.setVisible( false );
+	this.setVisible( 'visitor1', isGuest );
+	this.setVisible( 'visitor2', isGuest );
+	this.setVisible( 'visitor3', isGuest );
+	this.setVisible( 'visitor4', isGuest );
 
-		$sub.visitor1.setVisible( true );
-		$sub.visitor2.setVisible( true );
-		$sub.visitor3.setVisible( true );
-		$sub.visitor4.setVisible( true );
-
-		$sub.greeting1.setVisible( false );
-		$sub.greeting2.setVisible( false );
-		$sub.greeting3.setVisible( false );
-	}
+	this.setVisible( 'greeting1', !isGuest );
+	this.setVisible( 'greeting2', !isGuest );
+	this.setVisible( 'greeting3', !isGuest );
 };
 
 

@@ -157,34 +157,17 @@ Forms.Form =
 			Proto =
 				this.getWidgetPrototype( tree.type );
 
-		if( tree.type === 'Input' || tree.type ==='Button' || tree.type === 'CheckBox') // TODO
-		{
-			this.$sub[ name ] =
-				Proto.create(
-					'name',
-						name,
-					'tree',
-						tree,
-					'parent',
-						this,
-					'inherit',
-						inherit && inherit.$sub[ name ]
-				);
-		}
-		else
-		{
-			this.$sub[ name ] =
-				new Proto(
-					'name',
-						name,
-					'tree',
-						tree,
-					'parent',
-						this,
-					'inherit',
-						inherit && inherit.$sub[ name ]
-				);
-		}
+		this.$sub[ name ] =
+			Proto.create(
+				'name',
+					name,
+				'tree',
+					tree,
+				'parent',
+					this,
+				'inherit',
+					inherit && inherit.$sub[ name ]
+			);
 	}
 
 	Jools.immute( this );
@@ -812,6 +795,63 @@ Form.prototype.setHover =
 
 
 /*
+| Sets a text.
+*/
+Form.prototype.setText =
+	function(
+		widgetName,
+		text
+	)
+{
+	var
+		Proto =
+			this.getWidgetPrototype(
+				this.tree.twig[ widgetName ].type
+			);
+
+	this.$sub[ widgetName ] =
+		Proto.create(
+			'inherit',
+				this.$sub[ widgetName ],
+			'text',
+				text
+		);
+
+	shell.redraw =
+		true;
+};
+
+
+/*
+| Sets a visible attribute.
+*/
+Form.prototype.setVisible =
+	function(
+		widgetName,
+		visible
+	)
+{
+	var
+		Proto =
+			this.getWidgetPrototype(
+				this.tree.twig[ widgetName ].type
+			);
+
+	this.$sub[ widgetName ] =
+		Proto.create(
+			'inherit',
+				this.$sub[ widgetName ],
+			'visible',
+				visible
+		);
+
+	shell.redraw =
+		true;
+};
+
+
+
+/*
 | Sets the hovered component.
 */
 Form.prototype.setChecked =
@@ -837,6 +877,7 @@ Form.prototype.setChecked =
 	shell.redraw =
 		true;
 };
+
 
 /*
 | The shell got the systems focus.

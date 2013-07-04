@@ -8,7 +8,9 @@
 /*
 | Export
 */
-var Widgets;
+var
+	Widgets;
+
 Widgets =
 	Widgets || { };
 
@@ -19,7 +21,8 @@ Widgets =
 var
 	Curve,
 	Euclid,
-	Jools;
+	Jools,
+	Path;
 
 
 /*
@@ -28,7 +31,7 @@ var
 ( function( ) {
 'use strict';
 
-if( typeof( window ) === 'undefined' )
+if( CHECK && typeof( window ) === 'undefined' )
 {
 	throw new Error( 'this code needs a browser!' );
 }
@@ -40,42 +43,213 @@ if( typeof( window ) === 'undefined' )
 var Label =
 Widgets.Label =
 	function(
-		// ... free strings ...
+		tag,
+		inherit,
+		tree,
+		parent,
+		name,
+		visible,
+		text
 	)
 {
-	Widgets.Widget.call(
-		this,
-		'Label',
-		arguments
-	);
+	if( CHECK )
+	{
+		if( tag !== 'XOXO' )
+		{
+			throw new Error(
+				'tag mismatch'
+			);
+		}
 
-	var
-		inherit =
-			this.inherit;
+		if( parent === null )
+		{
+			throw new Error(
+				'parent missing'
+			);
+		}
 
-	this.pos =
-		this.parent.iframe.computePoint(
-			this.tree.pos
+		if( tree === null )
+		{
+			throw new Error(
+				'tree missing'
+			);
+		}
+	}
+
+	// TODO inherit
+	this.path =
+		new Path(
+			[
+				parent.name,
+				name
+			]
 		);
 
-	// if not null, overrides the design text
-	this._$text =
-		inherit ? inherit._$text : null;
+	this.name =
+		name;
+
+	this.parent =
+		parent;
+
+	this.pos =
+		parent.iframe.computePoint(
+			tree.pos
+		),
+
+	this.text =
+		text !== null ?
+			text :
+			tree.text;
+
+	this.tree =
+		tree;
+
+	this.visible =
+		visible;
 
 	this._font =
 		new Euclid.Font(
-			this.tree.font
+			tree.font
 		);
+
+	Jools.immute( this );
 };
 
 
 /*
-| Labels are Widgets
+| Creates a label.
 */
-Jools.subclass(
-	Label,
-	Widgets.Widget
-);
+Label.create =
+	function(
+		// free strings
+	)
+{
+	var
+		inherit =
+			null,
+
+		parent =
+			null,
+
+		name =
+			null,
+
+		text =
+			null,
+
+		tree =
+			null,
+
+		visible =
+			null;
+
+	for(
+		var a = 0, aZ = arguments.length;
+		a < aZ;
+		a += 2
+	)
+	{
+		switch( arguments[ a ] )
+		{
+			case 'inherit' :
+
+				inherit =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'name' :
+
+				name =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'parent' :
+
+				parent =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'text' :
+
+				text =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'tree' :
+
+				tree =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'visible' :
+
+				visible =
+					arguments[ a + 1 ];
+
+				break;
+
+			default :
+
+				throw new Error(
+					'invalid argument: ' + arguments[ a ]
+				);
+		}
+	}
+
+	if( inherit )
+	{
+		if( name === null )
+		{
+			name =
+				inherit.name;
+		}
+
+		if( parent === null )
+		{
+			parent =
+				inherit.parent;
+		}
+
+		if( tree === null )
+		{
+			tree =
+				inherit.tree;
+		}
+
+		if( text === null )
+		{
+			text =
+				inherit.text;
+		}
+
+		if( visible === null )
+		{
+			visible =
+				inherit.visible;
+		}
+	}
+
+	if( visible === null )
+	{
+		visible =
+			true;
+	}
+
+	return new Label(
+		'XOXO',
+		inherit,
+		tree,
+		parent,
+		name,
+		visible,
+		text
+	);
+};
 
 
 /*
@@ -96,14 +270,14 @@ Label.prototype.draw =
 		fabric
 	)
 {
-	if( !this._$visible )
+	if( !this.visible )
 	{
 		return;
 	}
 
 	fabric.paintText(
 		'text',
-			this._$text || this.tree.text,
+			this.text,
 		'p',
 			this.pos,
 		'font',
@@ -120,29 +294,29 @@ Label.prototype.setText =
 		text
 	)
 {
-	this._$text = text;
-
-	this.poke();
+	throw new Error(
+		'TODO'
+	);
 };
 
 
 /*
 | Clears cache.
+| TODO remove
 */
 Label.prototype.poke =
 	function( )
 {
-	this.parent.poke( );
 };
 
 
 /*
 | Force clears all caches.
+| TODO remove
 */
 Label.prototype.knock =
 	function( )
 {
-	// pass
 };
 
 

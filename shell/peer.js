@@ -732,7 +732,7 @@ Peer.prototype.split =
 			proc:
 				'splice'
 		}
-	)
+	);
 };
 
 

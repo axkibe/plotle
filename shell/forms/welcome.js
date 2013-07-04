@@ -269,7 +269,8 @@ Welcome.prototype.setUsername =
 	var $sub =
 		this.$sub;
 
-	$sub.headline.setText(
+	this.setText(
+		'headline',
 		'Welcome ' + username + '!'
 	);
 };
@@ -288,13 +289,17 @@ Welcome.prototype.pushButton =
 	{
 		case 'closeButton' :
 
-			shell.bridge.changeMode( 'Normal' );
+			shell.bridge.changeMode(
+				'Normal'
+			);
 
 			break;
 
 		default :
 
-			throw new Error( 'unknown button pushed: ' + buttonName );
+			throw new Error(
+				'unknown button pushed: ' + buttonName
+			);
 	}
 };
 

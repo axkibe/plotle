@@ -298,11 +298,12 @@ NoAccessToSpace.prototype.setSpace =
 	var $sub =
 		this.$sub;
 
-	$sub.headline.setText(
-		'no access to ' +
-		spaceUser +
-		':' +
-		spaceTag
+	this.setText(
+		'headline',
+			'no access to ' +
+			spaceUser +
+			':' +
+			spaceTag
 	);
 };
 
