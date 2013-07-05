@@ -1101,6 +1101,7 @@ Space.prototype.dragStop =
 			this.$view,
 
 		key,
+		result,
 		item;
 
 	if( !action )
@@ -1125,12 +1126,15 @@ Space.prototype.dragStop =
 							)
 					);
 
-				key =
-					shell.peer.newNote(
-						this.spaceUser,
-						this.spaceTag,
-						note.zone
-					);
+			result =
+				shell.peer.newNote(
+					this.spaceUser,
+					this.spaceTag,
+					note.zone
+				),
+
+			key =
+				result.chgX.trg.path.get( -1 );
 
 			this.$sub[ key ].grepFocus( this );
 
@@ -1192,7 +1196,7 @@ Space.prototype.dragStop =
 									)
 						);
 
-			key =
+			result =
 				shell.peer.newLabel(
 					this.spaceUser,
 					this.spaceTag,
@@ -1200,6 +1204,9 @@ Space.prototype.dragStop =
 					'Label',
 					label.$sub.doc.fontsize
 				);
+
+			key =
+				result.chgX.trg.path.get( -1 );
 
 			this.$sub[ key ].grepFocus( this );
 
@@ -1228,7 +1235,7 @@ Space.prototype.dragStop =
 							)
 					);
 
-			key =
+			result =
 				shell.peer.newPortal(
 					this.spaceUser,
 					this.spaceTag,
@@ -1237,9 +1244,13 @@ Space.prototype.dragStop =
 					'home'
 				);
 
+			key =
+				result.chgX.trg.path.get( -1 );
+
 			this.$sub[ key ].grepFocus( this );
 
-			shell.redraw = true;
+			shell.redraw =
+				true;
 
 			shell.bridge.stopAction( );
 
@@ -1280,7 +1291,8 @@ Space.prototype.dragStop =
 
 				case 'pan' :
 
-					action.relationState = 'start';
+					action.relationState =
+						'start';
 
 					break;
 			}

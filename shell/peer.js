@@ -9,27 +9,31 @@
 /*
 | Export
 */
-var Peer;
+var
+	Peer;
 
 
 /*
 | Imports
 */
-var IFace;
-var Jools;
-var Path;
+var
+	IFace,
+	Jools,
+	Path;
 
 
 /*
 | Capsule
 */
-(function () {
+(function( ) {
 
 
 "use strict";
 if( typeof( window ) === 'undefined' )
 {
-	throw new Error( 'this code nees a browser!' );
+	throw new Error(
+		'this code nees a browser!'
+	);
 }
 
 
@@ -53,7 +57,7 @@ Peer =
 
 
 /*
-| sets the current user
+| Sets the current user.
 */
 Peer.prototype.setUser =
 	function(
@@ -106,7 +110,7 @@ Peer.prototype.logout =
 
 
 /*
-| authentication completed of a visitor user on log out
+| Authentication completed of a visitor user on log out.
 */
 Peer.prototype.onAuth =
 	function(
@@ -119,7 +123,9 @@ Peer.prototype.onAuth =
 {
 	if( op !== 'logout' )
 	{
-		throw new Error( 'onAuth unexpected operation: ' + op );
+		throw new Error(
+			'onAuth unexpected operation: ' + op
+		);
 	}
 
 	callback( asw );
@@ -255,7 +261,7 @@ Peer.prototype.newNote =
 		zone
 	)
 {
-	var chgX =
+	return (
 		this._iface.alter(
 			{
 				val :
@@ -301,9 +307,8 @@ Peer.prototype.newNote =
 				rank :
 					0
 			}
-		);
-
-	return chgX.trg.path.get( -1 );
+		)
+	);
 };
 
 
@@ -319,7 +324,7 @@ Peer.prototype.newPortal =
 		destSpaceTag    // the tag of the space the portal leads to
 	)
 {
-	var chgX =
+	return (
 		this._iface.alter(
 			{
 				val :
@@ -347,9 +352,8 @@ Peer.prototype.newPortal =
 				rank :
 					0
 			}
-		);
-
-	return chgX.trg.path.get( -1 );
+		)
+	);
 };
 
 
@@ -362,26 +366,27 @@ Peer.prototype.setZone =
 		zone
 	)
 {
-	this._iface.alter(
-		{
-			val :
-				zone
-		},
-		{
-			path :
-				new Path(
-					itemPath,
-					'++',
-					'zone'
-				)
-		}
+	return (
+		this._iface.alter(
+			{
+				val :
+					zone
+			},
+			{
+				path :
+					new Path(
+						itemPath,
+						'++',
+						'zone'
+					)
+				}
+		)
 	);
 };
 
 
 /*
 | Sets an items fontsize.
-| XXXX
 */
 Peer.prototype.setFontSize =
 	function(
@@ -389,18 +394,21 @@ Peer.prototype.setFontSize =
 		fontsize
 	)
 {
-	this._iface.alter(
-		{
-			val  : fontsize
-		},
-		{
-			path :
-				new Path(
-					itemPath,
-					'++',
-					'fontsize'
-				)
-		}
+	return (
+		this._iface.alter(
+			{
+				val :
+					fontsize
+			},
+			{
+				path :
+					new Path(
+						itemPath,
+						'++',
+						'fontsize'
+					)
+			}
+		)
 	);
 };
 
@@ -414,17 +422,21 @@ Peer.prototype.setPNW =
 		pnw
 	)
 {
-	this._iface.alter(
-		{
-			val  : pnw
-		},
-		{
-			path : new Path(
-				itemPath,
-				'++',
-				'pnw'
-			)
-		}
+	return (
+		this._iface.alter(
+			{
+				val :
+					pnw
+			},
+			{
+				path :
+					new Path(
+						itemPath,
+						'++',
+						'pnw'
+					)
+			}
+		)
 	);
 };
 
@@ -441,7 +453,7 @@ Peer.prototype.newLabel =
 		fontsize
 	)
 {
-	var chgX =
+	return (
 		this._iface.alter(
 			{
 				val :
@@ -479,18 +491,17 @@ Peer.prototype.newLabel =
 
 				rank :
 					null
-		},
+			},
 
-		{
-			path :
-				new Path( [ '$new' ] ),
+			{
+				path :
+					new Path( [ '$new' ] ),
 
-			rank :
-				0
-		}
+				rank :
+					0
+			}
+		)
 	);
-
-	return chgX.trg.path.get( -1 );
 };
 
 
@@ -528,7 +539,7 @@ Peer.prototype.newRelation =
 		item2key
 	)
 {
-	var chgX =
+	return (
 		this._iface.alter(
 			{
 				val :
@@ -579,9 +590,8 @@ Peer.prototype.newRelation =
 				rank :
 					0
 			}
-		);
-
-	return chgX.trg.path.get( -1 );
+		)
+	);
 };
 
 
@@ -614,14 +624,20 @@ Peer.prototype.insertText =
 		text
 	)
 {
-	this._iface.alter(
-		{
-			val  : text
-		},
-		{
-			path : path,
-			at1  : offset
-		}
+	return (
+		this._iface.alter(
+			{
+				val :
+					text
+			},
+			{
+				path :
+					path,
+
+				at1 :
+					offset
+			}
+		)
 	);
 };
 
@@ -643,18 +659,28 @@ Peer.prototype.removeText =
 
 	if( len < 0 )
 	{
-		throw new Error('malformed removeText');
+		throw new Error(
+			'malformed removeText'
+		);
 	}
 
-	this._iface.alter(
-		{
-			path : path,
-			at1  : at1,
-			at2  : at1 + len
-		},
-		{
-			val: null
-		}
+	return (
+		this._iface.alter(
+			{
+				path :
+					path,
+
+				at1 :
+					at1,
+
+				at2 :
+					at1 + len
+			},
+			{
+				val :
+					null
+			}
+		)
 	);
 };
 
@@ -672,41 +698,68 @@ Peer.prototype.removeSpan =
 {
 	if( path1.get( -1 ) !== 'text' )
 	{
-		throw new Error( 'removeSpan invalid path' );
-	}
-
-	if( path2.get(-1) !== 'text' )
-	{
-		throw new Error('removeSpan invalid path');
-	}
-
-	if (path1.equals(path2))
-	{
-		return this.removeText(
-			path1,
-			at1,
-			at2 - at1
+		throw new Error(
+			'removeSpan invalid path'
 		);
 	}
 
-	var k1 = path1.get( -2 );
-	var k2 = path2.get( -2 );
+	if( path2.get( -1 ) !== 'text' )
+	{
+		throw new Error(
+			'removeSpan invalid path'
+		);
+	}
 
-	var pivot = this._iface.get( path1, -2 );
-	var r1 = pivot.rankOf( k1 );
-	var r2 = pivot.rankOf( k2 );
+	if ( path1.equals( path2 ) )
+	{
+		return (
+			this.removeText(
+				path1,
+				at1,
+				at2 - at1
+			).tree
+		);
+	}
+
+	var
+		k1 =
+			path1.get( -2 ),
+
+		k2 =
+			path2.get( -2 ),
+
+		pivot =
+			this._iface.get( path1, -2 ),
+
+		r1 =
+			pivot.rankOf( k1 ),
+
+		r2 =
+			pivot.rankOf( k2 );
 
 	for( var r = r1; r < r2 - 1; r++ )
 	{
-		this.join( path1, this._iface.get( path1 ).length );
+		this.join(
+			path1,
+			this._iface.get( path1 ).length
+		);
 	}
-	var len2 = this._iface.get( path1 ).length;
-	this.join( path1, len2 );
 
-	this.removeText(
+	var
+		len2 =
+			this._iface.get( path1 ).length;
+
+	this.join(
 		path1,
-		at1,
-		len2 - at1 + at2
+		len2
+	);
+
+	return (
+		this.removeText(
+			path1,
+			at1,
+			len2 - at1 + at2
+		).tree
 	);
 };
 
@@ -720,18 +773,20 @@ Peer.prototype.split =
 		offset
 	)
 {
-	this._iface.alter(
-		{
-			path:
-				path,
+	return (
+		this._iface.alter(
+			{
+				path:
+					path,
 
-			at1:
-				offset
-		},
-		{
-			proc:
-				'splice'
-		}
+				at1:
+					offset
+			},
+			{
+				proc:
+					'splice'
+			}
+		)
 	);
 };
 
@@ -745,14 +800,16 @@ Peer.prototype.join =
 		at1
 	)
 {
-	this._iface.alter(
-		{
-			proc: 'splice'
-		},
-		{
-			path: path,
-			at1 : at1
-		}
+	return (
+		this._iface.alter(
+			{
+				proc: 'splice'
+			},
+			{
+				path: path,
+				at1 : at1
+			}
+		)
 	);
 };
 
@@ -765,24 +822,36 @@ Peer.prototype.removeItem =
 		path
 	)
 {
-	var key =
-		path.get( -1 );
+	var
+		key =
+			path.get( -1 ),
 
-	var pivot =
-		this._iface.get( path, -1 );
+		pivot =
+			this._iface.get(
+				path,
+				-1
+			),
 
-	var r1 =
-		pivot.rankOf( key );
+		r1 =
+			pivot.rankOf( key );
 
-	this._iface.alter(
-		{
-			val  : null,
-			rank : r1
-		},
-		{
-			path : path,
-			rank : null
-		}
+	return (
+		this._iface.alter(
+			{
+				val :
+					null,
+
+				rank :
+					r1
+			},
+			{
+				path :
+					path,
+
+				rank :
+					null
+			}
+		)
 	);
 };
 

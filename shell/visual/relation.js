@@ -333,29 +333,33 @@ Relation.spawn =
 		item2
 	)
 {
-	var cline =
-		Euclid.Line.connect(
-			item1.getSilhoutte( item1.getZone( ) ),
-			null,
-			item2.getSilhoutte( item2.getZone( ) ),
-			null
-		);
+	var
+		cline =
+			Euclid.Line.connect(
+				item1.getSilhoutte( item1.getZone( ) ),
+				null,
+				item2.getSilhoutte( item2.getZone( ) ),
+				null
+			),
 
-	var pnw =
-		cline.pc.sub(
-			theme.relation.spawnOffset
-		);
+		pnw =
+			cline.pc.sub(
+				theme.relation.spawnOffset
+			),
 
-	var key =
-		shell.peer.newRelation(
-			space.spaceUser,
-			space.spaceTag,
-			pnw,
-			'relates to',
-			20,
-			item1.key,
-			item2.key
-		);
+		result =
+			shell.peer.newRelation(
+				space.spaceUser,
+				space.spaceTag,
+				pnw,
+				'relates to',
+				20,
+				item1.key,
+				item2.key
+			),
+
+		key =
+			 result.chgX.trg.path.get( -1 )
 
 	// event listener has spawned the vrel
 	space.$sub[ key ].grepFocus( space );

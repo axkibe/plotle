@@ -36,9 +36,11 @@ var
 "use strict";
 
 
-if( typeof ( window ) === 'undefined' )
+if( CHECK && typeof ( window ) === 'undefined' )
 {
-	throw new Error( 'this code nees a browser!' );
+	throw new Error(
+		'this code nees a browser!'
+	);
 }
 
 
@@ -1012,30 +1014,31 @@ IFace.prototype.alter =
 		trg
 	)
 {
-    var r =
-		new Change(
-			new Sign( src ),
-			new Sign( trg )
-		).changeTree( this.$cSpace );
+    var
+		result =
+			new Change(
+				new Sign( src ),
+				new Sign( trg )
+			).changeTree( this.$cSpace );
 
     this.$cSpace =
-		r.tree;
+		result.tree;
 
-	var chgX =
-		r.chgX;
+	var
+		chgX =
+			result.chgX,
 
-	var c = Jools.immute(
-		{
-			cid :
-				Jools.uid( ),
+		c =
+			Jools.immute({
+				cid :
+					Jools.uid( ),
 
-			chgX :
-				chgX,
+				chgX :
+					chgX,
 
-			time :
-				this.$remoteTime
-		}
-	);
+				time :
+					this.$remoteTime
+			});
 
 	this._$outbox.push( c );
 
@@ -1058,12 +1061,12 @@ IFace.prototype.alter =
     if( this._updateRCV )
 	{
 		this._updateRCV.update(
-			r.tree,
+			result.tree,
 			chgX
 		);
 	}
 
-    return chgX;
+    return result;
 };
 
 
@@ -1202,22 +1205,23 @@ IFace.prototype.undo =
 		return;
 	}
 
-	var chgX =
-		this._$undo.pop( ).chgX.invert( );
+	var
+		chgX =
+			this._$undo.pop( ).chgX.invert( ),
 
-    var r =
-		chgX.changeTree( this.$cSpace );
+		result =
+			chgX.changeTree( this.$cSpace );
 
-	if( r === null )
+	if( result === null )
 	{
 		return;
 	}
 
     this.$cSpace =
-		r.tree;
+		result.tree;
 
 	chgX =
-		r.chgX;
+		result.chgX;
 
 	if( chgX === null )
 	{
@@ -1246,7 +1250,7 @@ IFace.prototype.undo =
     if( this._updateRCV )
 	{
 		this._updateRCV.update(
-			r.tree,
+			result.tree,
 			chgX
 		);
 	}
@@ -1268,14 +1272,14 @@ IFace.prototype.redo =
 		chgX =
 			this._$redo.pop( ).chgX.invert( ),
 
-		r =
+		result =
 			chgX.changeTree( this.$cSpace );
 
     this.$cSpace =
-		r.tree;
+		result.tree;
 
 	chgX =
-		r.chgX;
+		result.chgX;
 
 	if( chgX === null )
 	{
