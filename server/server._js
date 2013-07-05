@@ -895,6 +895,9 @@ Server.prototype.prepareResources =
 		'shell/bridge.js',
 			'fb',
 
+		'shell/greenscreen.js',
+			'fb',
+
 		'shell/shell.js',
 			'fb',
 

@@ -107,6 +107,13 @@ Jools.subclass(
 
 
 /*
+| The disc is shown while a space is shown.
+*/
+Space.prototype.showDisc =
+	true;
+
+
+/*
 | Updates the subtree to match a new tree.
 */
 Space.prototype.update =

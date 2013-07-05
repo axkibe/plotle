@@ -1903,6 +1903,9 @@ Portal.prototype._setHover =
 		return;
 	}
 
+	shell.redraw =
+		true;
+
 	this._$hover =
 		hover;
 };

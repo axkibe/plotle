@@ -28,6 +28,7 @@ var
 	Euclid,
 	fontPool,
 	Forms,
+	GreenScreen,
 	IFace,
 	Jools,
 	MeshMashine,
@@ -46,9 +47,11 @@ var
 
 'use strict';
 
-if( typeof( window ) === 'undefined' )
+if( CHECK && typeof( window ) === 'undefined' )
 {
-	throw new Error( 'this code needs a browser!' );
+	throw new Error(
+		'this code needs a browser!'
+	);
 }
 
 
@@ -133,9 +136,9 @@ Shell =
 	this._$selection =
 		null;
 
-	// true at greenscreen frowny
-	this.green =
-		false;
+	// greenscreen display if not null
+	this._$greenscreen =
+		null;
 
 	this._draw( );
 };
@@ -147,8 +150,9 @@ Shell =
 Shell.prototype.positionCaret =
 	function( )
 {
-	var display =
-		this._getCurrentDisplay( );
+	var
+		display =
+			this._getCurrentDisplay( );
 
 	if( display )
 	{
@@ -222,13 +226,9 @@ Shell.prototype.update =
 Shell.prototype.systemFocus =
 	function( )
 {
-	if( this.green )
-	{
-		return;
-	}
-
-	var display =
-		this._getCurrentDisplay( );
+	var
+		display =
+			this._getCurrentDisplay( );
 
 	if( display )
 	{
@@ -248,13 +248,9 @@ Shell.prototype.systemFocus =
 Shell.prototype.systemBlur =
 	function( )
 {
-	if( this.green )
-	{
-		return;
-	}
-
-	var display =
-		this._getCurrentDisplay( );
+	var
+		display =
+			this._getCurrentDisplay( );
 
 	if( display )
 	{
@@ -274,17 +270,13 @@ Shell.prototype.systemBlur =
 Shell.prototype.blink =
 	function( )
 {
-	if( this.green )
-	{
-		return;
-	}
-
 	// tests for font size changes
-	var w =
-		Euclid.Measure.width(
-			this._fontWFont,
-			'meshcraft$8833'
-		);
+	var
+		w =
+			Euclid.Measure.width(
+				this._fontWFont,
+				'meshcraft$8833'
+			);
 
 	if( w !== this._$fontWatch )
 	{
@@ -294,8 +286,9 @@ Shell.prototype.blink =
 		this.knock( );
 	}
 
-	var display =
-		this._getCurrentDisplay( );
+	var
+		display =
+			this._getCurrentDisplay( );
 
 	if( display )
 	{
@@ -330,26 +323,13 @@ Shell.prototype.poke =
 
 
 /*
-| Pokes the disc
-*/
-Shell.prototype.pokeDisc =
-	function( )
-{
-	this._$disc.poke( );
-};
-
-
-/*
 | Force-clears all caches.
 */
 Shell.prototype.knock =
 	function( )
 {
-	if( this.green )
-	{
-		return;
-	}
-
+	// TODO remove
+	/*
 	var forms =
 		this._$forms;
 
@@ -369,116 +349,7 @@ Shell.prototype.knock =
 	this._$disc.knock( );
 
 	this._draw( );
-};
-
-
-/*
-| Sketches the greenscreen frowny.
-*/
-Shell.prototype.sketchFrowny =
-	function(
-		fabric,
-		border,
-		twist,
-		view,
-		pos
-	)
-{
-	fabric.moveTo(
-		pos.x - 100,
-		pos.y
-	);
-
-	fabric.lineTo(
-		pos.x,
-		pos.y - 30
-	);
-
-	fabric.lineTo(
-		pos.x + 100,
-		pos.y
-	);
-
-	fabric.moveTo(
-		pos.x - 100,
-		pos.y - 130
-	);
-
-	fabric.lineTo(
-		pos.x - 50,
-		pos.y - 140
-	);
-
-	fabric.moveTo(
-		pos.x + 100,
-		pos.y - 130
-	);
-
-	fabric.lineTo(
-		pos.x + 50,
-		pos.y - 140
-	);
-};
-
-
-/*
-| Draws the green screen
-*/
-Shell.prototype._drawGreenScreen =
-	function(
-		fabric
-	)
-{
-	var ce =
-		fabric.getCenter( );
-
-	fabric.fillRect(
-		'rgb(170, 255, 170)',
-		0, 0,
-		fabric.width, fabric.height
-	);
-
-	fabric.edge(
-		{
-			edge :
-			[
-				{
-					border : 0,
-					width  : 1,
-					color  : 'black'
-				}
-			]
-		},
-		this,
-		'sketchFrowny',
-		Euclid.View.proper,
-		ce.add( 0, -80 )
-	);
-
-	fabric.paintText(
-		'text',
-			this.green,
-		'p',
-			ce,
-		'font',
-			fontPool.get(
-				26,
-				'cm'
-			)
-	);
-
-	fabric.paintText(
-		'text',
-			'Please refresh the page to reconnect.',
-		'xy',
-			ce.x,
-			ce.y + 50,
-		'font',
-			fontPool.get(
-				20,
-				'cm'
-			)
-	);
+	*/
 };
 
 
@@ -488,27 +359,25 @@ Shell.prototype._drawGreenScreen =
 Shell.prototype._draw =
 	function( )
 {
-	var fabric =
-		this.fabric;
+	var
+		fabric =
+			this.fabric;
 
 	fabric.reset( );
 
-	if( this.green )
-	{
-		this._drawGreenScreen( fabric );
-
-		return;
-	}
-
-	var display =
-		this._getCurrentDisplay( );
+	var
+		display =
+			this._getCurrentDisplay( );
 
 	if( display )
 	{
 		display.draw( fabric );
 	}
 
-	this._$disc.draw( fabric );
+	if( display && display.showDisc )
+	{
+		this._$disc.draw( fabric );
+	}
 
 	this.redraw =
 		false;
@@ -525,13 +394,9 @@ Shell.prototype.click =
 		ctrl
 	)
 {
-	if( this.green )
-	{
-		return;
-	}
-
-	var display =
-		this._getCurrentDisplay( );
+	var
+		display =
+			this._getCurrentDisplay( );
 
 	if( display )
 	{
@@ -560,6 +425,11 @@ Shell.prototype._getCurrentDisplay =
 	var
 		name =
 			this.bridge.mode( );
+
+	if( this._$greenscreen )
+	{
+		return this._$greenscreen;
+	}
 
 	switch( name )
 	{
@@ -615,12 +485,6 @@ Shell.prototype.pointingHover =
 		ctrl
 	)
 {
-	if( this.green )
-	{
-		return;
-	}
-
-
 	// TODO make an $hover object
 
 	this.$hover =
@@ -636,15 +500,21 @@ Shell.prototype.pointingHover =
 		});
 
 	var
+		display =
+			this._getCurrentDisplay( ),
+
+		cursor = null;
+
+	if( display && display.showDisc )
+	{
 		cursor =
 			this._$disc.pointingHover(
 				p,
 				shift,
 				ctrl
 			);
+	}
 
-	var display =
-		this._getCurrentDisplay( );
 
 	if( display )
 	{
@@ -679,24 +549,27 @@ Shell.prototype.pointingHover =
 
 
 /*
-| Changes the shell to a green error screen.
+| Switches to a green error screen.
 */
 Shell.prototype.greenscreen =
 	function( message )
 {
-	if( this.green )
-	{
-		return;
-	}
-
 	if( !message )
 	{
 		message =
 			'unknown error.';
 	}
 
-	this.green =
-		message;
+	console.log(
+		'greenscreen:',
+		message
+	);
+
+	if( !this._$greenscreen )
+	{
+		this._$greenscreen =
+			new GreenScreen( message );
+	}
 
 	this._draw( );
 };
@@ -716,13 +589,9 @@ Shell.prototype.pointingStart =
 		ctrl
 	)
 {
-	if( this.green )
-	{
-		return false;
-	}
-
-	var pointingState =
-		null;
+	var
+		pointingState =
+			null;
 
 	if( pointingState === null )
 	{
@@ -734,8 +603,9 @@ Shell.prototype.pointingStart =
 			);
 	}
 
-	var display =
-		this._getCurrentDisplay( );
+	var
+		display =
+			this._getCurrentDisplay( );
 
 	if(
 		pointingState === null &&
@@ -771,23 +641,25 @@ Shell.prototype.dragStart =
 		ctrl
 	)
 {
-	if( this.green )
-	{
-		return;
-	}
+	var
+		cursor =
+			null,
 
-	var cursor =
-		this._$disc.dragStart(
-			p,
-			shift,
-			ctrl
-		);
+		display =
+			this._getCurrentDisplay( );
+
+	if( display && display.showDisc )
+	{
+		cursor =
+			this._$disc.dragStart(
+				p,
+				shift,
+				ctrl
+			);
+	}
 
 	if( cursor === null )
 	{
-		var display =
-			this._getCurrentDisplay( );
-
 		if( display )
 		{
 			cursor =
@@ -818,11 +690,6 @@ Shell.prototype.dragMove =
 		ctrl
 	)
 {
-	if( this.green )
-	{
-		return;
-	}
-
 	var action =
 		this.bridge.action( );
 
@@ -881,7 +748,7 @@ Shell.prototype.dragStop =
 		ctrl
 	)
 {
-	if( this.green )
+	if( this._$greenscreen )
 	{
 		return;
 	}
@@ -942,15 +809,11 @@ Shell.prototype.mousewheel =
 		ctrl
 	)
 {
-	if( this.green )
-	{
-		return;
-	}
+	// FIXME disc?
 
-	// disc?
-
-	var display =
-		this._getCurrentDisplay( );
+	var
+		display =
+			this._getCurrentDisplay( );
 
 	if( display )
 	{
@@ -964,7 +827,7 @@ Shell.prototype.mousewheel =
 
 	if( this.redraw )
 	{
-		this._draw();
+		this._draw( );
 	}
 };
 
@@ -979,15 +842,9 @@ Shell.prototype.specialKey =
 		ctrl
 	)
 {
-	// TODO make the green screen a "Display".
-
-	if( this.green )
-	{
-		return;
-	}
-
-	var display =
-		this._getCurrentDisplay( );
+	var
+		display =
+			this._getCurrentDisplay( );
 
 	if( display )
 	{
@@ -1011,15 +868,12 @@ Shell.prototype.specialKey =
 Shell.prototype.input =
 	function( text )
 {
-	if( this.green )
-	{
-		return;
-	}
-
+	// TODO, this has no place here
 	this.removeSelection( );
 
-	var display =
-		this._getCurrentDisplay( );
+	var
+		display =
+			this._getCurrentDisplay( );
 
 	if( display )
 	{
@@ -1042,12 +896,13 @@ Shell.prototype.resize =
 		height
 	)
 {
-	var screensize =
-	this.screensize =
-		new Euclid.Point(
-			width,
-			height
-		);
+	var
+		screensize =
+		this.screensize =
+			new Euclid.Point(
+				width,
+				height
+			);
 
 	// TODO only when changed
 	this._$disc =
@@ -1169,11 +1024,12 @@ Shell.prototype.onload =
 			)
 		);
 
-	var user =
-		window.localStorage.getItem( 'user' );
+	var
+		user =
+			window.localStorage.getItem( 'user' ),
 
-	var passhash =
-		null;
+		passhash =
+			null;
 
 	if( user )
 	{
@@ -1182,7 +1038,8 @@ Shell.prototype.onload =
 	}
 	else
 	{
-		user = 'visitor';
+		user =
+			'visitor';
 	}
 
 	this.peer.auth(

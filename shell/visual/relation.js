@@ -359,7 +359,7 @@ Relation.spawn =
 			),
 
 		key =
-			 result.chgX.trg.path.get( -1 );
+			result.chgX.trg.path.get( -1 );
 
 	// event listener has spawned the vrel
 	space.$sub[ key ].grepFocus( space );

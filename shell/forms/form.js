@@ -173,6 +173,12 @@ Forms.Form =
 	Jools.immute( this );
 };
 
+/*
+| The disc is shown while a form is shown.
+*/
+Form.prototype.showDisc =
+	true;
+
 
 /*
 | Returns the widgets prototype matching type
