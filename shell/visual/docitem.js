@@ -167,7 +167,12 @@ DocItem.prototype.click =
 		return false;
 	}
 
-	if( !this.getZone( ).within( view, p ) )
+	if(
+		!this.zone.within(
+			view,
+			p
+		)
+	)
 	{
 		return false;
 	}
@@ -182,44 +187,46 @@ DocItem.prototype.click =
 	shell.redraw =
 		true;
 
-	var pnw =
-		this.getZone( ).pnw;
+	var
+		pnw =
+			this.zone.pnw,
 
-	var pi =
-		vp.sub(
-			pnw.x,
-			pnw.y - (this.scrollbarY ? this.scrollbarY.getPos() : 0 )
-		);
+		pi =
+			vp.sub(
+				pnw.x,
+				pnw.y - (this.scrollbarY ? this.scrollbarY.getPos() : 0 )
+			),
 
-	var para =
-		this.getParaAtPoint(
-			pi
-		);
+		para =
+			this.getParaAtPoint(
+				pi
+			);
 
 	// FIXME move into para
 	if( para )
 	{
-		var ppnw =
-			this.$sub.doc.getPNW(
-				para.key
-			);
+		var
+			ppnw =
+				this.$sub.doc.getPNW(
+					para.key
+				),
 
-		var at1 =
-			para.getPointOffset(
-				this,
-				pi.sub( ppnw )
-			);
+			at1 =
+				para.getPointOffset(
+					this,
+					pi.sub( ppnw )
+				),
 
-		var caret =
-			space.setCaret(
-				{
-					path :
-						para.textPath,
+			caret =
+				space.setCaret(
+					{
+						path :
+							para.textPath,
 
-					at1 :
-						at1
-				}
-			);
+						at1 :
+							at1
+					}
+				);
 
 		caret.show( );
 

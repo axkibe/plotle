@@ -336,9 +336,9 @@ Relation.spawn =
 	var
 		cline =
 			Euclid.Line.connect(
-				item1.getSilhoutte( item1.getZone( ) ),
+				item1.getSilhoutte( item1.zone ),
 				null,
-				item2.getSilhoutte( item2.getZone( ) ),
+				item2.getSilhoutte( item2.zone ),
 				null
 			),
 
@@ -359,7 +359,7 @@ Relation.spawn =
 			),
 
 		key =
-			 result.chgX.trg.path.get( -1 )
+			 result.chgX.trg.path.get( -1 );
 
 	// event listener has spawned the vrel
 	space.$sub[ key ].grepFocus( space );
@@ -393,7 +393,7 @@ Relation.prototype.draw =
 	{
 		var l1 =
 			Euclid.Line.connect(
-				item1.getSilhoutte( item1.getZone( ) ),
+				item1.getSilhoutte( item1.zone ),
 				'normal',
 				zone,
 				'normal'
@@ -414,7 +414,7 @@ Relation.prototype.draw =
 				zone,
 				'normal',
 				item2.getSilhoutte(
-					item2.getZone( )
+					item2.zone
 				),
 				'arrow'
 			);

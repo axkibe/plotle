@@ -406,12 +406,11 @@ Space.prototype.draw =
 					);
 				}
 
-				var fromSilhoutte =
-					fromItem.getSilhoutte(
-						fromItem.getZone( )
-					);
+				var
+					fromSilhoutte =
+						fromItem.getSilhoutte( ),
 
-				var toSilhoutte;
+					toSilhoutte;
 
 				if(
 					action.toItemPath &&
@@ -421,7 +420,7 @@ Space.prototype.draw =
 					// arrow connects two items
 					toSilhoutte =
 						toItem.getSilhoutte(
-							toItem.getZone( )
+							toItem.zone
 						);
 				}
 				else if ( action.relationState === 'hadSelect' )
@@ -1418,7 +1417,7 @@ Space.prototype.dragStop =
 				// on the items to be removed
 				// otherwise it is not removed!
 				if(
-					!removeItem.getZone().within(
+					!removeItem.zone.within(
 						view,
 						p
 					)
@@ -1656,7 +1655,7 @@ Space.prototype.dragMove =
 				// it
 
 				action.removeItemFade = (
-					removeItem.getZone().within(
+					removeItem.zone.within(
 						view,
 						p
 					)

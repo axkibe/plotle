@@ -362,7 +362,7 @@ Para.prototype.positionCaret =
 			item.$sub.doc,
 
 		zone =
-			item.getZone( ),
+			item.zone,
 
 		cpos =
 		caret.$pos =

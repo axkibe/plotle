@@ -841,18 +841,4 @@ Note.prototype.getFlowWidth =
 };
 
 
-/*
-| Returns the zone of the item.
-|
-| An ongoing action can modify this
-| to something different than meshmashine data.
-|
-| TODO remove
-*/
-Note.prototype.getZone =
-	function( )
-{
-	return this.zone;
-};
-
 } )( );

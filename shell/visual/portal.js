@@ -878,19 +878,6 @@ Portal.prototype.pointingHover =
 
 
 /*
-| Returns the zone of the item.
-| An ongoing action can modify this to be different than meshmashine data.
-|
-| TODO remove
-*/
-Portal.prototype.getZone =
-	function( )
-{
-	return this.zone;
-};
-
-
-/*
 | Returns the fabric for the input field.
 */
 Portal.prototype._weave =
@@ -1212,7 +1199,7 @@ Portal.prototype.specialKey =
 		case 'del' :
 
 			show =
-				this.keyDel( )
+				this.keyDel( caret )
 				||
 				show;
 
@@ -1230,7 +1217,7 @@ Portal.prototype.specialKey =
 		case 'end' :
 
 			show =
-				this.keyEnd( )
+				this.keyEnd( caret )
 				||
 				show;
 
@@ -1239,8 +1226,8 @@ Portal.prototype.specialKey =
 /*
 		case 'enter' :
 
-			poke =
-				this.keyEnter( )
+			show =
+				this.keyEnter( caret )
 				||
 				show;
 
@@ -1250,7 +1237,7 @@ Portal.prototype.specialKey =
 		case 'left' :
 
 			show =
-				this.keyLeft( )
+				this.keyLeft( caret )
 				||
 				show;
 
@@ -1259,7 +1246,7 @@ Portal.prototype.specialKey =
 		case 'pos1' :
 
 			show =
-				this.keyPos1( )
+				this.keyPos1( caret )
 				||
 				show;
 
@@ -1268,7 +1255,7 @@ Portal.prototype.specialKey =
 		case 'right' :
 
 			show =
-				this.keyRight( )
+				this.keyRight( caret )
 				||
 				show;
 
@@ -1277,7 +1264,7 @@ Portal.prototype.specialKey =
 		case 'tab' :
 
 			show =
-				this.keyTab( )
+				this.keyTab( caret )
 				||
 				show;
 
@@ -1286,7 +1273,7 @@ Portal.prototype.specialKey =
 		case 'up' :
 
 			show =
-				this.keyUp( )
+				this.keyUp( caret )
 				||
 				show;
 
@@ -1296,9 +1283,7 @@ Portal.prototype.specialKey =
 
 	if( show )
 	{
-		this.poke( );
-
-		shell.$space.$caret.show( );
+		caret.show( );
 
 		shell.redraw =
 			true;
@@ -1309,11 +1294,13 @@ Portal.prototype.specialKey =
 | User pressed right key.
 */
 Portal.prototype.keyLeft =
-	function( )
+	function(
+		caret
+	)
 {
 	var
 		csign =
-			shell.$space.$caret.sign,
+			caret.sign,
 
 		section =
 			csign.path.get( -1 );
@@ -1351,6 +1338,7 @@ Portal.prototype.keyLeft =
 		{
 			path :
 				csign.path,
+
 			at1 :
 				csign.at1 - 1
 		}
@@ -1417,12 +1405,11 @@ Portal.prototype.keyDown =
 | User pressed down key.
 */
 Portal.prototype.keyTab =
-	function( )
+	function(
+		caret
+	)
 {
 	var
-		caret =
-			shell.$space.$caret,
-
 		csign =
 			caret.sign,
 
@@ -1483,12 +1470,11 @@ Portal.prototype.keyTab =
 | User pressed down key.
 */
 Portal.prototype.keyUp =
-	function( )
+	function(
+		caret
+	)
 {
 	var
-		caret =
-			shell.$space.$caret,
-
 		csign =
 			caret.sign,
 
@@ -1537,13 +1523,16 @@ Portal.prototype.keyUp =
 | User pressed right key.
 */
 Portal.prototype.keyRight =
-	function( )
+	function(
+		caret
+	)
 {
-	var csign =
-		shell.$space.$caret.sign;
+	var
+		csign =
+			caret.sign,
 
-	var section =
-		csign.path.get( -1 );
+		section =
+			csign.path.get( -1 );
 
 	if( !this._isSection( section ) )
 	{
@@ -1594,7 +1583,9 @@ Portal.prototype.keyRight =
 | User pressed backspace.
 */
 Portal.prototype.keyBackspace =
-	function( caret )
+	function(
+		caret
+	)
 {
 	var
 		csign =
@@ -1630,16 +1621,19 @@ Portal.prototype.keyBackspace =
 | User pressed del.
 */
 Portal.prototype.keyDel =
-	function( )
+	function(
+		caret
+	)
 {
-	var csign =
-		shell.$space.$caret.sign;
+	var
+		csign =
+			caret.sign,
 
-	var section =
-		csign.path.get( -1 );
+		section =
+			csign.path.get( -1 ),
 
-	var value =
-		this.tree[ section ];
+		value =
+			this.tree[ section ];
 
 	if( !this._isSection( section ) )
 	{
@@ -1668,13 +1662,16 @@ Portal.prototype.keyDel =
 | User pressed end key.
 */
 Portal.prototype.keyEnd =
-	function( )
+	function(
+		caret
+	)
 {
-	var csign =
-		shell.$space.$caret.sign;
+	var
+		csign =
+			caret.sign,
 
-	var section =
-		csign.path.get( -1 );
+		section =
+			csign.path.get( -1 );
 
 	if( !this._isSection( section ) )
 	{
@@ -1866,10 +1863,13 @@ Portal.prototype._prepareField =
 | User pressed pos1 key,
 */
 Portal.prototype.keyPos1 =
-	function( )
+	function(
+		caret
+	)
 {
-	var csign =
-		shell.$space.$caret.sign;
+	var
+		csign =
+			caret.sign;
 
 	if( csign.at1 <= 0 )
 	{
@@ -1905,8 +1905,6 @@ Portal.prototype._setHover =
 
 	this._$hover =
 		hover;
-
-	this.poke( );
 };
 
 

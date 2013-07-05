@@ -172,7 +172,7 @@ Item.prototype.planHandles =
 			this.handles,
 
 		zone =
-			this.getZone( ),
+			this.zone,
 
 		h =
 			this.$handles;
@@ -490,9 +490,7 @@ Item.prototype.drawHandles =
 	}
 
 	fabric.reverseClip(
-		this.getSilhoutte(
-			this.getZone( )
-		),
+		this.getSilhoutte( ),
 		'sketch',
 		view,
 		-1
@@ -558,10 +556,10 @@ Item.prototype.dragStart =
 
 	var
 		zone =
-			this.getZone( ),
+			this.zone,
 
 		silhoutte =
-			this.getSilhoutte( zone );
+			this.getSilhoutte( );
 
 	if(
 		!silhoutte.within(
@@ -678,7 +676,7 @@ Item.prototype.dragMove =
 		case 'createRelation' :
 
 			if(
-				!this.getZone( ).within(
+				!this.zone.within(
 					view,
 					p
 				)
@@ -701,7 +699,7 @@ Item.prototype.dragMove =
 		case 'RelBind' :
 
 			if(
-				!this.getZone( ).within(
+				!this.zone.within(
 					view,
 					p
 				)
@@ -779,7 +777,7 @@ Item.prototype.dragStop =
 		case 'createRelation' :
 
 			if(
-				!this.getZone().within(
+				!this.zone.within(
 					view,
 					p
 				)
@@ -836,7 +834,10 @@ Item.prototype.pointingHover =
 	}
 
 	if(
-		!this.getZone().within( view, p )
+		!this.zone.within(
+			view,
+			p
+		)
 	)
 	{
 		return null;
