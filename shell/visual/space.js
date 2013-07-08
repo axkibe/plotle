@@ -83,6 +83,11 @@ Visual.Space =
 
 	for( var k in tree.twig )
 	{
+		if( k === 'type' )
+		{
+			continue;
+		}
+
 		sub[ k ] =
 			this.createItem(
 				tree.twig[ k ],
@@ -144,6 +149,11 @@ Space.prototype.update =
 
 	for( var k in twig )
 	{
+		if( k === 'type' )
+		{
+			continue;
+		}
+
 		sub[ k ] =
 			this.createItem(
 				tree.twig[ k ],
@@ -284,12 +294,12 @@ Space.prototype.createItem =
 	)
 {
 	var Proto =
-		Visual[ tree.type ];
+		Visual[ tree.twig.type ];
 
 	if( !Proto )
 	{
 		throw new Error(
-			'unknown type: ' + tree.type
+			'unknown type: ' + tree.twig.type
 		);
 	}
 

@@ -65,7 +65,7 @@ Change =
 		src,
 		trg;
 
-	switch ( arguments.length )
+	switch( arguments.length )
 	{
 		case 2:
 
@@ -89,7 +89,9 @@ Change =
 
 		default :
 
-			throw new Error( 'Change Constructor: argument fail' );
+			throw new Error(
+				'Change Constructor: argument fail'
+			);
 	}
 
 	if( src.constructor === Sign )
@@ -207,7 +209,8 @@ Change.prototype.type =
 /*
 | Returns the inversion to this change.
 */
-Change.prototype.invert = function( )
+Change.prototype.invert =
+	function( )
 {
 	// checks if the inversion is cached.
 	if( Jools.is( this._invert ) )
@@ -243,10 +246,13 @@ Change.prototype.invert = function( )
 | Performes this change on a tree.
 */
 Change.prototype.changeTree =
-	function( tree )
+	function(
+		tree
+	)
 {
-	var type =
-		this.type( );
+	var
+		type =
+			this.type( );
 
 	Jools.log(
 		'change',
@@ -260,8 +266,9 @@ Change.prototype.changeTree =
 
 	// executes the op-handler
 	// TODO make a switch call around this
-	var r =
-		this[ type ]( tree );
+	var
+		r =
+			this[ type ]( tree );
 
 	// if answer is null the change has vaporated
 	if( r === null )
@@ -412,10 +419,11 @@ Change.prototype.set =
 		}
 
 		var orank;
+
 		if( src.val !== null )
 		{
 			pivot =
-				new Tree(
+				Tree.grow(
 					pivot,
 					Meshverse,
 					key,
@@ -437,7 +445,7 @@ Change.prototype.set =
 				);
 
 			pivot =
-				new Tree(
+				Tree.grow(
 					pivot,
 					Meshverse,
 					key,
@@ -456,7 +464,10 @@ Change.prototype.set =
 	}
 
 	var chg;
-	if( src === this.src && trg === this.trg )
+	if(
+		src === this.src &&
+		trg === this.trg
+	)
 	{
 		chg =
 			this;
@@ -752,15 +763,15 @@ Change.prototype.join =
 	// FIXME check other keys to be equal
 
 	para1 =
-		new Tree(
+		Tree.grow(
 			para1,
 			Meshverse,
 			'text',
-				para1.text + para2.text
+				para1.twig.text + para2.twig.text
 		);
 
 	pivot =
-		new Tree(
+		Tree.grow(
 			pivot,
 			Meshverse,
 			key,
@@ -874,7 +885,7 @@ Change.prototype.split = function( tree )
 			pivot.twig[ key ],
 
 		para2 =
-			new Tree(
+			Tree.grow(
 				para1,
 				Meshverse,
 				'text',
@@ -882,7 +893,7 @@ Change.prototype.split = function( tree )
 			);
 
 	para1 =
-		new Tree(
+		Tree.grow(
 			para1,
 			Meshverse,
 			'text',
@@ -890,7 +901,7 @@ Change.prototype.split = function( tree )
 		);
 
 	pivot =
-		new Tree(
+		Tree.grow(
 			pivot,
 			Meshverse,
 			key,
@@ -988,7 +999,7 @@ Change.prototype.rank =
 		);
 
 	pivot =
-		new Tree(
+		Tree.grow(
 			pivot,
 			Meshverse,
 			'-',

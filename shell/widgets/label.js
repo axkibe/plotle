@@ -93,13 +93,13 @@ Widgets.Label =
 
 	this.pos =
 		parent.iframe.computePoint(
-			tree.pos
+			tree.twig.pos
 		),
 
 	this.text =
 		text !== null ?
 			text :
-			tree.text;
+			tree.twig.text;
 
 	this.tree =
 		tree;
@@ -107,9 +107,10 @@ Widgets.Label =
 	this.visible =
 		visible;
 
+	// TODO font creator
 	this._font =
 		new Euclid.Font(
-			tree.font
+			tree.twig.font.twig
 		);
 
 	Jools.immute( this );

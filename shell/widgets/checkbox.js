@@ -125,21 +125,20 @@ Widgets.CheckBox =
 	this.visible =
 		visible;
 
+	// TODO computeRect
 	this.box =
 		new Euclid.Rect(
 			'pnw/pse',
-			parent.iframe.computePoint( tree.box.pnw ),
-			parent.iframe.computePoint( tree.box.pse )
+			parent.iframe.computePoint(
+				tree.twig.box.twig.pnw
+			),
+			parent.iframe.computePoint(
+				tree.twig.box.twig.pse
+			)
 		);
 
 	this.checked =
 		checked;
-
-	this.focusAccent =
-		focusAccent;
-
-	this.hoverAccent =
-		hoverAccent;
 
 	Jools.immute( this );
 };
@@ -317,8 +316,8 @@ CheckBox.create =
 	if( checked === null )
 	{
 		checked =
-			Jools.is( tree.checked ) ?
-				tree.checked :
+			Jools.is( tree.twig.checked ) ?
+				tree.twig.checked :
 				false;
 	}
 
@@ -543,7 +542,7 @@ CheckBox.prototype.draw =
 
 	var style =
 		Widgets.getStyle(
-			this.tree.style,
+			this.tree.twig.style,
 			Accent.state(
 				this.hoverAccent,
 				this.focusAccent
@@ -555,7 +554,7 @@ CheckBox.prototype.draw =
 	if( !Jools.isnon( style ) )
 	{
 		throw new Error(
-			'Invalid style: ' + this.tree.style
+			'Invalid style: ' + this.tree.twig.style
 		);
 	}
 

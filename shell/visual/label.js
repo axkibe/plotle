@@ -69,7 +69,6 @@ Visual.Label =
 
 		if( fontsize !== doc.fontsize )
 		{
-			console.log( fontsize, doc.fontsize );
 			throw new Error(
 				'fontsize mismatch'
 			);
@@ -210,7 +209,7 @@ Label.create =
 		if( fontsize === null )
 		{
 			fontsize =
-				tree.fontsize;
+				tree.twig.fontsize;
 		}
 
 		if( pnw === null )
@@ -218,7 +217,7 @@ Label.create =
 			// TODO this is always created...
 			pnw =
 				new Euclid.Point(
-					tree.pnw
+					tree.twig.pnw.twig
 				);
 		}
 	}
@@ -262,7 +261,7 @@ Label.create =
 			'inherit',
 				doc,
 			'tree',
-				tree && tree.doc,
+				tree && tree.twig.doc,
 			'path',
 				inherit ?
 					(
@@ -455,7 +454,7 @@ Label.prototype.dragStop =
 					this.$sub.doc.getFont( this ).size;
 
 			if(
-				!this.tree.pnw.equals( zone.pnw )
+				!this.tree.twig.pnw.equals( zone.pnw )
 			)
 			{
 				shell.peer.setPNW(
@@ -464,7 +463,7 @@ Label.prototype.dragStop =
 				);
 			}
 
-			if( fontsize !== this.tree.fontsize )
+			if( fontsize !== this.tree.twig.fontsize )
 			{
 				shell.peer.setFontSize(
 					this.path,

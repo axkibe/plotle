@@ -57,11 +57,28 @@ Euclid.Rect =
 		a3
 	)
 {
-	var pnw;
-	var pse;
+	var
+		pnw,
+		pse;
 
 	switch( overload )
 	{
+		case 'twig' :
+
+			pnw =
+				new Euclid.Point(
+					a1.twig.pnw.twig.x,
+					a1.twig.pnw.twig.y
+				);
+
+			pse =
+				new Euclid.Point(
+					a1.twig.pse.twig.x,
+					a1.twig.pse.twig.y
+				);
+
+			break;
+
 		case 'pnw/pse' :
 
 			pnw =
@@ -188,81 +205,88 @@ Rect.prototype.computePoint =
 		model
 	)
 {
-	var half =
-		Jools.half;
+	var
+		half =
+			Jools.half,
 
-	var pnw =
-		this.pnw;
+		twig =
+			model.twig,
 
-	var pse =
-		this.pse;
+		pnw =
+			this.pnw,
 
-	switch( model.anchor )
+		pse =
+			this.pse;
+
+	switch( twig.anchor )
 	{
 		case 'c'  :
 
 			return new Euclid.Point(
-				half( pnw.x + pse.x ) + model.x,
-				half( pnw.y + pse.y ) + model.y
+				half( pnw.x + pse.x ) + twig.x,
+				half( pnw.y + pse.y ) + twig.y
 			);
 
 		case 'n'  :
 
 			return new Euclid.Point(
-				half( pnw.x + pse.x ) + model.x,
-				pnw.y + model.y
+				half( pnw.x + pse.x ) + twig.x,
+				twig.y + twig.y
 			);
 
 		case 'ne' :
 
 			return new Euclid.Point(
-				pse.x + model.x,
-				pnw.y + model.y
+				pse.x + twig.x,
+				pnw.y + twig.y
 			);
 
 		case 'e'  :
 
 			return new Euclid.Point(
-				pse.x + model.x,
-				half( pnw.y + pse.y ) + model.y
+				pse.x + twig.x,
+				half( pnw.y + pse.y ) + twig.y
 			);
 
 		case 'se' :
 
-			return pse.add( model.x, model.y );
+			return pse.add(
+				twig.x,
+				twig.y
+			);
 
 		case 's'  :
 
 			return new Euclid.Point(
-				half( pnw.x + pse.x ) + model.x,
-				pse.y + model.y
+				half( pnw.x + pse.x ) + twig.x,
+				pse.y + twig.y
 			);
 
 		case 'sw' :
 
 			return new Euclid.Point(
-				pnw.x + model.x,
-				pse.y + model.y
+				pnw.x + twig.x,
+				pse.y + twig.y
 			);
 
 		case 'w'  :
 
 			return new Euclid.Point(
-				pnw.x + model.x,
-				half( pnw.y + pse.y ) + model.y
+				pnw.x + twig.x,
+				half( pnw.y + pse.y ) + twig.y
 			);
 
 		case 'nw' :
 
 			return pnw.add(
-				model.x,
-				model.y
+				twig.x,
+				twig.y
 			);
 
 		default :
 
 			throw new Error(
-				'Invalid anchor: ' + model.anchor
+				'Invalid anchor: ' + twig.anchor
 			);
 	}
 };

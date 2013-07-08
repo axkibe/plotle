@@ -207,16 +207,11 @@ Note.create =
 
 		if( !zone )
 		{
-			// TODO multicreate
+			// TODO create rect from twig
 			zone =
 				new Euclid.Rect(
-					'pnw/pse',
-					new Euclid.Point(
-						tree.zone.pnw
-					),
-					new Euclid.Point(
-						tree.zone.pse
-					)
+					'twig',
+					tree.twig.zone
 				);
 		}
 
@@ -227,7 +222,7 @@ Note.create =
 					'inherit',
 						inherit && inherit.$sub.doc,
 					'tree',
-						tree.doc,
+						tree.twig.doc,
 					'path',
 						new Path(
 							path,
@@ -362,7 +357,7 @@ Note.prototype.dragStop =
 				throw new Error( 'Note under minimum size!' );
 			}
 
-			if( this.tree.zone.equals( zone ) )
+			if( this.tree.twig.zone.equals( zone ) )
 			{
 				return;
 			}

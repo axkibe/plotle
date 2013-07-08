@@ -108,7 +108,7 @@ Forms.Form =
 		);
 
 	this.tree =
-		new Tree(
+		Tree.grow(
 			this.layout,
 			Pattern
 		);
@@ -155,7 +155,7 @@ Forms.Form =
 				twig[ name ],
 
 			Proto =
-				this.getWidgetPrototype( tree.type );
+				this.getWidgetPrototype( tree );
 
 		this.$sub[ name ] =
 			Proto.create(
@@ -184,10 +184,10 @@ Form.prototype.showDisc =
 | Returns the widgets prototype matching type
 */
 Form.prototype.getWidgetPrototype =
-	function( type )
+	function( tree )
 {
 
-	switch( type )
+	switch( tree.twig.type )
 	{
 		case 'Button' :
 
@@ -693,7 +693,7 @@ Form.prototype.setValue =
 	var
 		Proto =
 			this.getWidgetPrototype(
-				this.tree.twig[ widgetName ].type
+				this.tree.twig[ widgetName ]
 			);
 
 	this.$sub[ widgetName ] =
@@ -721,7 +721,7 @@ Form.prototype.setFocusAccent =
 	var
 		Proto =
 			this.getWidgetPrototype(
-				this.tree.twig[ widgetName ].type
+				this.tree.twig[ widgetName ]
 			);
 
 	this.$sub[ widgetName ] =
@@ -749,7 +749,7 @@ Form.prototype.setHoverAccent =
 	var
 		Proto =
 			this.getWidgetPrototype(
-				this.tree.twig[ widgetName ].type
+				this.tree.twig[ widgetName ]
 			);
 
 	this.$sub[ widgetName ] =
@@ -812,7 +812,7 @@ Form.prototype.setText =
 	var
 		Proto =
 			this.getWidgetPrototype(
-				this.tree.twig[ widgetName ].type
+				this.tree.twig[ widgetName ]
 			);
 
 	this.$sub[ widgetName ] =
@@ -840,7 +840,7 @@ Form.prototype.setVisible =
 	var
 		Proto =
 			this.getWidgetPrototype(
-				this.tree.twig[ widgetName ].type
+				this.tree.twig[ widgetName ]
 			);
 
 	this.$sub[ widgetName ] =
@@ -869,7 +869,7 @@ Form.prototype.setChecked =
 	var
 		Proto =
 			this.getWidgetPrototype(
-				this.tree.twig[ widgetName ].type
+				this.tree.twig[ widgetName ]
 			);
 
 	this.$sub[ widgetName ] =

@@ -82,7 +82,7 @@ config.devel =
 | If true "uglifies" the javascript pack, minimizing its size.
 */
 config.uglify =
-	true;
+	false;
 
 
 /*
@@ -135,20 +135,50 @@ config.debug.weinre =
 | enable specific logging categories
 */
 config.log  = {
-	//all:   true,
-	ajax:   false,
-	change: false,
-	debug:  true,
-	fail:   true,
-	twig:   false,
-	iface:  false,
-	peer:   false,
-	report: false,
-	start:  true,
-	shell:  true,
-	tfx:    false,
-	web:    true,
-	warn:   true
+//	all :
+//		true,
+
+	ajax :
+		false,
+
+	change :
+		false,
+
+	debug :
+		true,
+
+	fail :
+		true,
+
+	twig :
+		false,
+
+	iface :
+		false,
+
+	peer :
+		false,
+
+	report :
+		false,
+
+	start :
+		true,
+
+	shell :
+		true,
+
+	tfx :
+		false,
+
+	tree :
+		false,
+
+	web :
+		true,
+
+	warn :
+		true
 };
 
 

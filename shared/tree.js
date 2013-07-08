@@ -70,10 +70,50 @@ var allowsType =
 };
 
 
-/*
-| Constructor
-*/
 Tree =
+	function(
+		tag,
+		type,
+		twig,
+		ranks,
+		verse
+	)
+{
+	if( tag !== 'XOXO' )
+	{
+		throw new Error(
+			'use grow instead of new'
+		);
+	}
+
+	this.type =
+		type;
+
+	this.twig =
+		twig;
+
+	if( ranks )
+	{
+		this.ranks =
+			ranks;
+	}
+
+	this.verse =
+		verse;
+
+	// marks this to be grown
+	// data structure
+	this._grown =
+		true;
+
+	Jools.immute( this );
+}
+
+
+/*
+| Creates new (sub) trees.
+*/
+Tree.grow =
 	function(
 		model, // the model to copy
 		verse
@@ -90,19 +130,8 @@ Tree =
 		aZ =
 			arguments.length;
 
-	// marks the object to be fine
-	// FIXME this isnt so nice
-	Object.defineProperty(
-		this,
-		'verse',
-		{
-			value :
-				verse
-		}
-	);
-
 	// nothing to do?
-	if( model._$grown && aZ === 1 )
+	if( model._grown && aZ === 1 )
 	{
 		return model;
 	}
@@ -116,13 +145,14 @@ Tree =
 
 		type =
 			Tree.getType( model ),
+
 		k,
 		k1,
 		k2,
 		val;
 
 	Jools.log(
-		'grow',
+		'tree',
 		type,
 		arguments
 	);
@@ -138,25 +168,15 @@ Tree =
 		);
 	}
 
-	// copies the model
-	Jools.copy(
-		model,
-		this
-	);
-
-	if( pattern.twig )
-	{
-		twig =
-		this.twig =
-			model.twig ?
-				Jools.copy( model.twig, { } ) :
-				{ };
-	}
+	twig =
+		Jools.copy(
+			model.twig ? model.twig : model,
+			{ }
+		);
 
 	if( pattern.ranks )
 	{
 		ranks =
-		this.ranks =
 			model.ranks ?
 				model.ranks.slice( ) :
 				[ ];
@@ -164,6 +184,7 @@ Tree =
 
 	// applies changes specified by the arguments
 	a = 2;
+
 	while( a < aZ )
 	{
 		k =
@@ -200,7 +221,7 @@ Tree =
 					);
 				}
 
-				this.ranks.splice( k1, 0, k2 );
+				ranks.splice( k1, 0, k2 );
 
 				a += 3;
 
@@ -211,7 +232,7 @@ Tree =
 				if( !pattern.ranks )
 				{
 					throw Jools.reject(
-						'"-": '+type+' has no ranks'
+						'"-": ' + type + ' has no ranks'
 					);
 				}
 
@@ -253,16 +274,8 @@ Tree =
 						);
 					}
 
-					if( pattern.twig )
-					{
-						twig[ k ] =
-							k1;
-					}
-					else
-					{
-						this[ k ] =
-							k1;
-					}
+					twig[ k ] =
+						k1;
 				}
 
 				a += 2;
@@ -304,163 +317,102 @@ Tree =
 		klen =
 			0;
 
-	if( pattern.twig )
+	for( k in twig )
 	{
-		for( k in twig )
+		if(
+			// TODO does not own property ever happen?
+			!Object.hasOwnProperty.call( twig, k ) ||
+			k === 'type'
+		)
 		{
-			if( !Object.hasOwnProperty.call( twig, k ) )
-			{
-				continue;
-			}
-
-			if( !Jools.isString( k ) )
-			{
-				throw Jools.reject(
-					'key of twig no String: ' + k
-				);
-			}
-
-			val =
-				twig[ k ];
-
-			if( val === null )
-			{
-				delete twig[ k ];
-
-				continue;
-			}
-
-			klen++;
-
-			if( !pattern.twig[ Tree.getType( val ) ] )
-			{
-				throw Jools.reject(
-					type + '.twig does not allow ' + val.type
-				);
-			}
-
-			switch( val.constructor )
-			{
-				case Boolean :
-
-					throw new Error(
-						'.twig does not allow native Boolean'
-					);
-
-				case Number :
-
-					throw new Error(
-						'.twig does not allow native Number'
-					);
-
-				case String :
-
-					throw new Error(
-						'.twig does not allow native String'
-					);
-			}
-
-			if( !val._$grown )
-			{
-				twig[ k ] =
-					new Tree(
-						twig[ k ],
-						verse
-					);
-			}
+			continue;
 		}
-	}
-	else
-	{
-		for( k in this )
+
+		if( !Jools.isString( k ) )
 		{
-			if( !Object.hasOwnProperty.call( this, k ) )
-			{
-				continue;
-			}
+			throw Jools.reject(
+				'key of twig no String: ' + k
+			);
+		}
 
-			if( k === 'type' || k === 'verse' )
-			{
-				continue;
-			}
+		val =
+			twig[ k ];
 
-			val =
-				this[ k ];
+		if( val === null )
+		{
+			delete twig[ k ];
 
-			if( val === null )
-			{
-				delete this[ k ];
+			continue;
+		}
 
-				continue;
-			}
+		klen++;
 
-			klen++;
+		var
+			vtype =
+				Tree.getType( val ),
 
-			var
-				vtype =
-					Tree.getType( val ),
+			ptype =
+				pattern.twig ||
+				( pattern.must && pattern.must[ k ] )
+				||
+				( pattern.can && pattern.can[ k ] );
 
-				ptype =
-					( pattern.must && pattern.must[ k ] )
-					||
-					( pattern.can && pattern.can[ k ] );
+		if( !ptype )
+		{
+			throw Jools.reject(
+				type + ' does not allow key: ' + k
+			);
+		}
 
-			if( !ptype )
-			{
-				throw Jools.reject(
-					type + ' does not allow key: ' + k
-				);
-			}
+		// TODO fix in getType
+		if(
+			vtype === 'Number' &&
+			Jools.isInteger( val )
+		)
+		{
+			vtype =
+				'Integer';
+		}
 
-			if(
-				vtype === 'Number' &&
-				Jools.isInteger( val )
-			)
-			{
-				vtype = 'Integer';
-			}
+		// grows non basic types
 
-			// grows non basic types
+		switch( vtype )
+		{
+			case 'Boolean' :
+			case 'String' :
+			case 'Integer' :
+			case 'Number' :
 
-			switch( vtype )
-			{
-				case 'Boolean' :
-				case 'String' :
-				case 'Integer' :
-				case 'Number' :
+				break;
 
-					break;
+			default :
 
-				default :
+				if( !val._$grown )
+				{
+					twig[ k ] =
+						Tree.grow(
+							twig[ k ],
+							verse
+						);
+				}
+		}
 
-					if( !val._$grown )
-					{
-						this[ k ] =
-							new Tree(
-								this[ k ],
-								verse
-							);
-					}
-			}
-
-			if( !allowsType( ptype, vtype ) )
-			{
-				throw Jools.reject(
-					type + '.' + k + ' must be ' + ptype +
-					' but is ' +
-					vtype + ' (' + val + ')'
-				);
-			}
+		if( !allowsType( ptype, vtype ) )
+		{
+			throw Jools.reject(
+				type + '.' + k + ' must be ' + ptype +
+				' but is ' +
+				vtype + ' (' + val + ')'
+			);
 		}
 	}
 
 	// tests if all keys that must be there are there
-
 	if( pattern.must )
 	{
 		for( k in pattern.must )
 		{
-			if( !Jools.isnon( this[ k ] ) )
+			if( !Jools.isnon( twig[ k ] ) )
 			{
 				throw Jools.reject(
 					type + ' requires "' + k + '"'
@@ -470,7 +422,6 @@ Tree =
 	}
 
 	// tests the ranks
-
 	if( pattern.ranks )
 	{
 		aZ =
@@ -504,16 +455,15 @@ Tree =
 		}
 	}
 
-	// marks the object to be fine
-	Object.defineProperty(
-		this,
-		'_$grown',
-		{
-			value : true
-		}
+	return (
+		new Tree(
+			'XOXO',
+			type,
+			twig,
+			ranks,
+			verse
+		)
 	);
-
-	Jools.immute( this );
 };
 
 
@@ -562,16 +512,8 @@ Tree.prototype.getPath =
 			return null;
 		}
 
-		if( this.verse[ Tree.getType( tree ) ].twig )
-		{
-			tree =
-				tree.twig[ path.get( a ) ];
-		}
-		else
-		{
-			tree =
-				tree [ path.get( a ) ];
-		}
+		tree =
+			tree.twig[ path.get( a ) ];
 	}
 
 	return tree;
@@ -622,7 +564,7 @@ Tree.prototype.setPath =
 				);
 
 		val =
-			new Tree(
+			Tree.grow(
 				tree,
 				this.verse,
 				path.get( a ),
@@ -682,11 +624,12 @@ Tree.prototype.rankOf =
 		return r;
 	}
 
-	var rank =
-	rof[ key ] =
-		Jools.is( this.twig[ key ] ) ?
-			ranks.indexOf( key ) :
-			-1;
+	var
+		rank =
+		rof[ key ] =
+			Jools.is( this.twig[ key ] ) ?
+				ranks.indexOf( key ) :
+				-1;
 
 	return rank;
 };
@@ -731,25 +674,20 @@ Tree.getType =
 	switch( o.constructor )
 	{
 
-	case Array :
+		case Array :
+			return 'Array';
 
-		return 'Array';
+		case Boolean :
+			return 'Boolean';
 
-	case Boolean :
+		case Number :
+			return 'Number';
 
-		return 'Boolean';
+		case String :
+			return 'String';
 
-	case Number :
-
-		return 'Number';
-
-	case String :
-
-		return 'String';
-
-	default :
-
-		return o.type;
+		default :
+			return o.type ? o.type : o.twig.type;
 	}
 };
 

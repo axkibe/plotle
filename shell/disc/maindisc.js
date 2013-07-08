@@ -1748,7 +1748,6 @@ MainDisc.prototype.message =
 		// message
 	)
 {
-	// console.log( 'XXX message():', message );
 };
 
 
@@ -1860,7 +1859,6 @@ MainDisc.prototype.setSpaceZoom =
 		// zf
 	)
 {
-	// console.log( 'XXX setSpaceZoom():', zf );
 };
 
 /*

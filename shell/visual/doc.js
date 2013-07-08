@@ -166,6 +166,7 @@ Visual.Doc =
 	}
 	else
 	{
+		//TODO this has to go
 		this.ranks =
 			[ '1' ];
 

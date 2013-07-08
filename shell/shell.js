@@ -560,11 +560,6 @@ Shell.prototype.greenscreen =
 			'unknown error.';
 	}
 
-	console.log(
-		'greenscreen:',
-		message
-	);
-
 	if( !this._$greenscreen )
 	{
 		this._$greenscreen =
@@ -1091,8 +1086,6 @@ Shell.prototype.onAquireSpace =
 			break;
 
 		case 'nonexistent' :
-
-			console.log( asw );
 
 			this._$forms.NonExistingSpace.setSpace(
 				asw.spaceUser,

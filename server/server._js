@@ -275,7 +275,7 @@ Server.prototype.initRepository =
 	global.insert(
 		{
 			_id     : 'version',
-			version : 3
+			version : 4
 		},
 	_);
 };
@@ -395,7 +395,7 @@ Server.prototype.loadSpace =
 				[ ],
 
 			$tree :
-				new Tree(
+				Tree.grow(
 					{
 						type :
 							'Space'
@@ -426,17 +426,20 @@ Server.prototype.loadSpace =
 	{
 		if( o._id !== space.$seqZ )
 		{
-			throw new Error('sequence mismatch');
+			throw new Error(
+				'sequence mismatch'
+			);
 		}
 
 		// FIXME there is something quirky, why isn't *this* a "Change"?
-		var change = {
-			cid :
-				o.cid,
+		var change =
+			{
+				cid :
+					o.cid,
 
-			chgX :
-				null
-		};
+				chgX :
+					null
+			};
 
 		if ( !Jools.isArray( o.chgX ) )
 		{
@@ -1526,7 +1529,7 @@ Server.prototype.createSpace =
 				[ ],
 
 			$tree :
-				new Tree(
+				Tree.grow(
 					{
 						type :
 							'Space'

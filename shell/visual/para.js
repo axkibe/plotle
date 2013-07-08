@@ -64,17 +64,17 @@ Visual.Para =
 			);
 		}
 
-		if( tree && tree.type !== 'Para' )
-		{
-			throw new Error(
-				'type error'
-			);
-		}
-
-		if( tree === null )
+		if( !tree )
 		{
 			throw new Error(
 				'tree missing'
+			);
+		}
+
+		if( tree.twig.type !== 'Para' )
+		{
+			throw new Error(
+				'type error'
 			);
 		}
 
@@ -99,7 +99,7 @@ Visual.Para =
 		flowWidth;
 
 	this.text =
-		tree.text;
+		tree.twig.text;
 
 	// caching
 	this.$fabric =
@@ -601,7 +601,7 @@ Para.prototype.getFlow =
 			else
 			{
 				// horizontal overflow
-				// console.log('HORIZONTAL OVERFLOW'); // FIXME
+				// ('HORIZONTAL OVERFLOW'); // FIXME
 			}
 		}
 

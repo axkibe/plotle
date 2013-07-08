@@ -42,7 +42,7 @@ Stubs = { };
 
 
 Stubs.labelDoc =
-	new Tree(
+	Tree.grow(
 		{
 			type:
 				'Doc',
@@ -70,7 +70,7 @@ Stubs.labelDoc =
 
 
 Stubs.emptyDoc =
-	new Tree(
+	Tree.grow(
 		{
 			type:
 				'Doc',

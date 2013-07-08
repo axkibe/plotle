@@ -223,11 +223,9 @@ Portal.create =
 		if( !zone )
 		{
 			zone =
-				// TODO multi create
 				new Euclid.Rect(
-					'pnw/pse',
-					new Euclid.Point( tree.zone.pnw ),
-					new Euclid.Point( tree.zone.pse )
+					'twig',
+					tree.twig.zone
 				);
 		}
 	}
@@ -454,7 +452,7 @@ Portal.prototype.dragStop =
 				throw new Error( 'Portal under minimum size!' );
 			}
 
-			if( this.tree.zone.equals( zone ) )
+			if( this.tree.twig.zone.equals( zone ) )
 			{
 				return;
 			}
@@ -1153,7 +1151,7 @@ Portal.prototype._locateOffset =
 			this._fonts[ section ],
 
 		text =
-			this.tree[ section ];
+			this.tree.twig[ section ];
 
 	return new Euclid.Point(
 		Math.round(
@@ -1324,7 +1322,7 @@ Portal.prototype.keyLeft =
 								'spaceUser'
 							),
 					at1 :
-						this.tree.spaceUser.length
+						this.tree.twig.spaceUser.length
 				}
 			);
 
@@ -1540,7 +1538,7 @@ Portal.prototype.keyRight =
 	}
 
 	var value =
-		this.tree[ section ];
+		this.tree.twig[ section ];
 
 	if( csign.at1 >= value.length )
 	{
@@ -1633,7 +1631,7 @@ Portal.prototype.keyDel =
 			csign.path.get( -1 ),
 
 		value =
-			this.tree[ section ];
+			this.tree.twig[ section ];
 
 	if( !this._isSection( section ) )
 	{
@@ -1682,7 +1680,7 @@ Portal.prototype.keyEnd =
 		csign.at1;
 
 	var value =
-		this.tree[ section ];
+		this.tree.twig[ section ];
 
 	if( at1 >= value.length )
 	{
@@ -1792,7 +1790,7 @@ Portal.prototype._prepareField =
 			theme.portal.input.rounding,
 
 		text =
-			this.tree[ section ],
+			this.tree.twig[ section ],
 
 		width =
 			Euclid.Measure.width(
@@ -1926,7 +1924,7 @@ Portal.prototype._getOffsetAt =
 			x - this._$spaceFields[ section ].pnw.x,
 
 		value =
-			this.tree[ section ],
+			this.tree.twig[ section ],
 
 		x1 =
 			0,
@@ -1981,8 +1979,8 @@ Portal.prototype._moveTo =
 	function( )
 {
 	shell.moveToSpace(
-		this.tree.spaceUser,
-		this.tree.spaceTag,
+		this.tree.twig.spaceUser,
+		this.tree.twig.spaceTag,
 		false
 	);
 };

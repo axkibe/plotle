@@ -130,7 +130,7 @@ Disc.Disc =
 
 	// TODO inherit
 	this._tree =
-		new Tree(
+		Tree.grow(
 			this.layout,
 			Pattern
 		);
@@ -186,7 +186,7 @@ Disc.Disc =
 			tree =
 				twig[ wname ];
 
-		switch( tree.type )
+		switch( tree.twig.type )
 		{
 			case 'Button' :
 
@@ -211,7 +211,8 @@ Disc.Disc =
 			default :
 
 				throw new Error(
-					'Cannot create widget of type: ' + tree.type
+					'Cannot create widget of type: ' +
+						tree.twig.type
 				);
 		}
 	}

@@ -493,12 +493,14 @@ IFace.prototype.aquireSpace =
 
 		if( asw.node.type !== 'Space' )
 		{
-			throw new Error(' aquireSpace(): server served no space ');
+			throw new Error(
+				' aquireSpace(): server served no space '
+			);
 		}
 
 		self.$cSpace =
 		self.$rSpace =
-			new Tree(
+			Tree.grow(
 				asw.node,
 				Meshverse
 			);

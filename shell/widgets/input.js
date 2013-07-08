@@ -123,14 +123,19 @@ Widgets.Input =
 	this.visible =
 		visible;
 
+	// TODO compute a rect.
 	var
 		pnw =
 		this.pnw =
-			parent.iframe.computePoint( tree.frame.pnw ),
+			parent.iframe.computePoint(
+				tree.twig.frame.twig.pnw
+			),
 
 		pse =
 		this.pse =
-			parent.iframe.computePoint( tree.frame.pse );
+			parent.iframe.computePoint(
+				tree.twig.frame.twig.pse
+			);
 
 	this._shape =
 		new Euclid.RoundRect(
@@ -152,9 +157,10 @@ Widgets.Input =
 	this.hoverAccent =
 		hoverAccent;
 
+	// TODO tree creator
 	this._font =
 		new Euclid.Font(
-			tree.font
+			tree.twig.font.twig
 		);
 
 	Jools.immute( this );
@@ -385,7 +391,7 @@ Input.prototype.getOffsetAt =
 		a,
 
 		password =
-			this.tree.password,
+			this.tree.twig.password,
 
 		font =
 			this._font,
@@ -595,7 +601,7 @@ Input.prototype._weave =
 	var
 		style =
 			Widgets.getStyle(
-				this.tree.style,
+				this.tree.twig.style,
 				Accent.state(
 					this.hoverAccent,
 					this.focusAccent
@@ -612,7 +618,7 @@ Input.prototype._weave =
 		Euclid.View.proper
 	);
 
-	if( this.tree.password )
+	if( this.tree.twig.password )
 	{
 		fabric.fill(
 			{
@@ -689,7 +695,7 @@ Input.prototype.locateOffset =
 		value =
 			this.value;
 
-	if( this.tree.password )
+	if( this.tree.twig.password )
 	{
 		return new Euclid.Point(
 			pitch.x +
@@ -840,7 +846,7 @@ Input.prototype.input =
 			csign.at1,
 
 		maxlen =
-			this.tree.maxlen;
+			this.tree.twig.maxlen;
 
 	// cuts of text if larger than this maxlen
 	if(

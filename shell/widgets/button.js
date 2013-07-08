@@ -133,17 +133,18 @@ Widgets.Button =
 	this.visible =
 		visible;
 
+	// TODO compute a rect
 	var
 		pnw =
 		this.pnw =
 			parent.iframe.computePoint(
-				tree.frame.pnw
+				tree.twig.frame.twig.pnw
 			),
 
 		pse =
 		this.pse =
 			parent.iframe.computePoint(
-				tree.frame.pse
+				tree.twig.frame.twig.pse
 			),
 
 		iframe =
@@ -155,16 +156,16 @@ Widgets.Button =
 
 		// TODO move this to Shape
 		tshape =
-			tree.shape;
+			tree.twig.shape;
 
-	switch( tshape.type )
+	switch( tshape.twig.type )
 	{
 		case 'Curve' :
 
 			// TODO _shape
 			this.shape =
 				new Curve(
-					tshape,
+					tshape.twig,
 					iframe
 				);
 
@@ -174,8 +175,8 @@ Widgets.Button =
 
 			this.shape =
 				new Euclid.Ellipse(
-					iframe.computePoint( tshape.pnw ),
-					iframe.computePoint( tshape.pse )
+					iframe.computePoint( tshape.twig.pnw ),
+					iframe.computePoint( tshape.twig.pse )
 				);
 
 			break;
@@ -183,7 +184,7 @@ Widgets.Button =
 		default :
 
 			throw new Error(
-				'unknown shape: ' + tshape.type
+				'unknown shape: ' + tshape.twig.type
 			);
 	}
 
@@ -462,7 +463,7 @@ Button.prototype._weave =
 
 		style =
 			Widgets.getStyle(
-				tree.style,
+				tree.twig.style,
 				accent
 			);
 
@@ -471,7 +472,7 @@ Button.prototype._weave =
 	if( !Jools.isnon( style ) )
 	{
 		throw new Error(
-			'Invalid style: ' + tree.style
+			'Invalid style: ' + tree.twig.style
 		);
 	}
 
@@ -484,35 +485,35 @@ Button.prototype._weave =
 
 	var
 		caption =
-			tree.caption;
+			tree.twig.caption;
 
 	if( caption )
 	{
 		var
 			text =
-				this.text || caption.text,
+				this.text || caption.twig.text,
 
 			newline =
-				caption.newline,
+				caption.twig.newline,
 
 			// TODO tree creator
 			font =
 				new Euclid.Font(
-					caption.font
+					caption.twig.font.twig
 				),
 
 			pos =
 				this.iframe.computePoint(
-					caption.pos
+					caption.twig.pos
 				);
 
 		if( !Jools.is( newline ) )
 		{
-			if( !Jools.is( caption.rotate ) )
+			if( !Jools.is( caption.twig.rotate ) )
 			{
 				fabric.paintText(
 					'text',
-						caption.text,
+						caption.twig.text,
 					'p',
 						pos,
 					'font',
@@ -529,7 +530,7 @@ Button.prototype._weave =
 					'font',
 						font,
 					'rotate',
-						caption.rotate
+						caption.twig.rotate
 				);
 			}
 		}
@@ -573,13 +574,13 @@ Button.prototype._weave =
 
 	var
 		icon =
-			tree.icon;
+			tree.twig.icon;
 
 	if( icon )
 	{
 		style =
 			Widgets.getStyle(
-				tree.iconStyle,
+				tree.twig.iconStyle,
 				Accent.NORMA
 			);
 
@@ -835,7 +836,6 @@ Button.prototype.knock =
 Button.prototype.getText =
 	function( )
 {
-//	return this._$caption && this._$caption.$text;
 	throw new Error( 'TODO' );
 };
 

@@ -215,7 +215,7 @@ Relation.create =
 		if( fontsize === null )
 		{
 			fontsize =
-				tree.fontsize;
+				tree.twig.fontsize;
 		}
 
 		if( pnw === null )
@@ -223,20 +223,20 @@ Relation.create =
 			// TODO multi create
 			pnw =
 				new Euclid.Point(
-					tree.pnw
+					tree.twig.pnw.twig
 				);
 		}
 
 		if( item1key === null )
 		{
 			item1key =
-				tree.item1key;
+				tree.twig.item1key;
 		}
 
 		if( item2key === null )
 		{
 			item2key =
-				tree.item2key;
+				tree.twig.item2key;
 		}
 	}
 
@@ -290,7 +290,7 @@ Relation.create =
 			'inherit',
 				doc,
 			'tree',
-				tree && tree.doc,
+				tree && tree.twig.doc,
 			'path',
 				inherit ?
 					inherit.$sub.doc.path
