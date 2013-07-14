@@ -17,7 +17,8 @@ var
 | Exports
 */
 var
-	Meshverse;
+	Meshverse,
+	meshverse;
 
 
 /*
@@ -29,158 +30,169 @@ var
 // node imports
 if( typeof( window ) === 'undefined')
 {
-	Euclid = {
-		Point :
-			require('./euclid/point'),
-
-		Rect :
-			require('./euclid/rect')
-	};
-
 	Jools =
 		require('./jools');
 }
-
 
 /*
 | The meshcraft universe
 */
 Meshverse =
-{
-	'Space' :
+	function( )
 	{
+
+	};
+
+
+
+Meshverse.prototype.Space =
+	Jools.immute( {
+
 		twig :
-		{
-			'Label' :
-				true,
+			Jools.immute ( {
+				'Label' :
+					true,
 
-			'Note' :
-				true,
+				'Note' :
+					true,
 
-			'Portal' :
-				true,
+				'Portal' :
+					true,
 
-			'Relation' :
-				true
-		},
+				'Relation' :
+					true
+		} ),
 
 		ranks :
 			true
-	},
+	} );
 
-	'Note' :
-	{
+
+Meshverse.prototype.Note =
+	Jools.immute( {
+
 		must :
-		{
-			'doc' :
-				'Doc',
+			Jools.immute( {
+				'doc' :
+					'Doc',
 
-			'zone' :
-				'Rect',
+				'zone' :
+					'Rect',
 
-			'fontsize' :
-				'Number'
-		}
-	},
+				'fontsize' :
+					'Number'
+			} )
+	} );
 
-	'Portal' :
-	{
+Meshverse.prototype.Portal =
+	Jools.immute( {
 		must :
-		{
-			'zone' :
-				'Rect',
+			Jools.immute( {
+				'zone' :
+					'Rect',
 
-			'spaceUser' :
-				'String',
+				'spaceUser' :
+					'String',
 
-			'spaceTag' :
-				'String'
-		}
-	},
+				'spaceTag' :
+					'String'
+			} )
+	} );
 
-	'Label' :
-	{
+
+Meshverse.prototype.Label =
+	Jools.immute( {
+
 		must :
-		{
-			'doc' :
-				'Doc',
+			Jools.immute( {
+				'doc' :
+					'Doc',
 
-			'pnw' :
-				'Point',
+				'pnw' :
+					'Point',
 
-			'fontsize' :
-				'Number'
-		}
-	},
+				'fontsize' :
+					'Number'
+			} )
+	} );
 
-	'Relation' :
-	{
+
+Meshverse.prototype.Relation =
+	Jools.immute( {
+
 		must :
-		{
-			'doc' :
-				'Doc',
+			Jools.immute( {
+				'doc' :
+					'Doc',
 
-			'pnw' :
-				'Point',
+				'pnw' :
+					'Point',
 
-			'item1key' :
-				// 'Key', FIXME
-				'String',
+				'item1key' :
+					// 'Key', FIXME
+					'String',
 
-			'item2key' :
-				// 'Key', FIXME
-				'String',
+				'item2key' :
+					// 'Key', FIXME
+					'String',
 
-			'fontsize' :
-				'Number'
-		}
-	},
+				'fontsize' :
+					'Number'
+			} )
+	} );
 
-	'Doc' :
-	{
+
+Meshverse.prototype.Doc =
+	Jools.immute( {
+
 		twig :
-		{
-			'Para' :
-				true
-		},
+			Jools.immute( {
+				'Para' :
+					true
+			} ),
 
 		ranks :
 			true
-	},
+	} );
 
-	'Para' :
-	{
+
+Meshverse.prototype.Para =
+	Jools.immute( {
+
 		must :
-		{
-			'text' :
-				'String'
-		}
-	},
+			Jools.immute( {
+				'text' :
+					'String'
+			} )
+	} );
 
-	'Rect' :
-	{
+
+Meshverse.prototype.Rect =
+	Jools.immute( {
+
 		must :
-		{
-			'pnw' :
-				'Point',
+			Jools.immute( {
+				'pnw' :
+					'Point',
 
-			'pse' :
-				'Point'
-		}
-	},
+				'pse' :
+					'Point'
+			} )
+	} );
 
-	'Point' :
-	{
+
+Meshverse.prototype.Point =
+	Jools.immute( {
+
 		must :
-		{
-			'x' :
-				'Integer',
+			Jools.immute( {
+				'x' :
+					'Integer',
 
-			'y' :
-				'Integer'
-		}
-	}
-};
+				'y' :
+					'Integer'
+			} )
+	} );
 
 
 /*
@@ -188,23 +200,11 @@ Meshverse =
 */
 if( CHECK )
 {
-	for( var k in Meshverse )
+	for( var k in Meshverse.prototype )
 	{
 		var
 			p =
-				Meshverse[ k ];
-
-		Jools.immute( p );
-
-		if( p.twig )
-		{
-			Jools.immute( p.twig );
-		}
-
-		if( p.must )
-		{
-			Jools.immute( p.must );
-		}
+				Meshverse.prototype[ k ];
 
 		if( p.must )
 		{
@@ -226,12 +226,17 @@ if( CHECK )
 	}
 }
 
+meshverse =
+	new Meshverse( );
+
+
 /*
 | Node export
 */
 if( typeof( window ) === 'undefined' )
 {
-	module.exports = Meshverse;
+	module.exports =
+		meshverse;
 }
 
 } )( );

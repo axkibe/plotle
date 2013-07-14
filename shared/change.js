@@ -10,7 +10,7 @@
 */
 var
 	Jools,
-	Meshverse,
+	meshverse,
 	Path,
 	Sign,
 	Tree;
@@ -47,7 +47,7 @@ if( typeof( window ) === 'undefined' )
 	Tree =
 		require( './tree' );
 
-	Meshverse =
+	meshverse =
 		require( './meshverse' );
 }
 
@@ -425,7 +425,7 @@ Change.prototype.set =
 			pivot =
 				Tree.grow(
 					pivot,
-					Meshverse,
+					meshverse,
 					key,
 						src.val,
 					'+',
@@ -447,7 +447,7 @@ Change.prototype.set =
 			pivot =
 				Tree.grow(
 					pivot,
-					Meshverse,
+					meshverse,
 					key,
 						src.val,
 					'-',
@@ -765,7 +765,7 @@ Change.prototype.join =
 	para1 =
 		Tree.grow(
 			para1,
-			Meshverse,
+			meshverse,
 			'text',
 				para1.twig.text + para2.twig.text
 		);
@@ -773,7 +773,7 @@ Change.prototype.join =
 	pivot =
 		Tree.grow(
 			pivot,
-			Meshverse,
+			meshverse,
 			key,
 				para1,
 			key2,
@@ -887,7 +887,7 @@ Change.prototype.split = function( tree )
 		para2 =
 			Tree.grow(
 				para1,
-				Meshverse,
+				meshverse,
 				'text',
 					text.substring( at1, text.length )
 			);
@@ -895,7 +895,7 @@ Change.prototype.split = function( tree )
 	para1 =
 		Tree.grow(
 			para1,
-			Meshverse,
+			meshverse,
 			'text',
 				text.substring( 0, at1 )
 		);
@@ -903,7 +903,7 @@ Change.prototype.split = function( tree )
 	pivot =
 		Tree.grow(
 			pivot,
-			Meshverse,
+			meshverse,
 			key,
 				para1,
 			vKey,
@@ -1001,7 +1001,7 @@ Change.prototype.rank =
 	pivot =
 		Tree.grow(
 			pivot,
-			Meshverse,
+			meshverse,
 			'-',
 				orank,
 			'+',

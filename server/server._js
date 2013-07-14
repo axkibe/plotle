@@ -34,7 +34,7 @@ var
 	MeshMashine =
 		require( '../shared/meshmashine' ),
 
-	Meshverse =
+	meshverse =
 		require( '../shared/meshverse' ),
 
 	Path =
@@ -405,7 +405,7 @@ Server.prototype.loadSpace =
 						type :
 							'Space'
 					},
-					Meshverse
+					meshverse
 				),
 
 			$seqZ :
@@ -1539,7 +1539,7 @@ Server.prototype.createSpace =
 						type :
 							'Space'
 					},
-					Meshverse
+					meshverse
 				),
 
 			$seqZ :

@@ -19,7 +19,7 @@ var
 	Change,
 	ChangeRay,
 	MeshMashine,
-	Meshverse,
+	meshverse,
 	Path,
 	Sign,
 	Jools,
@@ -502,7 +502,7 @@ IFace.prototype.aquireSpace =
 		self.$rSpace =
 			Tree.grow(
 				asw.node,
-				Meshverse
+				meshverse
 			);
 
 		self.$spaceUser =
