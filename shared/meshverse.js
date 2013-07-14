@@ -186,12 +186,13 @@ Meshverse =
 /*
 | Some sanity tests on the patterns.
 */
-( function( patterns )
+if( CHECK )
 {
-	for( var k in patterns )
+	for( var k in Meshverse )
 	{
-		var p =
-			patterns[ k ];
+		var
+			p =
+				Meshverse[ k ];
 
 		Jools.immute( p );
 
@@ -223,8 +224,7 @@ Meshverse =
 			throw new Error( 'Patterns must not have .ranks without .twig' );
 		}
 	}
-
-} )( Meshverse );
+}
 
 /*
 | Node export

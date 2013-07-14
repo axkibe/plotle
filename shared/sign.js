@@ -97,19 +97,20 @@ Sign.field =
 
 
 /*
-| Sets a new value of a signature.
+| Returns a Signature with a new value..
 |
-| If the signature has the value preset, it checks equality.
-|
-| sign : signature to affix
-| test : function to test existence of key (is or isnon)
-| cm   : check message for failed checks
-| base : base message for failed checks
-| key  : key to affix at
-| val  : value to affix
+| If the signature has the value preset,
+| it is checked for equality.
 */
-Sign.prototype.affix = function(test, cm, base, key, val) {
-
+Sign.prototype.affix =
+	function(
+		test, // function to test existence of key (is or isnon)
+		cm,   // checks message for failed checks
+		base, // base message for failed checks
+		key,  // key to affix at
+		val   // value to affix
+	)
+{
 	if( test( this[ key ] ) )
 	{
 		if( !Jools.matches( val, this[ key ] ) )

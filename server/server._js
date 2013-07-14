@@ -13,6 +13,11 @@
 
 "use strict";
 
+/*
+| Turn on checking on server side by default
+*/
+GLOBAL.CHECK = true;
+
 if( typeof( require ) === 'undefined' )
 {
 	throw new Error( 'this code requires node!' );

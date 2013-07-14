@@ -107,7 +107,7 @@ Tree =
 		true;
 
 	Jools.immute( this );
-}
+};
 
 
 /*

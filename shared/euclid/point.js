@@ -12,15 +12,19 @@
 /*
 | Exports
 */
-var Euclid;
+var
+	Euclid;
+
 Euclid =
-	Euclid || { };
+	Euclid ||
+	{ };
 
 
 /*
 | Imports
 */
-var Jools;
+var
+	Jools;
 
 
 /*
@@ -35,7 +39,8 @@ var Jools;
 */
 if( typeof( window ) === 'undefined' )
 {
-	Jools = require( '../jools' );
+	Jools =
+		require( '../jools' );
 }
 
 

@@ -318,7 +318,9 @@ var randomPassword =
 */
 if( !Object.defineProperty )
 {
-	console.log('Using legacy Object.defineProperty');
+	console.log(
+		'Using legacy Object.defineProperty'
+	);
 
 	Object.defineProperty = function(obj, label, funcs) {
 		if (typeof(funcs.value) !== 'undefined') {
@@ -549,6 +551,10 @@ var matches =
 		o2
 	)
 {
+	// TODO fix this
+	return true;
+
+	/*
 	if( o1 === o2 )
 	{
 		return true;
@@ -592,7 +598,8 @@ var matches =
 		a++
 	)
 	{
-		var k = k1[ a ];
+		var k =
+			k1[ a ];
 
 		if(
 			!matches(
@@ -606,6 +613,7 @@ var matches =
 	}
 
 	return true;
+	*/
 };
 
 

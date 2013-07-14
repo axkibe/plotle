@@ -208,7 +208,8 @@ Form.prototype.getWidgetPrototype =
 		default :
 
 			throw new Error(
-				'Invalid component type: ' + type
+				'Invalid component type: ' +
+				tree.twig.type
 			);
 	}
 };
@@ -221,19 +222,21 @@ Form.prototype.getWidgetPrototype =
 Form.prototype.getFocus =
 	function( )
 {
-	var caret =
-		this.$caret;
+	var
+		caret =
+			this.$caret,
 
-	var sign =
-		caret.sign;
+		sign =
+			caret.sign;
 
 	if( !sign )
 	{
 		return null;
 	}
 
-	var path =
-		sign.path;
+	var
+		path =
+			sign.path;
 
 	if( path.get( 0 ) !== this.name )
 	{
