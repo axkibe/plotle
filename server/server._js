@@ -702,46 +702,46 @@ Server.prototype.prepareResources =
 		'shared/sha1.js',
 			'fb',
 
-		'shared/euclid/const.js',
+		'shell/euclid/const.js',
 			'fb',
 
-		'shared/euclid/compass.js',
+		'shell/euclid/compass.js',
 			'fb',
 
-		'shared/euclid/point.js',
+		'shell/euclid/point.js',
 			'fb',
 
-		'shared/euclid/rect.js',
+		'shell/euclid/rect.js',
 			'fb',
 
-		'shared/euclid/margin.js',
+		'shell/euclid/margin.js',
 			'fb',
 
-		'shared/euclid/font.js',
+		'shell/euclid/font.js',
 			'fb',
 
-		'shared/euclid/fabric.js',
+		'shell/euclid/fabric.js',
 			'fb',
 
-		'shared/euclid/measure.js',
+		'shell/euclid/measure.js',
 			'fb',
 
-		'shared/euclid/rect.js',
+		'shell/euclid/rect.js',
 			'fb',
 
-		'shared/euclid/shape.js',
+		'shell/euclid/shape.js',
 			'fb',
 
-		'shared/euclid/round-rect.js',
+		'shell/euclid/round-rect.js',
 			'fb',
 
-		'shared/euclid/ellipse.js',
+		'shell/euclid/ellipse.js',
 			'fb',
 
-		'shared/euclid/ellipse-flower.js',
+		'shell/euclid/ellipse-flower.js',
 			'fb',
 
-		'shared/euclid/line.js',
+		'shell/euclid/line.js',
 			'fb',
 
 		'shell/fontpool.js',
@@ -756,10 +756,10 @@ Server.prototype.prepareResources =
 		'shell/accent.js',
 			'fb',
 
-		'shared/euclid/view.js',
+		'shell/euclid/view.js',
 			'fb',
 
-		'shared/euclid/fix.js',
+		'shell/euclid/fix.js',
 			'fb',
 
 		'shared/meshverse.js',

@@ -385,8 +385,11 @@ var subclass =
 		Inherit.prototype = base.prototype;
 	}
 
-	sub.prototype = new Inherit( );
-	sub.prototype.constructor = sub;
+	sub.prototype =
+		new Inherit( );
+
+	sub.prototype.constructor =
+		sub;
 };
 
 
