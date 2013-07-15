@@ -9,6 +9,7 @@
 | Exports
 */
 var Euclid;
+
 Euclid =
 	Euclid || { };
 

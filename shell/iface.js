@@ -19,7 +19,7 @@ var
 	Change,
 	ChangeRay,
 	MeshMashine,
-	meshverse,
+	meshverseShell,
 	Path,
 	Sign,
 	Jools,
@@ -502,7 +502,7 @@ IFace.prototype.aquireSpace =
 		self.$rSpace =
 			Tree.grow(
 				asw.node,
-				meshverse
+				meshverseShell
 			);
 
 		self.$spaceUser =
@@ -726,7 +726,10 @@ IFace.prototype._update =
 
 				// changes the clients understanding of the server tree
 				self.$rSpace =
-					chgX.changeTree( self.$rSpace ).tree;
+					chgX.changeTree(
+						self.$rSpace,
+						meshverseShell
+					).tree;
 
 				if(
 					postbox.length > 0 &&
@@ -870,7 +873,10 @@ IFace.prototype._update =
 				}
 
 				space =
-					chgX.changeTree( space ).tree;
+					chgX.changeTree(
+						space,
+						meshverseShell
+					).tree;
 			}
 
 			// transforms the outbox
@@ -915,7 +921,10 @@ IFace.prototype._update =
 					);
 
 				space =
-					chgX.changeTree( space ).tree;
+					chgX.changeTree(
+						space,
+						meshverseShell
+					).tree;
 			}
 
 			self.$cSpace =
@@ -1021,7 +1030,10 @@ IFace.prototype.alter =
 			new Change(
 				new Sign( src ),
 				new Sign( trg )
-			).changeTree( this.$cSpace );
+			).changeTree(
+				this.$cSpace,
+				meshverseShell
+			);
 
     this.$cSpace =
 		result.tree;
@@ -1212,7 +1224,10 @@ IFace.prototype.undo =
 			this._$undo.pop( ).chgX.invert( ),
 
 		result =
-			chgX.changeTree( this.$cSpace );
+			chgX.changeTree(
+				this.$cSpace,
+				meshverseShell
+			);
 
 	if( result === null )
 	{
@@ -1275,7 +1290,10 @@ IFace.prototype.redo =
 			this._$redo.pop( ).chgX.invert( ),
 
 		result =
-			chgX.changeTree( this.$cSpace );
+			chgX.changeTree(
+				this.$cSpace,
+				meshverseShell
+			);
 
     this.$cSpace =
 		result.tree;

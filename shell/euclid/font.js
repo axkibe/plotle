@@ -11,7 +11,9 @@
 | Export
 */
 var Euclid;
-Euclid = Euclid || { };
+
+Euclid =
+	Euclid || { };
 
 
 /*

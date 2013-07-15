@@ -16,8 +16,9 @@ Euclid =
 /*
 | Imports
 */
-var Euclid;
-var Jools;
+var
+	Euclid,
+	Jools;
 
 
 /*

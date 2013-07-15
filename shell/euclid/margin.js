@@ -1,17 +1,16 @@
 /*
-|
 | Holds information of inner or outer distances.
-|
-| Margins are immutable objects.
-|
 */
 
 
 /*
 | Exports
 */
-var Euclid;
-Euclid = Euclid || {};
+var
+	Euclid;
+
+Euclid =
+	Euclid || { };
 
 
 /*
@@ -28,15 +27,6 @@ var Jools;
 
 
 /*
-| Node imports
-*/
-if (typeof(window) === 'undefined')
-{
-	Jools = require('../jools');
-}
-
-
-/*
 | Constructor.
 |
 | Margin(n, e, s, w)
@@ -46,7 +36,14 @@ if (typeof(window) === 'undefined')
 | s: south margin
 | w: west margin
 */
-var Margin = Euclid.Margin = function(m, e, s, w)
+var Margin =
+Euclid.Margin =
+	function(
+		m,
+		e,
+		s,
+		w
+	)
 {
 	if (typeof(m) === 'object')
 	{
@@ -70,16 +67,23 @@ var Margin = Euclid.Margin = function(m, e, s, w)
 /*
 | A margin with all distances 0.
 */
-Margin.zero = new Margin(0, 0, 0, 0);
+Margin.zero =
+	new Margin(
+		0,
+		0,
+		0,
+		0
+	);
 
 
 /*
 | Returns a json object for this margin
+| FIXME is this ever used?
 */
 Margin.prototype.toJSON = function()
 {
 	return this._json ||
-		(this._json =
+		( this._json =
 			{
 				n: this.n,
 				e: this.e,
@@ -93,7 +97,7 @@ Margin.prototype.toJSON = function()
 | East + west margin = x
 */
 Jools.lazyFixate(Margin.prototype, 'x',
-	function()
+	function( )
 	{
 		return this.e + this.w;
 	}
@@ -104,20 +108,11 @@ Jools.lazyFixate(Margin.prototype, 'x',
 | North + south margin = y
 */
 Jools.lazyFixate(Margin.prototype, 'y',
-	function()
+	function( )
 	{
 		return this.n + this.s;
 	}
 );
-
-
-/*
-| Node export
-*/
-if (typeof(window) === 'undefined')
-{
-	module.exports = Margin;
-}
 
 
 } ) ();

@@ -381,6 +381,7 @@ Item.prototype.sketchAllHandles =
 	var
 		h =
 			this.planHandles( ),
+
 		d8cwcf =
 			Euclid.Compass.dir8CWCF;
 

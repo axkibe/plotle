@@ -76,7 +76,7 @@ Tree =
 		type,
 		twig,
 		ranks,
-		verse
+		universe
 	)
 {
 	if( tag !== 'XOXO' )
@@ -98,8 +98,8 @@ Tree =
 			ranks;
 	}
 
-	this.verse =
-		verse;
+	this.universe =
+		universe;
 
 	// marks this to be grown
 	// data structure
@@ -116,7 +116,7 @@ Tree =
 Tree.grow =
 	function(
 		model, // the model to copy
-		verse
+		universe
 		//
 		// additional arguments:
 		//
@@ -159,7 +159,7 @@ Tree.grow =
 
 	var
 		pattern =
-			verse[ type ];
+			universe[ type ];
 
 	if( !pattern )
 	{
@@ -392,7 +392,7 @@ Tree.grow =
 					twig[ k ] =
 						Tree.grow(
 							twig[ k ],
-							verse
+							universe
 						);
 				}
 		}
@@ -455,13 +455,19 @@ Tree.grow =
 		}
 	}
 
+	if( universe.creators )
+	{
+
+
+	}
+
 	return (
 		new Tree(
 			'XOXO',
 			type,
 			twig,
 			ranks,
-			verse
+			universe
 		)
 	);
 };
@@ -527,12 +533,15 @@ Tree.prototype.setPath =
 	function(
 		path,
 		val,
+		universe,
 		shorten
 	)
 {
 	if( !Path.isPath( path ) )
 	{
-		throw new Error( 'no path' );
+		throw new Error(
+			'no path'
+		);
 	}
 
 	if( shorten < 0 )
@@ -543,7 +552,9 @@ Tree.prototype.setPath =
 
 	if( shorten < 0 )
 	{
-		throw new Error( 'invalid shorten' );
+		throw new Error(
+			'invalid shorten'
+		);
 	}
 
 	var
@@ -566,7 +577,7 @@ Tree.prototype.setPath =
 		val =
 			Tree.grow(
 				tree,
-				this.verse,
+				universe,
 				path.get( a ),
 				val
 			);
@@ -699,7 +710,7 @@ Tree.prototype.getPattern =
 		o
 	)
 {
-	return this.verse[ Tree.getType( o ) ];
+	return this.universe[ Tree.getType( o ) ];
 };
 
 /*

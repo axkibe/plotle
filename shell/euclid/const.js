@@ -10,8 +10,12 @@
 /*
 | Exports
 */
-var Euclid;
-Euclid = Euclid || { };
+var
+	Euclid;
+
+Euclid =
+	Euclid ||
+	{ };
 
 
 /*
@@ -27,15 +31,18 @@ var Jools;
 'use strict';
 
 
-var Const = Euclid.Const = { };
+var Const =
+	Euclid.Const =
+	{ };
 
 /*
 |'magic' number to approximate ellipses with beziers.
 */
-Const.magic = 0.551784;
+Const.magic =
+	0.551784;
 
 
-Jools.immute(Const);
+Jools.immute( Const );
 
 
-} ) ();
+} )( );

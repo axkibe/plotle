@@ -8,7 +8,9 @@
 /*
 | Export
 */
-var Euclid;
+var
+	Euclid;
+
 Euclid =
 	Euclid || { };
 
@@ -16,8 +18,9 @@ Euclid =
 /*
 | Imports
 */
-var Jools;
-var Euclid;
+var
+	Jools,
+	Euclid;
 
 
 /*
@@ -25,24 +28,6 @@ var Euclid;
 */
 ( function( ) {
 'use strict';
-
-
-/*
-| Node imports
-*/
-if( typeof( window ) === 'undefined' )
-{
-	Euclid =
-	{
-		Point :
-			require( './point'  ),
-
-		Margin :
-			require( './margin' )
-	};
-
-	Jools  = require( '../jools' );
-}
 
 
 /*
@@ -926,14 +911,5 @@ Rect.prototype.getProjection =
 	return pc;
 };
 
-
-/*
-| Node export
-*/
-if( typeof( window ) === 'undefined' )
-{
-	module.exports =
-		Rect;
-}
 
 })( );

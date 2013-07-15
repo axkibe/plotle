@@ -16,11 +16,15 @@ var Euclid;
 /*
 | Capsule
 */
-(function(){
+( function( ) {
 'use strict';
 
-if (typeof(window) === 'undefined')
-	{ throw new Error('this code needs a browser'); }
+if( typeof( window ) === 'undefined' )
+{
+	throw new Error(
+		'this code needs a browser'
+	);
+}
 
 
 /*
@@ -79,4 +83,4 @@ var Measure = Euclid.Measure =
 };
 
 
-})( );
+} )( );

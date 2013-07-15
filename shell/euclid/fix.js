@@ -9,25 +9,33 @@
 /*
 | Export
 */
-var Euclid;
-Euclid = Euclid || {};
+var
+	Euclid;
+
+Euclid =
+	Euclid || { };
 
 
 /*
 | Imports
 */
-var Jools;
-var theme;
+var
+	Jools,
+	theme;
 
 
 /*
 | Capsule
 */
-(function(){
+(function( ) {
 'use strict';
 
-if (typeof(window) === 'undefined')
-	{ throw new Error('this code needs a browser'); }
+if( typeof( window ) === 'undefined' )
+{
+	throw new Error(
+		'this code needs a browser'
+	);
+}
 
 
 /*

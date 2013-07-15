@@ -1,12 +1,8 @@
 /*
-|
 | A line.
 | It can have arrow heads.
 |
-| Lines are pseudo-immutable objects.
-|
 | Authors: Axel Kittenberger
-|
 */
 
 
@@ -14,7 +10,9 @@
 | Export
 */
 var Euclid;
-Euclid = Euclid || {};
+
+Euclid =
+	Euclid || { };
 
 
 /*

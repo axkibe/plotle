@@ -11,15 +11,14 @@
 var
 	Euclid,
 	Jools,
-	Meshverse
-	Point;
+	Meshverse;
 
 
 /*
 | Exports
 */
 var
-	MeshverseShell;
+	MeshverseShell,
 	meshverseShell;
 
 
@@ -31,7 +30,7 @@ var
 
 
 MeshverseShell =
-	funcion( )
+	function( )
 	{
 
 	};
@@ -46,7 +45,7 @@ Jools.subclass(
 MeshverseShell.prototype.creators =
 	Jools.immute( {
 		'Point' :
-			Point
+			Euclid.Point
 	} );
 
 

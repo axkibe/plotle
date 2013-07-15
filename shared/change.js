@@ -10,7 +10,6 @@
 */
 var
 	Jools,
-	meshverse,
 	Path,
 	Sign,
 	Tree;
@@ -46,9 +45,6 @@ if( typeof( window ) === 'undefined' )
 
 	Tree =
 		require( './tree' );
-
-	meshverse =
-		require( './meshverse' );
 }
 
 
@@ -135,12 +131,14 @@ Change =
 
 /*
 | Returns the type of this change.
+| TODO use lazyFixate
 */
 Change.prototype.type =
 	function( )
 {
-	var is =
-		Jools.is;
+	var
+		is =
+			Jools.is;
 
 	// checks if the answer is cached
 	if( is( this._type ) )
@@ -208,6 +206,7 @@ Change.prototype.type =
 
 /*
 | Returns the inversion to this change.
+| TODO use lazy fixate
 */
 Change.prototype.invert =
 	function( )
@@ -247,7 +246,8 @@ Change.prototype.invert =
 */
 Change.prototype.changeTree =
 	function(
-		tree
+		tree,
+		universe
 	)
 {
 	var
@@ -268,7 +268,7 @@ Change.prototype.changeTree =
 	// TODO make a switch call around this
 	var
 		r =
-			this[ type ]( tree );
+			this[ type ]( tree, universe );
 
 	// if answer is null the change has vaporated
 	if( r === null )
@@ -302,7 +302,9 @@ Change.prototype.length =
 | TODO check if needed
 */
 Change.prototype.get =
-	function( idx )
+	function(
+		idx
+	)
 {
 	if( idx !== 0 )
 	{
@@ -322,7 +324,8 @@ Change.prototype.get =
 */
 Change.prototype.set =
 	function(
-		tree
+		tree,
+		universe
 	)
 {
 	var
@@ -404,7 +407,8 @@ Change.prototype.set =
 		tree =
 			tree.setPath(
 				trg.path,
-				src.val
+				src.val,
+				universe
 			);
 	}
 	else
@@ -459,6 +463,7 @@ Change.prototype.set =
 			tree.setPath(
 				trg.path,
 				pivot,
+				universe,
 				-1
 			);
 	}
@@ -496,7 +501,10 @@ Change.prototype.set =
 | A string is inserted into a string item.
 */
 Change.prototype.insert =
-	function( tree )
+	function(
+		tree,
+		universe
+	)
 {
 	var
 		cm = 'change.insert',
@@ -542,7 +550,8 @@ Change.prototype.insert =
 
 	tree = tree.setPath(
 		trg.path,
-		nstr
+		nstr,
+		universe
 	);
 
 	var chg;
@@ -575,7 +584,10 @@ Change.prototype.insert =
 | A part of a string item is removed.
 */
 Change.prototype.remove =
-	function( tree )
+	function(
+		tree,
+		universe
+	)
 {
 	var
 		cm =
@@ -634,7 +646,12 @@ Change.prototype.remove =
 		str.substring( src.at2 )
 	);
 
-	tree = tree.setPath( src.path, nstr );
+	tree =
+		tree.setPath(
+			src.path,
+			nstr,
+			universe
+		);
 
 	var chg;
 	if(
@@ -669,7 +686,10 @@ Change.prototype.remove =
 | Two texts are joined into one.
 */
 Change.prototype.join =
-	function( tree )
+	function(
+		tree,
+		universe
+	)
 {
 	var
 		cm =
@@ -765,7 +785,7 @@ Change.prototype.join =
 	para1 =
 		Tree.grow(
 			para1,
-			meshverse,
+			universe,
 			'text',
 				para1.twig.text + para2.twig.text
 		);
@@ -773,7 +793,7 @@ Change.prototype.join =
 	pivot =
 		Tree.grow(
 			pivot,
-			meshverse,
+			universe,
 			key,
 				para1,
 			key2,
@@ -786,6 +806,7 @@ Change.prototype.join =
 		tree.setPath(
 			path,
 			pivot,
+			universe,
 			-2
 		);
 
@@ -823,7 +844,11 @@ Change.prototype.join =
 |
 | A text is split into two.
 */
-Change.prototype.split = function( tree )
+Change.prototype.split =
+	function(
+		tree,
+		universe
+	)
 {
 	var cm   = 'change.split';
 	var src  = this.src;
@@ -887,7 +912,7 @@ Change.prototype.split = function( tree )
 		para2 =
 			Tree.grow(
 				para1,
-				meshverse,
+				universe,
 				'text',
 					text.substring( at1, text.length )
 			);
@@ -895,7 +920,7 @@ Change.prototype.split = function( tree )
 	para1 =
 		Tree.grow(
 			para1,
-			meshverse,
+			universe,
 			'text',
 				text.substring( 0, at1 )
 		);
@@ -903,7 +928,7 @@ Change.prototype.split = function( tree )
 	pivot =
 		Tree.grow(
 			pivot,
-			meshverse,
+			universe,
 			key,
 				para1,
 			vKey,
@@ -916,6 +941,7 @@ Change.prototype.split = function( tree )
 		tree.setPath(
 			path,
 			pivot,
+			universe,
 			-2
 		);
 
@@ -952,7 +978,8 @@ Change.prototype.split = function( tree )
 */
 Change.prototype.rank =
 	function(
-		tree
+		tree,
+		universe
 	)
 {
 	var cm  = 'change.rank';
@@ -969,10 +996,15 @@ Change.prototype.rank =
 		cm, 'trg.rank not present'
 	);
 
-	var pivot = tree.getPath( src.path, -1 );
+	var
+		pivot =
+			tree.getPath(
+				src.path,
+				-1
+			);
 
 	Jools.check(
-		Jools.is(pivot.ranks),
+		Jools.is( pivot.ranks ),
 		cm, 'pivot not an ranks'
 	);
 
@@ -980,7 +1012,11 @@ Change.prototype.rank =
 	var orank = pivot.rankOf( key );
 
 	if ( orank < 0 )
-		{ throw Jools.reject('invalid key :'+key); }
+	{
+		throw Jools.reject(
+			'invalid key :' + key
+		);
+	}
 
 	// FIXME if (orank === trg.rank) return null;
 
@@ -1001,7 +1037,7 @@ Change.prototype.rank =
 	pivot =
 		Tree.grow(
 			pivot,
-			meshverse,
+			universe,
 			'-',
 				orank,
 			'+',
@@ -1012,6 +1048,7 @@ Change.prototype.rank =
 		tree.setPath(
 			src.path,
 			pivot,
+			universe,
 			-1
 		);
 

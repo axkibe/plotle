@@ -24,24 +24,15 @@ Euclid =
 | Imports
 */
 var
-	Jools;
+	Jools,
+	Tree;
 
 
 /*
 | Capsule
 */
-(function() {
+( function( ) {
 'use strict';
-
-
-/*
-| Node imports
-*/
-if( typeof( window ) === 'undefined' )
-{
-	Jools =
-		require( '../jools' );
-}
 
 
 /*
@@ -217,15 +208,6 @@ Point.renew =
 
 	return new Point( x, y );
 };
-
-
-/*
-| Node export.
-*/
-if( typeof( window ) === 'undefined' )
-{
-	module.exports = Point;
-}
 
 
 } )( );

@@ -198,21 +198,32 @@ ChangeRay.prototype.set =
 | a new array only then
 */
 ChangeRay.prototype.changeTree =
-	function( tree )
+	function(
+		tree,
+		universe
+	)
 {
 	// the ray with the changes applied
-	var cray =
-		new ChangeRay( );
+	var
+		cray =
+			new ChangeRay( );
 
 	// iterates through the change ray
-	for( var a = 0, aZ = this.length; a < aZ; a++ )
+	for(
+		var a = 0, aZ = this.length;
+		a < aZ;
+		a++
+	)
 	{
 		var
 			chg =
 				this.get( a ),
 
 			r =
-				chg.changeTree( tree );
+				chg.changeTree(
+					tree,
+					universe
+				);
 
 		// the tree returned by op-handler is the new tree
 		tree =
@@ -237,6 +248,9 @@ ChangeRay.prototype.changeTree =
 | Exports
 */
 if( typeof( window ) === 'undefined' )
-	{ module.exports = ChangeRay; }
+{
+	module.exports =
+		ChangeRay;
+}
 
 }( ) );

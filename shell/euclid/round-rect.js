@@ -19,6 +19,7 @@
 | Export
 */
 var Euclid;
+
 Euclid =
 	Euclid || { };
 
@@ -33,20 +34,6 @@ var Jools;
 */
 ( function() {
 'use strict';
-
-
-/*
-| Node imports
-*/
-if (typeof(window) === 'undefined')
-{
-	Euclid = {
-		Point  : require('./point'),
-		Rect   : require('./rect')
-	};
-
-	Jools  = require('../jools');
-}
 
 
 /*

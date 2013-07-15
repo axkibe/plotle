@@ -462,7 +462,10 @@ Server.prototype.loadSpace =
 		try
 		{
 			space.$tree =
-				change.chgX.changeTree( space.$tree ).tree;
+				change.chgX.changeTree(
+					space.$tree,
+					meshverse
+				).tree;
 
 		}
 		catch( e )
@@ -763,6 +766,9 @@ Server.prototype.prepareResources =
 			'fb',
 
 		'shared/meshverse.js',
+			'fb',
+
+		'shell/meshverse-shell.js',
 			'fb',
 
 		'shared/path.js',
@@ -1370,8 +1376,12 @@ Server.prototype.cmdAlter =
 	}
 
 	// applies the changes
-	var r =
-		chgX.changeTree( space.$tree );
+	var
+		r =
+			chgX.changeTree(
+				space.$tree,
+				meshverse
+			);
 
 	space.$tree =
 		r.tree;
@@ -2447,11 +2457,14 @@ Server.prototype.cmdGet =
 
 		for( var b = 0; b < chgX.length; b++ )
 		{
-			tree = chgX.
-				get( b ).
-				invert( ).
-				changeTree( tree ).
-				tree;
+			tree = chgX
+				.get( b )
+				.invert( )
+				.changeTree(
+					tree,
+					meshverse
+				)
+				.tree;
 		}
 	}
 

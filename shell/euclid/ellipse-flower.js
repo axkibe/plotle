@@ -25,8 +25,12 @@
 /*
 | Exports
 */
-var Euclid;
-Euclid = Euclid || {};
+var
+	Euclid;
+
+Euclid =
+	Euclid ||
+	{ };
 
 
 /*
