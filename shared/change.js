@@ -429,7 +429,7 @@ Change.prototype.set =
 			pivot =
 				Tree.grow(
 					pivot,
-					meshverse,
+					universe,
 					key,
 						src.val,
 					'+',
@@ -451,7 +451,7 @@ Change.prototype.set =
 			pivot =
 				Tree.grow(
 					pivot,
-					meshverse,
+					universe,
 					key,
 						src.val,
 					'-',
@@ -730,7 +730,7 @@ Change.prototype.join =
 			tree.getPath( path, -2 ),
 
 		pattern =
-			tree.getPattern( pivot );
+			universe[ pivot.type ];
 
 	Jools.check(
 		pattern.ranks,
@@ -870,8 +870,12 @@ Change.prototype.split =
 		cm, 'src signates no text'
 	);
 
-	var pivot   = tree.getPath( path, -2 );
-	var pattern = tree.getPattern( pivot );
+	var
+		pivot =
+			tree.getPath( path, -2 ),
+
+		pattern =
+			universe[ pivot.type ];
 
 	Jools.check(
 		pattern.ranks,

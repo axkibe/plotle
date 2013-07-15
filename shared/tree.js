@@ -75,8 +75,7 @@ Tree =
 		tag,
 		type,
 		twig,
-		ranks,
-		universe
+		ranks
 	)
 {
 	if( tag !== 'XOXO' )
@@ -97,9 +96,6 @@ Tree =
 		this.ranks =
 			ranks;
 	}
-
-	this.universe =
-		universe;
 
 	// marks this to be grown
 	// data structure
@@ -455,19 +451,32 @@ Tree.grow =
 		}
 	}
 
-	if( universe.creators )
+	var
+		creator =
+			universe.creators &&
+			universe.creators[ type ];
+
+	/*
+	if( creator )
 	{
+		console.log(' CREATOR FOR ' + type ); // TODO
 
-
+		return (
+			new creator(
+				twig,
+				ranks,
+				universe
+			)
+		);
 	}
+	*/
 
 	return (
 		new Tree(
 			'XOXO',
 			type,
 			twig,
-			ranks,
-			universe
+			ranks
 		)
 	);
 };
@@ -702,16 +711,6 @@ Tree.getType =
 	}
 };
 
-/*
-| Returns the pattern for object o.
-*/
-Tree.prototype.getPattern =
-	function(
-		o
-	)
-{
-	return this.universe[ Tree.getType( o ) ];
-};
 
 /*
 | Node export

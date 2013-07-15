@@ -49,21 +49,31 @@ var
 			a2
 		)
 {
-	if( typeof( a1 ) === 'object' )
+	if( arguments.length === 1 || arguments.length === 2 )
 	{
-		this.x =
-			a1.x;
+		// old style, TODO remove
+		if( typeof( a1 ) === 'object' )
+		{
+			this.x =
+				a1.x;
 
-		this.y =
-			a1.y;
+			this.y =
+				a1.y;
+		}
+		else
+		{
+			this.x =
+				a1;
+
+			this.y =
+				a2;
+		}
 	}
 	else
 	{
-		this.x =
-			a1;
-
-		this.y =
-			a2;
+		throw new Error(
+			'argument fail'
+		);
 	}
 
 	this.type =
@@ -71,6 +81,18 @@ var
 
 	Jools.immute( this );
 };
+
+
+/*
+| Points are tree nodes.
+*/
+/*
+Jools.subclass(
+	Point,
+	Tree
+);
+*/
+
 
 
 /*
