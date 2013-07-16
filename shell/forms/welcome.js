@@ -84,7 +84,7 @@ Welcome.prototype.layout =
 		'headline' :
 		{
 			type :
-				'Label',
+				'LabelWidget',
 
 			text :
 				'Welcome',
@@ -111,7 +111,7 @@ Welcome.prototype.layout =
 		'message1' :
 		{
 			type :
-				'Label',
+				'LabelWidget',
 
 			text :
 				'Your registration was successful :-)',
@@ -182,7 +182,7 @@ Welcome.prototype.layout =
 			caption :
 			{
 				type :
-					'Label',
+					'LabelWidget',
 
 				text :
 					'close',

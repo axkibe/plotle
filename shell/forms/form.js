@@ -26,7 +26,7 @@ var
 	Design,
 	Euclid,
 	Jools,
-	Pattern,
+	meshverseShell,
 	Sign,
 	shell,
 	system,
@@ -110,7 +110,7 @@ Forms.Form =
 	this.tree =
 		Tree.grow(
 			this.layout,
-			Pattern
+			meshverseShell
 		);
 
 	// hinders direct access of the layout
@@ -201,7 +201,7 @@ Form.prototype.getWidgetPrototype =
 
 			return Widgets.Input;
 
-		case 'Label' :
+		case 'LabelWidget' :
 
 			return Widgets.Label;
 

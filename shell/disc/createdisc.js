@@ -143,7 +143,7 @@ CreateDisc.prototype.layout =
 			caption :
 			{
 				type :
-					'Label',
+					'LabelWidget',
 
 				text :
 					'Note',
@@ -254,7 +254,7 @@ CreateDisc.prototype.layout =
 			caption :
 			{
 				type :
-					'Label',
+					'LabelWidget',
 
 				text :
 					'Label',
@@ -365,7 +365,7 @@ CreateDisc.prototype.layout =
 			caption :
 			{
 				type :
-					'Label',
+					'LabelWidget',
 
 				text :
 					'Rela-\ntion',
@@ -479,7 +479,7 @@ CreateDisc.prototype.layout =
 			caption :
 			{
 				type :
-					'Label',
+					'LabelWidget',
 
 				text :
 					'Portal',

@@ -50,6 +50,7 @@ Meshverse.prototype.Space =
 
 		twig :
 			Jools.immute ( {
+
 				'Label' :
 					true,
 
@@ -73,6 +74,7 @@ Meshverse.prototype.Note =
 
 		must :
 			Jools.immute( {
+
 				'doc' :
 					'Doc',
 
@@ -81,13 +83,17 @@ Meshverse.prototype.Note =
 
 				'fontsize' :
 					'Number'
+
 			} )
+
 	} );
 
 Meshverse.prototype.Portal =
 	Jools.immute( {
+
 		must :
 			Jools.immute( {
+
 				'zone' :
 					'Rect',
 
@@ -96,7 +102,9 @@ Meshverse.prototype.Portal =
 
 				'spaceTag' :
 					'String'
+
 			} )
+
 	} );
 
 
@@ -105,6 +113,7 @@ Meshverse.prototype.Label =
 
 		must :
 			Jools.immute( {
+
 				'doc' :
 					'Doc',
 
@@ -113,7 +122,9 @@ Meshverse.prototype.Label =
 
 				'fontsize' :
 					'Number'
+
 			} )
+
 	} );
 
 
@@ -122,6 +133,7 @@ Meshverse.prototype.Relation =
 
 		must :
 			Jools.immute( {
+
 				'doc' :
 					'Doc',
 
@@ -139,6 +151,7 @@ Meshverse.prototype.Relation =
 				'fontsize' :
 					'Number'
 			} )
+
 	} );
 
 
@@ -153,6 +166,7 @@ Meshverse.prototype.Doc =
 
 		ranks :
 			true
+
 	} );
 
 
@@ -161,9 +175,12 @@ Meshverse.prototype.Para =
 
 		must :
 			Jools.immute( {
+
 				'text' :
 					'String'
+
 			} )
+
 	} );
 
 
@@ -172,12 +189,15 @@ Meshverse.prototype.Rect =
 
 		must :
 			Jools.immute( {
+
 				'pnw' :
 					'Point',
 
 				'pse' :
 					'Point'
+
 			} )
+
 	} );
 
 
@@ -186,12 +206,15 @@ Meshverse.prototype.Point =
 
 		must :
 			Jools.immute( {
+
 				'x' :
 					'Integer',
 
 				'y' :
 					'Integer'
+
 			} )
+
 	} );
 
 
@@ -210,18 +233,17 @@ if( CHECK )
 		{
 			if( p.twig )
 			{
-				throw new Error( 'Patterns must not have .must and .twig' );
-			}
-
-			if( p.must.index )
-			{
-				throw new Error( 'index must not be a must' );
+				throw new Error(
+					'Patterns must not have .must and .twig'
+				);
 			}
 		}
 
 		if( p.ranks && !p.twig )
 		{
-			throw new Error( 'Patterns must not have .ranks without .twig' );
+			throw new Error(
+				'Patterns must not have .ranks without .twig'
+			);
 		}
 	}
 }

@@ -102,7 +102,7 @@ SignUp.prototype.layout =
 		'headline' :
 		{
 			type :
-				'Label',
+				'LabelWidget',
 
 			text :
 				'Sign Up',
@@ -128,7 +128,7 @@ SignUp.prototype.layout =
 		'usernameLabel' :
 		{
 			type :
-				'Label',
+				'LabelWidget',
 
 			text :
 				'username',
@@ -155,7 +155,7 @@ SignUp.prototype.layout =
 		'emailLabel' :
 		{
 			type :
-				'Label',
+				'LabelWidget',
 
 			text :
 				'email',
@@ -182,7 +182,7 @@ SignUp.prototype.layout =
 		'passwordLabel' :
 		{
 			type :
-				'Label',
+				'LabelWidget',
 
 			text :
 				'password',
@@ -209,7 +209,7 @@ SignUp.prototype.layout =
 		'password2Label' :
 		{
 			type :
-				'Label',
+				'LabelWidget',
 
 			text :
 				'repeat password',
@@ -236,7 +236,7 @@ SignUp.prototype.layout =
 		'newsletterLabel' :
 		{
 			type :
-				'Label',
+				'LabelWidget',
 
 			text :
 				'newsletter',
@@ -263,7 +263,7 @@ SignUp.prototype.layout =
 		'errorLabel' :
 		{
 			type :
-				'Label',
+				'LabelWidget',
 
 			text :
 				'',
@@ -555,7 +555,7 @@ SignUp.prototype.layout =
 		'newsletter2Label' :
 		{
 			type :
-				'Label',
+				'LabelWidget',
 
 			text :
 				'Updates and News',
@@ -582,7 +582,7 @@ SignUp.prototype.layout =
 		'newsletter3Label' :
 		{
 			type :
-				'Label',
+				'LabelWidget',
 
 			text :
 				'Never going to be more than an email a month. For sure!',
@@ -653,7 +653,7 @@ SignUp.prototype.layout =
 			caption :
 			{
 				type :
-					'Label',
+					'LabelWidget',
 
 				text :
 					'sign up',
@@ -762,7 +762,7 @@ SignUp.prototype.layout =
 			caption :
 			{
 				type :
-					'Label',
+					'LabelWidget',
 
 				text :
 					'close',

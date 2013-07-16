@@ -326,7 +326,7 @@ MainDisc.prototype.layout =
 			caption :
 			{
 				type :
-					'Label',
+					'LabelWidget',
 
 				text :
 					'new',
@@ -659,7 +659,7 @@ MainDisc.prototype.layout =
 			caption :
 			{
 				type :
-					'Label',
+					'LabelWidget',
 
 				text :
 					'',
@@ -772,7 +772,7 @@ MainDisc.prototype.layout =
 			caption :
 			{
 				type :
-					'Label',
+					'LabelWidget',
 
 				text :
 					'',
@@ -850,7 +850,7 @@ MainDisc.prototype.layout =
 			caption :
 			{
 				type :
-					'Label',
+					'LabelWidget',
 
 				text :
 					'log\nin',
@@ -966,7 +966,7 @@ MainDisc.prototype.layout =
 			caption :
 			{
 				type :
-					'Label',
+					'LabelWidget',
 
 				text :
 					'sign\nup',
@@ -1080,7 +1080,7 @@ MainDisc.prototype.layout =
 			caption :
 			{
 				type :
-					'Label',
+					'LabelWidget',
 
 				text :
 					'help',

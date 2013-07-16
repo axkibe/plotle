@@ -13,7 +13,6 @@
 var
 	Euclid,
 	Font,
-	Pattern,
 	theme;
 
 /*

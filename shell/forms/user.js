@@ -84,7 +84,7 @@ User.prototype.layout =
 		'headline' :
 		{
 			type :
-				'Label',
+				'LabelWidget',
 
 			text :
 				'Hello',
@@ -111,7 +111,7 @@ User.prototype.layout =
 		'visitor1' :
 		{
 			type :
-				'Label',
+				'LabelWidget',
 
 			text :
 				'You\'re currently an anonymous visitor!',
@@ -138,7 +138,7 @@ User.prototype.layout =
 		'visitor2' :
 		{
 			type :
-				'Label',
+				'LabelWidget',
 
 			text :
 				'Click on "sign up" or "log in"',
@@ -165,7 +165,7 @@ User.prototype.layout =
 		'visitor3' :
 		{
 			type :
-				'Label',
+				'LabelWidget',
 
 			text :
 				'on the control disc to the left',
@@ -192,7 +192,7 @@ User.prototype.layout =
 		'visitor4' :
 		{
 			type :
-				'Label',
+				'LabelWidget',
 
 			text :
 				' to register as an user.',
@@ -219,7 +219,7 @@ User.prototype.layout =
 		'greeting1' :
 		{
 			type :
-				'Label',
+				'LabelWidget',
 
 			text :
 				'This is your profile page!',
@@ -246,7 +246,7 @@ User.prototype.layout =
 		'greeting2' :
 		{
 			type :
-				'Label',
+				'LabelWidget',
 
 			text :
 				'In future you will be able to do stuff here,',
@@ -273,7 +273,7 @@ User.prototype.layout =
 		'greeting3' :
 		{
 			type :
-				'Label',
+				'LabelWidget',
 
 			text :
 				'like for example change your password.',
@@ -344,7 +344,7 @@ User.prototype.layout =
 			caption :
 			{
 				type :
-					'Label',
+					'LabelWidget',
 
 				text :
 					'close',

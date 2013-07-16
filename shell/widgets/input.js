@@ -733,7 +733,7 @@ Input.prototype.getCaretPos =
 {
 	var
 		fs =
-			this.tree.twig.font,
+			this.tree.twig.font.size, // XXX TODO twig.size
 
 		descend =
 			fs * theme.bottombox,
@@ -794,6 +794,7 @@ Input.prototype.positionCaret =
 		Math.round(
 			( cpos.s - cpos.n ) * view.zoom
 		);
+
 };
 
 

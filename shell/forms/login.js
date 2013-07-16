@@ -104,10 +104,11 @@ Login.prototype.layout =
 		'headline' :
 		{
 			type :
-				'Label',
+				'LabelWidget',
 
 			text :
 				'Log In',
+
 			font :
 				fontPool.get( 22, 'la' ),
 
@@ -130,7 +131,7 @@ Login.prototype.layout =
 		'usernameLabel' :
 		{
 			type :
-				'Label',
+				'LabelWidget',
 
 			text :
 				'username',
@@ -157,7 +158,7 @@ Login.prototype.layout =
 		'passwordLabel' :
 		{
 			type :
-				'Label',
+				'LabelWidget',
 
 			text :
 				'password',
@@ -184,7 +185,7 @@ Login.prototype.layout =
 		'errorLabel' :
 		{
 			type :
-				'Label',
+				'LabelWidget',
 
 			text :
 				'',
@@ -365,7 +366,7 @@ Login.prototype.layout =
 			caption :
 			{
 				type :
-					'Label',
+					'LabelWidget',
 
 				text :
 					'log in',
@@ -474,7 +475,7 @@ Login.prototype.layout =
 			caption :
 			{
 				type :
-					'Label',
+					'LabelWidget',
 
 				text :
 					'close',

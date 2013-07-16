@@ -798,9 +798,6 @@ Server.prototype.prepareResources =
 		'shell/peer.js',
 			'fb',
 
-		'shell/pattern.js',
-			'fb',
-
 		'shell/stubs.js',
 			'fb',
 

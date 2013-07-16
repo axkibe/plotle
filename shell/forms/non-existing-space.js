@@ -111,7 +111,7 @@ NonExistingSpace.prototype.layout =
 		'headline' :
 		{
 			type :
-				'Label',
+				'LabelWidget',
 
 			text :
 				'',
@@ -138,7 +138,7 @@ NonExistingSpace.prototype.layout =
 		'message1' :
 		{
 			type :
-				'Label',
+				'LabelWidget',
 
 			text :
 				'Do you want to create it?',
@@ -209,7 +209,7 @@ NonExistingSpace.prototype.layout =
 			caption :
 			{
 				type :
-					'Label',
+					'LabelWidget',
 
 				text :
 					'No',
@@ -317,7 +317,7 @@ NonExistingSpace.prototype.layout =
 			caption :
 			{
 				type :
-					'Label',
+					'LabelWidget',
 
 				text :
 					'Yes',

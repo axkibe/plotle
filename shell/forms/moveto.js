@@ -123,7 +123,7 @@ MoveTo.prototype.layout =
 		'headline' :
 		{
 			type :
-				'Label',
+				'LabelWidget',
 
 			text :
 				'move to another space',
@@ -196,7 +196,7 @@ MoveTo.prototype.layout =
 			caption :
 			{
 				type :
-					'Label',
+					'LabelWidget',
 
 				text :
 					'meshraft\nhome',
@@ -309,7 +309,7 @@ MoveTo.prototype.layout =
 			caption :
 			{
 				type :
-					'Label',
+					'LabelWidget',
 
 				text :
 					'meshraft\nsandbox',
@@ -420,7 +420,7 @@ MoveTo.prototype.layout =
 			caption :
 			{
 				type :
-					'Label',
+					'LabelWidget',
 
 				text :
 					'your\nhome',

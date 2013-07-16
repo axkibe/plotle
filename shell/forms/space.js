@@ -84,7 +84,7 @@ Space.prototype.layout =
 		'headline' :
 		{
 			type :
-				'Label',
+				'LabelWidget',
 
 			text :
 				'',
@@ -111,7 +111,7 @@ Space.prototype.layout =
 		'message1' :
 		{
 			type :
-				'Label',
+				'LabelWidget',
 
 			text :
 				'In future space settings can be altered here.',
@@ -182,7 +182,7 @@ Space.prototype.layout =
 			caption :
 			{
 				type :
-					'Label',
+					'LabelWidget',
 
 				text :
 					'close',

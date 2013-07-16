@@ -87,7 +87,7 @@ NoAccessToSpace.prototype.layout =
 		'headline' :
 		{
 			type :
-				'Label',
+				'LabelWidget',
 
 			text :
 				'',
@@ -114,7 +114,7 @@ NoAccessToSpace.prototype.layout =
 		'message1' :
 		{
 			type :
-				'Label',
+				'LabelWidget',
 
 			text :
 				'Sorry, you cannot port to this space or create it.',
@@ -185,7 +185,7 @@ NoAccessToSpace.prototype.layout =
 			caption :
 			{
 				type :
-					'Label',
+					'LabelWidget',
 
 				text :
 					'ok',
