@@ -913,14 +913,20 @@ SignUp.prototype.signup =
 
 	if( user.length < 4 )
 	{
-		errorLabel.setText(
+		this.setText(
+			'errorLabel',
 			'Username too short, min. 4 characters'
 		);
 
 		this.setCaret(
 			{
 				path :
-					new Path( [ this.name, 'userInput' ] ),
+					new Path(
+						[
+							this.name,
+							'userInput'
+						]
+					),
 
 				at1 :
 					user.length
@@ -932,7 +938,8 @@ SignUp.prototype.signup =
 
 	if( user.substr( 0, 5 ) === 'visit' )
 	{
-		errorLabel.setText(
+		this.setText(
+			'errorLabel',
 			'Username must not start with "visit"'
 		);
 
@@ -951,7 +958,8 @@ SignUp.prototype.signup =
 
 	if( pass.length < 5 )
 	{
-		errorLabel.setText(
+		this.setText(
+			'errorLabel',
 			'Password too short, min. 5 characters'
 		);
 
@@ -970,7 +978,10 @@ SignUp.prototype.signup =
 
 	if( pass !== pass2 )
 	{
-		errorLabel.setText( 'Passwords do not match' );
+		this.setText(
+			'errorLabel',
+			'Passwords do not match'
+		);
 
 		shell.setCaret(
 			{
@@ -1051,7 +1062,10 @@ SignUp.prototype.onRegister =
 
 	if( !res.ok )
 	{
-		sub.errorLabel.setText( res.message );
+		this.setText(
+			'errorLabel',
+			res.message
+		);
 
 		if( res.message.search(/Username/) >= 0 )
 		{

@@ -609,7 +609,8 @@ Login.prototype.login =
 
 	if( user.length < 4 )
 	{
-		errorLabel.setText(
+		this.setText(
+			'errorLabel',
 			'Username too short, min. 4 characters'
 		);
 
@@ -628,7 +629,10 @@ Login.prototype.login =
 
 	if( user.substr( 0, 5 ) === 'visit' )
 	{
-		errorLabel.setText( 'Username must not start with "visit"' );
+		this.setText(
+			'errorLabel',
+			'Username must not start with "visit"'
+		);
 
 		this.setCaret(
 			{
@@ -645,7 +649,10 @@ Login.prototype.login =
 
 	if( pass.length < 5 )
 	{
-		errorLabel.setText( 'Password too short, min. 5 characters' );
+		this.setText(
+			'errorLabel',
+			'Password too short, min. 5 characters'
+		);
 
 		this.setCaret(
 			{
@@ -722,7 +729,10 @@ Login.prototype.onAuth =
 {
 	if( !res.ok )
 	{
-		this.$sub.errorLabel.setText( res.message );
+		this.setText(
+			'errorLabel',
+			res.message
+		);
 
 		if( res.message.search(/Username/) >= 0 )
 		{
