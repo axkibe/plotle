@@ -19,12 +19,12 @@ var
 	Change,
 	ChangeRay,
 	MeshMashine,
-	meshverseShell,
 	Path,
 	Sign,
 	Jools,
 	config,
 	shell,
+	shellverse,
 	system,
 	Tree;
 
@@ -502,7 +502,7 @@ IFace.prototype.aquireSpace =
 		self.$rSpace =
 			Tree.grow(
 				asw.node,
-				meshverseShell
+				shellverse
 			);
 
 		self.$spaceUser =
@@ -728,7 +728,7 @@ IFace.prototype._update =
 				self.$rSpace =
 					chgX.changeTree(
 						self.$rSpace,
-						meshverseShell
+						shellverse
 					).tree;
 
 				if(
@@ -875,7 +875,7 @@ IFace.prototype._update =
 				space =
 					chgX.changeTree(
 						space,
-						meshverseShell
+						shellverse
 					).tree;
 			}
 
@@ -923,7 +923,7 @@ IFace.prototype._update =
 				space =
 					chgX.changeTree(
 						space,
-						meshverseShell
+						shellverse
 					).tree;
 			}
 
@@ -1032,7 +1032,7 @@ IFace.prototype.alter =
 				new Sign( trg )
 			).changeTree(
 				this.$cSpace,
-				meshverseShell
+				shellverse
 			);
 
     this.$cSpace =
@@ -1226,7 +1226,7 @@ IFace.prototype.undo =
 		result =
 			chgX.changeTree(
 				this.$cSpace,
-				meshverseShell
+				shellverse
 			);
 
 	if( result === null )
@@ -1292,7 +1292,7 @@ IFace.prototype.redo =
 		result =
 			chgX.changeTree(
 				this.$cSpace,
-				meshverseShell
+				shellverse
 			);
 
     this.$cSpace =

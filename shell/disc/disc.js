@@ -25,9 +25,9 @@ var
 	Euclid,
 	fontPool,
 	Jools,
-	meshverseShell,
 	Proc,
 	shell,
+	shellverse,
 	theme,
 	Tree,
 	Widgets;
@@ -132,7 +132,7 @@ Disc.Disc =
 	this._tree =
 		Tree.grow(
 			this.layout,
-			meshverseShell
+			shellverse
 		);
 
 	this.silhoutte =

@@ -16,7 +16,7 @@ var
 | Imports
 */
 var
-	meshverseShell,
+	shellverse,
 	Tree;
 
 
@@ -65,7 +65,7 @@ Stubs.labelDoc =
 				]
 		},
 
-		meshverseShell
+		shellverse
 	);
 
 
@@ -93,7 +93,7 @@ Stubs.emptyDoc =
 				]
 		},
 
-		meshverseShell
+		shellverse
 	);
 
 } )( );

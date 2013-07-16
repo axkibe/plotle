@@ -1,5 +1,5 @@
 /*
-| Meshcraft tree patterns.
+| Shell extensions to the meshverse.
 |
 | Authors: Axel Kittenberger
 */
@@ -18,8 +18,8 @@ var
 | Exports
 */
 var
-	MeshverseShell,
-	meshverseShell;
+	Shellverse,
+	shellverse;
 
 
 /*
@@ -29,7 +29,7 @@ var
 "use strict";
 
 
-MeshverseShell =
+Shellverse =
 	function( )
 	{
 
@@ -37,12 +37,12 @@ MeshverseShell =
 
 
 Jools.subclass(
-	MeshverseShell,
+	Shellverse,
 	Meshverse
 );
 
 
-MeshverseShell.prototype.AnchorPoint =
+Shellverse.prototype.AnchorPoint =
 	Jools.immute( {
 
 		must :
@@ -60,7 +60,7 @@ MeshverseShell.prototype.AnchorPoint =
 	} );
 
 
-MeshverseShell.prototype.BeziTo =
+Shellverse.prototype.BeziTo =
 	Jools.immute( {
 
 		must :
@@ -90,7 +90,7 @@ MeshverseShell.prototype.BeziTo =
 	} );
 
 
-MeshverseShell.prototype.Button =
+Shellverse.prototype.Button =
 	Jools.immute( {
 
 		must :
@@ -133,7 +133,7 @@ MeshverseShell.prototype.Button =
 	} );
 
 
-MeshverseShell.prototype.CheckBox =
+Shellverse.prototype.CheckBox =
 	Jools.immute( {
 
 		must :
@@ -153,7 +153,7 @@ MeshverseShell.prototype.CheckBox =
 	} );
 
 
-MeshverseShell.prototype.Curve =
+Shellverse.prototype.Curve =
 	Jools.immute( {
 
 		twig :
@@ -173,7 +173,7 @@ MeshverseShell.prototype.Curve =
 	} );
 
 
-MeshverseShell.prototype.Ellipse =
+Shellverse.prototype.Ellipse =
 	Jools.immute( {
 
 		must :
@@ -190,7 +190,7 @@ MeshverseShell.prototype.Ellipse =
 	} );
 
 
-MeshverseShell.prototype.Font =
+Shellverse.prototype.Font =
 	Jools.immute( {
 
 		must :
@@ -216,7 +216,7 @@ MeshverseShell.prototype.Font =
 	} );
 
 
-MeshverseShell.prototype.Frame =
+Shellverse.prototype.Frame =
 	Jools.immute( {
 
 		must :
@@ -232,7 +232,7 @@ MeshverseShell.prototype.Frame =
 	} );
 
 
-MeshverseShell.prototype.Input =
+Shellverse.prototype.InputWidget =
 	Jools.immute( {
 
 		must :
@@ -257,7 +257,7 @@ MeshverseShell.prototype.Input =
 	} );
 
 
-MeshverseShell.prototype.LabelWidget =
+Shellverse.prototype.LabelWidget =
 	Jools.immute( {
 
 		must :
@@ -287,7 +287,7 @@ MeshverseShell.prototype.LabelWidget =
 	} );
 
 
-MeshverseShell.prototype.Layout =
+Shellverse.prototype.Layout =
 	Jools.immute( {
 
 		twig :
@@ -299,7 +299,7 @@ MeshverseShell.prototype.Layout =
 				CheckBox :
 					true,
 
-				Input :
+				InputWidget :
 					true,
 
 				LabelWidget :
@@ -312,7 +312,7 @@ MeshverseShell.prototype.Layout =
 	} );
 
 
-MeshverseShell.prototype.LineTo =
+Shellverse.prototype.LineTo =
 	Jools.immute( {
 
 		must :
@@ -330,7 +330,7 @@ MeshverseShell.prototype.LineTo =
 	} );
 
 
-MeshverseShell.prototype.MoveTo =
+Shellverse.prototype.MoveTo =
 	Jools.immute( {
 
 		must :
@@ -348,7 +348,7 @@ MeshverseShell.prototype.MoveTo =
 	} );
 
 
-MeshverseShell.prototype.creators =
+Shellverse.prototype.creators =
 	Jools.immute( {
 
 		'Point' :
@@ -360,8 +360,8 @@ MeshverseShell.prototype.creators =
 	} );
 
 
-meshverseShell =
-	new MeshverseShell( );
+shellverse =
+	new Shellverse( );
 
 
 } )( );

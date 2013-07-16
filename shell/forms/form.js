@@ -26,7 +26,7 @@ var
 	Design,
 	Euclid,
 	Jools,
-	meshverseShell,
+	shellverse,
 	Sign,
 	shell,
 	system,
@@ -110,7 +110,7 @@ Forms.Form =
 	this.tree =
 		Tree.grow(
 			this.layout,
-			meshverseShell
+			shellverse
 		);
 
 	// hinders direct access of the layout

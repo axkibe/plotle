@@ -786,7 +786,7 @@ Server.prototype.prepareResources =
 		'shell/euclid/fix.js',
 			'fb',
 
-		'shell/meshverse-shell.js',
+		'shell/shellverse.js',
 			'fb',
 
 		'shell/curve.js',
