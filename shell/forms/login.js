@@ -213,7 +213,7 @@ Login.prototype.layout =
 		'userInput' :
 		{
 			type :
-				'Input',
+				'InputWidget',
 
 			password :
 				false,
@@ -267,7 +267,7 @@ Login.prototype.layout =
 		'passwordInput' :
 		{
 			type :
-				'Input',
+				'InputWidget',
 
 			password :
 				true,

@@ -197,7 +197,7 @@ Form.prototype.getWidgetPrototype =
 
 			return Widgets.CheckBox;
 
-		case 'Input' :
+		case 'InputWidget' :
 
 			return Widgets.Input;
 

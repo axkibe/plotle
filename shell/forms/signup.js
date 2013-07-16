@@ -291,7 +291,7 @@ SignUp.prototype.layout =
 		'userInput' :
 		{
 			type :
-				'Input',
+				'InputWidget',
 
 			password :
 				false,
@@ -345,7 +345,7 @@ SignUp.prototype.layout =
 		'emailInput' :
 		{
 			type :
-				'Input',
+				'InputWidget',
 
 			password :
 				false,
@@ -399,7 +399,7 @@ SignUp.prototype.layout =
 		'passwordInput' :
 		{
 			type :
-				'Input',
+				'InputWidget',
 
 			password :
 				true,
@@ -454,7 +454,7 @@ SignUp.prototype.layout =
 		'password2Input' :
 		{
 			type :
-				'Input',
+				'InputWidget',
 
 			password :
 				true,
