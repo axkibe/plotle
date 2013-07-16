@@ -188,7 +188,7 @@ Disc.Disc =
 
 		switch( tree.twig.type )
 		{
-			case 'Button' :
+			case 'ButtonWidget' :
 
 				this.buttons[ wname ] =
 					Widgets.Button.create(

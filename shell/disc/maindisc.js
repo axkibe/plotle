@@ -226,7 +226,7 @@ MainDisc.prototype.layout =
 		'normal' :
 		{
 			type :
-				'Button',
+				'ButtonWidget',
 
 			style :
 				'mainButton',
@@ -315,7 +315,7 @@ MainDisc.prototype.layout =
 		'create' :
 		{
 			type :
-				'Button',
+				'ButtonWidget',
 
 			style :
 				'mainButton',
@@ -428,7 +428,7 @@ MainDisc.prototype.layout =
 		'remove' :
 		{
 			type :
-				'Button',
+				'ButtonWidget',
 
 			style :
 				'mainButton',
@@ -520,7 +520,7 @@ MainDisc.prototype.layout =
 		'moveto' :
 		{
 			type :
-				'Button',
+				'ButtonWidget',
 
 			style :
 				'mainButton',
@@ -613,7 +613,7 @@ MainDisc.prototype.layout =
 		'space' :
 		{
 			type :
-				'Button',
+				'ButtonWidget',
 
 			style :
 				'mainButton',
@@ -726,7 +726,7 @@ MainDisc.prototype.layout =
 		'user' :
 		{
 			type :
-				'Button',
+				'ButtonWidget',
 
 			style :
 				'mainButton',
@@ -839,7 +839,7 @@ MainDisc.prototype.layout =
 		'login' :
 		{
 			type :
-				'Button',
+				'ButtonWidget',
 
 			style :
 				'mainButton',
@@ -955,7 +955,7 @@ MainDisc.prototype.layout =
 		'signup' :
 		{
 			type :
-				'Button',
+				'ButtonWidget',
 
 			style :
 				'mainButton',
@@ -1072,7 +1072,7 @@ MainDisc.prototype.layout =
 		'help' :
 		{
 			type :
-				'Button',
+				'ButtonWidget',
 
 			style :
 				'mainButton',

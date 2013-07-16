@@ -165,7 +165,7 @@ NonExistingSpace.prototype.layout =
 		'noButton' :
 		{
 			type :
-				'Button',
+				'ButtonWidget',
 
 			style :
 				'genericButton',
@@ -273,7 +273,7 @@ NonExistingSpace.prototype.layout =
 		'yesButton' :
 		{
 			type :
-				'Button',
+				'ButtonWidget',
 
 			style :
 				'genericButton',

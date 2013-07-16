@@ -508,7 +508,7 @@ SignUp.prototype.layout =
 		'newsletterCheckBox' :
 		{
 			type :
-				'CheckBox',
+				'CheckBoxWidget',
 
 			style :
 				'checkbox',
@@ -609,7 +609,7 @@ SignUp.prototype.layout =
 		'signupButton' :
 		{
 			type :
-				'Button',
+				'ButtonWidget',
 
 			style :
 				'genericButton',
@@ -718,7 +718,7 @@ SignUp.prototype.layout =
 		'closeButton' :
 		{
 			type :
-				'Button',
+				'ButtonWidget',
 
 			style :
 				'genericButton',

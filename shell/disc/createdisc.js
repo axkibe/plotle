@@ -135,7 +135,7 @@ CreateDisc.prototype.layout =
 		'createNote' :
 		{
 			type :
-				'Button',
+				'ButtonWidget',
 
 			style :
 				'createButton',
@@ -246,7 +246,7 @@ CreateDisc.prototype.layout =
 		'createLabel' :
 		{
 			type :
-				'Button',
+				'ButtonWidget',
 
 			style :
 				'createButton',
@@ -357,7 +357,7 @@ CreateDisc.prototype.layout =
 		'createRelation' :
 		{
 			type :
-				'Button',
+				'ButtonWidget',
 
 			style :
 				'createButton',
@@ -471,7 +471,7 @@ CreateDisc.prototype.layout =
 		'createPortal' :
 		{
 			type :
-				'Button',
+				'ButtonWidget',
 
 			style :
 				'createButton',

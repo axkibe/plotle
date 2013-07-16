@@ -189,11 +189,11 @@ Form.prototype.getWidgetPrototype =
 
 	switch( tree.twig.type )
 	{
-		case 'Button' :
+		case 'ButtonWidget' :
 
 			return Widgets.Button;
 
-		case 'CheckBox' :
+		case 'CheckBoxWidget' :
 
 			return Widgets.CheckBox;
 

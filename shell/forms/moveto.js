@@ -150,7 +150,7 @@ MoveTo.prototype.layout =
 		'meshcraftHomeButton' :
 		{
 			type :
-				'Button',
+				'ButtonWidget',
 
 			style :
 				'portalButton',
@@ -263,7 +263,7 @@ MoveTo.prototype.layout =
 		'meshcraftSandboxButton' :
 		{
 			type :
-				'Button',
+				'ButtonWidget',
 
 			style :
 				'portalButton',
@@ -376,7 +376,7 @@ MoveTo.prototype.layout =
 		'userHomeButton' :
 		{
 			type :
-				'Button',
+				'ButtonWidget',
 
 			style :
 				'portalButton',

@@ -138,7 +138,7 @@ Welcome.prototype.layout =
 		'closeButton' :
 		{
 			type :
-				'Button',
+				'ButtonWidget',
 
 			style :
 				'genericButton',

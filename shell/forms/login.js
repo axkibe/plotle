@@ -322,7 +322,7 @@ Login.prototype.layout =
 		'loginButton' :
 		{
 			type :
-				'Button',
+				'ButtonWidget',
 
 			style :
 				'genericButton',
@@ -431,7 +431,7 @@ Login.prototype.layout =
 		'closeButton' :
 		{
 			type :
-				'Button',
+				'ButtonWidget',
 
 			style :
 				'genericButton',

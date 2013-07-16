@@ -90,7 +90,7 @@ Shellverse.prototype.BeziTo =
 	} );
 
 
-Shellverse.prototype.Button =
+Shellverse.prototype.ButtonWidget =
 	Jools.immute( {
 
 		must :
@@ -133,7 +133,7 @@ Shellverse.prototype.Button =
 	} );
 
 
-Shellverse.prototype.CheckBox =
+Shellverse.prototype.CheckBoxWidget =
 	Jools.immute( {
 
 		must :
@@ -293,10 +293,10 @@ Shellverse.prototype.Layout =
 		twig :
 			Jools.immute( {
 
-				Button :
+				ButtonWidget :
 					true,
 
-				CheckBox :
+				CheckBoxWidget :
 					true,
 
 				InputWidget :

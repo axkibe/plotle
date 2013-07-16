@@ -141,7 +141,7 @@ NoAccessToSpace.prototype.layout =
 		'okButton' :
 		{
 			type :
-				'Button',
+				'ButtonWidget',
 
 			style :
 				'genericButton',
