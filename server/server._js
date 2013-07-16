@@ -705,6 +705,27 @@ Server.prototype.prepareResources =
 		'shared/sha1.js',
 			'fb',
 
+		'shared/meshverse.js',
+			'fb',
+
+		'shared/path.js',
+			'fb',
+
+		'shared/tree.js',
+			'fb',
+
+		'shared/sign.js',
+			'fb',
+
+		'shared/change.js',
+			'fb',
+
+		'shared/changeray.js',
+			'fb',
+
+		'shared/meshmashine.js',
+			'fb',
+
 		'shell/euclid/const.js',
 			'fb',
 
@@ -765,28 +786,7 @@ Server.prototype.prepareResources =
 		'shell/euclid/fix.js',
 			'fb',
 
-		'shared/meshverse.js',
-			'fb',
-
 		'shell/meshverse-shell.js',
-			'fb',
-
-		'shared/path.js',
-			'fb',
-
-		'shared/tree.js',
-			'fb',
-
-		'shared/sign.js',
-			'fb',
-
-		'shared/change.js',
-			'fb',
-
-		'shared/changeray.js',
-			'fb',
-
-		'shared/meshmashine.js',
 			'fb',
 
 		'shell/curve.js',

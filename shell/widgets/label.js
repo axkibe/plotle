@@ -107,12 +107,6 @@ Widgets.Label =
 	this.visible =
 		visible;
 
-	// TODO font creator
-	this._font =
-		new Euclid.Font(
-			tree.twig.font.twig
-		);
-
 	Jools.immute( this );
 };
 
@@ -282,7 +276,7 @@ Label.prototype.draw =
 		'p',
 			this.pos,
 		'font',
-			this._font
+			this.tree.twig.font
 	);
 };
 

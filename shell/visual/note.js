@@ -464,11 +464,12 @@ Note.prototype.draw =
 		);
 
 		// draws selection and text
-		sbary.point = Euclid.Point.renew(
-			0,
-			sbary.getPos( ),
-			sbary.point
-		);
+		sbary.point =
+			Euclid.Point.renew(
+				0,
+				sbary.getPos( ),
+				sbary.point
+			);
 
 		doc.draw(
 			f,
@@ -701,7 +702,9 @@ Note.prototype.setScrollbar =
 		zone.height - this.innerMargin.y,
 		this.$sub.doc.getHeight( this ),
 		Euclid.Point.renew(
-			zone.pse.x, zone.pnw.y + theme.scrollbar.vdis, sbary.pnw
+			zone.pse.x,
+			zone.pnw.y + theme.scrollbar.vdis,
+			sbary.pnw
 		),
 		zone.height - theme.scrollbar.vdis * 2
 	);

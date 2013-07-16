@@ -46,34 +46,62 @@ var
 	Euclid.Point =
 		function(
 			a1,
-			a2
+			a2,
+			a3
 		)
 {
-	if( arguments.length === 1 || arguments.length === 2 )
+	switch( arguments.length )
 	{
-		// old style, TODO remove
-		if( typeof( a1 ) === 'object' )
-		{
+		case 1 :
+			// TODO remove
 			this.x =
 				a1.x;
 
 			this.y =
 				a1.y;
-		}
-		else
-		{
+
+			break;
+
+		case 2 :
+			// TODO remove
+
 			this.x =
 				a1;
 
 			this.y =
 				a2;
-		}
-	}
-	else
-	{
-		throw new Error(
-			'argument fail'
-		);
+
+			break;
+
+		case 3 :
+
+			if( a1 !== 'TREE' )
+			{
+				throw new Error(
+					'argument fail'
+				);
+			}
+
+			Tree.call(
+				this,
+				'TREE',
+				'Point',
+				a2
+			);
+
+			this.x =
+				a2.x;
+
+			this.y =
+				a2.y;
+
+			break;
+
+		default :
+
+			throw new Error(
+				'argument fail'
+			);
 	}
 
 	this.type =
@@ -86,12 +114,10 @@ var
 /*
 | Points are tree nodes.
 */
-/*
 Jools.subclass(
 	Point,
 	Tree
 );
-*/
 
 
 
@@ -106,8 +132,10 @@ Point.prototype.equals =
 {
 	return (
 		typeof( a1 ) === 'object' ?
-			this.x === a1.x && this.y === a1.y :
-			this.x === a1   && this.y === a2
+			this.x === a1.x &&
+			this.y === a1.y :
+			this.x === a1   &&
+			this.y === a2
 	);
 };
 

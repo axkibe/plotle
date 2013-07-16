@@ -157,12 +157,6 @@ Widgets.Input =
 	this.hoverAccent =
 		hoverAccent;
 
-	// TODO tree creator
-	this._font =
-		new Euclid.Font(
-			tree.twig.font.twig
-		);
-
 	Jools.immute( this );
 };
 
@@ -394,7 +388,7 @@ Input.prototype.getOffsetAt =
 			this.tree.twig.password,
 
 		font =
-			this._font,
+			this.tree.twig.font,
 
 		mw;
 
@@ -609,7 +603,7 @@ Input.prototype._weave =
 			),
 
 		font =
-			this._font;
+			this.tree.twig.font;
 
 	fabric.fill(
 		style,
@@ -687,7 +681,7 @@ Input.prototype.locateOffset =
 			this.tree,
 
 		font =
-			this._font,
+			tree.twig.font,
 
 		pitch =
 			this._pitch,
@@ -739,7 +733,7 @@ Input.prototype.getCaretPos =
 {
 	var
 		fs =
-			this._font.size,
+			this.tree.twig.font,
 
 		descend =
 			fs * theme.bottombox,

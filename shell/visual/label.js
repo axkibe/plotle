@@ -214,11 +214,8 @@ Label.create =
 
 		if( pnw === null )
 		{
-			// TODO this is always created...
 			pnw =
-				new Euclid.Point(
-					tree.twig.pnw.twig
-				);
+				tree.twig.pnw
 		}
 	}
 

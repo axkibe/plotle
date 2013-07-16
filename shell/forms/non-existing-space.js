@@ -122,7 +122,7 @@ NonExistingSpace.prototype.layout =
 			pos :
 			{
 				type :
-					'Point',
+					'AnchorPoint',
 
 				anchor :
 					'c',
@@ -149,7 +149,7 @@ NonExistingSpace.prototype.layout =
 			pos :
 			{
 				type :
-					'Point',
+					'AnchorPoint',
 
 				anchor :
 					'c',
@@ -178,7 +178,7 @@ NonExistingSpace.prototype.layout =
 				pnw  :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'c',
@@ -193,7 +193,7 @@ NonExistingSpace.prototype.layout =
 				pse  :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'c',
@@ -220,7 +220,7 @@ NonExistingSpace.prototype.layout =
 				pos  :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'c',
@@ -241,7 +241,7 @@ NonExistingSpace.prototype.layout =
 				pnw :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'nw',
@@ -256,7 +256,7 @@ NonExistingSpace.prototype.layout =
 				pse :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'se',
@@ -286,7 +286,7 @@ NonExistingSpace.prototype.layout =
 				pnw  :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'c',
@@ -301,7 +301,7 @@ NonExistingSpace.prototype.layout =
 				pse  :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'c',
@@ -328,7 +328,7 @@ NonExistingSpace.prototype.layout =
 				pos  :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'c',
@@ -349,7 +349,7 @@ NonExistingSpace.prototype.layout =
 				pnw :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'nw',
@@ -364,7 +364,7 @@ NonExistingSpace.prototype.layout =
 				pse :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'se',

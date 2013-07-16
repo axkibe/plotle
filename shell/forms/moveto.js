@@ -134,7 +134,7 @@ MoveTo.prototype.layout =
 			pos :
 			{
 				type :
-					'Point',
+					'AnchorPoint',
 
 				anchor :
 					'c',
@@ -163,7 +163,7 @@ MoveTo.prototype.layout =
 				pnw  :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'c',
@@ -178,7 +178,7 @@ MoveTo.prototype.layout =
 				pse  :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'c',
@@ -210,7 +210,7 @@ MoveTo.prototype.layout =
 				pos  :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'c',
@@ -231,7 +231,7 @@ MoveTo.prototype.layout =
 				pnw :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'nw',
@@ -246,7 +246,7 @@ MoveTo.prototype.layout =
 				pse :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'se',
@@ -276,7 +276,7 @@ MoveTo.prototype.layout =
 				pnw  :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'c',
@@ -291,7 +291,7 @@ MoveTo.prototype.layout =
 				pse  :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'c',
@@ -323,7 +323,7 @@ MoveTo.prototype.layout =
 				pos  :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'c',
@@ -344,7 +344,7 @@ MoveTo.prototype.layout =
 				pnw :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'nw',
@@ -359,7 +359,7 @@ MoveTo.prototype.layout =
 				pse :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'se',
@@ -389,7 +389,7 @@ MoveTo.prototype.layout =
 				pnw  :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'c',
@@ -404,7 +404,7 @@ MoveTo.prototype.layout =
 				pse  :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'c',
@@ -434,7 +434,7 @@ MoveTo.prototype.layout =
 				pos  :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'c',
@@ -455,7 +455,7 @@ MoveTo.prototype.layout =
 				pnw :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'nw',
@@ -470,7 +470,7 @@ MoveTo.prototype.layout =
 				pse :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'se',

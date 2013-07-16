@@ -95,7 +95,7 @@ Space.prototype.layout =
 			pos :
 			{
 				type :
-					'Point',
+					'AnchorPoint',
 
 				anchor :
 					'c',
@@ -122,7 +122,7 @@ Space.prototype.layout =
 			pos :
 			{
 				type :
-					'Point',
+					'AnchorPoint',
 
 				anchor :
 					'c',
@@ -151,7 +151,7 @@ Space.prototype.layout =
 				pnw  :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'c',
@@ -166,7 +166,7 @@ Space.prototype.layout =
 				pse  :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'c',
@@ -193,7 +193,7 @@ Space.prototype.layout =
 				pos  :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'c',
@@ -214,7 +214,7 @@ Space.prototype.layout =
 				pnw :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'nw',
@@ -229,7 +229,7 @@ Space.prototype.layout =
 				pse :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'se',

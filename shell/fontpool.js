@@ -1,20 +1,20 @@
 /*
-|
 | Creates font objects by size and code
 |
 | FIXME return meshmashine grown Font objects.
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
 /*
 | Imports
 */
-var Euclid;
-var Font;
-var theme;
+var
+	Euclid,
+	Font,
+	Pattern,
+	theme;
 
 /*
 | Exports
@@ -194,25 +194,42 @@ FontPool.prototype.setDefaultFonts = function(normal, bold)
 /*
 | Gets a fontstlye by size and its code
 */
-FontPool.prototype.get = function(size, code)
+FontPool.prototype.get =
+	function(
+		size,
+		code
+	)
 {
 	if( !this.$settedDefaultFonts )
-		{ throw new Error( 'not setted default fonts' ); }
+	{
+		throw new Error(
+			'not setted default fonts'
+		);
+	}
 
 	var style = FontPool.styles[ code ];
 
 	if( !style )
-		{ throw new Error('Invalid font style'); }
+	{
+		throw new Error(
+			'Invalid font style'
+		);
+	}
 
-	var c = style.$c;
+	var
+		c =
+			style.$c;
 
 	if( !c )
 	{
-		c = style.$c = { };
+		c =
+		style.$c =
+			{ };
 	}
 
-	var f =
-		c[ size ];
+	var
+		f =
+			c[ size ];
 
 	if( f )
 	{
@@ -221,6 +238,14 @@ FontPool.prototype.get = function(size, code)
 
 	f =
 	c[ size ] =
+		/*
+		Tree.grow(
+			style,
+			Pattern,
+			'size',
+				size
+		);
+		*/
 		new Euclid.Font(
 			size,
 			style.family,
@@ -234,7 +259,7 @@ FontPool.prototype.get = function(size, code)
 
 
 fontPool =
-	new FontPool();
+	new FontPool( );
 
 
 } ) ();

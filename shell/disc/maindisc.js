@@ -245,7 +245,7 @@ MainDisc.prototype.layout =
 				pnw :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'nw',
@@ -260,7 +260,7 @@ MainDisc.prototype.layout =
 				pse :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'nw',
@@ -283,7 +283,7 @@ MainDisc.prototype.layout =
 				pnw :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'nw',
@@ -298,7 +298,7 @@ MainDisc.prototype.layout =
 				pse :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'se',
@@ -337,7 +337,7 @@ MainDisc.prototype.layout =
 				pos :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'c',
@@ -358,7 +358,7 @@ MainDisc.prototype.layout =
 				pnw :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'nw',
@@ -373,7 +373,7 @@ MainDisc.prototype.layout =
 				pse :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'nw',
@@ -396,7 +396,7 @@ MainDisc.prototype.layout =
 				pnw :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'nw',
@@ -411,7 +411,7 @@ MainDisc.prototype.layout =
 				pse :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'se',
@@ -450,7 +450,7 @@ MainDisc.prototype.layout =
 				pnw :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'nw',
@@ -465,7 +465,7 @@ MainDisc.prototype.layout =
 				pse :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'nw',
@@ -488,7 +488,7 @@ MainDisc.prototype.layout =
 				pnw :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'nw',
@@ -503,7 +503,7 @@ MainDisc.prototype.layout =
 				pse :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'se',
@@ -542,7 +542,7 @@ MainDisc.prototype.layout =
 				pnw :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'nw',
@@ -557,7 +557,7 @@ MainDisc.prototype.layout =
 				pse :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'nw',
@@ -580,7 +580,7 @@ MainDisc.prototype.layout =
 				pnw :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'nw',
@@ -595,7 +595,7 @@ MainDisc.prototype.layout =
 				pse :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'se',
@@ -626,7 +626,7 @@ MainDisc.prototype.layout =
 				pnw :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'nw',
@@ -641,7 +641,7 @@ MainDisc.prototype.layout =
 				pse :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'nw',
@@ -670,7 +670,7 @@ MainDisc.prototype.layout =
 				pos :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'c',
@@ -694,7 +694,7 @@ MainDisc.prototype.layout =
 				pnw :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'nw',
@@ -709,7 +709,7 @@ MainDisc.prototype.layout =
 				pse :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'se',
@@ -739,7 +739,7 @@ MainDisc.prototype.layout =
 				pnw :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'nw',
@@ -754,7 +754,7 @@ MainDisc.prototype.layout =
 				pse :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'nw',
@@ -783,7 +783,7 @@ MainDisc.prototype.layout =
 				pos :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'c',
@@ -807,7 +807,7 @@ MainDisc.prototype.layout =
 				pnw :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'nw',
@@ -822,7 +822,7 @@ MainDisc.prototype.layout =
 				pse :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'se',
@@ -864,7 +864,7 @@ MainDisc.prototype.layout =
 				pos :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'c',
@@ -885,7 +885,7 @@ MainDisc.prototype.layout =
 				pnw :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'nw',
@@ -900,7 +900,7 @@ MainDisc.prototype.layout =
 				pse :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'nw',
@@ -923,7 +923,7 @@ MainDisc.prototype.layout =
 				pnw :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'nw',
@@ -938,7 +938,7 @@ MainDisc.prototype.layout =
 				pse :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'se',
@@ -980,7 +980,7 @@ MainDisc.prototype.layout =
 				pos :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'c',
@@ -1001,7 +1001,7 @@ MainDisc.prototype.layout =
 				pnw :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'nw',
@@ -1016,7 +1016,7 @@ MainDisc.prototype.layout =
 				pse :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'nw',
@@ -1039,7 +1039,7 @@ MainDisc.prototype.layout =
 				pnw :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'nw',
@@ -1054,7 +1054,7 @@ MainDisc.prototype.layout =
 				pse :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'se',
@@ -1091,7 +1091,7 @@ MainDisc.prototype.layout =
 				pos :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'c',
@@ -1112,7 +1112,7 @@ MainDisc.prototype.layout =
 				pnw :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'nw',
@@ -1127,7 +1127,7 @@ MainDisc.prototype.layout =
 				pse :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'nw',
@@ -1150,7 +1150,7 @@ MainDisc.prototype.layout =
 				pnw :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'nw',
@@ -1165,7 +1165,7 @@ MainDisc.prototype.layout =
 				pse :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'se',

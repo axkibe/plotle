@@ -31,12 +31,27 @@ var Euclid;
 */
 Pattern =
 {
+	'AnchorPoint'  :
+	{
+		must :
+		{
+			anchor :
+				'String',
+
+			x :
+				'Number',
+
+			y :
+				'Number'
+		}
+	},
+
 	'BeziTo' :
 	{
 		must :
 		{
 			to :
-				'Point',
+				'AnchorPoint',
 
 			bx :
 				'Number',
@@ -131,10 +146,10 @@ Pattern =
 		must :
 		{
 			pnw :
-				'Point',
+				'AnchorPoint',
 
 			pse :
-				'Point'
+				'AnchorPoint'
 		}
 	},
 
@@ -164,10 +179,10 @@ Pattern =
 		must :
 		{
 			pnw :
-				'Point',
+				'AnchorPoint',
 
 			pse :
-				'Point'
+				'AnchorPoint'
 		}
 	},
 
@@ -201,7 +216,7 @@ Pattern =
 				'String',
 
 			pos  :
-				'Point',
+				'AnchorPoint',
 
 			font :
 				'Font'
@@ -243,7 +258,7 @@ Pattern =
 		must :
 		{
 			to :
-				'Point',
+				'AnchorPoint',
 
 			bx :
 				'Number',
@@ -258,7 +273,7 @@ Pattern =
 		must :
 		{
 			to :
-				'Point',
+				'AnchorPoint',
 
 			bx :
 				'Number',
@@ -268,19 +283,10 @@ Pattern =
 		}
 	},
 
-	'Point'  :
+	creators :
 	{
-		must :
-		{
-			anchor :
-				'String',
-
-			x :
-				'Number',
-
-			y :
-				'Number'
-		}
+		'Font' :
+			Euclid.Font
 	}
 };
 

@@ -78,7 +78,7 @@ Tree =
 		ranks
 	)
 {
-	if( tag !== 'XOXO' )
+	if( tag !== 'TREE' )
 	{
 		throw new Error(
 			'use grow instead of new'
@@ -456,24 +456,20 @@ Tree.grow =
 			universe.creators &&
 			universe.creators[ type ];
 
-	/*
 	if( creator )
 	{
-		console.log(' CREATOR FOR ' + type ); // TODO
-
 		return (
 			new creator(
+				'TREE', // TODO remove
 				twig,
-				ranks,
-				universe
+				ranks
 			)
 		);
 	}
-	*/
 
 	return (
 		new Tree(
-			'XOXO',
+			'TREE',
 			type,
 			twig,
 			ranks

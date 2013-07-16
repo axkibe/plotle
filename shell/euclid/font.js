@@ -32,7 +32,8 @@ var Jools;
 /*
 | Constructor.
 */
-var Font = Euclid.Font =
+var Font =
+Euclid.Font =
 	function(
 		size_o, // fontsize or one object having all the arguments
 		family, // font familiy
@@ -41,6 +42,36 @@ var Font = Euclid.Font =
 		base    // vertical base position
 	)
 {
+	if( arguments.length === 3 )
+	{
+		if( size_o !== 'TREE' )
+		{
+			throw new Error(
+				'Argument fail'
+			);
+		}
+
+		Tree.call(
+			this,
+			'TREE',
+			'Font',
+			family, // TODO rename
+			fill    // TODO rename
+		);
+
+		this.size   = family.size;
+		this.family = family.family;
+		this.align  = family.align;
+		this.fill   = family.fill;
+		this.base   = family.base;
+
+		Jools.immute( this );
+
+		return;
+	}
+
+	// TODO remove this
+
 	if(
 		typeof( size_o ) === 'object' &&
 		!( size_o instanceof Number )
@@ -68,16 +99,21 @@ var Font = Euclid.Font =
 /*
 | MeshMashine type
 */
-Font.prototype.type = 'Font';
+Font.prototype.type =
+	'Font';
 
 
 /*
 | Returns the CSS-string for this font.
+| TODO use lazy fixate
 */
-Font.prototype.getCSS = function()
+Font.prototype.getCSS =
+	function( )
 {
 	if( this._$css )
-		{ return this._$css; }
+	{
+		return this._$css;
+	}
 
 	return Jools.innumerable(
 		this,

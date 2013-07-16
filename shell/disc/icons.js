@@ -8,7 +8,9 @@
 /*
 | Export
 */
-var Disc;
+var
+	Disc;
+
 Disc =
 	Disc || { };
 
@@ -16,12 +18,13 @@ Disc =
 /*
 | Imports
 */
-var config;
-var Curve;
-var Euclid;
-var Jools;
-var shell;
-var theme;
+var
+	config,
+	Curve,
+	Euclid,
+	Jools,
+	shell,
+	theme;
 
 
 /*
@@ -31,7 +34,7 @@ var theme;
 'use strict';
 
 
-if( typeof( window ) === 'undefined')
+if( CHECK && typeof( window ) === 'undefined')
 {
 	throw new Error( 'this code needs a browser!' );
 }

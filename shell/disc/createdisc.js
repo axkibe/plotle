@@ -154,7 +154,7 @@ CreateDisc.prototype.layout =
 				pos :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'c',
@@ -176,7 +176,7 @@ CreateDisc.prototype.layout =
 				pnw :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'nw',
@@ -191,7 +191,7 @@ CreateDisc.prototype.layout =
 				pse :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'nw',
@@ -214,7 +214,7 @@ CreateDisc.prototype.layout =
 				pnw :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'nw',
@@ -229,7 +229,7 @@ CreateDisc.prototype.layout =
 				pse :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'se',
@@ -265,7 +265,7 @@ CreateDisc.prototype.layout =
 				pos :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'c',
@@ -287,7 +287,7 @@ CreateDisc.prototype.layout =
 				pnw :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'nw',
@@ -302,7 +302,7 @@ CreateDisc.prototype.layout =
 				pse :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'nw',
@@ -325,7 +325,7 @@ CreateDisc.prototype.layout =
 				pnw :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'nw',
@@ -340,7 +340,7 @@ CreateDisc.prototype.layout =
 				pse :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'se',
@@ -379,7 +379,7 @@ CreateDisc.prototype.layout =
 				pos :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'c',
@@ -401,7 +401,7 @@ CreateDisc.prototype.layout =
 				pnw :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'nw',
@@ -416,7 +416,7 @@ CreateDisc.prototype.layout =
 				pse :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'nw',
@@ -439,7 +439,7 @@ CreateDisc.prototype.layout =
 				pnw :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'nw',
@@ -454,7 +454,7 @@ CreateDisc.prototype.layout =
 				pse :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'se',
@@ -490,7 +490,7 @@ CreateDisc.prototype.layout =
 				pos :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'c',
@@ -512,7 +512,7 @@ CreateDisc.prototype.layout =
 				pnw :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'nw',
@@ -527,7 +527,7 @@ CreateDisc.prototype.layout =
 				pse :
 				{
 					type :
-						'Point',
+						'AnchorPoint',
 
 					anchor :
 						'nw',
@@ -550,7 +550,7 @@ CreateDisc.prototype.layout =
 				pnw :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'nw',
@@ -565,7 +565,7 @@ CreateDisc.prototype.layout =
 				pse :
 				{
 					type:
-						'Point',
+						'AnchorPoint',
 
 					anchor:
 						'se',

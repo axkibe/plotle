@@ -491,16 +491,14 @@ Button.prototype._weave =
 	{
 		var
 			text =
-				this.text || caption.twig.text,
+				this.text ||
+				caption.twig.text,
 
 			newline =
 				caption.twig.newline,
 
-			// TODO tree creator
 			font =
-				new Euclid.Font(
-					caption.twig.font.twig
-				),
+				caption.twig.font,
 
 			pos =
 				this.iframe.computePoint(
