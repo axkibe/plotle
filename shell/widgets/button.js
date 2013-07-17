@@ -149,7 +149,7 @@ Widgets.Button =
 
 		iframe =
 		this.iframe =
-			new Euclid.Rect(
+			Euclid.Rect.create(
 				'pse',
 				pse.sub( pnw )
 			),

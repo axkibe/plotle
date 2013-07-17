@@ -164,7 +164,7 @@ Portal.create =
 				)
 				{
 					zone =
-						new Euclid.Rect(
+						Euclid.Rect.create(
 							'pnw/size',
 							zone.pnw,
 							Math.max( minWidth,  zone.width  ),
@@ -223,7 +223,7 @@ Portal.create =
 		if( !zone )
 		{
 			zone =
-				new Euclid.Rect(
+				Euclid.Rect.create(
 					'twig',
 					tree.twig.zone
 				);

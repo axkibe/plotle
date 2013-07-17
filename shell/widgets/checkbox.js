@@ -127,7 +127,7 @@ Widgets.CheckBox =
 
 	// TODO computeRect
 	this.box =
-		new Euclid.Rect(
+		Euclid.Rect.create(
 			'pnw/pse',
 			parent.iframe.computePoint(
 				tree.twig.box.twig.pnw

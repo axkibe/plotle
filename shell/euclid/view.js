@@ -305,27 +305,48 @@ View.prototype.rect =
 {
 	if (this.zoom === 1) {
 
-		var r = (a1 instanceof Euclid.Rect) ? a1 : new Euclid.Rect( 'pnw/pse', a1, a2 );
+		var
+			r =
+				(a1 instanceof Euclid.Rect) ?
+					a1 :
+					Euclid.Rect.create(
+						'pnw/pse',
+						a1,
+						a2
+					);
 
-		return (this.pan.x === 0 && this.pan.y === 0)  ? r : r.add(this.pan);
+		return (
+			(this.pan.x === 0 && this.pan.y === 0) ?
+			r :
+			r.add( this.pan )
+		);
 	}
 
-	var pnw, pse;
+	var
+		pnw,
+		pse;
+
 	if (a1 instanceof Euclid.Rect)
 	{
-		pnw = a1.pnw;
-		pse = a1.pse;
+		pnw =
+			a1.pnw;
+
+		pse =
+			a1.pse;
 	}
 	else
 	{
-		pnw = a1;
-		pse = a2;
+		pnw =
+			a1;
+
+		pse =
+			a2;
 	}
 
-	return new Euclid.Rect(
+	return Euclid.Rect.create(
 		'pnw/pse',
-		this.point(pnw),
-		this.point(pse)
+		this.point( pnw ),
+		this.point( pse )
 	);
 };
 

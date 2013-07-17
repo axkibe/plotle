@@ -137,13 +137,28 @@ Jools.lazyFixate(
 	'zone',
 	function()
 	{
-		var p1 = this.p1;
-		var p2 = this.p2;
+		var
+			p1 =
+				this.p1,
 
-		return new Euclid.Rect(
+			p2 =
+				this.p2;
+
+		return Euclid.Rect.create(
 			'pnw/pse',
-			Euclid.Point.renew(Math.min(p1.x, p2.x), Math.min(p1.y, p2.y), p1, p2),
-			Euclid.Point.renew(Math.max(p1.x, p2.x), Math.max(p1.y, p2.y), p1, p2));
+			Euclid.Point.renew(
+				Math.min( p1.x, p2.x ),
+				Math.min( p1.y, p2.y ),
+				p1,
+				p2
+			),
+			Euclid.Point.renew(
+				Math.max( p1.x, p2.x ),
+				Math.max( p1.y, p2.y ),
+				p1,
+				p2
+			)
+		);
 	}
 );
 

@@ -90,7 +90,7 @@ Visual.Label =
 			doc.getHeight( );
 
 	this.zone =
-		new Euclid.Rect(
+		Euclid.Rect.create(
 			'pnw/size',
 			pnw,
 			Math.round(
@@ -382,7 +382,7 @@ Label.prototype.getSilhoutte =
 
 	s =
 	this._$silhoutte =
-		new Euclid.Rect(
+		Euclid.Rect.create(
 			'pnw/pse',
 			this.zone.pnw,
 			this.zone.pse.sub( 1, 1 )
@@ -414,7 +414,7 @@ Label.prototype.getZeroSilhoutte =
 
 	s =
 	this._zeroSilhoutte =
-		new Euclid.Rect(
+		Euclid.Rect.create(
 			'pse',
 			new Euclid.Point(
 				Math.max( zone.width  - 1, 0 ),

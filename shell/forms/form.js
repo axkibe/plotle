@@ -102,7 +102,7 @@ Forms.Form =
 	}
 
 	this.iframe =
-		new Euclid.Rect(
+		Euclid.Rect.create(
 			'pse',
 			this.screensize
 		);

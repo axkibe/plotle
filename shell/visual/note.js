@@ -142,7 +142,7 @@ Note.create =
 				)
 				{
 					zone =
-						new Euclid.Rect(
+						Euclid.Rect.create(
 							'pnw/size',
 							zone.pnw,
 							Math.max( minWidth,  zone.width  ),
@@ -209,7 +209,7 @@ Note.create =
 		{
 			// TODO create rect from twig
 			zone =
-				new Euclid.Rect(
+				Euclid.Rect.create(
 					'twig',
 					tree.twig.zone
 				);

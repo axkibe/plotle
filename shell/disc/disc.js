@@ -110,7 +110,7 @@ Disc.Disc =
 			style.ellipse.height;
 
 	this.oframe =
-		new Euclid.Rect(
+		Euclid.Rect.create(
 			'pnw/size',
 			new Euclid.Point(
 				0,
@@ -121,7 +121,7 @@ Disc.Disc =
 		);
 
 	this.iframe =
-		new Euclid.Rect(
+		Euclid.Rect.create(
 			'pnw/size',
 			Euclid.Point.zero,
 			width,

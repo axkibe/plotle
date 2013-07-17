@@ -877,7 +877,7 @@ Space.prototype.dragStart =
 				this.getActionItemCreator( action )
 					.create(
 						'zone',
-							new Euclid.Rect(
+							Euclid.Rect.create(
 								'pnw/pse',
 								p, //TODO depoint?
 								p
@@ -938,7 +938,7 @@ Space.prototype.dragStart =
 				this.getActionItemCreator( action )
 					.create(
 						'zone',
-							new Euclid.Rect(
+							Euclid.Rect.create(
 								'pnw/pse',
 								p, //TODO depoint?
 								p
@@ -1135,7 +1135,7 @@ Space.prototype.dragStop =
 						'inherit',
 							action.item,
 						'zone',
-							new Euclid.Rect(
+							Euclid.Rect.create(
 								'arbitrary',
 								view.depoint( action.start ),
 								view.depoint( action.move )
@@ -1171,7 +1171,7 @@ Space.prototype.dragStop =
 					action.origin,
 
 				zone =
-					new Euclid.Rect(
+					Euclid.Rect.create(
 						'arbitrary',
 						view.depoint( action.start ),
 						view.depoint( action.move ) // TODO why not p?
@@ -1244,7 +1244,7 @@ Space.prototype.dragStop =
 						'inherit',
 							action.item,
 						'zone',
-							new Euclid.Rect(
+							Euclid.Rect.create(
 								'arbitrary',
 								view.depoint( action.start ),
 								view.depoint( action.move )
@@ -1524,7 +1524,7 @@ Space.prototype.dragMove =
 
 			var
 				zone =
-					new Euclid.Rect(
+					Euclid.Rect.create(
 						'arbitrary',
 						view.depoint( action.start ),
 						view.depoint( p )

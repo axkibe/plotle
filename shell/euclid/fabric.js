@@ -38,7 +38,10 @@ var Jools;
 */
 var Fabric =
 Euclid.Fabric =
-	function( a1, a2 )
+	function(
+		a1,
+		a2
+	)
 {
 	switch( typeof( a1 ) )
 	{

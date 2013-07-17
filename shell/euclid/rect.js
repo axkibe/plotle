@@ -36,6 +36,53 @@ var
 var Rect =
 Euclid.Rect =
 	function(
+		pnw,
+		pse
+	)
+{
+	if( arguments.length !== 2 )
+	{
+		throw new Error('WTF');
+	}
+	if(
+		pnw.x > pse.x ||
+		pnw.y > pse.y
+	)
+	{
+		throw Jools.reject(
+			'not a rectangle.'
+		);
+	}
+
+	this.pnw =
+		pnw;
+
+	this.pse =
+		pse;
+
+	// TODO lazyFixate
+	Jools.innumerable(
+		this,
+		'width',
+		pse.x - pnw.x
+	);
+
+	Jools.innumerable(
+		this,
+		'height',
+		pse.y - pnw.y
+	);
+
+	this.type =
+		'Rect'; // FIXME - can this be circumvented?
+
+	Jools.immute( this );
+};
+
+
+
+Rect.create =
+	function(
 		overload,
 		a1,
 		a2,
@@ -127,58 +174,54 @@ Euclid.Rect =
 				a1.y >= a2.y
 			)
 			{
-				pnw = new Euclid.Point( a1.x, a2.y );
-				pse = new Euclid.Point( a2.x, a1.y );
+				pnw =
+					new Euclid.Point(
+						a1.x,
+						a2.y
+					);
+
+				pse =
+					new Euclid.Point(
+						a2.x,
+						a1.y
+					);
 			}
 			else if (
 				a1.x >= a2.x &&
 				a2.y >= a1.y
 			)
 			{
-				pnw = new Euclid.Point( a2.x, a1.y );
-				pse = new Euclid.Point( a1.x, a2.y );
+				pnw =
+					new Euclid.Point(
+						a2.x,
+						a1.y
+					);
+
+				pse =
+					new Euclid.Point(
+						a1.x,
+						a2.y
+					);
 			}
 			else
 			{
-				throw new Error( 'this is not possible' );
+				throw new Error(
+					'this is not possible'
+				);
 			}
 			break;
 
 		default :
 
-			throw new Error( 'invalid overload' );
+			throw new Error(
+				'invalid overload'
+			);
 	}
 
-	if(
-		pnw.x > pse.x ||
-		pnw.y > pse.y
-	)
-	{
-		throw Jools.reject('not a rectangle.');
-	}
-
-	this.pnw =
-		pnw;
-
-	this.pse =
-		pse;
-
-	Jools.innumerable(
-		this,
-		'width',
-		pse.x - pnw.x
+	return new Rect(
+		pnw,
+		pse
 	);
-
-	Jools.innumerable(
-		this,
-		'height',
-		pse.y - pnw.y
-	);
-
-	this.type =
-		'Rect'; // FIXME - can this be circumvented?
-
-	Jools.immute( this );
 };
 
 
@@ -292,7 +335,7 @@ Rect.prototype.reduce =
 
 	// allows margins to reduce the rect to zero size without erroring.
 
-	return new Rect(
+	return Rect.create(
 		'pnw/pse',
 		Euclid.Point.renew(
 			this.pnw.x + margin.e,
@@ -594,7 +637,7 @@ Rect.prototype.add =
 		a2
 	)
 {
-	return new this.constructor(
+	return Rect.create(
 		'pnw/pse',
 		this.pnw.add( a1, a2 ),
 		this.pse.add( a1, a2 )
@@ -706,7 +749,7 @@ Rect.renew =
 				Euclid.Point( ex, sy );
 	}
 
-	return new Rect(
+	return Rect.create(
 		'pnw/pse',
 		pnw,
 		pse
@@ -726,7 +769,7 @@ Rect.prototype.sub =
 		a2
 	)
 {
-	return new this.constructor(
+	return Rect.create(
 		'pnw/pse',
 		this.pnw.sub( a1, a2 ),
 		this.pse.sub( a1, a2 )
