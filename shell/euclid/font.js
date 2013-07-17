@@ -35,62 +35,33 @@ var Jools;
 var Font =
 Euclid.Font =
 	function(
-		size_o, // fontsize or one object having all the arguments
-		family, // font familiy
-		fill,   // font color
-		align,  // horizontal align
-		base    // vertical base position
+		tag,
+		twig,
+		ranks
 	)
 {
-	if( arguments.length === 3 )
+	if( tag !== 'TREE' )
 	{
-		if( size_o !== 'TREE' )
-		{
-			throw new Error(
-				'Argument fail'
-			);
-		}
-
-		Tree.call(
-			this,
-			'TREE',
-			'Font',
-			family, // TODO rename
-			fill    // TODO rename
+		throw new Error(
+			'Argument fail'
 		);
-
-		this.size   = family.size;
-		this.family = family.family;
-		this.align  = family.align;
-		this.fill   = family.fill;
-		this.base   = family.base;
-
-		Jools.immute( this );
-
-		return;
 	}
 
-	// TODO remove this
+	Tree.call(
+		this,
+		'TREE',
+		'Font',
+		twig,
+		ranks
+	);
 
-	if(
-		typeof( size_o ) === 'object' &&
-		!( size_o instanceof Number )
-	)
-	{
-		this.size    = size_o.size;
-		this.family  = size_o.family;
-		this.align   = size_o.align;
-		this.fill    = size_o.fill;
-		this.base    = size_o.base;
-	}
-	else
-	{
-		this.size    = size_o;
-		this.family  = family;
-		this.align   = align;
-		this.fill    = fill;
-		this.base    = base;
-	}
+	this.size =
+		twig.size;
+
+	Jools.keyNonGrata( this, 'family' );
+	Jools.keyNonGrata( this, 'align' );
+	Jools.keyNonGrata( this, 'fill' );
+	Jools.keyNonGrata( this, 'base' );
 
 	Jools.immute( this );
 };
@@ -118,7 +89,7 @@ Font.prototype.getCSS =
 	return Jools.innumerable(
 		this,
 		'_$css',
-		this.size + 'px ' + this.family
+		this.twig.size + 'px ' + this.twig.family
 	);
 };
 

@@ -1237,7 +1237,9 @@ Fabric.prototype.reverseClip =
 | FIXME remove
 */
 Fabric.prototype.scale =
-	function( s )
+	function(
+		s
+	)
 {
 	this._cx.scale( s, s );
 };
@@ -1247,35 +1249,62 @@ Fabric.prototype.scale =
 | Sets the font.
 */
 Fabric.prototype._setFont =
-	function( font )
+	function(
+		font
+	)
 {
 	// already setted this font
 	if( this._$font === font )
-		{ return; }
+	{
+		return;
+	}
 
-	if( !Jools.is( font.fill ) )
-		{ throw new Error( 'fontstyle misses fill' ); }
+	var
+		fill =
+			font.twig.fill,
 
-	if( !Jools.is( font.align ) )
-		{ throw new Error( 'fontstyle misses align' ); }
+		align =
+			font.twig.align,
 
-	if( !Jools.is( font.base ) )
-		{ throw new Error('fontstyle misses base'); }
+		base =
+			font.twig.base;
 
-	var cx =
-		this._cx;
+	if( !Jools.is( fill ) )
+	{
+		throw new Error(
+			'fontstyle misses fill'
+		);
+	}
+
+	if( !Jools.is( align ) )
+	{
+		throw new Error(
+			'fontstyle misses align'
+		);
+	}
+
+	if( !Jools.is( base ) )
+	{
+		throw new Error(
+			'fontstyle misses base'
+		);
+	}
+
+	var
+		cx =
+			this._cx;
 
 	cx.font =
 		font.getCSS( );
 
 	cx.fillStyle =
-		font.fill;
+		fill;
 
 	cx.textAlign =
-		font.align;
+		align;
 
 	cx.textBaseline =
-		font.base;
+		base;
 
 	this._$font =
 		font;

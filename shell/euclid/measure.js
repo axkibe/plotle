@@ -30,7 +30,8 @@ if( typeof( window ) === 'undefined' )
 /*
 | Singleton
 */
-var Measure = Euclid.Measure =
+var Measure =
+Euclid.Measure =
 {
 
 	/*
@@ -47,11 +48,17 @@ var Measure = Euclid.Measure =
 		var canvas = document.createElement( 'canvas' );
 
 		// TODO make own obejct
-		Euclid.swatch = new Euclid.Fabric( canvas );
+		Euclid.swatch =
+			new Euclid.Fabric( canvas );
 
-		Measure._$cx     = canvas.getContext( '2d' );
-		Measure._$size   = null;
-		Measure._$family = null;
+		Measure._$cx =
+			canvas.getContext( '2d' );
+
+		Measure._$size =
+			null;
+
+		Measure._$family =
+			null;
 	},
 
 
@@ -64,18 +71,23 @@ var Measure = Euclid.Measure =
 			text
 		)
 	{
-		var cx   = Measure._$cx;
+		var
+			cx =
+				Measure._$cx;
 
 		if(
-			Measure._$size !== font.size ||
-			Measure._$family !== font.family
+			Measure._$size !== font.twig.size ||
+			Measure._$family !== font.twig.family
 		)
 		{
-			Measure._$size = font.size;
+			Measure._$size =
+				font.twig.size;
 
-			Measure._$family = font.family;
+			Measure._$family =
+				font.twig.family;
 
-			cx.font = font.getCSS( );
+			cx.font =
+				font.getCSS( );
 		}
 
 		return cx.measureText( text ).width;

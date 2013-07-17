@@ -13,6 +13,7 @@
 var
 	Euclid,
 	Font,
+	shellverse,
 	theme;
 
 /*
@@ -28,7 +29,8 @@ var fontPool;
 
 var FontPool = function()
 {
-	// ---
+	this.$pool =
+		{ };
 };
 
 
@@ -156,14 +158,21 @@ FontPool.styles =
 /*
 | Sets the default font
 */
-FontPool.prototype.setDefaultFonts = function(normal, bold)
+FontPool.prototype.setDefaultFonts =
+	function(
+		normal,
+		bold
+	)
 {
 	if( this.$settedDefaultFonts )
 	{
-		throw new Error('multiple calls to set default font.');
+		throw new Error(
+			'multiple calls to setDefaultFont.'
+		);
 	}
 
-	this.$settedDefaultFonts = true;
+	this.$settedDefaultFonts =
+		true;
 
 	var styles = FontPool.styles;
 
@@ -206,7 +215,9 @@ FontPool.prototype.get =
 		);
 	}
 
-	var style = FontPool.styles[ code ];
+	var
+		style =
+			FontPool.styles[ code ];
 
 	if( !style )
 	{
@@ -217,12 +228,12 @@ FontPool.prototype.get =
 
 	var
 		c =
-			style.$c;
+			this.$pool[ code ];
 
 	if( !c )
 	{
 		c =
-		style.$c =
+		this.$pool[ code ] =
 			{ };
 	}
 
@@ -237,14 +248,13 @@ FontPool.prototype.get =
 
 	f =
 	c[ size ] =
-		/*
 		Tree.grow(
 			style,
-			Pattern,
+			shellverse,
 			'size',
 				size
 		);
-		*/
+		/*
 		new Euclid.Font(
 			size,
 			style.family,
@@ -252,6 +262,7 @@ FontPool.prototype.get =
 			style.align,
 			style.base
 		);
+		*/
 
 	return f;
 };
@@ -261,4 +272,4 @@ fontPool =
 	new FontPool( );
 
 
-} ) ();
+} )( );
