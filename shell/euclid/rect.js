@@ -169,9 +169,8 @@ Rect.create =
 			)
 			{
 				pnw =
-					Tree.grow(
+					shellverse.grow(
 						'Point',
-						shellverse,
 						'x',
 							a1.x,
 						'y',
@@ -179,9 +178,8 @@ Rect.create =
 					);
 
 				pse =
-					Tree.grow(
+					shellverse.grow(
 						'Point',
-						shellverse,
 						'x',
 							a2.x,
 						'y',
@@ -194,7 +192,7 @@ Rect.create =
 			)
 			{
 				pnw =
-					Tree.grow(
+					shellverse.grow(
 						'Point',
 						shellverse,
 						'x',
@@ -204,7 +202,7 @@ Rect.create =
 					);
 
 				pse =
-					Tree.grow(
+					shellverse.grow(
 						'Point',
 						shellverse,
 						'x',
@@ -228,9 +226,8 @@ Rect.create =
 			);
 	}
 
-	return Tree.grow(
+	return shellverse.grow(
 		'Rect',
-		shellverse,
 		'pnw',
 			pnw,
 		'pse',
@@ -265,9 +262,8 @@ Rect.prototype.computePoint =
 		case 'c'  :
 
 			return (
-				Tree.grow(
+				shellverse.grow(
 					'Point',
-					shellverse,
 					'x',
 						half( pnw.x + pse.x ) + twig.x,
 					'y',
@@ -278,9 +274,8 @@ Rect.prototype.computePoint =
 		case 'n'  :
 
 			return (
-				Tree.grow(
+				shellverse.grow(
 					'Point',
-					shellverse,
 					'x',
 						half( pnw.x + pse.x ) + twig.x,
 					'y',
@@ -291,7 +286,7 @@ Rect.prototype.computePoint =
 		case 'ne' :
 
 			return (
-				Tree.grow(
+				shellverse.grow(
 					'Point',
 					shellverse,
 					'x',
@@ -304,7 +299,7 @@ Rect.prototype.computePoint =
 		case 'e'  :
 
 			return (
-				Tree.grow(
+				shellverse.grow(
 					'Point',
 					shellverse,
 					'x',
@@ -326,7 +321,7 @@ Rect.prototype.computePoint =
 		case 's'  :
 
 			return (
-				Tree.grow(
+				shellverse.grow(
 					'Point',
 					shellverse,
 					'x',
@@ -339,9 +334,8 @@ Rect.prototype.computePoint =
 		case 'sw' :
 
 			return (
-				Tree.grow(
+				shellverse.grow(
 					'Point',
-					shellverse,
 					'x',
 						pnw.x + twig.x,
 					'y',
@@ -352,9 +346,8 @@ Rect.prototype.computePoint =
 		case 'w'  :
 
 			return (
-				Tree.grow(
+				shellverse.grow(
 					'Point',
-					shellverse,
 					'x',
 						pnw.x + twig.x,
 					'y',
@@ -632,9 +625,8 @@ Jools.lazyFixate(
 	function( )
 	{
 		return (
-			Tree.grow(
+			shellverse.grow(
 				'Point',
-				shellverse,
 				'x',
 					Jools.half( this.pse.x + this.pnw.x ),
 				'y',
@@ -654,9 +646,8 @@ Jools.lazyFixate(
 	function( )
 	{
 		return (
-			Tree.grow(
+			shellverse.grow(
 				'Point',
-				shellverse,
 				'x',
 					Jools.half( this.pse.x + this.pnw.x ),
 				'y',
@@ -676,9 +667,8 @@ Jools.lazyFixate(
 	function( )
 	{
 		return (
-			Tree.grow(
+			shellverse.grow(
 				'Point',
-				shellverse,
 				'x',
 					this.pnw.x,
 				'y',
@@ -698,9 +688,8 @@ Jools.lazyFixate(
 	function( )
 	{
 		return (
-			Tree.grow(
+			shellverse.grow(
 				'Point',
-				shellverse,
 				'x',
 					this.pse.x,
 				'y',
@@ -1002,9 +991,8 @@ Rect.prototype.getProjection =
 		if ( x >= wx && x <= ex )
 		{
 			return (
-				Tree.grow(
+				shellverse.grow(
 					'Point',
-					shellverse,
 					'x',
 						x,
 					'y',

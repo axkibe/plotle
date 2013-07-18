@@ -128,7 +128,7 @@ Shellverse.prototype.ButtonWidget =
 				visible :
 					'Boolean'
 
-			} ),
+			} )
 
 	} );
 
@@ -283,7 +283,7 @@ Shellverse.prototype.LabelWidget =
 				newline :
 					'Integer'
 
-			} ),
+			} )
 	} );
 
 

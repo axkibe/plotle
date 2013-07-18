@@ -11,10 +11,11 @@
 | Imports
 */
 var
+	config,
 	Euclid,
 	Jools,
 	Shell,
-	config;
+	shellverse;
 
 
 /*
@@ -724,9 +725,8 @@ System.prototype._onMouseDown =
 			this._canvas,
 
 		p =
-			Tree.grow(
+			shellverse.grow(
 				'Point',
-				shellverse,
 				'x',
 					event.pageX - canvas.offsetLeft,
 				'y',
@@ -820,9 +820,8 @@ System.prototype._onMouseMove =
 			this._canvas,
 
 		p =
-			Tree.grow(
+			shellverse.grow(
 				'Point',
-				shellverse,
 				'x',
 					event.pageX - canvas.offsetLeft,
 				'y',
@@ -939,9 +938,8 @@ System.prototype._onMouseUp =
 			this._canvas,
 
 		p =
-			Tree.grow(
+			shellverse.grow(
 				'Point',
-				shellverse,
 				'x',
 					event.pageX - canvas.offsetLeft,
 				'y',
@@ -1043,9 +1041,8 @@ System.prototype._onMouseWheel =
 			this._canvas,
 
 		p =
-			Tree.grow(
+			shellverse.grow(
 				'Point',
-				shellverse,
 				'x',
 					event.pageX - canvas.offsetLeft,
 				'y',
@@ -1106,9 +1103,8 @@ System.prototype._onTouchStart =
 			this._canvas,
 
 		p =
-			Tree.grow(
+			shellverse.grow(
 				'Point',
-				shellverse,
 				'x',
 					event.pageX - canvas.offsetLeft,
 				'y',
@@ -1194,9 +1190,8 @@ System.prototype._onTouchMove =
 			this._canvas,
 
 		p =
-			Tree.grow(
+			shellverse.grow(
 				'Point',
-				shellverse,
 				'x',
 					event.pageX - canvas.offsetLeft,
 				'y',
@@ -1315,7 +1310,7 @@ System.prototype._onTouchEnd =
 			this._canvas,
 
 		p =
-			Tree.grow(
+			shellverse.grow(
 				'Point',
 				'x',
 					event.changedTouches[ 0 ].pageX -

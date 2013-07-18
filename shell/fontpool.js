@@ -248,21 +248,11 @@ FontPool.prototype.get =
 
 	f =
 	c[ size ] =
-		Tree.grow(
+		shellverse.grow(
 			style,
-			shellverse,
 			'size',
 				size
 		);
-		/*
-		new Euclid.Font(
-			size,
-			style.family,
-			style.fill,
-			style.align,
-			style.base
-		);
-		*/
 
 	return f;
 };

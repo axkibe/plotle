@@ -268,19 +268,25 @@ View.prototype.point =
 			return a1;
 		}
 
-		return Tree.grow(
-			'Point',
-			shellverse,
-			'x',
-				this.x( a1 ),
-			'y',
-				this.y( a1 )
+		return (
+			shellverse.grow(
+				'Point',
+				'x',
+					this.x( a1 ),
+				'y',
+					this.y( a1 )
+			)
 		);
 	}
 
-	return new Euclid.Point(
-		this.x( a1, a2 ),
-		this.y( a1, a2 )
+	return (
+		shellverse.grow(
+			'Point',
+			'x',
+				this.x( a1, a2 ),
+			'y',
+				this.y( a1, a2 )
+		)
 	);
 };
 
