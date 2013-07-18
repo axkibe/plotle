@@ -25,6 +25,7 @@ Euclid =
 */
 var
 	Jools,
+	shellverse,
 	Tree;
 
 
@@ -156,9 +157,13 @@ Point.prototype.add =
 			return this;
 		}
 
-		return new Point(
-			this.x + a1.x,
-			this.y + a1.y
+		return Tree.grow(
+			'Point',
+			shellverse,
+			'x',
+				this.x + a1.x,
+			'y',
+				this.y + a1.y
 		);
 	}
 	else
@@ -168,9 +173,13 @@ Point.prototype.add =
 			return this;
 		}
 
-		return new Point(
-			this.x + a1,
-			this.y + a2
+		return Tree.grow(
+			'Point',
+			shellverse,
+			'x',
+				this.x + a1,
+			'y',
+				this.y + a2
 		);
 	}
 };
@@ -192,9 +201,13 @@ Point.prototype.sub =
 			return this;
 		}
 
-		return new Point(
-			this.x - a1.x,
-			this.y - a1.y
+		return Tree.grow(
+			'Point',
+			shellverse,
+			'x',
+				this.x - a1.x,
+			'y',
+				this.y - a1.y
 		);
 	}
 	else
@@ -204,22 +217,17 @@ Point.prototype.sub =
 			return this;
 		}
 
-		return new Point(
-			this.x - a1,
-			this.y - a2
+		return Tree.grow(
+			'Point',
+			shellverse,
+			'x',
+				this.x - a1,
+			'y',
+				this.y - a2
 		);
 	}
 };
 
-
-/*
-| Shortcut for point at 0/0.
-*/
-Point.zero =
-	new Point(
-		0,
-		0
-	);
 
 
 /*
@@ -256,8 +264,34 @@ Point.renew =
 		}
 	}
 
-	return new Point( x, y );
+	return Tree.grow(
+		'Point',
+		shellverse,
+		'x',
+			x,
+		'y',
+			y
+	);
 };
+
+/*
+| Shortcut for point at 0/0.
+*/
+Euclid.Point.zero =
+	new Point(
+		'TREE',
+		{
+			type :
+				'Point',
+			x :
+				0,
+
+			y :
+				0
+		},
+		null
+	);
+
 
 
 } )( );

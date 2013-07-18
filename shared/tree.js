@@ -139,13 +139,22 @@ Tree.grow =
 		ranks =
 			null,
 
-		type =
-			Tree.getType( model ),
-
+		type,
 		k,
 		k1,
 		k2,
 		val;
+
+	if( Jools.isString( model ) )
+	{
+		type =
+			model;
+	}
+	else
+	{
+		type =
+			Tree.getType( model );
+	}
 
 	Jools.log(
 		'tree',
@@ -164,11 +173,27 @@ Tree.grow =
 		);
 	}
 
-	twig =
-		Jools.copy(
-			model.twig ? model.twig : model,
-			{ }
-		);
+	if( Jools.isString( model ) )
+	{
+		twig =
+			{ };
+	}
+	else if( model.twig )
+	{
+		twig =
+			Jools.copy(
+				model.twig,
+				{ }
+			);
+	}
+	else
+	{
+		twig =
+			Jools.copy(
+				model,
+				{ }
+			);
+	}
 
 	if( pattern.ranks )
 	{

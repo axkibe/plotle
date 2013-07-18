@@ -223,10 +223,7 @@ Portal.create =
 		if( !zone )
 		{
 			zone =
-				Euclid.Rect.create(
-					'twig',
-					tree.twig.zone
-				);
+				tree.twig.zone;
 		}
 	}
 

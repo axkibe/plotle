@@ -351,12 +351,14 @@ Shellverse.prototype.MoveTo =
 Shellverse.prototype.creators =
 	Jools.immute( {
 
+		'Font' :
+			Euclid.Font,
+
 		'Point' :
 			Euclid.Point,
 
-		'Font' :
-			Euclid.Font
-
+		'Rect' :
+			Euclid.Rect
 	} );
 
 

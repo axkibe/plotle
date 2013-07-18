@@ -207,12 +207,8 @@ Note.create =
 
 		if( !zone )
 		{
-			// TODO create rect from twig
 			zone =
-				Euclid.Rect.create(
-					'twig',
-					tree.twig.zone
-				);
+				tree.twig.zone;
 		}
 
 		if( !doc )

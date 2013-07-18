@@ -19,8 +19,9 @@ Euclid =
 | Imports
 */
 var
+	Euclid,
 	Jools,
-	Euclid;
+	shellverse;
 
 
 /*
@@ -36,14 +37,29 @@ var
 var Rect =
 Euclid.Rect =
 	function(
-		pnw,
-		pse
+		tag,
+		twig,
+		ranks
 	)
 {
-	if( arguments.length !== 2 )
+	if( tag !== 'TREE' )
 	{
-		throw new Error('WTF');
+		throw new Error(
+			'invalid tag'
+		);
 	}
+
+	var
+		pnw =
+		this.pnw =
+			twig.pnw;
+
+	var
+		pse =
+		this.pse =
+			twig.pse;
+
+
 	if(
 		pnw.x > pse.x ||
 		pnw.y > pse.y
@@ -53,12 +69,6 @@ Euclid.Rect =
 			'not a rectangle.'
 		);
 	}
-
-	this.pnw =
-		pnw;
-
-	this.pse =
-		pse;
 
 	// TODO lazyFixate
 	Jools.innumerable(
@@ -95,22 +105,6 @@ Rect.create =
 
 	switch( overload )
 	{
-		case 'twig' :
-
-			pnw =
-				new Euclid.Point(
-					a1.twig.pnw.twig.x,
-					a1.twig.pnw.twig.y
-				);
-
-			pse =
-				new Euclid.Point(
-					a1.twig.pse.twig.x,
-					a1.twig.pse.twig.y
-				);
-
-			break;
-
 		case 'pnw/pse' :
 
 			pnw =
@@ -175,15 +169,23 @@ Rect.create =
 			)
 			{
 				pnw =
-					new Euclid.Point(
-						a1.x,
-						a2.y
+					Tree.grow(
+						'Point',
+						shellverse,
+						'x',
+							a1.x,
+						'y',
+							a2.y
 					);
 
 				pse =
-					new Euclid.Point(
-						a2.x,
-						a1.y
+					Tree.grow(
+						'Point',
+						shellverse,
+						'x',
+							a2.x,
+						'y',
+							a1.y
 					);
 			}
 			else if (
@@ -192,15 +194,23 @@ Rect.create =
 			)
 			{
 				pnw =
-					new Euclid.Point(
-						a2.x,
-						a1.y
+					Tree.grow(
+						'Point',
+						shellverse,
+						'x',
+							a2.x,
+						'y',
+							a1.y
 					);
 
 				pse =
-					new Euclid.Point(
-						a1.x,
-						a2.y
+					Tree.grow(
+						'Point',
+						shellverse,
+						'x',
+							a1.x,
+						'y',
+							a2.y
 					);
 			}
 			else
@@ -218,9 +228,13 @@ Rect.create =
 			);
 	}
 
-	return new Rect(
-		pnw,
-		pse
+	return Tree.grow(
+		'Rect',
+		shellverse,
+		'pnw',
+			pnw,
+		'pse',
+			pse
 	);
 };
 
@@ -250,71 +264,119 @@ Rect.prototype.computePoint =
 	{
 		case 'c'  :
 
-			return new Euclid.Point(
-				half( pnw.x + pse.x ) + twig.x,
-				half( pnw.y + pse.y ) + twig.y
+			return (
+				Tree.grow(
+					'Point',
+					shellverse,
+					'x',
+						half( pnw.x + pse.x ) + twig.x,
+					'y',
+						half( pnw.y + pse.y ) + twig.y
+				)
 			);
 
 		case 'n'  :
 
-			return new Euclid.Point(
-				half( pnw.x + pse.x ) + twig.x,
-				twig.y + twig.y
+			return (
+				Tree.grow(
+					'Point',
+					shellverse,
+					'x',
+						half( pnw.x + pse.x ) + twig.x,
+					'y',
+						twig.y + twig.y
+				)
 			);
 
 		case 'ne' :
 
-			return new Euclid.Point(
-				pse.x + twig.x,
-				pnw.y + twig.y
+			return (
+				Tree.grow(
+					'Point',
+					shellverse,
+					'x',
+						pse.x + twig.x,
+					'y',
+						pnw.y + twig.y
+				)
 			);
 
 		case 'e'  :
 
-			return new Euclid.Point(
-				pse.x + twig.x,
-				half( pnw.y + pse.y ) + twig.y
+			return (
+				Tree.grow(
+					'Point',
+					shellverse,
+					'x',
+						pse.x + twig.x,
+					'y',
+						half( pnw.y + pse.y ) + twig.y
+				)
 			);
 
 		case 'se' :
 
-			return pse.add(
-				twig.x,
-				twig.y
+			return (
+				pse.add(
+					twig.x,
+					twig.y
+				)
 			);
 
 		case 's'  :
 
-			return new Euclid.Point(
-				half( pnw.x + pse.x ) + twig.x,
-				pse.y + twig.y
+			return (
+				Tree.grow(
+					'Point',
+					shellverse,
+					'x',
+						half( pnw.x + pse.x ) + twig.x,
+					'y',
+						pse.y + twig.y
+				)
 			);
 
 		case 'sw' :
 
-			return new Euclid.Point(
-				pnw.x + twig.x,
-				pse.y + twig.y
+			return (
+				Tree.grow(
+					'Point',
+					shellverse,
+					'x',
+						pnw.x + twig.x,
+					'y',
+						pse.y + twig.y
+				)
 			);
 
 		case 'w'  :
 
-			return new Euclid.Point(
-				pnw.x + twig.x,
-				half( pnw.y + pse.y ) + twig.y
+			return (
+				Tree.grow(
+					'Point',
+					shellverse,
+					'x',
+						pnw.x + twig.x,
+					'y',
+						half( pnw.y + pse.y ) +
+						twig.y
+				)
 			);
 
 		case 'nw' :
 
-			return pnw.add(
-				twig.x,
-				twig.y
+			return (
+				pnw.add(
+					twig.x,
+					twig.y
+				)
 			);
 
 		default :
 
 			throw new Error(
-				'Invalid anchor: ' + twig.anchor
+				'Invalid anchor: ' +
+				twig.anchor
 			);
 	}
 };
@@ -569,9 +631,15 @@ Jools.lazyFixate(
 	'pc',
 	function( )
 	{
-		return new Euclid.Point(
-			Jools.half( this.pse.x + this.pnw.x ),
-			Jools.half( this.pse.y + this.pnw.y )
+		return (
+			Tree.grow(
+				'Point',
+				shellverse,
+				'x',
+					Jools.half( this.pse.x + this.pnw.x ),
+				'y',
+					Jools.half( this.pse.y + this.pnw.y )
+			)
 		);
 	}
 );
@@ -585,9 +653,15 @@ Jools.lazyFixate(
 	'pn',
 	function( )
 	{
-		return new Euclid.Point(
-			Jools.half( this.pse.x + this.pnw.x ),
-			this.pnw.y
+		return (
+			Tree.grow(
+				'Point',
+				shellverse,
+				'x',
+					Jools.half( this.pse.x + this.pnw.x ),
+				'y',
+					this.pnw.y
+			)
 		);
 	}
 );
@@ -601,9 +675,15 @@ Jools.lazyFixate(
 	'w',
 	function( )
 	{
-		return new Euclid.Point(
-			this.pnw.x,
-			Jools.half( this.pse.y + this.pnw.y )
+		return (
+			Tree.grow(
+				'Point',
+				shellverse,
+				'x',
+					this.pnw.x,
+				'y',
+					Jools.half( this.pse.y + this.pnw.y )
+			)
 		);
 	}
 );
@@ -617,9 +697,15 @@ Jools.lazyFixate(
 	'e',
 	function( )
 	{
-		return new Euclid.Point(
-			this.pse.x,
-			Jools.half( this.pse.y + this.pnw.y )
+		return (
+			Tree.grow(
+				'Point',
+				shellverse,
+				'x',
+					this.pse.x,
+				'y',
+					Jools.half( this.pse.y + this.pnw.y )
+			)
 		);
 	}
 );
@@ -864,7 +950,7 @@ Rect.prototype.within =
 
 		pnw =
 			this.pnw,
-	
+
 		pse =
 			this.pse;
 
@@ -884,25 +970,26 @@ Rect.prototype.within =
 Rect.prototype.getProjection =
 	function( p )
 {
-	var pc =
-		this.pc;
+	var
+		pc =
+			this.pc,
 
-	var ny =
-		this.pnw.y;
+		ny =
+			this.pnw.y,
 
-	var ex =
-		this.pse.x;
+		ex =
+			this.pse.x,
 
-	var sy =
-		this.pse.y;
+		sy =
+			this.pse.y,
 
-	var wx =
-		this.pnw.x;
+		wx =
+			this.pnw.x,
 
-	var k =
-		( p.y - pc.y ) / ( p.x - pc.x );
+		k =
+			( p.y - pc.y ) / ( p.x - pc.x ),
 
-	var x, y;
+		x, y;
 
 	// y = (x - pc.x) * k + pc.y
 	// x = (y - pc.y) / k + pc.x
@@ -914,7 +1001,16 @@ Rect.prototype.getProjection =
 
 		if ( x >= wx && x <= ex )
 		{
-			return new Euclid.Point( x, ny );
+			return (
+				Tree.grow(
+					'Point',
+					shellverse,
+					'x',
+						x,
+					'y',
+						ny
+				)
+			);
 		}
 	}
 

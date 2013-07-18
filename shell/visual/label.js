@@ -215,7 +215,7 @@ Label.create =
 		if( pnw === null )
 		{
 			pnw =
-				tree.twig.pnw
+				tree.twig.pnw;
 		}
 	}
 

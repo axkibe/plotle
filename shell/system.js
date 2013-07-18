@@ -719,20 +719,25 @@ System.prototype._onMouseDown =
 	// Opera requires focusing the window first
 	window.focus( );
 
-	var canvas =
-		this._canvas;
+	var
+		canvas =
+			this._canvas,
 
-	var p =
-		new Euclid.Point(
-			event.pageX - canvas.offsetLeft,
-			event.pageY - canvas.offsetTop
-		);
+		p =
+			Tree.grow(
+				'Point',
+				shellverse,
+				'x',
+					event.pageX - canvas.offsetLeft,
+				'y',
+					event.pageY - canvas.offsetTop
+			),
 
-	var shift =
-		event.shiftKey;
+		shift =
+			event.shiftKey,
 
-	var ctrl =
-		event.ctrlKey || event.metaKey;
+		ctrl =
+			event.ctrlKey || event.metaKey;
 
 	// asks the shell if it forces this to be a drag or click
 	// or the state is yet unknown.
@@ -813,15 +818,23 @@ System.prototype._onMouseMove =
 	var
 		canvas =
 			this._canvas,
+
 		p =
-			new Euclid.Point(
-				event.pageX - canvas.offsetLeft,
-				event.pageY - canvas.offsetTop
+			Tree.grow(
+				'Point',
+				shellverse,
+				'x',
+					event.pageX - canvas.offsetLeft,
+				'y',
+					event.pageY - canvas.offsetTop
 			),
+
 		shift =
 			event.shiftKey,
+
 		ctrl =
 			event.ctrlKey || event.metaKey,
+
 		cursor =
 			null;
 
@@ -924,15 +937,23 @@ System.prototype._onMouseUp =
 	var
 		canvas =
 			this._canvas,
+
 		p =
-			new Euclid.Point(
-				event.pageX - canvas.offsetLeft,
-				event.pageY - canvas.offsetTop
+			Tree.grow(
+				'Point',
+				shellverse,
+				'x',
+					event.pageX - canvas.offsetLeft,
+				'y',
+					event.pageY - canvas.offsetTop
 			),
+
 		shift =
 			event.shiftKey,
+
 		ctrl =
 			event.ctrlKey || event.metaKey,
+
 		cursor =
 			null;
 
@@ -1020,10 +1041,15 @@ System.prototype._onMouseWheel =
 	var
 		canvas =
 			this._canvas,
+
 		p =
-			new Euclid.Point(
-				event.pageX - canvas.offsetLeft,
-				event.pageY - canvas.offsetTop
+			Tree.grow(
+				'Point',
+				shellverse,
+				'x',
+					event.pageX - canvas.offsetLeft,
+				'y',
+					event.pageY - canvas.offsetTop
 			);
 
 	var dir;
@@ -1075,20 +1101,25 @@ System.prototype._onTouchStart =
 		return false;
 	}
 
-	var canvas =
-		this._canvas;
+	var
+		canvas =
+			this._canvas,
 
-	var p =
-		new Euclid.Point(
-			event.pageX - canvas.offsetLeft,
-			event.pageY - canvas.offsetTop
-		);
+		p =
+			Tree.grow(
+				'Point',
+				shellverse,
+				'x',
+					event.pageX - canvas.offsetLeft,
+				'y',
+					event.pageY - canvas.offsetTop
+			),
 
-	var shift =
-		event.shiftKey;
+		shift =
+			event.shiftKey,
 
-	var ctrl =
-		event.ctrlKey || event.metaKey;
+		ctrl =
+			event.ctrlKey || event.metaKey;
 
 	// asks the shell if it forces this to be a drag or click, or yet unknown.
 	this._$pointingState =
@@ -1158,23 +1189,28 @@ System.prototype._onTouchMove =
 		return false;
 	}
 
-	var canvas =
-		this._canvas;
+	var
+		canvas =
+			this._canvas,
 
-	var p =
-		new Euclid.Point(
-			event.pageX - canvas.offsetLeft,
-			event.pageY - canvas.offsetTop
-		);
+		p =
+			Tree.grow(
+				'Point',
+				shellverse,
+				'x',
+					event.pageX - canvas.offsetLeft,
+				'y',
+					event.pageY - canvas.offsetTop
+			),
 
-	var shift =
-		event.shiftKey;
+		shift =
+			event.shiftKey,
 
-	var ctrl =
-		event.ctrlKey || event.metaKey;
+		ctrl =
+			event.ctrlKey || event.metaKey,
 
-	var cursor =
-		null;
+		cursor =
+			null;
 
 	switch( this._$pointingState )
 	{
@@ -1274,23 +1310,29 @@ System.prototype._onTouchEnd =
 
 	this._releaseEvents( );
 
-	var canvas =
-		this._canvas;
+	var
+		canvas =
+			this._canvas,
 
-	var p =
-		new Euclid.Point(
-			event.changedTouches[ 0 ].pageX - canvas.offsetLeft,
-			event.changedTouches[ 0 ].pageY - canvas.offsetTop
-		);
+		p =
+			Tree.grow(
+				'Point',
+				'x',
+					event.changedTouches[ 0 ].pageX -
+					canvas.offsetLeft,
+				'y',
+					event.changedTouches[ 0 ].pageY -
+					canvas.offsetTop
+			),
 
-	var shift =
-		event.shiftKey;
+		shift =
+			event.shiftKey,
 
-	var ctrl =
-		event.ctrlKey || event.metaKey;
+		ctrl =
+			event.ctrlKey || event.metaKey,
 
-	var cursor =
-		null;
+		cursor =
+			null;
 
 	switch( this._$pointingState )
 	{

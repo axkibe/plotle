@@ -9,15 +9,20 @@
 /*
 | Export
 */
-var Euclid;
-Euclid = Euclid || { };
+var
+	Euclid;
+
+Euclid =
+	Euclid || { };
 
 
 /*
 | Imports
 */
-var Jools;
-var theme;
+var
+	Jools,
+	shellverse,
+	theme;
 
 
 /*
@@ -263,9 +268,13 @@ View.prototype.point =
 			return a1;
 		}
 
-		return new Euclid.Point(
-			this.x( a1 ),
-			this.y( a1 )
+		return Tree.grow(
+			'Point',
+			shellverse,
+			'x',
+				this.x( a1 ),
+			'y',
+				this.y( a1 )
 		);
 	}
 
