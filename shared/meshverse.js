@@ -95,13 +95,13 @@ Meshverse.prototype.grow =
 			arguments.length;
 
 	// nothing to do?
-	// TODO XXX
-	/*
-	if( model._grown && aZ === 1 )
+	if(
+		( model instanceof Tree ) &&
+		aZ === 1
+	)
 	{
 		return model;
 	}
-	*/
 
 	var
 		twig =

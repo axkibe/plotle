@@ -49,8 +49,6 @@ if( typeof( window ) === 'undefined' )
 
 /*
 | Constructor
-|
-| XXX change to free string arguments
 */
 var MainDisc =
 Disc.MainDisc =
@@ -1632,20 +1630,7 @@ MainDisc.prototype.input =
 		// text
 	)
 {
-	// XXX
-	return;
-};
 
-
-/*
-| Cycles the focus
-*/
-MainDisc.prototype.cycleFocus =
-	function(
-		// dir
-	)
-{
-	throw new Error( 'XXX' );
 };
 
 
@@ -1659,7 +1644,7 @@ MainDisc.prototype.specialKey =
 		// ctrl
 	)
 {
-	// XXX
+
 };
 
 

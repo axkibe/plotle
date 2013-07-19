@@ -68,11 +68,6 @@ Tree =
 			ranks;
 	}
 
-	// marks this to be grown
-	// data structure
-	this._grown =
-		true;
-
 	Jools.immute( this );
 };
 
