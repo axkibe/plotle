@@ -25,6 +25,7 @@ var
 	Sign,
 	Path,
 	shell,
+	shellverse,
 	system,
 	theme;
 

@@ -18,7 +18,9 @@ Euclid =
 /*
 | Imports
 */
-var Jools;
+var
+	Jools,
+	shellverse;
 
 
 /*
@@ -27,8 +29,12 @@ var Jools;
 (function(){
 'use strict';
 
-if (typeof(window) === 'undefined')
-	{ throw new Error('this code needs a browser'); }
+if( typeof( window ) === 'undefined' )
+{
+	throw new Error(
+		'this code needs a browser'
+	);
+}
 
 
 /*
@@ -39,7 +45,14 @@ if (typeof(window) === 'undefined')
 | p2: point 1
 | p2end: 'normal' or 'arrow'
 */
-var Line = Euclid.Line = function(p1, p1end, p2, p2end)
+var Line =
+Euclid.Line =
+	function(
+		p1,
+		p1end,
+		p2,
+		p2end
+	)
 {
 	this.p1    = p1;
 	this.p1end = p1end;

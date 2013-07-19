@@ -27,6 +27,7 @@ var
 	Path,
 	Portal,
 	shell,
+	shellverse,
 	Style,
 	theme;
 

@@ -34,6 +34,7 @@ var
 	MeshMashine,
 	Peer,
 	Range,
+	shellverse,
 	Sign,
 	system,
 	theme,

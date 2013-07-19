@@ -26,6 +26,7 @@ var
 	Jools,
 	Path,
 	shell,
+	shellverse,
 	theme;
 
 
