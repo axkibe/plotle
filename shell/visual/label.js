@@ -349,15 +349,12 @@ Label.prototype.highlight =
 		view
 	)
 {
-	var silhoutte =
-		this.getSilhoutte( );
-
 	fabric.edge(
 		Style.getStyle(
 			theme.label.style,
 			'highlight'
 		),
-		silhoutte,
+		this.silhoutte,
 		'sketch',
 		view
 	);
@@ -367,30 +364,20 @@ Label.prototype.highlight =
 /*
 | Returns the labels silhoutte.
 */
-Label.prototype.getSilhoutte =
+Jools.lazyFixate(
+	Label.prototype,
+	'silhoutte',
 	function( )
-{
-	var s =
-		this._$silhoutte;
-
-	if(
-		s
-	)
 	{
-		return s;
-	}
-
-
-	s =
-	this._$silhoutte =
-		Euclid.Rect.create(
-			'pnw/pse',
-			this.zone.pnw,
-			this.zone.pse.sub( 1, 1 )
+		return (
+			Euclid.Rect.create(
+				'pnw/pse',
+				this.zone.pnw,
+				this.zone.pse.sub( 1, 1 )
+			)
 		);
-
-	return s;
-};
+	}
+);
 
 
 /*

@@ -436,8 +436,10 @@ Item.prototype.sketchHandle =
 			view.distance(
 				this.$handles.bb
 			),
+
 		w =
 			view.point( zone.w ),
+
 		e =
 			view.point( zone.e );
 
@@ -491,7 +493,7 @@ Item.prototype.drawHandles =
 	}
 
 	fabric.reverseClip(
-		this.getSilhoutte( ),
+		this.silhoutte,
 		'sketch',
 		view,
 		-1
@@ -555,15 +557,8 @@ Item.prototype.dragStart =
 		return true;
 	}
 
-	var
-		zone =
-			this.zone,
-
-		silhoutte =
-			this.getSilhoutte( );
-
 	if(
-		!silhoutte.within(
+		!this.silhoutte.within(
 			view,
 			p
 		)

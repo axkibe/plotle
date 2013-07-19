@@ -570,38 +570,29 @@ Note.prototype.handles =
 
 /*
 | Returns the notes silhoutte.
-| XXX
 */
-Note.prototype.getSilhoutte =
+Jools.lazyFixate(
+	Note.prototype,
+	'silhoutte',
 	function( )
-{
-	var
-		s =
-			this._$silhoutte;
-
-	if( s )
 	{
-		return s;
+		var
+			zone =
+				this.zone,
+
+			cr =
+				theme.note.cornerRadius;
+
+			return (
+				new Euclid.RoundRect(
+					zone.pnw,
+					zone.pse,
+					cr,
+					cr
+				)
+			);
 	}
-
-	var
-		zone =
-			this.zone,
-
-		cr =
-			theme.note.cornerRadius;
-
-	s =
-	this._$silhoutte =
-		new Euclid.RoundRect(
-			zone.pnw,
-			zone.pse,
-			cr,
-			cr
-		);
-
-	return s;
-};
+);
 
 
 /*
@@ -646,16 +637,12 @@ Note.prototype.highlight =
 		view
 	)
 {
-	var
-		silhoutte =
-			this.getSilhoutte( );
-
 	fabric.edge(
 		Style.getStyle(
 			theme.note.style,
 			'highlight'
 		),
-		silhoutte,
+		this.silhoutte,
 		'sketch',
 		view
 	);

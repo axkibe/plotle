@@ -333,9 +333,9 @@ Relation.spawn =
 	var
 		cline =
 			Euclid.Line.connect(
-				item1.getSilhoutte( item1.zone ),
+				item1.silhoutte,
 				null,
-				item2.getSilhoutte( item2.zone ),
+				item2.silhoutte,
 				null
 			),
 
@@ -390,7 +390,7 @@ Relation.prototype.draw =
 	{
 		var l1 =
 			Euclid.Line.connect(
-				item1.getSilhoutte( item1.zone ),
+				item1.silhoutte,
 				'normal',
 				zone,
 				'normal'
@@ -410,9 +410,7 @@ Relation.prototype.draw =
 			Euclid.Line.connect(
 				zone,
 				'normal',
-				item2.getSilhoutte(
-					item2.zone
-				),
+				item2.silhoutte,
 				'arrow'
 			);
 

@@ -357,32 +357,20 @@ Portal.prototype.handles =
 
 /*
 | Returns the portals silhoutte.
-| XXX
 */
-Portal.prototype.getSilhoutte =
+Jools.lazyFixate(
+	Portal.prototype,
+	'silhoutte',
 	function( )
-{
-	// checks for a cache hit
-	var
-		s =
-			this._$silhoutte;
-
-	if( s )
 	{
-		return s;
-	}
-
-	// otherwise creates a new silhoutte
-
-	s =
-	this._$silhoutte =
-		new Euclid.Ellipse(
-			this.zone.pnw,
-			this.zone.pse
+		return (
+			new Euclid.Ellipse(
+				this.zone.pnw,
+				this.zone.pse
+			)
 		);
-
-	return s;
-};
+	}
+);
 
 
 /*
@@ -513,14 +501,11 @@ Portal.prototype.click =
 {
 	var
 		zone =
-			this.zone,
-
-		silhoutte =
-			this.getSilhoutte( );
+			this.zone;
 
 	// not clicked on the portal?
 	if(
-		!silhoutte
+		!this.silhoutte
 			.within(
 				view,
 				p
@@ -706,16 +691,11 @@ Portal.prototype.mousewheel =
 		// ctrl
 	)
 {
-	var
-		zone =
-			this.zone,
-
-		silhoutte =
-			this.getSilhoutte( );
-
-	return silhoutte.within(
-		view,
-		p
+	return (
+		this.silhoutte.within(
+			view,
+			p
+		)
 	);
 };
 
@@ -729,15 +709,12 @@ Portal.prototype.highlight =
 		view
 	)
 {
-	var silhoutte =
-		this.getSilhoutte( );
-
 	fabric.edge(
 		Style.getStyle(
 			theme.portal.style,
 			'highlight'
 		),
-		silhoutte,
+		this.silhoutte,
 		'sketch',
 		view
 	);
@@ -813,14 +790,11 @@ Portal.prototype.pointingHover =
 
 	var
 		zone =
-			this.zone,
-
-		silhoutte =
-			this.getSilhoutte( );
+			this.zone;
 
 	// not clicked on the portal?
 	if(
-		!silhoutte
+		!this.silhoutte
 			.within(
 				view,
 				p

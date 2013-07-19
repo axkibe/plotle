@@ -426,7 +426,7 @@ Space.prototype.draw =
 
 				var
 					fromSilhoutte =
-						fromItem.getSilhoutte( ),
+						fromItem.silhoutte,
 
 					toSilhoutte;
 
@@ -437,9 +437,7 @@ Space.prototype.draw =
 				{
 					// arrow connects two items
 					toSilhoutte =
-						toItem.getSilhoutte(
-							toItem.zone
-						);
+						toItem.silhoutte;
 				}
 				else if ( action.relationState === 'hadSelect' )
 				{
