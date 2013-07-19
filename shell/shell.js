@@ -91,9 +91,12 @@ Shell =
 
 	var screensize =
 	this.screensize =
-		new Euclid.Point(
-			fabric.width,
-			fabric.height
+		shellverse.grow(
+			'Point',
+			'x',
+				fabric.width,
+			'y',
+				fabric.height
 		);
 
 	var forms =
@@ -894,9 +897,12 @@ Shell.prototype.resize =
 	var
 		screensize =
 		this.screensize =
-			new Euclid.Point(
-				width,
-				height
+			shellverse.grow(
+				'Point',
+				'x',
+					width,
+				'y',
+					height
 			);
 
 	// TODO only when changed

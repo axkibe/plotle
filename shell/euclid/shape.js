@@ -338,7 +338,15 @@ Shape.prototype.getProjection =
 						Math.max( pc.y, p.y  ) >= piy
 					)
 					{
-						return new Euclid.Point( pix, piy );
+						return (
+							shellverse.grow(
+								'Point',
+								'x',
+									pix,
+								'y',
+									piy
+							)
+						);
 					}
 				}
 
@@ -371,15 +379,39 @@ Shape.prototype.getProjection =
 				{
 					if( p.y > cy )
 					{
-						return new Euclid.Point( cx, cy + b );
+						return (
+							shellverse.grow(
+								'Point',
+								'x',
+									cx,
+								'y',
+									cy + b
+							)
+						);
 					}
 					else if( p.y < cy )
 					{
-						return new Euclid.Point( cx, cy - b );
+						return (
+							shellverse.grow(
+								'Point',
+								'x',
+									cx,
+								'y',
+									cy - b
+							)
+						);
 					}
 					else
 					{
-						return new Euclid.Point( cx, cy );
+						return (
+							shellverse.grow(
+								'Point',
+								'x',
+									cx,
+								'y',
+									cy
+							)
+						);
 					}
 				}
 				else if(
@@ -433,7 +465,15 @@ Shape.prototype.getProjection =
 						)
 					)
 					{
-						return new Euclid.Point( x, y );
+						return (
+							shellverse.grow(
+								'Point',
+								'x',
+									x,
+								'y',
+									y
+							)
+						);
 					}
 				}
 

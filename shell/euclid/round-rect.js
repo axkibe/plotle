@@ -86,9 +86,26 @@ Euclid.RoundRect =
 
 	pse = pse.sub( 1, 1 );
 
-	var pne = new Euclid.Point( pse.x, pnw.y );
-	var psw = new Euclid.Point( pnw.x, pse.y );
+	var
+		pne =
+			shellverse.grow(
+				'Point',
+				'x',
+					pse.x,
+				'y',
+					pnw.y
+			),
 
+		psw =
+			shellverse.grow(
+				'Point',
+				'x',
+					pnw.x,
+				'y',
+					pse.y
+			);
+
+	// TODO lazy fixate
 	Jools.innumerable(this, 'width',  pse.x - pnw.x + 1);
 	Jools.innumerable(this, 'height', pse.y - pnw.y + 1);
 
@@ -130,12 +147,19 @@ Jools.subclass(
 /*
 | point in the center
 */
-Jools.lazyFixate(RoundRect.prototype, 'pc',
+Jools.lazyFixate(
+	RoundRect.prototype,
+	'pc',
 	function( )
 	{
-		return new Euclid.Point(
-			Jools.half( this.pse.x + this.pnw.x ),
-			Jools.half( this.pse.y + this.pnw.y )
+		return (
+			shellverse.grow(
+				'Point',
+				'x',
+					Jools.half( this.pse.x + this.pnw.x ),
+				'y',
+					Jools.half( this.pse.y + this.pnw.y )
+			)
 		);
 	}
 );

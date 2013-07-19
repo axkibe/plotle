@@ -52,37 +52,63 @@ Euclid.Ellipse =
 		pse;
 
 	// cardinal coords
-	var wx =
-		pnw.x;
+	var
+		wx =
+			pnw.x,
 
-	var ny =
-		pnw.y;
+		ny =
+			pnw.y,
 
-	var ex =
-		pse.x;
+		ex =
+			pse.x,
 
-	var sy =
-		pse.y;
+		sy =
+			pse.y,
 
-	// middles of cardinal cords
-	var my =
-		Jools.half(ny + sy);
+		// middles of cardinal cords
+		my =
+			Jools.half( ny + sy ),
 
-	var mx =
-		Jools.half(wx + ex);
+		mx =
+			Jools.half(wx + ex),
 
-	// cardinal points
-	var pw =
-		new Euclid.Point(wx, my);
+		// cardinal points
+		pw =
+			shellverse.grow(
+				'Point',
+				'x',
+					wx,
+				'y',
+					my
+			),
 
-	var pn =
-		new Euclid.Point(mx, ny);
+		pn =
+			shellverse.grow(
+				'Point',
+				'x',
+					mx,
+				'y',
+					ny
+			),
 
-	var pe =
-		new Euclid.Point(ex, my);
+		pe =
+			shellverse.grow(
+				'Point',
+				'x',
+					ex,
+				'y',
+					my
+			),
 
-	var ps =
-		new Euclid.Point(mx, sy);
+		ps =
+			shellverse.grow(
+				'Point',
+				'x',
+					mx,
+				'y',
+					sy
+			);
+
 
 	Euclid.Shape.call(
 		this,
@@ -101,11 +127,12 @@ Euclid.Ellipse =
 		a += 2
 	)
 	{
-		var arg =
-			arguments[ a ];
+		var
+			arg =
+				arguments[ a ],
 
-		var val =
-			arguments[ a + 1 ];
+			val =
+				arguments[ a + 1 ];
 
 		switch( arg )
 		{
@@ -150,9 +177,20 @@ Jools.lazyFixate(
 	'pc',
 	function()
 	{
-		return new Euclid.Point(
-			Jools.half( this.pnw.x + this.pse.x ),
-			Jools.half( this.pnw.y + this.pse.y )
+		return (
+			shellverse.grow(
+				'Point',
+				'x',
+					Jools.half(
+						this.pnw.x +
+						this.pse.x
+					),
+				'y',
+					Jools.half(
+						this.pnw.y +
+						this.pse.y
+					)
+			)
 		);
 	}
 );
@@ -166,9 +204,20 @@ Jools.lazyFixate(
 	'gradientPC',
 	function()
 	{
-		return new Euclid.Point(
-			Jools.half( this.pnw.x + this.pse.x ),
-			Jools.half( this.pnw.y + this.pse.y )
+		return (
+			shellverse.grow(
+				'Point',
+				'x',
+					Jools.half(
+						this.pnw.x +
+						this.pse.x
+					),
+				'y',
+					Jools.half(
+						this.pnw.y +
+						this.pse.y
+					)
+			)
 		);
 	}
 );

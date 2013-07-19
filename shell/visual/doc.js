@@ -422,16 +422,22 @@ Doc.prototype.draw =
 				vpara.getFlow( item );
 
 		pnws[ ranks[ r ] ] =
-			new Euclid.Point(
-				innerMargin.w,
-				Math.round( y )
+			shellverse.grow(
+				'Point',
+				'x',
+					innerMargin.w,
+				'y',
+					Math.round( y )
 			);
 
 		var
 			p =
-				new Euclid.Point(
-					innerMargin.w,
-					Math.round( y - scrollp.y )
+				shellverse.grow(
+					'Point',
+					'x',
+						innerMargin.w,
+					'y',
+						Math.round( y - scrollp.y )
 				);
 
 		vpara.draw(
@@ -701,15 +707,21 @@ Doc.prototype.sketchSelection =
 			innerMargin.w;
 
 	p1 =
-		new Euclid.Point(
-			Math.round( p1.x + pnw1.x - sp.x ),
-			Math.round( p1.y + pnw1.y - sp.y )
+		shellverse.grow(
+			'Point',
+			'x',
+				Math.round( p1.x + pnw1.x - sp.x ),
+			'y',
+				Math.round( p1.y + pnw1.y - sp.y )
 		);
 
 	p2 =
-		new Euclid.Point(
-			Math.round( p2.x + pnw2.x - sp.x ),
-			Math.round( p2.y + pnw2.y - sp.y )
+		shellverse.grow(
+			'Point',
+			'x',
+				Math.round( p2.x + pnw2.x - sp.x ),
+			'y',
+				Math.round( p2.y + pnw2.y - sp.y )
 		);
 
 	if( ( Math.abs( p2.y - p1.y ) < 2 ) )

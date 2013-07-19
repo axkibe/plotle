@@ -1206,9 +1206,12 @@ Space.prototype.dragStop =
 								( p.x > action.start.x ) ?
 									zone.pnw
 									:
-									new Euclid.Point(
-										zone.pse.x - resized.zone.width,
-										zone.pnw.y
+									shellverse.grow(
+										'Point',
+										'x',
+											zone.pse.x - resized.zone.width,
+										'y',
+											zone.pnw.y
 									)
 						);
 
@@ -1572,9 +1575,12 @@ Space.prototype.dragMove =
 								( p.x > action.start.x ) ?
 									zone.pnw
 									:
-									new Euclid.Point(
-										zone.pse.x - resized.zone.width,
-										zone.pnw.y
+									shellverse.grow(
+										'Point',
+										'x',
+											zone.pse.x - resized.zone.width,
+										'y',
+											zone.pnw.y
 									)
 						);
 

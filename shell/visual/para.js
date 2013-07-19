@@ -837,23 +837,34 @@ Para.prototype.locateOffset =
 
 	if( token )
 	{
-		return new Euclid.Point(
-			Math.round(
-				token.x +
-				Euclid.Measure.width(
-					font, text.substring( token.o, offset )
-				)
-			),
-			line.y
+		return (
+			'Point',
+			shellverse.grow(
+				'Point',
+				'x',
+					Math.round(
+						token.x +
+						Euclid.Measure.width(
+							font, text.substring( token.o, offset )
+						)
+					),
+				'y',
+					line.y
+			)
 		);
 	}
 	else
 	{
-		return new Euclid.Point(
-			Math.round(
-				Euclid.Measure.width( font, text )
-			),
-			line.y
+		return (
+			shellverse.grow(
+				'Point',
+				'x',
+					Math.round(
+						Euclid.Measure.width( font, text )
+					),
+				'y',
+					line.y
+			)
 		);
 	}
 };

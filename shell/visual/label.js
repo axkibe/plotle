@@ -416,9 +416,12 @@ Label.prototype.getZeroSilhoutte =
 	this._zeroSilhoutte =
 		Euclid.Rect.create(
 			'pse',
-			new Euclid.Point(
-				Math.max( zone.width  - 1, 0 ),
-				Math.max( zone.height - 1, 0 )
+			shellverse.grow(
+				'Point',
+				'x',
+					Math.max( zone.width  - 1, 0 ),
+				'y',
+					Math.max( zone.height - 1, 0 )
 			)
 		);
 

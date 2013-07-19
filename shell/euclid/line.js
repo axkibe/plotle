@@ -170,12 +170,21 @@ Jools.lazyFixate(
 	Line.prototype,
 	'pc',
 	function() {
-		var p1 = this.p1;
-		var p2 = this.p2;
+		var
+			p1 =
+				this.p1,
 
-		return new Euclid.Point(
-			Jools.half(p1.x + p2.x),
-			Jools.half(p1.y + p2.y)
+			p2 =
+				this.p2;
+
+		return (
+			shellverse.grow(
+				'Point',
+				'x',
+					Jools.half(p1.x + p2.x),
+				'y',
+					Jools.half(p1.y + p2.y)
+			)
 		);
 	}
 );

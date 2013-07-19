@@ -855,7 +855,13 @@ Fabric.prototype.getCenter =
 	{
 		c =
 		this._$center =
-			new Euclid.Point( x, y );
+			shellverse.grow(
+				'Point',
+				'x',
+					x,
+				'y',
+					y
+			);
 
 		return c;
 	}
@@ -1581,9 +1587,14 @@ Object.defineProperty(
 		get :
 			function( )
 			{
-				return new Euclid.Point(
-					this.width,
-					this.height
+				return (
+					shellverse.grow(
+						'Point',
+						'x',
+							this.width,
+						'y',
+							this.height
+					)
 				);
 			}
 	}

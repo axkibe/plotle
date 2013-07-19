@@ -410,9 +410,12 @@ Portal.prototype.getZeroSilhoutte =
 	this._$zeroSilhoutte =
 		new Euclid.Ellipse(
 			Euclid.Point.zero,
-			new Euclid.Point(
-				zone.width,
-				zone.height
+			shellverse.grow(
+				'Point',
+				'x',
+					zone.width,
+				'y',
+					zone.height
 			)
 		);
 
@@ -1139,7 +1142,7 @@ Portal.prototype._getCaretPos =
 Portal.prototype._locateOffset =
 	function(
 		section,   // 'spaceUser' or 'spaceTag'
-		offset    // the offset to get the point from.
+		offset     // the offset to get the point from.
 	)
 {
 	// FIXME cache position
@@ -1150,17 +1153,20 @@ Portal.prototype._locateOffset =
 		text =
 			this.tree.twig[ section ];
 
-	return new Euclid.Point(
-		Math.round(
-			Euclid.Measure.width(
-				font,
-				text.substring(
-					0,
-					offset
+	return shellverse.grow(
+		'Point',
+		'x',
+			Math.round(
+				Euclid.Measure.width(
+					font,
+					text.substring(
+						0,
+						offset
+					)
 				)
-			)
-		),
-		0
+			),
+		'y',
+			0
 	);
 };
 
@@ -1741,9 +1747,12 @@ Portal.prototype._prepareMoveToButton =
 			theme.portal.moveTo.rounding,
 
 		pnw =
-			new Euclid.Point(
-				Jools.half( zone.width - width ),
-				Jools.half( zone.height ) + 10
+			shellverse.grow(
+				'Point',
+				'x',
+					Jools.half( zone.width - width ),
+				'y',
+					Jools.half( zone.height ) + 10
 			),
 
 		pse =
@@ -1762,9 +1771,12 @@ Portal.prototype._prepareMoveToButton =
 			),
 
 		textCenter :
-			new Euclid.Point(
-				Jools.half(pnw.x + pse.x),
-				Jools.half(pnw.y + pse.y)
+			shellverse.grow(
+				'Point',
+				'x',
+					Jools.half( pnw.x + pse.x ),
+				'y',
+					Jools.half( pnw.y + pse.y )
 			)
 	};
 };
@@ -1802,22 +1814,24 @@ Portal.prototype._prepareField =
 			basePNW === null
 			?
 			(
-				new Euclid.Point(
-					Jools.half(
-						zone.width - width
-					),
-					Math.round(
-						Jools.half( zone.height ) - 30
-					)
+				shellverse.grow(
+					'Point',
+					'x',
+						Jools.half( zone.width - width ),
+					'y',
+						Math.round(
+							Jools.half( zone.height ) - 30
+						)
 				)
 			)
 			:
 			(
-				new Euclid.Point(
-					Jools.half(
-						zone.width - width
-					),
-					basePNW.y + 23
+				shellverse.grow(
+					'Point',
+					'x',
+						Jools.half( zone.width - width ),
+					'y',
+						basePNW.y + 23
 				)
 			),
 

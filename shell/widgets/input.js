@@ -355,7 +355,18 @@ Input.create =
 */
 Input._pitch =
 	new Euclid.Point(
-		8, 3
+		'TREE',
+		{
+			type :
+				'Point',
+
+			x :
+				8,
+
+			y :
+				3
+		},
+		null
 	);
 
 /*
@@ -691,34 +702,42 @@ Input.prototype.locateOffset =
 
 	if( this.tree.twig.password )
 	{
-		return new Euclid.Point(
-			pitch.x +
-				(
-					2 * this.maskWidth( font.size ) +
-					this.maskKern( font.size )
-				) * offset
-				- 1,
-
-			Math.round(
-				pitch.y +
-				font.size
+		return (
+			shellverse.grow(
+				'Point',
+				'x',
+					pitch.x +
+					(
+						2 * this.maskWidth( font.size ) +
+						this.maskKern( font.size )
+					) * offset
+					- 1,
+				'y',
+					Math.round(
+						pitch.y +
+						font.size
+					)
 			)
 		);
 	}
 	else
 	{
-		return new Euclid.Point(
-			Math.round(
-				pitch.x +
-				Euclid.Measure.width(
-					font,
-					value.substring( 0, offset )
-				)
-			),
-
-			Math.round(
-				pitch.y +
-				font.size
+		return (
+			shellverse.grow(
+				'Point',
+				'x',
+					Math.round(
+						pitch.x +
+						Euclid.Measure.width(
+							font,
+							value.substring( 0, offset )
+						)
+					),
+				'y',
+					Math.round(
+						pitch.y +
+						font.size
+					)
 			)
 		);
 	}
@@ -733,7 +752,7 @@ Input.prototype.getCaretPos =
 {
 	var
 		fs =
-			this.tree.twig.font.size, // XXX TODO twig.size
+			this.tree.twig.font.twig.size,
 
 		descend =
 			fs * theme.bottombox,
@@ -759,8 +778,10 @@ Input.prototype.getCaretPos =
 		{
 			s :
 				s,
+
 			n :
 				n,
+
 			x :
 				x
 		}
@@ -795,30 +816,6 @@ Input.prototype.positionCaret =
 			( cpos.s - cpos.n ) * view.zoom
 		);
 
-};
-
-
-/*
-| Returns the current value (text in the box)
-|
-| TODO remove
-*/
-Input.prototype.getValue =
-	function( )
-{
-	throw new Error( 'TODO ');
-};
-
-
-/*
-| Sets the current value (text in the box)
-*/
-Input.prototype.setValue =
-	function( )
-{
-	throw new Error(
-		'TODO'
-	);
 };
 
 

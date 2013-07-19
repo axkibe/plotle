@@ -100,8 +100,11 @@ View.prototype.x =
 
 	if( a1 instanceof Euclid.Point )
 	{
-		x = a1.x;
-		y = a1.y;
+		x =
+			a1.x;
+
+		y =
+			a1.y;
 	}
 	else
 	{
@@ -301,9 +304,12 @@ View.prototype.depoint =
 	)
 {
 	return (
-		new Euclid.Point(
-			this.dex( a1, a2 ),
-			this.dey( a1, a2 )
+		shellverse.grow(
+			'Point',
+			'x',
+				this.dex( a1, a2 ),
+			'y',
+				this.dey( a1, a2 )
 		)
 	);
 };
@@ -399,9 +405,12 @@ View.prototype.review =
 	var f = 1 / z1  - 1 / this.zoom;
 
 	return new View(
-		new Euclid.Point(
-			Math.round( pan.x + p.x * f ),
-			Math.round( pan.y + p.y * f )
+		shellverse.grow(
+			'Point',
+			'x',
+				Math.round( pan.x + p.x * f ),
+			'y',
+				Math.round( pan.y + p.y * f )
 		),
 		f1
 	);

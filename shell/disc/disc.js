@@ -112,9 +112,12 @@ Disc.Disc =
 	this.oframe =
 		Euclid.Rect.create(
 			'pnw/size',
-			new Euclid.Point(
-				0,
-				Jools.half( this.screensize.y - this.height )
+			shellverse.grow(
+				'Point',
+				'x',
+					0,
+				'y',
+					Jools.half( this.screensize.y - this.height )
 			),
 			width,
 			height
@@ -134,18 +137,27 @@ Disc.Disc =
 
 	this.silhoutte =
 		new Euclid.Ellipse(
-			new Euclid.Point(
-				width - 1 - ew,
-				0 - Jools.half( eh - height )
+			shellverse.grow(
+				'Point',
+				'x',
+					width - 1 - ew,
+				'y',
+					0 - Jools.half( eh - height )
 			),
-			new Euclid.Point(
-				width - 1,
-				height + Jools.half( eh - height )
+			shellverse.grow(
+				'Point',
+				'x',
+					width - 1,
+				'y',
+					height + Jools.half( eh - height )
 			),
 			'gradientPC',
-				new Euclid.Point(
-					-600,
-					Jools.half( height )
+				shellverse.grow(
+					'Point',
+					'x',
+						-600,
+					'y',
+						Jools.half( height )
 				),
 			'gradientR0',
 				0,

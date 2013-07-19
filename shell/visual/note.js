@@ -633,9 +633,12 @@ Note.prototype.getZeroSilhoutte =
 	this._$zeroSilhoutte =
 		new Euclid.RoundRect(
 			Euclid.Point.zero,
-			new Euclid.Point(
-				zone.width,
-				zone.height
+			shellverse.grow(
+				'Point',
+				'x',
+					zone.width,
+				'y',
+					zone.height
 			),
 			cr,
 			cr

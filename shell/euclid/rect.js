@@ -797,14 +797,16 @@ Rect.renew =
 
 		if( r.pnw.x === ex && r.pnw.y === sy )
 		{
-			pse = r.pnw;
+			pse =
+				r.pnw;
 
 			break;
 		}
 
 		if( r.pse.x === ex && r.pse.y === sy )
 		{
-			pse = r.pse;
+			pse =
+				r.pse;
 
 			break;
 		}
@@ -813,15 +815,25 @@ Rect.renew =
 	if( !pnw )
 	{
 		pnw =
-			new
-				Euclid.Point( wx, ny );
+			shellverse.grow(
+				'Point',
+				'x',
+					wx,
+				'y',
+					ny
+			);
 	}
 
 	if( !pse )
 	{
 		pse =
-			new
-				Euclid.Point( ex, sy );
+			shellverse.grow(
+				'Point',
+				'x',
+					ex,
+				'y',
+					sy
+			);
 	}
 
 	return Rect.create(
@@ -1009,7 +1021,15 @@ Rect.prototype.getProjection =
 
 		if( x >= wx && x <= ex )
 		{
-			return new Euclid.Point( x, sy );
+			return (
+				shellverse.grow(
+					'Point',
+					'x',
+						x,
+					'y',
+						sy
+				)
+			);
 		}
 	}
 
@@ -1020,7 +1040,15 @@ Rect.prototype.getProjection =
 
 		if( y >= ny && y <= sy )
 		{
-			return new Euclid.Point( ex, y );
+			return (
+				shellverse.grow(
+					'Point',
+					'x',
+						ex,
+					'y',
+						sy
+				)
+			);
 		}
 	}
 
@@ -1031,7 +1059,15 @@ Rect.prototype.getProjection =
 
 		if( y >= ny && y <= sy )
 		{
-			return new Euclid.Point( wx, y );
+			return (
+				shellverse.grow(
+					'Point',
+					'x',
+						wx,
+					'y',
+						y
+				)
+			);
 		}
 	}
 

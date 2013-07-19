@@ -46,67 +46,30 @@ var
 	Point =
 	Euclid.Point =
 		function(
-			a1,
-			a2,
-			a3
+			tag,
+			twig
 		)
 {
-	switch( arguments.length )
+	if( tag !== 'TREE' )
 	{
-		case 1 :
-			// TODO remove
-			this.x =
-				a1.x;
-
-			this.y =
-				a1.y;
-
-			break;
-
-		case 2 :
-			// TODO remove
-
-			this.x =
-				a1;
-
-			this.y =
-				a2;
-
-			break;
-
-		case 3 :
-
-			if( a1 !== 'TREE' )
-			{
-				throw new Error(
-					'argument fail'
-				);
-			}
-
-			Tree.call(
-				this,
-				'TREE',
-				'Point',
-				a2
-			);
-
-			this.x =
-				a2.x;
-
-			this.y =
-				a2.y;
-
-			break;
-
-		default :
-
-			throw new Error(
-				'argument fail'
-			);
+		throw new Error(
+			'argument fail'
+		);
 	}
 
-	this.type =
-		'Point';
+	Tree.call(
+		this,
+		'TREE',
+		'Point',
+		twig,
+		null
+	);
+
+	this.x =
+		twig.x;
+
+	this.y =
+		twig.y;
 
 	Jools.immute( this );
 };
