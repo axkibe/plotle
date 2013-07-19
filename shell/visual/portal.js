@@ -388,41 +388,25 @@ Portal.prototype.getSilhoutte =
 /*
 | Returns the portals silhoutte.
 */
-Portal.prototype.getZeroSilhoutte =
-	function(
-		zone    // the cache for the items zone
-	)
-{
-	// checks for cache hit
-	var s =
-		this._$zeroSilhoutte;
-
-	if(
-		s &&
-		s.width === zone.width &&
-		s.height === zone.height
-	)
+Jools.lazyFixate(
+	Portal.prototype,
+	'zeroSilhoutte',
+	function( )
 	{
-		return s;
-	}
-
-	// if not creates a new silhoutte
-	var zs =
-	this._$zeroSilhoutte =
-		new Euclid.Ellipse(
-			Euclid.Point.zero,
-			shellverse.grow(
-				'Point',
-				'x',
-					zone.width,
-				'y',
-					zone.height
+		return (
+			new Euclid.Ellipse(
+				Euclid.Point.zero,
+				shellverse.grow(
+					'Point',
+					'x',
+						this.zone.width,
+					'y',
+						this.zone.height
+				)
 			)
 		);
-
-	return zs;
-};
-
+	}
+);
 
 
 /*
@@ -895,9 +879,6 @@ Portal.prototype._weave =
 				vzone.height + 1
 			),
 
-		silhoutte =
-			this.getZeroSilhoutte( vzone ),
-
 		section =
 			caret.sign && caret.sign.path.get( -1 );
 
@@ -907,7 +888,7 @@ Portal.prototype._weave =
 			theme.portal.style,
 			'normal'
 		),
-		silhoutte,
+		this.zeroSilhoutte,
 		'sketch',
 		Euclid.View.proper
 	);
@@ -915,7 +896,7 @@ Portal.prototype._weave =
 	if( this._spacePath )
 	{
 		f.clip(
-			silhoutte,
+			this.zeroSilhoutte,
 			'sketch',
 			Euclid.View.proper,
 			0
@@ -1016,7 +997,7 @@ Portal.prototype._weave =
 			theme.portal.style,
 			'normal'
 		),
-		silhoutte,
+		this.zeroSilhoutte,
 		'sketch',
 		Euclid.View.proper
 	);

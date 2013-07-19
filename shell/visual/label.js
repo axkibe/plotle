@@ -395,39 +395,30 @@ Label.prototype.getSilhoutte =
 
 /*
 | Returns the items silhoutte anchored at zero.
-| XXX
 */
-Label.prototype.getZeroSilhoutte =
+Jools.lazyFixate(
+	Label.prototype,
+	'zeroSilhoutte',
 	function( )
-{
-	var
-		s =
-			this._zeroSilhoutte;
-
-	if( s )
 	{
-		return s;
-	}
+		var
+			zone =
+				this.zone;
 
-	var
-		zone =
-			this.zone;
-
-	s =
-	this._zeroSilhoutte =
-		Euclid.Rect.create(
-			'pse',
-			shellverse.grow(
-				'Point',
-				'x',
-					Math.max( zone.width  - 1, 0 ),
-				'y',
-					Math.max( zone.height - 1, 0 )
+		return (
+			Euclid.Rect.create(
+				'pse',
+				shellverse.grow(
+					'Point',
+					'x',
+						Math.max( zone.width  - 1, 0 ),
+					'y',
+						Math.max( zone.height - 1, 0 )
+				)
 			)
 		);
-
-	return s;
-};
+	}
+);
 
 
 /*
@@ -528,10 +519,7 @@ Label.prototype.draw =
 				this.$sub.doc,
 
 			imargin =
-				this.innerMargin,
-
-			silhoutte =
-				this.getZeroSilhoutte( );
+				this.innerMargin;
 
 		// draws selection and text
 		doc.draw(
@@ -548,7 +536,7 @@ Label.prototype.draw =
 				theme.label.style,
 				'normal'
 			),
-			silhoutte,
+			this.zeroSilhoutte,
 			'sketch',
 			Euclid.View.proper
 		);

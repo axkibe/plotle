@@ -441,9 +441,6 @@ Note.prototype.draw =
 			height =
 				doc.getHeight( this ),
 
-			silhoutte =
-				this.getZeroSilhoutte( ),
-
 			style =
 				Style.getStyle(
 					theme.note.style,
@@ -455,7 +452,7 @@ Note.prototype.draw =
 
 		f.fill(
 			style,
-			silhoutte,
+			this.zeroSilhoutte,
 			'sketch',
 			view.home( )
 		);
@@ -479,7 +476,7 @@ Note.prototype.draw =
 		// draws the border
 		f.edge(
 			style,
-			silhoutte,
+			this.zeroSilhoutte,
 			'sketch',
 			view.home( )
 		);
@@ -609,44 +606,35 @@ Note.prototype.getSilhoutte =
 
 /*
 | Returns the notes silhoutte anchored at zero.
-| XXX
 */
-Note.prototype.getZeroSilhoutte =
+Jools.lazyFixate(
+	Note.prototype,
+	'zeroSilhoutte',
 	function( )
-{
-	var
-		s =
-			this._$zeroSilhoutte;
-
-	if( s )
 	{
-		return s;
-	}
+		var
+			zone =
+				this.zone,
 
-	var
-		zone =
-			this.zone,
+			cr =
+				theme.note.cornerRadius;
 
-		cr =
-			theme.note.cornerRadius;
-
-	s =
-	this._$zeroSilhoutte =
-		new Euclid.RoundRect(
-			Euclid.Point.zero,
-			shellverse.grow(
-				'Point',
-				'x',
-					zone.width,
-				'y',
-					zone.height
-			),
-			cr,
-			cr
+		return (
+			new Euclid.RoundRect(
+				Euclid.Point.zero,
+				shellverse.grow(
+					'Point',
+					'x',
+						zone.width,
+					'y',
+						zone.height
+				),
+				cr,
+				cr
+			)
 		);
-
-	return s;
-};
+	}
+);
 
 
 /*
