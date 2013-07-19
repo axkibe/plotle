@@ -108,10 +108,7 @@ Forms.Form =
 		);
 
 	this.tree =
-		Tree.grow(
-			this.layout,
-			shellverse
-		);
+		shellverse.grow( this.layout );
 
 	// hinders direct access of the layout
 	this.layout =

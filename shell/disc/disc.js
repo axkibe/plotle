@@ -130,10 +130,7 @@ Disc.Disc =
 
 	// TODO inherit
 	this._tree =
-		Tree.grow(
-			this.layout,
-			shellverse
-		);
+		shellverse.grow( this.layout );
 
 	this.silhoutte =
 		new Euclid.Ellipse(

@@ -400,13 +400,7 @@ Server.prototype.loadSpace =
 				[ ],
 
 			$tree :
-				Tree.grow(
-					{
-						type :
-							'Space'
-					},
-					meshverse
-				),
+				meshverse.grow( 'Space' ),
 
 			$seqZ :
 				1
@@ -1541,13 +1535,7 @@ Server.prototype.createSpace =
 				[ ],
 
 			$tree :
-				Tree.grow(
-					{
-						type :
-							'Space'
-					},
-					meshverse
-				),
+				meshverse.grow( 'Space' ),
 
 			$seqZ :
 				1

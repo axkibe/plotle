@@ -42,7 +42,7 @@ Stubs = { };
 
 
 Stubs.labelDoc =
-	Tree.grow(
+	shellverse.grow(
 		{
 			type:
 				'Doc',
@@ -63,14 +63,12 @@ Stubs.labelDoc =
 				[
 					'1'
 				]
-		},
-
-		shellverse
+		}
 	);
 
 
 Stubs.emptyDoc =
-	Tree.grow(
+	shellverse.grow(
 		{
 			type:
 				'Doc',
@@ -91,9 +89,7 @@ Stubs.emptyDoc =
 				[
 					'1'
 				]
-		},
-
-		shellverse
+		}
 	);
 
 

@@ -346,9 +346,13 @@ Doc.prototype.Doc =
 | Returns the tree at rank 'rank'.
 */
 Doc.prototype.atRank =
-	function( rank )
+	function(
+		rank
+	)
 {
-	return this.$sub[ this.ranks[ rank ] ];
+	return (
+		this.$sub[ this.ranks[ rank ] ]
+	);
 };
 
 

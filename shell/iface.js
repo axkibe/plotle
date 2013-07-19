@@ -500,10 +500,7 @@ IFace.prototype.aquireSpace =
 
 		self.$cSpace =
 		self.$rSpace =
-			Tree.grow(
-				asw.node,
-				shellverse
-			);
+			shellverse.grow( asw.node );
 
 		self.$spaceUser =
 			spaceUser;

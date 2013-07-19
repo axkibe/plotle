@@ -427,9 +427,8 @@ Change.prototype.set =
 		if( src.val !== null )
 		{
 			pivot =
-				Tree.grow(
+				universe.grow(
 					pivot,
-					universe,
 					key,
 						src.val,
 					'+',
@@ -449,9 +448,8 @@ Change.prototype.set =
 				);
 
 			pivot =
-				Tree.grow(
+				universe.grow(
 					pivot,
-					universe,
 					key,
 						src.val,
 					'-',
@@ -783,17 +781,16 @@ Change.prototype.join =
 	// FIXME check other keys to be equal
 
 	para1 =
-		Tree.grow(
+		universe.grow(
 			para1,
-			universe,
 			'text',
-				para1.twig.text + para2.twig.text
+				para1.twig.text +
+				para2.twig.text
 		);
 
 	pivot =
-		Tree.grow(
+		universe.grow(
 			pivot,
-			universe,
 			key,
 				para1,
 			key2,
@@ -914,25 +911,22 @@ Change.prototype.split =
 			pivot.twig[ key ],
 
 		para2 =
-			Tree.grow(
+			universe.grow(
 				para1,
-				universe,
 				'text',
 					text.substring( at1, text.length )
 			);
 
 	para1 =
-		Tree.grow(
+		universe.grow(
 			para1,
-			universe,
 			'text',
 				text.substring( 0, at1 )
 		);
 
 	pivot =
-		Tree.grow(
+		universe.grow(
 			pivot,
-			universe,
 			key,
 				para1,
 			vKey,
@@ -1039,9 +1033,8 @@ Change.prototype.rank =
 		);
 
 	pivot =
-		Tree.grow(
+		universe.grow(
 			pivot,
-			universe,
 			'-',
 				orank,
 			'+',

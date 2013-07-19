@@ -9,7 +9,6 @@
 | Imports
 */
 var
-	Euclid,
 	Jools,
 	Tree;
 
@@ -32,7 +31,10 @@ var
 if( typeof( window ) === 'undefined')
 {
 	Jools =
-		require('./jools');
+		require( './jools' );
+
+	Tree =
+		require( './tree' );
 }
 
 /*
@@ -93,10 +95,13 @@ Meshverse.prototype.grow =
 			arguments.length;
 
 	// nothing to do?
+	// TODO XXX
+	/*
 	if( model._grown && aZ === 1 )
 	{
 		return model;
 	}
+	*/
 
 	var
 		twig =

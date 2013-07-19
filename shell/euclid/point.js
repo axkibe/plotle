@@ -157,9 +157,8 @@ Point.prototype.add =
 			return this;
 		}
 
-		return Tree.grow(
+		return shellverse.grow(
 			'Point',
-			shellverse,
 			'x',
 				this.x + a1.x,
 			'y',
@@ -173,9 +172,8 @@ Point.prototype.add =
 			return this;
 		}
 
-		return Tree.grow(
+		return shellverse.grow(
 			'Point',
-			shellverse,
 			'x',
 				this.x + a1,
 			'y',
@@ -201,9 +199,8 @@ Point.prototype.sub =
 			return this;
 		}
 
-		return Tree.grow(
+		return shellverse.grow(
 			'Point',
-			shellverse,
 			'x',
 				this.x - a1.x,
 			'y',
@@ -217,9 +214,8 @@ Point.prototype.sub =
 			return this;
 		}
 
-		return Tree.grow(
+		return shellverse.grow(
 			'Point',
-			shellverse,
 			'x',
 				this.x - a1,
 			'y',
@@ -264,9 +260,8 @@ Point.renew =
 		}
 	}
 
-	return Tree.grow(
+	return shellverse.grow(
 		'Point',
-		shellverse,
 		'x',
 			x,
 		'y',
