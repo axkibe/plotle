@@ -552,41 +552,15 @@ Jools.lazyFixate(
 
 /*
 | Returns the default font for the document.
-| XXX
-|
-| TODO simplify
 */
-Doc.prototype.getFont =
+Jools.lazyFixate(
+	Doc.prototype,
+	'font',
 	function( )
-{
-	var fontsize =
-		this.fontsize;
-
-	/*
-
-	TODO
-
-	if( item.fontSizeChange )
 	{
-		fontsize =
-			item.fontSizeChange( fontsize );
+		return fontPool.get( this.fontsize, 'la' );
 	}
-	*/
-
-	var f =
-		this._$font;
-
-	if( f && f.size === fontsize )
-	{
-		return f;
-	}
-
-	f =
-	this._$font =
-		fontPool.get( fontsize, 'la' );
-
-	return f;
-};
+);
 
 
 /*

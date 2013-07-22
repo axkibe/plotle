@@ -425,7 +425,7 @@ Para.prototype.getCaretPos =
 {
 	var
 		fs =
-			item.$sub.doc.getFont( item ).size,
+			item.$sub.doc.font.twig.size,
 
 		descend =
 			fs * theme.bottombox,
@@ -457,6 +457,7 @@ Para.prototype.getCaretPos =
 
 /*
 | Returns the font for this para.
+| XXX
 */
 Para.prototype.getFont =
 	function( )
