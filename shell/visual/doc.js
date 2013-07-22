@@ -420,7 +420,7 @@ Doc.prototype.draw =
 				this.atRank( r ),
 
 			flow =
-				vpara.getFlow( item );
+				vpara.flow;
 
 		pnws[ ranks[ r ] ] =
 			shellverse.grow(
@@ -487,7 +487,7 @@ Doc.prototype.getHeight =
 				this.atRank( r ),
 
 			flow =
-				vpara.getFlow( );
+				vpara.flow;
 
 		if( r > 0 )
 		{
@@ -541,7 +541,7 @@ Jools.lazyFixate(
 			spread =
 				max(
 					spread,
-					sub[ k ].getFlow( ).spread
+					sub[ k ].flow.spread
 				);
 		}
 
@@ -595,7 +595,7 @@ Doc.prototype.getParaAtPoint =
 			vpara =
 				sub[ k ];
 
-		if( p.y < pnws[ k ].y + vpara.getFlow( item ).height )
+		if( p.y < pnws[ k ].y + vpara.flow.height )
 		{
 			return vpara;
 		}
@@ -661,12 +661,12 @@ Doc.prototype.sketchSelection =
 		p1 =
 			para1.locateOffset(
 				s1.at1
-			),
+			).p,
 
 		p2 =
 			para2.locateOffset(
 				s2.at1
-			),
+			).p,
 
 		fontsize =
 			this.fontsize,

@@ -276,7 +276,7 @@ Para.prototype.draw =
 
 		var
 			flow =
-				this.getFlow( ),
+				this.flow,
 
 			font =
 				this.font,
@@ -432,9 +432,8 @@ Para.prototype.getCaretPos =
 
 		p =
 			this.locateOffset(
-				caret.sign.at1,
-				caret
-			),
+				caret.sign.at1
+			).p,
 
 		s =
 			Math.round( p.y + descend ),
@@ -473,177 +472,159 @@ Jools.lazyFixate(
 
 /*
 | Flows the paragraph, positioning all chunks.
-| XXX
 */
-Para.prototype.getFlow =
+Jools.lazyFixate(
+	Para.prototype,
+	'flow',
 	function( )
-{
-	var
-		flowWidth =
-			this.flowWidth,
-
-		font =
-			this.font,
-
-		flow =
-			this.$flow,
-
-		// FIXME go into subnodes instead
-		text =
-			this.text;
-
-	// checks for cache hit
-	if ( flow )
 	{
-		return flow;
-	}
+		var
+			flowWidth =
+				this.flowWidth,
 
-	// clears the caret flow cache if its within this flow
-	// TODO this is not nice
-	var caret =
-		shell.$space && shell.$space.$caret;
+			font =
+				this.font,
 
-	if (
-		caret &&
-		caret.path &&
-		caret.path.equals( this.path )
-	)
-	{
-		caret.flow$line =
-		caret.flow$token =
-			null;
-	}
+			// FIXME go into subnodes instead
+			text =
+				this.text;
 
+		var
+			// width really used.
+			spread =
+				0,
 
-	var
-		// width really used.
-		spread =
-			0,
+			// current x positon, and current x including last tokens width
+			x =
+				0,
 
-		// current x positon, and current x including last tokens width
-		x =
-			0,
+			xw =
+				0,
 
-		xw =
-			0,
+			y =
+				font.size,
 
-		y =
-			font.size,
+			space =
+				Euclid.Measure.width( font, ' ' ),
 
-		space =
-			Euclid.Measure.width( font, ' ' ),
+			line =
+				0,
 
-		line =
-			0;
+			flow =
+				[ ];
 
-	flow =
-	this.$flow =
-		[ ];
+		flow[ line ] = {
+			a :
+				[ ],
 
-	flow[ line ] = {
-		a :
-			[ ],
-		y :
-			y,
-		o :
-			0
-	};
+			y :
+				y,
+
+			o :
+				0
+		};
 
 
-	var reg =
-		( /(\s*\S+|\s+$)\s?(\s*)/g );
-		// !pre ? (/(\s*\S+|\s+$)\s?(\s*)/g) : (/(.+)()$/g);
+		var reg =
+			( /(\s*\S+|\s+$)\s?(\s*)/g );
+			// !pre ? (/(\s*\S+|\s+$)\s?(\s*)/g) : (/(.+)()$/g);
 
-	for(
-		var ca = reg.exec( text );
-		ca !== null;
-		ca = reg.exec( text )
-	)
-	{
-		// a token is a word plus following hard spaces
-		var token =
-			ca[ 1 ] + ca[ 2 ];
-
-		var w =
-			Euclid.Measure.width( font, token );
-
-		xw =
-			x + w + space;
-
-		if( flowWidth > 0 && xw > flowWidth )
+		for(
+			var ca = reg.exec( text );
+			ca !== null;
+			ca = reg.exec( text )
+		)
 		{
-			if( x > 0 )
+			// a token is a word plus following hard spaces
+			var token =
+				ca[ 1 ] + ca[ 2 ];
+
+			var w =
+				Euclid.Measure.width( font, token );
+
+			xw =
+				x + w + space;
+
+			if( flowWidth > 0 && xw > flowWidth )
 			{
-				// soft break
-				if( spread < xw )
+				if( x > 0 )
 				{
-					spread =
-						xw;
+					// soft break
+					if( spread < xw )
+					{
+						spread =
+							xw;
+					}
+
+					x =
+						0;
+
+					xw =
+						x + w + space;
+
+					y +=
+						Math.round( font.size * ( 1 + theme.bottombox ) );
+
+					line++;
+
+					flow[ line ] = {
+						a :
+							[ ],
+
+						y :
+							y,
+
+						o :
+							ca.index
+					};
 				}
+				else
+				{
+					// horizontal overflow
+					// ('HORIZONTAL OVERFLOW'); // FIXME
+				}
+			}
 
-				x =
-					0;
+			flow[ line ].a.push(
+				{
+					x :
+						x,
 
-				xw =
-					x + w + space;
+					w :
+						w,
 
-				y +=
-					Math.round( font.size * ( 1 + theme.bottombox ) );
-
-				line++;
-
-				flow[ line ] = {
-					a :
-						[ ],
-					y :
-						y,
 					o :
-						ca.index
-				};
-			}
-			else
-			{
-				// horizontal overflow
-				// ('HORIZONTAL OVERFLOW'); // FIXME
-			}
+						ca.index,
+
+					t :
+						token
+				}
+			);
+
+			x = xw;
 		}
 
-		flow[ line ].a.push(
-			{
-				x :
-					x,
-				w :
-					w,
-				o :
-					ca.index,
-				t :
-					token
-			}
-		);
+		if( spread < xw )
+		{
+			spread =
+				xw;
+		}
 
-		x = xw;
+		flow.height =
+			y;
+
+		flow.flowWidth =
+			flowWidth;
+
+		flow.spread =
+			spread;
+
+		//flow.fontsize =
+		//	font.size;
+
+		return flow;
 	}
-
-	if( spread < xw )
-	{
-		spread =
-			xw;
-	}
-
-	flow.height =
-		y;
-
-	flow.flowWidth =
-		flowWidth;
-
-	flow.spread =
-		spread;
-
-	flow.fontsize =
-		font.size;
-
-	return flow;
-};
+);
 
 
 /*
@@ -656,7 +637,7 @@ Para.prototype.getHeight =
 {
 	var
 		flow =
-			this.getFlow( );
+			this.flow;
 
 	return (
 		flow.height +
@@ -681,7 +662,7 @@ Para.prototype.getOffsetAt =
 			this.font,
 
 		flow =
-			this.getFlow( ),
+			this.flow,
 
 		fline =
 			flow[ line ],
@@ -758,21 +739,12 @@ Para.prototype.getOffsetAt =
 
 /*
 | Returns the point of a given offset.
-|
-| FIXME change to multireturn.
-| XXX
 */
 Para.prototype.locateOffset =
 	function(
-		offset,    // the offset to get the point from.
-		flowPos    // if set, writes flow$line and flow$token
-		//         // to the flow position used.
+		offset    // the offset to get the point from.
 	)
 {
-	if( typeof(offset) !== 'number' ) {
-		throw new Error( 'TODO' );
-	}
-
 	// FIXME cache position
 	var
 		tree =
@@ -785,7 +757,7 @@ Para.prototype.locateOffset =
 			this.text,
 
 		flow =
-			this.getFlow( ),
+			this.flow,
 		a,
 		aZ,
 		lineN,
@@ -825,23 +797,15 @@ Para.prototype.locateOffset =
 		}
 	}
 
-	if( flowPos )
-	{
-		flowPos.flow$line =
-			lineN;
-
-		flowPos.flow$token =
-			tokenN;
-	}
-
 	var
 		token =
-			line.a[ tokenN ];
+			line.a[ tokenN ],
+
+		p;
 
 	if( token )
 	{
-		return (
-			'Point',
+		p =
 			shellverse.grow(
 				'Point',
 				'x',
@@ -853,12 +817,11 @@ Para.prototype.locateOffset =
 					),
 				'y',
 					line.y
-			)
-		);
+			);
 	}
 	else
 	{
-		return (
+		p =
 			shellverse.grow(
 				'Point',
 				'x',
@@ -867,9 +830,21 @@ Para.prototype.locateOffset =
 					),
 				'y',
 					line.y
-			)
-		);
+			);
 	}
+
+	return (
+		Jools.immute( {
+			p :
+				p,
+
+			line :
+				lineN,
+
+			//token :
+			//	tokenN
+		} )
+	);
 };
 
 
@@ -884,7 +859,7 @@ Para.prototype.getPointOffset =
 {
 	var
 		flow =
-			this.getFlow( ),
+			this.flow,
 
 		line;
 
@@ -1076,7 +1051,7 @@ Para.prototype.keyDown =
 {
 	var
 		flow =
-			this.getFlow( ),
+			this.flow,
 
 		x =
 			caret.retainx !== null ? caret.retainx : caret.$pos.x,
@@ -1084,14 +1059,19 @@ Para.prototype.keyDown =
 		space =
 			shell.$space,
 
-		at1;
+		at1,
 
-	if( caret.flow$line < flow.length - 1 )
+		cpos =
+			this.locateOffset(
+				caret.sign.at1
+			);
+
+	if( cpos.line < flow.length - 1 )
 	{
 		// stays within this para
 		at1 =
 			this.getOffsetAt(
-				caret.flow$line + 1,
+				cpos.line + 1,
 				x
 			);
 
@@ -1333,9 +1313,14 @@ Para.prototype.keyUp =
 		caret
 	)
 {
-	this.getFlow( ); // FIXME, needed?
+	this.flow; // FIXME, needed?
 
 	var
+		cpos =
+			this.locateOffset(
+				caret.sign.at1
+			),
+
 		x =
 			(
 				caret.retainx !== null ?
@@ -1348,12 +1333,12 @@ Para.prototype.keyUp =
 
 		at1;
 
-	if( caret.flow$line > 0 )
+	if( cpos.line > 0 )
 	{
 		// stay within this para
 		at1 =
 			this.getOffsetAt(
-				caret.flow$line - 1,
+				cpos.line - 1,
 				x
 			);
 
@@ -1382,7 +1367,7 @@ Para.prototype.keyUp =
 
 		at1 =
 			ve.getOffsetAt(
-				ve.getFlow( item ).length - 1,
+				ve.flow.length - 1,
 				x
 			);
 
