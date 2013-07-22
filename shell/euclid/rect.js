@@ -969,7 +969,9 @@ Rect.prototype.within =
 | center of the rect (pc) to p intersects with the rect.
 */
 Rect.prototype.getProjection =
-	function( p )
+	function(
+		p
+	)
 {
 	var
 		pc =
@@ -1046,7 +1048,7 @@ Rect.prototype.getProjection =
 					'x',
 						ex,
 					'y',
-						sy
+						y
 				)
 			);
 		}
