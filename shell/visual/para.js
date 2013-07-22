@@ -279,7 +279,7 @@ Para.prototype.draw =
 				this.getFlow( ),
 
 			font =
-				this.getFont( ),
+				this.font,
 
 			width =
 				flow.spread * view.zoom,
@@ -457,18 +457,19 @@ Para.prototype.getCaretPos =
 
 /*
 | Returns the font for this para.
-| XXX
 */
-Para.prototype.getFont =
+Jools.lazyFixate(
+	Para.prototype,
+	'font',
 	function( )
-{
-	return (
-		fontPool.get(
+	{
+		return fontPool.get(
 			this.fontsize,
 			'la'
-		)
-	);
-};
+		);
+	}
+);
+
 
 /*
 | Flows the paragraph, positioning all chunks.
@@ -482,7 +483,7 @@ Para.prototype.getFlow =
 			this.flowWidth,
 
 		font =
-			this.getFont( ),
+			this.font,
 
 		flow =
 			this.$flow,
@@ -677,7 +678,7 @@ Para.prototype.getOffsetAt =
 {
 	var
 		font =
-			this.getFont( ),
+			this.font,
 
 		flow =
 			this.getFlow( ),
@@ -778,7 +779,7 @@ Para.prototype.locateOffset =
 			this.tree,
 
 		font =
-			this.getFont( ),
+			this.font,
 
 		text =
 			this.text,

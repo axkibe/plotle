@@ -761,7 +761,7 @@ Note.prototype.scrollPage =
 			up ? -1 : 1,
 
 		fs =
-			this.$sub.doc.getFont( ).size;
+			this.$sub.doc.font.twig.size;
 
 	this.setScrollbar(
 		this.scrollbarY.getPos( ) + dir * zone.height - fs * 2
@@ -800,17 +800,6 @@ Note.prototype.mousewheel =
 		true;
 
 	return true;
-};
-
-
-/*
-| Returns the width for the contents flow.
-| XXX
-*/
-Note.prototype.getFlowWidth =
-	function( )
-{
-	return this.zone.width - this.innerMargin.x;
 };
 
 

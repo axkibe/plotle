@@ -633,16 +633,6 @@ Label.prototype.fontSizeChange =
 
 
 /*
-| Returns the width for the contents flow.
-*/
-Label.prototype.getFlowWidth =
-	function( )
-{
-	return 0;
-};
-
-
-/*
 | Mouse wheel turned.
 */
 Label.prototype.mousewheel =
