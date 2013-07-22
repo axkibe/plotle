@@ -96,7 +96,7 @@ Visual.Label =
 			pnw,
 			Math.round(
 				Math.max(
-					doc.getSpread( ),
+					doc.spread,
 					h / 4
 				)
 			),

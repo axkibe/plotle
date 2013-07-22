@@ -519,33 +519,35 @@ Doc.prototype.getPNW =
 
 
 /*
-| Returns the width actually used of the document.
-| XXX
+| Returns the width actually used by the document.
 */
-Doc.prototype.getSpread =
+Jools.lazyFixate(
+	Doc.prototype,
+	'spread',
 	function( )
-{
-	var
-		spread =
-			0,
-
-		sub =
-			this.$sub,
-
-		max =
-			Math.max;
-
-	for( var k in sub )
 	{
-		spread =
-			max(
-				spread,
-				sub[ k ].getFlow( ).spread
-			);
-	}
+		var
+			spread =
+				0,
 
-	return spread;
-};
+			sub =
+				this.$sub,
+
+			max =
+				Math.max;
+
+		for( var k in sub )
+		{
+			spread =
+				max(
+					spread,
+					sub[ k ].getFlow( ).spread
+				);
+		}
+
+		return spread;
+	}
+);
 
 
 /*
