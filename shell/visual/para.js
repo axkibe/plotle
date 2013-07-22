@@ -285,7 +285,7 @@ Para.prototype.draw =
 				flow.spread * view.zoom,
 
 			height =
-				this.getHeight( ) * view.zoom;
+				this.height * view.zoom;
 
 		f =
 		this.$fabric =
@@ -629,23 +629,24 @@ Jools.lazyFixate(
 
 /*
 | Returns the height of the para
-|
-| XXX
 */
-Para.prototype.getHeight =
+Jools.lazyFixate(
+	Para.prototype,
+	'height',
 	function( )
-{
-	var
-		flow =
-			this.flow;
+	{
+		var
+			flow =
+				this.flow;
 
-	return (
-		flow.height +
-		Math.round(
-			this.fontsize * theme.bottombox
-		)
-	);
-};
+		return (
+			flow.height +
+			Math.round(
+				this.fontsize * theme.bottombox
+			)
+		);
+	}
+);
 
 
 /*

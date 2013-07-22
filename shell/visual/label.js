@@ -87,8 +87,8 @@ Visual.Label =
 		pnw;
 
 	var
-		h =
-			doc.getHeight( );
+		height =
+			doc.height;
 
 	this.zone =
 		Euclid.Rect.create(
@@ -97,11 +97,11 @@ Visual.Label =
 			Math.round(
 				Math.max(
 					doc.spread,
-					h / 4
+					height / 4
 				)
 			),
 			Math.round(
-				h
+				height
 			)
 		);
 

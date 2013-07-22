@@ -460,50 +460,53 @@ Doc.prototype.draw =
 | Returns the height of the document.
 | FIXME caching
 */
-Doc.prototype.getHeight =
+Jools.lazyFixate(
+	Doc.prototype,
+	'height',
 	function( )
-{
-	var
-		fs =
-			this.fontsize,
-
-		paraSep =
-			this.paraSep,
-
-		ranks =
-			this.ranks,
-
-		height =
-			0;
-
-	for(
-		var r = 0, rZ = ranks.length;
-		r < rZ;
-		r++
-	)
 	{
 		var
-			vpara =
-				this.atRank( r ),
+			fs =
+				this.fontsize,
 
-			flow =
-				vpara.flow;
+			paraSep =
+				this.paraSep,
 
-		if( r > 0 )
+			ranks =
+				this.ranks,
+
+			height =
+				0;
+
+		for(
+			var r = 0, rZ = ranks.length;
+			r < rZ;
+			r++
+		)
 		{
+			var
+				vpara =
+					this.atRank( r ),
+
+				flow =
+					vpara.flow;
+
+			if( r > 0 )
+			{
+				height +=
+					paraSep;
+			}
+
 			height +=
-				paraSep;
+				flow.height;
 		}
 
 		height +=
-			flow.height;
+			Math.round( fs * theme.bottombox );
+
+		return height;
 	}
-
-	height +=
-		Math.round( fs * theme.bottombox );
-
-	return height;
-};
+);
 
 
 /*

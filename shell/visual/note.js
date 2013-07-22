@@ -439,7 +439,7 @@ Note.prototype.draw =
 
 			// calculates if a scrollbar is needed
 			height =
-				doc.getHeight( this ),
+				doc.height,
 
 			style =
 				Style.getStyle(
@@ -675,7 +675,7 @@ Note.prototype.setScrollbar =
 	sbary.setPos(
 		pos,
 		zone.height - this.innerMargin.y,
-		this.$sub.doc.getHeight( this ),
+		this.$sub.doc.height,
 		Euclid.Point.renew(
 			zone.pse.x,
 			zone.pnw.y + theme.scrollbar.vdis,
