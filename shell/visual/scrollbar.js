@@ -227,7 +227,9 @@ Scrollbar.prototype.within = function( view, p )
 | Returns the value of pos change for d pixels in the current zone.
 */
 Scrollbar.prototype.scale =
-	function( d )
+	function(
+		d
+	)
 {
 	return d * this._$max / this._$size;
 };

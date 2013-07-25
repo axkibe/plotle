@@ -327,37 +327,6 @@ Shell.prototype.poke =
 
 
 /*
-| Force-clears all caches.
-*/
-Shell.prototype.knock =
-	function( )
-{
-	// TODO remove
-	/*
-	var forms =
-		this._$forms;
-
-	for( var name in forms )
-	{
-		var form =
-			form[ name ];
-
-		form.knock( );
-	}
-
-	if( this.$space )
-	{
-		this.$space.knock( );
-	}
-
-	this._$disc.knock( );
-
-	this._draw( );
-	*/
-};
-
-
-/*
 | Draws the dashboard and the space.
 */
 Shell.prototype._draw =
@@ -832,6 +801,50 @@ Shell.prototype.mousewheel =
 
 
 /*
+| Set the caret
+*/
+Shell.prototype.setCaret =
+	function(
+		section,
+		path,
+		at1,
+		retainx,
+		shown
+	)
+{
+	if( section !== 'space' )
+	{
+		throw new Error(
+			'setCaret section not space'
+		);
+	}
+
+	var caret =
+		new Caret(
+			// TODO skip model
+			new Sign( {
+				path:
+					path,
+
+				at1 :
+					at1
+			} ),
+			retainx,
+			shown
+		);
+
+	this.$space =
+		new Visual.Space(
+			this.$space.tree,
+			this.$space,
+			this.$space.spaceUser,
+			this.$space.spaceTag,
+			this.$space.access,
+			caret
+		);
+};
+
+/*
 | User is pressing a special key.
 */
 Shell.prototype.specialKey =
@@ -1159,6 +1172,7 @@ Shell.prototype.onAquireSpace =
 	this.$space =
 		new Visual.Space(
 			tree,
+			null,
 			spaceUser,
 			spaceTag,
 			access

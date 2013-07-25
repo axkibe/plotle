@@ -52,9 +52,11 @@ var Space =
 Visual.Space =
 	function(
 		tree,
+		inherit,
 		spaceUser,
 		spaceTag,
-		access
+		access,
+		caret
 	)
 {
 	Visual.Base.call(
@@ -69,10 +71,6 @@ Visual.Space =
 	this.spaceTag =
 		spaceTag;
 
-	var sub =
-	this.$sub =
-		{ };
-
 	this.access =
 		access;
 
@@ -82,22 +80,36 @@ Visual.Space =
 			0
 		);
 
-	for( var k in tree.twig )
+	if( inherit && tree === inherit.tree )
 	{
-		if( k === 'type' )
-		{
-			continue;
-		}
+		this.$sub =
+			inherit.$sub;
+	}
+	else
+	{
+		var sub =
+		this.$sub =
+			{ };
 
-		sub[ k ] =
-			this.createItem(
-				tree.twig[ k ],
-				k
-			);
+		for( var k in tree.twig )
+		{
+			if( k === 'type' )
+			{
+				continue;
+			}
+
+			sub[ k ] =
+				this.createItem(
+					tree.twig[ k ],
+					k,
+					inherit && inherit.$sub[ k ]
+				);
+		}
 	}
 
 	// TODO change Caret to free string arguments
 	this.$caret =
+		caret ||
 		new Caret(
 			null,
 			null,
@@ -771,8 +783,6 @@ Space.prototype.setCaret =
 		{
 			item.knock( );
 		}
-
-		this.redraw = true;
 	}
 
 	this.$caret =
@@ -793,8 +803,6 @@ Space.prototype.setCaret =
 		{
 			item.knock( );
 		}
-
-		this.redraw = true;
 	}
 
 	return this.$caret;

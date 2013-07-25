@@ -840,10 +840,7 @@ Para.prototype.locateOffset =
 				p,
 
 			line :
-				lineN,
-
-			//token :
-			//	tokenN
+				lineN
 		} )
 	);
 };
@@ -1076,13 +1073,10 @@ Para.prototype.keyDown =
 				x
 			);
 
-		space.setCaret(
-			{
-				path :
-					this.textPath,
-				at1 :
-					at1
-			},
+		shell.setCaret(
+			'space',
+			this.textPath,
+			at1,
 			x
 		);
 
