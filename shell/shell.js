@@ -827,6 +827,15 @@ Shell.prototype.setCaret =
 		shown
 	)
 {
+	console.log( 'retainx', retainx, shown );
+
+	if( retainx && typeof(retainx) !== 'number' )
+	{
+		throw new Error(
+			'NOT A NUMBER'
+		);
+	}
+
 	if( section !== 'space' )
 	{
 		throw new Error(
@@ -847,7 +856,7 @@ Shell.prototype.setCaret =
 				} )
 				:
 				null,
-			retainx,
+			retainx || null,
 			Jools.is( shown ) ? shown : this.$space.caret.$shown
 		);
 

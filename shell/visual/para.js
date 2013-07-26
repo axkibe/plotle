@@ -8,9 +8,12 @@
 /*
 | Export
 */
-var Visual;
+var
+	Visual;
+
 Visual =
-	Visual || { };
+	Visual ||
+	{ };
 
 
 /*
@@ -39,7 +42,9 @@ var
 
 if( typeof( window ) === 'undefined' )
 {
-	throw new Error( 'this code requires a browser!' );
+	throw new Error(
+		'this code requires a browser!'
+	);
 }
 
 
@@ -1089,7 +1094,6 @@ Para.prototype.keyDown =
 			'space',
 			ve.textPath,
 			at1,
-			true,
 			x
 		);
 	}
