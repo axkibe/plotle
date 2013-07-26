@@ -692,10 +692,9 @@ Note.prototype.setScrollbar =
 Note.prototype.scrollCaretIntoView =
 	function( )
 {
-	// TODO hand down
 	var
 		caret =
-			shell.$space.$caret,
+			shell.$space.caret,
 
 		scrolly =
 			this.scrollbarY,

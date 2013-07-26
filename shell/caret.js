@@ -66,6 +66,11 @@ Caret =
 	// true when just blinked away
 	this.$blinked =
 		false;
+
+	if( this.$shown )
+	{
+		system.restartBlinker( );
+	}
 };
 
 

@@ -467,17 +467,12 @@ Portal.prototype.grepFocus =
 
 	var
 		caret =
-			space.setCaret(
-				{
-					path :
-						this._spacePath.spaceUser,
-
-					at1 :
-						0
-				}
+			shell.setCaret(
+				'space',
+				this._spacePath.spaceUser,
+				0,
+				true
 			);
-
-	caret.show( );
 
 	shell.peer.moveToTop(
 		this.path
@@ -579,17 +574,13 @@ Portal.prototype.click =
 		)
 		{
 			caret =
-				space.setCaret(
-					{
-						path :
-							this._spacePath[ field ],
-
-						at1  :
-							this._getOffsetAt(
-								field,
-								pp.x
-							)
-					}
+				shell.setCaret(
+					'space',
+					this._spacePath[ field ],
+					this._getOffsetAt(
+						field,
+						pp.x
+					)
 				);
 
 			break;
@@ -1272,17 +1263,14 @@ Portal.prototype.keyLeft =
 	{
 		if( section === 'spaceTag' )
 		{
-			shell.$space.setCaret(
-				{
-					path :
-						new Path(
-							csign.path,
-							csign.path.length - 1,
-								'spaceUser'
-							),
-					at1 :
-						this.tree.twig.spaceUser.length
-				}
+			shell.setCaret(
+				'space',
+				new Path(
+					csign.path,
+					csign.path.length - 1,
+						'spaceUser'
+					),
+				this.tree.twig.spaceUser.length
 			);
 
 			return true;
@@ -1291,14 +1279,10 @@ Portal.prototype.keyLeft =
 		return false;
 	}
 
-	shell.$space.setCaret(
-		{
-			path :
-				csign.path,
-
-			at1 :
-				csign.at1 - 1
-		}
+	shell.setCaret(
+		'space',
+		csign.path,
+		csign.at1 - 1
 	);
 
 	return true;
@@ -1332,22 +1316,19 @@ Portal.prototype.keyDown =
 	{
 		case 'spaceUser' :
 
-			shell.$space.setCaret(
-				{
-					path :
-						new Path(
-							csign.path,
-							csign.path.length - 1,
-								'spaceTag'
-							),
+			shell.setCaret(
+				'space',
+				new Path(
+					csign.path,
+					csign.path.length - 1,
+					'spaceTag'
+				),
 
-					at1 :
-						this._getOffsetAt(
-							'spaceTag',
-							cpos.x +
-								this._$spaceFields.spaceUser.pnw.x
-						)
-				}
+				this._getOffsetAt(
+					'spaceTag',
+					cpos.x +
+						this._$spaceFields.spaceUser.pnw.x
+				)
 			);
 
 			break;
@@ -1406,18 +1387,14 @@ Portal.prototype.keyTab =
 			break;
 	}
 
-	shell.$space.setCaret(
-		{
-			path :
-				new Path(
-					csign.path,
-					csign.path.length - 1,
-						cycle
-				),
-
-			at1 :
-				0
-		}
+	shell.setCaret(
+		'space',
+		new Path(
+			csign.path,
+			csign.path.length - 1,
+				cycle
+		),
+		0
 	);
 
 	return true;
@@ -1451,22 +1428,18 @@ Portal.prototype.keyUp =
 	{
 		case 'spaceTag' :
 
-			shell.$space.setCaret(
-				{
-					path :
-						new Path(
-							csign.path,
-							csign.path.length - 1,
-								'spaceUser'
-							),
-
-					at1 :
-						this._getOffsetAt(
-							'spaceUser',
-							cpos.x +
-								this._$spaceFields.spaceTag.pnw.x
-						)
-				}
+			shell.setCaret(
+				'space',
+				new Path(
+					csign.path,
+					csign.path.length - 1,
+						'spaceUser'
+					),
+				this._getOffsetAt(
+					'spaceUser',
+					cpos.x +
+						this._$spaceFields.spaceTag.pnw.x
+				)
 			);
 
 			break;
@@ -1503,17 +1476,14 @@ Portal.prototype.keyRight =
 	{
 		if( section === 'spaceUser' )
 		{
-			shell.$space.setCaret(
-				{
-					path :
-						new Path(
-							csign.path,
-							csign.path.length - 1,
-								'spaceTag'
-							),
-					at1 :
-						0
-				}
+			shell.setCaret(
+				'space',
+				new Path(
+					csign.path,
+					csign.path.length - 1,
+					'spaceTag'
+				),
+				0
 			);
 
 			return true;
@@ -1522,14 +1492,10 @@ Portal.prototype.keyRight =
 		return false;
 	}
 
-	shell.$space.setCaret(
-		{
-			path :
-				csign.path,
-
-			at1 :
-				csign.at1 + 1
-		}
+	shell.setCaret(
+		'space',
+		csign.path,
+		csign.at1 + 1
 	);
 
 	return true;
@@ -1646,14 +1612,10 @@ Portal.prototype.keyEnd =
 		return false;
 	}
 
-	shell.$space.setCaret(
-		{
-			path :
-				csign.path,
-
-			at1 :
-				value.length
-		}
+	shell.setCaret(
+		'space',
+		csign.path,
+		value.length
 	);
 
 	return true;
@@ -1841,14 +1803,10 @@ Portal.prototype.keyPos1 =
 		return false;
 	}
 
-	shell.$space.setCaret(
-		{
-			path :
-				csign.path,
-
-			at1 :
-				0
-		}
+	shell.setCaret(
+		'space',
+		csign.path,
+		0
 	);
 
 	return true;

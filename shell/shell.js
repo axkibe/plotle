@@ -149,6 +149,21 @@ Shell =
 
 
 /*
+| TODO, workaround until $space is gone
+*/
+Object.defineProperty(
+	Shell.prototype,
+	'space',
+	{
+		get :
+			function( )
+		{
+			return this.$space;
+		}
+	}
+);
+
+/*
 | Positions the caret.
 */
 Shell.prototype.positionCaret =
@@ -822,15 +837,18 @@ Shell.prototype.setCaret =
 	var caret =
 		new Caret(
 			// TODO skip model
-			new Sign( {
-				path:
-					path,
+			path ?
+				new Sign( {
+					path:
+						path,
 
-				at1 :
-					at1
-			} ),
+					at1 :
+						at1
+				} )
+				:
+				null,
 			retainx,
-			shown
+			Jools.is( shown ) ? shown : this.$space.caret.$shown
 		);
 
 	this.$space =
@@ -843,6 +861,7 @@ Shell.prototype.setCaret =
 			caret
 		);
 };
+
 
 /*
 | User is pressing a special key.
@@ -1243,8 +1262,14 @@ Shell.prototype.onAuth =
 Shell.prototype.getCaret =
 	function( )
 {
-	var display =
-		this._getCurrentDisplay( );
+	var
+		display =
+			this._getCurrentDisplay( );
+
+	if( display === this.space )
+	{
+		return display.caret; // TODO XXX
+	}
 
 	return display && display.$caret;
 };
@@ -1256,8 +1281,9 @@ Shell.prototype.getCaret =
 Shell.prototype.logout =
 	function( )
 {
-	var self =
-		this;
+	var
+		self =
+			this;
 
 	this.peer.logout(
 		function( res )

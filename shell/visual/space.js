@@ -108,13 +108,18 @@ Visual.Space =
 	}
 
 	// TODO change Caret to free string arguments
-	this.$caret =
+	this.caret =
 		caret ||
 		new Caret(
-			null,
-			null,
-			false
+			null, // sign
+			null, // retrainx
+			true  // shown
 		);
+
+	Jools.keyNonGrata(
+		this,
+		'$caret'
+	);
 };
 
 
@@ -179,7 +184,7 @@ Space.prototype.update =
 
 	var
 		caret =
-			this.$caret,
+			this.caret,
 
 		csign =
 			caret.sign;
@@ -187,7 +192,7 @@ Space.prototype.update =
 	if(
 		csign &&
 		csign.path &&
-		Jools.is(
+		!Jools.is(
 			sub[ csign.path.get( 0 ) ]
 		)
 	)
@@ -203,22 +208,37 @@ Space.prototype.update =
 			shell.deselect( true );
 		}
 
-		this.setCaret( null );
+
+		shell.setCaret(
+			'space',
+			null,
+			0,
+			null,
+			true
+		);
+	}
+	else
+	{
+		if( caret.sign !== null )
+		{
+			var
+				sign =
+					MeshMashine.tfxSign(
+						caret.sign,
+						chgX
+					);
+
+			shell.setCaret(
+				'space',
+				sign.path, // TODO give sign
+				sign.at1,
+				caret.retainx
+			);
+		}
 	}
 
 	shell.redraw =
 		true;
-
-	if( caret.sign !== null )
-	{
-		this.setCaret(
-			MeshMashine.tfxSign(
-				caret.sign,
-				chgX
-			),
-			caret.retainx
-		);
-	}
 };
 
 
@@ -230,7 +250,7 @@ Space.prototype.focusedItem =
 {
 	var
 		caret =
-			this.$caret;
+			this.caret;
 
 	if( !caret.sign )
 	{
@@ -357,8 +377,8 @@ Space.prototype.draw =
 
 
 	// removes caret caches.
-	this.$caret.$save =
-	this.$caret.$screenPos =
+	this.caret.$save =
+	this.caret.$screenPos =
 		null;
 
 	for(
@@ -371,7 +391,7 @@ Space.prototype.draw =
 		this.getItem( this.tree.ranks[ r ] )
 			.draw(
 				fabric,
-				this.$caret,
+				this.caret,
 				view
 			);
 	}
@@ -398,7 +418,7 @@ Space.prototype.draw =
 			{
 				action.item.draw(
 					fabric,
-					this.$caret,
+					this.caret,
 					view
 				);
 			}
@@ -479,18 +499,19 @@ Space.prototype.draw =
 			break;
 	}
 
-	this.$caret.display( );
+	this.caret.display( );
 };
 
 
 /*
 | Force-clears all caches.
+| TODO remove
 */
 Space.prototype.knock =
 	function( )
 {
-	this.$caret.$save =
-	this.$caret.$screenPos =
+	this.caret.$save =
+	this.caret.$screenPos =
 		null;
 
 	for(
@@ -513,7 +534,7 @@ Space.prototype.positionCaret =
 	var
 		node =
 			this.getSub(
-				this.$caret.sign.path,
+				this.caret.sign.path,
 				'positionCaret'
 			);
 
@@ -521,7 +542,7 @@ Space.prototype.positionCaret =
 	{
 		node.positionCaret(
 			this,
-			this.$caret,
+			this.caret,
 			this.$view
 		);
 	}
@@ -730,82 +751,6 @@ Space.prototype.pointingHover =
 	}
 
 	return cursor || 'pointer';
-};
-
-
-/*
-| Sets the caret position.
-*/
-Space.prototype.setCaret =
-	function(
-		sign,
-		retainx
-	)
-{
-	switch( sign && sign.constructor )
-	{
-		case null :
-		case Sign :
-
-			break;
-
-		case Object :
-
-			sign =
-				new Sign( sign );
-
-			break;
-
-		default :
-
-			throw new Error(
-				'Space.setCaret: invalid sign'
-			);
-	}
-
-	var
-		item;
-
-	if(
-		this.$caret.sign &&
-		(
-			!sign ||
-			this.$caret.sign.path !== sign.path
-		)
-	)
-	{
-		item =
-			this._getCaretItem(
-				this.$caret.sign.path
-			);
-
-		if( item )
-		{
-			item.knock( );
-		}
-	}
-
-	this.$caret =
-		new Caret(
-			sign,
-			Jools.is( retainx ) ? retainx : null,
-			this.$caret.$shown
-		);
-
-	if( sign )
-	{
-		item =
-			this._getCaretItem(
-				sign.path
-			);
-
-		if( item )
-		{
-			item.knock( );
-		}
-	}
-
-	return this.$caret;
 };
 
 
@@ -1097,7 +1042,11 @@ Space.prototype.click =
 
 	// otherwise ...
 
-	this.setCaret( null );
+	shell.setCaret(
+		'space',
+		null,
+		null
+	);
 
 	shell.redraw =
 		true;
@@ -1464,7 +1413,11 @@ Space.prototype.dragStop =
 					action.removeItemPath.equals( focus.path )
 				)
 				{
-					this.setCaret( null );
+					shell.setCaret(
+						'space',
+						null,
+						0
+					);
 				}
 
 				shell.peer.removeItem(
@@ -1960,10 +1913,13 @@ Space.prototype.pointingStart =
 | Text input
 */
 Space.prototype.input =
-	function( text )
+	function(
+		text
+	)
 {
-	var caret =
-		this.$caret;
+	var
+		caret =
+			this.caret;
 
 	if( !caret.sign )
 	{
@@ -2044,8 +2000,9 @@ Space.prototype.specialKey =
 		}
 	}
 
-	var caret =
-		this.$caret;
+	var
+		caret =
+			this.caret;
 
 	if ( !caret.sign )
 	{
@@ -2165,8 +2122,9 @@ Space.prototype.getSub =
 Space.prototype.systemFocus =
 	function( )
 {
-	var caret =
-		this.$caret;
+	var
+		caret =
+			this.caret;
 
 	caret.show( );
 
@@ -2181,8 +2139,9 @@ Space.prototype.systemFocus =
 Space.prototype.systemBlur =
 	function( )
 {
-	var caret =
-		this.$caret;
+	var
+		caret =
+			this.caret;
 
 	caret.hide( );
 
@@ -2196,7 +2155,7 @@ Space.prototype.systemBlur =
 Space.prototype.blink =
 	function( )
 {
-	this.$caret.blink( );
+	this.caret.blink( );
 };
 
 

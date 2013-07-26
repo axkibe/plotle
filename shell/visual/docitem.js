@@ -127,18 +127,11 @@ DocItem.prototype.grepFocus =
 
 	var doc = this.$sub.doc;
 
-	var caret =
-		space.setCaret(
-			{
-				path :
-					doc.atRank( 0 ).textPath,
-
-				at1 :
-					0
-			}
-		);
-
-	caret.show( );
+	shell.setCaret(
+		'space',
+		doc.atRank( 0 ).textPath,
+		0
+	);
 
 	shell.peer.moveToTop(
 		this.path
@@ -159,13 +152,14 @@ DocItem.prototype.click =
 		access
 	)
 {
-	var vp =
-		view.depoint( p );
-
 	if( access != 'rw' )
 	{
 		return false;
 	}
+
+	var
+		vp =
+			view.depoint( p );
 
 	if(
 		!this.zone.within(
@@ -215,20 +209,13 @@ DocItem.prototype.click =
 				para.getPointOffset(
 					this,
 					pi.sub( ppnw )
-				),
-
-			caret =
-				space.setCaret(
-					{
-						path :
-							para.textPath,
-
-						at1 :
-							at1
-					}
 				);
 
-		caret.show( );
+		shell.setCaret(
+			'space',
+			para.textPath,
+			at1
+		);
 
 		shell.deselect( );
 	}

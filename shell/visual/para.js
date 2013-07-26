@@ -398,7 +398,6 @@ Para.prototype.positionCaret =
 		cx =
 			cpos.x + pnw.x;
 
-
 	caret.$screenPos =
 		view.point(
 			cx + zone.pnw.x,
@@ -897,11 +896,8 @@ Para.prototype.input =
 		para =
 			this,
 
-		space =
-			shell.$space,
-
 		item =
-			space.getSub(
+			shell.space.getSub(
 				para.path,
 				'Item'
 			),
@@ -919,12 +915,9 @@ Para.prototype.input =
 
 		shell.peer.insertText(
 			para.textPath,
-			caret.sign.at1,
+			shell.space.caret.sign.at1,
 			line
 		);
-
-		caret =
-			space.$caret;
 
         if( rx[ 2 ] )
 		{
@@ -932,20 +925,17 @@ Para.prototype.input =
 			// over return values
 			shell.peer.split(
 				para.textPath,
-				caret.sign.at1
+				shell.space.caret.sign.at1
 			);
 
 			item =
-				space.getSub(
+				shell.space.getSub(
 					para.path,
 					'Item'
 				);
 
 			doc =
 				item.$sub.doc;
-
-			caret =
-				shell.$space.$caret;
 
 			para =
 				doc.atRank(
@@ -1095,13 +1085,11 @@ Para.prototype.keyDown =
 		at1 =
 			ve.getOffsetAt( 0, x );
 
-		space.setCaret(
-			{
-				path :
-					ve.textPath,
-				at1 :
-					at1
-			},
+		shell.setCaret(
+			'space',
+			ve.textPath,
+			at1,
+			true,
 			x
 		);
 	}
@@ -1128,13 +1116,10 @@ Para.prototype.keyEnd =
 	var space =
 		shell.$space;
 
-	space.setCaret(
-		{
-			path :
-				this.textPath,
-			at1 :
-				this.text.length
-		}
+	shell.setCaret(
+		'space',
+		this.textPath,
+		this.text.length
 	);
 
 	return true;
@@ -1175,14 +1160,10 @@ Para.prototype.keyLeft =
 
 	if( caret.sign.at1 > 0 )
 	{
-		space.setCaret(
-			{
-				path :
-					this.textPath,
-
-				at1 :
-					caret.sign.at1 - 1
-			}
+		shell.setCaret(
+			'space',
+			this.textPath,
+			caret.sign.at1 - 1
 		);
 
 		return true;
@@ -1196,14 +1177,10 @@ Para.prototype.keyLeft =
 		var ve =
 			doc.atRank( r - 1 );
 
-		space.setCaret(
-			{
-				path :
-					ve.textPath,
-
-				at1 :
-					ve.text.length
-			}
+		shell.setCaret(
+			'space',
+			ve.textPath,
+			ve.text.length
 		);
 
 		return true;
@@ -1231,14 +1208,10 @@ Para.prototype.keyPos1 =
 		return false;
 	}
 
-	space.setCaret(
-		{
-			path :
-				this.textPath,
-
-			at1 :
-				0
-		}
+	shell.setCaret(
+		'space',
+		this.textPath,
+		0
 	);
 
 	return true;
@@ -1260,14 +1233,10 @@ Para.prototype.keyRight =
 
 	if( caret.sign.at1 < this.text.length )
 	{
-		space.setCaret(
-			{
-				path :
-					this.textPath,
-
-				at1 :
-					caret.sign.at1 + 1
-			}
+		shell.setCaret(
+			'space',
+			this.textPath,
+			caret.sign.at1 + 1
 		);
 
 		return true;
@@ -1281,14 +1250,10 @@ Para.prototype.keyRight =
 		var ve =
 			doc.atRank( r + 1 );
 
-		space.setCaret(
-			{
-				path :
-					ve.textPath,
-
-				at1 :
-					0
-			}
+		shell.setCaret(
+			'space',
+			ve.textPath,
+			0
 		);
 
 		return true;
@@ -1337,14 +1302,10 @@ Para.prototype.keyUp =
 				x
 			);
 
-		space.setCaret(
-			{
-				path :
-					this.textPath,
-
-				at1 :
-					at1
-			},
+		shell.setCaret(
+			'space',
+			this.textPath,
+			at1,
 			x
 		);
 
@@ -1366,11 +1327,10 @@ Para.prototype.keyUp =
 				x
 			);
 
-		space.setCaret(
-			{
-				path : ve.textPath,
-				at1  : at1
-			},
+		shell.setCaret(
+			'space',
+			ve.textPath,
+			at1,
 			x
 		);
 
@@ -1442,8 +1402,10 @@ Para.prototype.specialKey =
 						)
 					);
 
-				space.setCaret(
-					selection.sign2
+				shell.setCaret(
+					'space',
+					selection.sign2.path, // FIXME, maybe use freestrings
+					selection.sign2.at1
 				);
 
 				caret.show( );
@@ -1651,7 +1613,7 @@ Para.prototype.specialKey =
 	}
 
 	caret =
-		space.$caret;
+		space.caret;
 
 	if( shift )
 	{

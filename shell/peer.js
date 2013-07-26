@@ -214,7 +214,7 @@ Peer.prototype.register =
 
 
 /*
-| aquires a space.
+| Aquires a space.
 */
 Peer.prototype.aquireSpace =
 	function(
@@ -234,13 +234,11 @@ Peer.prototype.aquireSpace =
 
 
 /*
-| gets a tree
-|
-| path: path to tree
+| Gets a tree.
 */
 Peer.prototype.get =
 	function(
-		path,
+		path, // path to tree
 		len
 	)
 {
