@@ -1353,8 +1353,6 @@ Para.prototype.keyUp =
 */
 Para.prototype.specialKey =
 	function(
-		space,
-		caret,
 		key,
 		shift,
 		ctrl
@@ -1364,9 +1362,12 @@ Para.prototype.specialKey =
 		selection =
 			shell.getSelection( ),
 
+		space =
+			shell.$space,
+
 		item =
-			shell.$space.getSub(
-				caret.sign.path,
+			space.getSub(
+				space.caret.sign.path,
 				'Item'
 			),
 
@@ -1415,7 +1416,7 @@ Para.prototype.specialKey =
 					selection.sign2.at1
 				);
 
-				caret.show( );
+				shell.$space.caret.show( );
 
 				shell.redraw =
 					true;
@@ -1484,12 +1485,17 @@ Para.prototype.specialKey =
 			case 'up' :
 
 				select1 =
-					caret.sign;
+					shell.$space.caret.sign;
 
 				show =
 					true;
 		}
 	}
+
+	// TODO remove
+	var
+		caret =
+			shell.$space.caret;
 
 	switch( key )
 	{

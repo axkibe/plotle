@@ -464,7 +464,9 @@ Doc.prototype.draw =
 | Returns the para pnws
 */
 Doc.prototype.getPNWs =
-	function( )
+	function(
+		item
+	)
 {
 	if( this._$pnws )
 	{

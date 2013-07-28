@@ -1124,15 +1124,18 @@ Portal.prototype._locateOffset =
 */
 Portal.prototype.specialKey =
 	function(
-		space,
-		caret,
 		key
 		// shift
 		// ctrl
 	)
 {
-	var show =
-		false;
+	var
+		show =
+			false,
+
+		// TODO remove
+		caret =
+			shell.$space.caret;
 
 	switch( key )
 	{

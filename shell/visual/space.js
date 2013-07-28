@@ -1912,8 +1912,6 @@ Space.prototype.specialKey =
 	if( node )
 	{
 		node.specialKey(
-			this,
-			caret,
 			key,
 			shift,
 			ctrl
