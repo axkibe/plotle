@@ -977,13 +977,15 @@ Portal.prototype._weave =
 */
 Portal.prototype.input =
 	function(
-		caret,
 		text
 	)
 {
     var
 		reg  =
 			/([^\n]+)(\n?)/g,
+
+		caret =
+			shell.$space.caret,
 
 		section =
 			caret.sign.path.get( -1 );

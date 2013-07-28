@@ -893,7 +893,6 @@ Para.prototype.getPointOffset =
 */
 Para.prototype.input =
 	function(
-		caret,
 		text
 	)
 {
@@ -911,7 +910,10 @@ Para.prototype.input =
 			),
 
 		doc =
-			item.$sub.doc;
+			item.$sub.doc,
+
+		caret =
+			shell.space.caret;
 
     for(
 		var rx = reg.exec(text);

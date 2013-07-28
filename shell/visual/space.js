@@ -1828,10 +1828,7 @@ Space.prototype.input =
 
 	if( node )
 	{
-		node.input(
-			caret,
-			text
-		);
+		node.input( text );
 	}
 };
 
