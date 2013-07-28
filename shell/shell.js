@@ -211,10 +211,64 @@ Shell.prototype.update =
 		chgX
 	)
 {
+	/*
 	this.$space.update(
 		tree,
 		chgX
-	);
+	);*/
+
+	var
+		caret =
+			this.$space.caret,
+
+		csign =
+			caret.sign;
+
+	if(
+		csign &&
+		csign.path &&
+		!Jools.is(
+			tree.twig[ csign.path.get( 0 ) ]
+		)
+	)
+	{
+		caret =
+			new Caret(
+				null,
+				caret.retainx,
+				caret.$shown
+			);
+	}
+	else
+	{
+		if( caret.sign !== null )
+		{
+			var
+				sign =
+					MeshMashine.tfxSign(
+						caret.sign,
+						chgX
+					);
+
+			caret =
+				new Caret(
+					sign,
+					caret.retainx,
+					caret.$shown
+				);
+		}
+	}
+
+	this.$space =
+		new Visual.Space(
+			tree,
+			this.$space,
+			this.$space.spaceUser,
+			this.$space.spaceTag,
+			this.$space.access,
+			caret
+		);
+
 
 	// TODO move selection to space / forms
 
@@ -234,6 +288,20 @@ Shell.prototype.update =
 			)
 		);
 	}
+
+	// TODO figure out deleted selection
+	/*
+	var selection =
+		shell.getSelection( );
+
+	if(
+		selection &&
+		selection.sign1.path.get( -4 ) === csign.path.get( 1 )
+	)
+	{
+		shell.deselect( true );
+	}
+	*/
 
 	this._draw( );
 };
@@ -827,12 +895,10 @@ Shell.prototype.setCaret =
 		shown
 	)
 {
-	console.log( 'retainx', retainx, shown );
-
-	if( retainx && typeof(retainx) !== 'number' )
+	if( retainx && typeof( retainx ) !== 'number' )
 	{
 		throw new Error(
-			'NOT A NUMBER'
+			'NOT A NUMBER' // TODO
 		);
 	}
 

@@ -471,6 +471,7 @@ Portal.prototype.grepFocus =
 				'space',
 				this._spacePath.spaceUser,
 				0,
+				null,
 				true
 			);
 

@@ -382,6 +382,7 @@ Doc.prototype.draw =
 
 	// draws the selection
 	if (
+		fabric &&
 		selection &&
 		this.path.subPathOf( selection.sign1.path )
 	)
@@ -441,11 +442,14 @@ Doc.prototype.draw =
 						Math.round( y - scrollp.y )
 				);
 
-		vpara.draw(
-			fabric,
-			view,
-			view.point( p )
-		);
+		if( fabric )
+		{
+			vpara.draw(
+				fabric,
+				view,
+				view.point( p )
+			);
+		}
 
 		y +=
 			flow.height + paraSep;
@@ -455,6 +459,28 @@ Doc.prototype.draw =
 		pnws;   // north-west points of paras
 };
 
+
+/*
+| Returns the para pnws
+*/
+Doc.prototype.getPNWs =
+	function( )
+{
+	if( this._$pnws )
+	{
+		return this._$pnws;
+	}
+
+	this.draw(
+		null,
+		null,
+		item,
+		null,
+		null
+	);
+
+	return this._$pnws;
+};
 
 /*
 | Returns the height of the document.
@@ -514,10 +540,16 @@ Jools.lazyFixate(
 */
 Doc.prototype.getPNW =
 	function(
+		item,
 		key
 	)
 {
-	return this._$pnws[ key ];
+	if( arguments.length !== 2 )
+	{
+		throw new Error( 'TODO' );
+	}
+
+	return this.getPNWs(item)[ key ];
 };
 
 
@@ -583,7 +615,7 @@ Doc.prototype.getParaAtPoint =
 			this.$sub,
 
 		pnws =
-			this._$pnws;
+			this.getPNWs( item );
 
 	for(
 		var r = 0, rZ = ranks.length;
@@ -650,10 +682,10 @@ Doc.prototype.sketchSelection =
 			s2.path.get( -2 ),
 
 		pnw1 =
-			this.getPNW( key1 ),
+			this.getPNW( item, key1 ),
 
 		pnw2 =
-			this.getPNW( key2 ),
+			this.getPNW( item, key2 ),
 
 		para1 =
 			this.$sub[ key1 ],

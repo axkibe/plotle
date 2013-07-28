@@ -378,7 +378,10 @@ Para.prototype.positionCaret =
 			),
 
 		pnw =
-			doc.getPNW( this.key ),
+			doc.getPNW(
+				item,
+				this.key
+			),
 
 		sbary =
 			item.scrollbarY,
@@ -1362,7 +1365,7 @@ Para.prototype.specialKey =
 			shell.getSelection( ),
 
 		item =
-			space.getSub(
+			shell.$space.getSub(
 				caret.sign.path,
 				'Item'
 			),
@@ -1617,7 +1620,7 @@ Para.prototype.specialKey =
 	}
 
 	caret =
-		space.caret;
+		shell.$space.caret;
 
 	if( shift )
 	{
@@ -1646,7 +1649,7 @@ Para.prototype.specialKey =
 	if( show )
 	{
 		item =
-			space.getSub(
+			shell.$space.getSub(
 				caret.sign.path,
 				'Item'
 			);

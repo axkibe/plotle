@@ -710,7 +710,9 @@ Note.prototype.scrollCaretIntoView =
 
 	if( para.constructor !== Visual.Para )
 	{
-		throw new Error( 'para not a para.' );
+		throw new Error(
+			'para not a para.'
+		);
 	}
 
 	var
@@ -721,7 +723,10 @@ Note.prototype.scrollCaretIntoView =
 			),
 
 		pnw =
-			this.$sub.doc.getPNW( para.key ),
+			this.$sub.doc.getPNW(
+				this,
+				para.key
+			),
 
 		zone =
 			this.zone,

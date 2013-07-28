@@ -202,6 +202,7 @@ DocItem.prototype.click =
 		var
 			ppnw =
 				this.$sub.doc.getPNW(
+					this,
 					para.key
 				),
 
