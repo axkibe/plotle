@@ -86,7 +86,6 @@ Shell =
 	this.fabric =
 		fabric;
 
-	// TODO mark as private
 	this.$space =
 		null;
 
@@ -541,8 +540,6 @@ Shell.prototype.pointingHover =
 		ctrl
 	)
 {
-	// TODO make an $hover object
-
 	this.$hover =
 		Jools.immute({
 			p :
@@ -895,13 +892,6 @@ Shell.prototype.setCaret =
 		shown
 	)
 {
-	if( retainx && typeof( retainx ) !== 'number' )
-	{
-		throw new Error(
-			'NOT A NUMBER' // TODO
-		);
-	}
-
 	if( section !== 'space' )
 	{
 		throw new Error(
