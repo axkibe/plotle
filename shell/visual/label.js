@@ -41,7 +41,9 @@ var
 
 if( typeof( window ) === 'undefined' )
 {
-	throw new Error( 'this code needs a browser!' );
+	throw new Error(
+		'this code needs a browser!'
+	);
 }
 
 
@@ -450,7 +452,8 @@ Label.prototype.dragStop =
 				);
 			}
 
-			shell.redraw = true;
+			shell.redraw =
+				true;
 
 			break;
 
@@ -487,6 +490,7 @@ Label.prototype.draw =
 
 	// no buffer hit?
 	if (
+		true || // TODO, without there are issues with selection
 		!f ||
 		view.zoom !== f.$zoom
 	)
