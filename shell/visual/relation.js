@@ -325,7 +325,6 @@ Relation.create =
 */
 Relation.spawn =
 	function(
-		space,
 		item1,
 		item2
 	)
@@ -346,8 +345,8 @@ Relation.spawn =
 
 		result =
 			shell.peer.newRelation(
-				space.spaceUser,
-				space.spaceTag,
+				shell.space.spaceUser,
+				shell.space.spaceTag,
 				pnw,
 				'relates to',
 				20,
@@ -359,7 +358,7 @@ Relation.spawn =
 			result.chgX.trg.path.get( -1 );
 
 	// event listener has spawned the vrel
-	space.$sub[ key ].grepFocus( space );
+	shell.space.$sub[ key ].grepFocus( );
 };
 
 

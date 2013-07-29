@@ -75,10 +75,13 @@ Visual.Space =
 		access;
 
 	this.$view =
-		new Euclid.View(
-			Euclid.Point.zero,
-			0
-		);
+		inherit ?
+			inherit.$view
+			:
+			new Euclid.View(
+				Euclid.Point.zero,
+				0
+			);
 
 	if( inherit && tree === inherit.tree )
 	{
@@ -1002,7 +1005,7 @@ Space.prototype.dragStop =
 			key =
 				result.chgX.trg.path.get( -1 );
 
-			this.$sub[ key ].grepFocus( this );
+			this.$sub[ key ].grepFocus( );
 
 			shell.redraw =
 				true;
@@ -1077,7 +1080,7 @@ Space.prototype.dragStop =
 			key =
 				result.chgX.trg.path.get( -1 );
 
-			this.$sub[ key ].grepFocus( this );
+			this.$sub[ key ].grepFocus( );
 
 			shell.redraw =
 				true;
@@ -1116,7 +1119,7 @@ Space.prototype.dragStop =
 			key =
 				result.chgX.trg.path.get( -1 );
 
-			this.$sub[ key ].grepFocus( this );
+			this.$sub[ key ].grepFocus( );
 
 			shell.redraw =
 				true;

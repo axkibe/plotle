@@ -115,17 +115,17 @@ DocItem.prototype.getParaAtPoint =
 | Sets the focus to this item.
 */
 DocItem.prototype.grepFocus =
-	function(
-		space
-	)
+	function( )
 {
 	// already have focus?
-	if( space.focusedItem() === this )
+	if( shell.space.focusedItem() === this )
 	{
 		return;
 	}
 
-	var doc = this.$sub.doc;
+	var
+		doc =
+			this.$sub.doc;
 
 	shell.setCaret(
 		'space',
@@ -173,7 +173,7 @@ DocItem.prototype.click =
 
 	if( space.focusedItem( ) !== this )
 	{
-		this.grepFocus( space );
+		this.grepFocus( );
 
 		shell.deselect( );
 	}

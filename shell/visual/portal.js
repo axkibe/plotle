@@ -68,6 +68,7 @@ Visual.Portal =
 	if( path )
 	{
 		// paths to spaceUser and spaceTag
+
 		this._spacePath =
 			Jools.immute(
 				{
@@ -455,12 +456,10 @@ Portal.prototype.dragStop =
 | Sets the focus to this item.
 */
 Portal.prototype.grepFocus =
-	function(
-		space
-	)
+	function( )
 {
 	// already have focus?
-	if( space.focusedItem( ) === this )
+	if( shell.space.focusedItem( ) === this )
 	{
 		return;
 	}
@@ -543,7 +542,7 @@ Portal.prototype.click =
 
 	if( focus !== this )
 	{
-		this.grepFocus( space );
+		this.grepFocus( );
 
 		// TODO double deselect below?
 		shell.deselect( );
@@ -856,7 +855,7 @@ Portal.prototype._weave =
 		),
 		this.zeroSilhoutte,
 		'sketch',
-		Euclid.View.proper
+		view.home( )
 	);
 
 	if( this._spacePath )
@@ -965,7 +964,7 @@ Portal.prototype._weave =
 		),
 		this.zeroSilhoutte,
 		'sketch',
-		Euclid.View.proper
+		view.home( )
 	);
 
 	return f;

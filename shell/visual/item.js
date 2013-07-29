@@ -620,7 +620,7 @@ Item.prototype.dragStart =
 	// scrolling or dragging
 	if( access == 'rw' )
 	{
-		this.grepFocus( space );
+		this.grepFocus( );
 
 		var
 			vp =
@@ -786,7 +786,6 @@ Item.prototype.dragStop =
 				shell.$space;
 
 			Visual.Relation.spawn(
-				space,
 				space.getSub( action.fromItemPath ),
 				this
 			);
@@ -847,13 +846,11 @@ Item.prototype.pointingHover =
 | Sets the focus to this item.
 */
 Item.prototype.grepFocus =
-	function(
-		space
-	)
+	function( )
 {
 	// already have focus?
 	if(
-		space.focusedItem( ) === this
+		shell.space.focusedItem( ) === this
 	)
 	{
 		return;
