@@ -252,7 +252,7 @@ Label.create =
 		if( doc === null )
 		{
 			doc =
-				inherit.$sub.doc;
+				inherit.sub.doc;
 		}
 	}
 
@@ -265,7 +265,7 @@ Label.create =
 			'path',
 				inherit ?
 					(
-						inherit.$sub.doc.path
+						inherit.sub.doc.path
 					)
 					:
 					(
@@ -432,7 +432,7 @@ Label.prototype.dragStop =
 					this.zone,
 
 				fontsize =
-					this.$sub.doc.font.twig.size;
+					this.sub.doc.font.twig.size;
 
 			if(
 				!this.tree.twig.pnw.equals( zone.pnw )
@@ -507,7 +507,7 @@ Label.prototype.draw =
 
 		var
 			doc =
-				this.$sub.doc,
+				this.sub.doc,
 
 			imargin =
 				this.innerMargin;

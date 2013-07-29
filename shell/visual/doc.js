@@ -122,7 +122,7 @@ Visual.Doc =
 	}
 
 	sub =
-	this.$sub =
+	this.sub =
 		[ ];
 
 	if( tree )
@@ -148,7 +148,7 @@ Visual.Doc =
 					sub[ k ] =
 						Visual.Para.create(
 							'inherit',
-								inherit && inherit.$sub[ k ],
+								inherit && inherit.sub[ k ],
 							'tree',
 								twig[ k ],
 							'path',
@@ -174,7 +174,7 @@ Visual.Doc =
 		sub[ '1' ] =
 			Visual.Para.create(
 				'inherit',
-					inherit && inherit.$sub[ '1 ' ],
+					inherit && inherit.sub[ '1 ' ],
 				'fontsize',
 					fontsize,
 				'flowWidth',
@@ -352,7 +352,7 @@ Doc.prototype.atRank =
 	)
 {
 	return (
-		this.$sub[ this.ranks[ rank ] ]
+		this.sub[ this.ranks[ rank ] ]
 	);
 };
 
@@ -568,7 +568,7 @@ Jools.lazyFixate(
 				0,
 
 			sub =
-				this.$sub,
+				this.sub,
 
 			max =
 				Math.max;
@@ -614,7 +614,7 @@ Doc.prototype.getParaAtPoint =
 			this.ranks,
 
 		sub =
-			this.$sub,
+			this.sub,
 
 		pnws =
 			this.getPNWs( item );
@@ -690,10 +690,10 @@ Doc.prototype.sketchSelection =
 			this.getPNW( item, key2 ),
 
 		para1 =
-			this.$sub[ key1 ],
+			this.sub[ key1 ],
 
 		para2 =
-			this.$sub[ key2 ],
+			this.sub[ key2 ],
 
 		p1 =
 			para1.locateOffset(

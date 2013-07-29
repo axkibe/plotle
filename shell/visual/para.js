@@ -365,7 +365,7 @@ Para.prototype.positionCaret =
 			),
 
 		doc =
-			item.$sub.doc,
+			item.sub.doc,
 
 		zone =
 			item.zone,
@@ -432,7 +432,7 @@ Para.prototype.getCaretPos =
 {
 	var
 		fs =
-			item.$sub.doc.font.twig.size,
+			item.sub.doc.font.twig.size,
 
 		descend =
 			fs * theme.bottombox,
@@ -910,7 +910,7 @@ Para.prototype.input =
 			),
 
 		doc =
-			item.$sub.doc,
+			item.sub.doc,
 
 		caret =
 			shell.space.caret;
@@ -945,7 +945,7 @@ Para.prototype.input =
 				);
 
 			doc =
-				item.$sub.doc;
+				item.sub.doc;
 
 			para =
 				doc.atRank(
@@ -1374,7 +1374,7 @@ Para.prototype.specialKey =
 			),
 
 		doc =
-			item.$sub.doc,
+			item.sub.doc,
 
 		// if true the caret moved or the selection changed
 		show =

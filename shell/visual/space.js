@@ -85,13 +85,13 @@ Visual.Space =
 
 	if( inherit && tree === inherit.tree )
 	{
-		this.$sub =
-			inherit.$sub;
+		this.sub =
+			inherit.sub;
 	}
 	else
 	{
 		var sub =
-		this.$sub =
+		this.sub =
 			{ };
 
 		for( var k in tree.twig )
@@ -105,7 +105,7 @@ Visual.Space =
 				this.createItem(
 					tree.twig[ k ],
 					k,
-					inherit && inherit.$sub[ k ]
+					inherit && inherit.sub[ k ]
 				);
 		}
 	}
@@ -209,7 +209,7 @@ Space.prototype.getItem =
 			break;
 	}
 
-	return this.$sub[ key ];
+	return this.sub[ key ];
 };
 
 
@@ -1005,7 +1005,7 @@ Space.prototype.dragStop =
 			key =
 				result.chgX.trg.path.get( -1 );
 
-			this.$sub[ key ].grepFocus( );
+			this.sub[ key ].grepFocus( );
 
 			shell.redraw =
 				true;
@@ -1038,7 +1038,7 @@ Space.prototype.dragStop =
 
 				fs =
 					Math.max(
-						origin.$sub.doc.fontsize * ( oheight + dy ) / oheight,
+						origin.sub.doc.fontsize * ( oheight + dy ) / oheight,
 						theme.label.minSize
 					),
 
@@ -1074,13 +1074,13 @@ Space.prototype.dragStop =
 					this.spaceTag,
 					label.pnw,
 					'Label',
-					label.$sub.doc.fontsize
+					label.sub.doc.fontsize
 				);
 
 			key =
 				result.chgX.trg.path.get( -1 );
 
-			this.$sub[ key ].grepFocus( );
+			this.sub[ key ].grepFocus( );
 
 			shell.redraw =
 				true;
@@ -1119,7 +1119,7 @@ Space.prototype.dragStop =
 			key =
 				result.chgX.trg.path.get( -1 );
 
-			this.$sub[ key ].grepFocus( );
+			this.sub[ key ].grepFocus( );
 
 			shell.redraw =
 				true;
@@ -1236,7 +1236,7 @@ Space.prototype.dragStop =
 
 						shell.peer.setFontSize(
 							action.itemPath,
-							action.item.$sub.doc.fontsize
+							action.item.sub.doc.fontsize
 						);
 
 						break;
@@ -1412,7 +1412,7 @@ Space.prototype.dragMove =
 
 					fs =
 						Math.max(
-							origin.$sub.doc.fontsize * zone.height / oheight,
+							origin.sub.doc.fontsize * zone.height / oheight,
 							theme.label.minSize
 						);
 
@@ -1681,7 +1681,7 @@ Space.prototype.dragMove =
 
 					fs =
 						Math.max(
-							origin.$sub.doc.fontsize * ( oheight + dy ) / oheight,
+							origin.sub.doc.fontsize * ( oheight + dy ) / oheight,
 							theme.label.minSize
 						);
 
@@ -1979,13 +1979,13 @@ Space.prototype.getSub =
 			}
 		}
 
-		if( !n.$sub )
+		if( !n.sub )
 		{
 			break;
 		}
 
 		n =
-			n.$sub[ path.get( a ) ];
+			n.sub[ path.get( a ) ];
 
 		if( !n )
 		{

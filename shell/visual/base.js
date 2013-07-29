@@ -48,7 +48,7 @@ Visual.Base =
 	this.key =
 		path ? path.get( -1 ) : null;
 
-	this.$sub =
+	this.sub =
 		null;
 };
 
@@ -61,7 +61,7 @@ Base.prototype.atRank =
 		rank
 	)
 {
-	return this.$sub[ this.tree.ranks[ rank ] ];
+	return this.sub[ this.tree.ranks[ rank ] ];
 };
 
 

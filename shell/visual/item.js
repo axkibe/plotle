@@ -858,7 +858,7 @@ Item.prototype.grepFocus =
 
 	var
 		doc =
-			this.$sub.doc,
+			this.sub.doc,
 
 		caret =
 			shell.setCaret(

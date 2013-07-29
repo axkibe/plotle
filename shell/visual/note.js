@@ -217,7 +217,7 @@ Note.create =
 			doc =
 				Visual.Doc.create(
 					'inherit',
-						inherit && inherit.$sub.doc,
+						inherit && inherit.sub.doc,
 					'tree',
 						tree.twig.doc,
 					'path',
@@ -261,7 +261,7 @@ Note.create =
 			doc =
 				Visual.Doc.create(
 					'inherit',
-						inherit.$sub.doc,
+						inherit.sub.doc,
 					'flowWidth',
 						(
 							zone
@@ -432,7 +432,7 @@ Note.prototype.draw =
 
 		var
 			doc =
-				this.$sub.doc,
+				this.sub.doc,
 
 			imargin =
 				this.innerMargin,
@@ -675,7 +675,7 @@ Note.prototype.setScrollbar =
 	sbary.setPos(
 		pos,
 		zone.height - this.innerMargin.y,
-		this.$sub.doc.height,
+		this.sub.doc.height,
 		Euclid.Point.renew(
 			zone.pse.x,
 			zone.pnw.y + theme.scrollbar.vdis,
@@ -723,7 +723,7 @@ Note.prototype.scrollCaretIntoView =
 			),
 
 		pnw =
-			this.$sub.doc.getPNW(
+			this.sub.doc.getPNW(
 				this,
 				para.key
 			),
@@ -765,7 +765,7 @@ Note.prototype.scrollPage =
 			up ? -1 : 1,
 
 		fs =
-			this.$sub.doc.font.twig.size;
+			this.sub.doc.font.twig.size;
 
 	this.setScrollbar(
 		this.scrollbarY.getPos( ) + dir * zone.height - fs * 2

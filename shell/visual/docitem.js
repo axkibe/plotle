@@ -59,7 +59,7 @@ Visual.DocItem =
 		path
 	);
 
-	this.$sub =
+	this.sub =
 		{
 			doc :
 				doc
@@ -104,7 +104,7 @@ DocItem.prototype.getParaAtPoint =
 		return null;
 	}
 
-	return this.$sub.doc.getParaAtPoint(
+	return this.sub.doc.getParaAtPoint(
 		this,
 		p
 	);
@@ -125,7 +125,7 @@ DocItem.prototype.grepFocus =
 
 	var
 		doc =
-			this.$sub.doc;
+			this.sub.doc;
 
 	shell.setCaret(
 		'space',
@@ -201,7 +201,7 @@ DocItem.prototype.click =
 	{
 		var
 			ppnw =
-				this.$sub.doc.getPNW(
+				this.sub.doc.getPNW(
 					this,
 					para.key
 				),
