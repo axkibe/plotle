@@ -371,9 +371,6 @@ Doc.prototype.draw =
 {
 	// FIXME <pre>
 	var
-		paraSep =
-			this.paraSep,
-
 		selection =
 			shell.getSelection( ),
 
@@ -382,7 +379,6 @@ Doc.prototype.draw =
 
 	// draws the selection
 	if (
-		fabric &&
 		selection &&
 		this.path.subPathOf( selection.sign1.path )
 	)
@@ -400,12 +396,67 @@ Doc.prototype.draw =
 	}
 
 	var
-		y =
-			innerMargin.n,
-
 		// north-west points of paras
 		pnws =
+			this.getPNWs( item ),
+
+		ranks =
+			this.ranks;
+
+	for(
+		var r = 0, rZ = ranks.length;
+		r < rZ;
+		r++
+	)
+	{
+		var
+			vpara =
+				this.atRank( r ),
+
+			pnw =
+				pnws[ ranks[ r ] ],
+
+			p =
+				pnw.sub(
+					0,
+					Math.round( scrollp.y )
+				);
+
+		vpara.draw(
+			fabric,
+			view,
+			view.point( p )
+		);
+	}
+};
+
+
+/*
+| Returns the para pnws
+*/
+Doc.prototype.getPNWs =
+	function(
+		item
+	)
+{
+	if( this._$pnws )
+	{
+		return this._$pnws;
+	}
+
+	var
+		pnws =
+		this._$pnws =
 			{ },
+
+		paraSep =
+			this.paraSep,
+
+		innerMargin =
+			item.innerMargin,
+
+		y =
+			innerMargin.n,
 
 		ranks =
 			this.ranks;
@@ -432,56 +483,11 @@ Doc.prototype.draw =
 					Math.round( y )
 			);
 
-		var
-			p =
-				shellverse.grow(
-					'Point',
-					'x',
-						innerMargin.w,
-					'y',
-						Math.round( y - scrollp.y )
-				);
-
-		if( fabric )
-		{
-			vpara.draw(
-				fabric,
-				view,
-				view.point( p )
-			);
-		}
-
 		y +=
 			flow.height + paraSep;
 	}
 
-	this._$pnws =
-		pnws;   // north-west points of paras
-};
-
-
-/*
-| Returns the para pnws
-*/
-Doc.prototype.getPNWs =
-	function(
-		item
-	)
-{
-	if( this._$pnws )
-	{
-		return this._$pnws;
-	}
-
-	this.draw(
-		null,
-		null,
-		item,
-		null,
-		null
-	);
-
-	return this._$pnws;
+	return pnws;
 };
 
 /*
@@ -546,11 +552,6 @@ Doc.prototype.getPNW =
 		key
 	)
 {
-	if( arguments.length !== 2 )
-	{
-		throw new Error( 'TODO' );
-	}
-
 	return this.getPNWs(item)[ key ];
 };
 

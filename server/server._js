@@ -756,9 +756,6 @@ Server.prototype.prepareResources =
 		'shell/euclid/ellipse.js',
 			'fb',
 
-		'shell/euclid/ellipse-flower.js',
-			'fb',
-
 		'shell/euclid/line.js',
 			'fb',
 
