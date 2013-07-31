@@ -1,11 +1,9 @@
 /*
-|
-| A scrollbar (used by note).
+| A scrollbar (used by note)
 |
 | Currently there are only vertical scrollbars.
 |
 | Authors: Axel Kittenberger
-|
 */
 
 
@@ -18,45 +16,82 @@ var Visual;
 /*
 | Imports
 */
-var Euclid;
-var Jools;
-var theme;
+var
+	Euclid,
+	Jools,
+	theme;
 
 
 /*
 | Capsule
 */
-( function () {
+( function( ) {
 'use strict';
 
-if (typeof(window) === 'undefined')
-	{ throw new Error('this code needs a browser!'); }
+if( typeof( window ) === 'undefined' )
+{
+	throw new Error(
+		'this code needs a browser!'
+	);
+}
 
 
 /*
 | Constructor.
 */
-var Scrollbar =
-Visual.Scrollbar =
-	function( )
+var
+	Scrollbar =
+	Visual.Scrollbar =
+		function(
+			pos,      // position
+			aperture, // the size of the bar
+			max,      // maximum position
+			pnw,      // pnw
+			size      // size
+		)
 {
 	this.visible =
 		false;
 
-	// position
-	this._$pos =
-		0;
-
-	// maximum position
-	this._$max =
-		null;
-
-	// the size of the bar
 	this._$aperture =
-		null;
+		aperture;
 
-	this._$zone =
-		null;
+	this._$pnw =
+		pnw;
+
+	this._$max =
+		max;
+
+	this._$size =
+		size;
+
+	this.visible =
+		max > aperture;
+
+	if( max - aperture >= 0 )
+	{
+		pos =
+			Jools.limit(
+				0,
+				pos,
+				max - aperture
+			);
+	}
+	else
+	{
+		pos =
+			0;
+	}
+
+	if( pos < 0 )
+	{
+		throw new Error(
+			'Scrollbar pos < 0'
+		);
+	}
+
+	this._$pos =
+		pos;
 };
 
 
@@ -123,8 +158,20 @@ Scrollbar.prototype.getArea =
 
 	return (
 		new Euclid.RoundRect(
-			view.point( pnw.x, pnw.y + sy ).add( -s05, 0 ),
-			view.point( pnw.x, pnw.y + sy + map ).add( s05, 0 ),
+			view.point(
+				pnw.x,
+				pnw.y + sy
+			).add(
+				-s05,
+				0
+			),
+			view.point(
+				pnw.x,
+				pnw.y + sy + map
+			).add(
+				s05,
+				0
+			),
 			ths.ellipseA,
 			ths.ellipseB
 		)
@@ -148,56 +195,13 @@ Scrollbar.prototype.getPos =
 
 
 /*
-| Sets the scrollbars position and location.
-*/
-Scrollbar.prototype.setPos =
-	function(
-		pos,
-		aperture,
-		max,
-		pnw,
-		size
-	)
-{
-	if( max - aperture >= 0 )
-	{
-		pos =
-			Jools.limit( 0, pos, max - aperture );
-	}
-	else
-	{
-		pos =
-			0;
-	}
-
-	if( pos < 0 )
-	{
-		throw new Error(
-			'Scrollbar.setPos < 0'
-		);
-	}
-
-	this._$pos =
-		pos;
-
-	this._$aperture =
-		aperture;
-
-	this._$max =
-		max;
-
-	this._$pnw =
-		pnw;
-
-	this._$size =
-		size;
-};
-
-
-/*
 | Returns true if p is within the scrollbar.
 */
-Scrollbar.prototype.within = function( view, p )
+Scrollbar.prototype.within =
+	function(
+		view,
+		p
+	)
 {
 	if( !this.visible )
 	{
@@ -209,10 +213,10 @@ Scrollbar.prototype.within = function( view, p )
 			this._$pnw,
 
 		dex =
-			view.dex(p),
+			view.dex( p ),
 
 		dey =
-			view.dey(p);
+			view.dey( p );
 
 	return (
 		dex >= pnw.x &&
@@ -235,4 +239,4 @@ Scrollbar.prototype.scale =
 };
 
 
-} ) ();
+} )( );

@@ -77,10 +77,20 @@ Visual.Note =
 	this.zone =
 		zone;
 
-	var
-		sbary =
-		this.scrollbarY =
-			new Visual.Scrollbar( );
+	this.scrollbarY =
+		new Visual.Scrollbar(
+			0,
+			zone.height - this.innerMargin.y,
+			this.sub.doc.height,
+			shellverse.grow(
+				'Point',
+				'x',
+					zone.pse.x,
+				'y',
+					zone.pnw.y + theme.scrollbar.vdis
+			),
+			zone.height - theme.scrollbar.vdis * 2
+		);
 };
 
 
@@ -447,9 +457,6 @@ Note.prototype.draw =
 					'normal'
 				);
 
-		sbary.visible =
-			height > zone.height - imargin.y;
-
 		f.fill(
 			style,
 			this.zeroSilhoutte,
@@ -653,10 +660,13 @@ Note.prototype.highlight =
 | Actualizes the scrollbar.
 */
 Note.prototype.setScrollbar =
-	function( pos )
+	function(
+		pos
+	)
 {
-	var sbary =
-		this.scrollbarY;
+	var
+		sbary =
+			this.scrollbarY;
 
 	if( !sbary.visible )
 	{
@@ -672,17 +682,24 @@ Note.prototype.setScrollbar =
 			sbary.getPos( );
 	}
 
-	sbary.setPos(
-		pos,
-		zone.height - this.innerMargin.y,
-		this.sub.doc.height,
-		Euclid.Point.renew(
-			zone.pse.x,
-			zone.pnw.y + theme.scrollbar.vdis,
-			sbary.pnw
-		),
-		zone.height - theme.scrollbar.vdis * 2
+	console.log(
+		'scroll-to',
+		pos
 	);
+
+
+	this.scrollbarY =
+		new Visual.Scrollbar(
+			pos,
+			zone.height - this.innerMargin.y,
+			this.sub.doc.height,
+			Euclid.Point.renew(
+				zone.pse.x,
+				zone.pnw.y + theme.scrollbar.vdis,
+				sbary.pnw
+			),
+			zone.height - theme.scrollbar.vdis * 2
+		);
 };
 
 

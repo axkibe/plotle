@@ -109,7 +109,6 @@ Visual.Para =
 
 	// caching
 	this.$fabric =
-	this.$flow =
 		null;
 };
 
