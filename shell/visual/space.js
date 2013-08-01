@@ -1127,7 +1127,11 @@ Space.prototype.dragStop =
 			key =
 				result.chgX.trg.path.get( -1 );
 
-			shell.space.sub[ key ].grepFocus( );
+			shell.setCaret(
+				'space',
+				shell.space.sub[ key ].subPaths.spaceUser,
+				0
+			);
 
 			shell.redraw =
 				true;

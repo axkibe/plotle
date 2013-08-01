@@ -464,15 +464,13 @@ Portal.prototype.grepFocus =
 		return;
 	}
 
-	var
-		caret =
-			shell.setCaret(
-				'space',
-				this.subPaths.spaceUser,
-				0,
-				null,
-				true
-			);
+	shell.setCaret(
+		'space',
+		this.subPaths.spaceUser,
+		0,
+		null,
+		true
+	);
 
 	shell.peer.moveToTop(
 		this.path
