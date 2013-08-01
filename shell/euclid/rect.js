@@ -944,10 +944,14 @@ Rect.prototype.within =
 {
 	var
 		x =
-			view ? view.dex( p ) : p,
+			view ?
+				view.dex( p ) :
+				p.x,
 
 		y =
-			view ? view.dey( p ) : p,
+			view ?
+				view.dey( p ) :
+				p.y,
 
 		pnw =
 			this.pnw,

@@ -50,8 +50,6 @@ if( CHECK && typeof( window ) === 'undefined' )
 
 /*
 | Constructor
-|
-| TODO change to free string arguments
 */
 Disc.Disc =
 	function(
@@ -128,9 +126,10 @@ Disc.Disc =
 			height
 		);
 
-	// TODO inherit
 	this._tree =
-		shellverse.grow( this.layout );
+		inherit ?
+			inherit._tree :
+			shellverse.grow( this.layout );
 
 	this.silhoutte =
 		new Euclid.Ellipse(

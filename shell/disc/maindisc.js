@@ -1432,14 +1432,15 @@ MainDisc.prototype.pointingHover =
 		ctrl
 	)
 {
-	var oframe =
-		this.oframe;
+	var
+		oframe =
+			this.oframe,
 
-	var pnw =
-		oframe.pnw;
+		pnw =
+			oframe.pnw,
 
-	var pse =
-		oframe.pse;
+		pse =
+			oframe.pse;
 
 	// shortcut if p is not near the panel
 	if(
@@ -1551,7 +1552,7 @@ MainDisc.prototype.pointingStart =
 
 	// shortcut if p is not near the panel
 	if(
-		oframe.within(
+		!oframe.within(
 			null,
 			p
 		)

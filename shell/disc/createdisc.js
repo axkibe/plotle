@@ -721,20 +721,13 @@ CreateDisc.prototype.pointingHover =
 		ctrl
 	)
 {
-	var
-		pnw =
-			this.oframe.pnw,
-
-		pse =
-			this.oframe.pse;
-
 	// shortcut if p is not near the panel
 	if(
 		p === null ||
-		p.y < pnw.y || // TODO
-		p.y > pse.y ||
-		p.x < pnw.x ||
-		p.x > pse.x
+		!this.oframe.within(
+			null,
+			p
+		)
 	)
 	{
 		return this.setHover( null );
@@ -745,10 +738,11 @@ CreateDisc.prototype.pointingHover =
 			this._weave(),
 
 		pp =
-			p.sub(pnw);
+			p.sub( this.oframe.pnw );
 
-	// FIXME Optimize by reusing the latest path of this.$fabric
-	if( !fabric.withinSketch(
+	// ENHANCE optimize by reusing the latest path of this.$fabric
+	if(
+		!fabric.withinSketch(
 			this.silhoutte,
 			'sketch',
 			Euclid.View.proper,
@@ -802,19 +796,12 @@ CreateDisc.prototype.pointingStart =
 		ctrl
 	)
 {
-	var
-		pnw =
-			this.oframe.pnw,
-
-		pse =
-			this.oframe.pse;
-
 	// shortcut if p is not near the panel
 	if(
-		p.y < pnw.y || // TODO
-		p.y > pse.y ||
-		p.x < pnw.x ||
-		p.x > pse.x
+		!this.oframe.within(
+			null,
+			p
+		)
 	)
 	{
 		return null;
@@ -825,7 +812,7 @@ CreateDisc.prototype.pointingStart =
 			this._weave(),
 
 		pp =
-			p.sub(pnw);
+			p.sub( this.oframe.pnw );
 
 	// FIXME Optimize by reusing the latest path of this.$fabric
 	if(
@@ -841,8 +828,9 @@ CreateDisc.prototype.pointingStart =
 	}
 
 	// this is on the disc
-	var buttons =
-		this.buttons;
+	var
+		buttons =
+			this.buttons;
 
 	for( var name in buttons )
 	{

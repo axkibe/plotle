@@ -69,7 +69,7 @@ Visual.Portal =
 	{
 		// paths to spaceUser and spaceTag
 
-		this._spacePath =
+		this.subPaths =
 			Jools.immute(
 				{
 					spaceUser :
@@ -90,7 +90,7 @@ Visual.Portal =
 	}
 	else
 	{
-		this._spacePath =
+		this.subPaths =
 			null;
 	}
 
@@ -468,7 +468,7 @@ Portal.prototype.grepFocus =
 		caret =
 			shell.setCaret(
 				'space',
-				this._spacePath.spaceUser,
+				this.subPaths.spaceUser,
 				0,
 				null,
 				true
@@ -576,7 +576,7 @@ Portal.prototype.click =
 			caret =
 				shell.setCaret(
 					'space',
-					this._spacePath[ field ],
+					this.subPaths[ field ],
 					this._getOffsetAt(
 						field,
 						pp.x
@@ -858,7 +858,7 @@ Portal.prototype._weave =
 		view.home( )
 	);
 
-	if( this._spacePath )
+	if( this.subPaths )
 	{
 		f.clip(
 			this.zeroSilhoutte,
@@ -1004,7 +1004,7 @@ Portal.prototype.input =
 		var line = rx[ 1 ];
 
 		shell.peer.insertText(
-			this._spacePath[ section ],
+			this.subPaths[ section ],
 			caret.sign.at1,
 			line
 		);
@@ -1536,7 +1536,7 @@ Portal.prototype.keyBackspace =
 	}
 
 	shell.peer.removeText(
-		this._spacePath[ section ],
+		this.subPaths[ section ],
 		at1 - 1,
 		1
 	);
@@ -1577,7 +1577,7 @@ Portal.prototype.keyDel =
 	}
 
 	shell.peer.removeText(
-		this._spacePath[ section ],
+		this.subPaths[ section ],
 		at1,
 		1
 	);

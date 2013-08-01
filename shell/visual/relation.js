@@ -357,7 +357,6 @@ Relation.spawn =
 		key =
 			result.chgX.trg.path.get( -1 );
 
-	// event listener has spawned the vrel
 	shell.space.sub[ key ].grepFocus( );
 };
 

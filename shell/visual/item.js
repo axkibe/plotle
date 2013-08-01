@@ -866,6 +866,7 @@ Item.prototype.grepFocus =
 				{
 					path :
 						doc.atRank( 0 ).textPath,
+
 					at1 :
 						0
 				}
