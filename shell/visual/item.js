@@ -551,7 +551,7 @@ Item.prototype.dragStart =
 			'start',
 				p,
 			'startPos',
-				sbary.getPos( )
+				sbary.pos
 		);
 
 		return true;

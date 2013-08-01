@@ -91,7 +91,7 @@ var
 		);
 	}
 
-	this._pos =
+	this.pos =
 		pos;
 
 	Jools.immute( this );
@@ -142,7 +142,7 @@ Scrollbar.prototype.getArea =
 			this._size,
 
 		pos =
-			this._pos,
+			this.pos,
 
 		max =
 			this._max,
@@ -179,21 +179,6 @@ Scrollbar.prototype.getArea =
 			ths.ellipseB
 		)
 	);
-};
-
-
-/*
-| Returns the scrollbars position.
-*/
-Scrollbar.prototype.getPos =
-	function( )
-{
-	if( !this.visible )
-	{
-		return 0;
-	}
-
-	return this._pos;
 };
 
 

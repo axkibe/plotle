@@ -386,7 +386,7 @@ Para.prototype.positionCaret =
 			item.scrollbarY,
 
 		sy =
-			sbary ? Math.round( sbary.getPos( ) ) : 0,
+			sbary ? Math.round( sbary.pos ) : 0,
 
 		cyn =
 			Jools.limit(

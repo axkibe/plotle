@@ -196,6 +196,11 @@ Note.create =
 
 				break;
 
+			case 'scrolly' :
+
+				scrolly =
+					arguments[ a + 1 ];
+
 		default :
 
 			throw new Error(
@@ -274,7 +279,7 @@ Note.create =
 		if( scrolly === null )
 		{
 			scrolly =
-				inherit.scrollbarY.getPos( )
+				inherit.scrollbarY.pos
 		}
 
 		if( !doc )
@@ -480,7 +485,7 @@ Note.prototype.draw =
 		sbary.point =
 			Euclid.Point.renew(
 				0,
-				sbary.getPos( ),
+				sbary.pos,
 				sbary.point
 			);
 
@@ -691,7 +696,7 @@ Note.prototype.setScrollbar =
 	if( !Jools.is( pos ) )
 	{
 		pos =
-			sbary.getPos( );
+			sbary.pos;
 	}
 
 	this.scrollbarY =
@@ -723,7 +728,7 @@ Note.prototype.scrollCaretIntoView =
 			this.scrollbarY,
 
 		sy =
-			scrolly.getPos( ),
+			scrolly.pos,
 
 		para =
 			shell.$space.getSub(
@@ -791,7 +796,7 @@ Note.prototype.scrollPage =
 			this.sub.doc.font.twig.size;
 
 	this.setScrollbar(
-		this.scrollbarY.getPos( ) + dir * zone.height - fs * 2
+		this.scrollbarY.pos + dir * zone.height - fs * 2
 	);
 };
 
@@ -820,7 +825,7 @@ Note.prototype.mousewheel =
 	}
 
 	this.setScrollbar(
-		this.scrollbarY.getPos( ) - dir * system.settings.textWheelSpeed
+		this.scrollbarY.pos - dir * system.settings.textWheelSpeed
 	);
 
 	shell.redraw =

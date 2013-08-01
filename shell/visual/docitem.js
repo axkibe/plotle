@@ -188,7 +188,8 @@ DocItem.prototype.click =
 		pi =
 			vp.sub(
 				pnw.x,
-				pnw.y - (this.scrollbarY ? this.scrollbarY.getPos() : 0 )
+				pnw.y -
+					( this.scrollbarY ? this.scrollbarY.pos : 0 )
 			),
 
 		para =
