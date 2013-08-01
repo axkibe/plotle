@@ -10,7 +10,8 @@
 /*
 | Export
 */
-var Visual;
+var
+	Visual;
 
 
 /*
@@ -53,16 +54,16 @@ var
 	this.visible =
 		false;
 
-	this._$aperture =
+	this._aperture =
 		aperture;
 
-	this._$pnw =
+	this._pnw =
 		pnw;
 
-	this._$max =
+	this._max =
 		max;
 
-	this._$size =
+	this._size =
 		size;
 
 	this.visible =
@@ -90,8 +91,10 @@ var
 		);
 	}
 
-	this._$pos =
+	this._pos =
 		pos;
+
+	Jools.immute( this );
 };
 
 
@@ -133,19 +136,19 @@ Scrollbar.prototype.getArea =
 			theme.scrollbar,
 
 		pnw =
-			this._$pnw,
+			this._pnw,
 
 		size =
-			this._$size,
+			this._size,
 
 		pos =
-			this._$pos,
+			this._pos,
 
 		max =
-			this._$max,
+			this._max,
 
 		ap =
-			Math.round( this._$aperture * size / max ),
+			Math.round( this._aperture * size / max ),
 
 		map =
 			Math.max( ap, ths.minSize ),
@@ -190,7 +193,7 @@ Scrollbar.prototype.getPos =
 		return 0;
 	}
 
-	return this._$pos;
+	return this._pos;
 };
 
 
@@ -210,7 +213,7 @@ Scrollbar.prototype.within =
 
 	var
 		pnw =
-			this._$pnw,
+			this._pnw,
 
 		dex =
 			view.dex( p ),
@@ -222,7 +225,7 @@ Scrollbar.prototype.within =
 		dex >= pnw.x &&
 		dey >= pnw.y &&
 		dex <= pnw.x + theme.scrollbar.strength &&
-		dey <= pnw.y + this._$size
+		dey <= pnw.y + this._size
 	);
 };
 
@@ -235,7 +238,7 @@ Scrollbar.prototype.scale =
 		d
 	)
 {
-	return d * this._$max / this._$size;
+	return d * this._max / this._size;
 };
 
 

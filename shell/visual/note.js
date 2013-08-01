@@ -1,6 +1,7 @@
 /*
 | A fix sized text item.
-| Possibly has a scrollbar.
+|
+| Has a scrollbar.
 |
 | Authors: Axel Kittenberger
 */
@@ -57,7 +58,8 @@ Visual.Note =
 		tree,
 		path,
 		zone,
-		doc
+		doc,
+		scrolly
 	)
 {
 	if( CHECK && overload !== 'XOXO' )
@@ -79,7 +81,7 @@ Visual.Note =
 
 	this.scrollbarY =
 		new Visual.Scrollbar(
-			0,
+			scrolly,
 			zone.height - this.innerMargin.y,
 			this.sub.doc.height,
 			shellverse.grow(
@@ -125,6 +127,9 @@ Note.create =
 			null,
 
 		fontsize =
+			null,
+
+		scrolly =
 			null;
 
 	for(
@@ -266,6 +271,12 @@ Note.create =
 				inherit.path;
 		}
 
+		if( scrolly === null )
+		{
+			scrolly =
+				inherit.scrollbarY.getPos( )
+		}
+
 		if( !doc )
 		{
 			doc =
@@ -313,7 +324,8 @@ Note.create =
 			tree,
 			path,
 			zone,
-			doc
+			doc,
+			scrolly || 0
 		)
 	);
 };
@@ -681,12 +693,6 @@ Note.prototype.setScrollbar =
 		pos =
 			sbary.getPos( );
 	}
-
-	console.log(
-		'scroll-to',
-		pos
-	);
-
 
 	this.scrollbarY =
 		new Visual.Scrollbar(
