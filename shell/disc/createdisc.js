@@ -599,8 +599,8 @@ CreateDisc.prototype._weave =
 	var fabric =
 	this.$fabric =
 		new Euclid.Fabric(
-			this.width,
-			this.height
+			this.style.width,
+			this.style.height
 		);
 
 	fabric.fill(
@@ -705,7 +705,7 @@ CreateDisc.prototype.draw =
 			0,
 		'y',
 			Jools.half(
-				this.screensize.y - this.height
+				this.screensize.y - this.style.height
 			)
 	);
 };

@@ -1221,8 +1221,8 @@ MainDisc.prototype._weave =
 	fabric =
 	this.$fabric =
 		new Euclid.Fabric(
-			this.width,
-			this.height
+			this.style.width,
+			this.style.height
 		);
 
 	fabric.fill(
@@ -1539,14 +1539,15 @@ MainDisc.prototype.pointingStart =
 		ctrl
 	)
 {
-	var oframe =
-		this.oframe;
+	var
+		oframe =
+			this.oframe,
 
-	var pnw =
-		oframe.pnw;
+		pnw =
+			oframe.pnw,
 
-	var pse =
-		oframe.pse;
+		pse =
+			oframe.pse;
 
 	// shortcut if p is not near the panel
 	if(
@@ -1570,9 +1571,12 @@ MainDisc.prototype.pointingStart =
 		return null;
 	}
 
-	var fabric = this._weave();
+	var
+		fabric =
+			this._weave( ),
 
-	var pp = p.sub(pnw);
+		pp =
+			p.sub( pnw );
 
 	// FIXME Optimize by reusing the latest path of this.$fabric
 	if(

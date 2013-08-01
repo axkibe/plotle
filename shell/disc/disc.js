@@ -94,13 +94,10 @@ Disc.Disc =
 		this.style =
 			theme.disc[ this.name ],
 
-	// TODO remove this.width/height vars
 		width =
-			this.width =
 			style.width,
 
 		height =
-			this.height =
 			style.height,
 
 		ew =
@@ -117,7 +114,7 @@ Disc.Disc =
 				'x',
 					0,
 				'y',
-					Jools.half( this.screensize.y - this.height )
+					Jools.half( this.screensize.y - height )
 			),
 			width,
 			height
