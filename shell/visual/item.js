@@ -477,7 +477,7 @@ Item.prototype.drawHandles =
 	)
 {
 	var sbary =
-		this.scrollbarY;
+		this.$scrollbarY;
 
 	if( sbary && sbary.visible )
 	{
@@ -529,7 +529,7 @@ Item.prototype.dragStart =
 			shell.bridge.action( ),
 
 		sbary =
-			this.scrollbarY,
+			this.$scrollbarY,
 
 		space =
 			shell.$space;
@@ -731,7 +731,7 @@ Item.prototype.dragMove =
 					),
 
 				sbary =
-					item.scrollbarY,
+					item.$scrollbarY,
 
 				spos =
 					action.startPos + sbary.scale( dy );
@@ -818,7 +818,7 @@ Item.prototype.pointingHover =
 	}
 
 	var sbary =
-		this.scrollbarY;
+		this.$scrollbarY;
 
 	if(
 		sbary &&

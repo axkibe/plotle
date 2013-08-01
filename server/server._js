@@ -774,9 +774,6 @@ Server.prototype.prepareResources =
 		'shell/euclid/view.js',
 			'fb',
 
-		'shell/euclid/fix.js',
-			'fb',
-
 		'shell/shellverse.js',
 			'fb',
 

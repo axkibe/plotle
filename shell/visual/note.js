@@ -79,7 +79,7 @@ Visual.Note =
 	this.zone =
 		zone;
 
-	this.scrollbarY =
+	this.$scrollbarY =
 		new Visual.Scrollbar(
 			scrolly,
 			zone.height - this.innerMargin.y,
@@ -279,7 +279,7 @@ Note.create =
 		if( scrolly === null )
 		{
 			scrolly =
-				inherit.scrollbarY.pos
+				inherit.$scrollbarY.pos
 		}
 
 		if( !doc )
@@ -440,7 +440,7 @@ Note.prototype.draw =
 			this.$fabric,
 
 		sbary =
-			this.scrollbarY;
+			this.$scrollbarY;
 
 	// no buffer hit?
 	if(
@@ -683,7 +683,7 @@ Note.prototype.setScrollbar =
 {
 	var
 		sbary =
-			this.scrollbarY;
+			this.$scrollbarY;
 
 	if( !sbary.visible )
 	{
@@ -699,7 +699,7 @@ Note.prototype.setScrollbar =
 			sbary.pos;
 	}
 
-	this.scrollbarY =
+	this.$scrollbarY =
 		new Visual.Scrollbar(
 			pos,
 			zone.height - this.innerMargin.y,
@@ -725,7 +725,7 @@ Note.prototype.scrollCaretIntoView =
 			shell.$space.caret,
 
 		scrolly =
-			this.scrollbarY,
+			this.$scrollbarY,
 
 		sy =
 			scrolly.pos,
@@ -796,7 +796,7 @@ Note.prototype.scrollPage =
 			this.sub.doc.font.twig.size;
 
 	this.setScrollbar(
-		this.scrollbarY.pos + dir * zone.height - fs * 2
+		this.$scrollbarY.pos + dir * zone.height - fs * 2
 	);
 };
 
@@ -825,7 +825,7 @@ Note.prototype.mousewheel =
 	}
 
 	this.setScrollbar(
-		this.scrollbarY.pos - dir * system.settings.textWheelSpeed
+		this.$scrollbarY.pos - dir * system.settings.textWheelSpeed
 	);
 
 	shell.redraw =

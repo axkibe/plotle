@@ -383,7 +383,7 @@ Para.prototype.positionCaret =
 			),
 
 		sbary =
-			item.scrollbarY,
+			item.$scrollbarY,
 
 		sy =
 			sbary ? Math.round( sbary.pos ) : 0,

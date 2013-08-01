@@ -189,7 +189,7 @@ DocItem.prototype.click =
 			vp.sub(
 				pnw.x,
 				pnw.y -
-					( this.scrollbarY ? this.scrollbarY.pos : 0 )
+					( this.$scrollbarY ? this.$scrollbarY.pos : 0 )
 			),
 
 		para =
