@@ -39,7 +39,9 @@ var
 
 if( CHECK && typeof( window ) === 'undefined' )
 {
-	throw new Error( 'this code needs a browser!' );
+	throw new Error(
+		'this code needs a browser!'
+	);
 }
 
 
@@ -343,32 +345,6 @@ CheckBox.prototype.focusable =
 
 
 /*
-| True when checked.
-*/
-CheckBox.prototype.isChecked =
-	function( )
-{
-	throw new Error(
-		'TODO'
-	);
-};
-
-
-/*
-| Sets the current checked state
-*/
-CheckBox.prototype.setChecked =
-	function(
-		checked
-	)
-{
-	throw new Error(
-		'TODO'
-	);
-};
-
-
-/*
 | Mouse hover.
 */
 CheckBox.prototype.pointingHover =
@@ -528,7 +504,7 @@ CheckBox.prototype.input =
 
 /*
 | Draws the checkbox.
-| TODO _weave caching
+| FIXME _weave caching
 */
 CheckBox.prototype.draw =
 	function(

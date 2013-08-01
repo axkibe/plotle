@@ -1549,12 +1549,11 @@ MainDisc.prototype.pointingStart =
 		oframe.pse;
 
 	// shortcut if p is not near the panel
-	// TODO replace with oframe.within
 	if(
-		p.y < pnw.y ||
-		p.y > pse.y ||
-		p.x < pnw.x ||
-		p.x > pse.x
+		oframe.within(
+			null,
+			p
+		)
 	)
 	{
 		this.setHover( null );

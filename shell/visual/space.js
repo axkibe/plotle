@@ -1005,7 +1005,7 @@ Space.prototype.dragStop =
 			key =
 				result.chgX.trg.path.get( -1 );
 
-			this.sub[ key ].grepFocus( );
+			shell.space.sub[ key ].grepFocus( );
 
 			shell.redraw =
 				true;
@@ -1080,7 +1080,7 @@ Space.prototype.dragStop =
 			key =
 				result.chgX.trg.path.get( -1 );
 
-			this.sub[ key ].grepFocus( );
+			shell.space.sub[ key ].grepFocus( );
 
 			shell.redraw =
 				true;
@@ -1119,7 +1119,7 @@ Space.prototype.dragStop =
 			key =
 				result.chgX.trg.path.get( -1 );
 
-			this.sub[ key ].grepFocus( );
+			shell.space.sub[ key ].grepFocus( );
 
 			shell.redraw =
 				true;
