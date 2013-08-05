@@ -56,36 +56,37 @@ Disc.Disc =
 		// ... free strings ...
 	)
 {
-	var inherit =
-		Jools.parseFreeStrings.call(
-			this,
-			{
-				'name' :
+	var
+		inherit =
+			Jools.parseFreeStrings.call(
+				this,
 				{
-					type :
-						'param',
+					'name' :
+					{
+						type :
+							'param',
 
-					required :
-						true
+						required :
+							true
+					},
+
+					'inherit' :
+					{
+						type :
+							'return'
+					},
+
+					'screensize' :
+					{
+						type :
+							'param',
+
+						required :
+							true
+					}
 				},
-
-				'inherit' :
-				{
-					type :
-						'return'
-				},
-
-				'screensize' :
-				{
-					type :
-						'param',
-
-					required :
-						true
-				}
-			},
-			arguments
-		);
+				arguments
+			);
 
 	var
 		style =
@@ -165,11 +166,12 @@ Disc.Disc =
 	this.buttons =
 		{ };
 
-	var icons =
-	this._icons =
-		inherit ?
-			inherit._icons :
-			new Disc.Icons( );
+	var
+		icons =
+		this._icons =
+			inherit ?
+				inherit._icons :
+				new Disc.Icons( );
 
 	var
 		twig =
@@ -206,9 +208,7 @@ Disc.Disc =
 						'tree',
 							tree,
 						'icons',
-							icons,
-						'visible',
-							true
+							icons
 					);
 
 					break;

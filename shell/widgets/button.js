@@ -197,9 +197,6 @@ Widgets.Button =
 
 	this._$fabric =
 		null;
-
-	this.visible =
-		visible;
 };
 
 
