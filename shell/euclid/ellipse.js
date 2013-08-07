@@ -259,25 +259,5 @@ Ellipse.prototype.equals =
 };
 
 
-/*
-| Returns true if point is within the ellipse.
-|
-| TODO this should be inherited by Shape.
-*/
-Ellipse.prototype.within =
-	function(
-		view,
-		p
-	)
-{
-	return Euclid.swatch.withinSketch(
-		this,
-		'sketch',
-		view,
-		p
-	);
-};
-
-
 } )( );
 

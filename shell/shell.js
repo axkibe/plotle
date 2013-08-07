@@ -899,22 +899,23 @@ Shell.prototype.setCaret =
 		);
 	}
 
-	var caret =
-		new Caret(
-			// TODO skip model
-			path ?
-				new Sign( {
-					path:
-						path,
+	var
+		caret =
+			new Caret(
+				// TODO skip model
+				path ?
+					new Sign( {
+						path:
+							path,
 
-					at1 :
-						at1
-				} )
-				:
-				null,
-			retainx || null,
-			Jools.is( shown ) ? shown : this.$space.caret.$shown
-		);
+						at1 :
+							at1
+					} )
+					:
+					null,
+				retainx || null,
+				Jools.is( shown ) ? shown : this.$space.caret.$shown
+			);
 
 	this.$space =
 		new Visual.Space(

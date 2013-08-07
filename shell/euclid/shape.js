@@ -495,4 +495,23 @@ Shape.prototype.getProjection =
 };
 
 
+/*
+| Returns true if point is within the shape.
+*/
+Shape.prototype.within =
+	function(
+		view,
+		p
+	)
+{
+	return Euclid.swatch.withinSketch(
+		this,
+		'sketch',
+		view,
+		p
+	);
+};
+
+
+
 })( );
