@@ -1082,7 +1082,6 @@ SignUp.prototype.onRegister =
 			);
 		}
 
-		shell.poke( );
 		return;
 	}
 
@@ -1094,8 +1093,6 @@ SignUp.prototype.onRegister =
 	this.clear( );
 
 	shell.bridge.changeMode( 'Welcome' );
-
-	this.poke( );
 };
 
 

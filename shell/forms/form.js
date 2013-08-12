@@ -244,19 +244,6 @@ Form.prototype.getFocus =
 
 
 /*
-| Force clears all caches.
-*/
-Form.prototype.knock =
-	function( )
-{
-	for( var c in this.$sub )
-	{
-		this.$sub[ c ].knock( );
-	}
-};
-
-
-/*
 | Draws the form.
 */
 Form.prototype.draw =
@@ -595,20 +582,6 @@ Form.prototype.specialKey =
 		shift,
 		ctrl
 	);
-};
-
-
-/*
-| Clears caches.
-*/
-Form.prototype.poke =
-	function( )
-{
-//	this.$fabric =
-//		null;
-
-	shell.redraw =
-		true;
 };
 
 

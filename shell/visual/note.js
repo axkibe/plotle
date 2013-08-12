@@ -675,6 +675,8 @@ Note.prototype.highlight =
 };
 
 
+
+
 /*
 | Actualizes the scrollbar.
 */

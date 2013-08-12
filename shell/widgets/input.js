@@ -1268,9 +1268,4 @@ Input.prototype.grepFocus =
 };
 
 
-// TODO remove
-Input.prototype.knock =
-	function() {};
-
-
 })( );

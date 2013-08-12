@@ -586,23 +586,4 @@ CheckBox.prototype.grepFocus =
 };
 
 
-
-/*
-| Clears all caches.
-| TODO remove
-*/
-CheckBox.prototype.poke = function( )
-{
-};
-
-
-/*
-| Force clears all caches.
-| TODO remove
-*/
-CheckBox.prototype.knock = function( )
-{
-};
-
-
 } )( );

@@ -1653,18 +1653,6 @@ MainDisc.prototype.specialKey =
 
 
 /*
-| Clears caches.
-*/
-MainDisc.prototype.poke =
-	function( )
-{
-	this.$fabric = null;
-
-	shell.redraw = true;
-};
-
-
-/*
 | Sets the hovered component.
 */
 MainDisc.prototype.setHover =
@@ -1835,8 +1823,6 @@ MainDisc.prototype.setUser =
 
 	shell.redraw =
 		true;
-
-	this.poke( );
 };
 
 

@@ -227,15 +227,4 @@ Disc.Disc =
 };
 
 
-/*
-| Force clears all caches.
-*/
-Disc.Disc.prototype.knock =
-	function( )
-{
-	this.$fabric =
-		null;
-};
-
-
 } )( );

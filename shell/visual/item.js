@@ -738,8 +738,6 @@ Item.prototype.dragMove =
 
 			item.setScrollbar( spos );
 
-			item.poke( );
-
 			shell.redraw =
 				true;
 
@@ -875,31 +873,6 @@ Item.prototype.grepFocus =
 	caret.show( );
 
 	shell.peer.moveToTop( this.path );
-};
-
-
-/*
-| Called by subvisuals when they got changed.
-*/
-Item.prototype.poke =
-	function( )
-{
-	this.$fabric =
-		null;
-
-	shell.redraw =
-		true;
-};
-
-
-/*
-| Force-clears all caches.
-*/
-Item.prototype.knock =
-	function( )
-{
-	this.$fabric =
-		null;
 };
 
 

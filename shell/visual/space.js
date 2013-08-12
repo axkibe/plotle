@@ -406,28 +406,6 @@ Space.prototype.draw =
 
 
 /*
-| Force-clears all caches.
-| TODO remove
-*/
-Space.prototype.knock =
-	function( )
-{
-	this.caret.$save =
-	this.caret.$screenPos =
-		null;
-
-	for(
-		var r = this.tree.length - 1;
-		r >= 0;
-		r--
-	)
-	{
-		this.atRank( r ).knock( );
-	}
-};
-
-
-/*
 | Positions the caret.
 */
 Space.prototype.positionCaret =
@@ -504,8 +482,6 @@ Space.prototype.mousewheel =
 	}
 
 	shell.setSpaceZoom( this.$view.fact );
-
-	this.knock( );
 
 	shell.redraw =
 		true;
@@ -1871,8 +1847,6 @@ Space.prototype.changeZoom =
 	shell.setSpaceZoom(
 		this.$view.fact
 	);
-
-	this.knock( );
 
 	shell.redraw =
 		true;

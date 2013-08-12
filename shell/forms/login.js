@@ -761,8 +761,6 @@ Login.prototype.onAuth =
 			);
 		}
 
-		this.poke( );
-
 		return;
 	}
 
@@ -780,8 +778,6 @@ Login.prototype.onAuth =
 	);
 
 	shell.bridge.changeMode( 'Normal' );
-
-	this.poke( );
 };
 
 

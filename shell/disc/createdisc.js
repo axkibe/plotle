@@ -893,20 +893,6 @@ CreateDisc.prototype.specialKey =
 
 
 /*
-| Clears caches.
-*/
-CreateDisc.prototype.poke =
-	function( )
-{
-	this.$fabric =
-		null;
-
-	shell.redraw =
-		true;
-};
-
-
-/*
 | Sets the hovered component.
 */
 CreateDisc.prototype.setHover =

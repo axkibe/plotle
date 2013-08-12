@@ -158,8 +158,6 @@ Widget.prototype.grepFocus =
 		}
 	);
 
-	this.poke( );
-
 	return true;
 };
 

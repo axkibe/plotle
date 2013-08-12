@@ -296,26 +296,6 @@ Label.prototype.setText =
 
 
 /*
-| Clears cache.
-| TODO remove
-*/
-Label.prototype.poke =
-	function( )
-{
-};
-
-
-/*
-| Force clears all caches.
-| TODO remove
-*/
-Label.prototype.knock =
-	function( )
-{
-};
-
-
-/*
 | User is hovering his/her pointer ( mouse move )
 */
 Label.prototype.pointingHover =

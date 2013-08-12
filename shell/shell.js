@@ -202,8 +202,6 @@ Shell.prototype.messageRCV =
 	{
 		this._$disc.message( message );
 	}
-
-	this.poke( );
 };
 
 
@@ -354,33 +352,6 @@ Shell.prototype.blink =
 		display.caret.display(
 			this._$caretBlink
 		);
-	}
-};
-
-
-/*
-| Lets the shell check if it should redraw.
-|
-| Used by async handlers.
-*/
-Shell.prototype.poke =
-	function( )
-{
-	console.log( 'POKE' );
-
-	// actualizes hover context
-	if( this.$hover )
-	{
-		this.pointingHover(
-			this.$hover.p,
-			this.$hover.shift,
-			this.$hover.ctrl
-		);
-	}
-
-	if( this.redraw )
-	{
-		this._draw( );
 	}
 };
 
@@ -958,7 +929,9 @@ Shell.prototype.specialKey =
 | User entered normal text (one character or more).
 */
 Shell.prototype.input =
-	function( text )
+	function(
+		text
+	)
 {
 	// TODO, this has no place here
 	this.removeSelection( );
@@ -1197,8 +1170,6 @@ Shell.prototype.onAquireSpace =
 			this.redraw =
 				true;
 
-			this.poke( );
-
 			return;
 
 		case 'no access' :
@@ -1212,8 +1183,6 @@ Shell.prototype.onAquireSpace =
 
 			this.redraw =
 				true;
-
-			this.poke( );
 
 			return;
 
@@ -1368,8 +1337,6 @@ Shell.prototype.logout =
 				'home',
 				false
 			);
-
-			self.poke( );
 		}
 	);
 };
@@ -1482,9 +1449,7 @@ Shell.prototype.removeSelection =
 | Deselects the selection.
 */
 Shell.prototype.deselect =
-	function(
-		nopoke
-	)
+	function( )
 {
 	var selection =
 		this._$selection;
@@ -1493,16 +1458,6 @@ Shell.prototype.deselect =
 	{
 		return;
 	}
-
-	/*
-	if( !nopoke )
-	{
-		this.$space.getSub(
-			selection.sign1.path,
-			'Item'
-		).poke( );
-	}
-	*/
 
 	this._$selection =
 		null;

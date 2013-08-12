@@ -709,8 +709,6 @@ Button.prototype.pointingStart =
 						theme.zoom.repeatTimer,
 						repeatFunc
 					);
-
-				shell.poke( );
 			};
 
 		this._$retimer =
@@ -802,26 +800,6 @@ Button.prototype.draw =
 		'pnw',
 			this.pnw
 	);
-};
-
-
-/*
-| Clears all caches.
-*/
-Button.prototype.poke =
-	function( )
-{
-	// TODO remove
-};
-
-
-/*
-| Force clears all caches.
-*/
-Button.prototype.knock =
-	function( )
-{
-	// TODO remove
 };
 
 
