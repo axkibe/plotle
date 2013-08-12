@@ -1417,8 +1417,6 @@ Para.prototype.specialKey =
 					selection.sign2.at1
 				);
 
-				shell.$space.caret.show( );
-
 				shell.redraw =
 					true;
 
@@ -1662,8 +1660,6 @@ Para.prototype.specialKey =
 			);
 
 		item.scrollCaretIntoView( );
-
-		caret.show( );
 
 		shell.redraw =
 			true;

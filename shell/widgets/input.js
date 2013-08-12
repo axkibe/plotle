@@ -1219,23 +1219,20 @@ Input.prototype.pointingStart =
 		return null;
 	}
 
-	var caret =
-		this.parent.setCaret(
-			{
-				path :
-					new Path (
-						[
-							this.parent.name,
-							this.name
-						]
-					),
+	this.parent.setCaret(
+		{
+			path :
+				new Path (
+					[
+						this.parent.name,
+						this.name
+					]
+				),
 
-				at1 :
-					this.getOffsetAt( pp )
-			}
-		);
-
-	caret.show( );
+			at1 :
+				this.getOffsetAt( pp )
+		}
+	);
 
 	return false;
 };

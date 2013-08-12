@@ -83,6 +83,12 @@ Shell =
 			'meshcraft$8833'
 		);
 
+	this._$haveSystemFocus =
+		true;
+
+	this._$caretBlink =
+		false;
+
 	this.fabric =
 		fabric;
 
@@ -210,12 +216,6 @@ Shell.prototype.update =
 		chgX
 	)
 {
-	/*
-	this.$space.update(
-		tree,
-		chgX
-	);*/
-
 	var
 		caret =
 			this.$space.caret,
@@ -252,10 +252,14 @@ Shell.prototype.update =
 			caret =
 				new Caret(
 					sign,
-					caret.retainx,
-					caret.$shown
+					caret.retainx
 				);
 		}
+
+		this._$caretBlink =
+			false;
+
+		system.restartBlinker( );
 	}
 
 	this.$space =
@@ -312,19 +316,10 @@ Shell.prototype.update =
 Shell.prototype.systemFocus =
 	function( )
 {
-	var
-		display =
-			this._getCurrentDisplay( );
+	this._$haveSystemFocus =
+		true;
 
-	if( display )
-	{
-		display.systemFocus( );
-	}
-
-	if( this.redraw )
-	{
-		this._draw( );
-	}
+	this._draw( );
 };
 
 
@@ -334,51 +329,31 @@ Shell.prototype.systemFocus =
 Shell.prototype.systemBlur =
 	function( )
 {
-	var
-		display =
-			this._getCurrentDisplay( );
+	this._$haveSystemFocus =
+		false;
 
-	if( display )
-	{
-		display.systemBlur( );
-	}
-
-	if( this.redraw )
-	{
-		this._draw( );
-	}
+	this._draw( );
 };
 
 
 /*
-| Blinks the caret (if shown)
+| Blinks the caret ( if shown )
 */
 Shell.prototype.blink =
 	function( )
 {
-	// tests for font size changes
-	var
-		w =
-			Euclid.Measure.width(
-				this._fontWFont,
-				'meshcraft$8833'
-			);
-
-	if( w !== this._$fontWatch )
-	{
-		this._$fontWatch =
-			w;
-
-		this.knock( );
-	}
+	this._$caretBlink =
+		!this._$caretBlink;
 
 	var
 		display =
 			this._getCurrentDisplay( );
 
-	if( display )
+	if( display && display.caret )
 	{
-		display.blink( );
+		display.caret.display(
+			this._$caretBlink
+		);
 	}
 };
 
@@ -391,6 +366,8 @@ Shell.prototype.blink =
 Shell.prototype.poke =
 	function( )
 {
+	console.log( 'POKE' );
+
 	// actualizes hover context
 	if( this.$hover )
 	{
@@ -426,12 +403,20 @@ Shell.prototype._draw =
 
 	if( display )
 	{
-		display.draw( fabric );
+		display.draw(
+			fabric,
+			this._$haveSystemFocus,
+			this._$caretBlink
+		);
 	}
 
 	if( display && display.showDisc )
 	{
-		this._$disc.draw( fabric );
+		this._$disc.draw(
+			fabric,
+			this._$haveSystemFocus,
+			this._$caretBlink
+		);
 	}
 
 	this.redraw =
@@ -888,14 +873,20 @@ Shell.prototype.setCaret =
 		section,
 		path,
 		at1,
-		retainx,
-		shown
+		retainx
 	)
 {
 	if( section !== 'space' )
 	{
 		throw new Error(
 			'setCaret section not space'
+		);
+	}
+
+	if( arguments.length > 4 )
+	{
+		throw new Error(
+			'TODO'
 		);
 	}
 
@@ -913,8 +904,7 @@ Shell.prototype.setCaret =
 					} )
 					:
 					null,
-				retainx || null,
-				Jools.is( shown ) ? shown : this.$space.caret.$shown
+				retainx || null
 			);
 
 	this.$space =
@@ -926,6 +916,11 @@ Shell.prototype.setCaret =
 			this.$space.access,
 			caret
 		);
+
+	this._$caretBlink =
+		false;
+
+	system.restartBlinker( );
 };
 
 
@@ -1487,7 +1482,9 @@ Shell.prototype.removeSelection =
 | Deselects the selection.
 */
 Shell.prototype.deselect =
-	function( nopoke )
+	function(
+		nopoke
+	)
 {
 	var selection =
 		this._$selection;
@@ -1497,7 +1494,7 @@ Shell.prototype.deselect =
 		return;
 	}
 
-	// FIXME, use knock instead?
+	/*
 	if( !nopoke )
 	{
 		this.$space.getSub(
@@ -1505,9 +1502,10 @@ Shell.prototype.deselect =
 			'Item'
 		).poke( );
 	}
+	*/
 
-	this._$selection
-		= null;
+	this._$selection =
+		null;
 
 	system.setInput( '' );
 };

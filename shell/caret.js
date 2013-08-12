@@ -10,16 +10,19 @@
 /*
 | Exports
 */
-var Caret = null;
+var
+	Caret =
+		null;
 
 
 /*
 | Imports
 */
-var Euclid;
-var Jools;
-var shell;
-var system;
+var
+	Euclid,
+	Jools,
+	shell,
+	system;
 
 
 /*
@@ -29,9 +32,13 @@ var system;
 
 'use strict';
 
-if( typeof( window ) === 'undefined' )
+if(
+	typeof( window ) === 'undefined'
+)
 {
-	throw new Error( 'this code needs a browser!' );
+	throw new Error(
+		'this code needs a browser!'
+	);
 }
 
 
@@ -41,10 +48,14 @@ if( typeof( window ) === 'undefined' )
 Caret =
 	function(
 		sign,
-		retainx,
-		shown
+		retainx
 	)
 {
+	if( arguments.length > 2 )
+	{
+		throw new Error( 'TODO' );
+	}
+
 	// a signature pointing to the item the caret is in
 	this.sign =
 		sign;
@@ -53,24 +64,11 @@ Caret =
 	this.retainx =
 		retainx;
 
-	Jools.immute( this );
-
 	// position cache
 	this.$pos =
 		null;
 
-	// true if visible
-	this.$shown =
-		!!shown;
-
-	// true when just blinked away
-	this.$blinked =
-		false;
-
-	if( this.$shown )
-	{
-		system.restartBlinker( );
-	}
+	Jools.immute( this );
 };
 
 
@@ -85,37 +83,12 @@ Caret.useGetImageData =
 
 
 /*
-| Shows the caret or resets the blink timer if already shown
-*/
-Caret.prototype.show =
-	function( )
-{
-	this.$shown =
-		true;
-
-	this.$blinked =
-		false;
-
-	system.restartBlinker( );
-};
-
-
-/*
-| Hides the caret.
-*/
-Caret.prototype.hide =
-	function( )
-{
-	this.$shown =
-		false;
-};
-
-
-/*
 | Draws or erases the caret.
 */
 Caret.prototype.display =
-	function( )
+	function(
+		blink
+	)
 {
 	// erases the old caret
 	if( this.$save )
@@ -142,10 +115,7 @@ Caret.prototype.display =
 	this.$height =
 		null;
 
-	if(
-		!this.$shown ||
-		!this.sign
-	)
+	if( !this.sign )
 	{
 		return;
 	}
@@ -162,7 +132,7 @@ Caret.prototype.display =
 		height =
 			this.$height;
 
-	if( !this.$blinked && pos !== null )
+	if( !blink && pos !== null )
 	{
 		// saves the caret background
 		if( Caret.useGetImageData )
@@ -198,22 +168,6 @@ Caret.prototype.display =
 			1,
 			height
 		);
-	}
-};
-
-
-/*
-| Switches caret visibility state.
-*/
-Caret.prototype.blink =
-	function( )
-{
-	if( this.$shown )
-	{
-		this.$blinked =
-			!this.$blinked;
-
-		this.display( );
 	}
 };
 

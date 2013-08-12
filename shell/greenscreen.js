@@ -70,26 +70,6 @@ GreenScreen.prototype.positionCaret =
 
 
 /*
-| The shell got the systems focus.
-*/
-GreenScreen.prototype.systemFocus =
-	function( )
-{
-	return;
-};
-
-
-/*
-| The shell lost the systems focus.
-*/
-GreenScreen.prototype.systemBlur =
-	function( )
-{
-	return;
-};
-
-
-/*
 | Blinks the caret (if shown)
 */
 GreenScreen.prototype.blink =

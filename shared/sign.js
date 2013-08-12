@@ -27,7 +27,7 @@ var Jools;
 /*
 | Node includes.
 */
-if(typeof( window ) === 'undefined' )
+if( typeof( window ) === 'undefined' )
 {
 	Jools = require('./jools');
 }
@@ -52,10 +52,13 @@ Sign = function(model /*, ...*/)
 
 		if( !Sign.field[ k ] )
 		{
-			throw Jools.reject( 'invalid Sign property: ' + k );
+			throw Jools.reject(
+				'invalid Sign property: ' + k
+			);
 		}
 
-		this[k] = model[k];
+		this[ k ] =
+			model[ k ];
 	}
 
 	// then properties from arguments are applied
@@ -71,13 +74,15 @@ Sign = function(model /*, ...*/)
 
 		if( !Sign.field[ k ] )
 		{
-			throw Jools.reject('invalid Sign property: ' + k );
+			throw Jools.reject(
+				'invalid Sign property: ' + k
+			);
 		}
 
 		this[ k ] = arguments[ a + 1 ];
 	}
 
-	Jools.immute(this);
+	Jools.immute( this );
 };
 
 
@@ -144,8 +149,10 @@ Sign.prototype.affix =
 /*
 | Node
 */
-if (typeof(window) === 'undefined') {
-	module.exports = Sign;
+if( typeof( window ) === 'undefined' )
+{
+	module.exports =
+		Sign;
 }
 
 }( ) );

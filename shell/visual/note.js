@@ -201,6 +201,8 @@ Note.create =
 				scrolly =
 					arguments[ a + 1 ];
 
+				break;
+
 		default :
 
 			throw new Error(
@@ -279,7 +281,7 @@ Note.create =
 		if( scrolly === null )
 		{
 			scrolly =
-				inherit.$scrollbarY.pos
+				inherit.$scrollbarY.pos;
 		}
 
 		if( !doc )

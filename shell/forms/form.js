@@ -119,8 +119,7 @@ Forms.Form =
 	this.$caret =
 		new Caret(
 			null,
-			null,
-			false
+			null
 		);
 
 	// all components of the form
@@ -662,8 +661,7 @@ Form.prototype.setCaret =
 	this.$caret =
 		new Caret(
 			sign,
-			null,
-			this.$caret.$shown
+			null
 		);
 
 	if( sign )
@@ -886,42 +884,6 @@ Form.prototype.setChecked =
 
 
 /*
-| The shell got the systems focus.
-*/
-Form.prototype.systemFocus =
-	function( )
-{
-	var caret =
-		this.$caret;
-
-	caret.show( );
-
-	caret.display( );
-
-	shell.redraw =
-		true;
-};
-
-
-/*
-| The shell lost the systems focus.
-*/
-Form.prototype.systemBlur =
-	function( )
-{
-	var caret =
-		this.$caret;
-
-	caret.hide( );
-
-	caret.display( );
-
-	shell.redraw =
-		true;
-};
-
-
-/*
 | A button of the form has been pushed.
 */
 Form.prototype.pushButton =
@@ -932,15 +894,6 @@ Form.prototype.pushButton =
 	throw new Error(
 		'pushButton should be overloaded!'
 	);
-};
-
-/*
-| Blinks the caret (if shown)
-*/
-Form.prototype.blink =
-	function( )
-{
-	this.$caret.blink( );
 };
 
 

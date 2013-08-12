@@ -329,11 +329,13 @@ System.prototype.restartBlinker =
 	function( )
 {
 	// double uses the blink timer
-	this._testInput();
+	this._testInput( );
 
 	if( this._blinkTimer )
 	{
-		clearInterval( this._blinkTimer );
+		clearInterval(
+			this._blinkTimer
+		);
 	}
 
 	this._blinkTimer = setInterval(

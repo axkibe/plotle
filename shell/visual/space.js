@@ -115,8 +115,7 @@ Visual.Space =
 		caret ||
 		new Caret(
 			null, // sign
-			null, // retrainx
-			true  // shown
+			null  // retrainx
 		);
 
 	Jools.keyNonGrata(
@@ -251,7 +250,9 @@ Space.prototype.createItem =
 */
 Space.prototype.draw =
 	function(
-		fabric
+		fabric,
+		haveSystemFocus,
+		caretBlink
 	)
 {
 	var
@@ -396,7 +397,11 @@ Space.prototype.draw =
 			break;
 	}
 
-	this.caret.display( );
+
+	if( haveSystemFocus )
+	{
+		this.caret.display( caretBlink );
+	}
 };
 
 
@@ -2017,49 +2022,6 @@ Space.prototype.getSub =
 	}
 
 	return m;
-};
-
-
-/*
-| The shell got the systems focus.
-*/
-Space.prototype.systemFocus =
-	function( )
-{
-	var
-		caret =
-			this.caret;
-
-	caret.show( );
-
-	caret.display( );
-};
-
-
-
-/*
-| The shell lost the systems focus.
-*/
-Space.prototype.systemBlur =
-	function( )
-{
-	var
-		caret =
-			this.caret;
-
-	caret.hide( );
-
-	caret.display( );
-};
-
-
-/*
-| Blinks the caret (if shown)
-*/
-Space.prototype.blink =
-	function( )
-{
-	this.caret.blink( );
 };
 
 
