@@ -347,7 +347,11 @@ Shell.prototype.blink =
 		display =
 			this._getCurrentDisplay( );
 
-	if( display && display.caret )
+	if(
+		display &&
+		display.caret &&
+		this._$haveSystemFocus
+	)
 	{
 		display.caret.display(
 			this._$caretBlink
