@@ -468,8 +468,7 @@ Portal.prototype.grepFocus =
 		'space',
 		this.subPaths.spaceUser,
 		0,
-		null,
-		true
+		null
 	);
 
 	shell.peer.moveToTop(
@@ -1140,111 +1139,72 @@ Portal.prototype.specialKey =
 	{
 		case 'backspace' :
 
-			show =
-				this.keyBackspace( caret )
-				||
-				show;
+			this._keyBackspace( caret );
 
 			break;
 
 		case 'del' :
 
-			show =
-				this.keyDel( caret )
-				||
-				show;
+			this._keyDel( caret );
 
 			break;
 
 		case 'down' :
 
-			show =
-				this.keyDown( caret )
-				||
-				show;
+			this._keyDown( caret );
 
 			break;
 
 		case 'end' :
 
-			show =
-				this.keyEnd( caret )
-				||
-				show;
+			this._keyEnd( caret );
 
 			break;
 
 /*
 		case 'enter' :
 
-			show =
-				this.keyEnter( caret )
-				||
-				show;
+			this.keyEnter( caret );
 
 			break;
 */
 
 		case 'left' :
 
-			show =
-				this.keyLeft( caret )
-				||
-				show;
+			this._keyLeft( caret );
 
 			break;
 
 		case 'pos1' :
 
-			show =
-				this.keyPos1( caret )
-				||
-				show;
+			this._keyPos1( caret )
 
 			break;
 
 		case 'right' :
 
-			show =
-				this.keyRight( caret )
-				||
-				show;
+			this._keyRight( caret );
 
 			break;
 
 		case 'tab' :
 
-			show =
-				this.keyTab( caret )
-				||
-				show;
+			this._keyTab( caret );
 
 			break;
 
 		case 'up' :
 
-			show =
-				this.keyUp( caret )
-				||
-				show;
-
+			this._keyUp( caret );
 
 			break;
-	}
-
-	if( show )
-	{
-		caret.show( );
-
-		shell.redraw =
-			true;
 	}
 };
 
 /*
 | User pressed right key.
 */
-Portal.prototype.keyLeft =
+Portal.prototype._keyLeft =
 	function(
 		caret
 	)
@@ -1258,7 +1218,7 @@ Portal.prototype.keyLeft =
 
 	if( !this._isSection( section ) )
 	{
-		return false;
+		return;
 	}
 
 
@@ -1276,10 +1236,11 @@ Portal.prototype.keyLeft =
 				this.tree.twig.spaceUser.length
 			);
 
-			return true;
+			shell.redraw =
+				true;
 		}
 
-		return false;
+		return;
 	}
 
 	shell.setCaret(
@@ -1288,13 +1249,16 @@ Portal.prototype.keyLeft =
 		csign.at1 - 1
 	);
 
-	return true;
+	shell.redraw =
+		true;
+
+	return;
 };
 
 /*
 | User pressed down key.
 */
-Portal.prototype.keyDown =
+Portal.prototype._keyDown =
 	function(
 		caret
 	)
@@ -1308,7 +1272,7 @@ Portal.prototype.keyDown =
 
 	if( !this._isSection( section ) )
 	{
-		return false;
+		return;
 	}
 
 	var
@@ -1337,15 +1301,15 @@ Portal.prototype.keyDown =
 			break;
 	}
 
-
-	return true;
+	shell.redraw =
+		true;
 };
 
 
 /*
 | User pressed down key.
 */
-Portal.prototype.keyTab =
+Portal.prototype._keyTab =
 	function(
 		caret
 	)
@@ -1359,7 +1323,7 @@ Portal.prototype.keyTab =
 
 	if( !this._isSection( section ) )
 	{
-		return false;
+		return;
 	}
 
 	var
@@ -1400,13 +1364,14 @@ Portal.prototype.keyTab =
 		0
 	);
 
-	return true;
+	shell.redraw =
+		true;
 };
 
 /*
 | User pressed down key.
 */
-Portal.prototype.keyUp =
+Portal.prototype._keyUp =
 	function(
 		caret
 	)
@@ -1420,7 +1385,7 @@ Portal.prototype.keyUp =
 
 	if( !this._isSection( section ) )
 	{
-		return false;
+		return;
 	}
 
 	var
@@ -1448,14 +1413,14 @@ Portal.prototype.keyUp =
 			break;
 	}
 
-
-	return true;
+	shell.redraw =
+		true;
 };
 
 /*
 | User pressed right key.
 */
-Portal.prototype.keyRight =
+Portal.prototype._keyRight =
 	function(
 		caret
 	)
@@ -1489,10 +1454,11 @@ Portal.prototype.keyRight =
 				0
 			);
 
-			return true;
+			shell.redraw =
+				true;
 		}
 
-		return false;
+		return;
 	}
 
 	shell.setCaret(
@@ -1501,14 +1467,17 @@ Portal.prototype.keyRight =
 		csign.at1 + 1
 	);
 
-	return true;
+	shell.redraw =
+		true;
+
+	return;
 };
 
 
 /*
 | User pressed backspace.
 */
-Portal.prototype.keyBackspace =
+Portal.prototype._keyBackspace =
 	function(
 		caret
 	)
@@ -1522,7 +1491,7 @@ Portal.prototype.keyBackspace =
 
 	if( !this._isSection( section ) )
 	{
-		return false;
+		return;
 	}
 
 	var at1 =
@@ -1530,7 +1499,7 @@ Portal.prototype.keyBackspace =
 
 	if( at1 <= 0 )
 	{
-		return false;
+		return;
 	}
 
 	shell.peer.removeText(
@@ -1539,14 +1508,15 @@ Portal.prototype.keyBackspace =
 		1
 	);
 
-	return true;
+	shell.redraw =
+		true;
 };
 
 
 /*
 | User pressed del.
 */
-Portal.prototype.keyDel =
+Portal.prototype._keyDel =
 	function(
 		caret
 	)
@@ -1563,7 +1533,7 @@ Portal.prototype.keyDel =
 
 	if( !this._isSection( section ) )
 	{
-		return false;
+		return;
 	}
 
 	var at1 =
@@ -1571,7 +1541,7 @@ Portal.prototype.keyDel =
 
 	if( at1 >= value.length )
 	{
-		return false;
+		return;
 	}
 
 	shell.peer.removeText(
@@ -1580,14 +1550,15 @@ Portal.prototype.keyDel =
 		1
 	);
 
-	return true;
+	shell.redraw =
+		true;
 };
 
 
 /*
 | User pressed end key.
 */
-Portal.prototype.keyEnd =
+Portal.prototype._keyEnd =
 	function(
 		caret
 	)
@@ -1601,18 +1572,19 @@ Portal.prototype.keyEnd =
 
 	if( !this._isSection( section ) )
 	{
-		return false;
+		return;
 	}
 
-	var at1 =
-		csign.at1;
+	var
+		at1 =
+			csign.at1,
 
-	var value =
-		this.tree.twig[ section ];
+		value =
+			this.tree.twig[ section ];
 
 	if( at1 >= value.length )
 	{
-		return false;
+		return;
 	}
 
 	shell.setCaret(
@@ -1621,7 +1593,8 @@ Portal.prototype.keyEnd =
 		value.length
 	);
 
-	return true;
+	shell.redraw =
+		true;
 };
 
 
@@ -1792,7 +1765,7 @@ Portal.prototype._prepareField =
 /*
 | User pressed pos1 key,
 */
-Portal.prototype.keyPos1 =
+Portal.prototype._keyPos1 =
 	function(
 		caret
 	)
@@ -1803,7 +1776,7 @@ Portal.prototype.keyPos1 =
 
 	if( csign.at1 <= 0 )
 	{
-		return false;
+		return;
 	}
 
 	shell.setCaret(
@@ -1812,7 +1785,8 @@ Portal.prototype.keyPos1 =
 		0
 	);
 
-	return true;
+	shell.redraw =
+		true;
 };
 
 
