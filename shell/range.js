@@ -101,6 +101,7 @@ Range.prototype.normalize =
 			this.$end =
 				this.sign1;
 		}
+
 		return;
 	}
 
@@ -233,5 +234,16 @@ Range.prototype.innerText =
 };
 
 
+/*
+| Return true if sign1 equals sign2
+*/
+Range.prototype.empty =
+	function( )
+{
+	return (
+		this.sign1.path.equals( this.sign2.path ) &&
+		this.sign1.at1 === this.sign2.at1
+	);
+}
 
 })( );

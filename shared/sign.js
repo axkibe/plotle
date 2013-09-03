@@ -29,16 +29,22 @@ var Jools;
 */
 if( typeof( window ) === 'undefined' )
 {
-	Jools = require('./jools');
+	Jools =
+		require('./jools');
 }
 
 
 /*
 | Constructor
 */
-Sign = function(model /*, ...*/)
+Sign =
+	function(
+		model
+		/*, ...*/
+	)
 {
-	var k;
+	var
+		k;
 
 	// first properties from the model are inherited
 
@@ -79,7 +85,8 @@ Sign = function(model /*, ...*/)
 			);
 		}
 
-		this[ k ] = arguments[ a + 1 ];
+		this[ k ] =
+			arguments[ a + 1 ];
 	}
 
 	Jools.immute( this );
@@ -91,20 +98,33 @@ Sign = function(model /*, ...*/)
 */
 Sign.field =
 	Jools.immute({
-		'at1'   : true,
-		'at2'   : true,
-		'path'  : true,
-		'proc'  : true,
-		'rank'  : true,
-		'space' : true,
-		'val'   : true
+		'at1' :
+			true,
+
+		'at2' :
+			true,
+
+		'path' :
+			true,
+
+		'proc' :
+			true,
+
+		'rank' :
+			true,
+
+		'space' :
+			true,
+
+		'val' :
+			true
 	});
 
 
 /*
-| Returns a Signature with a new value..
+| Returns a sign with an additional value.
 |
-| If the signature has the value preset,
+| If this sign has the new value already set,
 | it is checked for equality.
 */
 Sign.prototype.affix =

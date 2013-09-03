@@ -1001,7 +1001,7 @@ Para.prototype.keyBackspace =
 /*
 | Del-key pressed.
 */
-Para.prototype.keyDel =
+Para.prototype._keyDel =
 	function(
 		item,
 		doc,
@@ -1039,7 +1039,7 @@ Para.prototype.keyDel =
 /*
 | Down arrow pressed.
 */
-Para.prototype.keyDown =
+Para.prototype._keyDown =
 	function(
 		item,
 		doc,
@@ -1051,7 +1051,9 @@ Para.prototype.keyDown =
 			this.flow,
 
 		x =
-			caret.retainx !== null ? caret.retainx : caret.$pos.x,
+			caret.retainx !== null ?
+				caret.retainx :
+				caret.$pos.x,
 
 		space =
 			shell.$space,
@@ -1083,10 +1085,11 @@ Para.prototype.keyDown =
 	}
 
 	// goto next para
-	var r =
-		doc.tree.rankOf( this.key );
+	var
+		r =
+			doc.tree.rankOf( this.key );
 
-	if (r < doc.tree.length - 1)
+	if( r < doc.tree.length - 1 )
 	{
 		var ve =
 			doc.atRank(r + 1);
@@ -1109,7 +1112,7 @@ Para.prototype.keyDown =
 /*
 | End-key pressed.
 */
-Para.prototype.keyEnd =
+Para.prototype._keyEnd =
 	function(
 		item,
 		doc,
@@ -1156,7 +1159,7 @@ Para.prototype.keyEnter =
 /*
 | Left arrow pressed.
 */
-Para.prototype.keyLeft =
+Para.prototype._keyLeft =
 	function(
 		item,
 		doc,
@@ -1201,7 +1204,7 @@ Para.prototype.keyLeft =
 /*
 | Pos1-key pressed.
 */
-Para.prototype.keyPos1 =
+Para.prototype._keyPos1 =
 	function(
 		item,
 		doc,
@@ -1229,7 +1232,7 @@ Para.prototype.keyPos1 =
 /*
 | Right arrow pressed.
 */
-Para.prototype.keyRight =
+Para.prototype._keyRight =
 	function(
 		item,
 		doc,
@@ -1274,7 +1277,7 @@ Para.prototype.keyRight =
 /*
 | Up arrow pressed.
 */
-Para.prototype.keyUp =
+Para.prototype._keyUp =
 	function(
 		item,
 		doc,
@@ -1450,8 +1453,10 @@ Para.prototype.specialKey =
 			case 'backspace' :
 			case 'del' :
 
+				shell.removeSelection( );
+
 				selection =
-					shell.removeSelection( );
+					null;
 
 				show =
 					true;
@@ -1462,8 +1467,10 @@ Para.prototype.specialKey =
 
 			case 'enter' :
 
+				shell.removeSelection( );
+
 				selection =
-					shell.removeSelection( );
+					null;
 
 				show =
 					true;
@@ -1535,7 +1542,7 @@ Para.prototype.specialKey =
 		case 'down' :
 
 			show =
-				this.keyDown(
+				this._keyDown(
 					item,
 					doc,
 					caret
@@ -1548,7 +1555,7 @@ Para.prototype.specialKey =
 		case 'end' :
 
 			show =
-				this.keyEnd(
+				this._keyEnd(
 					item,
 					doc,
 					caret
@@ -1561,7 +1568,7 @@ Para.prototype.specialKey =
 		case 'left' :
 
 			show =
-				this.keyLeft(
+				this._keyLeft(
 					item,
 					doc,
 					caret
@@ -1574,7 +1581,7 @@ Para.prototype.specialKey =
 		case 'pos1' :
 
 			show =
-				this.keyPos1(
+				this._keyPos1(
 					item,
 					doc,
 					caret
@@ -1587,7 +1594,7 @@ Para.prototype.specialKey =
 		case 'right' :
 
 			show =
-				this.keyRight(
+				this._keyRight(
 					item,
 					doc,
 					caret
@@ -1600,7 +1607,7 @@ Para.prototype.specialKey =
 		case 'up' :
 
 			show =
-				this.keyUp(
+				this._keyUp(
 					item,
 					doc,
 					caret
@@ -1613,7 +1620,7 @@ Para.prototype.specialKey =
 		case 'del' :
 
 			show =
-				this.keyDel(
+				this._keyDel(
 					item,
 					doc,
 					caret

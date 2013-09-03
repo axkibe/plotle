@@ -1423,29 +1423,34 @@ Shell.prototype.arrivedAtSpace =
 Shell.prototype.removeSelection =
 	function( )
 {
-	var selection =
-		this._$selection;
+	var
+		selection =
+			this._$selection;
 
-	if( !selection ) {
-		return null;
+	if( !selection )
+	{
+		return;
 	}
 
 	selection.normalize( this.$space );
 
-	this.deselect();
+	this.deselect( );
 
 	this.redraw =
 		true;
 
-	this.peer.removeSpan(
-		selection.$begin.path,
-		selection.$begin.at1,
+	if( !selection.empty( ) )
+	{
+		this.peer.removeSpan(
+			selection.$begin.path,
+			selection.$begin.at1,
 
-		selection.$end.path,
-		selection.$end.at1
-	);
+			selection.$end.path,
+			selection.$end.at1
+		);
+	}
 
-	return null;
+	return;
 };
 
 
