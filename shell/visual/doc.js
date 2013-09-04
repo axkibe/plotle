@@ -492,7 +492,6 @@ Doc.prototype.getPNWs =
 
 /*
 | Returns the height of the document.
-| FIXME caching
 */
 Jools.lazyFixate(
 	Doc.prototype,
@@ -661,12 +660,9 @@ Doc.prototype.sketchSelection =
 {
 	var
 		selection =
-			shell.getSelection( ),
+			shell.getSelection( );
 
-		space =
-			shell.$space;
-
-	selection.normalize( space );
+	selection.normalize( shell.$space );
 
 	var
 		sp =
@@ -696,15 +692,21 @@ Doc.prototype.sketchSelection =
 		para2 =
 			this.sub[ key2 ],
 
-		p1 =
+		o1 =
 			para1.locateOffset(
 				s1.at1
-			).p,
+			),
 
-		p2 =
+		o2 =
 			para2.locateOffset(
 				s2.at1
-			).p,
+			),
+
+		p1 =
+			o1.p,
+
+		p2 =
+			o2.p,
 
 		fontsize =
 			this.fontsize,
@@ -739,19 +741,25 @@ Doc.prototype.sketchSelection =
 				Math.round( p2.y + pnw2.y - sp.y )
 		);
 
-	if( ( Math.abs( p2.y - p1.y ) < 2 ) )
+	if(
+		key1 === key2 &&
+		o1.line === o2.line
+	)
 	{
-		// ***
+		// p1***p2
 		fabric.moveTo( p1.x, p1.y + descend, view );
 		fabric.lineTo( p1.x, p1.y -  ascend, view );
 		fabric.lineTo( p2.x, p2.y -  ascend, view );
 		fabric.lineTo( p2.x, p2.y + descend, view );
 		fabric.lineTo( p1.x, p1.y + descend, view );
 	}
-	else if ( Math.abs( p1.y + fontsize + descend - p2.y ) < 2 && ( p2.x <= p1.x ) )
+	else if (
+		p2.y - ascend <= p1.y + descend &&
+		p2.x < p1.x
+	)
 	{
-		//      ***
-		// ***
+		//        p1***
+		// ***p2
 		fabric.moveTo( rx,   p1.y -  ascend, view );
 		fabric.lineTo( p1.x, p1.y -  ascend, view );
 		fabric.lineTo( p1.x, p1.y + descend, view );
@@ -764,8 +772,8 @@ Doc.prototype.sketchSelection =
 	}
 	else
 	{
-		//    *****
-		// *****
+		//   p1*******
+		// ******p2
 		fabric.moveTo( rx,   p2.y -  ascend, view );
 		fabric.lineTo( p2.x, p2.y -  ascend, view );
 		fabric.lineTo( p2.x, p2.y + descend, view );

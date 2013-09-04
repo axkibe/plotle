@@ -281,7 +281,7 @@ Label.create =
 			'flowWidth',
 				0,
 			'paraSep',
-				0
+				fontsize * theme.bottombox
 		);
 
 	// TODO return inherit
@@ -561,78 +561,6 @@ Label.prototype.draw =
 				zone.pnw
 		);
 	}
-};
-
-
-/*
-| Calculates the change of fontsize due to resizing.
-*/
-Label.prototype.fontSizeChange =
-	function( fontsize )
-{
-	var action =
-		shell.bridge.action( );
-
-	if(
-		!action ||
-		!this.path ||
-		!this.path.equals( action.itemPath )
-	)
-	{
-		return fontsize;
-	}
-
-	switch( action.type )
-	{
-		case 'ItemResize' :
-
-			if( !action.startZone )
-			{
-				return fontsize;
-			}
-
-			var
-				height =
-					action.startZone.height,
-
-				dy;
-
-			switch( action.align )
-			{
-				case 'ne' :
-				case 'nw' :
-
-					dy =
-						action.start.y - action.move.y;
-
-					break;
-
-				case 'se' :
-				case 'sw' :
-
-					dy =
-						action.move.y - action.start.y;
-
-					break;
-
-				default :
-
-					throw new Error(
-						'unknown align: '+ action.align
-					);
-			}
-
-			return Math.max(
-				fontsize * ( height + dy ) / height,
-				theme.label.minSize
-			);
-
-		default:
-
-			return fontsize;
-	}
-
-	return Math.max( fontsize, 4 );
 };
 
 

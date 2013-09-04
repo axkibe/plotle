@@ -641,12 +641,8 @@ Jools.lazyFixate(
 	'height',
 	function( )
 	{
-		var
-			flow =
-				this.flow;
-
 		return (
-			flow.height +
+			this.flow.height +
 			Math.round(
 				this.fontsize * theme.bottombox
 			)
@@ -960,7 +956,7 @@ Para.prototype.input =
 /*
 | Backspace pressed.
 */
-Para.prototype.keyBackspace =
+Para.prototype._keyBackspace =
 	function(
 		item,
 		doc,
@@ -1140,7 +1136,7 @@ Para.prototype._keyEnd =
 /*
 | Enter-key pressed
 */
-Para.prototype.keyEnter =
+Para.prototype._keyEnter =
 	function(
 		item,
 		doc,
@@ -1508,7 +1504,7 @@ Para.prototype.specialKey =
 		case 'backspace' :
 
 			show =
-				this.keyBackspace(
+				this._keyBackspace(
 					item,
 					doc,
 					caret
@@ -1519,7 +1515,7 @@ Para.prototype.specialKey =
 		case 'enter' :
 
 			show =
-				this.keyEnter(
+				this._keyEnter(
 					item,
 					doc,
 					caret
@@ -1689,17 +1685,6 @@ Jools.lazyFixate(
 		);
 	}
 );
-
-
-/*
-| Updates v-vine to match a new tree.
-*/
-Para.prototype.update =
-	function( tree )
-{
-	// TODO
-	throw new Error( 'Paras no longer update');
-};
 
 
 } )( );
