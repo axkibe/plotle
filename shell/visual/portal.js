@@ -837,8 +837,8 @@ Portal.prototype._weave =
 		f =
 		this.$fabric =
 			new Euclid.Fabric(
-				vzone.width + 1,
-				vzone.height + 1
+				vzone.width + 2,
+				vzone.height + 2
 			),
 
 		section =
@@ -860,7 +860,7 @@ Portal.prototype._weave =
 		f.clip(
 			this.zeroSilhoutte,
 			'sketch',
-			Euclid.View.proper,
+			view.home( ),
 			0
 		);
 
@@ -949,6 +949,8 @@ Portal.prototype._weave =
 		);
 
 		f.scale( 1 / view.zoom );
+
+		f.deClip( );
 	}
 
 	// redraws the edge on the end to top
