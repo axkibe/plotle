@@ -115,8 +115,8 @@ Euclid.Fabric =
 		this._canvas.getContext( '2d' );
 
 	// curren positiont ( without twist )
-	this._posx =
-	this._posy =
+	this._$posx =
+	this._$posy =
 		null;
 
 	this.$clip =
@@ -140,7 +140,7 @@ Fabric.prototype.arc =
 		a6
 	)
 {
-	var tw = this._twist, x, y, r, sa, ea, ac;
+	var tw = this._$twist, x, y, r, sa, ea, ac;
 
 	if( typeof( a1 ) === 'object' )
 	{
@@ -187,7 +187,7 @@ Fabric.prototype.beziTo =
 		aZ =
 			arguments.length,
 		tw =
-			this._twist,
+			this._$twist,
 		cp1x,
 		cp1y,
 		cp2x,
@@ -195,7 +195,7 @@ Fabric.prototype.beziTo =
 		x,
 		y;
 
-	if( this._posx === null || this._posy === null )
+	if( this._$posx === null || this._$posy === null )
 	{
 		throw new Error( 'beziTo: pFail' );
 	}
@@ -282,12 +282,16 @@ Fabric.prototype.beziTo =
 			arguments[ a++ ];
 	}
 
-	cp1x += this._posx + tw;
-	cp1y += this._posy + tw;
+	cp1x += this._$posx + tw;
+	cp1y += this._$posy + tw;
 	cp2x += x + tw;
 	cp2y += y + tw;
-	this._posx = x;
-	this._posy = y;
+
+	this._$posx =
+		x;
+	this._$posy =
+		y;
+
 	x += tw;
 	y += tw;
 
@@ -528,8 +532,9 @@ Fabric.prototype.edge =
 		a4
 	)
 {
-	var edge =
-		style.edge;
+	var
+		edge =
+			style.edge;
 
 	if( edge instanceof Array )
 	{
@@ -608,7 +613,7 @@ Fabric.prototype.fill =
 			view
 		);
 
-	if( this._twist !== 0 )
+	if( this._$twist !== 0 )
 	{
 		throw new Error(
 			'wrong twist'
@@ -945,7 +950,12 @@ Fabric.prototype.lineTo =
 		a3
 	)
 {
-	var tw = this._twist, v, x, y;
+	var
+		tw =
+			this._$twist,
+		v,
+		x,
+		y;
 
 	if( typeof( a1 ) === 'object' )
 	{
@@ -968,8 +978,8 @@ Fabric.prototype.lineTo =
 		y = v.y( x1, y );
 	}
 
-	this._posx = x;
-	this._posy = y;
+	this._$posx = x;
+	this._$posy = y;
 
 	this._cx.lineTo( x + tw, y + tw );
 };
@@ -991,35 +1001,52 @@ Fabric.prototype.moveTo =
 		a3
 	)
 {
-	var tw = this._twist, v, x, y;
+	var
+		tw =
+			this._$twist,
+		v,
+		x,
+		y;
 
 	if( typeof( a1 ) === 'object' )
 	{
-		x = a1.x;
-		y = a1.y;
-		v = a2;
+		x =
+			a1.x;
+
+		y =
+			a1.y;
+
+		v =
+			a2;
 	}
 	else
 	{
-		x = a1;
-		y = a2;
-		v = a3;
+		x =
+			a1;
+
+		y =
+			a2;
+
+		v =
+			a3;
 	}
 
 	Jools.ensureInt( x, y );
 
 	if( v )
 	{
-		var x1 = x;
-		x = v.x( x,  y );
-		y = v.y( x1, y );
+		var
+			x1 =
+				x;
+		x =
+			v.x( x,  y );
+
+		y =
+			v.y( x1, y );
 	}
 
-	this._posx = x;
-	this._posy = y;
-
-	x += tw;
-	y += tw;
+	this._$posx = x;
+	this._$posy = y;
 
 	this._cx.moveTo(
 		x + tw,
@@ -1365,7 +1392,7 @@ Fabric.prototype.withinSketch =
 	}
 
 	/*
-	var tw = this._twist;
+	var tw = this._$twist;
 
 	px += tw;
 	py += tw;
@@ -1393,9 +1420,14 @@ Fabric.prototype._begin =
 	function( twist )
 {
 	// lines are targed at .5 coords.
-	this._twist = twist ? 0.5 : 0;
+	this._$twist =
+		twist ? 0.5 : 0;
+
 	this._cx.beginPath( );
-	this._posx = this.posy = null;
+
+	this._$posx =
+	this._$posy =
+		null;
 };
 
 
@@ -1539,7 +1571,7 @@ Fabric.prototype._edge =
 	cx.lineWidth =
 		style.width;
 
-	if( this._twist !== 0.5 )
+	if( this._$twist !== 0.5 )
 	{
 		throw new Error(
 			'wrong twist'

@@ -787,8 +787,9 @@ Doc.prototype.sketchSelection =
 		{
 			fabric.lineTo( lx, p1.y + descend, view );
 		}
-
 		fabric.lineTo( p1.x, p1.y + descend, view );
+
+
 		fabric.lineTo( p1.x, p1.y -  ascend, view );
 		fabric.lineTo( rx,   p1.y -  ascend, view );
 
