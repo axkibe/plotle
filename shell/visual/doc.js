@@ -754,7 +754,7 @@ Doc.prototype.sketchSelection =
 		fabric.lineTo( p1.x, p1.y + descend, view );
 	}
 	else if (
-		p2.y - ascend <= p1.y + descend &&
+		p2.y - ascend - 1 <= p1.y + descend &&
 		p2.x < p1.x
 	)
 	{

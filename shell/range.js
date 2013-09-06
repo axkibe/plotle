@@ -40,10 +40,24 @@ if( typeof( window ) === 'undefined' )
 */
 Range =
 	function(
+		doc,
 		sign1,
 		sign2
 	)
 {
+	this.doc =
+		doc;
+
+	if( CHECK && sign1.path.get(-1) !== 'text' )
+	{
+		throw new Error( 's1.path.get(-1) !== "text"' );
+	}
+
+	if( CHECK && sign2.path.get( -1 ) !== 'text' )
+	{
+		throw new Error( 's2.path.get(-1) !== "text"' );
+	}
+
 	this.sign1 =
 		sign1;
 
@@ -62,9 +76,7 @@ Range =
 | Sets begin/end so begin is before end.
 */
 Range.prototype.normalize =
-	function(
-		space
-	)
+	function( )
 {
 	var
 		s1 =
@@ -72,16 +84,6 @@ Range.prototype.normalize =
 
 		s2 =
 			this.sign2;
-
-	if( s1.path.get(-1) !== 'text' )
-	{
-		throw new Error( 's1.path.get(-1) !== "text"' );
-	}
-
-	if( s2.path.get( -1 ) !== 'text' )
-	{
-		throw new Error( 's2.path.get(-1) !== "text"' );
-	}
 
 	if( s1.path.equals( s2.path ) )
 	{
@@ -117,22 +119,12 @@ Range.prototype.normalize =
 		throw new Error( 'k1 === k2' );
 	}
 
-	var pivot =
-		space.getSub( s1.path, 'Doc' );
-
-	if(
-		pivot !== space.getSub( s2.path, 'Doc' )
-	)
-	{
-		throw new Error( 'pivot(s1) !== pivot(s2)' );
-	}
-
 	var
 		r1 =
-			pivot.tree.rankOf( k1 ),
+			this.doc.tree.rankOf( k1 ),
 
 		r2 =
-			pivot.tree.rankOf( k2 );
+			this.doc.tree.rankOf( k2 );
 
 	if( r1 < r2 )
 	{
@@ -168,11 +160,12 @@ Range.prototype.innerText =
 
 	this.normalize( space );
 
-	var s1 =
-		this.$begin;
+	var
+		s1 =
+			this.$begin,
 
-	var s2 =
-		this.$end;
+		s2 =
+			this.$end;
 
 	if( s1.path.equals( s2.path ) )
 	{
@@ -188,30 +181,28 @@ Range.prototype.innerText =
 		);
 	}
 
-	var pivot =
-		space.getSub(s1.path, 'Doc');
+	var
+		tree =
+			this.doc.tree,
 
-	var tree =
-		pivot.tree;
+		key1 =
+			s1.path.get( -2 ),
 
-	var key1 =
-		s1.path.get( -2 );
+		key2 =
+			s2.path.get(-2);
 
-	var key2 =
-		s2.path.get(-2);
+		text1 =
+			tree.twig[ key1 ].text;
 
-	var text1 =
-		tree.twig[ key1 ].text;
+		text2 =
+			tree.twig[ key2 ].text;
 
-	var text2 =
-		tree.twig[ key2 ].text;
-
-	var buf = [
-		text1.substring(
-			s1.at1,
-			text1.length
-		)
-	];
+		buf = [
+			text1.substring(
+				s1.at1,
+				text1.length
+			)
+		];
 
 	for(
 		var r = tree.rankOf(key1), rZ = tree.rankOf(key2);
@@ -236,6 +227,7 @@ Range.prototype.innerText =
 
 /*
 | Return true if sign1 equals sign2
+| TODO lazy fixate
 */
 Range.prototype.empty =
 	function( )

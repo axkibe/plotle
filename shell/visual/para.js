@@ -1391,6 +1391,7 @@ Para.prototype.specialKey =
 
 				selection =
 					shell.setSelection(
+						doc,
 						new Sign(
 							{
 								path :
@@ -1643,6 +1644,7 @@ Para.prototype.specialKey =
 
 				selection =
 					shell.setSelection(
+						doc,
 						select1,
 						caret.sign
 					);

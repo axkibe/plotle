@@ -279,6 +279,7 @@ Shell.prototype.update =
 	if( selection )
 	{
 		this.setSelection(
+			selection.doc,
 			MeshMashine.tfxSign(
 				selection.sign1,
 				chgX
@@ -1361,26 +1362,29 @@ Shell.prototype.getSelection =
 */
 Shell.prototype.setSelection =
 	function(
+		doc,
 		sign1,
 		sign2
 	)
 {
-	if( !sign1 )
+	if( CHECK && !sign1 )
 	{
 		throw new Error( 'sign1 null' );
 	}
 
-	if( !sign2 )
+	if( CHECK && !sign2 )
 	{
 		throw new Error( 'sign2 null' );
 	}
 
-	var selection =
-	this._$selection =
-		new Range(
-			sign1,
-			sign2
-		);
+	var
+		selection =
+		this._$selection =
+			new Range(
+				doc,
+				sign1,
+				sign2
+			);
 
 	system.setInput(
 		selection.innerText(
