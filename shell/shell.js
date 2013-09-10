@@ -859,13 +859,6 @@ Shell.prototype.setCaret =
 		);
 	}
 
-	if( arguments.length > 4 )
-	{
-		throw new Error(
-			'TODO'
-		);
-	}
-
 	var
 		caret =
 			new Caret(
