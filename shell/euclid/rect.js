@@ -59,7 +59,6 @@ Euclid.Rect =
 		this.pse =
 			twig.pse;
 
-
 	if(
 		pnw.x > pse.x ||
 		pnw.y > pse.y
@@ -70,26 +69,11 @@ Euclid.Rect =
 		);
 	}
 
-	// TODO lazyFixate
-	Jools.innumerable(
-		this,
-		'width',
-		pse.x - pnw.x
-	);
-
-	Jools.innumerable(
-		this,
-		'height',
-		pse.y - pnw.y
-	);
-
 	this.type =
 		'Rect'; // FIXME - can this be circumvented?
 
 	Jools.immute( this );
 };
-
-
 
 Rect.create =
 	function(
@@ -235,6 +219,30 @@ Rect.create =
 	);
 };
 
+
+/*
+| Rectangle width.
+*/
+Jools.lazyFixate(
+	Rect.prototype,
+	'width',
+	function( )
+	{
+		return this.pse.x - this.pnw.x
+	}
+);
+
+/*
+| Rectangle height.
+*/
+Jools.lazyFixate(
+	Rect.prototype,
+	'height',
+	function( )
+	{
+		return this.pse.y - this.pnw.y
+	}
+);
 
 /*
 | Computes a point modelled relative to this rect.
