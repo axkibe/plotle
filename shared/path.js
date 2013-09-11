@@ -200,7 +200,8 @@ Path.prototype.get =
 {
 	if( i < 0 )
 	{
-		i += this._path.length;
+		i +=
+			this._path.length;
 	}
 
 	if( i < 0 || i >= this._path.length )

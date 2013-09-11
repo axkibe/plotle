@@ -149,39 +149,17 @@ Range.prototype.normalize =
 | The text the selection selects.
 */
 Range.prototype.innerText =
-	function(
-		space
-	)
+	function( )
 {
-	if( !this.active )
-	{
-		return '';
-	}
-
-	this.normalize( space );
+	this.normalize( );
 
 	var
 		s1 =
 			this.$begin,
 
 		s2 =
-			this.$end;
+			this.$end,
 
-	if( s1.path.equals( s2.path ) )
-	{
-		var text =
-			space.getSub(
-				s1.path,
-				'Para'
-			).tree.text;
-
-		return text.substring(
-			s1.at1,
-			s2.at1
-		);
-	}
-
-	var
 		tree =
 			this.doc.tree,
 
@@ -191,11 +169,30 @@ Range.prototype.innerText =
 		key2 =
 			s2.path.get(-2);
 
+
+	if( s1.path.equals( s2.path ) )
+	{
+
+		console.log( this.doc );
+
+		var
+			text =
+				tree.twig[ key1 ].twig.text;
+
+		console.log( text );
+
+		return text.substring(
+			s1.at1,
+			s2.at1
+		);
+	}
+
+	var
 		text1 =
-			tree.twig[ key1 ].text;
+			tree.twig[ key1 ].twig.text,
 
 		text2 =
-			tree.twig[ key2 ].text;
+			tree.twig[ key2 ].twig.text,
 
 		buf = [
 			text1.substring(
@@ -212,7 +209,7 @@ Range.prototype.innerText =
 	{
 		buf.push(
 			'\n',
-			tree.twig[ tree.ranks[ r ] ].text
+			tree.twig[ tree.ranks[ r ] ].twig.text
 		);
 	}
 
@@ -227,15 +224,17 @@ Range.prototype.innerText =
 
 /*
 | Return true if sign1 equals sign2
-| TODO lazy fixate
 */
-Range.prototype.empty =
+Jools.lazyFixate(
+	Range.prototype,
+	'empty',
 	function( )
-{
-	return (
-		this.sign1.path.equals( this.sign2.path ) &&
-		this.sign1.at1 === this.sign2.at1
-	);
-}
+	{
+		return (
+			this.sign1.path.equals( this.sign2.path ) &&
+			this.sign1.at1 === this.sign2.at1
+		);
+	}
+);
 
 })( );
