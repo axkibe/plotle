@@ -228,7 +228,7 @@ Jools.lazyFixate(
 	'width',
 	function( )
 	{
-		return this.pse.x - this.pnw.x
+		return this.pse.x - this.pnw.x;
 	}
 );
 
@@ -240,7 +240,7 @@ Jools.lazyFixate(
 	'height',
 	function( )
 	{
-		return this.pse.y - this.pnw.y
+		return this.pse.y - this.pnw.y;
 	}
 );
 
@@ -382,6 +382,28 @@ Rect.prototype.computePoint =
 	}
 };
 
+
+/*
+| Computes a rect modelled relative to this rect.
+*/
+Rect.prototype.computeRect =
+	function(
+		model
+	)
+{
+	var
+		pnw =
+			this.computePoint( model.pnw ),
+
+		pse =
+			this.computePoint( model.pse );
+
+	return Rect.create(
+		'pnw/pse',
+		pnw,
+		pse
+	);
+};
 
 /*
 | Returns a rectangle thats reduced on every side by a margin object

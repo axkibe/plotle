@@ -1473,11 +1473,14 @@ Fabric.prototype._colorStyle =
 
 		case 'horizontal' :
 
+			var pnw, pse;
+
+			// TODO remove oframe lessness
+			pnw = shape.pnw || shape.oframe.pnw;
+			pse = shape.pse || shape.oframe.pse;
+
 			// FIXME use gradientPNW
-			if(
-				!shape.pnw ||
-				!shape.pse
-			)
+			if( !pnw || !pse )
 			{
 				throw new Error(
 					style.gradient + ': gradient misses pnw/pse'
@@ -1486,9 +1489,9 @@ Fabric.prototype._colorStyle =
 
 			grad = this._cx.createLinearGradient(
 				0,
-				shape.pnw.y,
+				pnw.y,
 				0,
-				shape.pse.y
+				pse.y
 			);
 
 			break;

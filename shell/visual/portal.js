@@ -1179,7 +1179,7 @@ Portal.prototype.specialKey =
 
 		case 'pos1' :
 
-			this._keyPos1( caret )
+			this._keyPos1( caret );
 
 			break;
 

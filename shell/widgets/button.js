@@ -133,25 +133,19 @@ Widgets.Button =
 	this.visible =
 		visible;
 
-	// TODO compute a rect
 	var
-		pnw =
-		this.pnw =
-			parent.iframe.computePoint(
-				tree.twig.frame.twig.pnw
+		oframe =
+		this.oframe =
+			parent.iframe.computeRect(
+				tree.twig.frame.twig
 			),
 
-		pse =
-		this.pse =
-			parent.iframe.computePoint(
-				tree.twig.frame.twig.pse
-			),
-
+		// TODO use home
 		iframe =
 		this.iframe =
 			Euclid.Rect.create(
 				'pse',
-				pse.sub( pnw )
+				oframe.pse.sub( oframe.pnw )
 			),
 
 		// TODO move this to Shape
@@ -600,10 +594,10 @@ Button.prototype.pointingHover =
 	if(
 		!this.visible ||
 		p === null ||
-		p.x < this.pnw.x || // TODO within
-		p.y < this.pnw.y ||
-		p.x > this.pse.x ||
-		p.y > this.pse.y
+		p.x < this.oframe.pnw.x || // TODO within
+		p.y < this.oframe.pnw.y ||
+		p.x > this.oframe.pse.x ||
+		p.y > this.oframe.pse.y
 	)
 	{
 		return null;
@@ -613,7 +607,7 @@ Button.prototype.pointingHover =
 		this._weave( );
 
 	var pp =
-		p.sub( this.pnw );
+		p.sub( this.oframe.pnw );
 
 	if(
 		!fabric.withinSketch(
@@ -650,10 +644,10 @@ Button.prototype.pointingStart =
 
 	if(
 		!this.visible ||
-		p.x < this.pnw.x ||
-		p.y < this.pnw.y ||
-		p.x > this.pse.x ||
-		p.y > this.pse.y
+		p.x < this.oframe.pnw.x ||
+		p.y < this.oframe.pnw.y ||
+		p.x > this.oframe.pse.x ||
+		p.y > this.oframe.pse.y
 	)
 	{
 		return null;
@@ -664,7 +658,7 @@ Button.prototype.pointingStart =
 			this._weave( ),
 
 		pp =
-			p.sub( this.pnw );
+			p.sub( this.oframe.pnw );
 
 	if(!
 		fabric.withinSketch(
@@ -798,7 +792,7 @@ Button.prototype.draw =
 		'image',
 			this._weave( ),
 		'pnw',
-			this.pnw
+			this.oframe.pnw
 	);
 };
 
