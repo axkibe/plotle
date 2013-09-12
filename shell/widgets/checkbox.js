@@ -127,16 +127,9 @@ Widgets.CheckBox =
 	this.visible =
 		visible;
 
-	// TODO computeRect
 	this.box =
-		Euclid.Rect.create(
-			'pnw/pse',
-			parent.iframe.computePoint(
-				tree.twig.box.twig.pnw
-			),
-			parent.iframe.computePoint(
-				tree.twig.box.twig.pse
-			)
+		parent.iframe.computeRect(
+			tree.twig.box.twig
 		);
 
 	this.checked =

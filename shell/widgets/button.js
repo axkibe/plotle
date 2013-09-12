@@ -167,6 +167,7 @@ Widgets.Button =
 
 		case 'Ellipse' :
 
+			// TODO compute ellipse
 			this.shape =
 				new Euclid.Ellipse(
 					iframe.computePoint( tshape.twig.pnw ),
@@ -589,25 +590,28 @@ Button.prototype._weave =
 | Mouse hover.
 */
 Button.prototype.pointingHover =
-	function( p )
+	function(
+		p
+	)
 {
 	if(
 		!this.visible ||
 		p === null ||
-		p.x < this.oframe.pnw.x || // TODO within
-		p.y < this.oframe.pnw.y ||
-		p.x > this.oframe.pse.x ||
-		p.y > this.oframe.pse.y
+		!this.oframe.within(
+			Euclid.View.proper,
+			p
+		)
 	)
 	{
 		return null;
 	}
 
-	var fabric =
-		this._weave( );
+	var
+		fabric =
+			this._weave( ),
 
-	var pp =
-		p.sub( this.oframe.pnw );
+		pp =
+			p.sub( this.oframe.pnw );
 
 	if(
 		!fabric.withinSketch(
@@ -639,15 +643,16 @@ Button.prototype.pointingStart =
 		ctrl
 	)
 {
-	var self =
-		this;
+	var
+		self =
+			this;
 
 	if(
 		!this.visible ||
-		p.x < this.oframe.pnw.x ||
-		p.y < this.oframe.pnw.y ||
-		p.x > this.oframe.pse.x ||
-		p.y > this.oframe.pse.y
+		!this.oframe.within(
+			Euclid.View.proper,
+			p
+		)
 	)
 	{
 		return null;
@@ -798,16 +803,6 @@ Button.prototype.draw =
 
 
 /*
-| Sets the buttons text.
-*/
-Button.prototype.getText =
-	function( )
-{
-	throw new Error( 'TODO' );
-};
-
-
-/*
 | Control takes focus.
 | TODO remove
 */
@@ -834,17 +829,6 @@ Button.prototype.grepFocus =
 	);
 
 	return true;
-};
-
-
-
-/*
-| Sets the buttons text.
-*/
-Button.prototype.setText =
-	function( text )
-{
-	throw new Error( 'TODO' );
 };
 
 
