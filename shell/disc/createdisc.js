@@ -724,7 +724,7 @@ CreateDisc.prototype.pointingHover =
 	// shortcut if p is not near the panel
 	if(
 		p === null ||
-		!this.oframe.within(
+		!this.frame.within(
 			null,
 			p
 		)
@@ -735,10 +735,10 @@ CreateDisc.prototype.pointingHover =
 
 	var
 		fabric =
-			this._weave(),
+			this._weave( ),
 
 		pp =
-			p.sub( this.oframe.pnw );
+			p.sub( this.frame.pnw );
 
 	// ENHANCE optimize by reusing the latest path of this.$fabric
 	if(
@@ -798,7 +798,7 @@ CreateDisc.prototype.pointingStart =
 {
 	// shortcut if p is not near the panel
 	if(
-		!this.oframe.within(
+		!this.frame.within(
 			null,
 			p
 		)
@@ -809,10 +809,10 @@ CreateDisc.prototype.pointingStart =
 
 	var
 		fabric =
-			this._weave(),
+			this._weave( ),
 
 		pp =
-			p.sub( this.oframe.pnw );
+			p.sub( this.frame.pnw );
 
 	// FIXME Optimize by reusing the latest path of this.$fabric
 	if(

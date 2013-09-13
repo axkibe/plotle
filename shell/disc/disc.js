@@ -105,7 +105,7 @@ Disc.Disc =
 		eh =
 			style.ellipse.height;
 
-	this.oframe =
+	this.frame =
 		Euclid.Rect.create(
 			'pnw/size',
 			shellverse.grow(

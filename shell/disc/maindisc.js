@@ -1207,8 +1207,9 @@ design =
 MainDisc.prototype._weave =
 	function( )
 {
-	var fabric =
-		this.$fabric;
+	var
+		fabric =
+			this.$fabric;
 
 //  TODO reenable caching once
 //       disc recreation is fixed
@@ -1417,7 +1418,7 @@ MainDisc.prototype.draw =
 		'image',
 			this._weave( ),
 		'pnw',
-			this.oframe.pnw
+			this.frame.pnw
 	);
 };
 
@@ -1432,20 +1433,10 @@ MainDisc.prototype.pointingHover =
 		ctrl
 	)
 {
-	var
-		oframe =
-			this.oframe,
-
-		pnw =
-			oframe.pnw,
-
-		pse =
-			oframe.pse;
-
 	// shortcut if p is not near the panel
 	if(
 		p === null ||
-		!oframe.within(
+		!this.frame.within(
 			null,
 			p
 		)
@@ -1467,11 +1458,12 @@ MainDisc.prototype.pointingHover =
 		return null;
 	}
 
-	var fabric =
-		this._weave( );
+	var
+		fabric =
+			this._weave( ),
 
-	var pp =
-		p.sub( pnw );
+		pp =
+			p.sub( this.frame.pnw );
 
 	// FIXME Optimize by reusing the latest path of this.$fabric
 
@@ -1540,19 +1532,9 @@ MainDisc.prototype.pointingStart =
 		ctrl
 	)
 {
-	var
-		oframe =
-			this.oframe,
-
-		pnw =
-			oframe.pnw,
-
-		pse =
-			oframe.pse;
-
 	// shortcut if p is not near the panel
 	if(
-		!oframe.within(
+		!this.frame.within(
 			null,
 			p
 		)
@@ -1577,7 +1559,7 @@ MainDisc.prototype.pointingStart =
 			this._weave( ),
 
 		pp =
-			p.sub( pnw );
+			p.sub( this.frame.pnw );
 
 	// FIXME Optimize by reusing the latest path of this.$fabric
 	if(
