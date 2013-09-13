@@ -125,8 +125,8 @@ Widgets.Input =
 		visible;
 
 	var
-		oframe =
-		this.oframe =
+		frame =
+		this.frame =
 			parent.iframe.computeRect(
 				tree.twig.frame.twig
 			);
@@ -134,7 +134,7 @@ Widgets.Input =
 	this._shape =
 		new Euclid.RoundRect(
 			Euclid.Point.zero,
-			oframe.pse.sub( oframe.pnw ),
+			frame.pse.sub( frame.pnw ),
 			7,
 			3
 		),
@@ -667,7 +667,7 @@ Input.prototype.draw =
 		'image',
 			this._weave( ),
 		'pnw',
-			this.oframe.pnw
+			this.frame.pnw
 	);
 };
 
@@ -757,7 +757,7 @@ Input.prototype.getCaretPos =
 			),
 
 		pnw =
-			this.oframe.pnw,
+			this.frame.pnw,
 
 		s =
 			Math.round( p.y + pnw.y + descend ),
@@ -766,7 +766,7 @@ Input.prototype.getCaretPos =
 			s - Math.round( fs + descend ),
 
 		x =
-			p.x + this.oframe.pnw.x - 1;
+			p.x + this.frame.pnw.x - 1;
 
 	return Jools.immute(
 		{
@@ -1148,7 +1148,7 @@ Input.prototype.pointingHover =
 {
 	if(
 		p === null ||
-		!this.oframe.within(
+		!this.frame.within(
 			Euclid.View.proper,
 			p
 		)
@@ -1160,7 +1160,7 @@ Input.prototype.pointingHover =
 	var
 		pp =
 			p.sub(
-				this.oframe.pnw
+				this.frame.pnw
 			);
 
 	if(
@@ -1189,7 +1189,7 @@ Input.prototype.pointingStart =
 {
 	if(
 		p === null ||
-		!this.oframe.within(
+		!this.frame.within(
 			Euclid.View.proper,
 			p
 		)
@@ -1200,7 +1200,7 @@ Input.prototype.pointingStart =
 
 	var
 		pp =
-			p.sub( this.oframe.pnw );
+			p.sub( this.frame.pnw );
 
 	if(
 		!this._shape.within(
