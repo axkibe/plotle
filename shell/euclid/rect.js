@@ -391,17 +391,25 @@ Rect.prototype.computeRect =
 		model
 	)
 {
-	var
-		pnw =
-			this.computePoint( model.pnw ),
-
-		pse =
-			this.computePoint( model.pse );
-
 	return Rect.create(
 		'pnw/pse',
-		pnw,
-		pse
+		this.computePoint( model.pnw ),
+		this.computePoint( model.pse )
+	);
+};
+
+
+/*
+| Computes an ellipse modelled relative to this rect.
+*/
+Rect.prototype.computeEllipse =
+	function(
+		model
+	)
+{
+	return new Euclid.Ellipse(
+		this.computePoint( model.pnw ),
+		this.computePoint( model.pse )
 	);
 };
 

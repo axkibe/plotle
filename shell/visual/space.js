@@ -1999,22 +1999,5 @@ Space.prototype.getSub =
 };
 
 
-/*
-| Returns the the item the caret is in
-| TODO might remove this func
-*/
-Space.prototype._getCaretItem =
-	function(
-		path
-	)
-{
-	return this.getSub(
-		path,
-		'Item'
-	);
-};
-
-
-
 } )( );
 

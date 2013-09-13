@@ -138,28 +138,33 @@ Euclid.Ellipse =
 		{
 			case 'gradientPC' :
 
-				this._lazy_gradientPC = val;
+				this._lazy_gradientPC =
+					val;
 
 				break;
 
 			case 'gradientR0' :
 
-				this._lazy_gradientR0 = val;
+				this._lazy_gradientR0 =
+					val;
 
 				break;
 
 			case 'gradientR1' :
 
-				this._lazy_gradientR1 = val;
+				this._lazy_gradientR1 =
+					val;
 
 				break;
 
 			default :
-				throw new Error( 'invalid argument: ' + arg );
+				throw new Error(
+					'invalid argument: ' + arg
+				);
 		}
 	}
 
-	Jools.immute(this);
+	Jools.immute( this );
 };
 
 
@@ -243,6 +248,7 @@ Jools.lazyFixate(
 		);
 	}
 );
+
 
 /*
 | Returns true if this ellipse is the same as another

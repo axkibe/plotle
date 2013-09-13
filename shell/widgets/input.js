@@ -124,15 +124,17 @@ Widgets.Input =
 	this.visible =
 		visible;
 
-	this.oframe =
-		parent.iframe.computeRect(
-			tree.twig.frame.twig
-		);
+	var
+		oframe =
+		this.oframe =
+			parent.iframe.computeRect(
+				tree.twig.frame.twig
+			);
 
 	this._shape =
 		new Euclid.RoundRect(
 			Euclid.Point.zero,
-			pse.sub( pnw ),
+			oframe.pse.sub( oframe.pnw ),
 			7,
 			3
 		),

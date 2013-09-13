@@ -167,11 +167,9 @@ Widgets.Button =
 
 		case 'Ellipse' :
 
-			// TODO compute ellipse
 			this.shape =
-				new Euclid.Ellipse(
-					iframe.computePoint( tshape.twig.pnw ),
-					iframe.computePoint( tshape.twig.pse )
+				iframe.computeEllipse(
+					tshape.twig
 				);
 
 			break;
