@@ -60,11 +60,6 @@ Euclid.Font =
 	this.size =
 		twig.size;
 
-	Jools.keyNonGrata( this, 'family' );
-	Jools.keyNonGrata( this, 'align' );
-	Jools.keyNonGrata( this, 'fill' );
-	Jools.keyNonGrata( this, 'base' );
-
 	Jools.immute( this );
 };
 
@@ -77,22 +72,15 @@ Font.prototype.type =
 
 
 /*
-| Returns the CSS-string for this font.
-| TODO use lazy fixate
+| The CSS-string for this font.
 */
-Font.prototype.getCSS =
+Jools.lazyFixate(
+	Font.prototype,
+	'css',
 	function( )
-{
-	if( this._$css )
 	{
-		return this._$css;
+		return this.twig.size + 'px ' + this.twig.family;
 	}
-
-	return Jools.innumerable(
-		this,
-		'_$css',
-		this.twig.size + 'px ' + this.twig.family
-	);
-};
+);
 
 })( );

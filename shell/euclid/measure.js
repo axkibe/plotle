@@ -87,7 +87,7 @@ Euclid.Measure =
 				font.twig.family;
 
 			cx.font =
-				font.getCSS( );
+				font.css;
 		}
 
 		return cx.measureText( text ).width;

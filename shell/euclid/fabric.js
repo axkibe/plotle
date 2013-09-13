@@ -1333,7 +1333,7 @@ Fabric.prototype._setFont =
 			this._cx;
 
 	cx.font =
-		font.getCSS( );
+		font.css;
 
 	cx.fillStyle =
 		fill;

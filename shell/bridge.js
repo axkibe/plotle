@@ -130,7 +130,7 @@ Bridge = function( )
 	/*
 	| current mode
 	*/
-	// TODO change to a loading screen as startup
+	// FIXME change to a loading screen as startup
 	this._$mode =
 		'Normal';
 
