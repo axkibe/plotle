@@ -1436,7 +1436,7 @@ Shell.prototype.removeSelection =
 	this.redraw =
 		true;
 
-	if( !selection.empty( ) )
+	if( !selection.empty )
 	{
 		this.peer.removeSpan(
 			selection.$begin.path,
