@@ -301,7 +301,7 @@ Shell.prototype.update =
 		selection.sign1.path.get( -4 ) === csign.path.get( 1 )
 	)
 	{
-		shell.deselect( true );
+		shell.deselect( );
 	}
 	*/
 

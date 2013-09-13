@@ -663,6 +663,8 @@ CreateDisc.prototype.pushButton =
 		case 'createNote' :
 		case 'createPortal' :
 
+			shell.deselect( );
+
 			shell.bridge.startAction(
 				buttonName,
 				'space'
@@ -671,6 +673,8 @@ CreateDisc.prototype.pushButton =
 			return;
 
 		case 'createRelation' :
+
+			shell.deselect( );
 
 			shell.bridge.startAction(
 				'createRelation',

@@ -125,56 +125,35 @@ Visual.Doc =
 	this.sub =
 		[ ];
 
-	if( tree )
+	ranks =
+	this.ranks =
+		tree.ranks;
+
+	var
+		twig =
+			tree.twig;
+
+	for(
+		var r = 0, rZ = tree.length;
+		r < rZ;
+		r++
+	)
 	{
-		ranks =
-		this.ranks =
-			tree.ranks;
+		var k =
+			ranks[ r ];
 
-		var
-			twig =
-				tree.twig;
-
-		for(
-			var r = 0, rZ = tree.length;
-			r < rZ;
-			r++
-		)
-			{
-				var k =
-					ranks[ r ];
-
-				{
-					sub[ k ] =
-						Visual.Para.create(
-							'inherit',
-								inherit && inherit.sub[ k ],
-							'tree',
-								twig[ k ],
-							'path',
-								path &&
-								new Path(
-									path,
-									'++', k
-								),
-							'fontsize',
-								fontsize,
-							'flowWidth',
-								flowWidth
-						);
-				}
-			}
-	}
-	else
-	{
-		//TODO this has to go
-		this.ranks =
-			[ '1' ];
-
-		sub[ '1' ] =
+		sub[ k ] =
 			Visual.Para.create(
 				'inherit',
-					inherit && inherit.sub[ '1 ' ],
+					inherit && inherit.sub[ k ],
+				'tree',
+					twig[ k ],
+				'path',
+					path &&
+					new Path(
+						path,
+						'++', k
+					),
 				'fontsize',
 					fontsize,
 				'flowWidth',
@@ -380,6 +359,7 @@ Doc.prototype.draw =
 	// draws the selection
 	if (
 		selection &&
+		this.path &&
 		this.path.subPathOf( selection.sign1.path )
 	)
 	{
