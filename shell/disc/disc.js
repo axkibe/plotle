@@ -119,14 +119,6 @@ Disc.Disc =
 			height
 		);
 
-	this.iframe =
-		Euclid.Rect.create(
-			'pnw/size',
-			Euclid.Point.zero,
-			width,
-			height
-		);
-
 	this._tree =
 		inherit ?
 			inherit._tree :

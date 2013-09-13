@@ -101,7 +101,7 @@ Forms.Form =
 		}
 	}
 
-	this.iframe =
+	this.frame =
 		Euclid.Rect.create(
 			'pse',
 			this.screensize

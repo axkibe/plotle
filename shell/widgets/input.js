@@ -127,7 +127,7 @@ Widgets.Input =
 	var
 		frame =
 		this.frame =
-			parent.iframe.computeRect(
+			parent.frame.zeropnw.computeRect(
 				tree.twig.frame.twig
 			);
 

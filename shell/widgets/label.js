@@ -92,7 +92,7 @@ Widgets.Label =
 		parent;
 
 	this.pos =
-		parent.iframe.computePoint(
+		parent.frame.zeropnw.computePoint(
 			tree.twig.pos
 		),
 

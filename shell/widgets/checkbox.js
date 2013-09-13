@@ -128,7 +128,7 @@ Widgets.CheckBox =
 		visible;
 
 	this.box =
-		parent.iframe.computeRect(
+		parent.frame.zeropnw.computeRect(
 			tree.twig.box.twig
 		);
 
