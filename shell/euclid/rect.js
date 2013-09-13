@@ -244,6 +244,33 @@ Jools.lazyFixate(
 	}
 );
 
+
+/*
+| A rectangle of same size with pnw at 0/0
+*/
+Jools.lazyFixate(
+	Rect.prototype,
+	'zeropnw',
+	function( )
+	{
+		if (
+			this.pnw.x === 0 &&
+			this.pnw.y === 0
+		)
+		{
+			return this;
+		}
+		else
+		{
+			return Rect.create(
+				'pse',
+				this.pse.sub( this.pnw )
+			)
+		}
+	}
+);
+
+
 /*
 | Computes a point modelled relative to this rect.
 */
@@ -654,8 +681,9 @@ Rect.prototype.cardinalResize =
 	);
 };
 
+
 /*
-| point in the center
+| Point in the center.
 */
 Jools.lazyFixate(
 	Rect.prototype,
@@ -676,7 +704,7 @@ Jools.lazyFixate(
 
 
 /*
-| point in the north
+| Point in the north.
 */
 Jools.lazyFixate(
 	Rect.prototype,
@@ -697,7 +725,7 @@ Jools.lazyFixate(
 
 
 /*
-| west point
+| West point.
 */
 Jools.lazyFixate(
 	Rect.prototype,
@@ -718,7 +746,7 @@ Jools.lazyFixate(
 
 
 /*
-| east point
+| East point.
 */
 Jools.lazyFixate(
 	Rect.prototype,
@@ -883,7 +911,7 @@ Rect.renew =
 
 
 /*
-| Returns a rect moved by a -point or -x/-y.
+| Returns a rect moved by -point or -x/-y.
 |
 | sub(point)   -or-
 | sub(x, y)
