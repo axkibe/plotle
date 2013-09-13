@@ -1476,8 +1476,8 @@ Fabric.prototype._colorStyle =
 			var pnw, pse;
 
 			// TODO remove oframe lessness
-			pnw = shape.pnw || shape.oframe.pnw;
-			pse = shape.pse || shape.oframe.pse;
+			pnw = shape.pnw || shape.frame.pnw || shape.oframe.pnw;
+			pse = shape.pse || shape.frame.pse || shape.oframe.pse;
 
 			// FIXME use gradientPNW
 			if( !pnw || !pse )

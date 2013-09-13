@@ -134,18 +134,10 @@ Widgets.Button =
 		visible;
 
 	var
-		oframe =
-		this.oframe =
+		frame =
+		this.frame =
 			parent.iframe.computeRect(
 				tree.twig.frame.twig
-			),
-
-		// TODO use home
-		iframe =
-		this.iframe =
-			Euclid.Rect.create(
-				'pse',
-				oframe.pse.sub( oframe.pnw )
 			),
 
 		// TODO move this to Shape
@@ -160,7 +152,7 @@ Widgets.Button =
 			this.shape =
 				new Curve(
 					tshape.twig,
-					iframe
+					frame.zeropnw
 				);
 
 			break;
@@ -168,7 +160,7 @@ Widgets.Button =
 		case 'Ellipse' :
 
 			this.shape =
-				iframe.computeEllipse(
+				frame.zeropnw.computeEllipse(
 					tshape.twig
 				);
 
@@ -445,7 +437,7 @@ Button.prototype._weave =
 
 	fabric =
 	this._$fabric =
-		new Euclid.Fabric( this.iframe );
+		new Euclid.Fabric( this.frame.zeropnw );
 
 	var
 		tree =
@@ -491,7 +483,7 @@ Button.prototype._weave =
 				caption.twig.font,
 
 			pos =
-				this.iframe.computePoint(
+				this.frame.zeropnw.computePoint(
 					caption.twig.pos
 				);
 
@@ -595,7 +587,7 @@ Button.prototype.pointingHover =
 	if(
 		!this.visible ||
 		p === null ||
-		!this.oframe.within(
+		!this.frame.within(
 			Euclid.View.proper,
 			p
 		)
@@ -609,7 +601,7 @@ Button.prototype.pointingHover =
 			this._weave( ),
 
 		pp =
-			p.sub( this.oframe.pnw );
+			p.sub( this.frame.pnw );
 
 	if(
 		!fabric.withinSketch(
@@ -647,7 +639,7 @@ Button.prototype.pointingStart =
 
 	if(
 		!this.visible ||
-		!this.oframe.within(
+		!this.frame.within(
 			Euclid.View.proper,
 			p
 		)
@@ -661,7 +653,7 @@ Button.prototype.pointingStart =
 			this._weave( ),
 
 		pp =
-			p.sub( this.oframe.pnw );
+			p.sub( this.frame.pnw );
 
 	if(!
 		fabric.withinSketch(
@@ -795,7 +787,7 @@ Button.prototype.draw =
 		'image',
 			this._weave( ),
 		'pnw',
-			this.oframe.pnw
+			this.frame.pnw
 	);
 };
 
