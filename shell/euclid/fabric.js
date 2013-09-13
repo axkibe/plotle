@@ -1466,7 +1466,7 @@ Fabric.prototype._colorStyle =
 			grad = this._cx.createLinearGradient(
 				view.x( shape.pnw ),
 				view.y( shape.pnw ),
-				view.x( shape.pnw ) + view.distance( shape.width / 10 ),
+				view.x( shape.pnw ) + view.scale( shape.width / 10 ),
 				view.y( shape.pse )
 			);
 			break;

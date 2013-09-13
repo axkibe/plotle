@@ -51,11 +51,6 @@ Caret =
 		retainx
 	)
 {
-	if( arguments.length > 2 )
-	{
-		throw new Error( 'TODO' );
-	}
-
 	// a signature pointing to the item the caret is in
 	this.sign =
 		sign;

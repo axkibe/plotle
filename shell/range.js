@@ -172,14 +172,9 @@ Range.prototype.innerText =
 
 	if( s1.path.equals( s2.path ) )
 	{
-
-		console.log( this.doc );
-
 		var
 			text =
 				tree.twig[ key1 ].twig.text;
-
-		console.log( text );
 
 		return text.substring(
 			s1.at1,

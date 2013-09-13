@@ -433,7 +433,7 @@ Item.prototype.sketchHandle =
 {
 	var
 		bb =
-			view.distance(
+			view.scale(
 				this.$handles.bb
 			),
 

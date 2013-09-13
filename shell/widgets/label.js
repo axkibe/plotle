@@ -282,20 +282,6 @@ Label.prototype.draw =
 
 
 /*
-| Overrides the designed text.
-*/
-Label.prototype.setText =
-	function(
-		text
-	)
-{
-	throw new Error(
-		'TODO'
-	);
-};
-
-
-/*
 | User is hovering his/her pointer ( mouse move )
 */
 Label.prototype.pointingHover =

@@ -77,10 +77,9 @@ View.prototype.eq =
 
 
 /*
-| Returns the zoomed distance d
-| TODO rename to scale
+| Returns the scaled distance of d
 */
-View.prototype.distance =
+View.prototype.scale =
 	function( d )
 {
 	return this.zoom * d;
