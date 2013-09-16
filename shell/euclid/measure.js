@@ -38,27 +38,10 @@ Euclid.Measure =
 	| Initialize is called once by shell
 	*/
 	init :
-		function( )
+		function( canvas )
 	{
-		if( Measure._$cs )
-		{
-			throw new Error( 'Measure already initialized' );
-		}
-
-		var canvas = document.createElement( 'canvas' );
-
-		// TODO make own obejct
-		Euclid.swatch =
-			new Euclid.Fabric( canvas );
-
-		Measure._$cx =
+		Measure._cx =
 			canvas.getContext( '2d' );
-
-		Measure._$size =
-			null;
-
-		Measure._$family =
-			null;
 	},
 
 
@@ -73,19 +56,12 @@ Euclid.Measure =
 	{
 		var
 			cx =
-				Measure._$cx;
+				Measure._cx;
 
 		if(
-			Measure._$size !== font.twig.size ||
-			Measure._$family !== font.twig.family
+			cx.foont !== font.css
 		)
 		{
-			Measure._$size =
-				font.twig.size;
-
-			Measure._$family =
-				font.twig.family;
-
 			cx.font =
 				font.css;
 		}

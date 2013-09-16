@@ -21,7 +21,8 @@ Euclid =
 var
 	Euclid,
 	Jools,
-	shellverse;
+	shellverse,
+	swatch;
 
 
 /*
@@ -504,7 +505,7 @@ Shape.prototype.within =
 		p
 	)
 {
-	return Euclid.swatch.withinSketch(
+	return swatch.withinSketch(
 		this,
 		'sketch',
 		view,

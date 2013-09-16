@@ -854,7 +854,7 @@ Style.styles =
 	},
 
 	/*
-	| TODO make this an icon
+	| FIXME make this an icon
 	*/
 	checkboxCheck :
 	{

@@ -29,7 +29,8 @@ Euclid =
 */
 var
 	Jools,
-	shellverse;
+	shellverse,
+	swatch;
 
 /*
 | Capsule
@@ -107,10 +108,6 @@ Euclid.RoundRect =
 					pse.y
 			);
 
-	// TODO lazy fixate
-	Jools.innumerable(this, 'width',  pse.x - pnw.x + 1);
-	Jools.innumerable(this, 'height', pse.y - pnw.y + 1);
-
 	Euclid.Shape.call(
 		this,
 		[
@@ -168,6 +165,31 @@ Jools.lazyFixate(
 
 
 /*
+| Rectangle width.
+*/
+Jools.lazyFixate(
+	RoundRect.prototype,
+	'width',
+	function( )
+	{
+		return this.pse.x - this.pnw.x;
+	}
+);
+
+/*
+| Rectangle height.
+*/
+Jools.lazyFixate(
+	RoundRect.prototype,
+	'height',
+	function( )
+	{
+		return this.pse.y - this.pnw.y;
+	}
+);
+
+
+/*
 | Returns true if this rectangle is the same as another
 */
 RoundRect.prototype.equals =
@@ -190,7 +212,7 @@ RoundRect.prototype.within =
 		p
 	)
 {
-	return Euclid.swatch.withinSketch(
+	return swatch.withinSketch(
 		this,
 		'sketch',
 		view,

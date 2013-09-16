@@ -75,6 +75,7 @@ Euclid.Rect =
 	Jools.immute( this );
 };
 
+
 Rect.create =
 	function(
 		overload,
@@ -265,7 +266,7 @@ Jools.lazyFixate(
 			return Rect.create(
 				'pse',
 				this.pse.sub( this.pnw )
-			)
+			);
 		}
 	}
 );

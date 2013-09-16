@@ -37,7 +37,9 @@ var
 	shellverse,
 	Sign,
 	system,
-	theme,
+	swatch,
+	theme, // TODO remove
+	Theme,
 	Visual;
 
 
@@ -72,7 +74,14 @@ Shell =
 	shell =
 		this;
 
-	Euclid.Measure.init( );
+	var
+		canvas =
+			document.createElement( 'canvas' );
+
+	swatch =
+		new Euclid.Fabric( canvas );
+
+	Euclid.Measure.init( canvas );
 
 	this._fontWFont =
 		fontPool.get( 20, 'la' );
@@ -136,6 +145,7 @@ Shell =
 	this._$disc =
 		new Disc.MainDisc(
 			null,
+			Theme.MainDisc,
 			screensize
 		);
 

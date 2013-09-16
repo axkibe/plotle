@@ -759,10 +759,10 @@ Server.prototype.prepareResources =
 		'shell/euclid/line.js',
 			'fb',
 
-		'shell/fontpool.js',
+		'shell/shellverse.js',
 			'fb',
 
-		'shell/theme.js',
+		'shell/fontpool.js',
 			'fb',
 
 		'shell/style.js',
@@ -771,10 +771,16 @@ Server.prototype.prepareResources =
 		'shell/accent.js',
 			'fb',
 
-		'shell/euclid/view.js',
+		'shell/theme.js',
 			'fb',
 
-		'shell/shellverse.js',
+		'shell/theme/maindisc.js',
+			'fb',
+
+		'shell/theme/createdisc.js',
+			'fb',
+
+		'shell/euclid/view.js',
 			'fb',
 
 		'shell/curve.js',

@@ -18,18 +18,10 @@ Disc =
 | Imports
 */
 var
-	config,
-	Curve,
-	Dash,
-	Design,
 	Euclid,
-	fontPool,
 	Jools,
-	Proc,
-	shell,
 	shellverse,
 	theme,
-	Tree,
 	Widgets;
 
 
@@ -74,6 +66,15 @@ Disc.Disc =
 					{
 						type :
 							'return'
+					},
+
+					'layout' :
+					{
+						type :
+							'param',
+
+						required :
+							true
 					},
 
 					'screensize' :
