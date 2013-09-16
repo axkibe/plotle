@@ -140,8 +140,7 @@ Widgets.Button =
 			tree.twig.frame.twig
 		);
 
-	// TODO _shape
-	this.shape =
+	this._shape =
 		Euclid.Shape.create(
 			tree.twig.shape.twig,
 			this.frame.zeropnw
@@ -378,7 +377,7 @@ Button.prototype.sketch =
 		twist
 	)
 {
-	this.shape.sketch(
+	this._shape.sketch(
 		fabric,
 		border,
 		twist,

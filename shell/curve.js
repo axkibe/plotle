@@ -1,6 +1,6 @@
 /*
 | A bezier curve.
-| TODO move to bezier
+| TODO move to Euclid
 |
 | Authors: Axel Kittenberger
 */
@@ -44,10 +44,9 @@ Curve =
 		frame
 	)
 {
-	// TODO _data
 	var
 		data =
-		this.data =
+		this._data =
 			[ ];
 
 	if( tree.type !== 'Curve' )
@@ -97,37 +96,64 @@ Curve.prototype.sketch =
 		// twist
 	)
 {
-	var data = this.data;
-	var lbx = 0;
-	var lby = 0;
-	var bo = border;
+	var
+		data =
+			this._data,
 
-	for(var a = 0, aZ = data.length; a < aZ; a++)
+		lbx =
+			0,
+
+		lby =
+			0,
+
+		bo =
+			border;
+
+	for(
+		var a = 0, aZ = data.length;
+		a < aZ;
+		a++
+	)
 	{
-		var c = data[a];
-		var ct = c.tree;
-		var to = c.to;
-		var bx = ct.bx * bo;
-		var by = ct.by * bo;
+		var
+			c =
+				data[a],
 
-		switch(ct.type)
+			ct =
+				c.tree,
+
+			to =
+				c.to,
+
+			bx =
+				ct.bx * bo,
+
+			by =
+				ct.by * bo;
+
+		switch( ct.type )
 		{
 			case 'MoveTo':
 
-				fabric.moveTo(to.x + bx, to.y + by);
+				fabric.moveTo( to.x + bx, to.y + by );
 
 				break;
 
 			case 'LineTo':
 
-				fabric.lineTo(to.x + bx, to.y + by);
+				fabric.lineTo( to.x + bx, to.y + by );
 
 				break;
 
 			case 'BeziTo':
 
-				var tbx = to.x + bx;
-				var tby = to.y + by;
+				var
+					tbx =
+						to.x + bx,
+
+					tby =
+						to.y + by;
+
 				fabric.beziTo(
 					ct.c1x + (tbx && tbx + lbx ? (tbx / (tbx + lbx)) : 0),
 					ct.c1y + (tby && tby + lby ? (tby / (tby + lby)) : 0),
@@ -154,3 +180,4 @@ Curve.prototype.sketch =
 };
 
 } )( );
+
