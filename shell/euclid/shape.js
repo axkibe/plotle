@@ -19,6 +19,7 @@ Euclid =
 | Imports
 */
 var
+	Curve,
 	Euclid,
 	Jools,
 	shellverse,
@@ -52,6 +53,40 @@ Euclid.Shape =
 };
 
 
+
+/*
+| Creates a shape from a model
+*/
+Shape.create =
+	function(
+		model,
+		frame
+	)
+{
+	switch( model.type )
+	{
+		case 'Curve' :
+
+			return (
+				new Curve(
+					model,
+					frame
+				)
+			);
+
+		case 'Ellipse' :
+
+			return frame.computeEllipse( model );
+
+		default :
+
+			throw new Error(
+				'unknown shape: ' + model.type
+			);
+	}
+};
+
+
 /*
 | Draws the shape
 */
@@ -74,7 +109,9 @@ Shape.prototype.sketch =
 
 	if( hull[ h++ ] !== 'start' )
 	{
-		throw new Error( 'hull must have start at [0]' );
+		throw new Error(
+			'hull must have start at [0]'
+		);
 	}
 
 	var pstart =

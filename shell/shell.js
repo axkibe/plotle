@@ -984,6 +984,7 @@ Shell.prototype.resize =
 	this._$disc =
 		new Disc.MainDisc(
 			this._$disc,
+			Theme.MainDisc,
 			screensize
 		);
 

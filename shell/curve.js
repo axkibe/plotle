@@ -1,5 +1,6 @@
 /*
 | A bezier curve.
+| TODO move to bezier
 |
 | Authors: Axel Kittenberger
 */
@@ -8,26 +9,29 @@
 /*
 | Exports
 */
-var Curve =
-	null;
-
+var
+	Curve =
+		null;
 
 /*
 | Imports
 */
-var Jools;
-var Euclid;
+var
+	Jools,
+	Euclid;
 
 
 /*
 | Capsule
 */
-( function() {
+( function( ) {
 'use strict';
 
-if( typeof( window ) === 'undefined' )
+if( CHECK && typeof( window ) === 'undefined' )
 {
-	throw new Error( 'this code needs a browser!' );
+	throw new Error(
+		'this code needs a browser!'
+	);
 }
 
 
@@ -40,32 +44,41 @@ Curve =
 		frame
 	)
 {
-	var data =
-	this.data =
-		[ ];
+	// TODO _data
+	var
+		data =
+		this.data =
+			[ ];
 
 	if( tree.type !== 'Curve' )
 	{
-		throw new Error( 'Curve tree not a Curve' );
+		throw new Error(
+			'Curve tree not a Curve'
+		);
 	}
 
 	if( tree.twig[ tree.ranks[ 0 ] ].type !== 'MoveTo' )
 	{
-		throw new Error(' Curve does not begin with MoveTo' );
+		throw new Error(
+			'Curve does not begin with MoveTo'
+		);
 	}
 
 	for(
 		var a = 0, aZ = tree.length;
 		a < aZ;
 		a++
-	) {
-		var ct =
-			tree.twig[ tree.ranks[ a ] ];
+	)
+	{
+		var
+			ct =
+				tree.twig[ tree.ranks[ a ] ];
 
 		data.push(
 			{
 				to :
 					frame.computePoint( ct.to ),
+
 				tree :
 					ct
 			}
@@ -96,16 +109,23 @@ Curve.prototype.sketch =
 		var to = c.to;
 		var bx = ct.bx * bo;
 		var by = ct.by * bo;
-		switch(ct.type) {
+
+		switch(ct.type)
+		{
 			case 'MoveTo':
+
 				fabric.moveTo(to.x + bx, to.y + by);
+
 				break;
 
 			case 'LineTo':
+
 				fabric.lineTo(to.x + bx, to.y + by);
+
 				break;
 
 			case 'BeziTo':
+
 				var tbx = to.x + bx;
 				var tby = to.y + by;
 				fabric.beziTo(
@@ -118,15 +138,19 @@ Curve.prototype.sketch =
 					tbx,
 					tby
 				);
-			break;
+
+				break;
 
 			default :
 				throw new Error('invalid curve type: ' + ct.type);
 		}
 
-		lbx = bx;
-		lby = by;
+		lbx =
+			bx;
+
+		lby =
+			by;
 	}
 };
 
-} ) ();
+} )( );

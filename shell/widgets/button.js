@@ -112,14 +112,16 @@ Widgets.Button =
 	this.name =
 		name;
 
-	// TODO inherit.
 	this.path =
-		new Path(
-			[
-				parent.name,
-				name
-			]
-		);
+		inherit ?
+			inherit.path
+			:
+			new Path(
+				[
+					parent.name,
+					name
+				]
+			);
 
 	this.parent =
 		parent;
@@ -133,45 +135,17 @@ Widgets.Button =
 	this.visible =
 		visible;
 
-	var
-		frame =
-		this.frame =
-			parent.frame.zeropnw.computeRect(
-				tree.twig.frame.twig
-			),
+	this.frame =
+		parent.frame.zeropnw.computeRect(
+			tree.twig.frame.twig
+		);
 
-		// TODO move this to Shape
-		tshape =
-			tree.twig.shape;
-
-	switch( tshape.twig.type )
-	{
-		case 'Curve' :
-
-			// TODO _shape
-			this.shape =
-				new Curve(
-					tshape.twig,
-					frame.zeropnw
-				);
-
-			break;
-
-		case 'Ellipse' :
-
-			this.shape =
-				frame.zeropnw.computeEllipse(
-					tshape.twig
-				);
-
-			break;
-
-		default :
-
-			throw new Error(
-				'unknown shape: ' + tshape.twig.type
-			);
-	}
+	// TODO _shape
+	this.shape =
+		Euclid.Shape.create(
+			tree.twig.shape.twig,
+			this.frame.zeropnw
+		);
 
 	// if true repeats the push action if held down
 	this.repeating =
@@ -392,7 +366,6 @@ Button.create =
 */
 Button.prototype.focusable =
 	true;
-
 
 
 /*
