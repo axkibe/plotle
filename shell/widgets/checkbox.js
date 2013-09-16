@@ -509,23 +509,15 @@ CheckBox.prototype.draw =
 		return;
 	}
 
-	var style =
-		Widgets.getStyle(
-			this.tree.twig.style,
-			Accent.state(
-				this.hoverAccent,
-				this.focusAccent
-			)
-		);
-
-	// TODO why doesnt getStyle throw the Error?
-
-	if( !Jools.isnon( style ) )
-	{
-		throw new Error(
-			'Invalid style: ' + this.tree.twig.style
-		);
-	}
+	var
+		style =
+			Widgets.getStyle(
+				this.tree.twig.style,
+				Accent.state(
+					this.hoverAccent,
+					this.focusAccent
+				)
+			);
 
 	fabric.paint(
 		style,

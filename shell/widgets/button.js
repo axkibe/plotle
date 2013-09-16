@@ -421,15 +421,6 @@ Button.prototype._weave =
 				accent
 			);
 
-	// TODO throw in getStyle
-
-	if( !Jools.isnon( style ) )
-	{
-		throw new Error(
-			'Invalid style: ' + tree.twig.style
-		);
-	}
-
 	fabric.paint(
 		style,
 		this,

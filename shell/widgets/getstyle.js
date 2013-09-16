@@ -43,8 +43,9 @@ Widgets.getStyle =
 		accent
 	)
 {
-	var style =
-		Style.styles[ name ];
+	var
+		style =
+			Style.styles[ name ];
 
 	if( !style )
 	{
