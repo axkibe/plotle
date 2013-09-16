@@ -88,26 +88,28 @@ Widgets.CheckBox =
 		if( typeof( focusAccent ) !== 'boolean' )
 		{
 			throw new Error(
-				'invalid focusAccent.'
+				'invalid focusAccent'
 			);
 		}
 
 		if( typeof( hoverAccent ) !== 'boolean' )
 		{
 			throw new Error(
-				'invalid hoverAccent.'
+				'invalid hoverAccent'
 			);
 		}
 	}
 
-	// TODO inherit
 	this.path =
-		new Path(
-			[
-				parent.name,
-				name
-			]
-		);
+		inherit ?
+			inherit.path
+			:
+			new Path(
+				[
+					parent.name,
+					name
+				]
+			);
 
 	this.tree =
 		tree;

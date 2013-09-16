@@ -97,14 +97,16 @@ Widgets.Input =
 		}
 	}
 
-	// TODO inherit
 	this.path =
-		new Path(
-			[
-				parent.name,
-				name
-			]
-		);
+		inherit ?
+			inherit.path
+			:
+			new Path(
+				[
+					parent.name,
+					name
+				]
+			);
 
 	this.tree =
 		tree;

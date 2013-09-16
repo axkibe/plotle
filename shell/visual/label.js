@@ -284,7 +284,7 @@ Label.create =
 				fontsize * theme.bottombox
 		);
 
-	// TODO return inherit
+	// HEH return inherit
 
 	return (
 		new Label(
