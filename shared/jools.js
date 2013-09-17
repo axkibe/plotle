@@ -63,254 +63,300 @@ var configSwitch =
 if( typeof( window ) === 'undefined' )
 {
 	// in node
-	config =  require('../config');
-	sha1hex = require('./sha1').sha1hex;
-	devel   = configSwitch(config.devel, 'server');
+	config =
+		require('../config');
+
+	sha1hex =
+		require('./sha1').sha1hex;
+
+	devel =
+		configSwitch(config.devel, 'server');
 }
 else
 {
 	// in browser
-	devel  = configSwitch(config.devel, 'shell');
+	devel  =
+		configSwitch(config.devel, 'shell');
 }
 
 
-var puffed =
-	config.debug.puffed;
+var
+	puffed =
+		config.debug.puffed,
 
 
-/*
-| Returns true if o is defined
-*/
-var is =
-	function( o )
-{
-	return typeof( o ) !== 'undefined';
-};
-
-
-/*
-| Returns true if o is defined and not null
-*/
-var isnon =
-	function( o )
-{
-	return typeof( o ) !== 'undefined' && o !== null;
-};
-
-
-/*
-| Returns true if o is an integer number
-*/
-var isInteger =
-	function( o )
-{
-	return typeof( o ) === 'number' && Math.floor( o ) === o;
-};
-
-
-/*
-| Returns true if o is an Array
-*/
-var isArray =
-	function( o )
-{
-	if( !o )
-		{ return false; }
-
-	return o.constructor === Array;
-};
-
-
-/*
-| Returns true if o is a String
-*/
-var isString  =
-	function( o )
-{
-	return typeof( o ) === 'string' || o instanceof String;
-};
-
-
-/*
-| Limits value to be between min and max
-*/
-var limit =
-	function(
-		min,
-		val,
-		max
-	)
-{
-	if( min > max )
+	/*
+	| Returns true if o is defined
+	*/
+	is =
+		function( o )
 	{
-		throw new Error('limit() min > max');
-	}
+		return typeof( o ) !== 'undefined';
+	},
 
-	if( val < min )
+
+	/*
+	| Returns true if o is defined and not null
+	*/
+	isnon =
+		function( o )
 	{
-		return min;
-	}
+		return (
+			typeof( o ) !== 'undefined' &&
+			o !== null
+		);
+	},
 
-	if( val > max )
+
+	/*
+	| Returns true if o is an integer number
+	*/
+	isInteger =
+		function( o )
 	{
-		return max;
-	}
+		return (
+			typeof( o ) === 'number' &&
+			Math.floor( o ) === o
+		);
+	},
 
-	return val;
-};
 
-
-/*
-| buils a fail message
-*/
-var fail =
-	function(
-		args,
-		aoffset
-	)
-{
-	var a =
-		Array.prototype.slice.call(args, aoffset, args.length);
-
-	for(
-		var i = 2;
-		i < arguments.length;
-		i++
-	)
+	/*
+	| Returns true if o is an Array
+	*/
+	isArray =
+		function( o )
 	{
-		a.push( arguments[ i ] );
-	}
-
-	var b =
-		a.slice();
-
-	b.unshift( 'fail' );
-
-	log.apply(
-		null,
-		b
-	);
-
-	throw reject( a.join(' ') );
-};
-
-
-/*
-| Throws a reject if condition is not met.
-*/
-var check =
-	function( condition )
-{
-	if( !condition )
-	{
-		fail( arguments, 1 );
-	}
-};
-
-
-/*
-| Throws a reject if v is not within limits
-*/
-var checkLimits =
-	function( v, low, high )
-{
-	if ( v < low || v > high )
-	{
-		fail(arguments, 3, low, '<=', v, '<=', high);
-	}
-};
-
-
-/*
-| Hashes the password.
-*/
-var passhash =
-	function( pass )
-{
-	return sha1hex( pass + '-meshcraft-8833' );
-};
-
-
-/*
-| Returns a rejection error.
-*/
-var reject =
-	function( message )
-{
-	// in devel mode any failure is fatal.{
-	if ( Jools.devel )
-	{
-		throw new Error( message );
-	}
-
-	log(
-		'reject',
-		'reject',
-		message
-	);
-
-	return {
-		ok :
-			false,
-
-		message :
-			message
-	};
-};
-
-
-/*
-| Returns an unique identifier.
-*/
-var uid =
-	function( )
-{
-	var mime =
-		'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-
-	var ua = [ ];
-
-	for(
-		var a = 0;
-		a < 3;
-		a++
-	)
-	{
-		var r32 = Math.floor(0x100000000 * Math.random());
-
-		for( var b = 0; b < 6; b++ )
+		if( !o )
 		{
-			ua.push(mime[r32 & 0x3F]);
-			r32 = r32 >>> 6;
+			return false;
 		}
-	}
 
-	return ua.join('');
-};
+		return o.constructor === Array;
+	},
 
 
-/*
-| Creates a random password with only numbers and lower case alphas.
-*/
-var randomPassword =
-	function( length )
-{
-	var ch =
-		'abcdefghijklmnopqrstuvwxyz0123456789';
-
-	var ua =
-		[];
-
-	for(
-		var a = 0;
-		a < length;
-		a++
-	)
+	/*
+	| Returns true if o is a String
+	*/
+	isString  =
+		function( o )
 	{
-		ua.push( ch[ Math.floor( 36 * Math.random( ) ) ] );
-	}
-	return ua.join( '' );
-};
+		return (
+			typeof( o ) === 'string' ||
+			( o instanceof String )
+		);
+	},
+
+
+	/*
+	| Limits value to be between min and max
+	*/
+	limit =
+		function(
+			min,
+			val,
+			max
+		)
+	{
+		if( min > max )
+		{
+			throw new Error('limit() min > max');
+		}
+
+		if( val < min )
+		{
+			return min;
+		}
+
+		if( val > max )
+		{
+			return max;
+		}
+
+		return val;
+	},
+
+
+	/*
+	| buils a fail message
+	*/
+	fail =
+		function(
+			args,
+			aoffset
+		)
+	{
+		var
+			a =
+				Array.prototype.slice.call(
+					args,
+					aoffset,
+					args.length
+				);
+
+		for(
+			var i = 2;
+			i < arguments.length;
+			i++
+		)
+		{
+			a.push( arguments[ i ] );
+		}
+
+		var
+			b =
+				a.slice( );
+
+		b.unshift( 'fail' );
+
+		log.apply(
+			null,
+			b
+		);
+
+		throw reject( a.join(' ') );
+	},
+
+
+	/*
+	| Throws a reject if condition is not met.
+	*/
+	check =
+		function( condition )
+	{
+		if( !condition )
+		{
+			fail(
+				arguments,
+				1
+			);
+		}
+	},
+
+
+	/*
+	| Throws a reject if v is not within limits
+	*/
+	checkLimits =
+		function(
+			v,
+			low,
+			high
+		)
+	{
+		if ( v < low || v > high )
+		{
+			fail(
+				arguments,
+				3,
+				low,
+				'<=',
+				v,
+				'<=',
+				high
+			);
+		}
+	},
+
+
+	/*
+	| Hashes the password.
+	*/
+	passhash =
+		function( pass )
+	{
+		return sha1hex( pass + '-meshcraft-8833' );
+	},
+
+
+	/*
+	| Returns a rejection error.
+	*/
+	reject =
+		function( message )
+	{
+		// in devel mode any failure is fatal.{
+		if ( Jools.devel )
+		{
+			throw new Error( message );
+		}
+
+		log(
+			'reject',
+			'reject',
+			message
+		);
+
+		return {
+			ok :
+				false,
+
+			message :
+				message
+		};
+	},
+
+
+	/*
+	| Returns an unique identifier
+	*/
+	uid =
+		function( )
+	{
+		var
+			mime =
+			'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/',
+
+			ua =
+				[ ];
+
+		for(
+			var a = 0;
+			a < 3;
+			a++
+		)
+		{
+			var
+				r32 =
+					Math.floor( 0x100000000 * Math.random( ) );
+
+			for( var b = 0; b < 6; b++ )
+			{
+				ua.push( mime[ r32 & 0x3F ] );
+
+				r32 = r32 >>> 6;
+			}
+		}
+
+		return ua.join( '' );
+	},
+
+
+	/*
+	| Creates a random password with only numbers and lower case alphas.
+	*/
+	randomPassword =
+		function( length )
+	{
+		var
+			ch =
+				'abcdefghijklmnopqrstuvwxyz0123456789',
+
+			ua =
+				[ ];
+
+		for(
+			var a = 0;
+			a < length;
+			a++
+		)
+		{
+			ua.push( ch[ Math.floor( 36 * Math.random( ) ) ] );
+		}
+
+		return ua.join( '' );
+	};
 
 
 /*
@@ -331,6 +377,7 @@ if( !Object.defineProperty )
 		if (funcs.set) obj.__defineSetter__(label, funcs.set);
 	};
 }
+
 
 if( !Object.freeze )
 {
