@@ -840,40 +840,4 @@ Item.prototype.pointingHover =
 };
 
 
-/*
-| Sets the focus to this item.
-*/
-Item.prototype.grepFocus =
-	function( )
-{
-	// already have focus?
-	if(
-		shell.space.focusedItem( ) === this
-	)
-	{
-		return;
-	}
-
-	var
-		doc =
-			this.sub.doc,
-
-		caret =
-			shell.setCaret(
-				'space',
-				{
-					path :
-						doc.atRank( 0 ).textPath,
-
-					at1 :
-						0
-				}
-			);
-
-	caret.show( );
-
-	shell.peer.moveToTop( this.path );
-};
-
-
 } )( );
