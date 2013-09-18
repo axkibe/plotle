@@ -1,6 +1,5 @@
 /*
 | A bezier curve.
-| TODO move to Euclid
 |
 | Authors: Axel Kittenberger
 */
