@@ -453,32 +453,6 @@ Portal.prototype.dragStop =
 
 
 /*
-| Sets the focus to this item.
-*/
-Portal.prototype.grepFocus =
-	function( )
-{
-	// already have focus?
-	if( shell.space.focusedItem( ) === this )
-	{
-		return;
-	}
-
-	shell.setCaret(
-		'space',
-		this.subPaths.spaceUser,
-		0,
-		null
-	);
-
-	shell.peer.moveToTop(
-		this.path
-	);
-};
-
-
-
-/*
 | Sees if this portal is being clicked.
 */
 Portal.prototype.click =
@@ -537,14 +511,6 @@ Portal.prototype.click =
 		return false;
 	}
 
-	if( focus !== this )
-	{
-		this.grepFocus( );
-
-		// TODO double deselect below?
-		shell.deselect( );
-	}
-
 	shell.redraw =
 		true;
 
@@ -559,8 +525,9 @@ Portal.prototype.click =
 
 	for( var field in Portal.spaceFields )
 	{
-		var sf =
-			this._$spaceFields[ field ];
+		var
+			sf =
+				this._$spaceFields[ field ];
 
 		if(
 			sf.silhoutte
@@ -584,9 +551,18 @@ Portal.prototype.click =
 		}
 	}
 
-	if( caret )
+	// if non of the field were clicked
+	// just focus the portal itself
+	if(
+		caret === null &&
+		shell.space.focusedItem( ) !== this
+	)
 	{
-		caret.show( );
+		shell.setCaret(
+			'space',
+			this.path,
+			0
+		);
 	}
 
 	shell.deselect( );

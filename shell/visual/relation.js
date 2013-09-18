@@ -357,7 +357,12 @@ Relation.spawn =
 		key =
 			result.chgX.trg.path.get( -1 );
 
-	shell.space.sub[ key ].grepFocus( );
+
+	shell.setCaret(
+		'space',
+		shell.space.sub[ key ].sub.doc.atRank( 0 ).textPath,
+		0
+	);
 };
 
 
