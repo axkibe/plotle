@@ -620,7 +620,15 @@ Item.prototype.dragStart =
 	// scrolling or dragging
 	if( access == 'rw' )
 	{
-		this.grepFocus( );
+		// grepFocus
+		if( shell.space.focusedItem() !== this )
+		{
+			shell.setCaret(
+				'space',
+				this.path,
+				0 // FIXME
+			);
+		}
 
 		var
 			vp =

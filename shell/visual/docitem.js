@@ -112,34 +112,6 @@ DocItem.prototype.getParaAtPoint =
 
 
 /*
-| Sets the focus to this item.
-*/
-DocItem.prototype.grepFocus =
-	function( )
-{
-	// already have focus?
-	if( shell.space.focusedItem() === this )
-	{
-		return;
-	}
-
-	var
-		doc =
-			this.sub.doc;
-
-	shell.setCaret(
-		'space',
-		doc.atRank( 0 ).textPath,
-		0
-	);
-
-	shell.peer.moveToTop(
-		this.path
-	);
-};
-
-
-/*
 | Sees if this item is being clicked.
 */
 DocItem.prototype.click =
@@ -171,15 +143,11 @@ DocItem.prototype.click =
 		return false;
 	}
 
-	if( space.focusedItem( ) !== this )
-	{
-		this.grepFocus( );
-
-		shell.deselect( );
-	}
 
 	shell.redraw =
 		true;
+
+	shell.deselect( );
 
 	var
 		pnw =
@@ -189,8 +157,16 @@ DocItem.prototype.click =
 			vp.sub(
 				pnw.x,
 				pnw.y -
-					( this.$scrollbarY ? this.$scrollbarY.pos : 0 )
+					(
+						this.$scrollbarY ?
+							this.$scrollbarY.pos
+							:
+							0
+					)
 			),
+
+		doc =
+			this.sub.doc,
 
 		para =
 			this.getParaAtPoint(
@@ -202,7 +178,7 @@ DocItem.prototype.click =
 	{
 		var
 			ppnw =
-				this.sub.doc.getPNW(
+				doc.getPNW(
 					this,
 					para.key
 				),
@@ -218,8 +194,17 @@ DocItem.prototype.click =
 			para.textPath,
 			at1
 		);
+	}
+	else
+	{
+		para =
+			doc.atRank( doc.ranks.length - 1 );
 
-		shell.deselect( );
+		shell.setCaret(
+			'space',
+			para.textPath,
+			para.text.length
+		);
 	}
 
 	return true;
