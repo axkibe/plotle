@@ -48,23 +48,26 @@ Sign =
 
 	// first properties from the model are inherited
 
-	for( k in model )
+	if( model )
 	{
-		// ignores inherited properties
-		if( !Object.hasOwnProperty.call( model, k ) )
+		for( k in model )
 		{
-			continue;
-		}
+			// ignores inherited properties
+			if( !Object.hasOwnProperty.call( model, k ) )
+			{
+				continue;
+			}
 
-		if( !Sign.field[ k ] )
-		{
-			throw Jools.reject(
-				'invalid Sign property: ' + k
-			);
-		}
+			if( !Sign.field[ k ] )
+			{
+				throw Jools.reject(
+					'invalid Sign property: ' + k
+				);
+			}
 
-		this[ k ] =
-			model[ k ];
+			this[ k ] =
+				model[ k ];
+		}
 	}
 
 	// then properties from arguments are applied

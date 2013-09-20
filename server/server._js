@@ -759,6 +759,9 @@ Server.prototype.prepareResources =
 		'shell/euclid/line.js',
 			'fb',
 
+		'shell/euclid/curve.js',
+			'fb',
+
 		'shell/shellverse.js',
 			'fb',
 
@@ -781,9 +784,6 @@ Server.prototype.prepareResources =
 			'fb',
 
 		'shell/euclid/view.js',
-			'fb',
-
-		'shell/curve.js',
 			'fb',
 
 		'shell/iface.js',

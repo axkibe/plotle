@@ -1,9 +1,9 @@
 /*
-|
 | The virtual caret.
 |
 | Authors: Axel Kittenberger
 |
+| TODO remove $stuff
 */
 
 

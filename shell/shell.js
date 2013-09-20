@@ -904,6 +904,202 @@ Shell.prototype.setCaret =
 
 
 /*
+| Sets the user's mark.
+|
+| This can be the caret, a text selection or object selection
+*/
+Shell.prototype.userMark =
+	function(
+		command
+		// ...
+	)
+{
+	var
+		at1 =
+			null,
+
+		mark =
+			null,
+
+		path =
+			null,
+
+		section =
+			null,
+
+		setnull =
+			null,
+
+		sign =
+			null,
+
+		retainx =
+			null,
+
+		type =
+			null;
+
+	for(
+		var a = 1, aZ = arguments.length;
+		a < aZ;
+		a++
+	)
+	{
+		switch( arguments[ a ] )
+		{
+			case 'at1' :
+
+				at1 =
+					arguments[ a + 1 ];
+
+				a += 2;
+
+				break;
+
+			case 'null' :
+
+				setnull =
+					true;
+
+				a += 1;
+
+				break;
+
+			case 'section' :
+
+				section =
+					arguments[ a + 1 ];
+
+				a += 2;
+
+				break;
+
+			case 'sign' :
+
+				sign =
+					arguments[ a + 1 ];
+
+				a += 2;
+
+				break;
+
+			case 'type' :
+
+				type =
+					arguments[ a + 1 ];
+
+				a += 2;
+
+				break;
+
+			case 'path' :
+
+				path =
+					arguments[ a + 1 ];
+
+				a += 2;
+
+				break;
+
+			case 'retainx' :
+
+				retainx =
+					arguments[ a + 1 ];
+
+				a += 2;
+
+				break;
+
+			default :
+
+				throw new Error(
+					'invalid argument: ' + arguments[ a ]
+				);
+
+		}
+	}
+
+	if( CHECK )
+	{
+		if( command !== 'set' )
+		{
+			throw new Error(
+				'userMark command not "set"'
+			);
+		}
+
+		if( section !== 'space' )
+		{
+			throw new Error(
+				'userMark section not "space"'
+			);
+		}
+	}
+
+
+	switch( type )
+	{
+		case 'caret' :
+
+			if( sign === null )
+			{
+				if( CHECK && path === null )
+				{
+					throw new Error(
+						'userMark set caret, sign and path === null'
+					);
+				}
+
+				sign =
+					new Sign(
+						null,
+						'path',
+							path,
+						'at1',
+							at1
+					);
+			}
+
+			mark =
+				new Caret(
+					sign,
+					retainx
+				);
+
+			this._$caretBlink =
+				false;
+
+			system.restartBlinker( );
+
+			break;
+
+		case 'item' :
+
+			// TODO mark should not be a caret;
+			mark =
+				new Caret(
+					new Sign(
+						null,
+						'path',
+							path
+					)
+				);
+
+			break;
+	}
+
+	this.$space =
+		new Visual.Space(
+			this.$space.tree,
+			this.$space,
+			this.$space.spaceUser,
+			this.$space.spaceTag,
+			this.$space.access,
+			mark
+		);
+};
+
+/*
 | User is pressing a special key.
 */
 Shell.prototype.specialKey =
