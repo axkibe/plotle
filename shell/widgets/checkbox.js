@@ -559,14 +559,14 @@ CheckBox.prototype.grepFocus =
 		return false;
 	}
 
-	this.parent.setCaret(
-		{
-			path :
-				this.path,
-
-			at1 :
-				0
-		}
+	shell.userMark(
+		'set',
+		'type',
+			'item',
+		'section',
+			'forms',
+		'path',
+			this.path
 	);
 
 	return true;

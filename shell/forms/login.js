@@ -614,14 +614,16 @@ Login.prototype.login =
 			'Username too short, min. 4 characters'
 		);
 
-		this.setCaret(
-			{
-				path :
-					new Path( [ this.name, 'userInput' ] ),
-
-				at1 :
-					user.length
-			}
+		shell.userMark(
+			'set',
+			'type',
+				'caret',
+			'section',
+				'forms',
+			'path',
+				new Path( [ this.name, 'userInput' ] ),
+			'at1',
+				user.length
 		);
 
 		return;
@@ -634,14 +636,16 @@ Login.prototype.login =
 			'Username must not start with "visit"'
 		);
 
-		this.setCaret(
-			{
-				path :
-					new Path( [ this.name, 'userInput' ] ),
-
-				at1 :
-					0
-			}
+		shell.userMark(
+			'set',
+			'type',
+				'caret',
+			'section',
+				'forms',
+			'path'
+				new Path( [ this.name, 'userInput' ] ),
+			'at1',
+				0
 		);
 
 		return;
@@ -654,14 +658,16 @@ Login.prototype.login =
 			'Password too short, min. 5 characters'
 		);
 
-		this.setCaret(
-			{
-				path :
-					new Path( [ this.name, 'passwordInput' ] ),
-
-				at1 :
-					pass.length
-			}
+		shell.userMark(
+			'set',
+			'type',
+				'caret',
+			'section',
+				'forms',
+			'path',
+				new Path( [ this.name, 'passwordInput' ] ),
+			'at1',
+				pass.length
 		);
 
 		return;
@@ -736,28 +742,36 @@ Login.prototype.onAuth =
 
 		if( res.message.search(/Username/) >= 0 )
 		{
-			this.setCaret(
-				{
-					path :
-						new Path(
-							[ this.name, 'userInput' ]
-						),
-
-					at1 :
-						user.length
-				}
+			shell.userMark(
+				'set',
+				'type',
+					'caret',
+				'section',
+					'forms',
+				'path',
+					new Path( [
+						this.name,
+						'userInput'
+					] ),
+				'at1',
+					user.length
 			);
 		}
 		else
 		{
-			this.setCaret(
-				{
-					path :
-						new Path(
-							[ this.name, 'passwordInput' ]
-						),
-					at1  : pass.length
-				}
+			shell.userMark(
+				'set',
+				'type',
+					'caret',
+				'section',
+					'forms',
+				'path'
+					new Path( [
+						this.name,
+						'passwordInput'
+					] ),
+				'at1',
+					pass.length
 			);
 		}
 
@@ -801,7 +815,14 @@ Login.prototype.clear =
 		''
 	);
 
-	this.setCaret( null );
+	shell.userMark(
+		'set',
+		'section',
+			'forms',
+		'form',
+			this.name,
+		'null'
+	);
 };
 
 
