@@ -861,7 +861,7 @@ Input.prototype.input =
 		'type',
 			'caret',
 		'section',
-			this.parent.name,
+			'forms',
 		'path',
 			csign.path,
 		'at1',
@@ -899,7 +899,7 @@ Input.prototype.keyBackspace =
 		'type',
 			'caret',
 		'section',
-			parent.name,
+			'forms',
 		'path',
 			csign.path,
 		'at1',
@@ -974,7 +974,7 @@ Input.prototype.keyEnd =
 		'type',
 			'caret',
 		'section',
-			parent.name,
+			'forms',
 		'path',
 			csign.path,
 		'at1',
@@ -998,14 +998,17 @@ Input.prototype.keyLeft =
 		return;
 	}
 
-	this.parent.setCaret(
-		{
-			path :
-				csign.path,
 
-			at1 :
-				csign.at1 - 1
-		}
+	shell.userMark(
+		'set',
+		'type',
+			'caret',
+		'section',
+			'forms',
+		'path',
+			csign.path,
+		'at1',
+			csign.at1 - 1
 	);
 };
 
@@ -1025,14 +1028,16 @@ Input.prototype.keyPos1 =
 		return;
 	}
 
-	this.parent.setCaret(
-		{
-			path :
-				csign.path,
-
-			at1 :
-				0
-		}
+	shell.userMark(
+		'set',
+		'type',
+			'caret',
+		'section',
+			'forms',
+		'path',
+			csign.path,
+		'at1',
+			0
 	);
 };
 
@@ -1052,11 +1057,16 @@ Input.prototype.keyRight =
 		return;
 	}
 
-	this.parent.setCaret(
-		{
-			path : csign.path,
-			at1  : csign.at1 + 1
-		}
+	shell.userMark(
+		'set',
+		'type',
+			'caret',
+		'section',
+			'forms',
+		'path',
+			csign.path,
+		'at1',
+			csign.at1 + 1
 	);
 };
 
@@ -1223,19 +1233,21 @@ Input.prototype.pointingStart =
 		return null;
 	}
 
-	this.parent.setCaret(
-		{
-			path :
-				new Path (
-					[
-						this.parent.name,
-						this.name
-					]
-				),
-
-			at1 :
-				this.getOffsetAt( pp )
-		}
+	shell.userMark(
+		'set',
+		'type',
+			'caret',
+		'section',
+			'forms',
+		'path',
+			new Path (
+				[
+					this.parent.name,
+					this.name
+				]
+			),
+		'at1',
+			this.getOffsetAt( pp )
 	);
 
 	return false;
@@ -1258,14 +1270,16 @@ Input.prototype.grepFocus =
 		return false;
 	}
 
-	this.parent.setCaret(
-		{
-			path :
-				this.path,
-
-			at1 :
-				0
-		}
+	shell.userMark(
+		'set',
+		'type',
+			'caret',
+		'section',
+			'forms',
+		'path',
+			this.path,
+		'at1',
+			0
 	);
 
 	return true;

@@ -1035,14 +1035,14 @@ Shell.prototype.userMark =
 				if( CHECK && path === null )
 				{
 					throw new Error(
-						'userMark set caret, sign and path === null'
+						'set caret, sign and path === null'
 					);
 				}
 
 				if( CHECK && at1 === null )
 				{
 					throw new Error(
-						'userMark set caret, sign and at1 === null'
+						'set caret, sign and at1 === null'
 					);
 				}
 
@@ -1085,36 +1085,45 @@ Shell.prototype.userMark =
 	}
 
 
-	if( section === 'space' )
+	switch( section )
 	{
-		this.$space =
-			new Visual.Space(
-				this.$space.tree,
-				this.$space,
-				this.$space.spaceUser,
-				this.$space.spaceTag,
-				this.$space.access,
-				mark
+		case 'space' :
+
+			this.$space =
+				new Visual.Space(
+					this.$space.tree,
+					this.$space,
+					this.$space.spaceUser,
+					this.$space.spaceTag,
+					this.$space.access,
+					mark
+				);
+
+			break;
+
+		case 'forms' :
+
+			var
+				name =
+					mark.sign.path.get( 0 ),
+
+				form =
+					this._$forms[ this._formNames[ name ] ];
+
+			if( !form )
+			{
+				throw new Error(
+					'invalid section: ' + section
+				);
+			}
+
+			// TODO XXX
+
+			form.setCaret(
+				mark.sign
 			);
-	}
-	else
-	{
-		var
-			form =
-				this._$forms[ this._formNames[ section ] ];
 
-		if( !form )
-		{
-			throw new Error(
-				'invalid section: ' + section
-			);
-		}
-
-		// TODO XXX
-
-		form.setCaret(
-			mark.sign
-		);
+			break;
 	}
 };
 
