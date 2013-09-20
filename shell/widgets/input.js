@@ -856,14 +856,16 @@ Input.prototype.input =
 			value.substring( at1 )
 	);
 
-	this.parent.setCaret(
-		{
-			path :
-				csign.path,
-
-			at1 :
-				at1 + text.length
-		}
+	shell.userMark(
+		'set',
+		'type',
+			'caret',
+		'section',
+			this.parent.name,
+		'path',
+			csign.path,
+		'at1',
+			at1 + text.length
 	);
 };
 

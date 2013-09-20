@@ -129,17 +129,26 @@ Shell =
 	this._$forms =
 		{ };
 
+	var
+		formNames =
+		this._formNames =
+			{ };
+
 	for( var i in forms )
 	{
 		var
 			name =
 				forms[ i ];
 
-		this._$forms[ name ] =
-			new Forms[ name ](
-				'screensize',
-					screensize
-			);
+		var form =
+			this._$forms[ name ] =
+				new Forms[ name ](
+					'screensize',
+						screensize
+				);
+
+		formNames[ form.name ] =
+			name;
 	}
 
 	this._$disc =
@@ -474,8 +483,9 @@ Shell.prototype._getCurrentDisplay =
 		case 'User' :
 		case 'Welcome' :
 
-			var inherit =
-				this._$forms[ name ];
+			var
+				inherit =
+					this._$forms[ name ];
 
 			if(
 				!this.screensize.equals(
@@ -1013,13 +1023,6 @@ Shell.prototype.userMark =
 				'userMark command not "set"'
 			);
 		}
-
-		if( section !== 'space' )
-		{
-			throw new Error(
-				'userMark section not "space"'
-			);
-		}
 	}
 
 
@@ -1081,15 +1084,38 @@ Shell.prototype.userMark =
 			break;
 	}
 
-	this.$space =
-		new Visual.Space(
-			this.$space.tree,
-			this.$space,
-			this.$space.spaceUser,
-			this.$space.spaceTag,
-			this.$space.access,
-			mark
+
+	if( section === 'space' )
+	{
+		this.$space =
+			new Visual.Space(
+				this.$space.tree,
+				this.$space,
+				this.$space.spaceUser,
+				this.$space.spaceTag,
+				this.$space.access,
+				mark
+			);
+	}
+	else
+	{
+		var
+			form =
+				this._$forms[ this._formNames[ section ] ];
+
+		if( !form )
+		{
+			throw new Error(
+				'invalid section: ' + section
+			);
+		}
+
+		// TODO XXX
+
+		form.setCaret(
+			mark.sign
 		);
+	}
 };
 
 /*
