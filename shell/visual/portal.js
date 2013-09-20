@@ -538,13 +538,19 @@ Portal.prototype.click =
 		)
 		{
 			caret =
-				shell.setCaret(
-					'space',
-					this.subPaths[ field ],
-					this._getOffsetAt(
-						field,
-						pp.x
-					)
+				shell.userMark(
+					'set',
+					'type',
+						'caret',
+					'section',
+						'space',
+					'path',
+						this.subPaths[ field ],
+					'at1',
+						this._getOffsetAt(
+							field,
+							pp.x
+						)
 				);
 
 			break;
@@ -558,10 +564,14 @@ Portal.prototype.click =
 		shell.space.focusedItem( ) !== this
 	)
 	{
-		shell.setCaret(
-			'space',
-			this.path,
-			0
+		shell.userMark(
+			'set',
+			'type',
+				'item',
+			'section',
+				'space',
+			'path',
+				this.path
 		);
 	}
 
@@ -954,6 +964,7 @@ Portal.prototype.input =
 		text
 	)
 {
+	// TODO make moveToButton react.
     var
 		reg  =
 			/([^\n]+)(\n?)/g,
@@ -1199,19 +1210,25 @@ Portal.prototype._keyLeft =
 		return;
 	}
 
-
 	if( csign.at1 === 0 )
 	{
 		if( section === 'spaceTag' )
 		{
-			shell.setCaret(
-				'space',
-				new Path(
-					csign.path,
-					csign.path.length - 1,
-						'spaceUser'
-					),
-				this.tree.twig.spaceUser.length
+			shell.userMark(
+				'set',
+				'type',
+					'caret',
+				'section',
+					'space',
+				'path',
+					// FIXME rather user this.path
+					new Path(
+						csign.path,
+						csign.path.length - 1,
+							'spaceUser'
+						),
+				'at1',
+					this.tree.twig.spaceUser.length
 			);
 
 			shell.redraw =
@@ -1221,10 +1238,16 @@ Portal.prototype._keyLeft =
 		return;
 	}
 
-	shell.setCaret(
-		'space',
-		csign.path,
-		csign.at1 - 1
+	shell.userMark(
+		'set',
+		'type',
+			'caret',
+		'section',
+			'space',
+		'path',
+			csign.path,
+		'at1',
+			csign.at1 - 1
 	);
 
 	shell.redraw =
@@ -1248,7 +1271,7 @@ Portal.prototype._keyDown =
 		section =
 			csign.path.get( -1 );
 
-	if( !this._isSection( section ) )
+	if( !this._isSection( section ) || section === 'moveToButton' )
 	{
 		return;
 	}
@@ -1261,19 +1284,25 @@ Portal.prototype._keyDown =
 	{
 		case 'spaceUser' :
 
-			shell.setCaret(
-				'space',
-				new Path(
-					csign.path,
-					csign.path.length - 1,
-					'spaceTag'
-				),
-
-				this._getOffsetAt(
-					'spaceTag',
-					cpos.x +
-						this._$spaceFields.spaceUser.pnw.x
-				)
+			shell.userMark(
+				'set',
+				'type',
+					'caret',
+				'section',
+					'space',
+				'path',
+					// FIXME use this paths
+					new Path(
+						csign.path,
+						csign.path.length - 1,
+						'spaceTag'
+					),
+				'at1',
+					this._getOffsetAt(
+						'spaceTag',
+						cpos.x +
+							this._$spaceFields.spaceUser.pnw.x
+					)
 			);
 
 			break;
@@ -1332,14 +1361,20 @@ Portal.prototype._keyTab =
 			break;
 	}
 
-	shell.setCaret(
-		'space',
-		new Path(
-			csign.path,
-			csign.path.length - 1,
-				cycle
-		),
-		0
+	shell.userMark(
+		'set',
+		'type',
+			'caret',
+		'section',
+			'space',
+		'path',
+			new Path(
+				csign.path,
+				csign.path.length - 1,
+					cycle
+			),
+		'at1',
+			0
 	);
 
 	shell.redraw =
@@ -1361,7 +1396,8 @@ Portal.prototype._keyUp =
 		section =
 			csign.path.get( -1 );
 
-	if( !this._isSection( section ) )
+	// TODO true circulation
+	if( !this._isSection( section ) || section === 'moveToButton' )
 	{
 		return;
 	}
@@ -1374,18 +1410,24 @@ Portal.prototype._keyUp =
 	{
 		case 'spaceTag' :
 
-			shell.setCaret(
-				'space',
-				new Path(
-					csign.path,
-					csign.path.length - 1,
-						'spaceUser'
-					),
-				this._getOffsetAt(
-					'spaceUser',
-					cpos.x +
-						this._$spaceFields.spaceTag.pnw.x
-				)
+			shell.userMark(
+				'set',
+				'type',
+					'caret',
+				'section',
+					'space',
+				'path', // FIXME this.paths
+					new Path(
+						csign.path,
+						csign.path.length - 1,
+							'spaceUser'
+						),
+				'at1',
+					this._getOffsetAt(
+						'spaceUser',
+						cpos.x +
+							this._$spaceFields.spaceTag.pnw.x
+					)
 			);
 
 			break;
@@ -1415,21 +1457,29 @@ Portal.prototype._keyRight =
 		return false;
 	}
 
-	var value =
-		this.tree.twig[ section ];
+	var
+		value =
+			this.tree.twig[ section ];
 
-	if( csign.at1 >= value.length )
+	// FIXME make true circulation
+	if( value && csign.at1 >= value.length )
 	{
 		if( section === 'spaceUser' )
 		{
-			shell.setCaret(
-				'space',
-				new Path(
-					csign.path,
-					csign.path.length - 1,
-					'spaceTag'
-				),
-				0
+			shell.userMark(
+				'set',
+				'type',
+					'caret',
+				'section',
+					'space',
+				'path', // FIXME this.paths
+					new Path(
+						csign.path,
+						csign.path.length - 1,
+						'spaceTag'
+					),
+				'at1',
+					0
 			);
 
 			shell.redraw =
@@ -1439,10 +1489,16 @@ Portal.prototype._keyRight =
 		return;
 	}
 
-	shell.setCaret(
-		'space',
-		csign.path,
-		csign.at1 + 1
+	shell.userMark(
+		'set',
+		'type',
+			'caret',
+		'section',
+			'space',
+		'path',
+			csign.path,
+		'at1',
+			csign.at1 + 1
 	);
 
 	shell.redraw =
@@ -1565,10 +1621,16 @@ Portal.prototype._keyEnd =
 		return;
 	}
 
-	shell.setCaret(
-		'space',
-		csign.path,
-		value.length
+	shell.userMark(
+		'set',
+		'type',
+			'caret',
+		'section',
+			'space',
+		'path',
+			csign.path,
+		'at1',
+			value.length
 	);
 
 	shell.redraw =
@@ -1757,10 +1819,16 @@ Portal.prototype._keyPos1 =
 		return;
 	}
 
-	shell.setCaret(
-		'space',
-		csign.path,
-		0
+	shell.userMark(
+		'set',
+		'type',
+			'caret',
+		'section',
+			'space',
+		'path',
+			csign.path,
+		'at1',
+			0
 	);
 
 	shell.redraw =

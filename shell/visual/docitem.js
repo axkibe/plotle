@@ -189,10 +189,16 @@ DocItem.prototype.click =
 					pi.sub( ppnw )
 				);
 
-		shell.setCaret(
-			'space',
-			para.textPath,
-			at1
+		shell.userMark(
+			'set',
+			'type',
+				'caret',
+			'section',
+				'space',
+			'path',
+				para.textPath,
+			'at1',
+				at1
 		);
 	}
 	else
@@ -200,10 +206,16 @@ DocItem.prototype.click =
 		para =
 			doc.atRank( doc.ranks.length - 1 );
 
-		shell.setCaret(
-			'space',
-			para.textPath,
-			para.text.length
+		shell.userMark(
+			'set',
+			'type',
+				'caret',
+			'section',
+				'space',
+			'path',
+				para.textPath,
+			'at1',
+				para.text.length
 		);
 	}
 
