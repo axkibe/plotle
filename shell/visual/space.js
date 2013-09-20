@@ -920,10 +920,11 @@ Space.prototype.click =
 
 	// otherwise ...
 
-	shell.setCaret(
-		'space',
-		null,
-		null
+	shell.userMark(
+		'set',
+		'section',
+			'space',
+		'null'
 	);
 
 	shell.redraw =
@@ -954,14 +955,18 @@ Space.prototype.dragStop =
 		result,
 		item;
 
-	if( !action )
+	if( CHECK && !action )
 	{
-		throw new Error('Dragstop without action?');
+		throw new Error(
+			'Dragstop without action'
+		);
 	}
 
 	switch( action.type )
 	{
 		case 'createNote' :
+			// FIXME move to Note
+			// ( and all others creators )
 
 			var
 				note =
@@ -986,10 +991,16 @@ Space.prototype.dragStop =
 			key =
 				result.chgX.trg.path.get( -1 );
 
-			shell.setCaret(
-				'space',
-				shell.space.sub[ key ].sub.doc.atRank( 0 ).textPath,
-				0
+			shell.userMark(
+				'set',
+				'section',
+					'space',
+				'type',
+					'caret',
+				'path',
+					shell.space.sub[ key ].sub.doc.atRank( 0 ).textPath,
+				'at1',
+					0
 			);
 
 			shell.redraw =
@@ -1065,10 +1076,16 @@ Space.prototype.dragStop =
 			key =
 				result.chgX.trg.path.get( -1 );
 
-			shell.setCaret(
-				'space',
-				shell.space.sub[ key ].sub.doc.atRank( 0 ).textPath,
-				0
+			shell.userMark(
+				'set',
+				'type',
+					'caret',
+				'section',
+					'space',
+				'path',
+					shell.space.sub[ key ].sub.doc.atRank( 0 ).textPath,
+				'at1',
+					0
 			);
 
 			shell.redraw =
@@ -1108,10 +1125,16 @@ Space.prototype.dragStop =
 			key =
 				result.chgX.trg.path.get( -1 );
 
-			shell.setCaret(
-				'space',
-				shell.space.sub[ key ].subPaths.spaceUser,
-				0
+			shell.userMark(
+				'set',
+				'type',
+					'caret',
+				'section',
+					'space',
+				'path',
+					shell.space.sub[ key ].subPaths.spaceUser,
+				'at1',
+					0
 			);
 
 			shell.redraw =
@@ -1303,10 +1326,11 @@ Space.prototype.dragStop =
 					action.removeItemPath.equals( focus.path )
 				)
 				{
-					shell.setCaret(
-						'space',
-						null,
-						0
+					shell.userMark(
+						'set',
+						'section',
+							'space',
+						'null'
 					);
 				}
 
