@@ -894,11 +894,16 @@ Input.prototype.keyBackspace =
 			this.value.substring( at1 )
 	);
 
-	this.parent.setCaret(
-		{
-			path : csign.path,
-			at1  : csign.at1 - 1
-		}
+	shell.userMark(
+		'set',
+		'type',
+			'caret',
+		'section',
+			parent.name,
+		'path',
+			csign.path,
+		'at1',
+			csign.at1 - 1
 	);
 };
 
@@ -964,14 +969,16 @@ Input.prototype.keyEnd =
 		return;
 	}
 
-	this.parent.setCaret(
-		{
-			path :
-				csign.path,
-
-			at1 :
-				this.value.length
-		}
+	shell.userMark(
+		'set',
+		'type',
+			'caret',
+		'section',
+			parent.name,
+		'path',
+			csign.path,
+		'at1',
+			this.value.length
 	);
 };
 
