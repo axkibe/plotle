@@ -1049,7 +1049,7 @@ Para.prototype._keyDown =
 		x =
 			caret.retainx !== null ?
 				caret.retainx :
-				caret.$pos.x,
+				caret.$pos.x, // FIXME remove $pos
 
 		space =
 			shell.$space,
@@ -1070,11 +1070,18 @@ Para.prototype._keyDown =
 				x
 			);
 
-		shell.setCaret(
-			'space',
-			this.textPath,
-			at1,
-			x
+		shell.userMark(
+			'set',
+			'type',
+				'caret',
+			'section',
+				'space',
+			'path',
+				this.textPath,
+			'at1',
+				at1,
+			'retainx',
+				x
 		);
 
 		return true;
@@ -1093,11 +1100,18 @@ Para.prototype._keyDown =
 		at1 =
 			ve.getOffsetAt( 0, x );
 
-		shell.setCaret(
-			'space',
-			ve.textPath,
-			at1,
-			x
+		shell.userMark(
+			'set',
+			'type',
+				'caret',
+			'section',
+				'space',
+			'path',
+				ve.textPath,
+			'at1',
+				at1,
+			'retainx',
+				x
 		);
 	}
 
@@ -1120,13 +1134,20 @@ Para.prototype._keyEnd =
 		return false;
 	}
 
-	var space =
-		shell.$space;
+	var
+		space =
+			shell.$space;
 
-	shell.setCaret(
-		'space',
-		this.textPath,
-		this.text.length
+	shell.userMark(
+		'set',
+		'type',
+			'caret',
+		'section',
+			'space',
+		'path',
+			this.textPath,
+		'at1',
+			this.text.length
 	);
 
 	return true;
@@ -1162,32 +1183,47 @@ Para.prototype._keyLeft =
 		caret
 	)
 {
-	var space =
-		shell.$space;
+	var
+		space =
+			shell.$space;
 
 	if( caret.sign.at1 > 0 )
 	{
-		shell.setCaret(
-			'space',
-			this.textPath,
-			caret.sign.at1 - 1
+		shell.userMark(
+			'set',
+			'type',
+				'caret',
+			'section',
+				'space',
+			'path',
+				this.textPath,
+			'at1',
+				caret.sign.at1 - 1
 		);
 
 		return true;
 	}
 
-	var r =
-		doc.tree.rankOf( this.key );
+	var
+		r =
+			doc.tree.rankOf( this.key );
 
 	if( r > 0 )
 	{
-		var ve =
-			doc.atRank( r - 1 );
+		var
+			ve =
+				doc.atRank( r - 1 );
 
-		shell.setCaret(
-			'space',
-			ve.textPath,
-			ve.text.length
+		shell.userMark(
+			'set',
+			'type',
+				'caret',
+			'section',
+				'space',
+			'path',
+				ve.textPath,
+			'at1',
+				ve.text.length
 		);
 
 		return true;
@@ -1207,18 +1243,25 @@ Para.prototype._keyPos1 =
 		caret
 	)
 {
-	var space =
-		shell.$space;
+	var
+		space =
+			shell.$space;
 
 	if( caret.at1 === 0 )
 	{
 		return false;
 	}
 
-	shell.setCaret(
-		'space',
-		this.textPath,
-		0
+	shell.userMark(
+		'set',
+		'type',
+			'caret',
+		'section',
+			'space',
+		'path',
+			this.textPath,
+		'at1',
+			0
 	);
 
 	return true;
@@ -1232,18 +1275,25 @@ Para.prototype._keyRight =
 	function(
 		item,
 		doc,
-		caret
+		caret // FIXME dont hand down caret
 	)
 {
-	var space =
-		shell.$space;
+	var
+		space =
+			shell.$space;
 
 	if( caret.sign.at1 < this.text.length )
 	{
-		shell.setCaret(
-			'space',
-			this.textPath,
-			caret.sign.at1 + 1
+		shell.userMark(
+			'set',
+			'type',
+				'caret',
+			'section',
+				'space',
+			'path',
+				this.textPath,
+			'at1',
+				caret.sign.at1 + 1
 		);
 
 		return true;
@@ -1257,10 +1307,16 @@ Para.prototype._keyRight =
 		var ve =
 			doc.atRank( r + 1 );
 
-		shell.setCaret(
-			'space',
-			ve.textPath,
-			0
+		shell.userMark(
+			'set',
+			'type',
+				'caret',
+			'section',
+				'space',
+			'path',
+				ve.textPath,
+			'at1',
+				0
 		);
 
 		return true;
@@ -1309,11 +1365,18 @@ Para.prototype._keyUp =
 				x
 			);
 
-		shell.setCaret(
-			'space',
-			this.textPath,
-			at1,
-			x
+		shell.userMark(
+			'set',
+			'type',
+				'caret',
+			'section',
+				'space',
+			'path',
+				this.textPath,
+			'at1',
+				at1,
+			'retainx',
+				x
 		);
 
 		return true;
@@ -1334,11 +1397,18 @@ Para.prototype._keyUp =
 				x
 			);
 
-		shell.setCaret(
-			'space',
-			ve.textPath,
-			at1,
-			x
+		shell.userMark(
+			'set',
+			'type',
+				'caret',
+			'section',
+				'space',
+			'path',
+				ve.textPath,
+			'at1',
+				at1,
+			'retainx',
+				x
 		);
 
 		return true;
@@ -1389,6 +1459,8 @@ Para.prototype.specialKey =
 					v1 =
 						doc.atRank( doc.tree.length - 1 );
 
+				// TODO userMark
+
 				selection =
 					shell.setSelection(
 						doc,
@@ -1411,10 +1483,14 @@ Para.prototype.specialKey =
 						)
 					);
 
-				shell.setCaret(
-					'space',
-					selection.sign2.path, // FIXME, maybe use freestrings
-					selection.sign2.at1
+				shell.userMark(
+					'set',
+					'type',
+						'caret',
+					'section',
+						'space',
+					'sign',
+						selection.sign2
 				);
 
 				shell.redraw =

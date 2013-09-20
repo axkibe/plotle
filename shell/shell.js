@@ -950,9 +950,7 @@ Shell.prototype.userMark =
 			case 'at1' :
 
 				at1 =
-					arguments[ a + 1 ];
-
-				a += 2;
+					arguments[ ++a ];
 
 				break;
 
@@ -961,52 +959,40 @@ Shell.prototype.userMark =
 				setnull =
 					true;
 
-				a += 1;
-
 				break;
 
 			case 'section' :
 
 				section =
-					arguments[ a + 1 ];
-
-				a += 2;
+					arguments[ ++a ];
 
 				break;
 
 			case 'sign' :
 
 				sign =
-					arguments[ a + 1 ];
-
-				a += 2;
+					arguments[ ++a ];
 
 				break;
 
 			case 'type' :
 
 				type =
-					arguments[ a + 1 ];
-
-				a += 2;
+					arguments[ ++a ];
 
 				break;
 
 			case 'path' :
 
 				path =
-					arguments[ a + 1 ];
-
-				a += 2;
+					arguments[ ++a ];
 
 				break;
 
 			case 'retainx' :
 
 				retainx =
-					arguments[ a + 1 ];
-
-				a += 2;
+					arguments[ ++a ];
 
 				break;
 
@@ -1047,6 +1033,13 @@ Shell.prototype.userMark =
 				{
 					throw new Error(
 						'userMark set caret, sign and path === null'
+					);
+				}
+
+				if( CHECK && at1 === null )
+				{
+					throw new Error(
+						'userMark set caret, sign and at1 === null'
 					);
 				}
 
