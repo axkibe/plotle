@@ -623,10 +623,14 @@ Item.prototype.dragStart =
 		// grepFocus
 		if( shell.space.focusedItem() !== this )
 		{
-			shell.setCaret(
-				'space',
-				this.path,
-				0 // FIXME
+			shell.userMark(
+				'set',
+				'type',
+					'item',
+				'section',
+					'space',
+				'path',
+					this.path
 			);
 		}
 
