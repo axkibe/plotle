@@ -928,7 +928,13 @@ Shell.prototype.userMark =
 		at1 =
 			null,
 
+		form =
+			null,
+
 		mark =
+			null,
+
+		name =
 			null,
 
 		path =
@@ -960,6 +966,13 @@ Shell.prototype.userMark =
 			case 'at1' :
 
 				at1 =
+					arguments[ ++a ];
+
+				break;
+
+			case 'form' :
+
+				form =
 					arguments[ ++a ];
 
 				break;
@@ -1082,6 +1095,15 @@ Shell.prototype.userMark =
 				);
 
 			break;
+
+		default :
+
+			if( !setnull )
+			{
+				throw new Error(
+					'type missing'
+				);
+			}
 	}
 
 
@@ -1103,26 +1125,34 @@ Shell.prototype.userMark =
 
 		case 'forms' :
 
-			var
+			if( !setnull )
+			{
 				name =
-					mark.sign.path.get( 0 ),
+					mark.sign.path.get( 0 );
 
 				form =
 					this._$forms[ this._formNames[ name ] ];
 
-			if( !form )
-			{
-				throw new Error(
-					'invalid section: ' + section
+				if( !form )
+				{
+					throw new Error(
+						'invalid section: ' + section
+					);
+				}
+
+				form.setCaret(
+					mark.sign
 				);
 			}
+			else
+			{
+				form =
+					this._$forms[ this._formNames[ form ] ];
 
-			// TODO XXX
-
-			form.setCaret(
-				mark.sign
-			);
-
+				form.setCaret(
+					null
+				);
+			}
 			break;
 	}
 };

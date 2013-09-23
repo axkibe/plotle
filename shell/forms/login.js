@@ -642,8 +642,11 @@ Login.prototype.login =
 				'caret',
 			'section',
 				'forms',
-			'path'
-				new Path( [ this.name, 'userInput' ] ),
+			'path',
+				new Path( [
+					this.name,
+					'userInput'
+				] ),
 			'at1',
 				0
 		);
@@ -665,7 +668,10 @@ Login.prototype.login =
 			'section',
 				'forms',
 			'path',
-				new Path( [ this.name, 'passwordInput' ] ),
+				new Path( [
+					this.name,
+					'passwordInput'
+				] ),
 			'at1',
 				pass.length
 		);
@@ -692,8 +698,9 @@ Login.prototype.specialKey =
 		ctrl
 	)
 {
-	var focus =
-		this.getFocus( );
+	var
+		focus =
+			this.getFocus( );
 
 	if( !focus )
 	{
@@ -765,7 +772,7 @@ Login.prototype.onAuth =
 					'caret',
 				'section',
 					'forms',
-				'path'
+				'path',
 					new Path( [
 						this.name,
 						'passwordInput'

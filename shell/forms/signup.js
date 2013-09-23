@@ -918,19 +918,21 @@ SignUp.prototype.signup =
 			'Username too short, min. 4 characters'
 		);
 
-		this.setCaret(
-			{
-				path :
-					new Path(
-						[
-							this.name,
-							'userInput'
-						]
-					),
-
-				at1 :
-					user.length
-			}
+		shell.userMark(
+			'set',
+			'type',
+				'caret',
+			'section',
+				'forms',
+			'path',
+				new Path(
+					[
+						this.name,
+						'userInput'
+					]
+				),
+			'at1',
+				at1
 		);
 
 		return;
@@ -943,14 +945,19 @@ SignUp.prototype.signup =
 			'Username must not start with "visit"'
 		);
 
-		this.setCaret(
-			{
-				path :
-					new Path( [ this.name, 'userInput' ] ),
-
-				at1 :
-					0
-			}
+		shell.userMark(
+			'set',
+			'type',
+				'caret',
+			'section',
+				'forms',
+			'path',
+				new Path( [
+					this.name,
+					'userInput'
+				] ),
+			'at1',
+				0
 		);
 
 		return;
@@ -963,14 +970,19 @@ SignUp.prototype.signup =
 			'Password too short, min. 5 characters'
 		);
 
-		this.setCaret(
-			{
-				path :
-					new Path( [ this.name, 'passwordInput' ] ),
-
-				at1 :
-					pass.length
-			}
+		shell.userMark(
+			'set',
+			'type',
+				'caret',
+			'section',
+				'forms',
+			'path',
+				new Path( [
+					this.name,
+					'passwordInput'
+				] ),
+			'at1',
+				pass.length
 		);
 
 		return;
@@ -983,24 +995,28 @@ SignUp.prototype.signup =
 			'Passwords do not match'
 		);
 
-		shell.setCaret(
-			{
-				path :
-					new Path( [ this.name, 'password2Input' ] ),
-				at1 :
-					pass2.length
-			}
+		shell.userMark(
+			'set',
+			'type',
+				'caret',
+			'section',
+				'forms',
+			'path',
+				new Path( [
+					this.name,
+					'password2Input'
+				] ),
+			'at1',
+				pass2.length
 		);
+
 		return;
 	}
-
-	var passhash =
-		Jools.passhash( pass );
 
 	shell.peer.register(
 		user,
 		email,
-		passhash,
+		Jools.passhash( pass ),
 		newsletter,
 		this
 	);
@@ -1067,18 +1083,21 @@ SignUp.prototype.onRegister =
 			res.message
 		);
 
-		if( res.message.search(/Username/) >= 0 )
+		if( res.message.search( /Username/ ) >= 0 )
 		{
-			this.setCaret(
-				{
-					path :
-						new Path(
-							[ this.name, 'userInput' ]
-						),
-
-					at1 :
-						sub.userInput.value.length
-				}
+			shell.userMark(
+				'set',
+				'type',
+					'caret',
+				'section',
+					'forms',
+				'path',
+					new Path( [
+						this.name,
+						'userInput'
+					] ),
+				'at1',
+					sub.userInput.value.length
 			);
 		}
 
@@ -1127,7 +1146,14 @@ SignUp.prototype.clear =
 		true
 	);
 
-	this.setCaret( null );
+	shell.userMark(
+		'set',
+		'section',
+			'forms',
+		'form',
+			this.name,
+		'null'
+	);
 };
 
 

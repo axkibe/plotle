@@ -774,7 +774,7 @@ Button.prototype.grepFocus =
 	shell.userMark(
 		'set',
 		'type',
-			'caret',
+			'item',
 		'section',
 			'forms',
 		'path',
