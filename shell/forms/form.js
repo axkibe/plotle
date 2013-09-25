@@ -107,13 +107,6 @@ Forms.Form =
 			this.screensize
 		);
 
-	this.tree =
-		shellverse.grow( this.layout );
-
-	// hinders direct access of the layout
-	this.layout =
-		null;
-
 	// the caret or a caret less component
 	// having the focus (for example a button)
 	this.$caret =

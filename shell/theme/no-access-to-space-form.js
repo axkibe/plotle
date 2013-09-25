@@ -1,5 +1,5 @@
 /*
-| The user's form.
+| Default design for no access to space.
 |
 | Authors: Axel Kittenberger
 */
@@ -8,77 +8,50 @@
 /*
 | Export
 */
-var Forms;
-Forms =
-	Forms || { };
+var
+	Theme;
+
+Theme =
+	Theme || { };
 
 
 /*
 | Imports
 */
-var Euclid;
-var fontPool;
-var Jools;
-var Path;
-var shell;
-
+var
+	fontPool;
 
 /*
 | Capsule
 */
-(function( ) {
+( function( ) {
 'use strict';
 
 
-/*
-| The login form
-*/
-var Space =
-Forms.Space =
-	function(
-		// free strings
-	)
-{
-	// TODO
-	this.tree =
-		shellverse.grow( this.layout );
+var
+	/*
+	| Close control
+	*/
+	okButton =
+	{
+		width :
+			50,
 
-	Forms.Form.apply(
-		this,
-		arguments
-	);
-};
+		height :
+			50,
 
+		w :
+			180,
 
-Jools.subclass(
-	Space,
-	Forms.Form
-);
-
-
-/*
-| Close control
-*/
-var closeButton =
-{
-	width :
-		50,
-
-	height :
-		50,
-
-	w :
-		180,
-
-	n :
-		38
-};
+		n :
+			38
+	};
 
 
 /*
 | Layout
 */
-Space.prototype.layout =
+Theme.NoAccessToSpaceForm =
 {
 	type :
 		'Layout',
@@ -118,7 +91,7 @@ Space.prototype.layout =
 				'LabelWidget',
 
 			text :
-				'In future space settings can be altered here.',
+				'Sorry, you cannot port to this space or create it.',
 
 			font :
 				fontPool.get( 16, 'ca' ),
@@ -139,7 +112,7 @@ Space.prototype.layout =
 			}
 		},
 
-		'closeButton' :
+		'okButton' :
 		{
 			type :
 				'ButtonWidget',
@@ -161,10 +134,10 @@ Space.prototype.layout =
 						'c',
 
 					x :
-						closeButton.w,
+						okButton.w,
 
 					y :
-						closeButton.n
+						okButton.n
 				},
 
 				pse  :
@@ -176,10 +149,10 @@ Space.prototype.layout =
 						'c',
 
 					x :
-						closeButton.w + closeButton.width,
+						okButton.w + okButton.width,
 
 					y :
-						closeButton.n + closeButton.height
+						okButton.n + okButton.height
 				}
 			},
 
@@ -189,7 +162,7 @@ Space.prototype.layout =
 					'LabelWidget',
 
 				text :
-					'close',
+					'ok',
 
 				font :
 					fontPool.get( 14, 'cm' ),
@@ -253,62 +226,9 @@ Space.prototype.layout =
 	[
 		'headline',
 		'message1',
-		'closeButton'
+		'okButton'
 	]
 };
 
 
-/*
-| A button of the form has been pushed.
-*/
-Space.prototype.pushButton =
-	function(
-		buttonName
-		// shift,
-		// ctrl
-	)
-{
-	switch( buttonName )
-	{
-		case 'closeButton' :
-
-			shell.bridge.changeMode( 'Normal' );
-
-			break;
-
-		default :
-
-			throw new Error( 'unknown button pushed: ' + buttonName );
-	}
-};
-
-
-
-/*
-| Name of the form.
-*/
-Space.prototype.name =
-	'space';
-
-
-/*
-| Finished loading a space.
-*/
-Space.prototype.arrivedAtSpace =
-	function(
-		spaceUser,
-		spaceTag
-		// access
-	)
-{
-	var $sub =
-		this.$sub;
-
-	this.setText(
-		'headline',
-		spaceUser + ':' + spaceTag
-	);
-};
-
 } )( );
-

@@ -68,7 +68,9 @@ Shell =
 {
 	if( shell !== null )
 	{
-		throw new Error( 'Singleton not single' );
+		throw new Error(
+			'Singleton not single'
+		);
 	}
 
 	shell =
@@ -864,6 +866,9 @@ Shell.prototype.mousewheel =
 /*
 | Set the caret
 */
+/*
+TODO
+
 Shell.prototype.setCaret =
 	function(
 		section,
@@ -910,13 +915,19 @@ Shell.prototype.setCaret =
 		false;
 
 	system.restartBlinker( );
-};
+}
+*/;
 
 
 /*
 | Sets the user's mark.
 |
-| This can be the caret, a text selection or object selection
+| This can be
+|     the caret
+|     a text selection
+|     a widget
+|     a single item
+|     an iten selection
 */
 Shell.prototype.userMark =
 	function(
