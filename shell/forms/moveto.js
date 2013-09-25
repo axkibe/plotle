@@ -19,13 +19,13 @@ Forms =
 | Imports
 */
 var
+	Design,
 	Euclid,
 	fontPool,
 	Jools,
 	Path,
 	shell,
-	Widgets,
-	Theme;
+	Widgets;
 
 
 /*
@@ -45,7 +45,7 @@ Forms.MoveTo =
 	)
 {
 	this.tree =
-		shellverse.grow( Theme.MoveToForm );
+		shellverse.grow( Design.MoveToForm );
 
 	Forms.Form.apply(
 		this,

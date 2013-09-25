@@ -19,12 +19,13 @@ Forms =
 /*
 | Imports
 */
-var Euclid,
+var
+	Design,
+	Euclid,
 	fontPool,
 	Jools,
 	Path,
-	shell,
-	Theme;
+	shell;
 
 
 /*
@@ -44,7 +45,7 @@ Forms.Login =
 	)
 {
 	this.tree =
-		shellverse.grow( Theme.LoginForm );
+		shellverse.grow( Design.LoginForm );
 
 	Forms.Form.apply(
 		this,

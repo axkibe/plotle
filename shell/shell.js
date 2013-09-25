@@ -24,6 +24,7 @@ var
 	Action,
 	Bridge,
 	Caret,
+	Design,
 	Disc,
 	Euclid,
 	fontPool,
@@ -39,7 +40,6 @@ var
 	system,
 	swatch,
 	theme, // TODO remove
-	Theme,
 	Visual;
 
 
@@ -156,7 +156,7 @@ Shell =
 	this._$disc =
 		new Disc.MainDisc(
 			null,
-			Theme.MainDisc,
+			Design.MainDisc,
 			screensize
 		);
 
@@ -1249,7 +1249,7 @@ Shell.prototype.resize =
 	this._$disc =
 		new Disc.MainDisc(
 			this._$disc,
-			Theme.MainDisc,
+			Design.MainDisc,
 			screensize
 		);
 

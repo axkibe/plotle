@@ -777,19 +777,19 @@ Server.prototype.prepareResources =
 		'shell/theme.js',
 			'fb',
 
-		'shell/theme/maindisc.js',
+		'shell/design/maindisc.js',
 			'fb',
 
-		'shell/theme/createdisc.js',
+		'shell/design/createdisc.js',
 			'fb',
 
-		'shell/theme/login-form.js',
+		'shell/design/login-form.js',
 			'fb',
 
-		'shell/theme/moveto-form.js',
+		'shell/design/moveto-form.js',
 			'fb',
 
-		'shell/theme/no-access-to-space-form.js',
+		'shell/design/no-access-to-space-form.js',
 			'fb',
 
 		'shell/euclid/view.js',

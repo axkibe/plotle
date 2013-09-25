@@ -8,10 +8,11 @@
 | Export
 */
 var
-	Theme;
+	Design;
 
-Theme =
-	Theme || { };
+
+Design =
+	Design || { };
 
 
 /*
@@ -82,7 +83,7 @@ var design = {
 	}
 };
 
-Theme.CreateDisc =
+Design.CreateDisc =
 {
 	type :
 		'Layout',

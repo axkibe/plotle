@@ -9,10 +9,11 @@
 | Export
 */
 var
-	Theme;
+	Design;
 
-Theme =
-	Theme || { };
+
+Design =
+	Design || { };
 
 
 /*
@@ -140,7 +141,8 @@ var design =
 	*/
 };
 
-Theme.MainDisc =
+
+Design.MainDisc =
 {
 	type :
 		'Layout',

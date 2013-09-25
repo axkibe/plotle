@@ -19,12 +19,12 @@ Disc =
 | Imports
 */
 var
+	Design,
 	Euclid,
 	fontPool,
 	Jools,
 	shell,
-	Widgets,
-	Theme;
+	Widgets;
 
 /*
 | Capsule
@@ -77,7 +77,7 @@ Disc.MainDisc =
 	this.createDisc =
 		new Disc.CreateDisc(
 			screensize,
-			Theme.CreateDisc,
+			Design.CreateDisc,
 			inherit && inherit.createDisc
 		);
 

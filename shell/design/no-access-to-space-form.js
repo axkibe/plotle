@@ -9,10 +9,11 @@
 | Export
 */
 var
-	Theme;
+	Design;
 
-Theme =
-	Theme || { };
+
+Design =
+	Design || { };
 
 
 /*
@@ -51,7 +52,7 @@ var
 /*
 | Layout
 */
-Theme.NoAccessToSpaceForm =
+Design.NoAccessToSpaceForm =
 {
 	type :
 		'Layout',

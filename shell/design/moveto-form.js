@@ -9,10 +9,11 @@
 | Export
 */
 var
-	Theme;
+	Design;
 
-Theme =
-	Theme || { };
+
+Design =
+	Design || { };
 
 
 /*
@@ -27,50 +28,60 @@ var
 ( function( ) {
 'use strict';
 
+
 var
-
-	/*
-	| Login control
-	*/
-	loginButton =
+	meshcraftHomeButton =
 	{
-		width :
-			70,
-
-		height :
-			70,
-
 		w :
-			95,
+			-145,
 
 		n :
-			28
+			-100,
+
+		width :
+			130,
+
+		height :
+			130
 	},
 
 
-	/*
-	| Close control
-	*/
-	closeButton =
+	meshcraftSandboxButton =
 	{
-		width :
-			50,
-
-		height :
-			50,
-
 		w :
-			180,
+			15,
 
 		n :
-			38
+			-100,
+
+		width :
+			130,
+
+		height :
+			130
+	},
+
+
+	userHomeButton =
+	{
+		w :
+			-145,
+
+		n :
+			60,
+
+		width :
+			130,
+
+		height :
+			130
 	};
 
 
 /*
 | Layout
 */
-Theme.LoginForm =
+Design.MoveToForm =
 {
 	type :
 		'Layout',
@@ -83,10 +94,10 @@ Theme.LoginForm =
 				'LabelWidget',
 
 			text :
-				'Log In',
+				'move to another space',
 
 			font :
-				fontPool.get( 22, 'la' ),
+				fontPool.get( 22, 'ca' ),
 
 			pos :
 			{
@@ -97,211 +108,20 @@ Theme.LoginForm =
 					'c',
 
 				x :
-					-225,
+					0,
 
 				y :
-					-112
+					-150
 			}
 		},
 
-		'usernameLabel' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'username',
-
-			font :
-				fontPool.get( 16, 'la' ),
-
-			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					-175,
-
-				y :
-					-49
-			}
-		},
-
-		'passwordLabel' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'password',
-
-			font :
-				fontPool.get( 16, 'la' ),
-
-			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					-175,
-
-				y :
-					-9
-			}
-		},
-
-		'errorLabel' :
-		{
-			type :
-				'LabelWidget',
-
-			text :
-				'',
-				// 'username/password not accepted',
-
-			font :
-				fontPool.get( 14, 'car' ),
-
-			pos :
-			{
-				type :
-					'AnchorPoint',
-
-				anchor :
-					'c',
-
-				x :
-					-20,
-
-				y :
-					-83
-			}
-		},
-
-		'userInput' :
-		{
-			type :
-				'InputWidget',
-
-			password :
-				false,
-
-			style :
-				'input',
-
-			font :
-				fontPool.get( 14, 'la' ),
-
-			maxlen :
-				100,
-
-			frame  :
-			{
-				type :
-					'Frame',
-
-				pnw :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						-80,
-
-					y :
-						-67
-				},
-
-				pse :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						130,
-
-					y :
-						-41
-				}
-			}
-		},
-
-		'passwordInput' :
-		{
-			type :
-				'InputWidget',
-
-			password :
-				true,
-
-			style :
-				'input',
-
-			font :
-				fontPool.get( 14, 'la' ),
-
-			maxlen :
-				100,
-
-			frame  :
-			{
-				type :
-					'Frame',
-
-				pnw :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						-80,
-
-					y :
-						-27
-				},
-
-				pse :
-				{
-					type :
-						'AnchorPoint',
-
-					anchor :
-						'c',
-
-					x :
-						130,
-
-					y :
-						-1
-				}
-			}
-		},
-
-
-		'loginButton' :
+		'meshcraftHomeButton' :
 		{
 			type :
 				'ButtonWidget',
 
 			style :
-				'genericButton',
+				'portalButton',
 
 			frame :
 			{
@@ -317,10 +137,10 @@ Theme.LoginForm =
 						'c',
 
 					x :
-						loginButton.w,
+						meshcraftHomeButton.w,
 
 					y :
-						loginButton.n
+						meshcraftHomeButton.n
 				},
 
 				pse  :
@@ -332,10 +152,12 @@ Theme.LoginForm =
 						'c',
 
 					x :
-						loginButton.w + loginButton.width,
+						meshcraftHomeButton.w +
+						meshcraftHomeButton.width,
 
 					y :
-						loginButton.n + loginButton.height
+						meshcraftHomeButton.n +
+						meshcraftHomeButton.height
 				}
 			},
 
@@ -345,7 +167,10 @@ Theme.LoginForm =
 					'LabelWidget',
 
 				text :
-					'log in',
+					'meshraft\nhome',
+
+				newline :
+					25,
 
 				font :
 					fontPool.get( 14, 'cm' ),
@@ -403,14 +228,13 @@ Theme.LoginForm =
 			}
 		},
 
-
-		'closeButton' :
+		'meshcraftSandboxButton' :
 		{
 			type :
 				'ButtonWidget',
 
 			style :
-				'genericButton',
+				'portalButton',
 
 			frame :
 			{
@@ -426,10 +250,10 @@ Theme.LoginForm =
 						'c',
 
 					x :
-						closeButton.w,
+						meshcraftSandboxButton.w,
 
 					y :
-						closeButton.n
+						meshcraftSandboxButton.n
 				},
 
 				pse  :
@@ -441,10 +265,12 @@ Theme.LoginForm =
 						'c',
 
 					x :
-						closeButton.w + closeButton.width,
+						meshcraftSandboxButton.w +
+						meshcraftSandboxButton.width,
 
 					y :
-						closeButton.n + closeButton.height
+						meshcraftSandboxButton.n +
+						meshcraftSandboxButton.height
 				}
 			},
 
@@ -454,7 +280,121 @@ Theme.LoginForm =
 					'LabelWidget',
 
 				text :
-					'close',
+					'meshraft\nsandbox',
+
+				newline :
+					25,
+
+				font :
+					fontPool.get( 14, 'cm' ),
+
+				pos  :
+				{
+					type:
+						'AnchorPoint',
+
+					anchor:
+						'c',
+
+					x :
+						0,
+
+					y :
+						0
+				}
+			},
+
+			shape :
+			{
+				type :
+					'Ellipse',
+
+				pnw :
+				{
+					type:
+						'AnchorPoint',
+
+					anchor:
+						'nw',
+
+					x :
+						0,
+
+					y :
+						0
+				},
+
+				pse :
+				{
+					type:
+						'AnchorPoint',
+
+					anchor:
+						'se',
+
+					x :
+						-1,
+
+					y :
+						-1
+				}
+			}
+		},
+
+		'userHomeButton' :
+		{
+			type :
+				'ButtonWidget',
+
+			style :
+				'portalButton',
+
+			frame :
+			{
+				type :
+					'Frame',
+
+				pnw  :
+				{
+					type :
+						'AnchorPoint',
+
+					anchor :
+						'c',
+
+					x :
+						userHomeButton.w,
+
+					y :
+						userHomeButton.n
+				},
+
+				pse  :
+				{
+					type :
+						'AnchorPoint',
+
+					anchor :
+						'c',
+
+					x :
+						userHomeButton.w + userHomeButton.width,
+
+					y :
+						userHomeButton.n + userHomeButton.height
+				}
+			},
+
+			caption :
+			{
+				type :
+					'LabelWidget',
+
+				text :
+					'your\nhome',
+
+				newline :
+					25,
 
 				font :
 					fontPool.get( 14, 'cm' ),
@@ -517,13 +457,9 @@ Theme.LoginForm =
 	ranks :
 	[
 		'headline',
-		'usernameLabel',
-		'passwordLabel',
-		'errorLabel',
-		'userInput',
-		'passwordInput',
-		'loginButton',
-		'closeButton'
+		'meshcraftHomeButton',
+		'meshcraftSandboxButton',
+		'userHomeButton'
 	]
 };
 

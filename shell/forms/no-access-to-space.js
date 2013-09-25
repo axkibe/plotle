@@ -19,12 +19,12 @@ Forms =
 | Imports
 */
 var
+	Design,
 	Euclid,
 	fontPool,
 	Jools,
 	Path,
-	shell,
-	Theme;
+	shell;
 
 /*
 | Capsule
@@ -44,7 +44,7 @@ var
 		)
 {
 	this.tree =
-		shellverse.grow( Theme.NoAccessToSpaceForm );
+		shellverse.grow( Design.NoAccessToSpaceForm );
 
 	Forms.Form.apply(
 		this,
