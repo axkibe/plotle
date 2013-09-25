@@ -115,8 +115,9 @@ NonExistingSpace.prototype.setSpace =
 		spaceTag
 	)
 {
-	var $sub =
-		this.$sub;
+	var
+		$sub =
+			this.$sub;
 
 	this.$spaceUser =
 		spaceUser;
@@ -124,7 +125,8 @@ NonExistingSpace.prototype.setSpace =
 	this.$spaceTag =
 		spaceTag;
 
-	$sub.headline.setText(
+	this.setText(
+		'headline',
 		spaceUser +
 		':' +
 		spaceTag +

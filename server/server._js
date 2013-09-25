@@ -795,6 +795,9 @@ Server.prototype.prepareResources =
 		'shell/design/non-existing-space-form.js',
 			'fb',
 
+		'shell/design/signup-form.js',
+			'fb',
+
 		'shell/euclid/view.js',
 			'fb',
 

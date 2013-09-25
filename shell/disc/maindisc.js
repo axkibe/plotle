@@ -237,6 +237,7 @@ MainDisc.prototype.getButtonOfMode =
 			return 'user';
 
 		case 'NoAccessToSpace' :
+		case 'NonExistingSpace' :
 		case 'Welcome' :
 		case null :
 			return null;
