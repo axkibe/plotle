@@ -1,5 +1,5 @@
 /*
-| Default theme of the creation disc.
+| Default design of the creation disc.
 |
 | Authors: Axel Kittenberger
 */

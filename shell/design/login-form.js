@@ -1,5 +1,5 @@
 /*
-| Default theme for login form.
+| Default design for the login form.
 |
 | Authors: Axel Kittenberger
 */

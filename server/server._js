@@ -792,6 +792,9 @@ Server.prototype.prepareResources =
 		'shell/design/no-access-to-space-form.js',
 			'fb',
 
+		'shell/design/non-existing-space-form.js',
+			'fb',
+
 		'shell/euclid/view.js',
 			'fb',
 

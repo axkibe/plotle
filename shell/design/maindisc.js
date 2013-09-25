@@ -1,5 +1,5 @@
 /*
-| Default theme for the maindisc.
+| Default design for the maindisc.
 |
 | Authors: Axel Kittenberger
 */
