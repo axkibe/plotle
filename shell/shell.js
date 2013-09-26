@@ -106,15 +106,16 @@ Shell =
 	this.$space =
 		null;
 
-	var screensize =
-	this.screensize =
-		shellverse.grow(
-			'Point',
-			'x',
-				fabric.width,
-			'y',
-				fabric.height
-		);
+	var
+		screensize =
+		this.screensize =
+			shellverse.grow(
+				'Point',
+				'x',
+					fabric.width,
+				'y',
+					fabric.height
+			);
 
 	var forms =
 		[
@@ -886,6 +887,9 @@ Shell.prototype.userMark =
 		form =
 			null,
 
+		formname =
+			null,
+
 		mark =
 			null,
 
@@ -1059,6 +1063,15 @@ Shell.prototype.userMark =
 					'type missing'
 				);
 			}
+			else
+			{
+				// TODO
+				mark =
+					new Caret(
+						null,
+						null
+					);
+			}
 	}
 
 
@@ -1080,37 +1093,45 @@ Shell.prototype.userMark =
 
 		case 'forms' :
 
-			if( !setnull )
+			name =
+				setnull ?
+					form :
+					mark.sign.path.get( 0 ),
+
+			formname =
+				this._formNames[ name ];
+
+			if( CHECK && !formname )
 			{
-				name =
-					mark.sign.path.get( 0 );
-
-				form =
-					this._$forms[ this._formNames[ name ] ];
-
-				if( !form )
-				{
-					throw new Error(
-						'invalid section: ' + section
-					);
-				}
-
-				form.setCaret(
-					mark.sign
+				throw new Error(
+					'invalid form: ' + name
 				);
 			}
-			else
-			{
-				form =
-					this._$forms[ this._formNames[ form ] ];
 
-				form.setCaret(
-					null
+			if( CHECK && !this._$forms[ formname ] )
+			{
+				throw new Error(
+					'invalid formname: ' + formname
 				);
 			}
+
+			this._$forms[ formname ] =
+				new Forms[ formname ](
+					'screensize',
+						this.screensize,
+					'inherit',
+						this._$forms[ formname ],
+					'userMark',
+						mark
+				);
+
 			break;
 	}
+
+	this.redraw =
+		true;
 };
+
 
 /*
 | User is pressing a special key.

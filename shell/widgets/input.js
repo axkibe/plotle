@@ -916,7 +916,7 @@ Input.prototype.keyDel =
 {
 	var
 		at1 =
-			this.parent.$caret.csign.at1;
+			this.parent.$caret.sign.at1;
 
 	if( at1 >= this.value.length )
 	{

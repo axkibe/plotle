@@ -148,6 +148,17 @@ Label.create =
 	{
 		switch( arguments[ a ] )
 		{
+			case 'focusAccent' :
+
+				if( CHECK && arguments[ a + 1 ] !== null )
+				{
+					throw new Error(
+						'Label cannot have a focusAccent'
+					);
+				}
+
+				break;
+
 			case 'inherit' :
 
 				inherit =

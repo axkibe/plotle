@@ -22,6 +22,7 @@ Forms =
 | Imports
 */
 var
+	Design,
 	fontPool,
 	Jools,
 	shell,

@@ -60,17 +60,20 @@ Forms.Form =
 	)
 {
 	var
-		inherit =
-			null,
-
 		a =
 			0,
 
 		aZ =
-			arguments.length;
+			arguments.length,
 
-	this.screensize =
-		null;
+		inherit =
+			null,
+
+		userMark =
+			null,
+
+		screensize =
+			null;
 
 	while( a < aZ )
 	{
@@ -89,7 +92,14 @@ Forms.Form =
 
 			case 'screensize' :
 
-				this.screensize =
+				screensize =
+					arguments[ a++ ];
+
+				continue;
+
+			case 'userMark' :
+
+				userMark =
 					arguments[ a++ ];
 
 				continue;
@@ -97,23 +107,30 @@ Forms.Form =
 			default :
 
 				throw new Error( 'unknown argument: ' + arg );
-
 		}
 	}
+
+	this.screensize =
+		screensize;
 
 	this.frame =
 		Euclid.Rect.create(
 			'pse',
-			this.screensize
+			screensize
 		);
 
 	// the caret or a caret less component
 	// having the focus (for example a button)
+	// TODO
 	this.$caret =
+		userMark
+		||
 		new Caret(
 			null,
 			null
 		);
+
+	console.log( 'TC', this.$caret );
 
 	// all components of the form
 	this.$sub =
@@ -144,7 +161,23 @@ Forms.Form =
 				twig[ name ],
 
 			Proto =
-				this.getWidgetPrototype( tree );
+				this.getWidgetPrototype( tree ),
+
+			focusAccent = null;
+
+		if( Proto.prototype.focusable )
+		{
+			if( !this.$caret.sign )
+			{
+				focusAccent =
+					false;
+			}
+			else
+			{
+				focusAccent =
+					this.$caret.sign.path.get( 1 ) === name
+			}
+		}
 
 		this.$sub[ name ] =
 			Proto.create(
@@ -155,7 +188,9 @@ Forms.Form =
 				'parent',
 					this,
 				'inherit',
-					inherit && inherit.$sub[ name ]
+					inherit && inherit.$sub[ name ],
+				'focusAccent',
+					focusAccent
 			);
 	}
 
@@ -262,11 +297,12 @@ Form.prototype.draw =
 		a--
 	)
 	{
-		var name =
-			ranks[ a ];
+		var
+			name =
+				ranks[ a ],
 
-		var comp =
-			this.$sub[ name ];
+			comp =
+				this.$sub[ name ];
 
 		comp.draw( fabric );
 	}
@@ -575,73 +611,6 @@ Form.prototype.specialKey =
 		shift,
 		ctrl
 	);
-};
-
-
-/*
-| Sets the caret position.
-*/
-Form.prototype.setCaret =
-	function(
-		sign
-	)
-{
-	switch( sign && sign.constructor )
-	{
-		case null :
-		case Sign :
-
-			break;
-
-		case Object :
-
-			sign =
-				new Sign( sign );
-
-			break;
-
-		default :
-
-			throw new Error(
-				'Space.setCaret: invalid sign'
-			);
-	}
-
-	var
-		entity;
-
-	if(
-		this.$caret.sign &&
-		(
-			!sign ||
-			this.$caret.sign.path !== sign.path
-		)
-	)
-	{
-		this.setFocusAccent(
-			this.$caret.sign.path.get( 1 ),
-			false
-		);
-	}
-
-	this.$caret =
-		new Caret(
-			sign,
-			null
-		);
-
-	if( sign )
-	{
-		this.setFocusAccent(
-			this.$caret.sign.path.get( 1 ),
-			true
-		);
-	}
-
-	shell.redraw =
-		true;
-
-	return this.$caret;
 };
 
 
