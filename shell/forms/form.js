@@ -568,8 +568,38 @@ Form.prototype.cycleFocus =
 		ve =
 			this.$sub[ name ];
 
-		if( ve.grepFocus( ) )
+		if(
+			ve.focusable &&
+			ve.visible !== false
+		)
 		{
+			if( ve.caretable )
+			{
+				shell.userMark(
+		        	'set',
+			        'type',
+		    	        'caret',
+			        'section',
+			            'forms',
+			        'path',
+			            ve.path,
+					'at1',
+						0
+				);
+			}
+			else
+			{
+				shell.userMark(
+		        	'set',
+			        'type',
+		    	        'item',
+			        'section',
+			            'forms',
+			        'path',
+			            ve.path
+				);
+			}
+
 			break;
 		}
 	}

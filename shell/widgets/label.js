@@ -261,16 +261,6 @@ Label.create =
 
 
 /*
-| Labels cannot focus.
-*/
-Label.prototype.grepFocus =
-	function( )
-{
-	return false;
-};
-
-
-/*
 | Draws the label on the fabric.
 */
 Label.prototype.draw =

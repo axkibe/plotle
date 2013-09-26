@@ -756,36 +756,6 @@ Button.prototype.draw =
 
 
 /*
-| Control takes focus.
-| TODO remove
-*/
-Button.prototype.grepFocus =
-	function( )
-{
-	if(
-		!this.focusable ||
-		!this.visible ||
-		this.parent.getFocus( ) === this
-	)
-	{
-		return false;
-	}
-
-	shell.userMark(
-		'set',
-		'type',
-			'item',
-		'section',
-			'forms',
-		'path',
-			this.path
-	);
-
-	return true;
-};
-
-
-/*
 | Stops a ReButton action.
 */
 Button.prototype.dragStop =

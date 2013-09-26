@@ -1151,6 +1151,13 @@ Input.prototype.specialKey =
 
 
 /*
+| Inputs can hold a caret.
+*/
+Input.prototype.caretable =
+	true;
+
+
+/*
 | Inputs are focusable
 */
 Input.prototype.focusable =
@@ -1251,38 +1258,6 @@ Input.prototype.pointingStart =
 	);
 
 	return false;
-};
-
-
-/*
-| Control takes focus.
-| TODO remove
-*/
-Input.prototype.grepFocus =
-	function( )
-{
-	if(
-		!this.focusable ||
-		!this.visible ||
-		this.parent.getFocus( ) === this
-	)
-	{
-		return false;
-	}
-
-	shell.userMark(
-		'set',
-		'type',
-			'caret',
-		'section',
-			'forms',
-		'path',
-			this.path,
-		'at1',
-			0
-	);
-
-	return true;
 };
 
 

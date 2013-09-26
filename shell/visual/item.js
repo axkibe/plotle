@@ -620,7 +620,7 @@ Item.prototype.dragStart =
 	// scrolling or dragging
 	if( access == 'rw' )
 	{
-		// grepFocus
+		// take focus
 		if( shell.space.focusedItem() !== this )
 		{
 			shell.userMark(
