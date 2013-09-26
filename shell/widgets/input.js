@@ -755,7 +755,7 @@ Input.prototype.getCaretPos =
 
 		p =
 			this.locateOffset(
-				this.parent.$caret.sign.at1
+				this.parent.userMark.sign.at1
 			),
 
 		pnw =
@@ -795,7 +795,7 @@ Input.prototype.positionCaret =
 {
 	var
 		caret =
-			this.parent.$caret,
+			this.parent.userMark,
 
 		cpos =
 		caret.$pos =
@@ -824,14 +824,14 @@ Input.prototype.input =
 	)
 {
 	var
-		csign =
-			this.parent.$caret.sign,
+		sign =
+			this.parent.userMark.sign,
 
 		value =
 			this.value,
 
 		at1 =
-			csign.at1,
+			sign.at1,
 
 		maxlen =
 			this.tree.twig.maxlen;
@@ -863,7 +863,7 @@ Input.prototype.input =
 		'section',
 			'forms',
 		'path',
-			csign.path,
+			sign.path,
 		'at1',
 			at1 + text.length
 	);
@@ -877,11 +877,11 @@ Input.prototype.keyBackspace =
 	function( )
 {
 	var
-		csign =
-			this.parent.$caret.sign,
+		sign =
+			this.parent.userMark.sign,
 
 		at1 =
-			csign.at1;
+			sign.at1;
 
 	if( at1 <= 0 )
 	{
@@ -901,9 +901,9 @@ Input.prototype.keyBackspace =
 		'section',
 			'forms',
 		'path',
-			csign.path,
+			sign.path,
 		'at1',
-			csign.at1 - 1
+			at1 - 1
 	);
 };
 
@@ -916,7 +916,7 @@ Input.prototype.keyDel =
 {
 	var
 		at1 =
-			this.parent.$caret.sign.at1;
+			this.parent.userMark.sign.at1;
 
 	if( at1 >= this.value.length )
 	{
@@ -958,11 +958,11 @@ Input.prototype.keyEnd =
 	function( )
 {
 	var
-		csign =
-			this.parent.$caret.sign,
+		sign =
+			this.parent.userMark.sign,
 
 		at1 =
-			csign.at1;
+			sign.at1;
 
 	if( at1 >= this.value.length )
 	{
@@ -976,7 +976,7 @@ Input.prototype.keyEnd =
 		'section',
 			'forms',
 		'path',
-			csign.path,
+			sign.path,
 		'at1',
 			this.value.length
 	);
@@ -990,10 +990,10 @@ Input.prototype.keyLeft =
 	function( )
 {
 	var
-		csign =
-			this.parent.$caret.sign;
+		sign =
+			this.parent.userMark.sign;
 
-	if( csign.at1 <= 0 )
+	if( sign.at1 <= 0 )
 	{
 		return;
 	}
@@ -1006,9 +1006,9 @@ Input.prototype.keyLeft =
 		'section',
 			'forms',
 		'path',
-			csign.path,
+			sign.path,
 		'at1',
-			csign.at1 - 1
+			sign.at1 - 1
 	);
 };
 
@@ -1020,10 +1020,10 @@ Input.prototype.keyPos1 =
 	function( )
 {
 	var
-		csign =
-			this.parent.$caret.sign;
+		sign =
+			this.parent.userMark.sign;
 
-	if( csign.at1 <= 0 )
+	if( sign.at1 <= 0 )
 	{
 		return;
 	}
@@ -1035,7 +1035,7 @@ Input.prototype.keyPos1 =
 		'section',
 			'forms',
 		'path',
-			csign.path,
+			sign.path,
 		'at1',
 			0
 	);
@@ -1049,10 +1049,10 @@ Input.prototype.keyRight =
 	function( )
 {
 	var
-		csign =
-			this.parent.$caret.sign;
+		sign =
+			this.parent.userMark.sign;
 
-	if( csign.at1 >= this.value.length )
+	if( sign.at1 >= this.value.length )
 	{
 		return;
 	}
@@ -1064,9 +1064,9 @@ Input.prototype.keyRight =
 		'section',
 			'forms',
 		'path',
-			csign.path,
+			sign.path,
 		'at1',
-			csign.at1 + 1
+			sign.at1 + 1
 	);
 };
 

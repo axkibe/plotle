@@ -1540,7 +1540,7 @@ Shell.prototype.getCaret =
 		return display.caret; // TODO XXX
 	}
 
-	return display && display.$caret;
+	return display && display.userMark;
 };
 
 

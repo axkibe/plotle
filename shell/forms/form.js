@@ -119,12 +119,10 @@ Forms.Form =
 			screensize
 		);
 
-	// the caret or a caret less component
-	// having the focus (for example a button)
-	// TODO
-	this.$caret =
+	this.userMark =
 		userMark
 		||
+		// TODO
 		new Caret(
 			null,
 			null
@@ -165,7 +163,7 @@ Forms.Form =
 
 		if( Proto.prototype.focusable )
 		{
-			if( !this.$caret.sign )
+			if( !this.userMark.sign )
 			{
 				focusAccent =
 					false;
@@ -173,7 +171,7 @@ Forms.Form =
 			else
 			{
 				focusAccent =
-					this.$caret.sign.path.get( 1 ) === name
+					this.userMark.sign.path.get( 1 ) === name
 			}
 		}
 
@@ -245,11 +243,11 @@ Form.prototype.getFocus =
 	function( )
 {
 	var
-		caret =
-			this.$caret,
+		mark =
+			this.userMark,
 
 		sign =
-			caret.sign;
+			mark.sign;
 
 	if( !sign )
 	{
@@ -260,9 +258,9 @@ Form.prototype.getFocus =
 		path =
 			sign.path;
 
-	if( path.get( 0 ) !== this.name )
+	if( CHECK && path.get( 0 ) !== this.name )
 	{
-		throw new Error( 'this caret not on this form!' );
+		throw new Error( 'the mark is not on this form!' );
 	}
 
 	return this.$sub[ path.get( 1 ) ] || null;
@@ -305,7 +303,7 @@ Form.prototype.draw =
 		comp.draw( fabric );
 	}
 
-	this.$caret.display( );
+	this.userMark.display( );
 };
 
 
@@ -317,7 +315,7 @@ Form.prototype.positionCaret =
 {
 	var
 		caret =
-			this.$caret,
+			this.userMark,
 
 		name =
 			caret.sign.path.get( 1 ),

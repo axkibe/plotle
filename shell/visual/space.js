@@ -117,11 +117,6 @@ Visual.Space =
 			null, // sign
 			null  // retrainx
 		);
-
-	Jools.keyNonGrata(
-		this,
-		'$caret'
-	);
 };
 
 
