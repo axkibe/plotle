@@ -801,6 +801,9 @@ Server.prototype.prepareResources =
 		'shell/design/space-form.js',
 			'fb',
 
+		'shell/design/welcome-form.js',
+			'fb',
+
 		'shell/euclid/view.js',
 			'fb',
 
