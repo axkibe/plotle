@@ -16,11 +16,12 @@ Forms =
 /*
 | Imports
 */
-var Euclid;
-var fontPool;
-var Jools;
-var Path;
-var shell;
+var
+	Design,
+	fontPool,
+	Jools,
+	shell,
+	shellverse;
 
 
 /*

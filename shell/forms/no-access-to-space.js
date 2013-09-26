@@ -20,11 +20,9 @@ Forms =
 */
 var
 	Design,
-	Euclid,
-	fontPool,
 	Jools,
-	Path,
-	shell;
+	shell,
+	shellverse;
 
 /*
 | Capsule

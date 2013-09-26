@@ -798,6 +798,9 @@ Server.prototype.prepareResources =
 		'shell/design/signup-form.js',
 			'fb',
 
+		'shell/design/space-form.js',
+			'fb',
+
 		'shell/euclid/view.js',
 			'fb',
 

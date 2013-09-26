@@ -10,18 +10,22 @@
 /*
 | Export
 */
-var Forms;
-Forms = Forms || { };
+var
+	Forms;
+
+
+Forms =
+	Forms || { };
 
 
 /*
 | Imports
 */
-var Euclid;
-var fontPool;
-var Jools;
-var Path;
-var shell;
+var
+	fontPool,
+	Jools,
+	shell,
+	shellverse;
 
 /*
 | Capsule

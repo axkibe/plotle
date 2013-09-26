@@ -864,62 +864,6 @@ Shell.prototype.mousewheel =
 
 
 /*
-| Set the caret
-*/
-/*
-TODO
-
-Shell.prototype.setCaret =
-	function(
-		section,
-		path,
-		at1,
-		retainx
-	)
-{
-	if( section !== 'space' )
-	{
-		throw new Error(
-			'setCaret section not space'
-		);
-	}
-
-	var
-		caret =
-			new Caret(
-				// TODO skip model
-				path ?
-					new Sign( {
-						path:
-							path,
-
-						at1 :
-							at1
-					} )
-					:
-					null,
-				retainx || null
-			);
-
-	this.$space =
-		new Visual.Space(
-			this.$space.tree,
-			this.$space,
-			this.$space.spaceUser,
-			this.$space.spaceTag,
-			this.$space.access,
-			caret
-		);
-
-	this._$caretBlink =
-		false;
-
-	system.restartBlinker( );
-}
-*/;
-
-
-/*
 | Sets the user's mark.
 |
 | This can be

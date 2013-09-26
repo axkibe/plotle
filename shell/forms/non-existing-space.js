@@ -19,11 +19,10 @@ Forms =
 | Imports
 */
 var
-	Euclid,
-	fontPool,
+	Design,
 	Jools,
-	Path,
-	shell;
+	shell,
+	shellverse;
 
 /*
 | Capsule

@@ -16,11 +16,12 @@ Forms =
 /*
 | Imports
 */
-var Euclid;
-var fontPool;
-var Jools;
-var Path;
-var shell;
+var
+	Design,
+	Jools,
+	Path,
+	shell,
+	shellverse;
 
 /*
 | Capsule
@@ -141,7 +142,7 @@ SignUp.prototype.signup =
 					]
 				),
 			'at1',
-				at1
+				user.length
 		);
 
 		return;
