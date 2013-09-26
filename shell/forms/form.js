@@ -130,8 +130,6 @@ Forms.Form =
 			null
 		);
 
-	console.log( 'TC', this.$caret );
-
 	// all components of the form
 	this.$sub =
 		{ };
