@@ -21,7 +21,7 @@ Forms =
 var
 	Accent,
 	config,
-	Caret,
+	CaretMark,
 	Curve,
 	Design,
 	Euclid,
@@ -123,7 +123,7 @@ Forms.Form =
 		userMark
 		||
 		// TODO
-		new Caret(
+		new CaretMark(
 			null,
 			null
 		);
@@ -171,7 +171,7 @@ Forms.Form =
 			else
 			{
 				focusAccent =
-					this.userMark.sign.path.get( 1 ) === name
+					this.userMark.sign.path.get( 1 ) === name;
 			}
 		}
 
@@ -574,13 +574,13 @@ Form.prototype.cycleFocus =
 			if( ve.caretable )
 			{
 				shell.userMark(
-		        	'set',
-			        'type',
-		    	        'caret',
-			        'section',
-			            'forms',
-			        'path',
-			            ve.path,
+					'set',
+					'type',
+						'caret',
+					'section',
+						'forms',
+					'path',
+						ve.path,
 					'at1',
 						0
 				);
@@ -588,13 +588,13 @@ Form.prototype.cycleFocus =
 			else
 			{
 				shell.userMark(
-		        	'set',
-			        'type',
-		    	        'item',
-			        'section',
-			            'forms',
-			        'path',
-			            ve.path
+					'set',
+					'type',
+						'item',
+					'section',
+						'forms',
+					'path',
+						ve.path
 				);
 			}
 

@@ -23,7 +23,7 @@ var
 var
 	Action,
 	Bridge,
-	Caret,
+	CaretMark,
 	Design,
 	Disc,
 	Euclid,
@@ -252,10 +252,9 @@ Shell.prototype.update =
 	)
 	{
 		caret =
-			new Caret(
+			new CaretMark(
 				null,
-				caret.retainx,
-				caret.$shown
+				caret.retainx
 			);
 	}
 	else
@@ -270,7 +269,7 @@ Shell.prototype.update =
 					);
 
 			caret =
-				new Caret(
+				new CaretMark(
 					sign,
 					caret.retainx
 				);
@@ -1029,7 +1028,7 @@ Shell.prototype.userMark =
 			}
 
 			mark =
-				new Caret(
+				new CaretMark(
 					sign,
 					retainx
 				);
@@ -1045,7 +1044,7 @@ Shell.prototype.userMark =
 
 			// TODO mark should not be a caret;
 			mark =
-				new Caret(
+				new CaretMark(
 					new Sign(
 						null,
 						'path',
@@ -1067,7 +1066,7 @@ Shell.prototype.userMark =
 			{
 				// TODO
 				mark =
-					new Caret(
+					new CaretMark(
 						null,
 						null
 					);

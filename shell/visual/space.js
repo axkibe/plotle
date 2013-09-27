@@ -19,7 +19,7 @@ Visual =
 | Imports
 */
 var
-	Caret,
+	CaretMark,
 	Euclid,
 	Jools,
 	MeshMashine,
@@ -113,7 +113,7 @@ Visual.Space =
 	// TODO change Caret to free string arguments
 	this.caret =
 		caret ||
-		new Caret(
+		new CaretMark(
 			null, // sign
 			null  // retrainx
 		);

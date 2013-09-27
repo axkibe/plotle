@@ -20,7 +20,6 @@ Widgets =
 */
 var
 	Accent,
-	Caret,
 	Curve,
 	Euclid,
 	Jools,
