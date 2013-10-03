@@ -122,8 +122,8 @@ Forms.Form =
 	this.userMark =
 		userMark
 		||
-		// TODO
-		new Mark.Caret(
+		// TODO vacant
+		Mark.Caret.create(
 			null,
 			null
 		);

@@ -39,16 +39,29 @@ if( CHECK && typeof( window ) === 'undefined' )
 }
 
 
+var
+	_tag =
+		'X59368929';
+
+
 /*
 | Constructor.
 */
 var Caret =
 Mark.Caret =
 	function(
+		tag,
 		sign,
 		retainx
 	)
 {
+	if( CHECK && tag !== _tag )
+	{
+		throw new Error(
+			'direct creation'
+		);
+	}
+
 	// a signature pointing to the item the caret is in
 	this.sign =
 		sign;
@@ -61,7 +74,27 @@ Mark.Caret =
 	this.$pos =
 		null;
 
-	Jools.immute( this );
+	Mark.call( this );
+};
+
+
+Jools.subclass(
+	Caret,
+	Mark
+);
+
+
+Caret.create =
+	function(
+		sign,
+		retainx
+	)
+{
+	return new Caret(
+		_tag,
+		sign,
+		retainx
+	);
 };
 
 

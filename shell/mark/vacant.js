@@ -59,7 +59,8 @@ Mark.Vacant =
 	if( CHECK && tag !== _tag )
 	{
 		throw new Error(
-			'not allowed direct creation'
+			'direct creation'
+		);
 	}
 
 	Mark.call( this );

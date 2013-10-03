@@ -252,7 +252,8 @@ Shell.prototype.update =
 	)
 	{
 		caret =
-			new Mark.Caret(
+			// TODO vacant
+			Mark.Caret.create(
 				null,
 				caret.retainx
 			);
@@ -269,7 +270,7 @@ Shell.prototype.update =
 					);
 
 			caret =
-				new Mark.Caret(
+				Mark.Caret.create(
 					sign,
 					caret.retainx
 				);
@@ -1028,7 +1029,7 @@ Shell.prototype.userMark =
 			}
 
 			mark =
-				new Mark.Caret(
+				Mark.Caret.create(
 					sign,
 					retainx
 				);
@@ -1044,7 +1045,7 @@ Shell.prototype.userMark =
 
 			// TODO mark should not be a caret;
 			mark =
-				new Mark.Caret(
+				Mark.Caret.create(
 					new Sign(
 						null,
 						'path',
@@ -1066,7 +1067,7 @@ Shell.prototype.userMark =
 			{
 				// TODO
 				mark =
-					new Mark.Caret(
+					Mark.Caret.create(
 						null,
 						null
 					);

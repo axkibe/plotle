@@ -113,7 +113,7 @@ Visual.Space =
 	// TODO change Caret to free string arguments
 	this.caret =
 		caret ||
-		new Mark.Caret(
+		Mark.Caret.create(
 			null, // sign
 			null  // retrainx
 		);
