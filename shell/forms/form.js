@@ -123,7 +123,7 @@ Forms.Form =
 		userMark
 		||
 		// TODO
-		new Mark(
+		new Mark.Caret(
 			null,
 			null
 		);
