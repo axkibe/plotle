@@ -21,11 +21,11 @@ Forms =
 var
 	Accent,
 	config,
-	CaretMark,
 	Curve,
 	Design,
 	Euclid,
 	Jools,
+	Mark,
 	shellverse,
 	Sign,
 	shell,
@@ -123,7 +123,7 @@ Forms.Form =
 		userMark
 		||
 		// TODO
-		new CaretMark(
+		new Mark(
 			null,
 			null
 		);

@@ -909,7 +909,10 @@ Server.prototype.prepareResources =
 		'shell/system.js',
 			'fb',
 
-		'shell/mark/caret-mark.js',
+		'shell/mark/mark.js',
+			'fb',
+
+		'shell/mark/caret.js',
 			'fb',
 
 		'shell/range.js',

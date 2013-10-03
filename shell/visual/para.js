@@ -452,9 +452,12 @@ Para.prototype.getCaretPos =
 
 	return Jools.immute(
 		{
-			s: s,
-			n: n,
-			x: x
+			s :
+				s,
+			n :
+				n,
+			x :
+				x
 		}
 	);
 };

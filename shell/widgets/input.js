@@ -810,7 +810,6 @@ Input.prototype.positionCaret =
 		Math.round(
 			( cpos.s - cpos.n ) * view.zoom
 		);
-
 };
 
 

@@ -11,8 +11,7 @@
 | Exports
 */
 var
-	CaretMark =
-		null;
+	Mark;
 
 
 /*
@@ -43,7 +42,8 @@ if( CHECK && typeof( window ) === 'undefined' )
 /*
 | Constructor.
 */
-CaretMark =
+var Caret =
+Mark.Caret =
 	function(
 		sign,
 		retainx
@@ -71,14 +71,14 @@ CaretMark =
 | Without it uses drawImage() for the whole canvas.
 | On firefox this is paradoxically way faster.
 */
-CaretMark.useGetImageData =
+Caret.useGetImageData =
 	true;
 
 
 /*
 | Draws or erases the caret.
 */
-CaretMark.prototype.display =
+Caret.prototype.display =
 	function(
 		blink
 	)
@@ -86,7 +86,7 @@ CaretMark.prototype.display =
 	// erases the old caret
 	if( this.$save )
 	{
-		if( CaretMark.useGetImageData )
+		if( Caret.useGetImageData )
 		{
 			shell.fabric.putImageData(
 				this.$save,
@@ -128,7 +128,7 @@ CaretMark.prototype.display =
 	if( !blink && pos !== null )
 	{
 		// saves the caret background
-		if( CaretMark.useGetImageData )
+		if( Caret.useGetImageData )
 		{
 			this.$save = shell.fabric.getImageData(
 				pos.x,

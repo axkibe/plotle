@@ -23,7 +23,6 @@ var
 var
 	Action,
 	Bridge,
-	CaretMark,
 	Design,
 	Disc,
 	Euclid,
@@ -32,6 +31,7 @@ var
 	GreenScreen,
 	IFace,
 	Jools,
+	Mark,
 	MeshMashine,
 	Peer,
 	Range,
@@ -252,7 +252,7 @@ Shell.prototype.update =
 	)
 	{
 		caret =
-			new CaretMark(
+			new Mark.Caret(
 				null,
 				caret.retainx
 			);
@@ -269,7 +269,7 @@ Shell.prototype.update =
 					);
 
 			caret =
-				new CaretMark(
+				new Mark.Caret(
 					sign,
 					caret.retainx
 				);
@@ -1028,7 +1028,7 @@ Shell.prototype.userMark =
 			}
 
 			mark =
-				new CaretMark(
+				new Mark.Caret(
 					sign,
 					retainx
 				);
@@ -1044,7 +1044,7 @@ Shell.prototype.userMark =
 
 			// TODO mark should not be a caret;
 			mark =
-				new CaretMark(
+				new Mark.Caret(
 					new Sign(
 						null,
 						'path',
@@ -1066,7 +1066,7 @@ Shell.prototype.userMark =
 			{
 				// TODO
 				mark =
-					new CaretMark(
+					new Mark.Caret(
 						null,
 						null
 					);
