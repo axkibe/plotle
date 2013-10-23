@@ -109,8 +109,36 @@ Caret.useGetImageData =
 
 
 /*
+| Reflection.
+*/
+Caret.prototype.type =
+	'caret';
+
+
+/*
+| Returns this if an entity of that path should
+| be concerned about this mark.
+*/
+Caret.prototype.concerns =
+	function(
+		path
+	)
+{
+	if( path.subPathOf( this.sign.path ) )
+	{
+		return this;
+	}
+	else
+	{
+		return null;
+	}
+}
+
+
+/*
 | Draws or erases the caret.
 */
+/*
 Caret.prototype.display =
 	function(
 		blink
@@ -149,7 +177,7 @@ Caret.prototype.display =
 	// calculates new position
 	// even if blinked, so system can fiddle the input
 	// position correctly
-	shell.positionCaret( );
+	shell.p_ositionCaret( );
 
 	var
 		pos =
@@ -196,6 +224,7 @@ Caret.prototype.display =
 		);
 	}
 };
+*/
 
 
 } )( );

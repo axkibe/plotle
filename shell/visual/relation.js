@@ -40,6 +40,10 @@ if( typeof( window ) === 'undefined' )
 }
 
 
+var
+	_tag =
+		'LABEL-30268594';
+
 /*
 | Constructor.
 */
@@ -53,7 +57,8 @@ Visual.Relation =
 		fontsize,
 		doc,
 		item1key,
-		item2key
+		item2key,
+		mark
 	)
 {
 	Visual.Label.call(
@@ -63,7 +68,8 @@ Visual.Relation =
 		path,
 		pnw,
 		fontsize,
-		doc
+		doc,
+		mark
 	);
 
 	this.item1key =
@@ -107,19 +113,10 @@ Relation.create =
 	)
 {
 	var
-		inherit =
-			null,
-
-		tree =
-			null,
-
-		path =
-			null,
-
-		pnw =
-			null,
-
 		doc =
+			null,
+
+		inherit =
 			null,
 
 		fontsize =
@@ -129,7 +126,20 @@ Relation.create =
 			null,
 
 		item2key =
+			null,
+
+		mark =
+			null,
+
+		path =
+			null,
+
+		pnw =
+			null,
+
+		tree =
 			null;
+
 
 	for(
 		var a = 0, aZ = arguments.length;
@@ -139,34 +149,6 @@ Relation.create =
 	{
 		switch( arguments[ a ] )
 		{
-			case 'inherit' :
-
-				inherit =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'pnw' :
-
-				pnw =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'tree' :
-
-				tree =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'path' :
-
-				path =
-					arguments[ a + 1 ];
-
-				break;
-
 			case 'doc' :
 
 				doc =
@@ -181,6 +163,13 @@ Relation.create =
 
 				break;
 
+			case 'inherit' :
+
+				inherit =
+					arguments[ a + 1 ];
+
+				break;
+
 			case 'item1key ' :
 
 				item1key =
@@ -191,6 +180,34 @@ Relation.create =
 			case 'item2key' :
 
 				item2key =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'mark' :
+
+				mark =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'path' :
+
+				path =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'pnw' :
+
+				pnw =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'tree' :
+
+				tree =
 					arguments[ a + 1 ];
 
 				break;
@@ -218,12 +235,6 @@ Relation.create =
 				tree.twig.fontsize;
 		}
 
-		if( pnw === null )
-		{
-			pnw =
-				tree.twig.pnw;
-		}
-
 		if( item1key === null )
 		{
 			item1key =
@@ -235,6 +246,13 @@ Relation.create =
 			item2key =
 				tree.twig.item2key;
 		}
+
+		if( pnw === null )
+		{
+			pnw =
+				tree.twig.pnw;
+		}
+
 	}
 
 	if( inherit )
@@ -307,7 +325,7 @@ Relation.create =
 
 	return (
 		new Relation(
-			'XOXO',
+			_tag,
 			tree,
 			path,
 			pnw,
@@ -378,7 +396,6 @@ Relation.spawn =
 Relation.prototype.draw =
 	function(
 		fabric,
-		caret,
 		view
 	)
 {
@@ -397,13 +414,14 @@ Relation.prototype.draw =
 
 	if( item1 )
 	{
-		var l1 =
-			Euclid.Line.connect(
-				item1.silhoutte,
-				'normal',
-				zone,
-				'normal'
-			);
+		var
+			l1 =
+				Euclid.Line.connect(
+					item1.silhoutte,
+					'normal',
+					zone,
+					'normal'
+				);
 
 		fabric.paint(
 			theme.relation.style,
@@ -434,7 +452,6 @@ Relation.prototype.draw =
 	Visual.Label.prototype.draw.call(
 		this,
 		fabric,
-		caret,
 		view
 	);
 };

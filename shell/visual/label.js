@@ -19,10 +19,7 @@ Visual =
 | Imports
 */
 var
-	Action,
-	config,
 	Euclid,
-	fontPool,
 	Jools,
 	Path,
 	shell,
@@ -47,6 +44,11 @@ if( CHECK && typeof( window ) === 'undefined' )
 }
 
 
+var
+	_tag =
+		'LABEL-30268594';
+
+
 /*
 | Constructor.
 */
@@ -58,15 +60,16 @@ Visual.Label =
 		path,
 		pnw,
 		fontsize,
-		doc
+		doc,
+		mark
 	)
 {
 	if( CHECK )
 	{
-		if( tag !== 'XOXO' )
+		if( tag !== _tag )
 		{
 			throw new Error(
-				'do not call new Label directly'
+				'tag mismatch'
 			);
 		}
 
@@ -109,6 +112,9 @@ Visual.Label =
 
 	this.fontsize =
 		fontsize;
+
+	this.mark =
+		mark;
 };
 
 
@@ -121,25 +127,28 @@ Label.create =
 	)
 {
 	var
-		tree =
+		doc =
 			null,
 
-		path =
+		fontsize =
 			null,
 
 		inherit =
 			null,
 
+		mark =
+			null,
+
+		path =
+			null,
+
 		pnw =
 			null,
 
+		tree =
+			null,
+
 		zone =
-			null,
-
-		doc =
-			null,
-
-		fontsize =
 			null;
 
 	for(
@@ -150,9 +159,37 @@ Label.create =
 	{
 		switch( arguments[ a ] )
 		{
+			case 'doc' :
+
+				doc =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'fontsize' :
+
+				fontsize =
+					arguments[ a + 1 ];
+
+				break;
+
 			case 'inherit' :
 
 				inherit =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'mark' :
+
+				mark =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'path' :
+
+				path =
 					arguments[ a + 1 ];
 
 				break;
@@ -167,27 +204,6 @@ Label.create =
 			case 'tree' :
 
 				tree =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'path' :
-
-				path =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'doc' :
-
-				doc =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'fontsize' :
-
-				fontsize =
 					arguments[ a + 1 ];
 
 				break;
@@ -225,16 +241,10 @@ Label.create =
 
 	if( inherit )
 	{
-		if( tree === null )
+		if( doc === null )
 		{
-			tree =
-				inherit.tree;
-		}
-
-		if( !path )
-		{
-			path =
-				inherit.path;
+			doc =
+				inherit.sub.doc;
 		}
 
 		if( fontsize === null )
@@ -243,16 +253,22 @@ Label.create =
 				inherit.fontsize;
 		}
 
+		if( !path )
+		{
+			path =
+				inherit.path;
+		}
+
 		if( pnw  === null )
 		{
 			pnw =
 				inherit.pnw;
 		}
 
-		if( doc === null )
+		if( tree === null )
 		{
-			doc =
-				inherit.sub.doc;
+			tree =
+				inherit.tree;
 		}
 	}
 
@@ -281,19 +297,22 @@ Label.create =
 			'flowWidth',
 				0,
 			'paraSep',
-				fontsize * theme.bottombox
+				fontsize * theme.bottombox,
+			'mark',
+				mark
 		);
 
-	// HEH return inherit
+	// FIXME return inherit
 
 	return (
 		new Label(
-			'XOXO',
+			_tag,
 			tree,
 			path,
 			pnw,
 			fontsize,
-			doc
+			doc,
+			mark
 		)
 	);
 
@@ -477,7 +496,6 @@ Label.prototype.dragStop =
 Label.prototype.draw =
 	function(
 		fabric,
-		caret,
 		view
 	)
 {

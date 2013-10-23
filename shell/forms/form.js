@@ -122,11 +122,7 @@ Forms.Form =
 	this.userMark =
 		userMark
 		||
-		// TODO vacant
-		Mark.Caret.create(
-			null,
-			null
-		);
+		Mark.Vacant.create( );
 
 	// all components of the form
 	this.$sub =
@@ -303,13 +299,17 @@ Form.prototype.draw =
 		comp.draw( fabric );
 	}
 
-	this.userMark.display( );
+	if( this.userMark.display )
+	{
+		this.userMark.display( );
+	}
 };
 
 
 /*
 | Positions the caret.
 */
+/*
 Form.prototype.positionCaret =
 	function( )
 {
@@ -341,6 +341,7 @@ Form.prototype.positionCaret =
 			null;
 	}
 };
+*/
 
 
 /*

@@ -47,6 +47,9 @@ if( typeof( window ) === 'undefined' )
 	);
 }
 
+var
+	_tag =
+		'X35155849';
 
 /*
 | Constructor.
@@ -58,15 +61,16 @@ Visual.Para =
 		tree,
 		path,
 		fontsize,
-		flowWidth
+		flowWidth,
+		mark
 	)
 {
 	if( CHECK )
 	{
-		if( tag !== 'XOXO' )
+		if( tag !== _tag )
 		{
 			throw new Error(
-				'invalid tag'
+				'tag mismatch'
 			);
 		}
 
@@ -107,6 +111,9 @@ Visual.Para =
 	this.text =
 		tree.twig.text;
 
+	this.mark =
+		mark;
+
 	// caching
 	this.$fabric =
 		null;
@@ -132,19 +139,22 @@ Para.create =
 	)
 {
 	var
-		inherit =
-			null,
-
-		tree =
-			null,
-
-		path =
+		flowWidth =
 			null,
 
 		fontsize =
 			null,
 
-		flowWidth =
+		inherit =
+			null,
+
+		mark =
+			null,
+
+		path =
+			null,
+
+		tree =
 			null;
 
 	for(
@@ -162,16 +172,9 @@ Para.create =
 
 				break;
 
-			case 'tree' :
+			case 'flowWidth' :
 
-				tree =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'path' :
-
-				path =
+				flowWidth =
 					arguments[ a + 1 ];
 
 				break;
@@ -183,9 +186,23 @@ Para.create =
 
 				break;
 
-			case 'flowWidth' :
+			case 'mark' :
 
-				flowWidth =
+				mark =
+					arguments[ a + 1];
+
+				break;
+
+			case 'path' :
+
+				path =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'tree' :
+
+				tree =
 					arguments[ a + 1 ];
 
 				break;
@@ -200,16 +217,10 @@ Para.create =
 
 	if( inherit )
 	{
-		if( !tree )
+		if( !flowWidth )
 		{
-			tree =
-				inherit.tree;
-		}
-
-		if( !path )
-		{
-			path =
-				inherit.path;
+			flowWidth =
+				inherit.flowWidth;
 		}
 
 		if( !fontsize )
@@ -218,10 +229,16 @@ Para.create =
 				inherit.fontsize;
 		}
 
-		if( !flowWidth )
+		if( !path )
 		{
-			flowWidth =
-				inherit.flowWidth;
+			path =
+				inherit.path;
+		}
+
+		if( !tree )
+		{
+			tree =
+				inherit.tree;
 		}
 
 		if(
@@ -231,7 +248,8 @@ Para.create =
 				( inherit.path && inherit.path.equals( path ) )
 			) &&
 			inherit.fontsize === fontsize &&
-			inherit.flowWidth === flowWidth
+			inherit.flowWidth === flowWidth &&
+			inherit.mark === mark
 		)
 		{
 			return inherit;
@@ -240,11 +258,12 @@ Para.create =
 
 	return (
 		new Para(
-			'XOXO',
+			_tag,
 			tree,
 			path,
 			fontsize,
-			flowWidth
+			flowWidth,
+			mark
 		)
 	);
 };
@@ -274,7 +293,7 @@ Para.prototype.draw =
 		zoom =
 			view.zoom;
 
-	if( !f || f.zoom !== zoom )
+	if( true || !f || f.zoom !== zoom ) // TODO
 	{
 		// no cache
 
@@ -335,6 +354,22 @@ Para.prototype.draw =
 				);
 			}
 		}
+
+		var
+			mark =
+				shell.space.mark;
+
+		// TODO use concerns
+		if(
+			mark.sign &&
+			mark.sign.path.equals( this.textPath )
+		)
+		{
+			this.drawCaret(
+				f,
+				view
+			);
+		}
 	}
 
 	fabric.drawImage(
@@ -346,22 +381,43 @@ Para.prototype.draw =
 };
 
 
-/*
-| Positions the caret drawing data.
-*/
-Para.prototype.positionCaret =
+Para.prototype.drawCaret =
 	function(
-		space,
-		caret,
+		fabric,
 		view
 	)
 {
 	var
+		mark =
+			this.mark,
+
+		space =
+			shell.space,
+
 		item =
-			space.getSub(
+			shell.space.getSub(
 				this.path,
 				'Item'
 			),
+
+		fs =
+			item.sub.doc.font.twig.size,
+
+		descend =
+			fs * theme.bottombox,
+
+		p =
+			this.locateOffset(
+				mark.sign.at1
+			).p,
+
+		s =
+			Math.round( p.y + descend ),
+
+		n =
+			s - Math.round( fs + descend );
+
+		/*
 
 		doc =
 			item.sub.doc,
@@ -369,13 +425,7 @@ Para.prototype.positionCaret =
 		zone =
 			item.zone,
 
-		cpos =
-		caret.$pos =
-			this.getCaretPos(
-				item,
-				caret
-			),
-
+		/*
 		pnw =
 			doc.getPNW(
 				item,
@@ -386,79 +436,47 @@ Para.prototype.positionCaret =
 			item.$scrollbarY,
 
 		sy =
-			sbary ? Math.round( sbary.pos ) : 0,
+			sbary ?
+				Math.round( sbary.pos )
+				:
+				0,
 
-		cyn =
+		cn =
 			Jools.limit(
 				0,
-				cpos.n + pnw.y - sy,
+				n + pnw.y - sy,
 				zone.height
 			),
 
-		cys =
+		cs =
 			Jools.limit(
 				0,
-				cpos.s + pnw.y - sy,
+				s + pnw.y - sy,
 				zone.height
 			),
 
 		cx =
-			cpos.x + pnw.x;
+			p.x + pnw.x;
+		*/
 
-	caret.$screenPos =
-		view.point(
-			cx + zone.pnw.x,
-			cyn + zone.pnw.y
-		);
+	// TODO use X/Y
+	/*
+	system.focusCenter(
+		'p',
+			view.point(
+				cx + zone.pnw.x,
+				cn + zone.pnw.y
+			)
+	);
+	*/
 
-	caret.$height =
-		Math.round(
-			( cys - cyn ) * view.zoom
-		);
-};
-
-
-/*
-| Returns the caret position relative to the doc.
-|
-| FIXME remove?
-*/
-Para.prototype.getCaretPos =
-	function(
-		item, // the item the para belongs to,
-		caret // the caret
-	)
-{
-	var
-		fs =
-			item.sub.doc.font.twig.size,
-
-		descend =
-			fs * theme.bottombox,
-
-		p =
-			this.locateOffset(
-				caret.sign.at1
-			).p,
-
-		s =
-			Math.round( p.y + descend ),
-
-		n =
-			s - Math.round( fs + descend ),
-
-		x =
-			p.x - 1;
-
-	return Jools.immute(
-		{
-			s :
-				s,
-			n :
-				n,
-			x :
-				x
-		}
+	// draws the caret
+	fabric.fillRect(
+		'black',
+		p.x,
+		n,
+		1,
+		s - n
 	);
 };
 
@@ -496,9 +514,8 @@ Jools.lazyFixate(
 
 			// FIXME go into subnodes instead
 			text =
-				this.text;
+				this.text,
 
-		var
 			// width really used.
 			spread =
 				0,
@@ -908,10 +925,7 @@ Para.prototype.input =
 			),
 
 		doc =
-			item.sub.doc,
-
-		caret =
-			shell.space.caret;
+			item.sub.doc;
 
     for(
 		var rx = reg.exec(text);
@@ -923,7 +937,7 @@ Para.prototype.input =
 
 		shell.peer.insertText(
 			para.textPath,
-			shell.space.caret.sign.at1,
+			shell.space.mark.sign.at1,
 			line
 		);
 
@@ -933,7 +947,7 @@ Para.prototype.input =
 			// over return values
 			shell.peer.split(
 				para.textPath,
-				shell.space.caret.sign.at1
+				shell.space.mark.sign.at1
 			);
 
 			item =
@@ -962,23 +976,23 @@ Para.prototype.input =
 Para.prototype._keyBackspace =
 	function(
 		item,
-		doc,
-		caret
+		doc
 	)
 {
-	if( caret.sign.at1 > 0 )
+	if( this.mark.sign.at1 > 0 )
 	{
 		shell.peer.removeText(
 			this.textPath,
-			caret.sign.at1 - 1,
+			this.mark.sign.at1 - 1,
 			1
 		);
 
 		return true;
 	}
 
-	var r =
-		doc.tree.rankOf( this.key );
+	var
+		r =
+			doc.tree.rankOf( this.key );
 
 	if( r > 0 )
 	{
@@ -1003,23 +1017,23 @@ Para.prototype._keyBackspace =
 Para.prototype._keyDel =
 	function(
 		item,
-		doc,
-		caret
+		doc
 	)
 {
-	if( caret.sign.at1 < this.text.length )
+	if( this.mark.sign.at1 < this.text.length )
 	{
 		shell.peer.removeText(
 			this.textPath,
-			caret.sign.at1,
+			this.mark.sign.at1,
 			1
 		);
 
 		return true;
 	}
 
-	var r =
-		doc.tree.rankOf( this.key );
+	var
+		r =
+			doc.tree.rankOf( this.key );
 
 	if( r < doc.tree.length - 1 )
 	{
@@ -1041,28 +1055,28 @@ Para.prototype._keyDel =
 Para.prototype._keyDown =
 	function(
 		item,
-		doc,
-		caret
+		doc
 	)
 {
 	var
+		mark =
+			this.mark,
+
 		flow =
 			this.flow,
-
-		x =
-			caret.retainx !== null ?
-				caret.retainx :
-				caret.$pos.x, // FIXME remove $pos
-
-		space =
-			shell.$space,
 
 		at1,
 
 		cpos =
 			this.locateOffset(
-				caret.sign.at1
-			);
+				mark.sign.at1
+			),
+
+		x =
+			mark.retainx !== null ?
+				mark.retainx :
+				cpos.x;
+
 
 	if( cpos.line < flow.length - 1 )
 	{
@@ -1128,18 +1142,20 @@ Para.prototype._keyDown =
 Para.prototype._keyEnd =
 	function(
 		item,
-		doc,
-		caret
+		doc
 	)
 {
-	if( caret.sign.at1 === this.text.length )
+	var
+		mark =
+			this.mark,
+
+		text =
+			this.text;
+
+	if( mark.sign.at1 === text.length )
 	{
 		return false;
 	}
-
-	var
-		space =
-			shell.$space;
 
 	shell.userMark(
 		'set',
@@ -1150,7 +1166,7 @@ Para.prototype._keyEnd =
 		'path',
 			this.textPath,
 		'at1',
-			this.text.length
+			text.length
 	);
 
 	return true;
@@ -1163,13 +1179,12 @@ Para.prototype._keyEnd =
 Para.prototype._keyEnter =
 	function(
 		item,
-		doc,
-		caret
+		doc
 	)
 {
 	shell.peer.split(
 		this.textPath,
-		caret.sign.at1
+		this.mark.sign.at1
 	);
 
 	return true;
@@ -1182,15 +1197,17 @@ Para.prototype._keyEnter =
 Para.prototype._keyLeft =
 	function(
 		item,
-		doc,
-		caret
+		doc
 	)
 {
 	var
-		space =
-			shell.$space;
+		mark =
+			this.mark,
 
-	if( caret.sign.at1 > 0 )
+		space =
+			shell.space;
+
+	if( mark.sign.at1 > 0 )
 	{
 		shell.userMark(
 			'set',
@@ -1201,7 +1218,7 @@ Para.prototype._keyLeft =
 			'path',
 				this.textPath,
 			'at1',
-				caret.sign.at1 - 1
+				mark.sign.at1 - 1
 		);
 
 		return true;
@@ -1242,15 +1259,17 @@ Para.prototype._keyLeft =
 Para.prototype._keyPos1 =
 	function(
 		item,
-		doc,
-		caret
+		doc
 	)
 {
 	var
-		space =
-			shell.$space;
+		mark =
+			this.mark,
 
-	if( caret.at1 === 0 )
+		space =
+			shell.space;
+
+	if( mark.at1 === 0 )
 	{
 		return false;
 	}
@@ -1277,15 +1296,17 @@ Para.prototype._keyPos1 =
 Para.prototype._keyRight =
 	function(
 		item,
-		doc,
-		caret // FIXME dont hand down caret
+		doc
 	)
 {
 	var
-		space =
-			shell.$space;
+		mark =
+			this.mark,
 
-	if( caret.sign.at1 < this.text.length )
+		space =
+			shell.space;
+
+	if( mark.sign.at1 < this.text.length )
 	{
 		shell.userMark(
 			'set',
@@ -1296,7 +1317,7 @@ Para.prototype._keyRight =
 			'path',
 				this.textPath,
 			'at1',
-				caret.sign.at1 + 1
+				mark.sign.at1 + 1
 		);
 
 		return true;
@@ -1335,27 +1356,27 @@ Para.prototype._keyRight =
 Para.prototype._keyUp =
 	function(
 		item,
-		doc,
-		caret
+		doc
 	)
 {
-	this.flow; // FIXME, needed?
-
 	var
+		mark =
+			this.mark,
+
 		cpos =
 			this.locateOffset(
-				caret.sign.at1
+				mark.sign.at1
 			),
 
 		x =
 			(
-				caret.retainx !== null ?
-					caret.retainx :
-					caret.$pos.x
+				mark.retainx !== null ?
+					mark.retainx :
+					cpos.x
 			),
 
 		space =
-			shell.$space,
+			shell.space,
 
 		at1;
 
@@ -1436,11 +1457,11 @@ Para.prototype.specialKey =
 			shell.getSelection( ),
 
 		space =
-			shell.$space,
+			shell.space,
 
 		item =
 			space.getSub(
-				space.caret.sign.path,
+				this.path,
 				'Item'
 			),
 
@@ -1567,17 +1588,12 @@ Para.prototype.specialKey =
 			case 'up' :
 
 				select1 =
-					shell.$space.caret.sign;
+					shell.space.caret.sign;
 
 				show =
 					true;
 		}
 	}
-
-	// TODO remove
-	var
-		caret =
-			shell.$space.caret;
 
 	switch( key )
 	{
@@ -1586,8 +1602,7 @@ Para.prototype.specialKey =
 			show =
 				this._keyBackspace(
 					item,
-					doc,
-					caret
+					doc
 				) || show;
 
 			break;
@@ -1597,8 +1612,7 @@ Para.prototype.specialKey =
 			show =
 				this._keyEnter(
 					item,
-					doc,
-					caret
+					doc
 				) || show;
 
 			break;
@@ -1620,8 +1634,7 @@ Para.prototype.specialKey =
 			show =
 				this._keyDown(
 					item,
-					doc,
-					caret
+					doc
 				)
 				||
 				show;
@@ -1633,8 +1646,7 @@ Para.prototype.specialKey =
 			show =
 				this._keyEnd(
 					item,
-					doc,
-					caret
+					doc
 				)
 				||
 				show;
@@ -1646,8 +1658,7 @@ Para.prototype.specialKey =
 			show =
 				this._keyLeft(
 					item,
-					doc,
-					caret
+					doc
 				)
 				||
 				show;
@@ -1659,8 +1670,7 @@ Para.prototype.specialKey =
 			show =
 				this._keyPos1(
 					item,
-					doc,
-					caret
+					doc
 				)
 				||
 				show;
@@ -1672,8 +1682,7 @@ Para.prototype.specialKey =
 			show =
 				this._keyRight(
 					item,
-					doc,
-					caret
+					doc
 				)
 				||
 				show;
@@ -1685,8 +1694,7 @@ Para.prototype.specialKey =
 			show =
 				this._keyUp(
 					item,
-					doc,
-					caret
+					doc
 				)
 				||
 				show;
@@ -1698,8 +1706,7 @@ Para.prototype.specialKey =
 			show =
 				this._keyDel(
 					item,
-					doc,
-					caret
+					doc
 				)
 				||
 				show;
@@ -1707,8 +1714,9 @@ Para.prototype.specialKey =
 			break;
 	}
 
-	caret =
-		shell.$space.caret;
+	var
+		mark =
+			shell.space.mark;
 
 	if( shift )
 	{
@@ -1725,7 +1733,7 @@ Para.prototype.specialKey =
 					shell.setSelection(
 						doc,
 						select1,
-						caret.sign
+						this.mark.sign
 					);
 
 				shell.redraw =
@@ -1737,12 +1745,6 @@ Para.prototype.specialKey =
 
 	if( show )
 	{
-		item =
-			shell.$space.getSub(
-				caret.sign.path,
-				'Item'
-			);
-
 		item.scrollCaretIntoView( );
 
 		shell.redraw =

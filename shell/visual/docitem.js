@@ -50,7 +50,8 @@ Visual.DocItem =
 	function(
 		tree,
 		path,
-		doc
+		doc,
+		mark
 	)
 {
 	Visual.Item.call(
@@ -65,6 +66,8 @@ Visual.DocItem =
 				doc
 		};
 
+	this.mark =
+		mark;
 };
 
 

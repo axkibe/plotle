@@ -11,6 +11,7 @@
 var
 	Visual;
 
+
 Visual =
 	Visual || { };
 
@@ -56,9 +57,16 @@ Visual.Space =
 		spaceUser,
 		spaceTag,
 		access,
-		caret
+		mark
 	)
 {
+	if( CHECK && !mark )
+	{
+		throw new Error(
+			'mark must be valid'
+		);
+	}
+
 	Visual.Base.call(
 		this,
 		tree,
@@ -78,45 +86,37 @@ Visual.Space =
 		inherit ?
 			inherit.$view
 			:
-			new Euclid.View(
+			new Euclid.View(   // FIXME make this a singleton
 				Euclid.Point.zero,
 				0
 			);
 
-	if( inherit && tree === inherit.tree )
-	{
-		this.sub =
-			inherit.sub;
-	}
-	else
-	{
-		var sub =
+	this.mark =
+		mark;
+
+	var
+		sub =
 		this.sub =
 			{ };
 
-		for( var k in tree.twig )
+	for( var k in tree.twig )
+	{
+		if( k === 'type' )
 		{
-			if( k === 'type' )
-			{
-				continue;
-			}
-
-			sub[ k ] =
-				this.createItem(
-					tree.twig[ k ],
-					k,
-					inherit && inherit.sub[ k ]
-				);
+			continue;
 		}
+
+		sub[ k ] =
+			this.createItem(
+				tree.twig[ k ],
+				k,
+				inherit && inherit.sub[ k ]
+			);
 	}
 
-	// TODO change Caret to free string arguments
-	this.caret =
-		caret ||
-		Mark.Caret.create(
-			null, // sign
-			null  // retrainx
-		);
+	// FIXME remove
+	Jools.keyNonGrata( this, 'caret' );
+	Jools.keyNonGrata( this, '$caret' );
 };
 
 
@@ -140,17 +140,17 @@ Space.prototype.focusedItem =
 	function( )
 {
 	var
-		caret =
-			this.caret;
+		mark =
+			this.mark;
 
-	if( !caret.sign )
+	if( !mark.sign )
 	{
 		return null;
 	}
 
 	var
 		path =
-			caret.sign.path,
+			mark.sign.path,
 
 		action =
 			shell.bridge.action( );
@@ -217,8 +217,9 @@ Space.prototype.createItem =
 		inherit
 	)
 {
-	var Proto =
-		Visual[ tree.twig.type ];
+	var
+		Proto =
+			Visual[ tree.twig.type ];
 
 	if( !Proto )
 	{
@@ -227,6 +228,11 @@ Space.prototype.createItem =
 		);
 	}
 
+	// FIXME; dont create a new path here
+	var
+		path =
+			new Path( [ key ] );
+
 	return (
 		Proto.create(
 			'inherit',
@@ -234,7 +240,9 @@ Space.prototype.createItem =
 			'tree',
 				tree,
 			'path',
-				new Path( [ key ] )
+				path,
+			'mark',
+				this.mark.concerns( path )
 		)
 	);
 };
@@ -246,8 +254,7 @@ Space.prototype.createItem =
 Space.prototype.draw =
 	function(
 		fabric,
-		haveSystemFocus,
-		caretBlink
+		haveSystemFocus
 	)
 {
 	var
@@ -265,14 +272,9 @@ Space.prototype.draw =
 		ranks =
 			this.ranks;
 
+	// TODO
 	this._center =
 		fabric.getCenter( );
-
-
-	// removes caret caches.
-	this.caret.$save =
-	this.caret.$screenPos =
-		null;
 
 	for(
 		var r = tree.length - 1;
@@ -284,7 +286,6 @@ Space.prototype.draw =
 		this.getItem( this.tree.ranks[ r ] )
 			.draw(
 				fabric,
-				this.caret,
 				view
 			);
 	}
@@ -311,7 +312,6 @@ Space.prototype.draw =
 			{
 				action.item.draw(
 					fabric,
-					this.caret,
 					view
 				);
 			}
@@ -390,36 +390,6 @@ Space.prototype.draw =
 			}
 
 			break;
-	}
-
-
-	if( haveSystemFocus )
-	{
-		this.caret.display( caretBlink );
-	}
-};
-
-
-/*
-| Positions the caret.
-*/
-Space.prototype.positionCaret =
-	function( )
-{
-	var
-		node =
-			this.getSub(
-				this.caret.sign.path,
-				'positionCaret'
-			);
-
-	if( node )
-	{
-		node.positionCaret(
-			this,
-			this.caret,
-			this.$view
-		);
 	}
 };
 
@@ -1827,19 +1797,20 @@ Space.prototype.input =
 	)
 {
 	var
-		caret =
-			this.caret;
+		mark =
+			this.mark;
 
-	if( !caret.sign )
+	if( !mark.sign )
 	{
 		return;
 	}
 
-	var node =
-		this.getSub(
-			caret.sign.path,
-			'input'
-		);
+	var
+		node =
+			this.getSub(
+				mark.sign.path,
+				'input'
+			);
 
 	if( node )
 	{
@@ -1855,7 +1826,7 @@ Space.prototype.changeZoom =
 	function( df )
 {
 	var pm =
-		this.$view.depoint( this._center );
+		this.$view.depoint( this._center ); // TODO
 
 	this.$view =
 		this.$view.review(
@@ -1905,19 +1876,20 @@ Space.prototype.specialKey =
 	}
 
 	var
-		caret =
-			this.caret;
+		mark =
+			this.mark;
 
-	if ( !caret.sign )
+	if ( !mark.sign )
 	{
 		return;
 	}
 
-	var node =
-		this.getSub(
-			caret.sign.path,
-			'specialKey'
-		);
+	var
+		node =
+			this.getSub(
+				mark.sign.path,
+				'specialKey'
+			);
 
 	if( node )
 	{

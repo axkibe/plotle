@@ -47,6 +47,10 @@ if( typeof( window ) === 'undefined' )
 }
 
 
+var
+	_tag =
+		'X9357879';
+
 /*
 | Constructor.
 */
@@ -56,9 +60,17 @@ Visual.Portal =
 		tag,
 		tree,
 		path,
-		zone
+		zone,
+		mark
 	)
 {
+	if( CHECK && tag !== _tag )
+	{
+		throw new Error(
+			'tag mismatch'
+		);
+	}
+
 	Visual.Item.call(
 		this,
 		tree,
@@ -97,7 +109,11 @@ Visual.Portal =
 	this.zone =
 		zone;
 
+	this.mark =
+		mark;
+
 	// the prepared space fields
+	// FIXME lazy evaluate
 	this._$spaceFields =
 		{
 			spaceUser :
@@ -120,23 +136,26 @@ Jools.subclass(
 
 Portal.create =
 	function(
-		// free string
+		// free strings
 	)
 {
 	var
-		tree =
-			null,
-
-		path =
+		fontsize =
 			null,
 
 		inherit =
 			null,
 
-		zone =
+		mark =
 			null,
 
-		fontsize =
+		path =
+			null,
+
+		tree =
+			null,
+
+		zone =
 			null;
 
 	for(
@@ -148,6 +167,34 @@ Portal.create =
 
 		switch( arguments[ a ] )
 		{
+			case 'inherit' :
+
+				inherit =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'mark' :
+
+				mark =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'path' :
+
+				path =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'tree' :
+
+				tree =
+					arguments[ a + 1 ];
+
+				break;
+
 			case 'zone' :
 
 				var
@@ -173,27 +220,6 @@ Portal.create =
 							Math.max( minHeight, zone.height )
 						);
 				}
-
-				break;
-
-			case 'inherit' :
-
-				inherit =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'tree' :
-
-				tree =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'path' :
-
-				path =
-					arguments[ a + 1 ];
 
 				break;
 
@@ -271,10 +297,11 @@ Portal.create =
 
 	return (
 		new Portal(
-			'XOXO',
+			_tag,
 			tree,
 			path,
-			zone
+			zone,
+			mark
 		)
 	);
 };
@@ -467,7 +494,10 @@ Portal.prototype.click =
 {
 	var
 		zone =
-			this.zone;
+			this.zone,
+
+		mark =
+			null;
 
 	// not clicked on the portal?
 	if(
@@ -515,9 +545,6 @@ Portal.prototype.click =
 		true;
 
 	var
-		caret =
-			null,
-
 		pp =
 			view
 				.depoint( p )
@@ -537,7 +564,7 @@ Portal.prototype.click =
 				)
 		)
 		{
-			caret =
+			mark =
 				shell.userMark(
 					'set',
 					'type',
@@ -560,7 +587,7 @@ Portal.prototype.click =
 	// if non of the field were clicked
 	// just focus the portal itself
 	if(
-		caret === null &&
+		mark === null &&
 		shell.space.focusedItem( ) !== this
 	)
 	{
@@ -589,7 +616,6 @@ Portal.prototype.click =
 Portal.prototype.draw =
 	function(
 		fabric,
-		caret,
 		view
 	)
 {
@@ -613,7 +639,6 @@ Portal.prototype.draw =
 	{
 		f =
 			this._weave(
-				caret,
 				zone,
 				vzone,
 				view.home( )
@@ -699,7 +724,8 @@ Portal.prototype.highlight =
 /*
 | Draws the caret if its in this portal.
 */
-Portal.prototype.positionCaret =
+/*
+Portal.prototype.p_ositionCaret = TODO
 	function(
 		space,
 		caret,
@@ -715,10 +741,7 @@ Portal.prototype.positionCaret =
 		section === 'moveToButton'
 	)
 	{
-		caret.$screenPos =
-		caret.$height =
-			null;
-
+		// TODO
 		return;
 	}
 
@@ -744,6 +767,7 @@ Portal.prototype.positionCaret =
 			( cpos.s - cpos.n ) * view.zoom
 		);
 };
+*/
 
 
 /*
@@ -813,7 +837,6 @@ Portal.prototype.pointingHover =
 */
 Portal.prototype._weave =
 	function(
-		caret,
 		zone,
 		vzone,
 		view
@@ -827,8 +850,11 @@ Portal.prototype._weave =
 				vzone.height + 2
 			),
 
+		mark =
+			this.mark,
+
 		section =
-			caret.sign && caret.sign.path.get( -1 );
+			mark.sign && mark.sign.path.get( -1 );
 
 	// TODO only fill here
 	f.paint(
@@ -969,11 +995,11 @@ Portal.prototype.input =
 		reg  =
 			/([^\n]+)(\n?)/g,
 
-		caret =
-			shell.$space.caret,
+		mark =
+			this.mark,
 
 		section =
-			caret.sign.path.get( -1 );
+			mark.sign.path.get( -1 );
 
 	if( !this._isSection( section ) )
 	{
@@ -991,7 +1017,7 @@ Portal.prototype.input =
 
 		shell.peer.insertText(
 			this.subPaths[ section ],
-			caret.sign.at1,
+			mark.sign.at1,
 			line
 		);
 	}
@@ -1024,16 +1050,17 @@ Portal.prototype._fonts =
 
 
 /*
-| Returns the caret position.
+| Returns the mark position.
 */
 Portal.prototype._getCaretPos =
-	function(
-		caret
-	)
+	function( )
 {
 	var
+		mark =
+			this.mark,
+
 		section =
-			caret.sign.path.get( -1 ),
+			mark.sign.path.get( -1 ),
 
 		fs =
 			this._fonts[ section ].size,
@@ -1044,7 +1071,7 @@ Portal.prototype._getCaretPos =
 		p =
 			this._locateOffset(
 				section,
-				caret.sign.at1
+				mark.sign.at1
 			),
 
 		s =
@@ -1118,73 +1145,69 @@ Portal.prototype.specialKey =
 {
 	var
 		show =
-			false,
-
-		// TODO remove
-		caret =
-			shell.$space.caret;
+			false;
 
 	switch( key )
 	{
 		case 'backspace' :
 
-			this._keyBackspace( caret );
+			this._keyBackspace( );
 
 			break;
 
 		case 'del' :
 
-			this._keyDel( caret );
+			this._keyDel( );
 
 			break;
 
 		case 'down' :
 
-			this._keyDown( caret );
+			this._keyDown( );
 
 			break;
 
 		case 'end' :
 
-			this._keyEnd( caret );
+			this._keyEnd( );
 
 			break;
 
 /*
 		case 'enter' :
 
-			this.keyEnter( caret );
+			this.keyEnter( );
 
 			break;
 */
 
 		case 'left' :
 
-			this._keyLeft( caret );
+			this._keyLeft( );
 
 			break;
 
 		case 'pos1' :
 
-			this._keyPos1( caret );
+			this._keyPos1( );
 
 			break;
 
 		case 'right' :
 
-			this._keyRight( caret );
+			this._keyRight( );
 
 			break;
 
 		case 'tab' :
 
-			this._keyTab( caret );
+			this._keyTab( );
 
 			break;
 
 		case 'up' :
 
-			this._keyUp( caret );
+			this._keyUp( );
 
 			break;
 	}
@@ -1194,13 +1217,12 @@ Portal.prototype.specialKey =
 | User pressed right key.
 */
 Portal.prototype._keyLeft =
-	function(
-		caret
-	)
+	function( )
 {
 	var
+		// TODO call msign
 		csign =
-			caret.sign,
+			this.mark.sign,
 
 		section =
 			csign.path.get( -1 );
@@ -1260,13 +1282,11 @@ Portal.prototype._keyLeft =
 | User pressed down key.
 */
 Portal.prototype._keyDown =
-	function(
-		caret
-	)
+	function( )
 {
 	var
 		csign =
-			caret.sign,
+			this.mark.sign,
 
 		section =
 			csign.path.get( -1 );
@@ -1278,7 +1298,7 @@ Portal.prototype._keyDown =
 
 	var
 		cpos =
-			this._getCaretPos( caret );
+			this._getCaretPos( );
 
 	switch( section )
 	{
@@ -1317,13 +1337,11 @@ Portal.prototype._keyDown =
 | User pressed down key.
 */
 Portal.prototype._keyTab =
-	function(
-		caret
-	)
+	function( )
 {
 	var
 		csign =
-			caret.sign,
+			this.mark.sign,
 
 		section =
 			csign.path.get( -1 );
@@ -1385,13 +1403,11 @@ Portal.prototype._keyTab =
 | User pressed down key.
 */
 Portal.prototype._keyUp =
-	function(
-		caret
-	)
+	function( )
 {
 	var
 		csign =
-			caret.sign,
+			this.mark.sign,
 
 		section =
 			csign.path.get( -1 );
@@ -1404,7 +1420,7 @@ Portal.prototype._keyUp =
 
 	var
 		cpos =
-			this._getCaretPos( caret );
+			this._getCaretPos( );
 
 	switch( section )
 	{
@@ -1441,13 +1457,11 @@ Portal.prototype._keyUp =
 | User pressed right key.
 */
 Portal.prototype._keyRight =
-	function(
-		caret
-	)
+	function( )
 {
 	var
 		csign =
-			caret.sign,
+			this.mark.sign,
 
 		section =
 			csign.path.get( -1 );
@@ -1512,13 +1526,11 @@ Portal.prototype._keyRight =
 | User pressed backspace.
 */
 Portal.prototype._keyBackspace =
-	function(
-		caret
-	)
+	function( )
 {
 	var
 		csign =
-			caret.sign,
+			this.mark.sign,
 
 		section =
 			csign.path.get( -1 );
@@ -1551,13 +1563,11 @@ Portal.prototype._keyBackspace =
 | User pressed del.
 */
 Portal.prototype._keyDel =
-	function(
-		caret
-	)
+	function( )
 {
 	var
 		csign =
-			caret.sign,
+			this.mark.sign,
 
 		section =
 			csign.path.get( -1 ),
@@ -1593,13 +1603,11 @@ Portal.prototype._keyDel =
 | User pressed end key.
 */
 Portal.prototype._keyEnd =
-	function(
-		caret
-	)
+	function( )
 {
 	var
 		csign =
-			caret.sign,
+			this.mark.sign,
 
 		section =
 			csign.path.get( -1 );
@@ -1806,13 +1814,11 @@ Portal.prototype._prepareField =
 | User pressed pos1 key,
 */
 Portal.prototype._keyPos1 =
-	function(
-		caret
-	)
+	function( )
 {
 	var
 		csign =
-			caret.sign;
+			this.mark.sign;
 
 	if( csign.at1 <= 0 )
 	{

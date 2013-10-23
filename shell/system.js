@@ -31,6 +31,8 @@ var
 */
 ( function( ) {
 'use strict';
+
+
 if( CHECK && typeof( window ) === 'undefined' )
 {
 	throw new Error(
@@ -104,12 +106,15 @@ var System =
 {
 	if( system )
 	{
-		throw new Error('System not a singleton');
+		throw new Error(
+			'System not a singleton'
+		);
 	}
 
-	var canvas =
-	this._canvas =
-		document.getElementById( 'canvas' );
+	var
+		canvas =
+		this._canvas =
+			document.getElementById( 'canvas' );
 
 	canvas.width =
 		window.innerWidth - 1;
@@ -353,8 +358,9 @@ System.prototype.setInput =
 		text
 	)
 {
-	var hi =
-		this._hiddenInput;
+	var
+		hi =
+			this._hiddenInput;
 
 	hi.value =
 	this._inputVal =
@@ -391,59 +397,107 @@ System.prototype.setTimer =
 
 
 /*
-| Sets the focus mode so it matched the keyboard suggestion (for iPad)
+| Sets the "focus center"
+| This is most likely the caret.
+|
+| On the iPad with keyboard, scrolling can become active again
+| an thus the caret should be kept in the screen
+|
 | Moves the hidden input vertically so the iPad keeps the caret in view
 */
-System.prototype._fiddleInput =
-	function( )
+System.prototype.focusCenter =
+	function(
+		// ...
+	)
 {
 	var
-		caret =
-			this.shell.getCaret( );
+		x =
+			null,
 
-	if( !caret )
+		y =
+			null;
+
+
+	for(
+		var a = 0, aZ = arguments.length;
+		a < aZ;
+		a++
+	)
 	{
-		return;
-	}
-
-	var
-		height =
-			caret.$height,
-
-		pos =
-			caret.$screenPos;
-
-	if( height > 0 )
-	{
-		var input =
-			this._hiddenInput;
-
-		input.style.top =
-			pos.y + 'px';
-
-		input.style.height =
-			height;
-
-		if( !this._$suggestingKeyboard )
+		switch( arguments[ a ] )
 		{
-			input.focus( );
+			case 'x' :
 
-			// works around a bug in safari/OSX
-			var self =
-				this;
+				x =
+					arguments[ ++a ];
 
-			this.setTimer(
-				0,
-				function( )
-				{
-					self._hiddenInput.selectionStart = 1;
-				}
-			);
+				break;
 
-			this._$suggestingKeyboard =
-				true;
+			case 'y' :
+
+				y =
+					arguments[ ++a ];
+
+				break;
+
+			case 'p' :
+
+				x =
+					arguments[ a + 1 ].x;
+
+				y =
+					arguments[ ++a ].y;
+
+				break;
+
+			default :
+
+				throw new Error(
+					'invalid argument'
+				);
 		}
 	}
+
+	if(
+		CHECK &&
+		( x !== null || y !== null )
+	)
+	{
+		throw new Error(
+			'x/y missing'
+		);
+	}
+
+
+	var
+		input =
+			this._hiddenInput;
+
+	input.style.top =
+		y + 'px';
+
+	if( true || !this._$suggestingKeyboard ) // TODO
+	{
+		input.focus( );
+
+		var
+			self =
+				this;
+
+		// works around ctrl+click bug in safari/OSX
+		this.setTimer(
+			0,
+			function( )
+			{
+				self._hiddenInput.selectionStart = 1;
+			}
+		);
+
+		this._$suggestingKeyboard =
+			true;
+	}
+
+	/*
 	else
 	{
 		if( this._$suggestingKeyboard )
@@ -454,7 +508,10 @@ System.prototype._fiddleInput =
 				false;
 		}
 	}
+	*/
+
 };
+
 
 // ---------------------------
 
@@ -469,7 +526,7 @@ System.prototype._blink =
 	// maybe the user pasted something using the browser menu
 	this._testInput( );
 
-	this.shell.blink( );
+	// this.shell.blink( );
 };
 
 
@@ -552,18 +609,20 @@ System.prototype._onResize =
 		// event
 	)
 {
-	var c =
-		this._canvas;
+	var
+		c =
+			this._canvas,
 
-	var w =
-	c.width =
-		document.documentElement.clientWidth - 1;
+		w =
+		c.width =
+			document.documentElement.clientWidth - 1,
 
-	var h =
-	c.height =
-		document.documentElement.clientHeight - 1;
+		h =
+		c.height =
+			document.documentElement.clientHeight - 1;
 
-	if( this.shell ) {
+	if( this.shell )
+	{
 		this.shell.resize(
 			w,
 			h
@@ -601,8 +660,9 @@ System.prototype._onHiddenKeyDown =
 		event
 	)
 {
-	var kcode =
-		this._$lastSpecialKey = event.keyCode;
+	var
+		kcode =
+			this._$lastSpecialKey = event.keyCode;
 
 	if(
 		!this._specialKey(
@@ -625,17 +685,18 @@ System.prototype._onHiddenKeyPress =
 		event
 	)
 {
-	var ew =
-		event.which;
+	var
+		ew =
+			event.which,
 
-	var kcode =
-		event.keyCode;
+		kcode =
+			event.keyCode,
 
-	var shift =
-		event.shiftKey;
+		shift =
+			event.shiftKey,
 
-	var ctrl =
-		event.ctrlKey || event.metaKey;
+		ctrl =
+			event.ctrlKey || event.metaKey;
 
 	if (
 		(
@@ -802,8 +863,6 @@ System.prototype._onMouseDown =
 		canvas.style.cursor = cursor;
 	}
 
-
-	this._fiddleInput( );
 
 	return false;
 };
@@ -1024,8 +1083,6 @@ System.prototype._onMouseUp =
 			cursor;
 	}
 
-	this._fiddleInput( );
-
 	return false;
 };
 
@@ -1079,8 +1136,6 @@ System.prototype._onMouseWheel =
 		event.shiftKey,
 		event.ctrlKey || event.metaKey
 	);
-
-	this._fiddleInput( );
 };
 
 
@@ -1166,8 +1221,6 @@ System.prototype._onTouchStart =
 
 			break;
 	}
-
-	this._fiddleInput( );
 
 	return false;
 };
@@ -1392,8 +1445,6 @@ System.prototype._onTouchEnd =
 			throw new Error( 'invalid pointingState' );
 	}
 
-	this._fiddleInput( );
-
 	return false;
 };
 
@@ -1512,8 +1563,6 @@ System.prototype._specialKey =
 		ctrl
 	);
 
-	this._fiddleInput( );
-
 	return false;
 };
 
@@ -1551,8 +1600,6 @@ System.prototype._testInput =
 		0;
 
 	this.shell.input( text );
-
-	this._fiddleInput( );
 };
 
 

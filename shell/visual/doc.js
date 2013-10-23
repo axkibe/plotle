@@ -43,6 +43,11 @@ if ( typeof( window ) === 'undefined' )
 }
 
 
+var
+	_tag =
+		'X15472002';
+
+
 /*
 | Constructor.
 */
@@ -55,15 +60,16 @@ Visual.Doc =
 		path,
 		fontsize,
 		flowWidth,
-		paraSep
+		paraSep,
+		mark
 	)
 {
 	if( CHECK )
 	{
-		if( tag !== 'XOXO' )
+		if( tag !== _tag )
 		{
 			throw new Error(
-				'do not call new Doc directly'
+				'tag mismatch'
 			);
 		}
 	}
@@ -89,6 +95,9 @@ Visual.Doc =
 
 	this._$pnws =
 		null;
+
+	this.mark =
+		mark;
 
 	if( CHECK )
 	{
@@ -139,8 +148,16 @@ Visual.Doc =
 		r++
 	)
 	{
-		var k =
-			ranks[ r ];
+		var
+			k =
+				ranks[ r ],
+
+			paraPath =
+				path &&  // TODO is this ever null?
+				new Path(
+					path,
+					'++', k
+				);
 
 		sub[ k ] =
 			Visual.Para.create(
@@ -149,15 +166,13 @@ Visual.Doc =
 				'tree',
 					twig[ k ],
 				'path',
-					path &&
-					new Path(
-						path,
-						'++', k
-					),
+					paraPath,
 				'fontsize',
 					fontsize,
 				'flowWidth',
-					flowWidth
+					flowWidth,
+				'mark',
+					mark && mark.concerns( paraPath )
 			);
 	}
 };
@@ -181,16 +196,19 @@ Doc.create =
 		tree =
 			null,
 
-		inherit =
-			null,
-
-		path =
-			null,
-
 		fontsize =
 			null,
 
 		flowWidth =
+			null,
+
+		inherit =
+			null,
+
+		mark =
+			null,
+
+		path =
 			null,
 
 		paraSep =
@@ -204,23 +222,9 @@ Doc.create =
 	{
 		switch( arguments[ a ] )
 		{
-			case 'tree' :
+			case 'flowWidth' :
 
-				tree =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'inherit' :
-
-				inherit =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'path' :
-
-				path =
+				flowWidth =
 					arguments[ a + 1 ];
 
 				break;
@@ -232,9 +236,16 @@ Doc.create =
 
 				break;
 
-			case 'flowWidth' :
+			case 'inherit' :
 
-				flowWidth =
+				inherit =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'mark' :
+
+				mark =
 					arguments[ a + 1 ];
 
 				break;
@@ -242,6 +253,20 @@ Doc.create =
 			case 'paraSep' :
 
 				paraSep =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'path' :
+
+				path =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'tree' :
+
+				tree =
 					arguments[ a + 1 ];
 
 				break;
@@ -287,6 +312,7 @@ Doc.create =
 				inherit.paraSep;
 		}
 
+		/* FIXME
 		if(
 			inherit.tree === tree &&
 			(
@@ -295,22 +321,25 @@ Doc.create =
 			) &&
 			inherit.fontsize === fontsize &&
 			inherit.flowWidth === flowWidth &&
-			inherit.paraSep === paraSep
+			inherit.paraSep === paraSep &&
+			inherit.mark === mark
 		)
 		{
 			return inherit;
 		}
+		*/
 	}
 
 	return (
 		new Doc(
-			'XOXO',
+			_tag,
 			inherit,
 			tree,
 			path,
 			fontsize,
 			flowWidth,
-			paraSep
+			paraSep,
+			mark
 		)
 	);
 };

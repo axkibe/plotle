@@ -48,24 +48,30 @@ if( typeof( window ) === 'undefined' )
 }
 
 
+var
+	_tag =
+		'X69907604';
+
+
 /*
 | Constructor.
 */
 var Note =
 Visual.Note =
 	function(
-		overload,
+		tag,
 		tree,
 		path,
 		zone,
 		doc,
-		scrolly
+		scrolly,
+		mark
 	)
 {
-	if( CHECK && overload !== 'XOXO' )
+	if( CHECK && tag !== _tag )
 	{
 		throw new Error(
-			'do not call new Note directly'
+			'tag mismatch'
 		);
 	}
 
@@ -73,7 +79,8 @@ Visual.Note =
 		this,
 		tree,
 		path,
-		doc
+		doc,
+		mark
 	);
 
 	this.zone =
@@ -111,26 +118,30 @@ Note.create =
 	)
 {
 	var
-		tree =
-			null,
-
-		path =
-			null,
-
-		inherit =
-			null,
-
-		zone =
-			null,
-
 		doc =
 			null,
 
 		fontsize =
 			null,
 
+		inherit =
+			null,
+
+		mark =
+			null,
+
+		path =
+			null,
+
 		scrolly =
+			null,
+
+		tree =
+			null,
+
+		zone =
 			null;
+
 
 	for(
 		var a = 0, aZ = arguments.length;
@@ -140,6 +151,41 @@ Note.create =
 	{
 		switch( arguments[ a ] )
 		{
+			case 'doc' :
+
+				doc =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'inherit' :
+
+				inherit =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'path' :
+
+				path =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'scrolly' :
+
+				scrolly =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'tree' :
+
+				tree =
+					arguments[ a + 1 ];
+
+				break;
+
 			case 'zone' :
 
 				var
@@ -168,37 +214,9 @@ Note.create =
 
 				break;
 
-			case 'inherit' :
+			case 'mark' :
 
-				inherit =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'tree' :
-
-				tree =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'path' :
-
-				path =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'doc' :
-
-				doc =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'scrolly' :
-
-				scrolly =
+				mark =
 					arguments[ a + 1 ];
 
 				break;
@@ -253,7 +271,9 @@ Note.create =
 					'flowWidth',
 						zone.width - Note.innerMargin.x,
 					'paraSep',
-						Jools.half( fontsize )
+						Jools.half( fontsize ),
+					'mark',
+						mark
 				);
 		}
 	}
@@ -327,12 +347,13 @@ Note.create =
 
 	return (
 		new Note(
-			'XOXO',
+			_tag,
 			tree,
 			path,
 			zone,
 			doc,
-			scrolly || 0
+			scrolly || 0,
+			mark
 		)
 	);
 };
@@ -427,7 +448,6 @@ Note.prototype.minWidth =
 Note.prototype.draw =
 	function(
 		fabric,
-		caret,
 		view
 	)
 {
@@ -724,6 +744,8 @@ Note.prototype.setScrollbar =
 Note.prototype.scrollCaretIntoView =
 	function( )
 {
+	//console.log( 'TODO' );
+	/*
 	var
 		caret =
 			shell.$space.caret,
@@ -778,6 +800,7 @@ Note.prototype.scrollCaretIntoView =
 			cp.s + pnw.y - zone.height + imargin.s
 		);
 	}
+	*/
 };
 
 

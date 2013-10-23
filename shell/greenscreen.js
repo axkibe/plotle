@@ -60,16 +60,6 @@ GreenScreen.prototype.showDisc =
 
 
 /*
-| Positions the caret.
-*/
-GreenScreen.prototype.positionCaret =
-	function( )
-{
-	return;
-};
-
-
-/*
 | Blinks the caret (if shown)
 */
 GreenScreen.prototype.blink =

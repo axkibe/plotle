@@ -1,8 +1,6 @@
 /*
 | The users shell.
 |
-| The shell consists of the disc, dashboard and the visual space.
-|
 | Authors: Axel Kittenberger
 */
 
@@ -39,7 +37,6 @@ var
 	Sign,
 	system,
 	swatch,
-	theme, // TODO remove
 	Visual;
 
 
@@ -237,50 +234,41 @@ Shell.prototype.update =
 	)
 {
 	var
-		caret =
-			this.$space.caret,
+		mark =
+			this.space.mark,
 
-		csign =
-			caret.sign;
+		msign =
+			mark.sign;
 
-	if(
-		csign &&
-		csign.path &&
-		!Jools.is(
-			tree.twig[ csign.path.get( 0 ) ]
+	if( mark.type === 'caret' )
+	{
+		if ( !Jools.is(
+				tree.twig[ mark.sign.path.get( 0 ) ]
+			)
 		)
-	)
-	{
-		caret =
-			// TODO vacant
-			Mark.Caret.create(
-				null,
-				caret.retainx
-			);
-	}
-	else
-	{
-		if( caret.sign !== null )
+		{
+			mark =
+				Mark.Vacant.create( );
+		}
+		else
 		{
 			var
 				sign =
 					MeshMashine.tfxSign(
-						caret.sign,
+						mark.sign,
 						chgX
 					);
 
-			caret =
+			// TODO keeping retainx might not be correct
+			//      in some cases
+			mark =
 				Mark.Caret.create(
 					sign,
-					caret.retainx
+					mark.retainx
 				);
 		}
-
-		this._$caretBlink =
-			false;
-
-		system.restartBlinker( );
 	}
+
 
 	this.$space =
 		new Visual.Space(
@@ -289,14 +277,15 @@ Shell.prototype.update =
 			this.$space.spaceUser,
 			this.$space.spaceTag,
 			this.$space.access,
-			caret
+			mark
 		);
 
 
 	// TODO move selection to space / forms
 
-	var selection =
-		this._$selection;
+	var
+		selection =
+			this._$selection;
 
 	if( selection )
 	{
@@ -360,6 +349,7 @@ Shell.prototype.systemBlur =
 /*
 | Blinks the caret ( if shown )
 */
+/*
 Shell.prototype.blink =
 	function( )
 {
@@ -381,10 +371,11 @@ Shell.prototype.blink =
 		);
 	}
 };
+*/
 
 
 /*
-| Draws the dashboard and the space.
+| Draws everything.
 */
 Shell.prototype._draw =
 	function( )
@@ -735,6 +726,7 @@ Shell.prototype.dragMove =
 
 	switch( action.section )
 	{
+		// TODO board???
 		case 'board' :
 
 			cursor =
@@ -795,6 +787,7 @@ Shell.prototype.dragStop =
 
 	switch( action.section )
 	{
+		// TODO board???
 		case 'board' :
 
 			this._$disc.dragStop(
@@ -1065,12 +1058,8 @@ Shell.prototype.userMark =
 			}
 			else
 			{
-				// TODO
 				mark =
-					Mark.Caret.create(
-						null,
-						null
-					);
+					Mark.Vacant.create( );
 			}
 	}
 
@@ -1463,7 +1452,8 @@ Shell.prototype.onAquireSpace =
 			null,
 			spaceUser,
 			spaceTag,
-			access
+			access,
+			Mark.Vacant.create( )
 		);
 
 	this.arrivedAtSpace(

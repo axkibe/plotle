@@ -67,13 +67,21 @@ Mark.Vacant =
 };
 
 
+/*
+| Reflection.
+*/
+Vacant.prototype.type =
+	'vacant';
+
+
+
 Jools.subclass(
 	Mark,
 	Vacant
 );
 
 
-Mark.create =
+Vacant.create =
 	function( )
 {
 	if( singleton !== null )
@@ -86,6 +94,20 @@ Mark.create =
 
 	return singleton;
 }
+
+
+/*
+| Returns this if an entity of that path should
+| be concerned about this mark.
+*/
+Vacant.prototype.concerns =
+	function(
+		path
+	)
+{
+	return null;
+}
+
 
 
 } )( );
