@@ -112,6 +112,8 @@ Visual.Portal =
 	this.mark =
 		mark;
 
+	console.log( 'M', mark );
+
 	// the prepared space fields
 	// FIXME lazy evaluate
 	this._$spaceFields =
@@ -257,22 +259,28 @@ Portal.create =
 
 	if( inherit )
 	{
-		if( !tree )
-		{
-			tree =
-				inherit.tree;
-		}
-
 		if( !fontsize )
 		{
 			fontsize =
 				inherit.fontsize;
 		}
 
+		if( !mark )
+		{
+			mark =
+				inherit.mark;
+		}
+
 		if( !path )
 		{
 			path =
 				inherit.path;
+		}
+
+		if( !tree )
+		{
+			tree =
+				inherit.tree;
 		}
 
 		if(
@@ -288,6 +296,11 @@ Portal.create =
 			(
 				inherit.zone === zone ||
 				( inherit.zone && inherit.zone.equals( zone ) )
+			)
+			&&
+			(
+				inherit.mark === mark
+				// FIXME (or equals)
 			)
 		)
 		{
@@ -854,7 +867,7 @@ Portal.prototype._weave =
 			this.mark,
 
 		section =
-			mark.sign && mark.sign.path.get( -1 );
+			mark && mark.sign && mark.sign.path.get( -1 );
 
 	// TODO only fill here
 	f.paint(

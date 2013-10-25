@@ -293,7 +293,8 @@ Para.prototype.draw =
 		zoom =
 			view.zoom;
 
-	if( true || !f || f.zoom !== zoom ) // TODO
+	// FIXME, zoom level should be part of the object.
+	if( !f || f.zoom !== zoom )
 	{
 		// no cache
 
@@ -1577,7 +1578,8 @@ Para.prototype.specialKey =
 	}
 	else if ( shift && !selection )
 	{
-		switch( key ) {
+		switch( key )
+		{
 			case 'backup' :
 			case 'down' :
 			case 'end' :
@@ -1588,7 +1590,7 @@ Para.prototype.specialKey =
 			case 'up' :
 
 				select1 =
-					shell.space.caret.sign;
+					shell.space.mark.sign;
 
 				show =
 					true;
@@ -1733,7 +1735,7 @@ Para.prototype.specialKey =
 					shell.setSelection(
 						doc,
 						select1,
-						this.mark.sign
+						shell.space.mark.sign
 					);
 
 				shell.redraw =

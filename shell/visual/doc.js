@@ -312,6 +312,12 @@ Doc.create =
 				inherit.paraSep;
 		}
 
+		if( mark === null )
+		{
+			mark =
+				inherit.mark;
+		}
+
 		/* FIXME
 		if(
 			inherit.tree === tree &&

@@ -273,37 +273,13 @@ Note.create =
 					'paraSep',
 						Jools.half( fontsize ),
 					'mark',
-						mark
+						mark || ( inherit && inherit.mark )
 				);
 		}
 	}
 
 	if( inherit )
 	{
-		if( !tree )
-		{
-			tree =
-				inherit.tree;
-		}
-
-		if( !fontsize )
-		{
-			fontsize =
-				inherit.fontsize;
-		}
-
-		if( !path )
-		{
-			path =
-				inherit.path;
-		}
-
-		if( scrolly === null )
-		{
-			scrolly =
-				inherit.$scrollbarY.pos;
-		}
-
 		if( !doc )
 		{
 			doc =
@@ -319,6 +295,36 @@ Note.create =
 							zone.width - Note.innerMargin.x
 						)
 				);
+		}
+
+		if( !fontsize )
+		{
+			fontsize =
+				inherit.fontsize;
+		}
+
+		if( !mark )
+		{
+			mark =
+				inherit.mark;
+		}
+
+		if( !path )
+		{
+			path =
+				inherit.path;
+		}
+
+		if( scrolly === null )
+		{
+			scrolly =
+				inherit.$scrollbarY.pos;
+		}
+
+		if( !tree )
+		{
+			tree =
+				inherit.tree;
 		}
 
 		if(
