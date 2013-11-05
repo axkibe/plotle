@@ -1,5 +1,5 @@
 /*
-| A sequence of visual paragraphs.
+| A sequence of paragraphs.
 |
 | Authors: Axel Kittenberger
 */
@@ -312,19 +312,12 @@ Doc.create =
 				inherit.paraSep;
 		}
 
-		if( mark === null )
-		{
-			mark =
-				inherit.mark;
-		}
-
 		/* FIXME
 		if(
 			inherit.tree === tree &&
 			(
-				inherit.path === path ||
-				( inherit.path && inherit.path.equals( path ) )
-			) &&
+				inherit.path && inherit.path.equals( path )
+			)
 			inherit.fontsize === fontsize &&
 			inherit.flowWidth === flowWidth &&
 			inherit.paraSep === paraSep &&

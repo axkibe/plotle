@@ -90,16 +90,23 @@ Jools.subclass(
 */
 Point.prototype.equals =
 	function(
-		a1,
-		a2
+		p
 	)
 {
+	if( CHECK && typeof( p ) !== 'object' )
+	{
+		// FIXME this can go eventually
+		throw new Error( 'param fail' );
+	}
+
 	return (
-		typeof( a1 ) === 'object' ?
-			this.x === a1.x &&
-			this.y === a1.y :
-			this.x === a1   &&
-			this.y === a2
+		this === p
+		||
+		(
+			this.x === p.x
+			&&
+			this.y === p.y
+		)
 	);
 };
 

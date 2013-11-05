@@ -112,8 +112,6 @@ Visual.Portal =
 	this.mark =
 		mark;
 
-	console.log( 'M', mark );
-
 	// the prepared space fields
 	// FIXME lazy evaluate
 	this._$spaceFields =
@@ -265,12 +263,6 @@ Portal.create =
 				inherit.fontsize;
 		}
 
-		if( !mark )
-		{
-			mark =
-				inherit.mark;
-		}
-
 		if( !path )
 		{
 			path =
@@ -289,18 +281,15 @@ Portal.create =
 			)
 			&&
 			(
-				inherit.path === path ||
-				( inherit.path && inherit.path.equals( path ) )
+				inherit.path && inherit.path.equals( path )
 			)
 			&&
 			(
-				inherit.zone === zone ||
-				( inherit.zone && inherit.zone.equals( zone ) )
+				inherit.zone && inherit.zone.equals( zone )
 			)
 			&&
 			(
-				inherit.mark === mark
-				// FIXME (or equals)
+				inherit.mark && inherit.mark.equals( mark )
 			)
 		)
 		{

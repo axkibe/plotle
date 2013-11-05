@@ -273,7 +273,7 @@ Note.create =
 					'paraSep',
 						Jools.half( fontsize ),
 					'mark',
-						mark || ( inherit && inherit.mark )
+						mark
 				);
 		}
 	}
@@ -303,12 +303,6 @@ Note.create =
 				inherit.fontsize;
 		}
 
-		if( !mark )
-		{
-			mark =
-				inherit.mark;
-		}
-
 		if( !path )
 		{
 			path =
@@ -333,13 +327,11 @@ Note.create =
 			)
 			&&
 			(
-				inherit.path === path ||
-				( inherit.path && inherit.path.equals( path ) )
+				inherit.path && inherit.path.equals( path )
 			)
 			&&
 			(
-				inherit.zone === zone ||
-				( inherit.zone && inherit.zone.equals( zone ) )
+				inherit.zone && inherit.zone.equals( zone )
 			)
 			&&
 			(

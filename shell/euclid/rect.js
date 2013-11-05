@@ -940,8 +940,12 @@ Rect.prototype.equals =
 	)
 {
 	return (
-		this.pnw.equals( r.pnw ) &&
-		this.pse.equals( r.pse )
+		this === r
+		||
+		(
+			this.pnw.equals( r.pnw ) &&
+			this.pse.equals( r.pse )
+		)
 	);
 };
 

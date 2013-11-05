@@ -244,8 +244,7 @@ Para.create =
 		if(
 			inherit.tree === tree &&
 			(
-				inherit.path === path ||
-				( inherit.path && inherit.path.equals( path ) )
+				inherit.path && inherit.path.equals( path )
 			) &&
 			inherit.fontsize === fontsize &&
 			inherit.flowWidth === flowWidth &&
@@ -366,9 +365,10 @@ Para.prototype.draw =
 			mark.sign.path.equals( this.textPath )
 		)
 		{
-			this.drawCaret(
+			this._drawCaret(
 				f,
-				view
+				view,
+				mark
 			);
 		}
 	}
@@ -382,16 +382,17 @@ Para.prototype.draw =
 };
 
 
-Para.prototype.drawCaret =
+/*
+| Draws the caret
+*/
+Para.prototype._drawCaret =
 	function(
 		fabric,
-		view
+		view,
+		mark
 	)
 {
 	var
-		mark =
-			this.mark,
-
 		space =
 			shell.space,
 
@@ -655,7 +656,7 @@ Jools.lazyFixate(
 
 
 /*
-| Returns the height of the para
+| Returns the height of the para.
 */
 Jools.lazyFixate(
 	Para.prototype,

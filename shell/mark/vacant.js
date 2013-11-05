@@ -67,6 +67,12 @@ Mark.Vacant =
 };
 
 
+Jools.subclass(
+	Mark,
+	Vacant
+);
+
+
 /*
 | Reflection.
 */
@@ -74,13 +80,10 @@ Vacant.prototype.type =
 	'vacant';
 
 
-
-Jools.subclass(
-	Mark,
-	Vacant
-);
-
-
+/*
+| Creates a 'vacant' mark.
+| Which happens to be a singleton.
+*/
 Vacant.create =
 	function( )
 {
@@ -93,6 +96,18 @@ Vacant.create =
 		new Mark.Vacant( _tag );
 
 	return singleton;
+}
+
+
+/*
+| Returns true if this mark equals another.
+*/
+Vacant.prototype.equals =
+	function(
+		mark
+	)
+{
+	return this.type === mark.type;
 }
 
 

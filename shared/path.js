@@ -215,8 +215,6 @@ Path.prototype.get =
 
 /*
 | Returns true if this path is the same as another.
-|
-| FIXME: optimize by using local variables
 */
 Path.prototype.equals =
 	function( o )
@@ -226,14 +224,26 @@ Path.prototype.equals =
 		return false;
 	}
 
-	if( this._path.length !== o._path.length )
+	if( this === o )
+	{
+		return true;
+	}
+
+	var
+		tp =
+			this._path,
+
+		op =
+			o._path;
+
+	if( tp.length !== op.length )
 	{
 		return false;
 	}
 
-	for( var k in this._path )
+	for( var k in tp )
 	{
-		if( this._path[k] !== o._path[k] )
+		if( tp[ k ] !== op[ k ] )
 		{
 			return false;
 		}

@@ -136,6 +136,25 @@ Caret.prototype.concerns =
 
 
 /*
+| Returns true if this mark equals another.
+*/
+Caret.prototype.equals =
+	function(
+		mark
+	)
+{
+	return (
+		this === mark ||
+		(
+			this.type === mark.type &&
+			this.sign.equals( mark.sign ) &&
+			this.retainx === mark.retainx
+		)
+	);
+}
+
+
+/*
 | Draws or erases the caret.
 */
 /*
