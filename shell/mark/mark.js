@@ -5,9 +5,7 @@
 |     the caret
 |     a text selection
 |     one or several items
-|     nothing
-|
-| Authors: Axel Kittenberger
+|     nothing (vacant)
 */
 
 

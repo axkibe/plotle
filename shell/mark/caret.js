@@ -70,10 +70,6 @@ Mark.Caret =
 	this.retainx =
 		retainx;
 
-	// position cache
-	this.$pos =
-		null;
-
 	Mark.call( this );
 };
 
@@ -143,11 +139,21 @@ Caret.prototype.equals =
 		mark
 	)
 {
+	if( !mark )
+	{
+		return false;
+	}
+
 	return (
-		this === mark ||
+		this === mark
+		||
 		(
-			this.type === mark.type &&
-			this.sign.equals( mark.sign ) &&
+			this.type === mark.type
+			&&
+			this.sign.path.equals( mark.sign.path )
+			&&
+			this.sign.at1 === mark.sign.at1
+			&&
 			this.retainx === mark.retainx
 		)
 	);

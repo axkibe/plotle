@@ -68,6 +68,10 @@ Visual.Note =
 		mark
 	)
 {
+	console.log(
+		'NEW NOTE', path
+	);
+
 	if( CHECK && tag !== _tag )
 	{
 		throw new Error(
@@ -321,6 +325,14 @@ Note.create =
 				inherit.tree;
 		}
 
+		console.log(
+			'T',
+			inherit.tree === tree,
+			inherit.path && inherit.path.equals( path ),
+			inherit.zone && inherit.zone.equals( zone ),
+			inherit.sub.doc === doc
+		);
+
 		if(
 			(
 				inherit.tree === tree
@@ -335,7 +347,7 @@ Note.create =
 			)
 			&&
 			(
-				inherit.doc === doc
+				inherit.sub.doc === doc
 			)
 		)
 		{

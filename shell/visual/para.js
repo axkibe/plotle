@@ -285,6 +285,8 @@ Para.prototype.draw =
 		pnw     // pnw of this para
 	)
 {
+//	console.log(this.path);
+
 	var
 		f =
 			this.$fabric,
@@ -1075,10 +1077,9 @@ Para.prototype._keyDown =
 			),
 
 		x =
-			mark.retainx !== null ?
+			Jools.isnon( mark.retainx ) ?
 				mark.retainx :
-				cpos.x;
-
+				cpos.p.x;
 
 	if( cpos.line < flow.length - 1 )
 	{
@@ -1372,9 +1373,9 @@ Para.prototype._keyUp =
 
 		x =
 			(
-				mark.retainx !== null ?
+				Jools.isnon( mark.retainx ) ?
 					mark.retainx :
-					cpos.x
+					cpos.p.x
 			),
 
 		space =

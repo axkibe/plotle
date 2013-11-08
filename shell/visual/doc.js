@@ -35,7 +35,7 @@ var
 'use strict';
 
 
-if ( typeof( window ) === 'undefined' )
+if ( CHECK && typeof( window ) === 'undefined' )
 {
 	throw new Error(
 		'this code requires a browser!'
@@ -312,22 +312,51 @@ Doc.create =
 				inherit.paraSep;
 		}
 
-		/* FIXME
+		/*
+		TODO remove
+		console.log(
+			'D',
+			inherit.tree === tree,
+			inherit.path && inherit.path.equals( path ),
+			inherit.fontsize === fontsize,
+			inherit.flowWidth === flowWidth,
+			inherit.paraSep === paraSep,
+            inherit.mark === mark
+            ||
+            (
+                inherit.mark && inherit.mark.equals( mark )
+		    )
+		);
+		*/
+
+
 		if(
 			inherit.tree === tree &&
 			(
 				inherit.path && inherit.path.equals( path )
 			)
-			inherit.fontsize === fontsize &&
-			inherit.flowWidth === flowWidth &&
-			inherit.paraSep === paraSep &&
-			inherit.mark === mark
+			&&
+			inherit.fontsize === fontsize
+			&&
+			inherit.flowWidth === flowWidth
+			&&
+			inherit.paraSep === paraSep
+			&&
+			(
+				inherit.mark === mark
+				||
+				(
+					inherit.mark && inherit.mark.equals( mark )
+				)
+			)
 		)
 		{
+			console.log( 'Dinherit' );
 			return inherit;
 		}
-		*/
 	}
+	
+	console.log( 'Dnew' );
 
 	return (
 		new Doc(
