@@ -1766,6 +1766,11 @@ Jools.lazyFixate(
 	'textPath',
 	function( )
 	{
+		if( this.path === null )
+		{
+			return null;
+		}
+
 		return new Path(
 			this.path,
 			'++',
