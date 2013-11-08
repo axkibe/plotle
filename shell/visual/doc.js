@@ -312,24 +312,6 @@ Doc.create =
 				inherit.paraSep;
 		}
 
-		/*
-		TODO remove
-		console.log(
-			'D',
-			inherit.tree === tree,
-			inherit.path && inherit.path.equals( path ),
-			inherit.fontsize === fontsize,
-			inherit.flowWidth === flowWidth,
-			inherit.paraSep === paraSep,
-            inherit.mark === mark
-            ||
-            (
-                inherit.mark && inherit.mark.equals( mark )
-		    )
-		);
-		*/
-
-
 		if(
 			inherit.tree === tree &&
 			(
@@ -351,13 +333,10 @@ Doc.create =
 			)
 		)
 		{
-			console.log( 'Dinherit' );
 			return inherit;
 		}
 	}
 	
-	console.log( 'Dnew' );
-
 	return (
 		new Doc(
 			_tag,

@@ -312,11 +312,12 @@ Para.prototype.draw =
 			height =
 				this.height * view.zoom;
 
+		// adds 1 to width so the caret is visible.
 		f =
 		this.$fabric =
 			new Euclid.Fabric(
-				width,
-				height
+				width + 1, 
+				height + 1
 			);
 
 		f.scale( zoom );
