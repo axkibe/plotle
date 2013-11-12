@@ -16,7 +16,7 @@
 /*
 | Turn on checking on server side by default.
 */
-GLOBAL.RELEASE = false;
+GLOBAL.CHECK = true;
 
 if( typeof( require ) === 'undefined' )
 {
@@ -1109,7 +1109,7 @@ Server.prototype.prepareResources =
 
 						global_defs :
 						{
-							'RELEASE' : true
+							'CHECK' : false
 						}
 					}
 				),

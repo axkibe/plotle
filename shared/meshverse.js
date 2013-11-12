@@ -647,7 +647,7 @@ Meshverse.prototype.Point =
 /*
 | Some sanity tests on the patterns.
 */
-if( !RELEASE )
+if( CHECK )
 {
 	for( var k in Meshverse.prototype )
 	{
