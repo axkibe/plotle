@@ -118,6 +118,9 @@ Note.create =
 	)
 {
 	var
+		alter =
+			null,
+
 		doc =
 			null,
 
@@ -151,6 +154,13 @@ Note.create =
 	{
 		switch( arguments[ a ] )
 		{
+			case 'alter' :
+
+				alter =
+					arguments[ a + 1 ];
+
+				break;
+
 			case 'doc' :
 
 				doc =
@@ -227,6 +237,28 @@ Note.create =
 				'invalid argument: ' + arguments[ a ]
 			);
 
+		}
+	}
+
+	if( alter )
+	{
+		for( var k in alter )
+		{
+			switch( k )
+			{
+				case 'scrolly' :
+
+					scrolly =
+						alter[ k ];
+
+					break;
+
+				default :
+
+					throw new Error(
+						'alter key ' + k + ' not supported'
+					);
+			}
 		}
 	}
 
@@ -337,9 +369,13 @@ Note.create =
 			(
 				inherit.sub.doc === doc
 			)
+			&&
+			(
+				inherit.scrollbarY.pos === scrolly
+			)
 		)
 		{
-			return inherit;
+			return inherit; XXX
 		}
 	}
 
@@ -691,54 +727,6 @@ Note.prototype.highlight =
 };
 
 
-
-
-/*
-| Actualizes the scrollbar.
-|
-| TODO this is not immutable
-*/
-/*
-Note.prototype.setScrollbar =
-	function(
-		pos
-	)
-{
-	var
-		sbary =
-			this.scrollbarY;
-
-	if( !sbary.visible )
-	{
-		return;
-	}
-
-	var
-		zone =
-			this.zone;
-
-	if( !Jools.is( pos ) )
-	{
-		pos =
-			sbary.pos;
-	}
-
-	this.scrollbarY =
-		new Visual.Scrollbar(
-			pos,
-			zone.height - this.innerMargin.y,
-			this.sub.doc.height,
-			Euclid.Point.renew(
-				zone.pse.x,
-				zone.pnw.y + theme.scrollbar.vdis,
-				sbary.pnw
-			),
-			zone.height - theme.scrollbar.vdis * 2
-		);
-};
-*/
-
-
 /*
 | Scrolls the note so the caret comes into view.
 */
@@ -747,13 +735,10 @@ Note.prototype.scrollCaretIntoView =
 {
 	var
 		mark =
-			this.mark,
-
-		scrolly =
-			this.scrollbarY,
+			shell.space.mark,
 
 		sy =
-			scrolly.pos,
+			this.scrollbarY.pos,
 
 		para =
 			shell.space.getSub(
@@ -761,20 +746,17 @@ Note.prototype.scrollCaretIntoView =
 				'Para'
 			);
 
-	if( CHECK && para.constructor !== Visual.Para )
+	if( CHECK )
 	{
-		throw new Error(
-			'para not a para.'
-		);
+		if( para.constructor !== Visual.Para )
+		{
+			throw new Error(
+				'para not a para.'
+			);
+		}
 	}
 
 	var
-		pnw =
-			this.sub.doc.getPNW(
-				this,
-				para.key
-			),
-
 		zone =
 			this.zone,
 
@@ -791,6 +773,12 @@ Note.prototype.scrollCaretIntoView =
 			para.locateOffset(
 				mark.sign.at1
 			).p,
+		
+		pnw =
+			this.sub.doc.getPNW(
+				this,
+				para.key
+			),
 
 		s =
 			Math.round( p.y + descend ),
@@ -799,17 +787,19 @@ Note.prototype.scrollCaretIntoView =
 			s - Math.round( fs + descend );
 
 
-	console.log( n, pnw.y, imargin.n );
-
 	if( n + pnw.y - imargin.n < sy )
 	{
-		this.setScrollbar(
+		shell.setAttr(
+			this.key,
+			'scrolly',
 			n + pnw.y - imargin.n
 		);
 	}
 	else if( s + pnw.y + imargin.s > sy + zone.height )
 	{
-		this.setScrollbar(
+		shell.setAttr(
+			this.key,
+			'scrolly',
 			s + pnw.y - zone.height + imargin.s
 		);
 	}
@@ -863,7 +853,9 @@ Note.prototype.mousewheel =
 		return false;
 	}
 
-	this.setScrollbar(
+	shell.setAttr(
+		this.key,
+		'scrolly',
 		this.scrollbarY.pos - dir * system.settings.textWheelSpeed
 	);
 

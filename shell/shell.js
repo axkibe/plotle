@@ -1121,6 +1121,29 @@ Shell.prototype.userMark =
 
 
 /*
+| Sets the attribute of an item
+*/
+Shell.prototype.setAttr =
+	function(
+		key,    // of item
+		attr,   // to set
+		val     // to set to
+	)
+{
+	this.$space =
+		Visual.Space.create(
+			'inherit',
+				this.$space,
+			'alter',
+				key,
+				attr,
+				val
+		);
+};
+
+
+
+/*
 | User is pressing a special key.
 */
 Shell.prototype.specialKey =

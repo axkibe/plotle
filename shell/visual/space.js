@@ -132,7 +132,8 @@ Visual.Space =
 			this.createItem(
 				tree.twig[ k ],
 				k,
-				inherit && inherit.sub[ k ]
+				inherit && inherit.sub[ k ],
+				alter && alter[ k ]
 			);
 	}
 
@@ -220,7 +221,7 @@ Space.create =
 				aitem =
 					alter[ arguments[ a + 1] ];
 
-				if( aitem === null )
+				if( !aitem )
 				{
 					aitem =
 					alter[ arguments[ a + 1] ] =
@@ -431,7 +432,8 @@ Space.prototype.createItem =
 	function(
 		tree,
 		key,
-		inherit
+		inherit,
+		alter
 	)
 {
 	var
@@ -459,7 +461,9 @@ Space.prototype.createItem =
 			'path',
 				path,
 			'mark',
-				this.mark.concerns( path )
+				this.mark.concerns( path ),
+			'alter',
+				alter
 		)
 	);
 };

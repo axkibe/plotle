@@ -128,7 +128,7 @@ Caret.prototype.concerns =
 	{
 		return null;
 	}
-}
+};
 
 
 /*
@@ -157,7 +157,7 @@ Caret.prototype.equals =
 			this.retainx === mark.retainx
 		)
 	);
-}
+};
 
 
 /*

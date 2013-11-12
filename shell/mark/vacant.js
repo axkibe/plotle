@@ -96,7 +96,7 @@ Vacant.create =
 		new Mark.Vacant( _tag );
 
 	return singleton;
-}
+};
 
 
 /*
@@ -108,7 +108,7 @@ Vacant.prototype.equals =
 	)
 {
 	return this.type === mark.type;
-}
+};
 
 
 /*
@@ -121,7 +121,7 @@ Vacant.prototype.concerns =
 	)
 {
 	return null;
-}
+};
 
 
 

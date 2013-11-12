@@ -316,7 +316,7 @@ Para.prototype.draw =
 		f =
 		this.$fabric =
 			new Euclid.Fabric(
-				width + 1, 
+				width + 1,
 				height + 1
 			);
 

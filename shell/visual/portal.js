@@ -167,6 +167,17 @@ Portal.create =
 
 		switch( arguments[ a ] )
 		{
+			case 'alter' :
+
+				if( arguments[ a + 1] )
+				{
+					throw new Error(
+						'alter not supported'
+					);
+				}
+
+				break;
+
 			case 'inherit' :
 
 				inherit =
