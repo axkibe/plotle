@@ -161,8 +161,8 @@ DocItem.prototype.click =
 				pnw.x,
 				pnw.y -
 					(
-						this.$scrollbarY ?
-							this.$scrollbarY.pos
+						this.scrollbarY ?
+							this.scrollbarY.pos
 							:
 							0
 					)

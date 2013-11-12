@@ -438,7 +438,7 @@ Para.prototype._drawCaret =
 			),
 
 		sbary =
-			item.$scrollbarY,
+			item.scrollbarY,
 
 		sy =
 			sbary ?
