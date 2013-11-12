@@ -216,7 +216,7 @@ Server.prototype.checkRepositorySchemaVersion =
 		if( version.version !== 4 )
 		{
 			throw new Error(
-				'Wrong repository schema version, expected 4, got '+
+				'Wrong repository schema version, expected 4, got ' +
 				version.version
 			);
 		}
@@ -1102,14 +1102,13 @@ Server.prototype.prepareResources =
 			compressor =
 				uglify.Compressor(
 					{
-							/*
 						dead_code :
 							true,
-							*/
 
 						global_defs :
 						{
-							'CHECK' : false
+							'CHECK' :
+								false
 						}
 					}
 				),
@@ -1124,23 +1123,30 @@ Server.prototype.prepareResources =
 		bundle =
 			ast.print_to_string( { } );
 	}
-
+	
 	// calculates the hash for the bundle
-	var bsha1 =
-		sha1.sha1hex( bundle );
+	var
+		bsha1 =
+			sha1.sha1hex( bundle ),
 
-	// registers the bundle as ressource
-	var br = new Resource(
-		'meshcraft-' + bsha1 + '.js',
-		'mc'
-	);
+		// registers the bundle as ressource
+		br =
+			new Resource(
+				'meshcraft-' + bsha1 + '.js',
+				'mc'
+			);
 
-	br.data = bundle;
+	br.data =
+		bundle;
 
 	this.$resources[ br.path ] =
 		br;
 
-	Jools.log( 'start', 'bundle:', bsha1 );
+	Jools.log(
+		'start',
+		'bundle:',
+		bsha1
+	);
 
 	// Prepends the CHECK flag after
 	// the bundle has been created.
@@ -1187,11 +1193,12 @@ Server.prototype.prepareResources =
 	}
 
 	// the index.html file
-	var main =
-		new Resource(
-			'shell/meshcraft.html',
-			'm'
-		);
+	var
+		main =
+			new Resource(
+				'shell/meshcraft.html',
+				'm'
+			);
 
 	main.data =
 		fs.readFile(
@@ -1236,8 +1243,17 @@ Server.prototype.prepareResources =
 			_);
 	}
 
-	Jools.log( 'start', 'uncompressed bundle size is ', br.data.length );
-	Jools.log( 'start', '  compressed bundle size is ', br.gzip.length );
+	Jools.log(
+		'start',
+		'uncompressed bundle size is ',
+		br.data.length
+	);
+
+	Jools.log(
+		'start',
+		'  compressed bundle size is ',
+		br.gzip.length
+	);
 };
 
 

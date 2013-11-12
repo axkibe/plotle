@@ -55,19 +55,38 @@ var
 var Space =
 Visual.Space =
 	function(
+		tag,
 		tree,
 		inherit,
 		spaceUser,
 		spaceTag,
 		access,
-		mark
+		mark,
+		alter
 	)
 {
-	if( CHECK && !mark )
+	if( CHECK )
 	{
-		throw new Error(
-			'mark must be valid'
-		);
+		if( tag !== _tag )
+		{
+			throw new Error(
+				'tag mismatch'
+			);
+		}
+
+		if( !mark )
+		{
+			throw new Error(
+				'mark must be valid'
+			);
+		}
+
+		if( !tree )
+		{
+			throw new Error(
+				'tree must be valid'
+			);
+		}
 	}
 
 	Visual.Base.call(
@@ -127,6 +146,201 @@ Jools.subclass(
 	Space,
 	Visual.Base
 );
+
+
+/*
+| Creates a space.
+*/
+Space.create =
+	function
+	(
+		// free strings
+	)
+{
+	var
+		access =
+			null,
+
+		alter =
+			null,
+
+		inherit =
+			null,
+
+		mark =
+			null,
+
+		spaceTag =
+			null,
+
+		spaceUser =
+			null,
+
+		tree =
+			null;
+
+	var
+		a =
+			0,
+
+		aZ =
+			arguments.length,
+
+		aitem;
+	
+
+	while( a < aZ )
+	{
+		switch( arguments[ a ] )
+		{
+			case 'access' :
+
+				access =
+					arguments[ a + 1 ];
+
+				a += 2;
+
+				break;
+			
+			case 'alter' :
+
+				// alters one item
+				// followed by these arguments
+				//
+				//   key ... of the item
+				//   attribute ... to change
+				//   value ... to set it to
+
+				if( alter === null )
+				{
+					alter =
+						{ };
+				}
+
+				aitem =
+					alter[ arguments[ a + 1] ];
+
+				if( aitem === null )
+				{
+					aitem =
+					alter[ arguments[ a + 1] ] =
+						{ };
+				}
+
+				aitem[ arguments[ a + 2 ] ] =
+					arguments[ a + 3 ];
+
+				a += 4;
+
+				break;
+
+			case 'inherit' :
+
+				inherit =
+					arguments[ a + 1 ];
+			
+				a += 2;
+
+				break;
+
+			case 'mark' :
+
+				mark =
+					arguments[ a + 1 ];
+
+				a += 2;
+
+				break;
+
+			case 'spaceTag' :
+
+				spaceTag =
+					arguments[ a + 1 ];
+
+				a += 2;
+
+				break;
+			
+			case 'spaceUser' :
+
+				spaceUser =
+					arguments[ a + 1 ];
+
+				a += 2;
+
+				break;
+
+			case 'tree' :
+
+				tree =
+					arguments[ a + 1 ];
+
+				a += 2;
+
+				break;
+
+		default :
+
+			throw new Error(
+				'invalid argument: ' + arguments[ a ]
+			);
+
+		}
+	}
+
+	if( inherit )
+	{
+		if( !access )
+		{
+			access =
+				inherit.access;
+		}
+
+		if( !alter )
+		{
+			alter =
+				inherit.alter;
+		}
+
+		if( !mark )
+		{
+			mark =
+				inherit.mark;
+		}
+
+		if( !spaceTag )
+		{
+			spaceTag =
+				inherit.spaceTag;
+		}
+
+		if( !spaceUser )
+		{
+			spaceUser =
+				inherit.spaceUser;
+		}
+		
+		if( !tree )
+		{
+			tree =
+				inherit.tree;
+		}
+	}
+
+	return (
+		new Space(
+			_tag,
+			tree,
+			inherit,
+			spaceUser,
+			spaceTag,
+			access,
+			mark,
+			alter
+		)
+	);
+};
+
 
 
 /*

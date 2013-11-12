@@ -271,13 +271,13 @@ Shell.prototype.update =
 
 
 	this.$space =
-		new Visual.Space(
-			tree,
-			this.$space,
-			this.$space.spaceUser,
-			this.$space.spaceTag,
-			this.$space.access,
-			mark
+		Visual.Space.create(
+			'tree',
+				tree,
+			'inherit',
+				this.$space,
+			'mark',
+				mark
 		);
 
 
@@ -1069,13 +1069,11 @@ Shell.prototype.userMark =
 		case 'space' :
 
 			this.$space =
-				new Visual.Space(
-					this.$space.tree,
-					this.$space,
-					this.$space.spaceUser,
-					this.$space.spaceTag,
-					this.$space.access,
-					mark
+				Visual.Space.create(
+					'inherit',
+						this.$space,
+					'mark',
+						mark
 				);
 
 			break;
@@ -1447,13 +1445,17 @@ Shell.prototype.onAquireSpace =
 			asw.access;
 
 	this.$space =
-		new Visual.Space(
-			tree,
-			null,
-			spaceUser,
-			spaceTag,
-			access,
-			Mark.Vacant.create( )
+		Visual.Space.create(
+			'tree',
+				tree,
+			'spaceUser',
+				spaceUser,
+			'spaceTag',
+				spaceTag,
+			'access',
+				access,
+			'mark',
+				Mark.Vacant.create( )
 		);
 
 	this.arrivedAtSpace(
