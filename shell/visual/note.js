@@ -86,7 +86,7 @@ Visual.Note =
 	this.zone =
 		zone;
 
-	this.$scrollbarY =
+	this.scrollbarY =
 		new Visual.Scrollbar(
 			scrolly,
 			zone.height - this.innerMargin.y,
@@ -312,7 +312,7 @@ Note.create =
 		if( scrolly === null )
 		{
 			scrolly =
-				inherit.$scrollbarY.pos;
+				inherit.scrollbarY.pos;
 		}
 
 		if( !tree )
@@ -460,7 +460,7 @@ Note.prototype.draw =
 			this.$fabric,
 
 		sbary =
-			this.$scrollbarY;
+			this.scrollbarY;
 
 	// no buffer hit?
 	if(
@@ -558,8 +558,6 @@ Note.prototype.draw =
 
 	if( sbary.visible )
 	{
-		this.setScrollbar( );
-
 		sbary.draw(
 			fabric,
 			view
@@ -697,7 +695,10 @@ Note.prototype.highlight =
 
 /*
 | Actualizes the scrollbar.
+|
+| TODO this is not immutable
 */
+/*
 Note.prototype.setScrollbar =
 	function(
 		pos
@@ -705,15 +706,16 @@ Note.prototype.setScrollbar =
 {
 	var
 		sbary =
-			this.$scrollbarY;
+			this.scrollbarY;
 
 	if( !sbary.visible )
 	{
 		return;
 	}
 
-	var zone =
-		this.zone;
+	var
+		zone =
+			this.zone;
 
 	if( !Jools.is( pos ) )
 	{
@@ -721,7 +723,7 @@ Note.prototype.setScrollbar =
 			sbary.pos;
 	}
 
-	this.$scrollbarY =
+	this.scrollbarY =
 		new Visual.Scrollbar(
 			pos,
 			zone.height - this.innerMargin.y,
@@ -734,6 +736,7 @@ Note.prototype.setScrollbar =
 			zone.height - theme.scrollbar.vdis * 2
 		);
 };
+*/
 
 
 /*
@@ -742,25 +745,23 @@ Note.prototype.setScrollbar =
 Note.prototype.scrollCaretIntoView =
 	function( )
 {
-	//console.log( 'TODO' );
-	/*
 	var
-		caret =
-			shell.$space.caret,
+		mark =
+			this.mark,
 
 		scrolly =
-			this.$scrollbarY,
+			this.scrollbarY,
 
 		sy =
 			scrolly.pos,
 
 		para =
-			shell.$space.getSub(
-				caret.sign.path,
+			shell.space.getSub(
+				mark.sign.path,
 				'Para'
 			);
 
-	if( para.constructor !== Visual.Para )
+	if( CHECK && para.constructor !== Visual.Para )
 	{
 		throw new Error(
 			'para not a para.'
@@ -768,12 +769,6 @@ Note.prototype.scrollCaretIntoView =
 	}
 
 	var
-		cp =
-			para.getCaretPos(
-				this,
-				caret
-			),
-
 		pnw =
 			this.sub.doc.getPNW(
 				this,
@@ -784,21 +779,40 @@ Note.prototype.scrollCaretIntoView =
 			this.zone,
 
 		imargin =
-			this.innerMargin;
+			this.innerMargin,
 
-	if( cp.n + pnw.y - imargin.n < sy )
+		fs =
+			this.sub.doc.font.twig.size,
+
+		descend =
+			fs * theme.bottombox,
+
+		p =
+			para.locateOffset(
+				mark.sign.at1
+			).p,
+
+		s =
+			Math.round( p.y + descend ),
+
+		n =
+			s - Math.round( fs + descend );
+
+
+	console.log( n, pnw.y, imargin.n );
+
+	if( n + pnw.y - imargin.n < sy )
 	{
 		this.setScrollbar(
-			cp.n + pnw.y - imargin.n
+			n + pnw.y - imargin.n
 		);
 	}
-	else if( cp.s + pnw.y + imargin.s > sy + zone.height )
+	else if( s + pnw.y + imargin.s > sy + zone.height )
 	{
 		this.setScrollbar(
-			cp.s + pnw.y - zone.height + imargin.s
+			s + pnw.y - zone.height + imargin.s
 		);
 	}
-	*/
 };
 
 
@@ -821,7 +835,7 @@ Note.prototype.scrollPage =
 			this.sub.doc.font.twig.size;
 
 	this.setScrollbar(
-		this.$scrollbarY.pos + dir * zone.height - fs * 2
+		this.scrollbarY.pos + dir * zone.height - fs * 2
 	);
 };
 
@@ -850,7 +864,7 @@ Note.prototype.mousewheel =
 	}
 
 	this.setScrollbar(
-		this.$scrollbarY.pos - dir * system.settings.textWheelSpeed
+		this.scrollbarY.pos - dir * system.settings.textWheelSpeed
 	);
 
 	shell.redraw =

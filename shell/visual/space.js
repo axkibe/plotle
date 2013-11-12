@@ -45,6 +45,9 @@ if( typeof( window ) === 'undefined' )
 	);
 }
 
+var
+	_tag =
+		'X38170216';
 
 /*
 | Constructor

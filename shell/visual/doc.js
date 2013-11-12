@@ -452,7 +452,7 @@ Doc.prototype.draw =
 */
 Doc.prototype.getPNWs =
 	function(
-		item
+		item // the item this doc belongs to
 	)
 {
 	if( this._$pnws )
@@ -567,7 +567,7 @@ Doc.prototype.getPNW =
 		key
 	)
 {
-	return this.getPNWs(item)[ key ];
+	return this.getPNWs( item )[ key ];
 };
 
 
