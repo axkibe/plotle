@@ -1715,6 +1715,12 @@ Para.prototype.specialKey =
 
 	if( show )
 	{
+		item =
+			shell.space.getSub(
+				this.path,
+				'Item'
+			);
+
 		item.scrollCaretIntoView( );
 
 		shell.redraw =

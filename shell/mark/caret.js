@@ -120,7 +120,10 @@ Caret.prototype.concerns =
 		path
 	)
 {
-	if( path.subPathOf( this.sign.path ) )
+	if(
+		path
+		&&
+		path.subPathOf( this.sign.path ) )
 	{
 		return this;
 	}
