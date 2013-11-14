@@ -867,7 +867,9 @@ Portal.prototype._weave =
 			this.mark,
 
 		section =
-			mark && mark.sign && mark.sign.path.get( -1 );
+			mark &&
+			mark.sign &&
+			mark.sign.path.get( -1 );
 
 	// TODO only fill here
 	f.paint(
@@ -973,6 +975,20 @@ Portal.prototype._weave =
 				this._fonts.moveTo
 		);
 
+
+		if(
+			mark &&
+			mark.type === 'caret' &&
+			mark.concerns( this.path )
+		)
+		{
+			this._drawCaret(
+				f,
+				view,
+				mark
+			);
+		}
+
 		f.scale( 1 / view.zoom );
 
 		f.deClip( );
@@ -1065,6 +1081,7 @@ Portal.prototype._fonts =
 /*
 | Returns the mark position.
 */
+/*
 Portal.prototype._getCaretPos =
 	function( )
 {
@@ -1109,7 +1126,7 @@ Portal.prototype._getCaretPos =
 		}
 	);
 };
-
+*/
 
 /*
 | Returns the point of a given offset.
@@ -1142,6 +1159,81 @@ Portal.prototype._locateOffset =
 			),
 		'y',
 			0
+	);
+};
+
+
+/*
+| Draws the caret
+*/
+Portal.prototype._drawCaret =
+	function(
+		fabric,
+		view,
+		mark
+	)
+{
+	var
+		space =
+			shell.space,
+
+		item =
+			shell.space.getSub(
+				this.path,
+				'Item'
+			),
+
+		section =
+			mark.sign.path.get( -1 );
+
+	if( section === 'moveToButton' )
+	{
+		return;
+	}
+	
+	var
+		font =
+			this._fonts[ section ],
+
+		fs =
+			font.twig.size,
+
+		descend =
+			fs * theme.bottombox,
+
+		fieldPNW =
+			this._$spaceFields[ section ].pnw,
+		
+		p =
+			this._locateOffset(
+				section,
+				mark.sign.at1
+			),
+
+		s =
+			Math.round( p.y + descend ) + fieldPNW.y,
+
+		n =
+			s - Math.round( fs + descend );
+
+	// TODO
+	/*
+	system.focusCenter(
+		'p',
+			view.point(
+				cx + zone.pnw.x,
+				cn + zone.pnw.y
+			)
+	);
+	*/
+
+	// draws the caret
+	fabric.fillRect(
+		'black',
+		p.x + fieldPNW.x,
+		n,
+		1,
+		s - n
 	);
 };
 
@@ -1226,70 +1318,45 @@ Portal.prototype.specialKey =
 	}
 };
 
+
 /*
-| User pressed right key.
+| User pressed backspace.
 */
-Portal.prototype._keyLeft =
+Portal.prototype._keyBackspace =
 	function( )
 {
 	var
-		// TODO call msign
-		csign =
+		sign =
 			this.mark.sign,
 
 		section =
-			csign.path.get( -1 );
+			sign.path.get( -1 );
 
 	if( !this._isSection( section ) )
 	{
 		return;
 	}
 
-	if( csign.at1 === 0 )
+	var
+		at1 =
+			sign.at1;
+
+	if( at1 <= 0 )
 	{
-		if( section === 'spaceTag' )
-		{
-			shell.userMark(
-				'set',
-				'type',
-					'caret',
-				'section',
-					'space',
-				'path',
-					// FIXME rather user this.path
-					new Path(
-						csign.path,
-						csign.path.length - 1,
-							'spaceUser'
-						),
-				'at1',
-					this.tree.twig.spaceUser.length
-			);
-
-			shell.redraw =
-				true;
-		}
-
 		return;
 	}
 
-	shell.userMark(
-		'set',
-		'type',
-			'caret',
-		'section',
-			'space',
-		'path',
-			csign.path,
-		'at1',
-			csign.at1 - 1
+	shell.peer.removeText(
+		this.subPaths[ section ],
+		at1 - 1,
+		1
 	);
 
 	shell.redraw =
 		true;
-
-	return;
 };
+
+
 
 /*
 | User pressed down key.
@@ -1298,20 +1365,27 @@ Portal.prototype._keyDown =
 	function( )
 {
 	var
-		csign =
+		sign =
 			this.mark.sign,
 
 		section =
-			csign.path.get( -1 );
+			sign.path.get( -1 );
 
-	if( !this._isSection( section ) || section === 'moveToButton' )
+	if(
+		!this._isSection( section )
+		||
+		section === 'moveToButton'
+	)
 	{
 		return;
 	}
 
 	var
 		cpos =
-			this._getCaretPos( );
+			this._locateOffset(
+				section,
+				sign.at1
+			);
 
 	switch( section )
 	{
@@ -1326,8 +1400,8 @@ Portal.prototype._keyDown =
 				'path',
 					// FIXME use this paths
 					new Path(
-						csign.path,
-						csign.path.length - 1,
+						sign.path,
+						sign.path.length - 1,
 						'spaceTag'
 					),
 				'at1',
@@ -1346,6 +1420,100 @@ Portal.prototype._keyDown =
 };
 
 
+
+/*
+| User pressed right key.
+*/
+Portal.prototype._keyLeft =
+	function( )
+{
+	var
+		// TODO call msign
+		sign =
+			this.mark.sign,
+
+		section =
+			sign.path.get( -1 );
+
+	if( !this._isSection( section ) )
+	{
+		return;
+	}
+
+	if( sign.at1 === 0 )
+	{
+		var
+			cycle =
+				null;
+
+		switch( section )
+		{
+			case 'spaceUser' :
+
+				cycle =
+					'moveToButton';
+
+				break;
+
+			case 'spaceTag' :
+
+				cycle =
+					'spaceUser';
+
+				break;
+
+			case 'moveToButton' :
+
+				cycle =
+					'spaceTag';
+
+				break;
+		}
+
+		shell.userMark(
+			'set',
+			'type',
+				'caret',
+			'section',
+				'space',
+			'path',
+				// FIXME rather user this.path
+				new Path(
+					sign.path,
+					sign.path.length - 1,
+						cycle
+					),
+			'at1',
+				cycle === 'moveToButton' ?
+					0
+					:
+					this.tree.twig[ cycle ].length
+		);
+
+		shell.redraw =
+			true;
+
+		return;
+	}
+
+	shell.userMark(
+		'set',
+		'type',
+			'caret',
+		'section',
+			'space',
+		'path',
+			sign.path,
+		'at1',
+			sign.at1 - 1
+	);
+
+	shell.redraw =
+		true;
+
+	return;
+};
+
 /*
 | User pressed down key.
 */
@@ -1353,11 +1521,11 @@ Portal.prototype._keyTab =
 	function( )
 {
 	var
-		csign =
+		sign =
 			this.mark.sign,
 
 		section =
-			csign.path.get( -1 );
+			sign.path.get( -1 );
 
 	if( !this._isSection( section ) )
 	{
@@ -1400,8 +1568,8 @@ Portal.prototype._keyTab =
 			'space',
 		'path',
 			new Path(
-				csign.path,
-				csign.path.length - 1,
+				sign.path,
+				sign.path.length - 1,
 					cycle
 			),
 		'at1',
@@ -1419,11 +1587,11 @@ Portal.prototype._keyUp =
 	function( )
 {
 	var
-		csign =
+		sign =
 			this.mark.sign,
 
 		section =
-			csign.path.get( -1 );
+			sign.path.get( -1 );
 
 	// TODO true circulation
 	if( !this._isSection( section ) || section === 'moveToButton' )
@@ -1433,7 +1601,10 @@ Portal.prototype._keyUp =
 
 	var
 		cpos =
-			this._getCaretPos( );
+			this._locateOffset(
+				section,
+				sign.at1
+			);
 
 	switch( section )
 	{
@@ -1447,8 +1618,8 @@ Portal.prototype._keyUp =
 					'space',
 				'path', // FIXME this.paths
 					new Path(
-						csign.path,
-						csign.path.length - 1,
+						sign.path,
+						sign.path.length - 1,
 							'spaceUser'
 						),
 				'at1',
@@ -1473,11 +1644,11 @@ Portal.prototype._keyRight =
 	function( )
 {
 	var
-		csign =
+		sign =
 			this.mark.sign,
 
 		section =
-			csign.path.get( -1 );
+			sign.path.get( -1 );
 
 	if( !this._isSection( section ) )
 	{
@@ -1489,29 +1660,58 @@ Portal.prototype._keyRight =
 			this.tree.twig[ section ];
 
 	// FIXME make true circulation
-	if( value && csign.at1 >= value.length )
+	if(
+		section === 'moveToButton'
+		||
+		( value && sign.at1 >= value.length )
+	)
 	{
-		if( section === 'spaceUser' )
-		{
-			shell.userMark(
-				'set',
-				'type',
-					'caret',
-				'section',
-					'space',
-				'path', // FIXME this.paths
-					new Path(
-						csign.path,
-						csign.path.length - 1,
-						'spaceTag'
-					),
-				'at1',
-					0
-			);
+		var
+			cycle =
+				null;
 
-			shell.redraw =
-				true;
+		switch( section )
+		{
+			case 'spaceUser' :
+
+				cycle =
+					'spaceTag';
+
+				break;
+
+			case 'spaceTag' :
+
+				cycle =
+					'moveToButton';
+
+				break;
+
+			case 'moveToButton' :
+
+				cycle =
+					'spaceUser';
+	
+				break;
 		}
+
+		shell.userMark(
+			'set',
+			'type',
+				'caret',
+			'section',
+				'space',
+			'path', // FIXME this.paths
+				new Path(
+					sign.path,
+					sign.path.length - 1,
+					cycle
+				),
+			'at1',
+				0
+		);
+
+		shell.redraw =
+			true;
 
 		return;
 	}
@@ -1523,9 +1723,9 @@ Portal.prototype._keyRight =
 		'section',
 			'space',
 		'path',
-			csign.path,
+			sign.path,
 		'at1',
-			csign.at1 + 1
+			sign.at1 + 1
 	);
 
 	shell.redraw =
@@ -1536,54 +1736,17 @@ Portal.prototype._keyRight =
 
 
 /*
-| User pressed backspace.
-*/
-Portal.prototype._keyBackspace =
-	function( )
-{
-	var
-		csign =
-			this.mark.sign,
-
-		section =
-			csign.path.get( -1 );
-
-	if( !this._isSection( section ) )
-	{
-		return;
-	}
-
-	var at1 =
-		csign.at1;
-
-	if( at1 <= 0 )
-	{
-		return;
-	}
-
-	shell.peer.removeText(
-		this.subPaths[ section ],
-		at1 - 1,
-		1
-	);
-
-	shell.redraw =
-		true;
-};
-
-
-/*
 | User pressed del.
 */
 Portal.prototype._keyDel =
 	function( )
 {
 	var
-		csign =
+		sign =
 			this.mark.sign,
 
 		section =
-			csign.path.get( -1 ),
+			sign.path.get( -1 ),
 
 		value =
 			this.tree.twig[ section ];
@@ -1593,8 +1756,9 @@ Portal.prototype._keyDel =
 		return;
 	}
 
-	var at1 =
-		csign.at1;
+	var
+		at1 =
+			sign.at1;
 
 	if( at1 >= value.length )
 	{
@@ -1619,11 +1783,11 @@ Portal.prototype._keyEnd =
 	function( )
 {
 	var
-		csign =
+		sign =
 			this.mark.sign,
 
 		section =
-			csign.path.get( -1 );
+			sign.path.get( -1 );
 
 	if( !this._isSection( section ) )
 	{
@@ -1632,7 +1796,7 @@ Portal.prototype._keyEnd =
 
 	var
 		at1 =
-			csign.at1,
+			sign.at1,
 
 		value =
 			this.tree.twig[ section ];
@@ -1649,7 +1813,7 @@ Portal.prototype._keyEnd =
 		'section',
 			'space',
 		'path',
-			csign.path,
+			sign.path,
 		'at1',
 			value.length
 	);
@@ -1830,10 +1994,10 @@ Portal.prototype._keyPos1 =
 	function( )
 {
 	var
-		csign =
+		sign =
 			this.mark.sign;
 
-	if( csign.at1 <= 0 )
+	if( sign.at1 <= 0 )
 	{
 		return;
 	}
@@ -1845,7 +2009,7 @@ Portal.prototype._keyPos1 =
 		'section',
 			'space',
 		'path',
-			csign.path,
+			sign.path,
 		'at1',
 			0
 	);

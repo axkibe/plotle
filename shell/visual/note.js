@@ -375,7 +375,7 @@ Note.create =
 			)
 		)
 		{
-			return inherit; XXX
+			return inherit; // XXX
 		}
 	}
 

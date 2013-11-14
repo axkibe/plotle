@@ -360,10 +360,9 @@ Para.prototype.draw =
 			mark =
 				shell.space.mark;
 
-		// TODO use concerns
 		if(
-			mark.sign &&
-			mark.sign.path.equals( this.textPath )
+			mark &&
+			mark.concerns( this.path )
 		)
 		{
 			this._drawCaret(
@@ -420,49 +419,7 @@ Para.prototype._drawCaret =
 		n =
 			s - Math.round( fs + descend );
 
-		/*
-
-		doc =
-			item.sub.doc,
-
-		zone =
-			item.zone,
-
-		/*
-		pnw =
-			doc.getPNW(
-				item,
-				this.key
-			),
-
-		sbary =
-			item.scrollbarY,
-
-		sy =
-			sbary ?
-				Math.round( sbary.pos )
-				:
-				0,
-
-		cn =
-			Jools.limit(
-				0,
-				n + pnw.y - sy,
-				zone.height
-			),
-
-		cs =
-			Jools.limit(
-				0,
-				s + pnw.y - sy,
-				zone.height
-			),
-
-		cx =
-			p.x + pnw.x;
-		*/
-
-	// TODO use X/Y
+	// TODO
 	/*
 	system.focusCenter(
 		'p',
@@ -756,6 +713,12 @@ Para.prototype.getOffsetAt =
 		{
 			break;
 		}
+	}
+
+	if( a > text.length )
+	{
+		a =
+			text.length;
 	}
 
 	if( dx - x1 < x2 - dx && a > 0 )
@@ -1118,7 +1081,7 @@ Para.prototype._keyDown =
 	if( r < doc.tree.length - 1 )
 	{
 		var ve =
-			doc.atRank(r + 1);
+			doc.atRank( r + 1 );
 
 		at1 =
 			ve.getOffsetAt( 0, x );
