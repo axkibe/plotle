@@ -1639,22 +1639,45 @@ Portal.prototype._keyUp =
 		section =
 			sign.path.get( -1 );
 
-	// TODO true circulation
-	if( !this._isSection( section ) || section === 'moveToButton' )
+	if(
+		!this._isSection( section )
+	)
 	{
 		return;
 	}
 
 	var
-		cpos =
-			this._locateOffset(
-				section,
-				sign.at1
-			);
+		cpos;
 
 	switch( section )
 	{
+		case 'spaceUser' :
+
+			shell.userMark(
+				'set',
+				'type',
+					'caret',
+				'section',
+					'space',
+				'path', // FIXME this.paths
+					new Path(
+						sign.path,
+						sign.path.length - 1,
+							'moveToButton'
+						),
+				'at1',
+					0
+			);
+
+			break;
+
 		case 'spaceTag' :
+
+			cpos =
+				this._locateOffset(
+					section,
+					sign.at1
+				);
 
 			shell.userMark(
 				'set',
@@ -1674,6 +1697,26 @@ Portal.prototype._keyUp =
 						cpos.x +
 							this._$spaceFields.spaceTag.pnw.x
 					)
+			);
+
+			break;
+
+		case 'moveToButton' :
+
+			shell.userMark(
+				'set',
+				'type',
+					'caret',
+				'section',
+					'space',
+				'path', // FIXME this.paths
+					new Path(
+						sign.path,
+						sign.path.length - 1,
+							'spaceTag'
+						),
+				'at1',
+					0
 			);
 
 			break;
