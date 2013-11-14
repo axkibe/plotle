@@ -824,7 +824,9 @@ Note.prototype.scrollPage =
 		fs =
 			this.sub.doc.font.twig.size;
 
-	this.setScrollbar(
+	shell.setAttr(
+		this.key,
+		'scrolly',
 		this.scrollbarY.pos + dir * zone.height - fs * 2
 	);
 };

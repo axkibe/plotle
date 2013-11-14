@@ -285,8 +285,6 @@ Para.prototype.draw =
 		pnw     // pnw of this para
 	)
 {
-//	console.log(this.path);
-
 	var
 		f =
 			this.$fabric,
@@ -705,7 +703,7 @@ Para.prototype.getOffsetAt =
 	)
 	{
 		ftoken =
-			fline.a[token];
+			fline.a[ token ];
 
 		if( x <= ftoken.x + ftoken.w )
 		{
@@ -727,17 +725,21 @@ Para.prototype.getOffsetAt =
 	var
 		dx =
 			x - ftoken.x,
+
 		text =
 			ftoken.t,
+
 		x1 =
 			0,
+
 		x2 =
 			0,
+
 		a;
 
 	for(
 		a = 0;
-		a < text.length;
+		a <= text.length;
 		a++
 	)
 	{
@@ -760,7 +762,7 @@ Para.prototype.getOffsetAt =
 	{
 		a--;
 	}
-
+		
 	return ftoken.o + a;
 };
 
