@@ -1186,7 +1186,10 @@ Portal.prototype._drawCaret =
 		section =
 			mark.sign.path.get( -1 );
 
-	if( section === 'moveToButton' )
+	if(
+		!this._isSection( section )
+		||
+		section === 'moveToButton' )
 	{
 		return;
 	}
@@ -1373,23 +1376,24 @@ Portal.prototype._keyDown =
 
 	if(
 		!this._isSection( section )
-		||
-		section === 'moveToButton'
 	)
 	{
 		return;
 	}
+		
 
 	var
-		cpos =
-			this._locateOffset(
-				section,
-				sign.at1
-			);
+		cpos;
 
 	switch( section )
 	{
 		case 'spaceUser' :
+		
+			cpos =
+				this._locateOffset(
+					section,
+					sign.at1
+				);
 
 			shell.userMark(
 				'set',
@@ -1410,6 +1414,48 @@ Portal.prototype._keyDown =
 						cpos.x +
 							this._$spaceFields.spaceUser.pnw.x
 					)
+			);
+		
+			break;
+
+		case 'spaceTag' :
+			
+			shell.userMark(
+				'set',
+				'type',
+					'caret',
+				'section',
+					'space',
+				'path',
+					// FIXME use this paths
+					new Path(
+						sign.path,
+						sign.path.length - 1,
+						'moveToButton'
+					),
+				'at1',
+					0
+			);
+
+			break;
+
+		case 'moveToButton' :
+	
+			shell.userMark(
+				'set',
+				'type',
+					'caret',
+				'section',
+					'space',
+				'path',
+					// FIXME use this paths
+					new Path(
+						sign.path,
+						sign.path.length - 1,
+						'spaceUser'
+					),
+				'at1',
+					0
 			);
 
 			break;
