@@ -42,6 +42,21 @@ Euclid.View =
 		fact
 	)
 {
+	if( CHECK )
+	{
+		if( !(pan instanceof Euclid.Point) )
+		{
+			throw new Error(
+				'pan not a point'
+			);
+		}
+
+		Jools.ensureInt(
+			pan.x,
+			pan.y
+		);
+	}
+
 	this.pan =
 		pan;
 
@@ -169,8 +184,11 @@ View.prototype.y =
 
 	if( a1 instanceof Euclid.Point )
 	{
-		x = a1.x;
-		y = a1.y;
+		x =
+			a1.x;
+
+		y =
+			a1.y;
 	}
 	else
 	{
@@ -179,15 +197,20 @@ View.prototype.y =
 			typeof( a2 ) !== 'number'
 		)
 		{
-			throw new Error( 'not a number' );
+			throw new Error(
+				'not a number'
+			);
 		}
 
-		x = a1;
-		y = a2;
+		x =
+			a1;
+
+		y =
+			a2;
 	}
 
 	return Math.round(
-		(y + this.pan.y) * this.zoom
+		( y + this.pan.y ) * this.zoom
 	);
 };
 
@@ -201,12 +224,16 @@ View.prototype.dey =
 		a2
 	)
 {
-	var x, y;
+	var
+		x, y;
 
 	if( a1 instanceof Euclid.Point )
 	{
-		x = a1.x;
-		y = a1.y;
+		x =
+			a1.x;
+
+		y =
+			a1.y;
 	}
 	else
 	{
@@ -215,11 +242,16 @@ View.prototype.dey =
 			typeof( a2 ) !== 'number'
 		)
 		{
-			throw new Error( 'not a number' );
+			throw new Error(
+				'not a number'
+			);
 		}
 
-		x = a1;
-		y = a2;
+		x =
+			a1;
+
+		y =
+			a2;
 	}
 
 	return Math.round(
@@ -239,12 +271,13 @@ View.prototype.home =
 		return this._$home;
 	}
 
-	var home =
-	this._$home =
-		new View(
-			Euclid.Point.zero,
-			this.fact
-		);
+	var
+		home =
+		this._$home =
+			new View(
+				Euclid.Point.zero,
+				this.fact
+			);
 
 	return home;
 };
@@ -323,8 +356,8 @@ View.prototype.rect =
 		a2
 	)
 {
-	if (this.zoom === 1) {
-
+	if( this.zoom === 1 )
+	{
 		var
 			r =
 				(a1 instanceof Euclid.Rect) ?
@@ -336,8 +369,10 @@ View.prototype.rect =
 					);
 
 		return (
-			(this.pan.x === 0 && this.pan.y === 0) ?
-			r :
+			( this.pan.x === 0 && this.pan.y === 0 )
+			?
+			r
+			:
 			r.add( this.pan )
 		);
 	}
@@ -346,7 +381,7 @@ View.prototype.rect =
 		pnw,
 		pse;
 
-	if (a1 instanceof Euclid.Rect)
+	if( a1 instanceof Euclid.Rect )
 	{
 		pnw =
 			a1.pnw;
@@ -392,13 +427,26 @@ View.prototype.review =
 		p
 	)
 {
-	var pan = this.pan;
-	var f1;
+	var
+		pan =
+			this.pan,
 
-	if (df === 0)
-		{ f1 = 0; }
+		f1;
+
+	if( df === 0 )
+	{
+		f1 =
+			0;
+	}
 	else
-		{ f1 = Jools.limit( theme.zoom.min, this.fact + df, theme.zoom.max); }
+	{
+		f1 =
+			Jools.limit(
+				theme.zoom.min,
+				this.fact + df,
+				theme.zoom.max
+			);
+	}
 
 	var z1 = Math.pow(1.1, f1);
 	var f = 1 / z1  - 1 / this.zoom;

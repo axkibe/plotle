@@ -1759,8 +1759,8 @@ Space.prototype.dragMove =
 			this.$view =
 				new Euclid.View(
 					action.pan.add(
-						pd.x / view.zoom,
-						pd.y / view.zoom
+						Math.round( pd.x / view.zoom ),
+						Math.round( pd.y / view.zoom )
 					),
 					view.fact
 				);
