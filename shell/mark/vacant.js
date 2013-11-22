@@ -68,8 +68,8 @@ Mark.Vacant =
 
 
 Jools.subclass(
-	Mark,
-	Vacant
+	Vacant,
+	Mark
 );
 
 
@@ -107,6 +107,8 @@ Vacant.prototype.equals =
 		mark
 	)
 {
+	console.log( 'AAAAA' );
+
 	return this.type === mark.type;
 };
 

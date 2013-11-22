@@ -137,6 +137,8 @@ Caret.prototype.equals =
 		mark
 	)
 {
+	console.log( this.type );
+
 	if( !mark )
 	{
 		return false;

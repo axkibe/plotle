@@ -394,9 +394,6 @@ Para.prototype._drawCaret =
 	)
 {
 	var
-		space =
-			shell.space,
-
 		item =
 			shell.space.getSub(
 				this.path,
@@ -899,7 +896,7 @@ Para.prototype.input =
 			item.sub.doc;
 
     for(
-		var rx = reg.exec(text);
+		var rx = reg.exec( text );
 		rx !== null;
 		rx = reg.exec( text )
 	)
@@ -1459,17 +1456,10 @@ Para.prototype._keyLeft =
 		bAt1
 	)
 {
-	var
-		mark =
-			this.mark,
-
-		space =
-			shell.space;
-
-	if( mark.sign.at1 > 0 )
+	if( at1 > 0 )
 	{
 		this._setMark(
-			mark.sign.at1 - 1,
+			at1 - 1,
 			null,
 			bPath,
 			bAt1
@@ -1515,10 +1505,6 @@ Para.prototype._keyPos1 =
 		bAt1
 	)
 {
-	var
-		space =
-			shell.space;
-
 	if( at1 === 0 )
 	{
 		return false;
@@ -1548,10 +1534,6 @@ Para.prototype._keyRight =
 		bAt1
 	)
 {
-	var
-		space = // XXX
-			shell.space;
-
 	if( at1 < this.text.length )
 	{
 		this._setMark(
@@ -1638,8 +1620,9 @@ Para.prototype._keyUp =
 	}
 
 	// goto prev para
-	var r =
-		doc.tree.rankOf( this.key );
+	var
+		r =
+			doc.tree.rankOf( this.key );
 
 	if( r > 0 )
 	{

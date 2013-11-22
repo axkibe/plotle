@@ -38,7 +38,7 @@ var
 ( function( ) {
 'use strict';
 
-if( typeof( window ) === 'undefined' )
+if( CHECK && typeof( window ) === 'undefined' )
 {
 	throw new Error(
 		'this code needs a browser!'
@@ -358,35 +358,52 @@ Space.prototype.focusedItem =
 	function( )
 {
 	var
-		mark =
-			this.mark;
-
-	if( !mark.sign )
-	{
-		return null;
-	}
-
-	var
-		path =
-			mark.sign.path,
-
 		action =
-			shell.bridge.action( );
+			shell.bridge.action( ),
 
+		mark =
+			this.mark,
+			
+		path =
+			null;
 
-	switch( action && action.type )
+	switch( mark.type )
 	{
-		case 'ItemDrag' :
-		case 'ItemResize' :
+		case 'caret' :
 
-			if( action.itemPath.subPathOf( path ) )
-			{
-				return action.item;
-			}
+			path =
+				mark.sign.path;
 
 			break;
-	}
 
+		case 'range' :
+
+			path =
+				mark.eSign.path;
+
+			break;
+
+		default :
+			
+			return null;
+	}
+	
+	if( action )
+	{
+		switch( action.type )
+		{
+			case 'ItemDrag' :
+			case 'ItemResize' :
+
+				if( action.itemPath.subPathOf( path ) )
+				{
+					return action.item;
+				}
+
+				break;
+		}
+	}
+			
 	return (
 		this.getSub(
 			path,
@@ -2020,17 +2037,35 @@ Space.prototype.input =
 {
 	var
 		mark =
-			this.mark;
+			this.mark,
 
-	if( !mark.sign )
+		path;
+
+	switch( mark.type )
 	{
-		return;
+		case 'caret' :
+
+			path =
+				mark.sign.path;
+
+			break;
+
+		case 'range' :
+
+			path =
+				mark.eSign.path;
+
+			break;
+
+		default :
+
+			return;
 	}
 
 	var
 		node =
 			this.getSub(
-				mark.sign.path,
+				path,
 				'input'
 			);
 
@@ -2042,13 +2077,14 @@ Space.prototype.input =
 
 
 /*
-| Changes the zoom factor (around center)
+| Changes the zoom factor ( around center )
 */
 Space.prototype.changeZoom =
 	function( df )
 {
-	var pm =
-		this.$view.depoint( this._center ); // TODO
+	var
+		pm =
+			this.$view.depoint( this._center ); // TODO
 
 	this.$view =
 		this.$view.review(
@@ -2099,9 +2135,29 @@ Space.prototype.specialKey =
 
 	var
 		mark =
-			this.mark;
+			this.mark,
 
-	if ( !mark.sign )
+		path =
+			null;
+
+	switch( mark.type )
+	{
+		case 'caret' :
+			
+			path =
+				mark.sign.path;
+
+			break;
+
+		case 'range' :
+
+			path =
+				mark.eSign.path;
+
+			break;
+	}
+
+	if ( !path )
 	{
 		return;
 	}
@@ -2109,7 +2165,7 @@ Space.prototype.specialKey =
 	var
 		node =
 			this.getSub(
-				mark.sign.path,
+				path,
 				'specialKey'
 			);
 

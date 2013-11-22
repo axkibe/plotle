@@ -286,11 +286,11 @@ Shell.prototype.update =
 		this.s_etSelection(
 			selection.doc,
 			MeshMashine.tfxSign(
-				selection.sign1,
+				selection.bSign,
 				chgX
 			),
 			MeshMashine.tfxSign(
-				selection.sign2,
+				selection.eSign,
 				chgX
 			)
 		);
@@ -301,7 +301,7 @@ Shell.prototype.update =
 	/*
 	if(
 		selection &&
-		selection.sign1.path.get( -4 ) === csign.path.get( 1 )
+		selection.bSign.path.get( -4 ) === csign.path.get( 1 )
 	)
 	{
 		shell.d_eselect( );
@@ -1147,8 +1147,6 @@ Shell.prototype.userMark =
 	}
 
 
-	console.log( 'setting mark', mark.type, mark );
-
 	switch( section )
 	{
 		case 'space' :
@@ -1685,18 +1683,18 @@ Shell.prototype.logout =
 Shell.prototype.s_etSelection =
 	function(
 		doc,
-		sign1,
-		sign2
+		bSign,
+		eSign
 	)
 {
-	if( CHECK && !sign1 )
+	if( CHECK && !bSign )
 	{
-		throw new Error( 'sign1 null' );
+		throw new Error( 'bSign null' );
 	}
 
-	if( CHECK && !sign2 )
+	if( CHECK && !eSign )
 	{
-		throw new Error( 'sign2 null' );
+		throw new Error( 'eSign null' );
 	}
 
 	var
@@ -1704,8 +1702,8 @@ Shell.prototype.s_etSelection =
 		this._$s_election =
 			new Range(
 				doc,
-				sign1,
-				sign2
+				bSign,
+				eSign
 			);
 
 	system.setInput(

@@ -392,13 +392,6 @@ Doc.prototype.draw =
 		mark =
 			shell.space.mark;
 
-	console.log(
-		mark,
-		mark.type,
-		this.path,
-		mark && mark.concerns( this.path )
-	);
-
 	if(
 		mark &&
 		mark.type === 'range' &&
@@ -698,8 +691,6 @@ Doc.prototype.sketchRange =
 	}
 
 	mark.normalize( );
-
-	console.log( 'MMMMMMMMMMM', mark );
 
 	var
 		s1 =

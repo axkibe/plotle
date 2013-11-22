@@ -50,8 +50,8 @@ Mark.Range =
 	function(
 		tag,
 		doc,
-		sign1,
-		sign2
+		bSign,
+		eSign
 	)
 {
 	this.doc =
@@ -59,26 +59,26 @@ Mark.Range =
 
 	if( CHECK )
 	{
-		if( sign1.path.get(-1) !== 'text' )
+		if( bSign.path.get( -1 ) !== 'text' )
 		{
 			throw new Error(
-				's1.path.get(-1) !== "text"'
+				'bSign.path.get( -1 ) !== "text"'
 			);
 		}
 
-		if( sign2.path.get( -1 ) !== 'text' )
+		if( eSign.path.get( -1 ) !== 'text' )
 		{
 			throw new Error(
-				's2.path.get(-1) !== "text"'
+				'eSign.path.get( -1 ) !== "text"'
 			);
 		}
 	}
 
-	this.sign1 =
-		sign1;
+	this.bSign =
+		bSign;
 
-	this.sign2 =
-		sign2;
+	this.eSign =
+		eSign;
 
 	this.$begin =
 	this.$end =
@@ -100,15 +100,15 @@ Jools.subclass(
 Range.create =
 	function(
 		doc,
-		sign1,
-		sign2
+		bSign,
+		eSign
 	)
 {
 	return new Range(
 		_tag,
 		doc,
-		sign1,
-		sign2
+		bSign,
+		eSign
 	);
 };
 
@@ -121,28 +121,28 @@ Range.prototype.normalize =
 {
 	var
 		s1 =
-			this.sign1,
+			this.bSign,
 
 		s2 =
-			this.sign2;
+			this.eSign;
 
 	if( s1.path.equals( s2.path ) )
 	{
 		if( s1.at1 <= s2.at1 )
 		{
 			this.$begin =
-				this.sign1;
+				this.bSign;
 
 			this.$end =
-				this.sign2;
+				this.eSign;
 		}
 		else
 		{
 			this.$begin =
-				this.sign2;
+				this.eSign;
 
 			this.$end =
-				this.sign1;
+				this.bSign;
 		}
 
 		return;
@@ -277,7 +277,7 @@ Range.prototype.concerns =
 	if(
 		path
 		&&
-		path.subPathOf( this.sign1.path ) )
+		path.subPathOf( this.bSign.path ) )
 	{
 		return this;
 	}
@@ -289,7 +289,7 @@ Range.prototype.concerns =
 
 
 /*
-| Return true if sign1 equals sign2
+| Return true if bSign equals eSign
 */
 Jools.lazyFixate(
 	Range.prototype,
@@ -297,8 +297,8 @@ Jools.lazyFixate(
 	function( )
 	{
 		return (
-			this.sign1.path.equals( this.sign2.path ) &&
-			this.sign1.at1 === this.sign2.at1
+			this.bSign.path.equals( this.eSign.path ) &&
+			this.bSign.at1 === this.eSign.at1
 		);
 	}
 );
