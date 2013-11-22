@@ -150,7 +150,7 @@ DocItem.prototype.click =
 	shell.redraw =
 		true;
 
-	shell.deselect( );
+//	shell.d_eselect( ); TODO
 
 	var
 		pnw =

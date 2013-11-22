@@ -9,8 +9,7 @@
 | Export
 */
 var
-	Range =
-		null;
+	Mark;
 
 
 /*
@@ -27,19 +26,29 @@ var
 | Capsule
 */
 (function( ) {
+
 'use strict';
 
-if( typeof( window ) === 'undefined' )
+if( CHECK && typeof( window ) === 'undefined' )
 {
-	throw new Error( 'this code requires a browser!' );
+	throw new Error(
+		'this code requires a browser!'
+	);
 }
 
+
+var
+	_tag =
+		'X4052376';
 
 /*
 | Constructor.
 */
+var
 Range =
+Mark.Range =
 	function(
+		tag,
 		doc,
 		sign1,
 		sign2
@@ -48,14 +57,21 @@ Range =
 	this.doc =
 		doc;
 
-	if( CHECK && sign1.path.get(-1) !== 'text' )
+	if( CHECK )
 	{
-		throw new Error( 's1.path.get(-1) !== "text"' );
-	}
+		if( sign1.path.get(-1) !== 'text' )
+		{
+			throw new Error(
+				's1.path.get(-1) !== "text"'
+			);
+		}
 
-	if( CHECK && sign2.path.get( -1 ) !== 'text' )
-	{
-		throw new Error( 's2.path.get(-1) !== "text"' );
+		if( sign2.path.get( -1 ) !== 'text' )
+		{
+			throw new Error(
+				's2.path.get(-1) !== "text"'
+			);
+		}
 	}
 
 	this.sign1 =
@@ -68,7 +84,32 @@ Range =
 	this.$end =
 		null;
 
-	Jools.immute( this );
+	Mark.call( this );
+};
+
+
+Jools.subclass(
+	Range,
+	Mark
+);
+
+
+/*
+| Creates a mark
+*/
+Mark.create =
+	function(
+		doc,
+		sign1,
+		sign2
+	)
+{
+	return new Range(
+		_tag,
+		doc,
+		sign1,
+		sign2
+	);
 };
 
 
@@ -231,5 +272,6 @@ Jools.lazyFixate(
 		);
 	}
 );
+
 
 })( );

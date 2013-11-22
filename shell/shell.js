@@ -161,9 +161,6 @@ Shell =
 	this.bridge =
 		new Bridge( );
 
-	this._$selection =
-		null;
-
 	// greenscreen display if not null
 	this._$greenscreen =
 		null;
@@ -283,13 +280,10 @@ Shell.prototype.update =
 
 	// TODO move selection to space / forms
 
-	var
-		selection =
-			this._$selection;
-
+	/*
 	if( selection )
 	{
-		this.setSelection(
+		this.s_etSelection(
 			selection.doc,
 			MeshMashine.tfxSign(
 				selection.sign1,
@@ -301,18 +295,16 @@ Shell.prototype.update =
 			)
 		);
 	}
+	*/
 
 	// TODO figure out deleted selection
 	/*
-	var selection =
-		shell.getSelection( );
-
 	if(
 		selection &&
 		selection.sign1.path.get( -4 ) === csign.path.get( 1 )
 	)
 	{
-		shell.deselect( );
+		shell.d_eselect( );
 	}
 	*/
 
@@ -873,8 +865,22 @@ Shell.prototype.userMark =
 		// ...
 	)
 {
+	console.log.apply( console, arguments );
+
 	var
 		at1 =
+			null,
+
+		bAt1 =
+			null,
+
+		bPath =
+			null,
+
+		eAt1 =
+			null,
+
+		ePath =
 			null,
 
 		form =
@@ -918,6 +924,34 @@ Shell.prototype.userMark =
 			case 'at1' :
 
 				at1 =
+					arguments[ ++a ];
+
+				break;
+			
+			case 'bAt1' :
+
+				bAt1 =
+					arguments[ ++a ];
+
+				break;
+
+			case 'bPath' :
+
+				bPath =
+					arguments[ ++a ];
+
+				break;
+
+			case 'eAt1' :
+
+				eAt1 =
+					arguments[ ++a ];
+
+				break;
+
+			case 'ePath' :
+
+				ePath =
 					arguments[ ++a ];
 
 				break;
@@ -995,22 +1029,34 @@ Shell.prototype.userMark =
 	{
 		case 'caret' :
 
+			if( CHECK )
+			{
+				if(
+					( sign === null )
+					&&
+					( path === null || at1 === null )
+				)
+				{
+					throw new Error(
+						'set caret, sign and path/at1 === null'
+					);
+				}
+
+				if(
+					bAt1  !== null ||
+					bPath !== null ||
+					eAt1  !== null ||
+					ePath !== null
+				)
+				{
+					throw new Error(
+						'set caret, but with range signature'
+					);
+				}
+			}
+
 			if( sign === null )
 			{
-				if( CHECK && path === null )
-				{
-					throw new Error(
-						'set caret, sign and path === null'
-					);
-				}
-
-				if( CHECK && at1 === null )
-				{
-					throw new Error(
-						'set caret, sign and at1 === null'
-					);
-				}
-
 				sign =
 					new Sign(
 						null,
@@ -1031,6 +1077,45 @@ Shell.prototype.userMark =
 				false;
 
 			system.restartBlinker( );
+
+			break;
+
+		case 'range' :
+
+			if( CHECK )
+			{
+				if(
+					at1  !== null ||
+					path !== null
+				)
+				{
+					throw new Error(
+						'set range, but with caret signature'
+					);
+				}
+			}
+
+			mark =
+				Mark.Range.create(
+					shell.space.getSub(
+						bPath,
+						'Doc'
+					),
+					new Sign(
+						null,
+						'path',
+							bPath,
+						'at1',
+							bAt1
+					),
+					new Sign(
+						null,
+						'path',
+							ePath,
+						'at1',
+							eAt1
+					)
+				);
 
 			break;
 
@@ -1181,9 +1266,6 @@ Shell.prototype.input =
 		text
 	)
 {
-	// TODO, this has no place here
-	this.removeSelection( );
-
 	var
 		display =
 			this._getCurrentDisplay( );
@@ -1597,19 +1679,10 @@ Shell.prototype.logout =
 
 
 /*
-| Gets the selection.
-*/
-Shell.prototype.getSelection =
-	function( )
-{
-	return this._$selection;
-};
-
-
-/*
 | Sets the selection.
 */
-Shell.prototype.setSelection =
+/*
+Shell.prototype.s_etSelection =
 	function(
 		doc,
 		sign1,
@@ -1628,7 +1701,7 @@ Shell.prototype.setSelection =
 
 	var
 		selection =
-		this._$selection =
+		this._$s_election =
 			new Range(
 				doc,
 				sign1,
@@ -1643,6 +1716,7 @@ Shell.prototype.setSelection =
 
 	return selection;
 };
+*/
 
 /*
 | A space finished loading.
@@ -1672,13 +1746,15 @@ Shell.prototype.arrivedAtSpace =
 
 /*
 | Removes the selection including its contents.
+| XXX remove
 */
-Shell.prototype.removeSelection =
+/*
+Shell.prototype.r_emoveSelection =
 	function( )
 {
 	var
 		selection =
-			this._$selection;
+			this._$s_election;
 
 	if( !selection )
 	{
@@ -1687,7 +1763,7 @@ Shell.prototype.removeSelection =
 
 	selection.normalize( this.$space );
 
-	this.deselect( );
+	this.d_eselect( );
 
 	this.redraw =
 		true;
@@ -1705,27 +1781,6 @@ Shell.prototype.removeSelection =
 
 	return;
 };
-
-
-/*
-| Deselects the selection.
 */
-Shell.prototype.deselect =
-	function( )
-{
-	var selection =
-		this._$selection;
-
-	if( !selection )
-	{
-		return;
-	}
-
-	this._$selection =
-		null;
-
-	system.setInput( '' );
-};
-
 
 } )( );

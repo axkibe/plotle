@@ -939,6 +939,289 @@ Para.prototype.input =
 	item.scrollCaretIntoView( );
 };
 
+/*
+| Handles a special key
+*/
+Para.prototype.specialKey =
+	function(
+		key,
+		shift,
+		ctrl
+	)
+{
+	var
+		item =
+			shell.space.getSub(
+				this.path,
+				'Item'
+			),
+
+		doc =
+			item.sub.doc,
+
+		mark =
+			null,
+
+		show =
+			false;
+
+	if( ctrl )
+	{
+		switch( key )
+		{
+			case 'a' :
+
+				var
+					v0 =
+						doc.atRank( 0 ),
+					v1 =
+						doc.atRank( doc.tree.length - 1 );
+
+				shell.userMark(
+					'set',
+					'type',
+						'range',
+					'section',
+						'space',
+					'bPath',
+						v0.textPath,
+					'bAt1',
+						0,
+					'ePath',
+						v1.textPath,
+					'eAt1',
+						v1.text.length
+				);
+
+				shell.redraw =
+					true;
+
+				return true;
+		}
+	}
+
+	mark =
+		shell.space.mark;
+
+
+	if( !shift && mark.type === 'range' )
+	{
+		switch( key )
+		{
+			case 'backspace' :
+			case 'del' :
+
+				shell.removeRange( mark );
+
+				mark =
+					shell.space.mark;
+
+				show =
+					true;
+
+				key =
+					null;
+
+				break;
+
+			case 'enter' :
+
+				shell.removeRange( mark );
+	
+				mark =
+					shell.space.mark;
+
+				show =
+					true;
+
+				break;
+		}
+	}
+
+	var
+		keyHandler =
+			_keyMap[ key ],
+
+		at1 =
+			null,
+
+		bPath =
+			null,
+
+		bAt1 =
+			null,
+
+		retainx =
+			null;
+
+
+	switch( mark.type )
+	{
+		case 'caret' :
+
+			if( CHECK )
+			{
+				if( !this.path.subPathOf( mark.sign.path ) )
+				{
+					throw new Error(
+						'path mismatch'
+					);
+				}
+			}
+
+			at1 =
+				mark.sign.at1;
+
+			retainx =
+				mark.retainx;
+
+			if( shift )
+			{
+				bPath =
+					mark.sign.path;
+
+				bAt1 =
+					mark.sign.at1;
+			}
+
+			break;
+
+		case 'range' :
+
+			if( CHECK )
+			{
+				if( !this.path.subPathOf( mark.eSign.path ) )
+				{
+					throw new Error(
+						'path mismatch'
+					);
+				}
+			}
+
+			at1 =
+				mark.eSign.at1;
+
+			retainx =
+				mark.retainx;
+			
+			if( shift )
+			{
+				bPath =
+					mark.bSign.path;
+
+				bAt1 =
+					mark.bSign.at1;
+			}
+
+			break;
+	}
+
+	if( keyHandler )
+	{
+		show =
+			this[ keyHandler ](
+				item,
+				doc,
+				at1,
+				retainx,
+				bPath,
+				bAt1
+			)
+			||
+			show;
+	}
+	else
+	{
+		switch( key )
+		{
+			case 'pageup' :
+
+				item.scrollPage( true );
+
+				break;
+
+			case 'pagedown' :
+
+				item.scrollPage( false );
+
+				break;
+		}
+	}
+
+	if( show )
+	{
+		item =
+			shell.space.getSub(
+				this.path,
+				'Item'
+			);
+
+		item.scrollCaretIntoView( );
+
+		shell.redraw =
+			true;
+	}
+};
+
+
+/*
+| Returns the path to the .text attribute
+*/
+Jools.lazyFixate(
+	Para.prototype,
+	'textPath',
+	function( )
+	{
+		if( this.path === null )
+		{
+			return null;
+		}
+
+		return new Path(
+			this.path,
+			'++',
+				'text'
+		);
+	}
+);
+
+/*
++----------- private --------------
+*/
+
+// XXX
+
+var
+	_keyMap =
+		{
+			'backspace' :
+				'_keyBackspace',
+
+			'del' :
+				'_keyDel',
+
+			'down' :
+				'_keyDown',
+
+			'end' :
+				'_keyEnd',
+
+			'enter' :
+				'_keyEnter',
+
+			'left' :
+				'_keyLeft',
+
+			'pos1' :
+				'_keyPos1',
+
+			'right' :
+				'_keyRight',
+
+			'up' :
+				'_keyUp',
+		};
+
 
 /*
 | Backspace pressed.
@@ -946,14 +1229,18 @@ Para.prototype.input =
 Para.prototype._keyBackspace =
 	function(
 		item,
-		doc
+		doc,
+		at1,
+		retainx,
+		bPath,
+		bAt1
 	)
 {
-	if( this.mark.sign.at1 > 0 )
+	if( at1 > 0 )
 	{
 		shell.peer.removeText(
 			this.textPath,
-			this.mark.sign.at1 - 1,
+			at1 - 1,
 			1
 		);
 
@@ -966,8 +1253,9 @@ Para.prototype._keyBackspace =
 
 	if( r > 0 )
 	{
-		var ve =
-			doc.atRank( r - 1 );
+		var
+			ve =
+				doc.atRank( r - 1 );
 
 		shell.peer.join(
 			ve.textPath,
@@ -987,14 +1275,18 @@ Para.prototype._keyBackspace =
 Para.prototype._keyDel =
 	function(
 		item,
-		doc
+		doc,
+		at1,
+		retainx,
+		bPath,
+		bAt1
 	)
 {
-	if( this.mark.sign.at1 < this.text.length )
+	if( at1 < this.text.length )
 	{
 		shell.peer.removeText(
 			this.textPath,
-			this.mark.sign.at1,
+			at1,
 			1
 		);
 
@@ -1025,50 +1317,42 @@ Para.prototype._keyDel =
 Para.prototype._keyDown =
 	function(
 		item,
-		doc
+		doc,
+		at1,
+		retainx,
+		bPath,
+		bAt1
 	)
 {
 	var
-		mark =
-			this.mark,
-
 		flow =
 			this.flow,
 
-		at1,
-
 		cpos =
 			this.locateOffset(
-				mark.sign.at1
+				at1
 			),
 
 		x =
-			Jools.isnon( mark.retainx ) ?
-				mark.retainx :
+			retainx !== null ?
+				retainx :
 				cpos.p.x;
 
 	if( cpos.line < flow.length - 1 )
 	{
 		// stays within this para
 		at1 =
+
+		this._setMark(
 			this.getOffsetAt(
 				cpos.line + 1,
 				x
-			);
-
-		shell.userMark(
-			'set',
-			'type',
-				'caret',
-			'section',
-				'space',
-			'path',
-				this.textPath,
-			'at1',
-				at1,
-			'retainx',
-				x
+			),
+			x,
+			bPath,
+			bAt1
 		);
+
 
 		return true;
 	}
@@ -1080,8 +1364,9 @@ Para.prototype._keyDown =
 
 	if( r < doc.tree.length - 1 )
 	{
-		var ve =
-			doc.atRank( r + 1 );
+		var
+			ve =
+				doc.atRank( r + 1 );
 
 		at1 =
 			ve.getOffsetAt( 0, x );
@@ -1111,7 +1396,11 @@ Para.prototype._keyDown =
 Para.prototype._keyEnd =
 	function(
 		item,
-		doc
+		doc,
+		at1,
+		retainx,
+		bPath,
+		bAt1
 	)
 {
 	var
@@ -1126,16 +1415,11 @@ Para.prototype._keyEnd =
 		return false;
 	}
 
-	shell.userMark(
-		'set',
-		'type',
-			'caret',
-		'section',
-			'space',
-		'path',
-			this.textPath,
-		'at1',
-			text.length
+	this._setMark(
+		text.length,
+		null,
+		bPath,
+		bAt1
 	);
 
 	return true;
@@ -1148,7 +1432,9 @@ Para.prototype._keyEnd =
 Para.prototype._keyEnter =
 	function(
 		item,
-		doc
+		doc,
+		bPath,
+		bAt1
 	)
 {
 	shell.peer.split(
@@ -1166,7 +1452,11 @@ Para.prototype._keyEnter =
 Para.prototype._keyLeft =
 	function(
 		item,
-		doc
+		doc,
+		at1,
+		retainx,
+		bPath,
+		bAt1
 	)
 {
 	var
@@ -1178,16 +1468,11 @@ Para.prototype._keyLeft =
 
 	if( mark.sign.at1 > 0 )
 	{
-		shell.userMark(
-			'set',
-			'type',
-				'caret',
-			'section',
-				'space',
-			'path',
-				this.textPath,
-			'at1',
-				mark.sign.at1 - 1
+		this._setMark(
+			mark.sign.at1 - 1,
+			null,
+			bPath,
+			bAt1
 		);
 
 		return true;
@@ -1203,16 +1488,11 @@ Para.prototype._keyLeft =
 			ve =
 				doc.atRank( r - 1 );
 
-		shell.userMark(
-			'set',
-			'type',
-				'caret',
-			'section',
-				'space',
-			'path',
-				ve.textPath,
-			'at1',
-				ve.text.length
+		ve.setMark(
+			ve.text.length,
+			null,
+			bPath,
+			bAt1
 		);
 
 		return true;
@@ -1228,31 +1508,27 @@ Para.prototype._keyLeft =
 Para.prototype._keyPos1 =
 	function(
 		item,
-		doc
+		doc,
+		at1,
+		retainx,
+		bPath,
+		bAt1
 	)
 {
 	var
-		mark =
-			this.mark,
-
 		space =
 			shell.space;
 
-	if( mark.at1 === 0 )
+	if( at1 === 0 )
 	{
 		return false;
 	}
 
-	shell.userMark(
-		'set',
-		'type',
-			'caret',
-		'section',
-			'space',
-		'path',
-			this.textPath,
-		'at1',
-			0
+	this.setMark(
+		0,
+		null,
+		bPath,
+		bAt1
 	);
 
 	return true;
@@ -1265,28 +1541,24 @@ Para.prototype._keyPos1 =
 Para.prototype._keyRight =
 	function(
 		item,
-		doc
+		doc,
+		at1,
+		retainx,
+		bPath,
+		bAt1
 	)
 {
 	var
-		mark =
-			this.mark,
-
-		space =
+		space = // XXX
 			shell.space;
 
-	if( mark.sign.at1 < this.text.length )
+	if( at1 < this.text.length )
 	{
-		shell.userMark(
-			'set',
-			'type',
-				'caret',
-			'section',
-				'space',
-			'path',
-				this.textPath,
-			'at1',
-				mark.sign.at1 + 1
+		this._setMark(
+			at1 + 1,
+			null,
+			bPath,
+			bAt1
 		);
 
 		return true;
@@ -1297,19 +1569,15 @@ Para.prototype._keyRight =
 
 	if( r < doc.tree.length - 1 )
 	{
-		var ve =
-			doc.atRank( r + 1 );
+		var
+			ve =
+				doc.atRank( r + 1 );
 
-		shell.userMark(
-			'set',
-			'type',
-				'caret',
-			'section',
-				'space',
-			'path',
-				ve.textPath,
-			'at1',
-				0
+		ve._setMark(
+			0,
+			null,
+			bPath,
+			bAt1
 		);
 
 		return true;
@@ -1325,29 +1593,23 @@ Para.prototype._keyRight =
 Para.prototype._keyUp =
 	function(
 		item,
-		doc
+		doc,
+		at1,
+		retainx,
+		bPath,
+		bAt1
 	)
 {
 	var
-		mark =
-			this.mark,
-
 		cpos =
 			this.locateOffset(
-				mark.sign.at1
+				at1
 			),
 
 		x =
-			(
-				Jools.isnon( mark.retainx ) ?
-					mark.retainx :
-					cpos.p.x
-			),
-
-		space =
-			shell.space,
-
-		at1;
+			retainx !== null ?
+					retainx :
+					cpos.p.x;
 
 	if( cpos.line > 0 )
 	{
@@ -1412,343 +1674,93 @@ Para.prototype._keyUp =
 
 
 /*
-| Handles a special key
+| Sets the users caret or range
 */
-Para.prototype.specialKey =
+Para.prototype._setMark =
 	function(
-		key,
-		shift,
-		ctrl
+		at1,     // position to mark caret (or end of range)
+		retainx, // retains this x position when moving up/down
+		bPath,   // begin path when marking a range
+		bAt1     // begin at1  when marking a range
 	)
 {
-	var
-		selection =
-			shell.getSelection( ),
+	console.log( 'bP', bPath );
 
-		space =
-			shell.space,
-
-		item =
-			space.getSub(
-				this.path,
-				'Item'
-			),
-
-		doc =
-			item.sub.doc,
-
-		// if true the caret moved or the selection changed
-		show =
-			false;
-
-	if( ctrl )
+	if( !bPath )
 	{
-		switch( key )
+		if( retainx )
 		{
-			case 'a' :
-				var
-					v0 =
-						doc.atRank( 0 ),
-					v1 =
-						doc.atRank( doc.tree.length - 1 );
-
-				// TODO userMark
-
-				selection =
-					shell.setSelection(
-						doc,
-						new Sign(
-							{
-								path :
-									v0.textPath,
-								at1 :
-									0
-							}
-						),
-						new Sign(
-							{
-								path :
-									v1.textPath,
-
-								at1 :
-									v1.text.length
-							}
-						)
-					);
-
-				shell.userMark(
-					'set',
-					'type',
-						'caret',
-					'section',
-						'space',
-					'sign',
-						selection.sign2
-				);
-
-				shell.redraw =
-					true;
-
-				return true;
-		}
-	}
-
-	var select1 =
-		selection && selection.sign1;
-
-	if( !shift && selection )
-	{
-		switch( key )
-		{
-			case 'down' :
-			case 'end' :
-			case 'left' :
-			case 'pageup' :
-			case 'pagedown' :
-			case 'pos1' :
-			case 'right' :
-			case 'up' :
-
-				shell.deselect( );
-
-				show =
-					true;
-
-				break;
-
-			case 'backspace' :
-			case 'del' :
-
-				shell.removeSelection( );
-
-				selection =
-					null;
-
-				show =
-					true;
-
-				key = null;
-
-				break;
-
-			case 'enter' :
-
-				shell.removeSelection( );
-
-				selection =
-					null;
-
-				show =
-					true;
-
-				break;
-		}
-	}
-	else if ( shift && !selection )
-	{
-		switch( key )
-		{
-			case 'backup' :
-			case 'down' :
-			case 'end' :
-			case 'left' :
-			case 'pagedown' :
-			case 'pos1':
-			case 'right' :
-			case 'up' :
-
-				select1 =
-					shell.space.mark.sign;
-
-				show =
-					true;
-		}
-	}
-
-	switch( key )
-	{
-		case 'backspace' :
-
-			show =
-				this._keyBackspace(
-					item,
-					doc
-				) || show;
-
-			break;
-
-		case 'enter' :
-
-			show =
-				this._keyEnter(
-					item,
-					doc
-				) || show;
-
-			break;
-
-		case 'pageup' :
-
-			item.scrollPage( true );
-
-			break;
-
-		case 'pagedown' :
-
-			item.scrollPage( false );
-
-			break;
-
-		case 'down' :
-
-			show =
-				this._keyDown(
-					item,
-					doc
-				)
-				||
-				show;
-
-			break;
-
-		case 'end' :
-
-			show =
-				this._keyEnd(
-					item,
-					doc
-				)
-				||
-				show;
-
-			break;
-
-		case 'left' :
-
-			show =
-				this._keyLeft(
-					item,
-					doc
-				)
-				||
-				show;
-
-			break;
-
-		case 'pos1' :
-
-			show =
-				this._keyPos1(
-					item,
-					doc
-				)
-				||
-				show;
-
-			break;
-
-		case 'right' :
-
-			show =
-				this._keyRight(
-					item,
-					doc
-				)
-				||
-				show;
-
-			break;
-
-		case 'up' :
-
-			show =
-				this._keyUp(
-					item,
-					doc
-				)
-				||
-				show;
-
-			break;
-
-		case 'del' :
-
-			show =
-				this._keyDel(
-					item,
-					doc
-				)
-				||
-				show;
-
-			break;
-	}
-
-	var
-		mark =
-			shell.space.mark;
-
-	if( shift )
-	{
-		switch( key )
-		{
-			case 'end' :
-			case 'pos1' :
-			case 'left' :
-			case 'up' :
-			case 'right' :
-			case 'down' :
-
-				selection =
-					shell.setSelection(
-						doc,
-						select1,
-						shell.space.mark.sign
-					);
-
-				shell.redraw =
-					true;
-
-				break;
-		}
-	}
-
-	if( show )
-	{
-		item =
-			shell.space.getSub(
-				this.path,
-				'Item'
+			return shell.userMark(
+				'set',
+				'type',
+					'caret',
+				'section',
+					'space',
+				'path',
+					this.textPath,
+				'at1',
+					at1,
+				'retainx',
+					retainx
 			);
-
-		item.scrollCaretIntoView( );
-
-		shell.redraw =
-			true;
+		}
+		else
+		{
+			return shell.userMark(
+				'set',
+				'type',
+					'caret',
+				'section',
+					'space',
+				'path',
+					this.textPath,
+				'at1',
+					at1
+			);
+		}
+	}
+	else
+	{
+		if( retainx )
+		{
+			return shell.userMark(
+				'set',
+				'type',
+					'range',
+				'section',
+					'space',
+				'bPath',
+					bPath,
+				'bAt1',
+					bAt1,
+				'ePath',
+					this.ePath,
+				'eAt1',
+					at1,
+				'retainx',
+					retainx
+			);
+		}
+		else
+		{
+			return shell.userMark(
+				'set',
+				'type',
+					'range',
+				'section',
+					'space',
+				'bPath',
+					bPath,
+				'bAt1',
+					bAt1,
+				'ePath',
+					this.ePath,
+				'eAt1',
+					at1
+			);
+		}
 	}
 };
-
-
-/*
-| Returns the path to the .text attribute
-*/
-Jools.lazyFixate(
-	Para.prototype,
-	'textPath',
-	function( )
-	{
-		if( this.path === null )
-		{
-			return null;
-		}
-
-		return new Path(
-			this.path,
-			'++',
-				'text'
-		);
-	}
-);
 
 
 } )( );

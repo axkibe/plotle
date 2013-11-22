@@ -386,13 +386,11 @@ Doc.prototype.draw =
 {
 	// FIXME <pre>
 	var
-		selection =
-			shell.getSelection( ),
-
 		innerMargin =
 			item.innerMargin;
 
 	// draws the selection
+	/*
 	if (
 		selection &&
 		this.path &&
@@ -410,6 +408,10 @@ Doc.prototype.draw =
 			scrollp
 		);
 	}
+	*/
+
+	// XXX draw selection
+	// XXX move caret drawing to doc
 
 	var
 		// north-west points of paras
@@ -662,6 +664,7 @@ Doc.prototype.getParaAtPoint =
 /*
 | Sketches a selection.
 */
+/*
 Doc.prototype.sketchSelection =
 	function(
 		fabric,      // the fabric to path for
@@ -674,12 +677,6 @@ Doc.prototype.sketchSelection =
 		scrollp      // scroll position of the doc
 	)
 {
-	var
-		selection =
-			shell.getSelection( );
-
-	selection.normalize( shell.$space );
-
 	var
 		sp =
 			scrollp,
@@ -815,6 +812,7 @@ Doc.prototype.sketchSelection =
 		}
 	}
 };
+*/
 
 
 } )( );

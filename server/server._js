@@ -918,7 +918,7 @@ Server.prototype.prepareResources =
 		'shell/mark/caret.js',
 			'fb',
 
-		'shell/range.js',
+		'shell/mark/range.js',
 			'fb',
 
 		'shell/bridge.js',

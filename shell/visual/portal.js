@@ -615,7 +615,7 @@ Portal.prototype.click =
 		);
 	}
 
-	shell.deselect( );
+	// shell.d_eselect( ); TODO
 
 	return true;
 };
