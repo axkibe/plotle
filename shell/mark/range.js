@@ -51,7 +51,8 @@ Mark.Range =
 		tag,
 		doc,
 		bSign,
-		eSign
+		eSign,
+		retainx
 	)
 {
 	this.doc =
@@ -80,6 +81,9 @@ Mark.Range =
 	this.eSign =
 		eSign;
 
+	this.retainx =
+		retainx;
+
 	this.$begin =
 	this.$end =
 		null;
@@ -101,14 +105,16 @@ Range.create =
 	function(
 		doc,
 		bSign,
-		eSign
+		eSign,
+		retainx
 	)
 {
 	return new Range(
 		_tag,
 		doc,
 		bSign,
-		eSign
+		eSign,
+		retainx
 	);
 };
 
@@ -285,6 +291,39 @@ Range.prototype.concerns =
 	{
 		return null;
 	}
+};
+
+
+/*
+| Returns true if this mark equals another.
+*/
+Range.prototype.equals =
+	function(
+		mark
+	)
+{
+	if( !mark )
+	{
+		return false;
+	}
+
+	return (
+		this === mark
+		||
+		(
+			this.type === mark.type
+			&&
+			this.bSign.path.equals( mark.bSign.path )
+			&&
+			this.bSign.at1 === mark.bSign.at1
+			&&
+			this.eSign.path.equals( mark.bSign.path )
+			&&
+			this.eSign.at1 === mark.eSign.at1
+			&&
+			this.retainx === mark.retainx
+		)
+	);
 };
 
 

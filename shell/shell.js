@@ -1112,7 +1112,8 @@ Shell.prototype.userMark =
 							ePath,
 						'at1',
 							eAt1
-					)
+					),
+					retainx
 				);
 
 			break;
