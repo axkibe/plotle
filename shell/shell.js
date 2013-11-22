@@ -865,8 +865,6 @@ Shell.prototype.userMark =
 		// ...
 	)
 {
-	console.log.apply( console, arguments );
-
 	var
 		at1 =
 			null,
@@ -1148,6 +1146,8 @@ Shell.prototype.userMark =
 			}
 	}
 
+
+	console.log( 'setting mark', mark.type, mark );
 
 	switch( section )
 	{

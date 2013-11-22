@@ -562,8 +562,9 @@ Note.prototype.draw =
 		);
 	}
 
-	var action =
-		shell.bridge.action( );
+	var
+		action =
+			shell.bridge.action( );
 
 	// TODO move this logic into the callee
 	if(
@@ -730,13 +731,20 @@ Note.prototype.highlight =
 /*
 | Scrolls the note so the caret comes into view.
 */
-Note.prototype.scrollCaretIntoView =
+Note.prototype.scrollMarkIntoView =
 	function( )
 {
 	var
 		mark =
-			shell.space.mark,
+			shell.space.mark;
 
+	// TODO handle ranges
+	if( mark.type !== 'caret' )
+	{
+		return;
+	}
+
+	var
 		sy =
 			this.scrollbarY.pos,
 
@@ -755,6 +763,7 @@ Note.prototype.scrollCaretIntoView =
 			);
 		}
 	}
+
 
 	var
 		zone =

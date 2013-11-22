@@ -97,7 +97,7 @@ Jools.subclass(
 /*
 | Creates a mark
 */
-Mark.create =
+Range.create =
 	function(
 		doc,
 		sign1,
@@ -255,6 +255,36 @@ Range.prototype.innerText =
 	);
 
 	return buf.join( '' );
+};
+
+
+/*
+| Reflection.
+*/
+Range.prototype.type =
+	'range';
+
+
+/*
+| Returns this if an entity of that path should
+| be concerned about this mark.
+*/
+Range.prototype.concerns =
+	function(
+		path
+	)
+{
+	if(
+		path
+		&&
+		path.subPathOf( this.sign1.path ) )
+	{
+		return this;
+	}
+	else
+	{
+		return null;
+	}
 };
 
 

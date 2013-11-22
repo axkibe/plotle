@@ -8,13 +8,15 @@
 /*
 | Exports
 */
-var Sign;
+var
+	Sign;
 
 
 /*
 | Imports
 */
-var Jools;
+var
+	Jools;
 
 
 /*

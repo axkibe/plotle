@@ -362,6 +362,7 @@ Para.prototype.draw =
 
 		if(
 			mark &&
+			mark.type === 'caret' &&
 			mark.concerns( this.path )
 		)
 		{
@@ -936,7 +937,7 @@ Para.prototype.input =
 		}
     }
 
-	item.scrollCaretIntoView( );
+	item.scrollMarkIntoView( );
 };
 
 /*
@@ -1002,7 +1003,6 @@ Para.prototype.specialKey =
 
 	mark =
 		shell.space.mark;
-
 
 	if( !shift && mark.type === 'range' )
 	{
@@ -1156,7 +1156,7 @@ Para.prototype.specialKey =
 				'Item'
 			);
 
-		item.scrollCaretIntoView( );
+		item.scrollMarkIntoView( );
 
 		shell.redraw =
 			true;
@@ -1684,8 +1684,6 @@ Para.prototype._setMark =
 		bAt1     // begin at1  when marking a range
 	)
 {
-	console.log( 'bP', bPath );
-
 	if( !bPath )
 	{
 		if( retainx )
@@ -1734,7 +1732,7 @@ Para.prototype._setMark =
 				'bAt1',
 					bAt1,
 				'ePath',
-					this.ePath,
+					this.textPath,
 				'eAt1',
 					at1,
 				'retainx',
@@ -1754,7 +1752,7 @@ Para.prototype._setMark =
 				'bAt1',
 					bAt1,
 				'ePath',
-					this.ePath,
+					this.textPath,
 				'eAt1',
 					at1
 			);

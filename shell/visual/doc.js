@@ -387,20 +387,28 @@ Doc.prototype.draw =
 	// FIXME <pre>
 	var
 		innerMargin =
-			item.innerMargin;
+			item.innerMargin,
 
-	// draws the selection
-	/*
-	if (
-		selection &&
-		this.path &&
-		this.path.subPathOf( selection.sign1.path )
+		mark =
+			shell.space.mark;
+
+	console.log(
+		mark,
+		mark.type,
+		this.path,
+		mark && mark.concerns( this.path )
+	);
+
+	if(
+		mark &&
+		mark.type === 'range' &&
+		mark.concerns( this.path )
 	)
 	{
 		fabric.paint(
 			theme.selection.style,
 			this,
-			'sketchSelection',
+			'sketchRange',
 			view,
 			item,
 			width,
@@ -408,10 +416,6 @@ Doc.prototype.draw =
 			scrollp
 		);
 	}
-	*/
-
-	// XXX draw selection
-	// XXX move caret drawing to doc
 
 	var
 		// north-west points of paras
@@ -664,8 +668,7 @@ Doc.prototype.getParaAtPoint =
 /*
 | Sketches a selection.
 */
-/*
-Doc.prototype.sketchSelection =
+Doc.prototype.sketchRange =
 	function(
 		fabric,      // the fabric to path for
 		border,      // width of the path (ignored)
@@ -681,11 +684,29 @@ Doc.prototype.sketchSelection =
 		sp =
 			scrollp,
 
+		mark =
+			this.mark;
+
+	if( CHECK )
+	{
+		if( mark.type !== 'range' )
+		{
+			throw new Error(
+				'wronte mark type'
+			);
+		}
+	}
+
+	mark.normalize( );
+
+	console.log( 'MMMMMMMMMMM', mark );
+
+	var
 		s1 =
-			selection.$begin,
+			mark.$begin, // TODO
 
 		s2 =
-			selection.$end,
+			mark.$end, // TODO
 
 		key1 =
 			s1.path.get( -2 ),
@@ -812,7 +833,6 @@ Doc.prototype.sketchSelection =
 		}
 	}
 };
-*/
 
 
 } )( );

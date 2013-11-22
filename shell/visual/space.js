@@ -1988,8 +1988,9 @@ Space.prototype.pointingStart =
 	}
 
 
-	var focus =
-		this.focusedItem( );
+	var
+		focus =
+			this.focusedItem( );
 
 	if( focus )
 	{

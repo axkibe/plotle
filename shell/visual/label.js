@@ -611,7 +611,7 @@ Label.prototype.mousewheel =
 /*
 | Dummy since a label does not scroll.
 */
-Label.prototype.scrollCaretIntoView =
+Label.prototype.scrollMarkIntoView =
 	function( )
 {
 	// nada
