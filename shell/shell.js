@@ -32,7 +32,6 @@ var
 	Mark,
 	MeshMashine,
 	Peer,
-	Range,
 	shellverse,
 	Sign,
 	system,
@@ -234,38 +233,99 @@ Shell.prototype.update =
 		mark =
 			this.space.mark,
 
-		msign =
-			mark.sign;
+		mItemTree;
 
-	if( mark.type === 'caret' )
+	
+	switch( mark.type )
 	{
-		if ( !Jools.is(
-				tree.twig[ mark.sign.path.get( 0 ) ]
+		case 'caret' :
+	
+			mItemTree =
+				tree.twig[ mark.sign.path.get( 0 ) ];
+
+			// tests if the owning item was removed
+			if (
+				!Jools.is( mItemTree )
 			)
-		)
-		{
-			mark =
-				Mark.Vacant.create( );
-		}
-		else
-		{
-			var
-				sign =
-					MeshMashine.tfxSign(
-						mark.sign,
-						chgX
+			{
+				mark =
+					Mark.Vacant.create( );
+			}
+			else
+			{
+				var
+					sign =
+						MeshMashine.tfxSign(
+							mark.sign,
+							chgX
+						);
+						
+				// TODO keeping retainx might not be correct
+				//      in some cases
+				mark =
+					Mark.Caret.create(
+						sign,
+						mark.retainx
 					);
+			}
 
-			// TODO keeping retainx might not be correct
-			//      in some cases
-			mark =
-				Mark.Caret.create(
-					sign,
-					mark.retainx
-				);
-		}
+			break;
+
+		case 'range' :
+
+			mItemTree =
+				tree.twig[ mark.bSign.path.get( 0 ) ];
+
+			// tests if the owning item was removed
+			if(
+				!Jools.is( mItemTree )
+			)
+			{
+				mark =
+					Mark.Vacant.create( );
+			}
+			else
+			{
+				var
+					bSign =
+						MeshMashine.tfxSign(
+							mark.bSign,
+							chgX
+						),
+						
+					eSign =
+						MeshMashine.tfxSign(
+							mark.eSign,
+							chgX
+						);
+
+					// tests if the range collapsed to a simple caret.
+					if(
+						bSign.path.equals( eSign.path ) &&
+						bSign.at1 === eSign.at1
+					)
+					{
+						mark =
+							Mark.Caret.create(
+								bSign,
+								mark.retainx
+							);
+					}
+					else
+					{
+						mark =
+							Mark.Range.create(
+								mItemTree.twig.doc,
+								bSign,
+								eSign,
+								mark.retainx
+							);
+					}
+			}
+
+			break;
+			
 	}
-
 
 	this.$space =
 		Visual.Space.create(
@@ -1095,10 +1155,7 @@ Shell.prototype.userMark =
 
 			mark =
 				Mark.Range.create(
-					shell.space.getSub(
-						bPath,
-						'Doc'
-					),
+					shell.space.tree.twig[ bPath.get( 0 ) ].twig.doc,
 					new Sign(
 						null,
 						'path',
@@ -1678,46 +1735,6 @@ Shell.prototype.logout =
 
 
 /*
-| Sets the selection.
-*/
-/*
-Shell.prototype.s_etSelection =
-	function(
-		doc,
-		bSign,
-		eSign
-	)
-{
-	if( CHECK && !bSign )
-	{
-		throw new Error( 'bSign null' );
-	}
-
-	if( CHECK && !eSign )
-	{
-		throw new Error( 'eSign null' );
-	}
-
-	var
-		selection =
-		this._$s_election =
-			new Range(
-				doc,
-				bSign,
-				eSign
-			);
-
-	system.setInput(
-		selection.innerText(
-			this.$space
-		)
-	);
-
-	return selection;
-};
-*/
-
-/*
 | A space finished loading.
 */
 Shell.prototype.arrivedAtSpace =
@@ -1745,41 +1762,28 @@ Shell.prototype.arrivedAtSpace =
 
 /*
 | Removes the selection including its contents.
-| XXX remove
 */
-/*
-Shell.prototype.r_emoveSelection =
-	function( )
+Shell.prototype.removeRange =
+	function(
+		range
+	)
 {
-	var
-		selection =
-			this._$s_election;
-
-	if( !selection )
-	{
-		return;
-	}
-
-	selection.normalize( this.$space );
-
-	this.d_eselect( );
-
 	this.redraw =
 		true;
 
-	if( !selection.empty )
+	if( !range.empty )
 	{
 		this.peer.removeSpan(
-			selection.$begin.path,
-			selection.$begin.at1,
+			range.front.path,
+			range.front.at1,
 
-			selection.$end.path,
-			selection.$end.at1
+			range.back.path,
+			range.back.at1
 		);
 	}
 
 	return;
 };
-*/
+
 
 } )( );

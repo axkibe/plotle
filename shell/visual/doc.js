@@ -690,14 +690,12 @@ Doc.prototype.sketchRange =
 		}
 	}
 
-	mark.normalize( );
-
 	var
 		s1 =
-			mark.$begin, // TODO
+			mark.front,
 
 		s2 =
-			mark.$end, // TODO
+			mark.back,
 
 		key1 =
 			s1.path.get( -2 ),

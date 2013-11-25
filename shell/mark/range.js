@@ -49,14 +49,14 @@ Range =
 Mark.Range =
 	function(
 		tag,
-		doc,
+		docTree,
 		bSign,
 		eSign,
 		retainx
 	)
 {
-	this.doc =
-		doc;
+	this.docTree =
+		docTree;
 
 	if( CHECK )
 	{
@@ -84,10 +84,6 @@ Mark.Range =
 	this.retainx =
 		retainx;
 
-	this.$begin =
-	this.$end =
-		null;
-
 	Mark.call( this );
 };
 
@@ -103,7 +99,7 @@ Jools.subclass(
 */
 Range.create =
 	function(
-		doc,
+		docTree,
 		bSign,
 		eSign,
 		retainx
@@ -111,7 +107,7 @@ Range.create =
 {
 	return new Range(
 		_tag,
-		doc,
+		docTree,
 		bSign,
 		eSign,
 		retainx
@@ -120,95 +116,62 @@ Range.create =
 
 
 /*
-| Sets begin/end so begin is before end.
+| Returns the signature which comes first in docTree.
 */
-Range.prototype.normalize =
-	function( )
-{
-	var
-		s1 =
-			this.bSign,
-
-		s2 =
-			this.eSign;
-
-	if( s1.path.equals( s2.path ) )
+Object.defineProperty(
+	Range.prototype,
+	'front',
 	{
-		if( s1.at1 <= s2.at1 )
+		get : function( )
 		{
-			this.$begin =
-				this.bSign;
-
-			this.$end =
-				this.eSign;
+			if( !this._front )
+			{
+				this._normalize( );
+			}
+				
+			return this._front;
 		}
-		else
+	}
+);
+
+
+/*
+| Returns the signature which comes last in docTree.
+*/
+Object.defineProperty(
+	Range.prototype,
+	'back',
+	{
+		get : function( )
 		{
-			this.$begin =
-				this.eSign;
-
-			this.$end =
-				this.bSign;
+			if( !this._back )
+			{
+				this._normalize( );
+			}
+				
+			return this._back;
 		}
-
-		return;
 	}
-
-	var
-		k1 =
-			s1.path.get( -2 ),
-
-		k2 =
-			s2.path.get( -2 );
-
-	if( k1 === k2 )
-	{
-		throw new Error( 'k1 === k2' );
-	}
-
-	var
-		r1 =
-			this.doc.tree.rankOf( k1 ),
-
-		r2 =
-			this.doc.tree.rankOf( k2 );
-
-	if( r1 < r2 )
-	{
-		this.$begin =
-			s1;
-
-		this.$end =
-			s2;
-	}
-	else
-	{
-		this.$begin =
-			s2;
-
-		this.$end =
-			s1;
-	}
-};
+);
 
 
 /*
 | The text the selection selects.
+|
+| TODO lazy fixate this
 */
 Range.prototype.innerText =
 	function( )
 {
-	this.normalize( );
-
 	var
 		s1 =
-			this.$begin,
+			this.front,
 
 		s2 =
-			this.$end,
+			this.back,
 
 		tree =
-			this.doc.tree,
+			this.docTree,
 
 		key1 =
 			s1.path.get( -2 ),
@@ -341,6 +304,80 @@ Jools.lazyFixate(
 		);
 	}
 );
+
+
+/*
+| Sets _front/_back so _front is before _back.
+*/
+Range.prototype._normalize =
+	function( )
+{
+	var
+		s1 =
+			this.bSign,
+
+		s2 =
+			this.eSign;
+
+	if( s1.path.equals( s2.path ) )
+	{
+		if( s1.at1 <= s2.at1 )
+		{
+			this._front =
+				this.bSign;
+
+			this._back =
+				this.eSign;
+		}
+		else
+		{
+			this._front =
+				this.eSign;
+
+			this._back =
+				this.bSign;
+		}
+
+		return;
+	}
+
+	var
+		k1 =
+			s1.path.get( -2 ),
+
+		k2 =
+			s2.path.get( -2 );
+
+	if( k1 === k2 )
+	{
+		throw new Error( 'k1 === k2' );
+	}
+
+	var
+		r1 =
+			this.docTree.rankOf( k1 ),
+
+		r2 =
+			this.docTree.rankOf( k2 );
+
+	if( r1 < r2 )
+	{
+		this._front =
+			s1;
+
+		this._back =
+			s2;
+	}
+	else
+	{
+		this._front =
+			s2;
+
+		this._back =
+			s1;
+	}
+};
+
 
 
 })( );
