@@ -21,7 +21,7 @@ Visual =
 ( function( ) {
 'use strict';
 
-if( typeof( window ) === 'undefined' )
+if( CHECK && typeof( window ) === 'undefined' )
 {
 	throw new Error(
 		'this code requires a browser!'

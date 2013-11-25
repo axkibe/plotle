@@ -40,7 +40,7 @@ var
 'use strict';
 
 
-if( typeof( window ) === 'undefined' )
+if( CHECK && typeof( window ) === 'undefined' )
 {
 	throw new Error(
 		'this code requires a browser!'
@@ -1368,18 +1368,11 @@ Para.prototype._keyDown =
 		at1 =
 			ve.getOffsetAt( 0, x );
 
-		shell.userMark(
-			'set',
-			'type',
-				'caret',
-			'section',
-				'space',
-			'path',
-				ve.textPath,
-			'at1',
-				at1,
-			'retainx',
-				x
+		ve._setMark(
+			at1,
+			x,
+			bPath,
+			bAt1
 		);
 	}
 
@@ -1407,7 +1400,9 @@ Para.prototype._keyEnd =
 		text =
 			this.text;
 
-	if( mark.sign.at1 === text.length )
+	if(
+		mark &&
+		mark.sign.at1 === text.length )
 	{
 		return false;
 	}
@@ -1510,7 +1505,7 @@ Para.prototype._keyPos1 =
 		return false;
 	}
 
-	this.setMark(
+	this._setMark(
 		0,
 		null,
 		bPath,
@@ -1602,19 +1597,13 @@ Para.prototype._keyUp =
 				x
 			);
 
-		shell.userMark(
-			'set',
-			'type',
-				'caret',
-			'section',
-				'space',
-			'path',
-				this.textPath,
-			'at1',
-				at1,
-			'retainx',
-				x
+		this._setMark(
+			at1,
+			x,
+			bPath,
+			bAt1
 		);
+
 
 		return true;
 	}
@@ -1635,18 +1624,11 @@ Para.prototype._keyUp =
 				x
 			);
 
-		shell.userMark(
-			'set',
-			'type',
-				'caret',
-			'section',
-				'space',
-			'path',
-				ve.textPath,
-			'at1',
-				at1,
-			'retainx',
-				x
+		ve._setMark(
+			at1,
+			x,
+			bPath,
+			bAt1
 		);
 
 		return true;
