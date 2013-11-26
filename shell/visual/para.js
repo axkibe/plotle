@@ -937,8 +937,9 @@ Para.prototype.input =
 	item.scrollMarkIntoView( );
 };
 
+
 /*
-| Handles a special key
+| Handles a special key.
 */
 Para.prototype.specialKey =
 	function(
@@ -1060,6 +1061,11 @@ Para.prototype.specialKey =
 			{
 				if( !this.path.subPathOf( mark.sign.path ) )
 				{
+					console.log(
+						this.path,
+						mark.sign.path
+					);
+
 					throw new Error(
 						'path mismatch'
 					);

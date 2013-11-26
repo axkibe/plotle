@@ -2163,15 +2163,13 @@ Space.prototype.specialKey =
 	}
 
 	var
-		node =
-			this.getSub(
-				path,
-				'specialKey'
-			);
+		item =
+			this.sub[ path.get( 0 ) ];
 
-	if( node )
+
+	if( item )
 	{
-		node.specialKey(
+		item.specialKey(
 			key,
 			shift,
 			ctrl
@@ -2184,6 +2182,8 @@ Space.prototype.specialKey =
 | Returns the sub node path points to.
 |
 | For example 'Item' or having a method like 'specialKey'
+|
+| FIXME remove
 */
 Space.prototype.getSub =
 	function(

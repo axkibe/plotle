@@ -226,4 +226,22 @@ DocItem.prototype.click =
 };
 
 
+/*
+| Handles a special key.
+*/
+DocItem.prototype.specialKey =
+	function(
+		key,
+		shift,
+		ctrl
+	)
+{
+	this.sub.doc.specialKey(
+		key,
+		shift,
+		ctrl
+	);
+}
+
+
 } )( );

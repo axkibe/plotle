@@ -657,6 +657,52 @@ Doc.prototype.getParaAtPoint =
 };
 
 
+/*
+| Handles a special key.
+*/
+Doc.prototype.specialKey =
+	function(
+		key,
+		shift,
+		ctrl
+	)
+{
+	var
+		path;
+
+	switch( this.mark.type )
+	{
+		case 'caret' :
+
+			path =
+				this.mark.sign.path;
+
+			break;
+
+		case 'range' :
+
+			path =
+				this.mark.eSign.path;
+
+			break;
+
+		default :
+
+			return false;
+	}
+
+	return (
+		this
+			.sub[ path.get( 2 ) ]
+			.specialKey(
+				key,
+				shift,
+				ctrl
+			)
+	);
+}
+
+
 
 /*
 | Sketches a selection.
