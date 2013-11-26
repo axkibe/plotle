@@ -2137,8 +2137,7 @@ Space.prototype.specialKey =
 		mark =
 			this.mark,
 
-		path =
-			null;
+		path;
 
 	switch( mark.type )
 	{
@@ -2155,11 +2154,10 @@ Space.prototype.specialKey =
 				mark.eSign.path;
 
 			break;
-	}
 
-	if ( !path )
-	{
-		return;
+		default :
+
+			return;
 	}
 
 	var

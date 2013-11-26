@@ -1002,7 +1002,7 @@ Para.prototype.specialKey =
 	mark =
 		shell.space.mark;
 
-	if( !shift && mark.type === 'range' )
+	if( mark.type === 'range' )
 	{
 		switch( key )
 		{
@@ -1020,7 +1020,7 @@ Para.prototype.specialKey =
 				key =
 					null;
 
-				break;
+				return true;
 
 			case 'enter' :
 
@@ -1031,8 +1031,13 @@ Para.prototype.specialKey =
 
 				show =
 					true;
+	
+				shell.peer.split(
+					this.textPath,
+					this.mark.eSign.at1
+				);
 
-				break;
+				return true;
 		}
 	}
 
@@ -1399,22 +1404,13 @@ Para.prototype._keyEnd =
 		bAt1
 	)
 {
-	var
-		mark =
-			this.mark,
-
-		text =
-			this.text;
-
-	if(
-		mark &&
-		mark.sign.at1 === text.length )
+	if( at1 === this.text.length ) 
 	{
 		return false;
 	}
 
 	this._setMark(
-		text.length,
+		this.text.length,
 		null,
 		bPath,
 		bAt1
@@ -1431,13 +1427,15 @@ Para.prototype._keyEnter =
 	function(
 		item,
 		doc,
+		at1,
+		retainx,
 		bPath,
 		bAt1
 	)
 {
 	shell.peer.split(
 		this.textPath,
-		this.mark.sign.at1
+		at1
 	);
 
 	return true;
