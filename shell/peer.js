@@ -17,7 +17,6 @@ var
 | Imports
 */
 var
-	IFace,
 	Jools,
 	Path;
 

@@ -11,7 +11,6 @@
 | Imports
 */
 var
-	Euclid,
 	Font,
 	shellverse,
 	theme;

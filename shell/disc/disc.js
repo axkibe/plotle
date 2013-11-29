@@ -21,7 +21,9 @@ var
 	Euclid,
 	Jools,
 	shellverse,
+	xxx,
 	theme,
+	Path,
 	Widgets;
 
 
@@ -184,7 +186,15 @@ Disc.Disc =
 				ranks[ r ],
 
 			tree =
-				twig[ wname ];
+				twig[ wname ],
+
+			path =
+				new Path(
+					[
+						this.name,
+						wname
+					]
+				);
 
 		switch( tree.twig.type )
 		{
@@ -192,12 +202,14 @@ Disc.Disc =
 
 				this.buttons[ wname ] =
 					Widgets.Button.create(
-						'parent',
-							this,
+						'section',
+							'disc',
+						'path',
+							path,
+						'superFrame',
+							this.frame.zeropnw,
 						'inherit',
 							inherit && inherit.buttons[ wname ],
-						'name',
-							wname,
 						'tree',
 							tree,
 						'icons',

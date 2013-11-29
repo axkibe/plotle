@@ -11,6 +11,7 @@
 var
 	Widgets;
 
+
 Widgets =
 	Widgets || { };
 
@@ -57,6 +58,7 @@ Widgets.Input =
 		tag,
 		inherit,
 		tree,
+		section,
 		path,
 		frame,
 		focusAccent,
@@ -165,9 +167,6 @@ Input.create =
 	)
 {
 	var
-		inherit =
-			null,
-
 		focusAccent =
 			null,
 
@@ -177,10 +176,16 @@ Input.create =
 		hoverAccent =
 			null,
 
+		inherit =
+			null,
+
 		mark =
 			null,
 
 		path =
+			null,
+
+		section =
 			null,
 		
 		superFrame =
@@ -235,6 +240,13 @@ Input.create =
 			case 'path' :
 
 				path =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'section' :
+
+				section =
 					arguments[ a + 1 ];
 
 				break;
@@ -301,6 +313,12 @@ Input.create =
 				inherit.path;
 		}
 
+		if( section === null )
+		{
+			section =
+				inherit.section;
+		}
+
 		if( tree === null )
 		{
 			tree =
@@ -365,6 +383,7 @@ Input.create =
 		_tag,
 		inherit,
 		tree,
+		section,
 		path,
 		frame,
 		focusAccent,

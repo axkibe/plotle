@@ -21,7 +21,6 @@ var
 */
 var
 	Action,
-	Jools,
 	shell;
 
 

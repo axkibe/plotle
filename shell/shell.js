@@ -1249,16 +1249,84 @@ Shell.prototype.cycleFormFocus =
 		formname =
 			this._formNames[ name ];
 
-	if( CHECK && !this._$forms[ formname ] )
+	if( CHECK )
 	{
-		throw new Error(
-			'invalid formname: ' + formname
-		);
+		if( !this._$forms[ formname ] )
+		{
+			throw new Error(
+				'invalid formname: ' + formname
+			);
+		}
 	}
 
 	return this._$forms.cycleFocus( dir );
-}
+};
 
+
+/*
+| A button has been pushed.
+*/
+Shell.prototype.pushButton =
+	function(
+		section,
+		path
+	)
+{
+	if( CHECK )
+	{
+		if( section !== 'form' )
+		{
+			throw new Error(
+				'section must be form'
+			);
+		}
+	}
+
+	var
+		formname =
+			this._formNames[ path.get( 0 ) ];
+	
+	if( CHECK )
+	{
+		if( !this._$forms[ formname ] )
+		{
+			throw new Error(
+				'invalid formname: ' + formname
+			);
+		}
+	}
+	
+	return this._$forms.pushButton(
+		path.get( 1 ),
+		false, // FIXME honor shift / ctrl states
+		false
+	);
+};
+
+
+Shell.prototype.setHover(
+	section,
+	path
+)
+{
+	switch( section )
+	{
+		case 'disc' :
+
+			break;
+
+		case 'form' :
+
+			break;
+
+		default :
+
+			throw new Error(
+				'invalid section'
+			);
+
+	}
+};
 
 /*
 | Sets the value of a form object.
@@ -1283,8 +1351,6 @@ Shell.prototype.setFormValue =
 			'invalid formname: ' + formname
 		);
 	}
-
-	console.log( formname, itemname );
 
 	return this._$forms[ formname ].setValue(
 		itemname,

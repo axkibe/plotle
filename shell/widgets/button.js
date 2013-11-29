@@ -8,7 +8,9 @@
 /*
 | Export
 */
-var Widgets;
+var
+	Widgets;
+
 
 Widgets =
 	Widgets || { };
@@ -43,6 +45,11 @@ if( CHECK && typeof( window ) === 'undefined' )
 }
 
 
+var
+	_tag =
+		'BUTTON-52212713';
+
+
 /*
 | Constructor.
 */
@@ -52,31 +59,47 @@ Widgets.Button =
 		tag,
 		inherit,
 		tree,
-		parent,
-		name,
+		section,
+		path,
+		frame,
 		focusAccent,
 		hoverAccent,
 		icons,
 		text,
-		visible
+		visible,
+		mark
 	)
 {
 	if( CHECK )
 	{
-		if( tag !== 'XOXO' )
+		if( tag !== _tag )
 		{
 			throw new Error(
 				'tag mismatch'
 			);
 		}
 
-		if( parent === null )
+		if( frame === null )
 		{
 			throw new Error(
-				'parent missing'
+				'frame missing'
 			);
 		}
 
+		if( path === null )
+		{
+			throw new Error(
+				'path missing'
+			);
+		}
+
+		if( section === null )
+		{
+			throw new Error(
+				'section missing'
+			);
+		}
+		
 		if( tree === null )
 		{
 			throw new Error(
@@ -109,22 +132,11 @@ Widgets.Button =
 	this.hoverAccent =
 		hoverAccent;
 
-	this.name =
-		name;
+	this.section =
+		section;
 
 	this.path =
-		inherit ?
-			inherit.path
-			:
-			new Path(
-				[
-					parent.name,
-					name
-				]
-			);
-
-	this.parent =
-		parent;
+		path;
 
 	this.text =
 		text;
@@ -136,9 +148,7 @@ Widgets.Button =
 		visible;
 
 	this.frame =
-		parent.frame.zeropnw.computeRect(
-			tree.twig.frame.twig
-		);
+		frame;
 
 	this._shape =
 		Euclid.Shape.create(
@@ -169,6 +179,9 @@ Button.create =
 	var
 		focusAccent =
 			null,
+		
+		frame =
+			null,
 
 		hoverAccent =
 			null,
@@ -179,10 +192,16 @@ Button.create =
 		inherit =
 			null,
 
-		name =
+		mark =
 			null,
 
-		parent =
+		path =
+			null,
+
+		section =
+			null,
+
+		superFrame =
 			null,
 
 		text =
@@ -230,16 +249,30 @@ Button.create =
 
 				break;
 
-			case 'name' :
+			case 'mark' :
 
-				name =
+				mark =
 					arguments[ a + 1 ];
 
 				break;
 
-			case 'parent' :
+			case 'path' :
 
-				parent =
+				path =
+					arguments[ a + 1 ];
+
+				break;
+			
+			case 'section' :
+
+				section =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'superFrame' :
+
+				superFrame =
 					arguments[ a + 1 ];
 
 				break;
@@ -287,22 +320,28 @@ Button.create =
 				inherit.hoverAccent;
 		}
 
+		if( frame === null && superFrame === null )
+		{
+			frame =
+				inherit.frame;
+		}
+
 		if( icons === null )
 		{
 			icons =
 				inherit.icons;
 		}
 
-		if( name === null )
+		if( path === null )
 		{
-			name =
-				inherit.name;
+			path =
+				inherit.path;
 		}
 
-		if( parent === null )
+		if( section === null )
 		{
-			parent =
-				inherit.parent;
+			section =
+				inherit.section;
 		}
 
 		if( text === null )
@@ -344,19 +383,37 @@ Button.create =
 				true;
 	}
 
+	if( frame === null )
+	{
+		if( superFrame === null )
+		{
+			throw new Error(
+				'superFrame and frame === null'
+			);
+		}
+
+		frame =
+			superFrame.computeRect(
+				tree.twig.frame.twig
+			);
+	}
+
+    // FIXME inherit cache
+
 	return new Button(
-		'XOXO',
+		_tag,
 		inherit,
 		tree,
-		parent,
-		name,
+		section,
+		path,
+		frame,
 		focusAccent,
 		hoverAccent,
 		icons,
 		text,
-		visible
+		visible,
+		mark
 	);
-
 };
 
 
@@ -578,8 +635,9 @@ Button.prototype.pointingHover =
 		return null;
 	}
 
-	this.parent.setHover(
-		this.name
+	shell.setHover(
+		this.section,
+		this.path
 	);
 
 	return 'default';
@@ -630,9 +688,6 @@ Button.prototype.pointingStart =
 		return null;
 	}
 
-	var parent =
-		this.parent;
-
 	if(
 		this.repeating &&
 		!this._$retimer
@@ -650,10 +705,9 @@ Button.prototype.pointingStart =
 		repeatFunc =
 			function( )
 			{
-				parent.pushButton(
-					self.name,
-					false,
-					false
+				shell.pushButton(
+					this.section,
+					this.path
 				);
 
 				self._$retimer =
@@ -670,10 +724,9 @@ Button.prototype.pointingStart =
 			);
 	}
 
-	parent.pushButton(
-		this.name,
-		shift,
-		ctrl
+	shell.pushButton(
+		this.section,
+		this.path
 	);
 
 	return this.repeating ? 'drag' : false;
@@ -692,22 +745,27 @@ Button.prototype.specialKey =
 	{
 		case 'down' :
 
-			this.parent.cycleFocus( +1 );
+			shell.cycleFormFocus(
+				this.path.get( 0 ),
+				1
+			);
 
 			return;
 
 		case 'up' :
 
-			this.parent.cycleFocus( -1 );
+			shell.cycleFormFocus(
+				this.path.get( 0 ),
+				-1
+			);
 
 			return;
 
 		case 'enter' :
 
-			this.parent.pushButton(
-				this.name,
-				false,
-				false
+			shell.pushButton(
+				this.section,
+				this.path
 			);
 
 			return;
@@ -723,10 +781,9 @@ Button.prototype.input =
 		// text
 	)
 {
-	this.parent.pushButton(
-		this.name,
-		false,
-		false
+	shell.pushButton(
+		this.section,
+		this.path
 	);
 
 	return true;

@@ -183,13 +183,16 @@ Forms.Form =
 
 		switch( tree.twig.type )  // XXX
 		{
+		case 'ButtonWidget' :
 		case 'InputWidget' :
 		this.$sub[ name ] =
 			Proto.create(
-				'tree',
-					tree,
+				'section',
+					'form',
 				'path',
 					path,
+				'tree',
+					tree,
 				'superFrame',
 					this.frame.zeropnw,
 				'inherit',
