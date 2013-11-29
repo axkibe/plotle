@@ -241,7 +241,7 @@ DocItem.prototype.specialKey =
 		shift,
 		ctrl
 	);
-}
+};
 
 
 } )( );

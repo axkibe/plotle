@@ -700,7 +700,7 @@ Doc.prototype.specialKey =
 				ctrl
 			)
 	);
-}
+};
 
 
 

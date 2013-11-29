@@ -26,6 +26,7 @@ var
 	Euclid,
 	Jools,
 	Mark,
+	Path,
 	shellverse,
 	Sign,
 	shell,
@@ -69,7 +70,7 @@ Forms.Form =
 		inherit =
 			null,
 
-		userMark =
+		mark =
 			null,
 
 		screensize =
@@ -97,9 +98,9 @@ Forms.Form =
 
 				continue;
 
-			case 'userMark' :
+			case 'mark' :
 
-				userMark =
+				mark =
 					arguments[ a++ ];
 
 				continue;
@@ -119,8 +120,8 @@ Forms.Form =
 			screensize
 		);
 
-	this.userMark =
-		userMark
+	this.mark =
+		mark
 		||
 		Mark.Vacant.create( );
 
@@ -159,7 +160,7 @@ Forms.Form =
 
 		if( Proto.prototype.focusable )
 		{
-			if( !this.userMark.sign )
+			if( !this.mark.sign )
 			{
 				focusAccent =
 					false;
@@ -167,10 +168,39 @@ Forms.Form =
 			else
 			{
 				focusAccent =
-					this.userMark.sign.path.get( 1 ) === name;
+					this.mark.sign.path.get( 1 ) === name;
 			}
 		}
 
+		var
+			path =
+				new Path(
+					[
+						this.name,
+						name
+					]
+				);
+
+		switch( tree.twig.type )  // XXX
+		{
+		case 'InputWidget' :
+		this.$sub[ name ] =
+			Proto.create(
+				'tree',
+					tree,
+				'path',
+					path,
+				'superFrame',
+					this.frame.zeropnw,
+				'inherit',
+					inherit && inherit.$sub[ name ],
+				'focusAccent',
+					focusAccent,
+				'mark',
+					this.mark.concerns( path )
+			);
+		break;
+		default :
 		this.$sub[ name ] =
 			Proto.create(
 				'name',
@@ -184,6 +214,7 @@ Forms.Form =
 				'focusAccent',
 					focusAccent
 			);
+		}
 	}
 
 	Jools.immute( this );
@@ -235,12 +266,12 @@ Form.prototype.getWidgetPrototype =
 /*
 | Returns the focused item.
 */
-Form.prototype.getFocus =
+Form.prototype.getFocusedItem =
 	function( )
 {
 	var
 		mark =
-			this.userMark,
+			this.mark,
 
 		sign =
 			mark.sign;
@@ -298,50 +329,7 @@ Form.prototype.draw =
 
 		comp.draw( fabric );
 	}
-
-	if( this.userMark.display )
-	{
-		this.userMark.display( );
-	}
 };
-
-
-/*
-| Positions the caret.
-*/
-/*
-Form.prototype.positionCaret =
-	function( )
-{
-	var
-		caret =
-			this.userMark,
-
-		name =
-			caret.sign.path.get( 1 ),
-
-		ce =
-			this.$sub[ name ];
-
-	if( !ce )
-	{
-		throw new Error('Caret component does not exist!');
-	}
-
-	if( ce.positionCaret )
-	{
-		ce.positionCaret(
-			Euclid.View.proper
-		);
-	}
-	else
-	{
-		caret.$screenPos =
-		caret.$height =
-			null;
-	}
-};
-*/
 
 
 /*
@@ -508,15 +496,16 @@ Form.prototype.input =
 		text
 	)
 {
-	var focus =
-		this.getFocus( );
+	var
+		item =
+			this.getFocusedItem( );
 
-	if( !focus )
+	if( !item )
 	{
 		return;
 	}
 
-	focus.input( text );
+	item.input( text );
 };
 
 
@@ -532,17 +521,20 @@ Form.prototype.cycleFocus =
 		tree =
 			this.tree,
 
-		focus =
-			this.getFocus( );
+		mark =
+			this.mark,
 
-	if( !focus )
+		path =
+			this.mark.sign.path;
+
+	if( !path )
 	{
 		return;
 	}
 
 	var
 		rank =
-			tree.rankOf( focus.name ),
+			tree.rankOf( path.get( 1 ) ),
 
 		rs =
 			rank,
@@ -616,10 +608,10 @@ Form.prototype.specialKey =
 	)
 {
 	var
-		focus =
-			this.getFocus( );
+		item =
+			this.getFocusedItem( );
 
-	if( !focus )
+	if( !item )
 	{
 		return;
 	}
@@ -633,7 +625,7 @@ Form.prototype.specialKey =
 		return;
 	}
 
-	focus.specialKey(
+	item.specialKey(
 		key,
 		shift,
 		ctrl
@@ -643,6 +635,8 @@ Form.prototype.specialKey =
 
 /*
 | Sets the value of a widget.
+|
+| XXX remove
 */
 Form.prototype.setValue =
 	function(

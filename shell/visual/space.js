@@ -2063,15 +2063,12 @@ Space.prototype.input =
 	}
 
 	var
-		node =
-			this.getSub(
-				path,
-				'input'
-			);
+		item =
+			this.sub[ path.get( 0 ) ];
 
-	if( node )
+	if( item )
 	{
-		node.input( text );
+		item.input( text );
 	}
 };
 
@@ -2163,7 +2160,6 @@ Space.prototype.specialKey =
 	var
 		item =
 			this.sub[ path.get( 0 ) ];
-
 
 	if( item )
 	{

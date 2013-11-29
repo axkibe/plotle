@@ -232,46 +232,6 @@ SignUp.prototype.signup =
 	);
 };
 
-/*
-| User is pressing a special key.
-*/
-/*
-Login.prototype.specialKey =
-	function(
-		key,
-		shift,
-		ctrl
-	)
-{
-	var focus =
-		this.getFocus( );
-
-	if( !focus )
-	{
-		return;
-	}
-
-	// a return in the password field is made
-	// to be a login command right away
-
-	if(
-		key === 'enter' &&
-		focus.name === 'passwordInput'
-	)
-	{
-		this.login( );
-
-		return;
-	}
-
-	return Forms.Form.prototype.specialKey.call(
-		this,
-		key,
-		shift,
-		ctrl
-	);
-};
-*/
 
 /*
 | A register operation completed.

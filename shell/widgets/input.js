@@ -37,8 +37,15 @@ var
 
 if( CHECK && typeof( window ) === 'undefined' )
 {
-	throw new Error( 'this code needs a browser!' );
+	throw new Error(
+		'this code needs a browser!'
+	);
 }
+
+
+var
+	_tag =
+		'INPUT-316354610';
 
 
 /*
@@ -50,27 +57,35 @@ Widgets.Input =
 		tag,
 		inherit,
 		tree,
-		parent,
-		name,
+		path,
+		frame,
 		focusAccent,
 		hoverAccent,
 		visible,
-		value
+		value,
+		mark
 	)
 {
 	if( CHECK )
 	{
-		if( tag !== 'XOXO' )
+		if( tag !== _tag )
 		{
 			throw new Error(
 				'tag mismatch'
 			);
 		}
 
-		if( parent === null )
+		if( path === null )
 		{
 			throw new Error(
-				'parent missing'
+				'path missing'
+			);
+		}
+
+		if( frame === null )
+		{
+			throw new Error(
+				'frame missing'
 			);
 		}
 
@@ -97,24 +112,10 @@ Widgets.Input =
 	}
 
 	this.path =
-		inherit ?
-			inherit.path
-			:
-			new Path(
-				[
-					parent.name,
-					name
-				]
-			);
+		path;
 
 	this.tree =
 		tree;
-
-	this.parent =
-		parent;
-
-	this.name =
-		name;
 
 	this.focusAccent =
 		focusAccent;
@@ -125,12 +126,8 @@ Widgets.Input =
 	this.visible =
 		visible;
 
-	var
-		frame =
-		this.frame =
-			parent.frame.zeropnw.computeRect(
-				tree.twig.frame.twig
-			);
+	this.frame =
+		frame;
 
 	this._shape =
 		new Euclid.RoundRect(
@@ -145,6 +142,9 @@ Widgets.Input =
 
 	this.value =
 		value;
+
+	this.mark =
+		mark;
 
 	this.focusAccent =
 		focusAccent;
@@ -171,13 +171,19 @@ Input.create =
 		focusAccent =
 			null,
 
+		frame =
+			null,
+
 		hoverAccent =
 			null,
 
-		parent =
+		mark =
 			null,
 
-		name =
+		path =
+			null,
+		
+		superFrame =
 			null,
 
 		tree =
@@ -219,16 +225,23 @@ Input.create =
 
 				break;
 
-			case 'name' :
+			case 'mark' :
 
-				name =
+				mark =
 					arguments[ a + 1 ];
 
 				break;
 
-			case 'parent' :
+			case 'path' :
 
-				parent =
+				path =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'superFrame' :
+
+				superFrame =
 					arguments[ a + 1 ];
 
 				break;
@@ -275,17 +288,17 @@ Input.create =
 			hoverAccent =
 				inherit.hoverAccent;
 		}
-
-		if( name === null )
+		
+		if( frame === null && superFrame === null )
 		{
-			name =
-				inherit.name;
+			frame =
+				inherit.frame;
 		}
 
-		if( parent === null )
+		if( path === null )
 		{
-			parent =
-				inherit.parent;
+			path =
+				inherit.path;
 		}
 
 		if( tree === null )
@@ -330,17 +343,35 @@ Input.create =
 		value =
 			'';
 	}
+			
+	if( frame === null )
+	{
+		if( superFrame === null )
+		{
+			throw new Error(
+				'superFrame and frame === null'
+			);
+		}
+		
+		frame =
+			superFrame.computeRect(
+				tree.twig.frame.twig
+			);
+	}
+
+	// FIXME inherit cache
 
 	return new Input(
-		'XOXO',
+		_tag,
 		inherit,
 		tree,
-		parent,
-		name,
+		path,
+		frame,
 		focusAccent,
 		hoverAccent,
 		visible,
-		value
+		value,
+		mark
 	);
 };
 
@@ -740,8 +771,49 @@ Input.prototype.locateOffset =
 
 
 /*
+| Draws the caret
+*/
+Input.prototype._drawCaret =
+	function(
+		fabric
+	)
+{
+	// draws the caret
+	var
+		fs =
+			this.tree.twig.font.twig.size,
+
+		descend =
+			fs * theme.bottombox,
+
+		p =
+			this.locateOffset(
+				this.mark.sign.at1
+			),
+
+		s =
+			Math.round( p.y + descend ),
+
+		n =
+			s - Math.round( fs + descend ),
+
+		x =
+			p.x + this.frame.pnw.x - 1;
+
+	fabric.fillRect(
+		'black',
+		p.x,
+		n,
+		1,
+		s - n
+	);
+};
+
+
+/*
 | Returns the caret position relative to the parent.
 */
+/*
 Input.prototype.getCaretPos =
 	function( )
 {
@@ -754,7 +826,7 @@ Input.prototype.getCaretPos =
 
 		p =
 			this.locateOffset(
-				this.parent.userMark.sign.at1
+				X.sign.at1
 			),
 
 		pnw =
@@ -782,11 +854,13 @@ Input.prototype.getCaretPos =
 		}
 	);
 };
+*/
 
 
 /*
 | Draws the caret.
 */
+/*
 Input.prototype.positionCaret =
 	function(
 		view
@@ -794,7 +868,7 @@ Input.prototype.positionCaret =
 {
 	var
 		caret =
-			this.parent.userMark,
+			X,
 
 		cpos =
 		caret.$pos =
@@ -811,6 +885,7 @@ Input.prototype.positionCaret =
 			( cpos.s - cpos.n ) * view.zoom
 		);
 };
+*/
 
 
 /*
@@ -823,7 +898,7 @@ Input.prototype.input =
 {
 	var
 		sign =
-			this.parent.userMark.sign,
+			this.mark.sign,
 
 		value =
 			this.value,
@@ -847,8 +922,8 @@ Input.prototype.input =
 			);
 	}
 
-	this.parent.setValue(
-		this.name,
+	shell.setFormValue(
+		this.path,
 		value.substring( 0, at1 ) +
 			text +
 			value.substring( at1 )
@@ -876,7 +951,7 @@ Input.prototype.keyBackspace =
 {
 	var
 		sign =
-			this.parent.userMark.sign,
+			this.mark.sign,
 
 		at1 =
 			sign.at1;
@@ -886,8 +961,8 @@ Input.prototype.keyBackspace =
 		return;
 	}
 
-	this.parent.setValue(
-		this.name,
+	shell.setFormValue(
+		this.path,
 		this.value.substring( 0, at1 - 1 ) +
 			this.value.substring( at1 )
 	);
@@ -914,15 +989,15 @@ Input.prototype.keyDel =
 {
 	var
 		at1 =
-			this.parent.userMark.sign.at1;
+			this.mark.sign.at1;
 
 	if( at1 >= this.value.length )
 	{
 		return;
 	}
 
-	this.parent.setValue(
-		this.name,
+	shell.setFormValue(
+		this.path,
 		this.value.substring( 0, at1 ) +
 			this.value.substring( at1 + 1 )
 	);
@@ -935,7 +1010,10 @@ Input.prototype.keyDel =
 Input.prototype.keyEnter =
 	function( )
 {
-	this.parent.cycleFocus( 1 );
+	shell.cycleFormFocus(
+		this.path.get( 0 ),
+		1
+	);
 };
 
 
@@ -945,7 +1023,10 @@ Input.prototype.keyEnter =
 Input.prototype.keyDown =
 	function( )
 {
-	this.parent.cycleFocus( 1 );
+	shell.cycleFormFocus(
+		this.path.get( 0 ),
+		1
+	);
 };
 
 
@@ -957,7 +1038,7 @@ Input.prototype.keyEnd =
 {
 	var
 		sign =
-			this.parent.userMark.sign,
+			this.mark.sign,
 
 		at1 =
 			sign.at1;
@@ -989,7 +1070,7 @@ Input.prototype.keyLeft =
 {
 	var
 		sign =
-			this.parent.userMark.sign;
+			this.mark.sign;
 
 	if( sign.at1 <= 0 )
 	{
@@ -1019,7 +1100,7 @@ Input.prototype.keyPos1 =
 {
 	var
 		sign =
-			this.parent.userMark.sign;
+			this.mark.sign;
 
 	if( sign.at1 <= 0 )
 	{
@@ -1048,7 +1129,7 @@ Input.prototype.keyRight =
 {
 	var
 		sign =
-			this.parent.userMark.sign;
+			this.mark.sign;
 
 	if( sign.at1 >= this.value.length )
 	{
@@ -1075,7 +1156,10 @@ Input.prototype.keyRight =
 Input.prototype.keyUp =
 	function( )
 {
-	this.parent.cycleFocus( -1 );
+	shell.cycleFormFocus(
+		this.path.get( 0 ),
+		-1
+	);
 
 	return;
 };
@@ -1245,12 +1329,7 @@ Input.prototype.pointingStart =
 		'section',
 			'forms',
 		'path',
-			new Path (
-				[
-					this.parent.name,
-					this.name
-				]
-			),
+			this.path,
 		'at1',
 			this.getOffsetAt( pp )
 	);

@@ -205,21 +205,13 @@ Login.prototype.specialKey =
 		ctrl
 	)
 {
-	var
-		focus =
-			this.getFocus( );
-
-	if( !focus )
-	{
-		return;
-	}
-
 	// a return in the password field is made
 	// to be a login command right away
 
 	if(
 		key === 'enter' &&
-		focus.name === 'passwordInput'
+		this.mark &&
+		this.mark.sign.path.get( 1 ) === 'passwordInput'
 	)
 	{
 		this.login( );

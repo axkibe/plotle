@@ -399,34 +399,6 @@ Shell.prototype.systemBlur =
 
 
 /*
-| Blinks the caret ( if shown )
-*/
-/*
-Shell.prototype.blink =
-	function( )
-{
-	this._$caretBlink =
-		!this._$caretBlink;
-
-	var
-		display =
-			this._getCurrentDisplay( );
-
-	if(
-		display &&
-		display.caret &&
-		this._$haveSystemFocus
-	)
-	{
-		display.caret.display(
-			this._$caretBlink
-		);
-	}
-};
-*/
-
-
-/*
 | Draws everything.
 */
 Shell.prototype._draw =
@@ -1229,18 +1201,21 @@ Shell.prototype.userMark =
 			formname =
 				this._formNames[ name ];
 
-			if( CHECK && !formname )
+			if( CHECK )
 			{
-				throw new Error(
-					'invalid form: ' + name
-				);
-			}
+				if( !formname )
+				{
+					throw new Error(
+						'invalid form: ' + name
+					);
+				}
 
-			if( CHECK && !this._$forms[ formname ] )
-			{
-				throw new Error(
-					'invalid formname: ' + formname
-				);
+				if( CHECK && !this._$forms[ formname ] )
+				{
+					throw new Error(
+						'invalid formname: ' + formname
+					);
+				}
 			}
 
 			this._$forms[ formname ] =
@@ -1249,7 +1224,7 @@ Shell.prototype.userMark =
 						this.screensize,
 					'inherit',
 						this._$forms[ formname ],
-					'userMark',
+					'mark',
 						mark
 				);
 
@@ -1262,7 +1237,64 @@ Shell.prototype.userMark =
 
 
 /*
-| Sets the attribute of an item
+| Cycles focus in a form.
+*/
+Shell.prototype.cycleFormFocus =
+	function(
+		name,
+		dir
+	)
+{
+	var
+		formname =
+			this._formNames[ name ];
+
+	if( CHECK && !this._$forms[ formname ] )
+	{
+		throw new Error(
+			'invalid formname: ' + formname
+		);
+	}
+
+	return this._$forms.cycleFocus( dir );
+}
+
+
+/*
+| Sets the value of a form object.
+| FIXME: combine with setAttr
+*/
+Shell.prototype.setFormValue =
+	function(
+		path,
+		value
+	)
+{
+	var
+		formname =
+			this._formNames[ path.get( 0 ) ],
+
+		itemname =
+			path.get( 1 );
+
+	if( CHECK && !this._$forms[ formname ] )
+	{
+		throw new Error(
+			'invalid formname: ' + formname
+		);
+	}
+
+	console.log( formname, itemname );
+
+	return this._$forms[ formname ].setValue(
+		itemname,
+		value
+	);
+};
+
+
+/*
+| Sets the attribute of an item.
 */
 Shell.prototype.setAttr =
 	function(
@@ -1281,7 +1313,6 @@ Shell.prototype.setAttr =
 				val
 		);
 };
-
 
 
 /*
@@ -1675,25 +1706,6 @@ Shell.prototype.onAuth =
 			false
 		);
 	}
-};
-
-
-/*
-| Gets the current caret.
-*/
-Shell.prototype.getCaret =
-	function( )
-{
-	var
-		display =
-			this._getCurrentDisplay( );
-
-	if( display === this.space )
-	{
-		return display.caret; // TODO XXX
-	}
-
-	return display && display.userMark;
 };
 
 

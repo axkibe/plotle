@@ -358,7 +358,7 @@ Para.prototype.draw =
 
 		var
 			mark =
-				shell.space.mark;
+				this.mark;
 
 		if(
 			mark &&
@@ -1197,8 +1197,6 @@ Jools.lazyFixate(
 +----------- private --------------
 */
 
-// XXX
-
 var
 	_keyMap =
 		{
@@ -1404,7 +1402,7 @@ Para.prototype._keyEnd =
 		bAt1
 	)
 {
-	if( at1 === this.text.length ) 
+	if( at1 === this.text.length )
 	{
 		return false;
 	}
