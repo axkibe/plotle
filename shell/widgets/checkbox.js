@@ -21,6 +21,7 @@ Widgets =
 var
 	Accent,
 	Euclid,
+	shell,
 	Jools;
 
 
@@ -39,7 +40,7 @@ if( CHECK && typeof( window ) === 'undefined' )
 
 var
 	_tag =
-		'CHECKBOX-90606258';
+		'CHECKBOX-WIDGET-90606258';
 
 
 /*

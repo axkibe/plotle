@@ -44,7 +44,7 @@ if( CHECK && typeof( window ) === 'undefined' )
 
 var
 	_tag =
-		'INPUT-316354610';
+		'INPUT-WIDGET-316354610';
 
 
 /*
@@ -75,21 +75,21 @@ Widgets.Input =
 			);
 		}
 
-		if( path === null )
+		if( !path )
 		{
 			throw new Error(
 				'path missing'
 			);
 		}
 
-		if( frame === null )
+		if( !frame )
 		{
 			throw new Error(
 				'frame missing'
 			);
 		}
 
-		if( tree === null )
+		if( !tree )
 		{
 			throw new Error(
 				'tree missing'

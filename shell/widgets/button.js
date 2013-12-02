@@ -44,7 +44,7 @@ if( CHECK && typeof( window ) === 'undefined' )
 
 var
 	_tag =
-		'BUTTON-52212713';
+		'BUTTON-WIDGET-52212713';
 
 
 /*

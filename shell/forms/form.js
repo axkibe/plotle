@@ -173,11 +173,6 @@ Forms.Form =
 					]
 				);
 
-		switch( tree.twig.type )  // XXX
-		{
-		case 'ButtonWidget' :
-		case 'CheckBoxWidget' :
-		case 'InputWidget' :
 		this.$sub[ name ] =
 			Proto.create(
 				'section',
@@ -195,22 +190,6 @@ Forms.Form =
 				'mark',
 					this.mark.concerns( path )
 			);
-		break;
-		default :
-		this.$sub[ name ] =
-			Proto.create(
-				'name',
-					name,
-				'tree',
-					tree,
-				'parent',
-					this,
-				'inherit',
-					inherit && inherit.$sub[ name ],
-				'focusAccent',
-					focusAccent
-			);
-		}
 	}
 
 	Jools.immute( this );

@@ -1414,7 +1414,7 @@ Shell.prototype.setChecked =
 		itemname,
 		value
 	);
-}
+};
 
 
 

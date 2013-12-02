@@ -19,8 +19,7 @@ Widgets =
 | Imports
 */
 var
-	Jools,
-	Path;
+	Jools;
 
 
 /*
@@ -31,8 +30,14 @@ var
 
 if( CHECK && typeof( window ) === 'undefined' )
 {
-	throw new Error( 'this code needs a browser!' );
+	throw new Error(
+		'this code needs a browser!'
+	);
 }
+
+var
+	_tag =
+		'LABEL-WIDGET-66560489';
 
 
 /*
@@ -44,25 +49,27 @@ Widgets.Label =
 		tag,
 		inherit,
 		tree,
-		parent,
-		name,
+		section,
+		path,
+		pos,
 		visible,
 		text
+		// mark
 	)
 {
 	if( CHECK )
 	{
-		if( tag !== 'XOXO' )
+		if( tag !== _tag )
 		{
 			throw new Error(
 				'tag mismatch'
 			);
 		}
 
-		if( parent === null )
+		if( path === null )
 		{
 			throw new Error(
-				'parent missing'
+				'path missing'
 			);
 		}
 
@@ -75,26 +82,10 @@ Widgets.Label =
 	}
 
 	this.path =
-		inherit ?
-			inherit.path
-			:
-			new Path(
-				[
-					parent.name,
-					name
-				]
-			);
-
-	this.name =
-		name;
-
-	this.parent =
-		parent;
+		path;
 
 	this.pos =
-		parent.frame.zeropnw.computePoint(
-			tree.twig.pos
-		),
+		pos;
 
 	this.text =
 		text !== null ?
@@ -123,10 +114,19 @@ Label.create =
 		inherit =
 			null,
 
-		parent =
+		mark =
 			null,
 
-		name =
+		path =
+			null,
+
+		pos =
+			null,
+
+		section =
+			null,
+
+		superFrame =
 			null,
 
 		text =
@@ -151,7 +151,7 @@ Label.create =
 				if( CHECK && arguments[ a + 1 ] !== null )
 				{
 					throw new Error(
-						'Label cannot have a focusAccent'
+						'Labels must not have a focusAccent'
 					);
 				}
 
@@ -164,16 +164,37 @@ Label.create =
 
 				break;
 
-			case 'name' :
+			case 'mark' :
 
-				name =
+				mark =
 					arguments[ a + 1 ];
 
 				break;
 
-			case 'parent' :
+			case 'path' :
 
-				parent =
+				path =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'pos' :
+
+				pos =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'section' :
+
+				section =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'superFrame' :
+
+				superFrame =
 					arguments[ a + 1 ];
 
 				break;
@@ -209,16 +230,22 @@ Label.create =
 
 	if( inherit )
 	{
-		if( name === null )
+		if( path === null )
 		{
-			name =
-				inherit.name;
+			path =
+				inherit.path;
 		}
 
-		if( parent === null )
+		if( pos === null )
 		{
-			parent =
-				inherit.parent;
+			pos =
+				inherit.pos;
+		}
+
+		if( section === null )
+		{
+			section =
+				inherit.section;
 		}
 
 		if( tree === null )
@@ -246,14 +273,33 @@ Label.create =
 			true;
 	}
 
+	if( pos === null )
+	{
+		if( superFrame === null )
+		{
+			throw new Error(
+				'superFrame and pos === null'
+			);
+		}
+
+		pos =
+			superFrame.computePoint(
+				tree.twig.pos
+			);
+	}
+
+	// FIXME inherit cache
+
 	return new Label(
-		'XOXO',
+		_tag,
 		inherit,
 		tree,
-		parent,
-		name,
+		section,
+		path,
+		pos,
 		visible,
-		text
+		text,
+		mark
 	);
 };
 
