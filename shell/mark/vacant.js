@@ -16,10 +16,7 @@ var
 | Imports
 */
 var
-	Euclid,
-	Jools,
-	shell,
-	system;
+	Jools;
 
 
 /*
@@ -45,7 +42,7 @@ var
 		null,
 
 	_tag =
-		'78440763';
+		'MARK-78440763';
 
 /*
 | Constructor.
@@ -119,7 +116,7 @@ Vacant.prototype.equals =
 */
 Vacant.prototype.concerns =
 	function(
-		path
+		// path
 	)
 {
 	return null;

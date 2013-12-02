@@ -19,14 +19,9 @@ Visual =
 | Imports
 */
 var
-	Action,
-	EllipseMenu,
 	Euclid,
 	Jools,
-	Path,
 	shell,
-	Style,
-	system,
 	theme;
 
 
@@ -529,10 +524,7 @@ Item.prototype.dragStart =
 			shell.bridge.action( ),
 
 		sbary =
-			this.scrollbarY,
-
-		space =
-			shell.$space;
+			this.scrollbarY;
 
 	if(
 		!action &&

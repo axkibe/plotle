@@ -346,9 +346,15 @@ Testpad.prototype.onkeydown =
 | Press event to (hidden) input.
 */
 Testpad.prototype.onkeypress =
-	function( event )
+	function(
+		// event
+	)
 {
-	setTimeout( this.testinput, 0, this );
+	setTimeout(
+		this.testinput,
+		0,
+		this
+	);
 };
 
 
@@ -356,7 +362,9 @@ Testpad.prototype.onkeypress =
 | Up event to (hidden) input.
 */
 Testpad.prototype.onkeyup =
-	function( event )
+	function(
+		// event
+	)
 {
 	this.testinput( this );
 };

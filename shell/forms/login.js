@@ -119,9 +119,6 @@ Login.prototype.login =
 		sub =
 			this.$sub,
 
-		errorLabel =
-			sub.errorLabel,
-
 		user =
 			sub.userInput.value,
 
@@ -321,10 +318,7 @@ Login.prototype.onAuth =
 Login.prototype.clear =
 	function( )
 {
-	var
-		sub =
-			this.$sub;
-
+	// TODO remove this.setValue
 	this.setValue(
 		'userInput',
 		''

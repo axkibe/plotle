@@ -19,9 +19,7 @@ var
 | Imports
 */
 var
-	Action,
 	Bridge,
-	Design,
 	Disc,
 	Euclid,
 	fontPool,
@@ -200,9 +198,9 @@ Shell.prototype.positionCaret =
 */
 Shell.prototype.messageRCV =
 	function(
-		space,
-		user,
-		message
+		// space,
+		// user,
+		// message
 	)
 {
 	/*

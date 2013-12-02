@@ -18,8 +18,7 @@ var
 | Imports
 */
 var
-	fontPool,
-	Euclid;
+	fontPool;
 
 /*
 | Capsule
@@ -29,7 +28,9 @@ var
 
 if( typeof( window ) === 'undefined' )
 {
-	throw new Error( 'this code needs a browser!' );
+	throw new Error(
+		'this code needs a browser!'
+	);
 }
 
 

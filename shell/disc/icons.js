@@ -19,12 +19,7 @@ Disc =
 | Imports
 */
 var
-	config,
-	Curve,
-	Euclid,
-	Jools,
-	shell,
-	theme;
+	Jools;
 
 
 /*
@@ -47,6 +42,7 @@ var Icons =
 Disc.Icons =
 	function( )
 {
+	// pass
 };
 
 

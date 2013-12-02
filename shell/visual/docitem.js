@@ -1,5 +1,5 @@
 /*
-| An item with a doc.
+| An item with a document.
 |
 | Common base of Note, Label and Relation.
 |
@@ -21,13 +21,8 @@ Visual =
 | Imports
 */
 var
-	Action,
-	Euclid,
 	Jools,
-	Path,
-	shell,
-	system,
-	theme;
+	shell;
 
 
 /*

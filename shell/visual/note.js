@@ -21,7 +21,6 @@ Visual =
 | Imports
 */
 var
-	Action,
 	config,
 	Euclid,
 	Jools,
@@ -516,13 +515,6 @@ Note.prototype.draw =
 		var
 			doc =
 				this.sub.doc,
-
-			imargin =
-				this.innerMargin,
-
-			// calculates if a scrollbar is needed
-			height =
-				doc.height,
 
 			style =
 				Style.getStyle(

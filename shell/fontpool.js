@@ -11,9 +11,7 @@
 | Imports
 */
 var
-	Font,
-	shellverse,
-	theme;
+	shellverse;
 
 /*
 | Exports

@@ -20,16 +20,12 @@ Visual =
 | Imports
 */
 var
-	Caret,
-	config,
 	Euclid,
 	fontPool,
 	Jools,
-	Sign,
 	Path,
 	shell,
 	shellverse,
-	system,
 	theme;
 
 
@@ -738,9 +734,6 @@ Para.prototype.locateOffset =
 {
 	// FIXME cache position
 	var
-		tree =
-			this.tree,
-
 		font =
 			this.font,
 
@@ -1236,10 +1229,10 @@ Para.prototype._keyBackspace =
 	function(
 		item,
 		doc,
-		at1,
-		retainx,
-		bPath,
-		bAt1
+		at1
+		// retainx
+		// bPath,
+		// bAt1
 	)
 {
 	if( at1 > 0 )
@@ -1282,10 +1275,10 @@ Para.prototype._keyDel =
 	function(
 		item,
 		doc,
-		at1,
-		retainx,
-		bPath,
-		bAt1
+		at1
+		// retainx,
+		// bPath,
+		// bAt1
 	)
 {
 	if( at1 < this.text.length )
@@ -1425,10 +1418,10 @@ Para.prototype._keyEnter =
 	function(
 		item,
 		doc,
-		at1,
-		retainx,
-		bPath,
-		bAt1
+		at1
+		// retainx,
+		// bPath,
+		// bAt1
 	)
 {
 	shell.peer.split(

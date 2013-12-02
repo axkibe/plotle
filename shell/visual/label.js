@@ -146,9 +146,6 @@ Label.create =
 			null,
 
 		tree =
-			null,
-
-		zone =
 			null;
 
 	for(
@@ -536,10 +533,7 @@ Label.prototype.draw =
 
 		var
 			doc =
-				this.sub.doc,
-
-			imargin =
-				this.innerMargin;
+				this.sub.doc;
 
 		// draws selection and text
 		doc.draw(

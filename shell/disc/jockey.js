@@ -20,11 +20,7 @@ Disc =
 */
 var
 	Design,
-	Euclid,
-	fontPool,
-	Jools,
-	shell,
-	Widgets;
+	shell;
 
 /*
 | Capsule
@@ -295,7 +291,8 @@ Jockey.prototype.setMode =
 	)
 {
 	return this._$mainDisc.setMode( mode );
-}
+};
+
 
 /*
 | Displays the current space zoom level

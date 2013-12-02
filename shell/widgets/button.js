@@ -21,11 +21,8 @@ Widgets =
 */
 var
 	Accent,
-	config,
-	Curve,
 	Euclid,
 	Jools,
-	Path,
 	shell,
 	system,
 	theme;
@@ -66,8 +63,8 @@ Widgets.Button =
 		hoverAccent,
 		icons,
 		text,
-		visible,
-		mark
+		visible
+		// mark
 	)
 {
 	if( CHECK )
@@ -649,9 +646,9 @@ Button.prototype.pointingHover =
 */
 Button.prototype.pointingStart =
 	function(
-		p,
-		shift,
-		ctrl
+		p
+		// shift,
+		// ctrl
 	)
 {
 	var

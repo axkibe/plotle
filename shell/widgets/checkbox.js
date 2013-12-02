@@ -20,15 +20,9 @@ Widgets =
 */
 var
 	Accent,
-	Action,
-	config,
-	Curve,
 	Euclid,
 	Jools,
-	Path,
-	shell,
-	system,
-	theme;
+	Path;
 
 
 /*

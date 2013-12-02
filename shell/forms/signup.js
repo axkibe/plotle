@@ -115,9 +115,6 @@ SignUp.prototype.signup =
 		sub =
 			this.$sub,
 
-		errorLabel =
-			sub.errorLabel,
-
 		user =
 			sub.userInput.value,
 

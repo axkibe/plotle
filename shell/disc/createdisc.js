@@ -89,10 +89,7 @@ CreateDisc.prototype._weave =
 
 	var
 		buttons =
-			this.buttons,
-
-		action =
-			shell.bridge.action( );
+			this.buttons;
 
 	for( var buttonName in this.buttons )
 	{
@@ -115,9 +112,9 @@ CreateDisc.prototype._weave =
 */
 CreateDisc.prototype.pushButton =
 	function(
-		path,
-		shift,
-		ctrl
+		path
+		// shift,
+		// ctrl
 	)
 {
 	var

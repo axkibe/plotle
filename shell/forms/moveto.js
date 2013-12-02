@@ -80,9 +80,6 @@ MoveTo.prototype.setUsername =
 		username;
 
 	var
-		userHomeButton =
-			this.$sub.userHomeButton,
-
 		isGuest =
 			username.substr( 0, 7 ) === 'visitor';
 

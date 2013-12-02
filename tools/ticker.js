@@ -7,28 +7,49 @@
 | Authors: Axel Kittenberger
 */
 
-var http     = require('http');
-var util     = require('util');
-var Jools    = require('../shared/jools');
-var config   = require('../config');
+var
+	http =
+		require( 'http' ),
+
+	util =
+		require('util'),
+
+	Jools =
+		require('../shared/jools'),
+
+	config =
+		require( '../config' );
 
 /**
 | Capsule
 */
-(function() {
-"use strict";
+( function( ) {
+'use strict';
 
-var args   = process.argv;
-var user   = args[2];
-var pass   = args[3];
-var itemid = args[4];
-if (!Jools.is(user) || !Jools.is(pass) || !Jools.is(itemid)) {
+var
+	args =
+		process.argv,
+
+	user =
+		args[ 2 ],
+
+	pass =
+		args[ 3 ],
+
+	itemid =
+		args[ 4 ];
+
+if(!Jools.is(user) || !Jools.is(pass) || !Jools.is(itemid))
+{
 	console.log('Usage: ' + args[1] + ' USER PASSWORD ITEMID');
 	process.exit(1);
 }
-pass = Jools.passhash('-meshcraft-8833');
 
-/**
+pass =
+	Jools.passhash( '-meshcraft-8833' );
+
+
+/*
 | Options to connect.
 */
 var ops = {
@@ -38,7 +59,8 @@ var ops = {
 	method: 'POST'
 };
 
-/**
+
+/*
 | Issue on request and builds its answer.
 */
 function request(cmd, callback) {
@@ -66,7 +88,7 @@ function request(cmd, callback) {
 }
 
 
-/**
+/*
 | Parses and runs one json request, parses and pretty-prints the json answer.
 */
 function jsonRequest(cmd, callback) {
@@ -86,42 +108,86 @@ function jsonRequest(cmd, callback) {
 	});
 }
 
-/**
+/*
 | Main program.
 */
-console.log('Talking to '+ops.host+':'+ops.port+ops.path);
+console.log(
+	'Talking to ' + ops.host + ':' + ops.port + ops.path
+);
 
-var p      =  -1;
-var ralpha = 'zyxwvutsrpqonmlkjihgfedcba';
-var rtime  = -1;
+var
+	p =
+		-1,
 
-var fget = function() {
+	ralpha =
+		'zyxwvutsrpqonmlkjihgfedcba',
+
+	rtime =
+		-1;
+
+var fget =
+function()
+{
 	jsonRequest(
 		{
-			cmd: 'get',
-			user: user,
-			pass: pass,
-			path: ['meshcraft:home'],
+			cmd :
+				'get',
+
+			user :
+				user,
+
+			pass :
+				pass,
+			path :
+				[ 'meshcraft:home' ],
+
 			time: -1
 		},
-		function(asw) {
-			rtime = parseInt(asw.time, 10);
-			var text = asw.node.copse[itemid].doc.copse['1'].text;
-			console.log('text:', text);
-			flet(text);
+		function( asw )
+		{
+			rtime =
+				parseInt( asw.time, 10 );
+
+			var
+				text =
+					asw.node.copse[itemid].doc.copse[ '1' ].text;
+
+			console.log(
+				'text:',
+				text
+			);
+
+			flet( text );
 		}
 	);
 };
 
-var fletasw = function(asw) {
+var fletasw =
+	function(
+		// asw
+	)
+{
 	p++;
-	setTimeout(fget, 1000);
+
+	setTimeout(
+		fget,
+		1000
+	);
 };
 
-var flet = function(text) {
-	if (p >= ralpha.length) { p = -1; }
+var flet =
+	function(
+		text
+	)
+{
+	if( p >= ralpha.length )
+	{
+		p =
+			-1;
+	}
 
-	if (p < 0) {
+	if( p < 0 )
+	{
 		// delete line
 		jsonRequest(
 			{
@@ -143,7 +209,9 @@ var flet = function(text) {
 			},
 			fletasw
 		);
-	} else {
+	}
+	else
+	{
 		jsonRequest(
 			{
 				cmd:  'alter',
@@ -166,8 +234,7 @@ var flet = function(text) {
 	}
 };
 
-fget();
+fget( );
 
 
-
-})();
+} )( );

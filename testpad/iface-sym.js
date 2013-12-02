@@ -1,11 +1,9 @@
 /*
-|
 | The interface simulator simulates a server without ever
 | talking to one. Used for debugging.
 |
 | Authors: Axel Kittenberger
 | License: MIT(Expat), see accompanying 'License'-file
-|
 */
 
 
@@ -18,17 +16,13 @@ var IFaceSym;
 /*
 | Imports
 */
-var Change;
-var ChangeRay;
-var MeshMashine;
-var Meshverse;
-var Path;
-var Sign;
-var Tree;
-var Jools;
-var config;
-var shell;
-var system;
+var
+	Change,
+	MeshMashine,
+	Meshverse,
+	Sign,
+	Tree,
+	Jools;
 
 
 /*
@@ -38,31 +32,40 @@ var system;
 "use strict";
 
 if( typeof ( window ) === 'undefined' )
-	{ throw new Error( 'this code nees a browser!' ); }
+{
+	throw new Error(
+		'this code nees a browser!'
+	);
+}
 
 /*
 | Constructor.
 */
-IFaceSym = function( )
+IFaceSym =
+	function( )
 {
 	// the current space;
 	this.$space  =
 		new Tree(
 			{
 				type  : 'Space',
+
 				copse :
 				{
 					'testnote' :
 					{
 						type     : 'Note',
+
 						doc      :
 						{
 							type  : 'Doc',
+
 							copse :
 							{
 								'1' :
 								{
 									type : 'Para',
+
 									text : 'muhkuh'
 								}
 							},
@@ -116,19 +119,31 @@ IFaceSym.prototype.setUser =
 		passhash
 	)
 {
-	this.$user     = user;
-	this.$passhash = passhash;
+	this.$user =
+		user;
+
+	this.$passhash =
+		passhash;
 };
 
 
 /*
 | Aquires a space.
 */
-IFaceSym.prototype.aquireSpace = function(spacename, callback)
+IFaceSym.prototype.aquireSpace =
+	function(
+		spacename,
+		callback
+	)
 {
-	var self = this;
-	if( spacename !== 'testpad' ) {
-		throw new Error(' IFaceSym only has the space "testpad"');
+	var self =
+		this;
+
+	if( spacename !== 'testpad' )
+	{
+		throw new Error(
+			'IFaceSym only has the space "testpad"'
+		);
 	}
 
 	self.$spacename = spacename;
@@ -137,9 +152,14 @@ IFaceSym.prototype.aquireSpace = function(spacename, callback)
 		null,
 		Jools.immute(
 			{
-				tree   : self.$space,
-				name   : spacename,
-				access : 'rw'
+				tree :
+					self.$space,
+
+				name :
+					spacename,
+
+				access :
+					'rw'
 			}
 		)
 	);
@@ -156,18 +176,36 @@ IFaceSym.prototype.get =
 		len
 	)
 {
-	var changes = this.$changes;
-	var cZ      = changes.length;
-	var time    = this.$time;
-	var space   = this.$space;
+	var
+		changes =
+			this.$changes,
+
+		cZ =
+			changes.length,
+
+		time =
+			this.$time,
+
+		space =
+			this.$space;
 
 	if( time < 0 || time > cZ )
-		{ throw new Error('invalid time'); }
+	{
+		throw new Error(
+			'invalid time'
+		);
+	}
 
 	// if the requested tree is not the latest, replay it backwards
-	for (var a = cZ - 1; a >= time; a--)
+	for(
+		var a = cZ - 1;
+		a >= time;
+		a--
+	)
 	{
-		var chgX = changes[ a ];
+		var
+			chgX =
+				changes[ a ];
 
 		for (var b = 0; b < chgX.length; b++)
 		{
@@ -250,7 +288,7 @@ IFaceSym.prototype.goToTime =
 | gets the maximum time
 */
 IFaceSym.prototype.getMaxTime =
-	function( time )
+	function( )
 {
 	return this.$changes.length;
 };

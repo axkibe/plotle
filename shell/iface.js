@@ -25,8 +25,7 @@ var
 	config,
 	shell,
 	shellverse,
-	system,
-	Tree;
+	system;
 
 
 /*

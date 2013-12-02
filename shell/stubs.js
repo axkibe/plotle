@@ -16,8 +16,7 @@ var
 | Imports
 */
 var
-	shellverse,
-	Tree;
+	shellverse;
 
 
 /*

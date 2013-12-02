@@ -38,8 +38,7 @@ var Rect =
 Euclid.Rect =
 	function(
 		tag,
-		twig,
-		ranks
+		twig
 	)
 {
 	if( tag !== 'TREE' )
@@ -74,6 +73,7 @@ Euclid.Rect =
 
 	Jools.immute( this );
 };
+
 
 
 Rect.create =

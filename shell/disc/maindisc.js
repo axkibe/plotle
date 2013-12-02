@@ -19,9 +19,7 @@ Disc =
 | Imports
 */
 var
-	Design,
 	Euclid,
-	fontPool,
 	Jools,
 	shell,
 	Widgets;
@@ -251,9 +249,9 @@ MainDisc.prototype.getButtonOfMode =
 */
 MainDisc.prototype.pushButton =
 	function(
-		path,
-		shift,
-		ctrl
+		path
+		// shift,
+		// ctrl
 	)
 {
 	var

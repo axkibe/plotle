@@ -11,6 +11,6 @@
 	"laxbreak"  : true,
 	"strict"    : true,
 	"undef"     : true,
-	"unused"    : false,
+	"unused"    : true,
 	"globals"   : { "CHECK": true }
 }

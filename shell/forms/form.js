@@ -19,20 +19,12 @@ Forms =
 | Imports
 */
 var
-	Accent,
-	config,
-	Curve,
-	Design,
 	Euclid,
 	Jools,
 	Mark,
 	Path,
-	shellverse,
-	Sign,
 	shell,
-	system,
 	theme,
-	Tree,
 	Widgets;
 
 
@@ -523,9 +515,6 @@ Form.prototype.cycleFocus =
 	var
 		tree =
 			this.tree,
-
-		mark =
-			this.mark,
 
 		path =
 			this.mark.sign.path;

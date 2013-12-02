@@ -126,10 +126,6 @@ NonExistingSpace.prototype.setSpace =
 		spaceTag
 	)
 {
-	var
-		$sub =
-			this.$sub;
-
 	this.$spaceUser =
 		spaceUser;
 

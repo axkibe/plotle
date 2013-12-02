@@ -19,7 +19,6 @@ Visual =
 | Imports
 */
 var
-	Euclid,
 	fontPool,
 	Jools,
 	Path,

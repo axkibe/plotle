@@ -22,10 +22,7 @@ Visual =
 var
 	Euclid,
 	Jools,
-	Mark,
-	MeshMashine,
 	Path,
-	Sign,
 	shell,
 	shellverse,
 	Stubs,
@@ -47,7 +44,7 @@ if( CHECK && typeof( window ) === 'undefined' )
 
 var
 	_tag =
-		'X38170216';
+		'SPACE-X38170216';
 
 /*
 | Constructor
@@ -491,8 +488,8 @@ Space.prototype.createItem =
 */
 Space.prototype.draw =
 	function(
-		fabric,
-		haveSystemFocus
+		fabric
+		// haveSystemFocus
 	)
 {
 	var
@@ -503,12 +500,7 @@ Space.prototype.draw =
 			this.$view,
 
 		action =
-			shell.bridge.action( ),
-
-		zone,
-
-		ranks =
-			this.ranks;
+			shell.bridge.action( );
 
 	// TODO
 	this._center =

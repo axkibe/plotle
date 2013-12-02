@@ -23,7 +23,6 @@ Forms =
 */
 var
 	Design,
-	fontPool,
 	Jools,
 	shell,
 	shellverse;
@@ -72,9 +71,6 @@ Welcome.prototype.name =
 Welcome.prototype.setUsername =
 	function( username )
 {
-	var $sub =
-		this.$sub;
-
 	this.setText(
 		'headline',
 		'Welcome ' + username + '!'

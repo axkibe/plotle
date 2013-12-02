@@ -36,8 +36,7 @@ var Context =
 Visual.Context =
 	function(
 		fontsize,
-		paraSep,
-		flowWidth
+		paraSep
 	)
 {
 	if( CHECK )

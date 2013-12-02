@@ -115,9 +115,6 @@ Space.prototype.arrivedAtSpace =
 		// access
 	)
 {
-	var $sub =
-		this.$sub;
-
 	this.setText(
 		'headline',
 		spaceUser + ':' + spaceTag

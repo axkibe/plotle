@@ -105,9 +105,6 @@ NoAccessToSpace.prototype.setSpace =
 		spaceTag
 	)
 {
-	var $sub =
-		this.$sub;
-
 	this.setText(
 		'headline',
 			'no access to ' +

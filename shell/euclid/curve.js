@@ -16,8 +16,7 @@ var
 | Imports
 */
 var
-	Jools,
-	Euclid;
+	Jools;
 
 
 /*
@@ -82,6 +81,8 @@ Curve =
 			}
 		);
 	}
+
+	Jools.immute( this );
 };
 
 

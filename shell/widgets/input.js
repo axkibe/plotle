@@ -21,10 +21,8 @@ Widgets =
 */
 var
 	Accent,
-	Curve,
 	Euclid,
 	Jools,
-	Path,
 	shell,
 	shellverse,
 	theme;
@@ -814,10 +812,10 @@ Input.prototype._drawCaret =
 			Math.round( p.y + descend ),
 
 		n =
-			s - Math.round( fs + descend ),
+			s - Math.round( fs + descend );
 
-		x =
-			p.x + this.frame.pnw.x - 1;
+//		x =
+//			p.x + this.frame.pnw.x - 1;
 
 	fabric.fillRect(
 		'black',

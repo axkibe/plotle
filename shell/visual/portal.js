@@ -19,13 +19,11 @@ Visual =
 */
 var
 	Accent,
-	Action,
 	config,
 	fontPool,
 	Euclid,
 	Jools,
 	Path,
-	Portal,
 	shell,
 	shellverse,
 	Style,
@@ -525,9 +523,6 @@ Portal.prototype.click =
 	}
 
 	var
-		focus =
-			space.focusedItem( ),
-
 		moveToButton =
 			this._$moveToButton;
 
@@ -1174,14 +1169,11 @@ Portal.prototype._drawCaret =
 	)
 {
 	var
-		space =
-			shell.space,
-
-		item =
-			shell.space.getSub(
-				this.path,
-				'Item'
-			),
+//		item =
+//			shell.space.getSub(
+//				this.path,
+//				'Item'
+//			),
 
 		section =
 			mark.sign.path.get( -1 );
@@ -1251,10 +1243,6 @@ Portal.prototype.specialKey =
 		// ctrl
 	)
 {
-	var
-		show =
-			false;
-
 	switch( key )
 	{
 		case 'backspace' :

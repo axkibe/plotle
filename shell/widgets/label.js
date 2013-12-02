@@ -19,8 +19,6 @@ Widgets =
 | Imports
 */
 var
-	Curve,
-	Euclid,
 	Jools,
 	Path;
 

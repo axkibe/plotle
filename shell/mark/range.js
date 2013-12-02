@@ -16,10 +16,7 @@ var
 | Imports
 */
 var
-	Jools,
-	shell,
-	system,
-	Visual;
+	Jools;
 
 
 /*

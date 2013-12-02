@@ -10,29 +10,28 @@
 /*
 | Export
 */
-var Euclid;
+var
+	Euclid;
+
 
 Euclid =
 	Euclid || { };
 
 
 /*
-| Imports
-*/
-var Jools;
-
-
-/*
 | Capsule
 */
-(function(){
+( function( ) {
 'use strict';
 
 
 /*
 | Constructor.
 */
-var Compass = Euclid.Compass = {};
+var
+	Compass =
+	Euclid.Compass =
+		{ };
 
 
 /*
