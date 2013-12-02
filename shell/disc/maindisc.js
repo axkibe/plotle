@@ -413,7 +413,10 @@ MainDisc.prototype.pointingHover =
 
 	if ( cursor === null )
 	{
-		this.setHover( null );
+		shell.setHover(
+			'disc',
+			this.path
+		);
 	}
 
 	return cursor || 'default';
@@ -532,7 +535,62 @@ MainDisc.prototype.setHover =
 		path
 	)
 {
-	// TODO
+	if( CHECK )
+	{
+		var
+			discname =
+				path.get( 0 );
+
+		if( discname !== 'main' )
+		{
+			throw new Error(
+				'invalid discname: ' + discname
+			);
+		}
+	}
+
+	var
+		buttonName =
+			path.length > 1 ?
+				path.get( 1 )
+				:
+				null;
+
+	if( this.$hover === buttonName )
+	{
+		return;
+	}
+
+	this.$fabric =
+		null;
+
+	if( this.$hover )
+	{
+		this.buttons[ this.$hover ] =
+			Widgets.Button.create(
+				'inherit',
+					this.buttons[ this.$hover ],
+				'hoverAccent',
+					false
+			);
+	}
+
+	this.$hover =
+		buttonName;
+
+	if( buttonName )
+	{
+		this.buttons[ buttonName ] =
+			Widgets.Button.create(
+				'inherit',
+					this.buttons[ buttonName ],
+				'hoverAccent',
+					true
+			);
+	}
+
+	shell.redraw =
+		true;
 };
 
 

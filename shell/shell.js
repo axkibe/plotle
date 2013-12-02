@@ -1325,7 +1325,25 @@ Shell.prototype.setHover =
 
 		case 'form' :
 
-			break;
+			var
+				formname =
+					this._formNames[ path.get( 0 ) ];
+
+			if( CHECK )
+			{
+				if( !this._$forms[ formname ] )
+				{
+					throw new Error(
+						'invalid formname: ' + formname
+					);
+				}
+			}
+
+			return (
+				this._$forms[ formname ].setHover(
+					path.get( 1 )
+				)
+			);
 
 		default :
 
