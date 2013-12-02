@@ -70,11 +70,20 @@ NoAccessToSpace.prototype.name =
 */
 NoAccessToSpace.prototype.pushButton =
 	function(
-		buttonName
+		path
 		// shift,
 		// ctrl
 	)
 {
+	if( CHECK )
+	{
+		// TODO
+	}
+	
+	var
+		buttonName =
+			path.get( 1 );
+
 	switch( buttonName )
 	{
 		case 'okButton' :

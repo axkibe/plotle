@@ -65,11 +65,20 @@ Jools.subclass(
 */
 Space.prototype.pushButton =
 	function(
-		buttonName
+		path
 		// shift,
 		// ctrl
 	)
 {
+	if( CHECK )
+	{
+		// TODO
+	}
+	
+	var
+		buttonName =
+			path.get( 1 );
+
 	switch( buttonName )
 	{
 		case 'closeButton' :
@@ -82,6 +91,9 @@ Space.prototype.pushButton =
 
 			throw new Error( 'unknown button pushed: ' + buttonName );
 	}
+
+	shell.redraw =
+		true;
 };
 
 

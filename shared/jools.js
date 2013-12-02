@@ -8,22 +8,23 @@
 /*
 | Export
 */
-var Jools;
+var
+	Jools;
 
 
 /*
 | Imports
 */
-var config;
-var sha1hex;
+var
+	config,
+	sha1hex;
 
 
 /*
 | Capsule
 */
 ( function( ) {
-
-"use strict";
+'use strict';
 
 
 /*
@@ -64,19 +65,25 @@ if( typeof( window ) === 'undefined' )
 {
 	// in node
 	config =
-		require('../config');
+		require( '../config' );
 
 	sha1hex =
-		require('./sha1').sha1hex;
+		require( './sha1' ).sha1hex;
 
 	devel =
-		configSwitch(config.devel, 'server');
+		configSwitch(
+			config.devel,
+			'server'
+		);
 }
 else
 {
 	// in browser
-	devel  =
-		configSwitch(config.devel, 'shell');
+	devel =
+		configSwitch(
+			config.devel,
+			'shell'
+		);
 }
 
 
@@ -1129,6 +1136,8 @@ var half =
 
 /*
 | Parses free string.
+|
+| TODO remove
 */
 var parseFreeStrings =
 	function(

@@ -74,13 +74,6 @@ Disc.MainDisc =
 			screensize
 	);
 
-	this.createDisc =
-		new Disc.CreateDisc(
-			screensize,
-			Design.CreateDisc,
-			inherit && inherit.createDisc
-		);
-
 	this.$user =
 		null;
 
@@ -154,6 +147,7 @@ MainDisc.prototype._weave =
 
 /*
 | Returns the mode associated with a button
+|
 | TODO remove
 */
 MainDisc.prototype.getModeOfButton =
@@ -200,6 +194,7 @@ MainDisc.prototype.getModeOfButton =
 
 /*
 | Returns the mode associated with a button
+|
 | TODO remove
 */
 MainDisc.prototype.getButtonOfMode =
@@ -243,6 +238,7 @@ MainDisc.prototype.getButtonOfMode =
 			return null;
 
 		default :
+
 			throw new Error(
 				'unknown mode:' + mode
 			);
@@ -255,11 +251,28 @@ MainDisc.prototype.getButtonOfMode =
 */
 MainDisc.prototype.pushButton =
 	function(
-		buttonName
+		path,
+		shift,
+		ctrl
 	)
 {
-	var bridge =
-		shell.bridge;
+	var
+		bridge =
+			shell.bridge,
+
+		discname =
+			path.get( 0 );
+
+	if( discname !== 'main' )
+	{
+		throw new Error(
+			'invalid discname: ' + discname
+		);
+	}
+
+	var
+		buttonName =
+			path.get( 1 );
 
 	if(
 		buttonName === 'login' &&
@@ -277,8 +290,9 @@ MainDisc.prototype.pushButton =
 		)
 	);
 
-	var action =
-		bridge.action( );
+	var
+		action =
+			bridge.action( );
 
 	if( buttonName === 'remove' )
 	{
@@ -299,6 +313,9 @@ MainDisc.prototype.pushButton =
 			bridge.stopAction( );
 		}
 	}
+
+	shell.redraw =
+		true;
 };
 
 
@@ -310,11 +327,6 @@ MainDisc.prototype.draw =
 		fabric
 	)
 {
-	if( shell.bridge.inMode( 'Create' ) )
-	{
-		this.createDisc.draw( fabric );
-	}
-
 	fabric.drawImage(
 		'image',
 			this._weave( ),
@@ -343,18 +355,10 @@ MainDisc.prototype.pointingHover =
 		)
 	)
 	{
-		this.setHover( null );
-
-		if( shell.bridge.inMode( 'Create' ) )
-		{
-			return (
-				this.createDisc.pointingHover(
-					p,
-					shift,
-					ctrl
-				)
-			);
-		}
+		shell.setHover(
+			'disc',
+			this.path
+		);
 
 		return null;
 	}
@@ -376,28 +380,21 @@ MainDisc.prototype.pointingHover =
 		)
 	)
 	{
-		this.setHover( null );
-
-		if( shell.bridge.inMode( 'Create' ) )
-		{
-			return (
-				this.createDisc.pointingHover(
-					p,
-					shift,
-					ctrl
-				)
-			);
-		}
+		shell.setHover(
+			'disc',
+			this.path
+		);
 
 		return null;
 	}
 
 	// this is on the disc
-	var buttons =
-		this.buttons;
+	var
+		buttons =
+			this.buttons,
 
-	var cursor =
-		null;
+		cursor =
+			null;
 
 	for( var name in buttons )
 	{
@@ -441,16 +438,10 @@ MainDisc.prototype.pointingStart =
 		)
 	)
 	{
-		this.setHover( null );
-
-		if( shell.bridge.inMode( 'Create' ) )
-		{
-			return this.createDisc.pointingStart(
-				p,
-				shift,
-				ctrl
-			);
-		}
+		shell.setHover(
+			'disc',
+			this.path
+		);
 
 		return null;
 	}
@@ -472,32 +463,28 @@ MainDisc.prototype.pointingStart =
 		)
 	)
 	{
-		this.setHover( null );
-
-		if( shell.bridge.inMode( 'Create' ) )
-		{
-			return this.createDisc.pointingStart(
-				p,
-				shift,
-				ctrl
-			);
-		}
+		this.setHover(
+			'disc',
+			this.path
+		);
 
 		return null;
 	}
 
 	// this is on the disc
-	var buttons = this.buttons;
+	var
+		buttons =
+			this.buttons;
 
 	for( var name in buttons )
 	{
 		var r =
-			buttons[ name ].
-			pointingStart(
-				pp,
-				shift,
-				ctrl
-			);
+			buttons[ name ]
+				.pointingStart(
+					pp,
+					shift,
+					ctrl
+				);
 
 		if( r )
 		{
@@ -517,7 +504,7 @@ MainDisc.prototype.input =
 		// text
 	)
 {
-
+	// nothing
 };
 
 
@@ -537,13 +524,15 @@ MainDisc.prototype.specialKey =
 
 /*
 | Sets the hovered component.
+|
+| TODO remove
 */
 MainDisc.prototype.setHover =
 	function(
-		name
+		path
 	)
 {
-	// FIXME
+	// TODO
 };
 
 
@@ -608,6 +597,7 @@ MainDisc.prototype.message =
 		// message
 	)
 {
+	// nothing
 };
 
 
@@ -717,7 +707,9 @@ MainDisc.prototype.setSpaceZoom =
 		// zf
 	)
 {
+	// nothing
 };
+
 
 /*
 | Start of a dragging operation.
@@ -731,15 +723,6 @@ MainDisc.prototype.dragStart =
 {
 	return null;
 };
-
-MainDisc.prototype.setActive =
-	function(
-		active
-	)
-{
-	this.createDisc.setActive( active );
-};
-
 
 
 } )( );

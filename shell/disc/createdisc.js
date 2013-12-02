@@ -45,9 +45,9 @@ if( CHECK && typeof( window ) === 'undefined')
 var CreateDisc =
 Disc.CreateDisc =
 	function(
-		screensize,
+		inherit,
 		layout,
-		inherit
+		screensize
 	)
 {
 	Disc.Disc.call(
@@ -94,9 +94,9 @@ CreateDisc.prototype._weave =
 		action =
 			shell.bridge.action( );
 
-	for( var name in this.buttons )
+	for( var buttonName in this.buttons )
 	{
-		buttons[ name ].draw( fabric );
+		buttons[ buttonName ].draw( fabric );
 	}
 
 	fabric.edge(
@@ -115,15 +115,37 @@ CreateDisc.prototype._weave =
 */
 CreateDisc.prototype.pushButton =
 	function(
-		buttonName
+		path,
+		shift,
+		ctrl
 	)
 {
-	var action =
-		shell.bridge.action( );
+	var
+		action =
+			shell.bridge.action( );
+
+	if( CHECK )
+	{
+		var
+			discname =
+				path.get( 0 );
+
+		if( discname !== 'create' )
+		{
+			throw new Error(
+				'invalid discname: ' + discname
+			);
+		}
+	}
+
+	var
+		buttonName =
+			path.get( 1 );
 
 	if( action && action.type === buttonName )
 	{
 		// already in this action
+
 		return;
 	}
 
@@ -211,7 +233,12 @@ CreateDisc.prototype.pointingHover =
 		)
 	)
 	{
-		return this.setHover( null );
+		return (
+			shell.setHover(
+				'disc',
+				this.path
+			)
+		);
 	}
 
 	var
@@ -231,7 +258,12 @@ CreateDisc.prototype.pointingHover =
 		)
 	)
 	{
-		return this.setHover( null );
+		return (
+			shell.setHover(
+				'disc',
+				this.path
+			)
+		);
 	}
 
 	// this is on the disc
@@ -242,10 +274,10 @@ CreateDisc.prototype.pointingHover =
 		cursor =
 			null;
 
-	for( var name in buttons )
+	for( var buttonName in buttons )
 	{
 		cursor =
-			buttons[ name ]
+			buttons[ buttonName ]
 				.pointingHover(
 					pp,
 					shift,
@@ -260,7 +292,10 @@ CreateDisc.prototype.pointingHover =
 
 	if ( cursor === null )
 	{
-		this.setHover( null );
+		shell.setHover(
+			'disc',
+			this.path
+		);
 	}
 
 	return cursor || 'default';
@@ -313,10 +348,10 @@ CreateDisc.prototype.pointingStart =
 		buttons =
 			this.buttons;
 
-	for( var name in buttons )
+	for( var buttonName in buttons )
 	{
 		var r =
-			buttons[ name ]
+			buttons[ buttonName ]
 				.pointingStart(
 					pp,
 					shift,
@@ -375,13 +410,36 @@ CreateDisc.prototype.specialKey =
 
 /*
 | Sets the hovered component.
+|
+| TODO remove
 */
 CreateDisc.prototype.setHover =
 	function(
-		name
+		path
 	)
 {
-	if( this.$hover === name )
+	if( CHECK )
+	{
+		var
+			discname =
+				path.get( 0 );
+
+		if( discname !== 'create' )
+		{
+			throw new Error(
+				'invalid discname: ' + discname
+			);
+		}
+	}
+
+	var
+		buttonName =
+			path.length > 1 ?
+				path.get( 1 )
+				:
+				null;
+
+	if( this.$hover === buttonName )
 	{
 		return;
 	}
@@ -401,14 +459,14 @@ CreateDisc.prototype.setHover =
 	}
 
 	this.$hover =
-		name;
+		buttonName;
 
-	if( name )
+	if( buttonName )
 	{
-		this.buttons[ name ] =
+		this.buttons[ buttonName ] =
 			Widgets.Button.create(
 				'inherit',
-					this.buttons[ name ],
+					this.buttons[ buttonName ],
 				'hoverAccent',
 					true
 			);
@@ -418,6 +476,10 @@ CreateDisc.prototype.setHover =
 		true;
 };
 
+
+/*
+| Sets the active button
+*/
 CreateDisc.prototype.setActive =
 	function(
 		active

@@ -70,11 +70,20 @@ Login.prototype.name =
 */
 Login.prototype.pushButton =
 	function(
-		buttonName
+		path
 		// shift,
 		// ctrl
 	)
 {
+	if( CHECK )
+	{
+		// TODO
+	}
+	
+	var
+		buttonName =
+			path.get( 1 );
+
 	switch( buttonName )
 	{
 		case 'loginButton' :
@@ -91,8 +100,13 @@ Login.prototype.pushButton =
 
 		default :
 
-			throw new Error( 'unknown button pushed: ' + buttonName );
+			throw new Error(
+				'unknown button pushed: ' + buttonName
+			);
 	}
+			
+	shell.redraw =
+		true;
 };
 
 /*

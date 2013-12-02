@@ -656,6 +656,47 @@ Doc.prototype.getParaAtPoint =
 	return null;
 };
 
+/*
+| A text has been inputed.
+*/
+Doc.prototype.input =
+	function(
+		text
+	)
+{
+	var
+		path;
+
+	switch( this.mark.type )
+	{
+		case 'caret' :
+
+			path =
+				this.mark.sign.path;
+
+			break;
+
+		case 'range' :
+
+			path =
+				this.mark.eSign.path;
+
+			break;
+
+		default :
+
+			return false;
+	}
+
+	return (
+		this
+			.sub[ path.get( 2 ) ]
+			.input(
+				text
+			)
+	);
+};
+
 
 /*
 | Handles a special key.

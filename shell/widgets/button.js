@@ -99,7 +99,7 @@ Widgets.Button =
 				'section missing'
 			);
 		}
-		
+
 		if( tree === null )
 		{
 			throw new Error(
@@ -179,7 +179,7 @@ Button.create =
 	var
 		focusAccent =
 			null,
-		
+
 		frame =
 			null,
 
@@ -262,7 +262,7 @@ Button.create =
 					arguments[ a + 1 ];
 
 				break;
-			
+
 			case 'section' :
 
 				section =

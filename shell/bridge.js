@@ -123,7 +123,8 @@ var modes =
 /*
 | Constructor.
 */
-Bridge = function( )
+Bridge =
+	function( )
 {
 
 	/*
@@ -190,9 +191,9 @@ Bridge.prototype.changeMode =
 		mode;
 
 	// FIXME evil knevil
-	if( shell._$disc )
+	if( shell._$discJockey )
 	{
-		shell._$disc.setMode( mode );
+		shell._$discJockey.setMode( mode );
 	}
 };
 
@@ -220,14 +221,15 @@ Bridge.prototype.startAction =
 		);
 	}
 
-	var action =
-	this._$action =
-		new Action( arguments );
+	var
+		action =
+		this._$action =
+			new Action( arguments );
 
 	// FIXME evil knevil
-	if( shell._$disc )
+	if( shell._$discJockey )
 	{
-		shell._$disc.setActive( action && action.type );
+		shell._$discJockey.setActive( action && action.type );
 	}
 
 	return action;
@@ -251,9 +253,9 @@ Bridge.prototype.stopAction =
 		null;
 
 	// FIXME evil knevil
-	if( shell._$disc )
+	if( shell._$discJockey )
 	{
-		shell._$disc.setActive( null );
+		shell._$discJockey.setActive( null );
 	}
 };
 

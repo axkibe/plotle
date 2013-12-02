@@ -86,11 +86,20 @@ Welcome.prototype.setUsername =
 */
 Welcome.prototype.pushButton =
 	function(
-		buttonName
+		path
 		// shift,
 		// ctrl
 	)
 {
+	if( CHECK )
+	{
+		// TODO
+	}
+	
+	var
+		buttonName =
+			path.get( 1 );
+
 	switch( buttonName )
 	{
 		case 'closeButton' :
@@ -107,6 +116,9 @@ Welcome.prototype.pushButton =
 				'unknown button pushed: ' + buttonName
 			);
 	}
+
+	shell.redraw =
+		true;
 };
 
 

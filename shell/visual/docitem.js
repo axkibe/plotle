@@ -227,6 +227,18 @@ DocItem.prototype.click =
 
 
 /*
+| A text has been inputed.
+*/
+DocItem.prototype.input =
+	function(
+		text
+	)
+{
+	return this.sub.doc.input( text );
+};
+
+
+/*
 | Handles a special key.
 */
 DocItem.prototype.specialKey =
@@ -236,7 +248,7 @@ DocItem.prototype.specialKey =
 		ctrl
 	)
 {
-	this.sub.doc.specialKey(
+	return this.sub.doc.specialKey(
 		key,
 		shift,
 		ctrl

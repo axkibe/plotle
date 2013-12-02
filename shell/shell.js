@@ -93,9 +93,6 @@ Shell =
 	this._$haveSystemFocus =
 		true;
 
-	this._$caretBlink =
-		false;
-
 	this.fabric =
 		fabric;
 
@@ -150,10 +147,9 @@ Shell =
 			name;
 	}
 
-	this._$disc =
-		new Disc.MainDisc(
+	this._$discJockey =
+		new Disc.Jockey(
 			null,
-			Design.MainDisc,
 			screensize
 		);
 
@@ -209,14 +205,16 @@ Shell.prototype.messageRCV =
 		message
 	)
 {
+	/*
 	if( user )
 	{
-		this._$disc.message( user + ': ' + message );
+		this._$d_isc.message( user + ': ' + message );
 	}
 	else
 	{
-		this._$disc.message( message );
+		this._$d_isc.message( message );
 	}
+	*/
 };
 
 
@@ -418,17 +416,15 @@ Shell.prototype._draw =
 	{
 		display.draw(
 			fabric,
-			this._$haveSystemFocus,
-			this._$caretBlink
+			this._$haveSystemFocus
 		);
 	}
 
 	if( display && display.showDisc )
 	{
-		this._$disc.draw(
+		this._$discJockey.draw(
 			fabric,
-			this._$haveSystemFocus,
-			this._$caretBlink
+			this._$haveSystemFocus
 		);
 	}
 
@@ -560,7 +556,7 @@ Shell.prototype.pointingHover =
 	if( display && display.showDisc )
 	{
 		cursor =
-			this._$disc.pointingHover(
+			this._$discJockey.pointingHover(
 				p,
 				shift,
 				ctrl
@@ -643,7 +639,7 @@ Shell.prototype.pointingStart =
 	if( pointingState === null )
 	{
 		pointingState =
-			this._$disc.pointingStart(
+			this._$discJockey.pointingStart(
 				p,
 				shift,
 				ctrl
@@ -698,7 +694,7 @@ Shell.prototype.dragStart =
 	if( display && display.showDisc )
 	{
 		cursor =
-			this._$disc.dragStart(
+			this._$discJockey.dragStart(
 				p,
 				shift,
 				ctrl
@@ -754,7 +750,7 @@ Shell.prototype.dragMove =
 		case 'board' :
 
 			cursor =
-				this._$disc.dragMove(
+				this._$discJockey.dragMove(
 					p,
 					shift,
 					ctrl
@@ -814,7 +810,7 @@ Shell.prototype.dragStop =
 		// TODO board???
 		case 'board' :
 
-			this._$disc.dragStop(
+			this._$discJockey.dragStop(
 				p,
 				shift,
 				ctrl
@@ -1103,9 +1099,6 @@ Shell.prototype.userMark =
 					retainx
 				);
 
-			this._$caretBlink =
-				false;
-
 			system.restartBlinker( );
 
 			break;
@@ -1272,48 +1265,63 @@ Shell.prototype.pushButton =
 		path
 	)
 {
-	if( CHECK )
+	switch( section )
 	{
-		if( section !== 'form' )
-		{
+		case 'disc' :
+
+			return this._$discJockey.pushButton(
+				path,
+				false,
+				false
+			);
+
+		case 'form' :
+
+			var
+				formname =
+					this._formNames[ path.get( 0 ) ];
+
+			if( CHECK )
+			{
+				if( !this._$forms[ formname ] )
+				{
+					throw new Error(
+						'invalid formname: ' + formname
+					);
+				}
+			}
+
+			return (
+				this._$forms[ formname ].pushButton(
+					path,
+					false, // FIXME honor shift / ctrl states
+					false
+				)
+			);
+
+		default :
+
 			throw new Error(
 				'section must be form'
 			);
-		}
 	}
-
-	var
-		formname =
-			this._formNames[ path.get( 0 ) ];
-	
-	if( CHECK )
-	{
-		if( !this._$forms[ formname ] )
-		{
-			throw new Error(
-				'invalid formname: ' + formname
-			);
-		}
-	}
-	
-	return this._$forms.pushButton(
-		path.get( 1 ),
-		false, // FIXME honor shift / ctrl states
-		false
-	);
 };
 
 
-Shell.prototype.setHover(
-	section,
-	path
-)
+/*
+| Sets a hovered component.
+*/
+Shell.prototype.setHover =
+	function(
+		section,
+		path
+	)
 {
 	switch( section )
 	{
 		case 'disc' :
 
-			break;
+			return this._$discJockey.setHover( path );
 
 		case 'form' :
 
@@ -1327,6 +1335,7 @@ Shell.prototype.setHover(
 
 	}
 };
+
 
 /*
 | Sets the value of a form object.
@@ -1456,10 +1465,9 @@ Shell.prototype.resize =
 			);
 
 	// TODO only when changed
-	this._$disc =
-		new Disc.MainDisc(
-			this._$disc,
-			Design.MainDisc,
+	this._$discJockey =
+		new Disc.Jockey(
+			this._$discJockey,
 			screensize
 		);
 
@@ -1523,7 +1531,7 @@ Shell.prototype.setUser =
 
 	this.bridge.setUsername( user );
 
-	this._$disc.setUser( user );
+	this._$discJockey.setUser( user );
 
 	this._$forms.User.setUsername( user );
 
@@ -1541,7 +1549,7 @@ Shell.prototype.setSpaceZoom =
 		zf
 	)
 {
-	this._$disc.setSpaceZoom( zf );
+	this._$discJockey.setSpaceZoom( zf );
 };
 
 
@@ -1615,7 +1623,7 @@ Shell.prototype.moveToSpace =
 	)
 {
 	// TODO make message a function of shell
-	this._$disc.message(
+	this._$discJockey.message(
 		'Moving to ' + spaceUser + ':' + spaceTag + ' ...'
 	);
 
@@ -1722,7 +1730,7 @@ Shell.prototype.onAquireSpace =
 		access
 	);
 
-	this._$disc.setSpaceZoom( 0 );
+	this._$discJockey.setSpaceZoom( 0 );
 
 	this._draw( );
 };
@@ -1822,7 +1830,7 @@ Shell.prototype.arrivedAtSpace =
 		access
 	)
 {
-	this._$disc.arrivedAtSpace(
+	this._$discJockey.arrivedAtSpace(
 		spaceUser,
 		spaceTag,
 		access

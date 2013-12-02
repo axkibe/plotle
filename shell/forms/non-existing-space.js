@@ -76,11 +76,20 @@ NonExistingSpace.prototype.name =
 */
 NonExistingSpace.prototype.pushButton =
 	function(
-		buttonName
+		path
 		// shift,
 		// ctrl
 	)
 {
+	if( CHECK )
+	{
+		// TODO
+	}
+	
+	var
+		buttonName =
+			path.get( 1 );
+
 	switch( buttonName )
 	{
 		case 'noButton' :
@@ -105,6 +114,9 @@ NonExistingSpace.prototype.pushButton =
 
 			throw new Error( 'unknown button pushed: ' + buttonName );
 	}
+
+	shell.redraw =
+		true;
 };
 
 

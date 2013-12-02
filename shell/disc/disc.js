@@ -21,7 +21,6 @@ var
 	Euclid,
 	Jools,
 	shellverse,
-	xxx,
 	theme,
 	Path,
 	Widgets;
@@ -51,45 +50,96 @@ Disc.Disc =
 	)
 {
 	var
+		name =
+			null,
+
 		inherit =
-			Jools.parseFreeStrings.call(
-				this,
-				{
-					'name' :
-					{
-						type :
-							'param',
+			null,
 
-						required :
-							true
-					},
+		layout =
+			null,
 
-					'inherit' :
-					{
-						type :
-							'return'
-					},
+		screensize =
+			null;
+	
+	for(
+		var a = 0, aZ = arguments.length;
+		a < aZ;
+		a++
+	)
+	{
+		switch( arguments[ a ] )
+		{
+			case 'name' :
 
-					'layout' :
-					{
-						type :
-							'param',
+				name =
+					arguments[ ++a ];
 
-						required :
-							true
-					},
+				break;
 
-					'screensize' :
-					{
-						type :
-							'param',
+			case 'inherit' :
 
-						required :
-							true
-					}
-				},
-				arguments
+				inherit =
+					arguments[ ++a ];
+
+				break;
+
+			case 'screensize' :
+
+				screensize =
+					arguments[ ++a ];
+
+				break;
+
+			case 'layout' :
+
+				layout =
+					arguments[ ++a ];
+
+				break;
+
+			default :
+
+				throw new Error(
+					'invalid arguments: ' + arguments[ a + 1]
+				);
+		}
+	}
+
+	if( CHECK )
+	{
+		if( name === null )
+		{
+			throw new Error(
+				'name missing'
 			);
+		}
+		
+		if( screensize === null )
+		{
+			throw new Error(
+				'screensize missing'
+			);
+		}
+
+		if( layout === null )
+		{
+			throw new Error(
+				'layout missing'
+			);
+		}
+	}
+
+	// TODO remove
+	this.name =
+		name;
+
+	this.screensize =
+		screensize;
+
+	// TODO remove
+	this.layout =
+		layout;
 
 	var
 		style =
@@ -160,6 +210,11 @@ Disc.Disc =
 	// the buttons
 	this.buttons =
 		{ };
+
+	this.path =
+		new Path(
+			[ this.name ]
+		);
 
 	var
 		icons =

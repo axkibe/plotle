@@ -819,13 +819,16 @@ Server.prototype.prepareResources =
 		'shell/disc/icons.js',
 			'fb',
 
-		'shell/disc/createdisc.js',
-			'fb',
-
 		'shell/disc/disc.js',
 			'fb',
 
+		'shell/disc/createdisc.js',
+			'fb',
+
 		'shell/disc/maindisc.js',
+			'fb',
+
+		'shell/disc/jockey.js',
 			'fb',
 
 		'shell/action.js',
@@ -1077,10 +1080,10 @@ Server.prototype.prepareResources =
 	bundle =
 		bundle.join( '\n' );
 
-	fs.writeFile(
-		'bundle.js',
-		bundle,
-	_);
+	//fs.writeFile(
+	//	'bundle.js',
+	//	bundle,
+	//_);
 
 
 	// uglifies the bundle if configured so

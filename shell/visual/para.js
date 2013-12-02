@@ -872,7 +872,7 @@ Para.prototype.getPointOffset =
 
 
 /*
-| Text has been inputted.
+| A text has been inputed.
 */
 Para.prototype.input =
 	function(
