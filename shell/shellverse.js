@@ -139,7 +139,7 @@ Shellverse.prototype.CheckBoxWidget =
 		must :
 			Jools.immute( {
 
-				box :
+				frame :
 					'Frame',
 
 				checked :

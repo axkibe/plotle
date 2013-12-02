@@ -494,7 +494,7 @@ Design.SignUpForm =
 			checked :
 				true,
 
-			box :
+			frame :
 			{
 				type :
 					'Frame',

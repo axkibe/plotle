@@ -21,8 +21,7 @@ Widgets =
 var
 	Accent,
 	Euclid,
-	Jools,
-	Path;
+	Jools;
 
 
 /*
@@ -38,6 +37,10 @@ if( CHECK && typeof( window ) === 'undefined' )
 	);
 }
 
+var
+	_tag =
+		'CHECKBOX-90606258';
+
 
 /*
 | Constructor.
@@ -48,34 +51,36 @@ Widgets.CheckBox =
 		tag,
 		inherit,
 		tree,
-		parent,
-		name,
+		section,
+		path,
+		frame,
 		focusAccent,
 		hoverAccent,
 		visible,
 		checked
+		// mark
 	)
 {
 	if( CHECK )
 	{
-		if( tag !== 'XOXO' )
+		if( tag !== _tag )
 		{
 			throw new Error(
 				'tag mismatch'
 			);
 		}
 
-		if( parent === null )
+		if( !frame )
 		{
 			throw new Error(
-				'parent missing'
+				'frame missing'
 			);
 		}
 
-		if( tree === null )
+		if( !path )
 		{
 			throw new Error(
-				'tree missing'
+				'path missing'
 			);
 		}
 
@@ -95,24 +100,13 @@ Widgets.CheckBox =
 	}
 
 	this.path =
-		inherit ?
-			inherit.path
-			:
-			new Path(
-				[
-					parent.name,
-					name
-				]
-			);
+		path;
 
 	this.tree =
 		tree;
 
-	this.parent =
-		parent;
-
-	this.name =
-		name;
+	this.section =
+		section;
 
 	this.focusAccent =
 		focusAccent;
@@ -123,10 +117,8 @@ Widgets.CheckBox =
 	this.visible =
 		visible;
 
-	this.box =
-		parent.frame.zeropnw.computeRect(
-			tree.twig.box.twig
-		);
+	this.frame =
+		frame;
 
 	this.checked =
 		checked;
@@ -144,25 +136,34 @@ CheckBox.create =
 	)
 {
 	var
-		inherit =
+		checked =
 			null,
 
 		focusAccent =
 			null,
 
+		frame =
+			null,
+
 		hoverAccent =
 			null,
 
-		parent =
+		inherit =
 			null,
 
-		name =
+		mark =
+			null,
+
+		path =
+			null,
+
+		section =
+			null,
+
+		superFrame =
 			null,
 
 		tree =
-			null,
-
-		checked =
 			null,
 
 		visible =
@@ -177,6 +178,13 @@ CheckBox.create =
 	{
 		switch( arguments[ a ] )
 		{
+			case 'checked' :
+
+				checked =
+					arguments[ a + 1 ];
+
+				break;
+
 			case 'inherit' :
 
 				inherit =
@@ -198,16 +206,30 @@ CheckBox.create =
 
 				break;
 
-			case 'name' :
+			case 'mark' :
 
-				name =
+				mark =
 					arguments[ a + 1 ];
 
 				break;
 
-			case 'parent' :
+			case 'path' :
 
-				parent =
+				path =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'section' :
+
+				section =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'superFrame' :
+
+				superFrame =
 					arguments[ a + 1 ];
 
 				break;
@@ -215,13 +237,6 @@ CheckBox.create =
 			case 'tree' :
 
 				tree =
-					arguments[ a + 1 ];
-
-				break;
-
-			case 'checked' :
-
-				checked =
 					arguments[ a + 1 ];
 
 				break;
@@ -243,6 +258,12 @@ CheckBox.create =
 
 	if( inherit )
 	{
+		if( checked === null )
+		{
+			checked =
+				inherit.checked;
+		}
+
 		if( focusAccent === null )
 		{
 			focusAccent =
@@ -255,28 +276,28 @@ CheckBox.create =
 				inherit.hoverAccent;
 		}
 
-		if( name === null )
+		if( frame === null && superFrame === null )
 		{
-			name =
-				inherit.name;
+			frame =
+				inherit.frame;
 		}
 
-		if( parent === null )
+		if( path === null )
 		{
-			parent =
-				inherit.parent;
+			path =
+				inherit.path;
+		}
+
+		if( section === null )
+		{
+			section =
+				inherit.section;
 		}
 
 		if( tree === null )
 		{
 			tree =
 				inherit.tree;
-		}
-
-		if( checked === null )
-		{
-			checked =
-				inherit.checked;
 		}
 
 		if( visible === null )
@@ -311,13 +332,31 @@ CheckBox.create =
 				tree.twig.checked :
 				false;
 	}
+	
+	if( frame === null )
+	{
+		if( superFrame === null )
+		{
+			throw new Error(
+				'superFrame and frame === null'
+			);
+		}
+
+		frame =
+			superFrame.computeRect(
+				tree.twig.frame.twig
+			);
+	}
+
+	// FIXME inherit cache
 
 	return new CheckBox(
-		'XOXO',
+		_tag,
 		inherit,
 		tree,
-		parent,
-		name,
+		section,
+		path,
+		frame,
 		focusAccent,
 		hoverAccent,
 		visible,
@@ -355,14 +394,15 @@ CheckBox.prototype.sketchCheck =
 		// twist
 	)
 {
-	var pc =
-		this.box.pc;
+	var
+		pc =
+			this.frame.pc,
 
-	var pcx =
-		pc.x;
+		pcx =
+			pc.x,
 
-	var pcy =
-		pc.y;
+		pcy =
+			pc.y;
 
 	fabric.moveTo(
 		pcx -  5,
@@ -420,14 +460,14 @@ CheckBox.prototype.pointingStart =
 	}
 
 	if(
-		this.box.within(
+		this.frame.within(
 			Euclid.View.proper,
 			p
 		)
 	)
 	{
-		this.parent.setChecked(
-			this.name,
+		shell.setChecked(
+			this.path,
 			!this.checked
 		);
 
@@ -464,8 +504,8 @@ CheckBox.prototype.specialKey =
 
 		case 'enter' :
 
-			this.parent.setChecked(
-				this.name,
+			shell.setChecked(
+				this.path,
 				!this.checked
 			);
 
@@ -482,8 +522,8 @@ CheckBox.prototype.input =
 		// text
 	)
 {
-	this.parent.setChecked(
-		this.name,
+	shell.setChecked(
+		this.path,
 		!this.checked
 	);
 
@@ -517,7 +557,7 @@ CheckBox.prototype.draw =
 
 	fabric.paint(
 		style,
-		this.box,
+		this.frame,
 		'sketch',
 		Euclid.View.proper
 	);

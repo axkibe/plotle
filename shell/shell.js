@@ -1355,6 +1355,7 @@ Shell.prototype.setHover =
 
 /*
 | Sets the value of a form object.
+|
 | FIXME: combine with setAttr
 */
 Shell.prototype.setFormValue =
@@ -1382,6 +1383,39 @@ Shell.prototype.setFormValue =
 		value
 	);
 };
+
+
+/*
+| Sets a checkbox
+|
+| FIXME: combine with setAttr
+*/
+Shell.prototype.setChecked =
+	function(
+		path,
+		value
+	)
+{
+	var
+		formname =
+			this._formNames[ path.get( 0 ) ],
+
+		itemname =
+			path.get( 1 );
+
+	if( CHECK && !this._$forms[ formname ] )
+	{
+		throw new Error(
+			'invalid formname: ' + formname
+		);
+	}
+
+	return this._$forms[ formname ].setChecked(
+		itemname,
+		value
+	);
+}
+
 
 
 /*

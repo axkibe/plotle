@@ -218,13 +218,6 @@ Button.create =
 	{
 		switch( arguments[ a ] )
 		{
-			case 'inherit' :
-
-				inherit =
-					arguments[ a + 1 ];
-
-				break;
-
 			case 'focusAccent' :
 
 				focusAccent =
@@ -242,6 +235,13 @@ Button.create =
 			case 'icons' :
 
 				icons =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'inherit' :
+
+				inherit =
 					arguments[ a + 1 ];
 
 				break;
