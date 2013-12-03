@@ -289,7 +289,10 @@ Para.prototype.draw =
 			view.zoom;
 
 	// FIXME, zoom level should be part of the object.
-	if( !f || f.zoom !== zoom )
+	if(
+		!f ||
+		f.zoom !== zoom
+	)
 	{
 		// no cache
 
@@ -301,12 +304,12 @@ Para.prototype.draw =
 				this.font,
 
 			width =
-				flow.spread * view.zoom,
+				flow.spread * zoom,
 
 			height =
-				this.height * view.zoom;
+				this.height * zoom;
 
-		// adds 1 to width so the caret is visible.
+		// adds to width so the caret gets visible.
 		f =
 		this.$fabric =
 			new Euclid.Fabric(
@@ -351,6 +354,8 @@ Para.prototype.draw =
 				);
 			}
 		}
+		
+		f.scale( 1 / zoom );
 
 		var
 			mark =
@@ -427,10 +432,10 @@ Para.prototype._drawCaret =
 	// draws the caret
 	fabric.fillRect(
 		'black',
-		p.x,
-		n,
+		view.scale( p.x ),
+		view.scale( n ),
 		1,
-		s - n
+		view.scale( s - n )
 	);
 };
 

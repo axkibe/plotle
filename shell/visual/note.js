@@ -499,17 +499,20 @@ Note.prototype.draw =
 
 	// no buffer hit?
 	if(
-		config.debug.noCache ||
-		!f ||
-		vzone.width !== f.width ||
+		config.debug.noCache
+		||
+		!f
+		||
+		vzone.width !== f.width
+		||
 		vzone.height !== f.height
 	)
 	{
 		f =
 		this.$fabric =
 			new Euclid.Fabric(
-				vzone.width  + 2,
-				vzone.height + 2
+				vzone.width,
+				vzone.height
 			);
 
 		var

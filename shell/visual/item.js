@@ -740,7 +740,11 @@ Item.prototype.dragMove =
 				spos =
 					action.startPos + sbary.scale( dy );
 
-			item.setScrollbar( spos );
+			shell.setAttr(
+				this.key,
+				'scrolly',
+				spos
+			);
 
 			shell.redraw =
 				true;

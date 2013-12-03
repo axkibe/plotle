@@ -1272,6 +1272,7 @@ Fabric.prototype.reverseClip =
 
 /*
 | Sets the canvas scale
+|
 | FIXME remove
 */
 Fabric.prototype.scale =
