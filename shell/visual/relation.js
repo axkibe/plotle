@@ -116,10 +116,10 @@ Relation.create =
 		doc =
 			null,
 
-		inherit =
+		fontsize =
 			null,
 
-		fontsize =
+		inherit =
 			null,
 
 		item1key =
@@ -268,34 +268,16 @@ Relation.create =
 
 	if( inherit )
 	{
-		if( tree === null )
+		if( doc === null )
 		{
-			tree =
-				inherit.tree;
-		}
-
-		if( path === null )
-		{
-			path =
-				inherit.path;
+			doc =
+				inherit.sub.doc;
 		}
 
 		if( fontsize === null )
 		{
 			fontsize =
 				inherit.fontsize;
-		}
-
-		if( pnw === null )
-		{
-			pnw =
-				inherit.pnw;
-		}
-
-		if( doc === null )
-		{
-			doc =
-				inherit.sub.doc;
 		}
 
 		if( item1key === null )
@@ -309,6 +291,24 @@ Relation.create =
 			item2key =
 				inherit.item2key;
 		}
+
+		if( path === null )
+		{
+			path =
+				inherit.path;
+		}
+
+		if( pnw === null )
+		{
+			pnw =
+				inherit.pnw;
+		}
+
+		if( tree === null )
+		{
+			tree =
+				inherit.tree;
+		}
 	}
 
 	doc =
@@ -321,18 +321,26 @@ Relation.create =
 				inherit ?
 					inherit.sub.doc.path
 					:
-					new Path(
-						path,
-						'++',
-							'doc'
+					(
+						path
+						&&
+						new Path(
+							path,
+							'++',
+								'doc'
+						)
 					),
 			'fontsize',
 				fontsize,
 			'flowWidth',
 				0,
 			'paraSep',
-				0
+				0,
+			'mark',
+				mark
 		);
+
+	// FIXME return inherit
 
 	return (
 		new Relation(

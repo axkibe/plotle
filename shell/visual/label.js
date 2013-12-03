@@ -261,7 +261,7 @@ Label.create =
 				inherit.fontsize;
 		}
 
-		if( !path )
+		if( path === null )
 		{
 			path =
 				inherit.path;
@@ -293,7 +293,8 @@ Label.create =
 					)
 					:
 					(
-						path &&
+						path
+						&&
 						new Path(
 							path,
 							'++',
@@ -339,6 +340,7 @@ Jools.subclass(
 Label.prototype.positioning =
 	'pnw/fontsize';
 
+
 /*
 | Self referencing creator.
 */
@@ -361,10 +363,16 @@ Label.prototype.innerMargin =
 Label.prototype.handles =
 	Jools.immute(
 		{
-			ne : true,
-			se : true,
-			sw : true,
-			nw : true
+			ne :
+				true,
+
+			se :
+				true,
+			sw :
+				true,
+
+			nw :
+				true
 		}
 	);
 

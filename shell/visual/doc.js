@@ -389,7 +389,7 @@ Doc.prototype.draw =
 			item.innerMargin,
 
 		mark =
-			shell.space.mark;
+			this.mark;
 
 	if(
 		mark &&
@@ -770,6 +770,8 @@ Doc.prototype.sketchRange =
 	{
 		if( mark.type !== 'range' )
 		{
+			console.log( mark );
+
 			throw new Error(
 				'wronte mark type'
 			);

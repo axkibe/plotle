@@ -608,7 +608,7 @@ Form.prototype.specialKey =
 /*
 | Sets the value of a widget.
 |
-| XXX remove
+| TODO remove
 */
 Form.prototype.setValue =
 	function(

@@ -1468,7 +1468,7 @@ Para.prototype._keyLeft =
 			ve =
 				doc.atRank( r - 1 );
 
-		ve.setMark(
+		ve._setMark(
 			ve.text.length,
 			null,
 			bPath,

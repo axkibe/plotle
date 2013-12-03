@@ -809,8 +809,6 @@ Input.prototype._drawCaret =
 		fabric
 	)
 {
-	console.log( 'XXX' );
-
 	// draws the caret
 	var
 		fs =
