@@ -213,7 +213,9 @@ Disc.Disc =
 
 	this.path =
 		new Path(
-			[ this.name ]
+			[
+				name
+			]
 		);
 
 	var

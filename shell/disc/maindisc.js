@@ -464,7 +464,7 @@ MainDisc.prototype.pointingStart =
 		)
 	)
 	{
-		this.setHover(
+		shell.setHover(
 			'disc',
 			this.path
 		);

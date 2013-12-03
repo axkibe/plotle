@@ -728,56 +728,6 @@ Portal.prototype.highlight =
 };
 
 
-
-/*
-| Draws the caret if its in this portal.
-*/
-/*
-Portal.prototype.p_ositionCaret = TODO
-	function(
-		space,
-		caret,
-		view
-	)
-{
-	var
-		section =
-			caret.sign.path.get( -1 );
-
-	if(
-		!this._isSection( section ) ||
-		section === 'moveToButton'
-	)
-	{
-		// TODO
-		return;
-	}
-
-	var
-		cpos =
-			caret.$pos =
-			this._getCaretPos( caret ),
-
-		pnw =
-			this.zone.pnw,
-
-		fieldPNW =
-			this._$spaceFields[ section ].pnw;
-
-	caret.$screenPos =
-		view.point(
-			cpos.x + pnw.x + fieldPNW.x,
-			cpos.n + pnw.y + fieldPNW.y
-		);
-
-	caret.$height =
-		Math.round(
-			( cpos.s - cpos.n ) * view.zoom
-		);
-};
-*/
-
-
 /*
 | User is hovering his/her pointing device around.
 |
@@ -1828,7 +1778,10 @@ Portal.prototype._keyDel =
 		value =
 			this.tree.twig[ section ];
 
-	if( !this._isSection( section ) )
+	if(
+		!this._isSection( section ) ||
+		section === 'moveToButton'
+	)
 	{
 		return;
 	}
@@ -1866,7 +1819,10 @@ Portal.prototype._keyEnd =
 		section =
 			sign.path.get( -1 );
 
-	if( !this._isSection( section ) )
+	if(
+		!this._isSection( section ) ||
+		section === 'moveToButton'
+	)
 	{
 		return;
 	}
