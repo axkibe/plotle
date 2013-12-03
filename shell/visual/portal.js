@@ -610,8 +610,6 @@ Portal.prototype.click =
 		);
 	}
 
-	// shell.d_eselect( ); TODO
-
 	return true;
 };
 
@@ -1219,13 +1217,11 @@ Portal.prototype.specialKey =
 
 			break;
 
-/*
 		case 'enter' :
 
-			this.keyEnter( );
+			this._keyEnter( );
 
 			break;
-*/
 
 		case 'left' :
 
@@ -1850,6 +1846,81 @@ Portal.prototype._keyEnd =
 		'at1',
 			value.length
 	);
+
+	shell.redraw =
+		true;
+};
+
+
+/*
+| User pressed enter key.
+*/
+Portal.prototype._keyEnter =
+	function( )
+{
+	var
+		sign =
+			this.mark.sign,
+
+		section =
+			sign.path.get( -1 );
+
+	if( !this._isSection( section ) )
+	{
+		return;
+	}
+
+	var
+		cycle =
+			null;
+
+	switch( section )
+	{
+		case 'spaceUser' :
+
+			cycle =
+				'spaceTag';
+
+			break;
+
+		case 'spaceTag' :
+
+			cycle =
+				'moveToButton';
+
+			break;
+	}
+
+	if( cycle )
+	{
+		shell.userMark(
+			'set',
+			'type',
+				'caret',
+			'section',
+				'space',
+			'path',
+				new Path(
+					sign.path,
+					sign.path.length - 1,
+						cycle
+				),
+			'at1',
+				0
+		);
+	}
+	else
+	{
+		if( CHECK )
+		{
+			if( section !== 'moveToButton' )
+			{
+				throw new Error( );
+			}
+		}
+
+		this._moveTo( );
+	}
 
 	shell.redraw =
 		true;
