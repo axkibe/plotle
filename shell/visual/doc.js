@@ -44,7 +44,7 @@ if ( CHECK && typeof( window ) === 'undefined' )
 
 var
 	_tag =
-		'X15472002';
+		'DOC-15472002';
 
 
 /*

@@ -44,7 +44,7 @@ if( CHECK && typeof( window ) === 'undefined' )
 
 var
 	_tag =
-		'SPACE-X38170216';
+		'SPACE-38170216';
 
 /*
 | Constructor
@@ -133,10 +133,6 @@ Visual.Space =
 				alter && alter[ k ]
 			);
 	}
-
-	// FIXME remove
-	Jools.keyNonGrata( this, 'caret' );
-	Jools.keyNonGrata( this, '$caret' );
 };
 
 

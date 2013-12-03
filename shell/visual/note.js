@@ -49,7 +49,7 @@ if( CHECK && typeof( window ) === 'undefined' )
 
 var
 	_tag =
-		'X69907604';
+		'NOTE-69907604';
 
 
 /*

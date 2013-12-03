@@ -16,11 +16,14 @@
 /*
 | Turn on checking on server side by default.
 */
-GLOBAL.CHECK = true;
+GLOBAL.CHECK =
+	true;
 
 if( typeof( require ) === 'undefined' )
 {
-	throw new Error( 'this code requires node!' );
+	throw new Error(
+		'this code requires node!'
+	);
 }
 
 
@@ -595,28 +598,35 @@ Server.prototype.cmdMessage =
 
 /*
 | Builds the shells config.js file.
-| TODO move \n into join and rework generated code look-alike
 */
 Server.prototype.buildShellConfig =
 	function( )
 {
-	var cconfig = [ ];
-	var k;
+	var
+		cconfig =
+			[ ],
 
+		k;
+	
 	cconfig.push(
 		'var config = {\n',
-		'\tdevel   : ', Jools.configSwitch(config.devel, 'shell'), ',\n',
-		'\tmaxUndo : ', config.maxUndo, ',\n',
+		'\tdevel   : ',
+			Jools.configSwitch( config.devel, 'shell' ),
+			',\n',
+		'\tmaxUndo : ',
+			config.maxUndo, ',\n',
 		'\tdebug   : {\n'
 	);
 
-	var first =
-		true;
+	var
+		first =
+			true;
 
 	for( k in config.debug )
 	{
-		var val =
-			config.debug[ k ];
+		var
+			val =
+				config.debug[ k ];
 
 		if( !first )
 		{
@@ -647,13 +657,14 @@ Server.prototype.buildShellConfig =
 
 	for( k in config.log )
 	{
-		if (!first)
+		if( !first )
 		{
-			cconfig.push(',\n');
+			cconfig.push( ',\n' );
 		}
 		else
 		{
-			first = false;
+			first =
+				false;
 		}
 
 		cconfig.push(
@@ -1042,7 +1053,7 @@ Server.prototype.prepareResources =
 		cconfig;
 
 	cconfig.data =
-		this.buildShellConfig();
+		this.buildShellConfig( );
 
 	var
 		// the bundle itself
@@ -1054,10 +1065,14 @@ Server.prototype.prepareResources =
 			[ ];
 
 	// loads the to be bundled files
-	for( a = 0, aZ = bundleRessources.length; a < aZ; a++ )
+	for(
+		a = 0, aZ = bundleRessources.length;
+		a < aZ;
+		a++
+	)
 	{
 		r =
-			bundleRessources[a];
+			bundleRessources[ a ];
 
 		devels.push(
 			'<script src="' + r.path + '" type="text/javascript"></script>'

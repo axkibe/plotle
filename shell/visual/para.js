@@ -45,7 +45,7 @@ if( CHECK && typeof( window ) === 'undefined' )
 
 var
 	_tag =
-		'X35155849';
+		'PARA-35155849';
 
 /*
 | Constructor.

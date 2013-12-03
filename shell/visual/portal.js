@@ -47,7 +47,7 @@ if( CHECK && typeof( window ) === 'undefined' )
 
 var
 	_tag =
-		'X9357879';
+		'PORTAL-9357879';
 
 /*
 | Constructor.

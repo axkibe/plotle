@@ -42,7 +42,7 @@ var
 		null,
 
 	_tag =
-		'MARK-78440763';
+		'MARK-VACANT-78440763';
 
 /*
 | Constructor.
@@ -104,24 +104,21 @@ Vacant.prototype.equals =
 		mark
 	)
 {
-	console.log( 'AAAAA' );
-
-	return this.type === mark.type;
+	return this === mark;
 };
 
 
 /*
-| Returns this if an entity of that path should
-| be concerned about this mark.
+| A vacant mark concerns about nothing
+| and thus returns itself.
 */
 Vacant.prototype.concerns =
 	function(
 		// path
 	)
 {
-	return null;
+	return this;
 };
-
 
 
 } )( );

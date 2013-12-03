@@ -124,7 +124,7 @@ Caret.prototype.concerns =
 	}
 	else
 	{
-		return null;
+		return Mark.Vacant.create( );
 	}
 };
 

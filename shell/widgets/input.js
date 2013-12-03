@@ -198,7 +198,6 @@ Input.create =
 		visible =
 			null;
 
-
 	for(
 		var a = 0, aZ = arguments.length;
 		a < aZ;
@@ -303,6 +302,12 @@ Input.create =
 		{
 			frame =
 				inherit.frame;
+		}
+
+		if( mark === null )
+		{
+			mark =
+				inherit.mark;
 		}
 
 		if( path === null )
@@ -693,6 +698,15 @@ Input.prototype._weave =
 		);
 	}
 
+	if(
+		this.mark
+		&&
+		this.mark.type === 'caret'
+	)
+	{
+		this._drawCaret( fabric );
+	}
+
 	fabric.edge(
 		style,
 		shape,
@@ -795,6 +809,8 @@ Input.prototype._drawCaret =
 		fabric
 	)
 {
+	console.log( 'XXX' );
+
 	// draws the caret
 	var
 		fs =
@@ -809,13 +825,10 @@ Input.prototype._drawCaret =
 			),
 
 		s =
-			Math.round( p.y + descend ),
+			Math.round( p.y + descend + 1 ),
 
 		n =
 			s - Math.round( fs + descend );
-
-//		x =
-//			p.x + this.frame.pnw.x - 1;
 
 	fabric.fillRect(
 		'black',
