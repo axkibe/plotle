@@ -1528,27 +1528,94 @@ System.prototype._specialKey =
 		{
 			case  8 :
 
-				key = 'backspace';
+				key =
+					'backspace';
 
 				break;
 
 			case  9 :
 
-				key = 'tab';
+				key =
+					'tab';
 
 				break;
 
-			case 13 : key = 'enter';     break;
-			case 27 : key = 'esc';       break;
-			case 33 : key = 'pageup';    break;
-			case 34 : key = 'pagedown';  break;
-			case 35 : key = 'end';       break;
-			case 36 : key = 'pos1';      break;
-			case 37 : key = 'left';      break;
-			case 38 : key = 'up';        break;
-			case 39 : key = 'right';     break;
-			case 40 : key = 'down';      break;
-			case 46 : key = 'del';       break;
+			case 13 :
+
+				key =
+					'enter';
+
+				break;
+
+			case 27 :
+
+				key =
+					'esc';
+				
+				break;
+
+			case 33 :
+
+				key =
+					'pageup';
+				
+				break;
+
+			case 34 :
+			
+				key =
+					'pagedown';
+				
+				break;
+
+			case 35 :
+			
+				key =
+					'end';
+				
+				break;
+
+			case 36 :
+			
+				key =
+					'pos1';
+				
+				break;
+
+			case 37 :
+			
+				key =
+					'left';
+				
+				break;
+
+			case 38 :
+
+				key =	
+					'up';
+				
+				break;
+
+			case 39 :
+			
+				key =
+					'right';
+				
+				break;
+
+			case 40 :
+
+				key =
+					'down';
+				
+				break;
+
+			case 46 :
+
+				key =
+					'del';
+				
+				break;
 		}
 	}
 
@@ -1620,6 +1687,9 @@ startup =
 					new Shell( system.fabric );
 
 				system.shell.onload( );
+
+				// FIXME work on IOS
+				system._hiddenInput.focus( );
 			}
 		);
 

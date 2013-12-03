@@ -106,7 +106,7 @@ Visual.Label =
 				)
 			),
 			Math.round(
-				height
+				height + 2
 			)
 		);
 
