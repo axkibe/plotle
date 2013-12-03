@@ -506,7 +506,7 @@ Jools.lazyFixate(
 
 
 		var reg =
-			( /(\s*\S+|\s+$)\s?(\s*)/g );
+			( /(\S+\s*$|\s*\S+)\s?(\s*)/g );
 			// !pre ? (/(\s*\S+|\s+$)\s?(\s*)/g) : (/(.+)()$/g);
 
 		for(
@@ -516,15 +516,16 @@ Jools.lazyFixate(
 		)
 		{
 			// a token is a word plus following hard spaces
-			var token =
-				ca[ 1 ] + ca[ 2 ];
+			var
+				token =
+					ca[ 1 ] + ca[ 2 ],
 
-			var w =
-				Euclid.Measure.width( font, token );
+				w =
+					Euclid.Measure.width( font, token );
 
 			xw =
-				x + w + space;
-
+				x + w;
+			
 			if( flowWidth > 0 && xw > flowWidth )
 			{
 				if( x > 0 )
@@ -581,7 +582,8 @@ Jools.lazyFixate(
 				}
 			);
 
-			x = xw;
+			x =
+				xw + space;
 		}
 
 		if( spread < xw )
@@ -1059,11 +1061,6 @@ Para.prototype.specialKey =
 			{
 				if( !this.path.subPathOf( mark.sign.path ) )
 				{
-					console.log(
-						this.path,
-						mark.sign.path
-					);
-
 					throw new Error(
 						'path mismatch'
 					);

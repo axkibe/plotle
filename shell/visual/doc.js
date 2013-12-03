@@ -770,8 +770,6 @@ Doc.prototype.sketchRange =
 	{
 		if( mark.type !== 'range' )
 		{
-			console.log( mark );
-
 			throw new Error(
 				'wronte mark type'
 			);

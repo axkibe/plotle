@@ -101,7 +101,7 @@ Visual.Label =
 			pnw,
 			Math.round(
 				Math.max(
-					doc.spread,
+					doc.spread + 3,
 					height / 4
 				)
 			),
