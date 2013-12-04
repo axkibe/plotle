@@ -79,7 +79,7 @@ NoAccessToSpace.prototype.pushButton =
 	{
 		// TODO
 	}
-	
+
 	var
 		buttonName =
 			path.get( 1 );
@@ -99,6 +99,9 @@ NoAccessToSpace.prototype.pushButton =
 };
 
 
+/*
+| Sets the space information.
+*/
 NoAccessToSpace.prototype.setSpace =
 	function(
 		spaceUser,

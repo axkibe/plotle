@@ -886,6 +886,9 @@ Server.prototype.prepareResources =
 
 		'shell/forms/non-existing-space.js',
 			'fb',
+		
+		'shell/forms/jockey.js',
+			'fb',
 
 		'shell/visual/base.js',
 			'fb',

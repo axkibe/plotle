@@ -103,6 +103,15 @@ Forms.Form =
 		}
 	}
 
+	if( inherit )
+	{
+		if( screensize === null )
+		{
+			screensize =
+				inherit.screensize;
+		}
+	}
+
 	this.screensize =
 		screensize;
 

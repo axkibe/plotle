@@ -108,43 +108,13 @@ Shell =
 					fabric.height
 			);
 
-	var forms =
-		[
-			'Login',
-			'MoveTo',
-			'NoAccessToSpace',
-			'NonExistingSpace',
-			'SignUp',
-			'Space',
-			'User',
-			'Welcome'
-		];
+	this._$formJockey =
+		new Forms.Jockey(
+			'screensize',
+				screensize
+		);
 
-	this._$forms =
-		{ };
-
-	var
-		formNames =
-		this._formNames =
-			{ };
-
-	for( var i in forms )
-	{
-		var
-			name =
-				forms[ i ];
-
-		var form =
-			this._$forms[ name ] =
-				new Forms[ name ](
-					'screensize',
-						screensize
-				);
-
-		formNames[ form.name ] =
-			name;
-	}
-
+	// TODO free-strings
 	this._$discJockey =
 		new Disc.Jockey(
 			null,
@@ -333,37 +303,6 @@ Shell.prototype.update =
 				mark
 		);
 
-
-	// TODO move selection to space / forms
-
-	/*
-	if( selection )
-	{
-		this.s_etSelection(
-			selection.doc,
-			MeshMashine.tfxSign(
-				selection.bSign,
-				chgX
-			),
-			MeshMashine.tfxSign(
-				selection.eSign,
-				chgX
-			)
-		);
-	}
-	*/
-
-	// TODO figure out deleted selection
-	/*
-	if(
-		selection &&
-		selection.bSign.path.get( -4 ) === csign.path.get( 1 )
-	)
-	{
-		shell.d_eselect( );
-	}
-	*/
-
 	this._draw( );
 };
 
@@ -495,26 +434,12 @@ Shell.prototype._getCurrentDisplay =
 		case 'User' :
 		case 'Welcome' :
 
-			var
-				inherit =
-					this._$forms[ name ];
-
-			if(
-				!this.screensize.equals(
-					inherit.screensize
+			return (
+				this._$formJockey.get(
+					name,
+					this.screensize
 				)
-			)
-			{
-				this._$forms[ name ] =
-					new Forms[ name ](
-						'inherit',
-							inherit,
-						'screensize',
-							this.screensize
-					);
-			}
-
-			return this._$forms[ name ];
+			);
 
 		default :
 
@@ -910,9 +835,6 @@ Shell.prototype.userMark =
 		form =
 			null,
 
-		formname =
-			null,
-
 		mark =
 			null,
 
@@ -1189,35 +1111,10 @@ Shell.prototype.userMark =
 					form :
 					mark.sign.path.get( 0 ),
 
-			formname =
-				this._formNames[ name ];
-
-			if( CHECK )
-			{
-				if( !formname )
-				{
-					throw new Error(
-						'invalid form: ' + name
-					);
-				}
-
-				if( CHECK && !this._$forms[ formname ] )
-				{
-					throw new Error(
-						'invalid formname: ' + formname
-					);
-				}
-			}
-
-			this._$forms[ formname ] =
-				new Forms[ formname ](
-					'screensize',
-						this.screensize,
-					'inherit',
-						this._$forms[ formname ],
-					'mark',
-						mark
-				);
+			this._$formJockey.setMark(
+				name,
+				mark
+			);
 
 			break;
 	}
@@ -1236,21 +1133,10 @@ Shell.prototype.cycleFormFocus =
 		dir
 	)
 {
-	var
-		formname =
-			this._formNames[ name ];
-
-	if( CHECK )
-	{
-		if( !this._$forms[ formname ] )
-		{
-			throw new Error(
-				'invalid formname: ' + formname
-			);
-		}
-	}
-
-	return this._$forms.cycleFocus( dir );
+	this._$formJockey.cycleFocus(
+		name,
+		dir
+	);
 };
 
 
@@ -1275,26 +1161,10 @@ Shell.prototype.pushButton =
 
 		case 'form' :
 
-			var
-				formname =
-					this._formNames[ path.get( 0 ) ];
-
-			if( CHECK )
-			{
-				if( !this._$forms[ formname ] )
-				{
-					throw new Error(
-						'invalid formname: ' + formname
-					);
-				}
-			}
-
-			return (
-				this._$forms[ formname ].pushButton(
-					path,
-					false, // FIXME honor shift / ctrl states
-					false
-				)
+			return this._$formJockey.pushButton(
+				path,
+				false,
+				false
 			);
 
 		default :
@@ -1311,7 +1181,7 @@ Shell.prototype.pushButton =
 */
 Shell.prototype.setHover =
 	function(
-		section,
+		section, // TODO remove
 		path
 	)
 {
@@ -1323,25 +1193,7 @@ Shell.prototype.setHover =
 
 		case 'form' :
 
-			var
-				formname =
-					this._formNames[ path.get( 0 ) ];
-
-			if( CHECK )
-			{
-				if( !this._$forms[ formname ] )
-				{
-					throw new Error(
-						'invalid formname: ' + formname
-					);
-				}
-			}
-
-			return (
-				this._$forms[ formname ].setHover(
-					path.get( 1 )
-				)
-			);
+			return this._$formJockey.setHover( path );
 
 		default :
 
@@ -1364,29 +1216,17 @@ Shell.prototype.setFormValue =
 		value
 	)
 {
-	var
-		formname =
-			this._formNames[ path.get( 0 ) ],
-
-		itemname =
-			path.get( 1 );
-
-	if( CHECK && !this._$forms[ formname ] )
-	{
-		throw new Error(
-			'invalid formname: ' + formname
-		);
-	}
-
-	return this._$forms[ formname ].setValue(
-		itemname,
-		value
+	return (
+		this._$formJockey.setValue(
+			path,
+			value
+		)
 	);
 };
 
 
 /*
-| Sets a checkbox
+| Sets a checkbox.
 |
 | FIXME: combine with setAttr
 */
@@ -1396,22 +1236,8 @@ Shell.prototype.setChecked =
 		value
 	)
 {
-	var
-		formname =
-			this._formNames[ path.get( 0 ) ],
-
-		itemname =
-			path.get( 1 );
-
-	if( CHECK && !this._$forms[ formname ] )
-	{
-		throw new Error(
-			'invalid formname: ' + formname
-		);
-	}
-
-	return this._$forms[ formname ].setChecked(
-		itemname,
+	this._$formJockey.setChecked(
+		path,
 		value
 	);
 };
@@ -1583,11 +1409,7 @@ Shell.prototype.setUser =
 
 	this._$discJockey.setUser( user );
 
-	this._$forms.User.setUsername( user );
-
-	this._$forms.Welcome.setUsername( user );
-
-	this._$forms.MoveTo.setUsername( user );
+	this._$formJockey.setUsername( user );
 };
 
 
@@ -1702,10 +1524,12 @@ Shell.prototype.onAquireSpace =
 
 		case 'nonexistent' :
 
-			this._$forms.NonExistingSpace.setSpace(
+			this._$formJockey.setSpace(
+				'NonExistingSpace',
 				asw.spaceUser,
 				asw.spaceTag
 			);
+
 
 			shell.bridge.changeMode( 'NonExistingSpace' );
 
@@ -1716,7 +1540,8 @@ Shell.prototype.onAquireSpace =
 
 		case 'no access' :
 
-			this._$forms.NoAccessToSpace.setSpace(
+			this._$formJockey.setSpace(
+				'NoAccessToSpace',
 				asw.spaceUser,
 				asw.spaceTag
 			);
@@ -1886,7 +1711,7 @@ Shell.prototype.arrivedAtSpace =
 		access
 	);
 
-	this._$forms.Space.arrivedAtSpace(
+	this._$formJockey.arrivedAtSpace(
 		spaceUser,
 		spaceTag,
 		access

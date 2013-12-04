@@ -1551,70 +1551,70 @@ System.prototype._specialKey =
 
 				key =
 					'esc';
-				
+
 				break;
 
 			case 33 :
 
 				key =
 					'pageup';
-				
+
 				break;
 
 			case 34 :
-			
+
 				key =
 					'pagedown';
-				
+
 				break;
 
 			case 35 :
-			
+
 				key =
 					'end';
-				
+
 				break;
 
 			case 36 :
-			
+
 				key =
 					'pos1';
-				
+
 				break;
 
 			case 37 :
-			
+
 				key =
 					'left';
-				
+
 				break;
 
 			case 38 :
 
-				key =	
+				key =
 					'up';
-				
+
 				break;
 
 			case 39 :
-			
+
 				key =
 					'right';
-				
+
 				break;
 
 			case 40 :
 
 				key =
 					'down';
-				
+
 				break;
 
 			case 46 :
 
 				key =
 					'del';
-				
+
 				break;
 		}
 	}

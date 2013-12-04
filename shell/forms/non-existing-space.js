@@ -120,6 +120,9 @@ NonExistingSpace.prototype.pushButton =
 };
 
 
+/*
+| Sets the space information.
+*/
 NonExistingSpace.prototype.setSpace =
 	function(
 		spaceUser,

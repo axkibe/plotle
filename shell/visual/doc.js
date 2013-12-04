@@ -22,7 +22,6 @@ var
 	fontPool,
 	Jools,
 	Path,
-	shell,
 	shellverse,
 	theme;
 
