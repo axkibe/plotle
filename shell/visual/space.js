@@ -26,7 +26,8 @@ var
 	shell,
 	shellverse,
 	Stubs,
-	theme;
+	theme,
+	TraitSet;
 
 
 /*
@@ -59,7 +60,7 @@ Visual.Space =
 		spaceTag,
 		access,
 		mark,
-		alter
+		traitSet
 	)
 {
 	if( CHECK )
@@ -130,7 +131,7 @@ Visual.Space =
 				tree.twig[ k ],
 				k,
 				inherit && inherit.sub[ k ],
-				alter && alter[ k ]
+				traitSet
 			);
 	}
 };
@@ -155,9 +156,6 @@ Space.create =
 		access =
 			null,
 
-		alter =
-			null,
-
 		inherit =
 			null,
 
@@ -170,6 +168,9 @@ Space.create =
 		spaceUser =
 			null,
 
+		traitSet =
+			null,
+
 		tree =
 			null;
 
@@ -178,10 +179,7 @@ Space.create =
 			0,
 
 		aZ =
-			arguments.length,
-
-		aitem;
-	
+			arguments.length;
 
 	while( a < aZ )
 	{
@@ -195,36 +193,38 @@ Space.create =
 				a += 2;
 
 				break;
-			
-			case 'alter' :
 
-				// alters one item
-				// followed by these arguments
-				//
-				//   key ... of the item
-				//   attribute ... to change
-				//   value ... to set it to
+			case 'traitSet' :
 
-				if( alter === null )
+				// sets a (set of) attributes
+
+				if( CHECK )
 				{
-					alter =
-						{ };
+					if( traitSet.type !== 'traitSet' )
+					{
+						throw new Error(
+							'traitSet not a traitSet'
+						);
+					}
 				}
 
-				aitem =
-					alter[ arguments[ a + 1] ];
-
-				if( !aitem )
+				if( traitSet === null )
 				{
-					aitem =
-					alter[ arguments[ a + 1] ] =
-						{ };
+					traitSet =
+						arguments[ a + 1 ];
+				}
+				else
+				{
+					traitSet =
+						new TraitSet(
+							'set',
+								traitSet,
+							'trait',
+								arguments[ a + 1 ]
+						);
 				}
 
-				aitem[ arguments[ a + 2 ] ] =
-					arguments[ a + 3 ];
-
-				a += 4;
+				a += 2;
 
 				break;
 
@@ -232,7 +232,7 @@ Space.create =
 
 				inherit =
 					arguments[ a + 1 ];
-			
+
 				a += 2;
 
 				break;
@@ -254,7 +254,7 @@ Space.create =
 				a += 2;
 
 				break;
-			
+
 			case 'spaceUser' :
 
 				spaceUser =
@@ -290,12 +290,6 @@ Space.create =
 				inherit.access;
 		}
 
-		if( !alter )
-		{
-			alter =
-				inherit.alter;
-		}
-
 		if( !mark )
 		{
 			mark =
@@ -313,7 +307,7 @@ Space.create =
 			spaceUser =
 				inherit.spaceUser;
 		}
-		
+
 		if( !tree )
 		{
 			tree =
@@ -330,7 +324,7 @@ Space.create =
 			spaceTag,
 			access,
 			mark,
-			alter
+			traitSet
 		)
 	);
 };
@@ -356,7 +350,7 @@ Space.prototype.focusedItem =
 
 		mark =
 			this.mark,
-			
+
 		path =
 			null;
 
@@ -377,10 +371,10 @@ Space.prototype.focusedItem =
 			break;
 
 		default :
-			
+
 			return null;
 	}
-	
+
 	if( action )
 	{
 		switch( action.type )
@@ -396,7 +390,7 @@ Space.prototype.focusedItem =
 				break;
 		}
 	}
-			
+
 	return (
 		this.getSub(
 			path,
@@ -2127,7 +2121,7 @@ Space.prototype.specialKey =
 	switch( mark.type )
 	{
 		case 'caret' :
-			
+
 			path =
 				mark.sign.path;
 

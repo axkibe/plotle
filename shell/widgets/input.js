@@ -185,7 +185,7 @@ Input.create =
 
 		section =
 			null,
-		
+
 		superFrame =
 			null,
 
@@ -297,7 +297,7 @@ Input.create =
 			hoverAccent =
 				inherit.hoverAccent;
 		}
-		
+
 		if( frame === null && superFrame === null )
 		{
 			frame =
@@ -364,7 +364,7 @@ Input.create =
 		value =
 			'';
 	}
-			
+
 	if( frame === null )
 	{
 		if( superFrame === null )
@@ -373,7 +373,7 @@ Input.create =
 				'superFrame and frame === null'
 			);
 		}
-		
+
 		frame =
 			superFrame.computeRect(
 				tree.twig.frame.twig
@@ -836,84 +836,6 @@ Input.prototype._drawCaret =
 		s - n
 	);
 };
-
-
-/*
-| Returns the caret position relative to the parent.
-*/
-/*
-Input.prototype.getCaretPos =
-	function( )
-{
-	var
-		fs =
-			this.tree.twig.font.twig.size,
-
-		descend =
-			fs * theme.bottombox,
-
-		p =
-			this.locateOffset(
-				X.sign.at1
-			),
-
-		pnw =
-			this.frame.pnw,
-
-		s =
-			Math.round( p.y + pnw.y + descend ),
-
-		n =
-			s - Math.round( fs + descend ),
-
-		x =
-			p.x + this.frame.pnw.x - 1;
-
-	return Jools.immute(
-		{
-			s :
-				s,
-
-			n :
-				n,
-
-			x :
-				x
-		}
-	);
-};
-*/
-
-
-/*
-| Draws the caret.
-*/
-/*
-Input.prototype.positionCaret =
-	function(
-		view
-	)
-{
-	var
-		caret =
-			X,
-
-		cpos =
-		caret.$pos =
-			this.getCaretPos();
-
-	caret.$screenPos =
-		view.point(
-			cpos.x,
-			cpos.n
-		);
-
-	caret.$height =
-		Math.round(
-			( cpos.s - cpos.n ) * view.zoom
-		);
-};
-*/
 
 
 /*

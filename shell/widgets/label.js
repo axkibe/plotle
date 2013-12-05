@@ -236,7 +236,7 @@ Label.create =
 				inherit.path;
 		}
 
-		if( pos === null )
+		if( pos === null && superFrame === null )
 		{
 			pos =
 				inherit.pos;

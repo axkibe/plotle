@@ -602,8 +602,10 @@ Button.prototype.pointingHover =
 	)
 {
 	if(
-		!this.visible ||
-		p === null ||
+		!this.visible
+		||
+		p === null
+		||
 		!this.frame.within(
 			Euclid.View.proper,
 			p

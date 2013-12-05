@@ -59,6 +59,43 @@ Jools.subclass(
 );
 
 
+Login.create =
+	function(
+		// free strings
+	)
+{
+	var
+		a =
+			0,
+
+		aZ =
+			arguments.length;
+
+	while( a < aZ )
+	{
+		var
+			arg =
+				arguments[ a++ ];
+
+		switch( arg )
+		{
+
+			case 'screensize' :
+
+				break;
+
+			case 'inherit' :
+
+				break;
+
+			case 'mark' :
+
+				break;
+		}
+	}
+};
+
+
 /*
 | Name of the form.
 */

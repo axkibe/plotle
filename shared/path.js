@@ -146,7 +146,8 @@ Path =
 /*
 | Returns true if argument is a path
 */
-Path.isPath = function( a )
+Path.isPath =
+	function( a )
 {
 	return a.constructor === Path;
 };

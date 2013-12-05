@@ -99,7 +99,9 @@ Forms.Form =
 
 			default :
 
-				throw new Error( 'unknown argument: ' + arg );
+				throw new Error(
+					'unknown argument: ' + arg
+				);
 		}
 	}
 
@@ -191,7 +193,7 @@ Forms.Form =
 				'tree',
 					tree,
 				'superFrame',
-					this.frame.zeropnw,
+					this.frame,
 				'inherit',
 					inherit && inherit.$sub[ name ],
 				'focusAccent',

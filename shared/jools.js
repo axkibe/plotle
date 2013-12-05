@@ -9,7 +9,8 @@
 | Export
 */
 var
-	Jools;
+	Jools =
+		{ };
 
 
 /*
@@ -28,15 +29,9 @@ var
 
 
 /*
-| Config variables
-*/
-var devel;
-
-
-/*
 | Returns boolean parameter for shell or server.
 */
-var configSwitch =
+Jools.configSwitch =
 	function(
 		param,  // the parameter
 		side    // 'shell' or 'server'
@@ -47,7 +42,9 @@ var configSwitch =
 		side !== 'server'
 	)
 	{
-		throw new Error( 'configSwitch side must be shell or server' );
+		throw new Error(
+			'configSwitch side must be shell or server'
+		);
 	}
 
 	return (
@@ -70,8 +67,8 @@ if( typeof( window ) === 'undefined' )
 	sha1hex =
 		require( './sha1' ).sha1hex;
 
-	devel =
-		configSwitch(
+	Jools.devel =
+		Jools.configSwitch(
 			config.devel,
 			'server'
 		);
@@ -79,8 +76,8 @@ if( typeof( window ) === 'undefined' )
 else
 {
 	// in browser
-	devel =
-		configSwitch(
+	Jools.devel =
+		Jools.configSwitch(
 			config.devel,
 			'shell'
 		);
@@ -89,230 +86,234 @@ else
 
 var
 	puffed =
-		config.debug.puffed,
+		config.debug.puffed;
 
 
-	/*
-	| Returns true if o is defined
-	*/
-	is =
-		function( o )
+/*
+| Returns true if o is defined
+*/
+Jools.is =
+	function( o )
+{
+	return typeof( o ) !== 'undefined';
+};
+
+
+/*
+| Returns true if o is defined and not null
+*/
+Jools.isnon =
+	function( o )
+{
+	return (
+		typeof( o ) !== 'undefined' &&
+		o !== null
+	);
+};
+
+
+/*
+| Returns true if o is an integer number
+*/
+Jools.isInteger =
+	function( o )
+{
+	return (
+		typeof( o ) === 'number' &&
+		Math.floor( o ) === o
+	);
+};
+
+
+/*
+| Returns true if o is an Array
+*/
+Jools.isArray =
+	function( o )
+{
+	if( !o )
 	{
-		return typeof( o ) !== 'undefined';
-	},
+		return false;
+	}
+
+	return o.constructor === Array;
+};
 
 
-	/*
-	| Returns true if o is defined and not null
-	*/
-	isnon =
-		function( o )
+/*
+| Returns true if o is a String
+*/
+Jools.isString  =
+	function( o )
+{
+	return (
+		typeof( o ) === 'string' ||
+		( o instanceof String )
+	);
+};
+
+
+/*
+| Limits value to be between min and max
+*/
+Jools.limit =
+	function(
+		min,
+		val,
+		max
+	)
+{
+	if( min > max )
 	{
-		return (
-			typeof( o ) !== 'undefined' &&
-			o !== null
+		throw new Error(
+			'limit() min > max'
 		);
-	},
+	}
 
-
-	/*
-	| Returns true if o is an integer number
-	*/
-	isInteger =
-		function( o )
+	if( val < min )
 	{
-		return (
-			typeof( o ) === 'number' &&
-			Math.floor( o ) === o
-		);
-	},
+		return min;
+	}
 
-
-	/*
-	| Returns true if o is an Array
-	*/
-	isArray =
-		function( o )
+	if( val > max )
 	{
-		if( !o )
-		{
-			return false;
-		}
+		return max;
+	}
 
-		return o.constructor === Array;
-	},
+	return val;
+};
 
 
-	/*
-	| Returns true if o is a String
-	*/
-	isString  =
-		function( o )
-	{
-		return (
-			typeof( o ) === 'string' ||
-			( o instanceof String )
-		);
-	},
-
-
-	/*
-	| Limits value to be between min and max
-	*/
-	limit =
-		function(
-			min,
-			val,
-			max
-		)
-	{
-		if( min > max )
-		{
-			throw new Error('limit() min > max');
-		}
-
-		if( val < min )
-		{
-			return min;
-		}
-
-		if( val > max )
-		{
-			return max;
-		}
-
-		return val;
-	},
-
-
-	/*
-	| buils a fail message
-	*/
-	fail =
-		function(
-			args,
-			aoffset
-		)
-	{
-		var
-			a =
-				Array.prototype.slice.call(
-					args,
-					aoffset,
-					args.length
-				);
-
-		for(
-			var i = 2;
-			i < arguments.length;
-			i++
-		)
-		{
-			a.push( arguments[ i ] );
-		}
-
-		var
-			b =
-				a.slice( );
-
-		b.unshift( 'fail' );
-
-		log.apply(
-			null,
-			b
-		);
-
-		throw reject( a.join(' ') );
-	},
-
-
-	/*
-	| Throws a reject if condition is not met.
-	*/
-	check =
-		function( condition )
-	{
-		if( !condition )
-		{
-			fail(
-				arguments,
-				1
+/*
+| Builds a fail message.
+*/
+var fail =
+	function(
+		args,
+		aoffset
+	)
+{
+	var
+		a =
+			Array.prototype.slice.call(
+				args,
+				aoffset,
+				args.length
 			);
-		}
-	},
+
+	for(
+		var i = 2;
+		i < arguments.length;
+		i++
+	)
+	{
+		a.push( arguments[ i ] );
+	}
+
+	var
+		b =
+			a.slice( );
+
+	b.unshift( 'fail' );
+
+	Jools.log.apply(
+		null,
+		b
+	);
+
+	throw Jools.reject( a.join(' ') );
+};
 
 
-	/*
-	| Throws a reject if v is not within limits
-	*/
-	checkLimits =
-		function(
-			v,
+/*
+| Throws a reject if condition is not met.
+*/
+Jools.check =
+	function( condition )
+{
+	if( !condition )
+	{
+		fail(
+			arguments,
+			1
+		);
+	}
+};
+
+
+/*
+| Throws a reject if v is not within limits
+*/
+Jools.checkLimits =
+	function(
+		v,
+		low,
+		high
+	)
+{
+	if ( v < low || v > high )
+	{
+		fail(
+			arguments,
+			3,
 			low,
+			'<=',
+			v,
+			'<=',
 			high
-		)
-	{
-		if ( v < low || v > high )
-		{
-			fail(
-				arguments,
-				3,
-				low,
-				'<=',
-				v,
-				'<=',
-				high
-			);
-		}
-	},
-
-
-	/*
-	| Hashes the password.
-	*/
-	passhash =
-		function( pass )
-	{
-		return sha1hex( pass + '-meshcraft-8833' );
-	},
-
-
-	/*
-	| Returns a rejection error.
-	*/
-	reject =
-		function( message )
-	{
-		// in devel mode any failure is fatal.{
-		if ( Jools.devel )
-		{
-			throw new Error( message );
-		}
-
-		log(
-			'reject',
-			'reject',
-			message
 		);
-
-		return {
-			ok :
-				false,
-
-			message :
-				message
-		};
-	},
+	}
+};
 
 
-	/*
-	| Returns an unique identifier
-	*/
-	uid =
-		function( )
+/*
+| Hashes the password.
+*/
+Jools.passhash =
+	function( pass )
+{
+	return sha1hex( pass + '-meshcraft-8833' );
+};
+
+
+/*
+| Returns a rejection error.
+*/
+Jools.reject =
+	function(
+		message
+	)
+{
+	// in devel mode any failure is fatal.{
+	if ( Jools.devel )
 	{
-		var
-			mime =
+		throw new Error( message );
+	}
+
+	Jools.log(
+		'reject',
+		'reject',
+		message
+	);
+
+	return {
+		ok :
+			false,
+
+		message :
+			message
+	};
+};
+
+
+/*
+| Returns an unique identifier.
+*/
+Jools.uid =
+	function( )
+{
+	var
+		mime =
 			'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/',
 
 			ua =
@@ -340,30 +341,32 @@ var
 	},
 
 
-	/*
-	| Creates a random password with only numbers and lower case alphas.
-	*/
-	randomPassword =
-		function( length )
+/*
+| Creates a random password with only numbers and lower case alphas.
+*/
+Jools.randomPassword =
+	function(
+		length
+	)
+{
+	var
+		ch =
+			'abcdefghijklmnopqrstuvwxyz0123456789',
+
+		ua =
+			[ ];
+
+	for(
+		var a = 0;
+		a < length;
+		a++
+	)
 	{
-		var
-			ch =
-				'abcdefghijklmnopqrstuvwxyz0123456789',
+		ua.push( ch[ Math.floor( 36 * Math.random( ) ) ] );
+	}
 
-			ua =
-				[ ];
-
-		for(
-			var a = 0;
-			a < length;
-			a++
-		)
-		{
-			ua.push( ch[ Math.floor( 36 * Math.random( ) ) ] );
-		}
-
-		return ua.join( '' );
-	};
+	return ua.join( '' );
+};
 
 
 /*
@@ -403,7 +406,7 @@ if( !Object.freeze )
 | Subclassing helper.
 |
 */
-var subclass =
+Jools.subclass =
 	function(
 		sub,   // prototype to become a subclass.
 		base   // either a prototype to become the base.
@@ -450,7 +453,7 @@ var subclass =
 /*
 | Throws an error if any argument is not an integer.
 */
-var ensureInt =
+Jools.ensureInt =
 	function(
 		// integers
 	)
@@ -471,7 +474,7 @@ var ensureInt =
 | Checks the definedness of a list of variables
 | and throws an arguments error if not.
 */
-var ensureArgs =
+Jools.ensureArgs =
 	function(
 		// list of:
 		//   argument name, defined variable
@@ -498,7 +501,7 @@ var ensureArgs =
 /*
 | Fixates a value to an object (not changeable)
 */
-var fixate =
+Jools.fixate =
 	function(
 		obj,
 		key,
@@ -523,7 +526,7 @@ var fixate =
 |
 | if writable is undefined, defaults to false
 */
-var innumerable =
+Jools.innumerable =
 	function(
 		obj,
 		key,
@@ -547,7 +550,7 @@ var innumerable =
 /*
 * A value is computed and fixated only when needed.
 */
-var lazyFixate =
+Jools.lazyFixate =
 	function(
 		proto,
 		key,
@@ -565,9 +568,9 @@ var lazyFixate =
 			{
 				var ckey = '_lazy_' + key;
 
-				return is( this[ ckey ] ) ?
+				return Jools.is( this[ ckey ] ) ?
 					this[ ckey ] :
-					innumerable(
+					Jools.innumerable(
 						this,
 						ckey,
 						getter.call( this )
@@ -581,7 +584,7 @@ var lazyFixate =
 /*
 | Copies one object (not deep!)
 */
-var copy =
+Jools.copy =
 	function(
 		o,  // the object to copy from
 		c   // the object to copy into
@@ -602,7 +605,7 @@ var copy =
 /*
 | Returns true if a node matches another node
 */
-var matches =
+Jools.matches =
 	function(
 		// o1,
 		// o2
@@ -659,7 +662,7 @@ var matches =
 			k1[ a ];
 
 		if(
-			!matches(
+			!Jools.matches(
 				o1[ k ],
 				o2[ k ]
 			)
@@ -932,9 +935,10 @@ var _inspect =
 
 
 /*
-| Logs a number of inspected argument if category is configured to be logged.
+| Logs a number of inspected argument
+| if category is configured to be logged.
 */
-var log =
+Jools.log =
 	function(
 		category
 	)
@@ -981,7 +985,8 @@ var log =
 /*
 | Shortcut for log('debug', ...);
 */
-function debug( )
+Jools.debug =
+	function( )
 {
 	if( !config.log.debug )
 	{
@@ -1011,13 +1016,14 @@ function debug( )
 	console.log(
 		a.join( '' )
 	);
-}
+};
 
 
 /*
 | Returns a descriptive string for an object.
 */
-var inspect = function( o )
+Jools.inspect =
+	function( o )
 {
 	var a = [ ];
 
@@ -1035,7 +1041,7 @@ var inspect = function( o )
 /*
 | Makes an object immutable
 */
-var immute =
+Jools.immute =
 	function(
 		obj
 	)
@@ -1099,7 +1105,7 @@ var immute =
 |
 | Used for developing during changes
 */
-var keyNonGrata =
+Jools.keyNonGrata =
 	function(
 		obj,
 		key
@@ -1127,234 +1133,21 @@ var keyNonGrata =
 };
 
 // divides by 2 and rounds up
-var half =
+Jools.half =
 	function( v )
 {
 	return Math.round( v / 2 );
 };
 
 
-/*
-| Parses free string.
-|
-| TODO remove
-*/
-var parseFreeStrings =
-	function(
-		freeType, // a type object, or an array of type objects
-		args,     // the arguments used to create this
-		recurse   // true if recursing
-	)
-{
-	var
-		a =
-			0,
-
-		aZ =
-			args.length,
-
-		f, fZ,
-
-		arg,
-
-		type,
-
-		property,
-
-		ret =
-			null;
-
-	// TODO ensure null-ness of params in non recursive calls
-
-	while( a < aZ )
-	{
-		arg =
-			args[ a ];
-
-		if( !isArray( freeType ) )
-		{
-			type =
-				freeType[ arg ];
-		}
-		else
-		{
-			for(
-				f = 0, fZ = freeType.length;
-				f < fZ;
-				f++
-			)
-			{
-				var fi =
-					freeType[ f ];
-
-				if( fi[ arg ] )
-				{
-					type =
-						fi[ arg ];
-
-					break;
-				}
-			}
-		}
-
-		if( !type )
-		{
-			throw new Error(
-				'unknown argument: ' + arg
-			);
-		}
-
-		property =
-			type.property || arg;
-
-		switch( type.type )
-		{
-			case 'param' :
-
-				this[ property ] =
-					args[ a + 1 ];
-
-				a += 2;
-
-				break;
-
-			case 'return' :
-
-				if( ret !== null )
-				{
-					throw new Error(
-						'multiple return values to free-strings'
-					);
-				}
-
-				ret =
-					args[ a + 1 ];
-
-				a += 2;
-
-				break;
-
-			default :
-
-				throw new Error(
-					'invalid freestring type ' + type.type +
-					' for ' + arg
-				);
-		}
-
-	}
-
-	// checks if all required params are there
-	// but not when recursing, since its not yet finished
-	if( !recurse )
-	{
-		for(
-			f = 0, fZ = isArray( freeType ) ? freeType.length : 1;
-			f < fZ;
-			f++
-		)
-		{
-			var ft =
-				isArray( freeType ) ?
-					freeType[ f ] :
-					freeType;
-
-			for( arg in ft )
-			{
-				type =
-					ft[ arg ];
-
-				property =
-					type.property || arg;
-
-				if(
-					type.required &&
-					this[ property ] === null
-				)
-				{
-					throw new Error(
-						'required param ' + arg + ' missing.'
-					);
-				}
-			}
-		}
-	}
-
-	return ret;
-};
-
 
 /*
-| Extens a free strings typification
+| Node export
 */
-var extentFreeType =
-	function(
-		base,
-		sub
-	)
-{
-	if( !sub )
-	{
-		return base;
-	}
-
-	if( isArray( sub ) )
-	{
-		throw new Error(
-			'Cannot extent freeType by Array'
-		);
-	}
-
-	if( isArray( base ) )
-	{
-		base.push( sub );
-		return;
-	}
-
-	return [ base, sub ];
-};
-
-/*
-| Exports
-*/
-Jools =
-{
-	check            : check,
-	checkLimits      : checkLimits,
-	configSwitch     : configSwitch,
-	copy             : copy,
-	debug            : debug,
-	devel            : devel,
-	ensureInt        : ensureInt,
-	ensureArgs       : ensureArgs,
-	extentFreeType   : extentFreeType,
-	fixate           : fixate,
-	half             : half,
-	inspect          : inspect,
-	innumerable      : innumerable,
-	is               : is,
-	isnon            : isnon,
-	isArray          : isArray,
-	isInteger        : isInteger,
-	isString         : isString,
-	immute           : immute,
-	keyNonGrata      : keyNonGrata,
-	lazyFixate       : lazyFixate,
-	limit            : limit,
-	log              : log,
-	matches          : matches,
-	parseFreeStrings : parseFreeStrings,
-	passhash         : passhash,
-	randomPassword   : randomPassword,
-	reject           : reject,
-	subclass         : subclass,
-	uid              : uid
-};
-
-
 if( typeof( window ) === 'undefined' )
 {
-	module.exports = Jools;
+	module.exports =
+		Jools;
 }
 
 
