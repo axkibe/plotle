@@ -283,7 +283,7 @@ Note.create =
 					case 'scrolly' :
 
 						scrolly =
-							t.value;
+							t.val;
 
 						break;
 

@@ -133,7 +133,7 @@ TraitSet =
 								args[ a + 2 ],
 
 							val :
-								args[ a + 2 ]
+								args[ a + 3 ]
 						}
 					);
 
