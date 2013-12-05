@@ -1245,23 +1245,30 @@ Shell.prototype.setChecked =
 
 
 /*
-| Sets the attribute of an item.
+| Sets the trait(s) of item(s).
 */
-Shell.prototype.setAttr =
+Shell.prototype.setTraits =
 	function(
-		key,    // of item
-		attr,   // to set
-		val     // to set to
+		section,
+		traitSet
 	)
 {
+	if( CHECK )
+	{
+		if( section !== 'space' )
+		{
+			throw new Error(
+				'section !== space'
+			);
+		}
+	}
+
 	this.$space =
 		Visual.Space.create(
 			'inherit',
 				this.$space,
-			'alter',
-				key,
-				attr,
-				val
+			'traitSet',
+				traitSet
 		);
 };
 

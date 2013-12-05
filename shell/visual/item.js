@@ -22,7 +22,8 @@ var
 	Euclid,
 	Jools,
 	shell,
-	theme;
+	theme,
+	TraitSet;
 
 
 /*
@@ -740,10 +741,14 @@ Item.prototype.dragMove =
 				spos =
 					action.startPos + sbary.scale( dy );
 
-			shell.setAttr(
-				this.key,
-				'scrolly',
-				spos
+			shell.setTraits(
+				'space',
+				TraitSet.create(
+					'trait',
+						this.path,
+						'scrolly',
+						spos
+				)
 			);
 
 			shell.redraw =

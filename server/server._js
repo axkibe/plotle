@@ -607,7 +607,7 @@ Server.prototype.buildShellConfig =
 			[ ],
 
 		k;
-	
+
 	cconfig.push(
 		'var config = {\n',
 		'\tdevel   : ',
@@ -785,6 +785,9 @@ Server.prototype.prepareResources =
 		'shell/accent.js',
 			'fb',
 
+		'shell/traitset.js',
+			'fb',
+
 		'shell/theme.js',
 			'fb',
 
@@ -886,7 +889,7 @@ Server.prototype.prepareResources =
 
 		'shell/forms/non-existing-space.js',
 			'fb',
-		
+
 		'shell/forms/jockey.js',
 			'fb',
 

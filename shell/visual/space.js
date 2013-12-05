@@ -26,8 +26,7 @@ var
 	shell,
 	shellverse,
 	Stubs,
-	theme,
-	TraitSet;
+	theme;
 
 
 /*
@@ -200,29 +199,26 @@ Space.create =
 
 				if( CHECK )
 				{
-					if( traitSet.type !== 'traitSet' )
+					if( arguments[ a + 1 ] )
 					{
-						throw new Error(
-							'traitSet not a traitSet'
-						);
+						if( arguments[ a + 1].type !== 'traitSet' )
+						{
+							throw new Error(
+								'traitSet not a traitSet'
+							);
+						}
+
+						if( traitSet !== null )
+						{
+							throw new Error(
+								'traitSet already set'
+							);
+						}
 					}
 				}
 
-				if( traitSet === null )
-				{
-					traitSet =
-						arguments[ a + 1 ];
-				}
-				else
-				{
-					traitSet =
-						new TraitSet(
-							'set',
-								traitSet,
-							'trait',
-								arguments[ a + 1 ]
-						);
-				}
+				traitSet =
+					arguments[ a + 1 ];
 
 				a += 2;
 
@@ -437,7 +433,7 @@ Space.prototype.createItem =
 		tree,
 		key,
 		inherit,
-		alter
+		traitSet
 	)
 {
 	var
@@ -466,8 +462,8 @@ Space.prototype.createItem =
 				path,
 			'mark',
 				this.mark.concerns( path ),
-			'alter',
-				alter
+			'traitSet',
+				traitSet
 		)
 	);
 };

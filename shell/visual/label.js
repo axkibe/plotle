@@ -156,17 +156,6 @@ Label.create =
 	{
 		switch( arguments[ a ] )
 		{
-			case 'alter' :
-
-				if( arguments[ a + 1] )
-				{
-					throw new Error(
-						'alter not supported'
-					);
-				}
-
-				break;
-
 			case 'doc' :
 
 				doc =
@@ -206,6 +195,12 @@ Label.create =
 
 				pnw =
 					arguments[ a + 1 ];
+
+				break;
+
+			case 'traitSet' :
+
+				// FIXME ignoring
 
 				break;
 

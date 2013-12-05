@@ -29,7 +29,8 @@ var
 	shellverse,
 	Style,
 	system,
-	theme;
+	theme,
+	TraitSet;
 
 
 /*
@@ -117,8 +118,8 @@ Note.create =
 	)
 {
 	var
-		alter =
-			null,
+		a,
+		aZ,
 
 		doc =
 			null,
@@ -138,6 +139,9 @@ Note.create =
 		scrolly =
 			null,
 
+		traitSet =
+			null,
+
 		tree =
 			null,
 
@@ -146,20 +150,13 @@ Note.create =
 
 
 	for(
-		var a = 0, aZ = arguments.length;
+		a = 0, aZ = arguments.length;
 		a < aZ;
 		a += 2
 	)
 	{
 		switch( arguments[ a ] )
 		{
-			case 'alter' :
-
-				alter =
-					arguments[ a + 1 ];
-
-				break;
-
 			case 'doc' :
 
 				doc =
@@ -191,6 +188,13 @@ Note.create =
 			case 'tree' :
 
 				tree =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'traitSet' :
+
+				traitSet =
 					arguments[ a + 1 ];
 
 				break;
@@ -239,35 +243,70 @@ Note.create =
 		}
 	}
 
-	if( alter )
+	if( inherit )
 	{
-		for( var k in alter )
+		if( !path )
 		{
-			switch( k )
+			path =
+				inherit.path;
+		}
+	}
+
+	if( traitSet )
+	{
+		if( CHECK )
+		{
+			if( !path )
 			{
-				case 'scrolly' :
+				throw new Error(
+					'traitSet needs path'
+				);
+			}
+		}
 
-					scrolly =
-						alter[ k ];
+		for(
+			a = 0, aZ = traitSet.length;
+			a < aZ;
+			a++
+		)
+		{
+			var
+				t =
+					traitSet.get( a );
 
-					break;
+			if (
+				t.path.equals( path )
+			)
+			{
+				switch( t.key )
+				{
+					case 'scrolly' :
 
-				default :
+						scrolly =
+							t.value;
 
-					throw new Error(
-						'alter key ' + k + ' not supported'
-					);
+						break;
+
+					default :
+
+						throw new Error(
+							'unknown trait: ' + t.key
+						);
+				}
 			}
 		}
 	}
 
 	if( tree )
 	{
-		if( CHECK && !path )
+		if( CHECK )
 		{
-			throw new Error(
-				'tree needs path'
-			);
+			if( !path )
+			{
+				throw new Error(
+					'tree needs path'
+				);
+			}
 		}
 
 		if( !fontsize )
@@ -777,7 +816,7 @@ Note.prototype.scrollMarkIntoView =
 			para.locateOffset(
 				mark.sign.at1
 			).p,
-		
+
 		pnw =
 			this.sub.doc.getPNW(
 				this,
@@ -793,18 +832,26 @@ Note.prototype.scrollMarkIntoView =
 
 	if( n + pnw.y - imargin.n < sy )
 	{
-		shell.setAttr(
-			this.key,
-			'scrolly',
-			n + pnw.y - imargin.n
+		shell.setTraits(
+			'space',
+			TraitSet.create(
+				'trait',
+					this.path,
+					'scrolly',
+					n + pnw.y - imargin.n
+			)
 		);
 	}
 	else if( s + pnw.y + imargin.s > sy + zone.height )
 	{
-		shell.setAttr(
-			this.key,
-			'scrolly',
-			s + pnw.y - zone.height + imargin.s
+		shell.setTraits(
+			'space',
+			TraitSet.create(
+				'trait',
+					this.path,
+					'scrolly',
+					s + pnw.y - zone.height + imargin.s
+			)
 		);
 	}
 };
@@ -828,10 +875,14 @@ Note.prototype.scrollPage =
 		fs =
 			this.sub.doc.font.twig.size;
 
-	shell.setAttr(
-		this.key,
-		'scrolly',
-		this.scrollbarY.pos + dir * zone.height - fs * 2
+	shell.setTraits(
+		'space',
+		TraitSet.create(
+			'trait',
+				this.path,
+				'scrolly',
+				this.scrollbarY.pos + dir * zone.height - fs * 2
+		)
 	);
 };
 
@@ -859,10 +910,14 @@ Note.prototype.mousewheel =
 		return false;
 	}
 
-	shell.setAttr(
-		this.key,
-		'scrolly',
-		this.scrollbarY.pos - dir * system.settings.textWheelSpeed
+	shell.setTraits(
+		'space',
+		TraitSet.create(
+			'trait',
+				this.path,
+				'scrolly',
+				this.scrollbarY.pos - dir * system.settings.textWheelSpeed
+		)
 	);
 
 	shell.redraw =
