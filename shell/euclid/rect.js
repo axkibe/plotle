@@ -179,7 +179,6 @@ Rect.create =
 				pnw =
 					shellverse.grow(
 						'Point',
-						shellverse,
 						'x',
 							a2.x,
 						'y',
@@ -189,7 +188,6 @@ Rect.create =
 				pse =
 					shellverse.grow(
 						'Point',
-						shellverse,
 						'x',
 							a1.x,
 						'y',
