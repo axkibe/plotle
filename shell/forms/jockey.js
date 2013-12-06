@@ -274,33 +274,55 @@ Jockey.prototype.setHover =
 
 /*
 | Sets the value of a form object.
-|
-| FIXME: combine with setAttr
 */
-Jockey.prototype.setValue =
+Jockey.prototype.setTraits =
 	function(
-		path,
-		value
+		traitSet
 	)
 {
-	var
-		formname =
-			this._formNames[ path.get( 0 ) ],
-
-		itemname =
-			path.get( 1 );
-
-	if( CHECK && !this._$forms[ formname ] )
+	for(
+		var a = 0, aZ = traitSet.length;
+		a < aZ;
+		a++
+	)
 	{
-		throw new Error(
-			'invalid formname: ' + formname
-		);
-	}
+		var
+			t =
+				traitSet.get( a ),
 
-	return this._$forms[ formname ].setValue(
-		itemname,
-		value
-	);
+			path = t.path,
+
+			formname =
+				this._formNames[ path.get( 0 ) ],
+
+			itemname =
+				path.get( 1 );
+
+		if( CHECK && !this._$forms[ formname ] )
+		{
+			throw new Error(
+				'invalid formname: ' + formname
+			);
+		}
+
+		switch( t.key )
+		{
+			case 'value' :
+
+				this._$forms[ formname ].setValue(
+					itemname,
+					t.val
+				);
+
+				break;
+
+			default :
+
+				throw new Error(
+					'invalid key in setTraits: ' + t.key
+				);
+		}
+	}
 };
 
 

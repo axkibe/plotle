@@ -25,7 +25,8 @@ var
 	Jools,
 	shell,
 	shellverse,
-	theme;
+	theme,
+	TraitSet;
 
 
 /*
@@ -872,11 +873,16 @@ Input.prototype.input =
 			);
 	}
 
-	shell.setFormValue(
-		this.path,
-		value.substring( 0, at1 ) +
-			text +
-			value.substring( at1 )
+	shell.setTraits(
+		'forms',
+		TraitSet.create(
+			'trait',
+				this.path,
+				'value',
+				value.substring( 0, at1 ) +
+					text +
+					value.substring( at1 )
+			)
 	);
 
 	shell.userMark(
@@ -911,10 +917,15 @@ Input.prototype.keyBackspace =
 		return;
 	}
 
-	shell.setFormValue(
-		this.path,
-		this.value.substring( 0, at1 - 1 ) +
-			this.value.substring( at1 )
+	shell.setTraits(
+		'forms',
+		TraitSet.create(
+			'trait',
+				this.path,
+				'value',
+				this.value.substring( 0, at1 - 1 ) +
+					this.value.substring( at1 )
+			)
 	);
 
 	shell.userMark(
@@ -946,10 +957,15 @@ Input.prototype.keyDel =
 		return;
 	}
 
-	shell.setFormValue(
-		this.path,
-		this.value.substring( 0, at1 ) +
-			this.value.substring( at1 + 1 )
+	shell.setTraits(
+		'forms',
+		TraitSet.create(
+			'trait',
+				this.path,
+				'value',
+				this.value.substring( 0, at1 ) +
+					this.value.substring( at1 + 1 )
+			)
 	);
 };
 

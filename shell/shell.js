@@ -1206,26 +1206,6 @@ Shell.prototype.setHover =
 
 
 /*
-| Sets the value of a form object.
-|
-| FIXME: combine with setAttr
-*/
-Shell.prototype.setFormValue =
-	function(
-		path,
-		value
-	)
-{
-	return (
-		this._$formJockey.setValue(
-			path,
-			value
-		)
-	);
-};
-
-
-/*
 | Sets a checkbox.
 |
 | FIXME: combine with setAttr
@@ -1253,23 +1233,34 @@ Shell.prototype.setTraits =
 		traitSet
 	)
 {
-	if( CHECK )
+	switch( section )
 	{
-		if( section !== 'space' )
-		{
-			throw new Error(
-				'section !== space'
-			);
-		}
-	}
+		case 'forms' :
 
-	this.$space =
-		Visual.Space.create(
-			'inherit',
-				this.$space,
-			'traitSet',
+			this._$formJockey.setTraits(
 				traitSet
-		);
+			);
+
+			break;
+
+		case 'space' :
+
+			this.$space =
+				Visual.Space.create(
+					'inherit',
+						this.$space,
+					'traitSet',
+						traitSet
+				);
+
+			break;
+
+		default :
+
+			throw new Error(
+				'invalid section'
+			);
+	}
 };
 
 
