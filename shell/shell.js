@@ -1206,25 +1206,6 @@ Shell.prototype.setHover =
 
 
 /*
-| Sets a checkbox.
-|
-| FIXME: combine with setAttr
-*/
-Shell.prototype.setChecked =
-	function(
-		path,
-		value
-	)
-{
-	this._$formJockey.setChecked(
-		path,
-		value
-	);
-};
-
-
-
-/*
 | Sets the trait(s) of item(s).
 */
 Shell.prototype.setTraits =

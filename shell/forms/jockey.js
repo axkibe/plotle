@@ -316,6 +316,15 @@ Jockey.prototype.setTraits =
 
 				break;
 
+			case 'check' :
+
+				this._$forms[ formname ].setChecked(
+					itemname,
+					t.val
+				);
+
+				break;
+
 			default :
 
 				throw new Error(
@@ -323,38 +332,6 @@ Jockey.prototype.setTraits =
 				);
 		}
 	}
-};
-
-
-/*
-| Sets a checkbox.
-|
-| FIXME: combine with setAttr
-*/
-Jockey.prototype.setChecked =
-	function(
-		path,
-		value
-	)
-{
-	var
-		formname =
-			this._formNames[ path.get( 0 ) ],
-
-		itemname =
-			path.get( 1 );
-
-	if( CHECK && !this._$forms[ formname ] )
-	{
-		throw new Error(
-			'invalid formname: ' + formname
-		);
-	}
-
-	return this._$forms[ formname ].setChecked(
-		itemname,
-		value
-	);
 };
 
 

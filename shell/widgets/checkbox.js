@@ -21,8 +21,9 @@ Widgets =
 var
 	Accent,
 	Euclid,
+	Jools,
 	shell,
-	Jools;
+	TraitSet;
 
 
 /*
@@ -467,9 +468,14 @@ CheckBox.prototype.pointingStart =
 		)
 	)
 	{
-		shell.setChecked(
-			this.path,
-			!this.checked
+		shell.setTraits(
+			'forms',
+			TraitSet.create(
+				'trait',
+					this.path,
+					'check',
+					!this.checked
+			)
 		);
 
 		return false;
@@ -505,9 +511,14 @@ CheckBox.prototype.specialKey =
 
 		case 'enter' :
 
-			shell.setChecked(
-				this.path,
-				!this.checked
+			shell.setTraits(
+				'forms',
+				TraitSet.create(
+					'trait',
+						this.path,
+						'check',
+						!this.checked
+				)
 			);
 
 			return;
@@ -523,9 +534,14 @@ CheckBox.prototype.input =
 		// text
 	)
 {
-	shell.setChecked(
-		this.path,
-		!this.checked
+	shell.setTraits(
+		'forms',
+		TraitSet.create(
+			'trait',
+				this.path,
+				'check',
+				!this.checked
+		)
 	);
 
 	return true;
