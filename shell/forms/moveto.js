@@ -11,6 +11,7 @@
 var
 	Forms;
 
+
 Forms =
 	Forms || { };
 
@@ -33,23 +34,46 @@ var
 'use strict';
 
 
+var
+	_tag =
+		'MOVETO-FORM-46974287';
+
 /*
 | The login form
 */
 var MoveTo =
 Forms.MoveTo =
 	function(
-		// free strings
+		tag,
+		inherit,
+		screensize,
+		mark
 	)
 {
+	if( CHECK )
+	{
+		if( tag !== _tag )
+		{
+			throw new Error(
+				'invalid tag'
+			);
+		}
+	}
+
 	this.tree =
 		shellverse.grow( Design.MoveToForm );
 
-	Forms.Form.apply(
+	Forms.Form.call(
 		this,
-		arguments
+		'inherit',
+			inherit,
+		'screensize',
+			screensize,
+		'mark',
+			mark
 	);
 
+	// XXX
 	this.$username =
 		null;
 };
@@ -60,6 +84,76 @@ Jools.subclass(
 	Forms.Form
 );
 
+
+/*
+| Creates a new form.
+*/
+MoveTo.create =
+	function(
+		// free strings
+	)
+{
+	var
+		a =
+			0,
+
+		aZ =
+			arguments.length,
+
+		screensize =
+			null,
+
+		inherit =
+			null,
+
+		mark =
+			null;
+
+	while( a < aZ )
+	{
+		var
+			arg =
+				arguments[ a++ ];
+
+		switch( arg )
+		{
+
+			case 'screensize' :
+
+				screensize =
+					arguments[ a++ ];
+
+				break;
+
+			case 'inherit' :
+
+				inherit =
+					arguments[ a++ ];
+
+				break;
+
+			case 'mark' :
+
+				mark =
+					arguments[ a++ ];
+
+				break;
+
+			default :
+
+				throw new Error(
+					'invalid argument'
+				);
+		}
+	}
+
+	return new MoveTo(
+		_tag,
+		inherit,
+		screensize,
+		mark
+	);
+};
 
 
 /*

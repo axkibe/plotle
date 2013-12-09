@@ -72,11 +72,11 @@ Forms.Jockey =
 	var
 		forms =
 			[
-				'Login',
-				'MoveTo',
+				'Login',      // XXX
+				'MoveTo',     // XXX
 				'NoAccessToSpace',
 				'NonExistingSpace',
-				'SignUp',
+				'SignUp',     // XXX
 				'Space',
 				'User',
 				'Welcome'
@@ -105,6 +105,8 @@ Forms.Jockey =
 		switch( name ) { // XXX
 
 		case 'Login' :
+		case 'MoveTo' :
+		case 'SignUp' :
 
 			form =
 				this._$forms[ name ] =
@@ -156,6 +158,8 @@ Jockey.prototype.get =
 	{
 		switch( name ) { // XXX
 		case 'Login' :
+		case 'MoveTo' :
+		case 'SignUp' :
 		this._$forms[ name ] =
 			Forms[ name ].create(
 				'inherit',
@@ -215,6 +219,8 @@ Jockey.prototype.setMark =
 
 	switch( formname ) { // XXX
 	case 'Login' :
+	case 'MoveTo' :
+	case 'SignUp' :
 	this._$forms[ formname ] =
 		Forms[ formname ].create(
 			'inherit',

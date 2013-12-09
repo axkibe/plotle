@@ -8,7 +8,10 @@
 /*
 | Export
 */
-var Forms;
+var
+	Forms;
+
+
 Forms =
 	Forms || { };
 
@@ -29,23 +32,45 @@ var
 ( function( ) {
 'use strict';
 
+var
+	_tag =
+		'SIGNUP-FORM-51533630';
+
 
 /*
-| The login form
+| The signup form.
 */
 var SignUp =
 Forms.SignUp =
 	function(
-		// free strings
+		tag,
+		inherit,
+		screensize,
+		mark
 	)
 {
+	if( CHECK )
+	{
+		if( tag !== _tag )
+		{
+			throw new Error(
+				'invalid tag'
+			);
+		}
+	}
+
 	// TODO
 	this.tree =
 		shellverse.grow( Design.SignUpForm );
 
-	Forms.Form.apply(
+	Forms.Form.call(
 		this,
-		arguments
+		'inherit',
+			inherit,
+		'screensize',
+			screensize,
+		'mark',
+			mark
 	);
 };
 
@@ -54,6 +79,77 @@ Jools.subclass(
 	SignUp,
 	Forms.Form
 );
+
+
+/*
+| Creates a new form.
+*/
+SignUp.create =
+	function(
+		// free strings
+	)
+{
+	var
+		a =
+			0,
+
+		aZ =
+			arguments.length,
+
+		screensize =
+			null,
+
+		inherit =
+			null,
+
+		mark =
+			null;
+
+	while( a < aZ )
+	{
+		var
+			arg =
+				arguments[ a++ ];
+
+		switch( arg )
+		{
+
+			case 'screensize' :
+
+				screensize =
+					arguments[ a++ ];
+
+				break;
+
+			case 'inherit' :
+
+				inherit =
+					arguments[ a++ ];
+
+				break;
+
+			case 'mark' :
+
+				mark =
+					arguments[ a++ ];
+
+				break;
+
+			default :
+
+				throw new Error(
+					'invalid argument'
+				);
+		}
+	}
+
+	return new SignUp(
+		_tag,
+		inherit,
+		screensize,
+		mark
+	);
+};
 
 
 
@@ -77,7 +173,7 @@ SignUp.prototype.pushButton =
 	{
 		// TODO
 	}
-	
+
 	var
 		buttonName =
 			path.get( 1 );

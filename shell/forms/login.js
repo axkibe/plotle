@@ -38,7 +38,7 @@ var
 		'LOGIN-FORM-39606038';
 
 /*
-| The login form
+| The login form.
 */
 var Login =
 Forms.Login =
@@ -80,6 +80,9 @@ Jools.subclass(
 );
 
 
+/*
+| Creates a new form.
+*/
 Login.create =
 	function(
 		// free strings
