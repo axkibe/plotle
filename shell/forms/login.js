@@ -33,6 +33,9 @@ var
 (function( ) {
 'use strict';
 
+var
+	_tag =
+		'LOGIN-FORM-39606038';
 
 /*
 | The login form
@@ -40,15 +43,33 @@ var
 var Login =
 Forms.Login =
 	function(
-		// free strings
+		tag,
+		inherit,
+		screensize,
+		mark
 	)
 {
+	if( CHECK )
+	{
+		if( tag !== _tag )
+		{
+			throw new Error(
+				'invalid tag'
+			);
+		}
+	}
+
 	this.tree =
 		shellverse.grow( Design.LoginForm );
 
-	Forms.Form.apply(
+	Forms.Form.call(
 		this,
-		arguments
+		'inherit',
+			inherit,
+		'screensize',
+			screensize,
+		'mark',
+			mark
 	);
 };
 
@@ -69,7 +90,16 @@ Login.create =
 			0,
 
 		aZ =
-			arguments.length;
+			arguments.length,
+
+		screensize =
+			null,
+
+		inherit =
+			null,
+
+		mark =
+			null;
 
 	while( a < aZ )
 	{
@@ -82,17 +112,39 @@ Login.create =
 
 			case 'screensize' :
 
+				screensize =
+					arguments[ a++ ];
+
 				break;
 
 			case 'inherit' :
+
+				inherit =
+					arguments[ a++ ];
 
 				break;
 
 			case 'mark' :
 
+				mark =
+					arguments[ a++ ];
+
 				break;
+
+			default :
+
+				throw new Error(
+					'invalid argument'
+				);
 		}
 	}
+
+	return new Login(
+		_tag,
+		inherit,
+		screensize,
+		mark
+	);
 };
 
 
@@ -116,7 +168,7 @@ Login.prototype.pushButton =
 	{
 		// TODO
 	}
-	
+
 	var
 		buttonName =
 			path.get( 1 );
@@ -141,7 +193,7 @@ Login.prototype.pushButton =
 				'unknown button pushed: ' + buttonName
 			);
 	}
-			
+
 	shell.redraw =
 		true;
 };

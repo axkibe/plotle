@@ -134,7 +134,9 @@ Forms.Form =
 
 	// the component the pointer is hovering above
 	this.$hover =
-		inherit ? inherit.$hover : null;
+		inherit ?
+			inherit.$hover :
+			null;
 
 	var
 		twig =

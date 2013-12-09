@@ -19,7 +19,8 @@ Forms =
 /*
 | Imports
 */
-
+var
+	Mark;
 
 /*
 | Capsule
@@ -79,7 +80,10 @@ Forms.Jockey =
 				'Space',
 				'User',
 				'Welcome'
-			];
+			],
+
+		mark =
+			Mark.Vacant.create( );
 
 	this._$forms =
 		{ };
@@ -95,12 +99,35 @@ Forms.Jockey =
 			name =
 				forms[ i ];
 
-		var form =
-			this._$forms[ name ] =
-				new Forms[ name ](
-					'screensize',
-						screensize
-				);
+		var
+			form;
+
+		switch( name ) { // XXX
+
+		case 'Login' :
+
+			form =
+				this._$forms[ name ] =
+					Forms[ name ].create(
+						'screensize',
+							screensize,
+						'mark',
+							mark
+					);
+
+			break;
+
+		default :
+
+			form =
+				this._$forms[ name ] =
+					new Forms[ name ](
+						'screensize',
+							screensize
+					);
+
+			break;
+		}
 
 		formNames[ form.name ] =
 			name;
@@ -127,6 +154,18 @@ Jockey.prototype.get =
 		)
 	)
 	{
+		switch( name ) { // XXX
+		case 'Login' :
+		this._$forms[ name ] =
+			Forms[ name ].create(
+				'inherit',
+					inherit,
+				'screensize',
+					screensize
+			);
+
+		break;
+		default :
 		this._$forms[ name ] =
 			new Forms[ name ](
 				'inherit',
@@ -134,6 +173,8 @@ Jockey.prototype.get =
 				'screensize',
 					screensize
 			);
+		break;
+		}
 	}
 
 	return this._$forms[ name ];
@@ -172,6 +213,17 @@ Jockey.prototype.setMark =
 		}
 	}
 
+	switch( formname ) { // XXX
+	case 'Login' :
+	this._$forms[ formname ] =
+		Forms[ formname ].create(
+			'inherit',
+				this._$forms[ formname ],
+			'mark',
+				mark
+		);
+	break;
+	default :
 	this._$forms[ formname ] =
 		new Forms[ formname ](
 			'inherit',
@@ -179,6 +231,8 @@ Jockey.prototype.setMark =
 			'mark',
 				mark
 		);
+	break;
+	}
 };
 
 
