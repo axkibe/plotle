@@ -1,5 +1,5 @@
 /*
-| User has no access to a space he tried to port to.
+| User has no access to a space s/he tried to port to.
 |
 | Authors: Axel Kittenberger
 */
@@ -24,12 +24,17 @@ var
 	shell,
 	shellverse;
 
+
 /*
 | Capsule
 */
 (function( ) {
 'use strict';
 
+
+var
+	_tag =
+		'NO-ACCES-TO-SPACE-FORM-22869232';
 
 /*
 | The login form
@@ -38,15 +43,33 @@ var
 	NoAccessToSpace =
 	Forms.NoAccessToSpace =
 		function(
-			// free strings
+			tag,
+			inherit,
+			screensize,
+			mark
 		)
 {
+	if( CHECK )
+	{
+		if( tag !== _tag )
+		{
+			throw new Error(
+				'invalid tag'
+			);
+		}
+	}
+
 	this.tree =
 		shellverse.grow( Design.NoAccessToSpaceForm );
 
-	Forms.Form.apply(
+	Forms.Form.call(
 		this,
-		arguments
+		'inherit',
+			inherit,
+		'screensize',
+			screensize,
+		'mark',
+			mark
 	);
 };
 
@@ -56,6 +79,76 @@ Jools.subclass(
 	Forms.Form
 );
 
+
+/*
+| Creates a new form.
+*/
+NoAccessToSpace.create =
+	function(
+		// free strings
+	)
+{
+	var
+		a =
+			0,
+
+		aZ =
+			arguments.length,
+
+		screensize =
+			null,
+
+		inherit =
+			null,
+
+		mark =
+			null;
+
+	while( a < aZ )
+	{
+		var
+			arg =
+				arguments[ a++ ];
+
+		switch( arg )
+		{
+
+			case 'screensize' :
+
+				screensize =
+					arguments[ a++ ];
+
+				break;
+
+			case 'inherit' :
+
+				inherit =
+					arguments[ a++ ];
+
+				break;
+
+			case 'mark' :
+
+				mark =
+					arguments[ a++ ];
+
+				break;
+
+			default :
+
+				throw new Error(
+					'invalid argument'
+				);
+		}
+	}
+
+	return new NoAccessToSpace(
+		_tag,
+		inherit,
+		screensize,
+		mark
+	);
+};
 
 
 /*
