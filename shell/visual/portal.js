@@ -150,6 +150,9 @@ Portal.create =
 		path =
 			null,
 
+		traitSet =
+			null,
+
 		tree =
 			null,
 
@@ -193,6 +196,13 @@ Portal.create =
 			case 'path' :
 
 				path =
+					arguments[ a + 1 ];
+
+				break;
+
+			case 'traitSet' :
+
+				traitSet =
 					arguments[ a + 1 ];
 
 				break;

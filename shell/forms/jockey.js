@@ -75,7 +75,7 @@ Forms.Jockey =
 				'Login',      // XXX
 				'MoveTo',     // XXX
 				'NoAccessToSpace', // XXX
-				'NonExistingSpace',
+				'NonExistingSpace', // XXX
 				'SignUp',     // XXX
 				'Space',
 				'User',
@@ -107,6 +107,7 @@ Forms.Jockey =
 		case 'Login' :
 		case 'MoveTo' :
 		case 'NoAccessToSpace' :
+		case 'NonExistingSpace' :
 		case 'SignUp' :
 
 			form =
@@ -161,6 +162,7 @@ Jockey.prototype.get =
 		case 'Login' :
 		case 'MoveTo' :
 		case 'NoAccessToSpace' :
+		case 'NonExistingSpace' :
 		case 'SignUp' :
 		this._$forms[ name ] =
 			Forms[ name ].create(
@@ -223,6 +225,7 @@ Jockey.prototype.setMark =
 	case 'Login' :
 	case 'MoveTo' :
 	case 'NoAccessToSpace' :
+	case 'NonExistingSpace' :
 	case 'SignUp' :
 	this._$forms[ formname ] =
 		Forms[ formname ].create(
@@ -426,7 +429,7 @@ Jockey.prototype.setSpace =
 		spaceTag
 	)
 {
-	this._forms[ formname ].setSpace(
+	this._$forms[ formname ].setSpace(
 		spaceUser,
 		spaceTag
 	);

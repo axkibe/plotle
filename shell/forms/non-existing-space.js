@@ -11,6 +11,7 @@
 var
 	Forms;
 
+
 Forms =
 	Forms || { };
 
@@ -24,32 +25,56 @@ var
 	shell,
 	shellverse;
 
+
 /*
 | Capsule
 */
 (function( ) {
 'use strict';
 
+var
+	_tag =
+		'NON-EXISTING-SPACE-FORM-7423431';
+
 
 /*
-| The login form
+| The space does not exist form.
 */
 var
 	NonExistingSpace =
 	Forms.NonExistingSpace =
 		function(
-			// free strings
+			tag,
+			inherit,
+			screensize,
+			mark
 		)
 {
+	if( CHECK )
+	{
+		if( tag !== _tag )
+		{
+			throw new Error(
+				'invalid tag'
+			);
+		}
+	}
+
 	// TODO
 	this.tree =
 		shellverse.grow( Design.NonExistingSpaceForm );
 
-	Forms.Form.apply(
+	Forms.Form.call(
 		this,
-		arguments
+		'inherit',
+			inherit,
+		'screensize',
+			screensize,
+		'mark',
+			mark
 	);
 
+	// XXX
 	this.$spaceUser =
 	this.$spaceTag =
 		null;
@@ -62,13 +87,82 @@ Jools.subclass(
 );
 
 
-
-
 /*
-| Name of the form.
+| Reflection.
 */
 NonExistingSpace.prototype.name =
 	'nonExistingSpace';
+
+
+/*
+| Creates a new form.
+*/
+NonExistingSpace.create =
+	function(
+		// free strings
+	)
+{
+	var
+		a =
+			0,
+
+		aZ =
+			arguments.length,
+
+		screensize =
+			null,
+
+		inherit =
+			null,
+
+		mark =
+			null;
+
+	while( a < aZ )
+	{
+		var
+			arg =
+				arguments[ a++ ];
+
+		switch( arg )
+		{
+
+			case 'screensize' :
+
+				screensize =
+					arguments[ a++ ];
+
+				break;
+
+			case 'inherit' :
+
+				inherit =
+					arguments[ a++ ];
+
+				break;
+
+			case 'mark' :
+
+				mark =
+					arguments[ a++ ];
+
+				break;
+
+			default :
+
+				throw new Error(
+					'invalid argument'
+				);
+		}
+	}
+
+	return new NonExistingSpace(
+		_tag,
+		inherit,
+		screensize,
+		mark
+	);
+};
 
 
 /*
@@ -85,7 +179,7 @@ NonExistingSpace.prototype.pushButton =
 	{
 		// TODO
 	}
-	
+
 	var
 		buttonName =
 			path.get( 1 );
