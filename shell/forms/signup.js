@@ -22,7 +22,6 @@ Forms =
 var
 	Design,
 	Jools,
-	Path,
 	shell,
 	shellverse,
 	TraitSet;
@@ -83,10 +82,10 @@ Jools.subclass(
 
 
 /*
-| Name of the form.
+| Reflextion.
 */
-SignUp.prototype.name =
-	'signup';
+SignUp.prototype.reflect =
+	'SignUp';
 
 /*
 | A button of the form has been pushed.
@@ -169,12 +168,7 @@ SignUp.prototype.signup =
 			'section',
 				'forms',
 			'path',
-				new Path(
-					[
-						this.name,
-						'userInput'
-					]
-				),
+				sub.userInput.path,
 			'at1',
 				user.length
 		);
@@ -196,10 +190,7 @@ SignUp.prototype.signup =
 			'section',
 				'forms',
 			'path',
-				new Path( [
-					this.name,
-					'userInput'
-				] ),
+				sub.userInput.path,
 			'at1',
 				0
 		);
@@ -221,10 +212,7 @@ SignUp.prototype.signup =
 			'section',
 				'forms',
 			'path',
-				new Path( [
-					this.name,
-					'passwordInput'
-				] ),
+				sub.passwordInput.path,
 			'at1',
 				pass.length
 		);
@@ -246,10 +234,7 @@ SignUp.prototype.signup =
 			'section',
 				'forms',
 			'path',
-				new Path( [
-					this.name,
-					'password2Input'
-				] ),
+				sub.password2Input.path,
 			'at1',
 				pass2.length
 		);
@@ -277,8 +262,9 @@ SignUp.prototype.onRegister =
 		res
 	)
 {
-	var sub =
-		this.$sub;
+	var
+		sub =
+			this.$sub;
 
 	if( !res.ok )
 	{
@@ -296,10 +282,7 @@ SignUp.prototype.onRegister =
 				'section',
 					'forms',
 				'path',
-					new Path( [
-						this.name,
-						'userInput'
-					] ),
+					sub.userInput.path,
 				'at1',
 					sub.userInput.value.length
 			);
@@ -360,7 +343,7 @@ SignUp.prototype.clear =
 		'section',
 			'forms',
 		'form',
-			this.name,
+			this.reflect,
 		'null'
 	);
 };

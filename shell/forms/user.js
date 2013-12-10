@@ -78,6 +78,15 @@ Jools.subclass(
 
 
 /*
+| Name of the form.
+*/
+User.prototype.reflect =
+	'User';
+
+
+// TODO move to design
+
+/*
 | Close control
 */
 var closeButton =
@@ -486,7 +495,7 @@ User.prototype.pushButton =
 	{
 		// TODO
 	}
-	
+
 	var
 		buttonName =
 			path.get( 1 );
@@ -507,13 +516,6 @@ User.prototype.pushButton =
 	shell.redraw =
 		true;
 };
-
-
-/*
-| Name of the form.
-*/
-User.prototype.name =
-	'user';
 
 
 })( );

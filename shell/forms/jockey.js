@@ -111,7 +111,7 @@ Forms.Jockey =
 							mark
 					);
 
-		formNames[ form.name ] =
+		formNames[ form.reflect ] =
 			name;
 	}
 };

@@ -87,8 +87,8 @@ Jools.subclass(
 /*
 | Name of the form.
 */
-MoveTo.prototype.name =
-	'moveto';
+MoveTo.prototype.reflect =
+	'MoveTo';
 
 /*
 | Finished loading a space.

@@ -80,6 +80,13 @@ Jools.subclass(
 
 
 /*
+| Name of the form.
+*/
+Space.prototype.reflect =
+	'Space';
+
+
+/*
 | A button of the form has been pushed.
 */
 Space.prototype.pushButton =
@@ -114,14 +121,6 @@ Space.prototype.pushButton =
 	shell.redraw =
 		true;
 };
-
-
-
-/*
-| Name of the form.
-*/
-Space.prototype.name =
-	'space';
 
 
 /*

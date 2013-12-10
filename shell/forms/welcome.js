@@ -82,10 +82,11 @@ Jools.subclass(
 
 
 /*
-| Name of the form.
+| Reflexion.
 */
-Welcome.prototype.name =
-	'welcome';
+Welcome.prototype.reflect =
+	'Welcome';
+
 
 /*
 | sets the username

@@ -138,7 +138,7 @@ Forms.Form =
 			path =
 				new Path(
 					[
-						this.name,
+						this.reflect,
 						name
 					]
 				);
@@ -164,6 +164,7 @@ Forms.Form =
 			);
 	}
 
+	Jools.keyNonGrata( this, 'name' );
 	Jools.immute( this );
 };
 
@@ -270,7 +271,6 @@ Form.create =
 };
 
 
-
 /*
 | The disc is shown while a form is shown.
 */
@@ -336,9 +336,11 @@ Form.prototype.getFocusedItem =
 		path =
 			sign.path;
 
-	if( CHECK && path.get( 0 ) !== this.name )
+	if( CHECK && path.get( 0 ) !== this.reflect )
 	{
-		throw new Error( 'the mark is not on this form!' );
+		throw new Error(
+			'the mark is not on this form!'
+		);
 	}
 
 	return this.$sub[ path.get( 1 ) ] || null;
@@ -857,7 +859,7 @@ Form.prototype._getCaretEntity =
 		);
 	}
 
-	if( path.get( 0 ) !== this.name )
+	if( path.get( 0 ) !== this.reflect )
 	{
 		throw new Error(
 			'caret path mismatch'

@@ -90,8 +90,8 @@ Jools.subclass(
 /*
 | Reflection.
 */
-NonExistingSpace.prototype.name =
-	'nonExistingSpace';
+NonExistingSpace.prototype.reflect =
+	'NonExistingSpace';
 
 
 /*

@@ -22,7 +22,6 @@ Forms =
 var
 	Design,
 	Jools,
-	Path,
 	shell,
 	shellverse,
 	TraitSet;
@@ -82,10 +81,10 @@ Jools.subclass(
 
 
 /*
-| Name of the form.
+| Reflexion.
 */
-Login.prototype.name =
-	'login';
+Login.prototype.reflect =
+	'Login';
 
 
 /*
@@ -163,7 +162,7 @@ Login.prototype.login =
 			'section',
 				'forms',
 			'path',
-				new Path( [ this.name, 'userInput' ] ),
+				sub.userInput.path,
 			'at1',
 				user.length
 		);
@@ -185,10 +184,7 @@ Login.prototype.login =
 			'section',
 				'forms',
 			'path',
-				new Path( [
-					this.name,
-					'userInput'
-				] ),
+				sub.userInput.path,
 			'at1',
 				0
 		);
@@ -210,10 +206,7 @@ Login.prototype.login =
 			'section',
 				'forms',
 			'path',
-				new Path( [
-					this.name,
-					'passwordInput'
-				] ),
+				sub.passwordInput.path,
 			'at1',
 				pass.length
 		);
@@ -274,6 +267,10 @@ Login.prototype.onAuth =
 		pass
 	)
 {
+	var
+		sub =
+			this.$sub;
+
 	if( !res.ok )
 	{
 		this.setText(
@@ -290,10 +287,7 @@ Login.prototype.onAuth =
 				'section',
 					'forms',
 				'path',
-					new Path( [
-						this.name,
-						'userInput'
-					] ),
+					sub.userInput.path,
 				'at1',
 					user.length
 			);
@@ -307,10 +301,7 @@ Login.prototype.onAuth =
 				'section',
 					'forms',
 				'path',
-					new Path( [
-						this.name,
-						'passwordInput'
-					] ),
+					sub.passwordInput.path,
 				'at1',
 					pass.length
 			);
@@ -365,7 +356,7 @@ Login.prototype.clear =
 		'section',
 			'forms',
 		'form',
-			this.name,
+			this.reflect,
 		'null'
 	);
 };
